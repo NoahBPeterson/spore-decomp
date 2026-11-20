@@ -2209,7 +2209,7 @@ ResMusic *ResMusic::ScalarDeletingDtor(u8 flags)
         operator_delete_array(mVec30.mpBegin);
     if (mVec1c.mpBegin != 0)
         operator_delete_array(mVec1c.mpBegin);
-    mpVtbl = (void *)0x013eb938;
+    mpVtbl = (void *)&PTR_013eb938;
     if ((flags & 1) != 0)
         operator_delete_array(this);
     return this;

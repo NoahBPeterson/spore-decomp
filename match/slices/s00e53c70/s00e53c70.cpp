@@ -1,5 +1,10 @@
 // Slice s00e53c70 (batch bfs3, slice 18). Region 0xe53c70-0xe54bf6.
 // Cell-game medal/save UI glue. Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a7bb8[];
+extern "C" char g_16b4178[];
+
 #include "types.h"
 #include <math.h>
 #include <xmmintrin.h>
@@ -43,7 +48,7 @@ struct cCellLookup18 {
 };
 
 static inline void* CellById(int id) {
-  return ((cCellLookup18*)(g_16b3c04 + 0x1c))->Get(id);
+  return ((cCellLookup18*)((char*)&g_16b3c04 + 0x1c))->Get(id);
 }
 
 __declspec(noinline) void FUN_00e53f70();                         // 0x00e53f70 allocate cell UI windows
@@ -209,22 +214,22 @@ void SP_sOnButtonSaveClick() {
 // @ 0x00e54050
 int FUN_00e54050(int id) {
   int i = 0;
-  int* p = (int*)0x15a7bac;
+  int* p = (int*)&g_15a7bac;
   do {
     if (p[-1] != id) {
       i += *p;
     } else {
       int n = *p;
       for (int j = 0; j < n; ++j) {
-        if (((char*)0x16b4278)[i] == 0) {
-          ((char*)0x16b4278)[i] = 1;
-          return ((int*)0x16b4178)[i];
+        if (((char*)&g_16b4178 + 0x100)[i] == 0) {
+          ((char*)&g_16b4178 + 0x100)[i] = 1;
+          return ((int*)g_16b4178)[i];
         }
         ++i;
       }
     }
     p += 3;
-  } while ((int)p < 0x15a7bb8);
+  } while ((int)p < (int)((char*)&g_15a7bac + 0xc));
   return 0;
 }
 

@@ -19,6 +19,11 @@
 //  0x00de60f0  helper                                     (113 B)
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 
 // Transform message (ctor 0x434040, Init 0x832dc0): flags/count + pos + scale + 3x3 rotation.
@@ -120,9 +125,9 @@ struct Str16 {
 
     Str16()
     {
-        begin = (wchar_t*)0x1667bac;
-        end   = (wchar_t*)0x1667bac;
-        cap   = (wchar_t*)0x1667bae;
+        begin = (wchar_t*)g_1667bac;
+        end   = (wchar_t*)g_1667bac;
+        cap   = (wchar_t*)g_1667bae;
     }
 };
 struct cGameData {

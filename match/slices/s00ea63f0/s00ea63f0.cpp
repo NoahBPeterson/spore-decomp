@@ -13,6 +13,16 @@
 // written here as __fastcall(self, edx, value, id) which produces the identical layout.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_16c6adc[];
+extern "C" char g_16c6ae0[];
+extern "C" char g_16c6ae4[];
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 #include <math.h>
 
@@ -578,9 +588,9 @@ bool __fastcall Ability_7830(PrimBase* self, void* /*edx*/)
 {
     if (!self->Init())
         return false;
-    *(u32*)((char*)self + 0x38) = *(u32*)0x016c6adc;
-    *(u32*)((char*)self + 0x3c) = *(u32*)0x016c6ae0;
-    *(u32*)((char*)self + 0x40) = *(u32*)0x016c6ae4;
+    *(u32*)((char*)self + 0x38) = *(u32*)g_16c6adc;
+    *(u32*)((char*)self + 0x3c) = *(u32*)g_16c6ae0;
+    *(u32*)((char*)self + 0x40) = *(u32*)g_16c6ae4;
     return true;
 }
 
@@ -740,7 +750,7 @@ void __fastcall Ability_7f70(PrimBase* self, void* /*edx*/, float value, u32 id)
 {
     self->SetValue(value, (int)id);
 
-    void* g = *(void**)0x016c7aa4;
+    void* g = *(void**)g_16c7aa4;
     float out = kFf;
     if (g != 0)
     {
@@ -764,7 +774,7 @@ void __fastcall Ability_80a0(PrimBase* self, void* /*edx*/, float value, u32 id)
     self->SetValue(value, (int)id);
 
     float out = 0.0f;
-    void* g = *(void**)0x016c7aa4;
+    void* g = *(void**)g_16c7aa4;
     if (g != 0)
     {
         void* o = *(void**)((char*)g + 0x78);
@@ -806,9 +816,9 @@ void* __fastcall GmeEditorResBase_dtor(GmeRefCounted* self, void* /*edx*/, unsig
     if (p != 0)
         p->Release();
 
-    self->mVt2 = (void*)0x13ef094;
-    self->mVt1 = (void*)0x13eb394;
-    self->mVt0 = (void*)0x13eb938;
+    self->mVt2 = (void*)g_13ef094;
+    self->mVt1 = (void*)g_13eb394;
+    self->mVt0 = (void*)g_13eb938;
 
     if (flags & 1)
         operator_delete(self);

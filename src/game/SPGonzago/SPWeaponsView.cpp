@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPWeaponsView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14767d0[];
+
 // Hand guard (kept by merge_preamble on re-apply): the generated tm.h defines `struct tm` unguarded, so it
 // collides with <wchar.h>'s own `struct tm` (C2011) as soon as a slice of this module needs <wchar.h>
 // (s00cc3220 does).  Defining the CRT guard first makes <wchar.h> skip its copy; tm.h (via SP/cStarRecord.h)
@@ -967,7 +970,7 @@ void* cSpaceDefenseMissileView_s00cc_3220::MakeView(cSpatialObject* p)
 // @ 0x00cc36d0
 void* cSpatialObjectView_s00cc_3220::FUN_00cc36d0(u8 flag)
 {
-    mpVtbl = (void*)0x14767d0;
+    mpVtbl = (void*)g_14767d0;
     _ReadWriteBarrier();
     if (mpObject) {
         void* r = VT_B8_1(mpObject, 0x24630ce);

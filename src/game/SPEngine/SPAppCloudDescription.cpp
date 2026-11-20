@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPAppCloudDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ArgScript/cCommandBase.h"
@@ -1475,7 +1478,7 @@ cCloudDescription::~cCloudDescription()
     FreeCounted(v9c.mpBegin);
     FreeCounted(v84.mpBegin);
     FreeCounted(v64.mpBegin);
-    mVtbl = (void*)0x13ef094;
+    mVtbl = (void*)g_13ef094;
 }
 
 // @ 0x00f53590

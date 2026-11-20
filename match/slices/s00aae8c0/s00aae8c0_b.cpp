@@ -3,6 +3,12 @@
 // Class and field names follow the 2008 dev PDB (EA::Swarm::cParticlesEffect /
 // cParticlesDescription); retail offsets were taken from the disassembly and differ from the PDB.
 // flags: /vc71 /O2 /MD /Gy /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00aaa110();
+extern "C" void FUN_00aabc20();
+extern "C" void FUN_00aad240();
+
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -171,9 +177,9 @@ void SwarmModuleInit(char flag)
 {
     if (flag) {
         memset(&g_swarmInitBlock, 0, sizeof(g_swarmInitBlock));
-        g_swarmInitBlock.p0 = (void*)0x00aaa110;
-        g_swarmInitBlock.p8 = (void*)0x00aabc20;
-        g_swarmInitBlock.pC = (void*)0x00aad240;
+        g_swarmInitBlock.p0 = (void*)FUN_00aaa110;
+        g_swarmInitBlock.p8 = (void*)FUN_00aabc20;
+        g_swarmInitBlock.pC = (void*)FUN_00aad240;
     }
 }
 

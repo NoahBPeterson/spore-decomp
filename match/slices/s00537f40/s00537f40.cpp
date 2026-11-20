@@ -1,6 +1,15 @@
 // Slice s00537f40: Swarm skin-paint particle effect (transform copy, refcount) and its
 // ArgScript command. Large/algorithmic functions are stubs (partial.txt). Unoptimized
 // module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f2194[];
+extern "C" char g_13f21d4[];
+extern "C" char g_13ef094[];
+extern "C" char g_13f2f44[];
+extern "C" char g_13f2f54[];
+extern "C" char g_13f2f58[];
+
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -187,20 +196,20 @@ struct Desc538 {                        // 0xb8-byte particle description
 // @ 0x00538260
 Desc538::Desc538()
 {
-    m0 = (void*)0x13ef094;
+    m0 = (void*)g_13ef094;
     m4 = 0;
-    m0 = (void*)0x13ef094;
+    m0 = (void*)g_13ef094;
     struct CtorLocals { PaintBlock538* sub; int pad[3]; U32VecHead* vec; int tail; };
     CtorLocals L;
     L.sub = (PaintBlock538*)((char*)this + 8);
-    L.sub->m0 = (void*)0x13f2f58;
+    L.sub->m0 = (void*)g_13f2f58;
     L.vec = &L.sub->mVec;
     L.vec->mpBegin = 0;
     L.vec->mpEnd = 0;
     L.vec->mpCapacity = 0;
     L.sub->mList.Construct();
-    m0 = (void*)0x13f2f54;
-    m8 = (void*)0x13f2f44;
+    m0 = (void*)g_13f2f54;
+    m8 = (void*)g_13f2f44;
     mB4 = -1;
 }
 
@@ -213,9 +222,9 @@ struct ParticleEffectBase538 {
     void* m4;
     char pad[0x40];
     ~ParticleEffectBase538() {
-        m0 = (void*)0x13f21d4;
-        m4 = (void*)0x13f2194;
-        m4 = (void*)0x13ef094;
+        m0 = (void*)g_13f21d4;
+        m4 = (void*)g_13f2194;
+        m4 = (void*)g_13ef094;
     }
 };
 struct ParticleComponentRef538 {

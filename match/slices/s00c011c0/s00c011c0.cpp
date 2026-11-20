@@ -9,6 +9,15 @@
 // (three pointers + 8-byte allocator state) and its strings 16 bytes.
 //
 // Toolchain: cl 15.00.30729.01 (VS2008 SP1), /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef63c[];
+extern "C" char g_1469cc0[];
+extern "C" char g_1469cd8[];
+extern "C" char g_1469ce8[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 #include <intrin.h>   // _ReadWriteBarrier (scheduling barrier, emits no code)
 
@@ -90,11 +99,11 @@ cCommunity::cCommunity()
 {
     // The interface sub-object's base vftable is installed first, then the two
     // primary vftables, then the community's own interface vftable.
-    mpVtbl   = (void*)0x13ef63c;                             // +0x034
+    mpVtbl   = (void*)g_13ef63c;                             // +0x034
     _ReadWriteBarrier();   // retail keeps this base vftable store, dead as it is
-    mpVtbl0  = (void*)0x1469ce8;                             // +0x000
-    mpVtbl1  = (void*)0x1469cd8;                             // +0x004
-    mpVtbl   = (void*)0x1469cc0;                             // +0x034
+    mpVtbl0  = (void*)g_1469ce8;                             // +0x000
+    mpVtbl1  = (void*)g_1469cd8;                             // +0x004
+    mpVtbl   = (void*)g_1469cc0;                             // +0x034
 
     mCommunitySize = 0;                                      // +0x038
     mStructureLines.mpBegin = 0;                             // +0x03c
@@ -129,13 +138,13 @@ cCommunity::cCommunity()
     // Empty strings: begin == end == the shared empty buffer at 0x01667bac and
     // capacity == one past it, 0x01667bae.
     _ReadWriteBarrier();
-    mName.mpBegin = (void*)0x1667bac;                            // +0x0f8
-    mName.mpEnd = (void*)0x1667bac;                              // +0x0fc
+    mName.mpBegin = (void*)g_1667bac;                            // +0x0f8
+    mName.mpEnd = (void*)g_1667bac;                              // +0x0fc
     _ReadWriteBarrier();   // the two capacities are materialised below 0x1667bac's stores
-    mName.mpCapacity = (void*)0x1667bae;                         // +0x100
-    mDescription.mpCapacity = (void*)0x1667bae;                  // +0x110
-    mDescription.mpBegin = (void*)0x1667bac;                     // +0x108
-    mDescription.mpEnd = (void*)0x1667bac;                       // +0x10c
+    mName.mpCapacity = (void*)g_1667bae;                         // +0x100
+    mDescription.mpCapacity = (void*)g_1667bae;                  // +0x110
+    mDescription.mpBegin = (void*)g_1667bac;                     // +0x108
+    mDescription.mpEnd = (void*)g_1667bac;                       // +0x10c
 
     mGODPoliticalID = 0xffffffff;                            // +0x118
     mpLeader = 0;                                            // +0x11c

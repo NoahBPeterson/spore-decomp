@@ -19,6 +19,17 @@
 //   0x01226f30  zero-initialise the smart-pointer global 0x15d2dbc and register its destructor
 // The three ctor+atexit initializers reserve a dead 12-byte frame (char pad[12]) exactly as
 // the original does, and compile with /GS- so no security cookie is emitted.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013bc9f0();
+extern "C" void FUN_013bca10();
+extern "C" void FUN_013bca30();
+extern "C" void FUN_013bca50();
+extern "C" char g_15d2964[];
+extern "C" char g_15d29c8[];
+extern "C" char g_15d2c60[];
+extern "C" char g_15d2dbc[];
+
 #include "types.h"
 
 extern "C" int atexit(void (__cdecl*)());
@@ -120,8 +131,8 @@ void FUN_01225310()
 {
     char pad[12];
     (void)pad;   // dead frame, matching the original dynamic initializer
-    ((Singleton*)0x15d2c60)->ctor();
-    atexit((void (__cdecl*)())0x13bc9f0);
+    ((Singleton*)g_15d2c60)->ctor();
+    atexit((void (__cdecl*)())FUN_013bc9f0);
 }
 
 // @ 0x01225340
@@ -129,8 +140,8 @@ void FUN_01225340()
 {
     char pad[12];
     (void)pad;
-    ((Singleton*)0x15d29c8)->ctor();
-    atexit((void (__cdecl*)())0x13bca10);
+    ((Singleton*)g_15d29c8)->ctor();
+    atexit((void (__cdecl*)())FUN_013bca10);
 }
 
 // @ 0x01225370
@@ -138,13 +149,13 @@ void FUN_01225370()
 {
     char pad[12];
     (void)pad;
-    ((Singleton*)0x15d2964)->ctor();
-    atexit((void (__cdecl*)())0x13bca30);
+    ((Singleton*)g_15d2964)->ctor();
+    atexit((void (__cdecl*)())FUN_013bca30);
 }
 
 // @ 0x01226f30
 void FUN_01226f30()
 {
-    *(uint32_t*)0x15d2dbc = 0;
-    atexit((void (__cdecl*)())0x13bca50);
+    *(uint32_t*)g_15d2dbc = 0;
+    atexit((void (__cdecl*)())FUN_013bca50);
 }

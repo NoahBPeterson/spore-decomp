@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00b90000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14659cc[];
+extern "C" char g_14659e8[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -1977,7 +1981,7 @@ FloatPairCtorA* FloatPairCtorA::FUN_00b93810(float a, float b)
 {
     *(float*)((char*)this + 8) = a;
     *(int*)((char*)this + 4) = 0;
-    *(int*)this = 0x14659cc;
+    *(int*)this = (int)g_14659cc;
     *(float*)((char*)this + 0xc) = b;
     return this;
 }
@@ -1987,7 +1991,7 @@ FloatPairCtorB* FloatPairCtorB::FUN_00b93840(float a, float b)
 {
     *(float*)((char*)this + 8) = a;
     *(int*)((char*)this + 4) = 0;
-    *(int*)this = 0x14659e8;
+    *(int*)this = (int)g_14659e8;
     *(float*)((char*)this + 0xc) = b;
     return this;
 }

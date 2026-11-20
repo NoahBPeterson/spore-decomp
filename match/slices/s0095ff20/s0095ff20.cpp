@@ -1,5 +1,10 @@
 // Slice s0095ff20 -- EA::UTFWin Window geometry/message helpers and WindowListMarshaller.
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f2150[];
+
 #include "types.h"
 
 // ---- free helpers (external) ------------------------------------------------
@@ -350,8 +355,8 @@ bool Window::DoMessage(void* msg) {
 
 // @ 0x00960550
 void* __stdcall AllocPair(void* arg) {
-    char* p = (char*)operator_new_size(0xc, (const char*)0x13f2150, 0, 0,
-                                       (const char*)0x13ebb38, 0xd1);
+    char* p = (char*)operator_new_size(0xc, (const char*)g_13f2150, 0, 0,
+                                       (const char*)g_13ebb38, 0xd1);
     if (p != 0) {
         *(int*)p = *(int*)arg;
         int c = *(int*)((char*)arg + 4);

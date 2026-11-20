@@ -8,6 +8,11 @@
 // and a float pair in EAX in the original -- approximated here, so the a720-family is nonmatching).
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 
 inline void* operator new(unsigned, void* p) { return p; }
@@ -276,10 +281,10 @@ uint32_t FeedbackMgr::GetEvent(uint32_t key)
 struct Glyph { char pad[4]; void* a; void* b; void* c; };
 Glyph* __fastcall FUN_00b6a700(Glyph* p)
 {
-    void* c = (void*)0x1667bac;
+    void* c = (void*)g_1667bac;
     p->a = c;
     p->b = c;
-    p->c = (void*)0x1667bae;
+    p->c = (void*)g_1667bae;
     return p;
 }
 

@@ -4,6 +4,9 @@
 //
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436ab8[];
+
 #include <string.h>
 #include <new>
 #include <intrin.h>
@@ -518,7 +521,7 @@ InternalDatabaseList::~InternalDatabaseList()
 // ===========================================================================
 bool Manager::SetKeyName(Key* pKey, const wchar_t* pName)
 {
-    mNameMutex.Lock(reinterpret_cast<const char*>(0x1436AB8));
+    mNameMutex.Lock(reinterpret_cast<const char*>((int)g_1436ab8));
     WString* pStr = mKeyNameMap.KeyNameOperatorIndex(pKey);
     const char* pBegin = reinterpret_cast<const char*>(pName);
     const char* pScan  = pBegin;

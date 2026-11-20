@@ -2,6 +2,11 @@
 // Object file: Havok/_at_01090000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a1b88[];
+extern "C" char g_14a1b90[];
+extern "C" char g_14a1c08[];
+
 #include "game/types.h"
 #include <math.h>
 #include <new>
@@ -1975,7 +1980,7 @@ hkBool_s0109_38e0__motors hkPointToPathConstraintData::isValid() const
 // @ 0x01094bc0
 void cCurveContainer::Destroy()
 {
-	this->mpVtbl = (void*)0x014a1b88;
+	this->mpVtbl = (void*)g_14a1b88;
 	int i;
 	int n = this->m_arrays[0].m_size;
 	for (i = 0; i < n; ++i)
@@ -2025,7 +2030,7 @@ void cCurveContainer::Destroy()
 		heap->Dealloc(this->m_arrays[0].m_data,
 		              (this->m_arrays[0].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
 	}
-	this->mpVtbl = (void*)0x013ef094;
+	this->mpVtbl = (void*)&vtbl_013ef094;
 }
 
 // @ 0x01094d50
@@ -2055,12 +2060,12 @@ void* cStreamProxy::To08(void* arg)
 void* cStreamProxy::Destroy(int flags)
 {
 	cRefObj* p = (cRefObj*)this->mpStream;
-	this->mpVtbl = (void*)0x014a1b90;
+	this->mpVtbl = (void*)g_14a1b90;
 	if (p->m_memSize != 0) {
 		if (--p->m_refCount == 0)
 			p->Release(1);
 	}
-	this->mpVtbl = (void*)0x013ef094;
+	this->mpVtbl = (void*)&vtbl_013ef094;
 	if (flags & 1)
 		gDeallocator->Dealloc(this, this->m_memSize, 0x29);
 	return this;
@@ -2331,7 +2336,7 @@ hkKeyframedRigidMotion::hkKeyframedRigidMotion(const hkVector4_s0109_5320& pos, 
     ((hkRigidMotionCtorThunk*)this)->m_savedMotion = 0;
     mC4 = 0;
     *(unsigned int*)(void*)&mC0 = 0;
-    ((hkRigidMotionCtorThunk*)this)->vftable = (void*)0x014a1c08;
+    ((hkRigidMotionCtorThunk*)this)->vftable = (void*)g_14a1c08;
 }
 
 // @ 0x01095ba0

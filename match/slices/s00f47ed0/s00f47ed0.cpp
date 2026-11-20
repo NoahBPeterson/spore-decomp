@@ -1,6 +1,9 @@
 // Slice s00f47ed0 -- SporeApp startup entry points and a state destructor.
 // Region is /O2 (no frame pointer); float locals via movss.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 typedef unsigned int uint32_t;
 
 struct WString;
@@ -49,7 +52,7 @@ cTerrainBrushState::~cTerrainBrushState()
     ReleaseBlock(field88);
     ReleaseBlock(field40);
     ReleaseBlock(field2c);
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = (void*)g_13ef094;
 }
 
 // ---------------------------------------------------------------------------

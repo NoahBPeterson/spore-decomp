@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/Manager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436ab8[];
+
 #include "game/types.h"
 #include "EA/ResourceMan/Cache.h"
 #include "EA/ResourceMan/Manager.h"
@@ -1745,7 +1748,7 @@ EA::ResourceMan::InternalDatabaseList_s008e_0eb0::~InternalDatabaseList_s008e_0e
 // @ 0x008e1480
 bool EA::ResourceMan::Manager_s008e_0eb0::SetKeyName(EA::ResourceMan::Key_s008e_0eb0* pKey, const wchar_t* pName)
 {
-    mNameMutex.Lock(reinterpret_cast<const char*>(0x1436AB8));
+    mNameMutex.Lock(reinterpret_cast<const char*>((int)g_1436ab8));
     EA::ResourceMan::WString* pStr = mKeyNameMap.KeyNameOperatorIndex(pKey);
     const char* pBegin = reinterpret_cast<const char*>(pName);
     const char* pScan  = pBegin;

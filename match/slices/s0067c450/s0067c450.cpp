@@ -2,6 +2,19 @@
 // global-state register helpers (0x67cc70..0x67d0c0), zlib shim allocators
 // (0x67d230/0x67d260) and EA::IO zlib stream setters (0x67d280..0x67d54d).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00c2e4e0();
+extern "C" char g_16327bc[];
+extern "C" char g_16327c4[];
+extern "C" char g_16327c8[];
+extern "C" char g_16327d0[];
+extern "C" char g_16327e0[];
+extern "C" char g_16327f4[];
+extern "C" char g_16327f8[];
+extern "C" char g_16327fc[];
+extern "C" char g_1632818[];
+
 #include "types.h"
 
 // ------------------------------------------------------------------ cUIHints
@@ -442,24 +455,24 @@ void FUN_0067d020(void* a, void* b, int c) {
 extern "C" void FUN_011f4270(int, void*, void*, void*, void*);
 extern "C" void FUN_0067cf20();
 void FUN_0067d0c0() {
-  FUN_011f4270(0x236, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067d020);
-  *(unsigned int*)0x16327c8 = 4;
-  FUN_011f4270(0x238, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0);
-  *(unsigned int*)0x16327d0 = 1;
-  FUN_011f4270(0x233, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cd20);
-  *(unsigned int*)0x16327bc = 4;
-  FUN_011f4270(0x235, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cd90);
-  *(unsigned int*)0x16327c4 = 4;
-  FUN_011f4270(0x23c, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067ce00);
-  *(unsigned int*)0x16327e0 = 0x30;
-  FUN_011f4270(0x241, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cf20);
-  *(unsigned int*)0x16327f4 = 0x40;
-  FUN_011f4270(0x242, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cca0);
-  *(unsigned int*)0x16327f8 = 0x40;
-  FUN_011f4270(0x243, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cce0);
-  *(unsigned int*)0x16327fc = 0x90;
-  FUN_011f4270(0x24a, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)0xc2e4e0, (void*)FUN_0067cc70);
-  *(unsigned int*)0x1632818 = 0x30;
+  FUN_011f4270(0x236, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067d020);
+  *(unsigned int*)g_16327c8 = 4;
+  FUN_011f4270(0x238, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)0);
+  *(unsigned int*)g_16327d0 = 1;
+  FUN_011f4270(0x233, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067cd20);
+  *(unsigned int*)g_16327bc = 4;
+  FUN_011f4270(0x235, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067cd90);
+  *(unsigned int*)g_16327c4 = 4;
+  FUN_011f4270(0x23c, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067ce00);
+  *(unsigned int*)g_16327e0 = 0x30;
+  FUN_011f4270(0x241, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067cf20);
+  *(unsigned int*)g_16327f4 = 0x40;
+  FUN_011f4270(0x242, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067cca0);
+  *(unsigned int*)g_16327f8 = 0x40;
+  FUN_011f4270(0x243, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067cce0);
+  *(unsigned int*)g_16327fc = 0x90;
+  FUN_011f4270(0x24a, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_00c2e4e0, (void*)FUN_0067cc70);
+  *(unsigned int*)g_1632818 = 0x30;
 }
 
 // ------------------------------------------------------------------ zlib shim allocators

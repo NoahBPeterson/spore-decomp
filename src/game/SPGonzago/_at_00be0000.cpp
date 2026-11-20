@@ -2,6 +2,12 @@
 // Object file: SPGonzago/_at_00be0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1468e0c[];
+extern "C" char g_1468e20[];
+extern "C" char g_1468e90[];
+extern "C" char g_1567e48[];
+
 #include "game/types.h"
 #include "SP/cVehicle.h"
 #include "SP/cGameNounManager.h"
@@ -1154,11 +1160,11 @@ cCityTerritory* cCityTerritory::ctor()
 {
     ((GameDataBase*)this)->Ctor();
     ((SpatialBase*)sub34)->Ctor();
-    *(void**)sub34      = (void*)0x01468e90;
+    *(void**)sub34      = (void*)g_1468e90;
     m110                = 0;
     m111                = 0;
-    vfptr0              = (void*)0x01468e20;
-    vfptr1              = (void*)0x01468e0c;
+    vfptr0              = (void*)g_1468e20;
+    vfptr1              = (void*)g_1468e0c;
     m108                = 1;
     m10c                = 100.0f;
     return this;
@@ -1181,7 +1187,7 @@ void* cCityTerritory::AsInterface(uint32_t id)
 // @ 0x00beb9f0
 bool cCityTerritory::InitFromDefinition(void* a)
 {
-    ((PropReg*)a)->Add(this, (void*)0x01567e48, L"cGameData");
+    ((PropReg*)a)->Add(this, (void*)g_1567e48, L"cGameData");
     return true;
 }
 

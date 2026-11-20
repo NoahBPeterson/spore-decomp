@@ -2,6 +2,11 @@
 // Object file: SPMovie/slist.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1491e4c[];
+extern "C" char g_1491e68[];
+extern "C" char g_1491ef8[];
+
 #include "game/types.h"
 #include <intrin.h>
 #pragma intrinsic(__rdtsc)
@@ -683,7 +688,7 @@ namespace rw {
 void* SList_s00fc_c260::Dtor(unsigned flags)
 {
     mHead = 0;
-    vftable = (void*)0x1491e4c;
+    vftable = (void*)g_1491e4c;
     if (flags & 1)
         operator_delete(this);
     return this;
@@ -778,9 +783,9 @@ SNode* SList_s00fc_c260::LoadNewNode(int a, int b)
 namespace rw {
 void* SList_s00fc_c260::ScalarDeletingDtor(unsigned flags)
 {
-    vftable = (void*)0x1491ef8;
+    vftable = (void*)g_1491ef8;
     Clear(0);
-    vftable = (void*)0x1491e68;
+    vftable = (void*)g_1491e68;
     if (flags & 1)
         operator_delete(this);
     return this;

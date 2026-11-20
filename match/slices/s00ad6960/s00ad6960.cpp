@@ -1,6 +1,11 @@
 // Slice s00ad6960 - Spore Simulator ArgScript commands + UI layout/subsystem
 // helpers (show/hide widget groups, subtitles, modal, action target ctor).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145a6a8[];
+extern "C" char g_145afdc[];
+
 #include "types.h"
 
 typedef unsigned int   uint32;
@@ -182,7 +187,7 @@ void* SimCmd::init()
 {
     SimCmd* c = this;
     ((CmdBaseCtor*)this)->baseCtor();
-    *(void**)this = (void*)0x145afdc;
+    *(void**)this = (void*)g_145afdc;
     ((ArgSpecCtor*)((char*)this + 0x10))->specCtor(true);
     FUN_0083bcd0((char*)this + 0x10,
                  "Adds a referencable object",
@@ -394,7 +399,7 @@ void FUN_00ad6f40(void)
     cmd = o ? ((CmdSetState*)o)->init() : 0;
     ((TriggerMgr*)GetTriggerMgr())->Register(gSetStateCmdId, cmd);
     o = operator_new6(0x10, "Simulator", 0, 0, 0, 0);
-    cmd = o ? (((CmdSimple*)o)->baseInit(), *(void**)o = (void*)0x145a6a8, o) : 0;
+    cmd = o ? (((CmdSimple*)o)->baseInit(), *(void**)o = (void*)g_145a6a8, o) : 0;
     ((TriggerMgr*)GetTriggerMgr())->Register(gSimpleCmdId, cmd);
     o = operator_new6(0xe0, "Simulator", 0, 0, 0, 0);
     cmd = o ? ((CmdSetState2*)o)->init() : 0;

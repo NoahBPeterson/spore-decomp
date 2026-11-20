@@ -2,6 +2,11 @@
 // Object file: SPAudio/eapdinstance.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a647b0();
+extern "C" void FUN_00a64820();
+extern "C" void FUN_00a64870();
+
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include <intrin.h>
@@ -704,7 +709,7 @@ bool EapdAssetManager::MakeFloatHandler(float f)
     bool ok = false;
     if (*(int*)this == 0) {
         void* sys = SystemGetAssetManager();
-        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)0xa647b0);
+        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)FUN_00a647b0);
         if (e) {
             e->mKind10 = 1;
             e->mFloat14 = f;
@@ -724,7 +729,7 @@ bool EapdAssetManager::MakeSymbolHandler(const char* s)
         PgSymbol sym;
         gensym(&sym, s);
         void* sys = SystemGetAssetManager();
-        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)0xa64820);
+        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)FUN_00a64820);
         if (e) {
             e->mKind10 = 2;
             *(unsigned*)&e->mFloat14 = sym.mHash;
@@ -743,7 +748,7 @@ bool EapdAssetManager::MakeListHandler(void)
     bool ok = false;
     if (*(int*)this == 2) {
         void* sys = SystemGetAssetManager();
-        void* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)0xa64870);
+        void* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)FUN_00a64870);
         if (e)
             ok = true;
     }

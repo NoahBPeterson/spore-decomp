@@ -2,6 +2,9 @@
 // Object file: Swarm/EffectsManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "game/types.h"
 #include "EA/Swarm/cGlobalParams.h"
 
@@ -976,7 +979,7 @@ cGlobalParams::cGlobalParams()
 // @ 0x00a6d000
 int GmeRefCount::ScalarDeletingDestructor(unsigned flags)
 {
-    *(void**)((char*)this + 4) = (void*)0x013ef094;
+    *(void**)((char*)this + 4) = (void*)g_13ef094;
     if (flags & 1)
         operator_delete__(this);
     return (int)this;

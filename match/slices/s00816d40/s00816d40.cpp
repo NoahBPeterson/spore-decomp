@@ -2,6 +2,12 @@
 // UI::CalloutMessageBox / cSPUIMessageBox helpers.
 // Relocations are masked; externs only need the right convention/arity.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_1418dc4[];
+extern "C" char g_1418dd4[];
+
 typedef unsigned int  u32;
 typedef unsigned char u8;
 
@@ -227,11 +233,11 @@ struct MsgBoxA {
 extern "C" void Dealloc(void*);
 // @ 0x00817000
 void* MsgBoxA::scalarDtor(u8 flags) {
-    *(void**)((char*)this + 0) = (void*)0x1418dd4;
-    *(void**)((char*)this + 4) = (void*)0x1418dc4;
+    *(void**)((char*)this + 0) = (void*)g_1418dd4;
+    *(void**)((char*)this + 4) = (void*)g_1418dc4;
     layout.~cSPUILayout();
-    *(void**)((char*)this + 4) = (void*)0x13ec458;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_13ec458;
+    *(void**)((char*)this + 0) = (void*)g_13eb938;
     if (flags & 1) Dealloc(this);
     return this;
 }

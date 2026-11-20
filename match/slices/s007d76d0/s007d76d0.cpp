@@ -1,6 +1,12 @@
 // Slice s007d76d0 (batch w2g5): SP::cGameModelEffect split handling, a small
 // creature-ability command class, and SP::cApp mode/message methods.
 // Retail module flags: /O2 /MD /Gy /EHsc /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_007d7ed0();
+extern "C" char g_1675ff0[];
+extern "C" char g_1675ff8[];
+
 #include "types.h"
 #include <string.h>
 #include <intrin.h>
@@ -457,8 +463,8 @@ cAbilityCmd* AbilityCmdNew(void* arg) {
 
 // @ 0x007d7f40  (static registration)
 void AbilityRegister() {
-    *(void**)0x01675ff8 = (void*)0x007d7ed0;
-    *(void**)0x01675ff0 = 0;
+    *(void**)g_1675ff8 = (void*)FUN_007d7ed0;
+    *(void**)g_1675ff0 = 0;
 }
 
 // @ 0x007d7f60

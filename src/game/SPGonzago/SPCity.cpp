@@ -2,6 +2,29 @@
 // Object file: SPGonzago/SPCity.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14682dc[];
+extern "C" char g_1468300[];
+extern "C" char g_1468324[];
+extern "C" char g_1468350[];
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+extern "C" char g_1467f40[];
+extern "C" char g_1467f48[];
+extern "C" char g_1467f50[];
+extern "C" char g_1467f58[];
+extern "C" char g_1467f60[];
+extern "C" char g_1467f74[];
+extern "C" char g_1467f90[];
+extern "C" char g_1467fa0[];
+extern "C" char g_1467fb0[];
+extern "C" char g_14682ac[];
+extern "C" char g_14684d8[];
+extern "C" char g_14685a0[];
+extern "C" char g_1468608[];
+extern "C" char g_1468618[];
+extern "C" char g_168bd4c[];
+
 #include "game/types.h"
 #include "SP/cAnimatingCreature.h"
 #include "SP/cCity.h"
@@ -1116,8 +1139,8 @@ struct CElement {
     __declspec(noinline) CElement *CopyConstructFrom(const CElement &src);   // 0x00bdd380
     __declspec(noinline) CElement *CopyAssignFrom(const CElement &src);      // 0x00bdd470
 };
-#define VTBL_SUB_BASE ((void *)0x1465d54)
-#define VTBL_SUB_DERIVED ((void *)0x1464450)
+#define VTBL_SUB_BASE ((void *)g_1465d54)
+#define VTBL_SUB_DERIVED ((void *)g_1464450)
 static __forceinline void CopySub(CElementSub &d, const CElementSub &s)
 {
     d.m_vtbl = VTBL_SUB_BASE;
@@ -2281,25 +2304,25 @@ class cCheatObject : public cGameData_s00bd_5ea0, public cSpatialObject_s00bd_5e
 }
 using SP::cGameData_s00bd_5ea0;
 using SP::cCheatObject;
-#define gStr_1467f50 ((const wchar_t*)0x01467f50)   // 0x01467f50
-#define gStr_1467f48 ((const wchar_t*)0x01467f48)   // 0x01467f48
-#define gStr_1467f40 ((const wchar_t*)0x01467f40)   // 0x01467f40
+#define gStr_1467f50 ((const wchar_t*)g_1467f50)   // 0x01467f50
+#define gStr_1467f48 ((const wchar_t*)g_1467f48)   // 0x01467f48
+#define gStr_1467f40 ((const wchar_t*)g_1467f40)   // 0x01467f40
 struct cCityInputStrategy {                        // singleton at 0x0168bd4c
   void Begin();                                    // 0x00b7d390
   void AddNode(const wchar_t* name, int id, int flags); // 0x00b7d2e0
   void SelectNode(void* obj, void* arg);           // 0x00b7cc60
 };
-#define kCityInputStrategy ((cCityInputStrategy*)0x0168bd4c)
-#define gStrEnergy ((const wchar_t*)0x01467f90)         // 0x01467f90
-#define gStrEntertainment ((const wchar_t*)0x01467f74)  // 0x01467f74
-#define gStrHappiness ((const wchar_t*)0x01467f60)      // 0x01467f60
-#define gStrAll ((const wchar_t*)0x01467f58)            // 0x01467f58
-#define gStrHunger ((const wchar_t*)0x01467fb0)   // 0x01467fb0
-#define gStrHealth ((const wchar_t*)0x01467fa0)   // 0x01467fa0
-#define gStrSetMotive ((const wchar_t*)0x01468350)   // 0x01468350
-#define gStrHappinessW ((const wchar_t*)0x01468324)  // 0x01468324
-#define gStrToggleId ((const wchar_t*)0x01468300)    // 0x01468300
-#define gStrMaxVehicles ((const wchar_t*)0x014682dc) // 0x014682dc
+#define kCityInputStrategy ((cCityInputStrategy*)g_168bd4c)
+#define gStrEnergy ((const wchar_t*)g_1467f90)         // 0x01467f90
+#define gStrEntertainment ((const wchar_t*)g_1467f74)  // 0x01467f74
+#define gStrHappiness ((const wchar_t*)g_1467f60)      // 0x01467f60
+#define gStrAll ((const wchar_t*)g_1467f58)            // 0x01467f58
+#define gStrHunger ((const wchar_t*)g_1467fb0)   // 0x01467fb0
+#define gStrHealth ((const wchar_t*)g_1467fa0)   // 0x01467fa0
+#define gStrSetMotive ((const wchar_t*)g_1468350)   // 0x01468350
+#define gStrHappinessW ((const wchar_t*)g_1468324)  // 0x01468324
+#define gStrToggleId ((const wchar_t*)g_1468300)    // 0x01468300
+#define gStrMaxVehicles ((const wchar_t*)g_14682dc) // 0x014682dc
 // ---- items of slice s00bd5ea0 end
 
 // ---- items of slice s00bda190 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -5203,7 +5226,7 @@ void FUN_00bd6e00(cCheatObject* obj)
   if (p) {
     int v = ((Fn_i_v)VT(p, 0x38))(p);
     if (v == (int)0xee9b2232)
-      kCityInputStrategy->AddNode((const wchar_t*)0x014682ac, 0x1f45, 0);
+      kCityInputStrategy->AddNode((const wchar_t*)g_14682ac, 0x1f45, 0);
   }
   kCityInputStrategy->SelectNode((SP::cSpatialObject_s00bd_5ea0*)obj, 0);
 }
@@ -5363,7 +5386,7 @@ void __fastcall FUN_00bd8500(cCity* ecx_this, void* edx, char flag, void* owner)
             old->v04();
         }
     }
-    ecx_this->mp208->SetEffectId(0x168bd70, 5.0f);
+    ecx_this->mp208->SetEffectId((int)&g_168bd70, 5.0f);
     ecx_this->mp208->DoF3d2(ecx_this);
     ecx_this->mRegion38.AsSlot38()->DoC470(1);
 }
@@ -6418,10 +6441,10 @@ cCulturalTarget_s00bd_a190::cCulturalTarget_s00bd_a190()
 
     mAttackState = 0;
 
-    mGameData.mpVtbl = (void*)0x1468618;
-    mpVtbl04 = (void*)0x1468608;
-    mCombatant.mpVtbl = (void*)0x14685a0;
-    mSpatial.mpVtbl = (void*)0x14684d8;
+    mGameData.mpVtbl = (void*)g_1468618;
+    mpVtbl04 = (void*)g_1468608;
+    mCombatant.mpVtbl = (void*)g_14685a0;
+    mSpatial.mpVtbl = (void*)g_14684d8;
 
     mGateIndex = 0xff;
     mAttackerPoliticalID = 0xffffffff;

@@ -4,6 +4,10 @@
 // image resource and a posted render message); 0x007b77a0 tears the posted job down;
 // 0x007b7830 / 0x007b7920 / 0x007b7a20 drive a frame job: bind the job's viewer to a
 // raster, draw through the world's layer renderer, fit the result and run the job.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16f6e34[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -147,7 +151,7 @@ void FrameJob::RunTiles(int a, int b, int unused, int d) {
 // @ 0x007b7920
 void FrameJob::RunAspect(int a, int b, int unused, int d) {
     (void)unused;
-    unsigned saved = *(volatile unsigned*)0x016f6e34;
+    unsigned saved = *(volatile unsigned*)g_16f6e34;
     SetShaderData(0x223, 0, 1);
     viewer->SetRaster(scene->raster, true);
     viewer->Clear(7);

@@ -4,6 +4,10 @@
 // The 10 targets of this slice are the scheduler / filesystem entry points; the
 // Mutex::{Destroy,Init,Lock,Unlock}, RwwString::set and the small trivial
 // wrappers are the neighbouring functions recorded alongside them.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec47c[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -680,7 +684,7 @@ int* __fastcall f_011ec800(int* p)
 {
     p[0] = 0; p[1] = 0; p[2] = 0; p[3] = -1;
     ((char*)p)[0x10] = 0;
-    p[5] = (int)0x13ec47c;
+    p[5] = (int)g_13ec47c;
     return p;
 }
 

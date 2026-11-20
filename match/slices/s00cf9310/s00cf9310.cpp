@@ -1,3 +1,5 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145f924[];
 
 #include "types.h"
 
@@ -52,7 +54,7 @@ void cCivModeStrategy::FUN_00cf9310()
 
     if (singleton == 0) {
         singleton = new (
-            (const char*)0x0145F924,
+            (const char*)g_145f924,
             0, 0, 0, 0
         ) SimSingleton();
 

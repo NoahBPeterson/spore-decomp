@@ -2,6 +2,12 @@
 // Object file: plugins/_at_01130000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14b0934[];
+extern "C" char g_14b1788[];
+extern "C" char g_14b1c8c[];
+extern "C" char g_15bbb38[];
+
 #include "game/types.h"
 #include "rw/audio/core/DecoderRegistry.h"
 #include "rw/audio/core/StreamPool.h"
@@ -286,7 +292,7 @@ void AudioObj::F_d00()
 // @ 0x01138f70
 namespace rw { namespace audio { namespace core {
 void* __cdecl FUN_01138f70(void)
-{ return g_p15bbb20 = (void*)0x15bbb38; }
+{ return g_p15bbb20 = (void*)g_15bbb38; }
 }}}  // namespace rw::audio::core
 
 // @ 0x01138f90
@@ -313,7 +319,7 @@ int __cdecl FUN_01138fb0(void* rec)
 namespace rw { namespace audio { namespace core {
 bool __cdecl FUN_01138fd0(void* p)
 {
-    if (p) *(void**)p = (void*)0x14b0934;
+    if (p) *(void**)p = (void*)g_14b0934;
     A<int>(p, 0xc) = (int)((char*)p + 0x30);
     A<u8>(p, 0x3c) = 0;
     A<float>(p, 0x38) = 0.0f; A<float>(p, 0x30) = 0.0f;
@@ -466,7 +472,7 @@ namespace rw { namespace audio { namespace core {
 bool __cdecl FUN_01139450(void* p)
 {
     if (p) {
-        *(void**)p = (void*)0x14b1788;
+        *(void**)p = (void*)g_14b1788;
         ((PlugIn_s0112_ce20*)((char*)p + 0x24))->Initialize_SndPlayer1();
     }
     A<float>(p, 0x40) = 0.0f;
@@ -549,7 +555,7 @@ int __cdecl FUN_01139770(void* rec)
 namespace rw { namespace audio { namespace core {
 bool __cdecl FUN_011397e0(void* p)
 {
-    if (p) { *(void**)p = (void*)0x14b1c8c; A<int>(p, 0x2c) = 0; A<int>(p, 0x30) = 0; A<u8>(p, 0x34) = 0; }
+    if (p) { *(void**)p = (void*)g_14b1c8c; A<int>(p, 0x2c) = 0; A<int>(p, 0x30) = 0; A<u8>(p, 0x34) = 0; }
     A<float>(p, 0x38) = 0.0f; A<float>(p, 0x3c) = 0.0f; A<float>(p, 0x40) = 0.0f;
     A<float>(p, 0x44) = 0.0f; A<float>(p, 0x48) = 0.0f; A<float>(p, 0x4c) = 0.0f;
     return true;

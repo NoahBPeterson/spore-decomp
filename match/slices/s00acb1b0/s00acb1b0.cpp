@@ -1,4 +1,8 @@
 // Slice s00acb1b0: vector/EASTL range helpers (0x145a184 class).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145a164[];
+
 #include <string.h>
 
 typedef unsigned int uint;
@@ -273,7 +277,7 @@ void VO::FUN_00acb930(int a2, int a3, int a4) {
 void* VO::FUN_00acbaf0(int* src) {
     uchar* d = (uchar*)this;
     *(int*)d = *src;
-    *(void**)(d + 4) = (void*)0x145a164;
+    *(void**)(d + 4) = (void*)g_145a164;
     *(d + 8) = *(uchar*)((uchar*)src + 8);
     *(d + 9) = *(uchar*)((uchar*)src + 9);
     ((XC*)(d + 0xc))->FUN_00aca9d0((uchar*)src + 0xc);

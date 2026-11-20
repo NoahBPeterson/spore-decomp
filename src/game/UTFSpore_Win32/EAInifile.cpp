@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/EAInifile.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e7d8[];
+
 #include "game/types.h"
 #include "EA/IO/FileStream.h"
 #include "EA/IO/IStream.h"
@@ -955,7 +958,7 @@ IniFile_s0093_4260::~IniFile_s0093_4260()
 {
     VTableHeader* pHeader = (VTableHeader*)this;
     NameMap* pNameMap = &mSectionNameMap;
-    pHeader->mpVTable = (void*)0x143e7d8;
+    pHeader->mpVTable = (void*)g_143e7d8;
     pNameMap->DoNukeSubtree(pNameMap->mpRoot);
     PosMap* pMap = &mSectionPositionMap;
     pMap->DoNukeSubtree(pMap->mpRoot);

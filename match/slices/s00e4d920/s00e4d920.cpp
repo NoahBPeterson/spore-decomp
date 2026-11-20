@@ -1,5 +1,13 @@
 // Slice s00e4d920 -- SP cell/fluid Simulator helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (verified region)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebcdc[];
+extern "C" char g_13effa8[];
+extern "C" char g_13effb8[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 #include <new>
 #include <intrin.h>
@@ -84,8 +92,8 @@ struct WideName {                       // wide-string temp: 16 bytes in retail'
     wchar_t* mpCap;                     // +0x08
     void*    mpOwner;                   // +0x0c  (never touched by this function)
     WideName()
-        : mpBegin((wchar_t*)0x1667bac)   // shared empty-string sentinel
-        , mpEnd((wchar_t*)0x1667bac)
+        : mpBegin((wchar_t*)g_1667bac)   // shared empty-string sentinel
+        , mpEnd((wchar_t*)g_1667bac)
     {
         // mpCap is stored by the caller path, after the key stores (retail order)
     }
@@ -106,7 +114,7 @@ struct VolumeBase {                     // ref-counted base, vtable 0x13ebcdc
     unsigned int mReserved;             // +0x14
     VolumeBase()
     {
-        mpVptr = (void*)0x13ebcdc;
+        mpVptr = (void*)g_13ebcdc;
         _InterlockedExchange(&mnRefCount, 0);
         mKey.mId = 0;
         mKey.mType = 0;
@@ -120,7 +128,7 @@ struct AdvectVolume : VolumeBase {      // vtable 0x1482de8
     int   mnPayloadBytes;               // +0x1c
     AdvectVolume()
     {
-        mpVptr = (void*)0x1482de8;
+        mpVptr = (void*)&g_vt_1482de8;
         mpPayload = 0;
         mnPayloadBytes = 0;
     }
@@ -131,9 +139,9 @@ struct PublishHandle {                  // 8-byte ref-counted handle, 0x13effa8
     long  mnRefCount;
     PublishHandle()
     {
-        mpVptr = (void*)0x13effa8;
+        mpVptr = (void*)g_13effa8;
         _InterlockedExchange(&mnRefCount, 0);
-        mpVptr = (void*)0x1482e64;
+        mpVptr = (void*)&g_vt_1482e64;
     }
 };
 
@@ -163,7 +171,7 @@ bool __cdecl ImportAdvectMap(const char* name, int dim)
     WideName wname;
     key.mType = 0x4805684;
     key.mGroup = 0;
-    wname.mpCap = (wchar_t*)0x1667bae;   // empty-string capacity sentinel
+    wname.mpCap = (wchar_t*)g_1667bae;   // empty-string capacity sentinel
     WStr_Format(&wname, g_volumeNameFormat, name);
 
     mgr = (void*)SP_GetManager();
@@ -185,7 +193,7 @@ bool __cdecl ImportAdvectMap(const char* name, int dim)
     PublishHandle guard;
     mgr = (void*)SP_GetManager();
     ((VolumeMgrPublish)(*(void***)mgr)[8])(mgr, p, 0, (void*)*g_pCellData, &guard, 0);
-    guard.mpVptr = (void*)0x13effb8;    // release drops the handle to its base vtable
+    guard.mpVptr = (void*)g_13effb8;    // release drops the handle to its base vtable
     wname.Free();
     return true;
 }

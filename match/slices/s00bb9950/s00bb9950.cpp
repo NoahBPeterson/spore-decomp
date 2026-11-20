@@ -13,6 +13,12 @@
 // cPlanetRecord.confirmed: mFlags 0x2c, mPlanetObjects 0x134 (vector of
 //   0x2c-byte cPlanetObjectData, mFlags at +0x28), mKey 0x184, mTechLevel 0x194.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_14664b8[];
+extern "C" char g_14664c8[];
+
 #include "types.h"
 #include <stddef.h>
 #include <intrin.h>
@@ -678,15 +684,15 @@ cStarRecord::cStarRecord()
 // ===========================================================================
 void cStarRecord::Dtor()
 {
-    *(uint32_t*)((char*)this + 0x00) = 0x14664c8;
-    *(uint32_t*)((char*)this + 0x04) = 0x14664b8;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_14664c8;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_14664b8;
     field_98.Dtor();
     mPlanets.Dtor();
     int n = (int)(mName.mpCapacity - mName.mpBegin) & (int)0xfffffffe;
     if (n > 2 && mName.mpBegin != 0)
         FUN_00f47380((void*)mName.mpBegin);
-    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
 }
 
 // ===========================================================================

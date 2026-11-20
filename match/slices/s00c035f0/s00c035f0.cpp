@@ -11,6 +11,9 @@
 // 0x1624 / 0x1674 members).  All the unnamed callees are declared here; because
 // chk.py only compiles to .obj, a declaration is enough for the call to appear.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1571370[];
+
 #include "game/types.h"
 #include <math.h>
 
@@ -516,7 +519,7 @@ bool CreatureBase::Write(void* stream)
     }
   }
   Ser ser;
-  ser.FUN_00692f90(this, (void*)0x1571370, 0x1a80d26);
+  ser.FUN_00692f90(this, (void*)g_1571370, 0x1a80d26);
   if (bl) {
     if (ser.FUN_00692900(stream))
       return true;

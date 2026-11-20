@@ -1,5 +1,10 @@
 // Slice s0045aa70: Simulator::cContentValidationSummarizer-style effect table + XformMsg helpers
 // and a large container-owning object ctor/dtor. Hand-modelled layouts (see comments).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_13ecc8c[];
+
 #include "types.h"
 
 struct IRefObj {            // intrusive ref-counted object: vtbl[0]=AddRef, [1]=Release
@@ -121,9 +126,9 @@ void ThisBase_Dtor(void* p);              // @0x45b380
 // @ 0x45aa70
 cContentValidationSummarizer::cContentValidationSummarizer()
 {
-    vtbl = (void*)0x13ec458;
+    vtbl = (void*)g_13ec458;
     f4 = 0;
-    vtbl = (void*)0x13ecc8c;
+    vtbl = (void*)g_13ecc8c;
     uint32_t pos[1];
     char tag;
     ((TableCtorApi*)&table)->FUN_005640f0(&tag);
@@ -133,10 +138,10 @@ cContentValidationSummarizer::cContentValidationSummarizer()
 // @ 0x45ab00
 cContentValidationSummarizer::~cContentValidationSummarizer()
 {
-    vtbl = (void*)0x13ecc8c;
+    vtbl = (void*)g_13ecc8c;
     uint32_t pos[3];
     ((TableDtorApi*)&table)->FUN_0045b380();
-    vtbl = (void*)0x13ec458;
+    vtbl = (void*)g_13ec458;
     (void)pos;
 }
 

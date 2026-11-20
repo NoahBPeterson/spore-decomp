@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPUITimeline.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5a54[];
+
 #include "game/types.h"
 #include "SP/cTelemetry.h"
 #include "EA/Stopwatch.h"
@@ -4108,10 +4111,12 @@ void __fastcall FUN_00e39200(Timeline_s00e3_8ce0* self, void* dummy)
 void __fastcall FUN_00e39300(Timeline_s00e3_8ce0* self, void* dummy, s32 v)
 {
   (void)dummy;
-  for (s32 addr = 0x015a5a54; addr < 0x015a5a68; addr += 4) {
+  s32 addr = (int)g_15a5a54;     // five window IDs at 0x015a5a54..0x015a5a68: the first test is known true
+  do {
     Wnd* w = (Wnd*)self->p348->FindWindowByID(*(u32*)addr, 1);
     if (w != 0) ((WndVt*)w)->SetVisible(1, v);
-  }
+    addr += 4;
+  } while (addr < (int)((char*)&g_15a5a54 + 0x14));
 }
 
 // @ 0x00e39350

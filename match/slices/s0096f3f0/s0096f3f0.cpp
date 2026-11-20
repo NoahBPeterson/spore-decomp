@@ -8,6 +8,18 @@
 // nonmatching.txt for the residual diff.  OnMouseMove (0x970460) updates the
 // row-extra-data hash map and is likewise only approximated.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb1bc[];
+extern "C" char g_13fa72c[];
+extern "C" char g_14424bc[];
+extern "C" char g_14424d4[];
+extern "C" char g_1442584[];
+extern "C" char g_14425c0[];
+extern "C" char g_14425d8[];
+extern "C" char g_14426a0[];
+extern "C" char g_14426bc[];
+extern "C" char g_1485720[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -148,10 +160,10 @@ class FrameDrawable { public:
 // @ 0x0096fe30
 FrameDrawable::FrameDrawable()
 {
-    const float one = *(const float*)0x01485720;
-    *(void* volatile*)((char*)this + 4) = (void*)0x013fa72c;
-    *(void**)((char*)this + 0) = (void*)0x014424d4;
-    *(void* volatile*)((char*)this + 4) = (void*)0x014424bc;
+    const float one = *(const float*)g_1485720;
+    *(void* volatile*)((char*)this + 4) = (void*)g_13fa72c;
+    *(void**)((char*)this + 0) = (void*)g_14424d4;
+    *(void* volatile*)((char*)this + 4) = (void*)g_14424bc;
     _ReadWriteBarrier();
     int zero = 0;
     *(int*)((char*)this + 8) = zero;
@@ -426,11 +438,11 @@ void* __fastcall FUN_009700b0(char* param_1)
 {
     FadeEffect_ctor(param_1);
     const float zero = 0.0f;
-    *(void* volatile*)(param_1 + 0x60) = (void*)0x014426a0;
-    *(void**)(param_1 + 0) = (void*)0x014425d8;
-    *(void**)(param_1 + 4) = (void*)0x014425c0;
-    *(void**)(param_1 + 0x0c) = (void*)0x01442584;
-    *(void* volatile*)(param_1 + 0x60) = (void*)0x014426bc;
+    *(void* volatile*)(param_1 + 0x60) = (void*)g_14426a0;
+    *(void**)(param_1 + 0) = (void*)g_14425d8;
+    *(void**)(param_1 + 4) = (void*)g_14425c0;
+    *(void**)(param_1 + 0x0c) = (void*)g_1442584;
+    *(void* volatile*)(param_1 + 0x60) = (void*)g_14426bc;
     *(float*)(param_1 + 0x64) = zero;
     *(float*)(param_1 + 0x68) = zero;
     return param_1;
@@ -451,11 +463,11 @@ void* BasicFactory_GlideEffect::CreateInstance(int, void* param2)
     if (obj != 0) {
         FadeEffect_ctor(obj);
         const float zero = 0.0f;
-        *(void* volatile*)(obj + 0x60) = (void*)0x014426a0;
-        *(void**)(obj + 0) = (void*)0x014425d8;
-        *(void**)(obj + 4) = (void*)0x014425c0;
-        *(void**)(obj + 0x0c) = (void*)0x01442584;
-        *(void* volatile*)(obj + 0x60) = (void*)0x014426bc;
+        *(void* volatile*)(obj + 0x60) = (void*)&g_14426a0;
+        *(void**)(obj + 0) = (void*)&g_14425d8;
+        *(void**)(obj + 4) = (void*)&g_14425c0;
+        *(void**)(obj + 0x0c) = (void*)&g_1442584;
+        *(void* volatile*)(obj + 0x60) = (void*)&g_14426bc;
         *(float*)(obj + 0x64) = zero;
         *(float*)(obj + 0x68) = zero;
         return obj;
@@ -507,7 +519,7 @@ CellFormat::CellFormat()
 // @ 0x009701c0
 CellFormat* CellFormat::InitInvalid()
 {
-    const float fNegOne = *(const float*)0x013eb1bc;
+    const float fNegOne = *(const float*)g_13eb1bc;
     *(int*)((char*)this + 0) = 0;
     *(char*)((char*)this + 0x24) = (char)0xff;
     *(char*)((char*)this + 0x25) = 0;
@@ -530,7 +542,7 @@ CellFormat* CellFormat::InitInvalid()
 // @ 0x00970210
 CellFormat* CellFormat::InitFrom(const void* src)
 {
-    const float fNegOne = *(const float*)0x013eb1bc;
+    const float fNegOne = *(const float*)g_13eb1bc;
     *(int*)((char*)this + 0) = 0;
     *(char*)((char*)this + 0x25) = 0;
     *(char*)((char*)this + 0x26) = 0;

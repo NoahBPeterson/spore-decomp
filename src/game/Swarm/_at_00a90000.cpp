@@ -2,6 +2,21 @@
 // Object file: Swarm/_at_00a90000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a89680();
+extern "C" void FUN_00a8bf10();
+extern "C" void FUN_00a8cc00();
+extern "C" void FUN_00a93880();
+extern "C" void FUN_00a94fb0();
+extern "C" void FUN_00a954b0();
+extern "C" void FUN_00a95d30();
+extern "C" void FUN_00a96520();
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_14586d4[];
+extern "C" char g_14586d8[];
+extern "C" char g_1458714[];
+
 #include "game/types.h"
 #include "EA/Swarm/cIEffectsWorld.h"
 #include "EA/Swarm/cIVisualEffect.h"
@@ -1843,10 +1858,10 @@ struct Emitter {
 // @ 0x00a938d0
 void RegisterMeshStreamers2(bool)
 {
-    gMeshStreamerTable.mpRegister = (void*)0x00a8bf10;
-    gMeshStreamerTable.mpCreate   = (void*)0x00a8cc00;
-    gMeshStreamerTable.mpField0c  = (void*)0x00a93880;
-    gMeshStreamerTable.mpField14  = (void*)0x00a89680;
+    gMeshStreamerTable.mpRegister = (void*)FUN_00a8bf10;
+    gMeshStreamerTable.mpCreate   = (void*)FUN_00a8cc00;
+    gMeshStreamerTable.mpField0c  = (void*)FUN_00a93880;
+    gMeshStreamerTable.mpField14  = (void*)FUN_00a89680;
     gMeshStreamerTable.mField18   = 3;
     gMeshStreamerTable.mField1c   = 4;
 }
@@ -1858,7 +1873,7 @@ cMetaParticlesEffect::~cMetaParticlesEffect()
     FreeVecBuffer(mVec94.mpBegin);
     FreeVecBuffer(mVec80.mpBegin);
     FreeVecBuffer(mVec60.mpBegin);
-    mpVtbl = (void*)0x013ef094;
+    mpVtbl = (void*)g_13ef094;
 }
 
 // @ 0x00a93980
@@ -2305,12 +2320,12 @@ CAbil* CAbil::FUN_00a94470(void* owner)
 // @ 0x00a947b0
 CAbil* CAbil::FUN_00a947b0(u8_s00a9_3cf0 freeIt)
 {
-    vt0 = (void*)0x1458714;
-    vt1 = (void*)0x14586d8;
-    vt2 = (void*)0x14586d4;
+    vt0 = (void*)g_1458714;
+    vt1 = (void*)g_14586d8;
+    vt2 = (void*)g_14586d4;
     ((IntrusiveList*)(void*)((char*)this + 0x14))->FUN_00620230();
-    vt1 = (void*)0x13f21d4;
-    vt2 = (void*)0x13ef094;
+    vt1 = (void*)g_13f21d4;
+    vt2 = (void*)g_13ef094;
     if (freeIt & 1) {
         FUN_00f47380(this);
     }
@@ -2773,10 +2788,10 @@ void __cdecl RegisterSwarmVtables(char enable)
 {
     if (enable) {
         MemZero(gpSwarmVtbl, 0, 0x80);
-        gpSwarmVtbl[0] = (void*)0x00a96520;
-        gpSwarmVtbl[1] = (void*)0x00a94fb0;
-        gpSwarmVtbl[2] = (void*)0x00a954b0;
-        gpSwarmVtbl[3] = (void*)0x00a95d30;
+        gpSwarmVtbl[0] = (void*)FUN_00a96520;
+        gpSwarmVtbl[1] = (void*)FUN_00a94fb0;
+        gpSwarmVtbl[2] = (void*)FUN_00a954b0;
+        gpSwarmVtbl[3] = (void*)FUN_00a95d30;
     }
 }
 

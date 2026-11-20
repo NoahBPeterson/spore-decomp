@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPSpaceCommActions.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fa1d4[];
+
 #include "game/types.h"
 #include <intrin.h>
 
@@ -670,7 +673,7 @@ void ResumeSpaceGame()
 // @ 0x0102cd40
 void CloseCommScreenToSpace()
 {
-    ((cCommScreen*)GetLayout(0x13fa1d4))->SetSpeakerText();
+    ((cCommScreen*)GetLayout((int)g_13fa1d4))->SetSpeakerText();
     ((cCommScreen*)GetLayout(0))->SetResponseCount();
     ((cRewardReceiver*)GetRewardReceiver(0x2710))->Apply();
 

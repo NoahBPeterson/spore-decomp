@@ -20,6 +20,12 @@
 // the pressed mission-button id at +0x8c and the selected slot at +0x90; the
 // notify handler is a member of the slot subobject at +0x40, so its fields are
 // the panel fields shifted by 0x40.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1480338[];
+extern "C" char g_1480344[];
+
 #include "types.h"
 
 #define nullptr 0
@@ -642,11 +648,11 @@ void cUITradingActivity::Deactivate(uint32_t nReason)
 // @ 0x00e1dc20
 void* cTradeUI::Destroy(uint32_t nFlags)
 {
-    mpVtbl0 = (void*)0x1480344;
-    mpTraceVtbl = (void*)0x1480338;
+    mpVtbl0 = (void*)g_1480344;
+    mpTraceVtbl = (void*)g_1480338;
     mLayout.Shutdown(1);
     mLayout.Destroy();
-    mpVtbl0 = (void*)0x13eb938;
+    mpVtbl0 = (void*)g_13eb938;
     if ((nFlags & 1) != 0)
         operator_delete_array(this);
     return this;

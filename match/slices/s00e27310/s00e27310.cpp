@@ -1,5 +1,8 @@
 // s00e27310 -- SP::cSPUIPosseItem / cSPUIPosse and derived posee items.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16ac2c8[];
+
 typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
@@ -609,7 +612,7 @@ u8 cSPUIPosseItemTribeBaby::init(cSPUIPosse* posse)
         void* sys = FUN_00a206f0();
         void* r = sys != 0 ? ((void* (__thiscall*)(void*))VT(sys)[0x20 / 4])(sys) : 0;
 
-        FUN_00435ed0(*(u32*)0x16ac2c8, r);
+        FUN_00435ed0(*(u32*)g_16ac2c8, r);
         mBlinkerStart = FUN_00805080();
         return 1;
     }
@@ -850,7 +853,7 @@ void cSPUIPosseItem::FUN_00e281a0(u8 flag)
 // @ 0x00e28230
 void cSPUIPosseItem::FUN_00e28230()
 {
-    FUN_00e26de0(mRefs.mpBegin, mRefs.mpEnd, (void*)0x00e22760);
+    FUN_00e26de0(mRefs.mpBegin, mRefs.mpEnd, (void*)&FUN_00e22760);
 }
 
 // ===========================================================================

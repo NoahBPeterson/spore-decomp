@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00e80000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16c45b4[];
+
 #include "game/types.h"
 #include <math.h>
 #include <string.h>
@@ -621,31 +624,31 @@ void FUN_00e86980(SphereTree* tree, Node* node)
 // @ 0x00e86ad0
 void FUN_00e86ad0()
 {
-  ((SimulatorGlobal*)0x016c45b4)->FUN_00b72080(0x10, 2);
+  ((SimulatorGlobal*)g_16c45b4)->FUN_00b72080(0x10, 2);
 }
 
 // @ 0x00e86ae0
 void FUN_00e86ae0()
 {
-  int priority = ((SimulatorGlobal*)0x016c45b4)->FUN_00e31100();
-  SimEntry* e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+  int priority = ((SimulatorGlobal*)g_16c45b4)->FUN_00e31100();
+  SimEntry* e = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72230(&priority);
   while (e != 0) {
     SpherePool* pool = (SpherePool*)e->value;
     if (pool != 0) {
       free(pool->base);
       FUN_00f47380(pool);
     }
-    ((SimulatorGlobal*)0x016c45b4)->FUN_00b72260(e->key);
-    e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+    ((SimulatorGlobal*)g_16c45b4)->FUN_00b72260(e->key);
+    e = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72230(&priority);
   }
-  ((SimulatorGlobal*)0x016c45b4)->FUN_00b720e0();
+  ((SimulatorGlobal*)g_16c45b4)->FUN_00b720e0();
 }
 
 // @ 0x00e86b60
 void FUN_00e86b60()
 {
-  int priority = ((SimulatorGlobal*)0x016c45b4)->FUN_00e31100();
-  SimEntry* e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+  int priority = ((SimulatorGlobal*)g_16c45b4)->FUN_00e31100();
+  SimEntry* e = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72230(&priority);
   while (e != 0) {
     Node* node = (Node*)e->value;
     node->pos.x = 0;
@@ -653,7 +656,7 @@ void FUN_00e86b60()
     node->pos.z = 0;
     e->field08 = 0;
     e->field0c = 0;
-    e = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72230(&priority);
+    e = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72230(&priority);
   }
 }
 

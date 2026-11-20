@@ -2,6 +2,15 @@
 // Member offsets are taken from the constructor at 0x006f8d40.  The class has three vtables
 // (multiple inheritance), modelled here as three explicit pointer fields so the compiler does
 // not emit its own vtable stores.  Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_140b798[];
+extern "C" char g_140b7a8[];
+extern "C" char g_140b7b8[];
+
 #include "types.h"
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
@@ -260,9 +269,9 @@ cFilterChain::cFilterChain() {
 // ==========================================================================================
 // @ 0x006f8f60  (destructor)
 cFilterChain::~cFilterChain() {
-  vtbl0 = (void*)0x140b7b8;
-  vtbl1 = (void*)0x140b7a8;
-  vtbl2 = (void*)0x140b798;
+  vtbl0 = (void*)g_140b7b8;
+  vtbl1 = (void*)g_140b7a8;
+  vtbl2 = (void*)g_140b798;
   _ReadWriteBarrier();
 
   FreeGuarded(mArrBegin);
@@ -277,9 +286,9 @@ cFilterChain::~cFilterChain() {
   }
   FreeGuarded(mDescBegin);
 
-  vtbl2 = (void*)0x13ec458;
-  vtbl1 = (void*)0x13eb394;
-  vtbl0 = (void*)0x13eb938;
+  vtbl2 = (void*)g_13ec458;
+  vtbl1 = (void*)g_13eb394;
+  vtbl0 = (void*)g_13eb938;
 }
 
 // ==========================================================================================

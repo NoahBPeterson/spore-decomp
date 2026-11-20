@@ -9,6 +9,15 @@
 // Layout from the sibling slice s00eb5480 (retail shifts the splines to 0x3c bytes each, so the spline
 // block runs +0x1b0 .. +0x2dc, and a fifth track spline sits at +0x2a0).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (same module as s00eb4420 / s00eb73f0).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_148869c[];
+extern "C" char g_14886a0[];
+extern "C" char g_14886b0[];
+
 #include "types.h"
 #include <math.h>
 
@@ -266,9 +275,9 @@ cGameCinematicsCameraController* cGameCinematicsCameraController::Construct(void
 // ---------------------------------------------------------------------------------------------
 cGameCinematicsCameraController::~cGameCinematicsCameraController()
 {
-	mpVtbl0 = (void*)0x014886b0;
-	mpVtbl1 = (void*)0x014886a0;
-	mpVtbl2 = (void*)0x0148869c;
+	mpVtbl0 = (void*)g_14886b0;
+	mpVtbl1 = (void*)g_14886a0;
+	mpVtbl2 = (void*)g_148869c;
 	{
 		RBTree* pTree = &mTree;
 		pTree->Nuke(pTree->mAnchor.mpNodeParent);
@@ -293,9 +302,9 @@ cGameCinematicsCameraController::~cGameCinematicsCameraController()
 	if (mpOwner != 0)
 		(*(void(__thiscall**)(void*))(*(char**)mpOwner + 4))(mpOwner);
 
-	mpVtbl2 = (void*)0x013ef094;   // IEventModifier
-	mpVtbl1 = (void*)0x013eb394;   // PaintSystem
-	mpVtbl0 = (void*)0x013eb938;   // ITracerBase
+	mpVtbl2 = (void*)g_13ef094;   // IEventModifier
+	mpVtbl1 = (void*)g_13eb394;   // PaintSystem
+	mpVtbl0 = (void*)g_13eb938;   // ITracerBase
 }
 
 // ---------------------------------------------------------------------------------------------

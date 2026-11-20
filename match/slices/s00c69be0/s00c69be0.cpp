@@ -1,4 +1,9 @@
 // @ 0x00c69be0
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1577a98[];
+extern "C" char g_157a1f8[];
+
 #include "game/types.h"
 
 namespace SP {
@@ -23,9 +28,9 @@ int SP::cNest::WriteAsText(void* pData)
     uint8_t serA[0xa14];
     uint8_t serB[0xa14];
     int n = ((FnB18420*)this)->f(pData);
-    ((CVarListSer*)serA)->ctor((char*)this + 0x34, (void*)0x157a1f8, 0x1a80d26);
+    ((CVarListSer*)serA)->ctor((char*)this + 0x34, (void*)g_157a1f8, 0x1a80d26);
     n += ((CVarListSer*)serA)->GetFields(pData);
-    ((CVarListSer*)serB)->ctor(this, (void*)0x1577a98, 0x1a80d26);
+    ((CVarListSer*)serB)->ctor(this, (void*)g_1577a98, 0x1a80d26);
     n += ((CVarListSer*)serB)->GetFields(pData);
     return n;
 }

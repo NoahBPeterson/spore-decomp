@@ -2,6 +2,9 @@
 // Object file: SPAudio/eapdtime.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a59db0();
+
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
 
@@ -479,7 +482,7 @@ void* delay_new(float f)
 {
     char* x = (char*)pd_new(spDelayClass);
     if (x) {
-        *(void**)(x + 0x28) = clock_new(x, (void*)0xa59db0);
+        *(void**)(x + 0x28) = clock_new(x, (void*)FUN_00a59db0);
         t_symbol sym;
         t_symbol sym2;
         t_symbol* s = gensym(&sym, "bang");

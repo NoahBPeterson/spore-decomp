@@ -2,6 +2,23 @@
 // Object file: Spui/_at_00810000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13f6b3c[];
+extern "C" char g_140af70[];
+extern "C" char g_1418e50[];
+extern "C" char g_1418e68[];
+extern "C" char g_1418e70[];
+extern "C" char g_1419b34[];
+extern "C" char g_1419b3c[];
+extern "C" char g_1419b50[];
+extern "C" char g_1419c70[];
+extern "C" char g_15451e8[];
+extern "C" char g_15451ec[];
+extern "C" char g_164d858[];
+
 #include "game/types.h"
 #include "EA/Stopwatch.h"
 #include "cSPUILayoutObjectCollection.h"
@@ -163,8 +180,8 @@ virtual void q11();
 extern "C" Canvas* SP_Canvas();        // 0x0067dcf0
 extern "C" void*   SP_MessageServer(); // 0x0067dcc0
 extern "C" void*   SP_CheatManager();
-#define sMouseXScale (*(float*)0x15451e8)
-#define sMouseYScale (*(float*)0x15451ec)
+#define sMouseXScale (*(float*)g_15451e8)
+#define sMouseYScale (*(float*)g_15451ec)
 struct ZoomBase {
     void SetStyleWindow(int);
 };
@@ -627,7 +644,7 @@ struct ImgColor { unsigned r, g, b, a; };
 // @ 0x008129c0
 void RegisterLayoutCheat()
 {
-    cSPUILayoutCheat_s0081_24a0* p = new ((const char*)0x13f6b3c, 0, 0, 0, 0) cSPUILayoutCheat_s0081_24a0();
+    cSPUILayoutCheat_s0081_24a0* p = new ((const char*)g_13f6b3c, 0, 0, 0, 0) cSPUILayoutCheat_s0081_24a0();
     (void)p;
     SP_CheatManager();
 }
@@ -1055,9 +1072,9 @@ void __fastcall FUN_00817b00raw(cSPUIMovieRecordUI* p)
 {
     cTokBase& base = *(cTokBase*)((char*)p + 8);
     _ReadWriteBarrier();
-    p->mVt0 = (void*)0x1418e70;
-    p->mVt1 = (void*)0x1418e68;
-    base.mVt = (void*)0x1418e50;
+    p->mVt0 = (void*)g_1418e70;
+    p->mVt1 = (void*)g_1418e68;
+    base.mVt = (void*)g_1418e50;
     FreeStrW(&p->s78);
     FreeStrW(&p->s68);
     FreeStrW(&p->s58);
@@ -1073,9 +1090,9 @@ void __fastcall FUN_00817b00raw(cSPUIMovieRecordUI* p)
     if (p->mW1) Vv0(p->mW1, 0x04);
     if (p->mLayout) Vv0(p->mLayout, 0x08);
     base.Destroy();
-    p->mVt1 = (void*)0x13eb394;
-    p->mVt0 = (void*)0x13eb938;
-    *(void**)0x164d858 = 0;
+    p->mVt1 = (void*)g_13eb394;
+    p->mVt0 = (void*)g_13eb938;
+    *(void**)g_164d858 = 0;
 }
 
 // @ 0x00817c40
@@ -1128,13 +1145,13 @@ ItemWinCtor* ItemWinCtor::Ctor()
 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin()
 {
   ((S962a10*)this)->f();
-  mIfaceVtbl20c = (void*)0x13ec458;
+  mIfaceVtbl20c = (void*)g_13ec458;
   mUnknown210 = 0;
-  mIfaceVtbl214 = (void*)0x140af70;
-  mVtbl0 = (void*)0x1419c70;
-  mVtbl4 = (void*)0x1419b50;
-  mIfaceVtbl20c = (void*)0x1419b3c;
-  mIfaceVtbl214 = (void*)0x1419b34;
+  mIfaceVtbl214 = (void*)g_140af70;
+  mVtbl0 = (void*)g_1419c70;
+  mVtbl4 = (void*)g_1419b50;
+  mIfaceVtbl20c = (void*)g_1419b3c;
+  mIfaceVtbl214 = (void*)g_1419b34;
   mValue218 = 100.0f;
 }
 

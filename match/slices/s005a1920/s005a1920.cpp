@@ -1,5 +1,9 @@
 // Slice s005a1920 -- SP::cTerrainUI / cEditorCameraController helpers.
 // Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15d1168[];
+
 #include "types.h"
 #include <math.h>
 
@@ -565,7 +569,7 @@ void SP::cEditorCameraController::SetCenterCameraOffset()
 {
     float v = 0.0f;
     if (mConfig->HasProperty(0x6fda2e1c))
-        v = *(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, 0x015d1168);
+        v = *(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, (int)g_15d1168);
     float negated = -v;
     mTargetCameraZoomModifier = negated * 0.85f + v;
 }
@@ -575,10 +579,10 @@ void SP::cEditorCameraController::SetPartModeCameraOffset()
 {
     if (mConfig->HasProperty(0x6fda2e1c))
         mTargetCameraZoomModifier =
-            *(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, 0x015d1168);
+            *(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, (int)g_15d1168);
     if (mConfig->HasProperty(0x8fda2e23))
         mTargetCameraOffsetX =
-            *(const float*)VariantData(mConfig->GetProperty(0x8fda2e23), 0xd, 0x10, 0x015d1168);
+            *(const float*)VariantData(mConfig->GetProperty(0x8fda2e23), 0xd, 0x10, (int)g_15d1168);
 }
 
 // @ 0x005a24c0
@@ -586,8 +590,8 @@ void SP::cEditorCameraController::SetPaintModeCameraOffset()
 {
     if (mConfig->HasProperty(0x6fda2e1c))
         mTargetCameraZoomModifier =
-            -*(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, 0x015d1168);
+            -*(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, (int)g_15d1168);
     if (mConfig->HasProperty(0x8fda2e23))
         mTargetCameraOffsetX =
-            *(const float*)VariantData(mConfig->GetProperty(0x8fda2e23), 0xd, 0x10, 0x015d1168);
+            *(const float*)VariantData(mConfig->GetProperty(0x8fda2e23), 0xd, 0x10, (int)g_15d1168);
 }

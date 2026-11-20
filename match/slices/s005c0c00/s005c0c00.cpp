@@ -1,6 +1,10 @@
 // SP::cSPEditorPaintLikeThis (palette "paint like this" item), its base
 // cSPPaletteItemUIOneClickPaint dtor, a palette-item message class and small find helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f7c8c[];
+
 #include <new>
 #include "types.h"
 
@@ -702,7 +706,7 @@ void cSPEditorPaintLikeThis::Init(cSPPaletteInfo* info, IWindow* parent, int a, 
     text.Load(0xc0152a6d, 0x5af4a04, 0);
     void* mem = TooltipAlloc(0x68, 4, "UI/Tooltip", GetUIAllocator());
     mTooltip = mem ? new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, text.GetText(), (float*)&emptyKey, 0,
-                                                  (const wchar_t*)0x13f7c8c, 0)
+                                                  (const wchar_t*)g_13f7c8c, 0)
                    : 0;
     mBtnLoadMain->AddWinProc(mTooltip);
     mBtnLoadTray->AddWinProc(mTooltip);

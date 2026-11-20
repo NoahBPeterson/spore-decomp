@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00e30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include <math.h>
@@ -2095,7 +2098,7 @@ void cSPSwatchView::Update(int32_t delta)
 // @ 0x00e34470
 void cAssetSwatchWidget::InitLayout()
 {
-    cSPUILayout_s00e3_4290* pNew = (cSPUILayout_s00e3_4290*)operator new(0x18, (void*)0x013f6b3c, 0, 0, 0, 0);
+    cSPUILayout_s00e3_4290* pNew = (cSPUILayout_s00e3_4290*)operator new(0x18, (void*)g_13f6b3c, 0, 0, 0, 0);
     if (pNew)
         pNew = pNew->ctor();
     else

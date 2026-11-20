@@ -2,6 +2,23 @@
 // Object file: SPEditors/_at_00ef0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_1400744[];
+extern "C" char g_140085c[];
+extern "C" char g_14426a0[];
+extern "C" char g_148b040[];
+extern "C" char g_148b050[];
+extern "C" char g_148b058[];
+extern "C" char g_148b3b4[];
+extern "C" char g_148b3c4[];
+extern "C" char g_148b3dc[];
+extern "C" char g_148b3e8[];
+extern "C" char g_148b3f8[];
+extern "C" char g_15acd1c[];
+
 #include "game/types.h"
 #include "SP/FunctionalMatch/Constraint.h"
 #include "SP/cLocalInputState.h"
@@ -815,7 +832,7 @@ struct SpaceMgr {
     uint8_t       pad78[0xcc - 0x78];
     int32_t       mMode;     // +0xcc
 };
-#define GMGR (*(SpaceMgr**)0x16c7aa4)
+#define GMGR (*(SpaceMgr**)&g_16c7aa4)
 // ---- items of slice s00ef26c0 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -3434,9 +3451,9 @@ CEditor* CEditor::Construct()
 // @ 0x00ef0400
 void CEditor::Destroy()
 {
-    mpVtbl0 = (const void*)0x148b058;
-    mpVtbl1 = (const void*)0x148b050;
-    mpVtbl2 = (const void*)0x148b040;
+    mpVtbl0 = (const void*)g_148b058;
+    mpVtbl1 = (const void*)g_148b050;
+    mpVtbl2 = (const void*)g_148b040;
     g_16c7aa4 = 0;
     if (mpFieldD8)
         mpFieldD8->v1();
@@ -3472,9 +3489,9 @@ void CEditor::Destroy()
         mpField14->v2();
     if (mpField10)
         mpField10->m.v2();
-    mpVtbl2 = (const void*)0x13ec458;
-    mpVtbl1 = (const void*)0x13eb394;
-    mpVtbl0 = (const void*)0x13eb938;
+    mpVtbl2 = (const void*)&VTABLE_013ec458;
+    mpVtbl1 = (const void*)g_13eb394;
+    mpVtbl0 = (const void*)g_13eb938;
 }
 
 // @ 0x00ef0570
@@ -4741,7 +4758,7 @@ void PlanetFlow::AdvanceStage()
             ((C801360*)FUN_0067cab0())->Show();
             this->mCounter = 1;
         }
-        if ((this->mFlag != 0 && this->mCounter >= *(uint32_t*)0x15acd1c) ||
+        if ((this->mFlag != 0 && this->mCounter >= *(uint32_t*)g_15acd1c) ||
             this->mCounter > 0x1e) {
             this->FillPending();
             this->FEF0220();
@@ -5660,12 +5677,12 @@ void cLargeAssetView::ShowMetadata(IResource* r)
 // @ 0x00ef61b0
 void cLargeAssetView::Destroy()
 {
-    mpVtbl00 = (void*)0x148b3f8;
-    mpVtbl04 = (void*)0x148b3e8;
-    mpVtbl08 = (void*)0x148b3dc;
-    mEmbed.mpVtable = (void*)0x140085c;
-    mp24 = (void*)0x148b3c4;
-    mp28 = (void*)0x148b3b4;
+    mpVtbl00 = (void*)g_148b3f8;
+    mpVtbl04 = (void*)g_148b3e8;
+    mpVtbl08 = (void*)g_148b3dc;
+    mEmbed.mpVtable = (void*)g_140085c;
+    mp24 = (void*)g_148b3c4;
+    mp28 = (void*)g_148b3b4;
 
     _ReadWriteBarrier();
     if (mnF0) {
@@ -5750,31 +5767,31 @@ void cLargeAssetView::Destroy()
     if (mp30)
         (*(void (__thiscall**)(void*))((char*)*(void**)mp30 + 8))(mp30);
 
-    mp28 = (void*)0x13ec458;
-    mpVtbl04 = (void*)0x13eb394;
-    mpVtbl00 = (void*)0x13eb938;
+    mp28 = (void*)&VTABLE_013ec458;
+    mpVtbl04 = (void*)g_13eb394;
+    mpVtbl00 = (void*)g_13eb938;
 }
 
 // @ 0x00ef64e0
 cLargeAssetView* __fastcall cLargeAssetView_Ctor(cLargeAssetView* pThis)
 {
     void** ppEmbed = (void**)&pThis->mEmbed;
-    pThis->mpVtbl00 = (void*)0x14426a0;
+    pThis->mpVtbl00 = (void*)g_14426a0;
     _ReadWriteBarrier();
-    pThis->mpVtbl04 = (void*)0x13eb384;
+    pThis->mpVtbl04 = (void*)g_13eb384;
     FUN_0066f200(ppEmbed);
     _ReadWriteBarrier();
-    pThis->mp24 = (void*)0x1400744;
-    pThis->mp28 = (void*)0x13ec458;
+    pThis->mp24 = (void*)g_1400744;
+    pThis->mp28 = (void*)&VTABLE_013ec458;
     _ReadWriteBarrier();
     pThis->mn2c = 0;
     _ReadWriteBarrier();
-    pThis->mpVtbl00 = (void*)0x148b3f8;
-    pThis->mpVtbl04 = (void*)0x148b3e8;
-    pThis->mpVtbl08 = (void*)0x148b3dc;
-    *ppEmbed = (void*)0x140085c;
-    pThis->mp24 = (void*)0x148b3c4;
-    pThis->mp28 = (void*)0x148b3b4;
+    pThis->mpVtbl00 = (void*)g_148b3f8;
+    pThis->mpVtbl04 = (void*)g_148b3e8;
+    pThis->mpVtbl08 = (void*)g_148b3dc;
+    *ppEmbed = (void*)g_140085c;
+    pThis->mp24 = (void*)g_148b3c4;
+    pThis->mp28 = (void*)g_148b3b4;
     _ReadWriteBarrier();
 
     pThis->mp30 = 0;

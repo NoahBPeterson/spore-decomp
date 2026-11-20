@@ -10,6 +10,13 @@
 // on the avatar's continent, plays the list's effect properties and runs FUN_00b9c830.
 //
 // Built with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc: RAII locals but no EH frame).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1465c3c[];
+extern "C" char g_1465c40[];
+extern "C" char g_156c060[];
+extern "C" char g_156c0b8[];
+
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -622,7 +629,7 @@ namespace G7
             G7AfterSpawn();
             break;
         }
-        ((Grid*)0x156c060)->Rebuild();
+        ((Grid*)g_156c060)->Rebuild();
     }
 
 // @ 0x00ba1ce0
@@ -696,7 +703,7 @@ namespace G7
         mScratch.Init();
 
         VarListSerializer ser;
-        ser.Ctor(this, (void*)0x156c0b8, 0x1a80d26);
+        ser.Ctor(this, (void*)g_156c0b8, 0x1a80d26);
         ser.Read(stream);
     }
 
@@ -803,8 +810,8 @@ namespace G7
     Owner* Owner::Ctor()
     {
         BaseCtor();
-        pVtbl0 = (void*)0x1465c40;
-        pVtbl1 = (void*)0x1465c3c;
+        pVtbl0 = (void*)g_1465c40;
+        pVtbl1 = (void*)g_1465c3c;
         mActive.Init();
         mPending.Init();
         mScratch.Init();
@@ -816,8 +823,8 @@ namespace G7
 // @ 0x00ba2290
     Owner* Owner::Dtor(u8 flags)
     {
-        pVtbl0 = (void*)0x1465c40;
-        pVtbl1 = (void*)0x1465c3c;
+        pVtbl0 = (void*)g_1465c40;
+        pVtbl1 = (void*)g_1465c3c;
         mScratch.DoClear();
         mPending.DoClear();
         mActive.DoClear();

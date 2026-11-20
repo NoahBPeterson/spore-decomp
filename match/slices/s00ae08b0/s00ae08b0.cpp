@@ -1,5 +1,16 @@
 // Slice s00ae08b0: Simulator object-context / trigger-manager helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00ae05c0();
+extern "C" void FUN_00b1e520();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_145b908[];
+extern "C" char g_145b918[];
+
 #include "types.h"
 
 extern "C" void* __cdecl operator_new(unsigned int size, const char* name, int, int, int, int); // 0xF473A0
@@ -106,8 +117,8 @@ extern "C" void __fastcall vector_dtor_ae6970(void* v);
 void __fastcall FUN_00ae08b0(void* self_)
 {
     char* self = (char*)self_;
-    *(void**)self = (void*)0x145b918;
-    *(void**)(self + 8) = (void*)0x145b908;
+    *(void**)self = (void*)g_145b918;
+    *(void**)(self + 8) = (void*)g_145b908;
 
     vector_dtor_ae6970(self + 0x30);
 
@@ -118,8 +129,8 @@ void __fastcall FUN_00ae08b0(void* self_)
         operator_delete_(c->f04);
     }
 
-    *(void**)(self + 8) = (void*)0x13ec458;
-    *(void**)self = (void*)0x13eb938;
+    *(void**)(self + 8) = (void*)g_13ec458;
+    *(void**)self = (void*)g_13eb938;
 }
 
 // ===========================================================================
@@ -358,6 +369,6 @@ struct NounMgrWrapper : cGameNounManager {
 
 int NounMgrWrapper::FUN_00ae0e00(int param)
 {
-    return (int)GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
-                                  (void*)0x00ae05c0, (void*)0x00b1e520, param) + 4;
+    return (int)GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                  (void*)FUN_00ae05c0, (void*)FUN_00b1e520, param) + 4;
 }

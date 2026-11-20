@@ -1,5 +1,10 @@
 // hkMoppCode cleanup isolated from the mixed-toolchain _at_010f0000.cpp.
 // Flags: /vc71 /O2 /MD /Gy /TP.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a59b4[];
+
 #include "game/types.h"
 #include <stddef.h>
 
@@ -42,11 +47,11 @@ typedef char hkMoppCodeArrayOffsetCheck[(offsetof(hkMoppCode, m_data) == 0x20) ?
 // @ 0x010f0120
 hkMoppCode::~hkMoppCode()
 {
-    m_vtable = (void*)0x014a59b4;
+    m_vtable = (void*)g_14a59b4;
     _ReadWriteBarrier();
     if ((m_data.m_capacityAndFlags & 0x80000000u) == 0) {
         hkThreadMemory* memory = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
         memory->deallocateChunk(m_data.m_data, m_data.m_capacityAndFlags & 0x3fffffff, 0x14);
     }
-    m_vtable = (void*)0x013ef094;
+    m_vtable = (void*)g_13ef094;
 }

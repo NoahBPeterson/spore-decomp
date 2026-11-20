@@ -7,6 +7,16 @@
 // The member reads its object through `this`; a local `uint8_t* this_` alias
 // keeps the body readable.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1441058[];
+extern "C" char g_1441070[];
+extern "C" char g_1441088[];
+extern "C" char g_14410b0[];
+extern "C" char g_1441120[];
+extern "C" char g_1441240[];
+extern "C" char g_154eea0[];
+
 typedef unsigned int   uint32_t;
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
@@ -231,14 +241,14 @@ void* S_966df0::m(uint8_t param_2)
 {
     void* this_ = this;
     void* img = (void*)F(this_, 0x10);
-    F(this_, 0x00) = 0x1441088;
-    F(this_, 0x04) = 0x1441070;
-    F(this_, 0x0c) = 0x1441058;
+    F(this_, 0x00) = (int)g_1441088;
+    F(this_, 0x04) = (int)g_1441070;
+    F(this_, 0x0c) = (int)g_1441058;
     if (img != 0)
         VCALL0(img, 0x04);
-    F(this_, 0x0c) = 0x13eb938;
-    F(this_, 0x04) = 0x13eb938;
-    F(this_, 0x00) = 0x13eb938;
+    F(this_, 0x0c) = (int)g_13eb938;
+    F(this_, 0x04) = (int)g_13eb938;
+    F(this_, 0x00) = (int)g_13eb938;
     if ((param_2 & 1) != 0)
         FUN_00951330(this_);
     return this_;
@@ -252,12 +262,12 @@ void S_966e40::m()
 {
     void* this_ = this;
     S_8323d0* ll = (S_8323d0*)((uint8_t*)this_ + 0x7b0);
-    F(this_, 0x00) = 0x1441240;
-    F(this_, 0x04) = 0x1441120;
-    F(this_, 0x20c) = 0x14410b0;
+    F(this_, 0x00) = (int)g_1441240;
+    F(this_, 0x04) = (int)g_1441120;
+    F(this_, 0x20c) = (int)g_14410b0;
     ll->m();
     ((S_89c540*)((uint8_t*)this_ + 0x280))->m();
-    F(this_, 0x20c) = 0x13eb938;
+    F(this_, 0x20c) = (int)g_13eb938;
     ((S_962740*)this_)->m();
 }
 
@@ -266,12 +276,12 @@ void* S_967120::m(uint8_t param_2)
 {
     void* this_ = this;
     S_8323d0* ll = (S_8323d0*)((uint8_t*)this_ + 0x7b0);
-    F(this_, 0x00) = 0x1441240;
-    F(this_, 0x04) = 0x1441120;
-    F(this_, 0x20c) = 0x14410b0;
+    F(this_, 0x00) = (int)g_1441240;
+    F(this_, 0x04) = (int)g_1441120;
+    F(this_, 0x20c) = (int)g_14410b0;
     ll->m();
     ((S_89c540*)((uint8_t*)this_ + 0x280))->m();
-    F(this_, 0x20c) = 0x13eb938;
+    F(this_, 0x20c) = (int)g_13eb938;
     ((S_962740*)this_)->m();
     if ((param_2 & 1) != 0)
         FUN_00951330(this_);
@@ -705,7 +715,7 @@ extern "C" uint8_t __cdecl FUN_009678f0(uint32_t* param_1, uint32_t param_2,
         param_1[1] = (uint32_t)arr;
 
         uint32_t kind = (*(uint16_t*)(param_3 + 0xc)) & 0xfff;
-        param_1[0] = ((uint32_t*)0x154eea0)[kind];
+        param_1[0] = ((uint32_t*)g_154eea0)[kind];
 
         if (arr != 0) {
             uint32_t* dst = arr;

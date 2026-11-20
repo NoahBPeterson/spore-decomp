@@ -1,5 +1,13 @@
 // Slice s007f3380: Sims3::UI IME composition / candidate-list / proxy methods.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_1414ba4[];
+extern "C" char g_1414bb4[];
+extern "C" char g_1414bc0[];
+extern "C" char g_1414ce0[];
+
 #include "types.h"
 #include <new>
 #include <intrin.h>
@@ -443,13 +451,13 @@ tail:
 // @ 0x007F3C10  Sims3::UI::IMECandidateList::IMECandidateList
 void* __fastcall IMECandidateListCtor(void* self) {
   ((void(__thiscall*)(void*))WindowCtor)(self);
-  *(void* volatile*)((char*)self + 0x20c) = (void*)0x13eb394;
+  *(void* volatile*)((char*)self + 0x20c) = (void*)g_13eb394;
   _ReadWriteBarrier();
   *(unsigned char*)((char*)self + 0x214) = 0;
   *(void**)((char*)self + 0x218) = 0;
-  *(void**)self = (void*)0x1414ce0;
-  *(void**)((char*)self + 4) = (void*)0x1414bc0;
-  *(void* volatile*)((char*)self + 0x20c) = (void*)0x1414bb4;
+  *(void**)self = (void*)g_1414ce0;
+  *(void**)((char*)self + 4) = (void*)g_1414bc0;
+  *(void* volatile*)((char*)self + 0x20c) = (void*)g_1414bb4;
   _ReadWriteBarrier();
   *(void**)((char*)self + 0x234) = 0;
   *(void**)((char*)self + 0x238) = 0;
@@ -460,16 +468,16 @@ void* __fastcall IMECandidateListCtor(void* self) {
 
 // @ 0x007F3CC0  Sims3::UI::IMECandidateList::~IMECandidateList
 void __fastcall IMECandidateListDtor(void* self) {
-  *(void**)self = (void*)0x1414ce0;
-  *(void**)((char*)self + 4) = (void*)0x1414bc0;
-  *(void* volatile*)((char*)self + 0x20c) = (void*)0x1414bb4;
+  *(void**)self = (void*)g_1414ce0;
+  *(void**)((char*)self + 4) = (void*)g_1414bc0;
+  *(void* volatile*)((char*)self + 0x20c) = (void*)g_1414bb4;
   void* p = *(void* volatile*)((char*)self + 0x240);
   if (p) ((void(__thiscall*)(void*))VSLOT(p, 0xc))(p);
   p = *(void* volatile*)((char*)self + 0x238);
   if (p) ((void(__thiscall*)(void*))VSLOT(p, 4))(p);
   p = *(void* volatile*)((char*)self + 0x234);
   if (p) ((void(__thiscall*)(void*))VSLOT(p, 4))(p);
-  *(void* volatile*)((char*)self + 0x20c) = (void*)0x13eb394;
+  *(void* volatile*)((char*)self + 0x20c) = (void*)g_13eb394;
   ((void(__thiscall*)(void*))WindowDtor)(self);
 }
 
@@ -589,12 +597,12 @@ void __fastcall IMECandidateListShutdown(void* self) {
 
 // @ 0x007F4200  IMECandidateList scalar deleting destructor
 void* __fastcall IMECandidateListScalarDtor(void* self, void* /*unused*/, unsigned flags) {
-  *(void* volatile*)self = (void*)0x1414ba4;
+  *(void* volatile*)self = (void*)g_1414ba4;
   void* p = *(void* volatile*)((char*)self + 0x3c);
   if (p) ((void(__thiscall*)(void*))VSLOT(p, 4))(p);
   p = *(void* volatile*)((char*)self + 0x30);
   if (p) ((void(__thiscall*)(void*))VSLOT(p, 4))(p);
-  *(void* volatile*)self = (void*)0x13eb394;
+  *(void* volatile*)self = (void*)g_13eb394;
   if (flags & 1) ((void(__cdecl*)(void*))OperatorDelete)(self);
   return self;
 }

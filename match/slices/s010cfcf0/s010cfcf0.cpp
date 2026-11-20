@@ -6,6 +6,12 @@
 // none yet; otherwise it releases the sphere's previously allocated contact point id.
 // Note the agent's id slot for sphere i is m_contactPointId[numSpheres - 1 - i] in the binary.
 // Flags: /vc71 /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a43a4[];
+extern "C" char g_14a44bc[];
+
 #include "types.h"
 #include <intrin.h>
 #include <new>
@@ -309,7 +315,7 @@ void hkAgentWrapper::FUN_010cfcf0(void* a1, void* a2, void* a3, void* a4)
     hkPointCollector collector;
     collector.m_field8 = a4;
     collector.m_field4 = 0x7f7fffee;
-    collector.m_vtable = (void*)0x014a43a4;
+    collector.m_vtable = (void*)g_14a43a4;
     ((hkMultiRayConvexAgentBase*)this)->getClosestPoints(*(const hkCdBody*)a2,
                                                          *(const hkCdBody*)a1,
                                                          *(const hkCollisionInput*)a3,
@@ -355,7 +361,7 @@ void* hkAgentWrapper::FUN_010cfdb0(unsigned char flags)
     }
 
 after_deallocate:
-    object->m_vtable = (void*)0x013ef094;
+    object->m_vtable = (void*)g_13ef094;
     if ((flags & 1) != 0)
         ((hkMemory*)g_hkMemoryInstance)->deallocate(object, object->m_size, 0x1c);
 
@@ -402,7 +408,7 @@ void* __cdecl FUN_010cff30(const hkCdBody& bodyA, const hkCdBody& bodyB,
     hkAgent44* node = (hkAgent44*)mem;
     node->m_size = 0x20;
     new (mem) hkMultiRayConvexAgent(bodyB, bodyA, input, mgr);
-    node->m_vtable = (void*)0x014a44bc;
+    node->m_vtable = (void*)g_14a44bc;
     return node;
 }
 

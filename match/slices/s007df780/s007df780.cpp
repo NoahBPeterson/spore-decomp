@@ -1,6 +1,11 @@
 // Slice s007df780 (w2g5 slice 25).  Region: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 // Swarm split-model-kernel description, kernel-storage setters and the
 // ArgScript SplitModelKernelEffect command.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_1453948[];
+
 #include "types.h"
 #include <string.h>
 #include <math.h>
@@ -134,7 +139,7 @@ void* FUN_007dfbf0()
     int* p = (int*)EAllocSwarm(8, "Swarm", 0, 0, 0, 0);
     if (p) {
         p[1] = 0;
-        p[0] = 0x1453948;
+        p[0] = (int)g_1453948;
         return p;
     }
     return 0;
@@ -483,7 +488,7 @@ void* cEffectCommand::FUN_007e02f0(char flag)
     void* p = m4c;
     if ((int)m54 - (int)p > 1 && p != 0)
         EFree2(p);
-    m38 = (void*)0x13ef094;
+    m38 = (void*)g_13ef094;
     ((CmdDtor*)this)->Dtor();
     if (flag & 1)
         EFree2(this);

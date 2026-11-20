@@ -2,6 +2,12 @@
 // Object file: SPBake/SPEditorExportUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_13ef098[];
+extern "C" char g_13ef09c[];
+
 #include "game/types.h"
 #include "SP/cSPEditorSkinPart.h"
 #include "SP/cRuntimeCreatureResource.h"
@@ -3117,19 +3123,19 @@ inline void CopyColorArray(cSPColorRGB_s0047_1b50* d, const cSPColorRGB_s0047_1b
 void F_00425990();               // 0x425990 __thiscall: vector<int>::~vector
 struct ObjBase {
     void* mVtbl;                 // +0x00
-    ObjBase() { mVtbl = (void*)0x13eb938; }
-    ~ObjBase() { mVtbl = (void*)0x13eb938; }
+    ObjBase() { mVtbl = (void*)g_13eb938; }
+    ~ObjBase() { mVtbl = (void*)g_13eb938; }
 };
 struct RefCountedBase {
     void* mVtbl;                 // +0x00
     volatile long mRefCount;     // +0x04
     RefCountedBase()
     {
-        mVtbl = (void*)0x13ef094;
+        mVtbl = (void*)g_13ef094;
         long volatile* pRef = &mRefCount;
         _InterlockedExchange(pRef, 0);
     }
-    ~RefCountedBase() { mVtbl = (void*)0x13ef094; }
+    ~RefCountedBase() { mVtbl = (void*)g_13ef094; }
 };
 struct IntVector_s0047_1b50 {
     int* mpBegin;                // +0x00
@@ -6206,8 +6212,8 @@ IntVecObj::IntVecObj()
 {
     int dummy;
     (void)dummy;
-    ObjBase::mVtbl = (void*)0x13ef09c;              // IntVecObj vftables
-    RefCountedBase::mVtbl = (void*)0x13ef098;
+    ObjBase::mVtbl = (void*)g_13ef09c;              // IntVecObj vftables
+    RefCountedBase::mVtbl = (void*)g_13ef098;
     mVec.Init();
     mField20 = 0;
 }

@@ -1,6 +1,10 @@
 // Slice s00936090 -- EA::Random (LCG + Mersenne Twister) and EA::SharedLibrary /
 // SharedLibraryRegistry (UTF dynamic library management).
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e9d8[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -399,7 +403,7 @@ EA::SharedLibraryRegistry::~SharedLibraryRegistry() {
 
 // @ 0x00936920
 void* EA::SharedLibraryRegistry::scalar_deleting_destructor(uint8_t f) {
-    *(void**)this = (void*)0x143e9d8;   // vftable
+    *(void**)this = (void*)g_143e9d8;   // vftable
     mMutex.Destroy();
     mSharedLibraries.Destruct();
     if (f & 1)

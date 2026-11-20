@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCityGameTribeView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1486ca4[];
+
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cSPTimer.h"
@@ -423,7 +426,7 @@ cTribeView_s00e9_2ca0::cTribeView_s00e9_2ca0()
 // @ 0x00e93c00
 cTribeView_s00e9_2ca0::~cTribeView_s00e9_2ca0()
 {
-    *(void**)this = (void*)0x1486ca4;
+    *(void**)this = (void*)g_1486ca4;
     mpObject->KillEffect(0x50b2c615, 1);
     mpObject->KillEffect(0x50b2c617, 1);
     mpObject->KillEffect(0x50b2c616, 1);

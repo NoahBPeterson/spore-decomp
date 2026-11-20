@@ -2,6 +2,14 @@
 // Reconstructed from the 2008 PDB layouts and Ghidra decompilation.
 // Build: /O2 /MD /Gy /EHsc /TP (default game-code flags).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_008e5930();
+extern "C" char g_14357e4[];
+extern "C" char g_1436da8[];
+extern "C" char g_1437bd8[];
+extern "C" char g_1437be4[];
+extern "C" char g_1437bf4[];
+
 #include <stddef.h>
 #include <string.h>
 #include <wchar.h>
@@ -345,7 +353,7 @@ void XmlParser::Fn8e5ca0()
 {
     char* c = (char*)this;
     void* px = *(void**)(c + 0x220);
-    *(void**)c = (void*)0x1437be4;
+    *(void**)c = (void*)g_1437be4;
     if (px != 0) {
         XML_ParserFree(px);
         *(void**)(c + 0x220) = 0;
@@ -355,7 +363,7 @@ void XmlParser::Fn8e5ca0()
     if ((((char*)cap - (char*)b) & ~1) > 2 && b != 0 && b != *(wchar16**)(c + 0x18)) {
         operator_delete__(b);
     }
-    *(void**)c = (void*)0x14357e4;
+    *(void**)c = (void*)g_14357e4;
 }
 
 // ---------------------------------------------------------------------------
@@ -447,7 +455,7 @@ struct GuiThing {
 void* GuiThing::Fn8e5370(int a, int b, int c)
 {
     Fn8e4400(a, b, c);
-    *(void**)this = (void*)0x1436da8;
+    *(void**)this = (void*)g_1436da8;
     return this;
 }
 
@@ -459,7 +467,7 @@ struct GuiThing2 {
 void* GuiThing2::Fn8e55d0(int a, int b, int c)
 {
     Fn8e52b0(a, 2);
-    *(void**)this = (void*)0x1437bd8;
+    *(void**)this = (void*)g_1437bd8;
     *(int*)((char*)this + 0x18) = b;
     *(int*)((char*)this + 0x1c) = c;
     return this;
@@ -680,8 +688,8 @@ void XmlParser::Fn8e5fb0()
     FUN_0090a870(mpXmlParser_220, 0);
     FUN_00903300(mpXmlParser_220, (void*)&Fn8e5b90, (void*)&Fn8e5c50);
     FUN_00903320(mpXmlParser_220, (void*)&Fn8e5e20);
-    FUN_00903340(mpXmlParser_220, (void*)0x8e5930);
-    FUN_00903370(mpXmlParser_220, (void*)0xc2e4e0, (void*)0xc2e4e0);
+    FUN_00903340(mpXmlParser_220, (void*)FUN_008e5930);
+    FUN_00903370(mpXmlParser_220, (void*)&ReadText_00c2e4e0, (void*)&ReadText_00c2e4e0);
     FUN_009033b0(mpXmlParser_220, (void*)&Fn8e5a70);
     FUN_00903350(mpXmlParser_220, (void*)&Fn8e5980);
     FUN_009033c0(mpXmlParser_220, (void*)&Fn8e5e50);
@@ -728,7 +736,7 @@ void* GuiThing3::Fn8e6130(void* a)
     char* c = (char*)this;
     *(int*)(c + 4) = 0;
     *(int*)(c + 8) = 0;
-    *(void**)c = (void*)0x1437bf4;
+    *(void**)c = (void*)g_1437bf4;
     *(void**)(c + 0xc) = a;
     *(int*)(c + 0x10) = -1;
     *(int*)(c + 0x14) = 0;

@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPUIGlobalUICiv.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147f2c8[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cGonzagoSubsystem.h"
@@ -2431,9 +2434,9 @@ void __stdcall FlashCivCommButton(int unused1, void* window, int unused3)
         WGetInt(window, 0x8ed27e7a);
     void* child = ((void* (__thiscall*)(void*))(*(void***)window)[0x13])(window);
     if (child == 0) {
-        SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+        SPUIHelpers_SetWindowSPMaterial(window, (int)g_147f2c8, 0);
     } else if (WGetInt(child, 0x5234b49) == 0) {
-        SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+        SPUIHelpers_SetWindowSPMaterial(window, (int)g_147f2c8, 0);
     }
 }
 

@@ -2,6 +2,22 @@
 // Object file: Spui/SPUIPopupMenu.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1418fd8[];
+extern "C" char g_1546064[];
+extern "C" char g_1546068[];
+extern "C" char g_154606c[];
+extern "C" char g_1546070[];
+extern "C" char g_1546074[];
+extern "C" char g_1546078[];
+extern "C" char g_154607c[];
+extern "C" char g_1546080[];
+extern "C" char g_1546084[];
+extern "C" char g_1546088[];
+extern "C" char g_154608c[];
+extern "C" char g_1546090[];
+extern "C" char g_1546094[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include <wchar.h>
@@ -856,8 +872,8 @@ unsigned char PSB::OnTick()
 // @ 0x012fc2b0
 void init_1546064()
 {
-    *(int*)0x1546064 = 1;
-    *(int*)0x1546068 = 0;
-    *(void**)0x154606c = (void*)0x1418fd8; *(int*)0x1546070 = 0x4c9a86d; *(short*)0x1546074 = 0x13; *(int*)0x1546078 = 0x88c; *(int*)0x154607c = 1; *(int*)0x1546080 = 0;
-    *(void**)0x1546084 = (void*)0x1418fd8; *(int*)0x1546088 = 0x4c9a86e; *(short*)0x154608c = 0x13; *(int*)0x1546090 = 0x890; *(int*)0x1546094 = 1;
+    *(int*)g_1546064 = 1;
+    *(int*)g_1546068 = 0;
+    *(void**)g_154606c = (void*)g_1418fd8; *(int*)g_1546070 = 0x4c9a86d; *(short*)g_1546074 = 0x13; *(int*)g_1546078 = 0x88c; *(int*)g_154607c = 1; *(int*)g_1546080 = 0;
+    *(void**)g_1546084 = (void*)g_1418fd8; *(int*)g_1546088 = 0x4c9a86e; *(short*)g_154608c = 0x13; *(int*)g_1546090 = 0x890; *(int*)g_1546094 = 1;
 }

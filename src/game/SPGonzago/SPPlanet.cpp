@@ -2,6 +2,12 @@
 // Object file: SPGonzago/SPPlanet.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145c660[];
+extern "C" char g_145c71c[];
+extern "C" char g_145c738[];
+extern "C" char g_145c748[];
+
 #include "game/types.h"
 #include "SP/cFruit.h"
 #include "SP/cGameData.h"
@@ -4857,9 +4863,9 @@ void cFruitOps2::Disable(void* arg)
 Simulator_cFruitGroup::~Simulator_cFruitGroup()
 {
     Simulator_cFruitGroup* self = this;
-    *(void**)self = (void*)0x0145c748;
-    self->vtbl4 = (void*)0x0145c738;
-    self->vtbl34 = (void*)0x0145c71c;
+    *(void**)self = (void*)g_145c748;
+    self->vtbl4 = (void*)g_145c738;
+    self->vtbl34 = (void*)g_145c71c;
     self->f4c = 0;
     self->f54 = 0;
     _ReadWriteBarrier();
@@ -6874,7 +6880,7 @@ int* FUN_00b05770(int* srcBegin, int* srcEnd, int* dest, int)
     while (srcBegin != srcEnd) {
         if (dest) {
             ((PoolOwner_s00b0_47b0*)dest)->rbcontainer_copy(srcBegin);
-            *dest = 0x145c660;
+            *dest = (int)g_145c660;
         }
         srcBegin = (int*)((char*)srcBegin + 0x24);
         dest     = (int*)((char*)dest + 0x24);

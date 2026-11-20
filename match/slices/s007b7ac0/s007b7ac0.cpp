@@ -6,6 +6,13 @@
 // degrees per tile), rendering every tile twice (once with a fixed set of app bool properties, once
 // with the user's values restored) and blitting it into its cell of the target raster.
 // Module flags: /O2 /arch:SSE, EH (intrusive message pointer), no /GS cookie.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_140ff8c[];
+extern "C" char g_140ff9c[];
+
 #include "types.h"
 #include <math.h>
 
@@ -378,10 +385,10 @@ extern const float g_1485720;                      // 0x01485720
 
 // @ 0x007b8550
 Summarizer* __fastcall FUN_007b8550(Summarizer* self) {
-    *(void* volatile*)&self->mVt4 = (void*)0x13ec458;
+    *(void* volatile*)&self->mVt4 = (void*)g_13ec458;
     self->m08 = 0;
-    self->mVt0 = (void*)0x140ff9c;
-    *(void* volatile*)&self->mVt4 = (void*)0x140ff8c;
+    self->mVt0 = (void*)g_140ff9c;
+    *(void* volatile*)&self->mVt4 = (void*)g_140ff8c;
     self->m10 = -1;
     self->m14 = -1;
     self->m18 = 0;
@@ -417,13 +424,13 @@ Summarizer* __fastcall FUN_007b8550(Summarizer* self) {
 
 // @ 0x007b8680
 Summarizer* Summarizer::Delete(int flags) {
-    mVt0 = (void*)0x140ff9c;
-    *(void* volatile*)&mVt4 = (void*)0x140ff8c;
+    mVt0 = (void*)g_140ff9c;
+    *(void* volatile*)&mVt4 = (void*)g_140ff8c;
     void* p = *(void* volatile*)&m24;
     if (p != 0 && ((AllocHeader*)p)[-1].mSize != 0)
         F_00f47380(p);
-    mVt4 = (void*)0x13ec458;
-    mVt0 = (void*)0x13eb938;
+    mVt4 = (void*)g_13ec458;
+    mVt0 = (void*)g_13eb938;
     if (flags & 1)
         F_00f47380(this);
     return this;

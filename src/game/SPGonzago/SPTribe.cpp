@@ -2,6 +2,12 @@
 // Object file: SPGonzago/SPTribe.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1581288[];
+extern "C" char g_169543c[];
+extern "C" char g_1695458[];
+extern "C" char g_1695460[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include "sse_helpers.h"
@@ -4108,7 +4114,7 @@ void __fastcall Tribe_SetEditorMode(Tribe* pSelf, int, uint8_t bMode)
         if (bMode == 1) {
             int* pObj = Sub_b3d240();
             void** pSlot = (void**)((char*)*(void***)pObj + 0x60);
-            void* pName = ((void*(__thiscall*)(void*, void*))((void**)pSelf->mpModelFactory_120)[0x2c / 4])(&pSelf->mpModelFactory_120, (void*)0x0169543c);
+            void* pName = ((void*(__thiscall*)(void*, void*))((void**)pSelf->mpModelFactory_120)[0x2c / 4])(&pSelf->mpModelFactory_120, (void*)g_169543c);
             ((void(__thiscall*)(int*, int, void*))*pSlot)(pObj, 0x1046f5ef, pName);
             void* pOwner = (char*)pSelf + 0x20c;
             int* pIter = SELF(pOwner)->FUN_00cee330();
@@ -4229,10 +4235,10 @@ void* __cdecl F8ea70(unsigned int nSlot)
 {
     if (nSlot - 1 <= 0x1e) {
         int nTerrain = ((TerrainSphere*)((NounMgr*)Sub_b3d300())->GetCurrentTerrainSphere())->GetSubIndex();
-        return (char*)0x01695458 + (nTerrain * 0x20 + (int)nSlot) * 0xb8;
+        return (char*)g_1695458 + (nTerrain * 0x20 + (int)nSlot) * 0xb8;
     }
     int nTerrain = ((TerrainSphere*)((NounMgr*)Sub_b3d300())->GetCurrentTerrainSphere())->GetSubIndex();
-    return (char*)0x01695458 + nTerrain * 0x1700;
+    return (char*)g_1695458 + nTerrain * 0x1700;
 }
 
 // @ 0x00c8eae0
@@ -4240,7 +4246,7 @@ int __fastcall Tribe_GetMaxPopulation(Tribe* pSelf)
 {
     if (pSelf->mPopSlot_550 > 0u && pSelf->mPopSlot_550 < 0x20) {
         int nTerrain = ((TerrainSphere*)((NounMgr*)Sub_b3d300())->GetCurrentTerrainSphere())->GetSubIndex();
-        return *(int*)((char*)0x01695460
+        return *(int*)((char*)g_1695460
                        + (nTerrain * 0x20 + (int)pSelf->mPopSlot_550) * 0xb8);
     }
     {
@@ -5375,7 +5381,7 @@ void cTribe_s00c9_0b40::CheckFoodTutorialComplete()
     return;
 
   s32 value = vA4();
-  s32 price = GetTutorialToolPrice(*(u32*)0x1581288, 0xb79e0065, 0x28);
+  s32 price = GetTutorialToolPrice(*(u32*)g_1581288, 0xb79e0065, 0x28);
   if (value < price)
     return;
 

@@ -1,5 +1,9 @@
 // Slice s0095a580 -- EA::UTFWin::WindowMgr message-queue processing + display-list rebuild.
 // Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  (no /EH: member dtors not EH-registered)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1440688[];
+
 #include "s0095a580.h"
 #include "../s00958a70/s00958a70.h"   // sibling header: its annotations count for equiv.py
 
@@ -8,7 +12,7 @@ struct MutexOps {
     void __thiscall Unlock();                                      // 0x922270
 };
 
-#define LMUTEX() ((MutexOps*)&mxC)->Lock((const void*)0x1440688)
+#define LMUTEX() ((MutexOps*)&mxC)->Lock((const void*)g_1440688)
 #define UMUTEX() ((MutexOps*)&mxC)->Unlock()
 
 struct RawMsgList { Node anchor; IAlloc* alloc; u32 allocFlags; };

@@ -1,6 +1,12 @@
 // Slice s00ac8d00 - Spore gameplay: tribe/city helpers, EASTL range/copy helpers,
 // cLocomotionRequest ctor, locomotion tuning loader.  (no PDB names)
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145a158[];
+extern "C" char g_1566000[];
+extern "C" char g_15661a8[];
+
 #include "types.h"
 
 typedef unsigned int   uint32;
@@ -228,7 +234,7 @@ bool FUN_00ac9110(void* a, int* arr)
     int end = arr[1];
     for (int it = arr[0]; it != end; it += 0x20) {
         if (it != -4) {
-            ((CSC*)a)->FUN_00695b40((void*)(it + 4), (void*)0x1566000, L"cCastInfo");
+            ((CSC*)a)->FUN_00695b40((void*)(it + 4), (void*)g_1566000, L"cCastInfo");
         }
     }
     return 1;
@@ -405,7 +411,7 @@ char* FUN_00ac95a0(char* s, char* end, char* d)
 {
     while (s != end) {
         if (d) {
-            *(void**)d = (void*)0x145a158;
+            *(void**)d = (void*)g_145a158;
             d[4] = s[4];
             RCObj* p = *(RCObj**)(s + 8);
             *(RCObj**)(d + 8) = p;
@@ -762,7 +768,7 @@ bool FUN_00ac9ef0(void* a, int* p)
     int end = root[*(int*)((char*)p + 8)];
     while (node != end) {
         if (node + 4 != 0) {
-            ((CSC*)a)->FUN_00695b40((void*)(node + 4), (void*)0x15661a8, L"tAnimalStage");
+            ((CSC*)a)->FUN_00695b40((void*)(node + 4), (void*)g_15661a8, L"tAnimalStage");
         }
         node = *(int*)(node + 0x68);
         while (!node) {

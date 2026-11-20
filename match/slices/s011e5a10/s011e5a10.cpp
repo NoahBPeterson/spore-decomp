@@ -20,6 +20,10 @@
 // (getfreerequest / queuerequest / freerequest / decbufferusage / the two open callbacks).
 //
 // Flags: /vc71 /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14529a8[];
+
 #include <string.h>
 #include "types.h"
 
@@ -299,7 +303,7 @@ void filesys_destroy(void)
 // @ 0x011e5d80
 void* __fastcall DeviceDriver_ctor(void* self, int, const char* name)
 {
-    st32(self, 0, 0x014529a8);
+    st32(self, 0, (int)g_14529a8);
     StringCopy((char*)self + 4, name);
     return self;
 }

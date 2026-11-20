@@ -1,3 +1,35 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00692ca0();
+extern "C" void FUN_00692fb0();
+extern "C" void FUN_00693150();
+extern "C" void FUN_00695080();
+extern "C" void FUN_00ac8050();
+extern "C" void FUN_00ae3430();
+extern "C" void FUN_00ae3450();
+extern "C" void FUN_00ae5720();
+extern "C" void FUN_00bd1780();
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00c87090();
+extern "C" void FUN_00c87630();
+extern "C" char g_14736cc[];
+extern "C" char g_14736d8[];
+extern "C" char g_14736e8[];
+extern "C" char g_14736f8[];
+extern "C" char g_1473704[];
+extern "C" char g_1473710[];
+extern "C" char g_147371c[];
+extern "C" char g_1473728[];
+extern "C" char g_1473734[];
+extern "C" char g_1579f50[];
+extern "C" char g_1579f8c[];
+extern "C" char g_1579fc8[];
+extern "C" char g_157a004[];
+extern "C" char g_157a040[];
+extern "C" char g_157a07c[];
+extern "C" char g_157a0b8[];
+extern "C" char g_157a0f4[];
+extern "C" char g_157a130[];
+
 #include <intrin.h>
 // src/game/SPGonzago/SPSpaceInventory.cpp -- migrated from slice(s) s0104bcc0, s00c87be0, s00c86aa0, s01351ae0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceInventory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
@@ -1404,25 +1436,25 @@ void SP::cSPSpaceInventoryItem_s0104_bcc0::UpdateTuning(u32 propId, u32* out)
 void FUN_01353800(void)
 {
     PropDesc d;
-    d.mName = (const char*)0x1473734;
+    d.mName = (const char*)g_1473734;
     d.mHash = 0x223eb9d;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
-    d.mFn24 = (void*)0xae3430;
-    d.mFn28 = (void*)0xae3450;
-    d.mFn2C = (void*)0x693150;
-    d.mFn30 = (void*)0x695080;
+    d.mDefault = (void*)FUN_00692ca0;
+    d.mFn24 = (void*)FUN_00ae3430;
+    d.mFn28 = (void*)FUN_00ae3450;
+    d.mFn2C = (void*)FUN_00693150;
+    d.mFn30 = (void*)FUN_00695080;
     d.mFn34 = (void*)U_01353800_0_34;
-    d.mFn38 = (void*)0xae5720;
+    d.mFn38 = (void*)FUN_00ae5720;
     d.mType = 0x5c;
-    *(PropDesc*)0x1579f50 = d;
+    *(PropDesc*)g_1579f50 = d;
 
-    d.mName = (const char*)0x1473728;
+    d.mName = (const char*)g_1473728;
     d.mHash = 0x223eb9e;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_1_24;
     d.mFn28 = (void*)U_01353800_1_28;
     d.mFn2C = (void*)U_01353800_1_2c;
@@ -1430,13 +1462,13 @@ void FUN_01353800(void)
     d.mFn34 = (void*)S3800_F34A;
     d.mFn38 = (void*)S3800_F38A;
     d.mType = 0x10;
-    *(PropDesc*)0x1579f8c = d;
+    *(PropDesc*)g_1579f8c = d;
 
-    d.mName = (const char*)0x147371c;
+    d.mName = (const char*)g_147371c;
     d.mHash = 0x362aeb9;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_2_24;
     d.mFn28 = (void*)U_01353800_2_28;
     d.mFn2C = (void*)U_01353800_2_2c;
@@ -1444,13 +1476,13 @@ void FUN_01353800(void)
     d.mFn34 = (void*)S3800_F34A;
     d.mFn38 = (void*)S3800_F38A;
     d.mType = 0x14;
-    *(PropDesc*)0x1579fc8 = d;
+    *(PropDesc*)g_1579fc8 = d;
 
-    d.mName = (const char*)0x1473710;
+    d.mName = (const char*)g_1473710;
     d.mHash = 0x362aeba;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_3_24;
     d.mFn28 = (void*)U_01353800_3_28;
     d.mFn2C = (void*)U_01353800_3_2c;
@@ -1458,13 +1490,13 @@ void FUN_01353800(void)
     d.mFn34 = (void*)S3800_F34B;
     d.mFn38 = (void*)S3800_F38B;
     d.mType = 0x18;
-    *(PropDesc*)0x157a004 = d;
+    *(PropDesc*)g_157a004 = d;
 
-    d.mName = (const char*)0x1473704;
+    d.mName = (const char*)g_1473704;
     d.mHash = 0x362aebb;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_4_24;
     d.mFn28 = (void*)U_01353800_4_28;
     d.mFn2C = (void*)U_01353800_4_2c;
@@ -1472,27 +1504,27 @@ void FUN_01353800(void)
     d.mFn34 = (void*)U_01353800_4_34;
     d.mFn38 = (void*)U_01353800_4_38;
     d.mType = 0x1c;
-    *(PropDesc*)0x157a040 = d;
+    *(PropDesc*)g_157a040 = d;
 
-    d.mName = (const char*)0x14736f8;
+    d.mName = (const char*)g_14736f8;
     d.mHash = 0x223eba1;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
-    d.mFn24 = (void*)0xc87630;
-    d.mFn28 = (void*)0xbd1780;
-    d.mFn2C = (void*)0xc2e4e0;
-    d.mFn30 = (void*)0x692fb0;
-    d.mFn34 = (void*)0xc87090;
-    d.mFn38 = (void*)0xac8050;
+    d.mDefault = (void*)FUN_00692ca0;
+    d.mFn24 = (void*)FUN_00c87630;
+    d.mFn28 = (void*)FUN_00bd1780;
+    d.mFn2C = (void*)FUN_00c2e4e0;
+    d.mFn30 = (void*)FUN_00692fb0;
+    d.mFn34 = (void*)FUN_00c87090;
+    d.mFn38 = (void*)FUN_00ac8050;
     d.mType = 0x2c;
-    *(PropDesc*)0x157a07c = d;
+    *(PropDesc*)g_157a07c = d;
 
-    d.mName = (const char*)0x14736e8;
+    d.mName = (const char*)g_14736e8;
     d.mHash = 0x5d28f83;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_6_24;
     d.mFn28 = (void*)U_01353800_6_28;
     d.mFn2C = (void*)U_01353800_6_2c;
@@ -1500,13 +1532,13 @@ void FUN_01353800(void)
     d.mFn34 = (void*)S3800_F34B;
     d.mFn38 = (void*)S3800_F38B;
     d.mType = 0x20;
-    *(PropDesc*)0x157a0b8 = d;
+    *(PropDesc*)g_157a0b8 = d;
 
-    d.mName = (const char*)0x14736d8;
+    d.mName = (const char*)g_14736d8;
     d.mHash = 0x61d7ac0;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_7_24;
     d.mFn28 = (void*)U_01353800_7_28;
     d.mFn2C = (void*)U_01353800_7_2c;
@@ -1514,13 +1546,13 @@ void FUN_01353800(void)
     d.mFn34 = (void*)S3800_F34B;
     d.mFn38 = (void*)S3800_F38B;
     d.mType = 0x24;
-    *(PropDesc*)0x157a0f4 = d;
+    *(PropDesc*)g_157a0f4 = d;
 
-    d.mName = (const char*)0x14736cc;
+    d.mName = (const char*)g_14736cc;
     d.mHash = 0x61d7ac9;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01353800_8_24;
     d.mFn28 = (void*)U_01353800_8_28;
     d.mFn2C = (void*)U_01353800_8_2c;
@@ -1528,5 +1560,5 @@ void FUN_01353800(void)
     d.mFn34 = (void*)U_01353800_8_34;
     d.mFn38 = (void*)U_01353800_8_38;
     d.mType = 0x28;
-    *(PropDesc*)0x157a130 = d;
+    *(PropDesc*)g_157a130 = d;
 }

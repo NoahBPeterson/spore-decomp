@@ -2,6 +2,17 @@
 // Object file: UTFSpore_Win32/httppostbodystream.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f3a68[];
+extern "C" char g_13fb610[];
+extern "C" char g_13fb618[];
+extern "C" char g_13fb644[];
+extern "C" char g_13fb688[];
+extern "C" char g_143f3d8[];
+extern "C" char g_143f3e0[];
+extern "C" char g_143f444[];
+
 #include "game/types.h"
 #include "EA/Internet/HTTPMultipartFormDataPostBodyStream.h"
 #include "EA/Internet/HTTPMultipartRelatedPostBodyStream.h"
@@ -735,11 +746,11 @@ bool HTTPMultipartFormDataPostBodyStream_s0094_5ed0::WriteField(const char* name
             mnTextStart = pos;
             mLastDataType = 0;
         }
-        WriteStr((const char*)0x13fb644, mpMemStream);
+        WriteStr((const char*)g_13fb644, mpMemStream);
         mpMemStream->Write(msBoundary.data(), msBoundary.size());
-        WriteStr((const char*)0x13fb618, mpMemStream);
+        WriteStr((const char*)g_13fb618, mpMemStream);
         WriteStr(name, mpMemStream);
-        WriteStr((const char*)0x13fb610, mpMemStream);
+        WriteStr((const char*)g_13fb610, mpMemStream);
         WriteStr(value, mpMemStream);
         if (mpMemStream->GetState() != 0)
             mnState = -1;
@@ -760,9 +771,9 @@ bool HTTPMultipartFormDataPostBodyStream_s0094_5ed0::WriteEndBoundary()
             mnTextStart = pos;
             mLastDataType = 0;
         }
-        WriteStr((const char*)0x13fb644, mpMemStream);
+        WriteStr((const char*)g_13fb644, mpMemStream);
         mpMemStream->Write(msBoundary.data(), msBoundary.size());
-        WriteStr((const char*)0x13fb688, mpMemStream);
+        WriteStr((const char*)g_13fb688, mpMemStream);
         if (mpMemStream->GetState() != 0)
             mnState = -1;
         else {
@@ -938,22 +949,22 @@ bool HTTPMultipartFormDataPostBodyStream::Close()
 // @ 0x00946f70
 HTTPMultipartFormDataPostBodyStream::~HTTPMultipartFormDataPostBodyStream()
 {
-    mpVtbl = (void*)0x143f3e0;
-    mpVtbl2 = (void*)0x143f3d8;
+    mpVtbl = (void*)g_143f3e0;
+    mpVtbl2 = (void*)g_143f3d8;
     _ReadWriteBarrier();
     if (mpMemStream)
         VCALL0(mpMemStream, 8);
     if (msBoundary.mpCapacity - msBoundary.mpBegin > 1 && msBoundary.mpBegin)
         operator delete(msBoundary.mpBegin);
     ((ListBase*)&mListAnchor)->DoClear();
-    mpVtbl2 = (void*)0x13ef094;
-    mpVtbl = (void*)0x13f3a68;
+    mpVtbl2 = (void*)g_13ef094;
+    mpVtbl = (void*)g_13f3a68;
 }
 
 // @ 0x00946fe0
 bool EA::Internet::HTTPMultipartFormDataPostBodyStream::GetContentTypeString(eastl::basic_string<char, eastl::allocator> & out)
 {
-    out.assign(S_(0x143f444), S_(0x143f444) + 0x1e);
+    out.assign(S_((int)g_143f444), S_((int)g_143f444) + 0x1e);
     const char* boundary = (const char*)VCALL0(this, 0x4c);
     unsigned n = strlen(boundary);
     out.append(boundary, boundary + n);

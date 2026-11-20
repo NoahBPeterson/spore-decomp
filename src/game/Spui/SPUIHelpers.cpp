@@ -1293,7 +1293,7 @@ void* AttrP1c(int* p)
         int* q = FindByKey(p, 0x3ec2e62);
         if (q != 0) return (char*)q + 0x1c;
     }
-    return (void*)0x1544384;
+    return (void*)&DAT_01544384;
 }
 
 // @ 0x00805290
@@ -1414,7 +1414,7 @@ void FixedAlloc::FixedFree(void* p, int flags)
         *(int**)(block + 0x10) = base;
         return;
     }
-    void* alloc = *(void**)0x164c4b8;
+    void* alloc = *(void**)&DAT_0164c4b8;
     (*(void(__thiscall**)(void*, int*, int))VSlot(alloc, 0xc))(alloc, base, 0);
 }
 

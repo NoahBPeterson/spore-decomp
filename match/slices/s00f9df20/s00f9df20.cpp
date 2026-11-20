@@ -1,4 +1,8 @@
 // s00f9df20: 0x00f9e4d0 (scatter-texture pass: refreshes the six scatter cube faces, or draws one face quad)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16ca0d8[];
+
 #include "types.h"
 
 struct Raster;
@@ -483,7 +487,7 @@ void cScatterHost::RebuildEffects()
     mpSensorMgr = (cScatterMgr*)EffectsManagerPtr()->V4c(0xd0a45522u, 0);
     mpEffectMgr = FUN_006eea10();
     mpEffectMgr->V78(7);
-    mpEffectMgr->V84(0x16ca0d8u, GetAppHost()->V50());
+    mpEffectMgr->V84((unsigned)g_16ca0d8, GetAppHost()->V50());
     mpSensorMgr->V1c(mpEffectMgr.p);
     mpSensorMgr->V24(2);
     mpSensorMgr->GetProbe(0x8ebc7a73u, 0, (void**)mpProbe.AsOutParam());

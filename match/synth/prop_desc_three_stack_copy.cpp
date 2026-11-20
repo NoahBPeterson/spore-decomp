@@ -54,7 +54,7 @@ extern void __cdecl fn_00693090();
 extern void __cdecl fn_00694f00();
 extern void __cdecl fn_00675ca0();
 void FUN_013340b0() {
-  g_01570f10 = T(s_01469d98, 0x3E2D7ECu, 0, fn_00692ca0, fn_00b6e3a0, fn_00ac88c0, fn_006930f0, fn_00695010, (fp)0xb1fbf0, fn_00acbba0);
+  g_01570f10 = T(s_01469d98, 0x3E2D7ECu, 0, fn_00692ca0, fn_00b6e3a0, fn_00ac88c0, fn_006930f0, fn_00695010, (fp)&fn_00b1fbf0, fn_00acbba0);
   g_01570f4c = T(s_0145ca24, 0x3E2D7EDu, 12, fn_00692ca0, fn_00572810, fn_00ac88f0, fn_006930b0, fn_00694fc0, fn_00b1fbf0, fn_00acbb80);
   g_01570f88 = T(s_01469d8c, 0x3E2D7EFu, 16, fn_00692ca0, fn_00572810, fn_00572840, fn_00693090, fn_00694f00, fn_00b1fbf0, fn_00675ca0);
 }
@@ -83,7 +83,7 @@ extern void __cdecl fn_00c2e4e0();
 extern void __cdecl fn_00692fb0();
 extern void __cdecl fn_00c6c630();
 void FUN_0133c450() {
-  g_01574c48 = T(s_014665d4, 0x3F2BAE3u, 0, fn_00692ca0, fn_00572810, fn_00572840, fn_00692ff0, fn_00694ee0, (fp)0xb1fbf0, fn_0057cde0);
+  g_01574c48 = T(s_014665d4, 0x3F2BAE3u, 0, fn_00692ca0, fn_00572810, fn_00572840, fn_00692ff0, fn_00694ee0, (fp)&fn_00b1fbf0, fn_0057cde0);
   g_01574c84 = T(s_0146d600, 0x3F2C04Du, 4, fn_00692ca0, fn_00572810, fn_00ac88f0, fn_006930b0, fn_00694fc0, fn_00b1fbf0, fn_00acbb80);
   g_01574cc0 = T(s_0146d5f0, 0x3F2C064u, 8, fn_00692ca0, fn_00c6ce30, fn_00c46470, fn_00c2e4e0, fn_00692fb0, fn_00b1fbf0, fn_00c6c630);
 }
@@ -197,7 +197,7 @@ extern void __cdecl fn_00febfb0();
 extern void __cdecl fn_00feca60();
 extern void __cdecl fn_00ac8050();
 void FUN_01396930() {
-  g_015b4aa0 = T(s_0146b534, 0x55344212u, 0, fn_00692ca0, fn_00572810, fn_00572840, fn_00693090, fn_00694f00, (fp)0xb1fbf0, fn_00675ca0);
+  g_015b4aa0 = T(s_0146b534, 0x55344212u, 0, fn_00692ca0, fn_00572810, fn_00572840, fn_00693090, fn_00694f00, (fp)&fn_00b1fbf0, fn_00675ca0);
   g_015b4adc = T(s_014949dc, 0x55344213u, 8, fn_00692ca0, fn_00b04e00, fn_00c761c0, fn_00c2e4e0, fn_00692fb0, fn_00b1fbf0, fn_00eafe40);
   g_015b4b18 = T(s_014949c8, 0x55344214u, 48, fn_00692ca0, fn_00febfb0, fn_00feca60, fn_00c2e4e0, fn_00692fb0, fn_00b1fbf0, fn_00ac8050);
 }
@@ -222,7 +222,7 @@ extern void __cdecl fn_0057cde0();
 extern const char s_014750bc[];
 extern T g_015b4fa0;
 void FUN_01396fe0() {
-  g_015b4f28 = T(s_0145bc18, 0x3221261u, 0, fn_00692ca0, fn_00b6e3a0, fn_00ac88c0, fn_006930f0, fn_00695010, (fp)0xb1fbf0, fn_00acbba0);
+  g_015b4f28 = T(s_0145bc18, 0x3221261u, 0, fn_00692ca0, fn_00b6e3a0, fn_00ac88c0, fn_006930f0, fn_00695010, (fp)&fn_00b1fbf0, fn_00acbba0);
   g_015b4f64 = T(s_014750c8, 0x322128Bu, 12, fn_00692ca0, fn_00572810, fn_00572840, fn_00692ff0, fn_00694ee0, fn_00b1fbf0, fn_0057cde0);
   g_015b4fa0 = T(s_014750bc, 0x3221290u, 16, fn_00692ca0, fn_00572810, fn_00572840, fn_00692ff0, fn_00694ee0, fn_00b1fbf0, fn_0057cde0);
 }

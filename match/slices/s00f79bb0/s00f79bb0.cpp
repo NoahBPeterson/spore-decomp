@@ -14,6 +14,12 @@
 // NAMING NOTE: no symbol is known for 0x00F79BF0; the class is called cParticlesEffectOld here
 // (Claude-coined) and InitParticle follows the sibling's (guessed) name. Layout names follow
 // s00f5e910 at the older offsets.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00f765a0();
+extern "C" void FUN_00f77940();
+extern "C" void FUN_00f78a60();
+
 #include "types.h"
 #include <math.h>
 
@@ -430,9 +436,9 @@ void FUN_00f79bb0(char init)
 {
     if (init != 0) {
         memset(&gStreamGlobals, 0, sizeof(gStreamGlobals));
-        gStreamGlobals.mVtable0 = 0x00f765a0;
-        gStreamGlobals.mFn8 = 0x00f77940;
-        gStreamGlobals.mFnC = 0x00f78a60;
+        gStreamGlobals.mVtable0 = (int)FUN_00f765a0;
+        gStreamGlobals.mFn8 = (int)FUN_00f77940;
+        gStreamGlobals.mFnC = (int)FUN_00f78a60;
     }
 }
 

@@ -1,5 +1,9 @@
 // Slice s0091f520 - EA::Debug::ReportWriter diagnostic writers + related helpers.
 // Optimized (/O2, no /GS cookies). Some functions carry SEH; those are approximated.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143d824[];
+
 #include "types.h"
 #include <string.h>
 
@@ -500,7 +504,7 @@ public:
 // @ 0x00920410
 void __fastcall HT_Destroy(HTNode** self)
 {
-    self[0] = (HTNode*)0x0143d824;
+    self[0] = (HTNode*)g_143d824;
     HTMap* a = (HTMap*)((char*)self + 0x128);
     a->DoFreeNodes(a->buckets, a->bucketCount);
     a->count = 0;

@@ -2,6 +2,11 @@
 // Retail layouts differ from the 2008 PDB for the Deform class (retail string is at +0x11c,
 // mSetPickData at +0x118), so members are named by role and retail offset.
 // Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef1ac[];
+extern "C" char g_13ef1c0[];
+
 #include "types.h"
 
 typedef uint32_t u32;
@@ -135,8 +140,8 @@ extern void __fastcall cSPEditorHandleDeform_Shutdown(cSPEditorHandle* self);   
 // @ 0x47f520
 void __fastcall BallConnector_Dtor(cSPEditorHandle* self)
 {
-    *(void**)self = (void*)0x13ef1c0;
-    self->mRefCountVft = (void*)0x13ef1ac;
+    *(void**)self = (void*)g_13ef1c0;
+    self->mRefCountVft = (void*)g_13ef1ac;
     cSPEditorHandle_Shutdown(self);
     cSPEditorHandle_BaseDtor(self);
 }

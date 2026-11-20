@@ -3,6 +3,13 @@
 // All functions are __thiscall with `this` in ecx unless noted.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_13eb394[];
+extern "C" char g_146d164[];
+extern "C" char g_146d174[];
+extern "C" char g_146d188[];
+
 #include <math.h>
 
 typedef unsigned char      u8;
@@ -745,10 +752,10 @@ void cSPMission::WriteUintVector(VecU32* vec, void* stream)
 cGenericPressureEvent* cGenericPressureEvent::ctor()
 {
     Ctor();
-    *(void* volatile*)((char*)this + 0x34) = (void*)0x13eb384;
-    mpVtbl = (void*)0x146d188;
-    mpVtbl4 = (void*)0x146d174;
-    mpVtbl34 = (void*)0x146d164;
+    *(void* volatile*)((char*)this + 0x34) = (void*)g_13eb384;
+    mpVtbl = (void*)g_146d188;
+    mpVtbl4 = (void*)g_146d174;
+    mpVtbl34 = (void*)g_146d164;
     mTimer38.Ctor();
     mTimer58.Ctor();
     return this;
@@ -760,12 +767,12 @@ cGenericPressureEvent* cGenericPressureEvent::ctor()
 // @ 0x00c46540
 void* cGenericPressureEvent::ScalarDeletingDtor(u32 flags)
 {
-    mpVtbl = (void*)0x146d188;
-    mpVtbl4 = (void*)0x146d174;
-    mpVtbl34 = (void*)0x146d164;
+    mpVtbl = (void*)g_146d188;
+    mpVtbl4 = (void*)g_146d174;
+    mpVtbl34 = (void*)g_146d164;
     mTimer58.Dtor();
     mTimer38.Dtor();
-    mpVtbl34 = (void*)0x13eb394;
+    mpVtbl34 = (void*)g_13eb394;
     Dtor();
     if ((flags & 1) != 0)
         OperatorDeleteArray(this);

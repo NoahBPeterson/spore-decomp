@@ -2,6 +2,11 @@
 // Slice s00cf4660: Simulator::cCityInputStrategy construction, reset, init,
 // destruction, and the species-scan messaging callback.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147875c[];
+extern "C" char g_1478774[];
+extern "C" char g_1478788[];
+
 typedef unsigned int  u32;
 typedef unsigned char u8;
 
@@ -433,16 +438,16 @@ void CityInputStrategy::Reset(u32 mode)
 
     ArgCmd local;
     local.Ctor(&mTreeBase04);
-    local.SetName((const char*)0x1478788);
+    local.SetName((const char*)g_1478788);
     switch (mode) {
     case 0:
-        local.SetName((const char*)0x147875c);
+        local.SetName((const char*)g_147875c);
         break;
     case 1:
-        local.SetName((const char*)0x1478774);
+        local.SetName((const char*)g_1478774);
         break;
     default:
-        local.SetName((const char*)0x147875c);
+        local.SetName((const char*)g_147875c);
         break;
     }
     local.Finish();

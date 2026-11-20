@@ -8,6 +8,10 @@
 // the original uses (offsets noted inline).
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1461330[];
+
 #include "types.h"
 #include <math.h>
 
@@ -345,7 +349,7 @@ void __fastcall FUN_00b4d7a0(char* self, int, float radius, float tag, u8 solid)
 void* __fastcall FUN_00b4d820(char* self, int, const void* shape, const void* xform, u32 a)
 {
     ((HkObj*)self)->hkPhantomCtor(shape, xform, a);
-    st32(self, 0, 0x1461330u);
+    st32(self, 0, (unsigned)g_1461330);
     st8(self, 0x130, 0);
     return self;
 }

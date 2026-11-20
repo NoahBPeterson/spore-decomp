@@ -2,6 +2,13 @@
 // Object file: SPEngine/SPGraphicsRTTManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_13ec458[];
+extern "C" char g_140e374[];
+extern "C" char g_140e384[];
+extern "C" char g_140e398[];
+
 #include "game/types.h"
 #include "SP/cViewer.h"
 #include <xmmintrin.h>
@@ -917,13 +924,13 @@ Obj2c* __cdecl CreateObj2c()
 {
     volatile Obj2c* p = (volatile Obj2c*)EASTL_allocator_allocate(0x2c, "Graphics", 0, 0, 0, 0);
     if (p) {
-        p->vt4 = (void*)0x13eb384;
+        p->vt4 = (void*)g_13eb384;
         p->mRefCount = 0;
-        p->vt8 = (void*)0x13ec458;
+        p->vt8 = (void*)g_13ec458;
         p->mFlag = 0;
-        p->vt0 = (void*)0x140e398;
-        p->vt4 = (void*)0x140e384;
-        p->vt8 = (void*)0x140e374;
+        p->vt0 = (void*)g_140e398;
+        p->vt4 = (void*)g_140e384;
+        p->vt8 = (void*)g_140e374;
         p->mSize = 0x200;
         p->f18 = 0;
         p->f1c = 0;

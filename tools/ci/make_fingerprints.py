@@ -6,6 +6,8 @@ usage: make_fingerprints.py [--vas FILE] [--out tools/ci/fingerprints.jsonl]
        --vas: one hex VA per line (default: every known function start)
        make_fingerprints.py --add-masked tools/ci/fingerprints.jsonl.gz [--out tools/ci/fingerprints.jsonl]
        --add-masked: add the "masked" field to existing fingerprints, leaving size, mask and hash as they are
+       make_fingerprints.py --add-fixups tools/ci/fingerprints.jsonl.gz [--out tools/ci/fingerprints.jsonl]
+       --add-fixups: add the "fixups" field (retail .reloc offsets) the same way
 """
 import argparse, csv, glob, json, os, sys
 
@@ -42,8 +44,25 @@ def main():
     ap.add_argument("--vas")
     ap.add_argument("--out", default=os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"))
     ap.add_argument("--add-masked")
+    ap.add_argument("--add-fixups")
     a = ap.parse_args()
     orig = R.Original()
+    if a.add_fixups:
+        import gzip
+        n = 0
+        with gzip.open(a.add_fixups, "rt") as src, open(a.out, "w") as f:
+            for line in src:
+                fp = json.loads(line)
+                va = int(fp["va"], 16)
+                fx = F.fixups(orig, va, fp["size"])
+                mask = F.unpack_mask(fp["mask"])
+                if not all(o + k in mask for o in fx for k in range(4)):
+                    sys.exit("%s: a .reloc fixup outside the fingerprint's mask" % fp["va"])
+                fp["fixups"] = fx
+                f.write(json.dumps(fp, separators=(",", ":")) + "\n")
+                n += 1
+        print("added fixups to %d fingerprints -> %s" % (n, os.path.relpath(a.out, ROOT)))
+        return
     if a.add_masked:
         import gzip
         n = 0

@@ -1,4 +1,11 @@
 // @ 0x00e1b2d0
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1480218[];
+extern "C" char g_1480224[];
+extern "C" char g_148022c[];
+extern "C" char g_1480248[];
+
 #include "game/types.h"
 
 // Stand-in for the primary base. The real type is cUIMissionCardPanel; the
@@ -53,11 +60,11 @@ cMissionPanelDerived* cMissionPanelDerived::Construct()
     // the scheduler sinks the whole group below the zero fill, so the +0x40
     // slot is written through the member's address (the base-subobject
     // vftable assignment), which keeps the group in place.
-    vf00 = (void*)0x1480248;
-    vf08 = (void*)0x148022c;
-    vf0c = (void*)0x1480224;
+    vf00 = (void*)g_1480248;
+    vf08 = (void*)g_148022c;
+    vf0c = (void*)g_1480224;
     void** const ppVft40 = &vf40;
-    *ppVft40 = (void*)0x1480218;
+    *ppVft40 = (void*)g_1480218;
 
     m44 = 0;
     m48 = 0;

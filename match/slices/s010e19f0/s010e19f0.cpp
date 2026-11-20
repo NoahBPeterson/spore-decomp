@@ -1,3 +1,7 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e4174[];
+extern "C" char g_16e4178[];
+
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long dwTlsIndex);
 
 struct HkMem_010e19f0 {
@@ -20,7 +24,7 @@ struct HkArray_010e19f0 {
 
     ~HkArray_010e19f0() {
         if ((m_capacityAndFlags & 0x80000000) == 0) {
-            HkTlsMem_010e19f0* tls = (HkTlsMem_010e19f0*)TlsGetValue(*(unsigned long*)0x016e4174);
+            HkTlsMem_010e19f0* tls = (HkTlsMem_010e19f0*)TlsGetValue(*(unsigned long*)g_16e4174);
             tls->FreeArray(m_data, (m_capacityAndFlags & 0x3fffffff) * 12, 0x14);
         }
     }
@@ -41,7 +45,7 @@ struct Obj_010e19f0 : public Base_010e19f0 {
     void operator delete(void* p) {
         Obj_010e19f0* self = (Obj_010e19f0*)p;
         int size = (unsigned short)self->m4;
-        HkMem_010e19f0* mem = *(HkMem_010e19f0**)0x016e4178;
+        HkMem_010e19f0* mem = *(HkMem_010e19f0**)g_16e4178;
         mem->Dealloc(p, size, 0x1c);
     }
 

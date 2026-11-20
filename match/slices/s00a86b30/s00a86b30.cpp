@@ -1,6 +1,9 @@
 // Slice s00a86b30: creature/plant simulator object family.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 typedef unsigned int uint;
 
 // ---- element subobject at +0x40 ------------------------------------------
@@ -150,7 +153,7 @@ void __fastcall Sim_Dtor(Sim* self)
     self->v8c.~SimVectorF();
     self->v78.~SimVectorF();
     self->v60.~SimVectorF();
-    *(void**)self = (void*)0x013ef094;
+    *(void**)self = (void*)g_13ef094;
 }
 
 // ---- simulator constructor ------------------------------------------------

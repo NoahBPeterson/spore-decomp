@@ -1,5 +1,8 @@
 // SporeApp.exe slice s00e34290 -- SPUI swatch widgets / asset view (gold6, worker 36)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -420,7 +423,7 @@ void cSPSwatchView::InitSwatch(const ViewRecord& key, const ViewRecord& outer,
 // @ 0x00e34470
 void cAssetSwatchWidget::InitLayout()
 {
-    cSPUILayout* pNew = (cSPUILayout*)operator new(0x18, (void*)0x013f6b3c, 0, 0, 0, 0);
+    cSPUILayout* pNew = (cSPUILayout*)operator new(0x18, (void*)g_13f6b3c, 0, 0, 0, 0);
     if (pNew)
         pNew = pNew->ctor();
     else

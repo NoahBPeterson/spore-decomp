@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/XmlParser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14357e4[];
+extern "C" char g_1437be4[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -238,7 +242,7 @@ void XmlParser::Fn8e5ca0()
 {
     char* c = (char*)this;
     void* px = *(void**)(c + 0x220);
-    *(void**)c = (void*)0x1437be4;
+    *(void**)c = (void*)g_1437be4;
     if (px != 0) {
         XML_ParserFree(px);
         *(void**)(c + 0x220) = 0;
@@ -248,7 +252,7 @@ void XmlParser::Fn8e5ca0()
     if ((((char*)cap - (char*)b) & ~1) > 2 && b != 0 && b != *(wchar16**)(c + 0x18)) {
         operator_delete__(b);
     }
-    *(void**)c = (void*)0x14357e4;
+    *(void**)c = (void*)g_14357e4;
 }
 
 // @ 0x008e5da0

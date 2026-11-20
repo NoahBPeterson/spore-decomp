@@ -2,6 +2,9 @@
 // Object file: SPBake/SPEditorManipulationUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef52c[];
+
 #include "game/types.h"
 #include "EA/Audio/FactoryBinarySampleData.h"
 #include "cSPMatrix3.h"
@@ -7688,7 +7691,7 @@ hkRigidBody_s0048_d010* MoveBlockLowAngleStacking(cSPEditorBlock_s0048_d010* blo
 // @ 0x0048db10
 void* HkObj::F_48db10(unsigned flags)
 {
-    *(void**)this = (void*)0x13ef534;
+    *(void**)this = (void*)&g_vtbl_13ef534;
     if (flags & 1) {
         GetHkMemoryForDelete()->Free(this, 8, 0x1c);
     }
@@ -7704,8 +7707,8 @@ void HkObj::F_48db60()
 // @ 0x0048dbb0
 void* HkObj::F_48dbb0(unsigned flags)
 {
-    *(void**)this = (void*)0x13ef52c;
-    *(void**)this = (void*)0x13ef534;
+    *(void**)this = (void*)g_13ef52c;
+    *(void**)this = (void*)&g_vtbl_13ef534;
     if (flags & 1) {
         GetHkMemoryForDelete()->Free(this, 8, 0x1c);
     }

@@ -5,6 +5,10 @@
 // scalar SSE (movss/mulss/comiss) plus x87 fcos/fsin/fsqrt/fyl2x, so they only match
 // cl 15.00 with fast floats.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14ce70c[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -565,7 +569,7 @@ void ThreadObj::FUN_011547b0(void)
 {
     FUN_01154730(4);
     Wake();
-    WaitForEnd((const unsigned int*)0x014ce70c, 0);
+    WaitForEnd((const unsigned int*)g_14ce70c, 0);
 }
 
 // ---------------------------------------------------------------------------

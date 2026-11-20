@@ -2,6 +2,10 @@
 // Object file: SPEditors/SPUIFeedEdit.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+
 #include "game/types.h"
 #include "SP/cSPUIFeedEditAssetView.h"
 #include "SP/cSPUIFeedEdit.h"
@@ -1723,15 +1727,15 @@ extern float      kPosseMaxRange;                // 0x01486ebc
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
-#define G16C7AA4       (*(void**)0x016c7aa4)          // app / scenario global
+#define G16C7AA4       (*(void**)&g_16c7aa4)          // app / scenario global
 #define G16065F8       (*(const u8*)0x016065f8)
 #define G16065D8       (*(const u32*)0x016065d8)
 #define G16065DC       (*(const u32*)0x016065dc)
 #define G16065EC       (*(const u32*)0x016065ec)
 #define F1485720       (*(const float*)0x01485720)     // _HK_REAL_ONE
 #define MAT_DEFAULT    ((void*)0x016c76d8)
-#define VTBL_13EB90C   ((void*)0x013eb90c)
-#define VTBL_13EB844   ((void*)0x013eb844)
+#define VTBL_13EB90C   ((void*)g_13eb90c)
+#define VTBL_13EB844   ((void*)g_13eb844)
 typedef void  (__thiscall* FnV0)(void*);
 typedef void  (__thiscall* FnV1)(void*, void*);
 typedef void  (__thiscall* FnPost)(void*, u32, void*, int);
@@ -1972,7 +1976,7 @@ public:
 }
 struct SyncSim { char mPad[0xd0]; void* mpData; };                    // +0xd0
 struct SyncApp { char mPad[0x74]; SyncSim* mpSim; };                  // +0x74
-#define SYNC_APP (*(SyncApp**)0x016c7aa4)
+#define SYNC_APP (*(SyncApp**)&g_16c7aa4)
 struct Panel_s00ed_57e0 {
     char        mPad00[8];                        // +0x00
     WinProcS    mWinProc;                         // +0x08

@@ -2,6 +2,10 @@
 // Object file: Spui/_at_00820000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebacc[];
+extern "C" char g_13f6b3c[];
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include "EA/Stopwatch.h"
@@ -1285,8 +1289,8 @@ void LayerWinProcInit()
 bool __cdecl LayerProc1(char* p)
 {
   if (*(void**)(p + 0x1c)) {
-    void* m = NewMem(0x24, (void*)0x13f6b3c, 0, 0, 0, 0);
-    Stream* s = m ? ((Stream*)m)->Ctor(0, 0, (void*)0x13ebacc) : 0;
+    void* m = NewMem(0x24, (void*)g_13f6b3c, 0, 0, 0, 0);
+    Stream* s = m ? ((Stream*)m)->Ctor(0, 0, (void*)g_13ebacc) : 0;
     if (s) s->AddRef();
     s->Set(1, 1.0f);
     LayoutMgr mgr;

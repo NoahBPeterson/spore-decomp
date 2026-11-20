@@ -1,5 +1,10 @@
 // Slice s00c0bd70 — Simulator::cGameData/cCreatureBase/cCreatureLocomotion helpers.
 // Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1570858[];
+extern "C" char g_1571798[];
+
 #include "types.h"
 #include <math.h>
 
@@ -398,15 +403,15 @@ char __cdecl FUN_00c0ccc0(float* p, float dt) {
 int __thiscall C::C0bd70(void* fields) {
   int sum = ((GameDataFields*)this)->GetFieldValues(fields);
   {
-    cVarListSerializer v((char*)this + 0x34, (void*)0x15816b8, 0x1a80d26);
+    cVarListSerializer v((char*)this + 0x34, (void*)&g_15816b8, 0x1a80d26);
     sum += v.GetFields(fields);
   }
   sum += ((LocoFields*)((char*)this + 0xc0))->GetFieldValues(fields);
   {
-    cVarListSerializer v((char*)this + 0x5a8, (void*)0x1570858, 0x1a80d26);
+    cVarListSerializer v((char*)this + 0x5a8, (void*)g_1570858, 0x1a80d26);
     sum += v.GetFields(fields);
   }
-  cVarListSerializer v3(this, (void*)0x1571798, 0x1a80d26);
+  cVarListSerializer v3(this, (void*)g_1571798, 0x1a80d26);
   sum += v3.GetFields(fields);
   return sum;
 }

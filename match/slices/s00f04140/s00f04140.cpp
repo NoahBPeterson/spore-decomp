@@ -1,6 +1,17 @@
 // slice s00f04140 — Simulator::cScenarioYouTube, the YouTube "tell a friend" e-mail dialog.
 // Reconstructed from the retail image (SporeApp.exe, 2017 build).
 // flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13ef094[];
+extern "C" char g_148b840[];
+extern "C" char g_148b850[];
+extern "C" char g_148b858[];
+extern "C" char g_148b864[];
+
 #include "types.h"
 
 // --------------------------------------------------------------------------- externals
@@ -667,7 +678,7 @@ void* cScenarioYouTube::FUN_00f046e0(unsigned flags)
         mpMsgHandler->Release();
     if (mpRef10)
         mpRef10->Release();
-    mpVtbl0 = (void*)0x13ef094;
+    mpVtbl0 = (void*)g_13ef094;
     if (flags & 1)
         operator delete(this);
     return this;
@@ -736,10 +747,10 @@ void* cScenarioYouTube::FUN_00f04740()
 void cScenarioYouTube::FUN_00f04910()
 {
     Vec20& v1 = mVec1;
-    mpVtbl0 = (void*)0x148b864;
-    mpVtbl4 = (void*)0x148b858;
-    mpVtbl8 = (void*)0x148b850;
-    mpVtblc = (void*)0x148b840;
+    mpVtbl0 = (void*)g_148b864;
+    mpVtbl4 = (void*)g_148b858;
+    mpVtbl8 = (void*)g_148b850;
+    mpVtblc = (void*)g_148b840;
     _ReadWriteBarrier();
 
     v1.DestroyRange(v1.mpBegin, v1.mpEnd);
@@ -774,9 +785,9 @@ void cScenarioYouTube::FUN_00f04910()
         mpMsgHandler = 0;
         RemoveHandler(h, mpMsgA, mpMsgB, mpMsgC, mpMsgD);
     }
-    mpVtblc = (void*)0x13ec458;
-    mpVtbl8 = (void*)0x13eb394;
-    mpVtbl0 = (void*)0x13eb938;
+    mpVtblc = (void*)g_13ec458;
+    mpVtbl8 = (void*)g_13eb394;
+    mpVtbl0 = (void*)g_13eb938;
 }
 
 // =========================================================================== 0x00F04AD0

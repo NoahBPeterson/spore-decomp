@@ -1,6 +1,10 @@
 // Slice s008d5340: EA::Input::TriggerConfigParser::Parse (008d5340).
 // Parses the input trigger config text: "[platform,...]" sections, "#define NAME value",
 // "(a, b) = value" combos and "MOD+KEY = value" bindings. Layouts from the 2008 dev PDB.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436624[];
+
 #include "types.h"
 #include <new>
 #include <string.h>
@@ -691,7 +695,7 @@ void* DatabaseDirectoryFiles::Cast(unsigned int nInterfaceId)
 void DatabaseDirectoryFiles::SetMutexLocked(bool bLock)
 {
     if (bLock)
-        mMutex.Lock(reinterpret_cast<void*>(0x01436624));
+        mMutex.Lock(reinterpret_cast<void*>((int)g_1436624));
     else
         mMutex.Unlock();
 }

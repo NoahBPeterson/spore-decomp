@@ -3,6 +3,9 @@
 // Region: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2.  Byte-exact: CreateModelInstance.
 // The remaining functions are complete translations (not byte-exact yet).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00754c10();
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -563,7 +566,7 @@ void S_00755240::FUN_00755240(cJob* job) {
     }
   }
   job->m18 = 1;
-  job->Continuation((void*)0x754c10, this);
+  job->Continuation((void*)FUN_00754c10, this);
 }
 
 // 0x007552e0  (223 bytes) EASTL vector<GlyphInfo (8 bytes)>::operator=(const vector&)

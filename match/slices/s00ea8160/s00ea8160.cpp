@@ -1,5 +1,12 @@
 // Audio setup (0xea8160, 2156 bytes, __thiscall, no args, returns true): creates the mix mode manager, then
 // registers every creature-ability handler with the audio system and finally the layer object.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00ea5420();
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+
 #include "types.h"
 #include <stddef.h>
 #include <math.h>
@@ -211,9 +218,9 @@ DtorA* DtorA::FUN_00ea89d0(unsigned char flags)
         FUN_00f47380(begin38);
     if (obj18 != 0)
         obj18->v1();
-    vtbl8 = (void*)0x013ef094;
-    vtbl4 = (void*)0x013eb394;
-    vtbl0 = (void*)0x013eb938;
+    vtbl8 = (void*)g_13ef094;
+    vtbl4 = (void*)g_13eb394;
+    vtbl0 = (void*)g_13eb938;
     if ((flags & 1) != 0)
         FUN_00f47380(this);
     return this;
@@ -239,9 +246,9 @@ DtorB* DtorB::FUN_00ea8a30(unsigned char flags)
         FUN_00f47380(begin2c);
     if (obj18 != 0)
         obj18->v1();
-    vtbl8 = (void*)0x013ef094;
-    vtbl4 = (void*)0x013eb394;
-    vtbl0 = (void*)0x013eb938;
+    vtbl8 = (void*)g_13ef094;
+    vtbl4 = (void*)g_13eb394;
+    vtbl0 = (void*)g_13eb938;
     if ((flags & 1) != 0)
         FUN_00f47380(this);
     return this;
@@ -486,7 +493,7 @@ void AudioObj::FUN_00ea8c30(float f, int a)
     int* vec = nm->GetGameDataVector(FUN_00cd7d10, FUN_00d3d420,
                                      FUN_00bf6e00, FUN_00b1e500,
                                      (const void*)0x01e4daae);
-    AbilityB* ab = Ability_5440(vec + 1, pos, 0x00ea5420);
+    AbilityB* ab = Ability_5440(vec + 1, pos, (int)FUN_00ea5420);
     cTribe* owner = nm->GetPlayerTribe();
     if (ab == 0 || owner == 0)
         return;

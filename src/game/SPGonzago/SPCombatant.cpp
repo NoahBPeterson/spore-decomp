@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPCombatant.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14698f0[];
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 #include "game/types.h"
 #include "SP/cCity.h"
 #include "SP/cCombatant.h"
@@ -719,7 +724,7 @@ void* __fastcall FUN_00bfcc80(Combatant* self, int, unsigned param_2)
 // @ 0x00bfcd00
 void __fastcall Combatant_dtor(Combatant* self)
 {
-    self->vftable = (void**)0x14698f0;
+    self->vftable = (void**)g_14698f0;
     // The three effect handles at +0xbc..+0xc8, released back-to-front.
     void** slot = self->mSlotsBc + 3;
     int n = 2;
@@ -933,7 +938,7 @@ void __fastcall FUN_00bfd2b0(OrientObject* self)
 // @ 0x00bfd3e0
 HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntry* src)
 {
-    self->vftable = (void*)0x1465d54;
+    self->vftable = (void*)g_1465d54;
     self->mRefCount4 = 0;
     self->mField08 = src->mField08;
     self->mField0c = src->mField0c;
@@ -941,7 +946,7 @@ HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntr
     self->mField14 = src->mField14;
     self->mByte18 = src->mByte18;
     self->mField1c = src->mField1c;
-    self->vftable = (void*)0x1464450;
+    self->vftable = (void*)g_1464450;
     self->mField20 = src->mField20;
     return self;
 }
@@ -951,7 +956,7 @@ HostileEntry* FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, 
 {
     while (first != last) {
         if (out != 0) {
-            out->vftable = (void*)0x1465d54;
+            out->vftable = (void*)g_1465d54;
             out->mRefCount4 = 0;
             out->mField08 = first->mField08;
             out->mField0c = first->mField0c;
@@ -959,7 +964,7 @@ HostileEntry* FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, 
             out->mField14 = first->mField14;
             out->mByte18 = first->mByte18;
             out->mField1c = first->mField1c;
-            out->vftable = (void*)0x1464450;
+            out->vftable = (void*)g_1464450;
             out->mField20 = first->mField20;
         }
         ++first;

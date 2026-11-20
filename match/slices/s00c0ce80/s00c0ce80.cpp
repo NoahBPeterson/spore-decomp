@@ -1,5 +1,9 @@
 // Slice s00c0ce80 - cCreatureBase animation / hunger helpers.
 // Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_150c900[];
+
 #include "types.h"
 #include <math.h>
 
@@ -120,7 +124,7 @@ void __thiscall CCB::cff0(int param) {
     G32((char*)this + 0xf98) = param;
     float v;
     if (*(char*)((char*)this + 0xbb0) != 0)
-        v = ce80(2, 1) + GF(0x150c900);
+        v = ce80(2, 1) + GF((int)g_150c900);
     else
         v = ce80(param, 0);
     GF((char*)this + 0x2a0) = v;

@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/Page.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1437dc4[];
+extern "C" char g_1437e18[];
+extern "C" char g_1437e58[];
+
 #include "game/types.h"
 #include "EA/XHTML/Layout/Page.h"
 #include "EA/Allocator/StackAllocator.h"
@@ -1075,7 +1080,7 @@ EA::XHTML::Layout::InlineItem::InlineItem(EA::XHTML::Layout::Page_s008e_b250* pP
     mpBorder = 0;
     mpBackground = 0;
     mpElement = pElement;
-    *(void**)this = (void*)0x1437dc4;
+    *(void**)this = (void*)g_1437dc4;
 }
 
 // @ 0x008ebca0
@@ -1086,7 +1091,7 @@ EA::XHTML::Layout::TableCell::TableCell(EA::XHTML::Layout::Page_s008e_b250* pPag
     mColSpan = 1;
     mRow = 0;
     mCol = 0;
-    *(void**)this = (void*)0x1437e18;
+    *(void**)this = (void*)g_1437e18;
     mMinWidth = 0.0f;
     mMaxWidth = 0.0f;
 }
@@ -1106,7 +1111,7 @@ EA::XHTML::Layout::TableGroup::TableGroup(EA::XHTML::Layout::Page_s008e_b250* pP
     mpBorder = 0;
     mpBackground = 0;
     mpElement = pElement;
-    *(void**)this = (void*)0x1437e58;
+    *(void**)this = (void*)g_1437e58;
     mpField5c = (void*)type;
 }
 

@@ -1,5 +1,8 @@
 // src/game/UTFSpore_Win32/CascadeEffect.cpp
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -182,7 +185,7 @@ void* S_9675c0::m()
 namespace EA { namespace UTFWinControls {
 CascadeEffect* CascadeEffect::Destroy(uint8_t flags)
 {
-    static const uint32_t kVtable = 0x13eb938;   // Destroy/Release vtable (address from retail)
+    static const uint32_t kVtable = (int)g_13eb938;   // Destroy/Release vtable (address from retail)
     m0c = (void*)kVtable;
     m04 = (void*)kVtable;
     m00 = (void*)kVtable;

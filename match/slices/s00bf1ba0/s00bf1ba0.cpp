@@ -753,7 +753,7 @@ void StarFillN(void* dst, uint n, void* src)
         StarRecord* rec = (StarRecord*)((char*)d - 8);
         if (rec != 0)
         {
-            rec->vptr = 0x01465d54;
+            rec->vptr = (int)&FUN_01465d54;
             rec->pad04 = 0;
             rec->f08 = s->f08;
             rec->f0c = s->f0c;
@@ -761,7 +761,7 @@ void StarFillN(void* dst, uint n, void* src)
             rec->f14 = s->f14;
             rec->f18 = s->f18;
             rec->f1c = s->f1c;
-            rec->vptr = 0x01464450;
+            rec->vptr = (int)&FUN_01464450;
         }
         --n;
         d = (StarRecord*)((char*)d + 0x20);
@@ -775,7 +775,7 @@ StarRecord* StarCopyCtorRange2(StarRecord* first, StarRecord* last, StarRecord* 
     {
         if (dst != 0)
         {
-            *(int*)((char*)dst + 0) = 0x01465d54;
+            *(int*)((char*)dst + 0) = (int)&FUN_01465d54;
             *(int*)((char*)dst + 4) = 0;
             *(int*)((char*)dst + 8) = *(int*)((char*)first + 8);
             *(int*)((char*)dst + 0xc) = *(int*)((char*)first + 0xc);
@@ -783,7 +783,7 @@ StarRecord* StarCopyCtorRange2(StarRecord* first, StarRecord* last, StarRecord* 
             *(int*)((char*)dst + 0x14) = *(int*)((char*)first + 0x14);
             *(byte*)((char*)dst + 0x18) = *(byte*)((char*)first + 0x18);
             *(int*)((char*)dst + 0x1c) = *(int*)((char*)first + 0x1c);
-            *(int*)((char*)dst + 0) = 0x01464450;
+            *(int*)((char*)dst + 0) = (int)&FUN_01464450;
         }
     }
     return dst;

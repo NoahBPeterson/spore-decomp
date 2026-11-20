@@ -113,7 +113,7 @@ void Reg::Init() {
     MsgServer* s = MessageServer();
     server = s;
     sub = p;
-    kind = (void*)0x13ff74c;
+    kind = (void*)&g_vtbl_13ff74c;
     one = 1;
     zero = 0;
     if (s && p) s->Register(p, 0x4249453);

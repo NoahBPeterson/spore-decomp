@@ -2,6 +2,9 @@
 // Object file: SPAudio/AudioSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1452970[];
+
 #include "game/types.h"
 #include "SP/cIReleaseCallback.h"
 #include "SP/cResourceBase.h"
@@ -4959,7 +4962,7 @@ bool Sys::WithinRange(void* a, int b)
 // @ 0x00a210d0
 void Sys::LockB8()
 {
-    ((Mutex*)((char*)this + 0xb8))->Lock((void*)0x1452970);
+    ((Mutex*)((char*)this + 0xb8))->Lock((void*)g_1452970);
 }
 
 // @ 0x00a21100

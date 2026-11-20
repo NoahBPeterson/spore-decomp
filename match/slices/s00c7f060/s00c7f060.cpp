@@ -2,6 +2,11 @@
 // Reconstructed from annotated disassembly + Ghidra decompiles.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1694bac[];
+extern "C" char g_1694bb0[];
+extern "C" char g_1694bb4[];
+
 typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
@@ -173,9 +178,9 @@ void __fastcall FUN_00c7f060(void* self) {
 // @ 0x00c7f300
 u8 __fastcall FUN_00c7f300(void* self, void* dummy, u32* key, float x, float y, float z) {
   (void)dummy;
-  if (x == *(float*)0x1694bac) {
-    if (y == *(float*)0x1694bb0) {
-      if (z == *(float*)0x1694bb4) goto done;
+  if (x == *(float*)g_1694bac) {
+    if (y == *(float*)g_1694bb0) {
+      if (z == *(float*)g_1694bb4) goto done;
     }
   }
   if (*key != 0) {
@@ -229,11 +234,11 @@ void __cdecl FUN_00c7f390(void) {
 u8 __fastcall FUN_00c7f430(void* self, void* dummy, s32* keyword, float* coords) {
   (void)dummy;
   float x = coords[0];
-  if (x == *(float*)0x1694bac) {
+  if (x == *(float*)g_1694bac) {
     float y = coords[1];
-    if (y == *(float*)0x1694bb0) {
+    if (y == *(float*)g_1694bb0) {
       float z = coords[2];
-      if (z == *(float*)0x1694bb4) goto done;
+      if (z == *(float*)g_1694bb4) goto done;
     }
   }
   if (*keyword != 0) {

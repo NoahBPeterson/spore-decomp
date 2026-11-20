@@ -2,6 +2,17 @@
 // Object file: SPGonzago/SPMissionMultiDelivery.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f01bc[];
+extern "C" char g_13f09b4[];
+extern "C" char g_146f174[];
+extern "C" char g_146f184[];
+extern "C" char g_146f198[];
+extern "C" char g_16919c4[];
+extern "C" char g_16919c8[];
+extern "C" char g_16919cc[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cPlanet.h"
@@ -1626,9 +1637,9 @@ namespace SP {
 cSPMissionMultiDelivery_s00c5_62b0* __fastcall cMissionMultiDeliveryCtor(cSPMissionMultiDelivery_s00c5_62b0* this_, int unused)
 {
     this_->ConstructBase();
-    *(void**)this_ = (void*)0x146f198;
-    *(void**)((char*)this_ + 0x04) = (void*)0x146f184;
-    *(void**)((char*)this_ + 0x34) = (void*)0x146f174;
+    *(void**)this_ = (void*)g_146f198;
+    *(void**)((char*)this_ + 0x04) = (void*)g_146f184;
+    *(void**)((char*)this_ + 0x34) = (void*)g_146f174;
     this_->mDeliveryState = 0;
     this_->mpRunnerItems = 0;
     this_->mpRunnerItemsEnd = 0;
@@ -1639,9 +1650,9 @@ cSPMissionMultiDelivery_s00c5_62b0* __fastcall cMissionMultiDeliveryCtor(cSPMiss
     *(void**)((char*)this_ + 0x21c) = 0;
     *(void**)((char*)this_ + 0x220) = 0;
     *(void**)((char*)this_ + 0x224) = 0;
-    this_->mpItemDefinition = *(void**)0x16919c4;
-    this_->mItemCount = *(int32_t*)0x16919c8;
-    this_->mItemsDelivered = *(int32_t*)0x16919cc;
+    this_->mpItemDefinition = *(void**)g_16919c4;
+    this_->mItemCount = *(int32_t*)g_16919c8;
+    this_->mItemsDelivered = *(int32_t*)g_16919cc;
     cString_ctor((char*)this_ + 0x23c);
     (void)unused;
     return this_;
@@ -1694,7 +1705,7 @@ namespace SP {
 void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58310(void* value)
 {
     cListNode_s00c5_7570* head = *(cListNode_s00c5_7570**)this;
-    cListNode_s00c5_7570* node = (cListNode_s00c5_7570*)EAAllocate(0xc, (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    cListNode_s00c5_7570* node = (cListNode_s00c5_7570*)EAAllocate(0xc, (const char*)g_13f09b4, 0, 0, (const char*)g_13ebb38, 0xd1);
     if (&node->mpValue)
         node->mpValue = *(void**)value;
     node->mpNext = head;
@@ -1709,7 +1720,7 @@ namespace SP {
 void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58360(void* value)
 {
     cListNode_s00c5_7570* head = (cListNode_s00c5_7570*)this;
-    cListNode_s00c5_7570* node = (cListNode_s00c5_7570*)EAAllocate(0xc, (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    cListNode_s00c5_7570* node = (cListNode_s00c5_7570*)EAAllocate(0xc, (const char*)g_13f09b4, 0, 0, (const char*)g_13ebb38, 0xd1);
     if (&node->mpValue)
         node->mpValue = *(void**)value;
     node->mpNext = head;
@@ -1776,7 +1787,7 @@ u8 cSPMissionMultiDelivery_s00c5_8920::GetTagString(u32 tag, cWString* out)
     }
     if (tag == 0x8aad4d34) {
         i32 n = GetNumItemsNotDeliveredToBuyer(*(cPlanet_s00c5_8920**)mpBuyerVecBegin);
-        WStr_Format(out, (const wchar_t_*)0x013f01bc, n);
+        WStr_Format(out, (const wchar_t_*)g_13f01bc, n);
         return 1;
     }
     return ((cSPMissionBase*)this)->GetTagString(tag, out);

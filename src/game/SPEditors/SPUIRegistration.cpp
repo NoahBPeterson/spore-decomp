@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPUIRegistration.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00623f40();
+
 #include "game/types.h"
 #include "SP/Pollen/cRegistrationDialog.h"
 #include "EA/UTFWin/CustomWinProc.h"
@@ -1038,7 +1041,7 @@ bool cRegistrationDialog_s0061_fbd0::Show2(bool bEnterPressed)
   IWindow_s0061_fbd0* w = mLayout.FindWindowByID(0xffffffff, true);
   if (!w) return false;
   w->AddWinProc(this);
-  mpXHTMLFrameSet = new ("Pollinator", 0, 0, 0, 0) cXHTMLFrameSet_s0061_fbd0((void*)0x623f40);
+  mpXHTMLFrameSet = new ("Pollinator", 0, 0, 0, 0) cXHTMLFrameSet_s0061_fbd0((void*)FUN_00623f40);
   mpXHTMLFrameSet.mpObject->SetEventIDs(0x1002, 0x1006, 0x1003, 0x1024);
   if (mpXHTMLFrameSet.mpObject->Attach(w, 0x451a4c0)) {
     MessageServer()->PostMSG(0x5bd6378, 0, 0);

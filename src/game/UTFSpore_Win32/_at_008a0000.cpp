@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/_at_008a0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1432218[];
+
 #include "game/types.h"
 #include <float.h>
 #include <math.h>
@@ -310,7 +313,7 @@ void FUN_008a5880(Vec3_s008a_5700 const* color0, Vec3_s008a_5700 const* color1, 
 RangeFit::RangeFit(ColourSet const* colours)
 {
     mpColours = colours;
-    mpVtable = (void*)0x01432218;
+    mpVtable = (void*)g_1432218;
 
     Vec3_s008a_5700 const& first = colours->GetPoints()[0];
 

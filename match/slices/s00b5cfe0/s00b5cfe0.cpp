@@ -2,6 +2,11 @@
 // Module "Spore"; SP::cGonzagoMode and Gonzago UI helpers.  Each block starts with
 // its original address.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f09b4[];
+extern "C" char g_1667bad[];
+
 #include "s00b5cfe0.h"
 
 extern "C" void* operator_new_ea(unsigned, const char*, int, int, int, int);
@@ -39,7 +44,7 @@ void __stdcall FUN_00b5d760(int)
         g_168710c |= 1;
         g_16870fc = (int)&g_1667bac;
         g_1687100 = (int)&g_1667bac;
-        g_1687104 = 0x1667bad;
+        g_1687104 = (int)g_1667bad;
         atexit(FUN_013c29f0);
     }
 }
@@ -486,8 +491,8 @@ void __stdcall FUN_00b5d870(int param)
             }
             else
             {
-                begin = (char*)operator_new_0xf473a0(len + 1, (const char*)0x13f09b4 /*"Simulator"*/,
-                                                     0, 0, (const char*)0x13ebb38, 0xd1);
+                begin = (char*)operator_new_0xf473a0(len + 1, (const char*)g_13f09b4 /*"Simulator"*/,
+                                                     0, 0, (const char*)g_13ebb38, 0xd1);
                 end = begin + len;
             }
             memcpy_11e0744(begin, src, len);
@@ -545,8 +550,8 @@ static inline void ReleaseGonzagoValue(void* value)
 static __forceinline void InsertGonzagoValue(cGonzagoNode* anchor, void* value)
 {
     cGonzagoNode* node = (cGonzagoNode*)operator_new_0xf473a0(
-        sizeof(cGonzagoNode), (const char*)0x13f09b4, 0, 0,
-        (const char*)0x13ebb38, 0xd1);
+        sizeof(cGonzagoNode), (const char*)g_13f09b4, 0, 0,
+        (const char*)g_13ebb38, 0xd1);
     void** storage = &node->mpValue;
     if (storage) {
         *storage = value;

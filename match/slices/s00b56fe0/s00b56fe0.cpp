@@ -1,4 +1,9 @@
 // s00b56fe0 : build a constraint between two physics entities (type pair dispatch)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f8990[];
+
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
 
@@ -260,7 +265,7 @@ void HkNodePool::AddNode(const HkNodeData* data)
     else {
         void* allocator = m_allocator;
         node = (HkPoolNode*)opnew_f473a0(allocator, "Simulator", 0, 0,
-                                         (const char*)0x013ebb38, 0xd1);
+                                         (const char*)g_13ebb38, 0xd1);
     }
     if (node != 0) {
         node->m_a = data->m_a;
@@ -315,7 +320,7 @@ void HkContainerOwner::Destroy()
 {
     m_vec1.Clear();
     m_vec2.Clear();
-    m_vptr = (void*)0x013f8990;
+    m_vptr = (void*)g_13f8990;
 }
 
 struct HkValueRange {

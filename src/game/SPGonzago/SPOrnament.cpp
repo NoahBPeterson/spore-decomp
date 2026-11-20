@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPOrnament.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1471458[];
+extern "C" char g_14714c0[];
+extern "C" char g_1471528[];
+extern "C" char g_1471530[];
+extern "C" char g_1471540[];
+extern "C" char g_1471598[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cGameNounManager.h"
@@ -977,12 +985,12 @@ void cInteractiveOrnament_s00c4_04c0::Update_00c408f0(i32 dt)
 // @ 0x00c68e30
 cMovableDestructibleOrnament::cMovableDestructibleOrnament()
 {
-    mLoco.mVt = (void*)0x1471598;
-    mVt0 = (void*)0x1471540;
-    mVt4 = (void*)0x1471530;
-    mLoco.mVtD4 = (void*)0x1471528;
-    mSub.mVt = (void*)0x14714c0;
-    mCombatant.mVt = (void*)0x1471458;
+    mLoco.mVt = (void*)g_1471598;
+    mVt0 = (void*)g_1471540;
+    mVt4 = (void*)g_1471530;
+    mLoco.mVtD4 = (void*)g_1471528;
+    mSub.mVt = (void*)g_14714c0;
+    mCombatant.mVt = (void*)g_1471458;
 }
 
 // @ 0x00c68f30

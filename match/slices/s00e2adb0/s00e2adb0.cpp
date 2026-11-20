@@ -13,6 +13,11 @@
 //   * every path ends in the base cSPUIPropertyLayout::DoMessage
 // Every callee/global is a masked relocation, so the stub classes below fix only calling conventions,
 // argument lists, and vtable slots / field offsets used here.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14816f0[];
+extern "C" char g_1481700[];
+
 #include "types.h"
 #include <stdlib.h>
 #include <intrin.h>
@@ -526,8 +531,8 @@ public:
 Object* Object::_virtual_dtor(unsigned flags)
 {
     WorldTree* tree = &mTree;
-    mpVtable0 = (void*)0x1481700;
-    mpVtable1 = (void*)0x14816f0;
+    mpVtable0 = (void*)g_1481700;
+    mpVtable1 = (void*)g_14816f0;
     void* root = tree->mpRoot;
     tree->NukeSubtree(root);
     this->CPL::~CPL();

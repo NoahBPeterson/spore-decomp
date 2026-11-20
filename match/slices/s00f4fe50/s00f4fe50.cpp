@@ -1,6 +1,15 @@
 // Slice s00f4fe50: 4x4 transform helpers (column/row setup, direction query) and the
 // teardown of a container of 12 sub-objects.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_148e7f8[];
+extern "C" char g_148e7fc[];
+extern "C" char g_148e810[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------------------------
@@ -160,9 +169,9 @@ void cMat4::SetRow(const float* src, char flag)
 // @ 0x00f50040
 void cContainer::Destroy()
 {
-    mvp00 = (void*)0x148e810;
-    mvp04 = (void*)0x148e7fc;
-    mvp08 = (void*)0x148e7f8;
+    mvp00 = (void*)g_148e810;
+    mvp04 = (void*)g_148e7fc;
+    mvp08 = (void*)g_148e7f8;
 
     // Release the owned trailing object through its vtable slot 1.
     void* extra = mpExtra;
@@ -183,9 +192,9 @@ void cContainer::Destroy()
     mSubs[1].Release();
     mSubs[0].Release();
 
-    mvp08 = (void*)0x13ef094;
-    mvp04 = (void*)0x13eb394;
-    mvp00 = (void*)0x13eb938;
+    mvp08 = (void*)g_13ef094;
+    mvp04 = (void*)g_13eb394;
+    mvp00 = (void*)g_13eb938;
 }
 
 // @ 0x00f501d0

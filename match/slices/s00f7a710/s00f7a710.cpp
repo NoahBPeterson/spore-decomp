@@ -1,6 +1,15 @@
 // EA::Swarm particle-to-vertex writer (0x00f7a710), older cParticlesEffect copy of 0x00aaf700: for every live particle it samples the
 // emitter's color / alpha / scale / rotation curves at age/lifetime, builds a cTransform,
 // and writes a 3x4 scaled matrix plus an rgb+alpha record into the acquired vertex stream.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_148fed4[];
+extern "C" char g_148fed8[];
+extern "C" char g_148ff14[];
+extern "C" char g_148ff18[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -531,10 +540,10 @@ cParticlesEffect* cParticlesEffect::Init(void* pDesc, uint32_t collectionIndex)
 // @ 0x00f7b460
 void cParticlesEffect::Destroy()
 {
-    mpVtbl0 = (void*)0x148ff18;
-    mpVtbl1 = (void*)0x148ff14;
-    mpVtbl2 = (void*)0x148fed8;
-    mpVtbl3 = (void*)0x148fed4;
+    mpVtbl0 = (void*)g_148ff18;
+    mpVtbl1 = (void*)g_148ff14;
+    mpVtbl2 = (void*)g_148fed8;
+    mpVtbl3 = (void*)g_148fed4;
     _ReadWriteBarrier();
     if (mpF218) {
         void* obj = (void*)&mpF218->mpVtable;
@@ -559,6 +568,6 @@ void cParticlesEffect::Destroy()
         ((void (__thiscall*)(void*))vt[1])(mpF194);
     }
     ((IntrusiveListBase*)&mpParticlesHead)->Destroy();
-    mpVtbl2 = (void*)0x13f21d4;
-    mpVtbl3 = (void*)0x13ef094;
+    mpVtbl2 = (void*)g_13f21d4;
+    mpVtbl3 = (void*)g_13ef094;
 }

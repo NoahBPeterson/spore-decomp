@@ -5,6 +5,11 @@
 //
 // Reconstructions that are not byte-exact are documented in partial.txt (approximate)
 // or nonmatching.txt (complete but not byte-exact).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1417cb0[];
+extern "C" char g_1417cb4[];
+
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -363,7 +368,7 @@ void __thiscall cSPUIInfoLineTray::Add(const void* src)
         v->Insert(v->end, e);
     }
     cSPUILayout* l = tmp.layout;
-    tmp.vtbl = (void**)0x1417cb0;
+    tmp.vtbl = (void**)g_1417cb0;
     if (l) { tmp.layout = 0; l->Release(); }
     if (tmp.layout) tmp.layout->Release();
     VecDtorInline(&tmp.v2);
@@ -373,7 +378,7 @@ void __thiscall cSPUIInfoLineTray::Add(const void* src)
 // @ 0x0080ceb0
 void* __thiscall cSPUIInfoLineTray::ScalarDeletingDtor(u8 flags)
 {
-    vtbl = (void**)0x1417cb4;
+    vtbl = (void**)g_1417cb4;
     dtor();
     VecDtorVec(&mVec);
     if (mLayout) ((VF0v)VT(mLayout)[2])(mLayout);

@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPSpaceCombatUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1416f14[];
+extern "C" char g_1499570[];
+
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cSPCreatureBase.h"
@@ -997,7 +1001,7 @@ int __cdecl FUN_0102b010(void* p1, uint32_t param_2, uint32_t param_3)
 // @ 0x0102b140
 void* Owner01402::FUN_0102b140(uint8_t flags)
 {
-    this->vtbl = 0x1499570;
+    this->vtbl = (int)g_1499570;
     _ReadWriteBarrier();
     uint32_t p = this->child;
     if (p != 0) {
@@ -1008,7 +1012,7 @@ void* Owner01402::FUN_0102b140(uint8_t flags)
     if (p != 0) {
         ((void(__thiscall*)(uint32_t))VF(p, 4))(p);
     }
-    this->vtbl = 0x1416f14;
+    this->vtbl = (int)g_1416f14;
     if ((flags & 1) != 0) {
         FUN_00f47380(this);
     }

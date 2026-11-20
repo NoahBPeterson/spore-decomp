@@ -2,22 +2,38 @@
 // cTerrainSphere plumbing: vtable forwarders, a colour sample, small container helpers
 // (insertion sorts, heap sift-up), terrain-map bundle construction, and misc accessors.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15b117c[];
+extern "C" char g_15b1180[];
+extern "C" char g_15b1184[];
+extern "C" char g_15b1188[];
+extern "C" char g_15b1200[];
+extern "C" char g_15b1204[];
+extern "C" char g_15b1208[];
+extern "C" char g_15b120c[];
+extern "C" char g_15b1210[];
+extern "C" char g_15b1214[];
+extern "C" char g_16c9e44[];
+extern "C" char g_16c9e68[];
+extern "C" char g_16ca0d8[];
+
 #include "types.h"
 #include <xmmintrin.h>
 #include <stddef.h>
 
 // ---- addresses used as literals in the original (relocations masked when matching) ----
-#define DAT_015b117c (*(int*)(0x015b117c))
-#define DAT_015b1180 (*(int*)(0x015b1180))
-#define DAT_015b1184 (*(int*)(0x015b1184))
-#define DAT_015b1188 (*(int*)(0x015b1188))
-#define DAT_015b1200 (*(int*)(0x015b1200))
-#define DAT_015b1204 (*(int*)(0x015b1204))
-#define DAT_015b1208 (*(int*)(0x015b1208))
-#define DAT_015b120c (*(int*)(0x015b120c))
-#define DAT_015b1210 (*(int*)(0x015b1210))
-#define DAT_015b1214 (*(int*)(0x015b1214))
-#define DAT_016c9e68 (*(int**)(0x016c9e68))
+#define DAT_015b117c (*(int*)((int)g_15b117c))
+#define DAT_015b1180 (*(int*)((int)g_15b1180))
+#define DAT_015b1184 (*(int*)((int)g_15b1184))
+#define DAT_015b1188 (*(int*)((int)g_15b1188))
+#define DAT_015b1200 (*(int*)((int)g_15b1200))
+#define DAT_015b1204 (*(int*)((int)g_15b1204))
+#define DAT_015b1208 (*(int*)((int)g_15b1208))
+#define DAT_015b120c (*(int*)((int)g_15b120c))
+#define DAT_015b1210 (*(int*)((int)g_15b1210))
+#define DAT_015b1214 (*(int*)((int)g_15b1214))
+#define DAT_016c9e68 (*(int**)((int)g_16c9e68))
 #define DAT_016c9e8c (*(float*)(0x016c9e8c))
 #define DAT_016c9e90 (*(float*)(0x016c9e90))
 #define DAT_016c9e94 (*(float*)(0x016c9e94))
@@ -152,7 +168,7 @@ int cTerrainSphere::m00f968b0(char* other)
 // @ 0x00f96910
 int __stdcall FUN_00f96910(int i)
 {
-    return *((int**)0x016c9e44)[i];
+    return *((int**)g_16c9e44)[i];
 }
 
 // @ 0x00f96920
@@ -265,7 +281,7 @@ void cTerrainSphere::InitializeStaticRTTTextures()
 void __cdecl FUN_00f96c60()
 {
     void* r = GetRenderer();
-    FUN_007c3ba0((void*)0x016ca0d8);
+    FUN_007c3ba0((void*)g_16ca0d8);
     (*(void (__thiscall**)(void*, int, int))(*(int*)r + 0x14))(r, DAT_015b1200, DAT_015b1204);
     (*(void (__thiscall**)(void*, int, int))(*(int*)r + 0x14))(r, DAT_015b1208, DAT_015b120c);
     (*(void (__thiscall**)(void*, int, int))(*(int*)r + 0x14))(r, DAT_015b1210, DAT_015b1214);

@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/XmlDeserializer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1446c44[];
+extern "C" char g_14613b8[];
+extern "C" char g_15503d0[];
+
 #include "game/types.h"
 #include "EA/Allocator/StackAllocator.h"
 
@@ -542,7 +547,7 @@ namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
 unsigned FUN_0099a380(const wchar_t* key)
 {
     struct NameEntry { const wchar_t* name; int value; };
-    const NameEntry* const kNameTable = (const NameEntry*)0x15503d0;
+    const NameEntry* const kNameTable = (const NameEntry*)g_15503d0;
     int lo;
     lo = 0;
     int hi = 0x16;
@@ -1170,14 +1175,14 @@ void S99b5e0::f()
 {
   char* self = (char*)this;
   char* ht = self + 0x64;
-  *(int*)self = (int)0x1446c44;
+  *(int*)self = (int)g_1446c44;
   ((S693230*)ht)->f(*(void**)(ht + 4), *(unsigned*)(ht + 8));
   *(int*)(ht + 0xc) = 0;
   if (*(unsigned*)(ht + 8) > 1) FUN_f47380(*(void**)(ht + 4));
   ((S620230b*)(self + 0x5c))->f();
   ((S928dc0*)(self + 0x28))->f();
   ((S928dc0*)(self + 4))->f();
-  *(int*)self = (int)0x14613b8;
+  *(int*)self = (int)g_14613b8;
 }
 
 // @ 0x0099b660

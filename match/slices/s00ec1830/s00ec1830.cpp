@@ -1,4 +1,8 @@
 // Slice s00ec1830 (gold4 #85).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 #include <intrin.h>
 // SP::PICK_UP_OBJECT behaviour: the tick state machine (FUN_00ec1830), the idle-animation
 // helper (FUN_00ec1f80), the "decider" table factory (FUN_00ec1ff0), the RNG-driven
@@ -217,7 +221,7 @@ PickupTimer* __fastcall FUN_00ec21c0(PickupTimer* t)
     t->anim = 0;
     _ReadWriteBarrier();
     t->b0c = 0;
-    double r = RandomDoubleUniform((void*)0x1601760) + 1.0;
+    double r = RandomDoubleUniform((void*)g_1601760) + 1.0;
     if (r >= 2.0)
         r = 2.0;
     if (r < 1.0)

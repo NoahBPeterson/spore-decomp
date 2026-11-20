@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPUISpace.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c1f0[];
+
 #define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 #include "game/types.h"
 #include "SP/cArtilleryProjectile.h"
@@ -6655,7 +6658,7 @@ void SPUISpace::FUN_01066230(char param)
 // @ 0x01066310
 void __stdcall FUN_01066310(int* src)
 {
-    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)&g_alloc_13ebb38, 0xd1);
     int* d = (int*)p;
     if (d) { d[0]=src[0]; d[1]=src[1]; d[2]=src[2]; d[3]=src[3]; d[4]=src[4]; }
     d[5] = 0;
@@ -6743,7 +6746,7 @@ CmdCtor* CmdCtor::init(SPUISpace* space, uint windowID)
 {
     int zero = 0;
     CmdCtor* p = this;
-    p->mVtbl = (void*)0x149c1f0;
+    p->mVtbl = (void*)g_149c1f0;
     p->mpItem08 = 0;
     // Retain the native store order without qualifying the other fields.
     *(SPUISpace* volatile*)&p->mpSpace14 = space;
@@ -9103,7 +9106,7 @@ void __stdcall FUN_0106b950(Node* head, NodeIterator begin, NodeIterator end, in
     (void)unused;
     for (; begin != end; ++begin) {
         void*& value = *begin;
-        Node* n = (Node*)FUN_00f473a0(0xc, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
+        Node* n = (Node*)FUN_00f473a0(0xc, "Simulator", 0, 0, (void*)&g_alloc_13ebb38, 0xd1);
         if (&n->mData != 0)
             n->mData = value;
         n->mNext = head;

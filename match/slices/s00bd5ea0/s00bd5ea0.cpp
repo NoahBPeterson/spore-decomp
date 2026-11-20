@@ -6,6 +6,47 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast  (no /EHsc)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_1467e6c[];
+extern "C" char g_1467e80[];
+extern "C" char g_1467f40[];
+extern "C" char g_1467f48[];
+extern "C" char g_1467f50[];
+extern "C" char g_1467f58[];
+extern "C" char g_1467f60[];
+extern "C" char g_1467f74[];
+extern "C" char g_1467f90[];
+extern "C" char g_1467fa0[];
+extern "C" char g_1467fb0[];
+extern "C" char g_1467fc0[];
+extern "C" char g_1467fe0[];
+extern "C" char g_14680a4[];
+extern "C" char g_14680b8[];
+extern "C" char g_1468134[];
+extern "C" char g_1468150[];
+extern "C" char g_1468168[];
+extern "C" char g_1468184[];
+extern "C" char g_146819c[];
+extern "C" char g_14681b8[];
+extern "C" char g_14681d8[];
+extern "C" char g_14681f0[];
+extern "C" char g_1468208[];
+extern "C" char g_1468220[];
+extern "C" char g_146823c[];
+extern "C" char g_1468258[];
+extern "C" char g_1468274[];
+extern "C" char g_1468294[];
+extern "C" char g_14682ac[];
+extern "C" char g_14682dc[];
+extern "C" char g_1468300[];
+extern "C" char g_1468324[];
+extern "C" char g_1468350[];
+extern "C" char g_146837c[];
+extern "C" char g_1468380[];
+extern "C" char g_14683d0[];
+extern "C" char g_168bd4c[];
+
 #include "types.h"
 #include <math.h>
 
@@ -278,13 +319,13 @@ using SP::cCheatObject;
 using SP::FunctionalMatch::Constraint;
 
 // ---------------------------------------------------------------- data globals
-#define VT_cCelestialBody0 ((void*)0x01467e80)
-#define VT_cCelestialBody1 ((void*)0x01467e6c)
-#define VT_cCheatObject0   ((void*)0x014680b8)
-#define VT_cCheatObject1   ((void*)0x014680a4)
-#define VT_cCheatObject2   ((void*)0x01467fe0)
-#define VT_cCheatObject3   ((void*)0x01467fc0)
-#define VT_GB1             ((void*)0x013eb384)
+#define VT_cCelestialBody0 ((void*)g_1467e80)
+#define VT_cCelestialBody1 ((void*)g_1467e6c)
+#define VT_cCheatObject0   ((void*)g_14680b8)
+#define VT_cCheatObject1   ((void*)g_14680a4)
+#define VT_cCheatObject2   ((void*)g_1467fe0)
+#define VT_cCheatObject3   ((void*)g_1467fc0)
+#define VT_GB1             ((void*)g_13eb384)
 
 extern float gPos_168bc90[3];      // 0x0168bc90 (0,0,0)
 extern float gOne_1485720;         // 0x01485720 (1.0f)
@@ -621,16 +662,16 @@ void FUN_00bd68a0() {
 // ===========================================================================
 // @ 0x00bd68c0  append three commodity nodes then select the given object
 // ===========================================================================
-#define gStr_1467f50 ((const wchar_t*)0x01467f50)   // 0x01467f50
-#define gStr_1467f48 ((const wchar_t*)0x01467f48)   // 0x01467f48
-#define gStr_1467f40 ((const wchar_t*)0x01467f40)   // 0x01467f40
+#define gStr_1467f50 ((const wchar_t*)g_1467f50)   // 0x01467f50
+#define gStr_1467f48 ((const wchar_t*)g_1467f48)   // 0x01467f48
+#define gStr_1467f40 ((const wchar_t*)g_1467f40)   // 0x01467f40
 
 struct cCityInputStrategy {                        // singleton at 0x0168bd4c
   void Begin();                                    // 0x00b7d390
   void AddNode(const wchar_t* name, int id, int flags); // 0x00b7d2e0
   void SelectNode(void* obj, void* arg);           // 0x00b7cc60
 };
-#define kCityInputStrategy ((cCityInputStrategy*)0x0168bd4c)
+#define kCityInputStrategy ((cCityInputStrategy*)g_168bd4c)
 
 void FUN_00bd68c0(cCheatObject* obj) {
   kCityInputStrategy->Begin();
@@ -643,10 +684,10 @@ void FUN_00bd68c0(cCheatObject* obj) {
 // ===========================================================================
 // @ 0x00bd6940  civic commodity menu (energy / entertainment / happiness)
 // ===========================================================================
-#define gStrEnergy ((const wchar_t*)0x01467f90)         // 0x01467f90
-#define gStrEntertainment ((const wchar_t*)0x01467f74)  // 0x01467f74
-#define gStrHappiness ((const wchar_t*)0x01467f60)      // 0x01467f60
-#define gStrAll ((const wchar_t*)0x01467f58)            // 0x01467f58
+#define gStrEnergy ((const wchar_t*)g_1467f90)         // 0x01467f90
+#define gStrEntertainment ((const wchar_t*)g_1467f74)  // 0x01467f74
+#define gStrHappiness ((const wchar_t*)g_1467f60)      // 0x01467f60
+#define gStrAll ((const wchar_t*)g_1467f58)            // 0x01467f58
 
 void FUN_00bd6940(cCheatObject* obj) {
   kCityInputStrategy->Begin();
@@ -660,8 +701,8 @@ void FUN_00bd6940(cCheatObject* obj) {
 // ===========================================================================
 // @ 0x00bd69d0  creature commodity menu (hunger / energy / health)
 // ===========================================================================
-#define gStrHunger ((const wchar_t*)0x01467fb0)   // 0x01467fb0
-#define gStrHealth ((const wchar_t*)0x01467fa0)   // 0x01467fa0
+#define gStrHunger ((const wchar_t*)g_1467fb0)   // 0x01467fb0
+#define gStrHealth ((const wchar_t*)g_1467fa0)   // 0x01467fa0
 
 void FUN_00bd69d0(cCheatObject* obj) {
   kCityInputStrategy->Begin();
@@ -738,20 +779,20 @@ struct ICheatSink {
   virtual void RegPart(uint id, const char* name);   // vtable slot 0x40
 };
 
-#define gCheatCmd0 ((const char*)0x01468294)
-#define gCheatCmd1 ((const char*)0x01468274)
-#define gCheatCmd2 ((const char*)0x01468258)
-#define gCheatCmd3 ((const char*)0x0146823c)
-#define gCheatCmd4 ((const char*)0x01468220)
-#define gCheatCmd5 ((const char*)0x01468208)
-#define gCheatCmd6 ((const char*)0x014681f0)
-#define gCheatCmd7 ((const char*)0x014681d8)
-#define gCheatCmd8 ((const char*)0x014681b8)
-#define gCheatCmd9 ((const char*)0x0146819c)
-#define gCheatCmdA ((const char*)0x01468184)
-#define gCheatCmdB ((const char*)0x01468168)
-#define gCheatCmdC ((const char*)0x01468150)
-#define gCheatCmdD ((const char*)0x01468134)
+#define gCheatCmd0 ((const char*)g_1468294)
+#define gCheatCmd1 ((const char*)g_1468274)
+#define gCheatCmd2 ((const char*)g_1468258)
+#define gCheatCmd3 ((const char*)g_146823c)
+#define gCheatCmd4 ((const char*)g_1468220)
+#define gCheatCmd5 ((const char*)g_1468208)
+#define gCheatCmd6 ((const char*)g_14681f0)
+#define gCheatCmd7 ((const char*)g_14681d8)
+#define gCheatCmd8 ((const char*)g_14681b8)
+#define gCheatCmd9 ((const char*)g_146819c)
+#define gCheatCmdA ((const char*)g_1468184)
+#define gCheatCmdB ((const char*)g_1468168)
+#define gCheatCmdC ((const char*)g_1468150)
+#define gCheatCmdD ((const char*)g_1468134)
 extern uint gCheatHandlerIds[3];  // 0x01468128
 
 void cCheatObject::BindCheatHandlers() {
@@ -787,10 +828,10 @@ void cCheatObject::BindCheatHandlers() {
 // ===========================================================================
 // @ 0x00bd6e00  cheat-mode creature commodity menu
 // ===========================================================================
-#define gStrSetMotive ((const wchar_t*)0x01468350)   // 0x01468350
-#define gStrHappinessW ((const wchar_t*)0x01468324)  // 0x01468324
-#define gStrToggleId ((const wchar_t*)0x01468300)    // 0x01468300
-#define gStrMaxVehicles ((const wchar_t*)0x014682dc) // 0x014682dc
+#define gStrSetMotive ((const wchar_t*)g_1468350)   // 0x01468350
+#define gStrHappinessW ((const wchar_t*)g_1468324)  // 0x01468324
+#define gStrToggleId ((const wchar_t*)g_1468300)    // 0x01468300
+#define gStrMaxVehicles ((const wchar_t*)g_14682dc) // 0x014682dc
 
 void FUN_00bd6e00(cCheatObject* obj) {
   kCityInputStrategy->Begin();
@@ -802,7 +843,7 @@ void FUN_00bd6e00(cCheatObject* obj) {
   if (p) {
     int v = ((Fn_i_v)VT(p, 0x38))(p);
     if (v == (int)0xee9b2232)
-      kCityInputStrategy->AddNode((const wchar_t*)0x014682ac, 0x1f45, 0);
+      kCityInputStrategy->AddNode((const wchar_t*)g_14682ac, 0x1f45, 0);
   }
   kCityInputStrategy->SelectNode((SP::cSpatialObject*)obj, 0);
 }
@@ -858,9 +899,9 @@ void* __fastcall FUN_00bd7010(char* self) {
   *(void**)self = VT_GB1;
   base->Construct();
   *(char volatile*)(self + 0x20) = 0;
-  *(void* volatile*)self = (void*)0x14683d0;
-  *(void* volatile*)(self + 4) = (void*)0x1468380;
-  *(void* volatile*)(self + 8) = (void*)0x146837c;
+  *(void* volatile*)self = (void*)g_14683d0;
+  *(void* volatile*)(self + 4) = (void*)g_1468380;
+  *(void* volatile*)(self + 8) = (void*)g_146837c;
   *(uint volatile*)(self + 0x24) = 0;
   *(uint volatile*)(self + 0x28) = 0;
   *(uint volatile*)(self + 0x2c) = 0;

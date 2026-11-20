@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPSpatialObjectView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1455648[];
+extern "C" char g_1486c00[];
+
 #include "game/types.h"
 #include "SP/cRotationRing.h"
 #include "SP/cSpatialObject.h"
@@ -301,7 +305,7 @@ void cSpatialObjectView::SetIsInWorld(bool b)
 cSpatialObjectView::~cSpatialObjectView()
 {
     cSpatialObject* o = mpObject;
-    *(void**)this = (void*)0x1486c00;
+    *(void**)this = (void*)g_1486c00;
     if (o != 0)
         VC0(void, o, 0xa4);
 
@@ -323,7 +327,7 @@ cSpatialObjectView::~cSpatialObjectView()
     if (o != 0)
         VC0(void, o, 0xc0);
 
-    *(void**)this = (void*)0x1455648;
+    *(void**)this = (void*)g_1455648;
 }
 
 // @ 0x00e926d0
@@ -526,7 +530,7 @@ cSpatialObjectView::cSpatialObjectView()
 {
     mField08 = 0;
     mField04 = 0;
-    *(void**)this = (void*)0x1486c00;
+    *(void**)this = (void*)g_1486c00;
     mpObject = 0;
     mpObjectCombatant = 0;
     mField14 = 0;

@@ -1,5 +1,11 @@
 // Slice s00c71bf0: SP::cPlanet / cVisiblePlanet (retail).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1472414[];
+extern "C" char g_1472428[];
+extern "C" char g_1472480[];
+
 #include <intrin.h>
 #include "types.h"
 #include <math.h>
@@ -554,9 +560,9 @@ void CPlanet::FUN_00c72450(int a, int b)
 // @ 0x00c72470
 void* CPlanet::FUN_00c72470(int free)
 {
-    *(void**)this = (void*)0x1472480;
-    *(void**)((char*)this + 0xd4) = (void*)0x1472428;
-    *(void**)((char*)this + 0xd8) = (void*)0x1472414;
+    *(void**)this = (void*)g_1472480;
+    *(void**)((char*)this + 0xd4) = (void*)g_1472428;
+    *(void**)((char*)this + 0xd8) = (void*)g_1472414;
     _ReadWriteBarrier();
     void* q = mpCommon;
     if (q != 0) ((void(__thiscall*)(void*))(*(void***)q)[0xc0 / 4])(q);

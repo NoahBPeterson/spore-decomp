@@ -1,6 +1,10 @@
 // Slice s00e66980 -- SPGonzago/SPCellGame.obj (cell stage): cell-gfx shutdown, cell-pair
 // pool/map helpers, the bomb/sound-event helpers and the effect registration tail.
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast  (cell TU; no /EHsc)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16b3dac[];
+
 #include "types.h"
 
 typedef uint32_t u32;
@@ -418,7 +422,7 @@ void FUN_00e67510(int world, int* ppEffect, int a3, int a4, int a5, int a6, char
         d.pos.y = gCellWorldCenter.y;
         d.pos.z = gCellWorldCenter.z;
         d.scale = g_one_1485720;
-        d.rot.Assign((void*)0x16b3dac);
+        d.rot.Assign((void*)g_16b3dac);
         FUN_00e84150(a5, a6, &d);
         FUN_00e63480((void*)*ppEffect, a3, &d);
         return;

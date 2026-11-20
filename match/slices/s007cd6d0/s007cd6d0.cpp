@@ -1,6 +1,10 @@
 // Slice s007cd6d0: cConfigManager startup/configure + eastl pair copy helpers + draw/animation.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS-
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1411ad8[];
+extern "C" char g_16778dc[];
+
 #include "../s007ca950/s007ca950.h"
 
 namespace EA { namespace ArgScript {
@@ -121,7 +125,7 @@ void cConfigManagerS::Initialize()
     }
     char* pc = (char*)((void*(__thiscall*)(void*))VTOBJ((void*)self[4])[0x58 / 4])((void*)self[4]);
     if (((char*)self)[0x61] == 0 && *pc != 0)
-        FUN_006bb1c0((const char*)0x1411ad8, 0x7d0, 1, 0);
+        FUN_006bb1c0((const char*)g_1411ad8, 0x7d0, 1, 0);
     if (self[0xa8 / 4] >= 0) {
         int v = ((ExtConfig*)self[0xb0 / 4])->GetIntProperty(0x1a34e253u);
         int cur = self[0xa8 / 4];
@@ -244,7 +248,7 @@ __declspec(noinline) double __cdecl cConfigManagerUnnamedB90(float* param_1)
 {
     double lo = param_1[0];
     double hi = param_1[1];
-    double v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
+    double v = ((ExtRandom*)g_16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
     if (v >= hi) return hi;
     if (v < lo) return lo;
     return v;

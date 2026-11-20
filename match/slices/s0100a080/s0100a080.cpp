@@ -1,5 +1,12 @@
 // Slice s0100a080: expiry of the space-game UFO status effects.
 // Flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00ad48b0();
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+
 #include "types.h"
 
 typedef unsigned char u8;
@@ -59,7 +66,7 @@ void UpdateUFOStatusEffects()
 {
     cSpaceNounManager* manager = NounManager();
     cGameDataVectorOut* out = manager->GetGameDataVector(
-        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xad48b0, (void*)0xb1e500, 0x18ebadc);
+        (void*)FUN_00cd7d10, (void*)FUN_00d3d420, (void*)FUN_00ad48b0, (void*)FUN_00b1e500, 0x18ebadc);
 
     cSpaceNounVector& nouns = out->mVec;
     cSpaceNoun** it = nouns.mpBegin;

@@ -1,6 +1,10 @@
 // Slice s00a6c190 -- EA::Swarm effects manager / global params helpers.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 // (cGlobalParams ctor uses SSE1 scalar moves; /arch:SSE is required for that unit.)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "types.h"
 #include <string.h>
 #include <intrin.h>
@@ -654,7 +658,7 @@ struct GmeRefCount {
 };
 int GmeRefCount::ScalarDeletingDestructor(unsigned flags)
 {
-    *(void**)((char*)this + 4) = (void*)0x013ef094;
+    *(void**)((char*)this + 4) = (void*)g_13ef094;
     if (flags & 1)
         operator_delete__(this);
     return (int)this;

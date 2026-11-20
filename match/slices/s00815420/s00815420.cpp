@@ -2,6 +2,9 @@
 // UI cheats / text-style loading / cSPUIMainWin::InitFonts.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -114,7 +117,7 @@ extern void* g_164d348;   // 0x164d348
 
 // @ 0x00815ce0
 bool cSPUIMainWin_InitFonts() {
-    FontServer* fs = (FontServer*)EAlloc(0x2fd0, 0x13f6b3c, 0, 0, 0, 0);
+    FontServer* fs = (FontServer*)EAlloc(0x2fd0, (int)g_13f6b3c, 0, 0, 0, 0);
     if (fs) fs = (FontServer*)fs->Init(FUN_00805510(1));
     else fs = 0;
     fs->f04();
@@ -122,7 +125,7 @@ bool cSPUIMainWin_InitFonts() {
     FUN_00885b00(fs);
     fs->f38(L"web-default", L"Palatino Sans Infl Com");
     fs->f38(L"monospace", L"Lucida Console");
-    StyleManager* sm = (StyleManager*)EAlloc(0x120, 0x13f6b3c, 0, 0, 0, 0);
+    StyleManager* sm = (StyleManager*)EAlloc(0x120, (int)g_13f6b3c, 0, 0, 0, 0);
     void* smp;
     if (sm) smp = sm->Init(FUN_00805510(1));
     else smp = 0;
