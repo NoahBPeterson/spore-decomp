@@ -9,5 +9,4 @@
 00d65c40 899 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes
 00d65fe0 151 lounge vignette decision approximated; 151 vs 186 bytes
 00d660a0 57 FindNext: bit tests folded to test/jns instead of shr/test; 61 bytes
-00d660e0 61 CopyFrom: compiler shrink-wraps esi and folds the sign test; 57 vs 61 bytes
 00d66120 115 AssignFrom: compiler tail-merges the two payload copies; 102 vs 123 bytes
