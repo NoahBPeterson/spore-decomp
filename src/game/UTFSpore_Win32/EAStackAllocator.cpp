@@ -144,13 +144,10 @@ void StackAllocator_s0092_8b00::Reset(void* p)
             mpCurrentObjectEnd = (char*)p;
             return;
         }
-        if (mpTopBookmark != 0) {
-            void* bm = mpTopBookmark;
-            while (bm != 0 && *(char**)((char*)bm + 4) >= start && b->mpEnd > *(char**)((char*)bm + 4)
-                   && bm >= (void*)start && bm < (void*)b->mpEnd) {
-                bm = *(void**)bm;
-            }
-            mpTopBookmark = (Bookmark_s0092_8b00*)bm;
+        while (mpTopBookmark != 0 && *(char**)((char*)mpTopBookmark + 4) >= start
+               && *(char**)((char*)mpTopBookmark + 4) < b->mpEnd
+               && (char*)mpTopBookmark >= start && (char*)mpTopBookmark < b->mpEnd) {
+            mpTopBookmark = *(Bookmark_s0092_8b00**)mpTopBookmark;
         }
         Block_s0092_8b00* nxt = b->mpPrevBlock;
         if (mpCoreFreeFunction != 0)
