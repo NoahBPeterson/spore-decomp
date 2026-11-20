@@ -9,3 +9,4 @@
 ../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00930f60@FilePath_s0093_0180@IO@EA@@QAEPA_WPB_W@Z  00930f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFilePath.cpp  ?AppendDirectory@FilePath_s0093_0180@IO@EA@@QAEXXZ  00930f90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_00931100@FilePath_s0093_0180@IO@EA@@QAEXPB_W_N@Z  00931100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFilePath.cpp  ?FUN_009309b0@IO@EA@@YAPA_WPA_WPB_W1H@Z  009309b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
