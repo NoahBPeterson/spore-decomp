@@ -812,8 +812,9 @@ bool cAppStateManager::Shutdown()
 bool cAppStateManager::StateOccurredPreviously(void* p)
 {
     int n = (int)((mpPrevEnd - mpPrevBegin)) - 1;
+    void*** pv = &mpPrevBegin;
     if (n >= 0) {
-        void** it = mpPrevBegin + n;
+        void** it = *pv + n;
         do {
             if (*it == p)
                 return true;
