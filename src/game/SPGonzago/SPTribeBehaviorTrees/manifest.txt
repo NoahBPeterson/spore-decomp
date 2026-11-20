@@ -89,3 +89,4 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db2fa0@@YAXPAUTaskCtx@@IIII0@Z  00db2fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?ReleaseSocialTargetState@@YAXPAX0000PAUcActionState@@@Z  00db40f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?PushDefault@SlotVector@@QAEXXZ  00dbe380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daeca0@@YAEPAUCC@@HHHHPAUOut@@@Z  00daeca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -9072,7 +9072,7 @@ uint8_t __cdecl FUN_00daeca0(CC* self, int a1, int a2, int a3, int a4, Out* a5)
             else
                 src = (int32_t*)(s ? q : 0);
         } else {
-            src = (int32_t*)0x15d1164;
+            src = (int32_t*)&SP::g_15d1164;
         }
         int32_t v = *src;
         a5->f0 = v;
@@ -9080,7 +9080,7 @@ uint8_t __cdecl FUN_00daeca0(CC* self, int a1, int a2, int a3, int a4, Out* a5)
         a5->f8 = 0;
         a5->fC = 0;
         a5->f10 = -1;
-        return (uint8_t)(self->base.Slot45(v) != 0 ? 1 : 0);
+        return (uint8_t)(self->base.Slot45(a5->f0) != 0 ? 1 : 0);
     }
     return 0;
 }
