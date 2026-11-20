@@ -676,6 +676,7 @@ void IMECompositionS::Dtor()
     *(void**)((char*)this + 0x4) = &g_vt_1414eb0;
     *(void**)((char*)this + 0x20c) = &g_vt_1414db8;
     *(void**)((char*)this + 0x658) = &g_vt_1414dac;
+    _ReadWriteBarrier();
     void* p1 = *(void**)((char*)this + 0x694);
     if (p1 && *(int*)((char*)p1 - 4) != 0)
         deallocate(p1);
