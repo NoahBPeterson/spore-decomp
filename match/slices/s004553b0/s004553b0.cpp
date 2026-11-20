@@ -52,16 +52,13 @@ float ClampDot(const Vec3* a, const Vec3* b) {
 
 // @ 0x00455f50
 short* FindFirst(short* begin, short* end, short* valsBegin, short* valsEnd) {
-    short* it;
-    for (;;) {
-        if (begin == end)
-            return end;
-        for (it = valsBegin; it != valsEnd; ++it) {
-            if (*begin == *it)
+    for (; begin != end; ++begin) {
+        for (short* it = valsBegin; it != valsEnd; ++it) {
+            if ((unsigned short)*begin == (unsigned short)*it)
                 return begin;
         }
-        ++begin;
     }
+    return end;
 }
 
 struct FixedC {

@@ -5,5 +5,4 @@
 00455c50  36   ClampDot: extra jmp per arm from the nested if/else layout not reproduced
 00455cf0  87   InitFixed: fixed-vector init; /Od locals and this-relative stores not exact
 00455d60  310  StringAppend: literal EASTL basic_string::append not fully reproduced
-00455f50  67   FindFirst: outer for(;;) loop layout (leading jmp to condition) not reproduced
 00455fa0  482  VecInsert32: eastl vector insert/relocate with 0x20-stride temporaries not reproduced
