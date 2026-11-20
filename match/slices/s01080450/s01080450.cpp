@@ -233,9 +233,7 @@ int hkStreamReader::skip(int nbytes)
 	int left = nbytes;
 	while (left != 0)
 	{
-		int chunk = 0x200;
-		if (left < 0x201)
-			chunk = left;
+		int chunk = (left > 0x200) ? 0x200 : left;
 		int n = read(scratch, chunk);
 		if (n == 0)
 			break;
@@ -631,6 +629,9 @@ hkBool hkVector4::isNormalized3(float epsilon) const
 	return false;
 }
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x01081360
 void hkVector4::setTransformedPos(const hkTransform& t, const hkVector4& p)
 {
@@ -641,6 +642,7 @@ void hkVector4::setTransformedPos(const hkTransform& t, const hkVector4& p)
 	x = ((c * t.m[8] + b * t.m[4]) + a * t.m[0]) + t.m[12];
 	y = ((c * t.m[9] + b * t.m[5]) + a * t.m[1]) + t.m[13];
 	z = ((c * t.m[10] + b * t.m[6]) + a * t.m[2]) + t.m[14];
+	_ReadWriteBarrier();
 	w = 0.0f;
 }
 // --- equivalence checker address annotations
