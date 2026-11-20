@@ -6694,24 +6694,37 @@ bool AudioSystem_s00a2_5c40::Map_26100(uint key, uint arg)
     return r;
 }
 
+// eastl::hashtable_iterator over the node chain (next at +8)
+struct HIt_a261c0 {
+    void*  mpNode;
+    void** mpBucket;
+    HIt_a261c0(void** pBucket) : mpNode(*pBucket), mpBucket(pBucket) {}
+    static HIt_a261c0 Begin(const HTable& t) {
+        HIt_a261c0 i(t.mpBucketArray);
+        if (!i.mpNode)
+            i.increment_bucket();
+        return i;
+    }
+    static HIt_a261c0 End(const HTable& t) { return HIt_a261c0(t.mpBucketArray + t.mnBucketCount); }
+    void increment_bucket() {
+        ++mpBucket;
+        while (*mpBucket == 0)
+            ++mpBucket;
+        mpNode = *mpBucket;
+    }
+    void increment() {
+        mpNode = *(void**)((uchar*)mpNode + 8);
+        while (mpNode == 0)
+            mpNode = *++mpBucket;
+    }
+};
 // @ 0x00a261c0
 void AudioSystem_s00a2_5c40::Map_261c0(uint arg)
 {
-    void** ba = mMap_119bb8.mpBucketArray;
-    void* cur = *ba;
-    if (!cur) {
-        while (*++ba == 0) {}
-        cur = *ba;
-    }
-    void* end = mMap_119bb8.mpBucketArray[mMap_119bb8.mnBucketCount];
-    while (end != cur) {
-        void* obj = *(void**)((uchar*)cur + 4);
+    for (HIt_a261c0 it = HIt_a261c0::Begin(mMap_119bb8), itEnd = HIt_a261c0::End(mMap_119bb8);
+         it.mpNode != itEnd.mpNode; it.increment()) {
+        void* obj = *(void**)((uchar*)it.mpNode + 4);
         ((void(__thiscall*)(void*, uint))vc_s00a2_5c40(obj, 0x2c))(obj, arg);
-        cur = *(void**)((uchar*)cur + 8);
-        while (!cur) {
-            ++ba;
-            cur = *ba;
-        }
     }
 }
 
