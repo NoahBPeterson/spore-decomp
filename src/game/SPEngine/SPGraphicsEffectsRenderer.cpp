@@ -2202,13 +2202,22 @@ void ShaderHost::CallF2(int a, float b)
     }
 }
 
+struct Caps_s006e69e0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21();
+    virtual int HasCap(int cap);   // +0x58
+};
 // @ 0x006e69e0
 void ShaderHost::SetMode(int mode, int value)
 {
     Manager* m = (Manager*)FUN_0067dd50();
-    if (mode != 6 && mode != 5) {
-        VirtualFn1 fn = (VirtualFn1)((void**)m->vtbl)[0x58 / 4];
-        if (fn(m, 0x16) != 0) {
+    int idx = mode - 1;
+    if (idx != 5 && idx != 4) {
+        if (((Caps_s006e69e0*)m)->HasCap(0x16) != 0) {
             *(char*)((char*)this + 0x368) = (char)value;
         }
     }
