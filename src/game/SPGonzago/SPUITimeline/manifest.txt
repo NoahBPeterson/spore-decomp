@@ -30,3 +30,4 @@
 ../src/game/SPGonzago/SPUITimeline.cpp  ?IsPaletteIdPresent@@YA_NI@Z  00e3b630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37910@cSPUITimeline@@QAEXXZ  00e37910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e393b0@@YIHPAUTimeline_s00e3_8ce0@@PAX@Z  00e393b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?GetGameModeIndex@@YAII@Z  00e36f50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

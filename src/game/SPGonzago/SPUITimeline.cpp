@@ -3125,20 +3125,25 @@ int32_t __cdecl GetGameLevel(int32_t nGameMode)
 // @ 0x00e36f50
 uint32_t __cdecl GetGameModeIndex(uint32_t nHash)
 {
-    switch (nHash) {
-    case 0xa426730b:
-        return 0;
-    case 0xad56080c:
-        return 1;
-    case 0xf71fa311:
-        return 2;
-    case 0xbeb528cb:
-        return 3;
-    case 0x2db6dad3:
-        return 4;
-    default:
-        return 0;
+    uint32_t nIndex = 0;
+    switch ((int32_t)nHash) {
+    case (int32_t)0xa426730b:
+        nIndex = 0;
+        break;
+    case (int32_t)0xad56080c:
+        nIndex = 1;
+        break;
+    case (int32_t)0xf71fa311:
+        nIndex = 2;
+        break;
+    case (int32_t)0xbeb528cb:
+        nIndex = 3;
+        break;
+    case (int32_t)0x2db6dad3:
+        nIndex = 4;
+        break;
     }
+    return nIndex;
 }
 
 // @ 0x00e36fb0
