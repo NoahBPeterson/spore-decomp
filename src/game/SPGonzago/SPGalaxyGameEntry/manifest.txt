@@ -172,3 +172,4 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de4630@cGalaxyGameEntryImpl_s00de_41b0@@QAEXXZ  00de4630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?OnActivate@cGalaxyGameEntryImpl_s00de_41b0@@QAEXXZ  00de4720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ??0cPaintSystem@@QAE@XZ  00dea500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?cDownloadDialog_ctor_5c80@@YIPAUcDownloadDialog@@PAU1@@Z  00df5c80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

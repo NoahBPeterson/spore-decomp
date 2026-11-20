@@ -106,7 +106,6 @@
 00df5830 170 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
 00df5940 60 flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS
 00df59c0 132 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
-00df5c80 20 flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS
 00df5f50 160 flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS
 00df6040 184 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)
 00df6140 408 flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (no mismatch, low coverage)

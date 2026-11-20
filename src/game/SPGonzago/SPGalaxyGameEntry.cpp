@@ -15524,7 +15524,7 @@ void cDownloadDialog::FUN_00df5aa0(char b)
 // @ 0x00df5c80
 cDownloadDialog* __fastcall cDownloadDialog_ctor_5c80(cDownloadDialog* self)
 {
-    *(void**)((char*)self + 0x04) = (void*)vtbl_Resource_Async;
+    *(void* volatile*)((char*)self + 0x04) = (void*)vtbl_Resource_Async;
     self->mpVal_08 = 0;
     *(void**)self = (void*)vtbl_UI_cDownloadDialog_C;
     *(void**)((char*)self + 0x04) = (void*)vtbl_UI_cDownloadDialog_D;
