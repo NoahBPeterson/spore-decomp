@@ -1456,26 +1456,30 @@ void HeadTailX::F_8f24f0(ListNodeX* node)
 }
 }}}  // namespace EA::XHTML::Layout
 
+extern "C" char g_1439a54[];   // 0x01439a54 vtable
 // @ 0x008f2550
 namespace EA { namespace XHTML { namespace Layout {
 PoolNodeX* FUN_008f2550(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
-    if ((pool->mField08 - pool->mField0c) - 0x18 < 0) {
-        if (!pool->F_928ba0(0x18))
-            return 0;
+    if ((pool->mField08 - pool->mField0c) - 0x18 >= 0 || pool->F_928ba0(0x18)) {
+        PoolNodeX* node = (PoolNodeX*)pool->mField0c;
+        pool->mField0c = (int)((char*)node + 0x18);
+        pool->mField10 = (int)((char*)node + 0x18);
+        if (node != 0) {
+            node->mField04 = 0;
+            node->mVtable = (uint32_t)g_1439a54;
+            _ReadWriteBarrier();
+            node->mField08 = a;
+            _ReadWriteBarrier();
+            node->mField0c = b;
+            _ReadWriteBarrier();
+            node->mField10 = c;
+            _ReadWriteBarrier();
+            node->mField14 = d;
+            return node;
+        }
     }
-    PoolNodeX* node = (PoolNodeX*)pool->mField0c;
-    pool->mField0c = (int)((char*)node + 0x18);
-    pool->mField10 = (int)((char*)node + 0x18);
-    if (!node)
-        return 0;
-    node->mField04 = 0;
-    node->mVtable = 0x01439a54;
-    node->mField08 = a;
-    node->mField0c = b;
-    node->mField10 = c;
-    node->mField14 = d;
-    return node;
+    return 0;
 }
 }}}  // namespace EA::XHTML::Layout
 
