@@ -10,6 +10,7 @@ extern void* g_16c8b44;                                    // 0x16c8b44  SP::cSP
 #include "rw/core/arena/Arena.h"
 #include <math.h>
 #include <xmmintrin.h>
+#include <intrin.h>
 
 // ---- items of slice s006c0db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
@@ -125,11 +126,16 @@ virtual void b2();
 virtual void b3();
 virtual void b4();
 };
-struct BakedArenaThing : BaseA, BaseB {
-  int m_ref;      // +8
+// GmeRefCount-style second base: its vtable at +4, then an interlocked reference count.
+struct BakedRefCount : BaseB {
+  volatile long m_ref;  // +8
+  BakedRefCount() { _InterlockedExchange(&m_ref, 0); }
+};
+struct BakedArenaThing : BaseA, BakedRefCount {
   int m_c;        // +0xc
   int m_10;       // +0x10
   int m_14;       // +0x14
+  int m_18, m_1c;
   int m_20;       // +0x20
   BakedArenaThing();
 };
@@ -762,7 +768,7 @@ void SortHeap(Rec24* first, Rec24* last)
 
 // @ 0x006c3510
 BakedArenaThing::BakedArenaThing()
-: m_ref(0), m_c(0), m_10(0), m_14(0), m_20(0) {}
+: m_c(0), m_10(0), m_14(0), m_20(0) {}
 
 // @ 0x006c3550
 float* FUN_006c3550(float* outA, float* outB, const float* base, const float* dir, const float* s, const int* idx, int layout)
