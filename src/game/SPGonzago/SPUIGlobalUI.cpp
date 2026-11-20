@@ -51,6 +51,11 @@ extern "C" void  __cdecl FUN_006a12a0(void*, uint32_t, void*);   // 0x6a12a0 Get
 extern "C" void* __cdecl FUN_010666a0();                         // 0x10666a0
 extern "C" uint8_t      g_bPaused;       // @ 0x16a1890
 extern "C" char g_vtblContentValidationSummarizer[];  // @ 0x13ec458
+extern "C" char g_147f1c8[];   // vtables retail relocates here (cSPUIGlobalUIRootWinProc and its
+extern "C" char g_147f1b8[];   //   two secondary bases)
+extern "C" char g_147f1a8[];
+extern "C" char g_13eb394[];   // IHandler vtable
+extern "C" char g_13eb938[];   // base vtable
 extern "C" char g_vtblListenerBase[];                 // @ 0x13eb384
 extern "C" char g_vtblNetworkActivityProc[];          // @ 0x147f0dc
 extern "C" char g_vtblNetworkActivityProc04[];        // @ 0x147f0cc
@@ -1103,9 +1108,10 @@ void* WinObj::Ctor(void* arg)
 void WinObj::Dtor()
 {
     void* self = this;
-    *(void**)self = (void*)0x147f1c8;
-    *(void**)((char*)self + 4) = (void*)0x147f1b8;
-    *(void**)((char*)self + 8) = (void*)0x147f1a8;
+    *(void**)self = g_147f1c8;
+    *(void**)((char*)self + 4) = g_147f1b8;
+    *(void**)((char*)self + 8) = g_147f1a8;
+    _ReadWriteBarrier();
     void* h = *(void**)((char*)self + 0x10);
     if (h != 0) {
         void* a1 = *(void**)((char*)self + 0x14);
@@ -1127,9 +1133,9 @@ void WinObj::Dtor()
         *(void**)((char*)self + 0x10) = 0;
         FUN_00571db0(h, a1, a2, a3, a4);
     }
-    *(void**)((char*)self + 8) = (void*)0x13ec458;
-    *(void**)((char*)self + 4) = (void*)0x13eb394;
-    *(void**)self = (void*)0x13eb938;
+    *(void**)((char*)self + 8) = g_vtblContentValidationSummarizer;
+    *(void**)((char*)self + 4) = g_13eb394;
+    *(void**)self = g_13eb938;
 }
 
 // @ 0x00e01250
