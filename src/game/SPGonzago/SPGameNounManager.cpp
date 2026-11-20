@@ -295,7 +295,7 @@ struct RBNode {
     char    mColor;       // +0xc
 };
 extern RBNode* __cdecl RBTreeIncrement(RBNode* p);   // 0x00921580
-extern void    __cdecl RBTreeNuke(RBNode* p);        // 0x009a9600
+struct S9a9600 { void f(void*); };                // 0x009a9600: rbtree DoNuke(node)
 struct RBTreeHeader {
     int     mPad;
     RBNode  mAnchor;   // +4
@@ -2439,8 +2439,9 @@ void __thiscall FlushMgr::Flush()
         if (p) opdel(p);
     }
     RBNode* p = *(RBNode**)((char*)this + 0xc0);
+    S9a9600* const tree = (S9a9600*)((char*)this + 0xb4);
     while (p) {
-        RBTreeNuke(*(RBNode**)p);
+        tree->f(*(RBNode**)p);
         RBNode* next = *(RBNode**)((char*)p + 4);
         opdel(p);
         p = next;
