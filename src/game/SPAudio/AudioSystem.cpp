@@ -5434,55 +5434,35 @@ void* __fastcall copyRef2_00a21d90(char* self, void* dummy, unsigned** a, unsign
     return self;
 }
 
+// key = {a, b, c}; compared on a, then c, then b
+static __forceinline bool KeyLess_a21dc0(const unsigned* x, const unsigned* y)
+{
+    if (x[0] != y[0]) return x[0] < y[0];
+    if (x[2] != y[2]) return x[2] < y[2];
+    return x[1] < y[1];
+}
+static __forceinline char* LowerBound_a21dc0(RbTree_00a21dc0* t, const unsigned* k)
+{
+    char* node = *(char**)((char*)t + 0xc);
+    char* result = (char*)t + 4;
+    while (node) {
+        if (!KeyLess_a21dc0((const unsigned*)(node + 0x10), k)) {
+            result = node;
+            node = *(char**)(node + 4);
+        } else
+            node = *(char**)(node + 0);
+    }
+    return result;
+}
 // @ 0x00a21dc0
 void* RbTree_00a21dc0::Find(void** out, void* key)
 {
-    char* self = (char*)this;
-    unsigned node = *(unsigned*)(self + 0xc);
-    char* root = self + 4;
-    char* it = root;
-    if (node != 0) {
-        unsigned* k = (unsigned*)key;
-        do {
-            unsigned k0 = k[0];
-            unsigned v10 = *(unsigned*)(node + 0x10);
-            bool less;
-            if (v10 != k0) {
-                less = v10 < k0;
-            } else {
-                unsigned v18 = *(unsigned*)(node + 0x18);
-                unsigned k8 = k[2];
-                if (v18 != k8) {
-                    less = v18 < k8;
-                } else {
-                    less = *(unsigned*)(node + 0x14) < k[1];
-                }
-            }
-            if (!less) {
-                it = (char*)node;
-                node = *(unsigned*)(node + 4);
-            } else {
-                node = *(unsigned*)(node + 0);
-            }
-        } while (node != 0);
-    }
-    if (it != root) {
-        unsigned* k = (unsigned*)key;
-        unsigned k0 = k[0];
-        unsigned v10 = *(unsigned*)((char*)it + 0x10);
-        bool less;
-        if (v10 != k0) {
-            less = k0 < v10;
-        } else {
-            unsigned k8 = k[2];
-            unsigned v18 = *(unsigned*)((char*)it + 0x18);
-            if (v18 != k8) {
-                less = k8 < v18;
-            } else {
-                less = k[1] < *(unsigned*)((char*)it + 0x14);
-            }
-        }
-        if (!less) { *out = it; return out; }
+    char* root = (char*)this + 4;
+    const unsigned* k = (const unsigned*)key;
+    char* it = LowerBound_a21dc0(this, k);
+    if (it != root && !KeyLess_a21dc0(k, (const unsigned*)(it + 0x10))) {
+        *out = it;
+        return out;
     }
     *out = root;
     return out;

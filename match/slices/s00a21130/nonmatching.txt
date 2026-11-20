@@ -4,7 +4,6 @@
 00a21630  71  complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00a21710  789 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); fixed calling convention to thiscall (ecx=this, ret 8); equiv WEAK (399 valid, 26.5% coverage)
 00a21cb0  63  complete; eastl list insert helper; fixed cdecl->__stdcall (ret 0xc) and return a1; equiv PASS (315 valid, 93.1% coverage)
-00a21dc0  87  complete; eastl rbtree find; fixed swapped args (out=arg1, key=arg2) and return out pointer; equiv PASS (387 valid, 100% coverage); thiscall stub-class member
 00a21eb0  131 complete; voice hash-bucket rehash (node next at +0x10); fixed inverted tail free-list branch (inline-pool ptr pushed on free list, not delete()d); equiv WEAK (104 valid, 100% coverage); thiscall stub-class member
 00a21f60  73  complete; ref-counted allocation; fixed operator-new argument order (size,"EASTL",0,0,file,0xd1) and cdecl->__stdcall (ret 4); equiv PASS (344 valid, 100% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 00a22060  135 complete; voice hash-bucket rehash (node next at +0x1e4); equiv WEAK (46.9% coverage); now a thiscall stub-class member
