@@ -8376,8 +8376,11 @@ void __thiscall CCM_s00c0_ddb0::ddb0(float* param_2)
 // @ 0x00c0dfb0
 void* __thiscall CCM_s00c0_ddb0::dfb0(int param)
 {
-    CCMInner* p = mpInner_b54;
-    if (p != 0) return ((F_cab60*)p->mpTable_17c)->f(param);
+    void* p = mpInner_b54;
+    if (p != 0) {
+        p = ((CCMInner*)p)->mpTable_17c;
+        return ((F_cab60*)p)->f(param);
+    }
     return 0;
 }
 
