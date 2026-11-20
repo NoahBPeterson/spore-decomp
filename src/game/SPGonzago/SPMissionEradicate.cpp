@@ -56,8 +56,6 @@ public:
 
 // ---- items of slice s00c4dbf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __stdcall FUN_00b3d3e0a(int a);                     // SP::EventLog (1-arg, stdcall)
-extern "C" void  __cdecl FUN_00c44b80(void* self);
-extern "C" void  __cdecl FUN_00c44bd0(void* self);
 typedef unsigned int u32;
 extern "C" void* __stdcall FUN_00b3d3e0_s00c4_dbf0(int a, int b);              // SP::EventLog (2-arg, stdcall)
 namespace SP {
@@ -463,10 +461,15 @@ int __fastcall FUN_00c4ed50(void* ecx_this, void* edx)
     return (int)((a < b) ? 0xd19969f6u : 0xa2b7bfa8u);
 }
 
+struct MissionBase_c44b80 {
+    void FUN_00c44b80();   // 0x00c44b80 (thiscall)
+    void FUN_00c44bd0();   // 0x00c44bd0 (thiscall)
+};
+
 // @ 0x00c4edd0
 void __fastcall FUN_00c4edd0(void* ecx_this, void* edx)
 {
-    FUN_00c44b80(ecx_this);
+    ((MissionBase_c44b80*)ecx_this)->FUN_00c44b80();
     void** vt = *(void***)ecx_this;
     (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x1622184);
     (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x5e37a53);
@@ -479,7 +482,7 @@ void __fastcall FUN_00c4edd0(void* ecx_this, void* edx)
 // @ 0x00c4ee30
 void __fastcall FUN_00c4ee30(void* ecx_this, void* edx)
 {
-    FUN_00c44bd0(ecx_this);
+    ((MissionBase_c44b80*)ecx_this)->FUN_00c44bd0();
     (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x1622184);
     (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x5e37a53);
     (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x2489760);
