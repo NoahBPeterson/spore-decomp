@@ -1,6 +1,10 @@
 // Slice s00b318d0: SP::cGameTimeManager (pause gates, time flow, base stopwatch), the "settime" cheat
 // command, a token translator and a few helpers.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1569130[];
+
 #include "types.h"
 #include "sse_helpers.h"
 #include <xmmintrin.h>
@@ -216,7 +220,7 @@ void cGameTimeManager::Serialize(void* stream)
         mBaseTimeElapsed += X87RoundToInt64(elapsed);
     }
     sBaseTimer.RestartIfRunning();
-    cVarListSerializer ser(this, (const void*)0x01569130, 0x01a80d26);
+    cVarListSerializer ser(this, (const void*)g_1569130, 0x01a80d26);
     ser.Serialize(stream);
 }
 

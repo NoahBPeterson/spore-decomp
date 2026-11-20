@@ -2,6 +2,12 @@
 // constructor, destructor, intrusive-list/vector helpers, virtual binding and emit step.
 // Reconstructed from the original disassembly.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_1458c38[];
+extern "C" char g_1458c3c[];
+
 typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned int uint;
@@ -212,8 +218,8 @@ GObj* GObj::ctor(int a, int b)
 // @ 0x00aa04a0
 void GObj::dtor()
 {
-    at<int>(this, 0) = (int)0x1458c3c;
-    at<int>(this, 4) = (int)0x1458c38;
+    at<int>(this, 0) = (int)g_1458c3c;
+    at<int>(this, 4) = (int)g_1458c38;
     ((Vec250*)op(this, 0x250))->destroy();
     void* p;
     p = at<void*>(this, 0x248);
@@ -245,8 +251,8 @@ void GObj::dtor()
     if (p != 0)
         ((VFn)((void**)*(void**)p)[4 / 4])(p);
     ((ListHead*)op(this, 0x24))->destroy();
-    at<int>(this, 0) = (int)0x13f21d4;
-    at<int>(this, 4) = (int)0x13ef094;
+    at<int>(this, 0) = (int)g_13f21d4;
+    at<int>(this, 4) = (int)g_13ef094;
 }
 
 // ------------------------------------------------------------------ 00aa0ba0

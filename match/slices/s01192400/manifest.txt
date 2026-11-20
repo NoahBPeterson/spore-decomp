@@ -28,3 +28,8 @@ slices/s01192400/ec_asn1.cpp  _o2i_ECPublicKey  01192d40  /O2 /arch:SSE /MD /Gy 
 slices/s01192400/ssl_ciph.cpp  _ssl_load_ciphers  01192e90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
 slices/s01192400/ssl_ciph.cpp  _ssl_cipher_get_disabled  01193270  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
 slices/s01192400/ssl_ciph.cpp  _ssl_cipher_strength_sort  01193670  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s01192400_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s01192400/oss_dh_asn1.cpp  _dh_cb  01192e00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01192400/oss_ssl_ciph.cpp  _ssl_cipher_collect_ciphers  011933a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01192400/oss_ssl_ciph.cpp  _ssl_cipher_collect_aliases  01193450  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01192400/oss_ssl_ciph.cpp  _ssl_cipher_apply_rule  01193490  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

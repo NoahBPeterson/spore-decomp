@@ -2,6 +2,14 @@
 // Object file: SPGonzago/_at_00c40000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dd34[];
+extern "C" char g_146dd44[];
+extern "C" char g_146dd58[];
+extern "C" char g_146dfa4[];
+extern "C" char g_146dfb4[];
+extern "C" char g_146dfc8[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cPlanet.h"
@@ -732,9 +740,9 @@ void* __fastcall FUN_00c4dbf0(void* ecx_this, void* edx)
     *(int*)((char*)ecx_this + 0x1f4) = zero;
     *(int*)((char*)ecx_this + 0x1f8) = zero;
     *(int*)((char*)ecx_this + 0x1fc) = zero;
-    *(void**)ecx_this = (void*)0x146dd58;
-    *(void**)((char*)ecx_this + 4) = (void*)0x146dd44;
-    *(void**)((char*)ecx_this + 0x34) = (void*)0x146dd34;
+    *(void**)ecx_this = (void*)g_146dd58;
+    *(void**)((char*)ecx_this + 4) = (void*)g_146dd44;
+    *(void**)((char*)ecx_this + 0x34) = (void*)g_146dd34;
     _ReadWriteBarrier();
     *(void**)((char*)ecx_this + 0x200) = (void*)zero;
     *(void**)((char*)ecx_this + 0x204) = (void*)0;
@@ -863,9 +871,9 @@ void* __fastcall FUN_00c4def0(void* ecx_this, void* edx)
     *(int*)((char*)ecx_this + 0x1f0) = zero;
     *(char*)((char*)ecx_this + 0x1f4) = 0;
     *(char*)((char*)ecx_this + 0x1f5) = 0;
-    *(void**)ecx_this = (void*)0x146dfc8;
-    *(void**)((char*)ecx_this + 4) = (void*)0x146dfb4;
-    *(void**)((char*)ecx_this + 0x34) = (void*)0x146dfa4;
+    *(void**)ecx_this = (void*)g_146dfc8;
+    *(void**)((char*)ecx_this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)ecx_this + 0x34) = (void*)g_146dfa4;
     return ecx_this;
 }
 

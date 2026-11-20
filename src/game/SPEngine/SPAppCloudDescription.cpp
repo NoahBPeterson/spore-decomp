@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPAppCloudDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ArgScript/cCommandBase.h"
@@ -875,7 +878,7 @@ struct cOwner { void Set(const char* name, int a, void* obj); }; // 0x00a6f9c0
 struct cCloudEffect : AppPropsFields {
     cOwner*  mOwner;               // +0x30
     int      mPad34;               // +0x34
-    int      mField38;             // +0x38
+    volatile int mField38;         // +0x38  (volatile pins the vptr store before mCmd's ctor)
     int      mPad3c;               // +0x3c
     cCloudEffectCommand mCmd;      // +0x40
     char     pad2a8[8];            // +0x2a8
@@ -886,7 +889,7 @@ struct cCloudEffect : AppPropsFields {
     uint8_t  mFlag2c0;             // +0x2c0
 
     cCloudEffect() : mField38(0xeba93c76), mStrBegin((const char*)gEmptyString16),
-                     mStrEnd((const char*)gEmptyString16), mStrCap((void*)0x1667bad) {}
+                     mStrEnd((const char*)gEmptyString16), mStrCap((char*)gEmptyString16 + 1) {}
     virtual void Update(char flag);                            // 0x00f57410 = vtable +0x14
 };
 struct Registrar {
@@ -1237,12 +1240,18 @@ void BattleCommand::FloatListCommand(EA::ArgScript::cArguments_s007e_d1b0* args)
   FloatVec& sv = mDesc->mScaleVec;
   sv.erase(sv.mpBegin, sv.mpEnd);
   for (int i = 0; i < count; ++i)
-    mDesc->mScaleVec.push_back(ArgToFloat(mIface, list[i]));
+    mDesc->mScaleVec.push_back(((ArgConverter*)mIface)->ToFloat(list[i]));
   char* text = (*args)[0];
   if (StrStr(text, "255") != 0) {
-    const float k = kInv255;
     FloatVec& v = mDesc->mScaleVec;
-    for (uint32_t i = 0; i < v.size(); ++i) v[i] *= k;
+    uint32_t i = 0;
+    if (i < v.size()) {
+      const float k = kInv255;
+      do {
+        v[i] *= k;
+        ++i;
+      } while (i < v.size());
+    }
   }
 }
 
@@ -1475,7 +1484,7 @@ cCloudDescription::~cCloudDescription()
     FreeCounted(v9c.mpBegin);
     FreeCounted(v84.mpBegin);
     FreeCounted(v64.mpBegin);
-    mVtbl = (void*)0x13ef094;
+    mVtbl = (void*)g_13ef094;
 }
 
 // @ 0x00f53590
@@ -2063,12 +2072,8 @@ void SWARM_CloudAddCommands(Registrar* p1, Registrar* p2)
     p2->AddCommand(PTR_s_cloud, obj);
 
     cCloudGroup* grp = (cCloudGroup*)EAAllocate(0x10, "ArgScript/GroupCloud", 0, 0, 0, 0);
-    if (grp) {
-        new (grp) cCloudGroup();
-        p1->AddGroup(PTR_s_cloud, grp);
-    } else {
-        p1->AddGroup(PTR_s_cloud, grp);
-    }
+    grp = new (grp) cCloudGroup();
+    p1->AddGroup(PTR_s_cloud, grp);
 }
 
 // @ 0x00f57590

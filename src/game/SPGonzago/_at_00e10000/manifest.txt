@@ -20,3 +20,5 @@
 ../src/game/SPGonzago/_at_00e10000.cpp  ?pairAssignBackward@@YAPAUPair@@PAU1@00@Z  00e1e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f420@@YIXPAX@Z  00e1f420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e19230@cSkinPaintClear@@QAEXH@Z  00e19230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e10000.cpp  ?Activate@cTradeUI@@QAEXXZ  00e1dae0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f390@@YIPAXPAX@Z  00e1f390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

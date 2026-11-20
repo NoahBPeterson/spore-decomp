@@ -105,3 +105,8 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e420@CCM_s00c0_ddb0@@QAEDXZ  00c0e420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e3d0@CCM_s00c0_ddb0@@QAEDXZ  00c0e3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?d970@CCB_s00c0_ce80@@QAEXPAM@Z  00c0d970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?e580@CCM_s00c0_ddb0@@QAEPAXXZ  00c0e580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?dfb0@CCM_s00c0_ddb0@@QAEPAXH@Z  00c0dfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?e120@CCM_s00c0_ddb0@@QAEDH@Z  00c0e120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?NotifySummarizer@CreatureBase_s00c1_4350@@QAEXXZ  00c14e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?fae0@CAN@@QAEXH@Z  00c0fae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

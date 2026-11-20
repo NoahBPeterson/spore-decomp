@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPWeaponsView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14767d0[];
+
 // Hand guard (kept by merge_preamble on re-apply): the generated tm.h defines `struct tm` unguarded, so it
 // collides with <wchar.h>'s own `struct tm` (C2011) as soon as a slice of this module needs <wchar.h>
 // (s00cc3220 does).  Defining the CRT guard first makes <wchar.h> skip its copy; tm.h (via SP/cStarRecord.h)
@@ -20,6 +23,9 @@
 #include "SP/cSpatialObject.h"
 #include <wchar.h>
 #include <string.h>
+
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00cc22c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef int intptr_t;
@@ -657,11 +663,8 @@ cSpatialObjectView* MakeDeepSpaceProjectileView(void* pObject)
 // @ 0x00cc2c90
 cSpaceDefenseMissileView::cSpaceDefenseMissileView()
 {
-    mpEffectInfo = nullptr;
-    mFlag38 = 0;
-    mFlag39 = 0;
-    mFlag3a = 0;
-    mFlag3b = 0;
+    *(void* volatile*)&mpEffectInfo = nullptr;
+    *(uint32_t*)&mFlag38 = 0;
 }
 
 // @ 0x00cc2cb0
@@ -964,7 +967,8 @@ void* cSpaceDefenseMissileView_s00cc_3220::MakeView(cSpatialObject* p)
 // @ 0x00cc36d0
 void* cSpatialObjectView_s00cc_3220::FUN_00cc36d0(u8 flag)
 {
-    mpVtbl = (void*)0x14767d0;
+    mpVtbl = (void*)g_14767d0;
+    _ReadWriteBarrier();
     if (mpObject) {
         void* r = VT_B8_1(mpObject, 0x24630ce);
         if (r) {

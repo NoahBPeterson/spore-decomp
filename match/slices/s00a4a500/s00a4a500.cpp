@@ -4,7 +4,13 @@
 // (g_canvas.c); only the fields these functions touch are declared, at their binary
 // offsets. Callees, globals and vtable targets are masked relocations.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a4a6b0();
+extern "C" char g_13ec47c[];
+
 #include "types.h"
+#include <stddef.h>
 
 typedef unsigned int uintptr_t;
 
@@ -210,21 +216,22 @@ void* canvas_realizedollar(void** out, void* env, void* a3, const char* s)
 }
 
 // @ 0x00a4a5d0
-void* canvas_findtext(int* out, void* x)
+void* canvas_findtext(int* __restrict out, void* x)
 {
-    while (*(int*)((char*)x + 0x74) == 0)
-        x = *(void**)((char*)x + 0x2c);
-    int* p = *(int**)((char*)x + 0x74);
-    int a = p[0];
-    out[1] = p[1];
-    out[0] = a;
-    return out;
+    while (((t_glist*)x)->gl_symtag == 0)
+        x = ((t_glist*)x)->gl_owner;
+    const t_symbol* p = (const t_symbol*)((t_glist*)x)->gl_symtag;
+    t_symbol* result = (t_symbol*)out;
+    *result = *p;
+    return result;
 }
 
 // @ 0x00a4a600
-void glist_getname(t_symbol* out, t_glist* g)
+t_symbol* glist_getname(t_symbol* __restrict out, t_glist* g)
 {
-    *out = *(t_symbol*)((char*)g + 0x64);
+    out->s_name = g->gl_name_a;
+    out->s_thing = g->gl_name_b;
+    return out;
 }
 
 // @ 0x00a4a620
@@ -254,7 +261,7 @@ void canvas_loadbang(t_glist* g)
 {
     for (t_gobj* o = *(t_gobj**)((char*)g + 0x28); o != 0; o = o->g_next) {
         if (zgetfn(o, gLoadbangSym.s_name, gLoadbangSym.s_thing) != 0)
-            pd_vmess(o, gLoadbangSym.s_name, gLoadbangSym.s_thing, (void*)0x13ec47c);
+            pd_vmess(o, gLoadbangSym.s_name, gLoadbangSym.s_thing, (void*)g_13ec47c);
     }
 }
 
@@ -506,15 +513,31 @@ void canvas_free(t_glist* g)
         canvas_takeofflist(g);
 }
 
+// The fields used by canvas_pop in the known prefix of a canvas.
+struct CanvasPopPrefix {
+    char padding[0x78];
+    unsigned flags;
+    char padding7c[4];
+    void* helperResult;
+};
+typedef char CanvasPopFlagsOffset[(offsetof(CanvasPopPrefix, flags) == 0x78) ? 1 : -1];
+typedef char CanvasPopHelperOffset[(offsetof(CanvasPopPrefix, helperResult) == 0x80) ? 1 : -1];
+
+class CanvasPopAssetManager {
+public:
+    void* NewEntryNode(void* canvas, void* callback); // 0x00a643b0
+};
+
 // @ 0x00a4ad10
 void canvas_pop(t_glist* g)
 {
     pd_popsym(g);
     canvas_resortinlets(g);
     canvas_resortoutlets(g);
-    *(unsigned*)((char*)g + 0x78) &= ~8u;
-    void* p = FUN_00a67ce0();
-    *(void**)((char*)g + 0x80) = FUN_00a643b0(p, g, (void*)0x00a4a6b0);
+    CanvasPopPrefix* canvas = (CanvasPopPrefix*)g;
+    canvas->flags &= ~8u;
+    CanvasPopAssetManager* manager = (CanvasPopAssetManager*)FUN_00a67ce0();
+    canvas->helperResult = manager->NewEntryNode(g, (void*)FUN_00a4a6b0);
 }
 
 // @ 0x00a4ad50

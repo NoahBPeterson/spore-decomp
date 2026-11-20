@@ -1,6 +1,11 @@
 // Slice s00ad6960 - Spore Simulator ArgScript commands + UI layout/subsystem
 // helpers (show/hide widget groups, subtitles, modal, action target ctor).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145a6a8[];
+extern "C" char g_145afdc[];
+
 #include "types.h"
 
 typedef unsigned int   uint32;
@@ -182,7 +187,7 @@ void* SimCmd::init()
 {
     SimCmd* c = this;
     ((CmdBaseCtor*)this)->baseCtor();
-    *(void**)this = (void*)0x145afdc;
+    *(void**)this = (void*)g_145afdc;
     ((ArgSpecCtor*)((char*)this + 0x10))->specCtor(true);
     FUN_0083bcd0((char*)this + 0x10,
                  "Adds a referencable object",
@@ -394,7 +399,7 @@ void FUN_00ad6f40(void)
     cmd = o ? ((CmdSetState*)o)->init() : 0;
     ((TriggerMgr*)GetTriggerMgr())->Register(gSetStateCmdId, cmd);
     o = operator_new6(0x10, "Simulator", 0, 0, 0, 0);
-    cmd = o ? (((CmdSimple*)o)->baseInit(), *(void**)o = (void*)0x145a6a8, o) : 0;
+    cmd = o ? (((CmdSimple*)o)->baseInit(), *(void**)o = (void*)g_145a6a8, o) : 0;
     ((TriggerMgr*)GetTriggerMgr())->Register(gSimpleCmdId, cmd);
     o = operator_new6(0xe0, "Simulator", 0, 0, 0, 0);
     cmd = o ? ((CmdSetState2*)o)->init() : 0;
@@ -520,17 +525,25 @@ void** FUN_00ad7400(void* last_, void* first_, void** out)
 }
 
 // ===========================================================================
+extern "C" char g_145b328[];   // 0x145b328: CUID vtable (primary)
+extern "C" char g_145b30c[];   // 0x145b30c: CUID vtable (+4 base)
+extern "C" char g_145b2fc[];   // 0x145b2fc: CUID vtable (+8 base)
+extern "C" char g_13eb394[];   // 0x13eb394: base vtable (+0)
+extern "C" char g_13eb938[];   // 0x13eb938: base vtable (+4)
+extern "C" char g_13ec458[];   // 0x13ec458: base vtable (+8)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x00ad7470
 // ===========================================================================
 struct SubObj { virtual void s00(); virtual void s04(); virtual void s08(); };
 void CUID::FUN_00ad7470()
 {
-    SubObj* p;
-    p = *(SubObj* volatile*)&m50;
-    *(void**)this = (void*)0x145b328;
-    *(void**)((char*)this + 4) = (void*)0x145b30c;
-    *(void**)((char*)this + 8) = (void*)0x145b2fc;
-    if (p) p->s08();
+    *(void**)this = g_145b328;
+    *(void**)((char*)this + 4) = g_145b30c;
+    *(void**)((char*)this + 8) = g_145b2fc;
+    _ReadWriteBarrier();
+    SubObj* p = (SubObj*)m50; if (p) p->s08();
     p = (SubObj*)m4c; if (p) p->s04();
     p = (SubObj*)m48; if (p) p->s04();
     p = (SubObj*)m44; if (p) p->s04();
@@ -547,9 +560,9 @@ void CUID::FUN_00ad7470()
     p = (SubObj*)m18; if (p) p->s04();
     p = (SubObj*)m14; if (p) p->s04();
     p = (SubObj*)m10; if (p) p->s08();
-    *(void**)((char*)this + 8) = (void*)0x13ec458;
-    *(void**)((char*)this + 4) = (void*)0x13eb938;
-    *(void**)this = (void*)0x13eb394;
+    *(void**)((char*)this + 8) = g_13ec458;
+    *(void**)((char*)this + 4) = g_13eb938;
+    *(void**)this = g_13eb394;
 }
 
 // ===========================================================================

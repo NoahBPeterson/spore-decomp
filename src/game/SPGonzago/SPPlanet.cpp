@@ -2,6 +2,12 @@
 // Object file: SPGonzago/SPPlanet.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145c660[];
+extern "C" char g_145c71c[];
+extern "C" char g_145c738[];
+extern "C" char g_145c748[];
+
 #include "game/types.h"
 #include "SP/cFruit.h"
 #include "SP/cGameData.h"
@@ -2276,6 +2282,13 @@ extern SimAttribute gPlanetAttributes[12];   // 0x01578890
 struct TinyCopyT { void Copy(const void* src); };                  // 0x00b01cb0 (thiscall, 1 arg)
 struct BigElem   { void Ctor(void* src); };                        // 0x00b03680 (thiscall, 1 arg)
 struct BigElemD  { void Dtor(); void Dtor2(void* src); };          // 0x00b03740 (thiscall)
+// The 0x80-byte element the range helpers at 0x00b03ca0 / 0x00b03f10 copy (same shape as
+// SPCity's CElement helpers 0x00bdd5c0 / 0x00bdd600).
+struct BigElem80 {
+    char pad00[0x80];
+    void CopyConstructFrom(const BigElem80& src);  // 0x00b03680
+    void CopyAssignFrom(const BigElem80& src);     // 0x00b03740
+};
 void* __cdecl FUN_00f473a0(uint32 size, const char* name, int, int, const char* file, int line);
 void  __cdecl FUN_00b02930(void*, int, int, int, void*, float, float, float);
 void  __cdecl FUN_00b02930(void*, int, int, int, void*, HeapPos);
@@ -2464,7 +2477,6 @@ struct cBigVector {
     void* mpEnd;                                             // +0x04
     void Erase(void* first, void* last);
 };
-void* __cdecl destroy_range_big(void* src, void* end, void* dst); // 0x00b03f10
 // ---- items of slice s00b06e10 end
 
 // ---- items of slice s00b07980 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -4851,9 +4863,9 @@ void cFruitOps2::Disable(void* arg)
 Simulator_cFruitGroup::~Simulator_cFruitGroup()
 {
     Simulator_cFruitGroup* self = this;
-    *(void**)self = (void*)0x0145c748;
-    self->vtbl4 = (void*)0x0145c738;
-    self->vtbl34 = (void*)0x0145c71c;
+    *(void**)self = (void*)g_145c748;
+    self->vtbl4 = (void*)g_145c738;
+    self->vtbl34 = (void*)g_145c71c;
     self->f4c = 0;
     self->f54 = 0;
     _ReadWriteBarrier();
@@ -5793,9 +5805,8 @@ void __cdecl FUN_00b035b0(void* ar, cSaveTreeHdr* hdr)
 cTreeData::cTreeData(void* src)
 {
     cTreeData* p = (cTreeData*)src;
-    this->vtbl1 = gVtblContentValidationSummarizer;
+    *(void* volatile*)&this->vtbl1 = gVtblContentValidationSummarizer;  // base-subobject vtable store kept by retail
     this->m08 = 0;
-    _ReadWriteBarrier();               // base-subobject vtable store is kept by the retail build
     this->vtbl0 = gVtblTreeData;
     this->vtbl1 = gVtblTreeData2;
     this->m0c = p->m0c;
@@ -6046,16 +6057,15 @@ void __cdecl sort_partition_c(void** lo, void** hi, const float* pivot, float px
 }
 
 // @ 0x00b03ca0
-void* __cdecl construct_range_big(void* first, void* last, void* cursor)
+BigElem80* __cdecl construct_range_big(BigElem80* first, BigElem80* last, BigElem80* dest)
 {
-    void* r = cursor;
     while (first != last) {
-        if (r != 0)
-            ((BigElem*)r)->Ctor(first);
-        first = (char*)first + 0x80;
-        r = (char*)r + 0x80;
+        if (dest != 0)
+            dest->CopyConstructFrom(*first);
+        ++first;
+        ++dest;
     }
-    return r;
+    return dest;
 }
 
 // @ 0x00b03d70
@@ -6115,15 +6125,14 @@ void __cdecl sort_heap_range2(void* first, void* last, float px, float py, float
 }
 
 // @ 0x00b03f10
-void* __cdecl destroy_range_big(void* first, void* last, void* cursor)
+BigElem80* __cdecl copy_range_big(BigElem80* first, BigElem80* last, BigElem80* dest)
 {
-    void* r = cursor;
-    while (last != first) {
-        ((BigElemD*)r)->Dtor();
-        last = (char*)last + 0x80;
-        r = (char*)r + 0x80;
+    while (first != last) {
+        dest->CopyAssignFrom(*first);
+        ++first;
+        ++dest;
     }
-    return r;
+    return dest;
 }
 
 // @ 0x00b03f50
@@ -6853,15 +6862,16 @@ int** FUN_00b056e0(int** out, int* first, int* last, int* obj)
 }
 
 // @ 0x00b05730
-void FUN_00b05730(int* p, uint n, int, void* src)
+void FUN_00b05730(int* p, uint n, int src, void*)
 {
+    int* d = p;
     while (n > 0) {
-        if (p) {
-            ((PoolOwner_s00b0_47b0*)p)->rbcontainer_copy(src);
-            *p = 0x145c660;
+        if (d) {
+            ((PoolOwner_s00b0_47b0*)d)->rbcontainer_copy((void*)src);
+            *d = (int)g_145c660;
         }
         --n;
-        p = (int*)((char*)p + 0x24);
+        d = (int*)((char*)d + 0x24);
     }
 }
 
@@ -6871,7 +6881,7 @@ int* FUN_00b05770(int* srcBegin, int* srcEnd, int* dest, int)
     while (srcBegin != srcEnd) {
         if (dest) {
             ((PoolOwner_s00b0_47b0*)dest)->rbcontainer_copy(srcBegin);
-            *dest = 0x145c660;
+            *dest = (int)g_145c660;
         }
         srcBegin = (int*)((char*)srcBegin + 0x24);
         dest     = (int*)((char*)dest + 0x24);

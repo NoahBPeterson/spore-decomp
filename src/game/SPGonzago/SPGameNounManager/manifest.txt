@@ -32,3 +32,5 @@
 ../src/game/SPGonzago/SPGameNounManager.cpp  ??0cMilitaryAttackCityOrder@@QAE@XZ  00b231b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ??0cVehicleGroupOrder@@QAE@XZ  00b22100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b26710@cTimelineModeStarter@@QAEXXZ  00b26710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ??0cListenerBase@@QAE@XZ  00b232b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?GetPlayerCivilization@cGameNounManager_s00b2_5c30@@QAEPAVcCivilization@@XZ  00b25fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

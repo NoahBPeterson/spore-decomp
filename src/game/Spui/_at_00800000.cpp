@@ -2,6 +2,11 @@
 // Object file: Spui/_at_00800000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1417cac[];
+extern "C" char g_1417cb0[];
+extern "C" char g_1417cb4[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -44,7 +49,7 @@ struct C_802890 { void* f(void* want); };
 // ---- items of slice s008019f0 end
 
 // ---- items of slice s00809700 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void efree(void* p); // 0x00a222c0
+extern "C" void efree(void* p); // 0x00f47380
 extern int g_15446cc, g_15446d0, g_15446d4;
 extern char g_obj_15446c8;
 extern "C" void* dbgnew(unsigned size, const void* data, int a, int b, const char* file, int line); // 0x00f473a0
@@ -980,7 +985,7 @@ RecC* copyFwd(void* unused, RecC* begin, RecC* end, RecC* dst)
 WinRec* WinRecOps::DeletingDtor(unsigned int flags)
 {
     WinRec* self = (WinRec*)this;
-    self->vtbl = (void**)0x1417cac;
+    self->vtbl = (void**)g_1417cac;
     _ReadWriteBarrier();
     WinRef* w = self->win;
     if (w) {
@@ -1102,10 +1107,13 @@ void __fastcall Vec42CDtor(int* v)
         efree((void*)d);
 }
 
+extern void* g_01417cb0[];   // 0x01417cb0 Big3 vftable
+
 // @ 0x0080b9b0
 void* Big3::DeletingDtor(char flags)
 {
-    vtbl = (void*)0x1417cb0;
+    vtbl = (void*)g_01417cb0;
+    _ReadWriteBarrier();
     Layout* l = layout;
     if (l != 0) {
         layout = 0;
@@ -1609,7 +1617,7 @@ void __thiscall cSPUIInfoLineTray::Add(const void* src)
         v->Insert(v->end, e);
     }
     cSPUILayout_s0080_c5d0* l = tmp.layout;
-    tmp.vtbl = (void**)0x1417cb0;
+    tmp.vtbl = (void**)g_1417cb0;
     if (l) { tmp.layout = 0; l->Release(); }
     if (tmp.layout) tmp.layout->Release();
     VecDtorInline(&tmp.v2);
@@ -1618,7 +1626,7 @@ void __thiscall cSPUIInfoLineTray::Add(const void* src)
 // @ 0x0080ceb0
 void* __thiscall cSPUIInfoLineTray::ScalarDeletingDtor(u8 flags)
 {
-    vtbl = (void**)0x1417cb4;
+    vtbl = (void**)g_1417cb4;
     dtor();
     VecDtorVec(&mVec);
     if (mLayout) ((VF0v)VT(mLayout)[2])(mLayout);
@@ -1627,13 +1635,16 @@ void* __thiscall cSPUIInfoLineTray::ScalarDeletingDtor(u8 flags)
     return this;
 }
 
+extern "C" char g_13ec458[];   // 0x013ec458 EA::RefCountVTemplate<int> vftable
+extern "C" char g_1417d14[];   // 0x01417d14 cSPUILaunchScreenWinProc vftable
+extern "C" char g_1417d04[];   // 0x01417d04 cSPUILaunchScreenWinProc vftable (+4)
 // @ 0x0080cf00
 cSPUILaunchScreenWinProc* __thiscall cSPUILaunchScreenWinProc::ctor()
 {
-    vtbl2 = (void**)0x13ec458;
+    *(void** volatile*)&vtbl2 = (void**)g_13ec458;
     f8 = 0;
-    vtbl = (void**)0x1417d14;
-    vtbl2 = (void**)0x1417d04;
+    vtbl = (void**)g_1417d14;
+    vtbl2 = (void**)g_1417d04;
     fC = 3;
     f10 = -1;
     return this;

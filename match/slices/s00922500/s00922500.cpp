@@ -1,5 +1,9 @@
 // Slice s00922500 (bfs2 #22), 32-bit MSVC 2008.
 // EA::Thread (Semaphore/Thread) + EA::Trace helpers. Real names/layouts from the 2008 dev PDB.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_010829f0();
+
 #include <intrin.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -466,7 +470,7 @@ void EA::Thread::Thread::SetIdealProcessor(int proc)
 void __fastcall FUN_00922d10(void*** p)
 {
     if (*p != 0 && **p != 0)
-        QueueUserAPC((PAPCFUNC)0x010829f0, (HANDLE)**p, 0);
+        QueueUserAPC((PAPCFUNC)FUN_010829f0, (HANDLE)**p, 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -526,7 +530,7 @@ void C233e0::Set(unsigned short x)
     v = x;
 }
 
-// @ 0x009233f0
+// Legacy copy; byte-exact definition is in src/game/UTFSpore_Win32/ealog_imp.cpp.
 struct C233f0 { void** vtbl; void Call(void* arg); };
 void C233f0::Call(void* arg)
 {
@@ -775,12 +779,11 @@ unsigned __stdcall EA::Thread::EAThreadEntryWrapped(void* arg)
         } __except (EXCEPTION_CONTINUE_EXECUTION) {
         }
     }
-    unsigned r;
     if (p->mpBeginThreadUserWrapper != 0)
-        r = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
+        p->mnReturnValue = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
     else
-        r = (*(unsigned (__thiscall**)(void*, void*))((char*)*(void**)pfn + 4))(pfn, pctx);
-    p->mnReturnValue = r;
+        p->mnReturnValue = (*(unsigned (__thiscall**)(void*, void*))((char*)*(void**)pfn + 4))(pfn, pctx);
+    unsigned r = p->mnReturnValue;
     SetCurrentThreadHandle(0, false);
     p->mnStatus = 2;
     if (_InterlockedDecrement(&p->mnRefCount) == 0)

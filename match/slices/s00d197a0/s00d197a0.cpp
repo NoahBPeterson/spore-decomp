@@ -710,7 +710,7 @@ inline int Log2(int n)
     int i = 0;
     while (n != 0) {
         n >>= 1;
-        ++i;
+        i++;
     }
     return i;
 }
@@ -720,10 +720,9 @@ template <class It, class Compare>
 void quick_sort(It first, It last, Compare compare)
 {
     if (first != last) {
-        int count = (int)(last - first);
         _ReadWriteBarrier();
-        quick_sort_impl(first, last, 2 * Log2(count) - 2, compare);
-        if (count > 28) {
+        quick_sort_impl(first, last, 2 * Log2((int)(last - first)) - 2, compare);
+        if ((last - first) > 28) {
             InsertionSort(first, first + 28, compare);
             InsertionSortSimple(first + 28, last, compare);
         } else {

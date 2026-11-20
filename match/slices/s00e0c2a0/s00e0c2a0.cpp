@@ -3,6 +3,7 @@
 // sampling routines.
 // Flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 #include "types.h"
+#include "sse_helpers.h"
 
 typedef unsigned char u8;
 typedef unsigned int  u32;
@@ -238,4 +239,51 @@ void* cTerrainRenderer::Destroy(u8 flags)
     if ((flags & 1) != 0)
         FUN_00951330(this);
     return this;
+}
+
+// @ 0x00e0c2a0
+// Fades the mode out: stores the pi-scaled inverse of the clamped time and
+// notifies the interface subobjects published at +0x00 and +0x04.
+struct cFadeSubObj {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+    virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
+    virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
+    virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31();
+    virtual void s32(); virtual void s33(); virtual void s34(); virtual void s35();
+    virtual void s36();                // slot 36, offset 0x90
+};
+
+struct cFadeMode {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34();
+    virtual void v35();                // slot 35, offset 0x8c
+
+    cFadeSubObj mSub;                   // 0x04
+    u8  mPad0008[0x348];
+    f32 mFade;                          // 0x350
+    u32 mPad354;
+    u32 mPad358;
+    u32 mFlags;                         // 0x35c
+
+    void SetFade(f32 t);                // 0x00e0c2a0
+};
+
+void cFadeMode::SetFade(f32 t)
+{
+    f32 v = SseClamp(t, 0.0f, 1.0f);
+    mFade = (1.0f - v) * 3.14159274f;
+    mSub.s36();
+    v35();
+    mFlags |= 3;
 }

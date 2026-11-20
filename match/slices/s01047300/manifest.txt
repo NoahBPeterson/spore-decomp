@@ -1,0 +1,1 @@
+slices/s01047300/s01047300.cpp  ?Helper47300@CStarMap@@QAEXI@Z  01047300  /O2 /MD /Gy /EHsc /TP

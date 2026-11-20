@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/Draw2D.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1440448[];
+extern "C" char g_14404ac[];
+
 #include "game/types.h"
 #include "EA/UTFWin/CustomWinProc.h"
 #include "EA/UTFWin/MultiHeapObject.h"
@@ -1421,7 +1426,7 @@ typedef char Draw2DConstructionSizeCheck[(sizeof(Draw2DConstructionView) == 0x24
 // @ 0x009520a0
 Draw2DConstructionView* Draw2DConstructionView::Init(EA::UTFWin::IWindowMgr* owner)
 {
-    mpVtable = (void*)0x01440448;
+    mpVtable = (void*)g_1440448;
     mpRenderable = 0;
     mpWindowMgr = owner;
     mColor = 0xffffffff;
@@ -1611,11 +1616,13 @@ bool SkinBuilder::FUN_009528d0(SkinOut* out, int arg)
 void* FUN_00952a60()
 {
   void* p = EANew(0x14, 4, 0, "OSGlobal", 0, 0, 0, 0);
-  if (!p) return 0;
-  ((uint32_t*)p)[1] = 0;
-  ((uint32_t*)p)[0] = 0;
-  ((uint32_t*)p)[4] = 0;
-  return p;
+  if (p) {
+    ((uint32_t*)p)[1] = 0;
+    ((uint32_t*)p)[0] = 0;
+    ((uint32_t*)p)[4] = 0;
+    return p;
+  }
+  return 0;
 }
 
 // @ 0x00952aa0
@@ -2291,9 +2298,9 @@ void GlyphRenderer::DrawText(float x, float y, const wchar_t* pText, int nLen, c
 void* UIRes::Dtor(unsigned char flags)
 {
     void* self = this;
-    *(void**)self = (void*)0x14404ac;
+    *(void**)self = (void*)g_14404ac;
     FUN_009558c0();
-    *(void**)self = (void*)0x13eb938;
+    *(void**)self = (void*)g_13eb938;
     if (flags & 1)
         operator_delete__(self);
     return self;

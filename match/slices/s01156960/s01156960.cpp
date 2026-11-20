@@ -12,6 +12,9 @@
 // Built with VC .NET 2003 (cl 13.10) + /GL /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14ce868[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -41,7 +44,7 @@ extern "C" char g_strLowpass[];   // 0x014ce7f4
 extern "C" char g_strHighpass[];  // 0x014ce814
 extern "C" char g_strUserFilter[];// 0x014ce834
 // 0x014ce868 : the class vftable (stored by the deleting destructor).
-#define g_vftableAddr ((void*)0x014ce868)
+#define g_vftableAddr ((void*)g_14ce868)
 
 // ---------------------------------------------------------------------------
 // Callees (defined in other slices; declarations only)

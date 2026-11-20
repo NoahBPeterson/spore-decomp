@@ -615,7 +615,7 @@ void __fastcall FUN_00bd8500(cCity* ecx_this, void* edx, char flag, void* owner)
             old->v04();
         }
     }
-    ecx_this->mp208->SetEffectId(0x168bd70, 5.0f);
+    ecx_this->mp208->SetEffectId((int)&g_168bd70, 5.0f);
     ecx_this->mp208->DoF3d2(ecx_this);
     ecx_this->mRegion38.AsSlot38()->DoC470(1);
 }
@@ -634,7 +634,7 @@ void __fastcall FUN_00bd8590(cCommunity* ecx_this, void* edx, void* a)
 // ---------------------------------------------------------------------------------------------
 // 0x00bd85c0 -- sum (elem[+0xc50] + 0.5) * 2/3 over +0x1f4..+0x1f8 into *out.
 // ---------------------------------------------------------------------------------------------
-// @ 0x00bd85c0
+// Legacy copy; canonical marker is in src/game/SPGonzago/SPCity.cpp.
 void __fastcall FUN_00bd85c0(cCity* ecx_this, void* edx, float* out, int* count)
 {
     int n = (int)(ecx_this->mEnd1f8 - ecx_this->mBeg1f4);

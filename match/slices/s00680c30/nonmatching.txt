@@ -7,5 +7,3 @@
 00681800  310  Obj1800 copy ctor: 0x60 plain copy emitted with different register rotation; same size, all copies present
 00681a10  80   ObjA copy ctor: vec copies match except lea/push scheduling and first arg register choice
 00681b50  87   ObjB50 operator=: struct-copy register rotation differs; all six member assignments in order; equiv: UNSUPPORTED (0 valid inputs, faults)
-00681c40  9    ObjA operator=: only arg-eval scheduling (lea of first call arg before vs after the 4th dword store); equiv: PASS (206 valid, 100% cov)
-00681e80  9    copy_backward loop: only the same arg-eval scheduling difference

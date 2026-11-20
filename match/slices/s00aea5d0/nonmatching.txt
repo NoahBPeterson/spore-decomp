@@ -9,7 +9,6 @@
 00aeab40  320  SpaceTool::RemoveByKey: complete; register allocation differs
 00aeae10  122  Vec12::erase: complete (`mpEnd -= last - first` element arithmetic); loop guard/register shape differs [equiv: WEAK 144 valid, 60.8% coverage, no mismatch]
 00aeae90  346  Vec12::DoInsertValue: complete; EASTL scheduling differs
-00aeb030  31   destroy_hash_buckets: complete; near-miss (loop/regs)
 00aeb090  103  SpaceTool::Cleanup: complete; vtable slot calls via generic helpers change scheduling
 00aeb160  176  SpaceTool::AddEntry: near-miss (176 diff bytes); logic complete, but the emulated pool hands the two equivalence sides different arenas, so the returned entry pointer differs (FAIL-KEPT)
 00aeacc0  250  SerializeList (field serializer): complete (eastl::basic_string<wchar_t> RangeInitialize + copy ctor 0x56e2d0 + dealloc, ConvertToString16, Field/EndField, visitor loop); register allocation / stack layout differ (checked with /O2 /MD /Gy /TP /GS-, retail has no EH frames) [equiv: WEAK 202 valid, 12.6% coverage, no mismatch]

@@ -22,6 +22,9 @@
 //   0x01159500  decode one packet
 //   0x011595f0  free the scratch allocation
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14ce868[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -308,7 +311,7 @@ void CSubbandDecoder::FUN_01158a80()
 void* CSubbandDecoder::FUN_01158ad0(u8 flags)
 {
     void* p = *(void**)((char*)this + 0x1b8);
-    vftable = (void*)0x014ce868;
+    vftable = (void*)g_14ce868;
     if (p != 0)
         g_pFreeFn(p);
     FUN_01163dc0();

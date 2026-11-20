@@ -131,12 +131,11 @@ void Stimuli::SetStimulus(Stimulus* s, uint32_t a, uint32_t b, float c, IRefCoun
 // @ 0x00bc9770
 void Stimuli::ClearStimulus(Stimulus* s)
 {
-	uint32_t id = s->id;
 	float zero = 0.0f;
-	_ReadWriteBarrier();
 	uint32_t mask = s->mask;
-	mMask0 &= ~id;
+	uint32_t id = s->id;
 	mMask1 &= ~mask;
+	mMask0 &= ~id;
 	s->id = 0;
 	s->mask = 0;
 	s->duration = zero;

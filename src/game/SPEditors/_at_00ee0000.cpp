@@ -1,3 +1,27 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb430[];
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_14426a0[];
+extern "C" char g_148aba8[];
+extern "C" char g_148abb8[];
+extern "C" char g_148abc8[];
+extern "C" char g_148abd0[];
+extern "C" char g_148ac34[];
+extern "C" char g_148ac3c[];
+extern "C" char g_148ac5c[];
+extern "C" char g_148aca8[];
+extern "C" char g_148acb8[];
+extern "C" char g_148acf0[];
+extern "C" char g_148ad00[];
+extern "C" char g_148ad1c[];
+extern "C" char g_15ac738[];
+extern "C" char g_16c77f8[];
+extern "C" char g_16c780c[];
+
 #include <xmmintrin.h>
 // src/game/SPEditors/_at_00ee0000.cpp -- migrated from slice(s) s00eede20, s00eed3f0, s00eeb770, s00eea7c0, s00ee9840, s00ee8860, s00ee7990, s00ee6880, s00ee4390, s00ee3800, s00ee2860, s00ee16f0, s00ee0d70, s00edfed0 by tools/migrate/rewrite.py
 // Object file: SPEditors/_at_00ee0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
@@ -1941,10 +1965,10 @@ struct TutorialsUI {
     void ClearPending();                // 0xef72b0
 };
 static inline TutorialsUI* GetTutorialsUI() {
-    return *(TutorialsUI**)(*(int*)0x16c7aa4 + 0xd4);
+    return *(TutorialsUI**)(*(int*)&g_16c7aa4 + 0xd4);
 }
 static inline void* GetSpacePtr() {
-    return *(void**)(*(int*)0x16c7aa4 + 0x18);
+    return *(void**)(*(int*)&g_16c7aa4 + 0x18);
 }
 template <class R, class T, int Off>
 static inline R vcallR(T* p) {
@@ -4010,6 +4034,11 @@ void Beh::F3540(void* item, void* list)
     MGR()->F427c0();
 }
 
+struct Inner24_s00ee3630 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void Update(int arg);   // +0x18
+};
+struct Obj14_s00ee3630 { char pad[0x24]; Inner24_s00ee3630 mInner; };
 // @ 0x00ee3630
 void Beh::F3630(int arg)
 {
@@ -4043,8 +4072,7 @@ void Beh::F3630(int arg)
     {
         if (*(int*)(t + 0x20) != ((int (__thiscall*)(void*))FUN_007f54d0)(*(void**)(t + 0x14)))
             ((void (__thiscall*)(void*, int))VTP(*(void**)(t + 0x14))[0x1c / 4])(*(void**)(t + 0x14), *(int*)(t + 0x20));
-        void* inner = *(void**)((char*)*(void**)(t + 0x14) + 0x24);
-        ((void (__thiscall*)(void*, int))VTP(inner)[0x18 / 4])(inner, arg);
+        ((Obj14_s00ee3630*)*(void**)(t + 0x14))->mInner.Update(arg);
         ((void (__thiscall*)(void*))FUN_00ece300)(*(void**)(t + 0x14));
     }
 
@@ -4356,6 +4384,8 @@ bool Hee::F3F60(int msg, void* param)
     return false;
 }
 
+extern void* g_013eb394[];   // 0x013eb394 PaintSystem vftable (query's base vtable)
+
 // @ 0x00ee40f0
 void Bee::F40F0()
 {
@@ -4367,13 +4397,14 @@ void Bee::F40F0()
     KeyVec found;
     GetManager()->ResolveQuery(&found, &query, 0);
 
-    u32 idx = sMathRandom.RandomUint32Uniform((u32)(found.mpEnd - found.mpBegin));
+    u32 n = (u32)(found.mpEnd - found.mpBegin);
+    u32 idx = sMathRandom.RandomUint32Uniform(n);
     ApplyPick(found.mpBegin + idx);
 
     // inlined destructors, in reverse construction order
     SpFree(found.mpBegin);
     SpFree(query.mIds.mpBegin);
-    query.mpVtbl = (void*)0x13eb394;
+    query.mpVtbl = (void*)g_013eb394;
     SpFree(ids.mpBegin);
 }
 
@@ -5282,8 +5313,8 @@ char __stdcall FUN_00ee7910(int id, u32* out, u8* flag)
 // @ 0x00ee7990
 void __thiscall SpuEd::BaseDtor()
 {
-    o000 = 0x148abd0;
-    o008 = 0x148abc8;
+    o000 = (int)g_148abd0;
+    o008 = (int)g_148abc8;
     _ReadWriteBarrier();
     if (o02c)
     {
@@ -5298,8 +5329,8 @@ void __thiscall SpuEd::BaseDtor()
     if (o014) ((VI*)o014)->v02();
     if (o010) ((VI*)o010)->v02();
     if (o00c) ((VI*)o00c)->v02();
-    o008 = 0x13eb394;
-    o000 = 0x13ec458;
+    o008 = (int)g_13eb394;
+    o000 = (int)g_13ec458;
 }
 
 // @ 0x00ee7a50
@@ -5656,8 +5687,8 @@ void __thiscall SpuEd::Select(void* win)
 // @ 0x00ee8570
 void __thiscall SpuEd::Dtor4()
 {
-    o000 = 0x148ac3c;
-    o008 = 0x148ac34;
+    o000 = (int)g_148ac3c;
+    o008 = (int)g_148ac34;
     _ReadWriteBarrier();
     if (o024) ((VI*)o024)->v01();
     if (o020) ((VI*)(o020 + 0xc))->v01();
@@ -5667,8 +5698,8 @@ void __thiscall SpuEd::Dtor4()
         o00c = 0;
         RemoveHandler((void*)h, (void*)o010, o014, (int)o018, (int)o01c);
     }
-    o008 = 0x13eb394;
-    o000 = 0x13ec458;
+    o008 = (int)g_13eb394;
+    o000 = (int)g_13ec458;
 }
 
 // @ 0x00ee85e0
@@ -5682,11 +5713,11 @@ void __thiscall SpuEd::Enable2(u8 on)
             void* p = (void*)((char*)this + 8);
             o00c = (u32)MessageServer();
             o010 = (u32)p;
-            o014 = 0x15ac738;
+            o014 = (int)g_15ac738;
             o018 = 1;
             o01c = 0;
             if (o00c && p)
-                ((XMsgSrv*)o00c)->m09(p, *(u32*)0x15ac738);
+                ((XMsgSrv*)o00c)->m09(p, *(u32*)g_15ac738);
             ((XUniv*)rec)->F36380();
         }
         char* u = (char*)g_universe;
@@ -5737,7 +5768,7 @@ u8 __thiscall SpuEd::SetSource(void* src)
     }
     if (o00c)
     {
-        void* mem = EAAllocate(0x3c, (const char*)0x13eb430, 0, 0, 0, 0);
+        void* mem = EAAllocate(0x3c, (const char*)g_13eb430, 0, 0, 0, 0);
         void* obj = mem ? ((XObj3c*)mem)->Init() : 0;
         void* old2 = (void*)o010;
         if (obj != old2)
@@ -5913,11 +5944,11 @@ void OBJ174::Update()
 // @ 0x00ee90e0
 OBJ14* OBJ14::ScalarDeletingDtor(unsigned char flags)
 {
-    *(void**)this = (void*)0x148ac5c;
+    *(void**)this = (void*)g_148ac5c;
     _ReadWriteBarrier();
     if (mp10) mp10->Release();
     if (mpC) mpC->Release();
-    *(void**)this = (void*)0x13ec458;
+    *(void**)this = (void*)g_13ec458;
     if (flags & 1) operator delete(this);
     return this;
 }
@@ -5945,20 +5976,20 @@ C40::C40()
     mC3c = 0;
     if ((gRegFlags & 1) == 0) {
         gRegFlags |= 1;
-        ((cRegNode*)0x16c780c)->Construct(0);
-        *(void**)0x16c780c = (void*)0x148aba8;
+        ((cRegNode*)g_16c780c)->Construct(0);
+        *(void**)g_16c780c = (void*)g_148aba8;
         atexit(FUN_013c8a60);
     }
-    if (((cRegNode*)0x16c780c)->Flag() == 0)
-        ((cRegNode*)0x16c780c)->Fallback();
+    if (((cRegNode*)g_16c780c)->Flag() == 0)
+        ((cRegNode*)g_16c780c)->Fallback();
     if ((gRegFlags & 2) == 0) {
         gRegFlags |= 2;
-        ((cRegNode*)0x16c77f8)->Construct(0);
-        *(void**)0x16c77f8 = (void*)0x148abb8;
+        ((cRegNode*)g_16c77f8)->Construct(0);
+        *(void**)g_16c77f8 = (void*)g_148abb8;
         atexit(FUN_013c8a50);
     }
-    if (((cRegNode*)0x16c77f8)->Flag() == 0)
-        ((cRegNode*)0x16c77f8)->Fallback();
+    if (((cRegNode*)g_16c77f8)->Flag() == 0)
+        ((cRegNode*)g_16c77f8)->Fallback();
 }
 
 // @ 0x00ee9260
@@ -6305,8 +6336,8 @@ void Entry::Ctor()
 // @ 0x00ee9c70
 void Entry::Dtor()
 {
-    *(void* volatile*)this = (void*)0x148acb8;
-    *(void* volatile*)((uint8_t*)this + 4) = (void*)0x148aca8;
+    *(void* volatile*)this = (void*)g_148acb8;
+    *(void* volatile*)((uint8_t*)this + 4) = (void*)g_148aca8;
     IRefObj* pts = *(IRefObj* volatile*)&this->mPoints;
     if (pts != 0)  pts->Release();
     if (this->mLayout != 0)  ((cSPUILayout_s00ee_9840*)this->mLayout)->Release();
@@ -6316,8 +6347,8 @@ void Entry::Dtor()
     if (this->mWinA != 0)      ((IWindow_s00ee_9840*)this->mWinA)->Release();
     if (this->mWin0 != 0)      ((IWindow_s00ee_9840*)this->mWin0)->Release();
     if (this->mOwner != 0)     ((IWindow_s00ee_9840*)this->mOwner)->Release();
-    *(void* volatile*)this = (void*)0x13eb938;
-    *(void* volatile*)((uint8_t*)this + 4) = (void*)0x13ec458;
+    *(void* volatile*)this = (void*)g_13eb938;
+    *(void* volatile*)((uint8_t*)this + 4) = (void*)g_13ec458;
 }
 
 // @ 0x00ee9d00
@@ -6409,7 +6440,7 @@ void Entry::SetColor(ColorRGB_s00ee_9840 color)
         IMsgServer_s00ee_9840* ms = (IMsgServer_s00ee_9840*)MessageServer_s00ee_9840();
         ms->Send(0xd69290d7, 0, 0);
     }
-    TutorialsUI_s00ee_9840* ui = *(TutorialsUI_s00ee_9840**)(*(int*)0x16c7aa4 + 0xd4);
+    TutorialsUI_s00ee_9840* ui = *(TutorialsUI_s00ee_9840**)(*(int*)&g_16c7aa4 + 0xd4);
     ui->ToggleHint(0x96, 0x97);
     cSPUILayout_s00ee_9840* lay = this->mLayout;
     uint32_t c = ColorRGBToU32(&this->mColor.r);
@@ -6421,13 +6452,13 @@ void Entry::SetColor(ColorRGB_s00ee_9840 color)
 void Entry::NotifyChanged()
 {
     if (this->mWinA == 0) return;
-    void* p = EAAllocate(0x40, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    void* p = EAAllocate(0x40, (const char*)&DAT_013f6b3c, 0, 0, 0, 0);
     if (p == 0) return;
     void* msg = p;
     *(int*)((uint8_t*)msg + 0x30) = 0;
-    *(void**)msg = (void*)0x13eb90c;
+    *(void**)msg = (void*)g_13eb90c;
     _InterlockedExchange((volatile long*)((uint8_t*)msg + 4), 0);
-    *(void* volatile*)msg = (void*)0x13eb844;
+    *(void* volatile*)msg = (void*)g_13eb844;
     *(int* volatile*)((uint8_t*)msg + 0x38) = 0;
     _ReadWriteBarrier();
     vcallv_vol<Obj, 4>((Obj*)msg);
@@ -6744,13 +6775,13 @@ View::View()
 {
     View* p = this;
     __m128 zero = _mm_setzero_ps();
-    p->mpVtbl1 = (void*)0x14426a0;   // base cSPScenarioModeSporepediaLargeAssetView
-    p->mpVtbl2 = (void*)0x13ec458;   // RefCountVTemplate<int>
+    p->mpVtbl1 = (void*)g_14426a0;   // base cSPScenarioModeSporepediaLargeAssetView
+    p->mpVtbl2 = (void*)g_13ec458;   // RefCountVTemplate<int>
     _ReadWriteBarrier();
     p->mUnk0c = 0;
-    p->mpVtbl0 = (void**)0x148ad1c;
-    p->mpVtbl1 = (void*)0x148ad00;
-    p->mpVtbl2 = (void*)0x148acf0;
+    p->mpVtbl0 = (void**)g_148ad1c;
+    p->mpVtbl1 = (void*)g_148ad00;
+    p->mpVtbl2 = (void*)g_148acf0;
     p->mWinParent = 0;
     p->mAssetView = 0;
     p->mWinB = 0;
@@ -7260,15 +7291,12 @@ void __cdecl f_00eec540(int p)
 // @ 0x00eec580
 int __cdecl f_00eec580(int p)
 {
-    if (p <= 0)
-        return 0;
-    int n = g_016c7a28;
-    while (p > n) {
-        p = n;
-        if (p <= 0)
-            return 0;
+    while (p > 0) {
+        if (p <= g_016c7a28)
+            return g_016c7a24[p - 1];
+        p = g_016c7a28;
     }
-    return g_016c7a24[p - 1];
+    return 0;
 }
 
 // @ 0x00eed3f0

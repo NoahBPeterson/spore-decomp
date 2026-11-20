@@ -1,5 +1,14 @@
 // src/game/SPEditors/SPUISearchBox.cpp -- SP::cSPUISearchBox and the small helpers of its object file.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13ec468[];
+extern "C" char g_1400e84[];
+extern "C" char g_1400e94[];
+extern "C" char g_1400ea4[];
+
 #include "game/types.h"
 #include "SP/cSPUISearchBox.h"
 #include "cSPUILayout.h"
@@ -36,9 +45,10 @@ struct Stopwatch { void Init(int a, int b); long long GetElapsedTime(); void Res
 int GetTutorialToolPrice(void* a, unsigned key, int def); // 0x004e1c30
 void* MessageServer(); // 0x0067dcc0
 void RemoveHandler(void* server, void* handler, void* ids, int count, int prio);
+struct WStrAssignStub { void Assign(unsigned short* a, unsigned short* b); };   // 0x00423650 (eastl::basic_string<wchar_t>::assign(first, last))
 struct EString {
   void Assign(unsigned short* s);   // 0x005c3d90 (equiv t3)
-  void Assign(unsigned short* a, unsigned short* b);
+  void Assign(unsigned short* a, unsigned short* b);   // 0x00672750
 };
 void FUN_006b8f40(void* s);
 void CenterWindowInRect(void* obj);   // 0x00810000 (equiv t2)
@@ -232,9 +242,9 @@ cSPUISearchBox::cSPUISearchBox()
 // Releases the two AutoRefCount windows and the layout, frees the search string, drops the handler.
 cSPUISearchBox::~cSPUISearchBox()
 {
-  *(void**)this = (void*)0x1400ea4;          // IWinProc vtable
-  *(void**)((char*)this + 4) = (void*)0x1400e94;  // IHandlerRC vtable
-  *(void**)((char*)this + 8) = (void*)0x1400e84;  // RefCountVTemplate vtable
+  *(void**)this = (void*)g_1400ea4;          // IWinProc vtable
+  *(void**)((char*)this + 4) = (void*)g_1400e94;  // IHandlerRC vtable
+  *(void**)((char*)this + 8) = (void*)g_1400e84;  // RefCountVTemplate vtable
   _ReadWriteBarrier();
   unsigned short* searchStringBegin = strBegin;
   // eastl::basic_string frees its buffer only when the capacity is heap-backed (capacity bytes > 2).
@@ -249,9 +259,9 @@ cSPUISearchBox::~cSPUISearchBox()
   ReleaseObj(mWinRoot);
   ReleaseObj(mWinParent);
   if (mLayout) ((FnV1)((VObj*)mLayout)->vt[kVtRelease])(mLayout);   // layout->Release()
-  *(void**)((char*)this + 8) = (void*)0x13ec458;
-  *(void**)((char*)this + 4) = (void*)0x13eb394;
-  *(void**)this = (void*)0x13eb938;
+  *(void**)((char*)this + 8) = (void*)g_13ec458;
+  *(void**)((char*)this + 4) = (void*)g_13eb394;
+  *(void**)this = (void*)g_13eb938;
 }
 
 // @ 0x00672040
@@ -280,8 +290,8 @@ void cSPUISearchBox::Update_(int unused)
 void cSPUISearchBox::EmptySearch()
 {
   if (mWinSearchBox) {
-    const unsigned short* kEmpty = (const unsigned short*)0x13ec468;   // 16-bit empty string literal
-    ((EString*)((char*)this + 0x58))->Assign((unsigned short*)kEmpty, (unsigned short*)kEmpty);
+    const unsigned short* kEmpty = (const unsigned short*)g_13ec468;   // 16-bit empty string literal
+    ((WStrAssignStub*)((char*)this + 0x58))->Assign((unsigned short*)kEmpty, (unsigned short*)kEmpty);
     ((FnV1p)((VObj*)mWinSearchBox)->vt[kWindowSetText])(mWinSearchBox, strBegin);   // search box->SetText(mSearchString)
   }
 }

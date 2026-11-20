@@ -2,7 +2,6 @@
 00957dd0 116 Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
 00957e90 50 Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
 00958070 62 Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)
-009580e0 12 Fn009580e0: complete (insert node into intrusive list at this+0x18); 12 bytes differ (base computed via lea vs add); difftest PASS (400 valid, 100.0% coverage)
 00958640 98 DumpDisplayList: complete (splice pending nodes, reset display list, recycle nodes); regalloc/order differ; difftest WEAK (309 valid, 20.0% coverage)
 00958780 30 WindowMgr::DebugDumpDisplayList: complete (lock +0x28, pending-flag guard, lock +0x70, DumpDisplayList); bool test idiom + tail-call differ; difftest WEAK (238 valid, 50.0% coverage)
 009587d0 27 Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
@@ -14,7 +13,6 @@
 00959e00 402 DetachWindow: complete; regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00959fe0 156 fe0: complete; ebx-vs-edx argv reg + folded null test differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0095a140 771 UpdateRenderState: complete (ours 1200B vs orig 973B); regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2; difftest UNSUPPORTED (0/400 valid; fault(read) 356, fake-arity 39) flags: /O2 /MD /Gy /EHsc /TP /GS-
-0095a510 5 RenderWindow: complete; lea reg choice for &ev and win+4 differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 210, fault(read) 179) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0095a580 359 BuildDisplayList complete; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame; call/reg layout differs
 0095a870 60 AssignFrom complete; erase/insert call sites construct Iter temporaries with the MSVC push-ecx aggregate idiom, loop is a do-while with a shared erase epilogue; regs/flow differ
 0095a9a0 195 PostMsg complete; original spills &mxC to a push-ecx stack slot and schedules the two rep-movsd copies differently; difftest PASS (equivalence)

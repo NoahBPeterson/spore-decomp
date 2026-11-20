@@ -2,6 +2,13 @@
 // Object file: SPEngine/SPGraphicsResourceFactory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00762f10();
+extern "C" void FUN_007632f0();
+extern "C" void FUN_00763cb0();
+extern "C" void FUN_00763df0();
+extern "C" char g_140dfe0[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include "SP/cGraphicsResourceFactory.h"
@@ -1681,7 +1688,7 @@ int __fastcall Release763250(void* self)
             Map762fa0* map = (Map762fa0*)GetGlobal67de80();
             int key[2];
             key[0] = (int)p;
-            key[1] = 0x762f10;
+            key[1] = (int)FUN_00762f10;
             map->Append(key);
         } else if (p != 0) {
             ((IObj*)p)->s2(1);
@@ -1782,7 +1789,7 @@ unsigned char __cdecl ArenaWrite(void* buf, int n, unsigned total)
 // @ 0x00763520
 bool SP::cGraphicsResourceFactory::Shutdown()
 {
-    RemoveRegistrationCallback(0x2f4e681b, (void*)0x7632f0);
+    RemoveRegistrationCallback(0x2f4e681b, (void*)FUN_007632f0);
     return true;
 }
 
@@ -1792,7 +1799,7 @@ unsigned int SP::cGraphicsResourceFactory::GetSupportedTypes(unsigned int * type
     unsigned int count = 8;
     if (types != 0) {
         if (n >= count) {
-            memcpy(types, (void*)0x140dfe0, 32);
+            memcpy(types, (void*)g_140dfe0, 32);
         } else {
             return 0;
         }
@@ -2080,11 +2087,11 @@ void* __fastcall FUN_7640c0(void* self)
 // @ 0x007641c0
 bool SP::cGraphicsResourceFactory::Init()
 {
-    AddRegistrationCallback(0x2f4e681b, (void*)0x7632f0);
+    AddRegistrationCallback(0x2f4e681b, (void*)FUN_007632f0);
     void* t = ArenaTypeRegGetType(0x20003);
-    *(void**)((char*)t + 0xc) = (void*)0x763df0;
+    *(void**)((char*)t + 0xc) = (void*)FUN_00763df0;
     t = ArenaTypeRegGetType(0x2000b);
-    *(void**)((char*)t + 0xc) = (void*)0x763cb0;
+    *(void**)((char*)t + 0xc) = (void*)FUN_00763cb0;
     void* m = GetManager();
     ((void(__thiscall*)(void*, int, void*, int))(*(void***)m)[0x24 / 4])(m, 0x2f4e681c, kRasterRecordTypes, 3);
     return true;
@@ -2652,16 +2659,10 @@ void ResB::Method660b0()
 // @ 0x00766100
 void ResB::MoveOut(void* out)
 {
-    int* o = (int*)out;
-    char* self = (char*)this;
-    o[0] = *(int*)(self + 4);
-    o[1] = *(int*)(self + 8);
-    o[2] = *(int*)(self + 0xc);
-    o[3] = *(int*)(self + 0x10);
-    *(int*)(self + 4) = 0;
-    *(int*)(self + 8) = 0;
-    *(int*)(self + 0xc) = 0;
-    *(int*)(self + 0x10) = 0;
+    struct Quad { int a, b, c, d; Quad() { b = 0; c = 0; d = 0; a = 0; } };
+    Quad& mine = *(Quad*)((char*)this + 4);
+    *(Quad*)out = mine;
+    mine = Quad();
 }
 
 // @ 0x00766140

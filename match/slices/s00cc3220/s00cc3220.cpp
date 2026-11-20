@@ -205,7 +205,7 @@ struct cArtilleryProjectileView : cSpatialObjectView {
 };
 
 // =============================================================================
-// @ 0x00cc36d0
+// Legacy copy; byte-exact definition is in src/game/SPGonzago/SPWeaponsView.cpp.
 void* cSpatialObjectView::FUN_00cc36d0(u8 flag)
 {
     mpVtbl = (void*)0x14767d0;

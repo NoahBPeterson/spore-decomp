@@ -9,6 +9,9 @@
 // its root at manager + 0x10. A tree node is a 0x10 byte rbtree base followed
 // by the pair key at +0x10 and the route data at +0x18.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1499a30[];
+
 typedef unsigned int size_t;
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
@@ -441,7 +444,7 @@ cTradeRoutePair::cTradeRoutePair(const cTradeRoutePair& src)
 {
     mnKeyA = src.mnKeyA;
     mnKeyB = src.mnKeyB;
-    mData.mpVtable = (void*)0x1499a30;
+    mData.mpVtable = (void*)g_1499a30;
     mData.mnEmpireA = src.mData.mnEmpireA;
     mData.mnEmpireB = src.mData.mnEmpireB;
     mData.mnSystemA = src.mData.mnSystemA;
@@ -700,7 +703,7 @@ void cTradeRouteTree::erase(cRBNodeBase* pNode)
     while (pNode != 0) {
         erase(pNode->mpNodeRight);
         cRBNodeBase* pNext = pNode->mpNodeLeft;
-        ((cRouteNode*)pNode)->mData.mpVtable = (void*)0x1499a30;
+        ((cRouteNode*)pNode)->mData.mpVtable = (void*)g_1499a30;
         cRouteNode_Free(pNode);
         pNode = pNext;
     }

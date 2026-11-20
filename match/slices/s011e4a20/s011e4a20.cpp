@@ -629,6 +629,11 @@ uint32 __cdecl rw_ArenaSectionAtoms_fixup(void* ar, uint32* section)
     return 1;
 }
 
+void __cdecl FUN_011e5430(void);   // 0x011e5430
+void __cdecl FUN_011e4970(void);   // 0x011e4970
+void __cdecl FUN_011e4670(void);   // 0x011e4670
+void __cdecl FUN_011e4680(void);   // 0x011e4680
+
 // @ 0x011e5750
 void __cdecl rw_register_section_fixups(void)
 {
@@ -636,13 +641,13 @@ void __cdecl rw_register_section_fixups(void)
     r = (int)FUN_011e22c0(0x10004);
     *(void**)(r + 0xc) = (void*)&rw_ArenaSectionManifest_Fixup;
     r = (int)FUN_011e22c0(0x10005);
-    *(void**)(r + 0xc) = (void*)&rw_ArenaSectionTypes_Fixup;
+    *(void**)(r + 0xc) = (void*)&FUN_011e5430;
     r = (int)FUN_011e22c0(0x10006);
     *(void**)(r + 0xc) = (void*)&rw_ArenaSectionAtoms_serialize;
     r = (int)FUN_011e22c0(0x10007);
-    *(void**)(r + 0xc) = (void*)&rw_ArenaSectionExternalArenas_ser;
-    r = (int)FUN_011e22c0(0x10008);
     *(void**)(r + 0xc) = (void*)&rw_ArenaSectionAtoms_fixup;
+    r = (int)FUN_011e22c0(0x10008);
+    *(void**)(r + 0xc) = (void*)&rw_ArenaSectionAtoms_Fixup;
 }
 
 // @ 0x011e57b0
@@ -650,8 +655,8 @@ void __cdecl rw_register_section_writers(void)
 {
     int r;
     r = (int)FUN_011e22c0(0x10004);
-    *(void**)(r + 4) = (void*)&rw_section_manifest_walk;
-    *(void**)(r + 8) = (void*)&rw_ArenaSectionAtoms_serialize;
+    *(void**)(r + 4) = (void*)&FUN_011e4970;
+    *(void**)(r + 8) = (void*)&rw_section_manifest_walk;
     r = (int)FUN_011e22c0(0x10005);
     *(void**)(r + 4) = (void*)&rw_section_types_advance;
     *(void**)(r + 8) = (void*)&rw_ArenaSectionTypes_Fixup;
@@ -659,8 +664,8 @@ void __cdecl rw_register_section_writers(void)
     *(void**)(r + 4) = (void*)&rw_section_ext_advance;
     *(void**)(r + 8) = (void*)&rw_ArenaSectionExternalArenas_ser;
     r = (int)FUN_011e22c0(0x10007);
-    *(void**)(r + 4) = (void*)&rw_section_init_table1c;
-    *(void**)(r + 8) = (void*)&rw_ArenaSectionAtoms_fixup;
+    *(void**)(r + 4) = (void*)&FUN_011e4670;
+    *(void**)(r + 8) = (void*)&FUN_011e4680;
     r = (int)FUN_011e22c0(0x10008);
     *(void**)(r + 4) = (void*)&rw_section_pad_advance;
     *(void**)(r + 8) = (void*)&rw_ArenaSectionAtoms_Refix;

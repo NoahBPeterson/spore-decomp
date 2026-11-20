@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPCombatant.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14698f0[];
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 #include "game/types.h"
 #include "SP/cCity.h"
 #include "SP/cCombatant.h"
@@ -137,7 +142,12 @@ struct AnimObj {                                       // 0x00bfc900 target obje
 // ---- items of slice s00bfcc80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma pack(push, 1)
 #pragma pack(pop)
-struct RcMap    { void* mRoot; void NukeSubtree(void* key); };  // 0x009A9600-style thiscall
+struct RcMap    {                                                // 0x009A9600-style thiscall
+    void* mRoot;
+    void NukeSubtree(void* key);
+    // ~rbtree body: DoNukeSubtree(mAnchor.mpNodeParent), the anchor parent at tree +0x0c.
+    void NukeAll() { NukeSubtree(((void**)this)[3]); }
+};
 struct Combatant {
     void**   vftable;                                           // +0x00
     uint32_t pad04;                                             // +0x04
@@ -524,14 +534,14 @@ void VtObj::GameDataCenter(Vec3* out)
 }
 
 // @ 0x00bfc900
-bool VtObj::TrikeCheck(int arg)
+static bool TrikeCheck(VtObj* self, int arg)
 {
     switch (GetCurrentGameMode()) {
     case 0x1654c01:
     case 0x1654c10: {
-        if (this == 0)
+        if (self == 0)
             return false;
-        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, int))this->vt[3])(this, 0xce9f6639);
+        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, int))self->vt[3])(self, 0xce9f6639);
         if (o == 0)
             return false;
         if (o->flags & 0x200)
@@ -551,28 +561,28 @@ bool VtObj::TrikeCheck(int arg)
         return false;
     }
     case 0x1654c02:
-        if (F_b18850(this))
+        if (F_b18850(self))
             return true;
-        if (F_b187b0(this))
+        if (F_b187b0(self))
             return true;
         return false;
     case 0x1654c04:
-        if (F_b18810(this))
+        if (F_b18810(self))
             return true;
-        if (F_b187d0(this))
+        if (F_b187d0(self))
             return true;
-        if (F_b18830(this))
+        if (F_b18830(self))
             return true;
-        if (F_b18760(this))
+        if (F_b18760(self))
             return true;
         return false;
     case 0x1654c05: {
-        if (this == 0)
+        if (self == 0)
             return false;
-        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, void*))this->vt[3])(this, (void*)0x013f94d4);
+        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, void*))self->vt[3])(self, (void*)0x013f94d4);
         if (o == 0)
             return false;
-        if (!F_b187d0(this) && !F_b18870(this) && !F_b18760(this))
+        if (!F_b187d0(self) && !F_b18870(self) && !F_b18760(self))
             return false;
         int empire = GetPlayerEmpireID();
         if (arg != empire) {
@@ -588,7 +598,7 @@ bool VtObj::TrikeCheck(int arg)
 // @ 0x00bfca80
 void TrikeNotify(void* obj, void* owner, int extra)
 {
-    if (((VtObj*)obj)->TrikeCheck((int)owner) && F_b673c0(obj))
+    if (TrikeCheck((VtObj*)obj, (int)owner) && F_b673c0(obj))
         FUN_00b69930(obj, FUN_00b685e0(obj), extra);
 }
 
@@ -714,7 +724,7 @@ void* __fastcall FUN_00bfcc80(Combatant* self, int, unsigned param_2)
 // @ 0x00bfcd00
 void __fastcall Combatant_dtor(Combatant* self)
 {
-    self->vftable = (void**)0x14698f0;
+    self->vftable = (void**)g_14698f0;
     // The three effect handles at +0xbc..+0xc8, released back-to-front.
     void** slot = self->mSlotsBc + 3;
     int n = 2;
@@ -746,7 +756,7 @@ void __fastcall Combatant_dtor(Combatant* self)
         ((RcSlot*)p)->Release4();
     if ((p = self->mNextTarget28) != 0)
         ((RcSlot*)p)->Release64();
-    self->mMap0c.NukeSubtree(self->mList18);
+    self->mMap0c.NukeAll();
 }
 
 // @ 0x00bfcdd0
@@ -928,7 +938,7 @@ void __fastcall FUN_00bfd2b0(OrientObject* self)
 // @ 0x00bfd3e0
 HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntry* src)
 {
-    self->vftable = (void*)0x1465d54;
+    self->vftable = (void*)g_1465d54;
     self->mRefCount4 = 0;
     self->mField08 = src->mField08;
     self->mField0c = src->mField0c;
@@ -936,7 +946,7 @@ HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntr
     self->mField14 = src->mField14;
     self->mByte18 = src->mByte18;
     self->mField1c = src->mField1c;
-    self->vftable = (void*)0x1464450;
+    self->vftable = (void*)g_1464450;
     self->mField20 = src->mField20;
     return self;
 }
@@ -946,7 +956,7 @@ HostileEntry* FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, 
 {
     while (first != last) {
         if (out != 0) {
-            out->vftable = (void*)0x1465d54;
+            out->vftable = (void*)g_1465d54;
             out->mRefCount4 = 0;
             out->mField08 = first->mField08;
             out->mField0c = first->mField0c;
@@ -954,7 +964,7 @@ HostileEntry* FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, 
             out->mField14 = first->mField14;
             out->mByte18 = first->mByte18;
             out->mField1c = first->mField1c;
-            out->vftable = (void*)0x1464450;
+            out->vftable = (void*)g_1464450;
             out->mField20 = first->mField20;
         }
         ++first;

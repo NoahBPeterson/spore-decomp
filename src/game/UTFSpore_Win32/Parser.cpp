@@ -3925,18 +3925,15 @@ void EA::ArgScript::cSetECommand_s0084_6280::ExecuteBody(cArguments_s0084_6280* 
     mFullParser->SetVariableNoSubstitution(pArg[0], pArg[1]);
 }
 
+extern "C" char g_13fc77c[];   // "true"
+extern "C" char g_13fc778[];   // "false"
+
 // @ 0x00846770
 void EA::ArgScript::cSetBCommand_s0084_6280::ExecuteBody(cArguments_s0084_6280* pArgs)
 {
     const char** pArg = pArgs->MainArguments(2);
     const char** pArgFast = pArg;
-    bool b = mParser->EvalCondition(pArg[1]);
-    const char* pValue;
-    if (b)
-        pValue = (const char*)0x013fc77c;
-    else
-        pValue = (const char*)0x013fc778;
-    mFullParser->SetVariableNoSubstitution(pArgFast[0], pValue);
+    mFullParser->SetVariableNoSubstitution(pArgFast[0], mParser->EvalCondition(pArg[1]) ? g_13fc77c : g_13fc778);
 }
 
 // @ 0x008467c0

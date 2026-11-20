@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPUISpaceTrading.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_149c578[];
+extern "C" char g_149c580[];
+extern "C" char g_149c590[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include "cSPUILayout.h"
@@ -974,7 +982,8 @@ void cTrading::F1075810(int flag, void* item)
 void cTrading::F1075990()
 {
     SpaceRoot* r = (SpaceRoot*)FUN_010666a0();
-    r->m61c->F0E31030(0x10000, 0x144dbf9c, 1, 0x697075e);
+    UIRoot61C*& ui = r->m61c;
+    ui->F0E31030(0x10000, 0x144dbf9c, 1, 0x697075e);
 }
 
 // @ 0x010759c0
@@ -1094,9 +1103,9 @@ void cSPUISpaceTrading::Fn10759C0(IWindow* w, TradeItem* item, unsigned isUser)
 // @ 0x01075db0
 void cSPUISpaceTrading::Fn1075DB0()
 {
-    mpVtbl0 = (void*)0x149c590;
-    mpVtbl1 = (void*)0x149c580;
-    mpVtbl2 = (void*)0x149c578;
+    mpVtbl0 = (void*)g_149c590;
+    mpVtbl1 = (void*)g_149c580;
+    mpVtbl2 = (void*)g_149c578;
     _ReadWriteBarrier();
 
     if (mHandler != 0) {
@@ -1126,9 +1135,9 @@ void cSPUISpaceTrading::Fn1075DB0()
     if (mField14 != 0) ((RefObj*)mField14)->v1();
     if (mField10 != 0) ((RefObj*)mField10)->v1();
 
-    mpVtbl2 = (void*)0x13eb394;
-    mpVtbl1 = (void*)0x13ec458;
-    mpVtbl0 = (void*)0x13eb938;
+    mpVtbl2 = (void*)g_13eb394;
+    mpVtbl1 = (void*)g_13ec458;
+    mpVtbl0 = (void*)g_13eb938;
 }
 
 // @ 0x01075ef0

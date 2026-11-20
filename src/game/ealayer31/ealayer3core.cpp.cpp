@@ -2,6 +2,9 @@
 // Object file: ealayer31/ealayer3core.cpp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14ce590[];
+
 #include "game/types.h"
 #include "rw/audio/core/System.h"
 #include <string.h>
@@ -70,7 +73,7 @@ public:
 namespace rw { namespace audio { namespace core {
 EALayer3Core::EALayer3Core(int n)
 {
-    *(void**)this = (void*)0x14ce590;
+    *(void**)this = (void*)g_14ce590;
     // 0x1148cf0: CMpegBase::AllocateSynth(n), inherited from the base class
     AllocateSynth(n);
     // 0x1146d20: CMpegLayer3Base::AllocateHybrid(n), inherited

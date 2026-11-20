@@ -1,3 +1,13 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13f01bc[];
+extern "C" char g_13f5b90[];
+extern "C" char g_147f264[];
+extern "C" char g_147f27c[];
+extern "C" char g_147f288[];
+extern "C" char g_15a4854[];
+extern "C" char g_15a4860[];
+
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
 
@@ -303,9 +313,9 @@ void BanContent::SetText(int id, const wchar_t* text, const void* extras)
         void* a = FUN_0067de40();
         void* b = ((TFnP)VT(a, 0x20))(a);
         ((TFnVII)VT(b, 0x2c))(b, (int)extras, (int)&this->mTokens.mExtra);
-        FUN_00809db0(this, (void*)0x015a4860);
+        FUN_00809db0(this, (void*)g_15a4860);
     } else {
-        FUN_00809db0(this, (void*)0x015a4854);
+        FUN_00809db0(this, (void*)g_15a4854);
     }
 }
 
@@ -445,9 +455,9 @@ BanEntry* BanEntry::CopyFrom(const BanEntry& src)
 // @ 0x00e03930
 void BanContent::Dtor()
 {
-    this->mpVtbl = (void*)0x0147f27c;
+    this->mpVtbl = (void*)g_147f27c;
     BanVec* list = &this->mTokens.mList;
-    this->mTokens.mpVtbl = (void*)0x0147f264;
+    this->mTokens.mpVtbl = (void*)g_147f264;
 
     list->DestroyRange(list->mpBegin, list->mpEnd);
     BanEntry* p = this->mTokens.mList.mpBegin;
@@ -559,7 +569,7 @@ void* cSPUIGlobalUI::Construct()
 // @ 0x00e03b20
 void cSPUIGlobalUI::Destroy()
 {
-    this->mpVtbl = (void*)0x0147f288;
+    this->mpVtbl = (void*)g_147f288;
     // Install the teardown interface before reading the registered handler.
     _ReadWriteBarrier();
 
@@ -577,7 +587,7 @@ void cSPUIGlobalUI::Destroy()
     if (this->mpOptions != 0)
         ((TFnV)VT(this->mpOptions, 4))(this->mpOptions);
 
-    this->mpVtbl = (void*)0x013eb394;   // PaintSystem vtable
+    this->mpVtbl = (void*)g_13eb394;   // PaintSystem vtable
 }
 
 // ===========================================================================
@@ -587,13 +597,13 @@ bool BanTranslator::Format(const wchar_t* key, wchar_t* out)
     unsigned h = FNV1_String16(key, 0x811c9dc5, 1);
     switch (h) {
     case 0x2f009dd8:
-        WStr_Format(out, 0x013f01bc, this->miId);
+        WStr_Format(out, (int)g_13f01bc, this->miId);
         return true;
     case 0x989407d5:
-        WStr_Format(out, 0x013f5b90, this->mExtra.mpBegin);
+        WStr_Format(out, (int)g_13f5b90, this->mExtra.mpBegin);
         return true;
     case 0xd5c6de59:
-        WStr_Format(out, 0x013f5b90, this->mText.mpBegin);
+        WStr_Format(out, (int)g_13f5b90, this->mText.mpBegin);
         return true;
     }
     return false;

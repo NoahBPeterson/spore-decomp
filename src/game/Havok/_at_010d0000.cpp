@@ -2,6 +2,19 @@
 // Object file: Havok/_at_010d0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_010d4280();
+extern "C" void FUN_010d4b00();
+extern "C" void FUN_010d4ed0();
+extern "C" void FUN_010ebc80();
+extern "C" char g_14a43a4[];
+extern "C" char g_14a43b4[];
+extern "C" char g_14a4654[];
+extern "C" char g_14a46b8[];
+extern "C" char g_14a46ec[];
+extern "C" char g_14a4748[];
+extern "C" char g_14a477c[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -2217,7 +2230,6 @@ static __forceinline float hkAbsf(float x) { return x < 0.0f ? -x : x; }
 // ---- items of slice s010d7570 end
 
 // ---- items of slice s010d8520 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern const float g_hkBoxBoxRadiusFactor;                       // 0x014a48c8 (1.999f)
 class hkBool_s010d_8520
 {
 public:
@@ -3368,7 +3380,7 @@ void hkSymmetricAgent_hkMultiSphereTriangleAgent::getPenetrations(const hkCdBody
     hkSymmetricAgentFlipBodyCollector_s010d_18c0__b flip;
     flip.m_original = &collector;
     flip.m_earlyOut = 0;
-    flip.m_vftable = (void*)0x014a43b4;
+    flip.m_vftable = (void*)g_14a43b4;
     hkMultiSphereTriangleAgent_s010d_18c0__b::getPenetrations(bodyB, bodyA, input, flip);
 }
 
@@ -3378,7 +3390,7 @@ void hkSymmetricAgent_hkMultiSphereTriangleAgent::getClosestPoints(const hkCdBod
     hkSymmetricAgentFlipCollector_s010d_18c0__b flip;
     flip.m_original = &collector;
     flip.m_earlyOutDistance = HK_REAL_MAX;
-    flip.m_vftable = (void*)0x014a43a4;
+    flip.m_vftable = (void*)g_14a43a4;
     hkMultiSphereTriangleAgent_s010d_18c0__b::getClosestPoints(bodyB, bodyA, input, flip);
 }
 
@@ -3560,7 +3572,7 @@ void hkCapsuleTriangleAgent_s010d_37d0::getPenetrationsWrapper(const void* bodyA
     hkTempPairCollector tmp;
     tmp.m_extra = collector;
     tmp.m_earlyOut = 0;
-    tmp.m_vtbl = (const void*)0x014a43b4;
+    tmp.m_vtbl = (const void*)g_14a43b4;
     getPenetrations(*(const hkCdBody_s010d_37d0*)bodyB, *(const hkCdBody_s010d_37d0*)bodyA,
                     *(const hkCollisionInput_s010d_37d0*)input, *(hkCdBodyPairCollector_s010d_37d0*)&tmp);
 }
@@ -3571,7 +3583,7 @@ void hkCapsuleTriangleAgent_s010d_37d0::getClosestPointsWrapper(const void* body
     hkTempPointCollector tmp;
     tmp.m_extra = collector;
     tmp.m_earlyOutDistance = 0x7f7fffeeu;
-    tmp.m_vtbl = (const void*)0x014a43a4;
+    tmp.m_vtbl = (const void*)g_14a43a4;
     getClosestPoints(*(const hkCdBody_s010d_37d0*)bodyB, *(const hkCdBody_s010d_37d0*)bodyA,
                      *(const hkCollisionInput_s010d_37d0*)input, *(hkCdPointCollector_s010d_37d0*)&tmp);
 }
@@ -3600,7 +3612,7 @@ void* hkCapsuleCapsuleAgent__create(const void* bodyA, const void* bodyB, const 
     *(void**)((char*)agent + 8) = contactMgr;
     *(unsigned short*)((char*)agent + 4) = 0x14;
     *(unsigned short*)((char*)agent + 6) = 1;
-    *(void**)agent = (void*)0x014a4654;
+    *(void**)agent = (void*)g_14a4654;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     *(unsigned short*)((char*)agent + 0xe) = 0xffff;
     *(unsigned short*)((char*)agent + 0x10) = 0xffff;
@@ -3756,10 +3768,10 @@ void __cdecl hkCapsuleCapsuleAgent__registerAgent(hkCollisionDispatcher_s010d_47
     hkAgentFuncs funcs;
     funcs.m_isFlipped = 0;
     funcs.m_isPredictive = 0;
-    funcs.m_createFunc = (hkAgentCreateFunc)0x010d4280;
-    funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc)0x010d4ed0;
-    funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc)0x010d4b00;
-    funcs.m_linearCastFunc = (hkAgentLinearCastFunc)0x010ebc80;
+    funcs.m_createFunc = (hkAgentCreateFunc)FUN_010d4280;
+    funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc)FUN_010d4ed0;
+    funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc)FUN_010d4b00;
+    funcs.m_linearCastFunc = (hkAgentLinearCastFunc)FUN_010ebc80;
     dispatcher.registerCollisionAgent(funcs, 8, 8);
 }
 
@@ -3770,7 +3782,7 @@ extern "C" void* hkSphereBoxAgent__create(const void* bodyA, const void* bodyB, 
     *(unsigned short*)((char*)agent + 4) = 0x10;
     *(unsigned short*)((char*)agent + 6) = 1;
     *(void**)((char*)agent + 8) = contactMgr;
-    *(void**)agent = (void*)0x014a46b8;
+    *(void**)agent = (void*)g_14a46b8;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     return agent;
 }
@@ -3783,7 +3795,7 @@ extern "C" void* hkSymmetricSphereBoxAgent__create(const void* bodyA, const void
     *(unsigned short*)((char*)agent + 6) = 1;
     *(void**)((char*)agent + 8) = contactMgr;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
-    *(void**)agent = (void*)0x014a46ec;
+    *(void**)agent = (void*)g_14a46ec;
     return agent;
 }
 
@@ -4159,7 +4171,7 @@ void hkSymmetricSphereBoxAgent::getClosestPoints(const hkCdBody_s010d_53d0& body
     hkSymPointCollectorLocal sym;
     sym.m_forward = &collector;
     sym.m_earlyOut = 0x7f7fffeeu;
-    sym.m_vtable = (void*)0x014a43a4;
+    sym.m_vtable = (void*)g_14a43a4;
 
     hkSphereBoxAgent::getClosestPoints(bodyB, bodyA, input,
                                        *(hkCdPointCollector_s010d_53d0*)&sym);
@@ -4172,7 +4184,7 @@ hkCollisionAgent* hkSphereTriangleAgent::createSphereTriangleAgent(const hkCdBod
     agent->m_contactMgr = mgr;
     *(unsigned short*)((char*)agent + 4) = 0x20;
     *(unsigned short*)((char*)agent + 6) = 1;
-    *(void**)agent = (void*)0x014a4748;
+    *(void**)agent = (void*)g_14a4748;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     hkCollideTriangleUtil_s010d_6420::setupClosestPointTriangleCache(
         (const hkVector4_s010d_6420*)((const char*)bodyB.m_shape + 0x10), agent->m_cache);
@@ -4186,11 +4198,11 @@ hkCollisionAgent* hkSphereTriangleAgent::createTriangleSphereAgent(const hkCdBod
     agent->m_contactMgr = mgr;
     *(unsigned short*)((char*)agent + 4) = 0x20;
     *(unsigned short*)((char*)agent + 6) = 1;
-    *(void**)agent = (void*)0x014a4748;
+    *(void**)agent = (void*)g_14a4748;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     hkCollideTriangleUtil_s010d_6420::setupClosestPointTriangleCache(
         (const hkVector4_s010d_6420*)((const char*)bodyA.m_shape + 0x10), agent->m_cache);
-    *(void**)agent = (void*)0x014a477c;
+    *(void**)agent = (void*)g_14a477c;
     return agent;
 }
 
@@ -4394,7 +4406,7 @@ void hkSymmetricSphereTriangleAgent::getPenetrations(const hkCdBody_s010d_6420& 
     hkSymPairCollectorLocal sym;
     sym.m_forward = &collector;
     sym.m_earlyOut = 0;
-    sym.m_vtable = (void*)0x014a43b4;
+    sym.m_vtable = (void*)g_14a43b4;
 
     hkSphereTriangleAgent::getPenetrations(bodyB, bodyA, input,
                                            *(hkCdBodyPairCollector_s010d_6420*)&sym);
@@ -4406,7 +4418,7 @@ void hkSymmetricSphereTriangleAgent::getClosestPoints(const hkCdBody_s010d_6420&
     hkSymPointCollectorLocal_s010d_6420 sym;
     sym.m_forward = &collector;
     sym.m_earlyOut = 0x7f7fffeeu;
-    sym.m_vtable = (void*)0x014a43a4;
+    sym.m_vtable = (void*)g_14a43a4;
 
     hkSphereTriangleAgent::getClosestPoints(bodyB, bodyA, input,
                                             *(hkCdPointCollector_s010d_6420*)&sym);
@@ -4759,7 +4771,7 @@ void hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520::getClosestPoints(const hk
 	hkFlipCollectorFixed flipCollector;
 	flipCollector.m_original = &collector;
 	flipCollector.m_earlyOutDistance = hkRealMax();
-	flipCollector.m_vftable = (void*)0x014A43A4;
+	flipCollector.m_vftable = (void*)g_14a43a4;
 	hkSphereCapsuleAgent_s010d_8520::getClosestPoints(bodyB, bodyA, input, *(hkCdPointCollector_s010d_8520*)&flipCollector);
 }
 
@@ -5036,9 +5048,9 @@ hkCollisionAgent_s010d_8520* HK_CALL hkBoxBoxAgent::createBoxBoxAgent(const hkCd
 {
 	const hkConvexShapeView* shapeA = (const hkConvexShapeView*)bodyA.m_shape;
 	const hkConvexShapeView* shapeB = (const hkConvexShapeView*)bodyB.m_shape;
-	float radiusA = shapeA->m_halfExtents.w * g_hkBoxBoxRadiusFactor;
-	if ((radiusA > input.m_tolerance) &&
-	    (shapeB->m_halfExtents.w * g_hkBoxBoxRadiusFactor > input.m_tolerance))
+	float radiusA = shapeA->m_halfExtents.w * 1.999f;
+	if (!(radiusA <= input.m_tolerance) &&
+	    !(shapeB->m_halfExtents.w * 1.999f <= input.m_tolerance))
 	{
 		hkBoxBoxAgent* agent = new hkBoxBoxAgent(mgr);
 		agent->m_manifold.init();

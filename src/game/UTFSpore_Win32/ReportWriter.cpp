@@ -254,9 +254,9 @@ bool EA::Debug::ReportWriter::WriteKeyValueFormatted(char const * name, char con
     int n = _vsnprintf(mBuffer, 0x400, fmt, ap);
     va_end(ap);
     unsigned x = (unsigned)(n - 1);
-    if (x > 0x3fe)
-        return false;
-    return WriteKeyValue(name, mBuffer);
+    if (x <= 0x3fe)
+        return WriteKeyValue(name, mBuffer);
+    return false;
 }
 
 // @ 0x0091ebf0

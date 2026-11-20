@@ -3,6 +3,10 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 typedef unsigned int  u32;
 typedef unsigned char u8;
 
@@ -56,8 +60,8 @@ struct CElement {
 };
 
 // Vtables installed while the embedded sub-objects are copy-constructed.
-#define VTBL_SUB_BASE ((void *)0x1465d54)
-#define VTBL_SUB_DERIVED ((void *)0x1464450)
+#define VTBL_SUB_BASE ((void *)g_1465d54)
+#define VTBL_SUB_DERIVED ((void *)g_1464450)
 
 // Compiler scheduling barrier (not assembly): keeps the sub-object construction
 // order identical to the original translation unit.

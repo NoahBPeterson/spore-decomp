@@ -267,6 +267,7 @@ bool EmitterSub::Shutdown()
         ((void (__thiscall*)(void*, u32))((*(void***)sys)[0x124 / 4]))(sys, mGroupId);
         mKey18 = 0;
         mGroupId = 0;
+        _ReadWriteBarrier();
         if (mpPatch) {
             void* p = mpPatch;
             mpPatch = 0;

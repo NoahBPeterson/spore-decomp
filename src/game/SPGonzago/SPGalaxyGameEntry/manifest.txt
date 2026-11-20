@@ -164,3 +164,11 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?F_dfa40@@YAHHHH@Z  00dfaa40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00deb6d0@@YIXPAX@Z  00deb6d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?e005b0@@YAXXZ  00e005b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?ReadIntPropertyPair@@YAHII@Z  00de4e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?Destroy@cUISpaceRes@@QAEXXZ  00dfef70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_ae00@UI_s00df_a5c0@@QAEPAU1@PAX@Z  00dfae00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de57b0@cGalaxyGameEntryImpl_s00de_5040@@QAE?AURbIter57@@PAURbNode57@@PAUKey2@@D@Z  00de57b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?MoveTail@cEntryVector@@QAEPAUcPollenEntry@@PAU2@0@Z  00de97a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de4630@cGalaxyGameEntryImpl_s00de_41b0@@QAEXXZ  00de4630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?OnActivate@cGalaxyGameEntryImpl_s00de_41b0@@QAEXXZ  00de4720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ??0cPaintSystem@@QAE@XZ  00dea500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

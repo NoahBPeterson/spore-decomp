@@ -1489,9 +1489,9 @@ void cPlayerCityMusic_s00ea_d1a0::Stop()
     if (mp_10c == 0) return;
     Reset(0);
     FUN_00572020(mp_10c, 0);
-    mp_10c = 0;
-    if (t->mp_208 != 0) {
-        void* h = t->mp_208;
+    *(void* volatile*)&mp_10c = 0;
+    void* h = *(void* volatile*)&t->mp_208;
+    if (h != 0) {
         t->mp_208 = 0;
         RemoveHandler(h, t->mp_20c, t->mp_210, (void*)t->mn_214, (void*)t->mn_218);
     }
@@ -2209,7 +2209,7 @@ ResMusic *ResMusic::ScalarDeletingDtor(u8 flags)
         operator_delete_array(mVec30.mpBegin);
     if (mVec1c.mpBegin != 0)
         operator_delete_array(mVec1c.mpBegin);
-    mpVtbl = (void *)0x013eb938;
+    mpVtbl = (void *)&PTR_013eb938;
     if ((flags & 1) != 0)
         operator_delete_array(this);
     return this;

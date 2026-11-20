@@ -1343,7 +1343,7 @@ struct UVGenJobBase1 { virtual void Slot0(); int mRefCount; ~UVGenJobBase1() {} 
 struct UVGenRefVec { void* mBegin; void* mEnd; void* mCap; int pad[3]; ~UVGenRefVec(); };   // 0x0041eb80
 struct UVGenVec {
     void* mpBegin; int pad[4];
-    ~UVGenVec() { if (mpBegin && *((int*)mpBegin - 1) != 0) FUN_00723930(mpBegin); }
+    ~UVGenVec() { if (mpBegin && *((int*)mpBegin - 1) != 0) EASTL_allocator_deallocate(mpBegin); }
 };
 struct __declspec(novtable) UVGenJobInfoObj : UVGenJobBase0, UVGenJobBase1 {
     UVGenRefVec mJobs;   // +0x0c

@@ -2,6 +2,9 @@
 // Object file: cmn/spktplay.cpp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e7fcc[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -102,7 +105,7 @@ int F_0113f750(int index)
 {
     if (g_16e7c1c == 0) return -10;
     Sub_1133450();
-    unsigned* tbl = (unsigned*)0x16e7fcc;
+    unsigned* tbl = (unsigned*)g_16e7fcc;
     tbl[index] = 0;
     Sub_1133460();
     return 0;

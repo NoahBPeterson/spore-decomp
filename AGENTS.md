@@ -12,7 +12,11 @@ diffs that show what still differs; everything else runs from the repo.
 Every pull request is checked by the **Byte-match check** (`.github/workflows/byte-match.yml`). It compiles the files
 your change can affect with the original compilers and compares every function listed in a `manifest.txt` with a
 **retail fingerprint** (`tools/ci/fingerprints.jsonl.gz`): the function's size, which byte positions hold addresses,
-and a SHA-256 of the rest. Fingerprints contain no code and no names; the check never sees the game.
+the addresses retail uses there, and a SHA-256 of the rest. Fingerprints contain no instructions and no names; the
+check never sees the game. Because addresses are masked, the bytes match whatever your names point at, so the check
+also compares each name that claims an address (`g_15b7458`, `FUN_00abcdef`, or a mangled name `symbols/` records)
+with the address retail uses at that spot, and fails a new match whose name points elsewhere (`tools/ci/targets.py`). It
+also fails a plain number where retail has an address (the fingerprint lists retail's relocated offsets): name it.
 
 The check passes when every affected function matches its fingerprint (apart from the long-standing ones in
 `tools/ci/known_failures.txt`), no function that matched before has been dropped, and **at least one function is
@@ -46,6 +50,10 @@ no match). You can run the same check locally (below) before you open the pull r
    whoever worked on it last. (`--by diff` sorts by fewest differing bytes instead; `--by size` smallest first.)
    Functions nobody has started (0 tries, "no source yet") come first: `task.py <address>` names the new file to
    create for them.
+   Rows marked "same shape as 0x..." are functions whose bytes a generated match reproduced with another function's
+   source that calls or reads other addresses (`match/shape_only.txt`): copy that function, point its calls and
+   globals at what retail uses here, and `check.py` records it. These count as byte-exact once written, and the site
+   credits them in a separate "names fixed" column, not as new functions.
 2. **Read its context.** `.venv/bin/python tools/contrib/task.py 0x00529690` prints its source file, status, compiler
    flags, retail size, includes and current source. For a function that others have tried, it also prints every
    earlier version of its note (what each person tried and how many bytes differed) and links any closed pull
@@ -82,7 +90,9 @@ no match). You can run the same check locally (below) before you open the pull r
    function's line into `equivalent.txt` beside its manifest and a small proof file into `equivalent/<address>.json`;
    commit both. The pull request check confirms your source still builds to the bytes that were proved, and a
    maintainer re-runs the proof before merging (the `equiv-verified` label). Equivalent functions are counted
-   separately from byte-exact ones (the site stacks them) and stay open: making one byte-exact later still counts.
+   separately from byte-exact ones (the site stacks them) and stay open: making one byte-exact later still counts. When
+   it does, `check.py` also removes its `equivalent.txt` line and proof file (the proof is about bytes your source no
+   longer builds).
    `REFUTED` means the source computes something different from the original: fix the source, not the proof.
    `UNKNOWN` means no layer could decide; that is not a verdict on your code. Layers that need extra installs
    (angr, Docker for DDEC) are skipped with a message when missing; see `tools/equiv/LAYERS.md`.
@@ -133,11 +143,19 @@ into the generator's inputs so they are not lost.
   check stays red.
 - Do not write a constant as the address of a made-up global (`&g_Table2458018` for `0x2458018`): the check sees the
   relocation and fails it.
+- The reverse holds too: where retail has an address (a relocation), name it; never write the number. A vtable, a
+  global, a string or a callback is `extern "C" char g_13eb938[];` / `extern "C" void FUN_00abcdef();` (or the real
+  declaration), used as `(void*)g_13eb938`. The check fails "a number at offset N where retail has an address". Two
+  addresses in one object (a table and its end, fields of one global) are one name plus an offset
+  (`(char*)&g_1483f74 + 0x126c`), not two names, or cl compiles them as unrelated objects.
 - Only `src/game/`, `match/slices/` and `match/include/` can change in a contribution. Changes to `tools/`, `.github/`
   or the fingerprints need a maintainer; put them in a separate pull request.
 - Never commit game files, the analysis image, disassembly or dumps of game code.
 - The open-source libraries the game links (jpeg, libpng, OpenSSL, EA's EABase/EASTL/EAText/EAWebKit) are out of scope:
-  they are rebuilt from their published sources, not decompiled.
+  they are rebuilt from their published sources, not decompiled. Never copy their source into the repository: a wrapper
+  `#include`s the published file from `work/` (`tools/ci/setup_oss.sh`), and the check fails a line with a third-party
+  copyright or license notice. Matches of these functions need a maintainer's `oss-reviewed` label and are counted
+  apart from Spore's own code (`THIRD_PARTY.md`).
 
 ## Where to read more
 

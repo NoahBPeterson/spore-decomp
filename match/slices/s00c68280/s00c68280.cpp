@@ -1,5 +1,18 @@
 // Slice s00c68280: Simulator object helpers (ornament / nano-drone / ground-locomotion).
 // Flags: /O2 /MD /Gy /TP /arch:SSE2 /fp:fast (SSE ucomiss code shape).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1471458[];
+extern "C" char g_14714c0[];
+extern "C" char g_1471528[];
+extern "C" char g_1471530[];
+extern "C" char g_1471540[];
+extern "C" char g_1471598[];
+extern "C" char g_14716b0[];
+extern "C" char g_1471718[];
+extern "C" char g_1471728[];
+extern "C" char g_1471780[];
+
 #include "types.h"
 #include <stdlib.h>
 #include <math.h>
@@ -667,12 +680,12 @@ void COrn::Ed70(Vector3* pos, Vector3Vec* v)
 // ===========================================================================
 cMovableDestructibleOrnament::cMovableDestructibleOrnament()
 {
-    mLoco.mVt = (void*)0x1471598;
-    mVt0 = (void*)0x1471540;
-    mVt4 = (void*)0x1471530;
-    mLoco.mVtD4 = (void*)0x1471528;
-    mSub.mVt = (void*)0x14714c0;
-    mCombatant.mVt = (void*)0x1471458;
+    mLoco.mVt = (void*)g_1471598;
+    mVt0 = (void*)g_1471540;
+    mVt4 = (void*)g_1471530;
+    mLoco.mVtD4 = (void*)g_1471528;
+    mSub.mVt = (void*)g_14714c0;
+    mCombatant.mVt = (void*)g_1471458;
 }
 
 // ===========================================================================
@@ -680,12 +693,12 @@ cMovableDestructibleOrnament::cMovableDestructibleOrnament()
 // ===========================================================================
 cMovableDestructibleOrnament::~cMovableDestructibleOrnament()
 {
-    mVt0 = (void*)0x1471540;
-    mVt4 = (void*)0x1471530;
-    mLoco.mVt = (void*)0x1471598;
-    mLoco.mVtD4 = (void*)0x1471528;
-    mCombatant.mVt = (void*)0x1471458;
-    mSub.mVt = (void*)0x14714c0;
+    mVt0 = (void*)g_1471540;
+    mVt4 = (void*)g_1471530;
+    mLoco.mVt = (void*)g_1471598;
+    mLoco.mVtD4 = (void*)g_1471528;
+    mCombatant.mVt = (void*)g_1471458;
+    mSub.mVt = (void*)g_14714c0;
 }
 
 // ===========================================================================
@@ -765,12 +778,12 @@ void* FUN_00c69110()
 // ===========================================================================
 cNanoDrone::cNanoDrone()
 {
-    mSpatial.mVt = (void*)0x1471780;
-    mVt0 = (void*)0x1471728;
-    mVt4 = (void*)0x1471718;
+    mSpatial.mVt = (void*)g_1471780;
+    mVt0 = (void*)g_1471728;
+    mVt4 = (void*)g_1471718;
     mp1d0 = 0;
     m1d4 = -1;
-    mCombatant.mVt = (void*)0x14716b0;
+    mCombatant.mVt = (void*)g_14716b0;
 }
 
 // ===========================================================================
@@ -798,10 +811,10 @@ int COrn::F1e0(int id)
 cNanoDrone::~cNanoDrone()
 {
     void* p = mp1d0;
-    mVt0 = (void*)0x1471728;
-    mVt4 = (void*)0x1471718;
-    mSpatial.mVt = (void*)0x1471780;
-    mCombatant.mVt = (void*)0x14716b0;
+    mVt0 = (void*)g_1471728;
+    mVt4 = (void*)g_1471718;
+    mSpatial.mVt = (void*)g_1471780;
+    mCombatant.mVt = (void*)g_14716b0;
     if (p != 0) {
         ((cAgentOrderManager*)p)->F_00bcae90();
         FUN_00f47380(p);

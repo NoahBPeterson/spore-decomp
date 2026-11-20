@@ -1,0 +1,1 @@
+slices/s00c43e40/s00c43e40.cpp  ?SetGoal@cLocomotiveObject@@QAEXPAUcGoalData@@@Z  00c43e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast

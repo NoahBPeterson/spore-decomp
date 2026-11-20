@@ -3,6 +3,10 @@
 // (+-kWrap), planet-height effect hook, anchor-vector and orientation easing toward their targets, then the
 // camera-to-world matrix and the helper (projection owner) updates.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5538[];
+
 #include <math.h>
 #include "types.h"
 
@@ -615,7 +619,7 @@ void cCreatureDisplayStrategyE::UpdatePosseItemGhosts()
         return;
 
     void* pMem = FUN_009512d0(0x14c, 4, kPosseItemGhostShell, FUN_009512c0());
-    cPosseItem* pNew = pMem ? ((cPosseItem*)pMem)->Init(0x15a5538u) : 0;
+    cPosseItem* pNew = pMem ? ((cPosseItem*)pMem)->Init((unsigned)g_15a5538) : 0;
     mpPosse->AddItem(pNew);
     mpPosse->SetSelectedItem((void*)1);
 }

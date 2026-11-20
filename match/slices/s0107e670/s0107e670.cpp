@@ -1,5 +1,11 @@
 // Havok 3.1.0 base library, part 1 (0x0107E670..0x0107F47F): stdio streams, hkOstream, hkBaseSystem,
 // hkStackTracer, hkString helpers. No floating point in this slice.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_149c8b0[];
+extern "C" char g_149c8dc[];
+
 #include "hk31_base.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -92,10 +98,10 @@ hkStdioStreamReader::~hkStdioStreamReader()
 // @ 0x0107e7e0
 void* hkStdioStreamReader::scalar_deleting_dtor(unsigned char flags)
 {
-	*(void**)this = (void*)0x0149c8b0;
+	*(void**)this = (void*)g_149c8b0;
 	if (m_file)
 		fclose(m_file);
-	*(void**)this = (void*)0x013ef094;
+	*(void**)this = (void*)g_13ef094;
 	if (flags & 1)
 		hkReferencedObject::operator delete(this);
 	return this;
@@ -174,9 +180,9 @@ hkStdioStreamWriter::~hkStdioStreamWriter()
 // @ 0x0107e9a0
 void* hkStdioStreamWriter::scalar_deleting_dtor(unsigned char flags)
 {
-	*(void**)this = (void*)0x0149c8dc;
+	*(void**)this = (void*)g_149c8dc;
 	close();
-	*(void**)this = (void*)0x013ef094;
+	*(void**)this = (void*)g_13ef094;
 	if (flags & 1)
 		hkReferencedObject::operator delete(this);
 	return this;

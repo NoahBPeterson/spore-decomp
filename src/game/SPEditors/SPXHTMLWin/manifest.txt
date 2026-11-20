@@ -11,3 +11,5 @@
 ../src/game/SPEditors/SPXHTMLWin.cpp  ?OnKeyDown@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  00623ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPXHTMLWin.cpp  ??1cSPHoverTitle@Pollen@SP@@UAE@XZ  00623af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPXHTMLWin.cpp  ?ReleaseRef@RefCounted@Pollen@SP@@QAEHXZ  00623070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?OnMessage@cPopupTimer@@QAE_NPAXPAUSMessage@@@Z  00623f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ?DestroyFormControl@cXHTMLWin@Pollen@SP@@QAEXPAUDomElement@@@Z  00623370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

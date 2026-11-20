@@ -932,7 +932,10 @@ float __cdecl FUN_00da65f0(cSPCreatureCitizen* c)
 // @ 0x00da6610
 float __cdecl FUN_00da6610(cSPCreatureCitizen* c)
 {
-    return (float)(u8)c->GetTribe()->mF556;
+    // the flag byte is widened into the argument's (now dead) stack slot
+    int& flag = (int&)c;
+    flag = (u8)c->GetTribe()->mF556;
+    return (float)flag;
 }
 
 // @ 0x00da6630

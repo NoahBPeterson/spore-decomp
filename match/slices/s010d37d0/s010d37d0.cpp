@@ -10,6 +10,12 @@
 //
 // Flags: /vc71 /O2 /MD /Gy /TP (Havok 3.1.0 was built by VC .NET 2003, x87
 // floats, 16-byte aligned frames).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a43a4[];
+extern "C" char g_14a43b4[];
+extern "C" char g_14a4654[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -185,7 +191,7 @@ void hkCapsuleTriangleAgent::getPenetrationsWrapper(const void* bodyA, const voi
     hkTempPairCollector tmp;
     tmp.m_extra = collector;
     tmp.m_earlyOut = 0;
-    tmp.m_vtbl = (const void*)0x014a43b4;
+    tmp.m_vtbl = (const void*)g_14a43b4;
     getPenetrations(*(const hkCdBody*)bodyB, *(const hkCdBody*)bodyA,
                     *(const hkCollisionInput*)input, *(hkCdBodyPairCollector*)&tmp);
 }
@@ -206,7 +212,7 @@ void hkCapsuleTriangleAgent::getClosestPointsWrapper(const void* bodyA, const vo
     hkTempPointCollector tmp;
     tmp.m_extra = collector;
     tmp.m_earlyOutDistance = 0x7f7fffeeu;
-    tmp.m_vtbl = (const void*)0x014a43a4;
+    tmp.m_vtbl = (const void*)g_14a43a4;
     getClosestPoints(*(const hkCdBody*)bodyB, *(const hkCdBody*)bodyA,
                      *(const hkCollisionInput*)input, *(hkCdPointCollector*)&tmp);
 }
@@ -269,7 +275,7 @@ void* hkCapsuleCapsuleAgent__create(const void* bodyA, const void* bodyB,
     *(void**)((char*)agent + 8) = contactMgr;
     *(unsigned short*)((char*)agent + 4) = 0x14;
     *(unsigned short*)((char*)agent + 6) = 1;
-    *(void**)agent = (void*)0x014a4654;
+    *(void**)agent = (void*)g_14a4654;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     *(unsigned short*)((char*)agent + 0xe) = 0xffff;
     *(unsigned short*)((char*)agent + 0x10) = 0xffff;

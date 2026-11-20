@@ -1,3 +1,4 @@
+extern "C" char g_1416460[];
 // slice s007fed20 — UTFWin cSPUIBehaviorWinEventBase + win interpolators.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include <cstddef>
@@ -195,7 +196,7 @@ bool SerReadC(SerItem3* out, void* src) {
     VCallV(p, 0x14);
     out->f4 = p;
     out->f8 = (void*)1;
-    out->f0 = 0;
+    out->f0 = g_1416460;   // retail stores this address (the type descriptor), not 0
     return true;
 }
 

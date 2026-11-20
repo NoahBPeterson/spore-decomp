@@ -2,6 +2,16 @@
 // Object file: Spui/SPUIPieMenu.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13f6b3c[];
+extern "C" char g_1414b10[];
+extern "C" char g_1418ef8[];
+extern "C" char g_1418f94[];
+extern "C" char g_1418fa4[];
+extern "C" char g_14431f8[];
+
 #include "game/types.h"
 #include <new>
 #include <math.h>
@@ -10,6 +20,7 @@
 #include <string.h>
 #include <wchar.h>
 #include "cSPUILayout.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void SPUIHelpers_UpdateMouseFocus(int);
@@ -369,7 +380,7 @@ struct DSub { float* GetPair40(float*, int); };   // 0x00830d60
 extern "C" void FUN_00818650(void*);
 struct DestroyHelper { void Fn(); };
 static inline void DestroyItem(char* p) {
-    *(void**)p = (void*)0x1418ef8;
+    *(void**)p = (void*)g_1418ef8;
     ((DestroyHelper*)p)->Fn();
     void* q;
     q = *(void**)(p + 0x30); if (q) Vv0(q, 0x04);
@@ -477,7 +488,7 @@ struct ItemVec {
     void DoInsertValue(char* pos, const char* val);         // 0x0081a510
 };
 static inline char* AllocItems(int cap) {
-    return cap ? (char*)operator_new_f473a0(cap * 0x4c, (const char*)0x13f6b3c, 0, 0,
+    return cap ? (char*)operator_new_f473a0(cap * 0x4c, (const char*)g_13f6b3c, 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
 }
 struct AutoRef {
@@ -511,14 +522,14 @@ struct IWinProcBase { void** vftable; };                 // +0x00
 struct RefCountBase {                                     // +0x04
     void** vftable2;
     int    mRefCount;
-    RefCountBase() { vftable2 = (void**)0x13ec458; mRefCount = 0; }
-    ~RefCountBase() { vftable2 = (void**)0x13ec458; }
+    RefCountBase() { vftable2 = (void**)g_13ec458; mRefCount = 0; }
+    ~RefCountBase() { vftable2 = (void**)g_13ec458; }
 };
 struct IWinProcBase2 : IWinProcBase {
-    ~IWinProcBase2() { vftable = (void**)0x13eb938; }
+    ~IWinProcBase2() { vftable = (void**)g_13eb938; }
 };
 struct PieBase : IWinProcBase2, RefCountBase {
-    PieBase() { vftable = (void**)0x1418fa4; vftable2 = (void**)0x1418f94; }
+    PieBase() { vftable = (void**)g_1418fa4; vftable2 = (void**)g_1418f94; }
 };
 struct cSPUIPieMenu_s0081_98f0 : PieBase {
     ItemVec  mItems;       // +0x0c
@@ -1055,6 +1066,7 @@ bool cSPUIPieMenuItem_s0081_89a0::sub8191b0()
 {
     MarkUnused();
     mpCurrentWindow = 0;
+    _ReadWriteBarrier();
     { void* q = mpRHSWindowSet;  if (q) { mpRHSWindowSet = 0;  Vv0(q, 0x04); } }
     { void* q = mpIconWindow;    if (q) { mpIconWindow = 0;    Vv0(q, 0x04); } }
     { void* q = mpParentWin;     if (q) { mpParentWin = 0;     Vv0(q, 0x04); } }
@@ -1205,7 +1217,7 @@ void cSPUIPieMenu::rebuild_layout()
 // @ 0x00819880
 void cSPUIPieMenuItem_s0081_89a0::dtor819880()
 {
-    vftable = (void**)0x1418ef8;
+    vftable = (void**)g_1418ef8;
     sub8191b0();
     void* q;
     q = *(void**)((char*)this + 0x30); if (q) Vv0(q, 0x04);
@@ -1410,8 +1422,8 @@ cSPUIPieMenu_s0081_98f0::cSPUIPieMenu_s0081_98f0()
 // @ 0x0081a2b0
 cSPUIPieMenu_s0081_98f0::~cSPUIPieMenu_s0081_98f0()
 {
-    vftable = (void**)0x1418fa4;
-    vftable2 = (void**)0x1418f94;
+    vftable = (void**)g_1418fa4;
+    vftable2 = (void**)g_1418f94;
 }
 
 // @ 0x0081a350
@@ -1421,9 +1433,9 @@ bool cSPUIPieMenu_s0081_98f0::Init(const Key* k1, const Key* k2, char a3, void* 
     void* w;
     if (mem) {
         ((WinMem*)mem)->Ctor();
-        *(void**)mem = (void*)0x1414b10;
+        *(void**)mem = (void*)g_1414b10;
         w = (char*)mem + 4;
-        *(void**)w = (void*)0x14431f8;
+        *(void**)w = (void*)g_14431f8;
     } else {
         w = 0;
     }

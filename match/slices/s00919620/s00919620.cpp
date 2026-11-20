@@ -1,6 +1,8 @@
 // Slice s00919620: EA-text style binary container parser (stream header + string tables), small string helpers,
 // EA::Callstack symbol database helpers.
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- CRT / runtime ----
 extern "C" void* __cdecl memcpy_thunk(void* dst, const void* src, unsigned n);        // 0x011e0744
@@ -69,9 +71,10 @@ FixedString::FixedString()
 {
     char* p = mBuf;
     mpPoolBegin = p;
+    _ReadWriteBarrier();
     mpEnd = p;
     mpBegin = p;
-    mpCapacity = mpPoolBegin + 0x100;
+    mpCapacity = p + 0x100;
     *p = 0;
 }
 

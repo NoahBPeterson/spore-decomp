@@ -556,9 +556,9 @@ BigMode::BigMode()
     f697960(this);
     h90 = 0;
     h94 = 0;
-    Obj9c* o = (Obj9c*)o9c;
+    _ReadWriteBarrier();
     h98 = 0;
-    o->Init();
+    ((Obj9c*)o9c)->Init();
     s910 = g_1667bac;
     s914 = g_1667bac;
     s918 = g_1667bae;

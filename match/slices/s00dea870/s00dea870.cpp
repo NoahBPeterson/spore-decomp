@@ -7,6 +7,11 @@
 //   +0x108 dword, +0x144 cSPUILayout, +0x15c/0x184/0x198/0x1ac pointers,
 //   +0x1ec dword, +0x1f2/0x1f3/0x1f4 bytes, +0x200 dword,
 //   +0x204 array of 12-byte { panelID dword, float, float } entries.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147e3b0[];
+extern "C" char g_16a1484[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------------------------
@@ -703,8 +708,8 @@ void __fastcall FUN_00deb5d0(void* self)
 void* __fastcall FUN_00deb670(void* self)
 {
     FUN_00e00630();
-    *(uint32_t*)self = 0x147e3b0;
-    *(void**)0x16a1484 = self;
+    *(uint32_t*)self = (int)g_147e3b0;
+    *(void**)g_16a1484 = self;
     return self;
 }
 
@@ -721,7 +726,7 @@ struct cGalaxyGameEntryDeb {
 
 void* cGalaxyGameEntryDeb::DestroyDeb(unsigned int flags)
 {
-    *(void**)0x16a1484 = 0;
+    *(void**)g_16a1484 = 0;
     *(int**)this = &g_vtbl_GalaxyGameEntryDeb;
     if (flags & 1)
         FUN_00f47380(this);

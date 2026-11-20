@@ -2,6 +2,11 @@
 // SP::cTribeModeStrategy goal-progress bookkeeping and tribe-simulator helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14774c4[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -192,7 +197,7 @@ void cVec16::FUN_00cdafb0(Rec16* src)
     if (end < mpCap) {
         mpEnd = end + 1;
         if (end != 0) {
-            end->mpVtbl = (void*)0x14774c4;
+            end->mpVtbl = (void*)g_14774c4;
             end->mU_04 = src->mU_04;
             void* obj = src->mpObj;
             end->mpObj = obj;
@@ -215,17 +220,17 @@ void cVec1c::FUN_00cdb430()
     if (end < mpCap) {
         mpEnd = end + 1;
         if (end != 0) {
-            end->mpBegin = (void*)0x1667bac;
-            end->mpEnd   = (void*)0x1667bac;
-            end->mpCap   = (void*)0x1667bae;
+            end->mpBegin = (void*)g_1667bac;
+            end->mpEnd   = (void*)g_1667bac;
+            end->mpCap   = (void*)g_1667bae;
             end->mU_14 = 0;
             end->mU_18 = 0;
         }
     } else {
         Rec1c tmp;
-        tmp.mpBegin = (void*)0x1667bac;
-        tmp.mpEnd   = (void*)0x1667bac;
-        tmp.mpCap   = (void*)0x1667bae;
+        tmp.mpBegin = (void*)g_1667bac;
+        tmp.mpEnd   = (void*)g_1667bac;
+        tmp.mpCap   = (void*)g_1667bae;
         tmp.mU_14 = 0;
         tmp.mU_18 = 0;
         FUN_00cdb1f0(end, &tmp);
@@ -286,7 +291,7 @@ void cTribeModeStrategy::FUN_00cdb3a0(u32 a1, u32 a2)
         ((cVec16*)((u8*)this + 0x40))->FUN_00cdafb0(
             (Rec16*)MOPS(recbuf)->FUN_00cd4720(a1, a2));
         Rec16* rec = (Rec16*)recbuf;
-        rec->mpVtbl = (void*)0x14774c4;
+        rec->mpVtbl = (void*)g_14774c4;
         void* obj = rec->mpObj;
         if (obj != 0)
             ((void (__thiscall*)(void*))VT(obj)[1])(obj);

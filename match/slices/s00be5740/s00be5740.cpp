@@ -9,6 +9,9 @@
 // line up exactly with that layout, so the same field model is reused here.
 // Toolchain: cl 15.00.30729.01 (VS2008 SP1), /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_156e448[];
+
 typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
@@ -683,7 +686,7 @@ void __cdecl FUN_00be6180(cIOStream* stream, cBlockVecOwner* vec)
     tmp.p70 = 0;
     tmp.p78 = 0;
 
-    SP::cVarListSerializer ser(&tmp, (void*)0x156e448, 0x1a80d26);
+    SP::cVarListSerializer ser(&tmp, (void*)g_156e448, 0x1a80d26);
     ser.Read(stream);
 
     CBlock* e = (CBlock*)vec->mEnd;

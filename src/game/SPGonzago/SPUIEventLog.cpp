@@ -1029,6 +1029,7 @@ void cSPUIEventLog_s00dd_6a70::RemoveEvent(unsigned id, char immediate)
         cFeedbackEvent_s00dd_6a70* ev = (cFeedbackEvent_s00dd_6a70*)it->mValue;
         if (ev != 0) {
             ev->mB2 = false;
+            _ReadWriteBarrier();
             ev->mDuration = 0.0f;
         }
     }

@@ -11,4 +11,3 @@
 006de530 66 heap sift-up (signed); hoisted parent index / branch layout differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
 006de580 169 heap sift-up for 0x34-byte elements; 13-dword block copies scheduled differently; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
 006deb70 217  make-heap push for 0x34-byte element; saves the old element into a 0x34-byte record before copying the new element; equiv: PASS 537/600 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP
-006df280 11 intrusive refptr operator=; lock xadd release plus _InterlockedExchange reset, cl folds the decrement flag-test and schedules the tail differently; equiv: PASS (734 valid inputs, 100% coverage)

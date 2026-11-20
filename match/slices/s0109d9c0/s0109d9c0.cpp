@@ -16,6 +16,11 @@
 // monitor-stream timer macros.
 //
 // Flags: /O2 /MD /Gy /TP /GS- (no /EHsc; locals are POD).  See nonmatching.txt.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a20c0[];
+extern "C" char g_14a20f8[];
+
 #include "types.h"
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
@@ -812,7 +817,7 @@ void hkContactEventMgr::processContact(hkCollidable* a, hkCollidable* b, void* /
 hkContactEventFactory::hkContactEventFactory(void* world)
 {
     m_refCount = 1;
-    m_vptr = (void**)0x014a20f8;
+    m_vptr = (void**)g_14a20f8;
     m_world = world;
 }
 
@@ -827,7 +832,7 @@ hkContactEventMgr* hkContactEventFactory::create(hkCollidable* a, hkCollidable* 
     raw->m_memSizeAndFlags = 0x18;
     void* world = m_world;
     raw->m_refCount = 1;
-    raw->m_vptr = (void**)0x014a20c0;
+    raw->m_vptr = (void**)g_14a20c0;
     hkUint16 delayB = entityB->m_processContactCallbackDelay;
     hkUint16 delayA = entityA->m_processContactCallbackDelay;
     hkUint16 delay = delayA < delayB ? delayA : delayB;

@@ -709,8 +709,7 @@ VP C6::asInterface(int iid)
 int C7::Release()
 {
     long* p = (long*)((char*)this + 4);
-    long n = _InterlockedExchangeAdd(p, -1);
-    --n;
+    long n = _InterlockedDecrement(p);
     if (n == 0) {
         _InterlockedExchange(p, 1);
         void* owner = (void*)((char*)this - 4);

@@ -13,6 +13,9 @@ tools/contrib/prove.py and re-checked by a maintainer) are shown stacked on top,
 2026-11-12). Above those, "tested": functions that passed the randomized difftest sweep (docs/equiv_verdicts.json,
 category pass/comdat), which is evidence, not proof; labelled as such (decision 2026-11-14). No function names, symbol names or code.
 Module names are EA's top-level directory names, already public as the folders under src/game/.
+Open-source libraries (the "Open-source libraries" module) are not in the headline, history, size bands or contributor
+function counts (decision 2026-11-20): compiling their published sources recovers none of Spore's own code. They have
+their own line, their module row, and an "open-source" column in the credits.
 """
 import argparse, bisect, collections, datetime, glob, gzip, html, json, os, re, subprocess
 
@@ -23,6 +26,7 @@ MANIFEST_RE = re.compile(r"^(match/manifest\.txt|match/clones\.txt|match/slices/
 EQUIV_RE = re.compile(r"^(match/slices/[^/]+/equivalent\.txt|src/game/.+/equivalent\.txt)$")
 VERDICTS = "docs/equiv_verdicts.json"
 TESTED_CATS = ("pass", "comdat")     # verdicts.py categories that mean every branch ran and both builds agreed
+LIBS = "Open-source libraries"       # tools/site/make_module_map.py
 
 
 def git(*a, inp=None):
@@ -80,14 +84,29 @@ def current_tested(fps, done, eqv):
     return (tested_vas(text) & set(fps)) - done - eqv
 
 
+GENERATED_RE = re.compile(r"^(match/clones\.txt|match/synth/[^/]+\.manifest)$")
+
+
+def shape_only():
+    """match/shape_only.txt (tools/ci/shape_only.py): generated matches whose borrowed source names other functions'
+    targets. Not byte-exact, on every day of the history too (decision 2026-11-19): the generated row did not make
+    them so on any day, and the line keeps its shape instead of stepping down the day they were taken out."""
+    try:
+        return {int(l.split()[0], 16) for l in open(os.path.join(ROOT, "match", "shape_only.txt"))
+                if l.strip() and not l.startswith("#")}
+    except OSError:
+        return set()
+
+
 class BlobCache:
     """byte-exact VAs at a commit, reading each manifest blob once across all commits"""
     def __init__(self):
         self.vas = {}
+        self.shape = shape_only()
 
     def at(self, commit, fps):
         tree = git("ls-tree", "-r", commit, "--", "match", "src/game", "tools/ci/known_failures.txt", VERDICTS)
-        want, eqw, known_blob, ver_blob = [], [], None, None
+        want, gen, eqw, known_blob, ver_blob = [], [], [], None, None
         for line in tree.splitlines():
             meta, path = line.split("\t", 1)
             sha = meta.split()[2]
@@ -96,10 +115,10 @@ class BlobCache:
             elif path == VERDICTS:
                 ver_blob = sha
             elif MANIFEST_RE.match(path):
-                want.append(sha)
+                (gen if GENERATED_RE.match(path) else want).append(sha)
             elif EQUIV_RE.match(path):
                 eqw.append(sha)
-        need = [s for s in set(want) | set(eqw) | {known_blob, ver_blob} - {None} if s not in self.vas]
+        need = [s for s in set(want) | set(gen) | set(eqw) | {known_blob, ver_blob} - {None} if s not in self.vas]
         if need:
             out = subprocess.run(["git", "cat-file", "--batch"], cwd=ROOT, capture_output=True,
                                  input="\n".join(need).encode() + b"\n", check=True).stdout
@@ -111,9 +130,12 @@ class BlobCache:
                 self.vas[sha] = (("K", known_vas(body)) if sha == known_blob else
                                  ("V", tested_vas(body)) if sha == ver_blob else ("M", rows_vas(body)))
                 i = hdr_end + 1 + size + 1
-        done = set()
+        done, generated = set(), set()
         for s in want:
             done |= self.vas[s][1]
+        for s in gen:
+            generated |= self.vas[s][1]
+        done |= generated - (self.shape - done)      # shape-only rows never counted, unless written source covers them
         if known_blob:
             done -= self.vas[known_blob][1]
         done &= set(fps)
@@ -162,37 +184,58 @@ def model_field(body):
     return k.group(1) if k else ""
 
 
+_ROWS = {}   # manifest blob sha -> its addresses, shared by every present_before call
+
+
 def present_before(sha, vas):
     """The addresses of `vas` that already had byte-exact source in the merge's first parent: a manifest row of a slice
     or a src/game module.  Rows of the generated manifests (match/synth/*, match/clones.txt) do not count: replacing a
-    template or clone match with written C++ is new work."""
+    template or clone match with written C++ is new work.  Reads only the manifests, each blob once (a `git grep` of
+    the whole tree per merged pull request took minutes on every core)."""
     if not vas:
         return set()
-    args = ["grep", "-I", "-F"]
-    for v in vas:
-        args += ["-e", "%08x" % v]
-    try:
-        out = git(*args, "%s^" % sha, "--", "match", "src/game")
-    except subprocess.CalledProcessError:   # git grep exits 1 when nothing matches
-        return set()
+    blobs = []
+    for line in git("ls-tree", "-r", "%s^" % sha, "--", "match/slices", "src/game").splitlines():
+        meta, path = line.split("\t", 1)
+        if MANIFEST_RE.match(path):
+            blobs.append(meta.split()[2])
+    need = [s for s in set(blobs) if s not in _ROWS]
+    if need:
+        out = subprocess.run(["git", "cat-file", "--batch"], cwd=ROOT, capture_output=True,
+                             input="\n".join(need).encode() + b"\n", check=True).stdout
+        i = 0
+        for s in need:
+            hdr_end = out.index(b"\n", i)
+            size = int(out[i:hdr_end].split()[2])
+            _ROWS[s] = rows_vas(out[hdr_end + 1:hdr_end + 1 + size].decode("utf-8", "replace"))
+            i = hdr_end + 1 + size + 1
     found = set()
-    for line in out.splitlines():
-        _rev, path, text = line.split(":", 2)   # "<sha>^:<path>:<line>"
-        if MANIFEST_RE.match(path) and path.startswith(("match/slices/", "src/game/")):
-            found |= rows_vas(text)
+    for s in blobs:
+        found |= _ROWS[s] & vas
     try:   # rows listed but failing the fingerprint check (tools/ci/known_failures.txt) were not byte-exact yet
         found -= known_vas(git("show", "%s^:tools/ci/known_failures.txt" % sha))
     except subprocess.CalledProcessError:
         pass
-    return found & vas
+    return found
 
 
-def pr_credits(prs_path, fps):
+def shape_before(sha, vas):
+    """The addresses of `vas` listed in match/shape_only.txt in the merge's first parent: a generated row had matched
+    their bytes with a twin's source that names other targets. Writing their own source fixes the names; it is
+    credited apart ("names fixed"), not as new functions and bytes (decision 2026-11-19)."""
+    try:
+        text = git("show", "%s^:match/shape_only.txt" % sha)
+    except subprocess.CalledProcessError:
+        return set()
+    return {int(l.split()[0], 16) for l in text.splitlines() if l.strip() and not l.startswith("#")} & vas
+
+
+def pr_credits(prs_path, fps, oss=frozenset()):
     if not prs_path or not os.path.exists(prs_path):
         return []
     # A function is credited to the first merged pull request that added it, until a later merge removes it: a reverted
     # pull request loses its credit, and one that lands the same work again gets it.
-    owner, rows = {}, []
+    owner, named, rows = {}, {}, []
     for p in sorted(json.load(open(prs_path)), key=lambda p: p.get("mergedAt") or ""):
         sha = (p.get("mergeCommit") or {}).get("oid")
         if not sha:
@@ -212,18 +255,24 @@ def pr_credits(prs_path, fps):
                     removed |= rows_vas(line[1:])
         for v in removed - added:
             owner.pop(v, None)
-        new = (added - removed) & set(fps)
+            named.pop(v, None)
+        new = (added - removed) & (set(fps) | oss)
         # a function that was already byte-exact somewhere before the merge (a migration moving it from its slice's
         # manifest into its module's, rows pushed before contributions opened) is not new work
         new -= present_before(sha, new)
-        for v in new:
+        shaped = shape_before(sha, new)
+        for v in shaped:
+            named.setdefault(v, p["number"])
+        for v in new - shaped:
             owner.setdefault(v, p["number"])
         rows.append(p)
     out = []
     for p in rows:
-        new = [v for v, n in owner.items() if n == p["number"]]
+        mine = [v for v, n in owner.items() if n == p["number"]]
+        new = [v for v in mine if v not in oss]
         out.append({"n": p["number"], "who": (p.get("author") or {}).get("login", "?"), "when": (p.get("mergedAt") or "")[:10],
-                    "f": len(new), "b": sum(fps[v] for v in new), "model": model_field(p.get("body"))[:48]})
+                    "f": len(new), "b": sum(fps[v] for v in new), "o": len(mine) - len(new), "nf": sum(1 for n in named.values() if n == p["number"]),
+                    "model": model_field(p.get("body"))[:48]})
     return sorted(out, key=lambda r: -r["n"])
 
 
@@ -345,8 +394,13 @@ def line_chart(pts, total_f, total_b):
 
 
 def build(out, prs_path, repo):
-    fps = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    fps_all = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    modof = module_of(fps_all)
+    oss = frozenset(va for va, m in modof.items() if m == LIBS)
+    fps = {va: s for va, s in fps_all.items() if va not in oss}       # Spore's own code: every total below
     done = current(fps)
+    oss_done = current(fps_all) & oss
+    of, ob, odf, odb = len(oss), sum(fps_all[v] for v in oss), len(oss_done), sum(fps_all[v] for v in oss_done)
     tf, tb = len(fps), sum(fps.values())
     df, db = len(done), sum(fps[v] for v in done)
     eqv = current_equivalent(fps, done)
@@ -357,11 +411,11 @@ def build(out, prs_path, repo):
             "when": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
     hist = history(fps)
     mods = collections.defaultdict(lambda: [0, 0, 0, 0])
-    for va, m in module_of(fps).items():
-        r = mods[m]; r[0] += 1; r[1] += fps[va]
-        if va in done:
-            r[2] += 1; r[3] += fps[va]
-    prs = pr_credits(prs_path, fps)
+    for va, m in modof.items():
+        r = mods[m]; r[0] += 1; r[1] += fps_all[va]
+        if va in done or va in oss_done:
+            r[2] += 1; r[3] += fps_all[va]
+    prs = pr_credits(prs_path, fps, oss)
 
     # --- progress page
     b = ['<h1>Spore, rebuilt byte for byte</h1><p class="lede">Every function of Spore\'s <code>SporeApp.exe</code> (2008, PC) '
@@ -384,6 +438,10 @@ def build(out, prs_path, repo):
              '<span><i style="background:var(--todo)"></i>not yet</span></div></div>'
              % (pct(db, tb), fmt(df), fmt(tf), kb(db), kb(tb), pct(db + eb + tsb, tb), fmt(ef), fmt(tsf),
                 pct(db, tb), pct(eb, tb), pct(tsb, tb), pct(db, tb), pct(eb, tb), pct(tsb, tb)))
+    b.append('<p class="note">These numbers are Spore\'s own code. The open-source libraries the game links (zlib, '
+             'libpng, libjpeg, expat, OpenSSL and EA\'s published libraries) are counted apart: they are rebuilt by '
+             'compiling their published sources, which recovers none of Spore\'s code. %s of their %s functions '
+             '(%.1f%% of %s) are rebuilt so far.</p>' % (fmt(odf), fmt(of), pct(odb, ob), kb(ob)))
     b.append('<p class="note">Bytes are the honest measure: most of what remains is in large functions. Every count here '
              'is checked against retail fingerprints by the pull-request check; nothing is counted on trust. '
              '"Proven equivalent" functions compile to different bytes that a machine-checked proof shows behave '
@@ -415,24 +473,31 @@ def build(out, prs_path, repo):
              'with Galactic Adventures after the development build the module map comes from.</p>')
     # Only pull requests that are credited with functions are listed and counted: tools, notes-only and reverted pull
     # requests (and ones whose work a later merge removed) add nothing to the totals.
-    prs = [p for p in prs if p["f"] or p["b"]]
+    prs = [p for p in prs if p["f"] or p["b"] or p.get("nf") or p.get("o")]
     if prs:
-        who = collections.defaultdict(lambda: [0, 0, 0])
+        who = collections.defaultdict(lambda: [0, 0, 0, 0, 0])
         for p in prs:
-            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]
+            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]; w[3] += p.get("nf", 0); w[4] += p.get("o", 0)
         b.append('<h2>Contributors</h2><div class="panel scroll"><table><tr><th>contributor</th><th>pull requests</th>'
-                 '<th>functions</th><th>bytes</th></tr>')
-        for k, (n, f, by) in sorted(who.items(), key=lambda kv: (-kv[1][2], kv[0])):
-            b.append('<tr><td><a href="https://github.com/%s">%s</a></td><td>%d</td><td>%s</td><td>%s</td></tr>'
-                     % (E(k), E(k), n, fmt(f), fmt(by)))
+                 '<th>functions</th><th>bytes</th><th>names fixed</th><th>open-source</th></tr>')
+        for k, (n, f, by, nf, o) in sorted(who.items(), key=lambda kv: (-kv[1][2], -kv[1][3], kv[0])):
+            b.append('<tr><td><a href="https://github.com/%s">%s</a></td><td>%d</td><td>%s</td><td>%s</td><td>%s</td>'
+                     '<td>%s</td></tr>' % (E(k), E(k), n, fmt(f), fmt(by), fmt(nf), fmt(o)))
         b.append('</table></div><h2>Recent pull requests</h2><div class="panel scroll"><table><tr><th>pull request</th>'
-                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>model or tool</th></tr>')
+                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>names fixed</th><th>open-source</th>'
+                 '<th>model or tool</th></tr>')
         for p in prs[:25]:
             b.append('<tr><td><a href="https://github.com/%s/pull/%d">#%d</a></td><td>%s</td><td>%s</td><td>%s</td>'
-                     '<td>%s</td><td style="text-align:left">%s</td></tr>' % (E(repo), p["n"], p["n"], p["when"], E(p["who"]),
-                                                                          fmt(p["f"]), fmt(p["b"]), E(p["model"] or "")))
+                     '<td>%s</td><td>%s</td><td>%s</td><td style="text-align:left">%s</td></tr>' % (
+                         E(repo), p["n"], p["n"], p["when"], E(p["who"]), fmt(p["f"]), fmt(p["b"]), fmt(p.get("nf", 0)),
+                         fmt(p.get("o", 0)),
+                         E(p["model"] or "")))
         b.append('</table></div><p class="note">Counted from pull requests merged since contributions opened '
-                 '(November 2026). Most earlier work was done by the maintainer\'s own agent runs.</p>')
+                 '(November 2026). Most earlier work was done by the maintainer\'s own agent runs. "Names fixed": '
+                 'functions whose bytes a generated match already reproduced with another function\'s source; writing '
+                 'their own source puts the right calls and globals in, and is counted here, not as new functions. '
+                 '"Open-source": open-source library functions rebuilt from their published sources, not counted as '
+                 'functions.</p>')
     b.append('<h2>Help</h2><p>Hundreds of functions are only a few bytes from a match. <a href="join.html">Start here</a>.</p>')
 
     join = """<h1>Join</h1><p class="lede">Pick a function whose C++ is already written but compiles a few bytes off,

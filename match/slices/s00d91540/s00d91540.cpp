@@ -2,6 +2,15 @@
 // Slice s00d91540: citizen-tree animation/state helpers, lane-node search, and
 // UFO fear/open-clump activations.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14007f4[];
+extern "C" char g_1470f1c[];
+extern "C" char g_147b9f0[];
+extern "C" char g_147c0fc[];
+extern "C" char g_147c108[];
+extern "C" char g_14853e0[];
+extern "C" char g_1601760[];
+
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned char  u8;
@@ -165,7 +174,7 @@ bool FUN_00d91650(void* p0, u32 a1, u32 a2, u32 a3, u32 a4, AnimState* st)
     if (st->mb0C != 0) {
         if (((NearGoal*)&c->mC0)->Do()) {
             st->mb0C = 0;
-            st->mn14 = ((PlayAnim*)c)->Do(((u32*)0x147c0fc)[st->mn10], 1, 0xffffffff);
+            st->mn14 = ((PlayAnim*)c)->Do(((u32*)g_147c0fc)[st->mn10], 1, 0xffffffff);
         }
         return true;
     }
@@ -209,8 +218,8 @@ bool FUN_00d91770(void* p0, u32 a1, u32 a2, u32 a3, u32 a4, UfoState* st,
     Creature* c = (Creature*)p0;
     if (((NearGoal*)&c->mC0)->Do()) {
         if (st->mb00 == 0) {
-            u32 idx = ((RandU32*)0x1601760)->Do(5);
-            ((Interrupt*)c)->Do(((u32*)0x147c108)[idx], 0xffffffff, 0);
+            u32 idx = ((RandU32*)g_1601760)->Do(5);
+            ((Interrupt*)c)->Do(((u32*)g_147c108)[idx], 0xffffffff, 0);
             st->mb00 = 1;
         }
         st->mf04 += dt;
@@ -376,15 +385,15 @@ bool FUN_00d921c0(void* p0, u32 a1, u32 a2, u32 flags, u32 a4, u32* out)
     if (pos.x == cur->x && pos.y == cur->y && pos.z == cur->z) {
         Vec3f* r = ((PlanetModel*)SP_PlanetModel())->MakeRandomWorldPosition(
             &tmp, (Vec3f*)((FnP)((void**)c->mC0.mpVtbl)[0x2c / 4])(&c->mC0),
-            *(f32*)0x1470f1c, *(f32*)0x14853e0);
+            *(f32*)g_1470f1c, *(f32*)g_14853e0);
         pos = *r;
     }
 
     Vec3f* r2 = ((PlanetModel*)SP_PlanetModel())->MakeRandomWorldPosition(
-        &tmp, &pos, 0.0f, *(f32*)0x14007f4);
+        &tmp, &pos, 0.0f, *(f32*)g_14007f4);
     pos = *r2;
 
     ((Interrupt*)c)->Do(0x2481db0, 0xffffffff, 0);
-    ((MoveTo*)c)->Do(2, &pos, 1.0f, *(f32*)0x147b9f0);
+    ((MoveTo*)c)->Do(2, &pos, 1.0f, *(f32*)g_147b9f0);
     return true;
 }

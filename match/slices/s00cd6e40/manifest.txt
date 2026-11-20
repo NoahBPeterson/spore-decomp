@@ -1,0 +1,1 @@
+slices/s00cd6e40/s00cd6e40.cpp  ?HasObject@cTribeModeStrategy@SP@@QAE_NI@Z  00cd6e40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

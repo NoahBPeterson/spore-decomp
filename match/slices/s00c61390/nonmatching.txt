@@ -5,5 +5,4 @@
 00c61e80  17  complete; difftest PASS (334 valid, 100.0% cov). this/gd land in edi/ebx; the original keeps this in esi and gd in edi.
 00c620c0  45  complete; difftest PASS (400 valid, 100.0% cov). returns id & 0xffffff00 with `and eax,0xffffff00`; the original clears the low byte with the 2-byte `xor al,al`, shifting branch offsets.
 00c62250  227  complete; difftest FAIL (first mismatch: edx clobbered, original leaves it untouched). large message handler; branch/call ordering and scratch-register usage differ.
-00c62590  45  complete; difftest PASS (395 valid, 79.4% cov). arg/this in esi/ebx swapped vs ebx/esi, and `(u>>3)&1` folded to `test byte [mem],8` instead of mov/shr/test.
 00c62750  136  complete; difftest WEAK (400 valid, 36.6% cov). record-driven message handler; branch order and inlined accessor scheduling differ.

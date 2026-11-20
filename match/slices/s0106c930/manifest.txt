@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0106c930/s0106c930.cpp  ?FUN_0106c930@cSPUISpace@@QAEXXZ  0106c930  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2,6 +2,10 @@
 // Object file: SPBake/SPSkinnerRTT_SporeApp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16f91e0[];
+extern "C" char g_16fa38c[];
+
 #include "game/types.h"
 #include "nSPSkinner/cRTTBuffer.h"
 #include "SP/cRenderTargetRectID.h"
@@ -274,8 +278,8 @@ void DrawCtx::Draw(float* v, float w)
 // @ 0x00529350
 void SetRenderState(int state, uint32_t value)
 {
-    ((uint32_t*)0x016fa38c)[(state - 7) >> 5] |= 1u << ((state - 7) & 0x1f);
-    ((uint32_t*)0x016f91e0)[state] = value;
+    ((uint32_t*)g_16fa38c)[(state - 7) >> 5] |= 1u << ((state - 7) & 0x1f);
+    ((uint32_t*)g_16f91e0)[state] = value;
 }
 
 // @ 0x005293a0

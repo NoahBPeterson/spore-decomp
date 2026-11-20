@@ -1029,8 +1029,8 @@ struct Variant_s0060_d860 {
     void Construct(uint32_t type, uint32_t size, uint32_t a, uint32_t b, uint32_t c);      // 0x0093dd80
     void Destruct(int);                                                                    // 0x0093db80
     Variant_s0060_d860(const U64Pair* p) {
-        mTypeId = 0;
         mFlags = 0;
+        mTypeId = 0;
         Construct(p);  // 0x0093dd80 (EA::Variant::Construct)
     }
     Variant_s0060_d860(uint32_t a, uint32_t b) {
@@ -1933,12 +1933,12 @@ namespace SP {
 void cPollinator_s0060_d860::UpdateProperty(uint32_t id, const Key_s0060_d860& key)
 {
     if (mpAsssetDirectory) {
-        EA::U64Pair serverId = {0xffffffff, 0xffffffff};
+        uint64_t serverId = (uint64_t)-1;
         Pollen::cAssetMetadata_s0060_d860* pMetadata = 0;
-        if (Pollen::GetAssetMetadata(key, &pMetadata)) serverId = *pMetadata->GetServerId();
-        if ((serverId.lo & serverId.hi) != 0xffffffff) {
+        if (Pollen::GetAssetMetadata(key, &pMetadata)) serverId = *(const uint64_t*)pMetadata->GetServerId();
+        if (serverId != (uint64_t)-1) {
             if (cPropertyManager_s0060_d860* pMgr = GetPropertyManager()) {
-                EA::Variant_s0060_d860 v(&serverId);
+                EA::Variant_s0060_d860 v((const EA::U64Pair*)&serverId);
                 pMgr->SetProperty(id, &v);
             }
         }
@@ -1954,7 +1954,7 @@ void cPollinator_s0060_d860::UpdateProperty2(uint32_t id, const Key_s0060_d860* 
     Pollen::cAssetMetadata_s0060_d860* pMetadata = 0;
     if (Pollen::GetAssetMetadata(*key, &pMetadata)) {
         EA::U64Pair serverId = *pMetadata->GetServerId();
-        if ((serverId.lo & serverId.hi) != 0xffffffff) {
+        if ((serverId.hi & serverId.lo) != 0xffffffff) {
             if (cPropertyManager_s0060_d860* pMgr = GetPropertyManager()) pMgr->SetProperty2(id, serverId.lo, serverId.hi, v);
         }
     }

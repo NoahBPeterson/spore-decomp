@@ -50,3 +50,5 @@
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?FindEntry@EffectsRenderer_s006f_1770@@QAEPAXII@Z  006f2050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??1Host3@@QAE@XZ  006e7f30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??0WStrFixed@@QAE@PBUWStrRange@@@Z  006ec660  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?DestroyEffectsRendererSystem@@YAXXZ  006efc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?SetMode@ShaderHost@@QAEXHH@Z  006e69e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

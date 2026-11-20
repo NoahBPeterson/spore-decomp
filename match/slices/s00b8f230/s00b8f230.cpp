@@ -1,4 +1,9 @@
 // s00b8f230.cpp — Simulator::cPlantCargoInfo / cSpaceInventoryItem /
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1465850[];
+extern "C" char g_1465858[];
+
 #include <intrin.h>
 // cGonzagoSubsystem rbtree region, plus the Simulator package loader.
 // Reconstructed from Ghidra decompiles + disassembly.
@@ -501,8 +506,8 @@ void* S::FUN_00b8ff90()
 {
   char* self = (char*)this;
   ((void (__thiscall*)(void*))FUN_00b5b960)(self);       // SP::cGonzagoSubsystem ctor
-  *(void**)(self + 0x00) = (void*)0x01465858;
-  *(void**)(self + 0x04) = (void*)0x01465850;
+  *(void**)(self + 0x00) = (void*)g_1465858;
+  *(void**)(self + 0x04) = (void*)g_1465850;
   _ReadWriteBarrier();
   char* eax = self + 0x20;
   *(int*)(eax + 4) = 0;
@@ -523,8 +528,8 @@ void* S::FUN_00b8ffd0(char del)
 {
   char* self = (char*)this;
   char* ecx = self + 0x1c;
-  *(void**)(self + 0x00) = (void*)0x01465858;
-  *(void**)(self + 0x04) = (void*)0x01465850;
+  *(void**)(self + 0x00) = (void*)g_1465858;
+  *(void**)(self + 0x04) = (void*)g_1465850;
   char* p = *(char**)(ecx + 0xc);
   ((void (__thiscall*)(char*, char*))FUN_00b8fd90)(ecx, p);
   ((void (__thiscall*)(void*))FUN_00b5b9a0)(self);       // SP::cGonzagoSubsystem dtor

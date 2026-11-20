@@ -2,6 +2,16 @@
 // Object file: SPGonzago/SPWeapons.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_1475194[];
+extern "C" char g_14751a4[];
+extern "C" char g_14751b4[];
+extern "C" char g_14751e0[];
+extern "C" char g_14752a4[];
+extern "C" char g_14752b8[];
+
 #include "game/types.h"
 #include "SP/cArtilleryProjectile.h"
 #include "SP/cLocomotiveObject.h"
@@ -3126,7 +3136,7 @@ void __stdcall f00cb4670_ballistic_execute(Vector3* self)
     }
     Quaternion q;
     (*(cLocomotiveObject_s00cb_44b0**)((char*)self + 0x14))->SetOrientation(
-        QuaternionFromDirections(&q, (const Vector3*)0x0169a9e8, self));
+        QuaternionFromDirections(&q, (const Vector3*)&g_169a9e8, self));
 }
 
 // @ 0x00cb46f0
@@ -3533,11 +3543,11 @@ cSpaceDefenseMissileLocomotion* cSpaceDefenseMissileLocomotion::Construct(float 
                                                                          float turnRate,
                                                                          void* target)
 {
-    mpVtbl8 = (Vtbl*)0x13ec458;
+    mpVtbl8 = (Vtbl*)g_13ec458;
     m0c = 0;
     mSpeed = maxSpeed;
-    mpVtbl = (Vtbl*)0x14751a4;
-    mpVtbl8 = (Vtbl*)0x1475194;
+    mpVtbl = (Vtbl*)g_14751a4;
+    mpVtbl8 = (Vtbl*)g_1475194;
     mTurnRate = turnRate;
     mpTarget = target;
     if (target != 0)
@@ -3742,11 +3752,10 @@ void cDefaultBeamProjectile::FUN_00cb5930(f32* pos)
 // @ 0x00cb5980
 u32 cDefaultBeamProjectile::FUN_00cb5980()
 {
-    void** slot = (void**)((u8*)mpSub2c + 0x114);
-    void* p = *slot;
-    if (p == 0)
-        return 0;
-    return ((u32 (__thiscall*)(void*, u32))VT(p)[0xb8 / 4])(p, 0x13f94d4);
+    void*& slot = *(void**)((u8*)mpSub2c + 0x114);
+    if (slot != 0)
+        return ((u32 (__thiscall*)(void*, u32))VT(slot)[0xb8 / 4])(slot, 0x13f94d4);
+    return 0;
 }
 
 // @ 0x00cb59b0
@@ -3815,10 +3824,10 @@ u32 cDefaultBeamProjectile::FUN_00cb5b70()
 // @ 0x00cb5bd0
 void cDefaultAoEArea::FUN_00cb5bd0()
 {
-    mpVtbl = (void*)0x14752b8;
-    mpVtbl2 = (void*)0x14752a4;
-    mpSubVtbl = (void*)0x14751e0;
-    mpVtbl108 = (void*)0x14751b4;
+    mpVtbl = (void*)g_14752b8;
+    mpVtbl2 = (void*)g_14752a4;
+    mpSubVtbl = (void*)g_14751e0;
+    mpVtbl108 = (void*)g_14751b4;
 
     MOPS((u8*)this + 0x138)->FUN_00b638b0();
 
@@ -3826,7 +3835,7 @@ void cDefaultAoEArea::FUN_00cb5bd0()
     if (p != 0)
         ((void (__thiscall*)(void*))VT(p)[8 / 4])(p);
 
-    mpVtbl108 = (void*)0x145dca8;
+    mpVtbl108 = (void*)&g_vft_145dca8;
     MOPS((u8*)this + 0x34)->FUN_00c8a420();
     MOPS(this)->FUN_00b184c0();
 }
@@ -5282,7 +5291,7 @@ void* TObj::_virtual_dtor(uint8_t param_2)
         ((void(__thiscall*)(uint32_t))VF(p, 0x64))(p);
     }
     TObj* sub = (TObj*)((char*)this + 0x34);
-    *(uint32_t*)((char*)this + 0x504) = 0x145dca8;
+    *(uint32_t*)((char*)this + 0x504) = (int)&g_vft_145dca8;
     sub->F_c432e0();
     ((TObj*)this)->F_184c0();
     if ((param_2 & 1) != 0) {
@@ -5462,8 +5471,8 @@ void* TObj::FUN_00cb9b90(uint8_t param_2)
     if (p != 0 && *(uint32_t*)(p - 4) != 0) {
         FUN_00f47380((void*)p);
     }
-    *(uint32_t*)((char*)this + 0x08) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x08) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
     if ((param_2 & 1) != 0) {
         FUN_00f47380(this);
     }

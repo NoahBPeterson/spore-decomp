@@ -2,6 +2,9 @@
 // Object file: SPGonzago/InteractionTarget.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1459be8[];
+
 #include "game/types.h"
 #include "SP/cInteractionTarget.h"
 
@@ -12,7 +15,7 @@ extern "C" void  __cdecl operator_delete_array(void*);     // 0xf47380
 typedef unsigned int  u32;
 typedef unsigned char u8;
 extern "C" void  __cdecl operator_delete_array(void*);     // 0xf47380
-#define VTBL_01459be8  ((void*)0x1459be8)
+#define VTBL_01459be8  ((void*)g_1459be8)
 struct RefObj {
     void* mpVftable;                                // +0x00
     u8    mPad04[0x04];                             // +0x04

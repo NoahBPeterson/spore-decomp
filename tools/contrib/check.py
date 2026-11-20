@@ -10,7 +10,9 @@ instruction diff of your build against the original, then a quick equivalence ch
 --no-quick skips it): does the source compute something else (fix the logic), or does it only compile differently?
 
 On MATCH it records the result: it adds the function's manifest.txt line and removes its nonmatching.txt /
-partial.txt line, so the files are ready for your pull request.  --dry-run only prints what it would change.
+partial.txt (or match/shape_only.txt) line, and, when the function was proven equivalent, its equivalent.txt line
+and proof (equivalent/<va>.json), so the files are ready for your pull request.  --dry-run only prints what it would
+change.
 """
 import argparse, os, subprocess, sys
 
@@ -108,9 +110,31 @@ def main():
         else:
             print("  (for an instruction diff, make work/SporeApp.analysis.bin from your own game: tools/contrib/make_image.py)")
         return 1
+    if not stubs:
+        # do the names point where retail points? (tools/ci/targets.py, #458; the bytes match with any address)
+        import targets as TG
+        bad = TG.describe(TG.check(fp, obj, sym, T.fingerprints(), src) or [])
+        if bad:
+            print("  but a name points somewhere other than retail does at that spot (the bytes match only because")
+            print("  addresses are masked; the pull request check fails this):")
+            for line in bad:
+                print("    " + line)
+            print("  Fix the name or the source so it refers to what retail uses there (or the symbols/ line, if that")
+            print("  is what is wrong). Nothing recorded.")
+            return 1
     if any(r[2] == va for r in S.manifest_rows(ident)):
         print("(already a manifest row: nothing to add)")
         return 0
+    if not stubs:
+        # a row would name another function: the symbol already names a different function's row (a twin of the same
+        # shape that kept its sibling's name), or a FUN_00abcdef name for another address (targets.row_names)
+        rel = os.path.relpath(src, os.path.join(ROOT, "match")).replace(os.sep, "/")
+        rows = [(r[0], r[1], r[2]) for r in S.manifest_rows(ident)] + [(rel, sym, va)]
+        why = TG.row_names(rows, T.fingerprints()).get((rel, va))
+        if why:
+            print("  but %s. Name this function's own symbol (check the `// @ 0x%08x` marker's function). "
+                  "Nothing recorded." % (why, va))
+            return 1
     rel_src = os.path.relpath(src, os.path.join(ROOT, "match")).replace(os.sep, "/")
     d = S.slice_dir(ident)
     line = "%s  %s  %08x  %s" % (rel_src, sym, va, " ".join(flags))
@@ -123,6 +147,9 @@ def main():
         print("\nwould add to %s:\n  %s" % (os.path.relpath(manifest, ROOT), line))
         for path in note_files(va):
             print("and remove the %08x line from %s" % (va, os.path.relpath(path, ROOT)))
+        for path, proof in equivalent_files(va):
+            print("and remove the %08x line from %s and its proof %s (byte-exact replaces proven equivalent)"
+                  % (va, os.path.relpath(path, ROOT), os.path.relpath(proof, ROOT)))
         return 0
     text = open(manifest).read() if os.path.exists(manifest) else ""
     with open(manifest, "a") as f:
@@ -136,6 +163,15 @@ def main():
         if len(keep) != len(lines):
             open(path, "w", encoding="utf-8").writelines(keep)
             print("removed its line from %s" % os.path.relpath(path, ROOT))
+    # a proven-equivalent function that is now byte-exact: its proof is about bytes our source no longer builds, and
+    # CI would fail the row (PR #499, 0x00c62590)
+    for path, proof in equivalent_files(va):
+        lines = open(path, encoding="utf-8", errors="replace").readlines()
+        open(path, "w", encoding="utf-8").writelines(l for l in lines if not _equiv_row(l, va))
+        if os.path.exists(proof):
+            os.remove(proof)
+        print("removed its line from %s and its proof %s (byte-exact replaces proven equivalent)"
+              % (os.path.relpath(path, ROOT), os.path.relpath(proof, ROOT)))
     return 0
 
 
@@ -153,17 +189,39 @@ def _stub(data, rel, retail_size):
 
 
 def note_files(va):
-    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va."""
+    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va, and match/shape_only.txt (a
+    generated match borrowed another function's source for it; written source replaces that)."""
     import glob
     out, key = [], "%08x" % va
     for path in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.txt")) +
-                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)):
-        if os.path.basename(path) not in ("nonmatching.txt", "partial.txt"):
+                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)) + \
+            [os.path.join(ROOT, "match", "shape_only.txt")]:
+        if not os.path.exists(path) or os.path.basename(path) not in ("nonmatching.txt", "partial.txt", "shape_only.txt"):
             continue
         text = open(path, encoding="utf-8", errors="replace").read()
         if key in text.lower() and any(_is_row(l, va) for l in text.splitlines()):
             out.append(path)
     return out
+
+
+def equivalent_files(va):
+    """[(equivalent.txt, its equivalent/<va>.json)] for every equivalent.txt (slices and src/game) listing va"""
+    import glob
+    out = []
+    for path in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) +
+                       glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True)):
+        if any(_equiv_row(l, va) for l in open(path, encoding="utf-8", errors="replace")):
+            out.append((path, os.path.join(os.path.dirname(path), "equivalent", "%08x.json" % va)))
+    return out
+
+
+def _equiv_row(line, va):
+    """an equivalent.txt row (manifest format: source, symbol, va, flags) for va"""
+    p = line.split("#", 1)[0].split()
+    try:
+        return len(p) >= 3 and int(p[2], 16) == va
+    except ValueError:
+        return False
 
 
 def _is_row(line, va):

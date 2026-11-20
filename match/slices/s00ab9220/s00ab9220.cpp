@@ -7,6 +7,15 @@
 //  * 00ab9410/9550/9e40/9fe0 are eastl::vector<Vector3> members (3 pointers + inline-buffer
 //    pointer at +0x10, element stride 12).  00aba040 is the same code for vector<float>.
 //  * 00ab9320 / 00ab9a40 are methods on the object whose +0x10 field points at the config block.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_1459638[];
+extern "C" char g_145963c[];
+extern "C" char g_1459678[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------------------------------
@@ -147,15 +156,21 @@ struct Cfg
 // ===================================================================================================
 // 0x00ab9220  one-shot static initialiser: allocate the two 0x80-byte hook tables and patch them.
 // ===================================================================================================
+typedef void (__cdecl* TrailFn)();
+extern TrailFn g_1679690[0x20];   // 0x01679690 ribbon stream hook table
+extern TrailFn g_1679710[0x20];   // 0x01679710 trail fill hook table
+void __cdecl FUN_00ab7720();      // 0x00ab7720 Trail_FillVertices
+void __cdecl FUN_00ab86d0();      // 0x00ab86d0 Trail_FillStrip
+void __cdecl FUN_00ab3370();      // 0x00ab3370 cRibbonEffect_StreamQuads
 // @ 0x00ab9220
 void __cdecl FUN_00ab9220(char param_1)
 {
     if (param_1 != 0) {
-        operator_new_arr((void*)0x01679690, 0, 0x80);
-        operator_new_arr((void*)0x01679710, 0, 0x80);
-        *(void* volatile*)0x01679710 = (void*)0x00ab7720;
-        *(void* volatile*)0x01679730 = (void*)0x00ab86d0;
-        *(void* volatile*)0x01679690 = (void*)0x00ab3370;
+        operator_new_arr(g_1679690, 0, sizeof(g_1679690));
+        operator_new_arr(g_1679710, 0, sizeof(g_1679710));
+        g_1679710[0] = FUN_00ab7720;
+        g_1679710[8] = FUN_00ab86d0;
+        g_1679690[0] = FUN_00ab3370;
     }
 }
 
@@ -165,9 +180,9 @@ void __cdecl FUN_00ab9220(char param_1)
 // @ 0x00ab9270
 void Big::dtor()
 {
-    *(void* volatile*)&m000 = (void*)0x01459678;
-    *(void* volatile*)&m004 = (void*)0x0145963c;
-    *(void* volatile*)&m008 = (void*)0x01459638;
+    *(void* volatile*)&m000 = (void*)g_1459678;
+    *(void* volatile*)&m004 = (void*)g_145963c;
+    *(void* volatile*)&m008 = (void*)g_1459638;
 
     int o1 = *(int volatile*)&m6DC;
     if (o1 != 0) {
@@ -190,8 +205,8 @@ void Big::dtor()
     if (mVec134.mBegin != 0 && (void*)mVec134.mBegin != mVec134.mInline)
         sp_free(mVec134.mBegin);
 
-    m004 = (void*)0x013f21d4;
-    m008 = (void*)0x013ef094;
+    m004 = (void*)g_13f21d4;
+    m008 = (void*)g_13ef094;
 }
 
 // ===================================================================================================
@@ -218,7 +233,7 @@ void V12::reserve(unsigned n)
     if (n > (unsigned)(mCap - mBegin)) {
         V3* p;
         if (n != 0)
-            p = (V3*)ea_allocate(n * 12, "EASTL", 0, 0, 0x013ebb38, 0xd1);
+            p = (V3*)ea_allocate(n * 12, "EASTL", 0, 0, (int)g_13ebb38, 0xd1);
         else
             p = 0;
         ea_copy(mBegin, mEnd, p);

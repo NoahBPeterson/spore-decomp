@@ -2,6 +2,10 @@
 // Object file: SPAudio/SPAudioMixMode.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+
 #include "game/types.h"
 #include "EA/Audio/IPrimitive.h"
 #include "EA/Audio/ResponseCurve.h"
@@ -60,7 +64,7 @@ namespace SP {
 namespace Audio {
 struct IEventModifier {
     void*          mpVtable0;                                // +0x00
-    volatile void* mpVtable4;                                // +0x04
+    void*          mpVtable4;                                // +0x04
     uint32_t       mPad08;                                   // +0x08
     IEventModifier();
 };  // namespace Audio
@@ -478,14 +482,16 @@ bool PrimBase::HandleMessage(int id, void* arg)
     return true;
 }
 
+extern "C" char g_vt_01487348;    // 0x01487348
+
 // @ 0x00ea4fd0
 namespace SP { namespace Audio {
 IEventModifier::IEventModifier()
 {
-    mpVtable4 = (void*)0x013ef094;
+    *(void* volatile*)&mpVtable4 = &g_vt_013ef094;
     mPad08 = 0;
-    mpVtable0 = (void*)0x0148734c;
-    mpVtable4 = (void*)0x01487348;
+    mpVtable0 = &g_vt_0148734c;
+    mpVtable4 = &g_vt_01487348;
 }
 }}  // namespace SP::Audio
 
@@ -1168,9 +1174,9 @@ cMixMode_s00ea_8f90::~cMixMode_s00ea_8f90()
     if (mA.mBegin) operator_delete(mA.mBegin);
     if (mpConfig)
         ((Fn0) VT(mpConfig, 0x04))(mpConfig);
-    mVtbl2 = (void*) 0x13ef094;
-    mVtbl1 = (void*) 0x13eb394;
-    mVtbl0 = (void*) 0x13eb938;
+    mVtbl2 = (void*) &g_vt_013ef094;
+    mVtbl1 = (void*) g_13eb394;
+    mVtbl0 = (void*) g_13eb938;
 }
 }}  // namespace SP::Audio
 

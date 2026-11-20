@@ -2359,7 +2359,11 @@ __declspec(noinline) bool FUN_00833ba0(void* param_1, int param_2, void* param_3
 }
 
 // @ 0x00834000
-void __stdcall FUN_00834000(int a1, int a2, int a3)
+struct TexLoader_834000 {
+    bool FUN_00833ba0(void* a1, int a2, void* a3, int a4, int a5);
+    void FUN_00834000(void* a1, int a2, void* a3);
+};
+void TexLoader_834000::FUN_00834000(void* a1, int a2, void* a3)
 {
-    ((void (__stdcall*)(int, int, int, int, int))FUN_00833ba0)(a1, a2, a3, -1, -1);
+    FUN_00833ba0(a1, a2, a3, -1, -1);
 }

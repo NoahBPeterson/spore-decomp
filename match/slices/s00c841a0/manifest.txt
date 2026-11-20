@@ -1,0 +1,1 @@
+slices/s00c841a0/s00c841a0.cpp  ?GetStarTuning@@YAMH@Z  00c841a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCityVisualizer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_167a3d0[];
+
 #include "game/types.h"
 struct RefPtr; struct RefPtrVector;   // used by the forward prototype of EraseRefValue (0x00d5aae0) before s00d5a260's stubs
 
@@ -2065,7 +2068,7 @@ bool cCastingManager::Write(SP::cIObjectDatabaseOStream& archive) const
 // @ 0x00ac8660
 void FUN_00ac8660(void)
 {
-    LoadArithmeticaFile(0x25e94602, 0x24a4f5a, (void*)0x167a3d0);
+    LoadArithmeticaFile(0x25e94602, 0x24a4f5a, (void*)g_167a3d0);
 }
 
 // @ 0x00ac8690
@@ -2429,10 +2432,17 @@ void VO::FUN_00acd2d0(void* p)
     }
 }
 
+// The staged object's type query is virtual slot 8 (+0x20).
+struct ITypedObj_acd410 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual int  GetType();                                  // +0x20
+};
+
 // @ 0x00acd410
 void VO::FUN_00acd410(void* p)
 {
-    switch (objType(p)) {
+    switch (((ITypedObj_acd410*)p)->GetType()) {
     case 0x18eb45e: {
         int key = ((CStage*)p)->mKey24;
         mCountMap.erase(&key);
@@ -5457,12 +5467,15 @@ void __stdcall DeactivateCitizen(CCitizen* pCitizen)
 CRecord12* CCitizenManager::FindSlot(CCitizen* pCitizen)
 {
     int nCount = (int)(mpCitizensEnd - mpCitizens);
+    int i = 0;
     if (nCount > 0) {
-        CCitizen** pCitizen2 = mpCitizens;
-        for (int i = 0; i < nCount; ++i, ++pCitizen2) {
+        CCitizen** pCitizen2 = *(CCitizen** volatile*)&mpCitizens;
+        do {
             if (*pCitizen2 == pCitizen)
                 return &mpRecords[i];
-        }
+            ++i;
+            ++pCitizen2;
+        } while (i < nCount);
     }
     return (CRecord12*)pCitizen->mVisual.Resolve();
 }
@@ -6975,10 +6988,13 @@ void Vec3AllocVector::swap(Vec3AllocVector& other)
         Vec3* tb = mpBegin;
         mpBegin = ob;
         other.mpBegin = tb;
+        _ReadWriteBarrier();
         Vec3* te = mpEnd;
+        _ReadWriteBarrier();
         Vec3* oe = other.mpEnd;
         mpEnd = oe;
         other.mpEnd = te;
+        _ReadWriteBarrier();
         Vec3* oc = other.mpCapacity;
         Vec3* tc = mpCapacity;
         mpCapacity = oc;

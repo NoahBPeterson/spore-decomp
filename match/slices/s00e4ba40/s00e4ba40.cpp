@@ -8,6 +8,11 @@
 // Notation: `// @ 0x<va>` markers above each function; helper declarations carry
 // the retail address of the callee.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148256c[];
+extern "C" char g_16ad060[];
+extern "C" char g_16ad064[];
+
 typedef unsigned int   uint;
 typedef unsigned char  u8;
 typedef unsigned short u16;
@@ -211,7 +216,7 @@ cMyMagicCommand* cMyMagicCommand::Command(void* field)
 // ===========================================================================
 void* cMyMagicCommand::Destroy(uint flags)
 {
-    this->mpVptr_00 = (void*)0x148256c;
+    this->mpVptr_00 = (void*)g_148256c;
     this->mLock_1c.Release();
     void* buf = this->mpVecBegin_04;
     if (buf != 0 && *(int*)((char*)buf - 4) != 0)
@@ -305,9 +310,9 @@ void FUN_00e4bca0(void* param_1, void* param_2)
 // ===========================================================================
 void FUN_00e4bd70(void)
 {
-    void* p = *(void**)0x16ad064;
+    void* p = *(void**)g_16ad064;
     while (p != 0) {
-        void** list = *(void***)0x16ad060;
+        void** list = *(void***)g_16ad060;
         FUN_00e4bca0(list[8], p);
         p = *(void**)((char*)p + 0x28);
     }

@@ -159,8 +159,11 @@ void* __cdecl SP_GetSystemAT();                               // 0x00a206f0
 void  __cdecl SP_KillSetiEffects(uint32_t id, void* at);      // 0x00435ed0
 void* __cdecl FUN_005c2570(void* p);                          // 0x005c2570 interface_cast
 void  __cdecl FUN_00662b00(void* p);                          // 0x00662b00
-struct cSPUIFeedListCategory {
-    char      pad00[0x10];
+// bases per SP/cSPUIFeedListCategory.h: EA::Messaging::IHandlerRC (+0), EA::UTFWin::IWinProc (+4)
+struct IHandlerRC_s0066_3e50 { virtual void v00(); };
+struct IWinProc_s0066_3e50 { virtual void v00(); };
+struct cSPUIFeedListCategory : IHandlerRC_s0066_3e50, IWinProc_s0066_3e50 {
+    char      pad08[0x8];     // +0x08 RefCountVTemplate<int>
     bool      m10;            // +0x10
     char      pad11[3];
     bool      m14;            // +0x14
@@ -530,8 +533,7 @@ void cSPUIFeedListCategory::FUN_00663e50()
         if (p) { md4 = 0; ((cSPUILayout_s0066_3be0*)p)->Release(); }
     }
     if (m70) {
-        void* self = (char*)this + 4;
-        m70->AttachProc(self);
+        m70->AttachProc(static_cast<IWinProc_s0066_3e50*>(this));
     }
     if (m64) {
         m64->Shutdown(true);
@@ -642,9 +644,9 @@ void cSPUIFeedListCategory::FUN_006644e0(bool b)
 // @ 0x00664550
 bool cSPUIFeedListCategory::FUN_00664550(bool b)
 {
-    if (!b) return m14;
-    if (m14 && m60 && ((PredObj*)m60)->FUN_00a98020()) return true;
-    return false;
+    if (b)
+        return m14 && m60 && ((PredObj*)m60)->FUN_00a98020();
+    return m14;
 }
 
 

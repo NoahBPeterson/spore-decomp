@@ -285,7 +285,7 @@ struct VectorOps {
 namespace EA {
 namespace XHTML {
 namespace Layout {
-void FUN_011e0744(void* first, void* last, int zero);   // 0x011e0744
+void FUN_011e0744(void* dest, void* src, int nbytes);   // 0x011e0744 (memmove)
 }
 }
 }
@@ -2803,9 +2803,10 @@ void Table::LayoutRows(StackingContext* ctx, StyleState* style)
 namespace EA { namespace XHTML { namespace Layout {
 void TableRow_s008f_16c0::Dispose()
 {
-    FUN_011e0744(mCells.mpBegin, mCells.mpEnd, 0);
-    const int count = (int)((char*)mCells.mpEnd - (char*)mCells.mpBegin) >> 2;
-    mCells.mpEnd = (TableCell_s008f_16c0**)((char*)mCells.mpEnd - count * 4);
+    TableCell_s008f_16c0** first = mCells.mpBegin;
+    TableCell_s008f_16c0** last = mCells.mpEnd;
+    FUN_011e0744(first, last, (char*)mCells.mpEnd - (char*)last);
+    mCells.mpEnd += -(last - first);
     ((Item_s008f_16c0*)this)->Dispose();
 }
 }}}  // namespace EA::XHTML::Layout

@@ -1,6 +1,12 @@
 // Slice s01062ce0 -- SP::cUFOLocomotion::UpdateLocomotion + movement command helpers, and
 // SP::cUIBadgeCard (vtable 0x149c070) init/shutdown/feed update helpers.
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c04c[];
+extern "C" char g_149c054[];
+extern "C" char g_149c070[];
+
 #include <intrin.h>
 #include "types.h"
 
@@ -451,9 +457,9 @@ void UB::f01063330(void* wp)
 UB* UB::f01063360()
 {
     f010e18bb0();
-    v0 = (void*)0x149c070;
-    v8 = (void*)0x149c054;
-    vC = (void*)0x149c04c;
+    v0 = (void*)g_149c070;
+    v8 = (void*)g_149c054;
+    vC = (void*)g_149c04c;
     active = 0;
     f44.f010e0a390();
     fB4.f010e0a390();
@@ -472,9 +478,9 @@ UB* UB::f01063360()
 // @ 0x01063400
 void UB::f01063400()
 {
-    v0 = (void*)0x149c070;
-    v8 = (void*)0x149c054;
-    vC = (void*)0x149c04c;
+    v0 = (void*)g_149c070;
+    v8 = (void*)g_149c054;
+    vC = (void*)g_149c04c;
     _ReadWriteBarrier();
     if (f1a8) (*(void (__thiscall**)(void*))((char*)*(void**)f1a8 + 4))(f1a8);
     if (feed) (*(void (__thiscall**)(void*))((char*)*(void**)feed + 4))(feed);

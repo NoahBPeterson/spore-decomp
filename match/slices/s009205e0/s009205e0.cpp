@@ -1,5 +1,10 @@
 // Slice s009205e0: EA::Audio::Eapd symbol/group hash tables, wchar_t path helpers,
 // eastl fixed_pool / RBTreeIncrement and a couple of float range mappers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143d824[];
+extern "C" char g_154df28[];
+
 #include "types.h"
 #include "sse_helpers.h"
 #include <intrin.h>
@@ -150,20 +155,21 @@ wchar_t* SkipComponentBack(wchar_t* first, wchar_t* last) {
 wchar_t* ComponentAt(wchar_t* first, wchar_t* last, int index) {
     if (index >= 0) {
         wchar_t* p = first;
-        for (index = index + 1; p < last && index > 0; --index)
+        for (++index; p < last && index > 0; --index)
             p = SkipComponent(p, last);
-        if (index == 0 && first < p && (p[-1] == L'\\' || p[-1] == L'/'))
+        if (index == 0 && p > first && (p[-1] == L'\\' || p[-1] == L'/'))
             --p;
         return p;
     }
-    if (first < last) {
-        while (index = index + 1, index < 0) {
-            last = SkipComponentBack(first, last);
-            if (last <= first)
-                return last;
+    ++index;
+    while (last > first) {
+        if (index >= 0) {
+            if (last > first && (last[-1] == L'\\' || last[-1] == L'/'))
+                --last;
+            return last;
         }
-        if (first < last && (last[-1] == L'\\' || last[-1] == L'/'))
-            --last;
+        last = SkipComponentBack(first, last);
+        ++index;
     }
     return last;
 }
@@ -264,16 +270,14 @@ __declspec(noinline) unsigned* LowerBound(unsigned* first, unsigned* last, const
 // @ 0x009212c0  first element strictly greater than key
 unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
     int n = (int)(last - first);
-    if (n > 0) {
-        unsigned k = *key;
-        do {
-            int half = n >> 1;
-            if (!(k < first[half])) {
-                first = first + half + 1;
-                half = n + (-1 - half);
-            }
+    while (n > 0) {
+        int half = n >> 1;
+        unsigned* mid = first + half;
+        if (!(*key < *mid)) {
+            first = ++mid;
+            n -= half + 1;
+        } else
             n = half;
-        } while (n > 0);
     }
     return first;
 }
@@ -281,16 +285,14 @@ unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
 // @ 0x00921300  first element not less than key
 unsigned* LowerBound(unsigned* first, unsigned* last, const unsigned* key) {
     int n = (int)(last - first);
-    if (n > 0) {
-        unsigned k = *key;
-        do {
-            int half = n >> 1;
-            if (first[half] < k) {
-                first = first + half + 1;
-                half = n + (-1 - half);
-            }
+    while (n > 0) {
+        int half = n >> 1;
+        unsigned* mid = first + half;
+        if (*mid < *key) {
+            first = ++mid;
+            n -= half + 1;
+        } else
             n = half;
-        } while (n > 0);
     }
     return first;
 }
@@ -526,7 +528,7 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
         h = h * 0x1000193 ^ c;
         c = *s;
     }
-    unsigned idx = h % mnBucketCount;
+    const unsigned idx = h % mnBucketCount;
     HashNode* n = (HashNode*)EASTL_allocator_allocate(0x14, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     if (n != 0) {
@@ -536,12 +538,12 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
         n->mKey = value.mKey;
     }
     n->mpNext = 0;
-    HashNode* head = mpBuckets[idx];
-    HashNode* p = head;
-    while (p != 0 && p->mpName != value.mpName)
-        p = p->mpNext;
+    HashNode* p = mpBuckets[idx];
+    for (; p != 0; p = p->mpNext)
+        if (value.mpName == p->mpName)
+            break;
     if (p == 0) {
-        n->mpNext = head;
+        n->mpNext = mpBuckets[idx];
         mpBuckets[idx] = n;
     } else {
         n->mpNext = p->mpNext;
@@ -556,7 +558,7 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
 
 // @ 0x009206d0
 EapdSymbolTable* EapdSymbolTable::ctor() {
-    *(void**)((char*)this + 0) = (void*)0x143d824;
+    *(void**)((char*)this + 0) = (void*)g_143d824;
     mLock.Init(0, 1);
     *(float*)((char*)this + 0x118) = 1.0f;
     *(float*)((char*)this + 0x11c) = 2.0f;
@@ -565,14 +567,14 @@ EapdSymbolTable* EapdSymbolTable::ctor() {
     *(unsigned*)((char*)this + 0x120) = 0;
     *(unsigned*)((char*)this + 0x110) = 1;
     _ReadWriteBarrier();
-    *(void**)((char*)this + 0x10c) = (void*)0x154df28;
+    *(void**)((char*)this + 0x10c) = (void*)g_154df28;
     _ReadWriteBarrier();
     *(float*)((char*)this + 0x138) = 1.0f;
     *(float*)((char*)this + 0x13c) = 2.0f;
     _ReadWriteBarrier();
     *(unsigned*)((char*)this + 0x134) = 0;
     *(unsigned*)((char*)this + 0x140) = 0;
-    *(void**)((char*)this + 0x12c) = (void*)0x154df28;
+    *(void**)((char*)this + 0x12c) = (void*)g_154df28;
     *(unsigned*)((char*)this + 0x130) = 1;
     return this;
 }

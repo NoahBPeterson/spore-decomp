@@ -2,6 +2,17 @@
 // Object file: Spui/SPUILayers.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13ef094[];
+extern "C" char g_1417dd4[];
+extern "C" char g_1417de4[];
+extern "C" char g_1417df4[];
+extern "C" char g_1417df8[];
+extern "C" char g_1417e14[];
+extern "C" char g_1417e18[];
+
 #include "game/types.h"
 #include "cSPUILayout.h"
 #include "cSPUILayeredObject.h"
@@ -432,15 +443,15 @@ void Layered::MethodDA50(void* param, void* a2, void* a3, void* a4, void* a5)
 // @ 0x0080db70
 void* __fastcall FUN_0080db70(char* p)
 {
-    if (p) return *(void**)(p + 8);
-    return *(void* volatile*)(p + 0x258);
+    char* base = p ? p - 0x250 : 0;
+    return *(void**)(base + 0x258);
 }
 
 // @ 0x0080db90
 void* __fastcall FUN_0080db90(char* p)
 {
-    if (p) return *(void**)(p + 4);
-    return *(void* volatile*)(p + 0x254);
+    char* base = p ? p - 0x250 : 0;
+    return *(void**)(base + 0x254);
 }
 
 // @ 0x0080dbb0
@@ -603,7 +614,8 @@ void* __cdecl FUN_0080df00(void** first, void** last, void** dest)
 // @ 0x0080df50
 int __fastcall FUN_0080df50(char* p)
 {
-    char* b = (p && p != (char*)0x250) ? p - 0x24c : 0;
+    char* d = p ? p - 0x250 : 0;
+    char* b = d ? d + 4 : 0;
     return _InterlockedIncrement((long*)(b + 4));
 }
 
@@ -611,10 +623,10 @@ int __fastcall FUN_0080df50(char* p)
 int cSPUIModelsAndEffectsRenderer::Release()
 {
     char* p = (char*)this;
-    char* b = 0;
-    if (p) { char* t = p - 0x250; if (t) b = t + 4; }
+    char* d = p ? p - 0x250 : 0;
+    char* b = d ? d + 4 : 0;
     long* rc = (long*)(b + 4);
-    int n = _InterlockedExchangeAdd(rc, -1) - 1;
+    int n = _InterlockedDecrement(rc);
     if (n == 0) {
         _InterlockedExchange(rc, 1);
         if (b) ((VF1v)VT(b)[0])(b, (void*)1);
@@ -945,13 +957,13 @@ void* __thiscall cSPUICustomRendererImpl::ctor()
 void* __thiscall cSPUICustomRendererImpl::VectorDtor(u8 flags)
 {
     u8* self = (u8*)this;
-    vtbl = (void**)0x1417df8;
-    vtbl2 = (void**)0x1417df4;
+    vtbl = (void**)g_1417df8;
+    vtbl2 = (void**)g_1417df4;
     Fun_7c3ba0(self + 0x60);
     Fun_7c4000(self + 0x60);
     mLayers.dtor();
-    vtbl2 = (void**)0x13ef094;
-    vtbl = (void**)0x13eb938;
+    vtbl2 = (void**)g_13ef094;
+    vtbl = (void**)g_13eb938;
     if (flags & 1) GameFree(this);
     return this;
 }
@@ -960,19 +972,19 @@ void* __thiscall cSPUICustomRendererImpl::VectorDtor(u8 flags)
 void __thiscall cSPUICustomRendererImpl::ScalarDtor()
 {
     u8* self = (u8*)this;
-    vtbl = (void**)0x1417e18;
-    vtbl2 = (void**)0x1417e14;
+    vtbl = (void**)g_1417e18;
+    vtbl2 = (void**)g_1417e14;
     if (p258) FUN_0080dbb0(this);
     if (p258) { void* o = p258; ((VF0v)VT(o)[1])(o); }
     if (p254) { void* o = p254; ((VF0v)VT(o)[1])(o); }
     if (p250) { void* o = p250; ((VF0v)VT(o)[1])(o); }
-    vtbl = (void**)0x1417df8;
-    vtbl2 = (void**)0x1417df4;
+    vtbl = (void**)g_1417df8;
+    vtbl2 = (void**)g_1417df4;
     Fun_7c3ba0(self + 0x60);
     Fun_7c4000(self + 0x60);
     mLayers.dtor();
-    vtbl2 = (void**)0x13ef094;
-    vtbl = (void**)0x13eb938;
+    vtbl2 = (void**)g_13ef094;
+    vtbl = (void**)g_13eb938;
 }
 
 // @ 0x0080ed50
@@ -1018,14 +1030,14 @@ UI_LayerManager* __thiscall UI_LayerManager::ctor()
 void* __thiscall UI_LayerManager::VectorDtor(u8 flags)
 {
     u8* self = (u8*)this;
-    vtbl = (void**)0x1417de4;
-    *(void**)(self + 4) = (void*)0x1417dd4;
+    vtbl = (void**)g_1417de4;
+    *(void**)(self + 4) = (void*)g_1417dd4;
     Fun_8e2b20(self + 0x40);
     if (p3c) { void* o = p3c; ((VF0v)VT(o)[1])(o); }
     SharedVecDtor(self + 0x20);
     SharedVecDtor(self + 0xc);
-    *(void**)(self + 4) = (void*)0x13ec458;
-    vtbl = (void**)0x13eb938;
+    *(void**)(self + 4) = (void*)g_13ec458;
+    vtbl = (void**)g_13eb938;
     if (flags & 1) GameFree(this);
     return this;
 }
@@ -1235,9 +1247,7 @@ u32 __thiscall cSPUILayeredObject_s0080_f7c0::MethodF9D0(void* a, void* key)
 // @ 0x0080fa00
 void __fastcall FUN_0080fa00(void* p)
 {
-    if (p) p = (u8*)((u32)p + 0xfffffdb0u);
-    else   p = 0;
-    ((ObjStub*)p)->go();
+    ((ObjStub*)(p ? (char*)p - 0x250 : 0))->go();
 }
 
 // @ 0x0080fa20

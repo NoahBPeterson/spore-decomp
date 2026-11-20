@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/Socket_imp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fb19c[];
+extern "C" char g_143fb00[];
+extern "C" char g_143fbd8[];
+
 #include "game/types.h"
 #include "EA/SSL/FileSystemDefault.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -591,12 +597,9 @@ bool ISocket::SetDebugOption(bool enabled)
 bool EA::Sockets::Socket::GetLingerOption(bool & out, unsigned int & val)
 {
     struct { unsigned short on; unsigned short sec; } opts;
-    opts.on = 0;
-    opts.sec = 0;
-    unsigned h = *(unsigned*)((char*)this + 4);
     int len = 4;
-    if (getsockopt(h, 0xffff, 0x80, (char*)&opts, &len) != 0) {
-        REPORT_ERROR(this);
+    if (getsockopt(*(unsigned*)((char*)this + 4), 0xffff, 0x80, (char*)&opts, &len) != 0) {
+        ((Primary*)((char*)this - 8))->DoError(WSAGetLastError(), 0);
         return false;
     }
     out = (opts.on != 0);
@@ -610,11 +613,8 @@ bool Socket::SetLingerOpt(unsigned char on, unsigned short level)
     struct { unsigned short on; unsigned short sec; } opts;
     opts.on = (unsigned short)(on != 0);
     opts.sec = level;
-    unsigned h = *(unsigned*)((char*)this + 4);
-    int r = setsockopt(h, 0xffff, 0x80, (const char*)&opts, 4);
-    (void)h;
-    if (r != 0) {
-        ReportError(0);
+    if (setsockopt(*(unsigned*)((char*)this + 4), 0xffff, 0x80, (const char*)&opts, 4) != 0) {
+        ((Primary*)((char*)this - 8))->DoError(WSAGetLastError(), 0);
         return false;
     }
     return true;
@@ -631,11 +631,8 @@ bool Socket::GetNonBlocking(unsigned char* out)
 bool EA::Sockets::Socket::SetNonBlockingOption(bool b)
 {
     unsigned long value = (unsigned long)(b != 0);
-    unsigned h = *(unsigned*)((char*)this + 4);
-    int r = ioctlsocket(h, 0x8004667e, &value);
-    (void)h;
-    if (r != 0) {
-        REPORT_ERROR(this);
+    if (ioctlsocket(*(unsigned*)((char*)this + 4), 0x8004667e, &value) != 0) {
+        ((Primary*)((char*)this - 8))->DoError(WSAGetLastError(), 0);
         return false;
     }
     *(unsigned char*)((char*)this + 0x77) = b;
@@ -1031,12 +1028,12 @@ bool ISocket::GetPeerAddress(Address& a)
 // @ 0x0094e770
 void Socket_s0094_dbc0::Destroy()
 {
-    mpVtbl = (void*)0x143fbd8;
-    mpISocketVtbl = (void*)0x143fb00;
+    mpVtbl = (void*)g_143fbd8;
+    mpISocketVtbl = (void*)g_143fb00;
     if (mSocketId != -1 && mbSaveSocket == 0)
         ((ISocket*)((char*)this + 8))->Fn0094d4b0();
-    mpISocketVtbl = (void*)0x13eb938;
-    mpVtbl = (void*)0x13fb19c;
+    mpISocketVtbl = (void*)g_13eb938;
+    mpVtbl = (void*)g_13fb19c;
 }
 
 // @ 0x0094e7b0
@@ -1083,12 +1080,12 @@ SocketBase::SocketBase()
 // @ 0x0094e8d0
 void* Socket_s0094_dbc0::DestroyScalar(unsigned flags)
 {
-    mpVtbl = (void*)0x143fbd8;
-    mpISocketVtbl = (void*)0x143fb00;
+    mpVtbl = (void*)g_143fbd8;
+    mpISocketVtbl = (void*)g_143fb00;
     if (mSocketId != -1 && mbSaveSocket == 0)
         ((ISocket*)((char*)this + 8))->Fn0094d4b0();
-    mpISocketVtbl = (void*)0x13eb938;
-    mpVtbl = (void*)0x13fb19c;
+    mpISocketVtbl = (void*)g_13eb938;
+    mpVtbl = (void*)g_13fb19c;
     if (flags & 1)
         operator_delete__(this);
     return this;

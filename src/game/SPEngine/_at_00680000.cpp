@@ -2,6 +2,9 @@
 // Object file: SPEngine/_at_00680000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00753fb0();
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include <stdlib.h>   // atol, strtoul, wcstol (msvcr90 imports)
@@ -1431,7 +1434,10 @@ ObjB50& ObjB50::operator=(const ObjB50& x)
 // @ 0x00681c40
 ObjA& ObjA::operator=(const ObjA& x)
 {
-    m0 = x.m0;
+    m0.w[0] = x.m0.w[0];
+    m0.w[1] = x.m0.w[1];
+    m0.w[2] = x.m0.w[2];
+    m0.w[3] = x.m0.w[3];
     mF0 = x.mF0;
     mF1 = x.mF1;
     mF2 = x.mF2;
@@ -3112,7 +3118,7 @@ bool CJobHolder2::Attach(void* job)
 {
     CJobHolder* holder = mHolder;
     if (holder->SetJob(job, mArg)) {
-        return ((FnContinuation)Continuation_68F9F0)(job, (void*)0x00753fb0, this);
+        return ((FnContinuation)Continuation_68F9F0)(job, (void*)FUN_00753fb0, this);
     }
     return false;
 }

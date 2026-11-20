@@ -1,4 +1,16 @@
 // slice s007fd840 — UTFWin behavior action/event region. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1415dd0[];
+extern "C" char g_1415ef8[];
+extern "C" char g_1415f08[];
+extern "C" char g_1415f18[];
+extern "C" char g_1416140[];
+extern "C" char g_141619c[];
+extern "C" char g_14161ac[];
+extern "C" char g_14161c4[];
+extern "C" char g_14162a4[];
+
 #include <cstddef>
 #include <math.h>
 #include <intrin.h>
@@ -184,7 +196,7 @@ bool SerReadA(SerItem* out, void* src) {
     VCallV(p, 0x14);
     out->base = p;
     out->count = 1;
-    out->type = 0;
+    out->type = g_1415dd0;   // retail stores this address (the type descriptor), not 0
     return true;
 }
 
@@ -623,18 +635,20 @@ void State::SetAllocatorObj() {
     SList_SetAllocator(s, (void*)(intptr_t)VCallR(src, 0x1c));
 }
 
+struct SListObj { void SetAllocator(void* a); };   // 0x00985db0 rw::SList::SetAllocator
+struct CastObj { virtual void v0(); virtual void v1(); virtual void v2(); virtual SListObj* Cast(unsigned id); };
+struct AllocSrc { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+                  virtual void v4(); virtual void v5(); virtual void v6(); virtual void* GetAllocator(); };
+
 // @ 0x007fdfe0
 bool State::InitWith(int v) {
     ((EvBase*)this)->SetValue(v);
-    void* w = *(void**)((char*)this + 0x40);
-    if (w) {
-        void* s = VCallR(w, 0xc);
-        if (s) {
-            void* src = *(void**)((char*)this + 0x38);
-            if (src)
-                SList_SetAllocator(s, (void*)(intptr_t)VCallR(src, 0x1c));
+    if (CastObj* w = *(CastObj**)((char*)this + 0x40)) {
+        if (SListObj* s = w->Cast(0x254a4bb)) {
+            if (*(AllocSrc**)((char*)this + 0x38))
+                s->SetAllocator((*(AllocSrc**)((char*)this + 0x38))->GetAllocator());
             else
-                SList_SetAllocator(s, 0);
+                s->SetAllocator(0);
         }
     }
     return true;
@@ -913,9 +927,9 @@ void* Interp::DeletingDtor(unsigned char flags) {
     void* self = this;
     Interp0* p0 = (Interp0*)self;
     void* a = p0->mpTimeFunction;        // +0x3c
-    p0->mVtbl0 = (void*)0x1415f18;
-    p0->mVtbl4 = (void*)0x1415f08;
-    p0->mVtblC = (void*)0x1415ef8;
+    p0->mVtbl0 = (void*)g_1415f18;
+    p0->mVtbl4 = (void*)g_1415f08;
+    p0->mVtblC = (void*)g_1415ef8;
     if (a) {
         VCallV(a, 4);
         p0->mpTimeFunction = 0;
@@ -954,11 +968,11 @@ void* State::DeletingDtor(unsigned char flags) {
 void* WinEvent::DeletingDtor(unsigned char flags) {
     void* self = this;
     WinEvent* w = this;
-    w->mVtbl0 = (void*)0x14161c4;
-    w->mVtbl4 = (void*)0x14161ac;
-    w->mVtbl8 = (void*)0x14162a4;
-    w->mVtbl10 = (void*)0x141619c;
-    w->mVtbl18 = (void*)0x1416140;
+    w->mVtbl0 = (void*)g_14161c4;
+    w->mVtbl4 = (void*)g_14161ac;
+    w->mVtbl8 = (void*)g_14162a4;
+    w->mVtbl10 = (void*)g_141619c;
+    w->mVtbl18 = (void*)g_1416140;
     ((C_7fc200*)self)->Dtor();
     if (flags & 1) FUN_00951330(self);
     return self;

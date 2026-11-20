@@ -1,6 +1,11 @@
 // Slice s006c0db0 — rw::graphics::BlendShape arena accessors, EASTL vector
 // helpers and SP::cAnimationBaker::GetBakedAnimations (retail).
 // Module flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_006c0fa0();
+extern "C" void FUN_00c2e4e0();
+
 #include "types.h"
 #include <string.h>
 
@@ -301,7 +306,7 @@ u32 VecDtorRange(u32 first, u32 last, u32 out)
 u32 Vec38::CtorCopy(u32 src)
 {
     u32 dst = (u32)this;
-    sub_11e0b85_s((void*)dst, 8, 4, (void*)0x6c0fa0, (void*)0xc2e4e0);
+    sub_11e0b85_s((void*)dst, 8, 4, (void*)FUN_006c0fa0, (void*)FUN_00c2e4e0);
     *(u32*)dst = *(u32*)src;
     *(u32*)(dst + 4) = *(u32*)(src + 4);
     return dst;
@@ -311,7 +316,7 @@ u32 Vec38::CtorCopy(u32 src)
 void Vec38::DtorRange2(u32 first, u32 last)
 {
     while (first < last) {
-        sub_11e0b22_s((void*)(first + 0x18), 8, 4, (void*)0xc2e4e0);
+        sub_11e0b22_s((void*)(first + 0x18), 8, 4, (void*)FUN_00c2e4e0);
         first += 0x38;
     }
 }

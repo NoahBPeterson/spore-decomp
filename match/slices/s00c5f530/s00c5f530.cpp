@@ -11,6 +11,13 @@
 //  0x00c60120  SP::cSPMissionStory201::OnArtifactScanned      (399 B)
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00c5fc70();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+
 #include "types.h"
 
 // ---------------------------------------------------------------- shared types
@@ -239,8 +246,8 @@ void* FUN_00c5fd90()
     if (GetCurrentGameMode() == (void*)0x01654c05) {
         if (GetUniverseContext() == 0) {
             cGameNounManager* nm = (cGameNounManager*)NounManager();
-            tVecData* v = nm->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
-                                                (void*)0x00c5fc70, (void*)0x00b1e500,
+            tVecData* v = nm->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                (void*)FUN_00c5fc70, (void*)FUN_00b1e500,
                                                 (void*)0x018c88e4);
             cNoun*** items = &v->mItems[0];
             cNoun** begin = items[0];

@@ -2,6 +2,9 @@
 // Object file: SPAudio/_at_00a30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1453948[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include <string.h>
@@ -637,7 +640,7 @@ struct TrackVec {
     TeString mStr;   // +0x18
     TrackVec* Ctor(int a, const char* b);         // 0x00a3d630
     void DoInsertValue(int* pos, int* value);     // 0x00a3d6e0
-    void Erase(int* a, int* b);                   // 0x011e0744 (eastl vector erase)
+    void Erase(int* a, int* b);                   // 0x00bdc770 (destroys the elements in [a, b))
     void Dtor();                                  // 0x00a3d690
 };
 // ---- items of slice s00a3cbb0 end
@@ -1043,7 +1046,7 @@ cMapDescription* FUN_00a3cb20(EA::IO::IReader* pReader, int32_t nVersion)
         cMapDescription* pNew = (cMapDescription*)pMemory;
         pNew->m0c = 1.0f;
         pNew->m04 = 0;
-        pNew->mpVt00 = (void*)0x01453948;
+        pNew->mpVt00 = (void*)g_1453948;
         pNew->m08 = 0;
         pNew->m10 = 0.0f;
         pDesc = pNew;
@@ -1100,16 +1103,18 @@ void MixEnableCtx::Disable(int arg)
 int* FUN_00a3ce40(int self)
 {
     int* p = (int*)::operator new(0x1c, "Swarm", 0, 0, 0, 0);
-    if (!p) return 0;
-    p[1] = (int)(void*)vtbl_GmeRefCount;
-    p[2] = 0;
-    p[0] = (int)(void*)PTR_FUN_01453998;
-    p[1] = (int)(void*)PTR_FUN_014599e8;
-    p[3] = *(int*)(self + 8);
-    *(float*)((char*)p + 0x10) = *(float*)(self + 0xc);
-    *(uint8_t*)((char*)p + 0x18) = 0;
-    *(float*)((char*)p + 0x14) = *(float*)(self + 0x10);
-    return p;
+    if (p) {
+        *(volatile int*)&p[1] = (int)(void*)vtbl_GmeRefCount;
+        p[2] = 0;
+        p[0] = (int)(void*)PTR_FUN_01453998;
+        p[1] = (int)(void*)PTR_FUN_014599e8;
+        p[3] = *(int*)(self + 8);
+        *(float*)((char*)p + 0x10) = *(float*)(self + 0xc);
+        *(float*)((char*)p + 0x14) = *(float*)(self + 0x10);
+        *(uint8_t*)((char*)p + 0x18) = 0;
+        return p;
+    }
+    return 0;
 }
 
 // @ 0x00a3ced0
@@ -1247,7 +1252,7 @@ int EA::Audio::Mixer::FindByName(int key)
     int b = (int)mpEnd;
     for (;;) {
         if (a == b) return 0;
-        if (eastl_hashtable_find((void*)(a + 0x18), (void*)key)) break;
+        if (KeyEq((void*)(a + 0x18), (void*)key)) break;
         a += 0x28;
     }
     return a;

@@ -2,6 +2,31 @@
 // Object file: SPGonzago/_at_00c60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfb4[];
+extern "C" char g_1470320[];
+extern "C" char g_1470330[];
+extern "C" char g_1470530[];
+extern "C" char g_1470540[];
+extern "C" char g_1470748[];
+extern "C" char g_1470758[];
+extern "C" char g_1470b74[];
+extern "C" char g_1470b88[];
+extern "C" char g_1470df0[];
+extern "C" char g_1470eb8[];
+extern "C" char g_1470f20[];
+extern "C" char g_1470fe4[];
+extern "C" char g_1470ff8[];
+extern "C" char g_147112c[];
+extern "C" char g_14716b0[];
+extern "C" char g_1471718[];
+extern "C" char g_1471728[];
+extern "C" char g_1471780[];
+extern "C" char g_1471fdc[];
+extern "C" char g_1472000[];
+extern "C" char g_1472008[];
+extern "C" char g_1578618[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cSPMission.h"
@@ -415,14 +440,12 @@ struct Ref {
 struct GameDataBase { void ctorGameData(); };
 struct SpatialBase  { void ctorSpatialObject(); };
 struct SpatialObj   { void SetModelKey(void* key); };
-enum {
-    kVtblMorph0  = 0x1470eb8,   // cMorphHandle primary vftable
-    kVtblMorph1  = 0x147112c,   // cMorphHandle second base vftable
-    kVtblMorphSp = 0x1470df0,   // cMorphHandle spatial sub-object vftable
-    kVtblTgt0    = 0x1470ff8,   // cTargetMorphHandle primary vftable
-    kVtblTgt1    = 0x1470fe4,   // cTargetMorphHandle second base vftable
-    kVtblTgtSp   = 0x1470f20    // cTargetMorphHandle spatial sub-object vftable
-};
+#define kVtblMorph0 ((int)g_1470eb8)   // cMorphHandle primary vftable
+#define kVtblMorph1 ((int)g_147112c)   // cMorphHandle second base vftable
+#define kVtblMorphSp ((int)g_1470df0)   // cMorphHandle spatial sub-object vftable
+#define kVtblTgt0 ((int)g_1470ff8)   // cTargetMorphHandle primary vftable
+#define kVtblTgt1 ((int)g_1470fe4)   // cTargetMorphHandle second base vftable
+#define kVtblTgtSp ((int)g_1470f20)   // cTargetMorphHandle spatial sub-object vftable
 struct MorphInit {
     uint8_t mFlag;   // +0x00
     char    pad01[0x17];
@@ -1628,7 +1651,7 @@ void Mission::FUN_00c61390(int arg)
 
     void* nm = FUN_00b3d300();
     void* vec = ((Mission*)nm)->FUN_00b21340(
-        0x00cd7d10, 0x00d3d420, 0x00acdff0, 0x00b1e500, 0x018c43e8);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00acdff0, (int)&FUN_00b1e500, 0x018c43e8);
     int local[5];
     ((Mission*)local)->FUN_00ba95a0((char*)vec + 4);
     int* begin = (int*)local[0];
@@ -1718,9 +1741,9 @@ void* Mission::FUN_00c61bb0()
     *(int*)((char*)this + 0x1f0) = 0;
     *(int*)((char*)this + 0x1f4) = 0;
     *(int*)((char*)this + 0x1f8) = 0;
-    *(void**)((char*)this + 0) = (void*)0x01470330;
-    *(void**)((char*)this + 4) = (void*)0x0146dfb4;
-    *(void**)((char*)this + 0x34) = (void*)0x01470320;
+    *(void**)((char*)this + 0) = (void*)g_1470330;
+    *(void**)((char*)this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)this + 0x34) = (void*)g_1470320;
     return this;
 }
 
@@ -1796,9 +1819,9 @@ void* Mission::FUN_00c61f20()
     *(int*)((char*)this + 0x1f8) = 0;
     *(uint8*)((char*)this + 0x1fc) = 0;
     *(uint8*)((char*)this + 0x1fd) = 0;
-    *(void**)((char*)this + 0) = (void*)0x01470540;
-    *(void**)((char*)this + 4) = (void*)0x0146dfb4;
-    *(void**)((char*)this + 0x34) = (void*)0x01470530;
+    *(void**)((char*)this + 0) = (void*)g_1470540;
+    *(void**)((char*)this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)this + 0x34) = (void*)g_1470530;
     return this;
 }
 
@@ -1919,9 +1942,9 @@ void* Mission::FUN_00c62370()
     this->FUN_00c48e90();
     *(int*)((char*)this + 0x1f0) = 0;
     *(uint8*)((char*)this + 0x1f4) = 0;
-    *(void**)((char*)this + 0) = (void*)0x01470758;
-    *(void**)((char*)this + 4) = (void*)0x0146dfb4;
-    *(void**)((char*)this + 0x34) = (void*)0x01470748;
+    *(void**)((char*)this + 0) = (void*)g_1470758;
+    *(void**)((char*)this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)this + 0x34) = (void*)g_1470748;
     return this;
 }
 
@@ -1960,7 +1983,8 @@ void Mission::FUN_00c62590(int msg, int arg)
         if (b == pid || a == pid) {
             ((Mission*)((char*)this - 0x34))->FUN_00c4b760();
             unsigned u = *(unsigned*)((char*)this + 0xfc);
-            if ((u >> 3) & 1)
+            bool on = ((u >> 3) & 1) != 0;
+            if (on)
                 *(uint8*)((char*)this + 0x1c0) = 1;
         }
     }
@@ -2092,9 +2116,9 @@ void* __fastcall cMissionWar_ctor(void* self, int _e)
   *(int*)((char*)self + 0x1f0) = 0;
   *(int*)((char*)self + 0x1f4) = 0;
   *(uint8_t*)((char*)self + 0x1fc) = 0;
-  *(void**)self = (void*)0x1470b88;
-  *(void**)((char*)self + 4) = (void*)0x146dfb4;
-  *(void**)((char*)self + 0x34) = (void*)0x1470b74;
+  *(void**)self = (void*)g_1470b88;
+  *(void**)((char*)self + 4) = (void*)g_146dfb4;
+  *(void**)((char*)self + 0x34) = (void*)g_1470b74;
   *(int*)((char*)self + 0x1f8) = -1;
   return self;
 }
@@ -2271,27 +2295,22 @@ void CopyPair(void* a, void* b)
 }
 
 // @ 0x00c63be0
+extern "C" char g_vt_1470eb8;   // 0x01470eb8 cMorphHandle primary vftable
+extern "C" char g_vt_147112c;   // 0x0147112c cMorphHandle second base vftable
+extern "C" char g_vt_1470df0;   // 0x01470df0 cMorphHandle spatial sub-object vftable
 cMorphHandle::cMorphHandle()
 {
     ((GameDataBase*)this)->ctorGameData();
     ((SpatialBase*)&mpVtblSpatial)->ctorSpatialObject();
-    _ReadWriteBarrier();
-    mpVtbl = (void*)kVtblMorph0;
-    _ReadWriteBarrier();
-    mpVtbl04 = (void*)kVtblMorph1;
-    _ReadWriteBarrier();
-    mpVtblSpatial = (void*)kVtblMorphSp;
-    _ReadWriteBarrier();
+    mpVtbl = &g_vt_1470eb8;
+    mpVtbl04 = &g_vt_147112c;
+    mpVtblSpatial = &g_vt_1470df0;
     mF108 = 0.0f;
-    _ReadWriteBarrier();
     mF10c = 0.0f;
-    _ReadWriteBarrier();
     mF110 = 0.0f;
     _ReadWriteBarrier();
     mB114 = 1;
-    _ReadWriteBarrier();
     mB115 = 1;
-    _ReadWriteBarrier();
     mVis = 0;
 }
 
@@ -3963,12 +3982,12 @@ void COrn::F090()
 // @ 0x00c69150
 cNanoDrone::cNanoDrone()
 {
-    mSpatial.mVt = (void*)0x1471780;
-    mVt0 = (void*)0x1471728;
-    mVt4 = (void*)0x1471718;
+    mSpatial.mVt = (void*)g_1471780;
+    mVt0 = (void*)g_1471728;
+    mVt4 = (void*)g_1471718;
     mp1d0 = 0;
     m1d4 = -1;
-    mCombatant.mVt = (void*)0x14716b0;
+    mCombatant.mVt = (void*)g_14716b0;
 }
 
 // @ 0x00c691e0
@@ -3992,10 +4011,10 @@ int COrn::F1e0(int id)
 cNanoDrone::~cNanoDrone()
 {
     void* p = mp1d0;
-    mVt0 = (void*)0x1471728;
-    mVt4 = (void*)0x1471718;
-    mSpatial.mVt = (void*)0x1471780;
-    mCombatant.mVt = (void*)0x14716b0;
+    mVt0 = (void*)g_1471728;
+    mVt4 = (void*)g_1471718;
+    mSpatial.mVt = (void*)g_1471780;
+    mCombatant.mVt = (void*)g_14716b0;
     if (p != 0) {
         ((cAgentOrderManager*)p)->F_00bcae90();
         FUN_00f47380(p);
@@ -4135,9 +4154,9 @@ void* __fastcall FUN_00c6f3d0(void* self, void* /*edx*/)
 {
   char* p = (char*)self;
   ((void*(__thiscall*)(void*))FUN_00c87660)(self);   // base ctor
-  *(u32*)(p + 0x00) = 0x01472008;     // vtbl cObjectInstanceInventoryItem
-  *(u32*)(p + 0x08) = 0x01472000;
-  *(u32*)(p + 0x0c) = 0x01471fdc;
+  *(u32*)(p + 0x00) = (int)g_1472008;     // vtbl cObjectInstanceInventoryItem
+  *(u32*)(p + 0x08) = (int)g_1472000;
+  *(u32*)(p + 0x0c) = (int)g_1471fdc;
   *(u32*)(p + 0x7c) = 0;              // mObject
   *(u8*)(p + 0x1c) = 1;              // mbIsUnique
   *(u32*)(p + 0x14) = 8;             // mItemType = ObjectInstance
@@ -4171,7 +4190,7 @@ u8 __fastcall FUN_00c6f500(void* self, void* /*edx*/, void* stream)
   u8 ok = ((u8(__thiscall*)(void*, void*))FUN_00c879a0)(self, stream);
   u32 ser[645];   // cVarListSerializer, 0xa14 bytes
   ((void*(__thiscall*)(void*, void*, void*, int))FUN_00692f90)(
-      ser, p - 0xc, (void*)0x01578618, 0x1a80d26);
+      ser, p - 0xc, (void*)g_1578618, 0x1a80d26);
   u8 ok2 = ((u8(__thiscall*)(void*, void*))FUN_00693e10)(ser, stream);
   return (ok2 != 0 && ok != 0);
 }
@@ -4180,9 +4199,10 @@ u8 __fastcall FUN_00c6f500(void* self, void* /*edx*/, void* stream)
 void* __fastcall FUN_00c6f590(void* self, void* /*edx*/, u32 flags)
 {
   char* p = (char*)self;
-  *(u32*)(p + 0x00) = 0x01472008;
-  *(u32*)(p + 0x08) = 0x01472000;
-  *(u32*)(p + 0x0c) = 0x01471fdc;
+  *(void**)(p + 0x00) = g_1472008;
+  *(void**)(p + 0x08) = g_1472000;
+  *(void**)(p + 0x0c) = g_1471fdc;
+  _ReadWriteBarrier();
   void* obj = *(void**)(p + 0x7c);
   if (obj != 0) {
     ((void(__thiscall*)(void*))(*(void***)obj)[4 / 4])(obj);

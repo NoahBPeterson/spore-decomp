@@ -86,7 +86,7 @@ struct ISpaceGame { bool IsFrozen(); };                      // 0x00b18e40
 
 int GetUniverseContext();                        // 0x01021080
 cSPSimulatorSpaceGame* GetUFOSimulator();        // 0x00ffbe50
-IStage* GetStage();                              // 0x00b3d4d0
+IStage* GetStage();                              // 0x00b3d470
 ISpaceGame* SpaceGameGet();                      // 0x01002bd0
 cSpatialObject* GetActivePlanet();               // 0x01021260
 cSpaceLocation* GetHomeLocation();               // 0x01021230

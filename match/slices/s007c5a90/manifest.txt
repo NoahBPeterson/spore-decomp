@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s007c5a90/s007c5a90.cpp  ?ActiveControllerID@cCameraManager@@QAEXXZ   007c6150
 slices/s007c5a90/s007c5a90.cpp  ?ActiveController@cCameraManager@@QAEPAXXZ   007c61a0
+slices/s007c5a90/s007c5a90.cpp  ?WriteImageFile@@YAHPADPAX@Z  007c5f00  /O2 /MD /Gy /EHsc /TP

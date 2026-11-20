@@ -160,7 +160,7 @@ struct cPaintVarEvalList {
     sp_vector<Modifier> mModifiers;     // +0x00
     sp_vector<Entry> mEntries;          // +0x14
     sp_vector<float> mCurveData;        // +0x28
-    cPaintVarEvalList() { uint32_t unused; }
+    cPaintVarEvalList() { uint32_t unused; }   // 0x005355e0
     cPaintVarEvalList(const cPaintVarEvalList& x);
 };
 

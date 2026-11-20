@@ -272,7 +272,7 @@ extern const unsigned int DAT_0140d15c[];
 struct C29820 {
     int   f0;
     int   f1;
-    float f2, f3, f4, f5, f6, f7;
+    float f2[6];
     int   f8, f9, f10, f11, f12;
     C29820* Init(int a, float* b, int c, int d);
 };
@@ -1245,12 +1245,8 @@ C29820* C29820::Init(int a, float* b, int c, int d)
 {
     f0 = a;
     f1 = 0;
-    f2 = b[0];
-    f3 = b[1];
-    f4 = b[2];
-    f5 = b[3];
-    f6 = b[4];
-    f7 = b[5];
+    for (int i = 0; i < 6; i++)
+        f2[i] = b[i];
     f8 = c;
     f9 = d;
     f10 = 0;

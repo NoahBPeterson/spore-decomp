@@ -2,6 +2,10 @@
 // Object file: SPEditors/SPUIFeedEdit.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+
 #include "game/types.h"
 #include "SP/cSPUIFeedEditAssetView.h"
 #include "SP/cSPUIFeedEdit.h"
@@ -1723,15 +1727,15 @@ extern float      kPosseMaxRange;                // 0x01486ebc
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
-#define G16C7AA4       (*(void**)0x016c7aa4)          // app / scenario global
+#define G16C7AA4       (*(void**)&g_16c7aa4)          // app / scenario global
 #define G16065F8       (*(const u8*)0x016065f8)
 #define G16065D8       (*(const u32*)0x016065d8)
 #define G16065DC       (*(const u32*)0x016065dc)
 #define G16065EC       (*(const u32*)0x016065ec)
 #define F1485720       (*(const float*)0x01485720)     // _HK_REAL_ONE
 #define MAT_DEFAULT    ((void*)0x016c76d8)
-#define VTBL_13EB90C   ((void*)0x013eb90c)
-#define VTBL_13EB844   ((void*)0x013eb844)
+#define VTBL_13EB90C   ((void*)g_13eb90c)
+#define VTBL_13EB844   ((void*)g_13eb844)
 typedef void  (__thiscall* FnV0)(void*);
 typedef void  (__thiscall* FnV1)(void*, void*);
 typedef void  (__thiscall* FnPost)(void*, u32, void*, int);
@@ -1972,7 +1976,7 @@ public:
 }
 struct SyncSim { char mPad[0xd0]; void* mpData; };                    // +0xd0
 struct SyncApp { char mPad[0x74]; SyncSim* mpSim; };                  // +0x74
-#define SYNC_APP (*(SyncApp**)0x016c7aa4)
+#define SYNC_APP (*(SyncApp**)&g_16c7aa4)
 struct Panel_s00ed_57e0 {
     char        mPad00[8];                        // +0x00
     WinProcS    mWinProc;                         // +0x08
@@ -2056,6 +2060,7 @@ struct cSim_s00ed_6720 {
     void   f3bcc0(int n);                            // 0x00f3bcc0
     bool   f327f0();                                 // 0x00f327f0
     bool   f41270(int a);                            // 0x00f41270
+    void   f3d8c0(int a);                            // 0x00f3d8c0 (thiscall, ret 4)
     char   pad10[0x10];
     void*  f10;                                      // +0x10
 };
@@ -2395,20 +2400,24 @@ int cSPUIFeedEdit::GetAssetIndex(int a, int b)
   return -1;
 }
 
+// intrusive_ptr<IRef>::operator= on the image member
+static inline void AssignRef_s0065cd70(void*& dst, void* src)
+{
+  if (src != dst) {
+    void* old = dst;
+    if (src) ((IRef*)src)->AddRef();
+    dst = src;
+    if (old) ((IRef*)old)->Release();
+  }
+}
+
 // @ 0x0065cd70
 AssetInfo& AssetInfo::operator=(const AssetInfo& other)
 {
   a = other.a;
   b = other.b;
   c = other.c;
-  _ReadWriteBarrier();
-  void* nw = other.d;
-  void* old = d;
-  if (nw != old) {
-    if (nw) ((IRef*)nw)->AddRef();
-    d = nw;
-    if (old) ((IRef*)old)->Release();
-  }
+  AssignRef_s0065cd70(d, other.d);
   return *this;
 }
 
@@ -5210,12 +5219,11 @@ void Panel_s00ed_6720::BadgeAutoTest()
 // @ 0x00ed7490
 void Panel_s00ed_6720::SelectionChanged(int a)
 {
-    (void)a;
     if (g_16c7aa4_s00ed_6720->sim->f41270(0)) {
         if (*(int*)((char*)g_16c7aa4_s00ed_6720->sim->f10 + 8) == 0)
             BadgeAutoTest();
         Select(0);
-        sim_f3d8c0(g_16c7aa4_s00ed_6720->sim);
+        g_16c7aa4_s00ed_6720->sim->f3d8c0(a);
     }
     else {
         mMode = 0;

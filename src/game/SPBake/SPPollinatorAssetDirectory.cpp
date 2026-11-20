@@ -1135,7 +1135,7 @@ namespace eastl {
 typedef basic_string_s0055_1b60<wchar_t> string16_s0055_1b60;
 }
 namespace eastl {
-template <class T> inline bool operator==(const basic_string_s0055_1b60<T>& a, const basic_string_s0055_1b60<T>& b)
+template <class T> inline bool operator==(const basic_string_s0055_1b60<T>& a, const basic_string_s0055_1b60<T>& b)   // 0x00554FB0
 {
     return ((a.size() == b.size()) && (memcmp(a.data(), b.data(), (unsigned int)a.size()) == 0));
 }
@@ -1307,7 +1307,10 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 namespace eastl {
 void EASTL_allocator_deallocate(void* p); // 0x00f47380
 }
-struct HashFreeStub { void DoFreeNodes(void** pArr, unsigned n); };
+struct HashFreeStub {
+    void DoFreeNodes(void** pArr, unsigned n);
+    inline void DoFreeNode(void* pNode) { void* p = pNode; EASTL_allocator_deallocate(p); }
+};
 struct HashIteratorStub {
     void* mpNode;
     void* mpBucket;
@@ -3545,9 +3548,9 @@ void HashFreeStub::DoFreeNodes(void** pArr, unsigned n)
     for (unsigned i = 0; i < n; ++i) {
         void* node = pArr[i];
         while (node) {
-            void* next = *(void**)((char*)node + 8);
-            EASTL_allocator_deallocate(node);
-            node = next;
+            void* const temp = node;
+            node = *(void**)((char*)node + 8);
+            DoFreeNode(temp);
         }
         pArr[i] = 0;
     }

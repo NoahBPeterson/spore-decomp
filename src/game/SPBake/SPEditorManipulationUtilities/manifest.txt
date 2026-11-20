@@ -118,3 +118,4 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?NumberBlocks@cSPEditorModel_s004a_c610@SP@@QAEXXZ  004ad4e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetCreatorType@@YA_NPBUResourceKey@@@Z  00641900  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00641fa0@cTimelineSporepediaCardData@@QAE_NXZ  00641fa0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?PushFront@DequeBase@@QAEXPAX@Z  004ab130  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

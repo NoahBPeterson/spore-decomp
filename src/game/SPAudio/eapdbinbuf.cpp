@@ -523,11 +523,8 @@ void binbuf_add(t_binbuf* b, int argc, const t_atom* argv)
 
         b->b_vec = vec;
         ap = (t_atom*)((char*)vec + b->b_n * (int)sizeof(t_atom));
-        for (i = argc; i != 0; --i) {
-            *ap = *argv;
-            argv++;
-            ap++;
-        }
+        for (i = argc; i--; ap++)
+            *ap = *(argv++);
         b->b_n = n;
     }
 }

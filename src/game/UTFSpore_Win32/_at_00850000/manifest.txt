@@ -27,3 +27,4 @@
 ../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085e6b0@@YAXHHHHHPAH@Z  0085e6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085e760@@YAXHHHHHPAHH@Z  0085e760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085ade0@@YAXPAUReader@@IPAII@Z  0085ade0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_00854f00@@YAPAXPAUcTerrainExport@@@Z  00854f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

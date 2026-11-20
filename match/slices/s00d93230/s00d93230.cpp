@@ -1,3 +1,6 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -143,7 +146,7 @@ u8 __cdecl FUN_00d93230(cObj* a1, void* a2, void* a3, void* a4, void* a5, u32* a
     default:
         goto ret1;
     }
-    u32 r = MOPS((void*)0x1601760)->FUN_00a68fb0(3);
+    u32 r = MOPS((void*)g_1601760)->FUN_00a68fb0(3);
     switch (r) {
     case 0:
         MOPS(a1)->FUN_00c12190(0x2d5f9be, 1, -1);

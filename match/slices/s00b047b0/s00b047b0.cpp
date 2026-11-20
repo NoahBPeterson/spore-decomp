@@ -2,6 +2,10 @@
 // subsystem (0x00b047b0..0x00b058f0).
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145c660[];
+
 #include "types.h"
 
 typedef unsigned int   uint;
@@ -804,7 +808,7 @@ int* FUN_00b05770(int* srcBegin, int* srcEnd, int* dest, int)
     while (srcBegin != srcEnd) {
         if (dest) {
             ((PoolOwner*)dest)->rbcontainer_copy(srcBegin);
-            *dest = 0x145c660;
+            *dest = (int)g_145c660;
         }
         srcBegin = (int*)((char*)srcBegin + 0x24);
         dest     = (int*)((char*)dest + 0x24);

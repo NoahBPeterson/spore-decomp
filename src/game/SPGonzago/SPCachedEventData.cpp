@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCachedEventData.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1494378[];
+
 #include "game/types.h"
 #include "EA/Messaging/AutoHandler.h"
 
@@ -75,6 +78,7 @@ struct Rbtree {                 // eastl set header
     };
     uint32_t mField14;          // +0x14
     uint32_t mField18;          // +0x18
+    void Nuke() { ((MC*)this)->f_009a9600(mRoot); }
 };
 struct cCachedEventData {
     void*    mpVtbl;            // +0x00
@@ -111,13 +115,14 @@ struct cCachedEventData {
 };
 // ---- items of slice s00fe68a0 end
 
+extern "C" char g_13eb394[];   // IHandler vtable
 // @ 0x00fe6a00
 cCachedEventData::~cCachedEventData()
 {
-    ((MC*)&mInactivePlayers)->f_009a9600(mInactivePlayers.mRoot);
-    ((MC*)&mActiveEmpires)->f_009a9600(mActiveEmpires.mRoot);
-    ((MC*)&mLocalEmpires)->f_009a9600(mLocalEmpires.mRoot);
-    ((MC*)&mNearbyEmpires)->f_009a9600(mNearbyEmpires.mRoot);
+    mInactivePlayers.Nuke();
+    mActiveEmpires.Nuke();
+    mLocalEmpires.Nuke();
+    mNearbyEmpires.Nuke();
 
     ((MC*)&mNearbyKnownEmpireStars)->f_00ae6970();
     ((MC*)&mNearbyEmpireStars)->f_00ae6970();
@@ -132,7 +137,7 @@ cCachedEventData::~cCachedEventData()
         FUN_00571db0(h, (void*)(uintptr_t)mArg08, (void*)(uintptr_t)mArg0c,
                      (void*)(uintptr_t)mArg10, (void*)(uintptr_t)mArg14);
     }
-    mpVtbl = (void*)0x13eb394;
+    mpVtbl = g_13eb394;
 }
 
 // @ 0x00fe6ad0
@@ -438,14 +443,14 @@ void cCachedEventData::Init()
     EA::Messaging::AutoHandler* h = (EA::Messaging::AutoHandler*)&mHandler;
     h->mpServer = (EA::Messaging::Server*)server;
     h->mpHandler = (EA::Messaging::IHandler*)this;
-    h->mpIdArray = (unsigned int*)0x1494378;
+    h->mpIdArray = (unsigned int*)g_1494378;
     h->mnIdArrayCount = 5;
     h->mnPriority = 0;
 
     typedef void (__thiscall* Fn)(void*, void*, uint32_t);
     if (h->mpServer != 0 && h->mpHandler != 0) {
         for (uint32_t i = 0; i < 0x14; i += 4) {
-            uint32_t fn = *(uint32_t*)(0x1494378 + i);
+            uint32_t fn = *(uint32_t*)((int)g_1494378 + i);
             ((Fn)VF(server, 0x24))(server, this, fn);
         }
     }

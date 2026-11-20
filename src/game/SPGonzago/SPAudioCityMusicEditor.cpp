@@ -1057,9 +1057,10 @@ void cCityMusicEditor_s00ea_0910::Shutdown()
 {
     SetVisibility(0);
     if (mHandler.mpField00) {
-        RemoveHandler(mHandler.mpField00, mHandler.mpField04, mHandler.mpField08,
-                      mHandler.mpField0c, mHandler.mpField10);
+        void* pServer = mHandler.mpField00;
         mHandler.mpField00 = 0;
+        RemoveHandler(pServer, mHandler.mpField04, mHandler.mpField08,
+                      mHandler.mpField0c, mHandler.mpField10);
     }
     mPulses.erase(mPulses.mpBegin, mPulses.mpEnd);
     mpNoteEditor->FUN_00ea3ed0();
@@ -1076,10 +1077,11 @@ void __fastcall FUN_00ea1470(cCityMusicEditor_s00ea_0910* self)
     self->Shutdown();
 
     if (self->mHandler.mpField00) {
-        RemoveHandler(self->mHandler.mpField00, self->mHandler.mpField04,
+        void* pServer = self->mHandler.mpField00;
+        self->mHandler.mpField00 = 0;
+        RemoveHandler(pServer, self->mHandler.mpField04,
                       self->mHandler.mpField08, self->mHandler.mpField0c,
                       self->mHandler.mpField10);
-        self->mHandler.mpField00 = 0;
     }
     if (self->mpLoadSave) {
         ((IRef8*)self->mpLoadSave)->Release();

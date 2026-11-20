@@ -1,3 +1,14 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146aaf8[];
+extern "C" char g_146ab10[];
+extern "C" char g_146ab78[];
+extern "C" char g_146ab94[];
+extern "C" char g_146aba0[];
+extern "C" char g_146aca0[];
+extern "C" char g_146ad08[];
+extern "C" char g_146ad4c[];
+extern "C" char g_146ad60[];
+
 #include <intrin.h>
 // src/game/SPGonzago/SPCreatureCitizen.cpp -- migrated from slice(s) s00c278e0, s00c24e80, s00c0ddb0, s01335f70, s00da7780, s00c267e0, s00c25a50, s00c23f80, s00c22fc0, s00c22010 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureCitizen.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
@@ -1764,7 +1775,7 @@ void cSPCreatureBase::FUN_00c22930Read(void* pStream)
     void* pS = pTarget->GetStream();
     EA::IO::ReadInt32(pS, &nTag, 1, 0);
     this->FUN_00c14aa0(pStream);
-    cVarListSerializer ser(this, (void*)0x015721f0, 0x1a80d26);
+    cVarListSerializer ser(this, (void*)&g_tbl_15721f0, 0x1a80d26);
     ser.SerializeIn(pStream);
 }
 
@@ -3792,15 +3803,15 @@ cCreatureCitizen* cCreatureCitizen::Construct()
 // @ 0x00c27120
 void cCreatureCitizen::Destroy()
 {
-    mpVtbl00 = (void*)0x146ad60;
-    mpVtbl04 = (void*)0x146ad4c;
-    mpVtbl34 = (void*)0x146ad08;
-    mAgent.mpVtblLocal = (void*)0x146aca0;
-    mLocomotion.mpVtblLocal = (void*)0x146aba0;
-    mpVtbl194 = (void*)0x146ab94;
-    mpVtbl590 = (void*)0x146ab78;
-    mpVtbl5a8 = (void*)0x146ab10;
-    mpVtbl670 = (void*)0x146aaf8;
+    mpVtbl00 = (void*)g_146ad60;
+    mpVtbl04 = (void*)g_146ad4c;
+    mpVtbl34 = (void*)g_146ad08;
+    mAgent.mpVtblLocal = (void*)g_146aca0;
+    mLocomotion.mpVtblLocal = (void*)g_146aba0;
+    mpVtbl194 = (void*)g_146ab94;
+    mpVtbl590 = (void*)g_146ab78;
+    mpVtbl5a8 = (void*)g_146ab10;
+    mpVtbl670 = (void*)g_146aaf8;
 
     _ReadWriteBarrier();
     if (mpRequest != nullptr)
@@ -4112,14 +4123,8 @@ void FUN_00da7dc0(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
 bool FUN_00da7e20(Creature* p, Creature* q)
 {
     Creature* a = p->FUN_00bc9b10();
-    i32_s00da_7780 iVar2 = (i32_s00da_7780)a->GetTribe();
-    i32_s00da_7780 iVar3 = (i32_s00da_7780)q->GetTribe();
-    if (iVar3 == iVar2) {
-        iVar2 = a->FUN_00c0ee60();
-        iVar3 = q->FUN_00c0ee60();
-        if (iVar3 == iVar2)
-            return 1;
-    }
+    if (q->GetTribe() == a->GetTribe() && q->FUN_00c0ee60() == a->FUN_00c0ee60())
+        return 1;
     return 0;
 }
 

@@ -1,1 +1,0 @@
-00d1c150 22 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 100.0% cov); constructor: vtable-store scheduling only -- original interleaves mov ecx,edi between the two base-vtable stores and keeps all four override stores together ahead of the zero-fill; MSVC groups them differently (22 bytes)

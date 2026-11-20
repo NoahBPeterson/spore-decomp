@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPUIMissions.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13f6b3c[];
+extern "C" char g_147fe50[];
+extern "C" char g_147fe60[];
+extern "C" char g_16c7aa4[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cSPMission.h"
@@ -210,8 +218,6 @@ public:
     void SetCardsVisibility(bool bVisible);               // 0x00e14c10
     cSPUILayout_s00e1_4a30* GetPanelLayout();                        // 0x00e14c70
     void SetPanelArea(EA::RectT_s00e1_4a30<float> area);             // 0x00e14d00
-    static void InsertionSortSubrange(CardRef* pFirst, CardRef* pLast);   // 0x00e14d90
-    static void InsertionSort(CardRef* pFirst, CardRef* pLast);           // 0x00e14e60
     void UpdateProgressWindows();                         // 0x00e154d0
     void UpdateScenarioWindows();                         // 0x00e15620
     void ExpandMissionCard(int missionId);                // 0x00e15b90
@@ -2672,6 +2678,10 @@ public:
 };
 }
 namespace SP {
+// The button's polymorphic bases: the primary one at +0, the window-handler interface at +8.
+struct cUIMissionButtonPrimary { virtual void v00(); uint32_t mPad04; };
+struct cUIMissionButtonHandler { virtual void h00(); };
+struct cUIMissionButtonBases : cUIMissionButtonPrimary, cUIMissionButtonHandler {};
 class cUIMissionButton {
 public:
     void SetTracked();
@@ -2824,8 +2834,8 @@ void cUICard_s00e1_2f80::Release2()
   q = p20; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
   q = p1c; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
   q = p0c; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
-  *(void**)((char*)this + 4) = (void*)0x13ec458;
-  *(void**)this = (void*)0x13eb938;
+  *(void**)((char*)this + 4) = (void*)g_13ec458;
+  *(void**)this = (void*)g_13eb938;
 }
 
 // @ 0x00e132c0
@@ -2848,9 +2858,11 @@ void cUICard_s00e1_2f80::Teardown()
     if (q) { p0c = 0; ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q); }
   }
   q = p20;
-  if (q) FUN_00e2ed40();
-  q = p20;
-  if (q) { p20 = 0; ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q); }
+  if (q) {
+    ((cSPUIRelationshipStrip*)q)->FUN_00e2ed40();
+    q = p20;
+    if (q) { p20 = 0; ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q); }
+  }
 }
 
 // @ 0x00e13360
@@ -2999,7 +3011,7 @@ void CardLayout::ResizeToStyle0(bool animate)
 // @ 0x00e141a0
 CardLayout* CardLayout::InitA()
 {
-    mpVtbl1 = (void*)0x013ec458;
+    mpVtbl1 = (void*)&g_13ec458;
     m08 = 0;
     m0C = 0;
     m10 = 0;
@@ -3194,7 +3206,7 @@ void CardLayout::UpdateButtonStateB(ISelectable* src)
 }
 
 static __forceinline void InitBaseVtbl(void* volatile& v) {
-    v = (void*)0x013ec458;
+    v = (void*)&g_13ec458;
 }
 
 // @ 0x00e147a0
@@ -3218,8 +3230,8 @@ CardLayout* CardLayout::InitB()
     mpWinB = 0;
     mp40 = 0;
     mpWinC = 0;
-    mpVtbl0 = (void*)0x0147fe60;
-    mpVtbl1 = (void*)0x0147fe50;
+    mpVtbl0 = (void*)g_147fe60;
+    mpVtbl1 = (void*)g_147fe50;
     m98.u = 0;
     return this;
 }
@@ -3227,7 +3239,7 @@ CardLayout* CardLayout::InitB()
 // @ 0x00e14810
 CardLayout* CardLayout::InitC()
 {
-    mpVtbl1 = (void*)0x013ec458;
+    mpVtbl1 = (void*)&g_13ec458;
     m08 = 0;
     m0C = 0;
     m10 = 0;
@@ -3273,7 +3285,7 @@ void CardLayout::UpdateScrollButtons()
 {
     if (mF0 == 1)
         return;
-    ScrollGlobals* g = *(ScrollGlobals**)0x016c7aa4;
+    ScrollGlobals* g = *(ScrollGlobals**)g_16c7aa4;
     int total = g->mpHost->mCount;
     int cur = g->mpSource->GetScrollPos();
     IWindow_s00e1_3b50* w = mpMainWin->FindWindowByID(0x74b5328, true);
@@ -3428,79 +3440,6 @@ void cUIMissionCardPanel::SetPanelArea(EA::RectT_s00e1_4a30<float> area)
         mPanelBackdrop.mpObject->Init(&area.mLeft, false, 0);
     }
     mPanelBackdrop.mpObject->SetVisibility(true);
-}
-
-// @ 0x00e14d90
-void cUIMissionCardPanel::InsertionSortSubrange(CardRef* pFirst, CardRef* pLast)
-{
-    if (pFirst == pLast)
-        return;
-
-    for (CardRef* pCur = pFirst + 1; pCur != pLast; ++pCur) {
-        cUICard* pValue = pCur->mpObject;
-        if (pValue != nullptr)
-            pValue->AddRef();
-
-        CardRef* pPos = pCur;
-        while (pPos != pFirst && CardLessThan(pValue, (pPos - 1)->mpObject)) {
-            cUICard* pPrev = (pPos - 1)->mpObject;
-            cUICard* pOld = pPos->mpObject;
-            if (pPrev != pOld) {
-                if (pPrev != nullptr)
-                    pPrev->AddRef();
-                pPos->mpObject = pPrev;
-                if (pOld != nullptr)
-                    pOld->Release();
-            }
-            --pPos;
-        }
-
-        cUICard* pOld = pPos->mpObject;
-        if (pValue != pOld) {
-            if (pValue != nullptr)
-                pValue->AddRef();
-            pPos->mpObject = pValue;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
-        if (pValue != nullptr)
-            pValue->Release();
-    }
-}
-
-// @ 0x00e14e60
-void cUIMissionCardPanel::InsertionSort(CardRef* pFirst, CardRef* pLast)
-{
-    for (; pFirst != pLast; ++pFirst) {
-        cUICard* pValue = pFirst->mpObject;
-        if (pValue != nullptr)
-            pValue->AddRef();
-
-        CardRef* pPos = pFirst;
-        while (CardLessThan(pValue, (pPos - 1)->mpObject)) {
-            cUICard* pPrev = (pPos - 1)->mpObject;
-            cUICard* pOld = pPos->mpObject;
-            if (pPrev != pOld) {
-                if (pPrev != nullptr)
-                    pPrev->AddRef();
-                pPos->mpObject = pPrev;
-                if (pOld != nullptr)
-                    pOld->Release();
-            }
-            --pPos;
-        }
-
-        cUICard* pOld = pPos->mpObject;
-        if (pValue != pOld) {
-            if (pValue != nullptr)
-                pValue->AddRef();
-            pPos->mpObject = pValue;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
-        if (pValue != nullptr)
-            pValue->Release();
-    }
 }
 
 // @ 0x00e15060
@@ -4182,7 +4121,7 @@ void cMissionPanel::FUN_00e173c0()
 PaintSystem::PaintSystem()
 {
     ((GonzagoCtor*)this)->Init();      // SP::cGonzagoSubsystem::cGonzagoSubsystem
-    mVtbl1c = (void*)0x13ec458;
+    mVtbl1c = (void*)&g_13ec458;
     mZero20 = 0;
     mVtbl24 = (void*)0x13eb394;
     mVtbl0 = (void*)0x147ffe8;
@@ -4675,6 +4614,60 @@ bool cSortMissions::operator()(int* a, int* b)
     return k1 < k2;
 }
 
+// @ 0x00e19dd0
+// Item ordering in the current game mode: true when a's entry comes after b's.
+struct cOrderedItemSource {
+    void* GetOrderedItems();   // 0x009892e0
+};
+extern "C" bool __stdcall cSortMissionsByMode(int* a, int* b)
+{
+    int mode = (int)SP_GetCurrentGameMode();
+    switch (mode) {
+    case 0x1654c05: {
+        int* pa = a ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)a) + 0xc))(a, 0x2aa5ada) : 0;
+        int* pb = b ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)b) + 0xc))(b, 0x2aa5ada) : 0;
+        void* list = ((cMissionManager*)GetMissionManager())->GetMissionList();
+        int* cur = (int*)*(int*)list;
+        int n = (*((int*)list + 1) - (int)cur) >> 2;
+        int k1 = -1;
+        int k2 = -1;
+        for (int i = 0; i < n; ++i) {
+            int v = *cur;
+            if (v == (int)pa) k1 = i;
+            else if (v == (int)pb) k2 = i;
+            if (k1 != -1 && k2 != -1) break;
+            ++cur;
+        }
+        return k1 > k2;
+    }
+    case 0x1654c01:
+    case 0x1654c02:
+    case 0x1654c04: {
+        int* pa = a ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)a) + 0xc))(a, 0x14066ce5) : 0;
+        int* pb = b ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)b) + 0xc))(b, 0x14066ce5) : 0;
+        void* src;
+        if (mode == 0x1654c01) src = (void*)FUN_00d37cb0();
+        else if (mode == 0x1654c02) src = (void*)FUN_00cd3440();
+        else src = (void*)FUN_00d004b0();
+        void* list = ((cOrderedItemSource*)src)->GetOrderedItems();
+        int* cur = (int*)*(int*)list;
+        int n = (*((int*)list + 1) - (int)cur) >> 2;
+        int k1 = -1;
+        int k2 = -1;
+        for (int i = 0; i < n; ++i) {
+            int v = *cur;
+            if (v == (int)pa) k1 = i;
+            else if (v == (int)pb) k2 = i;
+            if (k1 != -1 && k2 != -1) break;
+            ++cur;
+        }
+        return k1 > k2;
+    }
+    default:
+        return false;
+    }
+}
+
 // @ 0x00e1a1a0
 uint32_t __fastcall FUN_00e1a1a0(CIndexedArray* pThis)
 {
@@ -5137,7 +5130,7 @@ void cUIMissionButton::Shutdown()
     {
         IWinWindow* pHandlerWindow = mpLayout->FindWindowByID(0x5ee1ee0, 1);
         if (pHandlerWindow != 0)
-            pHandlerWindow->SetHandler(&mpVtbl08);
+            pHandlerWindow->SetHandler(&static_cast<cUIMissionButtonHandler&>(reinterpret_cast<cUIMissionButtonBases&>(*this)));
     }
     reinterpret_cast<cUIMissionCardPanel_s00e1_bbc0*>(this)->ShutdownCard();
 }
@@ -5204,7 +5197,7 @@ void cUIMissionButton::CreateMissionButton(void* p1, void* p2, void* p3, void* p
     if (mpLayout == 0)
         return;
 
-    void* pRawFeed = operator_new(0x6c, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    void* pRawFeed = operator_new(0x6c, (const char*)g_13f6b3c, 0, 0, 0, 0);
     cSPUIFeedList_s00e1_bbc0* pNewFeed = pRawFeed != 0 ? (cSPUIFeedList_s00e1_bbc0*)((cSPUIFeedList_s00e1_bbc0*)pRawFeed)->Ctor() : 0;
     {
         cSPUIFeedList_s00e1_bbc0* pOldFeed = mpFeedList;

@@ -76,7 +76,7 @@ extern const wchar_t DAT_01480584[], DAT_01480588[];
 // tiny cSPUIPosseItem-ish and misc helpers used by the byte-exact ones
 // ----------------------------------------------------------------------
 
-// @ 0x00e21590
+// Legacy copy; byte-exact definition is in src/game/SPGonzago/SPUIPosse.cpp.
 // returns one of two wide-string constants based on index
 const wchar_t* __stdcall FUN_00e21590(int idx) {
   switch (idx) {

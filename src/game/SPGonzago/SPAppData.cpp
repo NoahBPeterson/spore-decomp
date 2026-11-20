@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPAppData.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148256c[];
+extern "C" char g_16ad060[];
+extern "C" char g_16ad064[];
+
 #include "game/types.h"
 #include <math.h>
 #include <string.h>
@@ -489,7 +494,8 @@ struct MapStrInt {                      // eastl::map<eastl::string,int>
     u8       mPad_11[3];                // +0x11
     int      mnSize_14;                 // +0x14
     uint     mPad_18;                   // +0x18
-    int*  at(const EaString* key);          // 0x00b1c220  operator[]
+    int*  at(const EaString* key);          // 0x00e4bda0  (int-keyed lookup/insert)
+    int*  FUN_00b1c220(const EaString* key); // 0x00b1c220  operator[]
     void* find(void** out, const void* key); // 0x00b20930  ?Find@MapStrFind
     void  NukeSubtree(void* root);          // 0x00e84940  DoNukeSubtree
 };
@@ -1278,7 +1284,7 @@ cMyMagicCommand_s00e4_ba40* cMyMagicCommand_s00e4_ba40::Command(void* field)
 // @ 0x00e4bad0
 void* cMyMagicCommand_s00e4_ba40::Destroy(uint flags)
 {
-    this->mpVptr_00 = (void*)0x148256c;
+    this->mpVptr_00 = (void*)g_148256c;
     this->mLock_1c.Release();
     void* buf = this->mpVecBegin_04;
     if (buf != 0 && *(int*)((char*)buf - 4) != 0)
@@ -1364,9 +1370,9 @@ void FUN_00e4bca0(void* param_1, void* param_2)
 // @ 0x00e4bd70
 void FUN_00e4bd70(void)
 {
-    void* p = *(void**)0x16ad064;
+    void* p = *(void**)g_16ad064;
     while (p != 0) {
-        void** list = *(void***)0x16ad060;
+        void** list = *(void***)g_16ad060;
         FUN_00e4bca0(list[8], p);
         p = *(void**)((char*)p + 0x28);
     }
@@ -1392,7 +1398,7 @@ int* MapStrInt::at(const EaString* key)
     if (pos == head || k < *(int*)((char*)pos + 0x10)) {
         EaString tmp;
         tmp.SetEmpty();
-        void* v = FUN_00b1c220();
+        void* v = ::FUN_00b1c220();
         (void)v;
         u8* n = (u8*)NewMapNode(this, pos, k);
         pos = (void**)n;
@@ -1459,7 +1465,7 @@ void FUN_00e4bff0(const char* key, int value)
     EaString& s = frame.s;
     s.SetEmpty();
     s.sprintf_(g_fmtPctS, key);
-    int* slot = gspAppDataGlobals_s00e4_ba40->mFieldMap_28.at(&s);
+    int* slot = gspAppDataGlobals_s00e4_ba40->mFieldMap_28.FUN_00b1c220(&s);
     *slot = value;
     s.FreeIfOwned();
 }

@@ -195,6 +195,31 @@ def never_tried(max_size):
             if fp["size"] <= max_size and va not in done and va not in noted and va not in lib]
 
 
+def shape_only():
+    """{va: (twin va or None, borrowed source)} from match/shape_only.txt: functions a generated row matched only by
+    borrowing a twin's source that names other targets (tools/ci/shape_only.py). Open work, and quick: start from
+    the twin's source and point every name at what retail uses."""
+    out = {}
+    try:
+        for l in open(os.path.join(ROOT, "match", "shape_only.txt")):
+            p = l.split("#", 1)[0].split()
+            if len(p) >= 3:
+                out[int(p[0], 16)] = (int(p[1], 16) if p[1] != "-" else None, p[2])
+    except OSError:
+        pass
+    return out
+
+
+def shape_hint(va, sh):
+    twin, src = sh
+    if twin is not None:
+        return ("same shape as 0x%08x" % twin,
+                "copy 0x%08x from match/%s into %s, then point its calls and globals at what retail uses here"
+                % (twin, src, new_source_path(va)))
+    return ("generated, wrong names", "match/%s has a generated version whose names point elsewhere; write it in %s"
+            % (src, new_source_path(va)))
+
+
 def new_source_path(va):
     return "match/slices/s%08x/s%08x.cpp" % (va, va)
 
@@ -445,9 +470,12 @@ def main():
         if neq and not a.show_equivalent:
             print("(%d more are proven equivalent already and hidden; --show-equivalent lists them)" % neq)
         print("  %-10s  %5s  %6s  %6s  %s" % ("function", "tries", "differ", "size", "where / last note"))
+        shp = shape_only()
         for size, va, diff, where, reason in rows:
             n = ndiff(diff)
-            if va not in have:
+            if va in shp and va not in have:
+                where, reason = shape_hint(va, shp[va])
+            elif va not in have:
                 where, reason = "no source yet", "write it in " + new_source_path(va) + (" (" + reason + ")" if reason else "")
             c = cl.get(va)
             if c:
@@ -477,6 +505,14 @@ def main():
         print("claimed    COULD NOT CHECK (offline?): look for this address in the open pull requests before starting")
     print("retail     %s" % ("%d bytes (fingerprint: %d bytes are addresses, not compared)" %
                              (fp["size"], sum(n for _s, n in fp["mask"])) if fp else "no fingerprint: not a known function start"))
+    shp = shape_only().get(va)
+    if shp and not src:
+        where, how = shape_hint(va, shp)
+        print("source     none of its own: %s (a generated match borrowed that source, but retail calls or reads other\n"
+              "           addresses here, so it is not counted as byte-exact)\n"
+              "next: %s;\n      then: .venv/bin/python tools/contrib/check.py 0x%08x (it checks the names too)"
+              % (where, how, va))
+        return 0
     if not src:
         p = new_source_path(va)
         print("source     none yet: no file has a `// @ 0x%08x` marker.\n"

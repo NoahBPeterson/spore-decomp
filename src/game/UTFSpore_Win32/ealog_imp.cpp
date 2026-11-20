@@ -7,6 +7,7 @@
 #include "EA/Trace/Server.h"
 #include <string.h>
 #include "EA/Trace/LogFilterGroupLevels.h"
+#include "EA/Trace/LogRecord.h"
 #include "EASemaphoreData.h"
 #include "EAThreadDynamicData.h"
 #include "EA/Thread/Semaphore.h"
@@ -89,7 +90,6 @@ void  UpdateLogFilters();
 }
 }
 struct C233e0 { char pad[0x21c]; unsigned short v; void Set(unsigned short); };
-struct C233f0 { void** vtbl; void Call(void* arg); };
 // ---- items of slice s00922500 end
 
 // ---- items of slice s009234f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1078,10 +1078,10 @@ void C233e0::Set(unsigned short x)
 }
 
 // @ 0x009233f0
-void C233f0::Call(void* arg)
+bool EA::Trace::LogFilterGroupLevels::IsFiltered(const EA::Trace::LogRecord& record) const
 {
-    void* v = *(void**)((char*)arg + 0xc);
-    (*(void(__thiscall**)(void*, void*))((char*)vtbl + 0x14))(this, v);
+    EA::Trace::TraceHelper* v = record.mTraceHelper;
+    return (*(bool(__thiscall**)(const void*, const void*))((char*)*(void***)this + 0x14))(this, v);
 }
 
 // @ 0x00923440
@@ -1539,12 +1539,11 @@ EA::Trace::LogFilterGroupLevels_s0092_34f0::LogFilterGroupLevels_s0092_34f0(void
 // @ 0x00923f90
 EA::Trace::LogFilterGroupLevels_s0092_34f0::~LogFilterGroupLevels_s0092_34f0()
 {
-    _ReadWriteBarrier();
     mGlobalLevel = 1;
     char dummy = 0;
     RemoveGroupLevel(&dummy);
-    EA::Trace::RBNode* root = (EA::Trace::RBNode*)mGroupLevelMap.mAnchor.mpParent;
-    mGroupLevelMap.DoNukeSubtree(root);
+    EA::Trace::RBTreeMap& groupLevels = mGroupLevelMap;
+    groupLevels.DoNukeSubtree((EA::Trace::RBNode*)groupLevels.mAnchor.mpParent);
     if ((mName.mpCapacity - mName.mpBegin) > 1 && mName.mpBegin != 0)
         EA_operator_delete(mName.mpBegin);
 }

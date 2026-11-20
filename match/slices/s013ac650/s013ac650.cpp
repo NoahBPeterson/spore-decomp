@@ -2,6 +2,17 @@
 // Havok class/typeinfo dynamic initializers and singleton/atexit glue (0x013AC650..0x013BED00).
 // Reconstructed from the retail binary. Relocations are masked by the matcher, so external
 // reflection tables and callees are declared as externs with the right shape.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_010c4a20();
+extern "C" void FUN_010c98e0();
+extern "C" void FUN_010cb210();
+extern "C" void FUN_01127830();
+extern "C" char g_14a3c54[];
+extern "C" char g_14a40c4[];
+extern "C" char g_14a416c[];
+extern "C" char g_14a6254[];
+
 #include <intrin.h>
 
 // ------------------------------------------------------------------ CRT / Win32 imports
@@ -159,16 +170,16 @@ extern TypeInfo g_016e58b0, g_016e58ec, g_016e5c70;
 void FUN_013b51d0() {
     hkShapeCollection shape;
     g_016e58b0.name   = "hkTriSampledHeightFieldCollection";
-    g_016e58b0.finish = (void (*)(void*))0x010c4a20;
-    g_016e58b0.vtbl   = (const void*)0x014a3c54;
+    g_016e58b0.finish = (void (*)(void*))FUN_010c4a20;
+    g_016e58b0.vtbl   = (const void*)g_14a3c54;
     (void)shape;
 }
 // @ 0x013B5300
 void FUN_013b5300() {
     hkShapeCollection shape;
     g_016e58ec.name   = "hkConvexPieceMeshShape";
-    g_016e58ec.finish = (void (*)(void*))0x010cb210;
-    g_016e58ec.vtbl   = (const void*)0x014a416c;
+    g_016e58ec.finish = (void (*)(void*))FUN_010cb210;
+    g_016e58ec.vtbl   = (const void*)g_14a416c;
     (void)shape;
 }
 // @ 0x013B55D0
@@ -176,8 +187,8 @@ struct __declspec(align(16)) hkUnaryAction { unsigned pad[0x48/4]; hkUnaryAction
 void FUN_013b55d0() {
     hkUnaryAction action((void*)0, 0);
     g_016e5c70.name   = "hkMouseSpringAction";
-    g_016e5c70.finish = (void (*)(void*))0x01127830;
-    g_016e5c70.vtbl   = (const void*)0x014a6254;
+    g_016e5c70.finish = (void (*)(void*))FUN_01127830;
+    g_016e5c70.vtbl   = (const void*)g_14a6254;
     (void)action;
 }
 // ---- the {name, finishFn, vtable} record the shape registration above fills in
@@ -193,9 +204,9 @@ void FUN_013b52d0() {
     extern const float g_01485720;
     float probe = FUN_010c9050();
     g_016e58e0.name   = hkCylinderShapeName;
-    g_016e58e0.finish = (void (*)(void*))0x010c98e0;
+    g_016e58e0.finish = (void (*)(void*))FUN_010c98e0;
     g_015ba2d8 = g_01485720 - probe;
-    g_016e58e0.vtbl   = (const void*)0x014a40c4;
+    g_016e58e0.vtbl   = (const void*)g_14a40c4;
 }
 
 // ---- simple global stores / getters

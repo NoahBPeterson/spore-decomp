@@ -2,6 +2,51 @@
 // Object file: SPGonzago/SPPlayer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1465d64[];
+extern "C" void FUN_00595a50();
+extern "C" void FUN_00675ca0();
+extern "C" void FUN_00692ca0();
+extern "C" void FUN_00692fb0();
+extern "C" void FUN_00693070();
+extern "C" void FUN_00693090();
+extern "C" void FUN_00694f00();
+extern "C" void FUN_00694f80();
+extern "C" void FUN_00ac8050();
+extern "C" void FUN_00ae3310();
+extern "C" void FUN_00ae3470();
+extern "C" void FUN_00ae3490();
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00c76300();
+extern "C" char g_1473080[];
+extern "C" char g_147309c[];
+extern "C" char g_14730b8[];
+extern "C" char g_14730c8[];
+extern "C" char g_14730dc[];
+extern "C" char g_14730f0[];
+extern "C" char g_1473104[];
+extern "C" char g_1473110[];
+extern "C" char g_1473124[];
+extern "C" char g_1473130[];
+extern "C" char g_1473144[];
+extern "C" char g_147315c[];
+extern "C" char g_1473174[];
+extern "C" char g_147318c[];
+extern "C" char g_14731a0[];
+extern "C" char g_157963c[];
+extern "C" char g_1579678[];
+extern "C" char g_15796b4[];
+extern "C" char g_15796f0[];
+extern "C" char g_157972c[];
+extern "C" char g_1579768[];
+extern "C" char g_15797a4[];
+extern "C" char g_15797e0[];
+extern "C" char g_1579894[];
+extern "C" char g_15798d0[];
+extern "C" char g_157990c[];
+extern "C" char g_1579948[];
+extern "C" char g_1579984[];
+
 #include "game/types.h"
 #include "SP/cEmpire.h"
 #include "SP/cGameNounManager.h"
@@ -1487,15 +1532,16 @@ struct cSpacePlayerWarData {
     cSpacePlayerWarData* __thiscall ctor(const cSpacePlayerWarData& src);   // 0x00c76f60
 };
 struct cHashSubD {
-    U32 mDummy;   // +0x00 (sub-object state, not touched by the thunks below)
+    U32 mDummy;       // +0x00 (sub-object state, not touched by the thunks below)
+    U32 mpBuckets;    // +0x04
+    U32 mnBuckets;    // +0x08
+    U32 mnElements;   // +0x0c
 
-    void __thiscall FUN_006b6740(U32* pKey);   // 0x006b6740
+    U32 __thiscall FUN_006b6740(U32* pKey);   // 0x006b6740, returns erased count
 };
 struct cHashTableD {
     U32       md000[0x111c / 4];   // +0x000
     cHashSubD mSub;                // +0x111c
-    U32       mpBuckets;           // +0x1120
-    U32       mnBuckets;           // +0x1124
 
     bool __thiscall Contains(U32 nKey);       // 0x00c772c0
     void __thiscall FUN_00c77300(U32 nKey);   // 0x00c77300
@@ -2206,7 +2252,7 @@ void* __cdecl FUN_00ba2e50(int lo, int hi, uint32_t* key)
 void __thiscall W::Run_00ba2f20()
 {
   char* s = (char*)this;
-  *(void**)s = (void*)0x1465dc8;
+  *(void**)s = (void*)g_vtblPlayerPlanetData;   // 0x01465d64
   ((CGZTimer*)(s + 0x80))->Dtor();
   if (*(void**)(s + 0x68)) operator_delete__(*(void**)(s + 0x68));
   if (*(void**)(s + 0x50)) operator_delete__(*(void**)(s + 0x50));
@@ -2734,7 +2780,7 @@ CElemTimer* __cdecl FUN_00c77250(const CElemTimer* pFirst, const CElemTimer* pLa
 bool __thiscall cHashTableD::Contains(U32 nKey)
 {
     int nCount = 0;
-    cHashNodeD* pNode = (cHashNodeD*)(*(U32*)(mpBuckets + (nKey % mnBuckets) * 4));
+    cHashNodeD* pNode = (cHashNodeD*)(*(U32*)(mSub.mpBuckets + (nKey % mSub.mnBuckets) * 4));
     while (pNode != 0) {
         if (nKey == pNode->mKey)
             ++nCount;
@@ -2746,7 +2792,8 @@ bool __thiscall cHashTableD::Contains(U32 nKey)
 // @ 0x00c77300
 void __thiscall cHashTableD::FUN_00c77300(U32 nKey)
 {
-    mSub.FUN_006b6740(&nKey);
+    U32 key = nKey;
+    mSub.FUN_006b6740(&key);
 }
 
 // @ 0x00c77380
@@ -4471,7 +4518,7 @@ void __cdecl FUN_00c7c9b0(void* stream, cPlanetVec* vec)
     if (count != 0) {
         do {
             PlayerPlanetData temp;
-            temp.mpVtbl = (void*)0x1465d64;
+            temp.mpVtbl = (void*)g_1465d64;
             temp.pv08b = temp.pv08e = temp.pv08c = 0;
             temp.pv20b = temp.pv20e = temp.pv20c = 0;
             temp.pv38b = temp.pv38e = temp.pv38c = 0;
@@ -4751,25 +4798,25 @@ void InitPlayerAttributes()
 void FUN_01351ae0(void)
 {
     PropDesc d;
-    d.mName = (const char*)0x1473124;
+    d.mName = (const char*)g_1473124;
     d.mHash = 0x5626ed3;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_0_24;
     d.mFn28 = (void*)U_01351ae0_0_28;
-    d.mFn2C = (void*)0x693070;
-    d.mFn30 = (void*)0x694f80;
+    d.mFn2C = (void*)FUN_00693070;
+    d.mFn30 = (void*)FUN_00694f80;
     d.mFn34 = (void*)U_01351ae0_0_34;
-    d.mFn38 = (void*)0x595a50;
+    d.mFn38 = (void*)FUN_00595a50;
     d.mType = 0xa2;
-    *(PropDesc*)0x1579600 = d;
+    *(PropDesc*)&g_1579600 = d;
 
-    d.mName = (const char*)0x1473110;
+    d.mName = (const char*)g_1473110;
     d.mHash = 0x6282444;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_1_24;
     d.mFn28 = (void*)U_01351ae0_1_28;
     d.mFn2C = (void*)U_01351ae0_1_2c;
@@ -4777,13 +4824,13 @@ void FUN_01351ae0(void)
     d.mFn34 = (void*)SAE0_F34A;
     d.mFn38 = (void*)SAE0_F38A;
     d.mType = 0xa1;
-    *(PropDesc*)0x157963c = d;
+    *(PropDesc*)g_157963c = d;
 
-    d.mName = (const char*)0x1473104;
+    d.mName = (const char*)g_1473104;
     d.mHash = 0x6282445;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_2_24;
     d.mFn28 = (void*)U_01351ae0_2_28;
     d.mFn2C = (void*)U_01351ae0_2_2c;
@@ -4791,13 +4838,13 @@ void FUN_01351ae0(void)
     d.mFn34 = (void*)SAE0_F34A;
     d.mFn38 = (void*)SAE0_F38A;
     d.mType = 0xa0;
-    *(PropDesc*)0x1579678 = d;
+    *(PropDesc*)g_1579678 = d;
 
-    d.mName = (const char*)0x14730f0;
+    d.mName = (const char*)g_14730f0;
     d.mHash = 0x5d2741e;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_3_24;
     d.mFn28 = (void*)U_01351ae0_3_28;
     d.mFn2C = (void*)SAE0_F2CB;
@@ -4805,13 +4852,13 @@ void FUN_01351ae0(void)
     d.mFn34 = (void*)U_01351ae0_3_34;
     d.mFn38 = (void*)U_01351ae0_3_38;
     d.mType = 0x8;
-    *(PropDesc*)0x15796b4 = d;
+    *(PropDesc*)g_15796b4 = d;
 
-    d.mName = (const char*)0x14730dc;
+    d.mName = (const char*)g_14730dc;
     d.mHash = 0x5d27422;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_4_24;
     d.mFn28 = (void*)U_01351ae0_4_28;
     d.mFn2C = (void*)SAE0_F2CB;
@@ -4819,13 +4866,13 @@ void FUN_01351ae0(void)
     d.mFn34 = (void*)U_01351ae0_4_34;
     d.mFn38 = (void*)U_01351ae0_4_38;
     d.mType = 0x20;
-    *(PropDesc*)0x15796f0 = d;
+    *(PropDesc*)g_15796f0 = d;
 
-    d.mName = (const char*)0x14730c8;
+    d.mName = (const char*)g_14730c8;
     d.mHash = 0x5d27426;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_5_24;
     d.mFn28 = (void*)U_01351ae0_5_28;
     d.mFn2C = (void*)SAE0_F2CB;
@@ -4833,13 +4880,13 @@ void FUN_01351ae0(void)
     d.mFn34 = (void*)U_01351ae0_5_34;
     d.mFn38 = (void*)U_01351ae0_5_38;
     d.mType = 0x38;
-    *(PropDesc*)0x157972c = d;
+    *(PropDesc*)g_157972c = d;
 
-    d.mName = (const char*)0x14730b8;
+    d.mName = (const char*)g_14730b8;
     d.mHash = 0x5d2742a;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351ae0_6_24;
     d.mFn28 = (void*)U_01351ae0_6_28;
     d.mFn2C = (void*)SAE0_F2CB;
@@ -4847,74 +4894,74 @@ void FUN_01351ae0(void)
     d.mFn34 = (void*)U_01351ae0_6_34;
     d.mFn38 = (void*)U_01351ae0_6_38;
     d.mType = 0x50;
-    *(PropDesc*)0x1579768 = d;
+    *(PropDesc*)g_1579768 = d;
 
-    d.mName = (const char*)0x147309c;
+    d.mName = (const char*)g_147309c;
     d.mHash = 0x5f0de1b;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
-    d.mFn24 = (void*)0xc7b510;
-    d.mFn28 = (void*)0xc76300;
+    d.mDefault = (void*)FUN_00692ca0;
+    d.mFn24 = (void*)&SP::FUN_00c7b510;
+    d.mFn28 = (void*)FUN_00c76300;
     d.mFn2C = (void*)SAE0_F2CB;
     d.mFn30 = (void*)SAE0_F30B;
     d.mFn34 = (void*)U_01351ae0_7_34;
-    d.mFn38 = (void*)0xc793e0;
+    d.mFn38 = (void*)&FUN_00c793e0;
     d.mType = 0x68;
-    *(PropDesc*)0x15797a4 = d;
+    *(PropDesc*)g_15797a4 = d;
 
-    d.mName = (const char*)0x1473080;
+    d.mName = (const char*)g_1473080;
     d.mHash = 0x689821d;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
-    d.mFn24 = (void*)0xae3470;
-    d.mFn28 = (void*)0xae3490;
+    d.mDefault = (void*)FUN_00692ca0;
+    d.mFn24 = (void*)FUN_00ae3470;
+    d.mFn28 = (void*)FUN_00ae3490;
     d.mFn2C = (void*)SAE0_F2CB;
     d.mFn30 = (void*)SAE0_F30B;
-    d.mFn34 = (void*)0xae3310;
-    d.mFn38 = (void*)0xac8050;
+    d.mFn34 = (void*)FUN_00ae3310;
+    d.mFn38 = (void*)FUN_00ac8050;
     d.mType = 0x80;
-    *(PropDesc*)0x15797e0 = d;
+    *(PropDesc*)g_15797e0 = d;
 }
 
 // @ 0x01351e60
 void FUN_01351e60(void)
 {
     PropDesc d;
-    d.mName = (const char*)0x14731a0;
+    d.mName = (const char*)g_14731a0;
     d.mHash = 0x5626da6;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351e60_0_24;
     d.mFn28 = (void*)U_01351e60_0_28;
-    d.mFn2C = (void*)0x693090;
-    d.mFn30 = (void*)0x694f00;
+    d.mFn2C = (void*)FUN_00693090;
+    d.mFn30 = (void*)FUN_00694f00;
     d.mFn34 = (void*)U_01351e60_0_34;
-    d.mFn38 = (void*)0x675ca0;
+    d.mFn38 = (void*)FUN_00675ca0;
     d.mType = 0x8;
-    *(PropDesc*)0x1579858 = d;
+    *(PropDesc*)&g_1579858 = d;
 
-    d.mName = (const char*)0x147318c;
+    d.mName = (const char*)g_147318c;
     d.mHash = 0x57a0b60;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
-    d.mFn24 = (void*)0xae3470;
-    d.mFn28 = (void*)0xae3490;
-    d.mFn2C = (void*)0xc2e4e0;
-    d.mFn30 = (void*)0x692fb0;
-    d.mFn34 = (void*)0xae3310;
-    d.mFn38 = (void*)0xac8050;
+    d.mDefault = (void*)FUN_00692ca0;
+    d.mFn24 = (void*)FUN_00ae3470;
+    d.mFn28 = (void*)FUN_00ae3490;
+    d.mFn2C = (void*)FUN_00c2e4e0;
+    d.mFn30 = (void*)FUN_00692fb0;
+    d.mFn34 = (void*)FUN_00ae3310;
+    d.mFn38 = (void*)FUN_00ac8050;
     d.mType = 0x10;
-    *(PropDesc*)0x1579894 = d;
+    *(PropDesc*)g_1579894 = d;
 
-    d.mName = (const char*)0x1473174;
+    d.mName = (const char*)g_1473174;
     d.mHash = 0x5626dae;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351e60_2_24;
     d.mFn28 = (void*)U_01351e60_2_28;
     d.mFn2C = (void*)U_01351e60_2_2c;
@@ -4922,13 +4969,13 @@ void FUN_01351e60(void)
     d.mFn34 = (void*)SE60_F34;
     d.mFn38 = (void*)SE60_F38;
     d.mType = 0x30;
-    *(PropDesc*)0x15798d0 = d;
+    *(PropDesc*)g_15798d0 = d;
 
-    d.mName = (const char*)0x147315c;
+    d.mName = (const char*)g_147315c;
     d.mHash = 0x5626ec6;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351e60_3_24;
     d.mFn28 = (void*)U_01351e60_3_28;
     d.mFn2C = (void*)U_01351e60_3_2c;
@@ -4936,13 +4983,13 @@ void FUN_01351e60(void)
     d.mFn34 = (void*)SE60_F34;
     d.mFn38 = (void*)SE60_F38;
     d.mType = 0x34;
-    *(PropDesc*)0x157990c = d;
+    *(PropDesc*)g_157990c = d;
 
-    d.mName = (const char*)0x1473144;
+    d.mName = (const char*)g_1473144;
     d.mHash = 0x5626eca;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351e60_4_24;
     d.mFn28 = (void*)U_01351e60_4_28;
     d.mFn2C = (void*)U_01351e60_4_2c;
@@ -4950,13 +4997,13 @@ void FUN_01351e60(void)
     d.mFn34 = (void*)SE60_F34;
     d.mFn38 = (void*)SE60_F38;
     d.mType = 0x38;
-    *(PropDesc*)0x1579948 = d;
+    *(PropDesc*)g_1579948 = d;
 
-    d.mName = (const char*)0x1473130;
+    d.mName = (const char*)g_1473130;
     d.mHash = 0x5626ece;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)U_01351e60_5_24;
     d.mFn28 = (void*)U_01351e60_5_28;
     d.mFn2C = (void*)U_01351e60_5_2c;
@@ -4964,7 +5011,7 @@ void FUN_01351e60(void)
     d.mFn34 = (void*)SE60_F34;
     d.mFn38 = (void*)SE60_F38;
     d.mType = 0x3c;
-    *(PropDesc*)0x1579984 = d;
+    *(PropDesc*)g_1579984 = d;
 }
 
 // @ 0x00c75650

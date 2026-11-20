@@ -5,3 +5,4 @@
 ../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006dde90@@YAXHHHH@Z  006dde90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006de350@@YAXXZ  006de350  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_006d0000.cpp  ??1Elem16VecView_6df3b0@@QAE@XZ  006df3b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_006d0000.cpp  ?AssignRefPtr@RefPtr@@QAEAAU1@PBU1@@Z  006df280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

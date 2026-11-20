@@ -17,6 +17,5 @@
 006614d0 232 vector<E34>::insert - complete, reallocation path not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE2
 00661a10 198 cSPUIFeedFilter::HasAnyAsset - complete, lower_bound result compare folded and loop counter/this register allocation differ; equiv WEAK (55.8% coverage) flags: /O2 /MD /Gy /TP /arch:SSE2
 00661d10 1611 CreateFilterButtons complete (all paths/calls); size 1883 vs 1983, x87 vs SSE for pos.x, duplicated epilogue releases, branch layout differs flags: /O2 /MD /Gy /TP /arch:SSE /GS-
-00662540 6 two-branch reload of m18; cl picks edx/eax vs the original's eax/edx, calls normalized flags: /O2 /MD /Gy /TP /arch:SSE /GS-
 006625f0 201 layout setup / area capture; register and stack-slot schedule differs (calls match) flags: /O2 /MD /Gy /TP /arch:SSE /GS-
 00662750 86 update path; sete placement and branch body scheduling differ (calls match) flags: /O2 /MD /Gy /TP /arch:SSE /GS-

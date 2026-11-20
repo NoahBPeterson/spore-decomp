@@ -85,3 +85,5 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae7d0@SP@@YAMPAVcSPCreatureBase_s00da_dce0@1@@Z  00dae7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae840@SP@@YA_NPAVcSPCreatureBase_s00da_dce0@1@HHHHPAUOrderValueBlock@1@H@Z  00dae840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da82f0@@YAMPAUCreature@@H@Z  00da82f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?SpawnPlacementTest@@YA_NPAUSpawnHost@@HHHHPAUSpawnOut@@PAUSpawnIn@@@Z  00dadfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db2fa0@@YAXPAUTaskCtx@@IIII0@Z  00db2fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

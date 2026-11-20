@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPPlanetSim.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f09b4[];
+
 #include "game/types.h"
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -1684,7 +1688,7 @@ void Vec18::reserve(unsigned n)
   if (n > capCount) {
     char* p;
     if (n)
-      p = (char*)FUN_00f473a0(n * 0x18, (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+      p = (char*)FUN_00f473a0(n * 0x18, (const char*)g_13f09b4, 0, 0, (int)g_13ebb38, 0xd1);
     else
       p = 0;
     FUN_00720200(begin, end, p);
@@ -1704,7 +1708,7 @@ void Vec38::reserve(unsigned n)
   if (n > capCount) {
     char* p;
     if (n)
-      p = (char*)FUN_00f473a0(n * 0x38, (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+      p = (char*)FUN_00f473a0(n * 0x38, (const char*)g_13f09b4, 0, 0, (int)g_13ebb38, 0xd1);
     else
       p = 0;
     FUN_00f25ea0(begin, end, p);

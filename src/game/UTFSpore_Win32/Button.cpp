@@ -2,6 +2,15 @@
 // Object file: UTFSpore_Win32/Button.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1441058[];
+extern "C" char g_1441070[];
+extern "C" char g_1441088[];
+extern "C" char g_14410b0[];
+extern "C" char g_1441120[];
+extern "C" char g_1441240[];
+
 #include "game/types.h"
 #include "EA/Text/LineLayout.h"
 #include "EA/UTFWin/RenderContext.h"
@@ -109,7 +118,7 @@ struct IFocusMgr {
     virtual void s48();
     virtual void s4c();
     virtual void s50();
-    virtual void* GetFocus(int);
+    virtual IWinVt* GetFocus(int);
     virtual void SetFocus(int, IWinVt*);
     virtual void ReleaseFocus(int, IWinVt*);
 };
@@ -249,7 +258,7 @@ struct IPainterVt {
     virtual void s14();
     virtual void GetSize(float*, int, int);
 };
-struct WB {
+struct WB : IPrimVt, IWinVt {
     IWinVt* W() { return (IWinVt*)((char*)this + 4); }
     IBtnVt* Btn() { return (IBtnVt*)((char*)this + 0x20c); }
     IPrimVt* P() { return (IPrimVt*)this; }
@@ -547,14 +556,20 @@ int FlexFlag::GetEffectFlag()
 }
 
 // @ 0x00963f70
+struct FlexFlagVt_963f70 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void SetFlags(uint32_t f);   // +0x24
+};
 void FlexFlag::SetEffectFlag(uint32_t m, bool on)
 {
-    int v = *(int*)((char*)this - 0x160);
-    if (on) {
-        (*(void(__thiscall**)(void*, uint32_t))((char*)*(void**)this + 0x24))(this, (uint32_t)v | m);
-    } else {
-        (*(void(__thiscall**)(void*, uint32_t))((char*)*(void**)this + 0x24))(this, (uint32_t)v & ~m);
-    }
+    uint32_t v = *(uint32_t*)((char*)this - 0x160);
+    if (on)
+        v |= m;
+    else
+        v &= ~m;
+    ((FlexFlagVt_963f70*)this)->SetFlags(v);
 }
 
 // @ 0x00963fd0
@@ -598,13 +613,8 @@ bool WB::OnMouseDown(int a, int b, int c, uint32_t f)
 {
     if (!(f & 8) || (f & 0x30))
         return false;
-    void* w = this ? (char*)this + 4 : 0;
-    if (Mgr()->GetFocus(1) != w)
-        {
-            IFocusMgr* m = Mgr();
-            void** vt = *(void***)m;
-            ((void(__thiscall*)(void*, int, void*))vt[0x58 / 4])(m, 1, W());
-        }
+    if (Mgr()->GetFocus(1) != this)
+        Mgr()->SetFocus(1, this);
     uint32_t fl = F(uint32_t, 0xac);
     if (!(fl & 2) && (fl & 8)) {
         Btn()->SetFlag(2, 1);
@@ -618,13 +628,8 @@ bool WB::OnMouseDown(int a, int b, int c, uint32_t f)
 bool WB::OnMouseUp(int a, int b, int c, uint32_t f)
 {
     if (!(f & 8)) {
-        void* w = this ? (char*)this + 4 : 0;
-        if (Mgr()->GetFocus(1) == w)
-            {
-            IFocusMgr* m = Mgr();
-            void** vt = *(void***)m;
-            ((void(__thiscall*)(void*, int, void*))vt[0x5c / 4])(m, 1, W());
-        }
+        if (Mgr()->GetFocus(1) == this)
+            Mgr()->ReleaseFocus(1, this);
         if (F(uint32_t, 0xac) & 2) {
             Btn()->SetFlag(2, 0);
             if (!(F(uint8_t, 0x218) & 1))
@@ -1024,19 +1029,21 @@ void S_966c70::m()
     VCALL0(this_ + 4, 0x90);
 }
 
+// UI::ButtonDrawableRadio's layout: an interface at +0, two Resource::Async bases at +4 and +0xc.
+struct BDRIface_s0096 { virtual void i0(); };
+struct BDRAsyncA_s0096 { virtual void a0(); uint32_t m08; BDRAsyncA_s0096() : m08(0) {} };
+struct BDRAsyncB_s0096 { virtual void b0(); };
+struct BDRFields_s0096 { uint32_t m10; uint8_t m14; BDRFields_s0096() : m10(0), m14(0) {} };
+struct ButtonDrawableRadio_s0096 : BDRIface_s0096, BDRAsyncA_s0096, BDRAsyncB_s0096 {
+    BDRFields_s0096 mFields;
+    virtual void i0();
+};
+inline void* operator new(size_t, S_966dc0* where) { __assume(where != 0); return where; }
+
 // @ 0x00966dc0
 void* S_966dc0::m()
 {
-    void* this_ = this;
-    F_s0096_6b20(this_, 0x04) = 0x13fa72c;
-    F_s0096_6b20(this_, 0x08) = 0;
-    F_s0096_6b20(this_, 0x0c) = 0x13fa72c;
-    F_s0096_6b20(this_, 0x00) = 0x1441088;
-    F_s0096_6b20(this_, 0x04) = 0x1441070;
-    F_s0096_6b20(this_, 0x0c) = 0x1441058;
-    F_s0096_6b20(this_, 0x10) = 0;
-    FB(this_, 0x14) = 0;
-    return this_;
+    return new (this) ButtonDrawableRadio_s0096;
 }
 
 // @ 0x00966df0
@@ -1044,14 +1051,14 @@ void* S_966df0::m(uint8_t param_2)
 {
     void* this_ = this;
     void* img = (void*)F_s0096_6b20(this_, 0x10);
-    F_s0096_6b20(this_, 0x00) = 0x1441088;
-    F_s0096_6b20(this_, 0x04) = 0x1441070;
-    F_s0096_6b20(this_, 0x0c) = 0x1441058;
+    F_s0096_6b20(this_, 0x00) = (int)g_1441088;
+    F_s0096_6b20(this_, 0x04) = (int)g_1441070;
+    F_s0096_6b20(this_, 0x0c) = (int)g_1441058;
     if (img != 0)
         VCALL0(img, 0x04);
-    F_s0096_6b20(this_, 0x0c) = 0x13eb938;
-    F_s0096_6b20(this_, 0x04) = 0x13eb938;
-    F_s0096_6b20(this_, 0x00) = 0x13eb938;
+    F_s0096_6b20(this_, 0x0c) = (int)g_13eb938;
+    F_s0096_6b20(this_, 0x04) = (int)g_13eb938;
+    F_s0096_6b20(this_, 0x00) = (int)g_13eb938;
     if ((param_2 & 1) != 0)
         FUN_00951330(this_);
     return this_;
@@ -1062,12 +1069,12 @@ void S_966e40::m()
 {
     void* this_ = this;
     S_8323d0* ll = (S_8323d0*)((uint8_t*)this_ + 0x7b0);
-    F_s0096_6b20(this_, 0x00) = 0x1441240;
-    F_s0096_6b20(this_, 0x04) = 0x1441120;
-    F_s0096_6b20(this_, 0x20c) = 0x14410b0;
+    F_s0096_6b20(this_, 0x00) = (int)g_1441240;
+    F_s0096_6b20(this_, 0x04) = (int)g_1441120;
+    F_s0096_6b20(this_, 0x20c) = (int)g_14410b0;
     ll->m();
     ((S_89c540*)((uint8_t*)this_ + 0x280))->m();
-    F_s0096_6b20(this_, 0x20c) = 0x13eb938;
+    F_s0096_6b20(this_, 0x20c) = (int)g_13eb938;
     ((S_962740*)this_)->m();
 }
 
@@ -1179,12 +1186,12 @@ void* S_967120::m(uint8_t param_2)
 {
     void* this_ = this;
     S_8323d0* ll = (S_8323d0*)((uint8_t*)this_ + 0x7b0);
-    F_s0096_6b20(this_, 0x00) = 0x1441240;
-    F_s0096_6b20(this_, 0x04) = 0x1441120;
-    F_s0096_6b20(this_, 0x20c) = 0x14410b0;
+    F_s0096_6b20(this_, 0x00) = (int)g_1441240;
+    F_s0096_6b20(this_, 0x04) = (int)g_1441120;
+    F_s0096_6b20(this_, 0x20c) = (int)g_14410b0;
     ll->m();
     ((S_89c540*)((uint8_t*)this_ + 0x280))->m();
-    F_s0096_6b20(this_, 0x20c) = 0x13eb938;
+    F_s0096_6b20(this_, 0x20c) = (int)g_13eb938;
     ((S_962740*)this_)->m();
     if ((param_2 & 1) != 0)
         FUN_00951330(this_);

@@ -472,8 +472,9 @@ public:
 __declspec(noinline) cBuildXHTMLDetokenizer::cVar::cVar() {}
 __declspec(noinline) cBuildXHTMLDetokenizer::cVar::~cVar() {}
 
+// @ 0x00673870
 __declspec(noinline) cBuildXHTMLDetokenizer::cVar::cVar(const cVar& x)
-    : mId(x.mId), mName(x.mName), mValue(x.mValue), mActions(x.mActions), mStrings(x.mStrings)
+    : mId(x.mId), mName((_ReadWriteBarrier(), x.mName)), mValue(x.mValue), mActions(x.mActions), mStrings(x.mStrings)
 {
 }
 

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cInteractionAgent.h"
 #include "SP/cLocomotiveObject.h"
 #include "SP/cPlanetModel.h"
@@ -149,6 +150,12 @@ public:
 };
 }
 namespace SP {
+static inline void CopyVec(cSPVector3& d, const cSPVector3& s)
+{
+    d.x = s.x;
+    d.y = s.y;
+    d.z = s.z;
+}
 struct Cell {
     byte       mFlag;     // +0x00
     char       pad1[3];
@@ -157,8 +164,8 @@ struct Cell {
     Cell& operator=(const Cell& o)
     {
         mFlag = o.mFlag;
-        mPoint = o.mPoint;
-        mHit = o.mHit;
+        CopyVec(mPoint, o.mPoint);
+        CopyVec(mHit, o.mHit);
         return *this;
     }
 };
@@ -194,6 +201,8 @@ struct AgentInfoMap {
     uint32_t mAllocBytes;   // +0x10
     uint32_t mnSize;        // +0x14
     void* InsertNode(void** out, void* parent, uint32_t* key, char side);  // 0x00d72d50
+    void DoNukeSubtree(void* node);                                         // 0x009a9600
+    void NukeAll() { DoNukeSubtree(mAllocName); }                           // inlined ~rbtree body
 };
 }
 namespace SP {
@@ -796,14 +805,13 @@ void* SP::cTribeGameBehaviorFish::DeleteDtor(unsigned flags)
 {
     this->vtbl0 = (void**)&SP::SP_vtbl_Fish;
     this->vtbl1 = (void**)&SP::SP_vtbl_Fish1;
+    _ReadWriteBarrier();
     void* tribe = this->mpTribe;
     if (tribe != 0) {
         void** vt = *(void***)tribe;
         ((void(__thiscall*)(void*))vt[1])(tribe);
     }
-    SPExt* map = (SPExt*)&this->mAgentInfoMap;
-    void* node = this->mAgentInfoMap.mAllocName;
-    map->Nuke(node);
+    this->mAgentInfoMap.NukeAll();
     ((SPExt*)this)->DtorBody();
     if (flags & 1)
         operator delete[](this);

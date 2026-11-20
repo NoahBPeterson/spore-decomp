@@ -1,4 +1,3 @@
-00a2f1a0  13   eastl::map operator[] assignment/store scheduling differs; difftest PASS (mapped MapUU::operator[] to 0x00a2e060, removed stray "@" markers in class decl)
 00a2e650  1474 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
 00a2edd0  86   complete hashtable find+erase wrapper; temp/iterator slot reuse and callee-saved regs differ
 00a2ef60  420  complete stopwatch-timed table rebuild; locals/regs and EH layout differ; difftest WEAK (19% coverage: ObjectError() returns global 0x1667aa0, null in the image, so the body is unreachable)

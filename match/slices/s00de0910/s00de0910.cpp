@@ -276,7 +276,7 @@ void __thiscall cGalaxyGameEntryImpl::FUN_00de0a30(uint32_t param_1, void* param
 // @ 0x00de0a90  cContentValidationSummarizer::cContentValidationSummarizer
 void* __thiscall cContentValidationSummarizer::FUN_00de0a90(void* pOuter, uint8_t b)
 {
-    mVtbl4 = VTBL(vtbl_CVS);
+    *(void* volatile*)&mVtbl4 = VTBL(vtbl_CVS);
     m08 = 0;
     mVtbl0 = VTBL(vtbl_0147dc04);
     this->~cContentValidationSummarizer();

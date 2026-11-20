@@ -6,6 +6,24 @@
 // Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  (UTFWin region; the
 // effect functions mix x87 arithmetic with movss stores, see notes).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fa72c[];
+extern "C" char g_14426a0[];
+extern "C" char g_144347c[];
+extern "C" char g_14434b8[];
+extern "C" char g_14434d0[];
+extern "C" char g_14435a0[];
+extern "C" char g_14435bc[];
+extern "C" char g_14436c0[];
+extern "C" char g_14436dc[];
+extern "C" char g_14436f8[];
+extern "C" char g_1443780[];
+extern "C" char g_14437b0[];
+extern "C" char g_14437cc[];
+extern "C" char g_14437e8[];
+extern "C" char g_1443870[];
+extern "C" char g_1485720[];
+
 #include "types.h"
 #include <math.h>
 
@@ -237,12 +255,12 @@ struct BasicFactory_Simple  { void* CreateInstance(int unused, int grp); };
 InflateEffect::InflateEffect()
 {
     FadeEffect_ctor(this);
-    const float one = *(const float*)0x01485720;
-    *(void* volatile*)((char*)this + 0x60) = (void*)0x014426a0;
-    *(void**)this = (void*)0x014434d0;
-    *(void**)((char*)this + 4) = (void*)0x014434b8;
-    *(void**)((char*)this + 0xc) = (void*)0x0144347c;
-    *(void**)((char*)this + 0x60) = (void*)0x014435a0;
+    const float one = *(const float*)g_1485720;
+    *(void* volatile*)((char*)this + 0x60) = (void*)g_14426a0;
+    *(void**)this = (void*)g_14434d0;
+    *(void**)((char*)this + 4) = (void*)g_14434b8;
+    *(void**)((char*)this + 0xc) = (void*)g_144347c;
+    *(void**)((char*)this + 0x60) = (void*)g_14435a0;
     mValue = one;
 }
 
@@ -254,15 +272,15 @@ void* BasicFactory_Inflate::CreateInstance(int unused, int grp)
 
     if (grp == 0)
         grp = FUN_009512c0();
-    p = (char*)FUN_009512d0(0xb8, 8, (const char*)0x014435bc, grp);
+    p = (char*)FUN_009512d0(0xb8, 8, (const char*)g_14435bc, grp);
     if (p != 0) {
         FadeEffect_ctor(p);
         float one = g_kOne;
-        *(void* volatile*)(p + 0x60) = (void*)0x014426a0;
-        *(void**)p = (void*)0x014434d0;
-        *(void**)(p + 4) = (void*)0x014434b8;
-        *(void**)(p + 0xc) = (void*)0x0144347c;
-        *(void**)(p + 0x60) = (void*)0x014435a0;
+        *(void* volatile*)(p + 0x60) = (void*)g_14426a0;
+        *(void**)p = (void*)g_14434d0;
+        *(void**)(p + 4) = (void*)g_14434b8;
+        *(void**)(p + 0xc) = (void*)g_144347c;
+        *(void**)(p + 0x60) = (void*)g_14435a0;
         *(float*)(p + 0x64) = one;
         return p;
     }
@@ -376,14 +394,14 @@ void* BasicFactory_Prop::CreateInstance(int unused, int grp)
 
     if (grp == 0)
         grp = FUN_009512c0();
-    p = (char*)FUN_009512d0(0x20, 4, (const char*)0x01443780, grp);
+    p = (char*)FUN_009512d0(0x20, 4, (const char*)g_1443780, grp);
     if (p != 0) {
-    *(void* volatile*)(p + 4) = (void*)0x013fa72c;
+    *(void* volatile*)(p + 4) = (void*)g_13fa72c;
     *(int*)(p + 8) = 0;
-    *(void* volatile*)(p + 0xc) = (void*)0x014426a0;
-    *(void**)p = (void*)0x014436f8;
-    *(void**)(p + 4) = (void*)0x014436dc;
-    *(void**)(p + 0xc) = (void*)0x014436c0;
+    *(void* volatile*)(p + 0xc) = (void*)g_14426a0;
+    *(void**)p = (void*)g_14436f8;
+    *(void**)(p + 4) = (void*)g_14436dc;
+    *(void**)(p + 0xc) = (void*)g_14436c0;
     *(float*)(p + 0x1c) = 0.0f;
     *(float*)(p + 0x18) = 0.0f;
     *(float*)(p + 0x14) = 0.0f;
@@ -400,14 +418,14 @@ void* BasicFactory_Simple::CreateInstance(int unused, int grp)
 
     if (grp == 0)
         grp = FUN_009512c0();
-    p = (char*)FUN_009512d0(0x14, 4, (const char*)0x01443870, grp);
+    p = (char*)FUN_009512d0(0x14, 4, (const char*)g_1443870, grp);
     if (p != 0) {
-    *(void* volatile*)(p + 4) = (void*)0x013fa72c;
+    *(void* volatile*)(p + 4) = (void*)g_13fa72c;
     *(int*)(p + 8) = 0;
-    *(void* volatile*)(p + 0xc) = (void*)0x014426a0;
-    *(void**)p = (void*)0x014437e8;
-    *(void**)(p + 4) = (void*)0x014437cc;
-    *(void**)(p + 0xc) = (void*)0x014437b0;
+    *(void* volatile*)(p + 0xc) = (void*)g_14426a0;
+    *(void**)p = (void*)g_14437e8;
+    *(void**)(p + 4) = (void*)g_14437cc;
+    *(void**)(p + 0xc) = (void*)g_14437b0;
     *(unsigned char*)(p + 0x10) = 5;
     return p;
     }

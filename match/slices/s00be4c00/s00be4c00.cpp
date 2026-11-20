@@ -4,6 +4,10 @@
 // Reconstructed from annotated disassembly + Ghidra decompiles.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_151ac94[];
+extern "C" char g_156ea28[];
+
 #include <wchar.h>
 #pragma intrinsic(wcscmp)
 
@@ -769,7 +773,7 @@ u8 __fastcall FUN_00be54c0(cRaidBeh* self, void* dummy, cStream* stream)
   self->FUN_00c00530(stream);
 
   if (wcscmp(reinterpret_cast<const wchar_t*>(self->obj34.Chars()),
-      *reinterpret_cast<const wchar_t**>(0x151ac94)) == 0) {
+      *reinterpret_cast<const wchar_t**>((int)g_151ac94)) == 0) {
     cTempWideStr tmp;
     RaidNameGeneratorInstance()->GetName(&tmp, 0x58f4c251);
     self->obj34.Assign(tmp.begin);
@@ -800,7 +804,7 @@ u8 __fastcall FUN_00be54c0(cRaidBeh* self, void* dummy, cStream* stream)
   self->timer708.Load(stream);
   self->timer728.Load(stream);
 
-  cVarListSerializer ser(self, (void*)0x156ea28, 0x1a80d26);
+  cVarListSerializer ser(self, (void*)g_156ea28, 0x1a80d26);
   u8 ok = ser.Serialize(stream);
 
   if (self->blocks.p658 != 0) {

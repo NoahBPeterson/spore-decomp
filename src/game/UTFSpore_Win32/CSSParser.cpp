@@ -2,9 +2,14 @@
 // Object file: UTFSpore_Win32/CSSParser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_008f2810();
+extern "C" char g_1439a48[];
+
 #include "game/types.h"
 extern "C" size_t __cdecl wcslen(const wchar_t*);
 #pragma intrinsic(wcslen)
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" char    gTokStart[];         // 0x01667b04
@@ -1429,7 +1434,7 @@ namespace EA { namespace XHTML { namespace Layout {
 PropNodeX* PropNodeX::F_8f24a0(int a, const uint16_t* str)
 {
     mField04 = 0;
-    mVtable = 0x01439a48;
+    mVtable = (int)g_1439a48;
     mField08 = (uint32_t)a;
     mField0c = (uint32_t)str;
     mLength = str ? (int)wcslen((const wchar_t*)str) : -1;
@@ -2082,18 +2087,15 @@ namespace EA { namespace XHTML { namespace Style {
 bool CharStream_s008f_2660::MatchAscii(const char* s)
 {
     int i = 0;
-    char c = s[0];
-    if (c != 0) {
+    if (s[0] != 0) {
         wchar_t* end = mpEnd;
-        wchar_t* p = mpPos;
+        wchar_t* base = mpPos;
         do {
-            unsigned short ch = (p < end) ? (unsigned short)*p : 0;
-            if (c != ch)
+            wchar_t ch = (base + i < end) ? base[i] : 0;
+            if (s[i] != ch)
                 return false;
-            c = s[i + 1];
             ++i;
-            ++p;
-        } while (c != 0);
+        } while (s[i] != 0);
     }
     mpPos += i;
     return true;
@@ -2312,6 +2314,7 @@ void* CharStream::Fn8f38b0(wchar16* s)
     *(void**)(c + 0) = s;
     *(void**)(c + 8) = s;
     *(int*)(c + 0xc) = 1;
+    _ReadWriteBarrier();
     void* g = (void*)gEmptyStr;
     *(void**)(c + 0x10) = g;
     *(void**)(c + 0x14) = g;
@@ -2679,9 +2682,9 @@ bool CSSParser_s008f_43f0::ParseBackgroundImage(Property_s008f_43f0** pList)
 {
     Property_s008f_43f0* p;
     if (MatchURL()) {
-        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2810, 0, 0, 0), TokenValue());
+        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2810, 0, 0, 0), TokenValue());
     } else if (MatchIdent(L"none")) {
-        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2810, 0, 0, 0), 0);
+        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2810, 0, 0, 0), 0);
     } else {
         return false;
     }

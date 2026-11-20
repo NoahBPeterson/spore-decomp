@@ -11,6 +11,13 @@
 //     storm/nest position Vector3 at +0x74.
 //   * cSPDramaManager stores the drama-event multimap at +0x50 and the active-event bitmask at
 //     +0x6c.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_147b090[];
+extern "C" char g_147b278[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -469,16 +476,16 @@ bool SP::cSeaMonsterEvent::ShouldActivate()
 // @ 0x00d4ca70
 SP::cDramaEventInstanceData* SP::cDramaEventInstanceData::FUN_00d4ca70(u8 flags)
 {
-    m_vtbl00 = (void**)0x147b090;
-    m_vtbl04 = (void**)0x147b278;
+    m_vtbl00 = (void**)g_147b090;
+    m_vtbl04 = (void**)g_147b278;
     mGameDataMap5c.DestroyMembers();
     if (mData44.mpBegin != 0) operator_delete_array(mData44.mpBegin);
     if (mpPropList40 != 0) {
         void* old = mpPropList40;
         ((IInterface*)old)->v04();
     }
-    m_vtbl04 = (void**)0x13ec458;
-    m_vtbl00 = (void**)0x13eb938;
+    m_vtbl04 = (void**)g_13ec458;
+    m_vtbl00 = (void**)g_13eb938;
     if ((flags & 1) != 0) operator_delete_array(this);
     return this;
 }

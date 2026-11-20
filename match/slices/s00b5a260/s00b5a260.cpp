@@ -18,6 +18,12 @@
 //    +0x30  uint8  enabled flag
 //    +0x60  void** begin of the tracked-object list      +0x64  void** end
 //    +0x14c8  map head   +0x14cc  table pointer   +0x14d0  table count
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1569ca4[];
+extern "C" char g_167ecd0[];
+extern "C" char g_167ecd4[];
+
 #include "types.h"
 #include <xmmintrin.h>
 
@@ -89,8 +95,8 @@ void  FUN_00b54970(void*, void*, void*);     // 0x00b54970
 void  FUN_010834f0(void*, void*);            // 0x010834f0
 
 // fixed retail globals
-#define DAT_0167ecd0 (*(void**)0x0167ecd0)      // hkWorld*
-#define DAT_0167ecd4 (*(void**)0x0167ecd4)      // hkWorldObject*
+#define DAT_0167ecd0 (*(void**)g_167ecd0)      // hkWorld*
+#define DAT_0167ecd4 (*(void**)g_167ecd4)      // hkWorldObject*
 #define DAT_0167ecdc (*(void**)0x0167ecdc)      // editor callback object
 #define DAT_016e4178 (*(void**)0x016e4178)      // hkMemory::s_instance
 #define DAT_01569a94 (*(uint8_t*)0x01569a94)
@@ -99,7 +105,7 @@ void  FUN_010834f0(void*, void*);            // 0x010834f0
 #define DAT_01569aa0 (*(float*)0x01569aa0)
 #define DAT_0156b6ec (*(float*)0x0156b6ec)
 #define DAT_013eb95c (*(float*)0x013eb95c)
-#define DAT_01569ca4 (*(u32*)0x01569ca4)
+#define DAT_01569ca4 (*(u32*)g_1569ca4)
 
 struct Map14c8 {
     void*   head;       // +0x00

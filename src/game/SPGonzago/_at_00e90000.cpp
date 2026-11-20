@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00e90000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14869bc[];
+
 #include "game/types.h"
 #include "SP/cCommodityNode.h"
 #include "SP/cGameNounManager.h"
@@ -167,15 +170,18 @@ struct cCreature
 // ---- items of slice s00e972b0 end
 
 // @ 0x00e90b50
+extern "C" char g_1486934[];
+struct ColonyCursorKey_e90b50 {
+    u32 type, group, instance;
+    ColonyCursorKey_e90b50(u32 i, u32 t, u32 g) : type(t), group(g), instance(i) {}
+};
 __declspec(noinline) void* SP::cPlaceholderColonyEditorCursorAttachment::Construct()
 {
     BaseCtor();
     Vec3 c = { 0.0f, 1.0f, 0.0f };
     mColor = c;
-    mKeyType = 0xd749c1;
-    mKeyGroup = 0;
-    mVTable = (void**)0x1486934;
-    mKeyInstance = 0x5c4fce4c;
+    mVTable = (void**)g_1486934;
+    *(ColonyCursorKey_e90b50*)&mKeyType = ColonyCursorKey_e90b50(0x5c4fce4c, 0xd749c1, 0);
     return this;
 }
 
@@ -230,7 +236,7 @@ SP::cToolObject::cToolObject()
     : cSpatialObjectView()
 {
     Vec3 c = { 1.0f, 1.0f, 1.0f };
-    mVTable = (void**)0x14869bc;
+    mVTable = (void**)g_14869bc;
     mColor = c;
 }
 

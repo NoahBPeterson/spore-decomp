@@ -90,3 +90,7 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?Assign@RefRecordOps@@QAEPAXPBX@Z  00b01cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?make_heap_range@@YAXPAX0UHeapPos@@@Z  00b03d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?make_heap_range2@@YAXPAX0UHeapPos@@@Z  00b03e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?construct_range_big@@YAPAUBigElem80@@PAU1@00@Z  00b03ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?copy_range_big@@YAPAUBigElem80@@PAU1@00@Z  00b03f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ??0cTreeData@@QAE@PAX@Z  00b03680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00b05730@@YAXPAHIHPAX@Z  00b05730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

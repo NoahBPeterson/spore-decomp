@@ -231,16 +231,15 @@ struct HashNode {
   HashNode* mp18;      // +0x18  next
 };
 
-void destroy_hash_buckets(HashNode** table, u32 count) {
+void __stdcall destroy_hash_buckets(HashNode** table, u32 count) {
   for (u32 i = 0; i < count; ++i) {
     HashNode* n = table[i];
     while (n) {
-      void* p4 = n->mp4;
-      HashNode* next = n->mp18;
-      if (p4 && *((int*)p4 - 1) != 0)
-        op_del(p4);
-      op_del(n);
-      n = next;
+      HashNode* cur = n;
+      n = n->mp18;
+      if (cur->mp4 && *((int*)cur->mp4 - 1) != 0)
+        op_del(cur->mp4);
+      op_del(cur);
     }
     table[i] = 0;
   }

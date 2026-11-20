@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-00743950 11 complete SetTimeScale; null path writes the global through a zeroed base (xor eax,eax; [eax+0x11c]) which cl folds to an absolute address
-007439b0 7 complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
 00743c50 47 eastl Internal::insertion_sort_simple (desc, comparator): cl loop-rotation differs; difftest WEAK (198 valid, 16.2% cov)
 00743d20 81 eastl Internal::insertion_sort_simple (asc, comparator): cl loop-rotation differs; difftest WEAK (168 valid, 15.8% cov)
 00744050 528 cSPTransform two-point transform: instruction schedule/register allocation differs; difftest PASS (689 valid, 100% cov)
@@ -8,7 +6,6 @@
 007445b0 6 cModelWorld::CallOnLoad.  Complete and behaviourally identical; two real bugs fixed while completing it (the segmented path did `segEnd = *(char**)(begin + 0xe0)` instead of `segEnd = begin + 0xe0`, and the 8-entry slot scans were signed loops where the original uses `jb`).  The flag test needed `bool onLoad = (model->mFlags >> 14) & 1;` to get the original's `mov eax,[edi+4]; shr eax,0xe; test al,1` (the sibling 0x7446a0 has the identical shape with `>> 17`); `uint32_t` made cl fold it into `test dword ptr [edi+4],0x4000`.  The only remaining difference is one allocator tie-break: the original keeps the segment end in esi and the segment table in edx, cl picks esi for the table (both roles are self-consistent; the instruction shapes match exactly, only `[edx+4]`/`[esi+4]` and `lea esi`/`lea edx` swap).  Naming the walkers esi/edx, swapping declaration order, and four equivalent spellings of the segment advance all left cl's choice unchanged.  difftest PASS (1311 valid, 73.0% cov).
 007446e0 95 GetModelResourceIDs: control-flow/register schedule differs (dead field_c temp); difftest UNSUPPORTED (unresolved ref ResHolder::Get)
 00744870 49 AnimAction: stack-slot layout and bool handling differ
-00744be0 4 SetDynamicDraw: arg register-role assignment (ebx/ebp) swapped
 00744d80 111 SetEffectEnabled: effect-list traversal and vtable slot selection differ [equiv: WEAK (81% cov)]
 00745010 26 CheckFlag: field loaded via cmp instead of mov+test [equiv: UNSUPPORTED (0/1200 valid inputs)]
 00745050 29 SelectMesh: branch block ordering of the 0x9c/0xac selection differs [equiv: UNSUPPORTED (0/1200 valid inputs)]
@@ -37,17 +34,12 @@
 00747270 90 cLoadingModel dtor shape differs; equiv: FAIL 5/5 mismatch (execution)
 00747720 121 deque< cLoadQueueEntry >::~deque shape differs
 007477d0 215 deque< cLoadQueueEntry >::clear shape differs
-007478b0 57 vector< cLoadQueueEntry >::~vector shape differs
 00747920 73 deque pop_back shape differs; equiv: WEAK 67.5% cov
 00747ac0 112 0x38-record copy ctor register shape differs; equiv: PASS 1200 inputs 100% cov
 00747b70 179 uninitialized_copy of refcounted 0x3c elements shape differs
 00747c90 128 uninitialized_fill_n shape differs
 00747eb0 61 make_heap<cOccluder*> schedule/copy flavour differs
 00747f30 150 sort_heap<cOccluder*> shape differs
-00748010 46 make_heap pair (greater) schedule differs
-00748060 111 sort_heap pair (greater) shape differs; equiv: FAIL call #0 mismatch (by-value compare arg size)
-007480c0 46 make_heap pair (less) schedule differs
-00748110 111 sort_heap pair (less) shape differs; equiv: FAIL call #0 mismatch (by-value compare arg size)
 00748170 127 uninitialized_copy of plain 0x3c elements shape differs
 00748280 121 deque uninitialized_copy shape differs
 00748380 119 deque copy_backward shape differs

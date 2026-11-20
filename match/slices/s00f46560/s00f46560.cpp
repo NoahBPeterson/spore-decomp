@@ -5,6 +5,15 @@
 // (0x00F47380..0x00F475B0) is the shared-allocator / OS-global plumbing and
 // matches byte-for-byte.  Bodies follow the annotated disassembly
 // (work/match/scratch_s00f46560_cards.txt).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_148d5c4[];
+extern "C" char g_148d5d4[];
+extern "C" char g_148d5dc[];
+
 #include "types.h"
 #include <intrin.h>
 #include <xmmintrin.h>
@@ -464,9 +473,9 @@ void* cOnlineTab::FUN_00f46b50() {
 
 // @ 0x00F46C00
 void cOnlineTab::FUN_00f46c00() {
-    *(void**)((char*)this + 0) = (void*)0x148d5dc;
-    *(void**)((char*)this + 4) = (void*)0x148d5d4;
-    *(void**)((char*)this + 8) = (void*)0x148d5c4;
+    *(void**)((char*)this + 0) = (void*)g_148d5dc;
+    *(void**)((char*)this + 4) = (void*)g_148d5d4;
+    *(void**)((char*)this + 8) = (void*)g_148d5c4;
     _ReadWriteBarrier();
 
     if (mpHandler) {
@@ -485,9 +494,9 @@ void cOnlineTab::FUN_00f46c00() {
     if (p) (*(FnP)Vslot(p, 4))(p);
 
     FrameAt(this, 0x10)->FUN_009968a0();
-    *(void**)((char*)this + 8) = (void*)0x13ec458;
-    *(void**)((char*)this + 4) = (void*)0x13eb394;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 8) = (void*)g_13ec458;
+    *(void**)((char*)this + 4) = (void*)g_13eb394;
+    *(void**)((char*)this + 0) = (void*)g_13eb938;
 }
 
 // @ 0x00F46CF0
@@ -635,17 +644,23 @@ void* cScreen::FUN_00f46dd0() {
     return this;
 }
 
+extern void* g_0148d6ac[];   // 0x0148d6ac cScreen vftable
+extern void* g_0148d69c[];   // 0x0148d69c cScreen secondary vftable
+extern void* g_013ec458[];   // 0x013ec458 base vftable
+extern void* g_013eb938[];   // 0x013eb938 base vftable
+
 // @ 0x00F46E30
 void cScreen::FUN_00f46e30() {
-    *(void**)((char*)this + 0) = (void*)0x148d6ac;
-    *(void**)((char*)this + 4) = (void*)0x148d69c;
+    *(void**)((char*)this + 0) = (void*)g_0148d6ac;
+    *(void**)((char*)this + 4) = (void*)g_0148d69c;
+    _ReadWriteBarrier();
     if (mpFrame7c) (*(FnP)Vslot(mpFrame7c, 4))(mpFrame7c);
     if (mpFrame78) (*(FnP)Vslot(mpFrame78, 4))(mpFrame78);
     if (mpFrame74) (*(FnP)Vslot(mpFrame74, 4))(mpFrame74);
     if (mpWindow70) (*(FnP)Vslot(mpWindow70, 4))(mpWindow70);
     FrameAt(this, 0xc)->FUN_009968a0();
-    *(void**)((char*)this + 4) = (void*)0x13ec458;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_013ec458;
+    *(void**)((char*)this + 0) = (void*)g_013eb938;
 }
 
 // @ 0x00F46EB0

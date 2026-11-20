@@ -4,6 +4,10 @@
 // one block of static Havok class data.
 // Toolchain: Havok was linked in from VC .NET 2003 libraries, so the scalar
 // float code is x87; the hkVector4 paths use explicit SSE intrinsics.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14f8f54[];
+
 #include <xmmintrin.h>
 #include <math.h>
 #include "types.h"
@@ -364,7 +368,7 @@ void* hkCreateSmallObject()
 
     *(unsigned short*)((char*)p + 4) = 0x1c;
     *(unsigned short*)((char*)p + 6) = 1;
-    *(unsigned*)p = 0x014f8f54u;
+    *(unsigned*)p = (unsigned)g_14f8f54;
     *(int*)((char*)p + 0x10) = 0;
     *(int*)((char*)p + 0x14) = 0;
     *(int*)((char*)p + 0x18) = 0x80000000;
@@ -545,8 +549,8 @@ void hkStringMapBase::resizeTable(int slots)
 
     m_table = (int*)hkMemory::s_instance->alloc(slots * 0xc, 0x14);
     hkString_memSet(m_table, 0xff, slots * 4);
-    m_mask = slots - 1;
     m_numEntries = 0;
+    m_mask = slots - 1;
 
     int i = 0;
     if (0 < oldSize) {

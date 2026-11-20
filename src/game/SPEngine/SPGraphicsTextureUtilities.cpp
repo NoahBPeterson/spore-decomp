@@ -785,10 +785,14 @@ public:
 typedef char ImageVector_size_must_be_0x18[sizeof(ImageVector) == 0x18 ? 1 : -1];
 struct B0 { virtual int AddRef(); virtual int Release(); virtual int Query(); };
 struct B1 { virtual int AddRef(); virtual int Release(); };
-class BakeSprites : public B0, public B1 {
+// GmeRefCount-style base: vtable at +4, interlocked reference count at +8.
+struct B1Ref : B1 {
+    volatile long mRef;       // +0x8
+    B1Ref() { _InterlockedExchange(&mRef, 0); }
+};
+// The vector base is constructed first but laid out after the polymorphic bases (+0xc).
+class BakeSprites : public AutoVec, public B0, public B1Ref {
 public:
-    int     mRef;             // +0x8
-    AutoVec mVec;             // +0xc
     BakeSprites();
     virtual ~BakeSprites();
 };
@@ -2121,11 +2125,7 @@ C00d0::C00d0()
 { f0=0; f1=0; f2=0; f5=0; f6=0; f7=0; }
 
 // @ 0x007b00f0
-BakeSprites::BakeSprites()
-: mVec()
-{
-    _InterlockedExchange((volatile long*)&mRef, 0);
-}
+BakeSprites::BakeSprites() {}
 
 // @ 0x007b0130
 C0130::~C0130()

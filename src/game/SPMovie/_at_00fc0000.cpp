@@ -84,9 +84,10 @@ struct DecodeOptions {
 extern "C" StreamChunk* rw_Stream_GetChunk(void* stream);   // 0x11e6b50
 extern "C" void        rw_Chunk_Release(StreamChunk* c);    // 0x11e7c70
 extern "C" void        util_Copy16(u8*, u8*, int);          // 0x11ea910
+extern "C" char g_1491fd8[];
 struct Vp6Ext {
     Vp6Ext* Ctor3c0();
-    void Ctor940(int p2);
+    Vp6Ext* Ctor940(int p2);
     void CtorDE80();
     void Ctor3E0(int p2, int p3, int p4);
 };
@@ -456,10 +457,10 @@ void VideoDecoder_Vp6::Decode(int p2, DecodeOptions* opt)
 }
 
 // @ 0x00fcd940
-void Vp6Ext::Ctor940(int p2)
+Vp6Ext* Vp6Ext::Ctor940(int p2)
 {
     int self = (int)this;
-    *(int*)(self + 0x00) = 0x1491fd8;
+    *(void**)(self + 0x00) = g_1491fd8;
     *(int*)(self + 0x04) = 0;
     *(int*)(self + 0x08) = 0;
     *(int*)(self + 0x0c) = 0;
@@ -468,6 +469,7 @@ void Vp6Ext::Ctor940(int p2)
     *(int*)(self + 0x1c) = 0;
     if (p2 == 0 || p2 == 1)
         *(int*)(self + 0x1c) = p2;
+    return this;
 }
 
 // @ 0x00fcd970

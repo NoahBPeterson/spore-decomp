@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00c80000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1695294[];
+extern "C" char g_16952a0[];
+
 #include "game/types.h"
 #include "SP/cViewer.h"
 #include "SP/cCommunity.h"
@@ -276,8 +280,8 @@ struct SpatialModel {
     void SetModelKey3(uint32_t* key);
 };
 void* SP_PlanetModel();            // 0x00b3d350
-void* FUN_00b3d310(void* self);    // 0x00b3d310
-struct PlanetCall { void v(); };   // 0x00b3e810
+void* FUN_00b3d310();    // 0x00b3d310
+struct PlanetCall { void v(void* obj); };   // 0x00b3e810 (ret 4)
 struct SpatialPos {
     char  pad00[4];
     float x;   // 0x04
@@ -976,13 +980,8 @@ void SpatialModel::SetModelKey3(uint32_t* key)
 void SpatialPos::Fn()
 {
     if (SP_PlanetModel()) {
-        float x = this->x;
-        float y = this->y;
-        float z = this->z;
-        if (x * x + y * y + z * z > 0.001f) {
-            void* r = FUN_00b3d310(this);
-            ((PlanetCall*)r)->v();
-        }
+        if (x * x + y * y + z * z > 0.001f)
+            ((PlanetCall*)FUN_00b3d310())->v(this);
     }
 }
 
@@ -1048,7 +1047,7 @@ void cSO::func78h(cSPVector3_s00c8_8e30* out)
 {
     void* owner = (void*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
     cSPVector3_s00c8_8e30 v;
-    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)0x01695294, owner);
+    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)g_1695294, owner);
     cSPVector3_s00c8_8e30 tmp = *r;
     if (FUN_0059ab70(&tmp))
         *out = tmp;
@@ -1061,7 +1060,7 @@ void cSO::GetCommunityName(cSPVector3_s00c8_8e30* out)
 {
     void* owner = (void*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
     cSPVector3_s00c8_8e30 v;
-    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)0x016952a0, owner);
+    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)g_16952a0, owner);
     cSPVector3_s00c8_8e30 tmp = *r;
     if (FUN_0059ab70(&tmp))
         *out = tmp;

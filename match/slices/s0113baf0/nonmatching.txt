@@ -7,7 +7,6 @@
 0113bd60  124  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (303 valid, 62.7% cov); /LTCG scheduling
 0113be10  162  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (322 valid, 100% cov); /LTCG register allocation + SSE constant stores
 0113bf10  240  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (385 valid, 100% cov); /LTCG register allocation
-0113c060  8    complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 93.3% cov); only the `cmp cl,2` is scheduled before the `lea`/store (LTCG)
 0113c130  74   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation in the byte/float fill loops
 0113c1d0  86   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
 0113c290  22   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown (dec/jne vs sub/jns)

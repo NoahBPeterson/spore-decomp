@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00e4ecc0 220 fluid particle buffer init; complete. difftest: UNSUPPORTED (0/400 valid)
-00e4ee60 16 sGetSourceLevel; complete. difftest: PASS (400 valid, 100% cov)
 00e4efb0 58 frame: fixed the two post-create flag calls (0x00a04ce0/0x00a04d00 are __thiscall: model in ECX, value pushed, `ret 4`; they were declared cdecl so the model was pushed as an argument). What still differs is the frame: the callee must take its model in EDI (`mov eax,[edi]` with no save, the caller 0xe5ce90->0xe5d01d leaves `edi = [gfx+0x16214]` and its `lea ecx,[esp+0x50]` passes the scratch array), so every callee-saved push frame differs; also read `arg` for the first flag value (orig `mov eax,[esp+8]`, i.e. the caller's scratch cell) rather than the literal 1. fix1: quick check DIFFERS (emulator gave no result; L2 register check)
 00e4f6d0 69 quad-leaf index emit recursion; complete. difftest: WEAK (161 valid, 100% cov)
 00e51930 72 register self, list lookup + mesh vcall, append: complete; original receives self already in esi (register-arg static, no prologue/`pop esi`), we take it on the stack; body matches instruction for instruction otherwise. fix1: quick check DIFFERS (emulator, because the entry registers differ: retail uses esi at entry)
@@ -45,10 +44,8 @@
 00e5a1a0  115  cell-quality tier + spawn: complete (this in ESI via single-caller static trick); SSE constant load vs memory-operand comiss and dead lea [esi+0x254]/eax=ebx artifacts differ
 00e5a2a0 250 view-vector angle helper: complete; SIMD dot-product evaluation/scheduling of a- and b-vectors differs (size matches)
 00e5a850 116 complete (same calls in order: sGetBoxSizeMultiplier2 cdecl, kLevelSize and gspCellGame loads, x87 mul/div, RoundToInt/cvtss2si pair, both wrap-and-clamp fixups); volatile temps force 32-bit float rounding at the original's store points; the 1/x is an SSE divss where cl emits x87 (fld1/fdivrp), so the bytes differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e61140 5 global reload/register choice differs (o kept in ecx vs eax); equiv UNSUPPORTED: 0/1200 valid inputs (fault(read), _vsnprintf import)
 00e61370 276 matrix->vector math operand order/scheduling differs; equiv FAIL: 1 ulp float difference in output
 00e61630 106 ctor wrapper: temp Handle slot and case schedule differ; equiv UNSUPPORTED: 0/1200 valid inputs (_mktime64 import, write faults)
-00e61a50 11 factory new-expression: vtable/field store order differs; equiv FAIL: vtable pointer stored differs from original (orig 01485598 vs ours)
 00e63ac0 264 compact cell array (release dead parts): complete; loop/index register allocation differs
 00e63bf0 113 spawn/kill cell attachment effect: complete; transform copy and vtable-call schedule differ
 00e63d10 33 assign global AutoRef from factory: complete; AddRef/Release ordering folded differently
@@ -118,7 +115,6 @@
 00e72c80 215 enter-cell-mode trigger: complete; pool call-site ordering and register allocation differ
 00e72e70 58 ability-record writer (tag 0x27): complete; tag-boolean register choice (EDI vs EDX) and thiscall push/add ordering differ
 00e72fb0 8 ability-record writer (tag 0x28): complete; only the add-ecx-offset vs push-arg order at two thiscall sites differs
-00e730d0 14 ability dispatch by element type: complete; only the global-load/arg-load scheduling order at the two GetChecked sites differs
 00e73140 234 area-cast ability: complete; pool call-site ordering and register allocation differ
 00e74a20 1162 complete (16 calls, same order); stack-slot sharing/spill order differs; callees e6d790/e868f0/e4f9d0 are static in the original (esi/edi/ecx/xmm0 register conventions) and declared cdecl here
 00e76880 152 per-frame leak/drip updater: the original receives its subject (the cell) in ESI and keeps it there across the whole body (byte 0x1ac, the resource scan, and the FUN_00e68000/FUN_00e76660 calls) -- a custom register ABI for a same-TU static helper that cannot be reproduced when the function is compiled alone (subject becomes a stack argument)

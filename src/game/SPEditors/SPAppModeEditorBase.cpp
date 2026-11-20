@@ -2710,7 +2710,7 @@ public:
     T* mpObject;
     AutoRefCountX(const AutoRefCountX& x);
     ~AutoRefCountX() { if (mpObject) mpObject->Release(); }
-    AutoRefCountX& operator=(const AutoRefCountX& x);
+    AutoRefCountX& operator=(const AutoRefCountX& x);   // 0x005766E0
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
 };
@@ -10911,10 +10911,11 @@ void FUN_00580df0()
 // @ 0x005810a0
 void cBoolVec::EraseAll()
 {
-    void* begin = mpBegin;
-    void* end = mpEnd;
-    DoInsertValue(begin, end, 0);
-    mpEnd = (char*)mpEnd + (((int)end - (int)begin) >> 2) * -4;
+    // eastl vector::erase(begin(), end()), inlined: the tail move (mpEnd - last bytes) is not folded.
+    int* first = (int*)mpBegin;
+    int* last = (int*)mpEnd;
+    DoInsertValue(first, last, (int)((char*)mpEnd - (char*)last));
+    mpEnd = (int*)mpEnd - (last - first);
 }
 
 // @ 0x005810d0

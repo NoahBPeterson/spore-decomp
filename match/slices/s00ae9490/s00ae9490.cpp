@@ -9,6 +9,11 @@
 // allocation and EASTL inlining are reproduced only approximately.
 //
 // Flags: default VS2008 (/O2 /MD /Gy /EHsc /TP).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+
 #include "types.h"
 
 typedef unsigned int   u32;
@@ -541,7 +546,8 @@ bool SpaceTool::Select(int a, int b)
 {
     if (b == -1)
         return false;
-    if (*(int*)((char*)this + 0x28) - *(int*)((char*)this + 0x24) >> 2 == 0)
+    unsigned count = (unsigned)(*(int**)((char*)this + 0x28) - *(int**)((char*)this + 0x24));
+    if (count <= 0)
         return false;
     if (FindBest(a, b, 2))
         return true;
@@ -575,8 +581,8 @@ void* GmeEditorRes::Destroy(u8 flags)
 {
     *(u32*)((char*)this + 0x0c) = 0xffffffff;
     *(u32*)((char*)this + 0x10) = 0;
-    *(u32*)((char*)this + 0x04) = 0x13ef094;
-    *(u32*)((char*)this + 0x00) = 0x13eb938;
+    *(u32*)((char*)this + 0x04) = (int)g_13ef094;
+    *(u32*)((char*)this + 0x00) = (int)g_13eb938;
     if (flags & 1)
         op_del(this);
     return this;

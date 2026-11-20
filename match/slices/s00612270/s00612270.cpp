@@ -479,7 +479,7 @@ struct PropertyBagBase : public RefCountBase {
     PropertyBagBase(uint32_t a) : pad8(0), padC(0), pad10(0), pad14(0), mField18(a) {}
 };
 struct cPropertyBag : public PropertyBagBase {
-    uint32_t mField1C;
+    struct Field1C { uint32_t v; Field1C(uint32_t x) : v(x) {} } mField1C;  // +0x1c
     PropPair* mpBegin;       // +0x20
     PropPair* mpEnd;         // +0x24
     PropPair* mpCapacity;    // +0x28

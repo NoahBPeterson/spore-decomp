@@ -7,3 +7,11 @@ slices/s011bb2b0/conf_lib.cpp  _NCONF_get_section  011bbec0  /O2 /arch:SSE /MD /
 slices/s011bb2b0/conf_lib.cpp  _NCONF_get_string  011bbf10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bb2b0_inc
 slices/s011bb2b0/conf_lib.cpp  _CONF_get_section  011bbf70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bb2b0_inc
 slices/s011bb2b0/conf_lib.cpp  _CONF_get_string  011bbfe0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bb2b0_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011bb2b0/oss_asn1_gen.cpp  _append_exp  011bb2b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bb2b0/oss_asn1_gen.cpp  _asn1_str2tag  011bb360  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bb2b0/oss_asn1_gen.cpp  _asn1_multi  011bbd50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bb2b0/oss_conf_lib.cpp  _CONF_free  011bc060  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bb2b0/oss_t1_enc.cpp  _tls1_P_hash  011bc0a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bb2b0/oss_t1_enc.cpp  _tls1_PRF  011bc2e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011bb2b0/oss_t1_enc.cpp  _tls1_generate_key_block  011bc350  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

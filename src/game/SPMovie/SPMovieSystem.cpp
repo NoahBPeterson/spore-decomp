@@ -2,6 +2,12 @@
 // Object file: SPMovie/SPMovieSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_1491730[];
+extern "C" char g_14939e4[];
+extern "C" char g_14939f4[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -505,7 +511,7 @@ void StreamA::FUN_00fc7ec0(AudioSamples* samples)
 // @ 0x00fc7f30
 StreamC::StreamC()
 {
-  mpVtable = (Vtbl*)0x1491730;
+  mpVtable = (Vtbl*)g_1491730;
   mField04 = 0;
   mField08 = 0;
   mField0c = 0;
@@ -743,11 +749,11 @@ void* cMovieSystem::GetSomething()
 // @ 0x00fd7ab0
 cMovieLetterbox* cMovieLetterbox::Construct()
 {
-    mpRefCountTable = (void*)0x013ec458u;
+    mpRefCountTable = (void*)g_13ec458;
     mnRefCount = 0;
     _ReadWriteBarrier();
-    mpInterfaceTable = (void*)0x014939f4u;
-    mpRefCountTable = (void*)0x014939e4u;
+    mpInterfaceTable = (void*)g_14939f4;
+    mpRefCountTable = (void*)g_14939e4;
     mpLayout = 0;
     return this;
 }

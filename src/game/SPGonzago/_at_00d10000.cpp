@@ -356,21 +356,21 @@ void* RetailRotationQuery::cRotationBall::AsInterface(uint32_t type)
                              : cGameData::AsInterface(type);
 }
 
+struct StreamImpl_d1d540 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5();
+    virtual void* Iface();   // +0x18
+};
+inline void WriteTag_d1d540(void* s, uint v) { WriteUint32(s, &v, 1, 0); }
+
 // @ 0x00d1d540
 char cRotationBall::Write(void* stream)
 {
     void* impl = (*(VFnR)VSLOT(stream, 0x20))(stream);
-    uint tag = 0x7292112;
-    void* iface = (*(VFnR)VSLOT(impl, 0x18))(impl);
-    WriteUint32(iface, &tag, 1, 0);
+    WriteTag_d1d540(((StreamImpl_d1d540*)impl)->Iface(), 0x7292112);
     ((cGameData*)this)->Write(stream);
     cGameModel* m = mpModel_108;
-    if (m) {
-        void* r = (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807);
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, r);
-    } else {
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, 0);
-    }
+    (*(VFn1)VSLOT(stream, 0x2c))(stream, m ? (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807) : 0);
     return 1;
 }
 
@@ -495,13 +495,18 @@ void* cRotationRing::SetThing6c(void* v)
     return v;
 }
 
+extern char g_147a0a8[];   // 0x0147a0a8  cRotationBall vftable (primary)
+extern char g_147a094[];   // 0x0147a094  cRotationBall vftable (+0x04 subobject)
+extern char g_1479fd0[];   // 0x01479fd0  cSpatialObject vftable (+0x34 member)
+
 // @ 0x00d1da60
 void cRotationBall::FiniBall()
 {
     cSpatialObject* sp = &mSpatial_34;
-    mpVtbl_00 = (void*)0x147a0a8;
-    mpVtbl_04 = (void*)0x147a094;
-    sp->mpVtbl_00 = (void*)0x1479fd0;
+    _ReadWriteBarrier();
+    mpVtbl_00 = g_147a0a8;
+    mpVtbl_04 = g_147a094;
+    sp->mpVtbl_00 = g_1479fd0;
     mName_110.FreeIfOwned();
     if (mpModel_108)
         (*(VFn0)VSLOT(mpModel_108, 0xc0))(mpModel_108);
@@ -543,17 +548,10 @@ void cRotationBall::SetModel(cGameModel* m, void* p)
 char cRotationRing::Write(void* stream)
 {
     void* impl = (*(VFnR)VSLOT(stream, 0x20))(stream);
-    uint tag = 0x2ee8eeb;
-    void* iface = (*(VFnR)VSLOT(impl, 0x18))(impl);
-    WriteUint32(iface, &tag, 1, 0);
+    WriteTag_d1d540(((StreamImpl_d1d540*)impl)->Iface(), 0x2ee8eeb);
     ((cGameData*)this)->Write(stream);
     cGameModel* m = mpModel_108;
-    if (m) {
-        void* r = (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807);
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, r);
-    } else {
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, 0);
-    }
+    (*(VFn1)VSLOT(stream, 0x2c))(stream, m ? (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807) : 0);
     return 1;
 }
 
@@ -605,13 +603,18 @@ char cRotationRing::GetFlagR()
     return (char)mpModel_108->mbFlag_6f;
 }
 
+extern char g_147a200[];   // 0x0147a200  cRotationRing vftable (primary)
+extern char g_147a1ec[];   // 0x0147a1ec  cRotationRing vftable (+0x04 subobject)
+extern char g_147a128[];   // 0x0147a128  cSpatialObject vftable (+0x34 member)
+
 // @ 0x00d1de10
 void cRotationRing::FiniRing()
 {
     cSpatialObject* sp = &mSpatial_34;
-    mpVtbl_00 = (void*)0x147a200;
-    mpVtbl_04 = (void*)0x147a1ec;
-    sp->mpVtbl_00 = (void*)0x147a128;
+    _ReadWriteBarrier();
+    mpVtbl_00 = g_147a200;
+    mpVtbl_04 = g_147a1ec;
+    sp->mpVtbl_00 = g_147a128;
     mName_110.FreeIfOwned();
     if (mpModel_108)
         (*(VFn0)VSLOT(mpModel_108, 0xc0))(mpModel_108);

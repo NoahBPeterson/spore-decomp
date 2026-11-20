@@ -1,6 +1,9 @@
 // EA::Trace zone allocation: the pooled allocator wrapper and the ZoneObject allocation hooks.
 // Object file: UTFSpore_Win32/ZoneObject.obj.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e104[];
+
 #include "game/types.h"
 #include "EA/Allocator/ZoneObject.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -40,7 +43,7 @@ C25f30* C25f30::F(int a2, int a3, int a4)
     p[5] = a4;              // +0x14  allocation unit
     p[2] = 0; p[3] = 0; p[4] = 0;
     p[6] = a3;              // +0x18
-    *p = 0x0143e104;        // +0x00  vtable (address in the retail image)
+    *p = (int)g_143e104;        // +0x00  vtable (address in the retail image)
     p[7] = 0;               // +0x1c
     return this;
 }
@@ -84,7 +87,7 @@ void ZoneObject_delete(void* p)
 {
     if (p) {
         void* base = (char*)p - 8;
-        ((void (__thiscall*)(void*, int))(*(void***)*(void**)base)[3])(base, 0);
+        (*(EA::Allocator::ICoreAllocator**)base)->Free(base, 0);
     }
 }
 }}  // namespace EA::Trace

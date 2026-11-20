@@ -114,10 +114,12 @@ void Obj::FUN_005409d0(int* pos, unsigned int n, int* value)
     }
 }
 
+struct Word_s0054_0f20 { int v; };   // one-dword struct leading Entry18
+
 // @ 0x00540f20
 Entry18* Obj::FUN_00540f20(Entry18* p)
 {
-    *(int*)this = *(int*)p;
+    *(Word_s0054_0f20*)this = *(Word_s0054_0f20*)p;  // first word is a 4-byte struct (copied source-first)
     ((int*)this)[1] = ((int*)p)[1];
     ((int*)this)[2] = ((int*)p)[2];
     float* src = (float*)((char*)p + 0xc);
@@ -208,10 +210,10 @@ void FUN_00541600(int a)
 }
 
 // @ 0x00541630
+struct Empty_00541630 {};
 void FUN_00541630(int a, int b)
 {
-        bool local = 0;
-    (void)local;
+    Empty_00541630();
     g_pLocalLight->FUN_00928a80(a, b, 0);
 }
 

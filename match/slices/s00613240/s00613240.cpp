@@ -84,9 +84,9 @@ struct Elem16 {  // pair<uint64, intrusive_ptr<IRefObj>> (16 bytes)
     Elem16& operator=(const Elem16& x) {
         a = x.a;
         b = x.b;
-        IRefObj* const pNew = x.p;
-        if (pNew != p) {
-            IRefObj* const pTemp = p;
+        IRefObj* const pNew = *(IRefObj* const volatile*)&x.p;
+        IRefObj* const pTemp = p;
+        if (pNew != pTemp) {
             if (pNew) pNew->AddRef();
             p = pNew;
             if (pTemp) pTemp->Release();
@@ -110,7 +110,7 @@ PropPair* __cdecl CopyBackward(PropPair*, PropPair*, PropPair*);                
 const PropPair* __cdecl LowerBound(const PropPair*, const PropPair*, const uint32_t&, eastl::MapCompare);  // 0x00612db0
 Elem16* __cdecl UninitializedCopyElem16(const Elem16*, const Elem16*, Elem16*);     // 0x00612ad0
 Elem16* __cdecl DestructElem16Range(Elem16*, Elem16*, Elem16*);                     // 0x007cddf0
-Elem16* __cdecl CopyBackwardElem16(Elem16*, Elem16*, Elem16*);                      // 0x007cde80
+Elem16* __cdecl CopyBackwardRefPairs(Elem16*, Elem16*, Elem16*);                      // 0x007cde80
 Elem16* __cdecl CopyElem16(Elem16*, Elem16*, Elem16*);                              // 0x007c7e10
 const Elem16* __cdecl LowerBoundKey64(const Elem16*, const Elem16*, const uint64_t*, eastl::MapCompare);  // 0x007c8160
 const uint32_t* __cdecl LowerBoundSet(const uint32_t*, const uint32_t*, const uint32_t*, eastl::MapCompare);  // 0x00555a20
@@ -209,7 +209,7 @@ void Elem16Vector::DoInsertValue(Elem16* position, const Elem16& value) {
         const Elem16* pValue = &value;
         if ((pValue >= position) && (pValue < mpEnd)) ++pValue;
         ::new (mpEnd) Elem16(*(mpEnd - 1));
-        CopyBackwardElem16(position, mpEnd - 1, mpEnd);
+        CopyBackwardRefPairs(position, mpEnd - 1, mpEnd);
         *position = *pValue;
         ++mpEnd;
     } else {
@@ -563,7 +563,8 @@ void cListenerSet::insertKey(uint32_t key) {
 
 // @ 0x00613a10
 void cListenerSet::Shutdown() {
-    mListeners.eraseRange(mListeners.mpBegin, mListeners.mpEnd);
+    Elem16Vector& l = mListeners;
+    l.eraseRange(l.mpBegin, l.mpEnd);
     mSet.clear();
     mHandle.Reset();
     if (cManager* pMgr = GetManager()) {
@@ -666,7 +667,10 @@ bool cPollinatorLookup::LookupByKey(const ResourceKey* pKey, IRefObj** ppOut, bo
     MetaRef metadata;
     if (GetAssetMetadata(*pKey, &metadata.mpObject)) {
         const uint32_t* pId = metadata.mpObject->GetServerId();
-        return Lookup(*(const uint64_t*)pId, ppOut, bTouch);
+        const uint64_t serverId = *reinterpret_cast<const uint64_t*>(pId);
+        IRefObj** output = ppOut;
+        const bool touch = bTouch;
+        return Lookup(serverId, output, touch);
     }
     return false;
 }

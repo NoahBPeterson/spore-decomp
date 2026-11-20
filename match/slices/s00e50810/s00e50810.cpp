@@ -1,6 +1,11 @@
 // Slice s00e50810 (batch bfs0, slice 32). Region 0xe50810-0xe51819.
 // SP::cCellMode / cell-game camera + input helpers (float math, bounds, source-level
 // selection, save/load glue). Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1483f74[];
+extern "C" char g_14851e0[];
+
 #include "types.h"
 #include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gObjectSerializerList[]; // 0x015a7e38
@@ -63,7 +68,19 @@ extern "C" void   __cdecl FUN_007eb820(int);              // 0x7eb820
 extern "C" void   __cdecl FUN_00e394f0(uint32_t, void*, void*, void*, void*); // 0xe394f0
 extern "C" float  __cdecl FUN_01041cd0(float, float, float); // 0x1041cd0
 extern "C" void*  __cdecl EA_IO_WriteUint32(void*, void*, int, int); // 0x93aa70
-extern "C" int    __cdecl SP_sGetSourceLevel();           // 0xe4ee60
+static __declspec(noinline) int __fastcall SP_sGetSourceLevel(int, int level)
+{
+  if (level == 1000) return gTable_1483c14[147];
+  int i = 0;
+  if (level >= 0) {
+    int* threshold = gTable_1483c14 + 8;
+    do {
+      threshold += 7;
+      ++i;
+    } while (level >= *threshold);
+  }
+  return gTable_1483c14[i * 7];
+}           // 0xe4ee60
 extern "C" int    __fastcall SP_sGetSourceLevelReg(void* self, int level); // 0xe4ee60
 struct cVarListSerializer {
   void Ctor(int a, void* b, uint32_t c);   // 0x692f90
@@ -346,7 +363,7 @@ int FUN_00e510f0() {
 
 // @ 0x00e511b0
 void FUN_00e511b0() {
-  for (uint32_t* p = (uint32_t*)0x1483f74; (int)p < 0x14851e0; p += 9) {
+  for (uint32_t* p = (uint32_t*)g_1483f74; (int)p < (int)((char*)&g_1483f74 + 0x126c); p += 9) {
     uint32_t id = *p;
     void* o = FUN_0067cb20();
     ((void(__thiscall*)(void*, uint32_t, int))Vt(o)[0x2c / 4])(o, id, 0);
@@ -504,16 +521,18 @@ int FUN_00e51690(int obj) {
 int FUN_00e516c0(int obj) {
   int level = *(int*)(*(int*)((char*)gCellGame_16b3c04 + 0x5190) + 0x1c);
   int* row;
-  if (level == 1000) row = (int*)0x1483e60;
+  if (level == 1000) row = gTable_1483c14 + 147;
   else {
     int i = 0;
-    int* p = (int*)0x1483c34;
-    if (level >= 0) { do { p += 7; ++i; } while (*p <= level); }
-    row = (int*)(0x1483c14 + i * 0x1c);
+    if (level >= 0) {
+      int* p = gTable_1483c14 + 8;
+      do { p += 7; ++i; } while (level >= *p);
+    }
+    row = gTable_1483c14 + i * 7;
   }
-  int base = row[0];
-  int sl = *(int*)(obj + 0x358);
-  if (sl == -1) sl = SP_sGetSourceLevel();
+  int base = static_cast<volatile int*>(row)[0];
+  int sl = *(int*)(static_cast<volatile int&>(obj) + 0x358);
+  if (sl == -1) sl = SP_sGetSourceLevel(0, level);
   return (sl - base) + 2;
 }
 

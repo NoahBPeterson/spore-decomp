@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00af0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145c1bc[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -1707,7 +1710,16 @@ bool __thiscall LayoutMgr::LookupC(void* entity, int key, float* out)
 // @ 0x00af0db0
 void __thiscall HashTable::FreeChains(HashNode** buckets, u32 count)
 {
-    for (u32 i = 0; i < count; i++)
+    struct SavedState
+    {
+        u32 index;
+        HashNode* node;
+    };
+    // Restore the saved values only after the inner cleanup calls.
+    volatile SavedState saved;
+    u32 i = 0;
+    saved.index = i;
+    while (i < count)
     {
         HashNode* n = buckets[i];
         while (n != 0)
@@ -1715,16 +1727,26 @@ void __thiscall HashTable::FreeChains(HashNode** buckets, u32 count)
             HashNode* cur = n;
             n = n->next;
             InnerNode* p = *(InnerNode**)((char*)cur + 0x10);
-            while (p != 0)
+            XClear* const valueAllocator = (XClear*)((char*)cur + 4);
+            saved.node = cur;
+            if (p != 0)
             {
-                ((XClear*)((char*)cur + 4))->ClearValue(p->val);
-                InnerNode* pn = p->next;
-                FreeMem(p);
-                p = pn;
+                do
+                {
+                    valueAllocator->ClearValue(p->val);
+                    InnerNode* pn = p->next;
+                    FreeMem(p);
+                    p = pn;
+                } while (p != 0);
+                i = saved.index;
+                cur = saved.node;
             }
             FreeMem(cur);
         }
-        buckets[i] = 0;
+        HashNode*& slotToReset = buckets[i];
+        slotToReset = 0;
+        ++i;
+        saved.index = i;
     }
 }
 
@@ -1889,7 +1911,7 @@ void __cdecl CreateLayoutManager()
 // @ 0x00af1430
 void __thiscall TimerOwner::Dtor()
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ((XGonzago*)timer)->Dtor();
     ((XList*)&head)->DoClear();
 }
@@ -1914,7 +1936,7 @@ void __thiscall TimerOwner::Add(const void* wstr)
 // @ 0x00af14b0
 TimerOwner* __thiscall TimerOwner::Ctor()
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ListHead* h = &head;
     h->next = (ListNode*)h;
     h->prev = (ListNode*)h;
@@ -1942,7 +1964,7 @@ TimerOwner* __thiscall TimerOwner::Ctor()
 // @ 0x00af1540
 TimerOwner* __thiscall TimerOwner::Delete(u32 flags)
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ((XGonzago*)timer)->Dtor();
     ((XList*)&head)->DoClear();
     if (flags & 1)
@@ -4375,6 +4397,7 @@ void SP::cActionCircle_s00af_9aa0::tSlot::ReserveId(unsigned int id)
 {
   mOccupied = true;
   mReservingId = id;
+  _ReadWriteBarrier();
   cGameData_s00af_9aa0* old = mpReservingNoun.mpObject;
   mpReservingNoun.mpObject = (cGameData_s00af_9aa0*)0;
   if (old) old->Release();

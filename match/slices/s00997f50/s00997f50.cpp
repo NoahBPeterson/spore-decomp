@@ -1,5 +1,14 @@
 // Slice s00997f50 -- EA::UTFWinTools HitMask/RWTexture/SerCollection.
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebcdc[];
+extern "C" char g_13effa8[];
+extern "C" char g_141aa84[];
+extern "C" char g_14469dc[];
+extern "C" char g_14469f0[];
+extern "C" char g_1446a3c[];
+
 #include "types.h"
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
@@ -201,14 +210,14 @@ bool HMFactory::CreateResource(int param2, void** out, void* p4, void* p5)
 void* __fastcall FUN_009986e0(void* self)
 {
     char* a = (char*)self;
-    *(void**)(a + 0) = (void*)0x141aa84;
-    *(void**)(a + 8) = (void*)0x13ebcdc;
+    *(void**)(a + 0) = (void*)g_141aa84;
+    *(void**)(a + 8) = (void*)g_13ebcdc;
     _InterlockedExchange((volatile long*)(a + 0xc), 0);
     *(unsigned*)(a + 0x10) = 0;
     *(unsigned*)(a + 0x14) = 0;
     *(unsigned*)(a + 0x18) = 0;
-    *(void**)(a + 0) = (void*)0x14469f0;
-    *(void**)(a + 8) = (void*)0x14469dc;
+    *(void**)(a + 0) = (void*)g_14469f0;
+    *(void**)(a + 8) = (void*)g_14469dc;
     *(unsigned*)(a + 0x1c) = 0;
     *(unsigned*)(a + 4) = 0;
     return a;
@@ -242,9 +251,9 @@ bool RWTexFactory::CreateResource(int param2, void** out, void* p4, void* p5)
 void* __fastcall FUN_00998820(void* self)
 {
     char* a = (char*)self;
-    *(void**)(a + 0) = (void*)0x13effa8;
+    *(void**)(a + 0) = (void*)g_13effa8;
     _InterlockedExchange((volatile long*)(a + 4), 0);
-    *(void**)(a + 0) = (void*)0x1446a3c;
+    *(void**)(a + 0) = (void*)g_1446a3c;
     *(unsigned char*)(a + 8) = 1;
     return a;
 }

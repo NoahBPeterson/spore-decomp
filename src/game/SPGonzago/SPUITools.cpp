@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPUITools.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c658[];
+extern "C" char g_149c660[];
+extern "C" char g_149c67c[];
+
 #include "game/types.h"
 #include "EA/Variant.h"
 #include "SP/cSPMission.h"
@@ -713,13 +718,10 @@ extern "C" bool FUN_00e0a4c0(); // 0x00e0a4c0
 extern "C" void FUN_00663860(); // 0x00663860 feed AddWindow
 void* __cdecl   FUN_00f473a0(int size, const char* name, int a, int b, int c, int d); // operator_new
 extern "C" void* FUN_00e36650(); // 0x00e36650
-#pragma pack(push, 1)
 struct Vec3_s0107 {
-    uint32_t x, y, z;
-    Vec3_s0107() {}
-    Vec3_s0107(const Vec3_s0107& o) : x(o.x), y(o.y), z(o.z) {}
+    float x, y, z;
 };
-#pragma pack(pop)
+extern Vec3_s0107 g_15b9768;                         // 0x015b9768 tool fill colour
 void  __cdecl    FUN_00e36b30(); // 0x00e36b30
 extern "C" void  FUN_00662920();                     // 0x00662920
 extern "C" void  FUN_006b54b0();                     // 0x006b54b0 cString::Load
@@ -1031,7 +1033,7 @@ void cToolWindow::FUN_0107ac90(int a1, int a2, int a3, int a4)
         ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(Layout(), 0x5f00928, true), key);
     void* tooltip = Tooltip();
     ((void (__thiscall *)(void *, Vec3_s0107, uint32_t, int, int))FUN_00e36b30)(
-        tooltip, *(Vec3_s0107*)0x015b9768, 0x5fd4ce0, 200, 0xfa);
+        tooltip, g_15b9768, 0x5fd4ce0, 200, 0xfa);
     void* obj = ((void *(__thiscall *)(void *, uint32_t, bool))FUN_00e36650)(tooltip, 0x51a37b8, true);
     float* r = (float*)((void*(__thiscall*)(void*)) (*(void***)obj)[0x38 / 4])(obj);
     SetLineY(r[2] - r[0]);
@@ -1087,9 +1089,9 @@ void __thiscall cToolWindow::FUN_0107ae40(void* pWin)
 cToolWindow* cToolWindow::FUN_0107ae70()
 {
     FUN_00e18bb0(this);
-    *(void**)this = (void*)0x0149c67c;
-    *((void**)this + 2) = (void*)0x0149c660;
-    *((void**)this + 3) = (void*)0x0149c658;
+    *(void**)this = (void*)g_149c67c;
+    *((void**)this + 2) = (void*)g_149c660;
+    *((void**)this + 3) = (void*)g_149c658;
     mFlag40 = false;
     FUN_00e0a390(Sub());
     FUN_00e36480(Tooltip());
@@ -1107,9 +1109,9 @@ cToolWindow* cToolWindow::FUN_0107ae70()
 // @ 0x0107af00
 void cToolWindow::FUN_0107af00()
 {
-    *(void**)this = (void*)0x0149c67c;
-    *((void**)this + 2) = (void*)0x0149c660;
-    *((void**)this + 3) = (void*)0x0149c658;
+    *(void**)this = (void*)g_149c67c;
+    *((void**)this + 2) = (void*)g_149c660;
+    *((void**)this + 3) = (void*)g_149c658;
     _ReadWriteBarrier();
     void* p = *((void**)this + 0x52);
     if (p != 0)

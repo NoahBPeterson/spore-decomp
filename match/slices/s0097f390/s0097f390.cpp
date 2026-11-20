@@ -9,6 +9,26 @@
 //   RemoveAll are entered with `this` == WinMessageBox+0x338 and reach the owner through
 //   negative displacements (-0x334 -> owner+4, -0x128 -> owner+0x210).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fa72c[];
+extern "C" char g_14426a0[];
+extern "C" char g_1443910[];
+extern "C" char g_14439c8[];
+extern "C" char g_1443a58[];
+extern "C" char g_1443ac8[];
+extern "C" char g_1443be8[];
+extern "C" char g_1443d38[];
+extern "C" char g_1443d74[];
+extern "C" char g_1443d90[];
+extern "C" char g_1443e5c[];
+extern "C" char g_1444098[];
+extern "C" char g_14440b4[];
+extern "C" char g_14440d0[];
+extern "C" char g_154df28[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 
 extern "C" unsigned __cdecl wcslen(const wchar_t*);
@@ -301,10 +321,10 @@ void HashOwner::Clear()
 // @ 0x0097fb60
 WinMessageBox::~WinMessageBox()
 {
-    *(void* volatile*)&mpVtbl0 = (void*)0x1443be8;
-    *(void* volatile*)&mpVtbl4 = (void*)0x1443ac8;
-    *(void* volatile*)&mpVtbl20c = (void*)0x1443a58;
-    *(void* volatile*)&mTail.mpVtbl = (void*)0x14439c8;
+    *(void* volatile*)&mpVtbl0 = (void*)g_1443be8;
+    *(void* volatile*)&mpVtbl4 = (void*)g_1443ac8;
+    *(void* volatile*)&mpVtbl20c = (void*)g_1443a58;
+    *(void* volatile*)&mTail.mpVtbl = (void*)g_14439c8;
     IRefCounted* p = *(IRefCounted* volatile*)&mTail.mpButtonDrawable;
     if (p)
         p->Release();
@@ -324,7 +344,7 @@ WinMessageBox::~WinMessageBox()
     if (h->mnBucketCount > 1)
         FreeMem(h->mpBucketArray);
     mTail.mButtons.DestroyVector();
-    mTail.mpVtbl = (void*)0x13eb938;
+    mTail.mpVtbl = (void*)g_13eb938;
     Destroy();
 }
 
@@ -346,12 +366,12 @@ void WinMessageBoxTail::SetMessageText(const wchar_t* text)
 WinMessageBox::WinMessageBox()
 {
     Init();
-    VS_P(mTail.mpVtbl, 0x1443910);
+    VS_P(mTail.mpVtbl, (int)g_1443910);
     VS_F(mTail.m008, 5.0f);
-    VS_P(mpVtbl0, 0x1443be8);
-    VS_P(mpVtbl4, 0x1443ac8);
-    VS_P(mpVtbl20c, 0x1443a58);
-    VS_P(mTail.mpVtbl, 0x14439c8);
+    VS_P(mpVtbl0, (int)g_1443be8);
+    VS_P(mpVtbl4, (int)g_1443ac8);
+    VS_P(mpVtbl20c, (int)g_1443a58);
+    VS_P(mTail.mpVtbl, (int)g_14439c8);
     VS_I(mTail.m004, 1);
     VS_F(mTail.m00c, 5.0f);
     VS_F(mTail.m010, 5.0f);
@@ -376,10 +396,10 @@ WinMessageBox::WinMessageBox()
     VS_I(mTail.mKeyList.mnBucketCount, 1);
     VS_I(mTail.mKeyList.mnElementCount, 0);
     VS_I(mTail.m074, 0);
-    VS_P(mTail.mKeyList.mpBucketArray, 0x154df28);
-    VS_P(mTail.msMessageText.mpCapacity, 0x1667bae);
-    VS_P(mTail.msMessageText.mpBegin, 0x1667bac);
-    VS_P(mTail.msMessageText.mpEnd, 0x1667bac);
+    VS_P(mTail.mKeyList.mpBucketArray, (int)g_154df28);
+    VS_P(mTail.msMessageText.mpCapacity, (int)g_1667bae);
+    VS_P(mTail.msMessageText.mpBegin, (int)g_1667bac);
+    VS_P(mTail.msMessageText.mpEnd, (int)g_1667bac);
     VS_I(mTail.m08c, 0);
     VS_I(mTail.m090, 0);
     VS_P(mTail.mpMessageText, 0);
@@ -474,13 +494,13 @@ void* BasicFactory_ModulateEffect::CreateInstance(void* ctx, void* allocator)
         0x70, 8, "UTFWin/EA::UTFWinControls::ModulateEffect", allocator);
     if (p) {
         p->Ctor();
-        p->m60 = (void*)0x14426a0;
+        p->m60 = (void*)g_14426a0;
         p->m64 = -1;
         p->m68 = -1;
-        p->m00 = (void*)0x1443d90;
-        p->m04 = (void*)0x1443d74;
-        p->m0c = (void*)0x1443d38;
-        p->m60 = (void*)0x1443e5c;
+        p->m00 = (void*)g_1443d90;
+        p->m04 = (void*)g_1443d74;
+        p->m0c = (void*)g_1443d38;
+        p->m60 = (void*)g_1443e5c;
         return p;
     }
     return 0;
@@ -526,9 +546,9 @@ Navigator::Navigator()
 // @ 0x00980420
 Navigator::~Navigator()
 {
-    m0c = (void*)0x13eb938;
-    m04 = (void*)0x13eb938;
-    m00 = (void*)0x13eb938;
+    m0c = (void*)g_13eb938;
+    m04 = (void*)g_13eb938;
+    m00 = (void*)g_13eb938;
 }
 
 // @ 0x00980430
@@ -544,9 +564,9 @@ ExplicitNavigator::ExplicitNavigator()
 // @ 0x00980490
 CascadeEffect* CascadeEffect::Destroy(uint8_t flags)
 {
-    m0c = (void*)0x13eb938;
-    m04 = (void*)0x13eb938;
-    m00 = (void*)0x13eb938;
+    m0c = (void*)g_13eb938;
+    m04 = (void*)g_13eb938;
+    m00 = (void*)g_13eb938;
     if (flags & 1)
         MultiHeapDelete(this);
     return this;
@@ -582,12 +602,12 @@ void* BasicFactory_PerspectiveEffect::CreateInstance(void* ctx, void* allocator)
     PerspectiveEffect* p = (PerspectiveEffect*)AllocObject(
         0x14, 4, "UTFWin/EA::UTFWinControls::PerspectiveEffect", allocator);
     if (p) {
-        p->m04 = (void*)0x13fa72c;
+        p->m04 = (void*)g_13fa72c;
         p->m08 = 0;
-        p->m0c = (void*)0x14426a0;
-        p->m00 = (void*)0x14440d0;
-        p->m04 = (void*)0x14440b4;
-        p->m0c = (void*)0x1444098;
+        p->m0c = (void*)g_14426a0;
+        p->m00 = (void*)g_14440d0;
+        p->m04 = (void*)g_14440b4;
+        p->m0c = (void*)g_1444098;
         p->m10 = 400.0f;
         return p;
     }

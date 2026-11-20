@@ -2,6 +2,13 @@
 // Object file: SPGonzago/_at_00c30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013c3880();
+extern "C" char g_1466c14[];
+extern "C" char g_146c56c[];
+extern "C" char g_1573a60[];
+extern "C" char g_157a1f8[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cSpatialObject.h"
@@ -962,7 +969,7 @@ void cGameBundle::Read(uint32_t s)
     ((BaseSpatial*)mSpatial)->Read(s);
     ((BaseGameData*)this)->Read(s);
     ((SerObj*)buf)->Ctor(this, &g_p1573038, 0x1a80d26);
-    ((SerObj*)buf)->Serialize(s);
+    ((SerObj*)buf)->Read(s);
 }
 
 // @ 0x00c35d20
@@ -1450,9 +1457,9 @@ int cGameData::WriteAsText(void* pData)
     uint8_t serA[0xa14];
     uint8_t serB[0xa14];
     int n = ((FnB18420*)this)->f(pData);
-    ((CVarListSer*)serA)->ctor((char*)this + 0x34, (void*)0x157a1f8, 0x1a80d26);
+    ((CVarListSer*)serA)->ctor((char*)this + 0x34, (void*)g_157a1f8, 0x1a80d26);
     n += ((CVarListSer*)serA)->GetFields(pData);
-    ((CVarListSer*)serB)->ctor(this, (void*)0x1573a60, 0x1a80d26);
+    ((CVarListSer*)serB)->ctor(this, (void*)g_1573a60, 0x1a80d26);
     n += ((CVarListSer*)serB)->GetFields(pData);
     return n;
 }
@@ -1606,7 +1613,7 @@ void* __cdecl FUN_00c3ea80()
         g_168e568 = 0;
         g_168e56c = 0;
         g_168e570 = 0;
-        atexit((void(__cdecl*)(void))0x13c3880);
+        atexit((void(__cdecl*)(void))FUN_013c3880);
     }
     return &g_168e568;
 }
@@ -1656,7 +1663,7 @@ void* RetailSolarHitSphere::cSolarHitSphere::AsInterface(uint32_t type)
 void* cGameplayMarker::Destroy(int bDelete)
 {
     CMarkerBase* pBase = (CMarkerBase*)this;
-    pBase->mpVtbl00 = (void*)0x146c56c;
+    pBase->mpVtbl00 = (void*)g_146c56c;
     _ReadWriteBarrier();
     if (pBase->mpRef38 != nullptr)
         pBase->mpRef38->Release();
@@ -1676,9 +1683,9 @@ void cInteractableObject::Shutdown()
 {
     ((FnAc0520*)((uint8_t*)this + 0x210))->f();
     ((FnBfcd00*)((uint8_t*)this + 0x148))->f();
-    *(uint32_t*)((uint8_t*)this + 0x144) = 0x1466c14;
+    *(uint32_t*)((uint8_t*)this + 0x144) = (int)g_1466c14;
     ((FnC8a420*)((uint8_t*)this + 0x70))->f();
-    *(uint32_t*)((uint8_t*)this + 0x34) = 0x146c56c;
+    *(uint32_t*)((uint8_t*)this + 0x34) = (int)g_146c56c;
     _ReadWriteBarrier();
     IRefCounted* pOwner = *(IRefCounted**)((uint8_t*)this + 0x6c);
     if (pOwner != nullptr)

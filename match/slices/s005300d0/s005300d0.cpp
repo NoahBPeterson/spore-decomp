@@ -7,6 +7,8 @@
 
 typedef unsigned int size_t;
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
+// eastl::max: returns the larger argument by const reference.
+template <class T> inline const T& Max(const T& a, const T& b) { return a < b ? b : a; }
 
 extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned dbg,
                                           const char* file, int line);   // 0x00f473a0
@@ -190,14 +192,14 @@ string::~string()
     DeallocateSelf();
 }
 
-// ---------------------------------------------------------------- @ 0x005306c0
+// @ 0x005306c0
 void string::push_back(char c)
 {
     if (mpEnd + 1 == mpCapacity) {
-        uint32_t nRequired = (uint32_t)(mpEnd - mpBegin) + 1;
+        uint32_t nNeeded = (uint32_t)(mpEnd - mpBegin) + 1;
         uint32_t nCapacity = (uint32_t)(mpCapacity - mpBegin) - 1;
         uint32_t nNewCapacity = (nCapacity > 8) ? nCapacity * 2 : 8;
-        reserve(nRequired < nNewCapacity ? nNewCapacity : nRequired);
+        reserve(Max(nNewCapacity, nNeeded));
     }
     *mpEnd = c;
     mpEnd = mpEnd + 1;

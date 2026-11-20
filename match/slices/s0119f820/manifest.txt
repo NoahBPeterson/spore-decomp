@@ -19,3 +19,11 @@ slices/s0119f820/ssl_s3_pkt.cpp  _ssl3_do_compress  011a0720  /O2 /arch:SSE /MD 
 slices/s0119f820/ssl_s3_pkt.cpp  _ssl3_write_pending  011a0770  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119f820_inc
 slices/s0119f820/ssl_s3_pkt.cpp  _ssl3_do_change_cipher_spec  011a0860  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119f820_inc
 slices/s0119f820/ssl_s3_pkt.cpp  _ssl3_send_alert  011a0930  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s0119f820_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s0119f820/oss_s23_lib.cpp  _ssl23_put_cipher_by_char  011a03b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119f820/oss_s3_lib.cpp  _ssl3_ctx_callback_ctrl  0119fe90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119f820/oss_s3_lib.cpp  _ssl3_put_cipher_by_char  0119ff30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119f820/oss_s3_lib.cpp  _ssl3_choose_cipher  0119ff70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119f820/oss_s3_lib.cpp  _ssl3_read  011a0310  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119f820/oss_s3_lib.cpp  _ssl3_peek  011a0330  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119f820/oss_s3_pkt.cpp  _ssl3_do_uncompress  011a06d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

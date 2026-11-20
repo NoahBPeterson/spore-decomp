@@ -21,6 +21,11 @@
 // goal_b, extent, ground_up and the function name GroundGoal are Claude-coined.
 //
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f2150[];
+
 #include "types.h"
 #include <math.h>
 
@@ -163,8 +168,8 @@ void  __cdecl EastlFreeDebug(void* p);                              // 0x00f4738
 void  __cdecl MoveRange(void* first, void* last, void* dest);        // 0x009b4290
 void  __cdecl CopyRange(void* pResultSlot, void* first, void* last,
                         void* dest, void* pSourceVector);            // 0x009be710
-#define EASTL_ALLOC_NAME ((const char*)0x013f2150)   // "EASTL"
-#define EASTL_ALLOC_FILE ((const char*)0x013ebb38)   // .../EASTL/allocator.h
+#define EASTL_ALLOC_NAME ((const char*)g_13f2150)   // "EASTL"
+#define EASTL_ALLOC_FILE ((const char*)g_13ebb38)   // .../EASTL/allocator.h
 #define EASTL_ALLOC_LINE 0xd1
 
 // eastl::vector of 0x30-byte goal entries: the pushed-back goal list.

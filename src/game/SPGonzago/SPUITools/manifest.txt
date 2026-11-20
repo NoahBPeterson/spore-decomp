@@ -8,3 +8,4 @@
 ../src/game/SPGonzago/SPUITools.cpp  ?FUN_0107ae70@cToolWindow@@QAEPAV1@XZ  0107ae70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITools.cpp  ?FUN_0107ac20@cToolWindow@@QAEXXZ  0107ac20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITools.cpp  ?FUN_0107af00@cToolWindow@@QAEXXZ  0107af00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUITools.cpp  ?FUN_0107ac90@cToolWindow@@QAEXHHHH@Z  0107ac90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

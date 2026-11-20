@@ -2,6 +2,14 @@
 // Object file: UTFSpore_Win32/_at_00950000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_144064c[];
+extern "C" char g_154edd8[];
+extern "C" char g_154ede4[];
+extern "C" char g_154ede8[];
+extern "C" char g_154edec[];
+
 #include "game/types.h"
 #include "EA/Thread/Mutex.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -708,12 +716,12 @@ void UIObj::SetRect(float* in)
 // @ 0x00957850
 void __fastcall FUN_00957850(int* self)
 {
-    self[0] = 0x144064c;
+    self[0] = (int)g_144064c;
     if (self[1] != 0) {
         ((VFn0)Vt((void*)self[1])[1])((void*)self[1]);
         self[1] = 0;
     }
-    self[0] = 0x13eb938;
+    self[0] = (int)g_13eb938;
 }
 
 // @ 0x00957880
@@ -721,11 +729,11 @@ void** __cdecl FUN_00957880(int a, int b)
 {
     if ((g_166b134 & 1) == 0) {
         g_166b134 |= 1;
-        *(int*)0x154ede4 = a;
-        *(int*)0x154ede8 = b;
-        *(int*)0x154edec = 0;
+        *(int*)g_154ede4 = a;
+        *(int*)g_154ede8 = b;
+        *(int*)g_154edec = 0;
     }
-    return (void**)0x154edd8;
+    return (void**)g_154edd8;
 }
 
 // @ 0x009578c0
@@ -748,12 +756,12 @@ bool __cdecl FUN_009578c0(SerObj* a, SerObj* pObj, SerDesc* pDesc, SerValue* pOu
 void* UIObj::VirtualDtor(unsigned char flags)
 {
     int* self = (int*)this;
-    self[0] = 0x144064c;
+    self[0] = (int)g_144064c;
     if (self[1] != 0) {
         ((VFn0)Vt((void*)self[1])[1])((void*)self[1]);
         self[1] = 0;
     }
-    self[0] = 0x13eb938;
+    self[0] = (int)g_13eb938;
     if (flags & 1)
         operator_delete__(self);
     return self;
@@ -763,7 +771,7 @@ void* UIObj::VirtualDtor(unsigned char flags)
 int* UIObj::Ctor(int* p2, int* p3, float* r, int extra)
 {
     int* self = (int*)this;
-    self[0] = 0x144064c;
+    self[0] = (int)g_144064c;
     _InterlockedExchange((volatile long*)(self + 10), 0);
     self[1] = (int)p2;
     if (p2 != 0)
@@ -781,7 +789,7 @@ int* UIObj::Ctor(int* p2, int* p3, float* r, int extra)
 // @ 0x009579f0
 UIImage* UIImage::Image(void* obj, int a, int b, float c, float d, float e, float f, int h)
 {
-    vtbl = (void*)0x144064c;
+    vtbl = (void*)g_144064c;
     _InterlockedExchange((volatile long*)&f28, 0);
     p1 = obj;
     if (obj) ((VTab*)obj)->v00();
@@ -811,7 +819,7 @@ void** __cdecl Fn00957a60(int a, int b)
 // @ 0x00957aa0
 UIImage* __fastcall Fn00957aa0(UIImage* self)
 {
-    self->vtbl = (void*)0x144064c;
+    self->vtbl = (void*)g_144064c;
     _InterlockedExchange((volatile long*)&self->f28, 0);
     self->p1 = 0;
     return self;
@@ -822,7 +830,7 @@ void* __stdcall Fn00957ac0(int a, int b)
 {
     UIImage* p = (UIImage*)operator new(0x2c, "UTFWin/Image", 0, 0, 0, 0);
     if (p) {
-        p->vtbl = (void*)0x144064c;
+        p->vtbl = (void*)g_144064c;
         _InterlockedExchange((volatile long*)&p->f28, 0);
         p->p1 = 0;
         return p;
@@ -1199,9 +1207,9 @@ void Mat4::Translate(const float* v)
 void Mat4::Scale(const float* s)
 {
     if (flags == 0) flags = 1;
-    m[0] = s[0] * m[0];
-    m[1] = s[1] * m[1];
-    m[2] = s[2] * m[2];
+    { float t = s[0]; t *= m[0]; m[0] = t; }
+    { float t = s[1]; t *= m[1]; m[1] = t; }
+    { float t = s[2]; t *= m[2]; m[2] = t; }
     m[4] = m[4] * s[0];
     m[5] = m[5] * s[1];
     m[6] = m[6] * s[2];

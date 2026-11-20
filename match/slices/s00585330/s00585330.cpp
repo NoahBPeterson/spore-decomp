@@ -236,9 +236,10 @@ bool cAppModeEditorBase::OnKeyUp(uint32_t key, uint32_t mods)
         fn(mLightingWorld, key, mods);
     }
     SetModeModifiers();
-    if (key > 0xf) {
-        if (key < 0x13)
-            mCurrentMouseDown = mods;
+    switch (key) {
+    case 0x10: case 0x11: case 0x12:
+        mCurrentMouseDown = mods;
+        break;
     }
     return false;
 }

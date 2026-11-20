@@ -5,3 +5,34 @@ slices/s011a81e0/s011a81e0.cpp  ?rc2_magic_to_meth@@YAHH@Z  011a9590  /O2 /arch:
 slices/s011a81e0/s011a81e0.cpp  _OpenSSL_add_all_digests    011a8ae0  /O2 /arch:SSE /MD /Gy /TP
 slices/s011a81e0/s011a81e0.cpp  _OpenSSL_add_all_ciphers    011a8c30  /O2 /arch:SSE /MD /Gy /TP
 slices/s011a81e0/ssl3_accept.cpp  _ssl3_accept  011a81e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011a81e0/oss_evp_asn1.cpp  _ASN1_TYPE_set_octetstring  011a9e20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_evp_asn1.cpp  _ASN1_TYPE_set_int_octetstring  011a9ec0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_ecb_cipher  011a9b20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_ofb_cipher  011a9b80  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_cbc_cipher  011a9bb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_cfb64_cipher  011a9be0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_cfb1_cipher  011a9c20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_cfb8_cipher  011a9cc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_init_key  011a9d50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des.cpp  _des_ctrl  011a9d70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede_ecb_cipher  011a9790  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede_ofb_cipher  011a9800  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede_cbc_cipher  011a9840  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede_cfb64_cipher  011a9880  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede3_cfb1_cipher  011a98c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede3_cfb8_cipher  011a9970  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede_init_key  011a9a10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des_ede3_init_key  011a9a50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_des3.cpp  _des3_ctrl  011a9aa0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_rc2.cpp  _rc2_ecb_cipher  011a9470  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_rc2.cpp  _rc2_ofb_cipher  011a94d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_rc2.cpp  _rc2_init_key  011a9560  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_rc2.cpp  _rc2_get_asn1_type_and_iv  011a95d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_rc2.cpp  _rc2_set_asn1_type_and_iv  011a96b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_e_rc2.cpp  _rc2_ctrl  011a9720  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_o_names.cpp  _obj_name_cmp  011a90f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_o_names.cpp  _obj_name_hash  011a9170  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_o_names.cpp  _OBJ_NAME_init  011a91d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_o_names.cpp  _OBJ_NAME_get  011a9210  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a81e0/oss_o_names.cpp  _OBJ_NAME_add  011a92c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

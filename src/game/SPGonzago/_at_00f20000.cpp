@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00f20000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00f24a90();
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -813,7 +816,7 @@ struct LayoutGlobal {        // 0x38-byte Simulator layout singleton
   LayoutTree worlds;         // +0x00
   LayoutTree collections;    // +0x1c
 };
-#define gLayoutManager (*(LayoutGlobal**)0x016c8318)   /* 0x016c8318 */
+#define gLayoutManager (*(LayoutGlobal**)&DAT_016c8318)   /* 0x016c8318 */
 void* FUN_00f473a0(unsigned size, const char* name, int a, int b,
                    const char* file, int line);      // 0x00f473a0
 void  FUN_00f47380(void* p);                         // 0x00f47380
@@ -1243,12 +1246,8 @@ void __cdecl FUN_00f20b20(int* self)
     V2cC* p = (V2cC*)self[1];
     if (p->q() != 1) {
         V0c* q = (V0c*)self[1];
-        if (q) {
-            PropData* d = (PropData*)q->q(0xce9f6639);
-            d->flag1 = 0;
-        } else {
-            ((PropData*)0)->flag1 = 0;
-        }
+        PropData* d = q ? (PropData*)q->q(0xce9f6639) : 0;
+        d->flag1 = 0;
     }
 }
 
@@ -1258,12 +1257,8 @@ void __cdecl FUN_00f20b60(int* self)
     V2cC* p = (V2cC*)self[1];
     if (p->q() != 1) {
         V0c* q = (V0c*)self[1];
-        if (q) {
-            PropData* d = (PropData*)q->q(0xce9f6639);
-            d->flag0 = 0;
-        } else {
-            ((PropData*)0)->flag0 = 0;
-        }
+        PropData* d = q ? (PropData*)q->q(0xce9f6639) : 0;
+        d->flag0 = 0;
     }
 }
 
@@ -1400,15 +1395,10 @@ void __cdecl FUN_00f20ef0(V4* self)
 // @ 0x00f20fe0
 void __cdecl FUN_00f20fe0(void)
 {
-    void* p = sub_new(0x1c, "Simulator", 0, 0, 0, 0);
-    if (p) {
-        ((SimCtx*)p)->ctor743b50();
-        g_pSimCtor = p;
-        ((SimCtx*)p)->b72080(0x14, 0x80);
-    } else {
-        g_pSimCtor = 0;
-        ((SimCtx*)0)->b72080(0x14, 0x80);
-    }
+    SimCtx* p = (SimCtx*)sub_new(0x1c, "Simulator", 0, 0, 0, 0);
+    SimCtx* s = p ? (p->ctor743b50(), p) : 0;
+    g_pSimCtor = s;
+    s->b72080(0x14, 0x80);
 }
 
 // @ 0x00f21080
@@ -1875,18 +1865,26 @@ void FUN_00f24200(void)
 }
 
 // @ 0x00f24390
+struct EventTreeHdr_s00f2_4390 {
+    int   mCompare;     // +0x00
+    int*  mpLeft;       // +0x04 anchor
+    int*  mpRight;      // +0x08
+    int*  mpParent;     // +0x0c root
+    uint8_t mColor;     // +0x10
+    int   mnSize;       // +0x14
+    void reset()
+    {
+        ((EventTree*)this)->Destroy(mpParent);
+        mpRight = (int*)&mpLeft;
+        mpLeft = (int*)&mpLeft;
+        mpParent = 0;
+        mColor = 0;
+        mnSize = 0;
+    }
+};
 void FUN_00f24390(void)
 {
-    EventTree* tree = (EventTree*)DAT_016c8318;
-    int* puVar1 = (int*)(DAT_016c8318 + 0xc);
-    int iVar3 = (int)tree;
-    tree->Destroy(*(int**)((char*)tree + 0xc));
-    int iVar2 = iVar3 + 4;
-    *(int*)(iVar3 + 8) = iVar2;
-    *(int*)iVar2 = iVar2;
-    *puVar1 = 0;
-    *(uint8_t*)(iVar3 + 0x10) = 0;
-    *(int*)(iVar3 + 0x14) = 0;
+    ((EventTreeHdr_s00f2_4390*)DAT_016c8318)->reset();
 }
 
 // @ 0x00f243c0
@@ -2025,7 +2023,7 @@ void FUN_00f243c0(int* ev, float dt)
 void FUN_00f24ae0(int* ev, int target, float dt)
 {
     if (dt != 0.0f) {
-        char cVar1 = FUN_00f20350((IVObj*)((void* (__thiscall*)(void*))*(void**)(*ev + 4))(ev), dt, (void (*)(UIEntry*))0x00f24a90);
+        char cVar1 = FUN_00f20350((IVObj*)((void* (__thiscall*)(void*))*(void**)(*ev + 4))(ev), dt, (void (*)(UIEntry*))FUN_00f24a90);
         if (cVar1 != 0)
             return;
     }
@@ -2652,8 +2650,7 @@ void fn26ac0(void* param)
   int* p = ((int*(*)(void*))*(void**)((char*)param + 0x20))(param);
   if ((g016c8474 & 1) == 0) {
     g016c8474 |= 1;
-    g016c8470 = *p = 0;
-    return;
+    g016c8470 = 0;
   }
   *p = (int)g016c8470;
 }
@@ -2668,8 +2665,7 @@ void fn26c60(void* param)
   int* p = ((int*(*)(void*))*(void**)((char*)param + 0x20))(param);
   if ((g016c847c & 1) == 0) {
     g016c847c |= 1;
-    g016c8478 = *p = 0;
-    return;
+    g016c8478 = 0;
   }
   *p = (int)g016c8478;
 }

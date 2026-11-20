@@ -2,6 +2,19 @@
 // Built with VC .NET 2003 (cl 13.10) + /GL /LTCG, so most of these functions cannot be byte-exact
 // from a single-object compile; the source below is the complete behaviour-equivalent reconstruction.
 // Flags: /vc71 /O2 /MD /Gy /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_01141990();
+extern "C" void FUN_01141c30();
+extern "C" void FUN_01141f90();
+extern "C" char g_16e7c1c[];
+extern "C" char g_16e80c4[];
+extern "C" char g_16e80c8[];
+extern "C" char g_16e80cc[];
+extern "C" char g_16e810c[];
+extern "C" char g_16e8110[];
+extern "C" char g_16e8114[];
+
 #include "types.h"
 
 struct SNDSTREAMSTATE;
@@ -456,7 +469,7 @@ int __cdecl Voice_CreateInstance(int code)
 // ---------------------------------------------------------------------------
 bool __cdecl FUN_011330e0(void)
 {
-	return (*(uint8_t*)0x016e7c1c) == 1;
+	return (*(uint8_t*)g_16e7c1c) == 1;
 }
 
 // ---------------------------------------------------------------------------
@@ -541,12 +554,12 @@ int __cdecl Snd9_System_Init(int param_1)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_01133250(void)
 {
-	*(void**)0x016e80c4 = (void*)0x01141f90;   // SFILTER_unpackealayer3init
-	*(void**)0x016e80c8 = (void*)0x01141c30;   // SFILTER_unpackealayer3linit
-	*(void**)0x016e80cc = (void*)0x01141990;   // SFILTER_unpackealayer3pinit
-	*(int*)0x016e810c = 0x20;
-	*(int*)0x016e8110 = 0x34;
-	*(int*)0x016e8114 = 0x38;
+	*(void**)g_16e80c4 = (void*)FUN_01141f90;   // SFILTER_unpackealayer3init
+	*(void**)g_16e80c8 = (void*)FUN_01141c30;   // SFILTER_unpackealayer3linit
+	*(void**)g_16e80cc = (void*)FUN_01141990;   // SFILTER_unpackealayer3pinit
+	*(int*)g_16e810c = 0x20;
+	*(int*)g_16e8110 = 0x34;
+	*(int*)g_16e8114 = 0x38;
 }
 
 // ---------------------------------------------------------------------------

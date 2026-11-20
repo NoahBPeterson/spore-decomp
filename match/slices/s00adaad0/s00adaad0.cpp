@@ -8,6 +8,8 @@ void* operator new(unsigned int size, const char* name, int a, int b, const char
 extern void __cdecl operator_delete_array(void* p);          // 0xf47380
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 #pragma intrinsic(_InterlockedExchange)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 class cArguments {
 public:
@@ -178,7 +180,7 @@ struct ResKey { int f0, f4, f8; };
 // ---- external helpers / globals -------------------------------------------------
 extern unsigned int __stdcall FUN_00b3d230(unsigned int hash);      // 0xb3d230
 extern void __fastcall FUN_00b5cde0(void* p);                       // 0xb5cde0
-extern void __stdcall FUN_00ad9010(void* p);                        // 0xad9010
+struct Copy_ad9010 { void FUN_00ad9010(void* p); };                 // 0xad9010 (thiscall)
 extern AudioSys* __cdecl FUN_00a206f0();                            // 0xa206f0
 extern void __cdecl FUN_011e0744(void* dst, const char* src, int count);   // 0x11e0744
 extern void* __cdecl FUN_0093c6d0(void* out, const void* in);              // 0x93c6d0
@@ -400,7 +402,7 @@ char __fastcall FUN_00adb2a0(void* self, int /*edx*/, unsigned int a, unsigned i
         HTbl* h = (HTbl*)(p + 0x10);
         h->findKey(local, &a);
         if (local[0] != h->arr[h->count]) {
-            FUN_00ad9010((void*)(local[0] + 4));
+            ((Copy_ad9010*)b)->FUN_00ad9010((void*)(local[0] + 4));
             return 1;
         }
     }
@@ -459,17 +461,18 @@ void __stdcall FUN_00adb680(void* list, unsigned int count)
 {
     char** arr = (char**)list;
     for (unsigned int i = 0; i < count; ++i) {
-        char* p = arr[i];
-        while (p) {
-            char* next = *(char**)(p + 0x38);
+        char* next = arr[i];
+        while (next) {
+            char* p = next;
+            next = *(char**)(p + 0x38);
             *(void**)(p + 4) = &g_vtbl_145b2f8;
             *(void**)(p + 0xc) = &g_vtbl_145b2ec;
+            _ReadWriteBarrier();
             void* q = *(void**)(p + 0x10);
             if (q) ((RefObj*)q)->Release();
             *(void**)(p + 0xc) = &g_vtbl_13eb938;
             *(void**)(p + 4) = &g_vtbl_13ef094;
             operator_delete_array(p);
-            p = next;
         }
         arr[i] = 0;
     }

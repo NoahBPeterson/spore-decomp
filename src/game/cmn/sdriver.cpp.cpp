@@ -2,6 +2,10 @@
 // Object file: cmn/sdriver.cpp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e61a8[];
+extern "C" char g_16e804c[];
+
 #include "game/types.h"
 
 // ---- items of slice s0113fc50 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -21,8 +25,11 @@ void  __cdecl SNDVOICEI_free(int);                      // 0x1141020 (slice 16)
 void* __fastcall Sys17_Alloc(void* self, int pad, unsigned size, const char* name,
                              unsigned align, unsigned zero);   // 0x112c820
 void  __fastcall Sys17_Free(void* self, int pad, void* p, int z); // 0x112c850
+struct System_s0112c850 {                              // rw::audio::core::System
+    void Free(void* p, int z);                          // 0x112c850
+};
 #define D  (A32(0x16e7c78))
-#define SYSPTR (Ap(0x16e61a8))
+#define SYSPTR (Ap((int)g_16e61a8))
 void FUN_01140930(int a, int val);
 int  F_01140a70(int a, int ch);
 // ---- items of slice s0113fc50 end
@@ -46,7 +53,7 @@ namespace  {
 int SNDPLATFORM_restore()
 {
     Sub_1133450();
-    Sys17_Free(SYSPTR, 0, (void*)A32(0x16e804c), 0);
+    ((System_s0112c850*)SYSPTR)->Free((void*)A32((int)g_16e804c), 0);
     Sub_1133460();
     return 0;
 }

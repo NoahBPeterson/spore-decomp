@@ -1,0 +1,1 @@
+slices/s00d30fb0/s00d30fb0.cpp  ?SpawnMovementGoalEffect@cCreatureModeInputStrategy@@QAEXPBUVec3@@@Z  00d30fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

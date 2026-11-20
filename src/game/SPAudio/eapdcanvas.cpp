@@ -393,19 +393,11 @@ namespace EA { namespace Audio { namespace Eapd {
 void* canvas_getdollarzero()
 {
     t_glist* x = (t_glist*)pd_findbyclass(gHashXSymbol_s00a4_9670, gpCanvasClass_s00a4_9670);
-    t_canvasenv* env;
-
-    if (x == 0) {
-        env = 0;
-    } else {
-        while (!x->gl_env)
-            x = x->gl_owner;
-        env = x->gl_env;
-    }
-    if (env == 0) {
+    t_canvasenv* env = (x ? canvas_getenv(x) : 0);
+    if (env)
+        return env->ce_dollarzero;
+    else
         return 0;
-    }
-    return env->ce_dollarzero;
 }
 }}}  // namespace EA::Audio::Eapd
 

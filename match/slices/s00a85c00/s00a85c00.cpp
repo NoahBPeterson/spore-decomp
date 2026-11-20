@@ -1,4 +1,11 @@
 // slice s00a85c00 -- EA::Swarm distribute emitter helper ("cDistributeEffectSimulator",
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_145812c[];
+extern "C" char g_1458130[];
+
 #include <intrin.h>
 // name guessed).  0x00a85c00..0x00a86114 are the methods of one GmeIComponent-derived
 // class (its two vtables are 0x1458130 / 0x145812c); 0x00a86120.. onwards belongs to the
@@ -483,10 +490,10 @@ int EnumGroupOverrides(char* obj, uint32* out, int limit)
 // @ 0x00a86120
 cDistributeSimulator::cDistributeSimulator(uint32 desc)
 {
-    mVtbl04 = 0x13ef094;
+    mVtbl04 = (int)g_13ef094;
     pad08 = 0;
-    mVtbl00 = 0x1458130;
-    mVtbl04 = 0x145812c;
+    mVtbl00 = (int)g_1458130;
+    mVtbl04 = (int)g_145812c;
     mDesc = (cDistributeDescInit*)desc;
     mActive = 0;
     mFlags14 = 0;
@@ -522,8 +529,8 @@ cDistributeSimulator::cDistributeSimulator(uint32 desc)
 // @ 0x00a86210
 void* cDistributeSimulator::Destroy(uint32 flags)
 {
-    mVtbl00 = 0x1458130;
-    mVtbl04 = 0x145812c;
+    mVtbl00 = (int)g_1458130;
+    mVtbl04 = (int)g_145812c;
     _ReadWriteBarrier();
     if (mpRef8c) {
         cIRefObj* r = mpRef8c;
@@ -531,8 +538,8 @@ void* cDistributeSimulator::Destroy(uint32 flags)
     }
     if (mpRef88 != 0)
         (*(void(__thiscall**)(cIRefObj*))(*(uint32*)mpRef88 + 4))(mpRef88);
-    mVtbl00 = 0x13f21d4;
-    mVtbl04 = 0x13ef094;
+    mVtbl00 = (int)g_13f21d4;
+    mVtbl04 = (int)g_13ef094;
     if (flags & 1)
         operator_delete__(this);
     return this;

@@ -5,6 +5,17 @@
 // 13 assigned VAs, 7 byte-exact; every VA is a manifest row (the non-exact ones
 // also appear in nonmatching.txt).  See work/match/scratch_s79_final_summary.txt
 // for the whole batch (96/202 byte-exact).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f3a68[];
+extern "C" char g_143f3d8[];
+extern "C" char g_143f3e0[];
+extern "C" char g_143f444[];
+extern "C" char g_143f54c[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bad[];
+
 #include "s00946dc0.h"
 #include <intrin.h>
 
@@ -25,7 +36,7 @@ typedef int  (__thiscall *VF3)(void*, int, int, int);
 
 static const char* const kLongWeekdays = S_(0x143f4e8);   // "Monday"...
 static const char* const kShortWeekdays = S_(0x143f530);  // "Mon"...
-static const char* const kShortMonths = S_(0x143f54c);    // "Jan"...
+static const char* const kShortMonths = S_((int)g_143f54c);    // "Jan"...
 
 // @ 0x00946dc0
 HTTPMultipartFormDataPostBodyStream::HTTPMultipartFormDataPostBodyStream()
@@ -102,22 +113,22 @@ bool HTTPMultipartFormDataPostBodyStream::Close()
 // @ 0x00946f70
 HTTPMultipartFormDataPostBodyStream::~HTTPMultipartFormDataPostBodyStream()
 {
-    mpVtbl = (void*)0x143f3e0;
-    mpVtbl2 = (void*)0x143f3d8;
+    mpVtbl = (void*)g_143f3e0;
+    mpVtbl2 = (void*)g_143f3d8;
     _ReadWriteBarrier();
     if (mpMemStream)
         VCALL0(mpMemStream, 8);
     if (msBoundary.mpCapacity - msBoundary.mpBegin > 1 && msBoundary.mpBegin)
         operator delete(msBoundary.mpBegin);
     ((ListBase*)&mListAnchor)->DoClear();
-    mpVtbl2 = (void*)0x13ef094;
-    mpVtbl = (void*)0x13f3a68;
+    mpVtbl2 = (void*)g_13ef094;
+    mpVtbl = (void*)g_13f3a68;
 }
 
 // @ 0x00946fe0
 bool HTTPMultipartFormDataPostBodyStream::GetContentTypeString(eastl::StrStub* out)
 {
-    out->assign(S_(0x143f444), S_(0x143f444) + 0x1e);
+    out->assign(S_((int)g_143f444), S_((int)g_143f444) + 0x1e);
     const char* boundary = (const char*)VCALL0(this, 0x4c);
     unsigned n = strlen(boundary);
     out->append(boundary, boundary + n);
@@ -252,17 +263,17 @@ void StrVec::PushEmpty()
     if (end < mpCapacity) {
         mpEnd = end + 0x10;
         if (end) {
-            *(char**)end = (char*)0x1667bac;
-            *(char**)(end + 4) = (char*)0x1667bac;
-            *(char**)(end + 8) = (char*)0x1667bad;
+            *(char**)end = (char*)g_1667bac;
+            *(char**)(end + 4) = (char*)g_1667bac;
+            *(char**)(end + 8) = (char*)g_1667bad;
         }
         return;
     }
     {
         char tmp[16];
-        *(char**)tmp = (char*)0x1667bac;
-        *(char**)(tmp + 4) = (char*)0x1667bac;
-        *(char**)(tmp + 8) = (char*)0x1667bad;
+        *(char**)tmp = (char*)g_1667bac;
+        *(char**)(tmp + 4) = (char*)g_1667bac;
+        *(char**)(tmp + 8) = (char*)g_1667bad;
         DoInsertValue(end, tmp);
         if (*(char**)(tmp + 8) - *(char**)tmp > 1 && *(char**)tmp)
             operator delete(*(char**)tmp);

@@ -1,5 +1,4 @@
 # va  reason
-00e4d920  ImportAdvectMap: FNV/format/EA-Resource prologue + property-list allocation only sketched
 00e4dde0  grid insertion: 20x15 per-cell 8-slot bucket builder not reconstructed (register-convention fn)
 00e4def0  grid splat/normalise: SIMD accumulation loop not reconstructed
 00e4e230  sCellIndexGetNeighbors: neighbour enumeration not reconstructed (xmm3 register arg)

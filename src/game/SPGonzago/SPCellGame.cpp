@@ -715,9 +715,9 @@ extern float  g_16b3c30;
 extern char   g_15a7c40[];
 extern char   g_16b3dac[];
 extern float  g_16b3c28_s00e6_1000;
-int   __cdecl f5c9d0(void);                                               // 0x00e5c9d0
-void  __cdecl f83910(void*, int, int, int);                               // 0x00e83910
-void  __cdecl f828c0(void);                                               // 0x00e828c0
+int   __cdecl FUN_00e5c9d0(void);                                               // 0x00e5c9d0
+void  __cdecl FUN_00e83910(void*, int, int, int);                               // 0x00e83910
+void  __cdecl FUN_00e828c0(void);                                               // 0x00e828c0
 int*  __cdecl f4ce40(void*);                                              // 0x00e4ce40
 int   __cdecl f82970(void);                                               // 0x00e82970
 void  __cdecl f82920(void*);                                              // 0x00e82920
@@ -763,13 +763,12 @@ struct cSPTransform_s00e6_1000 {
     cSPTransform_s00e6_1000& operator=(const cSPTransform_s00e6_1000&);   // 0x00537dc0 (out of line)
 };
 struct CellObj5190;
-struct Invoker1c { int Call(); };
 struct Sub10 { char pad[0xc]; };
 struct CellObj5190 {
     char            pad0[0xc];
     int             field_0c;        // +0x0c
     Sub10           sub10;           // +0x10
-    Invoker1c*      field_1c;        // +0x1c
+    int             field_1c;        // +0x1c (level)
     int             field_20;        // +0x20
     int             field_24;        // +0x24
     int             field_28;        // +0x28
@@ -837,16 +836,20 @@ struct CellAbility : B1, B2 {
         b_e9 = 0;
     }
 };
-struct SaveGameObj : B1, B2 {
-    int f08;
+// GmeRefCount-style base at +4: its own vtable, then the reference count.
+struct SaveGameRefCount {
+    SaveGameRefCount() : mnRefCount(0) {}
+    virtual void rc0();
+    int mnRefCount;
+};
+struct SaveGameObj : B1, SaveGameRefCount {
     int pad0c;
-    int f10, f14, f18;
+    struct Triple {
+        int a, b, c;
+        Triple() : a(0), b(0), c(0) {}
+    } f10;
     char pad1c[0xec - 0x1c];
-    SaveGameObj()
-    {
-        f08 = 0;
-        f10 = 0; f14 = 0; f18 = 0;
-    }
+    SaveGameObj() {}
 };
 // ---- items of slice s00e61000 end
 
@@ -3058,13 +3061,18 @@ int FUN_00e4ee30(int n)
 // @ 0x00e4ee60
 int __fastcall SP_sGetSourceLevel(int, int n)
 {
-    if (n == 1000) return g_1483e60;
-    int i = 0;
-    if (n >= 0) {
-        int* p = g_1483c34;
-        do { p += 7; ++i; } while (n >= *p);
+    const int* r;
+    if (n == 1000) {
+        r = &g_1483e60;
+    } else {
+        int i = 0;
+        if (n >= 0) {
+            int* p = g_1483c34;
+            do { p += 7; ++i; } while (n >= *p);
+        }
+        r = &g_1483c14[i * 7];
     }
-    return g_1483c14[i * 7];
+    return *r;
 }
 
 // @ 0x00e4ef60
@@ -5085,11 +5093,12 @@ void sInitGfx()
 // @ 0x00e61140
 void FUN_00e61140(void)
 {
-    int a = gspCellGame_s00e6_1000->field_5190->field_1c->Call();
+    CellObj5190* s = gspCellGame_s00e6_1000->field_5190;
+    int a = FUN_00e51430(s->field_1c);
     int d = a - gspCellGame_s00e6_1000->field_5190->field_2c + 0x32;
-    int b = f5c9d0();
-    f83910(&gspCellGame_s00e6_1000->field_5190->sub10, d, b, gspCellGame_s00e6_1000->field_5164);
-    f828c0();
+    int b = FUN_00e5c9d0();
+    FUN_00e83910(&gspCellGame_s00e6_1000->field_5190->sub10, d, b, gspCellGame_s00e6_1000->field_5164);
+    FUN_00e828c0();
     gspCellGame_s00e6_1000->field_5168 = 1;
 }
 
@@ -6110,7 +6119,7 @@ void FUN_00e67510(int world, int* ppEffect, int a3, int a4, int a5, int a6, char
         d.pos.y = gCellWorldCenter_s00e6_6980.y;
         d.pos.z = gCellWorldCenter_s00e6_6980.z;
         d.scale = g_one_1485720;
-        d.rot.Assign((void*)0x16b3dac);
+        d.rot.Assign((void*)&g_16b3dac);
         FUN_00e84150(a5, a6, &d);
         FUN_00e63480((void*)*ppEffect, a3, &d);
         return;
@@ -8373,8 +8382,10 @@ void FUN_00e72fb0(int* param_1, int param_2)
 // @ 0x00e730d0
 bool FUN_00e730d0(int param_1, int param_2, int param_3)
 {
-    if (!gspCellGame_s00e7_2430->mCells.GetChecked(param_1)) return false;
-    int other = (int)gspCellGame_s00e7_2430->mCells.GetChecked(param_2);
+    ObjectPool_s00e7_2430* cells = &gspCellGame_s00e7_2430->mCells;
+    if (!cells->GetChecked(param_1)) return false;
+    cells = &gspCellGame_s00e7_2430->mCells;
+    int other = (int)cells->GetChecked(param_2);
     if (!other) return false;
     if (FUN_00e4ff50(other) == 1) {
         FUN_00e72fb0((int*)other, param_3);

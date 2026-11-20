@@ -30,7 +30,7 @@ public:
     void ReleaseOwner();
     void UpdateTransform();
     void SetEnabled(uint8_t bEnabled, float fRate);
-    void Update(float fDelta);
+    void Update();
     void SetTransform(const Vec4* pTransform, bool bSnap);
     void AddVelocity(const Vec4* pVelocity);
 
@@ -386,7 +386,7 @@ void cDebugBehavior::SetEnabled(uint8_t bEnabled, float fRate)
 }
 
 // @ 0x00aef410
-void cDebugBehavior::Update(float fDelta)
+void cDebugBehavior::Update()
 {
     if (*(int*)((uint8_t*)mpOwnerRef + 8) == 0 || mbBlendActive != 0) {
         mCurrent.mX = mTarget.mX;
@@ -414,7 +414,6 @@ void cDebugBehavior::Update(float fDelta)
     mCurrent.mY = mTarget.mY * fInverse + *(float*)((uint8_t*)pOwner + 0x44) * fBlend;
     mCurrent.mZ = mTarget.mZ * fInverse + *(float*)((uint8_t*)pOwner + 0x48) * fBlend;
     mCurrent.mW = mTarget.mW * fInverse + *(float*)((uint8_t*)pOwner + 0x4c) * fBlend;
-    (void)fDelta;
 }
 
 // @ 0x00aef530
@@ -489,8 +488,8 @@ void SP::cHavokLocomotiveController::FUN_00aef690(char b)
 void SP::cHavokLocomotiveController::FUN_00aef6b0(int a, float f)
 {
     m_entityListener.FUN_00af8a10(a, f);
-    FUN_00aef410();
-    FUN_00aef330();
+    ((cDebugBehavior*)this)->Update();
+    ((cDebugBehavior*)this)->UpdateTransform();
 }
 
 // @ 0x00aef6e0

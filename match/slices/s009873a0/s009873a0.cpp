@@ -1,5 +1,14 @@
 // Slice s009873a0 -- EA::UTFWinControls WinSpinner / StdDrawable.
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fa72c[];
+extern "C" char g_1445200[];
+extern "C" char g_1445240[];
+extern "C" char g_1445280[];
+extern "C" char g_1445298[];
+
 #include "types.h"
 #include <math.h>
 #pragma intrinsic(sqrt)
@@ -68,17 +77,17 @@ struct StdDrawableBase0 {
     void* v[4];                     // +0x00 vtable ptrs (0,4,8,c)
     StdDrawableBase0()
     {
-        *(void* volatile*)&v[1] = (void*)0x13fa72c;
+        *(void* volatile*)&v[1] = (void*)g_13fa72c;
         v[2] = 0;
-        *(void* volatile*)&v[3] = (void*)0x1445200;
+        *(void* volatile*)&v[3] = (void*)g_1445200;
     }
 };
 struct StdDrawableBase : StdDrawableBase0 {
     StdDrawableBase()
     {
-        *(void* volatile*)&v[0] = (void*)0x1445298;
-        *(void* volatile*)&v[1] = (void*)0x1445280;
-        *(void* volatile*)&v[3] = (void*)0x1445240;
+        *(void* volatile*)&v[0] = (void*)g_1445298;
+        *(void* volatile*)&v[1] = (void*)g_1445280;
+        *(void* volatile*)&v[3] = (void*)g_1445240;
     }
 };
 struct StdDrawable : StdDrawableBase {
@@ -174,9 +183,9 @@ void* StdDrawable::GetImageForState(unsigned st)
 // @ 0x00987b10
 StdDrawable::~StdDrawable()
 {
-    v[0] = (void*)0x1445298;
-    v[1] = (void*)0x1445280;
-    v[3] = (void*)0x1445240;
+    v[0] = (void*)g_1445298;
+    v[1] = (void*)g_1445280;
+    v[3] = (void*)g_1445240;
     for (int i = 0; i < 8; i++) {
         if (mpImage[i])
             (*(void(__thiscall**)(void*))((char*)*(void**)mpImage[i] + 4))(mpImage[i]);
@@ -184,9 +193,9 @@ StdDrawable::~StdDrawable()
     }
     if (mHitMask)
         (*(void(__thiscall**)(void*))((char*)*(void**)mHitMask + 4))(mHitMask);
-    v[3] = (void*)0x13eb938;
-    v[1] = (void*)0x13eb938;
-    v[0] = (void*)0x13eb938;
+    v[3] = (void*)g_13eb938;
+    v[1] = (void*)g_13eb938;
+    v[0] = (void*)g_13eb938;
 }
 
 // @ 0x00987bf0

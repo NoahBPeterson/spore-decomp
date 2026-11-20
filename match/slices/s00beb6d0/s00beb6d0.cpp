@@ -18,6 +18,13 @@
 // The cCityWalls layout is taken verbatim from match/slices/s00bed920/s00bed920.cpp.
 // cCityTerritory is re-laid flat from this slice's disassembly (cSpatialObject at +0x34,
 // own fields at 0x108/0x10c/0x110/0x111 and 0x274/0x344).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1468e0c[];
+extern "C" char g_1468e20[];
+extern "C" char g_1468e90[];
+extern "C" char g_1567e48[];
+
 #include <math.h>
 #include "types.h"
 
@@ -289,11 +296,11 @@ cCityTerritory* cCityTerritory::ctor()
 {
     ((GameDataBase*)this)->Ctor();
     ((SpatialBase*)sub34)->Ctor();
-    *(void**)sub34      = (void*)0x01468e90;
+    *(void**)sub34      = (void*)g_1468e90;
     m110                = 0;
     m111                = 0;
-    vfptr0              = (void*)0x01468e20;
-    vfptr1              = (void*)0x01468e0c;
+    vfptr0              = (void*)g_1468e20;
+    vfptr1              = (void*)g_1468e0c;
     m108                = 1;
     m10c                = 100.0f;
     return this;
@@ -316,7 +323,7 @@ void* cCityTerritory::AsInterface(uint32_t id)
 // @ 0x00beb9f0
 bool cCityTerritory::InitFromDefinition(void* a)
 {
-    ((PropReg*)a)->Add(this, (void*)0x01567e48, L"cGameData");
+    ((PropReg*)a)->Add(this, (void*)g_1567e48, L"cGameData");
     return true;
 }
 

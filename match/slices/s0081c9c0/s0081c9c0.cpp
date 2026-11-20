@@ -1,5 +1,17 @@
 // Slice s0081c9c0 -- Spore UI: cSPUIPopupMenuWin scroll buttons / Variant / PropertyEditor.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_140af70[];
+extern "C" char g_141990c[];
+extern "C" char g_1419920[];
+extern "C" char g_1419a40[];
+extern "C" char g_1419b34[];
+extern "C" char g_1419b3c[];
+extern "C" char g_1419b50[];
+extern "C" char g_1419c70[];
+
 #include "types.h"
 
 extern int g_164dd8c;
@@ -476,14 +488,14 @@ struct cSPUIProgressBarGradientWin {
 // @ 0x0081d020
 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin() {
   ((S962a10*)this)->f();
-  mIfaceVtbl20c = (void*)0x13ec458;
+  mIfaceVtbl20c = (void*)g_13ec458;
   mUnknown210 = 0;
-  mIfaceVtbl214 = (void*)0x140af70;
+  mIfaceVtbl214 = (void*)g_140af70;
   mpGradientImage228 = 0;
-  mVtbl0 = (void*)0x1419a40;
-  mVtbl4 = (void*)0x1419920;
-  mIfaceVtbl20c = (void*)0x141990c;
-  mIfaceVtbl214 = (void*)0x1419b34;
+  mVtbl0 = (void*)g_1419a40;
+  mVtbl4 = (void*)g_1419920;
+  mIfaceVtbl20c = (void*)g_141990c;
+  mIfaceVtbl214 = (void*)g_1419b34;
   mValue218 = 100.0f;
   mColorMin21c = 0xffff0000;
   mColorMax220 = 0xff00ff00;
@@ -494,13 +506,13 @@ UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin() {
 // @ 0x0081d510
 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin() {
   ((S962a10*)this)->f();
-  mIfaceVtbl20c = (void*)0x13ec458;
+  mIfaceVtbl20c = (void*)g_13ec458;
   mUnknown210 = 0;
-  mIfaceVtbl214 = (void*)0x140af70;
-  mVtbl0 = (void*)0x1419c70;
-  mVtbl4 = (void*)0x1419b50;
-  mIfaceVtbl20c = (void*)0x1419b3c;
-  mIfaceVtbl214 = (void*)0x1419b34;
+  mIfaceVtbl214 = (void*)g_140af70;
+  mVtbl0 = (void*)g_1419c70;
+  mVtbl4 = (void*)g_1419b50;
+  mIfaceVtbl20c = (void*)g_1419b3c;
+  mIfaceVtbl214 = (void*)g_1419b34;
   mValue218 = 100.0f;
 }
 

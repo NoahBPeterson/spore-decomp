@@ -1,6 +1,9 @@
 // Slice s008189a0 (batch w2g7 #7), 32-bit MSVC 2008.
 // cSPUIPieMenuItem / cSPUIPieMenu.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1418ef8[];
+
 #include <math.h>
 #include <string.h>
 #include <wchar.h>
@@ -124,7 +127,7 @@ bool cSPUIPieMenuItem::sub8191b0() {
 
 // @ 0x00819880
 void cSPUIPieMenuItem::dtor819880() {
-    vftable = (void**)0x1418ef8;
+    vftable = (void**)g_1418ef8;
     sub8191b0();
     void* q;
     q = *(void**)((char*)this + 0x30); if (q) Vv0(q, 0x04);

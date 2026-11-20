@@ -1,6 +1,13 @@
 // Slice s00936090 -- EA::Random (LCG + Mersenne Twister) and EA::SharedLibrary /
 // SharedLibraryRegistry (UTF dynamic library management).
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e9d8[];
+extern "C" char g_13f65b4[];
+extern "C" char g_143ea00[];
+extern "C" wchar_t g_1667bac[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -353,6 +360,7 @@ struct ObjectVector {
     void* mpEnd;     // +0x04
     void* mpCap;     // +0x08
     void erase(void* first, void* last);   // 0x00d018d0 (equiv t2)
+    void eraseRefs(void* first, void* last);   // 0x005c2170 (sp_ref_vector::erase)
     void Destruct();   // 0x005c7f10 (equiv t3)
     void push_back_impl(void* value);
     void insert_pair(void* pos, void* value);   // 0x009a0c50 (8-byte elements)
@@ -398,7 +406,7 @@ EA::SharedLibraryRegistry::~SharedLibraryRegistry() {
 
 // @ 0x00936920
 void* EA::SharedLibraryRegistry::scalar_deleting_destructor(uint8_t f) {
-    *(void**)this = (void*)0x143e9d8;   // vftable
+    *(void**)this = (void*)g_143e9d8;   // vftable
     mMutex.Destroy();
     mSharedLibraries.Destruct();
     if (f & 1)
@@ -531,13 +539,15 @@ bool EA::SharedLibrary::SetPath(const wchar_t* path, bool flag) {
 
 // @ 0x00936C80
 EA::SharedLibrary::SharedLibrary(uint32_t a, uint32_t b) {
-    *(void**)this = (void*)0x13f65b4;   // ILibraryCommand vftable
+    *(void**)this = (void*)g_13f65b4;   // ILibraryCommand vftable
     mnRefCount = 0;
-    *(void**)this = (void*)0x143ea00;   // SharedLibrary vftable
+    *(void**)this = (void*)g_143ea00;   // SharedLibrary vftable
     mHandle = 0;
-    mpPathBegin = (wchar_t*)0x1667bac;
-    mpPathEnd = (wchar_t*)0x1667bac;
-    mpPathCap = (wchar_t*)0x1667bae;
+    _ReadWriteBarrier();
+    mpPathBegin = g_1667bac;
+    mpPathEnd = g_1667bac;
+    mpPathCap = g_1667bac + 1;
+    _ReadWriteBarrier();
     mHandlerBegin = 0;
     mHandlerEnd = 0;
     mHandlerCap = 0;
@@ -710,7 +720,7 @@ bool EA::SharedLibraryRegistry::Init(uint32_t a, SharedLibrary* b) {
 bool EA::SharedLibraryRegistry::Shutdown() {
     RemoveAllLibraries(1);
     mMutex.Lock(&gpRegistryMutexName);
-    mSharedLibraries.erase(mSharedLibraries.mpBegin, mSharedLibraries.mpEnd);
+    mSharedLibraries.eraseRefs(mSharedLibraries.mpBegin, mSharedLibraries.mpEnd);
     mMutex.Unlock();
     return true;
 }

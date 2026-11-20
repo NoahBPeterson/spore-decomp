@@ -5,3 +5,5 @@
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ??4cImportInfo@@QAEAAU0@ABU0@@Z  005fb350  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ??1cImportExportRetail@@UAE@XZ  005fb900  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ?erase@StrTable@@QAEIPBUWStr@@@Z  005fa100  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPThumbnailImportExport.cpp  ?ClearBucketsA@@YGXPAPAHI@Z  005fa1d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPThumbnailImportExport.cpp  ?ClearBucketsB@@YGXPAPAHI@Z  005fa230  /O2 /MD /Gy /TP /Isrc/game/include

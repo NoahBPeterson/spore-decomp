@@ -9,6 +9,13 @@
 // 0x00c7d940/0x00c7dac0) and the two cVarListSerializer read/write loops.
 // No PDB names exist for this range.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  (no /EHsc)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1473324[];
+extern "C" char g_1579ae8[];
+extern "C" char g_1579ba0[];
+extern "C" char g_1579c58[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -211,7 +218,7 @@ bool __cdecl IsTargetable(void* self)
 cTargetList::~cTargetList()
 {
     void* old = m49c;
-    *(void**)this = (void*)0x1473324;
+    *(void**)this = (void*)g_1473324;
     if (old)
         FreeMem(old);
     m49c = 0;
@@ -553,18 +560,18 @@ bool cTargetList::Write(void* stream)
 {
     cVarListSerializer ser1;
     cVarListSerializer ser2;
-    ser1.Construct(this, (void*)0x1579c58, 0x1a80d26u);
+    ser1.Construct(this, (void*)g_1579c58, 0x1a80d26u);
     bool ok = ser1.Serialize(stream);
     if (ok) {
         char* p = (char*)this + 0x04;
         for (int i = 0; i < 3; ++i) {
-            ser2.Construct(p, (void*)0x1579ae8, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ae8, 0x1a80d26u);
             ser2.Serialize(stream);
             p += 0x10;
         }
         p = (char*)this + 0x34;
         for (int i = 0; i < 2; ++i) {
-            ser2.Construct(p, (void*)0x1579ba0, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ba0, 0x1a80d26u);
             ser2.Serialize(stream);
             p += 0x10;
         }
@@ -577,18 +584,18 @@ bool cTargetList::Read(void* stream)
 {
     cVarListSerializer ser1;
     cVarListSerializer ser2;
-    ser1.Construct(this, (void*)0x1579c58, 0x1a80d26u);
+    ser1.Construct(this, (void*)g_1579c58, 0x1a80d26u);
     bool ok = ser1.Serialize2(stream);
     if (ok) {
         char* p = (char*)this + 0x04;
         for (int i = 0; i < 3; ++i) {
-            ser2.Construct(p, (void*)0x1579ae8, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ae8, 0x1a80d26u);
             ser2.Serialize2(stream);
             p += 0x10;
         }
         p = (char*)this + 0x34;
         for (int i = 0; i < 2; ++i) {
-            ser2.Construct(p, (void*)0x1579ba0, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ba0, 0x1a80d26u);
             ser2.Serialize2(stream);
             p += 0x10;
         }

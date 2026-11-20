@@ -2,6 +2,11 @@
 // Object file: Havok/_at_01090000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a1b88[];
+extern "C" char g_14a1b90[];
+extern "C" char g_14a1c08[];
+
 #include "game/types.h"
 #include <math.h>
 #include <new>
@@ -1174,6 +1179,9 @@ virtual void v2c();
                                              void* output);                        // 0x010995d0
     virtual void processAgentResetCollisionInformation(void* entry, const void* input,
                                                        void* output);              // 0x01099670
+    void FUN_01099be0(void* entities, int numEntities, void* collideInput,
+                      void (*collideFunc)(void* pair, void* input, void* output));  // 0x01099be0
+    void FUN_01099cb0(void* entities, int numEntities, void* world);              // 0x01099cb0
 };
 class hkBackstepSimulation : public hkDiscreteSimulation
 {
@@ -1193,7 +1201,6 @@ typedef void (*hkCollideFunc)(void* pair, void* input, void* output);   // 0x010
 // ---- items of slice s01098e50 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-void __stdcall FUN_01099be0(void* entities, int numEntities, void* collideInput, hkCollideFunc collideFunc);  // 0x01099be0 (stays in the slice: not this object's)
 
 // ---- items of slice s0109c3b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);   // kernel32, IAT 0x013cc2dc
@@ -1973,7 +1980,7 @@ hkBool_s0109_38e0__motors hkPointToPathConstraintData::isValid() const
 // @ 0x01094bc0
 void cCurveContainer::Destroy()
 {
-	this->mpVtbl = (void*)0x014a1b88;
+	this->mpVtbl = (void*)g_14a1b88;
 	int i;
 	int n = this->m_arrays[0].m_size;
 	for (i = 0; i < n; ++i)
@@ -2023,7 +2030,7 @@ void cCurveContainer::Destroy()
 		heap->Dealloc(this->m_arrays[0].m_data,
 		              (this->m_arrays[0].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
 	}
-	this->mpVtbl = (void*)0x013ef094;
+	this->mpVtbl = (void*)&vtbl_013ef094;
 }
 
 // @ 0x01094d50
@@ -2053,12 +2060,12 @@ void* cStreamProxy::To08(void* arg)
 void* cStreamProxy::Destroy(int flags)
 {
 	cRefObj* p = (cRefObj*)this->mpStream;
-	this->mpVtbl = (void*)0x014a1b90;
+	this->mpVtbl = (void*)g_14a1b90;
 	if (p->m_memSize != 0) {
 		if (--p->m_refCount == 0)
 			p->Release(1);
 	}
-	this->mpVtbl = (void*)0x013ef094;
+	this->mpVtbl = (void*)&vtbl_013ef094;
 	if (flags & 1)
 		gDeallocator->Dealloc(this, this->m_memSize, 0x29);
 	return this;
@@ -2329,7 +2336,7 @@ hkKeyframedRigidMotion::hkKeyframedRigidMotion(const hkVector4_s0109_5320& pos, 
     ((hkRigidMotionCtorThunk*)this)->m_savedMotion = 0;
     mC4 = 0;
     *(unsigned int*)(void*)&mC0 = 0;
-    ((hkRigidMotionCtorThunk*)this)->vftable = (void*)0x014a1c08;
+    ((hkRigidMotionCtorThunk*)this)->vftable = (void*)g_14a1c08;
 }
 
 // @ 0x01095ba0
@@ -3355,10 +3362,10 @@ void hkDiscreteSimulation::stepIntegrate(hkWorld_s0109_8e50* world, const hkStep
 }
 
 // @ 0x01099cb0
-void __stdcall FUN_01099cb0(void* entities, int numEntities, void* world)
+void hkDiscreteSimulation::FUN_01099cb0(void* entities, int numEntities, void* world)
 {
-    // The original loads world->m_o78 and pushes the address of processAgentResetCollisionInformation as a
-    // plain immediate (0x01099670) before the call; expressed as a real function-pointer argument.
+    // A member forwarding `this` (ecx) to the agent-pair walk: the original loads world->m_o78 and pushes
+    // the address of processAgentResetCollisionInformation (0x01099670) as a plain function pointer.
     void* collideInput = *(void**)((char*)world + 0x78);
     FUN_01099be0(entities, numEntities, collideInput, (hkCollideFunc)FUN_01099670);
 }

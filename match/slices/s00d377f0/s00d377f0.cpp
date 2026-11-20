@@ -25,6 +25,11 @@
 //
 // Flags: /O2 /MD /Gy /TP
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147a938[];
+extern "C" char g_147a948[];
+extern "C" char g_147a96c[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -680,9 +685,9 @@ void cSPCreatureMissionManager::SetCardArea(u32 a, u32 b, u32 c)
 // @ 0x00d37f50
 void* cSPCreatureMissionManager::ScalarDeletingDtor(u32 flags)
 {
-    mpVtbl00 = (void*)0x147a96c;
-    mpVtbl08 = (void*)0x147a948;
-    mpVtbl10 = (void*)0x147a938;
+    mpVtbl00 = (void*)g_147a96c;
+    mpVtbl08 = (void*)g_147a948;
+    mpVtbl10 = (void*)g_147a938;
     g_CreatureMissionManager = 0;
 
     if (mSpeciesMission.mpObj != 0)
@@ -1036,12 +1041,12 @@ float FUN_00d386a0()
 // @ 0x00d38780
 u32 FUN_00d38780()
 {
-    float f = FUN_00d386a0();
-    if (f >= 0.33333334f)
+    float f;
+    if ((f = FUN_00d386a0()) >= 0.33333334f)
         return 0x17e5ef84;
-    if (f < -0.33333334f)
-        return 0xfd159d91;
-    return 0xb9de15f2;
+    if (f >= -0.33333334f)
+        return 0xb9de15f2;
+    return 0xfd159d91;
 }
 
 // ---------------------------------------------------------------------------------------------

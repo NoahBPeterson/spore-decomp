@@ -19,6 +19,10 @@
 // structural reconstructions (x87/SSE scheduled, marked nonmatching).
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145dca8[];
+
 #include "types.h"
 #include <math.h>
 
@@ -593,7 +597,7 @@ void Simulator::cGameData::FUN_00cbb6f0()
     }
 
     cLocomotiveObject* pLoco = &mLoco;
-    mpVtable504 = (void*)0x145dca8;
+    mpVtable504 = (void*)g_145dca8;
     pLoco->m_c432e0();
     ((Obj*)this)->m_b184c0();
 }

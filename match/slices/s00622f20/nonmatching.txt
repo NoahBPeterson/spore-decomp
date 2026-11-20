@@ -1,4 +1,3 @@
-00623370  13   cXHTMLWin::DestroyFormControl: complete; list clear is not CSE'd in the original (separate empty test and loop-entry test)
 006233f0  275  cXHTMLWin::FocusNextControl (tab order via the tabindex attribute): complete; block layout of the first scan loop
 00623570  96   FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion)
 00623610  58   FindFormChild: same loop shape issue

@@ -49,3 +49,4 @@
 ../src/game/Havok/_at_010d0000.cpp  ??0hkPhantomAgent@@QAE@ABVhkCdBody_s010d_f100@@0PAVhkContactMgr@@@Z  010df3d0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkTransformAgent@@UAEXXZ  010df560  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?createListBAgent@hkSymmetricAgent_hkListAgent@@SAPAVhkCollisionAgent_s010d_f100@@ABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@PAVhkContactMgr@@@Z  010df280  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?createBoxBoxAgent@hkBoxBoxAgent@@SAPAVhkCollisionAgent_s010d_8520@@ABVhkCdBody_s010d_8520@@0ABUhkCollisionInput_s010d_8520@@PAVhkContactMgr_s010d_8520@@@Z  010d9330  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include

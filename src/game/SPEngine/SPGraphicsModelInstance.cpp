@@ -1956,13 +1956,9 @@ int cModelInstance_s0073_a110::GetAnimationMoveToTimes(int animID, int* dst, cha
         start += e->mAnimFirstDeform;
         n -= e->mAnimFirstDeform;
     }
-    if (dst != 0 && n > 0) {
-        int i = 0;
-        do {
-            // the controller table is re-read every step: the store through dst may alias it
+    if (dst != 0) {
+        for (int i = 0; i < n; ++i)
             dst[i] = *(const int*)((const char*)mControllers + start * 8 + i * 8);
-            ++i;
-        } while (i < n);
     }
     return n;
 }
@@ -3834,14 +3830,15 @@ MInit::MInit()
 // @ 0x00741040
 cModelInstance_s0074_03c0::~cModelInstance_s0074_03c0()
 {
-    vt = vtbl_cModelInstance;
-    HullData* h = mHull;
+    *(void* volatile*)&vt = vtbl_cModelInstance;
+    HullData* h = *(HullData* volatile*)&mHull;
     if (h) {
         void* b = h->begin;
         if (b && ((int*)b)[-1] != 0) operator delete[](b);
         operator delete[](h);
     }
     mHull = 0;
+    _ReadWriteBarrier();
     if (mBones.p) {
         RefIface* bones = mBones.p;
         mBones.p = 0;

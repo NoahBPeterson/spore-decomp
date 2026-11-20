@@ -58,8 +58,11 @@ Vector2* AddVec2(Vector2* out, const Vector2* a, const Vector2* b)
     Vector2 r;
     r.x = a->x + b->x;
     r.y = a->y + b->y;
-    Vector2 s = r;
-    *out = s;
+    Vector2 s;
+    s.x = r.x;
+    s.y = r.y;
+    out->x = s.x;
+    out->y = s.y;
     return out;
 }
 

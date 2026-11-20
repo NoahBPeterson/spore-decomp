@@ -2,6 +2,20 @@
 // Object file: SPGonzago/_at_00bc0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1466890[];
+extern "C" char g_1466898[];
+extern "C" char g_15906f0[];
+extern "C" char g_1590778[];
+extern "C" char g_1590800[];
+extern "C" char g_1590888[];
+extern "C" char g_1590910[];
+extern "C" char g_1590998[];
+extern "C" char g_1590a20[];
+extern "C" char g_1590aa8[];
+extern "C" char g_1590b30[];
+extern "C" char g_15aa9e8[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cPropertyList.h"
@@ -1995,6 +2009,7 @@ struct RawList {                // 0x28 bytes: sentinel + embedded FixedAllocato
     ListNode* mpPrev;           // +0x04
     FixedAllocatorBase mAlloc;  // +0x08
     void Clear();                                                               // 0x00bcaa00
+    void ClearList();                                                           // 0x00bcab00
     ListNode* AllocNode();                                                      // 0x00bcaab0
     void ConstructNode(ListEntry* p);                                           // 0x00bcab80
     RawList* Construct();                                                       // 0x00bcb590
@@ -3723,8 +3738,8 @@ void SimClass::ClearMap()
 void SimClass::Destroy()
 {
     HashMap* m = &map;
-    vtbl0 = (uint32_t)0x1466898;
-    vtbl1 = (uint32_t)0x1466890;
+    vtbl0 = (uint32_t)g_1466898;
+    vtbl1 = (uint32_t)g_1466890;
     m->ClearBuckets((void**)m->buckets, m->bucketCount);
     m->size = 0;
     if (m->bucketCount > 1)
@@ -3805,8 +3820,8 @@ void SubVec::Insert(Sub* pos, uint32_t n, const Sub& value)
 SimClass::SimClass()
 {
     BaseCtor();
-    vtbl0 = (uint32_t)0x1466898;
-    vtbl1 = (uint32_t)0x1466890;
+    vtbl0 = (uint32_t)g_1466898;
+    vtbl1 = (uint32_t)g_1466890;
     uint32_t zero = 0;
     FixedAlloc_s00bc_6360 fa(0x95c, 4, 0x20, zero, 0xffffffff, (void*)0x6abeb0, (void*)0xf47410, "Simulator/list");
     ListHead* l = &list;
@@ -4268,11 +4283,10 @@ WE** __fastcall FUN_00bc7f80(WE** param_1)
         puVar1->activeI = 0x3fffffff;
         puVar1->FUN_00bc7b70(0x32);
         cHierGrid_ctor((char*)puVar1 + 0x1c);
-        *param_1 = puVar1;
-        return param_1;
+    } else {
+        puVar1 = 0;
     }
-    WE* p = puVar1;
-    *param_1 = p;
+    *param_1 = puVar1;
     return param_1;
 }
 
@@ -4563,6 +4577,7 @@ bool __thiscall GridMask::FitsMask(unsigned m1, unsigned m2)
     return true;
 }
 
+template <class T> inline void SwapRef_s00bc87b0(T& a, T& b) { T t = a; a = b; b = t; }
 // @ 0x00bc87b0
 void __cdecl Grid_FlushPending(char flag, unsigned a2, char* obj, unsigned a4, double a5)
 {
@@ -4575,9 +4590,7 @@ void __cdecl Grid_FlushPending(char flag, unsigned a2, char* obj, unsigned a4, d
     }
     *(unsigned*)(obj + 0x55) = 0;
     if (flag) {
-        unsigned tmp = *(unsigned*)(obj + 0x51);
-        *(unsigned*)(obj + 0x51) = *(unsigned*)(obj + 0x4d);
-        *(unsigned*)(obj + 0x4d) = tmp;
+        SwapRef_s00bc87b0(*(unsigned*)(obj + 0x51), *(unsigned*)(obj + 0x4d));
         *(unsigned*)(obj + 0x55) = a2;
         return;
     }
@@ -5695,16 +5708,16 @@ void FUN_00bca6f0(void)
 {
     g_0168B54C = &FUN_00bca670;
     g_0168B550 = &FUN_00bca6a0;
-    FUN_00bc8fa0((void*)0x1590800);
-    FUN_00bc8fa0((void*)0x1590888);
-    FUN_00bc8fa0((void*)0x15906f0);
-    FUN_00bc8fa0((void*)0x1590778);
-    FUN_00bc8fa0((void*)0x1590910);
-    FUN_00bc8fa0((void*)0x1590998);
-    FUN_00bc8fa0((void*)0x1590a20);
-    FUN_00bc8fa0((void*)0x1590aa8);
-    FUN_00bc8fa0((void*)0x1590b30);
-    FUN_00bc8fa0((void*)0x15aa9e8);
+    FUN_00bc8fa0((void*)g_1590800);
+    FUN_00bc8fa0((void*)g_1590888);
+    FUN_00bc8fa0((void*)g_15906f0);
+    FUN_00bc8fa0((void*)g_1590778);
+    FUN_00bc8fa0((void*)g_1590910);
+    FUN_00bc8fa0((void*)g_1590998);
+    FUN_00bc8fa0((void*)g_1590a20);
+    FUN_00bc8fa0((void*)g_1590aa8);
+    FUN_00bc8fa0((void*)g_1590b30);
+    FUN_00bc8fa0((void*)g_15aa9e8);
 }
 
 // @ 0x00bca7a0
@@ -6238,7 +6251,7 @@ void cVarListEditor::Reset()
     mpVecEnd = (Quad16_s00bc_b0b0*)((char*)mpVecEnd + (((char*)end - (char*)begin) >> 4) * -16);
     mpObject = 0;
     RawList* list = &mList1;
-    list->Clear();
+    list->ClearList();
     list->mpNext = (ListNode*)list;
     list->mpPrev = (ListNode*)list;
 }
@@ -6319,15 +6332,17 @@ void cVarListEditor::SetListObject(VarSource* item)
     }
 }
 
+// The var-list editor as an owned object: its destructor clears the list and then the embedded
+// fixed allocator, and the class-level delete forwards to the game allocator.
+struct OwnedVarList : RawList
+{
+    ~OwnedVarList() { Clear(); }
+    static void operator delete(void* p) { operator_delete(p); }
+};
 // @ 0x00bcb700
 void __cdecl DestroyVarList()
 {
-    cVarListEditor* p = g_pVarListEditor;
-    if (p) {
-        ((RawList*)p)->Clear();
-        ((RawList*)p)->mAlloc.~FixedAllocatorBase();
-        operator_delete(p);
-    }
+    delete (OwnedVarList*)g_pVarListEditor;
     g_pVarListEditor = 0;
 }
 

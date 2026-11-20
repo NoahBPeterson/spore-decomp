@@ -6,3 +6,4 @@ slices/s00aeb3e0/s00aeb3e0.cpp  ?FUN_00aeb720@SpaceTool@@QAEXHHHHHH@Z  00aeb720 
 slices/s00aeb3e0/s00aeb3e0.cpp  ?FUN_00aebb30@SpaceTool@@QAEXXZ  00aebb30  /O2 /MD /Gy /EHsc /TP
 slices/s00aeb3e0/s00aeb3e0.cpp  ?FUN_00aeb890@SpaceTool@@QAEXPAHHHH@Z  00aeb890  /O2 /MD /Gy /EHsc /TP
 slices/s00aeb3e0/s00aeb3e0.cpp  ?FUN_00aebc10@SpaceTool@@QAE_NHH@Z  00aebc10  /O2 /MD /Gy /EHsc /TP
+slices/s00aeb3e0/s00aeb3e0.cpp  ?FUN_00aeb700@SpaceTool@@QAEXXZ  00aeb700  /O2 /MD /Gy /EHsc /TP

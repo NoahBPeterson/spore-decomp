@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPXHTMLControlAppearance.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fd3fc[];
+
 #include "game/types.h"
 #include <intrin.h>
 
@@ -221,7 +224,7 @@ bool cXHTMLControlAppearance::CreateHitMaskFromResource(int* p1, int* p2, void**
 cXHTMLControlAppearance::cXHTMLControlAppearance()
 {
   mPad4 = 0;
-  *(const uint32_t**)this = (const uint32_t*)0x013FD3FC;
+  *(const uint32_t**)this = (const uint32_t*)g_13fd3fc;
   mpBegin = 0; mpEnd = 0; mpCap = 0; mpScroll1 = 0; mpScroll2 = 0;
 }
 

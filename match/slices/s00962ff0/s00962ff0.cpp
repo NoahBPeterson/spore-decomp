@@ -12,19 +12,23 @@ extern "C" void* __cdecl FUN_011f36d0(int*, int, int, int);            // 0x11f3
 extern "C" void* __cdecl FUN_011f5010(int*, int, int, int, int, int);  // 0x11f5010
 extern void* g_pfnIndexBuffer;                                         // 0x16f4ae4
 
-// ------------------------------------------------------------------ 0x962ff0
-int __cdecl FUN_00962ff0(int p2, int p3, int p4, int p5)
+// @ 0x00962ff0
+int __cdecl FUN_00962ff0(int allocator, int vertexDescription, int vertexCount, int flags)
 {
-    ResDesc desc;
-    FUN_011f51d0(&desc + 0, p2, p3, p4, p5);
-    int r = ((int (__cdecl*)(int, int))g_pfnIndexBuffer)(desc.b, desc.c);
-    if (r != 0) {
-        int local[4];
-        local[0] = r;
-        local[1] = 0;
-        local[2] = 0;
-        local[3] = 0;
-        return (int)FUN_011f36d0(local, p2, p3, p4);
+    // The resource descriptor reserves eight words; its first two give the
+    // allocation size and alignment. The allocator argument is unused here.
+    int descriptor[8];
+    ((void (__cdecl*)(int*, int, int, int))FUN_011f51d0)(
+        descriptor, vertexDescription, vertexCount, flags);
+    int memory = ((int (__cdecl*)(int, int))g_pfnIndexBuffer)(
+        descriptor[0], descriptor[1]);
+    if (memory != 0) {
+        int allocation[4];
+        allocation[0] = memory;
+        allocation[1] = 0;
+        allocation[2] = 0;
+        allocation[3] = 0;
+        return (int)FUN_011f36d0(allocation, vertexDescription, vertexCount, flags);
     }
     return 0;
 }

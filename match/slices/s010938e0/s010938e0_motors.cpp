@@ -11,6 +11,13 @@
 //
 // Layouts below are read off the asm; the constraint motor hierarchy is the same one that
 // slices/s0108eb30 reconstructs (its hkVelocityConstraintMotor::clone is byte-exact).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a1808[];
+extern "C" char g_14a1b14[];
+extern "C" char g_14a1b64[];
+
 #include "types.h"
 #include <stddef.h>
 #include <math.h>
@@ -245,12 +252,12 @@ void hkPositionConstraintMotor::calcMotorData(const hkConstraintMotorInput& in, 
 hkConstraintMotor* hkPositionConstraintMotor::clone() const
 {
 	hkPositionConstraintMotor* p = (hkPositionConstraintMotor*)hkMemory::s_instance->allocateChunk(0x20, 0x29);
-	*(const void**)p = (const void*)0x014a1808;      // hkConstraintMotor vtable
+	*(const void**)p = (const void*)g_14a1808;      // hkConstraintMotor vtable
 	p->m_memSizeAndFlags = 0x20;
 	p->m_referenceCount = 1;
 	p->m_minForce = m_minForce;
 	p->m_maxForce = m_maxForce;
-	*(const void**)p = (const void*)0x014a1b14;      // hkPositionConstraintMotor vtable
+	*(const void**)p = (const void*)g_14a1b14;      // hkPositionConstraintMotor vtable
 	p->m_tau = m_tau;
 	p->m_damping = m_damping;
 	p->m_proportionalRecoveryVelocity = m_proportionalRecoveryVelocity;
@@ -338,10 +345,10 @@ CHK(hkPointToPathLayout, m_path, 0x0c);
 // @ 0x01094470
 void* hkPointToPathLayout::scalarDeletingDestructor(unsigned int flags)
 {
-	mpVtbl = (void*)0x014a1b64;         // hkPointToPathConstraintData vtable
+	mpVtbl = (void*)g_14a1b64;         // hkPointToPathConstraintData vtable
 	if (m_path != 0)
 		m_path->removeReference();
-	mpVtbl = (void*)0x013ef094;         // hkReferencedObject vtable
+	mpVtbl = (void*)g_13ef094;         // hkReferencedObject vtable
 	if ((flags & 1) != 0)
 		hkMemory::s_instance->deallocateChunk(this, m_memSizeAndFlags, 0x29);
 	return this;

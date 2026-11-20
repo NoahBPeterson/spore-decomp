@@ -350,6 +350,10 @@ struct Callee {
     void* p(int);   // 0x0095bc10 (equiv t3)
     int64_t i64();   // 0x0093a3a0 (equiv t3)
 };
+struct RampStub {
+    void* ctor();                                   // 0x007fd460 (cSPUIBehaviorTimeFunctionRamp ctor)
+    void  SetParams(float, float, float);           // 0x007fd4a0 (cSPUIBehaviorTimeFunctionRamp::SetParams)
+};
 struct Obj {
     void  M5300(void* p);
     int   M53C0(void* p);
@@ -404,11 +408,13 @@ void __stdcall DestroyRange(void* first, void* last)
 void* Obj::M5FF0(char flags)
 {
     *(void**)((char*)this + 0) = &g_vt_014153bc;
+    _ReadWriteBarrier();
     void* p = *(void**)((char*)this + 0x84);
     if (p)
         ((FV0)VTOBJ(p)[4 / 4])(p);
     *(void**)((char*)this + 4) = &g_vt_013f6400;
     *(void**)((char*)this + 0xc) = &g_vt_013f63fc;
+    _ReadWriteBarrier();
     void* q = *(void**)((char*)this + 0x10);
     if (q)
         ((FV0)VTOBJ(q)[4 / 4])(q);
@@ -424,7 +430,7 @@ void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
     *(void**)((char*)out + 4) = 0;
     void* caller = FUN_009512c0();
     void* mem = FUN_009512d0(0x48, 4, "SPUICreateAnimationTimerRamp", caller);
-    void* obj = mem ? ((Callee*)mem)->ctor() : 0;
+    void* obj = mem ? ((RampStub*)mem)->ctor() : 0;
     void* old = *(void**)((char*)out + 4);
     if (obj != old) {
         if (obj)
@@ -433,7 +439,7 @@ void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
         if (old)
             ((FV0)VTOBJ(old)[4 / 4])(old);
     }
-    ((Callee*)obj)->f(a, b, c);
+    ((RampStub*)obj)->SetParams(a, b, c);
     return out;
 }
 
@@ -453,7 +459,7 @@ void* __cdecl CreateTimeSmooth(void* out, float a2, float a3, float a4, float a5
         if (old)
             ((FV0)VTOBJ(old)[4 / 4])(old);
     }
-    ((Callee*)obj)->f(a2, a5, a6);
+    ((RampStub*)obj)->SetParams(a2, a5, a6);
     return out;
 }
 
@@ -723,7 +729,8 @@ bool F6910(void* self, int a2, float a3, int phase)
         *(float*)((char*)self + 0x24) = f[0];
         *(float*)((char*)self + 0x28) = f[1];
         *(float*)((char*)self + 0x2c) = f[2];
-        *(float*)((char*)self + 0x30) = f[3];
+        float* d = (float*)((char*)self + 0x30);
+        *d = f[3];
         return *(void**)((char*)self + 0x10) != 0;
     }
     if (phase == 2) {

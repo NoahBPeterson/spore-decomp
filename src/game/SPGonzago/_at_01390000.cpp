@@ -1,3 +1,17 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16ca3d4[];
+extern "C" char g_16ca3d8[];
+extern "C" char g_16ca3dc[];
+extern "C" char g_16ca3e0[];
+extern "C" char g_16ca3e4[];
+extern "C" char g_16ca3e8[];
+extern "C" char g_16ca3ec[];
+extern "C" char g_16ca3f0[];
+extern "C" char g_16ca3f4[];
+extern "C" char g_16ca3f8[];
+extern "C" char g_16ca3fc[];
+extern "C" char g_16ca400[];
+
 #include "game/types.h"
 #include <math.h>
 
@@ -59,38 +73,54 @@ void FUN_00694f00();
 void FUN_00675ca0();
 void FUN_00b1fbf0();
 
+// a bound member-function slot: the code pointer and a this-adjust of 0
+struct Single_s01390c90 { void FUN_00803000(); };            // 0x803000
+typedef void (Single_s01390c90::*SingleFn_s01390c90)();
+struct Bound_s01390c90 {
+    SingleFn_s01390c90 fn;   // +0x00
+    int                adj;  // +0x04
+    Bound_s01390c90() {}
+    Bound_s01390c90(SingleFn_s01390c90 f) { adj = 0; fn = f; }
+};
+extern Bound_s01390c90 g_16c9b8c;                           // 0x16c9b8c
+
 // @ 0x01390c90
 void init_16c9b8c()
 {
-    int c = 0x803000;
-    *(int*)0x16c9b8c = c;
-    *(int*)0x16c9b90 = 0;
+    g_16c9b8c = Bound_s01390c90(&Single_s01390c90::FUN_00803000);
 }
+
+// a value/flag pair: the value and a cleared second word
+struct Pair_s01390cb0 {
+    int value;   // +0x00
+    int extra;   // +0x04
+    Pair_s01390cb0() {}
+    Pair_s01390cb0(int v) { extra = 0; value = v; }
+};
+extern Pair_s01390cb0 g_16c9b94;                            // 0x16c9b94
 
 // @ 0x01390cb0
 void init_16c9b94()
 {
-    int c = 0xe0;
-    *(int*)0x16c9b94 = c;
-    *(int*)0x16c9b98 = 0;
+    g_16c9b94 = Pair_s01390cb0(0xe0);
 }
 
 // @ 0x01391740
 // Twelve int32 slots of one table, all set to the "none" sentinel -1.
 void init_16ca3d4()
 {
-    *(int*)0x16ca3d4 = -1;
-    *(int*)0x16ca3d8 = -1;
-    *(int*)0x16ca3dc = -1;
-    *(int*)0x16ca3e0 = -1;
-    *(int*)0x16ca3e4 = -1;
-    *(int*)0x16ca3e8 = -1;
-    *(int*)0x16ca3ec = -1;
-    *(int*)0x16ca3f0 = -1;
-    *(int*)0x16ca3f4 = -1;
-    *(int*)0x16ca3f8 = -1;
-    *(int*)0x16ca3fc = -1;
-    *(int*)0x16ca400 = -1;
+    *(int*)g_16ca3d4 = -1;
+    *(int*)g_16ca3d8 = -1;
+    *(int*)g_16ca3dc = -1;
+    *(int*)g_16ca3e0 = -1;
+    *(int*)g_16ca3e4 = -1;
+    *(int*)g_16ca3e8 = -1;
+    *(int*)g_16ca3ec = -1;
+    *(int*)g_16ca3f0 = -1;
+    *(int*)g_16ca3f4 = -1;
+    *(int*)g_16ca3f8 = -1;
+    *(int*)g_16ca3fc = -1;
+    *(int*)g_16ca400 = -1;
 }
 
 // Sixteen owning terrain-layer slots, shared with SPTerrainStateMgr.

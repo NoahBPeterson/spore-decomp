@@ -14,16 +14,34 @@ original upstream source with the matching toolchain. These sources are **not**
 relicensed by this project; each keeps its own upstream license, and the resulting
 matched addresses are recorded in `symbols/lib_names.txt` and `work/oss/*_matches.csv`.
 
-| Component | Source | License |
-|---|---|---|
-| OpenSSL | openssl.org | Apache-2.0 |
-| zlib | zlib.net | zlib |
-| libpng | libpng.org | libpng |
-| libjpeg (IJG) | ijg.org | IJG |
-| Microsoft C runtime | MSVC 15.00 (VS2008 SP1) | Microsoft EULA |
-| EA EAText / EAIO | EAWebKit 1.21.00 | EA WebKit license (3-clause BSD-style) |
-| EA EAThread | github.com/BurnoutDecomp/EAThread (fork of electronicarts/EAThread) | EA BSD 3-clause |
-| RenderWare 4 / EATech reconstructions (rw::audio::core, rw::core, EA::Thread, Snd, vp6) | github.com/BurnoutDecomp/b5-decomp (`vendor/renderware`, `src/vendor/renderware`, `src/SDKs/EATech`, `src/GameShared/GameClasses/RenderWare`) | EA-style BSD 3-clause, assumed (see below) |
+| Component | Source | License | Can be combined with GPL-2.0 |
+|---|---|---|---|
+| OpenSSL 0.9.8g | openssl.org | OpenSSL License and original SSLeay License (both apply; BSD-style with advertising clauses). Apache-2.0 is only OpenSSL 3.0 and later | **no** |
+| zlib 1.2.3 | zlib.net | zlib | yes |
+| libpng 1.2.25 | libpng.org | libpng | yes |
+| libjpeg 6a (IJG) | ijg.org | IJG | yes |
+| expat | libexpat | MIT | yes |
+| Microsoft C runtime | MSVC 15.00 (VS2008 SP1) | Microsoft EULA | no (never in the repository; compiled by the toolchain) |
+| EA EAText / EAIO | EAWebKit 1.21.00 | EA WebKit license (3-clause BSD-style) | yes |
+| EA EAThread | github.com/BurnoutDecomp/EAThread (fork of electronicarts/EAThread) | EA BSD 3-clause | yes |
+| RenderWare 4 / EATech reconstructions (rw::audio::core, rw::core, EA::Thread, Snd, vp6) | github.com/BurnoutDecomp/b5-decomp (`vendor/renderware`, `src/vendor/renderware`, `src/SDKs/EATech`, `src/GameShared/GameClasses/RenderWare`) | EA-style BSD 3-clause, assumed (see below) | unknown (no license notice) |
+
+### Rules for contributions (decision 2026-11-20)
+- **Reference, never copy.** Upstream library source is `#include`d from where `tools/ci/setup_oss.sh` unpacks it
+  under `work/` (a wrapper of one or two lines, as in `match/slices/s011cae60/bn_exp2.cpp`), never pasted into the
+  repository. Each library keeps its own license, and OpenSSL's cannot be combined with this project's GPL-2.0, so
+  the repository must not contain it. The Byte-match check fails a pull request that adds a line carrying a
+  third-party copyright or license notice (`tools/ci/license_check.py --notices`).
+- **Maintainer review.** A pull request that adds manifest rows for functions in the "Open-source libraries" module
+  (`tools/site/modules.json`) fails the check until a maintainer adds the `oss-reviewed` label, after checking that each
+  wrapper compiles the published file unchanged (`tools/ci/license_check.py --oss` lists them).
+- **Counted apart.** These functions are not in the headline numbers, history, size bands or contributor function
+  counts on the progress site and in `PROGRESS.md`: compiling a published library recovers none of Spore's own code.
+  They have their own line, their module row and an "open-source" column in the credits.
+- Files copied in before this rule (libjpeg and zlib headers and sources in a few `match/slices/s008*` slices, expat
+  under `src/game/UTFSpore_Win32/expat` and `match/slices/s00906*/expat`, two EAText headers in
+  `match/slices/s0088e210/inc/EAText`) are all under licenses that allow it and keep their notices; no OpenSSL source
+  is in the repository. Moving them to `work/` is a cleanup for later.
 
 The EA EAText/EAIO sources used for the `lib_eatext` matches are obtained from the
 EAWebKit distribution and are built locally under `work/` (git-ignored); **no EA

@@ -1,5 +1,9 @@
 // Slice s00cd45c0 -- SP::cTribeModeStrategy and its tribe-mode helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00bc36d0();
+
 #include "types.h"
 
 #define NOINLINE __declspec(noinline)
@@ -407,9 +411,9 @@ NOINLINE char __fastcall FUN_00cd4d50(char* self, int)
 {
     void* a = FUN_00b3d3c0();
     ((CExt72880*)a)->call();
-    void* c = FUN_00b3d240(0xcd45c0);
+    void* c = FUN_00b3d240((int)&FUN_00cd45c0);
     ((CExt33ce0*)c)->call();
-    void* d = FUN_00b3d240(0xcd46d0);
+    void* d = FUN_00b3d240((int)&FUN_00cd46d0);
     ((CExt33cf0*)d)->call();
     ((CExtBC3170*)(self + 0x1a8))->call();
     return 1;
@@ -656,7 +660,7 @@ char CTribeMode::FUN_00cd4c70(int)
     char* self = (char*)this;
     void* app = App();
     app = (*(void*(__fastcall**)(void*))(*(int*)app + 0x50))(app);
-    ((TC2v)VSLOT(app, 0x20))(app, 0x4c6a8d6, (void*)0xbc36d0);
+    ((TC2v)VSLOT(app, 0x20))(app, 0x4c6a8d6, (void*)FUN_00bc36d0);
     void* server = FUN_00883860();
     void* h = self ? (void*)(self + 8) : 0;
     *(void**)(self + 0x1cc) = server;

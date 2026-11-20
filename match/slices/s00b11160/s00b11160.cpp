@@ -1,4 +1,13 @@
 // Slice s00b11160 -- Spore terrain-camera / quaternion-hermite cluster (unnamed FUN_* functions):
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_145cf78[];
+extern "C" char g_145cf88[];
+extern "C" char g_14667ec[];
+
 #include <intrin.h>
 // a cubic Hermite interpolation of a quaternion, four 0x10-stride copy/fill helpers, a
 // component teardown, a terrain-sphere surface probe, a zoom-program loader, and a big
@@ -152,7 +161,7 @@ void FUN_00b11580(Vec4f* dst, unsigned count, Vec4f* src)
 // =============================================================================================
 // 0x00b115c0 -- copy 0x10-stride records from [from,to) into dest (dest may be null).
 // @ 0x00b115c0
-void FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
+Vec4f* FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
 {
     if (f != to) {
         do {
@@ -166,6 +175,7 @@ void FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
             d += 1;
         } while (f != to);
     }
+    return d;
 }
 
 // =============================================================================================
@@ -176,9 +186,9 @@ void FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
 void GmeEditorResBase::Destroy()
 {
     char* s = (char*)this;
-    mVtbl0 = 0x0145cf88;
-    mVtbl4 = 0x0145cf78;
-    mVtbl8 = 0x014667ec;
+    mVtbl0 = (int)g_145cf88;
+    mVtbl4 = (int)g_145cf78;
+    mVtbl8 = (int)g_14667ec;
     _ReadWriteBarrier();
 
     if (*(void**)(s + 0x30c) != 0) {
@@ -200,9 +210,9 @@ void GmeEditorResBase::Destroy()
     p = *(void**)(s + 0x180); if (p != 0 && *(unsigned*)((char*)p - 4) != 0) EASTL_allocator_deallocate(p);
     p = *(void**)(s + 0x16c); if (p != 0 && *(unsigned*)((char*)p - 4) != 0) EASTL_allocator_deallocate(p);
 
-    mVtbl8 = 0x013ef094;
-    mVtbl4 = 0x013eb394;
-    mVtbl0 = 0x013eb938;
+    mVtbl8 = (int)g_13ef094;
+    mVtbl4 = (int)g_13eb394;
+    mVtbl0 = (int)g_13eb938;
 }
 
 // =============================================================================================

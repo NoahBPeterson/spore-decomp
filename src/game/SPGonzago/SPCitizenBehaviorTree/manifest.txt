@@ -47,3 +47,4 @@
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d93f70@@YAXPAUcObj@@PAX111PAI@Z  00d93f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d90d70@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX1E1PAH@Z  00d90d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d935d0@@YAMPAUcObj@@@Z  00d935d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d933d0@@YAEPAUcObj@@@Z  00d933d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

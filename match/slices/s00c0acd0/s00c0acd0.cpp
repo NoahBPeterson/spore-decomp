@@ -1,6 +1,9 @@
 // Slice s00c0acd0 -- Simulator creature update/serialization helpers.
 // Flags: /O2 /MD /Gy /EHsc /TP
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 #include <stddef.h>
 #include <algorithm>
 #include "SP/cVarListSerializer.h"
@@ -36,7 +39,7 @@ class RandomLinearCongruential {
   float RandomDoubleUniform();
 };
 } }
-#define GRAND ((EA::Random::RandomLinearCongruential*)0x1601760)
+#define GRAND ((EA::Random::RandomLinearCongruential*)g_1601760)
 
 bool __cdecl SP_GetPropertyAsUint32Array(unsigned int prop, unsigned int arg,
                                          int* count, int** data);

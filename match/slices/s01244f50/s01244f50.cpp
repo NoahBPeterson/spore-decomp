@@ -3,6 +3,50 @@
 // registrations) and small global setters that copy defaults into the live
 // globals.  Code shape: ebp frame, everything materialised in memory.
 // Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f3da8[];
+extern "C" char g_140b5a0[];
+extern "C" char g_15d98f0[];
+extern "C" char g_15d992c[];
+extern "C" char g_15d9930[];
+extern "C" char g_15da7d4[];
+extern "C" char g_15da7d8[];
+extern "C" char g_15da7dc[];
+extern "C" char g_15da884[];
+extern "C" char g_15da960[];
+extern "C" char g_15dabcc[];
+extern "C" char g_15dabd0[];
+extern "C" char g_15dabd4[];
+extern "C" char g_15dacc8[];
+extern "C" char g_15daccc[];
+extern "C" char g_15dacd0[];
+extern "C" char g_15dd6e0[];
+extern "C" char g_15dd784[];
+extern "C" char g_15de2a0[];
+extern "C" char g_15de57c[];
+extern "C" char g_15dec08[];
+extern "C" char g_15dec0c[];
+extern "C" char g_15dec10[];
+extern "C" char g_15df204[];
+extern "C" char g_15df208[];
+extern "C" char g_15df20c[];
+extern "C" char g_15df210[];
+extern "C" char g_15df214[];
+extern "C" char g_15df218[];
+extern "C" char g_15df21c[];
+extern "C" char g_15df220[];
+extern "C" char g_15df224[];
+extern "C" char g_15e2a38[];
+extern "C" char g_15e2d08[];
+extern "C" char g_15e3188[];
+extern "C" char g_15e3294[];
+extern "C" char g_15e3298[];
+extern "C" char g_15e329c[];
+extern "C" char g_15e3f18[];
+extern "C" char g_15e3f1c[];
+extern "C" char g_15e3f20[];
+
 #include <stddef.h>
 #include <math.h>
 #pragma intrinsic(log)
@@ -193,7 +237,7 @@ void init_150c720()
 void init_15d98f0()
 {
     float t = 1e-6f;
-    *(float*)0x15d98f0 = (float)log(t);
+    *(float*)g_15d98f0 = (float)log(t);
 }
 
 #pragma float_control(precise, off)
@@ -222,8 +266,8 @@ void init_15d9a68()
 // @ 0x0124ab80
 void init_15d992c()
 {
-    *(float*)0x15d992c = 1.0f;
-    *(float*)0x15d9930 = 1.0f;
+    *(float*)g_15d992c = 1.0f;
+    *(float*)g_15d9930 = 1.0f;
 }
 
 // @ 0x01250270
@@ -231,12 +275,12 @@ void init_15da7d4()
 {
     extern const wchar_t g_1667bac;   // 0x1667bac  eastl::gEmptyString16
     uint32_t unused;
-    *(void**)0x15da7d4 = 0;
-    *(void**)0x15da7d8 = 0;
-    *(void**)0x15da7dc = 0;
-    *(const wchar_t**)0x15da7d4 = &g_1667bac;
-    *(void**)0x15da7d8 = *(void**)0x15da7d4;
-    *(const wchar_t**)0x15da7dc = (const wchar_t*)((uint32_t)*(void**)0x15da7d4 + 2);
+    *(void**)g_15da7d4 = 0;
+    *(void**)g_15da7d8 = 0;
+    *(void**)g_15da7dc = 0;
+    *(const wchar_t**)g_15da7d4 = &g_1667bac;
+    *(void**)g_15da7d8 = *(void**)g_15da7d4;
+    *(const wchar_t**)g_15da7dc = (const wchar_t*)((uint32_t)*(void**)g_15da7d4 + 2);
     atexit(&FUN_013bcc30);
 }
 
@@ -244,7 +288,7 @@ void init_15da7d4()
 void init_15da960()
 {
     AllocTag tag;
-    ((Rbtree*)0x15da960)->ctor(tag);
+    ((Rbtree*)g_15da960)->ctor(tag);
     atexit(&FUN_013bcc50);
 }
 
@@ -252,7 +296,7 @@ void init_15da960()
 void init_15da884()
 {
     AllocTag tag;
-    ((Rbtree*)0x15da884)->ctor(tag);
+    ((Rbtree*)g_15da884)->ctor(tag);
     atexit(&FUN_013bcc70);
 }
 
@@ -281,24 +325,24 @@ struct PackedColor {
 void init_15dacc8()
 {
     PackedColor c(0x62, 0x60);
-    *(uint32_t*)0x15dacc8 = 0xa077208c;
-    *(uint32_t*)0x15daccc = 0;
-    *(uint32_t*)0x15dacd0 = *(uint32_t*)&c;
+    *(uint32_t*)g_15dacc8 = 0xa077208c;
+    *(uint32_t*)g_15daccc = 0;
+    *(uint32_t*)g_15dacd0 = *(uint32_t*)&c;
 }
 
 // @ 0x012503b0
 void init_15dabcc()
 {
     PackedColor c(0x62, 0x60);
-    *(uint32_t*)0x15dabcc = 0x6b2c0771;
-    *(uint32_t*)0x15dabd0 = 0;
-    *(uint32_t*)0x15dabd4 = *(uint32_t*)&c;
+    *(uint32_t*)g_15dabcc = 0x6b2c0771;
+    *(uint32_t*)g_15dabd0 = 0;
+    *(uint32_t*)g_15dabd4 = *(uint32_t*)&c;
 }
 
 // @ 0x01259610
 void init_15dd784()
 {
-    *(float*)0x15dd784 = 1.0f / (*(float*)0x15dd6e0 * 0.3f);
+    *(float*)g_15dd784 = 1.0f / (*(float*)g_15dd6e0 * 0.3f);
 }
 
 // @ 0x0125bd80
@@ -317,22 +361,22 @@ void init_15de138()
 void init_15de57c()
 {
     PackedColor c(0, 0x22);
-    *(uint32_t*)0x15de57c = *(uint32_t*)&c;
+    *(uint32_t*)g_15de57c = *(uint32_t*)&c;
 }
 
 // @ 0x0125dc40
 void init_15de2a0()
 {
-    ((FixedAllocatorBase*)0x15de2a0)->ctor(0x50, 0, 0x80, 0, 0xffffffffu, 0, 0, 0);
+    ((FixedAllocatorBase*)g_15de2a0)->ctor(0x50, 0, 0x80, 0, 0xffffffffu, 0, 0, 0);
     atexit(&FUN_013bcd70);
 }
 
 // @ 0x0125fa80
 void init_15dec08()
 {
-    *(uint32_t*)0x15dec08 = 0;
-    *(uint32_t*)0x15dec0c = 0;
-    *(uint32_t*)0x15dec10 = 0;
+    *(uint32_t*)g_15dec08 = 0;
+    *(uint32_t*)g_15dec0c = 0;
+    *(uint32_t*)g_15dec10 = 0;
 }
 
 // @ 0x01261040
@@ -352,22 +396,22 @@ void init_15df0f0()
 // @ 0x012610e0
 void init_15df204()
 {
-    *(float*)0x15df204 = 0.0f;
-    *(float*)0x15df208 = 0.0f;
-    *(float*)0x15df20c = 1.0f;
-    *(float*)0x15df210 = 0.0f;
-    *(float*)0x15df214 = 0.0f;
-    *(float*)0x15df218 = 1.0f;
-    *(float*)0x15df21c = 0.0f;
-    *(float*)0x15df220 = 0.0f;
-    *(float*)0x15df224 = 1.0f;
+    *(float*)g_15df204 = 0.0f;
+    *(float*)g_15df208 = 0.0f;
+    *(float*)g_15df20c = 1.0f;
+    *(float*)g_15df210 = 0.0f;
+    *(float*)g_15df214 = 0.0f;
+    *(float*)g_15df218 = 1.0f;
+    *(float*)g_15df21c = 0.0f;
+    *(float*)g_15df220 = 0.0f;
+    *(float*)g_15df224 = 1.0f;
 }
 
 // @ 0x0126c8c0
 void init_15e2d08()
 {
     int n = 8;
-    char* p = (char*)0x15e2d08;
+    char* p = (char*)g_15e2d08;
     while (--n >= 0) {
         p += 4;
     }
@@ -377,62 +421,78 @@ void init_15e2d08()
 void init_15e2a38()
 {
     int n = 6;
-    char* p = (char*)0x15e2a38;
+    char* p = (char*)g_15e2a38;
     while (--n >= 0) {
         vector_constructor_iterator(p + 0x10, 4, 4, &FUN_00402ab0);
         p += 0x20;
     }
 }
 
+struct PointerRange_s0126dae0 { void* begin; void* end; void* capacity; };
+// Prefix view of native object 0x015e2e48, described as sAtomStartElementMap
+// and sStartHandlers in earlier reconstructions; original linkage name is unknown.
+extern PointerRange_s0126dae0 g_015e2e48;
+
 // @ 0x0126dae0
 void init_15e2e48()
 {
-    *(uint32_t*)0x15e2e48 = 0;
-    *(uint32_t*)0x15e2e4c = 0;
-    *(uint32_t*)0x15e2e50 = 0;
-    bool b = false;
+    g_015e2e48.begin = 0;
+    g_015e2e48.end = 0;
+    g_015e2e48.capacity = 0;
+    struct Tag {};
+    Tag b = Tag();
     atexit(&FUN_013bce80);
 }
+
+extern PointerRange_s0126dae0 g_015e2da8;
+
+extern PointerRange_s0126dae0 g_015e2da8;
 
 // @ 0x0126db20
 void init_15e2da8()
 {
-    *(uint32_t*)0x15e2da8 = 0;
-    *(uint32_t*)0x15e2dac = 0;
-    *(uint32_t*)0x15e2db0 = 0;
-    bool b = false;
+    g_015e2da8.begin = 0;
+    g_015e2da8.end = 0;
+    g_015e2da8.capacity = 0;
+    struct Tag {};
+    Tag b = Tag();
     atexit(&FUN_013bcea0);
 }
+
+extern PointerRange_s0126dae0 g_015e2f54;
+
+extern PointerRange_s0126dae0 g_015e2f54;
 
 // @ 0x0126db60
 void init_15e2f54()
 {
-    *(uint32_t*)0x15e2f54 = 0;
-    *(uint32_t*)0x15e2f58 = 0;
-    *(uint32_t*)0x15e2f5c = 0;
-    bool b = false;
+    g_015e2f54.begin = 0;
+    g_015e2f54.end = 0;
+    g_015e2f54.capacity = 0;
+    struct Tag {};
+    Tag b = Tag();
     atexit(&FUN_013bcec0);
 }
 
 // @ 0x0126ecd0
 void init_15e3294()
 {
-    *(uint32_t*)0x15e3294 = 0x1749a6e;
-    *(uint32_t*)0x15e3298 = 0x1749a6e;
-    *(uint32_t*)0x15e329c = 1;
+    *(uint32_t*)g_15e3294 = 0x1749a6e;
+    *(uint32_t*)g_15e3298 = 0x1749a6e;
+    *(uint32_t*)g_15e329c = 1;
 }
 
 // @ 0x0126ed00
 void init_15e3188()
 {
-    *(void**)0x15e3188 = (void*)0x140b5a0;
-    *(void**)0x15e3188 = (void*)0x13f3da8;
+    *(void**)g_15e3188 = (void*)g_140b5a0;
+    *(void**)g_15e3188 = (void*)g_13f3da8;
 }
 
 // @ 0x01274080
 void init_15e3f18()
 {
-    *(uint32_t*)0x15e3f18 = 0x5358d0c;
-    *(uint32_t*)0x15e3f1c = 0x5358d0c;
-    *(uint32_t*)0x15e3f20 = 1;
+    *(uint32_t*)g_15e3f18 = 0x5358d0c;
+    *(uint32_t*)g_15e3f1c = 0x5358d0c;
+    *(uint32_t*)g_15e3f20 = 1;
 }

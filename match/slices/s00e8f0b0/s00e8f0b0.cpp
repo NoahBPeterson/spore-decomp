@@ -20,6 +20,10 @@
 // only argument; it returns the sub-object of the requested class or null.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+
 #include "types.h"
 
 typedef unsigned char      u8;
@@ -874,7 +878,7 @@ cSPUIMeter_e8f0* cMineralView_e8f0::UpdateLoyaltyBar(cSPUIMeter_e8f0* p, char bS
     }
     if (p == 0) {
       cSPUIMeter_e8f0* np;
-      void* mem = operator_new(0x50, (const char*)0x013f6b3c, 0, 0, 0, 0);
+      void* mem = operator_new(0x50, (const char*)g_13f6b3c, 0, 0, 0, 0);
       if (mem) {
         np = (cSPUIMeter_e8f0*)((cSPUIMeter_e8f0*)mem)->Init(hdr, 0x3ffb28c, 0x4d428c1, L"CivConversionBar", 0xe9f70df9);
       } else {

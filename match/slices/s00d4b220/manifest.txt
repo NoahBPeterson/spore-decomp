@@ -1,0 +1,1 @@
+slices/s00d4b220/s00d4b220.cpp  ?AssignBabyTeacher@cSPDramaManager@@QAEXXZ  00d4b220  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

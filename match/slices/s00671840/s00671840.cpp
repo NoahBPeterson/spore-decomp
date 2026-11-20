@@ -1,3 +1,13 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13ec468[];
+extern "C" char g_1400e84[];
+extern "C" char g_1400e94[];
+extern "C" char g_1400ea4[];
+extern "C" char g_1400f30[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -41,9 +51,10 @@ int GetTutorialToolPrice(void* a, unsigned key, int def); // 0x004e1c30
 void* MessageServer(); // 0x0067dcc0
 void RemoveHandler(void* server, void* handler, void* ids, int count, int prio);
 unsigned short* Window_GetText(void* w);
+struct WStrAssignStub { void Assign(unsigned short* a, unsigned short* b); };   // 0x00423650 (eastl::basic_string<wchar_t>::assign(first, last))
 struct EString {
   void Assign(unsigned short* s);   // 0x005c3d90 (equiv t3)
-  void Assign(unsigned short* a, unsigned short* b);
+  void Assign(unsigned short* a, unsigned short* b);   // 0x00672750
   void Detok8f40();
   long long Find(unsigned short* sub, int pos);
   EString* AssignFrom(EString* other);
@@ -364,9 +375,9 @@ cSPUISearchBox::cSPUISearchBox() {
 
 // @ 0x00671f70
 cSPUISearchBox::~cSPUISearchBox() {
-  *(void**)this = (void*)0x1400ea4;
-  *(void**)((char*)this + 4) = (void*)0x1400e94;
-  *(void**)((char*)this + 8) = (void*)0x1400e84;
+  *(void**)this = (void*)g_1400ea4;
+  *(void**)((char*)this + 4) = (void*)g_1400e94;
+  *(void**)((char*)this + 8) = (void*)g_1400e84;
   _ReadWriteBarrier();
   unsigned short* p = strBegin;
   if ((int)(((char*)strCap - (char*)p) & 0xfffffffe) > 2 && p) {
@@ -380,9 +391,9 @@ cSPUISearchBox::~cSPUISearchBox() {
   ReleaseObj(mWinRoot);
   ReleaseObj(mWinParent);
   if (mLayout) ((FnV1)((VObj*)mLayout)->vt[8 / 4])(mLayout);
-  *(void**)((char*)this + 8) = (void*)0x13ec458;
-  *(void**)((char*)this + 4) = (void*)0x13eb394;
-  *(void**)this = (void*)0x13eb938;
+  *(void**)((char*)this + 8) = (void*)g_13ec458;
+  *(void**)((char*)this + 4) = (void*)g_13eb394;
+  *(void**)this = (void*)g_13eb938;
 }
 
 // @ 0x00672040
@@ -409,7 +420,7 @@ void cSPUISearchBox::Update_(int unused) {
 // @ 0x006720e0
 void cSPUISearchBox::EmptySearch() {
   if (mWinSearchBox) {
-    ((EString*)((char*)this + 0x58))->Assign((unsigned short*)0x13ec468, (unsigned short*)0x13ec468);
+    ((WStrAssignStub*)((char*)this + 0x58))->Assign((unsigned short*)g_13ec468, (unsigned short*)g_13ec468);
     ((FnV1p)((VObj*)mWinSearchBox)->vt[0x80 / 4])(mWinSearchBox, strBegin);
   }
 }
@@ -507,7 +518,7 @@ struct HFrameSet {
 // @ 0x00672400
 HFrameSet::HFrameSet() {
   m4 = 0;
-  vt = (void*)0x1400f30;
+  vt = (void*)g_1400f30;
   ((FrameSet*)&fs)->Ctor(0);
   m6c = 0;
   _ReadWriteBarrier();
@@ -515,11 +526,11 @@ HFrameSet::HFrameSet() {
 }
 // @ 0x00672440
 HFrameSet* HFrameSet::Destroy(unsigned char flags) {
-  vt = (void*)0x1400f30;
+  vt = (void*)g_1400f30;
   _ReadWriteBarrier();
   if (m6c) ((FnV1)((VObj*)m6c)->vt[1])(m6c);
   ((FrameSet*)&fs)->Dtor();
-  vt = (void*)0x13ec458;
+  vt = (void*)g_13ec458;
   if (flags & 1) operator_delete_(this);
   return this;
 }

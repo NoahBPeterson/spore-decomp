@@ -4,6 +4,10 @@
 // four cCommandBase-derived command ctors + their Execute bodies, and the
 // fixed_pool ctor of the resource object.
 // Flags: /O2 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15662e0[];
+
 #include "types.h"
 
 typedef unsigned char byte;
@@ -351,7 +355,7 @@ CmdActor::CmdActor() {
     *(void**)this = (void*)&vtbl_CmdActor;
     mSpec.Init(true);
     mSpec.ConstructSpec(
-        "Adds a controllable actor", ":positionType", (void*)0x15662e0,
+        "Adds a controllable actor", ":positionType", (void*)g_15662e0,
         "<actor:cstring>", &mActorName, "actor name",
         "<animations:int[]>", InitAnimations(mZero), "animations guids to play",
         "-noWait^", 0, "wait for animation to finish before moving on",
@@ -511,7 +515,7 @@ CmdVig::CmdVig() {
     *(void**)this = (void*)&vtbl_CmdVig;
     mSpec.Init(true);
     mSpec.ConstructSpec(
-        "Creates a vignette command to be processed later", ":positionType", (void*)0x15662e0,
+        "Creates a vignette command to be processed later", ":positionType", (void*)g_15662e0,
         "<actor:cstring>", &mActorName, "actor name",
         "<vignetteName:cstring>", &mVigName, "vignette identifier (name)",
         "<position:vector3>", &mPos,

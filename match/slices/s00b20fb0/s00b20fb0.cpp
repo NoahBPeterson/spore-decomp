@@ -1,5 +1,10 @@
 // Decompiled slice s00b20fb0 -- SP::cGameNounManager noun/game-data plumbing.
 // Reconstructed from the shipped binary; helper addresses noted per call.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1403934[];
+extern "C" char g_145ed3c[];
+
 #include <intrin.h>
 #include "types.h"
 
@@ -205,12 +210,12 @@ struct HtStrOwner {
 HtStrOwner* HtStrOwner::FUN_00b21180(uint8_t flags)
 {
   StrHt& table = mTable;
-  mpVtable = (void*)0x0145ed3c;
+  mpVtable = (void*)g_145ed3c;
   table.DoFreeBuckets(table.mpBuckets, table.mBucketCount);
   table.mSize = 0;
   if (table.mBucketCount > 1)
     operator delete[](table.mpBuckets);
-  mpVtable = (void*)0x01403934;
+  mpVtable = (void*)g_1403934;
   if (flags & 1)
     operator delete[](this);
   return this;

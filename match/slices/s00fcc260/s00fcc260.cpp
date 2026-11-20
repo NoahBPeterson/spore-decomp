@@ -1,5 +1,11 @@
 // slice s00fcc260 -- RenderWare rw::SList intrusive doubly-linked list.
 // Compile: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1491e4c[];
+extern "C" char g_1491e68[];
+extern "C" char g_1491ef8[];
+
 #include "types.h"
 
 extern "C" void MemFill8(void* dst, unsigned val, unsigned count);   // core::stdc::MemFill8
@@ -125,7 +131,7 @@ class SList { public:
 // @ 0x00fcce10
 SList::SList()
 {
-    vftable = (void*)0x1491ef8;
+    vftable = (void*)g_1491ef8;
     mHead = 0;
     mTail = 0;
     mLength = 0;
@@ -586,7 +592,7 @@ int SList::Permute(int* idx)
 void* SList::Dtor(unsigned flags)
 {
     mHead = 0;
-    vftable = (void*)0x1491e4c;
+    vftable = (void*)g_1491e4c;
     if (flags & 1)
         operator_delete(this);
     return this;
@@ -659,9 +665,9 @@ SNode* SList::LoadNewNode(int a, int b)
 // @ 0x00fccfb0
 void* SList::ScalarDeletingDtor(unsigned flags)
 {
-    vftable = (void*)0x1491ef8;
+    vftable = (void*)g_1491ef8;
     Clear(0);
-    vftable = (void*)0x1491e68;
+    vftable = (void*)g_1491e68;
     if (flags & 1)
         operator_delete(this);
     return this;

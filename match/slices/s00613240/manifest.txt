@@ -9,3 +9,6 @@ slices/s00613240/s00613240.cpp  ?insertHint@Elem16Vector@@QAEPAUElem16@@PAU2@ABU
 slices/s00613240/s00613240.cpp  ?HandleMessage@cListenerSet@@QAE_NPAD@Z  00613c60  /O2 /MD /Gy /TP /GS-
 slices/s00613240/s00613240.cpp  ??APropMap@@QAEAAUVariant@EA@@ABI@Z  00613d20  /O2 /MD /Gy /TP /GS-
 slices/s00613240/s00613240.cpp  ?FindOrInsert@Elem16Vector@@QAEPAPAUIRefObj@@AB_K@Z  00613dd0  /O2 /MD /Gy /TP /GS-
+slices/s00613240/s00613240.cpp  ?Shutdown@cListenerSet@@QAEXXZ  00613a10  /O2 /MD /Gy /TP /GS-
+slices/s00613240/s00613240.cpp  ?DoInsertValue@Elem16Vector@@QAEXPAUElem16@@ABU2@@Z  006133b0  /O2 /MD /Gy /TP /GS-
+slices/s00613240/s00613240.cpp  ?LookupByKey@cPollinatorLookup@@QAE_NPBUResourceKey@@PAPAUIRefObj@@_N@Z  006138b0  /O2 /MD /Gy /TP /GS-

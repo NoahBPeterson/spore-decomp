@@ -9,6 +9,10 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc: the string/hash_map locals get no EH frame).
 // The retail class is larger than the 2008 PDB layout (mpGameInfo at +0x628), so fields are named
 // by role at their retail offsets.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec468[];
+
 #include "types.h"
 #include <new>
 #include <string.h>
@@ -660,7 +664,7 @@ void cGalaxyGameEntryUIStateMachine::FUN_00df55b0(int mode)
 
     IWindow* window = view->mLayout54.FindWindowByID(0x42e2e38, true);
     if (window)
-        window->SetText((const wchar_t*)0x013ec468);
+        window->SetText((const wchar_t*)g_13ec468);
 
     window = view->mLayout54.FindWindowByID(0x431e538, true);
     if (window)

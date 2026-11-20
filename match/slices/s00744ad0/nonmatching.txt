@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00744be0  4   SetDynamicDraw: arg register-role assignment (ebx/ebp) swapped
 00744d80  122 SetEffectEnabled: effect-list traversal and vtable slot selection differ [equiv: WEAK (81% cov)]
 00745010  19  CheckFlag: field loaded via cmp instead of mov+test [equiv: UNSUPPORTED (0/1200 valid inputs)]
 00745050  29  SelectMesh: branch block ordering of the 0x9c/0xac selection differs [equiv: UNSUPPORTED (0/1200 valid inputs)]

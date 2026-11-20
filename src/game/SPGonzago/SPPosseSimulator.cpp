@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPPosseSimulator.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+#include <intrin.h>
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_147b7ec[];
+extern "C" char g_147b810[];
+extern "C" char g_169e5b8[];
+
 #include "game/types.h"
 #include <math.h>
 
@@ -26,6 +34,7 @@ extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int
 extern "C" void  __cdecl EA_Free(void* p);                          // 0xf47380
 extern "C" void* __cdecl SP_NounManager();                          // 0xb3d300
 extern "C" void* __cdecl SP_PropertyManager();                      // 0x67de30
+extern "C" void  __cdecl FUN_00b5b6c0();                            // SP::cGonzagoSimulator ctor
 extern "C" void  __cdecl FUN_00b234c0();                            // ClearPosseMembers
 extern "C" void  __cdecl FUN_00d01790();
 extern "C" void  __cdecl FUN_00b96600();
@@ -66,6 +75,7 @@ public:
     void* Dtor(unsigned int flags);
     void Shutdown();
     PosseSim* Init();
+    void OnTick(int arg1, int arg2);
 };
 typedef char PosseSimSizeCheck[sizeof(PosseSim) == 0x58 ? 1 : -1];
 void* operator new(unsigned int, const char*, int = 0, int = 0, int = 0, int = 0);
@@ -344,15 +354,15 @@ void RemovePosseMember(void* self, int member, char arg3, char arg4)
 void* PosseSim::Dtor(unsigned int flags)
 {
     PosseSim* self = this;
-    *(void**)self = (void*)0x147b810;
-    *(void**)((char*)self + 8) = (void*)0x147b7ec;
-    *(void**)0x169e5b8 = 0;
+    *(void**)self = (void*)g_147b810;
+    *(void**)((char*)self + 8) = (void*)g_147b7ec;
+    *(void**)g_169e5b8 = 0;
     Slot** e = *(Slot***)((char*)self + 0x20);
     if (e != 0 && e[-1] != 0) {
         EA_Free(e);
     }
-    *(void**)((char*)self + 8) = (void*)0x13eb938;
-    *(void**)self = (void*)0x13ec458;
+    *(void**)((char*)self + 8) = (void*)g_13eb938;
+    *(void**)self = (void*)g_13ec458;
     if (flags & 1) {
         EA_Free(self);
     }
@@ -376,11 +386,78 @@ void PosseSim::Shutdown()
     }
 }
 
+// ---- items for PosseSim::OnTick (0x00d53790)
+struct PosseNoun;
+struct PosseNounList {                                  // object returned by the noun manager
+    PosseNoun** mpBegin;                                // +0x00
+    PosseNoun** mpEnd;                                  // +0x04
+};
+struct PosseNounInfo {
+    char    mPad000[0x192];
+    uint8_t mField192;                                  // +0x192
+};
+struct PosseNounB4C {
+    void* mpField00;                                    // +0x00
+    char  mPad04[4];
+};
+struct PosseNoun {
+    char          mPad000[0x192];
+    uint8_t       mField192;                            // +0x192
+    char          mPad193[0xb4c - 0x193];
+    PosseNounB4C* mpFieldB4c;                           // +0xb4c
+    char          mPadB50[0xb58 - 0xb50];
+    uint32_t      mFlagsB58;                            // +0xb58
+    char          mPadB5C[0xb5e - 0xb5c];
+    uint8_t       mDeadB5e;                             // +0xb5e
+};
+extern int   gPosseTickKey;
+extern int   gPosseGroupKey;
+extern float gPosseEffectParam;
+void          PosseSim_TouchMember(PosseNoun* noun);                        // cdecl
+void          PosseSim_UpdateMember(PosseNoun* noun);                       // thiscall body
+int           PosseSim_MemberReady(PosseNoun* noun);                        // thiscall body
+int           PosseSim_MemberLeaving(PosseNoun* noun);                      // thiscall body
+extern "C" void* __cdecl FUN_00c04590();                                    // 0xc04590 Creature::Get
+void          PosseSim_QueueEffect(void*, int, int, float, int);            // thiscall body
+void* __stdcall PosseSim_FindGroup(void* key, int n);                       // stdcall
+void          PosseSim_SetGroupFlag(void* group);                           // thiscall body
+void          PosseSim_RemoveMember(PosseSim*, PosseNoun*, int, int);       // thiscall body
+// ---- items for PosseSim::OnTick end
+
 // @ 0x00d53790
-void PosseSim_OnTick(PosseSim* self, int arg1, int arg2)
+void PosseSim::OnTick(int arg1, int arg2)
 {
-    (void)self; (void)arg1; (void)arg2;
-    SP_NounManager();
+    (void)arg1; (void)arg2;
+    PosseSim* self = this;
+    PosseNounList* list = ((PosseNounList*(__thiscall*)(void*))FUN_00b1f9c0)(SP_NounManager());
+    if (list->mpBegin != list->mpEnd) {
+        PosseNoun** it = list->mpBegin;
+        PosseNoun** end = list->mpEnd;
+        while (it != end) {
+            PosseNoun* noun = *it;
+            noun->mFlagsB58 |= 0x100;
+            if (noun->mDeadB5e != 0) {
+                if (((int(__thiscall*)(PosseNoun*))PosseSim_MemberLeaving)(noun) == 0 ||
+                    ((PosseNounInfo*)((void*(__thiscall*)(PosseNoun*))FUN_00c04590)(noun))->mField192 == 0) {
+                    ((void(__thiscall*)(void*))PosseSim_SetGroupFlag)(
+                        ((void* (__stdcall*)(void*, int))PosseSim_FindGroup)((void*)0xfbf10c5eu, 1));
+                }
+                ((void(__thiscall*)(PosseSim*, PosseNoun*, int, int))PosseSim_RemoveMember)(self, noun, 1, 0);
+                end = list->mpEnd;
+            } else {
+                if (noun->mpFieldB4c->mpField00 != (void*)&gPosseTickKey) {
+                    PosseSim_TouchMember(noun);
+                    ((void(__thiscall*)(PosseNoun*))PosseSim_UpdateMember)(noun);
+                    if (((int(__thiscall*)(PosseNoun*))PosseSim_MemberReady)(noun) == 0 ||
+                        ((PosseNounInfo*)((void*(__thiscall*)(PosseNoun*))FUN_00c04590)(noun))->mField192 == 0) {
+                        ((void(__thiscall*)(void*, int, int, float, int))PosseSim_QueueEffect)(
+                            (void*)((char*)noun->mpFieldB4c + 8), 0, 0x20, gPosseEffectParam, 0);
+                    }
+                }
+                ++it;
+            }
+        }
+    }
 }
 
 // @ 0x00d53890
@@ -409,19 +486,20 @@ void** partition(void** first, void** last, int pivot, char (__cdecl* pred)(int,
 PosseSim* PosseSim::Init()
 {
     PosseSim* self = this;
-    SP_NounManager();  // placeholder; real base ctor 0xb5b6c0
+    ((void(__thiscall*)(void*))FUN_00b5b6c0)(self);  // SP::cGonzagoSimulator::cGonzagoSimulator
     *(void**)((char*)self + 0x18) = 0;
     *(void**)((char*)self + 0x1c) = 0;
-    *(void**)self = (void*)0x147b810;
-    *(void**)((char*)self + 8) = (void*)0x147b7ec;
+    *(void**)self = (void*)g_147b810;
+    *(void**)((char*)self + 8) = (void*)g_147b7ec;
     *(unsigned int*)((char*)self + 0x10) = 60000;
     *(float*)((char*)self + 0x14) = 20.0f;
+    _ReadWriteBarrier();
     *(void**)((char*)self + 0x34) = 0;
     Slot** base = (Slot**)((char*)self + 0x38);
     self->mpBegin = base;
     self->mpEnd = base;
-    self->mpCapacity = (Slot**)((char*)self + 0x58);
-    *(void**)0x169e5b8 = self;
+    self->mpCapacity = base + 8;
+    *(void**)g_169e5b8 = self;
     return self;
 }
 

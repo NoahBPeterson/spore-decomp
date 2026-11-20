@@ -1,6 +1,11 @@
 // slice s01179f60 -- statically linked OpenSSL 0.9.8g BIGNUM / RSA_sign core (lib_cblock).
 // Module flags: /O2 /MD /Gy /EHsc /TP  (same as the adjacent OpenSSL slice s01177a10).
 // Call targets are masked relocations, so only callee *signatures* matter.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_011910c0();
+extern "C" void FUN_01192e50();
+
 #include "types.h"
 
 typedef unsigned int u32;
@@ -485,7 +490,7 @@ void* __cdecl FUN_0117b100(int param_1)
 // ===========================================================================
 void __cdecl FUN_0117b1e0(int param_1, int param_2, int param_3, int param_4)
 {
-    FUN_01190020((void*)0x011910c0, "X509 CRL", param_1, param_2, param_3, param_4);
+    FUN_01190020((void*)FUN_011910c0, "X509 CRL", param_1, param_2, param_3, param_4);
 }
 
 // ===========================================================================
@@ -493,7 +498,7 @@ void __cdecl FUN_0117b1e0(int param_1, int param_2, int param_3, int param_4)
 // ===========================================================================
 void __cdecl FUN_0117b210(int param_1, int param_2, int param_3, int param_4)
 {
-    FUN_01190020((void*)0x01192e50, "DH PARAMETERS", param_1, param_2, param_3, param_4);
+    FUN_01190020((void*)FUN_01192e50, "DH PARAMETERS", param_1, param_2, param_3, param_4);
 }
 
 // ===========================================================================

@@ -71,19 +71,23 @@ struct hkReleaseCounts
 // @ 0x010a5830
 void hkJobQueue::releaseAll(hkReleaseCounts* counts)
 {
-	int n = counts->m_count04;
+	const int countA = counts->m_count04;
 	counts->m_count04 = 0;
-	if (n > 0) {
+	if (countA > 0) {
+		hkSemaphore* semaphore = &m_semA;
+		int n = countA;
 		do {
-			m_semA.release(1);
+			semaphore->release(1);
 			--n;
 		} while (n != 0);
 	}
-	n = counts->m_count08;
+	const int countB = counts->m_count08;
 	counts->m_count08 = 0;
-	if (n > 0) {
+	if (countB > 0) {
+		hkSemaphore* semaphore = &m_semB;
+		int n = countB;
 		do {
-			m_semB.release(1);
+			semaphore->release(1);
 			--n;
 		} while (n != 0);
 	}

@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/_at_00da0000.cpp  ?FUN_00da8580@@YAMPAUCreature@@HHHPAUBehaviorStimuli@@PAE@Z  00da8580  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00da0000.cpp  ?FUN_00da7f40@@YAXPAUCreature@@@Z  00da7f40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00da0000.cpp  ?FUN_00da5cf0@@YA_NPAUcSPCreatureCitizen@@PAX111PAM@Z  00da5cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00da0000.cpp  ?FUN_00da6610@@YAMPAUcSPCreatureCitizen@@@Z  00da6610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,5 +1,11 @@
 // Slice s00ed57e0 : stage/panel callout + mode-update helpers (UI panel).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -8,7 +14,7 @@ typedef unsigned int   u32;
 typedef          int   s32;
 
 // ------------------------------------------------------------------ retail data
-#define G16C7AA4       (*(void**)0x016c7aa4)          // app / scenario global
+#define G16C7AA4       (*(void**)g_16c7aa4)          // app / scenario global
 #define G16065F8       (*(const u8*)0x016065f8)
 #define G16065D8       (*(const u32*)0x016065d8)
 #define G16065DC       (*(const u32*)0x016065dc)
@@ -18,8 +24,8 @@ typedef          int   s32;
 #define F16C7704       (*(const float*)0x016c7704)
 #define F1485720       (*(const float*)0x01485720)     // _HK_REAL_ONE
 #define MAT_DEFAULT    ((void*)0x016c76d8)
-#define VTBL_13EB90C   ((void*)0x013eb90c)
-#define VTBL_13EB844   ((void*)0x013eb844)
+#define VTBL_13EB90C   ((void*)g_13eb90c)
+#define VTBL_13EB844   ((void*)g_13eb844)
 
 // ------------------------------------------------------------------ indirect-call shapes
 typedef void  (__thiscall* FnV0)(void*);

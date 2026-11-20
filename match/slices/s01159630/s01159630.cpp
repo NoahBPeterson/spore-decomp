@@ -1,5 +1,21 @@
 // Slice s01159630: rw::audio::core::HELPER_CEALayer3 scalefactor reader (ISO 11172-3 "III_get_scale_factors").
 // Flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15c3848[];
+extern "C" char g_16e8088[];
+extern "C" char g_16e808c[];
+extern "C" char g_16e8090[];
+extern "C" char g_16e8094[];
+extern "C" char g_16e8098[];
+extern "C" char g_16e809c[];
+extern "C" char g_16e80d0[];
+extern "C" char g_16e80d4[];
+extern "C" char g_16e80d8[];
+extern "C" char g_16e80dc[];
+extern "C" char g_16e80e0[];
+extern "C" char g_16e80e4[];
+
 #include "types.h"
 
 namespace rw { namespace audio { namespace core {
@@ -366,12 +382,12 @@ void ReaderTable_Init1()
 // @ 0x011597d0
 void ReaderTable_Init2()
 {
-    *(ReaderInitFn*)0x016e8094 = &Reader_Init_116bed0;
-    *(unsigned*)0x016e80dc      = 0x2c;
-    *(unsigned*)0x016e80e0      = 0x54;
-    *(ReaderInitFn*)0x016e8098 = &Reader_Init_116bdb0;
-    *(ReaderInitFn*)0x016e809c = &Reader_Init_116bb20;
-    *(unsigned*)0x016e80e4      = 0x3c;
+    *(ReaderInitFn*)g_16e8094 = &Reader_Init_116bed0;
+    *(unsigned*)g_16e80dc      = 0x2c;
+    *(unsigned*)g_16e80e0      = 0x54;
+    *(ReaderInitFn*)g_16e8098 = &Reader_Init_116bdb0;
+    *(ReaderInitFn*)g_16e809c = &Reader_Init_116bb20;
+    *(unsigned*)g_16e80e4      = 0x3c;
 }
 
 // ------------------------------------------------------------------ @ 0x01159810
@@ -379,12 +395,12 @@ void ReaderTable_Init2()
 // @ 0x01159810
 void ReaderTable_Init3()
 {
-    *(ReaderInitFn*)0x016e8088 = &Reader_Init_116c170;
-    *(unsigned*)0x016e80d0      = 0x28;
-    *(ReaderInitFn*)0x016e808c = &Reader_Init_116c0c0;
-    *(unsigned*)0x016e80d4      = 0x2c;
-    *(ReaderInitFn*)0x016e8090 = &Reader_Init_116c010;
-    *(unsigned*)0x016e80d8      = 0x34;
+    *(ReaderInitFn*)g_16e8088 = &Reader_Init_116c170;
+    *(unsigned*)g_16e80d0      = 0x28;
+    *(ReaderInitFn*)g_16e808c = &Reader_Init_116c0c0;
+    *(unsigned*)g_16e80d4      = 0x2c;
+    *(ReaderInitFn*)g_16e8090 = &Reader_Init_116c010;
+    *(unsigned*)g_16e80d8      = 0x34;
 }
 
 // ------------------------------------------------------------------ @ 0x01159850
@@ -392,7 +408,7 @@ void ReaderTable_Init3()
 // @ 0x01159850
 int InstallDoInsertValue(void* fn)
 {
-    *(void**)0x015c3848 = fn;
+    *(void**)g_15c3848 = fn;
     return 0;
 }
 

@@ -551,7 +551,8 @@ char CreatureBase::FUN_00c03010()
         else        r = GetSetting9_00401090()->f_004df830(key, p, loc);
         if (r != 0) {
             f_00ba5df0(key, loc);
-            key[0] = loc[0]; key[1] = loc[1]; key[2] = loc[2];
+            struct Key12 { uint32_t a, b, c; };
+            *(Key12*)key = *(Key12*)loc;
         }
         return r;
     }

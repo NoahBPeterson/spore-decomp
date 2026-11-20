@@ -1,4 +1,11 @@
 // Slice s00ecbb10 -- Sporepedia card data / asset helpers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+extern "C" char g_15abdd4[];
+extern "C" char g_15abdd8[];
+extern "C" char g_15abddc[];
+
 #include <intrin.h>
 #include "types.h"
 
@@ -227,9 +234,9 @@ int __cdecl FUN_00ecc100(int key)
 {
     int value = 0;
     Iter it;
-    Iter* result = ((TC_645ed0*)0x15abdd4)->find(&it, &key);
+    Iter* result = ((TC_645ed0*)g_15abdd4)->find(&it, &key);
     int* node = result->node;
-    if (node != *(int**)(*(char**)0x15abdd8 + *(int*)0x15abddc * 4))
+    if (node != *(int**)(*(char**)((char*)&g_15abdd4 + 0x4) + *(int*)((char*)&g_15abdd4 + 0x8) * 4))
         value = node[1];
     return value;
 }
@@ -253,7 +260,7 @@ void __fastcall FUN_00ecc920(S920* s)
 // @ 0x00ecc840
 bool __fastcall FUN_00ecc840(S_c8* s)
 {
-    void* p = FUN_00f473a0(0x5394, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    void* p = FUN_00f473a0(0x5394, (const char*)g_13f6b3c, 0, 0, 0, 0);
     s->mC8 = (VObj*)(p != 0 ? FUN_0080ba10(p) : 0);
     return 1;
 }

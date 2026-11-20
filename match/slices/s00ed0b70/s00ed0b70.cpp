@@ -1,5 +1,18 @@
 // Slice s00ed0b70 -- Scenario::AvatarPaletteItemUI and swatch/item UI glue.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14897d0[];
+extern "C" char g_1489948[];
+extern "C" char g_1489960[];
+extern "C" char g_14899e0[];
+extern "C" char g_14899f0[];
+extern "C" char g_1489a0c[];
+extern "C" char g_1489a3c[];
+extern "C" char g_1489a50[];
+extern "C" void FUN_00ed1cf0();
+extern "C" char g_13fcab8[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -181,14 +194,14 @@ void* __fastcall FUN_00ed1250(void* self)
 {
     char* p = (char*)self;
     FUN_00ecf150(self);
-    *(void**)p = (void*)0x1489a50;
-    *(void**)(p + 8) = (void*)0x1489a3c;
-    *(void**)(p + 0x24) = (void*)0x1489a0c;
-    *(void**)(p + 0x30) = (void*)0x14899f0;
-    *(void**)(p + 0x34) = (void*)0x14899e0;
-    *(void**)(p + 0x44) = (void*)0x14897d0;
-    *(void**)(p + 0x6c) = (void*)0x1489960;
-    *(void**)(p + 0x70) = (void*)0x1489948;
+    *(void**)p = (void*)g_1489a50;
+    *(void**)(p + 8) = (void*)g_1489a3c;
+    *(void**)(p + 0x24) = (void*)g_1489a0c;
+    *(void**)(p + 0x30) = (void*)g_14899f0;
+    *(void**)(p + 0x34) = (void*)g_14899e0;
+    *(void**)(p + 0x44) = (void*)g_14897d0;
+    *(void**)(p + 0x6c) = (void*)g_1489960;
+    *(void**)(p + 0x70) = (void*)g_1489948;
     *(int*)(p + 0x10) = (int)0xfffffffe;
     *(int*)(p + 0x14) = (int)0xe34e8a60;
     return self;
@@ -457,10 +470,10 @@ void* Obj1120::f(int a1, int a2, int a3, int a4, int a5, int a6, int a7)
 {
     ((Fn00929e70*)this)->fn(0, 0, a4, a5, a6, a7, 0);
     f28 = (void*)a1;
-    vtbl = (void*)0x13fcab8;
+    vtbl = (void*)g_13fcab8;
     f2c = (void*)a2;
     f24 = (void*)a3;
-    ((Fn00929da0*)this)->fn((void*)0xed1cf0, this, 0);
+    ((Fn00929da0*)this)->fn((void*)FUN_00ed1cf0, this, 0);
     return this;
 }
 

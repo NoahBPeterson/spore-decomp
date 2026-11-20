@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPTribeModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00bc36d0();
+extern "C" void FUN_00cd45c0();
+extern "C" char g_14774c4[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include "SP/cCommunity.h"
@@ -2901,7 +2908,7 @@ struct CActTarget {
 struct CTerrain {
     char pad[0x1150];
     int mCityHallPos[3];                                         // +0x1150
-    unsigned char F772c0(int key);       // 0x00c772c0
+    unsigned char HasFlag(int key);       // 0x00c772c0
     void F77300(int a);                  // 0x00c77300
     void F77380(int key, int* out);      // 0x00c77380
     void F77bf0(int a);                  // 0x00c77bf0
@@ -2987,7 +2994,7 @@ struct TM {
     void F_cd43c0(void* a);
     bool F_cd4490();
     unsigned int F_cd4460(int a);
-    unsigned int F_cd44a0();
+    bool F_cd44a0();
     unsigned int F_cd44e0(void* a, void* b);
     // PostTerrainAction is a free cdecl function (see below).
     void F_cd3e60();
@@ -3991,16 +3998,17 @@ done0:
 TM::TM()
 {
     M_b70820();
-    *(void**)this = g_vt147734c;
-    *(void**)((char*)this + 8) = g_vt1477328;
-    *(void**)((char*)this + 0x10) = g_vt1477318;
-    *(int*)((char*)this + 0x74) = 0;
-    *(float*)((char*)this + 0x88) = g_fltOne;
-    *(float*)((char*)this + 0x8c) = g_fltTwo;
-    *(int*)((char*)this + 0x84) = 0;
-    *(int*)((char*)this + 0x90) = 0;
-    *(int*)((char*)this + 0x80) = 1;
-    *(void**)((char*)this + 0x7c) = g_vt154df28;
+    float one = g_fltOne;
+    *(void* volatile*)this = g_vt147734c;
+    *(void* volatile*)((char*)this + 8) = g_vt1477328;
+    *(void* volatile*)((char*)this + 0x10) = g_vt1477318;
+    *(volatile int*)((char*)this + 0x74) = 0;
+    *(volatile float*)((char*)this + 0x88) = one;
+    *(volatile float*)((char*)this + 0x8c) = g_fltTwo;
+    *(volatile int*)((char*)this + 0x84) = 0;
+    *(volatile int*)((char*)this + 0x90) = 0;
+    *(volatile int*)((char*)this + 0x80) = 1;
+    *(void* volatile*)((char*)this + 0x7c) = g_vt154df28;
     g_169b27c = (uint32_t)this;
 }
 
@@ -4264,7 +4272,7 @@ void TM::StartTribe()
     ((CAch*)AchievementsController())->F(0xd082675a, 4, 1);
 }
 
-// @ 0x00cd43c0
+// Legacy copy; byte-exact definition is in match/slices/s00cd3480/s00cd3480.cpp.
 void TM::F_cd43c0(void* a)
 {
     C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, a);
@@ -4291,7 +4299,7 @@ unsigned int TM::F_cd4460(int a)
 {
     CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
     if (s != 0) {
-        if (s->F772c0(a))
+        if (s->HasFlag(a))
             return 1;
     }
     return 0;
@@ -4304,14 +4312,11 @@ bool TM::F_cd4490()
 }
 
 // @ 0x00cd44a0
-unsigned int TM::F_cd44a0()
+bool TM::F_cd44a0()
 {
     CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
-    if (s != 0) {
-        if (s->F772c0(0x056d1871))
-            return 0;
-    }
-    return 1;
+    int hasKey = s != 0 && s->HasFlag(0x056d1871);
+    return (char)hasKey == 0;
 }
 
 // @ 0x00cd44e0
@@ -4540,7 +4545,7 @@ char CTribeMode::FUN_00cd4c70(int)
     char* self = (char*)this;
     void* app = App();
     app = (*(void*(__fastcall**)(void*))(*(int*)app + 0x50))(app);
-    ((TC2v)VSLOT(app, 0x20))(app, 0x4c6a8d6, (void*)0xbc36d0);
+    ((TC2v)VSLOT(app, 0x20))(app, 0x4c6a8d6, (void*)FUN_00bc36d0);
     void* server = FUN_00883860();
     void* h = self ? (void*)(self + 8) : 0;
     *(void**)(self + 0x1cc) = server;
@@ -4572,9 +4577,9 @@ NOINLINE char __fastcall FUN_00cd4d50(char* self, int)
 {
     void* a = FUN_00b3d3c0();
     ((CExt72880*)a)->call();
-    void* c = FUN_00b3d240(0xcd45c0);
+    void* c = FUN_00b3d240((int)FUN_00cd45c0);
     ((CExt33ce0*)c)->call();
-    void* d = FUN_00b3d240(0xcd46d0);
+    void* d = FUN_00b3d240((int)&FUN_00cd46d0);
     ((CExt33cf0*)d)->call();
     ((CExtBC3170*)(self + 0x1a8))->call();
     return 1;
@@ -5932,7 +5937,7 @@ void cVec16::FUN_00cdafb0(Rec16* src)
     if (end < mpCap) {
         mpEnd = end + 1;
         if (end != 0) {
-            end->mpVtbl = (void*)0x14774c4;
+            end->mpVtbl = (void*)g_14774c4;
             end->mU_04 = src->mU_04;
             void* obj = src->mpObj;
             end->mpObj = obj;
@@ -6016,7 +6021,7 @@ void cTribeModeStrategy_s00cd_ab10::FUN_00cdb3a0(u32 a1, u32 a2)
         ((cVec16*)((u8*)this + 0x40))->FUN_00cdafb0(
             (Rec16*)MOPS(recbuf)->FUN_00cd4720(a1, a2));
         Rec16* rec = (Rec16*)recbuf;
-        rec->mpVtbl = (void*)0x14774c4;
+        rec->mpVtbl = (void*)g_14774c4;
         void* obj = rec->mpObj;
         if (obj != 0)
             ((void (__thiscall*)(void*))VT(obj)[1])(obj);
@@ -6032,17 +6037,17 @@ void cVec1c::FUN_00cdb430()
     if (end < mpCap) {
         mpEnd = end + 1;
         if (end != 0) {
-            end->mpBegin = (void*)0x1667bac;
-            end->mpEnd   = (void*)0x1667bac;
-            end->mpCap   = (void*)0x1667bae;
+            end->mpBegin = (void*)g_1667bac;
+            end->mpEnd   = (void*)g_1667bac;
+            end->mpCap   = (void*)g_1667bae;
             end->mU_14 = 0;
             end->mU_18 = 0;
         }
     } else {
         Rec1c tmp;
-        tmp.mpBegin = (void*)0x1667bac;
-        tmp.mpEnd   = (void*)0x1667bac;
-        tmp.mpCap   = (void*)0x1667bae;
+        tmp.mpBegin = (void*)g_1667bac;
+        tmp.mpEnd   = (void*)g_1667bac;
+        tmp.mpCap   = (void*)g_1667bae;
         tmp.mU_14 = 0;
         tmp.mU_18 = 0;
         FUN_00cdb1f0(end, &tmp);
@@ -6303,7 +6308,7 @@ cHut* SP::cTribeModeStrategy_s00cd_bb10::FindClosestNPCHut(uint32_t param)
 {
     cGameNounManager_s00cd_bb10* nm = NounManager_s00cd_bb10();
     NounManagerData* data = nm->GetGameDataVector(
-        0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00accbb0, (int)&FUN_00b1e500, 0x18c6d19);
     cTribe_s00cd_bb10* tribe = FindClosestNPC(&data->mVector, param, SP::IsNonEmptyNPCTribe);
     if (tribe)
         return tribe->GetTribeHut();
@@ -6681,8 +6686,9 @@ void cTribeModeStrategy_s00cd_d500::PreGameModeTransition(u32 previousMode, u32 
 s32 FUN_00cdd960()
 {
     void* pTribe = NounManager_s00cd_d500()->GetPlayerTribe();
+    cGameNounManager_s00cd_d500* pMgr = NounManager_s00cd_d500();
     PtrVec_s00cd_d500<cNoun>* pItems =
-        &((NounVecOut<cNoun>*)NounManager_s00cd_d500()->GetGameDataVector(F_cd7d10, F_d3d420, F_accc30, F_b1e500, 0x1be418e))->mItems_04;
+        &((NounVecOut<cNoun>*)pMgr->GetGameDataVector(F_cd7d10, F_d3d420, F_accc30, F_b1e500, 0x1be418e))->mItems_04;
 
     cNoun** pIt = pItems->mpBegin;
     cNoun** const pEnd = pItems->mpEnd;

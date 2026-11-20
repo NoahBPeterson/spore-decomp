@@ -288,8 +288,9 @@ bool ResourceDeviceDriver::KeyToText(uint8_t* key, char* text, uint32_t* size) {
     do {
         uint8_t b = *key++;
         *text++ = (char)((b & 0xf) + 'A');
+        --n;
         *text++ = (char)((b >> 4) + 'A');
-    } while (--n);
+    } while (n != 0);
     *text = 0;
     *size = 0x20;
     return true;

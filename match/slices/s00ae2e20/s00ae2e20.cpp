@@ -564,11 +564,8 @@ Desc* Desc::CopyFrom(const Desc* s)
     d->m58 = s->m58;
     d->m5c = s->m5c;
     d->m60 = s->m60;
-    if (d->m60 != 0) {
-        volatile long* p = (volatile long*)((char*)d->m60 + 8);
-        long one = 1;
-        _InterlockedExchangeAdd(p, one);
-    }
+    if (d->m60 != 0)
+        _InterlockedIncrement((volatile long*)((char*)d->m60 + 8));
     return d;
 }
 

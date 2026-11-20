@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPTribeGameBehaviorMate.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00d773c0();
+extern "C" char g_147bf18[];
+
 #include "game/types.h"
 #include "SP/cSPCreatureCitizen.h"
 
@@ -86,10 +90,10 @@ bool TRIBE_MATE_Activate(Creature* self, int, int, int, int, Holder* holder)
 
     void* watched = WatchMemoryBlock(((OrderMgrPlay*)self->mOrderMgr)->mApi.Play(0x20000, 0));
 
-    void* node = ((OrderMgr*)FUN_00bc9b00())->FindNode(0x4e3feef, (void*)0xd773c0, holder);
+    void* node = ((OrderMgr*)FUN_00bc9b00())->FindNode(0x4e3feef, (void*)FUN_00d773c0, holder);
     void* ebp;
     if (node == 0) {
-        void* n2 = ((OrderMgr*)FUN_00bc9b00())->Func_bcb0b0(0x4e3feef, 2, 0x18eb4b7, (const char*)0x147bf18);
+        void* n2 = ((OrderMgr*)FUN_00bc9b00())->Func_bcb0b0(0x4e3feef, 2, 0x18eb4b7, (const char*)g_147bf18);
         node = n2;
         ((Node*)node)->m1A4 = 0.0f;
         ebp = self;
@@ -99,7 +103,7 @@ bool TRIBE_MATE_Activate(Creature* self, int, int, int, int, Holder* holder)
 
     if (!((Node*)node)->Func_bc9b50()
         && (watched == 0 || ebp == self || ebp == watched || self == watched)) {
-        ((OrderMgr*)self->mOrderMgr)->Func_bcb480(node, self, holder, (void*)0xd773c0);
+        ((OrderMgr*)self->mOrderMgr)->Func_bcb480(node, self, holder, (void*)FUN_00d773c0);
         ((void (__thiscall*)(VtblObj*, int))self->mVec.mVtbl[0x54 / 4])(&self->mVec, 0);
         holder->m0 = 1;
         self->Func_c0b970(0.0f);

@@ -42,7 +42,6 @@
                two Mutex placements, SYSTEM_INFO probe, cleanup path).  The allocator's Alloc
                slot is loaded into a register before the call, as in the original.  difftest PASSes.
                flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
-0112cd30   7  NodeList::find: semantically identical; ours tests m_id before loading the
                next pointer, the original loads next first (pure scheduling).
                flags /O2 /MD /Gy /EHsc /TP
 0112cd60  57  NodeList::insert: list splice is exact; the original walks with the sentinel

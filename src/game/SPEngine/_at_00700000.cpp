@@ -3,6 +3,10 @@
 // CellArray) and cCellList, the spatial cell list that owns five byte vectors, three
 // pointer vectors and a 0x7c-byte record vector.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_140c460[];
+
 #include "game/types.h"
 #include <xmmintrin.h>
 #include <string.h>
@@ -203,9 +207,9 @@ CellArray::CellArray(const SpCellRecord* src, unsigned n)
 // Releases the element storage, then the object itself when asked, and returns this.
 void* CellArray::Destroy(unsigned flags)
 {
-    vt = (void*)0x140c460;      // CellArray vtable
+    vt = (void*)g_140c460;      // CellArray vtable
     EASTL_allocator_deallocate(data);
-    vt = (void*)0x13ef094;      // base vtable
+    vt = (void*)g_13ef094;      // base vtable
     if (flags & kDestroyFreeThis)
         EASTL_allocator_deallocate(this);
     return this;

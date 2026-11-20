@@ -95,7 +95,7 @@ struct AnnotN {                       // cAnnotation with the inline default cto
 struct Annot {
     float value;
     WString str;
-    Annot() { InitEmpty(); }
+    Annot() { InitEmpty(); }          // @ 0x0056afc0 (default)
     Annot(AnnotN& src);               // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
     Annot(Annot& src);                // @ 0x0056b020 (copy)
@@ -298,7 +298,7 @@ struct WStr_s0056_b680 {                         // eastl::basic_string<wchar_t>
 struct WStrSrc_s0056_b680 {                      // weight + description string (by-value arg of cFeatureVector::AddDescribed)
     float value;
     WStr_s0056_b680 str;
-    WStrSrc_s0056_b680() { InitEmpty(); }
+    WStrSrc_s0056_b680() { InitEmpty(); }        // @ 0x0056afc0 (default)
     WStrSrc_s0056_b680(WStrSrc_s0056_b680& src);            // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
 };
@@ -1025,7 +1025,7 @@ struct WStr_s0056_c570 {                         // eastl::basic_string<wchar_t>
 struct WStrSrc_s0056_c570 {                      // weight + description string (by-value arg of cFeatureVector::AddDescribed)
     float value;
     WStr_s0056_c570 str;
-    WStrSrc_s0056_c570() { InitEmpty(); }
+    WStrSrc_s0056_c570() { InitEmpty(); }        // @ 0x0056afc0 (default)
     WStrSrc_s0056_c570(WStrSrc_s0056_c570& src);            // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
 };
@@ -1198,7 +1198,6 @@ virtual void v5();
 // ---- items of slice s0056d2b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cFeatureVector_s0056_d2b0 { float add(const cID& id, float weight); };   // @ 0x00571790
 struct Alloc_s0056_d2b0 { char pad[1]; Alloc_s0056_d2b0() {} };
-struct Alloc17 { char pad[1]; Alloc17() {} };
 struct Vec3_s0056_d2b0 { float x, y, z; };
 struct Block_s0056_d2b0 {                       // creature part, 0x1d8 bytes
     char pad0[0xd4];
@@ -1224,13 +1223,11 @@ struct SwatchVecBase {
     Vec3_s0056_d2b0* mpBegin; Vec3_s0056_d2b0* mpEnd; Vec3_s0056_d2b0* mpCapacity; uint32_t mAlloc[2];
     SwatchVecBase() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
     SwatchVecBase(const Alloc_s0056_d2b0& a);   // 0x00540470
-    SwatchVecBase(const Alloc17& a);   // 0x00540470
 };
 struct cSwatchColorLookupB {
     SwatchVecBase mTabColors;
     cSwatchColorLookupB() {}
     cSwatchColorLookupB(const Alloc_s0056_d2b0& a) : mTabColors(a) {}
-    cSwatchColorLookupB(const Alloc17& a) : mTabColors(a) {}
     bool Init();                     // @ 0x0056cde0
     unsigned GetAllocated(const void* a);   // @ 0x0056cf70
 };
@@ -1264,7 +1261,7 @@ struct WString_s0056_d2b0 {
 struct Annot_s0056_d2b0 {
     float value;
     WString_s0056_d2b0 str;
-    Annot_s0056_d2b0() { InitEmpty(); }
+    Annot_s0056_d2b0() { InitEmpty(); }          // @ 0x0056afc0 (default)
     Annot_s0056_d2b0(Annot_s0056_d2b0& src);               // @ 0x0056b020 (copy)
     void InitEmpty();                // @ 0x0056afc0
 };
@@ -2084,14 +2081,16 @@ bool cTextureClassifier::ExtractTraits(Creature_s0056_c570* creature, float** we
     return result;
 }
 
+struct cSwatchColorLookupD : cSwatchColorLookupB {
+    cSwatchColorLookupD() : cSwatchColorLookupB(Alloc_s0056_d2b0()) {}
+};
 // @ 0x0056d2b0
 bool cRegionColorClassifier::DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out)
 {
     bool result = false;
     if (c) {
         if (!gSwatchColors_s0056_d2b0) {
-            ScratchSlots<1>();
-            cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupB(Alloc17());
+            cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupD;
             if (lookup->Init())
                 gSwatchColors_s0056_d2b0 = lookup;
             else
@@ -2102,7 +2101,7 @@ bool cRegionColorClassifier::DescribeTraits(Creature_s0056_d2b0* c, float** weig
             cID id;
             id.cls = 0x52b27b5;
             DescSrc d;
-            ScratchSlots<75>();
+            ScratchSlots<76>();
             d.value = 33.333f;
             id.type = gSwatchColors_s0056_d2b0->GetAllocated(&c->mColor0);
             WStr_Format(&d.str, L"(%ls) %d: swatch %d", GetName(), 0, c->mColor0);
@@ -2182,7 +2181,7 @@ bool cBaseColorClassifier::DescribeTraits(Creature_s0056_d2b0* c, float** weight
     bool result = false;
     if (c) {
         if (!gSwatchColors_s0056_d2b0) {
-                        cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupB(Alloc_s0056_d2b0());
+            cSwatchColorLookupB* lookup = new ("OTDB", 0, 0, 0, 0) cSwatchColorLookupD;
             if (lookup->Init())
                 gSwatchColors_s0056_d2b0 = lookup;
             else

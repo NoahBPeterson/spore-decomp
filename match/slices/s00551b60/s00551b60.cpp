@@ -340,8 +340,8 @@ template <class T> struct basic_string {
 typedef basic_string<char> string;
 typedef basic_string<wchar_t> string16;
 
-// 0x00554FB0
-template <class T> inline bool operator==(const basic_string<T>& a, const basic_string<T>& b)
+template <class T> inline bool operator==(const basic_string<T>& a, const basic_string<T>& b)   // 0x00554FB0
+
 {
     return ((a.size() == b.size()) && (memcmp(a.data(), b.data(), (unsigned int)a.size()) == 0));
 }

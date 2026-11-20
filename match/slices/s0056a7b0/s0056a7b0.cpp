@@ -93,7 +93,7 @@ struct AnnotN {                       // cAnnotation with the inline default cto
 struct Annot {
     float value;
     WString str;
-    Annot() { InitEmpty(); }
+    Annot() { InitEmpty(); }          // @ 0x0056afc0 (default)
     Annot(AnnotN& src);               // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
     Annot(Annot& src);                // @ 0x0056b020 (copy)

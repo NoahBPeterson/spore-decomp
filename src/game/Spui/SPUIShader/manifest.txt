@@ -19,3 +19,4 @@
 ../src/game/Spui/SPUIShader.cpp  ?emplace@Vec4vector@@QAEPAUVec4@@PAU2@ABU2@@Z  0082f3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIShader.cpp  ?GetShaderProxy@@YAPAXXZ  0082f6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIShader.cpp  ?ReleaseRef@LayerWinProc@@QAEHXZ  0082eba0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIShader.cpp  ?LayerWinProcCtor@@YIPAULayerWinProc@@PAU1@@Z  0082ebd0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include

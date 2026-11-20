@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPMissionBiosphere.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f01bc[];
+extern "C" char g_146da54[];
+extern "C" char g_146da64[];
+extern "C" char g_146da78[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cPlanet.h"
@@ -714,9 +722,9 @@ cSPMissionBiosphere_s00c4_cb90* __fastcall cMissionBiosphere_ctor(cSPMissionBios
     this_->FUN_00c48e90();
     this_->mEventID_1f4 = 1;
     this_->mCount_200 = 1;
-    *(u32*)this_ = 0x146da78;
-    *(u32*)((char*)this_ + 0x04) = 0x146da64;
-    *(u32*)((char*)this_ + 0x34) = 0x146da54;
+    *(u32*)this_ = (int)g_146da78;
+    *(u32*)((char*)this_ + 0x04) = (int)g_146da64;
+    *(u32*)((char*)this_ + 0x34) = (int)g_146da54;
     this_->mState_1f0 = 0;
     this_->mThreshold_1f8 = 0;
     this_->mThreshold_1fc = 0;
@@ -725,9 +733,9 @@ cSPMissionBiosphere_s00c4_cb90* __fastcall cMissionBiosphere_ctor(cSPMissionBios
     this_->mCount_20c = 5;
     this_->mCount_210 = 0;
     this_->mTimer_218.FUN_00b63890();
-    this_->mVector_238.mpBegin = (::cHerd**)0x1667bac;
-    this_->mVector_238.mpEnd = (::cHerd**)0x1667bac;
-    this_->mVector_238.mpCapacity = (::cHerd**)0x1667bae;
+    this_->mVector_238.mpBegin = (::cHerd**)g_1667bac;
+    this_->mVector_238.mpEnd = (::cHerd**)g_1667bac;
+    this_->mVector_238.mpCapacity = (::cHerd**)g_1667bae;
     _ReadWriteBarrier();
     this_->mHerds_248.mpBegin = 0;
     this_->mHerds_248.mpEnd = 0;
@@ -827,14 +835,13 @@ void __fastcall FUN_00c4c690(cSPMissionBiosphere_s00c4_cb90* this_, int unused, 
         this_->UpdateEventLog(2, 0xd19969f6);
         return;
     }
-    int cur = ++this_->mCount_210;
-    int max = this_->mCount_20c;
-    int remaining = max - cur - 1;
-    if ((unsigned)remaining <= 2) {
+    this_->mCount_210++;
+    int remaining = this_->mCount_20c - this_->mCount_210;
+    if (remaining >= 1 && remaining <= 3) {
         this_->UpdateEventLog(0, 0xbf13693a);
         return;
     }
-    if (cur < max)
+    if (this_->mCount_210 < this_->mCount_20c)
         this_->UpdateEventLog(0, 0xed4727a9);
 }
 }  // namespace SP
@@ -854,23 +861,23 @@ bool __fastcall FUN_00c4c850(cSPMissionBiosphere_s00c4_cb90* this_, int unused,
                              u32 eventID, void* pParam)
 {
     if (eventID == 0x3f80b6b3) {
-        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_204);
+        WStr_Format(pParam, (const void*)g_13f01bc, this_->mCount_204);
         return true;
     }
     if (eventID == 0xcd3e21a2) {
-        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_208);
+        WStr_Format(pParam, (const void*)g_13f01bc, this_->mCount_208);
         return true;
     }
     if (eventID == 0xc1a31746) {
-        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_204 - this_->mCount_208);
+        WStr_Format(pParam, (const void*)g_13f01bc, this_->mCount_204 - this_->mCount_208);
         return true;
     }
     if (eventID == 0xd34ef208) {
-        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_210);
+        WStr_Format(pParam, (const void*)g_13f01bc, this_->mCount_210);
         return true;
     }
     if (eventID == 0xbd31ee03) {
-        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_20c - this_->mCount_210);
+        WStr_Format(pParam, (const void*)g_13f01bc, this_->mCount_20c - this_->mCount_210);
         return true;
     }
     return this_->FUN_00c491c0(eventID, pParam);

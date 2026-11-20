@@ -1293,7 +1293,7 @@ void* AttrP1c(int* p)
         int* q = FindByKey(p, 0x3ec2e62);
         if (q != 0) return (char*)q + 0x1c;
     }
-    return (void*)0x1544384;
+    return (void*)&DAT_01544384;
 }
 
 // @ 0x00805290
@@ -1414,7 +1414,7 @@ void FixedAlloc::FixedFree(void* p, int flags)
         *(int**)(block + 0x10) = base;
         return;
     }
-    void* alloc = *(void**)0x164c4b8;
+    void* alloc = *(void**)&DAT_0164c4b8;
     (*(void(__thiscall**)(void*, int*, int))VSlot(alloc, 0xc))(alloc, base, 0);
 }
 
@@ -2001,17 +2001,19 @@ void SetWindowAreaToParent(W_s0080_68d0* w)
     w->m6c(r);
 }
 
+struct Vec2_806c60 {
+    float x, y;
+    Vec2_806c60(float ax, float ay) : x(ax), y(ay) {}
+};
 // @ 0x00806c60
-float* FUN_00806c60(float* out, void* wp)
+Vec2_806c60 FUN_00806c60(void* wp)
 {
     W_s0080_68d0* w = (W_s0080_68d0*)wp;
-    out[0] = 0; out[1] = 0;
-    if (w == 0) return out;
-    float* a = (float*)w->v34();
-    out[0] = a[0];
-    float* b = (float*)w->v34();
-    out[1] = b[1];
-    return out;
+    Vec2_806c60 r(0.0f, 0.0f);
+    if (w == 0) return r;
+    r.x = ((float*)w->v34())[0];
+    r.y = ((float*)w->v34())[1];
+    return r;
 }
 
 // @ 0x00806ca0

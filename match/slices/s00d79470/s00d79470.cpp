@@ -7,8 +7,15 @@
 // +0x2c, the agent-info map at +0x74, mUpdateConfiguration at +0x100), so members are named by
 // retail offset. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc: the local fixed_vector
 // gets no EH frame).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147bda0[];
+extern "C" char g_147bdb0[];
+
 #include <math.h>
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 void operator delete[](void* p);   // 0x00f47380
 
@@ -429,8 +436,8 @@ bool __fastcall IsEditorActionAvailableFast(cEditorGameObject* p); // 0x00c0bb90
 // @ 0x00d79fd0
 void cEditorGameObject::Destroy()
 {
-    mpVtable0 = (void*)0x147bdb0;
-    mpVtable4 = (void*)0x147bda0;
+    mpVtable0 = (void*)g_147bdb0;
+    mpVtable4 = (void*)g_147bda0;
     BaseDestroy();
 }
 
@@ -545,14 +552,12 @@ float CanStartEditorAction(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_
 float IsD51660BitClear()
 {
     cD51660Result* result = LookupD51660();
-    if (result == 0)
-        goto return_zero;
-    uint32_t shifted = result->mFlags6c >> 1;
-    shifted &= 1;
-    if (shifted != 0)
-        goto return_zero;
-    return 1.0f;
-return_zero:
+    if (result) {
+        uint32_t shifted = result->mFlags6c >> 1;
+        _ReadWriteBarrier();
+        bool isSet = (shifted & 1) != 0;
+        if (!isSet) return 1.0f;
+    }
     return 0.0f;
 }
 

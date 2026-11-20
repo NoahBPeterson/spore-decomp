@@ -4,6 +4,12 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_146837c[];
+extern "C" char g_1468380[];
+extern "C" char g_14683d0[];
+
 #include "types.h"
 #include <intrin.h>
 #include <stddef.h>
@@ -70,10 +76,10 @@ extern "C" void __cdecl FUN_00c2e4e0(void*, int);
 struct cGonzagoSubsystem { void Destroy(); };
 void __fastcall FUN_00bd70b0(int* this_)
 {
-    this_[0] = 0x14683d0;
+    this_[0] = (int)g_14683d0;
     int* sub = this_ + 1;
-    sub[0] = 0x1468380;
-    this_[2] = 0x146837c;
+    sub[0] = (int)g_1468380;
+    this_[2] = (int)g_146837c;
     _ReadWriteBarrier();
     int h = this_[9];
     if (h != 0) {
@@ -81,7 +87,7 @@ void __fastcall FUN_00bd70b0(int* this_)
         FUN_00bd571db0(h, this_[10], this_[0xb], this_[0xc], this_[0xd]);
     }
     ((cGonzagoSubsystem*)sub)->Destroy();
-    this_[0] = 0x13eb394;
+    this_[0] = (int)g_13eb394;
 }
 
 // ===========================================================================
@@ -312,6 +318,15 @@ void __cdecl FUN_00bd7640(int param_1, int param_2)
         if (iVar1 != 0) FUN_00bd69d0((void*)param_1);
         if (iVar2 != 0) FUN_00bd6940((void*)param_1);
         break;
+    case 0x1f46:
+    case 0x1f47:
+    case 0x1f48:
+    case 0x1f49:
+    case 0x1f4a:
+    case 0x1f4b:
+        DAT_0168bcfc = param_2;
+        FUN_00bd68c0((void*)param_1);
+        return;
     case 0x1f41:
     case 0x1f42:
     case 0x1f43:
@@ -323,15 +338,6 @@ void __cdecl FUN_00bd7640(int param_1, int param_2)
             return;
         }
         break;
-    case 0x1f46:
-    case 0x1f47:
-    case 0x1f48:
-    case 0x1f49:
-    case 0x1f4a:
-    case 0x1f4b:
-        DAT_0168bcfc = param_2;
-        FUN_00bd68c0((void*)param_1);
-        return;
     case 0x1f4c:
         DAT_0168bcf4 = (DAT_0168bcf4 == 0);
         return;

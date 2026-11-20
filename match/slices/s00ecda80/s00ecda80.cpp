@@ -1,5 +1,9 @@
 // Slice s00ecda80 (bfs3 slice 23) -- SP editor palette/swatch UI + scenario helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15ad328[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -225,10 +229,12 @@ void __fastcall FUN_00ecdb90(int* p)
 
 // ============================================================ 0x00ecdbb0
 // @ 0x00ecdbb0
-void __fastcall FUN_00ecdbb0(int p)
+int __fastcall FUN_00ecdbb0(int p)
 {
-    if (*(int*)(p + 0x14) == (int)0x867a9ee9)
-        FUN_00eece20(p + 0x18);
+    int r = *(int*)(p + 0x14);
+    if (r == (int)0x867a9ee9)
+        r = FUN_00eece20(p + 0x18);
+    return r;
 }
 
 // ============================================================ 0x00ecdc20
@@ -496,7 +502,7 @@ void PaletteItemUI_ece200::DoMessage(void* msg, PaletteMessage* data)
         if (((int(__thiscall*)(void*))VTB(msg, 0x1c))(msg) == 0x4a1cb6e &&
             data->mValue18 == 0x3ea) {
             int handle = ((PaletteItemHandle*)((char*)this - 0x20))->mHandle00;
-            ((SysAT_15ad328*)0x015ad328)->FUN_00f00380(handle);
+            ((SysAT_15ad328*)g_15ad328)->FUN_00f00380(handle);
             if (handle == -2)
                 ((PaletteMgr*)g_pGameMgr_16c7aa4)->mpSink_d4->FUN_00efbbe0(6, 7);
         }
@@ -777,8 +783,11 @@ int* FUN_00ece870(int* param_1, int param_2)
 // @ 0x00ece8c0
 void __fastcall FUN_00ece8c0(int* p)
 {
-    if (p[4] != -1) {
-        int* u = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(p[4]);
+    const int key = p[4];
+    if (key != -1) {
+        GameMgr_16c7aa4* manager = g_pGameMgr_16c7aa4;
+        LookupOwner* owner = manager->pOwner_74;
+        int* u = owner->FUN_00f3e8a0(key);
         ((void(__thiscall*)(void*, int*))VTB(p, 0x30))(p, u);
     }
 }
@@ -787,8 +796,11 @@ void __fastcall FUN_00ece8c0(int* p)
 // @ 0x00ece8f0
 int __fastcall FUN_00ece8f0(int param_1)
 {
-    if (*(int*)(param_1 + 0x10) != -1) {
-        int* i = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(*(int*)(param_1 + 0x10));
+    const int key = *(int*)(param_1 + 0x10);
+    if (key != -1) {
+        GameMgr_16c7aa4* manager = g_pGameMgr_16c7aa4;
+        LookupOwner* owner = manager->pOwner_74;
+        int* i = owner->FUN_00f3e8a0(key);
         if (i != 0)
             return FUN_00eece20((int)i);
     }

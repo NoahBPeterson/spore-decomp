@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPUIFeedFilter.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14000b8[];
+
 #include "game/types.h"
 #include "SP/cSPUIFeedEdit.h"
 #include "SP/cSPUIFeedEditAssetView.h"
@@ -217,6 +220,7 @@ struct KeyVec {
     Key* mEnd;      // +0x04
     Key* mCap;      // +0x08
     KeyVec& operator=(const KeyVec& o);
+    KeyVec* CopyConstruct(const KeyVec& o);   // 0x006606a0 (uninitialized copy, used by FeedUninitCopy)
 };
 void  __cdecl CopyOverlap(Key* first, Key* last, Key* dest);   // 0x00b84c80
 void  __cdecl UninitCopyPtr(void** out, void* first, void* last, void* dest, void* extra);  // 0x00512050
@@ -451,7 +455,10 @@ extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv
 extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
 extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
 extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
-struct Blob14 { uint8_t x[0x14]; void Assign(Blob14* src); void FUN_006606a0(Blob14* src); };
+struct Blob14 { uint8_t x[0x14];
+    void Assign(Blob14* src);        // 0x006609a0
+    void FUN_006606a0(Blob14* src);  // 0x006606a0
+};
 struct E34 {
     uint32_t a;          // 0x00
     uint8_t  b;          // 0x04
@@ -600,7 +607,7 @@ virtual void v34();
 IObjectTemplateDB* __cdecl ObjectTemplateDB();       // 0x0067CB40
 namespace __equiv_ann1 {
 struct Blob14 {
-    void Assign();   // 0x006606a0 (equiv t3)
+    void Assign();   // 0x006609a0 (equiv t3)
 };
 }
 // ---- items of slice s00660dd0 end
@@ -1399,9 +1406,9 @@ FeedEntry* __cdecl FeedUninitCopy(FeedEntry* first, FeedEntry* last, FeedEntry* 
         if (dest) {
             dest->m0 = first->m0;
             dest->m4 = first->m4;
-            dest->v08 = first->v08;
+            dest->v08.CopyConstruct(first->v08);
             dest->m1c = first->m1c;
-            dest->v20 = first->v20;
+            dest->v20.CopyConstruct(first->v20);
         }
         ++first;
         ++dest;
@@ -1721,7 +1728,7 @@ char FUN_00661740(unsigned key, KeyVecE* out)
         uint32_t pa = e->a;
         int pb = e->b;
         if (e->c == 0x4edcd7a9)
-            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)0x14000b8));
+            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)g_14000b8));
         else
             cons.push_back(FMConstraint(pa, kEquals, pb));
     }
@@ -2008,11 +2015,10 @@ void FeedList::FUN_00662540()
         FUN_00661900((void*)m14, (char*)this + 0x30);
         if (m14 == m18) {
             ((FeedSub*)((char*)this + 0x1c))->FUN_00661390((char*)this + 0x30);
-            GetSupportedFilterTypes(m18);
-            return;
+        } else {
+            ((FeedSub*)((char*)this + 0x1c))->FUN_00661700();
+            FUN_00661900((void*)m18, (char*)this + 0x1c);
         }
-        ((FeedSub*)((char*)this + 0x1c))->FUN_00661700();
-        FUN_00661900((void*)m18, (char*)this + 0x1c);
         GetSupportedFilterTypes(m18);
     }
 }

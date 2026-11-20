@@ -225,3 +225,150 @@ void StepCellEntry(Cell* self, float a1, float a2, float a3, unsigned flags, int
 {
     StepCell(self, a1, a2, a3, flags, mode);
 }
+
+// ---------------------------------------------------------------------------
+// 0x00e6e8c0 -- cell-stage "cell_ending" handler (SPGonzago/SPCellGame).
+//
+// 0x00e7ce10 calls it with 0 when the level clock reaches 1000, 0x00e80ba0
+// with 1 (immediate).  When the layer catalog's +0xe0 word is clear and the
+// flag is not set it only fires the two level-end callouts; otherwise it emits
+// the "cell_ending" spawn record (kind 0x2f, mode 0x44, the cell_Eggkid
+// archetype) and passes the two timing floats to 0x00e53c70.
+//
+// Field offsets are kept as raw offsets because the cCellGame/cCell layouts are
+// owned by the other functions in this translation unit.
+#define BYTE_AT(p, o) (*(unsigned char*)((char*)(p) + (o)))
+#define INT_AT(p, o)  (*(int*)((char*)(p) + (o)))
+#define FLT_AT(p, o)  (*(float*)((char*)(p) + (o)))
+
+struct Vec4 { float x, y, z, w; };
+
+// The handle pools at cCellGame+0x1c / +0x54 (0x00b721d0 / 0x00b72210 / 0x00b72160).
+struct cHandlePool {
+    char  mReserved[0x38];
+    void* GetSafe(int handle);      // 0x00b721d0  thiscall
+    void* Get(int handle);          // 0x00b72210  thiscall
+    int   Alloc();                  // 0x00b72160  thiscall
+};
+
+// Key object returned by 0x00b3d4d0 (0x00ae0930 is its thiscall Init).
+struct cTempKey { void Init(); };
+
+// Notification/spawn record handed out by the +0x54 pool (see s00e6eb60.cpp).
+struct cSpawnRecord {
+    int           mField00;
+    int           mField04;
+    unsigned char mField08;
+    char          mPad09[0x1c - 0x09];
+    float         mField1c;
+    float         mField20;
+    int           mField24;         // record kind (0x2f here, 0x1c / 0x1b elsewhere)
+    int           mField28;
+    int           mField2c;
+    int           mField30;
+    int           mField34;
+    int           mField38;
+    int           mField3c;
+    float         mField40;
+    float         mField44;
+    Vec3          mPos48;
+    Vec3          mPos54;
+    Vec4          mQuat60;
+    int           mField70;
+    unsigned char mField74;
+    char          mPad75[3];
+    int           mField78;
+};
+
+// 0x015a8434 holds the archetype pointer of cell_Eggkid (0x0148533c, whose
+// first word is the 0x00e566e0 factory); the source passes the slot's address.
+struct cArchetypeSlot { const void* mpArchetype; };
+
+extern char*            gspCellUI;          // 0x016b3c0c
+extern Vec3             gCellWorldCenter;   // 0x016b3c28 (also kFallbackDir above)
+extern Vec4             gCellSpawnQuat;     // 0x015a7c4c (0, 0, 0, 1)
+extern cArchetypeSlot   gEggkidArchetype;   // 0x015a8434
+
+extern "C" unsigned FNV1_String8(const char* text, unsigned seed, int flag);  // 0x00932e80
+extern "C" void  FUN_00e53660(int a, int b);                          // 0x00e53660
+extern "C" int   FUN_00e4fca0(void);                                  // 0x00e4fca0
+extern "C" void  FUN_00e50450(unsigned id, const void* param);        // 0x00e50450
+extern "C" unsigned FUN_00e571cf0(const char* text);                  // 0x00e571cf0
+extern "C" float FUN_00e52b70(void);                                  // 0x00e52b70
+extern "C" void  FUN_00e53c70(float a, float b);                      // 0x00e53c70
+extern "C" float FUN_00e6d200(void* cell, int a, int mode, int field);// 0x00e6d200
+
+// 6 arguments, callee-cleaned (stdcall, ret 0x18).
+extern "C" cTempKey* __stdcall FUN_00b3d4d0(const char* name, int, int, int, int, int);
+
+// @ 0x00e6e8c0
+void FUN_00e6e8c0(bool skip)
+{
+    cHandleRef ref;
+    char* catalog = (char*)GetCellScales(&ref);
+
+    if (INT_AT(catalog, 0xe0) == 0 && !skip) {
+        FUN_00e53660(2, 1);
+        BYTE_AT(gspCellUI, 0x938) = 1;
+        int mode = FUN_00e4fca0();
+        if (mode == 1) {
+            FUN_00e50450(FNV1_String8("Callout_CLG_Ending", 0x811c9dc5u, mode), 0);
+            FUN_00e50450(FNV1_String8("Callout_CLG_TransitionButton", 0x811c9dc5u, 1),
+                         &gEggkidArchetype);
+        } else if (FUN_00e4fca0() == 2) {
+            FUN_00e50450(FUN_00e571cf0("Callout_CLG_Ending"), &gEggkidArchetype);
+        }
+        return;
+    }
+
+    int handle = INT_AT(gspCellGame, 0x411c);
+    cHandlePool* cells = (cHandlePool*)((char*)gspCellGame + 0x1c);
+    char* cell = (char*)cells->GetSafe(handle);
+    if (cell == 0)
+        return;
+    if (BYTE_AT(cell, 0x112) != 0 || BYTE_AT(cell, 0x113) != 0 || BYTE_AT(cell, 0x188) != 0)
+        return;
+
+    if (INT_AT(gspCellGame, 0x51b4) == 3) {
+        FLT_AT(gspCellGame, 0x51bc) = FUN_00e52b70();
+        INT_AT(*(char**)((char*)gspCellGame + 0x5190), 0xb0) = 3;
+        FLT_AT(*(char**)((char*)gspCellGame + 0x5190), 0xbc) = 5.0f;
+        INT_AT(gspCellGame, 0x51b4) = -1;
+        INT_AT(gspCellGame, 0x51b0) = 0;
+    }
+
+    FUN_00b3d4d0("cell_ending", 0, 0, 0, 0, 0)->Init();
+
+    int subjectHandle = INT_AT(gspCellGame, 0x411c);
+    cHandlePool* cellPool = (cHandlePool*)((char*)gspCellGame + 0x1c);
+    char* subject = (char*)cellPool->Get(subjectHandle);
+    float time = FUN_00e6d200(subject, 0, 0x44, INT_AT(subject, 0x1b0));
+
+    cHandlePool* allocPool = (cHandlePool*)((char*)gspCellGame + 0x54);
+    int slot = allocPool->Alloc();
+    cHandlePool* spawnPool = (cHandlePool*)((char*)gspCellGame + 0x54);
+    cSpawnRecord* rec = (cSpawnRecord*)spawnPool->Get(slot);
+
+    rec->mField1c = time;
+    rec->mField20 = time;
+    rec->mField24 = 0x2f;
+    rec->mField28 = 0;
+    rec->mField2c = 0;
+    rec->mField30 = -1;
+    rec->mField34 = -1;
+    rec->mField38 = 0;
+    rec->mField3c = 0;
+    rec->mField40 = 0.0f;
+    rec->mField44 = 0.0f;
+    rec->mPos48 = gCellWorldCenter;
+    rec->mPos54 = gCellWorldCenter;
+    rec->mQuat60 = gCellSpawnQuat;
+    rec->mField70 = 0;
+    rec->mField74 = 0;
+    rec->mField78 = 0;
+    rec->mField04 = 0;
+    rec->mField08 = 0;
+    INT_AT(gspCellGame, 0x5194) = slot;
+    INT_AT(gspCellGame, 0x5198) = slot;
+    FUN_00e53c70(time, 0.0f);
+}

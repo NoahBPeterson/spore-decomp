@@ -2,6 +2,12 @@
 // Object file: SPGonzago/SPEditModeCheats.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fc890[];
+extern "C" char g_14799b0[];
+extern "C" char g_1479a6c[];
+extern "C" char g_1479aac[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArgumentSpec.h"
 #include "EA/ArgScript/cArguments.h"
@@ -428,13 +434,13 @@ void cCommandGameplayMarkerTemplate::UpdateMarker(cArguments* pArguments)
 void* cCommandGameplayMarker::Init()
 {
     ((cMetaCommandBase*)this)->Init();
-    mpVTable = (void*)0x014799b0;
+    mpVTable = (void*)g_14799b0;
     mArgSpec.Init(true);
     mArguments.Init();
     mpGameplayMarker = 0;
     ArgScript_ConstructSpec(&mArgSpec, "Creates a gameplay marker",
                             "<type:int>", &mType, "type",
-                            "<id:int>", &mID, (const char*)0x013fc890,
+                            "<id:int>", &mID, (const char*)g_13fc890,
                             "<definitionId:int>", &mDefinitionID, "definitionId",
                             "<group:int>", &mGroupID, "group id",
                             "[position:vector3]", &mPosition, "position",
@@ -447,7 +453,7 @@ void* cCommandGameplayMarker::Init()
 void* cCommandGameplayMarkerTemplate::Init(const cVec3* pAlpha, const cVec3* pBeta)
 {
     cCommandGameplayMarker::Init();
-    mpVTable = (void*)0x01479a6c;
+    mpVTable = (void*)g_1479a6c;
     mAlphaVector.x = pAlpha->x;
     mAlphaVector.y = pAlpha->y;
     mAlphaVector.z = pAlpha->z;
@@ -456,11 +462,11 @@ void* cCommandGameplayMarkerTemplate::Init(const cVec3* pAlpha, const cVec3* pBe
     mBetaVector.z = pBeta->z;
     ArgScript_ConstructSpec(&mArgSpec, "Creates a gameplay marker",
                             "<type:int>", &mType, "type",
-                            "<id:int>", &mID, (const char*)0x013fc890,
+                            "<id:int>", &mID, (const char*)g_13fc890,
                             "<definitionId:int>", &mDefinitionID, "definitionId",
                             "<group:int>", &mGroupID, "group id",
                             "<alpha:float>", &mAlpha, "alpha",
-                            "<beta:float>", &mBeta, (const char*)0x01479aac,
+                            "<beta:float>", &mBeta, (const char*)g_1479aac,
                             0);
     return this;
 }

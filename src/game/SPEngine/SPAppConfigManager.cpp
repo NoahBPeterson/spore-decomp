@@ -776,7 +776,7 @@ T& vector_map_s007c_a950<Key_s007c_a950, T, C, A, RA>::operator[](const key_type
     iterator itEnd = this->mpEnd;
     iterator it = eastl::lower_bound(itBegin, itEnd, key, mValueCompare);
     if ((it == itEnd) || mValueCompare(key, *it))
-        it = base_type::insert(it, value_type(key, T()));
+        it = this->insert(it, value_type(key, T()));
     return it->second;
 }
 }

@@ -454,7 +454,7 @@ void __thiscall AnyObj::Call4(int a)
   fn(a, p8);
 }
 
-// @ 0x00a52b90
+// Legacy copy; byte-exact definition is in src/game/SPAudio/eapdgroup.cpp.
 void __thiscall AnyObj::CallC(int a)
 {
   if (p4 != 0)
@@ -603,11 +603,13 @@ void __thiscall PairVec::Insert(int pos, unsigned n, int* value)
 // @ 0x00a52f70
 void* __thiscall GroupHelp::Init(int b)
 {
+  extern const char g_1454fac[];  // Group helper table
+  const int value = *(int*)(b + 4);
   v0 = 0;
   v1 = 0;
   v2 = 0;
-  dummy = 0x1454fac;
-  v10 = *(int*)(b + 4);
+  dummy = (int)g_1454fac;
+  v10 = value;
   v14 = (int)"EAPd/Group";
   return this;
 }

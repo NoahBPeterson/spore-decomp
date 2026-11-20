@@ -292,19 +292,16 @@ void S::FUN_00b2e940(float dt) {
 void S::FUN_00b2ec10(int param_2, int param_3) {
   (void)param_2;
   if (0 < g_167e09c) {
-    g_167e09c = g_167e09c - 1;
-    if (g_167e09c == 0) {
+    if (--g_167e09c == 0) {
+      E* e = *(E**)((char*)this + 0x38);
       g_167e09c = 0;
-      if (*(int*)((char*)this + 0x38) != 0) ((E*)*(void**)((char*)this + 0x38))->ff35e0(1);
+      if (e != 0) e->ff35e0(1);
       if (*(int*)((char*)this + 0x3c) != 0) ((E*)*(void**)((char*)this + 0x3c))->a110();
     }
   }
   char* q = (char*)this - 4;
   ((Xdac0*)q)->FUN_00b2dac0();
-  double f = (double)param_3;
-  if (param_3 < 0) f = f + 4294967296.0f;
-  f = f * 0.001f;
-  ((S*)q)->FUN_00b2e940((float)f);
+  ((S*)q)->FUN_00b2e940((float)(unsigned)param_3 * 0.001f);
 }
 
 // ---------------------------------------------------------------------------

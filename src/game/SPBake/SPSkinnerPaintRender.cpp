@@ -2,6 +2,9 @@
 // Object file: SPBake/SPSkinnerPaintRender.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_150cad8[];
+
 #include "game/types.h"
 #include <string.h>
 #include <new>
@@ -1293,7 +1296,7 @@ struct RefPtr_s0042_5240 {
     RefCounted_s0042_5240* p;
     ~RefPtr_s0042_5240() { if (p) p->Release(); }
 };
-extern RefPtr_s0042_5240* MoveRange(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last, RefPtr_s0042_5240* dest);
+extern RefPtr_s0042_5240* MoveRange(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last, RefPtr_s0042_5240* dest);   // 0x0042eaa0
 struct PtrVector {
     void** begin;   // +0
     RefPtr_s0042_5240* end;    // +4
@@ -2678,7 +2681,7 @@ int RefCounted::AddRef()
 void SkinTexExtractorB::Init()
 {
     int hole;
-    mConn.Init(SP_MessageServer(), (char*)this - 8, (void*)0x150cad8, 3);
+    mConn.Init(SP_MessageServer(), (char*)this - 8, (void*)g_150cad8, 3);
     if (mInstance != 0) {
         FUN_0067dd60_s0051_c470()->SetInstance(mInstance, 0, 1, 0);
     } else {

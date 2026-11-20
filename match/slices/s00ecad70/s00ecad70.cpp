@@ -1,5 +1,14 @@
 // Slice s00ecad70 -- SP cell-stage UI: ban/palette item rows and slider helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_1489314[];
+extern "C" char g_1489324[];
+extern "C" char g_1489334[];
+extern "C" char g_1489350[];
+extern "C" char g_13eb394[];   // 0x013eb394 base vftable (+0x20 subobject)
+
 #include "types.h"
 #include <math.h>
 #include <xmmintrin.h>
@@ -386,14 +395,15 @@ struct PaletteItem {
 // @ 0x00ecb8c0
 void PaletteItem::dtor()
 {
-    vt0 = (void*)0x1489350;
-    *(void**)((char*)this + 0xc) = (void*)0x1489334;
-    *(void**)((char*)this + 0x10) = (void*)0x1489324;
-    *(void**)((char*)this + 0x20) = (void*)0x1489314;
+    vt0 = (void*)g_1489350;
+    *(void**)((char*)this + 0xc) = (void*)g_1489334;
+    *(void**)((char*)this + 0x10) = (void*)g_1489324;
+    *(void**)((char*)this + 0x20) = (void*)g_1489314;
+    _ReadWriteBarrier();
     if (p2c) ((IRelease*)p2c)->v2();
     if (p28) ((IRelease*)p28)->v2();
     if (p24) ((IRelease*)p24)->v1();
-    *(void**)((char*)this + 0x20) = (void*)0x13eb394;
+    *(void**)((char*)this + 0x20) = (void*)g_13eb394;
     ((SP::cSPPaletteItemUI_s005c_6340*)this)->SP::cSPPaletteItemUI_s005c_6340::~cSPPaletteItemUI_s005c_6340();
 }
 // ================================================================ cell-stage message handler / window helpers
@@ -618,12 +628,12 @@ PaletteItemUI* __fastcall FUN_00ecba50(PaletteItemUI* self)
     _ReadWriteBarrier();
     float one = kPaletteOne;
     _ReadWriteBarrier();
-    self->vt20 = (void*)0x13eb384;
-    self->vt00 = (void*)0x1489350;
-    self->vt0c = (void*)0x1489334;
-    self->vt10 = (void*)0x1489324;
+    self->vt20 = (void*)g_13eb384;
+    self->vt00 = (void*)g_1489350;
+    self->vt0c = (void*)g_1489334;
+    self->vt10 = (void*)g_1489324;
     _ReadWriteBarrier();
-    self->vt20 = (void*)0x1489314;
+    self->vt20 = (void*)g_1489314;
     _ReadWriteBarrier();
     self->p24 = 0;
     self->layout = 0;

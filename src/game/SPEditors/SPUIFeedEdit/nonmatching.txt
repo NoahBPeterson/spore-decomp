@@ -7,7 +7,6 @@
 0065cae0 117 enabled-state helper: complete; bool folding differs
 0065cc50 86 page-button enable helper: complete; register allocation differs
 0065ccd0 50 GetAssetIndex: complete; loop register allocation differs
-0065cd70 8 intrusive vector element assign: complete; refcount register schedule; equiv PASS (1164 valid, 100% cov)
 0065cec0 80 DoMessage: complete; vcall arg packing differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 edx]
 0065cf30 132 SetAsset: complete; vcall/refcount schedule differs
 0065d260 361 cSPUIFeedEdit::UpdateGrid: complete; loop/register schedule differs
@@ -24,7 +23,7 @@
 0065e110 775 Populate - complete, vector creation + float placement scheduling not byte-exact
 0065e570 254 RemoveAsset - complete, hashset find/erase path not byte-exact
 0065e720 317 ResetPanel - complete, hashset/window path not byte-exact
-0065e8d0 15 LoadLayout - complete, only vtable-call register order / arg register differs
+0065e8d0 15 data: LoadLayout is 272 bytes (ret at 0x0065e9df) but the fingerprint is 293: it also covers the following 21-byte FUN_0065e9e0 (load/unload dispatcher: jmp UnloadLayout / jmp LoadLayout), so it cannot match as one function. The AddWinProc (slot 0x104) argument order is fixed by giving cSPUIFeedEdit_s0065_df30 its real bases (cStringTokenTranslator +0 size 8, IWinProc +8 per SP/cSPUIFeedEdit.h) and calling AddWinProc(this); a GetFrame argument register swap (eax/ecx around the kFrameName load) remains after that.
 0065ea00 604 DoMessage - complete message dispatch, many branches/scheduling not byte-exact
 0065ef30 950 cSPUIFeedEdit::LoadFilter complete (module flags /O2 /MD /Gy /TP /arch:SSE for this function; clear sets, filter lookup, constraint query, asset population, page count, window updates); frame slot layout of query temporaries and register allocation differ [equiv: WEAK 14% coverage, no mismatch]
 0065f390 211 AddAsset - complete, hashset find/insert path not byte-exact
@@ -55,6 +54,5 @@
 00ed6b00 159 Deactivate2: same class of residual as Activate2 (call shapes + regalloc); all field offsets match. equiv: UNSUPPORTED (unmapped reads). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp, call#4 esp]
 00ed6bf0 780 DoBadgeMessage: all 11 handled keys (0x30c11c7, 0x462c656, 0x6202731/0x5d1536c, 0x65ff54a, 0x72bdb11, 0x774e2dc, 0x7d8af04, 0x7ec5866, 0x14051500, 0xcc0bf723, 0xfd7a08d0) reconstructed with correct data offsets ([pb+0x10]/[pb+0x18]/[pb+0x44]) and panel offsets. Residual is the dispatch chain shape (MSVC emits a different compare tree). equiv: UNSUPPORTED (synthetic cMenu/cPage helper symbols unresolved). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00ed7060 975 BadgeAutoTest: full achievement scan reconstructed (badge-type / sub-key counting, the 0x27e8 record stride, 0x4e0 inner stride, 0x9fa pointer stride, SetAssetData/Panel_Match flag folding, all 13 achievement keys, __stdcall AchievementsController accessor). Residual is stack-frame layout (0x2c vs 0x28 for the spilled `this`) and register allocation. equiv: UNSUPPORTED (unmapped reads + budget). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00ed7490 20 3 bytes over: the tail call FUN_00f3d8c0 is emitted as `call; pop esi; ret 4` where the original tail-jumps (`pop esi; mov edx,[g]; mov ecx,[edx+0x74]; jmp`). Body is otherwise instruction-identical; MSVC 2008 will not tail-call here because `push esi` forces an epilogue. Tried __fastcall/__cdecl/reordered/ nested/return forms -- all failed or worsened. equiv: WEAK (399/399 valid). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00ed76e0 402 Panel::FUN_00ed76e0: complete; this/mode/zero register homes, the mode key-buffer stack slot sharing and the point at which the callout key is zeroed differ (812 vs 808 bytes). equiv: WEAK (369 valid inputs, no mismatch, 34.2% coverage). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00ed7a10 1207 scenario-editor toolbar handler: complete; register homes (zero const/sim/panel) and the shared hint-text call tail differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

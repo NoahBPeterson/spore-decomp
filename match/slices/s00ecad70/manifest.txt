@@ -8,3 +8,4 @@ slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb6b0@@YAEH@Z  00ecb6b0  /O2 /MD /Gy /EH
 slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb950@@YIXPAUPaletteItemUI@@@Z  00ecb950  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ecad70/s00ecad70.cpp  ?Update@PaletteItemUI@@QAEXH@Z  00ecb9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecba50@@YIPAUPaletteItemUI@@PAU1@@Z  00ecba50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ecad70/s00ecad70.cpp  ?dtor@PaletteItem@@QAEXXZ  00ecb8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPGraphicsEffectsRenderer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -102,12 +105,13 @@ extern void*     g_15fd918;                      // 0x015fd918 property list
 extern const wchar_t g_140af84[];                // 0x0140af84 L"Arial"
 extern const char    g_13eb8a4[];                // 0x013eb8a4 "Graphics"
 extern const char g_matName7cc0[];
+struct Inner7cB { void FI(int); };   // 0x0076cd30 (the second object's update)
 struct Inner7c {
     char F7(int, int, int, int, int, int, int);       // 0x0076bc50
     void F12(int, int, int, int, int, int, int, int, // 0x0076ba30
              int, int, int, int);
     void FF(float);                                   // 0x00776450
-    void FI(int);                                     // 0x006f4280 / 0x0076cd30
+    void FI(int);                                     // 0x006f4280
     int  Fp(int, int);                                // 0x... vtable +0x10
     void Fq(int, int, float);                         // vtable +0x18/+0x1c
 };
@@ -673,7 +677,7 @@ struct cEffectsModel2 {
     void** mpVtable;    // +0
     int    mnRefCount;  // +4
 };
-struct cERSDtor { void Shutdown(); ~cERSDtor(); };
+struct cERSDtor { void Shutdown(); ~cERSDtor(); static void operator delete(void* p) { EASTL_allocator_deallocate(p); } };
 // ---- items of slice s006ef990 end
 
 // ---- items of slice s006f0890 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1377,7 +1381,7 @@ struct RenderEntity {
 struct RefBase {
     void* mpTable;                     // +0x00  dispatch table (0x013ef094)
     int   mRefCount;                   // +0x04
-    ~RefBase() { mpTable = (void*)0x013ef094; }
+    ~RefBase() { mpTable = (void*)g_13ef094; }
 };
 void __cdecl FreeBlock(void* p) throw();       // 0x00f47380 (operator delete)
 struct FixedVec {
@@ -2198,13 +2202,22 @@ void ShaderHost::CallF2(int a, float b)
     }
 }
 
+struct Caps_s006e69e0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21();
+    virtual int HasCap(int cap);   // +0x58
+};
 // @ 0x006e69e0
 void ShaderHost::SetMode(int mode, int value)
 {
     Manager* m = (Manager*)FUN_0067dd50();
-    if (mode != 6 && mode != 5) {
-        VirtualFn1 fn = (VirtualFn1)((void**)m->vtbl)[0x58 / 4];
-        if (fn(m, 0x16) != 0) {
+    int idx = mode - 1;
+    if (idx != 5 && idx != 4) {
+        if (((Caps_s006e69e0*)m)->HasCap(0x16) != 0) {
             *(char*)((char*)this + 0x368) = (char)value;
         }
     }
@@ -2528,7 +2541,7 @@ void Host3::Method7880(int arg)
     if (a != 0) {
         a->FI(arg);
     }
-    Inner7c* b = *(Inner7c**)((char*)this + 0x24);
+    Inner7cB* b = *(Inner7cB**)((char*)this + 0x24);
     if (b != 0) {
         b->FI(arg);
     }
@@ -5555,11 +5568,7 @@ void CreateEffectsRendererSystem()
 void DestroyEffectsRendererSystem()
 {
     g_pEffectsRendererSystem->Shutdown();
-    cERSDtor* p = g_pEffectsRendererSystem;
-    if (p) {
-        p->~cERSDtor();
-        EASTL_allocator_deallocate(p);
-    }
+    delete g_pEffectsRendererSystem;
     g_pEffectsRendererSystem = 0;
 }
 

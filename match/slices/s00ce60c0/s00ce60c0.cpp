@@ -1,5 +1,9 @@
 // Slice s00ce60c0 -- cTribeTokenTranslator accessors (partial).
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1477a60[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -50,7 +54,7 @@ void* __fastcall TribeTokenTranslatorCtor(SP::cTokenTranslatorFields* self)
     self->mValue10 = 0;
     self->mValue14 = 0;
     self->mValue18 = 0;
-    self->mpVtable0 = (void*)0x01477a60;
+    self->mpVtable0 = (void*)g_1477a60;
     return self;
 }
 

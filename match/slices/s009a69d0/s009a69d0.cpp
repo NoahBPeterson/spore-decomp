@@ -338,24 +338,19 @@ void UpdateFootsteps(void* manager, creature_instance_data* creature)
         return;
 
     nSPCreatureAnim::footstep_event_list* events = creature->mAnimData.get_events();
-    int total = (int)(events->mpEnd - events->mpBegin);
-    if (total != 0) {
-        int index = 0;
-        int remaining = total;
-        do {
-            dynamics_foot* foot = &events->mpBegin[index];
-            creature_body_instance_data* body = &creature->mpBodies[foot->mBodyIdx];
-            if (foot->mEdgeTrigger && foot->mFootDown &&
-                (body->mpStaticData->mFlags & 0x10) == 0 &&
-                body->mAnimWeight == 1.0f &&
-                (creature->mFootstepBasis.x * creature->mFootstepBasis.x +
-                 creature->mFootstepBasis.y * creature->mFootstepBasis.y +
-                 creature->mFootstepBasis.z * creature->mFootstepBasis.z > 0.1 ||
-                 fabs((double)creature->mFootstepBasis.w) > 0.2)) {
-                PlayFootstep(manager, creature, body, g_zero);
-            }
-            ++index;
-        } while (--remaining);
+    unsigned count = (unsigned)(events->mpEnd - events->mpBegin);
+    for (unsigned i = 0; i < count; ++i) {
+        dynamics_foot* foot = &events->mpBegin[i];
+        creature_body_instance_data* body = &creature->mpBodies[foot->mBodyIdx];
+        if (foot->mEdgeTrigger && foot->mFootDown &&
+            (body->mpStaticData->mFlags & 0x10) == 0 &&
+            body->mAnimWeight == 1.0f &&
+            (creature->mFootstepBasis.x * creature->mFootstepBasis.x +
+             creature->mFootstepBasis.y * creature->mFootstepBasis.y +
+             creature->mFootstepBasis.z * creature->mFootstepBasis.z > 0.1 ||
+             fabs((double)creature->mFootstepBasis.w) > 0.2)) {
+            PlayFootstep(manager, creature, body, g_zero);
+        }
     }
 }
 

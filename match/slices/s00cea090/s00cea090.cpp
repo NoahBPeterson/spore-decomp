@@ -2,6 +2,10 @@
 // SP::cCityDisplayStrategy init/update/posse management plus an eastl rbtree erase
 // helper used by its AutoRefCount<map> members.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include  (no /EHsc)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1477e3c[];
+
 #include "types.h"
 
 typedef unsigned int uint;
@@ -121,7 +125,7 @@ void CDS::Init()
     }
 
     void* layout = *(void**)(self + 0xec);
-    char ok = ((LayoutObj*)layout)->InitLayout((const void*)0x1477e3c, 0x40464100, 1, 0x5b598fa);
+    char ok = ((LayoutObj*)layout)->InitLayout((const void*)g_1477e3c, 0x40464100, 1, 0x5b598fa);
     if (ok) {
         void* l2 = *(void**)(self + 0xec);
         ((LayoutObj*)l2)->SetVis(0);

@@ -1,3 +1,9 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1459be8[];
+extern "C" char g_1459c6c[];
+extern "C" char g_1459c90[];
+extern "C" char g_1459c98[];
+
 #include "SP/cVarListSerializer.h"
 
 // Spore retail 00ac0180..00ac129e -- cInteractionTarget / cAnimalCargoInfo
@@ -32,13 +38,13 @@ void* __cdecl SP_NounManager();                     // 0xb3d300
 // ---------------------------------------------------------------------------
 // Image constants (named by address).
 // ---------------------------------------------------------------------------
-#define VTBL_01459be8  ((void*)0x1459be8)
+#define VTBL_01459be8  ((void*)g_1459be8)
 #define VTBL_01459c04  ((void*)0x1459c04)
 #define VTBL_01459c20  ((void*)0x1459c20)
 #define VTBL_01459c30  ((void*)0x1459c30)
-#define VTBL_01459c6c  ((void*)0x1459c6c)
-#define VTBL_01459c90  ((void*)0x1459c90)
-#define VTBL_01459c98  ((void*)0x1459c98)
+#define VTBL_01459c6c  ((void*)g_1459c6c)
+#define VTBL_01459c90  ((void*)g_1459c90)
+#define VTBL_01459c98  ((void*)g_1459c98)
 
 #define VBASE_01459be5 ((void*)0x1459be5)   // "Interaction History:\n"
 #define VBASE_01459bd0 ((void*)0x1459bd0)

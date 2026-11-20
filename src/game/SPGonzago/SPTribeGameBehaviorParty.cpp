@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPTribeGameBehaviorParty.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147bda0[];
+extern "C" char g_147bdb0[];
+
 #include "game/types.h"
 #include "SP/cActionCircle.h"
 #include "SP/cInteractionAgent.h"
@@ -1096,8 +1100,8 @@ int cTribeGameBehaviorParty_s00d7_9470::Action()
 namespace SP {
 void cEditorGameObject::Destroy()
 {
-    mpVtable0 = (void*)0x147bdb0;
-    mpVtable4 = (void*)0x147bda0;
+    mpVtable0 = (void*)g_147bdb0;
+    mpVtable4 = (void*)g_147bda0;
     BaseDestroy();
 }
 }  // namespace SP

@@ -7,6 +7,10 @@
 //   00d71f50  clear the behaviour stimuli and refresh locomotion
 //
 // Flags: /O2 /MD /Gy /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00d995c0();
+
 #include "types.h"
 
 typedef unsigned int u32;
@@ -318,7 +322,7 @@ bool TRIBE_BABY_FEAR_Activate(cSPCreatureCitizen* self)
         EventLog()->PostFeedbackEvent(0x9cb7ee45, 0x182cd6ce, (int)loco->v2c(), 0, 1, 0);
         return true;
     }
-    cAgentOrderNode* node = AgentOrderManager()->FindNode(0x60995fc, (void*)0x00d995c0, self);
+    cAgentOrderNode* node = AgentOrderManager()->FindNode(0x60995fc, (void*)FUN_00d995c0, self);
     if (node)
     {
         int id = node->CurrentId();

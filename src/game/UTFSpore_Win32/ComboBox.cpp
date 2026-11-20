@@ -2,6 +2,13 @@
 // Object file: UTFSpore_Win32/ComboBox.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fa72c[];
+extern "C" char g_1441670[];
+extern "C" char g_1441688[];
+extern "C" char g_14416a0[];
+extern "C" char g_154eea0[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include "EA/Stopwatch.h"
@@ -380,7 +387,7 @@ extern "C" uint8_t __cdecl FUN_009678f0(uint32_t* param_1, uint32_t param_2, uin
         param_1[1] = (uint32_t)arr;
 
         uint32_t kind = (*(uint16_t*)(param_3 + 0xc)) & 0xfff;
-        param_1[0] = ((uint32_t*)0x154eea0)[kind];
+        param_1[0] = ((uint32_t*)g_154eea0)[kind];
 
         if (arr != 0) {
             uint32_t* dst = arr;
@@ -956,11 +963,11 @@ ComboBoxDrawable::ComboBoxDrawable()
     *(const void* volatile*)&mpSerializableTable = g_vtbl_ResourceAsync;
     _ReadWriteBarrier();
     mnRefCount = 0;
-    mpComponentImageTable = (const void*)0x013fa72c;
+    mpComponentImageTable = (const void*)g_13fa72c;
     _ReadWriteBarrier();
-    mpDrawableTable = (const void*)0x014416a0;
-    mpSerializableTable = (const void*)0x01441688;
-    mpComponentImageTable = (const void*)0x01441670;
+    mpDrawableTable = (const void*)g_14416a0;
+    mpSerializableTable = (const void*)g_1441688;
+    mpComponentImageTable = (const void*)g_1441670;
     mpComponentImages[0] = 0;
     mpComponentImages[1] = 0;
     mpComponentImages[2] = 0;

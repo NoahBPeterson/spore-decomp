@@ -10,6 +10,7 @@ extern void* g_16c8b44;                                    // 0x16c8b44  SP::cSP
 #include "rw/core/arena/Arena.h"
 #include <math.h>
 #include <xmmintrin.h>
+#include <intrin.h>
 
 // ---- items of slice s006c0db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
@@ -20,6 +21,7 @@ extern void* g_16c8b44;                                    // 0x16c8b44  SP::cSP
 // ---- items of slice s006c0db0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
+struct cSPMemPool928a30 { u32 LockedAligned(u32, u32, int, int, int, int, int, int); }; // 0x928a30 SP::cSPMemPool::LockedAligned
 extern u32   __fastcall sub_928a30_t(void* self, int, u32, u32, int,int,int,int,int,int); // 0x928a30
 
 // ---- items of slice s006c1cd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -125,11 +127,16 @@ virtual void b2();
 virtual void b3();
 virtual void b4();
 };
-struct BakedArenaThing : BaseA, BaseB {
-  int m_ref;      // +8
+// GmeRefCount-style second base: its vtable at +4, then an interlocked reference count.
+struct BakedRefCount : BaseB {
+  volatile long m_ref;  // +8
+  BakedRefCount() { _InterlockedExchange(&m_ref, 0); }
+};
+struct BakedArenaThing : BaseA, BakedRefCount {
   int m_c;        // +0xc
   int m_10;       // +0x10
   int m_14;       // +0x14
+  int m_18, m_1c;
   int m_20;       // +0x20
   BakedArenaThing();
 };
@@ -302,8 +309,10 @@ int StateFromGlobal(u32* p)
 // @ 0x006c1c80
 u32 MakeStream(u32* out, u32* in)
 {
-    u32 v = sub_928a30_t(g_16c8b44, 0, in[0], in[1], 0, 0, 0, 0, 0, 0);
-    out[0] = 0;
+    u32 b = in[1];
+    u32 a = in[0];
+    u32 v = ((cSPMemPool928a30*)g_16c8b44)->LockedAligned(a, b, 0, 0, 0, 0, 0, 0);
+    *(volatile u32*)&out[0] = 0;
     out[1] = 0;
     out[2] = 0;
     out[3] = 0;
@@ -762,7 +771,7 @@ void SortHeap(Rec24* first, Rec24* last)
 
 // @ 0x006c3510
 BakedArenaThing::BakedArenaThing()
-: m_ref(0), m_c(0), m_10(0), m_14(0), m_20(0) {}
+: m_c(0), m_10(0), m_14(0), m_20(0) {}
 
 // @ 0x006c3550
 float* FUN_006c3550(float* outA, float* outB, const float* base, const float* dir, const float* s, const int* idx, int layout)

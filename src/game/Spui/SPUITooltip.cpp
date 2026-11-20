@@ -288,13 +288,44 @@ void TooltipManager::SetTooltipText(int a, int b)
     }
 }
 
+struct IWindow_s00835520 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual float* GetArea();   // +0x38
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void SetLocation(float x, float y);   // +0x70
+};
 // @ 0x00835520
 void TooltipManager::MakeFullyVisibleInMainWindow(int dummy)
 {
     (void)dummy;
     float area[4];
     ((void (__cdecl*)(void*))FUN_00805ea0)(area);
-    float* r = ((float* (__thiscall*)(void*))VT(window)[0x38 / 4])(window);
+    float* r = ((IWindow_s00835520*)window)->GetArea();
     float sx = 0.0f;
     float* p = r;
     if (!(*r > 0.0f)) p = &sx;
@@ -305,7 +336,7 @@ void TooltipManager::MakeFullyVisibleInMainWindow(int dummy)
     sy = *q;
     if (area[2] < r[2]) sx = r[0] - (r[2] - area[2]);
     if (area[3] < r[3]) sy = r[1] - (r[3] - r[1]);
-    ((void (__thiscall*)(void*, float, float))VT(window)[0x70 / 4])(window, sx, sy);
+    ((IWindow_s00835520*)window)->SetLocation(sx, sy);
 }
 
 // @ 0x00835610

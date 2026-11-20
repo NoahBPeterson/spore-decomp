@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/_at_00990000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_1446834[];
+extern "C" char g_1446838[];
+
 #include "game/types.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
 #include "EA/UTFWinExtras/WinXHTML.h"
@@ -40,6 +46,9 @@ struct VecPB {
     __declspec(noinline) void push_back(unsigned* v);
     void DoInsertValue(unsigned* pos, unsigned* v);     // 0xa80dd0 (thiscall on the vector)
 };
+extern "C" char g_vtbl_GmeRefCount[];   // 0x013ef094 ??_7GmeRefCount@@6B@
+extern "C" char g_vtbl_1446838[];       // 0x01446838 Obj33 primary vtable
+extern "C" char g_vtbl_1446834[];       // 0x01446834 Obj33 vtable at +4
 struct Obj33 {
     char pad[0x18];
     Obj33* ctor();                                 // 0x997b60
@@ -214,10 +223,10 @@ void VecPB::push_back(unsigned* v)
 // @ 0x00997b60
 Obj33* Obj33::ctor()
 {
-    *(void**)((char*)this + 4) = (void*)0x13ef094;
+    *(void* volatile*)((char*)this + 4) = g_vtbl_GmeRefCount;
     *(unsigned*)((char*)this + 8) = 0;
-    *(void**)((char*)this + 0) = (void*)0x1446838;
-    *(void**)((char*)this + 4) = (void*)0x1446834;
+    *(void**)((char*)this + 0) = g_vtbl_1446838;
+    *(void**)((char*)this + 4) = g_vtbl_1446834;
     *(unsigned*)((char*)this + 0xc) = 0;
     *(unsigned*)((char*)this + 0x10) = 0;
     *(unsigned*)((char*)this + 0x14) = 0;
@@ -274,14 +283,14 @@ bool FrameSet::Bind(int** a1, int id, int* a3)
 // @ 0x00997cc0
 void* Obj33::ScalarDtor(unsigned flags)
 {
-    *(void**)((char*)this + 0) = (void*)0x1446838;
-    *(void**)((char*)this + 4) = (void*)0x1446834;
+    *(void**)((char*)this + 0) = (void*)g_1446838;
+    *(void**)((char*)this + 4) = (void*)g_1446834;
     clear();
     int p = *(int*)((char*)this + 0xc);
     if (p != 0 && *(int*)(p - 4) != 0)
         FUN_00f47380((void*)p);
-    *(void**)((char*)this + 4) = (void*)0x13ef094;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_13ef094;
+    *(void**)((char*)this + 0) = (void*)g_13eb938;
     if (flags & 1)
         FUN_00f47380(this);
     return this;
@@ -458,12 +467,12 @@ void SerAutoUpdate::ProcessChanges()
 // @ 0x00998d30
 void __cdecl ReloadChangedLayouts(void* iface)
 {
-    unsigned ms = 100;
-    FUN_00921df0(&ms);
-    SerAutoUpdate* s = 0;
-    if (iface)
-        s = (SerAutoUpdate*)VF(iface, 0xc, void*(__thiscall*)(void*, unsigned))(iface, 0x2fbf2058);
-    s->ProcessChanges();
+    {
+        unsigned ms = 100;
+        FUN_00921df0(&ms);
+    }
+    (iface ? (SerAutoUpdate*)VF(iface, 0xc, void*(__thiscall*)(void*, unsigned))(iface, 0x2fbf2058)
+           : (SerAutoUpdate*)0)->ProcessChanges();
 }
 
 // @ 0x00998d70

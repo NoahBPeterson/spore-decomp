@@ -24,3 +24,6 @@
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?Write@cCastingManager@@QBE_NAAVcIObjectDatabaseOStream@SP@@@Z  00ac8550  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?Read@cCastingManager@@QAE_NAAVcIObjectDatabaseIStream@SP@@@Z  00ad0b30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00ac8d00@CT@@QAEXHH@Z  00ac8d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?swap@Vec3AllocVector@@QAEXAAU1@@Z  00d5acc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00acd410@VO@@QAEXPAX@Z  00acd410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?FindSlot@CCitizenManager@@QAEPAUCRecord12@@PAUCCitizen@@@Z  00d579a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

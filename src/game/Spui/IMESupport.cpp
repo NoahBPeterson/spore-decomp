@@ -391,20 +391,20 @@ void IMECompColors::SetWindowColors()
 
 
 
+struct Vector2_s007f3b00 {
+  float x, y;
+  Vector2_s007f3b00(float ax, float ay) : x(ax), y(ay) {}
+};
 // @ 0x007f3b00
-void* CalculateTextSize(void* out, int text, int style, int len, void* typesetter)
+Vector2_s007f3b00 CalculateTextSize(int text, int style, int len, void* typesetter)
 {
   if (text != 0 && len != 0) {
     TS* ts = (TS*)typesetter;
     ts->LayoutLine(text, style, 0.0f, 0.0f, len);
     char* ll = (char*)ts->GetLineLayout();
-    *(float*)out = *(float*)(ll + 0x98);
-    *(float*)((char*)out + 4) = *(float*)(ll + 0xa0) - *(float*)(ll + 0xa4);
-    return out;
+    return Vector2_s007f3b00(*(float*)(ll + 0x98), *(float*)(ll + 0xa0) - *(float*)(ll + 0xa4));
   }
-  *(float*)out = 0.0f;
-  *(float*)((char*)out + 4) = 0.0f;
-  return out;
+  return Vector2_s007f3b00(0.0f, 0.0f);
 }
 
 
@@ -676,6 +676,7 @@ void IMECompositionS::Dtor()
     *(void**)((char*)this + 0x4) = &g_vt_1414eb0;
     *(void**)((char*)this + 0x20c) = &g_vt_1414db8;
     *(void**)((char*)this + 0x658) = &g_vt_1414dac;
+    _ReadWriteBarrier();
     void* p1 = *(void**)((char*)this + 0x694);
     if (p1 && *(int*)((char*)p1 - 4) != 0)
         deallocate(p1);

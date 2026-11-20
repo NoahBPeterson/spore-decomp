@@ -49,6 +49,13 @@ struct Callee {
     void* p(int);   // 0x0095bc10 (equiv t3)
     int64_t i64();   // 0x0093a3a0 (equiv t3)
 };
+struct SerStub { void SerUpdate(); };               // 0x009614a0 (Win::SerUpdate)
+struct SeqStub { void DtorBody(); };                // 0x008048c0 (cSPUIFrameSequencer destructor body)
+struct BaseWinStub { void FUN_00962740(); };        // 0x00962740
+struct RampStub {
+    void* ctor();                                   // 0x007fd460 (cSPUIBehaviorTimeFunctionRamp ctor)
+    void  SetParams(float, float, float);           // 0x007fd4a0 (cSPUIBehaviorTimeFunctionRamp::SetParams)
+};
 struct WT {
     bool Initialize();
     bool Shutdown();   // 0x00961e80 EA::UTFWin::Window::Shutdown
@@ -345,7 +352,7 @@ bool Obj::M5660(void* p)
 // @ 0x007F5690
 void Obj::M5690()
 {
-    ((Callee*)this)->f();
+    ((SerStub*)this)->SerUpdate();
     ((FV0)VTOBJ(this)[0x98 / 4])(this);
     ((FV0)VTOBJ(this)[0x9c / 4])(this);
 }
@@ -394,12 +401,12 @@ void Obj::M58E0()
     *(void**)((char*)this + 4) = &g_vt_01415178;
     *(void**)((char*)this + 0x20c) = &g_vt_01415144;
     *(void**)((char*)this + 0x210) = &g_vt_0141513c;
-    ((Callee*)seq)->f();
+    ((SeqStub*)seq)->DtorBody();
     void* p = *(void**)((char*)this + 0x248);
     if (p)
         ((FV0)VTOBJ(p)[4 / 4])(p);
     *(void**)((char*)this + 0x20c) = &g_vt_013eb938;
-    ((Callee*)this)->f();
+    ((BaseWinStub*)this)->FUN_00962740();
 }
 
 // @ 0x007F5990
@@ -636,7 +643,7 @@ void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
     *(void**)((char*)out + 4) = 0;
     void* caller = FUN_009512c0();
     void* mem = FUN_009512d0(0x48, 4, "SPUICreateAnimationTimerRamp", caller);
-    void* obj = mem ? ((Callee*)mem)->ctor() : 0;
+    void* obj = mem ? ((RampStub*)mem)->ctor() : 0;
     void* old = *(void**)((char*)out + 4);
     if (obj != old) {
         if (obj)
@@ -645,7 +652,7 @@ void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
         if (old)
             ((FV0)VTOBJ(old)[4 / 4])(old);
     }
-    ((Callee*)obj)->f(a, b, c);
+    ((RampStub*)obj)->SetParams(a, b, c);
     return out;
 }
 // @ 0x007F60D0
@@ -664,7 +671,7 @@ void* __cdecl CreateTimeSmooth(void* out, float a2, float a3, float a4, float a5
         if (old)
             ((FV0)VTOBJ(old)[4 / 4])(old);
     }
-    ((Callee*)obj)->f(a2, a5, a6);
+    ((RampStub*)obj)->SetParams(a2, a5, a6);
     return out;
 }
 

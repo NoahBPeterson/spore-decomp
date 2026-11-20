@@ -26,6 +26,7 @@ import run_all as R             # noqa: E402
 import asm_audit                # noqa: E402
 import fingerprint as F         # noqa: E402
 import ltcg                     # noqa: E402
+import targets as T             # noqa: E402
 
 
 # compiler options a manifest row may use (every option the manifests used on 2026-11-09).  Anything else is refused
@@ -85,6 +86,11 @@ def main():
             rows.append(r)
             rowfile[(r[0], r[2])] = m
     refused = {(r[0], r[3]): row_problem(r[0], r[3]) for r in rows}
+    # rows of written source whose symbol names another function (targets.row_names); generated manifests
+    # (match/synth, match/clones.txt) borrow names by design
+    written = [(src, sym, va) for src, sym, va, _f in rows
+               if os.path.basename(rowfile[(src, va)]) == "manifest.txt" and "/match/synth/" not in rowfile[(src, va)]]
+    misnamed = T.row_names(written, fps)
     keys = sorted(k for k, why in refused.items() if not why)
     objs = {}
     with ThreadPoolExecutor(a.jobs) as ex:
@@ -94,6 +100,7 @@ def main():
                 print("COMPILE FAILED %s\n%s" % (key[0], log.strip()[-1500:]))
     coffs, out, ok = {}, [], 0
     for src, sym, va, flags in rows:
+        tb = []                     # names that claim another address than retail uses here (targets.py, #458)
         obj = objs.get((src, flags))
         if refused[(src, flags)]:
             st = "refused: " + refused[(src, flags)]
@@ -116,16 +123,31 @@ def main():
                 st = F.check(fps[va], data, rel) if data is not None else "LTCG build failed: " + log[-300:]
             else:
                 st = F.check(fps[va], *F.extract(secs, syms, name))
+                if st == "PASS":
+                    tb = T.describe(T.check(fps[va], obj, name, fps, src) or [])
+                    if (src, va) in misnamed:
+                        tb.append(misnamed[(src, va)])
             asm = asm_audit.transcribed(os.path.join(ROOT, "match", src)).get("%08x" % va)
             if asm and st == "PASS":
                 st = "assembly transcription, not decompiled (%s)" % asm
         ok += st == "PASS"
         tag = "PASS" if st == "PASS" else "KNOWN" if va in known else "FAIL"
-        out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag})
+        out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag, **({"targets": tb} if tb else {})})
         print("%-5s %08x  %s%s" % (tag, va, src, "" if st == "PASS" else "  " + st))
+        for line in tb:
+            print("      target %s" % line)
     neq = 0
+    exact = {int(r["va"], 16) for r in out if r["tag"] == "PASS"}
     for path in eqfiles:
         for src, sym, va, flags in R.read_rows([path], ""):
+            if va in exact:
+                # byte-exact now (a manifest row in this run passes): the proof is about bytes our source no longer
+                # builds and the row only needs deleting; not a failure (PR #499, 0x00c62590)
+                st, tag = ("byte-exact now: delete this equivalent.txt line and %s"
+                           % os.path.relpath(FN_bundle(path, va), ROOT)), "STALE"
+                out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag, "kind": "equivalent"})
+                print("%-5s %08x  %s  %s" % (tag, va, src, st))
+                continue
             st = equivalent_row(path, src, va, flags, fps)
             neq += st == "EQUIV"
             tag = "EQUIV" if st == "EQUIV" else "FAIL"
@@ -187,8 +209,14 @@ def equivalent_row(path, src, va, flags, fps):
     except SystemExit as e:
         return "build failed: %s" % str(e)[-300:]
     if FN.build_hash(ours) != b.get("build"):
-        return "our build changed since the proof (rerun tools/contrib/prove.py %#x --record)" % va
+        return ("our build changed since the proof (rerun tools/contrib/prove.py %#x --record; if the function is "
+                "byte-exact now, delete its equivalent.txt line and proof instead)" % va)
     return "EQUIV"
+
+
+def FN_bundle(row_file, va):
+    """equivalent/<va>.json next to the equivalent.txt (tools/equiv/func.py bundle_path)"""
+    return os.path.join(os.path.dirname(row_file), "equivalent", "%08x.json" % va)
 
 
 def all_manifests():

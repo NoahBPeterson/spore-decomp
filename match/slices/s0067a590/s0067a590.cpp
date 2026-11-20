@@ -18,7 +18,9 @@ extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsig
 // ===========================================================================
 uint32_t __cdecl PackColor_67ac80(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
-    return (a << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+    // Preserve the native dword reads of the color parameters.
+    return (a << 24) | ((*(volatile uint32_t*)&r & 0xff) << 16)
+        | ((*(volatile uint32_t*)&g & 0xff) << 8) | (*(volatile uint32_t*)&b & 0xff);
 }
 
 // ===========================================================================
@@ -144,7 +146,7 @@ void HM590::possibly(char a, char b)
 // @ 0x0067A680  __cdecl callback: find manager, start tutorial flag
 // ===========================================================================
 struct C_a590_fwd {
-    void possibly(int a, int b);
+    void possibly(int a, int b);   // 0x0067a590
 };
 
 void __stdcall cb_67a680(void* unused, void* data)

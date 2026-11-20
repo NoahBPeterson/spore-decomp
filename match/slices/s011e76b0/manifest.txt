@@ -10,3 +10,4 @@ slices/s011e76b0/s011e76b0.cpp  ?Stop@Stopwatch@@QAEXXZ  011e83a0  /vc71 /O2 /MD
 slices/s011e76b0/s011e76b0.cpp  ?GetElapsedTime@Stopwatch@@QAEMXZ  011e8440  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s011e76b0/s011e76b0.cpp  ??0AsyncOp@@QAE@XZ  011e84f0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s011e76b0/s011e76b0.cpp  ?Reset@AsyncOp@@QAEXXZ  011e8530  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011e76b0/s011e76b0.cpp  ?Stream_Create@@YAPAXIIIIII@Z  011e7910  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE

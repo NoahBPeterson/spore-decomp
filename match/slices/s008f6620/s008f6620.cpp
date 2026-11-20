@@ -2,6 +2,16 @@
 // Object file: UTFSpore_Win32/CSSParser.obj (EA::XHTML::Style::CSSParser property parsers)
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include /vmg /vmv
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_008f2700();
+extern "C" void FUN_008f2940();
+extern "C" void FUN_008f27a0();
+extern "C" void FUN_008f27e0();
+extern "C" void FUN_008f27f0();
+extern "C" void FUN_008f2910();
+extern "C" void FUN_008f29b0();
+extern "C" void FUN_008f2a20();
+
 #include "game/types.h"
 #include <wchar.h>
 #include <new>
@@ -243,7 +253,7 @@ bool CSSParser::ParseStretch(PropertyList* pList)
 {
     float value = 1.0f;
     if (MatchSymbolBgRepeat(gTableBgRepeat, &value)) {
-        pList->Add(CreatePropertyFunc_f(mAllocator, Setter(0x8f27a0), value));
+        pList->Add(CreatePropertyFunc_f(mAllocator, Setter((int)FUN_008f27a0), value));
         return true;
     }
     return false;
@@ -306,7 +316,7 @@ bool CSSParser::ParseColor(PropertyList* pList)
 {
     unsigned color;
     if (MatchColor(&color)) {
-        pList->Add(CreatePropertyFunc_u(mAllocator, Setter(0x8f27e0), color));
+        pList->Add(CreatePropertyFunc_u(mAllocator, Setter((int)FUN_008f27e0), color));
         return true;
     }
     return false;
@@ -317,7 +327,7 @@ bool CSSParser::ParseBackgroundColor(PropertyList* pList)
 {
     unsigned color;
     if (MatchColor(&color)) {
-        pList->Add(CreatePropertyFunc_u(mAllocator, Setter(0x8f27f0), color));
+        pList->Add(CreatePropertyFunc_u(mAllocator, Setter((int)FUN_008f27f0), color));
         return true;
     }
     return false;
@@ -474,11 +484,11 @@ bool CSSParser::ParseVerticalAlign(PropertyList* pList)
     len.mValue = 0.0f;
     len.mUnits = 0;
     if (MatchLength(&len)) {
-        pList->Add(CreatePropertyFunc_L(mAllocator, Setter(0x8f2910), len));
+        pList->Add(CreatePropertyFunc_L(mAllocator, Setter((int)FUN_008f2910), len));
         return true;
     }
     if (MatchSymbolVAlign(gTableVAlign, (unsigned*)&len.mValue)) {
-        pList->Add(CreatePropertyFunc_u(mAllocator, Setter(0x8f2940), *(unsigned*)&len.mValue));
+        pList->Add(CreatePropertyFunc_u(mAllocator, Setter((int)&FUN_008f2940), *(unsigned*)&len.mValue));
         return true;
     }
     return false;
@@ -531,7 +541,7 @@ bool CSSParser::ParseMarginEdge(PropertyList* pList, int edge)
     } else if (!MatchLength(&len)) {
         return false;
     }
-    pList->Add(CreatePropertyFunc_LI(mAllocator, Setter(0x8f29b0), len, edge));
+    pList->Add(CreatePropertyFunc_LI(mAllocator, Setter((int)FUN_008f29b0), len, edge));
     return true;
 }
 
@@ -563,7 +573,7 @@ bool CSSParser::ParsePaddingEdge(PropertyList* pList, int edge)
     len.mValue = 0.0f;
     len.mUnits = 0;
     if (MatchLength(&len)) {
-        pList->Add(CreatePropertyFunc_LI(mAllocator, Setter(0x8f2a20), len, edge));
+        pList->Add(CreatePropertyFunc_LI(mAllocator, Setter((int)FUN_008f2a20), len, edge));
         return true;
     }
     return false;

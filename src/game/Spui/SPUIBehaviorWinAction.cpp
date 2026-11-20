@@ -2,6 +2,19 @@
 // Object file: Spui/SPUIBehaviorWinAction.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1415ef8[];
+extern "C" char g_1415f08[];
+extern "C" char g_1415f18[];
+extern "C" char g_1416034[];
+extern "C" char g_1542c44[];
+extern "C" char g_1542c48[];
+extern "C" char g_1542c4c[];
+extern "C" char g_1542c50[];
+extern "C" char g_1542c54[];
+extern "C" char g_1542c58[];
+extern "C" char g_1542c5c[];
+
 #include "game/types.h"
 #include <cstddef>
 #include <math.h>
@@ -233,16 +246,20 @@ bool SerLoadVector(SerBuffer* p, void* self, SerItem14* item)
     return true;
 }
 
+struct SListObj { void SetAllocator(void* a); };   // 0x00985db0 rw::SList::SetAllocator
+struct CastObj { virtual void v0(); virtual void v1(); virtual void v2(); virtual SListObj* Cast(unsigned id); };
+struct AllocSrc { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+                  virtual void v4(); virtual void v5(); virtual void v6(); virtual void* GetAllocator(); };
+
 // @ 0x007fdfa0
 void State::SetAllocatorObj()
 {
-    void* w = *(void**)((char*)this + 0x40);
-    if (!w) return;
-    void* s = VCallR(w, 0xc);
-    if (!s) return;
-    void* src = *(void**)((char*)this + 0x38);
-    if (!src) return;
-    SList_SetAllocator(s, (void*)(intptr_t)VCallR(src, 0x1c));
+    if (CastObj* w = *(CastObj**)((char*)this + 0x40)) {
+        if (SListObj* s = w->Cast(0x254a4bb)) {
+            if (*(AllocSrc**)((char*)this + 0x38))
+                s->SetAllocator((*(AllocSrc**)((char*)this + 0x38))->GetAllocator());
+        }
+    }
 }
 
 // @ 0x007fdfe0
@@ -380,9 +397,9 @@ void* Interp::DeletingDtor(unsigned char flags)
     void* self = this;
     Interp0* p0 = (Interp0*)self;
     void* a = p0->mpTimeFunction;        // +0x3c
-    p0->mVtbl0 = (void*)0x1415f18;
-    p0->mVtbl4 = (void*)0x1415f08;
-    p0->mVtblC = (void*)0x1415ef8;
+    p0->mVtbl0 = (void*)g_1415f18;
+    p0->mVtbl4 = (void*)g_1415f08;
+    p0->mVtblC = (void*)g_1415ef8;
     if (a) {
         VCallV(a, 4);
         p0->mpTimeFunction = 0;
@@ -397,13 +414,18 @@ void* Interp::DeletingDtor(unsigned char flags)
     return self;
 }
 
+extern "C" char g_1415fe8[];   // 0x1415fe8: State vtable (primary)
+extern "C" char g_1415fd4[];   // 0x1415fd4: State vtable (+4 base)
+extern "C" char g_1415fc4[];   // 0x1415fc4: State vtable (+0xc base)
+
 // @ 0x007fe390
 void* State::DeletingDtor(unsigned char flags)
 {
     State* s = this;
-    s->mVtbl0 = (void*)0x1415fe8;
-    s->mVtbl4 = (void*)0x1415fd4;
-    s->mVtblC = (void*)0x1415fc4;
+    s->mVtbl0 = g_1415fe8;
+    s->mVtbl4 = g_1415fd4;
+    s->mVtblC = g_1415fc4;
+    _ReadWriteBarrier();
     void* p = s->mpValueInterp;
     if (p) {
         s->mpValueInterp = 0;
@@ -503,7 +525,7 @@ def:
 // @ 0x012f7570
 void init_1542c44()
 {
-    *(int*)0x1542c44 = 1;
-    *(int*)0x1542c48 = 0;
-    *(void**)0x1542c4c = (void*)0x1416034; *(int*)0x1542c50 = 0x254cdfc; *(short*)0x1542c54 = 0x13; *(int*)0x1542c58 = 0x40; *(int*)0x1542c5c = 1;
+    *(int*)g_1542c44 = 1;
+    *(int*)g_1542c48 = 0;
+    *(void**)g_1542c4c = (void*)g_1416034; *(int*)g_1542c50 = 0x254cdfc; *(short*)g_1542c54 = 0x13; *(int*)g_1542c58 = 0x40; *(int*)g_1542c5c = 1;
 }

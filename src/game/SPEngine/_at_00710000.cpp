@@ -2503,14 +2503,14 @@ void Vec30::resize(unsigned n, const void* value)
 void Vec18::resize(unsigned n)
 {
     unsigned cur = (unsigned)((mpEnd - mpBegin) / 0x18);
-    if (cur < n) {
+    if (n > cur) {
         int fill[6] = { -1, -1, -1, -1, -1, -1 };
         insert(mpEnd, n - cur, fill);
     } else {
         char* p = mpBegin + n * 0x18;
         char* end = mpEnd;
         move(end, end, p);
-        mpEnd += (int)((p - end) / 0x18) * 0x18;
+        mpEnd -= (int)((end - p) / 0x18) * 0x18;
     }
 }
 

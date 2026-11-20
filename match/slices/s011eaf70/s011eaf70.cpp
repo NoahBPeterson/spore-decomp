@@ -784,15 +784,7 @@ void __stdcall FUN_011eb980(unsigned int* out, unsigned int* pairs, unsigned int
 	out[3] = rec[3];
 }
 
-// ---------------------------------------------------------------------------------------------------------
-// 011eb9f0: release the four handles produced by 011eb980.
-// ---------------------------------------------------------------------------------------------------------
-// @ 0x11eb9f0
-void __stdcall FUN_011eb9f0(unsigned int* handles)
-{
-	for (unsigned int i = 0; i < 4; ++i)
-		((void (__cdecl*)(unsigned int))g_rwFreeFn)(handles[i]);
-}
+// 011eb9f0 (release the four handles produced by 011eb980) lives in slice s011eb9f0: it is built with /vc71.
 
 // ---------------------------------------------------------------------------------------------------------
 // 011eba20: rw::core::stdc::StringnCopy

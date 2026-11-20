@@ -4087,6 +4087,7 @@ struct LoadHandle_s0041_86c0 {
     void Finish();  // 0x006909B0
     void Add(LoadHandle_s0041_86c0* h);  // 0x00691380
     bool Process(void* res);  // 0x004229F0
+    void ProcessB(void* res);  // 0x00422A10
     void OnBegin(void* p);  // 0x004229B0
     void OnEnd(void* p);  // 0x004229D0
 };
@@ -10380,7 +10381,7 @@ void EditorResource::NotifyA(LoadHandle_s0041_86c0* pParent)
 {
     mpThreaded.get()->Method1();
     mpThreaded.get()->Method2();
-    pParent->Process(this);
+    pParent->ProcessB(this);
 }
 
 // @ 0x00418fd0

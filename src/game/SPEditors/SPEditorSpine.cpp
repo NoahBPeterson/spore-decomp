@@ -555,7 +555,7 @@ class cSpine76 {
   float mVertebraHalfWidth;  // +0x11c
 
   void SetTuning(int unused);                        // 005d2740
-  void Refresh(int unused);                          // 005d2790
+  void Refresh();                                    // 005d2790 (tail-jumps into 005d1f30, so no stack args)
   __declspec(noinline) void FUN_005d1ba0();          // 005d1ba0
   __declspec(noinline) void FUN_005d1e70();          // 005d1e70
   __declspec(noinline) void FUN_005d1d40();          // 005d1d40
@@ -2147,7 +2147,7 @@ void cSpine76::SetTuning(int)
 
 // @ 0x005d2790
 namespace SP {
-void cSpine76::Refresh(int)
+void cSpine76::Refresh()
 {
   FUN_005d1e70();
   RBNodeBase* end = &mVertebrae.mAnchor;

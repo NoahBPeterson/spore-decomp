@@ -1,5 +1,9 @@
 // Slice s009579f0 -- EA::UTFWin UI image table + WindowMgr display/message plumbing.
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_144064c[];
+
 #include <intrin.h>
 #include <xmmintrin.h>
 
@@ -150,7 +154,7 @@ void  __cdecl    ProcessPendingTextures();               // 0x00957D30
 // ===========================================================================
 UIImage* UIImage::Image(void* obj, int a, int b, float c, float d, float e, float f, int h)
 {
-    vtbl = (void*)0x144064c;
+    vtbl = (void*)g_144064c;
     _InterlockedExchange((volatile long*)&f28, 0);
     p1 = obj;
     if (obj) ((VTab*)obj)->v00();
@@ -184,7 +188,7 @@ void** __cdecl Fn00957a60(int a, int b)
 // ===========================================================================
 UIImage* __fastcall Fn00957aa0(UIImage* self)
 {
-    self->vtbl = (void*)0x144064c;
+    self->vtbl = (void*)g_144064c;
     _InterlockedExchange((volatile long*)&self->f28, 0);
     self->p1 = 0;
     return self;
@@ -197,7 +201,7 @@ void* __stdcall Fn00957ac0(int a, int b)
 {
     UIImage* p = (UIImage*)operator new(0x2c, "UTFWin/Image", 0, 0, 0, 0);
     if (p) {
-        p->vtbl = (void*)0x144064c;
+        p->vtbl = (void*)g_144064c;
         _InterlockedExchange((volatile long*)&p->f28, 0);
         p->p1 = 0;
         return p;

@@ -10,6 +10,12 @@
 // tangent and a perpendicular to it; optional linear friction row; two linear bilateral rows (perp
 // and tangent x perp) pulling frame 0's origin onto the path; angular rows depending on the DOF mode
 // (>1: two rows, 3: a third, tied to the path's binormal); a linear limit unless the path is closed.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a1b88[];
+extern "C" char g_14a1b90[];
+
 #include "types.h"
 
 typedef float hkReal;
@@ -402,7 +408,7 @@ extern "C" int CurveIndex(hkReal t);   // 0x0120ad30
 // @ 0x01094bc0
 void cCurveContainer::Destroy()
 {
-	this->mpVtbl = (void*)0x014a1b88;
+	this->mpVtbl = (void*)g_14a1b88;
 	int i;
 	int n = this->m_arrays[0].m_size;
 	for (i = 0; i < n; ++i)
@@ -452,7 +458,7 @@ void cCurveContainer::Destroy()
 		heap->Dealloc(this->m_arrays[0].m_data,
 		              (this->m_arrays[0].m_capacityAndFlags & 0x3fffffff) * 4, 0x14);
 	}
-	this->mpVtbl = (void*)0x013ef094;
+	this->mpVtbl = (void*)g_13ef094;
 }
 
 // @ 0x01094d50
@@ -482,12 +488,12 @@ void* cStreamProxy::To08(void* arg)
 void* cStreamProxy::Destroy(int flags)
 {
 	cRefObj* p = (cRefObj*)this->mpStream;
-	this->mpVtbl = (void*)0x014a1b90;
+	this->mpVtbl = (void*)g_14a1b90;
 	if (p->m_memSize != 0) {
 		if (--p->m_refCount == 0)
 			p->Release(1);
 	}
-	this->mpVtbl = (void*)0x013ef094;
+	this->mpVtbl = (void*)g_13ef094;
 	if (flags & 1)
 		gDeallocator->Dealloc(this, this->m_memSize, 0x29);
 	return this;

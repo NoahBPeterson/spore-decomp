@@ -38,3 +38,5 @@
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f3a10@CharStream@@QAEDH@Z  008f3a10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f3a40@CharStream@@QAEXH@Z  008f3a40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?F_8f24a0@PropNodeX@Layout@XHTML@EA@@QAEPAV1234@HPBG@Z  008f24a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?MatchAscii@CharStream_s008f_2660@Style@XHTML@EA@@QAE_NPBD@Z  008f3480  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f38b0@CharStream@@QAEPAXPAG@Z  008f38b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

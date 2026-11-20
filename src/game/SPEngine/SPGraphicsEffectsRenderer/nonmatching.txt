@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 006e6840 43 GetLayout - case-body emission order in the switch jump table differs
-006e69e0 35 SetMode - original keeps the mode in edx and tests `mode-1`; ours keeps it in a callee-saved register
 006e6b70 11 SetParams - register scheduling of the two int args differs (eax/edx swap)
 006e6ca0 47 SortPairsA - insertion-sort register assignment (v1/v2 in edx/esi) differs
 006e6cf0 51 SortPairsB - insertion-sort register assignment differs
@@ -61,7 +60,6 @@
 006ee940 128 cEffectsRenderer::AddActive; complete, size 153 vs 197. Builds the scratch via FUN_006ec730/FUN_006ecfc0, runs the scratch-cleanup, then appends the id to the +0x238 vector (inline bump or DoInsertValue). equiv FAIL is a harness artifact (stubbed FUN_006ecfe0 faults). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 006eea80 38 vbvec::resize (vector<bool, fixed_vector_allocator>); complete, size 90 vs 88. Grows via FUN_006ecb40 or shrinks by re-linking the end pointer after the zero-length tail move. equiv 100% coverage; FAIL is a harness artifact (stubbed FUN_006ecb48 faults). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 006eeb60 239 Vector70::insert (eastl vector<cTextureParticleSet>, stride 0x70); complete, size 301 vs 412. In-capacity path copies the tail element up and assigns; reallocation path doubles capacity via operator new(...,"Graphics", allocator.h:0xd1), uninit-copies both halves via FUN_006e93d0/FUN_006eba30, frees the old block. equiv FAIL is a harness artifact (stubbed FUN_006e9230 faults). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-006efc10 7 complete; cl keeps the object in esi and moves to ecx for the destructor call, original reloads the global into ecx and spills a copy to esi.
 006f0890 684 complete cEffectsRenderer shutdown; register allocation/store scheduling differ (loop locals, hoisted stores) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 006f0b90 607 complete Render pass; global |= sequences merged by cl (orig keeps separate or's), reg alloc differs; the first IProps::Get out-pointer is carried in the flags argument slot (the original reuses that home), so ours seeds Prop* p from (unsigned)flags instead of reading an uninitialised local; difftest PASS 307 valid 64.8% (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
 006f0fb0 881 complete AddParticleSet; EH frame/refcount-release layout differs; difftest PASS 317 valid 62.4% (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)

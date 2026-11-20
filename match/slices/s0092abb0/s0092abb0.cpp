@@ -1,5 +1,9 @@
 // Slice s0092abb0: EA::Clipboard (SetClipboardData, Win32 clipboard window) and
 // EA::CommandLine (argument/switch lookup, insert, current app path).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e3a0[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -319,7 +323,7 @@ long __stdcall FUN_0092ae80(HWND hwnd, UINT msg, unsigned wp, long lp) {
 
 // @ 0x0092abb0
 bool Clipboard::SetClipboardData(IData* pData, bool b) {
-    mMutex.Lock((void*)0x143e3a0);
+    mMutex.Lock((void*)g_143e3a0);
     if (b)
         Clear(0xffffffff);
     if (pData != 0) {
@@ -344,7 +348,7 @@ bool Clipboard::SetClipboardData(IData* pData, bool b) {
             Win32Clipboard* os = (Win32Clipboard*)mpOSData;
             int len = (int)(pData->i5() >> 1) - 1;
             os->WriteText(pData->i4(), len);
-            mMutex.Lock((void*)0x143e3a0);
+            mMutex.Lock((void*)g_143e3a0);
         }
     }
     mMutex.Unlock();
@@ -385,7 +389,7 @@ bool Clipboard::Clipboard_EnablePlatform() {
 void Clipboard::FUN_0092b0f0(int v) {
     char* self = (char*)this;
     Mutex* m = (Mutex*)(self + 0x118);
-    m->Lock((void*)0x143e3a0);
+    m->Lock((void*)g_143e3a0);
     *(int*)(self + 4) = v;
     if (*self != 0) {
         if (v == 1) {

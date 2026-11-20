@@ -328,8 +328,9 @@ int Interpolator::Fixup(Interpolator* self, FrameTable* table)
     self->m_keys = (u32*)((u8*)self->m_keys + delta);
 
     rw::core::arena::Arena* arena = (rw::core::arena::Arena*)table->m_arena;
-    void* id = (void*)self->m_ctrl;
-    self->m_ctrl = (Controller*)arena->IdToObject((u32)id);
+    Controller** ctrl = &self->m_ctrl;
+    u32 id = (u32)*ctrl;
+    *ctrl = (Controller*)arena->IdToObject(id);
 
     u32 handle = self->m_handle;
     self->m_vtable = s_vtableInterpolator;

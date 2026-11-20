@@ -10,6 +10,15 @@
 // Member / helper names are Claude-coined where no symbol is known.
 //
 // Module flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00acdff0();
+extern "C" void FUN_00ae7060();
+extern "C" void FUN_00ae7080();
+extern "C" void FUN_00b1e520();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+
 #include "types.h"
 #include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gCitySimulatorSerializerList[]; // 0x01566b98
@@ -170,7 +179,7 @@ struct cGameNounManager {
 };
 inline int* GDV(void* gdm, void* key, void* fn1, void* fn2, void* extra)
 {
-    return ((cGameNounManager*)gdm)->GetGameDataVector(key, fn1, fn2, (void*)0xb1e520, extra);
+    return ((cGameNounManager*)gdm)->GetGameDataVector(key, fn1, fn2, (void*)&FUN_00b1e520, extra);
 }
 inline int* GDV(void* gdm, void* key, void* fn1, void* fn2)
 {
@@ -357,8 +366,8 @@ const wchar_t* cCitySimulator::GetName(int kind)
 {
     if (kind == 2)
         return str_city_simulator;
-    int* const data = GDV(NounManager(), (void*)0xcd7d10, (void*)0xd3d420,
-                          (void*)0xacdff0, (void*)0x18c43e8);
+    int* const data = GDV(NounManager(), (void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                          (void*)FUN_00acdff0, (void*)0x18c43e8);
     int* const begin = data + 1;
     const int n = (begin[1] - begin[0]) >> 2;
     WStr_Format(&mpName, str_cities_fmt, n, (int)(unsigned int)mSimClock.GetElapsedTime());
@@ -582,8 +591,8 @@ bool CitySimulatorMessageHandler::HandleMessage(unsigned int msg, const CityNoun
 // @ 0x00ae7200
 int* cGameNounManager::GetSubsystemVec(void* extra)
 {
-    return (int*)((char*)GetGameDataVector((void*)0xcd7d10, (void*)0xae7060,
-                                           (void*)0xae7080, (void*)0xb1e520, extra) + 4);
+    return (int*)((char*)GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00ae7060,
+                                           (void*)FUN_00ae7080, (void*)FUN_00b1e520, extra) + 4);
 }
 // @ 0x00ae7230
 void VecTB_clear_cb(void* db)

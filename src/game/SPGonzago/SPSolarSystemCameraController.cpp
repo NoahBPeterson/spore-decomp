@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPSolarSystemCameraController.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+
 #include "game/types.h"
 #include "sse_helpers.h"
 #include "SP/cSPTimer.h"
@@ -1110,7 +1115,7 @@ namespace SP {
 cSPSimulatorSpaceGame_s0101_bd10* GetUFOSimulator_s0101_bd10();        // 0x00ffbe50
 }
 namespace SP {
-IStage* GetStage();                              // 0x00b3d4d0
+IStage* GetStage();                              // 0x00b3d470
 }
 namespace SP {
 ISpaceGame* SpaceGameGet();                      // 0x01002bd0
@@ -1918,9 +1923,9 @@ void cEditorTraceObject::FUN_01018060()
     if (p10 != 0)
         ((void (__thiscall*)(void*))VT(p10)[4 / 4])(p10);
 
-    this->mVtbl8 = 0x13ec458;
-    this->mVtbl4 = 0x13eb394;
-    this->mVtbl0 = 0x13eb938;
+    this->mVtbl8 = (int)g_13ec458;
+    this->mVtbl4 = (int)g_13eb394;
+    this->mVtbl0 = (int)g_13eb938;
 }
 
 // @ 0x010187c0
@@ -2778,9 +2783,8 @@ void UFO::bad0(int a, int b)
     (void)b;
     int v = a;
     int local = 100;
-    int* p = &v;
-    if (v >= 100) p = &local;
-    aea0((float)*p * 0.001f);
+    const int& m = (local > v) ? v : local;
+    aea0((float)m * 0.001f);
 }
 
 // @ 0x0101bb10

@@ -4,3 +4,6 @@
 ../src/game/SPEditors/SPUIFeedListCategory.cpp  ?push_back@Vec8@@QAEXPAX@Z  00665330  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListCategory.cpp  ?ShutdownChildren@cSPUIFeedListCategory_s0066_4c90@@QAEXXZ  006657a0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664390@cSPUIFeedListCategory@@QAEXMMMM@Z  00664390  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_006644e0@cSPUIFeedListCategory@@QAEX_N@Z  006644e0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00663e50@cSPUIFeedListCategory@@QAEXXZ  00663e50  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664550@cSPUIFeedListCategory@@QAE_N_N@Z  00664550  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

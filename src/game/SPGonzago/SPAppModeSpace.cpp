@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPAppModeSpace.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15b4148[];
+
 #include "game/types.h"
 #include "SP/cGonzagoSubsystem.h"
 #include <math.h>
@@ -3642,14 +3645,18 @@ char AppMode::f9ce0(int a, int b)
 }
 
 // @ 0x00fd9d00
+struct GameInputMgr_9d00 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30();
+    virtual int GetMode();      // +0x34
+};
 int AppMode::f9d00()
 {
-    void* gi = FUN_00b3d250();
-    int r = ((int(__thiscall*)(void*))VTP(gi)[0x34 / 4])(gi);
-    if (r == 1) return 1;
-    gi = FUN_00b3d250();
-    r = ((int(__thiscall*)(void*))VTP(gi)[0x34 / 4])(gi);
-    if (r == 2) return 1;
+    if (((GameInputMgr_9d00*)FUN_00b3d250())->GetMode() == 1 ||
+        ((GameInputMgr_9d00*)FUN_00b3d250())->GetMode() == 2)
+        return 1;
     return 0;
 }
 
@@ -4100,7 +4107,7 @@ bool __thiscall cAppModeSpace::FUN_00fdab40(void* arg)
             b = b & ((cSelf*)r)->FUN_01017300(arg);
     }
 
-    cBigFrame_s00fd_ab40 frame((char*)this - 8, (void*)0x15b4148, (void*)0x1a80d26);
+    cBigFrame_s00fd_ab40 frame((char*)this - 8, (void*)g_15b4148, (void*)0x1a80d26);
     bool ok = frame.Test(arg);
     if (ok && b)
         return true;

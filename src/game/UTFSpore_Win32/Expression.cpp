@@ -104,6 +104,8 @@ extern "C" double __cdecl log(double);
 extern "C" double __cdecl fabs(double);
 extern "C" double __cdecl pow(double, double);
 #pragma intrinsic(asin, acos, atan, atan2, sin, cos, tan, sqrt, exp, log, fabs, pow)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int   uint32;
 namespace eastl {
 struct allocator_s0083_d3d0 { unsigned char pad[4]; };
@@ -714,6 +716,7 @@ float EA::ArgScript::cExpression::EvalRealTerm(char const *& p)
 // @ 0x0083e430
 cExpression::cExpression()
 : mfMaxLoadFactor(gOne), mfGrowthFactor(gTwo) {
+    _ReadWriteBarrier();
     mnBucketCount = 1;
     mpBucketArray = gEmptyBucketArray;
     mnElementCount = 0;

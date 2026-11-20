@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/jdmarker.cpp  ?FUN_00854ed0@@YAPAXPAUCommonInfo@@@Z  00854ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

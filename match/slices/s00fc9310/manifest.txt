@@ -8,3 +8,4 @@ slices/s00fc9310/s00fc9310.cpp  ?BeginEncoding@MovieEncoder_Avi@movie@rw@@QAEXXZ
 slices/s00fc9310/s00fc9310.cpp  ?AddAVIIndexEntry@MovieEncoder_Avi@movie@rw@@QAEXPBUAviIndexEntry@23@@Z  00fca160  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00fc9310/s00fc9310.cpp  ?FreeAVIIndexEntries@MovieEncoder_Avi@movie@rw@@QAEXXZ  00fca250  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00fc9310/s00fc9310.cpp  ?Ctor@MovieEncoder_Avi@movie@rw@@QAEPAV123@I@Z  00fca2c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fc9310/s00fc9310.cpp  ?PrepareDecoder@MovieDecoder@movie@rw@@QAEXPAX0I000III@Z  00fc9310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

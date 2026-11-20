@@ -2,6 +2,13 @@
 // (cSPUITimeline) and the cSPUIGlobalUIRootWinProc helpers that share the same translation unit.
 // /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc: none of these bodies installs an EH frame).
 // Out-of-line callees are only declared; their original addresses are in the trailing comments.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145ea00[];
+extern "C" char g_145ea48[];
+extern "C" char g_145ea80[];
+extern "C" char g_145eac8[];
+
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -340,15 +347,15 @@ void FUN_00b25cd0()
     GetStaticObj()->RegisterNounClasses();
     GetStaticObj()->FUN_00692850();
     RegisterDramaEventsFactories();
-    InitClassRegistry(&g_classRegistry0, 1, 0x0145ea00, FUN_013c2030);
+    InitClassRegistry(&g_classRegistry0, 1, (int)g_145ea00, FUN_013c2030);
     FUN_00b23c60(0x01186577, "cSpatialObject");
     FUN_00b23c60(0xef3da0d7, "cCreatureTribeMember");
     FUN_00b23c60(0x0e9cb8ba, "cBuilding");
     FUN_00b23c60(0xce9f6639, "cCreatureBase");
     FUN_00b23c60(0x013f94d4, "cCombatant");
-    InitClassRegistry(&g_classRegistry1, 2, 0x0145ea48, FUN_013c2020);
-    InitClassRegistry(&g_classRegistry2, 4, 0x0145ea80, FUN_013c2010);
-    InitClassRegistry(&g_classRegistry3, 8, 0x0145eac8, FUN_013c2000);
+    InitClassRegistry(&g_classRegistry1, 2, (int)g_145ea48, FUN_013c2020);
+    InitClassRegistry(&g_classRegistry2, 4, (int)g_145ea80, FUN_013c2010);
+    InitClassRegistry(&g_classRegistry3, 8, (int)g_145eac8, FUN_013c2000);
 }
 
 // ---------------------------------------------------------------------------------------------

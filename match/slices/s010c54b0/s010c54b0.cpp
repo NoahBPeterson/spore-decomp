@@ -4,6 +4,10 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP /vc71   (Havok 3.1.0 was built with VC .NET 2003 cl 13.10)
 //
 // No PDB names exist for the three helpers that have no exported symbol; they are coined below and marked.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "types.h"
 #include <math.h>
 extern "C" void _ReadWriteBarrier(void);
@@ -555,7 +559,7 @@ hkSubpartBuilder::~hkSubpartBuilder()
         hkThreadMemory::getInstance()->deallocateChunk(m_items.m_data,
                                                        (m_items.m_capacityAndFlags & 0x3fffffff) * 0x30,
                                                        HK_MEMORY_CLASS_ARRAY);
-    *(void**)this = (void*)0x013ef094;
+    *(void**)this = (void*)g_13ef094;
 }
 
 // @ 0x010c5de0

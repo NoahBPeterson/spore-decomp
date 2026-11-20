@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPUIGlobalUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_147f16c[];
+extern "C" char g_147f17c[];
+extern "C" char g_147f198[];
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include "cSPUILayoutManager.h"
@@ -44,6 +51,11 @@ extern "C" void  __cdecl FUN_006a12a0(void*, uint32_t, void*);   // 0x6a12a0 Get
 extern "C" void* __cdecl FUN_010666a0();                         // 0x10666a0
 extern "C" uint8_t      g_bPaused;       // @ 0x16a1890
 extern "C" char g_vtblContentValidationSummarizer[];  // @ 0x13ec458
+extern "C" char g_147f1c8[];   // vtables retail relocates here (cSPUIGlobalUIRootWinProc and its
+extern "C" char g_147f1b8[];   //   two secondary bases)
+extern "C" char g_147f1a8[];
+extern "C" char g_13eb394[];   // IHandler vtable
+extern "C" char g_13eb938[];   // base vtable
 extern "C" char g_vtblListenerBase[];                 // @ 0x13eb384
 extern "C" char g_vtblNetworkActivityProc[];          // @ 0x147f0dc
 extern "C" char g_vtblNetworkActivityProc04[];        // @ 0x147f0cc
@@ -981,8 +993,9 @@ void* OptObj::Ctor()
 void OptObj::Dtor()
 {
     void* self = this;
-    *(void**)self = (void*)0x147f17c;
-    *(void**)((char*)self + 4) = (void*)0x147f16c;
+    *(void**)self = (void*)g_147f17c;
+    *(void**)((char*)self + 4) = (void*)g_147f16c;
+    _ReadWriteBarrier();
     void* p54 = *(void**)((char*)self + 0x54);
     if (p54 != 0) ((RefObj1*)p54)->Release();
     ((CStringObj*)((char*)self + 0x40))->FUN_006b5240();
@@ -1001,8 +1014,9 @@ void OptObj::Dtor()
     if (p14 != 0) ((RefObj1*)p14)->Release();
     void* p10 = *(void**)((char*)self + 0x10);
     if (p10 != 0) ((RefObj2*)p10)->Release();
-    *(void**)self = (void*)0x13eb938;
-    *(void**)((char*)self + 4) = (void*)0x13ec458;
+    *(void**)self = (void*)g_13eb938;
+    _ReadWriteBarrier();
+    *(void**)((char*)self + 4) = (void*)g_13ec458;
 }
 
 // @ 0x00e00fe0
@@ -1047,7 +1061,7 @@ void OptObj::Reset()
 void* OptObj::DelDtor(unsigned int flags)
 {
     void* self = this;
-    *(void**)self = (void*)0x147f198;
+    *(void**)self = (void*)g_147f198;
     *(void**)((char*)self + 4) = 0;
     if (flags & 1) {
         EA_Free(self);
@@ -1094,9 +1108,10 @@ void* WinObj::Ctor(void* arg)
 void WinObj::Dtor()
 {
     void* self = this;
-    *(void**)self = (void*)0x147f1c8;
-    *(void**)((char*)self + 4) = (void*)0x147f1b8;
-    *(void**)((char*)self + 8) = (void*)0x147f1a8;
+    *(void**)self = g_147f1c8;
+    *(void**)((char*)self + 4) = g_147f1b8;
+    *(void**)((char*)self + 8) = g_147f1a8;
+    _ReadWriteBarrier();
     void* h = *(void**)((char*)self + 0x10);
     if (h != 0) {
         void* a1 = *(void**)((char*)self + 0x14);
@@ -1118,9 +1133,9 @@ void WinObj::Dtor()
         *(void**)((char*)self + 0x10) = 0;
         FUN_00571db0(h, a1, a2, a3, a4);
     }
-    *(void**)((char*)self + 8) = (void*)0x13ec458;
-    *(void**)((char*)self + 4) = (void*)0x13eb394;
-    *(void**)self = (void*)0x13eb938;
+    *(void**)((char*)self + 8) = g_vtblContentValidationSummarizer;
+    *(void**)((char*)self + 4) = g_13eb394;
+    *(void**)self = g_13eb938;
 }
 
 // @ 0x00e01250

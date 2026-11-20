@@ -12,3 +12,6 @@ slices/s00ecda80/s00ecda80.cpp  ?FUN_00ecdb30@@YIXPAH@Z  00ecdb30  /O2 /MD /Gy /
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ecdd70@@YIXPAH@Z  00ecdd70  /O2 /MD /Gy /EHsc /TP
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece7f0@@YI_NH@Z  00ece7f0  /O2 /MD /Gy /EHsc /TP
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece300@@YIXH@Z  00ece300  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?FUN_00ecdbb0@@YIHH@Z  00ecdbb0  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece8c0@@YIXPAH@Z  00ece8c0  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece8f0@@YIHH@Z  00ece8f0  /O2 /MD /Gy /EHsc /TP

@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPMissionRaid.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f5c04[];
+extern "C" char g_146f688[];
+
 #include "game/types.h"
 #include "sse_helpers.h"
 #include <intrin.h>
@@ -1264,7 +1268,7 @@ MissionElem* __cdecl FUN_00c5bbc0(MissionElem* first, MissionElem* last, Mission
   if (first != last) {
     do {
       if (dst != 0) {
-        dst->vtbl = 0x0146f688;
+        dst->vtbl = (int)g_146f688;
         dst->id    = first->id;
         dst->pos   = first->pos;
         dst->f14   = first->f14;
@@ -1413,7 +1417,7 @@ void __fastcall FUN_00c5c240(ElemVec* vec, void* dummy)
   if (e < vec->cap) {
     vec->end = e + 1;
     if (e != 0) {
-      e->vtbl  = 0x0146f688;
+      e->vtbl  = (int)g_146f688;
       e->id    = -1;
       e->pos.x = g_elemPosX;
       e->pos.y = g_elemPosY;
@@ -1430,7 +1434,7 @@ void __fastcall FUN_00c5c240(ElemVec* vec, void* dummy)
 
   {
     MissionElem tmp;
-    tmp.vtbl  = 0x0146f688;
+    tmp.vtbl  = (int)g_146f688;
     tmp.id    = -1;
     tmp.pos.x = g_elemPosX;
     tmp.pos.y = g_elemPosY;
@@ -1500,7 +1504,7 @@ u8 __fastcall FUN_00c5c410(cRaidEvent* self, void* dummy, u32 tag, void* out)
       cCivObject* emp = StarManager()->GetEmpireByID(self->f230);
       if (emp != 0) {
         emp->FUN_00c30c80();
-        WStr_Format(out, (const u16*)0x013f5c04, *(u32*)emp->GetCitiesPos());
+        WStr_Format(out, (const u16*)g_13f5c04, *(u32*)emp->GetCitiesPos());
       }
     }
     return 1;

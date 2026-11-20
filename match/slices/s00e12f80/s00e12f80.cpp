@@ -2,6 +2,11 @@
 // SP::cUICard / SP::cUIMissionCard UI helpers: vtable-forwarding wrappers, Toggle,
 // animation tick, message handling, destructor and the large InitForCreature.
 // Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+
 #include "types.h"
 #include <math.h>
 
@@ -188,8 +193,8 @@ void cUICard::Release2() {
   q = p20; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
   q = p1c; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
   q = p0c; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
-  *(void**)((char*)this + 4) = (void*)0x13ec458;
-  *(void**)this = (void*)0x13eb938;
+  *(void**)((char*)this + 4) = (void*)g_13ec458;
+  *(void**)this = (void*)g_13eb938;
 }
 
 // @ 0x00e132c0

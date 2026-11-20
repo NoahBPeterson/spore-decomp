@@ -16,7 +16,6 @@
 00a22110 125 complete; hash-bucket rehash (node next at +0x24); fixed next-link read as value (*(node+0x24)) and inverted tail free-list branch; equiv WEAK (42 valid, 95.3% coverage); thiscall stub-class member flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a22370 123 HTable20::Rehash: complete; same bucket-array reload difference
 00a22410 51 SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
-00a227a0 13 schedule: DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; the original hoists the mArg store above the inlined base ctor (vtable, xchg rc) and the derived vtable store, cl15 keeps base-then-members order. Tried init-list orders (mArg/mZero, explicit RefBaseA22()), body assignment, volatile mArg: no change. fix1: quick check PASS (emulator found no mismatch) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00a228d0 65 worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
 00a22b90 64 LoadShared: complete; inline Release uses dec vs add -1 and register order
 00a233b0 316 System::MuteAll: complete behaviour; constant materialisation (x87 fldz/fstp vs SSE), thiscall helper shape and frame differ (383 vs 440 bytes) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
@@ -32,7 +31,6 @@
 00a25090 6 complete; only xchg register choice (ecx/edx) differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a25190 194 complete; tmp AutoRefCount now in its own slot like the original (switch on id), but the original caches tmp.p in esi through the release while ours reloads it, and the shared operator new pushes are spelled with a zero register; difftest PASS after fixing the tmp slot (ours reused the dead param slot for tmp, so AutoRefCount::operator= got a this pointer outside our frame) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a252b0 1368 complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ flags: /O2 /MD /Gy /EHsc /TP /GS-
-00a25980 4 complete; eax/edx choice for string begin vs &out; difftest PASS (after annotating operator_delete__ and g_pfnString) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a25aa0 4 complete; ebx/ebp swap for args a and c flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a25c40 199 complete; AudioSystem::Update SEH frame + queue/stopwatch timing loop reproduced; 269 vs 651 bytes. [equiv: FAIL 5/7 valid, fault at 00a0f9b1] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a25ed0 115 complete; RemoveFromList intrusive-list unlink/refcount body; 123 vs 281 bytes. [equiv: WEAK 94 valid, 16.7% coverage] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
@@ -85,7 +83,6 @@
 00a29be0 791 complete; wide-string hashtable lookups, IConfiguration vtable slots and x87/branch shapes differ; size 1039 vs 1086. difftest WEAK (400/400 valid, 5.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a2a020 209 EA::Audio::System::ConnectSubmixTree (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction of the SEH signature; equiv now UNSUPPORTED (only 0/1200 inputs valid, read faults) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a2a150 85 eastl::hashtable find-or-insert helper (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction of the sret insert call (this in ECX, BoolTag by value); equiv now PASS (221 valid inputs, 95.2% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a2ab40 9 eastl::vector<E12>::pushEmpty wrapper (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): equivalent, but MSVC picks `test eax,eax; je` / zero via ecx where we emit `xor edx,edx; cmp eax,edx; je` / zero via edx (register tie-break); equiv now PASS (777 inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a2ac20 240 eastl::vector<uint32> insert/DoInsertValue helper (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction, no local symbol of similar size; equiv now UNSUPPORTED (unresolved ??2@YAPAXI@Z operator new) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a2add0 115 eastl::hashtable bucket destroy (chain walk, calls DoNukeSubtree 0x00a9600 + operator_delete__) (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural; equiv now PASS (457 inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a2ae90 56 eastl::hashtable erase-range (FindInsertPos 0x00a22730, element Release, count fixup) (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): count fixup subtracts (last-first) with the original's negated-magic divide (wraps like the original at INT_MIN); equiv now PASS (529 valid inputs, 60.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
@@ -110,7 +107,6 @@
 00a2e650 1433 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
 00a2edd0 88 complete hashtable find+erase wrapper; temp/iterator slot reuse and callee-saved regs differ
 00a2ef60 388 complete stopwatch-timed table rebuild; locals/regs and EH layout differ; difftest WEAK (19% coverage: ObjectError() returns global 0x1667aa0, null in the image, so the body is unreachable)
-00a2f1a0 13 eastl::map operator[] assignment/store scheduling differs; difftest PASS (mapped MapUU::operator[] to 0x00a2e060, removed stray "@" markers in class decl)
 00a2f5d0 86 complete pool node alloc+construct; EH object frame (placement-new temp) differs
 00a2f730 268 Submix::LoadFromResman: structure/head reproduced but large resman-parse branches omitted (ours 324 bytes vs retail 556); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv WEAK (392 valid, 19.8% coverage, need 60%)
 00a2f960 25 Submix::Submix ctor: size matches (287); residual is stack-temp scheduling for the empty allocator-tag refs passed to the three member hash-table ctors (retail reuses one uninitialised byte at [esp+0xb] for both args, ours allocates two adjacent byte temps) plus lea/push ordering (ours loads `this` before the second push); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (our code stores its own copy of the vtable/constant where retail stores the image address)

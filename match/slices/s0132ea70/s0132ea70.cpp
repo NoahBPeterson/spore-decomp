@@ -4,6 +4,17 @@
 // ---------------------------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------------------------
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00692ca0();
+extern "C" void FUN_00692fb0();
+extern "C" void FUN_00bf1bc0();
+extern "C" void FUN_00bf34f0();
+extern "C" void FUN_00bf3d40();
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00d011e0();
+extern "C" char g_14694a0[];
+
 typedef unsigned char      u8;
 typedef unsigned int       u32;
 typedef int                i32;
@@ -77,17 +88,17 @@ void __cdecl InitRbtreeSentinels()
 void __cdecl InitSerializerList()
 {
     cSerializerInit local;
-    local.mField00 = (void*)0x014694a0;
+    local.mField00 = (void*)g_14694a0;
     local.mField04 = (void*)0x03acc32f;
     local.mField18 = 0;
     local.mField1c = 0;
-    local.mField20 = (void*)0x00692ca0;
-    local.mField24 = (void*)0x00bf34f0;
-    local.mField28 = (void*)0x00bf1bc0;
-    local.mField2c = (void*)0x00c2e4e0;
-    local.mField30 = (void*)0x00692fb0;
-    local.mField34 = (void*)0x00d011e0;
-    local.mField38 = (void*)0x00bf3d40;
+    local.mField20 = (void*)FUN_00692ca0;
+    local.mField24 = (void*)FUN_00bf34f0;
+    local.mField28 = (void*)FUN_00bf1bc0;
+    local.mField2c = (void*)FUN_00c2e4e0;
+    local.mField30 = (void*)FUN_00692fb0;
+    local.mField34 = (void*)FUN_00d011e0;
+    local.mField38 = (void*)FUN_00bf3d40;
     local.mField08 = 0;
     g_serializerList = local;
 }

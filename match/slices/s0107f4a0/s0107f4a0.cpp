@@ -67,10 +67,11 @@ void hkArrayUtil::_reduce(void* array, int elemSize, void* inplaceStorage, int i
 	void* newData;
 	int newCapacity;
 	hkUint32 flag;
-	if (inplaceStorage == 0 || inplaceCapacity <= a->m_size)
+	if (inplaceStorage == 0 || a->m_size >= inplaceCapacity)
 	{
 		newCapacity = (a->m_capacityAndFlags >> 1) & 0x1fffffff;
-		newData = hkThreadMemory::getInstance().allocateChunk(newCapacity * elemSize, HK_MEMORY_CLASS_ARRAY);
+		hkThreadMemory& mem = hkThreadMemory::getInstance();
+		newData = mem.allocateChunk(newCapacity * elemSize, HK_MEMORY_CLASS_ARRAY);
 		flag = 0;
 	}
 	else

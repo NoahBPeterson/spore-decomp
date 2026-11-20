@@ -1,0 +1,1 @@
+slices/s00e07540/s00e07540.cpp  ?Draw@Meter@@QAEXXZ  00e07540  /O2 /MD /Gy /TP /arch:SSE /fp:fast

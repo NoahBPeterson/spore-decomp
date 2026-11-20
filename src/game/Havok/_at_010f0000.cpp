@@ -138,7 +138,7 @@ extern unsigned long g_hkMonitorStreamEndTls;   // 0x016e42a8
 extern unsigned long g_hkMonitorStreamCurTls;   // 0x016e42a4
 extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
 extern char vtable_Simulator_cCreatureAbility; // 0x013ef094 (the dtor's final vtable store)
-void* FUN_01099cb0(int a, int b, int c);      // 0x01099cb0
+void __stdcall FUN_01099cb0(void* entities, int numEntities, void* world);  // 0x01099cb0
 void* FUN_0111ccf0();                         // 0x0111ccf0 hkDefaultToiResourceMgr ctor
 void* FUN_0107db10(void* mem, int a, int b, int c);  // 0x0107db10 deallocateChunk
 void FUN_0107f530(void* array, int elemSize);         // 0x0107f530 hkArray::grow
@@ -1969,8 +1969,7 @@ void hkContinuousSimulation::warpTime(hkWorld_s010e_f580* world, float deltaTime
             entry->mTime = *(volatile float*)&deltaTime + entry->mTime;
             index++;
             offset += 0x40;
-            count = *(volatile int*)&simulation->mCount;
-        } while (count > index);
+        } while (index < *(volatile int*)&simulation->mCount);
     }
 }
 
@@ -2254,7 +2253,7 @@ void ContinuousSim::destroy()
 // @ 0x010f1a60
 void ContinuousSim::resetEntities(int a, int b, int c)
 {
-    FUN_01099cb0(a, b, c);
+    FUN_01099cb0((void*)a, b, (void*)c);
     f0bb0(a, b);
 }
 
@@ -3525,18 +3524,18 @@ void __cdecl hkCapsuleTriangleAgent3_register(hkCollisionDispatcher_s010f_d4c0* 
     const int typeB = 6;
     hkCollisionDispatcher_s010f_d4c0::Agent3Funcs funcs;
     funcs.m_createFunc          = (void* (*)())&hkCapsuleTriangleAgent3_create;
-    funcs.m_destroyFunc         = (void (*)())&hkCapsuleTriangleAgent3_destroy;
+    funcs.m_processFunc         = (void* (*)())&hkCapsuleTriangleAgent3_process;
+    funcs.m_sepNormalFunc       = (void (*)())&hkCapsuleTriangleAgent3_sepNormal;
     funcs.m_cleanupFunc         = (void (*)())&hkCapsuleTriangleAgent3_cleanup;
     funcs.m_removePointFunc     = (void (*)())&hkCapsuleTriangleAgent3_removePoint;
     funcs.m_commitPotentialFunc = (void (*)())&hkCapsuleTriangleAgent3_commitPotential;
     funcs.m_createZombieFunc    = (void (*)())&hkBoxBox_createZombie;
-    funcs.m_updateFilterFunc    = 0;
     funcs.m_invalidateTimFunc   = 0;
     funcs.m_warpTimeFunc        = 0;
-    funcs.m_sepNormalFunc       = (void (*)())&hkCapsuleTriangleAgent3_sepNormal;
-    funcs.m_processFunc         = (void* (*)())&hkCapsuleTriangleAgent3_process;
-    funcs.m_isPredictive        = hkBool_s010f_d4c0(false);
     funcs.m_ignoreSymmetricVersion = hkBool_s010f_d4c0(false);
+    funcs.m_updateFilterFunc    = 0;
+    funcs.m_destroyFunc         = (void (*)())&hkCapsuleTriangleAgent3_destroy;
+    funcs.m_isPredictive        = hkBool_s010f_d4c0(false);
     dispatcher->registerAgent3(funcs, typeA, typeB);
 }
 

@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/Window.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e104[];
+
 #include "game/types.h"
 #include <windows.h>
 #include <stddef.h>
@@ -23,7 +26,7 @@ extern void FUN_00925d60();
 namespace EA { namespace Trace { void FUN_00925d60(void* self); }}  // 0x00925d60 (defined below; used by a stub's inline body)
 namespace EA {
 namespace Trace {
-struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)0x0143e104; FUN_00925d60(); } };
+struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)g_143e104; FUN_00925d60(); } };
 }
 }
 // ---- items of slice s00925770 end
@@ -37,6 +40,8 @@ struct W {
 };
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
+extern "C" long _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedDecrement)
 struct Window {
     char pad[0x28];
     volatile long mRefCount;   // +0x28
@@ -336,21 +341,18 @@ void FUN_00925e60_hash(HashHolder* h)
 void * EA::UTFWin::Window::AsInterface(EA::COM::InterfaceId iid)
 {
     if (iid == (int)0xee3f516e)
-        goto common;
+        return this ? (void*)((char*)this + 4) : 0;
     if (iid == (int)0xeec58382)
         return this;
-    if (iid != (int)0xeeee8218)
-        return 0;
-common:
-    if (this == 0)
-        return 0;
-    return (Window*)((char*)this + 4);
+    if (iid == (int)0xeeee8218)
+        return this ? (void*)((char*)this + 4) : 0;
+    return 0;
 }
 
 // @ 0x0095f9a0
 int Window::Release()
 {
-    int n = _InterlockedExchangeAdd(&mRefCount, -1) - 1;
+    int n = _InterlockedDecrement(&mRefCount);
     if (n == 0) {
         _InterlockedExchangeAdd(&mRefCount, 1);
         if (this != 0)

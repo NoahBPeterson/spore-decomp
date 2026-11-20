@@ -269,9 +269,9 @@ struct IntVecMap {
 
 // @ 0x00b1aca0
 IntVecNode* IntVecMap::DoCreateNodeCopy(const IntVecNode* src, IntVecNode* parent) {
-  const IntVecNode* s = src;
+  const IntVecPair& value = *(const IntVecPair*)&src->first;
   IntVecNode* node = (IntVecNode*)SPORE_ALLOC(0x28);
-  new ((void*)&node->first) IntVecPair(*(const IntVecPair*)&s->first);
+  new ((void*)&node->first) IntVecPair(value);
   node->mpNodeParent = parent;
   node->mpNodeRight = 0;
   node->mpNodeLeft = 0;

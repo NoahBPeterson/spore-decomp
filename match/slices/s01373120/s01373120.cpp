@@ -10,6 +10,18 @@
 //  - 013742c0  property table (0x015a7948)
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013c7aa0();
+extern "C" void FUN_013c7ab0();
+extern "C" void FUN_013c7ac0();
+extern "C" char g_1481e20[];
+extern "C" char g_16ad4b0[];
+extern "C" char g_16b0a54[];
+extern "C" char g_16b0ea8[];
+extern "C" char g_16b0f8c[];
+extern "C" char g_16b1020[];
+
 #include "types.h"
 
 uint32_t __cdecl FNVHash(const char* pName, uint32_t nSeed, int nFlags);   // 0x00932e80
@@ -64,10 +76,10 @@ void __declspec(noinline) InitLineColorBottom()
     gLineColorBottom.mB = fB;
     float fA = gColorOne_1485720;
     gpColorList = &gLineColorBottom;
-    gLineColorBottom.mpClass = (void*)0x01481e20;
+    gLineColorBottom.mpClass = (void*)g_1481e20;
     gLineColorBottom.mA = fA;
 
-    atexit((void (__cdecl*)(void))0x013c7aa0);
+    atexit((void (__cdecl*)(void))FUN_013c7aa0);
 }
 
 // ===========================================================================
@@ -84,10 +96,10 @@ void __declspec(noinline) InitLineColorDropShadow()
     gLineColorDropShadow.mB = 0.0f;
     float fA = gColorBlue_1481ca8;
     gpColorList = &gLineColorDropShadow;
-    gLineColorDropShadow.mpClass = (void*)0x01481e20;
+    gLineColorDropShadow.mpClass = (void*)g_1481e20;
     gLineColorDropShadow.mA = fA;
 
-    atexit((void (__cdecl*)(void))0x013c7ab0);
+    atexit((void (__cdecl*)(void))FUN_013c7ab0);
 }
 
 // ===========================================================================
@@ -105,10 +117,10 @@ void __declspec(noinline) InitLineColorBorder()
     gLineColorBorder.mB = fRGB;
     float fA = gColorOne_1485720;
     gpColorList = &gLineColorBorder;
-    gLineColorBorder.mpClass = (void*)0x01481e20;
+    gLineColorBorder.mpClass = (void*)g_1481e20;
     gLineColorBorder.mA = fA;
 
-    atexit((void (__cdecl*)(void))0x013c7ac0);
+    atexit((void (__cdecl*)(void))FUN_013c7ac0);
 }
 
 // ---------------------------------------------------------------------------
@@ -155,7 +167,7 @@ void __declspec(noinline) InitPropTable_16b2c40()
     p[1].mOffset = 4;
     p[1].mPad1c = 0;
     p[1].mValue1 = SP::PropValF(3);
-    p[1].mValue2 = SP::PropValF((const void*)0x016ad4b0);
+    p[1].mValue2 = SP::PropValF((const void*)g_16ad4b0);
 
     p[2].mPad00 = 0;
     p[2].mDefault = SP::PropValF(0);
@@ -240,7 +252,7 @@ void __declspec(noinline) InitPropTable_16b1430()
     p[1].mOffset = 8;
     p[1].mPad1c = 0;
     p[1].mValue1 = SP::PropValF(3);
-    p[1].mValue2 = SP::PropValF((const void*)0x016b1020);
+    p[1].mValue2 = SP::PropValF((const void*)g_16b1020);
 
     p[2].mPad00 = 0;
     p[2].mDefault = SP::PropValF(0);
@@ -343,7 +355,7 @@ void __declspec(noinline) InitPropTable_15a7948()
     p[0].mHash = SP::sHash("table");
     p[0].mOffset = 0;
     p[0].mPad1c = 4;
-    p[0].mValue1 = SP::PropValF((const void*)0x016b0f8c);
+    p[0].mValue1 = SP::PropValF((const void*)g_16b0f8c);
     p[0].mValue2 = SP::PropValF(4);
 
     p[1].mPad00 = 0;
@@ -354,7 +366,7 @@ void __declspec(noinline) InitPropTable_15a7948()
     p[1].mHash = SP::sHash("cell");
     p[1].mOffset = 0;
     p[1].mPad1c = 4;
-    p[1].mValue1 = SP::PropValF((const void*)0x016b0a54);
+    p[1].mValue1 = SP::PropValF((const void*)g_16b0a54);
     p[1].mValue2 = SP::PropValF(4);
 
     p[2].mPad00 = 0;
@@ -365,7 +377,7 @@ void __declspec(noinline) InitPropTable_15a7948()
     p[2].mHash = SP::sHash("nothing");
     p[2].mOffset = 0;
     p[2].mPad1c = 4;
-    p[2].mValue1 = SP::PropValF((const void*)0x016b0ea8);
+    p[2].mValue1 = SP::PropValF((const void*)g_16b0ea8);
     p[2].mValue2 = SP::PropValF(4);
 
     p[3].mPad00 = 0;

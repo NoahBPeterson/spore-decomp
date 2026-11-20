@@ -3,6 +3,10 @@
 // Region is /O2 /MD with /arch:SSE (scalar movss for hkVector4 copies, x87 for the
 // plane/vertex arithmetic). Member offsets come from the dev PDB (tools/pdb_type.py)
 // and were confirmed against the disassembly.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a2888[];
+
 #include "types.h"
 
 typedef int hkInt32;
@@ -434,20 +438,21 @@ hkConvexVerticesShape* hkConvexVerticesShape::f1fe0(const void* a, int numVertic
     return this;
 }
 
+extern "C" char g_13ef094[];   // hkReferencedObject vtable (retail relocates it)
 // @ 0x010c21c0  hkConvexVerticesShape::~hkConvexVerticesShape
 hkConvexVerticesShape::~hkConvexVerticesShape()
 {
     if ((m_planeEquations.m_capacityAndFlags & 0x80000000) == 0)
     {
         hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
-        mem->deallocateChunk(m_planeEquations.m_data, m_planeEquations.getCapacity() << 4, 0x14);
+        mem->deallocateChunk(m_planeEquations.m_data, m_planeEquations.getCapacity() * 16, 0x14);
     }
     if ((m_rotatedVertices.m_capacityAndFlags & 0x80000000) == 0)
     {
         hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
         mem->deallocateChunk(m_rotatedVertices.m_data, m_rotatedVertices.getCapacity() * 0x30, 0x14);
     }
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = g_13ef094;
 }
 
 struct hkConvexVerticesShapeAssign { void assign(const void* src_); };
@@ -525,9 +530,9 @@ template void hkAlgorithm::quickSortRecursive<hkRootCdPoint, hkAlgorithm::lessRo
 // @ 0x010c2570  hkAllCdPointCollector::sortPoints
 void hkAllCdPointCollector::sortPoints()
 {
+    hkAlgorithm::lessRootCdPoint less = hkAlgorithm::lessRootCdPoint();
     if (m_points.m_size > 1)
     {
-        hkAlgorithm::lessRootCdPoint less;
         hkAlgorithm::quickSortRecursive<hkRootCdPoint, hkAlgorithm::lessRootCdPoint>(
             (hkRootCdPoint*)m_points.m_data, 0, m_points.m_size - 1, less);
     }
@@ -590,7 +595,7 @@ hkCapsuleShape::hkCapsuleShape(const hkVector4& a, const hkVector4& b, float rad
     m_radius = radius;
     m_referenceCount = 1;
     m_userData = 0;
-    *(void**)this = (void*)0x14a2888;
+    *(void**)this = (void*)g_14a2888;
     // the original copies all four words of each vertex (w included) and only then overwrites w with the
     // radius; copying the second w through an uint pun keeps cl from deleting the store as dead
     m_vertexA.x = a.x; m_vertexA.y = a.y; m_vertexA.z = a.z; m_vertexA.w = a.w;

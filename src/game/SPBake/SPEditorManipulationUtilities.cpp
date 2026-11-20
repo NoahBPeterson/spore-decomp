@@ -2,6 +2,9 @@
 // Object file: SPBake/SPEditorManipulationUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef52c[];
+
 #include "game/types.h"
 #include "EA/Audio/FactoryBinarySampleData.h"
 #include "cSPMatrix3.h"
@@ -5723,7 +5726,7 @@ struct DequeBase {
     void  DequeAlloc(unsigned int n);     // 0x4ab350
     void  ReallocNodeMap(unsigned int n, int flag);  // 0x503470
     void* DoAllocatePtrArray(int n);      // 0x56a240
-    void* PushFront(void* value);         // 0x4ab130
+    void  PushFront(void* value);         // 0x4ab130
 };
 struct Matrix3Like { char pad[0x24]; Matrix3Like(const Matrix3Like&); };
 extern OrientedPoint_s004a_a760* CopyOrientedRange(OrientedPoint_s004a_a760* first, OrientedPoint_s004a_a760* last,
@@ -7688,7 +7691,7 @@ hkRigidBody_s0048_d010* MoveBlockLowAngleStacking(cSPEditorBlock_s0048_d010* blo
 // @ 0x0048db10
 void* HkObj::F_48db10(unsigned flags)
 {
-    *(void**)this = (void*)0x13ef534;
+    *(void**)this = (void*)&g_vtbl_13ef534;
     if (flags & 1) {
         GetHkMemoryForDelete()->Free(this, 8, 0x1c);
     }
@@ -7704,8 +7707,8 @@ void HkObj::F_48db60()
 // @ 0x0048dbb0
 void* HkObj::F_48dbb0(unsigned flags)
 {
-    *(void**)this = (void*)0x13ef52c;
-    *(void**)this = (void*)0x13ef534;
+    *(void**)this = (void*)g_13ef52c;
+    *(void**)this = (void*)&g_vtbl_13ef534;
     if (flags & 1) {
         GetHkMemoryForDelete()->Free(this, 8, 0x1c);
     }
@@ -12440,6 +12443,11 @@ Vector3T_s004a_9920& operator/=(Vector3T_s004a_9920& v, const float& s)
 }
 }  // namespace SP
 
+namespace SP {
+template<> void evector<OrientedPoint>::DoInsertValue(OrientedPoint* position, const OrientedPoint& value);  // 0x004aa760
+template<> void evector<KeyedPair>::DoInsertValue(KeyedPair* position, const KeyedPair& value);  // 0x004aaac0
+}  // namespace SP
+
 // @ 0x004a9e40
 namespace SP {
 template void evector<WeightedPoint>::push_back(const WeightedPoint& value)
@@ -12686,7 +12694,7 @@ void VecM33::Insert(cSPMatrix3_s004a_a760* position, const cSPMatrix3_s004a_a760
 }
 
 // @ 0x004ab130
-void* DequeBase::PushFront(void* param_2)
+void DequeBase::PushFront(void* param_2)
 {
     void* v = *(void**)param_2;
     if (begin_.node == map) {
@@ -12695,8 +12703,7 @@ void* DequeBase::PushFront(void* param_2)
     begin_.node[-1] = (uint8_t*)AllocNode();
     begin_.SetSubarray((void**)(begin_.node - 1));
     begin_.cur = begin_.last - 4;
-    void* r = begin_.cur;
-    return r ? (*(void**)r = v, r) : 0;
+    new (begin_.cur) void*(v);
 }
 
 // @ 0x004ab210

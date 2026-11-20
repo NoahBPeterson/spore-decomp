@@ -1,3 +1,13 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143ff28[];
+
+extern "C" void FUN_0094eb40();
+extern "C" void FUN_0094eb50();
+extern "C" void FUN_0094f0f0();
+extern "C" void FUN_0094f120();
+extern "C" void FUN_0094f850();
+extern "C" void FUN_01192e50();
+
 #pragma intrinsic(strlen)
 // src/game/UTFSpore_Win32/SSLManager.cpp -- migrated from slice(s) s0117c560, s01179f60, s01176210, s0094fb80, s0094ea80 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/SSLManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
@@ -260,6 +270,7 @@ struct Ext {
     int   e4b0(int a, int b);               // 0x0094E4B0
     void* e340(unsigned iface);             // 0x0094E340 StreamSocket::AsInterface
     void  nuke(void* node);                 // 0x00D3B370 DoNukeSubtree
+    void  NukeRoot() { nuke(*(void**)((char*)this + 0xc)); }
 };
 void  __fastcall Mutex_dtor(void* m);                   // 0x00922130
 int   __fastcall Mutex_Unlock(void* m);                 // 0x00922270
@@ -952,7 +963,7 @@ int THREAD_cleanup()
 SSLManager_s0094_fb80* SSLManager_s0094_fb80::Ctor(ICoreAllocator* alloc)
 {
     void* self = this;
-    PTR(self, 0) = (void*)0x0143FF28;
+    PTR(self, 0) = (void*)g_143ff28;
     I8(self, 8) = 0;
     I32(self, 0xc) = 1;
     PTR(self, 0x10) = alloc;
@@ -961,6 +972,7 @@ SSLManager_s0094_fb80* SSLManager_s0094_fb80::Ctor(ICoreAllocator* alloc)
     Fn0094fa00(B(self) + 0x48);
     PTR(self, 0x14c) = 0;
     PTR(self, 0x150) = 0;
+    _ReadWriteBarrier();
     void* pool = B(self) + 0x16c;
     PTR(self, 0x164) = pool;
     PTR(self, 0x158) = pool;
@@ -1032,11 +1044,11 @@ int __cdecl THREAD_setup()
             r = 0;
         *(void**)(B(PTR(g_spSSLManager_s0094_fb80, 0x154)) + i * 4) = r;
     }
-    CRYPTO_set_id_callback((void*)0x0094EB40);
-    CRYPTO_set_locking_callback((void*)0x0094F0F0);
-    Fn011812b0((void*)0x0094F120);
-    CRYPTO_set_dynlock_lock_callback((void*)0x0094EB50);
-    CRYPTO_set_dynlock_destroy_callback((void*)0x0094F850);
+    CRYPTO_set_id_callback((void*)FUN_0094eb40);
+    CRYPTO_set_locking_callback((void*)FUN_0094f0f0);
+    Fn011812b0((void*)FUN_0094f120);
+    CRYPTO_set_dynlock_lock_callback((void*)FUN_0094eb50);
+    CRYPTO_set_dynlock_destroy_callback((void*)FUN_0094f850);
     return 1;
 }
 
@@ -1044,14 +1056,12 @@ int __cdecl THREAD_setup()
 void* SSLManager_s0094_fb80::DeletingDtor(char flags)
 {
     void* self = this;
-    PTR(self, 0) = (void*)0x0143FF28;
+    PTR(self, 0) = (void*)g_143ff28;
     SSLManager_Shutdown(self);
     void* p = PTR(self, 0x154);
     if (p != 0 && p != PTR(self, 0x164))
         operator_delete__(p);
-    Ext* map = (Ext*)(B(self) + 0x48);
-    void* node = PTR(self, 0x54);
-    map->nuke(node);
+    ((Ext*)(B(self) + 0x48))->NukeRoot();
     Mutex_dtor(B(self) + 0x18);
     if (flags & 1)
         operator_delete__(self);
@@ -1163,7 +1173,7 @@ bio_st_s0117_6210* __cdecl BIO_new_s0117_6210(bio_method_st* type)
 // @ 0x0117b210
 void __cdecl FUN_0117b210(int param_1, int param_2, int param_3, int param_4)
 {
-    FUN_01190020((void*)0x01192e50, "DH PARAMETERS", param_1, param_2, param_3, param_4);
+    FUN_01190020((void*)FUN_01192e50, "DH PARAMETERS", param_1, param_2, param_3, param_4);
 }
 
 // @ 0x0117b780

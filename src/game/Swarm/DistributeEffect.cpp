@@ -2,6 +2,14 @@
 // Object file: Swarm/DistributeEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_14582fc[];
+extern "C" char g_1458300[];
+extern "C" char g_1458304[];
+extern "C" char g_1458308[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include <xmmintrin.h>
@@ -1492,7 +1500,7 @@ struct cDistributeEffect_s00a8_7fb0 {
 
     void FUN_00a87fb0(void* stream, int base);                        // 0x00a87fb0
     __int64 FUN_00a88220();                                       // 0x00a88220
-    bool FUN_00a88350();                                              // 0x00a88350
+    int FUN_00a88350();                                              // 0x00a88350
     int  FUN_00a88390(int count, void** outBegin, void** outStride);  // 0x00a88390
     void FUN_00a886f0(int visible);                                   // 0x00a886f0
     void FUN_00a887b0(int index, float value);                        // 0x00a887b0
@@ -2446,18 +2454,13 @@ __int64 cDistributeEffect_s00a8_7fb0::FUN_00a88220()
 }
 
 // @ 0x00a88350
-bool cDistributeEffect_s00a8_7fb0::FUN_00a88350()
+int cDistributeEffect_s00a8_7fb0::FUN_00a88350()
 {
     void* v = *(void**)((char*)this + 0x15c);
-    if (v == 0)
-        return false;
-    unsigned x = mFlags >> 10;
-    if (x & 1)
-        return false;
-    int r = ((int(__thiscall*)(void*))(*(void***)v)[0x10 / 4])(v);
-    if (r != *(int*)((char*)this + 0x168))
-        return true;
-    return false;
+    if (v != 0 && !(bool)((mFlags >> 10) & 1) &&
+        ((int(__thiscall*)(void*))(*(void***)v)[0x10 / 4])(v) != *(int*)((char*)this + 0x168))
+        return 1;
+    return 0;
 }
 
 // @ 0x00a88390
@@ -3438,10 +3441,10 @@ void PtrVector::insert(RefPtr* position, unsigned n, const RefPtr& value)
 // @ 0x00a8cb00
 cDistributeEffect_s00a8_c850::~cDistributeEffect_s00a8_c850()
 {
-    mVtblIComponent = 0x1458308;
-    mVtblRefCount = 0x1458304;
-    mVtblTextureStreamer = 0x1458300;
-    mVtblModelStreamer = 0x14582fc;
+    mVtblIComponent = (int)g_1458308;
+    mVtblRefCount = (int)g_1458304;
+    mVtblTextureStreamer = (int)g_1458300;
+    mVtblModelStreamer = (int)g_14582fc;
 
     FreeBlock(mpBlock19c);
 
@@ -3461,8 +3464,8 @@ cDistributeEffect_s00a8_c850::~cDistributeEffect_s00a8_c850()
     FreeBlock(mSamplesBegin);
     FreeBlock(mRenderSamplesBegin);
 
-    mVtblIComponent = 0x13f21d4;
-    mVtblRefCount = 0x13ef094;
+    mVtblIComponent = (int)g_13f21d4;
+    mVtblRefCount = (int)g_13ef094;
 }
 
 // @ 0x00a8d450

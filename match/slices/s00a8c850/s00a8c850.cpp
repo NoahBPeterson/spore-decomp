@@ -5,6 +5,15 @@
 // It ends by re-setting the first two vtables to the base-class ones.
 // Retail member offsets (from the asm; they differ from the 2008 PDB layout in a few places, see
 // match/slices/s00a8d450/s00a8d450.cpp for the same class). Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_14582fc[];
+extern "C" char g_1458300[];
+extern "C" char g_1458304[];
+extern "C" char g_1458308[];
+
 #include "types.h"
 #include <new>
 
@@ -293,10 +302,10 @@ struct cDistributeEffect {
 // 0x00a8cb00 (thiscall, no arguments, plain `ret`).
 cDistributeEffect::~cDistributeEffect()
 {
-    mVtblIComponent = 0x1458308;
-    mVtblRefCount = 0x1458304;
-    mVtblTextureStreamer = 0x1458300;
-    mVtblModelStreamer = 0x14582fc;
+    mVtblIComponent = (int)g_1458308;
+    mVtblRefCount = (int)g_1458304;
+    mVtblTextureStreamer = (int)g_1458300;
+    mVtblModelStreamer = (int)g_14582fc;
 
     FreeBlock((void*)mVec19c.mpBegin);
 
@@ -316,8 +325,8 @@ cDistributeEffect::~cDistributeEffect()
     FreeBlock((void*)mSamples.mpBegin);
     FreeBlock((void*)mRenderSamples.mpBegin);
 
-    mVtblIComponent = 0x13f21d4;
-    mVtblRefCount = 0x13ef094;
+    mVtblIComponent = (int)g_13f21d4;
+    mVtblRefCount = (int)g_13ef094;
 }
 
 // Assigns a map reference counted interface pointer, AddRef'ing the new object before the old one

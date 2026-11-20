@@ -2,6 +2,23 @@
 // Object file: SPAudio/eapdconnective.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a57730();
+extern "C" void FUN_00a5bea0();
+extern "C" void FUN_00a5c400();
+extern "C" char g_16753f4[];
+extern "C" char g_167562c[];
+extern "C" char g_1675640[];
+extern "C" char g_1675654[];
+extern "C" char g_1675664[];
+extern "C" char g_1675678[];
+extern "C" char g_1675894[];
+extern "C" char g_1675898[];
+extern "C" char g_16758b4[];
+extern "C" char g_16758b8[];
+extern "C" char g_16758c4[];
+extern "C" char g_16758c8[];
+
 #include "game/types.h"
 #include <string.h>
 #include <malloc.h>
@@ -194,24 +211,24 @@ t_symbol* atom_getsymbol_at(t_symbol* out, int a, int b, void* atoms);          
 }
 }
 using EA::Audio::Eapd::t_symbol;
-#define g_spPdintClass    (*(void**)0x0167562cu)
-#define g_spPdfloatClass  (*(void**)0x01675678u)
-#define g_spPdsymbolClass (*(void**)0x01675640u)
-#define g_spBangClass     (*(void**)0x01675664u)
-#define g_spSendClass     (*(void**)0x01675654u)
+#define g_spPdintClass    (*(void**)g_167562c)
+#define g_spPdfloatClass  (*(void**)g_1675678)
+#define g_spPdsymbolClass (*(void**)g_1675640)
+#define g_spBangClass     (*(void**)g_1675664)
+#define g_spSendClass     (*(void**)g_1675654)
 #define g_spForwardClass  (*(void**)0x01675630u)
 #define g_spReceiveClass  (*(void**)0x01675648u)
 #define g_spSelectClass   (*(void**)0x0167565cu)
 #define g_spSelect2Class  (*(void**)0x01675660u)
-#define g_gFloatSymbol    (*(t_symbol*)0x016758c4u)
-#define g_gSymbolSymbol   (*(t_symbol*)0x01675894u)
-#define g_gBangSymbol     (*(t_symbol*)0x016758b4u)
+#define g_gFloatSymbol    (*(t_symbol*)g_16758c4)
+#define g_gSymbolSymbol   (*(t_symbol*)g_1675894)
+#define g_gBangSymbol     (*(t_symbol*)g_16758b4)
 #define g_gEmptySymbol    (*(t_symbol*)0x0167589cu)
-#define g_gFloatSymbol2   (*(void**)0x016758c8u)
-#define g_gSymbolSymbol2  (*(void**)0x01675898u)
-#define g_gBangSymbol2    (*(void**)0x016758b8u)
+#define g_gFloatSymbol2   (*(void**)g_16758c8)
+#define g_gSymbolSymbol2  (*(void**)g_1675898)
+#define g_gBangSymbol2    (*(void**)g_16758b8)
 #define g_gEmptySymbol2   (*(void**)0x016758a0u)
-#define g_gpNewestObject  (*(void**)0x016753f4u)
+#define g_gpNewestObject  (*(void**)g_16753f4)
 #define g_gOutletCount    (*(int*)0x0167545cu)
 struct PdObject
 {
@@ -956,6 +973,7 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 void* outlet_new(void* owner, t_symbol_s00a5_b510 a, t_symbol_s00a5_b510 b);                   // 0xa49d30
+void* outlet_new(void* owner, t_symbol_s00a5_b510 s);                                            // 0xa49d30
 }
 }
 }
@@ -1019,7 +1037,7 @@ inline void   setObjP(char* x, int off, void* v) { *(void**)(x + off) = v; }
 namespace EA {
 namespace Audio {
 namespace Eapd {
-inline void outlet_cnt(t_outlet* lst, float v)
+__forceinline void outlet_cnt(t_outlet* lst, float v)
 {
     if (++gOutletCount < 1000) {
         t_outconnect* oc;
@@ -1269,7 +1287,7 @@ byte pdfloat_setup()
     sp = EA::Audio::Eapd::gensym(&sym, "float");
     ok &= (byte)EA::Audio::Eapd::class_addcreator((void*)&pdfloat_new2, sp->s_name, sp->s_name2, 5, 0);
 
-    ok &= (byte)EA::Audio::Eapd::class_addbang(g_spPdfloatClass, (void*)0x00a5c400);
+    ok &= (byte)EA::Audio::Eapd::class_addbang(g_spPdfloatClass, (void*)FUN_00a5c400);
     ok &= (byte)EA::Audio::Eapd::class_doaddfloat(g_spPdfloatClass, (void*)&FUN_00a59b50);
     return ok;
 }
@@ -2320,8 +2338,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_bang(char* x)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_bang((char*)((void**)objP(x, 0x28))[i - 1]);
 }
@@ -2332,8 +2349,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_float(char* x, float f)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_cnt((t_outlet*)((void**)objP(x, 0x28))[i - 1], f);
 }
@@ -2344,8 +2360,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_symbol(char* x, t_symbol_s00a5_b510 s)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_symbol((char*)((void**)objP(x, 0x28))[i - 1], s);
 }
@@ -2356,8 +2371,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_list(char* x, t_symbol_s00a5_b510 s, int argc, void* argv)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_list((char*)((void**)objP(x, 0x28))[i - 1], s, argc, argv);
 }
@@ -2368,8 +2382,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_anything(char* x, t_symbol_s00a5_b510 s, int argc, void* argv)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_anything((char*)((void**)objP(x, 0x28))[i - 1], s, argc, argv);
 }
@@ -2490,8 +2503,8 @@ char* moses_new(float f)
     char* x = (char*)pd_new(spMosesClass);
     if (x != 0) {
         floatinlet_new(x, x + 0x2c);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
-        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
+        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510);
         setObjP(x, 0x28, o);
         setObjF(x, 0x2c, f);
     }
@@ -2503,10 +2516,10 @@ char* moses_new(float f)
 namespace EA { namespace Audio { namespace Eapd {
 void moses_float(char* x, float f)
 {
-    if (objF(x, 0x2c) <= f)
-        outlet_cnt((t_outlet*)objP(x, 0x28), f);
-    else
+    if (f < objF(x, 0x2c))
         outlet_cnt((t_outlet*)objP(x, 0xc), f);
+    else
+        outlet_cnt((t_outlet*)objP(x, 0x28), f);
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -2573,7 +2586,7 @@ byte until_setup(void)
     t_symbol_s00a5_b510* sym;
 
     sym = gensym(&s, "until");
-    spUntilClass = class_new_t1(*sym, (void*)0xa5bea0, 0, 0x30, 0, 0);
+    spUntilClass = class_new_t1(*sym, (void*)FUN_00a5bea0, 0, 0x30, 0, 0);
     byte ok = (byte)((spUntilClass != 0) & 1);
 
     ok &= class_addbang(spUntilClass, (void*)until_bang);
@@ -2642,7 +2655,7 @@ byte makefilename_setup(void)
     ok &= class_addsymbol_s00a5_b510(spMakefilenameClass, (void*)makefilename_symbol);
 
     sym = gensym(&s, "set");           // 0x13f2ce4
-    ok &= class_addmethod2(spMakefilenameClass, (void*)0xa57730, *sym, 2, 0);
+    ok &= class_addmethod2(spMakefilenameClass, (void*)FUN_00a57730, *sym, 2, 0);
     return ok;
 }
 }}}  // namespace EA::Audio::Eapd
@@ -2655,8 +2668,8 @@ char* swap_new(float f)
     if (x != 0) {
         setObjF(x, 0x30, f);
         setObjF(x, 0x2c, 0.0f);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
-        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
+        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510);
         setObjP(x, 0x28, o);
         floatinlet_new(x, x + 0x30);
     }
@@ -2713,7 +2726,7 @@ char* change_new(float f)
     char* x = (char*)pd_new(spChangeClass);
     if (x != 0) {
         setObjF(x, 0x28, f);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
     }
     return x;
 }

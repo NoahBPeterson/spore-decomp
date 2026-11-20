@@ -1,4 +1,8 @@
 // s00ae73e0 targets: combat/tool manager helpers (names are working names).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145bdcc[];
+
 #include "types.h"
 
 typedef unsigned int uint32_t;
@@ -17,7 +21,7 @@ struct GDVArgObj {                          // arg consumed by FUN_00bf0f40
     int Get();                              // 0xbf0f40 (__thiscall)
 };
 
-static uint32_t* const g_nullArgKinds = (uint32_t*)0x0145bdcc;   // 3 game-mode tags cycled by index
+static uint32_t* const g_nullArgKinds = (uint32_t*)g_145bdcc;   // 3 game-mode tags cycled by index
 
 int FUN_00bef920(int v);                    // 0xbef920 (cdecl)
 

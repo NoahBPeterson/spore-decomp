@@ -125,7 +125,7 @@ struct HashTable {    uint32 mUnk0;               // +0x00
     void* insertNode3(void* pOut, void* pKey, void* p3);  // 0x008DFCD0
     HashInsert18Result insertNode18(void* pKey, void* p3); // 0x008E02B0
     void* insertNode20(void* pOut, void* pKey, void* p3); // 0x008E0390
-    void* insertNode1c(void* pOut, void* pKey, void* p3); // 0x008E0550
+    HashInsert18Result insertNode1c(void* pKey, void* p3); // 0x008E0550
     int   eraseKey(uint32* pKey);                         // 0x008E0630
     void* refKey(uint32 nKey);                            // 0x008E0E10
 };
@@ -600,8 +600,9 @@ char Manager::RegisterChangeNotification(void* pUnused, Key key, int nPriority)
 // ===========================================================================
 // @ 0x008E0550
 // ===========================================================================
-void* HashTable::insertNode1c(void* pOut, void* pKey, void* p3)
+HashInsert18Result HashTable::insertNode1c(void* pKey, void* p3)
 {
+    HashInsert18Result result;
     (void)p3;
     uint32 nKey = *(uint32*)pKey;
     uint32 idx = nKey % mnBucketCount;
@@ -624,15 +625,15 @@ void* HashTable::insertNode1c(void* pOut, void* pKey, void* p3)
         *(void**)((char*)pNew + 0x18) = mpBucketArray[idx];
         mpBucketArray[idx] = pNew;
         ++mnElementCount;
-        *(void**)pOut = pNew;
-        *((void**)pOut + 1) = &mpBucketArray[idx];
-        *((uint8*)pOut + 8) = 1;
-        return pOut;
+        result.node = pNew;
+        result.bucket = &mpBucketArray[idx];
+        result.inserted = 1;
+        return result;
     }
-    *(void**)pOut = (void*)node;
-    *((void**)pOut + 1) = pSlot;
-    *((uint8*)pOut + 8) = 0;
-    return pOut;
+    result.node = (void*)node;
+    result.bucket = (void**)pSlot;
+    result.inserted = 0;
+    return result;
 }
 
 // ===========================================================================

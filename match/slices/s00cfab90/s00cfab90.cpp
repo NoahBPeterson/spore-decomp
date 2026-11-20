@@ -9,6 +9,13 @@
 //  0x00cfb660  SP::cCivModeStrategy::FinishMaxLoad    (548 B)
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00acdff0();
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+
 #include "types.h"
 
 // Game-data vector returned by cGameNounManager::GetGameDataVector.
@@ -64,8 +71,8 @@ void FUN_00cfb2c0(void) {}
 void* cCivModeStrategy::GetNumberedCity(int index)
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
-    tVecData* v = nm->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
-                                        (void*)0x00acdff0, (void*)0x00b1e500,
+    tVecData* v = nm->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                        (void*)FUN_00acdff0, (void*)FUN_00b1e500,
                                         (void*)0x018c43e8);
     void** items = (void**)&v->mItems[0];
     if (index < (void**)items[1] - (void**)items[0])

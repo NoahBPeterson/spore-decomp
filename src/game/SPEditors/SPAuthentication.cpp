@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPAuthentication.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_151e5c8[];
+
 #include "game/types.h"
 #include "SP/Pollen/cAuthManager.h"
 #include "SP/cSPPaletteItemUIOneClickPaint.h"
@@ -1945,7 +1948,7 @@ void cAuthManager_s0060_68c0::InitialLogin()
   if (!mbPrompt && (mbPlayOffline || (mUser.size() && mPassword.size()))) {
     if (mbPlayOffline) {
       MessageServer()->PostMSG(0x5b85ff5, 0, 0);
-      if (!sAppProperties->mpValues->mbGalacticAdventures) SPUIHelpers::ShowErrorDialog(0, (const void*)0x151e5c8);
+      if (!sAppProperties->mpValues->mbGalacticAdventures) SPUIHelpers::ShowErrorDialog(0, (const void*)g_151e5c8);
       Pollinator()->SetEnabledState(0x4c4d2cd);
       MessageServer()->PostMSG(0x44db12e, 0, 0);
       SetOfflineUserID();

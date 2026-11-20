@@ -12,3 +12,4 @@
 ../src/game/SPEditors/SPSubModeAction.cpp  ?RayPlaneIntersectZ@@YA_NPBUVec3f@@0PAU1@M@Z  00638e10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeAction.cpp  ?OnKeyDown@cSPPlayModeSubModeAction_s0063_9bd0@@QAE_NHH@Z  00639ec0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeAction.cpp  ??0cSPPlayModeSubModeAction_s0063_aa90@@QAE@XZ  0063b210  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeAction.cpp  ?SetWalkAnimation@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXPAVcAnimatingCreature_s0063_7f80@@I@Z  006388e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

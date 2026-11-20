@@ -546,7 +546,6 @@ public:
     cSPSpaceToolData_s0104_e060();
     cSPSpaceToolData_s0104_e060* CopyFrom(cSPSpaceToolData_s0104_e060* pOther);  // 0x0104e810 (cSPSpaceToolData::CopyFrom)
     void SetPropertyList(uint32_t nPropertyKey);
-    void TryDeselectAfterUse();  // 0x0104e260 (cSPSpaceToolData::TryDeselectAfterUse)
     void ReloadItemEffects();
     void FreeEffectBuffers();  // 0x0104e6f0 (cSPSpaceToolData::FreeEffectBuffers)
 
@@ -613,6 +612,7 @@ public:
     void ActivateToolEffect(void* pTool);
     void ShutdownGonzagoSubsystem();
     void ClearToolEffects();
+    void TryDeselectAfterUse(class cSPSpaceToolData_s0104_e060* pTool);  // 0x0104e260
 
     uint8_t mPad14[0xe4];                       // 0x14
     void* mpPropertyList;                       // 0xf8
@@ -1639,14 +1639,10 @@ bool SP::cSPSpaceToolData_s0104_bcc0::IsInContext()
 {
     bool result = false;
     if (mUpgradeInstance != 0) {
-        if (mUpgradeInstance != 0x5f848353) {
+        if (mUpgradeInstance != 0x5f848353
+            || (PlanetModel() != 0 && ((cPlanetModel_s0104_bcc0*)PlanetModel())->mpAnchor24 != 0
+                && (GetCurrentGameMode() != &gGameMode01654c05 || GetUniverseContext() == 0))) {
             result = true;
-        } else if (PlanetModel() != 0 && ((cPlanetModel_s0104_bcc0*)PlanetModel())->mpAnchor24 != 0) {
-            if (GetCurrentGameMode() != &gGameMode01654c05) {
-                result = true;
-            } else if (GetUniverseContext() == 0) {
-                result = true;
-            }
         }
     }
     return result;
@@ -1679,7 +1675,10 @@ u32 SP::cSPSpaceToolData_s0104_bcc0::IsDeselectedAfterUse()
         if (pl->FindProperty(0x3348701, &p) && p->mType12 == 1 && *p->GetBool())
             goto Ltrue;
     }
-    if (((mFlags174 >> 0xf) & 1) == 0) return 0;
+    {
+        bool on = ((mFlags174 >> 0xf) & 1) != 0;
+        if (!on) return 0;
+    }
 Ltrue:
     return 1;
 }
@@ -1840,15 +1839,15 @@ void ComputeToolEffectPosition(Vec3* pOut, float fX, float fY, float fZ, float f
 }
 
 // @ 0x0104e260
-void cSPSpaceToolData_s0104_e060::TryDeselectAfterUse()
+void cSPToolManager::TryDeselectAfterUse(cSPSpaceToolData_s0104_e060* pTool)
 {
-    if (!IsDeselectedAfterUse())
+    if (!pTool->IsDeselectedAfterUse())
         return;
 
     cSPSimulatorSpaceGame* pSpaceGame = (cSPSimulatorSpaceGame*)SpaceGameGet();
-    void* pInventory = pSpaceGame->GetPlayerInventory();
+    cSPPlayerInventory* pInventory = (cSPPlayerInventory*)pSpaceGame->GetPlayerInventory();
     if (pInventory != nullptr)
-        ReleaseInventoryItem(this);
+        pInventory->FUN_00ff4540(pTool);
 }
 
 // @ 0x0104e290

@@ -9,3 +9,4 @@ slices/s00d377f0/s00d377f0.cpp  ?HasBrainUpgrade@cCreatureLevelUpScenario@@QAE_N
 slices/s00d377f0/s00d377f0.cpp  ?OnMouseMove@cCreatureModeStrategy@@QAEXHMMH@Z  00d388a0  /O2 /MD /Gy /TP /arch:SSE
 slices/s00d377f0/s00d377f0.cpp  ?OnMouseButton@cCreatureModeStrategy@@QAEXHMMH@Z  00d388d0  /O2 /MD /Gy /TP /arch:SSE
 slices/s00d377f0/s00d377f0.cpp  ?FUN_00d38900@@YA_NXZ  00d38900  /O2 /MD /Gy /TP /arch:SSE
+slices/s00d377f0/s00d377f0.cpp  ?FUN_00d38780@@YAIXZ  00d38780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

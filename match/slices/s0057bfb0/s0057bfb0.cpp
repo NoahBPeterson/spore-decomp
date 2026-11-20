@@ -1,4 +1,9 @@
 // slice s0057bfb0 — SP::cAppModeEditorBase helpers, typed-value XML writers, EASTL string bits.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+
 #include "types.h"
 #include <string.h>
 #include <intrin.h>
@@ -184,7 +189,7 @@ public:
     T* mpObject;
     AutoRefCountX(const AutoRefCountX& x);
     ~AutoRefCountX() { if (mpObject) mpObject->Release(); }
-    AutoRefCountX& operator=(const AutoRefCountX& x);
+    AutoRefCountX& operator=(const AutoRefCountX& x);   // 0x005766E0
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
 };
@@ -750,8 +755,8 @@ public:
 // @ 0x0057ccf0
 void* cEditorNamedResource::ScalarDelete(unsigned int flags)
 {
-    *(void**)((char*)this + 4) = (void*)0x013EF094;
-    *(void**)this = (void*)0x013EB938;
+    *(void**)((char*)this + 4) = (void*)g_13ef094;
+    *(void**)this = (void*)g_13eb938;
     _ReadWriteBarrier();
     if ((mName.mpCapacity - mName.mpBegin) > 1) {
         wchar_t* p = mName.mpBegin;

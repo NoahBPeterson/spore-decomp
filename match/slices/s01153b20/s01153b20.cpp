@@ -5,6 +5,10 @@
 // scalar SSE (movss/mulss/comiss) plus x87 fcos/fsin/fsqrt/fyl2x, so they only match
 // cl 15.00 with fast floats.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14ce70c[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -407,12 +411,10 @@ void __fastcall FUN_011544d0(int self)
     if (*(int*)(self + 0x38) == 1)
     {
         float f = (float)*(int*)(self + 0x84);
+        float x = *(float*)(self + 0x54);
         float r = f;
-        if (*(float*)(self + 0x54) != 0.0f)
-        {
-            double d = (double)f;
-            r = (float)(d - (5.0 * d) / log10(fabs((double)*(float*)(self + 0x54))));
-        }
+        if (x != 0.0f)
+            r = f - (f * 5.0f) / (float)log10(fabs(x));
         *(float*)(self + 0x14) = f;
         int p = *(int*)(self + 8);
         *(float*)(p + 0x28) = (r - *(float*)(self + 0x18)) + *(float*)(p + 0x28);
@@ -548,15 +550,13 @@ void ThreadObj::FUN_01154730(int value)
 // ---------------------------------------------------------------------------
 void ThreadObj::FUN_01154770(int value)
 {
-    value = ~value;
-    volatile long* p = (volatile long*)((char*)this + 0x10);
     long old, nv;
     bool again;
     do
     {
-        old = _InterlockedExchangeAdd(p, 0);
-        nv = value & old;
-        again = (_InterlockedCompareExchange(p, nv, old) != old);
+        old = _InterlockedExchangeAdd((volatile long*)((char*)this + 0x10), 0);
+        nv = ~value & old;
+        again = (_InterlockedCompareExchange((volatile long*)((char*)this + 0x10), nv, old) != old);
     } while (again);
 }
 
@@ -567,7 +567,7 @@ void ThreadObj::FUN_011547b0(void)
 {
     FUN_01154730(4);
     Wake();
-    WaitForEnd((const unsigned int*)0x014ce70c, 0);
+    WaitForEnd((const unsigned int*)g_14ce70c, 0);
 }
 
 // ---------------------------------------------------------------------------

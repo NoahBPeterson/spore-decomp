@@ -16,6 +16,12 @@
 //   0x00ea9c20  SP::Audio::`anonymous_namespace'::cFactoryMixMode::scalar_deleting_destructor
 //   0x00ea9c70  SP::Audio::cMixModeManager::Shutdown()
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+
 #include "types.h"
 #include <string.h>
 
@@ -365,9 +371,9 @@ cMixMode::~cMixMode()
     if (mA.mBegin) operator_delete(mA.mBegin);
     if (mpConfig)
         ((Fn0) VT(mpConfig, 0x04))(mpConfig);
-    mVtbl2 = (void*) 0x13ef094;
-    mVtbl1 = (void*) 0x13eb394;
-    mVtbl0 = (void*) 0x13eb938;
+    mVtbl2 = (void*) g_13ef094;
+    mVtbl1 = (void*) g_13eb394;
+    mVtbl0 = (void*) g_13eb938;
 }
 
 // ---------------------------------------------------------------------------

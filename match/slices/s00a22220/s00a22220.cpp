@@ -359,20 +359,31 @@ int __stdcall MakeKeyPair(int* out, int)
     return 2;
 }
 
+extern "C" char g_13ebcdc[];   // PropBaseA22 vtable
+extern "C" char g_1452aac[];   // PropListA22 vtable
 struct PropBaseA22 {
-    virtual void v0();
+    void* vt;
     volatile long rc;
-    PropBaseA22() { _InterlockedExchange(&rc, 0); }
+    PropBaseA22() { vt = g_13ebcdc; _InterlockedExchange(&rc, 0); }
 };
-struct PropListA22 : PropBaseA22 {
-    u32    f08, f0c, f10, f14, f18, f1c;
+#pragma pack(push, 4)
+struct PropValA22 {
+    u32    f14, f18, f1c;
     double d20;
+    PropValA22() : d20(0.0) { f14 = 0; f18 = 0; }
+};
+#pragma pack(pop)
+struct PropListA22 : PropBaseA22 {
+    u32    f08, f0c, f10;
+    PropValA22 val;
     u32    f28;
     PropListA22();
-    virtual void v0();
 };
 // @ 0x00a22cf0
-PropListA22::PropListA22() : f08(0), f0c(0), f10(0), d20(0.0), f14(0), f18(0), f28(0) {}
+PropListA22::PropListA22() : f08(0), f0c(0), f10(0), f28(0)
+{
+    vt = g_1452aac;
+}
 
 // ---------------------------------------------------------------------------
 // Subscription::UpdateOutput

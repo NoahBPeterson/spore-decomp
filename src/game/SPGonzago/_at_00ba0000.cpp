@@ -2,6 +2,14 @@
 // Object file: SPGonzago/_at_00ba0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013c2f60();
+extern "C" void FUN_013c2f90();
+extern "C" char g_13eb394[];
+extern "C" char g_1465d70[];
+extern "C" char g_1465d78[];
+extern "C" char g_1465dc8[];
+
 #include "game/types.h"
 #include "SP/cPlanetModel.h"
 #include "SP/cITerrainSphere.h"
@@ -2339,9 +2347,9 @@ int __cdecl FUN_00ba36f0(void* buf, int end, int ret)
 void __thiscall W::Run_00ba37a0()
 {
   char* s = (char*)this;
-  *(void**)s = (void*)0x1465dc8;
-  *(void**)(s + 4) = (void*)0x1465d78;
-  *(void**)(s + 8) = (void*)0x1465d70;
+  *(void**)s = (void*)g_1465dc8;
+  *(void**)(s + 4) = (void*)g_1465d78;
+  *(void**)(s + 8) = (void*)g_1465d70;
   VecHdr* b = (VecHdr*)(s + 0x40);
   b->FreeNodes(b->data, b->size);
   b->fieldC = 0;
@@ -2351,7 +2359,7 @@ void __thiscall W::Run_00ba37a0()
   a->fieldC = 0;
   if (a->size > 1) operator_delete__(a->data);
   ((CGZSub*)(s + 4))->Dtor();
-  *(void**)s = (void*)0x13eb394;
+  *(void**)s = (void*)g_13eb394;
 }
 
 // @ 0x00ba3860
@@ -3585,16 +3593,16 @@ void InsertionSortSimpleC(ElemC* first, ElemC* last, bool (*compare)(const ElemC
 Elem16* UninitMove16(Elem16* first, Elem16* last, Elem16* dst)
 {
     if (first != last) {
-        if (dst != 0) {
-            while (first != last) {
+        do {
+            if (dst != 0) {
                 dst->a = first->a;
                 dst->b = first->b;
                 dst->c = first->c;
                 dst->d = first->d;
-                ++first;
-                ++dst;
             }
-        }
+            ++first;
+            ++dst;
+        } while (first != last);
     }
     return dst;
 }
@@ -4179,7 +4187,7 @@ void FUN_00ba9400(void* p)
         g_WStrA.mpBegin = g_emptyWString;
         g_WStrA.mpEnd = g_emptyWString;
         g_WStrA.mpCapacity = g_emptyWString + 1;
-        atexit((void (__cdecl*)(void))0x13c2f90);
+        atexit((void (__cdecl*)(void))FUN_013c2f90);
     }
     if (r != &g_WStrA)
         r->Assign(g_WStrA.mpBegin, g_WStrA.mpEnd);
@@ -4194,7 +4202,7 @@ void FUN_00ba9470(void* p)
         g_WStrB.mpBegin = g_emptyWString;
         g_WStrB.mpEnd = g_emptyWString;
         g_WStrB.mpCapacity = g_emptyWString + 1;
-        atexit((void (__cdecl*)(void))0x13c2f60);
+        atexit((void (__cdecl*)(void))FUN_013c2f60);
     }
     if (r != &g_WStrB)
         r->Assign(g_WStrB.mpBegin, g_WStrB.mpEnd);

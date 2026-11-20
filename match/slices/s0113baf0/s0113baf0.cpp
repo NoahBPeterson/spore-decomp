@@ -8,6 +8,8 @@
 #include <string.h>
 #include <math.h>
 #include <xmmintrin.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 // --- globals referenced by the original (addresses for the equivalence mapper) ---
 extern uint8_t  g_vtbl_014bc0fc[];          // 0x14bc0fc  shared base vtable
@@ -63,6 +65,7 @@ struct Ctx {
     bool     DelayLineInit(int, int, uint32_t); // 0x114d7b0
     void     D840(int);                      // 0x114d840
     void     C1154ee0();                     // 0x1154ee0
+    void     C00c2e4e0();                    // 0x00c2e4e0
     void     C1154ca0(void*);                // 0x1154ca0
     uint64_t Get64();                        // 0x68c140
 
@@ -331,6 +334,7 @@ bool FUN_0113c060(uint8_t* p)
     uint8_t ch = B(p, 0x21);
     uint8_t* edx = p + 0x28;
     W(p, 0xc) = (uint32_t)edx;
+    _ReadWriteBarrier();
     if (ch == 2)
         B(p, 0x70) = 0;
     else
@@ -635,7 +639,7 @@ void FUN_0113cb50(uint8_t* p)
 // @ 0x0113cbb0
 uint8_t* Ctx::FUN_0113cbb0(uint8_t param_2)
 {
-    ((Ctx*)((char*)this + 0x98))->C1154ee0();
+    ((Ctx*)((char*)this + 0x98))->C00c2e4e0();
     ((Ctx*)((char*)this + 0x5c))->D770();
     P(this, 0) = g_vtbl_014bc0fc;
     if (param_2 & 1)

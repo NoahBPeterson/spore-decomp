@@ -1,5 +1,10 @@
 // Slice s006ffe00: frustum/spatial-cell helpers (bit-pack/unpack) and small vector/accessor
 // routines. Region 0x6ffe00-0x700d80. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_140c460[];
+
 #include "types.h"
 #include <xmmintrin.h>
 #include <math.h>
@@ -203,9 +208,9 @@ CellArray::CellArray(const SpCellRecord* src, unsigned n) {
 
 // @ 0x00700450
 void* CellArray::Destroy(unsigned flags) {
-    vt = (void*)0x140c460;
+    vt = (void*)g_140c460;
     EASTL_allocator_deallocate(data);
-    vt = (void*)0x13ef094;
+    vt = (void*)g_13ef094;
     if (flags & 1)
         EASTL_allocator_deallocate(this);
     return this;

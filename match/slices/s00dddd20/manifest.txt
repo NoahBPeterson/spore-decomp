@@ -12,3 +12,4 @@ slices/s00dddd20/s00dddd20.cpp  ?Update@CamCtl@@QAEXHH@Z  00dde350  /O2 /MD /Gy 
 slices/s00dddd20/s00dddd20.cpp  ?init@CamCtl@@QAEXPAXPBUVec3@@@Z  00dde2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dddd20/s00dddd20.cpp  ?Key@CamCtl@@QAEDIH@Z  00dde400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00dddd20/s00dddd20.cpp  ?CamCtl_Preset@@YGXM@Z  00dde900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dddd20/s00dddd20.cpp  ?Zoom@CamCtl@@QAEDHHHH@Z  00dde540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

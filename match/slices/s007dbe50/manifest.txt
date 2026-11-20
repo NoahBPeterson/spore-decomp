@@ -1,0 +1,1 @@
+slices/s007dbe50/s007dbe50.cpp  ?StopMotion@cSmoothCameraController@@QAEXXZ  007dbe50  /O2 /MD /Gy /TP /arch:IA32 /Isrc/game/include

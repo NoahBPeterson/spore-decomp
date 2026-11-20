@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00e213f0 253 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL xmm1 clobber (register-ABI external callee) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e21590 16 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e215d0 46 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK equivalence weak/discarded inputs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e21640 161 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution mismatch (register-ABI external callee) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e217c0 77 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
@@ -19,7 +18,6 @@
 00e239a0 221 1 unresolved reference (?SetBlinkerMotive@PosseItemC); cSPUIPosseItem::SetDistress; member-modeled thiscall call target (00e21cf0) not defined for link + distress/blinker float-constant reconstruction (244 diff; 282 vs 305 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e23d50 89 only 0/400 inputs valid (fake-arity 290, fault(read) 104); cSPUIPosse::toggle_select_all; audio-system vtable chain with fake-arity and deferred-branch scheduling tie (GetSystem test / vtable slot fetch order) (102 diff; 123 vs 136 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e23de0 55 310 valid inputs (need 200), 31.0% coverage; clear transient items from list; iterator-vs-pointer loop register allocation (end/begin esi/edi vs edi/ebx) and per-iteration [it-4] reload (56 diff; 76 vs 75 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e23ee0 20 5/7 valid inputs mismatched (eax); lower_bound by u32 key (stride 16); argument load order/scheduling and half-index register choice (20 diff; 68 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e23f30 333 42 valid inputs (need 200), 14.0% coverage; insertion sort (move variant) over AutoRefCount pairs; move/copy-assign inlining and register scheduling differ widely (357 diff; 352 vs 376 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e240b0 293 only 0/400 inputs valid (fault(read) 341, fault(pool-limit) 53); insertion sort variant 2; refcounted-pair deref faults on synthetic inputs plus sort-codegen reconstruction (336 diff; 314 vs 357 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e24310 75 119 valid inputs (need 200), 25.6% coverage; fill range via output-iterator pointer; prologue/register allocation and out-pointer store scheduling tie (79 diff; 85 vs 89 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2,6 +2,24 @@
 // Object file: SPCreatureAnim/SPCreatureAnimManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1448b48[];
+extern "C" char g_1448c08[];
+extern "C" char g_1448c20[];
+extern "C" char g_1448c38[];
+extern "C" char g_1448c50[];
+extern "C" char g_1448c68[];
+extern "C" char g_1448c80[];
+extern "C" char g_1448c98[];
+extern "C" char g_1448cb0[];
+extern "C" char g_1448cc8[];
+extern "C" char g_1448ce0[];
+extern "C" char g_1448cf8[];
+extern "C" char g_1448d34[];
+extern "C" char g_1448d58[];
+extern "C" char g_1448d70[];
+extern "C" char g_15d115d[];
+
 #include "game/types.h"
 #include "SP/cViewer.h"
 #include <math.h>
@@ -347,7 +365,7 @@ void FUN_00a04630(cAnimatingCreature_s00a0_3da0* self, unsigned char param2, uns
 #define g_transformPtr        (*(void**)0x16fa380)
 #define g_transformLocal      ((float*)0x16fa4f0)
 #define g_posNegate           (*(const uint32_t*)0x13eb8b0)
-#define g_minusOne            (*(const float*)0x13eb1bc)
+#define g_minusOne            (*(const float*)&g_13eb1bc)
 #define g_uintToFloat         (*(const float*)0x13f4fd0)
 static void AssignModel(RenderInst* inst, IUnknown_s00a0_3da0* model)
 {
@@ -4972,21 +4990,10 @@ int cAnimatingCreature_s00a0_3da0::FUN_00a048b0(int id, int a3, int a4, int a5)
 bool cAnimatingCreature_s00a0_3da0::FUN_00a04900(int unused)
 {
 	(void)unused;
-	bool result;
 	LookupEntry* e = (LookupEntry*)FUN_009ff750(m_lookup184);
-	if (e == 0)
-	{
-		result = true;
-	}
-	else
-	{
-		void* obj = e->m_obj;
-		if (*(unsigned char*)((char*)obj + 0xac) == 0 && e->m_fieldC0 != 0)
-			result = true;
-		else
-			result = false;
-	}
-	return result;
+	if (e)
+		return *(unsigned char*)((char*)e->m_obj + 0xac) == 0 && e->m_fieldC0 != 0;
+	return true;
 }
 
 // @ 0x00a04940
@@ -5310,7 +5317,7 @@ char WrappedAnim::SetFlagFromProperty(bool value)
         if ((var->flags & 0x30) != 0) p = *(char**)var;
         else p = (ty != 0) ? (char*)var : 0;
     } else {
-        p = (char*)0x15d115d;
+        p = (char*)g_15d115d;
     }
     char old = mFlag3038;
     if (*p != 0) {
@@ -5801,8 +5808,8 @@ float anim_creature_s00a0_5c20::GetFeedbackValue(uint key)
 void anim_creature_s00a0_5c20::SetTargetRoot(anim_creature_s00a0_5c20* target)
 {
     f154 = 0;
-    f158 = 1;
-    anim_creature_s00a0_5c20* old = f15c;
+    *(volatile int*)&f158 = 1;
+    anim_creature_s00a0_5c20* old = *(anim_creature_s00a0_5c20* volatile*)&f15c;
     if (target != old) {
         if (target != 0)
             target->f198++;
@@ -6874,7 +6881,7 @@ void __cdecl FUN_00a08ba0(void)
 // @ 0x00a08cb0
 void* cAnimatingCreature_s00a0_8b00::scalar_deleting_destructor(uint8_t param_2)
 {
-    *(void**)this = (void*)0x1448b48;
+    *(void**)this = (void*)g_1448b48;
     _ReadWriteBarrier();
     if (f17c != 0)
         ((InstanceData*)f17c)->Release();
@@ -6894,7 +6901,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     void* c = EAAllocate(0x10, "ArgScript/OldAnimID", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c08;
+        *(void**)c = (void*)g_1448c08;
     } else {
         c = 0;
     }
@@ -6903,7 +6910,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/OldAnimName", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c20;
+        *(void**)c = (void*)g_1448c20;
     } else {
         c = 0;
     }
@@ -6912,7 +6919,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/OldDuration", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c38;
+        *(void**)c = (void*)g_1448c38;
     } else {
         c = 0;
     }
@@ -6921,7 +6928,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/OldDurationScale", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c50;
+        *(void**)c = (void*)g_1448c50;
     } else {
         c = 0;
     }
@@ -6930,7 +6937,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/EndMode", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c68;
+        *(void**)c = (void*)g_1448c68;
     } else {
         c = 0;
     }
@@ -6939,7 +6946,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/Idle", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c80;
+        *(void**)c = (void*)g_1448c80;
     } else {
         c = 0;
     }
@@ -6948,7 +6955,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/BlendInTime", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c98;
+        *(void**)c = (void*)g_1448c98;
     } else {
         c = 0;
     }
@@ -6957,7 +6964,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/AllowLocomotion", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448cb0;
+        *(void**)c = (void*)g_1448cb0;
     } else {
         c = 0;
     }
@@ -6966,7 +6973,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/DisableToolOverlayMask", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448cc8;
+        *(void**)c = (void*)g_1448cc8;
     } else {
         c = 0;
     }
@@ -6975,7 +6982,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/MatchVariantForToolMask", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448ce0;
+        *(void**)c = (void*)g_1448ce0;
     } else {
         c = 0;
     }
@@ -6984,7 +6991,7 @@ void OnRegObj::OnRegisterAnimCommand(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/PriorityOverride", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448cf8;
+        *(void**)c = (void*)g_1448cf8;
     } else {
         c = 0;
     }
@@ -7000,7 +7007,7 @@ void OnRegObj::OnRegisterAnim(void* parser, int state)
     void* c = EAAllocate(0x10, "ArgScript/Animation", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448d58;
+        *(void**)c = (void*)g_1448d58;
     } else {
         c = 0;
     }
@@ -7016,7 +7023,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     void* c = EAAllocate(0x34, "ArgScript/Choice", 0, 0, 0, 0);
     if (c != 0) {
         ((ChoiceBase*)c)->Ctor();
-        *(void**)c = (void*)0x1448d34;
+        *(void**)c = (void*)g_1448d34;
     } else {
         c = 0;
     }
@@ -7025,7 +7032,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/RandomizeChoicePerLoop", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448d70;
+        *(void**)c = (void*)g_1448d70;
     } else {
         c = 0;
     }
@@ -7034,7 +7041,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/EndMode", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c68;
+        *(void**)c = (void*)g_1448c68;
     } else {
         c = 0;
     }
@@ -7043,7 +7050,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/Idle", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c80;
+        *(void**)c = (void*)g_1448c80;
     } else {
         c = 0;
     }
@@ -7052,7 +7059,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/BlendInTime", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448c98;
+        *(void**)c = (void*)g_1448c98;
     } else {
         c = 0;
     }
@@ -7061,7 +7068,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/AllowLocomotion", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448cb0;
+        *(void**)c = (void*)g_1448cb0;
     } else {
         c = 0;
     }
@@ -7070,7 +7077,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/DisableToolOverlayMask", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448cc8;
+        *(void**)c = (void*)g_1448cc8;
     } else {
         c = 0;
     }
@@ -7079,7 +7086,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/MatchVariantForToolMask", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448ce0;
+        *(void**)c = (void*)g_1448ce0;
     } else {
         c = 0;
     }
@@ -7088,7 +7095,7 @@ void OnRegObj::OnRegisterChoice(void* parser, int state)
     c = EAAllocate(0x10, "ArgScript/PriorityOverride", 0, 0, 0, 0);
     if (c != 0) {
         ((CmdBase_s00a0_8b00*)c)->Ctor();
-        *(void**)c = (void*)0x1448cf8;
+        *(void**)c = (void*)g_1448cf8;
     } else {
         c = 0;
     }
@@ -7531,6 +7538,8 @@ void* SL71::v09e70(void* a2, void* a3)
     return self;
 }
 
+extern "C" char g_13ec458[];   // vtables retail relocates here
+extern "C" char g_13eb938[];
 // @ 0x00a09f90
 void SL71::v09f90()
 {
@@ -7546,10 +7555,10 @@ void SL71::v09f90()
     p = *(void**)(self + 0x1c);
     if (p) ((vt_v)vfn(p, 4))(p);
     p = *(void**)(self + 0xc);
-    if (p && (2 < (int)((*(char**)(self + 0x14) - (char*)p) & 0xfffffffeU)))
+    if (2 < (int)((*(char**)(self + 0x14) - (char*)p) & 0xfffffffeU) && p)
         FUN_00f47380(p);
-    *(void**)(self + 4) = (void*)0x13ec458;
-    *(void**)(self + 0) = (void*)0x13eb938;
+    *(void**)(self + 4) = g_13ec458;
+    *(void**)(self + 0) = g_13eb938;
 }
 
 // @ 0x00a0a020

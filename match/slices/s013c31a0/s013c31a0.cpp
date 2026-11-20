@@ -6,6 +6,24 @@
 // complete here but cannot match from one C++ function; see nonmatching.txt.
 #include "types.h"
 
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long _InterlockedDecrement(volatile long*);
+extern "C" long _InterlockedIncrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedDecrement, _InterlockedIncrement)
+struct R45ScatterResource {
+    void* image;
+    unsigned flags;
+    volatile long refCount;
+    __forceinline int Release() {
+        _InterlockedDecrement(&refCount);
+        if (_InterlockedExchangeAdd(&refCount, 0) < 1) {
+            _InterlockedIncrement(&refCount);
+            return 1;
+        }
+        return _InterlockedExchangeAdd(&refCount, 0);
+    }
+};
+
 extern "C" __declspec(dllimport) int __stdcall TlsFree(unsigned long);
 extern void __cdecl cdecl_free(void*);          // operator delete // 0x00f47380
 extern void __cdecl cdecl_shutdown_shared();    // EA::Allocator::ShutdownSharedAllocator
@@ -37,6 +55,8 @@ struct VBig {
     virtual void v64(); virtual void v65(); virtual void v66();
 };
 struct HTb { void* mBegin; unsigned mEnd; void DoFreeNodes(void*, void*); };
+// The table at 0x015b7458 has one more dword in front: its buffer pointer is at +4 and its end at +8 (retail reads 0x015b745c/0x015b7460).
+struct HTbP { unsigned m00; void* mBegin; unsigned mEnd; void DoFreeNodes(void*, void*); };
 struct Str { ~Str(); };
 struct CS { void Shutdown(int); ~CS(); };
 
@@ -116,6 +136,9 @@ void f_013c31a0() {
     h->DoFreeNodes(h->mBegin, (void*)h->mEnd);
     DBGFREE(h->mBegin);
 }
+
+// The linked retail extent continues into this separate empty function.
+void r45_04_link_pad_ret() {}
 
 // @ 0x013C33A0
 void f_013c33a0() {
@@ -275,15 +298,18 @@ void f_013c8f60() {
 // Adjacent empty COMDAT reproduces the linked retail extent after f_013c8f60.
 void terra09_link_pad_ret() {}
 
+// The object g_16c7c14 points at owns one interface pointer, released in its destructor.
+struct Holder_13c9030 {
+    V2* mpObj;
+    ~Holder_13c9030() { if (mpObj) mpObj->b(); }
+    static void operator delete(void* p) { cdecl_free(p); }
+};
+
 // @ 0x013C9030
 void f_013c9030() {
-    char* p = (char*)g_16c7c14;
+    Holder_13c9030* p = (Holder_13c9030*)g_16c7c14;
     *(void**)g_16c7c08 = vtbl_148b708;
-    if (p) {
-        void* q = *(void**)p;
-        if (q) ((V2*)q)->b();
-        cdecl_free(p);
-    }
+    delete p;
     g_16c7c14 = 0;
 }
 
@@ -323,29 +349,17 @@ void f_013c9950() {
 
 // @ 0x013C9C30
 void f_013c9c30() {
-    if (g_16c9f54) {
-        int* p = (int*)(g_16c9f54 + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f54) ((R45ScatterResource*)g_16c9f54)->Release();
 }
 
 // @ 0x013C9C70
 void f_013c9c70() {
-    if (g_16c9f58) {
-        int* p = (int*)(g_16c9f58 + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f58) ((R45ScatterResource*)g_16c9f58)->Release();
 }
 
 // @ 0x013C9CB0
 void f_013c9cb0() {
-    if (g_16c9f5c) {
-        int* p = (int*)(g_16c9f5c + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f5c) ((R45ScatterResource*)g_16c9f5c)->Release();
 }
 
 // @ 0x013C9DD0
@@ -398,7 +412,7 @@ void f_013c9f70() {
 // @ 0x013CA670
 void f_013ca670() {
     if (g_15b7478) ((V2*)g_15b7478)->b();
-    HTb* h = (HTb*)g_15b7458;
+    HTbP* h = (HTbP*)g_15b7458;
     h->DoFreeNodes(h->mBegin, (void*)h->mEnd);
     unsigned n = h->mEnd;
     *(unsigned*)((char*)h + 0xc) = 0;

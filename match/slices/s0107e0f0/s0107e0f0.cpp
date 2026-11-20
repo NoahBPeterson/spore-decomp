@@ -1,3 +1,6 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e4178[];
+
 struct HkMem_0107e0f0 {
     virtual void v0();
     virtual void v1();
@@ -18,7 +21,7 @@ struct Obj_0107e0f0 {
 
 // @ 0x0107e0f0
 Obj_0107e0f0* Obj_0107e0f0::Match_0107e0f0() {
-    HkMem_0107e0f0* mem = *(HkMem_0107e0f0**)0x016e4178;
+    HkMem_0107e0f0* mem = *(HkMem_0107e0f0**)g_16e4178;
     m0 = mem->Alloc(0x100, 0x14);
     Fn_0107f470(m0, 0, 0x100);
     m4 = 0;

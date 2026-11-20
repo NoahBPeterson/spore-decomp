@@ -1,0 +1,1 @@
+slices/s00c436a0/s00c436a0.cpp  ?ClearGoalAndStop@cLocomotiveObject@SP@@UAEXXZ  00c436a0  /O2 /MD /Gy /TP /EHs- /GS- /arch:SSE /Isrc/game/include

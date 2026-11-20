@@ -6,6 +6,13 @@
 // but the virtual calls are declared as genuine virtual methods on interface
 // structs so the compiler emits the original `mov eax,[ecx]; mov edx,[eax+slot];
 // call edx` shape (a __fastcall cast would force an extra `xor edx,edx`).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_14453d0[];
+extern "C" char g_1445410[];
+extern "C" char g_1445530[];
+
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -464,12 +471,12 @@ char __thiscall WinText::m_988f60(uint32_t p2, float* p3)
 // @ 0x00988f90
 void __thiscall WinText::m_988f90()
 {
-    F(this, 0) = 0x1445530;
-    F(this, 4) = 0x1445410;
-    F(this, 0x20c) = 0x14453d0;
+    F(this, 0) = (int)g_1445530;
+    F(this, 4) = (int)g_1445410;
+    F(this, 0x20c) = (int)g_14453d0;
     ((C_8323d0*)((uint8_t*)this + 0x758))->Dtor();
     ((C_89c540*)((uint8_t*)this + 0x228))->Dtor();
-    F(this, 0x20c) = 0x13eb938;
+    F(this, 0x20c) = (int)g_13eb938;
     ((C_962740*)this)->Free();
 }
 
@@ -505,12 +512,12 @@ WinText* __thiscall WinText::m_989000()
 // @ 0x009890d0
 WinText* __thiscall WinText::m_9890d0(uint8_t p2)
 {
-    F(this, 0) = 0x1445530;
-    F(this, 4) = 0x1445410;
-    F(this, 0x20c) = 0x14453d0;
+    F(this, 0) = (int)g_1445530;
+    F(this, 4) = (int)g_1445410;
+    F(this, 0x20c) = (int)g_14453d0;
     ((C_8323d0*)((uint8_t*)this + 0x758))->Dtor();
     ((C_89c540*)((uint8_t*)this + 0x228))->Dtor();
-    F(this, 0x20c) = 0x13eb938;
+    F(this, 0x20c) = (int)g_13eb938;
     ((C_962740*)this)->Free();
     if (p2 & 1) {
         FUN_00951330(this);

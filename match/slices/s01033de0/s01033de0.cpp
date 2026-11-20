@@ -10,6 +10,15 @@
 //     cViewer sub-objects at +0x178 / +0x2ec).
 //
 // Flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13f09b4[];
+extern "C" char g_1499800[];
+extern "C" char g_1499810[];
+extern "C" char g_15b7ca0[];
+extern "C" char g_16df2f8[];
+
 #include <math.h>
 #include "types.h"
 
@@ -20,15 +29,15 @@ struct Vec3 { float x, y, z; };
 // --------------------------------------------------------------------------- retail globals (absolute)
 #define G_FACTOR_TABLE   ((float*)0x016df330)      // +0x000 4 per-behaviour float factors
 #define G_TUNE_VARIANTS  ((TuningVariant*)0x016df3d8)  // +0x000 4 tuning variants, 0x14 bytes each
-#define G_LAST_ANIM_POS  ((float*)0x015b7ca0)      // +0x000 Vec3 of the last animation position
+#define G_LAST_ANIM_POS  ((float*)g_15b7ca0)      // +0x000 Vec3 of the last animation position
 #define G_REAL_ZERO      ((float*)0x01485378)      // _HK_REAL_ZERO
 #define G_STR_15B79B8    ((void*)0x015b79b8)
 #define G_STR_15B7844    ((void*)0x015b7844)
-#define G_STR_16DF2F8    ((void*)0x016df2f8)
-#define G_STR_SIMULATOR  ((void*)0x013f09b4)
-#define G_VT_BEHAVIOUR_A ((uint32_t)0x01499810)
-#define G_VT_BEHAVIOUR_B ((uint32_t)0x01499800)
-#define G_VT_ITRACERBASE ((uint32_t)0x013eb938)
+#define G_STR_16DF2F8    ((void*)g_16df2f8)
+#define G_STR_SIMULATOR  ((void*)g_13f09b4)
+#define G_VT_BEHAVIOUR_A ((uint32_t)g_1499810)
+#define G_VT_BEHAVIOUR_B ((uint32_t)g_1499800)
+#define G_VT_ITRACERBASE ((uint32_t)g_13eb938)
 
 // --------------------------------------------------------------------------- opaque services
 void* operator_new(uint32_t size, void* name, int a, int b, int c, int d);   // 0x00f473a0

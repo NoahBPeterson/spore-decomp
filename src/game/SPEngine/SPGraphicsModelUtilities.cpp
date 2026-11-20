@@ -2,6 +2,13 @@
 // Object file: SPEngine/SPGraphicsModelUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_13f1ab0[];
+extern "C" char g_140d9d4[];
+extern "C" char g_140d9d8[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -709,12 +716,12 @@ struct CS553 {
 
   void f55c80(void* job);
 };
-struct CS553Base0 { void* mpV; CS553Base0() { mpV = (void*)0x13f1ab0; } ~CS553Base0() { mpV = (void*)0x13eb938; } };
+struct CS553Base0 { void* mpV; CS553Base0() { mpV = (void*)g_13f1ab0; } ~CS553Base0() { mpV = (void*)g_13eb938; } };
 struct CS553Base1 {
   void* mpV;
   int mAtom;
-  CS553Base1() { mpV = (void*)0x13ef094; volatile long* p = (volatile long*)&mAtom; _InterlockedExchange(p, 0); }
-  ~CS553Base1() { mpV = (void*)0x13ef094; }
+  CS553Base1() { mpV = (void*)g_13ef094; volatile long* p = (volatile long*)&mAtom; _InterlockedExchange(p, 0); }
+  ~CS553Base1() { mpV = (void*)g_13ef094; }
 };
 struct CS553Vec {
   void* mpBegin;
@@ -725,8 +732,8 @@ struct CS553Vec {
   void* m20;
   void* mInline[16];
   CS553Vec(void* owner) {
-    ((CS553Base0*)owner)->mpV = (void*)0x140d9d8;
-    ((CS553Base1*)((char*)owner + 4))->mpV = (void*)0x140d9d4;
+    ((CS553Base0*)owner)->mpV = (void*)g_140d9d8;
+    ((CS553Base1*)((char*)owner + 4))->mpV = (void*)g_140d9d4;
     void** b = mInline; mpBegin = b; mpEnd = b; m20 = 0; mpCap = b + 16;
   }
   ~CS553Vec() { DestroyRange(mpBegin, mpEnd); FreeBuffer(mpBegin); }
@@ -984,6 +991,7 @@ struct Ext {
   void   FUN_006913c0(void*);                  // cJob::AddWeakDependency
   bool   FUN_0068f9f0(void*, void*);           // cJob::Continuation
   void   FUN_0059c410(void*, void*);           // ReleaseAutoRefRange (ecx = &range)
+  int    FUN_00fc7e50();                       // EA::XHTML::DOM::Node::Type
 };
 struct IObject_s0075_6280 {
   virtual int AddRef();
@@ -1780,11 +1788,11 @@ void FUN_00753fc0(RC_00753fc0* param_1)
   int n = (param_1->n += -1);
   if (n == 0) {
     param_1->n = 1;
+    _ReadWriteBarrier();
     // vtable slot 0 (deleting dtor) called thiscall on the record itself: the original's `ecx`
     // at the call is `this`, not a register-allocation choice (hybrid 2026-10-12).
     typedef void(__thiscall *Fn)(RC_00753fc0*, int);
-    Fn fn = *(Fn*)param_1->p;
-    fn(param_1, 1);
+    (*(Fn*)param_1->p)(param_1, 1);
   }
 }
 
@@ -2189,13 +2197,13 @@ void V_755570::FUN_00755570(unsigned int param_2, int param_3)
   int* param_1 = (int*)this;
   int iVar2 = param_1[1];
   unsigned int uVar3 = (unsigned int)((iVar2 - *param_1) >> 2);
-  if (uVar3 < param_2) {
+  if (param_2 > uVar3) {
     ((void (__thiscall*)(void*, int, unsigned int, int))FUN_00429e00)(this, iVar2, param_2 - uVar3, param_3);
     return;
   }
   int iVar1 = *param_1 + param_2 * 4;
   int uVar4 = FUN_006df700(iVar2, iVar2, iVar1);
-  FUN_0059c410(uVar4, param_1[1]);
+  ((Ext*)this)->FUN_0059c410((void*)uVar4, (void*)param_1[1]);
   param_1[1] = param_1[1] + ((iVar2 - iVar1 >> 2) * -4);
 }
 
@@ -2229,7 +2237,7 @@ char FUN_00755810(int a1, int a2, int a3, void* a4, int a5, int a6)
 // @ 0x00755c80
 void CS553::f55c80(void* job)
 {
-  void* mgr = GetManager_755d40();
+  void* mgr = GetManager();
   if (m20) { void* p = m20; m20 = 0; Rel0(p); }
   if (m1c) { void* p = m1c; m1c = 0; Rel0(p); }
   ((void(__thiscall*)(void*, void*, void*, void*, void*, void*, void*, void*, void*))VTSLOT(mgr, 0x10))
@@ -2238,19 +2246,18 @@ void CS553::f55c80(void* job)
   if (r) {
     void* n = ((void*(__thiscall*)(void*, void*))VTSLOT(r, 0xc))(r, (void*)0x3a212ac);
     if (n) {
-      int t = FUN_00fc7e50(n);
-      FUN_006913c0(job, (void*)t);
+      ((Ext*)job)->FUN_006913c0((void*)((Ext*)n)->FUN_00fc7e50());
     }
   }
   *(int*)((char*)job + 0x18) = 1;
-  FUN_0068f9f0(job, (void*)FUN_00755560, this);
+  ((Ext*)job)->FUN_0068f9f0((void*)FUN_00755560, this);
 }
 
 // @ 0x00755fe0
 void S_755fe0::FUN_00755fe0(void* arg)
 {
   (void)arg;
-  GetManager_755d40();
+  GetManager();
   int uVar1 = m108;
   IFoo_755d40* piVar2 = m104;
   if (piVar2 != 0) {

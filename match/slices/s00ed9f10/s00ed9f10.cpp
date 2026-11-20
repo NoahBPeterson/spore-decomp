@@ -547,10 +547,10 @@ extern "C" unsigned char FUN_00edabf0(uint32_t idx)
     struct { uint32_t a; uint32_t b; uint32_t c; } key;
     key.a = *(uint32_t*)(t + 8);
     key.b = *(uint32_t*)(t + 0xc);
-    uint32_t x = *(uint32_t*)(t + 0x10);
-    uint32_t y = ((idx + 1) ^ x) & 0xff;
-    key.c = y ^ x;
+    key.c = *(uint32_t*)(t + 0x10);
+    uint32_t c = key.c ^ (((idx + 1) ^ key.c) & 0xff);
     key.b = 0x2f7d0004;
+    key.c = c;
     ResourceMan* m = ResourceMan_GetManager();
     return (unsigned char)m->Load(&key, 0, 0, 0, 0, 0);
 }
@@ -689,13 +689,20 @@ int InputStrategy::FUN_00edae50(uint32_t msg, void* data)
 // ===========================================================================
 // 0x00edae80 -- destructor for the cSPEditorNaming-derived naming widget.
 // ===========================================================================
+extern "C" char g_148a440[];  // vtables stored by the destructor
+extern "C" char g_148a430[];
+extern "C" char g_148a420[];
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x00edae80
 void InputStrategy::FUN_00edae80()
 {
     char* self = (char*)this;
-    *(void**)(self + 0x00) = (void*)0x148a440;
-    *(void**)(self + 0x04) = (void*)0x148a430;
-    *(void**)(self + 0x08) = (void*)0x148a420;
+    *(void**)(self + 0x00) = g_148a440;
+    *(void**)(self + 0x04) = g_148a430;
+    *(void**)(self + 0x08) = g_148a420;
+    _ReadWriteBarrier();
     if (*(uint32_t*)(self + 0xcc) != 0) {
         uint32_t h = *(uint32_t*)(self + 0xcc);
         *(uint32_t*)(self + 0xcc) = 0;

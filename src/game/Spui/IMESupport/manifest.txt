@@ -9,3 +9,5 @@
 ../src/game/Spui/IMESupport.cpp  ?IMEServiceShutdown@UI@Sims3@@YAXXZ  007f4860  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/IMESupport.cpp  ?HandleMessage@IMEProxyS@@QAE_NIPAX@Z  007f5220  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/IMESupport.cpp  ??0WideFixedBuf@@QAE@PBG@Z  007f48d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?CalculateTextSize@@YA?AUVector2_s007f3b00@@HHHPAX@Z  007f3b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?Dtor@IMECompositionS@@QAEXXZ  007f45b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

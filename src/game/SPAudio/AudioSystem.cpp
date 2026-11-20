@@ -2,6 +2,9 @@
 // Object file: SPAudio/AudioSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1452970[];
+
 #include "game/types.h"
 #include "SP/cIReleaseCallback.h"
 #include "SP/cResourceBase.h"
@@ -296,9 +299,12 @@ struct RefBaseA22 {
     volatile long rc;
     RefBaseA22() { _InterlockedExchange(&rc, 0); }
 };
-struct DrvBA22 : RefBaseA22 {
+struct DrvArgA22 {          // non-polymorphic base, laid out after RefBaseA22 (+8)
     u32   pad[0x1e];       // +8 .. +0x80
     void* mArg;            // +0x80
+    DrvArgA22(void* arg) : mArg(arg) {}
+};
+struct DrvBA22 : DrvArgA22, RefBaseA22 {
     u32   mPad84;
     u32   mZero;           // +0x88
     DrvBA22(void* arg);
@@ -772,6 +778,7 @@ struct PropList : PropBase {
 };
 struct Str16 {
     wchar_t* b; wchar_t* e; wchar_t* cap; int alloc;
+    const wchar_t* c_str() const { return b; }
     ~Str16() { if ((int)(((char*)cap - (char*)b) & ~1) > 2 && b) operator_delete__(b); }
 };
 Str16 ConvertToString16(const char* s, int n);   // 0x0093c5a0
@@ -1375,7 +1382,7 @@ extern void* __cdecl ObjectError();  // 0x008de1a0
 void* __cdecl EaNew(unsigned size, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
 void __cdecl EaDelete(void* p);                                                                    // 0xf47380
 struct MapUU {
-    int& operator[](const uint32_t& key);  // 0x00a2e060
+    __declspec(noalias) int& operator[](const uint32_t& key);  // 0x00a2e060
 };
 static inline void ObjAddRef(void* p) { VCALL(void(__thiscall*)(void*), p, 0)(p); }
 static inline void ObjRelease(void* p) { VCALL(void(__thiscall*)(void*), p, 4)(p); }
@@ -4958,7 +4965,7 @@ bool Sys::WithinRange(void* a, int b)
 // @ 0x00a210d0
 void Sys::LockB8()
 {
-    ((Mutex*)((char*)this + 0xb8))->Lock((void*)0x1452970);
+    ((Mutex*)((char*)this + 0xb8))->Lock((void*)g_1452970);
 }
 
 // @ 0x00a21100
@@ -5743,7 +5750,7 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 
 // @ 0x00a227a0
 DrvBA22::DrvBA22(void* arg)
-: mArg(arg), RefBaseA22(), mZero(0) {}
+: DrvArgA22(arg), RefBaseA22(), mZero(0) {}
 
 // @ 0x00a227d0
 ResourceDeviceDriver* MakeRDD()
@@ -6524,7 +6531,7 @@ bool System_s00a2_4e10::Init()
 void Namer::Convert(const char* s, int a, int b, double c)
 {
     StrOut out = { 0, 0, 0 };
-    g_pfnString(&out, (int)ConvertToString16(s, -1).b, 0, 0, 0, 0); // 0x0154c464
+    g_pfnString(&out, (int)ConvertToString16(s, -1).c_str(), 0, 0, 0, 0); // 0x0154c464
     Dispatch((wchar_t*)out.a, a, b, c);
 }
 
@@ -8433,16 +8440,11 @@ void SmallStubs::Dtor()
 // @ 0x00a2ab40
 void Vec12::pushEmpty()
 {
-    E12* e = mpEnd;
-    if (e < mpCap) {
-        mpEnd = e + 1;
-        if (e) {
-            e->a = 0; e->b = 0; e->c = 0;
-            return;
-        }
+    if (mpEnd < mpCap) {
+        ::new((void*)mpEnd++) E12();
     } else {
-        E12 tmp = {0, 0, 0};
-        DoInsertValue(e, &tmp);
+        E12 tmp = E12();
+        DoInsertValue(mpEnd, &tmp);
     }
 }
 

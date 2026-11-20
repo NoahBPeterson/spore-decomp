@@ -243,7 +243,7 @@ class basic_string {
     }
     return (size_type)npos;
   }
-  size_type find(T c, size_type position = 0) const {
+  size_type find(T c, size_type position = 0) const {   // 0x004f6ab0
     if (position < (size_type)(mpEnd - mpBegin)) {
       const T* const pResult = eastl::find(mpBegin + position, mpEnd, c);
       if (pResult != mpEnd) return (size_type)(pResult - mpBegin);

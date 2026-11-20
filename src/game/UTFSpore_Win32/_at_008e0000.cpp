@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/_at_008e0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436da8[];
+extern "C" char g_1437bd8[];
+extern "C" char g_1437bf4[];
+
 #include "game/types.h"
 #include "EA/Thread/Mutex.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -1443,7 +1448,7 @@ char __stdcall Fn8e5320(float* out)
 void* GuiThing::Fn8e5370(int a, int b, int c)
 {
     Fn8e4400(a, b, c);
-    *(void**)this = (void*)0x1436da8;
+    *(void**)this = (void*)g_1436da8;
     return this;
 }
 
@@ -1451,7 +1456,7 @@ void* GuiThing::Fn8e5370(int a, int b, int c)
 void* GuiThing2::Fn8e55d0(int a, int b, int c)
 {
     Fn8e52b0(a, 2);
-    *(void**)this = (void*)0x1437bd8;
+    *(void**)this = (void*)g_1437bd8;
     *(int*)((char*)this + 0x18) = b;
     *(int*)((char*)this + 0x1c) = c;
     return this;
@@ -1495,7 +1500,7 @@ void* GuiThing3::Fn8e6130(void* a)
     char* c = (char*)this;
     *(int*)(c + 4) = 0;
     *(int*)(c + 8) = 0;
-    *(void**)c = (void*)0x1437bf4;
+    *(void**)c = (void*)g_1437bf4;
     *(void**)(c + 0xc) = a;
     *(int*)(c + 0x10) = -1;
     *(int*)(c + 0x14) = 0;
@@ -1609,10 +1614,16 @@ bool EA::XHTML::Layout::Item::IntersectSelection(uint* pOutOffset, uint* pOutLen
     return true;
 }
 
+// Typesetter stand-in: both are __thiscall members (ecx passes straight through).
+struct Typesetter_s008e_dd30 {
+    void* AddLineBreak(void* a, void* b, bool c, bool d);  // 0x0089b250
+    void* StyleCtorForward(void* a, void* b);
+};
+
 // @ 0x008edd30
-void* __stdcall StyleCtorForward(void* self, void* rect)
+void* Typesetter_s008e_dd30::StyleCtorForward(void* a, void* b)
 {
-    return EA::XHTML::Layout::StyleCtor(self, 0, rect, 0, 0);
+    return this->AddLineBreak(a, b, false, false);
 }
 
 // @ 0x008edd50
@@ -1626,10 +1637,8 @@ void __stdcall ScrollbarStyleSet(const EA::XHTML::Layout::Vec2* value)
 // @ 0x008edd80
 void __stdcall ScrollbarStyleGet(EA::XHTML::Layout::Vec2* out)
 {
-    char* p = (char*)EA::XHTML::Layout::ScrollAppGet();
-    int a = *(int*)(p + 0x348);
-    p += 0xf8;
-    *(int*)&out->x = a;
+    char* p = (char*)EA::XHTML::Layout::ScrollAppGet() + 0xf8;
+    *(int*)&out->x = *(int*)(p + 0x250);
     *(int*)&out->y = *(int*)(p + 0x244);
 }
 

@@ -59,3 +59,6 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca6f0@@YAXXZ  00bca6f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ??1cAgentOrder@@QAE@XZ  00bca120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FindSlot@cAgentOrderManager@@QAEIHHHH@Z  00bca0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?Grid_FlushPending@@YAXDIPADIN@Z  00bc87b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?DestroyVarList@@YAXXZ  00bcb700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7f80@@YIPAPAUWE@@PAPAU1@@Z  00bc7f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

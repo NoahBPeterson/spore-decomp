@@ -256,7 +256,7 @@ struct cModelInstance_s0074_4ad0 {
     void SetBoneCallback(int a, int b, int c, int d);  // 0x0073b840 (cModelInstance::SetBoneCallback)
     void SetAnimationGroupTransform(int a, int b);  // 0x0073f4b0 (cModelInstance::SetAnimationGroupTransform)
     int  GetRegionMaterialInfo(int region);  // 0x00741150 (cModelInstance::GetRegionMaterialInfo)
-    void SetDynamicDraw(int a, int b);  // 0x0073b8e0 (cModelInstance::SetDynamicDraw)
+    void SetDynamicDraw(void* a, bool b);  // 0x0073b8e0 (cModelInstance::SetDynamicDraw)
     int  GetDeformationHandles(void* a, void* b);  // 0x0073d1e0 (cModelInstance::GetDeformationHandles)
     int  GetArenaResource();  // 0x0073d160 (cModelInstance::GetArenaResource)
     bool SelectMesh(int a, int b);
@@ -341,7 +341,7 @@ struct cModelWorld_s0074_4ad0 : IModelWorld_s0074_4ad0 {
     void  SetBoneCallback(Model_s0074_4ad0*, int, int, int, int);  // 0x00744b10 (cModelWorld::SetBoneCallback)
     void  SetAnimationGroupTransform(Model_s0074_4ad0*, int, int);  // 0x00744b60 (cModelWorld::SetAnimationGroupTransform)
     int   GetMaterialInfo(Model_s0074_4ad0*, int);  // 0x00744ba0 (cModelWorld::GetMaterialInfo)
-    void  SetDynamicDraw(Model_s0074_4ad0*, int, int);  // 0x00744be0 (cModelWorld::SetDynamicDraw)
+    void  SetDynamicDraw(Model_s0074_4ad0*, void*, bool);  // 0x00744be0 (cModelWorld::SetDynamicDraw)
     int   GetNumLODs(Model_s0074_4ad0*);  // 0x00744c30 (cModelWorld::GetNumLODs)
     void  SetLOD(Model_s0074_4ad0*, int);
     void  SetSomeFloat(Model_s0074_4ad0*, float);  // 0x00744cf0 (cModelWorld::SetSomeFloat)
@@ -599,8 +599,9 @@ struct Stub00747270 { void F(); };
 // ---- hand-kept items of s007469b0 end
 
 // ---- hand-kept items of s00747920 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
-void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, uint32_t cmp);
-void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, uint32_t cmp);
+struct FKP;
+void  FUN_00745e00(void* first, int top, int size, int pos, FKP value, uint32_t cmp);  // adjust_heap (greater)
+void  FUN_00745e80(void* first, int top, int size, int pos, FKP value, uint32_t cmp);  // adjust_heap (less)
 static inline void RelObj(RCObj* o)
 {
     if (o && --o->mRefCount == 0) {
@@ -621,7 +622,7 @@ struct Occluder { float a, b, c, d, e, f; };
 typedef bool (__cdecl* OccluderCmp)(const Occluder&, const Occluder&);
 void AdjustHeapOccluder(Occluder* first, int top, int size, int pos, Occluder value, OccluderCmp cmp);
 struct Occluder4 { float a, b, c, d, e, f; };
-struct FKP { float x, y; FKP() {} FKP(const FKP& v) { x = v.x; y = v.y; } };
+struct FKP { float x, y; };  // passed by value as a plain 8-byte copy
 struct CmpGt { bool operator()(const FKP& a, const FKP& b) const { return a.y > b.y; } };
 struct CmpLt { bool operator()(const FKP& a, const FKP& b) const { return a.y < b.y; } };
 // 0x3c-byte POD element: dword key, two words, then 13 floats (+8..+0x38)
@@ -3029,19 +3030,16 @@ int cModelWorld56::Adjustor(int unused)
 // @ 0x00743950
 void __stdcall SetTimeScale(int param_1, float scale)
 {
-    if (param_1 != 0) {
-        *(float*)(param_1 + 0x114) = scale;
-        return;
-    }
-    *(float*)0x11c = scale;
+    // param_1 points 8 bytes into the object; the adjusted pointer keeps the null
+    char* obj = param_1 ? (char*)param_1 - 8 : 0;
+    *(float*)(obj + 0x11c) = scale;
 }
 
 // @ 0x007439b0
 int __stdcall OffsetOrE4(int param_1)
 {
-    if (param_1 != 0)
-        return param_1 + 0xdc;
-    return 0xe4;
+    char* obj = param_1 ? (char*)param_1 - 8 : 0;
+    return (int)(obj + 0xe4);
 }
 
 // @ 0x007439d0
@@ -3673,7 +3671,7 @@ int cModelWorld_s0074_4ad0::GetMaterialInfo(Model_s0074_4ad0* model, int region)
 }
 
 // @ 0x00744be0
-void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, int a, int b)
+void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, void* a, bool b)
 {
     cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
     cModelInstance_s0074_4ad0** p = (cModelInstance_s0074_4ad0**)((char*)m + 0x9c);
@@ -5052,16 +5050,37 @@ void FUN_007477d0(int self)
     *(int*)(b + 0x24) = *(int*)(b + 0x14);
 }
 
-// @ 0x007478b0
-void FUN_007478b0(uint32_t* v)
-{
-    uint32_t beg = *v, end = v[1];
-    for (; beg < end; beg += 0x1c) {
-        RCObj* r = (RCObj*)*(void**)(beg + 4);
-        if (r) (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)r) + 4)))(r, 1);
+// A load-queue value occupies 0x1c bytes and holds its reference in the second word.
+struct LoadQueueVectorEntryView {
+    uint32_t mKey;
+    RCObj* mpReference;
+    uint32_t mData[5];
+};
+struct LoadQueueVectorStorageView {
+    LoadQueueVectorEntryView* mpBegin;    // +0x00
+    LoadQueueVectorEntryView* mpEnd;      // +0x04
+    uint32_t mCapacityData[2];            // +0x08
+    LoadQueueVectorEntryView* mpPool;     // +0x10
+    ~LoadQueueVectorStorageView()
+    {
+        if (mpBegin && mpBegin != mpPool)
+            operator_delete__(mpBegin);
     }
-    if (*v != 0 && *v != v[4])
-        operator_delete_((void*)*v);
+};
+struct LoadQueueVectorDtorView : LoadQueueVectorStorageView {
+    ~LoadQueueVectorDtorView();
+};
+
+// @ 0x007478b0
+LoadQueueVectorDtorView::~LoadQueueVectorDtorView()
+{
+    LoadQueueVectorEntryView* end = mpEnd;
+    LoadQueueVectorEntryView* beg = mpBegin;
+    for (; beg < end; ++beg) {
+        RCObj* reference = beg->mpReference;
+        if (reference)
+            reference->s1();
+    }
 }
 
 // @ 0x00747920
@@ -5215,12 +5234,15 @@ void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 void MakeHeapGt(FKP* first, FKP* last, uint32_t compare)
 {
     int heapSize = (int)(last - first);
-    if (heapSize >= 2) {
+    if (heapSize < 2)
+        return;
+    {
         int parentPosition = ((heapSize - 2) >> 1) + 1;
+        FKP* p = first + parentPosition;
         do {
+            --p;
             --parentPosition;
-            FUN_00745e00(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, compare);
+            FUN_00745e00(first, parentPosition, heapSize, parentPosition, *p, compare);
         } while (parentPosition != 0);
     }
 }
@@ -5231,7 +5253,7 @@ void SortHeapGt(FKP* first, FKP* last, uint32_t compare)
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
+        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp, compare);
     }
 }
 
@@ -5239,12 +5261,15 @@ void SortHeapGt(FKP* first, FKP* last, uint32_t compare)
 void MakeHeapLt(FKP* first, FKP* last, uint32_t compare)
 {
     int heapSize = (int)(last - first);
-    if (heapSize >= 2) {
+    if (heapSize < 2)
+        return;
+    {
         int parentPosition = ((heapSize - 2) >> 1) + 1;
+        FKP* p = first + parentPosition;
         do {
+            --p;
             --parentPosition;
-            FUN_00745e80(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, compare);
+            FUN_00745e80(first, parentPosition, heapSize, parentPosition, *p, compare);
         } while (parentPosition != 0);
     }
 }
@@ -5255,7 +5280,7 @@ void SortHeapLt(FKP* first, FKP* last, uint32_t compare)
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
+        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp, compare);
     }
 }
 

@@ -1,6 +1,15 @@
 // Spore decompilation - gold1 slice s009013e0 (0x009013E0..0x0090245F).
 // EA::XML XmlTextWriter (writer) + XmlTextReader helpers + TokenIOContext string hashtable.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_140a054[];
+extern "C" char g_143a110[];
+extern "C" char g_143a118[];
+extern "C" char g_143a1c0[];
+extern "C" char g_143a2ac[];
+extern "C" char g_154db1c[];
+
 #include "types.h"
 #include <new>
 #include <stdarg.h>
@@ -218,7 +227,7 @@ namespace EA { namespace XML {
 XmlTextWriter::XmlTextWriter(unsigned char bPretty, int nEncoding)
 {
     mOutputEncoding = nEncoding;
-    *(void**)this = (void*)0x143a1c0;
+    *(void**)this = (void*)g_143a1c0;
     mFormatPretty = bPretty;
     mbSimpleElement = 0;
     mnState = 0;
@@ -231,7 +240,7 @@ XmlTextWriter::XmlTextWriter(unsigned char bPretty, int nEncoding)
 // @ 0x00901a50
 XmlTextWriter::~XmlTextWriter()
 {
-    *(void**)this = (void*)0x143a1c0;
+    *(void**)this = (void*)g_143a1c0;
     if (mpOutputStream != 0) {
         void* p = mpOutputStream;
         ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
@@ -280,13 +289,13 @@ bool XmlTextWriter::CloseCurrentElement()
 {
     switch (mnState) {
     case kStateElement:
-        if (!WriteData((const wchar_t*)0x140a054, 1)) return false;
+        if (!WriteData((const wchar_t*)g_140a054, 1)) return false;
         break;
     case kStatePI:
-        if (!WriteData((const wchar_t*)0x143a110, 2)) return false;
+        if (!WriteData((const wchar_t*)g_143a110, 2)) return false;
         break;
     case kStateCDATA:
-        if (!WriteData((const wchar_t*)0x143a118, 3)) return false;
+        if (!WriteData((const wchar_t*)g_143a118, 3)) return false;
         break;
     default:
         break;
@@ -521,7 +530,7 @@ bool XmlTextWriter::WriteText(const void* p, unsigned int n)
     void* stream = mpOutputStream;
     if (stream != 0) {
         return IO_WriteEncoded(stream, p, n,
-                               ((unsigned int*)0x143a2ac)[mOutputEncoding]);
+                               ((unsigned int*)g_143a2ac)[mOutputEncoding]);
     }
     return false;
 }
@@ -581,7 +590,7 @@ bool XmlTextReader::FUN_009013e0()
 void XmlTextReader::FUN_00901440(int a, int b)
 {
     if (FUN_00900a30(a, b))
-        m6c = FUN_0090aed0(0, (void*)0x154db1c, 0);
+        m6c = FUN_0090aed0(0, (void*)g_154db1c, 0);
     FUN_00901220();
 }
 
@@ -589,7 +598,7 @@ void XmlTextReader::FUN_00901440(int a, int b)
 void XmlTextReader::FUN_00901480(int a, int b, int c)
 {
     if (FUN_00900610(a, b, c))
-        m6c = FUN_0090aed0(0, (void*)0x154db1c, 0);
+        m6c = FUN_0090aed0(0, (void*)g_154db1c, 0);
     FUN_00901220();
 }
 

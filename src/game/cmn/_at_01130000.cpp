@@ -2,6 +2,17 @@
 // Object file: cmn/_at_01130000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_01141990();
+extern "C" void FUN_01141c30();
+extern "C" void FUN_01141f90();
+extern "C" char g_16e80c4[];
+extern "C" char g_16e80c8[];
+extern "C" char g_16e80cc[];
+extern "C" char g_16e810c[];
+extern "C" char g_16e8110[];
+extern "C" char g_16e8114[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -478,18 +489,18 @@ int __cdecl FUN_01133020(int a, int b)
 // @ 0x011330e0
 bool __cdecl FUN_011330e0(void)
 {
-	return (*(uint8_t*)0x016e7c1c) == 1;
+	return (*(uint8_t*)&g_16e7c1c) == 1;
 }
 
 // @ 0x01133250
 void __cdecl FUN_01133250(void)
 {
-	*(void**)0x016e80c4 = (void*)0x01141f90;   // SFILTER_unpackealayer3init
-	*(void**)0x016e80c8 = (void*)0x01141c30;   // SFILTER_unpackealayer3linit
-	*(void**)0x016e80cc = (void*)0x01141990;   // SFILTER_unpackealayer3pinit
-	*(int*)0x016e810c = 0x20;
-	*(int*)0x016e8110 = 0x34;
-	*(int*)0x016e8114 = 0x38;
+	*(void**)g_16e80c4 = (void*)FUN_01141f90;   // SFILTER_unpackealayer3init
+	*(void**)g_16e80c8 = (void*)FUN_01141c30;   // SFILTER_unpackealayer3linit
+	*(void**)g_16e80cc = (void*)FUN_01141990;   // SFILTER_unpackealayer3pinit
+	*(int*)g_16e810c = 0x20;
+	*(int*)g_16e8110 = 0x34;
+	*(int*)g_16e8114 = 0x38;
 }
 
 // @ 0x01133290
@@ -776,7 +787,7 @@ int __cdecl FUN_011336b0(int id, int param_2, float param_3)
 // @ 0x011339d0
 int __cdecl FUN_011339d0(int id, int n)
 {
-	if ((*(uint8_t*)0x016e7c1c) == 0)
+	if ((*(uint8_t*)&g_16e7c1c) == 0)
 		return -10;
 	int st = FUN_01132300(id);
 	if (st == 0)

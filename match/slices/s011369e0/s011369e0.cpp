@@ -2,6 +2,13 @@
 // Built with VC .NET 2003 (cl 13.10) + /GL /LTCG. Most functions call out heavily, so single-object
 // compiles cannot match them; the bodies are the behaviour-equivalent reconstruction.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14bc0fc[];
+extern "C" char g_15bae10[];
+extern "C" char g_15bae30[];
+extern "C" char g_15bae48[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -403,7 +410,7 @@ void DecoderThunk::FUN_01137060(int, int)
 bool __cdecl FUN_011370d0(int* param_1)
 {
 	if (param_1 != 0)
-		*param_1 = 0x014bc0fc;
+		*param_1 = (int)g_14bc0fc;
 	return true;
 }
 // ---------------------------------------------------------------------------
@@ -411,9 +418,9 @@ bool __cdecl FUN_011370d0(int* param_1)
 // ---------------------------------------------------------------------------
 int* __cdecl FUN_011370f0(void)
 {
-	*(int*)0x015bae30 = 0x015bae48;
-	FUN_0112dae0((int)0x015bae10, 0, 0);
-	return (int*)0x015bae48;
+	*(int*)g_15bae30 = (int)g_15bae48;
+	FUN_0112dae0((int)g_15bae10, 0, 0);
+	return (int*)g_15bae48;
 }
 
 // ---------------------------------------------------------------------------
@@ -532,14 +539,16 @@ bool __cdecl FUN_01137170(int* param_1, float* param_2)
 // ---------------------------------------------------------------------------
 // @ 0x011373c0
 // ---------------------------------------------------------------------------
+struct TimerOwnerHead { char pad[0x2c]; };
+struct TimerOwner : TimerOwnerHead, TimerNode {};
 int* __cdecl FUN_011373c0(void)
 {
 	TimerNode* p = g_timerNodes;
 	if (p == 0)
 		return 0;
-	int* r = (int*)((char*)p - 0x2c);
+	TimerOwner* o = static_cast<TimerOwner*>(p);
 	g_timerNodes = p->next;
-	return r;
+	return (int*)o;
 }
 
 // ---------------------------------------------------------------------------
@@ -549,8 +558,8 @@ int __cdecl FUN_011373e0(int param_1)
 {
 	int iVar2 = *(int*)(param_1 + 4);
 	int* p = (int*)(iVar2 + 0x2c);
-	*p = (int)g_timerListTail;
-	*(int*)(iVar2 + 0x30) = 0;
+	p[0] = (int)g_timerListTail;
+	p[1] = 0;
 	if (g_timerListTail != 0)
 		*(int*)((char*)g_timerListTail + 4) = (int)p;
 	g_timerListTail = p;

@@ -1,5 +1,9 @@
 // Slice s00660dd0: SP::cSPUIFeedFilter and its filter-button/asset-key containers.
 // UI module: /O2 /MD /Gy /TP /arch:SSE2 (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14000b8[];
+
 #include "types.h"
 #include <new>
 
@@ -30,7 +34,10 @@ extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, 
 // ---------------------------------------------------------------------------
 // Element type of the 0x34-byte filter-button vector.
 // ---------------------------------------------------------------------------
-struct Blob14 { uint8_t x[0x14]; void Assign(Blob14* src); void FUN_006606a0(Blob14* src); };
+struct Blob14 { uint8_t x[0x14];
+    void Assign(Blob14* src);        // 0x006609a0
+    void FUN_006606a0(Blob14* src);  // 0x006606a0
+};
 struct E34 {
     uint32_t a;          // 0x00
     uint8_t  b;          // 0x04
@@ -467,7 +474,7 @@ char FUN_00661740(unsigned key, KeyVecE* out)
         uint32_t pa = e->a;
         int pb = e->b;
         if (e->c == 0x4edcd7a9)
-            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)0x14000b8));
+            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)g_14000b8));
         else
             cons.push_back(FMConstraint(pa, kEquals, pb));
     }
@@ -587,6 +594,6 @@ namespace __equiv_ann {
 
 namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
 struct Blob14 {
-    void Assign();   // 0x006606a0 (equiv t3)
+    void Assign();   // 0x006609a0 (equiv t3)
 };
 }

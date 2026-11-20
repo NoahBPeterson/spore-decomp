@@ -77,13 +77,12 @@ struct SPin930 {
   RefA* m1c;         // +0x1c
   void* m20;         // +0x20
   char pad_24[0x38 - 0x24];
-  uint32_t m38;      // +0x38
-  uint32_t m3c;      // +0x3c
-  uint32_t m40;      // +0x40
+  struct Trio { uint32_t a, b, c; };
+  Trio m38;          // +0x38
   bool m44;          // +0x44
-  void SetBlock(RefA** src, uint32_t a, uint32_t b, uint32_t c, bool d);
+  void SetBlock(RefA** src, Trio t, bool d);
 };
-void SPin930::SetBlock(RefA** src, uint32_t a, uint32_t b, uint32_t c, bool d) {
+void SPin930::SetBlock(RefA** src, Trio t, bool d) {
   RefA* blk = *src;
   RefA* old = m1c;
   if (blk != old) {
@@ -93,9 +92,7 @@ void SPin930::SetBlock(RefA** src, uint32_t a, uint32_t b, uint32_t c, bool d) {
     if (old)
       old->Release();
   }
-  m38 = a;
-  m3c = b;
-  m40 = c;
+  m38 = t;
   m44 = d;
   if (m1c)
     m20 = *(void**)((char*)m1c + 0x33c);

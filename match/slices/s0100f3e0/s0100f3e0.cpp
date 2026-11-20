@@ -626,42 +626,6 @@ void AdjustPlanetHeapDist(void** pArray, int nTop, int nLen, int nHole, cAutoRef
 }
 
 // ===========================================================================================
-// @ 0x01010190
-void AdjustPlanetHeap(void** pArray, int nTop, int nLen, int nHole, cAutoRef value, BioProtectorSort compare)
-{
-    int nHoleIndex = nHole;
-    int nChild = nHoleIndex * 2 + 2;
-    while (nChild < nLen) {
-        if (compare(pArray[nChild], pArray[nChild - 1]))
-            --nChild;
-        cRefCounted* pNew = (cRefCounted*)pArray[nChild];
-        cRefCounted* pOld = (cRefCounted*)pArray[nHoleIndex];
-        if (pNew != pOld) {
-            if (pNew)
-                pNew->AddRef();
-            pArray[nHoleIndex] = pNew;
-            if (pOld)
-                pOld->Release();
-        }
-        nHoleIndex = nChild;
-        nChild = nChild * 2 + 2;
-    }
-    if (nChild == nLen) {
-        cRefCounted* pNew = (cRefCounted*)pArray[nChild - 1];
-        cRefCounted* pOld = (cRefCounted*)pArray[nHoleIndex];
-        if (pNew != pOld) {
-            if (pNew)
-                pNew->AddRef();
-            pArray[nHoleIndex] = pNew;
-            if (pOld)
-                pOld->Release();
-        }
-        nHoleIndex = nChild - 1;
-    }
-    PromotePlanetHeap(pArray, nTop, nHoleIndex, value, compare);
-}
-
-// ===========================================================================================
 // @ 0x010103f0
 double FUN_010103f0(void* pObject)
 {

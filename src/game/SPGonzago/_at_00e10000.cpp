@@ -2,7 +2,16 @@
 // Object file: SPGonzago/_at_00e10000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1480338[];
+extern "C" char g_1480344[];
+extern "C" char g_1480388[];
+extern "C" char g_1480390[];
+extern "C" char g_14803ac[];
+
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cSPMission.h"
 #include "SP/cIGonzagoSubsystem.h"
 #include "SP/cString.h"
@@ -379,13 +388,14 @@ public:
 bool __cdecl FUN_004f56f0(wchar_t wc);                          // 0x004f56f0
 void* __cdecl FUN_00e39ab0(uint32_t nType, int32_t nA, void* pB, void* pC,
                            int32_t nD, int32_t nE, void* pF, void* pG);    // 0x00e39ab0
-class cTradeUI {
+struct cTradeUIBase_s00e1dae0 { void* mpVtbl0; };
+struct cTradeUITrace_s00e1dae0 { void* mpTraceVtbl; };
+class cTradeUI : public cTradeUIBase_s00e1dae0, public cTradeUITrace_s00e1dae0 {
 public:
     void Activate();                    // 0x00e1dae0
     void* Destroy(uint32_t nFlags);     // 0x00e1dc20
 
-    void* mpVtbl0;              // +0x000  first base vtable
-    void* mpTraceVtbl;          // +0x004  tracer base vtable
+
     cSPUILayout_s00e1_d020 mLayout;        // +0x008
     bool mbInitialized;         // +0x020
 };
@@ -1388,8 +1398,7 @@ void cTradeUI::Activate()
         IWindow* pWindow = mLayout.FindWindowByID(0x7d4c266, 1);
         if (pWindow != nullptr) {
             pWindow->SetMode(1, 1);
-            void* pContext = (void*)&mpTraceVtbl;
-            SPUIHelpers_BeginModal(pWindow, pContext, true);
+            SPUIHelpers_BeginModal(pWindow, static_cast<cTradeUITrace_s00e1dae0*>(this), true);
             IWindow* pSecond = mLayout.FindWindowByID(0x7d4de46, 1);
             if (pSecond != nullptr)
                 pSecond->SetMode(2, 0);
@@ -1431,11 +1440,11 @@ void FUN_00e1dbd0()
 // @ 0x00e1dc20
 void* cTradeUI::Destroy(uint32_t nFlags)
 {
-    mpVtbl0 = (void*)0x1480344;
-    mpTraceVtbl = (void*)0x1480338;
+    mpVtbl0 = (void*)g_1480344;
+    mpTraceVtbl = (void*)g_1480338;
     mLayout.Shutdown(1);
     mLayout.Destroy();
-    mpVtbl0 = (void*)0x13eb938;
+    mpVtbl0 = (void*)g_13eb938;
     if ((nFlags & 1) != 0)
         operator_delete_array(this);
     return this;
@@ -2133,16 +2142,20 @@ int __cdecl FUN_00e1f2c0(ListRec* first, ListRec* last, void* cmp)
     return r;
 }
 
+extern "C" char g_vtbl_14803ac[];  // 0x014803ac panel vtable
+extern "C" char g_vtbl_1480390[];  // 0x01480390 its vtable at +8
+extern "C" char g_vtbl_1480388[];  // 0x01480388 its vtable at +0xc
 // @ 0x00e1f390
 void* __fastcall FUN_00e1f390(void* self)
 {
     FUN_00e18bb0(self);
-    *(void**)self = (void*)0x14803ac;
-    *(void**)((char*)self + 8) = (void*)0x1480390;
-    *(void**)((char*)self + 0xc) = (void*)0x1480388;
+    *(void**)self = g_vtbl_14803ac;
+    *(void**)((char*)self + 8) = g_vtbl_1480390;
+    *(void**)((char*)self + 0xc) = g_vtbl_1480388;
+    _ReadWriteBarrier();
     *(void**)((char*)self + 0x40) = 0;
     *(void**)((char*)self + 0x44) = 0;
-    *(void**)((char*)self + 0x48) = 0;
+    *(void* volatile*)((char*)self + 0x48) = 0;
     FUN_00e0a390((char*)self + 0x4c);
     *(void**)((char*)self + 0xbc) = 0;
     *(void**)((char*)self + 0xc0) = 0;
@@ -2158,9 +2171,9 @@ void* __fastcall FUN_00e1f390(void* self)
 // @ 0x00e1f420
 void __fastcall FUN_00e1f420(void* self)
 {
-    *(void**)self = (void*)0x14803ac;
-    *(void**)((char*)self + 8) = (void*)0x1480390;
-    *(void**)((char*)self + 0xc) = (void*)0x1480388;
+    *(void**)self = (void*)g_14803ac;
+    *(void**)((char*)self + 8) = (void*)g_1480390;
+    *(void**)((char*)self + 0xc) = (void*)g_1480388;
     FUN_00e1e120(self);
     FUN_00e1f280((char*)self + 0xc0);
     RefObj_s00e1_eab0* r1 = *(RefObj_s00e1_eab0**)((char*)self + 0xbc);

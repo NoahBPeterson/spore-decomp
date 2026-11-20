@@ -20,6 +20,10 @@
 // sin term, bit 6 negates the cos term and bit 7 picks the base vertex (0 = m_vertexB,
 // 1 = m_vertexA). The id is stored in the vertex's w component with the 0x3f000000 exponent
 // forced on (so w reads back as a small float carrying the id).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a40c4[];
+
 #include "types.h"
 #include <math.h>
 
@@ -102,7 +106,7 @@ void hkCylinderShape_init(hkCylinderShape* self)
     if (self)
     {
         self->m_referenceCount = 1;
-        *(uint32_t*)self = 0x14a40c4;
+        *(uint32_t*)self = (int)g_14a40c4;
         if (g_hkFpuRoundingValue < 0.0f)
             g_hkFpuRoundingValue = 1.0f - hkFpuRoundingProbe();
     }

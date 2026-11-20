@@ -2,6 +2,16 @@
 // Object file: SPGonzago/SPCivComm.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00acdff0();
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+extern "C" char g_13ec458[];
+extern "C" char g_1478b8c[];
+extern "C" char g_1478bac[];
+extern "C" char g_1478bbc[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include "SP/cCivilization.h"
@@ -90,7 +100,7 @@ public:
 class __declspec(novtable) ContentValidationSummarizer {
 public:
     ContentValidationSummarizer() {
-        *(void**)this = (void*)0x13ec458;
+        *(void**)this = (void*)g_13ec458;
         _ReadWriteBarrier();
         mBase04 = 0;
     }
@@ -451,7 +461,7 @@ void __cdecl FUN_00cfea20()
 {
     if (g_169d3c8 != 0)
         return;
-    CommSingleton* obj = new ((const char*)0x1478b8c, 0, 0, 0, 0) CommSingleton;
+    CommSingleton* obj = new ((const char*)g_1478b8c, 0, 0, 0, 0) CommSingleton;
     CommSingleton* old = (CommSingleton*)g_169d3c8;
     if (obj != old) {
         if (obj != 0)
@@ -504,7 +514,7 @@ bool __fastcall FUN_00cfeb40(void* this_, int unused, void* p)
     void* b = ((void* (__thiscall*)(void*))vt[6])(a);
     uint8_t prop[0xa14];
     CommWriteUint32(b, &tag, 1, 0);
-    ((CommSerializer*)prop)->call(this_, (void*)0x1581d40, (void*)0x1a80d26);
+    ((CommSerializer*)prop)->call(this_, (void*)&g_01581d40, (void*)0x1a80d26);
     return ((CommSerializeCall*)prop)->call(p);
 }
 
@@ -512,8 +522,8 @@ bool __fastcall FUN_00cfeb40(void* this_, int unused, void* p)
 __thiscall cSummarizer::cSummarizer()
 {
     char* self = (char*)this;
-    *(void**)self = (void*)0x1478bbc;
-    *(void**)(self + 4) = (void*)0x1478bac;
+    *(void**)self = (void*)g_1478bbc;
+    *(void**)(self + 4) = (void*)g_1478bac;
     mField0C = 0;
     mField10 = 0;
     _ReadWriteBarrier();
@@ -525,13 +535,15 @@ __thiscall cSummarizer::cSummarizer()
     mField28 = 0;
 }
 
+extern "C" char g_1478c10[];   // cGonzagoChild vtable
+extern "C" char g_1478c08[];   // cGonzagoChild second vtable (+4)
+
 // @ 0x00cfecc0
 __thiscall cGonzagoChild::cGonzagoChild()
 {
-    *(void**)this = (void*)0x1478c10;
-    *(void**)((char*)this + 4) = (void*)0x1478c08;
-    _ReadWriteBarrier();
-    mField1C = 0;
+    *(void* volatile*)this = g_1478c10;
+    *(void* volatile*)((char*)this + 4) = g_1478c08;
+    *(volatile int32_t*)&mField1C = 0;
     mField20 = 0;
     mField24 = 0;
 }
@@ -544,7 +556,7 @@ cCity_s00cf_eeb0* FindTargetCity(int kind, cGameData_s00cf_eeb0* source)
     struct CityDataList { void* pad0; CityPtrVector mData; };
     int count = 0;
     cGameNounManager_s00cf_eeb0* pManager = NounManager();
-    CityDataList* pList = (CityDataList*)pManager->FUN_00b21340(0x00cd7d10, 0x00d3d420, 0x00acdff0, 0x00b1e500, 0x018c43e8);
+    CityDataList* pList = (CityDataList*)pManager->FUN_00b21340((int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00acdff0, (int)FUN_00b1e500, 0x018c43e8);
     CityPtrVector* pNouns = &pList->mData;
     int n = (int)(pNouns->mpEnd - pNouns->mpBegin);
     for (int i = 0; i < n; i++) {

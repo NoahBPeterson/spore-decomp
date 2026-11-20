@@ -6,6 +6,10 @@
 // slots are reached through stub interfaces that declare the slot at its index (VPad<N,B>).
 //
 // Flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fb19c[];
+
 #include "types.h"
 
 #pragma warning(disable : 4100)
@@ -455,7 +459,7 @@ void* FUN_00fef670() {
     if (g_16dacb8 == 0) {
         void* p = operator_new(4, "Simulator", 0, 0, 0, 0);
         if (p != 0) {
-            *(u32*)p = 0x13fb19c;                        // vtbl_UTFInternet::HTTPRequest
+            *(u32*)p = (int)g_13fb19c;                        // vtbl_UTFInternet::HTTPRequest
             g_16dacb8 = (IHTTPRequest*)p;
             return p;
         }

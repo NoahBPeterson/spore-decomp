@@ -1,6 +1,30 @@
 // Slice s00e25710 (batch bfs3, slice 15). Region 0xe25710-0xe26677.
 // UI::Posse / cSPUIPosseItem constructors (matched) plus EASTL vector/partition
 // sorting helpers for the posse item list. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1480788[];
+extern "C" char g_1480798[];
+extern "C" char g_14807b0[];
+extern "C" char g_1480894[];
+extern "C" char g_14808a4[];
+extern "C" char g_14808c0[];
+extern "C" char g_14809a4[];
+extern "C" char g_14809b4[];
+extern "C" char g_14809d0[];
+extern "C" char g_1480ab4[];
+extern "C" char g_1480ac4[];
+extern "C" char g_1480ae0[];
+extern "C" char g_1480bc4[];
+extern "C" char g_1480bd4[];
+extern "C" char g_1480bf0[];
+extern "C" char g_1480cd4[];
+extern "C" char g_1480ce4[];
+extern "C" char g_1480d00[];
+extern "C" char g_1480de4[];
+extern "C" char g_1480df4[];
+extern "C" char g_1480e10[];
+
 #include "types.h"
 
 // ================= matched: object constructors =================
@@ -17,9 +41,9 @@ struct cSPUIPosseItemBase {
 class cSPUIPosseItemTribe : public cSPUIPosseItemBase { public: void* ctor(int a2); };
 void* cSPUIPosseItemTribe::ctor(int a2) {
   cSPUIPosseItemBase::ctor(a2, L"PosseItemTribe", 0x40464100);
-  *(void**)this = (void*)0x14807b0;
-  *(void**)((char*)this + 4) = (void*)0x1480798;
-  *(void**)((char*)this + 0xc) = (void*)0x1480788;
+  *(void**)this = (void*)g_14807b0;
+  *(void**)((char*)this + 4) = (void*)g_1480798;
+  *(void**)((char*)this + 0xc) = (void*)g_1480788;
   this->f14c = 1.0f;
   return this;
 }
@@ -28,9 +52,9 @@ void* cSPUIPosseItemTribe::ctor(int a2) {
 class cSPUIPosseItemTribeBaby : public cSPUIPosseItemBase { public: void* ctor(int a2); };
 void* cSPUIPosseItemTribeBaby::ctor(int a2) {
   cSPUIPosseItemBase::ctor(a2, L"PosseItemTribeBaby", 0x40464100);
-  *(void**)this = (void*)0x14808c0;
-  *(void**)((char*)this + 4) = (void*)0x14808a4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480894;
+  *(void**)this = (void*)g_14808c0;
+  *(void**)((char*)this + 4) = (void*)g_14808a4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480894;
   this->f14c = 0.0f;
   return this;
 }
@@ -39,9 +63,9 @@ void* cSPUIPosseItemTribeBaby::ctor(int a2) {
 class cSPUIPosseItemCiv : public cSPUIPosseItemBase { public: void* ctor(int a2); };
 void* cSPUIPosseItemCiv::ctor(int a2) {
   cSPUIPosseItemBase::ctor(a2, L"PosseItemCiv", 0x40464100);
-  *(void**)this = (void*)0x14809d0;
-  *(void**)((char*)this + 4) = (void*)0x14809b4;
-  *(void**)((char*)this + 0xc) = (void*)0x14809a4;
+  *(void**)this = (void*)g_14809d0;
+  *(void**)((char*)this + 4) = (void*)g_14809b4;
+  *(void**)((char*)this + 0xc) = (void*)g_14809a4;
   return this;
 }
 
@@ -49,9 +73,9 @@ void* cSPUIPosseItemCiv::ctor(int a2) {
 class cSPUIPosseItemSpace : public cSPUIPosseItemBase { public: void* ctor(int a2); };
 void* cSPUIPosseItemSpace::ctor(int a2) {
   cSPUIPosseItemBase::ctor(a2, a2 ? L"PosseItemSpace" : L"PosseItemSpaceGhostShell", 0x40464100);
-  *(void**)this = (void*)0x1480ae0;
-  *(void**)((char*)this + 4) = (void*)0x1480ac4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480ab4;
+  *(void**)this = (void*)g_1480ae0;
+  *(void**)((char*)this + 4) = (void*)g_1480ac4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480ab4;
   if (a2 == 0) this->mState = 0x7fffffff;
   return this;
 }
@@ -60,9 +84,9 @@ void* cSPUIPosseItemSpace::ctor(int a2) {
 struct cSPUIPosseItemTribeGhostShell : cSPUIPosseItemBase { void* ctor(); };
 void* cSPUIPosseItemTribeGhostShell::ctor() {
   cSPUIPosseItemBase::ctor(0, L"PosseItemTribeGhostShell", 0x40464100);
-  *(void**)this = (void*)0x1480e10;
-  *(void**)((char*)this + 4) = (void*)0x1480df4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480de4;
+  *(void**)this = (void*)g_1480e10;
+  *(void**)((char*)this + 4) = (void*)g_1480df4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480de4;
   this->mState = 0x7fffffff;
   return this;
 }
@@ -76,9 +100,9 @@ struct cScenarioEditPosseItemBase {
 struct cSPUIPosseItem2 : cScenarioEditPosseItemBase { void* ctor(int a2, int a3); };
 void* cSPUIPosseItem2::ctor(int a2, int a3) {
   cScenarioEditPosseItemBase::ctor(a2, a3);
-  *(void**)this = (void*)0x1480bf0;
-  *(void**)((char*)this + 4) = (void*)0x1480bd4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480bc4;
+  *(void**)this = (void*)g_1480bf0;
+  *(void**)((char*)this + 4) = (void*)g_1480bd4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480bc4;
   return this;
 }
 
@@ -86,9 +110,9 @@ void* cSPUIPosseItem2::ctor(int a2, int a3) {
 struct cSPUIPosseItem3 : cScenarioEditPosseItemBase { void* ctor(int a2); };
 void* cSPUIPosseItem3::ctor(int a2) {
   cScenarioEditPosseItemBase::ctor(0, a2);
-  *(void**)this = (void*)0x1480d00;
-  *(void**)((char*)this + 4) = (void*)0x1480ce4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480cd4;
+  *(void**)this = (void*)g_1480d00;
+  *(void**)((char*)this + 4) = (void*)g_1480ce4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480cd4;
   *(int*)((char*)this + 0x98) = 0x7fffffff;
   return this;
 }

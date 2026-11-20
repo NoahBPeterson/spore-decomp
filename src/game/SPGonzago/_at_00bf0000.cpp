@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00bf0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 #include "game/types.h"
 #include "SP/cCity.h"
 
@@ -715,6 +719,7 @@ int   __fastcall FUN_00bd9b60(void* self);                                     /
 int*  __fastcall cCity_GetPositionPtr(void* self);                             // 0x00fa0e00
 void  __fastcall FUN_00ae6970(void* self);                                     // 0x00ae6970
 void  __fastcall FUN_00aed92d0(void* self);                                    // 0x00ad92d0
+void  __fastcall FUN_005c7f10(void* self);                                    // 0x005c7f10
 void  __fastcall cGonzagoTimer_dtor(void* self);                               // 0x00b638b0
 void  __fastcall FUN_00b6edf0(void* self);                                     // 0x00b6edf0
 void  __fastcall cGameData_dtor(void* self);                                   // 0x00b184c0
@@ -859,6 +864,7 @@ public:
     int mCount;                     // 0x18
 
     Vec3_s00bf_4170* FindOrInsert(const int* pKey);   // 0x00bf5050
+    Vec3_s00bf_4170* FUN_00bf3cb0(const int* pKey);   // 0x00bf3cb0
 };
 class cCommunityEditor : public cEditorObject {
 public:
@@ -3400,7 +3406,7 @@ void StarFillN(void* dst, uint n, void* src)
         StarRecord* rec = (StarRecord*)((char*)d - 8);
         if (rec != 0)
         {
-            rec->vptr = 0x01465d54;
+            rec->vptr = (int)g_1465d54;
             rec->pad04 = 0;
             rec->f08 = s->f08;
             rec->f0c = s->f0c;
@@ -3408,7 +3414,7 @@ void StarFillN(void* dst, uint n, void* src)
             rec->f14 = s->f14;
             rec->f18 = s->f18;
             rec->f1c = s->f1c;
-            rec->vptr = 0x01464450;
+            rec->vptr = (int)g_1464450;
         }
         --n;
         d = (StarRecord*)((char*)d + 0x20);
@@ -3422,7 +3428,7 @@ StarRecord* StarCopyCtorRange2(StarRecord* first, StarRecord* last, StarRecord* 
     {
         if (dst != 0)
         {
-            *(int*)((char*)dst + 0) = 0x01465d54;
+            *(int*)((char*)dst + 0) = (int)g_1465d54;
             *(int*)((char*)dst + 4) = 0;
             *(int*)((char*)dst + 8) = *(int*)((char*)first + 8);
             *(int*)((char*)dst + 0xc) = *(int*)((char*)first + 0xc);
@@ -3430,7 +3436,7 @@ StarRecord* StarCopyCtorRange2(StarRecord* first, StarRecord* last, StarRecord* 
             *(int*)((char*)dst + 0x14) = *(int*)((char*)first + 0x14);
             *(byte*)((char*)dst + 0x18) = *(byte*)((char*)first + 0x18);
             *(int*)((char*)dst + 0x1c) = *(int*)((char*)first + 0x1c);
-            *(int*)((char*)dst + 0) = 0x01464450;
+            *(int*)((char*)dst + 0) = (int)g_1464450;
         }
     }
     return dst;
@@ -3858,7 +3864,7 @@ void __fastcall FUN_00bf36f0(int* self)
 	if (q != 0)
 		(*(T0*)(*(int*)q + 4))((void*)q);
 	FUN_00bf1b60((void*)((char*)self + 0x490));
-	FUN_00aed92d0((void*)((char*)self + 0x470));
+	FUN_005c7f10((void*)((char*)self + 0x470));
 
 	if ((int*)self[0x11b] != 0)
 		(*(T0*)(*(int*)self[0x11b] + 4))((void*)self[0x11b]);
@@ -4425,7 +4431,7 @@ void cCommunityEditor::NotifySubEditor(cCommunityEditor* pSub)
 void __fastcall SetModelTypeKey(void* pMap, int edx, int* pKey, const Vec3_s00bf_4170* pValue)
 {
     Vec3_s00bf_4170 value = *pValue;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FindOrInsert((const int*)&pKey);
+    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FUN_00bf3cb0((const int*)&pKey);
     *pSlot = value;
 }
 
@@ -4486,6 +4492,21 @@ void cCommunityEditor::RebuildCityFromTerrainSphere()
     SetModelTypeKey((void*)0x168caf0, 0, (int*)0x99e92f05, &stored);
 }
 
+extern char g_168caf0[];   // 0x0168caf0: the model-type -> position map (cVector3Map) the vehicle editor keeps
+
+__forceinline static void StoreVehicleModelKey(Vec3_s00bf_4170* pPosition, int nModel)
+{
+    int y = *(int*)&pPosition->mY;
+    int key = nModel;
+    int x = *(int*)&pPosition->mX;
+    int z = *(int*)&pPosition->mZ;
+    Vec3_s00bf_4170* pSlot =
+        ((Vec3_s00bf_4170* (__thiscall*)(void*, int*))FUN_00bf3cb0)(g_168caf0, &key);
+    *(int*)&pSlot->mX = x;
+    *(int*)&pSlot->mY = y;
+    *(int*)&pSlot->mZ = z;
+}
+
 // @ 0x00bf4fc0
 void cCommunityEditor::CreateVehicleFromTerrainSphere()
 {
@@ -4505,10 +4526,7 @@ void cCommunityEditor::CreateVehicleFromTerrainSphere()
     }
 
     CreateVehicleFromModelType((cCity_s00bf_4170*)(intptr_t)nModel, pPosition);
-
-    Vec3_s00bf_4170 stored = *pPosition;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)0x168caf0)->FindOrInsert(&nModel);
-    *pSlot = stored;
+    StoreVehicleModelKey(pPosition, nModel);
 }
 
 // @ 0x00bf5050

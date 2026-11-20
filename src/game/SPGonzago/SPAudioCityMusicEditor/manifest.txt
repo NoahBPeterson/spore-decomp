@@ -5,3 +5,5 @@
 ../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?RecursiveButtonSelect@@YAXPAX0@Z  00ea03e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ??1PulseVec@@QAE@XZ  00ea0e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?FUN_00ea1200@@YAXPAXPAUcSPUILayout_s00ea_0910@@D@Z  00ea1200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?Shutdown@cCityMusicEditor_s00ea_0910@@QAEXXZ  00ea13e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicEditor.cpp  ?FUN_00ea1470@@YIXPAUcCityMusicEditor_s00ea_0910@@@Z  00ea1470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

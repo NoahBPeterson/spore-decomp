@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPUITimeline.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5a54[];
+
 #include "game/types.h"
 #include "SP/cTelemetry.h"
 #include "EA/Stopwatch.h"
@@ -260,6 +263,7 @@ struct Object {
 struct Rect  { float left, top, right, bottom; };
 struct Vector2 { float x, y; };
 struct Point { float x; float y; };
+struct IWinProc_s00e3_7910 { virtual void v00(); };              // window-proc interface (cSPUITimeline +0x04)
 struct IWindow : Object {
     virtual void pad0c();
     virtual IWindow* GetParent();
@@ -323,7 +327,7 @@ struct IWindow : Object {
     virtual void padF8();
     virtual void padFc();
     virtual void pad100();
-    virtual void SetParent(IWindow* parent);           // +0x104
+    virtual void AddWinProc(IWinProc_s00e3_7910* proc); // +0x104
 };
 class cSPUILayout_s00e3_6ff0 : public Object { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
@@ -407,9 +411,9 @@ static inline int ClampLoHi(int v, int lo, int hi) {
     return v;
 }
 struct VecContainer { bool IsMember(int id); };             // 0x00e45fe0
-struct cSPUITimeline {
-    void*         mvpVtbl;                                    // +0x00
-    uint32_t      mEmbedded[0x0b];                            // +0x04 embedded window subobject
+struct cSPUITimelineBase_s00e3_7910 { virtual void v00(); };     // primary base, +0x00
+struct cSPUITimeline : cSPUITimelineBase_s00e3_7910, IWinProc_s00e3_7910 {
+    uint32_t      mEmbedded[0x0a];                            // +0x08
     cSPUILayout_s00e3_6ff0*  mpLayout;                                   // +0x30
     uint32_t      pad34;                                      // +0x34
     IWindow*      mpWin38;                                    // +0x38
@@ -467,7 +471,6 @@ struct cSPUITimeline {
                                float c, float d, float e, float f,
                                float g, float h);             // 0x00e37840
     void          FUN_00e37910();                             // 0x00e37910
-    IWindow*      Self() { return (IWindow*)mEmbedded; }      // +0x04 embedded window
     void          BeginCloseTimeline();                       // 0x00e37970
     double        FUN_00e37b40(TimelineNode* n, float a, int b);// 0x00e37b40
     void          FUN_00e37be0();                             // 0x00e37be0
@@ -3446,13 +3449,13 @@ void cSPUITimeline::FUN_00e37840(IWindow* target, float a, float b, float c, flo
 void cSPUITimeline::FUN_00e37910()
 {
     if (IWindow* w = mpWin3c)
-        w->SetParent(Self());
+        w->AddWinProc(this);
     if (IWindow* w = mpWin4c)
-        w->SetParent(Self());
+        w->AddWinProc(this);
     if (IWindow* w = mpWin54)
-        w->SetParent(Self());
+        w->AddWinProc(this);
     if (IWindow* w = mpWin38)
-        w->SetParent(Self());
+        w->AddWinProc(this);
 }
 
 // @ 0x00e37970
@@ -4108,10 +4111,12 @@ void __fastcall FUN_00e39200(Timeline_s00e3_8ce0* self, void* dummy)
 void __fastcall FUN_00e39300(Timeline_s00e3_8ce0* self, void* dummy, s32 v)
 {
   (void)dummy;
-  for (s32 addr = 0x015a5a54; addr < 0x015a5a68; addr += 4) {
+  s32 addr = (int)g_15a5a54;     // five window IDs at 0x015a5a54..0x015a5a68: the first test is known true
+  do {
     Wnd* w = (Wnd*)self->p348->FindWindowByID(*(u32*)addr, 1);
     if (w != 0) ((WndVt*)w)->SetVisible(1, v);
-  }
+    addr += 4;
+  } while (addr < (int)((char*)&g_15a5a54 + 0x14));
 }
 
 // @ 0x00e39350
@@ -4128,10 +4133,10 @@ void __fastcall FUN_00e39350(Timeline_s00e3_8ce0* self, void* dummy, s32 v)
 s32 __fastcall FUN_00e393b0(Timeline_s00e3_8ce0* self, void* dummy)
 {
   (void)dummy;
-  if (self->b370 != 0) goto ret1;
-  if (self->p30 != 0 && self->p30->IsVisible() != 0) goto ret1;
-  return 0;
-ret1:
+  if (self->b370 == 0) {
+    int visible = self->p30 != 0 ? self->p30->IsVisible() : 0;
+    if (visible == 0) return 0;
+  }
   return 1;
 }
 

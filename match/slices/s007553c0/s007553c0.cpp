@@ -16,6 +16,7 @@ extern "C" long __stdcall _InterlockedExchange(volatile long*, long);
 char FUN_007559a0(int, int, char);
 char FUN_006b4b60(void*, void*, int, int);
 void* GetManager_755d40();
+void* GetManager();  // 0x0067dcd0 (EA::ResourceMan)
 void FUN_007553b0();
 void FUN_00755560();
 void FUN_00753fa0();
@@ -265,7 +266,7 @@ class S_755fe0 {
 };
 void S_755fe0::FUN_00755fe0(void* arg) {
   (void)arg;
-  GetManager_755d40();
+  GetManager();
   int uVar1 = m108;
   IFoo_755d40* piVar2 = m104;
   if (piVar2 != 0) {

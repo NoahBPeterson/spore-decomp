@@ -22,6 +22,8 @@
 #include "EA/COM/IUnknown32.h"
 #include "EA/IO/MemoryStream.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memset_pf(void* dst, int val, unsigned n);   // 0x11e073e
@@ -692,7 +694,16 @@ virtual void f03();
     void Construct(const char* path);           // 0x931da0
 };
 struct PFRecordRead {
-    char raw[0x70];
+    union {
+        char raw[0x70];
+        struct {
+            uint32_t mPadding00[12];
+            void* mpBuffer30;
+            uint32_t mPadding34[13];
+            unsigned char mState68;
+            unsigned char mTail69[7];
+        };
+    };
     void  EnsureLoaded();                        // 0x8dc510
     char  ReadSpan(void* dst, unsigned pos, unsigned len); // 0x8dc3f0
     void* GetBuffer();                           // 0x8dc5e0
@@ -1006,6 +1017,7 @@ bool EA::ResourceMan::DatabasePackedFile::Shutdown()
             Close();
         DestroyIndex(mpIndex);
         mpIndex = 0;
+        _ReadWriteBarrier();
         if (mpStream.mpObject) {
             EA::IO::IStream* p = mpStream.mpObject;
             mpStream.mpObject = 0;
@@ -1402,11 +1414,9 @@ bool EA::ResourceMan::DatabasePackedFile::ReadRecordRaw(EA::ResourceMan::Key con
     mMutex.Lock(EA::Thread::kTimeoutNone);
     if (mnAccessFlags != 0) {
         const PFRecordInfo* e = (const PFRecordInfo*)mpIndex->FindRecord(key);
-        unsigned esize = e->mnSize;
-        unsigned n = size;
-        if (n > esize)
-            n = esize;
-        bool r = ReadFileSpan(dst, e->mnPosition, n);
+        if (size > e->mnSize)
+            size = e->mnSize;
+        bool r = ReadFileSpan(dst, e->mnPosition, size);
         mMutex.Unlock();
         return r;
     }
@@ -1462,7 +1472,7 @@ bool EA::ResourceMan::DatabasePackedFile::DecompressRecord(unsigned short a1, un
     if (pos != 0) {
         void* buf = mpAllocator->Alloc(size, kStrRaw, 0);
         if (buf) {
-            if (WriteFileSpan(buf, pos, size))
+            if (ReadFileSpan(buf, pos, size))
                 r = DecompressData(a1, (unsigned char const *)buf, size, d, e);
             mpAllocator->Free(buf, 0);
         }
@@ -2161,19 +2171,12 @@ void FUN_008dace0(SortNode** p1, SortNode** p2)
 // @ 0x008dad30
 void FUN_008dad30(SortNode** p1, SortNode** p2)
 {
-    for (; p1 != p2; p1 = p1 + 1) {
-        SortNode** j = p1;
-        SortNode* prev = p1[-1];
-        SortNode** k = p1 - 1;
+    for (; p1 != p2; ++p1) {
         SortNode* key = *p1;
-        if (key->key < prev->key) {
-            do {
-                *j = prev;
-                j = k;
-                prev = j[-1];
-                k = j - 1;
-            } while (key->key < prev->key);
-        }
+        SortNode** j = p1;
+        SortNode** k = p1;
+        for (--k; key->key < (*k)->key; --j, --k)
+            *j = *k;
         *j = key;
     }
 }
@@ -2634,6 +2637,7 @@ bool PFIndexModifiable_s008d_aff0::RemoveFile(const void* key, void* out)
 HoleSet_s008d_aff0::HoleSet_s008d_aff0()
 {
     mExtent = -1;
+    _ReadWriteBarrier();
     char* p = (char*)this + 8;
     *(void**)(p + 4) = 0;
     *(void**)(p + 8) = 0;
@@ -2848,15 +2852,9 @@ unsigned PFIndexModifiable_s008d_aff0::GetAllFiles(int a2, unsigned a3, int a4, 
 // @ 0x008dbeb0
 void PFIndexModifiable_s008d_aff0::PutFileInfo(int a1, int* info)
 {
-    int c = info[2];
-    int d = info[3];
-    int a = info[0];
-    int b = info[1];
-    unsigned* out = (unsigned*)mItemsMap.GetFileInfoRef((const void*)a1);
-    out[0] = a;
-    out[1] = b;
-    out[2] = c;
-    out[3] = d;
+    struct FI { int v[4]; };
+    FI tmp = *(FI*)info;
+    *(FI*)mItemsMap.GetFileInfoRef((const void*)a1) = tmp;
 }
 
 // @ 0x008dbef0
@@ -2870,8 +2868,11 @@ struct HoleTreeDoInsertThunk {
 
 void* HoleTreeDoInsertThunk::DoInsert(void** ppOut, void* pAfter, const int* pRange)
 {
-    unsigned aligned = (unsigned)this & 0xffffff00u;
-    ((Fn8dbc20)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, aligned);
+    struct Flag { bool b; };
+    typedef void* (__thiscall* Fn)(void*, void*, void*, void*, Flag);
+    Flag f;
+    f.b = false;
+    ((Fn)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, f);
     return ppOut;
 }
 
@@ -3156,9 +3157,10 @@ loaded:
 void* PFRecordRead::GetBuffer()
 {
     EnsureLoaded();
-    unsigned char flags = *(unsigned char*)(raw + 0x68);
+    unsigned char flags = mState68;
+    _ReadWriteBarrier();
     if (flags == 3)
-        return *(void**)(raw + 0x30);
+        return mpBuffer30;
     return 0;
 }
 

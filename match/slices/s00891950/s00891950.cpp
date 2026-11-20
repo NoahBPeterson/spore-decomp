@@ -1,5 +1,9 @@
 // Slice s00891950 -- destructor for the object whose vtable is 0x0142ea60.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_142ea60[];
+
 #include "types.h"
 
 // ---- callees ---------------------------------------------------------------
@@ -41,7 +45,7 @@ struct Obj_00891950 : Base_00891950 {
 // @ 0x00891950
 Obj_00891950::~Obj_00891950()
 {
-    vptr = (void*)0x0142ea60;
+    vptr = (void*)g_142ea60;
     Shutdown();
     ((SubObj_00891950*)((char*)this + 0x168))->~SubObj_00891950();
 

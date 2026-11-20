@@ -1,3 +1,7 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143a1c0[];
+extern "C" char g_143a2ac[];
+
 #include "EA/XML/XmlTextWriter.h"
 #include "EA/IO/IStream.h"
 #include <stdarg.h>
@@ -190,7 +194,7 @@ bool EA::XML::XmlTextWriter::WriteXmlHeader()
 EA::XML::XmlTextWriter::XmlTextWriter(bool bPretty, EA::XML::XmlTextWriter::OutputEncoding nEncoding)
 {
     mOutputEncoding = nEncoding;
-    *(void**)this = (void*)0x143a1c0;  // XmlTextWriter vtable
+    *(void**)this = (void*)g_143a1c0;  // XmlTextWriter vtable
     mbFormatPretty = bPretty;
     mbSimpleElement = 0;
     mnState = kStateChars;
@@ -203,7 +207,7 @@ EA::XML::XmlTextWriter::XmlTextWriter(bool bPretty, EA::XML::XmlTextWriter::Outp
 // @ 0x00901a50
 EA::XML::XmlTextWriter::~XmlTextWriter()
 {
-    *(void**)this = (void*)0x143a1c0;  // XmlTextWriter vtable
+    *(void**)this = (void*)g_143a1c0;  // XmlTextWriter vtable
     if (mpOutputStream.get() != 0) {
         EA::IO::IStream* p = mpOutputStream.get();
         p->Release();
@@ -336,7 +340,7 @@ bool EA::XML::XmlTextWriter::WriteText(wchar_t const * p, unsigned int n)
     if (stream != 0) {
         // 0x143a2ac maps OutputEncoding to the EA text-encoding id IO_WriteEncoded expects.
         return IO_WriteEncoded(stream, p, n,
-                               ((unsigned int*)0x143a2ac)[mOutputEncoding]);
+                               ((unsigned int*)g_143a2ac)[mOutputEncoding]);
     }
     return false;
 }

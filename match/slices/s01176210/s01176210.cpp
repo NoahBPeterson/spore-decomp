@@ -515,13 +515,7 @@ bio_st* __cdecl BIO_new_mem_buf(void* buf, int len)
         return 0;
     }
     if (len == -1) {
-        const char* p = (const char*)buf;
-        const char* q = p + 1;
-        uchar c;
-        do {
-            c = *p++;
-        } while (c);
-        len = (int)(p - q);
+        len = (int)strlen((const char*)buf);
     }
     ret = BIO_new(&BIO_s_mem_object);
     if (ret == 0)

@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPPlayerInventory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1494d54[];
+extern "C" char g_1494d68[];
+extern "C" char g_1579ed8[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -572,8 +577,8 @@ u32 __fastcall FUN_00ff3fb0(Inv* ecx_this, void* edx, void* host)
 // @ 0x00ff3ff0
 void __fastcall FUN_00ff3ff0(Inv* ecx_this)
 {
-    ecx_this->mpVtbl0 = (void*)0x1494d68;
-    ecx_this->mpVtbl1 = (void*)0x1494d54;
+    ecx_this->mpVtbl0 = (void*)g_1494d68;
+    ecx_this->mpVtbl1 = (void*)g_1494d54;
     _ReadWriteBarrier();
     ToolObj* p;
     p = ecx_this->m90;
@@ -605,12 +610,12 @@ int __fastcall FUN_00ff4090(GameData* ecx_this, void* edx, void* host)
     int a = ecx_this->GetFieldValues(host);
 
     cVarListSerializer s1;
-    s1.Ctor(ecx_this, (void*)0x1579ed8, 0x1a80d26);
+    s1.Ctor(ecx_this, (void*)g_1579ed8, 0x1a80d26);
     int b = s1.GetFields(host);
     int ab = a + b;
 
     cVarListSerializer s2;
-    s2.Ctor(ecx_this, (void*)0x15b5ed8, 0x1a80d26);
+    s2.Ctor(ecx_this, (void*)&g_15b5ed8, 0x1a80d26);
     int c = s2.GetFields(host);
 
     return c + ab;

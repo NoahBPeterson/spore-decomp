@@ -1,3 +1,7 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f1fdc[];
+extern "C" char g_1453948[];
+
 #include <intrin.h>
 // Slice s00f94660 -- 0x00f94660 .. 0x00f95540 (17 functions).
 //
@@ -270,12 +274,12 @@ extern "C" void FUN_00f94c50(void* stream, void* p2, char* desc)
 // @ 0x00f94cb0
 extern "C" void* FUN_00f94cb0(void* stream, void* p2)
 {
-    char* d = (char*)FUN_00f473a0(0x18, (const char*)0x13f1fdc, 0, 0, 0, 0);
+    char* d = (char*)FUN_00f473a0(0x18, (const char*)g_13f1fdc, 0, 0, 0, 0);
     char* r = 0;
     if (d) {
         void* volatile* p = (void* volatile*)d;
         p[1] = 0;
-        p[0] = (void*)0x1453948;   // vtbl_Swarm::MapDescription
+        p[0] = (void*)g_1453948;   // vtbl_Swarm::MapDescription
         p[2] = 0;
         p[3] = 0;
         p[4] = 0;

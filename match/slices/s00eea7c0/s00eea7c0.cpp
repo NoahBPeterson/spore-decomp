@@ -7,6 +7,15 @@
 // an input record. (0xeea7c0-0xeeb764)
 //
 // Flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_148acf0[];
+extern "C" char g_148ad00[];
+extern "C" char g_148ad1c[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -307,9 +316,9 @@ void View::SetEntryColor(void* id, float r, float g, float b)
 void View::Dtor()
 {
     void** v = (void**)this;
-    v[0] = (void*)0x148ad1c;
-    v[1] = (void*)0x148ad00;
-    v[2] = (void*)0x148acf0;
+    v[0] = (void*)g_148ad1c;
+    v[1] = (void*)g_148ad00;
+    v[2] = (void*)g_148acf0;
     _ReadWriteBarrier();
     if (this->mLayout2 != 0) {
         ((IRefObj*)this->mLayout2)->Release();
@@ -327,9 +336,9 @@ void View::Dtor()
     if (this->mWinB != 0)               this->mWinB->Release();
     if (this->mAssetView != 0)          this->mAssetView->Release();
     if (this->mWinParent != 0)          this->mWinParent->Release();
-    this->mpVtbl2 = (void*)0x13ec458;
-    this->mpVtbl1 = (void*)0x13eb938;
-    this->mpVtbl0 = (void**)0x13eb394;
+    this->mpVtbl2 = (void*)g_13ec458;
+    this->mpVtbl1 = (void*)g_13eb938;
+    this->mpVtbl0 = (void**)g_13eb394;
 }
 
 // @ 0x00eeaa40

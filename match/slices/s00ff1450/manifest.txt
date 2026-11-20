@@ -1,0 +1,1 @@
+slices/s00ff1450/s00ff1450.cpp  ?reserve@HandleVec@@QAEXI@Z  00ff1450  /O2 /MD /Gy /TP /arch:SSE

@@ -1,6 +1,11 @@
 // Slice s00a75dd0 — EA::Swarm::cMapInfo (MapInfo component), second batch.
 // Sample* / Init* helpers reached through the component and owner vtables.
 // Compile: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14575d4[];
+extern "C" char g_14575d8[];
+
 #include "s00a75dd0.h"
 #include <math.h>
 #include <xmmintrin.h>
@@ -63,7 +68,7 @@ void cMapInfo::Init11(const float* rect, int a2, int a3, uint8_t a4, IcOwner* ow
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d8;
+        mpPixels40 = (uint32_t*)g_14575d8;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
@@ -146,7 +151,7 @@ void cMapInfo::Init9(const float* rect, int a2, int a3, uint8_t a4, IcOwner* own
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
@@ -272,7 +277,7 @@ void cMapInfo::Init12(const float* rect, int a2, int a3, uint8_t a4, IcOwner* ow
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
@@ -328,7 +333,7 @@ void cMapInfo::Init13(const float* rect, int a2, int a3, uint8_t a4, IcOwner* ow
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }

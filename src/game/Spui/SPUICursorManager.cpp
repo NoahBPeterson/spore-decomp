@@ -500,7 +500,8 @@ void __fastcall Sub_801fd0(void* self)
   if (p) p->Release();
   p = *(RCObj**)((char*)self + 0x48);
   if (p) p->Release();
-  ((MapBase*)((char*)self + 0xc))->NukeSubtree(*(void**)((char*)self + 0x18));
+  MapBase* m = (MapBase*)((char*)self + 0xc);
+  m->NukeSubtree(*(void**)((char*)m + 0xc));
   *(void**)((char*)self + 8) = (void*)dc_c;
   *(void**)self = (void*)dc_d;
 }
@@ -656,9 +657,8 @@ bool CurMgr::Shutdown()
 bool __stdcall Sub_8026b0(const wchar_t* name, void* info)
 {
   void* h = LoadImageW(0, name, 2, 0, 0, 0x10);
-  bool r = h != 0;
   *(void**)((char*)info + 0x14) = h;
-  return r;
+  return h != 0;
 }
 
 // @ 0x00802850  ecx carries the cursor manager into 0x008026e0 (thiscall form)

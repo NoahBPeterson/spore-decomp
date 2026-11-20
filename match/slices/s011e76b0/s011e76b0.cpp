@@ -493,9 +493,8 @@ void __fastcall StreamImpl_ClearLists(void* implPtr, int)
 // @ 0x011e7910
 void* Stream_Create(u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6)
 {
-    StreamImpl* impl = (StreamImpl*)StreamImpl_operator_new(0x210);
-    if (impl != 0)
-        impl = impl->Init(a1, a2, a3, a4, a5, a6);
+    StreamImpl* mem = (StreamImpl*)StreamImpl_operator_new(0x210);
+    StreamImpl* impl = mem ? mem->Init(a1, a2, a3, a4, a5, a6) : 0;
     return *(void**)((char*)impl + 0x44);
 }
 

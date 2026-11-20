@@ -1,6 +1,15 @@
 // Slice s00dddd20 (batch bfs3, slice 11). Region 0xdddd20-0xddea3a.
 // Galaxy game-entry app mode / camera input camera-controller helpers.
 // Optimised: /O2 /MD /Gy /TP /arch:SSE.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_147d34c[];
+extern "C" char g_147d360[];
+extern "C" char g_147da94[];
+extern "C" char g_15a30b4[];
+extern "C" char g_15a3110[];
+
 #include "types.h"
 #include <math.h>
 #include <new>
@@ -142,10 +151,10 @@ struct SmallReg { void* vt0; void* volatile vt1; int a; int b; };
 void RegisterSmall(void* param) {
     SmallReg* o = (SmallReg*)EA_Allocate(0x10, "App", 0, 0, 0, 0);
     if (o != 0) {
-        o->vt1 = (void*)0x13ec458;
+        o->vt1 = (void*)g_13ec458;
         o->a = 0;
-        o->vt0 = (void*)0x147d360;
-        o->vt1 = (void*)0x147d34c;
+        o->vt0 = (void*)g_147d360;
+        o->vt1 = (void*)g_147d34c;
         o->b = 0;
     } else {
         o = 0;
@@ -369,7 +378,7 @@ void CamCtl::Update(int dt, int unused) {
         ((void(__thiscall*)(void*, uint32_t, void*, void*))(
             (*(void***)ms)[0x14 / 4]))(ms, 0x4360e14, 0, 0);
         self->f08 = 0;
-        g_16a10c8 = (void*)0x15a30b4;
+        g_16a10c8 = (void*)g_15a30b4;
     }
     self->f10 = (self->f0c - self->f14) * (1.0f - q) + self->f14;
 }
@@ -377,20 +386,24 @@ void CamCtl::Update(int dt, int unused) {
 // ===========================================================================
 //  0x00dde400  input key handler
 // ===========================================================================
+extern "C" float g_147dab8;   // float constants retail reads here
+extern "C" float g_13f08c0;
+extern "C" float g_13f1cac;
+extern "C" float g_14000fc;
 // @ 0x00dde400
 char CamCtl::Key(uint32_t key, int unused) {
     CamCtl* self = this; (void)unused;
     if (key == 0xbb || key == 0x6b) {
-        g_camera_roll = self->f18 * *(float*)0x147dab8;
+        g_camera_roll = self->f18 * g_147dab8;
     }
     if (key == 0xbd || key == 0x6d) {
-        g_camera_roll = self->f18 * *(float*)0x13f08c0;
+        g_camera_roll = self->f18 * g_13f08c0;
     }
     if (key == 0x25 || key == 0xbc || key == 0x64) {
-        g_camera_pitch = (self->f1c * g_16a10dc) * *(float*)0x13f1cac;
+        g_camera_pitch = (self->f1c * g_16a10dc) * g_13f1cac;
     }
     if (key == 0x27 || key == 0xbe || key == 0x66) {
-        g_camera_pitch = self->f1c * g_16a10dc * *(float*)0x14000fc;
+        g_camera_pitch = (self->f1c * g_16a10dc) * g_14000fc;
     }
     return 0;
 }
@@ -429,18 +442,15 @@ char __stdcall CamCtl_SetGlobals(float v1, float v2, int) {
     return 0;
 }
 
+extern "C" const float g_13eb8a0;
 // @ 0x00dde540
 char CamCtl::Zoom(int n, int b, int c, int d) {
     (void)b; (void)c; (void)d;
-    __asm {
-        cvtsi2ss xmm0, dword ptr [n]
-        mulss xmm0, dword ptr [ecx + 14h]
-        mulss xmm0, dword ptr ds:[13eb8a0h]
-        mulss xmm0, dword ptr [ecx + 18h]
-        xorps xmm0, xmmword ptr ds:[13eb8b0h]
-        movss dword ptr [g_camera_roll], xmm0
-        xor al, al
-    }
+    float t = (float)n * f14;
+    t = t * g_13eb8a0;
+    t = t * f18;
+    g_camera_roll = -t;
+    return 0;
 }
 
 // @ 0x00dde570
@@ -568,11 +578,11 @@ void __stdcall CamCtl_Preset(float f) {
     g_3114 = SseRoundToInt(f * 1000.0f);
     g_311c = g_15a3094;
     g_3120 = g_15a3094;
-    g_3124 = *(float*)0x13f1cac;
+    g_3124 = g_13f1cac;
     g_3128 = g_30ec;
     g_312c = g_30f0;
     g_3130 = g_30f4;
-    g_16a10c8 = (void*)0x15a3110;
+    g_16a10c8 = (void*)g_15a3110;
 }
 
 // ===========================================================================
@@ -583,10 +593,10 @@ void CamCtl_PresetReset() {
     Vec3 v;
     v.x = 0.0f;
     v.y = 0.0f;
-    v.z = *(float*)0x147da94;
+    v.z = *(float*)g_147da94;
     *(Vec3*)&g_cct0 = v;
     *(Vec3*)&g_cc0 = v;
-    g_16a10c8 = (void*)0x15a30b4;
+    g_16a10c8 = (void*)g_15a30b4;
 }
 // --- equivalence checker address annotations
 

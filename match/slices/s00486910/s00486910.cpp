@@ -263,7 +263,7 @@ void cSPEditorLimbJoint::F_487290(cSPEditorLimbJoint* child)
     cSPVector3 t1 = mTargetPosition + child->mTargetOffset;
     cSPVector3 t2 = mOriginalPosition + child->mOriginalOffset;
     child->Move(t1 - child->mTargetPosition, true);
-    child->Translate(t2 + child->mOriginalPosition);
+    child->Translate(t2 - child->mOriginalPosition);
 }
 
 // @ 0x4873d0

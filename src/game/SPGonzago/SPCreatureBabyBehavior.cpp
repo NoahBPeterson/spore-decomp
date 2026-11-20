@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCreatureBabyBehavior.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 #include "game/types.h"
 #include "SP/cLocomotiveObject.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -399,13 +402,15 @@ using nSPBehaviorTree::behavior_memory_block_s00d6_3fd0;
 struct MB1 : behavior_memory_block_s00d6_3fd0 { int f04; int f08; int anim; };                       // 0x00d63fd0
 // ---- items of slice s00d63fd0 end
 
+struct Iter_s00d61ce0 { void* node; Iter_s00d61ce0(const Iter_s00d61ce0& x) : node(x.node) {} 
+  Iter_s00d61ce0& operator++() { node = *(void**)node; return *this; } };
+
 // @ 0x00d61ce0
-void* __cdecl FUN_00d61ce0(void** out, void* begin, void* end, u32* key)
+Iter_s00d61ce0 __cdecl FUN_00d61ce0(Iter_s00d61ce0 begin, Iter_s00d61ce0 end, const u32& key)
 {
-    while (begin != end && ((u32*)begin)[2] != *key)
-        begin = *(void**)begin;
-    *out = begin;
-    return out;
+    while (begin.node != end.node && ((u32*)begin.node)[2] != key)
+        ++begin;
+    return begin;
 }
 
 // @ 0x00d61d10
@@ -414,7 +419,7 @@ bool __cdecl FUN_00d61d10(cSPCreatureBase* c, int, int, int, int, int* st)
     st[0] = 0;
     st[1] = 0;
     if (c->mFlagF90 != 0) {
-        s32 r = (s32)((RandomLCG*)0x01601760)->RandomUint32Uniform(1000);
+        s32 r = (s32)((RandomLCG*)g_1601760)->RandomUint32Uniform(1000);
         if (r < 0x15e) {
             st[1] = (int)c->PlayAnimation(0x315be650, 1, -1);
             return true;

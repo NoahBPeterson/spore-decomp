@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPVehicleBehaviorTree.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145efd8[];
+extern "C" char g_145efe8[];
+extern "C" char g_147c444[];
+extern "C" char g_147c468[];
+extern "C" char g_147c4b4[];
+extern "C" char g_147c4d8[];
+
 #include "game/types.h"
 #include "nSPBehaviorTree/behavior_stimuli.h"
 #include "SP/cPlanetModel.h"
@@ -3414,33 +3422,40 @@ bool Idle_Activate(void * pTree, double a2, unsigned int a3, unsigned int a4, nS
 }  // namespace SP::VehicleTree
 
 // @ 0x00dc7cc0
+extern "C" char g_vt_147c4d8;   // 0x0147c4d8 cVehicleTicker primary vftable
+extern "C" char g_vt_147c4b4;   // 0x0147c4b4 cVehicleTicker second vftable
+extern "C" char g_vt_147c468;   // 0x0147c468 SimSingleton primary vftable
+extern "C" char g_vt_147c444;   // 0x0147c444 SimSingleton second vftable
+extern "C" char g_vt_13ec458;   // 0x013ec458 RefCountVTemplate<int> vftable
+extern "C" char g_vt_13eb938;   // 0x013eb938 GmeEditorResBase vftable
 void cVehicleTicker_s00dc_77d0::Destroy()
 {
   cSpatialVector* pVec38 = &m38;
-  mpVt00 = (void*)0x0147c4d8;
-  mpVt08 = (void*)0x0147c4b4;
+  mpVt00 = &g_vt_147c4d8;
+  mpVt08 = &g_vt_147c4b4;
   pVec38->Destroy();
   if (mVoxSoundIds.mpBegin != 0 && ((int32_t*)mVoxSoundIds.mpBegin)[-1] != 0)
     FUN_00f47380(mVoxSoundIds.mpBegin);
   mGroupOrders.Destroy();
-  mpVt00 = (void*)0x0147c468;
-  mpVt08 = (void*)0x0147c444;
+  mpVt00 = &g_vt_147c468;
+  mpVt08 = &g_vt_147c444;
   FUN_00b5b690(this);
   if (g_1699ab8 == this)
     g_1699ab8 = 0;
-  mpVt00 = (void*)0x013ec458;
-  mpVt08 = (void*)0x013eb938;
+  mpVt00 = &g_vt_13ec458;
+  _ReadWriteBarrier();
+  mpVt08 = &g_vt_13eb938;
 }
 
 // @ 0x00dc7d70
 cVehicleTicker_s00dc_77d0::cVehicleTicker_s00dc_77d0()
 {
-  mpVt00 = (void*)0x0147c468;
-  mpVt08 = (void*)0x0147c444;
+  mpVt00 = (void*)g_147c468;
+  mpVt08 = (void*)g_147c444;
   g_1699ab8 = this;
   FUN_00b5b6f0(this);
-  mpVt00 = (void*)0x0147c4d8;
-  mpVt08 = (void*)0x0147c4b4;
+  mpVt00 = (void*)g_147c4d8;
+  mpVt08 = (void*)g_147c4b4;
   // Keep the vector initialization stores in their observed order.
   *(void* volatile*)&mGroupOrders.mpBegin = 0;
   *(void* volatile*)&mGroupOrders.mpEnd = 0;
@@ -4179,7 +4194,7 @@ bool __cdecl MoveToPointOrder_Activate(BehaviorObj* self)
 {
     Brain* brain = ((Brain* (__thiscall*)(BehaviorObj*))(void*)FUN_00ca71d0)(self);
     if (brain->mMode10 == 6) {
-        ((void (__thiscall*)(BehaviorObj*, Vector3, float, float))FUN_00c9fb40)(self, *(Vector3*)((char*)brain + 0x04), 0.0f, *(float*)0x013f1164);
+        ((void (__thiscall*)(BehaviorObj*, Vector3, float, float))FUN_00c9fb40)(self, *(Vector3*)((char*)brain + 0x04), 0.0f, *(float*)&DAT_013f1164);
         ((::cSpatialObject*)((char*)self + 0x34))->Ve4(*(Vector3*)((char*)brain + 0x04), 1.0f);
         FUN_00dcc610(self);
         return true;
@@ -4315,8 +4330,8 @@ void* __thiscall cVehicleTicker::GetGroupOrder()
 namespace SP {
 cCulturalConvertCityOrder_s00dc_c830::~cCulturalConvertCityOrder_s00dc_c830()
 {
-    mpVtbl0 = (cOrderVTable0*)0x0145efe8;
-    mpVtbl1 = (cOrderVTable1*)0x0145efd8;
+    mpVtbl0 = (cOrderVTable0*)g_145efe8;
+    mpVtbl1 = (cOrderVTable1*)g_145efd8;
     _ReadWriteBarrier();
     if (mpFieldA4)
         mpFieldA4->Release();

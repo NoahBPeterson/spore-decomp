@@ -2,6 +2,14 @@
 // Object file: SPEngine/_at_00770000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13ec458[];
+extern "C" char g_140e660[];
+extern "C" char g_140e670[];
+extern "C" char g_140e688[];
+extern "C" char g_140e698[];
+
 #include "game/types.h"
 #include <xmmintrin.h>
 #include <string.h>
@@ -260,7 +268,7 @@ void introsort_loop(SortElem* first, SortElem* last, int depthLimit, SortCompare
 struct Unk770320_s0077_3f60 {
     unsigned int Method(unsigned int param_2, int* param_3);  // 0x00770320 (Unk770320::Method)
 };
-extern Unk770320_s0077_3f60 g_770320;
+extern Unk770320_s0077_3f60 g_1630b68;
 struct Idx2 {
     int m0;
     int m1;
@@ -1632,7 +1640,7 @@ void partial_sort(SortElem* first, SortElem* middle, SortElem* last, SortCompare
 // @ 0x007740f0
 void FUN_007740f0(unsigned int param_1, int* param_2)
 {
-    g_770320.Method(param_1, param_2);
+    g_1630b68.Method(param_1, param_2);
 }
 
 // @ 0x00774290
@@ -1893,27 +1901,27 @@ char cRuntimeModelBuilder::setFlagB(int key, int unused)
 // @ 0x00776590
 void ShaderPreviewA::Destroy()
 {
-    vtbl0 = (void*)0x140e670;
-    vtbl8 = (void*)0x140e660;
+    vtbl0 = (void*)g_140e670;
+    vtbl8 = (void*)g_140e660;
     _ReadWriteBarrier();
     if (counted) counted->Release();
     meshes.FreeAll();
     table.FreeAll();
     if (buffer10c && EABlockInUse(buffer10c)) operator_delete_array(buffer10c);
-    vtbl8 = (void*)0x13eb394;
-    vtbl0 = (void*)0x13ec458;
+    vtbl8 = (void*)g_13eb394;
+    vtbl0 = (void*)g_13ec458;
 }
 
 // @ 0x00776680
 void ShaderPreviewB::Destroy()
 {
-    vtbl0 = (void*)0x140e698;
-    vtbl8 = (void*)0x140e688;
+    vtbl0 = (void*)g_140e698;
+    vtbl8 = (void*)g_140e688;
     meshes.FreeAll();
     table.FreeAll();
     if (buffer10c && EABlockInUse(buffer10c)) operator_delete_array(buffer10c);
-    vtbl8 = (void*)0x13eb394;
-    vtbl0 = (void*)0x13ec458;
+    vtbl8 = (void*)g_13eb394;
+    vtbl0 = (void*)g_13ec458;
 }
 
 // @ 0x00776730

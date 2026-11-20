@@ -1,5 +1,12 @@
 // Slice s00fe8630: space-item / empire relationship scoring (weights table lookups).
 // Built /O2 /MD /Gy /TP /arch:SSE2 (no EH frame).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_1494474[];
+extern "C" char g_1494498[];
+
 #include <math.h>
 #define NOINLINE __declspec(noinline)
 typedef unsigned char  u8;
@@ -329,8 +336,8 @@ void __cdecl FUN_00fe8c50(void* self, int extra, int scale)
 // @ 0x00fe8e20
 cEmpireGrowthSim::~cEmpireGrowthSim()
 {
-    mpVtbl0 = (void*)0x01494498;
-    mpVtbl8 = (void*)0x01494474;
+    mpVtbl0 = (void*)g_1494498;
+    mpVtbl8 = (void*)g_1494474;
 
     Ent330* p = mBlocks + 3;
     for (int i = 2; i >= 0; --i) {
@@ -353,8 +360,8 @@ cEmpireGrowthSim::~cEmpireGrowthSim()
     if (mpBlock10 != 0 && *((int*)mpBlock10 - 1) != 0)
         operator_delete__(mpBlock10);
 
-    mpVtbl8 = (void*)0x013eb938;
-    mpVtbl0 = (void*)0x013ec458;
+    mpVtbl8 = (void*)g_13eb938;
+    mpVtbl0 = (void*)g_13ec458;
 }
 
 // ==========================================================================
@@ -455,7 +462,7 @@ struct VarListSerializer {               // 0x00a14 bytes
 char Brush::ReadBrush(void* stream)
 {
     VarListSerializer ser;
-    ser.ctor(this, 0x015b4568, 0x01a80d26);
+    ser.ctor(this, (int)&FUN_015b4568, 0x01a80d26);
     char ok = ser.Read(stream);
     if (ok != 0)
         DeriveFields();

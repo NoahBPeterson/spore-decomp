@@ -4,6 +4,10 @@
 // ---------------------------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------------------------
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f01bc[];
+
 #include <math.h>
 #pragma intrinsic(sqrt)
 
@@ -394,7 +398,7 @@ u8 cSPMissionMultiDelivery::GetTagString(u32 tag, cWString* out)
     }
     if (tag == 0x8aad4d34) {
         i32 n = GetNumItemsNotDeliveredToBuyer((cPlanet*)mBuyerVec.mpBegin[0].mpObject);
-        WStr_Format(out, (const wchar_t_*)0x013f01bc, n);
+        WStr_Format(out, (const wchar_t_*)g_13f01bc, n);
         return 1;
     }
     return ((struct cSPMissionBase*)this)->GetTagString(tag, out);

@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00b70000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cVarListSerializer.h"
@@ -408,12 +411,6 @@ struct NewNode
     void* m_ref14;               // +0x14
 };
 void __cdecl WriteUint32(void* stream, const void* value, int count, int flags);   // 0x0093aa70
-struct cVarListSerializer
-{
-    char m_data[0xa14];
-    void ctor(void* owner, void* name, int line);        // 0x00692f90
-    void Serialize(void* object);                        // 0x00692900
-};
 struct RBTreeFind
 {
     void** find(void** out, void** key);                 // 0x00e5c780
@@ -1677,7 +1674,8 @@ struct Sub {
 struct ObMgr {
     void* Construct();                                 // 0xb79740
     void* Init(int* a, int* b);                        // 0xb794e0
-    int*  Insert(int* out, int* key, int unused);      // 0xb795c0
+    struct InsertResult { int* node; int* bucket; };
+    InsertResult Insert(int* key, int unused);          // 0xb795c0 (returned by value)
     int*  FindNode(int* bucket, int* key, unsigned h); // 0xb72f10
     void  Destroy();                                   // 0xb79aa0
     void  Query(V3* dir, PointerVec* out, unsigned mask, float radius,
@@ -2900,14 +2898,15 @@ void __cdecl Fn_00b71b90(IStream* pStream, FeedbackTree* pTree)
 // @ 0x00b71dc0
 cOwner::cOwner()
 {
+    _ReadWriteBarrier();
     eastl::nb* pAnchor = &mFeedback.mAnchor;
     pAnchor->mpNodeLeft   = 0;
     pAnchor->mpNodeParent = 0;
     pAnchor->mColor       = 0;
-    pAnchor->mpNodeLeft   = pAnchor;
+    mFeedback.mAnchor.mpNodeLeft = pAnchor;
     pAnchor->mpNodeRight  = pAnchor;
-    pAnchor->mpNodeParent = 0;
-    pAnchor->mColor       = 0;
+    mFeedback.mAnchor.mpNodeParent = 0;
+    *(char*)&mFeedback.mAnchor.mColor = 0;
     mFeedback.mnSize      = 0;
 }
 
@@ -4050,7 +4049,8 @@ void* Simulator_cObstacle::AllocNode3(int* src)
     if (node != 0) {
         *(int**)((char*)this + 0x1c) = (int*)node->f0;
     } else {
-        node = (Node3View*)EAAllocate(*(int*)((char*)this + 0x2c), "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        const int nodeSize = *(int*)((char*)this + 0x2c);
+        node = (Node3View*)EAAllocate(nodeSize, "Simulator", 0, 0, (int)&g_13ebb38, 0xd1);
     }
     if (node != 0) {
         node->f0 = src[0];
@@ -4073,7 +4073,7 @@ void* Simulator_cObstacle::AllocNode2(int* src)
         *(int**)((char*)this + 0x1c) = (int*)node->f0;
     } else {
         uint32_t nodeSize = *(uint32_t*)((char*)this + 0x2c);
-        node = (Node2View*)EAAllocate(nodeSize, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        node = (Node2View*)EAAllocate(nodeSize, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
     }
     if (node != 0) {
         node->f0 = src[0];
@@ -4207,7 +4207,7 @@ int ObstacleMgr::Lookup(unsigned int* key)
 {
     int local[2];
     Hashtable2* ht = (Hashtable2*)((char*)this + 0x56c0);
-    ht->Find(&local[0], key);
+    ((C74860*)ht)->Find(&local[0], (int*)key);
     if (local[0] != ht->mBegin[ht->mCount])
         return local[0] + 0xc;
     return 0;
@@ -4482,7 +4482,7 @@ void __cdecl FUN_00b768d0(void* first, void* last, void* a3, void* a4)
 {
     int n = (int)((char*)last - (char*)first) / 0xc;
     if (n > 1) {
-        char* buf = (char*)EAAllocate(n * 0xc, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        char* buf = (char*)EAAllocate(n * 0xc, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
         char uninit[12];
         FUN_00b74c20(buf, buf + n * 0xc, uninit);
         FUN_00b75c60(first, last, buf, a4);
@@ -5419,7 +5419,7 @@ void* ObMgr::Init(int* a, int* b)
 }
 
 // @ 0x00b795c0
-int* ObMgr::Insert(int* out, int* key, int unused)
+ObMgr::InsertResult ObMgr::Insert(int* key, int unused)
 {
     FindRes fr;
     ((BucketAlloc*)((char*)this + 0x10))->Find(&fr, *(int*)((char*)this + 8),
@@ -5443,10 +5443,11 @@ int* ObMgr::Insert(int* out, int* key, int unused)
     }
 
     ++*(int*)((char*)this + 0xc);
-    out[0] = (int)node;
-    out[1] = *(int*)((char*)this + 4) + idx;
+    InsertResult r;
+    r.node = node;
+    r.bucket = (int*)(*(int*)((char*)this + 4) + idx);
     (void)unused;
-    return out;
+    return r;
 }
 
 // @ 0x00b79740
@@ -6819,10 +6820,10 @@ void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value)
 // @ 0x00b7d420
 bool ServerObj::OnPieMsg(int msg, int arg)
 {
-    bool r = true;
     if (msg == 0x29ffa8d && mMode == 3)
         mMode = 4;
-    return r;
+    _ReadWriteBarrier();
+    return true;
 }
 
 // @ 0x00b7d440

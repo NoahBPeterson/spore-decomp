@@ -1,6 +1,10 @@
 // Slice s00fc9310: rw::movie (RenderWare "rpmovie") -- the movie decoder / renderer
 // (rw::movie::MovieDecoder) and the AVI movie encoder (rw::movie::MovieEncoder_Avi).
 // MSVC 2008 SP1 x86 (VS2008 SP1 cl 15.00).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1491b68[];
+
 #include "types.h"
 #include <intrin.h>
 #pragma intrinsic(__rdtsc)
@@ -405,6 +409,7 @@ void MovieDecoder::PrepareDecoder(void* a1, void* a2, uint32_t a3, void* a4, voi
                 for (uint32_t i = 0; i < used; ++i) {
                     uint8_t decodedFlag =
                         mRenderableQueue->GetFromDecoderList(i)->mDecodedFlag;
+                        _ReadWriteBarrier();
                     if (decodedFlag == 1)
                         anyDecoded = decodedFlag;
                 }
@@ -487,11 +492,11 @@ void DecodeVideoFrame(VideoRenderable* r, MovieDecoder* dec)
     if (r->mState > 0)
         return;
 
-    uint32_t n = dec->mRenderableQueue->GetFilledListSize();
+    uint32_t n = dec->mRenderableQueue->GetRendererListSize();
     for (uint32_t i = 0; i < n; ++i) {
         VideoRenderable* x = dec->mRenderableQueue->PopFromRendererList();
         if (x->mState > 0) {
-            dec->mRenderableQueue->AddToFilledList(x);
+            dec->mRenderableQueue->AddToRendererList(x);
         } else {
             dec->mRenderableQueue->AddToEmptyList(x);
             dec->mEmptyVideoRenderablesSemaphore->Post(1);
@@ -508,12 +513,12 @@ void MovieDecoder::Teardown()
     int status = mVideoDecodeThread->GetStatus(0);
     while (status == 1) {
         if (!posted) {
-            if (mRenderableQueue->GetEmptyListSize() != 0) {
+            if (mRenderableQueue->GetFilledListSize() != 0) {
                 VideoRenderable* r = mRenderableQueue->PopFromFilledList();
                 mRenderableQueue->AddToEmptyList(r);
                 mEmptyVideoRenderablesSemaphore->Post(1);
                 posted = true;
-            } else if (mRenderableQueue->GetFilledListSize() != 0) {
+            } else if (mRenderableQueue->GetRendererListSize() != 0) {
                 VideoRenderable* r = mRenderableQueue->PopFromRendererList();
                 mRenderableQueue->AddToEmptyList(r);
                 mEmptyVideoRenderablesSemaphore->Post(1);
@@ -925,7 +930,7 @@ void MovieEncoder_Avi::FreeAVIIndexEntries()
 // @ 0x00fca2c0
 MovieEncoder_Avi* MovieEncoder_Avi::Ctor(uint32_t bufferSize)
 {
-    vftable = (void*)0x1491b68;
+    vftable = (void*)g_1491b68;
     mBufferedWriter.Init();
 
     AviIndexBlock* first = &mFirstIndexBlock;

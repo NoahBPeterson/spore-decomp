@@ -1209,7 +1209,10 @@ namespace SP { namespace Pollen {
 void cXHTMLWin::DestroyFormControl(DomElement* e)
 {
   XList* list = &mControlList;
-  if (!list->empty()) ClearList(list);
+  if (!list->empty()) {
+    _ReadWriteBarrier();
+    ClearList(list);
+  }
   IControlHolder* h = e->mpControl;
   if (h) {
     IWindow_s0062_2f20* w = h->GetWindow(0xeeee8218);
@@ -1556,9 +1559,7 @@ bool cPopupTimer::OnMessage(void* unused, SMessage* m)
                 mText = m->mpData;
                 mNextTime = GetElapsedSeconds() + kDelayLong;
             }
-            return true;
-        }
-        if (mpWin) {
+        } else if (mpWin) {
             mpWin->SetFlag(1, 0);
             mNextTime = FLT_MAX;
         }

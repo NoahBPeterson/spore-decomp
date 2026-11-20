@@ -10,6 +10,13 @@
 // Flags: default VS2008 (/O2 /MD /Gy /EHsc /TP).  The originals are part of a /MD /O2
 // Simulator build; the LTCG inlining of the original is not reproduced, so most bodies
 // below are behaviourally-equivalent reconstructions rather than byte-exact copies.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_145bf14[];
+extern "C" char g_145bf1c[];
+extern "C" char g_145bf20[];
+
 #include "types.h"
 
 typedef unsigned int   u32;
@@ -309,9 +316,12 @@ L6c5:
 // @ 0x00aeb700
 void SpaceTool::FUN_00aeb700()
 {
-    u32 d = (u32)m38 + (int)0xfe9ab3fc;
-    if (d <= 1)
+    switch (m38) {
+    case 0x1654c04:
+    case 0x1654c05:
         FUN_00aeb090();
+        break;
+    }
     m38 = -1;
 }
 
@@ -504,9 +514,9 @@ void SpaceTool::FUN_00aeba50(void* stream)
 void SpaceTool::FUN_00aebb30()
 {
     char* s = (char*)this;
-    *(volatile u32*)(s + 0x00) = 0x145bf20;
-    *(volatile u32*)(s + 0x04) = 0x145bf1c;
-    *(volatile u32*)(s + 0x1c) = 0x145bf14;
+    *(volatile u32*)(s + 0x00) = (int)g_145bf20;
+    *(volatile u32*)(s + 0x04) = (int)g_145bf1c;
+    *(volatile u32*)(s + 0x1c) = (int)g_145bf14;
 
     int e = *(volatile int*)(s + 0x64);
     if (*(volatile int*)(s + 0x6c) - e > 1 && e != 0)
@@ -527,7 +537,7 @@ void SpaceTool::FUN_00aebb30()
     if (*(void**)(s + 0x20))
         relref(*(void**)(s + 0x20));
 
-    *(u32*)(s + 0x1c) = 0x13eb394;
+    *(u32*)(s + 0x1c) = (int)g_13eb394;
     FUN_00b5b9a0();
 }
 

@@ -2,6 +2,12 @@
 // Object file: SPGonzago/_at_00be0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1468e0c[];
+extern "C" char g_1468e20[];
+extern "C" char g_1468e90[];
+extern "C" char g_1567e48[];
+
 #include "game/types.h"
 #include "SP/cVehicle.h"
 #include "SP/cGameNounManager.h"
@@ -180,7 +186,6 @@ virtual void v8c();
 void*    __cdecl NounManager();                                    // 0x00b3d300
 void*    __cdecl GonzagoModelWorld();                              // 0x00b3d520
 void*    __cdecl PlanetModel();                                    // 0x00b3d350
-void* __stdcall FUN_00b18460(uint32_t id);                          // 0x00b18460
 int      __cdecl FUN_00c9e8e0(int kind, const Vector3* p);         // 0x00c9e8e0
 void*    __cdecl FUN_01029790();                                   // 0x01029790
 void     __cdecl FUN_00c6f770(uint32_t id, int idx, uint32_t val); // 0x00c6f770
@@ -858,7 +863,7 @@ virtual void v5c();
     void FUN_00bee200();                    // 0x00bee200
     void FUN_00becc80();                    // 0x00becc80
     void FUN_00beccf0();                    // 0x00beccf0
-    Vector3_s00be_eb70* FUN_00becb10(Vector3_s00be_eb70* out, const Vector3_s00be_eb70* src);   // 0x00becb10
+    Vector3_s00be_eb70 FUN_00becb10(const Vector3_s00be_eb70& src);   // 0x00becb10
 
     void Init(cCity_s00be_eb70* city, int model);      // 0x00beeb70
     void RecomputeGameData();               // 0x00bef4e0
@@ -1154,11 +1159,11 @@ cCityTerritory* cCityTerritory::ctor()
 {
     ((GameDataBase*)this)->Ctor();
     ((SpatialBase*)sub34)->Ctor();
-    *(void**)sub34      = (void*)0x01468e90;
+    *(void**)sub34      = (void*)g_1468e90;
     m110                = 0;
     m111                = 0;
-    vfptr0              = (void*)0x01468e20;
-    vfptr1              = (void*)0x01468e0c;
+    vfptr0              = (void*)g_1468e20;
+    vfptr1              = (void*)g_1468e0c;
     m108                = 1;
     m10c                = 100.0f;
     return this;
@@ -1171,7 +1176,7 @@ void* cCityTerritory::AsInterface(uint32_t id)
     if (id == 0x2450023) {
         r = this;
     } else {
-        r = FUN_00b18460(id);
+        r = ((Object*)this)->FUN_00b18460(id);
         if (r == 0)
             r = ((SpatialBase*)sub34)->AsInterface(id);
     }
@@ -1181,7 +1186,7 @@ void* cCityTerritory::AsInterface(uint32_t id)
 // @ 0x00beb9f0
 bool cCityTerritory::InitFromDefinition(void* a)
 {
-    ((PropReg*)a)->Add(this, (void*)0x01567e48, L"cGameData");
+    ((PropReg*)a)->Add(this, (void*)g_1567e48, L"cGameData");
     return true;
 }
 
@@ -1256,7 +1261,7 @@ void* cCityTerritory::AsInterface2(uint32_t id)
 {
     if (id == 0xed7fc07)
         return this;
-    void* r = FUN_00b18460(id);
+    void* r = ((Object*)this)->FUN_00b18460(id);
     if (r == 0)
         r = ((SpatialBase*)sub34)->AsInterface(id);
     return r;
@@ -2244,9 +2249,7 @@ void cVehicleLike::RecomputeGameData()
     FUN_00bee150();
     FUN_00bee200();
     FUN_00becc80();
-    Vector3_s00be_eb70 tmp;
-    Vector3_s00be_eb70* v = FUN_00becb10(&tmp, &mV224);
-    mV230 = *v;
+    mV230 = FUN_00becb10(mV224);
     FUN_00beccf0();
 }
 
@@ -2378,14 +2381,9 @@ void SP::cCivilization_s00be_eb70::RestartTimer3c8()
 // @ 0x00bef8a0
 bool SP::cCivilization_s00be_eb70::IsTimer108Elapsed()
 {
-    uint64_t t = mTimer108.GetElapsedTime();
-    uint32_t hi = (uint32_t)(t >> 32);
-    uint32_t lo = (uint32_t)t;
-    if (hi > 0)
+    if (mTimer108.GetElapsedTime() > 120000)
         return true;
-    if (lo <= 120000u)
-        return false;
-    return true;
+    return false;
 }
 
 // @ 0x00bef920

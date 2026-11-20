@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/XHTMLFrameSet.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_14467ac[];
+extern "C" char g_14467bc[];
+
 #include "game/types.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
 #include "EA/UTFWinExtras/WinXHTML.h"
@@ -394,13 +400,13 @@ void __thiscall JobQueue::FUN_009966b0(uint32_t n)
 // @ 0x009968a0
 __thiscall cXHTMLFrameSet_s0099_5b20::~cXHTMLFrameSet_s0099_5b20()
 {
-    *(uint32_t*)((char*)this + 0x00) = 0x14467bc;
-    *(uint32_t*)((char*)this + 0x04) = 0x14467ac;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_14467bc;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_14467ac;
     ((JobQueue*)((char*)this + 0x24))->FUN_00996640();
     if (mField0c != 0)
         EA_DELETE_ARRAY(mField0c);
-    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
 }
 
 // @ 0x009968f0
@@ -430,13 +436,13 @@ void __thiscall JobQueue::FUN_009968f0(void* e)
 // @ 0x00996a80
 void* __thiscall cXHTMLFrameSet_s0099_5b20::FUN_00996a80(uint8_t flags)
 {
-    *(uint32_t*)((char*)this + 0x00) = 0x14467bc;
-    *(uint32_t*)((char*)this + 0x04) = 0x14467ac;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_14467bc;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_14467ac;
     ((JobQueue*)((char*)this + 0x24))->FUN_00996640();
     if (mField0c != 0)
         EA_DELETE_ARRAY(mField0c);
-    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
     if ((flags & 1) != 0)
         EA_DELETE_ARRAY(this);
     return this;

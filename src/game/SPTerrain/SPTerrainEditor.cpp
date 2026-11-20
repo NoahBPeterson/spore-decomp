@@ -2,6 +2,9 @@
 // Object file: SPTerrain/SPTerrainEditor.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148f598[];
+
 #include "game/types.h"
 #include <string.h>
 #include <intrin.h>
@@ -1719,7 +1722,7 @@ void* __cdecl AllocTerrainDraw(void* a, void* b, void* c)
         p->mBase0 = 0;
         p->mBase1 = 0;
         p->mLockState = 0;
-        p->mpVtbl = (void**)0x0148f598;
+        p->mpVtbl = (void**)g_148f598;
         p->mpParam = (void*)1;
         r = p;
     }

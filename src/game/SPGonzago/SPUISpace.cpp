@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPUISpace.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c1f0[];
+
 #define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 #include "game/types.h"
 #include "SP/cArtilleryProjectile.h"
@@ -2290,6 +2293,8 @@ extern "C" void* __cdecl FUN_00b3d470();                        // GetTerraformi
 extern "C" void* __cdecl FUN_00b3d350();                       // SP::PlanetModel
 #define VF(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
 extern uint32_t DAT_0168a488, DAT_0168a48c, DAT_0168a490;
+struct Key12_bbca30 { int a, b, c; };   // a resource key (instance, type, group)
+
 class TObj {
 public:
     // ---- reused __thiscall callees (addresses in comments) -------------------
@@ -2320,7 +2325,8 @@ public:
     void  F_01034880();                                 // 0x1034880
 
     // ---- slice targets -------------------------------------------------------
-    int*  FUN_00bbca30(int* out, int index, int planet);   // 0xbbca30
+    int*  FUN_00bbca30(int* out, int index, int planet);   // 0xbbca30 (as the callers here spell it)
+    Key12_bbca30 FUN_00bbca30(int index, int planet);     // 0xbbca30 (the key is returned by value)
     void  FUN_00bbcb10(void* key, void* planet);           // 0xbbcb10
     char  FUN_00bbcb90(int param_1, int param_2);          // 0xbbcb90
     void  FUN_00bbcf00(void* planet, float f2, float f3, int param_4);  // 0xbbcf00
@@ -6189,7 +6195,7 @@ void __stdcall fn_bbc950(int* out, int a, int b, void* rec)
 }
 
 // @ 0x00bbca30
-int* TObj::FUN_00bbca30(int* out, int index, int planet)
+Key12_bbca30 TObj::FUN_00bbca30(int index, int planet)
 {
     if (planet == 0) {
         planet = *(int*)((char*)FUN_01021260() + 0x13c);        // ActivePlanet(); ->+0x13c
@@ -6205,17 +6211,11 @@ int* TObj::FUN_00bbca30(int* out, int index, int planet)
                 count++;
             }
             if (count == index) {
-                out[0] = *(int*)e;
-                out[1] = *((int*)e + 1);
-                out[2] = *((int*)e + 2);
-                return out;
+                return *(const Key12_bbca30*)e;
             }
         }
     }
-    out[0] = (int)DAT_0168a488;
-    out[1] = (int)DAT_0168a48c;
-    out[2] = (int)DAT_0168a490;
-    return out;
+    return *(const Key12_bbca30*)&DAT_0168a488;
 }
 
 // @ 0x00bbcb90
@@ -6655,7 +6655,7 @@ void SPUISpace::FUN_01066230(char param)
 // @ 0x01066310
 void __stdcall FUN_01066310(int* src)
 {
-    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)&g_alloc_13ebb38, 0xd1);
     int* d = (int*)p;
     if (d) { d[0]=src[0]; d[1]=src[1]; d[2]=src[2]; d[3]=src[3]; d[4]=src[4]; }
     d[5] = 0;
@@ -6743,7 +6743,7 @@ CmdCtor* CmdCtor::init(SPUISpace* space, uint windowID)
 {
     int zero = 0;
     CmdCtor* p = this;
-    p->mVtbl = (void*)0x149c1f0;
+    p->mVtbl = (void*)g_149c1f0;
     p->mpItem08 = 0;
     // Retain the native store order without qualifying the other fields.
     *(SPUISpace* volatile*)&p->mpSpace14 = space;
@@ -7806,13 +7806,8 @@ void FUN_010687a0()
     cGameTimeManager* tm = (cGameTimeManager*)SP_GameTimeManager();
     tm->DecPauseGate(0x4bf38a7);
     cSpaceGame* g = (cSpaceGame*)SP_SpaceGameGet();
-    if (g != 0) {
-        cSimThing* p = g->m14;
-        return p->FUN_01065d20();
-    } else {
-        cSimThing* p = 0;
-        return p->FUN_01065d20();
-    }
+    cSimThing* p = g ? g->m14 : 0;
+    p->FUN_01065d20();
 }
 
 // @ 0x010687d0
@@ -7823,6 +7818,95 @@ Blk28* Blk28::Destroy(u8 flags)
     if (flags & 1) SP_DeleteArray(this);
     return this;
 }
+
+struct ObjV_01068800 {   // the object whose two strings fill the windows
+    virtual void vf00();
+    virtual void vf04();
+    virtual void vf08();
+    virtual void vf0c();
+    virtual void vf10();
+    virtual void vf14();
+    virtual void vf18();
+    virtual void vf1c();
+    virtual void vf20();
+    virtual void vf24();
+    virtual void vf28();
+    virtual void vf2c();
+    virtual void vf30();
+    virtual void vf34();
+    virtual void vf38();
+    virtual void vf3c();
+    virtual void vf40();
+    virtual void vf44();
+    virtual void vf48();
+    virtual void vf4c();
+    virtual void vf50();
+    virtual void vf54();
+    virtual void vf58();
+    virtual void vf5c();
+    virtual void vf60();
+    virtual void vf64();
+    virtual void vf68();
+    virtual void vf6c();
+    virtual void vf70();
+    virtual void vf74();
+    virtual void vf78();
+    virtual void vf7c();
+    virtual void vf80();
+    virtual void vf84();
+    virtual void vf88();
+    virtual void vf8c();
+    virtual void vf90();
+    virtual void vf94();
+    virtual void vf98();
+    virtual void vf9c();
+    virtual void vfa0();
+    virtual void vfa4();
+    virtual void vfa8();
+    virtual void vfac();
+    virtual void vfb0();
+    virtual void vfb4();
+    virtual void FillLate(EaString16* out);     // +0xb8
+    virtual void vfbc();
+    virtual void vfc0();
+    virtual void vfc4();
+    virtual void FillEarly(EaString16* out);    // +0xc8
+};
+struct WinV_01068800 {   // UTFWin window, only the caption setter is used here
+    virtual void vf00();
+    virtual void vf04();
+    virtual void vf08();
+    virtual void vf0c();
+    virtual void vf10();
+    virtual void vf14();
+    virtual void vf18();
+    virtual void vf1c();
+    virtual void vf20();
+    virtual void vf24();
+    virtual void vf28();
+    virtual void vf2c();
+    virtual void vf30();
+    virtual void vf34();
+    virtual void vf38();
+    virtual void vf3c();
+    virtual void vf40();
+    virtual void vf44();
+    virtual void vf48();
+    virtual void vf4c();
+    virtual void vf50();
+    virtual void vf54();
+    virtual void vf58();
+    virtual void vf5c();
+    virtual void vf60();
+    virtual void vf64();
+    virtual void vf68();
+    virtual void vf6c();
+    virtual void vf70();
+    virtual void vf74();
+    virtual void vf78();
+    virtual void vf7c();
+    virtual void SetCaption(const void* text);  // +0x80
+};
 
 // @ 0x01068800
 void __stdcall FUN_01068800(void* layout, u32 index, void* obj, u32 unused)
@@ -7835,21 +7919,19 @@ void __stdcall FUN_01068800(void* layout, u32 index, void* obj, u32 unused)
 
     EaString16 sEarly;
     EaString16 sLate;
-    sLate.mpBegin = 0x1667bac;
-    sLate.mpEnd = 0x1667bac;
-    FnP fnB8 = (FnP)(*(void***)obj)[0xb8 / 4];
-    sLate.mpCap = 0x1667bae;
-    fnB8(obj, &sLate);
-    ((FnP)(*(void***)w2)[0x80 / 4])(w2, (void*)sLate.mpBegin);
+    sLate.mpBegin = (u32)&DAT_01667bac;
+    sLate.mpEnd = (u32)&DAT_01667bac;
+    sLate.mpCap = (u32)&DAT_01667bac + 2;
+    ((ObjV_01068800*)obj)->FillLate(&sLate);
+    ((WinV_01068800*)w2)->SetCaption((void*)sLate.mpBegin);
 
     void* w3 = ((FnFind)(*(void***)layout)[0xf0 / 4])(layout, index + 0x1c22452, 1);
     if (w3 != 0) {
-        sEarly.mpBegin = 0x1667bac;
-        sEarly.mpEnd = 0x1667bac;
-        FnP fnC8 = (FnP)(*(void***)obj)[0xc8 / 4];
-        sEarly.mpCap = 0x1667bae;
-        fnC8(obj, &sEarly);
-        ((FnP)(*(void***)w3)[0x80 / 4])(w3, (void*)sEarly.mpBegin);
+        sEarly.mpBegin = (u32)&DAT_01667bac;
+        sEarly.mpEnd = (u32)&DAT_01667bac;
+        sEarly.mpCap = (u32)&DAT_01667bac + 2;
+        ((ObjV_01068800*)obj)->FillEarly(&sEarly);
+        ((WinV_01068800*)w3)->SetCaption((void*)sEarly.mpBegin);
         if ((s32)((sEarly.mpCap - sEarly.mpBegin) & 0xfffffffeu) > 2 && sEarly.mpBegin != 0)
             op_del_array((void*)sEarly.mpBegin);
     }
@@ -9108,7 +9190,7 @@ void __stdcall FUN_0106b950(Node* head, NodeIterator begin, NodeIterator end, in
     (void)unused;
     for (; begin != end; ++begin) {
         void*& value = *begin;
-        Node* n = (Node*)FUN_00f473a0(0xc, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
+        Node* n = (Node*)FUN_00f473a0(0xc, "Simulator", 0, 0, (void*)&g_alloc_13ebb38, 0xd1);
         if (&n->mData != 0)
             n->mData = value;
         n->mNext = head;
@@ -10509,11 +10591,10 @@ void SP::cSPUISpace_s0107_1a00::InitFoodwebInfo()
         slot.mKind = 1;
         VT1(void, slot.mpWindow, 0x104, this);
     }
-    // Rows 15..17 hold the three crop slots; the retail build counts them down.
-    int row = 1;
-    for (int remaining = 3; remaining != 0; --remaining) {
-        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[14 + row];
-        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(row + 0x37e89de));
+    // Rows 15..17 hold the three crop slots.
+    for (int i = 0; i < 3; i++) {
+        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[15 + i];
+        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x37e89df));
         UIWindow* old = slot.mpWindow;
         if (w != old) {
             if (w != 0)
@@ -10523,9 +10604,8 @@ void SP::cSPUISpace_s0107_1a00::InitFoodwebInfo()
                 old->v01();
         }
         slot.mKind = 2;
-        slot.mIndex = row;
+        slot.mIndex = i + 1;
         VT1(void, slot.mpWindow, 0x104, this);
-        ++row;
     }
     for (int i = 0; i < 3; i++) {
         UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x535cbd8));

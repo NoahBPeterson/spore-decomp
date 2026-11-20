@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/HitMaskFactory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_13effa8[];
+extern "C" char g_1446894[];
+
 #include "game/types.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
 #include "EA/UTFWinExtras/WinXHTML.h"
@@ -27,7 +33,8 @@ extern "C" void  FUN_0087d070(void);                                    // 0x87d
 extern "C" void  FUN_00957300(void* a, int b, void* c);                 // 0x957300
 extern "C" void  FUN_00957230(void* a, int b, void* c);                 // 0x957230
 extern "C" unsigned g_frameMapTypes[];                                 // 0x1446868
-#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
+extern "C" long _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 
 // ---- items of slice s00996f10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
@@ -255,7 +262,7 @@ int Obj33::Release()
 {
     char* p = (char*)this + 0x28;
     volatile long* rc = (volatile long*)(p + 4);
-    int n = _InterlockedExchangeAdd(rc, -1) - 1;
+    int n = _InterlockedDecrement(rc);
     if (n == 0) {
         _InterlockedExchange(rc, 1);
         if (p != 0)
@@ -314,9 +321,9 @@ bool ReadResource(char* self, char* p2, void* p3)
 void* Obj33::ctor2()
 {
     unsigned char* p = (unsigned char*)this;
-    *(void**)p = (void*)0x13effa8;
+    *(void**)p = (void*)g_13effa8;
     _InterlockedExchange((volatile long*)(p + 4), 0);
-    *(void**)p = (void*)0x1446894;
+    *(void**)p = (void*)g_1446894;
     return this;
 }
 
@@ -345,13 +352,13 @@ void* Obj34::ctor()
 // @ 0x00998000
 void* Obj34::ScalarDtor(unsigned flags)
 {
-    mpResourceVtbl28 = (void*)0x13eb938;
+    mpResourceVtbl28 = (void*)g_13eb938;
     _ReadWriteBarrier();
     unsigned short* runs = mpRunData14;
     if (runs != 0 && ((const int*)runs)[-1] != 0)
         FUN_00f47380(runs);
-    mpRefCountVtbl04 = (void*)0x13ef094;
-    mpPrimaryVtbl00 = (void*)0x13eb938;
+    mpRefCountVtbl04 = (void*)g_13ef094;
+    mpPrimaryVtbl00 = (void*)g_13eb938;
     if (flags & 1)
         FUN_00f47380(this);
     return this;

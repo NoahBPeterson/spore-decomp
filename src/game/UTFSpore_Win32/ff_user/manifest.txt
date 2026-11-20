@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/ff_user.cpp  ?ff_malloc@@YAPAXI@Z  008a7760  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ff_user.cpp  ?ff_free@@YAXPAX@Z  008a7770  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ff_user.cpp  ?ff_realloc@@YAPAXPAXI@Z  008a7780  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

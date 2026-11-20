@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00c70000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1473324[];
+extern "C" char g_1473354[];
+
 #include "game/types.h"
 #include "SP/cCivData.h"
 #include "SP/cCombatant.h"
@@ -794,7 +798,7 @@ bool cTargetList::UpdateTarget(void* target)
 cTargetList::~cTargetList()
 {
     void* old = m49c;
-    *(void**)this = (void*)0x1473324;
+    *(void**)this = (void*)g_1473324;
     if (old)
         FreeMem(old);
     m49c = 0;
@@ -1063,7 +1067,7 @@ void CS::FUN_00c7e280(void* a)
     void* ms = MessageServer_0067dcc0();
     h.mp38 = ms;
     h.mp3C = hTarget;
-    h.mp40 = (void*)0x1473354;
+    h.mp40 = (void*)g_1473354;
     h.mp44 = (void*)1;
     h.mp48 = 0;
     if (ms != 0 && hTarget != 0) {

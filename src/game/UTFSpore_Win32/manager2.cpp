@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/manager2.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1440688[];
+
 #include "game/types.h"
 #include "EA/UTFWin/WindowMgr.h"
 #include "EA/Thread/Mutex.h"
@@ -500,7 +503,7 @@ struct MutexOps {
     void __thiscall Lock(const void* name);                        // 0x9221b0
     void __thiscall Unlock();                                      // 0x922270
 };
-#define LMUTEX() ((MutexOps*)&mxC)->Lock((const void*)0x1440688)
+#define LMUTEX() ((MutexOps*)&mxC)->Lock((const void*)g_1440688)
 #define UMUTEX() ((MutexOps*)&mxC)->Unlock()
 struct RawMsgList { Node anchor; IAlloc* alloc; u32 allocFlags; };
 static inline Iter MkIter(Node* n) { Iter i; i.n = n; return i; }
@@ -826,18 +829,17 @@ void W::x0b0(void* target)
     }
 }
 
+struct W_ListNode { W_ListNode* mpNext; W_ListNode* mpPrev; };
 // @ 0x009580e0
 void W::x0e0(char* node)
 {
     if (I32(node, 0x24) == 0 && I8(this, 0x25) == 0) {
-        int edx = I32(this, 0x1c);
-        char* base = B(this) + 0x18;
-        node += 0x20;
-        *(int*)(node + 4) = edx;
-        *(char**)node = base;
-        *(char**)(base + 4) = node;
-        char* c = *(char**)(node + 4);
-        *(char**)c = node;
+        W_ListNode* n = (W_ListNode*)(node + 0x20);
+        W_ListNode* anchor = (W_ListNode*)(B(this) + 0x18);
+        n->mpPrev = anchor->mpPrev;
+        n->mpNext = anchor;
+        anchor->mpPrev = n;
+        n->mpPrev->mpNext = n;
     }
 }
 
@@ -1027,11 +1029,11 @@ void W::Plot(int param)
 {
     char local[0x3c34];
     ((Ext*)(local + 0xc))->bb80(local + 0xc);
-    ((Ext*)(B(this) + 0x28))->Lock((const void*)0x1440688);
+    ((Ext*)(B(this) + 0x28))->Lock((const void*)g_1440688);
     ProcessPendingTextures();
     DumpDisplayList(this);
     Mutex_Unlock(B(this) + 0x28);
-    ((Ext*)(B(this) + 0x70))->Lock((const void*)0x1440688);
+    ((Ext*)(B(this) + 0x70))->Lock((const void*)g_1440688);
     ((Ext*)(local + 0x10))->bd60(B(this) + 0xa0, (void*)param);
     Mutex_Unlock(B(this) + 0x70);
     ((Ext*)(local + 0x84))->r2db_dtor();
@@ -1041,13 +1043,13 @@ void W::Plot(int param)
 // @ 0x00958780
 void __fastcall DebugDumpDisplayList(void* self)
 {
-    ((Ext*)(B(self) + 0x28))->Lock((const void*)0x1440688);
+    ((Ext*)(B(self) + 0x28))->Lock((const void*)g_1440688);
     char pending = I8(self, 0x58);
     if (pending == 0) {
         Mutex_Unlock(B(self) + 0x28);
         return;
     }
-    ((Ext*)(B(self) + 0x70))->Lock((const void*)0x1440688);
+    ((Ext*)(B(self) + 0x70))->Lock((const void*)g_1440688);
     DumpDisplayList(self);
     Mutex_Unlock(B(self) + 0x70);
     Mutex_Unlock(B(self) + 0x28);
@@ -1805,7 +1807,7 @@ void W_s0095_9780::DetachWindow(void* win)
         pSVar += 0x28;
     } while (iVar13 < 10);
 
-    TH(B(this) + 0x658)->Lock_((const void*)0x1440688);
+    TH(B(this) + 0x658)->Lock_((const void*)g_1440688);
     void* head = PTR(this, 0xd4);
     void* anchor1 = B(this) + 0xd4;
     while (head != anchor1) {
@@ -2043,9 +2045,10 @@ void W_s0095_9780::RenderWindow(int win, void* ctx)
     void* sub = B(ctx) + 0x58;
     ((int(__thiscall*)(void*, int, int))*(void**)((char*)*(void**)sub + 0x10))(sub, 0, 0);
     int ev[7];
+    IWin& iw = *(Win*)win;
     ev[2] = 0xd;
     ev[6] = (int)ctx;
-    GV(0, win + 4, ev, 0, 0);
+    GV(0, (int)&iw, ev, 0, 0);
     TH(ctx)->End2D();
 }
 
@@ -2183,7 +2186,7 @@ bool __thiscall WindowMgr::SendMsg(IWin* src, IWin* win, Msg* m, bool a4)
 void __thiscall WindowMgr::PostMsg(IWin* src, IWin* dst, const Msg* m)
 {
     MutexOps* mx = (MutexOps*)&mxC;
-    mx->Lock((const void*)0x1440688);
+    mx->Lock((const void*)g_1440688);
     if (q4.anchor.next == &q4.anchor) {
         MsgNode_s0095_8a70* n = (MsgNode_s0095_8a70*)q0.alloc->Alloc(0x24, 0, q0.allocFlags);
         Msg* pm = &n->msg;
@@ -2535,7 +2538,7 @@ void __thiscall WM::UpdateVisuals()
         b27 = true;
     }
     L2.prev = &L2; L2.next = &L2;
-    ((MutexOps*)&mxA)->Lock((const void*)0x1440688);
+    ((MutexOps*)&mxA)->Lock((const void*)g_1440688);
     if (lC.n.prev != &lC.n) {
         do {
             u8* nb = (u8*)lC.n.prev;

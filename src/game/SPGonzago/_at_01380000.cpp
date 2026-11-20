@@ -2,6 +2,11 @@
 // Object file: SPGonzago/_at_01380000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148ad9c[];
+extern "C" char g_16c8b40[];
+extern "C" char g_16c8b48[];
+
 #include "game/types.h"
 #include "EA/LimitStopwatch.h"
 #include "EA/Stopwatch.h"
@@ -605,7 +610,7 @@ void InitMyCaptainLevels()
     g_myCaptainLevels.mNameHash = EA::Hash::FNV1_String8("MyCaptainLevels", 0x811c9dc5, 1);
     g_myCaptainLevels.mpNext = g_myCaptainLevelsHead;
     g_myCaptainLevelsHead = &g_myCaptainLevels;
-    g_myCaptainLevels.mpVtable = (void*)0x148ad9c;
+    g_myCaptainLevels.mpVtable = (void*)g_148ad9c;
     g_myCaptainLevels.mField0c = 0;
     g_myCaptainLevels.mField10 = 0;
     atexit(FUN_013c8c90);
@@ -1437,13 +1442,13 @@ void init_15afd38()
 // @ 0x0138e640
 void init_16c8b40()
 {
-    if (*(int*)0x16c8b40 == 0) {
+    if (*(int*)g_16c8b40 == 0) {
         char ok = InitSharedAllocator();
-        *(char*)0x16c8b48 = 1;
+        *(char*)g_16c8b48 = 1;
         if (!ok)
-            *(char*)0x16c8b48 = 0;
+            *(char*)g_16c8b48 = 0;
     } else {
-        *(char*)0x16c8b48 = 0;
+        *(char*)g_16c8b48 = 0;
     }
     atexit(&FUN_013c9950);
 }

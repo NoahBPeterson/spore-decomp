@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/eatrace_imp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e050[];
+extern "C" char g_154df28[];
+
 #include "game/types.h"
 #include "EAMutexData.h"
 #include "EA/Trace/ILogFilter.h"
@@ -166,8 +170,21 @@ ILogManager* GetLogManager();                 // 0x00697fa0
 namespace EA {
 namespace Trace {
 struct TraceLogManagerRef {
-    int f0, f4, f8, fc;
-    ILogManager* mpLogManager;                // +0x10
+    struct Pair_s00925540 { int f0, f4; Pair_s00925540() { f4 = 0; f0 = 0; } } mPair;
+    int f8, fc;
+    struct LogManagerPtr_s00925540 {
+        ILogManager* mp;
+        LogManagerPtr_s00925540() : mp(0) {}
+        LogManagerPtr_s00925540& operator=(ILogManager* p) {
+            if (p != mp) {
+                ILogManager* const old = mp;
+                if (p) p->AddRef();
+                mp = p;
+                if (old) old->Release();
+            }
+            return *this;
+        }
+    } mpLogManager;                           // +0x10
     TraceLogManagerRef();
 };
 }
@@ -442,8 +459,8 @@ int __stdcall MessageBoxThreadStart(unsigned* p)
 namespace EA { namespace Trace {
 int TraceHelperTable::Release()
 {
-    int n = _InterlockedExchangeAdd((volatile long*)&mnRefCount, -1);
-    if (--n == 0) {
+    int n = _InterlockedDecrement((volatile long*)&mnRefCount);
+    if (n == 0) {
         _InterlockedExchange((volatile long*)&mnRefCount, 1);
         if (this) delete this;
         return 0;
@@ -596,15 +613,8 @@ TraceHelper_s0092_45b0* TraceHelperTable::ReserveHelper(unsigned type, const cha
 namespace EA { namespace Trace {
 TraceLogManagerRef::TraceLogManagerRef()
 {
-    f4 = 0; f0 = 0; mpLogManager = 0;
-    ILogManager* m = GetLogManager();
-    ILogManager* old = mpLogManager;
-    if (m != old) {
-        if (m) m->AddRef();
-        mpLogManager = m;
-        if (old) old->Release();
-    }
-    g_01668e9c->field->UpdateTracerRaw(mpLogManager);
+    mpLogManager = GetLogManager();
+    g_01668e9c->field->UpdateTracerRaw(mpLogManager.mp);
 }
 }}  // namespace EA::Trace
 
@@ -715,7 +725,7 @@ TraceHelperTable_s0092_5770* CreateHelperTable()
 {
     TraceHelperTable_s0092_5770* t = (TraceHelperTable_s0092_5770*)eastl_new(0x58, "EATrace/TraceHelperTable", 0, 0, 0, 0);
     if (t) {
-        *(void**)t = (void*)0x143e050;
+        *(void**)t = (void*)g_143e050;
         t->mTracer = 0;
         t->mVec.Zero();
         t->mMutex.Init(0, true);
@@ -731,7 +741,7 @@ TraceHelperTable_s0092_5770* CreateHelperTable()
 namespace EA { namespace Trace {
 void TraceHelperTable_s0092_5770::UnregisterHelper(TraceHelper_s0092_5770* h)
 {
-    mMutex.Lock((const void*)0x143dffc);
+    mMutex.Lock((const void*)&g_timeout_143dffc);
     h->mTracer = 0;
     h->mIsFiltered = true;
     h->mIsFilterEvaluated = false;
@@ -750,7 +760,7 @@ TempTraceHelperMap_s0092_5770* TempTraceHelperMap_s0092_5770::Init()
     ht.mGrowth = g_01470f1c;
     ht.mNextResize = 0;
     ht.mBucketCount = 1;
-    ht.mpBuckets = (void*)0x154df28;
+    ht.mpBuckets = (void*)g_154df28;
     ht.mElementCount = 0;
     ht.mNextResize = 0;
     ht.mbEnable = 1;
@@ -806,7 +816,7 @@ HelperTablePtr* HelperTablePtr::Init()
 namespace EA { namespace Trace {
 void TraceHelperTable_s0092_5770::RegisterHelper(TraceHelper_s0092_5770* h)
 {
-    mMutex.Lock((const void*)0x143dffc);
+    mMutex.Lock((const void*)&g_timeout_143dffc);
     h->mTracer = mTracer;
     h->mIsFiltered = true;
     h->mIsFilterEvaluated = false;

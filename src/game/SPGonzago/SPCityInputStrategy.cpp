@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPCityInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147875c[];
+extern "C" char g_1478774[];
+extern "C" char g_1478788[];
+
 #include "game/types.h"
 #include <math.h>
 #include <intrin.h>
@@ -1381,6 +1386,7 @@ void cCityInputStrategy::FUN_00cf1810(void* param_1, u8 param_2)
         mFieldc4 = 0;
         mFieldc8 = 0;
         mFieldcc = 0;
+        _ReadWriteBarrier();
         if (mpFieldd8)
         {
             void* p = mpFieldd8;
@@ -2581,16 +2587,16 @@ void CityInputStrategy::Reset(u32 mode)
 
     ArgCmd local;
     local.Ctor(&mTreeBase04);
-    local.SetName((const char*)0x1478788);
+    local.SetName((const char*)g_1478788);
     switch (mode) {
     case 0:
-        local.SetName((const char*)0x147875c);
+        local.SetName((const char*)g_147875c);
         break;
     case 1:
-        local.SetName((const char*)0x1478774);
+        local.SetName((const char*)g_1478774);
         break;
     default:
-        local.SetName((const char*)0x147875c);
+        local.SetName((const char*)g_147875c);
         break;
     }
     local.Finish();

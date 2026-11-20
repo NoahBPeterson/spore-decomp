@@ -845,9 +845,8 @@ uint8 TokenReader::MatchString()
         matchText.mpEnd = matchText.mpBegin;
     }
     if (FUN_008d5180(this, '"')) {
-        mTokenValue = (int)FNV1Hash(matchText.mpBegin,
-                                    (int)(matchText.mpEnd - matchText.mpBegin),
-                                    0x811c9dc5);
+        int n = (int)(matchText.mpEnd - matchText.mpBegin);
+        mTokenValue = (int)FNV1Hash(*(char* volatile*)&matchText.mpBegin, n, 0x811c9dc5);
         Advance();
         return 1;
     }

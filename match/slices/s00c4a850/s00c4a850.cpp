@@ -1,5 +1,12 @@
 // SporeApp.exe slice s00c4a850 -- SP mission init / asset picking + Simulator mission events (gold6, worker 36)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146d624[];
+extern "C" char g_146d638[];
+extern "C" char g_146d840[];
+extern "C" char g_146dfb4[];
+extern "C" char g_146fbf0[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -523,9 +530,9 @@ Simulator::cMissionAdventure::cMissionAdventure()
     Simulator_cGenericPressureEvent_ctor(this);
     mField1f0 = 0;
     mpData1f4 = 0;
-    mpVtbl = (void**)0x146d638;
-    mpVtbl04 = (void**)0x146dfb4;
-    mpVtbl34 = (void**)0x146d624;
+    mpVtbl = (void**)g_146d638;
+    mpVtbl04 = (void**)g_146dfb4;
+    mpVtbl34 = (void**)g_146d624;
 }
 
 struct cAdventurePlanet {
@@ -639,9 +646,9 @@ Simulator::cMissionBalance::cMissionBalance()
     Simulator_cGenericPressureEvent_ctor(this);
     mField1f0 = 0;
     mThreshold = 0;
-    mpVtbl = (void**)0x146d840;
-    mpVtbl04 = (void**)0x146dfb4;
-    mpVtbl34 = (void**)0x146fbf0;
+    mpVtbl = (void**)g_146d840;
+    mpVtbl04 = (void**)g_146dfb4;
+    mpVtbl34 = (void**)g_146fbf0;
 }
 
 // @ 0x00c4b6c0

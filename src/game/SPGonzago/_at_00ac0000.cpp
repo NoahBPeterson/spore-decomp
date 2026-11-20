@@ -2,6 +2,16 @@
 // Object file: SPGonzago/_at_00ac0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1459c6c[];
+extern "C" char g_1459c90[];
+extern "C" char g_1459c98[];
+extern "C" char g_145a158[];
+extern "C" char g_145a164[];
+extern "C" char g_145a184[];
+extern "C" char g_1566000[];
+extern "C" char g_15661a8[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include "SP/cInteraction.h"
@@ -377,9 +387,9 @@ extern "C" void* __cdecl operator_new(u32, const char*, int, int, int, int); // 
 #define VTBL_01459c04  ((void*)0x1459c04)
 #define VTBL_01459c20  ((void*)0x1459c20)
 #define VTBL_01459c30  ((void*)0x1459c30)
-#define VTBL_01459c6c  ((void*)0x1459c6c)
-#define VTBL_01459c90  ((void*)0x1459c90)
-#define VTBL_01459c98  ((void*)0x1459c98)
+#define VTBL_01459c6c  ((void*)g_1459c6c)
+#define VTBL_01459c90  ((void*)g_1459c90)
+#define VTBL_01459c98  ((void*)g_1459c98)
 #define VBASE_01459be5 ((void*)0x1459be5)   // "Interaction History:\n"
 #define VBASE_01459bd0 ((void*)0x1459bd0)
 #define G_013eb960  (*(float*)0x13eb960)    // +0.01
@@ -1399,15 +1409,15 @@ int FUN_00ac8fa0(int* p, int a, int b)
     if (p) {
         char ok = (*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, a, (void**)&p);
         if (ok) {
-            short t = *(short*)((char*)p + 0x12);
-            if (t != 10 && t != 0x10) {
-                return DAT_0164dc58;
-            }
-            if (*(byte*)((char*)p + 0x10) & 0x30) {
-                return *(int*)*(int*)p;
-            }
-            int m = (t != 0 ? -1 : 0);
-            return *(int*)(m & (int)p);
+            unsigned short t = *(unsigned short*)((char*)p + 0x12);
+            int* r;
+            if (t != 10 && t != 0x10)
+                r = (int*)&DAT_0164dc58;
+            else if (*(byte*)((char*)p + 0x10) & 0x30)
+                r = *(int**)p;
+            else
+                r = t ? (int*)p : 0;
+            return *r;
         }
     }
     return b;
@@ -1439,7 +1449,7 @@ bool FUN_00ac9110(void* a, int* arr)
     int end = arr[1];
     for (int it = arr[0]; it != end; it += 0x20) {
         if (it != -4) {
-            ((CSC*)a)->FUN_00695b40((void*)(it + 4), (void*)0x1566000, L"cCastInfo");
+            ((CSC*)a)->FUN_00695b40((void*)(it + 4), (void*)g_1566000, L"cCastInfo");
         }
     }
     return 1;
@@ -1564,7 +1574,7 @@ char* FUN_00ac95a0(char* s, char* end, char* d)
 {
     while (s != end) {
         if (d) {
-            *(void**)d = (void*)0x145a158;
+            *(void**)d = (void*)g_145a158;
             d[4] = s[4];
             RCObj* p = *(RCObj**)(s + 8);
             *(RCObj**)(d + 8) = p;
@@ -1867,7 +1877,7 @@ bool FUN_00ac9ef0(void* a, int* p)
     int end = root[*(int*)((char*)p + 8)];
     while (node != end) {
         if (node + 4 != 0) {
-            ((CSC*)a)->FUN_00695b40((void*)(node + 4), (void*)0x15661a8, L"tAnimalStage");
+            ((CSC*)a)->FUN_00695b40((void*)(node + 4), (void*)g_15661a8, L"tAnimalStage");
         }
         node = *(int*)(node + 0x68);
         while (!node) {
@@ -2326,7 +2336,7 @@ char FUN_00acaf80(void* pSave, const char* pFileName, const void* pValue, const 
 void* FourVecDtorStub::FUN_00acb150(uchar flags)
 {
     void* self = this;
-    *(void**)self = (void*)0x145a184;
+    *(void**)self = (void*)g_145a184;
     FUN_00ae6970((uchar*)self + 0x50);
     FUN_00ae6970((uchar*)self + 0x3c);
     FUN_00ae6970((uchar*)self + 0x28);
@@ -2388,7 +2398,7 @@ void* VO::FUN_00acbaf0(int* src)
 {
     uchar* d = (uchar*)this;
     *(int*)d = *src;
-    *(void**)(d + 4) = (void*)0x145a164;
+    *(void**)(d + 4) = (void*)g_145a164;
     *(d + 8) = *(uchar*)((uchar*)src + 8);
     *(d + 9) = *(uchar*)((uchar*)src + 9);
     ((XC*)(d + 0xc))->FUN_00aca9d0((uchar*)src + 0xc);

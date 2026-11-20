@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00b80000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1465850[];
+extern "C" char g_1465858[];
+
 #include "game/types.h"
 #include "SP/cVarListSerializer.h"
 #include "SP/cSPSpaceInventoryItem.h"
@@ -1169,21 +1173,24 @@ void cPlanetModel_s00b8_d190::FUN_00b8de60()
     }
 }
 
+struct IntVec_b8dec0 {
+    int32_t* mpBegin;
+    int32_t* mpEnd;
+    int32_t size() const { return (int32_t)(mpEnd - mpBegin); }
+};
 // @ 0x00b8dec0
 int32_t cPlanetModel_s00b8_d190::FUN_00b8dec0(int32_t index)
 {
-    if (index < (int32_t)(mField160 - mField15C) >> 2) {
-        return *(int32_t*)(mField15C + index * 4);
-    }
+    if (index < ((const IntVec_b8dec0*)&mField15C)->size())
+        return ((const IntVec_b8dec0*)&mField15C)->mpBegin[index];
     return 0;
 }
 
 // @ 0x00b8def0
 int32_t cPlanetModel_s00b8_d190::FUN_00b8def0(int32_t index)
 {
-    if (index < (int32_t)(mField174 - mField170) >> 2) {
-        return *(int32_t*)(mField170 + index * 4);
-    }
+    if (index < ((const IntVec_b8dec0*)&mField170)->size())
+        return ((const IntVec_b8dec0*)&mField170)->mpBegin[index];
     return 0;
 }
 
@@ -1930,8 +1937,8 @@ void* S::FUN_00b8ff90()
 {
   char* self = (char*)this;
   ((void (__thiscall*)(void*))FUN_00b5b960)(self);       // SP::cGonzagoSubsystem ctor
-  *(void**)(self + 0x00) = (void*)0x01465858;
-  *(void**)(self + 0x04) = (void*)0x01465850;
+  *(void**)(self + 0x00) = (void*)g_1465858;
+  *(void**)(self + 0x04) = (void*)g_1465850;
   _ReadWriteBarrier();
   char* eax = self + 0x20;
   *(int*)(eax + 4) = 0;
@@ -1951,8 +1958,8 @@ void* S::FUN_00b8ffd0(char del)
 {
   char* self = (char*)this;
   char* ecx = self + 0x1c;
-  *(void**)(self + 0x00) = (void*)0x01465858;
-  *(void**)(self + 0x04) = (void*)0x01465850;
+  *(void**)(self + 0x00) = (void*)g_1465858;
+  *(void**)(self + 0x04) = (void*)g_1465850;
   char* p = *(char**)(ecx + 0xc);
   ((void (__thiscall*)(char*, char*))FUN_00b8fd90)(ecx, p);
   ((void (__thiscall*)(void*))FUN_00b5b9a0)(self);       // SP::cGonzagoSubsystem dtor

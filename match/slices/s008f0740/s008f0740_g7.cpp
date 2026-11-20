@@ -16,6 +16,10 @@
 //
 // The struct offsets are the retail ones (checked against the disassembly); the base class carries
 // an opaque byte array so the derived field offsets stay right.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1437ed8[];
+
 #include "types.h"
 #include <stddef.h>
 #include <intrin.h>
@@ -199,7 +203,7 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
 	*(u32*)(self + 0xc4) = 0;          // mColCount
 	*(u32*)(self + 0xc8) = 0;          // mRowIndex
 	*(u32*)(self + 0xcc) = 0;          // mColIndex
-	*(u32*)(self + 0x00) = 0x1437ed8;  // table vtable
+	*(u32*)(self + 0x00) = (int)g_1437ed8;  // table vtable
 
 	*(float*)(self + 0xd0) = 0.0f;     // mRowSpacing
 	*(float*)(self + 0xd4) = 0.0f;     // mColSpacing
@@ -216,13 +220,16 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
 	return self;
 }
 
+extern void* g_01437ed8[];   // 0x01437ed8 Table_Layout_XHTML_EA vftable
+extern void* g_01437c00[];   // 0x01437c00 Block base vftable
+
 // @ 0x008f11b0  Table_Layout_XHTML_EA deleting destructor
 void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_dtor(unsigned char flags)
 {
 	char* self = (char*)this;
-	*(u32*)(self + 0x00) = 0x1437ed8;  // table vtable
+	*(volatile u32*)(self + 0x00) = (u32)g_01437ed8;  // table vtable
 
-	void* rows = *(void**)(self + 0xec);
+	void* rows = *(void* volatile*)(self + 0xec);
 	if (rows != 0 && *(int*)((char*)rows - 4) != 0)
 		operator_delete(rows);
 
@@ -231,7 +238,7 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_dtor(unsigned char flags)
 		operator_delete(cols);
 
 	((IntrusiveList*)(self + 0x18))->~IntrusiveList();
-	*(u32*)(self + 0x00) = 0x1437c00;  // Block base vtable
+	*(u32*)(self + 0x00) = (u32)g_01437c00;  // Block base vtable
 
 	if (flags & 1)
 		operator_delete(self);

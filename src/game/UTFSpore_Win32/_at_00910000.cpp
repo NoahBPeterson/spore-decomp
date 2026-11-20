@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/_at_00910000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f68c4[];
+extern "C" char g_143cf5c[];
+
 #include "game/types.h"
 #include <stddef.h>
 #include <string.h>
@@ -597,7 +601,7 @@ SymbolEngine::SymbolEngine()
 // @ 0x0091d7d0
 void* SymbolEngine::ScalarDeletingDtor(u8 flags)
 {
-    *(void**)this = (void*)0x0143cf5c;
+    *(void**)this = (void*)g_143cf5c;
     if (mHandle != 0) {
         SymCleanup(mHandle);
         CloseHandle(mHandle);
@@ -605,7 +609,7 @@ void* SymbolEngine::ScalarDeletingDtor(u8 flags)
         mLo = 0;
         mHi = 0;
     }
-    *(void**)this = (void*)0x013f68c4;
+    *(void**)this = (void*)g_13f68c4;
     if (flags & 1)
         FreeRawBlock(this);
     return this;

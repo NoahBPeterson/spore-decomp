@@ -241,7 +241,7 @@ int CommandServer4::ExecuteCommand(uint32 a, uint32 b)
 // ===========================================================================
 struct RBTreeStub {
     char treeData[0x14];
-    void find(void** out, const uint32& key);   // decl only (masked reloc)
+    void find(void** out, const uint32& key);   // 0x00e5c780 (eastl::rbtree<unsigned,...>::find; decl only)
 };
 
 struct ParamSet {
@@ -689,7 +689,6 @@ struct CMessageCommandDispatcher : IDispBase, GmeRC {
     ArcRef           mpIn;       // +0x38
     ArcRef           mpOut;      // +0x3c
     ArcRef           mpGen;      // +0x40
-    CMessageCommandDispatcher();
     ~CMessageCommandDispatcher();
     int ExecuteCommand(unsigned id, ParamSetObj* in, ParamSetObj* out);
 };
@@ -770,13 +769,7 @@ int CMessageCommandDispatcher::ExecuteCommand(unsigned id, ParamSetObj* in, Para
     return result;
 }
 
-// ===========================================================================
-// (see marker at definition) App::cMessageCommandDispatcher constructor
-// ===========================================================================
-// @ 0x00689D40
-CMessageCommandDispatcher::CMessageCommandDispatcher()
-{
-}
+// App::cMessageCommandDispatcher constructor is defined in command_dispatcher.cpp.
 // --- equivalence checker address annotations
     void SP_MessageServer(...); // 0x0067dcc0
 

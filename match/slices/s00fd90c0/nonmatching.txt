@@ -7,14 +7,12 @@
 00fd9610   85  VideoRenderer part reset: complete and equivalence PASSes
                (257 valid, 100% coverage); the loop folds the combined
                (uStack_10/_c/_8/_4) stores differently. flags /O2 /MD /Gy /TP /arch:SSE
-00fd9750    8  VideoRenderer set-source: complete and equivalence PASSes [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#5 target]
                (227 valid, 100% coverage); the MaterialManager vtable slot
                (0x28) is loaded one instruction earlier than the original.
                flags /O2 /MD /Gy /TP /arch:SSE
 00fd97c0  size  Render: complete and equivalence WEAK (251 valid, no mismatch,
           13% 13.2% coverage). Compiled 702 B vs the original's 943 B - the
                branch-specific store blocks were CSE'd together. flags /O2 /MD /Gy /TP /arch:SSE
-00fd9d00   26  InputManager mode test: complete and equivalence PASSes
                (399 valid, 100% coverage); cl factors the second comparison
                into `sete` instead of the original's shared `mov eax,1` tail.
                flags /O2 /MD /Gy /TP /arch:SSE
