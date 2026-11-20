@@ -852,10 +852,11 @@ void hkAabbPhantom::removeOverlappingCollidable(void* c)
 void hkAabbPhantom::addOverlappingCollidable(void* c)
 {
     if (fireCollidableAdded(c) == 0) {      // hkCollidableAccept: 0 = accept
-        if (m_overlappingCollidables.m_size == (m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff))
-            hkArrayUtil_reserveMore(&m_overlappingCollidables, 4);
-        m_overlappingCollidables.m_data[m_overlappingCollidables.m_size] = c;
-        m_overlappingCollidables.m_size++;
+        hkArray<void*>& a = m_overlappingCollidables;
+        if (a.m_size == (a.m_capacityAndFlags & 0x3fffffff))
+            hkArrayUtil_reserveMore(&a, 4);
+        a.m_data[a.m_size] = c;
+        a.m_size++;
     }
 }
 
