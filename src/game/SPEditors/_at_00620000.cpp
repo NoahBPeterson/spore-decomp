@@ -825,16 +825,13 @@ void __fastcall FUN_0062cb90(void* self)
 {
   char* s = (char*)self;
   int n = (*(int*)(s + 0x40) - *(int*)(s + 0x3c)) >> 2;
-  if (n > 0) {
-    do {
-      *(int*)(s + 0x40) -= 4;
-      int o = **(int**)(s + 0x40);
-      if (o != 0) {
-        char* vt = *(char**)o;
-        ((TF0)(*(void**)(vt + 8)))((void*)o);
-      }
-      --n;
-    } while (n != 0);
+  for (int i = 0; i < n; ++i) {
+    *(int*)(s + 0x40) -= 4;
+    int o = **(int**)(s + 0x40);
+    if (o != 0) {
+      char* vt = *(char**)o;
+      ((TF0)(*(void**)(vt + 8)))((void*)o);
+    }
   }
 }
 
