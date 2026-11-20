@@ -4083,6 +4083,7 @@ void cKeyQueue::FUN_00e49df0(Key12* key)
     mppBackSlot = slot;
     mpBackPage = *slot;
     mpBackEnd = mpBackPage + 16;
+    _ReadWriteBarrier();
     mpBack = mpBackPage;
 }
 
