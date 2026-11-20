@@ -77,6 +77,14 @@ struct SolarSystem {
     void InitBinarySystem(const String16* name);   // 0xc85200
 };
 
+struct PlanetModel {
+    int FUN_00b8d9b0();                            // 0xb8d9b0
+};
+
+struct MissionManager {
+    void* FindMissionByTargetPlanet(void* planet); // 0xfee220
+};
+
 struct Key {              // EA::ResourceMan::Key, 0xc bytes
     uint32_t instanceID;
     uint32_t typeID;
@@ -954,16 +962,12 @@ Vec* cStarRecord::GetPlanetRecords()
 bool cStarRecord::HasActivePlanets(bool checkMission)
 {
     Vec* v = (Vec*)GetPlanetRecords();
-    void** begin = (void**)v->mpBegin;
-    void** end = (void**)v->mpEnd;
-    for (; begin != end; ++begin) {
-        cPlanetRecord* pr = (cPlanetRecord*)*begin;
-        if (((bool(__thiscall*)(void*))0xb8d9b0)(pr)) {
-            if (checkMission) {
-                void* mm = SP_GetMissionManager();
-                if (((void*(__thiscall*)(void*, cPlanetRecord*))0xfee220)(mm, pr) != 0)
-                    return false;
-            }
+    for (void** it = (void**)v->mpBegin; it != (void**)v->mpEnd; ++it) {
+        void* pr = *it;
+        if (((PlanetModel*)pr)->FUN_00b8d9b0()) {
+            if (checkMission &&
+                ((MissionManager*)SP_GetMissionManager())->FindMissionByTargetPlanet(pr) != 0)
+                return false;
             return true;
         }
     }
