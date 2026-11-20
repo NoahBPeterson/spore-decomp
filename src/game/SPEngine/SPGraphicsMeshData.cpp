@@ -293,17 +293,19 @@ void __cdecl Obj15_Init(void* p);                               // 0x00720070
 // @ 0x0071dbf0
 bool __cdecl WriteStream(Rend* w, const Stream* s)
 {
-    uint32_t count = s->count;
-    WriteUint32(w, &count, 1, 0);
-    uint16_t format = s->format;
-    WriteUint16(w, &format, 1, 0);
-    if (s->data) {
-        if (s->format == s->stride) {
-            w->v14(s->data, s->format * s->count);
+    const Stream* src = s;
+    uint32_t& tmp = *(uint32_t*)&s;
+    tmp = src->count;
+    WriteUint32(w, &tmp, 1, 0);
+    tmp = src->format;
+    WriteUint16(w, (uint16_t*)&tmp, 1, 0);
+    if (src->data) {
+        if (src->format == src->stride) {
+            w->v14(src->data, src->format * src->count);
             return true;
         }
-        for (int i = 0; i < s->count; ++i)
-            w->v14(s->data + s->stride * i, s->format);
+        for (int i = 0; i < src->count; ++i)
+            w->v14(src->data + src->stride * i, src->format);
     }
     return true;
 }
