@@ -3524,18 +3524,18 @@ void __cdecl hkCapsuleTriangleAgent3_register(hkCollisionDispatcher_s010f_d4c0* 
     const int typeB = 6;
     hkCollisionDispatcher_s010f_d4c0::Agent3Funcs funcs;
     funcs.m_createFunc          = (void* (*)())&hkCapsuleTriangleAgent3_create;
-    funcs.m_destroyFunc         = (void (*)())&hkCapsuleTriangleAgent3_destroy;
+    funcs.m_processFunc         = (void* (*)())&hkCapsuleTriangleAgent3_process;
+    funcs.m_sepNormalFunc       = (void (*)())&hkCapsuleTriangleAgent3_sepNormal;
     funcs.m_cleanupFunc         = (void (*)())&hkCapsuleTriangleAgent3_cleanup;
     funcs.m_removePointFunc     = (void (*)())&hkCapsuleTriangleAgent3_removePoint;
     funcs.m_commitPotentialFunc = (void (*)())&hkCapsuleTriangleAgent3_commitPotential;
     funcs.m_createZombieFunc    = (void (*)())&hkBoxBox_createZombie;
-    funcs.m_updateFilterFunc    = 0;
     funcs.m_invalidateTimFunc   = 0;
     funcs.m_warpTimeFunc        = 0;
-    funcs.m_sepNormalFunc       = (void (*)())&hkCapsuleTriangleAgent3_sepNormal;
-    funcs.m_processFunc         = (void* (*)())&hkCapsuleTriangleAgent3_process;
-    funcs.m_isPredictive        = hkBool_s010f_d4c0(false);
     funcs.m_ignoreSymmetricVersion = hkBool_s010f_d4c0(false);
+    funcs.m_updateFilterFunc    = 0;
+    funcs.m_destroyFunc         = (void (*)())&hkCapsuleTriangleAgent3_destroy;
+    funcs.m_isPredictive        = hkBool_s010f_d4c0(false);
     dispatcher->registerAgent3(funcs, typeA, typeB);
 }
 
