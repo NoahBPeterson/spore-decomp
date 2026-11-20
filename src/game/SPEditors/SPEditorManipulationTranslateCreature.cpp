@@ -659,10 +659,11 @@ void cSPEditorManipulationTranslateCreature_s005b_dca0::fn5de60()
       FUN_00f47380(p);
     }
   }
-  void* s = mLimbsEnd;
-  void* d = mLimbsBegin;
-  memcpy(d, s, 0);
-  mLimbsEnd = (void*)((char*)mLimbsEnd + (((char*)s - (char*)d) >> 2) * -4);
+  // inlined vector::erase(begin(), end()): the tail length (mpEnd - last) is not folded
+  void** first = (void**)mLimbsBegin;
+  void** last = (void**)mLimbsEnd;
+  memcpy(first, last, (char*)mLimbsEnd - (char*)last);
+  mLimbsEnd = (void**)mLimbsEnd - (last - first);
 }
 
 // @ 0x005bded0
