@@ -1304,28 +1304,26 @@ Element* Element::Ctor1(void* doc, const u16* tag)
 // @ 0x008e5210
 void Form::HandleEvent(void* ev, int arg)
 {
-    Form* self = this;
     u32 phase = ((u32*)ev)[1];
     if (phase == 3) {
-        self->mpActiveSubmit = 0;
-        self->Reset();
-        return;
-    }
-    if (phase == 2) {
-        self->mpActiveSubmit = (Element*)((u32*)ev)[0];
+        mpActiveSubmit = 0;
+        Reset();
+    } else if (phase == 2) {
+        mpActiveSubmit = (Element*)((u32*)ev)[0];
         ((u32*)ev)[1] = 4;
-        ((u32*)ev)[0] = (u32)self;
+        ((u32*)ev)[0] = (u32)this;
+        Element::HandleEvent(ev, arg);
     } else if (phase == 5) {
         Element* elem = (Element*)((u32*)ev)[0];
         if (elem != 0) {
             const u16* name = elem->GetAttrValue(g_pAttrName);
             const u16* value = elem->GetAttrValue(g_pAttrValue);
             if (name != 0 && value != 0)
-                self->ExcludeGroups(self, name, value);
+                ExcludeGroups(this, name, value);
         }
-        return;
+    } else {
+        Element::HandleEvent(ev, arg);
     }
-    Element::HandleEvent(ev, arg);
 }
 
 // @ 0x008e52b0
