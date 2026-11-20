@@ -8434,16 +8434,11 @@ void SmallStubs::Dtor()
 // @ 0x00a2ab40
 void Vec12::pushEmpty()
 {
-    E12* e = mpEnd;
-    if (e < mpCap) {
-        mpEnd = e + 1;
-        if (e) {
-            e->a = 0; e->b = 0; e->c = 0;
-            return;
-        }
+    if (mpEnd < mpCap) {
+        ::new((void*)mpEnd++) E12();
     } else {
-        E12 tmp = {0, 0, 0};
-        DoInsertValue(e, &tmp);
+        E12 tmp = E12();
+        DoInsertValue(mpEnd, &tmp);
     }
 }
 
