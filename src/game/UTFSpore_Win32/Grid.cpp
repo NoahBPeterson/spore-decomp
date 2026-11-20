@@ -6845,16 +6845,33 @@ void WinGrid_s0097_5ea0::DoWindowAddition(int col, int row, void* pWindow, int a
     PlaceCellWindow(col, row, pWindow, a4, a5);
 }
 
+// The grid interface's virtual table (slots 0x33/0x34 accept a column/row key).
+struct IWinGridVt_5f30 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
+    virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+    virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34();
+    virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44();
+    virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49();
+    virtual void v50();
+    virtual bool AcceptColumn(unsigned key);   // +0xcc
+    virtual bool AcceptRow(unsigned key);      // +0xd0
+};
+
 // @ 0x00975f30
 bool IWinGridIface::SetColumnExtraData(unsigned key, void* data)
 {
-    (void)data;
-    unsigned k = key;
     mExtraDataType = 1;
-    if (!IVC1(bool, this, 0xcc / 4, k))
-        return false;
-    *mColumnExtraData.op_brackets(&k) = (void*)k;
-    return true;
+    if (((IWinGridVt_5f30*)this)->AcceptColumn(key)) {
+        unsigned k = key;
+        *mColumnExtraData.op_brackets(&k) = data;
+        return true;
+    }
+    return false;
 }
 
 // @ 0x00975f80
@@ -6867,13 +6884,13 @@ void* IWinGridIface::GetColumnExtraData(unsigned key)
 // @ 0x00975fa0
 bool IWinGridIface::SetRowExtraData(unsigned key, void* data)
 {
-    (void)data;
-    unsigned k = key;
     mExtraDataType = 1;
-    if (!IVC1(bool, this, 0xd0 / 4, k))
-        return false;
-    *mRowExtraData.op_brackets(&k) = (void*)k;
-    return true;
+    if (((IWinGridVt_5f30*)this)->AcceptRow(key)) {
+        unsigned k = key;
+        *mRowExtraData.op_brackets(&k) = data;
+        return true;
+    }
+    return false;
 }
 
 // @ 0x00975ff0
@@ -7107,9 +7124,14 @@ void IWinGridIface::SetRowHeading(unsigned key, void** pOut)
 // @ 0x009766a0
 void IWinGridIface::SetColumnHeading(unsigned key, const wchar_t* text)
 {
-    WStringObj* w = (WStringObj*)mRowHeadings.op_brackets(&key);
-    w->assign(text, text + EA::UTFWinControls::wcslen(text));
+    unsigned k = key;
+    WStringObj* w = (WStringObj*)mRowHeadings.op_brackets(&k);
+    const wchar_t* e = text;
+    while (*e)
+        ++e;
+    w->assign(text, text + (e - text));
 }
+
 
 // @ 0x009766f0
 void IWinGridIface::GetColumnHeading(unsigned key, void** pOut)
@@ -7122,8 +7144,12 @@ void IWinGridIface::GetColumnHeading(unsigned key, void** pOut)
 // @ 0x00976720
 void IWinGridIface::SetColumnHeading2(unsigned key, const wchar_t* text)
 {
-    WStringObj* w = (WStringObj*)mColumnHeadings.op_brackets(&key);
-    w->assign(text, text + EA::UTFWinControls::wcslen(text));
+    unsigned k = key;
+    WStringObj* w = (WStringObj*)mColumnHeadings.op_brackets(&k);
+    const wchar_t* e = text;
+    while (*e)
+        ++e;
+    w->assign(text, text + (e - text));
 }
 
 // @ 0x00976770
