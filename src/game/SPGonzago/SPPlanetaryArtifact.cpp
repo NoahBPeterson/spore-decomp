@@ -9,6 +9,17 @@ extern "C" char g_1472898[];
 extern "C" char g_14728a0[];
 extern "C" char g_147299c[];
 extern "C" char g_14729b0[];
+extern "C" char g_1472bf0[];
+extern "C" char g_1472bdc[];
+extern "C" char g_1472ae0[];
+extern "C" char g_1472ad8[];
+extern "C" char g_1472a70[];
+extern "C" char g_1472a08[];
+extern "C" char g_1694514[];
+extern "C" char g_1694518[];
+extern "C" char g_169451c[];
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 #include "game/types.h"
 #include "SP/cCombatant.h"
@@ -187,19 +198,22 @@ void* cPlanetaryArtifact::FUN_00c74a50()
     ((MovableOrn*)this)->cMovOrnCtor();
     float f = g_13eb1bc;
     m638 = 0;
-    mVtbl0 = (void*)0x1472bf0;
-    mVtbl4 = (void*)0x1472bdc;
-    p34 = (void*)0x1472ae0;
-    mVtbl108 = (void*)0x1472ad8;
-    mVtbl508 = (void*)0x1472a70;
-    mVtbl5d0 = (void*)0x1472a08;
+    mVtbl0 = (void*)g_1472bf0;
+    mVtbl4 = (void*)g_1472bdc;
+    p34 = (void*)g_1472ae0;
+    mVtbl108 = (void*)g_1472ad8;
+    mVtbl508 = (void*)g_1472a70;
+    mVtbl5d0 = (void*)g_1472a08;
+    _ReadWriteBarrier();
     m63c = 0;
     m640 = 0;
-    m64c = *(void**)0x1694514;
-    m650 = *(void**)0x1694518;
+    m64c = *(void**)g_1694514;
+    m650 = *(void**)g_1694518;
+    _ReadWriteBarrier();
+    void* t = *(void**)g_169451c;
     m65c = 0;
     m65d = 0;
-    m654 = *(void**)0x169451c;
+    m654 = t;
     m658 = -1;
     m65e = 1;
     m660 = f;
