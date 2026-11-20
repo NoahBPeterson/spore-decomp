@@ -246,7 +246,7 @@ struct NodePool {
 };
 static void ReleaseRef(void* p)
 {
-    if (p) (*(void(__thiscall**)(void*))((*(void***)p)[1]))(p);
+    if (p) ((void(__thiscall*)(void*))((*(void***)p)[1]))(p);
 }
 // ---- items of slice s00c053b0 end
 
@@ -832,14 +832,14 @@ uint8_t* NodePool::Cur()
 void NodePool::Pop()
 {
     uint8_t* cur = mpPoolBegin;
-    if (cur == mpBlockCur) {
-        FUN_00c04870();
-        return;
+    if (cur != mpBlockCur) {
+        uint8_t* esi = cur - 0x14;
+        mpPoolBegin = esi;
+        ReleaseRef(*(void**)(esi + 0x10));
+        ReleaseRef(*(void**)(esi + 0xc));
+    } else {
+        FUN_00c04870((void**)this);
     }
-    uint8_t* esi = cur - 0x14;
-    mpPoolBegin = esi;
-    ReleaseRef(*(void**)(esi + 0x10));
-    ReleaseRef(*(void**)(esi + 0xc));
 }
 
 // @ 0x00c05ee0
