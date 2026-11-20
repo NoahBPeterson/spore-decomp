@@ -506,7 +506,7 @@ struct ContentValidationSummarizer {
     void*    f04;        // +0x04
     void*    hModule;    // +0x08 (HMODULE)
     char     pad0c[0x20 - 0x0c];
-    void (*fn20)(uint32, void*);  // +0x20 callback
+    void (__stdcall *fn20)(uint32, void*);  // +0x20 callback
     char     pad24[0x38 - 0x24];
     void (*fn38)();      // +0x38
     uint32   f3c;        // +0x3c
@@ -1132,10 +1132,13 @@ void TestWinEx::UpdateSlot(uint32 v)
 // @ 0x00e205e0
 void PatchMgr::Apply()
 {
-    void* local = this;
-    fn20(*(uint32*)((char*)elems + idx5c * 0x38 + 0x10), &local);
-    for (int i = 0; i < nElems; ++i)
-        ((uint8_t*)elems)[i * 0x38 + 0x2c] = 0;
+    void* local;
+    fn20((uint32)elems[idx5c].vec1Begin, &local);
+    int i = 0;
+    if (i < nElems) {
+        for (int off = 0; i < nElems; ++i, off += 0x38)
+            *((char*)elems + off + 0x2c) = 0;
+    }
     f3c = 8;
 }
 
