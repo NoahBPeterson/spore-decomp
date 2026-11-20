@@ -270,16 +270,14 @@ __declspec(noinline) unsigned* LowerBound(unsigned* first, unsigned* last, const
 // @ 0x009212c0  first element strictly greater than key
 unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
     int n = (int)(last - first);
-    if (n > 0) {
-        unsigned k = *key;
-        do {
-            int half = n >> 1;
-            if (!(k < first[half])) {
-                first = first + half + 1;
-                half = n + (-1 - half);
-            }
+    while (n > 0) {
+        int half = n >> 1;
+        unsigned* mid = first + half;
+        if (!(*key < *mid)) {
+            first = ++mid;
+            n -= half + 1;
+        } else
             n = half;
-        } while (n > 0);
     }
     return first;
 }
@@ -287,16 +285,14 @@ unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
 // @ 0x00921300  first element not less than key
 unsigned* LowerBound(unsigned* first, unsigned* last, const unsigned* key) {
     int n = (int)(last - first);
-    if (n > 0) {
-        unsigned k = *key;
-        do {
-            int half = n >> 1;
-            if (first[half] < k) {
-                first = first + half + 1;
-                half = n + (-1 - half);
-            }
+    while (n > 0) {
+        int half = n >> 1;
+        unsigned* mid = first + half;
+        if (*mid < *key) {
+            first = ++mid;
+            n -= half + 1;
+        } else
             n = half;
-        } while (n > 0);
     }
     return first;
 }
