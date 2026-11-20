@@ -12,7 +12,7 @@
 010a2cb0 hkBroadPhaseBorder::maxPositionExceededCallback  # switch (m_behaviour): fixes the entity's motion type, or m_world->removeEntity for REMOVE_ENTITY
 010a2cf0 hkBroadPhaseBorder::worldDeletedCallback  # m_world->removeWorldDeletionListener(this) + removeReference()
 010a2d30 hkBroadPhaseBorder::deactivate  # removePhantomBatch(m_phantoms, 6), drop overlap listeners/refs, then clear m_world
-010a2db0 ?create@PhantomFactory@?1???0hkBroadPhaseBorder@@QAE@PAVhkWorld_s010a_22b0@@W4BroadPhaseBorderBehaviour@@@Z@SAPAVhkAabbPhantom@@ABVhkAabb_s010a_22b0@@PAX@Z  # hkBroadPhaseBorder::hkBroadPhaseBorder migrated from s010a22b0 (verbatim, slice spelling)
+010a2db0 ??0hkBroadPhaseBorder@@QAE@PAVhkWorld_s010a_22b0@@W4BroadPhaseBorderBehaviour@@@Z  # hkBroadPhaseBorder::hkBroadPhaseBorder migrated from s010a22b0 (verbatim, slice spelling)
 010a3190 hkBroadPhaseBorder::collidableAddedCallback  # if collidable->m_type == 1 forward its entity to maxPositionExceededCallback
 010a31c0 hkHalfstepSimulation::recoverFromStepFailure  # memory failure -> stepDeltaTime; HK_STEP_RESULT_BUSY when hkMemory::s_instance->m_numUsedChunks == 1; else restartFromStepFailure + mid-time step
 010a32a0 hkHalfstepSimulation::hkHalfstepSimulation  # ctor: m_simulationStep = 0

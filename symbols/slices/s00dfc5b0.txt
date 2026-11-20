@@ -11,7 +11,7 @@
 00dfce90 ?dtor@BlobE90@@QAEXXZ  # BlobE90::dtor migrated from s00dfc5b0 (verbatim, slice spelling)
 00dfcee0 ?assignFrom@Vec34@@QAEAAU1@ABU1@@Z  # Vec34::assignFrom migrated from s00dfc5b0 (verbatim, slice spelling)
 00dfd020 ?ctorr@Entry188@@QAEAAU1@ABU1@@Z  # Entry188::ctorr migrated from s00dfc5b0 (verbatim, slice spelling)
-00dfd080 ?Run@Init@?1??copyCtor@Huge_s00df_c5b0@@QAEAAU3@ABU3@@Z@SAXPAUVec44@@@Z  # Huge_s00df_c5b0::copyCtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd080 ?copyCtor@Huge_s00df_c5b0@@QAEAAU1@ABU1@@Z  # Huge_s00df_c5b0::copyCtor migrated from s00dfc5b0 (verbatim, slice spelling)
 00dfd250 ?uninitCopy188@@YAPADPAD00@Z  # uninitCopy188 migrated from s00dfc5b0 (verbatim, slice spelling)
 00dfd300 ?d300@@YGXPAH0@Z  # d300 migrated from s00dfc5b0 (verbatim, slice spelling)
 00dfd3a0 ??4Sub028@@QAEAAU0@ABU0@@Z  # Sub028::operator= migrated from s00dfc5b0 (verbatim, slice spelling)
