@@ -2983,11 +2983,13 @@ void __fastcall FUN_00eb0c30(void* self_)
     CityMusic* self = (CityMusic*)self_;
     if (*(u32*)((char*)self + 0xec) == *(u32*)((char*)self + 0xfc))
         return;
+    _ReadWriteBarrier();
     u32* p = *(u32**)((char*)self + 0xf8);
     if (*(u32*)((char*)self + 0xfc) == p[0])
         *(u32*)((char*)self + 0xfc) = p[1];
     *(u32*)((char*)self + 0xfc) -= 0x6c;
-    FUN_00eb0b70(self, 0, *(void**)((char*)self + 0xfc));
+    void* cur = *(void**)((char*)self + 0xfc);
+    FUN_00eb0b70(self, (int)cur, cur);
 }
 
 // @ 0x00eb0c70
@@ -2996,11 +2998,17 @@ void __fastcall FUN_00eb0c70(void* self_)
     CityMusic* self = (CityMusic*)self_;
     if (*(u32*)((char*)self + 0xf0) == *(u32*)((char*)self + 0xfc))
         return;
-    u32* p = *(u32**)((char*)self + 0xf8);
+    _ReadWriteBarrier();
     *(u32*)((char*)self + 0xfc) += 0x6c;
-    if (*(u32*)((char*)self + 0xfc) == p[1])
-        *(u32*)((char*)self + 0xfc) = p[0];
-    FUN_00eb0b70(self, 0, *(void**)((char*)self + 0xfc));
+    _ReadWriteBarrier();
+    u32 cur = *(u32*)((char*)self + 0xfc);
+    u32* p = *(u32**)((char*)self + 0xf8);
+    if (cur == p[1]) {
+        cur = p[0];
+        *(u32*)((char*)self + 0xfc) = cur;
+    }
+    _ReadWriteBarrier();
+    FUN_00eb0b70(self, (int)cur, *(void**)((char*)self + 0xfc));
 }
 
 // @ 0x00eb0cb0

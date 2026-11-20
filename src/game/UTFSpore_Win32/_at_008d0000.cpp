@@ -1009,16 +1009,10 @@ void TSI::FUN_008d35d0(RunRec* rec, int arg)
 void TSI::FUN_008d3690(RunRec* rec)
 {
     unsigned c = 0;
-    int n = mCount;
-    if (n != 0) {
-        RunRec* p = mRuns;
-        do {
-            if (p->mKey4 == rec->mKey4 && p->mpOwner == rec->mpOwner &&
-                p->mKeyC == rec->mKeyC)
-                c++;
-            p++;
-            n--;
-        } while (n != 0);
+    for (unsigned i = 0; i < (unsigned)mCount; i++) {
+        const RunRec& r = mRuns[i];
+        if (r.mKey4 == rec->mKey4 && r.mpOwner == rec->mpOwner && r.mKeyC == rec->mKeyC)
+            c++;
     }
     rec->mDup18 = (unsigned short)(1 < c);
     FUN_008d35d0(rec, 0x5ece0001);

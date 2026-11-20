@@ -741,11 +741,11 @@ struct Obj {
   uint_s00f2_4b30 f4a8, f4ac, f4b0, f4b4, f4b8, f4bc, f4c0, f4c4;
 
   int  fn25080(Obj* o);
-  void fn25110(Vec3i* out, bool* flag);
-  void fn25160(Vec3i* o);
-  void fn25190(Vec3i* out, bool* flag);
-  Vec3i* fn251f0(Vec3i* o);
-  Vec3i* fn25240(Vec3i* o, bool* flag);
+  Vec3i fn25110(bool* flag);
+  Vec3i fn25160();
+  Vec3i fn25190(bool* flag);
+  Vec3i fn251f0();
+  Vec3i fn25240(bool* flag);
 
   int  fn252c0();
   int  fn252f0();
@@ -2127,65 +2127,70 @@ int Obj::fn25080(Obj* o)
 }
 
 // @ 0x00f25110
-void Obj::fn25110(Vec3i* out, bool* flag)
+Vec3i Obj::fn25110(bool* flag)
 {
   *flag = (f24 == 1);
-  out->x = 0; out->y = 0; out->z = 0;
+  Vec3i out;
+  out.x = 0; out.y = 0; out.z = 0;
   if (f24 == 2) {
-    out->x = (int)f28; out->y = (int)f2c; out->z = (int)f30;
+    out = *(Vec3i*)&f28;
   } else {
-    out->x = (int)f00; out->y = (int)f04; out->z = (int)f08;
+    out = *(Vec3i*)this;
   }
+  return out;
 }
 
 // @ 0x00f25160
-void Obj::fn25160(Vec3i* o)
+Vec3i Obj::fn25160()
 {
-  *o = *(Vec3i*)this;
-  if ((uint_s00f2_4b30)o->y == kTypeB1B104) o->z = (int)kType65928944;
-  o->y = (int)kType2F7D0004;
+  Vec3i o = *(Vec3i*)this;
+  if ((uint_s00f2_4b30)o.y == kTypeB1B104) o.z = (int)kType65928944;
+  o.y = (int)kType2F7D0004;
+  return o;
 }
 
 // @ 0x00f25190
-void Obj::fn25190(Vec3i* out, bool* flag)
+Vec3i Obj::fn25190(bool* flag)
 {
   *flag = (f24 == 1);
-  out->x = 0; out->y = 0; out->z = 0;
+  Vec3i out;
+  out.x = 0; out.y = 0; out.z = 0;
   if (f24 == 2) {
-    out->x = (int)f28; out->y = (int)f2c; out->z = (int)f30;
+    out = *(Vec3i*)&f28;
   } else {
-    out->x = (int)f00; out->y = (int)f04; out->z = (int)f08;
+    out = *(Vec3i*)this;
   }
-  if ((uint_s00f2_4b30)out->y == kTypeB1B104) out->z = (int)kType65928944;
-  out->y = (int)kType2F7D0004;
+  if ((uint_s00f2_4b30)out.y == kTypeB1B104) out.z = (int)kType65928944;
+  out.y = (int)kType2F7D0004;
+  return out;
 }
 
 // @ 0x00f251f0
-Vec3i* Obj::fn251f0(Vec3i* o)
+Vec3i Obj::fn251f0()
 {
-  o->x = 0; o->y = 0; o->z = 0;
+  Vec3i o;
+  o.x = 0; o.y = 0; o.z = 0;
   Vec3i tmp;
-  Vec3i* r = (Vec3i*)sub_f21bb0(&tmp, this);
-  *o = *r;
-  if ((uint_s00f2_4b30)o->y == kTypeB1B104) o->z = (int)kType65928944;
-  o->y = (int)kType2F7D0004;
+  o = *(Vec3i*)sub_f21bb0(&tmp, this);
+  if ((uint_s00f2_4b30)o.y == kTypeB1B104) o.z = (int)kType65928944;
+  o.y = (int)kType2F7D0004;
   return o;
 }
 
 // @ 0x00f25240
-Vec3i* Obj::fn25240(Vec3i* o, bool* flag)
+Vec3i Obj::fn25240(bool* flag)
 {
   *flag = (f48 == 1);
-  o->x = 0; o->y = 0; o->z = 0;
+  Vec3i o;
+  o.x = 0; o.y = 0; o.z = 0;
   if (f48 == 2) {
-    o->x = (int)f50; o->y = (int)f54; o->z = (int)f58;
+    o = *(Vec3i*)&f50;
   } else {
     Vec3i tmp;
-    Vec3i* r = (Vec3i*)sub_f21bb0(&tmp, this);
-    *o = *r;
+    o = *(Vec3i*)sub_f21bb0(&tmp, this);
   }
-  if ((uint_s00f2_4b30)o->y == kTypeB1B104) o->z = (int)kType65928944;
-  o->y = (int)kType2F7D0004;
+  if ((uint_s00f2_4b30)o.y == kTypeB1B104) o.z = (int)kType65928944;
+  o.y = (int)kType2F7D0004;
   return o;
 }
 

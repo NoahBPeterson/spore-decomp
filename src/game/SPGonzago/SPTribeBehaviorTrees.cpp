@@ -9072,7 +9072,7 @@ uint8_t __cdecl FUN_00daeca0(CC* self, int a1, int a2, int a3, int a4, Out* a5)
             else
                 src = (int32_t*)(s ? q : 0);
         } else {
-            src = (int32_t*)0x15d1164;
+            src = (int32_t*)&SP::g_15d1164;
         }
         int32_t v = *src;
         a5->f0 = v;
@@ -9080,7 +9080,7 @@ uint8_t __cdecl FUN_00daeca0(CC* self, int a1, int a2, int a3, int a4, Out* a5)
         a5->f8 = 0;
         a5->fC = 0;
         a5->f10 = -1;
-        return (uint8_t)(self->base.Slot45(v) != 0 ? 1 : 0);
+        return (uint8_t)(self->base.Slot45(a5->f0) != 0 ? 1 : 0);
     }
     return 0;
 }
@@ -11033,6 +11033,10 @@ bool cSocialActionHost::ResolveTarget(cActionState* pState)
     return pState->mnLoopCount != 0;
 }
 
+struct SocialTargetRef {             // refcounted target: slot 0 is the deleting destructor
+    virtual void Destroy(uint32_t flags);
+    int mnRefCount;                   // +0x04
+};
 // @ 0x00db40f0
 void ReleaseSocialTargetState(void* pArg1, void* pArg2, void* pArg3, void* pArg4, void* pArg5, cActionState* pState)
 {
@@ -11051,14 +11055,15 @@ void ReleaseSocialTargetState(void* pArg1, void* pArg2, void* pArg3, void* pArg4
             operator_delete__(pBlock);
     }
 
-    cObject* pTarget = (cObject*)*(void**)((uint8_t*)pState + 0x0c);
+    SocialTargetRef* pTarget = *(SocialTargetRef**)((uint8_t*)pState + 0x0c);
     if (pTarget == nullptr)
         return;
-    int nRefs = *(int*)((uint8_t*)pTarget + 4);
-    *(int*)((uint8_t*)pTarget + 4) = nRefs - 1;
+    int nRefs = pTarget->mnRefCount;
+    pTarget->mnRefCount = nRefs - 1;
     if (nRefs - 1 == 0) {
-        *(int*)((uint8_t*)pTarget + 4) = 1;
-        pTarget->Call(0x00, (uint32_t)1);
+        pTarget->mnRefCount = 1;
+        _ReadWriteBarrier();
+        pTarget->Destroy(1);
     }
 }
 
@@ -13001,7 +13006,8 @@ void SlotVector::PushDefault()
         SlotEntry tmp;
         tmp.mId = 0x80000000;
         Insert(end, &tmp);
-        if (((tmp.mId >> 0x1f) & 1) == 0) ((GmPayloadVirtual*)&tmp.mObj)->Destroy(0);
+        bool empty = (bool)((tmp.mId >> 0x1f) & 1);
+        if (!empty) ((GmPayloadVirtual*)&tmp.mObj)->Destroy(0);
     }
 }
 

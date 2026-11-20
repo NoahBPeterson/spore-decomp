@@ -1183,12 +1183,10 @@ int cCivModeStrategy::HasCivTutorialOccurred(u32 id)
 // @ 0x00cf7880
 bool cCivModeStrategy::IsEitherDialogueIdle()
 {
-    if (!((bool (__thiscall *)(void *))FUN_007cd9c0)(m_dialogue110)
-        && !((bool (__thiscall *)(void *))FUN_007cfac0)(m_dialogue110)) {
-        return false;
-    }
-    if (((bool (__thiscall *)(void *))FUN_007cd9c0)(m_dialogue114)
-        || ((bool (__thiscall *)(void *))FUN_007cfac0)(m_dialogue114)) {
+    if ((((bool (__thiscall *)(void *))FUN_007cd9c0)(m_dialogue110)
+         || ((bool (__thiscall *)(void *))FUN_007cfac0)(m_dialogue110))
+        && (((bool (__thiscall *)(void *))FUN_007cd9c0)(m_dialogue114)
+         || ((bool (__thiscall *)(void *))FUN_007cfac0)(m_dialogue114))) {
         return true;
     }
     return false;

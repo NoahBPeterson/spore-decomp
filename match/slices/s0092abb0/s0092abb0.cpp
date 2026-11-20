@@ -406,17 +406,12 @@ void Clipboard::FUN_0092b0f0(int v) {
 bool Clipboard::FUN_0092b140() {
     char* self = (char*)this;
     Mutex* m = (Mutex*)(self + 0x118);
-    m->Lock((void*)0x143e3a0);
+    m->Lock((void*)g_143e3a0);
     if (*self == 0) {
         *self = 1;
         if (self[0x14c] != 0 && *(void**)(self + 8) == 0 && *(int*)(self + 4) == 1) {
             void* mem = FUN_006abeb0(0x1c);
-            if (mem != 0) {
-                *(void**)(self + 8) = new (mem) Win32Clipboard((Clipboard*)self);
-                m->Unlock();
-                return true;
-            }
-            *(void**)(self + 8) = 0;
+            *(void**)(self + 8) = mem ? new (mem) Win32Clipboard((Clipboard*)self) : 0;
         }
     }
     m->Unlock();

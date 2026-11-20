@@ -10,9 +10,6 @@
 
 00c045f0 111 non-byte-exact; game mode held in ebx across out-of-line 0xc0c0e0 Flag388 calls (called twice in original, merged by compiler here) and bit test folded to test [..],0x200; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (400 valid inputs, 83.7% coverage)
 00c04670 135 non-byte-exact; indexed ability lookup, indexed-load and 0xffffffff guard codegen differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (393 valid inputs, 80.7% coverage)
-00c04710 51 non-byte-exact; block order and pop esi placement differ from original's out-of-line 0xc0b770 call and esi=this retention; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (395 valid inputs, 100% coverage)
-00c04750 44 non-byte-exact; guard polarity (jne vs je) and inline-vs-out-of-line epilogue differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (2 unresolved refs: GameDataStub::GetObjectData, ThingMgrStub::GetThing)
-00c04790 44 non-byte-exact; helper inlining shape from Sub4750 call chain differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (400 valid inputs, 80.0% coverage)
 00c047d0 63 non-byte-exact; GameDataStub::GetObjectData / ThingMgrStub::GetThing thiscall shapes differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (2 unresolved refs: GameDataStub::GetObjectData, ThingMgrStub::GetThing)
 00c04870 66 non-byte-exact; __fastcall free function, arg arrives in ecx with no signature explaining it (this object only); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/49 inputs; fake call #0, stub callee)
 00c048c0 61 non-byte-exact; copy ctor ret 4; original does four repeated stores at [dst+8] from [src+8] plus fld/fstp float at +0; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/5 inputs; fake call #0)

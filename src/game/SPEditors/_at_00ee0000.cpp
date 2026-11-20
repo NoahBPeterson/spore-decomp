@@ -6627,15 +6627,12 @@ int Entry_PosGreater(Entry* a, Entry* b)
 // @ 0x00eea780
 void* RefCountPart::QueryInterface(uint32_t id)
 {
-    switch (id) {
-    case 0x968dcff4:
-        return (uint8_t*)this - 4;
-    case 0xee3f516e:
-    case 0x2f009dd0:
-        return ((uint8_t*)this - 4) != 0 ? (void*)this : 0;
-    default:
+    if (id != 0x968dcff4) {
+        if (id == 0xee3f516e || id == 0x2f009dd0)
+            return ((uint8_t*)this - 4) != 0 ? (void*)this : 0;
         return 0;
     }
+    return (uint8_t*)this - 4;
 }
 
 // @ 0x00eea7c0

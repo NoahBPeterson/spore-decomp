@@ -3,9 +3,6 @@
 00c03ec0 151 non-byte-exact; the 0x2000/0x100000 flag word OR-chain and the FUN_00d995f0 cdecl argument build (float, double, then 6 stacked words) are scheduled differently; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include; equiv PASS (374 valid inputs, 100.0% coverage)
 00c045f0 109 non-byte-exact; game mode held in ebx across out-of-line 0xc0c0e0 Flag388 calls (called twice in original, merged by compiler here) and bit test folded to test [..],0x200; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (400 valid inputs, 83.7% coverage)
 00c04670 115 non-byte-exact; indexed ability lookup, indexed-load and 0xffffffff guard codegen differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (393 valid inputs, 80.7% coverage)
-00c04710 50 non-byte-exact; block order and pop esi placement differ from original's out-of-line 0xc0b770 call and esi=this retention; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (395 valid inputs, 100% coverage)
-00c04750 39 non-byte-exact; guard polarity (jne vs je) and inline-vs-out-of-line epilogue differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (2 unresolved refs: GameDataStub::GetObjectData, ThingMgrStub::GetThing)
-00c04790 37 non-byte-exact; helper inlining shape from Sub4750 call chain differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (400 valid inputs, 80.0% coverage)
 00c047d0 60 non-byte-exact; GameDataStub::GetObjectData / ThingMgrStub::GetThing thiscall shapes differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (2 unresolved refs: GameDataStub::GetObjectData, ThingMgrStub::GetThing)
 00c04870 56 non-byte-exact; __fastcall free function, arg arrives in ecx with no signature explaining it (this object only); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/49 inputs; fake call #0, stub callee)
 00c049f0 216 non-byte-exact; x87 fsqrt sequence over species-profile aabb_extents, ret 4; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (2 unresolved refs: cGameNounManagerStub::GetAvatar, GameThing::GetProfile)
@@ -16,7 +13,6 @@
 00c05d40 122 Simulator::cGameData::cGameData_func3Ch: complete; equiv UNSUPPORTED (3 unresolved callees); vtable slot 0x3c/0x54 dispatch differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05df0 84 intrusive pool Free (0x14-byte elements): complete; equiv FAIL (5/207 mismatch, execution); loop/call schedule around ref-releases differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05e80 18 intrusive pool Cur: complete; equiv PASS (381 valid inputs, 100% coverage); cl loads the two tail fields lazily instead of up-front flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c05ea0 43 intrusive pool Pop: complete; equiv FAIL (5/5 mismatch, execution); tail-jmp vs call on final ref release flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05ee0 270 intrusive pool Reset: complete; equiv FAIL (5/5 mismatch, memory pool @40010010); nested release loops reordered relative to original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c06000 42 cLocomotionStrategy_Template singleton accessor: complete; equiv PASS (343 valid inputs, 78.1% coverage); vtable store order and null-path scheduling differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c06070 161 intrusive pool AllocChunk: complete; equiv FAIL (5/5 mismatch, execution); allocate/append schedule and allocator args differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

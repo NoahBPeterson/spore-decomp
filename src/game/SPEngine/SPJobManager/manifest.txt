@@ -14,3 +14,9 @@
 ../src/game/SPEngine/SPJobManager.cpp  ??0cJobDataView_68fbe0@@QAE@XZ  0068fbe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?ScheduleJob@cJobManager@@QAEXPAUcJobData@@@Z  00690540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Queue@cJob_s0069_07e0@@QAEXXZ  006909b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?GetMaxDependentPriority@@YGIPAUcJobData@@@Z  0068ffb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?ContinueJob@cJob@@QAEHXZ  0068f970  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddDependency@cJob_s0069_07e0@@QAEXPAU1@@Z  00691380  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddWeakDependency@cJob_s0069_07e0@@QAEXPAU1@@Z  006913c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?InsertJobByPriority@cJobManager@@QAEXPAUIntrusiveList@@PAUcJobData@@@Z  0068fff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?PreShutdown@cJobManager@@QAEXXZ  0068fd40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

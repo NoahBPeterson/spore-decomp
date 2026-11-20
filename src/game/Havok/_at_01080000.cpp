@@ -3323,10 +3323,7 @@ void hkConstraintConstructionKit::end()
 void hkGenericConstraintData::getConstraintInfo(hkConstraintInfo& out) const
 {
     out.m_maxSizeOfJacobians = 0; out.m_sizeOfJacobians = 0; out.m_sizeOfSchemas = 0; out.m_numSolverResults = 0;
-    out.m_maxSizeOfJacobians = m_scheme.m_info.m_maxSizeOfJacobians;
-    out.m_sizeOfJacobians = m_scheme.m_info.m_sizeOfJacobians;
-    out.m_sizeOfSchemas = m_scheme.m_info.m_sizeOfSchemas;
-    out.m_numSolverResults = m_scheme.m_info.m_numSolverResults;
+    out = m_scheme.m_info;
 }
 
 // @ 0x010896e0

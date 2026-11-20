@@ -34,7 +34,7 @@ void* __cdecl  VecCopyCtor(void* first, void* last, void* dst);     // 0x80cbd0
 void  __cdecl  VecMoveBack(void* first, void* last, void* dst);     // 0x80caf0
 u32   __cdecl  Shader_GetId();                             // 0x82f6e0
 void* __cdecl  SPUIShader_AcquireProxy();                  // 0x82f630
-void  __cdecl  SPUIShader_Bind(void*, void*);              // 0x82e670
+struct ShaderProxy { void Bind(void*); };                 // 0x82e670 (__thiscall)
 
 // ---- generic virtual-call helpers ----
 typedef void* (__thiscall *VF0)(void*);
@@ -422,14 +422,29 @@ char* __fastcall GetInnerB(char* p) {
 char* __fastcall GetInnerBase(char* p) { return p ? p - 0x250 : 0; }
 
 // @ 0x0080d620
+struct ShaderHost {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18();
+    virtual void* GetShader();                 // 0x4c
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34();
+    virtual void SetShader(void* shader);      // 0x8c
+    virtual void ApplyShader();                // 0x90
+};
 u8 __cdecl ShaderBind(void* self, void* arg2) {
-    void* p = ((VF0)VT(self)[0x4c / 4])(self);
+    ShaderHost* host = (ShaderHost*)self;
+    void* p = host->GetShader();
     if (p == 0 || p == (void*)Shader_GetId()) {
         p = SPUIShader_AcquireProxy();
-        ((VF1v)VT(self)[0x8c / 4])(self, p);
+        host->SetShader(p);
     }
-    ((VF0v)VT(self)[0x90 / 4])(self);
-    SPUIShader_Bind(p, arg2);
+    host->ApplyShader();
+    ((ShaderProxy*)p)->Bind(arg2);
     return 1;
 }
 

@@ -1441,7 +1441,7 @@ void DequeMap::PushBack(int* value)
 {
     int* self = (int*)this;
     int v = *value;
-    if (self[1] <= ((self[9] - *self) >> 2) + 1)
+    if (((self[9] - *self) >> 2) + 1 >= self[1])
         ((DequeMap*)self)->InsertAt(1, 1);
     int* buf = (int*)EASTL_allocator_allocate(0x100, "Graphics", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
@@ -1450,9 +1450,8 @@ void DequeMap::PushBack(int* value)
     if (self[6]) *(int*)self[6] = v;
     int t = self[9];
     self[9] = t + 4;
-    int base = *(int*)(t + 4);
-    self[7] = base;
-    self[8] = base + 0x100;
+    self[7] = *(int*)(t + 4);
+    self[8] = self[7] + 0x100;
     self[6] = self[7];
 }
 

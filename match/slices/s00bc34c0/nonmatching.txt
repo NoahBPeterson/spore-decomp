@@ -1,7 +1,6 @@
 00bc34c0 120 ctor complete; store scheduling differs (vtable/int stores ordered after float zeroing); difftest PASS
 00bc3700 1126 per-frame update complete (original also frees an uninitialised stack slot, omitted); x87/SSE scheduling and larger frame differ
 00bc3c20 390 complete; float op ordering / x87 vs SSE mix differs
-00bc3e20 25 complete; original null-derefs end() (xor eax,eax; mov [eax+0x7d0]) vs absolute store
 00bc40a0 341 complete vector<12-byte>::insert(range); size/ordering differences
 00bc4280 62 complete; loop register allocation differs (induction on &buf)
 00bc4370 78 complete; first held in memory in original

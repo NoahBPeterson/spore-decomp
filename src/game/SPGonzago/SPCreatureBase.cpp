@@ -8397,7 +8397,8 @@ void* __thiscall CCM_s00c0_ddb0::dfd0(int param)
 {
     CCMInner* p = mpInner_b54;
     if (p != 0) {
-        char* r = (char*)((F_cab60*)p->mpTable_17c)->f(param);
+        F_cab60* t = (F_cab60*)p->mpTable_17c;
+        char* r = (char*)t->f(param);
         if (r != 0) return *(void**)(r + 0x8c);
     }
     return 0;

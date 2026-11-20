@@ -13,3 +13,5 @@
 ../src/game/SPEngine/SPAppCloudDescription.cpp  ?FloatListParentCommand@BattleCommand@@QAEXPAVcArguments_s007e_d1b0@ArgScript@EA@@@Z  007ed670  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppCloudDescription.cpp  ?SWARM_CloudAddCommands@@YAXPAURegistrar@@0@Z  00f574c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppCloudDescription.cpp  ?FloatListCommand@BattleCommand@@QAEXPAVcArguments_s007e_d1b0@ArgScript@EA@@@Z  007ed560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppCloudDescription.cpp  ?EffectsMapID@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  00a6e600  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppCloudDescription.cpp  ?Duration@cCloudSourceCommand@@QAEXPAVcArguments_s00f5_3b60@ArgScript@EA@@@Z  00f544d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

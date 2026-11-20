@@ -1314,11 +1314,9 @@ extern "C" void ReadEffect(void* reader, void* unused, char* dst)
 namespace EA { namespace Swarm {
 long long cEffectsParser::EffectsMapID(const char* s)
 {
-    const char* p = s;
-    const char* q = p + 1;
-    do { } while (*p++ != 0);
+    const char* end = s + strlen(s);
     char* esi = (char*)this + 0x3c4;
-    ((EString*)esi)->assign(s, s + (int)(p - q));
+    ((EString*)esi)->assign(s, end);
     MakeCaseInsensitive(esi);
     if (strcmp(kTerrain, s) == 0)
         return 0;
@@ -1330,7 +1328,10 @@ long long cEffectsParser::EffectsMapID(const char* s)
         if (v != -1)
             return v;
     }
-    return -1;
+    union { long long id; struct { unsigned int lo, hi; } half; } r;
+    r.half.lo = 0xFFFFFFFFu;
+    r.half.hi = 0xFFFFFFFFu;
+    return r.id;
 }
 }}  // namespace EA::Swarm
 
@@ -1792,7 +1793,8 @@ void cCloudSourceCommand::Duration(EA::ArgScript::cArguments_s00f5_3b60* args)
             (*(FN_FLOAT*)((char*)(*(void**)mParser) + 0x98))(mParser, p[0]);
         return;
     }
-    *(float*)((char*)mParams + 0x1c) = v > 0.5f ? v : 0.5f;
+    float minDuration = 0.5f;
+    *(float*)((char*)mParams + 0x1c) = *(minDuration < v ? &v : &minDuration);
 }
 
 // @ 0x00f545c0

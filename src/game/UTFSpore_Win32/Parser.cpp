@@ -1768,7 +1768,7 @@ struct cCmdParser_s0084_6280 {
     virtual void s36();
     virtual bool        EvalCondition(const char* pExpr);   // +0x94
     virtual double      EvalFloat(const char* pExpr);        // +0x98
-    virtual long        EvalInt(const char* pExpr, char* pOut, int radix);  // +0x9c
+    virtual long        EvalInt(const char* pExpr);          // +0x9c
     virtual void        s3a();                                                  // +0xa0
     virtual void        EvalV2(float* pOut, const char* pExpr);   // +0xa4
     virtual void        EvalV3(float* pOut, const char* pExpr);   // +0xa8
@@ -2972,8 +2972,11 @@ void EA::ArgScript::cParser_s0084_2620::ParseStream(void* pStream)
 // @ 0x00843240
 void cParser_s0084_2620::GetLineLocationInfo(string8_s0084_2620* pInfo, int* pLine) const
 {
-    if (pInfo && &mCurrentPath != pInfo)
-        pInfo->assign(mCurrentPath.mpBegin, mCurrentPath.mpEnd);
+    if (pInfo) {
+        const string8_s0084_2620* src = &mCurrentPath;
+        if (src != pInfo)
+            pInfo->assign(src->mpBegin, src->mpEnd);
+    }
     if (pLine)
         *pLine = mCurrentLine;
 }
@@ -2982,18 +2985,18 @@ void cParser_s0084_2620::GetLineLocationInfo(string8_s0084_2620* pInfo, int* pLi
 bool cParser_s0084_2620::DefinitionExists(const char* pName) const
 {
     ::MakeCaseInsensitiveChars(pName, (void*)mCaseInsensitive);
-    FindResult_s0084_2620 r = mCommands.find(mCaseInsensitive);
-    CmdNode_s0084_2620* pEnd = mCommands.mpBucketArray[mCommands.mnBucketCount];
-    return r.mpNode != pEnd;
+    const CmdTable_s0084_2620& t = mCommands;
+    CmdNode_s0084_2620* pEnd = t.mpBucketArray[t.mnBucketCount];
+    return t.find(mCaseInsensitive).mpNode != pEnd;
 }
 
 // @ 0x008432d0
 bool cParser_s0084_2620::HasName6c(const char* pName) const
 {
     ::MakeCaseInsensitiveChars(pName, (void*)mCaseInsensitive);
-    FindResult_s0084_2620 r = mTable6c.find(mCaseInsensitive);
-    CmdNode_s0084_2620* pEnd = mTable6c.mpBucketArray[mTable6c.mnBucketCount];
-    return r.mpNode != pEnd;
+    const CmdTable_s0084_2620& t = mTable6c;
+    CmdNode_s0084_2620* pEnd = t.mpBucketArray[t.mnBucketCount];
+    return t.find(mCaseInsensitive).mpNode != pEnd;
 }
 
 // @ 0x00843320
@@ -3941,8 +3944,7 @@ void EA::ArgScript::cSetICommand_s0084_6280::ExecuteBody(cArguments_s0084_6280* 
 {
     const char** pArg = pArgs->MainArguments(2);
     char buf[12];
-    long n = mParser->EvalInt(pArg[1], buf, 10);
-    _ltoa(n, buf, 10);
+    _ltoa(mParser->EvalInt(pArg[1]), buf, 10);
     mFullParser->SetVariableNoSubstitution(pArg[0], buf);
 }
 

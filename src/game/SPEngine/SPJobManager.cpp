@@ -71,6 +71,13 @@ inline void AppendTail(IntrusiveList* pList, IntrusiveList* pNode) {
     pList->mpPrev = pNode;
     pNode->mpPrev->mpNext = pNode;
 }
+inline void InsertBefore(IntrusiveList* pos, IntrusiveList* pNode) {
+    IntrusiveList* prev = pos->mpPrev;
+    pos->mpPrev = pNode;
+    prev->mpNext = pNode;
+    pNode->mpNext = pos;
+    pNode->mpPrev = prev;
+}
 inline void ClearList(IntrusiveList* pAnchor) {
     IntrusiveList* p = pAnchor->mpNext;
     if (p != pAnchor) {
@@ -968,7 +975,7 @@ int cJob::AddRef()
 int cJob::ContinueJob()
 {
     cJobData* p = static_cast<cJobData*>(this);
-    EA::Thread::Mutex_s0068_f670* pMutex = &p->mpManager->mMutex;
+    EA::Thread::Mutex_s0068_f670* pMutex = &static_cast<cJobData*>(this)->mpManager->mMutex;
     pMutex->Lock((unsigned int)&g_MutexFlags);
     int status = p->mStatus;
     pMutex->Unlock();
@@ -1112,17 +1119,15 @@ cJobManagerView_68fc60::~cJobManagerView_68fc60()
 void cJobManager::PreShutdown()
 {
     IntrusiveList* pAnchor = &mThreads;
-    for (;;) {
-        IntrusiveList* pNode = pAnchor->mpNext;
-        if (pNode == pAnchor) break;
-        while (pNode == (IntrusiveList*)mpSyncThread) {
-            pNode = pNode->mpNext;
-            if (pNode == pAnchor) goto done;
+    IntrusiveList* pNode;
+    do {
+        for (pNode = pAnchor->mpNext; pNode != pAnchor; pNode = pNode->mpNext) {
+            if (pNode != (IntrusiveList*)mpSyncThread) {
+                RemoveThread((cJobThread*)pNode);
+                break;
+            }
         }
-        RemoveThread((cJobThread*)pNode);
-        if (pNode == pAnchor) break;
-    }
-done:
+    } while (pNode != pAnchor);
     while (EndThread(mpSyncThread, 0, 1)) {}
 }
 
@@ -1197,18 +1202,26 @@ bool cJobManager::IsAffinityInUse(unsigned int affinity)
     return false;
 }
 
+struct JobDependentLinkBase {
+    JobDependentLinkBase* mpNext;
+    JobDependentLinkBase* mpPrev;
+};
+struct cJobLinkDependentView : JobDependencyNode, JobDependentLinkBase {
+    cJobData* mpDependency;         // +0x10
+    cJobData* mpDependent;          // +0x14
+};
 // @ 0x0068ffb0
-unsigned int GetMaxDependentPriority(cJobData* job)
+unsigned int __stdcall GetMaxDependentPriority(cJobData* job)
 {
-    unsigned int maxPri = (unsigned int)job->mPriority;
-    IntrusiveList* pAnchor = &job->mDependents;
-    for (IntrusiveList* it = pAnchor->mpNext; it != pAnchor; it = it->mpNext) {
-        cJobLink* link = (cJobLink*)((char*)it - 8);
-        cJobData* dep = link->mpDependent;
-        int pri = dep->mRealPriority;
-        if ((int)maxPri < pri) maxPri = (unsigned int)pri;
+    int maxPri = job->mPriority;
+    JobDependentLinkBase* pAnchor = (JobDependentLinkBase*)&job->mDependents;
+    for (JobDependentLinkBase* it = pAnchor->mpNext; it != pAnchor; ) {
+        cJobLinkDependentView* link = static_cast<cJobLinkDependentView*>(it);
+        it = it->mpNext;
+        int pri = link->mpDependent->mRealPriority;
+        if (pri > maxPri) maxPri = pri;
     }
-    return maxPri;
+    return (unsigned int)maxPri;
 }
 
 // @ 0x0068fff0
@@ -1223,27 +1236,18 @@ void cJobManager::InsertJobByPriority(IntrusiveList* pList, cJobData* job)
     pJob->mpPrev = 0;
     IntrusiveList* first = pList->mpNext;
     job->mStatus = 3;
-    IntrusiveList* pos = first;
-    if (first != pList) {
+    IntrusiveList* node = pList;
+    if (first != node) {
         int pri = job->mRealPriority;
-        IntrusiveList* node = pList->mpPrev;
-        for (;;) {
-            if (pri <= ((cJobData*)node)->mRealPriority) {
-                pos = node->mpNext;
-                break;
-            }
-            if (first == node) {
-                pos = node;
-                break;
-            }
+        do {
             node = node->mpPrev;
-        }
+            if (pri <= ((cJobData*)node)->mRealPriority) {
+                InsertBefore(node->mpNext, pJob);
+                return;
+            }
+        } while (first != node);
     }
-    IntrusiveList* prev = pos->mpPrev;
-    pos->mpPrev = pJob;
-    prev->mpNext = pJob;
-    pJob->mpPrev = prev;
-    pJob->mpNext = pos;
+    InsertBefore(node, pJob);
 }
 
 // @ 0x00690050
@@ -1699,7 +1703,7 @@ void cJob_s0069_07e0::AddDependency(cJob_s0069_07e0* other)
     if (other == 0) return;
     cJobData_s0069_07e0* pOther = static_cast<cJobData_s0069_07e0*>(other);
     cJobData_s0069_07e0* pThis = static_cast<cJobData_s0069_07e0*>(this);
-    pThis->mpManager->AddJobDependency(pThis, pOther, false);
+    static_cast<cJobData_s0069_07e0*>(this)->mpManager->AddJobDependency(pThis, pOther, false);
 }
 
 // @ 0x006913c0
@@ -1708,7 +1712,7 @@ void cJob_s0069_07e0::AddWeakDependency(cJob_s0069_07e0* other)
     if (other == 0) return;
     cJobData_s0069_07e0* pOther = static_cast<cJobData_s0069_07e0*>(other);
     cJobData_s0069_07e0* pThis = static_cast<cJobData_s0069_07e0*>(this);
-    pThis->mpManager->AddJobDependency(pThis, pOther, true);
+    static_cast<cJobData_s0069_07e0*>(this)->mpManager->AddJobDependency(pThis, pOther, true);
 }
 
 // @ 0x00691400

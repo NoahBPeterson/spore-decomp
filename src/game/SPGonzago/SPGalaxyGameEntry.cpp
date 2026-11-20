@@ -9998,17 +9998,19 @@ void GameEntry::FUN_de3300()
 GameEntry* GameEntry::Ctor_de3370()
 {
     BaseCtor();
-    mpVtbl = (void*)0x147dd00;
+    mpVtbl = g_147dd00;
     mStopwatch.Ctor(0, 0);
-    mStr20.mpBegin = 0x1667bac;
-    mStr20.mpEnd = 0x1667bac;
-    mStr20.mpCap = 0x1667bae;
-    mStr30.mpCap = 0x1667bae;
-    mStr30.mpBegin = 0x1667bac;
-    mStr30.mpEnd = 0x1667bac;
+    mStr20.mpBegin = (u32)g_1667bac;
+    mStr20.mpEnd = (u32)g_1667bac;
+    _ReadWriteBarrier();
+    mStr20.mpCap = (u32)g_1667bae;
+    mStr30.mpCap = (u32)g_1667bae;
+    mStr30.mpBegin = (u32)g_1667bac;
+    mStr30.mpEnd = (u32)g_1667bac;
+    _ReadWriteBarrier();
     mp48 = 0;
     mStopwatch.SetUnits(4);
-    *(u32*)0x16a11b4 = (u32)this;
+    g_16a11b4 = (cUISingleton48*)this;
     return this;
 }
 
@@ -10929,9 +10931,10 @@ void cGalaxyGameEntryImpl_s00de_5040::FUN_00de5260(void)
 // @ 0x00de52d0
 void cGalaxyGameEntryImpl_s00de_5040::FUN_00de52d0(void)
 {
-    char* b = mBegin;
-    if (b != mEnd) {
-        mCurrentDword = *(int*)(mEnd - 4);
+    if (mBegin != mEnd) {
+        _ReadWriteBarrier();
+        mCurrentDword = ((int*)mEnd)[-1];
+        _ReadWriteBarrier();
         mEnd -= 4;
         return;
     }
@@ -11695,19 +11698,20 @@ bool cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea200()
     if (this->mn108 == 1)
         this->mn10c = 2;
 
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x4360e14);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x56bbd7f);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x44db12e);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x5bd6378);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x5dd52c7);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x6203fdc);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x4519b5f);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x625d27d);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x67c75bd6);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x634297ad);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x275a9c8c);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0xeda117de);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x8085c4c);
+    void* pHandler = &this->mHandler08;
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x4360e14);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x56bbd7f);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x44db12e);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x5bd6378);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x5dd52c7);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x6203fdc);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x4519b5f);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x625d27d);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x67c75bd6);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x634297ad);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x275a9c8c);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0xeda117de);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x8085c4c);
 
     cIEffectsWorld* pWorld = this->mp38;
     if (this->mb24c != 0)
@@ -11715,6 +11719,7 @@ bool cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea200()
         if (pWorld != 0)
             pWorld->v48(this->mp250);
         this->mb24c = 0;
+        _ReadWriteBarrier();
         tRefObj* pEffect = this->mp250;
         if (pEffect != 0)
         {
@@ -11729,8 +11734,8 @@ bool cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea200()
             pWorld->v4c();
     }
 
-    uint8_t* pEnd = (uint8_t*)&this->mp128;
     uint8_t* pCur = (uint8_t*)this->mp12c;
+    uint8_t* pEnd = (uint8_t*)&this->mp128;
     for (; pCur != pEnd; pCur = (uint8_t*)RBTreeIncrement(pCur))
         ((cVisitNode*)pCur)->mp14->v38();
 
@@ -15524,7 +15529,7 @@ void cDownloadDialog::FUN_00df5aa0(char b)
 // @ 0x00df5c80
 cDownloadDialog* __fastcall cDownloadDialog_ctor_5c80(cDownloadDialog* self)
 {
-    *(void**)((char*)self + 0x04) = (void*)vtbl_Resource_Async;
+    *(void* volatile*)((char*)self + 0x04) = (void*)vtbl_Resource_Async;
     self->mpVal_08 = 0;
     *(void**)self = (void*)vtbl_UI_cDownloadDialog_C;
     *(void**)((char*)self + 0x04) = (void*)vtbl_UI_cDownloadDialog_D;

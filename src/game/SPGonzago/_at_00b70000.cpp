@@ -1372,7 +1372,7 @@ struct QuadVec {
     __forceinline void erase(Quad16* first, Quad16* last)
     {
         copy_705250(last, last, first);
-        mpEnd += first - last;
+        mpEnd -= last - first;
     }
 };
 void FUN_00b76950(Vec3* first, Vec3* last, int depth,
@@ -3351,9 +3351,11 @@ uint Sim::FUN_00b72b60(V3* a, V3* b, float c, Op* obj, char flag, float* outDist
 // @ 0x00b72d80
 HIt* HIt::advance(HIt* out, int)
 {
-    out->mpNode = mpNode;
+    HashNode* node = mpNode;
+    out->mpNode = node;
+    HashNode* next = node->mpNext;
     out->mpBucket = mpBucket;
-    mpNode = mpNode->mpNext;
+    mpNode = next;
     while (!mpNode) {
         ++mpBucket;
         mpNode = *mpBucket;
@@ -4172,8 +4174,9 @@ int ObstacleMgr::FindById(unsigned int* a, int b, int id)
     int* end = it.end;
     int* bucket = it.bucket;
     while (cur != end) {
-        if (*(int*)(*(int*)((char*)cur + 8) + 0x5c) == id)
-            return *(int*)((char*)cur + 8);
+        int obj = *(int*)((char*)cur + 8);
+        if (*(int*)(obj + 0x5c) == id)
+            return obj;
         cur = *(int**)((char*)cur + 0x10);
         while (cur == 0) {
             bucket++;

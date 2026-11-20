@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00c62880   44  cMissionUseTool ctor: complete (vptr 0x1470970/0x1470960/0x1470950, state/fields zeroed); base-ctor call and vptr store schedule. difftest PASS (351 valid, 100% coverage)
-00c63a20   54  interface adjustor: complete; identity cases 0x771ad6a/0x7a309fb grouped, 0x1186577 returns this+0x34, fallback tail-calls 0xb18460. difftest PASS (400 valid, 64.7% coverage)
 00c62990  324  GetTagString override: complete property-list lookup, WString range init, out assignment and cache cleanup; base fallback retained. difftest WEAK (400 valid, 29.3% coverage; property/WString helpers opaque)
 00c62a80  161  cSPMissionUseTool::Init: complete property-vector ingest and 12-byte key append (inline fast path + 0x4e3e10 growth); named property result layout. difftest UNSUPPORTED (0/400 valid; fake-arity/fault-read on opaque property helpers)
 00c62b30  355  cSPMissionUseTool::Init: complete base Init, vtable 0x16c/0x170, byte-vector fill, PickPlanet options and cleanup. difftest UNSUPPORTED (0/400 valid; fault-read on opaque PickPlanet/planet helpers)

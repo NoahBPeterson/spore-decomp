@@ -3595,6 +3595,13 @@ void* __cdecl hkBoxBoxAgent3_destroy(hkAgentEntry_s010f_d4c0* entry, void* agent
     return (char*)manifold + 0x50;
 }
 
+// @ 0x010fdbd0
+// The registered destroy entry point: forwards to the contact-point cleanup above (a 5-byte jmp in retail).
+void* __cdecl hkBoxBoxAgent3_destroyEntry(hkAgentEntry_s010f_d4c0* entry, void* agentData, hkContactMgr_s010f_d4c0* mgr)
+{
+    return hkBoxBoxAgent3_destroy(entry, agentData, mgr);
+}
+
 // @ 0x010fdbe0
 void* __cdecl hkBoxBoxAgent3_process(const hkAgent3ProcessInput& input, hkAgentEntry_s010f_d4c0* entry, void* agentData, hkVector4_s010f_d4c0* separatingNormal, hkProcessCollisionOutput_s010f_d4c0& result)
 {
@@ -3643,18 +3650,18 @@ void __cdecl hkBoxBoxAgent3_register(hkCollisionDispatcher_s010f_d4c0* dispatche
 {
     hkCollisionDispatcher_s010f_d4c0::Agent3Funcs funcs;
     funcs.m_createFunc          = (void* (*)())&hkBoxBoxAgent3_create;
-    funcs.m_destroyFunc         = (void (*)())&hkBoxBoxAgent3_destroy;
-    funcs.m_cleanupFunc         = 0;
+    funcs.m_processFunc         = (void* (*)())&hkBoxBoxAgent3_process;
+    funcs.m_cleanupFunc         = (void (*)())&hkBoxBoxAgent3_destroy;
     funcs.m_removePointFunc     = (void (*)())&hkBoxBoxAgent3_removePoint;
     funcs.m_commitPotentialFunc = (void (*)())&hkBoxBoxAgent3_commitPotential;
     funcs.m_createZombieFunc    = (void (*)())&hkBoxBox_createZombie;
-    funcs.m_updateFilterFunc    = 0;
     funcs.m_invalidateTimFunc   = 0;
     funcs.m_warpTimeFunc        = 0;
-    funcs.m_sepNormalFunc       = 0;
-    funcs.m_processFunc         = (void* (*)())&hkBoxBoxAgent3_process;
-    funcs.m_isPredictive        = hkBool_s010f_d4c0(false);
     funcs.m_ignoreSymmetricVersion = hkBool_s010f_d4c0(false);
+    funcs.m_sepNormalFunc       = 0;
+    funcs.m_updateFilterFunc    = 0;
+    funcs.m_destroyFunc         = (void (*)())&hkBoxBoxAgent3_destroyEntry;
+    funcs.m_isPredictive        = hkBool_s010f_d4c0(false);
     dispatcher->registerAgent3(funcs, 7, 7);
 }
 
