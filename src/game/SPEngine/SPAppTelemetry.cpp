@@ -756,12 +756,12 @@ void ObjB3f::freeNodes()
 {
     int* node = *(int**)this;
     while (node != (int*)this) {
-        int p = node[5];
-        int* next = (int*)*node;
+        int* cur = node;
+        node = (int*)*node;
+        int p = cur[5];
         if (p && *(int*)(p - 4))
             operator_delete__((void*)p);
-        operator_delete__(node);
-        node = next;
+        operator_delete__(cur);
     }
 }
 
