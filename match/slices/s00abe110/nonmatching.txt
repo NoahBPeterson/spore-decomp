@@ -2,7 +2,6 @@
 00abe8a0 63 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free/end bit tests compile as cmp/jl
 00abe8f0 38 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free-chain expression load order
 00abe950 38 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free-chain expression load order
-00abe9b0 64 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (stale eax; void return); free-bit test/register allocation
 00abea00 8 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (138 valid, 62.5% cov); cmp operand order
 00abea40 58 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (rbtree::find arg model); map lookup register allocation
 00abea90 71 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (rbtree::find arg model); predicate register allocation

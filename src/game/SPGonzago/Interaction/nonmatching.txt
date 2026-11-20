@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00abe8f0 37 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free-chain expression load order
 00abe950 37 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free-chain expression load order
-00abe9b0 55 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (stale eax; void return); free-bit test/register allocation
 00abea00 8 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (138 valid, 62.5% cov); cmp operand order
 00abea40 58 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (rbtree::find arg model); map lookup register allocation
 00abea90 59 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (rbtree::find arg model); predicate register allocation

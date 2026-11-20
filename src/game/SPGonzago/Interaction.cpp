@@ -23,7 +23,7 @@ struct SlotVector;
 struct SlotIter {
   SlotVector* mpOwner;
   u32 mIndex;
-  void increment();
+  SlotIter& increment();
 };
 static const u32 kSlotEmpty = 0x3fffffff;
 int __cdecl SlotDistance(SlotIter first, SlotIter last);
@@ -439,14 +439,16 @@ void SlotVector::freeAgent(u32 i)
 }
 
 // @ 0x00abe9b0
-NOINLINE void SlotIter::increment()
+NOINLINE SlotIter& SlotIter::increment()
 {
-  u32 cur;
+  bool busy;
   do {
-    cur = mIndex;
-    mIndex = cur + 1;
-    if ((mpOwner->entry(cur)->mMeta >> 30) & 1) return;
-  } while ((int)mpOwner->entry(mIndex)->mMeta < 0);
+    u32 cur = mIndex++;
+    bool done = ((mpOwner->entry(cur)->mMeta >> 30) & 1) != 0;
+    if (done) return *this;
+    busy = ((mpOwner->entry(mIndex)->mMeta >> 31) & 1) != 0;
+  } while (busy);
+  return *this;
 }
 
 // @ 0x00abea00
