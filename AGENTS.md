@@ -18,6 +18,13 @@ also compares each name that claims an address (`g_15b7458`, `FUN_00abcdef`, or 
 with the address retail uses at that spot, and fails a new match whose name points elsewhere (`tools/ci/targets.py`). It
 also fails a plain number where retail has an address (the fingerprint lists retail's relocated offsets): name it.
 
+`symbols/` maps retail addresses to names. The addresses come from functions that matched retail's bytes, but the
+names, and the types and signatures inside them, are our reconstruction: our tools wrote them from our own source at
+the time (some come from the development build's debug data). The retail game has no names or types. Treat them as a
+strong hint, not ground truth: when retail's bytes show a different signature (`test al` for a `bool` return, `jge`
+for a signed one), the bytes win. Fix the source, and say in the pull request that the `symbols/` row is stale so a
+maintainer updates it.
+
 The check passes when every affected function matches its fingerprint (apart from the long-standing ones in
 `tools/ci/known_failures.txt`), no function that matched before has been dropped, and **at least one function is
 byte-exact, or newly proven equivalent (step 6), that was not before** (a pull request that changes only `nonmatching.txt` / `partial.txt` notes needs
