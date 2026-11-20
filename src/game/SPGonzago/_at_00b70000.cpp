@@ -1674,7 +1674,8 @@ struct Sub {
 struct ObMgr {
     void* Construct();                                 // 0xb79740
     void* Init(int* a, int* b);                        // 0xb794e0
-    int*  Insert(int* out, int* key, int unused);      // 0xb795c0
+    struct InsertResult { int* node; int* bucket; };
+    InsertResult Insert(int* key, int unused);          // 0xb795c0 (returned by value)
     int*  FindNode(int* bucket, int* key, unsigned h); // 0xb72f10
     void  Destroy();                                   // 0xb79aa0
     void  Query(V3* dir, PointerVec* out, unsigned mask, float radius,
@@ -5417,7 +5418,7 @@ void* ObMgr::Init(int* a, int* b)
 }
 
 // @ 0x00b795c0
-int* ObMgr::Insert(int* out, int* key, int unused)
+ObMgr::InsertResult ObMgr::Insert(int* key, int unused)
 {
     FindRes fr;
     ((BucketAlloc*)((char*)this + 0x10))->Find(&fr, *(int*)((char*)this + 8),
@@ -5441,10 +5442,11 @@ int* ObMgr::Insert(int* out, int* key, int unused)
     }
 
     ++*(int*)((char*)this + 0xc);
-    out[0] = (int)node;
-    out[1] = *(int*)((char*)this + 4) + idx;
+    InsertResult r;
+    r.node = node;
+    r.bucket = (int*)(*(int*)((char*)this + 4) + idx);
     (void)unused;
-    return out;
+    return r;
 }
 
 // @ 0x00b79740
