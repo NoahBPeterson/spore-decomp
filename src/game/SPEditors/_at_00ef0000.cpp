@@ -2557,7 +2557,11 @@ struct InputFwd  { void f(int); };                       // 0x00ef8a10, ret 4
 struct CatState  { unsigned f(int); };               // 0x00ef7330, ret 4
 struct CatValid  { bool f(int); };                   // 0x00ef72d0, ret 4
 struct Stopwatch_s00ef_9e40 { void SetTimeLimit(int, int); };       // 0x0093a480, ret 8
-struct HashFind  { void find(void*, void*); };           // 0x00a23ef0, ret 8
+struct HashFind  {
+    u32 m00; int* mpBucketArray; int mnBucketCount;         // +0 / +4 / +8
+    void find(void*, void*);                                // 0x00a23ef0, ret 8
+};
+struct HashIt_s00ef_a110 { int mpNode; int mpBucket; };
 struct Mgr830    { void f(int); };                       // 0x0067c830, ret 4
 struct PrimeRehashPolicyData {
     float mfMaxLoadFactor;   // +0
@@ -7391,10 +7395,11 @@ void cScenarioTutorials_s00ef_9e40::SetCategoryState(int category, char flag)
 void cScenarioTutorials_s00ef_9e40::HandleCategoryMessage(int category, int arg)
 {
     char* self = (char*)this;
-    int local;
+    HashIt_s00ef_a110 it;
     int k = category;
-    ((HashFind*)(self + 0x5c))->find(&local, &k);
-    if (local == *(int*)(*(int*)(self + 0x60) + *(int*)(self + 0x64) * 4)) {
+    HashFind& h = *(HashFind*)(self + 0x5c);
+    h.find(&it, &k);
+    if (it.mpNode == h.mpBucketArray[h.mnBucketCount]) {
         ((InputFwd*)self)->f(category);
         ((CatUpdate*)self)->f(category);
         unsigned state = ((CatState*)self)->f(category);
