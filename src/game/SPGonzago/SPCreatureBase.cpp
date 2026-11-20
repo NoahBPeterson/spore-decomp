@@ -10636,22 +10636,18 @@ void* Pool_s00c1_4350::Alloc(uint32_t* out)
 }
 
 // @ 0x00c14530
+struct RefSlot_s00c1_4530 {
+    IRefCounted_s00c1_4350* mp;
+    ~RefSlot_s00c1_4530() { if (mp) mp->Release(); }
+};
+struct Pool_s00c1_4530 {
+    RefSlot_s00c1_4530 mSlots[7];
+    RefSlot_s00c1_4530 mLast;  // +0x1c
+    static void operator delete(void* p) { EAFree(p); }
+};
 void DestroyPool()
 {
-    uint8_t* p = (uint8_t*)gSingleton168d900;
-    if (gSingleton168d900 != 0) {
-        uint8_t* slot = p + 0x1c;
-        if (*(IRefCounted_s00c1_4350**)(p + 0x1c) != 0)
-            (*(IRefCounted_s00c1_4350**)(p + 0x1c))->Release();
-        int n = 6;
-        do {
-            slot -= 4;
-            if (*(IRefCounted_s00c1_4350**)slot != 0)
-                (*(IRefCounted_s00c1_4350**)slot)->Release();
-            n--;
-        } while (n >= 0);
-        EAFree(p);
-    }
+    delete (Pool_s00c1_4530*)gSingleton168d900;
     gSingleton168d900 = 0;
 }
 
