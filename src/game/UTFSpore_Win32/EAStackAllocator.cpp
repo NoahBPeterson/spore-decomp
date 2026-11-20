@@ -106,12 +106,13 @@ bool StackAllocator_s0092_8b00::AllocateNewBlock(uint32 size)
     void* p = mpCoreAllocationFunction(need, &need, mpCoreFunctionContext);
     if (p != 0) {
         *(void**)p = mpCurrentBlock;
+        char* const end = (char*)p + need;
         char* dst = (char*)p + 8;
         mpCurrentBlock = (Block_s0092_8b00*)p;
-        *((char**)p + 1) = (char*)p + need;
-        mpCurrentBlockEnd = (char*)p + need;
+        *((char**)p + 1) = end;
+        mpCurrentBlockEnd = end;
         if (((uint32)dst & 7) != 0)
-            dst = (char*)(((uint32)p + 0xf) & 0xfffffff8);
+            dst = (char*)(((uint32)dst + 7) & 0xfffffff8);
         if (avail != 0 && dst != 0 && mpCurrentObjectBegin != 0)
             memcpy(dst, mpCurrentObjectBegin, avail);
         mpCurrentObjectBegin = dst;
