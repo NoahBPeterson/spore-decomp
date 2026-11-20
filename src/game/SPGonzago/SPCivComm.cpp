@@ -535,13 +535,15 @@ __thiscall cSummarizer::cSummarizer()
     mField28 = 0;
 }
 
+extern "C" char g_1478c10[];   // cGonzagoChild vtable
+extern "C" char g_1478c08[];   // cGonzagoChild second vtable (+4)
+
 // @ 0x00cfecc0
 __thiscall cGonzagoChild::cGonzagoChild()
 {
-    *(void**)this = (void*)0x1478c10;
-    *(void**)((char*)this + 4) = (void*)0x1478c08;
-    _ReadWriteBarrier();
-    mField1C = 0;
+    *(void* volatile*)this = g_1478c10;
+    *(void* volatile*)((char*)this + 4) = g_1478c08;
+    *(volatile int32_t*)&mField1C = 0;
     mField20 = 0;
     mField24 = 0;
 }
