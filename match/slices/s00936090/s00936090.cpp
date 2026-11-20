@@ -4,6 +4,9 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_143e9d8[];
+extern "C" char g_13f65b4[];
+extern "C" char g_143ea00[];
+extern "C" wchar_t g_1667bac[];
 
 #include "types.h"
 #include <intrin.h>
@@ -536,13 +539,15 @@ bool EA::SharedLibrary::SetPath(const wchar_t* path, bool flag) {
 
 // @ 0x00936C80
 EA::SharedLibrary::SharedLibrary(uint32_t a, uint32_t b) {
-    *(void**)this = (void*)0x13f65b4;   // ILibraryCommand vftable
+    *(void**)this = (void*)g_13f65b4;   // ILibraryCommand vftable
     mnRefCount = 0;
-    *(void**)this = (void*)0x143ea00;   // SharedLibrary vftable
+    *(void**)this = (void*)g_143ea00;   // SharedLibrary vftable
     mHandle = 0;
-    mpPathBegin = (wchar_t*)0x1667bac;
-    mpPathEnd = (wchar_t*)0x1667bac;
-    mpPathCap = (wchar_t*)0x1667bae;
+    _ReadWriteBarrier();
+    mpPathBegin = g_1667bac;
+    mpPathEnd = g_1667bac;
+    mpPathCap = g_1667bac + 1;
+    _ReadWriteBarrier();
     mHandlerBegin = 0;
     mHandlerEnd = 0;
     mHandlerCap = 0;
