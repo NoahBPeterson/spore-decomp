@@ -46,7 +46,6 @@
 00e61630 106 ctor wrapper: temp Handle slot and case schedule differ; equiv UNSUPPORTED: 0/1200 valid inputs (_mktime64 import, write faults)
 00e63ac0 264 compact cell array (release dead parts): complete; loop/index register allocation differs
 00e63bf0 113 spawn/kill cell attachment effect: complete; transform copy and vtable-call schedule differ
-00e63d10 33 assign global AutoRef from factory: complete; AddRef/Release ordering folded differently
 00e63d60 200 eastl FixedVector<PairIU>::DoInsertValue: complete; move_backward/copy helper schedule differs
 00e63e70 227 eastl FixedVector<SoundElem>::DoInsertValue: complete; element assign helper schedule differs
 00e643e0 50 notify cell-owner HUD: complete; arg/eval schedule and null-check layout differ

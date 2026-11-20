@@ -5230,10 +5230,13 @@ void __cdecl FUN_00e63bf0(int* pCell, int effKind, int* pEffect, uint16_t* xform
 }
 
 // @ 0x00e63d10
+struct CellXformSink {
+    void FUN_00e627a0(int src);       // 0x00e627a0 (__thiscall, ret 4)
+};
 void __cdecl FUN_00e63d10(int arg)
 {
     g_16b3de0 = FUN_00e61550_s00e6_3ac0();
-    FUN_00e627a0(arg);
+    ((CellXformSink*)g_16b3de0.mpObject)->FUN_00e627a0(arg);
 }
 
 // @ 0x00e63d60

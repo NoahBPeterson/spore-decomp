@@ -1,7 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
 00e63ac0  49  compact cell array (release dead parts): complete; loop/index register allocation differs
 00e63bf0  63  spawn/kill cell attachment effect: complete; transform copy and vtable-call schedule differ
-00e63d10  21  assign global AutoRef from factory: complete; AddRef/Release ordering folded differently
 00e63d60  51  eastl FixedVector<PairIU>::DoInsertValue: complete; move_backward/copy helper schedule differs
 00e63e70  49  eastl FixedVector<SoundElem>::DoInsertValue: complete; element assign helper schedule differs
 00e642a0  65  DNA-effect HUD label: complete; literal/format-arg slot layout approx; vtable calls folded
