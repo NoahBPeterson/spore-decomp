@@ -1294,7 +1294,8 @@ void EA::ResourceMan::Manager::DoDatabaseChanged(EA::ResourceMan::Database * a, 
 // @ 0x008decb0
 void Vec8::Fn8decb0()
 {
-    for (AutoRefObj* it = mpBegin; it < mpEnd; ++it) {
+    AutoRefObj* end = mpEnd;
+    for (AutoRefObj* it = mpBegin; it < end; ++it) {
         void* o = it->mpObject;
         if (o) {
             void** vt = *(void***)o;

@@ -10,3 +10,4 @@
 ../src/game/UTFSpore_Win32/Manager.cpp  ?GetLoadedResource@Manager_s008d_e020@ResourceMan@EA@@QAE_NABVKey@23@PAPAVResource@23@@Z  008de280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?FindCache@Manager_s008d_e020@ResourceMan@EA@@QAEPAVCache@23@ABVKey@23@@Z  008de360  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?CacheResource@Manager_s008d_e020@ResourceMan@EA@@QAE_NPAVResource@23@_N@Z  008de3b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Manager.cpp  ?Fn8decb0@Vec8@@QAEXXZ  008decb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
