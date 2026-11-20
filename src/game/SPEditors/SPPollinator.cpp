@@ -400,13 +400,14 @@ struct QValue {
     uint32_t mKey0;  // +0x0
     uint32_t mKey1;  // +0x4
     uint32_t mKey2;  // +0x8
-    uint8_t mFlag0;  // +0xc
-    uint8_t mFlag1;  // +0xd
+    bool mFlag0;     // +0xc
+    bool mFlag1;     // +0xd
     uint8_t mPad[2];
     QValue() {}
     QValue(const QValue& x)
         : mKey0(x.mKey0), mKey1(x.mKey1), mKey2(x.mKey2), mFlag0(x.mFlag0), mFlag1(x.mFlag1) {}
 };
+QValue* copy_705250(const QValue* first, const QValue* last, QValue* dest);   // 0x00705250 eastl copy
 struct UploadQueue {
     QValue* mpBegin;     // +0x0
     QValue* mpEnd;       // +0x4
@@ -415,6 +416,12 @@ struct UploadQueue {
 
     void DoInsertValue(QValue* position, const QValue* value);  // 0x0060ec20
     void push_back(const QValue& value);                        // 0x0060f080
+    void erase(QValue* position)
+    {
+        if (position + 1 < mpEnd)
+            copy_705250(position + 1, mpEnd, position);
+        --mpEnd;
+    }
 };
 struct EmptyQueue {
     char* mpBegin;  // +0x0
@@ -480,15 +487,23 @@ struct deque {
     iterator insert(iterator position, const T& value);
 };
 template class deque<TransactionPtr>;
+struct PollinateRequest {      // ResourceKey + two request flags, as NextIDReady copies it
+    uint32_t mKey0, mKey1, mKey2;
+    bool mbA;
+    bool mbB;
+};
 struct cPollinatorReal {
     virtual void v0();
     virtual bool HandleMessage(uint32_t id, void* msg);
-    char pad08[0x50];
+    char pad08[0x58 - 0x08];   // the 8-byte member aligns the vptr slot to 8
     void* mpAsssetDirectory;   // +0x58
-    uint32_t mnNextAssetIDLo;  // +0x60
-    uint32_t mnNextAssetIDHi;  // +0x64
+    uint32_t m5c;              // +0x5c
+    uint64_t mnNextAssetID;    // +0x60
     UploadQueue mUploadQueue;  // +0x68
     deque<TransactionPtr> mTransactions;  // +0x78
+
+    void NextIDReady();                                                    // 0x0060f010
+    void HandlePollinateRequest(const PollinateRequest& key, bool a, bool b);  // 0x0060ee90
 };
 struct RbNode {
     RbNode* mpRight;   // +0x0
@@ -2071,15 +2086,19 @@ void HandlePollinateRequest(cPollinatorReal* self, QValue* entry)
 }
 
 // @ 0x0060f010
-void NextIDReady(cPollinatorReal* self)
+void cPollinatorReal::NextIDReady()
 {
-    UploadQueue& q = self->mUploadQueue;
-    if (q.mpBegin == q.mpEnd) return;
-    if ((self->mnNextAssetIDLo & self->mnNextAssetIDHi) == 0xffffffff) return;
-    QValue local = *q.mpBegin;
-    for (QValue* p = q.mpBegin; p + 1 != q.mpEnd; ++p) p[0] = p[1];
-    q.mpEnd = q.mpEnd - 1;
-    HandlePollinateRequest(self, &local);
+    if (mUploadQueue.mpBegin == mUploadQueue.mpEnd) return;
+    if (mnNextAssetID == 0xffffffffffffffffULL) return;
+    const QValue* front = mUploadQueue.mpBegin;
+    PollinateRequest local;
+    local.mKey0 = front->mKey0;
+    local.mKey1 = front->mKey1;
+    local.mKey2 = front->mKey2;
+    local.mbA = front->mFlag0;
+    local.mbB = front->mFlag1;
+    mUploadQueue.erase(mUploadQueue.mpBegin);
+    HandlePollinateRequest(local, local.mbA, local.mbB);
 }
 
 // @ 0x0060f080
