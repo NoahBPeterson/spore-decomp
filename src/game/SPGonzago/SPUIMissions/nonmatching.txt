@@ -27,7 +27,6 @@
 00e17cf0 32 -- expand card then post 0xf46092d0 message via MessageServer; message-frame construction differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e17df0 51 -- iterate card vector calling UpdateDetails on each; register allocator differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e17e40 62 -- iterate card vector matching mission then UpdateDetails flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00e17f40 78 -- Init then mission swap (addref/release) then UpdateDetails + vtbl[0x28]/[0x2c] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e180d0 69 -- release every card, erase vector, shut down layout + field3c flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e18150 131 -- allocate cUIMissionCard (0x9c), push into vector, init from mission flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e18200 245 -- allocate card (0xa0), push, Setup, position, optional handler object flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
