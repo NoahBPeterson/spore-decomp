@@ -652,7 +652,7 @@ struct RefCountObj {
 struct RefPtr {
     RefCountObj* mpObject;              // +0x0
     RefPtr& AssignRefPtr(const RefPtr* x);
-    RefPtr& operator=(const RefPtr& x) {
+    __forceinline RefPtr& operator=(const RefPtr& x) {
         RefCountObj* src = x.mpObject;
         RefCountObj* old = mpObject;
         if (src != old) {
@@ -662,10 +662,10 @@ struct RefPtr {
             if (old) {
                 volatile long* p = (volatile long*)&old->mnRefCount;
                 long n = _InterlockedDecrement(p);
-                if (n == 0) {
-                    _InterlockedExchange(p, 1);
-                    old->Delete(1);
-                }
+                if (n != 0)
+                    return *this;
+                _InterlockedExchange(p, 1);
+                old->Delete(1);
             }
         }
         return *this;
