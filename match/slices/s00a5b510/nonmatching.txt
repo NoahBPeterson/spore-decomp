@@ -13,5 +13,4 @@
 00a5c0b0   34  complete makefilename_float (1000-byte buffer sprintf through the stored format, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable]
 00a5c100   34  complete makefilename_symbol (sprintf with the symbol name, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable]
 00a5c1f0   31  complete swap_new (store float to +0x30 and 0 to +0x2c, two outlet_new, store +0x28, floatinlet to +0x30); movss/lea scheduling differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
-00a5c300   20  complete swap_float (store to +0x2c then tail-call swap_bang); the input-to-+0x2c store lands in ecx in our build, the original leaves ecx untouched [equiv FAIL: 5/23 valid, first difference is ecx only - a pure register artifact, all memory results match]
 00a5c3c0   15  complete change_new (store float to +0x28 then outlet_new) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
