@@ -7,7 +7,6 @@
 00924c60  48   FString::push_back: complete; eastl::max temp/register layout differs
 00924d10  ~50  LogFormatterSimple::FormatRecord: complete; register allocation (ebx/ebp) and size() load order
 00924d90  ~340 LogFormatterFancy::FormatRecord: complete; strlen+end-pointer fold (dec eax vs sub/lea) and register allocation differ
-00925060  ~10  TraceHelperTable::Release: complete; xadd then `dec` vs `sub eax,1` and esi/edx pointer copies
 00925100  ~55  DisplayTraceDialog: complete; original re-reads msg from the stack instead of keeping it in ebp
 00925220  11   TraceHelper::TraceHelper: complete; arg load order (type/level in edx/ecx) and switch table placement
 00925370  ~35  hashtable::DoRehash: complete; ebp used for both bucket count and node temp in the original
