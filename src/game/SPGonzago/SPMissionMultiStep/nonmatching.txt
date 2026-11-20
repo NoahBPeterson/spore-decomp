@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00c59dc0 28 notify-loop over sub-missions (state!=9 -> FUN_00c485e0 + vtbl[0x94]) then tail FUN_00c46b80. Body matches; original keeps count in edi and loop index in ebx plus the end-first count idiom, mine swaps esi/edi/ebx and uses edx/eax for the vtbl fetch. 90 bytes both. equiv: UNSUPPORTED (0/400, fault(read))
-00c59e20 29 GetCurrSubMission + FUN_00c485d0 + tail FUN_00c46ab0. Same inlined-bounds register flip as 00c59d90 plus the null path materialises eax=0 then mov ecx,eax (mine directly xor ecx,ecx). 65 vs 73 bytes. equiv: UNSUPPORTED (0/400, fault(read))
 00c59e70 32 GetCurrSubMission then tail-jmp to sub-mission vtbl[0x118]. Same inlined-bounds/reload register flip; 50 vs 54 bytes. equiv: UNSUPPORTED (0/400, fault(read))
 00c59eb0 34 AcceptCurrentStep: GetCurrSubMission -> SP::cSPMission::Accept -> tail vtbl[0x1a8]. Same inlined-bounds register flip and eax=0/mov-ecx-vs-xor-ecx null path; 59 vs 65 bytes. equiv: UNSUPPORTED (0/400, fault(read))
 00c59f00 57 FUN: notify current sub, if it is the last also self-notify, then tail vtbl[0x1ac]. Same inlined-bounds register flip (6-byte size gap) plus edx/eax on the final vtbl fetch; 90 vs 96 bytes. equiv: UNSUPPORTED (0/400, fault(read))
