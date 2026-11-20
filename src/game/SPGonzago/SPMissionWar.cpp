@@ -381,20 +381,24 @@ branch_b:
 }
 
 // @ 0x00c63740
-uint32_t __fastcall M_GetTagString(void* self, int _e, int key, void* out)
+extern "C" const wchar_t g_13f01bc[];   // integer format string
+extern "C" const wchar_t g_1459c40[];   // text appended when the count is unknown
+struct TagWStr { void append(const wchar_t* s); };                 // 0x005c3d90 eastl::basic_string<wchar_t>::append
+struct TagSPObject { bool GetTagString(unsigned key, void* out); }; // 0x00c491c0 SPObject::GetTagString
+bool __fastcall M_GetTagString(void* self, int _e, int key, void* out)
 {
   if (key == (int)0xaae66a73) {
-    WStr_Format(out, (const wchar_t*)0x13f01bc, *(int*)((char*)self + 0x1f4));
-    return 1;
+    WStr_Format(out, g_13f01bc, *(int*)((char*)self + 0x1f4));
+    return true;
   }
   if (key == (int)0xc74ba481) {
-    int n = ((int(__thiscall*)(void*))0x00c635c0)(self);
+    int n = M_GetNumCities(self, _e);
     if (n >= 0) {
-      WStr_Format(out, (const wchar_t*)0x13f01bc, n);
+      WStr_Format(out, g_13f01bc, n);
     } else {
-      ((void(__thiscall*)(void*, const wchar_t*))0x005c3d90)(out, (const wchar_t*)0x1459c40);
+      ((TagWStr*)out)->append(g_1459c40);
     }
-    return 1;
+    return true;
   }
-  return ((uint32_t(__thiscall*)(void*, int, void*))0x00c491c0)(self, key, out);
+  return ((TagSPObject*)self)->GetTagString(key, out);
 }

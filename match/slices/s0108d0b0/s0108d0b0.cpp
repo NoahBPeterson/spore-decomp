@@ -800,7 +800,14 @@ class hkAabbPhantom : public hkPhantom { public:
 
 // @ 0x0108dd90
 // The original leaves the out pointer in EAX (void_hides_eax); returning the reference matches it.
-hkAabb& hkAabbPhantom::calcAabb(hkAabb& out) { out = m_aabb; return out; }
+hkAabb& hkAabbPhantom::calcAabb(hkAabb& out)
+{
+    // dword-wise copy of the two vectors
+    const uint32_t* src = (const uint32_t*)&m_aabb;
+    uint32_t* dst = (uint32_t*)&out;
+    for (int i = 0; i < 8; i++) dst[i] = src[i];
+    return out;
+}
 
 // @ 0x0108dde0
 void hkAabbPhantom::setAabb(const hkAabb& aabb)
@@ -845,10 +852,11 @@ void hkAabbPhantom::removeOverlappingCollidable(void* c)
 void hkAabbPhantom::addOverlappingCollidable(void* c)
 {
     if (fireCollidableAdded(c) == 0) {      // hkCollidableAccept: 0 = accept
-        if (m_overlappingCollidables.m_size == (m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff))
-            hkArrayUtil_reserveMore(&m_overlappingCollidables, 4);
-        m_overlappingCollidables.m_data[m_overlappingCollidables.m_size] = c;
-        m_overlappingCollidables.m_size++;
+        hkArray<void*>& a = m_overlappingCollidables;
+        if (a.m_size == (a.m_capacityAndFlags & 0x3fffffff))
+            hkArrayUtil_reserveMore(&a, 4);
+        a.m_data[a.m_size] = c;
+        a.m_size++;
     }
 }
 
@@ -873,9 +881,13 @@ hkAabbPhantom::hkAabbPhantom(int finishLoaded) : hkPhantom(1)
 }
 
 // Retail callees that take `this` in ecx, modelled as members so the call site leaves edx alone.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+struct hkFinishLoadedObjectFlag { int m_finishing; };
 struct hkWorldObjectFinishLoadedView {
-    void FinishLoaded(int flag);        // 0x010826e0
+    void FinishLoaded(hkFinishLoadedObjectFlag flag);   // 0x010826e0
 };
+extern "C" char g_149e51c[];            // hkAabbPhantom vftable
 struct hkAabbPhantomVtblView {
     void* m_vtbl;                       // +0x00
 };
@@ -888,14 +900,17 @@ void hkAabbPhantom_constructFinishLoaded(hkAabbPhantom* self)
 {
     if (self == 0)
         return;
-    ((hkWorldObjectFinishLoadedView*)self)->FinishLoaded(1);
+    hkFinishLoadedObjectFlag flag;
+    flag.m_finishing = 1;
+    ((hkWorldObjectFinishLoadedView*)self)->FinishLoaded(flag);
     self->m_overlapListeners.m_data = 0;
     self->m_overlapListeners.m_size = 0;
+    _ReadWriteBarrier();
     self->m_overlapListeners.m_capacityAndFlags = (int32_t)0x80000000;
     self->m_phantomListeners.m_data = 0;
     self->m_phantomListeners.m_size = 0;
     self->m_phantomListeners.m_capacityAndFlags = (int32_t)0x80000000;
-    ((hkAabbPhantomVtblView*)self)->m_vtbl = (void*)0x0149e51c;
+    ((hkAabbPhantomVtblView*)self)->m_vtbl = g_149e51c;
     self->m_overlappingCollidables.m_data = 0;
     self->m_overlappingCollidables.m_size = 0;
     self->m_overlappingCollidables.m_capacityAndFlags = (int32_t)0x80000000;

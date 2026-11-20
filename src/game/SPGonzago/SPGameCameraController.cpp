@@ -116,7 +116,8 @@ struct Str8 {
 Str8::Str8(int unused, const char* p, ...)
 {
     mpBegin = 0; mpEnd = 0; mpCapacity = 0;
-    const uint32_t n = (uint32_t)strlen(p) + 1;
+    const char* pFormat = p;
+    const uint32_t n = (uint32_t)strlen(pFormat) + 1;
     RangeInitialize(n);
     va_list args; va_start(args, p);
     append_sprintf_va_list(p, args);

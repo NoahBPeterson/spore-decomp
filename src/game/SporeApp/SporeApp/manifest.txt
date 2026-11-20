@@ -2,3 +2,4 @@
 ../src/game/SporeApp/SporeApp.cpp  ?Shutdown@cSporeApp@@QAE_NXZ  00f47700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ?Elapsed@Timer@@QAEHXZ  00f475b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ??1cSporeApp@@UAE@XZ  00f47680  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SporeApp/SporeApp.cpp  ?UpdateCheck@cSporeApp@@QAEDPAX0@Z  00f47c20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

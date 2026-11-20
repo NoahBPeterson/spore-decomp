@@ -87,11 +87,9 @@ void __stdcall vector_dtor_IntVector(IntVectorElem* begin, IntVectorElem* end)
 // 0x01023180  destroy every map node in [begin,end), returning the advanced copy
 // ===========================================================================
 // @ 0x01023180
-LayoutNode* __stdcall FUN_01023180(LayoutNode* begin, LayoutNode* end, LayoutNode* out)
+LayoutNode* FUN_01023180(LayoutNode* begin, LayoutNode* end, LayoutNode* out)
 {
-    if (begin == end)
-        return out;
-    do {
+    for (; begin != end; ++begin, ++out) {
         RbNode* node = (RbNode*)begin->mpNode;
         while (node != 0) {
             begin->DoNukeSubtree(node->mpKey);
@@ -99,9 +97,7 @@ LayoutNode* __stdcall FUN_01023180(LayoutNode* begin, LayoutNode* end, LayoutNod
             operator delete[](node);
             node = next;
         }
-        begin += 1;
-        out += 1;
-    } while (begin != end);
+    }
     return out;
 }
 

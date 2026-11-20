@@ -540,14 +540,6 @@ extern "C" void  __cdecl RangeInitialize(void* s, int n);                // 0x04
 
 // ---- items of slice s00683f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" char  g_emptyStr[];                          // 0x1667bac (empty string sentinel)
-extern "C" void  FUN_006841a0(void*, void*);
-extern "C" void  FUN_00682ca0(void*, void*);
-extern "C" void  FUN_00680fc0(void*, void*);
-extern "C" void  FUN_006823f0(void*, void*);
-extern "C" void  FUN_00682e90(void*, void*);
-extern "C" void  FUN_00683ab0(void*, void*);
-extern "C" void  FUN_00684740(void*, void*);
-extern "C" void  FUN_00684a90(void*, void*);
 static inline void** VT(void* p) { return *(void***)p; }
 struct S8_s0068_3f80 {
     char* mpBegin;
@@ -681,8 +673,26 @@ struct Factory : GmeEditorResBase {
     void WriteMap1700(Map2_s0068_3f80* map, IWrt* w);          // 0x0681f10
 };
 struct CPropList { void* ctor(); };                 // 0x0683e90
+struct FactQuery {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual int Find(int id);                     // +0x0c
+};
+struct FactStream {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void* GetWriter();                    // +0x18
+    virtual int GetObject();                      // +0x1c
+};
 struct FactSer {
-    int __thiscall ser_6842c0(int* a, int* b, int c, int d);
+    bool __thiscall ser_6842c0(int* a, int* b, int c, int d);
+    void FUN_006841a0(void* map, void* writer);   // 0x006841a0 Factory::WriteMapC
+    void FUN_00682ca0(void* map, void* writer);   // 0x00682ca0 SerCtx::WriteMap2A10
+    void FUN_00680fc0(void* map, void* writer);   // 0x00680fc0
+    void FUN_006823f0(void* vec, void* writer);   // 0x006823f0 SerCtx::WriteVecA
+    bool __thiscall ser_684b40(int* a, int* b, int c, int d);
+    void FUN_00684a90(void* map, void* reader);   // 0x00684a90 Factory::ReadMapC
+    void FUN_00684740(void* map, void* reader);   // 0x00684740 Factory::ReadMapB
+    void FUN_00682e90(void* map, void* reader);   // 0x00682e90 SerCtx::LoadMap1
+    void FUN_00683ab0(void* vec, void* reader);   // 0x00683ab0 ObjLoaderT::loadA
 };
 struct Map844 {
     char pad0[4];
@@ -1825,16 +1835,16 @@ void Factory::WriteMapC(MapC* map, IWrt* w)
 }
 
 // @ 0x006842c0
-int FactSer::ser_6842c0(int* a, int* b, int c, int d)
+bool FactSer::ser_6842c0(int* a, int* b, int c, int d)
 {
     (void)c; (void)d;
-    int i = a ? ((int (__thiscall*)(void*, int))VT(a)[0xc / 4])(a, 0x355d6f5) : 0;
-    void* u = ((void* (__thiscall*)(void*))VT(b)[0x18 / 4])(b);
+    int i = a ? ((FactQuery*)a)->Find(0x355d6f5) : 0;
+    void* u = ((FactStream*)b)->GetWriter();
     FUN_006841a0((void*)(i + 0x50), u);
     FUN_00682ca0((void*)(i + 0x18), u);
     FUN_00680fc0((void*)(i + 0x34), u);
     FUN_006823f0((void*)(i + 0x6c), u);
-    return 1;
+    return true;
 }
 
 // @ 0x00684330
@@ -2077,20 +2087,21 @@ void Factory::ReadMapC(MapC* map, IRd* r)
 }
 
 // @ 0x00684b40
-int ser_684b40(int* a, int* b)
+bool FactSer::ser_684b40(int* a, int* b, int c, int d)
 {
-    int i = ((int (__thiscall*)(void*))VT(a)[0x1c / 4])(a);
-    if (i) {
-        i = ((int (__thiscall*)(void*, int))VT(*(void**)(i + 4))[0xc / 4])(*(void**)(i + 4), 0x226a1de);
-        if (i) return 0;
+    (void)c; (void)d;
+    bool result = false;
+    int i = ((FactStream*)a)->GetObject();
+    if (!i || !((FactQuery*)(i + 4))->Find(0x226a1de)) {
+        void* u = ((FactStream*)a)->GetWriter();
+        int j = b ? ((FactQuery*)b)->Find(0x355d6f5) : 0;
+        FUN_00684a90((void*)(j + 0x50), u);
+        FUN_00684740((void*)(j + 0x18), u);
+        FUN_00682e90((void*)(j + 0x34), u);
+        FUN_00683ab0((void*)(j + 0x6c), u);
+        result = true;
     }
-    void* u = ((void* (__thiscall*)(void*))VT(a)[0x18 / 4])(a);
-    int j = b ? ((int (__thiscall*)(void*, int))VT(b)[0xc / 4])(b, 0x355d6f5) : 0;
-    FUN_00684a90((void*)(j + 0x50), u);
-    FUN_00684740((void*)(j + 0x18), u);
-    FUN_00682e90((void*)(j + 0x34), u);
-    FUN_00683ab0((void*)(j + 0x6c), u);
-    return 1;
+    return result;
 }
 
 // @ 0x00684be0
@@ -2345,14 +2356,16 @@ void __stdcall HashClearBuckets(void** buckets, uint32 n)
 {
     for (uint32 i = 0; i < n; ++i) {
         void* node = buckets[i];
-        while (node != 0) {
-            void* b = *(void**)((char*)node + 4);
-            void* c = *(void**)((char*)node + 0xc);
-            void* next = *(void**)((char*)node + 0x14);
-            if ((((char*)c - (char*)b) & ~1) > 2 && b != 0)
-                EAFree(b);
-            EAFree(node);
-            node = next;
+        if (node != 0) {
+            do {
+                void* cur = node;
+                node = *(void**)((char*)node + 0x14);
+                void* b = *(void**)((char*)cur + 4);
+                void* c = *(void**)((char*)cur + 0xc);
+                if ((((char*)c - (char*)b) & ~1) > 2 && b != 0)
+                    EAFree(b);
+                EAFree(cur);
+            } while (node != 0);
         }
         buckets[i] = 0;
     }

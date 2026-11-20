@@ -2,6 +2,8 @@
 // Object file: SPEditors/SPEditorBlockAbilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "game/types.h"
 #include "SP/cDirectPropertyList.h"
 #include "SP/cISPEditorAbilityProvider.h"
@@ -1265,13 +1267,16 @@ void cSPEditorBlockAbilities_s0059_f510::ShutdownLayouts()
     v->erase(v->mpBegin, v->mpEnd);
 }
 
+// the original reloads the vector's end after constructing the temporary
+static inline const cSPUILayout_s0059_f510& Fenced(const cSPUILayout_s0059_f510& v) { _ReadWriteBarrier(); return v; }
+
 // @ 0x0059f950
 void UILayoutVector::resize(uint32_t newSize)
 {
     if (newSize > (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18)) {
         // the default-constructed temporary lives in the caller's frame and is destroyed
         // right after the insert
-        insert(mpEnd, newSize - (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18), cSPUILayout_s0059_f510());
+        insert(mpEnd, newSize - (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18), Fenced(cSPUILayout_s0059_f510()));
         return;
     }
     erase(mpBegin + newSize, mpEnd);

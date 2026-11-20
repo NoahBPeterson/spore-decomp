@@ -15,3 +15,4 @@ slices/s00849f70/s00849f70.cpp  DoDestroyValues@WStringVector    0084aad0  /O2 /
 slices/s00849f70/s00849f70.cpp  FillWStrings                     0084ab10  /O2 /MD /Gy /TP
 slices/s00849f70/s00849f70.cpp  ?CopyWStrings                    0084ab40  /O2 /MD /Gy /TP
 slices/s00849f70/s00849f70.cpp  SetCompositionData@IMEServerWin32  0084ab80  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  ??0WString@@QAE@ABU0@@Z  0084a7e0  /O2 /MD /Gy /TP

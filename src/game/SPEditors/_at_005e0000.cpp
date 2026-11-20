@@ -196,10 +196,11 @@ struct CShut : BaseB {
     void Shutdown();
 };
 struct BaseA { BaseA(); virtual void v0(); };
-struct IBaseB { virtual void vb(); };
+struct __declspec(novtable) IBaseB { virtual void vb(); };
 struct VerbTray : BaseA, IBaseB {
     char pad08[0x4c];      // +0x08..+0x53
-    uint32_t z54[12];      // +0x54..+0x83
+    struct ZeroWords_s005e { uint32_t v[12]; ZeroWords_s005e() { v[0] = 0; v[1] = 0; v[2] = 0; v[3] = 0; v[4] = 0; v[5] = 0; v[6] = 0; v[7] = 0; v[8] = 0; v[9] = 0; v[10] = 0; v[11] = 0; } };
+    ZeroWords_s005e z54;   // +0x54..+0x83
     char pad84[0xc];       // +0x84..+0x8f
     float f90[6];          // +0x90..+0xa4
     VerbTray();
@@ -1659,8 +1660,6 @@ void AbilityLayoutData::LayoutAbilities(IEditorWidget* window, bool alt)
 // @ 0x005e0cf0
 VerbTray::VerbTray()
 {
-    z54[0] = 0; z54[1] = 0; z54[2] = 0; z54[3] = 0; z54[4] = 0; z54[5] = 0;
-    z54[6] = 0; z54[7] = 0; z54[8] = 0; z54[9] = 0; z54[10] = 0; z54[11] = 0;
     f90[0] = 0.0f; f90[1] = 0.0f; f90[2] = 0.0f;
     f90[3] = 0.0f; f90[4] = 0.0f; f90[5] = 0.0f;
 }

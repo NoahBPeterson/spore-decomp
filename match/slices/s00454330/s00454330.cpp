@@ -353,9 +353,12 @@ BasicString* BasicString::assign(const char* first, const char* last)
 int WVec::find(const wchar_t* needle, unsigned pos, int count)
 {
     if (pos < (unsigned)((mpEnd - mpBegin) >> 1)) {
-        char* p = (char*)WStr_FindFirst(mpBegin + pos * 2, mpEnd, needle, needle + count);
-        if (p != mpEnd) {
-            return (int)(p - mpBegin) >> 1;
+        char* first = mpBegin + pos * 2;
+        {
+            char* p = (char*)WStr_FindFirst(first, mpEnd, needle, needle + count);
+            if (p != mpEnd) {
+                return (int)(p - mpBegin) >> 1;
+            }
         }
     }
     return -1;

@@ -977,6 +977,16 @@ struct hkArrayUint {
   int m_size;                // +0x4
   int m_capacityAndFlags;    // +0x8
 
+  int indexOf(unsigned int v) const {
+    for (int i = 0; i < m_size; ++i)
+      if (m_data[i] == v) return i;
+    return -1;
+  }
+  void removeAt(int i) {
+    m_size--;
+    m_data[i] = m_data[m_size];
+  }
+
   void push_back(unsigned int v) {
     if (m_size == (m_capacityAndFlags & 0x3fffffff))
       hkArrayUtil::_reserveMore(this, 4);
@@ -4233,22 +4243,9 @@ void SP::cEntityListener::AddId(unsigned int id)
 // @ 0x00af9b00
 void SP::cEntityListener::RemoveId(unsigned int id)
 {
-  int i = 0;
-  int n = m9c.m_size;
-  if (0 < n) {
-    unsigned int* p = m9c.m_data;
-    do {
-      if (*p == id) goto found;
-      i++;
-      p++;
-    } while (i < n);
-    return;
-  found:
-    if (i != -1) {
-      m9c.m_size--;
-      m9c.m_data[i] = m9c.m_data[m9c.m_size];
-    }
-  }
+  int i = m9c.indexOf(id);
+  if (i != -1)
+    m9c.removeAt(i);
 }
 
 // @ 0x00af9b50

@@ -11,3 +11,5 @@
 ../src/game/SPEngine/SPID.cpp  ?FindLastCharA@@YAPADPAD0PBD@Z  0068c750  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPID.cpp  ?SPNameFromKeyThunk@@YAXPBUResKey@@PAXHHPBD@Z  0068d1a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPID.cpp  ?GetExplicitIdStartW@@YAPA_WPA_W0EE@Z  0068c770  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPID.cpp  ?SPNameFromKeyA@@YAXPBUResKey@@PAXPBD@Z  0068d290  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPID.cpp  ?SPNameFromKeyW@@YAXPBUResKey@@PAXPB_W@Z  0068d0d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -362,6 +362,7 @@ public:
         BlockPart* mpBegin;              // +0x48
         BlockPart* mpEnd;                // +0x4c
         int Size() { return (int)(mpEnd - mpBegin); }
+        BlockPart& operator[](int i) { return mpBegin[i]; }
         bool Empty() { return mpEnd == mpBegin; }
         BlockPart& Back() { return mpEnd[-1]; }
         void PopBack();                  // 0x4c6070
@@ -1699,9 +1700,8 @@ void cSPEditorSkinManager_s004c_4650::SetDefaultMaterial(uint32_t id)
     if (mCompleteSkin != 0) {
         mCompleteSkin->SetDefaultMaterial(mDefaultMaterial);
     }
-    int n = mBlockTransforms.Size();
-    for (int i = 0; i < n; ++i) {
-        mBlockTransforms.mpBegin[i].part->SetDefaultMaterial(mDefaultMaterial);
+    for (int i = 0, n = mBlockTransforms.Size(); i < n; ++i) {
+        mBlockTransforms[i].part->SetDefaultMaterial(mDefaultMaterial);
     }
 }
 }  // namespace SP

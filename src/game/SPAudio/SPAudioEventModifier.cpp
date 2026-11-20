@@ -923,17 +923,26 @@ void PrimVector::DoInsertValue(cEventModifierPrimitive_s00a3_8e40** position, un
 
 // @ 0x00a39c20
 namespace SP { namespace Audio {
+// hash node: key at +0, a small byte vector at +4..+0x10, next link at +0x14
+struct SoundHashNode {
+    unsigned       mKey;        // +0x00
+    char*          mpBegin;     // +0x04
+    char*          mpEnd;       // +0x08
+    char*          mpCapacity;  // +0x0c
+    unsigned       mPad10;      // +0x10
+    SoundHashNode* mpNext;      // +0x14
+};
+
 void SoundHashTable::DoFreeNodes(void** buckets, unsigned count)
 {
     for (unsigned i = 0; i < count; i++) {
-        void* node = buckets[i];
+        SoundHashNode* node = (SoundHashNode*)buckets[i];
         while (node) {
-            void* next = *(void**)((char*)node + 0x14);
-            char* begin = *(char**)((char*)node + 4);
-            if ((*(int*)((char*)node + 0xc) - (int)begin) > 1 && begin)
-                operator delete[](begin);
-            operator delete(node);
-            node = next;
+            SoundHashNode* const cur = node;
+            node = node->mpNext;
+            if ((cur->mpCapacity - cur->mpBegin) > 1 && cur->mpBegin)
+                operator delete[](cur->mpBegin);
+            operator delete(cur);
         }
         buckets[i] = 0;
     }

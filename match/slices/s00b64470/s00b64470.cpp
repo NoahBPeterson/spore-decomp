@@ -352,7 +352,8 @@ int BuildShapeFromSource(void* owner, float scale, IShapeSource* source)
     if (!key)
         return 0;
     int result = 0;
-    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, 0);
+    hkShapeBuilderMap* map = GetShapeBuilderMap();
+    ShapeBuilderFn builder = (ShapeBuilderFn)map->find(key, 0);
     if (builder)
         result = builder(owner, scale, source);
     return result;
@@ -366,28 +367,13 @@ int BuildShapeFromWorld(void* owner, float scale)
     if (!key)
         return 0;
     int result = 0;
-    IShapeContainer* self = container->Self();
-    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, self);
-    if (!builder)
-        return result;
-    return builder(owner, scale, self);
-}
-
-#if 0
-// @ 0x00b64a00
-int BuildShapeFromWorld_alt(void* owner, float scale)
-{
-    IShapeContainer* container = g_hkCollisionWorld->GetContainer();
-    void* key = container->MakeShapeKey(owner);
-    if (!key)
-        return 0;
-    int result = 0;
-    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, 0);
+    hkShapeBuilderMap* map = GetShapeBuilderMap();
+    ShapeBuilderFn builder = (ShapeBuilderFn)map->find(key, 0);
     if (builder)
         result = builder(owner, scale, container);
     return result;
 }
-#endif
+
 
 
 // ---- Mesh-group selection for one layer --------------------------------------------------------

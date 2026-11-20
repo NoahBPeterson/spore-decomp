@@ -702,13 +702,13 @@ void __stdcall VectorConstructorIterator(void* p, unsigned int size, int count, 
 BasicString* BasicString::assign(const char* first, const char* last)
 {
     unsigned n = (unsigned)(last - first);
-    if (n > (unsigned)(mpEnd - mpBegin)) {
+    if (n <= (unsigned)(mpEnd - mpBegin)) {
+        FUN_11e0744_memcpy(mpBegin, first, n);
+        erase(mpBegin + n, mpEnd);
+    } else {
         // too long for the current buffer: keep the bytes that fit and append the rest
         FUN_11e0744_memcpy(mpBegin, first, (unsigned)(mpEnd - mpBegin));
         append(first + (mpEnd - mpBegin), last);
-    } else {
-        FUN_11e0744_memcpy(mpBegin, first, n);
-        erase(mpBegin + n, mpEnd);
     }
     return this;
 }

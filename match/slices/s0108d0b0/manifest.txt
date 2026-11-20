@@ -11,3 +11,6 @@ slices/s0108d0b0/s0108d0b0.cpp  ??0Factory@hkSimpleConstraintContactMgr@@QAE@PAV
 slices/s0108d0b0/s0108d0b0.cpp  ?setAabb@hkAabbPhantom@@QAEXABVhkAabb@@@Z  0108dde0  /vc71 /O2 /MD /Gy /TP
 slices/s0108d0b0/s0108d0b0.cpp  ?calcStatistics@hkAabbPhantom@@UBEXPAVhkStatisticsCollector@@@Z  0108df30  /vc71 /O2 /MD /Gy /TP
 slices/s0108d0b0/s0108d0b0.cpp  ??0hkSimpleConstraintContactMgr@@QAE@PAVhkWorld@@PAVhkEntity@@1@Z  0108d9a0  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?calcAabb@hkAabbPhantom@@UAEAAVhkAabb@@AAV2@@Z  0108dd90  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?addOverlappingCollidable@hkAabbPhantom@@UAEXPAX@Z  0108dee0  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?hkAabbPhantom_constructFinishLoaded@@YAXPAVhkAabbPhantom@@@Z  0108df90  /vc71 /O2 /MD /Gy /TP

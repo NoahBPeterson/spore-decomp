@@ -835,22 +835,29 @@ PackStr* PackStr::InsertCStr(uint32 id, const char* s)
     return this;
 }
 
+extern "C" const wchar_t g_13fe614[];   // name separator literal
+static inline unsigned WLenNonEmpty(const wchar_t* s)
+{
+    const wchar_t* e = s;
+    while (*++e) {}
+    return (unsigned)(e - s);
+}
+static inline unsigned WLen(const wchar_t* s)
+{
+    const wchar_t* e = s;
+    while (*e)
+        ++e;
+    return (unsigned)(e - s);
+}
+
 // @ 0x0068d0d0
 void SPNameFromKeyW(const ResKey* key, void* out, const wchar_t* name)
 {
     WStr_Format(out, L"0x%08x", key->mGroup);
     if (name != 0) {
-        const wchar_t* pref = (const wchar_t*)0x013fe614;
-        const wchar_t* e = pref;
-        do {
-            ++e;
-        } while (*e);
-        ((WStr*)out)->Insert(*(wchar_t**)out, pref, e);
-        const wchar_t* n = name;
-        const wchar_t* ne = n;
-        while (*ne)
-            ++ne;
-        ((WStr*)out)->Insert(*(wchar_t**)out, n, ne);
+        const wchar_t* pref = g_13fe614;
+        ((WStr*)out)->Insert(*(wchar_t**)out, pref, pref + WLenNonEmpty(pref));
+        ((WStr*)out)->Insert(*(wchar_t**)out, name, name + WLen(name));
     }
     void* mgr = GetManager();
     uint32 res = ((uint32(__thiscall*)(void*, uint32))(*(void***)mgr)[0x8c / 4])(mgr, key->mType);
@@ -893,17 +900,15 @@ void PackStr::Swap(PackStr& other)
         EAFree(tmp.mpBegin);
 }
 
+extern "C" const char g_1403550[];   // "."
+
 // @ 0x0068d290
 void SPNameFromKeyA(const ResKey* key, void* out, const char* name)
 {
     Str_Format(out, "0x%08x", key->mGroup);
     if (name != 0) {
-        ((PackStr*)out)->Insert(*(char**)out, (const char*)0x1403550, (const char*)0x1403551);
-        const char* n = name;
-        const char* ne = n;
-        while (*ne)
-            ++ne;
-        ((PackStr*)out)->Insert(*(char**)out, n, ne);
+        ((PackStr*)out)->Insert(*(char**)out, g_1403550, g_1403550 + 1);
+        ((PackStr*)out)->Insert(*(char**)out, name, name + strlen(name));
     }
     void* mgr = GetManager();
     uint32 res = ((uint32(__thiscall*)(void*, uint32))(*(void***)mgr)[0x8c / 4])(mgr, key->mType);

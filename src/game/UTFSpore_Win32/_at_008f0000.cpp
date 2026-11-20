@@ -616,11 +616,10 @@ Ldone:
 // @ 0x008f0240
 float StackingContext::ClampWidth(float w)
 {
-    float* pf = (w > mf568) ? &w : &mf568;
-    float v = *pf;
-    if (v > mf564)
-        return mf564;
-    return v;
+    const float* pf = (w > mf568) ? &w : &mf568;
+    if (*pf > mf564)
+        return *(const volatile float*)&mf564;
+    return *(const volatile float*)pf;
 }
 
 // @ 0x008f2350

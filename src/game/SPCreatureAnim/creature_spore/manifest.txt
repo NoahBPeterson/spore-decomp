@@ -24,3 +24,4 @@
 ../src/game/SPCreatureAnim/creature_spore.cpp  ?Execute@cBlockBlockCommand_s009c_cfe0@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  009cd040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_spore.cpp  ?Clear@creature_effect_s009c_8a90@nSPCreatureAnim@@QAEX_N@Z  009c96b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_spore.cpp  ?resize@effect_item_vec@nSPCreatureAnim@@QAEXK@Z  009cb8f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?RemoveEffect@creature_instance_data_s009c_b3f0@nSPCreatureAnim@@QAEXPAUcreature_effect_s009c_b3f0@2@@Z  009cb460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

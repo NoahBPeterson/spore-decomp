@@ -13,6 +13,7 @@
 //   +0xf4  Vector3  vF4[N]
 typedef unsigned int uint32_t;
 typedef unsigned char uint8_t;
+#include <intrin.h>
 #include <math.h>
 
 struct Vector3 { float x, y, z; };
@@ -350,8 +351,8 @@ void cSim::FUN_00f3bcc0(int v) {
 // ---------------------------------------------------------------------------
 void cSim::FUN_00f3bd90(int idx, char val) {
     cInner* inner = mpInner;
-    int count = (int)(((int)inner->p17c - (int)inner->p178) / 0x38);
-    if (idx >= 0 && idx < count) {
+    if (idx >= 0 && idx < (int)(((int)inner->p17c - (int)inner->p178) / 0x38)) {
+        _ReadWriteBarrier();
         *(char*)((char*)inner->p178 + 0x20 + idx * 0x38) = val;
     }
 }
@@ -361,8 +362,8 @@ void cSim::FUN_00f3bd90(int idx, char val) {
 // ---------------------------------------------------------------------------
 bool cSim::FUN_00f3bde0(int idx) {
     cInner* inner = mpInner;
-    int count = (int)(((int)inner->p17c - (int)inner->p178) / 0x38);
-    if (idx >= 0 && idx < count) {
+    if (idx >= 0 && idx < (int)(((int)inner->p17c - (int)inner->p178) / 0x38)) {
+        _ReadWriteBarrier();
         return *(bool*)((char*)inner->p178 + 0x20 + idx * 0x38);
     }
     return false;
@@ -381,12 +382,13 @@ int cSim::FUN_00f3be30() {
 // @ 0x00f3be60
 // ---------------------------------------------------------------------------
 int cSim::FUN_00f3be60(int idx) {
-    if (idx < 0) return 0;
-    cInner* inner = mpInner;
-    if (idx < ((int)inner->p240 - (int)inner->p23c) / 0x534) {
-        return idx * 0x534 + (int)inner->p23c;
+    int result = 0;
+    cInner* inner;
+    if (idx >= 0 && idx < ((int)(inner = mpInner)->p240 - (int)inner->p23c) / 0x534) {
+        _ReadWriteBarrier();
+        result = idx * 0x534 + (int)inner->p23c;
     }
-    return 0;
+    return result;
 }
 
 // ---------------------------------------------------------------------------

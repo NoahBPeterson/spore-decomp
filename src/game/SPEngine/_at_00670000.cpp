@@ -108,10 +108,14 @@ void FUN_0067ce00(void* a, void* b, int c)
 // @ 0x0067d020
 void FUN_0067d020(void* a, void* b, int c)
 {
-  float values[8] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-  if (g_016f6e80) {
-    values[0] = g_016f6e80[0];
-  }
+  struct Float4 {
+    float x, y, z, w;
+    Float4(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {}
+  };
+  Float4 v(0.0f, 0.0f, 0.0f, 0.0f);
+  if (g_016f6e80)
+    v = Float4(g_016f6e80[0], 0.0f, 0.0f, 0.0f);
+  float* values = &v.x;
   if (c)
     g_016f89d0->vt[94](g_016f89d0, a, values, 1);
   else

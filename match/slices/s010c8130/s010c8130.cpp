@@ -84,6 +84,9 @@ static inline void hkMonitorStamp(const char* name)
 
 // ---- base classes -----------------------------------------------------------------------
 class hkReferencedObject { public:
+    hkReferencedObject() {}
+    // hkReferencedObject(): a fresh object holds one reference
+    hkReferencedObject(bool) { m_referenceCount = 1; }
     virtual ~hkReferencedObject() {}
     uint16_t m_memSizeAndFlags;     // +4 (0 = not heap allocated, never deleted)
     uint16_t m_referenceCount;      // +6
@@ -114,6 +117,8 @@ struct hkRayHitCollector;
 
 class hkShape : public hkReferencedObject { public:
     uint32_t m_userData;            // +8
+    hkShape() {}
+    hkShape(bool) : hkReferencedObject(true) { m_userData = 0; }
     virtual void vslot1();
     virtual void vslot2();
     virtual void getAabb(const hkTransform& localToWorld, float tolerance, hkAabb& out) const;   // +0x0c
@@ -160,8 +165,18 @@ struct hkMoppLongRayVirtualMachine {
                       const hkShapeRayCastInput& in, const hkCdBody& body, hkRayHitCollector& collector);
 };
 
-class hkMoppBvTreeShape : public hkShape { public:
+class hkBvTreeShape : public hkShape { public:
     hkShapeCollection* m_child;     // +0x0c
+    hkBvTreeShape(const hkShapeCollection* collection)
+        : hkShape(true)
+    {
+        m_child = (hkShapeCollection*)collection;
+        ((hkReferencedObject*)collection)->addReference();
+    }
+    ~hkBvTreeShape() { ((hkReferencedObject*)m_child)->removeReference(); }
+};
+
+class hkMoppBvTreeShape : public hkBvTreeShape { public:
     hkMoppCode*        m_code;      // +0x10
 
     hkMoppBvTreeShape(const hkShapeCollection* collection, const hkMoppCode* code);
@@ -174,11 +189,8 @@ class hkMoppBvTreeShape : public hkShape { public:
 
 // @ 0x010c8130
 hkMoppBvTreeShape::hkMoppBvTreeShape(const hkShapeCollection* collection, const hkMoppCode* code)
+    : hkBvTreeShape(collection)
 {
-    m_referenceCount = 1;
-    m_userData = 0;
-    m_child = (hkShapeCollection*)collection;
-    ((hkReferencedObject*)collection)->addReference();
     m_code = (hkMoppCode*)code;
     ((hkReferencedObject*)code)->addReference();
 }
@@ -187,7 +199,6 @@ hkMoppBvTreeShape::hkMoppBvTreeShape(const hkShapeCollection* collection, const 
 hkMoppBvTreeShape::~hkMoppBvTreeShape()
 {
     m_code->removeReference();
-    ((hkReferencedObject*)m_child)->removeReference();
 }
 
 // @ 0x010c81d0

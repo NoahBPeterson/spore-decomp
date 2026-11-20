@@ -843,21 +843,24 @@ bool Ev::Eval()
 // @ 0x007f97a0
 void* Ev::AsA(int id)
 {
-    int v = id;
-    if (v == (int)0xeec58382) return this;
-    if (v == (int)0xae9cb0fa) return this;
-    if (v == (int)0xee3f516e) return this;
-    if (v == (int)0x0243a853) return this;
+    switch (id) {
+    case 0x0243a853: return this;
+    case (int)0xee3f516e: return this;
+    case (int)0xae9cb0fa: return this;
+    case (int)0xeec58382: return this;
+    }
     return 0;
 }
 
 // @ 0x007f9800
 void* Ev::AsB(int id)
 {
-    if (id == (int)0xeec58382) return this;
-    if (id == (int)0xae9cb0fa) return this;
-    if (id == (int)0xee3f516e) return this;
-    if (id == (int)0x0243c076) return this;
+    switch (id) {
+    case 0x0243c076: return this;
+    case (int)0xee3f516e: return this;
+    case (int)0xae9cb0fa: return this;
+    case (int)0xeec58382: return this;
+    }
     return 0;
 }
 
@@ -870,10 +873,12 @@ void* Ev::Sub10()
 // @ 0x007f9890
 void* Ev::AsC(int id)
 {
-    if (id == (int)0xeec58382) return this ? (void*)((char*)this + 4) : 0;
-    if (id == (int)0xae9cb0fa) return this ? (void*)((char*)this + 4) : 0;
-    if (id == (int)0xee3f516e) return this ? (void*)((char*)this + 4) : 0;
-    if (id == (int)0x2f009dd0) return this;
+    switch (id) {
+    case 0x2f009dd0: return this;
+    case (int)0xee3f516e: return this ? (void*)((char*)this + 4) : 0;
+    case (int)0xae9cb0fa: return this ? (void*)((char*)this + 4) : 0;
+    case (int)0xeec58382: return this ? (void*)((char*)this + 4) : 0;
+    }
     return 0;
 }
 
@@ -887,10 +892,12 @@ bool Ev::Set14(int value)
 // @ 0x007f99e0
 void* Ev::AsD(int id)
 {
-    if (id == (int)0xeec58382) return this;
-    if (id == (int)0xae9cb0fa) return this;
-    if (id == (int)0xee3f516e) return this;
-    if (id == (int)0x024b5c98) return this;
+    switch (id) {
+    case 0x024b5c98: return this;
+    case (int)0xee3f516e: return this;
+    case (int)0xae9cb0fa: return this;
+    case (int)0xeec58382: return this;
+    }
     return 0;
 }
 
@@ -937,10 +944,12 @@ bool Ev::Test1()
 // @ 0x007f9bb0
 void* Ev::AsE(int id)
 {
-    if (id == (int)0xeec58382) return this;
-    if (id == (int)0xae9cb0fa) return this;
-    if (id == (int)0xee3f516e) return this;
-    if (id == (int)0x02439c2f) return this;
+    switch (id) {
+    case 0x02439c2f: return this;
+    case (int)0xee3f516e: return this;
+    case (int)0xae9cb0fa: return this;
+    case (int)0xeec58382: return this;
+    }
     return 0;
 }
 

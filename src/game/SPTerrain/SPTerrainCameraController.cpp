@@ -85,7 +85,7 @@ struct Spring1f {
   float m30, m34, m38;
   float m3c, m40, m44, m48, m4c, m50;
 
-  void Set(float v, bool force);          // 0x00b0fa70
+  void Set(const float& v, bool force);          // 0x00b0fa70
   void Reset(float v);                    // 0x00b0fbe0
 };
 }
@@ -264,15 +264,11 @@ bool SP::cTerrainCameraController::KeysHeld()
 }
 
 // @ 0x00b0fa70
-void SP::Spring1f::Set(float v, bool force)
+void SP::Spring1f::Set(const float& v, bool force)
 {
   if (force) {
-    m18 = v;
-    m14 = v;
-    m10 = v;
-    m0c = v;
-    m1c = v * 0.0f;
-    m20 = v * 0.0f;
+    m0c = m10 = m14 = m18 = v;
+    m20 = m1c = v * 0.0f;
     mb0 = 0;
     mb1 = 0;
     return;

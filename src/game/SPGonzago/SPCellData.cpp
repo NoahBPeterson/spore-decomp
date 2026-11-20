@@ -235,9 +235,19 @@ static void ReleaseObject(void* p)
 {
     (*(void(__thiscall**)(void*))((char*)Vt(p) + 4))(p);
 }
+struct ResStream_s00e4_d0d0 {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual void v03(); virtual void v04(); virtual void v05();
+    virtual void* GetResource();                                         // +0x18
+};
+struct ResObject_s00e4_d0d0 {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual void* Cast(int type);                                        // +0x0c
+};
 struct cCellFactoryBinary {
     bool ReadResource(void* stream, void* p3, void* p4, void* p5);      // 0x00e4cf80
     unsigned char ReadResourceFromStream(void* s, void* a, void* b, void* unused); // 0x00e4d000
+    bool WriteResource(void* a, void* s, void* unused3, void* unused4);   // 0x00e4d0d0 (FactoryBinary::WriteResource)
 };
 struct cProcObj { bool FUN_00e4d120(void* p2, void** out, int p4, int p5); };
 extern void* g_pCellCellData;       // 0x016ad1f0  (cell-data globals block)
@@ -455,17 +465,16 @@ unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, vo
 }
 
 // @ 0x00e4d0d0
-unsigned FactoryBinary_WriteResource(void* self, void* a, void* s)
+bool cCellFactoryBinary::WriteResource(void* a, void* s, void*, void*)
 {
-    void* obj = (*(void*(__thiscall**)(void*, void*))((char*)Vt(s) + 0x18))(s, a);
-    unsigned r = 0;
+    bool r = false;
+    void* obj = ((ResStream_s00e4_d0d0*)s)->GetResource();
     if (obj) {
-        void* kv = a ? (*(void*(__thiscall**)(void*, int))((char*)Vt(a) + 0xc))(a, 0x355d6f5) : 0;
-        if (*(int*)((char*)kv + 0x18)) {
-            r = (*(unsigned(__thiscall**)(void*, void*, void*))((char*)Vt(obj) + 0x38))(obj, *(void**)((char*)kv + 0x18), *(void**)((char*)kv + 0x1c));
-        }
+        void* kv = a ? ((ResObject_s00e4_d0d0*)a)->Cast(0x355d6f5) : 0;
+        if (*(int*)((char*)kv + 0x18))
+            r = (*(bool(__thiscall**)(void*, void*, void*))((char*)Vt(obj) + 0x38))(obj, *(void**)((char*)kv + 0x18), *(void**)((char*)kv + 0x1c));
     }
-    return r & 0xffffff00u;
+    return r;
 }
 
 // @ 0x00e4d120
