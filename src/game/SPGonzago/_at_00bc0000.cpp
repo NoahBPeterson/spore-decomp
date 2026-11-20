@@ -6102,6 +6102,20 @@ void cAgentOrderManager::PopFront()
     *(void**)(head + 0x18) = node;
 }
 
+struct OrderSrcRef {
+    IRefCount_s00bc_a040* p;
+    void assign(IRefCount_s00bc_a040* n)
+    {
+        IRefCount_s00bc_a040* old = p;
+        if (n != old) {
+            if (n != 0)
+                n->AddRef();
+            p = n;
+            if (old != 0)
+                old->Release();
+        }
+    }
+};
 // @ 0x00bcaf70
 cAgentOrder* cAgentOrderManager::PushBack(void* a, IRefCount_s00bc_a040* b, char clear)
 {
@@ -6116,17 +6130,7 @@ cAgentOrder* cAgentOrderManager::PushBack(void* a, IRefCount_s00bc_a040* b, char
     list->AllocLink();
     cAgentOrder* order = (cAgentOrder*)(*(char**)(self + 0x610) + 8);
     *(void**)order = a;
-    _ReadWriteBarrier();
-    IRefCount_s00bc_a040* old = order->mSource;
-    if (b != old) {
-        if (b != 0) {
-            b->AddRef();
-        }
-        order->mSource = b;
-        if (old != 0) {
-            old->Release();
-        }
-    }
+    ((OrderSrcRef*)&order->mSource)->assign(b);
     return order;
 }
 
