@@ -320,20 +320,19 @@ bool __thiscall EA::IO::MemoryStream_s0093_b9e0::Grow(size_type nSize)
 bool __thiscall EA::IO::MemoryStream_s0093_b9e0::SetPosition(int distance, int type)
 {
     size_type oldPos = mnPosition;
-    if (type == 0) {
-        mnPosition = distance;
-    } else if (type == 1) {
-        mnPosition = oldPos + distance;
-    } else if (type == 2) {
-        mnPosition = mnSize + distance;
+    switch (type) {
+        case 0: mnPosition = distance; break;
+        case 1: mnPosition += distance; break;
+        case 2: mnPosition = mnSize + distance; break;
     }
     if (mnPosition > mnSize) {
-        if (!mbResizeEnabled) {
+        if (mbResizeEnabled) {
+            if (!Grow(mnPosition)) {
+                mnPosition = oldPos;
+                return false;
+            }
+        } else {
             mnPosition = mnSize;
-            return false;
-        }
-        if (!Grow(mnPosition)) {
-            mnPosition = oldPos;
             return false;
         }
     }

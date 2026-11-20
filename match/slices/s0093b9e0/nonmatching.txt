@@ -2,7 +2,6 @@
 0093bbf0  45   complete: MemoryStream reads via shared data pointer, schedule differs
 0093be30  295  complete: MemoryStream::SetData; equiv PASS (5-param ABI restored, allocator vtable slot 2 / DefaultAllocator() call fixed)
 0093c000  249  complete: MemoryStream grow/copy; equiv PASS (helper takes this in ecx, allocator vtable slot 2 / DefaultAllocator() fixed)
-0093c0c0  99   complete: MemoryStream position arithmetic, branch layout differs
 0093c150  219  complete: MemoryStream resize-on-write; equiv PASS (explicit round-to-nearest reproduces retail's x87 fistp)
 0093c210  62   complete: scalar deleting dtor, refcount schedule differs
 0093c370  61   complete: MemoryStream SetSize, branch layout differs
