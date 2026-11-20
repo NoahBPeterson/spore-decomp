@@ -837,8 +837,9 @@ bool cInteraction_s00ab_f0b0::AddTarget(cInteractionTarget_s00ab_f0b0* pTarget)
 {
     if (pTarget != 0)
     {
-        pTarget->AddRef();
-        mTargets.Insert(pTarget);
+        cInteractionTarget_s00ab_f0b0* pRef = pTarget;
+        pRef->AddRef();
+        mTargets.Insert(pRef);
         pTarget->Release();
         pTarget->Attach(this);
         return true;
