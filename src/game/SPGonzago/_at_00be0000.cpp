@@ -2381,14 +2381,9 @@ void SP::cCivilization_s00be_eb70::RestartTimer3c8()
 // @ 0x00bef8a0
 bool SP::cCivilization_s00be_eb70::IsTimer108Elapsed()
 {
-    uint64_t t = mTimer108.GetElapsedTime();
-    uint32_t hi = (uint32_t)(t >> 32);
-    uint32_t lo = (uint32_t)t;
-    if (hi > 0)
+    if (mTimer108.GetElapsedTime() > 120000)
         return true;
-    if (lo <= 120000u)
-        return false;
-    return true;
+    return false;
 }
 
 // @ 0x00bef920
