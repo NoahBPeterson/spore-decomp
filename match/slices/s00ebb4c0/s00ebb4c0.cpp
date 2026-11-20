@@ -131,13 +131,14 @@ void __stdcall FUN_00ebb820(unsigned a, unsigned b)
 }
 
 // @ 0x00ebb860
+struct RcObj_ebb860 { virtual void AddRef(); virtual void Release(); };
 int FUN_00ebb860(int a, int b, int c)
 {
     while (a != b) {
-        if (*(int**)(a + 0x4c) != 0)
-            (*(void(**)(void))(** (int**)(a + 0x4c) + 4))();
-        if (*(int**)(a + 0x48) != 0)
-            (*(void(**)(void))(** (int**)(a + 0x48) + 4))();
+        if (RcObj_ebb860* p = *(RcObj_ebb860**)(a + 0x4c))
+            p->Release();
+        if (RcObj_ebb860* p = *(RcObj_ebb860**)(a + 0x48))
+            p->Release();
         cGonzagoTimer_dtor((void*)(a + 0x28));
         a += 0x50;
         c += 0x50;
