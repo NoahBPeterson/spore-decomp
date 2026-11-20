@@ -667,9 +667,10 @@ bool cSPGameDataUFO::TickUFOBehaviorTree(float dt, double time)
         return false;
     U32 nFlags = mpBehaviorTreeData->mFlags5fc;
     U32 nResult = FUN_00bc9980((char*)mpBehaviorTreeData + 8, dt);
-    return FUN_00bc8ff0(dt, time, mpBehaviorTreeData->mInt000, this,
-                        &mpBehaviorTreeData->mMotion1d0, mpBehaviorTreeData->mInt5e8,
-                        nFlags, nResult);
+    cBehaviorTreeData* tree = mpBehaviorTreeData;
+    U32 treeValue = tree->mInt5e8;
+    void* motion = &tree->mMotion1d0;
+    return FUN_00bc8ff0(dt, time, tree->mInt000, this, motion, treeValue, nFlags, nResult);
 }
 
 // @ 0x00c387b0

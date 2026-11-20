@@ -611,20 +611,26 @@ void FUN_008b2050(NibReader* p)
 {
     p->f0c = 0;
     p->f10 = 0;
-    while (p->remaining > 0) {
+    if (p->remaining <= 0)
+        return;
+    uint8 v1;
+    uint8* next;
+    do {
         uint8* cur = p->cur;
         uint8 v0 = *cur;
         cur++;
         p->f0c += v0;
-        p->cur = cur;
-        uint8 v1 = *cur;
-        uint8* next = cur + 1;
+        static_cast<NibReader volatile*>(p)->cur = cur;
+        v1 = *cur;
+        next = cur + 1;
         p->f10 += v1;
         p->remaining -= (int)v0 + (int)v1;
-        p->cur = next;
-        if (v1 != 0 && next[0] != 0)
+        if (p->remaining <= 0) {
+            p->cur = next;
             break;
-    }
+        }
+        p->cur = next;
+    } while (v1 == 0 || next[0] == 0);
 }
 
 // @ 0x008b20b0

@@ -3,3 +3,4 @@ slices/s00c37a90/s00c37a90.cpp  ?DeactivateBehaviorTree@cSPGameDataUFO@@QAEXXZ  
 slices/s00c37a90/s00c37a90.cpp  ?SetFlag@cSPGameDataUFO@@QAEXI_N@Z  00c389c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00c37a90/s00c37a90.cpp  ?TestFlag@cSPGameDataUFO@@QAE_NI@Z  00c38990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00c37a90/s00c37a90.cpp  ?WarpToDestination@cSPGameDataUFO@@QAE_NXZ  00c37cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c37a90/s00c37a90.cpp  ?TickUFOBehaviorTree@cSPGameDataUFO@@QAE_NMN@Z  00c38740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
