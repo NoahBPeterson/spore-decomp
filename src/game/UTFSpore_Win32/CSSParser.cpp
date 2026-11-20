@@ -2064,16 +2064,21 @@ Property_s008f_2660* CreatePropertyFunc_uint(EA::Allocator::StackAllocator_s0092
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(unsigned int) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(unsigned int*)((char*)p + 0x18) = value;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(unsigned int*)((char*)p + 0x18) = value;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
