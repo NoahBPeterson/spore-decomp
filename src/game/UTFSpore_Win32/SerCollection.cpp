@@ -2,6 +2,7 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void FUN_011e0744_(void* a, void* b, int c);
+extern "C" char g_14613b8[];   // IListener vftable
 extern void* g_SerCollection_vftable[];       // 0x1446abc
 extern void* g_hashEmptyBucketArray[];        // 0x154df28 (eastl gpEmptyBucketArray)
 extern const wchar_t g_emptyWString[];        // 0x13fe144
@@ -207,6 +208,7 @@ SerCollection_s0099_9110::~SerCollection_s0099_9110()
     operator_delete(mObjects.b);
   mExports.destroy();
   mImports.destroy();
+  *(void**)this = g_14613b8;   // IListener base dtor: back to the base vftable
 }
 
 // @ 0x009991e0
