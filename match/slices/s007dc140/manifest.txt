@@ -1,0 +1,1 @@
+slices/s007dc140/s007dc140.cpp  ?SetCurrentDiscreteOrientation@cSmoothCameraController@SP@@QAEXH@Z  007dc140  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -10,3 +10,4 @@ slices/s006dd250/s006dd250.cpp  ?FUN_006ddde0@@YAXHH@Z    006ddde0
 slices/s006dd250/s006dd250.cpp  ?FUN_006dde30@@YAXHHH@Z   006dde30
 slices/s006dd250/s006dd250.cpp  ?FUN_006dde90@@YAXHHHH@Z 006dde90
 slices/s006dd250/s006dd250.cpp  ?FUN_006ddef0@@YAXH@Z     006ddef0
+slices/s006dd250/vertex_buffer_lock_006dd250.cpp  ?Lock@VertexBuffer@graphics@rw@@QAEPAV123@IAAVBatchIterator@123@AAIII@Z  006dd250  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

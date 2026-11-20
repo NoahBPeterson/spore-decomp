@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00e75900  432  complete reconstruction; float/x87 ordering in sGenDistribute not byte-exact. Fixed this session: the work-clear/fetch sequence called 00e823a0 with a deref instead of 00e4cc40(param_6,&work) reading the float at +0x308; budget/param_4 were compared with the literal 0.0f so cl zeroed xmm1 (a register the original never writes) - the original compares against the global 0x1485378 and the loop is now a top-tested `while (budget > g_1485378)`; and the local char[0x200] needs /GS- (the original has no stack cookie, otherwise a __security_check_cookie call appears in the trace). Cell layout also lost a pad111 byte, shifting every field after +0x110. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-. difftest: WEAK (301 valid, 37.0% coverage)
 00e75b80  93   complete; UI vtable stub call shapes differ. difftest: UNSUPPORTED (0/1200 valid, fault(read))
 00e75c30  409  complete; x87 distance test + struct-init scheduling differ. difftest: WEAK (1094 valid, 13.3% coverage)
 00e75ea0  232  complete; x87 float copies / store order differ. difftest: WEAK (1044 valid, 14.4% coverage)

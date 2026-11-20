@@ -1,0 +1,1 @@
+slices/s00d391d0/s00d391d0.cpp  ?InitCreatureDisplay@@YAX_N@Z  00d391d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

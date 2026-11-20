@@ -8,6 +8,8 @@
 //
 // All of them operate on the "TribeEat" state block passed in on the stack.
 #include <stddef.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int uint32_t;
 
 struct Vec3 { float x, y, z; Vec3() {} Vec3(float a, float b, float c) : x(a), y(b), z(c) {} };
@@ -45,6 +47,16 @@ struct AutoRef {
     IRef* mp;
     void __thiscall Assign(IRef* p);                   // 0x00b5f950, ret 4
 };
+
+// Clear a ref-counted slot and drop the reference it held.
+static void ReleaseSlot(AutoRef* slot)
+{
+    IRef* p = slot->mp;
+    if (p != 0) {
+        slot->mp = 0;
+        p->Release();
+    }
+}
 
 struct Tribe {
     uint32_t pad00[(0x120 - 0x00) / 4];
@@ -131,6 +143,7 @@ struct EatState {
 
     bool FUN_00db0e30(char probe);
     char FUN_00db1030();
+    void FUN_00dac580_ecx();                           // 0x00dac580, same function as the __cdecl stand-in
 };
 
 extern "C" void* g_pProps158128c;                      // 0x0158128c
@@ -146,7 +159,7 @@ struct Container {
 Container* __cdecl FUN_00b3d2b0();                     // 0x00b3d2b0
 
 void  __cdecl FUN_00dac580(EatState* st);              // 0x00dac580
-void* __cdecl FUN_00da6270(IRef* a, int b);            // 0x00da6270
+char  __cdecl FUN_00da6270(IRef* a, int b);            // 0x00da6270
 float __cdecl GetPropertyT_float(void* props, unsigned id, float def);   // 0x004e1c70
 void* __cdecl FUN_00cee4a0(Spatial* v);                // 0x00cee4a0
 void* __cdecl FUN_00cee540(Spatial* v, float f);       // 0x00cee540
@@ -176,104 +189,112 @@ void __cdecl FUN_00db09c0(Citizen* c, int, int* obj, int, int, EatState* state);
 char __cdecl FUN_00db0b80(Citizen* c, int, int, Pool600* pool, int, EatState* state);
 void __cdecl FUN_00db0cb0(Citizen* c, int, int, int, int, EatState* state);
 
-// ------------------------------------------------------------------ @ 0x00db0e30
-// Per-frame maintenance of the "consumed target" reference, then a distance
-// probe that decides whether the order can still be fulfilled.
+// @ 0x00db0e30 -- per-frame maintenance of the "consumed target" reference, then a
+// distance probe that decides whether the order can still be fulfilled.
+//
+// mOwner's spatial sub-object at +0x34: the value used as the probe range is the
+// virtual slot at vtable +0x3c, so it is declared on its own slot-for-slot type
+// (Spatial's vf3c stand-in is non-virtual for the other task functions).
+// 0x00cee4a0 / 0x00cee540 pop their own stack arguments in the original (the call
+// sites have no `add esp`), so they are __stdcall; the __cdecl stand-ins above are
+// kept for the task functions that are already built against them.
+// The object mHolderC points at: 0x00cee540 / 0x00cee4a0 are its __thiscall methods
+// (they pop their own two/eight argument bytes, and ecx already holds the object at
+// both call sites in the original).
+struct ProbeTarget {
+    virtual void q00(); virtual void q01(); virtual void q02(); virtual void q03();
+    virtual void q04(); virtual void q05(); virtual void q06(); virtual void q07();
+    void* __thiscall FUN_00cee540(Spatial* v, float f);   // 0x00cee540, ret 8
+    void* __thiscall FUN_00cee4a0(Spatial* v);            // 0x00cee4a0, ret 8
+};
+
+struct OwnerSpatial {
+    virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
+    virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
+    virtual void p08(); virtual void p09(); virtual void p10();
+    virtual const Vec3* GetPosition();                 // +0x2c
+    virtual void p12(); virtual void p13(); virtual void p14();
+    virtual float GetValue();                          // +0x3c
+};
+
 bool EatState::FUN_00db0e30(char probe)
 {
-    EatState* st = this;
-    Target* tgt = (Target*)st->mHolder14.mp;
-    AutoRef* holder = &st->mHolder14;
-    bool cleanup = true;
-
-    if (tgt != 0 && tgt->mi128 != 0)
-        cleanup = !FUN_00b3d2b0()->FUN_00ac7ef0(st->mOwner, (IRef*)tgt);
-
-    if (cleanup) {
-        if (tgt != 0) {
-            IRef* o = tgt->mpOwner;
-            if (o == st->mOwner && o != 0) {
-                tgt->mpOwner = 0;
+    // No flag is kept: the original branches straight into the cleanup block.
+    if (!(mHolder14.mp != 0 && ((Target*)mHolder14.mp)->mi128 != 0 &&
+          FUN_00b3d2b0()->FUN_00ac7ef0(mOwner, mHolder14.mp))) {
+        if (mHolder14.mp != 0) {
+            IRef* o = ((Target*)mHolder14.mp)->mpOwner;
+            if (o == mOwner && o != 0) {
+                ((Target*)mHolder14.mp)->mpOwner = 0;
                 o->Release();
             }
         }
-        IRef* cur = holder->mp;
-        if (cur != 0) {
-            holder->mp = 0;
+        if (mHolder14.mp != 0) {
+            IRef* cur = mHolder14.mp;
+            mHolder14.mp = 0;
             cur->Release();
         }
     }
 
-    float range = ((Spatial*)((char*)st->mOwner + 0x34))->vf3c();
+    float range = ((OwnerSpatial*)((char*)mOwner + 0x34))->GetValue();
 
-    if (probe) {
-        Target* t = (Target*)holder->mp;
-        if (t != 0 && t->mpOwner != st->mOwner && range >= t->mf134)
-            FUN_00dac580(st);
-    }
+    if (probe && mHolder14.mp != 0 && ((Target*)mHolder14.mp)->mpOwner != 0 &&
+        ((Target*)mHolder14.mp)->mpOwner != mOwner &&
+        range >= ((Target*)mHolder14.mp)->mf134)
+        FUN_00dac580_ecx();
 
-    if (holder->mp != 0)
-        goto haveTarget;
+    if (mHolder14.mp == 0) {
+        const Vec3& pos = mPos;
 
-    if (st->mPos.x == g_f169f3b8 && st->mPos.y == g_f169f3bc && st->mPos.z == g_f169f3c0)
-        goto done;
+        if (pos.x == g_f169f3b8 && pos.y == g_f169f3bc && pos.z == g_f169f3c0)
+            goto done;
 
-    if (st->mHolderC.mp == 0)
-        goto fail;
+        ProbeTarget* const hc = (ProbeTarget*)mHolderC.mp;
+        if (hc == 0)
+            goto fail;
 
-    if (probe)
-        holder->Assign((IRef*)FUN_00cee540((Spatial*)&st->mPos, range));
-    else
-        holder->Assign((IRef*)FUN_00cee4a0((Spatial*)&st->mPos));
+        if (probe)
+            mHolder14.Assign((IRef*)hc->FUN_00cee540((Spatial*)&pos, range));
+        else
+            mHolder14.Assign((IRef*)hc->FUN_00cee4a0((Spatial*)&pos));
 
-    {
         float prop = GetPropertyT_float(g_pProps158128c, 0x88eae712, g_f13f7670);
-        Target* t = (Target*)holder->mp;
-        if (t != 0) {
-            const Vec3* p = t->mSpatial.GetPosition();
-            float dx = p->x - st->mPos.x;
-            float dy = p->y - st->mPos.y;
-            float dz = p->z - st->mPos.z;
+        if (mHolder14.mp != 0) {
+            const Vec3* p = ((Target*)mHolder14.mp)->mSpatial.GetPosition();
+            float dx = p->x - pos.x;
+            float dy = p->y - pos.y;
+            float dz = p->z - pos.z;
             if (dx * dx + dy * dy + dz * dz > prop * prop)
                 goto fail;
         }
+
+        // A target obtained above is claimed for this order too (the original
+        // re-tests the slot here: Assign may have found nothing).
+        if (mHolder14.mp != 0 && probe && ((Target*)mHolder14.mp)->mpOwner == 0)
+            ((AutoRef*)((char*)mHolder14.mp + 0x120))->Assign(mOwner);
+        goto done;
     }
 
-    {
-        Target* t = (Target*)holder->mp;
-        if (t != 0 && probe && t->mpOwner == 0)
-            ((AutoRef*)((char*)t + 0x120))->Assign(st->mOwner);
-    }
-    goto done;
+    // The target we kept from an earlier frame is claimed for this order.
+    if (probe && ((Target*)mHolder14.mp)->mpOwner == 0)
+        ((AutoRef*)((char*)mHolder14.mp + 0x120))->Assign(mOwner);
 
-tail:
-    {
-        Target* t = (Target*)holder->mp;
-        if (t != 0 && probe && t->mpOwner == 0)
-            ((AutoRef*)((char*)t + 0x120))->Assign(st->mOwner);
-    }
-    goto done;
-
-haveTarget:
-    {
-        Target* t = (Target*)holder->mp;
-        if (probe && t->mpOwner == 0)
-            ((AutoRef*)((char*)t + 0x120))->Assign(st->mOwner);
-    }
 done:
-    return holder->mp != 0;
+    return mHolder14.mp != 0;
+
 fail:
-    FUN_00dac580(st);
-    goto tail;
+    FUN_00dac580_ecx();
+    return mHolder14.mp != 0;
 }
 
-// ------------------------------------------------------------------ @ 0x00db1030
+// @ 0x00db1030
 char EatState::FUN_00db1030()
 {
     EatState* st = this;
     if (st->mSpot != -1) {
         ((SpotOwner*)st->mHolder18.mp)->FindSpot(0xd, st->mSpot);
         st->mSpot = -1;
+        _ReadWriteBarrier();               // retail reloads mHolder18.mp after the store
         IRef* h = st->mHolder18.mp;
         if (h != 0) {
             st->mHolder18.mp = 0;
@@ -289,17 +310,13 @@ char EatState::FUN_00db1030()
             o->Release();
         }
     }
-    IRef* cur = st->mHolder14.mp;
-    if (cur != 0) {
-        st->mHolder14.mp = 0;
-        cur->Release();
-    }
+    ReleaseSlot(&st->mHolder14);
 
-    if (FUN_00db0e30(1)) {
+    if (st->FUN_00db0e30(1)) {
         st->mPhase = 1;
         return 1;
     }
-    return (char)(unsigned)FUN_00da6270(st->mOwner, 0xe);
+    return FUN_00da6270(st->mOwner, 0xe);
 }
 
 // ------------------------------------------------------------------ @ 0x00db09c0

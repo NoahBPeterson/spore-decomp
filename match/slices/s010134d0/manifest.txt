@@ -1,0 +1,1 @@
+slices/s010134d0/s010134d0.cpp  ?UpdateEmpireAlliancesAndWars@cSimulatorUniverse@@QAEXPAUcEmpire@@M@Z  010134d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

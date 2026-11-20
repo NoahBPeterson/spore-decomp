@@ -1,0 +1,1 @@
+slices/s00894be0/s00894be0.cpp  ??0StyleManager@Text@EA@@QAE@PAVICoreAllocator@Allocator@2@@Z  00894be0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

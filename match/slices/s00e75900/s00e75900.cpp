@@ -187,15 +187,17 @@ struct Pool {
 };
 
 void  __fastcall f743b50(void* p);                  // 0x00743b50
-void  __fastcall f82130(void* p);                   // 0x00e82130
+void  __fastcall FUN_00e82130(void* p);                   // 0x00e82130
 int*  __cdecl    f823a0(void* a, void* b);          // 0x00e823a0
 int*  __cdecl    f_e4cc40(void* a, void* b);        // 0x00e4cc40
-bool  __cdecl    f5d410(Cell* c, Vec3* v, float f); // 0x00e5d410
-int   __cdecl    f87260(Cell* c, Vec3* v, float f, void* buf, int n, int b); // 0x00e87260
-void  __cdecl    f86f70(Cell* c);                   // 0x00e86f70
+bool  __cdecl    FUN_00e5d410(Cell* c, Vec3* v, float f); // 0x00e5d410
+int   __cdecl    FUN_00e87260(Cell* c, Vec3* v, float f, void* buf, int n, int b); // 0x00e87260
+void  __cdecl    FUN_00e86f70(Cell* c);                   // 0x00e86f70
 int   __cdecl    f74a20_10(Cell* c, Vec3* v, int a, void* b, int d, float one,
                            int z0, int z1, int g, int h); // 0x00e74a20 (10-arg)
 int   __cdecl    f74a20_4(int a, Vec3* v, float f, int b);    // 0x00e74a20 (4-arg)
+int   __cdecl    f74a20_gen(Cell* c, Vec3* v, float elev, void* b, int d,
+                            float one, float zero, int g, int h, int k); // 0x00e74a20 (10-arg, float items)
 void  __cdecl    f4cce0_src(int a);                 // helper not used
 int   __cdecl    f4cce0_8(int a, int b, int c, int d, int e, int f, int g, int h); // 0x00e4cce0
 int   __cdecl    f4cce0_2(int a, int b);            // 0x00e4cce0
@@ -356,7 +358,7 @@ void FUN_00e760f0(void)
         f743b50(&v2);
         int* pi = f_e4ce40(&v2);
         float s = *(float*)((char*)pi + 0x110);
-        f82130(&v2);
+        FUN_00e82130(&v2);
         v2.x = v1.x * s + v2.x;
         v2.y = v1.y * s + v2.y;
         v2.z = v1.z * s + v2.z;
@@ -533,64 +535,70 @@ void FUN_00e76660(int* param_1, int param_2, int param_3)
     }
 }
 
-// ================================================================== 0x00e75900
+// @ 0x00e75900
 namespace SP {
 void sGenDistribute(int param_1, float* param_2, float param_3, float param_4,
                     float param_5, int param_6, int param_7, int param_8, char param_9)
 {
-    float spanX = param_2[3] - param_2[0];
-    float spanY = param_2[4] - param_2[1];
-    Vec3 work;
-    float curZ = g_16b3c28;
-    float curX = g_16b3c2c;
-    float curY = g_16b3c30;
+    // Refcounted definition handle: Clear() zeroes it, Release() drops it.
+    struct CellDefRef { void* mRef; };
+    float step;
+    float maxHeight;
+    Vec3 pos;
+    float spanY;
+    float spanX;
+    float elevation;
+    float budget;
+    char buf[0x800];
 
-    f743b50(&work);
-    int* iVar2 = f_e4cc40((void*)param_6, &work);
-    float step = *(float*)((char*)iVar2 + 0x308);
-    f82130(&work);
+    spanX = param_2[3] - param_2[0];
+    spanY = param_2[4] - param_2[1];
+
+    pos.x = g_16b3c28;
+    pos.y = g_16b3c2c;
+    pos.z = g_16b3c30;
+
+    {
+        CellDefRef work;
+        f743b50(&work);
+        int* cellDef = f_e4cc40((void*)param_6, &work);
+        step = *(float*)((char*)cellDef + 0x308);
+        FUN_00e82130(&work);
+    }
     step = (kLevelSize[param_7] / *(float*)((char*)gspCellGame + 0x514c)) *
            step * 0.033333335f;
 
-    float budget = param_5;
+    budget = param_5;
     while (budget > g_1485378) {
-        double r = sMathRandom.RandomDoubleUniform();
-        if ((float)r <= budget) {
+        double roll = sMathRandom.RandomDoubleUniform();
+        if (!(roll > budget)) {
             int attempts = 0;
-            int placed = 1;
-            float maxv = param_3;
-            if (param_4 != g_1485378)
-                maxv = param_4;
-            float r2 = (float)sMathRandom.RandomDoubleUniform() * (maxv - param_3) + param_3;
-            curY = r2;
-            for (;;) {
+            int placed = attempts + 1;
+            maxHeight = (param_4 == g_1485378) ? param_3 : param_4;
+
+            double low = param_3;
+            double high = maxHeight;
+            double t = sMathRandom.RandomDoubleUniform();
+            double h = t * (high - low) + low;
+            double c = (h >= high) ? high : ((h < low) ? low : h);
+            elevation = (float)c;
+
+            do {
                 if (attempts >= 10)
                     break;
                 ++attempts;
-                curZ = (float)sMathRandom.RandomDoubleUniform() * spanX + param_2[0];
-                curX = (float)sMathRandom.RandomDoubleUniform() * spanY + param_2[1];
-                Vec3 v;
-                v.x = curZ;
-                v.y = curX;
-                v.z = curY;
-                bool hit = f5d410((Cell*)param_1, &v, step);
-                if (!hit || param_9 != 0) {
+                pos.x = (float)(sMathRandom.RandomDoubleUniform() * spanX + param_2[0]);
+                pos.y = (float)(sMathRandom.RandomDoubleUniform() * spanY + param_2[1]);
+                if (!FUN_00e5d410((Cell*)param_1, &pos, step) || param_9 != 0) {
                     if (param_1 != *(int*)((char*)gspCellGame + 0x40fc))
                         break;
-                    char buf[0x200];
-                    placed = f87260((Cell*)param_1, &v, step, buf, 0x200, 0);
+                    placed = FUN_00e87260((Cell*)param_1, &pos, step, buf, 0x200, 0);
                 }
-                if (placed <= 0)
-                    break;
-            }
+            } while (placed > 0);
             if (attempts < 10) {
-                Vec3 v;
-                v.x = curZ;
-                v.y = curX;
-                v.z = curY;
-                f74a20_10((Cell*)param_1, &v, (int)curY, (void*)param_6, param_7,
-                          1.0f, 0, 1, 0, 0);
-                f86f70((Cell*)param_1);
+                f74a20_gen((Cell*)param_1, &pos, elevation, (void*)param_6,
+                           param_7, 1.0f, 0.0f, 1, 0, 0);
+                FUN_00e86f70((Cell*)param_1);
             }
         }
         budget = budget - 1.0f;

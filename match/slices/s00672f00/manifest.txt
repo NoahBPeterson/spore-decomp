@@ -1,0 +1,1 @@
+slices/s00672f00/s00672f00.cpp  ?CopyUninitializedDetokenizerActions@@YAPAPAUcAction@cVar@cBuildXHTMLDetokenizer@?A0x5008a49d@@PAPAU1234@UDetokenizerActionIterator@@1PAU1234@@Z  00672f00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

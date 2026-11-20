@@ -1,0 +1,1 @@
+slices/s007e0570/s007e0570.cpp  ?SetDirection@cSafeDynamicKernelStorage@cSplitModelKernelDescription@SP@@QAEXABUcSPVector3@@0@Z  007e0570  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
