@@ -4199,9 +4199,10 @@ u8 __fastcall FUN_00c6f500(void* self, void* /*edx*/, void* stream)
 void* __fastcall FUN_00c6f590(void* self, void* /*edx*/, u32 flags)
 {
   char* p = (char*)self;
-  *(u32*)(p + 0x00) = 0x01472008;
-  *(u32*)(p + 0x08) = 0x01472000;
-  *(u32*)(p + 0x0c) = 0x01471fdc;
+  *(void**)(p + 0x00) = g_1472008;
+  *(void**)(p + 0x08) = g_1472000;
+  *(void**)(p + 0x0c) = g_1471fdc;
+  _ReadWriteBarrier();
   void* obj = *(void**)(p + 0x7c);
   if (obj != 0) {
     ((void(__thiscall*)(void*))(*(void***)obj)[4 / 4])(obj);
