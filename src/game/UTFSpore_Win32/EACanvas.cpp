@@ -742,11 +742,9 @@ void Canvas_s0084_7200::SetMinClientArea(unsigned w, unsigned h)
     RECT rc;
     v15(&rc);
     int rw = (int)(rc.right - rc.left);
-    int rh = (int)(rc.bottom - rc.top);
-    if (rw < (int)w || rh < (int)h) {
-        if (rh <= (int)h) rh = (int)h;
-        if (rw <= (int)w) rw = (int)w;
-        v16(mRectDesiredLeft, mRectDesiredTop, (unsigned)rw, (unsigned)rh, 0);
+    if (rw < (int)w || (int)(rc.bottom - rc.top) < (int)h) {
+        int rh = (int)(rc.bottom - rc.top);
+        v16(mRectDesiredLeft, mRectDesiredTop, (unsigned)(rw > (int)w ? rw : (int)w), (unsigned)(rh > (int)h ? rh : (int)h), 0);
     }
 }
 
