@@ -142,6 +142,7 @@ struct cGlobalUIManager {
 };
 extern cGlobalUIManager* g_pGlobalUIManager;        // 0x016c7aa4
 
+void operator_delete__(void* p);
 struct cMarkerTextDialog {
     struct Slot {
         IWindow* mpWindow;      // +0x00
@@ -160,6 +161,8 @@ struct cMarkerTextDialog {
     int          mPad7C;        // +0x7C
     Slot*        mpCurrentSlot; // +0x80
     char         mFlag84;       // +0x84
+    ~cMarkerTextDialog() { if (mpLayout != 0) mpLayout->Release(); }
+    static void operator delete(void* p) { operator_delete__(p); }
 };
 
 extern cMarkerTextDialog* g_pActive;   // 0x016c7d90
@@ -355,15 +358,9 @@ void FUN_00f0c290() {
         g_pDialog1->mpLayout = 0;
         lay->Release();
     }
-    if (g_pDialog1 != 0) {
-        if (g_pDialog1->mpLayout != 0) g_pDialog1->mpLayout->Release();
-        operator_delete__(g_pDialog1);
-    }
+    delete g_pDialog1;
     g_pDialog2->mpLayout->Shutdown(1);
-    if (g_pDialog2 != 0) {
-        if (g_pDialog2->mpLayout != 0) g_pDialog2->mpLayout->Release();
-        operator_delete__(g_pDialog2);
-    }
+    delete g_pDialog2;
 }
 
 // ---------------------------------------------------------------------------
