@@ -14744,17 +14744,14 @@ void* cCreatureFactory::FUN_00c201a0(char flag, void* param2, void* param3)
 
     if (flag != 0) {
         cFactoryObject* found = (cFactoryObject*)FUN_00c14e70(param3);
-        if (found != 0 && found->o10()) {
-            return 0;
+        if (found == 0 || !found->o10()) {
+            FUN_00c17350(param3, 0);
+            created = (cFactoryObject*)FUN_00c1d120(param2, param3);
+            if (created != 0) {
+                created->o08(0);
+            }
+            return created;
         }
-
-        FUN_00c17350(param3, 0);
-
-        created = (cFactoryObject*)FUN_00c1d120(param2, param3);
-        if (created != 0) {
-            created->o08(0);
-        }
-        return created;
     } else {
         FUN_00c17350(param3, 0);
     }
