@@ -50,3 +50,6 @@
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsConnectionAvailable@StreamSocketReadiness_s0094dbc0@@UAE_NI@Z  0094e5e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetBroadcastOption@ISocket@@QAE_N_N@Z  0094d960  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetDebugOption@ISocket@@QAE_N_N@Z  0094da20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetLingerOpt@Socket@@QAE_NEG@Z  0094daf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetNonBlockingOption@Socket@Sockets@EA@@UAE_N_N@Z  0094db60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?GetLingerOption@Socket@Sockets@EA@@UAE_NAA_NAAI@Z  0094da70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

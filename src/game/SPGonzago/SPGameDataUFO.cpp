@@ -294,7 +294,7 @@ struct PaintSystemExt : Skinner::PaintSystem {   // own vtbl 0x146bb78
     virtual ~PaintSystemExt();             // 0x00c38c90
 };
 struct OffsetHolder {
-    void GetPos(Vec3* out);                // 0x00c38c20
+    Vec3 GetPos();                         // 0x00c38c20 (returned through the hidden result pointer)
 };
 // ---- items of slice s00c389f0 end
 
@@ -2539,12 +2539,14 @@ void UFOThing::FUN_00c38b90()
 }
 
 // @ 0x00c38c20
-void OffsetHolder::GetPos(Vec3* out)
+Vec3 OffsetHolder::GetPos()
 {
     Vec3* p = (Vec3*)((float*)this - 0x134);   // 0x134 floats == 0x4d0 bytes
-    out->x = p->x;
-    out->y = p->y;
-    out->z = p->z;
+    Vec3 out;
+    out.x = p->x;
+    out.y = p->y;
+    out.z = p->z;
+    return out;
 }
 
 // @ 0x00c38c50

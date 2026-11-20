@@ -10,7 +10,6 @@
                and thiscall scheduling differ equiv: UNSUPPORTED (unresolved IdObj::m4).
 00f20ef0  196  proximity effect start/cancel: complete logic; vcall order and x87/SSE
                distance computation diverge equiv: UNSUPPORTED (0/1200 valid inputs).
-00f20fe0   14  Simulator ctor: complete; global store uses esi instead of the original's
                ecx and the string relocation rendering differs equiv: WEAK (75% coverage).
 00f21080  200  falloff callback loop: complete; SSE register allocation and the
                repeated min/max clamp schedule differ equiv: WEAK (26% coverage).

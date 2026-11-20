@@ -615,6 +615,13 @@ struct RbFind56 {
 };
 struct Key2 { int a, b; };
 struct RbNode57 { char pad[0x10]; Key2 key; };
+// rbtree iterator, returned by value through the hidden result pointer
+struct RbIter57
+{
+    RbNode57* mpNode;
+    explicit RbIter57(RbNode57* p) : mpNode(p) {}
+    RbIter57(const RbIter57& o) : mpNode(o.mpNode) {}
+};
 struct RbTree57 {
     void*   root;       // +0x00 (this+0x04)
     char    pad[0x0c];
@@ -679,7 +686,7 @@ struct cGalaxyGameEntryImpl_s00de_5040 {
     void  FUN_00de53d0(char p);         // 0x00de53d0
     void  ShowGalaxy(char param2);      // 0x00de5470
     OutKey3* FUN_00de56f0(OutKey3& pOut, KeyNode* key); // 0x00de56f0
-    void  FUN_00de57b0(RbNode57** pOut, RbNode57* parent, Key2* key, char flag); // 0x00de57b0
+    RbIter57 FUN_00de57b0(RbNode57* parent, Key2* key, char flag); // 0x00de57b0
     void  FUN_00de4910(void);           // 0x00de4910
     void  FUN_00de41b0(void);           // 0x00de41b0
     void  FUN_00de5950(void);           // 0x00de5950
@@ -7420,7 +7427,7 @@ struct cEntryVector {
     cPollenEntry* mpCapacity;                // +08
     uint32_t mAllocator;                     // +0c
 
-    cPollenEntry* MoveTail(cPollenEntry* first, cPollenEntry* dest);      // 0x00de97a0
+    cPollenEntry* MoveTail(cPollenEntry* first, cPollenEntry* last);      // 0x00de97a0
     void insert(cPollenEntry* position, unsigned int count,
                 const cPollenEntry& value);                              // 0x00de97f0
     void DestroyRange(cPollenEntry* first, cPollenEntry* last);           // 0x00de5ee0
@@ -10588,10 +10595,12 @@ void __thiscall cGalaxyGameEntryImpl_s00de_41b0::FUN_00de4630()
         mec = 1;
         me8 = 2;
         FUN_00809db0(&g_dw15a41d4, &g_dw15a3860);
-    } else if (mef != 0) {                  // re-read the member: this keeps cl from folding the clause away,
-        med = 1;                            // so the mef byte stays in al like the original
-    } else if (m1f1 != c) {
-        mee = 1;
+    } else if (mef != 0) {
+        med = 1;
+    } else {
+        _ReadWriteBarrier();
+        if (m1f1 != 0)
+            mee = 1;
     }
 }
 
@@ -10607,8 +10616,10 @@ int __thiscall cGalaxyGameEntryImpl_s00de_41b0::FUN_00de46e0()
 void __thiscall cGalaxyGameEntryImpl_s00de_41b0::OnActivate()
 {
     FUN_00ddd970();
-    g_bGalaxyActive = 1;
-    if (m15c == 0) {
+    if (m15c != 0) {
+        g_bGalaxyActive = 1;
+    } else {
+        g_bGalaxyActive = 1;
         void* pEM = FUN_0067ddd0();
         void* pWorld = ((void*(__thiscall*)(void*, uint32_t, const char*))VFN(pEM, 0x4c))(pEM, 0x2dda976, "GGE effects world");
         AssignRef_s00de_41b0(&m15c, pWorld, 0, 4);
@@ -11050,17 +11061,19 @@ OutKey3* cGalaxyGameEntryImpl_s00de_5040::FUN_00de56f0(OutKey3& pOut, KeyNode* k
     return &pOut;
 }
 
+extern char g_13f09b4[];   // 0x013f09b4 "Simulator"
+extern char g_13ebb38[];   // 0x013ebb38 allocator name
 // @ 0x00de57b0
-void cGalaxyGameEntryImpl_s00de_5040::FUN_00de57b0(RbNode57** pOut, RbNode57* parent, Key2* key, char flag)
+RbIter57 cGalaxyGameEntryImpl_s00de_5040::FUN_00de57b0(RbNode57* parent, Key2* key, char flag)
 {
     int left = (flag == 0 && parent != (RbNode57*)&mTree4.root
                 && key->a >= parent->key.a) ? 1 : 0;
-    RbNode57* node = (RbNode57*)EAllocNew(0x18, (const char*)0x13f09b4, 0, 0, (void*)0x13ebb38, 0xd1);
+    RbNode57* node = (RbNode57*)EAllocNew(0x18, g_13f09b4, 0, 0, g_13ebb38, 0xd1);
     if (&node->key != 0)
         node->key = *key;
     RBTreeInsert57(node, parent, &mTree4.root, left);
-    *pOut = node;
     mTree4.count++;
+    return RbIter57(node);
 }
 
 // @ 0x00de58c0
@@ -11390,11 +11403,12 @@ void cEditorMessageTarget::OnEditorMessageReceived(void* pMessage)
 }
 
 // @ 0x00de97a0
-cPollenEntry* cEntryVector::MoveTail(cPollenEntry* first, cPollenEntry* dest)
+cPollenEntry* cEntryVector::MoveTail(cPollenEntry* first, cPollenEntry* last)
 {
-    cPollenEntry* const newEnd = CopyConstructEntries(first, mpEnd, dest);
+    // erase(first, last): slide the tail [last, end) down onto first, destroy the leftovers
+    cPollenEntry* const newEnd = CopyConstructEntries(last, mpEnd, first);
     DestroyRange(newEnd, mpEnd);
-    mpEnd += dest - first;
+    mpEnd -= last - first;
     return first;
 }
 
@@ -17315,12 +17329,18 @@ UI_s00df_a5c0* UI_s00df_a5c0::FUN_ae00(void* other)
 {
     char* o = (char*)other;
     ((CStr_s00df_a5c0*)this)->Assign(other);
-    if ((void*)(o + 0x14) != (void*)((char*)this + 0x14))
-        ((WStrAssign*)((char*)this + 0x14))->assign(*(void**)(o + 0x14), *(void**)(o + 0x18));
+    {
+        void** src = (void**)(o + 0x14);
+        if ((void*)src != (void*)((char*)this + 0x14))
+            ((WStrAssign*)((char*)this + 0x14))->assign(src[0], src[1]);
+    }
     *(int*)((char*)this + 0x24) = *(int*)(o + 0x24);
     *(int*)((char*)this + 0x28) = *(int*)(o + 0x28);
-    if ((void*)(o + 0x2c) != (void*)((char*)this + 0x2c))
-        ((WStrAssign*)((char*)this + 0x2c))->assign(*(void**)(o + 0x2c), *(void**)(o + 0x30));
+    {
+        void** src = (void**)(o + 0x2c);
+        if ((void*)src != (void*)((char*)this + 0x2c))
+            ((WStrAssign*)((char*)this + 0x2c))->assign(src[0], src[1]);
+    }
     return this;
 }
 

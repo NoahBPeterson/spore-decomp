@@ -64,7 +64,7 @@ namespace SP {
 namespace Audio {
 struct IEventModifier {
     void*          mpVtable0;                                // +0x00
-    volatile void* mpVtable4;                                // +0x04
+    void*          mpVtable4;                                // +0x04
     uint32_t       mPad08;                                   // +0x08
     IEventModifier();
 };  // namespace Audio
@@ -482,14 +482,16 @@ bool PrimBase::HandleMessage(int id, void* arg)
     return true;
 }
 
+extern "C" char g_vt_01487348;    // 0x01487348
+
 // @ 0x00ea4fd0
 namespace SP { namespace Audio {
 IEventModifier::IEventModifier()
 {
-    mpVtable4 = (void*)0x013ef094;
+    *(void* volatile*)&mpVtable4 = &g_vt_013ef094;
     mPad08 = 0;
-    mpVtable0 = (void*)0x0148734c;
-    mpVtable4 = (void*)0x01487348;
+    mpVtable0 = &g_vt_0148734c;
+    mpVtable4 = &g_vt_01487348;
 }
 }}  // namespace SP::Audio
 

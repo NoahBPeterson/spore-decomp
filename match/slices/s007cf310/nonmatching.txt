@@ -7,7 +7,6 @@
 007cf760  294   MapY::insertPair: complete realloc/relocate path (allocate, copy pairs, addref each element, free old block, move-assign the value over the slot); retail copy-constructor call (RefField::ctor) and _EAlloc schedule differ; equiv: UNSUPPORTED (2 unresolved references: RefField::ctor, _EAlloc)
 007cf8d0  206   MapZ::setSlot: complete slot setter with the grow path; retail keeps the searched slot index live in a different register (mine leaves ecx modified); equiv: FAIL 5/96 valid inputs (first: ecx untouched by the original)
 007cf9b0  199   ObjX2::clear: complete body (two vector destroys, string reset, the four flag/queue clears); retail inlines more of the vector destroy loops; equiv: WEAK (70 valid inputs, 32.5% coverage)
-007cfb40  8     MapW::tryInsert: complete; only the interlocked addref intrinsic's micro-schedule differs (retail emits `add ecx,8` before `mov eax,1`, cl emits them in the opposite order); equiv: WEAK (75 valid inputs, 60.0% coverage)
 007cfbb0  121   InnerC::clear: complete body, retail's vector<bool> clear and the 0x50/0x54 pair handling are inlined differently; equiv: FAIL 5/5 valid inputs
 007cfc70  79    MapV::findOrInsert2: complete find-or-insert; helper split differs by 2 bytes; equiv: PASS (240 valid inputs, 100% coverage)
 007cfcd0  943   PMOwner::compile: complete property-model compile (element walk, kind dispatch, property writes), the retail loop bodies and _SP_GetPropertyAsKey call schedule differ; equiv: UNSUPPORTED (1 unresolved reference: _SP_GetPropertyAsKey)

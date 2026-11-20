@@ -1996,22 +1996,24 @@ void cOwnerT::RemoveOwner()
     }
 }
 
+extern char g_018c43e8[];   // 0x018c43e8 city type id object
+
 // @ 0x00bcd630
 void* cOwnerT::GetOwnerCivilization()
 {
     if (mpOwner_1f0 == 0) return 0;
-    void* pCity = ((void* (__thiscall*)(void*))vc(this, 0x30))(this);
+    void* pCity = ((void* (__thiscall*)(void*))((void**)*(void**)this)[0x30 / 4])(this);
     if (pCity != 0) {
-        void* type = ((void* (__thiscall*)(void*))vc(pCity, 0x20))(pCity);
-        if (type != (void*)0x018c43e8) pCity = 0;
+        void* type = ((void* (__thiscall*)(void*))((void**)*(void**)pCity)[0x20 / 4])(pCity);
+        if (type != (void*)g_018c43e8) pCity = 0;
     } else {
         pCity = 0;
     }
-    int id = ((int (__thiscall*)(void*))vc(this, 0x4c))(this);
+    int id = ((int (__thiscall*)(void*))((void**)*(void**)this)[0x4c / 4])(this);
     if (id == -1) {
         return ((void* (__thiscall*)(void*))FUN_00bd9bf0)(pCity);
     }
-    int id2 = ((int (__thiscall*)(void*))vc(this, 0x4c))(this);
+    int id2 = ((int (__thiscall*)(void*))((void**)*(void**)this)[0x4c / 4])(this);
     return ((void* (__thiscall*)(void*, void*))FUN_00b25f40)(FUN_00b3d300(), (void*)id2);
 }
 

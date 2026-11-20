@@ -27,3 +27,5 @@
 ../src/game/SPEngine/_at_00680000.cpp  ?FreeChain2@MapC0@@QAEXPAUNode15@@@Z  00681500  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ??1FactoryView_683f80@@QAE@XZ  00683f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ??0JobLockView_68f1d0@@QAE@PAUJlRecord_68f1d0@@PAX1@Z  0068f1d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??4ObjA@@QAEAAU0@ABU0@@Z  00681c40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?CopyBackwardA@@YAPAUObjA@@PAU1@00@Z  00681e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

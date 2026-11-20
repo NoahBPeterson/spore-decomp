@@ -156,15 +156,21 @@ struct Cfg
 // ===================================================================================================
 // 0x00ab9220  one-shot static initialiser: allocate the two 0x80-byte hook tables and patch them.
 // ===================================================================================================
+typedef void (__cdecl* TrailFn)();
+extern TrailFn g_1679690[0x20];   // 0x01679690 ribbon stream hook table
+extern TrailFn g_1679710[0x20];   // 0x01679710 trail fill hook table
+void __cdecl FUN_00ab7720();      // 0x00ab7720 Trail_FillVertices
+void __cdecl FUN_00ab86d0();      // 0x00ab86d0 Trail_FillStrip
+void __cdecl FUN_00ab3370();      // 0x00ab3370 cRibbonEffect_StreamQuads
 // @ 0x00ab9220
 void __cdecl FUN_00ab9220(char param_1)
 {
     if (param_1 != 0) {
-        operator_new_arr((void*)0x01679690, 0, 0x80);
-        operator_new_arr((void*)0x01679710, 0, 0x80);
-        *(void* volatile*)0x01679710 = (void*)0x00ab7720;
-        *(void* volatile*)0x01679730 = (void*)0x00ab86d0;
-        *(void* volatile*)0x01679690 = (void*)0x00ab3370;
+        operator_new_arr(g_1679690, 0, sizeof(g_1679690));
+        operator_new_arr(g_1679710, 0, sizeof(g_1679710));
+        g_1679710[0] = FUN_00ab7720;
+        g_1679710[8] = FUN_00ab86d0;
+        g_1679690[0] = FUN_00ab3370;
     }
 }
 

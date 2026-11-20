@@ -4397,6 +4397,7 @@ void SP::cActionCircle_s00af_9aa0::tSlot::ReserveId(unsigned int id)
 {
   mOccupied = true;
   mReservingId = id;
+  _ReadWriteBarrier();
   cGameData_s00af_9aa0* old = mpReservingNoun.mpObject;
   mpReservingNoun.mpObject = (cGameData_s00af_9aa0*)0;
   if (old) old->Release();

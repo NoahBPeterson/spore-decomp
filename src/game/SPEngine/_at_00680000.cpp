@@ -1434,7 +1434,10 @@ ObjB50& ObjB50::operator=(const ObjB50& x)
 // @ 0x00681c40
 ObjA& ObjA::operator=(const ObjA& x)
 {
-    m0 = x.m0;
+    m0.w[0] = x.m0.w[0];
+    m0.w[1] = x.m0.w[1];
+    m0.w[2] = x.m0.w[2];
+    m0.w[3] = x.m0.w[3];
     mF0 = x.mF0;
     mF1 = x.mF1;
     mF2 = x.mF2;

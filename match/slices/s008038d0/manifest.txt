@@ -13,3 +13,4 @@ slices/s008038d0/s008038d0.cpp  ?Bit0@Sec@@QAEIXZ  00804720  /O2 /MD /Gy /EHsc /
 slices/s008038d0/s008038d0.cpp  ?Bit2@Sec@@QAEIXZ  00804830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s008038d0/s008038d0.cpp  ?SetBit2@Sec@@QAEXH@Z  00804840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s008038d0/s008038d0.cpp  ?Bit3@Sec@@QAEIXZ  00804860  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?DtorBody@cSPUIFrameSequencer@@QAEXXZ  008048c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

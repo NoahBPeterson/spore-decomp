@@ -550,15 +550,13 @@ void ThreadObj::FUN_01154730(int value)
 // ---------------------------------------------------------------------------
 void ThreadObj::FUN_01154770(int value)
 {
-    value = ~value;
-    volatile long* p = (volatile long*)((char*)this + 0x10);
     long old, nv;
     bool again;
     do
     {
-        old = _InterlockedExchangeAdd(p, 0);
-        nv = value & old;
-        again = (_InterlockedCompareExchange(p, nv, old) != old);
+        old = _InterlockedExchangeAdd((volatile long*)((char*)this + 0x10), 0);
+        nv = ~value & old;
+        again = (_InterlockedCompareExchange((volatile long*)((char*)this + 0x10), nv, old) != old);
     } while (again);
 }
 

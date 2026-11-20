@@ -5,6 +5,8 @@
 
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
+extern "C" long __cdecl _InterlockedIncrement(volatile long*);
+#pragma intrinsic(_InterlockedIncrement)
 extern "C" void* __cdecl EAlloc(uint32_t, const char*, int, int, const char*, int);
 extern "C" void  __cdecl EFree(void*);
 
@@ -511,7 +513,7 @@ void* MapW::tryInsert(void* pos, void* value)
         unsigned ref = s[2];
         d[2] = ref;
         if (ref)
-            _InterlockedExchangeAdd((volatile long*)(ref + 8), 1);
+            _InterlockedIncrement((volatile long*)(ref + 8));
     }
     return (char*)mpTree + idx * 0x10;
 }

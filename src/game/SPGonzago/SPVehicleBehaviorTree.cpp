@@ -3422,22 +3422,29 @@ bool Idle_Activate(void * pTree, double a2, unsigned int a3, unsigned int a4, nS
 }  // namespace SP::VehicleTree
 
 // @ 0x00dc7cc0
+extern "C" char g_vt_147c4d8;   // 0x0147c4d8 cVehicleTicker primary vftable
+extern "C" char g_vt_147c4b4;   // 0x0147c4b4 cVehicleTicker second vftable
+extern "C" char g_vt_147c468;   // 0x0147c468 SimSingleton primary vftable
+extern "C" char g_vt_147c444;   // 0x0147c444 SimSingleton second vftable
+extern "C" char g_vt_13ec458;   // 0x013ec458 RefCountVTemplate<int> vftable
+extern "C" char g_vt_13eb938;   // 0x013eb938 GmeEditorResBase vftable
 void cVehicleTicker_s00dc_77d0::Destroy()
 {
   cSpatialVector* pVec38 = &m38;
-  mpVt00 = (void*)0x0147c4d8;
-  mpVt08 = (void*)0x0147c4b4;
+  mpVt00 = &g_vt_147c4d8;
+  mpVt08 = &g_vt_147c4b4;
   pVec38->Destroy();
   if (mVoxSoundIds.mpBegin != 0 && ((int32_t*)mVoxSoundIds.mpBegin)[-1] != 0)
     FUN_00f47380(mVoxSoundIds.mpBegin);
   mGroupOrders.Destroy();
-  mpVt00 = (void*)0x0147c468;
-  mpVt08 = (void*)0x0147c444;
+  mpVt00 = &g_vt_147c468;
+  mpVt08 = &g_vt_147c444;
   FUN_00b5b690(this);
   if (g_1699ab8 == this)
     g_1699ab8 = 0;
-  mpVt00 = (void*)0x013ec458;
-  mpVt08 = (void*)0x013eb938;
+  mpVt00 = &g_vt_13ec458;
+  _ReadWriteBarrier();
+  mpVt08 = &g_vt_13eb938;
 }
 
 // @ 0x00dc7d70

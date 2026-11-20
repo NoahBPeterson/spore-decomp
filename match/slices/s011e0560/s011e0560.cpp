@@ -410,9 +410,8 @@ void ArenaSelf::callSubref(uint16_t idx)
 void* ArenaSelf::idToObject(uint32_t id)
 {
     ArenaManifestApi* m = (ArenaManifestApi*)*(void**)((char*)this + 0x34);
-    void** table = *(void***)((char*)m->FUN_011e4610() + 8);
-    void* chunk = table[id >> 0x16];
-    return *(void**)((char*)chunk + (id & 0x3fffff) * 0x18);
+    char* chunk = (char*)(*(void***)((char*)m->FUN_011e4610() + 8))[id >> 0x16];
+    return *(void**)(chunk + (id & 0x3fffff) * 0x18);
 }
 
 // @ 0x011e2470

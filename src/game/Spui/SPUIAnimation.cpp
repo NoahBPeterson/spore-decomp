@@ -408,11 +408,13 @@ void __stdcall DestroyRange(void* first, void* last)
 void* Obj::M5FF0(char flags)
 {
     *(void**)((char*)this + 0) = &g_vt_014153bc;
+    _ReadWriteBarrier();
     void* p = *(void**)((char*)this + 0x84);
     if (p)
         ((FV0)VTOBJ(p)[4 / 4])(p);
     *(void**)((char*)this + 4) = &g_vt_013f6400;
     *(void**)((char*)this + 0xc) = &g_vt_013f63fc;
+    _ReadWriteBarrier();
     void* q = *(void**)((char*)this + 0x10);
     if (q)
         ((FV0)VTOBJ(q)[4 / 4])(q);
@@ -727,7 +729,8 @@ bool F6910(void* self, int a2, float a3, int phase)
         *(float*)((char*)self + 0x24) = f[0];
         *(float*)((char*)self + 0x28) = f[1];
         *(float*)((char*)self + 0x2c) = f[2];
-        *(float*)((char*)self + 0x30) = f[3];
+        float* d = (float*)((char*)self + 0x30);
+        *d = f[3];
         return *(void**)((char*)self + 0x10) != 0;
     }
     if (phase == 2) {

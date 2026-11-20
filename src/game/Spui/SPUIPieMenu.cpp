@@ -20,6 +20,7 @@ extern "C" char g_14431f8[];
 #include <string.h>
 #include <wchar.h>
 #include "cSPUILayout.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void SPUIHelpers_UpdateMouseFocus(int);
@@ -1065,6 +1066,7 @@ bool cSPUIPieMenuItem_s0081_89a0::sub8191b0()
 {
     MarkUnused();
     mpCurrentWindow = 0;
+    _ReadWriteBarrier();
     { void* q = mpRHSWindowSet;  if (q) { mpRHSWindowSet = 0;  Vv0(q, 0x04); } }
     { void* q = mpIconWindow;    if (q) { mpIconWindow = 0;    Vv0(q, 0x04); } }
     { void* q = mpParentWin;     if (q) { mpParentWin = 0;     Vv0(q, 0x04); } }

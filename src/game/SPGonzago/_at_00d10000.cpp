@@ -495,13 +495,18 @@ void* cRotationRing::SetThing6c(void* v)
     return v;
 }
 
+extern char g_147a0a8[];   // 0x0147a0a8  cRotationBall vftable (primary)
+extern char g_147a094[];   // 0x0147a094  cRotationBall vftable (+0x04 subobject)
+extern char g_1479fd0[];   // 0x01479fd0  cSpatialObject vftable (+0x34 member)
+
 // @ 0x00d1da60
 void cRotationBall::FiniBall()
 {
     cSpatialObject* sp = &mSpatial_34;
-    mpVtbl_00 = (void*)0x147a0a8;
-    mpVtbl_04 = (void*)0x147a094;
-    sp->mpVtbl_00 = (void*)0x1479fd0;
+    _ReadWriteBarrier();
+    mpVtbl_00 = g_147a0a8;
+    mpVtbl_04 = g_147a094;
+    sp->mpVtbl_00 = g_1479fd0;
     mName_110.FreeIfOwned();
     if (mpModel_108)
         (*(VFn0)VSLOT(mpModel_108, 0xc0))(mpModel_108);
@@ -605,13 +610,18 @@ char cRotationRing::GetFlagR()
     return (char)mpModel_108->mbFlag_6f;
 }
 
+extern char g_147a200[];   // 0x0147a200  cRotationRing vftable (primary)
+extern char g_147a1ec[];   // 0x0147a1ec  cRotationRing vftable (+0x04 subobject)
+extern char g_147a128[];   // 0x0147a128  cSpatialObject vftable (+0x34 member)
+
 // @ 0x00d1de10
 void cRotationRing::FiniRing()
 {
     cSpatialObject* sp = &mSpatial_34;
-    mpVtbl_00 = (void*)0x147a200;
-    mpVtbl_04 = (void*)0x147a1ec;
-    sp->mpVtbl_00 = (void*)0x147a128;
+    _ReadWriteBarrier();
+    mpVtbl_00 = g_147a200;
+    mpVtbl_04 = g_147a1ec;
+    sp->mpVtbl_00 = g_147a128;
     mName_110.FreeIfOwned();
     if (mpModel_108)
         (*(VFn0)VSLOT(mpModel_108, 0xc0))(mpModel_108);

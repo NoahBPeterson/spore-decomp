@@ -3196,9 +3196,8 @@ void cVehicle::PlaySomething()
 // @ 0x00c9eed0
 bool cVehicle::HasBit2000()
 {
-    uint32_t bits = mpField5e8->mBits & 0x2000;
-    uint32_t extra = 0;
-    return (bits | extra) != 0;
+    unsigned __int64 bits = *(unsigned __int64*)&mpField5e8->mBits;   // 64-bit flag word at +0x1c8
+    return (bits & 0x2000) != 0;
 }
 
 // @ 0x00c9eef0

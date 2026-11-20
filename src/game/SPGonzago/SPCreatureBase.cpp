@@ -8384,8 +8384,11 @@ void __thiscall CCM_s00c0_ddb0::ddb0(float* param_2)
 // @ 0x00c0dfb0
 void* __thiscall CCM_s00c0_ddb0::dfb0(int param)
 {
-    CCMInner* p = mpInner_b54;
-    if (p != 0) return ((F_cab60*)p->mpTable_17c)->f(param);
+    void* p = mpInner_b54;
+    if (p != 0) {
+        p = ((CCMInner*)p)->mpTable_17c;
+        return ((F_cab60*)p)->f(param);
+    }
     return 0;
 }
 
@@ -8457,11 +8460,9 @@ bool __thiscall CCM::e0c0(int param_2)
 char __thiscall CCM_s00c0_ddb0::e120(int param_2)
 {
     char* p = *(char**)(*(char**)((char*)this + 0xb54) + 0x184);
-    int* pu = (int*)(p + 0xf4c);
     for (int i = 0; i < 0x10; ++i) {
-        int v = *pu;
+        int v = ((int*)(p + 0xf4c))[i];
         if (v != -1 && *(int*)(v * 0xf0 + (int)p + 0xe0) == param_2) return 1;
-        ++pu;
     }
     return 0;
 }
@@ -10938,11 +10939,16 @@ void CreatureBase_s00c1_4350::OnStartSwimming()
         mbSelfPowered = 1;
 }
 
+// The object FUN_b3d310 returns is passed as `this` to the summarizer getter at 0x00c14350
+// (the getter itself never reads it).
+struct SummarizerHost_s00c1_4e50 {
+    cContentValidationSummarizer* GetContentValidationSummarizer();   // 0x00c14350
+};
+
 // @ 0x00c14e50
 void CreatureBase_s00c1_4350::NotifySummarizer()
 {
-    FUN_b3d310();
-    void* c = (void*)GetContentValidationSummarizerExternal();
+    void* c = (void*)((SummarizerHost_s00c1_4e50*)FUN_b3d310())->GetContentValidationSummarizer();
     ((cSpatialObject_s00c1_4350*)((char*)this + 0xc0))->FUN_c421b0(c);
 }
 

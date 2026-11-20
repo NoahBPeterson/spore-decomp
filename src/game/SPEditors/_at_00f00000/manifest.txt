@@ -19,3 +19,4 @@
 ../src/game/SPEditors/_at_00f00000.cpp  ?SetScenarioCoordinates@@YAXPAXPBUScenarioCoordinatePair@@@Z  00f088c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00f00000.cpp  ?f031d0@PL_s00f0_31a0@@QAEXXZ  00f031d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00f00000.cpp  ?f03e90@UI_s00f0_31a0@@QAEXXZ  00f03e90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?destroy_global_2dd0@@YAXXZ  00f02dd0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

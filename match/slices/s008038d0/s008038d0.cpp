@@ -540,13 +540,20 @@ void cSPUIFrameSequencer::SetFrameRange(int p2, int p3, char p4) {
     vis(fs, sec.mpVisitor, buf, last, cur);
 }
 
+extern void* g_01417804[];   // 0x01417804 cSPUIFrameSequencer vftable
+extern void* g_01417790[];   // 0x01417790 sequencer section vftable
+extern void* g_013eb938[];   // 0x013eb938 section base vftable
+extern void* g_013ec458[];   // 0x013ec458 base vftable
+
 // @ 0x008048c0
 void cSPUIFrameSequencer::DtorBody() {
-    vtable = (void**)0x1417804;
-    sec.vtable = (void**)0x1417790;
+    vtable = g_01417804;
+    sec.vtable = g_01417790;
     _ReadWriteBarrier();
     (*(void(__thiscall**)(void*, int))VSlot(&sec, 0x10))(&sec, 0);
-    if ((sec.mFlags2 & 4) != 0) sec.mContext.Destruct(0);
-    sec.vtable = (void**)0x13eb938;
-    vtable = (void**)0x13ec458;
+    // the context variant's type flags sit right after its 0x10-byte body (sec.mFlags2)
+    Variant* ctx = &sec.mContext;
+    if ((*((unsigned char*)ctx + 0x10) & 4) != 0) ctx->Destruct(0);
+    sec.vtable = g_013eb938;
+    vtable = g_013ec458;
 }

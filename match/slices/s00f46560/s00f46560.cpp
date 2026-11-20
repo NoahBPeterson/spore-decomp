@@ -644,17 +644,23 @@ void* cScreen::FUN_00f46dd0() {
     return this;
 }
 
+extern void* g_0148d6ac[];   // 0x0148d6ac cScreen vftable
+extern void* g_0148d69c[];   // 0x0148d69c cScreen secondary vftable
+extern void* g_013ec458[];   // 0x013ec458 base vftable
+extern void* g_013eb938[];   // 0x013eb938 base vftable
+
 // @ 0x00F46E30
 void cScreen::FUN_00f46e30() {
-    *(void**)((char*)this + 0) = (void*)0x148d6ac;
-    *(void**)((char*)this + 4) = (void*)0x148d69c;
+    *(void**)((char*)this + 0) = (void*)g_0148d6ac;
+    *(void**)((char*)this + 4) = (void*)g_0148d69c;
+    _ReadWriteBarrier();
     if (mpFrame7c) (*(FnP)Vslot(mpFrame7c, 4))(mpFrame7c);
     if (mpFrame78) (*(FnP)Vslot(mpFrame78, 4))(mpFrame78);
     if (mpFrame74) (*(FnP)Vslot(mpFrame74, 4))(mpFrame74);
     if (mpWindow70) (*(FnP)Vslot(mpWindow70, 4))(mpWindow70);
     FrameAt(this, 0xc)->FUN_009968a0();
-    *(void**)((char*)this + 4) = (void*)0x13ec458;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_013ec458;
+    *(void**)((char*)this + 0) = (void*)g_013eb938;
 }
 
 // @ 0x00F46EB0

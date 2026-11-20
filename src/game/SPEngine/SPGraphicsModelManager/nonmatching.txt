@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-007439b0 7 complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
 00743c50 47 eastl Internal::insertion_sort_simple (desc, comparator): cl loop-rotation differs; difftest WEAK (198 valid, 16.2% cov)
 00743d20 81 eastl Internal::insertion_sort_simple (asc, comparator): cl loop-rotation differs; difftest WEAK (168 valid, 15.8% cov)
 00744050 528 cSPTransform two-point transform: instruction schedule/register allocation differs; difftest PASS (689 valid, 100% cov)

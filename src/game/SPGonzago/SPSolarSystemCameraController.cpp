@@ -2783,9 +2783,8 @@ void UFO::bad0(int a, int b)
     (void)b;
     int v = a;
     int local = 100;
-    int* p = &v;
-    if (v >= 100) p = &local;
-    aea0((float)*p * 0.001f);
+    const int& m = (local > v) ? v : local;
+    aea0((float)m * 0.001f);
 }
 
 // @ 0x0101bb10

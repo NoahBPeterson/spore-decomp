@@ -412,15 +412,10 @@ void InnerSetter::SetInnerFlag(u8 v) {
 
 // @ 0x0080d5f0
 char* __fastcall GetInnerB(char* p) {
-    char* q = 0;
-    if (p) {
-        q = p - 0x250;
-        if (q) {
-            char* c = q + 0xc;
-            if (c) return c + 0x54;
-        }
-    }
-    return (char*)0x60;
+    char* q = p ? p - 0x250 : 0;
+    char* c = q ? q + 0xc : 0;
+    char* d = c ? c - 0xc : 0;
+    return d + 0x60;
 }
 
 // @ 0x0080d610

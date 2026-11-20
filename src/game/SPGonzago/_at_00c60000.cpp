@@ -2295,27 +2295,22 @@ void CopyPair(void* a, void* b)
 }
 
 // @ 0x00c63be0
+extern "C" char g_vt_1470eb8;   // 0x01470eb8 cMorphHandle primary vftable
+extern "C" char g_vt_147112c;   // 0x0147112c cMorphHandle second base vftable
+extern "C" char g_vt_1470df0;   // 0x01470df0 cMorphHandle spatial sub-object vftable
 cMorphHandle::cMorphHandle()
 {
     ((GameDataBase*)this)->ctorGameData();
     ((SpatialBase*)&mpVtblSpatial)->ctorSpatialObject();
-    _ReadWriteBarrier();
-    mpVtbl = (void*)kVtblMorph0;
-    _ReadWriteBarrier();
-    mpVtbl04 = (void*)kVtblMorph1;
-    _ReadWriteBarrier();
-    mpVtblSpatial = (void*)kVtblMorphSp;
-    _ReadWriteBarrier();
+    mpVtbl = &g_vt_1470eb8;
+    mpVtbl04 = &g_vt_147112c;
+    mpVtblSpatial = &g_vt_1470df0;
     mF108 = 0.0f;
-    _ReadWriteBarrier();
     mF10c = 0.0f;
-    _ReadWriteBarrier();
     mF110 = 0.0f;
     _ReadWriteBarrier();
     mB114 = 1;
-    _ReadWriteBarrier();
     mB115 = 1;
-    _ReadWriteBarrier();
     mVis = 0;
 }
 

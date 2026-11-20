@@ -62,3 +62,4 @@
 ../src/game/SPEditors/_at_00ee0000.cpp  ?OnMsg2@SpuEd@@QAEEIPAX@Z  00ee8180  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?SetSource@SpuEd@@QAEEPAX@Z  00ee8720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?F3630@Beh@@QAEXH@Z  00ee3630  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?F40F0@Bee@@QAEXXZ  00ee40f0  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include

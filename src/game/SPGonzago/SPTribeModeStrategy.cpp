@@ -6688,8 +6688,9 @@ void cTribeModeStrategy_s00cd_d500::PreGameModeTransition(u32 previousMode, u32 
 s32 FUN_00cdd960()
 {
     void* pTribe = NounManager_s00cd_d500()->GetPlayerTribe();
+    cGameNounManager_s00cd_d500* pMgr = NounManager_s00cd_d500();
     PtrVec_s00cd_d500<cNoun>* pItems =
-        &((NounVecOut<cNoun>*)NounManager_s00cd_d500()->GetGameDataVector(F_cd7d10, F_d3d420, F_accc30, F_b1e500, 0x1be418e))->mItems_04;
+        &((NounVecOut<cNoun>*)pMgr->GetGameDataVector(F_cd7d10, F_d3d420, F_accc30, F_b1e500, 0x1be418e))->mItems_04;
 
     cNoun** pIt = pItems->mpBegin;
     cNoun** const pEnd = pItems->mpEnd;

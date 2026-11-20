@@ -6333,15 +6333,17 @@ void cVarListEditor::SetListObject(VarSource* item)
     }
 }
 
+// The var-list editor as an owned object: its destructor clears the list and then the embedded
+// fixed allocator, and the class-level delete forwards to the game allocator.
+struct OwnedVarList : RawList
+{
+    ~OwnedVarList() { Clear(); }
+    static void operator delete(void* p) { operator_delete(p); }
+};
 // @ 0x00bcb700
 void __cdecl DestroyVarList()
 {
-    cVarListEditor* p = g_pVarListEditor;
-    if (p) {
-        ((RawList*)p)->Clear();
-        ((RawList*)p)->mAlloc.~FixedAllocatorBase();
-        operator_delete(p);
-    }
+    delete (OwnedVarList*)g_pVarListEditor;
     g_pVarListEditor = 0;
 }
 

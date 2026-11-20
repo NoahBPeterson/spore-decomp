@@ -727,7 +727,7 @@ struct RBTree_s008d_62f0
     void*   mpAllocIface; // +0x18 ICoreAllocator*
     uint32_t mnAllocName; // +0x1c
 
-    void DoInsertValueImpl(RBNode_s008d_62f0** ppOutNode, RBNode_s008d_62f0* pPosition,
+    RBNodeIter_s008d_62f0 DoInsertValueImpl(RBNode_s008d_62f0* pPosition,
                            const void* pKey, bool bLeft);   // 0x008d6e20
     RBNodeIter_s008d_62f0 Erase(RBNodeIter_s008d_62f0 it);              // 0x008d6d20
     RBNodeIter_s008d_62f0 EraseIterator(RBNodeIter_s008d_62f0 it);      // 0x008d7200
@@ -1403,30 +1403,24 @@ void KeyTreeDoNukeSubtree(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
 // Reconstructed from the retail listing.  The shape is complete; the remaining residue is cl 15's choice of
 // esi/edi for this/new-node (retail: esi=this, edi=node) and the scheduling of the insertion-side store.
 namespace EA { namespace ResourceMan {
-void RBTree_s008d_62f0::DoInsertValueImpl(RBNode_s008d_62f0** ppOutNode, RBNode_s008d_62f0* pPosition,
+RBNodeIter_s008d_62f0 RBTree_s008d_62f0::DoInsertValueImpl(RBNode_s008d_62f0* pPosition,
                                           const void* pKey, bool bLeft)
 {
     int nSide;
-    if (!bLeft && pPosition != Anchor(this))
-    {
-        const KeyPair_s008d_62f0* pNew = reinterpret_cast<const KeyPair_s008d_62f0*>(pKey);
-        nSide = 1;
-        if (KeyLess_s008d_62f0(pNew->mKey, *NodeKey(pPosition)))
-            nSide = 0;
-    }
-    else
-    {
+    const KeyPair_s008d_62f0* pNew = reinterpret_cast<const KeyPair_s008d_62f0*>(pKey);
+    if (bLeft || pPosition == Anchor(this) || KeyLess_s008d_62f0(pNew->mKey, *NodeKey(pPosition)))
         nSide = 0;
-    }
+    else
+        nSide = 1;
 
     RBNode_s008d_62f0* pNode = AllocTreeNode(this, 0x48);
-    if (pNode != 0)
-        reinterpret_cast<KeyPair_s008d_62f0*>(reinterpret_cast<uint8_t*>(pNode) + 0x10)->Construct(
-            *reinterpret_cast<const KeyPair_s008d_62f0*>(pKey));
+    KeyPair_s008d_62f0* pPair = reinterpret_cast<KeyPair_s008d_62f0*>(reinterpret_cast<uint8_t*>(pNode) + 0x10);
+    if (pPair != 0)
+        pPair->Construct(*reinterpret_cast<const KeyPair_s008d_62f0*>(pKey));
 
     RBTreeInsert(pNode, pPosition, Anchor(this), nSide);
     ++mnCount;
-    *ppOutNode = pNode;
+    return RBNodeIter_s008d_62f0(pNode);
 }
 }}  // namespace EA::ResourceMan
 

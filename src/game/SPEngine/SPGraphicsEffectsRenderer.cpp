@@ -677,7 +677,7 @@ struct cEffectsModel2 {
     void** mpVtable;    // +0
     int    mnRefCount;  // +4
 };
-struct cERSDtor { void Shutdown(); ~cERSDtor(); };
+struct cERSDtor { void Shutdown(); ~cERSDtor(); static void operator delete(void* p) { EASTL_allocator_deallocate(p); } };
 // ---- items of slice s006ef990 end
 
 // ---- items of slice s006f0890 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -5559,11 +5559,7 @@ void CreateEffectsRendererSystem()
 void DestroyEffectsRendererSystem()
 {
     g_pEffectsRendererSystem->Shutdown();
-    cERSDtor* p = g_pEffectsRendererSystem;
-    if (p) {
-        p->~cERSDtor();
-        EASTL_allocator_deallocate(p);
-    }
+    delete g_pEffectsRendererSystem;
     g_pEffectsRendererSystem = 0;
 }
 

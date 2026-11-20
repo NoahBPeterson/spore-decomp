@@ -8,6 +8,8 @@
 #include <string.h>
 #include <math.h>
 #include <xmmintrin.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 // --- globals referenced by the original (addresses for the equivalence mapper) ---
 extern uint8_t  g_vtbl_014bc0fc[];          // 0x14bc0fc  shared base vtable
@@ -332,6 +334,7 @@ bool FUN_0113c060(uint8_t* p)
     uint8_t ch = B(p, 0x21);
     uint8_t* edx = p + 0x28;
     W(p, 0xc) = (uint32_t)edx;
+    _ReadWriteBarrier();
     if (ch == 2)
         B(p, 0x70) = 0;
     else

@@ -19,3 +19,5 @@
 ../src/game/SPEditors/SPUISettings.cpp  ?Init@cOnlineTab_s0060_2940@@UAEXPB_WPAXI@Z  00603780  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISettings.cpp  ?HandleMessage@Handler14@@QAE_NIPAX@Z  006041f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISettings.cpp  ?SaveAllSettings@cSPUISettings14@@QAEXXZ  00604860  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?F10@GraphicsTabF10@@QAEXXZ  00603f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?FE0@GraphicsTabF10@@QAEXXZ  00603fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

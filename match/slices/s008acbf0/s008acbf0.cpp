@@ -389,9 +389,8 @@ int fnt_ContourTailDelta(TTExecCtx* c)
     int* org = z->mOrgX;
     int n = z->mNumContours;
     short* ends = z->mContourEnds;
-    int p = ends[n - 1];
-    int delta = org[p + 2] - org[p + 1];
-    p++;
+    int p = ends[n - 1] + 1;
+    int delta = org[p + 1] - org[p];
     *c->mStack = delta;
     c->mStack += 1;
     return p;

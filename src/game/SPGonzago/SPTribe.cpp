@@ -7063,25 +7063,39 @@ Vec3* cTribe_s00c9_7220::RandomRegionPointAt(int, Vec3* out, uint32_t key)
     return out;
 }
 
+// deque<uint32_t> iterator (EASTL DequeIterator: current, bucket begin, bucket end, bucket pointer)
+struct RegionDequeIter_s00c9_7c40
+{
+    uint32_t*  mpCurrent;
+    uint32_t*  mpBegin;
+    uint32_t*  mpEnd;
+    uint32_t** mpCurrentArrayPtr;
+    void Increment()
+    {
+        if (++mpCurrent == mpEnd)
+        {
+            mpBegin = *++mpCurrentArrayPtr;
+            mpEnd = mpBegin + 0x40;
+            mpCurrent = mpBegin;
+        }
+    }
+};
 // @ 0x00c97c40
 int cTribe_s00c9_7220::FindRegionIndex(uint32_t key, int key2)
 {
     uint32_t k = key;
     RegionSlot* slot = this->map4e4.Find(&k);
 
-    uint32_t* it = slot->mpBegin;
-    uint32_t* bucketEnd = slot->mpBucketEnd;
-    uint32_t** buckets = slot->mpBuckets;
+    RegionDequeIter_s00c9_7c40 it;
+    it.mpCurrent = slot->mpBegin;
+    it.mpEnd = slot->mpBucketEnd;
+    it.mpCurrentArrayPtr = slot->mpBuckets;
     uint32_t* end = slot->mpEnd;
     int idx = 0;
-    while (it != end) {
-        if ((uint32_t)key2 == *it)
+    while (it.mpCurrent != end) {
+        if ((uint32_t)key2 == *it.mpCurrent)
             return idx;
-        ++it;
-        if (it == bucketEnd) {
-            it = *++buckets;
-            bucketEnd = it + 0x40;
-        }
+        it.Increment();
         ++idx;
     }
     return -1;

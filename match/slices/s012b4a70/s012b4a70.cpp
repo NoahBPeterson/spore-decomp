@@ -130,6 +130,11 @@ struct DefaultVector3_s012b4a70 {
     DefaultVector3_s012b4a70* Self();         // 0x00572590, returns this
 };
 extern DefaultVector3_s012b4a70 g_DefaultVector_0164b298; // 0x0164b298
+struct DefaultVector4_s012b4a70 {
+    float x, y, z, w;
+    DefaultVector4_s012b4a70* Self();         // 0x00572590, returns this
+};
+extern DefaultVector4_s012b4a70 g_DefaultColor_0164b2a4;  // 0x0164b2a4
 extern float DAT_014853e0;                  // 0x014853e0  reciprocal scale
 extern float DAT_01471064;                  // 0x01471064
 
@@ -382,6 +387,8 @@ void __cdecl CopyVec3_AndMatrix()
 
 struct V3 { float x, y, z; };
 extern V3 V3_1606ae0, V3_1606aec;
+extern "C" float g_140a014;                   // 0x0140a014
+extern "C" float g_13f51ac;                   // 0x013f51ac -FLT_MAX
 static inline V3 Make3(float v)
 {
     V3 r;
@@ -394,8 +401,8 @@ static inline V3 Make3(float v)
 // @ 0x012cc3b0
 void __cdecl SetVec3Pair()
 {
-    V3_1606ae0 = Make3(*(float*)0x0140a014);
-    V3_1606aec = Make3(*(float*)0x013f51ac);
+    V3_1606ae0 = Make3(g_140a014);
+    V3_1606aec = Make3(g_13f51ac);
 }
 
 // @ 0x012d7850
@@ -641,13 +648,11 @@ void __cdecl SetColor_12()
 // @ 0x012f6460
 void __cdecl SetColor_13()
 {
-    ((UintArray*)0x0164b2a4)->Self();
-    float zero13 = 0.0f;
-    *(float*)0x0164b2a4 = zero13;
-    float one13 = DAT_01485720;
-    *(float*)0x0164b2a8 = one13;
-    *(float*)0x0164b2ac = zero13;
-    *(float*)0x0164b2b0 = one13;
+    g_DefaultColor_0164b2a4.Self();
+    g_DefaultColor_0164b2a4.x = 0.0f;
+    g_DefaultColor_0164b2a4.y = DAT_01485720;
+    g_DefaultColor_0164b2a4.z = 0.0f;
+    g_DefaultColor_0164b2a4.w = DAT_01485720;
 }
 
 // @ 0x012f64a0

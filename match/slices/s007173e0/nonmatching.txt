@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP; diff approximate)
 00717820  79   Vec30::resize: original recomputes size() across the branch, cl CSEs it here
-00717890  8    Vec18::resize: CopyVertex3D is a free cdecl callee and the shrink count comes from the pre-call mpEnd; only cl's negated-divisor vs negated-operand form differs
 00717cb0  35   AppEditor::insertRange: object address computed before vs after pushing args
 00718520  59   assignFwd50: source-pointer addressing hoisted differently (ebx/ebp)
 007173e0  1968  FUN_007173e0(sel): complete selection-definition pass - the three per-vertex count arrays (0x38 flag words of the 0x28 groups, squared-normal test on the 0x50 pair positions, 0x1c/0x20 sizes), then every 0xd0 usage record ORs 0x100/0x200 from the first two arrays and 0x400 from the 0x1c record (freeing all three arrays through the EA header refcount); cl inlines the allocate+zero helper three times instead of one shared path and keeps different registers per loop (1580 vs 1079 bytes); cosmetically the function also lacks the retail VC8 EH frame around the three allocations. equiv WEAK (205 valid, 31.7% cov).
