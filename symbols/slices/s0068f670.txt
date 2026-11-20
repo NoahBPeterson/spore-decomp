@@ -14,7 +14,7 @@
 0068fd40 ?PreShutdown@cJobManager@@QAEXXZ  # cJobManager::PreShutdown migrated from s0068f670 (verbatim, slice spelling)
 0068fda0 ?GetFreeJob@cJobManager@@QAE_NPAPAUcJob@@@Z  # cJobManager::GetFreeJob migrated from s0068f670 (verbatim, slice spelling)
 0068fed0 ?IsAffinityInUse@cJobManager@@QAE_NI@Z  # cJobManager::IsAffinityInUse migrated from s0068f670 (verbatim, slice spelling)
-0068ffb0 ?GetMaxDependentPriority@@YAIPAUcJobData@@@Z  # GetMaxDependentPriority migrated from s0068f670 (verbatim, slice spelling)
+0068ffb0 ?GetMaxDependentPriority@@YGIPAUcJobData@@@Z  # GetMaxDependentPriority migrated from s0068f670 (verbatim, slice spelling)
 0068fff0 ?InsertJobByPriority@cJobManager@@QAEXPAUIntrusiveList@@PAUcJobData@@@Z  # cJobManager::InsertJobByPriority migrated from s0068f670 (verbatim, slice spelling)
 00690050 ?GetFreeLink@cJobManager@@QAEPAUcJobLink@@XZ  # cJobManager::GetFreeLink migrated from s0068f670 (verbatim, slice spelling)
 006900b0 ?GetJobStatus@cJobManager@@QAEXPAUcJobData@@@Z  # cJobManager::GetJobStatus migrated from s0068f670 (verbatim, slice spelling)

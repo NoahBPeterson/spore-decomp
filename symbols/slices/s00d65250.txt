@@ -11,5 +11,5 @@
 00d65c40 ?FIGHT_Tick@@YAIHPAXPAH@Z  # FIGHT_Tick migrated from s00d65250 (verbatim, slice spelling)
 00d65fe0 ?FUN_00d65fe0@@YAIHIPAHMM@Z  # FUN_00d65fe0 migrated from s00d65250 (verbatim, slice spelling)
 00d660a0 ?FindNext@RecordArray@@QAEHH@Z  # RecordArray::FindNext migrated from s00d65250 (verbatim, slice spelling)
-00d660e0 ?CopyFrom@Variant@@QAEXPBH@Z  # Variant::CopyFrom migrated from s00d65250 (verbatim, slice spelling)
+00d660e0 ?CopyFrom@Variant@@QAEPAU1@PBH@Z  # Variant::CopyFrom migrated from s00d65250 (verbatim, slice spelling)
 00d66120 ?AssignFrom@Variant@@QAEXPBH@Z  # Variant::AssignFrom migrated from s00d65250 (verbatim, slice spelling)

@@ -19,7 +19,7 @@
 00a1b020 ?Eval@CurveEval@@QAENXZ  # CurveEval::Eval migrated from s00a1a590 (verbatim, slice spelling)
 00a1b100 ?Update@Envelope@Audio@EA@@QAEXM@Z  # EA::Audio::Envelope::Update migrated from s00a1a590
 00a1b160 ?FindZone@ResourceInstrumentBank@@QAE_NHHPAX@Z  # ResourceInstrumentBank::FindZone migrated from s00a1a590 (verbatim, slice spelling)
-00a1b1e0 ?Dispatch@SoundGraph@@QAEIII@Z  # SoundGraph::Dispatch migrated from s00a1a590 (verbatim, slice spelling)
+00a1b1e0 ?Dispatch@SoundGraph@@QAE_NII@Z  # SoundGraph::Dispatch migrated from s00a1a590 (verbatim, slice spelling)
 00a1b230 ?Tick@Sound_s00a1_a590@@QAEXIM@Z  # Sound_s00a1_a590::Tick migrated from s00a1a590 (verbatim, slice spelling)
 00a1b320 ?Remove@SoundGraph@@QAE_NPAX@Z  # SoundGraph::Remove migrated from s00a1a590 (verbatim, slice spelling)
 00a1b390 ?PopFront@SoundGraph@@QAEXXZ  # SoundGraph::PopFront migrated from s00a1a590 (verbatim, slice spelling)

@@ -1,7 +1,7 @@
 009413d0 ?GetVariantOp@@YAPAXHG@Z  # GetVariantOp migrated from s009413d0 (verbatim, slice spelling)
 00941440 ?SetVariantOp@@YAPAXHGPAX@Z  # SetVariantOp migrated from s009413d0 (verbatim, slice spelling)
 009414b0 ?InvokeVariantOp@@YAXHPAX0000@Z  # InvokeVariantOp migrated from s009413d0 (verbatim, slice spelling)
-009414f0 ?InitVariantTable@@YAHXZ  # InitVariantTable migrated from s009413d0 (verbatim, slice spelling)
+009414f0 ?InitVariantTable@@YA_NXZ  # InitVariantTable migrated from s009413d0 (verbatim, slice spelling)
 00941560 ?GetVariantOpChecked@@YAPAXHG@Z  # GetVariantOpChecked migrated from s009413d0 (verbatim, slice spelling)
 00941580 ?SetVariantOpChecked@@YAPAXHGPAX@Z  # SetVariantOpChecked migrated from s009413d0 (verbatim, slice spelling)
 009415a0 ?InvokeVariantOpChecked@@YAXHPAX0000@Z  # InvokeVariantOpChecked migrated from s009413d0 (verbatim, slice spelling)

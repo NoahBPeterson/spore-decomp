@@ -9,7 +9,7 @@
 010534c0 ?ScanAllSpecies@@YAHPAVcPlanet@@@Z  # ScanAllSpecies migrated from s010527f0 (verbatim, slice spelling)
 01053590 ?AdjustCost@cSPEnergyRepairToolStrategy@@QAEHH@Z  # cSPEnergyRepairToolStrategy::AdjustCost migrated from s010527f0 (verbatim, slice spelling)
 010535e0 ?AdjustCostPercent@cSPEnergyRepairToolStrategy@@QAEHH@Z  # cSPEnergyRepairToolStrategy::AdjustCostPercent migrated from s010527f0 (verbatim, slice spelling)
-01053650 ?StopTool@cSPToolStrategy@@QAE_NXZ  # cSPToolStrategy::StopTool migrated from s010527f0 (verbatim, slice spelling)
+01053650 ?StopTool@cSPToolStrategy@@QAE_NPAVcSPToolStrategy_s0105_6160@@@Z  # cSPToolStrategy::StopTool migrated from s010527f0 (verbatim, slice spelling)
 010536e0 ?CastToAnimalCargoInfo@@YAPAVIRefCounted@@PAUIItemHolder@@@Z  # CastToAnimalCargoInfo migrated from s010527f0 (verbatim, slice spelling)
 01053700 ?CastToPlantCargoInfo@@YAPAVIRefCounted@@PAUIItemHolder@@@Z  # CastToPlantCargoInfo migrated from s010527f0 (verbatim, slice spelling)
 010537e0 ?ActivateTool@cSPToolStrategy@@QAE_NH@Z  # cSPToolStrategy::ActivateTool migrated from s010527f0 (verbatim, slice spelling)

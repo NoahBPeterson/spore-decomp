@@ -7,7 +7,7 @@
 00a6e600 ?EffectsMapID@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # EffectsMapID migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6e6e0 ?FUN_00a6e6e0@Swarm@EA@@YAXPAX0PAH@Z  # FUN_00a6e6e0 migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6e7e0 ?FUN_00a6e7e0@Swarm@EA@@YAXPAXPADI0@Z  # FUN_00a6e7e0 migrated from s00a6dfc0 (verbatim, slice spelling)
-00a6eaf0 ?MapFindA@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # MapFindA migrated from s00a6dfc0 (verbatim, slice spelling)
+00a6eaf0 ?MapFindA@cEffectsParser@Swarm@EA@@QAEHPBD@Z  # MapFindA migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6eb60 ?MapFindB@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # MapFindB migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6ebd0 ?MapFindC@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # MapFindC migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6ec40 ?LookupRes@cEffectsParser@Swarm@EA@@QAE_JHPBD@Z  # LookupRes migrated from s00a6dfc0 (verbatim, slice spelling)

@@ -17,7 +17,7 @@
 00c634a0 ?M_GetUIShort@@YIXPAXH0@Z  # M_GetUIShort migrated from s00c62880 (verbatim, slice spelling)
 00c63570 ?M_GetProgressDisplayText@@YIXPAXH0@Z  # M_GetProgressDisplayText migrated from s00c62880 (verbatim, slice spelling)
 00c635c0 ?M_GetNumCities@@YIHPAXH@Z  # M_GetNumCities migrated from s00c62880 (verbatim, slice spelling)
-00c63740 ?M_GetTagString@@YIIPAXHH0@Z  # M_GetTagString migrated from s00c62880 (verbatim, slice spelling)
+00c63740 ?M_GetTagString@@YI_NPAXHH0@Z  # M_GetTagString migrated from s00c62880 (verbatim, slice spelling)
 00c637b0 ?M_C637b0@@YIXPAXHH0@Z  # M_C637b0 migrated from s00c62880 (verbatim, slice spelling)
 00c639a0 ?Adjust0@Adj@@QAEPAXPAX@Z  # Adj::Adjust0 migrated from s00c62880 (verbatim, slice spelling)
 00c639d0 ?Adjust1@Adj@@QAEPAXPAX@Z  # Adj::Adjust1 migrated from s00c62880 (verbatim, slice spelling)

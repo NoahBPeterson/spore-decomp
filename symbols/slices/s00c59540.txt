@@ -20,5 +20,5 @@
 00c5a390 ?FUN_00c5a390@cMissionMultiStep@@QAEXPAX@Z  # cMissionMultiStep::FUN_00c5a390 migrated from s00c59540 (verbatim, slice spelling)
 00c5a3b0 ?FUN_00c5a3b0@cMissionMultiStep@@QAEXIPAX@Z  # cMissionMultiStep::FUN_00c5a3b0 migrated from s00c59540 (verbatim, slice spelling)
 00c5a4c0 ?FUN_00c5a4c0@cMissionMultiStep@@QAEXPAX@Z  # cMissionMultiStep::FUN_00c5a4c0 migrated from s00c59540 (verbatim, slice spelling)
-00c5a4e0 ?FUN_00c5a4e0@cMissionMultiStep@@QAEXXZ  # cMissionMultiStep::FUN_00c5a4e0 migrated from s00c59540 (verbatim, slice spelling)
+00c5a4e0 ?FUN_00c5a4e0@cMissionMultiStep@@QAEXH@Z  # cMissionMultiStep::FUN_00c5a4e0 migrated from s00c59540 (verbatim, slice spelling)
 00c5a520 ?FUN_00c5a520@cMissionMultiStep@@QAEEI@Z  # cMissionMultiStep::FUN_00c5a520 migrated from s00c59540 (verbatim, slice spelling)

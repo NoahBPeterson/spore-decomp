@@ -8,7 +8,7 @@
 00ba6bb0 ?FUN_00ba6bb0@@YAHPAUGameObj@@PAXPAIPAM@Z  # complete, non-exact
 00ba6cf0 ?FUN_00ba6cf0@@YAXPAUBannerList@@@Z  # FUN_00ba6cf0 migrated from s00ba6750 (verbatim, slice spelling)
 00ba6d80 ?FUN_00ba6d80@@YAHPAUBannerList@@I@Z  # FUN_00ba6d80 migrated from s00ba6750 (verbatim, slice spelling)
-00ba6dc0 ?FUN_00ba6dc0@@YAHPAUBannerList@@I@Z  # complete, non-exact
+00ba6dc0 ?FUN_00ba6dc0@BannerList@@QAEHI@Z  # complete, non-exact
 00ba6e00 ?FUN_00ba6e00@@YAHPAUBannerList@@PAX@Z  # FUN_00ba6e00 migrated from s00ba6750 (verbatim, slice spelling)
 00ba6e80 ?FUN_00ba6e80@@YGHPAHPAXMH@Z  # FUN_00ba6e80 migrated from s00ba6750 (verbatim, slice spelling)
 00ba6f20 ?FUN_00ba6f20@@YAHPAUBannerList@@H@Z  # FUN_00ba6f20 migrated from s00ba6750 (verbatim, slice spelling)
