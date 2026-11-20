@@ -952,8 +952,9 @@ void fnt_FLIPPT(TTExecCtx* c)
     unsigned char* const flags = c->mZp0->mFlags;
     int* p = c->mStack;
     for (short n = c->mRepeat; n >= 0; n--) {
-        p -= 1;
-        flags[*p] ^= 1;
+        p--;
+        long i = *p;
+        flags[i] ^= 1;
     }
     c->mRepeat = 0;
     c->mStack = p;
