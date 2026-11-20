@@ -17,7 +17,6 @@
 0107e240  130  hkPointerMapBase<unsigned __int64>::findKey
 0107e2d0  417  hkPointerMapBase<unsigned __int64>::remove(Dummy*) ; equiv PASS (207 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 64-bit indices and lib_crt::allmul (428B vs 456B)
 0107e4a0  113  hkPointerMapBase<unsigned __int64>::resizeTable
-0107e560  14  hkPointerMapBase<unsigned long>::remove(KEY) -> hkResult
 0107e5b0  19  grow-to helper (tail-calls resizeTable, K) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in tail call vs return at ret#1]
 0107e5d0  19  grow-to helper (tail-calls resizeTable, _K) ; equiv UNSUPPORTED: 0/1200 valid inputs (fault/fake-arity); marker added
 0107e5f0  -  hkSingleton<hkStreambufFactory>::replaceInstance ; equiv WEAK: 400 valid, 27.3% cov (coverage-limited, no mismatch); global 0x016e42b4 resolves; chk ~size binds hkThreadMemory::replaceInstance

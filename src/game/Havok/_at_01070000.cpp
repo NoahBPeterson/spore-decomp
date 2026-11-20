@@ -485,10 +485,11 @@ template<class KEY> hkResult hkPointerMapBase<KEY>::remove(KEY k)
     }
     idx = mMask + 1;
 found:
-    if (idx > mMask)
-        return HK_FAILURE;
-    remove((Dummy*)idx);
-    return HK_SUCCESS;
+    if (idx <= mMask) {
+        remove((Dummy*)idx);
+        return HK_SUCCESS;
+    }
+    return HK_FAILURE;
 }
 
 // @ 0x0107e5b0
