@@ -314,6 +314,12 @@ struct VB0 { G43 virtual void*     fB0(); };
 void* __cdecl SP_GetCurrentGameMode();       // 0x00b5b800
 void* __cdecl SP_ModelManager();              // 0x0067dd80
 bool  __cdecl IsFinite(float f);              // 0x0059ab10
+// zero or a normal float (not denormal, inf or NaN)
+inline bool IsNormalOrZero(float f)
+{
+    unsigned bits = *(unsigned*)&f;
+    return (bits & 0x7fffffffu) == 0 || ((bits - 0x00800000u) & 0x7f800000u) < 0x7f000000u;
+}
 void* __cdecl FUN_00b3d3c0(void* p);          // 0x00b3d3c0
 void* __cdecl FUN_010212f0();                 // 0x010212f0
 struct Obj40 {
@@ -435,20 +441,11 @@ void* __cdecl SP_GonzagoModelWorld()
 }
 
 // @ 0x00b3d550
-bool __cdecl FUN_00b3d550(float* v)
+int __cdecl FUN_00b3d550(float* v)
 {
-    if (((*(unsigned*)&v[3] & 0x7fffffffu) == 0) ||
-        (((*(unsigned*)&v[3] - 0x00800000u) & 0x7f800000u) < 0x7f000000u)) {
-        if (((*(unsigned*)&v[0] & 0x7fffffffu) == 0) ||
-            (((*(unsigned*)&v[0] - 0x00800000u) & 0x7f800000u) < 0x7f000000u)) {
-            if (((*(unsigned*)&v[1] & 0x7fffffffu) == 0) ||
-                (((*(unsigned*)&v[1] - 0x00800000u) & 0x7f800000u) < 0x7f000000u)) {
-                if (IsFinite(v[2]))
-                    return true;
-            }
-        }
-    }
-    return false;
+    if (IsNormalOrZero(v[3]) && IsNormalOrZero(v[0]) && IsNormalOrZero(v[1]) && IsFinite(v[2]))
+        return 1;
+    return 0;
 }
 
 // @ 0x00b3d5f0
