@@ -16,3 +16,6 @@ slices/s00a4a500/s00a4a500.cpp  ?canvas_findtext@Eapd@Audio@EA@@YAPAXPIAHPAX@Z  
 slices/s00a4a500/s00a4a500.cpp  ?canvas_pop@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  00a4ad10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4a500/s00a4a500.cpp  ?canvas_showtext@Eapd@Audio@EA@@YAHPAUt_glist@123@@Z  00a4add0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4a500/s00a4a500.cpp  ?canvas_istable@Eapd@Audio@EA@@YAHPAUt_glist@123@@Z  00a4ad60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_deletelinesfor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAX@Z  00a4b250  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_deletelinesforio@Eapd@Audio@EA@@YAXPAUt_glist@123@PAX11@Z  00a4b2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_fixlinesfor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAX@Z  00a4b1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

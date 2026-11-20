@@ -660,16 +660,12 @@ void* linetraverser_next(t_linetraverser* t)
 void canvas_drawlines(t_glist* canvas)
 {
     t_linetraverser t;
-    char* p = (char*)&t;
-    *(int*)(p + 0x00) = (int)canvas;
-    t.tr_obj = 0; t.tr_nout = 0; t.tr_outno = 0; t.tr_oc = 0;
-    t.tr_oc2 = 0; t.tr_connected = 0; t.tr_inno = 0; t.tr_nin = 0;
-    t.tr_connline = 0; t.tr_walked = 0;
+    linetraverser_start(&t, canvas);
     int l = (int)linetraverser_next(&t);
     while (l != 0) {
         sys_gui(".x%lx.c create line %d %d %d %d -width %d -tags l%lx\n",
                  (unsigned)glist_getcanvas(canvas),
-                 t.tr_lx1, t.tr_ly1, t.tr_lx2, t.tr_ly2, 1, l);
+                 t.tr_lx3, t.tr_ly3, t.tr_lx4, t.tr_ly4, 1, l);
         l = (int)linetraverser_next(&t);
     }
 }
@@ -678,17 +674,13 @@ void canvas_drawlines(t_glist* canvas)
 void canvas_fixlinesfor(t_glist* canvas, void* obj)
 {
     t_linetraverser t;
-    char* p = (char*)&t;
-    *(int*)(p + 0x00) = (int)canvas;
-    t.tr_obj = 0; t.tr_nout = 0; t.tr_outno = 0; t.tr_oc = 0;
-    t.tr_oc2 = 0; t.tr_connected = 0; t.tr_inno = 0; t.tr_nin = 0;
-    t.tr_connline = 0; t.tr_walked = 0;
+    linetraverser_start(&t, canvas);
     int l = (int)linetraverser_next(&t);
     while (l != 0) {
         if (t.tr_obj == (t_object*)obj || t.tr_oc == (void*)obj) {
             sys_gui(".x%lx.c coords l%lx %d %d %d %d\n",
                      (unsigned)glist_getcanvas(canvas),
-                     l, t.tr_lx1, t.tr_ly1, t.tr_lx2, t.tr_ly2);
+                     l, t.tr_lx3, t.tr_ly3, t.tr_lx4, t.tr_ly4);
         }
         l = (int)linetraverser_next(&t);
     }
@@ -698,11 +690,7 @@ void canvas_fixlinesfor(t_glist* canvas, void* obj)
 void canvas_deletelinesfor(t_glist* canvas, void* obj)
 {
     t_linetraverser t;
-    char* p = (char*)&t;
-    *(int*)(p + 0x00) = (int)canvas;
-    t.tr_obj = 0; t.tr_nout = 0; t.tr_outno = 0; t.tr_oc = 0;
-    t.tr_oc2 = 0; t.tr_connected = 0; t.tr_inno = 0; t.tr_nin = 0;
-    t.tr_connline = 0; t.tr_walked = 0;
+    linetraverser_start(&t, canvas);
     int l = (int)linetraverser_next(&t);
     while (l != 0) {
         if (t.tr_obj == (t_object*)obj || t.tr_oc == obj) {
@@ -718,11 +706,7 @@ void canvas_deletelinesfor(t_glist* canvas, void* obj)
 void canvas_deletelinesforio(t_glist* canvas, void* src, void* dst, void* ins)
 {
     t_linetraverser t;
-    char* p = (char*)&t;
-    *(int*)(p + 0x00) = (int)canvas;
-    t.tr_obj = 0; t.tr_nout = 0; t.tr_outno = 0; t.tr_oc = 0;
-    t.tr_oc2 = 0; t.tr_connected = 0; t.tr_inno = 0; t.tr_nin = 0;
-    t.tr_connline = 0; t.tr_walked = 0;
+    linetraverser_start(&t, canvas);
     int l = (int)linetraverser_next(&t);
     while (l != 0) {
         if ((t.tr_obj == (t_object*)src && t.tr_oc2 == ins) ||
