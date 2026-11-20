@@ -1026,20 +1026,16 @@ int __thiscall cHierGrid_s0070_1a00::QuerySphereResult(float radius, float* pos,
     mQueryListIt = buffer;
     mQueryListEnd = buffer + count;
     QueryCells(radius, pos);
-    ObjListNode* node = mOutOfGrid.pNext;
-    if (mQueryListIt < mQueryListEnd) {
-        do {
-            if (node == &mOutOfGrid)
-                break;
-            *(void**)mQueryListIt = node->mObj;
-            mQueryListIt = (void**)((int)mQueryListIt + 4);
-            node = node->pNext;
-        } while ((unsigned)mQueryListIt < (unsigned)mQueryListEnd);
+    for (ObjListNode* node = mOutOfGrid.pNext; mQueryListIt < mQueryListEnd; node = node->pNext) {
+        if (node == &mOutOfGrid)
+            break;
+        *mQueryListIt = node->mObj;
+        mQueryListIt++;
     }
-    int result = (int)mQueryListIt - (int)buffer;
+    int result = mQueryListIt - buffer;
     mQueryListIt = 0;
     mQueryListEnd = 0;
-    return result >> 2;
+    return result;
 }
 
 // @ 0x007027e0
@@ -1050,20 +1046,16 @@ int __thiscall cHierGrid_s0070_1a00::QuerySegmentResult(float* p0, float* p1, in
     mQueryListIt = buffer;
     mQueryListEnd = buffer + count;
     QuerySegment(p0, p1);
-    ObjListNode* node = mOutOfGrid.pNext;
-    if (mQueryListIt < mQueryListEnd) {
-        do {
-            if (node == &mOutOfGrid)
-                break;
-            *(void**)mQueryListIt = node->mObj;
-            mQueryListIt = (void**)((int)mQueryListIt + 4);
-            node = node->pNext;
-        } while ((unsigned)mQueryListIt < (unsigned)mQueryListEnd);
+    for (ObjListNode* node = mOutOfGrid.pNext; mQueryListIt < mQueryListEnd; node = node->pNext) {
+        if (node == &mOutOfGrid)
+            break;
+        *mQueryListIt = node->mObj;
+        mQueryListIt++;
     }
-    int result = (int)mQueryListIt - (int)buffer;
+    int result = mQueryListIt - buffer;
     mQueryListIt = 0;
     mQueryListEnd = 0;
-    return result >> 2;
+    return result;
 }
 
 // @ 0x00702860
