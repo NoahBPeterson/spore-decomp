@@ -6,3 +6,4 @@
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?ComputeThresholdFraction@@YAXABUMapU32@@ABUMapU16@@MPAM222@Z  00f8afd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize16@EastlVec@@QAEXI@Z  00f8fce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize4F@EastlVec@@QAEXI@Z  00f8fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?Ctor@SimVec12@@QAEPAU1@HPBX@Z  00f8fa10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

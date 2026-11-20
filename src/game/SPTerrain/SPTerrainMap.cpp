@@ -946,6 +946,7 @@ struct GmeListS {
 
     void DtorH();
 };
+extern "C" char g_1490030[];   // SimVec12 vtable
 struct SimVec12 {
     void* m_vtbl;    // +0x00
     int   m_pad04;   // +0x04
@@ -2704,18 +2705,14 @@ void GmeListS::DtorH()
 SimVec12* SimVec12::Ctor(int n, const void* init)
 {
     mCount = n;
-    int size = n * n * 6;
+    unsigned size = n * n * 6;
     m_pad04 = 0;
-    *(int*)this = 0x1490030;
-    char* p;
-    if (size == 0)
-        p = 0;
-    else
-        p = (char*)operator_new(size, 0x80, 0, "Simulator", 0, 0, ALLOC_FILE, 0xe5);
+    m_vtbl = g_1490030;
+    char* p = size ? (char*)operator_new(size, 0x80, 0, "Simulator", 0, 0, ALLOC_FILE, 0xe5) : 0;
     mpBegin = p;
     mpEnd   = p;
     mpCap   = p + size;
-    if (size != 0)
+    if (size > 0)
         operator_new__(p, init, size);
     mpEnd = (char*)mpBegin + size;
     return this;
