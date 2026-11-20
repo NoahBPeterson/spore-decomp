@@ -668,7 +668,13 @@ namespace G7
         return true;
     }
 
-    void __stdcall EraseIt(Node** out, Node* it);
+    struct NodeIt
+    {
+        Node* p;
+        NodeIt(Node* n) : p(n) {}
+        NodeIt(const NodeIt& o) : p(o.p) {}
+    };
+    NodeIt __stdcall EraseIt(NodeIt it);
 
 // @ 0x00ba1ea0
     void SerializeList(Owner* owner, List* list)
@@ -741,7 +747,7 @@ namespace G7
                     if (mCommitted) {
                         ((void (__thiscall*)(Owner*, Obj*))VSlot(this, 0x60))(this, key);
                     } else {
-                        EraseIt((Node**)&key, n);
+                        EraseIt(NodeIt(n));
                     }
                     return;
                 }
@@ -751,7 +757,7 @@ namespace G7
         for (Node* n = mPending.pNext; n != (Node*)&mPending; n = n->pNext) {
             if (n->pObj == key) {
                 if (n != (Node*)&mPending)
-                    EraseIt((Node**)&key, n);
+                    EraseIt(NodeIt(n));
                 break;
             }
         }
@@ -953,16 +959,16 @@ namespace G7
     }
 
 // @ 0x00ba1e50
-    G7NOINLINE void __stdcall EraseIt(Node** out, Node* it)
+    G7NOINLINE NodeIt __stdcall EraseIt(NodeIt it)
     {
-        it = it->pNext;
-        *out = it;
-        Node* node = it->pPrev;
+        it.p = it.p->pNext;
+        Node* node = it.p->pPrev;
         node->pPrev->pNext = node->pNext;
         node->pNext->pPrev = node->pPrev;
         if (node->pObj)
             ObjRelease(node->pObj);
         operator delete[](node);
+        return it;
     }
 
 // @ 0x00ba2110
