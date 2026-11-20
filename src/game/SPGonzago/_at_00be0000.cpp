@@ -2440,21 +2440,20 @@ int __stdcall FUN_00bef980(int type)
 int __stdcall FUN_00befa50(int type)
 {
     switch (type) {
-    case 0:
-    case 6:
-    case 11:
-        return 2;
-    case 1:
-    case 4:
-    case 7:
-        return 4;
-    case 2:
-    case 5:
-    case 8:
-        return 6;
-    default:
-        return 1;
+    case 0:  return 2;
+    case 1:  return 4;
+    case 2:  return 6;
+    case 3:  return 1;
+    case 4:  return 4;
+    case 5:  return 6;
+    case 6:  return 2;
+    case 7:  return 4;
+    case 8:  return 6;
+    case 9:  return 1;
+    case 10: return 1;
+    case 11: return 2;
     }
+    return 1;
 }
 
 // @ 0x00befab0
