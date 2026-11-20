@@ -186,7 +186,6 @@ virtual void v8c();
 void*    __cdecl NounManager();                                    // 0x00b3d300
 void*    __cdecl GonzagoModelWorld();                              // 0x00b3d520
 void*    __cdecl PlanetModel();                                    // 0x00b3d350
-void* __stdcall FUN_00b18460(uint32_t id);                          // 0x00b18460
 int      __cdecl FUN_00c9e8e0(int kind, const Vector3* p);         // 0x00c9e8e0
 void*    __cdecl FUN_01029790();                                   // 0x01029790
 void     __cdecl FUN_00c6f770(uint32_t id, int idx, uint32_t val); // 0x00c6f770
@@ -1177,7 +1176,7 @@ void* cCityTerritory::AsInterface(uint32_t id)
     if (id == 0x2450023) {
         r = this;
     } else {
-        r = FUN_00b18460(id);
+        r = ((Object*)this)->FUN_00b18460(id);
         if (r == 0)
             r = ((SpatialBase*)sub34)->AsInterface(id);
     }
@@ -1262,7 +1261,7 @@ void* cCityTerritory::AsInterface2(uint32_t id)
 {
     if (id == 0xed7fc07)
         return this;
-    void* r = FUN_00b18460(id);
+    void* r = ((Object*)this)->FUN_00b18460(id);
     if (r == 0)
         r = ((SpatialBase*)sub34)->AsInterface(id);
     return r;
