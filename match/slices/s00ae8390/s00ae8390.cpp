@@ -129,8 +129,7 @@ int Host::FUN_00ae9040(int a, int b, u32* out1, u32* out2) {
 // @ 0x00ae90d0
 void Host::FUN_00ae90d0() {
   int* sys = (int*)FUN_00a206f0();
-  u32 v = 0;
-  if (sys != 0) v = (u32)((int(__thiscall*)(void*))(*(void***)sys)[0x20 / 4])(sys);
+  u32 v = sys != 0 ? (u32)((int(__thiscall*)(void*))(*(void***)sys)[0x20 / 4])(sys) : 0;
   sys = (int*)FUN_00a206f0();
   if (sys != 0) {
     ((void(__thiscall*)(void*, int))(*(void***)sys)[0x38 / 4])(sys, 0x3475365);
