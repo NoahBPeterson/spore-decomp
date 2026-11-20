@@ -982,7 +982,8 @@ void cTrading::F1075810(int flag, void* item)
 void cTrading::F1075990()
 {
     SpaceRoot* r = (SpaceRoot*)FUN_010666a0();
-    r->m61c->F0E31030(0x10000, 0x144dbf9c, 1, 0x697075e);
+    UIRoot61C*& ui = r->m61c;
+    ui->F0E31030(0x10000, 0x144dbf9c, 1, 0x697075e);
 }
 
 // @ 0x010759c0
