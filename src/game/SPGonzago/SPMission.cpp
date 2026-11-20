@@ -3420,11 +3420,14 @@ bool cSPMission_s00c4_7a10::Validate()
     if (mField8C != -1 && empire == 0) {
         goto fail;
     }
-    if (!pv88()) {
-        goto fail;
-    }
-    if (mField94 != -1 && FUN_00c452a0() == 0) {
-        goto fail;
+    if (pv88()) {
+        void* targetEmpire = (void*)FUN_00c452a0();
+        if (mField94 != -1 && targetEmpire == 0) {
+            goto fail;
+        }
+    } else {
+        SetState(1);
+        return false;
     }
     if (((cPlanet_s00c4_7a10*)mPlanet9C)->mField13C->FUN_00b8d970()) {
         goto fail;
