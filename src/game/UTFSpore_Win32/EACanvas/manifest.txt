@@ -53,3 +53,4 @@
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?GetMinClientArea@Canvas_s0084_7200@@QAEPAIPAI@Z  00848100  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetMinClientArea@Canvas_s0084_7200@@QAEXII@Z  00848120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ??0Canvas@@QAE@XZ  00849a40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?OnMouseEnter@Canvas_s0084_7200@@QAEXPAX@Z  00847bb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
