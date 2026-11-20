@@ -2461,13 +2461,15 @@ V4* CCubeQuery::GetColorB(V4* out)
 // @ 0x00f71660
 int QueryScaleA()
 {
-    IEff* eff = (IEff*)EffGet(EffectsManager(), 0x107ae878, 0);
-    if (!eff)
-        return 0;
-    EffAddRef(eff);
-    int r = (int)EffCall10(eff);
-    EffRelease(eff);
-    return r;
+    void* mgr = EffectsManager();
+    IEffect* eff = ((PFN_MgrLookup)(*(void***)mgr)[0x8c / 4])(mgr, 0x107ae878, 0);
+    if (eff) {
+        eff->vt00();
+        int r = eff->vt10();
+        eff->vt04();
+        return r;
+    }
+    return 0;
 }
 
 // @ 0x00f716b0
