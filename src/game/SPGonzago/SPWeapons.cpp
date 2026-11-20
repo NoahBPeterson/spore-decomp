@@ -5793,7 +5793,7 @@ bool SP::cResourceProjectile_s00cb_a050::Update()
     cSPTimer_s00cb_a050* pTimer = &mTimer;
 
     uint64_t e = pTimer->GetElapsedTime();
-    if (e != 0) {
+    if (e > 0) {
         uint64_t e2 = pTimer->GetElapsedTime();
         if (e2 > 1000u)
             return false;
@@ -5803,7 +5803,7 @@ bool SP::cResourceProjectile_s00cb_a050::Update()
         float dx = mEndPoint.x - p->x;
         float dy = mEndPoint.y - p->y;
         float dz = mEndPoint.z - p->z;
-        if (sqrtf(dx * dx + (dy * dy + dz * dz)) < DAT_01470f1c) {
+        if (sqrtf(dy * dy + (dx * dx + dz * dz)) < DAT_01470f1c) {
             pTimer->Start();
             ((cProjectileBase*)((char*)this - 0x504))->ExplodeResource();
         }
