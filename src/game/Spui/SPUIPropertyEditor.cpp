@@ -41,7 +41,7 @@ struct D3 {
   char pad[0x10];
   short w10;   // +0x10
   short w12;   // +0x12
-  void Call5(int, int, int, int, int);
+  void Call5(unsigned short, unsigned short, int, int, int);   // EA::Variant::Construct (0x0093dd80)
   D3* Init(int arg);
   D3* Init2(int arg);
 };
@@ -2381,11 +2381,11 @@ void SP::cSPUIPropertyEditor::Shutdown()
 
 // @ 0x0081ddd0
 D3* D3::Init(int arg)
-{ w10 = 2; w12 = 0x33; Call5(0x33, 0, arg, 0x10, 1); return this; }
+{ w12 = 0x33; w10 = 2; Call5(0x33, 0, arg, 0x10, 1); return this; }
 
 // @ 0x0081de30
 D3* D3::Init2(int arg)
-{ w10 = 2; w12 = 0x34; Call5(0x34, 0, arg, 0x10, 1); return this; }
+{ w12 = 0x34; w10 = 2; Call5(0x34, 0, arg, 0x10, 1); return this; }
 
 // @ 0x0081df10
 void** PUI::FindPropertyUIWindow(void** out, int id)
