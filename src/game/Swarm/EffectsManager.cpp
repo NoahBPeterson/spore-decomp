@@ -205,6 +205,7 @@ extern RegRec24 g_RegA[32];        // 0x01675a00
 struct Ctx {
     int  DispatchLookup(uint32_t key, uint32_t* out, int count);   // 0x00a691c0
     void ForEachRegA(uint32_t arg);                                // 0x00a69310
+    RefVecSlot* Slots() { return *(RefVecSlot**)((char*)this + 0x20); }
     void ForEachRegB(uint32_t arg);                                // 0x00a69380
     bool Serialize(void* stream);                                  // 0x00a69630
 };
@@ -628,47 +629,27 @@ class cEffectsManager_s00a6_dfc0 { public:
 // @ 0x00a69310
 void Ctx::ForEachRegA(uint32_t arg)
 {
-    char* self = (char*)this;
-    int k = 0;
-    RegRec24* rec = g_RegA;
-    do {
-        if (rec->pf0 != 0) {
-            RefVecSlot* slot = (RefVecSlot*)(*(char**)(self + 0x20) + k);
-            int n = (int)(slot->mpEnd - slot->mpBegin);
-            int i = 0;
-            if (n > 0) {
-                do {
-                    ((void(__cdecl*)(RefObject*, uint32_t))rec->pf0)(slot->mpBegin[i], arg);
-                    ++i;
-                } while (i < n);
-            }
+    for (int t = 0; t < 32; ++t) {
+        if (g_RegA[t].pf0 != 0) {
+            RefVecSlot& slot = Slots()[t];
+            int n = (int)(slot.mpEnd - slot.mpBegin);
+            for (int i = 0; i < n; ++i)
+                ((void(__cdecl*)(RefObject*, uint32_t))g_RegA[t].pf0)(Slots()[t].mpBegin[i], arg);
         }
-        ++rec;
-        k += 0x14;
-    } while (rec < (RegRec24*)0x01675e80);
+    }
 }
 
 // @ 0x00a69380
 void Ctx::ForEachRegB(uint32_t arg)
 {
-    char* self = (char*)this;
-    int k = 0;
-    RegRec24* rec = g_RegA;
-    do {
-        if (rec->pf4 != 0) {
-            RefVecSlot* slot = (RefVecSlot*)(*(char**)(self + 0x20) + k);
-            int n = (int)(slot->mpEnd - slot->mpBegin);
-            int i = 0;
-            if (n > 0) {
-                do {
-                    ((void(__cdecl*)(RefObject*, uint32_t))rec->pf4)(slot->mpBegin[i], arg);
-                    ++i;
-                } while (i < n);
-            }
+    for (int t = 0; t < 32; ++t) {
+        if (g_RegA[t].pf4 != 0) {
+            RefVecSlot& slot = Slots()[t];
+            int n = (int)(slot.mpEnd - slot.mpBegin);
+            for (int i = 0; i < n; ++i)
+                ((void(__cdecl*)(RefObject*, uint32_t))g_RegA[t].pf4)(Slots()[t].mpBegin[i], arg);
         }
-        ++rec;
-        k += 0x14;
-    } while (rec < (RegRec24*)0x01675e84);
+    }
 }
 
 // @ 0x00a6c8f0
