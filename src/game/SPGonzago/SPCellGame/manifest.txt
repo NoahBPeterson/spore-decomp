@@ -90,3 +90,4 @@
 ../src/game/SPGonzago/SPCellGame.cpp  ?SP_sGetSourceLevel@@YIHHH@Z  00e4ee60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e778b0@@YA_NPAH@Z  00e778b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e563e0@@YAMPAX@Z  00e563e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e56450@@YAMH@Z  00e56450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

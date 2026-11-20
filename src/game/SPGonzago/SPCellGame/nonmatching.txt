@@ -16,7 +16,6 @@
 00e560d0 210 apply impulse to fluid cell + accumulate: complete; index/loop register allocation differs
 00e56200 152 cell "population" getter (x100): complete; fld/fstp value forwarding schedule differs
 00e56300 149 cell "growth" getter (x20): complete; fld/fstp value forwarding schedule differs
-00e56450 63 level-relative multiplier curve: complete; x87 branch/const schedule differs
 00e56560 225 cell gravity/velocity vector: complete; register allocation (esi/edx) differs
 00e56700 174 keyframe-interp table lookup: complete; clamps and x87 schedule differ
 00e577a0 111 part-icon placement (base + axis*15/25): complete; original (237B) stages the three axis globals through integer loads + stack stores then movss reloads on the positive path and sign-mask xorps on the negative path; our symbol is 194B, size-filtered (no same-size candidate), and every block is scheduled/register-allocated differently.

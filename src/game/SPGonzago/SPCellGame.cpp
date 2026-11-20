@@ -3663,18 +3663,18 @@ float FUN_00e563e0(void* obj)
 }
 
 // @ 0x00e56450
-double FUN_00e56450(int self)
+float FUN_00e56450(int self)
 {
     int idx = *(int*)(self + 0x358);
     if (idx != -1) {
-        int lvl = SP_sGetSourceLevel();
+        int lvl = SP_sGetSourceLevel(gspCellGame_s00e6_e8c0, gspCellGame_s00e6_e8c0->mpLevelInfo->mLevel);
         float r = g_1483bd0[idx] / g_1483bd0[lvl];
-        if (r <= 0.5f) return 4.0;
-        if (r <= 1.0f) return 4.0 - ((double)r - 0.5) * 4.0;
-        if (r <= 2.0f) return 2.0;
-        if (r <= 4.0f) return 2.0 - ((double)r - 2.0) * 0.5;
+        if (r <= 0.5f) return 4.0f;
+        if (r <= 1.0f) return 4.0f - (r - 0.5f) * 4.0f;
+        if (r <= 2.0f) return 2.0f;
+        if (r <= 4.0f) return 2.0f - (r - 2.0f) * 0.5f;
     }
-    return 1.0;
+    return 1.0f;
 }
 
 // @ 0x00e56510
