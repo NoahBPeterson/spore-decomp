@@ -548,17 +548,10 @@ void cRotationBall::SetModel(cGameModel* m, void* p)
 char cRotationRing::Write(void* stream)
 {
     void* impl = (*(VFnR)VSLOT(stream, 0x20))(stream);
-    uint tag = 0x2ee8eeb;
-    void* iface = (*(VFnR)VSLOT(impl, 0x18))(impl);
-    WriteUint32(iface, &tag, 1, 0);
+    WriteTag_d1d540(((StreamImpl_d1d540*)impl)->Iface(), 0x2ee8eeb);
     ((cGameData*)this)->Write(stream);
     cGameModel* m = mpModel_108;
-    if (m) {
-        void* r = (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807);
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, r);
-    } else {
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, 0);
-    }
+    (*(VFn1)VSLOT(stream, 0x2c))(stream, m ? (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807) : 0);
     return 1;
 }
 
