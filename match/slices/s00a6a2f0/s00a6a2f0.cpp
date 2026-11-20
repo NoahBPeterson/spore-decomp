@@ -639,14 +639,15 @@ SlotVec* SlotVec::init(unsigned n, unsigned unused)
 // @ 0x00a6b080
 void Vec8::resize(unsigned n)
 {
-    int have = (int)(e - b);
-    if (n > (unsigned)have) {
+    unsigned have = (unsigned)(e - b);
+    if (n > have) {
         unsigned long long zero = 0;
         insert_n(e, n - have, (const T8*)&zero);
     } else {
-        T8* cut = b + n;
-        SporeMemcpy(cut, e, (unsigned)(e - e));
-        e -= e - cut;
+        T8* first = b + n;
+        T8* last = e;
+        SporeMemcpy(first, last, (unsigned)((char*)e - (char*)last));
+        e -= last - first;
     }
 }
 
