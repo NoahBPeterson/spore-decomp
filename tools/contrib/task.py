@@ -68,8 +68,9 @@ def sources():
 
 
 def locate(va):
-    """(source file, ident) carrying the line-start marker `// @ 0x<va>`; src/game first"""
-    pat = re.compile(r"(?mi)^//\s*@\s*0x0*%x\b" % va)
+    """(source file, ident) carrying the line-start marker `// @ 0x<va>`; src/game first. A pointer comment
+    `// @ 0x<va>  (source in <file>)` names where the definition is, so it is skipped (#518)."""
+    pat = re.compile(r"(?mi)^//\s*@\s*0x0*%x\b(?![^\n]*\(source in )" % va)
     for f in sources():
         if pat.search(open(f, errors="replace").read()):
             rel = os.path.relpath(f, ROOT)

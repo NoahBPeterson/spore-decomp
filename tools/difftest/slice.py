@@ -508,7 +508,7 @@ def marker_names(src, va):
     named = re.compile(r"//\s*(?:@\s*)?(?:0x)?0*%x\b[\s:,-]*((?:[A-Za-z_]\w*::)*~?[A-Za-z_]\w*)" % va, re.I)
     out = []
     for i, line in enumerate(lines):
-        if marker.search(line):
+        if marker.search(line) and "(source in " not in line:
             code = line.split("//")[0]
             if code.strip():
                 d = re.search(r"((?:[A-Za-z_]\w*\s*::\s*)*~?(?:operator\s*\S+?|[A-Za-z_]\w*))\s*\(", code)
@@ -635,6 +635,49 @@ def _name_matches(mangled, nm):
     return True
 
 
+_BUILTIN_WORDS = {"const", "volatile", "unsigned", "signed", "int", "char", "short", "long", "float", "double", "bool",
+                  "void", "struct", "class", "enum", "wchar_t", "__int64"}
+
+
+def _by_definition_order(coff, funcs, cands, src, va):
+    """Overloads with one name (#540: two hkBufferedStreamWriter constructors, two cSPSwatch::Init): cl emits a
+    translation unit's functions in the order they are defined, so the k-th marked definition of the name is the k-th
+    candidate in object order. Only used when every overload in the object has a marker, so the two counts agree."""
+    lines = open(src, encoding="utf-8", errors="replace").read().split("\n")
+    mark = re.compile(r"^\s*//\s*@\s*0x([0-9a-fA-F]{5,8})\b(?!.*\(source in )")
+    defs = []
+    for i, line in enumerate(lines):
+        m = mark.match(line)
+        if m:
+            defs.append((int(m.group(1), 16), _def_name_after(lines, i)))
+    mine = next((nm for v, nm in defs if v == va), None)
+    if not mine:
+        return None
+    # first: the class and struct names in the marked definition's parameter list, against each candidate's mangled
+    # name (`hkStreamWriter* s, int n` is `??0hkBufferedStreamWriter@@QAE@PAVhkStreamWriter@@H@Z`, not the hkBool one)
+    i = next(k for k, line in enumerate(lines) if mark.match(line) and int(mark.match(line).group(1), 16) == va)
+    text = " ".join(l.split("//")[0] for l in lines[i + 1:i + 30])
+    head = text[:text.find("{")] if "{" in text else text
+    params = head[head.find("(") + 1:head.rfind(")")] if "(" in head else ""
+    words = {w for w in re.findall(r"[A-Za-z_]\w*", params)
+             if len(w) > 2 and w not in _BUILTIN_WORDS and not w.endswith("_t")}
+    types = {w for w in words if any("@" + w + "@" in c or "V" + w + "@" in c or "U" + w + "@" in c for c in cands)}
+    if types:
+        score = {c: sum(1 for w in types if re.search(r"[VUW@]" + re.escape(w) + "@", c)) for c in cands}
+        best = max(score.values())
+        top = [c for c in cands if score[c] == best]
+        if len(top) == 1:
+            return top[0]
+    # then: cl emits a translation unit's functions in the order they are defined
+    same = [v for v, nm in defs if nm == mine]
+    if len(same) != len(cands) or len(set(same)) != len(same):
+        return None
+    def key(f):
+        sec, a, _b = coff.func_extent(funcs[f])
+        return (funcs[f].secno, a)
+    return sorted(cands, key=key)[same.index(va)]
+
+
 def find_symbol(coff, sid, va, src, orig_size=None):
     """-> (symbol name, how) | (list of candidates, 'ambiguous:...') | (None, reason).
     orig_size (bytes of the original function) rejects candidates of implausible size."""
@@ -657,6 +700,10 @@ def find_symbol(coff, sid, va, src, orig_size=None):
     if sn and names and not any(_name_matches(sn, nm) for nm in names) and len(landed_addresses(sn) - {va}) > 0:
         # the recorded name is also bound to another address and the source marker names a different function: the
         # record is wrong for one of them, so select by the marker instead (#340)
+        sn = None
+    if sn and names and re.search(r"@\?\d+\?\?", sn) and not any(_name_matches(sn, nm) for nm in names):
+        # the record names a method of a class local to some function (`?Run@Init@?1??copyCtor@Huge@@...`), the marker a
+        # different function: the record is wrong (#540, 0x00dfd080 gated a 25-byte helper against a 454-byte function)
         sn = None
     if sn and sn not in funcs:
         # the name is in rewrite.py's spelling (stub types renamed `hkVector4_s0109_8200`), the object may spell it the
@@ -691,5 +738,8 @@ def find_symbol(coff, sid, va, src, orig_size=None):
             if c not in allc:
                 allc.append(c)
     if allc:
+        pick = _by_definition_order(coff, funcs, allc, src, va)
+        if pick:
+            return pick, "overload by definition order"
         return allc, "ambiguous: %s" % names
     return None, "no marker/name for 0x%08x matched an object symbol (names tried: %s)" % (va, names or "-")
