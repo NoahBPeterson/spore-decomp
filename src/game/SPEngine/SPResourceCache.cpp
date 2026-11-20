@@ -740,18 +740,18 @@ bool __fastcall FUN_006b0020(char* self)
     volatile long* c = (volatile long*)(self + 8);
     if (_InterlockedExchangeAdd(c, 0) == 0)
         return false;
-    if (_InterlockedExchangeAdd(c, -1) == 1) {
-        void* p = *(void**)(self + 0x10);
-        int* r = (int*)((int(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p);
+    if (_InterlockedDecrement(c) == 0) {
+        void** p = (void**)(self + 0x10);
+        int* r = (int*)((int(__thiscall*)(void*))(*(void***)*p)[0x10 / 4])(*p);
         int v[3];
         v[0] = r[0];
         v[1] = r[1];
         v[2] = r[2];
-        void* q = (*(void*(__thiscall**)(void*))(*(void***)p)[0x18 / 4])(p);
+        void* q = ((void*(__thiscall*)(void*))(*(void***)*p)[0x18 / 4])(*p);
         int a = ((int(__thiscall*)(void*))(*(void***)q)[0x1c / 4])(q);
         void* z = *(void**)(*(char**)(self + 0xc) + 0x10);
         ((void(__thiscall*)(void*, int*, int))(*(void***)z)[0x18 / 4])(z, v, a);
-        (*(void(__thiscall**)(void*))(*(void***)p)[0x24 / 4])(p);
+        ((void(__thiscall*)(void*))(*(void***)*p)[0x24 / 4])(*p);
     }
     return true;
 }
