@@ -5670,12 +5670,14 @@ cAgentOrder* cAgentOrderManager::FindNode(int key, bool (*pred)(void*, void*), v
 {
     for (char* node = *(char**)this; node != (char*)this; node = *(char**)node) {
         cAgentOrder* order = (cAgentOrder*)(node + 8);
-        if (*(int*)(node + 0x10) == key && node[0x24] == 0 && (pred == 0 || pred(order, ctx))) {
+        if (*(int*)((char*)order + 8) == key && ((char*)order)[0x1c] == 0 && (pred == 0 || pred(order, ctx))) {
             return order;
         }
     }
     return 0;
 }
+
+
 
 // @ 0x00bca670
 void FUN_00bca670(void* p)
