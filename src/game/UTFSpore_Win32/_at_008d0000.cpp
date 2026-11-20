@@ -1329,12 +1329,14 @@ TSI* TSI::FUN_008d3c60(VAlloc* alloc)
 void TSI::FUN_008d3ca0()
 {
     mVtbl = &PTR_FUN_01435990;
+    _ReadWriteBarrier();
     if (mRects.begin != 0)
         mRects.alloc->deallocate(mRects.begin,
             (unsigned)((((int)mRects.cap - (int)mRects.begin) / 0x14) * 0x14));
+    struct Key16 { int a[4]; };
     if (mKeys.begin != 0)
         mKeys.alloc->deallocate(mKeys.begin,
-            (unsigned)((((int)mKeys.cap - (int)mKeys.begin) >> 4) << 4));
+            (unsigned)(((Key16*)mKeys.cap - (Key16*)mKeys.begin) * sizeof(Key16)));
     mVtbl = &PTR_FUN_01435980;
 }
 
