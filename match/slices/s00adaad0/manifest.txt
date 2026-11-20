@@ -3,3 +3,4 @@ slices/s00adaad0/s00adaad0.cpp  ?FUN_00adaad0@@YIXPAXHPAVcArguments@@@Z  00adaad
 slices/s00adaad0/s00adaad0.cpp  ?FUN_00adac70@@YIXPAXHPAVcArguments@@@Z  00adac70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb250@@YIHPAXHII@Z  00adb250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb360@@YIDPAXHI@Z  00adb360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb680@@YGXPAXI@Z  00adb680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

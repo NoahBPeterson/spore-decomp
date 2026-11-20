@@ -8,6 +8,8 @@ void* operator new(unsigned int size, const char* name, int a, int b, const char
 extern void __cdecl operator_delete_array(void* p);          // 0xf47380
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 #pragma intrinsic(_InterlockedExchange)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 class cArguments {
 public:
@@ -459,17 +461,18 @@ void __stdcall FUN_00adb680(void* list, unsigned int count)
 {
     char** arr = (char**)list;
     for (unsigned int i = 0; i < count; ++i) {
-        char* p = arr[i];
-        while (p) {
-            char* next = *(char**)(p + 0x38);
+        char* next = arr[i];
+        while (next) {
+            char* p = next;
+            next = *(char**)(p + 0x38);
             *(void**)(p + 4) = &g_vtbl_145b2f8;
             *(void**)(p + 0xc) = &g_vtbl_145b2ec;
+            _ReadWriteBarrier();
             void* q = *(void**)(p + 0x10);
             if (q) ((RefObj*)q)->Release();
             *(void**)(p + 0xc) = &g_vtbl_13eb938;
             *(void**)(p + 4) = &g_vtbl_13ef094;
             operator_delete_array(p);
-            p = next;
         }
         arr[i] = 0;
     }
