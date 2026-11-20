@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdtable.cpp  ?fx_register_all@@YA_NXZ  00a62e90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

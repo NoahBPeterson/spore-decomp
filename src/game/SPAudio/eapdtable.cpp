@@ -14,11 +14,11 @@ bool __cdecl fx_register_core();  // 0x00a62cc0 (stays in the slice: not this ob
 // @ 0x00a62e90
 bool __cdecl fx_register_all()
 {
-    bool ok = fx_register_core();
+    bool ok = true;
+    ok &= fx_register_core();
     ok &= fx_register_sequence();
     ok &= fx_register_decal();
     ok &= fx_register_metaparticles();
-    bool last = fx_register_sound();
-    ok = last & ok;
+    ok &= fx_register_sound();
     return ok;
 }

@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00a62e90 16 inline: dropped the sloppy `last & ok` tail so the fifth call feeds the running `ok` accumulator (`ok = fx_register_sound() & ok; return ok;`), which matches retail's tail (`call; and al,bl`); the earlier [equiv REFUTED ... ret#5 eax] is fixed. Still differs: cl 15.00.30729.01 widens the first `ok &=` into `mov bl,al; and bl,1` where retail has `and bl,1`, and the last step still takes a `bool` temporary instead of folding into `al` (ours 38 bytes, retail 41). fix1: quick check UNSUPPORTED (emulator fake-arity, angr not installed)
