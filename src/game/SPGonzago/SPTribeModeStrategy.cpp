@@ -4196,7 +4196,7 @@ void TM::F_cd40f0(void* p)
     void* base = (char*)p + 0x34;
     void* o = ((void*(__thiscall*)(void*))(*(void***)base)[0x34 / 4])(base);
     if (!((unsigned char(__thiscall*)(void*))(*(void***)o)[0x50 / 4])(o))
-        ((void(__thiscall*)(void*, int))(*(void***)this)[0xf0 / 4])(this, 0x29b);
+        ((void(__thiscall*)(void*, int))(*(void***)p)[0xf0 / 4])(p, 0x29b);
     void* o2 = ((void*(__thiscall*)(void*))(*(void***)base)[0x34 / 4])(base);
     ((void(__thiscall*)(void*, int))(*(void***)o2)[0x54 / 4])(o2, 1);
     void* cur = GetGameTerrainCursor();
