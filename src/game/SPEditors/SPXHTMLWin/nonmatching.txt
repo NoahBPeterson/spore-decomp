@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00623370 13 cXHTMLWin::DestroyFormControl: complete; list clear is not CSE'd in the original (separate empty test and loop-entry test) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 006233f0 258 cXHTMLWin::FocusNextControl (tab order via the tabindex attribute): complete; block layout of the first scan loop flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623570 95 FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623610 51 FindFormChild: same loop shape issue flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
