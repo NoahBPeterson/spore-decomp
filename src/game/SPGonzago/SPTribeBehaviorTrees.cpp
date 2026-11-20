@@ -13006,7 +13006,8 @@ void SlotVector::PushDefault()
         SlotEntry tmp;
         tmp.mId = 0x80000000;
         Insert(end, &tmp);
-        if (((tmp.mId >> 0x1f) & 1) == 0) ((GmPayloadVirtual*)&tmp.mObj)->Destroy(0);
+        bool empty = (bool)((tmp.mId >> 0x1f) & 1);
+        if (!empty) ((GmPayloadVirtual*)&tmp.mObj)->Destroy(0);
     }
 }
 
