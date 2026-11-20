@@ -424,12 +424,17 @@ Particle* Particle::Ctor()
   return this;
 }
 
+// The list links each node through its +4 field; a link maps back to its node (or null).
+static inline DecalNode* DecalFromLink(IntrusiveList* link)
+{
+  return link ? (DecalNode*)((char*)link - 4) : 0;
+}
+
 // @ 0x00a809d0
 void SurfaceDecals::VisitParticles()
 {
-  DecalNode* node = mListA4.mNext
-      ? (DecalNode*)((char*)mListA4.mNext - 4) : 0;
-  DecalNode* end = (DecalNode*)((char*)&mListA4 - 4);
+  DecalNode* node = DecalFromLink(mListA4.mNext);
+  DecalNode* end = DecalFromLink(&mListA4);
   while (node != end) {
     if (node->mIndex >= 0) {
       void* owner = mObj14;
@@ -444,9 +449,8 @@ void SurfaceDecals::VisitParticles()
 // @ 0x00a80a40
 void SurfaceDecals::ClearParticles()
 {
-  DecalNode* node = mListA4.mNext
-      ? (DecalNode*)((char*)mListA4.mNext - 4) : 0;
-  DecalNode* end = (DecalNode*)((char*)&mListA4 - 4);
+  DecalNode* node = DecalFromLink(mListA4.mNext);
+  DecalNode* end = DecalFromLink(&mListA4);
   while (node != end) {
     if (node->mIndex >= 0) {
       void* owner = mObj14;
