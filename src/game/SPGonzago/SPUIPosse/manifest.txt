@@ -84,3 +84,4 @@
 ../src/game/SPGonzago/SPUIPosse.cpp  ?SetItemIcon@cSPUIPosseItem_s00e2_1880@@QAEXPAXH@Z  00e21ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?SetScaleF@cSPUIPosse_s00e2_2860@@QAEXM@Z  00e23130  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e24310@@YAPAXPAPAXURefPairIter_e24310@@1PAX@Z  00e24310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e217c0@@YA_NPAX0@Z  00e217c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
