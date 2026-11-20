@@ -5769,23 +5769,25 @@ void __cdecl FUN_00c92e20(Vec3_s00c9_2a90* first, int top, int heapSize, int pos
 // @ 0x00c92f80
 char* __cdecl FUN_00c92f80(char* first, char* last, char* out)
 {
-    char* p = first + 0x44;
-    while (first != last) {
-        void* a = *(void**)(p + 4);
-        if (a != 0 && *(int*)((char*)a - 4) != 0)
-            FUN_00f47380(a);
-        void* b = *(void**)p;
-        if (b)
-            ((void(__thiscall*)(void*))VF(b, 4))(b);
-        void* c = *(void**)(p - 0x14);
-        if (c)
-            ((void(__thiscall*)(void*))VF(c, 4))(c);
-        void* e = *(void**)(p - 0x18);
-        if (e)
-            ((void(__thiscall*)(void*))VF(e, 4))(e);
-        first += 0x60;
-        p += 0x60;
-        out += 0x60;
+    if (first != last) {
+        char* p = first + 0x44;
+        do {
+            void* a = *(void**)(p + 4);
+            if (a != 0 && *(int*)((char*)a - 4) != 0)
+                FUN_00f47380(a);
+            void* b = *(void**)p;
+            if (b)
+                ((void(__thiscall*)(void*))VF(b, 4))(b);
+            void* c = *(void**)(p - 0x14);
+            if (c)
+                ((void(__thiscall*)(void*))VF(c, 4))(c);
+            void* e = *(void**)(p - 0x18);
+            if (e)
+                ((void(__thiscall*)(void*))VF(e, 4))(e);
+            first += 0x60;
+            p += 0x60;
+            out += 0x60;
+        } while (first != last);
     }
     return out;
 }
