@@ -261,18 +261,10 @@ extern "C" int __cdecl F52c90(int a, int b)
 // @ 0x00d52cb0
 void __cdecl F52cb0(int* arr, int start, int hole, int value, Cmp cmp)
 {
-    int parent;
-    if (hole <= start) {
-        arr[hole] = value;
-        return;
-    }
-    do {
-        parent = (hole - 1) >> 1;
-        if (!cmp(arr[parent], *(int*)(value + 8)))
-            break;
+    for (int parent = (hole - 1) >> 1; (hole > start) && cmp(arr[parent], value); parent = (hole - 1) >> 1) {
         arr[hole] = arr[parent];
         hole = parent;
-    } while (start < parent);
+    }
     arr[hole] = value;
 }
 
