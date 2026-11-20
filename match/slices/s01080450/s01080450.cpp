@@ -334,31 +334,26 @@ hkResult hkBufferedStreamWriter::seek(int offset, SeekWhence whence)
 		flushBuffer();
 		return m_stream->seek(offset, whence);
 	}
-	int pos = offset;
-	if (whence != 0)
+	int absOffset = -1;
+	switch (whence)
 	{
-		if (whence == 1)
-		{
-			pos = m_current + offset;
-		}
-		else
-		{
-			pos = -1;
-			if (whence == 2)
-				pos = m_current - offset;
-		}
+		case 0: absOffset = offset; break;
+		case 1: absOffset = m_current + offset; break;
+		case 2: absOffset = m_current - offset; break;
 	}
-	if (pos >= 0)
+	hkResult res = HK_SUCCESS;
+	if (absOffset < 0)
 	{
-		int cap = m_bufSize;
-		int clamped = pos;
-		if (cap < pos)
-			clamped = cap;
-		m_current = clamped;
-		return cap < pos ? HK_FAILURE : HK_SUCCESS;
+		absOffset = 0;
+		res = HK_FAILURE;
 	}
-	m_current = 0;
-	return HK_FAILURE;
+	else if (absOffset > m_bufSize)
+	{
+		absOffset = m_bufSize;
+		res = HK_FAILURE;
+	}
+	m_current = absOffset;
+	return res;
 }
 
 // @ 0x01080b50
