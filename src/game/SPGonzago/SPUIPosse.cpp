@@ -29,6 +29,7 @@ extern "C" char g_15a5524[];
 extern "C" char g_16ac2c8[];
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "cSPUILayout.h"
 #include <math.h>
 #include "cSPUIAnimator.h"
@@ -1729,12 +1730,7 @@ void cSPUIPosse_s00e2_2860::SnapToPosition()
 // @ 0x00e23130
 void cSPUIPosse_s00e2_2860::SetScaleF(float scale)
 {
-    float value = scale;
-    float lo = 0.25f;
-    float hi = 1.0f;
-    value = max_f(value, lo);
-    value = min_f(value, hi);
-    mField1e8 = value;
+    mField1e8 = SseClamp(scale, 0.25f, 1.0f);
     mFlag1d4 = 1;
     UpdateLayout(0);
 }
