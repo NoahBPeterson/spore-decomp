@@ -34,13 +34,13 @@ class cEapdMessage { public:
 namespace SP { namespace Audio {
 bool cEapdMessage::GetNextFloat(float* out)
 {
+    bool ok = false;
     uint32_t type;
     char unused[4];
-    bool ok = false;
     uint32_t* p = mpCommand->EnumParameter(&mCurrentOffset, &type, unused, 0);
     if (p && type == 0x40fdffb) {
         *out = *(float*)p;
-        return true;
+        ok = true;
     }
     return ok;
 }
