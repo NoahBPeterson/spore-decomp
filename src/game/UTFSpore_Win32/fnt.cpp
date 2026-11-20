@@ -1147,39 +1147,29 @@ void fnt_a0b0(TTExecCtx* c)
 // @ 0x008ae4a0
 void fnt_a0b8(TTExecCtx* c)
 {
-    int n = (short)(c->mOpcode - 0xb8);
     int* out = c->mStack;
     unsigned char* in = c->mIP;
-    for (; n >= 0; n--) {
-        unsigned short v = (unsigned short)(((unsigned short)in[0] << 8) + in[1]);
-        *out = (short)v;
-        out++;
-        in += 2;
+    for (short n = (short)(c->mOpcode - 0xb8); n >= 0; n--) {
+        unsigned short hi = *in++;
+        *out++ = (short)((hi << 8) + *in++);
     }
-    c->mIP = in;
     c->mStack = out;
+    c->mIP = in;
 }
 
 // @ 0x008ae4f0
 void fnt_a0b8b(TTExecCtx* c)
 {
     unsigned char* in = c->mIP;
-    int n = (unsigned short)*in;
-    unsigned char* next = in + 1;
+    short n = (unsigned short)*in++;
     int* out = c->mStack;
-    c->mIP = next;
-    n -= 1;
-    if ((short)n >= 0) {
-        do {
-            unsigned short v = (unsigned short)(((unsigned short)next[0] << 8) + next[1]);
-            *out = (short)v;
-            out++;
-            next += 2;
-            n--;
-        } while ((short)n >= 0);
+    c->mIP = in;
+    for (n--; n >= 0; n--) {
+        unsigned short hi = *in++;
+        *out++ = (short)((hi << 8) + *in++);
     }
     c->mStack = out;
-    c->mIP = next;
+    c->mIP = in;
 }
 
 // @ 0x008ae540
