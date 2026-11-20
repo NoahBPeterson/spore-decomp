@@ -18069,8 +18069,9 @@ char Big::Check()
 void Blob5b0::dtor()
 {
     if (mp20c && *(int*)((char*)mp20c - 4) != 0) operator_delete(mp20c);
-    ((Sub28Vec*)((char*)this + 0x28))->sub_dfb850(mp28, mp2c);
-    void* b = *(void**)((char*)this + 0x28);
+    Sub28Vec* v = (Sub28Vec*)((char*)this + 0x28);
+    v->sub_dfb850(*(void**)v, ((void**)v)[1]);
+    void* b = *(void**)v;
     if (b && *(int*)((char*)b - 4) != 0) operator_delete(b);
 }
 
