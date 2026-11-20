@@ -1577,8 +1577,7 @@ void cJobManager_s0069_07e0::SetJobPriorityUnderLock(cJobData_s0069_07e0* job, i
 // @ 0x006909b0
 void cJob_s0069_07e0::Queue()
 {
-    cJobData_s0069_07e0* p = static_cast<cJobData_s0069_07e0*>(this);
-    p->mpManager->QueueJobUnderLock(p);
+    static_cast<cJobData_s0069_07e0*>(this)->mpManager->QueueJobUnderLock(static_cast<cJobData_s0069_07e0*>(this));
 }
 
 // @ 0x006909e0
