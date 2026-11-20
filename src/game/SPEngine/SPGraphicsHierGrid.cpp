@@ -396,7 +396,7 @@ cGrid_s0070_3700* __cdecl grid_copy_construct(cGrid_s0070_3700* first, cGrid_s00
 cGrid_s0070_3700* __cdecl grid_destroy_range(cGrid_s0070_3700* first, cGrid_s0070_3700* last, cGrid_s0070_3700* ended); // 0x7032e0
 void __cdecl grid_fill_n(unsigned n, cGrid_s0070_3700* dst, const cGrid_s0070_3700* value);     // fill_n
 void __cdecl grid_assign_backward(cGrid_s0070_3700* first, cGrid_s0070_3700* last, cGrid_s0070_3700* dstEnd); // 0x703690
-cGrid_s0070_3700* __cdecl grid_assign_fill(cGrid_s0070_3700* first, cGrid_s0070_3700* last, const cGrid_s0070_3700* src); // 0x703c80
+void __cdecl grid_assign_fill(cGrid_s0070_3700* first, cGrid_s0070_3700* last, const cGrid_s0070_3700* src); // 0x703c80
 // ---- items of slice s00703700 end
 
 // @ 0x00700b70
@@ -1549,7 +1549,7 @@ void __thiscall cHierGrid_s0070_3700::Update(unsigned index, float radius, const
 }
 
 // @ 0x00703c80
-cGrid_s0070_3700* __cdecl grid_assign_fill(cGrid_s0070_3700* first, cGrid_s0070_3700* last, const cGrid_s0070_3700* src)
+void __cdecl grid_assign_fill(cGrid_s0070_3700* first, cGrid_s0070_3700* last, const cGrid_s0070_3700* src)
 {
     for (; first != last; first += 1) {
         first->mCellSize = src->mCellSize;
@@ -1557,11 +1557,10 @@ cGrid_s0070_3700* __cdecl grid_assign_fill(cGrid_s0070_3700* first, cGrid_s0070_
         first->mInvCellSize = src->mInvCellSize;
         first->mCellRadius = src->mCellRadius;
         *(Vec3*)&first->mCentreOriginX = *(Vec3*)&src->mCentreOriginX;
-        first->CopyConstruct(src[0]);         // mCells assignment (callee masked)
+        ((CellMap*)first->mCells)->Assign(*(const CellMap*)src->mCells);
         first->mMask = src->mMask;
         first->mChildMask = src->mChildMask;
     }
-    return first;
 }
 
 // @ 0x00703ce0
