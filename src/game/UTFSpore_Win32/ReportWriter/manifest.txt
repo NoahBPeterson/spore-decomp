@@ -18,3 +18,4 @@
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetAddressLocationString@ReportWriter@Debug@EA@@QAEIPBXPADI@Z  0091ee80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteKeyValueFormatted@ReportWriter@Debug@EA@@UAA_NPBD0ZZ  0091eba0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteText@ReportWriter@Debug@EA@@UAE_NPBD_N@Z  0091ea90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteKeyValue@ReportWriter@Debug@EA@@UAE_NPBD0@Z  0091eb20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
