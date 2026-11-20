@@ -800,7 +800,14 @@ class hkAabbPhantom : public hkPhantom { public:
 
 // @ 0x0108dd90
 // The original leaves the out pointer in EAX (void_hides_eax); returning the reference matches it.
-hkAabb& hkAabbPhantom::calcAabb(hkAabb& out) { out = m_aabb; return out; }
+hkAabb& hkAabbPhantom::calcAabb(hkAabb& out)
+{
+    // dword-wise copy of the two vectors
+    const uint32_t* src = (const uint32_t*)&m_aabb;
+    uint32_t* dst = (uint32_t*)&out;
+    for (int i = 0; i < 8; i++) dst[i] = src[i];
+    return out;
+}
 
 // @ 0x0108dde0
 void hkAabbPhantom::setAabb(const hkAabb& aabb)
