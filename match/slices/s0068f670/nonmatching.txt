@@ -1,7 +1,6 @@
 0068f670  124  complete, not byte-exact: ready-list bit-scan register/scheduling near-miss (renders "WEAK": 44.8% original coverage, no mismatch)
 0068f700  134  complete, not byte-exact: GetFreeWaitNode list pop + alloc near-miss
 0068f7c0  252  complete, not byte-exact: FreeJobUnderLock — see below
-0068f970  27   complete, not byte-exact: extra mov eax,edi after the base-to-derived cast
 0068f9f0  59   complete, not byte-exact: register allocation near-miss on the mutex-guarded store
 0068fad0  135  complete, not byte-exact: DoRehash same algorithm (allocate buckets, rehash chains, out-of-pool free-list push); the target keeps `this` in a register across the whole function while mine reloads it from the stack and rotates the loops differently.
 0068fd40  50   complete, not byte-exact: PreShutdown loop shape near-miss

@@ -968,7 +968,7 @@ int cJob::AddRef()
 int cJob::ContinueJob()
 {
     cJobData* p = static_cast<cJobData*>(this);
-    EA::Thread::Mutex_s0068_f670* pMutex = &p->mpManager->mMutex;
+    EA::Thread::Mutex_s0068_f670* pMutex = &static_cast<cJobData*>(this)->mpManager->mMutex;
     pMutex->Lock((unsigned int)&g_MutexFlags);
     int status = p->mStatus;
     pMutex->Unlock();
