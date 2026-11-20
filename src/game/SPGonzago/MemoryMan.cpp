@@ -421,6 +421,8 @@ struct Token {
         int  mnValueLength;  // +0x14 (text tokens)
     };
     int    mnEntryCount; // +0x18
+
+    explicit Token(int type) : mToken(type) {}
 };
 struct MemoryStream_s0090_0410 {
     void** vftable;             // +0x00
@@ -962,11 +964,7 @@ void OnStartElement2(XmlTextReader* t, void* a2, void* a3, void* a4)
 {
     if ((t->mnFlags & 8) == 0)
         return;
-    Token* p = AllocToken(t, 0x20);
-    if (p != 0)
-        p->mToken = 6;
-    else
-        p = 0;
+    Token* p = new (AllocToken(t, 0x20)) Token(6);
     p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = 0;
     p->mpEntries = (int*)t->FUN_00900970(a3);
@@ -985,9 +983,7 @@ void OnStartElement2(XmlTextReader* t, void* a2, void* a3, void* a4)
 // @ 0x00900e60
 void OnStartElement(XmlTextReader* t, void* a2, int* a3)
 {
-    Token* p = AllocToken(t, 0x20);
-    if (p != 0)
-        p->mToken = 1;
+    Token* p = new (AllocToken(t, 0x20)) Token(1);
     int n = 0;
     while (a3[n] != 0)
         n++;
@@ -1014,9 +1010,7 @@ void OnStartElement(XmlTextReader* t, void* a2, int* a3)
 // @ 0x00900f70
 void OnEndElement(XmlTextReader* t, void* a2)
 {
-    Token* p = AllocToken(t, 0x18);
-    if (p != 0)
-        p->mToken = 2;
+    Token* p = new (AllocToken(t, 0x18)) Token(2);
     p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = 0;
     t->mnDepth--;
@@ -1028,11 +1022,7 @@ void OnEndElement(XmlTextReader* t, void* a2)
 // @ 0x00900ff0
 void OnCharacterData(XmlTextReader* t, void* a2, int a3)
 {
-    Token* p = AllocToken(t, 0x18);
-    if (p != 0)
-        p->mToken = 4;
-    else
-        p = 0;
+    Token* p = new (AllocToken(t, 0x18)) Token(4);
     p->field8 = 0;
     uint32 size = (uint32)(a3 * 2);
     uint32 n = (size + 9) & ~7u;
@@ -1051,9 +1041,7 @@ void OnComment(XmlTextReader* t, void* a2)
 {
     if ((t->mnFlags & 1) == 0)
         return;
-    Token* p = AllocToken(t, 0x18);
-    if (p != 0)
-        p->mToken = 3;
+    Token* p = new (AllocToken(t, 0x18)) Token(3);
     p->field8 = 0;
     p->fieldc = (int)t->FUN_00900970(a2);
     p->mpNext = 0;
@@ -1066,9 +1054,7 @@ void OnPI(XmlTextReader* t, void* a2, void* a3)
 {
     if ((t->mnFlags & 2) == 0)
         return;
-    Token* p = AllocToken(t, 0x18);
-    if (p != 0)
-        p->mToken = 5;
+    Token* p = new (AllocToken(t, 0x18)) Token(5);
     p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = (int)t->FUN_00900970(a3);
     p->mpNext = 0;
