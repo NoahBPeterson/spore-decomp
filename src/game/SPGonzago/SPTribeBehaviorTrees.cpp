@@ -6134,7 +6134,8 @@ float __cdecl FUN_00da70e0(cSPCreatureCitizen* c)
     int v = c->FUN_c22dc0();
     if (v == 0 || v == 0xb)
         return 0.0f;
-    cTool* tool = c->GetTribe()->GetToolOfType(v);
+    cTribe* tribe = c->GetTribe();
+    cTool* tool = tribe->GetToolOfType(v);
     if (tool != 0 && tool->mCombat.GetDamageState() != 2)
         return 0.0f;
     return 1.0f;
