@@ -11,3 +11,4 @@ slices/s00ac6b90/s00ac6b90.cpp  ?getContainer@cGroundEditorRes@@QAEPAXXZ  00ac79
 slices/s00ac6b90/s00ac6b90.cpp  ?destroyContainer@cGroundEditorRes@@QAEXXZ  00ac7980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ac6b90/s00ac6b90.cpp  ?sdtor@cGroundLayer@@QAEPAXI@Z  00ac6e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ac6b90/s00ac6b90.cpp  ?createNoun_7790@@YGPAUcGameBundle@SP@@PAUcGameBundleContainer@2@MW4eBundleType@2@@Z  00ac7790  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac6b90/s00ac6b90.cpp  ?ensureContainer@cGroundEditorRes@@QAEXXZ  00ac7910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
