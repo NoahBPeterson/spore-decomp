@@ -1,8 +1,3 @@
-007f97a0 95  complete interface query; cl switch-tree lowering differs (shared vs per-case case bodies)
-007f9800 95  complete interface query; cl switch-tree lowering differs
-007f9890 153  complete interface query (this/this+4 cases); cl switch-tree lowering differs
-007f99e0 95  complete interface query; cl switch-tree lowering differs
-007f9bb0 95  complete interface query; cl switch-tree lowering differs
 007f9a40 68  complete slot refresh loop; /Od local slot order and call schedule differ
 007f9ae0 36  complete slot setter loop; /Od local slot order differs
 007f9c10 50  complete slot add loop; /Od local slot order differs
