@@ -112,7 +112,7 @@ TerrainRecord* TerrainRecord::Assign(const TerrainRecord& src)
     mF[2] = src.mF[2];
     mF[3] = src.mF[3];
     mF[4] = src.mF[4];
-    { IRef* n = src.mpRef14; IRef* o = mpRef14; if (n != o) { if (n) n->AddRef(); mpRef14 = n; if (o) o->Release(); } }
+    { IRef** po = &mpRef14; IRef* n = src.mpRef14; IRef* o = *po; if (n != o) { if (n) n->AddRef(); *po = n; if (o) o->Release(); } }
     { IRef* n = src.mpRef18; IRef* o = mpRef18; if (n != o) { if (n) n->AddRef(); mpRef18 = n; if (o) o->Release(); } }
     { IRef* n = src.mpRef1c; IRef* o = mpRef1c; if (n != o) { if (n) n->AddRef(); mpRef1c = n; if (o) o->Release(); } }
     { IRef* n = src.mpRef20; IRef* o = mpRef20; if (n != o) { if (n) n->AddRef(); mpRef20 = n; if (o) o->Release(); } }
@@ -121,10 +121,7 @@ TerrainRecord* TerrainRecord::Assign(const TerrainRecord& src)
     mTail05 = src.mTail05; mTail06 = src.mTail06; mTail07 = src.mTail07; mTail08 = src.mTail08;
     mTail09 = src.mTail09; mTail10 = src.mTail10; mTail11 = src.mTail11; mTail12 = src.mTail12;
     mTail13 = src.mTail13; mTail14 = src.mTail14;
-    {
-        const uint32_t* p = &src.mVec60.a;
-        mVec60.a = p[0]; mVec60.b = p[1]; mVec60.c = p[2];
-    }
+    mVec60 = src.mVec60;
     return this;
 }
 

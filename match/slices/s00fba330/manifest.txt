@@ -2,3 +2,4 @@
 slices/s00fba330/s00fba330.cpp  ?StaticInit@cTerrainStateMgr@SP@@SAXXZ  00fba330
 slices/s00fba330/models.cpp  ?Select5c0@TerrainMgr@@QAEXH@Z  00fbaf10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00fba330/models.cpp  ?Select5c4@TerrainMgr@@QAEXH@Z  00fbaf50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fba330/models.cpp  ?Assign@TerrainRecord@@QAEPAU1@ABU1@@Z  00fbab70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
