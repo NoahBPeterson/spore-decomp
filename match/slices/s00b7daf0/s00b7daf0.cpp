@@ -141,9 +141,11 @@ float __thiscall cPlanetModel::FUN_00b7e4d0() {
 
 // @ 0x00b7e500
 float __thiscall cPlanetModel::FUN_00b7e500() {
-  float r = 500.0f;
+  float r;
   if (mpISphere != 0 && mpISphere->GetMap() != 0)
     r = mpISphere->GetMap()->mRadius;
+  else
+    r = 500.0f;
   return r + r;
 }
 
