@@ -2679,13 +2679,14 @@ VecFAssign* VecFAssign::Assign(VecFAssign* other)
     return this;
 }
 
-struct FVec_f8f970 {
-    float* mpBegin;
-    float* mpEnd;
-    float* erase(float* first, float* last)
+template <class T>
+struct PodVec_f8f970 {
+    T* mpBegin;
+    T* mpEnd;
+    T* erase(T* first, T* last)
     {
         eastl_fill(first, last, (int)((char*)mpEnd - (char*)last));
-        *(float* volatile*)&mpEnd = mpEnd - (last - first);
+        *(T* volatile*)&mpEnd = mpEnd - (last - first);
         return first;
     }
 };
@@ -2695,7 +2696,7 @@ void GmeListF::DtorF()
 {
     m_vtbl = g_1490020;
     _ReadWriteBarrier();
-    FVec_f8f970* v = (FVec_f8f970*)&mpBegin;
+    PodVec_f8f970<float>* v = (PodVec_f8f970<float>*)&mpBegin;
     v->erase(v->mpBegin, v->mpEnd);
     if (v->mpBegin != 0)
         operator_delete__(v->mpBegin);
@@ -2705,15 +2706,13 @@ void GmeListF::DtorF()
 // @ 0x00f8f9c0
 void GmeListS::DtorH()
 {
-    *(int*)this = 0x1490028;
-    int endp = (int)mpEnd;
-    int begp = (int)mpBegin;
-    eastl_fill((void*)begp, (void*)endp, 0);
-    int cnt = (endp - begp) >> 1;
-    *(int*)((char*)this + 0x14) += -cnt * 2;
-    if (*(int*)((char*)this + 0x10) != 0)
-        operator_delete__(*(void**)((char*)this + 0x10));
-    *(int*)this = 0x13ef094;
+    m_vtbl = g_1490028;
+    _ReadWriteBarrier();
+    PodVec_f8f970<short>* v = (PodVec_f8f970<short>*)&mpBegin;
+    v->erase(v->mpBegin, v->mpEnd);
+    if (v->mpBegin != 0)
+        operator_delete__(v->mpBegin);
+    m_vtbl = g_13ef094;
 }
 
 // @ 0x00f8fa10
@@ -2759,15 +2758,13 @@ void GmeListV3::DtorE()
 // @ 0x00f8fb10
 void* GmeListFB::DtorI(int freeFlag)
 {
-    *(int*)this = 0x1490020;
-    int endp = (int)mpEnd;
-    int begp = (int)mpBegin;
-    eastl_fill((void*)begp, (void*)endp, 0);
-    int cnt = (endp - begp) >> 2;
-    *(int*)((char*)this + 0x14) += -cnt * 4;
-    if (*(int*)((char*)this + 0x10) != 0)
-        operator_delete__(*(void**)((char*)this + 0x10));
-    *(int*)this = 0x13ef094;
+    m_vtbl = g_1490020;
+    _ReadWriteBarrier();
+    PodVec_f8f970<float>* v = (PodVec_f8f970<float>*)&mpBegin;
+    v->erase(v->mpBegin, v->mpEnd);
+    if (v->mpBegin != 0)
+        operator_delete__(v->mpBegin);
+    m_vtbl = g_13ef094;
     if (freeFlag & 1)
         operator_delete__(this);
     return this;
@@ -2776,15 +2773,13 @@ void* GmeListFB::DtorI(int freeFlag)
 // @ 0x00f8fb70
 void* GmeListSB::DtorC(int freeFlag)
 {
-    *(int*)this = 0x1490028;
-    int endp = (int)mpEnd;
-    int begp = (int)mpBegin;
-    eastl_fill((void*)begp, (void*)endp, 0);
-    int cnt = (endp - begp) >> 1;
-    *(int*)((char*)this + 0x14) += -cnt * 2;
-    if (*(int*)((char*)this + 0x10) != 0)
-        operator_delete__(*(void**)((char*)this + 0x10));
-    *(int*)this = 0x13ef094;
+    m_vtbl = g_1490028;
+    _ReadWriteBarrier();
+    PodVec_f8f970<short>* v = (PodVec_f8f970<short>*)&mpBegin;
+    v->erase(v->mpBegin, v->mpEnd);
+    if (v->mpBegin != 0)
+        operator_delete__(v->mpBegin);
+    m_vtbl = g_13ef094;
     if (freeFlag & 1)
         operator_delete__(this);
     return this;

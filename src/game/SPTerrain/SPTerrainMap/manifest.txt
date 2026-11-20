@@ -8,3 +8,6 @@
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize4F@EastlVec@@QAEXI@Z  00f8fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?Ctor@SimVec12@@QAEPAU1@HPBX@Z  00f8fa10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorF@GmeListF@@QAEXXZ  00f8f970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorH@GmeListS@@QAEXXZ  00f8f9c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorI@GmeListFB@@QAEPAXH@Z  00f8fb10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorC@GmeListSB@@QAEPAXH@Z  00f8fb70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
