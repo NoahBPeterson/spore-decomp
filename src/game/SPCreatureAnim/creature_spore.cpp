@@ -2607,14 +2607,15 @@ void creature_instance_data_s009c_b3f0::RemoveEffect(creature_effect_s009c_b3f0*
     effect_node_s009c_b3f0** bucket = range.firstBucket;
     if (node == range.last)
         return;
-    while (node->value != p) {
+    do {
+        if (node->value == p) {
+            new (&range) hashtable_iterator_s009c_b3f0(EraseEffect(hashtable_iterator_s009c_b3f0(node, bucket)));
+            return;
+        }
         node = node->next;
         while (!node)
             node = *++bucket;
-        if (node == range.last)
-            return;
-    }
-    *(hashtable_iterator_s009c_b3f0*)&range = EraseEffect(hashtable_iterator_s009c_b3f0(node, bucket));
+    } while (node != range.last);
 }
 }  // namespace nSPCreatureAnim
 
