@@ -4723,29 +4723,44 @@ void TimerVec::insertOne(GonzagoTimer* pos, const GonzagoTimer* value)
     m_cap   = (GonzagoTimer*)((char*)block + (newCap << 5));
 }
 
-// @ 0x00bf55d0
-void FUN_00bf55d0()
-{
-    ((void (__thiscall*)(void*))FUN_00bf4a90)((void*)0x0168caf0);
-
-    unsigned char* tree = (unsigned char*)0x0168cb0c;
-    do {
-        unsigned char* node = *(unsigned char**)(tree + 0x0c);
+// The two global SPUI layout rbtrees (0x1c-byte headers at 0x0168cb0c..0x0168cb44).
+struct LayoutTreeNode_bf55d0 {
+    void* mpLeft;                       // +0x0
+    LayoutTreeNode_bf55d0* mpNext;      // +0x4
+};
+struct LayoutTree_bf55d0 {
+    void* mpAllocator;                  // +0x0
+    void* mpLeftmost;                   // +0x4  anchor
+    void* mpRightmost;                  // +0x8
+    LayoutTreeNode_bf55d0* mpRoot;      // +0xc
+    char mColor;                        // +0x10
+    int mnSize;                         // +0x14
+    int m18;                            // +0x18
+    void DoNukeSubtree(void* node) { ((void (__thiscall*)(void*, void*))FUN_009a9600)(this, node); }
+    __forceinline void clear() {
+        LayoutTreeNode_bf55d0* node = mpRoot;
         while (node != 0) {
-            unsigned char* next = *(unsigned char**)(node + 4);
-            ((void (__thiscall*)(void*, void*))FUN_009a9600)(tree, *(void**)node);
+            DoNukeSubtree(node->mpLeft);
+            LayoutTreeNode_bf55d0* next = node->mpNext;
             FUN_00f47380(node);
             node = next;
         }
+        mpRightmost = &mpLeftmost;
+        mpRoot = 0;
+        mColor = 0;
+        mnSize = 0;
+        mpLeftmost = &mpLeftmost;
+    }
+};
 
-        unsigned char* head = tree + 4;
-        *(void**)(tree + 0x08) = head;
-        *(void**)(tree + 0x0c) = 0;
-        *(unsigned char*)(tree + 0x10) = 0;
-        *(int*)(tree + 0x14) = 0;
-        tree += 0x1c;
-        *(void**)head = head;
-    } while ((int)tree < 0x0168cb44);
+// @ 0x00bf55d0
+void FUN_00bf55d0()
+{
+    ((void (__thiscall*)(void*))FUN_00bf4a90)(g_168caf0);
+
+    LayoutTree_bf55d0* trees = (LayoutTree_bf55d0*)DAT_0168cb0c;
+    for (int i = 0; i < 2; ++i)
+        trees[i].clear();
 }
 
 // @ 0x00bf5630
