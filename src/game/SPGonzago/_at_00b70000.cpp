@@ -4172,8 +4172,9 @@ int ObstacleMgr::FindById(unsigned int* a, int b, int id)
     int* end = it.end;
     int* bucket = it.bucket;
     while (cur != end) {
-        if (*(int*)(*(int*)((char*)cur + 8) + 0x5c) == id)
-            return *(int*)((char*)cur + 8);
+        int obj = *(int*)((char*)cur + 8);
+        if (*(int*)(obj + 0x5c) == id)
+            return obj;
         cur = *(int**)((char*)cur + 0x10);
         while (cur == 0) {
             bucket++;
