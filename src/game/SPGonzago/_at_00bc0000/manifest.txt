@@ -63,3 +63,4 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?DestroyVarList@@YAXXZ  00bcb700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7f80@@YIPAPAUWE@@PAPAU1@@Z  00bc7f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?setFlag@Reg@@QAEXHI@Z  00bc3e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca670@@YAXPAX@Z  00bca670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

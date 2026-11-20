@@ -5681,11 +5681,13 @@ cAgentOrder* cAgentOrderManager::FindNode(int key, bool (*pred)(void*, void*), v
 void FUN_00bca670(void* p)
 {
     char* self = (char*)p;
-    if (*(int*)(self + 0x2c) != 0 && *(char**)(self + 0x2c) != 0) {
-        char* o = *(char**)(self + 0x2c);
-        char* qi = (char*)((IRefCount_s00bc_a040*)o)->QueryInterface(0xce9f6639);
-        if (qi != 0) {
-            *(u32*)(self + 0x30) = *(u32*)(qi + 0xe54);
+    if (*(int*)(self + 0x2c) != 0) {
+        _ReadWriteBarrier();
+        if (char* o = *(char**)(self + 0x2c)) {
+            char* qi = (char*)((IRefCount_s00bc_a040*)o)->QueryInterface(0xce9f6639);
+            if (qi != 0) {
+                *(u32*)(self + 0x30) = *(u32*)(qi + 0xe54);
+            }
         }
     }
 }
