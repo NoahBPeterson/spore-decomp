@@ -1346,10 +1346,11 @@ void Canvas::SetStyle(int style)
         Show();
 }
 
+extern "C" char g_141ca70[];   // 0x0141ca70 Canvas vftable
 // @ 0x00849da0
 Canvas* Canvas::ScalarDtor(unsigned flags)
 {
-    *(void**)this = (void*)0x141ca70;   // vftable
+    *(void**)this = g_141ca70;   // vftable
     Shutdown();
     int n = (int)((char*)msCaption.mpCapacity - (char*)msCaption.mpBegin);
     if ((n & ~1) > 2 && msCaption.mpBegin)
