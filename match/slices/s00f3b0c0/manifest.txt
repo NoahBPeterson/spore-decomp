@@ -19,3 +19,4 @@ slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b290@cSim@@QAEXD@Z  00f3b290  /O2 /MD /
 slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bec0@cSim@@QAEHH@Z  00f3bec0  /O2 /MD /Gy /EHsc /TP
 slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bd90@cSim@@QAEXHD@Z  00f3bd90  /O2 /MD /Gy /EHsc /TP
 slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bde0@cSim@@QAE_NH@Z  00f3bde0  /O2 /MD /Gy /EHsc /TP
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3be60@cSim@@QAEHH@Z  00f3be60  /O2 /MD /Gy /EHsc /TP
