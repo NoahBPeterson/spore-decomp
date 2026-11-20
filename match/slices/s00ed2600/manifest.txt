@@ -4,3 +4,4 @@ slices/s00ed2600/s00ed2600.cpp  ?FUN_00ed29b0@@YAPAHPAH00@Z  00ed29b0  /O2 /MD /
 slices/s00ed2600/s00ed2600.cpp  ?FUN_00ed3570@@YAPAHPAH00@Z  00ed3570  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ed2600/s00ed2600.cpp  ?InsertAt@BigVector@@QAEPAUBigElem@@PAU2@0@Z  00ed3740  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ed2600/s00ed2600.cpp  ?InsertUnique@RefMap@@QAEPAPAXPAPAXPAURBNode@@0D@Z  00ed2a50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ed2600/s00ed2600.cpp  ?Erase@RefMap@@QAEXPAPAXPAURBNode@@@Z  00ed2ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE

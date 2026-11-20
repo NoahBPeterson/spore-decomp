@@ -378,8 +378,8 @@ void RefMap::Erase(void** result, RBNode* node)
     mSize--;
     next = (void*)eastl_RBTreeIncrement(n);
     eastl_RBTreeErase(n, &mAnchor);
-    if (n->mpValue)
-        ((RefObj*)n->mpValue)->mpVtbl->mSlot0c(n->mpValue);
+    if (RefObj* v = (RefObj*)n->mpValue)
+        v->mpVtbl->mSlot0c(v);
     operator_delete(n);
     *result = next;
 }
