@@ -3688,35 +3688,30 @@ void RebuildCitizenOrderListDefault()
     RebuildCitizenOrderList(-1);
 }
 
+static inline bool IsCommunityLeader(cCreatureCitizen* pCitizen, cCommunity* pCity, cCommunity* pTribe)
+{
+    cCommunity* pCommunity = pCity;
+    if (pCommunity == nullptr)
+        pCommunity = pTribe;
+    if (pCommunity != nullptr)
+        return pCommunity->GetLeader() == pCitizen;
+    return false;
+}
+
 // @ 0x00c26c90
 void cCreatureCitizen::ApplyToolOrder(uint32_t nToolMask, void* pOrder)
 {
-    uint32_t nEffect;
+    uint32_t nEffect = 0;
 
-    if (mnToolEffectIndex != 0) {
+    if (mnToolEffectIndex != 0)
         nEffect = (uint32_t)GetToolEffect(mnToolEffectIndex);
-        if (nEffect == 0)
-            goto default_order;
-    }
-    else {
-        cCommunity* pCommunity = (cCommunity*)mpOwnerCity;
-        if (pCommunity == nullptr) {
-            pCommunity = (cCommunity*)mpOwnerTribe;
-            if (pCommunity == nullptr)
-                goto default_order;
-        }
-        if (pCommunity->GetLeader() != this)
-            goto default_order;
+    else if (IsCommunityLeader(this, (cCommunity*)mpOwnerCity, (cCommunity*)mpOwnerTribe))
         nEffect = 0x11;
-    }
 
-    if ((nToolMask & (1u << nEffect)) != 0) {
+    if (nEffect != 0 && (nToolMask & (1u << nEffect)) != 0)
         ApplyOrder((int32_t)nEffect, pOrder);
-        return;
-    }
-
-default_order:
-    ApplyOrder(0, pOrder);
+    else
+        ApplyOrder(0, pOrder);
 }
 
 // @ 0x00c26d10
