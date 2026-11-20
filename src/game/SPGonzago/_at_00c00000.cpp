@@ -483,16 +483,18 @@ void __fastcall FUN_00c04870(void** p)
     operator_delete_(p[7]);
   void** q = (void**)((char*)p[9] - 4);
   p[9] = q;
-  void* v = *q;
+  char* v = (char*)*q;
   p[7] = v;
-  p[8] = (void*)((char*)v + 0xa0);
-  p[6] = (void*)((char*)v + 0x8c);
-  void** a = *(void***)((char*)v + 0x9c);
+  char* e = v + 0xa0;
+  p[8] = e;
+  char* r = e - 0x14;
+  p[6] = r;
+  void** a = *(void***)(r + 0x10);
   if (a)
-    (*(FnVoid)(*(char**)a + 4))(a);
-  void** b = *(void***)((char*)v + 0x98);
+    ((FnVoid)(*(void***)a)[1])(a);
+  void** b = *(void***)(r + 0xc);
   if (b)
-    (*(FnVoid)(*(char**)b + 4))(b);
+    ((FnVoid)(*(void***)b)[1])(b);
 }
 
 // @ 0x00c049f0
