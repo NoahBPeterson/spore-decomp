@@ -10931,9 +10931,10 @@ void cGalaxyGameEntryImpl_s00de_5040::FUN_00de5260(void)
 // @ 0x00de52d0
 void cGalaxyGameEntryImpl_s00de_5040::FUN_00de52d0(void)
 {
-    char* b = mBegin;
-    if (b != mEnd) {
-        mCurrentDword = *(int*)(mEnd - 4);
+    if (mBegin != mEnd) {
+        _ReadWriteBarrier();
+        mCurrentDword = ((int*)mEnd)[-1];
+        _ReadWriteBarrier();
         mEnd -= 4;
         return;
     }
