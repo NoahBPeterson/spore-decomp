@@ -540,10 +540,6 @@ extern "C" void  __cdecl RangeInitialize(void* s, int n);                // 0x04
 
 // ---- items of slice s00683f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" char  g_emptyStr[];                          // 0x1667bac (empty string sentinel)
-extern "C" void  FUN_00682e90(void*, void*);
-extern "C" void  FUN_00683ab0(void*, void*);
-extern "C" void  FUN_00684740(void*, void*);
-extern "C" void  FUN_00684a90(void*, void*);
 static inline void** VT(void* p) { return *(void***)p; }
 struct S8_s0068_3f80 {
     char* mpBegin;
@@ -684,6 +680,7 @@ struct FactQuery {
 struct FactStream {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
     virtual void* GetWriter();                    // +0x18
+    virtual int GetObject();                      // +0x1c
 };
 struct FactSer {
     bool __thiscall ser_6842c0(int* a, int* b, int c, int d);
@@ -691,6 +688,11 @@ struct FactSer {
     void FUN_00682ca0(void* map, void* writer);   // 0x00682ca0 SerCtx::WriteMap2A10
     void FUN_00680fc0(void* map, void* writer);   // 0x00680fc0
     void FUN_006823f0(void* vec, void* writer);   // 0x006823f0 SerCtx::WriteVecA
+    bool __thiscall ser_684b40(int* a, int* b, int c, int d);
+    void FUN_00684a90(void* map, void* reader);   // 0x00684a90 Factory::ReadMapC
+    void FUN_00684740(void* map, void* reader);   // 0x00684740 Factory::ReadMapB
+    void FUN_00682e90(void* map, void* reader);   // 0x00682e90 SerCtx::LoadMap1
+    void FUN_00683ab0(void* vec, void* reader);   // 0x00683ab0 ObjLoaderT::loadA
 };
 struct Map844 {
     char pad0[4];
@@ -2085,20 +2087,21 @@ void Factory::ReadMapC(MapC* map, IRd* r)
 }
 
 // @ 0x00684b40
-int ser_684b40(int* a, int* b)
+bool FactSer::ser_684b40(int* a, int* b, int c, int d)
 {
-    int i = ((int (__thiscall*)(void*))VT(a)[0x1c / 4])(a);
-    if (i) {
-        i = ((int (__thiscall*)(void*, int))VT(*(void**)(i + 4))[0xc / 4])(*(void**)(i + 4), 0x226a1de);
-        if (i) return 0;
+    (void)c; (void)d;
+    bool result = false;
+    int i = ((FactStream*)a)->GetObject();
+    if (!i || !((FactQuery*)(i + 4))->Find(0x226a1de)) {
+        void* u = ((FactStream*)a)->GetWriter();
+        int j = b ? ((FactQuery*)b)->Find(0x355d6f5) : 0;
+        FUN_00684a90((void*)(j + 0x50), u);
+        FUN_00684740((void*)(j + 0x18), u);
+        FUN_00682e90((void*)(j + 0x34), u);
+        FUN_00683ab0((void*)(j + 0x6c), u);
+        result = true;
     }
-    void* u = ((void* (__thiscall*)(void*))VT(a)[0x18 / 4])(a);
-    int j = b ? ((int (__thiscall*)(void*, int))VT(b)[0xc / 4])(b, 0x355d6f5) : 0;
-    FUN_00684a90((void*)(j + 0x50), u);
-    FUN_00684740((void*)(j + 0x18), u);
-    FUN_00682e90((void*)(j + 0x34), u);
-    FUN_00683ab0((void*)(j + 0x6c), u);
-    return 1;
+    return result;
 }
 
 // @ 0x00684be0
