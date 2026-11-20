@@ -1867,18 +1867,26 @@ void FUN_00f24200(void)
 }
 
 // @ 0x00f24390
+struct EventTreeHdr_s00f2_4390 {
+    int   mCompare;     // +0x00
+    int*  mpLeft;       // +0x04 anchor
+    int*  mpRight;      // +0x08
+    int*  mpParent;     // +0x0c root
+    uint8_t mColor;     // +0x10
+    int   mnSize;       // +0x14
+    void reset()
+    {
+        ((EventTree*)this)->Destroy(mpParent);
+        mpRight = (int*)&mpLeft;
+        mpLeft = (int*)&mpLeft;
+        mpParent = 0;
+        mColor = 0;
+        mnSize = 0;
+    }
+};
 void FUN_00f24390(void)
 {
-    EventTree* tree = (EventTree*)DAT_016c8318;
-    int* puVar1 = (int*)(DAT_016c8318 + 0xc);
-    int iVar3 = (int)tree;
-    tree->Destroy(*(int**)((char*)tree + 0xc));
-    int iVar2 = iVar3 + 4;
-    *(int*)(iVar3 + 8) = iVar2;
-    *(int*)iVar2 = iVar2;
-    *puVar1 = 0;
-    *(uint8_t*)(iVar3 + 0x10) = 0;
-    *(int*)(iVar3 + 0x14) = 0;
+    ((EventTreeHdr_s00f2_4390*)DAT_016c8318)->reset();
 }
 
 // @ 0x00f243c0
