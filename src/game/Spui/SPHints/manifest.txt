@@ -8,3 +8,4 @@
 ../src/game/Spui/SPHints.cpp  ?AddCondition@cUIHints_s0067_c450@@QAEXPAX@Z  0067ca50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?Update@cUIHints_s0067_c450@@QAEXXZ  0067c960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?init@cHintManager@@QAEPAU1@XZ  0067b270  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?Destroy2@cUIHints@@QAEXXZ  0067bb80  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
