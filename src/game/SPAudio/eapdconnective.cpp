@@ -2337,8 +2337,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_bang(char* x)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_bang((char*)((void**)objP(x, 0x28))[i - 1]);
 }
@@ -2361,8 +2360,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_symbol(char* x, t_symbol_s00a5_b510 s)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_symbol((char*)((void**)objP(x, 0x28))[i - 1], s);
 }
@@ -2373,8 +2371,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_list(char* x, t_symbol_s00a5_b510 s, int argc, void* argv)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_list((char*)((void**)objP(x, 0x28))[i - 1], s, argc, argv);
 }
@@ -2385,8 +2382,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_anything(char* x, t_symbol_s00a5_b510 s, int argc, void* argv)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_anything((char*)((void**)objP(x, 0x28))[i - 1], s, argc, argv);
 }
