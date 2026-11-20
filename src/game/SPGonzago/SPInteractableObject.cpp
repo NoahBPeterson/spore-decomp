@@ -226,8 +226,47 @@ public:
     bool Write(void* data); // 0x00c88a90
     bool Read(void* data); // 0x00c88b00
 };
-class cInteractableObject : public cGameData, public cSpatialObject {
+class cModel {
 public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
+    virtual void vc0();
+    virtual void SetModelVariant(int variant); // 0xc4
+};
+// The spatial base's virtual interface (only the slots used here).
+class cSpatialObjectView {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8();
+    virtual int GetModelVariant(int state, int a, int b); // 0xac
+    virtual cModel* GetModel();                           // 0xb0
+};
+class cInteractableObject : public cGameData, public cSpatialObject {
+    uint8_t mPad38[0x12c - 0x38];
+public:
+    uint8_t mModelReady;      // 0x12c
+    uint8_t mModelStateIndex; // 0x12d
+    void SetModelState(int nState, bool bForce);
+    cSpatialObjectView* Spatial() { return (cSpatialObjectView*)static_cast<cSpatialObject*>(this); }
     void* AsInterface(uint32_t type);
     bool Write(void* data);
     bool Read(void* data);
@@ -257,7 +296,7 @@ bool cInteractableObject::LoadModelChecked(void* pModel)
 }
 
 // @ 0x00c3f8b0
-void cInteractableObject::SetModelState(int nState, bool bForce)
+void RetailInteractableObject::cInteractableObject::SetModelState(int nState, bool bForce)
 {
     if (((uint8_t)nState == mModelStateIndex) && !bForce)
         return;
@@ -266,9 +305,8 @@ void cInteractableObject::SetModelState(int nState, bool bForce)
     if (mModelReady == 0)
         return;
 
-    if (GetModel() != nullptr) {
-        va8(nState, 1, 0);
-    }
+    if (Spatial()->GetModel() != nullptr)
+        Spatial()->GetModel()->SetModelVariant(Spatial()->GetModelVariant(nState, 1, 0));
 }
 
 // @ 0x00c3f9b0

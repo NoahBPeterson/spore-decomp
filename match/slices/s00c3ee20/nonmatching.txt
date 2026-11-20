@@ -4,7 +4,6 @@
 00c3f040  190  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker definition init; the property queries are unresolved so the branch bodies are simplified; equiv UNSUPPORTED (unresolved property helpers)
 00c3f4a0  103  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hit sphere constructor; the default radius and distance floats plus vtable stores are ordered differently from retail; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3f6f0  69  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) solar hit sphere constructor; the nested hit-sphere constructor plus key zeroing order differ; equiv FAIL (first mismatch memory .data @0167be2c)
-00c3f8b0  104  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set model state; the model variant switch goes through a virtual call instead of the retail inlined table; equiv FAIL (first mismatch execution)
 00c3f9b0  78  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable constructor; the vtable and default member stores are ordered differently from retail; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3fa70  58  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable destructor; the member free helpers are unresolved and the releases are not in retail order; equiv UNSUPPORTED (unresolved teardown helpers)
 00c3fad0  18  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clear effect state; the flag clear is byte-sized and the release guard is modelled as a null test; equiv FAIL (first mismatch execution)
