@@ -3527,8 +3527,15 @@ bool cSPDefaultAoETool_s0105_6160::StartTool(int nToolId, int nTarget, int nFlag
     return true;
 }
 
+// The strategy's CanUseTool overrides are __thiscall members that work on the tool passed in;
+// this one forwards `this` (ecx) untouched to the base check at 0x01056160.
+struct cSPToolStrategyCheck_s0105_6bb0 {
+    bool CanUseTool_56160(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut);  // 0x01056160
+    bool CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut);  // 0x01056bb0
+};
+
 // @ 0x01056bb0
-bool __stdcall CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+bool cSPToolStrategyCheck_s0105_6bb0::CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
 {
     if (CanUseTool_56160(self, nTarget, pOut)) {
         cSPSimulatorSpaceGame_s0105_6160* game = (cSPSimulatorSpaceGame_s0105_6160*)SpaceGameGetRaw();
