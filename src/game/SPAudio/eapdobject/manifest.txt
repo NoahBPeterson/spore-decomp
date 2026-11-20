@@ -18,3 +18,4 @@
 ../src/game/SPAudio/eapdobject.cpp  ?inlet_list@Eapd@Audio@EA@@YAXPAUt_inlet@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a498c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?inlet_free@Eapd@Audio@EA@@YAXPAUt_inlet@123@@Z  00a49990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?outlet_free@Eapd@Audio@EA@@YAXPAUt_outlet@123@@Z  00a49f20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdobject.cpp  ?outlet_new@Eapd@Audio@EA@@YAPAUt_outlet@123@PAUt_object@123@Ut_symbol@123@@Z  00a49d30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

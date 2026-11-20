@@ -662,13 +662,13 @@ namespace EA { namespace Audio { namespace Eapd {
 t_outlet* outlet_new(t_object* owner, t_symbol s)
 {
     t_outlet* o = (t_outlet*)getbytes(0x1c, "EAPd/t_outlet");
-    t_outlet* o2;
+    t_outlet *o2, *o3;
 
     o->o_owner = owner;
     o->o_next = 0;
     if ((o2 = owner->te_outlet)) {
-        for (; o2->o_next; o2 = o2->o_next)
-            ;
+        while ((o3 = o2->o_next))
+            o2 = o3;
         o2->o_next = o;
     } else {
         owner->te_outlet = o;
