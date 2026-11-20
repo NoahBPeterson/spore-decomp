@@ -397,24 +397,24 @@ bool FUN_00ec7640(int* param_1)
 // @ 0x00ec76e0
 void FUN_00ec76e0(void** out)
 {
-    int count = (int)((char*)g_16c75a0 - (char*)g_16c759c) >> 2;
-    void* obj;
-    void* holder;
-    if (count == 0) {
-        holder = 0;
-        FUN_00805310(&g_16c7590, 0, &holder);
-        obj = holder ? ((UIObject*)holder)->Cast(0x4c058cf) : 0;
-        *out = obj;
-        ((void(__thiscall*)(void*))(*(void***)obj)[0x0 / 4])(obj);
-    } else {
-        obj = g_16c759c[count - 1];
+    unsigned int count = (unsigned int)(g_16c75a0 - g_16c759c);
+    void* rel;
+    if (count > 0) {
+        void* obj = g_16c759c[count - 1];
         *out = obj;
         ((void(__thiscall*)(void*))(*(void***)obj)[0x0 / 4])(obj);
         g_16c75a0--;
-        holder = *g_16c75a0;
+        rel = *g_16c75a0;
+    } else {
+        void* holder = 0;
+        FUN_00805310(&g_16c7590, 0, &holder);
+        void* obj = holder ? ((UIObject*)holder)->Cast(0x4c058cf) : 0;
+        *out = obj;
+        ((void(__thiscall*)(void*))(*(void***)obj)[0x0 / 4])(obj);
+        rel = holder;
     }
-    if (holder)
-        ((void(__thiscall*)(void*))(*(void***)holder)[0x4 / 4])(holder);
+    if (rel)
+        ((void(__thiscall*)(void*))(*(void***)rel)[0x4 / 4])(rel);
 }
 
 // ---------------------------------------------------------------- 0x00ec7770
