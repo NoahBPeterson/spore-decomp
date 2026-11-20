@@ -2480,8 +2480,7 @@ int VO::FUN_00acbed0(int a2, int a3)
 // @ 0x00acc2d0
 int* FUN_00acc2d0(int* p, int* end, int* out)
 {
-    if (p == end) return out;
-    do {
+    for (; p != end; p += 6, out += 6) {
         int* a = (int*)*p;
         int* b = (int*)*out;
         if (a != b) {
@@ -2489,9 +2488,8 @@ int* FUN_00acc2d0(int* p, int* end, int* out)
             *out = (int)a;
             if (b) ((void (__thiscall*)(void*))vc(b, 4))(b);
         }
-        ((XC_s00ac_c140*)(p + 1))->FUN_01011cc0(out + 1);
-        p += 6; out += 6;
-    } while (p != end);
+        ((XC_s00ac_c140*)(out + 1))->FUN_01011cc0(p + 1);
+    }
     return out;
 }
 
