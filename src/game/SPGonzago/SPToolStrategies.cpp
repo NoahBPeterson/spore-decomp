@@ -250,7 +250,7 @@ public:
     bool ActivateTool(int nToolId);                       // 0x00e540d0
 };
 void AppendScanResult(void* pList, int* pOut);              // 0x01052880
-void GetMouseRay(Vec3* pOut);                               // 0x01052f90
+void __stdcall GetMouseRay(Vec3* pOut);                     // 0x01052f90
 void ShowScanEventLog(int a, int b, int c, int pCallback, int nDuration);
 int ScanSpecies(cPlanet* pPlanet);                          // 0x01053240
 int ScanTribe(cPlanet* pPlanet);                            // 0x01053320
@@ -2454,15 +2454,19 @@ Vec3* cSPToolStrategy::GetMouseWorldPosition(Vec3* pOut)
     return pOut;
 }
 
+struct cModelManagerView {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual Vec3* GetMousePosition(Vec3* pOut, int flags);   // +0x3c
+};
+cModelManagerView* __cdecl GetModelManager();                // 0x00b3d240
 // @ 0x01052f90
-void GetMouseRay(Vec3* pOut)
+void __stdcall GetMouseRay(Vec3* pOut)
 {
-    IVectorItem* pRay = (IVectorItem*)NounManager();
     Vec3 local;
-    Vec3* pResult = pRay->GetPosition(&local);
-    pOut->mX = pResult->mX;
-    pOut->mY = pResult->mY;
-    pOut->mZ = pResult->mZ;
+    *pOut = *GetModelManager()->GetMousePosition(&local, 0);
 }
 
 // @ 0x010531b0
