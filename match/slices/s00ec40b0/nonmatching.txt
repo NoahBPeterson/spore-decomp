@@ -6,7 +6,6 @@
 00ec4500   82  complete source; equiv WEAK 43 valid (need 200) 25% coverage flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4570   95  complete source; equiv PASS 400 valid 100% coverage (EASTL median-of-three, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec45f0   69  complete source; equiv PASS 355 valid 100% coverage (push_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec4650   75  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec46c0  138  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4750  300  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4900  109  complete source; equiv PASS 348 valid 88% coverage (adjust_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

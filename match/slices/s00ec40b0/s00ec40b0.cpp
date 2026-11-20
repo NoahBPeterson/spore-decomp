@@ -2,6 +2,7 @@
 extern "C" char g_148906c[];
 extern "C" char g_148907c[];
 extern "C" char g_1489090[];
+extern "C" char g_148918c[];
 
 #include <intrin.h>
 // Slice s00ec40b0 -- Spore UI: Sporepedia timeline card / asset view + the introsort + binary-heap
@@ -322,23 +323,29 @@ void FUN_00ec45f0(Rec* base, int root, int hole, uint32_t key, uint32_t value)
     base[hole].value = value;
 }
 
+struct MsgServer_ec4650 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void AddHandler(void* listener, uint32_t messageId);   // +0x24
+};
+struct MsgListenerOwner_ec4650 {
+    void FUN_00ec4650();
+};
 // @ 0x00ec4650
-void FUN_00ec4650(void* self)
+void MsgListenerOwner_ec4650::FUN_00ec4650()
 {
-    int* srv = (int*)SP_MessageServer();
-    void* ctx = (self == 0) ? 0 : (char*)self + 8;
-    *(int**)((char*)self + 0x94)  = srv;
-    *(void**)((char*)self + 0x98) = ctx;
-    *(void**)((char*)self + 0x9c) = (void*)0x0148918c;
-    *(uint32_t*)((char*)self + 0xa0) = 10;
-    *(uint32_t*)((char*)self + 0xa4) = 0;
-
+    void* ctx = (this != 0) ? (char*)this + 8 : 0;
+    MsgServer_ec4650* srv = (MsgServer_ec4650*)SP_MessageServer();
+    *(MsgServer_ec4650**)((char*)this + 0x94) = srv;
+    *(void**)((char*)this + 0x98) = ctx;
+    *(void**)((char*)this + 0x9c) = g_148918c;
+    *(uint32_t*)((char*)this + 0xa0) = 10;
+    *(uint32_t*)((char*)this + 0xa4) = 0;
     if (srv != 0 && ctx != 0)
     {
-        int* vt = (int*)*srv;
-        typedef void (*Fn)(void*, void*, void*);
         for (uint32_t off = 0; off < 0x28; off += 4)
-            ((Fn)vt[0x24 / 4])(srv, *(void**)((char*)0x0148918c + off), ctx);
+            srv->AddHandler(ctx, *(uint32_t*)(g_148918c + off));
     }
 }
 
