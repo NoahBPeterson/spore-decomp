@@ -37,7 +37,7 @@ struct AreaHolder {                              // the `this` of 0x97e8a0
 virtual void v0();
 virtual void v1();
 virtual void v2();
-    Sink14* GetSink() { return (Sink14*)*(void**)((char*)this + 0xc); }
+    Sink14* GetSink() { return (Sink14*)((char*)this + 0xc); }    // embedded sink object at +0xc
 };
 // ---- items of slice s0097e1f0 end
 
