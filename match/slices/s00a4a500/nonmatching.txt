@@ -8,8 +8,6 @@
 00a4aa80  39  complete; editor_free - glist_noselect/guiconnect_notarget/binbuf_free/freebytes sequence inlined differently. difftest UNSUPPORTED (needs a real allocator)
 00a4aac0  101  complete; canvas_create_editor - editor teardown and rtext_new loop inlined differently. difftest WEAK (294 valid inputs, 27.7% coverage - the editor paths need real heap objects)
 00a4abb0  213  complete; canvas_free - long teardown sequence; glist_delete loop and editor teardown inlined differently. difftest UNSUPPORTED (strcmp_i unresolved)
-00a4ad60  68  complete; canvas_istable - helper calls (ASN1_STRING_type + iterator) and the gensym("table") compare inlined differently. difftest PASS (387 inputs, 68.3% coverage)
-00a4add0  89  complete; canvas_showtext - same shape as canvas_istable with gensym("graph"). difftest PASS (387 inputs, 65.3% coverage)
 00a4ae50  -  complete; canvas_rename - sizeof 266 vs 204; makebindsym/pd_bind/sys_gui batches and the empty-name compare differ. difftest UNSUPPORTED (strcmp_i unresolved)
 00a4af60  392  complete; linetraverser_next - traverser walk, gobj_getrect calls and line-coordinate math reproduced semantically; register allocation and block layout differ. difftest FAIL (5/14 valid; opaque outconnect pointers fault in the emulator)
 00a4b140  83  complete; canvas_drawlines - traverser init + sys_gui create-line loop inlined differently. difftest UNSUPPORTED (needs a real PD instance)
