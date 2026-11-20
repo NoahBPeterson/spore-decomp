@@ -19,7 +19,6 @@
 01045a60 92 RemoveVisual(ptr): iteration/erase block differs; 110 vs 121 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045ae0 133 RemoveVisual(key): equal_range erase block differs; 167 vs 171 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045b90 81 RemoveVisualGroup: register allocation differs; 113 vs 121 bytes flags: /O2 /MD /Gy /TP /arch:SSE
-01045c30 55 FilterHelperRemove: condition strength-reduction (sub vs test/cmp); 72 vs 75 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045c80 434 FilterHelperTravelTrail: trail filter loop partially reconstructed; 488 vs 771 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045f90 338 FilterHelperVisited: visited filter vector iteration partially reconstructed; 388 vs 454 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01046160 394 complete; property pump rebuilt end to end (request struct, container walk, per-item handle/property assign) but register allocation and block layout differ throughout; 552 vs 587 bytes; equiv WEAK (no mismatch, coverage limited)

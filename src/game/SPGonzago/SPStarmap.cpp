@@ -1754,15 +1754,24 @@ void cStarMap::ResetTravelTrail()
 void cStarMap::FilterHelperRemove(int filter)
 {
   RemoveVisualGroup(filter, false);
-  if (filter != 0 && filter != 1 && filter == 2 &&
-      this->mRelationshipScreenEffect != 0) {
-    VEffect* eff = this->mRelationshipScreenEffect;
-    eff->Destroy(false);
-    eff = this->mRelationshipScreenEffect;
-    if (eff != 0) {
-      this->mRelationshipScreenEffect = 0;
-      eff->Release();
+  switch (filter) {
+  case 0:
+    return;
+  case 1:
+    return;
+  case 2:
+    if (this->mRelationshipScreenEffect != 0) {
+      VEffect* eff = this->mRelationshipScreenEffect;
+      eff->Destroy(false);
+      eff = this->mRelationshipScreenEffect;
+      if (eff != 0) {
+        this->mRelationshipScreenEffect = 0;
+        eff->Release();
+      }
     }
+    break;
+  default:
+    break;
   }
 }
 

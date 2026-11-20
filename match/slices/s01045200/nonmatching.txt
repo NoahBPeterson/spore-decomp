@@ -10,6 +10,5 @@
 01045a60 103 RemoveVisual(ptr): iteration/erase block differs; 110 vs 121 bytes
 01045ae0 137 RemoveVisual(key): equal_range erase block differs; 167 vs 171 bytes
 01045b90 89 RemoveVisualGroup: register allocation differs; 113 vs 121 bytes
-01045c30 58 FilterHelperRemove: condition strength-reduction (sub vs test/cmp); 72 vs 75 bytes
 01045c80 717 FilterHelperTravelTrail: trail filter loop partially reconstructed; 488 vs 771 bytes
 01045f90 404 FilterHelperVisited: visited filter vector iteration partially reconstructed; 388 vs 454 bytes
