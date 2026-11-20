@@ -5,8 +5,6 @@
 005ce9b0 1609 complete belt-of-circles arc walker (kinds 0/1/2, tangent search); not byte-exact: x87/SSE mix scheduling differs
 005cf110 655 complete nearest-parameter search (coarse scan + bisection); not byte-exact: x87 sum scheduling differs; difftest FAIL is a checker artifact: on the failing input Curve::Eval (0x5d5050) on a soup curve returns without writing its output point, so both sides read their uninitialized stack Vec2 (the original's slot holds leftover P/A values, ours the 0xcc stack fill) and the final ratio differs; all calls, parameters and the bisection result res->x agree
 005cf4f0 487 complete handle extrusion helper; not byte-exact: fabs/sqrt x87 interleave and vec3 copy via int regs differ
-005d13f0 68 CopyElem24: cl puts `last` in a callee-saved reg and picks different home registers; original keeps last in memory and aliases +0xc
-005d1450 63 RelocateElem24Backward: same register-allocation difference (original aliases src+0xc/dst+0xc, keeps bounds in memory)
 005d1f30 1188 ReconstructChain: complete Havok chain rebuild; register/scheduling and frame layout differ from the original (hkRefObj Release/alloc inlined 2x, map lookups via out-of-line find) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d2480 209 per-vertebra update: complete; original builds the hkTransform with a stricter interleave of the identity stores and loads mField1d8 earlier, leaving cl with fewer register moves flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d25c0 286 per-vertebra flex-damping update: complete; original keeps idx/order in ecx/ebx and the map find result in eax, cl here spills one slot and orders the float ops differently flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

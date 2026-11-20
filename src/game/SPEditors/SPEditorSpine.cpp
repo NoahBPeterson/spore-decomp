@@ -332,13 +332,14 @@ struct Sub24 {
 };
 }
 namespace SP {
+struct Vec3_s005d_13f0 {
+  float x, y, z;
+  Vec3_s005d_13f0(const Vec3_s005d_13f0& o) : x(o.x), y(o.y), z(o.z) {}
+};
 struct Elem24 {
   int mA;
-  float mB;
-  float mC;
-  float mD;
+  Vec3_s005d_13f0 mPos;
   Sub24 mSub;
-  Elem24(const Elem24& other) : mA(other.mA), mB(other.mB), mC(other.mC), mD(other.mD), mSub(other.mSub) {}
 };
 }
 namespace SP {
@@ -1836,13 +1837,7 @@ Elem24* CopyElem24(Elem24* first, Elem24* last, Elem24* dest)
 {
   if (first != last) {
     do {
-      if (dest) {
-        dest->mA = first->mA;
-        dest->mB = first->mB;
-        dest->mC = first->mC;
-        dest->mD = first->mD;
-        new ((void*)&dest->mSub) Sub24(first->mSub);
-      }
+      new ((void*)dest) Elem24(*first);
       ++first;
       ++dest;
     } while (first != last);
@@ -1855,16 +1850,15 @@ Elem24* CopyElem24(Elem24* first, Elem24* last, Elem24* dest)
 namespace SP {
 Elem24* RelocateElem24Backward(Elem24* first, Elem24* last, Elem24* dest)
 {
-  if (last == first) return dest;
-  do {
-    --last;
-    --dest;
-    dest->mA = last->mA;
-    dest->mB = last->mB;
-    dest->mC = last->mC;
-    dest->mD = last->mD;
-    dest->mSub = last->mSub;
-  } while (last != first);
+  if (last != first) {
+    do {
+      --last;
+      --dest;
+      dest->mA = last->mA;
+      dest->mPos = last->mPos;
+      dest->mSub = last->mSub;
+    } while (last != first);
+  }
   return dest;
 }
 }  // namespace SP
