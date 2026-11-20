@@ -27,3 +27,4 @@
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ??1LocaleMsg@@UAE@XZ  006306f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?AddPhoto@cSPPlayModePhotoBrowser_s0063_2780@@QAEXIH@Z  00632900  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?FindPhotoByGuid@cSPPlayModePhotoBrowser@@QAEPAUcPlayModePhoto@@I@Z  00630360  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?ResetPhotoMap@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NXZ  00632e40  /O2 /MD /Gy /TP /GS- /Isrc/game/include

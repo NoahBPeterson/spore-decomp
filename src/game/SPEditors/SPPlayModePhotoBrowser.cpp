@@ -1608,14 +1608,17 @@ bool cSPPlayModePhotoBrowser_s0063_2780::SaveThumbnail(void* data)
 // @ 0x00632e40
 bool cSPPlayModePhotoBrowser_s0063_2780::ResetPhotoMap()
 {
+    bool changed = false;
     mPhotoTypeMap.clear();
     uint32_t n = PhotoCountChanged();
     if (n != mPhotoCount) {
+        changed = true;
         mPhotoCount = n;
-        return true;
     }
-    return false;
+    return changed;
 }
+
+
 
 // @ 0x00632e90
 PhotoTypeInfo& PhotoTypeMap::operator[](const uint32_t& key)
