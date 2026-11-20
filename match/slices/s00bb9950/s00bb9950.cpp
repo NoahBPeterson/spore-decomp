@@ -145,7 +145,7 @@ public:
     int HasRare();                                             // 0xbb9c90 (full EAX result)
     void SetBlownUp(bool on);                                  // 0xbb9c40  (bit 0x40)
     bool UpdateSETI();                                         // 0xbb9eb0
-    bool HasMonolith();                                        // 0xbb9fb0
+    int HasMonolith();                                         // 0xbb9fb0
     void* GetSolarSystem();                                    // 0xc8b770
     void SetName(const String16* s);                           // 0xbba4b0
     void* GetCitizenSpecies();                                 // 0xbba500
@@ -574,15 +574,16 @@ setflag:
 // ===========================================================================
 // @ 0x00bb9fb0
 // ===========================================================================
-bool cStarRecord::HasMonolith()
+int cStarRecord::HasMonolith()
 {
     bool t = (mTechLevel == 5);
-    if (((mFlags >> 4) & 1) == 0) {
-        bool r = UpdateSETI() ? t : !t;
+    bool off = ((mFlags >> 4) & 1) != 0;
+    if (!off) {
+        int r = UpdateSETI() ? (int)t : !t;
         if (r)
-            return true;
+            return 1;
     }
-    return false;
+    return 0;
 }
 
 // ===========================================================================
