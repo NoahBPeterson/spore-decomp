@@ -7538,6 +7538,8 @@ void* SL71::v09e70(void* a2, void* a3)
     return self;
 }
 
+extern "C" char g_13ec458[];   // vtables retail relocates here
+extern "C" char g_13eb938[];
 // @ 0x00a09f90
 void SL71::v09f90()
 {
@@ -7553,10 +7555,10 @@ void SL71::v09f90()
     p = *(void**)(self + 0x1c);
     if (p) ((vt_v)vfn(p, 4))(p);
     p = *(void**)(self + 0xc);
-    if (p && (2 < (int)((*(char**)(self + 0x14) - (char*)p) & 0xfffffffeU)))
+    if (2 < (int)((*(char**)(self + 0x14) - (char*)p) & 0xfffffffeU) && p)
         FUN_00f47380(p);
-    *(void**)(self + 4) = (void*)0x13ec458;
-    *(void**)(self + 0) = (void*)0x13eb938;
+    *(void**)(self + 4) = g_13ec458;
+    *(void**)(self + 0) = g_13eb938;
 }
 
 // @ 0x00a0a020
