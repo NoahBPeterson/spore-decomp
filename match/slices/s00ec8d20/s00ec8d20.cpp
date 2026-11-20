@@ -72,10 +72,11 @@ void FUN_00ec8d20(int param_1)
     unsigned u = 0;
     do {
         int* p = *(int**)(param_1 + 4);
-        pair[1] = g_14892a8[u / 4];
+        int v = *(int*)((char*)g_14892a8 + u);
+        pair[1] = v;
         if (p < *(int**)(param_1 + 8)) {
             *(int**)(param_1 + 4) = p + 2;
-            if (p) { p[0] = pair[0]; p[1] = pair[1]; }
+            if (p) { p[0] = pair[0]; p[1] = v; }
         } else {
             ((VecInsert*)param_1)->insert(p, pair);
         }
