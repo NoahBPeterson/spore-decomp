@@ -4300,21 +4300,22 @@ void cSim::FUN_00ef1930(int a, float b)
 }
 
 // @ 0x00ef1990
-int FUN_00ef1990(u32* param_1, u32* param_2, u32* unused)
+struct RecordIter_ef1990 { u32* p; };
+int FUN_00ef1990(RecordIter_ef1990 it, u32* last, u32* unused)
 {
     (void)unused;
     int n = 0;
-    if (param_2 != param_1) {
+    if (last != it.p) {
         do {
             u32* q;
             do {
-                q = param_1;
-                param_1 = q + 0x8e;
+                q = it.p;
+                it.p = q + 0x8e;
                 if ((unsigned char)(*q >> 0x1e) & 1)
                     break;
-            } while ((unsigned char)(*param_1 >> 0x1f) & 1);
+            } while ((unsigned char)(*it.p >> 0x1f) & 1);
             n++;
-        } while (param_2 != param_1);
+        } while (last != it.p);
     }
     return n;
 }
