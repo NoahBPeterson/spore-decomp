@@ -7,3 +7,4 @@ slices/s00928b00/s00928b00.cpp  ?FUN_00928f00@BigFile@Allocator@EA@@QAEXPA_WIH@Z
 slices/s00928b00/s00928b00.cpp  ?FUN_009290a0@BigFile@Allocator@EA@@QAEXXZ  009290a0  /O2 /MD /Gy /TP
 slices/s00928b00/s00928b00.cpp  ?FUN_00929450@BigFile@Allocator@EA@@QAEXXZ  00929450  /O2 /MD /Gy /TP
 slices/s00928b00/s00928b00.cpp  ?FUN_00929290@BigFile@Allocator@EA@@QAEDXZ  00929290  /O2 /MD /Gy /TP
+slices/s00928b00/s00928b00.cpp  ?MallocAligned@StackAllocator@Allocator@EA@@QAEHHHHD@Z  00928d40  /O2 /MD /Gy /TP

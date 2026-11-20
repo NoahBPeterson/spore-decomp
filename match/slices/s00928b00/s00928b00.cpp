@@ -155,13 +155,14 @@ bool StackAllocator::AllocateNewBlock(uint32 size)
 // @ 0x00928d40
 int StackAllocator::MallocAligned(int size, int align, int offset, char flag)
 {
-    uint32 mask = (uint32)(align - 1) | 7;
+    uint32 alignment = ((uint32)(align - 1) | 7) + 1;
     uint32 sz = (uint32)(size + 7) & 0xfffffff8;
-    int p = (int)(((uint32)mpCurrentObjectBegin + offset + mask) & ~mask) - offset;
+    int p = (int)(((uint32)mpCurrentObjectBegin + offset + alignment - 1) & ~(alignment - 1)) - offset;
     if (flag != 0 && (char*)(p + sz) > mpCurrentBlockEnd) {
-        if (!AllocateNewBlock(sz + mask + 1 + offset))
+        if (AllocateNewBlock(sz + alignment + offset))
+            p = (int)(((uint32)mpCurrentObjectBegin + offset + alignment - 1) & ~(alignment - 1)) - offset;
+        else
             return 0;
-        p = (int)(((uint32)mpCurrentObjectBegin + offset + mask) & ~mask) - offset;
     }
     mpCurrentObjectBegin = (char*)(p + sz);
     mpCurrentObjectEnd = (char*)(p + sz);
