@@ -8,3 +8,4 @@
 ../src/game/SPAudio/SPAudioEventModifier.cpp  ?ReadTuningValues@cEventModifier_s00a3_9ce0@Audio@SP@@QAEXPBUResourceKey@@@Z  00a39f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEventModifier.cpp  ??1cEventModifierPrimitive_s00a3_8e40@Audio@SP@@UAE@XZ  00a39230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/SPAudioEventModifier.cpp  ??1cEventModifier_s00a3_8e40@Audio@SP@@UAE@XZ  00a39710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioEventModifier.cpp  ?DoFreeNodes@SoundHashTable@Audio@SP@@QAEXPAPAXI@Z  00a39c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
