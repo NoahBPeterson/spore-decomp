@@ -3,3 +3,4 @@
 ../src/game/SPEditors/SPEditorBlockAbilities.cpp  ?erase@?$vector_s0059_e360__b@VcSPUILayout@SP@@@eastl@@QAEPAVcSPUILayout@SP@@PAV34@0@Z  0059f4a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorBlockAbilities.cpp  ?ScalarDeletingDtor@cSPEditorBlockAbilities_s0059_f510@@QAEPAXE@Z  0059fa50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorBlockAbilities.cpp  ??0VehicleAbilities@@QAE@H@Z  0059f9e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorBlockAbilities.cpp  ?resize@UILayoutVector@@QAEXI@Z  0059f950  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
