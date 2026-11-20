@@ -3,14 +3,12 @@
 
 usage: offsets.py BASE_REF HEAD_REF [--json OUT]
        prints a summary and one line per file whose count changed; exit 1 if a file that exists on the base branch
-       now has more of them.
+       now has more of them (the workflow only turns that into a warning).
 
 Readable source names members (`mpOSData = new (mem) Win32Clipboard(this);`), it does not cast and add a byte
-offset (`*(void**)((char*)this + 8) = ...`). The code base still has tens of thousands of these, so instead of a
-ban this is a ratchet over the files a pull request changes (decision 2026-11-20):
-  - a file that exists on the base branch may not gain any (exit 1; a maintainer's `offsets-approved` label
-    overrides it when there really is no member to name);
-  - a new file that has some only gets a warning;
+offset (`*(void**)((char*)this + 8) = ...`). More matching functions matter far more than fewer offsets, so
+nothing fails on them (decision 2026-11-20):
+  - a file that gains some, or a new file that has some, gets a warning annotation;
   - a pull request that lowers the total and raises no file counts as a cleanup, which the "Require a new
     byte-exact function" step accepts in place of a new match (every function that matched must still match).
 
@@ -51,6 +49,22 @@ _STRIP = re.compile(r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])
 def count(text):
     text = _STRIP.sub(lambda m: " " if m.group(0)[0] in "/" else '""', text)
     return sum(len(p.findall(text)) for p in PATTERNS)
+
+
+# A function's source starts at its `// @ 0x<address>` marker line and runs to the next marker.
+_MARKER = re.compile(r"^[ \t]*//[ \t]*@[ \t]*0x([0-9a-fA-F]{6,8})\b", re.M)
+
+
+def per_function(text):
+    """{address: byte offsets in that function's source} for every function marker in `text`. Text before the first
+    marker (includes, struct declarations) belongs to no function."""
+    out = {}
+    ms = list(_MARKER.finditer(text))
+    for i, m in enumerate(ms):
+        end = ms[i + 1].start() if i + 1 < len(ms) else len(text)
+        va = int(m.group(1), 16)
+        out[va] = out.get(va, 0) + count(text[m.end():end])
+    return out
 
 
 def git(*args):
