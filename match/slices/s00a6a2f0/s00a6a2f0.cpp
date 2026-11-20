@@ -583,15 +583,16 @@ bool HashKeyMap::HasKey(EString* target, unsigned key)
 // @ 0x00a6ae70
 void RefVec::resize(unsigned n)
 {
-    int have = (int)(e - b);
-    if (n > (unsigned)have) {
+    unsigned have = (unsigned)(e - b);
+    if (n > have) {
         RefObject* zero = 0;
         insert_n(e, n - have, &zero);
     } else {
-        RefObject** cut = b + n;
-        RefObject** res = (RefObject**)MoveBack12(e, e, cut);
+        RefObject** first = b + n;
+        RefObject** last = e;
+        RefObject** res = (RefObject**)MoveBack12(last, e, first);
         DestroyRange(res, e);
-        e -= e - cut;
+        e -= last - first;
     }
 }
 

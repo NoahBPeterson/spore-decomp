@@ -6,3 +6,4 @@ slices/s00a6a2f0/s00a6a2f0.cpp  ?FreeRecs58@@YAPADPAD00@Z  00a6a610  /O2 /MD /Gy
 slices/s00a6a2f0/s00a6a2f0.cpp  ?FreeRecs58Std@@YGXII@Z  00a6a940  /O2 /MD /Gy /EHsc /TP
 slices/s00a6a2f0/s00a6a2f0.cpp  ??0Rec84B@@QAE@ABU0@@Z  00a6ac70  /O2 /MD /Gy /EHsc /TP
 slices/s00a6a2f0/s00a6a2f0.cpp  ?resize@Vec8@@QAEXI@Z  00a6b080  /O2 /MD /Gy /EHsc /TP
+slices/s00a6a2f0/s00a6a2f0.cpp  ?resize@RefVec@@QAEXI@Z  00a6ae70  /O2 /MD /Gy /EHsc /TP
