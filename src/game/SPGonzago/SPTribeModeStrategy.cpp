@@ -1788,6 +1788,7 @@ void FUN_00cde2f0();
 extern "C" void FUN_00cd7d10(); extern "C" void FUN_00d3d420(); extern "C" void FUN_00accbb0();
 extern "C" void FUN_00b1e500(); extern "C" void FUN_00b1e520(); extern "C" void FUN_00cdb110();
 extern "C" void FUN_00accc30(); extern "C" void FUN_00cdb620();
+extern "C" char g_18c6d19[];   // 0x018c6d19
 extern char DAT_01654c02;
 __forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
 inline float MinF(float a, float b)
@@ -6216,26 +6217,33 @@ u32 cTribeModeStrategy_s00cd_ab10::FUN_00cdba50()
 }
 
 // @ 0x00cdba90
+struct PtrVecView_s00cd_ba90 {       // the vector at PtrVec+4
+    void** mpBegin;
+    void** mpEnd;
+    u32 size() const { return (u32)(mpEnd - mpBegin); }
+    void* operator[](u32 i) const { return mpBegin[i]; }
+};
 void cTribeModeStrategy_s00cd_ab10::FUN_00cdba90()
 {
     void* ticker = FUN_00b3d330();
     void* noun = FUN_00b3d300();
-    PtrVec* vec = (PtrVec*)MOPS(noun)->FUN_00b21340((void*)0x00cd7d10,
-                                                     (void*)0x00d3d420,
-                                                     (void*)0x00accbb0,
-                                                     (void*)0x00b1e500,
-                                                     (void*)0x018c6d19);
-    void*** pbegin = &vec->mpBegin;
-    s32 count = (s32)((u8*)vec->mpEnd - (u8*)vec->mpBegin) >> 2;
-    for (u32 i = 0; i < (u32)count; i++) {
-        u32 item = (u32)(*pbegin)[i];
-        void* planner = *(void**)(item + 0x290);
+    PtrVec* vec = (PtrVec*)MOPS(noun)->FUN_00b21340((void*)FUN_00cd7d10,
+                                                     (void*)FUN_00d3d420,
+                                                     (void*)FUN_00accbb0,
+                                                     (void*)FUN_00b1e500,
+                                                     (void*)g_18c6d19);
+    const PtrVecView_s00cd_ba90& items = *(const PtrVecView_s00cd_ba90*)&vec->mpBegin;
+    u32 count = items.size();
+    for (u32 i = 0; i < count; i++) {
+        void* planner = *(void**)((char*)items[i] + 0x290);
         if (planner != 0) {
             ((void (__thiscall*)(void*, void*))VT(ticker)[0x54 / 4])(ticker, planner);
             MOPS(planner)->FUN_00ce0a20();
         }
     }
 }
+
+
 
 // @ 0x00cdbb10
 int SP::cTribeModeStrategy_s00cd_bb10::FUN_00cdbb10()
