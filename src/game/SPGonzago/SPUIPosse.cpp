@@ -2053,16 +2053,14 @@ void __fastcall FUN_00e23d50(void* self, void* dummy)
 void __fastcall FUN_00e23de0(void* self, void* dummy)
 {
   (void)dummy;
-  void* end = *(void**)((char*)self + 0x10);
-  void* begin = *(void**)((char*)self + 0xc);
-  while ((u32)end > (u32)begin) {
-    end = (char*)end - 4;
-    void* item = *(void**)end;
-    if (((TFi)(*(void***)item)[0xbc / 4])(item) == 3) {
-      ((TFv)(*(void***)item)[0xa8 / 4])(item);
-    } else if (((TFi)(*(void***)item)[0xbc / 4])(item) == 4) {
-      ((TFv)(*(void***)item)[0xa8 / 4])(item);
+  void** end = *(void***)((char*)self + 0x10);
+  void** begin = *(void***)((char*)self + 0xc);
+  while (end > begin) {
+    if (((TFi)(*(void***)end[-1])[0xbc / 4])(end[-1]) == 3 ||
+        ((TFi)(*(void***)end[-1])[0xbc / 4])(end[-1]) == 4) {
+      ((TFv)(*(void***)end[-1])[0xa8 / 4])(end[-1]);
     }
+    --end;
   }
 }
 
