@@ -379,9 +379,11 @@ struct SpVectorPtr {
       FUN_00f47380(mpBegin);
   }
 };
+extern "C" void  __cdecl operator_delete_(void*);          // 0x00f47380
 class cScenarioTutorialsList {
 public:
   ~cScenarioTutorialsList();                              // 0x00f01d60
+  static void operator delete(void* p) { operator_delete_(p); }
   uint32_t pad00;                                         // +0x00
   AutoRefCount<cRefCounted> m04;                          // +0x04
   AutoRefCount<cRefCounted> m08;                          // +0x08
@@ -555,7 +557,7 @@ struct SW {                       // EA::Stopwatch at +0xb0
     void ctor(int, int);          // 0x93a560
     void SetTimeLimit(int, int);  // 0x93a480
 };
-struct X { void run(); };
+
 struct V4_s00f0_2160 {
     void* p0;
     int   f4;
@@ -1922,11 +1924,7 @@ PL* PL::f02d30(int flag)
 // @ 0x00f02dd0
 void __cdecl destroy_global_2dd0()
 {
-    X* p = (X*)g_mgr;
-    if (p) {
-        p->run();
-        operator_delete_(p);
-    }
+    delete (cScenarioTutorialsList*)g_mgr;
     g_mgr = 0;
 }
 
