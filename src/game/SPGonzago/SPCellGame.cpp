@@ -8377,8 +8377,10 @@ void FUN_00e72fb0(int* param_1, int param_2)
 // @ 0x00e730d0
 bool FUN_00e730d0(int param_1, int param_2, int param_3)
 {
-    if (!gspCellGame_s00e7_2430->mCells.GetChecked(param_1)) return false;
-    int other = (int)gspCellGame_s00e7_2430->mCells.GetChecked(param_2);
+    ObjectPool_s00e7_2430* cells = &gspCellGame_s00e7_2430->mCells;
+    if (!cells->GetChecked(param_1)) return false;
+    cells = &gspCellGame_s00e7_2430->mCells;
+    int other = (int)cells->GetChecked(param_2);
     if (!other) return false;
     if (FUN_00e4ff50(other) == 1) {
         FUN_00e72fb0((int*)other, param_3);

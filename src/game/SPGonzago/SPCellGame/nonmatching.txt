@@ -116,7 +116,6 @@
 00e72c80 215 enter-cell-mode trigger: complete; pool call-site ordering and register allocation differ
 00e72e70 58 ability-record writer (tag 0x27): complete; tag-boolean register choice (EDI vs EDX) and thiscall push/add ordering differ
 00e72fb0 8 ability-record writer (tag 0x28): complete; only the add-ecx-offset vs push-arg order at two thiscall sites differs
-00e730d0 14 ability dispatch by element type: complete; only the global-load/arg-load scheduling order at the two GetChecked sites differs
 00e73140 234 area-cast ability: complete; pool call-site ordering and register allocation differ
 00e74a20 1162 complete (16 calls, same order); stack-slot sharing/spill order differs; callees e6d790/e868f0/e4f9d0 are static in the original (esi/edi/ecx/xmm0 register conventions) and declared cdecl here
 00e76880 152 per-frame leak/drip updater: the original receives its subject (the cell) in ESI and keeps it there across the whole body (byte 0x1ac, the resource scan, and the FUN_00e68000/FUN_00e76660 calls) -- a custom register ABI for a same-TU static helper that cannot be reproduced when the function is compiled alone (subject becomes a stack argument)
