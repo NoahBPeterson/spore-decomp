@@ -1,7 +1,7 @@
 004aa760 ?Insert@VecOP@@QAEXPAUOrientedPoint_s004a_a760@@ABU2@@Z  # VecOP::Insert migrated from s004aa760 (verbatim, slice spelling)
 004aaac0 ?Insert@VecTK@@QAEXPAUTransformKey@@ABU2@@Z  # VecTK::Insert migrated from s004aa760 (verbatim, slice spelling)
 004aae30 ?Insert@VecM33@@QAEXPAUcSPMatrix3_s004a_a760@@ABU2@@Z  # VecM33::Insert migrated from s004aa760 (verbatim, slice spelling)
-004ab130 ?PushFront@DequeBase@@QAEPAXPAX@Z  # DequeBase::PushFront migrated from s004aa760 (verbatim, slice spelling)
+004ab130 ?PushFront@DequeBase@@QAEXPAX@Z  # DequeBase::PushFront migrated from s004aa760 (verbatim, slice spelling)
 004ab210 ?Inc@DequeIt@@QAEPAU1@XZ  # DequeIt::Inc migrated from s004aa760 (verbatim, slice spelling)
 004ab280 ?CopyM36Range@@YAPAUM36@@PAU1@00@Z  # CopyM36Range migrated from s004aa760 (verbatim, slice spelling)
 004ab320 ?AllocNode@DequeBase@@QAEPAXXZ  # DequeBase::AllocNode migrated from s004aa760 (verbatim, slice spelling)
