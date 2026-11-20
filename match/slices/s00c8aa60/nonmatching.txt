@@ -5,7 +5,6 @@
 00c8b0a0  149  erase is thiscall on vector at +0xc0 with [begin,end); 64-bit id queried twice; block layout differs
 00c8b2e0  52   release handles: original does two derefs (this = *(void**)(self+0x9c), vtable = *this, method = vtable[0x16c], handle pushed as arg); fixed. equiv WEAK 229 valid no mismatch, 73.3% cov (refcount>1 / +0xa0 branches uncovered)
 00c8b450  16   cl folded the range test to add/cmp/setle
-00c8b640  10   cl reordered the independent pointer stores in the ctor
 00c8b6d0  116  00801920 called with ECX=param and no stack args; call/erase argument sharing differs
 00c8b040  41   optimization disabled to keep call instead of tail jmp; frame setup differs
 00c8aa60  733  cSpatialObjectView::UpdateEffects (/O2 /MD /Gy /EHsc /TP /arch=SSE): complete effect-list update loop (both the enabled and disabled-mode paths, resolve/rebuild XformMsg, compaction erase). equiv WEAK 228 valid 3.8% coverage (fault(read) 165, fake-arity 7) -- the harness cannot build a layout-correct cSpatialObjectView (type is not in the dev PDB), so the original is rarely entered. Not byte-exact: size 789 vs 712, cl keeps the XformMsg matrix/float staging in x87 where the original uses movss/xmm (precedent s005b94b0, s006e6100), plus extra spill/register pressure in the compaction loop.
