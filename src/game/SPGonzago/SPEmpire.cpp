@@ -72,7 +72,11 @@ struct Mission {
 // ---- items of slice s00c308b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const char DAT_01572b60[];   // 0x01572b60
 typedef unsigned int uint;
-struct Vec3 { float x, y, z; };
+struct Vec3 {
+    float x, y, z;
+    Vec3(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
+};
 struct Obj;
 struct MsgObj;
 Obj* __cdecl SP_NounManager();                       // 0x00b3d300
@@ -1422,15 +1426,15 @@ bool cEmpire::FUN_00c31470(cCivData* c)
 // @ 0x00c314a0
 void __fastcall cEmpireWarnPlayer(cEmpire* self)
 {
-    if (!SP_NounManager()->m_f67d90()->m_c7a770(self->mEmpireID)) {
-        SP_NounManager()->m_f67d90()->m_c7bba0(self->mEmpireID);
-        Vec3* c = cCivData_GetCities((cCivData*)SP_FUN_01021240());
-        cCivData* city = cEmpireFindNearestCity(self, *c);
-        Obj* sr = (Obj*)SP_StarManager()->m_bb5ae0((int)city);
-        Obj* ctx = sr->m_ce6950();
-        SP_CommManager()->m_aeb3e0((int)self->mEmpireID, (int)city, (int)ctx,
-                                    0x95bbbbfc, 0xde4b97ed, 1, 0, 0);
-    }
+    if (SP_NounManager()->m_f67d90()->m_c7a770(self->mEmpireID))
+        return;
+    uint id0 = self->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7bba0(id0);
+    cCivData* city = cEmpireFindNearestCity(self, *cCivData_GetCities((cCivData*)SP_FUN_01021240()));
+    Obj* sr = (Obj*)SP_StarManager()->m_bb5ae0((int)city);
+    int id = (int)self->mEmpireID;
+    SP_CommManager()->m_aeb3e0(id, (int)city, (int)sr->m_ce6950(),
+                                0x95bbbbfc, 0xde4b97ed, 1, 0, 0);
 }
 
 // @ 0x00c31550
@@ -1838,7 +1842,7 @@ void** __cdecl FUN_00c32030(void** pa, void** pb, void** pc, float px, float py,
   float* cA = (float*)FUN_005c65e0(*pa);
   float f1 = cA[0], f2 = cA[1], f3 = cA[2];
   float* cB = (float*)FUN_005c65e0(cb0);
-  Vec3 pos = {px, py, pz};
+  Vec3 pos(px, py, pz);
   if (((cB[2] - pz) * (cB[2] - pz) + (cB[1] - py) * (cB[1] - py)) + (cB[0] - px) * (cB[0] - px) <=
       ((f3 - pz) * (f3 - pz) + (f2 - py) * (f2 - py)) + (f1 - px) * (f1 - px)) {
     if (FUN_00c31080(&pos, 0, *pa, *pc)) return pa;
