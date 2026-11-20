@@ -545,17 +545,12 @@ void FUN_00ec4b10(void* first, void* last)
 // @ 0x00ec4b50  -- sort_heap
 void FUN_00ec4b50(Rec* first, Rec* last)
 {
-    int n = (int)(last - first);
-    if (n < 2) return;
-    Rec* end = last - 1;
-    while (true)
+    int n;
+    for (; (n = (int)(last - first)) > 1; --last)
     {
-        Rec v = *end;
-        *end = *first;
+        Rec v = last[-1];
+        last[-1] = *first;
         FUN_00ec4900(first, 0, n - 1, 0, v.key, v.value);
-        --end;
-        n = (int)(end - first) + 1;
-        if (n < 2) break;
     }
 }
 
