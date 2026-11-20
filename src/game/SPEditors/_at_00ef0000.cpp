@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 // addresses retail relocates here, named so the build relocates them too
+extern "C" char g_11966ed[];
 extern "C" char g_13eb384[];
 extern "C" char g_13eb394[];
 extern "C" char g_13eb938[];
@@ -8090,7 +8091,7 @@ int __cdecl FUN_00efcd90()
     void* a = (void*)((FN0_i)((*(void***)app)[0x14]))((void*)app);
     void* b = (void*)((FN0_i)((*(void***)a)[0xe]))(a);
     if (b != 0) {
-        int o = ((FN0_i)((*(void***)b)[3]))(b);
+        int o = ((FN1_pi)((*(void***)b)[3]))(b, (int)g_11966ed);
         if (o != 0 && (*(char*)(o + 0x319) == 0 || *(char*)(o + 0x11) != 0))
             return 1;
     }
