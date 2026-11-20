@@ -3351,9 +3351,11 @@ uint Sim::FUN_00b72b60(V3* a, V3* b, float c, Op* obj, char flag, float* outDist
 // @ 0x00b72d80
 HIt* HIt::advance(HIt* out, int)
 {
-    out->mpNode = mpNode;
+    HashNode* node = mpNode;
+    out->mpNode = node;
+    HashNode* next = node->mpNext;
     out->mpBucket = mpBucket;
-    mpNode = mpNode->mpNext;
+    mpNode = next;
     while (!mpNode) {
         ++mpBucket;
         mpNode = *mpBucket;
