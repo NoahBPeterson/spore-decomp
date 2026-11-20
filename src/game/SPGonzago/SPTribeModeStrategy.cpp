@@ -2908,7 +2908,7 @@ struct CActTarget {
 struct CTerrain {
     char pad[0x1150];
     int mCityHallPos[3];                                         // +0x1150
-    unsigned char F772c0(int key);       // 0x00c772c0
+    unsigned char HasFlag(int key);       // 0x00c772c0
     void F77300(int a);                  // 0x00c77300
     void F77380(int key, int* out);      // 0x00c77380
     void F77bf0(int a);                  // 0x00c77bf0
@@ -2994,7 +2994,7 @@ struct TM {
     void F_cd43c0(void* a);
     bool F_cd4490();
     unsigned int F_cd4460(int a);
-    unsigned int F_cd44a0();
+    bool F_cd44a0();
     unsigned int F_cd44e0(void* a, void* b);
     // PostTerrainAction is a free cdecl function (see below).
     void F_cd3e60();
@@ -4298,7 +4298,7 @@ unsigned int TM::F_cd4460(int a)
 {
     CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
     if (s != 0) {
-        if (s->F772c0(a))
+        if (s->HasFlag(a))
             return 1;
     }
     return 0;
@@ -4311,14 +4311,11 @@ bool TM::F_cd4490()
 }
 
 // @ 0x00cd44a0
-unsigned int TM::F_cd44a0()
+bool TM::F_cd44a0()
 {
     CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
-    if (s != 0) {
-        if (s->F772c0(0x056d1871))
-            return 0;
-    }
-    return 1;
+    int hasKey = s != 0 && s->HasFlag(0x056d1871);
+    return (char)hasKey == 0;
 }
 
 // @ 0x00cd44e0
