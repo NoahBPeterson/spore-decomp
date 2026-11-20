@@ -2890,7 +2890,7 @@ public:
     uint32_t  FUN_00deefb0(uint32_t key);
     void      FUN_00dee9a0(float a, float b);
     void      FUN_00dee770(uint32_t id, void* refObj);
-    void      FUN_00dee800(uint32_t id);
+    void      FUN_00dee800(uint32_t id, uint32_t imageId);
     char      FUN_00dee450(int msg, void* ctx);
     char      FUN_00def050(void* nameObj);
 };
@@ -13746,21 +13746,24 @@ void SP::GalaxyUI::FUN_00dee770(uint32_t id, void* refObj)
         ((VF0)(*(void***)res)[1])(res);    // Release
 }
 
+struct ImageRef_s00dee800 {
+    void* mpImage;
+    ImageRef_s00dee800() : mpImage(0) {}
+    ~ImageRef_s00dee800() { if (mpImage) ((VF0)(*(void***)mpImage)[1])(mpImage); }
+};
 // @ 0x00dee800
-void SP::GalaxyUI::FUN_00dee800(uint32_t id)
+void SP::GalaxyUI::FUN_00dee800(uint32_t id, uint32_t imageId)
 {
     void* w = mLayout.FindWindowByID(id, 1);
     if (w == 0) return;
-    void** wvt = *(void***)w;
-    void*  d   = ((VFP)wvt[0xa8 / 4])(w);
+    void* d = ((VFP)(*(void***)w)[0xa8 / 4])(w);
     if (d == 0) return;
-    void** dvt = *(void***)d;
-    void*  obj = ((VFP1)dvt[0x0c / 4])(d, 0x53eb526);
+    void* obj = ((VFP1)(*(void***)d)[0x0c / 4])(d, 0x53eb526);
     if (obj == 0) return;
-    void*  res = 0;
-    CreateImageFromResource2((void*)(size_t)id, &res, 0, -1, -1);
-    ((UIDrawable*)obj)->SetImageIcon(0, res);
-    ((VF0)wvt[0x90 / 4])(w);
+    ImageRef_s00dee800 image;
+    CreateImageFromResource2((void*)(size_t)imageId, &image.mpImage, 0, -1, -1);
+    ((UIDrawable*)obj)->SetImageIcon(0, image.mpImage);
+    ((VF0)(*(void***)w)[0x90 / 4])(w);
 }
 
 // @ 0x00dee890
