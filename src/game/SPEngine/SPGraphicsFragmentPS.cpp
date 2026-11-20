@@ -285,7 +285,15 @@ extern PSEntry* g_curPS;         // 0x01619760
 extern StackAlloc g_stackAlloc;  // 0x0161fda4
 extern D3DDevice* g_device;      // 0x016f89d0
 extern IPixelShader* g_activePS; // 0x016f89cc
-struct IntVec { uint32_t* mpBegin; uint32_t* mpEnd; };
+struct IntVec {
+  uint32_t* mpBegin; uint32_t* mpEnd;
+  uint32_t* erase(uint32_t* first, uint32_t* last)
+  {
+    memcpy(first, last, (unsigned)((char*)mpEnd - (char*)last));
+    mpEnd -= (last - first);
+    return first;
+  }
+};
 extern IntVec g_vecA;            // 0x01619878
 extern IntVec g_vecB;            // 0x0161988c
 int __cdecl BinaryFindPixelShader(const char* key, PSEntry* base, int n);   // 0x006fdab0
@@ -936,17 +944,8 @@ void Vec28::PushBack()
 // @ 0x006fb150
 void RegisterShaderTable()
 {
-  uint32_t* aBegin = *(uint32_t**)0x1619878;
-  uint32_t* aEnd   = *(uint32_t**)0x161987c;
-  memcpy(aBegin, aEnd, 0);
-  const int removedA = (int)(aEnd - aBegin);
-  *(uint32_t**)0x161987c = aEnd - removedA;
-
-  uint32_t* bBegin = *(uint32_t**)0x161988c;
-  uint32_t* bEnd   = *(uint32_t**)0x1619890;
-  memcpy(bBegin, bEnd, 0);
-  const int removedB = (int)(bEnd - bBegin);
-  *(uint32_t**)0x1619890 = bEnd - removedB;
+  g_vecA.erase(g_vecA.mpBegin, g_vecA.mpEnd);
+  g_vecB.erase(g_vecB.mpBegin, g_vecB.mpEnd);
 }
 
 // @ 0x006fb1b0
