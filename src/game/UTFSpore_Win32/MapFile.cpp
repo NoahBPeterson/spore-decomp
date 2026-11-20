@@ -283,12 +283,11 @@ u32* LowerBoundPair(u32* first, u32* last, const u32* key)
     while (n > 0) {
         int half = n >> 1;
         u32* mid = (u32*)(base + (half << 4));
-        if (key[1] < mid[1] || (key[1] == mid[1] && key[0] < mid[0]))
-            n = half;
-        else {
+        if (!(*(const unsigned __int64*)key < *(const unsigned __int64*)mid)) {
             base = (u8*)mid + 0x10;
             n += -half - 1;
-        }
+        } else
+            n = half;
     }
     return (u32*)base;
 }
