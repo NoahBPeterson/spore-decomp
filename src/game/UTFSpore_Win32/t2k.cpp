@@ -129,33 +129,28 @@ static void T2K_NewTransformationInternal(char* t, int* m, int arg, int x, int y
 // @ 0x008bfdb0
 void T2K_TransformXFunits(void* t, short units, int* outScaled, int* outRounded)
 {
-    int scaled = util_FixMul((int)units << 16, I32(t, 0x138));
-    int rounded = 0;
+    int x, y = 0;
+    x = util_FixMul((int)units << 16, I32(t, 0x138));
     if (I32(t, 0x1c) == 0) {
-        int a = util_FixMul(I32(t, 8), scaled);
-        rounded = util_FixMul(I32(t, 0x10), scaled);
-        *outScaled = a;
-        *outRounded = rounded;
-    } else {
-        *outScaled = scaled;
-        *outRounded = rounded;
+        y = x;
+        x = util_FixMul(I32(t, 8), x);
+        y = util_FixMul(I32(t, 0x10), y);
     }
+    *outScaled = x;
+    *outRounded = y;
 }
 
 // @ 0x008bfe10
 void T2K_TransformYFunits(void* t, short units, int* outScaled, int* outRounded)
 {
-    int scaled = util_FixMul((int)units << 16, I32(t, 0x13c));
-    int rounded = 0;
+    int x = 0, y;
+    y = util_FixMul((int)units << 16, I32(t, 0x13c));
     if (I32(t, 0x1c) == 0) {
-        int a = util_FixMul(I32(t, 0xc), scaled);
-        rounded = util_FixMul(I32(t, 0x14), scaled);
-        *outScaled = a;
-        *outRounded = rounded;
-    } else {
-        *outScaled = rounded;
-        *outRounded = scaled;
+        x = util_FixMul(I32(t, 0xc), y);
+        y = util_FixMul(I32(t, 0x14), y);
     }
+    *outScaled = x;
+    *outRounded = y;
 }
 
 // @ 0x008bfe80

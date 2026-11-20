@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGameCameraController.cpp  ??0Str8@@QAA@HPBDZZ  00472f50  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

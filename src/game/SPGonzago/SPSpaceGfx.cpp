@@ -1509,23 +1509,32 @@ void cSPSpaceGfx::ShutdownForGame()
     FUN_007c3ba0((void*)0x15b7b2c);
 }
 
+struct ColonyModelRef;
+struct ColonyModelWorld {
+    PV16 PV16 PV16 PV16 PV16 PV8 PV2 PV                 // slots 0..90
+    virtual void RemoveModel(ColonyModelRef* model, int flags);   // +0x16c
+};
+struct ColonyModelRef {
+    ColonyModelWorld* mpWorld;                          // +0x00
+};
+
 // @ 0x01037700
 void cSPSpaceGfx::AllianceGraphCreate()
 {
-    RBNode* pNode = (RBNode*)mColonyModelMap.mpBegin;
     RBNode* pHead = (RBNode*)&mColonyModelMap.mpHead;
-    while (pNode != pHead) {
-        ((cEffectFull*)pNode->mpValue)->_v16c(0);
-        pNode = (RBNode*)RBTreeIncrement(pNode);
+    for (RBNode* pNode = (RBNode*)mColonyModelMap.mpBegin; pNode != pHead; pNode = (RBNode*)RBTreeIncrement(pNode)) {
+        ColonyModelRef* pModel = (ColonyModelRef*)pNode->mpValue;
+        pModel->mpWorld->RemoveModel(pModel, 0);
     }
 
-    mColonyModelMap.DoNukeSubtree((RBNode*)mColonyModelMap.mpRoot);
-    void* head = (void*)&mColonyModelMap.mpHead;
-    mColonyModelMap.mpRoot = 0;
-    mColonyModelMap.mb10 = 0;
-    mColonyModelMap.mp14 = 0;
-    mColonyModelMap.mpBegin = head;
-    mColonyModelMap.mpHead = head;
+    ColonyMap& map = mColonyModelMap;
+    map.DoNukeSubtree((RBNode*)map.mpRoot);
+    map.mpRoot = 0;
+    map.mb10 = 0;
+    map.mp14 = 0;
+    map.mpBegin = &map.mpHead;
+    map.mpHead = &map.mpHead;
+    mbColonyMapIsDirty = false;
 }
 
 // @ 0x01037760

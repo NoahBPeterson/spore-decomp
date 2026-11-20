@@ -243,16 +243,17 @@ void FUN_00e56c30(float tile, float* in, int* outA, int* outB) {
 }
 
 // @ 0x00e56d40
-void FUN_00e56d40(float* out, float* in) {
+struct CellVec3 { float x, y, z; };
+CellVec3 FUN_00e56d40(float* in) {
   int l4, l8;
   FUN_00e56c30(*(float*)(G + 4), in, &l4, &l8);
-  int idx = l8 * 0x80 + l4;
-  char* g = G;
-  float* tbl = *(float**)(*(int*)g + 0x18);
-  float scale = *(float*)(g + 8);
-  out[0] = tbl[idx * 3] * scale;
-  out[1] = tbl[idx * 3 + 1] * scale;
-  out[2] = scale * 0.0f;
+  const CellVec3& v = (*(CellVec3**)(*(int*)G + 0x18))[l8 * 0x80 + l4];
+  float scale = *(float*)(G + 8);
+  CellVec3 r;
+  r.x = v.x * scale;
+  r.y = v.y * scale;
+  r.z = scale * 0.0f;
+  return r;
 }
 
 // @ 0x00e56dc0

@@ -1337,20 +1337,20 @@ void EA::Internet::HTTPClient::SetNotificationTarget(void (__cdecl *target)(void
 {
     int self = (int)this;
     void* old = *(void**)(self + 0x24);
-    if (old == target) {
+    if (old != target) {
+        if (old != 0) {
+            typedef void (__cdecl* Fn)(void*, int, unsigned, int, int);
+            ((Fn)old)(*(void**)(self + 0x28), self, 0x700af201, 0, 0);
+        }
+        *(void**)(self + 0x24) = target;
         *(void**)(self + 0x28) = ctx;
+        if (target != 0) {
+            typedef void (__cdecl* Fn)(void*, int, unsigned, int, int);
+            ((Fn)target)(ctx, self, 0x700af200, 0, 0);
+        }
         return;
     }
-    if (old != 0) {
-        typedef void (__cdecl* Fn)(void*, int, unsigned, int, int);
-        ((Fn)old)(*(void**)(self + 0x28), self, 0x700af201, 0, 0);
-    }
-    *(void**)(self + 0x24) = target;
     *(void**)(self + 0x28) = ctx;
-    if (target != 0) {
-        typedef void (__cdecl* Fn)(void*, int, unsigned, int, int);
-        ((Fn)target)(ctx, self, 0x700af200, 0, 0);
-    }
 }
 
 // @ 0x009421b0

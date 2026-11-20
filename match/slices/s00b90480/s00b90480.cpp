@@ -226,7 +226,8 @@ bool Cell907F0::F(int param_2, int param_3, int param_4, int param_5)
     int iVar3 = (uint)(*(int*)(param_1 + 0x38) * param_4) / *(uint*)(param_1 + 0x24) +
                 (uint)(*(int*)(param_1 + 0x3c) * param_5) / *(uint*)(param_1 + 0x24) +
                 *(int*)(param_1 + 0x3c) * param_3 + *(int*)(param_1 + 0x48);
-    if ((int)((uint)*(unsigned short*)(*(int*)(param_1 + 0x2c) + iVar3 * 2) - *(int*)(param_1 + 0x40)) < 0)
+    bool below = (((uint)*(unsigned short*)(*(int*)(param_1 + 0x2c) + iVar3 * 2) - *(int*)(param_1 + 0x40)) >> 31 & 1) != 0;
+    if (below)
         *puVar1 = uVar2 | 1;
     float fVar4 = (float)*(unsigned char*)(*(int*)(param_1 + 0x30) + 3 + iVar3 * 4) * 0.3921569f;
     if (fVar4 > *(float*)(param_1 + 0x28))

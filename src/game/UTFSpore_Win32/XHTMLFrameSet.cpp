@@ -36,6 +36,9 @@ extern "C" int g_listNodeOffset;                        // 0x1440aec
 #define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
 struct DqIter {
     char* cur; char* begin; char* end; char** arr;
+    DqIter() {}
+    DqIter(char* c, char* b, char* e, char** a) : cur(c), begin(b), end(e), arr(a) {}
+    DqIter(const DqIter& o) : cur(o.cur), begin(o.begin), end(o.end), arr(o.arr) {}
     DqIter* __thiscall plus_assign(int n);                                  // 0x9964c0
     void __thiscall move_backward(DqIter* first, DqIter* last, DqIter* out);// 0x996b40
     void __thiscall move_forward(DqIter* tmp, DqIter* next, DqIter* e, DqIter* out); // 0x996ad0
@@ -626,8 +629,13 @@ WinXHTML* cXHTMLFrameSet::GetJobInfo(void* key, bool* outFlag)
     char* esi = *(char**)(self + 0x30);
     char* edi = *(char**)(self + 0x38);
     while (a != end) {
-        if (*(void**)a == key)
-            break;
+        if (*(void**)a == key) {
+            WinXHTML* ret = *(WinXHTML**)(a + 4);
+            *outFlag = *(bool*)(a + 8);
+            DqIter res;
+            ((JobDeque*)(self + 0x24))->erase(&res, DqIter(a, esi, ebp, (char**)edi));
+            return ret;
+        }
         a += 0x0c;
         if (a == ebp) {
             esi = *(char**)(edi + 4);
@@ -636,15 +644,7 @@ WinXHTML* cXHTMLFrameSet::GetJobInfo(void* key, bool* outFlag)
             a = esi;
         }
     }
-    if (a == end)
-        return 0;
-    WinXHTML* ret = *(WinXHTML**)(a + 4);
-    *outFlag = *(bool*)(a + 8);
-    DqIter found;
-    found.cur = a; found.begin = esi; found.end = ebp; found.arr = (char**)edi;
-    DqIter res;
-    ((JobDeque*)(self + 0x24))->erase(&res, found);
-    return ret;
+    return 0;
 }
 
 // @ 0x009972a0

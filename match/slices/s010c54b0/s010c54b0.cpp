@@ -7,6 +7,7 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13ef094[];
+extern "C" char g_14a3d14[];
 
 #include "types.h"
 #include <math.h>
@@ -199,7 +200,7 @@ class hkShape
         if (m_memSizeAndFlags != 0) {
             --m_referenceCount;
             if (m_referenceCount == 0)
-                (*(void(__fastcall**)(void*, int))(*(void**)this))(this, 1);
+                destroy(1);
         }
     }
 };
@@ -230,9 +231,9 @@ struct hkTransformShape : hkShape
 void* hkTransformShape::destroy(unsigned int flags)
 {
     hkShape* s = m_shape;
-    *(void**)this = (void*)0x014a3d14;
+    *(void**)this = g_14a3d14;
     s->removeReference();
-    *(void**)this = (void*)0x013ef094;
+    *(void**)this = g_13ef094;
     if ((flags & 1) != 0)
         hkMemory::getInstance()->deallocate(this, m_memSizeAndFlags, HK_MEMORY_CLASS_SHAPE);
     return this;

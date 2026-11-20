@@ -106,12 +106,13 @@ bool StackAllocator_s0092_8b00::AllocateNewBlock(uint32 size)
     void* p = mpCoreAllocationFunction(need, &need, mpCoreFunctionContext);
     if (p != 0) {
         *(void**)p = mpCurrentBlock;
+        char* const end = (char*)p + need;
         char* dst = (char*)p + 8;
         mpCurrentBlock = (Block_s0092_8b00*)p;
-        *((char**)p + 1) = (char*)p + need;
-        mpCurrentBlockEnd = (char*)p + need;
+        *((char**)p + 1) = end;
+        mpCurrentBlockEnd = end;
         if (((uint32)dst & 7) != 0)
-            dst = (char*)(((uint32)p + 0xf) & 0xfffffff8);
+            dst = (char*)(((uint32)dst + 7) & 0xfffffff8);
         if (avail != 0 && dst != 0 && mpCurrentObjectBegin != 0)
             memcpy(dst, mpCurrentObjectBegin, avail);
         mpCurrentObjectBegin = dst;
@@ -168,17 +169,11 @@ StackAllocator_s0092_8b00::StackAllocator_s0092_8b00(void* pBlock, uint32 blockS
     mpCurrentBlockEnd = 0;
     mpCurrentObjectBegin = 0;
     mpCurrentObjectEnd = 0;
-    CoreFreeFn  origFree = free;
-    CoreAllocFn origAlloc = alloc;
-    if (alloc == 0)
-        alloc = &SP_Pool_AllocGlobal;
-    mpCoreAllocationFunction = alloc;
-    if (free == 0)
-        free = &operator_delete__f47410;
-    mpCoreFreeFunction = free;
+    mpCoreAllocationFunction = alloc ? alloc : &SP_Pool_AllocGlobal;
+    mpCoreFreeFunction = free ? free : &operator_delete__f47410;
     mpCoreFunctionContext = 0;
     mpTopBookmark = 0;
     if (blockSize != 0xffffffff)
-        Init((Block_s0092_8b00*)pBlock, blockSize, origAlloc, origFree, ctx);
+        Init((Block_s0092_8b00*)pBlock, blockSize, alloc, free, ctx);
 }
 }}  // namespace EA::Allocator

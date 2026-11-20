@@ -148,9 +148,12 @@ unsigned FUN_00e507d0(float a, float b) {
 // @ 0x00e4fde0
 __declspec(noinline) unsigned FUN_00e4fde0(int kind) {
   switch (kind) {
-    case 1: return 0x77d5cbac;
     case 4: return FNV1_String8("Cell_EatAnimal", 0x811c9dc5, 1);
     case 5: return FNV1_String8("Cell_EatOmnivore", 0x811c9dc5, 1);
+    case 1: return 0x77d5cbac;
+    case 0: return FNV1_String8("Cell_EatPlant", 0x811c9dc5, 1);
+    case 2: return FNV1_String8("Cell_EatPlant", 0x811c9dc5, 1);
+    case 3: return FNV1_String8("Cell_EatPlant", 0x811c9dc5, 1);
     default: return FNV1_String8("Cell_EatPlant", 0x811c9dc5, 1);
   }
 }

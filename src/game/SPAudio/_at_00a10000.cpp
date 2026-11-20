@@ -555,7 +555,9 @@ int Ability::q40(int x)
 // @ 0x00a10d40
 bool Ability::q44(int a, int b, int c)
 {
-    return (childA && childA->q44(a, b, c)) || (childB && childB->q44(a, b, c));
+    IChild* child;
+    return ((child = childA) != 0 && child->q44(a, b, c))
+        || ((child = childB) != 0 && child->q44(a, b, c));
 }
 
 // @ 0x00a10da0

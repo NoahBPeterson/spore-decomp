@@ -9,5 +9,4 @@
 00c63380  392  cSPMissionWar::Init: complete base Init, property bool read, progress reset, owner check, PickPlanet option text and vtable 0x128 finalize. difftest WEAK (235 valid, 52.8% coverage; property/planet helpers opaque)
 00c634a0  174  GetUIShortDescription: complete cached-text fast path, state switch keys, GetText call and out-to-cache assignment. difftest WEAK (145 valid, 36.4% coverage; memcpy import/opaque string helpers)
 00c635c0  374  GetNumCities: complete both branches (noun-manager city filter and target-planet turret filter), including empty-vector -1 and exact helper call order. difftest WEAK (159 valid, 28.6% coverage; city/noun helpers opaque)
-00c63740   90  GetTagString: complete both tag keys, %d formatting, GetNumCities result and negative fallback literal; base fallback retained. difftest WEAK (394 valid, 21.9% coverage; format paths)
 00c637b0  533  event handler: complete 0x2489766/0x248975f/0x2489760/0x3337cbb paths, progress cache, city-destroyed/failure/reward calls and base HandleMessage. difftest WEAK (395 valid, 27.6% coverage; event helpers opaque)

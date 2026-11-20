@@ -8,6 +8,7 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb394[];
+extern "C" char FUN_00623f40[];
 extern "C" char g_13eb938[];
 extern "C" char g_13ec458[];
 extern "C" char g_148d5c4[];
@@ -447,18 +448,21 @@ void cOnlineTab::FUN_00f46ab0(int a2) {
 
 // @ 0x00F46B50
 void* cOnlineTab::FUN_00f46b50() {
-    *(void**)((char*)this + 4) = (void*)0x13eb394;
-    *(void**)((char*)this + 8) = (void*)0x13ec458;
+    *(void* volatile*)((char*)this + 4) = g_13eb394;
+    *(void* volatile*)((char*)this + 8) = g_13ec458;
+    _ReadWriteBarrier();
     *(void**)((char*)this + 0xc) = 0;
-    *(void**)((char*)this + 0) = (void*)0x148d5dc;
-    *(void**)((char*)this + 4) = (void*)0x148d5d4;
-    *(void**)((char*)this + 8) = (void*)0x148d5c4;
+    _ReadWriteBarrier();
+    *(void**)((char*)this + 0) = g_148d5dc;
+    *(void**)((char*)this + 4) = g_148d5d4;
+    *(void**)((char*)this + 8) = g_148d5c4;
 
-    FrameAt(this, 0x10)->FUN_00996cc0((void*)0x623f40);
+    FrameAt(this, 0x10)->FUN_00996cc0(FUN_00623f40);
 
     mpFrame74 = 0;
     mpFrame78 = 0;
     mUrl.mpCapacity = (unsigned int*)&g_1667bae;
+    _ReadWriteBarrier();
     mUrl.mpBegin = (unsigned int*)&g_1667bac;
     mUrl.mpEnd = (unsigned int*)&g_1667bac;
     mpHandler = 0;
@@ -466,6 +470,7 @@ void* cOnlineTab::FUN_00f46b50() {
     mHandlerArg1 = 0;
     mHandlerArg2 = 0;
     mHandlerArg3 = 0;
+    _ReadWriteBarrier();
 
     (*(FnP)Vslot(FrameAt(this, 0x10), 0))(FrameAt(this, 0x10));
     return this;

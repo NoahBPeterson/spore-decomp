@@ -8,6 +8,7 @@
 #include "SP/cPropertyList.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" char g_1486518[];      // vtable of Simulator::cBundleView
 extern float kEffectNearDist;      // 0x01581338
 extern float kOneF;                // 0x01485720  1.0f
 #include <math.h>
@@ -256,10 +257,9 @@ SP::cEffectView* SP::cEffectView::Initialize()
     one.y = kOneF;
     one.z = kOneF;
     mVec = one;                // +0x18
-    m24 = 0x3f6368f1;          // +0x24
-    m28 = 0;                   // +0x28
-    *(void**)this = (void*)kEffectViewVtbl;   // +0x00
-    m2c = 0x5c4fce4c;          // +0x2c
+    struct Key3 { u32 a, b, c; Key3(u32 x, u32 y, u32 z) : a(x), b(y), c(z) {} };
+    *(void**)this = g_1486518;   // +0x00
+    *(Key3*)&m24 = Key3(0x3f6368f1, 0, 0x5c4fce4c);   // +0x24
     m34 = 0;                   // +0x34
     m38 = 1;                   // +0x38
     m3c = 0;                   // +0x3c

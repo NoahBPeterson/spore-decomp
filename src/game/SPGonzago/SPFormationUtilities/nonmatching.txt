@@ -1,7 +1,6 @@
 # bare-8hex-VA  diff-bytes  reason (one line each)
 00afadb0 55 DistCtx::IsCloser: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (266 valid, 100% cov); size matches, direct-expression variant reorders the x/y/z loads and leaves the helper form as the closest shape
 00afaec0 229 SP::cActionCircle::ProjectSlotsOntoPlanet: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (400 valid, 15.4% cov); size 271 vs 267, x87 sqrt/fdiv sequence and local frame differ
-00afb130 72 HashTable::erase: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (339 valid, 100% cov); size 111 vs 109, node traversal keeps an explicit local instead of retail's link-only form and the jump layout differs
 00afb230 159 SortSlotsByDistanceA: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (115 valid, 13.3% cov) after adding retail's begin==end early-out; diff is from the pre-fix build; size 249 vs 270, inner-loop register allocation still differs
 00afb340 377 SortSlotsByDistanceB: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid; fault(read)); size 400 vs 227, outer/inner loop shape and hole/prevp induction were not reproduced
 00afb430 145 MedianOfThree: flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (185 valid, 100% cov); size matches, branch/return scheduling differs

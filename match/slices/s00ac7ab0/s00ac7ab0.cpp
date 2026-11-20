@@ -91,6 +91,7 @@ struct CThisThunk {
     void  FUN_00cee820(void* p);          // 0xcee820
     void  FUN_00c35b20(int a, float b);   // 0xc35b20
     void* CreateNoun();                   // 0xb20c60
+    void* CreateNounId(unsigned id);      // 0xb20c60 (cGameNounManager::CreateNoun(id))
 };
 extern "C" void* SP_BehaviorManager();                                    // 0xb3d260
 extern "C" void  LoadArithmeticaFile(int a, int b, void* p);              // 0x7f2240
@@ -303,15 +304,14 @@ struct CNoun {
 void COrder::FUN_00ac7f80()
 {
     if (this->field1c == 0) {
-        void* mgr = SP_NounManager(0x1906183);
-        CNoun* obj = (CNoun*)SP_cGameNounManager_CreateNoun(mgr, (void*)0x1906183);
+        CNoun* obj = (CNoun*)((CThisThunk*)((void* (*)())SP_NounManager)())->CreateNounId(0x1906183);
         CNoun* old = (CNoun*)this->field1c;
         if (obj != old) {
             if (obj) obj->n00();
             this->field1c = (int)obj;
             if (old) old->n04();
         }
-        obj->n28(0);
+        ((CNoun*)this->field1c)->n28(0);
     }
 }
 

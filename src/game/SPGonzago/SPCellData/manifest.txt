@@ -38,3 +38,4 @@
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b24d4@@YAXXZ  0137b270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?E311_InitTilingTable@@YAXXZ  0137b550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?E315_InitEffectMapTable@@YAXXZ  0137b890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?WriteResource@cCellFactoryBinary@@QAE_NPAX000@Z  00e4d0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

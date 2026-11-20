@@ -142,11 +142,11 @@ class cDataDirectory {
 };
 
 // @ 0x005d5120
-E20* CopyE20Range(E20Iter first, E20Iter last, E20Iter dest)
+E20* CopyE20Range(E20* first, E20* last, E20* dest)
 {
   for (; first != last; ++first, ++dest)
-    if (&*dest) new ((void*)&*dest) E20(*first);
-  return dest.mpNode;
+    if (dest) new ((void*)dest) E20(*first);
+  return dest;
 }
 
 // @ 0x005d5160

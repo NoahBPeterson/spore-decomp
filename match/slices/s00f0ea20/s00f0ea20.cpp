@@ -128,6 +128,30 @@ struct PHTable
 };
 
 // eastl red-black tree anchor (the object at this+0x2ec)
+struct MinimapOwner_s00f0_f290
+{
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
+    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void RemoveChild(void* window);              // +0xe0
+};
+struct MinimapIface_s00f0_f290
+{
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual MinimapOwner_s00f0_f290* GetOwner();         // +0x10
+};
+
 struct MinimapTree
 {
     uint8_t  pad0[4];
@@ -139,6 +163,16 @@ struct MinimapTree
     uint32_t size;                                   // +0x14
 
     void Nuke(void* root);                           // 0x009a9600
+    void clear()
+    {
+        Nuke(parent);
+        void** p = &left;
+        parent = 0;
+        color  = 0;
+        size   = 0;
+        right  = p;
+        left   = p;
+    }
 };
 
 // eastl red-black tree used by the posse insert helper
@@ -582,10 +616,7 @@ void cSPUISpace::ResetMinimap()
         this->minimap->FUN_00e0ad00(4);
         void* m = (void*)this->minimap;
         void* slot = m != 0 ? (char*)m + 4 : 0;
-        void* inner = *(void**)((char*)m + 4);
-        void* fn = *(void**)((char*)inner + 0x10);
-        void* r = ((void* (__thiscall*)(void*))fn)((char*)m + 4);
-        (*(void (__thiscall**)(void*, void*))(*(char**)r + 0xe0))(r, slot);
+        ((MinimapIface_s00f0_f290*)((char*)m + 4))->GetOwner()->RemoveChild(slot);
         if (this->minimap != 0)
         {
             cSPUIMinimapWin* old = this->minimap;
@@ -595,15 +626,7 @@ void cSPUISpace::ResetMinimap()
         this->timer = 0.0f;
         this->flag_2e8 = 0;
     }
-    void* root = *(void**)((char*)this + 0x2f8);
-    MinimapTree* t = (MinimapTree*)((char*)this + 0x2ec);
-    t->Nuke(root);
-    void** p = &t->left;
-    t->parent = 0;
-    t->color  = 0;
-    t->size   = 0;
-    t->right  = p;
-    t->left   = p;
+    ((MinimapTree*)((char*)this + 0x2ec))->clear();
 }
 
 // ---------------------------------------------------------------------------

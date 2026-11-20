@@ -2342,9 +2342,8 @@ struct cPropertyUI_s0082_68b0 {
 Variant* Variant::Reset(int v)
 {
   if (flags & 4) Destruct(1);
-  unsigned short f = flags & 2;
-  if (f && typeId != 1) { Call5(1, 0x20, v, 1, 1); return this; }
-  flags = f | 0x20; typeId = 1;
+  if ((flags & 2) && typeId != 1) { Call5(1, 0x20, v, 1, 1); return this; }
+  typeId = 1; flags = (flags & 2) | 0x20;
   f0 = v; f4 = 1; f8 = 1;
   return this;
 }
@@ -2353,9 +2352,8 @@ Variant* Variant::Reset(int v)
 Variant* Variant::Set20(int v)
 {
   if (flags & 4) Destruct(1);
-  unsigned short f = flags & 2;
-  if (f && typeId != 0x20) { Call5(0x20, 0x20, v, 0xc, 1); return this; }
-  flags = f | 0x20; typeId = 0x20;
+  if ((flags & 2) && typeId != 0x20) { Call5(0x20, 0x20, v, 0xc, 1); return this; }
+  typeId = 0x20; flags = (flags & 2) | 0x20;
   f0 = v; f4 = 0xc; f8 = 1;
   return this;
 }

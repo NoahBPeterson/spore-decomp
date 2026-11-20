@@ -789,19 +789,28 @@ char cSporeApp::HandleMessage(unsigned int msg, int* data)
     return 1;
 }
 
+extern "C" const unsigned short g_148d824[];   // L" Demo"
+extern "C" const unsigned short g_13ec468[];   // L""
+static inline unsigned int WStrLen(const unsigned short* s)
+{
+    const unsigned short* p = s;
+    while (*++p) {}
+    return (unsigned int)(p - s);
+}
+
 // @ 0x00f47c20
 char cSporeApp::UpdateCheck(void* s, void* out)
 {
-    if (FNV1_String16(s, 0x811c9dc5, 1) != 0x81041658) return 0;
-    if (*(char*)((char*)this + 8)) {
-        const unsigned short* p = (const unsigned short*)0x148d824; // L" Demo"
-        const unsigned short* q = p;
-        while (*++q != 0) {}
-        ((WString*)out)->assign((unsigned int)p, (unsigned int)q);
+    char result = 1;
+    if (FNV1_String16(s, 0x811c9dc5, 1) != 0x81041658) {
+        result = 0;
+    } else if (*(char*)((char*)this + 8)) {
+        const unsigned short* p = g_148d824;
+        ((WString*)out)->assign((unsigned int)p, (unsigned int)(p + WStrLen(p)));
     } else {
-        ((WString*)out)->assign(0x13ec468, 0x13ec468);
+        ((WString*)out)->assign((unsigned int)g_13ec468, (unsigned int)g_13ec468);
     }
-    return 1;
+    return result;
 }
 
 // @ 0x00f47ca0

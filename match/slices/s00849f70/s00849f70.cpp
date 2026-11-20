@@ -68,6 +68,7 @@ struct WString {
     void AllocateSelf(unsigned n);    // 0x00429760
     WString& assign(const wchar_t* first, const wchar_t* last); // 0x00423650
     void resize(unsigned n);          // 0x00429520
+    void RangeInitialize(const wchar_t* pBegin, const wchar_t* pEnd);
 };
 
 inline void FreeWString(WString& s) {
@@ -243,16 +244,20 @@ WString::WString(unsigned n, wchar_t c, const void*) {
 }
 
 // @ 0x0084a7e0
-WString::WString(const WString& o) {
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    unsigned n = (unsigned)(o.mpEnd - o.mpBegin);
+inline wchar_t* CharStringUninitializedCopy(const wchar_t* pSource, const wchar_t* pSourceEnd, wchar_t* pDestination) {
+    DoInsertValue(pDestination, pSource, (unsigned)(pSourceEnd - pSource) * 2);
+    return pDestination + (pSourceEnd - pSource);
+}
+
+inline void WString::RangeInitialize(const wchar_t* pBegin, const wchar_t* pEnd) {
+    const unsigned n = (unsigned)(pEnd - pBegin);
     AllocateSelf(n + 1);
-    wchar_t* d = mpBegin;
-    DoInsertValue(d, o.mpBegin, n * 2);
-    mpEnd = d + n;
+    mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
     *mpEnd = 0;
+}
+
+WString::WString(const WString& o) : mpBegin(0), mpEnd(0), mpCapacity(0) {
+    RangeInitialize(o.mpBegin, o.mpEnd);
 }
 
 // @ 0x0084aa60
