@@ -1772,7 +1772,9 @@ public:
     uint32_t mStrategyClassID;                // 0x118
     uint8_t mPad11c[0x4];
     IRefCounted_s0105_6160* mpAreaEffect;                // 0x120
-    uint8_t mPad124[0x1c];
+    uint8_t mPad124[0x8];
+    IRefCounted_s0105_6160* mpEffectRef;                 // 0x12c
+    uint8_t mPad130[0x10];
     IRefCounted_s0105_6160* mpActiveObject;              // 0x140
     uint8_t mPad144[0x2c];
     int mEventType;                           // 0x170
@@ -2867,21 +2869,19 @@ bool cSPScanToolStrategy::StopTool()
     return this->StopTool();
 }
 
+// The scan strategy's UseTool works on the tool passed in and forwards `this` (ecx)
+// untouched to the base CanUseToolAtLocation (0x01053980).
+struct cSPScanToolCheck_s0105_4080 {
+    char CanUseToolAtLocation(cSPToolStrategy_s0105_6160* pTool, int nToolId, int nTarget);  // 0x01053980
+    bool UseTool(cSPToolStrategy_s0105_6160* pTool, int nToolId, int nTarget);               // 0x01054080
+};
+
 // @ 0x01054080
-static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3);
-
-bool cSPScanToolStrategy::UseTool(int nToolId, int nTarget)
+bool cSPScanToolCheck_s0105_4080::UseTool(cSPToolStrategy_s0105_6160* pTool, int nToolId, int nTarget)
 {
-    if (mpEffectRef != nullptr) {
+    if (pTool->mpEffectRef != nullptr)
         return true;
-    } else {
-        return CanUseToolAtLocationBody(this, nToolId, nTarget, 0);
-    }
-}
-
-static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3)
-{
-    return pTool->CanUseToolAtLocation(nToolId, nTarget, a3);
+    return (bool)CanUseToolAtLocation(pTool, nToolId, nTarget);
 }
 
 // @ 0x010540b0

@@ -17,4 +17,3 @@
 01053f20  118  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) AoE area update; the area/target position accessors are unresolved; equiv UNSUPPORTED (unresolved position accessors)
 01053fb0  106  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) scan tool activation; the terrain-sphere refresh is modelled as a species lookup through an unresolved noun manager; equiv UNSUPPORTED (unresolved NounManager)
 01053ff0  123  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) scan tool stop; space-game accessors and the charge reset are unresolved; equiv UNSUPPORTED (unresolved AddToolCharge)
-01054080  38  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) scan tool use; the effect test plus the validity call fold into a tail-jump; equiv UNSUPPORTED (unresolved accessors)
