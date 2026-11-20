@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/SPToolManager.cpp  ??0cToolObjectData_s0104_e290@@QAE@W4eToolObjectFlags@cToolObjectData@SP@@ABUVector3@@@Z  0104e290  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?Write@cSPSpaceToolData_s0104_bcc0@SP@@QAEEPAUcIface@@@Z  0104bcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104fd70@@YI_NPADHPAX@Z  0104fd70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?IsInContext@cSPSpaceToolData_s0104_bcc0@SP@@QAE_NXZ  0104cb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

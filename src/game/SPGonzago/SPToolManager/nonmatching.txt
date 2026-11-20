@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0104cb70 20 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (400 valid, 52.0% cov); IsInContext bool result codegen: original keeps the false value in bl and shares a single mov al,1 epilogue
 0104cc40 21 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (397 valid, 90.6% cov); IsDeselectedAfterUse flags bit-15 test strength-reduced to test dword,0x8000 instead of shr ecx,0xf/test cl,1
 0104cf20 3873 complete; cl threads the bool-materialize/test branches and hoists a zero into ebx (orig: xor bl,bl; mov bl,[eax]; test bl,bl per site, no hoist); difftest WEAK (0.6% coverage: every input with a non-null property list faults in the real property callees)
 0104e060 483 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tool effect position solve; the app cursor ray and the camera basis read are unresolved so the ray/sphere intersection is modelled through helper stubs and the branch layout widens; equiv UNSUPPORTED (unresolved camera services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

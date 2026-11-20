@@ -1639,14 +1639,10 @@ bool SP::cSPSpaceToolData_s0104_bcc0::IsInContext()
 {
     bool result = false;
     if (mUpgradeInstance != 0) {
-        if (mUpgradeInstance != 0x5f848353) {
+        if (mUpgradeInstance != 0x5f848353
+            || (PlanetModel() != 0 && ((cPlanetModel_s0104_bcc0*)PlanetModel())->mpAnchor24 != 0
+                && (GetCurrentGameMode() != &gGameMode01654c05 || GetUniverseContext() == 0))) {
             result = true;
-        } else if (PlanetModel() != 0 && ((cPlanetModel_s0104_bcc0*)PlanetModel())->mpAnchor24 != 0) {
-            if (GetCurrentGameMode() != &gGameMode01654c05) {
-                result = true;
-            } else if (GetUniverseContext() == 0) {
-                result = true;
-            }
         }
     }
     return result;
