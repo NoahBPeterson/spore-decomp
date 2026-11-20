@@ -1119,17 +1119,15 @@ cJobManagerView_68fc60::~cJobManagerView_68fc60()
 void cJobManager::PreShutdown()
 {
     IntrusiveList* pAnchor = &mThreads;
-    for (;;) {
-        IntrusiveList* pNode = pAnchor->mpNext;
-        if (pNode == pAnchor) break;
-        while (pNode == (IntrusiveList*)mpSyncThread) {
-            pNode = pNode->mpNext;
-            if (pNode == pAnchor) goto done;
+    IntrusiveList* pNode;
+    do {
+        for (pNode = pAnchor->mpNext; pNode != pAnchor; pNode = pNode->mpNext) {
+            if (pNode != (IntrusiveList*)mpSyncThread) {
+                RemoveThread((cJobThread*)pNode);
+                break;
+            }
         }
-        RemoveThread((cJobThread*)pNode);
-        if (pNode == pAnchor) break;
-    }
-done:
+    } while (pNode != pAnchor);
     while (EndThread(mpSyncThread, 0, 1)) {}
 }
 
