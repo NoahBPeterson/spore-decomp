@@ -347,7 +347,7 @@ struct CInputState {
     void __thiscall ResetIf(u32 k);                            // 0x697a10
     void __thiscall OnKeyUp(u32 a, u32 b);                     // 0x697a80
     void __thiscall OnMouseWheel(float x, float y, u32 arg);   // 0x697b20
-    void __thiscall OnMouseMove(float a, float b, u32 c, u32 d); // 0x697b40
+    void __thiscall OnMouseMove(u32 a, float b, float c, u32 d); // 0x697b40
     void __thiscall Reset();                                   // 0x697980
 };
 struct SHandle {
@@ -450,7 +450,7 @@ public:
     void __thiscall FUN_00ef07d0(u32 k);
     u8   __thiscall FUN_00ef08b0(u32 a, u32 b);
     u8   __thiscall FUN_00ef0900(u32 x, u32 y, u32 arg);
-    u8   __thiscall FUN_00ef09f0(u32 a, u32 b, u32 c, u32 d);
+    u8   __thiscall FUN_00ef09f0(u32 a, float b, float c, u32 d);
     void __thiscall FUN_00ef0a70(u32 a);
     void __thiscall FUN_00ef0b80();
     void __thiscall FUN_00ef0c80();
@@ -3636,16 +3636,16 @@ u8 __thiscall Strategy::FUN_00ef0900(u32 x, u32 y, u32 arg)
 }
 
 // @ 0x00ef09f0
-u8 __thiscall Strategy::FUN_00ef09f0(u32 a, u32 b, u32 c, u32 d)
+u8 __thiscall Strategy::FUN_00ef09f0(u32 a, float b, float c, u32 d)
 {
     Strategy* this_ = this;
     if (DAT_015acc34 != 4)
         return 1;
     ((CInputState*)((char*)this_ + 0x20))->OnMouseMove(a, b, c, d);
     void* im = DAT_015ad298;
-    ((void(__thiscall*)(void*, u32, u32, u32, u32))(*((char**)((char*)*(void**)im + 0x5c))))(im, a, b, c, d);
+    ((void(__thiscall*)(void*, u32, float, float, u32))(*((char**)((char*)*(void**)im + 0x5c))))(im, a, b, c, d);
     void* gm = FUN_00b3d250();
-    return ((u32(__thiscall*)(void*, u32, u32, u32, u32))(*((char**)((char*)*(void**)gm + 0x60))))(gm, a, b, c, d);
+    return ((u8(__thiscall*)(void*, u32, float, float, u32))(*((char**)((char*)*(void**)gm + 0x60))))(gm, a, b, c, d);
 }
 
 // @ 0x00ef0a70
