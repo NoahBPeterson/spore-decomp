@@ -570,7 +570,11 @@ int  FUN_00c71030(int i);
 int  FUN_00ff0df0(void* g, int a, int b);
 void FUN_00ff2d20(int a);
 struct VideoEncoder_Jpeg { char pad0[0x18]; float mFramesPerSecond; };
-struct S96180 { void fn(int* param_2, int* param_3); };
+struct S96180Pair { int mKey; int mValue; };
+struct S96180NodeBase { S96180NodeBase* mpLeft; S96180NodeBase* mpRight; S96180NodeBase* mpParent; int mColor; };
+struct S96180Node : S96180NodeBase { S96180Pair mValue; };
+struct S96180Iter { S96180Node* mpNode; };
+struct S96180 { int mCmp; S96180NodeBase mHeader; int mSize; S96180Iter fn(const S96180Pair* param_3, int unused); };
 struct S96360 { void fn(int param_2, int param_3, int param_4, int allocator); };
 struct S965d0 { unsigned fn(unsigned param_2, unsigned param_3); };
 struct S96600 { void fn(undefined4* param_2, undefined4* param_3); };
@@ -2942,33 +2946,31 @@ void Shuffle4(void** first, void** last, RandomLCG* rng)
 }
 
 // @ 0x00b96180
-void S96180::fn(int* param_2, int* param_3)
+S96180Iter S96180::fn(const S96180Pair* param_3, int)
 {
-    int param_1 = (int)this;
-    undefined4* puVar3 = (undefined4*)(param_1 + 4);
-    if (*(undefined4**)(param_1 + 0xc) != 0) {
-        undefined4* puVar1 = *(undefined4**)(param_1 + 0xc);
-        do {
-            puVar3 = puVar1;
-            if (*param_3 < (int)puVar3[4])
-                puVar1 = (undefined4*)puVar3[1];
-            else
-                puVar1 = (undefined4*)*puVar3;
-        } while (puVar1 != 0);
+    S96180NodeBase* parent = &mHeader;
+    S96180NodeBase* n = mHeader.mpParent;
+    while (n != 0) {
+        parent = n;
+        if (param_3->mKey < ((S96180Node*)n)->mValue.mKey)
+            n = n->mpRight;
+        else
+            n = n->mpLeft;
     }
-    undefined4 uVar4;
-    if ((puVar3 == (undefined4*)(param_1 + 4)) || (*param_3 < (int)puVar3[4]))
-        uVar4 = 0;
+    unsigned isLeft;
+    if (parent == &mHeader || param_3->mKey < ((S96180Node*)parent)->mValue.mKey)
+        isLeft = 0;
     else
-        uVar4 = 1;
-    int iVar2 = operator_new(0x18, "Simulator", 0, 0, kAllocFile, 0xd1);
-    if ((int*)(iVar2 + 0x10) != 0) {
-        *(int*)(iVar2 + 0x10) = *param_3;
-        *(int*)(iVar2 + 0x14) = param_3[1];
-    }
-    RBTreeInsert((void*)iVar2, puVar3, (void*)(param_1 + 4), uVar4);
-    *(int*)(param_1 + 0x14) = *(int*)(param_1 + 0x14) + 1;
-    *param_2 = iVar2;
+        isLeft = 1;
+    S96180Node* node = (S96180Node*)operator_new(0x18, "Simulator", 0, 0, kAllocFile, 0xd1);
+    S96180Pair* v = &node->mValue;
+    if (v != 0)
+        *v = *param_3;
+    RBTreeInsert(node, parent, &mHeader, isLeft);
+    mSize++;
+    S96180Iter it;
+    it.mpNode = node;
+    return it;
 }
 
 // @ 0x00b96220
