@@ -641,8 +641,12 @@ struct UintVec {
 class cCommandServer_s0068_b150 : public ICommandServerVt {
 public:
     struct CmdMap : RbTreeBase {
+        struct iterator {
+            RbNode* mpNode;
+            iterator(RbNode* p) : mpNode(p) {}
+        };
         void  DestroyNodes(RbNode* node);              // 0x0068B9D0
-        void  DestroyNode(RbNode* node, void** itOut); // 0x0068B950
+        iterator erase(iterator position);             // 0x0068B950
         ~CmdMap() { DestroyNodes(mAnchor.mpParent); }
     };
     struct GenSet : RbTreeBase {
@@ -1425,15 +1429,16 @@ void cCommandServer_s0068_b150::EnumerateCommands(UintVec& out)
 }
 
 // @ 0x0068b950
-void cCommandServer_s0068_b150::CmdMap::DestroyNode(RbNode* node, void** itOut)
+cCommandServer_s0068_b150::CmdMap::iterator cCommandServer_s0068_b150::CmdMap::erase(iterator position)
 {
+    RbNode* node = position.mpNode;
     --mnSize;
-    RbNode* next = (RbNode*)RbTreeIncrement(node);
+    position.mpNode = (RbNode*)RbTreeIncrement(position.mpNode);
     RbTreeErase(node, &mAnchor);
     ((CmdInfoNode*)node)->msTypeInfo.~WStr_s0068_b150();
     ((CmdInfoNode*)node)->msName.~WStr_s0068_b150();
     EAFree(node);
-    *itOut = next;
+    return position;
 }
 
 // @ 0x0068b9d0
@@ -1548,8 +1553,7 @@ bool cCommandServer_s0068_b150::UnregisterCommand(uint32 id)
     if (it == &mCommandInfoMap.mAnchor)
         return false;
     FUN_00689DC0(&((CmdInfoNode*)it)->mnID, 0, 0);
-    RbNode* next;
-    mCommandInfoMap.DestroyNode(it, (void**)&next);
+    mCommandInfoMap.erase(CmdMap::iterator(it));
     return true;
 }
 
