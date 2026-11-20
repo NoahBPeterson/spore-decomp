@@ -410,18 +410,16 @@ bool __thiscall WM::SendMsgFull(IWin* src, IWin* win, Msg* m, bool a4, bool a5)
 // @ 0x00b3d2c0
 void* __cdecl SP_RelationshipManager()
 {
-    void* m = SP_GetCurrentGameMode();
-    if ((int)m < 0x01654c06) {
-        if (m == (void*)0x01654c05)
-            return ((C4F*)g_167eae4)->f();
-        if (m != (void*)0x01654c02 && m != (void*)0x01654c04)
-            return 0;
-    } else if (m != (void*)0x01654c10) {
-        if (m != (void*)0x02ccd1d2)
-            return 0;
+    switch ((int)SP_GetCurrentGameMode()) {
+    case 0x01654c02:
+    case 0x01654c04:
+    case 0x01654c10:
+        return FUN_010212f0();
+    case 0x01654c05:
+    case 0x02ccd1d2:
         return ((C4F*)g_167eae4)->f();
     }
-    return FUN_010212f0();
+    return 0;
 }
 
 // @ 0x00b3d520
