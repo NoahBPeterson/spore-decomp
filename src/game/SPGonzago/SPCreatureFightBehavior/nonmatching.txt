@@ -13,7 +13,6 @@
 00d669c0 492 complete source (all paths/calls, call targets and vtable slots equal); not byte-exact: only stack-slot numbering differs (locals at +4 offset; frame 0x2c vs 0x2c, d reuses arg slot in original); size 917 vs 923; equiv: WEAK (202 valid inputs, 9.6% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66d60 59 complete source (all paths); not byte-exact: register allocation only - id lands in eax instead of ecx, shifting every modrm; size 72 vs 71; equiv: PASS (285 valid inputs, 100% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66e70 450 complete source (all paths/calls; ability/property hash, RB-tree anchor init, species-trait override, Max() pairs all present); not byte-exact: store ordering and stack-slot sharing differ; size 563 vs 609; equiv: FAIL (crashes inside the property-list virtual GetProperty with the harness fake props where the original returns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00d67660 96 Acquire a fresh fight-slot payload: zero a payload, allocate it from the pool,
 00d67700 172 FindGroup(Creature*): look the "Fight" group up in the B4C object's stimulus
 00d678d0 211 FightAction group refresh (FightAction*, flag): reset the action, re-find the
 00d679e0 697 SP::FIGHT_Activate(creature, ..., bits, FightAction*, ctx): bind the action to
