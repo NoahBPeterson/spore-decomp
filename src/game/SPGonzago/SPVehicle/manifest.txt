@@ -74,3 +74,5 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?Shutdown@SimPanel@@QAEXXZ  00cadb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca77b0@@YAXPAD0UcSPVector4_s00ca_75e0@@@Z  00ca77b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca7830@@YAXPAD0UcSPVector4_s00ca_75e0@@@Z  00ca7830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0da0@@YAPAUE18@@PAU1@00@Z  00ca0da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0e10@@YAPAUE18@@PAU1@00@Z  00ca0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -720,7 +720,8 @@ struct RefOps {
     void* __thiscall AssignA(void* src);       // 0x00ca0940
     void* __thiscall AssignB(void* src);       // 0x00ca09a0
 };
-struct E18 { void* p; float f0, f1, f2; unsigned u0, u1; };
+struct V3f_E18 { float x, y, z; };
+struct E18 { void* p; V3f_E18 v; unsigned u0, u1; };
 struct E16 { void* p; unsigned u0, u1; unsigned char b0; };
 // ---- items of slice s00c9ffd0 end
 
@@ -4085,27 +4086,23 @@ void __cdecl FUN_00ca0ba0(void** first, void** last)
 // @ 0x00ca0cf0
 E18* __cdecl FUN_00ca0cf0(E18* s, E18* last, E18* d)
 {
-    if (s == last) return d;
-    do {
+    while (s != last) {
         if (d) {
             d->p = s->p;
             if (d->p) (*(TFnV)VTFN(d->p, 0))(d->p);
-            d->f0 = s->f0;
-            d->f1 = s->f1;
-            d->f2 = s->f2;
+            d->v = s->v;
             d->u0 = s->u0;
             d->u1 = s->u1;
         }
         s++; d++;
-    } while (s != last);
+    }
     return d;
 }
 
 // @ 0x00ca0da0
 E18* __cdecl FUN_00ca0da0(E18* s, E18* last, E18* d)
 {
-    if (s == last) return d;
-    do {
+    while (s != last) {
         void* nw = s->p;
         void* old = d->p;
         if (nw != old) {
@@ -4113,21 +4110,18 @@ E18* __cdecl FUN_00ca0da0(E18* s, E18* last, E18* d)
             d->p = nw;
             if (old) (*(TFnV)VTFN(old, 1))(old);
         }
-        d->f0 = s->f0;
-        d->f1 = s->f1;
-        d->f2 = s->f2;
+        d->v = s->v;
         d->u0 = s->u0;
         d->u1 = s->u1;
         s++; d++;
-    } while (s != last);
+    }
     return d;
 }
 
 // @ 0x00ca0e10
 E18* __cdecl FUN_00ca0e10(E18* first, E18* s, E18* d)
 {
-    if (s == first) return d;
-    do {
+    while (s != first) {
         s--; d--;
         void* nw = s->p;
         void* old = d->p;
@@ -4136,12 +4130,10 @@ E18* __cdecl FUN_00ca0e10(E18* first, E18* s, E18* d)
             d->p = nw;
             if (old) (*(TFnV)VTFN(old, 1))(old);
         }
-        d->f0 = s->f0;
-        d->f1 = s->f1;
-        d->f2 = s->f2;
+        d->v = s->v;
         d->u0 = s->u0;
         d->u1 = s->u1;
-    } while (s != first);
+    }
     return d;
 }
 
