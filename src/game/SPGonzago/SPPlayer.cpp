@@ -2359,7 +2359,8 @@ void __cdecl WriteKeyBoolMap(ISerializer* pWriter, cVector<cKeyBoolPair>& items)
 // @ 0x00c760c0
 bool __cdecl FixupPlayerPlanetData(void* pCtx, cVector<cKeyBoolPair>& items)
 {
-    for (cKeyBoolPair* pItem = items.mpBegin; pItem != items.mpEnd; ++pItem) {
+    cKeyBoolPair* pEnd = items.mpEnd;
+    for (cKeyBoolPair* pItem = items.mpBegin; pItem != pEnd; ++pItem) {
         if (&pItem->mValue != 0)
             ((IRegisterHost*)pCtx)->Register(&pItem->mValue, &g_1579600, L"PlayerPlanetData");
     }
