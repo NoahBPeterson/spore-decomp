@@ -1,4 +1,3 @@
-010c8130 66 havok-equivalent
 010c8180 77 havok-equivalent
 010c81d0 334 havok-equivalent; equiv PASS 279/400 (100% coverage); replay PASS; not byte-exact (301 bytes differ: size 289 vs 334; VM scratch object sized/aligned to 0x40 so the outgoing-argument area matches; box built with direct member writes)
 010c83a0 236 havok-equivalent
