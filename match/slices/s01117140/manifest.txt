@@ -1,3 +1,4 @@
 # slice s01117140 -- Havok 3.1 hkGeomConvexHullBuilder functions 0x01117140 .. 0x01117580 + size
 # (only the byte-exact ones are listed -- this slice has none; see nonmatching.txt / partial.txt)
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01117140/s01117140.cpp  ?removeFlaggedVertices@hkGeomConvexHullBuilder@@SAXAAV?$hkArray@VhkVector4@@@@@Z  01117140  /vc71 /O2 /MD /Gy /TP

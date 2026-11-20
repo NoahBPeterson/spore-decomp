@@ -96,43 +96,20 @@ extern bool FUN_011159f0(const hkGeomConvexHullBuilder::WeightedNeighbour& a,
 // @ 0x01117140
 void hkGeomConvexHullBuilder::removeFlaggedVertices(hkArray<hkVector4>& vertices)
 {
-	int num = vertices.m_size;
+	const int num = vertices.m_size;
 	hkVector4* src = vertices.m_data;
-	int remainder = num - 1;
 	hkVector4* dst = src;
-
-	if (remainder + 1 >= 4)
+	for (int i = num - 1; i >= 0; i--)
 	{
-		int n = (int)((unsigned int)num >> 2);
-		remainder -= n * 4;
-		do
-		{
-			if (src->w == kZero) { hkVector4* p = dst++; p->x = src->x; p->y = src->y; p->z = src->z; p->w = src->w; }
-			src++;
-			if (src->w == kZero) { hkVector4* p = dst++; p->x = src->x; p->y = src->y; p->z = src->z; p->w = src->w; }
-			src++;
-			if (src->w == kZero) { hkVector4* p = dst++; p->x = src->x; p->y = src->y; p->z = src->z; p->w = src->w; }
-			src++;
-			if (src->w == kZero) { hkVector4* p = dst++; p->x = src->x; p->y = src->y; p->z = src->z; p->w = src->w; }
-			src++;
-		} while (--n);
-	}
-
-	if (remainder >= 0)
-	{
-		remainder++;
-		do
-		{
-			if (src->w == kZero) { hkVector4* p = dst++; p->x = src->x; p->y = src->y; p->z = src->z; p->w = src->w; }
-			src++;
-		} while (--remainder);
+		if (src->w == kZero) { hkVector4* p = dst++; p->x = src->x; p->y = src->y; p->z = src->z; p->w = src->w; }
+		src++;
 	}
 
 	int count = (int)(dst - vertices.m_data);
 	if ((int)(vertices.m_capacityAndFlags & 0x3FFFFFFF) < count)
 	{
 		int cap = (vertices.m_capacityAndFlags & 0x3FFFFFFF) * 2;
-		if (cap <= count) cap = count;
+		cap = (count < cap) ? cap : count;
 		hkArrayUtil::_reserveExactly(&vertices, cap, (int)sizeof(hkVector4));
 	}
 	vertices.m_size = count;
