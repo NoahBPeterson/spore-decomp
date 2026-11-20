@@ -1,3 +1,2 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00633ea0  235  SP::cSPPlayModePhotoBrowser::UpdateViewerImage: complete; AutoRef temp + tail-jmp release shape, size 254 vs 230; difftest WEAK (205/400 valid, 17.7% cov)
-006343f0   24  SP::cSPPlayModePhotoBrowser::NextPage: complete; ContinueJob loop + page-bounds branch shape, size 158 vs 160; difftest UNSUPPORTED (0/400 valid)

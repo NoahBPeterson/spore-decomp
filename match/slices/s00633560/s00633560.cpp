@@ -660,7 +660,7 @@ void __fastcall FUN_006343f0(void* self) {
     }
   }
   RBTreeHead* map = &b->mPhotoTypeMap;
-  map->DoNuke(*(RBNode**)((char*)b + 0x74));
+  map->DoNuke(map->mAnchor.parent);
   RBNode* anchor = (RBNode*)&map->mAnchor;
   map->mAnchor.right = anchor;
   map->mAnchor.left = anchor;
@@ -676,15 +676,12 @@ void __fastcall FUN_006343f0(void* self) {
   unsigned idx = b->mCurrentFirstPhotoIndex;
   unsigned nidx = idx + 5;
   b->mCurrentFirstPhotoIndex = nidx;
-  if (nidx < cnt) {
-    ((PMB*)b)->ClearLoadedPhotos();
-    b->ShowImageThumbnail();
-    ((PMB*)b)->UpdatePhotoCountText();
-  } else {
+  if (nidx >= cnt)
     b->mCurrentFirstPhotoIndex = idx;
-    b->ShowImageThumbnail();
-    ((PMB*)b)->UpdatePhotoCountText();
-  }
+  else
+    ((PMB*)b)->ClearLoadedPhotos();
+  b->ShowImageThumbnail();
+  ((PMB*)b)->UpdatePhotoCountText();
 }
 
 // ===========================================================================
