@@ -2705,13 +2705,14 @@ void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15980(void* a1, void* pObj)
     if (q != 0) {
         void* id = ((Fn_p_pi)VTSLOT(q, 0xc))(q, (int)0x01186577);
         if (id == mpField4C) {
+            _ReadWriteBarrier();
             Obj* f = (Obj*)mpField4C;
             if (f != 0) {
                 mpField4C = 0;
                 ((Fn_v_p)VTSLOT(f, 0xc0))(f);
             }
         }
-        SP_NounManager(q)->RemoveNoun(q);
+        SP_NounManager()->RemoveNoun(q);
         FUN_00ba1280();
     }
 }

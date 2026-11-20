@@ -19,3 +19,4 @@
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Partition@@YAPAIPAI0IUcStrCmp@@@Z  00d16e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15a10@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX@Z  00d15a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15550@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  00d15550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15980@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX0@Z  00d15980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
