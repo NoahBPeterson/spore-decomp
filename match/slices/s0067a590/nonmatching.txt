@@ -2,7 +2,6 @@
 0067a590  122  complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)
 0067af10  79  complete: predicate loop; element count is (end-begin) and the empty test is the pointer difference (not pointer equality); equiv PASS 577/600, 100% cov; register allocation (this in ebp, counter in edi) still differs
 0067af70  66  complete: same predicate loop; register allocation differs
-0067afd0  61  complete: three-way predicate composition; register/call scheduling differs
 0067b150  76  complete: store scheduling and 0.0f register reuse differ; cl hoists the cString construct differently
 0067a6e0  174  HintManager::HandleHintMessage complete; branch layout (End block out of line, redundant cur!=win test) and ebx/esi/edi allocation differ [equiv: WEAK 22% coverage]
 0067a880  89  complete: CalloutTimer smooth-ramp timers + MessageServer handler registered; pool-new and vtable-call scheduling differ [equiv: UNSUPPORTED 0/400 valid, the original's allocator/MessageServer path faults on every generated input]

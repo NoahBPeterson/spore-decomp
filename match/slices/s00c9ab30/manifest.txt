@@ -1,0 +1,1 @@
+slices/s00c9ab30/s00c9ab30.cpp  ?HotSpotMap_Read@@YA_NPAUISerializerReadStream@@PAUHotSpotMap@@@Z  00c9ab30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,1 @@
+slices/s01009df0/s01009df0.cpp  ?UpdateUFOEvents@cSPSimulatorSpaceGame@SP@@QAEXI@Z  01009df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

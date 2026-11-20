@@ -1,0 +1,1 @@
+slices/s00a22b20/s00a22b20.cpp  ??1SharedHolder@@UAE@XZ  00a22b20  /O2 /MD /Gy /EHsc /TP /GS-

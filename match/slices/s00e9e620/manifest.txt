@@ -1,0 +1,1 @@
+slices/s00e9e620/s00e9e620.cpp  ?insert@Vector3Array@@QAEXPAUVector3@@ABU2@@Z  00e9e620  /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,1 @@
+slices/s0069d980/s0069d980.cpp  ?WriteSerializableObject@ObjectDatabaseOStreamInterface@SP@@QAEHPBVcISerializableObject@2@@Z  0069d980  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

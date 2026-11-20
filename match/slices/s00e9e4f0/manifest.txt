@@ -1,0 +1,1 @@
+slices/s00e9e4f0/s00e9e4f0.cpp  ?insert@Vector12@@QAEXPAUElement12@@ABU2@@Z  00e9e4f0  /O2 /MD /Gy /EHsc /TP

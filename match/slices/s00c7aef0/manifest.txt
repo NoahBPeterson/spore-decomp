@@ -1,0 +1,1 @@
+slices/s00c7aef0/s00c7aef0.cpp  ?Read_00c7aef0@@YA_NPAVISerializerReadStream@@PAVcWarMap@@@Z  00c7aef0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -1,0 +1,1 @@
+slices/s00ea4610/s00ea4610.cpp  ?UpdatePulseWindows@cCityMusicEditor@@QAEXXZ  00ea4610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

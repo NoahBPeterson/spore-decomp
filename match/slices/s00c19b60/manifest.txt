@@ -1,1 +1,2 @@
 slices/s00c19b60/s00c19b60.cpp  ?AllocRows@CAnimTable@@QAEPAUAnimRow@@HHH@Z  00c19cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c19b60/serialize_00c19b60.cpp  ?FUN_00c19b60@@YAEPAPAXH0@Z  00c19b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

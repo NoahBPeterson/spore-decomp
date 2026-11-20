@@ -18,6 +18,9 @@ extern "C" char g_1571000[];
 #include <stdlib.h>
 #include <new>
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // unnamed retail callees and globals (address in the comment)
 extern uint32_t g_168d228[8];           // 0x0168d228  cached four-byte ids, seven entries used
 extern "C" void EA_IO_WriteUint32(void* stream, const uint32_t& value, int count, int flags); // 0x0093aa70
@@ -179,6 +182,8 @@ virtual void s6();
 };
 void ReadInt32(void* stream, uint32_t* value, int count, int flags);  // 0x0093a780
 void FreeAllocBlock(void* block);                                     // 0x00f47380
+void* EAAllocate(unsigned int size, const char* name, int a, int b,
+                 const char* file, int line);                         // 0x00f473a0
 struct cVarListSerializer_s00c0_15e0 {
     uint8_t mStorage[0xa14];
     void Construct(void* record, uint32_t key, uint32_t type);  // 0x00692f90
@@ -222,6 +227,7 @@ struct LaneRecVec {
     LaneRec* mpBegin;
     LaneRec* mpEnd;
     LaneRec* mpCap;
+    LaneRec* end() const { return mpEnd; }
     void ReservePoints(int n);                                    // 0x00c00f20
     void ReserveNodes(int n);                                     // 0x00c01ef0
     void DoInsertPoint(LaneRec* pos, const LaneRec* value);       // 0x00c01060
@@ -439,6 +445,71 @@ uint32_t FUN_00c00ad0(int index)
         return g_168d228[index];
     }
     return 0;
+}
+
+// @ 0x00c01060
+void LaneRecVec::DoInsertPoint(LaneRec* pos, const LaneRec* value)
+{
+    if (mpEnd != mpCap) {
+        // in place: keep the value valid when it points into the shifted range
+        const LaneRec* v = value;
+        if (v >= pos && v < mpEnd)
+            ++v;
+        if (mpEnd != 0) {
+            // copy-construct the last element past the end, then shift down
+            LaneRec* last = mpEnd;
+            last->mPos.x = last[-1].mPos.x;
+            last->mPos.y = last[-1].mPos.y;
+            last->mPos.z = last[-1].mPos.z;
+            last->mDir.x = last[-1].mDir.x;
+            last->mDir.y = last[-1].mDir.y;
+            last->mDir.z = last[-1].mDir.z;
+            last->mRadius = last[-1].mRadius;
+            _ReadWriteBarrier();
+            last->mIndex = last[-1].mIndex;
+        }
+        // move the tail one slot up, back to front
+        LaneRec* d = mpEnd;
+        for (LaneRec* s = mpEnd - 1; s != pos; ) {
+            --s;
+            --d;
+            *d = *s;
+        }
+        *pos = *v;
+        ++mpEnd;
+        return;
+    }
+
+    {
+        // grow: capacity = count ? count * 2 : 1, copy prefix, the new element
+        // and the suffix into the new block, then release the old one
+        unsigned int count = (unsigned int)(mpEnd - mpBegin);
+        unsigned int newCount = count > 0 ? count * 2 : 1;
+        LaneRec* newBegin;
+        if (newCount != 0)
+            newBegin = (LaneRec*)EAAllocate(newCount * 0x20, "LaneRec", 0, 0,
+                                            "SPCommunity.cpp", 209);
+        else
+            newBegin = 0;
+        LaneRec* mid = CopyLaneRange(mpBegin, pos, newBegin);
+        if (mid != 0) {
+            // construct the new element member by member (the copy helper is inlined)
+            mid->mPos.x = value->mPos.x;
+            mid->mPos.y = value->mPos.y;
+            mid->mPos.z = value->mPos.z;
+            mid->mDir.x = value->mDir.x;
+            mid->mDir.y = value->mDir.y;
+            mid->mDir.z = value->mDir.z;
+            mid->mRadius = value->mRadius;
+            mid->mIndex = value->mIndex;
+        }
+        LaneRec* newEnd = CopyLaneRange(pos, end(), mid + 1);
+        if (mpBegin != 0 && ((uint32_t*)mpBegin)[-1] != 0)
+            FreeAllocBlock(mpBegin);
+        mpBegin = newBegin;
+        mpCap = newBegin + newCount;
+        mpEnd = newEnd;
+    }
 }
 
 // @ 0x00c01ce0
