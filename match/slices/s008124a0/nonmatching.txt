@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00812aa0  44  complete: cSPUILayoutZoom::Init; x87 4-float copy schedule and reciprocal operand order differ
 00812b70  64  complete: cSPUILayoutZoom ctor; cl reorders the raw vtable stores vs member init (real base-ctor form needed) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00812db0  335 complete: cSPUIMainWin::BuildMouseMsg; same-TU GetFlags/MapFlags bodies let cl assume register clobbers (original kept result in ebx)
 00813300  76  complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
