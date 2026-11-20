@@ -22,6 +22,8 @@ struct IMEProxy {
   char pad2[0xc];
   void* mpIMEServer;       // +0x20
   void* mpWinMgr;          // +0x24
+  char pad28[8];           // +0x28
+  void* mpWinComposition;  // +0x30
   bool Init(void* server, int);
   void Shutdown();
   void SetupDefaultFonts();
@@ -283,14 +285,15 @@ void IMEProxy::SetupDefaultFonts()
 // @ 0x007f3320
 void IMEProxy::Shutdown()
 {
-  void* p = mpIMEServer;
-  if (p) {
-    void* a = ((void*(__thiscall*)(void*))VSLOT(*(void**)((char*)p + 0x20c), 0x10))(*(void**)((char*)p + 0x20c));
-    void* b = ((void*(__thiscall*)(void*))VSLOT(mpWinMgr, 4))(mpWinMgr);
-    ((void(__thiscall*)(void*))VSLOT(p, 0x1c))(p);
-    ((void(__thiscall*)(void*, void*))VSLOT(b, 0xdc))(b, a);
-    mpIMEServer = 0;
-    ((void(__thiscall*)(void*, int))VSLOT(p, 4))(p, 1);
+  void* p = mpWinComposition;
+  if (!p) return;
+  void* a = ((void*(__thiscall*)(void*))VSLOT((char*)p + 0x20c, 0x10))((char*)p + 0x20c);
+  void* b = ((void*(__thiscall*)(void*))VSLOT(mpWinMgr, 4))(mpWinMgr);
+  ((void(__thiscall*)(void*))VSLOT(mpWinComposition, 0x1c))(mpWinComposition);
+  ((void(__thiscall*)(void*, void*))VSLOT(b, 0xdc))(b, a);
+  if (void* q = mpWinComposition) {
+    mpWinComposition = 0;
+    ((void(__thiscall*)(void*))VSLOT(q, 4))(q);
   }
 }
 
