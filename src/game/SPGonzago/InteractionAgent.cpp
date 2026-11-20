@@ -299,14 +299,21 @@ struct Vec16 {
     void resize(uint n);
     void Fill(StreamDesc* pos, uint count, const StreamDesc* v);   // 0x47aa40
     void Erase(StreamDesc* first, StreamDesc* last);               // 0x4772a0
+    void Insert(StreamDesc* pos, uint count, const StreamDesc& v) { int unused; Fill(pos, count, &v); }
 };
 struct StreamElem {                    // 0x20 bytes
     int mUsage;                        // +0x0
     int mIndex;                        // +0x4
     int mType;                         // +0x8
     int mSlot;                         // +0xc
-    StreamDesc mDesc;                  // +0x10
-    StreamElem() : mUsage(0), mIndex(0), mType(0), mSlot(14) {}
+    struct Desc {                      // +0x10, constructed through StreamDesc::init0
+        int mCount; void* mpData; unsigned short mStride; unsigned short mStride2;
+        struct Owner {
+            IRefObj* mp;
+            ~Owner() { if (mp) mp->Release(); }
+        } mpOwner;
+    } mDesc;
+    StreamElem() : mUsage(0), mIndex(0), mType(0), mSlot(14) { ((StreamDesc*)&mDesc)->init0(); }
 };
 struct Vec32 {
     char* mpBegin; char* mpEnd; char* mpCapacity;
@@ -316,6 +323,7 @@ struct Vec32 {
     int size() const;
     void Fill32(char* pos, uint count, const StreamElem* v);       // 0x47ae60
     void Erase32(char* first, char* last);                         // 0x477380
+    void Insert32(char* pos, uint count, const StreamElem& v) { int unused; Fill32(pos, count, &v); }
 };
 struct StreamIndex { short mStream; short mSub; };     // 4 bytes
 struct IndexVec {                                      // 4-byte-element vector
@@ -761,11 +769,11 @@ template void vector_s0047_3e40<Elem16, 4>::reserve(uint32_t)
 void Vec16::resize(uint n)
 {
     if (n > (uint)(mpEnd - mpBegin)) {
-        StreamDesc tmp;
-        ScratchSlots_s0047_4bd0<15>();
-        Fill(mpEnd, n - (uint)(mpEnd - mpBegin), &tmp);
-        if (tmp.mpOwner) tmp.mpOwner->Release();
+        StreamElem::Desc tmp;
+        ((StreamDesc*)&tmp)->init0();
+        Insert(mpEnd, n - (uint)(mpEnd - mpBegin), (StreamDesc&)tmp);
     } else {
+        ScratchSlots_s0047_4bd0<11>();
         Erase(mpBegin + n, mpEnd);
     }
 }
@@ -775,10 +783,9 @@ void Vec32::resize(uint n)
 {
     if (n > (uint)((mpEnd - mpBegin) >> 5)) {
         StreamElem tmp;
-        ScratchSlots_s0047_4bd0<14>();
-        Fill32(mpEnd, n - (uint)((mpEnd - mpBegin) >> 5), &tmp);
-        if (tmp.mDesc.mpOwner) tmp.mDesc.mpOwner->Release();
+        Insert32(mpEnd, n - (uint)((mpEnd - mpBegin) >> 5), tmp);
     } else {
+        ScratchSlots_s0047_4bd0<11>();
         Erase32(mpBegin + n * 0x20, mpEnd);
     }
 }
