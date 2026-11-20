@@ -442,18 +442,15 @@ char __stdcall CamCtl_SetGlobals(float v1, float v2, int) {
     return 0;
 }
 
+extern "C" const float g_13eb8a0;
 // @ 0x00dde540
 char CamCtl::Zoom(int n, int b, int c, int d) {
     (void)b; (void)c; (void)d;
-    __asm {
-        cvtsi2ss xmm0, dword ptr [n]
-        mulss xmm0, dword ptr [ecx + 14h]
-        mulss xmm0, dword ptr ds:[13eb8a0h]
-        mulss xmm0, dword ptr [ecx + 18h]
-        xorps xmm0, xmmword ptr ds:[13eb8b0h]
-        movss dword ptr [g_camera_roll], xmm0
-        xor al, al
-    }
+    float t = (float)n * f14;
+    t = t * g_13eb8a0;
+    t = t * f18;
+    g_camera_roll = -t;
+    return 0;
 }
 
 // @ 0x00dde570
