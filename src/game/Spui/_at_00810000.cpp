@@ -1034,17 +1034,12 @@ void cSPUIMovieRecordUI::reload(int arg)
     Vv1(o, 0x1c, (int)base8);
 }
 
-extern "C" void* g_164d858;     // 0x0164d858 registrar slot
-extern "C" char g_14426a0[];    // vtables retail relocates here
-extern "C" char g_13eb394[];
-extern "C" char g_1418e70[];
-extern "C" char g_1418e68[];
-extern "C" char g_1418e50[];
+extern "C" char g_14426a0[];    // vtable retail relocates here
 // @ 0x00817a40
 cSPUIMovieRecordUI* __fastcall FUN_00817a40raw(cSPUIMovieRecordUI* p)
 {
     void** slot = (void**)((char*)p + 0x10);
-    g_164d858 = (void*)slot;
+    *(void**)g_164d858 = (void*)slot;   // registrar slot
     p->mVt0 = g_14426a0;
     *(void* volatile*)&p->mVt1 = g_13eb394;
     cTokBase& base = *(cTokBase*)((char*)p + 8);
