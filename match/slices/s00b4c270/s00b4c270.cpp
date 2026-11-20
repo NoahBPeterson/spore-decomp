@@ -685,21 +685,17 @@ void __fastcall FUN_00b4ccc0(void* self)
 void Sim::ce30(void* obj)
 {
     uint v;
-    if (obj != 0) {
-        void* p;
-        if (!((VObj24*)obj)->v24(0xa55a5cee, &p)) {
-            v = 1;
+    void* p;
+    if (obj != 0 && ((VObj24*)obj)->v24(0xa55a5cee, &p)) {
+        unsigned short k = *(unsigned short*)((char*)p + 0x12);
+        const uint* pv;
+        if (k == 9 || k == 0x10) {
+            if ((*(uchar*)((char*)p + 0x10) & 0x30) != 0) pv = *(const uint**)p;
+            else pv = k ? (const uint*)p : 0;
         } else {
-            uint k = (unsigned short)*(unsigned short*)((char*)p + 0x12);
-            if (k == 9 || k == 0x10) {
-                if ((*(uchar*)((char*)p + 0x10) & 0x30) != 0) p = *(void**)p;
-                else p = (void*)((uint)(-(int)k) & (uint)p);
-            } else {
-                p = &g_15d9c68;
-            }
-            v = *(uint*)p;
-            if (v > 3) return;
+            pv = (const uint*)&g_15d9c68;
         }
+        v = *pv;
     } else {
         v = 1;
     }
