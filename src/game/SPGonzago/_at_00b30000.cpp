@@ -843,7 +843,6 @@ struct C101 {
     bool  M_d5f0();
     float M_d630();
     void* M_d6a0();
-    void  M_d730();
     void  M_d7a0();
     void* M_d8c0();
     void  M_d9c0(float* out);
@@ -2254,20 +2253,19 @@ S16 __cdecl FUN_00b3d700(unsigned a, unsigned b)
     return r;
 }
 
+struct C101Base0 { virtual void b0(); };
+struct C101Listener { virtual void UnregisterMessages(); };   // second base at +4
+struct C101Obj : C101Base0, C101Listener {
+    void UnregisterMessages();
+};
 // @ 0x00b3d730
-void C101::M_d730()
+void C101Obj::UnregisterMessages()
 {
-    void* self = (char*)this - 4;
-    void* ms = SP_MessageServer();
-    ((V20*)ms)->f20(self, 0x0182c582u);
-    ms = SP_MessageServer();
-    ((V20*)ms)->f20(self, 0x01a0219eu);
-    ms = SP_MessageServer();
-    ((V20*)ms)->f20(self, 0x025630b7u);
-    ms = SP_MessageServer();
-    ((V20*)ms)->f20(self, 0x031018b9u);
-    ms = SP_MessageServer();
-    ((V20*)ms)->f20(self, 0x00f62defu);
+    ((V20*)SP_MessageServer())->f20(this, 0x0182c582u);
+    ((V20*)SP_MessageServer())->f20(this, 0x01a0219eu);
+    ((V20*)SP_MessageServer())->f20(this, 0x025630b7u);
+    ((V20*)SP_MessageServer())->f20(this, 0x031018b9u);
+    ((V20*)SP_MessageServer())->f20(this, 0x00f62defu);
     FUN_00b50ff0();
 }
 
