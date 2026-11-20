@@ -20,3 +20,4 @@
 ../src/game/SPGonzago/_at_00d10000.cpp  ?GetRadius@cRotationBall@@QAENXZ  00d1dd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FiniBall@cRotationBall@@QAEXXZ  00d1da60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FiniRing@cRotationRing@@QAEXXZ  00d1de10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?Write@cRotationBall@@QAEDPAX@Z  00d1d540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

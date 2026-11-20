@@ -356,21 +356,21 @@ void* RetailRotationQuery::cRotationBall::AsInterface(uint32_t type)
                              : cGameData::AsInterface(type);
 }
 
+struct StreamImpl_d1d540 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5();
+    virtual void* Iface();   // +0x18
+};
+inline void WriteTag_d1d540(void* s, uint v) { WriteUint32(s, &v, 1, 0); }
+
 // @ 0x00d1d540
 char cRotationBall::Write(void* stream)
 {
     void* impl = (*(VFnR)VSLOT(stream, 0x20))(stream);
-    uint tag = 0x7292112;
-    void* iface = (*(VFnR)VSLOT(impl, 0x18))(impl);
-    WriteUint32(iface, &tag, 1, 0);
+    WriteTag_d1d540(((StreamImpl_d1d540*)impl)->Iface(), 0x7292112);
     ((cGameData*)this)->Write(stream);
     cGameModel* m = mpModel_108;
-    if (m) {
-        void* r = (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807);
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, r);
-    } else {
-        (*(VFn1)VSLOT(stream, 0x2c))(stream, 0);
-    }
+    (*(VFn1)VSLOT(stream, 0x2c))(stream, m ? (*(VFnR1)VSLOT(m, 0xb8))(m, (void*)0x179c807) : 0);
     return 1;
 }
 
