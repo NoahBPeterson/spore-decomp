@@ -73,6 +73,10 @@ struct String16 {         // eastl::basic_string<wchar_t>, 0x10 bytes
     bool empty() const { return mpBegin == mpEnd; }
 };
 
+struct SolarSystem {
+    void InitBinarySystem(const String16* name);   // 0xc85200
+};
+
 struct Key {              // EA::ResourceMan::Key, 0xc bytes
     uint32_t instanceID;
     uint32_t typeID;
@@ -816,10 +820,10 @@ void cStarRecord::SetName(const String16* s)
         if (focus != 0) {
             void* solar = focus->GetSolarSystem();
             if (solar != 0)
-                ((void(__thiscall*)(void*, const String16*))0xc85200)(solar, s);
+                ((SolarSystem*)solar)->InitBinarySystem(s);
         }
         if (s != &mName)
-            ((void(__thiscall*)(String16*, uint32_t, uint32_t))0x423650)(&mName, s->mpBegin, s->mpEnd);
+            mName.assign(s->mpBegin, s->mpEnd);
     }
 }
 // ===========================================================================
