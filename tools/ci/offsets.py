@@ -20,9 +20,9 @@ What counts, outside comments and string literals:
   - a pointer cast of a name indexed by a literal: `((int*)p)[3]`, `((void**)this)[2]`;
   - a byte-pointer view of `this`: `(char*)this`, `(unsigned char*)this`, `(uint8_t*)this`, `(BYTE*)this`, also
     through `reinterpret_cast`.
-An offset from the address of a global (`(char*)&g_1483f74 + 0x126c`) does not count: AGENTS.md asks for that form
-when one relocation covers two fields of a global. Macros and helper functions that hide an offset are not seen;
-review catches those.
+  - a byte offset from a global's address: `(char*)&g_1483f74 + 0x126c` (declare the global with its type and write
+    `g_Foo.mBar`, which compiles to the same relocation).
+Macros and helper functions that hide an offset are not seen; review catches those.
 """
 import json, re, subprocess, sys
 
@@ -42,6 +42,8 @@ PATTERNS = [
     # (char*)this, reinterpret_cast<char*>(this)
     re.compile(_BYTECAST + r"\(?\s*this\b"),
     re.compile(r"reinterpret_cast\s*<\s*(?:const\s+)?(?:unsigned\s+)?(?:char|uint8_t|BYTE)\s*\*\s*>\s*\(\s*this\s*\)"),
+    # (char*)&g_1483f74 + 0x126c: a byte offset from a global's address
+    re.compile(_BYTECAST + r"&\s*[A-Za-z_][\w:]*\s*[+-]\s*" + _NUM),
 ]
 _STRIP = re.compile(r'//[^\n]*|/\*.*?\*/|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'', re.S)
 

@@ -154,8 +154,10 @@ into the generator's inputs so they are not lost.
 - The reverse holds too: where retail has an address (a relocation), name it; never write the number. A vtable, a
   global, a string or a callback is `extern "C" char g_13eb938[];` / `extern "C" void FUN_00abcdef();` (or the real
   declaration), used as `(void*)g_13eb938`. The check fails "a number at offset N where retail has an address". Two
-  addresses in one object (a table and its end, fields of one global) are one name plus an offset
-  (`(char*)&g_1483f74 + 0x126c`), not two names, or cl compiles them as unrelated objects.
+  addresses in one object (fields of one global, a table and its end) are one name, not two (cl compiles two names
+  as unrelated objects): declare the global with its type and use its members, `g_Foo.mBar` or `&g_Table[n]`. That
+  compiles to the same relocation as a byte offset from the global (`(char*)&g_1483f74 + 0x126c`), which the check
+  counts like any other byte offset.
 - Only `src/game/`, `match/slices/` and `match/include/` can change in a contribution. Changes to `tools/`, `.github/`
   or the fingerprints need a maintainer; put them in a separate pull request.
 - Never commit game files, the analysis image, disassembly or dumps of game code.
