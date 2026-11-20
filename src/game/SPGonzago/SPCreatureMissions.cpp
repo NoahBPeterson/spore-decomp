@@ -513,10 +513,9 @@ char MissionStub::FUN_00c2e9e0()
     char* self = (char*)this;
     if (*(int*)(self + 0x7c) != 5) {
         *(int*)(self + 0x7c) = 5;
-        void** vt = *(void***)self;
-        ((VFn)vt[0xbc / 4])(self);
-        ((VFn)vt[0x6c / 4])(self);
-        SP_cSPTimer_Restart(self + 0x38);
+        ((VFn)(*(void***)self)[0xbc / 4])(self);
+        ((VFn)(*(void***)self)[0x6c / 4])(self);
+        ((SP::cSPTimer*)(self + 0x38))->Restart();
         return 1;
     }
     return 0;
