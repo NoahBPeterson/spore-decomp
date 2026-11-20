@@ -1261,13 +1261,15 @@ u32 cCityInputStrategy::FUN_00cf1540()
 }
 
 // @ 0x00cf1560
+struct BoolArg_cf1560 { bool b; };
 u32 __stdcall FUN_00cf1560(void* param_1, u32 param_2)
 {
-    volatile bool uVar3 = 0;
+    BoolArg_cf1560 uVar3;
+    uVar3.b = false;
     switch (param_2)
     {
     case 0:
-        uVar3 = 1;
+        uVar3.b = true;
         break;
     case 1:
         MOPS(FUN_00b30d70())->FUN_00b2fba0(2);
@@ -1283,7 +1285,7 @@ u32 __stdcall FUN_00cf1560(void* param_1, u32 param_2)
     }
     u32 uVar1 = param_1 ? ((u32 (__thiscall*)(void*, void*))VT(param_1)[0x0c / 4])(param_1, (void*)0x01186577) : 0;
     void* cur = FUN_00b30d70();
-    ((void (__thiscall*)(void*, u32, u32))VT(cur)[0xa0 / 4])(cur, uVar3, uVar1);
+    ((void (__thiscall*)(void*, BoolArg_cf1560, u32))VT(cur)[0xa0 / 4])(cur, uVar3, uVar1);
     return 0;
 }
 
