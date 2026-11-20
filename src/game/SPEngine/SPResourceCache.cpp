@@ -353,15 +353,15 @@ void C_006af670::serialize(void* stream)
     header[0] = mFlags;
     header[1] = mKind;
     FUN_0093ab10(stream, header, 1, 0);
-    int count = (int)(mpEnd - mpBegin) >> 4;
-    IO_WriteUint32(stream, &count, 1, 0);
-    for (char* p = mpBegin; p != mpEnd; p += 0x10) {
-        int v8 = *(int*)(p + 8);
-        IO_WriteUint32(stream, &v8, 1, 0);
-        int v4 = *(int*)(p + 4);
-        IO_WriteUint32(stream, &v4, 1, 0);
-        int vc = *(int*)(p + 0xc);
-        IO_WriteUint32(stream, &vc, 1, 0);
+    int value = (int)(mpEnd - mpBegin) >> 4;
+    IO_WriteUint32(stream, &value, 1, 0);
+    for (char* p = mpBegin, *end = mpEnd; p != end; p += 0x10) {
+        value = *(int*)(p + 8);
+        IO_WriteUint32(stream, &value, 1, 0);
+        value = *(int*)(p + 4);
+        IO_WriteUint32(stream, &value, 1, 0);
+        value = *(int*)(p + 0xc);
+        IO_WriteUint32(stream, &value, 1, 0);
     }
 }
 
