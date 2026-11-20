@@ -11,6 +11,7 @@
 #include "EA/Text/TextStyle.h"
 #include "EA/Text/Typesetter.h"
 #include <stddef.h>
+#include <intrin.h>
 #include "EA/UTFWin/RenderContext.h"
 #pragma intrinsic(sqrt)
 
@@ -3777,10 +3778,12 @@ bool WinTextEdit_s0098_c880::OnMouseDown(float x, float y, uint32_t a, uint8_t e
 namespace EA { namespace UTFWinControls {
 bool WinTextEdit_s0098_c880::OnMouseMove(float x, float y, uint32_t a)
 {
-    if (OnMouseMoveEvent(1) &&
-        (((mIWin.mTextEditFlags >> 6) & 1) || !(mIWin.mTextEditFlags & 1))) {
-        int idx = Pick(x, y, 1);
-        mIWin.SetCursorIndex((uint32_t)idx, 1);
+    if (OnMouseMoveEvent(1)) {
+        if ((bool)((mIWin.mTextEditFlags >> 6) & 1) ||
+            (_ReadWriteBarrier(), !(mIWin.mTextEditFlags & 1))) {
+            int idx = Pick(x, y, 1);
+            mIWin.SetCursorIndex((uint32_t)idx, 1);
+        }
     }
     return true;
 }
