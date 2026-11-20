@@ -10512,9 +10512,10 @@ char FUN_00db2f10(void *pObj, u32 a2, u32 a3, u32 a4, u32 a5, TaskCtx *pCtx)
 void FUN_00db2fa0(TaskCtx *p1, u32 a2, u32 a3, u32 a4, u32 a5, TaskCtx *pCtx)
 {
     (void)p1; (void)a2; (void)a3; (void)a4; (void)a5;
-    if (pCtx->mpRefC != 0) {
-        void *p = pCtx->mpRefC;
-        pCtx->mpRefC = 0;
+    void** slot = (void**)&pCtx->mpRefC;
+    if (*slot != 0) {
+        void *p = *slot;
+        *slot = 0;
         vc_v(p, 4);
     }
     if (pCtx != 0 && pCtx->mpRefC != 0)
