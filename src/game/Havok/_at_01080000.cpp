@@ -4188,10 +4188,10 @@ hkPhantom_s0108_e080* hkAabbPhantom::clone() const
 void hkAabbPhantom::deallocateInternalArrays()
 {
     if (m_overlappingCollidables.m_size == 0) {
-        if (m_overlappingCollidables.m_capacityAndFlags >= 0) {
+        if ((m_overlappingCollidables.m_capacityAndFlags & 0x80000000) == 0) {
             void* tls = TlsGetValue(g_hkThreadMemoryTls_s0108_e080);
             ((hkThreadMemory_s0108_e080*)tls)->deallocateChunk(m_overlappingCollidables.m_data,
-                                           (m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff) << 2, 0x14);
+                                           (unsigned)(m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff) * 4u, 0x14);
         }
         m_overlappingCollidables.m_data = 0;
         m_overlappingCollidables.m_size = 0;
