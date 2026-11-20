@@ -3,7 +3,6 @@
 009a34a0 172 complete animation-object field init; calls partial 009a3080 via undefined symbol resolved to original image; equiv PASS: 400 valid inputs, 100.0% coverage (all insns)
 009a3630 51 complete refcount-descend; stack-local selection differs; equiv UNSUPPORTED: 4 unresolved reference(s): ?f@S9a1b00@@QAEHHH@Z, ?f@S99f0b0@@QAEXXZ, ?f@S9c4cc0@@QAEXXZ, ?
 009a36a0 77 complete binary-heap sift up; register allocation differs; equiv PASS: 1115 valid inputs, 100.0% coverage (all insns)
-009a3760 47 complete rbtree lower_bound; key load under null-root guard; equiv PASS: 361 valid inputs, 100.0% coverage (all insns)
 009a37a0 33 complete rbtree find; register allocation differs; equiv PASS: 1122 valid inputs, 100.0% coverage (all insns)
 009a37e0 40 complete rbtree count; induction variable ordering differs; equiv WEAK: 300 valid inputs (need 200), 34.5% coverage (need 100%% (all insns))
 009a3820 78 complete rbtree lower_bound(<=); key load under null-root guard; equiv PASS: 373 valid inputs, 100.0% coverage (all insns)

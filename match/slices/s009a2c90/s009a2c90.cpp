@@ -375,13 +375,13 @@ __declspec(noinline) bool FUN_009a3680(int a, int b) {
 // ---------------------------------------------------------------------------
 __declspec(noinline) int* S9a3760::f(int* out, unsigned* key) {
   RbTree* t = (RbTree*)this;
-  RbNode* head = &t->anchor;
-  RbNode* parent = head;
-  RbNode* node = head->parent;
+  RbNode* node = t->anchor.parent;
+  RbNode* parent = &t->anchor;
   if (node) {
-    unsigned k0 = key[0], k1 = key[1];
+    unsigned k0 = key[0];
+
     do {
-      if (k0 > node->key0 || (k0 == node->key0 && k1 > node->key1)) node = node->left;
+      if (node->key0 < k0 || (!(k0 < node->key0) && node->key1 < key[1])) node = node->left;
       else { parent = node; node = node->right; }
     } while (node);
   }
