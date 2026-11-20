@@ -232,6 +232,7 @@ void* cMissionMultiStep::GetCurrSubMission()
     u8* e = (u8*)mSubEnd;
     i32 n = (i32)(e - (u8*)mSubBegin) >> 2;
     if (idx >= 0 && idx < n) {
+        _ReadWriteBarrier();
         return ((void**)mSubBegin)[idx];
     }
     return 0;
