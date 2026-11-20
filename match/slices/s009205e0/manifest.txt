@@ -10,3 +10,4 @@ slices/s009205e0/s009205e0.cpp  ?ctor@EapdSymbolTable@@QAEPAU1@XZ  009206d0  /O2
 slices/s009205e0/s009205e0.cpp  ?ComponentAt@@YAPA_WPA_W0H@Z  00920da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009205e0/s009205e0.cpp  ?UpperBound@@YAPAIPAI0PBI@Z  009212c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009205e0/s009205e0.cpp  ?LowerBound@@YAPAIPAI0PBI@Z  00921300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009205e0/s009205e0.cpp  ?insert@HashTable@@QAE?AUHashIter@@ABUHashValue@@_N@Z  009205e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -528,7 +528,7 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
         h = h * 0x1000193 ^ c;
         c = *s;
     }
-    unsigned idx = h % mnBucketCount;
+    const unsigned idx = h % mnBucketCount;
     HashNode* n = (HashNode*)EASTL_allocator_allocate(0x14, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     if (n != 0) {
@@ -538,12 +538,12 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
         n->mKey = value.mKey;
     }
     n->mpNext = 0;
-    HashNode* head = mpBuckets[idx];
-    HashNode* p = head;
-    while (p != 0 && p->mpName != value.mpName)
-        p = p->mpNext;
+    HashNode* p = mpBuckets[idx];
+    for (; p != 0; p = p->mpNext)
+        if (value.mpName == p->mpName)
+            break;
     if (p == 0) {
-        n->mpNext = head;
+        n->mpNext = mpBuckets[idx];
         mpBuckets[idx] = n;
     } else {
         n->mpNext = p->mpNext;
