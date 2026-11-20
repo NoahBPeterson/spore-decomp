@@ -18,3 +18,4 @@ slices/s00a68140/s00a68140.cpp  ??1SymbolManagerExt@@UAE@XZ  00a68af0  /O2 /MD /
 slices/s00a68140/s00a68140.cpp  ??0FixedInputManagerS@@QAE@XZ  00a68bf0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00a68140/s00a68140.cpp  ??_GFixedInputManagerS@@UAEPAXI@Z  00a68c50  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00a68140/s00a68140.cpp  ?AssignPtrs@@YAXPAPAVRefObj@@00@Z  00a69070  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a68140/s00a68140.cpp  ?AssignPtrsRev@@YAPAPAVRefObj@@PAPAV1@00@Z  00a690d0  /O2 /MD /Gy /EHsc /TP /GS-
