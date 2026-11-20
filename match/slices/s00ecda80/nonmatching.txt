@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00ecda80  132  logic: complete; the SystemAT / g_15ad298 / MessageServer slot calls indexed the object (((void**)p)[off/4]) instead of the vtable, they now dispatch through *(void**)obj, and FUN_00f00380 is a thiscall on 0x015ad328 (arg pushed) not a cdecl call. Still differs: param_1 is kept in ebx across the calls in retail while ours spills it to ecx/esi (regalloc), 170 vs 172; fix1: quick check UNSUPPORTED (emulator hits its 10s limit)
-00ecdbb0   15  complete; constant compare + tail differs; equiv PASS (1200 valid inputs, 100.0% coverage (all insns))
 00ecdc70   46  complete; stopwatch/float compare scheduling differs; equiv UNSUPPORTED (only 0/1200 inputs valid (discards: import:_decode_pointer=1200))
 00ecdcc0  125  complete; property-layout position math scheduling differs; equiv UNSUPPORTED (2 unresolved reference(s): ?SP_WindowManager@@YAPAHXZ, ?cSPUIPropertyLayout_SetPositionAnd)
 00ecde00   75  complete; interface cast/adjustor if-chain scheduling differs (thiscall CastObj::Cast, ret 4); equiv PASS (400 valid inputs, 96.6% coverage)
