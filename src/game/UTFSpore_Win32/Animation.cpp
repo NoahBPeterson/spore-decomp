@@ -1,6 +1,10 @@
 // EA::UTFWin animation objects: curves, 2D paths and their factories.
 // Object file: UTFSpore_Win32/Animation.obj.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1440200[];
+extern "C" char g_1440250[];
+
 #include "game/types.h"
 #include <string.h>
 #include <new>
@@ -213,7 +217,7 @@ bool InitArray8(int* out, int src, int, int* allocator)
     out[2] = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
     void* p = ((void*(__thiscall*)(void*, unsigned, int))((void**)*(void**)allocator)[0])(allocator, out[2] * 8, 4);
     out[1] = (int)(size_t)p;
-    out[0] = 0x1440200;
+    out[0] = (int)g_1440200;
     if (out[2] != 0) {
         if (p != 0)
             ((void(__thiscall*)(void*, void*, int))((void**)*(void**)obj)[0x28 / 4])(obj, p, out[2]);
@@ -250,7 +254,7 @@ bool InitArray12(int* out, int src, int, int* allocator)
     out[2] = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
     void* p = ((void*(__thiscall*)(void*, unsigned, int))((void**)*(void**)allocator)[0])(allocator, out[2] * 0xc, 4);
     out[1] = (int)(size_t)p;
-    out[0] = 0x1440250;
+    out[0] = (int)g_1440250;
     if (out[2] != 0) {
         if (p != 0)
             ((void(__thiscall*)(void*, void*, int))((void**)*(void**)obj)[0x28 / 4])(obj, p, out[2]);

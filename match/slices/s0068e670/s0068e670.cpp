@@ -1,5 +1,9 @@
 // Slice s0068e670: Simulator/EA job-lock, thread-mutex and small utility helpers
 // (0x0068e670..0x0068f600). Module compiled /O2 /MD /Gy /EHsc /TP (no SSE).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1403750[];
+
 #include "types.h"
 #include <intrin.h>
 #include <string.h>
@@ -662,7 +666,7 @@ void ClsF4E0Ctor::ctorHelper() {
 // =====================================================================
 struct ClsF540 { uint32_t f0, f4; Mutex m; int count; void Acquire(); void Release(); };
 void ClsF540::Acquire() {
-    m.Lock((unsigned)0x01403750);
+    m.Lock((unsigned)g_1403750);
     ++count;
 }
 

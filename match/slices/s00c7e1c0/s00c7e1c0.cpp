@@ -1,5 +1,10 @@
 // Slice s00c7e1c0: cCubeSim cube-face helpers / terraform check (retail).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00faed90();
+extern "C" char g_1473354[];
+
 #include "types.h"
 #include <math.h>
 
@@ -141,7 +146,7 @@ void CS::FUN_00c7e280(void* a)
     void* ms = MessageServer_0067dcc0();
     h.mp38 = ms;
     h.mp3C = hTarget;
-    h.mp40 = (void*)0x1473354;
+    h.mp40 = (void*)g_1473354;
     h.mp44 = (void*)1;
     h.mp48 = 0;
     if (ms != 0 && hTarget != 0) {
@@ -352,8 +357,8 @@ void* CS::ctor_00c7ea70()
     int n = 0x5f;
     do {
         p->m00 = 0;
-        vector_ctor_iterator_00401930(&p->mVec0, 0x10, 3, (void*)0xfaed90);
-        vector_ctor_iterator_00401930(&p->mVec1, 0x10, 2, (void*)0xfaed90);
+        vector_ctor_iterator_00401930(&p->mVec0, 0x10, 3, (void*)FUN_00faed90);
+        vector_ctor_iterator_00401930(&p->mVec1, 0x10, 2, (void*)FUN_00faed90);
         p += 1;
     } while (--n >= 0);
     operator_new_array_011e073e(this, 0, 0x1f80);

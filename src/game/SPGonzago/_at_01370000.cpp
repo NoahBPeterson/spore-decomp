@@ -4,6 +4,12 @@
 // Function bodies keep the compiler-visible shape of the retail code (declaration order, store order and
 // __declspec(noinline) are codegen levers). Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013c7aa0();
+extern "C" void FUN_013c7ab0();
+extern "C" void FUN_013c7ac0();
+extern "C" char g_1481e20[];
+
 #include "game/types.h"
 
 extern "C" int      __cdecl atexit(void (__cdecl*)());
@@ -212,10 +218,10 @@ void __declspec(noinline) InitLineColorBottom()
     gLineColorBottom.mB = fB;
     float fA = kColorOne;
     gpColorList = &gLineColorBottom;
-    gLineColorBottom.mpClass = (void*)0x01481e20;  // g_propKey1481e20
+    gLineColorBottom.mpClass = (void*)g_1481e20;  // g_propKey1481e20
     gLineColorBottom.mA = fA;
 
-    atexit((void (__cdecl*)(void))0x013c7aa0);
+    atexit((void (__cdecl*)(void))FUN_013c7aa0);
 }
 
 // @ 0x013731b0
@@ -230,10 +236,10 @@ void __declspec(noinline) InitLineColorDropShadow()
     gLineColorDropShadow.mB = 0.0f;
     float fA = kColorBlue;
     gpColorList = &gLineColorDropShadow;
-    gLineColorDropShadow.mpClass = (void*)0x01481e20;  // g_propKey1481e20
+    gLineColorDropShadow.mpClass = (void*)g_1481e20;  // g_propKey1481e20
     gLineColorDropShadow.mA = fA;
 
-    atexit((void (__cdecl*)(void))0x013c7ab0);
+    atexit((void (__cdecl*)(void))FUN_013c7ab0);
 }
 
 // @ 0x01373220
@@ -249,10 +255,10 @@ void __declspec(noinline) InitLineColorBorder()
     gLineColorBorder.mB = fRGB;
     float fA = kColorOne;
     gpColorList = &gLineColorBorder;
-    gLineColorBorder.mpClass = (void*)0x01481e20;  // g_propKey1481e20
+    gLineColorBorder.mpClass = (void*)g_1481e20;  // g_propKey1481e20
     gLineColorBorder.mA = fA;
 
-    atexit((void (__cdecl*)(void))0x013c7ac0);
+    atexit((void (__cdecl*)(void))FUN_013c7ac0);
 }
 
 // @ 0x0137ec20

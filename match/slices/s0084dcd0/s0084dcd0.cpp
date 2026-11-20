@@ -2,6 +2,10 @@
 // Self-contained: png_struct / png_info layouts, the GIMEX image descriptor and the little
 // file handle are declared below with the offsets observed in the disassembly.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00c2e4e0();
+
 #include <setjmp.h>
 
 #pragma function(memset)
@@ -511,7 +515,7 @@ int __stdcall PNG_read_rgba(PngHandle* ph, GimexInfo* gimex, unsigned char* pixe
     png_info_def* info;
     int r = 0;
 
-    png = png_create_read_struct_2("1.2.25", 0, 0, (png_error_ptr)0xc2e4e0, 0,
+    png = png_create_read_struct_2("1.2.25", 0, 0, (png_error_ptr)FUN_00c2e4e0, 0,
                                    PNGREAD_malloc, PNGREAD_free);
     if (png != 0) {
         info = (png_info_def*)png_create_info_struct(png);

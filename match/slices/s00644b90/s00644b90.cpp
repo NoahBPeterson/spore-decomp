@@ -1,4 +1,9 @@
 // SP::cSPUIAssetBrowser helpers (0x00644b90..0x0064562f). Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb918[];
+extern "C" char g_13ef094[];
+
 #include "../s00642530/s00642530.h"
 
 // ---- virtual-slot call helpers (the exact class declarations of these UI objects live elsewhere) ----
@@ -307,8 +312,8 @@ void RelPair::Release2() {
 struct LocaleMsg2 { uint32_t vt0, vt1, f8, fc; PlainRC* owner; void Dtor(); };
 void LocaleMsg2::Dtor() {
     if (owner) owner->Release();
-    vt1 = 0x13ef094;
-    vt0 = 0x13eb918;
+    vt1 = (int)g_13ef094;
+    vt0 = (int)g_13eb918;
 }
 
 struct ResourceKey {

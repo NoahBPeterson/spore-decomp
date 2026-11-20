@@ -4,6 +4,12 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_146837c[];
+extern "C" char g_1468380[];
+extern "C" char g_14683d0[];
+
 #include "types.h"
 #include <intrin.h>
 #include <stddef.h>
@@ -70,10 +76,10 @@ extern "C" void __cdecl FUN_00c2e4e0(void*, int);
 struct cGonzagoSubsystem { void Destroy(); };
 void __fastcall FUN_00bd70b0(int* this_)
 {
-    this_[0] = 0x14683d0;
+    this_[0] = (int)g_14683d0;
     int* sub = this_ + 1;
-    sub[0] = 0x1468380;
-    this_[2] = 0x146837c;
+    sub[0] = (int)g_1468380;
+    this_[2] = (int)g_146837c;
     _ReadWriteBarrier();
     int h = this_[9];
     if (h != 0) {
@@ -81,7 +87,7 @@ void __fastcall FUN_00bd70b0(int* this_)
         FUN_00bd571db0(h, this_[10], this_[0xb], this_[0xc], this_[0xd]);
     }
     ((cGonzagoSubsystem*)sub)->Destroy();
-    this_[0] = 0x13eb394;
+    this_[0] = (int)g_13eb394;
 }
 
 // ===========================================================================

@@ -20,6 +20,10 @@
 // (m_class.c, m_sched.c, s_loader.c). Struct layouts are EA's: only the fields these functions
 // touch are declared, at their binary offsets. Callees are masked relocations.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (see manifest).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1454428[];
+
 #include "types.h"
 
 typedef unsigned int uintptr_t;   // VS2008 <stdint.h> absent from types.h
@@ -515,7 +519,7 @@ double clock_getlogicaltime()
 // @ 0x00a49220
 double clock_gettimesince(double systime)
 {
-    return (s_time - systime) * *(const double*)0x01454428;
+    return (s_time - systime) * *(const double*)g_1454428;
 }
 
 // @ 0x00a49240

@@ -1,6 +1,12 @@
 // Slice s00713e40: material-dispatch callback, shader registration, EA resource
 // adapter methods, and the material/texture collection helpers.
 // /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_140cca0[];
+extern "C" char g_140cca4[];
+
 #include <new>
 #include <string.h>
 #include <math.h>
@@ -130,10 +136,10 @@ void* Adapter20::Init()
     // pair of stores lets MSVC drop the first as dead. The volatile qualifier pins it.
     void* self = this;
     void* v = 0;
-    *(void* volatile*)((char*)self + 4) = (void*)0x13ef094;
+    *(void* volatile*)((char*)self + 4) = (void*)g_13ef094;
     *(void**)((char*)self + 8) = v;
-    *(void**)self = (void*)0x140cca4;
-    *(void**)((char*)self + 4) = (void*)0x140cca0;
+    *(void**)self = (void*)g_140cca4;
+    *(void**)((char*)self + 4) = (void*)g_140cca0;
     *(void**)((char*)self + 0xc) = v;
     *(void**)((char*)self + 0x10) = v;
     *(void**)((char*)self + 0x14) = v;

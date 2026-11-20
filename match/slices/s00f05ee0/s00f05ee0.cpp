@@ -16,6 +16,11 @@
 // functions in THIS slice belong to the genuine play-mode class whose retail layout is smaller and
 // is reconstructed locally below from the disassembly (handler subobject at +0x04, UI at +0x2c,
 // dialog state at +0x28, ...).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148b9a4[];
+extern "C" char g_15ad4a4[];
+
 #include "types.h"
 #include <string.h>
 
@@ -451,7 +456,7 @@ void cSPPlayModeSubModeMovie::ShowSendVideoURLDialog()
     if (!CheckRecordingPreconditions()) {
         void* w = ((cSPUILayout*) mUI)->FindWindowByID(0x3f67620, 1);
         ((FnWin2) VT(w, 0x7c))(w, 1, 0);
-        FUN_00809db0(GetHandlerSub(), 0x15ad4a4);
+        FUN_00809db0(GetHandlerSub(), (int)g_15ad4a4);
         mDialog = 10;
     }
 }
@@ -649,12 +654,12 @@ void cSPPlayModeSubModeMovie::RegisterMessageHandlers()
     void* srv = FUN_0067dcc0();
     mServer = srv;
     mHandlerObj = handlerObj;
-    mMsgTable = (void*) 0x148b9a4;
+    mMsgTable = (void*) g_148b9a4;
     mMsgCount = 0xf;
     m24 = 0;
     if (srv != 0 && handlerObj != 0) {
         for (u32 i = 0; i < 0x3c; i += 4) {
-            u32 id = *(u32*) (0x148b9a4 + i);
+            u32 id = *(u32*) ((int)g_148b9a4 + i);
             ((FnR2) VT(srv, 0x24))(srv, handlerObj, (void*) (size_t) id);
         }
     }

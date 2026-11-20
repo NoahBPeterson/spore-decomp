@@ -7,6 +7,14 @@
 // point is projected back onto the planet surface (cPlanetModel method 0x00b81630).
 // Names are Claude-coined from usage.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_1459e50[];
+extern "C" char g_1459e5c[];
+extern "C" char g_1459e60[];
+extern "C" char g_1459e70[];
+
 #include "types.h"
 #include <math.h>
 #include <new>
@@ -443,9 +451,9 @@ void __fastcall FUN_00ac5330(cPathFinderHandle* pHandle)
 // @ 0x00ac5350
 cPathFinder::~cPathFinder()
 {
-    mpVtbl0 = (void**)0x01459e60;
-    mSubsystem.mpVtbl = (void**)0x01459e70;
-    mSubsystem.mpVtbl04 = (void**)0x01459e5c;
+    mpVtbl0 = (void**)g_1459e60;
+    mSubsystem.mpVtbl = (void**)g_1459e70;
+    mSubsystem.mpVtbl04 = (void**)g_1459e5c;
     Drain();
     cSearchVisitor* pVisitor = mpVisitor;
     if (pVisitor != 0) {
@@ -458,7 +466,7 @@ cPathFinder::~cPathFinder()
     mRequests.Destroy();
     mOpen.FreeStorage();
     mSubsystem.Destroy();
-    mpVtbl0 = (void**)0x013eb394;       // PaintSystem vtable
+    mpVtbl0 = (void**)g_13eb394;       // PaintSystem vtable
 }
 
 // @ 0x00ac5400
@@ -474,7 +482,7 @@ void __fastcall FUN_00ac5400(uint8_t* pRequestBase)
 // @ 0x00ac5430
 cPathFinderHandle::~cPathFinderHandle()
 {
-    mpVtbl = (void**)0x01459e50;
+    mpVtbl = (void**)g_1459e50;
     if (mpFinder != 0) {
         cPathManager* pManager = GetPathManager();
         if (mpFinder != 0 && pManager != 0)
@@ -485,7 +493,7 @@ cPathFinderHandle::~cPathFinderHandle()
 // @ 0x00ac5490
 void* cPathFinderHandle::DestroyAndFree(uint flags)
 {
-    mpVtbl = (void**)0x01459e50;
+    mpVtbl = (void**)g_1459e50;
     if (mpFinder != 0) {
         cPathManager* pManager = GetPathManager();
         if (mpFinder != 0 && pManager != 0)

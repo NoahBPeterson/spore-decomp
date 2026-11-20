@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPGameDataUFO.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146be54[];
+extern "C" char g_146be68[];
+extern "C" char g_146be89[];
+extern "C" char g_146be9c[];
+extern "C" char g_1570858[];
+extern "C" char g_1573290[];
+
 #include "game/types.h"
 #include "SP/cBehaviorTreeData.h"
 #include "SP/cCombatant.h"
@@ -2838,10 +2846,10 @@ int cSPGameDataUFO_s00c3_ae70::GetFieldValues(void* pOut)
     int sum = ((FnB18420*)this)->f(pOut);
     sum += ((FnC0AF90*)((char*)this + 0x34))->f(pOut);
 
-    localA14.ctor((char*)this + 0x508, (void*)0x1570858, 0x1a80d26);
+    localA14.ctor((char*)this + 0x508, (void*)g_1570858, 0x1a80d26);
     sum += localA14.GetFields(pOut);
 
-    local1428.ctor(this, (void*)0x1573290, 0x1a80d26);
+    local1428.ctor(this, (void*)g_1573290, 0x1a80d26);
     sum += local1428.GetFields(pOut);
 
     return sum;
@@ -3504,17 +3512,17 @@ void UFO::func3e010(void* s)
     char* self = (char*)this;
     char* q = (char*)s;
     if (*(int*)(self + 0x714) == 0) {
-        ((Fn455d60*)q)->append("== Player UFO ==", (const char*)0x146be9c);
+        ((Fn455d60*)q)->append("== Player UFO ==", (const char*)g_146be9c);
     } else {
-        ((Fn455d60*)q)->append("== NPC UFO ==", (const char*)0x146be89);
+        ((Fn455d60*)q)->append("== NPC UFO ==", (const char*)g_146be89);
     }
-    FUN_005f9450(q, (const char*)0x146be68, (double)*(float*)(self + 0x768));
+    FUN_005f9450(q, (const char*)g_146be68, (double)*(float*)(self + 0x768));
 
     float hp = *(float*)(self + 0x540);
     void* sub = self + 0x508;
     typedef float(__thiscall* GetF)(void*);
     float maxf = ((GetF)(*(void**)(*(char**)sub + 0x58)))(sub);
-    FUN_005f9450(q, (const char*)0x146be54, (double)hp, (double)maxf);
+    FUN_005f9450(q, (const char*)g_146be54, (double)hp, (double)maxf);
 
     FUN_00563de0(self + 0x780, q);
 }

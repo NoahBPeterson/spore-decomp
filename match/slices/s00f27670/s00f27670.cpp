@@ -1,6 +1,10 @@
 // Slice s00f27670.  Editor/Simulator scenario helpers.  Built
 // /O2 /MD /Gy /TP /arch:SSE (scalar SSE used for float clears).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13f09b4[];
+
 typedef unsigned int uint;
 typedef unsigned int size_t;
 extern "C" {
@@ -152,7 +156,7 @@ void Vec18::reserve(unsigned n)
   if (n > capCount) {
     char* p;
     if (n)
-      p = (char*)FUN_00f473a0(n * 0x18, (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+      p = (char*)FUN_00f473a0(n * 0x18, (const char*)g_13f09b4, 0, 0, (int)g_13ebb38, 0xd1);
     else
       p = 0;
     FUN_00720200(begin, end, p);
@@ -179,7 +183,7 @@ void Vec38::reserve(unsigned n)
   if (n > capCount) {
     char* p;
     if (n)
-      p = (char*)FUN_00f473a0(n * 0x38, (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+      p = (char*)FUN_00f473a0(n * 0x38, (const char*)g_13f09b4, 0, 0, (int)g_13ebb38, 0xd1);
     else
       p = 0;
     FUN_00f25ea0(begin, end, p);

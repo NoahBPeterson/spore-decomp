@@ -1,5 +1,23 @@
 // Slice s01300280, /O2 part -- library/Windows init, float-derived globals and
 // zero-fill routines.  /O2 /arch:SSE.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16759f8[];
+extern "C" char g_166aa7c[];
+extern "C" char g_166aab4[];
+extern "C" char g_166c090[];
+extern "C" char g_166c098[];
+extern "C" char g_166c78c[];
+extern "C" char g_166c938[];
+extern "C" char g_166c97c[];
+extern "C" char g_166c980[];
+extern "C" char g_166c990[];
+extern "C" char g_1675eb0[];
+extern "C" char g_1678f3c[];
+extern "C" char g_1679394[];
+extern "C" char g_167946c[];
+extern "C" char g_1679564[];
+
 #include <intrin.h>
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
@@ -48,14 +66,14 @@ void init_166aa7c()
 {
     uint32_t wsaData[100];
     int r = WSAStartup(2, wsaData);
-    *(char*)0x166aa7c = (char)(r == 0);
+    *(char*)g_166aa7c = (char)(r == 0);
     atexit(&FUN_013c0fc0);
 }
 
 // @ 0x01300370
 void init_166aab4()
 {
-    *(void**)0x166aab4 = GetDefaultAllocator0();
+    *(void**)g_166aab4 = GetDefaultAllocator0();
 }
 
 // @ 0x01300760
@@ -77,13 +95,13 @@ void init_166b194()
 extern float g_1550b8c;
 void init_166c090()
 {
-    *(float*)0x166c090 = 1.0f / g_1550b8c;
+    *(float*)g_166c090 = 1.0f / g_1550b8c;
 }
 
 // @ 0x01301b40
 void init_166c098()
 {
-    *(float*)0x166c098 = (g_1550b8c - 1.0f) / g_1550b8c;
+    *(float*)g_166c098 = (g_1550b8c - 1.0f) / g_1550b8c;
 }
 
 // @ 0x01302200
@@ -99,21 +117,21 @@ void init_166c350()
 extern float g_155145c;
 void init_166c78c()
 {
-    *(float*)0x166c78c = 1.0f / g_155145c;
+    *(float*)g_166c78c = 1.0f / g_155145c;
 }
 
 // @ 0x01302ef0
 extern float g_155160c;
 void init_166c938()
 {
-    *(float*)0x166c938 = 1.0f / g_155160c;
+    *(float*)g_166c938 = 1.0f / g_155160c;
 }
 
 // @ 0x01302f50
 extern float g_155163c;
 void init_166c990()
 {
-    *(float*)0x166c990 = 1.0f / g_155163c;
+    *(float*)g_166c990 = 1.0f / g_155163c;
 }
 
 // @ 0x01302f70
@@ -123,20 +141,20 @@ extern float g_1551644;
 extern float g_1551640;
 void init_166c97c()
 {
-    *(float*)0x166c97c = -((g_1550b90 - g_166c964) / (g_1551644 - g_1551640));
+    *(float*)g_166c97c = -((g_1550b90 - g_166c964) / (g_1551644 - g_1551640));
 }
 
 // @ 0x01302fb0
 extern float g_1551648;
 void init_166c980()
 {
-    *(float*)0x166c980 = g_1551648 * g_1551648;
+    *(float*)g_166c980 = g_1551648 * g_1551648;
 }
 
 // @ 0x01307ea0
 void zero_1675eb8()
 {
-    uint32_t* p = (uint32_t*)0x1675eb0;
+    uint32_t* p = (uint32_t*)g_1675eb0;
     for (int i = 0x3f; i >= 0; --i) {
         p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
         p[4] = 0; p[5] = 0; p[6] = 0; p[7] = 0;
@@ -147,7 +165,7 @@ void zero_1675eb8()
 // @ 0x01307ed0
 void zero_1675a00()
 {
-    uint32_t* p = (uint32_t*)0x1675a08;
+    uint32_t* p = (uint32_t*)g_16759f8;
     for (int i = 0x1f; i >= 0; --i) {
         p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
         p[4] = 0; p[5] = 0; p[6] = 0; p[7] = 0; p[8] = 0;
@@ -188,7 +206,7 @@ void init_1678f3c()
     t.b = 0;
     _ReadWriteBarrier();
     t.a = 0xe0;
-    *(TwoInts*)0x1678f3c = t;
+    *(TwoInts*)g_1678f3c = t;
 }
 
 // @ 0x013107d0
@@ -198,7 +216,7 @@ void init_1679394()
     t.b = 0;
     _ReadWriteBarrier();
     t.a = 0x803000;
-    *(TwoInts*)0x1679394 = t;
+    *(TwoInts*)g_1679394 = t;
 }
 
 // @ 0x01310bc0
@@ -208,7 +226,7 @@ void init_1679564()
     t.b = 0;
     _ReadWriteBarrier();
     t.a = 0x803000;
-    *(TwoInts*)0x1679564 = t;
+    *(TwoInts*)g_1679564 = t;
 }
 
 // @ 0x01310be0
@@ -218,5 +236,5 @@ void init_167946c()
     t.b = 0;
     _ReadWriteBarrier();
     t.a = 0xe0;
-    *(TwoInts*)0x167946c = t;
+    *(TwoInts*)g_167946c = t;
 }

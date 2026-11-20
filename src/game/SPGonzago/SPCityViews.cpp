@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCityViews.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14862c4[];
+
 #include "game/types.h"
 #include "SP/cGonzagoTimer.h"
 #include <intrin.h>
@@ -1742,7 +1745,7 @@ cCityFeedbackView_s00e8_7cf0::cCityFeedbackView_s00e8_7cf0()
 // @ 0x00e88ae0
 cCityFeedbackView_s00e8_7cf0::~cCityFeedbackView_s00e8_7cf0()
 {
-    *(void* volatile*)&mpVtbl = (void*)0x14862c4;
+    *(void* volatile*)&mpVtbl = (void*)g_14862c4;
     _ReadWriteBarrier();
     if (mp0c) {
         IRefCounted* p = mp0c;

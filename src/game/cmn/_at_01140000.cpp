@@ -2,6 +2,11 @@
 // Object file: cmn/_at_01140000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14cafa0[];
+extern "C" char g_16e7bfc[];
+extern "C" char g_16f16f4[];
+
 #include "game/types.h"
 #include <string.h>
 #include <xmmintrin.h>
@@ -602,7 +607,7 @@ class ReverbIR1 { public:
 // @ 0x01140030
 int F_01140030(int a, int val)
 {
-    if (*(unsigned char*)0x16e7c1c == 0) return -10;
+    if (*(unsigned char*)&g_16e7c1c == 0) return -10;
     int handle = Sub_1141150(a);
     if (handle >= 0) {
         int local = -1;
@@ -618,7 +623,7 @@ int F_01140030(int a, int val)
 // @ 0x011400a0
 int F_011400a0(int a, int val)
 {
-    if (*(unsigned char*)0x16e7c1c == 0) return -10;
+    if (*(unsigned char*)&g_16e7c1c == 0) return -10;
     int handle = Sub_1141150(a);
     if (handle >= 0) {
         int local = -1;
@@ -761,9 +766,9 @@ void SndDecoder::DecodeSwap(int srcs, int n)
 // @ 0x011404f0
 void* SndDecoder::Dtor(unsigned char flags)
 {
-    *(void**)this = (void*)0x14cafa0;
+    *(void**)this = (void*)g_14cafa0;
     if ((flags & 1) != 0) {
-        (*(void(__cdecl**)(void*))0x16f16f4)(this);
+        (*(void(__cdecl**)(void*))g_16f16f4)(this);
     }
     return this;
 }
@@ -808,7 +813,7 @@ void SndDecoder::DecodeMul(int srcs, int n)
 // @ 0x011405e0
 int F_011405e0(int a, int val)
 {
-    if (*(unsigned char*)0x16e7c1c == 0) return -10;
+    if (*(unsigned char*)&g_16e7c1c == 0) return -10;
     int handle = Sub_1141150(a);
     if (handle >= 0) {
         int local = -1;
@@ -861,8 +866,8 @@ void FUN_011406e0(int a)
 // @ 0x01140760
 int F_01140760(void)
 {
-    A8(0x16e7bfc) = 1;
-    A8(0x16e7c23) = (unsigned char)Sub_1156800();
+    A8((int)g_16e7bfc) = 1;
+    A8((int)&g_16e7c23) = (unsigned char)Sub_1156800();
     return 0;
 }
 

@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/_at_008f0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1439a3c[];
+
 #include <wchar.h>
 #pragma intrinsic(wcslen)
 #include "game/types.h"
@@ -666,7 +669,7 @@ namespace EA { namespace XHTML { namespace Layout {
 PropNodeX* PropNodeX::F_8f2440(int a, const uint16_t* str)
 {
     mField04 = 0;
-    mVtable = 0x01439a3c;
+    mVtable = (int)g_1439a3c;
     mField08 = (uint32_t)a;
     mField0c = (uint32_t)str;
     mLength = str ? (int)wcslen((const wchar_t*)str) : -1;

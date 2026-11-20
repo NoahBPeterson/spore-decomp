@@ -2,6 +2,12 @@
 // Cell-game layer/resource loading: app-data teardown, advected-map catalog loading,
 // resource factory read/write, layer grid builders.  Optimised module with SSE:
 // /O2 /MD /Gy /TP /arch:SSE.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5dd4[];
+extern "C" char g_15a5dd8[];
+extern "C" char g_15a7754[];
+
 #include "types.h"
 
 static inline void** Vt(void* p) { return *(void***)p; }
@@ -246,9 +252,9 @@ void SP_CellDataShutdownForApp()
     }
     if (!SP_sIsLayerDataPacked()) {
         void* cm = SP_CheatManager();
-        (*(void(__thiscall**)(void*, void*))((char*)Vt(cm) + 0x1c))(cm, *(void**)0x015a5dd4);
+        (*(void(__thiscall**)(void*, void*))((char*)Vt(cm) + 0x1c))(cm, *(void**)g_15a5dd4);
         void* cm2 = SP_CheatManager();
-        (*(void(__thiscall**)(void*, void*))((char*)Vt(cm2) + 0x1c))(cm2, *(void**)0x015a5dd8);
+        (*(void(__thiscall**)(void*, void*))((char*)Vt(cm2) + 0x1c))(cm2, *(void**)g_15a5dd8);
     }
     operator_delete__(g_pCellCellData);
 }
@@ -263,7 +269,7 @@ void FUN_00e4cde0()
     do {
         *(void**)(p + 8) = FUN_00e82420(*(void**)p, *(void**)(p + 4));
         p += 0x10;
-    } while ((int)p < (int)0x015a7754);
+    } while ((int)p < (int)g_15a7754);
 }
 
 // =====================================================================

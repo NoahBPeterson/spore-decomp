@@ -4,6 +4,11 @@
 //
 //   0x00fa7450 SP::cTerrainSphere::DrawLayerBackgroundUpdate
 //   0x00fa74d0 SP::cTerrainSphere::DrawLayer
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15fd918[];
+extern "C" char g_16c9e78[];
+
 #include "types.h"
 #include <stddef.h>
 
@@ -65,7 +70,7 @@ void cTerrainSphere::DrawLayerBackgroundUpdate(void* unused, void* p1, void* p2)
 // @ 0x00fa74d0
 void cTerrainSphere::DrawLayer(void* p0, int p1, void* p2, void* p3) {
   if (INTV(0xa44) != 0) return;
-  void* ap = *(void**)0x15fd918;
+  void* ap = *(void**)g_15fd918;
   if (((TV1c)FUN_006a25a0)(ap, (void*)0x2955532f))
     ((TV2ii)FUN_006a17e0)(ap, 0x2955532f, 0);
   if (INTV(0x208) == 0) return;
@@ -78,7 +83,7 @@ void cTerrainSphere::DrawLayer(void* p0, int p1, void* p2, void* p3) {
   if (p1 == 0x21) ((cTerrainSphere*)b)->DrawLayerBackgroundUpdate(p2, p3, p0);
   char c = ((TV0c)FUN_00f678a0)(FUN_00f48a70());
   if (!c && U8V(0x4f0) && U8V(0x4f1)) {
-    FUN_006dd2a0(*(void**)0x16c9e78);
+    FUN_006dd2a0(*(void**)g_16c9e78);
     if (p1 == 7) { ((TV3u)FUN_00fa5cc0)(b, p2, p3, p0); return; }
     if (p1 == 8) ((TV3u)FUN_00f9bd00)(b, p2, p3, p0);
   }

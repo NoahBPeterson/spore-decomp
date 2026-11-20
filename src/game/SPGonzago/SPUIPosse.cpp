@@ -2,6 +2,32 @@
 // Object file: SPGonzago/SPUIPosse.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00e22760();
+extern "C" char g_1480788[];
+extern "C" char g_1480798[];
+extern "C" char g_14807b0[];
+extern "C" char g_1480894[];
+extern "C" char g_14808a4[];
+extern "C" char g_14808c0[];
+extern "C" char g_14809a4[];
+extern "C" char g_14809b4[];
+extern "C" char g_14809d0[];
+extern "C" char g_1480ab4[];
+extern "C" char g_1480ac4[];
+extern "C" char g_1480ae0[];
+extern "C" char g_1480bc4[];
+extern "C" char g_1480bd4[];
+extern "C" char g_1480bf0[];
+extern "C" char g_1480cd4[];
+extern "C" char g_1480ce4[];
+extern "C" char g_1480d00[];
+extern "C" char g_1480de4[];
+extern "C" char g_1480df4[];
+extern "C" char g_1480e10[];
+extern "C" char g_15a5524[];
+extern "C" char g_16ac2c8[];
+
 #include "game/types.h"
 #include "cSPUILayout.h"
 #include <math.h>
@@ -1952,7 +1978,7 @@ s32 __fastcall FUN_00e23ae0(void* self, void* dummy, u32 id)
   }
   u8 ok = ((TFuii)(*(void***)pm)[0x30 / 4])(pm, 0x5c770db7, &DAT_016ac278);
   if (ok) {
-    ((CopyImplC*)0x15a5524)->Copy(DAT_016ac278);
+    ((CopyImplC*)g_15a5524)->Copy(DAT_016ac278);
   }
   u8 r = ((SPUILayoutC*)((char*)self + 0x1bc))->Init(id, 1, 0x8d0f4fb);
   if (r) {
@@ -1973,7 +1999,7 @@ s32 __fastcall FUN_00e23b70(void* self, void* dummy, void* name, int id)
   }
   u8 ok = ((TFuii)(*(void***)pm)[0x30 / 4])(pm, 0x5c770db7, &DAT_016ac278);
   if (ok) {
-    ((CopyImplC*)0x15a5524)->Copy(DAT_016ac278);
+    ((CopyImplC*)g_15a5524)->Copy(DAT_016ac278);
   }
   u8 r = ((SPUILayoutC*)((char*)self + 0x1bc))->InitStr(name, id, 1, 0x8d0f4fb);
   if (r) {
@@ -2573,9 +2599,9 @@ void* cUIPosse15::ctor()
 void* cSPUIPosseItemTribe_s00e2_5710::ctor(int a2)
 {
   cSPUIPosseItemBase::ctor(a2, L"PosseItemTribe", 0x40464100);
-  *(void**)this = (void*)0x14807b0;
-  *(void**)((char*)this + 4) = (void*)0x1480798;
-  *(void**)((char*)this + 0xc) = (void*)0x1480788;
+  *(void**)this = (void*)g_14807b0;
+  *(void**)((char*)this + 4) = (void*)g_1480798;
+  *(void**)((char*)this + 0xc) = (void*)g_1480788;
   this->f14c = 1.0f;
   return this;
 }
@@ -2584,9 +2610,9 @@ void* cSPUIPosseItemTribe_s00e2_5710::ctor(int a2)
 void* cSPUIPosseItemTribeBaby_s00e2_5710::ctor(int a2)
 {
   cSPUIPosseItemBase::ctor(a2, L"PosseItemTribeBaby", 0x40464100);
-  *(void**)this = (void*)0x14808c0;
-  *(void**)((char*)this + 4) = (void*)0x14808a4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480894;
+  *(void**)this = (void*)g_14808c0;
+  *(void**)((char*)this + 4) = (void*)g_14808a4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480894;
   this->f14c = 0.0f;
   return this;
 }
@@ -2595,9 +2621,9 @@ void* cSPUIPosseItemTribeBaby_s00e2_5710::ctor(int a2)
 void* cSPUIPosseItemCiv::ctor(int a2)
 {
   cSPUIPosseItemBase::ctor(a2, L"PosseItemCiv", 0x40464100);
-  *(void**)this = (void*)0x14809d0;
-  *(void**)((char*)this + 4) = (void*)0x14809b4;
-  *(void**)((char*)this + 0xc) = (void*)0x14809a4;
+  *(void**)this = (void*)g_14809d0;
+  *(void**)((char*)this + 4) = (void*)g_14809b4;
+  *(void**)((char*)this + 0xc) = (void*)g_14809a4;
   return this;
 }
 
@@ -2605,9 +2631,9 @@ void* cSPUIPosseItemCiv::ctor(int a2)
 void* cSPUIPosseItemSpace_s00e2_5710::ctor(int a2)
 {
   cSPUIPosseItemBase::ctor(a2, a2 ? L"PosseItemSpace" : L"PosseItemSpaceGhostShell", 0x40464100);
-  *(void**)this = (void*)0x1480ae0;
-  *(void**)((char*)this + 4) = (void*)0x1480ac4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480ab4;
+  *(void**)this = (void*)g_1480ae0;
+  *(void**)((char*)this + 4) = (void*)g_1480ac4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480ab4;
   if (a2 == 0) this->mState = 0x7fffffff;
   return this;
 }
@@ -2616,9 +2642,9 @@ void* cSPUIPosseItemSpace_s00e2_5710::ctor(int a2)
 void* cSPUIPosseItem2_s00e2_5710::ctor(int a2, int a3)
 {
   cScenarioEditPosseItemBase::ctor(a2, a3);
-  *(void**)this = (void*)0x1480bf0;
-  *(void**)((char*)this + 4) = (void*)0x1480bd4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480bc4;
+  *(void**)this = (void*)g_1480bf0;
+  *(void**)((char*)this + 4) = (void*)g_1480bd4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480bc4;
   return this;
 }
 
@@ -2626,9 +2652,9 @@ void* cSPUIPosseItem2_s00e2_5710::ctor(int a2, int a3)
 void* cSPUIPosseItem3::ctor(int a2)
 {
   cScenarioEditPosseItemBase::ctor(0, a2);
-  *(void**)this = (void*)0x1480d00;
-  *(void**)((char*)this + 4) = (void*)0x1480ce4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480cd4;
+  *(void**)this = (void*)g_1480d00;
+  *(void**)((char*)this + 4) = (void*)g_1480ce4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480cd4;
   *(int*)((char*)this + 0x98) = 0x7fffffff;
   return this;
 }
@@ -2637,9 +2663,9 @@ void* cSPUIPosseItem3::ctor(int a2)
 void* cSPUIPosseItemTribeGhostShell::ctor()
 {
   cSPUIPosseItemBase::ctor(0, L"PosseItemTribeGhostShell", 0x40464100);
-  *(void**)this = (void*)0x1480e10;
-  *(void**)((char*)this + 4) = (void*)0x1480df4;
-  *(void**)((char*)this + 0xc) = (void*)0x1480de4;
+  *(void**)this = (void*)g_1480e10;
+  *(void**)((char*)this + 4) = (void*)g_1480df4;
+  *(void**)((char*)this + 0xc) = (void*)g_1480de4;
   this->mState = 0x7fffffff;
   return this;
 }
@@ -3474,7 +3500,7 @@ u8 cSPUIPosseItemTribeBaby::init(cSPUIPosse_s00e2_7310* posse)
         void* sys = FUN_00a206f0();
         void* r = sys != 0 ? ((void* (__thiscall*)(void*))VT(sys)[0x20 / 4])(sys) : 0;
 
-        FUN_00435ed0(*(u32*)0x16ac2c8, r);
+        FUN_00435ed0(*(u32*)g_16ac2c8, r);
         mBlinkerStart = FUN_00805080();
         return 1;
     }
@@ -3676,7 +3702,7 @@ void cSPUIPosseItem_s00e2_7310::FUN_00e281a0(u8 flag)
 // @ 0x00e28230
 void cSPUIPosseItem_s00e2_7310::FUN_00e28230()
 {
-    FUN_00e26de0(mRefs.mpBegin, mRefs.mpEnd, (void*)0x00e22760);
+    FUN_00e26de0(mRefs.mpBegin, mRefs.mpEnd, (void*)FUN_00e22760);
 }
 
 // @ 0x00e28250

@@ -1,4 +1,12 @@
 // Slice s00f0cad0: SporeApp/Simulator SP palette-item UI + placeable-effect.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_148bb00[];
+extern "C" char g_148bb10[];
+extern "C" char g_148bb20[];
+extern "C" char g_148bb3c[];
+
 #include <intrin.h>
 #include <stddef.h>
 // Functions 00f0cad0..00f0d8b0 of utl/SP*.obj.
@@ -476,12 +484,12 @@ PaletteItemUIOneClickPaint* PaletteItemUIOneClickPaint::Ctor()
 {
     ((PaletteItemUIBase*)this)->BaseCtor();
     // Preserve the IHandlerRC construction table before the derived tables.
-    *(void* volatile*)&mpHandlerVtable = (void*)0x013eb384u;
+    *(void* volatile*)&mpHandlerVtable = (void*)g_13eb384;
     _ReadWriteBarrier();
-    mpItemUIVtable = (void*)0x0148bb3cu;
-    mpWinProcVtable = (void*)0x0148bb20u;
-    mpRefCountVtable = (void*)0x0148bb10u;
-    mpHandlerVtable = (void*)0x0148bb00u;
+    mpItemUIVtable = (void*)g_148bb3c;
+    mpWinProcVtable = (void*)g_148bb20;
+    mpRefCountVtable = (void*)g_148bb10;
+    mpHandlerVtable = (void*)g_148bb00;
     mpLayout_24 = 0;
     mItemInstanceID_28 = 0;
     mItemGroupID_2c = 0;

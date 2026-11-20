@@ -1,4 +1,10 @@
 // s010175b0 -- SP::cSPSpacePlanetCameraController helpers / unnamed functions
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -574,7 +580,7 @@ void cEditorTraceObject::FUN_01018060()
     if (p10 != 0)
         ((void (__thiscall*)(void*))VT(p10)[4 / 4])(p10);
 
-    this->mVtbl8 = 0x13ec458;
-    this->mVtbl4 = 0x13eb394;
-    this->mVtbl0 = 0x13eb938;
+    this->mVtbl8 = (int)g_13ec458;
+    this->mVtbl4 = (int)g_13eb394;
+    this->mVtbl0 = (int)g_13eb938;
 }

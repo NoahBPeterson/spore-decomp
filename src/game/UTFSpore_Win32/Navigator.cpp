@@ -1,6 +1,14 @@
 // src/game/UTFSpore_Win32/Navigator.cpp
 // Object file: UTFSpore_Win32/Navigator.obj.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fa72c[];
+extern "C" char g_1443f38[];
+extern "C" char g_1443f5c[];
+extern "C" char g_1443f78[];
+extern "C" char g_1444434[];
+
 #include "game/types.h"
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -10,14 +18,12 @@
 // The constructor and destructor write interface/vtable pointers into their
 // members.  Those addresses are named after the interface they identify; the
 // names are guesses from usage, the values are exact.
-enum {
-    kNavigatorBaseVtbl   = 0x013fa72c,  // Navigator +0x04 while constructing
-    kNavigatorVtbl       = 0x01444434,  // Navigator +0x0c while constructing
-    kNavigatorDtorVtbl   = 0x013eb938,  // all members once destroyed
-    kExplicitNavSelfVtbl = 0x01443f78,  // ExplicitNavigator +0x00
-    kExplicitNavVtbl04   = 0x01443f5c,  // ExplicitNavigator +0x04
-    kExplicitNavVtbl0c   = 0x01443f38,  // ExplicitNavigator +0x0c
-};
+#define kNavigatorBaseVtbl ((int)g_13fa72c)   // Navigator +0x04 while constructing
+#define kNavigatorVtbl ((int)g_1444434)   // Navigator +0x0c while constructing
+#define kNavigatorDtorVtbl ((int)g_13eb938)   // all members once destroyed
+#define kExplicitNavSelfVtbl ((int)g_1443f78)   // ExplicitNavigator +0x00
+#define kExplicitNavVtbl04 ((int)g_1443f5c)   // ExplicitNavigator +0x04
+#define kExplicitNavVtbl0c ((int)g_1443f38)   // ExplicitNavigator +0x0c
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
 #define VP virtual void CAT(_p, __COUNTER__)();

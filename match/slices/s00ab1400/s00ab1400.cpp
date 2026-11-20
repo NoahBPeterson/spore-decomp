@@ -9,6 +9,11 @@
 // Retail layout = dev PDB cParticlesEffect / cParticlesDescription with 0x14-byte eastl vectors
 // (description offsets after mRateCurve shift by 4 per vector).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb960[];
+extern "C" char g_13f1fdc[];
+
 #include "types.h"
 
 namespace EA { namespace Swarm {
@@ -213,12 +218,12 @@ struct cRandomGlobal
 #define HK_ZERO           (*(const float*)0x01485378)
 #define HK_HALF           (*(const float*)0x01471064)
 #define K_DRAG_TIME_LIMIT (*(const float*)0x013EC478)             // 0.05f
-#define K_EMIT_TIME_EPS   (*(const float*)0x013EB960)             // 0.01f
+#define K_EMIT_TIME_EPS   (*(const float*)g_13eb960)             // 0.01f
 
 // Debug operator new[] the effect object is allocated with.
 void* __cdecl SwarmAllocDebug(size_t size, const char* pName, int flags, int debugFlags,
                               const char* file, int line);        // 0x00F473A0
-#define K_SWARM_ALLOC_NAME ((const char*)0x013F1FDC)              // "Swarm"
+#define K_SWARM_ALLOC_NAME ((const char*)g_13f1fdc)              // "Swarm"
 #define K_PARTICLES_EFFECT_SIZE 0x240
 
 class cIRenderer

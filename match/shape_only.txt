@@ -751,8 +751,15 @@
 0131ea70  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0132ff40  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0132ff60  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+01333010  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01333010@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+013340b0  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_013340b0@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+01334200  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01334200@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
 01335f10  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01335f30  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+0133c450  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_0133c450@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+01342b00  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01342b00@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+01352280  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01352280@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+01352370  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01352370@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
 01357980  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 013579a0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01362760  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
@@ -839,3 +846,7 @@
 0138e480  -  synth/int_tweak_init.cpp  ??__Eg_016c8958@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 0138e4d0  -  synth/int_tweak_init.cpp  ??__Eg_016c8968@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 01391690  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+01396930  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_01396930@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+01396ef0  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01396ef0@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+01396fe0  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_01396fe0@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
+013977a0  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_013977a0@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike

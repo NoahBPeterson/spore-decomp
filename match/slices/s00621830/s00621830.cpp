@@ -12,6 +12,11 @@
 //   00621f00  SP::cXHTMLControlAppearance::~cXHTMLControlAppearance
 //   00621f50  vector<ControlDrawable>::erase
 //   00621fc0  vector<ControlDrawable>::DoInsertValue / insert
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_13fd3fc[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -233,12 +238,12 @@ cXHTMLControlAppearance::cXHTMLControlAppearance()
 void __fastcall ControlDrawableVecDtor(void* self);   // 0x00621ea0 (thiscall; ecx = &vector)
 
 cXHTMLControlAppearance::~cXHTMLControlAppearance() {
-  *(const uint32_t**)this = (const uint32_t*)0x013FD3FC;   // own vtable
+  *(const uint32_t**)this = (const uint32_t*)g_13fd3fc;   // own vtable
   _ReadWriteBarrier();                                     // retail stores the vptr before loading +0x20
   if (mpScroll2) ((void(__thiscall*)(Drawable*))Vt(mpScroll2)[1])(mpScroll2);
   if (mpScroll1) ((void(__thiscall*)(Drawable*))Vt(mpScroll1)[1])(mpScroll1);
   ControlDrawableVecDtor((char*)this + 8);
-  *(const uint32_t**)this = (const uint32_t*)0x013EC458;   // base vtable (inlined base dtor)
+  *(const uint32_t**)this = (const uint32_t*)g_13ec458;   // base vtable (inlined base dtor)
 }
 
 namespace eastl {

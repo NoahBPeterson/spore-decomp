@@ -2,6 +2,11 @@
 // Object file: Spui/_at_00800000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1417cac[];
+extern "C" char g_1417cb0[];
+extern "C" char g_1417cb4[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -980,7 +985,7 @@ RecC* copyFwd(void* unused, RecC* begin, RecC* end, RecC* dst)
 WinRec* WinRecOps::DeletingDtor(unsigned int flags)
 {
     WinRec* self = (WinRec*)this;
-    self->vtbl = (void**)0x1417cac;
+    self->vtbl = (void**)g_1417cac;
     _ReadWriteBarrier();
     WinRef* w = self->win;
     if (w) {
@@ -1612,7 +1617,7 @@ void __thiscall cSPUIInfoLineTray::Add(const void* src)
         v->Insert(v->end, e);
     }
     cSPUILayout_s0080_c5d0* l = tmp.layout;
-    tmp.vtbl = (void**)0x1417cb0;
+    tmp.vtbl = (void**)g_1417cb0;
     if (l) { tmp.layout = 0; l->Release(); }
     if (tmp.layout) tmp.layout->Release();
     VecDtorInline(&tmp.v2);
@@ -1621,7 +1626,7 @@ void __thiscall cSPUIInfoLineTray::Add(const void* src)
 // @ 0x0080ceb0
 void* __thiscall cSPUIInfoLineTray::ScalarDeletingDtor(u8 flags)
 {
-    vtbl = (void**)0x1417cb4;
+    vtbl = (void**)g_1417cb4;
     dtor();
     VecDtorVec(&mVec);
     if (mLayout) ((VF0v)VT(mLayout)[2])(mLayout);

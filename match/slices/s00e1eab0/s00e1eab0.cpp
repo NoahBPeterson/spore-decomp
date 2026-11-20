@@ -7,6 +7,12 @@
 // layout is taken from the disassembly byte offsets through a local stub class.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1480388[];
+extern "C" char g_1480390[];
+extern "C" char g_14803ac[];
+
 #include "types.h"
 #include <math.h>
 
@@ -412,9 +418,9 @@ void* __fastcall FUN_00e1f390(void* self)
 // @ 0x00e1f420
 void __fastcall FUN_00e1f420(void* self)
 {
-    *(void**)self = (void*)0x14803ac;
-    *(void**)((char*)self + 8) = (void*)0x1480390;
-    *(void**)((char*)self + 0xc) = (void*)0x1480388;
+    *(void**)self = (void*)g_14803ac;
+    *(void**)((char*)self + 8) = (void*)g_1480390;
+    *(void**)((char*)self + 0xc) = (void*)g_1480388;
     FUN_00e1e120(self);
     FUN_00e1f280((char*)self + 0xc0);
     RefObj* r1 = *(RefObj**)((char*)self + 0xbc);

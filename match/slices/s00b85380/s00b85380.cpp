@@ -9,6 +9,9 @@
 // Retail member offsets are read from the disassembly; the dev PDB layout differs,
 // so objects are modelled locally with role-named members at retail offsets.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
@@ -24,7 +27,7 @@ static inline bool BlockIsOurs(const void *p)
 // --------------------------------------------------------------- extern decls
 extern "C" void *operator_new(u32 n, const char *pFile, int a, int b,
                               const char *pAlloc, int line);            // 0x00f473a0
-#define OPERATOR_NEW(n) operator_new((n), "Simulator", 0, 0, (const char *)0x013ebb38, 0xd1)
+#define OPERATOR_NEW(n) operator_new((n), "Simulator", 0, 0, (const char *)g_13ebb38, 0xd1)
 extern "C" void  operator_delete_array(void *p);                        // 0x00f47380
 extern "C" void *memcpy(void *d, const void *s, u32 n);                 // 0x011e0744
 extern "C" void *memset(void *d, int c, u32 n);                         // 0x011e073e

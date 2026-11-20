@@ -10,6 +10,12 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16753f4[];
+extern "C" char g_1675664[];
+extern "C" char g_16758b4[];
+extern "C" char g_16758b8[];
+
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int   uint32_t;
@@ -70,7 +76,7 @@ using EA::Audio::Eapd::t_symbol;
 #define g_spPdintClass    (*(void**)0x0167562cu)
 #define g_spPdfloatClass  (*(void**)0x01675678u)
 #define g_spPdsymbolClass (*(void**)0x01675640u)
-#define g_spBangClass     (*(void**)0x01675664u)
+#define g_spBangClass     (*(void**)g_1675664)
 #define g_spSendClass     (*(void**)0x01675654u)
 #define g_spForwardClass  (*(void**)0x01675630u)
 #define g_spReceiveClass  (*(void**)0x01675648u)
@@ -79,14 +85,14 @@ using EA::Audio::Eapd::t_symbol;
 
 #define g_gFloatSymbol    (*(t_symbol*)0x016758c4u)
 #define g_gSymbolSymbol   (*(t_symbol*)0x01675894u)
-#define g_gBangSymbol     (*(t_symbol*)0x016758b4u)
+#define g_gBangSymbol     (*(t_symbol*)g_16758b4)
 #define g_gEmptySymbol    (*(t_symbol*)0x0167589cu)
 #define g_gFloatSymbol2   (*(void**)0x016758c8u)
 #define g_gSymbolSymbol2  (*(void**)0x01675898u)
-#define g_gBangSymbol2    (*(void**)0x016758b8u)
+#define g_gBangSymbol2    (*(void**)g_16758b8)
 #define g_gEmptySymbol2   (*(void**)0x016758a0u)
 
-#define g_gpNewestObject  (*(void**)0x016753f4u)
+#define g_gpNewestObject  (*(void**)g_16753f4)
 #define g_gOutletCount    (*(int*)0x0167545cu)
 
 // ------------------------------------------------------------------------------------ Eapd structures

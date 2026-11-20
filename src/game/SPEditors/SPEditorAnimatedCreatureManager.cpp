@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPEditorAnimatedCreatureManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15fd918[];
+
 #include "game/types.h"
 #include "SP/cAnimatingCreature.h"
 
@@ -1139,7 +1142,7 @@ void SP::cSPEditorAnimatedCreatureManager_s0059_b4b0::Init(SP::cIModelWorld_s005
     mAnimWorld = (SP::cISPCreatureAnimWorld_s0059_b4b0*)(*(GetEditorFn*)(*(char**)pProps + 0x20))(pProps, L"Editor");
     if (!mAnimWorld)
         return;
-    if (*(int*)(*(int*)(*(int*)0x015fd918 + 0x3c) + 0x118) != 0) {
+    if (*(int*)(*(int*)(*(int*)g_15fd918 + 0x3c) + 0x118) != 0) {
         void* p2 = FUN_0067cb20();
         typedef void (__thiscall* NotifyFn)(void*, unsigned int);
         NotifyFn notify = *(NotifyFn*)(*(char**)p2 + 0x3c);

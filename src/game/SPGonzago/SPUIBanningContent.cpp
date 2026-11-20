@@ -2,6 +2,15 @@
 // Object file: SPGonzago/SPUIBanningContent.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_147f5c4[];
+extern "C" char g_147f5c8[];
+extern "C" char g_147f5d8[];
+extern "C" char g_147f5f4[];
+
 #include "game/types.h"
 #include "SP/cCivData.h"
 #include "SP/cGameNounManager.h"
@@ -1127,10 +1136,10 @@ void __cdecl FUN_00e097c0()
 // @ 0x00e09830
 void cFourBaseObject::Destroy()
 {
-    mField00 = (void*)0x0147f5f4;
-    mField04 = (void*)0x0147f5d8;
-    mField08 = (void*)0x0147f5c8;
-    mField0C = (void*)0x0147f5c4;
+    mField00 = (void*)g_147f5f4;
+    mField04 = (void*)g_147f5d8;
+    mField08 = (void*)g_147f5c8;
+    mField0C = (void*)g_147f5c4;
     if (mField18 != 0) {
         mField18 = 0;
         mField1C = 0;
@@ -1148,9 +1157,9 @@ void cFourBaseObject::Destroy()
     if (mField18 != 0) {
         ((cRefObject2*)mField18)->Release();
     }
-    mField0C = (void*)0x013ef094;
-    mField08 = (void*)0x013eb394;
-    mField04 = (void*)0x013eb938;
+    mField0C = (void*)g_13ef094;
+    mField08 = (void*)g_13eb394;
+    mField04 = (void*)g_13eb938;
 }
 
 // @ 0x00e09910

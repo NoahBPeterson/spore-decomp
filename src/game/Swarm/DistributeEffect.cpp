@@ -2,6 +2,14 @@
 // Object file: Swarm/DistributeEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_14582fc[];
+extern "C" char g_1458300[];
+extern "C" char g_1458304[];
+extern "C" char g_1458308[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include <xmmintrin.h>
@@ -3438,10 +3446,10 @@ void PtrVector::insert(RefPtr* position, unsigned n, const RefPtr& value)
 // @ 0x00a8cb00
 cDistributeEffect_s00a8_c850::~cDistributeEffect_s00a8_c850()
 {
-    mVtblIComponent = 0x1458308;
-    mVtblRefCount = 0x1458304;
-    mVtblTextureStreamer = 0x1458300;
-    mVtblModelStreamer = 0x14582fc;
+    mVtblIComponent = (int)g_1458308;
+    mVtblRefCount = (int)g_1458304;
+    mVtblTextureStreamer = (int)g_1458300;
+    mVtblModelStreamer = (int)g_14582fc;
 
     FreeBlock(mpBlock19c);
 
@@ -3461,8 +3469,8 @@ cDistributeEffect_s00a8_c850::~cDistributeEffect_s00a8_c850()
     FreeBlock(mSamplesBegin);
     FreeBlock(mRenderSamplesBegin);
 
-    mVtblIComponent = 0x13f21d4;
-    mVtblRefCount = 0x13ef094;
+    mVtblIComponent = (int)g_13f21d4;
+    mVtblRefCount = (int)g_13ef094;
 }
 
 // @ 0x00a8d450

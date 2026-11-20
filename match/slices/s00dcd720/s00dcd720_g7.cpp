@@ -16,6 +16,10 @@
 //                 at a random community member; otherwise attempt a repark.
 //
 // Type model shared with the committed ConvertCityOrder_Tick source in s00dcd720.cpp.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 #include "types.h"
 
 extern "C" double __cdecl sqrt(double);
@@ -249,7 +253,7 @@ struct cRandomGlobal {
     float RandomDouble();                                          // 0x009360d0
     uint32_t RandomUint32Uniform(uint32_t n);                      // 0x00a68fb0
 };
-#define Random() ((cRandomGlobal*)0x01601760)
+#define Random() ((cRandomGlobal*)g_1601760)
 
 struct State {
     uint32_t mPoliticalID;

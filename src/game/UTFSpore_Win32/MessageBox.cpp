@@ -2,6 +2,15 @@
 // Object file: UTFSpore_Win32/MessageBox.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_154f94c[];
+extern "C" char g_154f950[];
+extern "C" char g_154f954[];
+extern "C" char g_154f958[];
+extern "C" char g_154f95c[];
+extern "C" char g_154f960[];
+extern "C" char g_154f964[];
+
 #include "game/types.h"
 #include "EA/UTFWinControls/IWinButton.h"
 #include "EA/UTFWinControls/IWinText.h"
@@ -835,11 +844,11 @@ bool WinMessageBox::Refresh()
 // @ 0x01300b20
 void init_154f94c()
 {
-    *(int*)0x154f94c = 1;
-    *(int*)0x154f950 = 0;
-    *(int*)0x154f954 = 0;
-    *(int*)0x154f958 = 0xeec2c011;
-    *(short*)0x154f95c = 0xb;
-    *(int*)0x154f960 = 0x340;
-    *(int*)0x154f964 = 1;
+    *(int*)g_154f94c = 1;
+    *(int*)g_154f950 = 0;
+    *(int*)g_154f954 = 0;
+    *(int*)g_154f958 = 0xeec2c011;
+    *(short*)g_154f95c = 0xb;
+    *(int*)g_154f960 = 0x340;
+    *(int*)g_154f964 = 1;
 }

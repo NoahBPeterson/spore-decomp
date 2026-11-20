@@ -1,5 +1,54 @@
 // Slice s012f64e0 -- dynamic initializers for global math objects (vectors,
 // 3x3/4x4 matrices) plus their accessors.  /O2 /arch:SSE (movss/xmm stores).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1547690[];
+extern "C" char g_154df38[];
+extern "C" char g_164b210[];
+extern "C" char g_164b25c[];
+extern "C" char g_164b260[];
+extern "C" char g_164b264[];
+extern "C" char g_164b268[];
+extern "C" char g_164b28c[];
+extern "C" char g_164b290[];
+extern "C" char g_164b294[];
+extern "C" char g_164b2d0[];
+extern "C" char g_164b35c[];
+extern "C" char g_164b360[];
+extern "C" char g_164b364[];
+extern "C" char g_164b368[];
+extern "C" char g_164b384[];
+extern "C" char g_164b388[];
+extern "C" char g_164b38c[];
+extern "C" char g_164b390[];
+extern "C" char g_164b3a0[];
+extern "C" char g_164b3f0[];
+extern "C" char g_164b400[];
+extern "C" char g_164b404[];
+extern "C" char g_164b408[];
+extern "C" char g_164b40c[];
+extern "C" char g_164b42c[];
+extern "C" char g_164b430[];
+extern "C" char g_164b434[];
+extern "C" char g_164b438[];
+extern "C" char g_164b45c[];
+extern "C" char g_164b460[];
+extern "C" char g_164b468[];
+extern "C" char g_164b4e0[];
+extern "C" char g_164b4e4[];
+extern "C" char g_164b4e8[];
+extern "C" char g_164b4ec[];
+extern "C" char g_164b4f0[];
+extern "C" char g_164f018[];
+extern "C" char g_164f03c[];
+extern "C" char g_16514ec[];
+extern "C" char g_16679d0[];
+extern "C" char g_1667a58[];
+extern "C" char g_1667c00[];
+extern "C" char g_16688a0[];
+extern "C" char g_1668ef8[];
+extern "C" char g_1668efc[];
+
 #include <intrin.h>
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
@@ -36,58 +85,58 @@ struct Mat4 { uint32_t d[16]; };
 // @ 0x012f64e0
 void init_164b42c()
 {
-    ((GlobalLock*)0x164b42c)->bootstrap();
-    *(float*)0x164b42c = 1.0f;
-    *(float*)0x164b430 = 0.0f;
-    *(float*)0x164b434 = 1.0f;
-    *(float*)0x164b438 = 1.0f;
+    ((GlobalLock*)g_164b42c)->bootstrap();
+    *(float*)g_164b42c = 1.0f;
+    *(float*)g_164b430 = 0.0f;
+    *(float*)g_164b434 = 1.0f;
+    *(float*)g_164b438 = 1.0f;
 }
 
 // @ 0x012f6520
 void init_164b400()
 {
-    ((GlobalLock*)0x164b400)->bootstrap();
-    *(float*)0x164b400 = 1.0f;
-    *(float*)0x164b404 = 1.0f;
-    *(float*)0x164b408 = 0.0f;
-    *(float*)0x164b40c = 1.0f;
+    ((GlobalLock*)g_164b400)->bootstrap();
+    *(float*)g_164b400 = 1.0f;
+    *(float*)g_164b404 = 1.0f;
+    *(float*)g_164b408 = 0.0f;
+    *(float*)g_164b40c = 1.0f;
 }
 
 // @ 0x012f6560
 void init_164b384()
 {
-    ((GlobalLock*)0x164b384)->bootstrap();
-    *(float*)0x164b384 = 0.0f;
-    *(float*)0x164b388 = 1.0f;
-    *(float*)0x164b38c = 1.0f;
-    *(float*)0x164b390 = 1.0f;
+    ((GlobalLock*)g_164b384)->bootstrap();
+    *(float*)g_164b384 = 0.0f;
+    *(float*)g_164b388 = 1.0f;
+    *(float*)g_164b38c = 1.0f;
+    *(float*)g_164b390 = 1.0f;
 }
 
 // @ 0x012f65a0
 void init_164b3f0()
 {
-    ((GlobalLock*)0x164b3f0)->bootstrap();
-    ((Vector4f*)0x164b3f0)->Set(1.0f, 0.5f, 0.0f, 1.0f);
+    ((GlobalLock*)g_164b3f0)->bootstrap();
+    ((Vector4f*)g_164b3f0)->Set(1.0f, 0.5f, 0.0f, 1.0f);
 }
 
 // @ 0x012f65e0
 void init_164b25c()
 {
-    ((GlobalLock*)0x164b25c)->bootstrap();
-    *(float*)0x164b25c = 1.0f;
-    *(float*)0x164b260 = 1.0f;
-    *(float*)0x164b264 = 1.0f;
-    *(float*)0x164b268 = 0.0f;
+    ((GlobalLock*)g_164b25c)->bootstrap();
+    *(float*)g_164b25c = 1.0f;
+    *(float*)g_164b260 = 1.0f;
+    *(float*)g_164b264 = 1.0f;
+    *(float*)g_164b268 = 0.0f;
 }
 
 // @ 0x012f6620
 void init_164b35c()
 {
-    ((GlobalLock*)0x164b35c)->bootstrap();
-    *(float*)0x164b35c = 0.0f;
-    *(float*)0x164b360 = 0.0f;
-    *(float*)0x164b364 = 0.0f;
-    *(float*)0x164b368 = 0.0f;
+    ((GlobalLock*)g_164b35c)->bootstrap();
+    *(float*)g_164b35c = 0.0f;
+    *(float*)g_164b360 = 0.0f;
+    *(float*)g_164b364 = 0.0f;
+    *(float*)g_164b368 = 0.0f;
 }
 
 // @ 0x012f6650
@@ -96,10 +145,10 @@ extern float g_13eb184;  // 0x3f1645a2
 extern float g_13eb180;  // 0x3de978d5
 void init_164b28c()
 {
-    ((GlobalLock*)0x164b28c)->bootstrap();
-    *(float*)0x164b28c = g_13eb188;
-    *(float*)0x164b290 = g_13eb184;
-    *(float*)0x164b294 = g_13eb180;
+    ((GlobalLock*)g_164b28c)->bootstrap();
+    *(float*)g_164b28c = g_13eb188;
+    *(float*)g_164b290 = g_13eb184;
+    *(float*)g_164b294 = g_13eb180;
 }
 
 // @ 0x012f6690
@@ -108,10 +157,10 @@ extern float g_13eb190;
 extern float g_13eb18c;
 void init_164b4e8()
 {
-    ((GlobalLock*)0x164b4e8)->bootstrap();
-    *(float*)0x164b4e8 = g_13eb194;
-    *(float*)0x164b4ec = g_13eb190;
-    *(float*)0x164b4f0 = g_13eb18c;
+    ((GlobalLock*)g_164b4e8)->bootstrap();
+    *(float*)g_164b4e8 = g_13eb194;
+    *(float*)g_164b4ec = g_13eb190;
+    *(float*)g_164b4f0 = g_13eb18c;
 }
 
 // @ 0x012f66f0
@@ -119,9 +168,9 @@ void init_164b4e0()
 {
     Vector2f v;
     Vector2_SetZero(&v);
-    ((GlobalLock*)0x164b4e0)->bootstrap();
-    *(float*)0x164b4e0 = v.x;
-    *(float*)0x164b4e4 = v.y;
+    ((GlobalLock*)g_164b4e0)->bootstrap();
+    *(float*)g_164b4e0 = v.x;
+    *(float*)g_164b4e4 = v.y;
 }
 
 // @ 0x012f6730
@@ -129,9 +178,9 @@ void init_164b45c()
 {
     Vector2f v;
     Vector2_SetOne(&v);
-    ((GlobalLock*)0x164b45c)->bootstrap();
-    *(float*)0x164b45c = v.x;
-    *(float*)0x164b460 = v.y;
+    ((GlobalLock*)g_164b45c)->bootstrap();
+    *(float*)g_164b45c = v.x;
+    *(float*)g_164b460 = v.y;
 }
 
 // @ 0x012f6b40
@@ -139,8 +188,8 @@ void init_164b3a0()
 {
     Mat3 m;
     Matrix3_SetIdentity(&m);
-    ((GlobalLock*)0x164b3a0)->bootstrapMatrix();
-    *(Mat3*)0x164b3a0 = m;
+    ((GlobalLock*)g_164b3a0)->bootstrapMatrix();
+    *(Mat3*)g_164b3a0 = m;
 }
 
 // @ 0x012f6b80
@@ -148,8 +197,8 @@ void init_164b210()
 {
     Mat3 m;
     Matrix3_SetZero(&m);
-    ((GlobalLock*)0x164b210)->bootstrapMatrix();
-    *(Mat3*)0x164b210 = m;
+    ((GlobalLock*)g_164b210)->bootstrapMatrix();
+    *(Mat3*)g_164b210 = m;
 }
 
 // @ 0x012f6bc0
@@ -157,8 +206,8 @@ void init_164b468()
 {
     Mat4 m;
     Matrix4_SetIdentity(&m);
-    ((GlobalLock*)0x164b468)->bootstrapMatrix();
-    *(Mat4*)0x164b468 = m;
+    ((GlobalLock*)g_164b468)->bootstrapMatrix();
+    *(Mat4*)g_164b468 = m;
 }
 
 // @ 0x012f6c00
@@ -166,8 +215,8 @@ void init_164b2d0()
 {
     Mat4 m;
     Matrix4_SetZero(&m);
-    ((GlobalLock*)0x164b2d0)->bootstrapMatrix();
-    *(Mat4*)0x164b2d0 = m;
+    ((GlobalLock*)g_164b2d0)->bootstrapMatrix();
+    *(Mat4*)g_164b2d0 = m;
 }
 
 // ---------------------------------------------------------------------------
@@ -318,7 +367,7 @@ void init_164e9f8()
 // @ 0x012fdfe0
 void init_1547690()
 {
-    ((SetMode*)0x1547690)->SetMode2(2);
+    ((SetMode*)g_1547690)->SetMode2(2);
 }
 
 // @ 0x012fe000
@@ -360,7 +409,7 @@ void init_15476e4()
 void init_164f018()
 {
     void* a = GetDefaultAllocator2(0x20, 0x14);
-    ((BufC*)0x164f018)->init(a);
+    ((BufC*)g_164f018)->init(a);
     atexit(&FUN_013c0930);
 }
 
@@ -368,7 +417,7 @@ void init_164f018()
 void init_164f03c()
 {
     void* a = GetDefaultAllocator2(0x80, 0x14);
-    ((BufC*)0x164f03c)->init(a);
+    ((BufC*)g_164f03c)->init(a);
     atexit(&FUN_013c0940);
 }
 
@@ -384,7 +433,7 @@ void init_1548764()
 // @ 0x012ffef0
 void init_16514ec()
 {
-    *(void**)0x16514ec = GetDefaultAllocator0();
+    *(void**)g_16514ec = GetDefaultAllocator0();
 }
 
 // @ 0x012fff30
@@ -417,7 +466,7 @@ void init_1651994()
 // @ 0x012fffc0
 void init_16679d0()
 {
-    InitializeCriticalSection((void*)0x16679d0);
+    InitializeCriticalSection((void*)g_16679d0);
     atexit(&FUN_013c0c50);
 }
 
@@ -442,37 +491,37 @@ void init_1549834()
 // @ 0x01300080
 void init_1667a58()
 {
-    *(char*)0x1667a58 = (char)InitXInputFunctions();
+    *(char*)g_1667a58 = (char)InitXInputFunctions();
 }
 
 // @ 0x013000d0
 void init_1667c00()
 {
-    InitializeCriticalSection((void*)0x1667c00);
+    InitializeCriticalSection((void*)g_1667c00);
     atexit(&FUN_013c0d40);
 }
 
 // @ 0x013000f0
 void init_154df38()
 {
-    if (*(int*)0x154df38 == -1)
-        *(int*)0x154df38 = TlsAlloc();
+    if (*(int*)g_154df38 == -1)
+        *(int*)g_154df38 = TlsAlloc();
 }
 
 // @ 0x01300110
 long take_16688a0()
 {
-    return _InterlockedExchange((volatile long*)0x16688a0, 0);
+    return _InterlockedExchange((volatile long*)g_16688a0, 0);
 }
 
 // @ 0x01300230
 long take_1668ef8()
 {
-    return _InterlockedExchange((volatile long*)0x1668ef8, 0);
+    return _InterlockedExchange((volatile long*)g_1668ef8, 0);
 }
 
 // @ 0x01300240
 long take_1668efc()
 {
-    return _InterlockedExchange((volatile long*)0x1668efc, 0);
+    return _InterlockedExchange((volatile long*)g_1668efc, 0);
 }

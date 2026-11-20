@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPPlanetModel.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_13ef094[];
+
 #include "game/types.h"
 #include "SP/cITerrainSphere.h"
 #include "SP/cPlanetModel.h"
@@ -199,7 +203,7 @@ FORCEINLINE Mode *NewModifier()
 {
     Mode *p = (Mode *)operator_new(0xc, "Simulator", 0, 0, 0, 0);
     if (p != 0) {
-        p->m_vtbl = (void **)0x13ef094;
+        p->m_vtbl = (void **)&g_13ef094;
         _InterlockedExchange(&p->m_ref, 0);
         p->m_vtbl = (void **)0x146545c;
         ((RefObj *)p)->m_data = 0;
@@ -2726,7 +2730,7 @@ Mode *Mode::DeleteInstance(u32 flags)
     if (m_buffer != 0) {
         ((void (__thiscall *)(void *))((RefObj *)m_buffer)->m_vtbl[2])(m_buffer);
     }
-    m_vtbl = (void **)0x13ef094;
+    m_vtbl = (void **)g_13ef094;
     if (flags & 1)
         operator_delete_array(this);
     return this;
@@ -3415,7 +3419,7 @@ void * __stdcall AllocAndCopy(u32 n, const void *pSrc, const void *pSrcEnd)
 {
     void *pDst;
     if (n != 0)
-        pDst = operator_new(n, "Simulator", 0, 0, (int)0x013ebb38, 0xd1);
+        pDst = operator_new(n, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
     else
         pDst = 0;
     memcpy(pDst, pSrc, (u32)((const char *)pSrcEnd - (const char *)pSrc));
@@ -3572,7 +3576,7 @@ void *SpVector20B::AssignN(u32 n, u32 unused)
 {
     u8 *pBuf;
     if (n != 0)
-        pBuf = (u8 *)operator_new(n * 0x14, "Simulator", 0, 0, (int)0x013ebb38, 0xd1);
+        pBuf = (u8 *)operator_new(n * 0x14, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
     else
         pBuf = 0;
     u32 bytes = n * 0x14;
@@ -3613,7 +3617,7 @@ void *ByteVec::CopyCtor(const ByteVec *pSrc)
     u32 bytes = (u32)(pSrc->mpEnd - pSrc->mpBegin);
     u8 *pBuf;
     if (bytes != 0)
-        pBuf = (u8 *)operator_new(bytes, "Simulator", 0, 0, (int)0x013ebb38, 0xd1);
+        pBuf = (u8 *)operator_new(bytes, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
     else
         pBuf = 0;
     mpBegin = pBuf;

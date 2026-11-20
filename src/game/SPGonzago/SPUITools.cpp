@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPUITools.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c658[];
+extern "C" char g_149c660[];
+extern "C" char g_149c67c[];
+
 #include "game/types.h"
 #include "EA/Variant.h"
 #include "SP/cSPMission.h"
@@ -1084,9 +1089,9 @@ void __thiscall cToolWindow::FUN_0107ae40(void* pWin)
 cToolWindow* cToolWindow::FUN_0107ae70()
 {
     FUN_00e18bb0(this);
-    *(void**)this = (void*)0x0149c67c;
-    *((void**)this + 2) = (void*)0x0149c660;
-    *((void**)this + 3) = (void*)0x0149c658;
+    *(void**)this = (void*)g_149c67c;
+    *((void**)this + 2) = (void*)g_149c660;
+    *((void**)this + 3) = (void*)g_149c658;
     mFlag40 = false;
     FUN_00e0a390(Sub());
     FUN_00e36480(Tooltip());
@@ -1104,9 +1109,9 @@ cToolWindow* cToolWindow::FUN_0107ae70()
 // @ 0x0107af00
 void cToolWindow::FUN_0107af00()
 {
-    *(void**)this = (void*)0x0149c67c;
-    *((void**)this + 2) = (void*)0x0149c660;
-    *((void**)this + 3) = (void*)0x0149c658;
+    *(void**)this = (void*)g_149c67c;
+    *((void**)this + 2) = (void*)g_149c660;
+    *((void**)this + 3) = (void*)g_149c658;
     _ReadWriteBarrier();
     void* p = *((void**)this + 0x52);
     if (p != 0)

@@ -1,6 +1,10 @@
 // Slice s00e00760 (batch bfs3, slice 13). Region 0xe00760-0xe0174b.
 // Global-UI root window proc, options object, network activity proc and various
 // game-mode predicates.  Optimised: /O2 /MD /Gy /TP /arch:SSE.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147f198[];
+
 #include "types.h"
 
 extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int b,
@@ -563,7 +567,7 @@ void OptObj::Reset() {
 // @ 0x00e01090
 void* OptObj::DelDtor(unsigned int flags) {
     void* self = this;
-    *(void**)self = (void*)0x147f198;
+    *(void**)self = (void*)g_147f198;
     *(void**)((char*)self + 4) = 0;
     if (flags & 1) {
         EA_Free(self);

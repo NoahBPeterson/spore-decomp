@@ -2,6 +2,15 @@
 // Object file: SPGonzago/SPCommunityEditor.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1479200[];
+extern "C" char g_1479218[];
+extern "C" char g_1479234[];
+extern "C" char g_1479250[];
+extern "C" char g_147926c[];
+extern "C" char g_1479288[];
+extern "C" char g_14792a4[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include "EA/Random/RandomLinearCongruential.h"
@@ -4231,13 +4240,13 @@ void FUN_00d08930()
     void* mgr = SP_GameInputManager();
     if (mgr == 0)
         return;
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e80, (const char*)0x14792a4);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e82, (const char*)0x1479288);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e81, (const char*)0x147926c);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e83, (const char*)0x1479250);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e84, (const char*)0x1479234);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e85, (const char*)0x1479218);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e86, (const char*)0x1479200);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e80, (const char*)g_14792a4);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e82, (const char*)g_1479288);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e81, (const char*)g_147926c);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e83, (const char*)g_1479250);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e84, (const char*)g_1479234);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e85, (const char*)g_1479218);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e86, (const char*)g_1479200);
 }
 
 // @ 0x00d089d0

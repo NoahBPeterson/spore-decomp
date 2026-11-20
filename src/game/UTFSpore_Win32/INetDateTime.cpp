@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/INetDateTime.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143f54c[];
+
 #include "game/types.h"
 #include "EA/Internet/HTTPMultipartFormDataPostBodyStream.h"
 #include "tm.h"
@@ -63,7 +66,7 @@ int  MonthStringToInteger(const char* str);                     // 0x00947500
 #define S_(a) ((const char*)(a))
 static const char* const kLongWeekdays = S_(0x143f4e8);   // "Monday"...
 static const char* const kShortWeekdays = S_(0x143f530);  // "Mon"...
-static const char* const kShortMonths = S_(0x143f54c);    // "Jan"...
+static const char* const kShortMonths = S_((int)g_143f54c);    // "Jan"...
 // ---- items of slice s00946dc0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)

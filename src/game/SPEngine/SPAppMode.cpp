@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPAppMode.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14124e8[];
+
 #include "game/types.h"
 #include <string.h>
 #include <intrin.h>
@@ -23,7 +26,7 @@ struct CheatCmd : CmdBase {
     void* mpApp;
     CheatCmd(void* app)
     {
-        mpVtbl = (void*)0x014124e8;        // cAppModeCheat vtable (masked)
+        mpVtbl = (void*)g_14124e8;        // cAppModeCheat vtable (masked)
         mpApp = app;
     }
 };

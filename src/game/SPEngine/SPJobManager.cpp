@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPJobManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1403750[];
+
 #include "game/types.h"
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -767,7 +770,7 @@ extern "C" void FUN_68F4E0(void* p)
 // @ 0x0068f540
 void ClsF540::Acquire()
 {
-    m.Lock((void*)0x01403750);
+    m.Lock((void*)g_1403750);
     ++count;
 }
 

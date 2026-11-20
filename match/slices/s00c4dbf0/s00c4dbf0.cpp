@@ -6,6 +6,12 @@
 // byte-offset accessors on locally declared stub classes and raw vtable calls.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfa4[];
+extern "C" char g_146dfb4[];
+extern "C" char g_146dfc8[];
+
 #include "types.h"
 
 #pragma warning(disable : 4100)
@@ -334,9 +340,9 @@ void* __fastcall FUN_00c4def0(void* ecx_this, void* edx)
     *(int*)((char*)ecx_this + 0x1f0) = zero;
     *(char*)((char*)ecx_this + 0x1f4) = 0;
     *(char*)((char*)ecx_this + 0x1f5) = 0;
-    *(void**)ecx_this = (void*)0x146dfc8;
-    *(void**)((char*)ecx_this + 4) = (void*)0x146dfb4;
-    *(void**)((char*)ecx_this + 0x34) = (void*)0x146dfa4;
+    *(void**)ecx_this = (void*)g_146dfc8;
+    *(void**)((char*)ecx_this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)ecx_this + 0x34) = (void*)g_146dfa4;
     return ecx_this;
 }
 

@@ -2,6 +2,13 @@
 // Object file: Swarm/_at_00aa0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_1458c38[];
+extern "C" char g_1458c3c[];
+extern "C" char g_1565550[];
+
 #include "game/types.h"
 #include <math.h>
 #include <intrin.h>
@@ -434,8 +441,8 @@ GObj* GObj::ctor(int a, int b)
 // @ 0x00aa04a0
 void GObj::dtor()
 {
-    at<int>(this, 0) = (int)0x1458c3c;
-    at<int>(this, 4) = (int)0x1458c38;
+    at<int>(this, 0) = (int)g_1458c3c;
+    at<int>(this, 4) = (int)g_1458c38;
     ((Vec250*)op(this, 0x250))->destroy();
     void* p;
     p = at<void*>(this, 0x248);
@@ -467,8 +474,8 @@ void GObj::dtor()
     if (p != 0)
         ((VFn)((void**)*(void**)p)[4 / 4])(p);
     ((ListHead*)op(this, 0x24))->destroy();
-    at<int>(this, 0) = (int)0x13f21d4;
-    at<int>(this, 4) = (int)0x13ef094;
+    at<int>(this, 0) = (int)g_13f21d4;
+    at<int>(this, 4) = (int)g_13ef094;
 }
 
 // @ 0x00aa0600
@@ -1216,5 +1223,5 @@ void cModelEffect::Start(int unused)
 // @ 0x00aa2fd0
 void SetKeywordName(int index, const char* name)
 {
-    ((const char**)0x01565550)[index * 2] = name;
+    ((const char**)g_1565550)[index * 2] = name;
 }

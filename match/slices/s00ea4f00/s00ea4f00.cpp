@@ -8,6 +8,9 @@
 // static table at 0x0148730c, follows the new track and refreshes its
 // active state from the music object.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148730c[];
+
 struct IRefCounted {
     virtual void v00();                 // +0x00
     virtual void AddRef();              // +0x04
@@ -69,12 +72,12 @@ bool Viewer::SetMusic(IRefCounted* pMusic)
         MessageServer* pServer = (MessageServer*)MessageServerInstance();
         mpListenerServer = pServer;
         mpListenerOwner = this;
-        mnListenerIds = 0x0148730c;
+        mnListenerIds = (int)g_148730c;
         mnListenerCount = 2;
         mnListenerIndex = 0;
         if (pServer) {
             for (unsigned i = 0; i < 8; i += 4)
-                pServer->AddListener(this, *(const unsigned*)(0x0148730c + i));
+                pServer->AddListener(this, *(const unsigned*)((int)g_148730c + i));
         }
         Follow();
         SetActive(mpMusic->IsActive());

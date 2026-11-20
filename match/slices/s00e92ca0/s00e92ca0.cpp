@@ -15,6 +15,11 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE (MSVC 2008 SP1; no /EHsc, which adds EH
 // frames that the virtual dtors do not have in the original).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1486c54[];
+extern "C" char g_1486ca4[];
+
 #include "types.h"
 #include <math.h>
 
@@ -470,7 +475,7 @@ cTribeToolView::cTribeToolView()
 // @ 0x00e932d0
 cTribeToolView::~cTribeToolView()
 {
-    *(void**)this = (void*)0x1486c54;
+    *(void**)this = (void*)g_1486c54;
     cIVisualEffect* e = mDamageEffect;
     if (e) {
         VC1(void, e, 0xc, int, 1);
@@ -774,7 +779,7 @@ cTribeView::cTribeView()
 // @ 0x00e93c00
 cTribeView::~cTribeView()
 {
-    *(void**)this = (void*)0x1486ca4;
+    *(void**)this = (void*)g_1486ca4;
     mpObject->KillEffect(0x50b2c615, 1);
     mpObject->KillEffect(0x50b2c617, 1);
     mpObject->KillEffect(0x50b2c616, 1);

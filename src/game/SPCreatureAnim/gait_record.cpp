@@ -2,6 +2,11 @@
 // Object file: SPCreatureAnim/gait_record.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1447cc0[];
+extern "C" char g_1447cc4[];
+extern "C" char g_1447cc8[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cCommandBase.h"
 #include "EA/ArgScript/cIBlockCommand.h"
@@ -1600,7 +1605,7 @@ Rec44* Rec44::Ctor(const Rec44* src)
 {
     const int* r = src ? (const int*)src + 1 : 0;
     ref = *r;
-    vtbl = (void*)0x1447cc0;
+    vtbl = (void*)g_1447cc0;
     x = src->x;
     y = src->y;
     z = src->z;
@@ -1613,7 +1618,7 @@ Rec58* Rec58::Ctor(const Rec58* src)
 {
     const int* r = src ? (const int*)src + 1 : 0;
     ref = *r;
-    vtbl = (void*)0x1447cc4;
+    vtbl = (void*)g_1447cc4;
     x = src->x;
     y = src->y;
     z = src->z;
@@ -1627,7 +1632,7 @@ Rec1C* Rec1C::Ctor(const Rec1C* src)
 {
     const int* r = src ? (const int*)src + 1 : 0;
     ref = *r;
-    vtbl = (void*)0x1447cc8;
+    vtbl = (void*)g_1447cc8;
     d[0] = src->d[0];
     memcpy(&d[1], &src->d[1], 4 * sizeof(int));
     return this;
@@ -1751,7 +1756,7 @@ Rec1C* Copy1C(const Rec1C* first, const Rec1C* last, Rec1C* dst)
         if (dst != 0) {
             const int* ref = first ? (const int*)first + 1 : 0;
             dst->ref = *ref;
-            dst->vtbl = (void*)0x1447cc8;
+            dst->vtbl = (void*)g_1447cc8;
             dst->d[0] = first->d[0];
             dst->d[1] = first->d[1];
             dst->d[2] = first->d[2];

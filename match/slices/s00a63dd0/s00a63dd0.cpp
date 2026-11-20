@@ -8,6 +8,14 @@
 //   * the hash map used for EAPd objects (0xa64ad0 / 0xa64b70 / 0xa64be0 /
 //     0xa64c50 / 0xa64cf0).
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a647b0();
+extern "C" void FUN_00a64820();
+extern "C" void FUN_00a64870();
+extern "C" void FUN_00a64a10();
+extern "C" char g_13f5b98[];
+
 #include "s00a63dd0.h"
 
 namespace EA { namespace Audio { namespace Eapd {
@@ -336,7 +344,7 @@ __declspec(noinline) void EapdAssetManager::ClearLists(void* a1)
 void ThrowHelper(void* p)
 {
     (void)p;
-    ((void (__cdecl*)(void*))uThrowTarget)((void*)0x13f5b98);
+    ((void (__cdecl*)(void*))uThrowTarget)((void*)g_13f5b98);
 }
 
 // ===========================================================================
@@ -467,7 +475,7 @@ bool EapdAssetManager::MakeFloatHandler(float f)
     bool ok = false;
     if (*(int*)this == 0) {
         void* sys = SystemGetAssetManager();
-        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)0xa647b0);
+        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)FUN_00a647b0);
         if (e) {
             e->mKind10 = 1;
             e->mFloat14 = f;
@@ -487,7 +495,7 @@ bool EapdAssetManager::MakeSymbolHandler(const char* s)
         PgSymbol sym;
         gensym(&sym, s);
         void* sys = SystemGetAssetManager();
-        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)0xa64820);
+        AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)FUN_00a64820);
         if (e) {
             e->mKind10 = 2;
             *(unsigned*)&e->mFloat14 = sym.mHash;
@@ -506,7 +514,7 @@ bool EapdAssetManager::MakeListHandler(void)
     bool ok = false;
     if (*(int*)this == 2) {
         void* sys = SystemGetAssetManager();
-        void* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)0xa64870);
+        void* e = ((EapdAssetManager*)sys)->NewEntryNode(this, (void*)FUN_00a64870);
         if (e)
             ok = true;
     }
@@ -574,7 +582,7 @@ void EapdAssetManager::DisposeArray(void** arr, unsigned n)
 void EapdAssetManager::MakeFloatHandler2(uint8_t v)
 {
     void* sys = SystemGetAssetManager();
-    AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode((void*)this, (void*)0xa64a10);
+    AssetEntry* e = ((EapdAssetManager*)sys)->NewEntryNode((void*)this, (void*)FUN_00a64a10);
     e->mKind10 = 1;
     e->mFloat14 = (float)v;
 }

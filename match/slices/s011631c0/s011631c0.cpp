@@ -1,6 +1,10 @@
 // s011631c0 -- audio mix-ramp (cMixRamp): mixes one IIR block through a per-channel
 // ramp, fills linear / sine / sqrt ramps and applies per-slot weight scaling.
 // Compile: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14d75b0[];
+
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -354,7 +358,7 @@ extern "C" double MixSinPoly(float x)
 cMixRamp::~cMixRamp()
 {
     void* b = mBuf;
-    mVtbl = (void*)0x14d75b0;
+    mVtbl = (void*)g_14d75b0;
     if (b) g_016f16f4(b);
     cMixRamp_BaseDtor(this);
 }

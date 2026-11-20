@@ -174,7 +174,7 @@ int __stdcall rw_lookup_low(int unused, uint16_t idx)
 struct G2180 { void method(void* arg); };
 void __stdcall rw_something_2180(int unused, void* arg)
 {
-    ((G2180*)0x16f4b7c)->method(arg);
+    ((G2180*)&g_16f4b7c)->method(arg);
 }
 
 // @ 0x011e21b0

@@ -1,5 +1,9 @@
 // Slice s00f52df0 -- SPEngine/SPAppCloudDescription.obj: cCloudDescription dtor + default ctor.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "types.h"
 #include <stddef.h>
 
@@ -158,7 +162,7 @@ cCloudDescription::~cCloudDescription()
     FreeCounted(v9c.mpBegin);
     FreeCounted(v84.mpBegin);
     FreeCounted(v64.mpBegin);
-    mVtbl = (void*)0x13ef094;
+    mVtbl = (void*)g_13ef094;
 }
 
 // @ 0x00f53590

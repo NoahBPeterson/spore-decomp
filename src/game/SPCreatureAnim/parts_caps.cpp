@@ -2,6 +2,10 @@
 // Object file: SPCreatureAnim/parts_caps.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+extern "C" char g_1448758[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include <math.h>
@@ -387,7 +391,7 @@ Elem14* Elem14::ElemCopy(const Elem14* src)
 void RBTreeX::InsertIdx(void** out, void* where, uint32* key, char hint)
 {
     int left = (hint == 0 && where != (void*)((char*)this + 4) && *key >= *(uint32*)((char*)where + 0x10)) ? 1 : 0;
-    void* node = operator_new(0x1c, (const char*)0x1448758, 0, 0, (const char*)0x13ebb38, 0xd1);
+    void* node = operator_new(0x1c, (const char*)g_1448758, 0, 0, (const char*)g_13ebb38, 0xd1);
     uint32* dst = (uint32*)((char*)node + 0x10);
     if (dst) {
         dst[0] = key[0];

@@ -3,6 +3,10 @@
 // The element copy constructor is SmallRec::SmallRec(const SmallRec&) 0x00e617e0,
 // and the array copy goes through the CRT helper __ehvec_copy_construct 0x00406540.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00e617e0();
+
 #include "game/types.h"
 
 extern "C" void __stdcall ehvec_ctor(void* dst, void* src, unsigned size,
@@ -69,7 +73,7 @@ cCellRecordBlock::cCellRecordBlock(const cCellRecordBlock& other)
 {
     m0 = other.m0;
     ehvec_ctor((void*)&mRecs[0], (void*)&other.mRecs[0], 0x48, 0x40,
-               (void*)0xe617e0); // SmallRec::SmallRec(const SmallRec&)
+               (void*)FUN_00e617e0); // SmallRec::SmallRec(const SmallRec&)
     m1204 = other.m1204;
     m1238 = other.m1238;
     m123c = other.m123c;

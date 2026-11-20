@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/EASharedLibrary.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f65b4[];
+
 #include "game/types.h"
 #include "SP/cSPPaletteCategoryUI.h"
 #include "EA/UTFWin/IWindow.h"
@@ -709,7 +712,7 @@ EA::SharedLibrary_s0093_6090::~SharedLibrary_s0093_6090()
     int d = (int)((int)((int)mpPathCap - (int)p) & 0xfffffffeU);
     if (d > 2 && p != 0)
         FreeMem(p);
-    *(void**)this = (void*)0x13f65b4;   // ILibraryCommand vftable
+    *(void**)this = (void*)g_13f65b4;   // ILibraryCommand vftable
 }
 
 // @ 0x00936e10

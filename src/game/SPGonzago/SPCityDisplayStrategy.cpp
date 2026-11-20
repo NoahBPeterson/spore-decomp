@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPCityDisplayStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef74c[];
+extern "C" char g_1477e3c[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include "cSPUILayout.h"
@@ -1477,7 +1481,7 @@ void __fastcall FUN_00ce8d00(void* self, void* /*edx*/, void* cmd, void* owner)
   char* o = (char*)owner;
   float r = ((CityDisplayRatioCalls*)(o + 0x508))->NodeRatio();
   CityDisplayCommandCalls* command = (CityDisplayCommandCalls*)cmd;
-  if (r < *(float*)0x013ef74c) {
+  if (r < *(float*)g_13ef74c) {
     command->Slot84(0, 2);
   } else if (o[0xbcc] != 0) {
     command->Slot84(0, 1);
@@ -2145,7 +2149,7 @@ void CDS_s00ce_a090::Init()
     }
 
     void* layout = *(void**)(self + 0xec);
-    char ok = ((LayoutObj*)layout)->InitLayout((const void*)0x1477e3c, 0x40464100, 1, 0x5b598fa);
+    char ok = ((LayoutObj*)layout)->InitLayout((const void*)g_1477e3c, 0x40464100, 1, 0x5b598fa);
     if (ok) {
         void* l2 = *(void**)(self + 0xec);
         ((LayoutObj*)l2)->SetVis(0);

@@ -2,6 +2,12 @@
 //   hkConvexTransformShape (convex wrapper), hkConvexPieceMeshShape (piece-mesh wrapper),
 //   hkConvexListShape dtor, hkCollisionFilterList (filter combiner).
 // Flags: /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a41c0[];
+extern "C" char g_14a416c[];
+
 #include "types.h"
 #include <new>
 #include <xmmintrin.h>
@@ -214,7 +220,7 @@ void FUN_010cb210(void* self)
 {
     if (self != 0) {
         ((hkShapeCollectionCtor*)self)->ctor();
-        *(void**)self = (void*)0x014a416c;
+        *(void**)self = (void*)g_14a416c;
     }
 }
 
@@ -351,7 +357,7 @@ void* hkConvexPieceMeshShape::scalarDeletingDtor(hkUint32 flags)
 {
     hkConvexPieceMeshShape* self = this;
     RefObj* a = *(RefObj**)((char*)self + 0x14);
-    *(void**)self = (void*)0x014a416c;
+    *(void**)self = (void*)&g_14a416c;
     if (a->m_memSizeAndFlags != 0) {
         if (--a->m_referenceCount == 0)
             a->dtor(1);
@@ -361,7 +367,7 @@ void* hkConvexPieceMeshShape::scalarDeletingDtor(hkUint32 flags)
         if (--b->m_referenceCount == 0)
             b->dtor(1);
     }
-    *(void**)self = (void*)0x013ef094;
+    *(void**)self = (void*)g_13ef094;
     if (flags & 1) {
         hkMemoryVtbl* m = *(hkMemoryVtbl**)&g_hkMemoryInstance;
         m->deallocate(self, self->m_memSizeAndFlags, 0x24);
@@ -407,7 +413,7 @@ void hkConvexPieceMeshShape::calcStatistics(void* collector)
 // @ 0x010cb760  hkConvexListShape::`scalar deleting destructor'
 void* hkConvexListShape::scalarDeletingDtor(hkUint32 flags)
 {
-    *(void**)this = (void*)0x014a41c0;
+    *(void**)this = (void*)g_14a41c0;
     ((hkConvexListShapeBase*)this)->baseDtor();
     if (flags & 1) {
         hkMemoryVtbl* m = *(hkMemoryVtbl**)&g_hkMemoryInstance;
@@ -511,5 +517,5 @@ void hkCollisionFilterList::dtor()
     *(void**)((char*)self + 0x10) = (void*)0x013ef824;
     *(void**)((char*)self + 0xc)  = (void*)0x013ef824;
     *(void**)((char*)self + 8)   = (void*)0x013ef82c;
-    *(void**)self = (void*)0x013ef094;
+    *(void**)self = (void*)g_13ef094;
 }

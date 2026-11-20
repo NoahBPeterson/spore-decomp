@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00af0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145c1bc[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -1908,7 +1911,7 @@ void __cdecl CreateLayoutManager()
 // @ 0x00af1430
 void __thiscall TimerOwner::Dtor()
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ((XGonzago*)timer)->Dtor();
     ((XList*)&head)->DoClear();
 }
@@ -1933,7 +1936,7 @@ void __thiscall TimerOwner::Add(const void* wstr)
 // @ 0x00af14b0
 TimerOwner* __thiscall TimerOwner::Ctor()
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ListHead* h = &head;
     h->next = (ListNode*)h;
     h->prev = (ListNode*)h;
@@ -1961,7 +1964,7 @@ TimerOwner* __thiscall TimerOwner::Ctor()
 // @ 0x00af1540
 TimerOwner* __thiscall TimerOwner::Delete(u32 flags)
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ((XGonzago*)timer)->Dtor();
     ((XList*)&head)->DoClear();
     if (flags & 1)

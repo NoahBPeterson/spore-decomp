@@ -2,6 +2,10 @@
 // Object file: SPTerrain/SPTerrainSphere.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16ca0d8[];
+extern "C" char g_16ca404[];
+
 #include "game/types.h"
 #include <math.h>
 #include "SP/cDirectPropertyList.h"
@@ -6815,7 +6819,7 @@ void cScatterHost::RebuildEffects()
     mpSensorMgr = (cScatterMgr*)EffectsManagerPtr()->V4c(0xd0a45522u, 0);
     mpEffectMgr = FUN_006eea10();
     mpEffectMgr->V78(7);
-    mpEffectMgr->V84(0x16ca0d8u, GetAppHost()->V50());
+    mpEffectMgr->V84((unsigned)g_16ca0d8, GetAppHost()->V50());
     mpSensorMgr->V1c(mpEffectMgr.p);
     mpSensorMgr->V24(2);
     mpSensorMgr->GetProbe(0x8ebc7a73u, 0, (void**)mpProbe.AsOutParam());
@@ -7151,7 +7155,7 @@ void ShutdownRTTSphere()
         *h = 0;
         n += 2;
         ++h;
-    } while ((int)n < 0x16ca404);
+    } while ((int)n < (int)g_16ca404);
     mgr->FreeRTT(g_colorMap[0], g_colorMap[1]);
     g_texTerrain = 0;
     g_viewer.Shutdown();

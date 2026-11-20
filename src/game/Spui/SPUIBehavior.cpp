@@ -2,6 +2,56 @@
 // Object file: Spui/SPUIBehavior.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1415464[];
+extern "C" char g_1415b08[];
+extern "C" char g_1415ef8[];
+extern "C" char g_1415f08[];
+extern "C" char g_1415f18[];
+extern "C" char g_154279c[];
+extern "C" char g_15427a0[];
+extern "C" char g_15427a4[];
+extern "C" char g_15427a8[];
+extern "C" char g_15427ac[];
+extern "C" char g_15427b0[];
+extern "C" char g_15427b4[];
+extern "C" char g_15427b8[];
+extern "C" char g_15427bc[];
+extern "C" char g_15427c0[];
+extern "C" char g_15427c4[];
+extern "C" char g_15427c8[];
+extern "C" char g_15427cc[];
+extern "C" char g_15427d0[];
+extern "C" char g_15427d4[];
+extern "C" char g_15427d8[];
+extern "C" char g_15427dc[];
+extern "C" char g_15427e0[];
+extern "C" char g_15427e4[];
+extern "C" char g_15427e8[];
+extern "C" char g_15427ec[];
+extern "C" char g_15427f0[];
+extern "C" char g_15427f4[];
+extern "C" char g_15427f8[];
+extern "C" char g_15427fc[];
+extern "C" char g_1542800[];
+extern "C" char g_1542804[];
+extern "C" char g_1542808[];
+extern "C" char g_154280c[];
+extern "C" char g_1542810[];
+extern "C" char g_1542814[];
+extern "C" char g_1542818[];
+extern "C" char g_154281c[];
+extern "C" char g_1542820[];
+extern "C" char g_1542824[];
+extern "C" char g_1542828[];
+extern "C" char g_154282c[];
+extern "C" char g_1542830[];
+extern "C" char g_1542834[];
+extern "C" char g_1542838[];
+extern "C" char g_154283c[];
+extern "C" char g_1542840[];
+extern "C" char g_1542844[];
+
 #include "game/types.h"
 #include "cSPUIBehaviorEventBase.h"
 #include "EA/UTFWin/SerInfo.h"
@@ -1958,9 +2008,9 @@ Interp::Interp()
     Interp0* o = (Interp0*)this;
     ((AB*)this)->Ctor();
     Stopwatch* sw = &o->mStopwatch;
-    o->mVtbl0 = (void*)0x1415f18;
-    o->mVtbl4 = (void*)0x1415f08;
-    o->mVtblC = (void*)0x1415ef8;
+    o->mVtbl0 = (void*)g_1415f18;
+    o->mVtbl4 = (void*)g_1415f08;
+    o->mVtblC = (void*)g_1415ef8;
     o->mpTimeFunction = 0;
     o->mpValueInterp = 0;
     o->mLastTime = 0.0f;
@@ -1984,13 +2034,13 @@ Interp::Interp()
 // @ 0x012f6e50
 void init_154279c()
 {
-    *(int*)0x154279c = 1;
-    *(int*)0x15427a0 = 0;
-    *(void**)0x15427a4 = (void*)0x1415464; *(int*)0x15427a8 = 0x3335c13; *(short*)0x15427ac = 0x13; *(int*)0x15427b0 = 0x30; *(int*)0x15427b4 = 1; *(int*)0x15427b8 = 0;
-    *(void**)0x15427bc = (void*)0x1415464; *(int*)0x15427c0 = 0x3335c14; *(short*)0x15427c4 = 0x13; *(int*)0x15427c8 = 0x34; *(int*)0x15427cc = 1; *(int*)0x15427d0 = 0;
-    *(void**)0x15427d4 = (void*)0x1415464; *(int*)0x15427d8 = 0x3335c15; *(short*)0x15427dc = 0x13; *(int*)0x15427e0 = 0x38; *(int*)0x15427e4 = 1; *(int*)0x15427e8 = 0;
-    *(void**)0x15427ec = (void*)0x1415b08; *(int*)0x15427f0 = 0x3335c41; *(short*)0x15427f4 = 0x13; *(int*)0x15427f8 = 0x4c; *(int*)0x15427fc = 1; *(int*)0x1542800 = 0;
-    *(void**)0x1542804 = (void*)0x1415b08; *(int*)0x1542808 = 0x3335c42; *(short*)0x154280c = 0x13; *(int*)0x1542810 = 0x50; *(int*)0x1542814 = 1; *(int*)0x1542818 = 0;
-    *(void**)0x154281c = (void*)0x1415b08; *(int*)0x1542820 = 0x3335c43; *(short*)0x1542824 = 0x13; *(int*)0x1542828 = 0x54; *(int*)0x154282c = 1; *(int*)0x1542830 = 0;
-    *(void**)0x1542834 = (void*)0x1415b08; *(int*)0x1542838 = 0x3335c44; *(short*)0x154283c = 0x13; *(int*)0x1542840 = 0x58; *(int*)0x1542844 = 1;
+    *(int*)g_154279c = 1;
+    *(int*)g_15427a0 = 0;
+    *(void**)g_15427a4 = (void*)g_1415464; *(int*)g_15427a8 = 0x3335c13; *(short*)g_15427ac = 0x13; *(int*)g_15427b0 = 0x30; *(int*)g_15427b4 = 1; *(int*)g_15427b8 = 0;
+    *(void**)g_15427bc = (void*)g_1415464; *(int*)g_15427c0 = 0x3335c14; *(short*)g_15427c4 = 0x13; *(int*)g_15427c8 = 0x34; *(int*)g_15427cc = 1; *(int*)g_15427d0 = 0;
+    *(void**)g_15427d4 = (void*)g_1415464; *(int*)g_15427d8 = 0x3335c15; *(short*)g_15427dc = 0x13; *(int*)g_15427e0 = 0x38; *(int*)g_15427e4 = 1; *(int*)g_15427e8 = 0;
+    *(void**)g_15427ec = (void*)g_1415b08; *(int*)g_15427f0 = 0x3335c41; *(short*)g_15427f4 = 0x13; *(int*)g_15427f8 = 0x4c; *(int*)g_15427fc = 1; *(int*)g_1542800 = 0;
+    *(void**)g_1542804 = (void*)g_1415b08; *(int*)g_1542808 = 0x3335c42; *(short*)g_154280c = 0x13; *(int*)g_1542810 = 0x50; *(int*)g_1542814 = 1; *(int*)g_1542818 = 0;
+    *(void**)g_154281c = (void*)g_1415b08; *(int*)g_1542820 = 0x3335c43; *(short*)g_1542824 = 0x13; *(int*)g_1542828 = 0x54; *(int*)g_154282c = 1; *(int*)g_1542830 = 0;
+    *(void**)g_1542834 = (void*)g_1415b08; *(int*)g_1542838 = 0x3335c44; *(short*)g_154283c = 0x13; *(int*)g_1542840 = 0x58; *(int*)g_1542844 = 1;
 }

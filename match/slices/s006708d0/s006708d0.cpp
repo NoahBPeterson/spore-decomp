@@ -1,5 +1,12 @@
 // Slice s006708d0 - SP UI missing-expansion-pack page + galaxy game-entry message handling.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE (same region as s00671840).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_1400934[];
+extern "C" char g_1400944[];
+
 #include "types.h"
 #include <stdio.h>
 #include <intrin.h>
@@ -64,14 +71,14 @@ MissingPage::MissingPage() {
 // deleting destructor
 // @ 0x00671630
 MissingPage* MissingPage::Destroy(unsigned flags) {
-    *(void**)this = (void*)0x1400944;
-    *(void**)((char*)this + 4) = (void*)0x1400934;
+    *(void**)this = (void*)g_1400944;
+    *(void**)((char*)this + 4) = (void*)g_1400934;
     _ReadWriteBarrier();
     if (mpXHTMLWin) ((FnV1)((VObj*)mpXHTMLWin)->vt[1])(mpXHTMLWin);
     if (mpContentWin) ((FnV1)((VObj*)mpContentWin)->vt[1])(mpContentWin);
     ((FrameSet*)((char*)this + 0xc))->Dtor();
-    *(void**)((char*)this + 4) = (void*)0x13ec458;
-    *(void**)this = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_13ec458;
+    *(void**)this = (void*)g_13eb938;
     if (flags & 1) DeleteObj(this);
     return this;
 }

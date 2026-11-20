@@ -3,6 +3,9 @@
 //   DragDropCaptureWin (vtable 0x01417694)  : 008038d0..008045a0
 //   UTFWin::cSPUIFrameSequencer (0x01417804 / secondary 0x01417790) : 00804620..008048c0
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1417694[];
+
 typedef unsigned int u32;
 #include <intrin.h>
 
@@ -358,7 +361,7 @@ bool DragDropCaptureWin::OnEvent(int arg, void* pe) {
 
 // 0x008044a0 scalar deleting destructor
 void* DragDropCaptureWin::ScalarDeletingDtor(char flags) {
-    vtable = (void**)0x1417694;
+    vtable = (void**)g_1417694;
     Dispose(false);
     if (p != 0) ReleaseObj(p);
     if (win != 0) ReleaseObj(win);
@@ -384,7 +387,7 @@ static int g_ddcwGuard;
 void* GetDragDropCaptureWin() {
     if ((g_ddcwGuard & 1) == 0) {
         g_ddcwGuard |= 1;
-        g_ddcw.vtable = (void**)0x1417694;
+        g_ddcw.vtable = (void**)g_1417694;
         g_ddcw.a.field0 = 0; g_ddcw.a.ptr = 0; g_ddcw.a.fn = 0; g_ddcw.a.ctx = 0;
         g_ddcw.a.b10 = true; g_ddcw.a.b11 = false;
         g_ddcw.b.field0 = 0; g_ddcw.b.ptr = 0; g_ddcw.b.fn = 0; g_ddcw.b.ctx = 0;

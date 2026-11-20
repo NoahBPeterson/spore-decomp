@@ -1,6 +1,11 @@
 // Slice s0082dc00 (batch w2g7, slice 30).
 // UTFWin cSPUILayerIdWinProc / layer helpers plus assorted renderer and
 // allocator helpers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebacc[];
+extern "C" char g_13f6b3c[];
+
 #include <intrin.h>
 #include "types.h"
 #include <math.h>
@@ -235,8 +240,8 @@ void LayerWinProcInit() {
 // @ 0x0082E1D0
 bool __cdecl LayerProc1(char* p) {
   if (*(void**)(p + 0x1c)) {
-    void* m = NewMem(0x24, (void*)0x13f6b3c, 0, 0, 0, 0);
-    Stream* s = m ? ((Stream*)m)->Ctor(0, 0, (void*)0x13ebacc) : 0;
+    void* m = NewMem(0x24, (void*)g_13f6b3c, 0, 0, 0, 0);
+    Stream* s = m ? ((Stream*)m)->Ctor(0, 0, (void*)g_13ebacc) : 0;
     if (s) s->AddRef();
     s->Set(1, 1.0f);
     LayoutMgr mgr;

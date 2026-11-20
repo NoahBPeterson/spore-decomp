@@ -2,6 +2,17 @@
 // Object file: SPTerrain/_at_00f70000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00f765a0();
+extern "C" void FUN_00f77940();
+extern "C" void FUN_00f78a60();
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_148fed4[];
+extern "C" char g_148fed8[];
+extern "C" char g_148ff14[];
+extern "C" char g_148ff18[];
+
 #include "game/types.h"
 #include <math.h>
 #include "EA/Allocator/FixedAllocatorBase.h"
@@ -2951,9 +2962,9 @@ void FUN_00f79bb0(char init)
 {
     if (init != 0) {
         memset(&gStreamGlobals, 0, sizeof(gStreamGlobals));
-        gStreamGlobals.mVtable0 = 0x00f765a0;
-        gStreamGlobals.mFn8 = 0x00f77940;
-        gStreamGlobals.mFnC = 0x00f78a60;
+        gStreamGlobals.mVtable0 = (int)FUN_00f765a0;
+        gStreamGlobals.mFn8 = (int)FUN_00f77940;
+        gStreamGlobals.mFnC = (int)FUN_00f78a60;
     }
 }
 
@@ -3366,10 +3377,10 @@ cParticlesEffect_s00f7_a710* cParticlesEffect_s00f7_a710::Init(void* pDesc, uint
 // @ 0x00f7b460
 void cParticlesEffect_s00f7_a710::Destroy()
 {
-    mpVtbl0 = (void*)0x148ff18;
-    mpVtbl1 = (void*)0x148ff14;
-    mpVtbl2 = (void*)0x148fed8;
-    mpVtbl3 = (void*)0x148fed4;
+    mpVtbl0 = (void*)g_148ff18;
+    mpVtbl1 = (void*)g_148ff14;
+    mpVtbl2 = (void*)g_148fed8;
+    mpVtbl3 = (void*)g_148fed4;
     _ReadWriteBarrier();
     if (mpF218) {
         void* obj = (void*)&mpF218->mpVtable;
@@ -3394,8 +3405,8 @@ void cParticlesEffect_s00f7_a710::Destroy()
         ((void (__thiscall*)(void*))vt[1])(mpF194);
     }
     ((IntrusiveListBase*)&mpParticlesHead)->Destroy();
-    mpVtbl2 = (void*)0x13f21d4;
-    mpVtbl3 = (void*)0x13ef094;
+    mpVtbl2 = (void*)g_13f21d4;
+    mpVtbl3 = (void*)g_13ef094;
 }
 
 // @ 0x00f7b520

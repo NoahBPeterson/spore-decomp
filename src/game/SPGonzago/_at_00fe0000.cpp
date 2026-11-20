@@ -2,6 +2,14 @@
 // Object file: SPGonzago/_at_00fe0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_14943c0[];
+extern "C" char g_14943d0[];
+extern "C" char g_14948a4[];
+extern "C" char g_15b4568[];
+
 #include "game/types.h"
 #include "SP/cISerializableObject.h"
 #include "SP/cIObjectDatabaseOStream.h"
@@ -1038,15 +1046,15 @@ cSimOwner::cSimOwner()
 // @ 0x00fe7680
 void* cSimOwner::Destroy(int flags)
 {
-    mpVtbl  = (void*)0x14943d0;
-    mpVtbl2 = (void*)0x14943c0;
+    mpVtbl  = (void*)g_14943d0;
+    mpVtbl2 = (void*)g_14943c0;
     ((MC*)((char*)this + 0x30))->f_00f138c0();
     if (mpField2c != 0) {
         cSimOwner* o = (cSimOwner*)((char*)mpField2c + 4);
         ((void(__thiscall*)(void*))VF(o, 8))(o);
     }
-    mpVtbl2 = (void*)0x13eb394;
-    mpVtbl  = (void*)0x13eb938;
+    mpVtbl2 = (void*)g_13eb394;
+    mpVtbl  = (void*)g_13eb938;
     if (flags & 1)
         operator_delete(this);
     return this;
@@ -1528,7 +1536,7 @@ float* Brush_f8780(float* out, const float* src, const float* add, Brush_s00fe_8
 char Brush_s00fe_8630::ReadBrush(void* stream)
 {
     VarListSerializer ser;
-    ser.ctor(this, 0x015b4568, 0x01a80d26);
+    ser.ctor(this, (int)g_15b4568, 0x01a80d26);
     char ok = ser.Read(stream);
     if (ok != 0)
         DeriveFields();
@@ -1594,7 +1602,7 @@ bool GrowthState::ShouldGrow()
 // @ 0x00feb050
 void* __fastcall FUN_00feb050(VtableHolder* self)
 {
-    self->mpVtable = (void*)0x014948a4;
+    self->mpVtable = (void*)g_14948a4;
     self->mpField4 = 0;
     return self;
 }

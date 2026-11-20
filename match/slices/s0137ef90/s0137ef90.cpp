@@ -9,6 +9,12 @@
 // linker to one address) are declared as templates so cl sees distinct symbols.
 // Flags: /O2 /MD /Gy /EHsc /TP.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148521c[];
+extern "C" char g_148522c[];
+extern "C" char g_1485240[];
+extern "C" char g_148ad9c[];
+
 #include "types.h"
 
 namespace eastl { struct string8; }
@@ -253,9 +259,9 @@ void InitNestMissions()
     do {
         __assume(p != 0);
         new (p) cSPCreatureNestMission();
-        p->mpVtable0  = (void*)0x1485240;
-        p->mpVtable4  = (void*)0x148522c;
-        p->mpVtable34 = (void*)0x148521c;
+        p->mpVtable0  = (void*)g_1485240;
+        p->mpVtable4  = (void*)g_148522c;
+        p->mpVtable34 = (void*)g_148521c;
         ++p;
     } while (--i >= 0);
     atexit(FUN_013c7db0);
@@ -375,7 +381,7 @@ void InitMyCaptainLevels()
     g_myCaptainLevels.mNameHash = EA::Hash::FNV1_String8("MyCaptainLevels", 0x811c9dc5, 1);
     g_myCaptainLevels.mpNext = g_myCaptainLevelsHead;
     g_myCaptainLevelsHead = &g_myCaptainLevels;
-    g_myCaptainLevels.mpVtable = (void*)0x148ad9c;
+    g_myCaptainLevels.mpVtable = (void*)g_148ad9c;
     g_myCaptainLevels.mField0c = 0;
     g_myCaptainLevels.mField10 = 0;
     atexit(FUN_013c8c90);

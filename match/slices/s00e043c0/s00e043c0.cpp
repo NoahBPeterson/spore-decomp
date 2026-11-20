@@ -5,6 +5,10 @@
 // Window lookup chain: cSPUIGlobalUI::FindWindowByID(this, id) reads this+0x08 (the cSPUILayout)
 // and forwards to cSPUILayout::FindWindowByID(id, 1). Every window is then spoken to through its
 // vtable (see the W* helpers below), which is also how the retail code is written.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147f2c8[];
+
 #include "types.h"
 
 typedef unsigned char u8;
@@ -174,9 +178,9 @@ void __stdcall FlashCivCommButton(int unused1, void* window, int unused3)
         WGetInt(window, 0x8ed27e7a);
     void* child = ((void* (__thiscall*)(void*))(*(void***)window)[0x13])(window);
     if (child == 0) {
-        SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+        SPUIHelpers_SetWindowSPMaterial(window, (int)g_147f2c8, 0);
     } else if (WGetInt(child, 0x5234b49) == 0) {
-        SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+        SPUIHelpers_SetWindowSPMaterial(window, (int)g_147f2c8, 0);
     }
 }
 

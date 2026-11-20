@@ -24,6 +24,13 @@
 // cParticle) and the ModAPI Swarm headers (ParticleEffect description, ISurface, IEffectMap, cSurfaceInfo),
 // shifted to the retail offsets seen in the binary. Member names are taken from those sources where the
 // field clearly corresponds; names marked "(name guessed)" are Claude-coined.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00f5a7a0();
+extern "C" void FUN_00f5bba0();
+extern "C" void FUN_00f5ccf0();
+extern "C" void FUN_00f5dbb0();
+
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -501,10 +508,10 @@ void InitParticleQuadTables(bool init)
 {
     if (init) {
         memset(&g_particleGlobals.mQuadTable, 0, 0x80);
-        g_particleGlobals.mQuadTable.mSlot0 = (void*)0xf5a7a0;
-        g_particleGlobals.mQuadTable.mSlot8 = (void*)0xf5bba0;
-        g_particleGlobals.mQuadTable.mSlotC = (void*)0xf5dbb0;
-        g_particleGlobals.mSlot0 = (void*)0xf5ccf0;
+        g_particleGlobals.mQuadTable.mSlot0 = (void*)FUN_00f5a7a0;
+        g_particleGlobals.mQuadTable.mSlot8 = (void*)FUN_00f5bba0;
+        g_particleGlobals.mQuadTable.mSlotC = (void*)FUN_00f5dbb0;
+        g_particleGlobals.mSlot0 = (void*)FUN_00f5ccf0;
     }
 }
 

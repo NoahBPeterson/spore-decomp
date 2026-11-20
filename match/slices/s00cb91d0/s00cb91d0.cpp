@@ -1,6 +1,12 @@
 // s00cb91d0.cpp -- gold6 batch, worker 25
 // Reconstructed from the annotated disassembly + Ghidra decompiles in
 // work/match/scratch_s00cb91d0_cards.txt.  Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_145dca8[];
+
 typedef unsigned int   uint32_t;
 typedef unsigned short uint16_t;
 typedef unsigned char  uint8_t;
@@ -108,7 +114,7 @@ void* TObj::_virtual_dtor(uint8_t param_2) {
         ((void(__thiscall*)(uint32_t))VF(p, 0x64))(p);
     }
     TObj* sub = (TObj*)((char*)this + 0x34);
-    *(uint32_t*)((char*)this + 0x504) = 0x145dca8;
+    *(uint32_t*)((char*)this + 0x504) = (int)g_145dca8;
     sub->F_c432e0();
     ((TObj*)this)->F_184c0();
     if ((param_2 & 1) != 0) {
@@ -126,8 +132,8 @@ void* TObj::FUN_00cb9b90(uint8_t param_2) {
     if (p != 0 && *(uint32_t*)(p - 4) != 0) {
         FUN_00f47380((void*)p);
     }
-    *(uint32_t*)((char*)this + 0x08) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x08) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
     if ((param_2 & 1) != 0) {
         FUN_00f47380(this);
     }

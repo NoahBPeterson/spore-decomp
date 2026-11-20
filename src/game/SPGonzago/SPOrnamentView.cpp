@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPOrnamentView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+
 #include "game/types.h"
 #include "SP/cGameDataView.h"
 #include "SP/cModelInstance.h"
@@ -825,7 +828,7 @@ cSPUIMeter_e8f0* cMineralView_e8f0::UpdateLoyaltyBar(cSPUIMeter_e8f0* p, char bS
     }
     if (p == 0) {
       cSPUIMeter_e8f0* np;
-      void* mem = operator_new(0x50, (const char*)0x013f6b3c, 0, 0, 0, 0);
+      void* mem = operator_new(0x50, (const char*)g_13f6b3c, 0, 0, 0, 0);
       if (mem) {
         np = (cSPUIMeter_e8f0*)((cSPUIMeter_e8f0*)mem)->Init(hdr, 0x3ffb28c, 0x4d428c1, L"CivConversionBar", 0xe9f70df9);
       } else {

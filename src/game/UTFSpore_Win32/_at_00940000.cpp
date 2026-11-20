@@ -3,6 +3,10 @@
 //
 // Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bad[];
+
 #include "game/types.h"
 #include <string.h>
 #include <stdlib.h>
@@ -265,17 +269,17 @@ void StrVec::PushEmpty()
     if (end < mpCapacity) {
         mpEnd = end + 0x10;
         if (end) {
-            *(char**)end = (char*)0x1667bac;
-            *(char**)(end + 4) = (char*)0x1667bac;
-            *(char**)(end + 8) = (char*)0x1667bad;
+            *(char**)end = (char*)g_1667bac;
+            *(char**)(end + 4) = (char*)g_1667bac;
+            *(char**)(end + 8) = (char*)g_1667bad;
         }
         return;
     }
     {
         char tmp[16];
-        *(char**)tmp = (char*)0x1667bac;
-        *(char**)(tmp + 4) = (char*)0x1667bac;
-        *(char**)(tmp + 8) = (char*)0x1667bad;
+        *(char**)tmp = (char*)g_1667bac;
+        *(char**)(tmp + 4) = (char*)g_1667bac;
+        *(char**)(tmp + 8) = (char*)g_1667bad;
         DoInsertValue(end, tmp);
         if (*(char**)(tmp + 8) - *(char**)tmp > 1 && *(char**)tmp)
             operator delete(*(char**)tmp);

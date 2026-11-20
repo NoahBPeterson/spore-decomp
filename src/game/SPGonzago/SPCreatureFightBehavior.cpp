@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCreatureFightBehavior.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 #include "game/types.h"
 #include "SP/cCombatant.h"
 #include "SP/cSPCreatureBase.h"
@@ -1524,7 +1527,7 @@ void FUN_00d65500(int param)
 // @ 0x00d65530
 long double FUN_00d65530(float base, char doubled)
 {
-  RNG* rng = (RNG*)0x1601760;
+  RNG* rng = (RNG*)g_1601760;
   uint32_t r = rng->Uniform(gRandomMax);
   float value = (float)(gRandomBase + (int)r) * 0.001f + base;
   if (doubled)

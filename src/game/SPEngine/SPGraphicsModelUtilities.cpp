@@ -2,6 +2,13 @@
 // Object file: SPEngine/SPGraphicsModelUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_13f1ab0[];
+extern "C" char g_140d9d4[];
+extern "C" char g_140d9d8[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -709,12 +716,12 @@ struct CS553 {
 
   void f55c80(void* job);
 };
-struct CS553Base0 { void* mpV; CS553Base0() { mpV = (void*)0x13f1ab0; } ~CS553Base0() { mpV = (void*)0x13eb938; } };
+struct CS553Base0 { void* mpV; CS553Base0() { mpV = (void*)g_13f1ab0; } ~CS553Base0() { mpV = (void*)g_13eb938; } };
 struct CS553Base1 {
   void* mpV;
   int mAtom;
-  CS553Base1() { mpV = (void*)0x13ef094; volatile long* p = (volatile long*)&mAtom; _InterlockedExchange(p, 0); }
-  ~CS553Base1() { mpV = (void*)0x13ef094; }
+  CS553Base1() { mpV = (void*)g_13ef094; volatile long* p = (volatile long*)&mAtom; _InterlockedExchange(p, 0); }
+  ~CS553Base1() { mpV = (void*)g_13ef094; }
 };
 struct CS553Vec {
   void* mpBegin;
@@ -725,8 +732,8 @@ struct CS553Vec {
   void* m20;
   void* mInline[16];
   CS553Vec(void* owner) {
-    ((CS553Base0*)owner)->mpV = (void*)0x140d9d8;
-    ((CS553Base1*)((char*)owner + 4))->mpV = (void*)0x140d9d4;
+    ((CS553Base0*)owner)->mpV = (void*)g_140d9d8;
+    ((CS553Base1*)((char*)owner + 4))->mpV = (void*)g_140d9d4;
     void** b = mInline; mpBegin = b; mpEnd = b; m20 = 0; mpCap = b + 16;
   }
   ~CS553Vec() { DestroyRange(mpBegin, mpEnd); FreeBuffer(mpBegin); }

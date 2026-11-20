@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPCreatureBase.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_150c8bc[];
+extern "C" char g_150c900[];
+extern "C" char g_1570858[];
+extern "C" char g_1571798[];
+extern "C" char g_15816b8[];
+extern "C" char g_1601760[];
+
 // s00c19b60's items define the slices' own placement new(size_t, void*); s00c0acd0 adds <algorithm>, which reaches
 // <new> through <memory>/<xmemory> (C2084).  Same hand guard as SPGraphicsModelManager.cpp (rewrite.py placement_new_guard).
 #define __PLACEMENT_NEW_INLINE
@@ -1440,7 +1448,7 @@ class RandomLinearCongruential_s00c0_acd0 {
 };
 }
 }
-#define GRAND ((EA::Random::RandomLinearCongruential_s00c0_acd0*)0x1601760)
+#define GRAND ((EA::Random::RandomLinearCongruential_s00c0_acd0*)g_1601760)
 bool __cdecl SP_GetPropertyAsUint32Array(unsigned int prop, unsigned int arg,
                                          int* count, int** data);
 int  __cdecl SP_GetCurrentGameMode_s00c0_acd0();
@@ -7506,15 +7514,15 @@ int __thiscall C_s00c0_bd70::C0bd70(void* fields)
 {
   int sum = ((GameDataFields*)this)->GetFieldValues(fields);
   {
-    cVarListSerializer v((char*)this + 0x34, (void*)0x15816b8, 0x1a80d26);
+    cVarListSerializer v((char*)this + 0x34, (void*)g_15816b8, 0x1a80d26);
     sum += v.GetFields(fields);
   }
   sum += ((LocoFields*)((char*)this + 0xc0))->GetFieldValues(fields);
   {
-    cVarListSerializer v((char*)this + 0x5a8, (void*)0x1570858, 0x1a80d26);
+    cVarListSerializer v((char*)this + 0x5a8, (void*)g_1570858, 0x1a80d26);
     sum += v.GetFields(fields);
   }
-  cVarListSerializer v3(this, (void*)0x1571798, 0x1a80d26);
+  cVarListSerializer v3(this, (void*)g_1571798, 0x1a80d26);
   sum += v3.GetFields(fields);
   return sum;
 }
@@ -7958,7 +7966,7 @@ void __thiscall CCB::cf50()
 float __thiscall CCB::cfa0(int index, char flag)
 {
     if (*(char*)((char*)this + 0xbb0) != 0)
-        return ce80(2, 1) + GF(0x150c900);
+        return ce80(2, 1) + GF((int)g_150c900);
     float v = flag != 0 ? GF((char*)this + 0xfa8 + index * 4) : ce80(index, 0);
     return v;
 }
@@ -7969,7 +7977,7 @@ void __thiscall CCB_s00c0_ce80::cff0(int param)
     G32((char*)this + 0xf98) = param;
     float v;
     if (*(char*)((char*)this + 0xbb0) != 0)
-        v = ce80(2, 1) + GF(0x150c900);
+        v = ce80(2, 1) + GF((int)g_150c900);
     else
         v = ce80(param, 0);
     GF((char*)this + 0x2a0) = v;
@@ -7984,7 +7992,7 @@ int __thiscall CCB::d050(float param)
         if (iVar1 != 1) {
             float f;
             if (*(char*)((char*)this + 0xbb0) != 0)
-                f = ce80(2, 1) + GF(0x150c900);
+                f = ce80(2, 1) + GF((int)g_150c900);
             else
                 f = ce80(iVar1, 0);
             if (f >= param) {
@@ -8587,7 +8595,7 @@ double SP::cSPCreatureBase::GetTime()
 float __thiscall CCM::e4f0()
 {
     if (SP_GetCurrentGameMode() == (void*)0x1654c10
-        && *(int*)(G32(0x16c7aa4) + 0xcc) == 2
+        && *(int*)(G32((int)&g_16c7aa4) + 0xcc) == 2
         && this != 0) {
         int r = (int)((VQuery3*)this)->Query(0xd0036e08);
         bool bFlag = ((G32((char*)this + 0xb58) >> 9) & 1) != 0;
@@ -8601,7 +8609,7 @@ float __thiscall CCM::e4f0()
         float v = GF(e + 0x34c);
         if (v >= 0.0f) return v;
     }
-    return GF(0x150c8bc);
+    return GF((int)g_150c8bc);
 }
 
 // @ 0x00c0e580
@@ -8610,7 +8618,7 @@ void* __thiscall CCM_s00c0_ddb0::e580()
     char* c = *(char**)((char*)this + 0xb54);
     if (c != 0) {
         float* p = ((F_a048a0*)c)->f();
-        if (p[0] != GF(0x168d910) || p[1] != GF(0x168d914) || p[2] != GF(0x168d918)) {
+        if (p[0] != GF((int)&g_168d910) || p[1] != GF((int)&g_168d914) || p[2] != GF((int)&g_168d918)) {
             return ((F_a048a0*)(*(void**)((char*)this + 0xb54)))->f();
         }
     }

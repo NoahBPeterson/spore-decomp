@@ -2,6 +2,10 @@
 // cOfflineConfirmationDialog, cLoginHelpDialog) and SP::Pollen::cAuthManager, plus a few
 // EASTL string helpers from the same module.
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_151e5c8[];
+
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -710,7 +714,7 @@ void cAuthManager::InitialLogin() {
   if (!mbPrompt && (mbPlayOffline || (mUser.size() && mPassword.size()))) {
     if (mbPlayOffline) {
       MessageServer()->PostMSG(0x5b85ff5, 0, 0);
-      if (!sAppProperties->mpValues->mbGalacticAdventures) SPUIHelpers::ShowErrorDialog(0, (const void*)0x151e5c8);
+      if (!sAppProperties->mpValues->mbGalacticAdventures) SPUIHelpers::ShowErrorDialog(0, (const void*)g_151e5c8);
       Pollinator()->SetEnabledState(0x4c4d2cd);
       MessageServer()->PostMSG(0x44db12e, 0, 0);
       SetOfflineUserID();

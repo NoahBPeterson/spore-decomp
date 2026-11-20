@@ -2,6 +2,10 @@
 // UI module: cSPUILayoutZoom, cSPUILayoutCheat, cSPUIMainWin and helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15451e8[];
+extern "C" char g_15451ec[];
+
 #include "types.h"
 
 // ===========================================================================
@@ -92,8 +96,8 @@ extern "C" Canvas* SP_Canvas();        // 0x0067dcf0
 extern "C" void*   SP_MessageServer(); // 0x0067dcc0
 extern "C" void*   SP_CheatManager();
 
-#define sMouseXScale (*(float*)0x15451e8)
-#define sMouseYScale (*(float*)0x15451ec)
+#define sMouseXScale (*(float*)g_15451e8)
+#define sMouseYScale (*(float*)g_15451ec)
 
 // ===========================================================================
 // cSPUILayoutZoom  (vtable 0x01418518, size 0x44)

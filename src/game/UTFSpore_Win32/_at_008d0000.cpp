@@ -2,6 +2,17 @@
 // Object file: UTFSpore_Win32/_at_008d0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13effa8[];
+extern "C" char g_13f3a68[];
+extern "C" char g_140a2e0[];
+extern "C" char g_140a390[];
+extern "C" char g_1436624[];
+extern "C" char g_143692c[];
+extern "C" char g_1436968[];
+extern "C" char g_1436a00[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include <math.h>
@@ -1298,7 +1309,7 @@ void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned p
 TSI* TSI::FUN_008d3c60(VAlloc* alloc)
 {
     VAlloc* savedAlloc = *(VAlloc* volatile*)&alloc;
-    mVtbl = (void**)0x1435990;
+    mVtbl = (void**)&PTR_FUN_01435990;
     _ReadWriteBarrier();
     mKeys.begin = 0;
     mKeys.end = 0;
@@ -1895,7 +1906,7 @@ namespace EA { namespace ResourceMan {
 const wchar_t* DatabaseDirectoryFiles::GetExtensionByType(unsigned int nType)
 {
     EA::Thread::Mutex_s008d_5340* pMutex = &mMutex;
-    pMutex->Lock(reinterpret_cast<void*>(0x01436624));
+    pMutex->Lock(reinterpret_cast<void*>((int)g_1436624));
 
     for (RBNode* pNode = mExtensionToTypeMap.mpBegin; pNode != TreeAnchor(&mExtensionToTypeMap);
          pNode = static_cast<RBNode*>(RBTreeIncrement(pNode))) {
@@ -2112,9 +2123,9 @@ tail:
 // @ 0x008dd0d0
 void* PFRecordWrite_s008d_d0d0::ctor(int a2, int a3, int a4, void* a5, int a6)
 {
-    vtbl = (void**)0x13effa8;
+    vtbl = (void**)g_13effa8;
     _InterlockedExchange((volatile long*)&mRefCount, 0);
-    vtbl = (void**)0x140a2e0;
+    vtbl = (void**)g_140a2e0;
     mField08 = (int)0x12e4a892;
     int* k = (int*)a5;
     mKey[0] = k[0];
@@ -2122,13 +2133,13 @@ void* PFRecordWrite_s008d_d0d0::ctor(int a2, int a3, int a4, void* a5, int a6)
     mKey[2] = k[2];
     mpDatabase = (void*)a6;
     mField1c = 3;
-    vtbl20 = (void**)0x13f3a68;
+    vtbl20 = (void**)g_13f3a68;
     _ReadWriteBarrier();
-    vtbl = (void**)0x1436968;
-    vtbl20 = (void**)0x143692c;
-    vtbl = (void**)0x1436968;
-    vtbl20 = (void**)0x143692c;
-    ((void* (__thiscall*)(void*, void*))FUN_0093bd50)(mMemStream, (void*)0x140a390);
+    vtbl = (void**)g_1436968;
+    vtbl20 = (void**)g_143692c;
+    vtbl = (void**)g_1436968;
+    vtbl20 = (void**)g_143692c;
+    ((void* (__thiscall*)(void*, void*))FUN_0093bd50)(mMemStream, (void*)g_140a390);
     ((void* (__thiscall*)(void*, int))FUN_00931da0)(mFileStream, 0);
     *((char*)this + 0x274) = 0;
     _InterlockedExchange((volatile long*)((char*)this + 0x278), 1);
@@ -2222,8 +2233,8 @@ extern "C" int FUN_008ddde0(void* a1, void* a2)
 void EditorResource::dtor()
 {
     void* p = mpData;
-    vtbl = (void**)0x1436a00;
+    vtbl = (void**)g_1436a00;
     if (p != 0)
         ((MemAlloc*)g_pMemAlloc)->Free(p);
-    vtbl = (void**)0x13eb938;
+    vtbl = (void**)g_13eb938;
 }

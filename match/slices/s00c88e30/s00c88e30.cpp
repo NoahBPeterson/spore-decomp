@@ -1,5 +1,10 @@
 // Slice s00c88e30 -- SP::cSpatialObject methods (retail layout).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1695294[];
+extern "C" char g_16952a0[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -150,7 +155,7 @@ void cSO::func78h(cSPVector3* out)
 {
     void* owner = (void*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
     cSPVector3 v;
-    cSPVector3* r = (cSPVector3*)FUN_0059aed0(&v, (void*)0x01695294, owner);
+    cSPVector3* r = (cSPVector3*)FUN_0059aed0(&v, (void*)g_1695294, owner);
     cSPVector3 tmp = *r;
     if (FUN_0059ab70(&tmp))
         *out = tmp;
@@ -163,7 +168,7 @@ void cSO::GetCommunityName(cSPVector3* out)
 {
     void* owner = (void*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
     cSPVector3 v;
-    cSPVector3* r = (cSPVector3*)FUN_0059aed0(&v, (void*)0x016952a0, owner);
+    cSPVector3* r = (cSPVector3*)FUN_0059aed0(&v, (void*)g_16952a0, owner);
     cSPVector3 tmp = *r;
     if (FUN_0059ab70(&tmp))
         *out = tmp;

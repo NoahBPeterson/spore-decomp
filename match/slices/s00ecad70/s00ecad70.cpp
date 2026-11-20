@@ -1,5 +1,13 @@
 // Slice s00ecad70 -- SP cell-stage UI: ban/palette item rows and slider helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_1489314[];
+extern "C" char g_1489324[];
+extern "C" char g_1489334[];
+extern "C" char g_1489350[];
+
 #include "types.h"
 #include <math.h>
 #include <xmmintrin.h>
@@ -618,12 +626,12 @@ PaletteItemUI* __fastcall FUN_00ecba50(PaletteItemUI* self)
     _ReadWriteBarrier();
     float one = kPaletteOne;
     _ReadWriteBarrier();
-    self->vt20 = (void*)0x13eb384;
-    self->vt00 = (void*)0x1489350;
-    self->vt0c = (void*)0x1489334;
-    self->vt10 = (void*)0x1489324;
+    self->vt20 = (void*)g_13eb384;
+    self->vt00 = (void*)g_1489350;
+    self->vt0c = (void*)g_1489334;
+    self->vt10 = (void*)g_1489324;
     _ReadWriteBarrier();
-    self->vt20 = (void*)0x1489314;
+    self->vt20 = (void*)g_1489314;
     _ReadWriteBarrier();
     self->p24 = 0;
     self->layout = 0;

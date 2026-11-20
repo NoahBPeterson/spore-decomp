@@ -8,6 +8,9 @@
 // real layouts: cCityHall's spatial object sits at +0x34, cCameraMessage is
 // 0x30 bytes with its distance float at +0x20.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1478984[];
+
 typedef unsigned int uint32_t;
 
 extern "C" void* __cdecl SP_NounManager();            // 0x00b3d300
@@ -85,6 +88,6 @@ void __thiscall Strat::StartTechHint()
         (cTerrainSphere*)((cGameNounManager*)SP_NounManager())->GetCurrentTerrainSphere();
     if (!terrain->Query(0x50a2e65)) {
         terrain->AddFlag(0x50a2e65);
-        ((cMessageManager*)SP_MessageManager())->PostString(0x1478984, 1, 0, 0, 0, 0);
+        ((cMessageManager*)SP_MessageManager())->PostString((int)g_1478984, 1, 0, 0, 0, 0);
     }
 }

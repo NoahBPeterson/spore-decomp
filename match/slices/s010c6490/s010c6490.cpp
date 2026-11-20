@@ -2,6 +2,14 @@
 // plane-shape ray/sphere casts, statistics, and a few small vtable helpers.
 //
 // Module flags: /O2 /MD /Gy /EHsc /TP /vc71   (Havok 3.1.0 was built with VC .NET 2003 cl 13.10)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149db80[];
+extern "C" char g_149db88[];
+extern "C" char g_149db90[];
+extern "C" char g_149db98[];
+extern "C" char g_149dba0[];
+
 #include "types.h"
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
@@ -511,9 +519,9 @@ struct hkCollisionFilterSub : hkCollisionFilter
 };
 hkCollisionFilterSub::~hkCollisionFilterSub()
 {
-    *(void**)((char*)this + 0x0)  = (void*)0x0149dba0;
-    *(void**)((char*)this + 0x8)  = (void*)0x0149db98;
-    *(void**)((char*)this + 0xc)  = (void*)0x0149db90;
-    *(void**)((char*)this + 0x10) = (void*)0x0149db88;
-    *(void**)((char*)this + 0x14) = (void*)0x0149db80;
+    *(void**)((char*)this + 0x0)  = (void*)g_149dba0;
+    *(void**)((char*)this + 0x8)  = (void*)g_149db98;
+    *(void**)((char*)this + 0xc)  = (void*)g_149db90;
+    *(void**)((char*)this + 0x10) = (void*)g_149db88;
+    *(void**)((char*)this + 0x14) = (void*)g_149db80;
 }

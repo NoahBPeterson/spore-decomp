@@ -1,3 +1,51 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fa72c[];
+extern "C" char g_141a7fc[];
+extern "C" char g_1440e14[];
+extern "C" char g_1445200[];
+extern "C" char g_1445240[];
+extern "C" char g_1445280[];
+extern "C" char g_1445298[];
+extern "C" char g_14452e0[];
+extern "C" char g_154fbe4[];
+extern "C" char g_154fbe8[];
+extern "C" char g_154fbec[];
+extern "C" char g_154fbf0[];
+extern "C" char g_154fbf4[];
+extern "C" char g_154fbf8[];
+extern "C" char g_154fbfc[];
+extern "C" char g_154fc00[];
+extern "C" char g_154fc04[];
+extern "C" char g_154fc08[];
+extern "C" char g_154fc0c[];
+extern "C" char g_154fc10[];
+extern "C" char g_154fc14[];
+extern "C" char g_154fc18[];
+extern "C" char g_154fc1c[];
+extern "C" char g_154fc20[];
+extern "C" char g_154fc24[];
+extern "C" char g_154fc28[];
+extern "C" char g_154fc2c[];
+extern "C" char g_154fc30[];
+extern "C" char g_154fc34[];
+extern "C" char g_154fc38[];
+extern "C" char g_154fc3c[];
+extern "C" char g_154fc40[];
+extern "C" char g_154fc44[];
+extern "C" char g_154fc48[];
+extern "C" char g_154fc4c[];
+extern "C" char g_154fc50[];
+extern "C" char g_154fc54[];
+extern "C" char g_154fc58[];
+extern "C" char g_154fc5c[];
+extern "C" char g_154fc60[];
+extern "C" char g_154fc64[];
+extern "C" char g_154fc68[];
+extern "C" char g_154fc6c[];
+extern "C" char g_154fc70[];
+extern "C" char g_154fc74[];
+
 #include "game/types.h"
 #include <math.h>
 #pragma intrinsic(sqrt)
@@ -44,17 +92,17 @@ struct StdDrawableBase0 {
     void* v[4];                     // +0x00 vtable ptrs (0,4,8,c)
     StdDrawableBase0()
     {
-        *(void* volatile*)&v[1] = (void*)0x13fa72c;
+        *(void* volatile*)&v[1] = (void*)g_13fa72c;
         v[2] = 0;
-        *(void* volatile*)&v[3] = (void*)0x1445200;
+        *(void* volatile*)&v[3] = (void*)g_1445200;
     }
 };
 struct StdDrawableBase : StdDrawableBase0 {
     StdDrawableBase()
     {
-        *(void* volatile*)&v[0] = (void*)0x1445298;
-        *(void* volatile*)&v[1] = (void*)0x1445280;
-        *(void* volatile*)&v[3] = (void*)0x1445240;
+        *(void* volatile*)&v[0] = (void*)g_1445298;
+        *(void* volatile*)&v[1] = (void*)g_1445280;
+        *(void* volatile*)&v[3] = (void*)g_1445240;
     }
 };
 struct StdDrawable : StdDrawableBase {
@@ -140,9 +188,9 @@ void* StdDrawable::GetImageForState(unsigned st)
 // @ 0x00987b10
 StdDrawable::~StdDrawable()
 {
-    v[0] = (void*)0x1445298;
-    v[1] = (void*)0x1445280;
-    v[3] = (void*)0x1445240;
+    v[0] = (void*)g_1445298;
+    v[1] = (void*)g_1445280;
+    v[3] = (void*)g_1445240;
     for (int i = 0; i < 8; i++) {
         if (mpImage[i])
             (*(void(__thiscall**)(void*))((char*)*(void**)mpImage[i] + 4))(mpImage[i]);
@@ -150,9 +198,9 @@ StdDrawable::~StdDrawable()
     }
     if (mHitMask)
         (*(void(__thiscall**)(void*))((char*)*(void**)mHitMask + 4))(mHitMask);
-    v[3] = (void*)0x13eb938;
-    v[1] = (void*)0x13eb938;
-    v[0] = (void*)0x13eb938;
+    v[3] = (void*)g_13eb938;
+    v[1] = (void*)g_13eb938;
+    v[0] = (void*)g_13eb938;
 }
 
 // @ 0x00987bf0
@@ -366,41 +414,41 @@ StdDrawable::StdDrawable()
 // @ 0x01300c50
 void init_154fbe4()
 {
-    *(int*)0x154fbe4 = 8;
-    *(int*)0x154fbe8 = 0;
-    *(int*)0x154fbec = 0;
-    *(int*)0x154fbf0 = 0xef3c000a;
-    *(short*)0x154fbf4 = 9;
-    *(int*)0x154fbf8 = 0x30;
-    *(int*)0x154fbfc = 1;
-    *(int*)0x154fc00 = 0;
-    *(int*)0x154fc04 = 0;
-    *(int*)0x154fc08 = 0xef3c000b;
-    *(short*)0x154fc0c = 0x11;
-    *(int*)0x154fc10 = 0x44;
-    *(int*)0x154fc14 = 1;
-    *(int*)0x154fc18 = 0;
-    *(void**)0x154fc1c = (void*)0x1440e14;
-    *(int*)0x154fc20 = 0xef3c000c;
-    *(short*)0x154fc24 = 0x14;
-    *(int*)0x154fc28 = 0x34;
-    *(int*)0x154fc2c = 1;
-    *(int*)0x154fc30 = 0;
-    *(void**)0x154fc34 = (void*)0x14452e0;
-    *(int*)0x154fc38 = 0xf3c000d;
-    *(short*)0x154fc3c = 0x13;
-    *(int*)0x154fc40 = 0x4c;
-    *(int*)0x154fc44 = 1;
-    *(int*)0x154fc48 = 0;
-    *(int*)0x154fc4c = 0;
-    *(int*)0x154fc50 = 0xf3c000e;
-    *(short*)0x154fc54 = 0xb;
-    *(int*)0x154fc58 = 0x50;
-    *(int*)0x154fc5c = 1;
-    *(int*)0x154fc60 = 0;
-    *(void**)0x154fc64 = (void*)0x141a7fc;
-    *(int*)0x154fc68 = 0x39a69e6;
-    *(short*)0x154fc6c = 0x14;
-    *(int*)0x154fc70 = 0x54;
-    *(int*)0x154fc74 = 1;
+    *(int*)g_154fbe4 = 8;
+    *(int*)g_154fbe8 = 0;
+    *(int*)g_154fbec = 0;
+    *(int*)g_154fbf0 = 0xef3c000a;
+    *(short*)g_154fbf4 = 9;
+    *(int*)g_154fbf8 = 0x30;
+    *(int*)g_154fbfc = 1;
+    *(int*)g_154fc00 = 0;
+    *(int*)g_154fc04 = 0;
+    *(int*)g_154fc08 = 0xef3c000b;
+    *(short*)g_154fc0c = 0x11;
+    *(int*)g_154fc10 = 0x44;
+    *(int*)g_154fc14 = 1;
+    *(int*)g_154fc18 = 0;
+    *(void**)g_154fc1c = (void*)g_1440e14;
+    *(int*)g_154fc20 = 0xef3c000c;
+    *(short*)g_154fc24 = 0x14;
+    *(int*)g_154fc28 = 0x34;
+    *(int*)g_154fc2c = 1;
+    *(int*)g_154fc30 = 0;
+    *(void**)g_154fc34 = (void*)g_14452e0;
+    *(int*)g_154fc38 = 0xf3c000d;
+    *(short*)g_154fc3c = 0x13;
+    *(int*)g_154fc40 = 0x4c;
+    *(int*)g_154fc44 = 1;
+    *(int*)g_154fc48 = 0;
+    *(int*)g_154fc4c = 0;
+    *(int*)g_154fc50 = 0xf3c000e;
+    *(short*)g_154fc54 = 0xb;
+    *(int*)g_154fc58 = 0x50;
+    *(int*)g_154fc5c = 1;
+    *(int*)g_154fc60 = 0;
+    *(void**)g_154fc64 = (void*)g_141a7fc;
+    *(int*)g_154fc68 = 0x39a69e6;
+    *(short*)g_154fc6c = 0x14;
+    *(int*)g_154fc70 = 0x54;
+    *(int*)g_154fc74 = 1;
 }

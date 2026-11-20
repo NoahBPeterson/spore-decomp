@@ -2,6 +2,11 @@
 // Object file: SPEditors/SPSubModePhoto.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ff4d4[];
+extern "C" char g_1524c18[];
+extern "C" char g_1524c60[];
+
 #include "game/types.h"
 #include "SP/cSPPlayModeSubModePhoto.h"
 #include "EA/DateTime/DateTime.h"
@@ -788,12 +793,12 @@ bool cSPPlayModeSubModePhoto::Activate()
         void* handler = (void*)((char*)this + 0x14);
         mAutoMsgHandler.a = (uint32_t)ms;
         mAutoMsgHandler.b = (uint32_t)handler;
-        mAutoMsgHandler.c = 0x13ff4d4;
+        mAutoMsgHandler.c = (int)g_13ff4d4;
         mAutoMsgHandler.d = 0xd;
         mAutoMsgHandler.e = 0;
         if (handler) {
             for (uint32_t i = 0; i < 0x34; i += 4)
-                ms->AddHandler(handler, *(uint32_t*)(0x13ff4d4 + i));
+                ms->AddHandler(handler, *(uint32_t*)((int)g_13ff4d4 + i));
         }
     }
     return true;
@@ -1145,7 +1150,7 @@ void cSPPlayModeSubModePhoto_s0063_f740::SendPhoto()
     if (!FUN_0063fa40()) {
         CloseSendPhotoWindow();
         BeginProfScope(0, 1)->End();
-        FUN_00809db0((void*)0x1524c60, (void*)0x1524c18);
+        FUN_00809db0((void*)g_1524c60, (void*)g_1524c18);
         mDialogInProgress = 8;
         if (*(int*)(*(int*)((char*)gAppProperties2 + 0x3c) + 0x118) == 0)
             FUN_00675250()->AutoTest(0xb4c2a66b, 1);

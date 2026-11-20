@@ -1,6 +1,11 @@
 // Slice s00d160c0 - SporeApp 0x00d160c0..0x00d16eb0
 // Gameplay-marker UI helpers plus the string-comparator sort template helpers.
 // Flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 
 typedef unsigned char u8;
@@ -123,9 +128,9 @@ void cGameEditInputStrategy::SetPlanet(const cVec3i* planet)
     mPlanetF8 = *planet;
     if (mpField7c != 0) {
         cWString str;
-        str.mpBegin = (void*)0x01667bac;
-        str.mpEnd = (void*)0x01667bac;
-        str.mpCap = (void*)0x01667bae;
+        str.mpBegin = (void*)g_1667bac;
+        str.mpEnd = (void*)g_1667bac;
+        str.mpCap = (void*)g_1667bae;
         if (planet->y != 0)
             VT_7C_2(ObjectError(), (void*)planet, &str);
         VT_60_1(mpField7c, str.mpBegin, 0);

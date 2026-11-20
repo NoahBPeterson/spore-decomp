@@ -4,6 +4,13 @@
 // embedded node pool) they are built on, the GroupMap wrapper and the tiny
 // vtable-dispatch / copy helpers around them.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1403934[];
+extern "C" char g_1455648[];
+extern "C" char g_1454fac[];
+extern "C" char g_1455668[];
+
 #include "s00a64d70.h"
 
 // Mutable sentinel that keeps the CreateCanvas call from being folded away in
@@ -31,10 +38,10 @@ Copyable38* Copyable38::CopyCtor(const Copyable38* src)
 {
     uint32_t* d = mW;
     const uint32_t* s = src->mW;
-    d[0]  = 0x1454fac;      // own vtable
+    d[0]  = (int)g_1454fac;      // own vtable
     d[1]  = s[1];
     d[2]  = s[2];
-    d[3]  = 0x1454fac;      // nested holder's vtable
+    d[3]  = (int)g_1454fac;      // nested holder's vtable
     d[4]  = s[4];
     d[5]  = s[5];
     d[6]  = s[6];
@@ -409,8 +416,8 @@ struct NamedAllocTemp_a65180 {
     void*       mpVtbl;   // +0x00
     int         mA;       // +0x04
     const char* mpName;   // +0x08
-    NamedAllocTemp_a65180(const NamedAllocTemp_a65180& o, const char* name) : mpVtbl((void*)0x1454fac), mA(o.mA), mpName(name) {}
-    ~NamedAllocTemp_a65180() { mpVtbl = (void*)0x1403934; }
+    NamedAllocTemp_a65180(const NamedAllocTemp_a65180& o, const char* name) : mpVtbl((void*)&g_1454fac), mA(o.mA), mpName(name) {}
+    ~NamedAllocTemp_a65180() { mpVtbl = (void*)g_1403934; }
 };
 
 // @ 0x00a65180
@@ -432,7 +439,7 @@ Hashtable* Hashtable::Construct(const void* nameSlot)
        2.0f with movss, not a plain integer 2) */
     *(float*)&mnGrowthFactor = 2.0f;
     mnNextResize     = 0;
-    mPool.mpVtbl = (void*)0x1454fac;
+    mPool.mpVtbl = (void*)&g_1454fac;
     mPool.mA     = slot[1];
     mPool.mpName = (const char*)slot[2];
     mnBucketCount    = 1;
@@ -457,7 +464,7 @@ struct HashPool_a65000 {
     uint32_t mA;
     const char* mpName;
     void Free(void* p) { vt->Free(this, p); }
-    ~HashPool_a65000() { vt = (HashPoolVt_a65000*)0x1403934; }
+    ~HashPool_a65000() { vt = (HashPoolVt_a65000*)g_1403934; }
 };
 struct HashtableDtorView_a65000 {
     uint32_t pad0;
@@ -577,7 +584,7 @@ struct GroupMapBase_a651e0 {
     uint32_t   mField08;   // +0x08
     uint32_t   mField0c;   // +0x0c
     GroupMapBase_a651e0() : mpSelf((char*)this + 0x10), mField08(0), mField0c(0) {}
-    ~GroupMapBase_a651e0() { mpVtbl = (void*)0x1455648; }
+    ~GroupMapBase_a651e0() { mpVtbl = (void*)g_1455648; }
 };
 struct GroupMapDtorView_a651e0 : GroupMapBase_a651e0 {
     HashtableDtorView_a65000 mGroups;   // +0x10
@@ -642,7 +649,7 @@ void Instance::Destroy()
                 typedef void (__thiscall* Fn)(void*, void*);
                 ((Fn)(*(void***)&group->mpVtbl0c)[3])((void*)&group->mpVtbl0c, samples);
             }
-            group->mpVtbl0c = (void*)0x1403934;
+            group->mpVtbl0c = (void*)g_1403934;
             typedef void (__thiscall* FreeFn)(void*, void*);
             ((FreeFn)(*(void***)this)[3])(this, group);
         } while (mGroups.mpBucketArray[mGroups.mnBucketCount] != node);
@@ -652,9 +659,9 @@ void Instance::Destroy()
     ((EapdOwner*)owner)->ClearLists(this);      // 0xa646a0
 
     mGroupMap.mGroups.Dispose();                // 0xa65000
-    mGroupMap.mpVtbl = (void*)0x1455648;        // 0x01455648
+    mGroupMap.mpVtbl = (void*)g_1455648;        // 0x01455648
     mGroups.Finalize();                         // 0xa64b70
-    mpVtbl = (void*)0x1403934;                  // 0x01403934
+    mpVtbl = (void*)g_1403934;                  // 0x01403934
 }
 
 // ===========================================================================
@@ -725,7 +732,7 @@ struct GroupMapCtorView_a654a0 : GroupMapBase_a651e0 {
 // @ 0x00a654a0
 GroupMapCtorView_a654a0::GroupMapCtorView_a654a0(void* nameSlot)
 {
-    mpVtbl = (void*)0x1455668;
+    mpVtbl = (void*)g_1455668;
     ((HashtableCalls_a65180*)&mGroups)->InitNamed(nameSlot, "EAPd/InputManager");
 }
 
@@ -736,7 +743,7 @@ GroupMapCtorView_a654a0::GroupMapCtorView_a654a0(void* nameSlot)
 // @ 0x00a65560
 Instance* Instance::InstanceCtor(void* sys, void* a3, void* a4)
 {
-    mpVtbl       = (void*)0x1454fac;
+    mpVtbl       = (void*)&g_1454fac;
     mField04     = *(uint32_t*)((char*)sys + 4);
     mpClassName  = "EAPd/Instance";     // 0x014556ac
     mGroups.InitNamed(sys, "EAPd/GroupMap");   // 0x0145569c

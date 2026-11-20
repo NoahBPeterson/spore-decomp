@@ -1,4 +1,21 @@
 // Slice s0138d560 -- shared-allocator bootstrap and zero-fill initializers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16c8b40[];
+extern "C" char g_16c8b48[];
+extern "C" char g_16ca3d4[];
+extern "C" char g_16ca3d8[];
+extern "C" char g_16ca3dc[];
+extern "C" char g_16ca3e0[];
+extern "C" char g_16ca3e4[];
+extern "C" char g_16ca3e8[];
+extern "C" char g_16ca3ec[];
+extern "C" char g_16ca3f0[];
+extern "C" char g_16ca3f4[];
+extern "C" char g_16ca3f8[];
+extern "C" char g_16ca3fc[];
+extern "C" char g_16ca400[];
+
 typedef unsigned int uint32_t;
 
 extern "C" int atexit(void (__cdecl*)());
@@ -10,13 +27,13 @@ extern void FUN_013c9e00(void);
 // @ 0x0138e640
 void init_16c8b40()
 {
-    if (*(int*)0x16c8b40 == 0) {
+    if (*(int*)g_16c8b40 == 0) {
         char ok = InitSharedAllocator();
-        *(char*)0x16c8b48 = 1;
+        *(char*)g_16c8b48 = 1;
         if (!ok)
-            *(char*)0x16c8b48 = 0;
+            *(char*)g_16c8b48 = 0;
     } else {
-        *(char*)0x16c8b48 = 0;
+        *(char*)g_16c8b48 = 0;
     }
     atexit(&FUN_013c9950);
 }
@@ -40,18 +57,18 @@ void init_16c9b94()
 // @ 0x01391740
 void init_16ca3d4()
 {
-    *(int*)0x16ca3d4 = -1;
-    *(int*)0x16ca3d8 = -1;
-    *(int*)0x16ca3dc = -1;
-    *(int*)0x16ca3e0 = -1;
-    *(int*)0x16ca3e4 = -1;
-    *(int*)0x16ca3e8 = -1;
-    *(int*)0x16ca3ec = -1;
-    *(int*)0x16ca3f0 = -1;
-    *(int*)0x16ca3f4 = -1;
-    *(int*)0x16ca3f8 = -1;
-    *(int*)0x16ca3fc = -1;
-    *(int*)0x16ca400 = -1;
+    *(int*)g_16ca3d4 = -1;
+    *(int*)g_16ca3d8 = -1;
+    *(int*)g_16ca3dc = -1;
+    *(int*)g_16ca3e0 = -1;
+    *(int*)g_16ca3e4 = -1;
+    *(int*)g_16ca3e8 = -1;
+    *(int*)g_16ca3ec = -1;
+    *(int*)g_16ca3f0 = -1;
+    *(int*)g_16ca3f4 = -1;
+    *(int*)g_16ca3f8 = -1;
+    *(int*)g_16ca3fc = -1;
+    *(int*)g_16ca400 = -1;
 }
 
 // @ 0x01391bc0

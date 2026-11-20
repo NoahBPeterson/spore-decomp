@@ -2,6 +2,12 @@
 // Object file: SPEditors/SPUIAssetBrowser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb918[];
+extern "C" char g_13ef094[];
+extern "C" char g_13ff7fc[];
+extern "C" char g_13ff800[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include "SP/cSPUIAssetBrowser.h"
@@ -2004,10 +2010,10 @@ void HubD::Fn990()
 // @ 0x00644a80
 LocaleMsg::LocaleMsg(RCBase* o, const Key3* k, uint8_t bb)
 {
-    *(volatile uint32_t*)&vt1 = 0x13ef094;
+    *(volatile uint32_t*)&vt1 = (int)g_13ef094;
     f8 = 0;
-    vt0 = 0x13ff800;
-    vt1 = 0x13ff7fc;
+    vt0 = (int)g_13ff800;
+    vt1 = (int)g_13ff7fc;
     owner = o;
     if (o) o->v0();
     key = *k;
@@ -2187,8 +2193,8 @@ void RelPair::Release2()
 void LocaleMsg2::Dtor()
 {
     if (owner) owner->Release();
-    vt1 = 0x13ef094;
-    vt0 = 0x13eb918;
+    vt1 = (int)g_13ef094;
+    vt0 = (int)g_13eb918;
 }
 
 // @ 0x00645010

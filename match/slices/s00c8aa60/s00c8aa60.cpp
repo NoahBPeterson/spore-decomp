@@ -4,6 +4,9 @@
 // Functions whose bodies need the full inlined EASTL/EASTL-vector machinery are
 // stubbed (see partial.txt); the small standalone ones are reproduced exactly.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_157a828[];
+
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -874,7 +877,7 @@ struct StarMgr {
 // @ 0x00c8b3e0
 bool cStar::Read(int param) {
     VarListSerializer ser;
-    ser.Init(this, (const char*)0x157a828, 0x1a80d26);
+    ser.Init(this, (const char*)g_157a828, 0x1a80d26);
     bool ok = ser.Read(param);
 
     int v = ((StarMgr*)StarManager())->FUN_00ba6d80((u32)mKey);

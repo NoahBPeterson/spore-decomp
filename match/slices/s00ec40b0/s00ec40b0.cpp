@@ -1,3 +1,8 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148906c[];
+extern "C" char g_148907c[];
+extern "C" char g_1489090[];
+
 #include <intrin.h>
 // Slice s00ec40b0 -- Spore UI: Sporepedia timeline card / asset view + the introsort + binary-heap
 // template family it instantiates over 8-byte {Key,Value} pairs.
@@ -136,9 +141,9 @@ UI::TimelineSporepediaCardData* __fastcall UI_TimelineSporepediaCardData_ctor(UI
     b[0x78] = 0; b[0x79] = 0; b[0x7a] = 0; b[0x7b] = 0; b[0x7c] = 0;
 
     void** w = (void**)p;
-    w[0x00 / 4] = (void*)0x01489090;
-    w[0x10 / 4] = (void*)0x0148907c;
-    w[0x14 / 4] = (void*)0x0148906c;
+    w[0x00 / 4] = (void*)g_1489090;
+    w[0x10 / 4] = (void*)g_148907c;
+    w[0x14 / 4] = (void*)g_148906c;
     _ReadWriteBarrier();
 
     *(int*)(b + 0x80) = -1;

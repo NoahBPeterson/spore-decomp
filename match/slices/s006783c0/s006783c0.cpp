@@ -1,6 +1,15 @@
 // Slice s006783c0 - SPUISpace HUD widget: window anchoring, animation state machine,
 // intrusive refcount-vector assignment and destructors.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_14013c4[];
+extern "C" char g_14013d4[];
+extern "C" char g_14013f0[];
+
 #include "types.h"
 #include <math.h>
 #pragma intrinsic(sqrt, atan2, fabs)
@@ -202,9 +211,9 @@ void RefVec::Assign(int* first, int* last) {
 // ---- 0x00679400 : destructor ----------------------------------------
 // @ 0x00679400
 void __fastcall FUN_00679400(char* p) {
-    *(void**)p = (void*)0x14013f0;
-    *(void**)(p + 8) = (void*)0x14013d4;
-    *(void**)(p + 0xc) = (void*)0x14013c4;
+    *(void**)p = (void*)g_14013f0;
+    *(void**)(p + 8) = (void*)g_14013d4;
+    *(void**)(p + 0xc) = (void*)g_14013c4;
     FUN_00929d50(p + 0x1fc);
     FUN_00929d50(p + 0x1d8);
     FUN_00929d50(p + 0x1b4);
@@ -215,9 +224,9 @@ void __fastcall FUN_00679400(char* p) {
     if (*(void**)(p + 0x194)) { void* x=*(void**)(p+0x194); ((FnV1)((VObj*)x)->vt[1])(x); }
     FUN_00678f70(p + 0x3c);
     FUN_00679120(p + 0x10);
-    *(void**)(p + 0xc) = (void*)0x13eb394;
-    *(void**)(p + 8) = (void*)0x13eb938;
-    *(void**)p = (void*)0x13ec458;
+    *(void**)(p + 0xc) = (void*)g_13eb394;
+    *(void**)(p + 8) = (void*)g_13eb938;
+    *(void**)p = (void*)g_13ec458;
 }
 
 // ---- 0x00679520 : constructor ---------------------------------------

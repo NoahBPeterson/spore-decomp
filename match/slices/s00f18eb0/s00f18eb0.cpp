@@ -1,3 +1,6 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16c7aa4[];
+
 #include "s00f18eb0.h"
 
 namespace UI {
@@ -125,7 +128,7 @@ float cScenarioPlayProgressBar::GetProgressF()
 void* cScenarioPlayProgressBar::IsEnabled()
 {
     if (*(int*)((char*)this + 0x90) == 5) {
-        int* g = *(int**)0x16c7aa4;
+        int* g = *(int**)g_16c7aa4;
         if (g[0xd0 / 4])
             return *(void**)((char*)this + 0xc4);
     }
@@ -246,7 +249,7 @@ bool __cdecl cScenarioPlayProgressBar_KindOk(void* p)
 // ---------------------------------------------------------------------------
 void cScenarioPlayProgressBar::Apply(bool a, bool flag)
 {
-    int* g = *(int**)0x16c7aa4;
+    int* g = *(int**)g_16c7aa4;
     void* panel = *(void**)((char*)g + 0x6c);
     MissionCard* card = *(MissionCard**)((char*)panel + 0x148);
     if (!card)
@@ -305,7 +308,7 @@ void __cdecl cScenarioPlayProgressBar_Link(void* a)
 // ---------------------------------------------------------------------------
 bool __cdecl cScenarioPlayProgressBar_IsReady()
 {
-    int* g = *(int**)0x16c7aa4;
+    int* g = *(int**)g_16c7aa4;
     int* p = (int*)g[0x74 / 4];
     return *(uint8_t*)((char*)p + 0x14) == 0 && g[0xd0 / 4] != 0;
 }

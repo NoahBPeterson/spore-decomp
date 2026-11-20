@@ -1,3 +1,10 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f09b4[];
+extern "C" char g_14781bc[];
+extern "C" char g_14781d4[];
+extern "C" char g_14781ec[];
+extern "C" char g_1478220[];
+
 #include "sse_helpers.h"
 #include "s00cedff0_bundle.h"
 // Slice s00cedff0 -- Spore city-game cheat commands, bundle/container helpers and
@@ -257,24 +264,24 @@ Simulator::cCivModeStrategy::cCivModeStrategy()
     FUN_0067de20();
 
     c = (CommandObj *)((void *(__cdecl *)(u32, void *, u32, u32, u32, u32))FUN_00f473a0)
-            (0x10, (void *)0x13f09b4, 0, 0, 0, 0);
+            (0x10, (void *)g_13f09b4, 0, 0, 0, 0);
     if (c) {
         ((void *(__thiscall *)(void *))FUN_0083c800)(c);
-        c->m_vtbl00 = (void **)0x14781d4;
+        c->m_vtbl00 = (void **)g_14781d4;
     }
 
     c = (CommandObj *)((void *(__cdecl *)(u32, void *, u32, u32, u32, u32))FUN_00f473a0)
-            (0x10, (void *)0x13f09b4, 0, 0, 0, 0);
+            (0x10, (void *)g_13f09b4, 0, 0, 0, 0);
     if (c) {
         ((void *(__thiscall *)(void *))FUN_0083c800)(c);
-        c->m_vtbl00 = (void **)0x14781bc;
+        c->m_vtbl00 = (void **)g_14781bc;
     }
 
     c = (CommandObj *)((void *(__cdecl *)(u32, void *, u32, u32, u32, u32))FUN_00f473a0)
-            (0x10, (void *)0x13f09b4, 0, 0, 0, 0);
+            (0x10, (void *)g_13f09b4, 0, 0, 0, 0);
     if (c) {
         ((void *(__thiscall *)(void *))FUN_0083c800)(c);
-        c->m_vtbl00 = (void **)0x14781ec;
+        c->m_vtbl00 = (void **)g_14781ec;
     }
 }
 
@@ -475,7 +482,7 @@ void *__fastcall FUN_00cee540(VecObj *v, void *edx, float *p, float threshold)
 void *__fastcall FUN_00cee630(VecObj18 *o, void *edx)
 {
     (void)edx;
-    o->m_vtbl00 = (void **)0x1478220;
+    o->m_vtbl00 = (void **)g_1478220;
     o->m_vec.mpBegin = 0;
     o->m_vec.mpEnd = 0;
     o->m_vec.mpCap = 0;

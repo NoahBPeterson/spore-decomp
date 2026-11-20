@@ -1,5 +1,14 @@
 // Slice s00996f10 -- EA::UTFWinExtras XHTML frame set, frame map, HitMask tools.
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_13effa8[];
+extern "C" char g_1446834[];
+extern "C" char g_1446838[];
+extern "C" char g_1446894[];
+
 #include "types.h"
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
@@ -618,14 +627,14 @@ void Obj33::clear()
 // @ 0x00997cc0
 void* Obj33::ScalarDtor(unsigned flags)
 {
-    *(void**)((char*)this + 0) = (void*)0x1446838;
-    *(void**)((char*)this + 4) = (void*)0x1446834;
+    *(void**)((char*)this + 0) = (void*)g_1446838;
+    *(void**)((char*)this + 4) = (void*)g_1446834;
     clear();
     int p = *(int*)((char*)this + 0xc);
     if (p != 0 && *(int*)(p - 4) != 0)
         FUN_00f47380((void*)p);
-    *(void**)((char*)this + 4) = (void*)0x13ef094;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_13ef094;
+    *(void**)((char*)this + 0) = (void*)g_13eb938;
     if (flags & 1)
         FUN_00f47380(this);
     return this;
@@ -722,9 +731,9 @@ bool ReadResource(char* self, char* p2, void* p3)
 void* Obj33::ctor2()
 {
     unsigned char* p = (unsigned char*)this;
-    *(void**)p = (void*)0x13effa8;
+    *(void**)p = (void*)g_13effa8;
     _InterlockedExchange((volatile long*)(p + 4), 0);
-    *(void**)p = (void*)0x1446894;
+    *(void**)p = (void*)g_1446894;
     return this;
 }
 

@@ -10,6 +10,10 @@
 // call spelled out); naming it is what makes cl 15 hand eax to that argument and keep `position`
 // in ebp, i.e. it fixes the whole grow-path tail's scratch-register rotation (edx/eax/ecx/edx/eax
 // with a bare `mpBegin`).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 #include <new>
 #include "types.h"
 
@@ -45,7 +49,7 @@ struct ElemVec {
     }
     TElement* DoAllocate(uint n)
     {
-        return n ? (TElement*)EAAllocate(n * 0x38, "EASTL", 0, 0, 0x13ebb38, 0xd1) : 0;
+        return n ? (TElement*)EAAllocate(n * 0x38, "EASTL", 0, 0, (int)g_13ebb38, 0xd1) : 0;
     }
     void DoFree(TElement* p)
     {

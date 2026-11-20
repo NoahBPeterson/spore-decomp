@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPTribeModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00bc36d0();
+extern "C" void FUN_00cd45c0();
+extern "C" char g_14774c4[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include "SP/cCommunity.h"
@@ -4540,7 +4547,7 @@ char CTribeMode::FUN_00cd4c70(int)
     char* self = (char*)this;
     void* app = App();
     app = (*(void*(__fastcall**)(void*))(*(int*)app + 0x50))(app);
-    ((TC2v)VSLOT(app, 0x20))(app, 0x4c6a8d6, (void*)0xbc36d0);
+    ((TC2v)VSLOT(app, 0x20))(app, 0x4c6a8d6, (void*)FUN_00bc36d0);
     void* server = FUN_00883860();
     void* h = self ? (void*)(self + 8) : 0;
     *(void**)(self + 0x1cc) = server;
@@ -4572,9 +4579,9 @@ NOINLINE char __fastcall FUN_00cd4d50(char* self, int)
 {
     void* a = FUN_00b3d3c0();
     ((CExt72880*)a)->call();
-    void* c = FUN_00b3d240(0xcd45c0);
+    void* c = FUN_00b3d240((int)FUN_00cd45c0);
     ((CExt33ce0*)c)->call();
-    void* d = FUN_00b3d240(0xcd46d0);
+    void* d = FUN_00b3d240((int)&FUN_00cd46d0);
     ((CExt33cf0*)d)->call();
     ((CExtBC3170*)(self + 0x1a8))->call();
     return 1;
@@ -5932,7 +5939,7 @@ void cVec16::FUN_00cdafb0(Rec16* src)
     if (end < mpCap) {
         mpEnd = end + 1;
         if (end != 0) {
-            end->mpVtbl = (void*)0x14774c4;
+            end->mpVtbl = (void*)g_14774c4;
             end->mU_04 = src->mU_04;
             void* obj = src->mpObj;
             end->mpObj = obj;
@@ -6016,7 +6023,7 @@ void cTribeModeStrategy_s00cd_ab10::FUN_00cdb3a0(u32 a1, u32 a2)
         ((cVec16*)((u8*)this + 0x40))->FUN_00cdafb0(
             (Rec16*)MOPS(recbuf)->FUN_00cd4720(a1, a2));
         Rec16* rec = (Rec16*)recbuf;
-        rec->mpVtbl = (void*)0x14774c4;
+        rec->mpVtbl = (void*)g_14774c4;
         void* obj = rec->mpObj;
         if (obj != 0)
             ((void (__thiscall*)(void*))VT(obj)[1])(obj);
@@ -6032,17 +6039,17 @@ void cVec1c::FUN_00cdb430()
     if (end < mpCap) {
         mpEnd = end + 1;
         if (end != 0) {
-            end->mpBegin = (void*)0x1667bac;
-            end->mpEnd   = (void*)0x1667bac;
-            end->mpCap   = (void*)0x1667bae;
+            end->mpBegin = (void*)g_1667bac;
+            end->mpEnd   = (void*)g_1667bac;
+            end->mpCap   = (void*)g_1667bae;
             end->mU_14 = 0;
             end->mU_18 = 0;
         }
     } else {
         Rec1c tmp;
-        tmp.mpBegin = (void*)0x1667bac;
-        tmp.mpEnd   = (void*)0x1667bac;
-        tmp.mpCap   = (void*)0x1667bae;
+        tmp.mpBegin = (void*)g_1667bac;
+        tmp.mpEnd   = (void*)g_1667bac;
+        tmp.mpCap   = (void*)g_1667bae;
         tmp.mU_14 = 0;
         tmp.mU_18 = 0;
         FUN_00cdb1f0(end, &tmp);
@@ -6303,7 +6310,7 @@ cHut* SP::cTribeModeStrategy_s00cd_bb10::FindClosestNPCHut(uint32_t param)
 {
     cGameNounManager_s00cd_bb10* nm = NounManager_s00cd_bb10();
     NounManagerData* data = nm->GetGameDataVector(
-        0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00accbb0, (int)&FUN_00b1e500, 0x18c6d19);
     cTribe_s00cd_bb10* tribe = FindClosestNPC(&data->mVector, param, SP::IsNonEmptyNPCTribe);
     if (tribe)
         return tribe->GetTribeHut();

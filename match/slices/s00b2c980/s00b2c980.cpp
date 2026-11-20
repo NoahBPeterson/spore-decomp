@@ -7,6 +7,14 @@
 // substring match still finds them); the ignored register args of the original
 // disappear naturally.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145fd28[];
+extern "C" char g_145fd2c[];
+extern "C" char g_145fd5c[];
+extern "C" char g_145fd8c[];
+extern "C" char g_145fd90[];
+extern "C" char g_145fe38[];
+
 #include <stddef.h>
 
 #define ALLOC_H "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
@@ -482,7 +490,7 @@ void* S::FUN_00b2d480() {
 void S::FUN_00b2d660() {
   char* base = (char*)this;
   void* p1 = EastlNew(0x24, "Simulator", 0, 0, 0, 0);
-  if (p1) { ((E*)p1)->f8fa10(0x80, 0); *(void**)p1 = (void*)0x145fd5c; }
+  if (p1) { ((E*)p1)->f8fa10(0x80, 0); *(void**)p1 = (void*)g_145fd5c; }
   else p1 = 0;
   *(void**)(base + 0x38) = p1;
 
@@ -490,8 +498,8 @@ void S::FUN_00b2d660() {
   if (p2) {
     ((TC_vff)FUN_00ff3810)(p2, *(void**)(base + 0x38), 1.0f, 0.0f);
     float f = g_f1471064;
-    *(void**)p2 = (void*)0x145fd2c;
-    *(void**)((char*)p2 + 4) = (void*)0x145fd28;
+    *(void**)p2 = (void*)g_145fd2c;
+    *(void**)((char*)p2 + 4) = (void*)g_145fd28;
     *(float*)((char*)p2 + 0x34) = f;
   }
   else p2 = 0;
@@ -508,8 +516,8 @@ void S::FUN_00b2d660() {
   void* p3 = EastlNew(0x380, "Simulator", 0, 0, 0, 0);
   if (p3) {
     ((E*)p3)->f62d80();
-    *(void**)p3 = (void*)0x145fd90;
-    *(void**)((char*)p3 + 4) = (void*)0x145fd8c;
+    *(void**)p3 = (void*)g_145fd90;
+    *(void**)((char*)p3 + 4) = (void*)g_145fd8c;
     EastlNewArray((char*)p3 + 0x2c0, 0, 0xc0);
     *(void**)((char*)p3 + 0x250) = (char*)p3 + 0x2c0;
     *(void**)((char*)p3 + 0x254) = (void*)4;
@@ -613,12 +621,12 @@ void S::FUN_00b2da50() {
   char* handler = base - 4;
   *(void**)(base + 0x13c) = server;
   *(void**)(base + 0x140) = handler;
-  *(void**)(base + 0x144) = (void*)0x145fe38;
+  *(void**)(base + 0x144) = (void*)g_145fe38;
   *(int*)(base + 0x148) = 5;
   *(int*)(base + 0x14c) = 0;
   if (server && handler) {
     for (unsigned off = 0; off < 0x14; off += 4) {
-      int key = *(int*)(0x145fe38 + off);
+      int key = *(int*)((int)g_145fe38 + off);
       ((TC_vi)(*(void***)server)[9])(server, handler, key);
     }
   }

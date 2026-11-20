@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCreatureBabyBehavior.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1601760[];
+
 #include "game/types.h"
 #include "SP/cLocomotiveObject.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -416,7 +419,7 @@ bool __cdecl FUN_00d61d10(cSPCreatureBase* c, int, int, int, int, int* st)
     st[0] = 0;
     st[1] = 0;
     if (c->mFlagF90 != 0) {
-        s32 r = (s32)((RandomLCG*)0x01601760)->RandomUint32Uniform(1000);
+        s32 r = (s32)((RandomLCG*)g_1601760)->RandomUint32Uniform(1000);
         if (r < 0x15e) {
             st[1] = (int)c->PlayAnimation(0x315be650, 1, -1);
             return true;

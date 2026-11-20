@@ -5,6 +5,15 @@
 // vptrs seeded by the inlined base constructors (a cResource at +0x04, a cListenerBase at +0x0c)
 // are overwritten by the three derived vptrs, then the owner reference, the embedded layout
 // object and the two inline-buffer vectors are initialised.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_13fa72c[];
+extern "C" char g_148058c[];
+extern "C" char g_148059c[];
+extern "C" char g_14805b8[];
+extern "C" char g_16ac238[];
+
 #include "game/types.h"
 #include <intrin.h>
 
@@ -23,12 +32,12 @@ struct cSPUIPosseItem_s00e255c0 {
 void* cSPUIPosseItem_s00e255c0::ctor(void* pOwner, const void* pName, u32 typeId)
 {
   // inlined base constructors, then the derived vptrs
-  *(void* volatile*)((char*)this + 4) = (void*)0x13fa72c;
+  *(void* volatile*)((char*)this + 4) = (void*)g_13fa72c;
   *(u32* volatile*)((char*)this + 8) = 0;
-  *(void* volatile*)((char*)this + 0xc) = (void*)0x13eb384;
-  *(void**)((char*)this)      = (void*)0x14805b8;
-  *(void**)((char*)this + 4)  = (void*)0x148059c;
-  *(void**)((char*)this + 0xc) = (void*)0x148058c;
+  *(void* volatile*)((char*)this + 0xc) = (void*)g_13eb384;
+  *(void**)((char*)this)      = (void*)g_14805b8;
+  *(void**)((char*)this + 4)  = (void*)g_148059c;
+  *(void**)((char*)this + 0xc) = (void*)g_148058c;
 
   // owner reference
   *(void**)((char*)this + 0x50) = pOwner;
@@ -56,7 +65,7 @@ void* cSPUIPosseItem_s00e255c0::ctor(void* pOwner, const void* pName, u32 typeId
   ((LayoutCtorC*)((char*)this + 0x7c))->ctor();
 
   *(u32*)((char*)this + 0x94) = 0;
-  *(u32*)((char*)this + 0x98) = ++*(u32*)0x16ac238;    // global monotonic id
+  *(u32*)((char*)this + 0x98) = ++*(u32*)g_16ac238;    // global monotonic id
   *(u32*)((char*)this + 0x9c) = 0;
   *(u8*) ((char*)this + 0xa1) = 0;
   *(u8*) ((char*)this + 0xa2) = 0;

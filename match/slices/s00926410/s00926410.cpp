@@ -1,6 +1,10 @@
 // Slice s00926410 (bfs2 #23), 32-bit MSVC 2008.
 // EA::Allocator (FixedAllocatorBase / StackAllocator) and fixed-hashtable helpers.
 // Class layouts from the 2008 dev PDB.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1401b70[];
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 typedef unsigned int uint32;
@@ -261,7 +265,7 @@ void FUN_009268f0(int p, uint32 v)
 void FUN_00926930(int a1, void* a2)
 {
     FUN_00928de0(*(void**)(a1 + 0xc), a2);
-    FUN_00928de0((void*)0x1401b70, a2);
+    FUN_00928de0((void*)g_1401b70, a2);
     FUN_00928dd0();
 }
 

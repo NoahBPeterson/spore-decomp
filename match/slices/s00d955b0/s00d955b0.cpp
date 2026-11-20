@@ -1,4 +1,8 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00b3e5e0();
+
 struct IFace {
     virtual void v0();
     virtual void Release();
@@ -21,5 +25,5 @@ void FUN_00d955b0(Creature* self, int, int, int, int, IFace** holder)
         (*holder)->Release();
     self->SetSprinting(0);
     self->mpByte[0xa51] = 0;
-    self->mCallbacks.Insert((void*)0x00b3e5e0);
+    self->mCallbacks.Insert((void*)FUN_00b3e5e0);
 }

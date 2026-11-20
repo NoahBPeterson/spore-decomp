@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00f20000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00f24a90();
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -813,7 +816,7 @@ struct LayoutGlobal {        // 0x38-byte Simulator layout singleton
   LayoutTree worlds;         // +0x00
   LayoutTree collections;    // +0x1c
 };
-#define gLayoutManager (*(LayoutGlobal**)0x016c8318)   /* 0x016c8318 */
+#define gLayoutManager (*(LayoutGlobal**)&DAT_016c8318)   /* 0x016c8318 */
 void* FUN_00f473a0(unsigned size, const char* name, int a, int b,
                    const char* file, int line);      // 0x00f473a0
 void  FUN_00f47380(void* p);                         // 0x00f47380
@@ -2020,7 +2023,7 @@ void FUN_00f243c0(int* ev, float dt)
 void FUN_00f24ae0(int* ev, int target, float dt)
 {
     if (dt != 0.0f) {
-        char cVar1 = FUN_00f20350((IVObj*)((void* (__thiscall*)(void*))*(void**)(*ev + 4))(ev), dt, (void (*)(UIEntry*))0x00f24a90);
+        char cVar1 = FUN_00f20350((IVObj*)((void* (__thiscall*)(void*))*(void**)(*ev + 4))(ev), dt, (void (*)(UIEntry*))FUN_00f24a90);
         if (cVar1 != 0)
             return;
     }

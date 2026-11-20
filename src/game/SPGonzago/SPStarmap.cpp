@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPStarmap.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15b85a0[];
+extern "C" char g_16e0688[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include "SP/cStarRecord.h"
@@ -2292,7 +2296,7 @@ cPropView::~cPropView()
     void* a = FUN_0067dd50();
     ((void(__thiscall*)(void*, int))VF(a, 0x50))(a, 0x17);
 
-    ((void(__thiscall*)(void*))FUN_00feb0f0)((void*)0x016e0688);
+    ((void(__thiscall*)(void*))FUN_00feb0f0)((void*)g_16e0688);
 
     ((void(__thiscall*)(void*, int, int))FUN_01045b90)(this, 2, 0);
 
@@ -2331,7 +2335,7 @@ void cPropView::Fill_01046f30(void* arg)
     }
 
     ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)
-        (&local.mValue.y, this, 0x015b85a0, 0x01a80d26);
+        (&local.mValue.y, this, (int)g_15b85a0, 0x01a80d26);
     ((void(__thiscall*)(void*, void*))FUN_00693e10)(&local.mValue.y, arg);
 }
 

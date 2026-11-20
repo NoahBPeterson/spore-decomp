@@ -8,6 +8,9 @@
 // Retail member offsets are read from the disassembly; the dev PDB layout differs,
 // so objects are modelled locally with role-named members at retail offsets.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 typedef unsigned int   u32;
 typedef unsigned char  u8;
 typedef int            i32;
@@ -135,7 +138,7 @@ FORCEINLINE Mode *NewModifier()
 {
     Mode *p = (Mode *)operator_new(0xc, "Simulator", 0, 0, 0, 0);
     if (p != 0) {
-        p->m_vtbl = (void **)0x13ef094;
+        p->m_vtbl = (void **)&g_13ef094;
         _InterlockedExchange(&p->m_ref, 0);
         p->m_vtbl = (void **)0x146545c;
         ((RefObj *)p)->m_data = 0;
@@ -393,7 +396,7 @@ Mode *Mode::DeleteInstance(u32 flags)
     if (m_buffer != 0) {
         ((void (__thiscall *)(void *))((RefObj *)m_buffer)->m_vtbl[2])(m_buffer);
     }
-    m_vtbl = (void **)0x13ef094;
+    m_vtbl = (void **)g_13ef094;
     if (flags & 1)
         operator_delete_array(this);
     return this;

@@ -2,6 +2,21 @@
 // Object file: SPGonzago/SPTribeHut.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00692ca0();
+extern "C" char g_145a45c[];
+extern "C" char g_1467dac[];
+extern "C" char g_1474570[];
+extern "C" char g_1474584[];
+extern "C" char g_1474598[];
+extern "C" char g_14745ac[];
+extern "C" char g_157c3d0[];
+extern "C" char g_157c40c[];
+extern "C" char g_157c448[];
+extern "C" char g_157c484[];
+extern "C" char g_157c4c0[];
+extern "C" char g_157c4fc[];
+
 #include "game/types.h"
 #include <new>
 #include <string.h>
@@ -1322,11 +1337,11 @@ void FUN_01356230(void)
 {
     PropDesc d;
 
-    d.mName = (const char*)0x145a45c;
+    d.mName = (const char*)g_145a45c;
     d.mHash = 0x33e0b60;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E209_1_24;
     d.mFn28 = (void*)E209_1_28;
     d.mFn2C = (void*)E209_1_2C;
@@ -1334,13 +1349,13 @@ void FUN_01356230(void)
     d.mFn34 = (void*)E209_1_34;
     d.mFn38 = (void*)E209_1_38;
     d.mType = 0x230;
-    *(PropDesc*)0x157c3d0 = d;
+    *(PropDesc*)g_157c3d0 = d;
 
-    d.mName = (const char*)0x14745ac;
+    d.mName = (const char*)g_14745ac;
     d.mHash = 0x33e0b61;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E209_2_24;
     d.mFn28 = (void*)E209_2_28;
     d.mFn2C = (void*)E209_2_2C;
@@ -1348,13 +1363,13 @@ void FUN_01356230(void)
     d.mFn34 = (void*)E209_F34;
     d.mFn38 = (void*)E209_F38;
     d.mType = 0x20c;
-    *(PropDesc*)0x157c40c = d;
+    *(PropDesc*)g_157c40c = d;
 
-    d.mName = (const char*)0x1474598;
+    d.mName = (const char*)g_1474598;
     d.mHash = 0x33e0b62;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E209_3_24;
     d.mFn28 = (void*)E209_3_28;
     d.mFn2C = (void*)E209_3_2C;
@@ -1362,13 +1377,13 @@ void FUN_01356230(void)
     d.mFn34 = (void*)E209_F34;
     d.mFn38 = (void*)E209_F38;
     d.mType = 0x200;
-    *(PropDesc*)0x157c448 = d;
+    *(PropDesc*)g_157c448 = d;
 
-    d.mName = (const char*)0x1474584;
+    d.mName = (const char*)g_1474584;
     d.mHash = 0x33e0b63;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E209_4_24;
     d.mFn28 = (void*)E209_4_28;
     d.mFn2C = (void*)E209_4_2C;
@@ -1376,13 +1391,13 @@ void FUN_01356230(void)
     d.mFn34 = (void*)E209_F34;
     d.mFn38 = (void*)E209_F38;
     d.mType = 0x1e8;
-    *(PropDesc*)0x157c484 = d;
+    *(PropDesc*)g_157c484 = d;
 
-    d.mName = (const char*)0x1474570;
+    d.mName = (const char*)g_1474570;
     d.mHash = 0x33e0b64;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E209_5_24;
     d.mFn28 = (void*)E209_5_28;
     d.mFn2C = (void*)E209_5_2C;
@@ -1390,13 +1405,13 @@ void FUN_01356230(void)
     d.mFn34 = (void*)E209_F34;
     d.mFn38 = (void*)E209_F38;
     d.mType = 0x1f4;
-    *(PropDesc*)0x157c4c0 = d;
+    *(PropDesc*)g_157c4c0 = d;
 
-    d.mName = (const char*)0x1467dac;
+    d.mName = (const char*)g_1467dac;
     d.mHash = 0x5651e69;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E209_6_24;
     d.mFn28 = (void*)E209_6_28;
     d.mFn2C = (void*)E209_6_2C;
@@ -1404,5 +1419,5 @@ void FUN_01356230(void)
     d.mFn34 = (void*)E209_6_34;
     d.mFn38 = (void*)E209_6_38;
     d.mType = 0x234;
-    *(PropDesc*)0x157c4fc = d;
+    *(PropDesc*)g_157c4fc = d;
 }

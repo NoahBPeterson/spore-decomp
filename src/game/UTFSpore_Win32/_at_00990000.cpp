@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/_at_00990000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_1446834[];
+extern "C" char g_1446838[];
+
 #include "game/types.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
 #include "EA/UTFWinExtras/WinXHTML.h"
@@ -274,14 +280,14 @@ bool FrameSet::Bind(int** a1, int id, int* a3)
 // @ 0x00997cc0
 void* Obj33::ScalarDtor(unsigned flags)
 {
-    *(void**)((char*)this + 0) = (void*)0x1446838;
-    *(void**)((char*)this + 4) = (void*)0x1446834;
+    *(void**)((char*)this + 0) = (void*)g_1446838;
+    *(void**)((char*)this + 4) = (void*)g_1446834;
     clear();
     int p = *(int*)((char*)this + 0xc);
     if (p != 0 && *(int*)(p - 4) != 0)
         FUN_00f47380((void*)p);
-    *(void**)((char*)this + 4) = (void*)0x13ef094;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 4) = (void*)g_13ef094;
+    *(void**)((char*)this + 0) = (void*)g_13eb938;
     if (flags & 1)
         FUN_00f47380(this);
     return this;

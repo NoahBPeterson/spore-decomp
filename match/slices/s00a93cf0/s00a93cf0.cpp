@@ -11,6 +11,14 @@
 // its own `ret N` / the caller's `add esp,N`.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_14586d4[];
+extern "C" char g_14586d8[];
+extern "C" char g_1458714[];
+
 #include "s00a93cf0.h"
 
 // ---------------------------------------------------------------------------
@@ -628,12 +636,12 @@ CAbil* CAbil::FUN_00a94470(void* owner)
 // @ 0x00a947b0
 CAbil* CAbil::FUN_00a947b0(u8 freeIt)
 {
-    vt0 = (void*)0x1458714;
-    vt1 = (void*)0x14586d8;
-    vt2 = (void*)0x14586d4;
+    vt0 = (void*)g_1458714;
+    vt1 = (void*)g_14586d8;
+    vt2 = (void*)g_14586d4;
     ((IntrusiveList*)(void*)((char*)this + 0x14))->FUN_00620230();
-    vt1 = (void*)0x13f21d4;
-    vt2 = (void*)0x13ef094;
+    vt1 = (void*)g_13f21d4;
+    vt2 = (void*)g_13ef094;
     if (freeIt & 1) {
         FUN_00f47380(this);
     }

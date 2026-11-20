@@ -2,6 +2,12 @@
 // Object file: SPGonzago/_at_00ff0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_1494cd4[];
+extern "C" char g_1494d04[];
+extern "C" char g_1494d08[];
+
 #include "game/types.h"
 #include "cSPVector3.h"
 #include "SP/cBuildingData.h"
@@ -818,8 +824,8 @@ ImageModifier* __fastcall FUN_00ff3810(ImageModifier* ecx_this, void* edx, cCube
 // @ 0x00ff38a0
 void __fastcall FUN_00ff38a0(ImageModifier* ecx_this)
 {
-    ecx_this->mpVtbl0 = (void*)0x1494d08;
-    ecx_this->mpVtbl1 = (void*)0x1494d04;
+    ecx_this->mpVtbl0 = (void*)g_1494d08;
+    ecx_this->mpVtbl1 = (void*)g_1494d04;
     _ReadWriteBarrier();
     cCubeImage* pImg = ecx_this->mpImage;
     if (pImg != 0) {
@@ -831,8 +837,8 @@ void __fastcall FUN_00ff38a0(ImageModifier* ecx_this)
             ((void(__thiscall*)(void*, int))(*(void***)pImg)[0])(pImg, 1);
         }
     }
-    ecx_this->mpVtbl0 = (void*)0x1494cd4;
-    ecx_this->mpVtbl1 = (void*)0x13ef094;
+    ecx_this->mpVtbl0 = (void*)g_1494cd4;
+    ecx_this->mpVtbl1 = (void*)g_13ef094;
 }
 
 // @ 0x00ff38e0
@@ -875,8 +881,8 @@ float __fastcall FUN_00ff38e0(ImageModifier* ecx_this, void* edx, const float* p
 // @ 0x00ff3ab0
 ImageModifier* __fastcall FUN_00ff3ab0(ImageModifier* ecx_this, void* edx, u8 flags)
 {
-    ecx_this->mpVtbl0 = (void*)0x1494d08;
-    ecx_this->mpVtbl1 = (void*)0x1494d04;
+    ecx_this->mpVtbl0 = (void*)g_1494d08;
+    ecx_this->mpVtbl1 = (void*)g_1494d04;
     _ReadWriteBarrier();
     cCubeImage* pImg = ecx_this->mpImage;
     if (pImg != 0) {
@@ -888,8 +894,8 @@ ImageModifier* __fastcall FUN_00ff3ab0(ImageModifier* ecx_this, void* edx, u8 fl
             ((void(__thiscall*)(void*, int))(*(void***)pImg)[0])(pImg, 1);
         }
     }
-    ecx_this->mpVtbl0 = (void*)0x1494cd4;
-    ecx_this->mpVtbl1 = (void*)0x13ef094;
+    ecx_this->mpVtbl0 = (void*)g_1494cd4;
+    ecx_this->mpVtbl1 = (void*)g_13ef094;
     if ((flags & 1) != 0) {
         FUN_00f47380(ecx_this);
     }

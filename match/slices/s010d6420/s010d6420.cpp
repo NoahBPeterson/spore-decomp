@@ -13,6 +13,13 @@
 //  010d74f0  hkSymmetricAgent<hkSphereTriangleAgent>::getClosestPoints wrapper
 //
 // Flags: /vc71 /O2 /MD /Gy /TP  (Havok 3.1.0 was built by VC .NET 2003).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a43a4[];
+extern "C" char g_14a43b4[];
+extern "C" char g_14a4748[];
+extern "C" char g_14a477c[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -292,7 +299,7 @@ hkCollisionAgent* hkSphereTriangleAgent::createSphereTriangleAgent(const hkCdBod
     agent->m_contactMgr = mgr;
     *(unsigned short*)((char*)agent + 4) = 0x20;
     *(unsigned short*)((char*)agent + 6) = 1;
-    *(void**)agent = (void*)0x014a4748;
+    *(void**)agent = (void*)g_14a4748;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     hkCollideTriangleUtil::setupClosestPointTriangleCache(
         (const hkVector4*)((const char*)bodyB.m_shape + 0x10), agent->m_cache);
@@ -313,11 +320,11 @@ hkCollisionAgent* hkSphereTriangleAgent::createTriangleSphereAgent(const hkCdBod
     agent->m_contactMgr = mgr;
     *(unsigned short*)((char*)agent + 4) = 0x20;
     *(unsigned short*)((char*)agent + 6) = 1;
-    *(void**)agent = (void*)0x014a4748;
+    *(void**)agent = (void*)g_14a4748;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     hkCollideTriangleUtil::setupClosestPointTriangleCache(
         (const hkVector4*)((const char*)bodyA.m_shape + 0x10), agent->m_cache);
-    *(void**)agent = (void*)0x014a477c;
+    *(void**)agent = (void*)g_14a477c;
     return agent;
 }
 
@@ -599,7 +606,7 @@ void hkSymmetricSphereTriangleAgent::getPenetrations(const hkCdBody& bodyA, cons
     hkSymPairCollectorLocal sym;
     sym.m_forward = &collector;
     sym.m_earlyOut = 0;
-    sym.m_vtable = (void*)0x014a43b4;
+    sym.m_vtable = (void*)g_14a43b4;
 
     hkSphereTriangleAgent::getPenetrations(bodyB, bodyA, input,
                                            *(hkCdBodyPairCollector*)&sym);
@@ -623,7 +630,7 @@ void hkSymmetricSphereTriangleAgent::getClosestPoints(const hkCdBody& bodyA, con
     hkSymPointCollectorLocal sym;
     sym.m_forward = &collector;
     sym.m_earlyOut = 0x7f7fffeeu;
-    sym.m_vtable = (void*)0x014a43a4;
+    sym.m_vtable = (void*)g_14a43a4;
 
     hkSphereTriangleAgent::getClosestPoints(bodyB, bodyA, input,
                                             *(hkCdPointCollector*)&sym);

@@ -2,6 +2,14 @@
 // Object file: SPGonzago/_at_00e10000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1480338[];
+extern "C" char g_1480344[];
+extern "C" char g_1480388[];
+extern "C" char g_1480390[];
+extern "C" char g_14803ac[];
+
 #include "game/types.h"
 #include "SP/cSPMission.h"
 #include "SP/cIGonzagoSubsystem.h"
@@ -1431,11 +1439,11 @@ void FUN_00e1dbd0()
 // @ 0x00e1dc20
 void* cTradeUI::Destroy(uint32_t nFlags)
 {
-    mpVtbl0 = (void*)0x1480344;
-    mpTraceVtbl = (void*)0x1480338;
+    mpVtbl0 = (void*)g_1480344;
+    mpTraceVtbl = (void*)g_1480338;
     mLayout.Shutdown(1);
     mLayout.Destroy();
-    mpVtbl0 = (void*)0x13eb938;
+    mpVtbl0 = (void*)g_13eb938;
     if ((nFlags & 1) != 0)
         operator_delete_array(this);
     return this;
@@ -2158,9 +2166,9 @@ void* __fastcall FUN_00e1f390(void* self)
 // @ 0x00e1f420
 void __fastcall FUN_00e1f420(void* self)
 {
-    *(void**)self = (void*)0x14803ac;
-    *(void**)((char*)self + 8) = (void*)0x1480390;
-    *(void**)((char*)self + 0xc) = (void*)0x1480388;
+    *(void**)self = (void*)g_14803ac;
+    *(void**)((char*)self + 8) = (void*)g_1480390;
+    *(void**)((char*)self + 0xc) = (void*)g_1480388;
     FUN_00e1e120(self);
     FUN_00e1f280((char*)self + 0xc0);
     RefObj_s00e1_eab0* r1 = *(RefObj_s00e1_eab0**)((char*)self + 0xbc);

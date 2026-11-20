@@ -2,6 +2,10 @@
 // Object file: Swarm/Maps.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14575d4[];
+extern "C" char g_14575d8[];
+
 #include "game/types.h"
 #include <math.h>
 #include <intrin.h>
@@ -486,7 +490,7 @@ void cMapInfo_s00a7_5dd0::Init11(const float* rect, int a2, int a3, uint8_t a4, 
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d8;
+        mpPixels40 = (uint32_t*)g_14575d8;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
@@ -509,7 +513,7 @@ void cMapInfo_s00a7_5dd0::Init9(const float* rect, int a2, int a3, uint8_t a4, I
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
@@ -530,7 +534,7 @@ void cMapInfo_s00a7_5dd0::Init12(const float* rect, int a2, int a3, uint8_t a4, 
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
@@ -551,7 +555,7 @@ void cMapInfo_s00a7_5dd0::Init13(const float* rect, int a2, int a3, uint8_t a4, 
     if (!ok) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }

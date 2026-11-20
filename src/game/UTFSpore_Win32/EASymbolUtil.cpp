@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/EASymbolUtil.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1403934[];
+extern "C" char g_145ed3c[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include <intrin.h>
@@ -80,12 +84,12 @@ uint32_t HtStrOwner::FUN_00b21140(uint64_t key)
 HtStrOwner* HtStrOwner::FUN_00b21180(uint8_t flags)
 {
   StrHt& table = mTable;
-  mpVtable = (void*)0x0145ed3c;
+  mpVtable = (void*)g_145ed3c;
   table.DoFreeBuckets(table.mpBuckets, table.mBucketCount);
   table.mSize = 0;
   if (table.mBucketCount > 1)
     operator delete[](table.mpBuckets);
-  mpVtable = (void*)0x01403934;
+  mpVtable = (void*)g_1403934;
   if (flags & 1)
     operator delete[](this);
   return this;

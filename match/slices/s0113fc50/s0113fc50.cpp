@@ -1,6 +1,13 @@
 // Slice s0113fc50 -- SND audio library: sample-format decoders, per-play control wrappers and
 // the platform voice layer.  Original used VC .NET 2003 (/vc71) + /GL + /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14cafa0[];
+extern "C" char g_16e7bfc[];
+extern "C" char g_16e7c23[];
+extern "C" char g_16f16f4[];
+
 #include "../../include/types.h"
 
 #define A8(a)  (*(unsigned char*)(a))
@@ -189,9 +196,9 @@ int SndDecoder::Setup(void* buf, int a, int n)
 // @ 0x011404f0
 void* SndDecoder::Dtor(unsigned char flags)
 {
-    *(void**)this = (void*)0x14cafa0;
+    *(void**)this = (void*)g_14cafa0;
     if ((flags & 1) != 0) {
-        (*(void(__cdecl**)(void*))0x16f16f4)(this);
+        (*(void(__cdecl**)(void*))g_16f16f4)(this);
     }
     return this;
 }
@@ -496,8 +503,8 @@ void FUN_011406e0(int a)
 // @ 0x01140760
 int F_01140760(void)
 {
-    A8(0x16e7bfc) = 1;
-    A8(0x16e7c23) = (unsigned char)Sub_1156800();
+    A8((int)g_16e7bfc) = 1;
+    A8((int)g_16e7c23) = (unsigned char)Sub_1156800();
     return 0;
 }
 

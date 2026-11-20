@@ -1,5 +1,9 @@
 // Slice s00ecda80 (bfs3 slice 23) -- SP editor palette/swatch UI + scenario helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15ad328[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -496,7 +500,7 @@ void PaletteItemUI_ece200::DoMessage(void* msg, PaletteMessage* data)
         if (((int(__thiscall*)(void*))VTB(msg, 0x1c))(msg) == 0x4a1cb6e &&
             data->mValue18 == 0x3ea) {
             int handle = ((PaletteItemHandle*)((char*)this - 0x20))->mHandle00;
-            ((SysAT_15ad328*)0x015ad328)->FUN_00f00380(handle);
+            ((SysAT_15ad328*)g_15ad328)->FUN_00f00380(handle);
             if (handle == -2)
                 ((PaletteMgr*)g_pGameMgr_16c7aa4)->mpSink_d4->FUN_00efbbe0(6, 7);
         }

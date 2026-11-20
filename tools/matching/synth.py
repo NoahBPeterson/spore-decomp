@@ -64,6 +64,33 @@ def constify(src, A):
     return src
 
 
+def nameify(src, A):
+    """The reverse of constify(): an address inside the image that a template writes as a number
+    (`(const char*)21239096`, `(void*)0x13eb938`) gets a name, so the build relocates it as retail does
+    (tools/ci/fingerprint.py fails a number where retail has a relocation). `(T*)NUMBER` becomes `(T*)g_x`, a bare
+    NUMBER becomes `(unsigned)g_x`, and `extern "C" char g_x[];` is declared before the instance."""
+    lo, end = pe.OPTIONAL_HEADER.ImageBase, _image_end()
+    decls = []
+    for a in sorted(set(A)):
+        if not lo <= a < end:
+            continue
+        n = g(a)
+        known = re.search(r"\b%s\b" % n, src) is not None
+        ref = "&" + n if known else n
+        pat = re.compile(r"(?<![\w.])(?:0[xX]0*%x|%d)[uUlL]*(?![\w.])" % (a, a))
+        out, pos, hit = [], 0, False
+        for m in pat.finditer(src):
+            cast = re.search(r"\)\s*$", src[max(0, m.start() - 80):m.start()])   # right after ')': being cast
+            ty = "unsigned" if re.search(r"[uU]", m.group(0)) or a > 0x7FFFFFFF else "int"   # keep the literal's C type
+            out.append(src[pos:m.start()] + (ref if cast else "(%s)" % ty + ref))
+            pos, hit = m.end(), True
+        if hit:
+            src = "".join(out) + src[pos:]
+            if not known:
+                decls.append('extern "C" char %s[];\n' % n)
+    return "".join(decls) + src
+
+
 def constify_existing(name):
     """constify() on an already generated match/synth/<name>.cpp (for a template whose pattern is no longer in
     work/patterns.json, so it cannot be regenerated)"""
@@ -102,7 +129,7 @@ def run(name, limit, vas=None):
         code = bounds(va, starts)
         A, N = operands(va, code)
         src, sym = t["emit"](va, A, N)
-        src = constify(src, A)
+        src = nameify(constify(src, A), A)
         if sym in syms.values() or src in seen_defs:
             continue  # same global initialized twice can't be expressed in one TU; leave for agents
         seen_defs.add(src)

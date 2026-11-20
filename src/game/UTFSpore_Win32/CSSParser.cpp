@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/CSSParser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_008f2810();
+extern "C" char g_1439a48[];
+
 #include "game/types.h"
 extern "C" size_t __cdecl wcslen(const wchar_t*);
 #pragma intrinsic(wcslen)
@@ -1430,7 +1434,7 @@ namespace EA { namespace XHTML { namespace Layout {
 PropNodeX* PropNodeX::F_8f24a0(int a, const uint16_t* str)
 {
     mField04 = 0;
-    mVtable = 0x01439a48;
+    mVtable = (int)g_1439a48;
     mField08 = (uint32_t)a;
     mField0c = (uint32_t)str;
     mLength = str ? (int)wcslen((const wchar_t*)str) : -1;
@@ -2678,9 +2682,9 @@ bool CSSParser_s008f_43f0::ParseBackgroundImage(Property_s008f_43f0** pList)
 {
     Property_s008f_43f0* p;
     if (MatchURL()) {
-        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2810, 0, 0, 0), TokenValue());
+        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2810, 0, 0, 0), TokenValue());
     } else if (MatchIdent(L"none")) {
-        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2810, 0, 0, 0), 0);
+        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2810, 0, 0, 0), 0);
     } else {
         return false;
     }

@@ -7,6 +7,11 @@
 //          00BFD610 FUN_00bfd610   00BFD800 Simulator::cGameData::SetDefinitionID
 //          00BFD840 Simulator::cGameData::SetGameDataOwner
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 #include "s00bfcc80.h"
 #include <stddef.h>
 
@@ -48,7 +53,7 @@ void* __fastcall FUN_00bfcc80(Combatant* self, int, unsigned param_2)
 // @ 0x00bfd3e0
 HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntry* src)
 {
-    self->vftable = (void*)0x1465d54;
+    self->vftable = (void*)g_1465d54;
     self->mRefCount4 = 0;
     self->mField08 = src->mField08;
     self->mField0c = src->mField0c;
@@ -56,7 +61,7 @@ HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntr
     self->mField14 = src->mField14;
     self->mByte18 = src->mByte18;
     self->mField1c = src->mField1c;
-    self->vftable = (void*)0x1464450;
+    self->vftable = (void*)g_1464450;
     self->mField20 = src->mField20;
     return self;
 }

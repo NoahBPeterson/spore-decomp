@@ -1,5 +1,15 @@
 // Decompiled slice s00fc7430 -- rw::movie audio codec / stream helpers.
 // Reconstructed from the shipped binary; helper addresses noted per call.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14916c0[];
+extern "C" char g_1491730[];
+extern "C" char g_14917c0[];
+extern "C" char g_15b179c[];
+extern "C" char g_15b17dc[];
+extern "C" char g_15b17e0[];
+extern "C" char g_15b17e8[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -224,7 +234,7 @@ StreamA::StreamA(void* arg)
   mpCallback08 = 0;
   mpErrorCb0c = 0;
   mpField10 = 0;
-  mpVtable = (Vtbl*)0x14916c0;
+  mpVtable = (Vtbl*)g_14916c0;
   mStreamHandle = -1;
   mField18 = -1;
 }
@@ -284,7 +294,7 @@ void StreamA::FUN_00fc7ec0(AudioSamples* samples)
 // @ 0x00fc7f30
 StreamC::StreamC()
 {
-  mpVtable = (Vtbl*)0x1491730;
+  mpVtable = (Vtbl*)g_1491730;
   mField04 = 0;
   mField08 = 0;
   mField0c = 0;
@@ -374,7 +384,7 @@ void StreamB::FUN_00fc8060()
 // @ 0x00fc8080
 StreamB::StreamB()
 {
-  mpVtable = (Vtbl*)0x14917c0;
+  mpVtable = (Vtbl*)g_14917c0;
   mpField04 = 0;
   mField08 = -1;
   mField0c = -1;
@@ -489,7 +499,7 @@ bool FUN_00fc81b0(uint32_t** src, uint32_t* remaining, Blob10* dst)
 uint8_t FUN_00fc8330(uint32_t* p)
 {
   uint16_t hi = (uint16_t)(*(volatile uint32_t*)p >> 16);
-  return (hi == *(uint16_t*)0x15b17e8) ? 1 : 0;
+  return (hi == *(uint16_t*)g_15b17e8) ? 1 : 0;
 }
 
 // ===========================================================================
@@ -973,6 +983,6 @@ bool FUN_00fc8300(unsigned* p)
 {
   unsigned t = *p;
   unsigned short hi = (unsigned short)(t >> 16);
-  return t == *(unsigned*)0x15b179c || hi == *(unsigned short*)0x15b17dc ||
-         hi == *(unsigned short*)0x15b17e0;
+  return t == *(unsigned*)g_15b179c || hi == *(unsigned short*)g_15b17dc ||
+         hi == *(unsigned short*)g_15b17e0;
 }

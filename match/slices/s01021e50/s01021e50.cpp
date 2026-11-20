@@ -1,6 +1,9 @@
 // Background simulation manager, the planet list sort helpers it uses and the
 // small value helpers living next to them.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1495c98[];
+
 typedef unsigned int uint32_t;
 typedef int int32_t;
 typedef unsigned char uint8_t;
@@ -573,7 +576,7 @@ void AdvanceBackgroundSim(int32_t nDelta)
 // @ 0x01022990
 cObjectKey& cObjectKey::Init(void* pFirst, void* pSecond)
 {
-    mnType = (void*)0x1495c98;
+    mnType = (void*)g_1495c98;
     mpFirst = pFirst;
     mpSecond = pSecond;
     return *this;

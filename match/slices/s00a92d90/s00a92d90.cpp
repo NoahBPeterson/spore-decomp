@@ -9,6 +9,14 @@
 // is src/game/Swarm/DistributeEffect.cpp, so only the pieces the six functions touch
 // are repeated here (field names follow the retail layout recovered at 0xa934e0).
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a89680();
+extern "C" void FUN_00a8bf10();
+extern "C" void FUN_00a8cc00();
+extern "C" void FUN_00a93880();
+extern "C" char g_13ef094[];
+
 #include "types.h"
 
 typedef uint32_t u32;
@@ -567,10 +575,10 @@ extern MeshStreamerTable gMeshStreamerTable;          // 0x01676050
 
 void RegisterMeshStreamers2(bool)
 {
-    gMeshStreamerTable.mpRegister = (void*)0x00a8bf10;
-    gMeshStreamerTable.mpCreate   = (void*)0x00a8cc00;
-    gMeshStreamerTable.mpField0c  = (void*)0x00a93880;
-    gMeshStreamerTable.mpField14  = (void*)0x00a89680;
+    gMeshStreamerTable.mpRegister = (void*)FUN_00a8bf10;
+    gMeshStreamerTable.mpCreate   = (void*)FUN_00a8cc00;
+    gMeshStreamerTable.mpField0c  = (void*)FUN_00a93880;
+    gMeshStreamerTable.mpField14  = (void*)FUN_00a89680;
     gMeshStreamerTable.mField18   = 3;
     gMeshStreamerTable.mField1c   = 4;
 }
@@ -644,7 +652,7 @@ cMetaParticlesEffect::~cMetaParticlesEffect()
     FreeVecBuffer(mVec94.mpBegin);
     FreeVecBuffer(mVec80.mpBegin);
     FreeVecBuffer(mVec60.mpBegin);
-    mpVtbl = (void*)0x013ef094;
+    mpVtbl = (void*)g_13ef094;
 }
 
 // @ 0x00a93980

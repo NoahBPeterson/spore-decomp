@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPGraphicsEffectsRenderer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -1378,7 +1381,7 @@ struct RenderEntity {
 struct RefBase {
     void* mpTable;                     // +0x00  dispatch table (0x013ef094)
     int   mRefCount;                   // +0x04
-    ~RefBase() { mpTable = (void*)0x013ef094; }
+    ~RefBase() { mpTable = (void*)g_13ef094; }
 };
 void __cdecl FreeBlock(void* p) throw();       // 0x00f47380 (operator delete)
 struct FixedVec {

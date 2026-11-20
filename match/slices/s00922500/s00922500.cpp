@@ -1,5 +1,9 @@
 // Slice s00922500 (bfs2 #22), 32-bit MSVC 2008.
 // EA::Thread (Semaphore/Thread) + EA::Trace helpers. Real names/layouts from the 2008 dev PDB.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_010829f0();
+
 #include <intrin.h>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -466,7 +470,7 @@ void EA::Thread::Thread::SetIdealProcessor(int proc)
 void __fastcall FUN_00922d10(void*** p)
 {
     if (*p != 0 && **p != 0)
-        QueueUserAPC((PAPCFUNC)0x010829f0, (HANDLE)**p, 0);
+        QueueUserAPC((PAPCFUNC)FUN_010829f0, (HANDLE)**p, 0);
 }
 
 // ---------------------------------------------------------------------------

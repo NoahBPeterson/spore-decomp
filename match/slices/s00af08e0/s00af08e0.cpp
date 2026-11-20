@@ -1,5 +1,9 @@
 // Slice s00af08e0 — cSPUILayoutManager time-of-day lookup tables.
 // Compile: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145c1bc[];
+
 #include "s00af08e0.h"
 #include <math.h>
 #include <string.h>
@@ -385,7 +389,7 @@ void __cdecl CreateLayoutManager()
 // @ 0x00af1430 — non-deleting destructor.
 void __thiscall TimerOwner::Dtor()
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ((XGonzago*)timer)->Dtor();
     ((XList*)&head)->DoClear();
 }
@@ -410,7 +414,7 @@ void __thiscall TimerOwner::Add(const void* wstr)
 // @ 0x00af14b0 — constructor.
 TimerOwner* __thiscall TimerOwner::Ctor()
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ListHead* h = &head;
     h->next = (ListNode*)h;
     h->prev = (ListNode*)h;
@@ -438,7 +442,7 @@ TimerOwner* __thiscall TimerOwner::Ctor()
 // @ 0x00af1540 — deleting destructor.
 TimerOwner* __thiscall TimerOwner::Delete(u32 flags)
 {
-    vtable = 0x0145c1bc;
+    vtable = (int)g_145c1bc;
     ((XGonzago*)timer)->Dtor();
     ((XList*)&head)->DoClear();
     if (flags & 1)

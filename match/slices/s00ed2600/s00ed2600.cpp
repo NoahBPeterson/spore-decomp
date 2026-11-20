@@ -1,5 +1,9 @@
 // Slice s00ed2600 -- Simulator palette/UI container glue.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 #include "types.h"
 
 extern char* g_16c757c;   // 0x016c757c
@@ -246,7 +250,7 @@ void* FUN_00ed2390(void* first, void* last, void* dst);                    // 0x
 BigElem* FUN_00ed3520(BigElem* first, BigElem* last, BigElem* dst);        // 0x00ed3520
 int   FUN_00ed34a0(int a, int b, int c);                                  // 0x00ed34a0
 // free-function operator new mirroring the retail allocator fill.
-inline void* SpNew(size_t n) { return operator_new((unsigned)n, "Simulator", 0, 0, (const char*)0x013ebb38, 0xd1); }
+inline void* SpNew(size_t n) { return operator_new((unsigned)n, "Simulator", 0, 0, (const char*)&g_13ebb38, 0xd1); }
 void  FUN_00ed3570(BigElem* first, BigElem* last, BigElem* dst);           // 0x00ed3570
 
 // ---------------------------------------------------------------- SimPalette
@@ -352,7 +356,7 @@ void RefMap::Nuke(RBNode* node)
 void** RefMap::InsertUnique(void** result, RBNode* pos, void** key, char flag)
 {
     int side = (flag == 0 && pos != (RBNode*)&mAnchor && *key >= pos->mpValue) ? 1 : 0;
-    RBNode* node = (RBNode*)operator_new(0x14, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+    RBNode* node = (RBNode*)operator_new(0x14, "Simulator", 0, 0, (const char*)g_13ebb38, 0xd1);
     if (&node->mpValue) {
         node->mpValue = *key;
         if (node->mpValue)

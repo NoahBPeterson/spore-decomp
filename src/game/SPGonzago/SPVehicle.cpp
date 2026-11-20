@@ -1,3 +1,24 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00692ca0();
+extern "C" void FUN_00692fb0();
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00c7e9f0();
+extern "C" void FUN_00cd44e0();
+extern "C" char g_13ec47c[];
+extern "C" char g_14669f8[];
+extern "C" char g_147342c[];
+extern "C" char g_1474f08[];
+extern "C" char g_1474f14[];
+extern "C" char g_1474f20[];
+extern "C" char g_1474f28[];
+extern "C" char g_1579c58[];
+extern "C" char g_157c920[];
+extern "C" char g_157c95c[];
+extern "C" char g_157c998[];
+extern "C" char g_157c9d4[];
+extern "C" char g_157ca50[];
+extern "C" char g_157d30c[];
+
 #include <string.h>
 #pragma intrinsic(strlen)
 // src/game/SPGonzago/SPVehicle.cpp -- migrated from slice(s) s01355f90, s01354df0, s01351ae0, s00cb2f70, s00cb1110, s00cb02f0, s00caded0, s00cacf40, s00ca9820, s00ca8710, s00ca75e0, s00ca6630, s00ca5b10, s00ca4f90, s00ca46c0, s00ca3f20, s00ca3030, s00ca2210, s00ca1310, s00c9ffd0, s00c9de50, s00c9ef20 by tools/migrate/rewrite.py
@@ -5213,8 +5234,8 @@ void StringOwner::FUN_00ca7250(char* text)
         char* end = text + strlen(text);
         ((EastlString*)&mString)->Assign(text, end);
     } else {
-        ((EastlString*)&mString)->Assign((const char*)0x013ec47c,
-                                         (const char*)0x013ec47c);
+        ((EastlString*)&mString)->Assign((const char*)g_13ec47c,
+                                         (const char*)g_13ec47c);
     }
 }
 
@@ -6563,7 +6584,7 @@ void cFlyingLocomotion_s00cb_02f0::Update(LocoSteerParams* params)
 // @ 0x00cb1210
 TraceCache* FUN_00cb1210(unsigned key)
 {
-    Ht* const ht = (Ht*)0x0157d30c;
+    Ht* const ht = (Ht*)g_157d30c;
     Iter it;
 
     ht->Find(&it, &key);
@@ -6761,19 +6782,19 @@ void Sim34d0::FUN_00cb34d0(NavObj* obj)
 void FUN_01352460(void)
 {
     PropDesc d;
-    d.mName = (const char*)0x147342c;
+    d.mName = (const char*)g_147342c;
     d.mHash = 0x603498b;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
-    d.mFn24 = (void*)0xc7e9f0;
-    d.mFn28 = (void*)0xcd44e0;
-    d.mFn2C = (void*)0xc2e4e0;
-    d.mFn30 = (void*)0x692fb0;
+    d.mDefault = (void*)FUN_00692ca0;
+    d.mFn24 = (void*)FUN_00c7e9f0;
+    d.mFn28 = (void*)FUN_00cd44e0;
+    d.mFn2C = (void*)FUN_00c2e4e0;
+    d.mFn30 = (void*)FUN_00692fb0;
     d.mFn34 = (void*)U_01352460_0_34;
     d.mFn38 = (void*)U_01352460_0_38;
     d.mType = 0x0;
-    *(PropDesc*)0x1579c58 = d;
+    *(PropDesc*)g_1579c58 = d;
 }
 
 // @ 0x01354df0
@@ -7050,11 +7071,11 @@ void FUN_01357d00(void)
 {
     PropDesc d;
 
-    d.mName = (const char*)0x14669f8;
+    d.mName = (const char*)g_14669f8;
     d.mHash = 0x3b0990b;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E607_1_24;
     d.mFn28 = (void*)E607_1_28;
     d.mFn2C = (void*)E607_1_2C;
@@ -7062,13 +7083,13 @@ void FUN_01357d00(void)
     d.mFn34 = (void*)E607_1_34;
     d.mFn38 = (void*)E607_1_38;
     d.mType = 0x0;
-    *(PropDesc*)0x157c920 = d;
+    *(PropDesc*)g_157c920 = d;
 
-    d.mName = (const char*)0x1474f20;
+    d.mName = (const char*)g_1474f20;
     d.mHash = 0x3b0990c;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E607_2_24;
     d.mFn28 = (void*)E607_2_28;
     d.mFn2C = (void*)E607_2_2C;
@@ -7076,13 +7097,13 @@ void FUN_01357d00(void)
     d.mFn34 = (void*)E607_2_34;
     d.mFn38 = (void*)E607_2_38;
     d.mType = 0x10;
-    *(PropDesc*)0x157c95c = d;
+    *(PropDesc*)g_157c95c = d;
 
-    d.mName = (const char*)0x1474f14;
+    d.mName = (const char*)g_1474f14;
     d.mHash = 0x5135515;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E607_3_24;
     d.mFn28 = (void*)E607_3_28;
     d.mFn2C = (void*)E607_3_2C;
@@ -7090,13 +7111,13 @@ void FUN_01357d00(void)
     d.mFn34 = (void*)E607_3_34;
     d.mFn38 = (void*)E607_3_38;
     d.mType = 0x4;
-    *(PropDesc*)0x157c998 = d;
+    *(PropDesc*)g_157c998 = d;
 
-    d.mName = (const char*)0x1474f08;
+    d.mName = (const char*)g_1474f08;
     d.mHash = 0x3b0990e;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E607_4_24;
     d.mFn28 = (void*)E607_4_28;
     d.mFn2C = (void*)E607_4_2C;
@@ -7104,7 +7125,7 @@ void FUN_01357d00(void)
     d.mFn34 = (void*)E607_4_34;
     d.mFn38 = (void*)E607_4_38;
     d.mType = 0x14;
-    *(PropDesc*)0x157c9d4 = d;
+    *(PropDesc*)g_157c9d4 = d;
 }
 
 // @ 0x01357eb0
@@ -7112,11 +7133,11 @@ void FUN_01357eb0(void)
 {
     PropDesc d;
 
-    d.mName = (const char*)0x1474f28;
+    d.mName = (const char*)g_1474f28;
     d.mHash = 0x4179882;
     d.mZero18 = 0x0;
     d.mZero1C = 0x0;
-    d.mDefault = (void*)0x692ca0;
+    d.mDefault = (void*)FUN_00692ca0;
     d.mFn24 = (void*)E611_24;
     d.mFn28 = (void*)E611_28;
     d.mFn2C = (void*)E611_2C;
@@ -7124,5 +7145,5 @@ void FUN_01357eb0(void)
     d.mFn34 = (void*)E611_34;
     d.mFn38 = (void*)E611_38;
     d.mType = 0x0;
-    *(PropDesc*)0x157ca50 = d;
+    *(PropDesc*)g_157ca50 = d;
 }

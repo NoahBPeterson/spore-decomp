@@ -3581,7 +3581,7 @@ void C::Setup()
 {
     if (!*(u8*)((char*)this + 0x6d)) {
         if (*(void**)((char*)this + 0x1c) && *(void**)((char*)this + 0x18)) {
-            void* mem = EAAllocate(0x18, (const char*)0x13f6b3c, 0, 0, 0, 0);
+            void* mem = EAAllocate(0x18, (const char*)&DAT_013f6b3c, 0, 0, 0, 0);
             CSpuiLayout* lay = mem ? (CSpuiLayout*)LayoutCtor(mem) : 0;
             ((LayoutRef*)((char*)this + 0xc))->Set(lay);
 

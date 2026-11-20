@@ -1,6 +1,10 @@
 // Slice s00b2f870 - Simulator::cGameTerrainCursor and neighbours.
 // Reconstructed from the Ghidra decompilation + disassembly. No assembly is transcribed.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_167e7a4[];
+extern "C" char g_167e898[];
+
 #include <math.h>
 #include "SP/cVarListSerializer.h"
 
@@ -21,8 +25,8 @@ typedef char  (__thiscall *TCC0)(void*);
 #define SELOBJ(i) ((*(void***)(*(void***)((char*)this + 0x164)))[i])
 
 // ---- globals addressed by absolute VA --------------------------------------
-#define DAT_0167e7a4 (*(int**)0x0167e7a4u)
-#define DAT_0167e898 (*(int**)0x0167e898u)
+#define DAT_0167e7a4 (*(int**)g_167e7a4)
+#define DAT_0167e898 (*(int**)g_167e898)
 #define F_0167e770   (*(float*)0x0167e770u)
 #define I_0167e76c   (*(int*)0x0167e76cu)
 #define I_0167e768   (*(int*)0x0167e768u)

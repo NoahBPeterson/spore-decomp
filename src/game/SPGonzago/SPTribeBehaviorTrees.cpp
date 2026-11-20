@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPTribeBehaviorTrees.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147c2c4[];
+
 #include "game/types.h"
 #include "SP/cCombatant.h"
 #include "SP/cLocomotiveObject.h"
@@ -4535,7 +4538,7 @@ static void InitLoc74(Loc74* loc)
 #define G1485720       (*(const float*)0x01485720)   // _HK_REAL_ONE
 #define G147C21C       (*(const float*)0x0147c21c)
 #define G147C218       (*(const float*)0x0147c218)   // FLT_MAX, initial nearest-spot distance
-#define VTABLE_147C2C4 ((void*)0x0147c2c4)
+#define VTABLE_147C2C4 ((void*)g_147c2c4)
 #define RNG1601760     ((void*)0x01601760)           // EA::Random::RandomLinearCongruential
 #define SLIST169B41C   ((void*)0x0169b41c)           // rw::SList singleton
 typedef void   (__thiscall* FnV0)(void*);

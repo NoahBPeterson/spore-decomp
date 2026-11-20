@@ -9,6 +9,10 @@
 //
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast (EA XHTML module, no /EHsc)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1437c00[];
+extern "C" char g_1437e18[];
+
 #include "types.h"
 #include <string.h>
 #include <stddef.h>
@@ -689,7 +693,7 @@ TableCell::TableCell(Page* pPage, void* pElement) : Block(pPage, pElement, 7)
     mColSpan = 1;
     mRow = 0;
     mCol = 0;
-    *(void**)this = (void*)0x1437e18;
+    *(void**)this = (void*)g_1437e18;
     mMinWidth = 0.0f;
     mMaxWidth = 0.0f;
 }
@@ -962,7 +966,7 @@ void* TextStyleHashtable::Destroy(unsigned char flags)
     if (mpSecondary && *(int*)((char*)mpSecondary - 4) != 0)
         operator delete[]((char*)mpSecondary);
     mList18.Destroy();
-    mVptr = (void*)0x01437c00; // Block base vtable
+    mVptr = (void*)g_1437c00; // Block base vtable
     if (flags & 1)
         operator delete[](this);
     return this;

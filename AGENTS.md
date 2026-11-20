@@ -15,7 +15,8 @@ your change can affect with the original compilers and compares every function l
 the addresses retail uses there, and a SHA-256 of the rest. Fingerprints contain no instructions and no names; the
 check never sees the game. Because addresses are masked, the bytes match whatever your names point at, so the check
 also compares each name that claims an address (`g_15b7458`, `FUN_00abcdef`, or a mangled name `symbols/` records)
-with the address retail uses at that spot, and fails a new match whose name points elsewhere (`tools/ci/targets.py`).
+with the address retail uses at that spot, and fails a new match whose name points elsewhere (`tools/ci/targets.py`). It
+also fails a plain number where retail has an address (the fingerprint lists retail's relocated offsets): name it.
 
 The check passes when every affected function matches its fingerprint (apart from the long-standing ones in
 `tools/ci/known_failures.txt`), no function that matched before has been dropped, and **at least one function is
@@ -142,6 +143,11 @@ into the generator's inputs so they are not lost.
   check stays red.
 - Do not write a constant as the address of a made-up global (`&g_Table2458018` for `0x2458018`): the check sees the
   relocation and fails it.
+- The reverse holds too: where retail has an address (a relocation), name it; never write the number. A vtable, a
+  global, a string or a callback is `extern "C" char g_13eb938[];` / `extern "C" void FUN_00abcdef();` (or the real
+  declaration), used as `(void*)g_13eb938`. The check fails "a number at offset N where retail has an address". Two
+  addresses in one object (a table and its end, fields of one global) are one name plus an offset
+  (`(char*)&g_1483f74 + 0x126c`), not two names, or cl compiles them as unrelated objects.
 - Only `src/game/`, `match/slices/` and `match/include/` can change in a contribution. Changes to `tools/`, `.github/`
   or the fingerprints need a maintainer; put them in a separate pull request.
 - Never commit game files, the analysis image, disassembly or dumps of game code.

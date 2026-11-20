@@ -1,4 +1,9 @@
 // nSPSkinner RTT-paint buffer + RenderWare effects dispatch (unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16f91e0[];
+extern "C" char g_16fa38c[];
+
 #include "types.h"
 #include <xmmintrin.h>
 
@@ -224,8 +229,8 @@ void StateBits::Set(unsigned char a, unsigned char b, unsigned char c, unsigned 
 // @ 0x00529350
 void SetRenderState(int state, uint32_t value)
 {
-    ((uint32_t*)0x016fa38c)[(state - 7) >> 5] |= 1u << ((state - 7) & 0x1f);
-    ((uint32_t*)0x016f91e0)[state] = value;
+    ((uint32_t*)g_16fa38c)[(state - 7) >> 5] |= 1u << ((state - 7) & 0x1f);
+    ((uint32_t*)g_16f91e0)[state] = value;
 }
 
 // @ 0x005292d0

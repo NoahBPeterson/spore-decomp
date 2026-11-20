@@ -1,5 +1,10 @@
 // Slice s0137a490 — global property-table initialisers.
 // Compile: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5dfc[];
+extern "C" char g_16ad66c[];
+
 #include "s0137a490.h"
 
 // ---------------------------------------------------------------------------
@@ -11,7 +16,7 @@ void InitPropTable_15a674c(void)
     g_15a674c[0].name  = SP_sHash("color");
     g_15a674c[0].type  = 4;
     g_15a674c[0].unk08 = 0;
-    g_15a674c[0].val0  = PropValI(0x016ad66c);
+    g_15a674c[0].val0  = PropValI((int)g_16ad66c);
     g_15a674c[0].val1  = PropValI(4);
     g_15a674c[0].index = 0;
     g_15a674c[0].defVal = PropValI(0);
@@ -42,7 +47,7 @@ void InitPropTable_16b17b4(void)
     g_16b17b4[0].val0  = PropValI(8);
     g_16b17b4[0].val1  = PropValI(0);
     g_16b17b4[0].index = 0;
-    g_16b17b4[0].defVal = PropValI(0x015a5dfc);
+    g_16b17b4[0].defVal = PropValI((int)g_15a5dfc);
     g_16b17b4[0].unk1C = 0;
     g_16b17b4[0].unk20 = 0;
     g_16b17b4[0].unk24 = 0;

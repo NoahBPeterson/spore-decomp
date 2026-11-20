@@ -2,6 +2,31 @@
 // Object file: SPEditors/SPSubModeMovie.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13ec468[];
+extern "C" char g_13f5b98[];
+extern "C" char g_13ff0d8[];
+extern "C" char g_13ff0dc[];
+extern "C" char g_13ff0e8[];
+extern "C" char g_13ff0fc[];
+extern "C" char g_13ff140[];
+extern "C" char g_13ff250[];
+extern "C" char g_13ff260[];
+extern "C" char g_13ff294[];
+extern "C" char g_13ff2c4[];
+extern "C" char g_13ff2f0[];
+extern "C" char g_13ff3dc[];
+extern "C" char g_148b840[];
+extern "C" char g_148b850[];
+extern "C" char g_148b858[];
+extern "C" char g_148b864[];
+extern "C" char g_148b8bc[];
+extern "C" char g_148b900[];
+extern "C" char g_148b964[];
+
 #include "game/types.h"
 #include "SP/cSPPlayModeSubModeMovie.h"
 #include "EA/Stopwatch.h"
@@ -3763,7 +3788,7 @@ void cGalaxyGameEntryUIStateMachine::FUN_00df55b0(int mode)
 
     IWindow_s00df_47b0* window = view->mLayout54.FindWindowByID(0x42e2e38, true);
     if (window)
-        window->SetText((const wchar_t*)0x013ec468);
+        window->SetText((const wchar_t*)g_13ec468);
 
     window = view->mLayout54.FindWindowByID(0x431e538, true);
     if (window)
@@ -3829,10 +3854,10 @@ void cDownloadDialog::FUN_00df5670(char b)
 void Simulator::cScenarioYouTube::FUN_00f04910()
 {
     Vec20& v1 = mVec1;
-    mpVtbl0 = (void*)0x148b864;
-    mpVtbl4 = (void*)0x148b858;
-    mpVtbl8 = (void*)0x148b850;
-    mpVtblc = (void*)0x148b840;
+    mpVtbl0 = (void*)g_148b864;
+    mpVtbl4 = (void*)g_148b858;
+    mpVtbl8 = (void*)g_148b850;
+    mpVtblc = (void*)g_148b840;
     _ReadWriteBarrier();
 
     v1.DestroyRange(v1.mpBegin, v1.mpEnd);
@@ -3867,9 +3892,9 @@ void Simulator::cScenarioYouTube::FUN_00f04910()
         mpMsgHandler = 0;
         RemoveHandler(h, mpMsgA, mpMsgB, mpMsgC, mpMsgD);
     }
-    mpVtblc = (void*)0x13ec458;
-    mpVtbl8 = (void*)0x13eb394;
-    mpVtbl0 = (void*)0x13eb938;
+    mpVtblc = (void*)g_13ec458;
+    mpVtbl8 = (void*)g_13eb394;
+    mpVtbl0 = (void*)g_13eb938;
 }
 
 // @ 0x00f04ad0
@@ -4263,7 +4288,7 @@ void Movie::CloseUpload()
                 : 0;
 
     EaStr16 name;
-    name.Format((const char*)0x13ff3dc, at<int>(this, 0x54));
+    name.Format((const char*)g_13ff3dc, at<int>(this, 0x54));
     ((void (__thiscall*)(void*, char*, int, int))
      ((void**)*(void**)panel)[0x54 / 4])((void*)panel, name.mpBegin, 0, 2);
 }
@@ -4276,9 +4301,9 @@ void Movie::SendPublicAuth()
     at<uchar>(this, 0xbe) = 1;
     at<uchar>(this, 0xbd) = 0;
     at<uchar>(this, 0xbc) = 0;
-    msg.mToken.sprintf((const char*)0x13f5b98, at<int>(this, 0x8c));
-    msg.mUser.sprintf((const char*)0x13f5b98, at<int>(this, 0x9c));
-    msg.mExtra.sprintf((const char*)0x13f5b98, (const char*)0x13ff0d8);
+    msg.mToken.sprintf((const char*)g_13f5b98, at<int>(this, 0x8c));
+    msg.mUser.sprintf((const char*)g_13f5b98, at<int>(this, 0x9c));
+    msg.mExtra.sprintf((const char*)g_13f5b98, (const char*)g_13ff0d8);
     msg.mPrivate = 1;
     void* srv = MessageServer();
     ((void (__thiscall*)(void*, int, YtAuthMsg*, int))
@@ -4293,9 +4318,9 @@ void SP::cSPPlayModeSubModeMovie::LoginToYouTube()
     at<uchar>(this, 0xc1) = 1;
     at<uchar>(this, 0xc0) = 0;
     at<uchar>(this, 0xbf) = 0;
-    msg.mToken.sprintf((const char*)0x13f5b98, at<int>(this, 0x8c));
-    msg.mUser.sprintf((const char*)0x13f5b98, at<int>(this, 0x9c));
-    msg.mExtra.sprintf((const char*)0x13f5b98, (const char*)0x13ff0d8);
+    msg.mToken.sprintf((const char*)g_13f5b98, at<int>(this, 0x8c));
+    msg.mUser.sprintf((const char*)g_13f5b98, at<int>(this, 0x9c));
+    msg.mExtra.sprintf((const char*)g_13f5b98, (const char*)g_13ff0d8);
     msg.mPrivate = 0;
     void* srv = MessageServer();
     ((void (__thiscall*)(void*, int, YtAuthMsg*, int))
@@ -4319,19 +4344,19 @@ void __stdcall BuildYtFeed(EaStr* out)
         *out->mpBegin = 0;
         out->mpEnd = out->mpBegin;
     }
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff2f0);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff2c4);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff294);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff260);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff250);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b964);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b900);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff140);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b8bc);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff2f0);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff2c4);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff294);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff260);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff250);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_148b964);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_148b900);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff140);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_148b8bc);
     if (!priv)
-        out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0fc);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0e8);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0dc);
+        out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0fc);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0e8);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0dc);
 }
 
 // @ 0x00f063c0

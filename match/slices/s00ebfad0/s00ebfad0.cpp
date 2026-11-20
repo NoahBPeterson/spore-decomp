@@ -1,3 +1,15 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb95c[];
+extern "C" char g_13eecd8[];
+extern "C" char g_13eeda0[];
+extern "C" char g_1485378[];
+extern "C" char g_14853bc[];
+extern "C" char g_1488900[];
+extern "C" char g_1488f74[];
+extern "C" char g_1488f98[];
+extern "C" char g_1488fa4[];
+extern "C" char g_1601760[];
+
 #include <stddef.h>
 
 // Slice s00ebfad0 — 0x00ebfad0 .. 0x00ec0970.
@@ -79,13 +91,13 @@ static int g_pSimSingleton;                            // 0x0168d824
 static int g_SimSingletonCtor(int p) { return EXT(p).iG(); }
 
 // Real .rdata / .data constants (addresses in comments).
-static float* const g_pZero   = (float*)0x01485378;
-static float* const g_p3      = (float*)0x013eb95c;
-static float* const g_pBig    = (float*)0x01488900;
+static float* const g_pZero   = (float*)g_1485378;
+static float* const g_p3      = (float*)g_13eb95c;
+static float* const g_pBig    = (float*)g_1488900;
 static float* const g_pDist2  = (float*)0x01486110;
-static float* const g_p8      = (float*)0x013eeda0;
-static float* const g_pDist1  = (float*)0x014853bc;
-static float* const g_pSmall  = (float*)0x013eecd8;
+static float* const g_p8      = (float*)g_13eeda0;
+static float* const g_pDist1  = (float*)g_14853bc;
+static float* const g_pSmall  = (float*)g_13eecd8;
 
 // The shared decider state block used by several animation deciders.
 struct DeciderState {
@@ -443,7 +455,7 @@ char FUN_00ec01b0(int obj, int a, int b, int c, int d, AnimState* st)
     if (*(int*)(obj + 0x698) != 3)
         tag = 0x7ccb8cc;
     else
-        tag = *(int*)(0x1488f74 + *(int*)(obj + 0x69c) * 4);
+        tag = *(int*)((int)g_1488f74 + *(int*)(obj + 0x69c) * 4);
     st->tag = tag;
 
     (*(void (__thiscall**)(int))((*(int*)(obj + 0xc0)) + 0xec))(obj + 0xc0);
@@ -490,13 +502,13 @@ void FUN_00ec02e0(int obj)
     {
         char found = 0;
         int* p;
-        for (p = (int*)0x1488f98; (int)p < 0x1488fa4; p++) {
+        for (p = (int*)g_1488f98; (int)p < (int)((char*)&g_1488f98 + 0xc); p++) {
             if (EXT(obj).c2(*p) != 0)
                 found = 1;
         }
         if (found == 0) {
-            int n = EXT(0x1601760).rnd(3);
-            CREATURE(obj).InterruptAnim(*(int*)(0x1488f98 + n * 4), -1, 0);
+            int n = EXT((int)g_1601760).rnd(3);
+            CREATURE(obj).InterruptAnim(*(int*)((int)g_1488f98 + n * 4), -1, 0);
         }
     }
 }

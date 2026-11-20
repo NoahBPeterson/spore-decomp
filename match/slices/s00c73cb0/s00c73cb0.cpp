@@ -2,6 +2,15 @@
 // buildings / resources) plus cToolObject and cPlanetaryArtifact construction,
 // destruction and hit handling. Retail build.
 // Module flags: /O2 /MD /Gy /EHsc /TP.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14727c8[];
+extern "C" char g_1472830[];
+extern "C" char g_1472898[];
+extern "C" char g_14728a0[];
+extern "C" char g_147299c[];
+extern "C" char g_14729b0[];
+
 #include "types.h"
 
 // ------------------------------------------------------------ free helpers ---
@@ -592,12 +601,12 @@ void SpatialDerived::FUN_00c74880(int a, float* b)
 void* cToolObject::FUN_00c74950()
 {
     ((MovableOrn*)this)->cMovOrnCtor();
-    mVtbl0 = (void*)0x14729b0;
-    mVtbl4 = (void*)0x147299c;
-    mVtbl34 = (void*)0x14728a0;
-    mVtbl108 = (void*)0x1472898;
-    mVtbl508 = (void*)0x1472830;
-    mVtbl5d0 = (void*)0x14727c8;
+    mVtbl0 = (void*)g_14729b0;
+    mVtbl4 = (void*)g_147299c;
+    mVtbl34 = (void*)g_14728a0;
+    mVtbl108 = (void*)g_1472898;
+    mVtbl508 = (void*)g_1472830;
+    mVtbl5d0 = (void*)g_14727c8;
     m638 = 0;
     m63c = 0;
     m640.a = 0;
@@ -618,12 +627,12 @@ void* cToolObject::FUN_00c74950()
 // ===========================================================================
 void* cToolObject::FUN_00c749e0(unsigned char flag)
 {
-    mVtbl0 = (void*)0x14729b0;
-    mVtbl4 = (void*)0x147299c;
-    mVtbl34 = (void*)0x14728a0;
-    mVtbl108 = (void*)0x1472898;
-    mVtbl508 = (void*)0x1472830;
-    mVtbl5d0 = (void*)0x14727c8;
+    mVtbl0 = (void*)g_14729b0;
+    mVtbl4 = (void*)g_147299c;
+    mVtbl34 = (void*)g_14728a0;
+    mVtbl108 = (void*)g_1472898;
+    mVtbl508 = (void*)g_1472830;
+    mVtbl5d0 = (void*)g_14727c8;
     ((MovableOrn*)this)->cMovOrnDtor();
     if (flag & 1)
         FUN_00f47380(this);

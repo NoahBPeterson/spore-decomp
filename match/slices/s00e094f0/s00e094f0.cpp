@@ -11,6 +11,17 @@
 //   * the objects queried through slot +0x0c of the caller's object (0x00e09910 / 0x00e09b10).
 //
 // Flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_147f5c4[];
+extern "C" char g_147f5c8[];
+extern "C" char g_147f5d8[];
+extern "C" char g_147f5f4[];
+extern "C" char g_147f604[];
+
 #include "types.h"
 
 #define PV(n) virtual void pv##n();
@@ -432,7 +443,7 @@ int32_t cGrid::CellStart(int32_t row, int32_t col)
 // @ 0x00e0a390
 void* cGrid::Init()
 {
-    mField00 = (void*)0x0147f604;
+    mField00 = (void*)g_147f604;
     mField04 = 0;
     mField08 = 0;
     mField0C = 0;
@@ -623,10 +634,10 @@ struct cFourBaseObject {
 
 void cFourBaseObject::Destroy()
 {
-    mField00 = (void*)0x0147f5f4;
-    mField04 = (void*)0x0147f5d8;
-    mField08 = (void*)0x0147f5c8;
-    mField0C = (void*)0x0147f5c4;
+    mField00 = (void*)g_147f5f4;
+    mField04 = (void*)g_147f5d8;
+    mField08 = (void*)g_147f5c8;
+    mField0C = (void*)g_147f5c4;
     if (mField18 != 0) {
         mField18 = 0;
         mField1C = 0;
@@ -644,9 +655,9 @@ void cFourBaseObject::Destroy()
     if (mField18 != 0) {
         ((cRefObject2*)mField18)->Release();
     }
-    mField0C = (void*)0x013ef094;
-    mField08 = (void*)0x013eb394;
-    mField04 = (void*)0x013eb938;
+    mField0C = (void*)g_13ef094;
+    mField08 = (void*)g_13eb394;
+    mField04 = (void*)g_13eb938;
 }
 
 // --------------------------------------------------------------------------- 0x00e099d0

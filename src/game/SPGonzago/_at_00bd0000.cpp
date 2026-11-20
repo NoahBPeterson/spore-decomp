@@ -2,6 +2,32 @@
 // Object file: SPGonzago/_at_00bd0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_1467e6c[];
+extern "C" char g_1467e80[];
+extern "C" char g_1467fc0[];
+extern "C" char g_1467fe0[];
+extern "C" char g_14680a4[];
+extern "C" char g_14680b8[];
+extern "C" char g_1468134[];
+extern "C" char g_1468150[];
+extern "C" char g_1468168[];
+extern "C" char g_1468184[];
+extern "C" char g_146819c[];
+extern "C" char g_14681b8[];
+extern "C" char g_14681d8[];
+extern "C" char g_14681f0[];
+extern "C" char g_1468208[];
+extern "C" char g_1468220[];
+extern "C" char g_146823c[];
+extern "C" char g_1468258[];
+extern "C" char g_1468274[];
+extern "C" char g_1468294[];
+extern "C" char g_146837c[];
+extern "C" char g_1468380[];
+extern "C" char g_14683d0[];
+
 #include "game/types.h"
 #include "SP/cBuilding.h"
 #include "SP/cBuildingCityHall.h"
@@ -741,13 +767,13 @@ class cCheatObject : public cGameData_s00bd_5ea0, public cSpatialObject_s00bd_5e
 using SP::cGameData_s00bd_5ea0;
 using SP::cCelestialBody_s00bd_5ea0;
 using SP::cCheatObject;
-#define VT_cCelestialBody0 ((void*)0x01467e80)
-#define VT_cCelestialBody1 ((void*)0x01467e6c)
-#define VT_cCheatObject0   ((void*)0x014680b8)
-#define VT_cCheatObject1   ((void*)0x014680a4)
-#define VT_cCheatObject2   ((void*)0x01467fe0)
-#define VT_cCheatObject3   ((void*)0x01467fc0)
-#define VT_GB1             ((void*)0x013eb384)
+#define VT_cCelestialBody0 ((void*)g_1467e80)
+#define VT_cCelestialBody1 ((void*)g_1467e6c)
+#define VT_cCheatObject0   ((void*)g_14680b8)
+#define VT_cCheatObject1   ((void*)g_14680a4)
+#define VT_cCheatObject2   ((void*)g_1467fe0)
+#define VT_cCheatObject3   ((void*)g_1467fc0)
+#define VT_GB1             ((void*)g_13eb384)
 struct Matrix3f {
   float m[9];
   void Assign(const float* src);   // 0x0041cb40  (__thiscall)
@@ -791,20 +817,20 @@ virtual void v14();
 virtual void v15();
   virtual void RegPart(uint id, const char* name);   // vtable slot 0x40
 };
-#define gCheatCmd0 ((const char*)0x01468294)
-#define gCheatCmd1 ((const char*)0x01468274)
-#define gCheatCmd2 ((const char*)0x01468258)
-#define gCheatCmd3 ((const char*)0x0146823c)
-#define gCheatCmd4 ((const char*)0x01468220)
-#define gCheatCmd5 ((const char*)0x01468208)
-#define gCheatCmd6 ((const char*)0x014681f0)
-#define gCheatCmd7 ((const char*)0x014681d8)
-#define gCheatCmd8 ((const char*)0x014681b8)
-#define gCheatCmd9 ((const char*)0x0146819c)
-#define gCheatCmdA ((const char*)0x01468184)
-#define gCheatCmdB ((const char*)0x01468168)
-#define gCheatCmdC ((const char*)0x01468150)
-#define gCheatCmdD ((const char*)0x01468134)
+#define gCheatCmd0 ((const char*)g_1468294)
+#define gCheatCmd1 ((const char*)g_1468274)
+#define gCheatCmd2 ((const char*)g_1468258)
+#define gCheatCmd3 ((const char*)g_146823c)
+#define gCheatCmd4 ((const char*)g_1468220)
+#define gCheatCmd5 ((const char*)g_1468208)
+#define gCheatCmd6 ((const char*)g_14681f0)
+#define gCheatCmd7 ((const char*)g_14681d8)
+#define gCheatCmd8 ((const char*)g_14681b8)
+#define gCheatCmd9 ((const char*)g_146819c)
+#define gCheatCmdA ((const char*)g_1468184)
+#define gCheatCmdB ((const char*)g_1468168)
+#define gCheatCmdC ((const char*)g_1468150)
+#define gCheatCmdD ((const char*)g_1468134)
 extern uint gCheatHandlerIds[3];  // 0x01468128
 namespace SP {
 class cGonzagoSubsystem_s00bd_5ea0 {
@@ -1550,9 +1576,9 @@ void* __fastcall FUN_00bd7010(char* self)
   *(void**)self = VT_GB1;
   base->Construct();
   *(char volatile*)(self + 0x20) = 0;
-  *(void* volatile*)self = (void*)0x14683d0;
-  *(void* volatile*)(self + 4) = (void*)0x1468380;
-  *(void* volatile*)(self + 8) = (void*)0x146837c;
+  *(void* volatile*)self = (void*)g_14683d0;
+  *(void* volatile*)(self + 4) = (void*)g_1468380;
+  *(void* volatile*)(self + 8) = (void*)g_146837c;
   *(uint volatile*)(self + 0x24) = 0;
   *(uint volatile*)(self + 0x28) = 0;
   *(uint volatile*)(self + 0x2c) = 0;

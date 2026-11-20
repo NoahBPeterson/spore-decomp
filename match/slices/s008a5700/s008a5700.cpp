@@ -2,6 +2,10 @@
 // (DXT compressor in EAWebKit/EAText). The metric is always the perceptual one (0.2126, 0.7152, 0.0722), the
 // ordering is a selection by ascending projection onto the principal component (ties are all appended).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc: the original has no EH frame).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1432218[];
+
 #include "types.h"
 #include <float.h>
 
@@ -251,7 +255,7 @@ private:
 RangeFit::RangeFit(ColourSet const* colours)
 {
     mpColours = colours;
-    mpVtable = (void*)0x01432218;
+    mpVtable = (void*)g_1432218;
 
     Vec3 const& first = colours->GetPoints()[0];
 

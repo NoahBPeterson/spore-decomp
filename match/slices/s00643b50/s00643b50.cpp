@@ -1,4 +1,11 @@
 // Editor resource hub, part 2 (0x00643b50..0x00644b8f). Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb918[];
+extern "C" char g_13ef094[];
+extern "C" char g_13ff7fc[];
+extern "C" char g_13ff800[];
+
 #include "../s00642530/s00642530.h"
 
 void RemoveHandler(void* obj, uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // EA::Messaging::RemoveHandler // 0x00571db0
@@ -465,10 +472,10 @@ struct LocaleMsg {
     void Dtor();
 };
 LocaleMsg::LocaleMsg(RCBase* o, const Key3* k, uint8_t bb) {
-    *(volatile uint32_t*)&vt1 = 0x13ef094;
+    *(volatile uint32_t*)&vt1 = (int)g_13ef094;
     f8 = 0;
-    vt0 = 0x13ff800;
-    vt1 = 0x13ff7fc;
+    vt0 = (int)g_13ff800;
+    vt1 = (int)g_13ff7fc;
     owner = o;
     if (o) o->v0();
     key = *k;
@@ -478,8 +485,8 @@ LocaleMsg::LocaleMsg(RCBase* o, const Key3* k, uint8_t bb) {
 // @ 0x644af0
 void LocaleMsg::Dtor() {
     if (owner) owner->v1();
-    vt1 = 0x13ef094;
-    vt0 = 0x13eb918;
+    vt1 = (int)g_13ef094;
+    vt0 = (int)g_13eb918;
 }
 
 // @ 0x644b10

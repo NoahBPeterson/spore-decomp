@@ -4,6 +4,20 @@
 // the retail layout extends past the 2008 dev-build PDB.
 // Compile: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146afcc[];
+extern "C" char g_146afdc[];
+extern "C" char g_146aff0[];
+extern "C" char g_146b0d8[];
+extern "C" char g_146b0e8[];
+extern "C" char g_146b0f8[];
+extern "C" char g_146b318[];
+extern "C" char g_146b328[];
+extern "C" char g_146b338[];
+extern "C" char g_146b3fc[];
+extern "C" char g_146b40c[];
+extern "C" char g_146b420[];
+
 typedef unsigned int u32;
 typedef unsigned char u8;
 
@@ -110,18 +124,18 @@ extern "C" void* __fastcall GetCurrentTerrainSphere(void*); // 0x00f67d90 ecx=ob
 extern "C" void  GetImageResource(void*, void*);          // 0x00576650
 
 // ------------------------------------------------------------------ vtables
-#define VT_FIND              0x146b338
-#define VT_FIND_2            0x146b328
-#define VT_FIND_3            0x146b318
-#define VT_SPECIES           0x146b420
-#define VT_SPECIES_2         0x146b40c
-#define VT_SPECIES_3         0x146b3fc
-#define VT_TUTORIAL          0x146b0f8
-#define VT_TUTORIAL_2        0x146b0e8
-#define VT_TUTORIAL_3        0x146b0d8
-#define VT_BASE              0x146aff0
-#define VT_BASE_2            0x146afdc
-#define VT_BASE_3            0x146afcc
+#define VT_FIND              (int)g_146b338
+#define VT_FIND_2            (int)g_146b328
+#define VT_FIND_3            (int)g_146b318
+#define VT_SPECIES           (int)g_146b420
+#define VT_SPECIES_2         (int)g_146b40c
+#define VT_SPECIES_3         (int)g_146b3fc
+#define VT_TUTORIAL          (int)g_146b0f8
+#define VT_TUTORIAL_2        (int)g_146b0e8
+#define VT_TUTORIAL_3        (int)g_146b0d8
+#define VT_BASE              (int)g_146aff0
+#define VT_BASE_2            (int)g_146afdc
+#define VT_BASE_3            (int)g_146afcc
 
 // ---------------------------------------------------------------------------
 // @ 0x00c2f830

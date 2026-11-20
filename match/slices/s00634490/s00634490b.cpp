@@ -1,6 +1,9 @@
 // SSE-compiled part of the play-mode UI module (/O2 /MD /Gy /TP /GS- /arch:SSE):
 // a rectangle intersection and the two tooltip helpers (they keep float defaults on the stack).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fe714[];
+
 #include "s00634490_ui.h"
 
 struct RectF {
@@ -43,7 +46,7 @@ void cSPPlayModeUI::ShowToolTip(uint32_t id, uint32_t a2, uint32_t a3, cSPUITool
         if (!tip) {
             void* mem = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
             if (mem) {
-                tip = new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)0x13fe714, 0));
+                tip = new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)g_13fe714, 0));
                 if (tip) {
                     tip->AddRef();
                     result = tip;
@@ -79,7 +82,7 @@ void cSPPlayModeUI::ShowEditorUIToolTip(uint32_t id, uint32_t a2, uint32_t a3, c
         if (!tip) {
             void* mem = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
             if (mem) {
-                tip = new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)0x13fe714, 0));
+                tip = new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)g_13fe714, 0));
                 if (tip) {
                     tip->AddRef();
                     result = tip;

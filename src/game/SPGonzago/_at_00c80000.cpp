@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00c80000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1695294[];
+extern "C" char g_16952a0[];
+
 #include "game/types.h"
 #include "SP/cViewer.h"
 #include "SP/cCommunity.h"
@@ -1048,7 +1052,7 @@ void cSO::func78h(cSPVector3_s00c8_8e30* out)
 {
     void* owner = (void*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
     cSPVector3_s00c8_8e30 v;
-    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)0x01695294, owner);
+    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)g_1695294, owner);
     cSPVector3_s00c8_8e30 tmp = *r;
     if (FUN_0059ab70(&tmp))
         *out = tmp;
@@ -1061,7 +1065,7 @@ void cSO::GetCommunityName(cSPVector3_s00c8_8e30* out)
 {
     void* owner = (void*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
     cSPVector3_s00c8_8e30 v;
-    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)0x016952a0, owner);
+    cSPVector3_s00c8_8e30* r = (cSPVector3_s00c8_8e30*)FUN_0059aed0(&v, (void*)g_16952a0, owner);
     cSPVector3_s00c8_8e30 tmp = *r;
     if (FUN_0059ab70(&tmp))
         *out = tmp;

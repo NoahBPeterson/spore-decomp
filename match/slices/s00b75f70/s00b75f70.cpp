@@ -4,6 +4,10 @@
 // members, the fixed-vector growth helper, and the Sim high-LOD per-planet
 // init / resource-key walks that share the translation unit.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 #include "types.h"
 #include <math.h>
 
@@ -350,7 +354,7 @@ HT68b::iterator HT68b::erase(iterator i) {
 void __cdecl FUN_00b768d0(void* first, void* last, void* a3, void* a4) {
     int n = (int)((char*)last - (char*)first) / 0xc;
     if (n > 1) {
-        char* buf = (char*)EAAllocate(n * 0xc, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        char* buf = (char*)EAAllocate(n * 0xc, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
         char uninit[12];
         FUN_00b74c20(buf, buf + n * 0xc, uninit);
         FUN_00b75c60(first, last, buf, a4);

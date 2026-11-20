@@ -1,4 +1,9 @@
 // slice s0063f740: cSPPlayModeSubModePhoto send/write photo path.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1524c18[];
+extern "C" char g_1524c60[];
+
 #include "../s00636320/s00636320.h"
 
 struct cString { char pad[0x14]; cString(); ~cString(); };   // 0x006B5060 / 0x006B5240
@@ -73,7 +78,7 @@ void cSPPlayModeSubModePhoto::SendPhoto()
     if (!FUN_0063fa40()) {
         CloseSendPhotoWindow();
         BeginProfScope(0, 1)->End();
-        FUN_00809db0((void*)0x1524c60, (void*)0x1524c18);
+        FUN_00809db0((void*)g_1524c60, (void*)g_1524c18);
         mDialogInProgress = 8;
         if (*(int*)(*(int*)((char*)gAppProperties2 + 0x3c) + 0x118) == 0)
             FUN_00675250()->AutoTest(0xb4c2a66b, 1);

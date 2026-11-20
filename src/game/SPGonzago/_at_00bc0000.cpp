@@ -2,6 +2,20 @@
 // Object file: SPGonzago/_at_00bc0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1466890[];
+extern "C" char g_1466898[];
+extern "C" char g_15906f0[];
+extern "C" char g_1590778[];
+extern "C" char g_1590800[];
+extern "C" char g_1590888[];
+extern "C" char g_1590910[];
+extern "C" char g_1590998[];
+extern "C" char g_1590a20[];
+extern "C" char g_1590aa8[];
+extern "C" char g_1590b30[];
+extern "C" char g_15aa9e8[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cPropertyList.h"
@@ -3724,8 +3738,8 @@ void SimClass::ClearMap()
 void SimClass::Destroy()
 {
     HashMap* m = &map;
-    vtbl0 = (uint32_t)0x1466898;
-    vtbl1 = (uint32_t)0x1466890;
+    vtbl0 = (uint32_t)g_1466898;
+    vtbl1 = (uint32_t)g_1466890;
     m->ClearBuckets((void**)m->buckets, m->bucketCount);
     m->size = 0;
     if (m->bucketCount > 1)
@@ -3806,8 +3820,8 @@ void SubVec::Insert(Sub* pos, uint32_t n, const Sub& value)
 SimClass::SimClass()
 {
     BaseCtor();
-    vtbl0 = (uint32_t)0x1466898;
-    vtbl1 = (uint32_t)0x1466890;
+    vtbl0 = (uint32_t)g_1466898;
+    vtbl1 = (uint32_t)g_1466890;
     uint32_t zero = 0;
     FixedAlloc_s00bc_6360 fa(0x95c, 4, 0x20, zero, 0xffffffff, (void*)0x6abeb0, (void*)0xf47410, "Simulator/list");
     ListHead* l = &list;
@@ -5695,16 +5709,16 @@ void FUN_00bca6f0(void)
 {
     g_0168B54C = &FUN_00bca670;
     g_0168B550 = &FUN_00bca6a0;
-    FUN_00bc8fa0((void*)0x1590800);
-    FUN_00bc8fa0((void*)0x1590888);
-    FUN_00bc8fa0((void*)0x15906f0);
-    FUN_00bc8fa0((void*)0x1590778);
-    FUN_00bc8fa0((void*)0x1590910);
-    FUN_00bc8fa0((void*)0x1590998);
-    FUN_00bc8fa0((void*)0x1590a20);
-    FUN_00bc8fa0((void*)0x1590aa8);
-    FUN_00bc8fa0((void*)0x1590b30);
-    FUN_00bc8fa0((void*)0x15aa9e8);
+    FUN_00bc8fa0((void*)g_1590800);
+    FUN_00bc8fa0((void*)g_1590888);
+    FUN_00bc8fa0((void*)g_15906f0);
+    FUN_00bc8fa0((void*)g_1590778);
+    FUN_00bc8fa0((void*)g_1590910);
+    FUN_00bc8fa0((void*)g_1590998);
+    FUN_00bc8fa0((void*)g_1590a20);
+    FUN_00bc8fa0((void*)g_1590aa8);
+    FUN_00bc8fa0((void*)g_1590b30);
+    FUN_00bc8fa0((void*)g_15aa9e8);
 }
 
 // @ 0x00bca7a0

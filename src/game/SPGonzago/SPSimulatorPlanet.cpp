@@ -3207,7 +3207,7 @@ namespace SP {
 void FUN_00ffab60()
 {
     cGameNounManager_s00ff_a2c0* nm = NounManager();
-    GdVector* gv = nm->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00acdff0, (void*)0x00b1e500, (void*)0x18c43e8);
+    GdVector* gv = nm->GetGameDataVector((void*)&gFn_00cd7d10, (void*)&gFn_00d3d420, (void*)&gFn_00acdff0, (void*)&gFn_00b1e500, (void*)0x18c43e8);
     void*** range = &gv->m04;
     int cnt = (int)(range[1] - range[0]);
     for (int i = 0; i < cnt; i++) {

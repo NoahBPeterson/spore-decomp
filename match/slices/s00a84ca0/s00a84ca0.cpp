@@ -2,6 +2,11 @@
 // assembly, serialisation and teardown for a Swarm simulator base object.
 // Built with VS2008 SP1 (cl 15.00.30729.01) /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_1457fd8[];
+
 #include "types.h"
 
 // Bit extraction kept in an inline helper: the original tests bits through a
@@ -136,7 +141,7 @@ Cfg* __fastcall Cfg::Ctor()
 {
     volatile uint32_t* v = (volatile uint32_t*)this;
     v[1] = 0;                                          // 0x04
-    v[0] = 0x1457fd8;                                  // 0x00
+    v[0] = (int)g_1457fd8;                                  // 0x00
     v[2] = 0;                                          // 0x08
     *(volatile float*)((char*)this + 0x10) = 1.0f;
     *(volatile uint16_t*)((char*)this + 0x0c) = 0;
@@ -186,7 +191,7 @@ void __fastcall Cfg::Release()
         operator_delete__(this->arr28);
     if (this->arr14 != 0 && *(int32_t*)((char*)this->arr14 - 4) != 0)
         operator_delete__(this->arr14);
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = (void*)g_13ef094;
 }
 
 // ---------------------------------------------------------------------------
@@ -590,5 +595,5 @@ void __fastcall Heap5::Release()
         operator_delete__(this->p48);
     if (this->p34 != 0 && *(int32_t*)((char*)this->p34 - 4) != 0)
         operator_delete__(this->p34);
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = (void*)g_13ef094;
 }

@@ -1,6 +1,11 @@
 // slice s00599c40 -- editor verb-icon tooltip setup (SP::cSPEditorVerbIcon), the editor budget/time
 // bar panel (animated bars driven by a cSPUIAnimator), and small float / vector helpers.
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no EH, no stack cookies on wchar buffers).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f63fc[];
+extern "C" char g_13f6400[];
+
 #include "types.h"
 #include "sse_helpers.h"
 #include <math.h>
@@ -488,8 +493,8 @@ cSPUIWindowAnimation::~cSPUIWindowAnimation()
 // @ 0x0059a230
 void* cSPUIWindowAnimation::ScalarDelete(unsigned int flags)
 {
-    *(void**)this = (void*)0x013F6400;
-    *(void**)((char*)this + 8) = (void*)0x013F63FC;
+    *(void**)this = (void*)g_13f6400;
+    *(void**)((char*)this + 8) = (void*)g_13f63fc;
     _ReadWriteBarrier();
     if (mTarget.mpWindow)
         mTarget.mpWindow->Release();

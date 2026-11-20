@@ -10,6 +10,94 @@
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00675790();
+extern "C" void FUN_00675850();
+extern "C" void FUN_00675ff0();
+extern "C" void FUN_00676140();
+extern "C" void FUN_006761f0();
+extern "C" void FUN_00676540();
+extern "C" void FUN_00692ca0();
+extern "C" void FUN_00692fb0();
+extern "C" void FUN_006ac6f0();
+extern "C" void FUN_006ac770();
+extern "C" void FUN_006fafe0();
+extern "C" void FUN_006fb040();
+extern "C" void FUN_006fe7f0();
+extern "C" void FUN_006fe830();
+extern "C" void FUN_00928ad0();
+extern "C" void FUN_00b1fbf0();
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00f27200();
+extern "C" void FUN_00f47410();
+extern "C" void FUN_013bed40();
+extern "C" void FUN_013bf2f0();
+extern "C" void FUN_013bf360();
+extern "C" void FUN_013bf410();
+extern "C" void FUN_013bf480();
+extern "C" char g_140bbcc[];
+extern "C" char g_140c35c[];
+extern "C" char g_1529330[];
+extern "C" char g_152936c[];
+extern "C" char g_15293a8[];
+extern "C" char g_15293e4[];
+extern "C" char g_1529420[];
+extern "C" char g_1531cb8[];
+extern "C" char g_1535958[];
+extern "C" char g_1538130[];
+extern "C" char g_16032a8[];
+extern "C" char g_1604e63[];
+extern "C" char g_1606c0c[];
+extern "C" char g_16198c0[];
+extern "C" char g_161fda4[];
+extern "C" char g_1624710[];
+extern "C" char g_1628b98[];
+extern "C" char g_16299f4[];
+extern "C" char g_162f0e8[];
+extern "C" char g_16340e0[];
+extern "C" char g_1634100[];
+extern "C" char g_163411c[];
+extern "C" char g_164b200[];
+extern "C" char g_164b204[];
+extern "C" char g_164b208[];
+extern "C" char g_164b26c[];
+extern "C" char g_164b270[];
+extern "C" char g_164b274[];
+extern "C" char g_164b278[];
+extern "C" char g_164b2c4[];
+extern "C" char g_164b2c8[];
+extern "C" char g_164b2cc[];
+extern "C" char g_164b330[];
+extern "C" char g_164b334[];
+extern "C" char g_164b338[];
+extern "C" char g_164b33c[];
+extern "C" char g_164b378[];
+extern "C" char g_164b37c[];
+extern "C" char g_164b380[];
+extern "C" char g_164b394[];
+extern "C" char g_164b398[];
+extern "C" char g_164b39c[];
+extern "C" char g_164b3e4[];
+extern "C" char g_164b3e8[];
+extern "C" char g_164b3ec[];
+extern "C" char g_164b448[];
+extern "C" char g_164b44c[];
+extern "C" char g_164b450[];
+extern "C" char g_164b454[];
+extern "C" char g_164b4b8[];
+extern "C" char g_164b4bc[];
+extern "C" char g_164b4c0[];
+extern "C" char g_164b4c4[];
+extern "C" char g_164b4c8[];
+extern "C" char g_164b4cc[];
+extern "C" char g_164b4d0[];
+extern "C" char g_164b4d4[];
+extern "C" char g_164b4d8[];
+extern "C" char g_164b4dc[];
+extern "C" char g_164b504[];
+extern "C" char g_164b508[];
+extern "C" char g_164b50c[];
+
 #include <xmmintrin.h>
 
 typedef unsigned int   uint;
@@ -97,24 +185,24 @@ struct PropDesc {
 void __cdecl CrossGameData_InitProps()
 {
     const unsigned int z      = 0;
-    const unsigned int DefOff = 0x00692ca0;   // Simulator::Attribute::DefaultOffset
-    const unsigned int Ser    = 0x00c2e4e0;   // UTFWin::ILayoutElement::SetSerializer
-    const unsigned int Clear  = 0x00692fb0;   // ?ClearBuffer@@YAXPAPAC@Z
-    const unsigned int Get    = 0x00676140;
-    const unsigned int Set    = 0x00675790;
-    const unsigned int F34    = 0x00675850;
-    const unsigned int F38    = 0x006761f0;
+    const unsigned int DefOff = (int)FUN_00692ca0;   // Simulator::Attribute::DefaultOffset
+    const unsigned int Ser    = (int)FUN_00c2e4e0;   // UTFWin::ILayoutElement::SetSerializer
+    const unsigned int Clear  = (int)FUN_00692fb0;   // ?ClearBuffer@@YAXPAPAC@Z
+    const unsigned int Get    = (int)FUN_00676140;
+    const unsigned int Set    = (int)FUN_00675790;
+    const unsigned int F34    = (int)FUN_00675850;
+    const unsigned int F38    = (int)FUN_006761f0;
 
     PropDesc d;
 
     d.name = "mAchievementSet";            d.kind = 0xabce0000;
     d.zero18 = z; d.zero1c = z;
     d.defOffset = DefOff;
-    d.getter = 0x00676540; d.setter = 0x00f27200;
+    d.getter = (int)FUN_00676540; d.setter = (int)FUN_00f27200;
     d.serializer = Ser; d.clearBuffer = Clear;
-    d.fn34 = 0x00b1fbf0; d.fn38 = 0x00675ff0;
+    d.fn34 = (int)FUN_00b1fbf0; d.fn38 = (int)FUN_00675ff0;
     d.offset = 0x24;
-    *(PropDesc*)0x01529330 = d;
+    *(PropDesc*)g_1529330 = d;
 
     d.name = "mCrossGameData.mEncounteredCreatures"; d.kind = 0xabce0004;
     d.zero18 = z; d.zero1c = z;
@@ -123,7 +211,7 @@ void __cdecl CrossGameData_InitProps()
     d.serializer = Ser; d.clearBuffer = Clear;
     d.fn34 = F34; d.fn38 = F38;
     d.offset = 0x5c;
-    *(PropDesc*)0x0152936c = d;
+    *(PropDesc*)g_152936c = d;
 
     d.name = "mCrossGameData.mTribeGamesCompleted"; d.kind = 0xabce0005;
     d.zero18 = z; d.zero1c = z;
@@ -132,7 +220,7 @@ void __cdecl CrossGameData_InitProps()
     d.serializer = Ser; d.clearBuffer = Clear;
     d.fn34 = F34; d.fn38 = F38;
     d.offset = 0x9c;
-    *(PropDesc*)0x015293a8 = d;
+    *(PropDesc*)g_15293a8 = d;
 
     d.name = "mCrossGameData.mEatenCreatures"; d.kind = 0xabce0006;
     d.zero18 = z; d.zero1c = z;
@@ -141,7 +229,7 @@ void __cdecl CrossGameData_InitProps()
     d.serializer = Ser; d.clearBuffer = Clear;
     d.fn34 = F34; d.fn38 = F38;
     d.offset = 0x7c;
-    *(PropDesc*)0x015293e4 = d;
+    *(PropDesc*)g_15293e4 = d;
 
     d.name = "mCrossGameData.mCellGameIDs"; d.kind = 0xabce0007;
     d.zero18 = z; d.zero1c = z;
@@ -150,7 +238,7 @@ void __cdecl CrossGameData_InitProps()
     d.serializer = Ser; d.clearBuffer = Clear;
     d.fn34 = F34; d.fn38 = F38;
     d.offset = 0x3c;
-    *(PropDesc*)0x01529420 = d;
+    *(PropDesc*)g_1529420 = d;
 }
 
 // =============================================================================
@@ -162,7 +250,7 @@ extern uint DAT_01604e60, DAT_01604e68, DAT_015301e8, DAT_015301f0, DAT_015301f8
 void __cdecl Mask_1()
 {
     DAT_01604e60 &= 0xff0fffff;
-    *(unsigned char*)0x01604e63 = 0;
+    ((unsigned char*)&DAT_01604e60)[3] = 0;   // the byte at 0x01604e63
     DAT_01604e60 &= 0xfff00000;
 }
 
@@ -294,7 +382,7 @@ void __cdecl CopyVec3_AndMatrix()
     DAT_01531ca8 = DAT_01606a30;
     DAT_01531cac = DAT_01606a34;
     DAT_01531cb0 = DAT_01606a38;
-    ((Matrix3*)0x01531cb8)->Assign((const void*)0x01606c0c);
+    ((Matrix3*)g_1531cb8)->Assign((const void*)g_1606c0c);
 }
 
 struct V3 { float x, y, z; };
@@ -322,25 +410,25 @@ void __cdecl SetRecipSqrt_1()
 {
     // x87: fld [x]; fmul [scale]; fld1; fdivrp st(1); fsqrt; fstp [dst]
     //     = sqrt(1.0 / (x * scale))
-    *(float*)0x016299f4 = (float)sqrt(1.0 / (double)(*(float*)0x01535958 * DAT_014853e0));
+    *(float*)g_16299f4 = (float)sqrt(1.0 / (double)(*(float*)g_1535958 * DAT_014853e0));
 }
 
 // @ 0x012e45f0
 void __cdecl SetRecipSqrt_2()
 {
-    *(float*)0x01634100 = (float)sqrt(1.0 / (double)(*(float*)0x0163411c * DAT_014853e0));
+    *(float*)g_1634100 = (float)sqrt(1.0 / (double)(*(float*)g_163411c * DAT_014853e0));
 }
 
 // @ 0x012e4930
 void __cdecl SetRecipSqrt_3()
 {
-    *(float*)0x016340e0 = (float)sqrt(1.0 / (double)(*(float*)0x0163411c * DAT_014853e0));
+    *(float*)g_16340e0 = (float)sqrt(1.0 / (double)(*(float*)g_163411c * DAT_014853e0));
 }
 
 // @ 0x012dde20
 void __cdecl SetOneMinus()
 {
-    *(float*)0x0162f0e8 = DAT_01485720 - *(float*)0x01538130;
+    *(float*)g_162f0e8 = DAT_01485720 - *(float*)g_1538130;
 }
 
 // The identity-matrix globals are written as whole 16-byte SSE stores.
@@ -361,46 +449,46 @@ void __cdecl SetIdentityMatrix()
 // @ 0x012c5ae0
 void __cdecl RegList_Init()
 {
-    lib_crt_ctor_array((void*)0x016032a8, 0x150, 0xb,
-                       (void (__cdecl*)(void*))0x006ac770,
-                       (void (__cdecl*)(void*))0x006ac6f0);
-    lib_crt_atexit((void (__cdecl*)())0x013bed40);
+    lib_crt_ctor_array((void*)g_16032a8, 0x150, 0xb,
+                       (void (__cdecl*)(void*))FUN_006ac770,
+                       (void (__cdecl*)(void*))FUN_006ac6f0);
+    lib_crt_atexit((void (__cdecl*)())FUN_013bed40);
 }
 
 // @ 0x012d3830
 void __cdecl PixelFrag_Init()
 {
-    lib_crt_ctor_array((void*)0x016198c0, 0x64, 0x100,
-                       (void (__cdecl*)(void*))0x006fafe0,
-                       (void (__cdecl*)(void*))0x006fb040);
-    lib_crt_atexit((void (__cdecl*)())0x013bf360);
+    lib_crt_ctor_array((void*)g_16198c0, 0x64, 0x100,
+                       (void (__cdecl*)(void*))FUN_006fafe0,
+                       (void (__cdecl*)(void*))FUN_006fb040);
+    lib_crt_atexit((void (__cdecl*)())FUN_013bf360);
 }
 
 // @ 0x012d51f0
 void __cdecl VertexFrag_Init()
 {
-    lib_crt_ctor_array((void*)0x01624710, 0x44, 0x100,
-                       (void (__cdecl*)(void*))0x006fe7f0,
-                       (void (__cdecl*)(void*))0x006fe830);
-    lib_crt_atexit((void (__cdecl*)())0x013bf480);
+    lib_crt_ctor_array((void*)g_1624710, 0x44, 0x100,
+                       (void (__cdecl*)(void*))FUN_006fe7f0,
+                       (void (__cdecl*)(void*))FUN_006fe830);
+    lib_crt_atexit((void (__cdecl*)())FUN_013bf480);
 }
 
 // @ 0x012d5250
 void __cdecl PoolAlloc_Init()
 {
-    ((StackAllocator*)0x01628b98)->ctor((void*)0, 0xffffffff,
-                                        (void*)0x00928ad0, (void*)0x00f47410,
-                                        (void*)0x0140c35c);
-    lib_crt_atexit((void (__cdecl*)())0x013bf410);
+    ((StackAllocator*)g_1628b98)->ctor((void*)0, 0xffffffff,
+                                        (void*)FUN_00928ad0, (void*)FUN_00f47410,
+                                        (void*)g_140c35c);
+    lib_crt_atexit((void (__cdecl*)())FUN_013bf410);
 }
 
 // @ 0x012d3890
 void __cdecl PoolAllocPS_Init()
 {
-    ((StackAllocator*)0x0161fda4)->ctor((void*)0, 0xffffffff,
-                                        (void*)0x00928ad0, (void*)0x00f47410,
-                                        (void*)0x0140bbcc);
-    lib_crt_atexit((void (__cdecl*)())0x013bf2f0);
+    ((StackAllocator*)g_161fda4)->ctor((void*)0, 0xffffffff,
+                                        (void*)FUN_00928ad0, (void*)FUN_00f47410,
+                                        (void*)g_140bbcc);
+    lib_crt_atexit((void (__cdecl*)())FUN_013bf2f0);
 }
 
 // =============================================================================
@@ -440,29 +528,29 @@ void __cdecl InitDescTable()
 // @ 0x012f61e0
 void __cdecl SetColor_1()
 {
-    ((UintArray*)0x0164b394)->Self();
+    ((UintArray*)g_164b394)->Self();
     float one = DAT_01485720;
-    *(float*)0x0164b394 = one;
-    *(float*)0x0164b398 = one;
-    *(float*)0x0164b39c = one;
+    *(float*)g_164b394 = one;
+    *(float*)g_164b398 = one;
+    *(float*)g_164b39c = one;
 }
 
 // @ 0x012f6210
 void __cdecl SetColor_2()
 {
-    ((UintArray*)0x0164b200)->Self();
-    *(float*)0x0164b200 = 0.0f;
-    *(float*)0x0164b204 = 0.0f;
-    *(float*)0x0164b208 = 0.0f;
+    ((UintArray*)g_164b200)->Self();
+    *(float*)g_164b200 = 0.0f;
+    *(float*)g_164b204 = 0.0f;
+    *(float*)g_164b208 = 0.0f;
 }
 
 // @ 0x012f6240
 void __cdecl SetColor_3()
 {
-    ((UintArray*)0x0164b3e4)->Self();
-    *(float*)0x0164b3e4 = DAT_01485720;
-    *(float*)0x0164b3e8 = 0.0f;
-    *(float*)0x0164b3ec = 0.0f;
+    ((UintArray*)g_164b3e4)->Self();
+    *(float*)g_164b3e4 = DAT_01485720;
+    *(float*)g_164b3e8 = 0.0f;
+    *(float*)g_164b3ec = 0.0f;
 }
 
 // @ 0x012f6270
@@ -479,82 +567,82 @@ void __cdecl SetColor_4()
 // @ 0x012f62a0
 void __cdecl SetColor_5()
 {
-    ((UintArray*)0x0164b4b8)->Self();
-    *(float*)0x0164b4b8 = 0.0f;
-    *(float*)0x0164b4bc = 0.0f;
-    *(float*)0x0164b4c0 = DAT_01485720;
+    ((UintArray*)g_164b4b8)->Self();
+    *(float*)g_164b4b8 = 0.0f;
+    *(float*)g_164b4bc = 0.0f;
+    *(float*)g_164b4c0 = DAT_01485720;
 }
 
 // @ 0x012f62d0
 void __cdecl SetColor_6()
 {
-    ((UintArray*)0x0164b378)->Self();
+    ((UintArray*)g_164b378)->Self();
     float one = DAT_01485720;
     float zero = 0.0f;
-    *(float*)0x0164b378 = one;
-    *(float*)0x0164b37c = zero;
-    *(float*)0x0164b380 = one;
+    *(float*)g_164b378 = one;
+    *(float*)g_164b37c = zero;
+    *(float*)g_164b380 = one;
 }
 
 // @ 0x012f6300
 void __cdecl SetColor_7()
 {
-    ((UintArray*)0x0164b4d4)->Self();
+    ((UintArray*)g_164b4d4)->Self();
     float one = DAT_01485720;
-    *(float*)0x0164b4d4 = one;
-    *(float*)0x0164b4d8 = one;
-    *(float*)0x0164b4dc = 0.0f;
+    *(float*)g_164b4d4 = one;
+    *(float*)g_164b4d8 = one;
+    *(float*)g_164b4dc = 0.0f;
 }
 
 // @ 0x012f6330
 void __cdecl SetColor_8()
 {
-    ((UintArray*)0x0164b504)->Self();
-    *(float*)0x0164b504 = 0.0f;
+    ((UintArray*)g_164b504)->Self();
+    *(float*)g_164b504 = 0.0f;
     float one = DAT_01485720;
-    *(float*)0x0164b508 = one;
-    *(float*)0x0164b50c = one;
+    *(float*)g_164b508 = one;
+    *(float*)g_164b50c = one;
 }
 
 // @ 0x012f6360
 void __cdecl SetColor_9()
 {
-    ((UintArray*)0x0164b2c4)->Self();
-    *(float*)0x0164b2c4 = DAT_01485720;
-    *(float*)0x0164b2c8 = DAT_01471064;
-    *(float*)0x0164b2cc = 0.0f;
+    ((UintArray*)g_164b2c4)->Self();
+    *(float*)g_164b2c4 = DAT_01485720;
+    *(float*)g_164b2c8 = DAT_01471064;
+    *(float*)g_164b2cc = 0.0f;
 }
 
 // @ 0x012f63a0
 void __cdecl SetColor_10()
 {
-    ((UintArray*)0x0164b4c4)->Self();
+    ((UintArray*)g_164b4c4)->Self();
     float one = DAT_01485720;
-    *(float*)0x0164b4c4 = one;
-    *(float*)0x0164b4c8 = one;
-    *(float*)0x0164b4cc = one;
-    *(float*)0x0164b4d0 = one;
+    *(float*)g_164b4c4 = one;
+    *(float*)g_164b4c8 = one;
+    *(float*)g_164b4cc = one;
+    *(float*)g_164b4d0 = one;
 }
 
 // @ 0x012f63e0
 void __cdecl SetColor_11()
 {
-    ((UintArray*)0x0164b330)->Self();
-    *(float*)0x0164b330 = 0.0f;
-    *(float*)0x0164b334 = 0.0f;
-    *(float*)0x0164b338 = 0.0f;
-    *(float*)0x0164b33c = DAT_01485720;
+    ((UintArray*)g_164b330)->Self();
+    *(float*)g_164b330 = 0.0f;
+    *(float*)g_164b334 = 0.0f;
+    *(float*)g_164b338 = 0.0f;
+    *(float*)g_164b33c = DAT_01485720;
 }
 
 // @ 0x012f6420
 void __cdecl SetColor_12()
 {
-    ((UintArray*)0x0164b26c)->Self();
+    ((UintArray*)g_164b26c)->Self();
     float one = DAT_01485720;
-    *(float*)0x0164b26c = one;
-    *(float*)0x0164b270 = 0.0f;
-    *(float*)0x0164b274 = 0.0f;
-    *(float*)0x0164b278 = one;
+    *(float*)g_164b26c = one;
+    *(float*)g_164b270 = 0.0f;
+    *(float*)g_164b274 = 0.0f;
+    *(float*)g_164b278 = one;
 }
 
 // @ 0x012f6460
@@ -570,10 +658,10 @@ void __cdecl SetColor_13()
 // @ 0x012f64a0
 void __cdecl SetColor_14()
 {
-    ((UintArray*)0x0164b448)->Self();
-    *(float*)0x0164b448 = 0.0f;
-    *(float*)0x0164b44c = 0.0f;
+    ((UintArray*)g_164b448)->Self();
+    *(float*)g_164b448 = 0.0f;
+    *(float*)g_164b44c = 0.0f;
     float one = DAT_01485720;
-    *(float*)0x0164b450 = one;
-    *(float*)0x0164b454 = one;
+    *(float*)g_164b450 = one;
+    *(float*)g_164b454 = one;
 }
