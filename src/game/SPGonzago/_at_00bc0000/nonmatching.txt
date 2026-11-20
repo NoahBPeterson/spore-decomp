@@ -8,7 +8,6 @@
 00bc3c20 361 complete; float op ordering / x87 vs SSE mix differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00bc40a0 330 complete vector<12-byte>::insert(range); size/ordering differences flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00bc4280 65 complete; loop register allocation differs (induction on &buf) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00bc4370 74 complete; first held in memory in original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00bc43d0 290 complete vector<4-byte>::insert(range); byte-size arithmetic differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00bc4630 11 complete (Big ctor of 7 fixed_vectors + fixed_string); one store order swap at +0x768 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00bc4820 125 complete: Entry (0x954) construction -- base PropRecord ctor at +0x20 then the four inline fixed_vector<void*,N> members at +0x7e0/+0x878/+0x8d4/+0x92c; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS 392 facilities/100% coverage; only the store ordering of begin/end/capacity+allocator word and the lea-vs-add strength reduction differ

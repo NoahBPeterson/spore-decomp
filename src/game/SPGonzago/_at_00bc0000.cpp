@@ -2812,20 +2812,26 @@ Elem98* __cdecl FUN_00bc4310(const Elem98* first, const Elem98* last, Elem98* ds
     return dst;
 }
 
+struct Elem98CIter {
+    const Elem98* p;
+    bool operator!=(const Elem98CIter& o) const { return p != o.p; }
+    Elem98CIter& operator++() { ++p; return *this; }
+};
 // @ 0x00bc4370
-Elem98** __cdecl FUN_00bc4370(Elem98** out, const Elem98* first, const Elem98* last, Elem98* dst)
+Elem98** __cdecl FUN_00bc4370(Elem98** out, Elem98CIter first, Elem98CIter last, Elem98* dst)
 {
     *out = dst;
     for (; first != last; ++first) {
         Elem98* e = *out;
         if (e) {
+            const Elem98* src = first.p;
             e->mpBegin = e->buf;
             e->mpEnd = e->buf;
             e->overflow = 0;
-            e->mpCap = e->buf + 32;
-            e->assign(first);
+            e->mpCap = (void**)e->mpBegin + 32;
+            e->assign(src);
         }
-        *out = *out + 1;
+        ++*out;
     }
     return out;
 }
