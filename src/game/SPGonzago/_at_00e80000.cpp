@@ -565,9 +565,7 @@ void FUN_00e868f0(SphereTree* tree, const Vector3_s00e8_5dc0* pos, float f, int 
 void FUN_00e86930(SphereTree* tree, Node* node)
 {
   Node* parent = node->parent;
-  Node* sibling = parent->next;
-  if (sibling == node)
-    sibling = parent->right;
+  Node* sibling = (parent->next == node) ? parent->right : parent->next;
   Node* grand = parent->parent;
   Node** link = (grand->next == parent) ? &grand->next : &grand->right;
   FreeSphereNode(tree, parent);

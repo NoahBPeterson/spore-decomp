@@ -1882,11 +1882,12 @@ void __cdecl FUN_00feca80(cOutStream* pOut, tSerializeNode* pList)
 // @ 0x00fecb20
 void cTimerList::DestroyAll()
 {
-    for (tTimerNode* p = mpNext; p != (tTimerNode*)this; ) {
-        tTimerNode* pNext = p->mpNext;
-        p->mValue.mTimer.Destroy();
-        operator_delete_array(p);
-        p = pNext;
+    tTimerNode* p = mpNext;
+    while (p != (tTimerNode*)this) {
+        tTimerNode* pCur = p;
+        p = p->mpNext;
+        pCur->mValue.mTimer.Destroy();
+        operator_delete_array(pCur);
     }
 }
 

@@ -229,10 +229,12 @@ void __fastcall FUN_00ecdb90(int* p)
 
 // ============================================================ 0x00ecdbb0
 // @ 0x00ecdbb0
-void __fastcall FUN_00ecdbb0(int p)
+int __fastcall FUN_00ecdbb0(int p)
 {
-    if (*(int*)(p + 0x14) == (int)0x867a9ee9)
-        FUN_00eece20(p + 0x18);
+    int r = *(int*)(p + 0x14);
+    if (r == (int)0x867a9ee9)
+        r = FUN_00eece20(p + 0x18);
+    return r;
 }
 
 // ============================================================ 0x00ecdc20

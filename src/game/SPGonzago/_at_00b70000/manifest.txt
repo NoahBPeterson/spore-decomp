@@ -56,3 +56,4 @@
 ../src/game/SPGonzago/_at_00b70000.cpp  ?erase@MotiveMap@@QAE?AU?$rbtree_iterator@U?$pair@PAXPAX@eastl@@@eastl@@U23@@Z  00b71730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?AllocNode2@Simulator_cObstacle@@QAEPAXPAH@Z  00b74bc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?AllocNode3@Simulator_cObstacle@@QAEPAXPAH@Z  00b74b60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Insert@ObMgr@@QAE?AUInsertResult@1@PAHH@Z  00b795c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

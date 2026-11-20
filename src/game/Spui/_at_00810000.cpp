@@ -547,10 +547,11 @@ static inline void FreeStrW(Str16* s) {
     if ((int)(((u32)s->mCap - (u32)s->mBegin) & 0xfffffffe) > 2 && s->mBegin)
         MemFreeW(s->mBegin);
 }
+extern wchar_t gEmptyString16[];     // 0x01667bac
 static inline void InitStrW(Str16* s) {
-    s->mBegin = (void*)0x1667bac;
-    s->mEnd   = (void*)0x1667bac;
-    s->mCap   = (void*)0x1667bae;
+    s->mBegin = gEmptyString16;
+    s->mEnd   = gEmptyString16;
+    s->mCap   = gEmptyString16 + 1;
 }
 static inline void Vv0c(void* p, int off) {
     void** vt = *(void***)p;
@@ -1033,18 +1034,20 @@ void cSPUIMovieRecordUI::reload(int arg)
     Vv1(o, 0x1c, (int)base8);
 }
 
+extern "C" char g_14426a0[];    // vtable retail relocates here
 // @ 0x00817a40
 cSPUIMovieRecordUI* __fastcall FUN_00817a40raw(cSPUIMovieRecordUI* p)
 {
     void** slot = (void**)((char*)p + 0x10);
-    *(void**)0x164d858 = (void*)slot;
-    p->mVt0 = (void*)0x14426a0;
-    p->mVt1 = (void*)0x13eb394;
+    *(void**)g_164d858 = (void*)slot;   // registrar slot
+    p->mVt0 = g_14426a0;
+    *(void* volatile*)&p->mVt1 = g_13eb394;
     cTokBase& base = *(cTokBase*)((char*)p + 8);
     base.Construct();
-    p->mVt0 = (void*)0x1418e70;
-    p->mVt1 = (void*)0x1418e68;
-    base.mVt = (void*)0x1418e50;
+    p->mVt0 = g_1418e70;
+    p->mVt1 = g_1418e68;
+    base.mVt = g_1418e50;
+    _ReadWriteBarrier();
     *slot = 0;
     p->mW1 = 0;
     p->mW2 = 0;

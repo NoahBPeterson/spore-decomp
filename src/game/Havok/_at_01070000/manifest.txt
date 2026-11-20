@@ -6,3 +6,6 @@
 ../src/game/Havok/_at_01070000.cpp  ?findKey@?$hkPointerMapBase@K@@QBEPAVDummy@@K@Z  0107def0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_01070000.cpp  ?get@?$hkPointerMapBase@K@@QBE?AW4hkResult@@KPAK@Z  0107df30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_01070000.cpp  ?getWithDefault@?$hkPointerMapBase@K@@QBEKKK@Z  0107e540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?remove@?$hkPointerMapBase@K@@QAE?AW4hkResult@@K@Z  0107e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?FUN_0107e5b0@?$hkPointerMapBase@K@@QAEXH@Z  0107e5b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?FUN_0107e5d0@?$hkPointerMapBase@_K@@QAEXH@Z  0107e5d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

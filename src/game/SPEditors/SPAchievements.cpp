@@ -773,7 +773,7 @@ void __fastcall FUN_006792f0(char* p)
     int v = *q;
     *(int*)(p + 0xc) = v;
     *(int*)(p + 0x10) = v + 0x4d0;
-    *(int*)(p + 8) = *(int*)(p + 0xc);
+    *(int*)(p + 8) = *(volatile int*)(p + 0xc);
 }
 
 // @ 0x00679630

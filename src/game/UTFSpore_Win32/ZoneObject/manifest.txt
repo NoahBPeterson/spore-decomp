@@ -3,3 +3,4 @@
 ../src/game/UTFSpore_Win32/ZoneObject.cpp  ??2ZoneObject@Allocator@EA@@SAPAXIPAVICoreAllocator@12@PBD@Z  00925fe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ZoneObject.cpp  ??2ZoneObject@Allocator@EA@@SAPAXIPBDHH0H@Z  00926020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ZoneObject.cpp  ?F@C25f30@Trace@EA@@QAEPAU123@HHH@Z  00925f30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ZoneObject.cpp  ?ZoneObject_delete@Trace@EA@@YAXPAX@Z  00926060  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

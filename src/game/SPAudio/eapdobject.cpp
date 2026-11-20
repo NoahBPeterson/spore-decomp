@@ -429,15 +429,15 @@ t_inlet* inlet_new(t_object* owner, t_pd* dest, t_symbol s1, t_symbol s2)
 {
     t_inlet* x = (t_inlet*)pd_new(spInletClass);
     if (x) {
-        t_inlet* i2;
+        t_inlet *i2, *i3;
         x->i_owner = owner;
         x->i_dest = dest;
         x->u.i_symto = s2;
         x->i_symfrom = s1;
         x->i_next = 0;
         if ((i2 = owner->te_inlet)) {
-            for (; i2->i_next; i2 = i2->i_next)
-                ;
+            while ((i3 = i2->i_next))
+                i2 = i3;
             i2->i_next = x;
         } else {
             owner->te_inlet = x;
@@ -528,15 +528,15 @@ t_inlet* floatinlet_new(t_object* owner, float* dest)
 {
     t_inlet* x = (t_inlet*)pd_new(spFloatinletClass);
     if (x) {
-        t_inlet* i2;
+        t_inlet *i2, *i3;
         x->i_owner = owner;
         x->i_dest = 0;
         x->i_symfrom = gFloatSymbol;
         x->u.i_destp = dest;
         x->i_next = 0;
         if ((i2 = owner->te_inlet)) {
-            for (; i2->i_next; i2 = i2->i_next)
-                ;
+            while ((i3 = i2->i_next))
+                i2 = i3;
             i2->i_next = x;
         } else {
             owner->te_inlet = x;
@@ -562,15 +562,15 @@ t_inlet* symbolinlet_new(t_object* owner, t_symbol* dest)
 {
     t_inlet* x = (t_inlet*)pd_new(spSymbolinletClass);
     if (x) {
-        t_inlet* i2;
+        t_inlet *i2, *i3;
         x->i_owner = owner;
         x->i_dest = 0;
         x->i_symfrom = gSymbolSymbol;
         x->u.i_destp = dest;
         x->i_next = 0;
         if ((i2 = owner->te_inlet)) {
-            for (; i2->i_next; i2 = i2->i_next)
-                ;
+            while ((i3 = i2->i_next))
+                i2 = i3;
             i2->i_next = x;
         } else {
             owner->te_inlet = x;
@@ -662,13 +662,13 @@ namespace EA { namespace Audio { namespace Eapd {
 t_outlet* outlet_new(t_object* owner, t_symbol s)
 {
     t_outlet* o = (t_outlet*)getbytes(0x1c, "EAPd/t_outlet");
-    t_outlet* o2;
+    t_outlet *o2, *o3;
 
     o->o_owner = owner;
     o->o_next = 0;
     if ((o2 = owner->te_outlet)) {
-        for (; o2->o_next; o2 = o2->o_next)
-            ;
+        while ((o3 = o2->o_next))
+            o2 = o3;
         o2->o_next = o;
     } else {
         owner->te_outlet = o;

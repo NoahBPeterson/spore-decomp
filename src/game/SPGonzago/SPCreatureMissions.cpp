@@ -809,20 +809,28 @@ int* __fastcall FUN_00c2f340(int* self)
     return self;
 }
 
+extern "C" char g_146b0f8[];   // 0x146b0f8: tutorial mission vtable (primary)
+extern "C" char g_146b0e8[];   // 0x146b0e8: tutorial mission vtable (+4 base)
+extern "C" char g_146b0d8[];   // 0x146b0d8: tutorial mission vtable (+0x34 base)
+extern "C" char g_146aff0[];   // 0x146aff0: base mission vtable (primary)
+extern "C" char g_146afdc[];   // 0x146afdc: base mission vtable (+4 base)
+extern "C" char g_146afcc[];   // 0x146afcc: base mission vtable (+0x34 base)
+
 // @ 0x00c2f3e0
 void __fastcall FUN_00c2f3e0(int* self)
 {
-    self[0] = 0x146b0f8;
-    self[1] = 0x146b0e8;
-    self[0xd] = 0x146b0d8;
+    self[0] = (int)g_146b0f8;
+    self[1] = (int)g_146b0e8;
+    self[0xd] = (int)g_146b0d8;
+    _ReadWriteBarrier();
     int* p = (int*)self[0x20];
     if (p != 0) {
         typedef void (__fastcall *Fn)(void*);
         ((Fn*)p[0])[1](p);
     }
-    self[0] = 0x146aff0;
-    self[1] = 0x146afdc;
-    self[0xd] = 0x146afcc;
+    self[0] = (int)g_146aff0;
+    self[1] = (int)g_146afdc;
+    self[0xd] = (int)g_146afcc;
     ((C45140Dtor*)self)->FUN_00c45140();
 }
 

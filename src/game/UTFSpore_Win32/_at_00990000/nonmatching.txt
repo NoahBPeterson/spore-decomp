@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00997b60 14 Obj33::ctor: dead first vtable store and register choice differ; now returns this (original moves ecx into eax at entry and leaves it); equiv PASS (400 valid, 100% coverage); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00997ba0 44 Obj33::clear: end-pointer kept in a register instead of reloaded; zero arg folded flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00997bf0 29 HitMaskBinder::Bind: complete; vcall fetch scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998920 168 KeyHT::equal_range: complete; returns `out` in eax on both exits like the original; difftest PASS (219 valid inputs, 86.8% coverage, no mismatch) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

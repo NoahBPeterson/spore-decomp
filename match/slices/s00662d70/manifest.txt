@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00662d70/s00662d70.cpp  ?ShutdownCategories@cSPUIFeedList@@QAEXXZ  00663490  /O2 /MD /Gy /EHsc /TP
+slices/s00662d70/s00662d70.cpp  ?FUN_00663680@@YAXPADHD@Z  00663680  /O2 /MD /Gy /TP /arch:SSE2

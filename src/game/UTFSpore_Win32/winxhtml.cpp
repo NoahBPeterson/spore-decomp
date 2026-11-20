@@ -466,9 +466,9 @@ void __fastcall FUN_00992e60(char* self, int, i32 v)
 {
     if (v != (i32)ld32(self, 0xa8dc)) {
         char* win = self + 4;
-        i32 cur = ((SlotGetInt)(*(u32*)win + 0x24))(win);
+        i32 cur = ((SlotGetInt)*(u32*)(*(u32*)win + 0x24))(win);
         if (cur == (i32)ld32(self, 0xa8dc)) {
-            ((SlotSetInt)(*(u32*)win + 0x78))(win, v);
+            ((SlotSetInt)*(u32*)(*(u32*)win + 0x78))(win, v);
         }
         st32(self, 0xa8dc, (u32)v);
     }
@@ -479,9 +479,9 @@ void __fastcall FUN_00992ea0(char* self, int, i32 v)
 {
     if (v != (i32)ld32(self, 0xa8e0)) {
         char* win = self + 4;
-        i32 cur = ((SlotGetInt)(*(u32*)win + 0x24))(win);
+        i32 cur = ((SlotGetInt)*(u32*)(*(u32*)win + 0x24))(win);
         if (cur == (i32)ld32(self, 0xa8e0)) {
-            ((SlotSetInt)(*(u32*)win + 0x78))(win, v);
+            ((SlotSetInt)*(u32*)(*(u32*)win + 0x78))(win, v);
         }
         st32(self, 0xa8e0, (u32)v);
     }

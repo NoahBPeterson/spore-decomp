@@ -1017,6 +1017,7 @@ bool EA::ResourceMan::DatabasePackedFile::Shutdown()
             Close();
         DestroyIndex(mpIndex);
         mpIndex = 0;
+        _ReadWriteBarrier();
         if (mpStream.mpObject) {
             EA::IO::IStream* p = mpStream.mpObject;
             mpStream.mpObject = 0;
@@ -1413,11 +1414,9 @@ bool EA::ResourceMan::DatabasePackedFile::ReadRecordRaw(EA::ResourceMan::Key con
     mMutex.Lock(EA::Thread::kTimeoutNone);
     if (mnAccessFlags != 0) {
         const PFRecordInfo* e = (const PFRecordInfo*)mpIndex->FindRecord(key);
-        unsigned esize = e->mnSize;
-        unsigned n = size;
-        if (n > esize)
-            n = esize;
-        bool r = ReadFileSpan(dst, e->mnPosition, n);
+        if (size > e->mnSize)
+            size = e->mnSize;
+        bool r = ReadFileSpan(dst, e->mnPosition, size);
         mMutex.Unlock();
         return r;
     }
@@ -2172,19 +2171,12 @@ void FUN_008dace0(SortNode** p1, SortNode** p2)
 // @ 0x008dad30
 void FUN_008dad30(SortNode** p1, SortNode** p2)
 {
-    for (; p1 != p2; p1 = p1 + 1) {
-        SortNode** j = p1;
-        SortNode* prev = p1[-1];
-        SortNode** k = p1 - 1;
+    for (; p1 != p2; ++p1) {
         SortNode* key = *p1;
-        if (key->key < prev->key) {
-            do {
-                *j = prev;
-                j = k;
-                prev = j[-1];
-                k = j - 1;
-            } while (key->key < prev->key);
-        }
+        SortNode** j = p1;
+        SortNode** k = p1;
+        for (--k; key->key < (*k)->key; --j, --k)
+            *j = *k;
         *j = key;
     }
 }
@@ -2645,6 +2637,7 @@ bool PFIndexModifiable_s008d_aff0::RemoveFile(const void* key, void* out)
 HoleSet_s008d_aff0::HoleSet_s008d_aff0()
 {
     mExtent = -1;
+    _ReadWriteBarrier();
     char* p = (char*)this + 8;
     *(void**)(p + 4) = 0;
     *(void**)(p + 8) = 0;

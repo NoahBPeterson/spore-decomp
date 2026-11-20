@@ -767,7 +767,7 @@ int cMultiBlender_s0075_b520::GetBlendState()
         int* r = (int*)p->m_remapDataPtr;
         if (r == 0 || *r == 0)
             return ((int (__thiscall*)(void*))p->m_vTable->m_GetOutputNames)(p);
-        v = *r;
+        v = *(volatile int*)r;
     }
     return v;
 }

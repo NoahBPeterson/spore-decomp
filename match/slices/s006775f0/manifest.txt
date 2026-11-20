@@ -14,3 +14,4 @@ slices/s006775f0/s006775f0.cpp  ?DoInit@DequeBaseB4@@QAEXI@Z  006781d0  /O2 /MD 
 slices/s006775f0/s006775f0.cpp  ?do_copy@CopyImpl@@SAPAUAutoRef@@PBU2@0PAU2@@Z  006782c0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s006775f0/s006775f0.cpp  ?FindWindowShow@@YAXPAURefObj@@PAX_N@Z  00678310  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s006775f0/s006775f0.cpp  ?SelectWindow@@YAXPAURefObj@@PAX@Z  00678370  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s006775f0/s006775f0.cpp  ??0cSpaceInventory@@QAE@XZ  006775f0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

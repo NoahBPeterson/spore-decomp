@@ -297,14 +297,14 @@ bool __stdcall AudioCopyPtr(int a, int b, void** out)
 bool __stdcall AudioFuncAC(int a, int b, int c, float d)
 {
     AudioSystem* s = GetSystemAT();
-    return s->CallAC(a, b, d, 0) != 0;
+    return (bool)s->CallAC(a, b, d, 0);
 }
 
 // @ 0x00a46080
 bool __stdcall AudioFuncA8(int a, int b, int c, int d, int e)
 {
     AudioSystem* s = GetSystemAT();
-    return s->CallA8(a, b, e, 0) != 0;
+    return (bool)s->CallA8(a, b, e, 0);
 }
 
 // @ 0x00a460b0

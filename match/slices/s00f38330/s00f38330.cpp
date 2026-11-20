@@ -6,6 +6,8 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13ec458[];
+extern "C" char g_13eb938[];
+extern "C" char g_13eb394[];
 extern "C" char g_13f08b8[];
 extern "C" char g_14426a0[];
 extern "C" char g_148d0ac[];
@@ -208,12 +210,12 @@ struct BaseTranslator {
 static void* const kpSetiVtbl0        = (void*)g_148d0bc;
 static void* const kpSetiVtbl4        = (void*)g_148d0ac;
 static void* const kpBaseVtbl4        = (void*)g_13ec458;
-static void* const kpBaseVtbl0DTor    = (void*)0x013EB938;
+static void* const kpBaseVtbl0DTor    = (void*)g_13eb938;
 static void* const kpBigVtbl0         = (void*)g_148d114;
 static void* const kpBigVtbl4         = (void*)g_148d0f8;
 static void* const kpBigVtbl8         = (void*)g_148d0e8;
 static void* const kpBigBaseVtbl4     = (void*)g_14426a0;
-static void* const kpBigBaseVtbl0DTor = (void*)0x013EB394;
+static void* const kpBigBaseVtbl0DTor = (void*)g_13eb394;
 static void* const kpTranslatorVtbl   = (void*)g_148d140;
 static void* const kpBigHandler       = (void*)0x0148D134;
 
@@ -398,13 +400,14 @@ void __fastcall FUN_00f38610(SetiPanel* p)
 {
     p->mpVtbl0 = kpSetiVtbl0;
     p->mpVtbl4 = kpSetiVtbl4;
+    _ReadWriteBarrier();
     if (p->mpLayout)   CallSlot0(p->mpLayout, 0x08);
     if (p->mpChildC)   ReleaseObj(p->mpChildC);
     if (p->mpChildB)   ReleaseObj(p->mpChildB);
     if (p->mpChildA)   ReleaseObj(p->mpChildA);
     if (p->mpParentWin) ReleaseObj(p->mpParentWin);
-    p->mpVtbl0 = kpBaseVtbl0DTor;
     p->mpVtbl4 = kpBaseVtbl4;
+    p->mpVtbl0 = kpBaseVtbl0DTor;
 }
 
 // ===========================================================================
@@ -687,6 +690,7 @@ void __fastcall FUN_00f38ce0(BigAssetView* p)
     p->mpVtbl0 = kpBigVtbl0;
     p->mpVtbl4 = kpBigVtbl4;
     p->mpVtbl8 = kpBigVtbl8;
+    _ReadWriteBarrier();
     if (p->mpExtra) ReleaseObj(p->mpExtra);
     p->mChildren.Clear();
     if (p->mpServer != 0) {

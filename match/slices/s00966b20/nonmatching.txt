@@ -16,7 +16,6 @@
 00966c70  std::list walk over the child's drawables; same control flow, but
           VC8 assigns the tree/iterator registers differently (loop body
           complete: begin/end iterators, RTTI cast, vcall 0x28 on the match).
-00966dc0  /O2 removes the two dead base-vtable stores at +4/+0xc that the
           original keeps (inlined-base-ctor DSE, same as the factories).
 00966ed0  same dead base-vtable stores at +4/+0xc removed by /O2.
 00966f30  same dead base-vtable stores at +4/+0xc removed by /O2.
