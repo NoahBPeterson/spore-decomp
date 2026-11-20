@@ -362,8 +362,8 @@ void cSim::FUN_00f3bd90(int idx, char val) {
 // ---------------------------------------------------------------------------
 bool cSim::FUN_00f3bde0(int idx) {
     cInner* inner = mpInner;
-    int count = (int)(((int)inner->p17c - (int)inner->p178) / 0x38);
-    if (idx >= 0 && idx < count) {
+    if (idx >= 0 && idx < (int)(((int)inner->p17c - (int)inner->p178) / 0x38)) {
+        _ReadWriteBarrier();
         return *(bool*)((char*)inner->p178 + 0x20 + idx * 0x38);
     }
     return false;
