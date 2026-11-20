@@ -644,9 +644,9 @@ void cSPUIFeedListCategory::FUN_006644e0(bool b)
 // @ 0x00664550
 bool cSPUIFeedListCategory::FUN_00664550(bool b)
 {
-    if (!b) return m14;
-    if (m14 && m60 && ((PredObj*)m60)->FUN_00a98020()) return true;
-    return false;
+    if (b)
+        return m14 && m60 && ((PredObj*)m60)->FUN_00a98020();
+    return m14;
 }
 
 

@@ -1,7 +1,6 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 00663be0  456  FeedListCategory message dispatch (548-byte switch on msg+8); behavior complete, but MSVC block ordering (def block placement), sub_b4/sub_b3 body order and register assignment differ; equiv: WEAK (29% coverage, no mismatch)
 00664480  67   Expand; the whole FindWindow/SetStateFlag block is guarded by `if (m80)` (matching the original's merge), and 0x00662b00 is a thiscall member on m60 (dummy FeedNotify) instead of a cdecl free call; ternary null-check/merge schedule differs; equiv: PASS (269 valid inputs, 96.8% coverage)
-00664550  38   predicate; return-value materialisation (setcc vs shared xor eax,eax / mov eax,1)
 00664610  34   element-at; original loads the index into edx first, cl hoists the header loads; a `_ReadWriteBarrier()` inside the bounds check pins the header reload after it, matching the original's order; equiv: PASS (382 valid inputs, 100% coverage)
 00664640  54   find-by-0x17c; cl assigns esi=begin/edx=index, original esi=index/ecx=begin
 00664680  54   find-by-0x134; same register-assignment divergence; equiv: PASS (100% coverage)
