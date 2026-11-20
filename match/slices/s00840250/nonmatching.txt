@@ -1,4 +1,3 @@
-00840890  46   complete: NextToken; strspn/strcspn return expression differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 008409b0  52   complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
 00840bb0  70   complete: ParseEnum; table walk + throw frame differ
 00840c20  21   complete: Sprintf; buf scan loop shape differs

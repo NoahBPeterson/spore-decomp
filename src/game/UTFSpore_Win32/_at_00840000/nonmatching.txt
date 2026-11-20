@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00840890 32 complete: NextToken; strspn/strcspn return expression differs flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 008476b0 181 FUN_008476b0: complete; SEH-framed include-command bootstrap; string16/vtable dispatch scheduling differs; difftest WEAK (236 valid, 23.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0084a230 206 SetEnabled: repeated mpCanvas/mD0 member reloads and vcall register schedule differ flags: /O2 /MD /Gy /TP
 0084fa60 137 TGA_display_check: original uses a non-C register convention (array in EBX, elem size in EDI, count on stack); complete faithful C rewrite, ABI not reproducible from C; difftest FAIL-KEPT (LTCG reg ABI: array EBX, elem size EDI); fixed compare-against-element-0 and early return flags: /O2 /MD /Gy /EHsc /TP /GS-
