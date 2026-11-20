@@ -1348,7 +1348,8 @@ __declspec(noinline) int __fastcall Fn8e3850(void* pThis)
 {
     char* base = (char*)pThis + 0x108;
     int* end = *(int**)(base + 4);
-    int  idx = (int)(((char*)end - *(char**)base) >> 2);
+    _ReadWriteBarrier();
+    int  idx = (int)(*(int**)(base + 4) - *(int**)base);
     int* local = 0;
     if ((char*)end < *(char**)(base + 8)) {
         *(int**)(base + 4) = end + 1;
