@@ -2287,18 +2287,16 @@ bool spigot_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
-    bool ok = true;
-
     sym = gensym(&s, "spigot");
     spSpigotClass = class_new_t2(*sym, (void*)spigot_new, 0, 0x30, 0, 5, 0);
-    ok = ok && (spSpigotClass != 0);
+    unsigned char ok = (unsigned char)((spSpigotClass != 0) & 1);
 
-    ok = class_addbang(spSpigotClass, (void*)spigot_bang) && ok;
-    ok = class_doaddfloat(spSpigotClass, (void*)spigot_float) && ok;
-    ok = class_addsymbol_s00a5_b510(spSpigotClass, (void*)spigot_symbol) && ok;
-    ok = class_addlist_s00a5_b510(spSpigotClass, (void*)spigot_list) && ok;
-    ok = class_addanything_s00a5_b510(spSpigotClass, (void*)spigot_anything) && ok;
-    return ok;
+    ok &= (unsigned char)class_addbang(spSpigotClass, (void*)spigot_bang);
+    ok &= (unsigned char)class_doaddfloat(spSpigotClass, (void*)spigot_float);
+    ok &= (unsigned char)class_addsymbol_s00a5_b510(spSpigotClass, (void*)spigot_symbol);
+    ok &= (unsigned char)class_addlist_s00a5_b510(spSpigotClass, (void*)spigot_list);
+    ok &= (unsigned char)class_addanything_s00a5_b510(spSpigotClass, (void*)spigot_anything);
+    return *(bool*)&ok;
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -2406,18 +2404,17 @@ bool gate_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
-    bool ok = true;
 
     sym = gensym(&s, "gate");
     spGateClass = class_new_t3(*sym, (void*)gate_new, (void*)gate_free, 0x34, 0, 5, 5, 0);
-    ok = ok && (spGateClass != 0);
+    unsigned char ok = (unsigned char)((spGateClass != 0) & 1);
 
-    ok = class_addbang(spGateClass, (void*)gate_bang) && ok;
-    ok = class_doaddfloat(spGateClass, (void*)gate_float) && ok;
-    ok = class_addsymbol_s00a5_b510(spGateClass, (void*)gate_symbol) && ok;
-    ok = class_addlist_s00a5_b510(spGateClass, (void*)gate_list) && ok;
-    ok = class_addanything_s00a5_b510(spGateClass, (void*)gate_anything) && ok;
-    return ok;
+    ok &= (unsigned char)class_addbang(spGateClass, (void*)gate_bang);
+    ok &= (unsigned char)class_doaddfloat(spGateClass, (void*)gate_float);
+    ok &= (unsigned char)class_addsymbol_s00a5_b510(spGateClass, (void*)gate_symbol);
+    ok &= (unsigned char)class_addlist_s00a5_b510(spGateClass, (void*)gate_list);
+    ok &= (unsigned char)class_addanything_s00a5_b510(spGateClass, (void*)gate_anything);
+    return *(bool*)&ok;
 }
 }}}  // namespace EA::Audio::Eapd
 
