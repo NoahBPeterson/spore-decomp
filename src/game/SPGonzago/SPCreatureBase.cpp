@@ -8452,11 +8452,9 @@ bool __thiscall CCM::e0c0(int param_2)
 char __thiscall CCM_s00c0_ddb0::e120(int param_2)
 {
     char* p = *(char**)(*(char**)((char*)this + 0xb54) + 0x184);
-    int* pu = (int*)(p + 0xf4c);
     for (int i = 0; i < 0x10; ++i) {
-        int v = *pu;
+        int v = ((int*)(p + 0xf4c))[i];
         if (v != -1 && *(int*)(v * 0xf0 + (int)p + 0xe0) == param_2) return 1;
-        ++pu;
     }
     return 0;
 }
