@@ -534,14 +534,14 @@ void VtObj::GameDataCenter(Vec3* out)
 }
 
 // @ 0x00bfc900
-bool VtObj::TrikeCheck(int arg)
+static bool TrikeCheck(VtObj* self, int arg)
 {
     switch (GetCurrentGameMode()) {
     case 0x1654c01:
     case 0x1654c10: {
-        if (this == 0)
+        if (self == 0)
             return false;
-        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, int))this->vt[3])(this, 0xce9f6639);
+        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, int))self->vt[3])(self, 0xce9f6639);
         if (o == 0)
             return false;
         if (o->flags & 0x200)
@@ -561,28 +561,28 @@ bool VtObj::TrikeCheck(int arg)
         return false;
     }
     case 0x1654c02:
-        if (F_b18850(this))
+        if (F_b18850(self))
             return true;
-        if (F_b187b0(this))
+        if (F_b187b0(self))
             return true;
         return false;
     case 0x1654c04:
-        if (F_b18810(this))
+        if (F_b18810(self))
             return true;
-        if (F_b187d0(this))
+        if (F_b187d0(self))
             return true;
-        if (F_b18830(this))
+        if (F_b18830(self))
             return true;
-        if (F_b18760(this))
+        if (F_b18760(self))
             return true;
         return false;
     case 0x1654c05: {
-        if (this == 0)
+        if (self == 0)
             return false;
-        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, void*))this->vt[3])(this, (void*)0x013f94d4);
+        AnimObj* o = (AnimObj*)((void* (__thiscall*)(void*, void*))self->vt[3])(self, (void*)0x013f94d4);
         if (o == 0)
             return false;
-        if (!F_b187d0(this) && !F_b18870(this) && !F_b18760(this))
+        if (!F_b187d0(self) && !F_b18870(self) && !F_b18760(self))
             return false;
         int empire = GetPlayerEmpireID();
         if (arg != empire) {
@@ -598,7 +598,7 @@ bool VtObj::TrikeCheck(int arg)
 // @ 0x00bfca80
 void TrikeNotify(void* obj, void* owner, int extra)
 {
-    if (((VtObj*)obj)->TrikeCheck((int)owner) && F_b673c0(obj))
+    if (TrikeCheck((VtObj*)obj, (int)owner) && F_b673c0(obj))
         FUN_00b69930(obj, FUN_00b685e0(obj), extra);
 }
 
