@@ -1,6 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?GetRelativeIndex@?$cTerrainMap_s00f8_7b30@M@SP@@QAEHHHHHH@Z  00f87b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorF@GmeListF@@QAEXXZ  00f8f970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorH@GmeListS@@QAEXXZ  00f8f9c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorB@SimVec12@@QAEXXZ  00f8fa90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorE@GmeListV3@@QAEXXZ  00f8fad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -947,6 +947,12 @@ struct GmeListS {
     void DtorH();
 };
 extern "C" char g_1490030[];   // SimVec12 vtable
+extern "C" char g_1490020[];   // GmeListF vtable
+extern "C" char g_1490028[];   // GmeListS vtable
+extern "C" char g_1490038[];   // GmeListV3 vtable
+extern "C" char g_13ef094[];   // base vtable
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 struct SimVec12 {
     void* m_vtbl;    // +0x00
     int   m_pad04;   // +0x04
@@ -2673,18 +2679,27 @@ VecFAssign* VecFAssign::Assign(VecFAssign* other)
     return this;
 }
 
+struct FVec_f8f970 {
+    float* mpBegin;
+    float* mpEnd;
+    float* erase(float* first, float* last)
+    {
+        eastl_fill(first, last, (int)((char*)mpEnd - (char*)last));
+        *(float* volatile*)&mpEnd = mpEnd - (last - first);
+        return first;
+    }
+};
+
 // @ 0x00f8f970
 void GmeListF::DtorF()
 {
-    *(int*)this = 0x1490020;
-    int endp = (int)mpEnd;
-    int begp = (int)mpBegin;
-    eastl_fill((void*)begp, (void*)endp, 0);
-    int cnt = (endp - begp) >> 2;
-    *(int*)((char*)this + 0x14) += -cnt * 4;
-    if (*(int*)((char*)this + 0x10) != 0)
-        operator_delete__(*(void**)((char*)this + 0x10));
-    *(int*)this = 0x13ef094;
+    m_vtbl = g_1490020;
+    _ReadWriteBarrier();
+    FVec_f8f970* v = (FVec_f8f970*)&mpBegin;
+    v->erase(v->mpBegin, v->mpEnd);
+    if (v->mpBegin != 0)
+        operator_delete__(v->mpBegin);
+    m_vtbl = g_13ef094;
 }
 
 // @ 0x00f8f9c0
