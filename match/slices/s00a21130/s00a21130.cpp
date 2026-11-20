@@ -108,10 +108,16 @@ bool __stdcall isMsg00a21200(void* msg) {
 // ---------------------------------------------------------------------------------------
 // 0x00A21220  EA::Audio::SystemAccess::GlobalTime (double) + trailing 0x2b9f662 predicate
 // ---------------------------------------------------------------------------------------
+struct AudioCoreSystem_s00a2_1220 {   // rw::audio::core::System
+    char pad0[8];
+    double mTime;                      // +8
+};
+extern AudioCoreSystem_s00a2_1220* g_16e61a8;     // 0x016e61a8
+
 // @ 0x00A21220
 double globalTime_00a21220() {
-    void* p = *(void**)0x16e61a8;
-    if (p != 0) return *(double*)((char*)p + 8);
+    AudioCoreSystem_s00a2_1220* p = g_16e61a8;
+    if (p != 0) return p->mTime;
     return 0.0;
 }
 
