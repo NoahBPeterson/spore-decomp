@@ -207,6 +207,8 @@ void* TC_780::FUN_00ecc780(void* src)
 
 struct TC_8b0 { void* FUN_00ecc8b0(unsigned short* str); };
 
+extern "C" unsigned int __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 // @ 0x00ecc8b0
 void* TC_8b0::FUN_00ecc8b0(unsigned short* str)
 {
@@ -214,11 +216,7 @@ void* TC_8b0::FUN_00ecc8b0(unsigned short* str)
     if (*(unsigned char*)(s + 0x10) & 4)
         ((TC_93db80*)s)->Destruct(1);
     if (str != 0) {
-        unsigned short* q = str;
-        unsigned short* base = q + 1;
-        short c;
-        do { c = (short)*q; q++; } while (c != 0);
-        int n = ((int)((char*)q - (char*)base)) >> 1;
+        int n = (int)wcslen((const wchar_t*)str);
         ((TC_93dd80*)s)->Construct(3, 0x18, str, 2, n + 1);
         return s;
     }
