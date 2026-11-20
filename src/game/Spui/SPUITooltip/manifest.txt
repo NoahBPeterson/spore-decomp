@@ -12,3 +12,4 @@
 ../src/game/Spui/SPUITooltip.cpp  ?Destroy@cSPUITooltipWinProc_s0083_56e0@@QAEXXZ  00835d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUITooltip.cpp  ?SetTooltipText@TooltipManager@@QAEXHH@Z  008354a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUITooltip.cpp  ?MakeFullyVisibleInMainWindow@TooltipManager@@QAEXH@Z  00835520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUITooltip.cpp  ?LoadProps@TooltipManager@@QAE_NXZ  00835610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

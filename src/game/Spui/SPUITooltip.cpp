@@ -339,12 +339,20 @@ void TooltipManager::MakeFullyVisibleInMainWindow(int dummy)
     ((IWindow_s00835520*)window)->SetLocation(sx, sy);
 }
 
+// property-manager view: slot 0x30 fetches a property list by key
+struct PropListSource {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+    virtual char GetPropertyList(int key, void** out);   // +0x30
+};
+
 // @ 0x00835610
 bool TooltipManager::LoadProps()
 {
     void* pm = FUN_0067de30();
     if (void* p = props) { props = 0; ((VFv)VT(p)[4 / 4])(p); }
-    char c = ((char (__thiscall*)(void*, int, void**))VT(pm)[0x30 / 4])(pm, 0x5c770db7, &props);
+    char c = ((PropListSource*)pm)->GetPropertyList(0x5c770db7, &props);
     if (c)
         ((void (__thiscall*)(void*, void*))FUN_006237d0)(&g_1548560, props);
     return true;
