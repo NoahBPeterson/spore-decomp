@@ -180,7 +180,7 @@ struct ResKey { int f0, f4, f8; };
 // ---- external helpers / globals -------------------------------------------------
 extern unsigned int __stdcall FUN_00b3d230(unsigned int hash);      // 0xb3d230
 extern void __fastcall FUN_00b5cde0(void* p);                       // 0xb5cde0
-extern void __stdcall FUN_00ad9010(void* p);                        // 0xad9010
+struct Copy_ad9010 { void FUN_00ad9010(void* p); };                 // 0xad9010 (thiscall)
 extern AudioSys* __cdecl FUN_00a206f0();                            // 0xa206f0
 extern void __cdecl FUN_011e0744(void* dst, const char* src, int count);   // 0x11e0744
 extern void* __cdecl FUN_0093c6d0(void* out, const void* in);              // 0x93c6d0
@@ -402,7 +402,7 @@ char __fastcall FUN_00adb2a0(void* self, int /*edx*/, unsigned int a, unsigned i
         HTbl* h = (HTbl*)(p + 0x10);
         h->findKey(local, &a);
         if (local[0] != h->arr[h->count]) {
-            FUN_00ad9010((void*)(local[0] + 4));
+            ((Copy_ad9010*)b)->FUN_00ad9010((void*)(local[0] + 4));
             return 1;
         }
     }
