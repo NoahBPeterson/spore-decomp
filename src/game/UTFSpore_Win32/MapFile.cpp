@@ -217,7 +217,13 @@ struct StrObj {
 };
 void  RBTreeInsert(void* node, void* parent, void* header, int side); // 0x009216a0
 struct RbtreeVal { u32 mKey; void* mData; u32 mExtra; };
-void* RBTreeInsertValue(u8* self, u8** out, u8* parent, const u32* value, int side); // 0x0091bf80
+struct MapRBTreeIter {   // eastl::rbtree_iterator (non-POD: returned through a hidden pointer)
+    u8* mpNode;
+    MapRBTreeIter(u8* p) : mpNode(p) {}
+};
+struct MapRBTree {   // eastl::rbtree<u32 key, 12-byte value>: anchor at +4, size at +0x14
+    MapRBTreeIter DoInsertValueImpl(u8* parent, const u32* value, bool side);   // 0x0091bf80
+};
 void  StackAllocCtor(void* s, void* p, u32 n, void* a, void* b, void* c); // 0x00928cd0
 struct MapNode { void* vtable; char pad[4]; void* DoCreateNode(const void* src); }; // 0x0091c140
 extern "C" u16  g_emptyW16[];          // 0x01667bac
@@ -293,13 +299,14 @@ u32* LowerBoundPair(u32* first, u32* last, const u32* key)
 }
 
 // @ 0x0091bf80
-void* RBTreeInsertValue(u8* self, u8** out, u8* parent, const u32* value, int side)
+MapRBTreeIter MapRBTree::DoInsertValueImpl(u8* parent, const u32* value, bool side)
 {
-    int dir = 0;
-    if (side == 0 && parent != self + 4) {
-        if (*value >= *(u32*)(parent + 0x10))
-            dir = 1;
-    }
+    u8* self = (u8*)this;
+    int dir;
+    if (side || parent == self + 4 || *value < *(u32*)(parent + 0x10))
+        dir = 0;   // left
+    else
+        dir = 1;   // right
     u8* node = (u8*)EAAllocate(0x1c, g_s_eastl, 0, 0, g_s_srcpath, 0xd1);
     u8* slot = node + 0x10;
     if (slot != 0) {
@@ -309,8 +316,7 @@ void* RBTreeInsertValue(u8* self, u8** out, u8* parent, const u32* value, int si
     }
     RBTreeInsert(node, parent, self + 4, dir);
     ++*(u32*)(self + 0x14);
-    *out = node;
-    return out;
+    return MapRBTreeIter(node);
 }
 // @ 0x0091c0a0
 void* MapFile::CtorEmpty()
