@@ -7,3 +7,10 @@ slices/s011a5310/ssl_s3_enc.cpp  _ssl3_finish_mac  011a5950  /O2 /arch:SSE /MD /
 slices/s011a5310/ssl_s3_enc.cpp  _ssl3_generate_master_secret  011a5ad0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
 slices/s011a5310/ssl_s3_enc.cpp  _ssl3_setup_key_block  011a5d40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
 slices/s011a5310/ssl_s3_enc.cpp  _ssl3_mac  011a5f20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a5310_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011a5310/oss_s3_enc.cpp  _ssl3_handshake_mac  011a5990  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a5310/oss_s3_enc.cpp  _ssl3_alert_code  011a5c40  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a5310/oss_s3_enc.cpp  _ssl3_cert_verify_mac  011a5ec0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a5310/oss_s3_enc.cpp  _ssl3_final_finish_mac  011a5ee0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a5310/oss_s3_srvr.cpp  _ssl3_send_hello_request  011a6100  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a5310/oss_s3_srvr.cpp  _ssl3_check_client_hello  011a6140  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

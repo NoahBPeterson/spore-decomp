@@ -2,3 +2,6 @@
 slices/s011a4600/s011a4600.cpp  _ssl3_get_certificate_request  011a4600  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a4600_inc
 slices/s011a4600/s011a4600.cpp  _ssl3_connect  011a48f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a4600_inc
 slices/s011a4600/s011a4600_s3enc.cpp  _ssl3_generate_key_block  011a5120  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a4600_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011a4600/oss_s23_pkt.cpp  _ssl23_write_bytes  011a5030  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a4600/oss_s23_pkt.cpp  _ssl23_read_bytes  011a50a0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

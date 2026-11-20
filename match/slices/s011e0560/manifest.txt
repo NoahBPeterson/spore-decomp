@@ -9,3 +9,5 @@ slices/s011e0560/s011e0560.cpp  ?copyBlob@ArenaSelf@@QAEPAUBlob32@@PAU2@@Z  011e
 slices/s011e0560/s011e0560.cpp  ?rw_ArenaTypeRegGetType@@YAPAXH@Z  011e22c0  /O2 /MD /Gy /EHsc /TP
 slices/s011e0560/align_info.cpp  ?AlignUpTo@AlignInfo@@QAEIPBU1@@Z  011e20a0  /vc71 /O2 /MD /Gy /TP
 slices/s011e0560/s011e0560.cpp  ?idToObject@ArenaSelf@@QAEPAXI@Z  011e2300  /O2 /MD /Gy /EHsc /TP
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011e0560/oss_dso_win32.cpp  _win32_merger  011e0560  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

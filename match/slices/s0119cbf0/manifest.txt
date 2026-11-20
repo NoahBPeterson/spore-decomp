@@ -11,3 +11,6 @@ slices/s0119cbf0/openssl_v3_cpols.cpp  _policy_section  0119d420  /O2 /arch:SSE 
 slices/s0119cbf0/openssl_v3_cpols.cpp  _i2r_certpol  0119d670  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
 slices/s0119cbf0/openssl_v3_cpols.cpp  _r2i_certpol  0119d700  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
 slices/s0119cbf0/openssl_v3_bcons.cpp  _v2i_BASIC_CONSTRAINTS  0119d970  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b8e10_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto/x509v3
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s0119cbf0/oss_v3_alt.cpp  _i2v_GENERAL_NAME  0119dac0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119cbf0/oss_v3_bcons.cpp  _i2v_BASIC_CONSTRAINTS  0119d930  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

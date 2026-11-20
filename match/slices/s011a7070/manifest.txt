@@ -4,3 +4,5 @@
 slices/s011a7070/s011a7070.cpp  _ssl3_get_cert_verify           011a7070  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
 slices/s011a7070/s011a7070.cpp  _ssl3_get_client_certificate    011a7340  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
 slices/s011a7070/s011a7070.cpp  _ssl3_send_server_certificate   011a7770  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011a7070/oss_s3_srvr.cpp  _nid2curve_id  011a77f0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

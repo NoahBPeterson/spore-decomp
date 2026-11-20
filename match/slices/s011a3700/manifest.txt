@@ -1,1 +1,5 @@
 slices/s011a3700/s011a3700.cpp  ?FUN_011a38d0@@YAHPAH@Z  011a38d0  /O2 /MD /Gy /TP
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011a3700/oss_s3_clnt.cpp  _ssl3_send_client_verify  011a3700  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a3700/oss_s3_clnt.cpp  _ssl3_check_cert_and_algorithm  011a3a60  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a3700/oss_s3_clnt.cpp  _ssl3_get_key_exchange  011a3cf0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

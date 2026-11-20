@@ -1,1 +1,3 @@
 # no byte-exact functions in this slice (see partial.txt)
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011ae2b0/oss_bn_asm.cpp  _bn_mul_comba8  011ae2b0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

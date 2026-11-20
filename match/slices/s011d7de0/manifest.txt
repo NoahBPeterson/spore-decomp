@@ -8,3 +8,10 @@ slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_group_check_discriminant  011db7e0
 slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_point_set_affine_coordinates  011dbc80  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
 slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_point_get_affine_coordinates  011dbcd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
 slices/s011d7de0/ecp_smpl.cpp  _ec_GFp_simple_set_compressed_coordinates  011dbf60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011d7de0_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011d7de0/oss_c_enc.cpp  _CAST_encrypt  011d8230  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011d7de0/oss_c_enc.cpp  _CAST_decrypt  011d8700  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011d7de0/oss_ui_openssl.cpp  _write_string  011daef0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011d7de0/oss_ui_openssl.cpp  _read_till_nl  011daf40  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011d7de0/oss_ui_openssl.cpp  _open_console  011daf90  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011d7de0/oss_ui_openssl.cpp  _close_console  011db010  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
