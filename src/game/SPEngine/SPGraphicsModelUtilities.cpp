@@ -2196,13 +2196,13 @@ void V_755570::FUN_00755570(unsigned int param_2, int param_3)
   int* param_1 = (int*)this;
   int iVar2 = param_1[1];
   unsigned int uVar3 = (unsigned int)((iVar2 - *param_1) >> 2);
-  if (uVar3 < param_2) {
+  if (param_2 > uVar3) {
     ((void (__thiscall*)(void*, int, unsigned int, int))FUN_00429e00)(this, iVar2, param_2 - uVar3, param_3);
     return;
   }
   int iVar1 = *param_1 + param_2 * 4;
   int uVar4 = FUN_006df700(iVar2, iVar2, iVar1);
-  FUN_0059c410(uVar4, param_1[1]);
+  ((Ext*)this)->FUN_0059c410((void*)uVar4, (void*)param_1[1]);
   param_1[1] = param_1[1] + ((iVar2 - iVar1 >> 2) * -4);
 }
 
