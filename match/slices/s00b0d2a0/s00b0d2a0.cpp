@@ -268,15 +268,15 @@ KeySlot** cKeySlotList::RemoveRangeTo(KeySlot** out, KeySlot* pos)
 {
     ((ReleaseStub*)this)->Release((u32)(((char*)pos - (char*)mpSlots) >> 3));
 
-    for (;;) {
-        KeySlot* cur = pos;
-        pos = cur + 1;
-        if (((cur->mBits >> 30) & 1) != 0)
+    KeySlot* next = *(KeySlot* volatile*)&pos;
+    do {
+        KeySlot* cur = next++;
+        *(KeySlot* volatile*)&pos = next;
+        _ReadWriteBarrier();
+        if ((bool)((cur->mBits >> 30) & 1))
             break;
-        if (((pos->mBits >> 31) & 1) == 0)
-            break;
-    }
-    *out = pos;
+    } while ((bool)((next->mBits >> 31) & 1));
+    *out = next;
     return out;
 }
 
