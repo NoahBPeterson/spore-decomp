@@ -3303,12 +3303,13 @@ void SP::cPlayer_s00c7_7380::AddToSet(const uint32_t* pKey)
 // @ 0x00c78450
 void SP::cPlayer_s00c7_7380::NoteWarEndedWithPlayer(void* pEmpire)
 {
-    cPlayerTree* pTree = &mWarEvents11f8;
     uint32_t nKey = *(uint32_t*)((uint8_t*)pEmpire + 0x84);
-    cTreeNode* pNode;
-    pTree->Find(&pNode, &nKey);
-    if (pNode == (cTreeNode*)&pTree->mpEnd)
+    cPlayerTree* pTree = &mWarEvents11f8;
+    cTreeNode* pFound;
+    pTree->Find(&pFound, &nKey);
+    if (pFound == (cTreeNode*)&mWarEvents11f8.mpEnd)
         return;
+    cTreeNode* pNode = pFound;
     --pTree->mnCount;
     RBTreeIncrement(pNode);
     RBTreeErase(pNode, &pTree->mpEnd);

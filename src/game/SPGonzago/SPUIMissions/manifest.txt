@@ -40,3 +40,4 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Shutdown@cUIMissionButton@SP@@QAEXXZ  00e1ca30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Teardown@cUICard_s00e1_2f80@@QAEXXZ  00e132c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e17470@PaintSystem@@QAEXH@Z  00e17470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Setup@cUIMissionCard@@QAEXPAXDD@Z  00e17f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -14,7 +14,6 @@
 008d9a10 979 CloseRecord: complete; large function, many scheduling and register differences; difftest FAIL is a checker artifact: the original reuses its own incoming 'rec' arg slot as the rbtree::find result iterator while ours uses a frame local, and the checker normalises only pointers below esp at entry as STK; all 5 mismatches are this find argument, and with the arg slots normalised too (scratch copy of the checker) it reports no mismatch (WEAK, 296 valid, 14% coverage)
 008d9f80 227 DatabasePackedFile ctor: complete; dead stores (anchor zeros at 2f0..2f8) and string-empty constant schedule differ
 008da750 323 complete: DatabasePackedFile::ReadIndexRecord; VecBuf/read/index-serialize flow reconstructed; buffer alloc-header handling and register allocation differ; difftest PASS (351 valid, 88.5% coverage)
-008dad80 74 complete: FUN_008dad80 promote-heap; register allocation of (array,top,value,parent) differs from retail; difftest PASS (372 valid, 100% coverage)
 008daf40 42 complete: PFIndexModifiable::GetDataEnd (bucket-array iteration); register allocation differs (pBucket kept in edi instead of esi); difftest PASS (236 valid, 100% coverage)
 008dafa0 49 complete: PFIndexModifiable::GetTotalDiskSize (bucket-array iteration); peeled-scan/register-allocation differences; difftest PASS (261 valid, 100% coverage)
 008daff0 479 complete: PFIndexModifiable::Write (record/stream writer); full body reconstructed; buffer-building path differs
@@ -23,7 +22,6 @@
 008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs
 008db560 96 complete: RBTree::insertUnique (rbtree insert + alloc); register allocation (this/node in edi/esi) swapped vs retail [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
-008db630 80 complete: FUN_008db630 final sort pass; body shape differs
 008db730 54 complete: PFIndexModifiable ctor; vtable/alloc sequence close but differs
 008db7b0 92 complete: PFIndexModifiable::_virtual_dtor; vtable store order / allocator call differs
 008db850 99 complete: PFIndexModifiable::RemoveFile; hashtable erase iterator passed via struct-return/this-thunk; call shape differs

@@ -2,9 +2,4 @@
 # Format: <va> <diff-bytes> <reason incl. compiler flags> [equiv: <VERDICT>]
 # Flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 # Run:  .venv/bin/python tools/difftest/equiv.py s007e4260   (UNSUPPORTED = unresolved callees / no valid inputs)
-007e4260  2    cGotoStateCommand::Execute; BehaviorMessage ctor emits field30=0 before the base-vptr store, cl emits it after [equiv: UNSUPPORTED]
-007e46f0  2    cCheatCommand::Execute; same ctor store order [equiv: UNSUPPORTED]
-007e48f0  4    cLightingCommand::Execute; same ctor store order + message id kept in esi [equiv: UNSUPPORTED]
-007e4970  4    cCameraCommand::Execute; same ctor store order + message id kept in esi [equiv: UNSUPPORTED]
-007e4550  3    cKillEffectCommand::Execute; same ctor store order + softStop flag argument order [equiv: UNSUPPORTED]
 007e45e0  211  cModeCommand::Execute; no SEH frame + AddRef hoisted out of both branches + merged cm stores [equiv: UNSUPPORTED]

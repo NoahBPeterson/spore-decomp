@@ -463,6 +463,14 @@ Variant_s0093_d740* Variant_s0093_d740::SetBool(const unsigned char* p) {
 }
 }
 using EA::Variant_s0093_d740;
+// eastl::hashtable iterator: the node and its bucket
+struct HashTableIter {
+    int*           mpNode;
+    unsigned int*  mpBucket;
+    HashTableIter(int* pNode, unsigned int* pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+    HashTableIter(unsigned int* pBucket) : mpNode((int*)*pBucket), mpBucket(pBucket) {}
+    HashTableIter(const HashTableIter& x) : mpNode(x.mpNode), mpBucket(x.mpBucket) {}
+};
 struct HashTable {
     unsigned int  field_0;      // +0x00
     unsigned int* mpBuckets;    // +0x04
@@ -471,7 +479,13 @@ struct HashTable {
     void*         mpAlloc;      // +0x10
 
     void Rehash(unsigned n);                       // 0x0093DCC0
-    void* Find(void** out, const void* key);       // 0x0093E3F0
+    HashTableIter Find(const void* key);           // 0x0093E3F0
+    static int* DoFindNode(int* pNode, const void* key) {
+        for (; pNode; pNode = (int*)pNode[3])
+            if (*(const int*)key == pNode[0] && *(const unsigned short*)((const char*)key + 4) == *(unsigned short*)((char*)pNode + 4))
+                return pNode;
+        return 0;
+    }
     void Insert(void** out, int* key);             // 0x0093E470
 };
 struct WStr_s0093_d740 {
@@ -1963,23 +1977,11 @@ Variant_s0093_d740* Variant_s0093_d740::SetDouble(const double* p)
 }  // namespace EA
 
 // @ 0x0093e3f0
-void* HashTable::Find(void** out, const void* key)
+HashTableIter HashTable::Find(const void* key)
 {
-    const int* k = (const int*)key;
-    unsigned u = ((unsigned)*(const unsigned short*)((const char*)key + 4) + (unsigned)k[0]) % mnBucketCount;
-    int* node = (int*)mpBuckets[u];
-    void** slot = (void**)&mpBuckets[u];
-    while (node) {
-        if (*k == node[0] && *(const unsigned short*)((const char*)key + 4) == *(unsigned short*)((char*)node + 4))
-            goto found;
-        node = (int*)node[3];
-    }
-    slot = (void**)&mpBuckets[mnBucketCount];
-    node = (int*)*slot;
-found:
-    out[0] = node;
-    out[1] = slot;
-    return out;
+    const unsigned n = ((unsigned)*(const unsigned short*)((const char*)key + 4) + (unsigned)*(const int*)key) % mnBucketCount;
+    int* const pNode = DoFindNode((int*)mpBuckets[n], key);
+    return pNode ? HashTableIter(pNode, mpBuckets + n) : HashTableIter(mpBuckets + mnBucketCount);
 }
 
 // @ 0x0093e470

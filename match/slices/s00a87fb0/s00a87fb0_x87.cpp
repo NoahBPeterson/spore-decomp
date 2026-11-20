@@ -104,11 +104,11 @@ void FUN_00a88400(float* out, const float* p)
 uint32_t* FUN_00a88250(uint32_t* first, uint32_t* last, uint32_t* dst)
 {
     if (first != last) {
-        uint32_t* d5 = dst + 5;
-        uint32_t* s5 = first + 5;
+        float* d5 = (float*)dst + 5;
+        float* s5 = (float*)first + 5;
         do {
             if (dst != 0) {
-                *dst = *first;
+                *(float*)dst = *(float*)first;
                 d5[-4] = s5[-4];
                 d5[-3] = s5[-3];
                 d5[-2] = s5[-2];

@@ -65,3 +65,6 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?setFlag@Reg@@QAEXHI@Z  00bc3e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca670@@YAXPAX@Z  00bca670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FindNode@cAgentOrderManager@@QAEPAUcAgentOrder@@HP6A_NPAX0@Z0@Z  00bca620  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc4370@@YAPAPAUElem98@@PAPAU1@UElem98CIter@@1PAU1@@Z  00bc4370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc76d0@Rec_s00bc_74d0@@QAEPAU1@PAU1@@Z  00bc76d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?PushBack@cAgentOrderManager@@QAEPAUcAgentOrder@@PAXPAUIRefCount_s00bc_a040@@D@Z  00bcaf70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

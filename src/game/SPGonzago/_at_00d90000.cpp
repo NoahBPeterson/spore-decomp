@@ -1988,8 +1988,8 @@ bool FUN_00d9b480(Creature* a, Creature* b)
     if (ga->mKey != 0x546e8804 || gb->mKey != 0x546e8804) return false;
     int ia = ga->mIndex;
     int ib = gb->mIndex;
-    int va = *(int*)((char*)ta + 0x164 + ia * 0xac);
-    int vb = *(int*)((char*)tb + 0x164 + ib * 0xac);
+    int va = *(int*)((char*)ga - 0x6c + ia * 0xac);
+    int vb = *(int*)((char*)gb - 0x6c + ib * 0xac);
     return va < vb;
 }
 

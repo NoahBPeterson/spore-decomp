@@ -1845,10 +1845,14 @@ void cTribeDisplayStrategy::FUN_00cc9e20(void* citizen)
     }
 }
 
+// the tribe UI controller (object returned by cTribeModeStrategy vf+0x6c)
+struct TribeUIController_cca000 {
+    void FUN_00cca000(void* a, float f);   // 0xcca000
+};
 // @ 0x00cca000
-void FUN_00cca000_impl(void* self, void* a, float f)
+void TribeUIController_cca000::FUN_00cca000(void* a, float f)
 {
-    u8* p = (u8*)self;
+    u8* p = (u8*)this;
     void* ps = *(void**)((char*)p + 0x78);
     u32 kind;
     if (CIT(a)->FUN_00c0b770() != 0) {

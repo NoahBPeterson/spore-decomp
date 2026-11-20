@@ -2,7 +2,6 @@
 00541680 429 complete; /Od wide-string date/time parse schedule differs
 007c7ac0 77 loop/count register allocation and compare shape (indexed-for vs pointer loop)
 007c7b30 132 64-byte-aligned stack buffer / float-format call scheduling differs
-007c7cd0 76 CSE of mResBegin across the bounds check changes register allocation
 007c8270 242 command registration new-expression/EH scheduling differs
 007c8880 140 parser init vcall/register allocation differs
 007c8e50 190 cAlertCommand::Execute: EH/cError throw layout and HasFlag scheduling differ
@@ -10,7 +9,6 @@
 007c9040 164 card-vendor command Execute: strlen/string assign scheduling differs
 007c9fa0 153 eastl vector DoAssignFromIterator: allocator-grow + relocate call schedule differs
 007ca060 257 eastl vector<pair> operator=: relocate/uninit-copy call schedule differs [equiv: FAIL, 5/5 valid inputs mismatched (fake-arity: ours failed where original succeeded); symbol lookup fixed via ?4PairVec]
-007ca150 82 GetOptionIDs: prologue register allocation (this/out) and push_back load order differ
 007ca1c0 1448 cConfigManager::Initialize complete (parser setup, Options.txt, per-option property lists); block layout, register allocation and frame slots differ
 007cab40 111 eastl::vector<AutoRefCount<cPropertyList>,fixed_vector_allocator<4,4,4,0,1>>::resize(size_type): complete; the T() temporary is placed in a different stack slot and cl uses ebx for size(), differing register/stack shape.
 007cae30 47 `anonymous namespace'::cOptionBoolPropertyCommand::Execute: complete; same calls/paths but Variant temp slot and command-table pointer arithmetic schedule differ from retail.

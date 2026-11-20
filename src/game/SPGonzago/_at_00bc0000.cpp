@@ -2812,20 +2812,26 @@ Elem98* __cdecl FUN_00bc4310(const Elem98* first, const Elem98* last, Elem98* ds
     return dst;
 }
 
+struct Elem98CIter {
+    const Elem98* p;
+    bool operator!=(const Elem98CIter& o) const { return p != o.p; }
+    Elem98CIter& operator++() { ++p; return *this; }
+};
 // @ 0x00bc4370
-Elem98** __cdecl FUN_00bc4370(Elem98** out, const Elem98* first, const Elem98* last, Elem98* dst)
+Elem98** __cdecl FUN_00bc4370(Elem98** out, Elem98CIter first, Elem98CIter last, Elem98* dst)
 {
     *out = dst;
     for (; first != last; ++first) {
         Elem98* e = *out;
         if (e) {
+            const Elem98* src = first.p;
             e->mpBegin = e->buf;
             e->mpEnd = e->buf;
             e->overflow = 0;
-            e->mpCap = e->buf + 32;
-            e->assign(first);
+            e->mpCap = (void**)e->mpBegin + 32;
+            e->assign(src);
         }
-        *out = *out + 1;
+        ++*out;
     }
     return out;
 }
@@ -3931,6 +3937,21 @@ int WE::FUN_00bc7680(int param_2)
     return 0x3fffffff;
 }
 
+struct Quad_s00bc_76d0 { int a, b, c, d; };
+struct RefP_s00bc_76d0 {
+    RefObj* p;
+    RefP_s00bc_76d0& operator=(const RefP_s00bc_76d0& o)
+    {
+        RefObj* n = o.p;
+        RefObj* old = p;
+        if (n != old) {
+            if (n) n->Add();
+            p = n;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
 // @ 0x00bc76d0
 Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc76d0(Rec_s00bc_74d0* param_2)
 {
@@ -3942,24 +3963,9 @@ Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc76d0(Rec_s00bc_74d0* param_2)
     f14 = param_2->f14;
     f18 = param_2->f18;
     f1c = param_2->f1c;
-    void* piVar1 = param_2->p20;
-    void* piVar2 = p20;
-    if (piVar1 != piVar2) {
-        if (piVar1 != 0) ((RefObj*)piVar1)->Add();
-        p20 = piVar1;
-        if (piVar2 != 0) ((RefObj*)piVar2)->Release();
-    }
-    piVar1 = param_2->p24;
-    piVar2 = p24;
-    if (piVar1 != piVar2) {
-        if (piVar1 != 0) ((RefObj*)piVar1)->Add();
-        p24 = piVar1;
-        if (piVar2 != 0) ((RefObj*)piVar2)->Release();
-    }
-    f28 = param_2->f28;
-    f2c = param_2->f2c;
-    f30 = param_2->f30;
-    f34 = param_2->f34;
+    *(RefP_s00bc_76d0*)&p20 = *(const RefP_s00bc_76d0*)&param_2->p20;
+    *(RefP_s00bc_76d0*)&p24 = *(const RefP_s00bc_76d0*)&param_2->p24;
+    *(Quad_s00bc_76d0*)&f28 = *(const Quad_s00bc_76d0*)&param_2->f28;
     return this;
 }
 
@@ -6096,6 +6102,20 @@ void cAgentOrderManager::PopFront()
     *(void**)(head + 0x18) = node;
 }
 
+struct OrderSrcRef {
+    IRefCount_s00bc_a040* p;
+    void assign(IRefCount_s00bc_a040* n)
+    {
+        IRefCount_s00bc_a040* old = p;
+        if (n != old) {
+            if (n != 0)
+                n->AddRef();
+            p = n;
+            if (old != 0)
+                old->Release();
+        }
+    }
+};
 // @ 0x00bcaf70
 cAgentOrder* cAgentOrderManager::PushBack(void* a, IRefCount_s00bc_a040* b, char clear)
 {
@@ -6110,17 +6130,7 @@ cAgentOrder* cAgentOrderManager::PushBack(void* a, IRefCount_s00bc_a040* b, char
     list->AllocLink();
     cAgentOrder* order = (cAgentOrder*)(*(char**)(self + 0x610) + 8);
     *(void**)order = a;
-    _ReadWriteBarrier();
-    IRefCount_s00bc_a040* old = order->mSource;
-    if (b != old) {
-        if (b != 0) {
-            b->AddRef();
-        }
-        order->mSource = b;
-        if (old != 0) {
-            old->Release();
-        }
-    }
+    ((OrderSrcRef*)&order->mSource)->assign(b);
     return order;
 }
 

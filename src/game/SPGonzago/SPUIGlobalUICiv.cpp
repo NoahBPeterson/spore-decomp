@@ -2831,28 +2831,34 @@ bool DrawSuperweaponCooldown(cUIWindow* pButton, cMessage* pMsg)
     return true;
 }
 
+static inline void ResetCivIndexMap(cCivIndexMap* pMap)
+{
+    sCivIndexNode* pAnchor = (sCivIndexNode*)&pMap->mpAnchorLeft;
+    pAnchor->mpRight = 0;
+    pAnchor->mpParent = 0;
+    pAnchor->mnColor = 0;
+    pMap->mpAnchorParent = 0;
+    pMap->mbAnchorColor = 0;
+    pMap->mnSize = 0;
+    pMap->mpAnchorRight = pAnchor;
+    pMap->mpAnchorLeft = pAnchor;
+}
 // @ 0x00e057a0
 cSPUIGlobalUICiv::cSPUIGlobalUICiv()
-: mnPad74(0)
-    , mnPad78(0)
-    , mnPad7c(0)
-    , mnPad80(0)
-    , mnPad84(0)
-    , mbMinimapVisible(0)
-    , mbPad89(0) {
+{
+    *(volatile uint32_t*)&mnPad74 = 0;
+    mnPad78 = 0;
+    mnPad7c = 0;
+    mnPad80 = 0;
+    mnPad84 = 0;
+    mbMinimapVisible = 0;
+    mbPad89 = 0;
     for (int i = 0; i < 4; ++i)
         mButtons[i].mpObject = 0;
     mfCooldown = 0.0f;
-    mnPadC0 = 0;
+    *(volatile uint32_t*)&mnPadC0 = 0;
     mnPadC4 = 0;
-    mCivToIndex.mpAnchorRight = 0;
-    mCivToIndex.mpAnchorParent = 0;
-    mCivToIndex.mbAnchorColor = 0;
-    mCivToIndex.mpAnchorParent = 0;
-    mCivToIndex.mbAnchorColor = 0;
-    mCivToIndex.mnSize = 0;
-    mCivToIndex.mpAnchorRight = (sCivIndexNode*)&mCivToIndex.mpAnchorLeft;
-    mCivToIndex.mpAnchorLeft = (sCivIndexNode*)&mCivToIndex.mpAnchorLeft;
+    ResetCivIndexMap(&mCivToIndex);
 }
 
 // @ 0x00e05870

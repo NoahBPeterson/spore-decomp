@@ -4299,22 +4299,21 @@ void cUIMissionCard::Setup(void *mission, char a, char b)
     if (!((bool (__thiscall *)(void *, char))FUN_00e15060)(this, b)) {
         return;
     }
-    if (mission != m_mission) {
+    void *old = m_mission;
+    if (mission != old) {
         if (mission != 0) {
             ((void (__thiscall *)(void *))(*(void ***)mission)[0])(mission);
         }
-        void *old = m_mission;
         m_mission = mission;
         if (old != 0) {
             ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
         }
     }
     UpdateDetails(0);
-    void **vt = *(void ***)this;
     if (a != 0) {
-        ((void (__thiscall *)(void *))vt[0x28 / 4])(this);
+        ((void (__thiscall *)(void *, int))(*(void ***)this)[0x28 / 4])(this, 0);
     } else {
-        ((void (__thiscall *)(void *))vt[0x2c / 4])(this);
+        ((void (__thiscall *)(void *, int))(*(void ***)this)[0x2c / 4])(this, 0);
     }
 }
 

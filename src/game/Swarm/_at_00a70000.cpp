@@ -658,6 +658,8 @@ struct HIter {
     void** bucket;
     HIter() {}
     HIter(const HIter& o) { node = o.node; bucket = o.bucket; }
+    HIter(void* n, void** b) : node(n), bucket(b) {}
+    explicit HIter(void** b) : node(*b), bucket(b) {}
 };
 struct HTag {};
 struct HInsRes {              // eastl::pair<iterator, bool>
@@ -2302,26 +2304,25 @@ HNode<IRefT2>* __stdcall AllocNode2(const HPair<IRefT2>* src)
     return p;
 }
 
+static inline HNode<void>* HashFindNode_a7bf40(HNode<void>* n, const HKey& key)
+{
+    if (n) {
+        HKey k = key;
+        do {
+            if (k.a == n->key.a && k.b == n->key.b)
+                return n;
+            n = n->next;
+        } while (n);
+    }
+    return 0;
+}
 // @ 0x00a7bf40
 HIter HashMapBase::find(const HKey& k)
 {
     uint32_t idx = k.a % mBucketCount;
     HNode<void>** pBucket = mBuckets + idx;
-    HIter it;
-    it.node = *pBucket;
-    it.bucket = (void**)pBucket;
-    HNode<void>* n = (HNode<void>*)it.node;
-    if (n) {
-        do {
-            if (k.a == n->key.a && k.b == n->key.b)
-                return HIter(it);
-            n = n->next;
-            it.node = n;
-        } while (n);
-    }
-    it.bucket = (void**)(mBuckets + mBucketCount);
-    it.node = *it.bucket;
-    return HIter(it);
+    HNode<void>* n = HashFindNode_a7bf40(*pBucket, k);
+    return n ? HIter(n, (void**)pBucket) : HIter((void**)(mBuckets + mBucketCount));
 }
 
 // @ 0x00a7c100

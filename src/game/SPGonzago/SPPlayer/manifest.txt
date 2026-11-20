@@ -47,3 +47,4 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?GetConsequenceTrait@cPlayer@@QBEHH@Z  00c756e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c77300@cHashTableD@@QAEXI@Z  00c77300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FixupPlayerPlanetData@@YA_NPAXAAU?$cVector@UcKeyBoolPair@@@@@Z  00c760c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?NoteWarEndedWithPlayer@cPlayer_s00c7_7380@SP@@QAEXPAX@Z  00c78450  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

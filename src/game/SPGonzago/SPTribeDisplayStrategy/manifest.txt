@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?Insert@Vec3D@@QAEPAUVertex3D@@PAU2@0@Z  00ccbc90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00ccab80@cTribeDisplayStrategy@@QAEXXZ  00ccab80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00ccaa80@cTribeDisplayStrategy@@QAEXPAX@Z  00ccaa80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cca000@TribeUIController_cca000@@QAEXPAXM@Z  00cca000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

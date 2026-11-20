@@ -29,6 +29,7 @@ extern "C" char g_15a5524[];
 extern "C" char g_16ac2c8[];
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "cSPUILayout.h"
 #include <math.h>
 #include "cSPUIAnimator.h"
@@ -40,7 +41,15 @@ typedef unsigned int   u32;
 typedef unsigned char  u8;
 typedef          int   s32;
 void* __cdecl FUN_00b3d350();        // 0x00b3d350 SP::PlanetModel()
-void* __cdecl FUN_00b88590(void*);   // 0x00b88590 SP::cPlanetModel::GetContinent
+struct PlanetModel_s00e2_17c0 {
+  int FUN_00b88590(const void* pPos);   // 0x00b88590 SP::cPlanetModel::GetContinent (thiscall, ret 4)
+};
+struct PosSource_s00e2_17c0 {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v10();
+  virtual const void* GetPosition();    // +0x2c
+};
 void  __cdecl FUN_00881ea0(double, void*, int, const wchar_t*); // 0x00881ea0 SetNumberString
 void* __cdecl FUN_008061c0(void*, int); // 0x008061c0 SPUIHelpers::GetImageFromLayout
 u32   __cdecl FUN_007f5eb0(u32, u32, float); // 0x007f5eb0 Color::Lerp
@@ -1202,14 +1211,10 @@ bool __cdecl FUN_00e217c0(void* a, void* b)
   if (ia != ib)
     return ia < ib;
   if (ia != 2) {
-    void* pm = FUN_00b3d350();
+    PlanetModel_s00e2_17c0* pm = (PlanetModel_s00e2_17c0*)FUN_00b3d350();
     if (pm) {
-      void* oa = *(void**)((char*)a + 0x34);
-      void* ca = FUN_00b88590(
-          ((void*(__thiscall*)(void*))(*(void***)oa)[0x2c / 4])(oa));
-      void* ob = *(void**)((char*)b + 0x34);
-      void* cb = FUN_00b88590(
-          ((void*(__thiscall*)(void*))(*(void***)ob)[0x2c / 4])(ob));
+      int ca = pm->FUN_00b88590(((PosSource_s00e2_17c0*)((char*)a + 0x34))->GetPosition());
+      int cb = pm->FUN_00b88590(((PosSource_s00e2_17c0*)((char*)b + 0x34))->GetPosition());
       if (ca != cb)
         return ca < cb;
     }
@@ -1729,12 +1734,7 @@ void cSPUIPosse_s00e2_2860::SnapToPosition()
 // @ 0x00e23130
 void cSPUIPosse_s00e2_2860::SetScaleF(float scale)
 {
-    float value = scale;
-    float lo = 0.25f;
-    float hi = 1.0f;
-    value = max_f(value, lo);
-    value = min_f(value, hi);
-    mField1e8 = value;
+    mField1e8 = SseClamp(scale, 0.25f, 1.0f);
     mFlag1d4 = 1;
     UpdateLayout(0);
 }
@@ -2265,17 +2265,24 @@ void* __cdecl FUN_00e24290(void* first, void* last, void* out)
   return out;
 }
 
+struct RefPairIter_e24310 {
+  Ref* p;
+  RefPairIter_e24310(const RefPairIter_e24310& o) : p(o.p) {}
+  bool operator!=(const RefPairIter_e24310& o) const { return p != o.p; }
+  RefPairIter_e24310& operator++() { p += 2; return *this; }
+};
 // @ 0x00e24310
-void* __cdecl FUN_00e24310(void** out, void* first, void* last, void* val)
+void* __cdecl FUN_00e24310(void** out, RefPairIter_e24310 first, RefPairIter_e24310 last, void* val)
 {
   *out = val;
-  for (; first != last; first = (char*)first + 8) {
+  for (; first != last; ++first) {
     Ref* dst = (Ref*)*out;
     if (dst) {
-      Ref a = *(Ref*)first;
+      Ref* src = first.p;
+      Ref a = src[0];
       dst[0] = a;
       if (a) ((TFv)(*(void***)a)[0])(a);
-      Ref b = *(Ref*)((char*)first + 4);
+      Ref b = src[1];
       dst[1] = b;
       if (b) ((TFv)(*(void***)b)[0])(b);
     }

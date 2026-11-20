@@ -18,6 +18,5 @@
 0093e120 67 complete; SetUInt16b (type 7): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
 0093e1a0 71 complete; SetPtr (type 0xb, 8-byte copy): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; store/register scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 return target]
 0093e220 65 complete; SetDouble (type 0xe, fld/fstp copy): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
-0093e3f0 75 complete; EASTL hashtable find: original returns the out pointer in eax, the void declaration dropped it; now void* returning out; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; bucket-walk scheduling differs
 0093e470 165 complete; EASTL hashtable insert (rehash on grow + node alloc)
 0093e5f0 8348 complete EA::Variant default type proc (destruct/construct/convert matrix); flags /O2 /MD /Gy /TP /arch:SSE /GS-; register choice (esi/edi), shared temp slots (frame 0x174 vs 0x3ac) and block merging differ

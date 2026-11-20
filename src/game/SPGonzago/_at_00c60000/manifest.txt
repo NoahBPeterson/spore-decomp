@@ -75,3 +75,4 @@
 ../src/game/SPGonzago/_at_00c60000.cpp  ?QueryInterface@MorphA@@QAEPAXI@Z  00c63a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?AsInterface@cSPMissionBase@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  00c63aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Contains@A@@QAE_NH@Z  00c64a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?Fn64940@PathObj@@QAEXPAX@Z  00c64940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

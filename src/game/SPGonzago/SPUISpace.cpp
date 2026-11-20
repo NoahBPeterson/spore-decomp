@@ -2493,6 +2493,7 @@ void* StarManager_s0106_5c30();                                     // 0x00b3d2a
 void* GetPlayerEmpire_s0106_5c30();                                 // 0x01021300
 int   GetActivePlanet_s0106_5c30();                                 // 0x01021260
 void* FUN_0067cac0(uint id);                             // 0x0067cac0
+void* FUN_0067cac0();                                    // 0x0067cac0 (no-argument view)
 void* FUN_01077b40_s0106_5c30(void* w);                             // 0x01077b40
 void* operator_new(int size, const char* file, int line, int a, const char* file2, int line2);  // 0x00f473a0
 void* FUN_00e50750(void* a, void* b, void* c);           // 0x00e50750
@@ -6512,10 +6513,10 @@ bool T5d20::isStateSpecial()
 void T5d20::reset()
 {
     mState = 8;
-    ((CfgMgr*)FUN_0067cac0(0x43c18587))->Set(0x43c18587, 1);
-    ((CfgMgr*)FUN_0067cac0(0x1930f01e))->Set(0x1930f01e, 1);
-    ((CfgMgr*)FUN_0067cac0(0xf98be0b8))->Set(0xf98be0b8, 1);
-    ((CfgMgr*)FUN_0067cac0(0xe43f6bbd))->Set(0xe43f6bbd, 1);
+    ((CfgMgr*)FUN_0067cac0())->Set(0x43c18587, 1);
+    ((CfgMgr*)FUN_0067cac0())->Set(0x1930f01e, 1);
+    ((CfgMgr*)FUN_0067cac0())->Set(0xf98be0b8, 1);
+    ((CfgMgr*)FUN_0067cac0())->Set(0xe43f6bbd, 1);
 }
 
 // @ 0x01065ea0

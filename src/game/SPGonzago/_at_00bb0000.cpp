@@ -28,7 +28,6 @@ extern "C" void  __cdecl FUN_01043c60(void*, void*);           // cZooMarkerMgr 
 extern "C" void  __cdecl FUN_00f47380(void*);                  // operator_delete_array
 extern "C" void __cdecl FUN_00d52cb0(void*, int, int, int, void*);   // 0xd52cb0  push_heap-ish
 extern "C" void* __cdecl FUN_00b3d3b0();                       // 0xb3d3b0  PlanetModel (0 args)
-extern "C" void* __cdecl FUN_00b3d3b0b(int);                    // 0xb3d3b0  PlanetModel (1 arg)
 extern "C" void  __cdecl FUN_00bbd2a0(void*, float, void*);     // 0xbbd2a0
 #define VF(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
 extern uint32_t DAT_0168a488, DAT_0168a48c, DAT_0168a490;
@@ -40,7 +39,7 @@ public:
     void* F_8414c0();                   // 0x8414c0
     void  F_c80680(int, void*);         // 0xc80680
     void  F_f921d0(int, int);           // 0xf921d0
-    void  F_b2a750();                   // 0xb2a750
+    void  F_b2a750(unsigned);           // 0xb2a750 (SgHandler750::FUN_00b2a750, thiscall, ret 4)
     void  F_bbc870(void* out, int a, void* b, int c);   // 0xbbc870
     void  F_bbc540(void* out, void* p);                 // 0xbbc540  UpdateCargoSlots
     void  F_bbc950(void* out, int a, int b, int c);     // 0xbbc950
@@ -632,21 +631,14 @@ void __cdecl FUN_00bbd1f0(int* arr, int param_2, int param_3, void* param_4, Cmp
 // @ 0x00bbd6c0
 void __stdcall FUN_00bbd6c0(int* param_1)
 {
-    TObj* o = (TObj*)FUN_00b3d3b0();
-    TObj* hud = (TObj*)*(void**)((char*)o + 0x38);
+    TObj* hud = (TObj*)*(void**)((char*)FUN_00b3d3b0() + 0x38);
     hud->F_f921d0(0x80, 0);
-    int n = (param_1[1] - param_1[0]) >> 4;
-    if (n != 0) {
-        int off = 0;
-        do {
-            int base = param_1[0];
-            FUN_00bbd2a0((void*)(base + off), *(float*)(base + off + 0xc), hud);
-            off += 0x10;
-            n--;
-        } while (n != 0);
+    unsigned n = (unsigned)((param_1[1] - param_1[0]) >> 4);
+    for (unsigned i = 0; i < n; i++) {
+        char* e = (char*)param_1[0] + i * 0x10;
+        FUN_00bbd2a0(e, *(float*)(e + 0xc), hud);
     }
-    TObj* q = (TObj*)FUN_00b3d3b0b(0xf);
-    q->F_b2a750();
+    ((TObj*)FUN_00b3d3b0())->F_b2a750(0xf);
 }
 
 // @ 0x00bbd730

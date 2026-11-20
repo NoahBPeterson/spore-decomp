@@ -80,8 +80,7 @@ extern "C" void* __cdecl FUN_00c884f0(void* spatial, int id);         // AsInter
 extern "C" void* __cdecl FUN_00ac0320(void* it, int id);              // AsInterface thunk
 extern "C" void* __cdecl FUN_00c0bbd0(void* creature);                // GetSpeciesProfile
 extern "C" void* __cdecl FUN_00b1fdb0(void* nounManager);             // GetAvatar
-extern "C" void  __cdecl FUN_00c09fa0(void* pos, int key, int count, float f);  // SpawnHerdAnimals
-extern "C" float __cdecl FUN_00c69f80(void* herd);                    // 0x00c69f80
+extern "C" void  __cdecl FUN_00c09fa0(void* pos, int key, int count, float f, void* herd);  // SpawnHerdAnimals
 extern "C" char  __cdecl FindClosestWater(void* planet, const void* pos, float dist, void* out);  // 0xb8bb70
 extern "C" void* __cdecl FUN_00b815a0(void* planet, void* out, const void* dir);  // DirectionToSurfacePosition
 extern "C" void* __cdecl FUN_00b7f190(void* planet, void* out, const void* pos);  // BuildSurfaceOrientation
@@ -286,6 +285,7 @@ class cHerd_s00c6_a550
     void  OnAnimalRemoved(void* animal);                // 0xc6b440 (ret 4)
     void  FindWateringHole();                           // 0xc6b5b0
     void  SpawnAnimalsIfUnderfilled();                  // 0xc6b540
+    float FUN_00c69f80();                               // 0xc69f80 (baby fraction)
     void  SetEnabled(u8 on);                            // 0xc6ace0 (ret 4)
     bool  UnbrokenEggsInNest();                         // 0xc6ac40
     int   ClearLocationStatus(int i);                   // 0xc6ac90 (ret 4)
@@ -1395,16 +1395,15 @@ void SP::cHerd_s00c6_a550::SpawnAnimalsIfUnderfilled()
 {
     if (mbEnabled)
         return;
-    int count = mHead - (int)((char*)mpHerdEnd - (char*)mpHerdBegin) / 4 - mTail;
+    int count = mHead - (int)(mpHerdEnd - mpHerdBegin) - mTail;
     if (count <= 0)
         return;
     const Vec3* pos;
-    if (mpNest)
-        pos = ((ISpatial*)((char*)mpNest + 0x34))->GetPosition();
+    if (void* nest = mpNest)
+        pos = ((ISpatial*)((char*)nest + 0x34))->GetPosition();
     else
         pos = (const Vec3*)((char*)this + 0x34);
-    float radius = FUN_00c69f80(this);
-    FUN_00c09fa0((void*)pos, (int)mSpeciesKey, count, radius);
+    FUN_00c09fa0((void*)pos, (int)mSpeciesKey, count, FUN_00c69f80(), this);
 }
 }  // namespace SP
 

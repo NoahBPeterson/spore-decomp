@@ -60,7 +60,6 @@ struct S9c26a0 {
 struct S9a3890 { void* f(int*); };                               // 0x9a3890
 struct S9a3980 { void f(int*, char*, unsigned*, char); };
 struct S9a3a10 { void f(int*, int, unsigned*, char); };
-struct S9a38f0 { bool f(int, int, int*); };
 struct S9a34a0 { S9a34a0* f(); };
 struct S9a3b10 { int* f(int*, unsigned*, int); };
 struct S9a3220 { bool f(void*, void*, int); };
@@ -108,16 +107,17 @@ __declspec(noinline) void* S9a3890::f(int* param_1) {
 // ---------------------------------------------------------------------------
 // @ 0x009a38f0
 // ---------------------------------------------------------------------------
-__declspec(noinline) bool S9a38f0::f(int a, int b, int* out) {
+extern "C" __declspec(noinline) bool __cdecl FUN_009a38f0(int a, int b, int* out) {
   int key[2];
-  key[0] = a; key[1] = b;
+  key[0] = a;
   if (a) ((S9b3450*)(size_t)a)->f();
+  key[1] = b;
   int found;
   ((S9a3820*)g_166c05c)->f(&found, (unsigned*)key);
   if (a) ((S9c26a0*)(size_t)a)->f();
   if ((char*)found != (char*)g_166c05c + 4) {
     if (out) {
-      if (*(int*)(found + 0x18)) ((S99c980*)*(int*)(found + 0x18))->f();
+      if (int p = *(int*)(found + 0x18)) ((S99c980*)p)->f();
       *out = *(int*)(found + 0x18);
     }
     return true;
@@ -301,15 +301,12 @@ __declspec(noinline) int S9a3630::f() {
 // ---------------------------------------------------------------------------
 __declspec(noinline) void FUN_009a36a0(int* arr, int start, int pos, int item, int extra) {
   (void)extra;
-  int parent = (pos - 1) >> 1;
-  if (pos <= start) { arr[pos] = item; return; }
-  do {
-    int v = arr[parent];
-    if (*(unsigned*)(v + 0x12c) <= *(unsigned*)(item + 0x12c)) break;
-    arr[pos] = v;
+  for (int parent = (pos - 1) >> 1;
+       pos > start && *(unsigned*)(arr[parent] + 0x12c) > *(unsigned*)(item + 0x12c);
+       parent = (pos - 1) >> 1) {
+    arr[pos] = arr[parent];
     pos = parent;
-    parent = (parent - 1) >> 1;
-  } while (pos > start);
+  }
   arr[pos] = item;
 }
 
@@ -417,23 +414,31 @@ __declspec(noinline) int FUN_009a37e0(int key) {
 // ---------------------------------------------------------------------------
 // @ 0x009a3820  S9a3820::f: rbtree lower_bound (<=)
 // ---------------------------------------------------------------------------
+struct KeyPair9a3820 { unsigned first, second; };
+static __forceinline bool PairLess(const KeyPair9a3820& a, const KeyPair9a3820& b) {
+  return a.first < b.first || (!(b.first < a.first) && a.second < b.second);
+}
+static __forceinline RbNode* LowerBound9a3820(RbTree* t, const KeyPair9a3820& k) {
+  RbNode* node = t->anchor.parent;
+  RbNode* result = &t->anchor;
+  while (node) {
+    if (!PairLess(*(const KeyPair9a3820*)&node->key0, k)) {
+      result = node;
+      node = node->right;
+    } else
+      node = node->left;
+  }
+  return result;
+}
 __declspec(noinline) int* S9a3820::f(int* out, unsigned* key) {
   RbTree* t = (RbTree*)this;
-  RbNode* head = &t->anchor;
-  RbNode* parent = head;
-  RbNode* node = head->parent;
-  if (node) {
-    unsigned k0 = key[0], k1 = key[1];
-    do {
-      if (k0 > node->key0 || (k0 == node->key0 && k1 > node->key1)) node = node->left;
-      else { parent = node; node = node->right; }
-    } while (node);
-    if (parent != head && parent->key0 <= k0 && (parent->key0 < k0 || parent->key1 <= k1)) {
-      *out = (int)(size_t)parent;
-      return out;
-    }
+  const KeyPair9a3820& k = *(const KeyPair9a3820*)key;
+  RbNode* pos = LowerBound9a3820(t, k);
+  if (pos != &t->anchor && !(pos->key0 > k.first || (!(pos->key0 < k.first) && k.second < pos->key1))) {
+    *out = (int)(size_t)pos;
+    return out;
   }
-  *out = (int)(size_t)head;
+  *out = (int)(size_t)&t->anchor;
   return out;
 }
 

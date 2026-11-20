@@ -960,7 +960,7 @@ struct LightEffectSub {
     void Read(void* stream, int n);
     void Install(char flag);
 };
-Elem1C* Elem1C_copy_range(Elem1C* dst, Elem1C* first, Elem1C* last);
+Elem1C* Elem1C_copy_range(Elem1C* first, Elem1C* last, Elem1C* dst);
 Elem1C* Elem1C_fill(Elem1C* dst, unsigned int n, const Elem1C* v);
 Elem1C* Elem1C_fill_off14(Elem1C* dst, unsigned int n, const Elem1C* v);
 void* Elem1C_write_vector(void* stream, Elem1CVec* vec);
@@ -3134,18 +3134,20 @@ LightEffectSub* LightEffectSub_CreateAndRead(void* stream, int n)
 }
 
 // @ 0x00a99190
-Elem1C* Elem1C_copy_range(Elem1C* dst, Elem1C* first, Elem1C* last)
+Elem1C* Elem1C_copy_range(Elem1C* first, Elem1C* last, Elem1C* dst)
 {
-    Elem1C* s = first;
-    if (s != last) {
-        Elem1C* d = dst;
-        do {
-            if (d) {
-                d->w[0]=s->w[0]; d->w[1]=s->w[1]; d->w[2]=s->w[2];
-                d->w[3]=s->w[3]; d->w[4]=s->w[4]; d->w[5]=s->w[5]; d->w[6]=s->w[6];
-            }
-            ++s; ++d;
-        } while (s != last);
+    for (; first != last; ++first, ++dst) {
+        if (dst) {
+            dst->w[0] = first->w[0];
+            float* d = &dst->w[1];
+            const float* s = &first->w[1];
+            d[0] = s[0];
+            d[1] = s[1];
+            d[2] = s[2];
+            d[3] = s[3];
+            d[4] = s[4];
+            d[5] = s[5];
+        }
     }
     return dst;
 }
@@ -3225,9 +3227,9 @@ void Elem1C_insert(Elem1CVec* vec, Elem1C* pos, unsigned int n, const Elem1C* v)
         unsigned int want = oldN + n;
         if (want > newCap) newCap = want;
         char* p = (char*)EAAllocate(newCap * 0x1c, "EASTL", 0, 0, 0, 0xd1);
-        Elem1C* q = Elem1C_copy_range((Elem1C*)p, vec->mpBegin, pos);
+        Elem1C* q = Elem1C_copy_range(vec->mpBegin, pos, (Elem1C*)p);
         Elem1C_fill(q, n, v);
-        Elem1C* r = Elem1C_copy_range(q + n, pos, vec->mpEnd);
+        Elem1C* r = Elem1C_copy_range(pos, vec->mpEnd, q + n);
         if (vec->mpBegin && *(int*)((char*)vec->mpBegin - 4) != 0)
             operator_delete(vec->mpBegin);
         vec->mpBegin = (Elem1C*)p;

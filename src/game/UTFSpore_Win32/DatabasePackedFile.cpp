@@ -2185,19 +2185,12 @@ void FUN_008dad30(SortNode** p1, SortNode** p2)
 // @ 0x008dad80
 void FUN_008dad80(SortNode** array, int topIndex, int holeIndex, SortNode* value, int extra)
 {
-    int parent = (holeIndex - 1) >> 1;
-    if (holeIndex <= topIndex) {
-        array[holeIndex] = value;
-        return;
-    }
-    do {
-        SortNode* p = array[parent];
-        if (p->key >= value->key)
-            break;
-        array[holeIndex] = p;
+    for (int parent = (holeIndex - 1) >> 1;
+         holeIndex > topIndex && array[parent]->key < value->key;
+         parent = (holeIndex - 1) >> 1) {
+        array[holeIndex] = array[parent];
         holeIndex = parent;
-        parent = (parent - 1) >> 1;
-    } while (holeIndex > topIndex);
+    }
     array[holeIndex] = value;
     (void)extra;
 }
@@ -2560,7 +2553,7 @@ extern "C" void FUN_008db630(int* lo, int* mid, int* hi, int d)
         int v = *p;
         if (*(unsigned*)((char*)v + 0xc) < *(unsigned*)((char*)*lo + 0xc)) {
             *p = *lo;
-            FUN_008dadd0(lo, 0, (int)(mid - lo), 0, v, d);
+            FUN_008dadd0(lo, 0, (int)(mid - lo), 0, v, *(volatile int*)&d);
         }
     }
     FUN_008daef0(lo, mid, d);

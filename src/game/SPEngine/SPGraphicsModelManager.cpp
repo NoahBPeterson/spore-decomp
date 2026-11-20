@@ -6993,12 +6993,11 @@ void EditorResource::RemoveListener(unsigned key)
 // @ 0x0074f1a0
 bool VecIntAdd::add_unique(int x)
 {
-    IntVec& vec = v;
-    int n = vec.size();
+    int n = v.size();
     for (int i = 0; i < n; ++i)
-        if (vec[i] == x)
+        if (v[i] == x)
             return false;
-    vec.push_back(x);
+    v.push_back(x);
     return true;
 }
 
@@ -7823,11 +7822,10 @@ void* CspVec_753810::Init(void* p0, int count, void** arr)
   m0 = 0;
   m8.Init(p0, (void*)count);
   for (int i = 0; i < count; i++) {
-    void* p = arr[i];
-    *(void**)((char*)m8.m44.mArray + i * 0x3c) = p;
-    if (p != 0) {
-      *(cSPTransform_s0075_3270*)((char*)m8.m44.mArray + i * 0x3c + 4) = *(cSPTransform_s0075_3270*)((char*)p + 8);
-      ++*(int*)((char*)p + 0x40);
+    *(void**)((char*)m8.m44.mArray + i * 0x3c) = arr[i];
+    if (arr[i] != 0) {
+      *(cSPTransform_s0075_3270*)((char*)m8.m44.mArray + i * 0x3c + 4) = *(cSPTransform_s0075_3270*)((char*)arr[i] + 8);
+      ++*(int*)((char*)arr[i] + 0x40);
     }
   }
   return this;

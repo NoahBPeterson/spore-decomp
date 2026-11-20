@@ -6057,18 +6057,22 @@ void SetUpCitizenBodyScaleRanges(cSpeciesProfile const * obj, float & out, float
 void __fastcall FUN_00d58a80(CityVis* self, void* edx)
 {
     (void)edx;
-    PtrVec14* v = &self->mVec170;
-    for (int i = 0; i < 2; ++i, --v) {
-        void** p = v->mpBegin;
+    PtrVec14* v = &self->mVec170 + 1;
+    for (int i = 1; i >= 0; --i) {
+        --v;
         void** e = v->mpEnd;
+        void** p = v->mpBegin;
         for (; p < e; ++p)
             if (*p)
                 ((IObj*)*p)->Slot4();
         if (v->mpBegin && ((uint32_t*)v->mpBegin)[-1] != 0)
             operator_delete_array(v->mpBegin);
     }
-    for (int i = 0; i < 2; ++i)
-        ((ActionCircle*)((char*)self + 0xf8 - i * 0x64))->Dtor();
+    ActionCircle* c = (ActionCircle*)((char*)self + 0x15c);
+    for (int i = 1; i >= 0; --i) {
+        c = (ActionCircle*)((char*)c - 0x64);
+        c->Dtor();
+    }
     ((ActionCircle*)((char*)self + 0x30))->Dtor();
     ((GonzagoTimer*)((char*)self + 0x10))->Dtor();
 }

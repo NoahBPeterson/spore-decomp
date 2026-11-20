@@ -236,15 +236,9 @@ bool EA::Debug::ReportWriter::WriteFormatted(char const * fmt, ...)
 // @ 0x0091eb20
 bool EA::Debug::ReportWriter::WriteKeyValue(char const * a, char const * b)
 {
-    if (!Write(a, strlen(a)))
-        return false;
-    if (!Write(": ", 2))
-        return false;
-    if (!Write(b, strlen(b)))
-        return false;
-    if (!Write("\r\n", 2))
-        return false;
-    return true;
+    if (Write(a, strlen(a)) && Write(": ", 2) && Write(b, strlen(b)))
+        return Write("\r\n", 2);
+    return false;
 }
 
 // @ 0x0091eba0

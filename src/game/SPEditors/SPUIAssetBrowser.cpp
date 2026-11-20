@@ -2029,22 +2029,16 @@ void SP::cSPUIAssetBrowser::SetWebBrowserVisibility(bool vis, unsigned int x)
     if (ld) {
         WinV* w = ld->GetWin(0x561e0a8, 1);
         if (w) {
-            uint8_t f;
-            if (bl && vis) f = 1; else f = 0;
-            w->SetFlag(1, f != 0);
+            w->SetFlag(1, bl && vis);
         }
     }
     WinV* lv = AT(WinV*, 0x90);
     if (lv) {
-        uint8_t f;
-        if (!bl && vis) f = 1; else f = 0;
-        lv->SetFlag(1, f != 0);
+        lv->SetFlag(1, !bl && vis);
     }
     WebBrowser* wb = AT(WebBrowser*, 0x21c);
     if (wb) {
-        uint8_t f;
-        if (!bl && vis) f = 1; else f = 0;
-        wb->SetActive(f);
+        wb->SetActive(!bl && vis);
         if (!bl && vis) MessageServer_s0064_4b90()->Send(0xd4231540, &x, 0);
     }
 }
@@ -2058,22 +2052,16 @@ void Browser::Fn_c50(char vis, uint32_t a, uint32_t b)
     if (ld) {
         WinV* w = ld->GetWin(0x561e0a8, 1);
         if (w) {
-            uint8_t f;
-            if (bl && vis) f = 1; else f = 0;
-            w->SetFlag(1, f != 0);
+            w->SetFlag(1, bl && vis);
         }
     }
     WinV* lv = AT(WinV*, 0x94);
     if (lv) {
-        uint8_t f;
-        if (!bl && vis) f = 1; else f = 0;
-        lv->SetFlag(1, f != 0);
+        lv->SetFlag(1, !bl && vis);
     }
     WebBrowser* wb = AT(WebBrowser*, 0x220);
     if (wb) {
-        uint8_t f;
-        if (!bl && vis) f = 1; else f = 0;
-        wb->SetActive(f);
+        wb->SetActive(!bl && vis);
         if (!bl && vis) AT(WebBrowser*, 0x220)->Navigate(a, b);
     }
 }
@@ -2087,9 +2075,7 @@ void Browser::Fn_d10(char vis, int x)
     if (ld) {
         WinV* w = ld->GetWin(0x561e0a8, 1);
         if (w) {
-            uint8_t f;
-            if (bl && vis) f = 1; else f = 0;
-            w->SetFlag(1, f != 0);
+            w->SetFlag(1, bl && vis);
         }
     }
     if (AT(SubA*, 0xc4)) {

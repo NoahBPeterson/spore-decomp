@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE)
 00703b60  199  SP::cHierGrid::Update; complete behaviour, inlined-threshold scheduling differs (code size 191 vs 225)
-00703c80  7  assign-copy a cGrid range from one source (CellMap::Assign at +0x1c); complete, only the tail differs (retail returns the stale eax from the mMask copy; cl adds `mov eax,esi` for `return first`)
 00703ce0  83  SP::cHierGrid constructor; complete, register selection (edx vs ecx for the zero/-1 fills) differs
 00704060  202  SP::cHierGrid::Shutdown; complete, vector erase/clear inlining differs
 00704140  217  vector<cGrid>::resize; complete, EH frame and grow path differ

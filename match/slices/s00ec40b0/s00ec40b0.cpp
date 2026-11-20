@@ -2,6 +2,7 @@
 extern "C" char g_148906c[];
 extern "C" char g_148907c[];
 extern "C" char g_1489090[];
+extern "C" char g_148918c[];
 
 #include <intrin.h>
 // Slice s00ec40b0 -- Spore UI: Sporepedia timeline card / asset view + the introsort + binary-heap
@@ -41,7 +42,6 @@ namespace SP { namespace Thumbnail { class cImportExport; } namespace Achievemen
 extern "C" void* EAAllocate(unsigned int size, const char* tag, int, int, int, int);   // 0x00f473a0
 extern "C" void  FUN_0066b050(void* p);                                                 // 0x0066b050
 extern "C" void* FUN_00ef19f0();                                                        // 0x00ef19f0
-extern "C" void  FUN_00b3d410(int a, void* b, int c);                                   // 0x00b3d410
 extern "C" void  FUN_00e3e350(int a, void* b, int c);                                   // 0x00e3e350
 extern "C" void* SP_MessageServer();                                                    // 0x0067dcc0
 extern "C" void  UI_CalloutMessageBox(void* self, const char* text);                    // 0x00809db0
@@ -163,9 +163,18 @@ void __fastcall UI_TimelineSporepediaCardData_sendMessage(void* self, int /*unus
 // =====================================================================================================
 // 0x00EC4330 -- set a 3-dword "card id" through the global card store and reset the view's state.
 // =====================================================================================================
+extern char g_1654c10;                                   // 0x01654c10 game-mode object
+struct cBigEditorObject_s00e3_dca0 {
+    void Activate(char bOn, const void* pKey, char bFlag);   // 0x00e3e350
+};
+extern "C" cBigEditorObject_s00e3_dca0* FUN_00b3d410();    // 0x00b3d410
+struct CardIdView_ec4330 {
+    void FUN_00ec4330(uint32_t* id);
+};
 // @ 0x00ec4330
-void FUN_00ec4330(void* self, uint32_t* id)
+void CardIdView_ec4330::FUN_00ec4330(uint32_t* id)
 {
+    void* self = this;
     uint32_t* slot = (uint32_t*)FUN_00ef19f0();
     slot[0] = id[0];
     slot[1] = id[1];
@@ -173,8 +182,7 @@ void FUN_00ec4330(void* self, uint32_t* id)
     slot[9]  = 1;
     slot[10] = 0;
     *(uint8_t*)((char*)self + 0x24) = 0;
-    FUN_00b3d410(1, (void*)0x01654c10, 1);
-    FUN_00e3e350(1, (void*)0x01654c10, 1);
+    FUN_00b3d410()->Activate(1, &g_1654c10, 1);
     *(uint32_t*)((char*)self + 0x28) = 10;
 }
 
@@ -322,23 +330,29 @@ void FUN_00ec45f0(Rec* base, int root, int hole, uint32_t key, uint32_t value)
     base[hole].value = value;
 }
 
+struct MsgServer_ec4650 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void AddHandler(void* listener, uint32_t messageId);   // +0x24
+};
+struct MsgListenerOwner_ec4650 {
+    void FUN_00ec4650();
+};
 // @ 0x00ec4650
-void FUN_00ec4650(void* self)
+void MsgListenerOwner_ec4650::FUN_00ec4650()
 {
-    int* srv = (int*)SP_MessageServer();
-    void* ctx = (self == 0) ? 0 : (char*)self + 8;
-    *(int**)((char*)self + 0x94)  = srv;
-    *(void**)((char*)self + 0x98) = ctx;
-    *(void**)((char*)self + 0x9c) = (void*)0x0148918c;
-    *(uint32_t*)((char*)self + 0xa0) = 10;
-    *(uint32_t*)((char*)self + 0xa4) = 0;
-
+    void* ctx = (this != 0) ? (char*)this + 8 : 0;
+    MsgServer_ec4650* srv = (MsgServer_ec4650*)SP_MessageServer();
+    *(MsgServer_ec4650**)((char*)this + 0x94) = srv;
+    *(void**)((char*)this + 0x98) = ctx;
+    *(void**)((char*)this + 0x9c) = g_148918c;
+    *(uint32_t*)((char*)this + 0xa0) = 10;
+    *(uint32_t*)((char*)this + 0xa4) = 0;
     if (srv != 0 && ctx != 0)
     {
-        int* vt = (int*)*srv;
-        typedef void (*Fn)(void*, void*, void*);
         for (uint32_t off = 0; off < 0x28; off += 4)
-            ((Fn)vt[0x24 / 4])(srv, *(void**)((char*)0x0148918c + off), ctx);
+            srv->AddHandler(ctx, *(uint32_t*)(g_148918c + off));
     }
 }
 
@@ -531,17 +545,12 @@ void FUN_00ec4b10(void* first, void* last)
 // @ 0x00ec4b50  -- sort_heap
 void FUN_00ec4b50(Rec* first, Rec* last)
 {
-    int n = (int)(last - first);
-    if (n < 2) return;
-    Rec* end = last - 1;
-    while (true)
+    int n;
+    for (; (n = (int)(last - first)) > 1; --last)
     {
-        Rec v = *end;
-        *end = *first;
+        Rec v = last[-1];
+        last[-1] = *first;
         FUN_00ec4900(first, 0, n - 1, 0, v.key, v.value);
-        --end;
-        n = (int)(end - first) + 1;
-        if (n < 2) break;
     }
 }
 
@@ -684,10 +693,11 @@ void FUN_00ec4de0(Rec* first, Rec* middle, Rec* last)
     FUN_00ec4b10(first, middle);
     for (Rec* it = middle; it < last; ++it)
     {
-        if (less_rec(*it, *first))
+        Rec v = *it;
+        Rec f = *first;
+        if (v.value <= f.value && (v.value < f.value || v.key < f.key))
         {
-            Rec v = *it;
-            *it = *first;
+            *it = f;
             FUN_00ec4900(first, 0, (int)(middle - first), 0, v.key, v.value);
         }
     }
@@ -759,6 +769,7 @@ public:
     uint32_t mState_48;
     void Reset(char notify, int param); // 0x00ec4f70
     void Finish();
+    void FUN_00ec5100();
 };
 
 // @ 0x00ec4f70
@@ -829,8 +840,9 @@ void SporepediaAssetController::Reset(char notify, int param)
 }
 
 // @ 0x00ec5100
-void FUN_00ec5100(void* self)
+void SporepediaAssetController::FUN_00ec5100()
 {
+    void* self = this;
     int o = *(int*)((char*)self + 0x18);
     char flag = *(char*)((char*)self + 0x24);
     *(uint32_t*)((char*)self + 0x2c) = 6;
@@ -838,8 +850,8 @@ void FUN_00ec5100(void* self)
     uint32_t id[3] = { 0, 0, 0 };
     if (o != 0) { id[0] = *(uint32_t*)(o + 8); id[1] = *(uint32_t*)(o + 0xc); id[2] = *(uint32_t*)(o + 0x10); }
 
-    ((SporepediaAssetController*)self)->Reset(1, 2);
-    if (flag) FUN_00ec4330(self, id);
+    Reset(1, 2);
+    if (flag) ((CardIdView_ec4330*)this)->FUN_00ec4330(id);
 }
 
 // @ 0x00ec5160

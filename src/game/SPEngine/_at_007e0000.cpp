@@ -26,17 +26,18 @@ struct cSPTransform_s007e_06b0 {
     Matrix33 mRotation;     // +0x14
     cSPTransform_s007e_06b0& operator=(const cSPTransform_s007e_06b0& o);   // 0x00537dc0
 };
-struct SplitEffectBase1 {
+struct SplitEffectBase1 {             // GmeRefCount-style base at +0x04
     virtual void w0();
     virtual void w1();
     virtual void w2();
+    int   mnRefCount;                   // +0x08 (object +0x08)
+    SplitEffectBase1() : mnRefCount(0) {}
 };
 struct SplitEffectBase0 {
     virtual void e0();
     virtual void e1();
 };
 struct cSplitControllerEffect : SplitEffectBase0, SplitEffectBase1 {
-    int   field08;              // +0x08
     void* mpOwner;              // +0x0c
     int   field10;              // +0x10
     char  field14;              // +0x14
@@ -378,17 +379,16 @@ SplitControllerDtorView::~SplitControllerDtorView()
 
 // @ 0x007e1010
 cSplitControllerEffect::cSplitControllerEffect(void* owner)
+: mpOwner(owner)
 {
-    field08 = 0;
-    mpOwner = owner;
     field10 = 0;
     field14 = 0;
     mpState = 0;
     vecBegin = 0;
     vecEnd = 0;
     vecCap = 0;
-    mTransform.mModCount = 0;
     mTransform.mFlags = 0;
+    mTransform.mModCount = 0;
     mTransform.mTranslation[0] = gZero3[0];
     mTransform.mTranslation[1] = gZero3[1];
     mTransform.mTranslation[2] = gZero3[2];

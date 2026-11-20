@@ -17,8 +17,6 @@
 00972e90 543 DoArrowKey: complete (both key switches, selection clear, notify, scrollbar update); regalloc/frame differ, uninitialized msg fields left as-is; flags /arch:SSE /fp:fast (original uses movss/cvtsi2ss/comiss/cvttss2si); col/row now one CellCoordinates struct (msg.pCur points at both, as in the original)
 00973200 42 ClearSelection: complete; 64-bit compare of +0x84 reproduced, store zeroing/-1 constants scheduled differently
 00973490 238 AddScrollBar: complete (vertical+horizontal creation, drawable hookup, add to window, dirty); diverges in call/arg ordering
-00973640 91 ColIterA::operator++ (SparseMatrixColIterator<CellData*>): complete; loop layout differs; difftest PASS
-009736c0 74 ColIterB::operator++ (SparseMatrixColIterator<CellFormatExtra>): complete; loop layout differs; difftest WEAK (32.6% coverage: random trees rarely reach the outer-advance loop)
 00973740 63 SparseMatrix::RowBegin (outer find + inner begin iterator): complete; arg-slot reuse for the key differs
 009737a0 61 SparseMatrix::RowEnd (outer find + inner end iterator): complete; arg-slot reuse for the key differs
 00973800 144 SparseMatrix::GetMinMaxUsedRowForCol: complete; original forms inner-tree pointers via node+0x14 and keeps a result flag in al; difftest WEAK after fixing the backward walk (original uses a reverse_iterator: two RBTreeDecrement calls per step, one on a copy for the dereference)

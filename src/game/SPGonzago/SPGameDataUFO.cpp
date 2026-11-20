@@ -1266,11 +1266,11 @@ struct IRefObject_s00c3_a180 {
 };
 void* __cdecl GetSpaceCombatTuning_s00c3_a180();       // 0x01029940
 int   __cdecl GetPropertyAsFloatArray(void* pList, int id, int* pCount, float** pArray); // 0x006a08b0
-void* __cdecl EraseToolEntry(void* p, void* q);   // 0x00b3d390
+void* __cdecl ToolManager_s00c3_a180();          // 0x00b3d390 ToolManager()
 char  __cdecl UTFWin_Window_Initialize();          // 0x00b1fbf0 (bool)
 void  __cdecl FUN_006a0ae0(void* pVector, int id, int* pCount, int* pBase); // 0x006a0ae0 (vector reserve)
 struct Fn0104e340 {
-    char __thiscall f(unsigned int toolId);    // 0x0104e340  CreateToolFromToolID (ret 4)
+    char __thiscall f(void* pEntry, IRefObject_s00c3_a180** ppSlot);   // 0x0104e340 (ret 8)
 };
 static const int kPropGalaxyWarpTime = 0x5c8077c;
 struct IHandler_s00c3_a180 {
@@ -2727,13 +2727,14 @@ void enableWeapon(int toolID, int weaponLevel, IRefObject_s00c3_a180** ppSlot)
     int base  = 0;
     int count = 0;
     void* pTuning = GetSpaceCombatTuning_s00c3_a180();
-    FUN_006a0ae0(*(void**)((U8*)pTuning + 8), toolID, &count, &base);
+    void*& rVec = *(void**)((U8*)pTuning + 8);
+    FUN_006a0ae0(rVec, toolID, &count, &base);
 
-    if (count <= weaponLevel)
+    if (weaponLevel >= count)
     {
         if (count > 0)
             weaponLevel = count - 1;
-        if (count <= weaponLevel)
+        if (weaponLevel >= count)
             return;
     }
 
@@ -2744,12 +2745,7 @@ void enableWeapon(int toolID, int weaponLevel, IRefObject_s00c3_a180** ppSlot)
         *ppSlot = 0;
         vcall_release8(pOld);           // vtable +0x8
     }
-    void* pEntryResult = EraseToolEntry(pEntry, ppSlot);
-    // CreateToolFromToolID is `?CreateToolFromToolID@cSPToolManager@@QAE_NI@Z`; its `this`
-    // (ecx) is the erase result and the tool id is the stack argument.  MSVC /O2 folds the
-    // `mov ecx, eax` here, so the encoded call differs from the original even though the
-    // observable behaviour is the same (see nonmatching.txt).
-    ((Fn0104e340*)pEntryResult)->f((unsigned int)(U32)pEntry);
+    ((Fn0104e340*)ToolManager_s00c3_a180())->f(pEntry, ppSlot);
 }
 
 // @ 0x00c3a9f0

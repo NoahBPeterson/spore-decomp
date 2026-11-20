@@ -1334,7 +1334,8 @@ void vector_s0047_2b80<T,A>::resize(uint32_t n)
 extern float DAT_016881f0, DAT_016881f4, DAT_016881f8;
 #define VTC(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
 struct Quat { float x, y, z, w; };
-struct S18 { int a; float b, c, d; char e; char f; int g; };  // +0x12..+0x13 implicit padding
+struct S18V { float x, y, z; S18V(const S18V& o) : x(o.x), y(o.y), z(o.z) {} };
+struct S18 { int a; S18V v; char e; char f; int g; };  // +0x12..+0x13 implicit padding
 struct S24a { float a, b, c, d; int e; float f, g, h; int i; };
 struct S24b { float a, b, c, d, e, f; int g; float h, i; };
 struct cTerrainMapSet_s00b7_ea80 {
@@ -2224,7 +2225,7 @@ S18** FUN_00b7f5c0(S18** out, const S18* first, const S18* last, S18* dst)
     if (first != last) {
         do {
             if (dst) {
-                dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
+                dst->a = first->a; dst->v = first->v;
                 dst->e = first->e; dst->f = first->f; dst->g = first->g;
             }
             first++;
@@ -2238,14 +2239,8 @@ S18** FUN_00b7f5c0(S18** out, const S18* first, const S18* last, S18* dst)
 // @ 0x00b7f630
 S18* FUN_00b7f630(const S18* first, const S18* last, S18* dst)
 {
-    while (first != last) {
-        if (dst) {
-            dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
-            dst->e = first->e; dst->f = first->f; dst->g = first->g;
-        }
-        first++;
-        dst++;
-    }
+    for (; first != last; ++first, ++dst)
+        ::new ((void*)dst) S18(*first);
     return dst;
 }
 
@@ -2311,7 +2306,7 @@ void* FUN_00b7f860(S18* dst, unsigned count, const S18* src)
         S18* d = dst;
         do {
             if (d) {
-                d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+                d->a = src->a; d->v = src->v;
                 d->e = src->e; d->f = src->f; d->g = src->g;
             }
             --count;
