@@ -458,7 +458,11 @@ struct Query {
 // ---- items of slice s00a23360 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int __cdecl _strnicmp(const char*, const char*, unsigned int);
 extern float g_1485720;
-extern int   g_16e61a8;
+struct AudioCoreSystem_s00a2_1220 {   // rw::audio::core::System
+    char pad0[8];
+    double mTime;                      // +8
+};
+extern AudioCoreSystem_s00a2_1220* g_16e61a8;     // 0x016e61a8
 extern const char g_lockName[];   // 0x01452970
 #define EA_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* operator new(unsigned int, const char*, int, int, const char*, int);
@@ -5023,8 +5027,8 @@ bool __stdcall isMsg00a21200(void* msg)
 // @ 0x00a21220
 double globalTime_00a21220()
 {
-    void* p = *(void**)0x16e61a8;
-    if (p != 0) return *(double*)((char*)p + 8);
+    AudioCoreSystem_s00a2_1220* p = g_16e61a8;
+    if (p != 0) return p->mTime;
     return 0.0;
 }
 
