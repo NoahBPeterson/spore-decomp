@@ -1004,10 +1004,11 @@ void* __cdecl FUN_0080ed50()
 UI_LayerManager* __thiscall UI_LayerManager::ctor()
 {
     u8* self = (u8*)this;
-    *(void**)(self + 4) = (void*)0x13ec458;
+    *(void**)(self + 4) = (void*)g_13ec458;
+    _ReadWriteBarrier();
     *(u32*)(self + 8) = 0;
-    vtbl = (void**)0x1417de4;
-    *(void**)(self + 4) = (void*)0x1417dd4;
+    vtbl = (void**)g_1417de4;
+    *(void**)(self + 4) = (void*)g_1417dd4;
     *(u32*)(self + 0xc) = 0;
     *(u32*)(self + 0x10) = 0;
     *(u32*)(self + 0x14) = 0;
@@ -1017,6 +1018,7 @@ UI_LayerManager* __thiscall UI_LayerManager::ctor()
     *(u8*)(self + 0x34) = 0;
     *(u32*)(self + 0x38) = 0xffffffff;
     *(u32*)(self + 0x3c) = 0;
+    _ReadWriteBarrier();
     void* inl = self + 0x58;
     *(void**)(self + 0x50) = inl;
     *(void**)(self + 0x44) = inl;
@@ -1025,6 +1027,8 @@ UI_LayerManager* __thiscall UI_LayerManager::ctor()
     *(u8*)(self + 0x94) = 0;
     return this;
 }
+
+
 
 // @ 0x0080ee10
 void* __thiscall UI_LayerManager::VectorDtor(u8 flags)

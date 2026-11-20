@@ -21,3 +21,4 @@
 ../src/game/Spui/SPUILayers.cpp  ?FUN_0080df50@@YIHPAD@Z  0080df50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?Release@cSPUIModelsAndEffectsRenderer@@QAEHXZ  0080df80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?RenderEnd@Layered@@QAEXXZ  0080de20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?ctor@UI_LayerManager@@QAEPAU1@XZ  0080edb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
