@@ -1244,12 +1244,17 @@ void* EA::XHTML::Layout::TextStyleHashtable::FindNodeInBucket(void* pNode, const
     return pNode;
 }
 
+extern "C" char g_1437e8c[];   // TableRow vtable
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x008ec170
 EA::XHTML::Layout::TableRow::TableRow(EA::XHTML::Layout::Page_s008e_b250* pPage, void* pElement)
 : EA::XHTML::Layout::ContainerItem(pPage, 8)
 {
-    mChildItems.mpNext = &mChildItems;
-    mChildItems.mpPrev = &mChildItems;
+    eastl::intrusive_list_node_s008e_b250* pAnchor = &mChildItems;
+    pAnchor->mpPrev = pAnchor;
+    pAnchor->mpNext = pAnchor;
     mStyleRules = 0;
     mnRuleCount = 0;
     mPlacement = 0;
@@ -1258,7 +1263,8 @@ EA::XHTML::Layout::TableRow::TableRow(EA::XHTML::Layout::Page_s008e_b250* pPage,
     mpBorder = 0;
     mpBackground = 0;
     mpElement = pElement;
-    *(void**)this = (void*)0x1437e8c;
+    *(void**)this = (void*)g_1437e8c;
+    _ReadWriteBarrier();
     mpCellsBegin = 0;
     mpCellsEnd = 0;
     mpCellsCapacity = 0;
