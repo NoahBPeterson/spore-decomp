@@ -14,3 +14,4 @@
 ../src/game/SPEngine/SPJobManager.cpp  ??0cJobDataView_68fbe0@@QAE@XZ  0068fbe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?ScheduleJob@cJobManager@@QAEXPAUcJobData@@@Z  00690540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Queue@cJob_s0069_07e0@@QAEXXZ  006909b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?GetMaxDependentPriority@@YGIPAUcJobData@@@Z  0068ffb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

@@ -1197,18 +1197,26 @@ bool cJobManager::IsAffinityInUse(unsigned int affinity)
     return false;
 }
 
+struct JobDependentLinkBase {
+    JobDependentLinkBase* mpNext;
+    JobDependentLinkBase* mpPrev;
+};
+struct cJobLinkDependentView : JobDependencyNode, JobDependentLinkBase {
+    cJobData* mpDependency;         // +0x10
+    cJobData* mpDependent;          // +0x14
+};
 // @ 0x0068ffb0
-unsigned int GetMaxDependentPriority(cJobData* job)
+unsigned int __stdcall GetMaxDependentPriority(cJobData* job)
 {
-    unsigned int maxPri = (unsigned int)job->mPriority;
-    IntrusiveList* pAnchor = &job->mDependents;
-    for (IntrusiveList* it = pAnchor->mpNext; it != pAnchor; it = it->mpNext) {
-        cJobLink* link = (cJobLink*)((char*)it - 8);
-        cJobData* dep = link->mpDependent;
-        int pri = dep->mRealPriority;
-        if ((int)maxPri < pri) maxPri = (unsigned int)pri;
+    int maxPri = job->mPriority;
+    JobDependentLinkBase* pAnchor = (JobDependentLinkBase*)&job->mDependents;
+    for (JobDependentLinkBase* it = pAnchor->mpNext; it != pAnchor; ) {
+        cJobLinkDependentView* link = static_cast<cJobLinkDependentView*>(it);
+        it = it->mpNext;
+        int pri = link->mpDependent->mRealPriority;
+        if (pri > maxPri) maxPri = pri;
     }
-    return maxPri;
+    return (unsigned int)maxPri;
 }
 
 // @ 0x0068fff0
