@@ -2637,8 +2637,11 @@ void FUN_00808230(W_s0080_7840* w, float* v)
         t = mem ? (Xform*)WindowTransform_ctor((Xform*)mem) : 0;
         w->m104(t);
     }
-    if (t->f1c != v[0] || t->f20 != v[1] || t->f24 != v[2] || t->f28 != v[3]) {
-        t->f1c = v[0]; t->f20 = v[1]; t->f24 = v[2]; t->f28 = v[3];
+    struct Rect4 { float x0, y0, x1, y1; };
+    Rect4& cur = *(Rect4*)&t->f1c;
+    const Rect4& want = *(const Rect4*)v;
+    if (cur.x0 != want.x0 || cur.y0 != want.y0 || cur.x1 != want.x1 || cur.y1 != want.y1) {
+        cur = want;
         w->v98();
     }
 }
