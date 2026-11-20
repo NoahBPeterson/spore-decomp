@@ -12,7 +12,6 @@
 00745140 210 FillColor: switch jump-table/block layout differs [equiv: WEAK (92.6% cov)]
 00745520 45 slot_vector::next: bit-extraction lowering (test mem vs shr/test) differs [equiv: PASS equiv]
 00745560 65 load-queue chunk find: cursor/segment register schedule differs [equiv: FAIL (memory pool)]
-007455e0 49 DestroyChunk: vtable release + chunk-pointer reload schedule differs [equiv: PASS equiv]
 00745660 63 slot_vector count: bit-extraction lowering differs [equiv: WEAK (34.8% cov)]
 007456a0 73 slot assign: value-copy/flag branch layout differs [equiv: PASS equiv]
 00745710 98 deque advance: segment index math/register schedule differs [equiv: FAIL (memory pool)] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
