@@ -170,6 +170,7 @@ void* NounManager();
 struct TextView {
     int GetLineCount(void* pTool, void* pObject); // 0x01054350 (ret 8)
 };
+class cSPToolStrategy_s0105_6160;
 class cSPToolStrategy {
 public:
     virtual void v00();
@@ -216,7 +217,8 @@ public:
     bool ActivateTool(int nToolId);                     // 0x00e537e0
     char CanUseToolAtLocation(int nToolId, int nTarget, int a3);  // 0x00e53980
     void UpdatePassive();                                // 0x00e53bb0
-    bool StopTool();                                     // 0x00e53650
+    bool StopTool();
+    bool StopTool(cSPToolStrategy_s0105_6160* pTool);    // 0x01053650
     Vec3* FindTestTerrainLocation(Vec3* pOut, int nTarget);  // 0x00e53be0
     int SetErrorEvent(int nEventType, bool bPost);       // 0x00e527f0
     void AttachToolEffect(const void* pData, int arg2);  // 0x01053d50
@@ -2577,15 +2579,12 @@ int cSPEnergyRepairToolStrategy::AdjustCostPercent(int nBaseCost)
 }
 
 // @ 0x01053650
-static bool StopToolBody(cSPToolStrategy* pTool)
+// The strategy's StopTool works on the tool passed in (ret 4), not on `this`.
+bool cSPToolStrategy::StopTool(cSPToolStrategy_s0105_6160* pTool)
 {
     pTool->mbActive = 0;
     pTool->mTimer.Stop();
     return true;
-}
-bool cSPToolStrategy::StopTool()
-{
-    return StopToolBody(this);
 }
 
 // @ 0x010536e0

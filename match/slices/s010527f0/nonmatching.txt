@@ -8,7 +8,6 @@
 01053320  146  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tribe scan; planet/tribe accessors and the editor tray duration lookup are unresolved; equiv UNSUPPORTED (unresolved cPlanet/cPlanetSpecies)
 010533d0  196  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) colony scan; the UFO/colony accessors are modelled through unresolved helpers and the upfront flag test is simplified; equiv UNSUPPORTED (unresolved cSPSimulatorSpaceGame accessors)
 010534c0  156  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) full species scan; planet-model and species accessors are unresolved; equiv UNSUPPORTED (unresolved PlanetModel/cPlanet)
-01053650  20  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tool stop; the timer stop is a tail-jump in retail but a normal call here; equiv FAIL (first mismatch esp)
 01053980  524  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) use-location validity; space-game inventory, item direction and event-log calls are unresolved so the target/range checks collapse; equiv UNSUPPORTED (unresolved accessors)
 01053bb0  54  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) passive update; the use-tool-stop path is modelled as a plain release, missing the manager call; equiv FAIL (first mismatch execution)
 01053be0  328  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) test terrain location search; planet-model direction and random-surface helpers are unresolved; equiv UNSUPPORTED (unresolved PlanetModel helpers)
