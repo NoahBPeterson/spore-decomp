@@ -64,3 +64,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?ctor@ArtilleryProjectile@@QAEPAU1@XZ  00cb6ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Write@CArtilleryProjectile@@QAE_NPAUIStream@@@Z  00cb37d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5980@cDefaultBeamProjectile@@QAEIXZ  00cb5980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb94b0@TObj@@QAEPAV1@XZ  00cb94b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
