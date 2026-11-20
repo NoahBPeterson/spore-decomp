@@ -858,17 +858,19 @@ int EA::ArgScript::cExpression::EvalIntFactor(char const *& p)
 {
     int base = EvalSignedIntNumber(p);
     DiscardWhiteSpace(&p);
-    if (*p != '^')
-        return base;
-    ++p;
-    int exp = EvalIntFactor(p);
-    int result = 1;
-    for (; exp > 0; exp >>= 1) {
-        if (exp & 1)
-            result *= base;
-        base *= base;
+    if (*p == '^') {
+        ++p;
+        int exp = EvalIntFactor(p);
+        int x = base;
+        int result = 1;
+        for (; exp > 0; exp >>= 1) {
+            if (exp & 1)
+                result *= x;
+            x *= x;
+        }
+        return result;
     }
-    return result;
+    return base;
 }
 
 // @ 0x0083ea70
