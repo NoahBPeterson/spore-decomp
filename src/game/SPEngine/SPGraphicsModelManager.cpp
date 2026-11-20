@@ -6993,12 +6993,11 @@ void EditorResource::RemoveListener(unsigned key)
 // @ 0x0074f1a0
 bool VecIntAdd::add_unique(int x)
 {
-    IntVec& vec = v;
-    int n = vec.size();
+    int n = v.size();
     for (int i = 0; i < n; ++i)
-        if (vec[i] == x)
+        if (v[i] == x)
             return false;
-    vec.push_back(x);
+    v.push_back(x);
     return true;
 }
 

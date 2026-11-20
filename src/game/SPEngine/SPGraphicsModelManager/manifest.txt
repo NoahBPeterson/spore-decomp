@@ -84,3 +84,4 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?OffsetOrE4@@YGHH@Z  007439b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?DestroyChunk@@YIXH@Z  007455e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1LoadQueueVectorDtorView@@QAE@XZ  007478b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include /GS-
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?add_unique@VecIntAdd@@QAE_NH@Z  0074f1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
