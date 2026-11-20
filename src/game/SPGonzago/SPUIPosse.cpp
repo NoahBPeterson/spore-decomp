@@ -2105,7 +2105,7 @@ void* __fastcall FUN_00e23e80(void* self, void* dummy, void** src)
 }
 
 // @ 0x00e23ee0
-void __cdecl FUN_00e23ee0(void* first, void* last, u32* key)
+void* __cdecl FUN_00e23ee0(void* first, void* last, u32* key)
 {
   s32 n = (s32)((char*)last - (char*)first) >> 4;
   while (n > 0) {
@@ -2118,6 +2118,7 @@ void __cdecl FUN_00e23ee0(void* first, void* last, u32* key)
       n = half;
     }
   }
+  return first;
 }
 
 // @ 0x00e23f30
