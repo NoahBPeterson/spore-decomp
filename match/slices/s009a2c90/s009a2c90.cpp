@@ -414,23 +414,31 @@ __declspec(noinline) int FUN_009a37e0(int key) {
 // ---------------------------------------------------------------------------
 // @ 0x009a3820  S9a3820::f: rbtree lower_bound (<=)
 // ---------------------------------------------------------------------------
+struct KeyPair9a3820 { unsigned first, second; };
+static __forceinline bool PairLess(const KeyPair9a3820& a, const KeyPair9a3820& b) {
+  return a.first < b.first || (!(b.first < a.first) && a.second < b.second);
+}
+static __forceinline RbNode* LowerBound9a3820(RbTree* t, const KeyPair9a3820& k) {
+  RbNode* node = t->anchor.parent;
+  RbNode* result = &t->anchor;
+  while (node) {
+    if (!PairLess(*(const KeyPair9a3820*)&node->key0, k)) {
+      result = node;
+      node = node->right;
+    } else
+      node = node->left;
+  }
+  return result;
+}
 __declspec(noinline) int* S9a3820::f(int* out, unsigned* key) {
   RbTree* t = (RbTree*)this;
-  RbNode* head = &t->anchor;
-  RbNode* parent = head;
-  RbNode* node = head->parent;
-  if (node) {
-    unsigned k0 = key[0], k1 = key[1];
-    do {
-      if (k0 > node->key0 || (k0 == node->key0 && k1 > node->key1)) node = node->left;
-      else { parent = node; node = node->right; }
-    } while (node);
-    if (parent != head && parent->key0 <= k0 && (parent->key0 < k0 || parent->key1 <= k1)) {
-      *out = (int)(size_t)parent;
-      return out;
-    }
+  const KeyPair9a3820& k = *(const KeyPair9a3820*)key;
+  RbNode* pos = LowerBound9a3820(t, k);
+  if (pos != &t->anchor && !(pos->key0 > k.first || (!(pos->key0 < k.first) && k.second < pos->key1))) {
+    *out = (int)(size_t)pos;
+    return out;
   }
-  *out = (int)(size_t)head;
+  *out = (int)(size_t)&t->anchor;
   return out;
 }
 
