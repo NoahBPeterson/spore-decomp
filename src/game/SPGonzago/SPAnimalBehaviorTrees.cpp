@@ -12169,9 +12169,9 @@ u8 FUN_00d870b0(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState*
 // @ 0x00d871a0
 void FUN_00d871a0(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState* state)
 {
-    void* p = state->m4.p;
-    if (p) {
-        state->m4.p = 0;
+    void** slot = &state->m4.p;
+    if (void* p = *slot) {
+        *slot = 0;
         ((void (__thiscall*)(void*))VT(p)[4 / 4])(p);
     }
     MOPS(&creature->mB4C->mStimuli)->FUN_00bc98f0(0x200000, 0);
@@ -12216,9 +12216,9 @@ u8 FUN_00d87200(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState*
 // @ 0x00d872d0
 void FUN_00d872d0(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState* state)
 {
-    void* p = state->m4.p;
-    if (p) {
-        state->m4.p = 0;
+    void** slot = &state->m4.p;
+    if (void* p = *slot) {
+        *slot = 0;
         ((void (__thiscall*)(void*))VT(p)[4 / 4])(p);
     }
     MOPS(&creature->mB4C->mStimuli)->FUN_00bc98f0(0x200000, 0);
