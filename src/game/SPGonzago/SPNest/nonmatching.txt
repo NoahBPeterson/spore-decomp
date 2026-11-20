@@ -4,7 +4,6 @@
 00c6aa50 63 logic: FUN_00ba3f90 is __thiscall on the returned object (not __cdecl(obj,0,0)), FUN_00b3d4c0 is __stdcall, and the function returns bool (retail sets al only). Residual push/register order. fix1: quick check EQUIVALENT
 00c6aab0 110 Complete cNest::MoveNest; residual is vector temp scheduling and register allocation.
 00c6ab90 54 Complete cNest::AddFootprint; residual is planet-model reload scheduling + call shapes.
-00c6abf0 55 logic: the bound test is unsigned (retail jae; a generation with the top bit set is out of range). Residual div-by-stride/regalloc. fix1: quick check PASS
 00c6ac40 15 Complete UnbrokenEggsInNest; residual is loop-index/pointer induction-variable allocation.
 00c6ac90 19 logic: the caller sees eax = the argument (retail leaves eax=i), so the method returns int i; bounds check unchanged. Residual begin/end register allocation. fix1: quick check PASS
 00c6adc0 60 Complete evolved-key vector serialiser; residual is loop/call scheduling.
