@@ -115,3 +115,4 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?func6500@CB_s00c0_53b0@@QAEXXZ  00c06500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?funcCCh@CCCh@@QAEXH@Z  00c07400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c201a0@cCreatureFactory@@QAEPAXDPAX0@Z  00c201a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?C0c250_@C_s00c0_bd70@@QAEHXZ  00c0c250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

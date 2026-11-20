@@ -7683,17 +7683,14 @@ int __thiscall C_s00c0_bd70::C0c250_()
   bool b = false;
   void* p = FUN_00b3d4c0();
   if (p) {
-    void* nm = SP_NounManager();
-    void* av = ((GameNounManager_s00c0_bd70*)nm)->GetAvatar();
-    b = ((CreatureBaseMgr*)p)->FUN_00ba3f90(&cf->mB28, av, this) == 6;
+    b = ((CreatureBaseMgr*)p)->FUN_00ba3f90(
+            &cf->mB28, ((GameNounManager_s00c0_bd70*)SP_NounManager())->GetAvatar(), this) == 6;
   }
-  if (((cf->mB58 >> 7) & 1) == 0 && !b) {
-    bool def = (*(bool(__thiscall*)(void*))((*(void***)this)[0xd0/4]))(this);
-    if (!def) return 0;
-    if (SP_GetCurrentGameMode() != (void*)0x1654c10) return 1;
-    return 0;
-  }
-  return 1;
+  if ((bool)((cf->mB58 >> 7) & 1) || b ||
+      ((*(bool(__thiscall*)(void*))((*(void***)this)[0xd0/4]))(this) &&
+       SP_GetCurrentGameMode() != (void*)0x1654c10))
+    return 1;
+  return 0;
 }
 
 // @ 0x00c0c2d0
