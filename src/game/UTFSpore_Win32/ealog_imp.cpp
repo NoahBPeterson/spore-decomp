@@ -1638,11 +1638,8 @@ bool EA::Trace::Server_s0092_34f0::RemoveLogReporter(EA::Trace::ILogReporter_s00
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter1(void* rec)
 {
     void* r = rec;
-    EA::Trace::LogReporter_s0092_34f0* self = this;
-    if ((*(unsigned char*)((char*)r + 8) & 1) != 0 && self->mIsEnabled && self->mFilter.mpObject != 0 && self->mFormatter.mpObject != 0) {
-        bool ok = ((bool(__thiscall*)(void*, void*))(*(void***)self->mFilter.mpObject)[5])(self->mFilter.mpObject, r);
-        if (!ok) return 0;
-    }
+    if ((*(unsigned char*)((char*)r + 8) & 1) != 0)
+        return FilterEnabled(r);
     return 1;
 }
 
@@ -1650,11 +1647,8 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter1(void* rec)
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter2(void* rec)
 {
     void* r = rec;
-    EA::Trace::LogReporter_s0092_34f0* self = this;
-    if ((*(unsigned char*)(*(char**)((char*)r + 0xc) + 8) & 1) != 0 && self->mIsEnabled && self->mFilter.mpObject != 0 && self->mFormatter.mpObject != 0) {
-        bool ok = ((bool(__thiscall*)(void*, void*))(*(void***)self->mFilter.mpObject)[4])(self->mFilter.mpObject, r);
-        if (!ok) return 0;
-    }
+    if ((*(unsigned char*)(*(char**)((char*)r + 0xc) + 8) & 1) != 0)
+        return FilterEnabled2(r);
     return 1;
 }
 
@@ -1662,11 +1656,8 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter2(void* rec)
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter3(void* rec)
 {
     void* r = rec;
-    EA::Trace::LogReporter_s0092_34f0* self = this;
-    if ((*(unsigned char*)((char*)r + 8) & 2) != 0 && self->mIsEnabled && self->mFilter.mpObject != 0 && self->mFormatter.mpObject != 0) {
-        bool ok = ((bool(__thiscall*)(void*, void*))(*(void***)self->mFilter.mpObject)[5])(self->mFilter.mpObject, r);
-        if (!ok) return 0;
-    }
+    if ((*(unsigned char*)((char*)r + 8) & 2) != 0)
+        return FilterEnabled(r);
     return 1;
 }
 
@@ -1674,11 +1665,8 @@ int EA::Trace::LogReporter_s0092_34f0::SkipFilter3(void* rec)
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter4(void* rec)
 {
     void* r = rec;
-    EA::Trace::LogReporter_s0092_34f0* self = this;
-    if ((*(unsigned char*)(*(char**)((char*)r + 0xc) + 8) & 2) != 0 && self->mIsEnabled && self->mFilter.mpObject != 0 && self->mFormatter.mpObject != 0) {
-        bool ok = ((bool(__thiscall*)(void*, void*))(*(void***)self->mFilter.mpObject)[4])(self->mFilter.mpObject, r);
-        if (!ok) return 0;
-    }
+    if ((*(unsigned char*)(*(char**)((char*)r + 0xc) + 8) & 2) != 0)
+        return FilterEnabled2(r);
     return 1;
 }
 
