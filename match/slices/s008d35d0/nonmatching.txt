@@ -5,7 +5,6 @@
 008d3820 157 FUN_008d3820(a,b): insertion sort of 16-byte keys; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (88 valid, 12.9% coverage)
 008d40b0 70 FUN_008d40b0(a,b,p3): heapify-all driver (bottom-up sift-down); same results, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (344 valid, 34.9% coverage)
 008d4110 141 FUN_008d4110(a,b,p3): shell/heap extraction pass over 16-byte keys; same results, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (362 valid, 30.5% coverage)
-008d3690 93 FUN_008d3690(rec): set duplicate flag from run count then unlink via FUN_008d35d0; ecx-receiver member, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (259 valid, 100.0% coverage)
 008d3750 199 FUN_008d3750(a,b): insertion sort of 16-byte glyph keys; regalloc differs (would fault on synthetic inputs). flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, budget+fault)
 008d3a10 168 FUN_008d3a10(...): sift-up insert into heap of 16-byte keys; regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (233 valid, 79.7% coverage)
 008d3d30 108 FUN_008d3d30(obj,key,container): lookup rect entry then require every non-zero key in container runs; regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (255 valid, 100.0% coverage)
