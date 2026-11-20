@@ -465,13 +465,14 @@ static void sPull(int handle, float dist, float from, float to, const Vector3* t
 bool __cdecl sCellIsBehind(cCell* cell, const float* point) {
   float dir[3];
   sCellGetFacing(dir, cell);
-  const float dx = point[0] - cell->mPosition.x;
-  const float dy = point[1] - cell->mPosition.y;
-  const float dz = point[2] - cell->mPosition.z;
-  float dot = dx * dir[0];
-  dot += dy * dir[1];
-  dot += dz * dir[2];
-  if (dot < 0.0f)
+  float d[3];
+  d[0] = point[0] - cell->mPosition.x;
+  d[1] = point[1] - cell->mPosition.y;
+  d[2] = point[2] - cell->mPosition.z;
+  float dot = dir[0] * d[0];
+  dot += dir[1] * d[1];
+  dot += dir[2] * d[2];
+  if (0.0f > dot)
     return true;
   return false;
 }
