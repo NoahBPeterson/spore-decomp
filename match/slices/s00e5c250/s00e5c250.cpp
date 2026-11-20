@@ -132,10 +132,10 @@ bool FUN_00e5c410(int id, int kind) {
 // @ 0x00e5c460
 bool FUN_00e5c460(int id, int kind) {
   if (kind == 0) return true;
-  char* e = (char*)((CellLookup_s00e5c250*)((char*)gCellGame_16b3c04 + 0x1c))->FUN_00b72210(id);
-  int t = FUN_00e57340(e);
+  CellLookup_s00e5c250* cells = (CellLookup_s00e5c250*)((char*)gCellGame_16b3c04 + 0x1c);
+  char* e = (char*)cells->FUN_00b72210(id);
+  if (FUN_00e57340(e) == 4 && kind == 3) return true;
   float h = *(float*)(e + 0x58);
-  if (t == 4 && kind == 3) return true;
   if (h > gK_1470f1c && kind == 2) return true;
   if (h <= gK_1470f1c && kind == 1) return true;
   return false;
