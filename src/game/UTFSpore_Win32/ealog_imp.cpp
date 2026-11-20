@@ -1207,8 +1207,7 @@ void * EA::Trace::Server::AsInterface(EA::COM::InterfaceId id)
 // @ 0x009236d0
 int EA::Trace::Server::Release()
 {
-    int n = _InterlockedExchangeAdd((volatile long*)&mnRefCount.mValue, -1);
-    --n;
+    int n = _InterlockedDecrement((volatile long*)&mnRefCount.mValue);
     if (n == 0) {
         _InterlockedExchange((volatile long*)&mnRefCount.mValue, 1);
         if (this)
@@ -1524,10 +1523,11 @@ EA::Trace::LogFormatterFancy_s0092_34f0::~LogFormatterFancy_s0092_34f0()
 EA::Trace::LogFilterGroupLevels_s0092_34f0::LogFilterGroupLevels_s0092_34f0(void* cfg)
 {
     mnRefCount = 0;
-    mName.mpBegin = 0;
-    mName.mpEnd = 0;
-    mName.mpCapacity = 0;
-    ((EaStringInit*)&mName)->FUN_0057cc10((const char*)cfg);
+    EaString* name = &mName;
+    name->mpBegin = 0;
+    name->mpEnd = 0;
+    name->mpCapacity = 0;
+    ((EaStringInit*)name)->FUN_0057cc10((const char*)cfg);
     mGlobalLevel = 1;
     void* alloc = EA_GetDefaultAllocator();
     EA::Trace::RBNodeBase* anchor = &mGroupLevelMap.mAnchor;
@@ -1536,10 +1536,10 @@ EA::Trace::LogFilterGroupLevels_s0092_34f0::LogFilterGroupLevels_s0092_34f0(void
     *(Zero3*)((int*)anchor + 1) = Zero3();
     mGroupLevelMap.mpAllocator = alloc;
     mGroupLevelMap.mpAllocator2 = 0;
-    anchor->mpParent = 0;
-    anchor->mColor = 0;
+    mGroupLevelMap.mAnchor.mpParent = 0;
+    mGroupLevelMap.mAnchor.mColor = 0;
     mGroupLevelMap.mnSize = 0;
-    anchor->mpRight = anchor;
+    mGroupLevelMap.mAnchor.mpRight = anchor;
     anchor->mpLeft = anchor;
 }
 

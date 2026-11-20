@@ -1,10 +1,8 @@
-009236d0  34   Server::Release: complete; interlocked schedule + dec/sub differ
 009237c0  91   Server::GetLogReporter: complete; vector walk/return schedule differs
 00923ac0  87   rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)
 00923bc0  -    LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
 00923c90  13   LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
-00923f30  36   LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
 00924010  52   LogReporter::SetName: complete; notify-vcall local vs memory loads
 00924060  144  rbtree::DoInsertValue: complete; traversal/insert schedule differs
 00924170  34   LogReporter::LogReporter: complete; string/notify schedule differs

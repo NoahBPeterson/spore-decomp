@@ -37,3 +37,5 @@
 ../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SkipFilter2@LogReporter_s0092_34f0@Trace@EA@@QAEHPAX@Z  009242b0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SkipFilter3@LogReporter_s0092_34f0@Trace@EA@@QAEHPAX@Z  00924350  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SkipFilter4@LogReporter_s0092_34f0@Trace@EA@@QAEHPAX@Z  00924390  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?Release@Server@Trace@EA@@UAEHXZ  009236d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ??0LogFilterGroupLevels_s0092_34f0@Trace@EA@@QAE@PAX@Z  00923f30  /O2 /MD /Gy /TP /Isrc/game/include
