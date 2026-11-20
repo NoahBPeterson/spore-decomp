@@ -7819,6 +7819,95 @@ Blk28* Blk28::Destroy(u8 flags)
     return this;
 }
 
+struct ObjV_01068800 {   // the object whose two strings fill the windows
+    virtual void vf00();
+    virtual void vf04();
+    virtual void vf08();
+    virtual void vf0c();
+    virtual void vf10();
+    virtual void vf14();
+    virtual void vf18();
+    virtual void vf1c();
+    virtual void vf20();
+    virtual void vf24();
+    virtual void vf28();
+    virtual void vf2c();
+    virtual void vf30();
+    virtual void vf34();
+    virtual void vf38();
+    virtual void vf3c();
+    virtual void vf40();
+    virtual void vf44();
+    virtual void vf48();
+    virtual void vf4c();
+    virtual void vf50();
+    virtual void vf54();
+    virtual void vf58();
+    virtual void vf5c();
+    virtual void vf60();
+    virtual void vf64();
+    virtual void vf68();
+    virtual void vf6c();
+    virtual void vf70();
+    virtual void vf74();
+    virtual void vf78();
+    virtual void vf7c();
+    virtual void vf80();
+    virtual void vf84();
+    virtual void vf88();
+    virtual void vf8c();
+    virtual void vf90();
+    virtual void vf94();
+    virtual void vf98();
+    virtual void vf9c();
+    virtual void vfa0();
+    virtual void vfa4();
+    virtual void vfa8();
+    virtual void vfac();
+    virtual void vfb0();
+    virtual void vfb4();
+    virtual void FillLate(EaString16* out);     // +0xb8
+    virtual void vfbc();
+    virtual void vfc0();
+    virtual void vfc4();
+    virtual void FillEarly(EaString16* out);    // +0xc8
+};
+struct WinV_01068800 {   // UTFWin window, only the caption setter is used here
+    virtual void vf00();
+    virtual void vf04();
+    virtual void vf08();
+    virtual void vf0c();
+    virtual void vf10();
+    virtual void vf14();
+    virtual void vf18();
+    virtual void vf1c();
+    virtual void vf20();
+    virtual void vf24();
+    virtual void vf28();
+    virtual void vf2c();
+    virtual void vf30();
+    virtual void vf34();
+    virtual void vf38();
+    virtual void vf3c();
+    virtual void vf40();
+    virtual void vf44();
+    virtual void vf48();
+    virtual void vf4c();
+    virtual void vf50();
+    virtual void vf54();
+    virtual void vf58();
+    virtual void vf5c();
+    virtual void vf60();
+    virtual void vf64();
+    virtual void vf68();
+    virtual void vf6c();
+    virtual void vf70();
+    virtual void vf74();
+    virtual void vf78();
+    virtual void vf7c();
+    virtual void SetCaption(const void* text);  // +0x80
+};
+
 // @ 0x01068800
 void __stdcall FUN_01068800(void* layout, u32 index, void* obj, u32 unused)
 {
@@ -7830,21 +7919,19 @@ void __stdcall FUN_01068800(void* layout, u32 index, void* obj, u32 unused)
 
     EaString16 sEarly;
     EaString16 sLate;
-    sLate.mpBegin = 0x1667bac;
-    sLate.mpEnd = 0x1667bac;
-    FnP fnB8 = (FnP)(*(void***)obj)[0xb8 / 4];
-    sLate.mpCap = 0x1667bae;
-    fnB8(obj, &sLate);
-    ((FnP)(*(void***)w2)[0x80 / 4])(w2, (void*)sLate.mpBegin);
+    sLate.mpBegin = (u32)&DAT_01667bac;
+    sLate.mpEnd = (u32)&DAT_01667bac;
+    sLate.mpCap = (u32)&DAT_01667bac + 2;
+    ((ObjV_01068800*)obj)->FillLate(&sLate);
+    ((WinV_01068800*)w2)->SetCaption((void*)sLate.mpBegin);
 
     void* w3 = ((FnFind)(*(void***)layout)[0xf0 / 4])(layout, index + 0x1c22452, 1);
     if (w3 != 0) {
-        sEarly.mpBegin = 0x1667bac;
-        sEarly.mpEnd = 0x1667bac;
-        FnP fnC8 = (FnP)(*(void***)obj)[0xc8 / 4];
-        sEarly.mpCap = 0x1667bae;
-        fnC8(obj, &sEarly);
-        ((FnP)(*(void***)w3)[0x80 / 4])(w3, (void*)sEarly.mpBegin);
+        sEarly.mpBegin = (u32)&DAT_01667bac;
+        sEarly.mpEnd = (u32)&DAT_01667bac;
+        sEarly.mpCap = (u32)&DAT_01667bac + 2;
+        ((ObjV_01068800*)obj)->FillEarly(&sEarly);
+        ((WinV_01068800*)w3)->SetCaption((void*)sEarly.mpBegin);
         if ((s32)((sEarly.mpCap - sEarly.mpBegin) & 0xfffffffeu) > 2 && sEarly.mpBegin != 0)
             op_del_array((void*)sEarly.mpBegin);
     }
