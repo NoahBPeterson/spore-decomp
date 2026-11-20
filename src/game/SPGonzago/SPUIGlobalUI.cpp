@@ -689,7 +689,7 @@ extern "C" void  __cdecl FUN_00b32280();
 extern "C" void  __cdecl FUN_00b32250();
 extern "C" void  __cdecl FUN_00b32220();
 extern "C" void  __cdecl FUN_00e3c6f0();
-extern "C" void  __cdecl FUN_006035d0();
+extern "C" bool  __cdecl FUN_006035d0(void* mode);   // ShowSettingsWindow
 extern "C" void  __cdecl FUN_006a17e0();
 extern "C" void* __stdcall FUN_0080fee0(uint32_t tag);
 extern "C" void* __cdecl FUN_00810620();
@@ -884,7 +884,7 @@ void FUN_00e00bf0_impl()
     } else if (FUN_00e09540()) {
         ((MsgSrv*)SP_MessageServer())->send(0x620222b, 0, 0);
     }
-    FUN_006035d0();
+    FUN_006035d0(SP_GetCurrentGameMode());
 }
 
 // @ 0x00e00c40
