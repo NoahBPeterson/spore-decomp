@@ -53,6 +53,22 @@ def count(text):
     return sum(len(p.findall(text)) for p in PATTERNS)
 
 
+# A function's source starts at its `// @ 0x<address>` marker line and runs to the next marker.
+_MARKER = re.compile(r"^[ \t]*//[ \t]*@[ \t]*0x([0-9a-fA-F]{6,8})\b", re.M)
+
+
+def per_function(text):
+    """{address: byte offsets in that function's source} for every function marker in `text`. Text before the first
+    marker (includes, struct declarations) belongs to no function."""
+    out = {}
+    ms = list(_MARKER.finditer(text))
+    for i, m in enumerate(ms):
+        end = ms[i + 1].start() if i + 1 < len(ms) else len(text)
+        va = int(m.group(1), 16)
+        out[va] = out.get(va, 0) + count(text[m.end():end])
+    return out
+
+
 def git(*args):
     return subprocess.run(["git", *args], capture_output=True, text=True, errors="replace")
 

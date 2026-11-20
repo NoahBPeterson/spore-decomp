@@ -222,7 +222,7 @@ def present_before(sha, vas):
 def shape_before(sha, vas):
     """The addresses of `vas` listed in match/shape_only.txt in the merge's first parent: a generated row had matched
     their bytes with a twin's source that names other targets. Writing their own source fixes the names; it is
-    credited apart ("names fixed"), not as new functions and bytes (decision 2026-11-19)."""
+    credited apart ("made readable"), not as new functions and bytes (decision 2026-11-19)."""
     try:
         text = git("show", "%s^:match/shape_only.txt" % sha)
     except subprocess.CalledProcessError:
@@ -230,12 +230,43 @@ def shape_before(sha, vas):
     return {int(l.split()[0], 16) for l in text.splitlines() if l.strip() and not l.startswith("#")} & vas
 
 
-def pr_credits(prs_path, fps, oss=frozenset()):
+def offsets_removed(sha, done):
+    """Functions byte-exact now whose byte offsets (tools/ci/offsets.py: `*(T*)(p + N)`, `(char*)this`, ...) the merge
+    `sha` lowered, summed over the files it changed so that a function moved between files is compared with itself.
+    Counted as "made readable" (decision 2026-11-20)."""
+    import sys
+    sys.path.insert(0, os.path.join(ROOT, "tools", "ci"))
+    import offsets
+    if git("log", "-1", "--format=%s", sha).startswith('Revert "'):
+        return set()    # undoing a merge brings older source back; that is not readability work
+    files = [f for f in git("diff", "--name-only", "%s^" % sha, sha, "--", *offsets.ALLOWED).split()
+             if f.endswith(offsets.EXTS)]
+    if not files:
+        return set()
+    specs = ["%s^:%s" % (sha, f) for f in files] + ["%s:%s" % (sha, f) for f in files]
+    out = subprocess.run(["git", "cat-file", "--batch"], cwd=ROOT, capture_output=True,
+                         input="".join(x + "\n" for x in specs).encode()).stdout
+    before, after, pos = collections.Counter(), collections.Counter(), 0
+    for i in range(len(specs)):
+        hdr_end = out.index(b"\n", pos)
+        hdr = out[pos:hdr_end].split()
+        if hdr[-1] == b"missing":
+            pos = hdr_end + 1
+            continue
+        size = int(hdr[2])
+        text = out[hdr_end + 1:hdr_end + 1 + size].decode("utf-8", "replace")
+        pos = hdr_end + 1 + size + 1
+        (before if i < len(files) else after).update(offsets.per_function(text))
+    # the function must still have source after the merge: deleting or reverting code is not making it readable
+    return {va for va, n in before.items() if va in after and after[va] < n and va in done}
+
+
+def pr_credits(prs_path, fps, oss=frozenset(), done=frozenset()):
     if not prs_path or not os.path.exists(prs_path):
         return []
     # A function is credited to the first merged pull request that added it, until a later merge removes it: a reverted
     # pull request loses its credit, and one that lands the same work again gets it.
-    owner, named, rows = {}, {}, []
+    owner, named, readable, rows = {}, {}, {}, []
     for p in sorted(json.load(open(prs_path)), key=lambda p: p.get("mergedAt") or ""):
         sha = (p.get("mergeCommit") or {}).get("oid")
         if not sha:
@@ -265,13 +296,18 @@ def pr_credits(prs_path, fps, oss=frozenset()):
             named.setdefault(v, p["number"])
         for v in new - shaped:
             owner.setdefault(v, p["number"])
+        try:
+            cand = offsets_removed(sha, done)
+            readable[p["number"]] = present_before(sha, cand) if cand else set()   # it matched before this merge
+        except (subprocess.CalledProcessError, ValueError, IndexError):
+            readable[p["number"]] = set()
         rows.append(p)
     out = []
     for p in rows:
         mine = [v for v, n in owner.items() if n == p["number"]]
         new = [v for v in mine if v not in oss]
         out.append({"n": p["number"], "who": (p.get("author") or {}).get("login", "?"), "when": (p.get("mergedAt") or "")[:10],
-                    "f": len(new), "b": sum(fps[v] for v in new), "o": len(mine) - len(new), "nf": sum(1 for n in named.values() if n == p["number"]),
+                    "f": len(new), "b": sum(fps[v] for v in new), "o": len(mine) - len(new), "r": len(readable.get(p["number"], set()) | {v for v, n in named.items() if n == p["number"]}),
                     "model": model_field(p.get("body"))[:48]})
     return sorted(out, key=lambda r: -r["n"])
 
@@ -415,7 +451,7 @@ def build(out, prs_path, repo):
         r = mods[m]; r[0] += 1; r[1] += fps_all[va]
         if va in done or va in oss_done:
             r[2] += 1; r[3] += fps_all[va]
-    prs = pr_credits(prs_path, fps, oss)
+    prs = pr_credits(prs_path, fps, oss, done)
 
     # --- progress page
     b = ['<h1>Spore, rebuilt byte for byte</h1><p class="lede">Every function of Spore\'s <code>SporeApp.exe</code> (2008, PC) '
@@ -473,29 +509,32 @@ def build(out, prs_path, repo):
              'with Galactic Adventures after the development build the module map comes from.</p>')
     # Only pull requests that are credited with functions are listed and counted: tools, notes-only and reverted pull
     # requests (and ones whose work a later merge removed) add nothing to the totals.
-    prs = [p for p in prs if p["f"] or p["b"] or p.get("nf") or p.get("o")]
+    prs = [p for p in prs if p["f"] or p["b"] or p.get("r") or p.get("o")]
     if prs:
         who = collections.defaultdict(lambda: [0, 0, 0, 0, 0])
         for p in prs:
-            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]; w[3] += p.get("nf", 0); w[4] += p.get("o", 0)
+            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]; w[3] += p.get("r", 0); w[4] += p.get("o", 0)
         b.append('<h2>Contributors</h2><div class="panel scroll"><table><tr><th>contributor</th><th>pull requests</th>'
-                 '<th>functions</th><th>bytes</th><th>names fixed</th><th>open-source</th></tr>')
+                 '<th>functions</th><th>bytes</th><th>made readable*</th><th>open-source</th></tr>')
         for k, (n, f, by, nf, o) in sorted(who.items(), key=lambda kv: (-kv[1][2], -kv[1][3], kv[0])):
             b.append('<tr><td><a href="https://github.com/%s">%s</a></td><td>%d</td><td>%s</td><td>%s</td><td>%s</td>'
                      '<td>%s</td></tr>' % (E(k), E(k), n, fmt(f), fmt(by), fmt(nf), fmt(o)))
         b.append('</table></div><h2>Recent pull requests</h2><div class="panel scroll"><table><tr><th>pull request</th>'
-                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>names fixed</th><th>open-source</th>'
+                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>made readable*</th><th>open-source</th>'
                  '<th>model or tool</th></tr>')
         for p in prs[:25]:
             b.append('<tr><td><a href="https://github.com/%s/pull/%d">#%d</a></td><td>%s</td><td>%s</td><td>%s</td>'
                      '<td>%s</td><td>%s</td><td>%s</td><td style="text-align:left">%s</td></tr>' % (
-                         E(repo), p["n"], p["n"], p["when"], E(p["who"]), fmt(p["f"]), fmt(p["b"]), fmt(p.get("nf", 0)),
+                         E(repo), p["n"], p["n"], p["when"], E(p["who"]), fmt(p["f"]), fmt(p["b"]), fmt(p.get("r", 0)),
                          fmt(p.get("o", 0)),
                          E(p["model"] or "")))
         b.append('</table></div><p class="note">Counted from pull requests merged since contributions opened '
-                 '(November 2026). Most earlier work was done by the maintainer\'s own agent runs. "Names fixed": '
-                 'functions whose bytes a generated match already reproduced with another function\'s source; writing '
-                 'their own source puts the right calls and globals in, and is counted here, not as new functions. '
+                 '(November 2026). Most earlier work was done by the maintainer\'s own agent runs. *"Made readable": '
+                 'byte-exact functions a pull request made easier to read without changing their bytes: it removed '
+                 'byte offsets (pointer casts plus a number, such as <code>*(int*)(p + 8)</code>, where the code '
+                 'should name a member), or it gave a function whose bytes a generated match already reproduced with '
+                 'another function\'s source its own source, with the right calls and globals. More measures may be '
+                 'added. These count here, not as new functions. '
                  '"Open-source": open-source library functions rebuilt from their published sources, not counted as '
                  'functions.</p>')
     b.append('<h2>Help</h2><p>Hundreds of functions are only a few bytes from a match. <a href="join.html">Start here</a>.</p>')
