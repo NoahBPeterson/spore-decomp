@@ -989,22 +989,37 @@ void* C_6b0720::f(void* out, void* src)
 }
 
 // @ 0x006b08a0
+struct LruNodeBuf_006b08a0 {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    void* mPad0c;
+    void* mPad10;
+    void* mpOverflow;
+    char  mBuffer[0x100];
+    LruNodeBuf_006b08a0()
+    {
+        mpBegin = mBuffer;
+        mpEnd = mBuffer;
+        mpOverflow = 0;
+        mpCapacity = mpBegin + 0x100;
+    }
+};
+struct LruNode_006b08a0 {
+    void* mKey;
+    void* mValue;
+    void* mpPrev;
+    void* mpNext;
+    LruNodeBuf_006b08a0 mBuf;
+    LruNode_006b08a0(void* a, void* b) : mKey(a), mValue(b), mpPrev(0), mpNext(0) {}
+    static void* operator new(size_t, void* where) { return where; }
+};
 void* __stdcall FUN_006b08a0(void* a, void* b)
 {
-    char* p = (char*)ea_alloc_raw(0x128, (void*)"App/Resource/LRUCache", 0, 0, 0, 0);
-    if (!p)
-        return 0;
-    *(void**)p = a;
-    *(void**)(p + 4) = b;
-    *(void**)(p + 8) = 0;
-    *(void**)(p + 0xc) = 0;
-    char* q = p + 0x28;
-    *(void**)(p + 0x10) = q;
-    *(void**)(p + 0x14) = q;
-    q += 0x100;
-    *(void**)(p + 0x24) = 0;
-    *(void**)(p + 0x18) = q;
-    return p;
+    void* p = ea_alloc_raw(0x128, (void*)"App/Resource/LRUCache", 0, 0, 0, 0);
+    if (p)
+        return new (p) LruNode_006b08a0(a, b);
+    return 0;
 }
 
 // @ 0x006b0900
