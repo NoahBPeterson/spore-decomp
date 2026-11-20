@@ -7,6 +7,7 @@ extern "C" char g_147f27c[];
 extern "C" char g_147f288[];
 extern "C" char g_15a4854[];
 extern "C" char g_15a4860[];
+extern "C" char g_1667bac[];     // empty wide string (eastl gEmptyString)
 
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -525,31 +526,31 @@ bool CivPauseUI::OnMessage(int id, int arg)
 // @ 0x00e03ab0
 void* cSPUIGlobalUI::Construct()
 {
-    this->mpVtbl = (void*)0x0147f288;
+    this->mpVtbl = g_147f288;
     _ReadWriteBarrier();
     this->mpOptions = 0;
-    this->mpLayout = 0;
+    *(void* volatile*)&this->mpLayout = 0;
 
     this->mBan.mTokens.InitTokens();              // cStringTokenTranslator ctor
     this->mBan.mTokens.mbActive = 0;
     this->mBan.mTokens.mbHold = 0;
     _ReadWriteBarrier();
 
-    this->mBan.mpVtbl = (void*)0x0147f27c;
-    this->mBan.mTokens.mpVtbl = (void*)0x0147f264;
+    this->mBan.mpVtbl = g_147f27c;
+    this->mBan.mTokens.mpVtbl = g_147f264;
     _ReadWriteBarrier();
 
-    this->mBan.mTokens.mText.mpBegin = (wchar_t*)0x01667bac;
+    this->mBan.mTokens.mText.mpBegin = (wchar_t*)g_1667bac;
     _ReadWriteBarrier();
-    this->mBan.mTokens.mText.mpEnd = (wchar_t*)0x01667bac;
+    this->mBan.mTokens.mText.mpEnd = (wchar_t*)g_1667bac;
     _ReadWriteBarrier();
-    this->mBan.mTokens.mText.mpCap = (wchar_t*)0x01667bae;
+    this->mBan.mTokens.mText.mpCap = (wchar_t*)(g_1667bac + 2);
     _ReadWriteBarrier();
-    this->mBan.mTokens.mExtra.mpBegin = (wchar_t*)0x01667bac;
+    this->mBan.mTokens.mExtra.mpBegin = (wchar_t*)g_1667bac;
     _ReadWriteBarrier();
-    this->mBan.mTokens.mExtra.mpEnd = (wchar_t*)0x01667bac;
+    this->mBan.mTokens.mExtra.mpEnd = (wchar_t*)g_1667bac;
     _ReadWriteBarrier();
-    this->mBan.mTokens.mExtra.mpCap = (wchar_t*)0x01667bae;
+    this->mBan.mTokens.mExtra.mpCap = (wchar_t*)(g_1667bac + 2);
     _ReadWriteBarrier();
 
     this->mBan.mTokens.mList.mpBegin = 0;
