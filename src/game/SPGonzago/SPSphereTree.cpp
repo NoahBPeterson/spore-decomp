@@ -95,6 +95,8 @@ struct SimEntry {
   int field08;                // +0x08
   int field0c;                // +0x0c
 };
+extern "C" char g_16c45b4[];   // simulator global
+
 struct SimulatorGlobal {
   int FUN_00b72160();
   SphereTree* FUN_00b72210(int);
@@ -110,8 +112,8 @@ struct SimulatorGlobal {
 namespace SP {
 SphereTree* SphereTreeCreate()
 {
-  int handle = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72160();
-  SphereTree* tree = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72210(handle);
+  int handle = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72160();
+  SphereTree* tree = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72210(handle);
   tree->pool = new ("Simulator", 0, 0, 0, 0) SpherePool();
   return tree;
 }
