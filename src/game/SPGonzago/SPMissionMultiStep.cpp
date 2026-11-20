@@ -487,17 +487,11 @@ u8 cMissionMultiStep::FUN_00c5a520(u32 a)
 // @ 0x00c5a580
 void cMissionMultiStep_s00c5_a580::UpdateActiveStep()
 {
-    if (!IsActive())
-        return;
-    int nIndex = mCurrentStepIndex;
-    if (nIndex < 0)
-        return;
-    if (nIndex >= (int)(mpStepsEnd - mpStepsBegin))
-        return;
-    cMissionStep* pStep = mpStepsBegin[nIndex];
-    if (pStep == nullptr)
-        return;
-    pStep->OnActivate();
+    if (IsActive()) {
+        void* pStep = ((cMissionMultiStep*)this)->GetCurrSubMission();
+        if (pStep != 0)
+            (*(void(__thiscall**)(void*))((char*)vtbl(pStep) + 0x114))(pStep);
+    }
 }
 
 // @ 0x00c5a610
