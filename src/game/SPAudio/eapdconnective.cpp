@@ -1036,7 +1036,7 @@ inline void   setObjP(char* x, int off, void* v) { *(void**)(x + off) = v; }
 namespace EA {
 namespace Audio {
 namespace Eapd {
-inline void outlet_cnt(t_outlet* lst, float v)
+__forceinline void outlet_cnt(t_outlet* lst, float v)
 {
     if (++gOutletCount < 1000) {
         t_outconnect* oc;
@@ -2348,8 +2348,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_float(char* x, float f)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_cnt((t_outlet*)((void**)objP(x, 0x28))[i - 1], f);
 }
@@ -2516,10 +2515,10 @@ char* moses_new(float f)
 namespace EA { namespace Audio { namespace Eapd {
 void moses_float(char* x, float f)
 {
-    if (objF(x, 0x2c) <= f)
-        outlet_cnt((t_outlet*)objP(x, 0x28), f);
-    else
+    if (f < objF(x, 0x2c))
         outlet_cnt((t_outlet*)objP(x, 0xc), f);
+    else
+        outlet_cnt((t_outlet*)objP(x, 0x28), f);
 }
 }}}  // namespace EA::Audio::Eapd
 
