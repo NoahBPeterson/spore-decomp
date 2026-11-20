@@ -2743,9 +2743,17 @@ void PathObj::Fn64940(void* h)
 // @ 0x00c64a70
 bool __thiscall A::Contains(int key)
 {
-  volatile int* p = *(int**)((char*)this + 4);
-  for (int i = 0; i < ((int)*(int**)((char*)this + 8) - (int)*(int**)((char*)this + 4)) >> 2; ++i, ++p) {
-    if (key == *p) return true;
+  int** v = (int**)((char*)this + 4);   // v[0] = begin, v[1] = end
+  int i = 0;
+  if (i < (int)(v[1] - v[0])) {
+    _ReadWriteBarrier();
+    int* p = v[0];
+    do {
+      if (key == *p) return true;
+      _ReadWriteBarrier();
+      ++i;
+      ++p;
+    } while (i < (int)(v[1] - v[0]));
   }
   return false;
 }
