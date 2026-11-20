@@ -585,10 +585,10 @@ bool CurMgr::Remove(uint32_t k)
 // @ 0x00802580
 bool CurMgr::Clear()
 {
-  if (*(int*)((char*)this + 0x20) != 0) {
-    do {
+  int& count = *(int*)((char*)this + 0x20);
+  while (count != 0) {
       void* node = *(void**)((char*)this + 0x14);
-      *(int*)((char*)this + 0x20) -= 1;
+      count--;
       RBTreeIncrement(node);
       RBTreeErase(node, (char*)this + 0x10);
       int a = *(int*)((char*)node + 0x14);
@@ -596,7 +596,6 @@ bool CurMgr::Clear()
       if (sz > 2 && a)
         EASTL_allocator_deallocate((void*)a);
       EASTL_allocator_deallocate(node);
-    } while (*(int*)((char*)this + 0x20) != 0);
   }
   return true;
 }
