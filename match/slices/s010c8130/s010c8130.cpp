@@ -173,6 +173,7 @@ class hkBvTreeShape : public hkShape { public:
         m_child = (hkShapeCollection*)collection;
         ((hkReferencedObject*)collection)->addReference();
     }
+    ~hkBvTreeShape() { ((hkReferencedObject*)m_child)->removeReference(); }
 };
 
 class hkMoppBvTreeShape : public hkBvTreeShape { public:
@@ -198,7 +199,6 @@ hkMoppBvTreeShape::hkMoppBvTreeShape(const hkShapeCollection* collection, const 
 hkMoppBvTreeShape::~hkMoppBvTreeShape()
 {
     m_code->removeReference();
-    ((hkReferencedObject*)m_child)->removeReference();
 }
 
 // @ 0x010c81d0

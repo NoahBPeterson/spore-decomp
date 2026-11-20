@@ -5,3 +5,4 @@ slices/s010c8130/s010c8130.cpp  ?getNextKey@hkListShape@@UBEII@Z  010c8d60  /vc7
 slices/s010c8130/s010c8130.cpp  ?calcStatistics@hkCylinderShape@@UBEXPAVhkStatisticsCollector@@@Z  010c9030  /vc71 /O2 /MD /Gy /TP
 slices/s010c8130/s010c8130.cpp  ?hkMeshShape_constructFinishLoaded@@YAXPAVhkMeshShape@@@Z  010c8c10  /vc71 /O2 /MD /Gy /TP
 slices/s010c8130/s010c8130.cpp  ??0hkMoppBvTreeShape@@QAE@PBUhkShapeCollection@@PBVhkMoppCode@@@Z  010c8130  /vc71 /O2 /MD /Gy /TP
+slices/s010c8130/s010c8130.cpp  ??1hkMoppBvTreeShape@@UAE@XZ  010c8180  /vc71 /O2 /MD /Gy /TP
