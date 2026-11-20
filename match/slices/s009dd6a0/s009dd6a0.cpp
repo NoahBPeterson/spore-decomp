@@ -315,14 +315,10 @@ void __thiscall Track2::Grids(void* dstp)
 void Self::Cmd3(cArguments* args)
 {
     u32* a = args->MainArguments(3);
-    i32 off = (i32)(*(u8**)((u8*)mOwner + 4) + 0x7c) - (i32)a;
-    i32 n = 3;
-    do {
-        float f = mEval->Eval((i32)*a);
-        *(float*)(off + (i32)a) = f;
-        ++a;
-        n = n - 1;
-    } while (n != 0);
+    for (int i = 0; i < 3; ++i) {
+        float* d = (float*)(*(u8**)((u8*)mOwner + 4) + 0x7c) + i;
+        *d = mEval->Eval((i32)a[i]);
+    }
 }
 
 // @ 0x009ddcf0
@@ -330,14 +326,10 @@ void Self::Cmd3(cArguments* args)
 void Self::Cmd4(cArguments* args)
 {
     u32* a = args->MainArguments(4);
-    i32 off = (i32)(*(u8**)((u8*)mOwner + 4) + 0x24) - (i32)a;
-    i32 n = 4;
-    do {
-        float f = mEval->Eval((i32)*a);
-        *(float*)(off + (i32)a) = f;
-        ++a;
-        n = n - 1;
-    } while (n != 0);
+    for (int i = 0; i < 4; ++i) {
+        float* d = (float*)(*(u8**)((u8*)mOwner + 4) + 0x24) + i;
+        *d = mEval->Eval((i32)a[i]);
+    }
 }
 
 // @ 0x009ddd70
