@@ -18,6 +18,7 @@ extern "C" char g_148c114[];
 #include "cSPUIPropertyLayout.h"
 #include "SP/cString.h"
 #include <intrin.h>
+#include "sse_helpers.h"
 #include "SP/cSPCreatureBase.h"
 #include "cSPUILayout.h"
 #include "SP/cSPPalette.h"
@@ -5090,7 +5091,7 @@ bool PanelHandlerBase_s00f1_7f70::HandleMessage(uint msg, void* payload)
 // @ 0x00f18a00
 void UI::cScenarioPlayProgressBar::SetValue(float value)
 {
-    mTarget = FMin(FMax(value, 0.0f), 1.0f);
+    mTarget = SseClamp(value, 0.0f, 1.0f);
 }
 
 // @ 0x00f18d60
