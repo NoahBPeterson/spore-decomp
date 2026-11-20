@@ -263,20 +263,41 @@ void WpTree::insert(int* out, int pos, unsigned* key, char flag)
     *o = n;
 }
 
+extern "C" char g_148889c[];   // 0x0148889c, WpRegistry vtable
+extern "C" char g_13ef094[];   // 0x013ef094, GmeRefCount vtable
+struct WpTree_s00eb_bf00 {      // rbtree at +0x4c: its root at +0x0c
+    unsigned mPad[3];
+    void*    mpRoot;
+    void destroy(void* node);   // 0xd0c930
+};
+struct WpSubtree_s00eb_bf00 {   // tree at +0x30: its root at +0x0c
+    unsigned mPad[3];
+    void*    mpRoot;
+    void nuke(void* root);      // 0x9a9600
+};
+struct WpRecords_s00eb_bf00 {   // array of 0x50-byte records at +0x08
+    int* mpBegin;
+    int* mpEnd;
+    void FUN_00ebb820(unsigned a, unsigned b);   // 0x00ebb820 (ignores `this`)
+};
 // @ 0x00ebbf00
 void WpRegistry::dtor()
 {
     int* p = (int*)this;
-    p[0] = 0x148889c;
-    ((RbtreeNode*)((char*)p + 0x4c))->destroy((void*)p[0x16]);
-    ((Subtree*)((char*)p + 0x30))->nuke((void*)p[0x0f]);
+    WpTree_s00eb_bf00* tree = (WpTree_s00eb_bf00*)((char*)p + 0x4c);
+    *(void**)p = g_148889c;
+    tree->destroy(tree->mpRoot);
+    WpSubtree_s00eb_bf00* sub = (WpSubtree_s00eb_bf00*)((char*)p + 0x30);
+    sub->nuke(sub->mpRoot);
     ((Inner*)((char*)p + 0x1c))->clear();
-    FUN_00ebb820((unsigned)p[2], (unsigned)p[3]);
-    int* q = (int*)p[2];
+    WpRecords_s00eb_bf00* recs = (WpRecords_s00eb_bf00*)((char*)p + 8);
+    recs->FUN_00ebb820((unsigned)recs->mpBegin, (unsigned)recs->mpEnd);
+    int* q = recs->mpBegin;
     if (q != 0 && *(q - 1) != 0)
         FUN_00f47380(q);
-    p[0] = 0x13ef094;
+    *(void**)p = g_13ef094;
 }
+
 
 struct TreeObject {
     virtual void slot00();
