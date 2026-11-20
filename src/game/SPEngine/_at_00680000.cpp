@@ -540,10 +540,6 @@ extern "C" void  __cdecl RangeInitialize(void* s, int n);                // 0x04
 
 // ---- items of slice s00683f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" char  g_emptyStr[];                          // 0x1667bac (empty string sentinel)
-extern "C" void  FUN_006841a0(void*, void*);
-extern "C" void  FUN_00682ca0(void*, void*);
-extern "C" void  FUN_00680fc0(void*, void*);
-extern "C" void  FUN_006823f0(void*, void*);
 extern "C" void  FUN_00682e90(void*, void*);
 extern "C" void  FUN_00683ab0(void*, void*);
 extern "C" void  FUN_00684740(void*, void*);
@@ -681,8 +677,20 @@ struct Factory : GmeEditorResBase {
     void WriteMap1700(Map2_s0068_3f80* map, IWrt* w);          // 0x0681f10
 };
 struct CPropList { void* ctor(); };                 // 0x0683e90
+struct FactQuery {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual int Find(int id);                     // +0x0c
+};
+struct FactStream {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void* GetWriter();                    // +0x18
+};
 struct FactSer {
-    int __thiscall ser_6842c0(int* a, int* b, int c, int d);
+    bool __thiscall ser_6842c0(int* a, int* b, int c, int d);
+    void FUN_006841a0(void* map, void* writer);   // 0x006841a0 Factory::WriteMapC
+    void FUN_00682ca0(void* map, void* writer);   // 0x00682ca0 SerCtx::WriteMap2A10
+    void FUN_00680fc0(void* map, void* writer);   // 0x00680fc0
+    void FUN_006823f0(void* vec, void* writer);   // 0x006823f0 SerCtx::WriteVecA
 };
 struct Map844 {
     char pad0[4];
@@ -1825,16 +1833,16 @@ void Factory::WriteMapC(MapC* map, IWrt* w)
 }
 
 // @ 0x006842c0
-int FactSer::ser_6842c0(int* a, int* b, int c, int d)
+bool FactSer::ser_6842c0(int* a, int* b, int c, int d)
 {
     (void)c; (void)d;
-    int i = a ? ((int (__thiscall*)(void*, int))VT(a)[0xc / 4])(a, 0x355d6f5) : 0;
-    void* u = ((void* (__thiscall*)(void*))VT(b)[0x18 / 4])(b);
+    int i = a ? ((FactQuery*)a)->Find(0x355d6f5) : 0;
+    void* u = ((FactStream*)b)->GetWriter();
     FUN_006841a0((void*)(i + 0x50), u);
     FUN_00682ca0((void*)(i + 0x18), u);
     FUN_00680fc0((void*)(i + 0x34), u);
     FUN_006823f0((void*)(i + 0x6c), u);
-    return 1;
+    return true;
 }
 
 // @ 0x00684330
