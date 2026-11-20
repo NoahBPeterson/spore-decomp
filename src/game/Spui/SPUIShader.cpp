@@ -627,19 +627,19 @@ int LayerWinProc::ReleaseRef()
 }
 
 // @ 0x0082ebd0
+extern char      g_vtblLayerIdWinProc;        // 0x141a550
+extern char      g_vtblLayerIdWinProcSec;     // 0x141a538
 LayerWinProc* __fastcall LayerWinProcCtor(LayerWinProc* p)
 {
-  volatile int* d = (volatile int*)p;
-  int zero = 0;
-  char one = 1;
-  d[1] = 0x13fa72c;
-  d[2] = zero;
-  d[0] = 0x141a550;
-  d[1] = 0x141a538;
-  *(volatile char*)((char*)p + 0xc) = one;
-  *(volatile char*)((char*)p + 0xd) = one;
-  d[4] = zero;
-  d[5] = zero;
+  *(void* volatile*)((char*)p + 4) = &g_vtblBase13fa72c;
+  _ReadWriteBarrier();
+  *(int*)((char*)p + 8) = 0;
+  *(void**)p = &g_vtblLayerIdWinProc;
+  *(void**)((char*)p + 4) = &g_vtblLayerIdWinProcSec;
+  *((bool*)p + 0xc) = true;
+  *((bool*)p + 0xd) = true;
+  *(int*)((char*)p + 0x10) = 0;
+  *(int*)((char*)p + 0x14) = 0;
   return p;
 }
 
