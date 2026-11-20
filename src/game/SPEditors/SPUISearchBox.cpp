@@ -4,6 +4,8 @@
 extern "C" char g_13eb394[];
 extern "C" char g_13eb938[];
 extern "C" char g_13ec458[];
+extern "C" char g_13eb384[];
+extern "C" char g_1667bac[];   // empty wide string
 extern "C" char g_13ec468[];
 extern "C" char g_1400e84[];
 extern "C" char g_1400e94[];
@@ -214,16 +216,18 @@ void cSPUISearchBox::SetParentWindow(void* w)
 // @ 0x00671ec0
 cSPUISearchBox::cSPUISearchBox()
 {
-  *(void**)((char*)this + 4) = (void*)0x13eb384;
-  *(void**)((char*)this + 8) = (void*)0x13ec458;
+  *(void**)((char*)this + 4) = (void*)g_13eb384;
+  _ReadWriteBarrier();
+  *(void**)((char*)this + 8) = (void*)g_13ec458;
   mRefCount = 0;
   _ReadWriteBarrier();
-  *(void**)this = (void*)0x1400ea4;
-  *(void**)((char*)this + 4) = (void*)0x1400e94;
-  *(void**)((char*)this + 8) = (void*)0x1400e84;
+  *(void**)this = (void*)g_1400ea4;
+  *(void**)((char*)this + 4) = (void*)g_1400e94;
+  *(void**)((char*)this + 8) = (void*)g_1400e84;
   mIsVisible = false;
   ((Stopwatch*)((char*)this + 0x18))->Init(4, 0);
   mSearchMessageSent = true;
+  _ReadWriteBarrier();
   mLayout = 0;
   mWinParent = 0;
   mWinRoot = 0;
@@ -233,9 +237,10 @@ cSPUISearchBox::cSPUISearchBox()
   mpIdArray = 0;
   mnIdCount = 0;
   mnPriority = 0;
-  strBegin = (unsigned short*)0x1667bac;
-  strEnd = (unsigned short*)0x1667bac;
-  strCap = (unsigned short*)0x1667bae;
+  _ReadWriteBarrier();
+  strBegin = (unsigned short*)g_1667bac;
+  strEnd = (unsigned short*)g_1667bac;
+  strCap = (unsigned short*)g_1667bac + 1;
 }
 
 // @ 0x00671f70
