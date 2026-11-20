@@ -2293,20 +2293,24 @@ void* __cdecl FUN_01006280(char* first, char* last, char* dst)
 }
 
 // @ 0x010062d0
-void __cdecl FUN_010062d0(char* first, char* last, char* dst)
+extern "C" char g_13ec458[];   // ??_7ContentValidationSummarizer@@6B@
+extern "C" char g_1495400[];
+extern "C" char g_149bad8[];
+char* __cdecl FUN_010062d0(char* first, char* last, char* dst)
 {
   while (first != last) {
     if (dst != 0) {
-      *(u32*)(dst + 4) = 0x013ec458;   // ??_7ContentValidationSummarizer@@6B@
+      *(void* volatile*)(dst + 4) = g_13ec458;   // ??_7ContentValidationSummarizer@@6B@
       *(u32*)(dst + 8) = 0;
-      *(u32*)(dst + 0) = 0x01495400;
-      *(u32*)(dst + 4) = 0x0149bad8;
+      *(void**)(dst + 0) = g_1495400;
+      *(void**)(dst + 4) = g_149bad8;
       *(u32*)(dst + 0xc)  = *(u32*)(first + 0xc);
       *(u32*)(dst + 0x10) = *(u32*)(first + 0x10);
     }
     first += 0x14;
     dst   += 0x14;
   }
+  return dst;
 }
 
 // @ 0x01006320

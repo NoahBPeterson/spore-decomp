@@ -3,3 +3,4 @@ slices/s0076ed30/s0076ed30.cpp  ?erase@PageVec@@QAEPAUPageInfo@@PAU2@0@Z   0076e
 slices/s0076ed30/s0076ed30.cpp  ?InsertionSort20@@YAXPAUKey20@@0P6A_NPBU1@1@Z@Z   0076f640  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s0076ed30/s0076ed30.cpp  ??0JobRecordF@@QAE@ABU0@@Z                   0076f7c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s0076ed30/s0076ed30.cpp  ?SiftUp20@@YAXPAUKey20@@HHU1@P6A_NPBU1@2@Z@Z   0076f880  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s0076ed30/s0076ed30.cpp  ??0JobRecordI@@QAE@ABU0@@Z  0076f580  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

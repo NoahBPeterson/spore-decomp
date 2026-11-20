@@ -402,6 +402,7 @@ bool SP::cStringManager::LoadAll()
             ++pBucket;
         pNode = *pBucket;
     }
+    _ReadWriteBarrier();
     StringSetNode* const pEnd = mStringList.mpBucketArray[mStringList.mnBucketCount];
     while (pNode != pEnd) {
         if (ok && pNode->value->Load(-1, -1, 0))

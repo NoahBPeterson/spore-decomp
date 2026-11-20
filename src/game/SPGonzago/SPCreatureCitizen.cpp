@@ -3438,6 +3438,17 @@ i32_s00c2_5a50 cSPCreatureCitizen_s00c2_5a50::FUN_00c26170()
     return 0;
 }
 
+
+static inline bool IsLeader_c26310(cSPCreatureCitizen_s00c2_5a50* who)
+{
+    cCommunity* pComm = (cCommunity*)who->mpOwnerCity_1010;
+    if (pComm == 0)
+        pComm = (cCommunity*)who->mpOwnerTribe_1014;
+    if (pComm == 0)
+        return false;
+    return pComm->GetLeader() == who;
+}
+
 // @ 0x00c26310
 void cSPCreatureCitizen_s00c2_5a50::FUN_00c26310(void* pTree)
 {
@@ -3445,10 +3456,7 @@ void cSPCreatureCitizen_s00c2_5a50::FUN_00c26310(void* pTree)
     if (mnToolEffectIndex != 0) {
         eff = GetToolEffect((u32)mnToolEffectIndex);
     } else {
-        cCommunity* pComm = (cCommunity*)mpOwnerCity_1010;
-        if (pComm == 0)
-            pComm = (cCommunity*)mpOwnerTribe_1014;
-        if (pComm != 0 && pComm->GetLeader() == this)
+        if (IsLeader_c26310(this))
             eff = 0x11;
         else
             eff = 0;

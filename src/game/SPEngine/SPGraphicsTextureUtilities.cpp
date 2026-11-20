@@ -657,7 +657,7 @@ virtual void v13(void*);
               virtual void v16(); };
 struct IMsg { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
               virtual void v4(); virtual void v5(); virtual void v6(void*,void*,int,int); };
-struct AutoVec { void* b; void* e; void* c; AutoVec() { b=0; e=0; c=0; } ~AutoVec() throw(); /* 0x00a23920 */ };
+struct AutoVec { void* b; void* e; void* c; AutoVec() { b=0; e=0; c=0; } ~AutoVec(); /* 0x00a23920 */ };
 struct IEditorResource { virtual int AddRef(); virtual int Release(); };
 struct IRefCounted { virtual int AddRef(); virtual int Release(); int mRef; }; // +0x8
 struct Elem { char pad[0x28]; unsigned char* data; };           // pixel element at +0x28
@@ -769,11 +769,10 @@ public:
 };
 typedef char C0130_size_must_be_0x18[sizeof(C0130) == 0x18 ? 1 : -1];
 struct DObj : IEditorResource, IRefCounted { };
-class C0160 : public IEditorResource, public IRefCounted {
+class __declspec(novtable) C0160 : public C0130 {
 public:
-    AutoVec mVec;
     char    pad18[8];
-    IEditorResource* mObj;
+    IEditorResource* mObj;            // +0x20
     virtual ~C0160();
 };
 class ImageVector : public AutoVec, public ImageVectorRefCount,

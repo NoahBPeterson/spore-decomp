@@ -705,8 +705,7 @@ SgEntry* SgEntryList::FUN_00b2a690(uint32_t a, uint32_t b, uint32_t c)
     uint64_t key = ((SgObstacleMgr*)FUN_00b3d3c0())->FUN_00b72410(a, b);
     for (SgEntry* e = mBegin; e != mEnd; ++e)
     {
-        uint32_t v = e->m8;
-        if (v == (uint32_t)key && (v = e->mC) == (uint32_t)(key >> 32) && e->m0 == c)
+        if (*(uint64_t*)&e->m8 == key && e->m0 == c)
         {
             result = e;
             break;

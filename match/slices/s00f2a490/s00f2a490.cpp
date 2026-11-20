@@ -472,16 +472,16 @@ void FUN_00f2af60(int vec, int key, int* count, int arg4, char arg5)
     if ((*count <= 0 || arg5 == 0) && FUN_00f27990(key, arg4)) {
         if (vec) {
             IntVec* v = (IntVec*)vec;
+            uint32_t value = (uint32_t)key;
             uint32_t* end = v->mpEnd;
             if (end < v->mpCapacity) {
                 v->mpEnd = end + 1;
                 if (end) {
-                    *end = (uint32_t)key;
+                    *end = value;
                     ++*count;
                     return;
                 }
             } else {
-                uint32_t value = (uint32_t)key;
                 v->DoInsertKey4(end, value);
             }
         }

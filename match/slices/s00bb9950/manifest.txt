@@ -12,3 +12,4 @@ slices/s00bb9950/s00bb9950.cpp  ?AttrRead_00bb9cd0@@YA_NPAXPAE@Z  00bb9cd0  /O2 
 slices/s00bb9950/s00bb9950.cpp  ?AttrWrite_00bb9d00@@YA_NPAXPAE@Z  00bb9d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00bb9950/s00bb9950.cpp  ?Write@cStarRecord@@QAE_NPAX@Z  00bb9a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00bb9950/s00bb9950.cpp  ?Read@cStarRecord@@QAE_NPAX@Z  00bba570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bb9950/s00bb9950.cpp  ?HasMonolith@cStarRecord@@QAEHXZ  00bb9fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

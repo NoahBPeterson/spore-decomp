@@ -279,7 +279,7 @@ void __fastcall FUN_00926410(void* self)
     void* p = *(void**)((char*)self + 0x30);
     while (p != 0) {
         *(void**)((char*)self + 0x30) = *(void**)p;
-        (*(void(__cdecl**)(void*))(*(void**)((char*)self + 0x2c)))(p);
+        (*(void(__cdecl**)(void*))((char*)self + 0x2c))(p);
         p = *(void**)((char*)self + 0x30);
     }
     *(int*)((char*)self + 0x34) = 0;

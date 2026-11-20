@@ -2231,14 +2231,13 @@ uint32_t& CivCounterMap::GetCounter(cCivilization* pKey)
 void* cSPUIGlobalUI::AsInterface(unsigned id)
 {
     void* pRet = 0;
-    if (id != 0xee3f516e) {
-        if (id == 0x0469a812)
-            return (void*)((char*)this - 0x70);
-        if (id != 0x2f009dd0)
-            return pRet;
+    if (id == 0xee3f516e || (id != 0x0469a812 && id == 0x2f009dd0)) {
+        char* p = (char*)this - 0x70;
+        pRet = (void*)(p ? this : 0);
+    } else if (id == 0x0469a812) {
+        return (void*)((char*)this - 0x70);
     }
-    char* p = (char*)this - 0x70;
-    return (void*)(p ? this : 0);
+    return pRet;
 }
 
 // @ 0x00e042b0

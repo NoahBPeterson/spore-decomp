@@ -10,3 +10,4 @@
 ../src/game/SPEngine/SPStringManager.cpp  ?resize@?$SPVector@E@SP@@QAEXI@Z  006b73e0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
 ../src/game/SPEngine/SPStringManager.cpp  ?ReadByte@ByteStream@App@@QAEEXZ  006b6620  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
 ../src/game/SPEngine/SPStringManager.cpp  ??1cStringManager@SP@@UAE@XZ  006b6920  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPStringManager.cpp  ?LoadAll@cStringManager@SP@@QAE_NXZ  006b6a00  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include

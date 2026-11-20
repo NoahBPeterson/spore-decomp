@@ -597,10 +597,10 @@ struct MeshBuilder8 {
     void addIndicesSlot6(int count, const int* values, int index, int delta);
     void finish();
     // callees (other slices / TUs), masked
-    void sub18820();
-    void sub17ce0();
-    void sub173e0();
-    void sub18050();
+    void FUN_00718820();
+    void FUN_00717ce0();
+    void FUN_007173e0();
+    void FUN_00718050();
 };
 struct FixedIdVector6
 {
@@ -2945,16 +2945,22 @@ void fill28(Elem28_s0071_8640* first, Elem28_s0071_8640* last, const Elem28_s007
 }
 
 // @ 0x00719240
+struct MeshVec8_719240 {
+    int* mpBegin;
+    int* mpEnd;
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+
 void MeshBuilder8::finish()
 {
     if (n160 >= 0) {
-        char* base = (char*)pD0 + n160 * 0xd0;
-        *(int*)((char*)pE8 - 8) = (*(int*)(base + 0xc0) - *(int*)(base + 0xbc)) >> 2;
+        MeshVec8_719240& v = *(MeshVec8_719240*)((char*)pD0 + n160 * 0xd0 + 0xbc);
+        *(int*)((char*)pE8 - 8) = v.size();
     }
-    sub18820();
-    sub17ce0();
-    sub173e0();
-    sub18050();
+    FUN_00718820();
+    FUN_00717ce0();
+    FUN_007173e0();
+    FUN_00718050();
     b150 = 0;
 }
 

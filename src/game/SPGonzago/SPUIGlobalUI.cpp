@@ -689,7 +689,7 @@ extern "C" void  __cdecl FUN_00b32280();
 extern "C" void  __cdecl FUN_00b32250();
 extern "C" void  __cdecl FUN_00b32220();
 extern "C" void  __cdecl FUN_00e3c6f0();
-extern "C" void  __cdecl FUN_006035d0();
+extern "C" bool  __cdecl FUN_006035d0(void* mode);   // ShowSettingsWindow
 extern "C" void  __cdecl FUN_006a17e0();
 extern "C" void* __stdcall FUN_0080fee0(uint32_t tag);
 extern "C" void* __cdecl FUN_00810620();
@@ -833,14 +833,14 @@ int MenuKind()
 // @ 0x00e00ac0
 char FUN_00e00ac0_impl()
 {
-    void* w = (void*)FUN_00810620();
+    char r = 0;
+    void* w = ((TC*)FUN_0080fee0(0x5f1bfc10))->F_00810620();
     if (w != 0) {
-        void* r = (void*)(*(void*(__thiscall**)(void*, uint32_t, int))(*(void**)((char*)w + 0xf0)))(w, 0x615b50d, 1);
-        if (r != 0) {
-            return (*(char(__thiscall**)(void*))(*(void**)((char*)r + 0x28)))(r) & 1;
-        }
+        void* a = ((VFnPUI)VSLOT(w, 0xf0))(w, 0x615b50d, 1);
+        if (a != 0)
+            r = ((VFnC)VSLOT(a, 0x28))(a) & 1;
     }
-    return 0;
+    return r;
 }
 
 // @ 0x00e00b00
@@ -884,7 +884,7 @@ void FUN_00e00bf0_impl()
     } else if (FUN_00e09540()) {
         ((MsgSrv*)SP_MessageServer())->send(0x620222b, 0, 0);
     }
-    FUN_006035d0();
+    FUN_006035d0(SP_GetCurrentGameMode());
 }
 
 // @ 0x00e00c40

@@ -20,6 +20,7 @@ extern "C" void* __cdecl SP_MessageServer();
 extern "C" bool __fastcall FUN_006418e0(void* p);
 extern "C" void* __fastcall FUN_00656240(void* a, void* b);
 extern "C" void FUN_00654e20();
+extern "C" char g_13f6b3c[];
 extern "C" void  __cdecl FUN_004e5410(int, int, int, void*, void*, float);
 inline void  vc0(void* p, int off) { ((void(__thiscall*)(void*))(*(void**)((char*)*(void**)p + off)))(p); }
 inline void  vc1(void* p, int off, int a) { ((void(__thiscall*)(void*, int))(*(void**)((char*)*(void**)p + off)))(p, a); }
@@ -770,15 +771,9 @@ void cSPUIAssetView::SelectAsset(int a, char b, int c, char d, char e)
             if (q) ((void(__thiscall*)(void*, void*))&FUN_00654e20)(q, this);
         }
     }
-    void* obj = EA_operator_new(0x1c, (const char*)0x13f6b3c, 0, 0, 0, 0);
-    C64e740* made;
-    if (obj != 0) {
-        made = ((C64e740*)obj)->Construct(this, a, c, d, e);
-        if (made) vc0(made, 4);
-    }
-    else {
-        made = 0;
-    }
+    void* obj = EA_operator_new(0x1c, g_13f6b3c, 0, 0, 0, 0);
+    C64e740* made = obj ? ((C64e740*)obj)->Construct(this, a, c, d, e) : 0;
+    if (made) vc0(made, 4);
     void* srv = SP_MessageServer();
     vc3(srv, 0x14, 0x94174b89, (int)made, 0);
     if (made) vc0(made, 8);

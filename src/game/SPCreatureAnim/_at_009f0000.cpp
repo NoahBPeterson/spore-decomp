@@ -389,9 +389,10 @@ float animLayoutScale(AnimLayout* self)
         r = g_0166c990;
     if (r > g_0155163c)
         r = g_0155163c;
+    float out = r;
     if (self->m_flag371 != 0)
-        r *= g_01550b08;
-    return r;
+        out = g_01550b08 * r;
+    return out;
 }
 
 // @ 0x009f9dc0

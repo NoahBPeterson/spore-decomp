@@ -3111,13 +3111,13 @@ LightEffectSub* LightEffectSub_CreateAndRead(void* stream, int n)
     unsigned char* p = (unsigned char*)EAAllocate(0x58, g_str_Swarm, 0, 0, 0, 0);
     unsigned char* sub = 0;
     if (p) {
-        *(int*)(p + 0x04)   = 0;
-        *(void**)p          = (void*)&g_vtbl_LightEffectSub;
-        *(int*)(p + 0x08)   = 0;
-        *(float*)(p + 0x10) = 1.0f;
-        *(p + 0x0c)         = 1;
-        *(short*)(p + 0x14) = 0;
-        *(int*)(p + 0x18)   = 0;
+        *(volatile int*)(p + 0x04)   = 0;
+        *(void* volatile*)p          = (void*)&g_vtbl_LightEffectSub;
+        *(volatile int*)(p + 0x08)   = 0;
+        *(volatile float*)(p + 0x10) = 1.0f;
+        *(volatile unsigned char*)(p + 0x0c) = 1;
+        *(volatile short*)(p + 0x14) = 0;
+        *(volatile int*)(p + 0x18)   = 0;
         *(int*)(p + 0x1c)   = 0;
         *(int*)(p + 0x20)   = 0;
         *(int*)(p + 0x2c)   = 0;

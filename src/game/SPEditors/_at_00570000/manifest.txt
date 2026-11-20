@@ -7,3 +7,4 @@
 ../src/game/SPEditors/_at_00570000.cpp  ?end@cFeatureVector@@QAEPAUKey12@@XZ  005716e0  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00570000.cpp  ?ResetResourceType@cFeatureVector@@QAEXXZ  00571700  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00570000.cpp  ?clear@cFeatureVector@@QAEXXZ  00571680  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00570000.cpp  ??0cFeatureVector@@QAE@XZ  00571640  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -751,9 +751,8 @@ char* W::e70(int idx)
 // @ 0x00957e90
 void W::e90(int idx, void* arg)
 {
-    void* stored = PTR(this, 0x694 + idx * 0x28);
     void* v = arg ? (char*)arg - 4 : 0;
-    if (stored == v) {
+    if (PTR(this, 0x694 + idx * 0x28) == v) {
         ((VTab*)this)->v58(idx, 0);
     }
 }

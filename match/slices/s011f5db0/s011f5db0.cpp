@@ -113,7 +113,7 @@ extern int   g_170ed60;           // 0x170ed60
 
 // ---- callees -----------------------------------------------------------------
 int   __cdecl FUN_011f5fa0(unsigned length, int format, void** ppResource, unsigned f4); // 0x011f5fa0
-int   __cdecl FUN_011f6370(int base);                                                   // 0x011f6370
+void  __cdecl FUN_011f6370(int base);                                                   // 0x011f6370
 char* __cdecl D3D9TextCopy(char* dst, const char* src);                                 // 0x011fd6d0
 int   __cdecl FUN_011fcd10(int* a, int* b);                                             // 0x011fcd10
 int   __cdecl FUN_011e1fd4(const char* src, int len, void* defs, void* inc,
@@ -389,29 +389,24 @@ void FUN_011f6270(void)
 // ===========================================================================
 // @ 0x011f6370
 // ===========================================================================
-int FUN_011f6370(int base)
+void FUN_011f6370(int base)
 {
     byte* p = (byte*)(base + 0x11);
     int* out = (int*)(base + 0x34);
-    byte b = *p;
-    int prev = 0;
+    int acc = 0;
+    byte b = *p++;
     do {
-        p++;
-        int cur;
-        int next;
-        if (g_byteTable719c08[b] == 0) {
-            cur  = 0;
-            next = prev;
+        byte t = g_byteTable719c08[b];
+        int v;
+        if (t == 0) {
+            v = 0;
         } else {
-            next = prev + g_byteTable719c08[b];
-            cur  = prev;
+            v = acc;
+            acc += t;
         }
-        *out = cur;
-        b = *p;
-        out++;
-        prev = next;
+        *out++ = v;
+        b = *p++;
     } while (b != 0);
-    return 0;
 }
 
 // ===========================================================================

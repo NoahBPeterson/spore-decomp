@@ -7,3 +7,4 @@
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?SyncSuperweaponButton@cSPUIGlobalUICiv@@QAEXIPAHH@Z  00e060c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?HandleMessage@cSPUIGlobalUICiv_s00e0_6220@@QAEXIPAX@Z  00e06560  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?InitCommRelPanels@cSPUIGlobalUICiv_s00e0_6220@@QAEXXZ  00e065c0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?AsInterface@cSPUIGlobalUI@@QAEPAXI@Z  00e04270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

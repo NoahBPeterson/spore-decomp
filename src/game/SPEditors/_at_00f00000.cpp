@@ -543,8 +543,6 @@ extern "C" void  __cdecl FUN_00f01140(void*, void*, void*, int, int);   // 0x00f
 extern "C" void  __cdecl FUN_00eec940(void*, int);          // 0x00eec940
 extern "C" void  __cdecl SP_QuaternionFromDirections(void*, const void*, const void*); // 0x698180
 extern "C" void f_eff0c0_ext();   // 0x00eff0c0
-extern "C" void f_efd020_ext();   // 0x00efd020
-extern "C" void f01c20_ext();     // 0x00f01c20
 extern "C" void f00f80_ext();     // 0x00f00f80
 extern void* g_vtbl_148b708[];   // 0x0148b708  (the PL vtable itself)
 extern void* g_vtbl_148b788[];   // 0x0148b788  (the ScenarioTutorialsPlacement vtable)
@@ -676,6 +674,7 @@ struct Mgr_s00f0_2160 {
 };
 #define MGR ((Mgr_s00f0_2160*)g_mgr)
 #define VEC30 ((Vec30*)((char*)MGR + 0x30))
+struct CtlQ { void Update(); };   // 0x00efd020
 struct PL {
     void*  vtable;    // +0x00
     uint8_t b4;       // +0x04
@@ -688,6 +687,7 @@ struct PL {
     char   pad14[0x168];   // +0x14 .. +0x17b
     float  f17c;      // +0x17c
     void  f02160();              // 0x00f02160
+    void  f01c20();              // 0x00f01c20
     void  f02670();              // 0x00f02670
     void  f02700();              // 0x00f02700
     int   f02a10(int, int, float); // 0x00f02a10 ret 0xc
@@ -1868,23 +1868,45 @@ PL* PL::f02b80()
 }
 
 // @ 0x00f02c50
+struct VObj_f02c50 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual VObj_f02c50* Query(int id);           // +0x0c
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual VObj_f02c50* Get38();                 // +0x38
+    virtual void v3c(); virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual VObj_f02c50* GetSub();                // +0x50
+};
+struct VPL_f02c50 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual bool IsActive();                      // +0x38
+};
+static inline bool IsHidden_f02c50(VObj_f02c50* c)
+{
+    if (c) {
+        VObj_f02c50* d = c->Query(0x11966ed);
+        if (d)
+            return *(uint8_t*)((char*)d + 0x319) == 0;
+    }
+    return false;
+}
 void PL::f02c50()
 {
-    void** vt = *(void***)this;
-    if (!((bool(__thiscall*)(void*))vt[0x38 / 4])(this)) return;
-    void* a = FUN_0067dd10();
-    void** va = *(void***)a;
-    void* b = ((void*(__thiscall*)(void*))va[0x50 / 4])(a);
-    void** vb = *(void***)b;
-    void* c = ((void*(__thiscall*)(void*))vb[0x38 / 4])(b);
-    if (c) {
-        void** vc = *(void***)c;
-        void* d = ((void*(__thiscall*)(void*, int))vc[0x0c / 4])(c, 0x11966ed);
-        if (d && *(uint8_t*)((char*)d + 0x319) == 0) return;
+    if (((VPL_f02c50*)this)->IsActive()) {
+        if (IsHidden_f02c50(((VObj_f02c50*)FUN_0067dd10())->GetSub()->Get38())) return;
+        if (*(int*)((char*)g_mgr + 0x10) != 0) {
+            f02160();
+            ((CtlQ*)this)->Update();
+            return;
+        }
+        if (*(int*)((char*)g_mgr + 0xc) != 0)
+            f01c20();
     }
-    if (*(int*)((char*)g_mgr + 0x10) != 0) { f02160(); f_efd020_ext(); return; }
-    if (*(int*)((char*)g_mgr + 0xc) != 0) { f01c20_ext(); }
-    f_efd020_ext();
+    ((CtlQ*)this)->Update();
 }
 
 // @ 0x00f02cd0

@@ -449,12 +449,17 @@ bool WriteString(IStream_s0093_a9d0* pStream, const char* pStr, int count, int m
 
 // @ 0x0093ac80
 namespace EA { namespace IO {
-bool ReadBool(IStream_s0093_a9d0* pStream, bool* pOut)
+static inline bool ReadUint8_0093ac80(IStream_s0093_a9d0* pStream, uint8_t* p)
 {
     if (pStream->GetState() != 0)
         return false;
-    if (pStream->Read(pOut, 1) == 1) {
-        *pOut = (*pOut != 0);
+    return pStream->Read(p, 1) == 1;
+}
+bool ReadBool(IStream_s0093_a9d0* pStream, bool* pOut)
+{
+    uint8_t b;
+    if (ReadUint8_0093ac80(pStream, &b)) {
+        *pOut = (b != 0);
         return true;
     }
     return false;

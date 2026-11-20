@@ -594,17 +594,24 @@ void cScenarioEditModeScriptActsBarUI::FUN_00edbdd0(int a)
 // ---------------------------------------------------------------------------
 // 0x00edbe00  cScenarioEditModeScriptActsBarUI ctor
 // ---------------------------------------------------------------------------
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+extern "C" char g_13eb394[];   // IHandler vftable
+extern "C" char g_148a478[];   // cScenarioEditModeScriptActsBarUI vftable
+extern "C" char g_148a470[];   // cScenarioEditModeScriptActsBarUI IHandler vftable
+
 // @ 0x00edbe00
 cScenarioEditModeScriptActsBarUI* cScenarioEditModeScriptActsBarUI::ctor()
 {
     char* s = (char*)this;
     *(int*)(s + 4) = 0;
-    *(void**)(s + 8) = (void*)0x13eb394;
-    *(void**)(s + 0) = (void*)0x148a478;
-    *(void**)(s + 8) = (void*)0x148a470;
+    *(void* volatile*)(s + 8) = g_13eb394;
+    *(void**)(s + 0) = g_148a478;
+    *(void**)(s + 8) = g_148a470;
     *(int*)(s + 0xc) = 0;
     *(int*)(s + 0x10) = 0;
     *(int*)(s + 0x14) = 0;
+    _ReadWriteBarrier();
     *(int*)(s + 0x18) = 0;
     *(int*)(s + 0x1c) = 0;
     *(int*)(s + 0x20) = 0;

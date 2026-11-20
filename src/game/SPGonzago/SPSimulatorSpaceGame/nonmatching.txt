@@ -9,7 +9,6 @@
 01005c60 130 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL external callee ABI, 5/15 inputs (0x0040cf27)
 01005d80 438 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED no valid inputs (pointer-arg function, discards fault read)
 010060d0 211 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 28% coverage, equivalence-only
-010062d0 44 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL return-value/register diff (7-byte codegen)
 01006320 85 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED no valid inputs (import:memcpy)
 01006370 344 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL memory-pool 1-ulp diff (register-ABI external callee)
 01006630 84 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL external callee ABI (0x009289f4); equivalence-only

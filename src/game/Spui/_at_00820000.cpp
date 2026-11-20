@@ -1039,8 +1039,9 @@ cWrap::cWrap(IProv* prov, IRef* ref)
 // @ 0x00828df0
 void C25b::Do(int arg)
 {
-  if (m10 && mObj) {
-    mObj->v4();
+  if (m10 == 0) return;
+  if (IThing* p = mObj) {
+    p->v4();
     mObj->v5(arg, m10);
     mObj->v6();
   }

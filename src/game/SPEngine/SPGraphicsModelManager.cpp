@@ -4027,16 +4027,16 @@ void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key
 // @ 0x007455e0
 void __fastcall DestroyChunk(int param_1)
 {
-    ChunkObj* p = *(ChunkObj**)(*(int*)(param_1 + 8) + 4);
-    if (p)
-        p->Release();
+    ChunkObj*& ref = (*(ChunkObj***)(param_1 + 8))[1];
+    if (ref)
+        ref->Release();
     if (*(int*)(param_1 + 0xc))
         EA_Free(*(void**)(param_1 + 0xc));
     int* q = (int*)(*(int*)(param_1 + 0x14) + 4);
     *(int**)(param_1 + 0x14) = q;
-    int v = *q;
-    *(int*)(param_1 + 0xc) = v;
-    *(int*)(param_1 + 0x10) = v + 0xe0;
+    *(int*)(param_1 + 0xc) = *q;
+    *(char**)(param_1 + 0x10) = *(char**)(param_1 + 0xc) + 0xe0;
+    _ReadWriteBarrier();
     *(int*)(param_1 + 8) = *(int*)(param_1 + 0xc);
 }
 

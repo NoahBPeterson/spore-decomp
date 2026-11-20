@@ -1467,11 +1467,11 @@ int FeedbackScoreForMode2(uint32 id)
 // @ 0x00fe67b0
 long double EventMap::GetWeightedScore()
 {
-    uint32 step = (uint32)GetEventIndex();
+    int step = GetEventIndex();
     float base = (float)step;
-    if (step < 10)
-        return (GetScore(g_eventSteps[step]) + (long double)base) * (long double)0.1f;
-    return (long double)base * (long double)0.1f;
+    if ((uint32)step < 10)
+        return ((float)GetScore(g_eventSteps[step]) + base) * 0.1f;
+    return base * 0.1f;
 }
 
 // @ 0x00fe6800

@@ -10,8 +10,10 @@ extern int   g_148a694[];    // 0x0148a694
 // ---------------------------------------------------------------- callees
 void  __cdecl SetGlobalProperty(int, float);            // 0x005ca880
 void  __cdecl FUN_00572020(int, int);                   // 0x00572020
-void* __fastcall FUN_00e09c80(void*);                   // 0x00e09c80
-void* __cdecl FUN_00e09c90(void*, unsigned);            // 0x00e09c90
+struct WinList_e09c80 {
+    void* FUN_00e09c80();                                // 0x00e09c80
+    void* FUN_00e09c90(unsigned);                        // 0x00e09c90
+};
 void* __cdecl SP_MessageServer(void);                   // 0x0067dcc0
 void  __cdecl FUN_00ed8690(void);                       // 0x00ed8690
 int   __cdecl GetCurrentGameMode(void);                 // 0x00b5b800
@@ -105,10 +107,10 @@ struct ObjCC90 { void f(int); };
 // @ 0x00edcc90
 void ObjCC90::f(int param)
 {
-    char* base = (char*)this + 0x4c;
-    unsigned n = (unsigned)FUN_00e09c80(base);
+    WinList_e09c80* base = (WinList_e09c80*)((char*)this + 0x4c);
+    unsigned n = (unsigned)base->FUN_00e09c80();
     for (unsigned i = 0; i < n; ++i) {
-        char* w = (char*)FUN_00e09c90(base, i);
+        char* w = (char*)base->FUN_00e09c90(i);
         char* wnd = (char*)((ILayout*)w)->FindWindowByID(0x7b52f20, 1);
         ((FV_ii)(*(void***)wnd)[0x7c / 4])(wnd, 2, param);
     }
@@ -174,6 +176,7 @@ int FUN_00edcec0(int* p, int* arr, unsigned* count)
 }
 
 // ---------------------------------------------------------------- 0x00edcf10
+extern "C" char g_13eb394[];   // ??_7IHandler@@6B@
 struct ObjCF10 {
     char pad[4];
     void* vt4;      // +0x4
@@ -181,7 +184,7 @@ struct ObjCF10 {
 };
 void* ObjCF10::f(char param)
 {
-    vt4 = (void*)0x13eb394;
+    vt4 = (void*)g_13eb394;
     if (param & 1)
         EA_Free(this);
     return this;

@@ -236,16 +236,17 @@ __declspec(noinline) int *FactoryRegistry::CreateInstance(int type, void **out, 
     int *p = (int *)((int (__thiscall *)(void *, int, int, int, int))(*(void ***)this)[0x20 / 4])
                         (this, type, 0x5400186, a2, a3);
     int *old = (int *)*out;
-    if (p == old)
-        return old;
-    if (p)
-        ((void (__thiscall *)(void *))(*(void ***)p)[0])(p);
-    *out = p;
-    if (old) {
-        ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
-        return (int *)*out;
+    if (p != old) {
+        if (p)
+            ((void (__thiscall *)(void *))(*(void ***)p)[0])(p);
+        *out = p;
+        if (old) {
+            ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
+            return (int *)*out;
+        }
+        return p;
     }
-    return p;
+    return old;
 }
 
 // @ 0x008306a0

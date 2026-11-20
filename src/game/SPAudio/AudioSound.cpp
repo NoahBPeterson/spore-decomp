@@ -575,7 +575,7 @@ struct SoundGraph {
     void**   mListC7c;      // +0xc7c
     void**   mListC80;      // +0xc80
 
-    uint32_t Dispatch(uint32_t a, uint32_t b);   // 0xa1b1e0
+    bool     Dispatch(uint32_t a, uint32_t b);   // 0xa1b1e0
     bool     Remove(void* target);               // 0xa1b320
     void     PopFront();                         // 0xa1b390
     bool     Contains(void* target);             // 0xa1b440
@@ -1109,17 +1109,27 @@ bool ResourceInstrumentBank::FindZone(int32_t key, int32_t vel, void* out)
     return false;
 }
 
+struct SoundGraphOwnerVt {
+    uint8_t pad[0xac];
+    bool (__thiscall* mDispatch)(void*, uint32_t, uint32_t); // +0xac
+};
+
+struct SoundGraphInnerVt {
+    uint8_t pad[0x30];
+    bool (__thiscall* mDispatch)(void*, uint32_t, uint32_t); // +0x30
+};
+
 // @ 0x00a1b1e0
-uint32_t SoundGraph::Dispatch(uint32_t a, uint32_t b)
+bool SoundGraph::Dispatch(uint32_t a, uint32_t b)
 {
     // `this` is an interior pointer: the vtable lives 4 bytes before it.
     char* vtableOwner = (char*)this - 4;
-    if (((bool(__thiscall*)(void*, uint32_t, uint32_t))VtOf(vtableOwner)[0xac / 4])(vtableOwner, a, b))
-        return 1;
+    if ((*(SoundGraphOwnerVt**)vtableOwner)->mDispatch(vtableOwner, a, b))
+        return true;
     void* inner = *(void**)((char*)this + 0x40);
     if (inner != 0)
-        return ((uint32_t(__thiscall*)(void*, uint32_t, uint32_t))VtOf(inner)[0x30 / 4])(inner, a, b);
-    return 0;
+        return (*(SoundGraphInnerVt**)inner)->mDispatch(inner, a, b);
+    return false;
 }
 
 // @ 0x00a1b230

@@ -104,8 +104,7 @@ struct DescriptionBase {
     virtual void d1();
     int mnRefCount;
 };
-struct cSPSkinPaintParticleDescription_s0053_8e90 : DescriptionBase {
-    BrushDesc mBrush;                   // +0x8
+struct cSPSkinPaintParticleDescription_s0053_8e90 : DescriptionBase, BrushDesc {
 };
 template <class T>
 struct AutoRefCount {
@@ -117,12 +116,7 @@ struct cSPSkinPaintParticleEffectBlockCommand {
     AutoRefCount<cSPSkinPaintParticleDescription_s0053_8e90> mpDesc;  // +0x48
 };
 #define BRUSH() \
-    cSPSkinPaintParticleDescription_s0053_8e90* A; \
-    cSPSkinPaintParticleDescription_s0053_8e90* pDesc; \
-    BrushDesc* p; \
-    pDesc = A; \
-    pDesc = mState->mpDesc; \
-    p = pDesc ? &pDesc->mBrush : 0;
+    BrushDesc* p = mState->mpDesc;
 namespace {
 using EA::ArgScript::cArguments_s0053_8e90;
 
@@ -552,40 +546,40 @@ void* UninitFill20(Entry20* dst, int n, const Entry20* value, uint8_t /*isPod*/)
 // @ 0x00538e90
 void cSPSkinPaintParticledelayCommand::Execute(cArguments_s0053_8e90& args)
 {
-    BRUSH();
+    BrushDesc* brush = mState->mpDesc;
     size_t count = 0;
     const char** argv = args.MainArguments(&count, 1, 2);
     if (count == 2) {
-        p->mDelayMin = mParser->GetFloat(argv[0]);
-        p->mDelayMax = mParser->GetFloat(argv[1]);
+        brush->mDelayMin = mParser->GetFloat(argv[0]);
+        brush->mDelayMax = mParser->GetFloat(argv[1]);
     } else {
-        float value = mParser->GetFloat(argv[0]);
+        float val = mParser->GetFloat(argv[0]);
         float vary = 0.0f;
-        const char** opt = args.OptionArguments("vary", 1);
-        if (opt != 0)
-            vary = mParser->GetFloat(opt[0]);
-        p->mDelayMin = (1.0f - vary) * value;
-        p->mDelayMax = (1.0f + vary) * value;
+        argv = args.OptionArguments("vary", 1);
+        if (argv != 0)
+            vary = mParser->GetFloat(argv[0]);
+        brush->mDelayMin = (1.0f - vary) * val;
+        brush->mDelayMax = (1.0f + vary) * val;
     }
 }
 
 // @ 0x00538fe0
 void cSPSkinPaintParticlelifeCommand::Execute(cArguments_s0053_8e90& args)
 {
-    BRUSH();
+    BrushDesc* brush = mState->mpDesc;
     size_t count = 0;
     const char** argv = args.MainArguments(&count, 1, 2);
     if (count == 2) {
-        p->mLifeMin = mParser->GetFloat(argv[0]);
-        p->mLifeMax = mParser->GetFloat(argv[1]);
+        brush->mLifeMin = mParser->GetFloat(argv[0]);
+        brush->mLifeMax = mParser->GetFloat(argv[1]);
     } else {
-        float value = mParser->GetFloat(argv[0]);
+        float val = mParser->GetFloat(argv[0]);
         float vary = 0.0f;
-        const char** opt = args.OptionArguments("vary", 1);
-        if (opt != 0)
-            vary = mParser->GetFloat(opt[0]);
-        p->mLifeMin = (1.0f - vary) * value;
-        p->mLifeMax = (1.0f + vary) * value;
+        argv = args.OptionArguments("vary", 1);
+        if (argv != 0)
+            vary = mParser->GetFloat(argv[0]);
+        brush->mLifeMin = (1.0f - vary) * val;
+        brush->mLifeMax = (1.0f + vary) * val;
     }
 }
 

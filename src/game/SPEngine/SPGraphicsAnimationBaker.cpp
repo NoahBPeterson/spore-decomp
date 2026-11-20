@@ -14,7 +14,8 @@ extern void* IDGenerator();
 
 // ---- items of slice s006c0db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
-extern void  sub_11e0b22(void*, u32, u32, void*);          // ??_M vector dtor iterator
+extern "C" void FUN_00c2e4e0();                            // element destructor (folded)
+extern void  __stdcall sub_11e0b22(void*, u32, u32, void*); // ??_M vector dtor iterator
 extern void  sub_11e0b85(void*, u32, u32, void*, void*);   // ??_L vector ctor iterator
 extern void* sub_11e0744(void*, void*, u32);               // memcpy-ish
 extern u32   sub_11e23a0(void*);                           // Arena::GetNumExportedObjects
@@ -36,7 +37,7 @@ struct cAnimationBaker {
 // ---- items of slice s006c0db0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern void  sub_11e0b22(void*, u32, u32, void*);          // ??_M vector dtor iterator
+extern void  __stdcall sub_11e0b22(void*, u32, u32, void*); // ??_M vector dtor iterator
 extern void  sub_11e0b85(void*, u32, u32, void*, void*);   // ??_L vector ctor iterator
 extern void* sub_11e0744(void*, void*, u32);               // memcpy-ish
 extern u32   sub_11e23a0(void*);                           // Arena::GetNumExportedObjects
@@ -49,13 +50,8 @@ extern void  sub_ac040(u32, int);                          // SP::SetCachingType
 // @ 0x006c12e0
 u32 VecDtorRange(u32 first, u32 last, u32 out)
 {
-    if (first == last)
-        return out;
-    do {
-        sub_11e0b22((void*)(first + 0x18), 8, 4, (void*)0xc2e4e0);
-        first += 0x38;
-        out += 0x38;
-    } while (first != last);
+    for (; first != last; first += 0x38, out += 0x38)
+        sub_11e0b22((void*)(first + 0x18), 8, 4, (void*)&FUN_00c2e4e0);
     return out;
 }
 
@@ -161,11 +157,11 @@ void CollectArenaObjects(int self, u32* out, u32 a3)
     void* arena = *(void**)(self + 0x18);
     for (int i = 0; i < (int)sub_11e23a0(arena); ++i) {
         char obj[0x38];
-        sub_11e0b85(obj + 0x18, 8, 4, (void*)0x6c0fa0, (void*)0xc2e4e0);
+        sub_11e0b85(obj + 0x18, 8, 4, (void*)0x6c0fa0, (void*)&FUN_00c2e4e0);
         *(u32*)(obj + 0x18) = 0;
         *(u32*)(obj + 0x1c) = 1;
         sub_11e28e0(arena, i, obj);
-        sub_11e0b22(obj + 0x18, 8, 4, (void*)0xc2e4e0);
+        sub_11e0b22(obj + 0x18, 8, 4, (void*)&FUN_00c2e4e0);
     }
     sub_acfe0(a3, out[0]);
     sub_b4b60(out[0], sub_b1f90(0x49a3d83, 0, 0));

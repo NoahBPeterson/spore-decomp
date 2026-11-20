@@ -25,7 +25,6 @@
 00f096c0   95  complete; size 184 vs 169; slot teardown loop layout + reg alloc differ; difftest UNSUPPORTED (2 unresolved refs: Animator::ClearAll / Layout::SetVisibility)
 00f09770  107  complete; size 134 vs 138; quicksort recursion/depth layout differs; difftest WEAK 238 valid, 34.4% coverage
 00f09800    8  complete; same size; only three operand encodings ([eax+4] vs [edi+0x18], [eax+4] vs [edi+0x30]) and one lea pair order differ; difftest UNSUPPORTED (0/400 valid, import:memcpy)
-00f09910   42  complete; size 74 vs 75; a/rec callee-saved assignment is swapped (esi/edi) so the `rec & 0xffffff00` mask is emitted as an `and` instead of a byte store; difftest UNSUPPORTED (2 unresolved refs: GameData::Get / RecOwner::slot)
 00f09960  504  complete; size 636 vs 652; 11-case jump table and the per-case AttachTaskRecord chains differ; difftest UNSUPPORTED (2 unresolved refs: Day78::slot / NounMgr::GetAvatar)
 00f09bf0  117  complete; size 117 vs 147; the pair<int*,float> temp and the insertOther argument setup differ; difftest WEAK 160 valid, 100% coverage
 00f09c90   59  complete; size 92 vs 96; the insert-argument setup differs; third arg fixed to (uint)key & 0xffffff00 after the difftest FAIL; difftest WEAK 167 valid, 100% coverage

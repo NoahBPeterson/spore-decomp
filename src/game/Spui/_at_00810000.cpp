@@ -667,12 +667,15 @@ void Zoom::Transform(const float* r, float* out)
 }
 
 // @ 0x00812aa0
+struct Rect4_812aa0 {
+    float l, t, r, b;
+    Rect4_812aa0& operator=(const Rect4_812aa0& o) { l = o.l; t = o.t; r = o.r; b = o.b; return *this; }
+};
 bool Zoom::Init(ZoomWin* p)
 {
     mpMyWindow = p;
     if (p->z04()) {
-        float* r = p->z0d();
-        m10 = r[0]; m14 = r[1]; m18 = r[2]; m1c = r[3];
+        *(Rect4_812aa0*)&m10 = *(const Rect4_812aa0*)p->z0d();
         float* s = p->z04()->z0e();
         float f = s[2] - s[0];
         if (f < 1.0f) f = 1.0f;
@@ -680,8 +683,9 @@ bool Zoom::Init(ZoomWin* p)
         m38 = m18 * (1.0f / f);
         float g = s[3] - s[1];
         if (g < 1.0f) g = 1.0f;
-        m34 = m14 * (1.0f / g);
-        m3c = m1c * (1.0f / g);
+        float ig = 1.0f / g;
+        m34 = m14 * ig;
+        m3c = m1c * ig;
     }
     return false;
 }

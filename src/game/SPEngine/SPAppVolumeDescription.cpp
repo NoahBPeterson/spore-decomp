@@ -235,8 +235,9 @@ extern "C" void* VolumeRead(int* reader)
 // @ 0x007ee700
 void VolumeCmd::Alpha(EA::ArgScript::cArguments_s007e_e060* args)
 {
+  void** vt = *(void***)mArgConverter;
   char const* const* p = ((EA::ArgScript::cArguments*)args)->MainArguments(1);
-  mParams->mAlpha = ArgToFloat(mArgConverter, (void*)const_cast<char*>(*p));
+  mParams->mAlpha = ((float(__thiscall*)(void*, void*))vt[0x98 / 4])(mArgConverter, (void*)const_cast<char*>(*p));
 }
 
 // @ 0x007ee730

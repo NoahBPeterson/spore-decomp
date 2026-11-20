@@ -15,3 +15,4 @@
 ../src/game/Spui/_at_00820000.cpp  ?SetFloat@LayerWinProc@@QAEXMI@Z  0082e340  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?GetFloat@LayerWinProc@@QAEMI@Z  0082e360  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?FloatAt@LayerWinProc@@QAEPAMH@Z  0082e3f0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00820000.cpp  ?Do@C25b@@QAEXH@Z  00828df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

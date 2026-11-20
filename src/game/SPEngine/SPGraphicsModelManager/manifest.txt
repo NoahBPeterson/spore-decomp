@@ -82,4 +82,5 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SetTimeScale@@YGXHM@Z  00743950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SetDynamicDraw@cModelWorld_s0074_4ad0@@QAEXPAUModel_s0074_4ad0@@PAX_N@Z  00744be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?OffsetOrE4@@YGHH@Z  007439b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?DestroyChunk@@YIXH@Z  007455e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1LoadQueueVectorDtorView@@QAE@XZ  007478b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include /GS-

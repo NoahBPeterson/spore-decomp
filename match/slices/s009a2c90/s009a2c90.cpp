@@ -284,10 +284,10 @@ __declspec(noinline) int S9a3630::f() {
   int local[2];
   local[0] = *(int*)(self + 0xdc) - 1;
   local[1] = 0;
-  int* p = (local[0] < 1) ? &local[1] : &local[0];
+  int* p = (local[1] < local[0]) ? &local[0] : &local[1];
   int v = *p;
   *(int*)(self + 0xdc) = v;
-  if (v < 1) {
+  if (v <= 0) {
     *(int*)(self + 0xdc) = 1;
     ((S9a35b0*)self)->f();
     FUN_f47380(self);
@@ -339,7 +339,8 @@ __declspec(noinline) void FUN_009a36f0(int* arr, int start, int end, int pos, in
 // ---------------------------------------------------------------------------
 __declspec(noinline) float FUN_009a2c90(int a, float b, int c, int d) {
   S9a2c90Obj* obj = (S9a2c90Obj*)a;
-  return FUN_009a1d90(a, (float)((double)b + obj->fieldB0), c, d);
+  float s = (float)((double)b + obj->fieldB0);
+  return FUN_009a1d90(a, s, c, d);
 }
 
 // ---------------------------------------------------------------------------
@@ -374,13 +375,13 @@ __declspec(noinline) bool FUN_009a3680(int a, int b) {
 // ---------------------------------------------------------------------------
 __declspec(noinline) int* S9a3760::f(int* out, unsigned* key) {
   RbTree* t = (RbTree*)this;
-  RbNode* head = &t->anchor;
-  RbNode* parent = head;
-  RbNode* node = head->parent;
+  RbNode* node = t->anchor.parent;
+  RbNode* parent = &t->anchor;
   if (node) {
-    unsigned k0 = key[0], k1 = key[1];
+    unsigned k0 = key[0];
+
     do {
-      if (k0 > node->key0 || (k0 == node->key0 && k1 > node->key1)) node = node->left;
+      if (node->key0 < k0 || (!(k0 < node->key0) && node->key1 < key[1])) node = node->left;
       else { parent = node; node = node->right; }
     } while (node);
   }
@@ -393,8 +394,9 @@ __declspec(noinline) int* S9a3760::f(int* out, unsigned* key) {
 // ---------------------------------------------------------------------------
 __declspec(noinline) int FUN_009a37a0(int key) {
   int local;
+  int k = key;
   int* tree = g_166c058;
-  ((Rbtree99*)tree)->find(&local, &key);
+  ((Rbtree99*)tree)->find(&local, &k);
   if ((char*)local != (char*)tree + 4) return *(int*)((char*)(size_t)local + 0x14);
   return 0;
 }

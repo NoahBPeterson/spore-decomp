@@ -707,17 +707,19 @@ cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
 {
     uint32_t n = mPhotos.size();
     cPlayModePhoto* result = 0;
-    uint32_t i = 0;
-    if (n > 0) {
-        AutoRef<cPlayModePhoto>* b = mPhotos.mpBegin;
-        AutoRef<cPlayModePhoto>* p = b;
-        for (; i < n; ++i, ++p) {
-            if (((PhotoGuid*)p->mpObject)->guid == guid)
-                return b[i].mpObject;
+    for (uint32_t i = 0; i < n; ++i) {
+        cPlayModePhoto* photo = mPhotos.mpBegin[i].mpObject;
+        if (((PhotoGuid*)photo)->guid == guid) {
+            result = mPhotos.mpBegin[i].mpObject;
+            break;
         }
     }
     return result;
 }
+
+
+
+
 
 // @ 0x006303a0
 void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()

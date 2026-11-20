@@ -25,7 +25,8 @@ JobRecordF::JobRecordF(const JobRecordF& o)
 
 // integer flavour (f580, not byte-exact; kept as complete source)
 struct __declspec(align(16)) JobRecordI {
-    char c; int a, b, d; __m128 v[8]; int x, y, z, w, p, q;
+    struct Trio { int w, p, q; };
+    char c; int a, b, d; __m128 v[8]; int x, y, z; Trio t;
     JobRecordI(const JobRecordI& o);
 };
 // @ 0x0076f580
@@ -33,7 +34,7 @@ JobRecordI::JobRecordI(const JobRecordI& o)
 {
     c = o.c; a = o.a; b = o.b; d = o.d;
     for (int i = 0; i < 8; ++i) v[i] = o.v[i];
-    x = o.x; y = o.y; z = o.z; w = o.w; p = o.p; q = o.q;
+    x = o.x; y = o.y; z = o.z; t = o.t;
 }
 
 // ------------------------------------------------------------------ 0x30-byte element copy helpers

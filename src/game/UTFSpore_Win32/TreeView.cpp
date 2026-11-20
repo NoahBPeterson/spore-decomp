@@ -1242,7 +1242,7 @@ virtual void t26();
 virtual void t27();
 virtual void t28();
 virtual void t29();
-virtual void t30();
+    virtual void SetScrollbarDrawable(int which, void* p);      // +0x78 (slot assumed)
     virtual void SetScrollbarEnabled(int which, int v);          // +0x7c
     virtual void t32();
 };
@@ -1299,7 +1299,7 @@ class WinTreeView_s0099_13d0 : public TreeViewWindowBase, public IWinTreeView { 
     void ClearSelection();                                      // 0x00991860
     bool OnMouseDown(int, int, int, int);                       // 0x009918b0
     bool OnTick();                                              // 0x00991400
-    void SetScrollbarDrawable(int which, void* p);              // 0x00991930
+    virtual void SetScrollbarDrawable(int which, void* p);      // 0x00991930
     virtual void SetScrollbarEnabled(int which, int v);         // 0x00991990
     ~WinTreeView_s0099_13d0();                                             // 0x00991df0
 };
@@ -2539,12 +2539,12 @@ bool EA::UTFWinControls::WinTreeView_s0099_13d0::OnMouseDown(int, int, int, int)
 // @ 0x00991930
 void EA::UTFWinControls::WinTreeView_s0099_13d0::SetScrollbarDrawable(int which, void* p)
 {
-    ScrollbarState_s0099_13d0* sb = &mScrollbars[which];
-    IScrollbarDrawable_s0099_13d0* old = sb->mDrawable.mpObject;
-    if ((void*)old != p) {
+    IScrollbarDrawable_s0099_13d0** slot = &mScrollbars[which].mDrawable.mpObject;
+    IScrollbarDrawable_s0099_13d0* old = *slot;
+    if (p != (void*)old) {
         if (p != 0)
             (*(IScrollbarDrawable_s0099_13d0**)&p)->x0();
-        sb->mDrawable.mpObject = (IScrollbarDrawable_s0099_13d0*)p;
+        *slot = (IScrollbarDrawable_s0099_13d0*)p;
         if (old != 0)
             old->x1();
     }

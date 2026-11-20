@@ -22,3 +22,4 @@
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?ScalarDelete@ImageVector@@QAEPAV1@I@Z  007b03e0  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?RefUninitCopy_7b0040@@YA?AURefIt_7b0040@@U1@00@Z  007b0040  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0BakeSprites@@QAE@XZ  007b00f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1C0160@@UAE@XZ  007b0160  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

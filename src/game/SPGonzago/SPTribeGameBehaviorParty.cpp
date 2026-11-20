@@ -15,6 +15,8 @@ extern "C" char g_147bdb0[];
 #include "SP/cSpatialObject.h"
 #include "SP/cTribe.h"
 #include <math.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void FUN_00F47380(void* p);                        // operator delete (cdecl-1)
@@ -842,13 +844,17 @@ void* cTribeGameBehaviorParty::Init()
     mpVTable2 = &gVTable147BF4C;
 
     mAgentTree.mAnchor.mpRight  = 0;              // +0x7c
-    mAgentTree.mAnchor.mpParent = 0;              // +0x80
-    mAgentTree.mAnchor.mColor   = 0;              // +0x84
+    _ReadWriteBarrier();
+    RBNodeBase* pAnchor = &mAgentTree.mAnchor;
+
+    pAnchor->mpParent = 0;                        // +0x80
+    pAnchor->mColor   = 0;                        // +0x84
     mAgentTree.mAnchor.mpParent = 0;              // +0x80
     *reinterpret_cast<U8*>(&mAgentTree.mAnchor.mColor) = 0;   // +0x84
     mAgentTree.mSize            = 0;              // +0x88
-    mAgentTree.mAnchor.mpLeft   = &mAgentTree.mAnchor;        // +0x78
-    mAgentTree.mAnchor.mpRight  = &mAgentTree.mAnchor;        // +0x7c
+    pAnchor->mpLeft             = pAnchor;        // +0x78
+    mAgentTree.mAnchor.mpRight  = pAnchor;        // +0x7c
+    _ReadWriteBarrier();
     mpField90                   = 0;              // +0x90
     ((FnAFBA10*)&mCircle9C)->f();                 // construct the action circle
     return this;

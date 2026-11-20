@@ -1310,10 +1310,10 @@ void* __cdecl translateTransform(void* dst, void* src, void* outDst)
 {
   *(uint16_t*)dst = *(uint16_t*)outDst;
   *(uint16_t*)((char*)dst + 2) = *(uint16_t*)((char*)outDst + 2);
-  *(uint32_t*)((char*)dst + 4) = *(uint32_t*)((char*)outDst + 4);
-  *(uint32_t*)((char*)dst + 8) = *(uint32_t*)((char*)outDst + 8);
-  *(uint32_t*)((char*)dst + 0xc) = *(uint32_t*)((char*)outDst + 0xc);
-  *(uint32_t*)((char*)dst + 0x10) = *(uint32_t*)((char*)outDst + 0x10);
+  *(float*)((char*)dst + 4) = *(float*)((char*)outDst + 4);
+  *(float*)((char*)dst + 8) = *(float*)((char*)outDst + 8);
+  *(float*)((char*)dst + 0xc) = *(float*)((char*)outDst + 0xc);
+  *(float*)((char*)dst + 0x10) = *(float*)((char*)outDst + 0x10);
   ((Thiscall2)Matrix3_Assign)((char*)dst + 0x14, (char*)outDst + 0x14);
   ((Thiscall2)Modifier_Accumulate)(dst, src);
   return dst;

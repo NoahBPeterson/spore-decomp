@@ -40,7 +40,10 @@ struct Big {
 // ---- items of slice s0056fb90 end
 
 // ---- items of slice s005709b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct Allocator { const char* mpName; };
+struct Allocator {
+    const char* mpName;
+    Allocator(const char* = 0) {}
+};
 struct Key12 {
     uint32_t mA;
     uint32_t mB;
@@ -54,6 +57,7 @@ struct KeyVector {
     Key12* mpCapacity;
     Allocator mAllocator;
 
+    KeyVector(const Allocator& = Allocator()) : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     ~KeyVector();                                                            // 0x5719a0 (frees the buffer)
     Key12* erase(Key12* first, Key12* last);                                 // 0x50f740; returns first, ret 8
     Key12* insert(Key12* position, const Key12& value);                      // 0x5718f0
@@ -371,9 +375,6 @@ bool Key12::operator==(const Key12& rhs) const
 // @ 0x00571640
 cFeatureVector::cFeatureVector()
 {
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
     mfLen = 0.0f;
 }
 

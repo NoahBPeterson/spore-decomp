@@ -745,7 +745,7 @@ void DocX::SetAt(unsigned idx, IObj* o)
 void DocX::RemoveAllChildren()
 {
     InList* head = (InList*)((char*)this + 0x100);
-    while (*(void**)((char*)this + 0x104) != (void*)head) {
+    while (*(void**)((char*)head + 4) != (void*)head) {
         VI* p = *(VI**)((char*)this + 0x34);
         void* n = *(void**)((char*)this + 0x104);
         p->v2(*(void**)((char*)n + 0x14));

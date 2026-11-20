@@ -30,7 +30,6 @@
 #                `cmp [mem],imm` tests into loaded registers, ours keeps the
 #                memory-immediate form.  equiv UNSUPPORTED: 3 unresolved references
 #                (the can-join / clear stubs are external).
-00d791a0   44  Init(): seed the party block -- clear the agent tree's sentinel, stamp
 #                the two configuration bytes, place the block inside its 0x64-byte
 #                action circle and zero the trailing scratch field.  Complete
 #                reconstruction (76 vs 79); the original interleaves the two
