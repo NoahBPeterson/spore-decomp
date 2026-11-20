@@ -113,8 +113,19 @@ struct EStr {
         e = b + (send - s);
         *e = 0;
     }
+    EStr(const EStr& x) : b(0), e(0), c(0) { RangeInitialize(x.b, x.e); }
     ~EStr() { if (c - b > 1 && b) operator delete(b); }
     void AllocateSelf(unsigned n);   // 0x475ab0 (RangeInitialize shape)
+    void RangeInitialize(const char* pBegin, const char* pEnd) {
+        const unsigned n = (unsigned)(pEnd - pBegin);
+        AllocateSelf(n + 1);
+        e = CharStringUninitializedCopy(pBegin, pEnd, b);
+        *e = 0;
+    }
+    static char* CharStringUninitializedCopy(const char* pSource, const char* pSourceEnd, char* pDestination) {
+        memcpy(pDestination, pSource, (size_t)(pSourceEnd - pSource));
+        return pDestination + (pSourceEnd - pSource);
+    }
 };
 struct PairB {
     EStr k;
@@ -808,16 +819,8 @@ bool CheatMgr::Init()
 
 // @ 0x0067ee60
 PairB::PairB(const EStr& key, ICmdRef* const& val)
+    : k(key), v(val)
 {
-    const char* s = key.b;
-    const char* e = key.e;
-    unsigned n = (unsigned)(e - s);
-    k.AllocateSelf(n + 1);
-    char* d = k.b;
-    memcpy(d, s, n);
-    k.e = d + n;
-    *k.e = 0;
-    v = val;
     if (v) v->AddRef();
 }
 
