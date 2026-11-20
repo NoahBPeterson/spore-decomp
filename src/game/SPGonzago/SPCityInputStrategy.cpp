@@ -1201,6 +1201,8 @@ void __cdecl FUN_00cf1380(void** param_1, i32 param_2, i32 param_3, void* param_
         Release(param_4);
 }
 
+struct Obj80_cf1440 { void FUN_00d12fc0(); };   // 0x00d12fc0 (thiscall)
+
 // @ 0x00cf1440
 void cCityInputStrategy::FUN_00cf1440()
 {
@@ -1208,7 +1210,7 @@ void cCityInputStrategy::FUN_00cf1440()
     ((void (__thiscall*)(void*, void*))VT(mgr)[0x40 / 4])(mgr, mFielde4);
     if (mpField80)
     {
-        FUN_00d12fc0();
+        ((Obj80_cf1440*)mpField80)->FUN_00d12fc0();
         void* p = mpField80;
         if (p)
         {
