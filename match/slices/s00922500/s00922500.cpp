@@ -503,13 +503,8 @@ void __fastcall FUN_00922e10(void** p)
 void FUN_00923310(void** p)
 {
     void* d = *p;
-    if (d != 0) {
-        if (_InterlockedExchangeAdd((volatile long*)((char*)d + 0x20), -1) == 1) {
-            FUN_00922da0(d);
-            return;
-        }
-    }
-    __asm { mov eax, d }
+    if (d != 0 && _InterlockedDecrement((volatile long*)((char*)d + 0x20)) == 0)
+        FUN_00922da0(d);
 }
 
 // @ 0x00923330
