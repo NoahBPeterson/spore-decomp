@@ -1793,7 +1793,8 @@ void cCloudSourceCommand::Duration(EA::ArgScript::cArguments_s00f5_3b60* args)
             (*(FN_FLOAT*)((char*)(*(void**)mParser) + 0x98))(mParser, p[0]);
         return;
     }
-    *(float*)((char*)mParams + 0x1c) = v > 0.5f ? v : 0.5f;
+    float minDuration = 0.5f;
+    *(float*)((char*)mParams + 0x1c) = *(minDuration < v ? &v : &minDuration);
 }
 
 // @ 0x00f545c0
