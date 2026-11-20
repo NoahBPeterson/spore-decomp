@@ -881,9 +881,13 @@ hkAabbPhantom::hkAabbPhantom(int finishLoaded) : hkPhantom(1)
 }
 
 // Retail callees that take `this` in ecx, modelled as members so the call site leaves edx alone.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+struct hkFinishLoadedObjectFlag { int m_finishing; };
 struct hkWorldObjectFinishLoadedView {
-    void FinishLoaded(int flag);        // 0x010826e0
+    void FinishLoaded(hkFinishLoadedObjectFlag flag);   // 0x010826e0
 };
+extern "C" char g_149e51c[];            // hkAabbPhantom vftable
 struct hkAabbPhantomVtblView {
     void* m_vtbl;                       // +0x00
 };
@@ -896,14 +900,17 @@ void hkAabbPhantom_constructFinishLoaded(hkAabbPhantom* self)
 {
     if (self == 0)
         return;
-    ((hkWorldObjectFinishLoadedView*)self)->FinishLoaded(1);
+    hkFinishLoadedObjectFlag flag;
+    flag.m_finishing = 1;
+    ((hkWorldObjectFinishLoadedView*)self)->FinishLoaded(flag);
     self->m_overlapListeners.m_data = 0;
     self->m_overlapListeners.m_size = 0;
+    _ReadWriteBarrier();
     self->m_overlapListeners.m_capacityAndFlags = (int32_t)0x80000000;
     self->m_phantomListeners.m_data = 0;
     self->m_phantomListeners.m_size = 0;
     self->m_phantomListeners.m_capacityAndFlags = (int32_t)0x80000000;
-    ((hkAabbPhantomVtblView*)self)->m_vtbl = (void*)0x0149e51c;
+    ((hkAabbPhantomVtblView*)self)->m_vtbl = g_149e51c;
     self->m_overlappingCollidables.m_data = 0;
     self->m_overlappingCollidables.m_size = 0;
     self->m_overlappingCollidables.m_capacityAndFlags = (int32_t)0x80000000;
