@@ -6,3 +6,4 @@
 ../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getcurrentinstance@Eapd@Audio@EA@@YAPAXXZ  00a4a450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getenv@Eapd@Audio@EA@@YAPAUt_canvasenv@123@PAUt_glist@123@@Z  00a4a490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  00a4b3a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getdollarzero@Eapd@Audio@EA@@YAPAXXZ  00a4a4b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
