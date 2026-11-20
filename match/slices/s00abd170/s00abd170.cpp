@@ -208,15 +208,14 @@ int __cdecl FUN_00abd300(void* self, IntList* list, int a, int b) {
 
 // ---------------------------------------------------------------- 0x00abd390
 // @ 0x00ABD390
-void Eff::FUN_00abd390(void* a, void* b) {
-    SPTransOps* p0 = (SPTransOps*)((char*)this + 0x30);
+void Eff::FUN_00abd390(void* a, void* b) {    SPTransOps* p0 = (SPTransOps*)((char*)this + 0x30);
     p0->Assign(a);
     SPTransOps* p1 = (SPTransOps*)((char*)this + 0x68);
     p1->Assign(b);
     void* o = (void*)D(this, 0xa8);
     if (o != 0) {
         VCP(o, 0x18, p0);
-        VCP(o, 0x14, p1);
+        VCP((void*)D(this, 0xa8), 0x14, p1);
     }
 }
 

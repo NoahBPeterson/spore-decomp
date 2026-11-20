@@ -396,8 +396,7 @@ char* StringCopy(char* dst, const char* src)
 
 // @ 0x011e8b50
 char* StringAppend(char* dst, const char* src)
-{
-    char* d = dst;
+{    char* d = dst;
     char c = *d;
     while (c != 0)
     {
@@ -405,12 +404,16 @@ char* StringAppend(char* dst, const char* src)
         c = *d;
     }
     c = *src;
-    while (c != 0)
+    if (c != 0)
     {
-        *d = c;
-        ++d;
-        ++src;
-        c = *src;
+        int off = (int)(src - d);
+        do
+        {
+            *d = c;
+            c = d[off + 1];
+            ++d;
+        }
+        while (c != 0);
     }
     *d = 0;
     return dst;
