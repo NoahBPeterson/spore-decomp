@@ -373,14 +373,23 @@ struct Server_s0092_34f0 : IServer_s0092_34f0, ITracer_s0092_34f0 {
     char* mpHeapBuffer;      // +0xc
     int   mnHeapBufferSize;  // +0x10
     int   mLogRecordCounter; // +0x14
-    void* mpVecBegin;        // +0x18
-    void* mpVecEnd;          // +0x1c
-    void* mpVecCapacity;     // +0x20
-    char pad1[4];
+    struct ReporterVector {
+        void* mpBegin;
+        void* mpEnd;
+        void* mpCapacity;
+        char  mAllocator[4];
+        ReporterVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    } mReporters;            // +0x18
     void* mDefaultFilter;    // +0x28
-    void* mDefaultFormatter; // +0x2c
+    struct FormatterPtr {
+        void* mpObject;
+        FormatterPtr() : mpObject(0) {}
+    } mDefaultFormatter;     // +0x2c
     int   mUnknown30;        // +0x30
-    int   mnRefCount;        // +0x34
+    struct AtomicCount {
+        int mValue;
+        AtomicCount(int v) { _InterlockedExchange((volatile long*)&mValue, v); }
+    } mnRefCount;            // +0x34
     EA::Thread::Mutex_s0092_34f0 mMutex;// +0x38
 
     Server_s0092_34f0();  // 0x00923d40 (EA::Trace::Server::Server_s0092_34f0)
@@ -1238,8 +1247,8 @@ bool EA::Trace::Server_s0092_34f0::GetLogReporter(char* name, int* out)
 {
     mMutex.Lock((unsigned*)&g_timeoutP);
     *out = 0;
-    void** it = (void**)mpVecBegin;
-    void** end = (void**)mpVecEnd;
+    void** it = (void**)mReporters.mpBegin;
+    void** end = (void**)mReporters.mpEnd;
     while (it != end) {
         EA::Trace::ILogReporter_s0092_34f0* p = *(EA::Trace::ILogReporter_s0092_34f0**)*it;
         const char* s = ((const char*(__thiscall*)(void*))(*(void***)p)[7])(p);
@@ -1261,8 +1270,8 @@ unsigned EA::Trace::Server_s0092_34f0::EnumerateLogReporters(void** out, unsigne
     mMutex.Lock((unsigned*)&g_timeoutP);
     unsigned n = 0;
     if (out != 0) {
-        void** it = (void**)mpVecBegin;
-        void** end = (void**)mpVecEnd;
+        void** it = (void**)mReporters.mpBegin;
+        void** end = (void**)mReporters.mpEnd;
         while (it != end) {
             if (n >= max)
                 break;
@@ -1445,21 +1454,17 @@ EA::Trace::LogReporter_s0092_34f0::~LogReporter_s0092_34f0()
 
 // @ 0x00923d40
 EA::Trace::Server_s0092_34f0::Server_s0092_34f0()
+    : mbIsReporting(0),
+      mpHeapBuffer((char*)EA_operator_new(0x1000, "EATrace/Server/HeapBuffer/char[]", 0, 0, 0, 0)),
+      mnHeapBufferSize(0x1000),
+      mLogRecordCounter(0),
+      mReporters(),
+      // +0x28 (mDefaultFilter) is left uninitialised by the original
+      mDefaultFormatter(),
+      mUnknown30(0),
+      mnRefCount(0),
+      mMutex(0, 1)
 {
-    mbIsReporting = 0;
-    mpHeapBuffer = (char*)EA_operator_new(0x1000, "EATrace/Server/HeapBuffer/char[]", 0, 0, 0, 0);
-    mnHeapBufferSize = 0x1000;
-    mLogRecordCounter = 0;
-    mpVecBegin = 0;
-    mpVecEnd = 0;
-    mpVecCapacity = 0;
-    // +0x28 (mDefaultFilter) is left uninitialised by the original
-    mDefaultFormatter = 0;
-    mUnknown30 = 0;
-    _InterlockedExchange((volatile long*)&mnRefCount, 0);
-    EA::Thread::Mutex_s0092_34f0* pMutex = &mMutex;
-    __assume(pMutex != 0);
-    new (pMutex) EA::Thread::Mutex_s0092_34f0(0, 1);
 }
 
 // @ 0x00923dc0
@@ -1606,21 +1611,21 @@ EA::Trace::LogReporter::LogReporter(char const * name)
 bool EA::Trace::Server_s0092_34f0::RemoveLogReporter(EA::Trace::ILogReporter_s0092_34f0* p)
 {
     mMutex.Lock((unsigned*)&g_timeoutP);
-    void** it = (void**)mpVecBegin;
-    while (it != (void**)mpVecEnd) {
+    void** it = (void**)mReporters.mpBegin;
+    while (it != (void**)mReporters.mpEnd) {
         if (*it == p)
             break;
         ++it;
     }
-    if (it == (void**)mpVecEnd) {
+    if (it == (void**)mReporters.mpEnd) {
         mMutex.Unlock();
         return false;
     }
-    if ((char*)it + 4 < (char*)mpVecEnd) {
-        eastl_copy_impl((char*)it + 4, mpVecEnd, it);
+    if ((char*)it + 4 < (char*)mReporters.mpEnd) {
+        eastl_copy_impl((char*)it + 4, mReporters.mpEnd, it);
     }
-    mpVecEnd = (char*)mpVecEnd - 4;
-    EA::Trace::ILogReporter_s0092_34f0* last = *(EA::Trace::ILogReporter_s0092_34f0**)mpVecEnd;
+    mReporters.mpEnd = (char*)mReporters.mpEnd - 4;
+    EA::Trace::ILogReporter_s0092_34f0* last = *(EA::Trace::ILogReporter_s0092_34f0**)mReporters.mpEnd;
     if (last)
         ((void(__thiscall*)(void*))(*(void***)last)[1])(last);
     mMutex.Unlock();
