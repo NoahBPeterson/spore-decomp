@@ -64,3 +64,4 @@
 ../src/game/SPEditors/_at_00ee0000.cpp  ?F3630@Beh@@QAEXH@Z  00ee3630  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?F40F0@Bee@@QAEXXZ  00ee40f0  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?f_00eec580@@YAHH@Z  00eec580  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?QueryInterface@RefCountPart@@QAEPAXI@Z  00eea780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
