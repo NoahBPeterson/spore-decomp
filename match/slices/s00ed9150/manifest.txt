@@ -6,3 +6,4 @@ slices/s00ed9150/s00ed9150.cpp  ?FUN_00ed9bd0@@YAXXZ     00ed9bd0  /O2 /MD /Gy /
 slices/s00ed9150/s00ed9150.cpp  ?f@Obj9c20@@QAEXXZ       00ed9c20  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ed9150/s00ed9150.cpp  ?f@Obj9c60@@QAEXXZ       00ed9c60  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ed9150/s00ed9150.cpp  ?f@Obj9ca0@@QAEXXZ       00ed9ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ed9150/s00ed9150.cpp  ?FUN_00ed9560@@YAXPAHPAXH@Z  00ed9560  /O2 /MD /Gy /EHsc /TP /arch:SSE

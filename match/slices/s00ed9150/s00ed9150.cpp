@@ -183,18 +183,15 @@ void __cdecl FUN_00ed9150(int* out, float* pos, void* objPos, float f)
 void FUN_00ed9560(int* out, void* p2, int p3)
 {
     int* obj = (int*)FUN_00ed9040(p3, (float*)p2);
-    if (obj != 0) {
-        float f = g_1470f1c;
-        void* v = (void*)((FV_p)(*(void***)obj)[0x2c / 4])(obj);
-        FUN_00ed9150(out, (float*)p2, v, f);
-    }
-    char c = (char)((FV_r0)(*(void***)out)[0x10 / 4])(out);
-    if (c == 0) {
-        if (obj != 0)
-            ((FV_i)(*(void***)out)[8 / 4])(out, 0);
-    } else {
+    if (obj != 0)
+        FUN_00ed9150(out, (float*)p2, ((FV_p)(*(void***)obj)[0x2c / 4])(obj), g_1470f1c);
+    void* recv = *(void**)out;
+    if ((char)((FV_r0)(*(void***)recv)[0x10 / 4])(recv)) {
         if (obj == 0)
-            ((FV_i)(*(void***)out)[0xc / 4])(out, 0);
+            ((FV_i)(*(void***)*(void**)out)[0xc / 4])(*(void**)out, 0);
+    } else {
+        if (obj != 0)
+            ((FV_i)(*(void***)*(void**)out)[8 / 4])(*(void**)out, 0);
     }
 }
 
