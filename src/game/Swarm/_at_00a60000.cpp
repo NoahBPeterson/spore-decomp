@@ -81,7 +81,7 @@ class cEffectsParser { public:
     char      mName[0x10];          // +0x3c4
 
     long long EffectsMapID(const char* s);                          // 00a6e600
-    long long MapFindA(const char* s);                              // 00a6eaf0
+    int MapFindA(const char* s);                                    // 00a6eaf0
     long long MapFindB(const char* s, int idx);                     // 00a6eb60
     long long MapFindC(const char* s, int idx);                     // 00a6ebd0
     long long LookupRes(int idx, const char* s);                    // 00a6ec40
@@ -302,28 +302,36 @@ void FUN_00a6e7e0(void* self, char* dst, unsigned count, void* val)
 }
 }}  // namespace EA::Swarm
 
+// eastl::hash_map<string, int> of effect names (node value at +0x10)
+struct EffectNameNode {
+    uint8_t mKey[0x10];
+    int     mValue;     // +0x10
+};
+struct EffectNameMap {
+    uint32_t         mHash;              // +0x00
+    EffectNameNode** mpBucketArray;      // +0x04
+    uint32_t         mnBucketCount;      // +0x08
+    struct iterator {
+        EffectNameNode*  mpNode;
+        EffectNameNode** mpBucket;
+        iterator() {}
+    };
+    iterator find(const EA::Swarm::EString& key);   // 0x007e2ea0
+};
+
 // @ 0x00a6eaf0
 namespace EA { namespace Swarm {
-long long cEffectsParser::MapFindA(const char* s)
+int cEffectsParser::MapFindA(const char* s)
 {
-    void* self = this;
-    char* edi = (char*)self;
-    char* p = (char*)s;
-    char* q = p + 1;
-    do { } while (*p++ != 0);
-    int len = (int)(p - q);
-    char* esi = edi + 0x3c4;
-    ((EString*)esi)->assign(s, s + len);
-    MakeCaseInsensitive(esi);
-    void* local_8[2];
-    char* tbl = edi + 0x24;
-    v007e2ea0(local_8, tbl);
-    int ecx = *(int*)(tbl + 8);
-    int edx = *(int*)(tbl + 4);
-    long long r = *(int*)((char*)local_8[0] + 0x10);
-    if ((int)local_8[0] == *(int*)(edx + ecx * 4))
-        r = -1;
-    return r;
+    const char* end = s + strlen(s);
+    EString& name = *(EString*)((char*)this + 0x3c4);
+    name.assign(s, end);
+    MakeCaseInsensitive(&name);
+    EffectNameMap& map = *(EffectNameMap*)((char*)this + 0x24);
+    EffectNameMap::iterator it = map.find(name);
+    if (it.mpNode != map.mpBucketArray[map.mnBucketCount])
+        return it.mpNode->mValue;
+    return -1;
 }
 }}  // namespace EA::Swarm
 

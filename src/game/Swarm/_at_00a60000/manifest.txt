@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/Swarm/_at_00a60000.cpp  ?MapFindA@cEffectsParser@Swarm@EA@@QAEHPBD@Z  00a6eaf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
