@@ -2,6 +2,13 @@
 // Object file: UTFSpore_Win32/PerspectiveEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fa72c[];
+extern "C" char g_14426a0[];
+extern "C" char g_1444098[];
+extern "C" char g_14440b4[];
+extern "C" char g_14440d0[];
+
 #include "game/types.h"
 #include "EA/UTFWinControls/IWinButton.h"
 #include "EA/UTFWin/IWindow.h"
@@ -42,12 +49,12 @@ void* BasicFactory_PerspectiveEffect::CreateInstance(void* ctx, void* allocator)
     PerspectiveEffect* p = (PerspectiveEffect*)AllocObject(
         0x14, 4, "UTFWin/EA::UTFWinControls::PerspectiveEffect", allocator);
     if (p) {
-        p->m04 = (void*)0x13fa72c;
+        p->m04 = (void*)g_13fa72c;
         p->m08 = 0;
-        p->m0c = (void*)0x14426a0;
-        p->m00 = (void*)0x14440d0;
-        p->m04 = (void*)0x14440b4;
-        p->m0c = (void*)0x1444098;
+        p->m0c = (void*)g_14426a0;
+        p->m00 = (void*)g_14440d0;
+        p->m04 = (void*)g_14440b4;
+        p->m0c = (void*)g_1444098;
         p->m10 = 400.0f;
         return p;
     }

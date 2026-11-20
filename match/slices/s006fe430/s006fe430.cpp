@@ -1,6 +1,10 @@
 // Slice s006fe430: vertex-fragment declaration serialization, generated-vertex-shader string
 // assembly, shader selection and the cVertexFragmentInfo table support routines.
 // Region 0x6fe430-0x6ff170. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1628c20[];
+
 #include "types.h"
 #include <stdio.h>
 #include <string.h>
@@ -497,11 +501,11 @@ void __cdecl FUN_006fef70(int a) {
 
 // @ 0x006fefa0
 void __cdecl FUN_006fefa0() {
-    ((Vec130*)0x01628C20)->Destroy(g_vs_begin, g_vs_end);
+    ((Vec130*)g_1628c20)->Destroy(g_vs_begin, g_vs_end);
     unsigned int n = g_15345b0;
     if (n == 0)
         n = 0x200;
-    ((Vec130*)0x01628C20)->Reserve(n);
+    ((Vec130*)g_1628c20)->Reserve(n);
     g_1624568 = 0;
 }
 

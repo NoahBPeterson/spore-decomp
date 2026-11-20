@@ -3,6 +3,10 @@
 // helpers used by the space/planet editors.
 // Compile: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14659cc[];
+extern "C" char g_14659e8[];
+
 #include <stdlib.h>
 
 typedef unsigned int u32;
@@ -424,7 +428,7 @@ FloatPairCtorA* FloatPairCtorA::FUN_00b93810(float a, float b)
 {
     *(float*)((char*)this + 8) = a;
     *(int*)((char*)this + 4) = 0;
-    *(int*)this = 0x14659cc;
+    *(int*)this = (int)g_14659cc;
     *(float*)((char*)this + 0xc) = b;
     return this;
 }
@@ -434,7 +438,7 @@ FloatPairCtorB* FloatPairCtorB::FUN_00b93840(float a, float b)
 {
     *(float*)((char*)this + 8) = a;
     *(int*)((char*)this + 4) = 0;
-    *(int*)this = 0x14659e8;
+    *(int*)this = (int)g_14659e8;
     *(float*)((char*)this + 0xc) = b;
     return this;
 }

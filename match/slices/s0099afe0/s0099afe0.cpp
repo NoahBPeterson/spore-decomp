@@ -1,5 +1,10 @@
 // Slice s0099afe0: EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState XML reader.
 // Reconstructed from the annotated disassembly; real names from the 2008 PDB where known.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1446c44[];
+extern "C" char g_14613b8[];
+
 #include "types.h"
 
 extern "C" __declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
@@ -207,14 +212,14 @@ void S99b5a0::f(int key, int obj) {
 void S99b5e0::f() {
   char* self = (char*)this;
   char* ht = self + 0x64;
-  *(int*)self = (int)0x1446c44;
+  *(int*)self = (int)g_1446c44;
   ((S693230*)ht)->f(*(void**)(ht + 4), *(unsigned*)(ht + 8));
   *(int*)(ht + 0xc) = 0;
   if (*(unsigned*)(ht + 8) > 1) FUN_f47380(*(void**)(ht + 4));
   ((S620230b*)(self + 0x5c))->f();
   ((S928dc0*)(self + 0x28))->f();
   ((S928dc0*)(self + 4))->f();
-  *(int*)self = (int)0x14613b8;
+  *(int*)self = (int)g_14613b8;
 }
 
 // ---------------------------------------------------------------------------

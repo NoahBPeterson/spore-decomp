@@ -1,3 +1,8 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_1473478[];
+extern "C" char g_147349c[];
 
 #include "types.h"
 #include <intrin.h>
@@ -68,8 +73,8 @@ ModelVector& models = mModels;
 
 _ReadWriteBarrier();
 
-mpVtable0 = (void*)0x0147349c;
-mpVtable1 = (void*)0x01473478;
+mpVtable0 = (void*)g_147349c;
+mpVtable1 = (void*)g_1473478;
 
 _ReadWriteBarrier();
 
@@ -92,8 +97,8 @@ void** begin = models.mpBegin;
     mCelestialBodies.Destroy();
     mPlanets.Destroy();
 
-    mpVtable1 = (void*)0x013eb938;
-    mpVtable0 = (void*)0x013ec458;
+    mpVtable1 = (void*)g_13eb938;
+    mpVtable0 = (void*)g_13ec458;
 }
 
 } // namespace Simulator

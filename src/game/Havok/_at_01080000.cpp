@@ -2,6 +2,11 @@
 // Object file: Havok/_at_01080000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a1808[];
+extern "C" char g_14a181c[];
+
 #include "game/types.h"
 #include <stddef.h>
 #include <math.h>
@@ -2390,8 +2395,8 @@ void* hkNullContactMgrFactory::deletingDtor(unsigned flags)
 {
     // The scalar deleting destructor first installs the two original vtables (this object and
     // the embedded null contact manager at +8), then frees through g_hkMemory when bit 0 is set.
-    *(void**)&m_nullContactMgr_slot = (void*)0x013ef094u;
-    *(void**)this = (void*)0x013ef094u;
+    *(void**)&m_nullContactMgr_slot = (void*)g_13ef094;
+    *(void**)this = (void*)g_13ef094;
     if (flags & 1)
         hkNullContactMgrFactory::operator delete(this);
     return this;
@@ -4385,12 +4390,12 @@ void hkVelocityConstraintMotor::calcMotorData(const hkConstraintMotorInput& in, 
 hkConstraintMotor_s0108_eb30* hkVelocityConstraintMotor::clone() const
 {
 	hkVelocityConstraintMotor* p = (hkVelocityConstraintMotor*)hkMemory_s0108_eb30::s_instance->allocateChunk(0x1c, 0x29);
-	*(const void**)p = (const void*)0x014a1808;
+	*(const void**)p = (const void*)g_14a1808;
 	p->m_memSizeAndFlags = 0x1c;
 	p->m_referenceCount = 1;
 	p->m_minForce = m_minForce;
 	p->m_maxForce = m_maxForce;
-	*(const void**)p = (const void*)0x014a181c;
+	*(const void**)p = (const void*)g_14a181c;
 	p->m_tau = m_tau;
 	p->m_velocityTarget = m_velocityTarget;
 	p->m_useVelocityTargetFromConstraintTargets = m_useVelocityTargetFromConstraintTargets;

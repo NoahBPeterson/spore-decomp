@@ -15,6 +15,10 @@
 // Unknown helpers are called through their absolute addresses with the arity and convention seen
 // in the asm. Their bodies are not part of this slice.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6b3c[];
+
 #include "types.h"
 
 #define FR(o) (*(int*)(fr + (o)))
@@ -757,7 +761,7 @@ void cUIMissionButton::CreateMissionButton(void* p1, void* p2, void* p3, void* p
     if (mpLayout == 0)
         return;
 
-    void* pRawFeed = operator_new(0x6c, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    void* pRawFeed = operator_new(0x6c, (const char*)g_13f6b3c, 0, 0, 0, 0);
     cSPUIFeedList* pNewFeed = pRawFeed != 0 ? (cSPUIFeedList*)((cSPUIFeedList*)pRawFeed)->Ctor() : 0;
     {
         cSPUIFeedList* pOldFeed = mpFeedList;

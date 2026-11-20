@@ -8,6 +8,10 @@
 //                (0x0111fc00/0x011202d0 are outside this slice; 0111fbd0 stores this pointer).
 //   The object owns two collaborators reached through +0x20 and +0x28; only the vtable slots the code
 //   below actually calls are declared (slot numbers come from the call offsets in the disassembly).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a6108[];
+
 #include "../s0111e2c0/s0111e2c0.h"
 
 // ---------------------------------------------------------------------------------------------------
@@ -223,7 +227,7 @@ int MoppQuery::nodeCount()
 MoppQuery* MoppQuery::ctor()
 {
     m_refCount = 1;
-    m_vtbl = 0x014a6108;
+    m_vtbl = (int)g_14a6108;
     m_allocList = 0;
     m_nAlloc = 0;
     m_freeList = 0;

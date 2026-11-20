@@ -22,6 +22,13 @@
 //  0x00fe7680  cSimOwner::Destroy                                (ret 4)
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  (MSVC 2008 SP1).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_14943c0[];
+extern "C" char g_14943d0[];
+
 #include "types.h"
 
 typedef unsigned int uintptr_t;
@@ -829,15 +836,15 @@ cSimOwner::cSimOwner()
 // @ 0x00fe7680
 void* cSimOwner::Destroy(int flags)
 {
-    mpVtbl  = (void*)0x14943d0;
-    mpVtbl2 = (void*)0x14943c0;
+    mpVtbl  = (void*)g_14943d0;
+    mpVtbl2 = (void*)g_14943c0;
     ((MC*)((char*)this + 0x30))->f_00f138c0();
     if (mpField2c != 0) {
         cSimOwner* o = (cSimOwner*)((char*)mpField2c + 4);
         ((void(__thiscall*)(void*))VF(o, 8))(o);
     }
-    mpVtbl2 = (void*)0x13eb394;
-    mpVtbl  = (void*)0x13eb938;
+    mpVtbl2 = (void*)g_13eb394;
+    mpVtbl  = (void*)g_13eb938;
     if (flags & 1)
         operator_delete(this);
     return this;

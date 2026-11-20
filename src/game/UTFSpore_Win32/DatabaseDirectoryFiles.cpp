@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/DatabaseDirectoryFiles.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436624[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -975,7 +978,7 @@ namespace EA { namespace ResourceMan {
 void DatabaseDirectoryFiles_s008d_5340::SetMutexLocked(bool bLock)
 {
     if (bLock)
-        mMutex.Lock(reinterpret_cast<void*>(0x01436624));
+        mMutex.Lock(reinterpret_cast<void*>((int)g_1436624));
     else
         mMutex.Unlock();
 }

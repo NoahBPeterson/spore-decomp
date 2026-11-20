@@ -9,6 +9,9 @@
 // (the OnTick time comparison keeps the retail x87 fild/fcompi sequence, so no
 // /fp:fast; the Rule zero-fill still needs SSE movss.)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14948a4[];
+
 #include "types.h"
 #include <stddef.h>
 #include <string.h>
@@ -678,7 +681,7 @@ cEmpireGrowthSim::cEmpireGrowthSim() {
 
 // @ 0x00feb050
 void* __fastcall FUN_00feb050(VtableHolder* self) {
-    self->mpVtable = (void*)0x014948a4;
+    self->mpVtable = (void*)g_14948a4;
     self->mpField4 = 0;
     return self;
 }

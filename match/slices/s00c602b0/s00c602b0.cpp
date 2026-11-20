@@ -18,6 +18,12 @@
 //  00c61300  cSPMissionTerraform::GetTagString
 //
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc: no unwind frames).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfb4[];
+extern "C" char g_1470118[];
+extern "C" char g_1470128[];
+
 #include "types.h"
 #include <math.h>
 
@@ -532,9 +538,9 @@ Simulator::cMissionTerraform::cMissionTerraform()
     mEventStage = 0;
     mFlag1F4 = false;
     mFlag1F5 = false;
-    mpVftable = (void*)0x1470128;
-    mpVftable04 = (void*)0x146dfb4;
-    mpVftable34 = (void*)0x1470118;
+    mpVftable = (void*)g_1470128;
+    mpVftable04 = (void*)g_146dfb4;
+    mpVftable34 = (void*)g_1470118;
 }
 
 // =============================================================================================

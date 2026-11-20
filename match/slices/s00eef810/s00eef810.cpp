@@ -8,6 +8,15 @@
 //    an Any-of-Equals compound), then ObjectTemplateDB (vtable +0x30) is asked for templates matching them,
 //    and the first one that the resource manager (vtable +0x0c) accepts is returned.
 // Flags: /O2 /MD /Gy /TP (no /EHsc: the original has no EH frame).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_148b040[];
+extern "C" char g_148b050[];
+extern "C" char g_148b058[];
+
 #include "types.h"
 #include <math.h>
 
@@ -678,9 +687,9 @@ CEditor* CEditor::Construct()
 // @ 0x00EF0400
 void CEditor::Destroy()
 {
-    mpVtbl0 = (const void*)0x148b058;
-    mpVtbl1 = (const void*)0x148b050;
-    mpVtbl2 = (const void*)0x148b040;
+    mpVtbl0 = (const void*)g_148b058;
+    mpVtbl1 = (const void*)g_148b050;
+    mpVtbl2 = (const void*)g_148b040;
     g_16c7aa4 = 0;
     if (mpFieldD8)
         mpFieldD8->v1();
@@ -716,9 +725,9 @@ void CEditor::Destroy()
         mpField14->v2();
     if (mpField10)
         mpField10->m.v2();
-    mpVtbl2 = (const void*)0x13ec458;
-    mpVtbl1 = (const void*)0x13eb394;
-    mpVtbl0 = (const void*)0x13eb938;
+    mpVtbl2 = (const void*)g_13ec458;
+    mpVtbl1 = (const void*)g_13eb394;
+    mpVtbl0 = (const void*)g_13eb938;
 }
 
 // @ 0x00EF0570

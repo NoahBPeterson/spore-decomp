@@ -154,7 +154,7 @@ u32 __cdecl FUN_011f8310(int param_1)
 {
     void* d = g_d3d9;
     int r = ((int(__stdcall*)(void*, int, int, void*))VTD(d)[5])(d, param_1, 0, &DAT_01711fd0);
-    return (u32)((r < 0) - 1) & 0x17121d0;
+    return (u32)((r < 0) - 1) & (int)&DAT_017121d0;
 }
 
 // ---------------------------------------------------------------------------

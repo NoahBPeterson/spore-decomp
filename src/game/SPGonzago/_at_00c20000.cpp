@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00c20000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00ac8980();
+extern "C" void FUN_00c29ab0();
+
 #include "game/types.h"
 #include "SP/cActionCircle.h"
 #include "SP/cCommunity.h"
@@ -1621,8 +1625,8 @@ Value* Value::CopyFrom(const unsigned* key, TraceCache* src)
 	// the helper walks byte offsets: the eight hit records (stride 0x100), then the eight object slots
 	char*       pDst = (char*)&mValue;
 	const char* pSrc = (const char*)src;
-	FUN_00406540(pDst, pSrc, 0x100, 8, (void*)0x00c29ab0);
-	FUN_00406540(pDst + 0x800, pSrc + 0x800, 4, 8, (void*)0x00ac8980);
+	FUN_00406540(pDst, pSrc, 0x100, 8, (void*)FUN_00c29ab0);
+	FUN_00406540(pDst + 0x800, pSrc + 0x800, 4, 8, (void*)FUN_00ac8980);
 	return this;
 }
 
@@ -1658,7 +1662,7 @@ extern "C" void _ReadWriteBarrier(void);
 // @ 0x00c2b110
 TraceCache* __cdecl FUN_00c2b110(unsigned key)
 {
-	Ht* ht = (Ht*)0x01572460;
+	Ht* ht = (Ht*)&g_1572460;
 	Iter it;
 
 	ht->Find(&it, &key);

@@ -1,14 +1,24 @@
 // Slice s00ee7990 — SPUI asset/palette editor UI object: destructors, layout
 // init/shutdown, message handlers and category helpers.
 // Compile: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13ec458[];
+extern "C" char g_148abc8[];
+extern "C" char g_148abd0[];
+extern "C" char g_148ac34[];
+extern "C" char g_148ac3c[];
+extern "C" char g_15ac738[];
+
 #include <intrin.h>
 #include "s00ee7990.h"
 
 // @ 0x00ee7990 — reset the base vtables and drop every owned child object.
 void __thiscall SpuEd::BaseDtor()
 {
-    o000 = 0x148abd0;
-    o008 = 0x148abc8;
+    o000 = (int)g_148abd0;
+    o008 = (int)g_148abc8;
     _ReadWriteBarrier();
     if (o02c)
     {
@@ -23,8 +33,8 @@ void __thiscall SpuEd::BaseDtor()
     if (o014) ((VI*)o014)->v02();
     if (o010) ((VI*)o010)->v02();
     if (o00c) ((VI*)o00c)->v02();
-    o008 = 0x13eb394;
-    o000 = 0x13ec458;
+    o008 = (int)g_13eb394;
+    o000 = (int)g_13ec458;
 }
 
 // @ 0x00ee7a50 — unregister the message handler and release the derived children.
@@ -385,8 +395,8 @@ void __thiscall SpuEd::Select(void* win)
 // @ 0x00ee8570 — tear down the base level 4 object.
 void __thiscall SpuEd::Dtor4()
 {
-    o000 = 0x148ac3c;
-    o008 = 0x148ac34;
+    o000 = (int)g_148ac3c;
+    o008 = (int)g_148ac34;
     _ReadWriteBarrier();
     if (o024) ((VI*)o024)->v01();
     if (o020) ((VI*)(o020 + 0xc))->v01();
@@ -396,8 +406,8 @@ void __thiscall SpuEd::Dtor4()
         o00c = 0;
         RemoveHandler((void*)h, (void*)o010, o014, (int)o018, (int)o01c);
     }
-    o008 = 0x13eb394;
-    o000 = 0x13ec458;
+    o008 = (int)g_13eb394;
+    o000 = (int)g_13ec458;
 }
 
 // @ 0x00ee85e0 — enable/disable editor editing (hook or unhook the handler).
@@ -411,11 +421,11 @@ void __thiscall SpuEd::Enable2(u8 on)
             void* p = (void*)((char*)this + 8);
             o00c = (u32)MessageServer();
             o010 = (u32)p;
-            o014 = 0x15ac738;
+            o014 = (int)g_15ac738;
             o018 = 1;
             o01c = 0;
             if (o00c && p)
-                ((XMsgSrv*)o00c)->m09(p, *(u32*)0x15ac738);
+                ((XMsgSrv*)o00c)->m09(p, *(u32*)g_15ac738);
             ((XUniv*)rec)->F36380();
         }
         char* u = (char*)g_universe;

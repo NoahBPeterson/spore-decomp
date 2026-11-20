@@ -2,6 +2,10 @@
 // Object file: SPAudio/SPAudioMixMode.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+
 #include "game/types.h"
 #include "EA/Audio/IPrimitive.h"
 #include "EA/Audio/ResponseCurve.h"
@@ -1168,9 +1172,9 @@ cMixMode_s00ea_8f90::~cMixMode_s00ea_8f90()
     if (mA.mBegin) operator_delete(mA.mBegin);
     if (mpConfig)
         ((Fn0) VT(mpConfig, 0x04))(mpConfig);
-    mVtbl2 = (void*) 0x13ef094;
-    mVtbl1 = (void*) 0x13eb394;
-    mVtbl0 = (void*) 0x13eb938;
+    mVtbl2 = (void*) &g_vt_013ef094;
+    mVtbl1 = (void*) g_13eb394;
+    mVtbl0 = (void*) g_13eb938;
 }
 }}  // namespace SP::Audio
 

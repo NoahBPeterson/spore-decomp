@@ -13,6 +13,12 @@
 // then store the herd in slot 0x5f115ab, populate an empty herd (random positions around the
 // species), set its brain level, send message 0x609b763 and attach every creature to the species.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1470f1c[];
+extern "C" char g_147af20[];
+extern "C" char g_1582f88[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -742,7 +748,7 @@ void SeaMonsterEvent::TriggerEvent(u32 arg)
         SeaObj* o = *p;
         if (o != 0)
             ((void(__thiscall*)(void*))VTC(o, 0))(o);
-        ((Sub8*)((char*)o->mpSub + 8))->Apply(0, 4, *(float*)0x147af20, avatar);
+        ((Sub8*)((char*)o->mpSub + 8))->Apply(0, 4, *(float*)g_147af20, avatar);
         if (firstTime)
         {
             mCounters[0x614a7ea] = 1;
@@ -854,7 +860,7 @@ void Method1b60()
     DramaManager* dm = GetDramaInstance();
     if (dm->mp14 != 0)
     {
-        float f = *(float*)0x1582f88 * *(float*)0x1470f1c;
+        float f = *(float*)g_1582f88 * *(float*)g_1470f1c;
         ((Mate*)dm->mp14)->Activate(f);
         dm = g_sDramaInstance;
     }

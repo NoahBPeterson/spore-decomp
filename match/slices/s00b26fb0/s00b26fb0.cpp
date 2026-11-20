@@ -7,6 +7,13 @@
 // Absolute data addresses are accessed through reinterpret_cast<T*>(0x...),
 // matching the convention used elsewhere in this project.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_145fa98[];
+extern "C" char g_145faa8[];
+extern "C" char g_145fb0c[];
+
 #include <intrin.h>
 
 typedef unsigned char  uint8_t;
@@ -221,11 +228,11 @@ struct SavedGameCleanup {
 // @ 0x00b271b0
 void* SavedGameCleanup::Destroy(uint32_t flags)
 {
-    mpPrimaryTable_00 = (void*)0x0145faa8;
-    mpSecondaryTable_04 = (void*)0x0145fa98;
+    mpPrimaryTable_00 = (void*)g_145faa8;
+    mpSecondaryTable_04 = (void*)g_145fa98;
     mTree_14.~SavedGameTree();
-    mpSecondaryTable_04 = (void*)0x013ec458;
-    mpPrimaryTable_00 = (void*)0x013eb938;
+    mpSecondaryTable_04 = (void*)g_13ec458;
+    mpPrimaryTable_00 = (void*)g_13eb938;
     if (flags & 1)
         operator_delete(this);
     return this;
@@ -353,12 +360,12 @@ void SimSavedGameHandler2(void* p)
 // ===========================================================================
 void* __stdcall CreateSavedGameHeader(int, int)
 {
-    uint8_t* o = (uint8_t*)EAAllocate(0x68, (const char*)0x0145fb0c, 0, 0, 0, 0);
+    uint8_t* o = (uint8_t*)EAAllocate(0x68, (const char*)g_145fb0c, 0, 0, 0, 0);
     if (o != 0) {
         *(uint32_t*)(o + 8) = 0;
-        *(void* volatile*)(o + 4) = (void*)0x013ec458;
-        *(void**)(o) = (void*)0x0145faa8;
-        *(void**)(o + 4) = (void*)0x0145fa98;
+        *(void* volatile*)(o + 4) = (void*)g_13ec458;
+        *(void**)(o) = (void*)g_145faa8;
+        *(void**)(o + 4) = (void*)g_145fa98;
         _ReadWriteBarrier();
 
         uint8_t* c = o + 0x18;

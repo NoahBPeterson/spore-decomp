@@ -1,5 +1,12 @@
 // Slice s00fee3d0: SP::cSPMissionManager mission selection / generation.
 // Retail build (MSVC 2008 SP1). Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00b1e520();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+extern "C" void FUN_00fed010();
+
 #include "types.h"
 
 // ------------------------------------------------------------ free helpers ---
@@ -218,7 +225,7 @@ cSPMission* cSPMissionManager::GetMissionByID(int id)
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00fed010, (int)FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -236,7 +243,7 @@ cSPMission* cSPMissionManager::GetActiveMissionForEmpireAndPlanet(void* empire, 
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00fed010, (int)FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -259,7 +266,7 @@ char cSPMissionManager::IsPlanetARaidTarget(void* planet, unsigned* out)
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00fed010, (int)FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -291,7 +298,7 @@ int cSPMissionManager::HasMissionConversationWithEmpireAndPlanet(void* empire, v
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00fed010, (int)FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -352,7 +359,7 @@ char cSPMissionManager::FUN_00fee820()
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00fed010, (int)FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -382,7 +389,7 @@ void cSPMissionManager::DebugDraw()
     }
     cGameNounManager* nm = (cGameNounManager*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)FUN_00cd7d10, (int)FUN_00d3d420, (int)FUN_00fed010, (int)FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;

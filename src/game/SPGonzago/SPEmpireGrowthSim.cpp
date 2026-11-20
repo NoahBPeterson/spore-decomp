@@ -2,6 +2,12 @@
 // Object file: SPGonzago/SPEmpireGrowthSim.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_1494474[];
+extern "C" char g_1494498[];
+
 #include "game/types.h"
 #include "EA/Variant.h"
 #include "EA/ArgScript/cArgumentSpec.h"
@@ -464,8 +470,8 @@ void Scorer::Contribute(int row, int index, int kind, float* feats, float* best,
 // @ 0x00fe8e20
 cEmpireGrowthSim_s00fe_8630::~cEmpireGrowthSim_s00fe_8630()
 {
-    mpVtbl0 = (void*)0x01494498;
-    mpVtbl8 = (void*)0x01494474;
+    mpVtbl0 = (void*)g_1494498;
+    mpVtbl8 = (void*)g_1494474;
 
     Ent330* p = mBlocks + 3;
     for (int i = 2; i >= 0; --i) {
@@ -488,8 +494,8 @@ cEmpireGrowthSim_s00fe_8630::~cEmpireGrowthSim_s00fe_8630()
     if (mpBlock10 != 0 && *((int*)mpBlock10 - 1) != 0)
         operator_delete__(mpBlock10);
 
-    mpVtbl8 = (void*)0x013eb938;
-    mpVtbl0 = (void*)0x013ec458;
+    mpVtbl8 = (void*)g_13eb938;
+    mpVtbl0 = (void*)g_13ec458;
 }
 
 // @ 0x00fe8f70

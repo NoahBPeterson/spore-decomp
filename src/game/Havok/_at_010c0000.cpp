@@ -2,6 +2,10 @@
 // Object file: Havok/_at_010c0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a3c54[];
+extern "C" char g_14a43a4[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include <string.h>
@@ -1710,7 +1714,7 @@ void hkTriangleShapeCtor(hkTriangleShape_s010c_44d0* self)
     // if (this) { baseCtor(this); this->vtbl = &hkTriangleShape::vtbl; }
     if (self != 0) {
         ((hkShapeCollectionCtor_s010c_44d0*)self)->ctor();
-        *(void**)self = (void*)0x014a3c54;   // hkTriangleShape vtable (relocated in the original image)
+        *(void**)self = (void*)g_14a3c54;   // hkTriangleShape vtable (relocated in the original image)
     }
 }
 
@@ -2562,7 +2566,7 @@ void __stdcall FUN_010cec10(int a, int b, int c, int d)
     int local[3];
     local[2] = d;
     local[1] = 0x7f7fffee;
-    local[0] = 0x14a43a4;
+    local[0] = (int)g_14a43a4;
     FUN_010e4d50(b, a, c, local);
 }
 

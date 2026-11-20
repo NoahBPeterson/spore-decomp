@@ -2,6 +2,12 @@
 // The commands a city game registers with the cheat manager, and the manager
 // destructor that unregisters them again.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f09b4[];
+extern "C" char g_14781bc[];
+extern "C" char g_14781d4[];
+extern "C" char g_14781ec[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ArgScript/cIParser.h"
@@ -31,13 +37,13 @@ typedef unsigned char  u8;
 // The three command objects the city game's Simulator::cCivModeStrategy registers.
 enum {
     kCommandSize      = 0x10,        // sizeof(EA::ArgScript::cCommandBase)
-    kRegisterFile     = 0x13f09b4,   // allocator tag ("Simulator")
 };
+#define kRegisterFile ((int)g_13f09b4)   // allocator tag ("Simulator")
 
 // vtable addresses of the command classes (read from the retail image)
-#define kVTblToggleShowPaths     0x14781d4
-#define kVTblSetVehicleWeapons   0x14781bc
-#define kVTblMakeTradeRoutes     0x14781ec
+#define kVTblToggleShowPaths     (int)g_14781d4
+#define kVTblSetVehicleWeapons   (int)g_14781bc
+#define kVTblMakeTradeRoutes     (int)g_14781ec
 
 // The city game's three cheat commands.  Only the vtable pointer layout
 // matters here: cCommandSetVehicleWeapons keeps the parser it registered with.

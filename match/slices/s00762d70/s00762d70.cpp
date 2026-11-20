@@ -1,6 +1,11 @@
 // slice s00762d70
 // SP::cGraphicsResourceFactory / cEditorResource serialization module.
 // /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_007632f0();
+extern "C" char g_140dfe0[];
+
 #include <intrin.h>
 #include <string.h>
 #include "types.h"
@@ -361,7 +366,7 @@ unsigned char __cdecl ArenaWrite(void* buf, int n, unsigned total) {
 // ===========================================================================
 // @ 0x00763520
 bool SP::cGraphicsResourceFactory::Shutdown() {
-    RemoveRegistrationCallback(0x2f4e681b, (void*)0x7632f0);
+    RemoveRegistrationCallback(0x2f4e681b, (void*)FUN_007632f0);
     return true;
 }
 
@@ -370,7 +375,7 @@ unsigned int SP::cGraphicsResourceFactory::GetSupportedTypes(uint32_t* types, un
     unsigned int count = 8;
     if (types != 0) {
         if (n >= count) {
-            memcpy(types, (void*)0x140dfe0, 32);
+            memcpy(types, (void*)g_140dfe0, 32);
         } else {
             return 0;
         }

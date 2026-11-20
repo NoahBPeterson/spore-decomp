@@ -1,5 +1,10 @@
 // Slice s00831810 -- SP::cSPUIDebugConsole (derives the SPUI standard drawable).
 // Region flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_141a82c[];
+extern "C" char g_141a830[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------- masked externs
@@ -333,8 +338,8 @@ DebugConsole *DebugConsole::Ctor()
 void DebugConsole::Dtor()
 {
     FixedBufferAllocator *alloc = reinterpret_cast<FixedBufferAllocator *>(&mpAlloc);
-    vptr0 = (void *)0x141a830;
-    vptr4 = (void *)0x141a82c;
+    vptr0 = (void *)g_141a830;
+    vptr4 = (void *)g_141a82c;
     alloc->Free(mpText);
     if (alloc->mpInfo != 0 && (alloc->mpInfo->mSignature & 0x40000000) != 0)
         alloc->destroy_shared();

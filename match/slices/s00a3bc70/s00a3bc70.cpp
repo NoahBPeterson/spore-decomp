@@ -1,6 +1,10 @@
 // SP::Audio::cListener::Update (0x00a3bc70): recompute the audio listener position/orientation
 // from the camera (or the cell microphone/anchor when boom is enabled) and push it to the audio system.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1453948[];
+
 #include "types.h"
 #include <math.h>
 
@@ -481,7 +485,7 @@ cMapDescription* FUN_00a3cb20(EA::IO::IReader* pReader, int32_t nVersion)
         cMapDescription* pNew = (cMapDescription*)pMemory;
         pNew->m0c = 1.0f;
         pNew->m04 = 0;
-        pNew->mpVt00 = (void*)0x01453948;
+        pNew->mpVt00 = (void*)g_1453948;
         pNew->m08 = 0;
         pNew->m10 = 0.0f;
         pDesc = pNew;

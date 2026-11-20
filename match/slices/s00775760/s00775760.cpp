@@ -1,6 +1,15 @@
 // slice s00775760: SP::cRuntimeModelBuilder mesh / bone accessors and the
 // constructor/destructor pair for a resource model.  Small accessors are
 // reconstructed; the large EH-framed routines are skeletons (partial).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13ec458[];
+extern "C" char g_140e660[];
+extern "C" char g_140e670[];
+extern "C" char g_140e688[];
+extern "C" char g_140e698[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -450,24 +459,24 @@ struct ShaderPreviewB : ShaderPreview { void Destroy(); };
 
 // @ 0x00776590  ShaderPreviewA::Destroy
 void ShaderPreviewA::Destroy() {
-    vtbl0 = (void*)0x140e670;
-    vtbl8 = (void*)0x140e660;
+    vtbl0 = (void*)g_140e670;
+    vtbl8 = (void*)g_140e660;
     _ReadWriteBarrier();
     if (counted) counted->Release();
     meshes.FreeAll();
     table.FreeAll();
     if (buffer10c && EABlockInUse(buffer10c)) operator_delete_array(buffer10c);
-    vtbl8 = (void*)0x13eb394;
-    vtbl0 = (void*)0x13ec458;
+    vtbl8 = (void*)g_13eb394;
+    vtbl0 = (void*)g_13ec458;
 }
 
 // @ 0x00776680  ShaderPreviewB::Destroy
 void ShaderPreviewB::Destroy() {
-    vtbl0 = (void*)0x140e698;
-    vtbl8 = (void*)0x140e688;
+    vtbl0 = (void*)g_140e698;
+    vtbl8 = (void*)g_140e688;
     meshes.FreeAll();
     table.FreeAll();
     if (buffer10c && EABlockInUse(buffer10c)) operator_delete_array(buffer10c);
-    vtbl8 = (void*)0x13eb394;
-    vtbl0 = (void*)0x13ec458;
+    vtbl8 = (void*)g_13eb394;
+    vtbl0 = (void*)g_13ec458;
 }

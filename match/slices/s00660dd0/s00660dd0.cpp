@@ -1,5 +1,9 @@
 // Slice s00660dd0: SP::cSPUIFeedFilter and its filter-button/asset-key containers.
 // UI module: /O2 /MD /Gy /TP /arch:SSE2 (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14000b8[];
+
 #include "types.h"
 #include <new>
 
@@ -470,7 +474,7 @@ char FUN_00661740(unsigned key, KeyVecE* out)
         uint32_t pa = e->a;
         int pb = e->b;
         if (e->c == 0x4edcd7a9)
-            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)0x14000b8));
+            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)g_14000b8));
         else
             cons.push_back(FMConstraint(pa, kEquals, pb));
     }

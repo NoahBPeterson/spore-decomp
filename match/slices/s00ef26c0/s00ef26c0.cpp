@@ -7,6 +7,11 @@
 // per-frame creature/posse tick.
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15acd1c[];
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 
 typedef unsigned int uint;
@@ -253,7 +258,7 @@ struct SpaceMgr {
     uint8_t       pad78[0xcc - 0x78];
     int32_t       mMode;     // +0xcc
 };
-#define GMGR (*(SpaceMgr**)0x16c7aa4)
+#define GMGR (*(SpaceMgr**)g_16c7aa4)
 
 // message sent when a creature crosses the planet threshold
 struct RCMsg {
@@ -414,7 +419,7 @@ void PlanetFlow::AdvanceStage()
             ((C801360*)FUN_0067cab0())->Show();
             this->mCounter = 1;
         }
-        if ((this->mFlag != 0 && this->mCounter >= *(uint32_t*)0x15acd1c) ||
+        if ((this->mFlag != 0 && this->mCounter >= *(uint32_t*)g_15acd1c) ||
             this->mCounter > 0x1e) {
             this->FillPending();
             this->FEF0220();

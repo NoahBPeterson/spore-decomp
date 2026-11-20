@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00d00000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15820f8[];
+
 #include "game/types.h"
 #include "SP/cRelationshipManager.h"
 #include <intrin.h>
@@ -191,7 +194,7 @@ bool __fastcall FUN_00d06d80(void* this_, int unused, void* p)
     void* b = ((void* (__thiscall*)(void*))vt[6])(a);
     uint8_t prop[0xa14];
     FUN_0093aa70(b, &tag, 1, 0);
-    ((Fn692f90*)prop)->call(this_, (void*)0x15820f8, (void*)0x1a80d26);
+    ((Fn692f90*)prop)->call(this_, (void*)g_15820f8, (void*)0x1a80d26);
     return ((Fn692900*)prop)->call(p);
 }
 }  // namespace SP

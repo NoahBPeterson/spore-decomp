@@ -25,6 +25,11 @@
 // Callees are declared with their retail addresses; the rel32 call targets are masked during
 // comparison, so only call arity / member-vs-free matters.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ebcdc[];
+extern "C" char g_1436a00[];
+
 #include "types.h"
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
@@ -695,10 +700,10 @@ struct EditorResource {
 void EditorResource::dtor()
 {
     void* p = mpData;
-    vtbl = (void**)0x1436a00;
+    vtbl = (void**)g_1436a00;
     if (p != 0)
         ((MemAlloc*)g_pMemAlloc)->Free(p);
-    vtbl = (void**)0x13eb938;
+    vtbl = (void**)g_13eb938;
 }
 
 // ---------------------------------------------------------------------------
@@ -763,10 +768,10 @@ extern "C" char __stdcall FUN_008ddf70(int self, void* other, int a3, int a4)
 void* EditorResource::deleting_dtor(int flags)
 {
     void* p = mpData;
-    vtbl = (void**)0x1436a00;
+    vtbl = (void**)g_1436a00;
     if (p != 0)
         ((MemAlloc*)g_pMemAlloc)->Free(p);
-    vtbl = (void**)0x13eb938;
+    vtbl = (void**)g_13eb938;
     if (flags & 1)
         operator_delete__(this);
     return this;
@@ -783,12 +788,12 @@ struct PropertyList {
 PropertyList* PropertyList::ctor()
 {
     char* p = (char*)this;
-    *(void**)p = (void*)0x13ebcdc;
+    *(void**)p = (void*)g_13ebcdc;
     _InterlockedExchange((volatile long*)(p + 4), 0);
     *(int*)(p + 8) = 0;
     *(int*)(p + 0xc) = 0;
     *(int*)(p + 0x10) = 0;
-    *(void**)p = (void*)0x1436a00;
+    *(void**)p = (void*)g_1436a00;
     *(int*)(p + 0x14) = 0;
     *(int*)(p + 0x18) = 0;
     return this;

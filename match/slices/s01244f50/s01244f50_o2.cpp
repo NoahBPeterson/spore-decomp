@@ -1,6 +1,13 @@
 // Slice s01244f50 (/O2 part) -- FNV-1 string-hash table initializers and a
 // float sign-flip global setter, plus a cWString global initializer.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_150f2c4[];
+extern "C" char g_151ac94[];
+extern "C" char g_15e6c58[];
+extern "C" char g_15f0a1c[];
+
 typedef unsigned int uint32_t;
 
 extern "C" uint32_t __cdecl FNV1_String8(const char* s, uint32_t hash, unsigned int mode);  // 0x932e80
@@ -13,7 +20,7 @@ extern void FUN_013bd740(void);   // 0x13bd740
 // @ 0x0127caa0
 void init_15e6c58()
 {
-    *(float*)0x15e6c58 = -*(float*)0x150f2c4;
+    *(float*)g_15e6c58 = -*(float*)g_150f2c4;
 }
 
 // @ 0x012817b0
@@ -41,7 +48,7 @@ void init_15e89f8()
 // @ 0x012967b0
 void init_15f0a1c()
 {
-    ((cWString*)0x15f0a1c)->RangeInitialize(*(const wchar_t**)0x151ac94);
+    ((cWString*)g_15f0a1c)->RangeInitialize(*(const wchar_t**)g_151ac94);
     atexit(&FUN_013bd740);
 }
 

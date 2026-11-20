@@ -1,6 +1,12 @@
 // SP::cPollinator transaction handling: the rbtree walk (CancelTransactions), the deque
 // ctors/erase helpers, the feed-description vector erase and the transaction poster helpers.
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_151fafc[];
+extern "C" char g_151fb20[];
+extern "C" char g_151fb24[];
+
 #include "types.h"
 
 typedef unsigned int uint32_t;
@@ -582,8 +588,8 @@ bool cPollinator::Shutdown() {
     {
         void* const o = Object67de20();
         if (o) {
-            ((IVtA*)o)->s7(*(void**)0x151fb20);
-            ((IVtA*)o)->s7(*(void**)0x151fb24);
+            ((IVtA*)o)->s7(*(void**)((char*)&g_151fafc + 0x24));
+            ((IVtA*)o)->s7(*(void**)((char*)&g_151fafc + 0x28));
         }
     }
     {   // two-step release of mField4
@@ -624,8 +630,8 @@ bool cPollinator::Shutdown() {
             r->s11(p, 0x49a3777u, -9999);
             r->s11(p, 0x5d313c7u, -9999);
             r->s11(p, 0x5fff3ffu, -9999);
-            ((IVtB*)Object6895b0())->s11((void*)0x151fafc, 3);
-            for (int q = 0x151fafc; q < 0x151fb20; q += 0xc) {
+            ((IVtB*)Object6895b0())->s11((void*)g_151fafc, 3);
+            for (int q = (int)g_151fafc; q < (int)((char*)&g_151fafc + 0x24); q += 0xc) {
                 void* const o3 = Object883860();
                 ((IVtA*)o3)->s11(p, *(unsigned int*)q, -9999);
             }

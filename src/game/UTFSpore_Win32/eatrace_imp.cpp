@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/eatrace_imp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e050[];
+extern "C" char g_154df28[];
+
 #include "game/types.h"
 #include "EAMutexData.h"
 #include "EA/Trace/ILogFilter.h"
@@ -721,7 +725,7 @@ TraceHelperTable_s0092_5770* CreateHelperTable()
 {
     TraceHelperTable_s0092_5770* t = (TraceHelperTable_s0092_5770*)eastl_new(0x58, "EATrace/TraceHelperTable", 0, 0, 0, 0);
     if (t) {
-        *(void**)t = (void*)0x143e050;
+        *(void**)t = (void*)g_143e050;
         t->mTracer = 0;
         t->mVec.Zero();
         t->mMutex.Init(0, true);
@@ -737,7 +741,7 @@ TraceHelperTable_s0092_5770* CreateHelperTable()
 namespace EA { namespace Trace {
 void TraceHelperTable_s0092_5770::UnregisterHelper(TraceHelper_s0092_5770* h)
 {
-    mMutex.Lock((const void*)0x143dffc);
+    mMutex.Lock((const void*)&g_timeout_143dffc);
     h->mTracer = 0;
     h->mIsFiltered = true;
     h->mIsFilterEvaluated = false;
@@ -756,7 +760,7 @@ TempTraceHelperMap_s0092_5770* TempTraceHelperMap_s0092_5770::Init()
     ht.mGrowth = g_01470f1c;
     ht.mNextResize = 0;
     ht.mBucketCount = 1;
-    ht.mpBuckets = (void*)0x154df28;
+    ht.mpBuckets = (void*)g_154df28;
     ht.mElementCount = 0;
     ht.mNextResize = 0;
     ht.mbEnable = 1;
@@ -812,7 +816,7 @@ HelperTablePtr* HelperTablePtr::Init()
 namespace EA { namespace Trace {
 void TraceHelperTable_s0092_5770::RegisterHelper(TraceHelper_s0092_5770* h)
 {
-    mMutex.Lock((const void*)0x143dffc);
+    mMutex.Lock((const void*)&g_timeout_143dffc);
     h->mTracer = mTracer;
     h->mIsFiltered = true;
     h->mIsFilterEvaluated = false;

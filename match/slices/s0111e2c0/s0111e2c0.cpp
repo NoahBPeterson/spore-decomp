@@ -4,6 +4,11 @@
 // Group A: the code writer. It appends bytes to a fixed buffer that is filled from the *end* towards
 // the front, so each store lands at  m_buffer[m_capacity - m_position - 1]  and the buffer is doubled
 // (and its contents moved to the new buffer's tail) when the position reaches the capacity.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a59b4[];
+extern "C" char g_14a6100[];
+
 #include "s0111e2c0.h"
 #include <string.h>
 
@@ -15,7 +20,7 @@
 MoppCodeWriter* MoppCodeWriter::init(int nbytes)
 {
     this->m_refCount = 1;
-    this->m_vtbl = 0x014a6100u;
+    this->m_vtbl = (unsigned)g_14a6100;
     this->m_buffer = (char*)hkMemory::s_instance->allocate(nbytes, HK_MEMORY_CLASS_MOPP);
     this->m_capacity = nbytes;
     this->m_position = 0;
@@ -135,7 +140,7 @@ hkMoppCode* MoppCodeWriter::getCode()
     hkMoppCode* code = (hkMoppCode*)hkMemory::s_instance->allocateChunk(sizeof(hkMoppCode), HK_MEMORY_CLASS_MOPP);
     code->m_memSizeAndFlags = (uint16_t)sizeof(hkMoppCode);
     code->m_refCount = 1;
-    code->m_vtbl = 0x014a59b4u;
+    code->m_vtbl = (unsigned)g_14a59b4;
     // The array and the 16-byte code-info block are both initialised through pointers taken before
     // the four (or three) stores. Spelling the info stores as code->m_infoNN = 0, or binding the
     // array once and using it for everything, makes the compiler hoist the zero register and the

@@ -19,6 +19,11 @@
 //  0x00e91c30  cRotationRingView::~cRotationRingView        (ret)
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  (MSVC 2008 SP1).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1486a80[];
+extern "C" char g_1486b1c[];
+
 #include "types.h"
 #include <math.h>
 
@@ -229,7 +234,7 @@ cViewA::cViewA()
 {
     mField08 = 0;
     mField04 = 0;
-    *(void**)this = (void*)0x1486a80;
+    *(void**)this = (void*)g_1486a80;
     mpObject = 0;
     mpField10 = 0;
     mModel = 0;
@@ -318,7 +323,7 @@ cRotationRingView::cRotationRingView()
 {
     mField08 = 0;
     mField04 = 0;
-    *(void**)this = (void*)0x1486b1c;
+    *(void**)this = (void*)g_1486b1c;
     mpObject = 0;
     mpGameDataView = 0;
     mModel = 0;

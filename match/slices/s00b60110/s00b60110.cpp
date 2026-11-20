@@ -1,6 +1,12 @@
 // Slice s00b60110 -- App ArgScript command constructors/executors, the
 // simulator setup command, and a couple of App mode key/cheat hooks.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1462e24[];
+extern "C" char g_1462f2c[];
+extern "C" char g_1463220[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -221,7 +227,7 @@ struct SimulatorCommand {
 App::cPauseUIVisibleCommand::cPauseUIVisibleCommand()
     : EA::ArgScript::cCommandBase()
 {
-    vtbl = (void**)0x01462e24;
+    vtbl = (void**)g_1462e24;
     mSpec.ctor(true);
     mSpec.ConstructSpec(
         "sets or toggles whether the pause frame is drawn",
@@ -238,7 +244,7 @@ App::cPauseUIVisibleCommand::cPauseUIVisibleCommand()
 App::cStyleFilter::cStyleFilter()
     : EA::ArgScript::cCommandBase()
 {
-    vtbl = (void**)0x01462f2c;
+    vtbl = (void**)g_1462f2c;
     mSpec.ctor(true);
     mEffect.mPtr = 0;
     mSpec.ConstructSpec(
@@ -262,7 +268,7 @@ App::cStyleFilter::cStyleFilter()
 App::cAdventureLook::cAdventureLook()
     : EA::ArgScript::cCommandBase()
 {
-    vtbl = (void**)0x01463220;
+    vtbl = (void**)g_1463220;
     mSpec.ctor(true);
     mSpec.ConstructSpec(
         "Applies a stylized look to your Adventure! If used while editing an adventure, it gets saved with the adventure. Set Graphics Effects to Medium or High",
@@ -426,7 +432,7 @@ void App::cStyleFilter::FUN_00b60550(EA::ArgScript::cArguments* args)
 void* App::cStyleFilter::FUN_00b60830(int flags)
 {
     // volatile store keeps the original store-then-load order in the dtor.
-    *(void* volatile*)&vtbl = (void*)0x01462f2c;
+    *(void* volatile*)&vtbl = (void*)g_1462f2c;
     _ReadWriteBarrier();
     if (mEffect.mPtr)
         mEffect.mPtr->v04();

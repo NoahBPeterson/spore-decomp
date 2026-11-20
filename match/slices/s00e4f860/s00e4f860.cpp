@@ -3,6 +3,16 @@
 // /O2 /MD /Gy /TP /arch:SSE /fp:fast.  The recurring `lea ecx,[esp+N]; call
 // 0x743b50; ...; call 0xe82130` is a small scope guard (modelled by cGuard16).
 // 0xe4cc40 (thunk_FUN_00e823a0) looks an object up from a handle.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1483e9c[];
+extern "C" char g_1483efc[];
+extern "C" char g_15a83d0[];
+extern "C" char g_15a83e8[];
+extern "C" char g_15a83f4[];
+extern "C" char g_16b3de8[];
+extern "C" char g_16b4178[];
+
 #include "types.h"
 #include <xmmintrin.h>
 #include "sse_helpers.h"
@@ -221,13 +231,13 @@ void FUN_00e4fbb0(int* table) {
 struct cMission16 { char mUnk00[0x90]; int mLevel; void Init(unsigned id); };
 void FUN_00e4fe50() {
   int i = 0;
-  char* p = (char*)0x16b3de8;
+  char* p = (char*)g_16b3de8;
   do {
     *(int*)(p + 0x90) = i;
     ((cMission16*)p)->Init(FUN_00e4fde0(i));
     p += 0x98;
     ++i;
-  } while ((int)p < 0x16b4178);
+  } while ((int)p < (int)g_16b4178);
 }
 
 // @ 0x00e4fcd0
@@ -237,11 +247,11 @@ void FUN_00e4fcd0(char* p) {
   *(int*)(p + 0x24) = 1;
   *(int*)(p + 0xc) = 1;
   *(int*)(p + 8) = 1;
-  int* q = (int*)0x1483e9c;
+  int* q = (int*)g_1483e9c;
   do {
     if (*(int*)(p + q[-1] * 4) == 1) FUN_00e83430(q[0]);
     q += 2;
-  } while ((int)q < 0x1483efc);
+  } while ((int)q < (int)g_1483efc);
 }
 
 // @ 0x00e50750
@@ -453,14 +463,14 @@ struct QuitDialog { void Close(); }; // 0x007ebce0
 void SP_sOnQuitDesktopButtonClick() {
   void* t = FUN_0067de90(-1);
   ((QuitDialog*)t)->Close();
-  if (g_16b3c04[0x51da] == 0) { CellConfirmDialog((void*)0x15a83e8, (void*)0x15a83d0); return; }
+  if (g_16b3c04[0x51da] == 0) { CellConfirmDialog((void*)g_15a83e8, (void*)g_15a83d0); return; }
   void* cm = SP_CheatManager();
   (*(void(__thiscall**)(void*, const char*))((char*)Vt(cm) + 0x20))(cm, "quit");
 }
 
 // @ 0x00e501f0
 void FUN_00e501f0() {
-  if (g_16b3c04[0x51da] == 0) { CellConfirmDialog((void*)0x15a83f4, (void*)0x15a83d0); return; }
+  if (g_16b3c04[0x51da] == 0) { CellConfirmDialog((void*)g_15a83f4, (void*)g_15a83d0); return; }
   void* cm = FUN_0067dd20();
   (*(void(__thiscall**)(void*))((char*)Vt(cm) + 0x40))(cm);
 }

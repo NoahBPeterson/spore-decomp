@@ -2,6 +2,9 @@
 // Object file: SPAudio/_at_00a30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1453948[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include <string.h>
@@ -1043,7 +1046,7 @@ cMapDescription* FUN_00a3cb20(EA::IO::IReader* pReader, int32_t nVersion)
         cMapDescription* pNew = (cMapDescription*)pMemory;
         pNew->m0c = 1.0f;
         pNew->m04 = 0;
-        pNew->mpVt00 = (void*)0x01453948;
+        pNew->mpVt00 = (void*)g_1453948;
         pNew->m08 = 0;
         pNew->m10 = 0.0f;
         pDesc = pNew;

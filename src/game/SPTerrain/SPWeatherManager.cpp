@@ -2,6 +2,11 @@
 // Object file: SPTerrain/SPWeatherManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14915c0[];
+extern "C" char g_14915c4[];
+
 #include "game/types.h"
 #include <math.h>
 #include <intrin.h>
@@ -709,8 +714,8 @@ bool cJetStreamMap::SetValues(RefCounted* p, uint32_t keyLo, uint32_t keyHi)
 cJetStreamMap::~cJetStreamMap()
 {
     // restore the two base vtables first (the original stores them before touching the members)
-    *(void***)this = (void**)0x014915c4;                        // cIMap vftable
-    *((void***)this + 1) = (void**)0x014915c0;                  // RefCountTemplate vftable
+    *(void***)this = (void**)g_14915c4;                        // cIMap vftable
+    *((void***)this + 1) = (void**)g_14915c0;                  // RefCountTemplate vftable
     _ReadWriteBarrier();
     if (mMap) {
         RefCounted* p = mMap;
@@ -720,7 +725,7 @@ cJetStreamMap::~cJetStreamMap()
         RefCounted* p = mTerrainMapSet;
         p->Release();
     }
-    *((void***)this + 1) = (void**)0x013ef094;                  // ??_7GmeRefCount@@6B@
+    *((void***)this + 1) = (void**)g_13ef094;                  // ??_7GmeRefCount@@6B@
 }
 
 // @ 0x00fc3150

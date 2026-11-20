@@ -2,6 +2,21 @@
 // Object file: UTFSpore_Win32/Dialog.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_154f4dc[];
+extern "C" char g_154f4e0[];
+extern "C" char g_154f4e4[];
+extern "C" char g_154f4e8[];
+extern "C" char g_154f4ec[];
+extern "C" char g_154f4f0[];
+extern "C" char g_154f4f4[];
+extern "C" char g_154f4f8[];
+extern "C" char g_154f4fc[];
+extern "C" char g_154f500[];
+extern "C" char g_154f504[];
+extern "C" char g_154f508[];
+extern "C" char g_154f50c[];
+
 #include "game/types.h"
 #include "EA/UTFWinControls/IWinButton.h"
 #include "EA/UTFWinControls/IWinText.h"
@@ -1469,17 +1484,17 @@ bool WinDialog_s0096_c6f0::Refresh()
 // @ 0x01300950
 void init_154f4dc()
 {
-    *(int*)0x154f4dc = 0xa;
-    *(int*)0x154f4e0 = 0;
-    *(int*)0x154f4e4 = 0;
-    *(int*)0x154f4e8 = 0x2f42e1a2;
-    *(short*)0x154f4ec = 9;
-    *(int*)0x154f4f0 = 0x10;
-    *(int*)0x154f4f4 = 1;
-    *(int*)0x154f4f8 = 0;
-    *(int*)0x154f4fc = 0;
-    *(int*)0x154f500 = 0x2f42e1a3;
-    *(short*)0x154f504 = 9;
-    *(int*)0x154f508 = 0x14;
-    *(int*)0x154f50c = 1;
+    *(int*)g_154f4dc = 0xa;
+    *(int*)g_154f4e0 = 0;
+    *(int*)g_154f4e4 = 0;
+    *(int*)g_154f4e8 = 0x2f42e1a2;
+    *(short*)g_154f4ec = 9;
+    *(int*)g_154f4f0 = 0x10;
+    *(int*)g_154f4f4 = 1;
+    *(int*)g_154f4f8 = 0;
+    *(int*)g_154f4fc = 0;
+    *(int*)g_154f500 = 0x2f42e1a3;
+    *(short*)g_154f504 = 9;
+    *(int*)g_154f508 = 0x14;
+    *(int*)g_154f50c = 1;
 }

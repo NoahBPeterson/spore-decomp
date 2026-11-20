@@ -1,5 +1,9 @@
 // Slice s00676660: SP::Achievements::Controller and related UI message handlers.
 // Flags: /O2 /MD /Gy /TP (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1529330[];
+
 #include "types.h"
 
 typedef unsigned int uint32_t;
@@ -814,7 +818,7 @@ char SerOwner::FUN_00676910(Stream* s)
         Rec* r = g_pController->FUN_00676660(id);
         ReadI(s, &r->value);
     }
-    VarListSer vs(this, (void*)0x1529330, 0x1a80d26);
+    VarListSer vs(this, (void*)g_1529330, 0x1a80d26);
     return vs.Serialize(s);
 }
 

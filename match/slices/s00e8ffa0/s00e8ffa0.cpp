@@ -6,6 +6,9 @@
 //
 // Virtual calls on objects whose class is not recovered use VCn(ret, obj, byteoffset, ...).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14869f0[];
+
 #include <float.h>
 #include <new>
 typedef unsigned char      u8;
@@ -656,6 +659,6 @@ cPlanetaryArtifact::cPlanetaryArtifact()
     : cSpatialObjectView()
 {
     Vec3 c = { 1.0f, 1.0f, 1.0f };
-    mVTable = (void**)0x14869f0;
+    mVTable = (void**)g_14869f0;
     mColor = c;
 }

@@ -3,6 +3,10 @@
 // D3D9 register helpers and the register-table setup that feeds them.
 // Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00c2e4e0();
+extern "C" char g_16327bc[];
+
 // Retail globals used by this module. The name is the slice's own unnamed
 // name; the address is in each comment.
 extern void* g_016f6ed0;   // 0x016f6ed0: constant block (role is a guess)
@@ -115,29 +119,29 @@ void FUN_0067d020(void* a, void* b, int c)
 }
 
 // Argument block passed as the three pointer slots of every register-table insert.
-static void* const kZeroBlock = (void*)0xc2e4e0;  // 0x00c2e4e0
+#define kZeroBlock ((void*)FUN_00c2e4e0)   // 0x00c2e4e0 (a #define: a function address is no constant initializer to cl)
 
 // @ 0x0067d0c0
 void FUN_0067d0c0()
 {
   FUN_011f4270(0x236, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067d020);
-  *(unsigned int*)0x16327c8 = 4;
+  *(unsigned int*)((char*)&g_16327bc + 0xc) = 4;
   FUN_011f4270(0x238, kZeroBlock, kZeroBlock, kZeroBlock, (void*)0);
-  *(unsigned int*)0x16327d0 = 1;
+  *(unsigned int*)((char*)&g_16327bc + 0x14) = 1;
   FUN_011f4270(0x233, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067cd20);
-  *(unsigned int*)0x16327bc = 4;
+  *(unsigned int*)g_16327bc = 4;
   FUN_011f4270(0x235, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067cd90);
-  *(unsigned int*)0x16327c4 = 4;
+  *(unsigned int*)((char*)&g_16327bc + 0x8) = 4;
   FUN_011f4270(0x23c, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067ce00);
-  *(unsigned int*)0x16327e0 = 0x30;
+  *(unsigned int*)((char*)&g_16327bc + 0x24) = 0x30;
   FUN_011f4270(0x241, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067cf20);
-  *(unsigned int*)0x16327f4 = 0x40;
+  *(unsigned int*)((char*)&g_16327bc + 0x38) = 0x40;
   FUN_011f4270(0x242, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067cca0);
-  *(unsigned int*)0x16327f8 = 0x40;
+  *(unsigned int*)((char*)&g_16327bc + 0x3c) = 0x40;
   FUN_011f4270(0x243, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067cce0);
-  *(unsigned int*)0x16327fc = 0x90;
+  *(unsigned int*)((char*)&g_16327bc + 0x40) = 0x90;
   FUN_011f4270(0x24a, kZeroBlock, kZeroBlock, kZeroBlock, (void*)FUN_0067cc70);
-  *(unsigned int*)0x1632818 = 0x30;
+  *(unsigned int*)((char*)&g_16327bc + 0x5c) = 0x30;
 }
 
 // @ 0x0067d230

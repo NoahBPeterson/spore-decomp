@@ -4,6 +4,11 @@
 // The map key is a 32-bit id (an owning object's address); the mapped value is a 0x820-byte trace cache
 // made of 8 cached hit records (0x100 bytes each) followed by 8 cached object pointers.  Callees that are
 // __thiscall are modelled as members of placeholder structs (MSVC rejects __thiscall on free functions).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00ac8980();
+extern "C" void FUN_00c29ab0();
+
 #include "types.h"
 
 struct Node;
@@ -72,8 +77,8 @@ Value* Value::CopyFrom(const unsigned* key, TraceCache* src)
 	// the helper walks byte offsets: the eight hit records (stride 0x100), then the eight object slots
 	char*       pDst = (char*)&mValue;
 	const char* pSrc = (const char*)src;
-	FUN_00406540(pDst, pSrc, 0x100, 8, (void*)0x00c29ab0);
-	FUN_00406540(pDst + 0x800, pSrc + 0x800, 4, 8, (void*)0x00ac8980);
+	FUN_00406540(pDst, pSrc, 0x100, 8, (void*)FUN_00c29ab0);
+	FUN_00406540(pDst + 0x800, pSrc + 0x800, 4, 8, (void*)FUN_00ac8980);
 	return this;
 }
 

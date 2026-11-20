@@ -8,6 +8,11 @@
 // offsets read off the disassembly (the migrated headers carry the dev-PDB
 // layout, which is shifted and wrong for retail).  Every field that is touched
 // is named; gaps are `uint32_t padN[...]`.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1695458[];
+extern "C" char g_1695460[];
+
 #include "types.h"
 #include <math.h>
 
@@ -878,10 +883,10 @@ void* __cdecl F8ea70(unsigned int nSlot)
 {
     if (nSlot - 1 <= 0x1e) {
         int nTerrain = ((TerrainSphere*)((NounMgr*)Sub_b3d300())->GetCurrentTerrainSphere())->GetSubIndex();
-        return (char*)0x01695458 + (nTerrain * 0x20 + (int)nSlot) * 0xb8;
+        return (char*)g_1695458 + (nTerrain * 0x20 + (int)nSlot) * 0xb8;
     }
     int nTerrain = ((TerrainSphere*)((NounMgr*)Sub_b3d300())->GetCurrentTerrainSphere())->GetSubIndex();
-    return (char*)0x01695458 + nTerrain * 0x1700;
+    return (char*)g_1695458 + nTerrain * 0x1700;
 }
 
 // ===========================================================================
@@ -891,7 +896,7 @@ int __fastcall Tribe_GetMaxPopulation(Tribe* pSelf)
 {
     if (pSelf->mPopSlot_550 > 0u && pSelf->mPopSlot_550 < 0x20) {
         int nTerrain = ((TerrainSphere*)((NounMgr*)Sub_b3d300())->GetCurrentTerrainSphere())->GetSubIndex();
-        return *(int*)((char*)0x01695460
+        return *(int*)((char*)g_1695460
                        + (nTerrain * 0x20 + (int)pSelf->mPopSlot_550) * 0xb8);
     }
     {

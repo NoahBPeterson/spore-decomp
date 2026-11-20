@@ -2,6 +2,19 @@
 // Object file: Spui/SPUIBehaviorWinAction.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1415ef8[];
+extern "C" char g_1415f08[];
+extern "C" char g_1415f18[];
+extern "C" char g_1416034[];
+extern "C" char g_1542c44[];
+extern "C" char g_1542c48[];
+extern "C" char g_1542c4c[];
+extern "C" char g_1542c50[];
+extern "C" char g_1542c54[];
+extern "C" char g_1542c58[];
+extern "C" char g_1542c5c[];
+
 #include "game/types.h"
 #include <cstddef>
 #include <math.h>
@@ -380,9 +393,9 @@ void* Interp::DeletingDtor(unsigned char flags)
     void* self = this;
     Interp0* p0 = (Interp0*)self;
     void* a = p0->mpTimeFunction;        // +0x3c
-    p0->mVtbl0 = (void*)0x1415f18;
-    p0->mVtbl4 = (void*)0x1415f08;
-    p0->mVtblC = (void*)0x1415ef8;
+    p0->mVtbl0 = (void*)g_1415f18;
+    p0->mVtbl4 = (void*)g_1415f08;
+    p0->mVtblC = (void*)g_1415ef8;
     if (a) {
         VCallV(a, 4);
         p0->mpTimeFunction = 0;
@@ -503,7 +516,7 @@ def:
 // @ 0x012f7570
 void init_1542c44()
 {
-    *(int*)0x1542c44 = 1;
-    *(int*)0x1542c48 = 0;
-    *(void**)0x1542c4c = (void*)0x1416034; *(int*)0x1542c50 = 0x254cdfc; *(short*)0x1542c54 = 0x13; *(int*)0x1542c58 = 0x40; *(int*)0x1542c5c = 1;
+    *(int*)g_1542c44 = 1;
+    *(int*)g_1542c48 = 0;
+    *(void**)g_1542c4c = (void*)g_1416034; *(int*)g_1542c50 = 0x254cdfc; *(short*)g_1542c54 = 0x13; *(int*)g_1542c58 = 0x40; *(int*)g_1542c5c = 1;
 }

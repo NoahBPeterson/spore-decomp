@@ -5,6 +5,17 @@
 // notifies the rest of the UI through the message server. (0xee9840-0xeea7b7)
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13f6b3c[];
+extern "C" char g_148aca8[];
+extern "C" char g_148acb8[];
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -441,8 +452,8 @@ void Entry::Ctor()
 // @ 0x00ee9c70
 void Entry::Dtor()
 {
-    *(void* volatile*)this = (void*)0x148acb8;
-    *(void* volatile*)((uint8_t*)this + 4) = (void*)0x148aca8;
+    *(void* volatile*)this = (void*)g_148acb8;
+    *(void* volatile*)((uint8_t*)this + 4) = (void*)g_148aca8;
     IRefObj* pts = *(IRefObj* volatile*)&this->mPoints;
     if (pts != 0)  pts->Release();
     if (this->mLayout != 0)  ((cSPUILayout*)this->mLayout)->Release();
@@ -452,8 +463,8 @@ void Entry::Dtor()
     if (this->mWinA != 0)      ((IWindow*)this->mWinA)->Release();
     if (this->mWin0 != 0)      ((IWindow*)this->mWin0)->Release();
     if (this->mOwner != 0)     ((IWindow*)this->mOwner)->Release();
-    *(void* volatile*)this = (void*)0x13eb938;
-    *(void* volatile*)((uint8_t*)this + 4) = (void*)0x13ec458;
+    *(void* volatile*)this = (void*)g_13eb938;
+    *(void* volatile*)((uint8_t*)this + 4) = (void*)g_13ec458;
 }
 
 // @ 0x00ee9d00
@@ -602,7 +613,7 @@ void Entry::SetColor(ColorRGB color)
         IMsgServer* ms = (IMsgServer*)MessageServer();
         ms->Send(0xd69290d7, 0, 0);
     }
-    TutorialsUI* ui = *(TutorialsUI**)(*(int*)0x16c7aa4 + 0xd4);
+    TutorialsUI* ui = *(TutorialsUI**)(*(int*)g_16c7aa4 + 0xd4);
     ui->ToggleHint(0x96, 0x97);
     cSPUILayout* lay = this->mLayout;
     uint32_t c = ColorRGBToU32(&this->mColor.r);
@@ -614,13 +625,13 @@ void Entry::SetColor(ColorRGB color)
 void Entry::NotifyChanged()
 {
     if (this->mWinA == 0) return;
-    void* p = EAAllocate(0x40, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    void* p = EAAllocate(0x40, (const char*)g_13f6b3c, 0, 0, 0, 0);
     if (p == 0) return;
     void* msg = p;
     *(int*)((uint8_t*)msg + 0x30) = 0;
-    *(void**)msg = (void*)0x13eb90c;
+    *(void**)msg = (void*)g_13eb90c;
     _InterlockedExchange((volatile long*)((uint8_t*)msg + 4), 0);
-    *(void* volatile*)msg = (void*)0x13eb844;
+    *(void* volatile*)msg = (void*)g_13eb844;
     *(int* volatile*)((uint8_t*)msg + 0x38) = 0;
     _ReadWriteBarrier();
     vcallv_vol<Obj, 4>((Obj*)msg);

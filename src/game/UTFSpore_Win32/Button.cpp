@@ -2,6 +2,15 @@
 // Object file: UTFSpore_Win32/Button.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_1441058[];
+extern "C" char g_1441070[];
+extern "C" char g_1441088[];
+extern "C" char g_14410b0[];
+extern "C" char g_1441120[];
+extern "C" char g_1441240[];
+
 #include "game/types.h"
 #include "EA/Text/LineLayout.h"
 #include "EA/UTFWin/RenderContext.h"
@@ -1034,14 +1043,14 @@ void* S_966df0::m(uint8_t param_2)
 {
     void* this_ = this;
     void* img = (void*)F_s0096_6b20(this_, 0x10);
-    F_s0096_6b20(this_, 0x00) = 0x1441088;
-    F_s0096_6b20(this_, 0x04) = 0x1441070;
-    F_s0096_6b20(this_, 0x0c) = 0x1441058;
+    F_s0096_6b20(this_, 0x00) = (int)g_1441088;
+    F_s0096_6b20(this_, 0x04) = (int)g_1441070;
+    F_s0096_6b20(this_, 0x0c) = (int)g_1441058;
     if (img != 0)
         VCALL0(img, 0x04);
-    F_s0096_6b20(this_, 0x0c) = 0x13eb938;
-    F_s0096_6b20(this_, 0x04) = 0x13eb938;
-    F_s0096_6b20(this_, 0x00) = 0x13eb938;
+    F_s0096_6b20(this_, 0x0c) = (int)g_13eb938;
+    F_s0096_6b20(this_, 0x04) = (int)g_13eb938;
+    F_s0096_6b20(this_, 0x00) = (int)g_13eb938;
     if ((param_2 & 1) != 0)
         FUN_00951330(this_);
     return this_;
@@ -1052,12 +1061,12 @@ void S_966e40::m()
 {
     void* this_ = this;
     S_8323d0* ll = (S_8323d0*)((uint8_t*)this_ + 0x7b0);
-    F_s0096_6b20(this_, 0x00) = 0x1441240;
-    F_s0096_6b20(this_, 0x04) = 0x1441120;
-    F_s0096_6b20(this_, 0x20c) = 0x14410b0;
+    F_s0096_6b20(this_, 0x00) = (int)g_1441240;
+    F_s0096_6b20(this_, 0x04) = (int)g_1441120;
+    F_s0096_6b20(this_, 0x20c) = (int)g_14410b0;
     ll->m();
     ((S_89c540*)((uint8_t*)this_ + 0x280))->m();
-    F_s0096_6b20(this_, 0x20c) = 0x13eb938;
+    F_s0096_6b20(this_, 0x20c) = (int)g_13eb938;
     ((S_962740*)this_)->m();
 }
 
@@ -1169,12 +1178,12 @@ void* S_967120::m(uint8_t param_2)
 {
     void* this_ = this;
     S_8323d0* ll = (S_8323d0*)((uint8_t*)this_ + 0x7b0);
-    F_s0096_6b20(this_, 0x00) = 0x1441240;
-    F_s0096_6b20(this_, 0x04) = 0x1441120;
-    F_s0096_6b20(this_, 0x20c) = 0x14410b0;
+    F_s0096_6b20(this_, 0x00) = (int)g_1441240;
+    F_s0096_6b20(this_, 0x04) = (int)g_1441120;
+    F_s0096_6b20(this_, 0x20c) = (int)g_14410b0;
     ll->m();
     ((S_89c540*)((uint8_t*)this_ + 0x280))->m();
-    F_s0096_6b20(this_, 0x20c) = 0x13eb938;
+    F_s0096_6b20(this_, 0x20c) = (int)g_13eb938;
     ((S_962740*)this_)->m();
     if ((param_2 & 1) != 0)
         FUN_00951330(this_);

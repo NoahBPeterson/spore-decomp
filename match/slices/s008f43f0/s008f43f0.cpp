@@ -23,6 +23,16 @@
 //   FontFamily property object (0x40): vtable +0, next +4, setter +8, context +0xc, arg0 +0x10,
 //   arg1 +0x14, wchar_t* mNames[8] +0x18, mCount +0x38.
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_008f2720();
+extern "C" void FUN_008f2810();
+extern "C" void FUN_008f28f0();
+extern "C" void FUN_008f2900();
+extern "C" void FUN_008f2cb0();
+extern "C" void FUN_008f2cc0();
+extern "C" void FUN_008f2cd0();
+
 #include "types.h"
 
 // msvcr90 imports (calls go through the .rdata IAT slots at 0x13cc52c / 0x13cc514).
@@ -376,7 +386,7 @@ bool CSSParser::ParseFontVariant(Property** pList)
         return false;
     }
 
-    Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)0x8f2720, 0, 0, 0), v);
+    Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)FUN_008f2720, 0, 0, 0), v);
     p->mpNext = *pList;
     *pList = p;
     return true;
@@ -390,9 +400,9 @@ bool CSSParser::ParseBackgroundImage(Property** pList)
 {
     Property* p;
     if (MatchURL()) {
-        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2810, 0, 0, 0), TokenValue());
+        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2810, 0, 0, 0), TokenValue());
     } else if (MatchIdent(L"none")) {
-        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2810, 0, 0, 0), 0);
+        p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2810, 0, 0, 0), 0);
     } else {
         return false;
     }
@@ -431,14 +441,14 @@ bool CSSParser::ParseBackgroundAttachment(Property** pList)
 bool CSSParser::ParseListStyleImage(Property** pList)
 {
     if (MatchURL()) {
-        Property* p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)0x8f2cc0, 0, 0, 0), TokenValue());
+        Property* p = CreateURLPropertyFunc(mAllocator, PropCtx((void*)FUN_008f2cc0, 0, 0, 0), TokenValue());
         p->mpNext = *pList;
         *pList = p;
         return true;
     }
 
     if (MatchIdent(L"none")) {
-        Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)0x8f2cb0, 0, 0, 0), 0);
+        Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)FUN_008f2cb0, 0, 0, 0), 0);
         p->mpNext = *pList;
         *pList = p;
         return true;
@@ -454,14 +464,14 @@ bool CSSParser::ParseListStylePosition(Property** pList)
 {
     if (mToken == TokenIdent && wcscmp(L"inside", mReader.mMatchText.mpBegin) == 0) {
         Advance();
-        Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)0x8f2cd0, 0, 0, 0), 0);
+        Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)FUN_008f2cd0, 0, 0, 0), 0);
         p->mpNext = *pList;
         *pList = p;
         return true;
     }
 
     if (MatchIdent(L"outside")) {
-        Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)0x8f2cd0, 0, 0, 0), 1);
+        Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)FUN_008f2cd0, 0, 0, 0), 1);
         p->mpNext = *pList;
         *pList = p;
         return true;
@@ -597,7 +607,7 @@ bool CSSParser::ParseDirection(Property** pList)
         return false;
     }
 
-    Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)0x8f28f0, 0, 0, 0), v);
+    Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)FUN_008f28f0, 0, 0, 0), v);
     p->mpNext = *pList;
     *pList = p;
     return true;
@@ -621,7 +631,7 @@ bool CSSParser::ParseTextOverflow(Property** pList)
         return false;
     }
 
-    Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)0x8f2900, 0, 0, 0), v);
+    Property* p = CreatePropertyFunc_uint(mAllocator, PropCtx((void*)FUN_008f2900, 0, 0, 0), v);
     p->mpNext = *pList;
     *pList = p;
     return true;

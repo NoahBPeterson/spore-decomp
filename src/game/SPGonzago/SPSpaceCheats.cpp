@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPSpaceCheats.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1495c98[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -1764,7 +1767,7 @@ struct cCommandCheat {
 // @ 0x01022990
 cObjectKey& cObjectKey::Init(void* pFirst, void* pSecond)
 {
-    mnType = (void*)0x1495c98;
+    mnType = (void*)g_1495c98;
     mpFirst = pFirst;
     mpSecond = pSecond;
     return *this;

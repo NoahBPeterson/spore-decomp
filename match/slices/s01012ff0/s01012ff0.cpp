@@ -17,6 +17,10 @@
 //   tGrobShockData  = { int, int, cGonzagoTimer }        (0x28 bytes)
 //   cGonzagoTimer   = { void* vtbl 0x01464450, int, ... } (0x20 bytes)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 typedef unsigned __int64 u64;
 
 struct cGonzagoTimer {          // 0x20 bytes, vtable at +0x00
@@ -32,12 +36,12 @@ struct cGonzagoTimer {          // 0x20 bytes, vtable at +0x00
 
     __forceinline cGonzagoTimer(const cGonzagoTimer& o) {
         mField_04 = 0;
-        mVtbl = (void*)0x01465d54;   // vtable of the timer's base subobject
+        mVtbl = (void*)g_1465d54;   // vtable of the timer's base subobject
         *(u64*)&mElapsedLo = *(const u64*)&o.mElapsedLo;
         *(u64*)&mBaseLo = *(const u64*)&o.mBaseLo;
         mRunning = o.mRunning;
         mGetMs = o.mGetMs;
-        mVtbl = (void*)0x01464450;   // vtable of cGonzagoTimer
+        mVtbl = (void*)g_1464450;   // vtable of cGonzagoTimer
     }
     ~cGonzagoTimer();           // 0x00b638b0 (out of line; the temporary's
                                 // destructor is called at the end of each step)

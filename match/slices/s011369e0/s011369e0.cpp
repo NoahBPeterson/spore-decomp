@@ -2,6 +2,13 @@
 // Built with VC .NET 2003 (cl 13.10) + /GL /LTCG. Most functions call out heavily, so single-object
 // compiles cannot match them; the bodies are the behaviour-equivalent reconstruction.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14bc0fc[];
+extern "C" char g_15bae10[];
+extern "C" char g_15bae30[];
+extern "C" char g_15bae48[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -403,7 +410,7 @@ void DecoderThunk::FUN_01137060(int, int)
 bool __cdecl FUN_011370d0(int* param_1)
 {
 	if (param_1 != 0)
-		*param_1 = 0x014bc0fc;
+		*param_1 = (int)g_14bc0fc;
 	return true;
 }
 // ---------------------------------------------------------------------------
@@ -411,9 +418,9 @@ bool __cdecl FUN_011370d0(int* param_1)
 // ---------------------------------------------------------------------------
 int* __cdecl FUN_011370f0(void)
 {
-	*(int*)0x015bae30 = 0x015bae48;
-	FUN_0112dae0((int)0x015bae10, 0, 0);
-	return (int*)0x015bae48;
+	*(int*)g_15bae30 = (int)g_15bae48;
+	FUN_0112dae0((int)g_15bae10, 0, 0);
+	return (int*)g_15bae48;
 }
 
 // ---------------------------------------------------------------------------

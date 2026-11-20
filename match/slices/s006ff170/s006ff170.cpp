@@ -1,5 +1,10 @@
 // Slice s006ff170: vertex-shader fragment-record serialization and plane/clip test helpers.
 // Region 0x6ff170-0x6ffdf8. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bad[];
+
 #include "types.h"
 #include <string.h>
 
@@ -177,8 +182,8 @@ struct TempString {
     char* mpEnd;                    // +0x04
     void assignFill(unsigned n) {
         if (n + 1 <= 1) {
-            mpBegin = (char*)0x01667bac;
-            mpEnd   = (char*)0x01667bad;
+            mpBegin = (char*)g_1667bac;
+            mpEnd   = (char*)g_1667bad;
         } else {
             mpBegin = (char*)AllocGraphics(n + 1);
             mpEnd   = mpBegin + n + 1;
@@ -204,7 +209,7 @@ struct EString {                    // 0x0c
     char* begin;                    // +0x00
     char* end;                      // +0x04
     char* cap;                      // +0x08
-    EString() : begin((char*)0x01667bac), end((char*)0x01667bac), cap((char*)0x01667bad) {}
+    EString() : begin((char*)g_1667bac), end((char*)g_1667bac), cap((char*)g_1667bad) {}
 };
 struct CFragVec {                   // 0x14
     void* mpBegin;                  // +0x00

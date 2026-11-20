@@ -1,5 +1,17 @@
 // Decompiled slice s00c5e260 -- Simulator/SP mission objects.
 // Reconstructed from the shipped binary; helper addresses noted per call.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfb4[];
+extern "C" char g_146fbf0[];
+extern "C" char g_146fc00[];
+extern "C" char g_146fe3c[];
+extern "C" char g_146fe4c[];
+extern "C" char g_146fe60[];
+extern "C" char g_16925c0[];
+extern "C" char g_16925c4[];
+extern "C" char g_16925c8[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -157,13 +169,13 @@ void __fastcall MissionBaseCtor(void* self);
 MissionScan::MissionScan()
 {
   MissionBaseCtor(this);
-  mpVtable  = (Vtbl*)0x146fc00;
-  mpField04 = (void*)0x146dfb4;
-  mpField34 = (void*)0x146fbf0;
+  mpVtable  = (Vtbl*)g_146fc00;
+  mpField04 = (void*)g_146dfb4;
+  mpField34 = (void*)g_146fbf0;
   mField1f0 = 0;
-  mpField1f4 = (void*)*(int*)0x16925c0;
-  mField1f8 = *(int*)0x16925c4;
-  mField1fc = *(int*)0x16925c8;
+  mpField1f4 = (void*)*(int*)g_16925c0;
+  mField1f8 = *(int*)g_16925c4;
+  mField1fc = *(int*)g_16925c8;
 }
 
 // ===========================================================================
@@ -396,9 +408,9 @@ MissionStory201::MissionStory201()
   MissionBaseCtor(this);
   int zero = 0;
   *(volatile int*)&mField1f0 = zero;
-  *(volatile int*)&mpVtable  = (int)0x146fe60;
-  *(volatile int*)&mpField04 = (int)0x146fe4c;
-  *(volatile int*)&mpField34 = (int)0x146fe3c;
+  *(volatile int*)&mpVtable  = (int)g_146fe60;
+  *(volatile int*)&mpField04 = (int)g_146fe4c;
+  *(volatile int*)&mpField34 = (int)g_146fe3c;
   *(volatile int*)&mpField1f4 = zero;
   *(volatile int*)&mField1f8 = zero;
   *(volatile int*)&mField1fc = zero;

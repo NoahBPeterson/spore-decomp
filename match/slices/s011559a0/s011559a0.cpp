@@ -3,6 +3,12 @@
 // MIX resample/FX global management.  Same module as s0113ec90; original used
 // VC .NET 2003 (/vc71) + /GL + /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e61a8[];
+extern "C" char g_16f16d0[];
+extern "C" char g_16e8174[];
+
 #include "../../include/types.h"
 #include <math.h>
 #include <intrin.h>
@@ -299,10 +305,10 @@ void FUN_01156310(int param_1, float* param_2) {
 // @ 0x01156380
 void FUN_01156380(void) {
     Sub_1133450();
-    void* p = Ap(0x16f16d0);
+    void* p = Ap((int)g_16f16d0);
     if (p != 0)
-        ((rw::audio::core::System*)Ap(0x16e61a8))->Free(p, 0);
-    A32(0x16f16d0) = 0;
+        ((rw::audio::core::System*)Ap((int)g_16e61a8))->Free(p, 0);
+    A32((int)g_16f16d0) = 0;
     Sub_1133460();
 }
 
@@ -459,7 +465,7 @@ void MIX_setpitch(int param_1, int param_2) {
 
 // @ 0x01156940
 void FUN_01156940(int param_1) {
-    int p = param_1 * 0x5c + A32(0x16e8174);
+    int p = param_1 * 0x5c + A32((int)g_16e8174);
     if (*(int*)(p + 0x4c) != 0)
         Sub_11594e0(*(int*)(p + 0x4c));
 }

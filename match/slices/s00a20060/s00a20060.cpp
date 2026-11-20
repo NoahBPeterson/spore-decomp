@@ -1,4 +1,8 @@
 // Slice s00a20060 - EA::Audio::System property routing / setup helpers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1452970[];
+
 #include "types.h"
 
 typedef unsigned char u8;
@@ -280,7 +284,7 @@ bool Sys::WithinRange(void* a, int b)
 // @ 0x00a210d0
 void Sys::LockB8()
 {
-    ((Mutex*)((char*)this + 0xb8))->Lock((void*)0x1452970);
+    ((Mutex*)((char*)this + 0xb8))->Lock((void*)g_1452970);
 }
 
 // @ 0x00a21100

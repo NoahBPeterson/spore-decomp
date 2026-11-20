@@ -2,6 +2,10 @@
 // Reconstructed from annotated disassembly + Ghidra decompiles.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5a54[];
+extern "C" char g_15a5a68[];
+
 typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
@@ -315,10 +319,12 @@ void __fastcall FUN_00e39200(Timeline* self, void* dummy)
 void __fastcall FUN_00e39300(Timeline* self, void* dummy, s32 v)
 {
   (void)dummy;
-  for (s32 addr = 0x015a5a54; addr < 0x015a5a68; addr += 4) {
+  s32 addr = (int)g_15a5a54;     // five window IDs at 0x015a5a54..0x015a5a68: the first test is known true
+  do {
     Wnd* w = (Wnd*)self->p348->FindWindowByID(*(u32*)addr, 1);
     if (w != 0) ((WndVt*)w)->SetVisible(1, v);
-  }
+    addr += 4;
+  } while (addr < (int)((char*)&g_15a5a54 + 0x14));
 }
 
 // ======================================================================

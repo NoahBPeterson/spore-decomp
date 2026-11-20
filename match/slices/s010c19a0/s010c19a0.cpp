@@ -3,6 +3,10 @@
 // Region is /O2 /MD with /arch:SSE (scalar movss for hkVector4 copies, x87 for the
 // plane/vertex arithmetic). Member offsets come from the dev PDB (tools/pdb_type.py)
 // and were confirmed against the disassembly.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a2888[];
+
 #include "types.h"
 
 typedef int hkInt32;
@@ -590,7 +594,7 @@ hkCapsuleShape::hkCapsuleShape(const hkVector4& a, const hkVector4& b, float rad
     m_radius = radius;
     m_referenceCount = 1;
     m_userData = 0;
-    *(void**)this = (void*)0x14a2888;
+    *(void**)this = (void*)g_14a2888;
     // the original copies all four words of each vertex (w included) and only then overwrites w with the
     // radius; copying the second w through an uint pun keeps cl from deleting the store as dead
     m_vertexA.x = a.x; m_vertexA.y = a.y; m_vertexA.z = a.z; m_vertexA.w = a.w;

@@ -1,6 +1,10 @@
 // Slice s00fc9310: rw::movie (RenderWare "rpmovie") -- the movie decoder / renderer
 // (rw::movie::MovieDecoder) and the AVI movie encoder (rw::movie::MovieEncoder_Avi).
 // MSVC 2008 SP1 x86 (VS2008 SP1 cl 15.00).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1491b68[];
+
 #include "types.h"
 #include <intrin.h>
 #pragma intrinsic(__rdtsc)
@@ -926,7 +930,7 @@ void MovieEncoder_Avi::FreeAVIIndexEntries()
 // @ 0x00fca2c0
 MovieEncoder_Avi* MovieEncoder_Avi::Ctor(uint32_t bufferSize)
 {
-    vftable = (void*)0x1491b68;
+    vftable = (void*)g_1491b68;
     mBufferedWriter.Init();
 
     AviIndexBlock* first = &mFirstIndexBlock;

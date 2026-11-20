@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/Socket_imp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fb19c[];
+extern "C" char g_143fb00[];
+extern "C" char g_143fbd8[];
+
 #include "game/types.h"
 #include "EA/SSL/FileSystemDefault.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -1031,12 +1037,12 @@ bool ISocket::GetPeerAddress(Address& a)
 // @ 0x0094e770
 void Socket_s0094_dbc0::Destroy()
 {
-    mpVtbl = (void*)0x143fbd8;
-    mpISocketVtbl = (void*)0x143fb00;
+    mpVtbl = (void*)g_143fbd8;
+    mpISocketVtbl = (void*)g_143fb00;
     if (mSocketId != -1 && mbSaveSocket == 0)
         ((ISocket*)((char*)this + 8))->Fn0094d4b0();
-    mpISocketVtbl = (void*)0x13eb938;
-    mpVtbl = (void*)0x13fb19c;
+    mpISocketVtbl = (void*)g_13eb938;
+    mpVtbl = (void*)g_13fb19c;
 }
 
 // @ 0x0094e7b0
@@ -1083,12 +1089,12 @@ SocketBase::SocketBase()
 // @ 0x0094e8d0
 void* Socket_s0094_dbc0::DestroyScalar(unsigned flags)
 {
-    mpVtbl = (void*)0x143fbd8;
-    mpISocketVtbl = (void*)0x143fb00;
+    mpVtbl = (void*)g_143fbd8;
+    mpISocketVtbl = (void*)g_143fb00;
     if (mSocketId != -1 && mbSaveSocket == 0)
         ((ISocket*)((char*)this + 8))->Fn0094d4b0();
-    mpISocketVtbl = (void*)0x13eb938;
-    mpVtbl = (void*)0x13fb19c;
+    mpISocketVtbl = (void*)g_13eb938;
+    mpVtbl = (void*)g_13fb19c;
     if (flags & 1)
         operator_delete__(this);
     return this;

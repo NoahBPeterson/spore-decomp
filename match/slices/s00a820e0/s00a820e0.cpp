@@ -6,6 +6,11 @@
 // order and call sequence.
 //
 // Flags: default VS2008 (/O2 /MD /Gy /EHsc /TP).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16779fc[];
+extern "C" char g_1677a00[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -261,9 +266,9 @@ void cVisualEffect::UpdateDescription(int desc)
         m2c |= 0x800;
     else
         m2c &= ~0x800;
-    m50 = *(u32*)0x016779fc;
+    m50 = *(u32*)g_16779fc;
     _ReadWriteBarrier();
-    m54 = *(u32*)0x01677a00;
+    m54 = *(u32*)g_1677a00;
     m180 = *(i32*)(m28 + 0x40);
 }
 

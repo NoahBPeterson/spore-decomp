@@ -2,6 +2,10 @@
 // state field +0x84, ref-counted client +0x88, flags +0x10e/+0x10f), the
 // star-database reload loop, a heap sift-up helper, and a terrain-height query.
 // No dev-PDB symbols exist for this module; names are FUN_<va>.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1460564[];
+
 #include "types.h"
 #include <string.h>
 #include <intrin.h>
@@ -81,7 +85,7 @@ void __cdecl FUN_00b33c30(double value, int a, int b)
 {
     extern void* PTR_01569488;
     extern void FUN_008822e0(double, int, int, int, int);
-    FUN_008822e0(value, a, b, (int)PTR_01569488, 0x01460564);
+    FUN_008822e0(value, a, b, (int)PTR_01569488, (int)g_1460564);
 }
 
 // @ 0x00b33c70

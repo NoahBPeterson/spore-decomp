@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPUIAssetComments.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1525ba4[];
+
 #include "game/types.h"
 #include "SP/cSPUIAssetComments.h"
 #include "SP/cSPEditorNaming.h"
@@ -147,7 +150,7 @@ bool SP::cSPUIAssetComments_s0064_dbd0::DoMessage(void* sender, int* msg)
         void* p6 = (void*)msg[6];
         return ((FrameSet*)((char*)this + 0xc))->HandleFormSubmit((void*)*msg, p6);
     } else if (id == 0x43b0aee) {
-        FUN_809db0(0, (void*)0x1525ba4);
+        FUN_809db0(0, (void*)g_1525ba4);
         return true;
     }
     return false;

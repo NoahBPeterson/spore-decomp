@@ -6,6 +6,15 @@
 // All of the mission entry points are real __thiscall members so the compiler
 // emits the same callee-cleanup (ret N) code and keeps "this" in ecx.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfb4[];
+extern "C" char g_1470320[];
+extern "C" char g_1470330[];
+extern "C" char g_1470530[];
+extern "C" char g_1470540[];
+extern "C" char g_1470748[];
+extern "C" char g_1470758[];
+
 typedef unsigned int   uint32;
 typedef unsigned char  uint8;
 
@@ -411,9 +420,9 @@ void* Mission::FUN_00c61bb0()
     *(int*)((char*)this + 0x1f0) = 0;
     *(int*)((char*)this + 0x1f4) = 0;
     *(int*)((char*)this + 0x1f8) = 0;
-    *(void**)((char*)this + 0) = (void*)0x01470330;
-    *(void**)((char*)this + 4) = (void*)0x0146dfb4;
-    *(void**)((char*)this + 0x34) = (void*)0x01470320;
+    *(void**)((char*)this + 0) = (void*)g_1470330;
+    *(void**)((char*)this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)this + 0x34) = (void*)g_1470320;
     return this;
 }
 
@@ -489,9 +498,9 @@ void* Mission::FUN_00c61f20()
     *(int*)((char*)this + 0x1f8) = 0;
     *(uint8*)((char*)this + 0x1fc) = 0;
     *(uint8*)((char*)this + 0x1fd) = 0;
-    *(void**)((char*)this + 0) = (void*)0x01470540;
-    *(void**)((char*)this + 4) = (void*)0x0146dfb4;
-    *(void**)((char*)this + 0x34) = (void*)0x01470530;
+    *(void**)((char*)this + 0) = (void*)g_1470540;
+    *(void**)((char*)this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)this + 0x34) = (void*)g_1470530;
     return this;
 }
 
@@ -612,9 +621,9 @@ void* Mission::FUN_00c62370()
     this->FUN_00c48e90();
     *(int*)((char*)this + 0x1f0) = 0;
     *(uint8*)((char*)this + 0x1f4) = 0;
-    *(void**)((char*)this + 0) = (void*)0x01470758;
-    *(void**)((char*)this + 4) = (void*)0x0146dfb4;
-    *(void**)((char*)this + 0x34) = (void*)0x01470748;
+    *(void**)((char*)this + 0) = (void*)g_1470758;
+    *(void**)((char*)this + 4) = (void*)g_146dfb4;
+    *(void**)((char*)this + 0x34) = (void*)g_1470748;
     return this;
 }
 

@@ -1,5 +1,12 @@
 // src/game/UTFSpore_Win32/ModulateEffect.cpp
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14426a0[];
+extern "C" char g_1443d38[];
+extern "C" char g_1443d74[];
+extern "C" char g_1443d90[];
+extern "C" char g_1443e5c[];
+
 #include "game/types.h"
 
 // unnamed retail callees (address in the comment)
@@ -76,13 +83,13 @@ void* BasicFactory_ModulateEffect::CreateInstance(void* ctx, void* allocator)
         0x70, 8, "UTFWin/EA::UTFWinControls::ModulateEffect", allocator);
     if (p) {
         p->Ctor();
-        p->m60 = (void*)0x14426a0;
+        p->m60 = (void*)g_14426a0;
         p->m64 = -1;
         p->m68 = -1;
-        p->m00 = (void*)0x1443d90;
-        p->m04 = (void*)0x1443d74;
-        p->m0c = (void*)0x1443d38;
-        p->m60 = (void*)0x1443e5c;
+        p->m00 = (void*)g_1443d90;
+        p->m04 = (void*)g_1443d74;
+        p->m0c = (void*)g_1443d38;
+        p->m60 = (void*)g_1443e5c;
         return p;
     }
     return 0;

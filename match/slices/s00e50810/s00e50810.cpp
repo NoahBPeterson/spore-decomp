@@ -1,6 +1,11 @@
 // Slice s00e50810 (batch bfs0, slice 32). Region 0xe50810-0xe51819.
 // SP::cCellMode / cell-game camera + input helpers (float math, bounds, source-level
 // selection, save/load glue). Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1483f74[];
+extern "C" char g_14851e0[];
+
 #include "types.h"
 #include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gObjectSerializerList[]; // 0x015a7e38
@@ -346,7 +351,7 @@ int FUN_00e510f0() {
 
 // @ 0x00e511b0
 void FUN_00e511b0() {
-  for (uint32_t* p = (uint32_t*)0x1483f74; (int)p < 0x14851e0; p += 9) {
+  for (uint32_t* p = (uint32_t*)g_1483f74; (int)p < (int)((char*)&g_1483f74 + 0x126c); p += 9) {
     uint32_t id = *p;
     void* o = FUN_0067cb20();
     ((void(__thiscall*)(void*, uint32_t, int))Vt(o)[0x2c / 4])(o, id, 0);

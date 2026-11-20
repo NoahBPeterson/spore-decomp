@@ -1,4 +1,9 @@
 // s00fba330 targets: cTerrainStateMgr helper methods (names are working names).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16d6d30[];
+extern "C" char g_16d6d70[];
+
 #include "types.h"
 #include <math.h>
 
@@ -239,7 +244,7 @@ void TerrainMgr::Select5c0(int idx)
     if ((unsigned)idx >= kMax)
         return;
     mSel5c0 = idx;
-    ((SubAt20c*)((char*)this + 0x20c))->Apply((int*)((char*)0x016d6d30 + idx * 4));
+    ((SubAt20c*)((char*)this + 0x20c))->Apply((int*)((char*)g_16d6d30 + idx * 4));
 }
 
 // @ 0x00fbaf50
@@ -250,7 +255,7 @@ void TerrainMgr::Select5c4(int idx)
     mSel5c4 = idx;
     IRef** const pRef = &mpRef1f4;
     IRef* o = *pRef;
-    IRef* n = ((IRef**)0x016d6d70)[idx];
+    IRef* n = ((IRef**)g_16d6d70)[idx];
     if (n != o) {
         if (n) n->AddRef();
         *pRef = n;

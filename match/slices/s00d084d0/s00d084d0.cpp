@@ -2,6 +2,15 @@
 // Slice s00d084d0: community-editor shopping/economy helpers, UI launch,
 // camera/HUD toggles, and the building/vehicle cost switches.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1479200[];
+extern "C" char g_1479218[];
+extern "C" char g_1479234[];
+extern "C" char g_1479250[];
+extern "C" char g_147926c[];
+extern "C" char g_1479288[];
+extern "C" char g_14792a4[];
+
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned short u16;
@@ -113,13 +122,13 @@ void FUN_00d08930()
     void* mgr = SP_GameInputManager();
     if (mgr == 0)
         return;
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e80, (const char*)0x14792a4);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e82, (const char*)0x1479288);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e81, (const char*)0x147926c);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e83, (const char*)0x1479250);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e84, (const char*)0x1479234);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e85, (const char*)0x1479218);
-    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e86, (const char*)0x1479200);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e80, (const char*)g_14792a4);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e82, (const char*)g_1479288);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e81, (const char*)g_147926c);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e83, (const char*)g_1479250);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e84, (const char*)g_1479234);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e85, (const char*)g_1479218);
+    ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e86, (const char*)g_1479200);
 }
 
 // ---------------------------------------------------------------------------

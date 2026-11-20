@@ -16,6 +16,10 @@
 //  0x010d93e0  hkBoxBoxOriginCache_update (unnamed in the dev PDB)
 //
 // Havok 3.1.0 was built with VC .NET 2003, so this slice compiles with /vc71.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a43a4[];
+
 #include "hk31_sphere.h"
 #include <math.h>
 
@@ -97,7 +101,7 @@ void hkSymmetricAgent_hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bod
 	hkFlipCollectorFixed flipCollector;
 	flipCollector.m_original = &collector;
 	flipCollector.m_earlyOutDistance = hkRealMax();
-	flipCollector.m_vftable = (void*)0x014A43A4;
+	flipCollector.m_vftable = (void*)g_14a43a4;
 	hkSphereCapsuleAgent::getClosestPoints(bodyB, bodyA, input, *(hkCdPointCollector*)&flipCollector);
 }
 

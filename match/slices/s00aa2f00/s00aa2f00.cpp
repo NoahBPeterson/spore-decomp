@@ -4,6 +4,9 @@
 // itself (constructor / destructor) plus the small keyword-registration and vector-parse
 // helpers they use.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1565550[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -317,7 +320,7 @@ using namespace EA::Swarm;
 // @ 0x00aa2fd0
 void SetKeywordName(int index, const char* name)
 {
-    ((const char**)0x01565550)[index * 2] = name;
+    ((const char**)g_1565550)[index * 2] = name;
 }
 
 // @ 0x00aa2fe0

@@ -11,6 +11,15 @@
 //   * creates the "Sporepedia" helper (this+0xec) and the 0xE8 helper object, refreshes them,
 //   * clears this+0x110, positions the 0x07eb4153 window against this+0x34 and creates the last text zoom
 //     (this+0xf0).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_140085c[];
+extern "C" char g_14887e4[];
+extern "C" char g_14887f4[];
+extern "C" char g_148880c[];
+extern "C" char g_1488818[];
+extern "C" char g_1488828[];
+
 #include <intrin.h>
 #include "types.h"
 
@@ -431,12 +440,12 @@ struct cLargeViewOuter {
 // @ 0x00eb92d0
 void cLargeViewOuter::Destroy()
 {
-    mpVt00 = (void*)0x01488828;
-    mpVt04 = (void*)0x01488818;
-    mpVt08 = (void*)0x0148880c;
-    mpVt0c = (void*)0x014887f4;
-    mpVt10 = (void*)0x014887e4;
-    mpVtD0 = (void*)0x0140085c;
+    mpVt00 = (void*)g_1488828;
+    mpVt04 = (void*)g_1488818;
+    mpVt08 = (void*)g_148880c;
+    mpVt0c = (void*)g_14887f4;
+    mpVt10 = (void*)g_14887e4;
+    mpVtD0 = (void*)g_140085c;
     _ReadWriteBarrier();
 
     uint32_t id = mHandlerId;

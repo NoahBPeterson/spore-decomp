@@ -2,6 +2,9 @@
 // EA::ArgScript::cArguments plus cDataURI stream helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14f9174[];
+
 #include "types.h"
 
 void* __cdecl operator_new6(uint32_t, const void*, int, int, const char*, int);  // 0x00f473a0
@@ -167,11 +170,11 @@ char** cArguments::MainArguments(int* count, int min, int max) {
     int n = mNumMainArguments;
     if (n < min) {
         cError err("Expecting at least %d arguments", min);
-        CxxThrow(&err, (void*)0x14f9174);
+        CxxThrow(&err, (void*)g_14f9174);
     }
     if (n > max) {
         cError err("Expecting at most %d arguments", max);
-        CxxThrow(&err, (void*)0x14f9174);
+        CxxThrow(&err, (void*)g_14f9174);
     }
     if (count) *count = n;
     if (mNumMainArguments > 0) {
@@ -188,7 +191,7 @@ bool cArguments::HasFlag(const char* label) {
             if (!it->mProcessed && _stricmp(it->mName, label) == 0) {
                 if (it->mNumArguments != 0) {
                     cError err("Not expecting any arguments for option '%s'", label);
-                    CxxThrow(&err, (void*)0x14f9174);
+                    CxxThrow(&err, (void*)g_14f9174);
                 }
                 it->mProcessed = true;
                 return true;
@@ -208,11 +211,11 @@ char** cArguments::OptionArguments(const char* label, int* count, int min, int m
                 int n = it->mNumArguments;
                 if (n < min) {
                     cError err("Expecting at least %d arguments for option '%s'", min, label);
-                    CxxThrow(&err, (void*)0x14f9174);
+                    CxxThrow(&err, (void*)g_14f9174);
                 }
                 if (n > max) {
                     cError err("Expecting at most %d arguments for option '%s'", max, label);
-                    CxxThrow(&err, (void*)0x14f9174);
+                    CxxThrow(&err, (void*)g_14f9174);
                 }
                 if (count) *count = n;
                 it->mProcessed = true;

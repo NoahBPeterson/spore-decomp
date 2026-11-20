@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPAudioNPCCityMusic.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_1488214[];
+extern "C" char g_1488224[];
+
 #include "game/types.h"
 #include "SP/cVarListSerializer.h"
 #include <intrin.h>
@@ -618,12 +623,12 @@ cNPCCityMusic::cNPCCityMusic(uint32_t id)
 namespace SP { namespace Audio {
 cNPCCityMusic::cNPCCityMusic()
 {
-    mpVtable1 = (void*)0x13ec458;
+    mpVtable1 = (void*)g_13ec458;
     // Keep the base-interface store ahead of zero materialization.
     _ReadWriteBarrier();
     mField08 = 0;
-    mpVtable0 = (void*)0x1488224;
-    mpVtable1 = (void*)0x1488214;
+    mpVtable0 = (void*)g_1488224;
+    mpVtable1 = (void*)g_1488214;
     mId = 0xffffffff;
     mHandle = 0;
     mpAudioObject = 0;

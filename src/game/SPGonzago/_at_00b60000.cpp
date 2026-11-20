@@ -2,6 +2,10 @@
 // Object file: SPGonzago/_at_00b60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1687348[];
+extern "C" char g_16c7aa4[];
+
 #include "game/types.h"
 #include "SP/cSPTimer.h"
 #include "SP/cGonzagoTimer.h"
@@ -2747,7 +2751,7 @@ int __cdecl FUN_00b67610(int key)
 // @ 0x00b676a0
 void __cdecl FUN_00b676a0(void)
 {
-    char* p = *(char**)0x1687348;
+    char* p = *(char**)g_1687348;
     if (p)
         p[0x30] = (char)(p[0x30] == 0);
 }
@@ -2756,7 +2760,7 @@ void __cdecl FUN_00b676a0(void)
 u32 __cdecl FUN_00b677a0(u32 key)
 {
     if (SP_GetCurrentGameMode() == (void*)0x01654c10) {
-        ModeObj* o = *(ModeObj**)0x016c7aa4;
+        ModeObj* o = *(ModeObj**)g_16c7aa4;
         ModeTable* t = (ModeTable*)o->m_table;
         u32 k = key;
         int icon = t->FUN_00f3e900(k);

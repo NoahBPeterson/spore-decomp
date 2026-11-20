@@ -15,6 +15,10 @@
 //   00fa0e10/0e40/0e60  a padding-backed dirty-flag byte at +0x368/+0x369
 //   00fa0f10  AutoRefCount-holding job release (+0x10/+0x14)
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16ca404[];
+
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -353,7 +357,7 @@ void ShutdownRTTSphere()
         *h = 0;
         n += 2;
         ++h;
-    } while ((int)n < 0x16ca404);
+    } while ((int)n < (int)g_16ca404);
     mgr->FreeRTT(g_colorMap[0], g_colorMap[1]);
     g_texTerrain = 0;
     g_viewer.Shutdown();

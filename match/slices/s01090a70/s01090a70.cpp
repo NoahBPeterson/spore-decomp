@@ -6,6 +6,10 @@
 // Toolchain: the shipped module was built by cl 13.10 (VC .NET 2003); the slice compiles with
 // /vc71 /O2 /MD /Gy /TP. All floating point is scalar x87 with 0x1485378/0x1485720 (0.0f/1.0f)
 // and the polynomial constants below read straight out of the read-only pool.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149df10[];
+
 #include "s01090a70.h"
 #include <math.h>
 #include <new>
@@ -162,7 +166,7 @@ hkMotion* hkSphereMotionEx::clone() const
     p->m_memSizeAndFlags = (hkInt16)0xf0;
     new (p) hkRigidMotion(*(const hkVector4*)&g_identityPos_016e42d0,
                           *(const hkQuaternion*)&g_identityQuat_015b9b50);
-    *(const void**)p = (const void*)0x0149df10;
+    *(const void**)p = (const void*)g_149df10;
     hkString::memCpy((char*)p + 8, (const char*)this + 8, 0xe8);
     return p;
 }

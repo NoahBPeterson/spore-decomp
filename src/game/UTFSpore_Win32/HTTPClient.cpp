@@ -1,3 +1,7 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bad[];
+
 #include <string.h>
 // src/game/UTFSpore_Win32/HTTPClient.cpp -- migrated from slice(s) s00944f40, s00943f60, s00945ed0, s00942ff0, s00942290, s009413d0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/HTTPClient.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
@@ -910,9 +914,9 @@ namespace EA {
 namespace Internet {
 struct EmptyStr : eastl::StrStub_s0094_5ed0 {
     EmptyStr() {
-        mpBegin = (char*)0x1667bac;
-        mpEnd = (char*)0x1667bac;
-        mpCapacity = (char*)0x1667bad;
+        mpBegin = (char*)g_1667bac;
+        mpEnd = (char*)g_1667bac;
+        mpCapacity = (char*)g_1667bad;
     }
 };
 }

@@ -1,5 +1,9 @@
 // SP::Pollen registration dialog + cancel-confirmation dialog (Spore.com login flow) and two
 // Pollinator work-item helpers. Flags: /O2 /MD /Gy /TP /arch:SSE (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00623f40();
+
 #include "s0061fbd0.h"
 
 extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
@@ -199,7 +203,7 @@ bool cRegistrationDialog::Show2(bool bEnterPressed) {
   IWindow* w = mLayout.FindWindowByID(0xffffffff, true);
   if (!w) return false;
   w->AddWinProc(this);
-  mpXHTMLFrameSet = new ("Pollinator", 0, 0, 0, 0) cXHTMLFrameSet((void*)0x623f40);
+  mpXHTMLFrameSet = new ("Pollinator", 0, 0, 0, 0) cXHTMLFrameSet((void*)FUN_00623f40);
   mpXHTMLFrameSet.mpObject->SetEventIDs(0x1002, 0x1006, 0x1003, 0x1024);
   if (mpXHTMLFrameSet.mpObject->Attach(w, 0x451a4c0)) {
     MessageServer()->PostMSG(0x5bd6378, 0, 0);

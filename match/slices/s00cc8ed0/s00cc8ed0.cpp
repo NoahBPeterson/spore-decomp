@@ -12,6 +12,10 @@
 //     helpers at the end of the slice.
 //
 // Flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "types.h"
 
 #define PV(n) virtual void pv##n();
@@ -683,7 +687,7 @@ void TribeStrategy::FUN_00cc9430()
             c->pv1();
         }
     }
-    mVt = 0x013ef094;
+    mVt = (int)g_13ef094;
 }
 
 // --------------------------------------------------------------------------- 0x00cc9460

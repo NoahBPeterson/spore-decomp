@@ -2,6 +2,52 @@
 // Object file: Spui/SPUIStdDrawable.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_141a690[];
+extern "C" char g_15476e4[];
+extern "C" char g_15476e8[];
+extern "C" char g_15476ec[];
+extern "C" char g_15476f0[];
+extern "C" char g_15476f4[];
+extern "C" char g_15476f8[];
+extern "C" char g_15476fc[];
+extern "C" char g_1547700[];
+extern "C" char g_1547704[];
+extern "C" char g_1547708[];
+extern "C" char g_154770c[];
+extern "C" char g_1547710[];
+extern "C" char g_1547714[];
+extern "C" char g_1547718[];
+extern "C" char g_154771c[];
+extern "C" char g_1547720[];
+extern "C" char g_1547724[];
+extern "C" char g_1547728[];
+extern "C" char g_154772c[];
+extern "C" char g_1547730[];
+extern "C" char g_1547734[];
+extern "C" char g_1547738[];
+extern "C" char g_154773c[];
+extern "C" char g_1547740[];
+extern "C" char g_1547744[];
+extern "C" char g_1547748[];
+extern "C" char g_154774c[];
+extern "C" char g_1547750[];
+extern "C" char g_1547754[];
+extern "C" char g_1547758[];
+extern "C" char g_154775c[];
+extern "C" char g_1547760[];
+extern "C" char g_1547764[];
+extern "C" char g_1547768[];
+extern "C" char g_154776c[];
+extern "C" char g_1547770[];
+extern "C" char g_1547774[];
+extern "C" char g_1547778[];
+extern "C" char g_154777c[];
+extern "C" char g_1547780[];
+extern "C" char g_1547784[];
+extern "C" char g_1547788[];
+extern "C" char g_154778c[];
+
 #include "game/types.h"
 #include <intrin.h>
 
@@ -694,14 +740,14 @@ void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
 #pragma optimize("", off)
 void init_15476e4()
 {
-    *(int*)0x15476e4 = 1;
-    *(int*)0x15476e8 = 0;
-    *(void**)0x15476ec = (void*)0x141a690; *(int*)0x15476f0 = 0x54010a1; *(short*)0x15476f4 = 0x13; *(int*)0x15476f8 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[1]; *(int*)0x15476fc = 1; *(int*)0x1547700 = 0;
-    *(void**)0x1547704 = (void*)0x141a690; *(int*)0x1547708 = 0x54010a2; *(short*)0x154770c = 0x13; *(int*)0x1547710 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[2]; *(int*)0x1547714 = 1; *(int*)0x1547718 = 0;
-    *(void**)0x154771c = (void*)0x141a690; *(int*)0x1547720 = 0x54010a3; *(short*)0x1547724 = 0x13; *(int*)0x1547728 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[3]; *(int*)0x154772c = 1; *(int*)0x1547730 = 0;
-    *(void**)0x1547734 = (void*)0x141a690; *(int*)0x1547738 = 0x54010a4; *(short*)0x154773c = 0x13; *(int*)0x1547740 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[4]; *(int*)0x1547744 = 1; *(int*)0x1547748 = 0;
-    *(void**)0x154774c = (void*)0x141a690; *(int*)0x1547750 = 0x54010a5; *(short*)0x1547754 = 0x13; *(int*)0x1547758 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[5]; *(int*)0x154775c = 1; *(int*)0x1547760 = 0;
-    *(void**)0x1547764 = (void*)0x141a690; *(int*)0x1547768 = 0x54010a6; *(short*)0x154776c = 0x13; *(int*)0x1547770 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[6]; *(int*)0x1547774 = 1; *(int*)0x1547778 = 0;
-    *(void**)0x154777c = (void*)0x141a690; *(int*)0x1547780 = 0x54010a7; *(short*)0x1547784 = 0x13; *(int*)0x1547788 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[7]; *(int*)0x154778c = 1;
+    *(int*)g_15476e4 = 1;
+    *(int*)g_15476e8 = 0;
+    *(void**)g_15476ec = (void*)g_141a690; *(int*)g_15476f0 = 0x54010a1; *(short*)g_15476f4 = 0x13; *(int*)g_15476f8 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[1]; *(int*)g_15476fc = 1; *(int*)g_1547700 = 0;
+    *(void**)g_1547704 = (void*)g_141a690; *(int*)g_1547708 = 0x54010a2; *(short*)g_154770c = 0x13; *(int*)g_1547710 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[2]; *(int*)g_1547714 = 1; *(int*)g_1547718 = 0;
+    *(void**)g_154771c = (void*)g_141a690; *(int*)g_1547720 = 0x54010a3; *(short*)g_1547724 = 0x13; *(int*)g_1547728 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[3]; *(int*)g_154772c = 1; *(int*)g_1547730 = 0;
+    *(void**)g_1547734 = (void*)g_141a690; *(int*)g_1547738 = 0x54010a4; *(short*)g_154773c = 0x13; *(int*)g_1547740 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[4]; *(int*)g_1547744 = 1; *(int*)g_1547748 = 0;
+    *(void**)g_154774c = (void*)g_141a690; *(int*)g_1547750 = 0x54010a5; *(short*)g_1547754 = 0x13; *(int*)g_1547758 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[5]; *(int*)g_154775c = 1; *(int*)g_1547760 = 0;
+    *(void**)g_1547764 = (void*)g_141a690; *(int*)g_1547768 = 0x54010a6; *(short*)g_154776c = 0x13; *(int*)g_1547770 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[6]; *(int*)g_1547774 = 1; *(int*)g_1547778 = 0;
+    *(void**)g_154777c = (void*)g_141a690; *(int*)g_1547780 = 0x54010a7; *(short*)g_1547784 = 0x13; *(int*)g_1547788 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[7]; *(int*)g_154778c = 1;
 }
 #pragma optimize("", on)

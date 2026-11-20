@@ -20,6 +20,9 @@
 //   0x00f96520  cTerrainSphere::RemoveFromEffectsSystem() void
 //   0x00f967d0  GetGridExtents(int*,int*,int*)            ret 0xc
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14903a0[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -397,7 +400,7 @@ void DrawTerrainOverlay(int a)
 // @ 0x00f95cf0
 cTerrainOverlay::cTerrainOverlay()
 {
-    *(int*)this = 0x14903a0;
+    *(int*)this = (int)g_14903a0;
     mFlag04 = 0;
     mFlag05 = 0;
     mVal08 = 0;

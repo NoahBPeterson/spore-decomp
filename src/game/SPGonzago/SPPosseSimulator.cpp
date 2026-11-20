@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPPosseSimulator.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_147b7ec[];
+extern "C" char g_147b810[];
+extern "C" char g_169e5b8[];
+
 #include "game/types.h"
 #include <math.h>
 
@@ -345,15 +352,15 @@ void RemovePosseMember(void* self, int member, char arg3, char arg4)
 void* PosseSim::Dtor(unsigned int flags)
 {
     PosseSim* self = this;
-    *(void**)self = (void*)0x147b810;
-    *(void**)((char*)self + 8) = (void*)0x147b7ec;
-    *(void**)0x169e5b8 = 0;
+    *(void**)self = (void*)g_147b810;
+    *(void**)((char*)self + 8) = (void*)g_147b7ec;
+    *(void**)g_169e5b8 = 0;
     Slot** e = *(Slot***)((char*)self + 0x20);
     if (e != 0 && e[-1] != 0) {
         EA_Free(e);
     }
-    *(void**)((char*)self + 8) = (void*)0x13eb938;
-    *(void**)self = (void*)0x13ec458;
+    *(void**)((char*)self + 8) = (void*)g_13eb938;
+    *(void**)self = (void*)g_13ec458;
     if (flags & 1) {
         EA_Free(self);
     }

@@ -1,6 +1,12 @@
 // Slice s00995b20 — EA::UTFWinExtras WinXHTML / cXHTMLFrameSet and EASTL helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_14467ac[];
+extern "C" char g_14467bc[];
+
 typedef unsigned int   uint32_t;
 typedef unsigned short uint16_t;
 typedef unsigned char  uint8_t;
@@ -129,24 +135,24 @@ void __thiscall StarDeque::clear() {
 
 // @ 0x009968a0 — EA::UTFWinExtras::cXHTMLFrameSet::~cXHTMLFrameSet
 __thiscall cXHTMLFrameSet::~cXHTMLFrameSet() {
-    *(uint32_t*)((char*)this + 0x00) = 0x14467bc;
-    *(uint32_t*)((char*)this + 0x04) = 0x14467ac;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_14467bc;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_14467ac;
     ((JobQueue*)((char*)this + 0x24))->FUN_00996640();
     if (mField0c != 0)
         EA_DELETE_ARRAY(mField0c);
-    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
 }
 
 // @ 0x00996a80 — cXHTMLFrameSet::`scalar deleting dtor'
 void* __thiscall cXHTMLFrameSet::FUN_00996a80(uint8_t flags) {
-    *(uint32_t*)((char*)this + 0x00) = 0x14467bc;
-    *(uint32_t*)((char*)this + 0x04) = 0x14467ac;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_14467bc;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_14467ac;
     ((JobQueue*)((char*)this + 0x24))->FUN_00996640();
     if (mField0c != 0)
         EA_DELETE_ARRAY(mField0c);
-    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
-    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    *(uint32_t*)((char*)this + 0x04) = (int)g_13ec458;
+    *(uint32_t*)((char*)this + 0x00) = (int)g_13eb938;
     if ((flags & 1) != 0)
         EA_DELETE_ARRAY(this);
     return this;

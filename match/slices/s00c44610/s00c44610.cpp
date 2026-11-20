@@ -8,6 +8,10 @@
 // squared distance to the goal exceeds the module threshold, the steering id
 // 0x00b49a50 is registered once.  Otherwise, if it is registered, it is removed and the
 // goal state at +0x190/+0x19c is reset.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00b49a50();
+
 #include "types.h"
 
 struct Vec3 {
@@ -61,15 +65,15 @@ void cLocomotiveObject::UpdateSteeringForMovementStyle()
 
     if (creature->GetFlagB64()) {
         if (this->DistanceSquaredToGoal() > g_GoalDistanceThreshold) {
-            if (this->HasId(0x00b49a50))
+            if (this->HasId((int)FUN_00b49a50))
                 return;
-            this->InsertUnique(0x00b49a50);
+            this->InsertUnique((int)FUN_00b49a50);
             return;
         }
     }
 
-    if (this->HasId(0x00b49a50)) {
-        this->RemoveId(0x00b49a50);
+    if (this->HasId((int)FUN_00b49a50)) {
+        this->RemoveId((int)FUN_00b49a50);
         this->mbGoalFlag = 0;
         this->mGoalPosition = kZeroGoalPosition;
     }

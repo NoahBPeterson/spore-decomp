@@ -8,6 +8,10 @@
 //   if (new != old) { if (new) new->AddRef(); old_member = new; if (old) old->Release(); }
 // +0x4cc is the same field the neighbouring SP::cLocomotiveObject::Shutdown
 // (0x00c43f90) releases through vtable slot 1.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1574258[];
+
 #include "types.h"
 
 namespace SP {
@@ -72,7 +76,7 @@ bool cLocomotiveObject::Read(cIObjectDatabaseIStream& stream)
 
     cVarListSerializer serializer;
     ((void (__thiscall*)(cVarListSerializer*, void*, void*, unsigned int))FUN_00692f90)(
-        &serializer, this, (void*)0x1574258, 0x1a80d26u);
+        &serializer, this, (void*)g_1574258, 0x1a80d26u);
 
     bool ok = ((bool (__thiscall*)(cVarListSerializer*, cIObjectDatabaseIStream*))FUN_00693e10)(
         &serializer, &stream);

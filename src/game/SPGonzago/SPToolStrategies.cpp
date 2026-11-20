@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPToolStrategies.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e1b14[];
+
 #include "game/types.h"
 #include "SP/cPlanet.h"
 #include "SP/cPlanetModel.h"
@@ -2897,7 +2900,7 @@ struct ToolActivationBase {
 bool cSPGetOutOfUFOToolStrategy::ActivateTool(int nToolId)
 {
     if (reinterpret_cast<ToolActivationBase*>(this)->ActivateTool(nToolId)) {
-        ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
+        ShowToolEventLog(nToolId, (const void*)g_16e1b14, 3, 0);
         return true;
     }
     return false;

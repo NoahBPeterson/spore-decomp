@@ -1,5 +1,11 @@
 // Slice s00c62880 — SP::cSPMissionWar / cMissionWar mission helpers.
 // Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfb4[];
+extern "C" char g_1470b74[];
+extern "C" char g_1470b88[];
+
 #include "types.h"
 
 void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int);
@@ -46,9 +52,9 @@ void* __fastcall cMissionWar_ctor(void* self, int _e) {
   *(int*)((char*)self + 0x1f0) = 0;
   *(int*)((char*)self + 0x1f4) = 0;
   *(uint8_t*)((char*)self + 0x1fc) = 0;
-  *(void**)self = (void*)0x1470b88;
-  *(void**)((char*)self + 4) = (void*)0x146dfb4;
-  *(void**)((char*)self + 0x34) = (void*)0x1470b74;
+  *(void**)self = (void*)g_1470b88;
+  *(void**)((char*)self + 4) = (void*)g_146dfb4;
+  *(void**)((char*)self + 0x34) = (void*)g_1470b74;
   *(int*)((char*)self + 0x1f8) = -1;
   return self;
 }

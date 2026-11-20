@@ -1,3 +1,4 @@
+extern "C" char g_1416460[];
 // src/game/Spui/_at_007f0000.cpp -- migrated from slice(s) s007ffc70, s007fed20, s007fd840, s007fc880, s007f8540 by tools/migrate/rewrite.py
 // Object file: Spui/_at_007f0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -468,6 +469,7 @@ float Damped::v25(float t)
     return r;
 }
 
+extern "C" char g_1415dd0[];
 // @ 0x007fda80
 bool SerReadA(SerItem* out, void* src)
 {
@@ -475,7 +477,7 @@ bool SerReadA(SerItem* out, void* src)
     VCallV(p, 0x14);
     out->base = p;
     out->count = 1;
-    out->type = 0;
+    out->type = g_1415dd0;   // retail stores this address (the type descriptor), not 0
     return true;
 }
 
@@ -518,7 +520,7 @@ bool SerReadC(SerItem3* out, void* src)
     VCallV(p, 0x14);
     out->f4 = p;
     out->f8 = (void*)1;
-    out->f0 = 0;
+    out->f0 = g_1416460;   // retail stores this address (the type descriptor), not 0
     return true;
 }
 

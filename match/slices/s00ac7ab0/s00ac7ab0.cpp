@@ -1,6 +1,12 @@
 // Slice s00ac7ab0 - Spore gameplay: citizen/creature order helpers, serializer
 // adapters, Gonzago/tribe subsystem bits.  (no PDB names)
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1459fc0[];
+extern "C" char g_1459fc8[];
+extern "C" char g_167a3d0[];
+
 #include "types.h"
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -323,8 +329,8 @@ extern "C" void SP_cGonzagoSubsystem_dtor(void* p);       // 0xb5b9a0
 // @ 0x00ac7fe0
 void* GonzagoSub::scalarDtor(byte flags)
 {
-    *(void**)this = (void*)0x1459fc8;
-    mpRefCountVtbl = (void*)0x1459fc0;
+    *(void**)this = (void*)g_1459fc8;
+    mpRefCountVtbl = (void*)g_1459fc0;
     _ReadWriteBarrier();
     GonzagoSub* p = mpObject1c;
     if (p) p->Release();
@@ -466,7 +472,7 @@ bool FUN_00ac8550(void* self, IObj* p)
 // ===========================================================================
 void FUN_00ac8660(void)
 {
-    LoadArithmeticaFile(0x25e94602, 0x24a4f5a, (void*)0x167a3d0);
+    LoadArithmeticaFile(0x25e94602, 0x24a4f5a, (void*)g_167a3d0);
 }
 
 // ===========================================================================

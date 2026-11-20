@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/text1.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_14453d0[];
+extern "C" char g_1445410[];
+extern "C" char g_1445530[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -708,12 +714,12 @@ char __thiscall WinText::m_988f60(uint32_t p2, float* p3)
 // @ 0x00988f90
 void __thiscall WinText::m_988f90()
 {
-    F(this, 0) = 0x1445530;
-    F(this, 4) = 0x1445410;
-    F(this, 0x20c) = 0x14453d0;
+    F(this, 0) = (int)g_1445530;
+    F(this, 4) = (int)g_1445410;
+    F(this, 0x20c) = (int)g_14453d0;
     ((C_8323d0*)((uint8_t*)this + 0x758))->Dtor();
     ((C_89c540*)((uint8_t*)this + 0x228))->Dtor();
-    F(this, 0x20c) = 0x13eb938;
+    F(this, 0x20c) = (int)g_13eb938;
     ((C_962740*)this)->Free();
 }
 
@@ -749,12 +755,12 @@ WinText* __thiscall WinText::m_989000()
 // @ 0x009890d0
 WinText* __thiscall WinText::m_9890d0(uint8_t p2)
 {
-    F(this, 0) = 0x1445530;
-    F(this, 4) = 0x1445410;
-    F(this, 0x20c) = 0x14453d0;
+    F(this, 0) = (int)g_1445530;
+    F(this, 4) = (int)g_1445410;
+    F(this, 0x20c) = (int)g_14453d0;
     ((C_8323d0*)((uint8_t*)this + 0x758))->Dtor();
     ((C_89c540*)((uint8_t*)this + 0x228))->Dtor();
-    F(this, 0x20c) = 0x13eb938;
+    F(this, 0x20c) = (int)g_13eb938;
     ((C_962740*)this)->Free();
     if (p2 & 1) {
         FUN_00951330(this);

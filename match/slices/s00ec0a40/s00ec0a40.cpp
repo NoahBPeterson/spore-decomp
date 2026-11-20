@@ -161,7 +161,7 @@ u8 __cdecl FUN_00ec0b90(int self, void* a2, void* a3, void* a4, void* a5, u8* ou
 // @ 0x00ec0c40
 double __cdecl FUN_00ec0c40(void* self) {
     char* s = (char*)self;
-    void* mgr = *(void**)0x016c7aa4;
+    void* mgr = *(void**)&g_16c7aa4;
     int limit = *(int*)(*(char**)((char*)mgr + 0x78) + 0xb8);
     char* c = (char*)((H_00c04750*)s)->Get();
     if (*(int*)(c + 0x4b8) == 4) return 1.0;

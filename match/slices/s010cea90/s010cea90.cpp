@@ -6,6 +6,9 @@
 //
 // Compile with /O2 /MD /Gy /EHsc /TP (x87 TU: no /arch:SSE, no /fp:fast).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a43a4[];
+
 #include <intrin.h>
 
 typedef unsigned int   uint32;
@@ -233,7 +236,7 @@ void __stdcall FUN_010cec10(int a, int b, int c, int d)
     int local[3];
     local[2] = d;
     local[1] = 0x7f7fffee;
-    local[0] = 0x14a43a4;
+    local[0] = (int)g_14a43a4;
     FUN_010e4d50(b, a, c, local);
 }
 

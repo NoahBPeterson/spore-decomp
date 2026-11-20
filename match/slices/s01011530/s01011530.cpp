@@ -15,6 +15,11 @@
 //
 // Module is SporeApp Simulator/game code (VC9 SP1), not Havok.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------- shared types
@@ -44,7 +49,7 @@ struct tGrobShockData {
     {
         mField00 = o.mField00;
         mField04 = o.mField04;
-        mTimer.mVtbl = (void*)0x01465d54;
+        mTimer.mVtbl = (void*)g_1465d54;
         mTimer.mRefCount = 0;
         mTimer.mElapsedLo = o.mTimer.mElapsedLo;
         mTimer.mElapsedHi = o.mTimer.mElapsedHi;
@@ -52,7 +57,7 @@ struct tGrobShockData {
         mTimer.mBaseHi    = o.mTimer.mBaseHi;
         mTimer.mRunning   = o.mTimer.mRunning;
         mTimer.mGetMs     = o.mTimer.mGetMs;
-        mTimer.mVtbl = (void*)0x01464450;
+        mTimer.mVtbl = (void*)g_1464450;
     }
 
     // Copy-assignment copies the head dwords and the timer payload but leaves the

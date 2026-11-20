@@ -2,6 +2,16 @@
 // Slice s00de3300: galaxy game-entry lifecycle, mouse-mode toggles, and the
 // anonymous UI helpers (window image get/set, URL open, verb-icon labels).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147dba8[];
+extern "C" char g_147dd00[];
+extern "C" char g_15a2df8[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+extern "C" char g_16a11b4[];
+extern "C" char g_16a1344[];
+extern "C" char g_16a1848[];
+
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned short u16;
@@ -247,9 +257,9 @@ void GameEntry::FUN_de3300()
     ((Fn2)(*(void***)p)[0x60 / 4])(p, 0, 1);
     p = FUN_00df5f40();
     ((Fn1)(*(void***)p)[0x5c / 4])(p, 0);
-    ((GameEntry*)*(u32*)0x16a1344)->ShowGalaxy(0);
-    ((GameEntry*)*(u32*)0x16a1344)->ShowGalaxy(1);
-    ((GameEntry*)*(u32*)0x16a1344)->mp198->Do();
+    ((GameEntry*)*(u32*)g_16a1344)->ShowGalaxy(0);
+    ((GameEntry*)*(u32*)g_16a1344)->ShowGalaxy(1);
+    ((GameEntry*)*(u32*)g_16a1344)->mp198->Do();
     mp48 = 0;
     p = FUN_00df5f40();
     return ((Root*)p)->FUN_df95d0();
@@ -342,15 +352,15 @@ void GameEntry::OnModalWindowEnd(u32 a2, u32 a3)
 // @ 0x00de35d0
 void GameEntry::Dtor_de35d0()
 {
-    mpVtbl = (void*)0x147dd00;
-    *(u32*)0x16a11b4 = 0;
+    mpVtbl = (void*)g_147dd00;
+    *(u32*)g_16a11b4 = 0;
     u32 p = mStr30.mpBegin;
     if ((s32)((mStr30.mpCap - p) & 0xfffffffe) > 2 && p != 0)
         op_del_array((void*)p);
     p = mStr20.mpBegin;
     if ((s32)((mStr20.mpCap - p) & 0xfffffffe) > 2 && p != 0)
         op_del_array((void*)p);
-    mpVtbl = (void*)0x147dba8;
+    mpVtbl = (void*)g_147dba8;
 }
 
 // ===========================================================================
@@ -414,13 +424,13 @@ void GameEntry::BlowSavedGameUpRealGood()
 // @ 0x00de38b0
 void GameEntry::FUN_de38b0(u32 id, u32 arg)
 {
-    if ((((u32*)0x16a1848)[id >> 5] >> (id & 0x1f)) & 1)
+    if ((((u32*)g_16a1848)[id >> 5] >> (id & 0x1f)) & 1)
         return;
-    if (id == 0x1b && (*(GameEntry**)0x16a1344)->mb1F1 == 0) {
+    if (id == 0x1b && (*(GameEntry**)g_16a1344)->mb1F1 == 0) {
         void* audio = EA_Audio_GetSystemAT();
         KillSetiEffects(0x5da7b944,
                         audio != 0 ? ((FnU)(*(void***)audio)[0x20 / 4])(audio) : 0);
-        ((GameEntry*)*(u32*)0x16a1344)->FUN_de52d0();
+        ((GameEntry*)*(u32*)g_16a1344)->FUN_de52d0();
     }
     FUN_e00650(id, arg);
 }
@@ -636,12 +646,12 @@ void __cdecl FUN_00de3e40(u32 arg)
         prop = 0;
         ((FnV)(*(void***)old)[4 / 4])(old);
     }
-    char ok = ((FnQC)(*(void***)pm)[0x2c / 4])(pm, *(u32*)0x15a2df8, 0, &prop);
+    char ok = ((FnQC)(*(void***)pm)[0x2c / 4])(pm, *(u32*)g_15a2df8, 0, &prop);
     if (ok) {
         WString16 ws;
-        ws.mpBegin = 0x1667bac;
-        ws.mpEnd = 0x1667bac;
-        ws.mpCap = 0x1667bae;
+        ws.mpBegin = (int)g_1667bac;
+        ws.mpEnd = (int)g_1667bac;
+        ws.mpCap = (int)g_1667bae;
         if (SP_GetPropertyAsString16(prop, arg, &ws)) {
             void* app = SP_AppSystem();
             ((Fn1)(*(void***)app)[0x5c / 4])(app, ws.mpBegin);

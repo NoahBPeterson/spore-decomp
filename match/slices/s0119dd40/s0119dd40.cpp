@@ -1,3 +1,6 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15ce770[];
+
 #include "types.h"
 #include "s0119dd40.h"
 
@@ -498,7 +501,7 @@ void* gen_conf_method_119ec80(void* v3conf)
 void* gname_alloc_119f650(u32 nid)
 {
     if (nid < 0x41)
-        return (void*)(0x15ce770 - (int)nid * 0x28);
+        return (void*)((int)g_15ce770 - (int)nid * 0x28);
     return 0;
 }
 

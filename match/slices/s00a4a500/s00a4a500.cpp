@@ -4,6 +4,11 @@
 // (g_canvas.c); only the fields these functions touch are declared, at their binary
 // offsets. Callees, globals and vtable targets are masked relocations.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a4a6b0();
+extern "C" char g_13ec47c[];
+
 #include "types.h"
 #include <stddef.h>
 
@@ -256,7 +261,7 @@ void canvas_loadbang(t_glist* g)
 {
     for (t_gobj* o = *(t_gobj**)((char*)g + 0x28); o != 0; o = o->g_next) {
         if (zgetfn(o, gLoadbangSym.s_name, gLoadbangSym.s_thing) != 0)
-            pd_vmess(o, gLoadbangSym.s_name, gLoadbangSym.s_thing, (void*)0x13ec47c);
+            pd_vmess(o, gLoadbangSym.s_name, gLoadbangSym.s_thing, (void*)g_13ec47c);
     }
 }
 
@@ -532,7 +537,7 @@ void canvas_pop(t_glist* g)
     CanvasPopPrefix* canvas = (CanvasPopPrefix*)g;
     canvas->flags &= ~8u;
     CanvasPopAssetManager* manager = (CanvasPopAssetManager*)FUN_00a67ce0();
-    canvas->helperResult = manager->NewEntryNode(g, (void*)0x00a4a6b0);
+    canvas->helperResult = manager->NewEntryNode(g, (void*)FUN_00a4a6b0);
 }
 
 // @ 0x00a4ad50

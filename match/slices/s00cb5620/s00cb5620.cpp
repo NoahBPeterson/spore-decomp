@@ -2,6 +2,13 @@
 // SP::cDefaultBeamProjectile / SP::cDefaultAoEArea and related Simulator helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145dca8[];
+extern "C" char g_14751b4[];
+extern "C" char g_14751e0[];
+extern "C" char g_14752a4[];
+extern "C" char g_14752b8[];
+
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -441,10 +448,10 @@ u32 cDefaultBeamProjectile::FUN_00cb5b70()
 // @ 0x00cb5bd0
 void cDefaultAoEArea::FUN_00cb5bd0()
 {
-    mpVtbl = (void*)0x14752b8;
-    mpVtbl2 = (void*)0x14752a4;
-    mpSubVtbl = (void*)0x14751e0;
-    mpVtbl108 = (void*)0x14751b4;
+    mpVtbl = (void*)g_14752b8;
+    mpVtbl2 = (void*)g_14752a4;
+    mpSubVtbl = (void*)g_14751e0;
+    mpVtbl108 = (void*)g_14751b4;
 
     MOPS((u8*)this + 0x138)->FUN_00b638b0();
 
@@ -452,7 +459,7 @@ void cDefaultAoEArea::FUN_00cb5bd0()
     if (p != 0)
         ((void (__thiscall*)(void*))VT(p)[8 / 4])(p);
 
-    mpVtbl108 = (void*)0x145dca8;
+    mpVtbl108 = (void*)g_145dca8;
     MOPS((u8*)this + 0x34)->FUN_00c8a420();
     MOPS(this)->FUN_00b184c0();
 }

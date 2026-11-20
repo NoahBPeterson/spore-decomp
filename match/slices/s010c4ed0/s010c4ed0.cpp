@@ -1,3 +1,6 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16e4178[];
+
 struct HkMem_010c4ed0 {
     virtual void v0();
     virtual void v1();
@@ -38,7 +41,7 @@ struct Obj_010c4ed0 : public Base_010c4ed0 {
     void operator delete(void* p) {
         Obj_010c4ed0* self = (Obj_010c4ed0*)p;
         int size = (unsigned short)self->m4;
-        HkMem_010c4ed0* mem = *(HkMem_010c4ed0**)0x016e4178;
+        HkMem_010c4ed0* mem = *(HkMem_010c4ed0**)g_16e4178;
         mem->Dealloc(p, size, 0x24);
     }
 

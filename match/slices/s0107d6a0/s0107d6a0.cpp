@@ -1,5 +1,9 @@
 // Decompiled source for bfs3 slice 42: Havok hkThreadMemory / hkMemory /
 // hkPointerMapBase template instantiations (+ a cWalkAroundInputStrategy::Shutdown).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c85c[];
+
 #include "types.h"
 
 #define VFN(p, slot) (((void**)*(void**)p)[(slot)/4])
@@ -527,7 +531,7 @@ void* hkSmallObj::FUN_0107dc90()
 {
     void* self = this;
     char* p = (char*)self;
-    *(void**)p = (void*)0x149c85c;
+    *(void**)p = (void*)g_149c85c;
     *(int*)(p + 0xc) = 1;
     *(int*)(p + 0x10) = 0;
     *(int*)(p + 0x14) = 0;

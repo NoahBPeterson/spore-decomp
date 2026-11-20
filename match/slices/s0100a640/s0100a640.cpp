@@ -7,6 +7,13 @@
 // owning object is handed to vtable slot 5 of the record, i.e. the record's
 // "initialise for this owner" call.  The trailing vtable slot 7 call on the
 // owner is the tail call retail ends with (jmp [eax+0x1c]).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1495414[];
+extern "C" char g_13ec458[];
+extern "C" char g_1495400[];
+extern "C" char g_149bad8[];
+
 #include "types.h"
 
 // 0x14-byte element of the embassy vector (see slice s0100a7c0).
@@ -33,7 +40,7 @@ bool __cdecl ReadInt32(void* stream, int32_t* value, unsigned count, int endian)
 
 // The element's vtable (0x01495400) slot 5: initialise the record for an owner.
 typedef void (__thiscall* EmbElemInitFn)(EmbElem*, void*);
-static EmbElemInitFn g_embElemInit = (EmbElemInitFn)0x01495414;
+static EmbElemInitFn g_embElemInit = (EmbElemInitFn)(unsigned)g_1495414;
 
 // @ 0x0100a640
 void LoadEmbassyList(void* owner, EmbVec* list)
@@ -57,8 +64,8 @@ void LoadEmbassyList(void* owner, EmbVec* list)
     while (i < (uint32_t)count) {
         EmbElem elem;
         elem.m08 = 0;
-        elem.m00 = (void*)0x1495400;
-        elem.m04 = (void*)0x149bad8;
+        elem.m00 = (void*)g_1495400;
+        elem.m04 = (void*)g_149bad8;
         elem.m0C = -1;
         elem.m10 = 1000;
 
@@ -69,10 +76,10 @@ void LoadEmbassyList(void* owner, EmbVec* list)
             if (slot != 0) {
                 // the inlined copy stamps the intermediate vtable first (it is
                 // observable in retail, so keep it a volatile store)
-                *(void* volatile*)&slot->m04 = (void*)0x13ec458;
+                *(void* volatile*)&slot->m04 = (void*)g_13ec458;
                 slot->m08 = 0;
-                slot->m00 = (void*)0x1495400;
-                slot->m04 = (void*)0x149bad8;
+                slot->m00 = (void*)g_1495400;
+                slot->m04 = (void*)g_149bad8;
                 slot->m0C = elem.m0C;
                 slot->m10 = elem.m10;
             }

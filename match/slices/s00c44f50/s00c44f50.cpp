@@ -4,6 +4,11 @@
 // block whose resource ids run consecutively (0x43af507 + i), plus one last
 // entry that is set up before the block.
 // Flags: /O2 /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_168ee08[];
+extern "C" char g_168ef48[];
+
 #include "game/types.h"
 #include <wchar.h>
 
@@ -17,7 +22,7 @@ struct CStr {
 // @ 0x00c44f50
 void InitStringTable()
 {
-    CStr* const table = (CStr*)0x168ee08;
+    CStr* const table = (CStr*)g_168ee08;
 
     table[0].Load(0x2db6dad3, 0x43af4fa, 0);
     table[1].Load(0x2db6dad3, 0x43af4fb, 0);
@@ -37,7 +42,7 @@ void InitStringTable()
     table[15].Load(0x2db6dad3, 0x43af529, 0);
     table[26].Load(0x2db6dad3, 0x43af52a, 0);
 
-    CStr* const block = (CStr*)0x168ef48;
+    CStr* const block = (CStr*)g_168ef48;
     for (int i = 0; i < 10; ++i)
         block[i].Load(0x2db6dad3, 0x43af507 + i, 0);
 }

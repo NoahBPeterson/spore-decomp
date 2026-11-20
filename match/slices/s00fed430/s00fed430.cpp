@@ -21,6 +21,10 @@
 // (their bodies are not emitted in this translation unit, so ODR is preserved for the ones we
 // reference only by address).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -902,9 +906,9 @@ bool cSPMissionManager::RemoveMission(cSPMission* mission)
     {
         MessageBasicRC5 msg;
         msg.mId = 0x38cf2ff;
-        msg.vftable0 = 0x13eb90c;
+        msg.vftable0 = (int)g_13eb90c;
         _InterlockedExchange((volatile long*)&msg.mRefCount, 0);
-        msg.vftable0 = 0x13eb844;
+        msg.vftable0 = (int)g_13eb844;
         msg.mRCFlags = 0;
         *(void**)&msg.mData = mission;
         cMessageServer* server = MessageServer();

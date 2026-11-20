@@ -2,6 +2,10 @@
 // Object file: Swarm/_at_00a80000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_1457fd8[];
+
 #include "game/types.h"
 #include "EA/Swarm/cVisualEffect.h"
 
@@ -795,7 +799,7 @@ void __fastcall Cfg::Release()
         operator_delete__(this->arr28);
     if (this->arr14 != 0 && *(int32_t*)((char*)this->arr14 - 4) != 0)
         operator_delete__(this->arr14);
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = (void*)g_13ef094;
 }
 
 // @ 0x00a84f00
@@ -803,7 +807,7 @@ Cfg* __fastcall Cfg::Ctor()
 {
     volatile uint32_t* v = (volatile uint32_t*)this;
     v[1] = 0;                                          // 0x04
-    v[0] = 0x1457fd8;                                  // 0x00
+    v[0] = (int)g_1457fd8;                                  // 0x00
     v[2] = 0;                                          // 0x08
     *(volatile float*)((char*)this + 0x10) = 1.0f;
     *(volatile uint16_t*)((char*)this + 0x0c) = 0;
@@ -1117,7 +1121,7 @@ void __fastcall Heap5::Release()
         operator_delete__(this->p48);
     if (this->p34 != 0 && *(int32_t*)((char*)this->p34 - 4) != 0)
         operator_delete__(this->p34);
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = (void*)g_13ef094;
 }
 
 // @ 0x00a870b0
@@ -1295,7 +1299,7 @@ void __fastcall Sim_Dtor(Sim_s00a8_6b30* self)
     self->v8c.~SimVectorF();
     self->v78.~SimVectorF();
     self->v60.~SimVectorF();
-    *(void**)self = (void*)0x013ef094;
+    *(void**)self = (void*)g_13ef094;
 }
 
 // @ 0x00a87920

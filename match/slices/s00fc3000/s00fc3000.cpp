@@ -3,6 +3,12 @@
 //   00fc30f0  cJetStreamMap::~cJetStreamMap (vtable-restoring derived dtor)
 //   00fc3150  cJetStreamMap::SetValues(PressureMap) -- sets mMapId and mMap (mMaps[4])
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (see manifest).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14915c0[];
+extern "C" char g_14915c4[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -144,8 +150,8 @@ bool cJetStreamMap::SetValuesPressure(RefCounted* p, uint32_t keyLo, uint32_t ke
 cJetStreamMap::~cJetStreamMap()
 {
     // restore the two base vtables first (the original stores them before touching the members)
-    *(void***)this = (void**)0x014915c4;                        // cIMap vftable
-    *((void***)this + 1) = (void**)0x014915c0;                  // RefCountTemplate vftable
+    *(void***)this = (void**)g_14915c4;                        // cIMap vftable
+    *((void***)this + 1) = (void**)g_14915c0;                  // RefCountTemplate vftable
     _ReadWriteBarrier();
     if (mMap) {
         RefCounted* p = mMap;
@@ -155,5 +161,5 @@ cJetStreamMap::~cJetStreamMap()
         RefCounted* p = mTerrainMapSet;
         p->Release();
     }
-    *((void***)this + 1) = (void**)0x013ef094;                  // ??_7GmeRefCount@@6B@
+    *((void***)this + 1) = (void**)g_13ef094;                  // ??_7GmeRefCount@@6B@
 }

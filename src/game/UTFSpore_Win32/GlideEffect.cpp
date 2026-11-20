@@ -1,6 +1,13 @@
 // src/game/UTFSpore_Win32/GlideEffect.cpp
 // Object file: UTFSpore_Win32/GlideEffect.obj.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1442584[];
+extern "C" char g_14425c0[];
+extern "C" char g_14425d8[];
+extern "C" char g_14426a0[];
+extern "C" char g_14426bc[];
+
 namespace EA {
 namespace UTFWinControls {
 
@@ -45,11 +52,11 @@ namespace EA {
 namespace UTFWinControls {
 
 // Vtable addresses stored by the constructor, in the order the retail code writes them.
-static const unsigned int kVtblBase60     = 0x014426a0;
-static const unsigned int kVtblBase00     = 0x014425d8;
-static const unsigned int kVtblBase04     = 0x014425c0;
-static const unsigned int kVtblBase0C     = 0x01442584;
-static const unsigned int kVtblFinal60    = 0x014426bc;
+static const unsigned int kVtblBase60     = (int)g_14426a0;
+static const unsigned int kVtblBase00     = (int)g_14425d8;
+static const unsigned int kVtblBase04     = (int)g_14425c0;
+static const unsigned int kVtblBase0C     = (int)g_1442584;
+static const unsigned int kVtblFinal60    = (int)g_14426bc;
 
 // @ 0x00970010
 void GlideEffect::Scale(void*, FloatSink* sink, float scale)

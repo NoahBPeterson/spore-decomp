@@ -2,6 +2,12 @@
 // Small accessors/thunks are reconstructed exactly; the large Read/Update bodies are
 // reconstructed from the original instruction flow (see partial.txt / nonmatching.txt).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1572560[];
+extern "C" char g_1572618[];
+extern "C" char g_1572960[];
+extern "C" char g_1572a18[];
+
 #include "types.h"
 
 typedef unsigned int uint32;
@@ -344,10 +350,10 @@ unsigned char MissionStub::FUN_00c2e6c0(int param_2)
     cVarListSerializer ser2;
 
     unsigned char a = ((unsigned char(__thiscall*)(void*, int))FUN_00b18600)(self, param_2);
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser1, self, (int)0x01572560, (int)0x01a80d26);
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser1, self, (int)g_1572560, (int)0x01a80d26);
     unsigned char b = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser1, param_2);
     b &= a;
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser2, self, (int)0x01572618, (int)0x01a80d26);
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser2, self, (int)g_1572618, (int)0x01a80d26);
     unsigned char c = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser2, param_2);
     c &= b;
     return c;
@@ -379,10 +385,10 @@ unsigned char MissionStub::FUN_00c2e8c0(int param_2)
     cVarListSerializer ser2;
 
     unsigned char a = ((unsigned char(__thiscall*)(void*, int))FUN_00b18600)(self, param_2);
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser1, self, (int)0x01572560, (int)0x01a80d26);
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser1, self, (int)g_1572560, (int)0x01a80d26);
     unsigned char b = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser1, param_2);
     b &= a;
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser2, self, (int)0x01572960, (int)0x01a80d26);
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser2, self, (int)g_1572960, (int)0x01a80d26);
     unsigned char c = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser2, param_2);
     c &= b;
     return c;
@@ -396,10 +402,10 @@ unsigned char MissionStub::FUN_00c2eaa0(int param_2)
     cVarListSerializer ser2;
 
     unsigned char a = ((unsigned char(__thiscall*)(void*, int))FUN_00b18600)(self, param_2);
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser1, self, (int)0x01572560, (int)0x01a80d26);
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser1, self, (int)g_1572560, (int)0x01a80d26);
     unsigned char b = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser1, param_2);
     b &= a;
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser2, self, (int)0x01572a18, (int)0x01a80d26);
+    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser2, self, (int)g_1572a18, (int)0x01a80d26);
     unsigned char c = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser2, param_2);
     c &= b;
     return c;

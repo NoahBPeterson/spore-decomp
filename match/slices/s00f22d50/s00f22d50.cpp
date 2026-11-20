@@ -16,6 +16,10 @@
 //   +0xdc (void*)          +0xec vec()
 // `ev[6]` == *(int*)(ev + 0x18) is the owning object of property lookups.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15d9c6c[];
+extern "C" char g_164dc58[];
+
 #include "types.h"
 
 typedef unsigned int uint;
@@ -188,7 +192,7 @@ static float GetPropF(void* p, unsigned int key, void** out)
         unsigned short t = *(unsigned short*)((char*)q + 0x12);
         float* pv;
         if (t != 0xd && t != 0x10)
-            pv = (float*)0x015d9c6c;
+            pv = (float*)g_15d9c6c;
         else if (*(uint8_t*)((char*)q + 0x10) & 0x30)
             pv = (float*)*(int*)q;
         else
@@ -208,7 +212,7 @@ static int GetPropI(void* p, unsigned int key, void** out)
         unsigned short t = *(unsigned short*)((char*)q + 0x12);
         int* pv;
         if (t != 0xa && t != 0x10)
-            pv = (int*)0x0164dc58;
+            pv = (int*)g_164dc58;
         else if (*(uint8_t*)((char*)q + 0x10) & 0x30)
             pv = (int*)*(int*)q;
         else

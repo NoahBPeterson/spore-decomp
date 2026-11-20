@@ -1,5 +1,12 @@
 // Slice s00bf51d0: Spore Simulator routines (C++ reconstruction).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00acdff0();
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -450,8 +457,8 @@ bool PlanetChecker::CheckPlanet(void* obj)
 {
     void* mgr = FUN_00b3d300();
     void* vec = ((void* (__thiscall*)(void*, void*, void*, void*, void*, void*))
-                 FUN_00b21340)(mgr, (void*)0x00cd7d10, (void*)0x00d3d420,
-                               (void*)0x00acdff0, (void*)0x00b1e500,
+                 FUN_00b21340)(mgr, (void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                               (void*)FUN_00acdff0, (void*)FUN_00b1e500,
                                (void*)0x018c43e8);
 
     struct NounVec { void** m_begin; void** m_end; void** m_cap; };

@@ -3,6 +3,11 @@
 // radius along the axis (perpendicular1 x perpendicular2), then the ray is tested against the infinite
 // cylinder (closestInfLineSegInfLineSeg) and, if it misses the lateral surface, against the two end caps.
 // Flags: /O2 /MD /Gy /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14a4134[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -425,12 +430,12 @@ void hkConvexTransformShape::calcStatistics(hkStatisticsCollector* c) const
 void* hkConvexTransformShape::scalarDeletingDtor(unsigned int flags)
 {
     hkRefObj* child = (hkRefObj*)m_childShape;
-    *(void**)this = (void*)0x014a4134;
+    *(void**)this = (void*)g_14a4134;
     if (child->m_memSizeAndFlags != 0) {
         if (--child->m_referenceCount == 0)
             child->dtor(1);
     }
-    *(void**)this = (void*)0x013ef094;
+    *(void**)this = (void*)g_13ef094;
     if ((flags & 1) != 0) {
         hkMemoryVtbl* mem = *(hkMemoryVtbl**)&g_hkMemoryInstance;
         mem->deallocate(this, m_memSizeAndFlags, 0x24);

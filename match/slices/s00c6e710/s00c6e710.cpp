@@ -4,6 +4,13 @@
 // a herd-slot placement helper, the inventory-item ctor/dtor and its
 // serialize/deserialize + object-reference helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1471fdc[];
+extern "C" char g_1472000[];
+extern "C" char g_1472008[];
+extern "C" char g_1578618[];
+
 #include "types.h"
 #include <math.h>
 
@@ -453,9 +460,9 @@ void __fastcall FUN_00c6ee40(void* self, void* /*edx*/, u8 visible, float* pos) 
 void* __fastcall FUN_00c6f3d0(void* self, void* /*edx*/) {
   char* p = (char*)self;
   ((void*(__thiscall*)(void*))FUN_00c87660)(self);   // base ctor
-  *(u32*)(p + 0x00) = 0x01472008;     // vtbl cObjectInstanceInventoryItem
-  *(u32*)(p + 0x08) = 0x01472000;
-  *(u32*)(p + 0x0c) = 0x01471fdc;
+  *(u32*)(p + 0x00) = (int)g_1472008;     // vtbl cObjectInstanceInventoryItem
+  *(u32*)(p + 0x08) = (int)g_1472000;
+  *(u32*)(p + 0x0c) = (int)g_1471fdc;
   *(u32*)(p + 0x7c) = 0;              // mObject
   *(u8*)(p + 0x1c) = 1;              // mbIsUnique
   *(u32*)(p + 0x14) = 8;             // mItemType = ObjectInstance
@@ -496,7 +503,7 @@ u8 __fastcall FUN_00c6f500(void* self, void* /*edx*/, void* stream) {
   u8 ok = ((u8(__thiscall*)(void*, void*))FUN_00c879a0)(self, stream);
   u32 ser[645];   // cVarListSerializer, 0xa14 bytes
   ((void*(__thiscall*)(void*, void*, void*, int))FUN_00692f90)(
-      ser, p - 0xc, (void*)0x01578618, 0x1a80d26);
+      ser, p - 0xc, (void*)g_1578618, 0x1a80d26);
   u8 ok2 = ((u8(__thiscall*)(void*, void*))FUN_00693e10)(ser, stream);
   return (ok2 != 0 && ok != 0);
 }

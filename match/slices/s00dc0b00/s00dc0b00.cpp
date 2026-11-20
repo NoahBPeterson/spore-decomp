@@ -1,5 +1,9 @@
 // Slice s00dc0b00 — SP::cSPGameDataUFO abduction/tool/destination helpers.
 // Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_169f574[];
+
 #include "types.h"
 #include <math.h>
 
@@ -411,7 +415,7 @@ bool __cdecl FUN_00dc14a0(void* p1, int a2, int a3, int a4, int a5, int* out)
     }
     if (*out != 0)
     {
-        ((Stub*)s)->FUN_00c3b5c0(0x169f574);
+        ((Stub*)s)->FUN_00c3b5c0((int)g_169f574);
         *(float*)(out + 1) = 0.0f;
     }
     ((Stub*)(*(int*)(s + 0x6c8) + 8))->FUN_00bc98f0(1, 0);

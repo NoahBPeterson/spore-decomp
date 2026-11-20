@@ -2,6 +2,12 @@
 // Slice s00b0d2a0: cKeySlotList slot management plus the "Simulator" agent /
 // interaction bookkeeping class (paint system, agent vectors, slot lists).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_145cbc0[];
+extern "C" char g_145cbc8[];
+extern "C" char g_145cc18[];
+
 #include <intrin.h>
 
 typedef unsigned int   u32;
@@ -214,10 +220,10 @@ extern "C" void  __cdecl FUN_00b0d170(void* a, void* b, void* c);
 extern "C" void  __cdecl FUN_00b0ce40(void* a, u32 n, void** val, void* at);
 extern "C" void  __fastcall AutoRefAssign(void** dst, void* val);
 
-#define VTBL_SKINNER        ((void*)0x145cc18)
-#define VTBL_GONZAGO_BASE   ((void*)0x145cbc8)
-#define VTBL_GONZAGO_SUB    ((void*)0x145cbc0)
-#define VTBL_PAINTSYSTEM    ((void*)0x13eb394)
+#define VTBL_SKINNER        ((void*)g_145cc18)
+#define VTBL_GONZAGO_BASE   ((void*)g_145cbc8)
+#define VTBL_GONZAGO_SUB    ((void*)g_145cbc0)
+#define VTBL_PAINTSYSTEM    ((void*)g_13eb394)
 #define VTBL_LISTENERBASE   ((void*)0x13eb384)
 #define ALLOCATOR           ((void*)0x13ebb38)
 #define STR_SIMULATOR       ((const char*)0x13f09b4)

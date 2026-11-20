@@ -2,6 +2,14 @@
 // Object file: SPGonzago/SPUIMissions.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_13f6b3c[];
+extern "C" char g_147fe50[];
+extern "C" char g_147fe60[];
+extern "C" char g_16c7aa4[];
+
 #include "game/types.h"
 #include "SP/cGameData.h"
 #include "SP/cSPMission.h"
@@ -2822,8 +2830,8 @@ void cUICard_s00e1_2f80::Release2()
   q = p20; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
   q = p1c; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
   q = p0c; if (q) ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q);
-  *(void**)((char*)this + 4) = (void*)0x13ec458;
-  *(void**)this = (void*)0x13eb938;
+  *(void**)((char*)this + 4) = (void*)g_13ec458;
+  *(void**)this = (void*)g_13eb938;
 }
 
 // @ 0x00e132c0
@@ -2997,7 +3005,7 @@ void CardLayout::ResizeToStyle0(bool animate)
 // @ 0x00e141a0
 CardLayout* CardLayout::InitA()
 {
-    mpVtbl1 = (void*)0x013ec458;
+    mpVtbl1 = (void*)&g_13ec458;
     m08 = 0;
     m0C = 0;
     m10 = 0;
@@ -3192,7 +3200,7 @@ void CardLayout::UpdateButtonStateB(ISelectable* src)
 }
 
 static __forceinline void InitBaseVtbl(void* volatile& v) {
-    v = (void*)0x013ec458;
+    v = (void*)&g_13ec458;
 }
 
 // @ 0x00e147a0
@@ -3216,8 +3224,8 @@ CardLayout* CardLayout::InitB()
     mpWinB = 0;
     mp40 = 0;
     mpWinC = 0;
-    mpVtbl0 = (void*)0x0147fe60;
-    mpVtbl1 = (void*)0x0147fe50;
+    mpVtbl0 = (void*)g_147fe60;
+    mpVtbl1 = (void*)g_147fe50;
     m98.u = 0;
     return this;
 }
@@ -3225,7 +3233,7 @@ CardLayout* CardLayout::InitB()
 // @ 0x00e14810
 CardLayout* CardLayout::InitC()
 {
-    mpVtbl1 = (void*)0x013ec458;
+    mpVtbl1 = (void*)&g_13ec458;
     m08 = 0;
     m0C = 0;
     m10 = 0;
@@ -3271,7 +3279,7 @@ void CardLayout::UpdateScrollButtons()
 {
     if (mF0 == 1)
         return;
-    ScrollGlobals* g = *(ScrollGlobals**)0x016c7aa4;
+    ScrollGlobals* g = *(ScrollGlobals**)g_16c7aa4;
     int total = g->mpHost->mCount;
     int cur = g->mpSource->GetScrollPos();
     IWindow_s00e1_3b50* w = mpMainWin->FindWindowByID(0x74b5328, true);
@@ -4107,7 +4115,7 @@ void cMissionPanel::FUN_00e173c0()
 PaintSystem::PaintSystem()
 {
     ((GonzagoCtor*)this)->Init();      // SP::cGonzagoSubsystem::cGonzagoSubsystem
-    mVtbl1c = (void*)0x13ec458;
+    mVtbl1c = (void*)&g_13ec458;
     mZero20 = 0;
     mVtbl24 = (void*)0x13eb394;
     mVtbl0 = (void*)0x147ffe8;
@@ -5183,7 +5191,7 @@ void cUIMissionButton::CreateMissionButton(void* p1, void* p2, void* p3, void* p
     if (mpLayout == 0)
         return;
 
-    void* pRawFeed = operator_new(0x6c, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    void* pRawFeed = operator_new(0x6c, (const char*)g_13f6b3c, 0, 0, 0, 0);
     cSPUIFeedList_s00e1_bbc0* pNewFeed = pRawFeed != 0 ? (cSPUIFeedList_s00e1_bbc0*)((cSPUIFeedList_s00e1_bbc0*)pRawFeed)->Ctor() : 0;
     {
         cSPUIFeedList_s00e1_bbc0* pOldFeed = mpFeedList;

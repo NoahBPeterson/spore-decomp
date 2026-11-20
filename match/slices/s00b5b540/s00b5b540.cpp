@@ -2,6 +2,16 @@
 // Module "Spore"; SP::cGonzagoSubsystem and related Gonzago helpers.  Each block
 // starts with its original address.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1569d48[];
+extern "C" char g_156b5d0[];
+extern "C" char g_1686af2[];
+extern "C" char g_1686af3[];
+extern "C" char g_1686af4[];
+extern "C" char g_16870e4[];
+extern "C" char g_16870f0[];
+extern "C" char g_156a118[];
+
 #include "s00b5b540.h"
 #include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gGonzagoSerializerList[]; // 0x0156a118
@@ -475,8 +485,8 @@ extern "C" void*                 FUN_00fd9c60();                      // 0x00fd9
 extern "C" void*                 FUN_0067de90();                      // 0x0067de90 telemetry
 extern "C" int                   DAT_015e4ef0;                        // 0x015e4ef0 editor base strategy
 
-static Key3* const        g_planetKey        = (Key3*)0x016870e4;      // sPlanetKey
-static Key3* const        g_avatarKey        = (Key3*)0x016870f0;      // sAvatarSpecies
+static Key3* const        g_planetKey        = (Key3*)g_16870e4;      // sPlanetKey
+static Key3* const        g_avatarKey        = (Key3*)g_16870f0;      // sAvatarSpecies
 
 // Container slots (data pointers published by the "s*Container" records in
 // 0x0131ea90); every value is (subsystem + strategy offset).
@@ -646,7 +656,7 @@ char S5be60::f(void* stream)
     FUN_00b5ba30(0);
 
     CVarListSerializer ser;
-    ser.ctor(this, (void*)0x0156a118, 0x1a80d26);
+    ser.ctor(this, (void*)g_156a118, 0x1a80d26);
     char ok = ser.read(stream);
 
     if (ok)
@@ -861,11 +871,11 @@ extern "C" void* FUN_00b3d3e0();                              // 0x00b3d3e0 Even
 extern "C" void* FUN_00675250();                              // 0x00675250 Achievements::Controller
 extern "C" int   FUN_01021080();                              // 0x01021080 GetUniverseContext
 
-static unsigned char* const g_p1686af2 = (unsigned char*)0x01686af2;
-static unsigned char* const g_p1686af3 = (unsigned char*)0x01686af3;
-static unsigned char* const g_p1686af4 = (unsigned char*)0x01686af4;
-static unsigned char* const g_p156b5d0 = (unsigned char*)0x0156b5d0;
-static unsigned char* const g_p1569d48 = (unsigned char*)0x01569d48;
+static unsigned char* const g_p1686af2 = (unsigned char*)g_1686af2;
+static unsigned char* const g_p1686af3 = (unsigned char*)g_1686af3;
+static unsigned char* const g_p1686af4 = (unsigned char*)g_1686af4;
+static unsigned char* const g_p156b5d0 = (unsigned char*)g_156b5d0;
+static unsigned char* const g_p1569d48 = (unsigned char*)g_1569d48;
 
 struct cGonzagoSimulatorFrame
 {

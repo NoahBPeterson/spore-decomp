@@ -1,5 +1,14 @@
 // Slice s00c63a60 -- Simulator morph-handle hierarchy (cMorphHandle / cTargetMorphHandle).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1470df0[];
+extern "C" char g_1470eb8[];
+extern "C" char g_1470f20[];
+extern "C" char g_1470fe4[];
+extern "C" char g_1470ff8[];
+extern "C" char g_147112c[];
+
 #include "types.h"
 
 // Codegen-only compiler barrier (emits no instructions); used to pin store order where cl's
@@ -34,16 +43,14 @@ struct SpatialObj   { void SetModelKey(void* key); };
 extern "C" int gMorphData18;   // 0x1693d74
 extern "C" int gMorphData1c;   // 0x1693d78
 extern "C" int gMorphData20;   // 0x1693d7c
-// The image is not relocatable, so the retail constructors store their vftable addresses as plain
-// 32-bit immediates; writing them as integer constants reproduces those immediates byte for byte.
-enum {
-    kVtblMorph0  = 0x1470eb8,   // cMorphHandle primary vftable
-    kVtblMorph1  = 0x147112c,   // cMorphHandle second base vftable
-    kVtblMorphSp = 0x1470df0,   // cMorphHandle spatial sub-object vftable
-    kVtblTgt0    = 0x1470ff8,   // cTargetMorphHandle primary vftable
-    kVtblTgt1    = 0x1470fe4,   // cTargetMorphHandle second base vftable
-    kVtblTgtSp   = 0x1470f20    // cTargetMorphHandle spatial sub-object vftable
-};
+// Retail relocates these vftable addresses (they are in its .reloc table), so they are named: an integer
+// constant would give the same bytes but no relocation.
+#define kVtblMorph0 ((int)g_1470eb8)   // cMorphHandle primary vftable
+#define kVtblMorph1 ((int)g_147112c)   // cMorphHandle second base vftable
+#define kVtblMorphSp ((int)g_1470df0)   // cMorphHandle spatial sub-object vftable
+#define kVtblTgt0 ((int)g_1470ff8)   // cTargetMorphHandle primary vftable
+#define kVtblTgt1 ((int)g_1470fe4)   // cTargetMorphHandle second base vftable
+#define kVtblTgtSp ((int)g_1470f20)   // cTargetMorphHandle spatial sub-object vftable
 extern void* gModelKey;
 
 // @ 0x00c63b20

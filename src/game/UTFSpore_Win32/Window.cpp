@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/Window.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e104[];
+
 #include "game/types.h"
 #include <windows.h>
 #include <stddef.h>
@@ -23,7 +26,7 @@ extern void FUN_00925d60();
 namespace EA { namespace Trace { void FUN_00925d60(void* self); }}  // 0x00925d60 (defined below; used by a stub's inline body)
 namespace EA {
 namespace Trace {
-struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)0x0143e104; FUN_00925d60(); } };
+struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)g_143e104; FUN_00925d60(); } };
 }
 }
 // ---- items of slice s00925770 end

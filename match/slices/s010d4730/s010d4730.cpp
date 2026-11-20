@@ -7,6 +7,15 @@
 //
 // Flags: /vc71 /O2 /MD /Gy /TP  (Havok 3.1.0 was built by VC .NET 2003; the
 // 16-byte-aligned frame and x87 operand order are that compiler's).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_010d4280();
+extern "C" void FUN_010d4b00();
+extern "C" void FUN_010d4ed0();
+extern "C" void FUN_010ebc80();
+extern "C" char g_14a46b8[];
+extern "C" char g_14a46ec[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -328,10 +337,10 @@ void __cdecl hkCapsuleCapsuleAgent__registerAgent(hkCollisionDispatcher& dispatc
     hkAgentFuncs funcs;
     funcs.m_isFlipped = 0;
     funcs.m_isPredictive = 0;
-    funcs.m_createFunc = (hkAgentCreateFunc)0x010d4280;
-    funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc)0x010d4ed0;
-    funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc)0x010d4b00;
-    funcs.m_linearCastFunc = (hkAgentLinearCastFunc)0x010ebc80;
+    funcs.m_createFunc = (hkAgentCreateFunc)FUN_010d4280;
+    funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc)FUN_010d4ed0;
+    funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc)FUN_010d4b00;
+    funcs.m_linearCastFunc = (hkAgentLinearCastFunc)FUN_010ebc80;
     dispatcher.registerCollisionAgent(funcs, 8, 8);
 }
 // ---------------------------------------------------------------------------
@@ -345,7 +354,7 @@ extern "C" void* hkSphereBoxAgent__create(const void* bodyA, const void* bodyB,
     *(unsigned short*)((char*)agent + 4) = 0x10;
     *(unsigned short*)((char*)agent + 6) = 1;
     *(void**)((char*)agent + 8) = contactMgr;
-    *(void**)agent = (void*)0x014a46b8;
+    *(void**)agent = (void*)g_14a46b8;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
     return agent;
 }
@@ -362,6 +371,6 @@ extern "C" void* hkSymmetricSphereBoxAgent__create(const void* bodyA, const void
     *(unsigned short*)((char*)agent + 6) = 1;
     *(void**)((char*)agent + 8) = contactMgr;
     *(unsigned short*)((char*)agent + 0xc) = 0xffff;
-    *(void**)agent = (void*)0x014a46ec;
+    *(void**)agent = (void*)g_14a46ec;
     return agent;
 }

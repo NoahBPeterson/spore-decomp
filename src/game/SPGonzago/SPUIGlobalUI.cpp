@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPUIGlobalUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_147f16c[];
+extern "C" char g_147f17c[];
+extern "C" char g_147f198[];
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include "cSPUILayoutManager.h"
@@ -981,8 +988,8 @@ void* OptObj::Ctor()
 void OptObj::Dtor()
 {
     void* self = this;
-    *(void**)self = (void*)0x147f17c;
-    *(void**)((char*)self + 4) = (void*)0x147f16c;
+    *(void**)self = (void*)g_147f17c;
+    *(void**)((char*)self + 4) = (void*)g_147f16c;
     _ReadWriteBarrier();
     void* p54 = *(void**)((char*)self + 0x54);
     if (p54 != 0) ((RefObj1*)p54)->Release();
@@ -1002,9 +1009,9 @@ void OptObj::Dtor()
     if (p14 != 0) ((RefObj1*)p14)->Release();
     void* p10 = *(void**)((char*)self + 0x10);
     if (p10 != 0) ((RefObj2*)p10)->Release();
-    *(void**)self = (void*)0x13eb938;
+    *(void**)self = (void*)g_13eb938;
     _ReadWriteBarrier();
-    *(void**)((char*)self + 4) = (void*)0x13ec458;
+    *(void**)((char*)self + 4) = (void*)g_13ec458;
 }
 
 // @ 0x00e00fe0
@@ -1049,7 +1056,7 @@ void OptObj::Reset()
 void* OptObj::DelDtor(unsigned int flags)
 {
     void* self = this;
-    *(void**)self = (void*)0x147f198;
+    *(void**)self = (void*)g_147f198;
     *(void**)((char*)self + 4) = 0;
     if (flags & 1) {
         EA_Free(self);

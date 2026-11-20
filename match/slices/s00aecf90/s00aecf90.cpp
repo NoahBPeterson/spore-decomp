@@ -1,5 +1,9 @@
 // Slice s00aecf90: Spore engine routines (naked transcription).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13effb8[];
+
 #include "types.h"
 
 extern "C" void FUN_004558a0();
@@ -1411,7 +1415,7 @@ void* ServiceObj::Destroy(int flags)
 {
     if (m08 != 0)
         ((void (__thiscall*)(void*))((void**)*(void**)m08)[1])(m08);
-    *(void**)this = (void*)0x013effb8;      // base vtable
+    *(void**)this = (void*)g_13effb8;      // base vtable
     if (flags & 1)
         FreeService(this);
     return this;

@@ -4,6 +4,9 @@
 // and cSPUILayout headers declare no virtual slots, so the vtable helpers at the top spell the three
 // slots this module calls (AddRef +0, Release +4, the destructor +8).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ffc00[];
+
 #include "game/types.h"
 #include "SP/cSPUIAssetVerbs.h"
 #include "SP/cSPUIAssetView.h"
@@ -165,7 +168,7 @@ void cSPUIAssetVerbs::Shutdown()
 // @ 0x00656740
 bool cSPUIAssetVerbs::IsVerb(int idx)
 {
-    void* w = ((cSPUILayout_s0065_6310*)mLayout)->FindWindowByID(((int*)0x13ffc00)[idx], 1);
+    void* w = ((cSPUILayout_s0065_6310*)mLayout)->FindWindowByID(((int*)g_13ffc00)[idx], 1);
     if (w) return (vcr0(w, 0x28) & 1);
     return false;
 }

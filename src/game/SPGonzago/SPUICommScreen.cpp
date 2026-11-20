@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPUICommScreen.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_147cd84[];
+extern "C" char g_147cd8c[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "game/types.h"
 #include "SP/cDirectPropertyList.h"
 #include "SP/cSPCreatureBase.h"
@@ -2184,9 +2191,9 @@ void cSPUICommScreen_s00dd_3ed0::SetResponseCount(int n)
 // @ 0x00dd4150
 cSPUICommScreen_s00dd_3ed0* __fastcall ConstructCommScreen(cSPUICommScreen_s00dd_3ed0* self)
 {
-    self->mHandlerSub.mpVtbl = (void*)0x13eb394;    // transient base-class vtable
-    self->vtbl = (void*)0x147cd8c;
-    self->mHandlerSub.mpVtbl = (void*)0x147cd84;
+    self->mHandlerSub.mpVtbl = (void*)g_13eb394;    // transient base-class vtable
+    self->vtbl = (void*)g_147cd8c;
+    self->mHandlerSub.mpVtbl = (void*)g_147cd84;
     self->mHandlerSub.mF08 = 0;
     self->mLayout.p = 0;
     self->pad10 = 0;
@@ -2225,9 +2232,9 @@ cSPUICommScreen_s00dd_3ed0* __fastcall ConstructCommScreen(cSPUICommScreen_s00dd
     self->mFd8[4] = 0;
     _ReadWriteBarrier();
 
-    self->mFec = (const void*)0x1667bac;
-    self->mFf0 = (const void*)0x1667bac;
-    self->mFf4 = (const void*)0x1667bae;
+    self->mFec = (const void*)g_1667bac;
+    self->mFf0 = (const void*)g_1667bac;
+    self->mFf4 = (const void*)g_1667bae;
 
     return self;
 }

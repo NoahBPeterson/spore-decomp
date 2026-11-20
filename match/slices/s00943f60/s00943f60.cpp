@@ -1,5 +1,12 @@
 // Slice s00943f60 -- EA::Internet::HTTPClient::Shutdown (0x009440e0).
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13fb19c[];
+extern "C" char g_143f23c[];
+extern "C" char g_143f240[];
+
 #include "types.h"
 #include <intrin.h>
 #include <string.h>
@@ -579,7 +586,7 @@ void UTFHTTPRequest::Destroy() {
     mStr0e0.Destroy();
     mURL.Destroy();
     mMethod.Destroy();
-    *(void**)this = (void*)0x13fb19c;
+    *(void**)this = (void*)g_13fb19c;
 }
 
 // ---------------------------------------------------------------------------
@@ -664,8 +671,8 @@ struct HTTPClientEx {
 };
 
 void HTTPClientEx::Destroy() {
-    mpVtbl  = (void*)0x143f240;
-    mpVtbl2 = (void*)0x143f23c;
+    mpVtbl  = (void*)g_143f240;
+    mpVtbl2 = (void*)g_143f23c;
     ((HTTPClient*)this)->Shutdown();
     if (mp150 != 0) {
         if (*(int*)((char*)mp150 - 4) != 0)
@@ -682,8 +689,8 @@ void HTTPClientEx::Destroy() {
     m44.Destroy();
     m34.Destroy();
     mAgent.Destroy();
-    mpVtbl2 = (void*)0x13fb19c;
-    mpVtbl  = (void*)0x13eb938;
+    mpVtbl2 = (void*)g_13fb19c;
+    mpVtbl  = (void*)g_13eb938;
 }
 
 // HTTPRequest::SetURL internal (called with the request; it forwards to the URL at +0x30).

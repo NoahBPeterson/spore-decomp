@@ -13,6 +13,10 @@
 // the planet center.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  (SSE scalar math; sqrt chains in x87).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_167ed58[];
+
 #include "types.h"
 
 extern "C" double __cdecl sqrt(double);
@@ -420,7 +424,7 @@ extern void* (__stdcall* g_TlsGetValue)(u32);                            // 0x01
 // @ 0x00b532b0
 void* GetTableValue(void* key)
 {
-    HashTable* t = (HashTable*)0x0167ed58;
+    HashTable* t = (HashTable*)g_167ed58;
     HIter it;
     u32 k = (u32)key;
     t->find(&it, &k);

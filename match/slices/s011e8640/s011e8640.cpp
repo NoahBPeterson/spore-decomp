@@ -8,6 +8,10 @@
 // (symbols/renderware4_core.txt) => equivalence-only; flags /vc71.
 //
 // Compiled with: /vc71 /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14f6584[];
+
 #include "types.h"
 #include <new>
 
@@ -247,7 +251,7 @@ void* AsyncOp::GetResultHandle()
     Device* dev = mDevice;
     if (dev->mIsVirtual)
         dev = GetFsManager()->mpDefaultDevice;
-    dev->Wait(this, (const unsigned int*)0x014f6584);
+    dev->Wait(this, (const unsigned int*)g_14f6584);
     return mFileHandle;
 }
 
@@ -257,7 +261,7 @@ unsigned __int64 AsyncOp::GetResultSize()
     Device* dev = mDevice;
     if (dev->mIsVirtual)
         dev = GetFsManager()->mpDefaultDevice;
-    dev->Wait(this, (const unsigned int*)0x014f6584);
+    dev->Wait(this, (const unsigned int*)g_14f6584);
     return mTotalBytes;
 }
 

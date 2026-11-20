@@ -2,6 +2,10 @@
 // Object file: SPBake/_at_004c0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f05a8[];
+
 #include "game/types.h"
 #include "SP/cSPEditorBlock.h"
 #include "SP/cSPEditorModel.h"
@@ -807,11 +811,11 @@ struct RectVec {
 struct RefBase {
     void* mVtbl;                      // +0x00
     Cnt cnt;                          // +0x04
-    RefBase() : mVtbl((void*)0x13EF094u) {}
-    ~RefBase() { mVtbl = (void*)0x13EF094u; }
+    RefBase() : mVtbl((void*)g_13ef094) {}
+    ~RefBase() { mVtbl = (void*)g_13ef094; }
 };
 struct SkinVtblBase : RefBase {
-    SkinVtblBase() { mVtbl = (void*)0x13F05A8u; }
+    SkinVtblBase() { mVtbl = (void*)&g_13f05a8; }
 };
 struct SkinObj_s004c_6df0 : SkinVtblBase {
     AutoRef<Res> mResource;           // +0x08
@@ -2022,9 +2026,9 @@ int* __cdecl FUN_004c6b30(int* out, void* first, void* last, void* dst)
 // @ 0x004c6ba0
 void* __fastcall FUN_004c6ba0(char* self, int edx)
 {
-    *(unsigned*)self = 0x13ef094u;
+    *(unsigned*)self = (unsigned)g_13ef094;
     _InterlockedExchange((volatile long*)(self + 4), 0);
-    *(unsigned*)self = 0x13f05a8u;
+    *(unsigned*)self = (unsigned)&g_13f05a8;
     *(int*)(self + 8) = 0;
 
     char t1; char t2; char t3; char t4; char t5; char t6;
@@ -2098,7 +2102,7 @@ SkinObj_s004c_6df0::SkinObj_s004c_6df0(Res* pResource)
 // @ 0x004c72f0
 SkinObj_s004c_6df0::~SkinObj_s004c_6df0()
 {
-    *(void**)this = (void*)0x13F05A8u;
+    *(void**)this = (void*)g_13f05a8;
 }
 #pragma pack(pop)
 

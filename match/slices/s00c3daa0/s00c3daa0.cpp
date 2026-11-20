@@ -2,6 +2,16 @@
 // cSPGameDataUFO destination/init/NPC, cGamePlant ctor/dtor + serialization, and
 // cGameplayMarker / cCommunity helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include  (no /EHsc)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013c3880();
+extern "C" char g_146be68[];
+extern "C" char g_146be89[];
+extern "C" char g_146be9c[];
+extern "C" char g_146c388[];
+extern "C" char g_146c44c[];
+extern "C" char g_146c460[];
+
 #include "types.h"
 #include <math.h>
 #include <stdlib.h>
@@ -230,17 +240,17 @@ void UFO::func3e010(void* s)
     char* self = (char*)this;
     char* q = (char*)s;
     if (*(int*)(self + 0x714) == 0) {
-        ((Fn455d60*)q)->append("== Player UFO ==", (const char*)0x146be9c);
+        ((Fn455d60*)q)->append("== Player UFO ==", (const char*)g_146be9c);
     } else {
-        ((Fn455d60*)q)->append("== NPC UFO ==", (const char*)0x146be89);
+        ((Fn455d60*)q)->append("== NPC UFO ==", (const char*)g_146be89);
     }
-    FUN_005f9450(q, (const char*)0x146be68, (double)*(float*)(self + 0x768));
+    FUN_005f9450(q, (const char*)g_146be68, (double)*(float*)(self + 0x768));
 
     float hp = *(float*)(self + 0x540);
     void* sub = self + 0x508;
     typedef float(__thiscall* GetF)(void*);
     float maxf = ((GetF)(*(void**)(*(char**)sub + 0x58)))(sub);
-    FUN_005f9450(q, (const char*)0x146be54, (double)hp, (double)maxf);
+    FUN_005f9450(q, (const char*)&gF_146be54, (double)hp, (double)maxf);
 
     FUN_00563de0(self + 0x780, q);
 }
@@ -562,7 +572,7 @@ void* __cdecl FUN_00c3ea80()
         g_168e568 = 0;
         g_168e56c = 0;
         g_168e570 = 0;
-        atexit((void(__cdecl*)(void))0x13c3880);
+        atexit((void(__cdecl*)(void))FUN_013c3880);
     }
     return &g_168e568;
 }
@@ -631,9 +641,9 @@ void C3ec40::f()
 {
     char* self = (char*)this;
     char* p34 = self + 0x34;
-    *(int*)(self) = 0x146c460;
-    *(int*)(self + 4) = 0x146c44c;
-    *(int*)(p34) = 0x146c388;
+    *(int*)(self) = (int)g_146c460;
+    *(int*)(self + 4) = (int)g_146c44c;
+    *(int*)(p34) = (int)g_146c388;
 
     void* p;
     p = *(void**)(self + 0x1a4);
