@@ -118,3 +118,4 @@
 ../src/game/SPAudio/AudioSystem.cpp  ??0DrvBA22@@QAE@PAX@Z  00a227a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?Find@RbTree_00a21dc0@@QAEPAXPAPAXPAX@Z  00a21dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?UnregisterKey@Sys_s00a2_90b0@@QAE_NPAX@Z  00a29140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?UnregisterObj@Sys_s00a2_8120@@QAE_NI@Z  00a28d10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

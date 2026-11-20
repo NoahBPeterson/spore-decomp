@@ -3421,13 +3421,17 @@ virtual void c07();
     virtual void c13();
     virtual bool GetId(unsigned hash, unsigned* out);         // slot 14 (+0x38)
 };
-struct HIter_s00a2_8120 { void* node; void** bucket; };
+struct HIter_s00a2_8120 {
+    void* node; void** bucket;
+    HIter_s00a2_8120() {}
+    HIter_s00a2_8120(const HIter_s00a2_8120& x) : node(x.node), bucket(x.bucket) {}
+};
 struct U32Table {
     char     pad0[4];
     void**   mpBuckets;      // +4
     unsigned mnBuckets;      // +8
     void  find(HIter_s00a2_8120* out, const void* key);                  // 0x00645ed0
-    void  erase(HIter_s00a2_8120 it, HIter_s00a2_8120* out);                        // 0x00d2c9f0
+    HIter_s00a2_8120* erase(HIter_s00a2_8120* out, HIter_s00a2_8120 it);    // 0x00d2c9f0 (returns the iterator through out)
 };
 void  T4Find(U32Table* t, HIter_s00a2_8120* out, const void* key);                // 0x00a23ef0
 void  T4Op(U32Table* t, HIter_s00a2_8120* it, const void* key, int tag);          // 0x00a26be0
@@ -7786,10 +7790,11 @@ bool Sys_s00a2_8120::UnregisterObj(unsigned key)
     U32Table* map = &mObjMap;
     HIter_s00a2_8120 it;
     map->find(&it, &key);
-    if (it.node == map->mpBuckets[map->mnBuckets])
-        return false;
-    map->erase(it, &it);
-    return true;
+    if (it.node != map->mpBuckets[map->mnBuckets]) {
+        map->erase(&it, it);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x00a28d70
@@ -7885,7 +7890,7 @@ bool Sys_s00a2_8120::UntrackPlayingKey(Snd_s00a2_8120* obj)
     if (it.node == map->mpBuckets[map->mnBuckets])
         return false;
     UnregisterKey((char*)obj + 4);
-    map->erase(it, &it);
+    map->erase(&it, it);
     if (obj->listNext) {
         if (obj->listPrev) {
             obj->listPrev->listNext = obj->listNext;
