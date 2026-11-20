@@ -16,6 +16,10 @@
 //
 // The struct offsets are the retail ones (checked against the disassembly); the base class carries
 // an opaque byte array so the derived field offsets stay right.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1437ed8[];
+
 #include "types.h"
 #include <stddef.h>
 #include <intrin.h>
@@ -199,7 +203,7 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
 	*(u32*)(self + 0xc4) = 0;          // mColCount
 	*(u32*)(self + 0xc8) = 0;          // mRowIndex
 	*(u32*)(self + 0xcc) = 0;          // mColIndex
-	*(u32*)(self + 0x00) = 0x1437ed8;  // table vtable
+	*(u32*)(self + 0x00) = (int)g_1437ed8;  // table vtable
 
 	*(float*)(self + 0xd0) = 0.0f;     // mRowSpacing
 	*(float*)(self + 0xd4) = 0.0f;     // mColSpacing
