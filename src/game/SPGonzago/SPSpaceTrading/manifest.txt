@@ -24,3 +24,4 @@
 ../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_013a6f80@@YAXXZ  013a6f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_013a72b0@@YAXXZ  013a72b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_0103a480@@YGXPAPAXPAHHM@Z  0103a480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?push_back@cGonzagoTimerVec@@QAEXXZ  0103de00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
