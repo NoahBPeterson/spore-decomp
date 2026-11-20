@@ -438,20 +438,21 @@ hkConvexVerticesShape* hkConvexVerticesShape::f1fe0(const void* a, int numVertic
     return this;
 }
 
+extern "C" char g_13ef094[];   // hkReferencedObject vtable (retail relocates it)
 // @ 0x010c21c0  hkConvexVerticesShape::~hkConvexVerticesShape
 hkConvexVerticesShape::~hkConvexVerticesShape()
 {
     if ((m_planeEquations.m_capacityAndFlags & 0x80000000) == 0)
     {
         hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
-        mem->deallocateChunk(m_planeEquations.m_data, m_planeEquations.getCapacity() << 4, 0x14);
+        mem->deallocateChunk(m_planeEquations.m_data, m_planeEquations.getCapacity() * 16, 0x14);
     }
     if ((m_rotatedVertices.m_capacityAndFlags & 0x80000000) == 0)
     {
         hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
         mem->deallocateChunk(m_rotatedVertices.m_data, m_rotatedVertices.getCapacity() * 0x30, 0x14);
     }
-    *(void**)this = (void*)0x13ef094;
+    *(void**)this = g_13ef094;
 }
 
 struct hkConvexVerticesShapeAssign { void assign(const void* src_); };
