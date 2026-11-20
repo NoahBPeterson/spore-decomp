@@ -131,8 +131,12 @@ into the generator's inputs so they are not lost.
 - Write real, readable C++ that compiles to the original bytes, with the class and member names the headers give you.
   Use members, not byte offsets: `mpOSData = new (mem) Win32Clipboard(this);`, not
   `*(void**)((char*)this + 8) = ...`. If the struct lacks the member, add it to the struct. A pull request that only
-  makes matched code readable this way (no new match) is welcome: say so in its description, and a maintainer adds
-  the `cleanup-approved` label, after which the check only requires that everything still matches.
+  makes matched code readable this way (no new match) is welcome. The check enforces this over the files you change
+  (`tools/ci/offsets.py`; run `python3 tools/ci/offsets.py origin/main HEAD`): a file that already exists may not gain
+  byte offsets (`*(T*)(p + N)`, `((T*)p)[N]`, `(char*)this`), and a new file that has some gets a warning. A pull
+  request that lowers their count and adds none passes without a new match, as a cleanup. For a cleanup the counter
+  cannot see (a rename, a wrong type), say so in the description and a maintainer adds `cleanup-approved`; where there
+  really is no member to name, a maintainer can add `offsets-approved`.
 - A function's note goes in `nonmatching.txt` only when its body is a real decompilation of the whole function. A
   placeholder (`{}`, `{ return a; }`, a stub that skips calls the original makes) goes in `partial.txt`: it needs
   source, not codegen levers. `check.py` prints `STUB:` when it sees one.

@@ -175,13 +175,15 @@ jobs:
         # before must still match.
         env:
           CLEANUP: ${{ contains(github.event.pull_request.labels.*.name, 'cleanup-approved') || github.event_name == 'merge_group' }}
+          BASE: ${{ steps.refs.outputs.base }}
+          HEAD: ${{ steps.refs.outputs.head }}
         run: |
           # pipefail: without it the step takes tee's exit status, and the script's sys.exit(1) never failed a check.
           set -o pipefail
           python3 - "$RUNNER_TEMP/keep.txt" byte-match.json "$RUNNER_TEMP/changed.txt" "$RUNNER_TEMP/keep_where.txt" <<'EOF2' | tee -a "$GITHUB_STEP_SUMMARY"
           import collections, json, os, sys
           sys.path[:0] = ["tools/ci", "tools/matching"]
-          import gate, run_all
+          import gate, run_all, offsets
           keep = {l.split()[0].lower() for l in open(sys.argv[1]) if l.strip()}
           rows = json.load(open(sys.argv[2])) if os.path.exists(sys.argv[2]) else []
           changed = [l.strip() for l in open(sys.argv[3]) if l.strip()]
@@ -251,6 +253,11 @@ jobs:
               pass
           elif changed and all(os.path.basename(p) in ("nonmatching.txt", "partial.txt") for p in changed):
               print("Notes only (nonmatching.txt / partial.txt): no new match needed.")
+          elif offsets.compare(os.environ["BASE"], os.environ["HEAD"])["cleanup"]:
+              o = offsets.compare(os.environ["BASE"], os.environ["HEAD"])
+              print("Cleanup: byte offsets in the changed files go from %d to %d and no file gains any"
+                    " (tools/ci/offsets.py), so no new match is needed; every function that matched before still has to."
+                    % (o["before"], o["after"]))
           elif os.environ.get("CLEANUP") == "true":
               print("Cleanup approved by a maintainer (`cleanup-approved`): no new match needed; every function that")
               print("matched before still has to.")
@@ -343,6 +350,37 @@ jobs:
               head -20 "$RUNNER_TEMP/oss.txt" | sed 's/^/    /'
               echo "A maintainer checks that they compile the published source unchanged and adds the oss-reviewed"
               echo "label (THIRD_PARTY.md)."; } | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      # Readable source names members instead of casting and adding byte offsets (decision 2026-11-20). The code base
+      # still has tens of thousands, so this is a ratchet over the changed files: a file on the base branch may not
+      # gain any (a maintainer's offsets-approved label overrides it), a new file with some gets a warning.
+      - name: No new byte offsets in existing files
+        if: always() && steps.refs.outcome == 'success'
+        env:
+          APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'offsets-approved') || github.event_name == 'merge_group' }}
+        run: |
+          rc=0
+          python3 tools/ci/offsets.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" --json "$RUNNER_TEMP/offsets.json" > "$RUNNER_TEMP/offsets.txt" || rc=$?
+          sed 's/^/    /' "$RUNNER_TEMP/offsets.txt" | tee -a "$GITHUB_STEP_SUMMARY"
+          [ -f "$RUNNER_TEMP/offsets.json" ] && python3 - "$RUNNER_TEMP/offsets.json" <<'EOF2'
+          import json, sys
+          r = json.load(open(sys.argv[1]))
+          for f in r["new_with"]:
+              print("::warning file=%s::%d byte offsets (like *(T*)(p + N) or (char*)this) in a new file: name the members instead (AGENTS.md, Rules)" % (f["path"], f["after"]))
+          EOF2
+          if [ $rc -eq 0 ]; then
+            exit 0
+          elif [ $rc -ne 1 ]; then
+            echo "offsets.py failed (exit $rc)."; exit $rc
+          elif [ "$APPROVED" = "true" ]; then
+            echo "Byte offsets added to existing files, approved by a maintainer (offsets-approved)." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "This pull request adds byte offsets (*(T*)(p + N), ((T*)p)[N], (char*)this) to the files marked MORE above."
+              echo "Name the member instead: add it to the struct (or fix the struct's layout) and write obj->mMember."
+              echo "Run: python3 tools/ci/offsets.py origin/main HEAD. If there really is no member to name, say why in the"
+              echo "pull request and a maintainer may add the offsets-approved label (AGENTS.md, Rules)."; } | tee -a "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
 
