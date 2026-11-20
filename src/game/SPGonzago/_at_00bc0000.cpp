@@ -3937,6 +3937,21 @@ int WE::FUN_00bc7680(int param_2)
     return 0x3fffffff;
 }
 
+struct Quad_s00bc_76d0 { int a, b, c, d; };
+struct RefP_s00bc_76d0 {
+    RefObj* p;
+    RefP_s00bc_76d0& operator=(const RefP_s00bc_76d0& o)
+    {
+        RefObj* n = o.p;
+        RefObj* old = p;
+        if (n != old) {
+            if (n) n->Add();
+            p = n;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
 // @ 0x00bc76d0
 Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc76d0(Rec_s00bc_74d0* param_2)
 {
@@ -3948,24 +3963,9 @@ Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc76d0(Rec_s00bc_74d0* param_2)
     f14 = param_2->f14;
     f18 = param_2->f18;
     f1c = param_2->f1c;
-    void* piVar1 = param_2->p20;
-    void* piVar2 = p20;
-    if (piVar1 != piVar2) {
-        if (piVar1 != 0) ((RefObj*)piVar1)->Add();
-        p20 = piVar1;
-        if (piVar2 != 0) ((RefObj*)piVar2)->Release();
-    }
-    piVar1 = param_2->p24;
-    piVar2 = p24;
-    if (piVar1 != piVar2) {
-        if (piVar1 != 0) ((RefObj*)piVar1)->Add();
-        p24 = piVar1;
-        if (piVar2 != 0) ((RefObj*)piVar2)->Release();
-    }
-    f28 = param_2->f28;
-    f2c = param_2->f2c;
-    f30 = param_2->f30;
-    f34 = param_2->f34;
+    *(RefP_s00bc_76d0*)&p20 = *(const RefP_s00bc_76d0*)&param_2->p20;
+    *(RefP_s00bc_76d0*)&p24 = *(const RefP_s00bc_76d0*)&param_2->p24;
+    *(Quad_s00bc_76d0*)&f28 = *(const Quad_s00bc_76d0*)&param_2->f28;
     return this;
 }
 
