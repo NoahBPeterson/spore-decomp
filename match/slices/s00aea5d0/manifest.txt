@@ -1,1 +1,2 @@
 # no byte-exact functions in this slice (see nonmatching.txt / partial.txt)
+slices/s00aea5d0/s00aea5d0.cpp  ?destroy_hash_buckets@@YGXPAPAUHashNode@@I@Z  00aeb030  /O2 /MD /Gy /EHsc /TP
