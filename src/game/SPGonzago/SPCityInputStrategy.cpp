@@ -154,7 +154,7 @@ struct cCityInputStrategy
     void  FUN_00cf14d0();
     void  FUN_00cf1500(u32 a);
     u32   FUN_00cf1540();
-    u32   FUN_00cf1630(void* a);
+    u32   FUN_00cf1630(void* a, u32 b);
     u32   FUN_00cf16f0(void* a, void* b);
     u32   FUN_00cf17b0(void* a, void* b);
     void  FUN_00cf1810(void* a, u8 b);
@@ -1302,16 +1302,22 @@ u32 __stdcall FUN_00cf15e0(void* param_1, u32 param_2)
     return 0;
 }
 
+struct Vec3C_cf1630 {
+    f32 x, y, z;
+    Vec3C_cf1630() {}
+    Vec3C_cf1630(const Vec3C_cf1630& o) : x(o.x), y(o.y), z(o.z) {}
+};
+
 // @ 0x00cf1630
-u32 cCityInputStrategy::FUN_00cf1630(void* param_1)
+u32 cCityInputStrategy::FUN_00cf1630(void* param_1, u32)
 {
     u32 uVar1 = param_1 ? ((u32 (__thiscall*)(void*, void*))VT(param_1)[0x0c / 4])(param_1, (void*)0x01186577) : 0;
     mpField104 = (void*)uVar1;
     FUN_008d2f30((void*)&gCursorPosB, (void*)&gCursorPosA);
     void* pm = FUN_00b3d240();
-    Vec3 tmp;
-    f32* out = (f32*)((u32* (__thiscall*)(void*, Vec3*, u32, Vec3))VT(pm)[0x38 / 4])(
-        pm, &tmp, 0, *(Vec3*)&gEditorCursor[0]);
+    Vec3C_cf1630 tmp;
+    f32* out = (f32*)((u32* (__thiscall*)(void*, Vec3C_cf1630*, u32, Vec3C_cf1630))VT(pm)[0x38 / 4])(
+        pm, &tmp, 0, *(Vec3C_cf1630*)&gEditorCursor[0]);
     gTmpVecA[0] = ((u32*)out)[0];
     gTmpVecA[1] = ((u32*)out)[1];
     gTmpVecA[2] = ((u32*)out)[2];
