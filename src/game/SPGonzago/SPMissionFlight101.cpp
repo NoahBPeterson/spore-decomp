@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "SP/cHerd.h"
+#include <intrin.h>
 
 namespace SP { class cPlanetRecord; }
 
@@ -562,6 +563,7 @@ cSPMissionFlight101::cSPMissionFlight101()
     mpVftable = &gVtableFlight101;
     mpVftable2 = &gVtableFlight101Unk;
     mpVftable3 = &gVtableFlight101Extra;
+    _ReadWriteBarrier();
     mHerds.mpBegin = nullptr;
     mHerds.mpEnd = nullptr;
     mHerds.mpCapacity = nullptr;
