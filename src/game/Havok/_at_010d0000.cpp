@@ -2230,7 +2230,6 @@ static __forceinline float hkAbsf(float x) { return x < 0.0f ? -x : x; }
 // ---- items of slice s010d7570 end
 
 // ---- items of slice s010d8520 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern const float g_hkBoxBoxRadiusFactor;                       // 0x014a48c8 (1.999f)
 class hkBool_s010d_8520
 {
 public:
@@ -5049,9 +5048,9 @@ hkCollisionAgent_s010d_8520* HK_CALL hkBoxBoxAgent::createBoxBoxAgent(const hkCd
 {
 	const hkConvexShapeView* shapeA = (const hkConvexShapeView*)bodyA.m_shape;
 	const hkConvexShapeView* shapeB = (const hkConvexShapeView*)bodyB.m_shape;
-	float radiusA = shapeA->m_halfExtents.w * g_hkBoxBoxRadiusFactor;
-	if ((radiusA > input.m_tolerance) &&
-	    (shapeB->m_halfExtents.w * g_hkBoxBoxRadiusFactor > input.m_tolerance))
+	float radiusA = shapeA->m_halfExtents.w * 1.999f;
+	if (!(radiusA <= input.m_tolerance) &&
+	    !(shapeB->m_halfExtents.w * 1.999f <= input.m_tolerance))
 	{
 		hkBoxBoxAgent* agent = new hkBoxBoxAgent(mgr);
 		agent->m_manifold.init();
