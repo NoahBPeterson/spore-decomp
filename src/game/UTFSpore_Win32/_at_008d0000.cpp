@@ -560,7 +560,6 @@ namespace ResourceMan {
  struct RBNode_s008d_62f0; 
 }
 }
-void** RbTreeFind(void* pTree, void** ppOut, const void* pKey);          // 0x00a21dc0 (ret 8)
 namespace EA {
 namespace Thread {
 class Mutex_s008d_62f0
@@ -655,6 +654,8 @@ struct RBTree_s008d_62f0
     uint32_t mnCount;     // +0x14
     void*   mpAllocIface; // +0x18 ICoreAllocator*
     uint32_t mnAllocName; // +0x1c
+    struct iterator { RBNode_s008d_62f0* mpNode; };
+    iterator find(const void* pKey);                    // 0x00a21dc0 (thiscall, hidden return)
 };
 }
 }
@@ -1996,24 +1997,23 @@ bool DatabaseDirectoryFiles_s008d_62f0::CloseUnreferencedRecords()
 namespace EA { namespace ResourceMan {
 int DatabaseDirectoryFiles_s008d_62f0::GetRecordCount(const Key_s008d_62f0& key)
 {
-    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
+    mMutex.Lock(g_1436624);
 
-    RBNode_s008d_62f0* pNode = 0;
-    RbTreeFind(&mRecordDataMap, reinterpret_cast<void**>(&pNode), &key);
+    RBNode_s008d_62f0* pNode = mRecordDataMap.find(&key).mpNode;
 
-    if (pNode == Anchor(&mRecordDataMap))
+    if (pNode != Anchor(&mRecordDataMap))
     {
+        ListAnchor* pList = &NodeValue(pNode)->mRecords;
+        int nCount = 0;
+        for (void* p = pList->mpNext; p != pList; p = *reinterpret_cast<void**>(p))
+            ++nCount;
+
         mMutex.Unlock();
-        return 0;
+        return nCount;
     }
 
-    ListAnchor* pList = &NodeValue(pNode)->mRecords;
-    int nCount = 0;
-    for (void* p = pList->mpNext; p != pList; p = *reinterpret_cast<void**>(p))
-        ++nCount;
-
     mMutex.Unlock();
-    return nCount;
+    return 0;
 }
 }}  // namespace EA::ResourceMan
 
@@ -2021,30 +2021,29 @@ int DatabaseDirectoryFiles_s008d_62f0::GetRecordCount(const Key_s008d_62f0& key)
 namespace EA { namespace ResourceMan {
 bool DatabaseDirectoryFiles_s008d_62f0::GetRecordName(const Key_s008d_62f0& key, wchar_t* pName)
 {
-    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
+    mMutex.Lock(g_1436624);
 
-    RBNode_s008d_62f0* pNode = 0;
-    RbTreeFind(&mRecordDataMap, reinterpret_cast<void**>(&pNode), &key);
+    RBNode_s008d_62f0* pNode = mRecordDataMap.find(&key).mpNode;
 
-    if (pNode == Anchor(&mRecordDataMap))
+    if (pNode != Anchor(&mRecordDataMap))
     {
-        mMutex.Unlock();
-        return false;
-    }
-
-    if (pName != 0)
-    {
-        const wchar_t* pSrc = NodeValue(pNode)->mName.mpBegin;
-        wchar_t c;
-        do
+        if (pName != 0)
         {
-            c = *pSrc++;
-            *pName++ = c;
-        } while (c != 0);
+            const wchar_t* pSrc = NodeValue(pNode)->mName.mpBegin;
+            wchar_t c;
+            do
+            {
+                c = *pSrc++;
+                *pName++ = c;
+            } while (c != 0);
+        }
+
+        mMutex.Unlock();
+        return true;
     }
 
     mMutex.Unlock();
-    return true;
+    return false;
 }
 }}  // namespace EA::ResourceMan
 
