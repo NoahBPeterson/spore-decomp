@@ -6,4 +6,3 @@
 00981220  520 OnMouseDown: complete; large function, many stack-temp/vtable-load scheduling differences; difftest WEAK (4.7% coverage)
 00981430  93  OnMouseUp: complete; stack-temp and vptr-load scheduling differ; difftest PASS
 00981500  343 WinScrollbar::OnTick: complete; timer/selection switch matches the disassembly (fast path does double-precision elapsed*scale then SSE arrow multiply); equiv UNSUPPORTED (0/400 valid: fake-arity=399, fault(read)=1)
-00981700  92  SetRefreshFlag: complete; register allocation (this in edi vs esi) and bool-materialisation differ; difftest PASS

@@ -31,6 +31,7 @@ struct XCM {
     void SetRotationAtLeast2(float* face, float v);                    // 0095f5c0
 };
 struct XStopwatch {
+    bool IsRunning() const { return *(const int64_t*)this != 0; }
     void Restart();                                                    // 00571e80
     void Init(int a, int b);                                           // 0093a560
     void SetUnits(int u);                                              // 0093a1a0
@@ -851,17 +852,12 @@ int WinScrollbar::IsActive() {
 
 // @ 0x981700
 void WinScrollbar::SetRefreshFlag(char on) {
-    char old = 0;
-    if (*(int*)((char*)this + 0x248) | *(int*)((char*)this + 0x24c)) old = 1;
     XStopwatch* sw = (XStopwatch*)((char*)this + 0x248);
+    const bool old = sw->IsRunning();
     if (on) sw->Restart();
     else ((XPropList*)sw)->SetBoolProperty();
-    char now = 0;
-    if (*(int*)((char*)this + 0x248) | *(int*)((char*)this + 0x24c)) now = 1;
-    if (old != now) {
-        char active = (char)VSLOT(int(__thiscall*)(void*), this, 0x8c)(this);
-        VSLOT(void(__thiscall*)(void*, int, int), (char*)this + 4, 0x7c)((char*)this + 4, 8, (uint8_t)active);
-    }
+    if (old != sw->IsRunning())
+        SetFlag(8, ((ScrollbarActiveCall*)this)->IsActive());
 }
 
 // @ 0x981770
