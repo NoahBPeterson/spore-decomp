@@ -3,20 +3,20 @@ slices/s011ad110/s011ad110.cpp  _BN_mod_lshift_quick  011ad750  /O2 /MD /Gy /EHs
 slices/s011ad110/s011ad110.cpp  _bn_sqr_words  011adee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s011ad110/s011ad110.cpp  _bn_div_words  011adfd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 # Upstream OpenSSL 0.9.8g byte-exact matches
-slices/s011ad110/oss_bn_asm.cpp  _bn_mul_add_words  011adb60  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_asm.cpp  _bn_mul_words  011add30  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_asm.cpp  _bn_add_words  011ae100  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_asm.cpp  _bn_sub_words  011ae1f0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_div.cpp  _BN_div  011ad110  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_nnmod  011ad520  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_mod_add  011ad570  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_mod_add_quick  011ad5b0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_mod_sub_quick  011ad600  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_mod_mul  011ad640  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_mod_sqr  011ad6c0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_mod.cpp  _BN_mod_lshift1_quick  011ad700  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_rand.cpp  _bnrand  011ad810  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_rand.cpp  _BN_rand  011ad9b0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_rand.cpp  _BN_pseudo_rand  011ad9d0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_rand.cpp  _bn_rand_range  011ada00  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011ad110/oss_bn_rand.cpp  _BN_rand_range  011adb40  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_asm.cpp  _bn_mul_add_words  011adb60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_asm.cpp  _bn_mul_words  011add30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_asm.cpp  _bn_add_words  011ae100  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_asm.cpp  _bn_sub_words  011ae1f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_div.cpp  _BN_div  011ad110  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_nnmod  011ad520  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_mod_add  011ad570  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_mod_add_quick  011ad5b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_mod_sub_quick  011ad600  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_mod_mul  011ad640  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_mod_sqr  011ad6c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_mod.cpp  _BN_mod_lshift1_quick  011ad700  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_rand.cpp  _bnrand  011ad810  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_rand.cpp  _BN_rand  011ad9b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_rand.cpp  _BN_pseudo_rand  011ad9d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_rand.cpp  _bn_rand_range  011ada00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011ad110/oss_bn_rand.cpp  _BN_rand_range  011adb40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

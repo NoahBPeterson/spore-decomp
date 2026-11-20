@@ -4,4 +4,4 @@ slices/s011df670/s011df670.cpp  ?win32_unload@@YAHPAUDSO@@@Z  011dfe40  /O2 /MD 
 slices/s011df670/s011df670.cpp  ?win32_bind_func@@YAPAXPAUDSO@@PBD@Z  011dfee0  /O2 /MD /Gy /TP
 slices/s011df670/s011df670.cpp  ?win32_bind_var@@YAPAXPAUDSO@@PBD@Z  011dffa0  /O2 /MD /Gy /TP
 # Upstream OpenSSL 0.9.8g byte-exact matches
-slices/s011df670/oss_dso_win32.cpp  _win32_joiner  011e0320  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011df670/oss_dso_win32.cpp  _win32_joiner  011e0320  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

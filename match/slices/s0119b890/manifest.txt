@@ -8,10 +8,10 @@ slices/s0119b890/s0119b890.cpp  ?sxnet_v2i@@YAPAUSXNET@@PAUX509V3_EXT_METHOD@@PA
 slices/s0119b890/s0119b890.cpp  ?v2i_EXTENDED_KEY_USAGE@@YAPAXPAUX509V3_EXT_METHOD@@PAUX509V3_CTX@@PAX@Z  0119c890  /O2 /MD /Gy /TP
 slices/s0119b890/s0119b890.cpp  ?v2i_crld@@YAPAXPAUX509V3_EXT_METHOD@@PAUX509V3_CTX@@PAX@Z  0119ca30  /O2 /MD /Gy /TP
 # Upstream OpenSSL 0.9.8g byte-exact matches
-slices/s0119b890/oss_v3_akey.cpp  _i2v_AUTHORITY_KEYID  0119cb60  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s0119b890/oss_v3_crld.cpp  _i2v_crld  0119c950  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s0119b890/oss_v3_enum.cpp  _i2s_ASN1_ENUMERATED_TABLE  0119c7c0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s0119b890/oss_v3_extku.cpp  _i2v_EXTENDED_KEY_USAGE  0119c810  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s0119b890/oss_v3_pcons.cpp  _i2v_POLICY_CONSTRAINTS  0119bf90  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s0119b890/oss_v3_sxnet.cpp  _sxnet_i2r  0119c4a0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s0119b890/oss_v3_sxnet.cpp  _SXNET_get_id_INTEGER  0119c550  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_akey.cpp  _i2v_AUTHORITY_KEYID  0119cb60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_crld.cpp  _i2v_crld  0119c950  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_enum.cpp  _i2s_ASN1_ENUMERATED_TABLE  0119c7c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_extku.cpp  _i2v_EXTENDED_KEY_USAGE  0119c810  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_pcons.cpp  _i2v_POLICY_CONSTRAINTS  0119bf90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_sxnet.cpp  _sxnet_i2r  0119c4a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0119b890/oss_v3_sxnet.cpp  _SXNET_get_id_INTEGER  0119c550  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

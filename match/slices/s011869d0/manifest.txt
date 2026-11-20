@@ -5,12 +5,12 @@ slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_CTX_new@@YAPAHXZ  01187a80  /O2 /
 slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_POOL_get@@YAHH@Z  01187b90  /O2 /MD /Gy /TP
 slices/s011869d0/s011869d0.cpp  ?lib_cblock_BN_STACK_push@@YAXH@Z  01187b00  /O2 /MD /Gy /TP
 # Upstream OpenSSL 0.9.8g byte-exact matches
-slices/s011869d0/oss_bn_blind.cpp  _BN_BLINDING_free  011874e0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_bn_blind.cpp  _BN_BLINDING_set_thread_id  011875b0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_bn_ctx.cpp  _BN_POOL_finish  01187940  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_bn_ctx.cpp  _BN_POOL_release  01187a50  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_bn_ctx.cpp  _BN_CTX_free  01187ad0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_bn_ctx.cpp  _BN_CTX_end  01187b50  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_rsa_eay.cpp  _RSA_eay_mod_exp  01186fc0  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_rsa_eay.cpp  _RSA_eay_init  01187470  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
-slices/s011869d0/oss_rsa_eay.cpp  _RSA_eay_finish  01187480  /O2 /arch:SSE /MD /Gy /TC /Iwork/third_party/build/openssl-0.9.8g-d2110920 /Iwork/third_party/build/openssl-0.9.8g-d2110920/include /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_bn_blind.cpp  _BN_BLINDING_free  011874e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_bn_blind.cpp  _BN_BLINDING_set_thread_id  011875b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_bn_ctx.cpp  _BN_POOL_finish  01187940  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_bn_ctx.cpp  _BN_POOL_release  01187a50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_bn_ctx.cpp  _BN_CTX_free  01187ad0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_bn_ctx.cpp  _BN_CTX_end  01187b50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_rsa_eay.cpp  _RSA_eay_mod_exp  01186fc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_rsa_eay.cpp  _RSA_eay_init  01187470  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011869d0/oss_rsa_eay.cpp  _RSA_eay_finish  01187480  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
