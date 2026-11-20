@@ -130,7 +130,7 @@ int hkBufferedStreamReader::skip(int nbytes)
 {
 	int avail = m_end - m_current;
 	int left = nbytes;
-	if (avail < nbytes)
+	if (nbytes > avail)
 	{
 		do
 		{
@@ -138,7 +138,7 @@ int hkBufferedStreamReader::skip(int nbytes)
 			if (refillBuffer() != HK_SUCCESS)
 				return nbytes - left;
 			avail = m_end - m_current;
-		} while (avail < left);
+		} while (left > avail);
 	}
 	m_current += left;
 	return nbytes;
@@ -247,22 +247,24 @@ int hkStreamReader::skip(int nbytes)
 // @ 0x01080950
 int hkBufferedStreamWriter::flushBuffer()
 {
-	if (m_stream == 0)
-		return 0;
-	int n = m_current;
-	int done = 0;
-	if (n > 0)
+	if (m_stream != 0)
 	{
-		do
+		int n = m_current;
+		int done = 0;
+		if (n > 0)
 		{
-			int w = m_stream->write(m_buf + done, n - done);
-			done += w;
-			if (w == 0)
-				return done;
-		} while (done < n);
+			do
+			{
+				int w = m_stream->write(m_buf + done, n - done);
+				done += w;
+				if (w == 0)
+					return done;
+			} while (done < n);
+		}
+		m_current = 0;
+		return done;
 	}
-	m_current = 0;
-	return done;
+	return 0;
 }
 
 // @ 0x010809a0

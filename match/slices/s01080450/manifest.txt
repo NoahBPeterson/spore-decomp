@@ -21,3 +21,5 @@ slices/s01080450/s01080450.cpp  ?isOk3@hkVector4@@QBE?AVhkBool@@XZ  010812b0  /v
 slices/s01080450/s01080450.cpp  ?isOk@hkBufferedStreamReader@@UBE?AVhkBool@@XZ  01080730  /vc71 /O2 /MD /Gy /TP
 slices/s01080450/s01080450.cpp  ?isOk@hkBufferedStreamWriter@@UBE?AVhkBool@@XZ  01080a80  /vc71 /O2 /MD /Gy /TP
 slices/s01080450/s01080450.cpp  ?seek@hkBufferedStreamWriter@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamWriter@@@Z  01080ae0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?flushBuffer@hkBufferedStreamWriter@@QAEHXZ  01080950  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?skip@hkBufferedStreamReader@@UAEHH@Z  010806e0  /vc71 /O2 /MD /Gy /TP
