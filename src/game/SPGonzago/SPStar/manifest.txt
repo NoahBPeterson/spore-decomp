@@ -11,3 +11,4 @@
 ../src/game/SPGonzago/SPStar.cpp  ?IsBinary@Obj48@@QBE_NXZ  00c8b7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?CanHavePlanets@Obj48@@QBE_NXZ  00c8b800  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?c8b520@@YA_NH@Z  00c8b520  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ??0cStar_s00c8_aa60@@QAE@XZ  00c8b640  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

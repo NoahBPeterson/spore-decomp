@@ -20,3 +20,4 @@ slices/s00ad79d0/s00ad79d0.cpp  ?dtor@Sim@@QAEPAXE@Z                 00ad8960  /
 slices/s00ad79d0/s00ad79d0.cpp  _FUN_00ad81b0  00ad81b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ??0EditorRes@@QAE@ABU0@@Z  00ad7ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ?initDefault@CamInfo@@QAEPAU1@PAX@Z  00ad7a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?getLocation@CamInfo@@QAEPAXPAX@Z  00ad7b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast

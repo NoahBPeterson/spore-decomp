@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 007f31e0 0 Sims3::UI::IMEProxy::SetupDefaultFonts - style manager / font setup, skeleton
-007f3320 0 IMEProxy::Shutdown - secondary-object release with tail jump, skeleton
 007f33d0 0 Sims3::UI::IMEComposition::Init - 506-byte window/style setup, skeleton
 007f3750 0 IMEComposition message/font handler - 832 bytes, skeleton
 007f3d20 0 IMECandidateList paint/layout - 880 bytes, skeleton

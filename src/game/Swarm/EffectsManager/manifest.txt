@@ -26,3 +26,6 @@
 ../src/game/Swarm/EffectsManager.cpp  ?CreateWorld@cEffectsManager_s00a6_d020@Swarm@EA@@QAEPAUIWorld@23@II@Z  00a6df30  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/Swarm/EffectsManager.cpp  ?FUN_00a6d480@cEffectsManager_s00a6_d020@Swarm@EA@@QAEXXZ  00a6d480  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/Swarm/EffectsManager.cpp  ?DoUpdate@cEffectsManager@@QAEXII@Z  00a6c8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?ForEachRegA@Ctx@@QAEXI@Z  00a69310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?ForEachRegB@Ctx@@QAEXI@Z  00a69380  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Swarm/EffectsManager.cpp  ?FUN_00a6e3e0@cEffectsManager_s00a6_dfc0@Swarm@EA@@QAEXPAUVecBase@23@PAX@Z  00a6e3e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

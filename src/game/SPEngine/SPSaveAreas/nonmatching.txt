@@ -1,5 +1,4 @@
 # Complete (all paths present) but not byte-exact.
-006b1ef0 81 AutoRefCount pair operator=; register allocation (o in ebp/ebx vs edi) differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b2000 113 keyed save-area lookup; prologue schedule of the find args differs (esi saved later) flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b2090 103 keyed save-area lookup; same find-arg scheduling difference as 006b2000 flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b27f0 500 CreateHTTPServer complete; original keeps new-expression temp in the dead param slot and EH smart-ptr states, register alloc differs

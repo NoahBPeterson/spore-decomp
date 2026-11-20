@@ -388,7 +388,7 @@ struct cGameNounManager_s00d1_5440 {
 Obj*  __cdecl SP_PlanetModel();                       // 0x00b3d350
 Obj*  __cdecl SP_PropertyManager();                   // 0x0067de30
 Obj*  __cdecl SP_GetGameTerrainCursor();              // 0x00b30d70
-cGameNounManager_s00d1_5440* __cdecl SP_NounManager(void* pNoun); // 0x00b3d300
+cGameNounManager_s00d1_5440* __cdecl SP_NounManager();            // 0x00b3d300
 void* __cdecl FUN_00d1bf00();                         // 0x00d1bf00  GetEditSelection
 u32   __cdecl EA_Hash_FNV1_String16(const wchar_t* p, u32 seed, int flag); // 0x00932f30
 void  __cdecl EA_Messaging_RemoveHandler(void*, void*, void*, void*, void*); // 0x00571db0
@@ -2549,8 +2549,7 @@ void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15550()
     }
 
     if (mpNoun != 0) {
-        cGameNounManager_s00d1_5440* m = SP_NounManager(mpNoun);
-        m->RemoveNoun((Obj*)mpNoun);
+        SP_NounManager()->RemoveNoun((Obj*)mpNoun);
         mpNoun = 0;
     }
 
@@ -2705,13 +2704,14 @@ void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15980(void* a1, void* pObj)
     if (q != 0) {
         void* id = ((Fn_p_pi)VTSLOT(q, 0xc))(q, (int)0x01186577);
         if (id == mpField4C) {
+            _ReadWriteBarrier();
             Obj* f = (Obj*)mpField4C;
             if (f != 0) {
                 mpField4C = 0;
                 ((Fn_v_p)VTSLOT(f, 0xc0))(f);
             }
         }
-        SP_NounManager(q)->RemoveNoun(q);
+        SP_NounManager()->RemoveNoun(q);
         FUN_00ba1280();
     }
 }

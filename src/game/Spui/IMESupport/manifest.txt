@@ -11,3 +11,5 @@
 ../src/game/Spui/IMESupport.cpp  ??0WideFixedBuf@@QAE@PBG@Z  007f48d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/IMESupport.cpp  ?CalculateTextSize@@YA?AUVector2_s007f3b00@@HHHPAX@Z  007f3b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/IMESupport.cpp  ?Dtor@IMECompositionS@@QAEXXZ  007f45b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?Shutdown@IMEProxy@@QAEXXZ  007f3320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/IMESupport.cpp  ?SetWindowColors@IMECompColors@@QAEXXZ  007f3a90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

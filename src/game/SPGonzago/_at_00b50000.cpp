@@ -862,7 +862,7 @@ struct CmdLink {
     void*   mpField8;           // +0x08
 };
 struct CmdChain { void Unlink(); };                 // 0x00b4d770 (thiscall)
-struct CmdTail  { void Run(); };                    // 0x00b545b0 (thiscall)
+struct CmdTail  { void Run(int key); };             // 0x00b545b0 (thiscall, this unused)
 struct __declspec(align(16)) Build830 { uint32_t b[0x84 / 4]; void* Build(int a, int b2); }; // 0x00b4f830 (thiscall)
 struct ReqRec {                       // &local_110
     void*    mpA;                     // +0x00  (= uVar1)
@@ -3103,20 +3103,20 @@ void FUN_00b54b80(void)
     }
 }
 
+extern "C" char g_1569c98[];
 // @ 0x00b54be0
 int* __cdecl FUN_00b54be0(int* param_1, int param_2)
 {
     Build830 scratch;
-    uint32_t flag = 0;
+    struct { bool b; } tag;
     void* u = scratch.Build(param_2, param_2);
-    ((TblA*)0x1569c98)->DoInsertValue(param_1, u, flag);
+    tag.b = false;
+    ((TblA*)g_1569c98)->DoInsertValue(param_1, u, *(int*)&tag);
     CmdNode* node = (CmdNode*)*param_1;
     ((CmdLink*)node->mpBack)->mpField8 = &node->m10;
     void* o = FUN_00b3d310();
-    if (((char*)o)[0x25] != 0) {
-        void* o2 = FUN_00b3d310(param_2);
-        ((CmdTail*)o2)->Run();
-    }
+    if (((char*)o)[0x25] != 0)
+        ((CmdTail*)FUN_00b3d310())->Run(param_2);
     return param_1;
 }
 

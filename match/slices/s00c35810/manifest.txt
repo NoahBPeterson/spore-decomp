@@ -15,3 +15,4 @@ slices/s00c35810/s00c35810.cpp  ?CastTo@cGameBundleGroundContainer@@QAEPAXI@Z  0
 slices/s00c35810/s00c35810.cpp  ?Init@cGameBundleGroundContainer@@QAEXI@Z  00c365a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00c35810/s00c35810.cpp  ?FUN_00c365e0@@YGPAXPAX0@Z  00c365e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00c35810/s00c35810.cpp  ?Dtor2c@cGameBundleGroundContainer@@QAEXXZ  00c36690  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00c35810/s00c35810.cpp  ?Read@cGameBundleGroundContainer@@QAE_NPAX@Z  00c36740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

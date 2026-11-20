@@ -182,22 +182,12 @@ void* FUN_006be730(uint32** a, uint32** b, uint32** c)
 // @ 0x006be7c0
 void FUN_006be7c0(uint32* a, int first, int last, uint32 value)
 {
-    if (last <= first) {
-        a[last] = value;
-        return;
-    }
-    for (;;) {
-        int parent = (last - 1) >> 1;
-        uint32 pv = a[parent];
-        if (*(uint32*)(value + 0x14) < *(uint32*)(pv + 0x14))
-            break;
-        if (*(uint32*)(value + 0x14) <= *(uint32*)(pv + 0x14) &&
-            *(uint32*)(value + 0x10) <= *(uint32*)(pv + 0x10))
-            break;
-        a[last] = pv;
+    // eastl::promote_heap ordered by the 64-bit offset at +0x10
+    for (int parent = (last - 1) >> 1;
+         (last > first) && (*(uint64*)(a[parent] + 0x10) < *(uint64*)(value + 0x10));
+         parent = (last - 1) >> 1) {
+        a[last] = a[parent];
         last = parent;
-        if (parent <= first)
-            break;
     }
     a[last] = value;
 }

@@ -666,23 +666,25 @@ void cCityMusicNoteEditor::Destroy()
 {
   mpVtbl_00 = vtEditorMain;
   mpVtblRefCount_04 = vtEditorRefCount;
-  for (s32 i = 2; i >= 0; --i) {
-    cNoteVec& row = mNoteLayouts_18[i];
-    RefElem* end = row.mpEnd_04;
-    RefElem* elem = row.mpBegin_00;
+  cNoteVec* pRow = &mNoteLayouts_18[3];
+  s32 i = 2;
+  do {
+    --pRow;
+    RefElem* end = pRow->mpEnd_04;
+    RefElem* elem = pRow->mpBegin_00;
     for (; elem < end; ++elem) {
       if (elem->mpObject)
         elem->mpObject->Release();
     }
-    if (row.mpBegin_00)
-      operator_delete_array(row.mpBegin_00);
-  }
+    if (pRow->mpBegin_00)
+      operator_delete_array(pRow->mpBegin_00);
+  } while (--i >= 0);
   if (mpLayout_14)
     mpLayout_14->Release();
   if (mpMusic_10)
     mpMusic_10->Release();
-  mpVtbl_00 = vtEditorBase;
   mpVtblRefCount_04 = vtRefCountBase;
+  mpVtbl_00 = vtEditorBase;
 }
 
 // @ 0x00ea3b50

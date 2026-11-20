@@ -415,9 +415,9 @@ struct hkWorldCallbackUtil
     static void firePostSimulationCallback(hkWorld* world, const hkStepInfo* stepInfo);   // 0x0109f5a0
 };
 
-void FUN_0109bda0(hkDispatchable** p);                // 0x0109bda0
-void FUN_0109c240(hkDispatchable** p);                // 0x0109c240
-void FUN_0109c2a0(hkDispatchable** p);                // 0x0109c2a0
+void __stdcall FUN_0109bda0(hkDispatchable** p);                // 0x0109bda0
+void __stdcall FUN_0109c240(hkDispatchable** p);                // 0x0109c240
+void __stdcall FUN_0109c2a0(hkDispatchable** p);                // 0x0109c2a0
 
 // @ 0x0109b490
 void hkWorldOperationQueue::executeAllPending()
@@ -660,7 +660,7 @@ void hkWorldOperationQueue::executeAllPending()
 }
 
 // @ 0x0109BDA0
-void FUN_0109bda0(hkDispatchable** p)
+void __stdcall FUN_0109bda0(hkDispatchable** p)
 {
     if (p[0]->m_type == 2)
     {
@@ -673,7 +673,7 @@ void FUN_0109bda0(hkDispatchable** p)
 }
 
 // @ 0x0109C240
-void FUN_0109c240(hkDispatchable** p)
+void __stdcall FUN_0109c240(hkDispatchable** p)
 {
     if (p[0]->m_type == 2)
     {
@@ -688,16 +688,18 @@ void FUN_0109c240(hkDispatchable** p)
 }
 
 // @ 0x0109C2A0
-void FUN_0109c2a0(hkDispatchable** p)
+void __stdcall FUN_0109c2a0(hkDispatchable** p)
 {
+    if (p[0]->m_type == 3 && p[1]->m_type == p[0]->m_type)
+        return;
     if (p[0]->m_type == 3)
     {
-        if (p[1]->m_type == 3)
-            return;
-        dispatchTarget(p[0])->dispatch(dispatchArg(p[1]));
+        void* arg = dispatchArg(p[1]);
+        dispatchTarget(p[0])->dispatch(arg);
     }
-    if (p[1]->m_type == 3)
-        dispatchTarget(p[1])->dispatch(dispatchArg(p[0]));
+    if (p[1]->m_type != 3)
+        return;
+    return dispatchTarget(p[1])->dispatch(dispatchArg(p[0]));
 }
 
 // @ 0x0109C310

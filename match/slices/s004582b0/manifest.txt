@@ -5,3 +5,4 @@ slices/s004582b0/s004582b0.cpp  FUN_00458e00  00458e00  /Od /Ob1 /MD /Gy /TP /ar
 slices/s004582b0/s004582b0.cpp  FUN_00458eb0  00458eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s004582b0/s004582b0.cpp  ?PreloadLayout@SPUIHelpers@@YA_NI@Z  00458c60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s004582b0/s004582b0.cpp  ?FUN_00458d80@@YAXXZ  00458d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004582b0/s004582b0.cpp  ?InitLayoutWidget@Budget2@@QAEPAXXZ  00458c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

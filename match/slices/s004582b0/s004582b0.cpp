@@ -102,8 +102,9 @@ extern void FUN_00422c80();
 void* Budget2::InitLayoutWidget() {
     int* p = (int*)((char*)this + 0x14);
     char local[4];
+    int r;
     ((Fn_00422c80)FUN_00422c80)(this, local);
-    ((int*)this)[1] = (int)p;
+    ((int*)this)[1] = (int)((char*)this + 0x14);
     ((int*)this)[0] = ((int*)this)[1];
     ((int*)this)[2] = ((int*)this)[0] + 0x20;
     *(unsigned short*)((int*)((int*)this)[0]) = 0;

@@ -4,8 +4,6 @@
 0050f7f0 101 UninitCopy20: complete uninitialized_copy with out-param; frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 0050f8b0 77 UninitRelocate12: complete copy + discard-sources; frame/slot layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0050f950 165 QuickSortCmp (Keyed pointer array, custom compare): complete recursive quick sort; frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0050fa10 82 InsertionSortCmp: complete bounded insertion sort; slot layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0050fb30 80 InsertionSortSimpleCmp: complete simple insertion sort; slot layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0050fc30 765 Vec100::DoInsertValues: complete (grow + in-place paths); frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005100c0 243 QuickSortU32: complete default quick sort; frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00510350 835 Vec12I::insert(position, first, last): complete range insert (grow + in-place); frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -4,6 +4,7 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb384[];
+extern "C" char g_13eb394[];
 extern "C" char g_13ec458[];
 extern "C" char g_140e374[];
 extern "C" char g_140e384[];
@@ -147,6 +148,10 @@ extern "C" long _InterlockedIncrement(volatile long* Addend);
 extern "C" const float g_kBytesToMB;           // 0x0140e4b0 = 9.536743e-07f
 #pragma intrinsic(_InterlockedExchangeAdd)
 #pragma intrinsic(_InterlockedIncrement)
+extern "C" long _InterlockedDecrement(volatile long* Addend);
+#pragma intrinsic(_InterlockedDecrement)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 inline void* operator new(unsigned int, void* p) { return p; }
 struct PageRecord {
     int a[7];             // +0x00
@@ -231,10 +236,14 @@ struct Rec3c {
     void* mTexture;   // +0x38
     void  DestroyOne();
 };
+struct RecVec {
+    Rec3c* mBegin;    // +0x00
+    Rec3c* mEnd;      // +0x04
+    void DestroyValues(Rec3c* first, Rec3c* last);
+};
 struct SomeObj3 {
     char pad[0x18];
-    Rec3c* mBegin;    // +0x18
-    Rec3c* mEnd;      // +0x1c
+    RecVec mRecs;     // +0x18
     void Destroy();
 };
 struct PageRecVec {                       // +0x00 (vector<PageRecord>)
@@ -864,9 +873,9 @@ void Rec3c::DestroyOne()
     if (mTexture) {
         // AutoRefCount release: atomic decrement at +8, restore when it would drop below 1.
         volatile long* rc = (volatile long*)((char*)mTexture + 8);
-        _InterlockedExchangeAdd(rc, -1);
+        _InterlockedDecrement(rc);
         if (_InterlockedExchangeAdd(rc, 0) < 1)
-            _InterlockedIncrement(rc);
+            _InterlockedExchangeAdd(rc, 1);
         else
             _InterlockedExchangeAdd(rc, 0);
     }
@@ -881,17 +890,18 @@ void Rec3c::DestroyOne()
 // @ 0x0076e320
 Rec3c* __cdecl DestroyRecRange(Rec3c* first, Rec3c* last, Rec3c* out)
 {
-    if (first == last) return out;
-    do {
-        first->DestroyOne();
-        ++first;
-        ++out;
-    } while (first != last);
+    if (first != last) {
+        do {
+            first->DestroyOne();
+            ++first;
+            ++out;
+        } while (first != last);
+    }
     return out;
 }
 
 // @ 0x0076e3b0
-void __stdcall DestroyRecArray(Rec3c* first, Rec3c* last)
+void RecVec::DestroyValues(Rec3c* first, Rec3c* last)
 {
     for (; first < last; ++first)
         first->DestroyOne();
@@ -909,14 +919,16 @@ void __stdcall FreeElemArray(VecElem* first, VecElem* last)
 // @ 0x0076e5c0
 void SomeObj3::Destroy()
 {
-    *(void**)this = (void*)0x140e398;
-    *(void**)((char*)this + 4) = (void*)0x140e384;
-    *(void**)((char*)this + 8) = (void*)0x140e374;
-    DestroyRecArray(mBegin, mEnd);
-    if (mBegin && *(int*)((char*)mBegin - 4) != 0)
-        EASTL_allocator_deallocate(mBegin);
-    *(void**)((char*)this + 8) = (void*)0x13ec458;
-    *(void**)((char*)this + 4) = (void*)0x13eb394;
+    RecVec& recs = mRecs;
+    *(void**)this = (void*)g_140e398;
+    *(void**)((char*)this + 4) = (void*)g_140e384;
+    *(void**)((char*)this + 8) = (void*)g_140e374;
+    _ReadWriteBarrier();
+    recs.DestroyValues(recs.mBegin, recs.mEnd);
+    if (recs.mBegin && *(int*)((char*)recs.mBegin - 4) != 0)
+        EASTL_allocator_deallocate(recs.mBegin);
+    *(void**)((char*)this + 8) = (void*)g_13ec458;
+    *(void**)((char*)this + 4) = (void*)g_13eb394;
 }
 
 // @ 0x0076e610

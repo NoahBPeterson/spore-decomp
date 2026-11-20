@@ -59,6 +59,10 @@ struct CalleeVec {
 struct AllocObj {
     void FUN_00c8b640();                                        // 0x00c8b640
 };
+struct cStar_s00c8_aa60 {
+    cStar_s00c8_aa60();                                         // 0x00c8b640 (Simulator::cStar::cStar)
+};
+inline void* operator new(size_t, void* p) throw() { return p; }
 #define SUB(o, off) ((CalleeVec*)((u8*)(o) + (off)))
 
 // ---- vtable helpers (thiscall dispatch through a member pointer) ----------
@@ -653,21 +657,16 @@ void Manager::FUN_00bac620(int nType)
 // @ 0x00bac7d0
 void* Manager::FUN_00bac7d0()
 {
-    void* pObj = EAAlloc(0x50, "Simulator/cStar", 0, 0, 0, 0);
-    if (pObj)
-        ((AllocObj*)pObj)->FUN_00c8b640();
-    else
-        pObj = 0;
+    void* pObj = new (EAAlloc(0x50, "Simulator/cStar", 0, 0, 0, 0)) cStar_s00c8_aa60;
 
     u8* pVec = (u8*)this + 0x3c;
-    void** pEnd = *(void***)(pVec + 4);
+    void** __restrict pEnd = *(void***)(pVec + 4);
     if (pEnd < *(void***)(pVec + 8)) {
         *(void***)(pVec + 4) = pEnd + 1;
         if (pEnd)
             *pEnd = pObj;
     } else {
-        void* tmp = pObj;
-        SUB(pVec, 0)->FUN_00b96600(pEnd, &tmp);
+        SUB(pVec, 0)->FUN_00b96600(pEnd, &pObj);
     }
     return pObj;
 }

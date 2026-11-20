@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/SPPlanetaryArtifact.cpp  ?FUN_00c74ba0@cPlanetaryArtifact@@QAEXXZ  00c74ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetaryArtifact.cpp  ?FUN_00c74c20@cPlanetaryArtifact@@QAEXMHHHH@Z  00c74c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetaryArtifact.cpp  ?FUN_00c74ca0@cPlanetaryArtifact@@QAE_NXZ  00c74ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetaryArtifact.cpp  ?FUN_00c74a50@cPlanetaryArtifact@@QAEPAXXZ  00c74a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -205,6 +205,7 @@ extern RegRec24 g_RegA[32];        // 0x01675a00
 struct Ctx {
     int  DispatchLookup(uint32_t key, uint32_t* out, int count);   // 0x00a691c0
     void ForEachRegA(uint32_t arg);                                // 0x00a69310
+    RefVecSlot* Slots() { return *(RefVecSlot**)((char*)this + 0x20); }
     void ForEachRegB(uint32_t arg);                                // 0x00a69380
     bool Serialize(void* stream);                                  // 0x00a69630
 };
@@ -586,12 +587,30 @@ struct UIntVec {
 }
 namespace EA {
 namespace Swarm {
+CopyRec* FUN_00a6d8c0(CopyRec* first, CopyRec* last, CopyRec* dest);   // 0x00a6d8c0
+struct VecBase;
+struct IEffectCollection {                         // collection held in cEffectsManager +0x2c
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void OnClear(VecBase* vec, void* b);   // +0x40
+};
 struct VecBase {
     char*  mpBegin;         // +0x00
     char*  mpEnd;           // +0x04
     char*  mpCapacity;      // +0x08
     char*  Append(void* first, void* last);          // 0xa6d8c0
     void   FixTail(char* p);                         // 0x7e2be0
+    void   DestroyRange(CopyRec* first, CopyRec* last);  // 0x7e2be0
+    void   clear()                                   // eastl erase(begin(), end())
+    {
+        CopyRec* first = (CopyRec*)mpBegin;
+        CopyRec* last = (CopyRec*)mpEnd;
+        CopyRec* newEnd = FUN_00a6d8c0(last, (CopyRec*)mpEnd, first);
+        DestroyRange(newEnd, (CopyRec*)mpEnd);
+        mpEnd = (char*)((CopyRec*)mpEnd - (last - first));
+    }
 };
 }
 }
@@ -628,47 +647,27 @@ class cEffectsManager_s00a6_dfc0 { public:
 // @ 0x00a69310
 void Ctx::ForEachRegA(uint32_t arg)
 {
-    char* self = (char*)this;
-    int k = 0;
-    RegRec24* rec = g_RegA;
-    do {
-        if (rec->pf0 != 0) {
-            RefVecSlot* slot = (RefVecSlot*)(*(char**)(self + 0x20) + k);
-            int n = (int)(slot->mpEnd - slot->mpBegin);
-            int i = 0;
-            if (n > 0) {
-                do {
-                    ((void(__cdecl*)(RefObject*, uint32_t))rec->pf0)(slot->mpBegin[i], arg);
-                    ++i;
-                } while (i < n);
-            }
+    for (int t = 0; t < 32; ++t) {
+        if (g_RegA[t].pf0 != 0) {
+            RefVecSlot& slot = Slots()[t];
+            int n = (int)(slot.mpEnd - slot.mpBegin);
+            for (int i = 0; i < n; ++i)
+                ((void(__cdecl*)(RefObject*, uint32_t))g_RegA[t].pf0)(Slots()[t].mpBegin[i], arg);
         }
-        ++rec;
-        k += 0x14;
-    } while (rec < (RegRec24*)0x01675e80);
+    }
 }
 
 // @ 0x00a69380
 void Ctx::ForEachRegB(uint32_t arg)
 {
-    char* self = (char*)this;
-    int k = 0;
-    RegRec24* rec = g_RegA;
-    do {
-        if (rec->pf4 != 0) {
-            RefVecSlot* slot = (RefVecSlot*)(*(char**)(self + 0x20) + k);
-            int n = (int)(slot->mpEnd - slot->mpBegin);
-            int i = 0;
-            if (n > 0) {
-                do {
-                    ((void(__cdecl*)(RefObject*, uint32_t))rec->pf4)(slot->mpBegin[i], arg);
-                    ++i;
-                } while (i < n);
-            }
+    for (int t = 0; t < 32; ++t) {
+        if (g_RegA[t].pf4 != 0) {
+            RefVecSlot& slot = Slots()[t];
+            int n = (int)(slot.mpEnd - slot.mpBegin);
+            for (int i = 0; i < n; ++i)
+                ((void(__cdecl*)(RefObject*, uint32_t))g_RegA[t].pf4)(Slots()[t].mpBegin[i], arg);
         }
-        ++rec;
-        k += 0x14;
-    } while (rec < (RegRec24*)0x01675e84);
+    }
 }
 
 // @ 0x00a6c8f0
@@ -1793,17 +1792,12 @@ namespace EA { namespace Swarm {
 void cEffectsManager_s00a6_dfc0::FUN_00a6e3e0(VecBase* vec, void* b)
 {
     char* ebx = (char*)this;
-    char* ebp = vec->mpBegin;
-    char* esi = vec->mpEnd;
-    char* r = vec->Append(esi, ebp);
-    vec->FixTail(r);
-    int d = (int)(esi - ebp);
-    vec->mpEnd += (d / 12) * 0x24;
+    vec->clear();
     int n = (*(int*)(ebx + 0x30) - *(int*)(ebx + 0x2c)) >> 2;
     for (int i = 0; i < n; ++i) {
-        char* c = *(char**)(*(int*)(ebx + 0x2c) + i * 4);
+        IEffectCollection* c = *(IEffectCollection**)(*(int*)(ebx + 0x2c) + i * 4);
         if (c != 0)
-            (*(void(__thiscall**)(void*, void*, void*))(*((char**)*(char**)c) + 0x40))(c, (void*)vec, b);
+            c->OnClear(vec, b);
     }
 }
 }}  // namespace EA::Swarm

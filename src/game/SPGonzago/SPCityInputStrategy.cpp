@@ -154,7 +154,7 @@ struct cCityInputStrategy
     void  FUN_00cf14d0();
     void  FUN_00cf1500(u32 a);
     u32   FUN_00cf1540();
-    u32   FUN_00cf1630(void* a);
+    u32   FUN_00cf1630(void* a, u32 b);
     u32   FUN_00cf16f0(void* a, void* b);
     u32   FUN_00cf17b0(void* a, void* b);
     void  FUN_00cf1810(void* a, u8 b);
@@ -1201,6 +1201,8 @@ void __cdecl FUN_00cf1380(void** param_1, i32 param_2, i32 param_3, void* param_
         Release(param_4);
 }
 
+struct Obj80_cf1440 { void FUN_00d12fc0(); };   // 0x00d12fc0 (thiscall)
+
 // @ 0x00cf1440
 void cCityInputStrategy::FUN_00cf1440()
 {
@@ -1208,7 +1210,7 @@ void cCityInputStrategy::FUN_00cf1440()
     ((void (__thiscall*)(void*, void*))VT(mgr)[0x40 / 4])(mgr, mFielde4);
     if (mpField80)
     {
-        FUN_00d12fc0();
+        ((Obj80_cf1440*)mpField80)->FUN_00d12fc0();
         void* p = mpField80;
         if (p)
         {
@@ -1261,13 +1263,15 @@ u32 cCityInputStrategy::FUN_00cf1540()
 }
 
 // @ 0x00cf1560
+struct BoolArg_cf1560 { bool b; };
 u32 __stdcall FUN_00cf1560(void* param_1, u32 param_2)
 {
-    volatile bool uVar3 = 0;
+    BoolArg_cf1560 uVar3;
+    uVar3.b = false;
     switch (param_2)
     {
     case 0:
-        uVar3 = 1;
+        uVar3.b = true;
         break;
     case 1:
         MOPS(FUN_00b30d70())->FUN_00b2fba0(2);
@@ -1283,7 +1287,7 @@ u32 __stdcall FUN_00cf1560(void* param_1, u32 param_2)
     }
     u32 uVar1 = param_1 ? ((u32 (__thiscall*)(void*, void*))VT(param_1)[0x0c / 4])(param_1, (void*)0x01186577) : 0;
     void* cur = FUN_00b30d70();
-    ((void (__thiscall*)(void*, u32, u32))VT(cur)[0xa0 / 4])(cur, uVar3, uVar1);
+    ((void (__thiscall*)(void*, BoolArg_cf1560, u32))VT(cur)[0xa0 / 4])(cur, uVar3, uVar1);
     return 0;
 }
 
@@ -1300,16 +1304,22 @@ u32 __stdcall FUN_00cf15e0(void* param_1, u32 param_2)
     return 0;
 }
 
+struct Vec3C_cf1630 {
+    f32 x, y, z;
+    Vec3C_cf1630() {}
+    Vec3C_cf1630(const Vec3C_cf1630& o) : x(o.x), y(o.y), z(o.z) {}
+};
+
 // @ 0x00cf1630
-u32 cCityInputStrategy::FUN_00cf1630(void* param_1)
+u32 cCityInputStrategy::FUN_00cf1630(void* param_1, u32)
 {
     u32 uVar1 = param_1 ? ((u32 (__thiscall*)(void*, void*))VT(param_1)[0x0c / 4])(param_1, (void*)0x01186577) : 0;
     mpField104 = (void*)uVar1;
     FUN_008d2f30((void*)&gCursorPosB, (void*)&gCursorPosA);
     void* pm = FUN_00b3d240();
-    Vec3 tmp;
-    f32* out = (f32*)((u32* (__thiscall*)(void*, Vec3*, u32, Vec3))VT(pm)[0x38 / 4])(
-        pm, &tmp, 0, *(Vec3*)&gEditorCursor[0]);
+    Vec3C_cf1630 tmp;
+    f32* out = (f32*)((u32* (__thiscall*)(void*, Vec3C_cf1630*, u32, Vec3C_cf1630))VT(pm)[0x38 / 4])(
+        pm, &tmp, 0, *(Vec3C_cf1630*)&gEditorCursor[0]);
     gTmpVecA[0] = ((u32*)out)[0];
     gTmpVecA[1] = ((u32*)out)[1];
     gTmpVecA[2] = ((u32*)out)[2];

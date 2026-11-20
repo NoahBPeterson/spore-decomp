@@ -451,22 +451,23 @@ char cTerrainTool::OnPointer(float x, float y, int pressed)
 
     return pressed != 0;
 }
+struct Property { float* GetFloat(); };                        // 0x0041ea70
+extern "C" char g_1102b20[];
+extern "C" char g_1102b2f[];
 // @ 0x00f4fa20
 void cTerrainTool::ReadFromScript()
 {
-    typedef char (__thiscall *Fn)(void*, int, void**);
+    typedef char (__thiscall *Fn)(void*, uint32_t, Property**);
 
     if (mpScript30c) {
-        int* vt = *(int**)mpScript30c;
-        void* slot;
-        if (((Fn)vt[9])(mpScript30c, 0x1102b20, &slot) && *(short*)((char*)slot + 0x12) == 0xd)
-            mScriptVal310 = *(float*)Sub_41ea70();
+        Property* prop;
+        if (((Fn)(*(int**)mpScript30c)[9])(mpScript30c, (uint32_t)g_1102b20, &prop) && *(short*)((char*)prop + 0x12) == 0xd)
+            mScriptVal310 = *prop->GetFloat();
     }
     if (mpScript30c) {
-        int* vt = *(int**)mpScript30c;
-        void* slot;
-        if (((Fn)vt[9])(mpScript30c, 0x1102b2f, &slot) && *(short*)((char*)slot + 0x12) == 0xd)
-            mScriptVal314 = *(float*)Sub_41ea70();
+        Property* prop;
+        if (((Fn)(*(int**)mpScript30c)[9])(mpScript30c, (uint32_t)g_1102b2f, &prop) && *(short*)((char*)prop + 0x12) == 0xd)
+            mScriptVal314 = *prop->GetFloat();
     }
 }
 

@@ -531,12 +531,16 @@ CmdVig::CmdVig() {
 }
 
 // ===========================================================================
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // @ 0x00ad6320
 // ===========================================================================
 VigInfo* __fastcall FUN_00ad6320(VigInfo* p) {
     char* self = (char*)p;
-    *(void* volatile*)(self + 4) = (void*)&vtbl_RefCountBase;
-    *(int* volatile*)(self + 8) = 0;
+    *(void**)(self + 4) = (void*)&vtbl_RefCountBase;
+    _ReadWriteBarrier();
+    *(int*)(self + 8) = 0;
+    _ReadWriteBarrier();
     *(void**)self = (void*)&vtbl_VigInfo;
     *(void**)(self + 4) = (void*)&vtbl_RefCountV;
     *(int*)(self + 0x14) = 0;

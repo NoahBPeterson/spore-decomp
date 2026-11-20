@@ -106,7 +106,7 @@ int hkBufferedStreamReader::read(void* buf, int nbytes)
 	int cur = m_current;
 	int avail = m_end - cur;
 	int left = nbytes;
-	if (avail < nbytes)
+	if (nbytes > avail)
 	{
 		do
 		{
@@ -118,7 +118,7 @@ int hkBufferedStreamReader::read(void* buf, int nbytes)
 				return nbytes - left;
 			cur = m_current;
 			avail = m_end - cur;
-		} while (avail < left);
+		} while (left > avail);
 	}
 	hkString::memCpy(buf, m_buf + m_current, left);
 	m_current += left;
@@ -130,7 +130,7 @@ int hkBufferedStreamReader::skip(int nbytes)
 {
 	int avail = m_end - m_current;
 	int left = nbytes;
-	if (avail < nbytes)
+	if (nbytes > avail)
 	{
 		do
 		{
@@ -138,7 +138,7 @@ int hkBufferedStreamReader::skip(int nbytes)
 			if (refillBuffer() != HK_SUCCESS)
 				return nbytes - left;
 			avail = m_end - m_current;
-		} while (avail < left);
+		} while (left > avail);
 	}
 	m_current += left;
 	return nbytes;
@@ -233,9 +233,7 @@ int hkStreamReader::skip(int nbytes)
 	int left = nbytes;
 	while (left != 0)
 	{
-		int chunk = 0x200;
-		if (left < 0x201)
-			chunk = left;
+		int chunk = (left > 0x200) ? 0x200 : left;
 		int n = read(scratch, chunk);
 		if (n == 0)
 			break;
@@ -247,22 +245,24 @@ int hkStreamReader::skip(int nbytes)
 // @ 0x01080950
 int hkBufferedStreamWriter::flushBuffer()
 {
-	if (m_stream == 0)
-		return 0;
-	int n = m_current;
-	int done = 0;
-	if (n > 0)
+	if (m_stream != 0)
 	{
-		do
+		int n = m_current;
+		int done = 0;
+		if (n > 0)
 		{
-			int w = m_stream->write(m_buf + done, n - done);
-			done += w;
-			if (w == 0)
-				return done;
-		} while (done < n);
+			do
+			{
+				int w = m_stream->write(m_buf + done, n - done);
+				done += w;
+				if (w == 0)
+					return done;
+			} while (done < n);
+		}
+		m_current = 0;
+		return done;
 	}
-	m_current = 0;
-	return done;
+	return 0;
 }
 
 // @ 0x010809a0
@@ -334,31 +334,26 @@ hkResult hkBufferedStreamWriter::seek(int offset, SeekWhence whence)
 		flushBuffer();
 		return m_stream->seek(offset, whence);
 	}
-	int pos = offset;
-	if (whence != 0)
+	int absOffset = -1;
+	switch (whence)
 	{
-		if (whence == 1)
-		{
-			pos = m_current + offset;
-		}
-		else
-		{
-			pos = -1;
-			if (whence == 2)
-				pos = m_current - offset;
-		}
+		case 0: absOffset = offset; break;
+		case 1: absOffset = m_current + offset; break;
+		case 2: absOffset = m_current - offset; break;
 	}
-	if (pos >= 0)
+	hkResult res = HK_SUCCESS;
+	if (absOffset < 0)
 	{
-		int cap = m_bufSize;
-		int clamped = pos;
-		if (cap < pos)
-			clamped = cap;
-		m_current = clamped;
-		return cap < pos ? HK_FAILURE : HK_SUCCESS;
+		absOffset = 0;
+		res = HK_FAILURE;
 	}
-	m_current = 0;
-	return HK_FAILURE;
+	else if (absOffset > m_bufSize)
+	{
+		absOffset = m_bufSize;
+		res = HK_FAILURE;
+	}
+	m_current = absOffset;
+	return res;
 }
 
 // @ 0x01080b50
@@ -474,7 +469,7 @@ int hkClassMember::getAlignment() const
 		{
 			do
 			{
-				if (align < m_class->getMember(i).getAlignment())
+				if (m_class->getMember(i).getAlignment() > align)
 					align = m_class->getMember(i).getAlignment();
 				i++;
 			} while (i < m_class->getNumMembers());
@@ -634,6 +629,9 @@ hkBool hkVector4::isNormalized3(float epsilon) const
 	return false;
 }
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x01081360
 void hkVector4::setTransformedPos(const hkTransform& t, const hkVector4& p)
 {
@@ -644,6 +642,7 @@ void hkVector4::setTransformedPos(const hkTransform& t, const hkVector4& p)
 	x = ((c * t.m[8] + b * t.m[4]) + a * t.m[0]) + t.m[12];
 	y = ((c * t.m[9] + b * t.m[5]) + a * t.m[1]) + t.m[13];
 	z = ((c * t.m[10] + b * t.m[6]) + a * t.m[2]) + t.m[14];
+	_ReadWriteBarrier();
 	w = 0.0f;
 }
 // --- equivalence checker address annotations

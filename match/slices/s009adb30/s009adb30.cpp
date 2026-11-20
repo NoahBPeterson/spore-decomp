@@ -281,18 +281,20 @@ static void LocalAccum(float* a, int b, float* q, int st)
 // ===========================================================================
 // 0x009ae1c0  ref-count release (ecx = this)
 // ===========================================================================
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x009ae1c0
 int __fastcall FUN_009ae1c0(int* p)
 {
     int local_8[2];
-    int* piVar1 = local_8;
     local_8[0] = p[0x44] + -1;
     local_8[1] = 0;
-    if (p[0x44] - 1 < 1) piVar1 = local_8 + 1;
-    int iVar2 = *piVar1;
+    int iVar2 = *((local_8[0] > 0) ? local_8 : local_8 + 1);
     p[0x44] = iVar2;
-    if (iVar2 < 1) {
+    if (iVar2 <= 0) {
         p[0x44] = 1;
+        _ReadWriteBarrier();
         operator_delete__((void*)*p);
         *p = 0;
         p[1] = 0;

@@ -16,3 +16,5 @@ slices/s00980760/s00980760.cpp  ?IsActive@WinScrollbar@UTFWinControls@EA@@UAEHXZ
 slices/s00980760/s00980760.cpp  ?OnFocusChange@WinScrollbar@UTFWinControls@EA@@QAE_NHPAX@Z  009814c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00980760/s00980760.cpp  ?SetRefresh@WinScrollbar@UTFWinControls@EA@@UAEXD@Z  00981770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00980760/s00980760.cpp  ?SetValue@IWinScrollbar@UTFWinControls@EA@@QAEXHD@Z  009810a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetRefreshFlag@WinScrollbar@UTFWinControls@EA@@UAEXD@Z  00981700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?OnMouseUp@WinScrollbar@UTFWinControls@EA@@QAE_NMMHH@Z  00981430  /O2 /MD /Gy /TP /arch:SSE /fp:fast

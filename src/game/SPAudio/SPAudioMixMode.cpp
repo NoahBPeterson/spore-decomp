@@ -856,14 +856,9 @@ void Prim::Update2(float dt, u32 id)
     float f = tod->FUN_00bc2b30(pos);
     // The comparison result is widened to float through the x87 unit (fild/fabs/compare
     // against 0.0f); an int local plus fabsf is what produces that exact sequence.
-    float diff = this->m38 - f;
-    float limit = dayLen * 0.5f;
-    int near_ = diff < limit;
-    if (fabsf((float)near_) != 0.0f) {
+    int near_ = this->m38 - f < dayLen * 0.5f;
+    if (fabsf((float)near_) != 0.0f)
         SetValueDispatch(this, f);
-        this->m38 = f;
-        return;
-    }
     this->m38 = f;
 }
 

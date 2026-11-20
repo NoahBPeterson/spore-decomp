@@ -31,6 +31,7 @@ struct XCM {
     void SetRotationAtLeast2(float* face, float v);                    // 0095f5c0
 };
 struct XStopwatch {
+    bool IsRunning() const { return *(const int64_t*)this != 0; }
     void Restart();                                                    // 00571e80
     void Init(int a, int b);                                           // 0093a560
     void SetUnits(int u);                                              // 0093a1a0
@@ -198,6 +199,32 @@ class IWinScrollbar { public:
 
 // Call-only retail prefix views: no objects, vtables or RTTI are emitted.
 // This AL view consumes native IsActive's proven int0/1 result; its original return type is unknown.
+struct XWinMgr {                                  // window manager held at WinScrollbar +0x34
+    virtual void wm00();
+    virtual void wm04();
+    virtual void wm08();
+    virtual void wm0c();
+    virtual void wm10();
+    virtual void wm14();
+    virtual void wm18();
+    virtual void wm1c();
+    virtual void wm20();
+    virtual void wm24();
+    virtual void wm28();
+    virtual void wm2c();
+    virtual void wm30();
+    virtual void wm34();
+    virtual void wm38();
+    virtual void wm3c();
+    virtual void wm40();
+    virtual void wm44();
+    virtual void wm48();
+    virtual void wm4c();
+    virtual void wm50();
+    virtual void* GetMouseCapture(int which);     // +0x54
+    virtual void wm58();
+    virtual void ReleaseMouseCapture(int which, struct ScrollbarSecondaryCalls* w);   // +0x5c
+};
 struct ScrollbarActiveCall {
     virtual void active0();
     virtual void active1();
@@ -275,6 +302,9 @@ struct ScrollbarPrimaryCalls {
     virtual int IsActive();
     virtual void SetRefreshFlag(char on);
     virtual void SetRefresh(char on);
+    virtual void primary38();
+    virtual void primary39();
+    virtual char HitTestComponent(float x, float y);                   // +0xa0
 };
 struct ScrollbarSecondaryCalls {
     virtual void secondary0();
@@ -769,16 +799,17 @@ bool WinScrollbar::OnMouseDown(float x, float y, int a3, int button) {
 // @ 0x981430
 bool WinScrollbar::OnMouseUp(float x, float y, int a3, int flags) {
     (void)a3;
-    if (flags & 8) return false;
-    void* iwv = this ? (char*)this + 4 : 0;
-    void* mgr = winMgr;
-    if (VSLOT(void*(__thiscall*)(void*, int), mgr, 0x54)(mgr, 1) == iwv)
-        VSLOT(void(__thiscall*)(void*, int, void*), mgr, 0x5c)(mgr, 1, (char*)this + 4);
-    sb.selComp = 0xff;
-    sb.hlComp = (uint8_t)VSLOT(char(__thiscall*)(void*, float, float), this, 0xa0)(this, x, y);
-    VSLOT(void(__thiscall*)(void*, int), this, 0x90)(this, 0);
-    VSLOT(void(__thiscall*)(void*), (char*)this + 4, 0x90)((char*)this + 4);
-    return true;
+    if ((flags & 8) == 0) {
+        void* iwv = this ? (char*)this + 4 : 0;
+        if (((XWinMgr*)winMgr)->GetMouseCapture(1) == iwv)
+            ((XWinMgr*)winMgr)->ReleaseMouseCapture(1, this);
+        sb.selComp = 0xff;
+        sb.hlComp = (uint8_t)HitTestComponent(x, y);
+        SetRefreshFlag(0);
+        VSLOT(void(__thiscall*)(void*), (char*)this + 4, 0x90)((char*)this + 4);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x9814c0
@@ -851,17 +882,12 @@ int WinScrollbar::IsActive() {
 
 // @ 0x981700
 void WinScrollbar::SetRefreshFlag(char on) {
-    char old = 0;
-    if (*(int*)((char*)this + 0x248) | *(int*)((char*)this + 0x24c)) old = 1;
     XStopwatch* sw = (XStopwatch*)((char*)this + 0x248);
+    const bool old = sw->IsRunning();
     if (on) sw->Restart();
     else ((XPropList*)sw)->SetBoolProperty();
-    char now = 0;
-    if (*(int*)((char*)this + 0x248) | *(int*)((char*)this + 0x24c)) now = 1;
-    if (old != now) {
-        char active = (char)VSLOT(int(__thiscall*)(void*), this, 0x8c)(this);
-        VSLOT(void(__thiscall*)(void*, int, int), (char*)this + 4, 0x7c)((char*)this + 4, 8, (uint8_t)active);
-    }
+    if (old != sw->IsRunning())
+        SetFlag(8, ((ScrollbarActiveCall*)this)->IsActive());
 }
 
 // @ 0x981770

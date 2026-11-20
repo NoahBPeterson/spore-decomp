@@ -370,7 +370,8 @@ hmtxClass* New_hmtxEmptyClass(tsiMemObject* mem, int32 n, int32 n2)
 // @ 0x008cda70
 static hmtxClass* New_hmtxClass(tsiMemObject* mem, InputStream* in, int32 count, int32 count2)
 {
-    int32 n = count < count2 ? count : count2;
+    int32 n = count;
+    if (n > count2) n = count2;
     hmtxClass* h = New_hmtxEmptyClass(mem, count2, n);
     int32 i = 0;
     if (n > 0) {
@@ -378,7 +379,7 @@ static hmtxClass* New_hmtxClass(tsiMemObject* mem, InputStream* in, int32 count,
             h->f10[i] = ReadInt16(in);
             h->f0c[i] = ReadInt16(in);
         }
-        if (i > 0) {
+        if (i >= 1) {
             uint16 last = h->f10[i - 1];
             for (; i < count2; i++) {
                 h->f10[i] = last;

@@ -35,8 +35,16 @@ struct VObj {
     virtual void v6();
     virtual void v7();   // slot 7 (+0x1c)
 };
-struct StreamWrite       { uint32_t Slot18(); };       // vtable slot 6 (0x18)
-struct CastTarget        { StreamWrite* GetStream(); };// vtable slot 8 (0x20)
+struct StreamWrite {                                   // vtable slot 6 (0x18)
+    virtual void s0(); virtual void s1(); virtual void s2();
+    virtual void s3(); virtual void s4(); virtual void s5();
+    virtual uint32_t Slot18();
+};
+struct CastTarget {                                    // vtable slot 8 (0x20)
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+    virtual StreamWrite* GetStream();
+};
 struct SerObj {
     void     Ctor(void* self, void* nameTbl, uint32_t hash);   // 0x692f90
     void     Serialize(uint32_t stream);                       // 0x692900
@@ -336,15 +344,15 @@ bool cGameBundleGroundContainer::Write(void* stream)
 // @ 0x00c36740
 bool cGameBundleGroundContainer::Read(void* stream)
 {
-    uint32_t key = 0;
+    uint32_t key;
     StreamWrite* w = ((CastTarget*)stream)->GetStream();
     uint32_t sink = w->Slot18();
     FUN_0093a780((void*)sink, &key, 1, 0);
     bool r = ((GroundBase*)mSpatial)->ReadObj((uint32_t)stream);
-    uint32_t zero = 0;
     StreamWrite* w2 = ((CastTarget*)stream)->GetStream();
     uint32_t sink2 = w2->Slot18();
-    FUN_0093a780((void*)sink2, &zero, 1, 0);
+    uint32_t end;
+    FUN_0093a780((void*)sink2, &end, 1, 0);
     return r;
 }
 

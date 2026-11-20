@@ -500,12 +500,9 @@ void __fastcall FUN_00ff3df0(Inv* ecx_this)
     void** end = (void**)ecx_this->m60.mEnd;
     for (void** p = (void**)ecx_this->m60.mBegin; p != end; ++p) {
         InvItem* o = (InvItem*)*p;
-        ToolInst* t = 0;
-        if (o != 0) {
-            t = (ToolInst*)((void*(__thiscall*)(void*, u32))((void**)o->mpVtblC)[0xc / 4])(&o->mpVtblC, 0x707459f0);
-            if (t != 0) {
-                ((void(__thiscall*)(void*))(*(void***)t)[0x04 / 4])(t);
-            }
+        ToolInst* t = o ? (ToolInst*)((void*(__thiscall*)(void*, u32))((void**)o->mpVtblC)[0xc / 4])(&o->mpVtblC, 0x707459f0) : 0;
+        if (t != 0) {
+            ((void(__thiscall*)(void*))(*(void***)t)[0x04 / 4])(t);
         }
         if (t->GetCount() > 0) {
             if (t->HasFlag() != 0) {

@@ -437,18 +437,14 @@ unsigned* FillVec::FillInsert(unsigned count, unsigned value)
 // @ 0x006742f0
 EStr* MoveAssignBackward(EStr* first, EStr* last, EStr* dst)
 {
-    if (first != last) {
-        EStr* s = last - 1;
-        EStr* d = dst - 1;
-        do {
-            if (d != s) {
-                unsigned short* b = d->mpBegin;
-                if (b != d->mpEnd) { *b = 0; d->mpEnd = d->mpBegin; }
-                d->assign(s->mpBegin, s->mpEnd);
-            }
-            --s; --d;
-        } while (s != first);
-        return d;
+    while (last != first) {
+        --last;
+        --dst;
+        if (dst != last) {
+            unsigned short* b = dst->mpBegin;
+            if (b != dst->mpEnd) { *b = 0; dst->mpEnd = dst->mpBegin; }
+            dst->assign(last->mpBegin, last->mpEnd);
+        }
     }
     return dst;
 }

@@ -89,11 +89,12 @@ public:
     cSpatialObject* mpObject;                   // 0x38
     Frame* mpFrame;                             // 0x3c
 };
+struct cPlant_e8d1e0 { float GetPlantEffectScale(); };   // 0x00c3e260 (thiscall)
 class cGamePlantView : public cSpatialObjectView {
 public:
     cGamePlantView();
     ~cGamePlantView();
-    void UpdateEffectScale();
+    void UpdateEffectScale(cPlant_e8d1e0* pPlant);
     void HandleSimulationUpdate(void* pParam2, uint32_t nParam3);
     cGamePlantView* Create(cSpatialObject* pObject);
 };
@@ -115,23 +116,23 @@ void* CreateObject(size_t nSize, const char* pName);
 // ---- items of slice s00e8d0e0 end
 
 // @ 0x00e8d1e0
-void cGamePlantView::UpdateEffectScale()
+void cGamePlantView::UpdateEffectScale(cPlant_e8d1e0* pPlant)
 {
-    float fScale = GetPlantEffectScale();
+    float fScale = pPlant->GetPlantEffectScale();
     bool bChanged = !(mpAnimated == nullptr && fScale == 1.0f);
     if (mpAnimated != nullptr)
         mpAnimated->mfEffectValue = fScale;
 
-    void* pTarget = ((cDispatchObject*)this)->Call(0x2c);
+    void* pTarget = ((void* (__thiscall*)(void*))(*(void***)this)[0x2c / 4])(this);
     if (pTarget == nullptr)
         return;
     if (bChanged) {
-        *(uint32_t*)((uint8_t*)pTarget + 0x58) = 0;
-        *(uint32_t*)((uint8_t*)pTarget + 4) |= 2;
+        *(float*)((uint8_t*)pTarget + 0x58) = 0.0f;
+        *(volatile uint32_t*)((uint8_t*)pTarget + 4) |= 2;
         return;
     }
-    *(uint32_t*)((uint8_t*)pTarget + 0x58) = 0x3f800000;
-    *(uint32_t*)((uint8_t*)pTarget + 4) |= 2;
+    *(float*)((uint8_t*)pTarget + 0x58) = 1.0f;
+    *(volatile uint32_t*)((uint8_t*)pTarget + 4) |= 2;
 }
 
 // @ 0x00e8d260
@@ -223,7 +224,7 @@ BindEffect:
     }
 
 Done:
-    UpdateEffectScale();
+    UpdateEffectScale((cPlant_e8d1e0*)pParam2);
 }
 
 // @ 0x00e8d4f0

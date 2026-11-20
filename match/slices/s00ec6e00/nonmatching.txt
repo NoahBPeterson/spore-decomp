@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00ec6e00 81   global reload / loop-end reload not reproduced [equiv WEAK (46.7% cov)]
 00ec6ea0 52   begin/end register allocation swapped (ecx/eax vs edx/ecx) [equiv PASS]
 00ec6ee0 220  UI virtual-call chain: slot indexing and temp order differ [equiv UNSUPPORTED (0/1200 valid, read faults)]
 00ec6fc0 213  UI transform/temp locals not reproduced [equiv UNSUPPORTED (0/1200 valid, read faults)]
@@ -9,7 +8,6 @@
 00ec70d0 523  drag-reindex path reconstructed: two ComputeRect temporaries, float SetPos delta, camera-relative index query and the 10-entry value-shift loop; retail keeps more values live in xmm/fpu registers so the byte layout differs (380 vs 587).
 00ec7580 169  property lookup reconstructed: property-manager query, typed bool at +0x12, value accessor at 0x0041ea00, refcounted release; the dead pre-release block retained by retail is dropped by the compiler here (156 vs 186).
 00ec7640 120  stage-mode predicate reconstructed for kinds 1, 2 and 8 incl. the 0x00f25680, 0x00f25670, 0x00f25720 and 0x00ec7580 chain; the frame lookup and stage-set compare use a typed 0x4e0-byte record (164 vs 158).
-00ec76e0 80   free-list pop-or-create reconstructed: count from the begin/end globals, AddRef on the popped item, holder Cast(0x4c058cf) on the create path and Release of the holder.
 00ec7770 234  popup-menu item builder reconstructed: item pop, AddMenuItem, the 0xcdfb1002, 0xcdfb1003, 0xcdfb1004 and 0xcdfb1005 children, 3-way mode switch, SetText and the final item release (333 vs 356).
 00ec7950 94   unlocked-card update loop reconstructed over the pointer list, FindWindowByID + child text feed into the item builder, count recomputed each iteration.
 00ec7a80 197  credits-tab float layout reconstructed: holder Cast, FindChild(0xcdfb1002 and 0xcdfb1003, flag 1), three slot-0x38 x/x2 pairs and the combined width stored to 0x016c7580 (207 vs 270).

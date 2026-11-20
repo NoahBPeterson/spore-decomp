@@ -281,6 +281,9 @@ float FUN_00cf6e70()
     return local;
 }
 
+template <typename T>
+inline const T& MaxRef(const T& a, const T& b) { return (a < b) ? b : a; }
+
 // @ 0x00cf7090
 float FUN_00cf7090()
 {
@@ -292,11 +295,10 @@ float FUN_00cf7090()
     float military = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResMilitary);
     float religious = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResReligious);
     float economic = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResEconomic);
-    float lo1 = (religious > military) ? military : religious;
-    float m = (economic > lo1) ? lo1 : economic;
-    result = m;
-    if (m > kZero) {
-        result = m / (economic + religious + military);
+    result = MaxRef(military, religious);
+    result = MaxRef(result, economic);
+    if (result > kZero) {
+        result = result / (economic + religious + military);
     }
     return result;
 }

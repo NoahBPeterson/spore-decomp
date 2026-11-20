@@ -3,3 +3,4 @@ slices/s00d512f0/s00d512f0.cpp  ?GetVal@DramaManager@G7@@QAEIXZ  00d516a0  /O2 /
 slices/s00d512f0/s00d512f0.cpp  ?SetVal@DramaManager@G7@@QAEXI@Z  00d516d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00d512f0/s00d512f0.cpp  ?Method1890@MeteorStrikeEvent@G7@@QAEXXZ  00d51890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00d512f0/s00d512f0.cpp  ?Method1b60@G7@@YAXXZ  00d51b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d512f0/s00d512f0.cpp  ?Method1700@DramaManager@G7@@QAEXI@Z  00d51700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

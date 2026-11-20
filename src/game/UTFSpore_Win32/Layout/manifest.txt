@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/Layout.cpp  ?FUN_0097e8a0@@YIXPAUAreaHolder@@HPAUINode@@PAM@Z  0097e8a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

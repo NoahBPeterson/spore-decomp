@@ -294,20 +294,18 @@ void* CamInfo::getPtr()
 }
 
 // ================================================================================================
+extern "C" char g_1654c01[];   // game-mode id (retail relocates it)
 // @ 0x00ad7b90
 void* CamInfo::getLocation(void* pout)
 {
-    if (GetCurrentGameMode() == (void*)0x1654c01 && this->p2c != 0) {
-        void* r;
-        if (this->p2c)
-            r = VFN(this->p2c, 0xb8, TC_pi)(this->p2c, 0xce9f6639);
-        else
-            r = 0;
+    if (GetCurrentGameMode() == (void*)g_1654c01 && this->p2c != 0) {
+        void* cam = *(void* volatile*)&this->p2c;
+        void* r = cam ? VFN(cam, 0xb8, TC_pi)(cam, 0xce9f6639) : 0;
         ((C0d660*)r)->call(pout);
         return pout;
     }
-    if (this->p2c) {
-        float* v = (float*)VFN(this->p2c, 0x2c, TC_p0)(this->p2c);
+    if (void* cam = this->p2c) {
+        float* v = (float*)VFN(cam, 0x2c, TC_p0)(cam);
         float* o = (float*)pout;
         o[0] = v[0];
         o[1] = v[1];

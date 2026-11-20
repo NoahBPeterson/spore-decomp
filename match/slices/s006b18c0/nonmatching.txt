@@ -1,5 +1,4 @@
 # Complete (all paths present) but not byte-exact.
-006b1ef0  74   AutoRefCount pair operator=; register allocation (o in ebp/ebx vs edi) differs
 006b2000  108  keyed save-area lookup; prologue schedule of the find args differs (esi saved later)
 006b2090  98   keyed save-area lookup; same find-arg scheduling difference as 006b2000
 006b18c0  242  CacheMgr::Notify (event dispatch: key build + find, touch, add-from-event via the insert path, add-from-stream, 64-bit byte counter); complete, no EH in the original so only register allocation and the key build differ (it keeps ev in eax and derives the key in registers, we spill it); equiv PASS (286 valid, 82.9% cov)
