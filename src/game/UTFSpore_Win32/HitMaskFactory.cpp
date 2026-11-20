@@ -33,7 +33,8 @@ extern "C" void  FUN_0087d070(void);                                    // 0x87d
 extern "C" void  FUN_00957300(void* a, int b, void* c);                 // 0x957300
 extern "C" void  FUN_00957230(void* a, int b, void* c);                 // 0x957230
 extern "C" unsigned g_frameMapTypes[];                                 // 0x1446868
-#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
+extern "C" long _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 
 // ---- items of slice s00996f10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
@@ -261,7 +262,7 @@ int Obj33::Release()
 {
     char* p = (char*)this + 0x28;
     volatile long* rc = (volatile long*)(p + 4);
-    int n = _InterlockedExchangeAdd(rc, -1) - 1;
+    int n = _InterlockedDecrement(rc);
     if (n == 0) {
         _InterlockedExchange(rc, 1);
         if (p != 0)

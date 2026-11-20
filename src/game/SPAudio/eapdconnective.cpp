@@ -973,6 +973,7 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 void* outlet_new(void* owner, t_symbol_s00a5_b510 a, t_symbol_s00a5_b510 b);                   // 0xa49d30
+void* outlet_new(void* owner, t_symbol_s00a5_b510 s);                                            // 0xa49d30
 }
 }
 }
@@ -1036,7 +1037,7 @@ inline void   setObjP(char* x, int off, void* v) { *(void**)(x + off) = v; }
 namespace EA {
 namespace Audio {
 namespace Eapd {
-inline void outlet_cnt(t_outlet* lst, float v)
+__forceinline void outlet_cnt(t_outlet* lst, float v)
 {
     if (++gOutletCount < 1000) {
         t_outconnect* oc;
@@ -2337,8 +2338,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_bang(char* x)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_bang((char*)((void**)objP(x, 0x28))[i - 1]);
 }
@@ -2349,8 +2349,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_float(char* x, float f)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_cnt((t_outlet*)((void**)objP(x, 0x28))[i - 1], f);
 }
@@ -2361,8 +2360,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_symbol(char* x, t_symbol_s00a5_b510 s)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_symbol((char*)((void**)objP(x, 0x28))[i - 1], s);
 }
@@ -2373,8 +2371,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_list(char* x, t_symbol_s00a5_b510 s, int argc, void* argv)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_list((char*)((void**)objP(x, 0x28))[i - 1], s, argc, argv);
 }
@@ -2385,8 +2382,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void gate_anything(char* x, t_symbol_s00a5_b510 s, int argc, void* argv)
 {
     int i = (int)objF(x, 0x30);
-    if (objI(x, 0x2c) <= i)
-        i = objI(x, 0x2c);
+    i = (i < objI(x, 0x2c)) ? i : objI(x, 0x2c);
     if (i > 0)
         outlet_anything((char*)((void**)objP(x, 0x28))[i - 1], s, argc, argv);
 }
@@ -2507,8 +2503,8 @@ char* moses_new(float f)
     char* x = (char*)pd_new(spMosesClass);
     if (x != 0) {
         floatinlet_new(x, x + 0x2c);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
-        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
+        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510);
         setObjP(x, 0x28, o);
         setObjF(x, 0x2c, f);
     }
@@ -2520,10 +2516,10 @@ char* moses_new(float f)
 namespace EA { namespace Audio { namespace Eapd {
 void moses_float(char* x, float f)
 {
-    if (objF(x, 0x2c) <= f)
-        outlet_cnt((t_outlet*)objP(x, 0x28), f);
-    else
+    if (f < objF(x, 0x2c))
         outlet_cnt((t_outlet*)objP(x, 0xc), f);
+    else
+        outlet_cnt((t_outlet*)objP(x, 0x28), f);
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -2672,8 +2668,8 @@ char* swap_new(float f)
     if (x != 0) {
         setObjF(x, 0x30, f);
         setObjF(x, 0x2c, 0.0f);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
-        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
+        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510);
         setObjP(x, 0x28, o);
         floatinlet_new(x, x + 0x30);
     }
@@ -2730,7 +2726,7 @@ char* change_new(float f)
     char* x = (char*)pd_new(spChangeClass);
     if (x != 0) {
         setObjF(x, 0x28, f);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
     }
     return x;
 }

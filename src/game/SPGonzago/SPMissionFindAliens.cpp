@@ -139,19 +139,37 @@ void OnAcceptMission(void* pMission);
 void OnRejectMission(void* pMission);
 // ---- items of slice s00c54f90 end
 
+// Mission object seen by 0x00c4e230: virtual slot 0x6c, state at +0x1f0.
+struct MissionVt_c4e230 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    void SetSerializer();    // 0x00c2e4e0
+    void TriggerUIUpdate();  // 0x00c47d80
+    void FUN_00c472e0();     // 0x00c472e0
+    void FUN_00c471c0();     // 0x00c471c0
+    char pad04[0x1f0 - 4];
+    int  mState;             // +0x1f0
+};
+
 // @ 0x00c4e230
 void __fastcall FUN_00c4e230(void* ecx_this, void* edx)
 {
-    ((SP::ThisStubs*)ecx_this)->SetSerializer();
-    if (*(int*)((char*)ecx_this + 0x1f0) == 2)
+    MissionVt_c4e230* m = (MissionVt_c4e230*)ecx_this;
+    m->SetSerializer();
+    if (m->mState == 2)
         return;
-    ((SP::ThisStubs*)ecx_this)->BaseInitA();
-    if (*(int*)((char*)ecx_this + 0x1f0) != 2) {
-        *(int*)((char*)ecx_this + 0x1f0) = 2;
-        FUN_00c47d80(ecx_this);
+    m->v6c();
+    if (m->mState != 2) {
+        m->mState = 2;
+        m->TriggerUIUpdate();
     }
-    FUN_00c472e0(ecx_this);
-    FUN_00c471c0(ecx_this);
+    m->FUN_00c472e0();
+    m->FUN_00c471c0();
 }
 
 // @ 0x00c552d0

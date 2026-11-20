@@ -459,8 +459,8 @@ int __stdcall MessageBoxThreadStart(unsigned* p)
 namespace EA { namespace Trace {
 int TraceHelperTable::Release()
 {
-    int n = _InterlockedExchangeAdd((volatile long*)&mnRefCount, -1);
-    if (--n == 0) {
+    int n = _InterlockedDecrement((volatile long*)&mnRefCount);
+    if (n == 0) {
         _InterlockedExchange((volatile long*)&mnRefCount, 1);
         if (this) delete this;
         return 0;

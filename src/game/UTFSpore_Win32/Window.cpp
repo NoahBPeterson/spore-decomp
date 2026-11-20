@@ -40,6 +40,8 @@ struct W {
 };
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
+extern "C" long _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedDecrement)
 struct Window {
     char pad[0x28];
     volatile long mRefCount;   // +0x28
@@ -350,7 +352,7 @@ void * EA::UTFWin::Window::AsInterface(EA::COM::InterfaceId iid)
 // @ 0x0095f9a0
 int Window::Release()
 {
-    int n = _InterlockedExchangeAdd(&mRefCount, -1) - 1;
+    int n = _InterlockedDecrement(&mRefCount);
     if (n == 0) {
         _InterlockedExchangeAdd(&mRefCount, 1);
         if (this != 0)

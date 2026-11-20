@@ -21,3 +21,4 @@
 ../src/game/SPGonzago/_at_00bd0000.cpp  ?GetFieldValuesAll@cCheatObject@SP@@QAEHPAX@Z  00bd6b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bd0000.cpp  ?BindCheatHandlers@cCheatObject@SP@@QAEXXZ  00bd6c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bd0000.cpp  ?FUN_00bd7010@@YIPAXPAD@Z  00bd7010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bd0000.cpp  ?PushCoord@cBuilding@@QAEXI@Z  00bd1ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

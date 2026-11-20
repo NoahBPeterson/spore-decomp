@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 004fdd60 59 vector-destroy helper; /Od frame/loop slot order not reproduced; equiv PASS (ecx fixed: member Owner::Destroy)
 004fde40 63 allocator chunk pop; loop/AddCore schedule not reproduced; equiv WEAK 96.4% coverage (ecx fixed: Alloc::PopChunk)
-004fe7f0 31 2-vector add; temp-copy schedule not fully reproduced
 004fe860 73 wide-string assign; extra inline argument slot not reproduced; equiv PASS (ecx fixed: WStr::Assign)
 004fd9a0  564  16-byte-element vector insert: capacity-doubling grow path (CopyElems before/after the value, free only when [begin-4] != 0) and backward shift with aliased-source bump; complete body, /Od frame/local-slot order and the inlined copy_backward iterator frames differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast [equiv: WEAK 119 valid inputs, 92.0% coverage]
 004fdcb0  149  element copy helper: forward copy returning advanced dst plus the original's redundant empty second pass; complete body, /Od iterator local slots differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast [equiv: PASS 306 valid inputs, 98.3% coverage]

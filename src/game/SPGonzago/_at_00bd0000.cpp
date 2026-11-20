@@ -181,6 +181,17 @@ struct cCoordArray {
     u32* mpUnused28;     // +0x28
     void Init(u32 nCapacity);   // 0x004ab350
     void Grow(u32* pValue);     // 0x00502dd0
+    void push_back(u32& value) {
+        u32* pCur = mpCurrent;
+        u32* pNew = pCur + 1;
+        if (pNew != mpCapacity) {
+            mpCurrent = pNew;
+            if (pCur != 0)
+                *pCur = value;
+        } else {
+            Grow(&value);
+        }
+    }
 };
 struct cCoordVec {
     u32* mpBegin;        // +0x00
@@ -844,16 +855,8 @@ class cGonzagoSubsystem_s00bd_5ea0 {
 // @ 0x00bd1ab0
 void cBuilding::PushCoord(u32 value)
 {
-    u32* pCur = mCoords.mpCurrent;
-    cCoordArray* pCoords = &mCoords;
-    u32* pNew = pCur + 1;
-    if (pNew != pCoords->mpCapacity) {
-        pCoords->mpCurrent = pNew;
-        if (pCur != 0)
-            *pCur = value;
-    } else {
-        pCoords->Grow(&value);
-    }
+    u32 v = value;
+    mCoords.push_back(v);
 }
 
 // @ 0x00bd1af0

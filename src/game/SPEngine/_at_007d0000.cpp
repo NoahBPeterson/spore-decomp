@@ -1015,6 +1015,10 @@ void* Ser250(IStream* s, int* vec)
     return s;
 }
 
+static inline void PutByteValue(void* s, uint8_t v) { WriteByte(s, v, 1); }
+static inline void PutFloatValue(void* s, float v) { WriteFloat32(s, v, 1, 0); }
+static inline void PutU32Value(void* s, uint32_t v) { WriteUint32(s, v, 1, 0); }
+
 // @ 0x007d02b0
 void* Ser2B0(IStream* s, int* vec)
 {
@@ -1023,8 +1027,8 @@ void* Ser2B0(IStream* s, int* vec)
     for (uint32_t i = 0; i < (uint32_t)n; i++) {
         int* e = (int*)(vec[0] + i * 8);
         WriteUint32(s, (uint32_t)e[0], 1, 0);
-        WriteByte(s, (uint8_t)*((uint8_t*)e + 4), 1);
-        WriteByte(s, (uint8_t)*((uint8_t*)e + 5), 1);
+        PutByteValue(s, *((uint8_t*)e + 4));
+        PutByteValue(s, *((uint8_t*)e + 5));
     }
     return s;
 }
@@ -1034,9 +1038,10 @@ void Ser360(IStream* s, char* p)
 {
     s->Write(p, 8);
     Ser250(s, (int*)(p + 8));
-    WriteFloat32(s, (float)*(float*)(p + 0x1c), 1, 0);
-    WriteUint32(s, (uint32_t)*(uint32_t*)(p + 0x24), 1, 0);
-    WriteByte(s, (uint8_t)*(uint8_t*)(p + 0x28), 1);
+    PutFloatValue(s, *(float*)(p + 0x1c));
+    PutFloatValue(s, *(float*)(p + 0x20));
+    PutU32Value(s, *(uint32_t*)(p + 0x24));
+    PutByteValue(s, *(uint8_t*)(p + 0x28));
 }
 
 // @ 0x007d03f0

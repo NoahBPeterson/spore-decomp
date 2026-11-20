@@ -5,3 +5,4 @@
 ../src/game/Spui/SPUIBehaviorWinAction.cpp  ?DeletingDtor@Interp@@QAEPAXE@Z  007fe330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehaviorWinAction.cpp  ?init_1542c44@@YAXXZ  012f7570  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIBehaviorWinAction.cpp  ?DeletingDtor@State@@QAEPAXE@Z  007fe390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehaviorWinAction.cpp  ?SetAllocatorObj@State@@QAEXXZ  007fdfa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

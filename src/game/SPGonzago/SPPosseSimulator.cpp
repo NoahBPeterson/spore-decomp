@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 // addresses retail relocates here, named so the build relocates them too
+#include <intrin.h>
 extern "C" char g_13eb938[];
 extern "C" char g_13ec458[];
 extern "C" char g_147b7ec[];
@@ -33,6 +34,7 @@ extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int
 extern "C" void  __cdecl EA_Free(void* p);                          // 0xf47380
 extern "C" void* __cdecl SP_NounManager();                          // 0xb3d300
 extern "C" void* __cdecl SP_PropertyManager();                      // 0x67de30
+extern "C" void  __cdecl FUN_00b5b6c0();                            // SP::cGonzagoSimulator ctor
 extern "C" void  __cdecl FUN_00b234c0();                            // ClearPosseMembers
 extern "C" void  __cdecl FUN_00d01790();
 extern "C" void  __cdecl FUN_00b96600();
@@ -484,19 +486,20 @@ void** partition(void** first, void** last, int pivot, char (__cdecl* pred)(int,
 PosseSim* PosseSim::Init()
 {
     PosseSim* self = this;
-    SP_NounManager();  // placeholder; real base ctor 0xb5b6c0
+    ((void(__thiscall*)(void*))FUN_00b5b6c0)(self);  // SP::cGonzagoSimulator::cGonzagoSimulator
     *(void**)((char*)self + 0x18) = 0;
     *(void**)((char*)self + 0x1c) = 0;
-    *(void**)self = (void*)0x147b810;
-    *(void**)((char*)self + 8) = (void*)0x147b7ec;
+    *(void**)self = (void*)g_147b810;
+    *(void**)((char*)self + 8) = (void*)g_147b7ec;
     *(unsigned int*)((char*)self + 0x10) = 60000;
     *(float*)((char*)self + 0x14) = 20.0f;
+    _ReadWriteBarrier();
     *(void**)((char*)self + 0x34) = 0;
     Slot** base = (Slot**)((char*)self + 0x38);
     self->mpBegin = base;
     self->mpEnd = base;
-    self->mpCapacity = (Slot**)((char*)self + 0x58);
-    *(void**)0x169e5b8 = self;
+    self->mpCapacity = base + 8;
+    *(void**)g_169e5b8 = self;
     return self;
 }
 

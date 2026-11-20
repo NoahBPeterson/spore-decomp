@@ -6,6 +6,7 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_157a828[];
+extern "C" char g_1695244[];
 
 typedef unsigned char  u8;
 typedef unsigned short u16;
@@ -154,9 +155,9 @@ struct cSpatialObjectView {
     void  CreateEffect4(void* a, void* b, void* c, void* d);   // 0x00c8b040
     void  CreateEffect3(void* a, void* b, void* c);            // 0x00c8b060
     void  CreateEffect1(void* a);                              // 0x00c8b080
-    void  sub_b130(void* p2, int p3, void* p4);                // 0x00c8b130
+    Effect* sub_b130(void* p2, int p3, void* p4);                // 0x00c8b130
     void  sub_b1a0(void* p);                                   // 0x00c8b1a0
-    void  sub_b1b0(void* p2, int p3, void* p4);                // 0x00c8b1b0
+    Effect* sub_b1b0(void* p2, int p3, void* p4);                // 0x00c8b1b0
     void  sub_b210(void* p);                                   // 0x00c8b210
     bool  sub_b220(int param2, int id, char create, void** out);// 0x00c8b220
     void  sub_ad30(int param2, int id);                        // 0x00c8ad30
@@ -194,28 +195,32 @@ void cSpatialObjectView::CreateEffect1(void* a) {
 //  0x00c8b130 / 0x00c8b1a0 / 0x00c8b1b0 / 0x00c8b210
 // ===========================================================================
 // @ 0x00c8b130
-void cSpatialObjectView::sub_b130(void* p2, int p3, void* p4) {
-    void* e = CreateEffectInternal(p2, p3, p4, 1);
-    if (!*(volatile u8*)0x1695244 && !e) return;
-    for (EffectInfo* it = mEffects.pBegin; it != mEffects.pEnd; it = (EffectInfo*)((char*)it + 0x3c)) {
-        if (it->mId == (int)p4) {
-            if (!it->mFlag8) { it->mFlag8 = 1; it->mFlagA = 1; }
-            return;
+Effect* cSpatialObjectView::sub_b130(void* p2, int p3, void* p4) {
+    Effect* e = CreateEffectInternal(p2, p3, p4, 1);
+    if (g_1695244[0] || e) {
+        for (EffectInfo* it = mEffects.pBegin; it != mEffects.pEnd; ++it) {
+            if (it->mId == (int)p4) {
+                if (!it->mFlag8) { it->mFlag8 = 1; it->mFlagA = 1; }
+                return e;
+            }
         }
     }
+    return e;
 }
 // @ 0x00c8b1a0
 void cSpatialObjectView::sub_b1a0(void* p) { sub_b130(p, 0, p); }
 // @ 0x00c8b1b0
-void cSpatialObjectView::sub_b1b0(void* p2, int p3, void* p4) {
-    void* e = CreateEffectInternal(p2, p3, p4, 0);
-    if (!e) return;
-    for (EffectInfo* it = mEffects.pBegin; it != mEffects.pEnd; it = (EffectInfo*)((char*)it + 0x3c)) {
-        if (it->mId == (int)p4) {
-            if (!it->mFlag8) { it->mFlag8 = 1; it->mFlagA = 1; }
-            return;
+Effect* cSpatialObjectView::sub_b1b0(void* p2, int p3, void* p4) {
+    Effect* e = CreateEffectInternal(p2, p3, p4, 0);
+    if (e) {
+        for (EffectInfo* it = mEffects.pBegin; it != mEffects.pEnd; ++it) {
+            if (it->mId == (int)p4) {
+                if (!it->mFlag8) { it->mFlag8 = 1; it->mFlagA = 1; }
+                return e;
+            }
         }
     }
+    return e;
 }
 // @ 0x00c8b210
 void cSpatialObjectView::sub_b210(void* p) { sub_b1b0(p, 0, p); }

@@ -3,9 +3,13 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 // addresses retail relocates here, named so the build relocates them too
+extern "C" char g_11966ed[];
 extern "C" char g_13eb384[];
 extern "C" char g_13eb394[];
 extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_148b58c[];
+extern "C" char g_148b59c[];
 extern "C" char g_1400744[];
 extern "C" char g_140085c[];
 extern "C" char g_14426a0[];
@@ -698,7 +702,10 @@ struct MWVec {
     AutoRefCount* mpCapacity;   // +0x08
     void reserve(uint32_t n);                                   // 0x4e0880
     void DoInsertValue(AutoRefCount* pos, AutoRefCount* value); // 0x423c40
+    void DoDestroyValues(AutoRefCount* first, AutoRefCount* last); // 0x5f3680
+    inline void erase(AutoRefCount* first, AutoRefCount* last);
 };
+extern "C" MWVec g_15acca4;
 struct ByteVec {
     uint8_t* mpBegin;      // +0x00
     uint8_t* mpEnd;        // +0x04
@@ -795,6 +802,12 @@ int     __cdecl FUN_00bcc800(void* self);               // 0xbcc800
 char*   __cdecl FUN_0041e920(void* p);                  // 0x41e920 Property::GetBool
 void*   __cdecl FUN_005f4e10(void* first, void* last, void* out); // 0x5f4e10
 void    __cdecl FUN_005f3680(void* first, void* last);  // 0x5f3680
+inline void MWVec::erase(AutoRefCount* first, AutoRefCount* last)
+{
+    AutoRefCount* p = (AutoRefCount*)FUN_005f4e10(last, mpEnd, first);
+    DoDestroyValues(p, mpEnd);
+    mpEnd += -(last - first);
+}
 void*   __cdecl FUN_00f47380(void* p);                  // 0xf47380 operator delete
 struct NounVec {
     uint32_t mUnk0;      // +0x00
@@ -4287,21 +4300,22 @@ void cSim::FUN_00ef1930(int a, float b)
 }
 
 // @ 0x00ef1990
-int FUN_00ef1990(u32* param_1, u32* param_2, u32* unused)
+struct RecordIter_ef1990 { u32* p; };
+int FUN_00ef1990(RecordIter_ef1990 it, u32* last, u32* unused)
 {
     (void)unused;
     int n = 0;
-    if (param_2 != param_1) {
+    if (last != it.p) {
         do {
             u32* q;
             do {
-                q = param_1;
-                param_1 = q + 0x8e;
+                q = it.p;
+                it.p = q + 0x8e;
                 if ((unsigned char)(*q >> 0x1e) & 1)
                     break;
-            } while ((unsigned char)(*param_1 >> 0x1f) & 1);
+            } while ((unsigned char)(*it.p >> 0x1f) & 1);
             n++;
-        } while (param_2 != param_1);
+        } while (last != it.p);
     }
     return n;
 }
@@ -4735,13 +4749,7 @@ void PlanetFlow::FillPending()
 // @ 0x00ef29c0
 void GlobalMwVector_Clear()
 {
-    MWVec* v = (MWVec*)0x15acca4;
-    AutoRefCount* begin = v->mpBegin;
-    AutoRefCount* end = v->mpEnd;
-    void* p = FUN_005f4e10(end, end, begin);
-    FUN_005f3680(p, v->mpEnd);
-    int n = -(int)(end - begin);
-    v->mpEnd = (AutoRefCount*)((char*)v->mpEnd + n * 4);
+    g_15acca4.erase(g_15acca4.mpBegin, g_15acca4.mpEnd);
 }
 
 // @ 0x00ef2a10
@@ -6526,10 +6534,12 @@ int __cdecl FUN_00ef78c0()
 unsigned __fastcall FUN_00ef7900(char* p)
 {
     int z = 0;
-    *(void**)(p + 4) = &gVtbl_D;
+    *(void**)(p + 4) = g_13ec458;
+    _ReadWriteBarrier();
     *(int*)(p + 8) = z;
-    *(void**)p = &gVtbl_A;
-    *(void**)(p + 4) = &gVtbl_B;
+    *(void**)p = g_148b59c;
+    *(void**)(p + 4) = g_148b58c;
+    _ReadWriteBarrier();
     *(int*)(p + 0xc) = z;
     *(int*)(p + 0x10) = z;
     *(int*)(p + 0x14) = z;
@@ -8090,7 +8100,7 @@ int __cdecl FUN_00efcd90()
     void* a = (void*)((FN0_i)((*(void***)app)[0x14]))((void*)app);
     void* b = (void*)((FN0_i)((*(void***)a)[0xe]))(a);
     if (b != 0) {
-        int o = ((FN0_i)((*(void***)b)[3]))(b);
+        int o = ((FN1_pi)((*(void***)b)[3]))(b, (int)g_11966ed);
         if (o != 0 && (*(char*)(o + 0x319) == 0 || *(char*)(o + 0x11) != 0))
             return 1;
     }

@@ -370,10 +370,12 @@ unsigned __fastcall FUN_00f62d80(int* p)
 // @ 0x00f62e60
 void __fastcall FUN_00f62e60(cTerrainDistributeDescription* d)
 {
-    int* p = (int*)((char*)d + 0xe8);          // &mLevel[5].mChildrenBegin
-    for (int i = 4; i >= 0; i--) {
-        int v = *(int*)((char*)p - 0x28);
-        p = (int*)((char*)p - 0x28);
+    struct Lvl { int begin; int pad[9]; };
+    int i = 4;
+    Lvl* l = (Lvl*)((char*)d + 0xe8);          // &mLevel[5].mChildrenBegin
+    for (; i >= 0; i--) {
+        --l;
+        int v = l->begin;
         if (v != 0 && *(int*)(v - 4) != 0)
             operator_del((void*)v);
     }

@@ -144,6 +144,8 @@ class cSPPalettePage_s005c_1d70 {
 // ---- items of slice s008dd0d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long _InterlockedExchange(volatile long*, long);
+extern "C" long _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedDecrement)
 // ---- items of slice s008dd0d0 end
 
 // ---- items of slice s00936090 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -447,8 +449,7 @@ void cSPPalettePage_s005c_7500::Shutdown()
 // @ 0x008dd1c0
 int EA::SharedLibrary::Release()
 {
-    int n = _InterlockedExchangeAdd((volatile long*)((char*)this + 4), -1);
-    --n;
+    int n = _InterlockedDecrement((volatile long*)((char*)this + 4));
     if (n == 0) {
         _InterlockedExchange((volatile long*)((char*)this + 4), 1);
         if (this != 0)

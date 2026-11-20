@@ -55,3 +55,15 @@
 ../src/game/SPAudio/eapdconnective.cpp  ?pdsymbol_new@@YAPAXIII@Z  00a59c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?pdfloat_new2@@YAPAXM@Z  00a59b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?change_float@Eapd@Audio@EA@@YAXPADM@Z  00a5c400  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5b940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  00a5b9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_list@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  00a5ba20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_anything@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  00a5ba60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?swap_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5c260  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_float@Eapd@Audio@EA@@YAXPADM@Z  00a5b970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?spigot_float@Eapd@Audio@EA@@YAXPADM@Z  00a5b6a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?moses_float@Eapd@Audio@EA@@YAXPADM@Z  00a5bdb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?swap_float@Eapd@Audio@EA@@YAXPADM@Z  00a5c300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?moses_new@Eapd@Audio@EA@@YAPADM@Z  00a5bd50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?swap_new@Eapd@Audio@EA@@YAPADM@Z  00a5c1f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?change_new@Eapd@Audio@EA@@YAPADM@Z  00a5c3c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -14,3 +14,4 @@
 ../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?RegisterHelper@TraceHelperTable_s0092_5770@Trace@EA@@QAEXPAUTraceHelper_s0092_5770@23@@Z  00925b50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?Init@HelperTablePtr@Trace@EA@@QAEPAU123@XZ  00925b00  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/eatrace_imp.cpp  ??0TraceLogManagerRef@Trace@EA@@QAE@XZ  00925540  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eatrace_imp.cpp  ?Release@TraceHelperTable@Trace@EA@@QAEHXZ  00925060  /O2 /MD /Gy /TP /GS- /Isrc/game/include

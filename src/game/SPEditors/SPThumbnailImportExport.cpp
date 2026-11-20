@@ -2647,13 +2647,10 @@ void __stdcall ClearBucketsA(int** buckets, unsigned count)
     int* p = buckets[i];
     while (p) {
       int* cur = p;
-      int* next = (int*)p[7];
-      int s0 = cur[0];
-      int d = (cur[2] - cur[0]) & 0xfffffffe;
-      if (d > 2 && s0 != 0)
-        EA_Deallocate((void*)s0);
+      p = (int*)p[7];
+      if ((int)((cur[2] - cur[0]) & 0xfffffffe) > 2 && cur[0] != 0)
+        EA_Deallocate((void*)cur[0]);
       EA_Deallocate(cur);
-      p = next;
     }
     buckets[i] = 0;
   }
@@ -2665,14 +2662,11 @@ void __stdcall ClearBucketsB(int** buckets, unsigned count)
   for (unsigned i = 0; i < count; i++) {
     int* p = buckets[i];
     while (p) {
-      int* next = (int*)p[7];
       int* cur = p;
-      int s3 = cur[3];
-      int d = (cur[5] - cur[3]) & 0xfffffffe;
-      if (d > 2 && s3 != 0)
-        EA_Deallocate((void*)s3);
+      p = (int*)p[7];
+      if ((int)((cur[5] - cur[3]) & 0xfffffffe) > 2 && cur[3] != 0)
+        EA_Deallocate((void*)cur[3]);
       EA_Deallocate(cur);
-      p = next;
     }
     buckets[i] = 0;
   }

@@ -21,6 +21,7 @@ extern void* g_16c8b44;                                    // 0x16c8b44  SP::cSP
 // ---- items of slice s006c0db0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
+struct cSPMemPool928a30 { u32 LockedAligned(u32, u32, int, int, int, int, int, int); }; // 0x928a30 SP::cSPMemPool::LockedAligned
 extern u32   __fastcall sub_928a30_t(void* self, int, u32, u32, int,int,int,int,int,int); // 0x928a30
 
 // ---- items of slice s006c1cd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -308,8 +309,10 @@ int StateFromGlobal(u32* p)
 // @ 0x006c1c80
 u32 MakeStream(u32* out, u32* in)
 {
-    u32 v = sub_928a30_t(g_16c8b44, 0, in[0], in[1], 0, 0, 0, 0, 0, 0);
-    out[0] = 0;
+    u32 b = in[1];
+    u32 a = in[0];
+    u32 v = ((cSPMemPool928a30*)g_16c8b44)->LockedAligned(a, b, 0, 0, 0, 0, 0, 0);
+    *(volatile u32*)&out[0] = 0;
     out[1] = 0;
     out[2] = 0;
     out[3] = 0;

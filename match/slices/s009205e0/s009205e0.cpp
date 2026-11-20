@@ -155,20 +155,21 @@ wchar_t* SkipComponentBack(wchar_t* first, wchar_t* last) {
 wchar_t* ComponentAt(wchar_t* first, wchar_t* last, int index) {
     if (index >= 0) {
         wchar_t* p = first;
-        for (index = index + 1; p < last && index > 0; --index)
+        for (++index; p < last && index > 0; --index)
             p = SkipComponent(p, last);
-        if (index == 0 && first < p && (p[-1] == L'\\' || p[-1] == L'/'))
+        if (index == 0 && p > first && (p[-1] == L'\\' || p[-1] == L'/'))
             --p;
         return p;
     }
-    if (first < last) {
-        while (index = index + 1, index < 0) {
-            last = SkipComponentBack(first, last);
-            if (last <= first)
-                return last;
+    ++index;
+    while (last > first) {
+        if (index >= 0) {
+            if (last > first && (last[-1] == L'\\' || last[-1] == L'/'))
+                --last;
+            return last;
         }
-        if (first < last && (last[-1] == L'\\' || last[-1] == L'/'))
-            --last;
+        last = SkipComponentBack(first, last);
+        ++index;
     }
     return last;
 }
@@ -269,16 +270,14 @@ __declspec(noinline) unsigned* LowerBound(unsigned* first, unsigned* last, const
 // @ 0x009212c0  first element strictly greater than key
 unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
     int n = (int)(last - first);
-    if (n > 0) {
-        unsigned k = *key;
-        do {
-            int half = n >> 1;
-            if (!(k < first[half])) {
-                first = first + half + 1;
-                half = n + (-1 - half);
-            }
+    while (n > 0) {
+        int half = n >> 1;
+        unsigned* mid = first + half;
+        if (!(*key < *mid)) {
+            first = ++mid;
+            n -= half + 1;
+        } else
             n = half;
-        } while (n > 0);
     }
     return first;
 }
@@ -286,16 +285,14 @@ unsigned* UpperBound(unsigned* first, unsigned* last, const unsigned* key) {
 // @ 0x00921300  first element not less than key
 unsigned* LowerBound(unsigned* first, unsigned* last, const unsigned* key) {
     int n = (int)(last - first);
-    if (n > 0) {
-        unsigned k = *key;
-        do {
-            int half = n >> 1;
-            if (first[half] < k) {
-                first = first + half + 1;
-                half = n + (-1 - half);
-            }
+    while (n > 0) {
+        int half = n >> 1;
+        unsigned* mid = first + half;
+        if (*mid < *key) {
+            first = ++mid;
+            n -= half + 1;
+        } else
             n = half;
-        } while (n > 0);
     }
     return first;
 }
@@ -531,7 +528,7 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
         h = h * 0x1000193 ^ c;
         c = *s;
     }
-    unsigned idx = h % mnBucketCount;
+    const unsigned idx = h % mnBucketCount;
     HashNode* n = (HashNode*)EASTL_allocator_allocate(0x14, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     if (n != 0) {
@@ -541,12 +538,12 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
         n->mKey = value.mKey;
     }
     n->mpNext = 0;
-    HashNode* head = mpBuckets[idx];
-    HashNode* p = head;
-    while (p != 0 && p->mpName != value.mpName)
-        p = p->mpNext;
+    HashNode* p = mpBuckets[idx];
+    for (; p != 0; p = p->mpNext)
+        if (value.mpName == p->mpName)
+            break;
     if (p == 0) {
-        n->mpNext = head;
+        n->mpNext = mpBuckets[idx];
         mpBuckets[idx] = n;
     } else {
         n->mpNext = p->mpNext;

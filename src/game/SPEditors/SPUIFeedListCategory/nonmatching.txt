@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00663b80 48 category comparator - complete, only branch encoding differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 00664480 60 Expand; ternary null-check/merge schedule differs
-00664550 35 predicate; return-value materialisation (setcc vs shared xor eax,eax / mov eax,1)
 00664610 30 element-at; original loads the index into edx first, cl hoists the header loads
 00664640 56 find-by-0x17c; cl assigns esi=begin/edx=index, original esi=index/ecx=begin
 00664680 56 find-by-0x134; same register-assignment divergence; equiv: PASS (100% coverage)

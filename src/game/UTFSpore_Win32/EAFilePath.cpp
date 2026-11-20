@@ -642,9 +642,7 @@ wchar_t* FUN_009309b0(wchar_t* dest, const wchar_t* src, const wchar_t* arg3, in
 {
     if (FUN_00930950(src, 4)) {
         if (wcslen(src) < 0x103) {
-            wchar_t* d = dest;
-            while ((*d++ = *src++) != 0)
-                ;
+            wcscpy(dest, src);
             return dest;
         }
         return 0;

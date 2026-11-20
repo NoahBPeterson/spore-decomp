@@ -14,6 +14,7 @@ struct t_symbol { const char* s_name; int s_thing; };   // 8 bytes
 extern t_symbol gEmptySymbol;       // 0x167589c
 extern int   gEmptyA;               // 0x16758a0
 extern void* gVtblA52b40;                           // 0x1403934
+struct AnyIface_a52b40 { virtual void v0(); virtual void v1(); virtual int Call(int a, int b, int c); };
 struct AnyObj { void* vtbl; void* p4; const char* mpDefaultName;
   int  __thiscall Call6(int a, int b);
   void* __thiscall Call4(unsigned size);
@@ -52,7 +53,7 @@ EapdBuffer_a52af0::~EapdBuffer_a52af0()
 int __thiscall AnyObj::Call6(int a, int b)
 {
   if (p4 != 0)
-    return (*(int(__thiscall**)(int, int, int))(*(int*)p4 + 8))(a, b, 1);
+    return ((AnyIface_a52b40*)p4)->Call(a, b, 1);
   return 0;
 }
 

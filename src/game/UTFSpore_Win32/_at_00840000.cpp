@@ -501,10 +501,10 @@ unsigned char __cdecl LookupName12(const char* name, int* table, int* out)
 // @ 0x00840890
 const char* __cdecl NextToken(const char* s, int* len, const char* delims)
 {
-    unsigned a = (unsigned)strspn(s, delims);
-    unsigned b = (unsigned)strcspn(s + a, delims);
-    *len = (int)b;
-    return b ? s + a : 0;
+    int start = (int)strspn(s, delims);
+    int end = start + (int)strcspn(s + start, delims);
+    *len = end - start;
+    return (start != end) ? s + start : 0;
 }
 
 // @ 0x008476b0

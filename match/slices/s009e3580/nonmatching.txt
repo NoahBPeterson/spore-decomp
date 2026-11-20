@@ -36,6 +36,5 @@
 
 009e4260 59 EntryCopy: complete; the same forward copy as EntryAssignRange but returning the final dst pointer. Differences: ecx reload before AssignItems (same-TU issue) and a different rotation of the loop, 109 vs 107 B. difftest verdict WEAK (97/400 valid inputs, 17.9% coverage, no mismatch).
 
-009e42d0 33 EntryCopyBackward: complete; `while (last != first) { --last; --dstEnd; dstEnd->key = last->key; if (&dstEnd->in != &last->in) {...} } return dstEnd;`. The original reuses ecx for the AssignItems call and only reloads it before AssignGaits; we reload before both (same-TU issue), which shifts every rel8 by 2 bytes, 124 vs 122 B. difftest verdict WEAK (69/400 valid inputs, 17.5% coverage, no mismatch).
 
 009e4350 138 Inner::Inner(int,int): complete; `*this = Inner(); f8 = index; items.reserve(count); Item def = {0.0f, 0.5f, 0}; items.resize(count, def); if (g_1515dc) gaits.reserve(count);`. Differences: the temporary Inner is zeroed through a different store order and ecx is reloaded before the AssignItems/AssignGaits calls inside the inlined operator= (same-TU issue), 251 vs 249 B. difftest verdict PASS (254/400 valid inputs, 87.5% coverage).

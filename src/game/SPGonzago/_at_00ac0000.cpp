@@ -1409,15 +1409,15 @@ int FUN_00ac8fa0(int* p, int a, int b)
     if (p) {
         char ok = (*(char (__thiscall**)(void*, int, void**))((char*)VT(p) + 0x24))(p, a, (void**)&p);
         if (ok) {
-            short t = *(short*)((char*)p + 0x12);
-            if (t != 10 && t != 0x10) {
-                return DAT_0164dc58;
-            }
-            if (*(byte*)((char*)p + 0x10) & 0x30) {
-                return *(int*)*(int*)p;
-            }
-            int m = (t != 0 ? -1 : 0);
-            return *(int*)(m & (int)p);
+            unsigned short t = *(unsigned short*)((char*)p + 0x12);
+            int* r;
+            if (t != 10 && t != 0x10)
+                r = (int*)&DAT_0164dc58;
+            else if (*(byte*)((char*)p + 0x10) & 0x30)
+                r = *(int**)p;
+            else
+                r = t ? (int*)p : 0;
+            return *r;
         }
     }
     return b;

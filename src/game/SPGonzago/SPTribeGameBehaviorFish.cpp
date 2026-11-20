@@ -150,6 +150,12 @@ public:
 };
 }
 namespace SP {
+static inline void CopyVec(cSPVector3& d, const cSPVector3& s)
+{
+    d.x = s.x;
+    d.y = s.y;
+    d.z = s.z;
+}
 struct Cell {
     byte       mFlag;     // +0x00
     char       pad1[3];
@@ -158,8 +164,8 @@ struct Cell {
     Cell& operator=(const Cell& o)
     {
         mFlag = o.mFlag;
-        mPoint = o.mPoint;
-        mHit = o.mHit;
+        CopyVec(mPoint, o.mPoint);
+        CopyVec(mHit, o.mHit);
         return *this;
     }
 };

@@ -246,16 +246,20 @@ bool SerLoadVector(SerBuffer* p, void* self, SerItem14* item)
     return true;
 }
 
+struct SListObj { void SetAllocator(void* a); };   // 0x00985db0 rw::SList::SetAllocator
+struct CastObj { virtual void v0(); virtual void v1(); virtual void v2(); virtual SListObj* Cast(unsigned id); };
+struct AllocSrc { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+                  virtual void v4(); virtual void v5(); virtual void v6(); virtual void* GetAllocator(); };
+
 // @ 0x007fdfa0
 void State::SetAllocatorObj()
 {
-    void* w = *(void**)((char*)this + 0x40);
-    if (!w) return;
-    void* s = VCallR(w, 0xc);
-    if (!s) return;
-    void* src = *(void**)((char*)this + 0x38);
-    if (!src) return;
-    SList_SetAllocator(s, (void*)(intptr_t)VCallR(src, 0x1c));
+    if (CastObj* w = *(CastObj**)((char*)this + 0x40)) {
+        if (SListObj* s = w->Cast(0x254a4bb)) {
+            if (*(AllocSrc**)((char*)this + 0x38))
+                s->SetAllocator((*(AllocSrc**)((char*)this + 0x38))->GetAllocator());
+        }
+    }
 }
 
 // @ 0x007fdfe0

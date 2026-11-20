@@ -1,6 +1,5 @@
 # va diff flags difftest
 00e20860 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED unresolved imports (_GetCommandLineA@0, ?EA_ConvertToString16@@YAXPA_WPBD@Z, _GetCurrentProcessId@0)
-00e20d30 ecx-clobber /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL register-ABI external callee, ecx clobbered
 00e20d60 ecx-clobber /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL register-ABI external callee, ecx clobbered
 00e20e00 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact
 00e20e80 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact

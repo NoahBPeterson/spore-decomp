@@ -657,6 +657,7 @@ struct PanelVector_s0062_e7e0 {
   uint32_t mAllocator;
   void DoInsertValue(cSPPlayModeAnimPanelInfo** pos, cSPPlayModeAnimPanelInfo* const& v);   // 0x005c8480
   void Insert(cSPPlayModeAnimPanelInfo** pos, cSPPlayModeAnimPanelInfo* const& v);          // 0x005c21d0
+  uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
 };
 class cSPPlayModeAnimation_s0062_e7e0 {
  public:
@@ -1944,15 +1945,11 @@ float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId
 // @ 0x0062f2a0
 void cSPPlayModeAnimation_s0062_e7e0::Init(void* editorBase, cSPPlayModeUI_s0062_e7e0* ui)
 {
-  mUI = ui;
   mEditorBase = editorBase;
+  mUI = ui;
   mCurrAnimID = 0xffffffff;
   LoadAllAnimInfo();
-  uint32_t n = (uint32_t)(mAnimPanelInfo.mpEnd - mAnimPanelInfo.mpBegin) >> 2;
-  uint32_t pages = n + 1;
-  mNumPages = pages;
-  if (((char*)mAnimPanelInfo.mpEnd - (char*)mAnimPanelInfo.mpBegin) & 0xc) {
-    pages++;
-    mNumPages = pages;
-  }
+  mNumPages = mAnimPanelInfo.size() / 4 + 1;
+  if (mAnimPanelInfo.size() % 4 != 0)
+    mNumPages++;
 }

@@ -335,10 +335,10 @@ bool VPlanet::FUN_00c70b50()
     PlanetData* pd = mpPlanet;
     NodeBB9* o = (NodeBB9*)pd->fn_00b8de30();
     if (o->fn_00bb9ae0() == 5) {
-        void* av = ((NounMgr*)o)->GetAvatar();
-        void* sm = StarManager_00b3d2a0();
-        void* emp = ((StarMgr*)sm)->GetEmpireByID_00ba9370(av);
-        return ((Empire*)emp)->GetHomePlanet_00c31730() == (int)pd;
+        Empire* emp = (Empire*)((StarMgr*)StarManager_00b3d2a0())->GetEmpireByID_00ba9370(((NounMgr*)o)->GetAvatar());
+        if (emp->GetHomePlanet_00c31730() == (int)pd)
+            return true;
+        return false;
     }
     return false;
 }
