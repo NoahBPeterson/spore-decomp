@@ -6819,10 +6819,10 @@ void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value)
 // @ 0x00b7d420
 bool ServerObj::OnPieMsg(int msg, int arg)
 {
-    bool r = true;
     if (msg == 0x29ffa8d && mMode == 3)
         mMode = 4;
-    return r;
+    _ReadWriteBarrier();
+    return true;
 }
 
 // @ 0x00b7d440
