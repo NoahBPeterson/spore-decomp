@@ -1031,18 +1031,21 @@ bool EA::ResourceMan::DatabasePackedFile::Shutdown()
 // @ 0x008d86c0
 bool EA::ResourceMan::DatabasePackedFile::SetStream(EA::IO::IStream * s)
 {
-    if (mnAccessFlags != 0)
-        return false;
-    EA::IO::IStream* old = mpStream.mpObject;
-    if (s != old) {
-        if (s)
-            s->AddRef();
-        mpStream.mpObject = s;
-        if (old)
-            old->Release();
+    if (mnAccessFlags == 0) {
+        EA::IO::IStream* old = mpStream.mpObject;
+        if (s != old) {
+            if (s)
+                s->AddRef();
+            mpStream.mpObject = s;
+            if (old)
+                old->Release();
+        }
+        return true;
     }
-    return true;
+    return false;
 }
+
+
 
 // @ 0x008d8710
 unsigned int EA::ResourceMan::DatabasePackedFile::GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * a, EA::ResourceMan::KeyFilter * b)
