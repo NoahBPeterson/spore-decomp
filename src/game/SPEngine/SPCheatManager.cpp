@@ -424,16 +424,6 @@ class StrNameMap {
   uint8_t pad[4];      // +0
   SetNode_s0067_d550 mAnchor;     // +4 (mpNodeParent = root)
 };
-class PairB_s0067_d550 {
- public:
-  PairB_s0067_d550(const PairB_s0067_d550& x);  // @ 0x0067e900
-
-  char* mpBegin;         // +0x00
-  char* mpEnd;           // +0x04
-  char* mpCapacity;      // +0x08
-  uint32_t mAllocator;   // +0x0c
-  EA::IU34* mpCommand;   // +0x10
-};
 // the destructor's view of PairB: an EASTL string (freed unless it is the one-byte empty buffer) and a command
 // reference released through vtable slot 1
 struct PairBString {
@@ -441,11 +431,33 @@ struct PairBString {
   char* mpEnd;           // +0x04
   char* mpCapacity;      // +0x08
   uint32_t mAllocator;   // +0x0c
+  PairBString(const PairBString& x) : mpBegin(0), mpEnd(0), mpCapacity(0) {
+    RangeInitialize(x.mpBegin, x.mpEnd);
+  }
+  void RangeInitialize(const char* pBegin, const char* pEnd) {
+    const uint32_t n = (uint32_t)(pEnd - pBegin);
+    ((EA::Key*)this)->RangeInitialize(n + 1);   // AllocateSelf
+    mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
+    *mpEnd = 0;
+  }
   ~PairBString() { if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin); }
+  static char* CharStringUninitializedCopy(const char* pSource, const char* pSourceEnd, char* pDestination) {
+    memcpy(pDestination, pSource, (size_t)(pSourceEnd - pSource));
+    return pDestination + (pSourceEnd - pSource);
+  }
 };
 struct PairBCommandRef {
   EA::IU34* mp;
+  PairBCommandRef(const PairBCommandRef& x) : mp(x.mp) { if (mp) mp->AddRef(); }
   ~PairBCommandRef() { if (mp) mp->Release(); }
+};
+// eastl::pair<string, AutoRefCount<command>> as copied into the command map
+class PairB_s0067_d550 {
+ public:
+  PairB_s0067_d550(const PairB_s0067_d550& x);  // @ 0x0067e900
+
+  PairBString mKey;           // +0x00
+  PairBCommandRef mpCommand;  // +0x10
 };
 struct PairBObj {
   PairBString mKey;          // +0x00
@@ -675,14 +687,7 @@ KeyNode* __stdcall NewKeyNode(const char* pString)
 
 // @ 0x0067e900
 PairB_s0067_d550::PairB_s0067_d550(const PairB_s0067_d550& x)
-: mpBegin(0), mpEnd(0), mpCapacity(0) {
-  uint32_t n = x.mpEnd - x.mpBegin;
-  ((EA::Key*)this)->RangeInitialize(n + 1);
-  memcpy(mpBegin, x.mpBegin, n);
-  mpEnd = mpBegin + n;
-  *mpEnd = 0;
-  mpCommand = x.mpCommand;
-  if (mpCommand) mpCommand->AddRef();
+: mKey(x.mKey), mpCommand(x.mpCommand) {
 }
 
 // @ 0x0067e9a0

@@ -25,3 +25,4 @@
 ../src/game/SPEngine/SPCheatManager.cpp  ?NewPairA@@YGPAVPairA@@ABUArc01@EA@@@Z  0067e610  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ??1ConsoleStreamDtorView_67ea40@@UAE@XZ  0067ea40  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ?Execute@Cmd_ec70@@QAEXPAX@Z  0067ec70  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??0PairB_s0067_d550@@QAE@ABV0@@Z  0067e900  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
