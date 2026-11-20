@@ -1496,6 +1496,7 @@ struct VO {
     void  FUN_00acd2d0(void* p);
     void  FUN_00acd410(void* p);
     void  FUN_00ac84f0(void* p);   // 0x00ac84f0, defined in another slice
+    int*  FUN_00acbd90(int* other);   // 0x00acbd90 (vector copy-assign; `this` is the vector)
 };
 void* FUN_00accec0(uchar* p, uchar* end, uchar* out);
 // declaration-only alias of the function defined below (0x00accec0): s00ad0510's FUN_00ad08f0 calls it out of line in the
@@ -2217,15 +2218,16 @@ bool CT::FUN_00ac8d80(float* p)
 void* FUN_00accec0(uchar* p, uchar* end, uchar* out)
 {
     if (p != end) {
-        uchar* o = out;
+        uchar* d = out + 9;
+        uchar* s = p + 9;
         do {
-            *(int*)o = *(int*)p;
-            *(o + 8) = *(p + 8);
-            *(o + 9) = *(p + 9);
-            ((XC*)(o + 0xc))->FUN_00acbd90();
-            p += 0x20; o += 0x20;
+            *(int*)out = *(int*)p;
+            d[-1] = s[-1];
+            d[0] = s[0];
+            ((VO*)(d + 3))->FUN_00acbd90((int*)(s + 3));
+            p += 0x20; out += 0x20;
+            d += 0x20; s += 0x20;
         } while (p != end);
-        return o;
     }
     return out;
 }
