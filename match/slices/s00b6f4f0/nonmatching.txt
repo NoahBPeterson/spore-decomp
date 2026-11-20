@@ -12,4 +12,3 @@
 00b70410  335  compare a name object against a triple-key map: complete; equiv WEAK; schedule / register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b705a0   12  destructor (reset 3 vtables, release cards, free both maps + vector): complete; equiv PASS (221 valid, 100% coverage); only a 2-instruction scheduling swap of the mCard6c load / push edi versus the three vtable stores; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b706a0  230  hint: create a tutorial-mission noun for a tool id and remember it: complete; equiv WEAK; frame/register staging differs (orig ebp=this/ebx=key); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b707a0   99  advance the mission for a tool id (returns value&0xffffff00): complete; equiv WEAK; schedule/register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
