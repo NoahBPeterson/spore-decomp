@@ -13,3 +13,4 @@
 ../src/game/SPAudio/eapdinstance.cpp  ?GetGroup@ObjectHashMap@Eapd@Audio@EA@@QAEPAXUPgSymbol@234@@Z  00a64cb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?RemoveAllFor@CursorRegistry@@QAEXPAXH@Z  00a663e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ??1ObjectHashMapObj@Eapd@Audio@EA@@QAE@XZ  00a64b70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?Op1@GroupOwnerL@@QAE_NII@Z  00a68670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

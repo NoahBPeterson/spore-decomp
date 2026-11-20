@@ -1063,8 +1063,10 @@ void InstanceManager::Construct(void* a, void* b)
 bool GroupOwnerL::Op1(unsigned a, unsigned b)
 {
     bool r = false;
-    if (mListener)
+    if (mListener) {
+        _ReadWriteBarrier();
         mListener->OnA(a, b);
+    }
     GTable* t = mTable;
     GIter it = t->find(a);
     if (t->mBuckets[t->mBucketCount] != it.node)
