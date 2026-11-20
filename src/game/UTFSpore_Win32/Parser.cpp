@@ -2972,8 +2972,11 @@ void EA::ArgScript::cParser_s0084_2620::ParseStream(void* pStream)
 // @ 0x00843240
 void cParser_s0084_2620::GetLineLocationInfo(string8_s0084_2620* pInfo, int* pLine) const
 {
-    if (pInfo && &mCurrentPath != pInfo)
-        pInfo->assign(mCurrentPath.mpBegin, mCurrentPath.mpEnd);
+    if (pInfo) {
+        const string8_s0084_2620* src = &mCurrentPath;
+        if (src != pInfo)
+            pInfo->assign(src->mpBegin, src->mpEnd);
+    }
     if (pLine)
         *pLine = mCurrentLine;
 }

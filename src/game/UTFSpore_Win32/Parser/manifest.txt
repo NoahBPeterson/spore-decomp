@@ -53,3 +53,4 @@
 ../src/game/UTFSpore_Win32/Parser.cpp  ??0MacroPair@@QAE@ABU0@@Z  00844a60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ??0cMacroDefinition@ArgScript@EA@@QAE@XZ  00844860  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetBCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?GetLineLocationInfo@cParser_s0084_2620@ArgScript@EA@@UBEXPAUstring8_s0084_2620@eastl@@PAH@Z  00843240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
