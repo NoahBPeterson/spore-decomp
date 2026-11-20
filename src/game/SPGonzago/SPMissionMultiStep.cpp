@@ -57,6 +57,7 @@ struct CMissionOps {
     void  FUN_00c47cc0(int a);                 // 0xc47cc0 SetState
     void  FUN_00c487d0(u32 a, void* b);        // 0xc487d0 GetText
     void  FUN_00c485b0();                      // 0xc485b0 SP::cSPMission::Accept
+    void  FUN_00c47a10();                      // 0xc47a10 SP::cSPMission::OnAccept
     u8    FUN_00c45d80(u32 a);                 // 0xc45d80
 };
 #define MOPS(p) ((CMissionOps*)(p))
@@ -507,13 +508,17 @@ void cMissionMultiStep_s00c5_a580::CompleteStep()
 // @ 0x00c5a790
 void cMissionMultiStep_s00c5_a580::OnAccept()
 {
-    ResetStepSchedule();
-    mCurrentStepIndex = -1;
-    cSPMission* pFirst = nullptr;
-    if (mpStepsEnd - mpStepsBegin > 0)
-        pFirst = (cSPMission*)mpStepsBegin[0];
-    pFirst->Accept();
-    OnAccepted();
+    MOPS(this)->FUN_00c47a10();
+    cMissionMultiStep* self = (cMissionMultiStep*)this;
+    void* pFirst = 0;
+    self->mCurrSub = 0;
+    _ReadWriteBarrier();
+    if (self->SubCount() > 0) {
+        _ReadWriteBarrier();
+        pFirst = self->SubAt(0);
+    }
+    MOPS(pFirst)->FUN_00c485b0();
+    (*(void(__thiscall**)(void*))((char*)vtbl(this) + 0x1a8))(this);
 }
 
 // @ 0x00c5a7d0
