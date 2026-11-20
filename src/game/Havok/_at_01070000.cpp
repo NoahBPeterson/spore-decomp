@@ -77,6 +77,8 @@ public:
     hkResult remove(KEY k);
     KEY getWithDefault(KEY k, KEY def) const;
     void resizeTable(int newSize);
+    void FUN_0107e5b0(int numElements);   // reserve, KEY = unsigned long (tail-calls resizeTable)
+    void FUN_0107e5d0(int numElements);   // reserve, KEY = unsigned __int64
 };
 template<class KEY> inline int hkPointerMapBase<KEY>::findIndex(KEY k) const
 {
@@ -85,6 +87,8 @@ template<class KEY> inline int hkPointerMapBase<KEY>::findIndex(KEY k) const
             return i;
     return mMask + 1;
 }
+template<> void hkPointerMapBase<unsigned long>::FUN_0107e5b0(int numElements);
+template<> void hkPointerMapBase<unsigned __int64>::FUN_0107e5d0(int numElements);
 template class hkPointerMapBase<unsigned long>;
 template class hkPointerMapBase<unsigned __int64>;
 extern void* g_hkStreambufFactorySingleton;   // 0x016e42b4
@@ -493,23 +497,25 @@ found:
 }
 
 // @ 0x0107e5b0
-void FUN_0107e5b0(hkPointerMapBase<unsigned long>* self, int n)
+template<> void hkPointerMapBase<unsigned long>::FUN_0107e5b0(int numElements)
 {
+    int need = 3 * numElements;
     int s = 4;
-    if (3 * n > 4) {
-        do { s += s; } while (s < 3 * n);
+    if (need > s) {
+        do { s += s; } while (s < need);
     }
-    self->resizeTable(s);
+    resizeTable(s);
 }
 
 // @ 0x0107e5d0
-void FUN_0107e5d0(hkPointerMapBase<unsigned __int64>* self, int n)
+template<> void hkPointerMapBase<unsigned __int64>::FUN_0107e5d0(int numElements)
 {
+    int need = 3 * numElements;
     int s = 4;
-    if (3 * n > 4) {
-        do { s += s; } while (s < 3 * n);
+    if (need > s) {
+        do { s += s; } while (s < need);
     }
-    self->resizeTable(s);
+    resizeTable(s);
 }
 
 // @ 0x0107e5f0
