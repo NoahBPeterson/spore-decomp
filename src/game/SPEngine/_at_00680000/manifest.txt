@@ -29,3 +29,4 @@
 ../src/game/SPEngine/_at_00680000.cpp  ??0JobLockView_68f1d0@@QAE@PAUJlRecord_68f1d0@@PAX1@Z  0068f1d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ??4ObjA@@QAEAAU0@ABU0@@Z  00681c40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?CopyBackwardA@@YAPAUObjA@@PAU1@00@Z  00681e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?HashClearBuckets@@YGXPAPAXI@Z  0068d420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

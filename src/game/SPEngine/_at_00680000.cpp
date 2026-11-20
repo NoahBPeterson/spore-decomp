@@ -2345,14 +2345,16 @@ void __stdcall HashClearBuckets(void** buckets, uint32 n)
 {
     for (uint32 i = 0; i < n; ++i) {
         void* node = buckets[i];
-        while (node != 0) {
-            void* b = *(void**)((char*)node + 4);
-            void* c = *(void**)((char*)node + 0xc);
-            void* next = *(void**)((char*)node + 0x14);
-            if ((((char*)c - (char*)b) & ~1) > 2 && b != 0)
-                EAFree(b);
-            EAFree(node);
-            node = next;
+        if (node != 0) {
+            do {
+                void* cur = node;
+                node = *(void**)((char*)node + 0x14);
+                void* b = *(void**)((char*)cur + 4);
+                void* c = *(void**)((char*)cur + 0xc);
+                if ((((char*)c - (char*)b) & ~1) > 2 && b != 0)
+                    EAFree(b);
+                EAFree(cur);
+            } while (node != 0);
         }
         buckets[i] = 0;
     }
