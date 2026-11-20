@@ -515,25 +515,23 @@ RefPairCopy::RefPairCopy(const RefPairCopy& o)
 // @ 0x006b1ef0
 RefPair* RefPair::Assign(const RefPair* o)
 {
-  if (o->a != a) {
-    if (o->a != 0) {
-      o->a->ref.AddRef();
-    }
-    RefA* old = a;
-    a = o->a;
-    if (old != 0) {
-      old->ref.Release();
-    }
+  RefA* const pa = o->a;
+  RefA* const oldA = a;
+  if (pa != oldA) {
+    if (pa != 0)
+      pa->ref.AddRef();
+    a = pa;
+    if (oldA != 0)
+      oldA->ref.Release();
   }
-  if (o->b != b) {
-    if (o->b != 0) {
-      o->b->AddRef();
-    }
-    RefB* old = b;
-    b = o->b;
-    if (old != 0) {
-      old->Release();
-    }
+  RefB* const pb = o->b;
+  RefB* const oldB = b;
+  if (pb != oldB) {
+    if (pb != 0)
+      pb->AddRef();
+    b = pb;
+    if (oldB != 0)
+      oldB->Release();
   }
   return this;
 }
