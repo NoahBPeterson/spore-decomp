@@ -1,6 +1,12 @@
 // EA::UTFWinTools::RWTextureFactory -- the image -> RenderWare texture resource factory
 // (with the image reader/writer helper objects it drives).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebcdc[];
+extern "C" char g_141aa84[];
+extern "C" char g_14469dc[];
+extern "C" char g_14469f0[];
+
 #include "game/types.h"
 #include "EA/UTFWinTools/RWTextureFactory.h"
 
@@ -336,14 +342,14 @@ bool EA::UTFWinTools::RWTextureFactory::WriteResource(EA::ResourceMan::Resource 
 void* __fastcall FUN_009986e0(void* self)
 {
     char* a = (char*)self;
-    *(void**)(a + 0) = (void*)0x141aa84;   // Texture base vptr
-    *(void**)(a + 8) = (void*)0x13ebcdc;   // Resource base vptr
+    *(void**)(a + 0) = (void*)g_141aa84;   // Texture base vptr
+    *(void**)(a + 8) = (void*)g_13ebcdc;   // Resource base vptr
     _InterlockedExchange((volatile long*)(a + 0xc), 0);   // Resource::mRefCount
     *(unsigned*)(a + 0x10) = 0;            // Resource::mKey (instance)
     *(unsigned*)(a + 0x14) = 0;            // Resource::mKey (type)
     *(unsigned*)(a + 0x18) = 0;            // Resource::mKey (group)
-    *(void**)(a + 0) = (void*)0x14469f0;   // final Texture vptr
-    *(void**)(a + 8) = (void*)0x14469dc;   // final Resource vptr
+    *(void**)(a + 0) = (void*)g_14469f0;   // final Texture vptr
+    *(void**)(a + 8) = (void*)g_14469dc;   // final Resource vptr
     *(unsigned*)(a + 0x1c) = 0;            // mRecord
     *(unsigned*)(a + 4) = 0;               // Texture::mRawTexture
     return a;

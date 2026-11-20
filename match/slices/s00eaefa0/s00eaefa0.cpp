@@ -7,6 +7,9 @@
 // Retail member offsets are read from the disassembly; the dev PDB layout differs,
 // so objects are modelled locally with role-named members at retail offsets.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+
 typedef unsigned int u32;
 typedef unsigned short u16;
 typedef unsigned char u8;
@@ -158,7 +161,7 @@ ResMusic *ResMusic::ScalarDeletingDtor(u8 flags)
         operator_delete_array(mVec30.mpBegin);
     if (mVec1c.mpBegin != 0)
         operator_delete_array(mVec1c.mpBegin);
-    mpVtbl = (void *)0x013eb938;
+    mpVtbl = (void *)g_13eb938;
     if ((flags & 1) != 0)
         operator_delete_array(this);
     return this;

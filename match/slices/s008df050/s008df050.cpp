@@ -19,6 +19,9 @@
 //   008dfde0  rbtree<ChangeNotificationInfo>::DoInsertValue
 //   008dfed0  AutoRefVec::assign-from-range ctor helper
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436ab8[];
+
 #include <string.h>
 #include "types.h"
 
@@ -645,7 +648,7 @@ uint32 Manager::GetTypeFromTypename(const wchar_t* pName)
 const wchar_t* Manager::GetTypenameFromType(uint32 nType)
 {
     Thread::Mutex* pMutex = &mNameMutex;
-    pMutex->Lock((const char*)0x1436AB8);
+    pMutex->Lock((const char*)g_1436ab8);
     HashTable* pMap = &mTypenameMap;
     void* it[2];
     void** ppNode = pMap->findString(it, &nType);

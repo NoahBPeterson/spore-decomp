@@ -7,6 +7,17 @@
 //   00dd0710..00dd1250  UI::AssetDiscovery_Data / TimelineSporepediaCardData (Spui)
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147c9e8[];
+extern "C" char g_147c9f8[];
+extern "C" char g_147cac0[];
+extern "C" char g_147cb90[];
+extern "C" char g_147cba0[];
+extern "C" char g_147cbb0[];
+extern "C" char g_147cc78[];
+extern "C" char g_147cc88[];
+
 #include "types.h"
 #include <math.h>
 #include <new>
@@ -784,9 +795,9 @@ void* AssetDiscovery_Data::ConstructBase()
     mField_84 = 0;
     mField_88 = 0;
     mpPayload = 0;
-    ((void**)this)[0] = (void*)0x147c9f8;
-    ((void**)this)[4] = (void*)0x147c9e8;
-    ((void**)this)[5] = (void*)0x147cc78;
+    ((void**)this)[0] = (void*)g_147c9f8;
+    ((void**)this)[4] = (void*)g_147c9e8;
+    ((void**)this)[5] = (void*)g_147cc78;
     mField_80 = 0xffffffffu;
     mEnumValue = 0x7fffffff;
     mField_90 = fMinusOne;
@@ -813,9 +824,9 @@ void* __cdecl CreateAssetDiscoveryDataTag()
     AssetDiscovery_Data* p = (AssetDiscovery_Data*)operator new(0x9c, "Spui", 0, 0, 0, 0);
     if (p != 0) {
         p->ConstructBase();
-        ((void**)p)[0] = (void*)0x147cac0;
-        ((void**)p)[4] = (void*)0x147cc88;
-        ((void**)p)[5] = (void*)0x147cc78;
+        ((void**)p)[0] = (void*)g_147cac0;
+        ((void**)p)[4] = (void*)g_147cc88;
+        ((void**)p)[5] = (void*)g_147cc78;
         return p;
     }
     return 0;
@@ -825,9 +836,9 @@ void* __cdecl CreateAssetDiscoveryDataTag()
 void* AssetDiscovery_DataCStr::ConstructString()
 {
     ConstructBase();
-    ((void**)this)[0] = (void*)0x147cbb0;
-    ((void**)this)[4] = (void*)0x147cba0;
-    ((void**)this)[5] = (void*)0x147cb90;
+    ((void**)this)[0] = (void*)g_147cbb0;
+    ((void**)this)[4] = (void*)g_147cba0;
+    ((void**)this)[5] = (void*)g_147cb90;
     mString.Construct();
     return this;
 }
@@ -835,13 +846,13 @@ void* AssetDiscovery_DataCStr::ConstructString()
 // @ 0x00dd0cf0
 void* AssetDiscovery_DataCStr::Delete(unsigned char flags)
 {
-    ((void**)this)[0] = (void*)0x147cbb0;
-    ((void**)this)[4] = (void*)0x147cba0;
-    ((void**)this)[5] = (void*)0x147cb90;
+    ((void**)this)[0] = (void*)g_147cbb0;
+    ((void**)this)[4] = (void*)g_147cba0;
+    ((void**)this)[5] = (void*)g_147cb90;
     mString.~cString_s006b_47a0();
-    ((void**)this)[0] = (void*)0x147c9f8;
-    ((void**)this)[4] = (void*)0x147c9e8;
-    ((void**)this)[5] = (void*)0x147cc78;
+    ((void**)this)[0] = (void*)g_147c9f8;
+    ((void**)this)[4] = (void*)g_147c9e8;
+    ((void**)this)[5] = (void*)g_147cc78;
     TimelineSporepediaCardData_Dtor(this);
     if (flags & 1)
         operator delete[](this);
@@ -855,9 +866,9 @@ void* __cdecl CreateAssetDiscoveryData()
     if (p != 0) {
         p->ConstructBase();
         cString_s006b_47a0* pStr = &p->mString;
-        ((void**)p)[0] = (void*)0x147cbb0;
-        ((void**)p)[4] = (void*)0x147cba0;
-        ((void**)p)[5] = (void*)0x147cb90;
+        ((void**)p)[0] = (void*)g_147cbb0;
+        ((void**)p)[4] = (void*)g_147cba0;
+        ((void**)p)[5] = (void*)g_147cb90;
         pStr->Construct();
         return p;
     }

@@ -2,6 +2,10 @@
 // Object file: UTFSpore_Win32/StringTable.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_1446b40[];
+
 #include "game/types.h"
 #include "EA/Allocator/StackAllocator.h"
 
@@ -101,7 +105,7 @@ StringTable::StringTable()
 // @ 0x00999820
 UIStringMan::UIStringMan(void* arg)
 : mpArg(arg), mField04(0) {
-  mpVtbl = (void**)0x01446b40;
+  mpVtbl = (void**)g_1446b40;
   IntrusiveListHead& head = mList;
   head.mpPrev = &head;
   head.mpNext = &head;
@@ -110,10 +114,10 @@ UIStringMan::UIStringMan(void* arg)
 // @ 0x00999850
 UIStringMan* UIStringMan::ScalarDtor(unsigned flags)
 {
-  mpVtbl = (void**)0x01446b40;
+  mpVtbl = (void**)g_1446b40;
   ClearList();
   mList.Destroy();
-  mpVtbl = (void**)0x013ef094;
+  mpVtbl = (void**)g_13ef094;
   if (flags & 1)
     operator_delete(this);
   return this;

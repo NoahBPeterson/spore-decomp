@@ -1,4 +1,11 @@
 // Slice s00abc1a0 -- Spore Swarm distribution descriptor cluster (unnamed FUN_* functions):
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f21d4[];
+extern "C" char g_1459844[];
+extern "C" char g_14599e8[];
+
 #include <intrin.h>
 // descriptor serialisation (read/write), vector<0x0c> helpers, an AnalysisInfo-list container,
 // and a couple of component vtable ctors/dtors.
@@ -534,14 +541,14 @@ struct AList {
 void* AList::ctor(void* a1)
 {
     char* s = (char*)this;
-    *(void**)(s + 4) = (void*)0x13ef094;
+    *(void**)(s + 4) = (void*)g_13ef094;
     *(uint*)(s + 8) = 0;
     float zz = 0.0f;
     *(float*)(s + 0x20) = zz;
     *(float*)(s + 0x24) = zz;
     float one = DAT_01485720;
-    *(void**)(s + 0) = (void*)0x1459844;
-    *(void**)(s + 4) = (void*)0x14599e8;
+    *(void**)(s + 0) = (void*)g_1459844;
+    *(void**)(s + 4) = (void*)g_14599e8;
     *(void**)(s + 0xc) = a1;
     *(uint*)(s + 0x10) = 0;
     *(uint*)(s + 0x14) = 0;
@@ -567,8 +574,8 @@ void* AList::ctor(void* a1)
 void* AList::Destroy(uint flags)
 {
     char* s = (char*)this;
-    *(void**)(s + 0) = (void*)0x13f21d4;
-    *(void**)(s + 4) = (void*)0x13ef094;
+    *(void**)(s + 0) = (void*)g_13f21d4;
+    *(void**)(s + 4) = (void*)g_13ef094;
     if (flags & 1)
         operator_delete__(s);
     return s;
@@ -653,7 +660,7 @@ void* B90::Destroy(uint flags)
         if (*((uint*)p - 1) != 0)
             EA_FREE(p);
     }
-    *(void**)(s + 0) = (void*)0x13ef094;
+    *(void**)(s + 0) = (void*)g_13ef094;
     if (flags & 1)
         operator_delete__(s);
     return s;

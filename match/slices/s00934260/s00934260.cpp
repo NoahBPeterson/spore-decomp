@@ -1,5 +1,9 @@
 // Slice s00934260 - EA::IO::IniFile::WriteEntry (EAIO, retail layout; fields addressed per the disassembly).
 // Flags /O2 /MD /Gy /TP /GS- (no /EHsc: the original has no EH frame).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143e7d8[];
+
 #include "types.h"
 #include <string.h>
 
@@ -360,7 +364,7 @@ IniFile::~IniFile()
 {
     VTableHeader* pHeader = (VTableHeader*)this;
     NameMap* pNameMap = &mSectionNameMap;
-    pHeader->mpVTable = (void*)0x143e7d8;
+    pHeader->mpVTable = (void*)g_143e7d8;
     pNameMap->DoNukeSubtree(pNameMap->mpRoot);
     PosMap* pMap = &mSectionPositionMap;
     pMap->DoNukeSubtree(pMap->mpRoot);

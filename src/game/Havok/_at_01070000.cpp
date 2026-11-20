@@ -2,6 +2,9 @@
 // Object file: Havok/_at_01070000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_149c85c[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -280,7 +283,7 @@ void* hkSmallObj::FUN_0107dc90()
 {
     void* self = this;
     char* p = (char*)self;
-    *(void**)p = (void*)0x149c85c;
+    *(void**)p = (void*)g_149c85c;
     *(int*)(p + 0xc) = 1;
     *(int*)(p + 0x10) = 0;
     *(int*)(p + 0x14) = 0;

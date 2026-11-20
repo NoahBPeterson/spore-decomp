@@ -1,6 +1,15 @@
 // Slice s009568c0 - UTFWin 2D render system, display/renderable list pools,
 // EASTL vector helpers and Object/UI::Image layer code.
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast  (as every manifest row; no /EHsc: the originals have no EH frames)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_14404ac[];
+extern "C" char g_144064c[];
+extern "C" char g_154ede4[];
+extern "C" char g_154ede8[];
+extern "C" char g_154edec[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -278,9 +287,9 @@ struct UIRes { void* Dtor(unsigned char flags); };
 
 void* UIRes::Dtor(unsigned char flags) {
     void* self = this;
-    *(void**)self = (void*)0x14404ac;
+    *(void**)self = (void*)g_14404ac;
     FUN_009558c0();
-    *(void**)self = (void*)0x13eb938;
+    *(void**)self = (void*)g_13eb938;
     if (flags & 1)
         operator_delete__(self);
     return self;
@@ -766,12 +775,12 @@ void UIObj::SetRect(float* in) {
 // @ 0x00957850
 // ===========================================================================
 void __fastcall FUN_00957850(int* self) {
-    self[0] = 0x144064c;
+    self[0] = (int)g_144064c;
     if (self[1] != 0) {
         ((VFn0)Vt((void*)self[1])[1])((void*)self[1]);
         self[1] = 0;
     }
-    self[0] = 0x13eb938;
+    self[0] = (int)g_13eb938;
 }
 
 // ===========================================================================
@@ -780,11 +789,11 @@ void __fastcall FUN_00957850(int* self) {
 void** __cdecl FUN_00957880(int a, int b) {
     if ((g_166b134 & 1) == 0) {
         g_166b134 |= 1;
-        *(int*)0x154ede4 = a;
-        *(int*)0x154ede8 = b;
-        *(int*)0x154edec = 0;
+        *(int*)g_154ede4 = a;
+        *(int*)g_154ede8 = b;
+        *(int*)g_154edec = 0;
     }
-    return (void**)0x154edd8;
+    return (void**)&g_154edd8;
 }
 
 // ===========================================================================
@@ -810,12 +819,12 @@ bool __cdecl FUN_009578c0(SerObj* a, SerObj* pObj, SerDesc* pDesc, SerValue* pOu
 // ===========================================================================
 void* UIObj::VirtualDtor(unsigned char flags) {
     int* self = (int*)this;
-    self[0] = 0x144064c;
+    self[0] = (int)g_144064c;
     if (self[1] != 0) {
         ((VFn0)Vt((void*)self[1])[1])((void*)self[1]);
         self[1] = 0;
     }
-    self[0] = 0x13eb938;
+    self[0] = (int)g_13eb938;
     if (flags & 1)
         operator_delete__(self);
     return self;
@@ -826,7 +835,7 @@ void* UIObj::VirtualDtor(unsigned char flags) {
 // ===========================================================================
 int* UIObj::Ctor(int* p2, int* p3, float* r, int extra) {
     int* self = (int*)this;
-    self[0] = 0x144064c;
+    self[0] = (int)g_144064c;
     _InterlockedExchange((volatile long*)(self + 10), 0);
     self[1] = (int)p2;
     if (p2 != 0)

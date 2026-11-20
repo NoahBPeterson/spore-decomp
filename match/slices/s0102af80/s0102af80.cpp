@@ -1,6 +1,10 @@
 // Slice s0102af80 - SP living-universe / allied-UFO / space-combat helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1416f14[];
+extern "C" char g_1499570[];
+
 typedef unsigned int       uint32_t;
 typedef unsigned short     uint16_t;
 typedef unsigned char      uint8_t;
@@ -148,7 +152,7 @@ public:
 
 // @ 0x0102b140
 void* Owner01402::FUN_0102b140(uint8_t flags) {
-    this->vtbl = 0x1499570;
+    this->vtbl = (int)g_1499570;
     _ReadWriteBarrier();
     uint32_t p = this->child;
     if (p != 0) {
@@ -159,7 +163,7 @@ void* Owner01402::FUN_0102b140(uint8_t flags) {
     if (p != 0) {
         ((void(__thiscall*)(uint32_t))VF(p, 4))(p);
     }
-    this->vtbl = 0x1416f14;
+    this->vtbl = (int)g_1416f14;
     if ((flags & 1) != 0) {
         FUN_00f47380(this);
     }

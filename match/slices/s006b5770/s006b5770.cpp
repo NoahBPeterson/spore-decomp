@@ -1,6 +1,10 @@
 // slice s006b5770: App::cStringDetokenizer / ITokenTranslator and
 // SP::cStringTableResourceFactory.
 // Flags: /O2 /MD /Gy /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+
 #include "types.h"
 
 typedef unsigned short wchar16;
@@ -877,7 +881,7 @@ void* Hashtable::ScalarDeletingDtor(unsigned deleteFlag)
     int pool = self[6];
     if (pool != 0 && *(int*)(pool - 4) != 0)
         eastl::operator_delete_array((void*)pool);
-    *(void**)self = (void*)0x13eb938;   // ??_7ITracerBase@Trace@EA@@6B@
+    *(void**)self = (void*)g_13eb938;   // ??_7ITracerBase@Trace@EA@@6B@
     if (deleteFlag & 1)
         eastl::operator_delete_array(self);
     return self;

@@ -6,6 +6,10 @@
 // Reconstructed from work/match/scratch_s00d47630_card.txt.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_147adf8[];
+
 typedef unsigned int     u32;
 typedef signed   int     i32;
 typedef unsigned char    u8;
@@ -57,7 +61,7 @@ struct cContentValidationSummarizer {
 void cContentValidationSummarizer::FUN_00d47850()
 {
     cNodePool* pool = &mPool;
-    mVtbl_00 = (void*)0x147adf8;
+    mVtbl_00 = (void*)g_147adf8;
     pool->FreeLists(pool->mpTail, pool->mCount);
     u8* p = (u8*)pool->mpTail;
     pool->mField_0c = 0;
@@ -65,12 +69,12 @@ void cContentValidationSummarizer::FUN_00d47850()
         if (p >= pool->mpPoolLo && p < pool->mpPoolHi) {
             *(void**)p = pool->mpFreeHead;
             pool->mpFreeHead = p;
-            mVtbl_00 = (void*)0x13ec458;
+            mVtbl_00 = (void*)g_13ec458;
             return;
         }
         FUN_00f47380(p);
     }
-    mVtbl_00 = (void*)0x13ec458;
+    mVtbl_00 = (void*)g_13ec458;
 }
 
 // ---------------------------------------------------------------------------

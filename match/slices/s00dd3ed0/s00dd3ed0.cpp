@@ -7,6 +7,14 @@
 // strings and finally registers the screen's message handler with the message server.
 // Layout is the retail one (AutoRefCount members at +0x0c ... +0x30), not the 2008 PDB's.
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no EH frame in the original).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_147cd84[];
+extern "C" char g_147cd8c[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -390,9 +398,9 @@ __forceinline cString* SetScreenClosed(cSPUICommScreen* s, cString* p)
 // @ 0x00dd4150
 cSPUICommScreen* __fastcall ConstructCommScreen(cSPUICommScreen* self)
 {
-    self->mHandlerSub.mpVtbl = (void*)0x13eb394;    // transient base-class vtable
-    self->vtbl = (void*)0x147cd8c;
-    self->mHandlerSub.mpVtbl = (void*)0x147cd84;
+    self->mHandlerSub.mpVtbl = (void*)g_13eb394;    // transient base-class vtable
+    self->vtbl = (void*)g_147cd8c;
+    self->mHandlerSub.mpVtbl = (void*)g_147cd84;
     self->mHandlerSub.mF08 = 0;
     self->mLayout.p = 0;
     self->pad10 = 0;
@@ -431,9 +439,9 @@ cSPUICommScreen* __fastcall ConstructCommScreen(cSPUICommScreen* self)
     self->mFd8[4] = 0;
     _ReadWriteBarrier();
 
-    self->mFec = (const void*)0x1667bac;
-    self->mFf0 = (const void*)0x1667bac;
-    self->mFf4 = (const void*)0x1667bae;
+    self->mFec = (const void*)g_1667bac;
+    self->mFf0 = (const void*)g_1667bac;
+    self->mFf4 = (const void*)g_1667bae;
 
     return self;
 }

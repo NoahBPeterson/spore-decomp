@@ -2,6 +2,35 @@
 // Object file: SPGonzago/SPMission.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb384[];
+extern "C" char g_13eb394[];
+extern "C" char g_13f01bc[];
+extern "C" char g_13f5c04[];
+extern "C" char g_146d164[];
+extern "C" char g_146d174[];
+extern "C" char g_146d188[];
+extern "C" char g_146d624[];
+extern "C" char g_146d638[];
+extern "C" char g_146d840[];
+extern "C" char g_146dfb4[];
+extern "C" char g_146fbf0[];
+extern "C" char g_168ee08[];
+extern "C" char g_168ee1c[];
+extern "C" char g_168ee30[];
+extern "C" char g_168ee44[];
+extern "C" char g_168ee58[];
+extern "C" char g_168ee6c[];
+extern "C" char g_168ee80[];
+extern "C" char g_168ee94[];
+extern "C" char g_168eea8[];
+extern "C" char g_168eebc[];
+extern "C" char g_168eed0[];
+extern "C" char g_168eee4[];
+extern "C" char g_168eef8[];
+extern "C" char g_168ef48[];
+extern "C" char g_16e0d08[];
+
 // Hand guard (kept by merge_preamble on re-apply): the generated tm.h defines `struct tm` unguarded, so it
 // collides with <wchar.h>'s own `struct tm` (C2011) as soon as a slice of this module needs <wchar.h>.
 // Defining the CRT guard first makes <wchar.h> skip its copy; tm.h (via SP/cStarRecord.h) still supplies
@@ -2708,10 +2737,10 @@ void cSPMission_s00c4_5860::WriteUintVector(VecU32_s00c4_5860* vec, void* stream
 cGenericPressureEvent* cGenericPressureEvent::ctor()
 {
     Ctor();
-    *(void* volatile*)((char*)this + 0x34) = (void*)0x13eb384;
-    mpVtbl = (void*)0x146d188;
-    mpVtbl4 = (void*)0x146d174;
-    mpVtbl34 = (void*)0x146d164;
+    *(void* volatile*)((char*)this + 0x34) = (void*)g_13eb384;
+    mpVtbl = (void*)g_146d188;
+    mpVtbl4 = (void*)g_146d174;
+    mpVtbl34 = (void*)g_146d164;
     mTimer38.Ctor();
     mTimer58.Ctor();
     return this;
@@ -2720,12 +2749,12 @@ cGenericPressureEvent* cGenericPressureEvent::ctor()
 // @ 0x00c46540
 void* cGenericPressureEvent::ScalarDeletingDtor(u32 flags)
 {
-    mpVtbl = (void*)0x146d188;
-    mpVtbl4 = (void*)0x146d174;
-    mpVtbl34 = (void*)0x146d164;
+    mpVtbl = (void*)g_146d188;
+    mpVtbl4 = (void*)g_146d174;
+    mpVtbl34 = (void*)g_146d164;
     mTimer58.Dtor();
     mTimer38.Dtor();
-    mpVtbl34 = (void*)0x13eb394;
+    mpVtbl34 = (void*)g_13eb394;
     Dtor();
     if ((flags & 1) != 0)
         OperatorDeleteArray(this);
@@ -3570,30 +3599,30 @@ void SPObject::FUN_00c48970(int idx, WStr* out)
         return;
     switch (mArrCC[idx]) {
     case 0:
-        out->append(((CStr*)0x168ee08)->GetText());
+        out->append(((CStr*)g_168ee08)->GetText());
         return;
     case 1:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee1c)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee1c)->GetText());
         return;
     case 2:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee30)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee30)->GetText());
         return;
     case 3:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee44)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee44)->GetText());
         return;
     case 4:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee58)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee58)->GetText());
         return;
     case 5:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee6c)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee6c)->GetText());
         return;
     case 6:
-        out->append(((CStr*)0x168ee80)->GetText());
+        out->append(((CStr*)g_168ee80)->GetText());
         return;
     }
 }
@@ -3606,7 +3635,7 @@ void SPObject::FUN_00c48a90(WStr* out)
         return;
     _ReadWriteBarrier();
     if (i < 10) {
-        const wchar_t* p = ((CStr*)(0x168ef48 + i * 0x14))->GetText();
+        const wchar_t* p = ((CStr*)((int)g_168ef48 + i * 0x14))->GetText();
         out->assign(p, p + WStrLen(p));
     }
 }
@@ -3616,22 +3645,22 @@ void SPObject::FUN_00c48ae0(WStr* out)
 {
     switch (mKindF8) {
     case 0:
-        out->append(((CStr*)0x168ee94)->GetText());
+        out->append(((CStr*)g_168ee94)->GetText());
         break;
     case 1:
-        out->append(((CStr*)0x168eea8)->GetText());
+        out->append(((CStr*)g_168eea8)->GetText());
         return;
     case 2:
-        out->append(((CStr*)0x168eebc)->GetText());
+        out->append(((CStr*)g_168eebc)->GetText());
         return;
     case 3:
-        out->append(((CStr*)0x168eed0)->GetText());
+        out->append(((CStr*)g_168eed0)->GetText());
         return;
     case 4:
-        out->append(((CStr*)0x168eee4)->GetText());
+        out->append(((CStr*)g_168eee4)->GetText());
         return;
     case 5:
-        out->append(((CStr*)0x168eef8)->GetText());
+        out->append(((CStr*)g_168eef8)->GetText());
         return;
     }
 }
@@ -3824,7 +3853,7 @@ void SPObject::FUN_00c49140(WStr* out)
     CivData* o = (CivData*)GetCivData();
     if (o) {
         o->FUN_c30c80();
-        WStr3(out, (const wchar_t*)0x13f5c04, *o->GetCities());
+        WStr3(out, (const wchar_t*)g_13f5c04, *o->GetCities());
     }
 }
 
@@ -3834,7 +3863,7 @@ void SPObject::FUN_00c49180(WStr* out)
     CivData* o = (CivData*)GetOwnerEmpire();
     if (o) {
         o->FUN_c30c80();
-        WStr3(out, (const wchar_t*)0x13f5c04, *o->GetCities());
+        WStr3(out, (const wchar_t*)g_13f5c04, *o->GetCities());
     }
 }
 
@@ -4032,7 +4061,7 @@ void SPObject::FUN_00c49800(WStr* out)
 {
     float f = mFieldC8;
     int i = SseCeilToInt(f);
-    WStr3(out, (const wchar_t*)0x13f01bc, i);
+    WStr3(out, (const wchar_t*)g_13f01bc, i);
 }
 
 // @ 0x00c49840
@@ -4042,7 +4071,7 @@ void SPObject::FUN_00c49840(WStr* out)
     // Retail computes both interval bounds before formatting the lower bound.
     int low = SseRoundToInt(value - 0.5f);
     SseRoundToInt(value + 0.5f);
-    WStr3(out, (const wchar_t*)0x13f01bc, low);
+    WStr3(out, (const wchar_t*)g_13f01bc, low);
 }
 
 // @ 0x00c49890
@@ -4052,7 +4081,7 @@ void SPObject::FUN_00c49890(WStr* out)
     // Retail computes both interval bounds before formatting the upper bound.
     SseRoundToInt(value - 0.5f);
     int i = SseRoundToInt(value + 0.5f);
-    WStr3(out, (const wchar_t*)0x13f01bc, i);
+    WStr3(out, (const wchar_t*)g_13f01bc, i);
 }
 
 // @ 0x00c498e0
@@ -4584,9 +4613,9 @@ Simulator::cMissionAdventure::cMissionAdventure()
     Simulator_cGenericPressureEvent_ctor(this);
     mField1f0 = 0;
     mpData1f4 = 0;
-    mpVtbl = (void**)0x146d638;
-    mpVtbl04 = (void**)0x146dfb4;
-    mpVtbl34 = (void**)0x146d624;
+    mpVtbl = (void**)g_146d638;
+    mpVtbl04 = (void**)g_146dfb4;
+    mpVtbl34 = (void**)g_146d624;
 }
 
 // @ 0x00c4b0c0
@@ -4673,7 +4702,7 @@ Simulator::cMissionBalance::cMissionBalance()
     Simulator_cGenericPressureEvent_ctor(this);
     mField1f0 = 0;
     mThreshold = 0;
-    mpVtbl = (void**)0x146d840;
-    mpVtbl04 = (void**)0x146dfb4;
-    mpVtbl34 = (void**)0x146fbf0;
+    mpVtbl = (void**)g_146d840;
+    mpVtbl04 = (void**)g_146dfb4;
+    mpVtbl34 = (void**)g_146fbf0;
 }

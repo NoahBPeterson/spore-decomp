@@ -2,6 +2,13 @@
 // Object file: SPGonzago/SPCityModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00acdff0();
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+extern "C" char g_169d2c8[];
+
 #include "game/types.h"
 #include "SP/cCity.h"
 #include "SP/cGameNounManager.h"
@@ -1582,7 +1589,7 @@ void __cdecl FUN_00cfa360()
     gtm->DecPauseGate(0x4bf38a7);
     Cfg* cfg = (Cfg*)SP_ConfigManager();
     if (cfg->GetFlag(0x4ea96cb) != 0) {
-        ((Strat*)*(void**)0x0169d2c8)->CheckEvents();
+        ((Strat*)*(void**)g_169d2c8)->CheckEvents();
         return;
     }
     ((SubObj_s00cf_9ba0*)FUN_00b3d4f0_1())->Rel(0);
@@ -1899,8 +1906,8 @@ void FUN_00cfb2c0(void)
 void* cCivModeStrategy_s00cf_ab90::GetNumberedCity(int index)
 {
     cGameNounManager* nm = (cGameNounManager*)NounManager();
-    tVecData* v = nm->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
-                                        (void*)0x00acdff0, (void*)0x00b1e500,
+    tVecData* v = nm->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                        (void*)FUN_00acdff0, (void*)FUN_00b1e500,
                                         (void*)0x018c43e8);
     void** items = (void**)&v->mItems[0];
     if (index < (void**)items[1] - (void**)items[0])

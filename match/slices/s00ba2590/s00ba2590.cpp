@@ -1,5 +1,13 @@
 // Slice s00ba2590 — Simulator species-relationship / PlayerPlanetData helpers.
 // Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1465d64[];
+extern "C" char g_13eb394[];
+extern "C" char g_1465d70[];
+extern "C" char g_1465d78[];
+extern "C" char g_1465dc8[];
+
 #include "types.h"
 
 void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int); // 0xf473a0
@@ -225,7 +233,7 @@ void* __cdecl FUN_00ba2e50(int lo, int hi, uint32_t* key) {
 struct PPD { char pad00[0x70]; void* f68; char pad[0x24]; };
 void __thiscall W::Run_00ba2f20() {
   char* s = (char*)this;
-  *(void**)s = (void*)0x1465dc8;
+  *(void**)s = (void*)g_1465d64;   // PlayerPlanetData vtable
   ((CGZTimer*)(s + 0x80))->Dtor();
   if (*(void**)(s + 0x68)) operator_delete__(*(void**)(s + 0x68));
   if (*(void**)(s + 0x50)) operator_delete__(*(void**)(s + 0x50));
@@ -237,7 +245,7 @@ void __thiscall W::Run_00ba2f20() {
 // @ 0x00ba2f90
 void* __thiscall W::Run_00ba2f90() {
   char* s = (char*)this;
-  *(void**)s = (void*)0x1465d64;
+  *(void**)s = (void*)g_1465d64;
   for (int off = 0x08; off <= 0x70; off += 0x18) {
     *(void**)(s + off) = 0; *(void**)(s + off + 4) = 0; *(void**)(s + off + 8) = 0;
   }
@@ -397,9 +405,9 @@ int __cdecl FUN_00ba36f0(void* buf, int end, int ret) {
 // @ 0x00ba37a0
 void __thiscall W::Run_00ba37a0() {
   char* s = (char*)this;
-  *(void**)s = (void*)0x1465dc8;
-  *(void**)(s + 4) = (void*)0x1465d78;
-  *(void**)(s + 8) = (void*)0x1465d70;
+  *(void**)s = (void*)g_1465dc8;
+  *(void**)(s + 4) = (void*)g_1465d78;
+  *(void**)(s + 8) = (void*)g_1465d70;
   VecHdr* b = (VecHdr*)(s + 0x40);
   b->FreeNodes(b->data, b->size);
   b->fieldC = 0;
@@ -409,5 +417,5 @@ void __thiscall W::Run_00ba37a0() {
   a->fieldC = 0;
   if (a->size > 1) operator_delete__(a->data);
   ((CGZSub*)(s + 4))->Dtor();
-  *(void**)s = (void*)0x13eb394;
+  *(void**)s = (void*)g_13eb394;
 }

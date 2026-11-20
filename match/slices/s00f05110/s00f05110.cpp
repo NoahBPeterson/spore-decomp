@@ -2,6 +2,23 @@
 // String feed builder, YouTube authentication message senders and the upload
 // progress/panel layout code.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f5b98[];
+extern "C" char g_13ff0d8[];
+extern "C" char g_13ff0dc[];
+extern "C" char g_13ff0e8[];
+extern "C" char g_13ff0fc[];
+extern "C" char g_13ff140[];
+extern "C" char g_13ff250[];
+extern "C" char g_13ff260[];
+extern "C" char g_13ff294[];
+extern "C" char g_13ff2c4[];
+extern "C" char g_13ff2f0[];
+extern "C" char g_13ff3dc[];
+extern "C" char g_148b8bc[];
+extern "C" char g_148b900[];
+extern "C" char g_148b964[];
+
 typedef unsigned char  uchar;
 typedef unsigned short ushort;
 typedef unsigned int   uint;
@@ -67,9 +84,9 @@ void Movie::SendPublicAuth()
     at<uchar>(this, 0xbe) = 1;
     at<uchar>(this, 0xbd) = 0;
     at<uchar>(this, 0xbc) = 0;
-    msg.mToken.sprintf((const char*)0x13f5b98, at<int>(this, 0x8c));
-    msg.mUser.sprintf((const char*)0x13f5b98, at<int>(this, 0x9c));
-    msg.mExtra.sprintf((const char*)0x13f5b98, (const char*)0x13ff0d8);
+    msg.mToken.sprintf((const char*)g_13f5b98, at<int>(this, 0x8c));
+    msg.mUser.sprintf((const char*)g_13f5b98, at<int>(this, 0x9c));
+    msg.mExtra.sprintf((const char*)g_13f5b98, (const char*)g_13ff0d8);
     msg.mPrivate = 1;
     void* srv = MessageServer();
     ((void (__thiscall*)(void*, int, YtAuthMsg*, int))
@@ -85,9 +102,9 @@ void Movie::LoginToYouTube()
     at<uchar>(this, 0xc1) = 1;
     at<uchar>(this, 0xc0) = 0;
     at<uchar>(this, 0xbf) = 0;
-    msg.mToken.sprintf((const char*)0x13f5b98, at<int>(this, 0x8c));
-    msg.mUser.sprintf((const char*)0x13f5b98, at<int>(this, 0x9c));
-    msg.mExtra.sprintf((const char*)0x13f5b98, (const char*)0x13ff0d8);
+    msg.mToken.sprintf((const char*)g_13f5b98, at<int>(this, 0x8c));
+    msg.mUser.sprintf((const char*)g_13f5b98, at<int>(this, 0x9c));
+    msg.mExtra.sprintf((const char*)g_13f5b98, (const char*)g_13ff0d8);
     msg.mPrivate = 0;
     void* srv = MessageServer();
     ((void (__thiscall*)(void*, int, YtAuthMsg*, int))
@@ -120,19 +137,19 @@ void __stdcall BuildYtFeed(EaStr* out)
         *out->mpBegin = 0;
         out->mpEnd = out->mpBegin;
     }
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff2f0);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff2c4);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff294);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff260);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff250);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b964);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b900);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff140);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b8bc);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff2f0);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff2c4);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff294);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff260);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff250);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_148b964);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_148b900);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff140);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_148b8bc);
     if (!priv)
-        out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0fc);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0e8);
-    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0dc);
+        out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0fc);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0e8);
+    out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0dc);
 }
 
 // ---------------------------------------------------------------- wide string
@@ -221,7 +238,7 @@ void Movie::CloseUpload()
                 : 0;
 
     EaStr16 name;
-    name.Format((const char*)0x13ff3dc, at<int>(this, 0x54));
+    name.Format((const char*)g_13ff3dc, at<int>(this, 0x54));
     ((void (__thiscall*)(void*, char*, int, int))
      ((void**)*(void**)panel)[0x54 / 4])((void*)panel, name.mpBegin, 0, 2);
 }

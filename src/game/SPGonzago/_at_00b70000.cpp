@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00b70000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cVarListSerializer.h"
@@ -4045,7 +4048,7 @@ void* Simulator_cObstacle::AllocNode3(int* src)
         *(int**)((char*)this + 0x1c) = (int*)node->f0;
     } else {
         const int nodeSize = *(int*)((char*)this + 0x2c);
-        node = (Node3View*)EAAllocate(nodeSize, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        node = (Node3View*)EAAllocate(nodeSize, "Simulator", 0, 0, (int)&g_13ebb38, 0xd1);
     }
     if (node != 0) {
         node->f0 = src[0];
@@ -4068,7 +4071,7 @@ void* Simulator_cObstacle::AllocNode2(int* src)
         *(int**)((char*)this + 0x1c) = (int*)node->f0;
     } else {
         uint32_t nodeSize = *(uint32_t*)((char*)this + 0x2c);
-        node = (Node2View*)EAAllocate(nodeSize, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        node = (Node2View*)EAAllocate(nodeSize, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
     }
     if (node != 0) {
         node->f0 = src[0];
@@ -4477,7 +4480,7 @@ void __cdecl FUN_00b768d0(void* first, void* last, void* a3, void* a4)
 {
     int n = (int)((char*)last - (char*)first) / 0xc;
     if (n > 1) {
-        char* buf = (char*)EAAllocate(n * 0xc, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        char* buf = (char*)EAAllocate(n * 0xc, "Simulator", 0, 0, (int)g_13ebb38, 0xd1);
         char uninit[12];
         FUN_00b74c20(buf, buf + n * 0xc, uninit);
         FUN_00b75c60(first, last, buf, a4);

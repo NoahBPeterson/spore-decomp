@@ -8,6 +8,13 @@
 //                    it sends a navigation goal (walk to the position, facing the second one).
 // Class/member names are Claude-coined from usage.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc, same module as s00ad4b60 / s00ad2ae0).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_145a6d0[];
+extern "C" char g_145a6e0[];
+extern "C" char g_154df28[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -464,14 +471,14 @@ public:
 cVignetteContext::cVignetteContext()
 {
     void* volatile& baseVtable = mpVtable8;
-    baseVtable = (void*)0x13ec458;
+    baseVtable = (void*)g_13ec458;
     mField0c = 0;
-    mpVtable0 = (void*)0x145a6e0;
-    mpVtable8 = (void*)0x145a6d0;
+    mpVtable0 = (void*)g_145a6e0;
+    mpVtable8 = (void*)g_145a6d0;
     mField20 = 1.0f;
     mField24 = 2.0f;
     mField18 = 1;
-    mField14 = 0x154df28;
+    mField14 = (int)g_154df28;
     mField1c = 0;
     mField28 = 0;
 }

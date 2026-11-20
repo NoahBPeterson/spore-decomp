@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPNpcTribeController.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_145b9a0[];
+extern "C" char g_156ad88[];
+
 #include "game/types.h"
 #include "SP/cTerrainSphere.h"
 #include "SP/cTribeTool.h"
@@ -1190,7 +1194,7 @@ bool __declspec(noinline) ForEach(cTimerFactory* pFactory, cTimerMap* pMap)
             pEvent->Activate(pFactory);
         cGonzagoTimer* pTimer = &pNode->mValue.mTimer;
         if (pTimer)
-            pFactory->InitTimer(pTimer, (void*)0x145b9a0, (const wchar_t*)0x156ad88);
+            pFactory->InitTimer(pTimer, (void*)g_145b9a0, (const wchar_t*)g_156ad88);
         pNode = (cTimerNode*)RBTreeIncrement(pNode);
     }
     return true;

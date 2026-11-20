@@ -1,5 +1,10 @@
 // Slice s009205e0: EA::Audio::Eapd symbol/group hash tables, wchar_t path helpers,
 // eastl fixed_pool / RBTreeIncrement and a couple of float range mappers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_143d824[];
+extern "C" char g_154df28[];
+
 #include "types.h"
 #include "sse_helpers.h"
 #include <intrin.h>
@@ -556,7 +561,7 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
 
 // @ 0x009206d0
 EapdSymbolTable* EapdSymbolTable::ctor() {
-    *(void**)((char*)this + 0) = (void*)0x143d824;
+    *(void**)((char*)this + 0) = (void*)g_143d824;
     mLock.Init(0, 1);
     *(float*)((char*)this + 0x118) = 1.0f;
     *(float*)((char*)this + 0x11c) = 2.0f;
@@ -565,14 +570,14 @@ EapdSymbolTable* EapdSymbolTable::ctor() {
     *(unsigned*)((char*)this + 0x120) = 0;
     *(unsigned*)((char*)this + 0x110) = 1;
     _ReadWriteBarrier();
-    *(void**)((char*)this + 0x10c) = (void*)0x154df28;
+    *(void**)((char*)this + 0x10c) = (void*)g_154df28;
     _ReadWriteBarrier();
     *(float*)((char*)this + 0x138) = 1.0f;
     *(float*)((char*)this + 0x13c) = 2.0f;
     _ReadWriteBarrier();
     *(unsigned*)((char*)this + 0x134) = 0;
     *(unsigned*)((char*)this + 0x140) = 0;
-    *(void**)((char*)this + 0x12c) = (void*)0x154df28;
+    *(void**)((char*)this + 0x12c) = (void*)g_154df28;
     *(unsigned*)((char*)this + 0x130) = 1;
     return this;
 }

@@ -1,5 +1,10 @@
 // Slice s00b1d870 -- Simulator object factories, Gonzago/window toggles, terrain accessors.
 // Module flags: /O2 /MD /Gy /EHsc /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_167c988[];
+extern "C" char g_145e9e8[];
+
 #include "types.h"
 
 void* operator new(unsigned int size, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
@@ -308,7 +313,7 @@ struct SysGUI {
     void ShowLayout(const void* pText, int x, int y);   // 0x00a6ca00
     void HideLayout();                                  // 0x00c2e4e0
 };
-#define SYS_GUI ((SysGUI*)0x0167c988)
+#define SYS_GUI ((SysGUI*)g_167c988)
 
 struct LayoutHolder {
     char pad00[0x10];
@@ -326,7 +331,7 @@ void FUN_b1f960(bool enable) {
     if (GetLayoutOwner()->GetLayout()->mbLayoutActive)
         return;
     if (enable) {
-        SYS_GUI->ShowLayout((const void*)0x0145e9e8, 500, 400);
+        SYS_GUI->ShowLayout((const void*)g_145e9e8, 500, 400);
         SYS_GUI->ShowLayout((const void*)0x0000000a, 10, 1);
     } else {
         SYS_GUI->HideLayout();

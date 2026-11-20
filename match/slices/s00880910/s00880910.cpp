@@ -10,6 +10,10 @@
 // set the neighbouring EA::Locale slices use). No /EHsc: the fixed_string temporaries are destroyed
 // without an EH frame.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1549180[];
+extern "C" char g_154919c[];
+
 #include "types.h"
 
 #define WIN32 1
@@ -217,7 +221,7 @@ void GetLocaleInfoInt(const wchar_t* a, const wchar_t* b)
 
     key = FUN_0087f210(a);
 
-    LocString512* v = ((LocaleMap*)0x1549180)->Find(&key);
+    LocString512* v = ((LocaleMap*)g_1549180)->Find(&key);
     if (v->c_str() != a) {
         v->clear();
         v->assign(a, a + WcsLen(a));
@@ -225,7 +229,7 @@ void GetLocaleInfoInt(const wchar_t* a, const wchar_t* b)
 
     key = FUN_0087f210(b);
 
-    LocString512* v2 = ((LocaleMap*)0x154919c)->Find(&key);
+    LocString512* v2 = ((LocaleMap*)g_154919c)->Find(&key);
     if (v2->c_str() != b) {
         v2->clear();
         v2->assign(b, b + WcsLen(b));

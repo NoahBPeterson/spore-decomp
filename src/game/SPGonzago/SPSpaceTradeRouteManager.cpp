@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPSpaceTradeRouteManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1499a30[];
+
 #include "game/types.h"
 #include "SP/cCivData.h"
 #include "SP/cGonzagoSubsystem.h"
@@ -180,7 +183,7 @@ cTradeRoutePair::cTradeRoutePair(const cTradeRoutePair& src)
 {
     mnKeyA = src.mnKeyA;
     mnKeyB = src.mnKeyB;
-    mData.mpVtable = (void*)0x1499a30;
+    mData.mpVtable = (void*)g_1499a30;
     mData.mnEmpireA = src.mData.mnEmpireA;
     mData.mnEmpireB = src.mData.mnEmpireB;
     mData.mnSystemA = src.mData.mnSystemA;
@@ -408,7 +411,7 @@ void cTradeRouteTree::erase(cRBNodeBase* pNode)
     while (pNode != 0) {
         erase(pNode->mpNodeRight);
         cRBNodeBase* pNext = pNode->mpNodeLeft;
-        ((cRouteNode*)pNode)->mData.mpVtable = (void*)0x1499a30;
+        ((cRouteNode*)pNode)->mData.mpVtable = (void*)g_1499a30;
         cRouteNode_Free(pNode);
         pNode = pNext;
     }

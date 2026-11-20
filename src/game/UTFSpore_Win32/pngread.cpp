@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/pngread.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00c2e4e0();
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -494,7 +497,7 @@ int __stdcall PNG_read_rgba(PngHandle* ph, GimexInfo* gimex, unsigned char* pixe
     png_info_def* info;
     int r = 0;
 
-    png = png_create_read_struct_2("1.2.25", 0, 0, (png_error_ptr)0xc2e4e0, 0,
+    png = png_create_read_struct_2("1.2.25", 0, 0, (png_error_ptr)FUN_00c2e4e0, 0,
                                    PNGREAD_malloc, PNGREAD_free);
     if (png != 0) {
         info = (png_info_def*)png_create_info_struct(png);

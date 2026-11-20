@@ -15,6 +15,11 @@
 //
 // Retail offsets: cGameData @0, cLocomotiveObject @0x34, cCombatant @0x508,
 // cInteractionTarget @0x5d0 (ModAPI header, not the 2008 PDB).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1570858[];
+extern "C" char g_1573290[];
+
 #include "types.h"
 #include <math.h>
 
@@ -1009,10 +1014,10 @@ int cSPGameDataUFO::GetFieldValues(void* pOut)
     int sum = ((FnB18420*)this)->f(pOut);
     sum += ((FnC0AF90*)((char*)this + 0x34))->f(pOut);
 
-    localA14.ctor((char*)this + 0x508, (void*)0x1570858, 0x1a80d26);
+    localA14.ctor((char*)this + 0x508, (void*)g_1570858, 0x1a80d26);
     sum += localA14.GetFields(pOut);
 
-    local1428.ctor(this, (void*)0x1573290, 0x1a80d26);
+    local1428.ctor(this, (void*)g_1573290, 0x1a80d26);
     sum += local1428.GetFields(pOut);
 
     return sum;

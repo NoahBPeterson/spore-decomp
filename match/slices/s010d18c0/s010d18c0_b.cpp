@@ -10,6 +10,11 @@
 //               0x1c), caches the triangle's point-distance terms (triangle = bodyB).
 //   0x010d2860  hkCapsuleTriangleAgent::createTriangleCapsuleAgent: same object, triangle = bodyA, other vtable.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a43a4[];
+extern "C" char g_14a43b4[];
+
 #include "../s010cbaa0/hk31_b005.h"
 
 #define HK_REAL_MAX 3.40282e+38f      // 0x7f7fffee in this build
@@ -153,7 +158,7 @@ void hkSymmetricAgent_hkMultiSphereTriangleAgent::getPenetrations(const hkCdBody
     hkSymmetricAgentFlipBodyCollector flip;
     flip.m_original = &collector;
     flip.m_earlyOut = 0;
-    flip.m_vftable = (void*)0x014a43b4;
+    flip.m_vftable = (void*)g_14a43b4;
     hkMultiSphereTriangleAgent::getPenetrations(bodyB, bodyA, input, flip);
 }
 
@@ -165,7 +170,7 @@ void hkSymmetricAgent_hkMultiSphereTriangleAgent::getClosestPoints(const hkCdBod
     hkSymmetricAgentFlipCollector flip;
     flip.m_original = &collector;
     flip.m_earlyOutDistance = HK_REAL_MAX;
-    flip.m_vftable = (void*)0x014a43a4;
+    flip.m_vftable = (void*)g_14a43a4;
     hkMultiSphereTriangleAgent::getClosestPoints(bodyB, bodyA, input, flip);
 }
 

@@ -2,6 +2,9 @@
 // Reconstructed from annotated disassembly + Ghidra decompiles.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15a5524[];
+
 typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
@@ -247,7 +250,7 @@ s32 __fastcall FUN_00e23ae0(void* self, void* dummy, u32 id) {
   }
   u8 ok = ((TFuii)(*(void***)pm)[0x30 / 4])(pm, 0x5c770db7, &DAT_016ac278);
   if (ok) {
-    ((CopyImplC*)0x15a5524)->Copy(DAT_016ac278);
+    ((CopyImplC*)g_15a5524)->Copy(DAT_016ac278);
   }
   u8 r = ((SPUILayoutC*)((char*)self + 0x1bc))->Init(id, 1, 0x8d0f4fb);
   if (r) {
@@ -271,7 +274,7 @@ s32 __fastcall FUN_00e23b70(void* self, void* dummy, void* name, int id) {
   }
   u8 ok = ((TFuii)(*(void***)pm)[0x30 / 4])(pm, 0x5c770db7, &DAT_016ac278);
   if (ok) {
-    ((CopyImplC*)0x15a5524)->Copy(DAT_016ac278);
+    ((CopyImplC*)g_15a5524)->Copy(DAT_016ac278);
   }
   u8 r = ((SPUILayoutC*)((char*)self + 0x1bc))->InitStr(name, id, 1, 0x8d0f4fb);
   if (r) {

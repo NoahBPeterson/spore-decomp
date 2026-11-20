@@ -615,7 +615,7 @@ void __fastcall FUN_00bd8500(cCity* ecx_this, void* edx, char flag, void* owner)
             old->v04();
         }
     }
-    ecx_this->mp208->SetEffectId(0x168bd70, 5.0f);
+    ecx_this->mp208->SetEffectId((int)&g_168bd70, 5.0f);
     ecx_this->mp208->DoF3d2(ecx_this);
     ecx_this->mRegion38.AsSlot38()->DoC470(1);
 }

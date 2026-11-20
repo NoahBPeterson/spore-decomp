@@ -4,6 +4,10 @@
 // (frame-omitted prologues, SSE scalar float copies; no EH prolog although
 //  locals with destructors exist, so no /EHsc.)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_013c2f60();
+extern "C" void FUN_013c2f90();
+
 #include "types.h"
 #include <math.h>
 
@@ -199,7 +203,7 @@ void FUN_00ba9400(void* p)
         g_WStrA.mpBegin = g_emptyWString;
         g_WStrA.mpEnd = g_emptyWString;
         g_WStrA.mpCapacity = g_emptyWString + 1;
-        atexit((void (__cdecl*)(void))0x13c2f90);
+        atexit((void (__cdecl*)(void))FUN_013c2f90);
     }
     if (r != &g_WStrA)
         r->Assign(g_WStrA.mpBegin, g_WStrA.mpEnd);
@@ -216,7 +220,7 @@ void FUN_00ba9470(void* p)
         g_WStrB.mpBegin = g_emptyWString;
         g_WStrB.mpEnd = g_emptyWString;
         g_WStrB.mpCapacity = g_emptyWString + 1;
-        atexit((void (__cdecl*)(void))0x13c2f60);
+        atexit((void (__cdecl*)(void))FUN_013c2f60);
     }
     if (r != &g_WStrB)
         r->Assign(g_WStrB.mpBegin, g_WStrB.mpEnd);

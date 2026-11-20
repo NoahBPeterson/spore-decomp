@@ -2,6 +2,11 @@
 // Object file: SPGonzago/_at_00d30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147a938[];
+extern "C" char g_147a948[];
+extern "C" char g_147a96c[];
+
 #include "game/types.h"
 #include "SP/cSPCreatureBase.h"
 #include "SP/cGameNounManager.h"
@@ -216,9 +221,9 @@ bool cSPCreatureMissionManager::IsTracked(void* p)
 // @ 0x00d37f50
 void* cSPCreatureMissionManager::ScalarDeletingDtor(u32 flags)
 {
-    mpVtbl00 = (void*)0x147a96c;
-    mpVtbl08 = (void*)0x147a948;
-    mpVtbl10 = (void*)0x147a938;
+    mpVtbl00 = (void*)g_147a96c;
+    mpVtbl08 = (void*)g_147a948;
+    mpVtbl10 = (void*)g_147a938;
     g_CreatureMissionManager = 0;
 
     if (mSpeciesMission.mpObj != 0)

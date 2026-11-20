@@ -2,6 +2,10 @@
 // cLocomotiveObject members (0x00c22010 .. 0x00c22f60, 27 functions).
 // Reconstructed from the retail disassembly.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15721f0[];
+
 #include "types.h"
 
 #define PVN(n) virtual void pv##n();
@@ -684,7 +688,7 @@ void cSPCreatureBase::FUN_00c22930Read(void* pStream)
     void* pS = pTarget->GetStream();
     EA::IO::ReadInt32(pS, &nTag, 1, 0);
     this->FUN_00c14aa0(pStream);
-    cVarListSerializer ser(this, (void*)0x015721f0, 0x1a80d26);
+    cVarListSerializer ser(this, (void*)g_15721f0, 0x1a80d26);
     ser.SerializeIn(pStream);
 }
 

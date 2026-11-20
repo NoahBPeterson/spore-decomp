@@ -2,6 +2,11 @@
 // Object file: SPEngine/SPGraphicsFragmentVS.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1628c20[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bad[];
+
 #include "game/types.h"
 
 extern "C" void _ReadWriteBarrier();
@@ -249,7 +254,7 @@ struct EString_s006f_f170 {                    // 0x0c
     char* begin;                    // +0x00
     char* end;                      // +0x04
     char* cap;                      // +0x08
-    EString_s006f_f170() : begin((char*)0x01667bac), end((char*)0x01667bac), cap((char*)0x01667bad) {}
+    EString_s006f_f170() : begin((char*)g_1667bac), end((char*)g_1667bac), cap((char*)g_1667bad) {}
 };
 struct CFragVec {                   // 0x14
     void* mpBegin;                  // +0x00
@@ -592,13 +597,13 @@ void* __fastcall FUN_006fe7f0(char* p)
 {
     FragInfo* info = (FragInfo*)p;
     info->f00 = 0;
-    info->nameCap = (const char*)0x01667BAD;
+    info->nameCap = (const char*)g_1667bad;
     _ReadWriteBarrier();
-    info->nameBegin = (const char*)0x01667BAC;
-    info->nameEnd = (const char*)0x01667BAC;
-    info->uniBegin = (const char*)0x01667BAC;
-    info->uniEnd = (const char*)0x01667BAC;
-    info->uniCap = (const char*)0x01667BAD;
+    info->nameBegin = (const char*)g_1667bac;
+    info->nameEnd = (const char*)g_1667bac;
+    info->uniBegin = (const char*)g_1667bac;
+    info->uniEnd = (const char*)g_1667bac;
+    info->uniCap = (const char*)g_1667bad;
     info->vecBegin = 0;
     info->vecEnd = 0;
     info->vecCap = 0;
@@ -778,11 +783,11 @@ void __cdecl FUN_006fef70(int a)
 // @ 0x006fefa0
 void __cdecl FUN_006fefa0()
 {
-    ((Vec130*)0x01628C20)->Erase(g_vs_begin, g_vs_end);
+    ((Vec130*)g_1628c20)->Erase(g_vs_begin, g_vs_end);
     unsigned int n = g_15345b0;
     if (n == 0)
         n = 0x200;
-    ((Vec130*)0x01628C20)->Reserve(n);
+    ((Vec130*)g_1628c20)->Reserve(n);
     g_1624568 = 0;
 }
 

@@ -1,6 +1,24 @@
 // Slice s00c48970 - SP::cSPMission / Simulator::cGenericPressureEvent message and
 // text helpers.  All functions are __thiscall with `this` in ecx.
 // Flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f5c04[];
+extern "C" char g_168ee08[];
+extern "C" char g_168ee1c[];
+extern "C" char g_168ee30[];
+extern "C" char g_168ee44[];
+extern "C" char g_168ee58[];
+extern "C" char g_168ee6c[];
+extern "C" char g_168ee80[];
+extern "C" char g_168ee94[];
+extern "C" char g_168eea8[];
+extern "C" char g_168eebc[];
+extern "C" char g_168eed0[];
+extern "C" char g_168eee4[];
+extern "C" char g_168eef8[];
+extern "C" char g_16e0d08[];
+
 #include "types.h"
 #include <wchar.h>
 #include <string.h>
@@ -262,30 +280,30 @@ void SPObject::FUN_00c48970(int idx, WStr* out)
         return;
     switch (mArrCC[idx]) {
     case 0:
-        out->append(((CStr*)0x168ee08)->GetText());
+        out->append(((CStr*)g_168ee08)->GetText());
         return;
     case 1:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee1c)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee1c)->GetText());
         return;
     case 2:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee30)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee30)->GetText());
         return;
     case 3:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee44)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee44)->GetText());
         return;
     case 4:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee58)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee58)->GetText());
         return;
     case 5:
-        (*(Translator**)0x16e0d08)->mField10 = v;
-        out->append(((CStr*)0x168ee6c)->GetText());
+        (*(Translator**)g_16e0d08)->mField10 = v;
+        out->append(((CStr*)g_168ee6c)->GetText());
         return;
     case 6:
-        out->append(((CStr*)0x168ee80)->GetText());
+        out->append(((CStr*)g_168ee80)->GetText());
         return;
     }
 }
@@ -317,22 +335,22 @@ void SPObject::FUN_00c48ae0(WStr* out)
 {
     switch (mKindF8) {
     case 0:
-        out->append(((CStr*)0x168ee94)->GetText());
+        out->append(((CStr*)g_168ee94)->GetText());
         break;
     case 1:
-        out->append(((CStr*)0x168eea8)->GetText());
+        out->append(((CStr*)g_168eea8)->GetText());
         return;
     case 2:
-        out->append(((CStr*)0x168eebc)->GetText());
+        out->append(((CStr*)g_168eebc)->GetText());
         return;
     case 3:
-        out->append(((CStr*)0x168eed0)->GetText());
+        out->append(((CStr*)g_168eed0)->GetText());
         return;
     case 4:
-        out->append(((CStr*)0x168eee4)->GetText());
+        out->append(((CStr*)g_168eee4)->GetText());
         return;
     case 5:
-        out->append(((CStr*)0x168eef8)->GetText());
+        out->append(((CStr*)g_168eef8)->GetText());
         return;
     }
 }
@@ -532,7 +550,7 @@ void SPObject::FUN_00c49140(WStr* out)
     CivData* o = (CivData*)GetCivData();
     if (o) {
         o->FUN_c30c80();
-        WStr3(out, (const wchar_t*)0x13f5c04, *o->GetCities());
+        WStr3(out, (const wchar_t*)g_13f5c04, *o->GetCities());
     }
 }
 
@@ -542,7 +560,7 @@ void SPObject::FUN_00c49180(WStr* out)
     CivData* o = (CivData*)GetOwnerEmpire();
     if (o) {
         o->FUN_c30c80();
-        WStr3(out, (const wchar_t*)0x13f5c04, *o->GetCities());
+        WStr3(out, (const wchar_t*)g_13f5c04, *o->GetCities());
     }
 }
 

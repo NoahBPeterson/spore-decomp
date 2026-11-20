@@ -2,6 +2,18 @@
 // Object file: SPGonzago/SPMissionStory201.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00c5fc70();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+extern "C" char g_146dfb4[];
+extern "C" char g_146fe3c[];
+extern "C" char g_146fe4c[];
+extern "C" char g_146fe60[];
+extern "C" char g_1470118[];
+extern "C" char g_1470128[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cPlanet.h"
@@ -685,9 +697,9 @@ MissionStory201::MissionStory201()
   MissionBaseCtor(this);
   int zero = 0;
   *(volatile int*)&mField1f0 = zero;
-  *(volatile int*)&mpVtable  = (int)0x146fe60;
-  *(volatile int*)&mpField04 = (int)0x146fe4c;
-  *(volatile int*)&mpField34 = (int)0x146fe3c;
+  *(volatile int*)&mpVtable  = (int)g_146fe60;
+  *(volatile int*)&mpField04 = (int)g_146fe4c;
+  *(volatile int*)&mpField34 = (int)g_146fe3c;
   *(volatile int*)&mpField1f4 = zero;
   *(volatile int*)&mField1f8 = zero;
   *(volatile int*)&mField1fc = zero;
@@ -887,8 +899,8 @@ void* FUN_00c5fd90()
     if (GetCurrentGameMode() == (void*)0x01654c05) {
         if (GetUniverseContext() == 0) {
             cGameNounManager* nm = (cGameNounManager*)NounManager();
-            tVecData* v = nm->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
-                                                (void*)0x00c5fc70, (void*)0x00b1e500,
+            tVecData* v = nm->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                (void*)FUN_00c5fc70, (void*)FUN_00b1e500,
                                                 (void*)0x018c88e4);
             cNoun*** items = &v->mItems[0];
             cNoun** begin = items[0];
@@ -1026,7 +1038,7 @@ Simulator::cMissionTerraform::cMissionTerraform()
     mEventStage = 0;
     mFlag1F4 = false;
     mFlag1F5 = false;
-    mpVftable = (void*)0x1470128;
-    mpVftable04 = (void*)0x146dfb4;
-    mpVftable34 = (void*)0x1470118;
+    mpVftable = (void*)g_1470128;
+    mpVftable04 = (void*)g_146dfb4;
+    mpVftable34 = (void*)g_1470118;
 }

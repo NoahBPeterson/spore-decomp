@@ -2,6 +2,9 @@
 // Object file: SPEngine/SPAppSplitModelDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1453948[];
+
 #include "game/types.h"
 #include "EA/IO/IStream.h"
 #include "EA/ArgScript/cArguments.h"
@@ -252,7 +255,7 @@ struct __declspec(novtable) cSplitModelKernelDescription : EA::Swarm::cDescripti
     {
         mRefCount = 0;
         _ReadWriteBarrier();
-        *(const uint32_t**)this = (const uint32_t*)0x01453948;   // vtable (retail stores it after mRefCount)
+        *(const uint32_t**)this = (const uint32_t*)g_1453948;   // vtable (retail stores it after mRefCount)
         _ReadWriteBarrier();
         mData.mKernelData = 0;
         mData.mKernelDataVariation = 0;

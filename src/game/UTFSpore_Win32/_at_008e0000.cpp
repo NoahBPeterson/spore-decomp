@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/_at_008e0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1436da8[];
+extern "C" char g_1437bd8[];
+extern "C" char g_1437bf4[];
+
 #include "game/types.h"
 #include "EA/Thread/Mutex.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -1443,7 +1448,7 @@ char __stdcall Fn8e5320(float* out)
 void* GuiThing::Fn8e5370(int a, int b, int c)
 {
     Fn8e4400(a, b, c);
-    *(void**)this = (void*)0x1436da8;
+    *(void**)this = (void*)g_1436da8;
     return this;
 }
 
@@ -1451,7 +1456,7 @@ void* GuiThing::Fn8e5370(int a, int b, int c)
 void* GuiThing2::Fn8e55d0(int a, int b, int c)
 {
     Fn8e52b0(a, 2);
-    *(void**)this = (void*)0x1437bd8;
+    *(void**)this = (void*)g_1437bd8;
     *(int*)((char*)this + 0x18) = b;
     *(int*)((char*)this + 0x1c) = c;
     return this;
@@ -1495,7 +1500,7 @@ void* GuiThing3::Fn8e6130(void* a)
     char* c = (char*)this;
     *(int*)(c + 4) = 0;
     *(int*)(c + 8) = 0;
-    *(void**)c = (void*)0x1437bf4;
+    *(void**)c = (void*)g_1437bf4;
     *(void**)(c + 0xc) = a;
     *(int*)(c + 0x10) = -1;
     *(int*)(c + 0x14) = 0;

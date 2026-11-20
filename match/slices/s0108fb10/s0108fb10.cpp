@@ -3,6 +3,15 @@
 // hkStabilizedSphereMotion::clone, its applyAccumulator, hkSpringDamperConstraintMotor
 // (calcMotorData/clone), and hkSphereMotion's inertia virtuals (setInertiaLocal/setInertiaInvLocal/getInertia*).
 // Compiled with /vc71 /O2 /MD /Gy /TP (Havok is a /vc71 object). The x87 math functions are equivalence-only.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_149df90[];
+extern "C" char g_14a1808[];
+extern "C" char g_14a195c[];
+extern "C" char g_14a1990[];
+extern "C" char g_14a1a0c[];
+
 #include "s0108fb10.h"
 #include <math.h>
 #include <intrin.h>
@@ -28,7 +37,7 @@ void hkStiffSpringChainData_ctor(hkStiffSpringChainData* self)
 	if (self != 0)
 	{
 		self->m_referenceCount = 1;                 // +6: reference count == 1
-		*(const volatile void**)((char*)self) = (const void*)0x014a195c;   // vtable
+		*(const volatile void**)((char*)self) = (const void*)g_14a195c;   // vtable
 		self->m_atoms.m_data = 0;
 		self->m_atoms.m_size = 0;
 		self->m_atoms.m_capacityAndFlags = (int)0x80000000;
@@ -39,7 +48,7 @@ void hkStiffSpringChainData_ctor(hkStiffSpringChainData* self)
 // hkStiffSpringChainData::`scalar deleting destructor' (the compiler-generated ??_G name cannot be spelled).
 void* hkStiffSpringChainData::scalarDeletingDtor(unsigned int flags)
 {
-	*(volatile const void* volatile*)this = (const volatile void*)0x014a195c;   // vtable first
+	*(volatile const void* volatile*)this = (const volatile void*)g_14a195c;   // vtable first
 	_ReadWriteBarrier();
 	if ((m_atoms.m_capacityAndFlags & 0x80000000u) == 0)            // owned buffer
 	{
@@ -47,7 +56,7 @@ void* hkStiffSpringChainData::scalarDeletingDtor(unsigned int flags)
 		tm->deallocateChunk((void*)m_atoms.m_data,
 		                    (m_atoms.m_capacityAndFlags & HK_ARRAY_CAPACITY_MASK) * 0x30, 0x14);
 	}
-	*(volatile const void* volatile*)this = (const volatile void*)0x013ef094;   // ??_7GmeRefCount@@6B@
+	*(volatile const void* volatile*)this = (const volatile void*)g_13ef094;   // ??_7GmeRefCount@@6B@
 	if (flags & 1)
 	{
 		int n = (int)(uint16_t)m_memSizeAndFlags;
@@ -157,7 +166,7 @@ hkMotion* hkStabilizedSphereMotionEx::clone() const
 	hkStabilizedSphereMotionEx* p = (hkStabilizedSphereMotionEx*)hkMemory::s_instance->allocateChunk(0xf0, 0x2b);
 	p->m_memSizeAndFlags = 0xf0;
 	new (p) hkSphereMotion(*(const hkVector4*)&g_identityPos_016e42d0, *(const hkQuaternion*)&g_identityQuat_015b9b50);
-	*(const void**)p = (const void*)0x0149df90;
+	*(const void**)p = (const void*)g_149df90;
 	hkString::memCpy((char*)p + 8, (const char*)this + 8, 0xe8);
 	return p;
 }
@@ -285,7 +294,7 @@ const hkVelocityAccumulator* hkStabilizedSphereMotionEx::applyAccumulator(const 
 hkStabilizedBoxMotion::hkStabilizedBoxMotion(const hkVector4& position, const hkQuaternion& rotation)
 	: hkBoxMotion(position, rotation)
 {
-	*(const void**)this = (const void*)0x014a1990;
+	*(const void**)this = (const void*)g_14a1990;
 }
 
 // @ 0x1090390
@@ -294,7 +303,7 @@ hkMotion* hkStabilizedBoxMotionEx::clone() const
 	hkStabilizedBoxMotionEx* p = (hkStabilizedBoxMotionEx*)hkMemory::s_instance->allocateChunk(0x100, 0x2b);
 	p->m_memSizeAndFlags = 0x100;
 	new (p) hkBoxMotion(*(const hkVector4*)&g_identityPos_016e42d0, *(const hkQuaternion*)&g_identityQuat_015b9b50);
-	*(const void**)p = (const void*)0x014a1990;
+	*(const void**)p = (const void*)g_14a1990;
 	hkString::memCpy((char*)p + 8, (const char*)this + 8, 0xf8);
 	return p;
 }
@@ -441,12 +450,12 @@ hkConstraintMotor* hkSpringDamperConstraintMotorEx::clone() const
 {
 	hkSpringDamperConstraintMotor* p =
 		(hkSpringDamperConstraintMotor*)hkMemory::s_instance->allocateChunk(0x18, 0x29);
-	*(const void**)p = (const void*)0x014a1808;
+	*(const void**)p = (const void*)g_14a1808;
 	p->m_memSizeAndFlags = 0x18;
 	p->m_referenceCount = 1;
 	p->m_minForce = m_minForce;
 	p->m_maxForce = m_maxForce;
-	*(const void**)p = (const void*)0x014a1a0c;
+	*(const void**)p = (const void*)g_14a1a0c;
 	p->m_minTorque = m_minTorque;
 	p->m_maxTorque = m_maxTorque;
 	return p;

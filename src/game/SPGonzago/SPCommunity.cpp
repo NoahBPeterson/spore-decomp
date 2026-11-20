@@ -2,6 +2,10 @@
 // Object file: SPGonzago/SPCommunity.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1570f10[];
+extern "C" char g_1571000[];
+
 #include "game/types.h"
 #include "SP/cLaneInfo.h"
 #include "cSPVector3.h"
@@ -458,7 +462,7 @@ void FUN_00c01ce0(ISerializableObject* object, EmptyBubbleVec* vec)
         value.mW = 0.0f;
         value.mFlags = 0;
         cVarListSerializer_s00c0_15e0 serializer;
-        serializer.Construct(&value, 0x1570f10, 0x1a80d26);
+        serializer.Construct(&value, (int)g_1570f10, 0x1a80d26);
         serializer.Serialize(object);
 
         if (vec->mpEnd < vec->mpCap) {
@@ -688,7 +692,7 @@ void FUN_00c024f0(ISerializableObject* object, LaneRecVec* vec)
         value.mPad10[0] = 0;
         value.mPad10[1] = 0;
         cVarListSerializer_s00c0_15e0 serializer;
-        serializer.Construct(&value, 0x1571000, 0x1a80d26);
+        serializer.Construct(&value, (int)g_1571000, 0x1a80d26);
         serializer.Serialize(object);
 
         if (vec->mpEnd < vec->mpCap) {

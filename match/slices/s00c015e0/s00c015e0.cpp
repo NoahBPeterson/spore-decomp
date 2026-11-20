@@ -1,4 +1,9 @@
 // s00c015e0: obstacle/steering avoidance pass (0xc015e0). Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1570f10[];
+extern "C" char g_1571000[];
+
 #include "types.h"
 #include <math.h>
 #include <stdlib.h>
@@ -380,7 +385,7 @@ void FUN_00c01ce0(ISerializableObject* object, EmptyBubbleVec* vec)
         value.mW = 0.0f;
         value.mFlags = 0;
         cVarListSerializer serializer;
-        serializer.Construct(&value, 0x1570f10, 0x1a80d26);
+        serializer.Construct(&value, (int)g_1570f10, 0x1a80d26);
         serializer.Serialize(object);
 
         if (vec->mpEnd < vec->mpCap) {
@@ -471,7 +476,7 @@ void FUN_00c024f0(ISerializableObject* object, LaneRecVec* vec)
         value.mPad10[0] = 0;
         value.mPad10[1] = 0;
         cVarListSerializer serializer;
-        serializer.Construct(&value, 0x1571000, 0x1a80d26);
+        serializer.Construct(&value, (int)g_1571000, 0x1a80d26);
         serializer.Serialize(object);
 
         if (vec->mpEnd < vec->mpCap) {

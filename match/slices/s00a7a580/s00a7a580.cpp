@@ -1,6 +1,11 @@
 // match/slices/s00a7a580/s00a7a580.cpp
 // Object file: Swarm/Path.obj.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_14188c0[];
+extern "C" char g_14582ec[];
+
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 
@@ -335,10 +340,10 @@ void* EA::Swarm::cResourceOverridesParam_Create(int n)
     uint32_t* p = (uint32_t*)operator new(size + 0x10, "Swarm/ResourceOverrides", 0, 0, 0, 0);
     uint32_t* q;
     if (p) {
-        ((volatile uint32_t*)p)[1] = 0x13ef094;
+        ((volatile uint32_t*)p)[1] = (int)g_13ef094;
         ((volatile uint32_t*)p)[2] = 0;
-        ((volatile uint32_t*)p)[0] = 0x14582ec;
-        ((volatile uint32_t*)p)[1] = 0x14188c0;
+        ((volatile uint32_t*)p)[0] = (int)g_14582ec;
+        ((volatile uint32_t*)p)[1] = (int)g_14188c0;
         q = p;
     } else {
         q = 0;

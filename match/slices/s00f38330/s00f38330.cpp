@@ -3,6 +3,18 @@
 // cSPUISpace "seti" panel: object create/destroy, message handling, a 4-digit
 // clock display, a cCivTokenTranslator and its string members.  Module flags
 // /O2 /MD /Gy /TP.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_13f08b8[];
+extern "C" char g_14426a0[];
+extern "C" char g_148d0ac[];
+extern "C" char g_148d0bc[];
+extern "C" char g_148d0e8[];
+extern "C" char g_148d0f8[];
+extern "C" char g_148d114[];
+extern "C" char g_148d140[];
+
 #include <intrin.h>
 #include "types.h"
 extern "C" void _ReadWriteBarrier();
@@ -193,16 +205,16 @@ struct BaseTranslator {
 };
 
 // Vtables of the UI objects, stored verbatim (they live in the retail image).
-static void* const kpSetiVtbl0        = (void*)0x0148D0BC;
-static void* const kpSetiVtbl4        = (void*)0x0148D0AC;
-static void* const kpBaseVtbl4        = (void*)0x013EC458;
+static void* const kpSetiVtbl0        = (void*)g_148d0bc;
+static void* const kpSetiVtbl4        = (void*)g_148d0ac;
+static void* const kpBaseVtbl4        = (void*)g_13ec458;
 static void* const kpBaseVtbl0DTor    = (void*)0x013EB938;
-static void* const kpBigVtbl0         = (void*)0x0148D114;
-static void* const kpBigVtbl4         = (void*)0x0148D0F8;
-static void* const kpBigVtbl8         = (void*)0x0148D0E8;
-static void* const kpBigBaseVtbl4     = (void*)0x014426A0;
+static void* const kpBigVtbl0         = (void*)g_148d114;
+static void* const kpBigVtbl4         = (void*)g_148d0f8;
+static void* const kpBigVtbl8         = (void*)g_148d0e8;
+static void* const kpBigBaseVtbl4     = (void*)g_14426a0;
 static void* const kpBigBaseVtbl0DTor = (void*)0x013EB394;
-static void* const kpTranslatorVtbl   = (void*)0x0148D140;
+static void* const kpTranslatorVtbl   = (void*)g_148d140;
 static void* const kpBigHandler       = (void*)0x0148D134;
 
 // UI keys / ids.
@@ -478,7 +490,7 @@ void SpaceObj::f388b0(int v)
     if (*(int*)(self + 0x18)) {
         struct { TWString16 text; int reserved; } buf;
         buf.text.InitEmpty();
-        WStrFormat(&buf.text, (const wchar_t*)0x013F08B8, v);
+        WStrFormat(&buf.text, (const wchar_t*)g_13f08b8, v);
         CallSlot1i(*(void**)(self + 0x18), 0x80, (int)buf.text.mpBegin);
         buf.text.Release();
     }

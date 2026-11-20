@@ -1,5 +1,11 @@
 // s00feb120 -- SP::cSPMissionManager / SP::cEmpireLayer and helpers.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14948dc[];
+extern "C" char g_15b49b0[];
+extern "C" char g_1601760[];
+extern "C" char g_16dac54[];
+
 #include <math.h>
 
 typedef unsigned char      u8;
@@ -446,7 +452,7 @@ u8 cSPMissionManager::FUN_00febe50(void* key, u32* out)
         if (*slot == key)
         {
             if (out != 0)
-                *out = ((u32*)0x16dac54)[i];
+                *out = ((u32*)g_16dac54)[i];
             return 1;
         }
         i++;
@@ -532,7 +538,7 @@ i32 cSPMissionManager::FUN_00febf80(void* key)
     do
     {
         if (*slot == key)
-            return (i32)((u32*)0x16dac54)[i];
+            return (i32)((u32*)g_16dac54)[i];
         i++;
         slot++;
     } while (i < 3);
@@ -548,7 +554,7 @@ u8 FUN_00febfd0(void* self, u32* list)
     for (u32* p = (u32*)*list; p != list; p = (u32*)*p)
     {
         if (p + 2 != 0)
-            MOPS(self)->FUN_00695b40(p + 2, (void*)0x15b49b0, (void*)0x14948dc);
+            MOPS(self)->FUN_00695b40(p + 2, (void*)g_15b49b0, (void*)g_14948dc);
     }
     return 1;
 }
@@ -572,7 +578,7 @@ i32 FUN_00fec010(int* v)
 
         if (0.0 < sum)
         {
-            double r = MOPS((void*)0x1601760)->FUN_009360d0() * sum;
+            double r = MOPS((void*)g_1601760)->FUN_009360d0() * sum;
             if (r < sum)
             {
                 double acc = 0.0;

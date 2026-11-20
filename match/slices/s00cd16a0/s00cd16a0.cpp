@@ -1,5 +1,9 @@
 // Slice s00cd16a0 -- cScenarioEditModeInputStrategy: destructor and UI state machine setup.
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14771e0[];
+
 #include "types.h"
 
 namespace Simulator {
@@ -87,7 +91,7 @@ void* Simulator::cScenarioEditModeInputStrategy::Destroy(uint8_t flags)
 {
     cSub04& sub = mSub;
     cNested1c& nested = sub.mNested1c;
-    mpVtable = (void*)0x014771e0;
+    mpVtable = (void*)g_14771e0;
     nested.Release(nested.mpValue0c);
     sub.Release(sub.mpValue0c);
     if (flags & 1)

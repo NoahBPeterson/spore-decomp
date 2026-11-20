@@ -2,6 +2,15 @@
 // Object file: SPGonzago/SPSimPlanetLowLOD.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00faed90();
+extern "C" char g_1579ae8[];
+extern "C" char g_1579ba0[];
+extern "C" char g_1579c58[];
+extern "C" char g_1694bac[];
+extern "C" char g_1694bb0[];
+extern "C" char g_1694bb4[];
+
 #include "game/types.h"
 #include <math.h>
 #include "SP/cPlanet.h"
@@ -777,18 +786,18 @@ bool cTargetList::Write(void* stream)
 {
     cVarListSerializer ser1;
     cVarListSerializer ser2;
-    ser1.Construct(this, (void*)0x1579c58, 0x1a80d26u);
+    ser1.Construct(this, (void*)g_1579c58, 0x1a80d26u);
     bool ok = ser1.Serialize(stream);
     if (ok) {
         char* p = (char*)this + 0x04;
         for (int i = 0; i < 3; ++i) {
-            ser2.Construct(p, (void*)0x1579ae8, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ae8, 0x1a80d26u);
             ser2.Serialize(stream);
             p += 0x10;
         }
         p = (char*)this + 0x34;
         for (int i = 0; i < 2; ++i) {
-            ser2.Construct(p, (void*)0x1579ba0, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ba0, 0x1a80d26u);
             ser2.Serialize(stream);
             p += 0x10;
         }
@@ -801,18 +810,18 @@ bool cTargetList::Read(void* stream)
 {
     cVarListSerializer ser1;
     cVarListSerializer ser2;
-    ser1.Construct(this, (void*)0x1579c58, 0x1a80d26u);
+    ser1.Construct(this, (void*)g_1579c58, 0x1a80d26u);
     bool ok = ser1.Serialize2(stream);
     if (ok) {
         char* p = (char*)this + 0x04;
         for (int i = 0; i < 3; ++i) {
-            ser2.Construct(p, (void*)0x1579ae8, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ae8, 0x1a80d26u);
             ser2.Serialize2(stream);
             p += 0x10;
         }
         p = (char*)this + 0x34;
         for (int i = 0; i < 2; ++i) {
-            ser2.Construct(p, (void*)0x1579ba0, 0x1a80d26u);
+            ser2.Construct(p, (void*)g_1579ba0, 0x1a80d26u);
             ser2.Serialize2(stream);
             p += 0x10;
         }
@@ -1010,8 +1019,8 @@ void* CS::ctor_00c7ea70()
     int n = 0x5f;
     do {
         p->m00 = 0;
-        vector_ctor_iterator_00401930(&p->mVec0, 0x10, 3, (void*)0xfaed90);
-        vector_ctor_iterator_00401930(&p->mVec1, 0x10, 2, (void*)0xfaed90);
+        vector_ctor_iterator_00401930(&p->mVec0, 0x10, 3, (void*)FUN_00faed90);
+        vector_ctor_iterator_00401930(&p->mVec1, 0x10, 2, (void*)FUN_00faed90);
         p += 1;
     } while (--n >= 0);
     operator_new_array_011e073e(this, 0, 0x1f80);
@@ -1260,9 +1269,9 @@ void __fastcall FUN_00c7f060(void* self)
 u8 __fastcall FUN_00c7f300(void* self, void* dummy, u32* key, float x, float y, float z)
 {
   (void)dummy;
-  if (x == *(float*)0x1694bac) {
-    if (y == *(float*)0x1694bb0) {
-      if (z == *(float*)0x1694bb4) goto done;
+  if (x == *(float*)g_1694bac) {
+    if (y == *(float*)g_1694bb0) {
+      if (z == *(float*)g_1694bb4) goto done;
     }
   }
   if (*key != 0) {
@@ -1312,11 +1321,11 @@ u8 __fastcall FUN_00c7f430(void* self, void* dummy, s32* keyword, float* coords)
 {
   (void)dummy;
   float x = coords[0];
-  if (x == *(float*)0x1694bac) {
+  if (x == *(float*)g_1694bac) {
     float y = coords[1];
-    if (y == *(float*)0x1694bb0) {
+    if (y == *(float*)g_1694bb0) {
       float z = coords[2];
-      if (z == *(float*)0x1694bb4) goto done;
+      if (z == *(float*)g_1694bb4) goto done;
     }
   }
   if (*keyword != 0) {

@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPSimulatorUniverse.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1464450[];
+extern "C" char g_1465d54[];
+extern "C" char g_1601760[];
+
 #include "game/types.h"
 #include "SP/cCivData.h"
 #include "SP/cGonzagoTimer.h"
@@ -392,13 +397,13 @@ struct cSPTimer_s0101_04c0 {
     int    mGetMs;       // +0x1c
 
     __forceinline cSPTimer_s0101_04c0(const cSPTimer_s0101_04c0& o) {
-        mVtbl = (void*)0x01465d54;
+        mVtbl = (void*)g_1465d54;
         mRefCount = 0;
         *(uint64_t*)&mElapsedLo = *(const uint64_t*)&o.mElapsedLo;
         *(uint64_t*)&mBaseLo = *(const uint64_t*)&o.mBaseLo;
         mRunning = o.mRunning;
         mGetMs = o.mGetMs;
-        mVtbl = (void*)0x01464450;
+        mVtbl = (void*)g_1464450;
     }
     ~cSPTimer_s0101_04c0(); // 0x00b638b0
     cSPTimer_s0101_04c0& operator=(const cSPTimer_s0101_04c0& o)
@@ -1400,7 +1405,7 @@ struct UniverseEventClock {
 void UniverseEventClock::UpdateEvent(u64 elapsed)
 {
     float frequency = mSelector.GetFrequency(elapsed);
-    if (frequency > 0.0f && ((UniverseEventRandom*)0x01601760)->RandomDoubleUniform() < frequency) {
+    if (frequency > 0.0f && ((UniverseEventRandom*)g_1601760)->RandomDoubleUniform() < frequency) {
         UniverseCandidateList candidates;
         mSelector.Choose(&mLastEvent, &candidates);
         candidates.Destroy();
@@ -1417,7 +1422,7 @@ tGrobShockData* tGrobShockData::FUN_01010870(const tGrobShockData& o)
     mField00 = o.mField00;
     mField04 = o.mField04;
     _ReadWriteBarrier();
-    mTimer.mVtbl = (void*)0x01465d54;
+    mTimer.mVtbl = (void*)g_1465d54;
     mTimer.mRefCount = 0;
     mTimer.mElapsedLo = o.mTimer.mElapsedLo;
     mTimer.mElapsedHi = o.mTimer.mElapsedHi;
@@ -1425,7 +1430,7 @@ tGrobShockData* tGrobShockData::FUN_01010870(const tGrobShockData& o)
     mTimer.mBaseHi = o.mTimer.mBaseHi;
     mTimer.mRunning = o.mTimer.mRunning;
     mTimer.mGetMs = o.mTimer.mGetMs;
-    mTimer.mVtbl = (void*)0x01464450;
+    mTimer.mVtbl = (void*)g_1464450;
     return this;
 }
 

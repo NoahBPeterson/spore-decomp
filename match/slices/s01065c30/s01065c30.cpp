@@ -1,5 +1,9 @@
 // Slice s01065c30: SP::cSPUISpace UI helpers + cCommandDeleteCargoButtonState + misc.
 // Flags: /O2 /MD /Gy /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebb38[];
+
 #include "types.h"
 
 typedef unsigned int uint;
@@ -460,7 +464,7 @@ void SPUISpace::FUN_01066230(char param) {
 // @ 0x01066310
 // ===========================================================================
 void __stdcall FUN_01066310(int* src) {
-    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+    void* p = operator_new(0x18, "Simulator", 0, 0, (const char*)g_13ebb38, 0xd1);
     int* d = (int*)p;
     if (d) { d[0]=src[0]; d[1]=src[1]; d[2]=src[2]; d[3]=src[3]; d[4]=src[4]; }
     d[5] = 0;
@@ -575,7 +579,7 @@ struct CmdCtor {
 CmdCtor* CmdCtor::init(SPUISpace* space, uint windowID) {
     int zero = 0;
     CmdCtor* p = this;
-    p->mVtbl = (void*)0x149c1f0;
+    p->mVtbl = (void*)&g_149c1f0;
     p->mpItem08 = 0;
     // Retain the native store order without qualifying the other fields.
     *(SPUISpace* volatile*)&p->mpSpace14 = space;

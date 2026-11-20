@@ -1,6 +1,12 @@
 // EA::Callstack::MapFileMSVC::Load (0x0091ccf0): parses an MSVC linker .map file into the
 // section table, segment groups, address->symbol map and address->file/line map.
 // Flags: /O2 /MD /Gy /TP /GS-  (no EH frame in the original)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f68c4[];
+extern "C" char g_143ce60[];
+extern "C" char g_143ce8c[];
+
 #include "types.h"
 
 extern "C" __declspec(dllimport) int __cdecl sscanf(const char* buffer, const char* format, ...);
@@ -646,7 +652,7 @@ void SymbolMap::DoNukeSubtree(SymbolNode* node)
 // @ 0x0091cb40
 MapFileGCC3::~MapFileGCC3()
 {
-    vtable = (void*)0x0143ce60;
+    vtable = (void*)g_143ce60;
     mbLoadAttempted = false;
     mEntryPairArray.clear();
     mStackAllocator.Reset(0);
@@ -656,7 +662,7 @@ MapFileGCC3::~MapFileGCC3()
     if ((((int)msMapFilePath.mpCapacity - (int)msMapFilePath.mpBegin) & ~1) > 2 &&
         msMapFilePath.mpBegin)
         operator delete(msMapFilePath.mpBegin);
-    vtable = (void*)0x013f68c4;
+    vtable = (void*)g_13f68c4;
 }
 
 // @ 0x0091cbd0
@@ -756,7 +762,7 @@ MapFileMSVC::~MapFileMSVC()
 
 // @ 0x0091d480
 MapFileMSVC::MapFileMSVC()
-    : vtable((void*)0x0143ce8c)
+    : vtable((void*)g_143ce8c)
     , mbLoadAttempted(false)
     , mBaseAddress(0)
 {

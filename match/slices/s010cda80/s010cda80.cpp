@@ -5,6 +5,9 @@
 //
 // Module flags: /vc71 /O2 /MD /Gy /EHsc /TP
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef534[];
+
 typedef unsigned int hkUint32;
 
 struct hkCollisionInput;                     // opaque
@@ -141,7 +144,7 @@ void hkAlgorithm_quickSortRecursive(unsigned int* base, int lo, int hi, hkLessUi
 // @ 0x010cdca0
 void* hkBvTreeStreamAgent::scalarDeletingDtor(unsigned int flags)
 {
-    *(void**)this = (void*)0x013ef534;                 // vtable
+    *(void**)this = (void*)g_13ef534;                 // vtable
     if (flags & 1)
         g_hkMemoryInstance->deallocate((void*)this, 8, 0x1c);
     return (void*)this;

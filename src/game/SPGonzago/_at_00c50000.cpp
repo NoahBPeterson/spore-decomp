@@ -2,6 +2,14 @@
 // Object file: SPGonzago/_at_00c50000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_146dfb4[];
+extern "C" char g_146fbf0[];
+extern "C" char g_146fc00[];
+extern "C" char g_16925c0[];
+extern "C" char g_16925c4[];
+extern "C" char g_16925c8[];
+
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cSPMission.h"
@@ -1074,13 +1082,13 @@ cRaidEvent* __fastcall FUN_00c5bd40(cRaidEvent* self, void* dummy)
 MissionScan::MissionScan()
 {
   MissionBaseCtor(this);
-  mpVtable  = (Vtbl*)0x146fc00;
-  mpField04 = (void*)0x146dfb4;
-  mpField34 = (void*)0x146fbf0;
+  mpVtable  = (Vtbl*)g_146fc00;
+  mpField04 = (void*)g_146dfb4;
+  mpField34 = (void*)g_146fbf0;
   mField1f0 = 0;
-  mpField1f4 = (void*)*(int*)0x16925c0;
-  mField1f8 = *(int*)0x16925c4;
-  mField1fc = *(int*)0x16925c8;
+  mpField1f4 = (void*)*(int*)g_16925c0;
+  mField1f8 = *(int*)g_16925c4;
+  mField1fc = *(int*)g_16925c8;
 }
 
 // @ 0x00c5ea60

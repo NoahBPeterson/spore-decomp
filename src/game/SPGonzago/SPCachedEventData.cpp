@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCachedEventData.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1494378[];
+
 #include "game/types.h"
 #include "EA/Messaging/AutoHandler.h"
 
@@ -438,14 +441,14 @@ void cCachedEventData::Init()
     EA::Messaging::AutoHandler* h = (EA::Messaging::AutoHandler*)&mHandler;
     h->mpServer = (EA::Messaging::Server*)server;
     h->mpHandler = (EA::Messaging::IHandler*)this;
-    h->mpIdArray = (unsigned int*)0x1494378;
+    h->mpIdArray = (unsigned int*)g_1494378;
     h->mnIdArrayCount = 5;
     h->mnPriority = 0;
 
     typedef void (__thiscall* Fn)(void*, void*, uint32_t);
     if (h->mpServer != 0 && h->mpHandler != 0) {
         for (uint32_t i = 0; i < 0x14; i += 4) {
-            uint32_t fn = *(uint32_t*)(0x1494378 + i);
+            uint32_t fn = *(uint32_t*)((int)g_1494378 + i);
             ((Fn)VF(server, 0x24))(server, this, fn);
         }
     }

@@ -4,6 +4,11 @@
 // the members below are what drive the code generation, so keep them in sync with the
 // offsets noted per member.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1447cc0[];
+extern "C" char g_1447cc4[];
+extern "C" char g_1447cc8[];
+
 #include <math.h>
 #include <string.h>
 
@@ -420,7 +425,7 @@ Rec44* Rec44::Ctor(const Rec44* src)
 {
     const int* r = src ? (const int*)src + 1 : 0;
     ref = *r;
-    vtbl = (void*)0x1447cc0;
+    vtbl = (void*)g_1447cc0;
     x = src->x;
     y = src->y;
     z = src->z;
@@ -433,7 +438,7 @@ Rec58* Rec58::Ctor(const Rec58* src)
 {
     const int* r = src ? (const int*)src + 1 : 0;
     ref = *r;
-    vtbl = (void*)0x1447cc4;
+    vtbl = (void*)g_1447cc4;
     x = src->x;
     y = src->y;
     z = src->z;
@@ -447,7 +452,7 @@ Rec1C* Rec1C::Ctor(const Rec1C* src)
 {
     const int* r = src ? (const int*)src + 1 : 0;
     ref = *r;
-    vtbl = (void*)0x1447cc8;
+    vtbl = (void*)g_1447cc8;
     d[0] = src->d[0];
     memcpy(&d[1], &src->d[1], 4 * sizeof(int));
     return this;
@@ -592,7 +597,7 @@ Rec1C* Copy1C(const Rec1C* first, const Rec1C* last, Rec1C* dst)
         if (dst != 0) {
             const int* ref = first ? (const int*)first + 1 : 0;
             dst->ref = *ref;
-            dst->vtbl = (void*)0x1447cc8;
+            dst->vtbl = (void*)g_1447cc8;
             dst->d[0] = first->d[0];
             dst->d[1] = first->d[1];
             dst->d[2] = first->d[2];

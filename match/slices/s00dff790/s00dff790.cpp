@@ -3,6 +3,11 @@
 //
 // The large inlined functions are stubbed (see partial.txt).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147dba8[];
+extern "C" char g_16a1344[];
+extern "C" char g_16c7aa4[];
+
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -31,7 +36,7 @@ struct VBase {
 };
 // @ 0x00e00630
 VBase::VBase() {
-    vftable = (void**)0x147dba8;
+    vftable = (void**)g_147dba8;
     b4 = 0;
 }
 
@@ -43,14 +48,14 @@ struct Thisc { int m(); };
 void __stdcall e00560(int dummy) {
     (void)dummy;
     void* ab = SP_AssetBrowser();
-    GObj* g = *(GObj**)0x16a1344;
+    GObj* g = *(GObj**)g_16a1344;
     if (g->field108 == 7 &&
         *(char*)((char*)ab + 0x1c) == 0 &&
         g->b270 == 0) {
-        int* mm = *(int**)0x16c7aa4;
+        int* mm = *(int**)g_16c7aa4;
         EC* ec = *(EC**)((char*)mm + 0x1c);
         if (!ec->sub_ec4320()) {
-            (*(GObj**)0x16a1344)->sub_de52d0();
+            (*(GObj**)g_16a1344)->sub_de52d0();
         }
     }
 }

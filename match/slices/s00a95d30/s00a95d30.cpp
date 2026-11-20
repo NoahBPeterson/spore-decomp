@@ -10,6 +10,13 @@
 // rotated UV word (none, 0xff0000, 0xffff00, 0xff00).
 // The sink supplies (base pointer, stride) for up to `want` vertex groups per Fetch call.
 // Module flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- (aligned frame: SSE intrinsics).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a94fb0();
+extern "C" void FUN_00a954b0();
+extern "C" void FUN_00a95d30();
+extern "C" void FUN_00a96520();
+
 #include "types.h"
 #include <math.h>
 #include <stdlib.h>
@@ -272,10 +279,10 @@ void __cdecl RegisterSwarmVtables(char enable)
 {
     if (enable) {
         MemZero(gpSwarmVtbl, 0, 0x80);
-        gpSwarmVtbl[0] = (void*)0x00a96520;
-        gpSwarmVtbl[1] = (void*)0x00a94fb0;
-        gpSwarmVtbl[2] = (void*)0x00a954b0;
-        gpSwarmVtbl[3] = (void*)0x00a95d30;
+        gpSwarmVtbl[0] = (void*)FUN_00a96520;
+        gpSwarmVtbl[1] = (void*)FUN_00a94fb0;
+        gpSwarmVtbl[2] = (void*)FUN_00a954b0;
+        gpSwarmVtbl[3] = (void*)FUN_00a95d30;
     }
 }
 

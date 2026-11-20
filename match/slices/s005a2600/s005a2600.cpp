@@ -1,6 +1,15 @@
 // Slice s005a2600 -- SP::cTerrainUI input/command helpers, config refresh, transform
 // composition and scalar deleting destructor + EA::Swarm::cTransform::PreRotateX.
 // Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_13f69b4[];
+extern "C" char g_13f69b8[];
+extern "C" char g_13f69c8[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -291,16 +300,16 @@ void cTerrainUI::ConfigUpdated()
 // @ 0x005a2ed0
 void* cTerrainUI::ScalarDelete(unsigned flags)
 {
-    *(void**)((char*)this + 0) = (void*)0x13f69c8;
-    *(void**)((char*)this + 4) = (void*)0x13f69b8;
-    *(void**)((char*)this + 8) = (void*)0x13f69b4;
+    *(void**)((char*)this + 0) = (void*)g_13f69c8;
+    *(void**)((char*)this + 4) = (void*)g_13f69b8;
+    *(void**)((char*)this + 8) = (void*)g_13f69b4;
     _ReadWriteBarrier();
     cPropertyList* cfg = *(cPropertyList**)((char*)this + 0x10);
     if (cfg)
         ((void(__thiscall*)(void*))(*(void***)cfg)[4 / 4])(cfg);
-    *(void**)((char*)this + 8) = (void*)0x13ef094;
-    *(void**)((char*)this + 4) = (void*)0x13eb394;
-    *(void**)((char*)this + 0) = (void*)0x13eb938;
+    *(void**)((char*)this + 8) = (void*)g_13ef094;
+    *(void**)((char*)this + 4) = (void*)g_13eb394;
+    *(void**)((char*)this + 0) = (void*)g_13eb938;
     if (flags & 1)
         operator delete(this);
     return this;

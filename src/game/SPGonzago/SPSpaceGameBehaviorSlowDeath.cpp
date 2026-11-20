@@ -1,16 +1,22 @@
 // SPGonzago/SPSpaceGameBehaviorSlowDeath.obj: space-game behaviour start/stop of the slow-death sequence.
 // Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f09b4[];
+extern "C" char g_1499800[];
+extern "C" char g_1499810[];
+extern "C" char g_16df2f8[];
+
 #include "game/types.h"
 
 #define PV(n) virtual void pv##n();
 struct Vec3 { float x, y, z; };
 static const uint32_t kSlowDeathCoreSize = 0xa0;   // bytes of the cSpaceGameBehaviorSlowDeath object
 static const uint32_t kAgentQueryTag      = 0xce9f6639;  // identifier of the behaviour's agent query
-#define G_STR_16DF2F8    ((void*)0x016df2f8)
-#define G_STR_SIMULATOR  ((void*)0x013f09b4)
-#define G_VT_BEHAVIOUR_A ((uint32_t)0x01499810)
-#define G_VT_BEHAVIOUR_B ((uint32_t)0x01499800)
+#define G_STR_16DF2F8    ((void*)g_16df2f8)
+#define G_STR_SIMULATOR  ((void*)g_13f09b4)
+#define G_VT_BEHAVIOUR_A ((uint32_t)g_1499810)
+#define G_VT_BEHAVIOUR_B ((uint32_t)g_1499800)
 void* operator_new(uint32_t size, void* name, int a, int b, int c, int d);   // 0x00f473a0
 void  operator_delete_array(void* p);                                        // 0x00f47380
 struct PlanetModel {

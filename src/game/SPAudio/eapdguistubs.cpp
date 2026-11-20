@@ -2,6 +2,9 @@
 // Object file: SPAudio/eapdguistubs.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a61230();
+
 #include "game/types.h"
 
 // ---- items of slice s00a5fff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -633,7 +636,7 @@ byte g_hslider_setup(void)
     ok &= class_addbang(gpSliderClass, (void*)slider_float);
     ok &= class_doaddfloat(gpSliderClass, (void*)slider_setfloat);
     p = gensym(&s, "loadbang");
-    ok &= class_addmethod(gpSliderClass, (void*)0x00a61230, *p, 0);
+    ok &= class_addmethod(gpSliderClass, (void*)FUN_00a61230, *p, 0);
     return ok;
 }
 }  // namespace Eapd

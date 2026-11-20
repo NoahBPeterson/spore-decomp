@@ -17,6 +17,10 @@
 //   00f67aa0  project a direction into the terrain sprite atlas
 //   00f67da0  clear the six terrain sprite sub-rasters
 // Module flags: /O2 /MD /Gy /EHsc /TP.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_148f598[];
+
 #include "types.h"
 #include <math.h>
 
@@ -268,7 +272,7 @@ void* __cdecl AllocTerrainDraw(void* a, void* b, void* c)
         p->mBase0 = 0;
         p->mBase1 = 0;
         p->mLockState = 0;
-        p->mpVtbl = (void**)0x0148f598;
+        p->mpVtbl = (void**)g_148f598;
         p->mpParam = (void*)1;
         r = p;
     }

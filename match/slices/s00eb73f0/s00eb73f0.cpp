@@ -2,6 +2,11 @@
 //   0x00eb73f0  builds the position/zoom/orientation Hermite tracks for the current transition
 //   0x00eb7b30  message handler (target position, orientation, zoom messages)
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc), same module as s00eb4420.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1488718[];
+extern "C" char g_1488728[];
+
 #include "types.h"
 #include <math.h>
 
@@ -457,8 +462,8 @@ void* __fastcall Viewer_Init(ViewerLayout* self)
     UI_AssetDiscovery_View_ctor(self);
 
     uint32_t zero = 0;
-    self->mpVtable0 = (void**)0x01488728u;
-    self->mpVtable1 = (void**)0x01488718u;
+    self->mpVtable0 = (void**)g_1488728;
+    self->mpVtable1 = (void**)g_1488718;
     *(volatile uint32_t*)&self->m108 = zero;
     self->m10c = zero;
     self->m110 = zero;

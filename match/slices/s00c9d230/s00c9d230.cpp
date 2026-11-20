@@ -13,6 +13,16 @@
 //             +0x0e0/+0x100 timers (abs 0x200/0x220),
 //             +0x120/+0x124/+0x128 (abs 0x240/0x244/0x248),
 //             +0x0b4c anim owner (abs 0xc6c)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1466c14[];
+extern "C" char g_1474698[];
+extern "C" char g_14746c0[];
+extern "C" char g_1474728[];
+extern "C" char g_1474744[];
+extern "C" char g_1474758[];
+extern "C" char g_14747c0[];
+
 #include "types.h"
 
 #define PV(n) virtual void pv##n();
@@ -288,12 +298,12 @@ cTribeTool::cTribeTool()
 // @ 0x00c9d3b0
 cTribeTool::~cTribeTool()
 {
-    gameData.vft0   = (void*)0x1474758;
-    gameData.vft1   = (void*)0x1474744;
-    spatial.vft     = (void*)0x14747c0;
-    interact.vft    = (void*)0x1474728;
-    combatant.vft   = (void*)0x14746c0;
-    combatant.vftC8 = (void*)0x1474698;
+    gameData.vft0   = (void*)g_1474758;
+    gameData.vft1   = (void*)g_1474744;
+    spatial.vft     = (void*)g_14747c0;
+    interact.vft    = (void*)g_1474728;
+    combatant.vft   = (void*)g_14746c0;
+    combatant.vftC8 = (void*)g_1474698;
 
     combatant.timer2.Dtor();
     combatant.timer1.Dtor();
@@ -301,7 +311,7 @@ cTribeTool::~cTribeTool()
     if (combatant.mpOwner)
         combatant.mpOwner->Release();
 
-    combatant.vftC8 = (void*)0x1466c14;
+    combatant.vftC8 = (void*)g_1466c14;
     combatant.FUN_00bfcd00();
     interact.FUN_00ac0520();
     spatial.FUN_00c8a420();

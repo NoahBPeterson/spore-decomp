@@ -6,6 +6,10 @@
 // sequence reader at 0x00ff21d0; offsets are read from the disassembly.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15b5018[];
+
 #include "types.h"
 
 typedef unsigned int  u32;
@@ -123,7 +127,7 @@ void __cdecl FUN_00ff2060(SerHost* host, VectorEC* vec)
         // Ctor(pObject, pVarList, nSignature): the building property descriptor table
         // lives at 0x015b5018 (gBuildingVarList); the address is spelled out so the
         // compiler emits the retail `push imm32` and the retail argument push order.
-        ser.Ctor(&buf, (void*)0x015b5018, 0x1a80d26);
+        ser.Ctor(&buf, (void*)g_15b5018, 0x1a80d26);
         ser.Serialize(host);
 
         cBuildingData* pos = (cBuildingData*)vec->mEnd;

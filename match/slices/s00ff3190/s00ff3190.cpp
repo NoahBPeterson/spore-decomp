@@ -7,6 +7,28 @@
 // The classes below are local stubs with role-named fields at the retail
 // offsets read off the disassembly (the migrated headers carry the 2008
 // dev-PDB layout, which is shifted and wrong for retail).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_1494cd4[];
+extern "C" char g_1494d04[];
+extern "C" char g_1494d08[];
+extern "C" char g_1494d54[];
+extern "C" char g_1494d68[];
+extern "C" char g_1579ed8[];
+extern "C" char g_15b5ed8[];
+extern "C" char g_16dae04[];
+extern "C" char g_16dae10[];
+extern "C" char g_16dae1c[];
+extern "C" char g_16dae28[];
+extern "C" char g_16dae34[];
+extern "C" char g_16dae40[];
+extern "C" char g_16dae4c[];
+extern "C" char g_16dae58[];
+extern "C" char g_16dae64[];
+extern "C" char g_16dae70[];
+extern "C" char g_16dae7c[];
+
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
@@ -561,8 +583,8 @@ ImageModifier* __fastcall FUN_00ff3810(ImageModifier* ecx_this, void* edx, cCube
 // @ 0x00ff38a0 FUN_00ff38a0
 void __fastcall FUN_00ff38a0(ImageModifier* ecx_this)
 {
-    ecx_this->mpVtbl0 = (void*)0x1494d08;
-    ecx_this->mpVtbl1 = (void*)0x1494d04;
+    ecx_this->mpVtbl0 = (void*)g_1494d08;
+    ecx_this->mpVtbl1 = (void*)g_1494d04;
     _ReadWriteBarrier();
     cCubeImage* pImg = ecx_this->mpImage;
     if (pImg != 0) {
@@ -574,8 +596,8 @@ void __fastcall FUN_00ff38a0(ImageModifier* ecx_this)
             ((void(__thiscall*)(void*, int))(*(void***)pImg)[0])(pImg, 1);
         }
     }
-    ecx_this->mpVtbl0 = (void*)0x1494cd4;
-    ecx_this->mpVtbl1 = (void*)0x13ef094;
+    ecx_this->mpVtbl0 = (void*)g_1494cd4;
+    ecx_this->mpVtbl1 = (void*)g_13ef094;
 }
 
 // ---------------------------------------------------------------------------
@@ -624,8 +646,8 @@ float __fastcall FUN_00ff38e0(ImageModifier* ecx_this, void* edx, const float* p
 // @ 0x00ff3ab0 FUN_00ff3ab0
 ImageModifier* __fastcall FUN_00ff3ab0(ImageModifier* ecx_this, void* edx, u8 flags)
 {
-    ecx_this->mpVtbl0 = (void*)0x1494d08;
-    ecx_this->mpVtbl1 = (void*)0x1494d04;
+    ecx_this->mpVtbl0 = (void*)g_1494d08;
+    ecx_this->mpVtbl1 = (void*)g_1494d04;
     _ReadWriteBarrier();
     cCubeImage* pImg = ecx_this->mpImage;
     if (pImg != 0) {
@@ -637,8 +659,8 @@ ImageModifier* __fastcall FUN_00ff3ab0(ImageModifier* ecx_this, void* edx, u8 fl
             ((void(__thiscall*)(void*, int))(*(void***)pImg)[0])(pImg, 1);
         }
     }
-    ecx_this->mpVtbl0 = (void*)0x1494cd4;
-    ecx_this->mpVtbl1 = (void*)0x13ef094;
+    ecx_this->mpVtbl0 = (void*)g_1494cd4;
+    ecx_this->mpVtbl1 = (void*)g_13ef094;
     if ((flags & 1) != 0) {
         FUN_00f47380(ecx_this);
     }
@@ -690,17 +712,17 @@ int __fastcall FUN_00ff3bb0(ToolSet* ecx_this, void* edx, void* pId)
 // @ 0x00ff3bf0 FUN_00ff3bf0
 bool __fastcall FUN_00ff3bf0(ToolSet* ecx_this)
 {
-    return ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae04)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae10)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae1c)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae28)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae34)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae40)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae4c)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae58)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae64)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae70)
-        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)0x16dae7c);
+    return ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae04)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae10)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae1c)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae28)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae34)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae40)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae4c)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae58)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae64)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae70)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae7c);
 }
 
 // ---------------------------------------------------------------------------
@@ -851,8 +873,8 @@ u32 __fastcall FUN_00ff3fb0(Inv* ecx_this, void* edx, void* host)
 // @ 0x00ff3ff0 FUN_00ff3ff0
 void __fastcall FUN_00ff3ff0(Inv* ecx_this)
 {
-    ecx_this->mpVtbl0 = (void*)0x1494d68;
-    ecx_this->mpVtbl1 = (void*)0x1494d54;
+    ecx_this->mpVtbl0 = (void*)g_1494d68;
+    ecx_this->mpVtbl1 = (void*)g_1494d54;
     _ReadWriteBarrier();
     ToolObj* p;
     p = ecx_this->m90;
@@ -887,12 +909,12 @@ int __fastcall FUN_00ff4090(GameData* ecx_this, void* edx, void* host)
     int a = ecx_this->GetFieldValues(host);
 
     cVarListSerializer s1;
-    s1.Ctor(ecx_this, (void*)0x1579ed8, 0x1a80d26);
+    s1.Ctor(ecx_this, (void*)g_1579ed8, 0x1a80d26);
     int b = s1.GetFields(host);
     int ab = a + b;
 
     cVarListSerializer s2;
-    s2.Ctor(ecx_this, (void*)0x15b5ed8, 0x1a80d26);
+    s2.Ctor(ecx_this, (void*)g_15b5ed8, 0x1a80d26);
     int c = s2.GetFields(host);
 
     return c + ab;

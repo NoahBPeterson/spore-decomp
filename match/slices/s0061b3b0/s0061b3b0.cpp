@@ -1,6 +1,11 @@
 // Slice s0061b3b0: SP::Pollen YouTube transactions, request/asset helpers, EASTL sort internals
 // and a pair of eastl::basic_string / eastl::vector member functions.
 // Flags: /O2 /MD /Gy /TP /arch:SSE (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_13fc854[];
+
 #include "../s00622f20/s00622f20.h"
 
 extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
@@ -392,7 +397,7 @@ cContentValidationTransaction::cContentValidationTransaction(const char* a, cons
 
 // @ 0x0061bf50
 void cContentValidationTransaction::Destroy() {
-  *(unsigned int* volatile*)this = (unsigned int*)0x13fc854;
+  *(unsigned int* volatile*)this = (unsigned int*)g_13fc854;
   _ReadWriteBarrier();
   if ((mStr98.mpCapacity - mStr98.mpBegin) > 1 && mStr98.mpBegin)
     EASTL_allocator_deallocate(mStr98.mpBegin);
@@ -413,7 +418,7 @@ void cContentValidationTransaction::Destroy() {
   e = (char*)mVec14.mpEnd;
   for (p = (char*)mVec14.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
   if (mVec14.mpBegin && *((int*)mVec14.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec14.mpBegin);
-  mVtbl = (unsigned int*)0x13ec458;
+  mVtbl = (unsigned int*)g_13ec458;
 }
 
 // ---- the YouTube authentication transaction -------------------------------------------------

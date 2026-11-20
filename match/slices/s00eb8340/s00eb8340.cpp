@@ -2,6 +2,11 @@
 // vtable + refcount plumbing and the message/layout wiring of the adventure UI asset views.
 // Built with VS2008 SP1 (cl 15.00.30729.01) /O2 /MD /Gy /TP (no float code in this slice).
 // Flags: /O2 /MD /Gy /TP
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fa29c[];
+extern "C" char g_14887b8[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -192,8 +197,8 @@ void __fastcall Obj::Dtor()
 {
     char* p = (char*)this;
     char* e = p + 0x130;
-    *(void**)(p) = (void*)0x01488728;
-    *(void**)(p + 4) = (void*)0x01488718;
+    *(void**)(p) = (void*)&g_01488728;
+    *(void**)(p + 4) = (void*)&g_01488718;
     {
         void* o = *(void**)e;
         if (o) { void** vt = *(void***)o; ((VF0)vt[1])(o); }
@@ -601,7 +606,7 @@ void __fastcall Obj::Activate()
 // ---------------------------------------------------------------------------
 void __fastcall Obj::MakeLayout()
 {
-    void* obj = operator_new(0x18, (const char*)0x013fa29c, 0, 0, 0, 0);
+    void* obj = operator_new(0x18, (const char*)g_13fa29c, 0, 0, 0, 0);
     void* piVar3;
     if (obj != 0)
         piVar3 = ((Win18*)obj)->Ctor();
@@ -621,7 +626,7 @@ void __fastcall Obj::MakeLayout()
     id[2] = g;
     ((Fn120d*)f18)->F(id, 1, 0x5b598fa);
     ((Fn121b*)f18)->F(f1c, 1, 0x5b598fa);
-    ((Fn10090*)f18)->F((void*)0x0066ee30, this);
+    ((Fn10090*)f18)->F((void*)&FUN_0066ee30, this);
     FUN_0066ee30(this, f18, 1);
 }
 
@@ -886,7 +891,7 @@ struct LargeViewReference { virtual void Slot0(); virtual void AddRef(); virtual
 // ---------------------------------------------------------------------------
 void __thiscall Obj::MakeLargeView(void* a)
 {
-    void* obj = operator_new(0x8c, (const char*)0x014887b8, 0, 0, 0, 0);
+    void* obj = operator_new(0x8c, (const char*)g_14887b8, 0, 0, 0, 0);
     void* piVar4;
     if (obj != 0)
         piVar4 = ((Ctor8c*)obj)->Ctor();
@@ -923,7 +928,7 @@ void __thiscall Obj::MakeLargeView(void* a)
 // ---------------------------------------------------------------------------
 void __thiscall Obj::MakeSmallView(void* a)
 {
-    void* obj = operator_new(0x5c, (const char*)0x014887b8, 0, 0, 0, 0);
+    void* obj = operator_new(0x5c, (const char*)g_14887b8, 0, 0, 0, 0);
     void* iVar2;
     if (obj != 0)
         iVar2 = ((Ctor5c*)obj)->Ctor();
@@ -951,12 +956,12 @@ void* __fastcall Obj::Ctor2()
     ((Base2C*)((char*)this + 0xd0))->Init();
     // volatile pins the store order: the original emits the five vfptr stores
     // right after the base constructors, then the member initialisers.
-    *(void* volatile*)((char*)this + 0x00) = (void*)0x01488828;
-    *(void* volatile*)((char*)this + 0x04) = (void*)0x01488818;
-    *(void* volatile*)((char*)this + 0x08) = (void*)0x0148880c;
-    *(void* volatile*)((char*)this + 0x0c) = (void*)0x014887f4;
-    *(void* volatile*)((char*)this + 0x10) = (void*)0x014887e4;
-    *(void* volatile*)((char*)this + 0xd0) = (void*)0x0140085c;
+    *(void* volatile*)((char*)this + 0x00) = (void*)&g_01488828;
+    *(void* volatile*)((char*)this + 0x04) = (void*)&g_01488818;
+    *(void* volatile*)((char*)this + 0x08) = (void*)&g_0148880c;
+    *(void* volatile*)((char*)this + 0x0c) = (void*)&g_014887f4;
+    *(void* volatile*)((char*)this + 0x10) = (void*)&g_014887e4;
+    *(void* volatile*)((char*)this + 0xd0) = (void*)&g_0140085c;
     *(void* volatile*)((char*)this + 0xe8) = 0;
     *(void* volatile*)((char*)this + 0xec) = 0;
     *(void* volatile*)((char*)this + 0xf0) = 0;

@@ -2,6 +2,15 @@
 // Object file: SPGonzago/_at_00f10000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15ad8a4[];
+extern "C" char g_148c08c[];
+extern "C" char g_148c09c[];
+extern "C" char g_148c0ec[];
+extern "C" char g_148c0fc[];
+extern "C" char g_148c10c[];
+extern "C" char g_148c114[];
+
 #include "game/types.h"
 #include "SP/cSPPaletteItem.h"
 #include "SP/cSPPaletteItemUI.h"
@@ -3297,8 +3306,8 @@ extern "C" uint8_t __stdcall FUN_00f13330(uint32_t msg, int* data)
 extern "C" void* __fastcall FUN_00f13370(void* self, int, uint8_t freeFlag)
 {
     char* s = (char*)self;
-    *(void**)(s + 0x00) = (void*)0x148c09c;
-    *(void**)(s + 0x04) = (void*)0x148c08c;
+    *(void**)(s + 0x00) = (void*)g_148c09c;
+    *(void**)(s + 0x04) = (void*)g_148c08c;
     _ReadWriteBarrier();
     void** p20 = *(void***)(s + 0x20);
     if (p20)
@@ -3309,8 +3318,8 @@ extern "C" void* __fastcall FUN_00f13370(void* self, int, uint8_t freeFlag)
     void** p0c = *(void***)(s + 0x0c);
     if (p0c)
         ((FnV)(*(void***)p0c)[8 / 4])(p0c);
-    *(void**)(s + 0x04) = (void*)0x13ec458;
-    *(void**)(s + 0x00) = (void*)0x13eb938;
+    *(void**)(s + 0x04) = (void*)&vtbl_13ec458;
+    *(void**)(s + 0x00) = (void*)&vtbl_13eb938;
     if (freeFlag & 1)
         operator_delete(s);
     return self;
@@ -3463,7 +3472,7 @@ extern "C" void* __fastcall FUN_00f13890(void* self)
 {
     char* s = (char*)self;
     *(uint32_t*)(s + 0x04) = 0;
-    *(void**)(s + 0x00) = (void*)0x148c0ec;
+    *(void**)(s + 0x00) = (void*)g_148c0ec;
     FUN_00e0a390(s + 8);
     *(uint32_t*)(s + 0x78) = 0;
     *(uint32_t*)(s + 0x7c) = 0;
@@ -3475,10 +3484,10 @@ extern "C" void* __fastcall FUN_00f13890(void* self)
 extern "C" void __fastcall FUN_00f138c0(void* self)
 {
     char* s = (char*)self;
-    *(void**)(s + 0x00) = (void*)0x148c0ec;
+    *(void**)(s + 0x00) = (void*)g_148c0ec;
     eastl_vector_dtor(s + 0x78);
     FUN_00e0a400(s + 8);
-    *(void**)(s + 0x00) = (void*)0x13ec458;
+    *(void**)(s + 0x00) = (void*)&vtbl_13ec458;
 }
 
 // @ 0x00f138f0
@@ -3527,9 +3536,9 @@ extern "C" void* __fastcall FUN_00f138f0(void* self)
 void RewardUI::FUN_00f139f0()
 {
     char* s = (char*)this;
-    *(void**)(s + 0x00) = (void*)0x148c114;
-    *(void**)(s + 0x04) = (void*)0x148c10c;
-    *(void**)(s + 0x08) = (void*)0x148c0fc;
+    *(void**)(s + 0x00) = (void*)g_148c114;
+    *(void**)(s + 0x04) = (void*)g_148c10c;
+    *(void**)(s + 0x08) = (void*)g_148c0fc;
     _ReadWriteBarrier();
 
     uint32_t h = *(uint32_t*)(s + 0xe4);
@@ -3551,10 +3560,10 @@ void RewardUI::FUN_00f139f0()
     if (p2d)
         ((FnV)(*(void***)p2d)[4 / 4])(p2d);
 
-    *(void**)(s + 0x28) = (void*)0x148c0ec;
+    *(void**)(s + 0x28) = (void*)g_148c0ec;
     eastl_vector_dtor(s + 0xa0);
     FUN_00e0a400(s + 0x30);
-    *(void**)(s + 0x28) = (void*)0x13ec458;
+    *(void**)(s + 0x28) = (void*)&vtbl_13ec458;
     _ReadWriteBarrier();
 
     void** p9 = *(void***)(s + 0x24);
@@ -3573,9 +3582,9 @@ void RewardUI::FUN_00f139f0()
     if (p4)
         ((FnV)(*(void***)((char*)p4 + 4))[8 / 4])((char*)p4 + 4);
 
-    *(void**)(s + 0x08) = (void*)0x13ec458;
-    *(void**)(s + 0x04) = (void*)0x13eb394;
-    *(void**)(s + 0x00) = (void*)0x13eb938;
+    *(void**)(s + 0x08) = (void*)&vtbl_13ec458;
+    *(void**)(s + 0x04) = (void*)&vtbl_13eb394;
+    *(void**)(s + 0x00) = (void*)&vtbl_13eb938;
 }
 
 // @ 0x00f13b10
@@ -3758,10 +3767,10 @@ extern "C" void FUN_00f14090(uint32_t start, uint32_t* end, uint32_t* out)
 extern "C" void* __fastcall FUN_00f140c0(void* self, int, uint8_t freeFlag)
 {
     char* s = (char*)self;
-    *(void**)(s + 0x00) = (void*)0x148c0ec;
+    *(void**)(s + 0x00) = (void*)g_148c0ec;
     eastl_vector_dtor(s + 0x78);
     FUN_00e0a400(s + 8);
-    *(void**)(s + 0x00) = (void*)0x13ec458;
+    *(void**)(s + 0x00) = (void*)&vtbl_13ec458;
     if (freeFlag & 1)
         operator_delete(s);
     return self;
@@ -4565,7 +4574,7 @@ void cScenarioPaletteOwner::Shutdown()
         mpChain->Build();
         mpChain.reset();
     }
-    FUN_0067ca90()->Reset(0x15ad8a4);
+    FUN_0067ca90()->Reset((int)g_15ad8a4);
 }
 
 // @ 0x00f170c0
@@ -5250,7 +5259,7 @@ namespace UI {
 void* cScenarioPlayProgressBar_s00f1_8eb0::IsEnabled()
 {
     if (*(int*)((char*)this + 0x90) == 5) {
-        int* g = *(int**)0x16c7aa4;
+        int* g = *(int**)&g_16c7aa4;
         if (g[0xd0 / 4])
             return *(void**)((char*)this + 0xc4);
     }
@@ -5294,7 +5303,7 @@ void __cdecl cScenarioPlayProgressBar_Link(void* a)
 namespace UI {
 bool __cdecl cScenarioPlayProgressBar_IsReady()
 {
-    int* g = *(int**)0x16c7aa4;
+    int* g = *(int**)&g_16c7aa4;
     int* p = (int*)g[0x74 / 4];
     return *(uint8_t*)((char*)p + 0x14) == 0 && g[0xd0 / 4] != 0;
 }
@@ -5304,7 +5313,7 @@ bool __cdecl cScenarioPlayProgressBar_IsReady()
 namespace UI {
 void cScenarioPlayProgressBar_s00f1_8eb0::Apply(bool a, bool flag)
 {
-    int* g = *(int**)0x16c7aa4;
+    int* g = *(int**)&g_16c7aa4;
     void* panel = *(void**)((char*)g + 0x6c);
     MissionCard* card = *(MissionCard**)((char*)panel + 0x148);
     if (!card)

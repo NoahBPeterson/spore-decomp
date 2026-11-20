@@ -2,6 +2,9 @@
 // Object file: UTFSpore_Win32/CoreAllocatorGeneral.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_154df80[];
+
 #include "game/types.h"
 #include <windows.h>
 #include <stddef.h>
@@ -51,7 +54,7 @@ void* GetDefaultAllocatorX()
             g_0154df8c = 0;
             g_0154df90 = 0;
         }
-        g_01668eac = (void*)0x0154df80;
+        g_01668eac = (void*)g_154df80;
     }
     return g_01668eac;
 }

@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCityVisualizer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_167a3d0[];
+
 #include "game/types.h"
 struct RefPtr; struct RefPtrVector;   // used by the forward prototype of EraseRefValue (0x00d5aae0) before s00d5a260's stubs
 
@@ -2065,7 +2068,7 @@ bool cCastingManager::Write(SP::cIObjectDatabaseOStream& archive) const
 // @ 0x00ac8660
 void FUN_00ac8660(void)
 {
-    LoadArithmeticaFile(0x25e94602, 0x24a4f5a, (void*)0x167a3d0);
+    LoadArithmeticaFile(0x25e94602, 0x24a4f5a, (void*)g_167a3d0);
 }
 
 // @ 0x00ac8690

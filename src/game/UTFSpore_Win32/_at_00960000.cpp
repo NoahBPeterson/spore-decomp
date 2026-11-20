@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/_at_00960000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14422a4[];
+extern "C" char g_14422e0[];
+extern "C" char g_14422f8[];
+
 #include "game/types.h"
 #include "rw/graphics/BuildState.h"
 #include "EA/Stopwatch.h"
@@ -434,7 +439,7 @@ void FUN_0096ef80(void)
 FadeEffect::FadeEffect()
 {
     ((ExtBase*)this)->ctor963db0();
-    *(void**)((char*)this + 0x00) = (void*)0x14422f8;
-    *(void**)((char*)this + 0x04) = (void*)0x14422e0;
-    *(void**)((char*)this + 0x0c) = (void*)0x14422a4;
+    *(void**)((char*)this + 0x00) = (void*)g_14422f8;
+    *(void**)((char*)this + 0x04) = (void*)g_14422e0;
+    *(void**)((char*)this + 0x0c) = (void*)g_14422a4;
 }

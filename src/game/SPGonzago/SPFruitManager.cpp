@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPFruitManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_167af58[];
+
 #include "game/types.h"
 #include <string.h>
 #include <intrin.h>
@@ -1406,7 +1409,7 @@ void InitTreeFruitAttributes()
     ADD_TF(4, "mTreeSeqID", 0x67ddca8, 0x15c, UINT_ROW(Tag_mTreeSeqID))
     ADD_TF(5, "mTreeDistSequenceIdx", 0x67ddcab, 0x160, UINT_ROW(Tag_mTreeDistSequenceIdx))
     ADD_TF(6, "mState", 0x420798f, 0x16c, INT_ROW(Tag_mState))
-    ADD_TF(7, "sFruitCount", 0x410d9be, (void*)0x167af58, STATIC_ROW(Tag_sFruitCount))
+    ADD_TF(7, "sFruitCount", 0x410d9be, (void*)g_167af58, STATIC_ROW(Tag_sFruitCount))
 }
 }  // namespace Simulator
 

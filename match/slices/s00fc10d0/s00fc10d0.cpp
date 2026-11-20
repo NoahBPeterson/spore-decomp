@@ -1,6 +1,13 @@
 // slice s00fc10d0 -- cTerrainSystem / terrain-step helpers (0x00fc10d0..0x00fc2040).
 // Real PDB names: SP::cTerrainSystem::Init, SP::GetTerraformPlanetType,
 // SP::cSetCloudTypeStep::Step.  Module flags /O2 /MD /Gy /TP.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_1491314[];
+extern "C" char g_1491318[];
+
 #include "types.h"
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -553,8 +560,8 @@ inline int ReleaseTerrainReference(RefCounted* object)
 // @ 0x00fc1ae0
 void __fastcall FUN_00fc1ae0(int* p) {
     cTerrainSystem* s = (cTerrainSystem*)p;
-    s->mVtable0 = 0x1491318;
-    s->mVtable1 = 0x1491314;
+    s->mVtable0 = (int)g_1491318;
+    s->mVtable1 = (int)g_1491314;
     _ReadWriteBarrier();
     if (s->mProps1c) s->mProps1c->v1();
     if (s->mObj14) s->mObj14->v1();
@@ -563,9 +570,9 @@ void __fastcall FUN_00fc1ae0(int* p) {
         ReleaseTerrainReference(rc);
     }
     if (s->mObj0c) s->mObj0c->v3();
-    s->mVtable0 = 0x13eb938;
+    s->mVtable0 = (int)g_13eb938;
     _ReadWriteBarrier();
-    s->mVtable1 = 0x13ef094;
+    s->mVtable1 = (int)g_13ef094;
 }
 
 // ===========================================================================

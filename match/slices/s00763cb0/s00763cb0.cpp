@@ -1,6 +1,12 @@
 // slice s00763cb0
 // SP::cGraphicsResourceFactory arena/raster loading module.
 // flags: /O2 /MD /Gy /EHsc /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_007632f0();
+extern "C" void FUN_00763cb0();
+extern "C" void FUN_00763df0();
+
 #include <intrin.h>
 #include "types.h"
 
@@ -465,11 +471,11 @@ bool SP::cGraphicsResourceFactory::BuildArena(Stm7* s, Registry* reg, const V3u*
 // ===========================================================================
 // @ 0x007641c0
 bool SP::cGraphicsResourceFactory::Init() {
-    AddRegistrationCallback(0x2f4e681b, (void*)0x7632f0);
+    AddRegistrationCallback(0x2f4e681b, (void*)FUN_007632f0);
     void* t = ArenaTypeRegGetType(0x20003);
-    *(void**)((char*)t + 0xc) = (void*)0x763df0;
+    *(void**)((char*)t + 0xc) = (void*)FUN_00763df0;
     t = ArenaTypeRegGetType(0x2000b);
-    *(void**)((char*)t + 0xc) = (void*)0x763cb0;
+    *(void**)((char*)t + 0xc) = (void*)FUN_00763cb0;
     void* m = GetManager();
     ((void(__thiscall*)(void*, int, void*, int))(*(void***)m)[0x24 / 4])(m, 0x2f4e681c, kRasterRecordTypes, 3);
     return true;

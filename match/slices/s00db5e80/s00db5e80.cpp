@@ -1,5 +1,9 @@
 // Slice s00db5e80 : tribe domestication + tribe-vignette decision helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147c2c4[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -19,7 +23,7 @@ typedef          int   s32;
 #define G1485720       (*(const float*)0x01485720)   // _HK_REAL_ONE
 #define G147C21C       (*(const float*)0x0147c21c)
 #define G147C218       (*(const float*)0x0147c218)   // FLT_MAX, initial nearest-spot distance
-#define VTABLE_147C2C4 ((void*)0x0147c2c4)
+#define VTABLE_147C2C4 ((void*)g_147c2c4)
 #define RNG1601760     ((void*)0x01601760)           // EA::Random::RandomLinearCongruential
 #define SLIST169B41C   ((void*)0x0169b41c)           // rw::SList singleton
 

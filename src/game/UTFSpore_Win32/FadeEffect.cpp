@@ -2,6 +2,11 @@
 // Object file: UTFSpore_Win32/FadeEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14422a4[];
+extern "C" char g_14422e0[];
+extern "C" char g_14422f8[];
+
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -39,9 +44,9 @@ void* __stdcall BasicFactory_FadeEffect_CreateInstance(int unused, int alloc)
     void* p = FUN_009512d0(0x60, 8, "UTFWin/EA::UTFWinControls::FadeEffect", (void*)alloc);
     if (p) {
         ((ExtBase*)p)->ctor963db0();
-        *(void**)((char*)p + 0x00) = (void*)0x14422f8;
-        *(void**)((char*)p + 0x04) = (void*)0x14422e0;
-        *(void**)((char*)p + 0x0c) = (void*)0x14422a4;
+        *(void**)((char*)p + 0x00) = (void*)g_14422f8;
+        *(void**)((char*)p + 0x04) = (void*)g_14422e0;
+        *(void**)((char*)p + 0x0c) = (void*)g_14422a4;
         return p;
     }
     return 0;

@@ -1,5 +1,12 @@
 // SporeApp.exe slice s00d14460 -- gameplay marker command (gold6, worker 36)
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fc890[];
+extern "C" char g_14799b0[];
+extern "C" char g_1479a6c[];
+extern "C" char g_1479aac[];
+extern "C" char g_169dc20[];
+
 #include "types.h"
 #include <stddef.h>
 
@@ -631,13 +638,13 @@ void cCommandGameplayMarkerTemplate::UpdateMarker(cArguments* pArguments)
 void* cCommandGameplayMarker::Init()
 {
     ((cMetaCommandBase*)this)->Init();
-    mpVTable = (void*)0x014799b0;
+    mpVTable = (void*)g_14799b0;
     mArgSpec.Init(true);
     mArguments.Init();
     mpGameplayMarker = 0;
     ArgScript_ConstructSpec(&mArgSpec, "Creates a gameplay marker",
                             "<type:int>", &mType, "type",
-                            "<id:int>", &mID, (const char*)0x013fc890,
+                            "<id:int>", &mID, (const char*)g_13fc890,
                             "<definitionId:int>", &mDefinitionID, "definitionId",
                             "<group:int>", &mGroupID, "group id",
                             "[position:vector3]", &mPosition, "position",
@@ -670,7 +677,7 @@ void* cCommandGameplayMarker::Destroy(uint8_t nFlags)
 void* cCommandGameplayMarkerTemplate::Init(const cVec3* pAlpha, const cVec3* pBeta)
 {
     cCommandGameplayMarker::Init();
-    mpVTable = (void*)0x01479a6c;
+    mpVTable = (void*)g_1479a6c;
     mAlphaVector.x = pAlpha->x;
     mAlphaVector.y = pAlpha->y;
     mAlphaVector.z = pAlpha->z;
@@ -679,11 +686,11 @@ void* cCommandGameplayMarkerTemplate::Init(const cVec3* pAlpha, const cVec3* pBe
     mBetaVector.z = pBeta->z;
     ArgScript_ConstructSpec(&mArgSpec, "Creates a gameplay marker",
                             "<type:int>", &mType, "type",
-                            "<id:int>", &mID, (const char*)0x013fc890,
+                            "<id:int>", &mID, (const char*)g_13fc890,
                             "<definitionId:int>", &mDefinitionID, "definitionId",
                             "<group:int>", &mGroupID, "group id",
                             "<alpha:float>", &mAlpha, "alpha",
-                            "<beta:float>", &mBeta, (const char*)0x01479aac,
+                            "<beta:float>", &mBeta, (const char*)g_1479aac,
                             0);
     return this;
 }
@@ -715,8 +722,8 @@ void __stdcall FUN_00d15100(int32_t nA, int32_t nB)
 {
     (void)nA;
     (void)nB;
-    if (*(uint8_t*)0x0169dc20) {
-        *(uint8_t*)0x0169dc20 = 0;
+    if (*(uint8_t*)g_169dc20) {
+        *(uint8_t*)g_169dc20 = 0;
         cTerraformingManager* pManager = (cTerraformingManager*)SP_TerraformingManager();
         if (pManager)
             pManager->SetMode(1);

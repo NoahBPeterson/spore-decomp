@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPPlayModeUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fe714[];
+
 #include "game/types.h"
 #include "EA/Stopwatch.h"
 #include "SP/cAppModeEditorBase.h"
@@ -1230,7 +1233,7 @@ void cSPPlayModeUI_s0063_4490_b::ShowToolTip(uint32_t id, uint32_t a2, uint32_t 
         if (!tip) {
             void* mem = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
             if (mem) {
-                tip = new (mem) cSPUITooltipWinProc_s0063_4490_b(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)0x13fe714, 0));
+                tip = new (mem) cSPUITooltipWinProc_s0063_4490_b(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)g_13fe714, 0));
                 if (tip) {
                     tip->AddRef();
                     result = tip;
@@ -1266,7 +1269,7 @@ void cSPPlayModeUI_s0063_4490_b::ShowEditorUIToolTip(uint32_t id, uint32_t a2, u
         if (!tip) {
             void* mem = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
             if (mem) {
-                tip = new (mem) cSPUITooltipWinProc_s0063_4490_b(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)0x13fe714, 0));
+                tip = new (mem) cSPUITooltipWinProc_s0063_4490_b(L"Tooltips", 0x3754e6c, str.Format(pos, 0, (const wchar_t*)g_13fe714, 0));
                 if (tip) {
                     tip->AddRef();
                     result = tip;

@@ -8,6 +8,10 @@
 //  010d63a0  hkSymmetricAgent<hkSphereBoxAgent>::getClosestPoints wrapper
 //
 // Flags: /vc71 /O2 /MD /Gy /TP  (Havok 3.1.0 was built by VC .NET 2003).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a43a4[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -622,7 +626,7 @@ void hkSymmetricSphereBoxAgent::getClosestPoints(const hkCdBody& bodyA, const hk
     hkSymPointCollectorLocal sym;
     sym.m_forward = &collector;
     sym.m_earlyOut = 0x7f7fffeeu;
-    sym.m_vtable = (void*)0x014a43a4;
+    sym.m_vtable = (void*)g_14a43a4;
 
     hkSphereBoxAgent::getClosestPoints(bodyB, bodyA, input,
                                        *(hkCdPointCollector*)&sym);

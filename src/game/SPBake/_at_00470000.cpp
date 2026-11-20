@@ -202,8 +202,8 @@ cSPEditorHandle* cSPEditorHandle::ConstructDerived()
 // @ 0x0047f520
 void __fastcall BallConnector_Dtor(cSPEditorHandle_s0047_f520* self)
 {
-    *(void**)self = (void*)0x13ef1c0;
-    self->mRefCountVft = (void*)0x13ef1ac;
+    *(void**)self = (void*)&vtbl_13ef1c0;
+    self->mRefCountVft = (void*)&vtbl_13ef1ac;
     cSPEditorHandle_Shutdown(self);
     cSPEditorHandle_BaseDtor(self);
 }

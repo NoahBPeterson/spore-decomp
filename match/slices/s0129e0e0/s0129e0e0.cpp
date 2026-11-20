@@ -1,5 +1,9 @@
 // @ 0x0129e0e0
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15f38dc[];
+
 #include "types.h"
 
 // Static initialiser of a four-float global record at 0x015f38dc:
@@ -13,7 +17,7 @@ struct S0129e0e0_Record
     float w;    // 0x015f38e8
 };
 
-S0129e0e0_Record* const g_p15f38dc = (S0129e0e0_Record*)0x015f38dc;
+S0129e0e0_Record* const g_p15f38dc = (S0129e0e0_Record*)g_15f38dc;
 
 void FUN_0129e0e0()
 {

@@ -5,6 +5,10 @@
 // The map key is a 32-bit id (an object address); the mapped value is a 0x820-byte trace cache made
 // of 8 cached hit records (0x100 bytes each) followed by 8 cached object pointers.  The hashtable is
 // the eastl layout: hash-functor base, bucket array, bucket count, element count, rehash policy.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_157d30c[];
+
 #include "types.h"
 
 extern "C" void _ReadWriteBarrier();
@@ -140,7 +144,7 @@ InsertResult Ht::DoInsertValue(const Value& value, bool trueType)
 // @ 0x00cb1210
 TraceCache* FUN_00cb1210(unsigned key)
 {
-    Ht* const ht = (Ht*)0x0157d30c;
+    Ht* const ht = (Ht*)g_157d30c;
     Iter it;
 
     ht->Find(&it, &key);

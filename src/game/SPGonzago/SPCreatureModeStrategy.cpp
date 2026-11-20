@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPCreatureModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147adf8[];
+
 #include "game/types.h"
 #include "SP/cCity.h"
 #include "SP/cPlanet.h"
@@ -4245,11 +4248,11 @@ void HeapSort(SortEntry* begin, SortEntry* end, int cmp)
 // @ 0x00d3b4e0
 void* cContentValidationSummarizer::ScalarDeletingDestructor(unsigned int flags)
 {
-    *(void* volatile*)this = (void*)0x0147abec;
+    *(void* volatile*)this = (void*)&vtbl_cContentValidationSummarizer_0147abec;
     _ReadWriteBarrier();
     if (mpArray != 0 && mpArray[-1] != 0)
         operator_delete_array(mpArray);
-    *(void* volatile*)this = (void*)0x013ec458;
+    *(void* volatile*)this = (void*)&vtbl_cContentValidationSummarizer_013ec458;
     if (flags & 1)
         operator_delete_array(this);
     return this;
@@ -6669,7 +6672,7 @@ cTriggerRec* cCreatureTriggerSystem::GetTrigger(u32 eventType, cTriggerOwner* ow
 void cContentValidationSummarizer_s00d4_7630::FUN_00d47850()
 {
     cNodePool* pool = &mPool;
-    mVtbl_00 = (void*)0x147adf8;
+    mVtbl_00 = (void*)g_147adf8;
     pool->FreeLists(pool->mpTail, pool->mCount);
     u8* p = (u8*)pool->mpTail;
     pool->mField_0c = 0;
@@ -6677,12 +6680,12 @@ void cContentValidationSummarizer_s00d4_7630::FUN_00d47850()
         if (p >= pool->mpPoolLo && p < pool->mpPoolHi) {
             *(void**)p = pool->mpFreeHead;
             pool->mpFreeHead = p;
-            mVtbl_00 = (void*)0x13ec458;
+            mVtbl_00 = (void*)&vtbl_cContentValidationSummarizer_013ec458;
             return;
         }
         FUN_00f473a0(p);
     }
-    mVtbl_00 = (void*)0x13ec458;
+    mVtbl_00 = (void*)&vtbl_cContentValidationSummarizer_013ec458;
 }
 
 // @ 0x00d478b0

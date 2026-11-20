@@ -2,6 +2,13 @@
 // eastl::vector<SP::cMDSection> insert / resize / range-assign, and the
 // SP::cMeshData (0x58) deserializer.  Optimized module:
 // /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_140d02c[];
+extern "C" char g_14188c0[];
+
 #include "types.h"
 #include <string.h>
 #include <intrin.h>
@@ -135,11 +142,11 @@ void* AllocEltBuffer(int n)
             n = 4;
         int* p = (int*)operator new(n + 0xc, "Graphics", 0, 0, 0, 0);
         if (p) {
-            p[0] = 0x13eb938;
-            p[1] = 0x13ef094;
+            p[0] = (int)g_13eb938;
+            p[1] = (int)g_13ef094;
             _InterlockedExchange((volatile long*)&p[2], 0);
-            p[0] = 0x140d02c;
-            p[1] = 0x14188c0;
+            p[0] = (int)g_140d02c;
+            p[1] = (int)g_14188c0;
             return p;
         }
     }

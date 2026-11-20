@@ -7,6 +7,10 @@
 // helpers through a register-based ABI that a normal C++ declaration cannot reproduce; those
 // are reconstructed semantically (see nonmatching.txt).
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1687348[];
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -584,7 +588,7 @@ int __cdecl FUN_00b67610(int key)
 // ===========================================================================
 void __cdecl FUN_00b676a0(void)
 {
-    char* p = *(char**)0x1687348;
+    char* p = *(char**)g_1687348;
     if (p)
         p[0x30] = (char)(p[0x30] == 0);
 }
@@ -601,7 +605,7 @@ struct ModeTable { int __thiscall FUN_00f3e900(u32 key); };
 u32 __cdecl FUN_00b677a0(u32 key)
 {
     if (SP_GetCurrentGameMode() == (void*)0x01654c10) {
-        ModeObj* o = *(ModeObj**)0x016c7aa4;
+        ModeObj* o = *(ModeObj**)g_16c7aa4;
         ModeTable* t = (ModeTable*)o->m_table;
         u32 k = key;
         int icon = t->FUN_00f3e900(k);

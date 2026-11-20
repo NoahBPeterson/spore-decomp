@@ -2,6 +2,10 @@
 // Object file: SPEngine/SPGraphicsFragmentPS.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1667bac[];
+extern "C" char g_1667bad[];
+
 #include "game/types.h"
 #include <intrin.h>
 #include <string.h>
@@ -450,12 +454,12 @@ struct cPixelFragmentInfo {  // 0x64 bytes
   uint32_t mField60;         // +0x60
   cPixelFragmentInfo() {
     mFlags = 0;
-    mStr1Begin = 0x01667bac;
-    mStr1End = 0x01667bac;
-    mStr1Cap = 0x01667bad;
-    mStr2Begin = 0x01667bac;
-    mStr2End = 0x01667bac;
-    mStr2Cap = 0x01667bad;
+    mStr1Begin = (int)g_1667bac;
+    mStr1End = (int)g_1667bac;
+    mStr1Cap = (int)g_1667bad;
+    mStr2Begin = (int)g_1667bac;
+    mStr2End = (int)g_1667bac;
+    mStr2Cap = (int)g_1667bad;
     mRegions.mpBegin = 0;
     mRegions.mpEnd = 0;
     mRegions.mpCap = 0;

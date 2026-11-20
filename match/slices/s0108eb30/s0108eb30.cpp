@@ -4,6 +4,11 @@
 // suspension +0x60, perpSuspension +0x70, referenceAxle +0x80 (unused here)}, suspension min/max/strength/damping
 // +0x90..+0x9c. Rows: 2 angular bilateral, 2 linear bilateral (pivotB projected on the suspension axis), the
 // suspension limit and the user-tau spring row.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14a1808[];
+extern "C" char g_14a181c[];
+
 #include "types.h"
 #include <math.h>
 
@@ -350,12 +355,12 @@ void hkVelocityConstraintMotor::calcMotorData(const hkConstraintMotorInput& in, 
 hkConstraintMotor* hkVelocityConstraintMotor::clone() const
 {
 	hkVelocityConstraintMotor* p = (hkVelocityConstraintMotor*)hkMemory::s_instance->allocateChunk(0x1c, 0x29);
-	*(const void**)p = (const void*)0x014a1808;
+	*(const void**)p = (const void*)g_14a1808;
 	p->m_memSizeAndFlags = 0x1c;
 	p->m_referenceCount = 1;
 	p->m_minForce = m_minForce;
 	p->m_maxForce = m_maxForce;
-	*(const void**)p = (const void*)0x014a181c;
+	*(const void**)p = (const void*)g_14a181c;
 	p->m_tau = m_tau;
 	p->m_velocityTarget = m_velocityTarget;
 	p->m_useVelocityTargetFromConstraintTargets = m_useVelocityTargetFromConstraintTargets;

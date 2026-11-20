@@ -2,6 +2,12 @@
 // specialisations for 4-, 2- and 1-byte elements, plus the 4-byte grow helper.
 // Reconstructed from the retail object.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1490020[];
+extern "C" char g_1490028[];
+extern "C" char g_1490030[];
+extern "C" char g_1490038[];
+
 #include <string.h>
 
 typedef unsigned char  u8;
@@ -36,7 +42,7 @@ extern "C" void* __fastcall FUN_00f8ee70(SimVecHead* self)
     self->m04 = 0;
     self->m08 = 0;
     self->m0c = 0;
-    self->m00 = (void*)0x1490020;
+    self->m00 = (void*)g_1490020;
     self->m10 = 0;
     self->m14 = 0;
     self->m18 = 0;
@@ -49,7 +55,7 @@ extern "C" void* __fastcall FUN_00f8ee90(SimVecHead* self)
     self->m04 = 0;
     self->m08 = 0;
     self->m0c = 0;
-    self->m00 = (void*)0x1490028;
+    self->m00 = (void*)g_1490028;
     self->m10 = 0;
     self->m14 = 0;
     self->m18 = 0;
@@ -62,7 +68,7 @@ extern "C" void* __fastcall FUN_00f8eeb0(SimVecHead* self)
     self->m04 = 0;
     self->m08 = 0;
     self->m0c = 0;
-    self->m00 = (void*)0x1490030;
+    self->m00 = (void*)g_1490030;
     self->m10 = 0;
     self->m14 = 0;
     self->m18 = 0;
@@ -75,7 +81,7 @@ extern "C" void* __fastcall FUN_00f8eed0(SimVecHead* self)
     self->m04 = 0;
     self->m08 = 0;
     self->m0c = 0;
-    self->m00 = (void*)0x1490038;
+    self->m00 = (void*)g_1490038;
     self->m10 = 0;
     self->m14 = 0;
     self->m18 = 0;

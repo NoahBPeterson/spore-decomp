@@ -2,6 +2,10 @@
 // Hash-switch on the FNV-1 of the token; each case produces the replacement text.
 // 32-bit MSVC 2008 SP1 (no /EHsc: no EH frames in the original).
 // Flags: /O2 /MD /Gy /TP /GS-
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_15b029c[];
+
 #include "types.h"
 
 namespace eastl {
@@ -554,7 +558,7 @@ void SerializerThunk::Serialize(cOutStream* stream)
   cStreamPos* raw = writer->GetStream();
   EA::IO::WriteUint32(raw, &marker, 1, 0);
 
-  cVarListSerializer serializer(this, (cDataSerializerGeneric*)0x015b029c, 0x01a80d26);
+  cVarListSerializer serializer(this, (cDataSerializerGeneric*)g_15b029c, 0x01a80d26);
   serializer.Serialize(stream);
 }
 

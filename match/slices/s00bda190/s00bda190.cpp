@@ -11,6 +11,13 @@
 // mpHitSphere +0x208, crowd fractions +0x20c/+0x210, anger level +0x214) the real names
 // are used verbatim; the retail object is 0x218 bytes.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14684d8[];
+extern "C" char g_14685a0[];
+extern "C" char g_1468608[];
+extern "C" char g_1468618[];
+extern "C" char g_156e448[];
+
 #include "types.h"
 #include <math.h>
 
@@ -466,7 +473,7 @@ const uint32_t kSpaceGameModeID   = 0x01654c05;
 const uint32_t kCulturalEffect0   = 0x04aef54c;
 const uint32_t kCulturalEffect1   = 0x05f2281e;
 const uint32_t kCulturalEffect2   = 0x05f22835;
-const uint32_t kSerializerGroup   = 0x0156e448;
+const uint32_t kSerializerGroup   = (int)g_156e448;
 const uint32_t kCultureTargetInfoNote = 0x01a80d26;
 const uint32_t kCultureTargetCastType = 0x0137e8e0;
 const wchar_t  kCultureTargetInfoName[] = L"tCultureTargetInfo";   // 0x014684a4
@@ -1084,10 +1091,10 @@ cCulturalTarget::cCulturalTarget()
 
     mAttackState = 0;
 
-    mGameData.mpVtbl = (void*)0x1468618;
-    mpVtbl04 = (void*)0x1468608;
-    mCombatant.mpVtbl = (void*)0x14685a0;
-    mSpatial.mpVtbl = (void*)0x14684d8;
+    mGameData.mpVtbl = (void*)g_1468618;
+    mpVtbl04 = (void*)g_1468608;
+    mCombatant.mpVtbl = (void*)g_14685a0;
+    mSpatial.mpVtbl = (void*)g_14684d8;
 
     mGateIndex = 0xff;
     mAttackerPoliticalID = 0xffffffff;

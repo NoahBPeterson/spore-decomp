@@ -1,5 +1,9 @@
 // SporeApp.exe frozen batch "gold4" — slice s00ab22f0 (11 functions)
 // cRibbonEffect and friends.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+
 #include "types.h"
 
 typedef unsigned int uint;
@@ -175,7 +179,7 @@ void Big::Destroy()
     release_block(*(void**)(s + 0x48));
     release_block(*(void**)(s + 0x28));
     release_block(*(void**)(s + 0x14));
-    *(int*)s = 0x013ef094;
+    *(int*)s = (int)g_13ef094;
 }
 
 // ------------------------------------------------------------- IO interfaces

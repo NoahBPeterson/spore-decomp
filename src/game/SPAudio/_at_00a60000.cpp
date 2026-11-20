@@ -2,6 +2,11 @@
 // Object file: SPAudio/_at_00a60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1403934[];
+extern "C" void FUN_00a64a10();
+extern "C" char g_13f5b98[];
+
 #include <intrin.h>
 #include "game/types.h"
 #include <new>
@@ -1887,7 +1892,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void ThrowHelper(void* p)
 {
     (void)p;
-    ((void (__cdecl*)(void*))uThrowTarget)((void*)0x13f5b98);
+    ((void (__cdecl*)(void*))uThrowTarget)((void*)g_13f5b98);
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -1983,7 +1988,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void EapdAssetManager_s00a6_3dd0::MakeFloatHandler2(uint8_t v)
 {
     void* sys = SystemGetAssetManager();
-    AssetEntry* e = ((EapdAssetManager_s00a6_3dd0*)sys)->NewEntryNode((void*)this, (void*)0xa64a10);
+    AssetEntry* e = ((EapdAssetManager_s00a6_3dd0*)sys)->NewEntryNode((void*)this, (void*)FUN_00a64a10);
     e->mKind10 = 1;
     e->mFloat14 = (float)v;
 }
@@ -2135,11 +2140,11 @@ struct OvfAlloc_a66830 {
     uint32_t    mA;       // +0x04
     const char* mpName;   // +0x08
     void Free(void* p) { ((void (__thiscall*)(void*, void*))(*(void***)this)[3])(this, p); }
-    ~OvfAlloc_a66830() { mpVtbl = (void*)0x1403934; }
+    ~OvfAlloc_a66830() { mpVtbl = (void*)g_1403934; }
 };
 struct __declspec(novtable) OvfBase_a66830 {
     virtual void Slot0();
-    ~OvfBase_a66830() { *(void**)this = (void*)0x1403934; }
+    ~OvfBase_a66830() { *(void**)this = (void*)g_1403934; }
 };
 struct OvfDtorView_a66830 : OvfBase_a66830 {
     OvfAlloc_a66830 mAlloc;    // +0x04

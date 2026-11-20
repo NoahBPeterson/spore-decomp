@@ -2,6 +2,12 @@
 // Object file: SPEngine/_at_007d0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_007d7ed0();
+extern "C" char g_1453948[];
+extern "C" char g_1675ff0[];
+extern "C" char g_1675ff8[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/Swarm/cEffectParams.h"
@@ -1685,8 +1691,8 @@ cAbilityCmd* AbilityCmdNew(void* arg)
 // @ 0x007d7f40
 void AbilityRegister()
 {
-    *(void**)0x01675ff8 = (void*)0x007d7ed0;
-    *(void**)0x01675ff0 = 0;
+    *(void**)g_1675ff8 = (void*)FUN_007d7ed0;
+    *(void**)g_1675ff0 = 0;
 }
 
 // @ 0x007d7f60
@@ -1955,7 +1961,7 @@ void* FUN_007dfbf0()
     int* p = (int*)EAllocSwarm(8, "Swarm", 0, 0, 0, 0);
     if (p) {
         p[1] = 0;
-        p[0] = 0x1453948;
+        p[0] = (int)g_1453948;
         return p;
     }
     return 0;

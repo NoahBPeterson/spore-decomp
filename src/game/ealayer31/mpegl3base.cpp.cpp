@@ -1,3 +1,7 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14cbd80[];
+extern "C" char g_14cc180[];
+
 #include "game/types.h"
 #define _WIN32_WCE 1
 #include <intrin.h>
@@ -5,8 +9,8 @@
 
 // vftable and the two float tables this layer-3 decoder points at (absolute addresses
 // in the shipped image).
-#define MPEGL3BASE_VFTABLE   ((void*)0x14cc180)
-#define MPEGL3BASE_TWO_TO_NEG_QUARTER  ((float*)0x14cbd80)
+#define MPEGL3BASE_VFTABLE   ((void*)g_14cc180)
+#define MPEGL3BASE_TWO_TO_NEG_QUARTER  ((float*)g_14cbd80)
 #define MPEGL3BASE_TWO_TO_NEG_QUARTER_SIZE  0x400
 
 namespace rw {

@@ -2,6 +2,10 @@
 // mislabel): after the card text changed, resize the description/background windows to fit, either
 // instantly (SetSize) or through cSPUIAnimator size animations, then tell the "0x5397388" button child
 // to switch state.  Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 #include <math.h>
 
@@ -815,7 +819,7 @@ void CardLayout::UpdateScrollButtons()
 {
     if (mF0 == 1)
         return;
-    ScrollGlobals* g = *(ScrollGlobals**)0x016c7aa4;
+    ScrollGlobals* g = *(ScrollGlobals**)g_16c7aa4;
     int total = g->mpHost->mCount;
     int cur = g->mpSource->GetScrollPos();
     IWindow* w = mpMainWin->FindWindowByID(0x74b5328, true);

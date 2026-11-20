@@ -2,6 +2,11 @@
 // Object file: SPGonzago/SPGameEditInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14771e0[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "game/types.h"
 #include "EA/ArgScript/cArgumentSpec.h"
 #include "EA/ArgScript/cArguments.h"
@@ -2399,7 +2404,7 @@ void* Simulator::cScenarioEditModeInputStrategy::Destroy(uint8_t flags)
 {
     cSub04& sub = mSub;
     cNested1c& nested = sub.mNested1c;
-    mpVtable = (void*)0x014771e0;
+    mpVtable = (void*)g_14771e0;
     nested.Release(nested.mpValue0c);
     sub.Release(sub.mpValue0c);
     if (flags & 1)
@@ -2412,8 +2417,8 @@ void __stdcall FUN_00d15100(int32_t nA, int32_t nB)
 {
     (void)nA;
     (void)nB;
-    if (*(uint8_t*)0x0169dc20) {
-        *(uint8_t*)0x0169dc20 = 0;
+    if (*(uint8_t*)&g_169dc20) {
+        *(uint8_t*)&g_169dc20 = 0;
         cTerraformingManager* pManager = (cTerraformingManager*)SP_TerraformingManager();
         if (pManager)
             pManager->SetMode(1);
@@ -2974,9 +2979,9 @@ void cGameEditInputStrategy::SetPlanet(const cVec3i* planet)
     mPlanetF8 = *planet;
     if (mpField7c != 0) {
         cWString str;
-        str.mpBegin = (void*)0x01667bac;
-        str.mpEnd = (void*)0x01667bac;
-        str.mpCap = (void*)0x01667bae;
+        str.mpBegin = (void*)g_1667bac;
+        str.mpEnd = (void*)g_1667bac;
+        str.mpCap = (void*)g_1667bae;
         if (planet->y != 0)
             VT_7C_2(ObjectError(), (void*)planet, &str);
         VT_60_1(mpField7c, str.mpBegin, 0);

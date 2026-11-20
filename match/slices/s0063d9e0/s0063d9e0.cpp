@@ -1,4 +1,8 @@
 // slice s0063d9e0: cSPPlayModeSubModePhoto activation/shutdown + movie/photo helpers.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ff4d4[];
+
 #include <stdio.h>
 #include "../s00636320/s00636320.h"
 
@@ -65,12 +69,12 @@ bool cSPPlayModeSubModePhoto::Activate()
         void* handler = (void*)((char*)this + 0x14);
         mAutoMsgHandler.a = (uint32_t)ms;
         mAutoMsgHandler.b = (uint32_t)handler;
-        mAutoMsgHandler.c = 0x13ff4d4;
+        mAutoMsgHandler.c = (int)g_13ff4d4;
         mAutoMsgHandler.d = 0xd;
         mAutoMsgHandler.e = 0;
         if (handler) {
             for (uint32_t i = 0; i < 0x34; i += 4)
-                ms->AddHandler(handler, *(uint32_t*)(0x13ff4d4 + i));
+                ms->AddHandler(handler, *(uint32_t*)((int)g_13ff4d4 + i));
         }
     }
     return true;

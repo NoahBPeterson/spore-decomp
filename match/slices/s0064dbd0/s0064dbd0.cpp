@@ -2,6 +2,11 @@
 // Built with /O2 (no frame pointer in most functions); UI module (no /EHsc needed).
 // Stub interfaces carry only the vtable slots actually used; calls go through
 // __thiscall function-pointer casts on the vtable (relocated slot addresses are masked).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00623f40();
+extern "C" char g_1525ba4[];
+
 #include "../../include/types.h"
 #include <intrin.h>
 
@@ -171,7 +176,7 @@ bool SP::cSPEditorNaming::DoMessage(void* sender, int* msg)
 // ---------------------------------------------------------------------------
 SP::cSPUIAssetComments::cSPUIAssetComments()
 {
-    ((FrameSet*)((char*)this + 0xc))->Construct((void*)0x623f40);
+    ((FrameSet*)((char*)this + 0xc))->Construct((void*)FUN_00623f40);
     mpContentWin = 0;
     mpXHTMLWin = 0;
     _ReadWriteBarrier();
@@ -258,7 +263,7 @@ bool SP::cSPUIAssetComments::DoMessage(void* sender, int* msg)
         void* p6 = (void*)msg[6];
         return ((FrameSet*)((char*)this + 0xc))->HandleFormSubmit((void*)*msg, p6);
     } else if (id == 0x43b0aee) {
-        FUN_809db0(0, (void*)0x1525ba4);
+        FUN_809db0(0, (void*)g_1525ba4);
         return true;
     }
     return false;

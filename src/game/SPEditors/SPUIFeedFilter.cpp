@@ -2,6 +2,9 @@
 // Object file: SPEditors/SPUIFeedFilter.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14000b8[];
+
 #include "game/types.h"
 #include "SP/cSPUIFeedEdit.h"
 #include "SP/cSPUIFeedEditAssetView.h"
@@ -1725,7 +1728,7 @@ char FUN_00661740(unsigned key, KeyVecE* out)
         uint32_t pa = e->a;
         int pb = e->b;
         if (e->c == 0x4edcd7a9)
-            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)0x14000b8));
+            cons.push_back(FMConstraint(pa, kWithin, (float)pb, *(float*)g_14000b8));
         else
             cons.push_back(FMConstraint(pa, kEquals, pb));
     }

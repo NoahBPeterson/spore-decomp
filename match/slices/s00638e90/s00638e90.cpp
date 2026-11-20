@@ -1,6 +1,11 @@
 // slice s00638e90: cSPPlayModeSubModeAction (Spore creature-editor play-mode action).
 // Two spellings of the same layout exist in the PDB: SP::cSPPlayModeSubModeAction (five of the
 // functions here) and the global ::cSPPlayModeSubModeAction (FUN_00639350, FUN_00639b70).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fec40[];
+extern "C" char g_13fec78[];
+
 #include "../s00636320/s00636320.h"
 #include <intrin.h>
 
@@ -522,7 +527,7 @@ LAB_00639629:
 // @ 0x00639B70
 void cSPPlayModeSubModeAction::FUN_00639b70()
 {
-    *(void**)this = (void*)0x13fec78;
+    *(void**)this = (void*)g_13fec78;
     _ReadWriteBarrier();
     if (mObj10C != 0)
         ((T0)VTSLOT(mObj10C, 4))(mObj10C);
@@ -532,5 +537,5 @@ void cSPPlayModeSubModeAction::FUN_00639b70()
         ((T0)VTSLOT(mObj44, 4))(mObj44);
     if (mObj38 != 0)
         ((T0)VTSLOT(mObj38, 4))(mObj38);
-    *(void**)this = (void*)0x13fec40;
+    *(void**)this = (void*)g_13fec40;
 }

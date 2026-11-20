@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPGameEditModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ebc58[];
+
 #include "game/types.h"
 #include "SP/cGameEditInputStrategy.h"
 #include "SP/cGameNounManager.h"
@@ -710,7 +713,7 @@ u8 SP::cGameEditModeStrategy::FUN_00d1c2e0(int key, int state)
             local[2] = 0;
             u8 ok = GetPropertyAsKey(r, 0x3d03f84, local);
             if (ok) {
-                Msg5* alloc = (Msg5*)operator_new(0x40, (const char*)0x13ebc58, 0, 0, 0, 0);
+                Msg5* alloc = (Msg5*)operator_new(0x40, (const char*)g_13ebc58, 0, 0, 0, 0);
                 Msg5* msg = (alloc != 0) ? alloc->ctorRaw(0) : (Msg5*)0;
                 if (msg != 0)
                     ((VFnV)VFN(msg, 4))(msg);

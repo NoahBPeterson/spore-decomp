@@ -6110,7 +6110,7 @@ void FUN_00e67510(int world, int* ppEffect, int a3, int a4, int a5, int a6, char
         d.pos.y = gCellWorldCenter_s00e6_6980.y;
         d.pos.z = gCellWorldCenter_s00e6_6980.z;
         d.scale = g_one_1485720;
-        d.rot.Assign((void*)0x16b3dac);
+        d.rot.Assign((void*)&g_16b3dac);
         FUN_00e84150(a5, a6, &d);
         FUN_00e63480((void*)*ppEffect, a3, &d);
         return;

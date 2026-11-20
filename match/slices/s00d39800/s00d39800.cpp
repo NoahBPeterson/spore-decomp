@@ -18,6 +18,11 @@
 // Layout: offsets are taken from the disassembly of this build. Every touched field is named.
 // Flags: /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
 // =============================================================================================
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00d39010();
+extern "C" void FUN_00d39070();
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------------------------
@@ -385,8 +390,8 @@ void  __fastcall InstallThing(void* pObj);          // 0x00b72880
 // @ 0x00d3a7f0
 bool __cdecl RegisterCreatureModeModule()
 {
-    SetThingA(RegisterThing((void*)0x00d39010));
-    SetThingB(RegisterThing((void*)0x00d39070));
+    SetThingA(RegisterThing((void*)FUN_00d39010));
+    SetThingB(RegisterThing((void*)FUN_00d39070));
     InstallThing(GetThing());
     return true;
 }

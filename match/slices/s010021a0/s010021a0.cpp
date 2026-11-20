@@ -2,6 +2,11 @@
 // reticle goto-screen effect, rebuilds the star map filter, and raises awareness of nearby empires.
 // (PDB candidate name from the card: SP::cSPMission::RefreshStarMapEffect -- not confirmed.)
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb428[];
+extern "C" char g_15b6618[];
+
 #include "types.h"
 
 struct Vector3 {
@@ -537,9 +542,9 @@ void FUN_01002ee0()
 {
     struct Local { void* vftable; uint32_t tag; };
     ResMan* m = FUN_0067dcd0();
-    Local a; a.vftable = (void*)0x13eb428; a.tag = 0x1c135da;
+    Local a; a.vftable = (void*)g_13eb428; a.tag = 0x1c135da;
     m->Slot70(0, &a);
-    Local b; b.vftable = (void*)0x13eb428; b.tag = 0xe6bce5;
+    Local b; b.vftable = (void*)g_13eb428; b.tag = 0xe6bce5;
     m->Slot70(0, &b);
 }
 
@@ -632,7 +637,7 @@ bool SimSpace::Write(void* param_2)
     void* writer = pl->GetWriter();
     EA_IO_WriteUint32(writer, &tag, 1, 0);
     char ok = GonzagoWrite(param_2);
-    Serializer ser((char*)this - 8, 0x15b6618, 0x1a80d26);
+    Serializer ser((char*)this - 8, (int)g_15b6618, 0x1a80d26);
     if (ok != 0) {
         if (ser.Serialize(param_2) != 0)
             return true;
@@ -649,7 +654,7 @@ bool SimSpace::Read(void* param_2)
     char tag[4];
     EA_IO_ReadInt32(reader, tag, 1, 0);
     char ok = GonzagoRead(param_2);
-    Serializer ser((char*)this - 8, 0x15b6618, 0x1a80d26);
+    Serializer ser((char*)this - 8, (int)g_15b6618, 0x1a80d26);
     if (ok != 0) {
         if (ser.Read(param_2) != 0)
             return true;

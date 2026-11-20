@@ -2,6 +2,15 @@
 // Object file: SPGonzago/SPBuildings.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1485544[];
+extern "C" char g_156d770[];
+extern "C" char g_156dab8[];
+extern "C" char g_156db6c[];
+extern "C" char g_156dba8[];
+extern "C" char g_156dbe4[];
+extern "C" char g_157a1f8[];
+
 #include "game/types.h"
 #include "SP/cCity.h"
 #include "SP/cCombatant.h"
@@ -1553,7 +1562,7 @@ void __thiscall cSpatialObject::bcc5e0(int a, float f)
 float __thiscall cSpatialObject::bcc640()
 {
     float c = ((float(__thiscall*)(void*))VF(this, 0x5c / 4))(this);
-    return c * *(float*)0x1485544;
+    return c * *(float*)g_1485544;
 }
 
 // @ 0x00bcc650
@@ -1653,7 +1662,7 @@ void __thiscall cVehicle::Read1(void* s)
     FUN_0093a780(w, &ver, 1, 0);
     ((cSerializableNoun*)this)->ReadBase(s);
     cVarListSerializer vl;
-    vl.Construct(this, 0x156dab8, 0x1a80d26);
+    vl.Construct(this, (int)g_156dab8, 0x1a80d26);
     vl.Deserialize(s);
 }
 
@@ -1679,7 +1688,7 @@ void __thiscall cVehicle::Read2(void* s)
     FUN_0093a780(w, &ver, 1, 0);
     ((cSerializableNoun*)this)->ReadBase(s);
     cVarListSerializer vl;
-    vl.Construct(this, 0x156db6c, 0x1a80d26);
+    vl.Construct(this, (int)g_156db6c, 0x1a80d26);
     vl.Deserialize(s);
 }
 
@@ -1705,7 +1714,7 @@ void __thiscall cVehicle::Read3(void* s)
     FUN_0093a780(w, &ver, 1, 0);
     ((cSerializableNoun*)this)->ReadBase(s);
     cVarListSerializer vl;
-    vl.Construct(this, 0x156dba8, 0x1a80d26);
+    vl.Construct(this, (int)g_156dba8, 0x1a80d26);
     vl.Deserialize(s);
 }
 
@@ -1734,7 +1743,7 @@ bool __thiscall cVehicle::Read4(void* s)
     bool ok = ((cSerializableNoun*)this)->ReadBase(s) != 0 &&
               ((cSerializableNoun*)this)->ReadBase(s) != 0;
     cVarListSerializer vl;
-    vl.Construct(this, 0x156dbe4, 0x1a80d26);
+    vl.Construct(this, (int)g_156dbe4, 0x1a80d26);
     if (ok && vl.Deserialize(s) != 0)
         return true;
     return false;
@@ -1805,11 +1814,11 @@ void __thiscall cVehicle::WriteAsText(void* s)
     ((cGameData*)this)->WriteAsText(s);
     cVarListSerializer v1;
     cVarListSerializer v2;
-    v1.Construct((char*)this + 0x34, 0x157a1f8, 0x1a80d26);
+    v1.Construct((char*)this + 0x34, (int)g_157a1f8, 0x1a80d26);
     v1.GetFields(s);
-    v1.Construct((char*)this + 0x120, 0x1570858, 0x1a80d26);
+    v1.Construct((char*)this + 0x120, (int)&DAT_01570858, 0x1a80d26);
     v1.GetFields(s);
-    v2.Construct(this, 0x156d770, 0x1a80d26);
+    v2.Construct(this, (int)g_156d770, 0x1a80d26);
     v2.GetFields(s);
 }
 

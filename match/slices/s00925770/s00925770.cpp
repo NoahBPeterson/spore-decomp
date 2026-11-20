@@ -1,5 +1,19 @@
 // EA::Trace helper/allocator tail end (0x00925770..0x00926350). Many small EAThread/EASTL helpers;
 // the simple ones are byte-exact, the larger allocator internals are skeletons (see partial.txt).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec47c[];
+extern "C" char g_1403934[];
+extern "C" char g_143dffc[];
+extern "C" char g_143e050[];
+extern "C" char g_143e0e4[];
+extern "C" char g_143e0f4[];
+extern "C" char g_143e104[];
+extern "C" char g_143e114[];
+extern "C" char g_143e12c[];
+extern "C" char g_154df28[];
+extern "C" char g_154df80[];
+
 #include <windows.h>
 #include <stddef.h>
 #include <string.h>
@@ -37,7 +51,7 @@ __declspec(noinline) void* GetDefaultAllocatorX() {
             g_0154df8c = 0;
             g_0154df90 = 0;
         }
-        g_01668eac = (void*)0x0154df80;
+        g_01668eac = (void*)g_154df80;
     }
     return g_01668eac;
 }
@@ -82,7 +96,7 @@ void C25e40::F(int* p, int unused) {
 }
 // @ 0x00925E60
 extern void FUN_00925d60();
-struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)0x0143e104; FUN_00925d60(); } };
+struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)g_143e104; FUN_00925d60(); } };
 void FUN_00925e60_hash(HashHolder* h) { h->FUN_00925e60(); }
 
 struct CriticalSectionState {
@@ -125,7 +139,7 @@ C25f30* C25f30::F(int a2, int a3, int a4) {
     p[5] = a4;
     p[2] = 0; p[3] = 0; p[4] = 0;
     p[6] = a3;
-    *p = 0x0143e104;
+    *p = (int)g_143e104;
     p[7] = 0;
     return this;
 }
@@ -233,7 +247,7 @@ class TraceHelperTable { public:
 // 0x00925b50
 // @ 0x00925b50
 void TraceHelperTable::RegisterHelper(TraceHelper* h) {
-    mMutex.Lock((const void*)0x143dffc);
+    mMutex.Lock((const void*)g_143dffc);
     h->mTracer = mTracer;
     h->mIsFiltered = true;
     h->mIsFilterEvaluated = false;
@@ -244,7 +258,7 @@ void TraceHelperTable::RegisterHelper(TraceHelper* h) {
 // 0x00925960
 // @ 0x00925960
 void TraceHelperTable::UnregisterHelper(TraceHelper* h) {
-    mMutex.Lock((const void*)0x143dffc);
+    mMutex.Lock((const void*)g_143dffc);
     h->mTracer = 0;
     h->mIsFiltered = true;
     h->mIsFilterEvaluated = false;
@@ -258,7 +272,7 @@ void TraceHelperTable::UnregisterHelper(TraceHelper* h) {
 TraceHelperTable* CreateHelperTable() {
     TraceHelperTable* t = (TraceHelperTable*)eastl_new(0x58, "EATrace/TraceHelperTable", 0, 0, 0, 0);
     if (t) {
-        *(void**)t = (void*)0x143e050;
+        *(void**)t = (void*)g_143e050;
         t->mTracer = 0;
         t->mVec.Zero();
         t->mMutex.Init(0, true);
@@ -330,7 +344,7 @@ TempTraceHelperMap* TempTraceHelperMap::Init() {
     ht.mGrowth = g_01470f1c;
     ht.mNextResize = 0;
     ht.mBucketCount = 1;
-    ht.mpBuckets = (void*)0x154df28;
+    ht.mpBuckets = (void*)g_154df28;
     ht.mElementCount = 0;
     ht.mNextResize = 0;
     ht.mbEnable = 1;
@@ -458,11 +472,11 @@ void C25ca0::F(int p1, int p2) {
 // @ 0x00925cf0
 struct C25cf0 { void* vt; void* f4; char f8; void* fC; void* f10; void F(); };
 void C25cf0::F() {
-    vt = (void *)0x143e0e4;
+    vt = (void *)g_143e0e4;
     if (f8 != 0) {
         if (fC != 0) {
             ((void (__cdecl *)(void *, void *, void *))fC)(this, f4, f10);
-            vt = (void *)0x1403934;
+            vt = (void *)g_1403934;
             return;
         }
         void *p = f4;
@@ -471,14 +485,14 @@ void C25cf0::F() {
             eastl_delete(p);
         }
     }
-    vt = (void *)0x1403934;
+    vt = (void *)g_1403934;
 }
 
 // @ 0x00925d60
 struct C25d60 { void* vt; void* f4; void* f8; void* fC; void F(); };
 void C25d60::F() {
     void *p = fC;
-    vt = (void *)0x143e0f4;
+    vt = (void *)g_143e0f4;
     while (p != 0) {
         fC = *(void **)p;
         ((void (__thiscall *)(void *, void *, int))(*(void ***)f4)[3])(f4, p, 0);
@@ -486,7 +500,7 @@ void C25d60::F() {
     }
     f8 = 0;
     fC = 0;
-    vt = (void *)0x1403934;
+    vt = (void *)g_1403934;
 }
 
 // @ 0x00925dc0
@@ -621,7 +635,7 @@ struct C26190 {
 
 // @ 0x00926160
 void FUN_00926160(unsigned size) {
-    ((F9289f0*)g_016c8b44)->m(size, 0, 0, 0x143e114, (const char*)0x143e12c, 0x9a);
+    ((F9289f0*)g_016c8b44)->m(size, 0, 0, (int)g_143e114, (const char*)g_143e12c, 0x9a);
 }
 
 // FNV-1 hash of a byte key, optionally folded to lower case.
@@ -674,7 +688,7 @@ void* C26190::Find(unsigned hash) {
         if (hash == n->mHash) return n->mpValue;
         n = n->mpNext;
     }
-    return (void*)0x13ec47c;
+    return (void*)g_13ec47c;
 }
 
 // Allocate the first node block, split the bucket array out of it and zero the buckets.

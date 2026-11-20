@@ -2,7 +2,16 @@
 // Object file: SPGonzago/SPGalaxyGameEntry.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
-extern "C" char g_13eb938[];   // a vtable retail relocates here
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb938[];
+extern "C" char g_147dba8[];
+extern "C" char g_147dd00[];
+extern "C" char g_147e3b0[];
+extern "C" char g_147e618[];
+extern "C" char g_15a2df8[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+
 #include "game/types.h"
 #include "SP/cString.h"
 #include "EA/DateTime/DateTime.h"
@@ -551,9 +560,9 @@ struct Str16 {
 
     Str16()
     {
-        begin = (wchar_t*)0x1667bac;
-        end   = (wchar_t*)0x1667bac;
-        cap   = (wchar_t*)0x1667bae;
+        begin = (wchar_t*)g_1667bac;
+        end   = (wchar_t*)g_1667bac;
+        cap   = (wchar_t*)g_1667bae;
     }
 };
 struct cGameData {
@@ -9970,9 +9979,9 @@ void GameEntry::FUN_de3300()
     ((Fn2)(*(void***)p)[0x60 / 4])(p, 0, 1);
     p = FUN_00df5f40();
     ((Fn1)(*(void***)p)[0x5c / 4])(p, 0);
-    ((GameEntry*)*(u32*)0x16a1344)->ShowGalaxy(0);
-    ((GameEntry*)*(u32*)0x16a1344)->ShowGalaxy(1);
-    ((GameEntry*)*(u32*)0x16a1344)->mp198->Do();
+    ((GameEntry*)*(u32*)&g_16a1344)->ShowGalaxy(0);
+    ((GameEntry*)*(u32*)&g_16a1344)->ShowGalaxy(1);
+    ((GameEntry*)*(u32*)&g_16a1344)->mp198->Do();
     mp48 = 0;
     p = FUN_00df5f40();
     return ((Root*)p)->FUN_df95d0();
@@ -10056,15 +10065,15 @@ void GameEntry::OnModalWindowEnd(u32 a2, u32 a3)
 // @ 0x00de35d0
 void GameEntry::Dtor_de35d0()
 {
-    mpVtbl = (void*)0x147dd00;
-    *(u32*)0x16a11b4 = 0;
+    mpVtbl = (void*)g_147dd00;
+    *(u32*)&g_16a11b4 = 0;
     u32 p = mStr30.mpBegin;
     if ((s32)((mStr30.mpCap - p) & 0xfffffffe) > 2 && p != 0)
         op_del_array((void*)p);
     p = mStr20.mpBegin;
     if ((s32)((mStr20.mpCap - p) & 0xfffffffe) > 2 && p != 0)
         op_del_array((void*)p);
-    mpVtbl = (void*)0x147dba8;
+    mpVtbl = (void*)g_147dba8;
 }
 
 // @ 0x00de3650
@@ -10122,13 +10131,13 @@ void GameEntry::BlowSavedGameUpRealGood()
 // @ 0x00de38b0
 void GameEntry::FUN_de38b0(u32 id, u32 arg)
 {
-    if ((((u32*)0x16a1848)[id >> 5] >> (id & 0x1f)) & 1)
+    if ((((u32*)&DAT_016a1848)[id >> 5] >> (id & 0x1f)) & 1)
         return;
-    if (id == 0x1b && (*(GameEntry**)0x16a1344)->mb1F1 == 0) {
+    if (id == 0x1b && (*(GameEntry**)&g_16a1344)->mb1F1 == 0) {
         void* audio = EA_Audio_GetSystemAT();
         KillSetiEffects(0x5da7b944,
                         audio != 0 ? ((FnU)(*(void***)audio)[0x20 / 4])(audio) : 0);
-        ((GameEntry*)*(u32*)0x16a1344)->FUN_de52d0();
+        ((GameEntry*)*(u32*)&g_16a1344)->FUN_de52d0();
     }
     FUN_e00650(id, arg);
 }
@@ -10320,12 +10329,12 @@ void __cdecl FUN_00de3e40(u32 arg)
         prop = 0;
         ((FnV)(*(void***)old)[4 / 4])(old);
     }
-    char ok = ((FnQC)(*(void***)pm)[0x2c / 4])(pm, *(u32*)0x15a2df8, 0, &prop);
+    char ok = ((FnQC)(*(void***)pm)[0x2c / 4])(pm, *(u32*)g_15a2df8, 0, &prop);
     if (ok) {
         WString16 ws;
-        ws.mpBegin = 0x1667bac;
-        ws.mpEnd = 0x1667bac;
-        ws.mpCap = 0x1667bae;
+        ws.mpBegin = (int)&gEmptyA_1667bac;
+        ws.mpEnd = (int)&gEmptyA_1667bac;
+        ws.mpCap = (int)&gEmptyB_1667bae;
         if (SP_GetPropertyAsString16(prop, arg, &ws)) {
             void* app = SP_AppSystem();
             ((Fn1)(*(void***)app)[0x5c / 4])(app, ws.mpBegin);
@@ -12303,15 +12312,15 @@ void __fastcall FUN_00deb5d0(void* self)
 void* __fastcall FUN_00deb670(void* self)
 {
     FUN_00e00630_s00de_a870();
-    *(uint32_t*)self = 0x147e3b0;
-    *(void**)0x16a1484 = self;
+    *(uint32_t*)self = (int)g_147e3b0;
+    *(void**)&g_16a1484 = self;
     return self;
 }
 
 // @ 0x00deb6a0
 void* cGalaxyGameEntryDeb::DestroyDeb(unsigned int flags)
 {
-    *(void**)0x16a1484 = 0;
+    *(void**)&g_16a1484 = 0;
     *(int**)this = &g_vtbl_GalaxyGameEntryDeb;
     if (flags & 1)
         FUN_00f47380(this);
@@ -13582,7 +13591,7 @@ void cGalaxyGameEntryUIStateMachine_s00de_d5a0::TearDownUI()
 cNotifyAttackListener::cNotifyAttackListener()
 : cNotifyAttackListenerBase()
 {
-    mpVTable = (void*)0x147e618;
+    mpVTable = (void*)g_147e618;
     *(uint32_t volatile*)&mField14 = 0;
     mField08 = 0;
     gNotifyListener = this;
@@ -14141,9 +14150,9 @@ namespace SP {
 NameString_s00df_fc80 __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00defc00()
 {
     NameString_s00df_fc80 out;
-    out.mpBegin = 0x1667bac;
-    out.mpEnd = 0x1667bac;
-    out.mpCap = 0x1667bae;
+    out.mpBegin = (int)&gEmptyA_1667bac;
+    out.mpEnd = (int)&gEmptyA_1667bac;
+    out.mpCap = (int)&gEmptyB_1667bae;
     u32 text;
     do {
         WString16 key;
@@ -14196,9 +14205,9 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::SetStateSummaryText(
     ((SummaryTextServices*)FUN_0067de40())->Slot20()->Slot34(pText, 0);
 
     NameString_s00df_fc80 detokenized;
-    detokenized.mpBegin = 0x1667bac;
-    detokenized.mpEnd = 0x1667bac;
-    detokenized.mpCap = 0x1667bae;
+    detokenized.mpBegin = (int)&gEmptyA_1667bac;
+    detokenized.mpEnd = (int)&gEmptyA_1667bac;
+    detokenized.mpCap = (int)&gEmptyB_1667bae;
     ((SummaryTextServices*)FUN_0067de40())->Slot20()->Slot2C(text.c_str(), &detokenized);
     FUN_00def750(nField, detokenized.mpBegin);
 }
@@ -16258,7 +16267,7 @@ void __fastcall FUN_00df82d0(Dtor_s00df_82d0* self)
         (*(void(__thiscall**)(void*))((char*)*(void**)self->mpObject34 + 4))(self->mpObject34);
 
     self->mode20.ReleaseOwned();
-    *(void* volatile*)((char*)self + 0x18) = (void*)0x13eb938;
+    *(void* volatile*)((char*)self + 0x18) = (void*)g_13eb938;
     _ReadWriteBarrier();
     ((cSPUILayout_s00df_5670*)self)->dtor();
 }
@@ -19111,7 +19120,7 @@ void cUISpaceRes::Destroy()
         ((void (__thiscall*)(void*))(*(void***)mpTracer48)[1])(mpTracer48);
     mVec30.DestroyRangeVariant(mVec30.mpBegin, mVec30.mpEnd);      // 0x00685a30
     RawFree(mVec30.mpBegin);
-    mpVtbl18 = (void*)0x13eb938;
+    mpVtbl18 = (void*)&g_13eb938;
     _ReadWriteBarrier();
     mpVtbl00 = (void*)g_13eb938;
 }
@@ -19602,14 +19611,14 @@ void __stdcall e00560(int dummy)
 {
     (void)dummy;
     void* ab = SP_AssetBrowser();
-    GObj* g = *(GObj**)0x16a1344;
+    GObj* g = *(GObj**)&g_16a1344;
     if (g->field108 == 7 &&
         *(char*)((char*)ab + 0x1c) == 0 &&
         g->b270 == 0) {
-        int* mm = *(int**)0x16c7aa4;
+        int* mm = *(int**)&DAT_016c7AA4;
         EC* ec = *(EC**)((char*)mm + 0x1c);
         if (!ec->sub_ec4320()) {
-            (*(GObj**)0x16a1344)->sub_de52d0();
+            (*(GObj**)&g_16a1344)->sub_de52d0();
         }
     }
 }
@@ -19632,11 +19641,11 @@ void __cdecl e005b0()
         scope.mb24 = 0;
         int* q = (int*)operator_new(0x14, k_szSporepedia, 0, 0, 0, 0);
         if (q) {
-            int* g = *(int**)0x16a1344;
-            *(volatile int*)(q + 1) = 0x13ec458;
+            int* g = *(int**)&g_16a1344;
+            *(volatile int*)(q + 1) = (int)&vtbl_13ec458;
             q[2] = 0;
-            q[0] = 0x147dc04;
-            q[1] = 0x149bad8;
+            q[0] = (int)&vtbl_147dc04;
+            q[1] = (int)&vtbl_FUN_0149bad8;
             q[3] = (int)g;
             *(u8*)(q + 4) = 0;
             scope.mp0c = q;
@@ -19649,7 +19658,7 @@ void __cdecl e005b0()
 // @ 0x00e00630
 VBase::VBase()
 {
-    vftable = (void**)0x147dba8;
+    vftable = (void**)g_147dba8;
     b4 = 0;
 }
 

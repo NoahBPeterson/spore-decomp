@@ -8,6 +8,11 @@
 // through byte-offset accessors on a locally declared stub class.
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1471c00[];
+extern "C" char g_1471c10[];
+
 #include "types.h"
 #include <math.h>
 
@@ -414,8 +419,8 @@ SP::Vec3* SP::cHerd::GetWateringHolePosition()
 // @ 0x00c6bde0
 SP::cHerd::~cHerd()
 {
-    void* vt0 = (void*)0x1471c10;
-    void* vt1 = (void*)0x1471c00;
+    void* vt0 = (void*)g_1471c10;
+    void* vt1 = (void*)g_1471c00;
     *(void**)this = vt0;
     *(void* volatile*)((char*)this + 4) = vt1;
     void* a = *(void* volatile*)&mLocationStatusBegin;

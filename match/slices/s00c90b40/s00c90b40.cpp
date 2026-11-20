@@ -10,6 +10,11 @@
 // The tribe object layout is only partly known; it is modelled with named
 // role+offset stub structs so that every field access stays a named member.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1486110[];
+extern "C" char g_1581288[];
+extern "C" char g_158128c[];
+
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned char  u8;
@@ -672,7 +677,7 @@ void cTribe::CheckFoodTutorialComplete()
     return;
 
   s32 value = vA4();
-  s32 price = GetTutorialToolPrice(*(u32*)0x1581288, 0xb79e0065, 0x28);
+  s32 price = GetTutorialToolPrice(*(u32*)g_1581288, 0xb79e0065, 0x28);
   if (value < price)
     return;
 
@@ -690,7 +695,7 @@ void cTribe::UpgradeHut()
   if (mSpatial_120.IsValid() == 0)
     return;
 
-  FUN_00c8f3d0(0, (void*)1, *(float*)0x1486110, 0x2cc62c6,
+  FUN_00c8f3d0(0, (void*)1, *(float*)g_1486110, 0x2cc62c6,
                mSpatial_120.GetPosition(),
-               (u32)(SIZE_T)FUN_00ac8fa0(*(u32*)0x158128c, 0x93c8ee8, 5));
+               (u32)(SIZE_T)FUN_00ac8fa0(*(u32*)g_158128c, 0x93c8ee8, 5));
 }

@@ -1,5 +1,10 @@
 // Slice s004c6df0: SP::cSkinObject constructor / destructor (/Od).
 // Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ef094[];
+extern "C" char g_13f05a8[];
+
 #include "types.h"
 #pragma pack(push, 4)
 
@@ -210,14 +215,14 @@ struct RectVec {
 struct RefBase {
     void* mVtbl;                      // +0x00
     Cnt cnt;                          // +0x04
-    RefBase() : mVtbl((void*)0x13EF094u) {}
-    ~RefBase() { mVtbl = (void*)0x13EF094u; }
+    RefBase() : mVtbl((void*)g_13ef094) {}
+    ~RefBase() { mVtbl = (void*)g_13ef094; }
 };
 
 // Intermediate base so the derived vtable pointer is installed before the
 // members are constructed, exactly like the compiler-generated vptr store.
 struct SkinVtblBase : RefBase {
-    SkinVtblBase() { mVtbl = (void*)0x13F05A8u; }
+    SkinVtblBase() { mVtbl = (void*)&g_13f05a8; }
 };
 
 struct SkinObj : SkinVtblBase {
@@ -286,7 +291,7 @@ SkinObj::SkinObj(Res* pResource) : mResource(pResource), mFloat(0.0f)
 // @ 0x004c72f0
 SkinObj::~SkinObj()
 {
-    *(void**)this = (void*)0x13F05A8u;
+    *(void**)this = (void*)g_13f05a8;
 }
 
 #pragma pack(pop)

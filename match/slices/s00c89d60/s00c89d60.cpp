@@ -1,5 +1,9 @@
 // Slice s00c89d60: SP::cSpatialObject view/effect helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1473758[];
+
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -300,7 +304,7 @@ struct RefHolder {
 typedef void (__thiscall* RefReleaseFn)(void* self, void* holder, unsigned char del);
 void __fastcall F8a420(Spatial* s)
 {
-    s->vt = (void**)0x1473758;
+    s->vt = (void**)g_1473758;
     ((SpatialBaseDtor*)s)->Destroy();
     ((EffectVecDtor*)((char*)s + 0xc0))->Destroy();
     if (s->pa0 != 0) {

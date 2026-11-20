@@ -1,5 +1,9 @@
 // slice s00656310: SP::cSPUIAssetVerbs / SP::cSPUIAssetView Sporepedia UI helpers.
 // UI module: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ffc00[];
+
 #include "types.h"
 #include <intrin.h>
 
@@ -178,7 +182,7 @@ void cSPUIAssetVerbs::Shutdown() {
 
 // @ 0x00656740
 bool cSPUIAssetVerbs::IsVerb(int idx) {
-    void* w = ((cSPUILayout*)mLayout)->FindWindowByID(((int*)0x13ffc00)[idx], 1);
+    void* w = ((cSPUILayout*)mLayout)->FindWindowByID(((int*)g_13ffc00)[idx], 1);
     if (w) return (vcr0(w, 0x28) & 1);
     return false;
 }

@@ -4,6 +4,16 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast   (NO /EHsc: 0xee0000-0xf10000 contains no
 //   `mov eax,fs:[0]` C++-EH prologue at all, and /EHsc adds one to C40::C40, breaking it)
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13ec458[];
+extern "C" char g_148aba8[];
+extern "C" char g_148abb8[];
+extern "C" char g_148ac5c[];
+extern "C" char g_16c77f8[];
+extern "C" char g_16c780c[];
+extern "C" char g_16c7aa4[];
+
 #include "types.h"
 
 struct IWindow;
@@ -504,10 +514,10 @@ struct TutorialsUI {
 };
 
 static inline TutorialsUI* GetTutorialsUI() {
-    return *(TutorialsUI**)(*(int*)0x16c7aa4 + 0xd4);
+    return *(TutorialsUI**)(*(int*)g_16c7aa4 + 0xd4);
 }
 static inline void* GetSpacePtr() {
-    return *(void**)(*(int*)0x16c7aa4 + 0x18);
+    return *(void**)(*(int*)g_16c7aa4 + 0x18);
 }
 
 // --------------------------------------------------------------- vtable glue
@@ -709,11 +719,11 @@ void OBJ174::Update()
 // @ 0x00ee90e0
 OBJ14* OBJ14::ScalarDeletingDtor(unsigned char flags)
 {
-    *(void**)this = (void*)0x148ac5c;
+    *(void**)this = (void*)g_148ac5c;
     _ReadWriteBarrier();
     if (mp10) mp10->Release();
     if (mpC) mpC->Release();
-    *(void**)this = (void*)0x13ec458;
+    *(void**)this = (void*)g_13ec458;
     if (flags & 1) operator delete(this);
     return this;
 }
@@ -741,20 +751,20 @@ C40::C40()
     mC3c = 0;
     if ((gRegFlags & 1) == 0) {
         gRegFlags |= 1;
-        ((cRegNode*)0x16c780c)->Construct(0);
-        *(void**)0x16c780c = (void*)0x148aba8;
+        ((cRegNode*)g_16c780c)->Construct(0);
+        *(void**)g_16c780c = (void*)g_148aba8;
         atexit(FUN_013c8a60);
     }
-    if (((cRegNode*)0x16c780c)->Flag() == 0)
-        ((cRegNode*)0x16c780c)->Fallback();
+    if (((cRegNode*)g_16c780c)->Flag() == 0)
+        ((cRegNode*)g_16c780c)->Fallback();
     if ((gRegFlags & 2) == 0) {
         gRegFlags |= 2;
-        ((cRegNode*)0x16c77f8)->Construct(0);
-        *(void**)0x16c77f8 = (void*)0x148abb8;
+        ((cRegNode*)g_16c77f8)->Construct(0);
+        *(void**)g_16c77f8 = (void*)g_148abb8;
         atexit(FUN_013c8a50);
     }
-    if (((cRegNode*)0x16c77f8)->Flag() == 0)
-        ((cRegNode*)0x16c77f8)->Fallback();
+    if (((cRegNode*)g_16c77f8)->Flag() == 0)
+        ((cRegNode*)g_16c77f8)->Fallback();
 }
 
 // @ 0x00ee9260

@@ -2,6 +2,12 @@
 // Object file: UTFSpore_Win32/FrameDrawable.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13fa72c[];
+extern "C" char g_14424bc[];
+extern "C" char g_14424d4[];
+extern "C" char g_1485720[];
+
 #include "game/types.h"
 #include <math.h>
 #include "EA/UTFWin/RenderContext.h"
@@ -127,10 +133,10 @@ int FrameDrawable::CreateRenderables(UTFWin::RenderContext_s0096_f3f0* ctx, void
 namespace EA { namespace UTFWinControls {
 FrameDrawable::FrameDrawable()
 {
-    const float one = *(const float*)0x01485720;
-    *(void* volatile*)((char*)this + 4) = (void*)0x013fa72c;
-    *(void**)((char*)this + 0) = (void*)0x014424d4;
-    *(void* volatile*)((char*)this + 4) = (void*)0x014424bc;
+    const float one = *(const float*)g_1485720;
+    *(void* volatile*)((char*)this + 4) = (void*)g_13fa72c;
+    *(void**)((char*)this + 0) = (void*)g_14424d4;
+    *(void* volatile*)((char*)this + 4) = (void*)g_14424bc;
     _ReadWriteBarrier();
     int zero = 0;
     *(int*)((char*)this + 8) = zero;

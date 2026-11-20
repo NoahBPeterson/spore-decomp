@@ -1,3 +1,17 @@
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_16ca3d4[];
+extern "C" char g_16ca3d8[];
+extern "C" char g_16ca3dc[];
+extern "C" char g_16ca3e0[];
+extern "C" char g_16ca3e4[];
+extern "C" char g_16ca3e8[];
+extern "C" char g_16ca3ec[];
+extern "C" char g_16ca3f0[];
+extern "C" char g_16ca3f4[];
+extern "C" char g_16ca3f8[];
+extern "C" char g_16ca3fc[];
+extern "C" char g_16ca400[];
+
 #include "game/types.h"
 #include <math.h>
 
@@ -95,18 +109,18 @@ void init_16c9b94()
 // Twelve int32 slots of one table, all set to the "none" sentinel -1.
 void init_16ca3d4()
 {
-    *(int*)0x16ca3d4 = -1;
-    *(int*)0x16ca3d8 = -1;
-    *(int*)0x16ca3dc = -1;
-    *(int*)0x16ca3e0 = -1;
-    *(int*)0x16ca3e4 = -1;
-    *(int*)0x16ca3e8 = -1;
-    *(int*)0x16ca3ec = -1;
-    *(int*)0x16ca3f0 = -1;
-    *(int*)0x16ca3f4 = -1;
-    *(int*)0x16ca3f8 = -1;
-    *(int*)0x16ca3fc = -1;
-    *(int*)0x16ca400 = -1;
+    *(int*)g_16ca3d4 = -1;
+    *(int*)g_16ca3d8 = -1;
+    *(int*)g_16ca3dc = -1;
+    *(int*)g_16ca3e0 = -1;
+    *(int*)g_16ca3e4 = -1;
+    *(int*)g_16ca3e8 = -1;
+    *(int*)g_16ca3ec = -1;
+    *(int*)g_16ca3f0 = -1;
+    *(int*)g_16ca3f4 = -1;
+    *(int*)g_16ca3f8 = -1;
+    *(int*)g_16ca3fc = -1;
+    *(int*)g_16ca400 = -1;
 }
 
 // Sixteen owning terrain-layer slots, shared with SPTerrainStateMgr.

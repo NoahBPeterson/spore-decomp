@@ -1,6 +1,13 @@
 // Slice s006755c0: SP save/load subjects, uint32 hash maps (eastl::hashtable),
 // property lookups, and Pollen response helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE (no /EHsc).
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ef094[];
+extern "C" char g_140116c[];
+
 #include "types.h"
 
 typedef unsigned int uint32_t;
@@ -768,7 +775,7 @@ SubjectB* __fastcall FUN_006763e0(SubjectB* pThis)
 // @ 0x00676490
 void* __fastcall FUN_00676490(SubjectB* pThis, int, int nFlags)
 {
-    pThis->mpVtbl = (void*)0x0140116C;
+    pThis->mpVtbl = (void*)g_140116c;
     pThis->mMaps.~FourHashMaps();
     if (pThis->mp0c != 0)
         EAFree(pThis->mp0c);
@@ -776,7 +783,7 @@ void* __fastcall FUN_00676490(SubjectB* pThis, int, int nFlags)
         pThis->mp08->v1();
     if (pThis->mp04 != 0)
         pThis->mp04->v2();
-    pThis->mpVtbl = (void*)0x013EB394;
+    pThis->mpVtbl = (void*)g_13eb394;
     if ((nFlags & 1) != 0)
         EAFree(pThis);
     return pThis;
@@ -793,8 +800,8 @@ void* __fastcall FUN_006764f0(SubjectA* pThis, int, int nFlags)
         EAFree((void*)pThis->mu24);
     if (pThis->mu0c != 0)
         EAFree((void*)pThis->mu0c);
-    pThis->mpVtbl1 = (void*)0x013EF094;
-    pThis->mpVtbl0 = (void*)0x013EB938;
+    pThis->mpVtbl1 = (void*)g_13ef094;
+    pThis->mpVtbl0 = (void*)g_13eb938;
     if ((nFlags & 1) != 0)
         EAFree(pThis);
     return pThis;

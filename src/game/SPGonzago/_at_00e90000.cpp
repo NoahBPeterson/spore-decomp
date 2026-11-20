@@ -2,6 +2,9 @@
 // Object file: SPGonzago/_at_00e90000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_14869bc[];
+
 #include "game/types.h"
 #include "SP/cCommodityNode.h"
 #include "SP/cGameNounManager.h"
@@ -230,7 +233,7 @@ SP::cToolObject::cToolObject()
     : cSpatialObjectView()
 {
     Vec3 c = { 1.0f, 1.0f, 1.0f };
-    mVTable = (void**)0x14869bc;
+    mVTable = (void**)g_14869bc;
     mColor = c;
 }
 

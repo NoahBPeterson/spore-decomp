@@ -2,6 +2,9 @@
 // Object file: SPGonzago/SPMissionEradicate.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f01bc[];
+
 #include "game/types.h"
 #include "SP/cSPMissionBase.h"
 #include "EA/Random/RandomLinearCongruential.h"
@@ -1076,31 +1079,31 @@ char __fastcall FUN_00c501e0(void* ecx_this, void* edx, int tag, void* out)
     (void)edx;
     Mob* self = (Mob*)ecx_this;
     if (tag == 0x3f80b6b3) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x1f8));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x1f8));
         return 1;
     }
     if (tag == (int)0xcd3e21a2) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x208));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x208));
         return 1;
     }
     if (tag == (int)0xc1a31746) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x1f8) - ld32(ecx_this, 0x208));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x1f8) - ld32(ecx_this, 0x208));
         return 1;
     }
     if (tag == (int)0xd34ef208) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x210));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x210));
         return 1;
     }
     if (tag == (int)0xbd31ee03) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x20c) - ld32(ecx_this, 0x210));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x20c) - ld32(ecx_this, 0x210));
         return 1;
     }
     if (tag == 0x218e9bda) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x204) - ld32(ecx_this, 0x208));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x204) - ld32(ecx_this, 0x208));
         return 1;
     }
     if (tag == (int)0x85df68ab) {
-        FUN_0041e050(out, (void*)0x13f01bc, ld32(ecx_this, 0x204));
+        FUN_0041e050(out, (void*)g_13f01bc, ld32(ecx_this, 0x204));
     }
     return (char)self->GetTagStringBase(tag, out);
 }

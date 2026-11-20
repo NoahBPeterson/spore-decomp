@@ -2,6 +2,15 @@
 // Object file: SPGonzago/SPMissionManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13eb844[];
+extern "C" char g_13eb90c[];
+extern "C" char g_13fb19c[];
+extern "C" char g_14948dc[];
+extern "C" char g_15b49b0[];
+extern "C" char g_1601760[];
+extern "C" char g_16dac54[];
+
 #include "game/types.h"
 #include <math.h>
 #include "SP/cGameNounManager.h"
@@ -1486,7 +1495,7 @@ u8 cSPMissionManager::FUN_00febe50(void* key, u32* out)
         if (*slot == key)
         {
             if (out != 0)
-                *out = ((u32*)0x16dac54)[i];
+                *out = ((u32*)g_16dac54)[i];
             return 1;
         }
         i++;
@@ -1560,7 +1569,7 @@ i32 cSPMissionManager::FUN_00febf80(void* key)
     do
     {
         if (*slot == key)
-            return (i32)((u32*)0x16dac54)[i];
+            return (i32)((u32*)g_16dac54)[i];
         i++;
         slot++;
     } while (i < 3);
@@ -1573,7 +1582,7 @@ u8 FUN_00febfd0(void* self, u32* list)
     for (u32* p = (u32*)*list; p != list; p = (u32*)*p)
     {
         if (p + 2 != 0)
-            MOPS(self)->FUN_00695b40(p + 2, (void*)0x15b49b0, (void*)0x14948dc);
+            MOPS(self)->FUN_00695b40(p + 2, (void*)g_15b49b0, (void*)g_14948dc);
     }
     return 1;
 }
@@ -1594,7 +1603,7 @@ i32 FUN_00fec010(int* v)
 
         if (0.0 < sum)
         {
-            double r = MOPS((void*)0x1601760)->FUN_009360d0() * sum;
+            double r = MOPS((void*)g_1601760)->FUN_009360d0() * sum;
             if (r < sum)
             {
                 double acc = 0.0;
@@ -2543,9 +2552,9 @@ bool cSPMissionManager_s00fe_d430::RemoveMission(cSPMission_s00fe_d430* mission)
     {
         MessageBasicRC5 msg;
         msg.mId = 0x38cf2ff;
-        msg.vftable0 = 0x13eb90c;
+        msg.vftable0 = (int)g_13eb90c;
         _InterlockedExchange((volatile long*)&msg.mRefCount, 0);
-        msg.vftable0 = 0x13eb844;
+        msg.vftable0 = (int)g_13eb844;
         msg.mRCFlags = 0;
         *(void**)&msg.mData = mission;
         cMessageServer* server = MessageServer();
@@ -2859,7 +2868,7 @@ cSPMission_s00fe_e3d0* cSPMissionManager_s00fe_e3d0::GetMissionByID(int id)
 {
     cGameNounManager_s00fe_e3d0* nm = (cGameNounManager_s00fe_e3d0*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00fed010, (int)&FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -2877,7 +2886,7 @@ cSPMission_s00fe_e3d0* cSPMissionManager_s00fe_e3d0::GetActiveMissionForEmpireAn
 {
     cGameNounManager_s00fe_e3d0* nm = (cGameNounManager_s00fe_e3d0*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00fed010, (int)&FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -2900,7 +2909,7 @@ char cSPMissionManager_s00fe_e3d0::IsPlanetARaidTarget(void* planet, unsigned* o
 {
     cGameNounManager_s00fe_e3d0* nm = (cGameNounManager_s00fe_e3d0*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00fed010, (int)&FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -2932,7 +2941,7 @@ int cSPMissionManager_s00fe_e3d0::HasMissionConversationWithEmpireAndPlanet(void
 {
     cGameNounManager_s00fe_e3d0* nm = (cGameNounManager_s00fe_e3d0*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00fed010, (int)&FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -2993,7 +3002,7 @@ char cSPMissionManager_s00fe_e3d0::FUN_00fee820()
 {
     cGameNounManager_s00fe_e3d0* nm = (cGameNounManager_s00fe_e3d0*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00fed010, (int)&FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -3023,7 +3032,7 @@ void cSPMissionManager_s00fe_e3d0::DebugDraw()
     }
     cGameNounManager_s00fe_e3d0* nm = (cGameNounManager_s00fe_e3d0*)NounManager();
     MissionList* list = nm->GetGameDataVector(
-        0x00cd7d10, 0x00d3d420, 0x00fed010, 0x00b1e520, 0x2aa5ada);
+        (int)&FUN_00cd7d10, (int)&FUN_00d3d420, (int)&FUN_00fed010, (int)&FUN_00b1e520, 0x2aa5ada);
     SpVecPV& v = list->mItems;
     void** p = v.mpBegin;
     void** end = v.mpEnd;
@@ -3514,7 +3523,7 @@ void* FUN_00fef670()
     if (g_16dacb8 == 0) {
         void* p = operator_new(4, "Simulator", 0, 0, 0, 0);
         if (p != 0) {
-            *(u32*)p = 0x13fb19c;                        // vtbl_UTFInternet::HTTPRequest
+            *(u32*)p = (int)g_13fb19c;                        // vtbl_UTFInternet::HTTPRequest
             g_16dacb8 = (IHTTPRequest*)p;
             return p;
         }

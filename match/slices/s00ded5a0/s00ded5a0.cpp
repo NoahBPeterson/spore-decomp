@@ -1,6 +1,10 @@
 // Slice s00ded5a0: the galaxy game-entry UI state machine (layout setup, context
 // menu, planet preview and the star-pick flow) plus three small mode helpers.
 // Layouts follow the binary, not the 2008 PDB.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_147e618[];
+
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -687,7 +691,7 @@ extern cNotifyAttackListener* gNotifyListener;   // 0x016a1570
 cNotifyAttackListener::cNotifyAttackListener()
     : cNotifyAttackListenerBase()
 {
-    mpVTable = (void*)0x147e618;
+    mpVTable = (void*)g_147e618;
     *(uint32_t volatile*)&mField14 = 0;
     mField08 = 0;
     gNotifyListener = this;

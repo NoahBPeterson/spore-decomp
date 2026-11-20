@@ -1,6 +1,12 @@
 // slice s00599040 -- SP::cCollectableItems::LoadConfiguration and the SpaceInventory UI template
 // helpers (layout class with cSPUIPropertyLayout base, cSPUILayout at +0xc, vptr field at +0xa8).
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f6364[];
+extern "C" char g_13f6374[];
+extern "C" char g_1488874[];
+
 #include "types.h"
 #include "sse_helpers.h"
 
@@ -424,12 +430,12 @@ bool cSpaceInventory::LoadConfiguration(int a, int b)
 // @ 0x005994d0
 TraitSuperPowerRollover_s005994d0::TraitSuperPowerRollover_s005994d0()
 {
-    mpWinProcTable = (void*)0x013f6374;
-    mpRefCountTable = (void*)0x013f6364;
+    mpWinProcTable = (void*)g_13f6374;
+    mpRefCountTable = (void*)g_13f6364;
     *(IWindow* volatile*)&mpWindow = 0;
     SetResourceKey(L"TraitSuperPowerRollover", 0x40464100);
     SetRootWindowId(0);
-    SetAutoUpdateInterval(*(float*)0x01488874);
+    SetAutoUpdateInterval(*(float*)g_1488874);
 }
 
 // @ 0x005995d0

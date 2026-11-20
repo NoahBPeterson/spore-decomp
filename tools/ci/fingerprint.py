@@ -9,6 +9,8 @@ A fingerprint is made once by a maintainer, from the retail image (make_fingerpr
   sha256  of the retail bytes with the masked offsets zeroed
   masked  the retail bytes at the masked offsets, in offset order, as hex: the addresses the function uses (call
           targets, globals, vtables), which targets.py compares with the addresses the source's names claim (#458)
+  fixups  the offsets where retail's .reloc table fixes up an absolute address: the object must have a relocation
+          there too, so a constant written in place of a name (`(void**)0x13ef1c0` for a vtable) fails
 Fingerprints hold no names and no instructions: apart from those addresses, no code bytes.
 
 The check (gate.py, CI) compiles the function, cuts it out of the object file together with the EH funclets and local
@@ -103,7 +105,19 @@ def make(orig, va, size, md=None, rng=None):
                 o = ins.address - va + ins.size - 4
                 mask |= {o, o + 1, o + 2, o + 3}
     return {"va": "%08x" % va, "size": size, "mask": pack_mask(mask), "sha256": mhash(data, mask),
-            "masked": masked_hex(data, mask)}
+            "masked": masked_hex(data, mask), "fixups": fixups(orig, va, size)}
+
+
+def fixups(orig, va, size):
+    """offsets of the 4-byte absolute addresses retail's .reloc table fixes up inside the function"""
+    import bisect
+    rva = va - orig.base
+    i = bisect.bisect_left(orig.relocs, rva)
+    out = []
+    while i < len(orig.relocs) and orig.relocs[i] + 4 <= rva + size:
+        out.append(orig.relocs[i] - rva)
+        i += 1
+    return out
 
 
 def masked_hex(data, mask):
@@ -132,4 +146,8 @@ def check(fp, data, rel):
     stray = sorted(rel - mask)
     if stray:
         return "relocation at offset %s where the retail bytes are fixed" % ",".join(map(str, stray[:4]))
+    bare = [o for o in fp.get("fixups", ()) if o not in rel]
+    if bare:
+        return ("a number at offset %s where retail has an address (a relocation): name the function or global "
+                "instead of writing its address" % ",".join(map(str, bare[:4])))
     return "PASS" if mhash(data, mask) == fp["sha256"] else "bytes differ"

@@ -1,6 +1,10 @@
 // Swarm skin-paint particle description serialization + the EASTL vectors that
 // back the eval list (stride 0x10 and 0x14), and ArgScript::PaintCompat ctors.
 // Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f2424[];
+
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -177,8 +181,8 @@ struct PaintCompatB { PaintCompatB* Ctor1f0(); };
 PaintCompatA* PaintCompatA::Ctor1b0()
 {
     FUN_0083c800(this);                          // cCommandBase::cCommandBase
-    *(void**)this = (void*)0x13f2424;            // vtbl_ArgScript::PaintCompat
-    *(void**)this = (void*)0x13f2424;
+    *(void**)this = (void*)g_13f2424;            // vtbl_ArgScript::PaintCompat
+    *(void**)this = (void*)g_13f2424;
     return this;
 }
 
@@ -186,7 +190,7 @@ PaintCompatA* PaintCompatA::Ctor1b0()
 PaintCompatB* PaintCompatB::Ctor1f0()
 {
     FUN_0083c800(this);                          // cCommandBase::cCommandBase
-    *(void**)this = (void*)0x13f2424;            // vtbl_ArgScript::PaintCompat
+    *(void**)this = (void*)g_13f2424;            // vtbl_ArgScript::PaintCompat
     return this;
 }
 

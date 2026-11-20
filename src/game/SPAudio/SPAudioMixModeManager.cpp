@@ -2,6 +2,9 @@
 // Object file: SPAudio/SPAudioMixModeManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13effb8[];
+
 #include "game/types.h"
 #include "SP/Audio/cMixMode.h"
 #include "SP/Audio/cMixModeManager.h"
@@ -667,7 +670,7 @@ void* cFactoryMixMode_s00ea_8f90::scalar_deleting_destructor(unsigned char flags
     MixModeRbtree* tree = &mTree;
     tree->DoNukeSubtree(tree->mpRoot);
     mMutex.Dtor();
-    mVtbl = (void*) 0x13effb8;
+    mVtbl = (void*) g_13effb8;
     if (flags & 1)
         ZoneObject_delete(this);
     return this;

@@ -3,6 +3,10 @@
 //
 // Every object is a "pd" object: a t_gobj header (0..0x27), then per-class fields.
 // Symbols are passed and returned *by value* as an (hash, char*) pair.
+
+// addresses retail relocates here, named so the build relocates them too
+extern "C" void FUN_00a61230();
+
 #include "types.h"
 
 typedef unsigned int   uint;
@@ -262,7 +266,7 @@ byte g_hslider_setup(void)
     ok &= class_addbang(gpSliderClass, (void*)slider_float);
     ok &= class_doaddfloat(gpSliderClass, (void*)slider_setfloat);
     p = gensym(&s, "loadbang");
-    ok &= class_addmethod(gpSliderClass, (void*)0x00a61230, *p, 0);
+    ok &= class_addmethod(gpSliderClass, (void*)FUN_00a61230, *p, 0);
     return ok;
 }
 
