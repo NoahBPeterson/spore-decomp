@@ -2553,7 +2553,7 @@ extern "C" void FUN_008db630(int* lo, int* mid, int* hi, int d)
         int v = *p;
         if (*(unsigned*)((char*)v + 0xc) < *(unsigned*)((char*)*lo + 0xc)) {
             *p = *lo;
-            FUN_008dadd0(lo, 0, (int)(mid - lo), 0, v, d);
+            FUN_008dadd0(lo, 0, (int)(mid - lo), 0, v, *(volatile int*)&d);
         }
     }
     FUN_008daef0(lo, mid, d);
