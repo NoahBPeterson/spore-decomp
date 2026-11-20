@@ -5315,20 +5315,30 @@ void* WrapperOps::Wrap(u32* src, void* inner)
     return self;
 }
 
+// The function-local static of SP::GetDefaultValue<cSPTransform>: its init guard and the value itself.
+struct DefaultTransform_s00b0_24a0 {
+    u16 mFlags;                  // +0x00 (0x0167bb50)
+    u16 mFlags2;                 // +0x02
+    f32 mPosition[3];            // +0x04
+    f32 mScale;                  // +0x10
+    char mRotation[0x24];        // +0x14 (Matrix3)
+};
+extern "C" u32 g_167bb88;                               // 0x0167bb88
+extern "C" DefaultTransform_s00b0_24a0 g_167bb50;       // 0x0167bb50
 // @ 0x00b024a0
 void* GetDefaultValue_A(void)
 {
-    if ((*(volatile u32*)0x0167bb88 & 1) == 0) {
-        *(volatile u32*)0x0167bb88 |= 1;
-        *(f32*)0x0167bb54 = g_167af5c_s00b0_1690;
-        *(f32*)0x0167bb58 = g_167af60_s00b0_1690;
-        *(u16*)0x0167bb52 = 0;
-        *(f32*)0x0167bb5c = g_167af64_s00b0_1690;
-        *(u16*)0x0167bb50 = 0;
-        *(f32*)0x0167bb60 = 1.0f;
-        M3((void*)0x0167bb64)->Assign((const void*)0x0167b554);
+    if ((g_167bb88 & 1) == 0) {
+        g_167bb88 |= 1;
+        g_167bb50.mPosition[0] = g_167af5c_s00b0_1690;
+        g_167bb50.mFlags = 0;
+        g_167bb50.mFlags2 = 0;
+        g_167bb50.mPosition[1] = g_167af60_s00b0_1690;
+        g_167bb50.mPosition[2] = g_167af64_s00b0_1690;
+        g_167bb50.mScale = 1.0f;
+        M3(g_167bb50.mRotation)->Assign(&g_167b554);
     }
-    return (void*)0x0167bb50;
+    return &g_167bb50;
 }
 
 // @ 0x00b02520

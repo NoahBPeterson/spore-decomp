@@ -6,7 +6,6 @@
 0080dc90 53 complete; vtable slot 0x144/0x34 call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080dd50 50 complete; scalar local avoids /GS cookie; branch layout differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080dda0 109 complete; refcount/vtable call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-0080de20 57 complete; ModelManager call/bit-clear schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080dfe0 530 complete; early-return eax = last object / bbox; float path matches flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080e270 838 complete; WEAK equiv (10% coverage); renderer/camera-state field layout and float->int rounding (cvtss2si) codegen differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080e980 130 complete; refcount release/call schedule differs

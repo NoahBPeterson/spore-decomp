@@ -571,9 +571,9 @@ void Layered::RenderEnd()
     void** it = v2Begin;
     void** end = v2End;
     while (it != end) {
-        void* o = *it++;
+        void** cur = it++; void* o = *cur;
         void* m = ModelMgr();
-        u32 idx = (u32)(size_t)((VF1)VT(m)[0x28 / 4])(m, (void*)0x32fab27);
+        u32 idx = (u32)(size_t)((VF1a)VT(m)[0x28 / 4])(m, (void*)0x32fab27, 0);
         if (idx < 0x40) {
             u32* p = (u32*)((char*)o + 0x44 + (idx >> 5) * 4);
             *p &= ~(1u << (idx & 0x1f));
