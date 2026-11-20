@@ -107,10 +107,11 @@ int Ability::Add(const Vector3* pos, float a, float b, int c)
 int Ability::Add2(void* a, void* b, float c, void* d)
 {
     Pod16 val;
-    val.p0 = a;
-    val.p1 = b;
     val.f = c;
     val.p2 = d;
+    val.p0 = a;
+    val.p1 = b;
+    ScratchSlots<2>();
     mVec1c.push_back(&val);
     return mVec1c.size() - 1;
 }
