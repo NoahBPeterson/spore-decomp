@@ -464,17 +464,16 @@ void PosseSim::OnTick(int arg1, int arg2)
 void** partition(void** first, void** last, int pivot, char (__cdecl* pred)(int, int))
 {
     for (;;) {
-        while (pred((int)*first, pivot)) {
+        if (pred((int)*first, pivot)) {
             ++first;
+            continue;
         }
-        for (;;) {
-            --last;
-            if (!pred(pivot, (int)*last))
-                break;
+        if (pred(pivot, (int)*--last)) {
+            while (pred(pivot, (int)*--last))
+                ;
         }
-        if (first >= last) {
+        if (first >= last)
             return first;
-        }
         void* tmp = *first;
         *first = *last;
         *last = tmp;
