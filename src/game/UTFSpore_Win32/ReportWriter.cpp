@@ -214,11 +214,12 @@ bool EA::Debug::ReportWriter::EndSection(char const * a1)
 // @ 0x0091ea90
 bool EA::Debug::ReportWriter::WriteText(char const * data, bool flag)
 {
-    if (!Write(data, -1))
-        return false;
-    if (flag)
-        return Write("\r\n", 2);
-    return true;
+    if (Write(data, -1)) {
+        if (flag)
+            return Write("\r\n", 2);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x0091ead0
