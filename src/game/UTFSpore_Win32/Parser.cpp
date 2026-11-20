@@ -1768,7 +1768,7 @@ struct cCmdParser_s0084_6280 {
     virtual void s36();
     virtual bool        EvalCondition(const char* pExpr);   // +0x94
     virtual double      EvalFloat(const char* pExpr);        // +0x98
-    virtual long        EvalInt(const char* pExpr, char* pOut, int radix);  // +0x9c
+    virtual long        EvalInt(const char* pExpr);          // +0x9c
     virtual void        s3a();                                                  // +0xa0
     virtual void        EvalV2(float* pOut, const char* pExpr);   // +0xa4
     virtual void        EvalV3(float* pOut, const char* pExpr);   // +0xa8
@@ -3944,8 +3944,7 @@ void EA::ArgScript::cSetICommand_s0084_6280::ExecuteBody(cArguments_s0084_6280* 
 {
     const char** pArg = pArgs->MainArguments(2);
     char buf[12];
-    long n = mParser->EvalInt(pArg[1], buf, 10);
-    _ltoa(n, buf, 10);
+    _ltoa(mParser->EvalInt(pArg[1]), buf, 10);
     mFullParser->SetVariableNoSubstitution(pArg[0], buf);
 }
 
