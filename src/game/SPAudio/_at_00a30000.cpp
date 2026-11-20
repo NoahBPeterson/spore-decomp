@@ -1103,16 +1103,18 @@ void MixEnableCtx::Disable(int arg)
 int* FUN_00a3ce40(int self)
 {
     int* p = (int*)::operator new(0x1c, "Swarm", 0, 0, 0, 0);
-    if (!p) return 0;
-    p[1] = (int)(void*)vtbl_GmeRefCount;
-    p[2] = 0;
-    p[0] = (int)(void*)PTR_FUN_01453998;
-    p[1] = (int)(void*)PTR_FUN_014599e8;
-    p[3] = *(int*)(self + 8);
-    *(float*)((char*)p + 0x10) = *(float*)(self + 0xc);
-    *(uint8_t*)((char*)p + 0x18) = 0;
-    *(float*)((char*)p + 0x14) = *(float*)(self + 0x10);
-    return p;
+    if (p) {
+        *(volatile int*)&p[1] = (int)(void*)vtbl_GmeRefCount;
+        p[2] = 0;
+        p[0] = (int)(void*)PTR_FUN_01453998;
+        p[1] = (int)(void*)PTR_FUN_014599e8;
+        p[3] = *(int*)(self + 8);
+        *(float*)((char*)p + 0x10) = *(float*)(self + 0xc);
+        *(float*)((char*)p + 0x14) = *(float*)(self + 0x10);
+        *(uint8_t*)((char*)p + 0x18) = 0;
+        return p;
+    }
+    return 0;
 }
 
 // @ 0x00a3ced0
