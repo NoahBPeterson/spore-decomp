@@ -623,10 +623,10 @@ int __fastcall FUN_0080df50(char* p)
 int cSPUIModelsAndEffectsRenderer::Release()
 {
     char* p = (char*)this;
-    char* b = 0;
-    if (p) { char* t = p - 0x250; if (t) b = t + 4; }
+    char* d = p ? p - 0x250 : 0;
+    char* b = d ? d + 4 : 0;
     long* rc = (long*)(b + 4);
-    int n = _InterlockedExchangeAdd(rc, -1) - 1;
+    int n = _InterlockedDecrement(rc);
     if (n == 0) {
         _InterlockedExchange(rc, 1);
         if (b) ((VF1v)VT(b)[0])(b, (void*)1);
