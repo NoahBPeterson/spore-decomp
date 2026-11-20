@@ -15,7 +15,7 @@ category pass/comdat), which is evidence, not proof; labelled as such (decision 
 Module names are EA's top-level directory names, already public as the folders under src/game/.
 Open-source libraries (the "Open-source libraries" module) are not in the headline, history, size bands or contributor
 function counts (decision 2026-11-20): compiling their published sources recovers none of Spore's own code. They have
-their own line, their module row, and an "open-source" column in the credits.
+their own line and their module row; the credits leave them out.
 """
 import argparse, bisect, collections, datetime, glob, gzip, html, json, os, re, subprocess
 
@@ -509,24 +509,23 @@ def build(out, prs_path, repo):
              'with Galactic Adventures after the development build the module map comes from.</p>')
     # Only pull requests that are credited with functions are listed and counted: tools, notes-only and reverted pull
     # requests (and ones whose work a later merge removed) add nothing to the totals.
-    prs = [p for p in prs if p["f"] or p["b"] or p.get("r") or p.get("o")]
+    prs = [p for p in prs if p["f"] or p["b"] or p.get("r")]
     if prs:
-        who = collections.defaultdict(lambda: [0, 0, 0, 0, 0])
+        who = collections.defaultdict(lambda: [0, 0, 0, 0])
         for p in prs:
-            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]; w[3] += p.get("r", 0); w[4] += p.get("o", 0)
+            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]; w[3] += p.get("r", 0)
         b.append('<h2>Contributors</h2><div class="panel scroll"><table><tr><th>contributor</th><th>pull requests</th>'
-                 '<th>functions</th><th>bytes</th><th>made readable*</th><th>open-source</th></tr>')
-        for k, (n, f, by, nf, o) in sorted(who.items(), key=lambda kv: (-kv[1][2], -kv[1][3], kv[0])):
+                 '<th>functions</th><th>bytes</th><th>made readable*</th></tr>')
+        for k, (n, f, by, nf) in sorted(who.items(), key=lambda kv: (-kv[1][2], -kv[1][3], kv[0])):
             b.append('<tr><td><a href="https://github.com/%s">%s</a></td><td>%d</td><td>%s</td><td>%s</td><td>%s</td>'
-                     '<td>%s</td></tr>' % (E(k), E(k), n, fmt(f), fmt(by), fmt(nf), fmt(o)))
+                     '</tr>' % (E(k), E(k), n, fmt(f), fmt(by), fmt(nf)))
         b.append('</table></div><h2>Recent pull requests</h2><div class="panel scroll"><table><tr><th>pull request</th>'
-                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>made readable*</th><th>open-source</th>'
+                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>made readable*</th>'
                  '<th>model or tool</th></tr>')
         for p in prs[:25]:
             b.append('<tr><td><a href="https://github.com/%s/pull/%d">#%d</a></td><td>%s</td><td>%s</td><td>%s</td>'
-                     '<td>%s</td><td>%s</td><td>%s</td><td style="text-align:left">%s</td></tr>' % (
+                     '<td>%s</td><td>%s</td><td style="text-align:left">%s</td></tr>' % (
                          E(repo), p["n"], p["n"], p["when"], E(p["who"]), fmt(p["f"]), fmt(p["b"]), fmt(p.get("r", 0)),
-                         fmt(p.get("o", 0)),
                          E(p["model"] or "")))
         b.append('</table></div><p class="note">Counted from pull requests merged since contributions opened '
                  '(November 2026). Most earlier work was done by the maintainer\'s own agent runs. *"Made readable": '
@@ -534,9 +533,7 @@ def build(out, prs_path, repo):
                  'byte offsets (pointer casts plus a number, such as <code>*(int*)(p + 8)</code>, where the code '
                  'should name a member), or it gave a function whose bytes a generated match already reproduced with '
                  'another function\'s source its own source, with the right calls and globals. More measures may be '
-                 'added. These count here, not as new functions. '
-                 '"Open-source": open-source library functions rebuilt from their published sources, not counted as '
-                 'functions.</p>')
+                 'added. These count here, not as new functions.</p>')
     b.append('<h2>Help</h2><p>Hundreds of functions are only a few bytes from a match. <a href="join.html">Start here</a>.</p>')
 
     join = """<h1>Join</h1><p class="lede">Pick a function whose C++ is already written but compiles a few bytes off,
