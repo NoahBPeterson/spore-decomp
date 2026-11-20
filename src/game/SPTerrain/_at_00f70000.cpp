@@ -2493,21 +2493,28 @@ V4* CCubeQuery::GetScaledColor(V4* out, const V4* unused)
 }
 
 // @ 0x00f71760
-void* RefCountedDtor(void* self, unsigned char flags)
+struct RefCountedObj_f71760 { virtual void Destroy(int); int mRef; };
+struct RefCountedHolder_f71760 {
+    void* mpVtbl0;                    // +0x00
+    void* mpVtbl1;                    // +0x04
+    int   m08;                        // +0x08
+    RefCountedObj_f71760* mpObj;      // +0x0c
+    void* Dtor(unsigned char flags);
+};
+void* RefCountedHolder_f71760::Dtor(unsigned char flags)
 {
-    int* rc = *(int**)((char*)self + 0x0c);
-    if (rc) {
-        int n = rc[1] - 1;
-        rc[1] = n;
+    if (RefCountedObj_f71760* rc = mpObj) {
+        int n = (*(volatile int*)&rc->mRef += -1);
         if (n == 0) {
-            rc[1] = 1;
-            (*(void(**)(int))(*rc))(1);
+            rc->mRef = 1;
+            _ReadWriteBarrier();
+            rc->Destroy(1);
         }
     }
-    *(void**)((char*)self + 4) = (void*)0x013ef094;
+    mpVtbl1 = g_13ef094;
     if (flags & 1)
-        EAFreeOp(self);
-    return self;
+        EAFreeOp(this);
+    return this;
 }
 
 // @ 0x00f71f30
