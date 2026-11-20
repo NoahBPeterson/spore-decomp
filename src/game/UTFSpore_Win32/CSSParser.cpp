@@ -5,6 +5,7 @@
 #include "game/types.h"
 extern "C" size_t __cdecl wcslen(const wchar_t*);
 #pragma intrinsic(wcslen)
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" char    gTokStart[];         // 0x01667b04
@@ -2309,6 +2310,7 @@ void* CharStream::Fn8f38b0(wchar16* s)
     *(void**)(c + 0) = s;
     *(void**)(c + 8) = s;
     *(int*)(c + 0xc) = 1;
+    _ReadWriteBarrier();
     void* g = (void*)gEmptyStr;
     *(void**)(c + 0x10) = g;
     *(void**)(c + 0x14) = g;
