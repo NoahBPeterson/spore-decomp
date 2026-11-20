@@ -3,3 +3,4 @@
 ../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ?SetVector@cNPCCityMusic@Audio@SP@@QAEXPBUVector3@23@@Z  00eab3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ??0cNPCCityMusic@Audio@SP@@QAE@XZ  00eab4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ?Read@cNPCCityMusic@Audio@SP@@QAE_NAAVcIObjectDatabaseIStream@3@@Z  00eab2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ?Destroy@cNPCCityMusic@Audio@SP@@QAEPAV123@H@Z  00eab4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

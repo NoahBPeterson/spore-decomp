@@ -636,17 +636,17 @@ cNPCCityMusic::cNPCCityMusic()
 }
 }}  // namespace SP::Audio
 
+extern "C" char g_13eb938[];
 // @ 0x00eab4d0
 namespace SP { namespace Audio {
 cNPCCityMusic* cNPCCityMusic::Destroy(int flags)
 {
-    mpVtable0 = (void*)0x1488224;
-    mpVtable1 = (void*)0x1488214;
-    cNPCCityMusicManager* manager = GetMusicManager();
-    if (manager)
-        manager->ReleaseChannel(mId, mHandle);
-    mpVtable1 = (void*)0x13ec458;
-    mpVtable0 = (void*)0x13eb938;
+    mpVtable0 = (void*)g_1488224;
+    mpVtable1 = (void*)g_1488214;
+    if (GetMusicManager())
+        GetMusicManager()->ReleaseChannel(mId, mHandle);
+    mpVtable1 = (void*)g_13ec458;
+    mpVtable0 = (void*)g_13eb938;
     if (flags & 1)
         operator_delete_array(this);
     return this;
