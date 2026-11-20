@@ -87,6 +87,11 @@ struct VectorI {
     float* cap;
     void insert(float* pos, unsigned n, const float* val);   // 0x00eb1e80
     void resize(unsigned n);                                 // 0x00eb2070
+    float* erase(float* first, float* last) {
+        memcpy(first, last, (size_t)((char*)end - (char*)last));
+        end -= (last - first);
+        return first;
+    }
 };
 
 // byte-string (mpBegin/mpEnd/mpCapacity), EASTL-style
@@ -149,15 +154,7 @@ void VectorI::resize(unsigned n)
         insert(e, n - cur, &z);
         return;
     }
-    float* dst = begin + n;
-    memcpy(dst, e, 0);
-    // original: mpEnd += ((int)mpEnd - (int)_Dst >> 2) * -4  (mirrors the sar/neg/add asm)
-    int s = (int)((unsigned)e - (unsigned)dst);
-    s = s >> 2;
-    s = -s;
-    s = s + s;
-    s = s + s;
-    end = (float*)((int)e + s);
+    erase(begin + n, e);
 }
 
 // ---- call helpers ----
