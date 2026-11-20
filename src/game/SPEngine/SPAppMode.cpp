@@ -304,11 +304,14 @@ bool SP::cApp::InitAppModes()
 // @ 0x007d8270
 void* SP::cApp::AppMode(unsigned id)
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    SP::cAppModeInfo* p = mAppModesBegin;
-    for (int i = 0; i < n; ++i, ++p) {
-        if (p->mID == id)
-            return p->mpMode;
+    int i = 0;
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    if (n > 0) {
+        _ReadWriteBarrier();
+        do {
+            if (mAppModesBegin[i].mID == id)
+                return mAppModesBegin[i].mpMode;
+        } while (++i < n);
     }
     return 0;
 }
@@ -556,12 +559,16 @@ void SP::cAppModeCheat::Execute(void* args)
 // @ 0x007d8c30
 bool SP::cApp_s007d_85b0::SetAppMode(unsigned id)
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    for (int i = 0; i < n; ++i) {
-        if (mAppModesBegin[i].mID == id) {
-            ApplyAppMode(i);
-            return true;
-        }
+    int i = 0;
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    if (n > 0) {
+        _ReadWriteBarrier();
+        do {
+            if (mAppModesBegin[i].mID == id) {
+                ApplyAppMode(i);
+                return true;
+            }
+        } while (++i < n);
     }
     return false;
 }
