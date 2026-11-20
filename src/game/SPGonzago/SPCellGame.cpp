@@ -2561,7 +2561,6 @@ extern cCellGame_s00e7_77a0* gspCellGame_s00e7_77a0;    // 0x016b3c04
 extern CellState* gspCellState_s00e7_77a0;   // 0x016b3c0c
 extern Vector3_s00e7_77a0 gCellWorldCenter_s00e7_77a0;  // 0x016b3c28
 extern Vector3_s00e7_77a0 gDefaultTransform; // 0x015a7c4c
-int  FUN_00e4cce0_5(int id, int a, float b, float c, float d);  // 0x00e4cce0
 int  sGetSourceLevel();                          // 0x00e4ee60
 void FUN_00e86980(int a, int b);                 // 0x00e86980
 void FUN_00bbbde0(int grid, int obstacle);       // 0x00bbbde0 (thunk to 0x00bbb210)
@@ -2575,6 +2574,7 @@ int  FUN_00e74a20(int a1, int a2, float f1, int type, int count, float f2, float
 void sDropLoot(int a1, void* key, int a3, void* pos, float radius, int lvl, int a7, int a8,
                void* out, int* count);                  // 0x00e771d0
 int  FUN_00e76540(void* a, int b, int c);        // 0x00e76540
+int  FUN_00e76540(void* a, int b, int entry, void* center, float x, float y, float z); // 0x00e76540 (full argument list)
 class RandomLCG_s00e7_77a0 { public: double RandomDoubleUniform(); };  // 0x009360d0
 extern RandomLCG_s00e7_77a0 gMathRandom_s00e7_77a0;   // 0x01601760
 inline int GetStageLevel(int stage)
@@ -9131,8 +9131,7 @@ bool FUN_00e778b0(int* p)
     cSpawnCell* c = (cSpawnCell*)cells.GetChecked(h);
     if (c == 0)
         return false;
-    int r = FUN_00e4cce0_5(8, (int)&gCellWorldCenter_s00e7_77a0, 0.0f, 1.5f, 0.0f);
-    r = FUN_00e76540(c, -1, r);
+    int r = FUN_00e76540(c, -1, FUN_00e4cce0(8), &gCellWorldCenter_s00e7_77a0, 0.0f, 1.5f, 0.0f);
     gspCellState_s00e7_77a0->mFieldE0 = r;
     gspCellState_s00e7_77a0->mFieldF4 = 0.0f;
     return true;
