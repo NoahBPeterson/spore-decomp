@@ -97,26 +97,12 @@ __declspec(noinline) void SplitBase::Set(const short* s) {
 // @ 0x0092C130  SplitBase::Set
 __declspec(noinline) void SplitBase::Set(const char* s) {
     if (s != 0) {
-        WString* text = &mText;
-        const char* q = s + 1;
-        const char* p = s;
-        char c;
-        do { c = *p++; } while (c);
-        unsigned len = (unsigned)(p - q);
-        text->resize(len);
-        if (len > 0) {
-            unsigned i = 0;
-            do {
-                text->mpBegin[i] = (unsigned char)s[i];
-                ++i;
-            } while (i < len);
-        }
-        Split(text, &mArgs);
-        return;
-    }
-    if (mText.mpBegin != mText.mpEnd) {
-        *mText.mpBegin = 0;
-        mText.mpEnd = mText.mpBegin;
+        unsigned len = (unsigned)strlen(s);
+        mText.resize(len);
+        for (unsigned i = 0; i < len; ++i)
+            mText.mpBegin[i] = (unsigned char)s[i];
+    } else {
+        mText.clear();
     }
     Split(&mText, &mArgs);
 }
