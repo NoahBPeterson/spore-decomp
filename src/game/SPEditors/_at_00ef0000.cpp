@@ -7,6 +7,9 @@ extern "C" char g_11966ed[];
 extern "C" char g_13eb384[];
 extern "C" char g_13eb394[];
 extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_148b58c[];
+extern "C" char g_148b59c[];
 extern "C" char g_1400744[];
 extern "C" char g_140085c[];
 extern "C" char g_14426a0[];
@@ -6530,10 +6533,12 @@ int __cdecl FUN_00ef78c0()
 unsigned __fastcall FUN_00ef7900(char* p)
 {
     int z = 0;
-    *(void**)(p + 4) = &gVtbl_D;
+    *(void**)(p + 4) = g_13ec458;
+    _ReadWriteBarrier();
     *(int*)(p + 8) = z;
-    *(void**)p = &gVtbl_A;
-    *(void**)(p + 4) = &gVtbl_B;
+    *(void**)p = g_148b59c;
+    *(void**)(p + 4) = g_148b58c;
+    _ReadWriteBarrier();
     *(int*)(p + 0xc) = z;
     *(int*)(p + 0x10) = z;
     *(int*)(p + 0x14) = z;
