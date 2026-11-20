@@ -2902,7 +2902,7 @@ void*         GetCursorTable();                              // 0x0067cab0
 void*         AchievementsController();                      // 0x00675250
 struct CActTarget {
     int mA, mB, mC, mD, mE, mF, mG, mH, mI, mJ, mK, mL;  // 0x30 bytes
-    void Ctor(void* t);                                            // 0xad7a30 (ret 4)
+    CActTarget* Ctor(void* t);                                     // 0xad7a30 (ret 4)
     void Dtor();                                                   // 0xad7ad0
 };
 struct CTerrain {
@@ -4164,9 +4164,7 @@ void PostTerrainAction(int kind, void* tgt)
     default: return;
     }
     CActTarget t;
-    t.Ctor(tgt);
-    CTrig* mgr = (CTrig*)GetTriggerMgr();
-    mgr->PostAction(id, &t, 0);
+    ((CTrig*)GetTriggerMgr())->PostAction(id, t.Ctor(tgt), 0);
     t.Dtor();
 }
 
