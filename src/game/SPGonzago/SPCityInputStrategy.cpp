@@ -1383,7 +1383,6 @@ void cCityInputStrategy::FUN_00cf1810(void* param_1, u8 param_2)
         mFieldcc = 0;
         _ReadWriteBarrier();
         if (mpFieldd8)
-
         {
             void* p = mpFieldd8;
             mpFieldd8 = 0;

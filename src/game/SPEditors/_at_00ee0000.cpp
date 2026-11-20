@@ -4377,7 +4377,6 @@ void Bee::F40F0()
     u32 idx = sMathRandom.RandomUint32Uniform(n);
     ApplyPick(found.mpBegin + idx);
 
-
     // inlined destructors, in reverse construction order
     SpFree(found.mpBegin);
     SpFree(query.mIds.mpBegin);

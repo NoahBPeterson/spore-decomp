@@ -278,7 +278,6 @@ void* __thiscall cContentValidationSummarizer::FUN_00de0a90(void* pOuter, uint8_
 {
     *(void* volatile*)&mVtbl4 = VTBL(vtbl_CVS);
     m08 = 0;
-
     mVtbl0 = VTBL(vtbl_0147dc04);
     this->~cContentValidationSummarizer();
     mVtbl4 = VTBL(vtbl_0149bad8);

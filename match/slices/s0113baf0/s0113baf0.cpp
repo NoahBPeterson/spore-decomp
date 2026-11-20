@@ -336,7 +336,6 @@ bool FUN_0113c060(uint8_t* p)
     W(p, 0xc) = (uint32_t)edx;
     _ReadWriteBarrier();
     if (ch == 2)
-
         B(p, 0x70) = 0;
     else
         B(p, 0x70) = (uint8_t)((ch != 4) + 1);
