@@ -51,3 +51,4 @@
 ../src/game/Havok/_at_01080000.cpp  ?deletingDtor@hkNullContactMgrFactory@@QAEPAXI@Z  01082cf0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01080000.cpp  ?constrainToAngularDof@hkConstraintConstructionKit@@QAEXH@Z  010894a0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01080000.cpp  ?getConstraintInfo@hkGenericConstraintData@@UBEXAAUhkConstraintInfo@@@Z  010896b0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ?scalarDeletingDestructor@hkAabbPhantom@@UAEPAXI@Z  0108e250  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
