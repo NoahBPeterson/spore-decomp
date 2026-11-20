@@ -106,7 +106,7 @@ int hkBufferedStreamReader::read(void* buf, int nbytes)
 	int cur = m_current;
 	int avail = m_end - cur;
 	int left = nbytes;
-	if (avail < nbytes)
+	if (nbytes > avail)
 	{
 		do
 		{
@@ -118,7 +118,7 @@ int hkBufferedStreamReader::read(void* buf, int nbytes)
 				return nbytes - left;
 			cur = m_current;
 			avail = m_end - cur;
-		} while (avail < left);
+		} while (left > avail);
 	}
 	hkString::memCpy(buf, m_buf + m_current, left);
 	m_current += left;
@@ -469,7 +469,7 @@ int hkClassMember::getAlignment() const
 		{
 			do
 			{
-				if (align < m_class->getMember(i).getAlignment())
+				if (m_class->getMember(i).getAlignment() > align)
 					align = m_class->getMember(i).getAlignment();
 				i++;
 			} while (i < m_class->getNumMembers());
