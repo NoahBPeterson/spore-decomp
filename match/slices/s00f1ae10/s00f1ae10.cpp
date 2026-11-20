@@ -565,14 +565,16 @@ Ctr* PB::FindNearest(void* a, int q, void* excl)
 // @ 0x00f1b9b0
 void PB::GetNameA(WString* out)
 {
-    char* o = (char*)g_16c7aa4->f74->Find(f_b8);
+    SMgr* mgr = g_16c7aa4->f74;
+    char* o = (char*)mgr->Find(f_b8);
     if (o) AssignStr(*out, ((ObjName*)o)->Text());
 }
 
 // @ 0x00f1ba00
 void PB::GetNameB(WString* out)
 {
-    char* o = (char*)g_16c7aa4->f74->Find(f_b8);
+    SMgr* mgr = g_16c7aa4->f74;
+    char* o = (char*)mgr->Find(f_b8);
     if (o) AssignStr(*out, ((ObjName*)(o + 0x3c))->Text());
 }
 
