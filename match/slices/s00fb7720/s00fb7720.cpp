@@ -30,7 +30,8 @@ struct TCVec { void Set(int arg); void Release(); void ReleaseArg(void* p); };  
 extern void  FUN_00fb75b0(void*);                          // 0x00fb75b0 (thiscall)
 extern void  FUN_00fb6fb0(void*, void*, void*, void*);     // 0x00fb6fb0
 extern void  FUN_00fb7640(void*, void*);                   // 0x00fb7640
-struct TCVec2 { void Add(void* a, void* b, void* c, void* d); }; // 0x00fb6fb0
+struct RibbonTag_fb7920 {};   // empty tag passed by value
+struct TCVec2 { void Add(void* a, void* b, void* c, RibbonTag_fb7920 d); }; // 0x00fb6fb0
 struct TC1Self { void Append(void* p); void Release(); void Set2(void* arg); };
 extern void* operator_delete(void*);                       // 0x00f47380
 extern void  eastl_vector_insert(void*, void*, void*, int); // 0x011e0744
@@ -134,9 +135,10 @@ void TC1::QuadReset(int arg)
 void TC1::QuadAddRibbonPolys(int* p)
 {
     int* self = (int*)this;
+    RibbonTag_fb7920 tag;
     ((TCVec2*)((uint8_t*)self + 0x18c))->Add(
         (void*)*(int*)((uint8_t*)self + 0x190),
-        (void*)p[0], (void*)p[1], (void*)p);
+        (void*)p[0], (void*)p[1], tag);
     if (*(int*)((uint8_t*)self + 8) != 0)
         ((TCVec*)self)->ReleaseArg((void*)p);
 }
