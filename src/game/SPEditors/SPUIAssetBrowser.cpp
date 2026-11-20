@@ -2266,7 +2266,14 @@ void Browser::Fn_260()
 uint32_t Browser::Get_c()
 {
     VecEnt20& v = AT(VecEnt20, 0xcc);
-    if (!v.empty() && v.size() == 1) return (uint32_t)v.mpBegin->d;
+    Ent20* begin = v.mpBegin;
+    if (begin != v.mpEnd) {
+        _ReadWriteBarrier();
+        if ((uint32_t)(v.mpEnd - begin) == 1) {
+            _ReadWriteBarrier();
+            return (uint32_t)v.mpBegin->d;
+        }
+    }
     return 0;
 }
 

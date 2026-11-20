@@ -28,3 +28,4 @@
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?FUN_006460b0@cSPUIAssetBrowser@@SAXPAUElem@@00@Z  006460b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?FUN_00646140@cSPUIAssetBrowser@@SAPAUElem@@PAU2@00@Z  00646140  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Get_10@Browser@@QAEIXZ  00645300  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Get_c@Browser@@QAEIXZ  006452c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
