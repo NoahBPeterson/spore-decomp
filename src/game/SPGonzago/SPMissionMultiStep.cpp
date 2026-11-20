@@ -87,7 +87,7 @@ struct cMissionMultiStep {
     u8    FUN_00c5a520(u32 a);
     void  FUN_00c59eb0();
     void  FUN_00c59e70();
-    void  FUN_00c5a4e0();
+    void  FUN_00c5a4e0(int arg);
     void  FUN_00c5a180(u32 idx, void* out);
     void  FUN_00c5a260(void* out);
     void  FUN_00c5a280(u32 idx, void* out);
@@ -458,18 +458,11 @@ void cMissionMultiStep::FUN_00c5a4c0(void* out)
 }
 
 // @ 0x00c5a4e0
-void cMissionMultiStep::FUN_00c5a4e0()
+void cMissionMultiStep::FUN_00c5a4e0(int arg)
 {
-    i32 idx = mCurrSub;
-    u8* e = (u8*)mSubEnd;
-    i32 n = (i32)(e - (u8*)mSubBegin) >> 2;
-    if (idx >= 0 && idx < n) {
-        void* m = ((void**)mSubBegin)[idx];
-        if (m != 0) {
-            (*(void(__thiscall**)(void*))((char*)vtbl(m) + 0x124))(m);
-            return;
-        }
-    }
+    void* m = GetCurrSubMission();
+    if (m != 0)
+        (*(void(__thiscall**)(void*, int))((char*)vtbl(m) + 0x124))(m, arg);
 }
 
 // @ 0x00c5a520
