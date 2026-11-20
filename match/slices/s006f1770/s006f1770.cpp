@@ -818,13 +818,23 @@ void __stdcall FreeBucketList2(BucketNode** table, unsigned int count)
 }
 __declspec(noinline) void __cdecl AssignByKey(unsigned key, ResSub* value);
 // ---- 0x006f24a0 -------------------------------------------------------------
-// @ 0x006f24a0
-void __cdecl AssignByKey(unsigned key, ResSub* value)
+struct ResOwnerB {
+    char pad[0xa8];
+    HtTableB mTable;
+    ResSub** FindOrInsert(const Key8* k) { return mTable.FindOrInsert(k); }
+};
+static __forceinline ResSub** LookupSlotByKey(unsigned key)
 {
     Key8Bits kb;
     kb.q = (unsigned long long)key | ((unsigned long long)gKeyHigh << 32);
-    HtTableB& t = *(HtTableB*)((char*)FUN_0067ddf0() + 0xa8);
-    ResSub** slot = t.FindOrInsert(&kb.k);
+    ResOwnerB* owner = (ResOwnerB*)FUN_0067ddf0();
+    return owner->FindOrInsert(&kb.k);
+}
+
+// @ 0x006f24a0
+void __cdecl AssignByKey(unsigned key, ResSub* value)
+{
+    ResSub** slot = LookupSlotByKey(key);
     ResSub* old = *slot;
     if (value != old)
     {
