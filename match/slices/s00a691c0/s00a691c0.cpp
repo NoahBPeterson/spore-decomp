@@ -42,7 +42,6 @@ void  __cdecl FillRef(RefObject** dest, unsigned n, RefObject** src);       // 0
 void* __stdcall AllocCopy(unsigned n, RefObject** first, RefObject** last); // 0x00a695d0
 RefObject** __cdecl CopyRefs(RefObject** dest, RefObject** end, RefObject** src);              // 0x00a69070
 RefObject** __cdecl CopyBackwardRef(RefObject** first, RefObject** last, RefObject** destEnd); // 0x00a690d0
-void __stdcall DestroyElems84(void* first, void* last);                     // 0x00a69be0
 void* __cdecl DoFindNodeStr(void* node, const char* key);                   // 0x00555020
 
 // ---------------------------------------------------------------------------
@@ -617,22 +616,31 @@ RefVec& RefVec::assign(const RefVec& o)
 }
 
 // ===========================================================================
-// @ 0x00a69f40
+struct ElemVec84 {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    void DestroyRange(void* first, void* last);   // 0x00a69be0
+    void Teardown()
+    {
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            operator_delete__(mpBegin);
+    }
+};
 struct BigThing {
     char pad0[0x1c];
     void* mpAt1c;         // +0x1c
     char pad20[0x24];
-    RefVec mVec44;        // +0x44
+    ElemVec84 mVec44;     // +0x44
     void Destroy();       // 0x00a69f40
 };
 
+// @ 0x00a69f40
 void BigThing::Destroy()
 {
-    DestroyElems84(*(void**)((char*)this + 0x44), *(void**)((char*)this + 0x48));
-    void* a = *(void**)((char*)this + 0x44);
-    if (a && ((int*)a)[-1] != 0)
-        operator_delete__(a);
-    void* b = *(void**)((char*)this + 0x1c);
+    mVec44.Teardown();
+    void* b = mpAt1c;
     if (b && ((int*)b)[-1] != 0)
         operator_delete__(b);
 }

@@ -11,3 +11,5 @@
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?list_insert_before@@YGPAPAUListNode@@PAPAU1@UListIterator@@PAPAX@Z  00701050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?CloneEntry@CellMap@@QAEPAXPAUCellNode_s0070_2980@@@Z  00702980  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?Assign@CellMap@@QAEAAU1@ABU1@@Z  00702f60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?QuerySegmentResult@cHierGrid_s0070_1a00@@QAEHPAM0HPAPAX@Z  007027e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?QuerySphereResult@cHierGrid_s0070_1a00@@QAEHMPAMHPAPAX@Z  00702760  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

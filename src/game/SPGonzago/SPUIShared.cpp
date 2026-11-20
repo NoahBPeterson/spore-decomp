@@ -60,7 +60,7 @@ public:
     virtual float    v70();                     // +0x70
     virtual void     v74();                     // +0x74
     virtual void     v78();                     // +0x78
-    virtual void     v7c(int32_t nA, int32_t nB); // +0x7c visible/state pair
+    virtual void     v7c(int32_t nA, bool bB);    // +0x7c visible/state pair
     virtual void     v80();                     // +0x80
     virtual void     v84();                     // +0x84
     virtual void     v88();                     // +0x88

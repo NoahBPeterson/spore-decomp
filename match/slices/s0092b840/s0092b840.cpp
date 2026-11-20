@@ -21,6 +21,7 @@ struct WString {
     void erase(unsigned pos, unsigned count);                 // 0x004228E0 erase(pos,count)
     void make_lower();                                        // 0x005E8E80 make_lower
     unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    void clear() { if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; } }
     wchar_t& operator[](unsigned i) { return mpBegin[i]; }
 };
 
@@ -87,12 +88,8 @@ __declspec(noinline) void SplitBase::Set(const short* s) {
         const short* p = s;
         while (*p) ++p;
         mText.assign((const wchar_t*)s, (const wchar_t*)s + (p - s));
-        Split(&mText, &mArgs);
-        return;
-    }
-    if (mText.mpBegin != mText.mpEnd) {
-        *mText.mpBegin = 0;
-        mText.mpEnd = mText.mpBegin;
+    } else {
+        mText.clear();
     }
     Split(&mText, &mArgs);
 }
@@ -100,26 +97,12 @@ __declspec(noinline) void SplitBase::Set(const short* s) {
 // @ 0x0092C130  SplitBase::Set
 __declspec(noinline) void SplitBase::Set(const char* s) {
     if (s != 0) {
-        WString* text = &mText;
-        const char* q = s + 1;
-        const char* p = s;
-        char c;
-        do { c = *p++; } while (c);
-        unsigned len = (unsigned)(p - q);
-        text->resize(len);
-        if (len > 0) {
-            unsigned i = 0;
-            do {
-                text->mpBegin[i] = (unsigned char)s[i];
-                ++i;
-            } while (i < len);
-        }
-        Split(text, &mArgs);
-        return;
-    }
-    if (mText.mpBegin != mText.mpEnd) {
-        *mText.mpBegin = 0;
-        mText.mpEnd = mText.mpBegin;
+        unsigned len = (unsigned)strlen(s);
+        mText.resize(len);
+        for (unsigned i = 0; i < len; ++i)
+            mText.mpBegin[i] = (unsigned char)s[i];
+    } else {
+        mText.clear();
     }
     Split(&mText, &mArgs);
 }

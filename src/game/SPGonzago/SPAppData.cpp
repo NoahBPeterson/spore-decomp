@@ -63,10 +63,28 @@ struct IntRbNode {
     uint32_t   mColor;         // +0x0c
     int32_t    mKey;           // +0x10
 };
+struct IntRbIter {
+    IntRbNode* mpNode;
+    IntRbIter(IntRbNode* p) : mpNode(p) {}
+};
 struct IntRbTree {
     uint32_t  mnSize;          // +0x00
     IntRbNode mAnchor;         // +0x04
-    void find(IntRbNode** ppResult, const int32_t* pKey);
+    IntRbIter find(const int32_t* pKey);
+    __forceinline IntRbNode* DoLowerBound(const int32_t* pKey)
+    {
+        IntRbNode* pNode = mAnchor.mpParent;
+        IntRbNode* pResult = &mAnchor;
+        while (pNode) {
+            if (!(pNode->mKey < *pKey)) {
+                pResult = pNode;
+                pNode = pNode->mpRight;
+            } else {
+                pNode = pNode->mpLeft;
+            }
+        }
+        return pResult;
+    }
 };
 // ---- items of slice s00e39ab0 end
 
@@ -760,24 +778,13 @@ Matrix33_s005f_4310* Matrix3FromEulerXYZ(Matrix33_s005f_4310* out, const void* e
 }  // namespace SP
 
 // @ 0x00e39fb0
-void IntRbTree::find(IntRbNode** ppResult, const int32_t* pKey)
+IntRbIter IntRbTree::find(const int32_t* pKey)
 {
-    IntRbNode* pNode = mAnchor.mpParent;
     IntRbNode* pEnd = &mAnchor;
-    IntRbNode* pResult = pEnd;
-    while (pNode) {
-        if (pNode->mKey < *pKey) {
-            pNode = pNode->mpLeft;
-        } else {
-            pResult = pNode;
-            pNode = pNode->mpRight;
-        }
-    }
-    if (pResult != pEnd && !(*pKey < pResult->mKey)) {
-        *ppResult = pResult;
-        return;
-    }
-    *ppResult = pEnd;
+    IntRbNode* pResult = DoLowerBound(pKey);
+    if (pResult != pEnd && !(*pKey < pResult->mKey))
+        return IntRbIter(pResult);
+    return IntRbIter(pEnd);
 }
 
 // @ 0x00e4a7d0

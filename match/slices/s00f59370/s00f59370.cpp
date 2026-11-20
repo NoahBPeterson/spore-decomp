@@ -517,14 +517,14 @@ extern "C" EA::Allocator::FixedAllocatorBase g_allocatorCore;       // 0x016c946
 void** __cdecl FUN_00f5a1c0()
 {
     void** node = g_pAllocFreeList;
-    while (node == 0)
+    if (node != 0)
     {
-        if (!g_allocatorCore.AddCore(0, 0))
-            return 0;
-        node = g_pAllocFreeList;
+        g_pAllocFreeList = (void**)*node;
+        node[1] = 0;
+        node[0] = 0;
+        return node;
     }
-    g_pAllocFreeList = (void**)*node;
-    node[1] = 0;
-    node[0] = 0;
-    return node;
+    if (g_allocatorCore.AddCore(0, 0))
+        return FUN_00f5a1c0();
+    return 0;
 }

@@ -8,3 +8,4 @@ slices/s00b4d220/s00b4d220.cpp  ?FUN_00b4d850@@YIXPADH0@Z  00b4d850  /O2 /MD /Gy
 slices/s00b4d220/s00b4d220.cpp  ?CreateRigidBody@@YAPAXPBX@Z  00b4d880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b4d220/s00b4d220.cpp  ?FUN_00b4d8c0@@YAXXZ  00b4d8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b4d220/s00b4d220.cpp  ?FUN_00b4d930@@YIXPAD@Z  00b4d930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b4d220/s00b4d220.cpp  ?FUN_00b4d8e0@@YAXPAD0@Z  00b4d8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

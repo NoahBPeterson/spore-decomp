@@ -519,26 +519,25 @@ void FUN_0079ab90(int param_1, int param_2, int param_3, int param_4)
 int *FUN_0079ac10(int param_1, int param_2)
 {
     int *puVar1 = (int *)FUN_00f473a0(0x28, "Graphics", 0, 0, 0, 0);
-    if (puVar1 == 0) {
-        return 0;
-    }
-    puVar1[1] = (int)&V_13ef094;
-    puVar1[2] = 0;
-    puVar1[0] = (int)&V_140f58c;
-    puVar1[1] = (int)&V_140f588;
-    puVar1[3] = param_1;
-    if (param_1 != 0) {
-        *(int *)(param_1 + 4) = *(int *)(param_1 + 4) + 1;
-    }
-    puVar1[4] = 0;
-    puVar1[5] = 0;
-    puVar1[6] = 0;
-    puVar1[9] = param_2;
-    if (param_2 != 0) {
-        *(int *)(param_2 + 4) = *(int *)(param_2 + 4) + 1;
+    if (puVar1 != 0) {
+        *(volatile int *)&puVar1[1] = (int)&V_13ef094;
+        puVar1[2] = 0;
+        puVar1[0] = (int)&V_140f58c;
+        puVar1[1] = (int)&V_140f588;
+        puVar1[3] = param_1;
+        if (param_1 != 0) {
+            *(int *)(param_1 + 4) = *(int *)(param_1 + 4) + 1;
+        }
+        puVar1[4] = 0;
+        puVar1[5] = 0;
+        puVar1[6] = 0;
+        puVar1[9] = param_2;
+        if (param_2 != 0) {
+            *(int *)(param_2 + 4) = *(int *)(param_2 + 4) + 1;
+        }
         return puVar1;
     }
-    return puVar1;
+    return 0;
 }
 
 // @ 0x0079ac70

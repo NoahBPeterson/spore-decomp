@@ -133,7 +133,16 @@ struct Layout0 {
 };
 int* __cdecl FUN_00d3b3c0(int a, int b, int c);    // 0x00d3b3c0 (EASTL copy helper)
 struct Vec20 {                                      // member at this+0x20: destroy range
+    int* mpBegin;
+    int* mpEnd;
     void Insert(int* r, int* end);                  // 0x00a693f0
+    int* erase(int* first, int* last)
+    {
+        int* r = FUN_00d3b3c0((int)last, (int)mpEnd, (int)first);
+        Insert(r, mpEnd);
+        *(int*)&mpEnd += (last - first) * -4;
+        return first;
+    }
 };
 struct WStr {
     wchar_t* mpBegin;
@@ -558,11 +567,11 @@ void cHint::dtor()
 cHintManager* cHintManager::init()
 {
     f4 = 0;
-    vt8 = g_HM_14426a0;
+    *(void* volatile*)&vt8 = g_HM_14426a0;
     vt0 = g_HM_1401510;
     vt8 = g_HM_14014f4;
-    p0c = p10 = p14 = 0;
-    p20 = p24 = p28 = 0;
+    p0c = 0; p10 = 0; p14 = 0;
+    p20 = 0; p24 = 0; p28 = 0;
     f34 = 0.0f; f38 = 0.0f; f3c = 0; f40 = 0.0f; f44 = 0.0f;
     f48 = 3; f4c = 0; f50 = 0.0f;
     return this;
@@ -722,11 +731,8 @@ void cUIHints::InitHints()
 void cUIHints::Destroy2()
 {
     char* p = (char*)this;
-    int* begin = *(int**)(p + 0x20);
-    int* end = *(int**)(p + 0x24);
-    int* r = FUN_00d3b3c0((int)end, (int)end, (int)begin);
-    ((Vec20*)(p + 0x20))->Insert(r, end);
-    *(int*)(p + 0x24) += (end - begin) * -4;
+    Vec20* v = (Vec20*)(p + 0x20);
+    v->erase(v->mpBegin, v->mpEnd);
     if (*(void**)(p + 0x3c)) {
         ((Layout0*)*(void**)(p + 0x3c))->Shutdown(1);
         if (*(void**)(p + 0x3c)) {

@@ -1456,26 +1456,30 @@ void HeadTailX::F_8f24f0(ListNodeX* node)
 }
 }}}  // namespace EA::XHTML::Layout
 
+extern "C" char g_1439a54[];   // 0x01439a54 vtable
 // @ 0x008f2550
 namespace EA { namespace XHTML { namespace Layout {
 PoolNodeX* FUN_008f2550(PoolX* pool, uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
-    if ((pool->mField08 - pool->mField0c) - 0x18 < 0) {
-        if (!pool->F_928ba0(0x18))
-            return 0;
+    if ((pool->mField08 - pool->mField0c) - 0x18 >= 0 || pool->F_928ba0(0x18)) {
+        PoolNodeX* node = (PoolNodeX*)pool->mField0c;
+        pool->mField0c = (int)((char*)node + 0x18);
+        pool->mField10 = (int)((char*)node + 0x18);
+        if (node != 0) {
+            node->mField04 = 0;
+            node->mVtable = (uint32_t)g_1439a54;
+            _ReadWriteBarrier();
+            node->mField08 = a;
+            _ReadWriteBarrier();
+            node->mField0c = b;
+            _ReadWriteBarrier();
+            node->mField10 = c;
+            _ReadWriteBarrier();
+            node->mField14 = d;
+            return node;
+        }
     }
-    PoolNodeX* node = (PoolNodeX*)pool->mField0c;
-    pool->mField0c = (int)((char*)node + 0x18);
-    pool->mField10 = (int)((char*)node + 0x18);
-    if (!node)
-        return 0;
-    node->mField04 = 0;
-    node->mVtable = 0x01439a54;
-    node->mField08 = a;
-    node->mField0c = b;
-    node->mField10 = c;
-    node->mField14 = d;
-    return node;
+    return 0;
 }
 }}}  // namespace EA::XHTML::Layout
 
@@ -1946,16 +1950,21 @@ Property_s008f_2660* CreatePropertyFunc_Length(EA::Allocator::StackAllocator_s00
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(Length_s008f_2660) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(Length_s008f_2660*)((char*)p + 0x18) = value;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(Length_s008f_2660*)((char*)p + 0x18) = value;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
@@ -1965,17 +1974,22 @@ Property_s008f_2660* CreatePropertyFunc_ushort_ushort(EA::Allocator::StackAlloca
 {
     unsigned int size = (sizeof(Property_s008f_2660) + 2 + 2 + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(unsigned short*)((char*)p + 0x18) = v;
-    *(unsigned short*)((char*)p + 0x1a) = u;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(unsigned short*)((char*)p + 0x18) = v;
+        *(unsigned short*)((char*)p + 0x1a) = u;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
@@ -1985,17 +1999,22 @@ Property_s008f_2660* CreatePropertyFunc_Length_EdgeIndex(EA::Allocator::StackAll
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(Length_s008f_2660) + sizeof(int) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(Length_s008f_2660*)((char*)p + 0x18) = value;
-    *(int*)((char*)p + 0x20) = edge;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(Length_s008f_2660*)((char*)p + 0x18) = value;
+        *(int*)((char*)p + 0x20) = edge;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
@@ -2049,16 +2068,21 @@ Property_s008f_2660* CreatePropertyFunc_uint(EA::Allocator::StackAllocator_s0092
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(unsigned int) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(unsigned int*)((char*)p + 0x18) = value;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(unsigned int*)((char*)p + 0x18) = value;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
@@ -2068,17 +2092,22 @@ Property_s008f_2660* CreatePropertyFunc_uint_EdgeIndex(EA::Allocator::StackAlloc
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(unsigned int) + sizeof(int) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(unsigned int*)((char*)p + 0x18) = value;
-    *(int*)((char*)p + 0x1c) = edge;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(unsigned int*)((char*)p + 0x18) = value;
+        *(int*)((char*)p + 0x1c) = edge;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 

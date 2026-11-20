@@ -988,15 +988,20 @@ bool cSpaceInventory::GetFreeCargoSlot(cSpaceInventoryItem*& pDst)
 // @ 0x00c874a0
 bool cSpaceInventory::CargoSlotIsFree(cSpaceInventoryItem* pSlot)
 {
-    if (pSlot == 0)
-        return false;
-    int count = (int)(mInventoryItems.mpEnd - mInventoryItems.mpBegin);
-    for (int i = 0; i < count; i++) {
-        cSpaceInventoryItem* pItem = (cSpaceInventoryItem*)mInventoryItems.mpBegin[i];
-        if (pItem->mpCargoSlot.mPtr == pSlot)
-            return false;
+    if (pSlot != 0) {
+        int count = (int)(mInventoryItems.mpEnd - mInventoryItems.mpBegin);
+        int i = 0;
+        if (count > 0) {
+            _ReadWriteBarrier();
+            do {
+                cSpaceInventoryItem* pItem = (cSpaceInventoryItem*)mInventoryItems.mpBegin[i];
+                if (pSlot == pItem->mpCargoSlot.mPtr)
+                    return false;
+            } while (++i < count);
+        }
+        return true;
     }
-    return true;
+    return false;
 }
 
 // @ 0x00c874f0

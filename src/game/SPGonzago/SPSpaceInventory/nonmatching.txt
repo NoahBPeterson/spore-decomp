@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c874a0 55 cSpaceInventory::CargoSlotIsFree: complete; loop/register scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00c87660 174 nonmatching: cSpaceInventoryItem constructor; 266 vs 198 bytes; /EHsc unwind frame and vptr store order differ. difftest UNSUPPORTED (our code stores a local vtable address where the original stores the image symbol); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c87770 149 nonmatching: cSpaceInventoryItem destructor; 203 vs 128 bytes; teardown order differs. difftest UNSUPPORTED (unresolved ??1ItemRefCount@@UAE@XZ); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c878d0 154 nonmatching: CreateMultiDeliveryObject; 185 vs 208 bytes. difftest FAIL 5/5 (memory pool @40020000); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]

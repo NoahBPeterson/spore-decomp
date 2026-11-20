@@ -583,15 +583,16 @@ bool HashKeyMap::HasKey(EString* target, unsigned key)
 // @ 0x00a6ae70
 void RefVec::resize(unsigned n)
 {
-    int have = (int)(e - b);
-    if (n > (unsigned)have) {
+    unsigned have = (unsigned)(e - b);
+    if (n > have) {
         RefObject* zero = 0;
         insert_n(e, n - have, &zero);
     } else {
-        RefObject** cut = b + n;
-        RefObject** res = (RefObject**)MoveBack12(e, e, cut);
+        RefObject** first = b + n;
+        RefObject** last = e;
+        RefObject** res = (RefObject**)MoveBack12(last, e, first);
         DestroyRange(res, e);
-        e -= e - cut;
+        e -= last - first;
     }
 }
 
@@ -639,14 +640,15 @@ SlotVec* SlotVec::init(unsigned n, unsigned unused)
 // @ 0x00a6b080
 void Vec8::resize(unsigned n)
 {
-    int have = (int)(e - b);
-    if (n > (unsigned)have) {
+    unsigned have = (unsigned)(e - b);
+    if (n > have) {
         unsigned long long zero = 0;
         insert_n(e, n - have, (const T8*)&zero);
     } else {
-        T8* cut = b + n;
-        SporeMemcpy(cut, e, (unsigned)(e - e));
-        e -= e - cut;
+        T8* first = b + n;
+        T8* last = e;
+        SporeMemcpy(first, last, (unsigned)((char*)e - (char*)last));
+        e -= last - first;
     }
 }
 

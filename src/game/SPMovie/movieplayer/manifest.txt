@@ -18,3 +18,8 @@
 ../src/game/SPMovie/movieplayer.cpp  ?Stop@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcc060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?PlayVideo@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcbe90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?PauseVideo@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcbec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoPositionX@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoPositionY@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoScaleX@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoScaleY@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?Tick@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

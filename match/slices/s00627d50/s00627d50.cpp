@@ -485,14 +485,10 @@ public:
 unsigned char cSPPlayMode::OnMouseUp(int a, float b, float c, int d)
 {
     unsigned char r = 0;
-    ISubMode** p = mSubModes;
-    int n = 4;
-    do {
-        if (*p)
-            r |= (*p)->OnMouseUp(a, b, c, d);
-        ++p;
-        --n;
-    } while (n != 0);
+    for (int i = 0; i < 4; ++i) {
+        if (mSubModes[i])
+            r |= mSubModes[i]->OnMouseUp(a, b, c, d);
+    }
     return r;
 }
 
@@ -500,14 +496,10 @@ unsigned char cSPPlayMode::OnMouseUp(int a, float b, float c, int d)
 unsigned char cSPPlayMode::OnMouseMove(float a, float b, int c)
 {
     unsigned char r = 0;
-    ISubMode** p = mSubModes;
-    int n = 4;
-    do {
-        if (*p)
-            r |= (*p)->OnMouseMove(a, b, c);
-        ++p;
-        --n;
-    } while (n != 0);
+    for (int i = 0; i < 4; ++i) {
+        if (mSubModes[i])
+            r |= mSubModes[i]->OnMouseMove(a, b, c);
+    }
     return r;
 }
 
@@ -515,14 +507,10 @@ unsigned char cSPPlayMode::OnMouseMove(float a, float b, int c)
 unsigned char cSPPlayMode::OnKeyUp(int a, int b)
 {
     unsigned char r = 0;
-    ISubMode** p = mSubModes;
-    int n = 4;
-    do {
-        if (*p)
-            r |= (*p)->OnKeyUp(a, b);
-        ++p;
-        --n;
-    } while (n != 0);
+    for (int i = 0; i < 4; ++i) {
+        if (mSubModes[i])
+            r |= mSubModes[i]->OnKeyUp(a, b);
+    }
     return r;
 }
 

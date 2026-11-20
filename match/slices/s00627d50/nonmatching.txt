@@ -1,9 +1,6 @@
 00627d50  14  cCreatureCameraBase::UpdateCamera; complete, zoom constants multiply order (dt*K1)*K2 differs; equiv PASS (400 valid, 98.2% coverage)
 00627eb0  340  cCreatureCameraBase::Update; complete, original lerps pre-translate through Vector3 operator temps (different schedule); equiv FAIL-KEPT (retail singular matrix-inverse path 0x45df90->0x45dca0 copies uninitialized stack; our frame 0x18 vs 0x14 shifts the garbage; asm/transcription not permitted)
 00628100  112  cCreatureCameraDepends::SetLocalExtents; schedule: source is semantically identical to retail (mMin = (x*scale*-0.5, y*scale*-0.5, 0), mMax = (-sx, -sy, z*scale)); retail materialises both Vector3 temps (0x18 frame, minv in [esp..8], maxv in [esp+0xc..0x14]) and interleaves the member stores, ours reuses three slots (0xc frame) and hoists the -0.5 constant; tried locals (0x18 frame and retail store order, but maxv/minv slots swapped), a reference to the extents, an array of two, and minv-first variants; none byte-exact [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory] fix1: quick check UNSUPPORTED (emulator time limit)
-00628520  56  cSPPlayMode::OnMouseUp; complete, original tests [slot] in memory then reloads it
-00628570  52  cSPPlayMode::OnMouseMove; complete, same slot-reload difference
-006285c0  39  cSPPlayMode::OnKeyUp; complete, same slot-reload difference
 00628a80  90  cSPPlayMode::GetMouthPartIdx; complete, uninitialized outIndex reproduced; equiv PASS (217 valid at --inputs 400, 100% coverage; needs --layout 0)
 00628af0  300  cSPPlayMode::OnKeyDown; complete, tab-focus branch layout and slot-reload differ
 00628ca0  130  cAppModeEditorBase::SendButtonEventToBabies; complete, original keeps the vector base pointer in esi and recomputes element addresses

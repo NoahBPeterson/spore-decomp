@@ -664,8 +664,8 @@ void Page::SetViewportSize(float w, float h)
 // @ 0x008ec910
 int Page::AddResourceSlot()
 {
+    void** pEnd = mResourceTable.mpEnd;
     eastl::fixed_vector<void*, 127>* pv = &mResourceTable;
-    void** pEnd = pv->mpEnd;
     IRefCounted* pObj = 0;
     int n = (int)(pv->mpEnd - pv->mpBegin);
     if (pEnd < pv->mpCapacity) {

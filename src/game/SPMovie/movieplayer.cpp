@@ -421,7 +421,7 @@ class MovieRenderer_s00fc_b210
     void  Prepare(void* a, void* b, void* c, void* d);   // 0x00fcbd30
     float GetVideoDelay();                               // 0x00fcbe60
     void  PlayVideo();                                   // 0x00fcbe90
-    void  PauseVideo();                                  // 0x00fcbec0
+    __declspec(noinline) void PauseVideo();             // 0x00fcbec0
     void  ResumeVideo();                                 // 0x00fcbef0
     void  SetVideoPositionX(float v);                    // 0x00fcbf10
     void  SetVideoPositionY(float v);                    // 0x00fcbf50
@@ -1244,10 +1244,14 @@ void rw::movie::MoviePlayer_s00fc_b210::Render()
 // @ 0x00fcb6e0
 void rw::movie::MoviePlayer_s00fc_b210::Tick()
 {
-    if (mState - 2 <= 2u)
+    switch (mState)
     {
+    case 2:
+    case 3:
+    case 4:
         mMovieRenderer->PauseVideo();
         mMovieTimer->Sync();
+        break;
     }
 }
 
@@ -1587,60 +1591,68 @@ void rw::movie::MovieRenderer_s00fc_b210::ResumeVideo()
 // @ 0x00fcbf10
 void rw::movie::MovieRenderer_s00fc_b210::SetVideoPositionX(float v)
 {
-    if (mState == 0)
+    switch (mState)
     {
+    case 0:
         mPosX = v;
-    }
-    else if (mState - 1 <= 1u)
-    {
+        break;
+    case 1:
+    case 2:
         mPosX = v;
         if (mVideoRenderer != 0)
             ((rw::movie::IVideoRenderer*)mVideoRenderer)->v14(v);
+        break;
     }
 }
 
 // @ 0x00fcbf50
 void rw::movie::MovieRenderer_s00fc_b210::SetVideoPositionY(float v)
 {
-    if (mState == 0)
+    switch (mState)
     {
+    case 0:
         mPosY = v;
-    }
-    else if (mState - 1 <= 1u)
-    {
+        break;
+    case 1:
+    case 2:
         mPosY = v;
         if (mVideoRenderer != 0)
             ((rw::movie::IVideoRenderer*)mVideoRenderer)->v18(v);
+        break;
     }
 }
 
 // @ 0x00fcbf90
 void rw::movie::MovieRenderer_s00fc_b210::SetVideoScaleX(float v)
 {
-    if (mState == 0)
+    switch (mState)
     {
+    case 0:
         mScaleX = v;
-    }
-    else if (mState - 1 <= 1u)
-    {
+        break;
+    case 1:
+    case 2:
         mScaleX = v;
         if (mVideoRenderer != 0)
             ((rw::movie::IVideoRenderer*)mVideoRenderer)->v2c(v);
+        break;
     }
 }
 
 // @ 0x00fcbfd0
 void rw::movie::MovieRenderer_s00fc_b210::SetVideoScaleY(float v)
 {
-    if (mState == 0)
+    switch (mState)
     {
+    case 0:
         mScaleY = v;
-    }
-    else if (mState - 1 <= 1u)
-    {
+        break;
+    case 1:
+    case 2:
         mScaleY = v;
         if (mVideoRenderer != 0)
             ((rw::movie::IVideoRenderer*)mVideoRenderer)->v30(v);
+        break;
     }
 }
 

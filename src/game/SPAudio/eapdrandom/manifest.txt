@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/SPAudio/eapdrandom.cpp  ?frandom_new@Eapd@Audio@EA@@YAPAXM@Z  00a5ed40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrandom.cpp  ?random_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5eda0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

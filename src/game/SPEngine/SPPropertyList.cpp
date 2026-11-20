@@ -363,6 +363,7 @@ struct VariantMap {
   VariantPair_s006a_22a0* InsertOrGet(const unsigned int& key, const EA::Variant_s006a_22a0& value);
   VariantPair_s006a_22a0* insert_pos(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value);
   void ClearMapOnly();
+  void DestructRange(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last);   // 0x00685a30
 };
 }
 namespace SP {
@@ -468,7 +469,7 @@ static VariantPair_s006a_22a0* PairsAllocate(unsigned int n) {
   if (n == 0) return 0;
   return new ("App/cDirectPropertyList", 0, 0, 0, 0) VariantPair_s006a_22a0[n];
 }
-void PairsCopyRange(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last, VariantPair_s006a_22a0* dst);  // 0x00612b20
+VariantPair_s006a_22a0* PairsCopyRange(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last, VariantPair_s006a_22a0* dst);  // 0x00612b20
 void __stdcall PairsDestroyRange(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last);      // 0x00685a30
 void PairsCopyBytes(void* dst, const void* src, unsigned int size);           // 0x011e0744
 static void PairsDestroy_s006a_22a0(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
@@ -1833,9 +1834,11 @@ bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant const **
 // @ 0x006a28f0
 void SP::VariantMap::ClearMapOnly()
 {
-  PairsCopy(mpBegin, mpEnd, mpEnd);
-  PairsDestroy_s006a_22a0(mpBegin, mpEnd);
-  mpEnd = ShrinkEnd(mpBegin, mpEnd);
+  VariantPair_s006a_22a0* first = mpBegin;
+  VariantPair_s006a_22a0* last = mpEnd;
+  VariantPair_s006a_22a0* res = PairsCopyRange(last, mpEnd, first);
+  DestructRange(res, mpEnd);
+  mpEnd -= last - first;
 }
 
 // @ 0x006a2940

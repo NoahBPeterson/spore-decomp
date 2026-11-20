@@ -1156,6 +1156,12 @@ struct cLocalInputState_s00d2_8900 {
     char data[0x48];
     cLocalInputState_s00d2_8900();                  // 0x00697960
 };
+struct RbTrueTag_s00d2_8900 {};
+struct RbIter_s00d2_8900 {
+    RbNode* mpNode;
+    void operator++() { mpNode = RBTreeIncrement(mpNode); }
+    bool operator!=(const RbIter_s00d2_8900& o) const { return mpNode != o.mpNode; }
+};
 struct RbTreeAnchor_s00d2_8900 {
     RbTreeAnchor_s00d2_8900* mpRight;               // +0x00
     RbTreeAnchor_s00d2_8900* mpLeft;                // +0x04
@@ -1166,9 +1172,9 @@ struct RbTreeAnchor_s00d2_8900 {
     };
     uint32_t mnSize;                     // +0x10
 
-    void Insert(void* out, const void* key, int color);  // 0x00cbae70 (thiscall, ret 0xc)
+    void Insert(void* out, const void* key, RbTrueTag_s00d2_8900 unique);  // 0x00cbae70 (thiscall, ret 0xc)
     void DestroyAll(void* node);                         // 0x00cbae20 (thiscall, ret 4)
-    void MapIterateErase(RbNode* first, RbNode* last);   // 0x00d28e10
+    void MapIterateErase(RbIter_s00d2_8900 first, RbIter_s00d2_8900 last);   // 0x00d28e10
 };
 inline SPVector3 MakeVec(float x, float y, float z)
 {
@@ -2966,13 +2972,11 @@ void cCreatureCamera_s00d2_8900::UpdateDesiredLookAt()
 }
 
 // @ 0x00d28e10
-void RbTreeAnchor_s00d2_8900::MapIterateErase(RbNode* first, RbNode* last)
+void RbTreeAnchor_s00d2_8900::MapIterateErase(RbIter_s00d2_8900 first, RbIter_s00d2_8900 last)
 {
-    while (first != last) {
-        uint32_t color = 0;
+    for (; first != last; ++first) {
         void* out[2];
-        Insert(out, &first->mKey, color);
-        first = RBTreeIncrement(first);
+        Insert(out, &first.mpNode->mKey, RbTrueTag_s00d2_8900());
     }
 }
 

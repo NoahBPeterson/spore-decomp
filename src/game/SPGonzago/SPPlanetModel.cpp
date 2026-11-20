@@ -3432,8 +3432,9 @@ void * __stdcall AllocAndCopy(u32 n, const void *pSrc, const void *pSrcEnd)
 char TileMapLookup::LookupAssign(u32 key, Vec20B *pOut)
 {
     int n = (int)(mpKeysEnd - mpKeys);
+    u32** pk = &mpKeys;
     for (int i = 0; i < n; ++i) {
-        if (mpKeys[i] == key) {
+        if ((*pk)[i] == key) {
             Vec20BAssign(pOut, &mpData[i]);
             return 1;
         }

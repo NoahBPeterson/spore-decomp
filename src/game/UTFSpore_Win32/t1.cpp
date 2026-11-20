@@ -1937,6 +1937,7 @@ kernSubTable* New_T1kernSubTable(T1Class_s008b_8f30* t, tsiMemObject* mem, uint8
     table->flags4 = 0;
     table->length = 0x14;
     table->format = 1;
+    table->data = 0;
     table->data = New_T1kernSubTable0Data(t, mem, p, length);
     result->tables[0] = table;
     return result;

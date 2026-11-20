@@ -293,14 +293,10 @@ bool SP::cApp::PreInitAppModes()
 // @ 0x007d8230
 bool SP::cApp::InitAppModes()
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    if (n > 0) {
-        SP::cAppModeInfo* p = mAppModesBegin;
-        for (int i = 0; i < n; ++i, ++p) {
-            void* mode = p->mpMode;
-            void** vt = *(void***)mode;
-            ((void(__thiscall*)(void*, void*))vt[0x10 / 4])(mode, this);
-        }
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    for (int i = 0; i < n; ++i) {
+        void* mode = mAppModesBegin[i].mpMode;
+        ((void(__thiscall*)(void*, void*))(*(void***)mode)[0x10 / 4])(mode, this);
     }
     return true;
 }
@@ -308,11 +304,14 @@ bool SP::cApp::InitAppModes()
 // @ 0x007d8270
 void* SP::cApp::AppMode(unsigned id)
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    SP::cAppModeInfo* p = mAppModesBegin;
-    for (int i = 0; i < n; ++i, ++p) {
-        if (p->mID == id)
-            return p->mpMode;
+    int i = 0;
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    if (n > 0) {
+        _ReadWriteBarrier();
+        do {
+            if (mAppModesBegin[i].mID == id)
+                return mAppModesBegin[i].mpMode;
+        } while (++i < n);
     }
     return 0;
 }
@@ -560,12 +559,16 @@ void SP::cAppModeCheat::Execute(void* args)
 // @ 0x007d8c30
 bool SP::cApp_s007d_85b0::SetAppMode(unsigned id)
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    for (int i = 0; i < n; ++i) {
-        if (mAppModesBegin[i].mID == id) {
-            ApplyAppMode(i);
-            return true;
-        }
+    int i = 0;
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    if (n > 0) {
+        _ReadWriteBarrier();
+        do {
+            if (mAppModesBegin[i].mID == id) {
+                ApplyAppMode(i);
+                return true;
+            }
+        } while (++i < n);
     }
     return false;
 }

@@ -2,3 +2,5 @@
 slices/s0092b840/s0092b840.cpp  ?WriteToBigEndian@@YAXPAXIH@Z  0092c2d0
 slices/s0092b840/s0092b840.cpp  ??0Splitable3@@QAE@PBD@Z  0092c1b0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0092b840/s0092b840.cpp  ??0Splitable4@@QAE@PBF@Z  0092c210  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0092b840/s0092b840.cpp  ?Set@SplitBase@@QAEXPBF@Z  0092c0c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0092b840/s0092b840.cpp  ?Set@SplitBase@@QAEXPBD@Z  0092c130  /O2 /MD /Gy /EHsc /TP /GS-

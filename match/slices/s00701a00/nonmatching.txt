@@ -4,8 +4,6 @@
 00702550  218  PtrVec::insert: grow path now the real eastl sequence (capacity 0 -> 1 else doubled, operator new, DoInsertValue(pNew, mpBegin, head) with `+ (head & ~3)`, `*pEnd = *value`, second DoInsertValue(pEnd+1, pos, tail), delete of the old buffer, mpBegin/mpEnd/mpCap); remaining diff is expression form / one dword of frame. equiv WEAK: 190 valid inputs of 1000, 63.0% coverage, 0 mismatches (the default 400-input run is UNSUPPORTED because most mutated vectors make the original's memcpy thunk discard)
 00702660  97  bucket-array clear; structurally complete, register allocation (index kept in eax/stack vs esi) differs
 007026d0  27  FrustumQuery wrapper; only the copy-out loop's register allocation differs (ebx+register step vs ecx+immediate)
-00702760  59  sphere-query wrapper; copy-out loop register allocation differs
-007027e0  59  segment-query wrapper; copy-out loop register allocation differs
 00702860  60  3-argument query wrapper; copy-out loop register allocation differs
 007028e0  88  eastl hashtable erase; structurally complete, register allocation differs
 00701e40  1562  cHierGrid::Query3: complete z/y/x slab traversal of the segment p0->p1 per level (third arg unused as in the original), `p1[2]` now read after the level test like the retail code. equiv FAIL on 3/15 mutated inputs, eax only: the original leaves p1 / a loop counter in eax, ours leaves another leftover; both callers (0x70280b, 0x702893) ignore eax

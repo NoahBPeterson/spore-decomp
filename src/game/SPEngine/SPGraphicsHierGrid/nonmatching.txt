@@ -13,8 +13,6 @@
 00702550 126 eastl vector<_Ty>::insert; the DoInsertValue/reallocation schedule is not reproduced
 00702660 95 bucket-array clear; structurally complete, register allocation (index kept in eax/stack vs esi) differs
 007026d0 27 FrustumQuery wrapper; only the copy-out loop's register allocation differs (ebx+register step vs ecx+immediate)
-00702760 53 sphere-query wrapper; copy-out loop register allocation differs
-007027e0 54 segment-query wrapper; copy-out loop register allocation differs
 00702860 51 3-argument query wrapper; copy-out loop register allocation differs
 007028e0 88 eastl hashtable erase; structurally complete, register allocation differs
 00702a10 226 CellMap copy constructor; complete, allocation/copy schedule differs

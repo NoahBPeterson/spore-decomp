@@ -279,6 +279,7 @@ struct BannerList {
   void* mCC;   // +0xcc vector end
   char padD0[0x14c - 0xd0];
   void* m14C;  // +0x14c
+  int FUN_00ba6dc0(unsigned id);  // 0x00ba6dc0
 };
 void FUN_00ba6cf0(BannerList* self) {
   int n = (int)(((char*)self->mCC - (char*)self->mC8)) / 0x14;
@@ -302,10 +303,10 @@ int FUN_00ba6d80(BannerList* self, unsigned id) {
 }
 
 // @ 0x00ba6dc0
-int FUN_00ba6dc0(BannerList* self, unsigned id) {
+int BannerList::FUN_00ba6dc0(unsigned id) {
   if (id == 0xffffffff) return 0;
   unsigned lo = id & 0xffffff;
-  void** inner = (void**)self->mC8;
+  void** inner = (void**)mC8;
   void* row = inner[(lo >> 0xc) * 5];
   GameObj* cell = (GameObj*)(*(int*)((char*)row + (lo & 0xfff) * 4));
   return cell->Kind2((int)(id >> 0x18));

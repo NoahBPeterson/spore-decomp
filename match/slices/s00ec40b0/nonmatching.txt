@@ -19,6 +19,5 @@
 00ec4d70   71  complete source; equiv PASS 364 valid 100% coverage (partition, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4de0   88  complete source; equiv PASS 351 valid 100% coverage (partial_sort, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4e80  179  complete source; equiv PASS 394 valid 100% coverage (introsort loop; calls tolerated as inline diffs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec4f00   56  complete source; equiv WEAK 129 valid (need 200) 83% coverage flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4f70  320  complete source; equiv not completed (per-function run exceeded 600s on the object-heavy path) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec5100   81  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

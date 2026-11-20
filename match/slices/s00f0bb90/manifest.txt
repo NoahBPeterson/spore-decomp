@@ -5,3 +5,4 @@ slices/s00f0bb90/s00f0bb90.cpp  ?FUN_00f0bdf0@@YAXHH@Z  00f0bdf0
 slices/s00f0bb90/s00f0bb90.cpp  ?FUN_00f0be80@@YAXH@Z  00f0be80
 slices/s00f0bb90/s00f0bb90.cpp  ?FUN_00f0bea0@@YAXXZ  00f0bea0
 slices/s00f0bb90/s00f0bb90.cpp  ?FUN_00f0c210@@YAXXZ  00f0c210
+slices/s00f0bb90/s00f0bb90.cpp  ?FUN_00f0c290@@YAXXZ  00f0c290  /O2 /MD /Gy /EHsc /TP

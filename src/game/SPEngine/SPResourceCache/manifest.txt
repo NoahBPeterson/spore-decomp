@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006b00a0@@YAPAXHH@Z  006b00a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?Init@Cache@@QAEXXZ  006b17a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ??1CacheMgrDtorView_6b1ab0@@QAE@XZ  006b1ab0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006b08a0@@YGPAXPAX0@Z  006b08a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

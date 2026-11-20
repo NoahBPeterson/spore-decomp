@@ -569,9 +569,7 @@ void cGroundEditorRes::ensureContainer()
     if (p1c != 0)
         return;
     void* mem = EASTL_allocator_allocate(0x60, sz_name_13f09b4, 0, 0, 0, 0);
-    void* nc = 0;
-    if (mem)
-        nc = ((C36510*)mem)->Ctor();
+    void* nc = mem ? ((C36510*)mem)->Ctor() : 0;
     void* old = p1c;
     if (nc != old) {
         if (nc)

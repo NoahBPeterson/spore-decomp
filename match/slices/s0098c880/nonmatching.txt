@@ -8,4 +8,3 @@
 0098d110  431  WinTextEdit::RecalculateLineBreaks: complete; paragraph rebuild loop, TextRunIterator frame and line-wrap store differ; difftest UNSUPPORTED (0/400 valid)
 0098d320  144  WinTextEdit::Pick: complete; upper_bound arg setup, the yy/mTextExtentY comiss operand order and block layout differ; difftest WEAK (242 valid, 52.7% coverage)
 0098d420  217  WinTextEdit::OnMouseDown: complete; the (flags>>6)&1 test is folded to test al,0x40 here vs shr eax,6/test al,1 in the original, and the double-click Stopwatch frame differs; difftest PASS (221 valid, 100% coverage)
-0098d540  65  WinTextEdit::OnMouseMove: complete; the only difference is the (flags>>6)&1 test folding to test al,0x40 vs the original's shr eax,6/test al,1; difftest UNSUPPORTED (0/400 valid, fake-arity 311)

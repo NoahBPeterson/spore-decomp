@@ -340,6 +340,12 @@ void __fastcall FUN_0079fe20(void* self) {
 }
 
 // ---------------------------------------------------------------------------
+static __forceinline void PushBackSlowElem78(VecBase* v) {
+  Elem78 tmp;
+  tmp.mKey = -2;
+  ((Tc*)(&tmp.mBody))->m_07993a0();
+  ((Tc*)v)->m_0079f8d0((int)v->mpEnd, (int)&tmp);
+}
 // @ 0x0079fef0  eastl::vector<cElement>::push_back() -- one default 0x78-byte element.
 // ---------------------------------------------------------------------------
 // @ 0x0079fef0
@@ -354,10 +360,7 @@ void __fastcall FUN_0079fef0(void* self) {
     }
     return;
   }
-  Elem78 tmp;
-  tmp.mKey = -2;
-  ((Tc*)(&tmp.mBody))->m_07993a0();
-  ((Tc*)v)->m_0079f8d0((int)v->mpEnd, (int)&tmp);
+  PushBackSlowElem78(v);
 }
 
 // ---------------------------------------------------------------------------

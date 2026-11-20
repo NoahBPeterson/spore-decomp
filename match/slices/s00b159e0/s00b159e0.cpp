@@ -272,12 +272,15 @@ void FUN_00b16450(float* v, int* list)
 {
     if (list[0] != list[1])
     {
-        float x = *(float*)((char*)list + 0x38);
         float y = *(float*)((char*)list + 0x3c);
         float z = *(float*)((char*)list + 0x40);
-        v[0] += x;
-        v[1] += y;
-        v[2] += z;
+        float x = *(float*)((char*)list + 0x38);
+        y += v[1];
+        z += v[2];
+        x += v[0];
+        v[0] = x;
+        v[1] = y;
+        v[2] = z;
     }
 }
 

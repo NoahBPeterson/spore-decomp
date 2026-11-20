@@ -29,3 +29,4 @@
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ??0cSpaceInventory@@QAE@XZ  00c87b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Write@cSpaceInventory@@QAE_NPAX@Z  00c874f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Write@cSpaceInventoryItem@@UAE_NPAX@Z  00c87580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?CargoSlotIsFree@cSpaceInventory@@UAE_NPAVcSpaceInventoryItem@@@Z  00c874a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

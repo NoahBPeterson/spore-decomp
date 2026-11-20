@@ -671,6 +671,8 @@ struct cCommandBase_s007e_4260 : cICommand_s007e_4260 {
 }
 void SetMessageString8(void* msg, int a, const char* s);   // 0x00618bd0
 void* cAppStateManager_AddAction(void* self, EA::ArgScript::cArguments_s007e_4260* args, void* msg); // 0x007e40d0
+extern "C" char g_13eb90c[];   // base message vtable
+extern "C" char g_13eb844[];   // BehaviorMessage vtable
 struct __declspec(novtable) BehaviorMessageBase {
 virtual void b0();
 virtual void b1();
@@ -693,7 +695,7 @@ virtual void b3();
     {
         field30 = 0;
         _ReadWriteBarrier();
-        *(const uint32_t**)this = (const uint32_t*)0x013eb90c;   // base vtable
+        *(const uint32_t**)this = (const uint32_t*)g_13eb90c;   // base vtable
         _ReadWriteBarrier();
         _InterlockedExchange((volatile long*)&mRefCount, 0);
     }
@@ -706,7 +708,7 @@ struct __declspec(novtable) BehaviorMessage : BehaviorMessageBase {
     {
         field38 = 0;
         _ReadWriteBarrier();
-        *(const uint32_t**)this = (const uint32_t*)0x013eb844;   // derived vtable
+        *(const uint32_t**)this = (const uint32_t*)g_13eb844;   // derived vtable
     }
 };
 static inline BehaviorMessage* NewBehaviorMessage(int msgid) {
@@ -812,8 +814,9 @@ bool cAppStateManager::Shutdown()
 bool cAppStateManager::StateOccurredPreviously(void* p)
 {
     int n = (int)((mpPrevEnd - mpPrevBegin)) - 1;
+    void*** pv = &mpPrevBegin;
     if (n >= 0) {
-        void** it = mpPrevBegin + n;
+        void** it = *pv + n;
         do {
             if (*it == p)
                 return true;
@@ -1119,10 +1122,10 @@ void cTransitionMgr::FUN_007e2ce0(int idx)
         void* msg = EAlloc6(0x40, "App", 0, 0, 0, 0);
         if (msg) {
             *(int*)((char*)msg + 0x30) = 0;
-            *(void**)msg = (void*)0x13eb90c;
+            *(void**)msg = (void*)g_13eb90c;
             *(int*)((char*)msg + 4) = 0;
             *(int*)((char*)msg + 0x38) = 0;
-            *(void**)msg = (void*)0x13eb844;
+            *(void**)msg = (void*)g_13eb844;
         }
         SetMessageString8(msg, 0, (void*)*(int*)(piVar5 + 0x3c));
         *(void**)((char*)msg + 0x10) = self;

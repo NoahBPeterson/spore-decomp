@@ -14,3 +14,4 @@
 ../src/game/Swarm/EffectsWorld.cpp  ?ResetVisualEffectDescriptions@cEffectsWorld_s00a7_1a00@@QAEXH@Z  00a72010  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/Swarm/EffectsWorld.cpp  ?FUN_00a72060@cEffectsWorld_s00a7_1a00@@QAEXH@Z  00a72060  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/Swarm/EffectsWorld.cpp  ?ResetVisualEffectDescription@cEffectsWorld_s00a7_1a00@@QAEXPAUcVisualEffect_s00a7_1a00@@@Z  00a71f90  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?Teardown@cEffectsWorld@@QAE_NXZ  00a709e0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include

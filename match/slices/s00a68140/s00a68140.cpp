@@ -121,24 +121,25 @@ void AssignPtrs(RefObj** first, RefObj** last, RefObj** src)
 // @ 0xa690d0  backward intrusive_ptr assignment
 RefObj** AssignPtrsRev(RefObj** first, RefObj** last, RefObj** dst)
 {
-    if (last == first)
-        return dst;
-    do {
-        RefObj* p = *--last;
-        RefObj* q = *--dst;
-        if (p != q) {
-            if (p)
-                p->mnRefCount++;
-            *dst = p;
-            if (q) {
-                int n = (*(volatile int*)&q->mnRefCount += -1);
-                if (n == 0) {
-                    q->mnRefCount = 1;
-                    q->ScalarDtor(1);
+    if (last != first) {
+        do {
+            RefObj* p = *--last;
+            RefObj* q = *--dst;
+            if (p != q) {
+                if (p)
+                    p->mnRefCount++;
+                *dst = p;
+                if (q) {
+                    int n = (*(volatile int*)&q->mnRefCount += -1);
+                    if (n == 0) {
+                        q->mnRefCount = 1;
+                        _ReadWriteBarrier();
+                        q->ScalarDtor(1);
+                    }
                 }
             }
-        }
-    } while (last != first);
+        } while (last != first);
+    }
     return dst;
 }
 

@@ -10,4 +10,3 @@
 00a34bf0 33 VoiceContainer::Connect: bl vs al result byte and plugin load register
 00a34d70 75 SetSendId (fixed_vector<uint> push/back overwrite): operand/branch layout
 00a34dc0 92 cEapdMessage::Init: original keeps result byte in bl (xor bl,bl) and pushes ebp
-00a34e30 61 cEapdMessage::GetNextFloat: original keeps result byte in bl

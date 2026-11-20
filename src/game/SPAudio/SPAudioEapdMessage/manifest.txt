@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPAudio/SPAudioEapdMessage.cpp  ?GetNextFloat@cEapdMessage@Audio@SP@@QAE_NPAM@Z  00a34e30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

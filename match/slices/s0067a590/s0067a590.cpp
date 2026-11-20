@@ -322,6 +322,8 @@ void cHint::dtor()
 // ===========================================================================
 // @ 0x0067B270  UI::cHintManager constructor
 // ===========================================================================
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 extern char g_HM_14426a0[];   // 0x14426a0
 extern char g_HM_1401510[];   // 0x1401510
 extern char g_HM_14014f4[];   // 0x14014f4
@@ -363,10 +365,11 @@ struct VecHM {
 // @ 0x0067b2f0
 void cHintManager::dtor()
 {
+    VecHM* v = (VecHM*)&p20;
     vt0 = g_HM_1401510;
     vt8 = g_HM_14014f4;
-    VecHM* v = (VecHM*)&p20;
-    v->clear(p20, p24);
+    _ReadWriteBarrier();
+    v->clear(v->begin, v->end);
     if (p20 && *((int*)p20 - 1) != 0)
         EASTL_deallocate(p20);
     if (p0c && *((int*)p0c - 1) != 0)

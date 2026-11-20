@@ -5,7 +5,6 @@
 00d65c40 134 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d65fe0 116 lounge vignette decision approximated; 151 vs 186 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d660a0 57 FindNext: bit tests folded to test/jns instead of shr/test; 61 bytes flags: /O2 /MD /Gy /TP /arch:SSE
-00d660e0 57 CopyFrom: compiler shrink-wraps esi and folds the sign test; 57 vs 61 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d66120 94 AssignFrom: compiler tail-merges the two payload copies; 102 vs 123 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d66250 130 complete source; not byte-exact: floorf() cannot be produced as the original inline cvtss2si/cvtsi2ss/ucomiss/cmovb sequence by this compiler (only __ftol2_sse+_floor calls); size 180 vs 200; equiv: FAIL (only eax differs, void return debris); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66320 62 complete source (all paths); not byte-exact: register allocation - compiler keeps id in esi and mpData in edi (extra push/pop edi), original uses ecx/edx/esi; size 75 vs 72; equiv: UNSUPPORTED (unresolved global sTribeFightSlotsPool); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

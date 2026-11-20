@@ -12,7 +12,6 @@
 008de9d0 153 Manager::CheckCacheInternal complete; param-slot reuse for the ref and register allocation differ (equiv UNSUPPORTED: fake-arity)
 008dead0 249 Manager::Fn8dead0 complete (vf34 6 args, vf28 4 args, tmp reuses param slot); register allocation differs (equiv FAIL only on ah of char return)
 008debf0 95 Manager::DoDatabaseChanged tree walk; codegen differs (equiv WEAK)
-008decb0 53 AutoRefCount vector destructor; register allocation differs (equiv PASS)
 008ded00 196 hash-map insert; rehash-policy template codegen differs
 008dede0 30 AutoRefCount range release; interlocked sequence codegen differs (equiv WEAK)
 008dee30 31 AutoRefObj::operator=; interlocked sequence codegen differs (equiv WEAK: 83% coverage)

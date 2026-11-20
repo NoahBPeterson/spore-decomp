@@ -53,6 +53,14 @@ void __cdecl FUN_00b737d0(V3* first, int top, int len, int pos, V3 value,
                           CmpV3 cmp);                                      // 0xb737d0
 void __cdecl FUN_00b74d60(int* base, int i, int n, int idx, int value,
                           V3 pos);                                          // 0xb74d60
+// The same 12-byte position, with a member-wise (float) copy constructor: retail copies it into
+// the outgoing argument block with three movss.
+struct PosV3 {
+    float x, y, z;
+    PosV3(const PosV3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+void __cdecl FUN_00b74d60(int* base, int i, int n, int idx, int value,
+                          PosV3 pos);                                       // 0xb74d60
 char* __cdecl FUN_00b73780(char* first, char* last, char* dst);            // 0xb73780
 char* __cdecl FUN_00b739f0(char* first, char* last, char* dst);            // 0xb739f0
 void __cdecl FUN_00b73890(void** out, char* first, char* last, char* dst,
@@ -431,7 +439,7 @@ void f_00b75620(int** first, int** last, int* pivot, float x, float y, float z)
 // 0xb75750  heap make
 // ======================================================================
 // @ 0x00b75750 f_00b75750
-void f_00b75750(int* begin, int* end, V3 pos)
+void f_00b75750(int* begin, int* end, PosV3 pos)
 {
     int n = (int)(end - begin);
     if (n < 2)

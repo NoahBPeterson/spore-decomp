@@ -112,6 +112,7 @@ struct VEVec {
     void DoInsertValue(cVisualEffect** pos, cVisualEffect* const& v);   // 0xa0a360
     void Dtor();                                                      // 0xae6970
     void erase(cVisualEffect** first, cVisualEffect** last);          // 0xe25bd0
+    void clear() { erase(mpBegin, mpEnd); }
     void Add(cVisualEffect* const& v)
     {
         if (mpEnd < mpCap) {
@@ -847,16 +848,15 @@ bool cEffectsWorld::Teardown()
     cVisualEffect** it = mVE.mpBegin;
     if (it != mVE.mpEnd) {
         do {
-            cVisualEffect* ve = *it;
-            ve->Release();
-            if (ve) {
+            (*it)->Release();
+            if (cVisualEffect* ve = *it) {
                 *it = 0;
                 ve->ReleasePrimary();
             }
             ++it;
         } while (it != mVE.mpEnd);
     }
-    mVE.erase(mVE.mpBegin, mVE.mpEnd);
+    mVE.clear();
     return true;
 }
 

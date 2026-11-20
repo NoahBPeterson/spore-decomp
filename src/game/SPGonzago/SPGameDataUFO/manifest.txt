@@ -33,3 +33,4 @@
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ??1PaintSystemExt@@UAE@XZ  00c38c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c36ee0@@YIEPAUUfo@@PAX1@Z  00c36ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?GetPos@OffsetHolder@@QAE?AUVec3@@XZ  00c38c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c37040@@YI_NPAUUfo@@PAX@Z  00c37040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1140,16 +1140,19 @@ void cCreatureDisplayStrategy::SetUIVisible(int32_t nVisible)
         mpGlobalUI->SetVisibility(nVisible);
 
     if (mpEventList != nullptr) {
-        int32_t nEntryCount = (int32_t)(((uint8_t*)mpEventList->mpEntryEnd -
-                                        (uint8_t*)mpEventList->mpEntryBegin) >> 3);
-        mpEventList->SetActive((nVisible != 0 && (uint32_t)nEntryCount > 0) ? 1 : 0);
+        if ((uint8_t)nVisible != 0 &&
+            (uint32_t)((((uint8_t*)mpEventList->mpEntryEnd -
+                         (uint8_t*)mpEventList->mpEntryBegin) >> 3)) > 0)
+            mpEventList->SetActive(1);
+        else
+            mpEventList->SetActive(0);
     }
 
     cSPUIEventLog* pEventLog = EventLog();
     if (pEventLog != nullptr)
         pEventLog->SetVisibility(nVisible);
 
-    if (nVisible == 0)
+    if ((uint8_t)nVisible == 0)
         OnCreatureModeOff();
 
     mTimerBar.SetVisibility(nVisible);
