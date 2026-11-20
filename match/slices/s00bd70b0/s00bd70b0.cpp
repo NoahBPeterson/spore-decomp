@@ -318,6 +318,15 @@ void __cdecl FUN_00bd7640(int param_1, int param_2)
         if (iVar1 != 0) FUN_00bd69d0((void*)param_1);
         if (iVar2 != 0) FUN_00bd6940((void*)param_1);
         break;
+    case 0x1f46:
+    case 0x1f47:
+    case 0x1f48:
+    case 0x1f49:
+    case 0x1f4a:
+    case 0x1f4b:
+        DAT_0168bcfc = param_2;
+        FUN_00bd68c0((void*)param_1);
+        return;
     case 0x1f41:
     case 0x1f42:
     case 0x1f43:
@@ -329,15 +338,6 @@ void __cdecl FUN_00bd7640(int param_1, int param_2)
             return;
         }
         break;
-    case 0x1f46:
-    case 0x1f47:
-    case 0x1f48:
-    case 0x1f49:
-    case 0x1f4a:
-    case 0x1f4b:
-        DAT_0168bcfc = param_2;
-        FUN_00bd68c0((void*)param_1);
-        return;
     case 0x1f4c:
         DAT_0168bcf4 = (DAT_0168bcf4 == 0);
         return;
