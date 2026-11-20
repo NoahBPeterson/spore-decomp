@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00832790  31  Subtitles::Clear: complete; virtual-call register allocation differs
 00832900  32  Subtitles ctor: vtable/Stopwatch store scheduling + buffer-init order differ
 008329b0  760  Subtitles::SetWindow: complete; typesetter/line-layout and message-text paths; residual is load scheduling (original reloads [ebp]/[ebx]), x87-vs-SSE float copies and our /GS cookie (original has none); equiv WEAK (143 valid, 7.5% cov, no mismatch, inline-calls tolerated)
 00832e70  405  cSPUISwarmEffect::PositionSwarm: complete; residual is early-branch push ordering, x87-vs-SSE for a+=b*d and the Matrix33 ctor inlined differently; equiv WEAK (258 valid, 8.6% cov, no mismatch)

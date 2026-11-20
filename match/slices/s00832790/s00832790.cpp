@@ -79,10 +79,9 @@ extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 // ---------------------------------------------------------------- SPUI subtitles
 struct Anim2 { char pad[0x20]; };
 
-struct Subtitles {
-    void*    vptr0;      // +0x00
-    uint32_t rc;         // +0x04
-    void*    vptr1;      // +0x08
+struct SubtitlesBase0 { void* vptr0; uint32_t rc; };  // +0x00
+struct SubtitlesListener { void* vptr1; };              // +0x08
+struct Subtitles : SubtitlesBase0, SubtitlesListener {
     uint32_t f0c;        // +0x0c
     char     sw[0x18];   // +0x10 stopwatch
     float    f28;        // +0x28
@@ -241,6 +240,185 @@ static inline void Image_Release(void* p) {
 
 // ================================================================ bodies
 
+struct SubP;
+struct SubP {
+    virtual void _SubP_00();
+    virtual void _SubP_04();
+    virtual void _SubP_08();
+    virtual void _SubP_0c();
+    virtual void _SubP_10();
+    virtual void _SubP_14();
+    virtual void _SubP_18();
+    virtual void _SubP_1c();
+    virtual void _SubP_20();
+    virtual void _SubP_24();
+    virtual void _SubP_28();
+    virtual void _SubP_2c();
+    virtual void _SubP_30();
+    virtual void _SubP_34();
+    virtual void _SubP_38();
+    virtual void _SubP_3c();
+    virtual void _SubP_40();
+    virtual void _SubP_44();
+    virtual void _SubP_48();
+    virtual void _SubP_4c();
+    virtual void _SubP_50();
+    virtual void _SubP_54();
+    virtual void _SubP_58();
+    virtual void _SubP_5c();
+    virtual void _SubP_60();
+    virtual void _SubP_64();
+    virtual void _SubP_68();
+    virtual void SetRect(void* r); // +0x6c
+};
+struct SubQ {
+    virtual void _SubQ_00();
+    virtual void _SubQ_04();
+    virtual void _SubQ_08();
+    virtual void _SubQ_0c();
+    virtual void _SubQ_10();
+    virtual void _SubQ_14();
+    virtual void _SubQ_18();
+    virtual void _SubQ_1c();
+    virtual void _SubQ_20();
+    virtual void _SubQ_24();
+    virtual void _SubQ_28();
+    virtual void _SubQ_2c();
+    virtual void _SubQ_30();
+    virtual void _SubQ_34();
+    virtual void _SubQ_38();
+    virtual void _SubQ_3c();
+    virtual void _SubQ_40();
+    virtual void _SubQ_44();
+    virtual void _SubQ_48();
+    virtual void _SubQ_4c();
+    virtual void _SubQ_50();
+    virtual void _SubQ_54();
+    virtual void _SubQ_58();
+    virtual void _SubQ_5c();
+    virtual void _SubQ_60();
+    virtual void _SubQ_64();
+    virtual void _SubQ_68();
+    virtual void _SubQ_6c();
+    virtual void _SubQ_70();
+    virtual void _SubQ_74();
+    virtual void _SubQ_78();
+    virtual void _SubQ_7c();
+    virtual void _SubQ_80();
+    virtual void _SubQ_84();
+    virtual void _SubQ_88();
+    virtual void _SubQ_8c();
+    virtual void _SubQ_90();
+    virtual void _SubQ_94();
+    virtual void _SubQ_98();
+    virtual void _SubQ_9c();
+    virtual void _SubQ_a0();
+    virtual void _SubQ_a4();
+    virtual void _SubQ_a8();
+    virtual void _SubQ_ac();
+    virtual void _SubQ_b0();
+    virtual void _SubQ_b4();
+    virtual void _SubQ_b8();
+    virtual void _SubQ_bc();
+    virtual void _SubQ_c0();
+    virtual void _SubQ_c4();
+    virtual void _SubQ_c8();
+    virtual void _SubQ_cc();
+    virtual void _SubQ_d0();
+    virtual void _SubQ_d4();
+    virtual void SetP(SubP* p); // +0xd8
+    virtual void _SubQ_dc();
+    virtual void SetT(void* t); // +0xe0
+};
+struct SubWinT {
+    virtual void _SubWinT_00();
+    virtual void Release(); // +0x4
+    virtual void _SubWinT_08();
+    virtual void _SubWinT_0c();
+    virtual SubQ* GetQ(); // +0x10
+    virtual void _SubWinT_14();
+    virtual void _SubWinT_18();
+    virtual void _SubWinT_1c();
+    virtual void _SubWinT_20();
+    virtual void _SubWinT_24();
+    virtual void _SubWinT_28();
+    virtual void _SubWinT_2c();
+    virtual void _SubWinT_30();
+    virtual void _SubWinT_34();
+    virtual void Reset(); // +0x38
+    virtual void _SubWinT_3c();
+    virtual void _SubWinT_40();
+    virtual void _SubWinT_44();
+    virtual void _SubWinT_48();
+    virtual void _SubWinT_4c();
+    virtual void _SubWinT_50();
+    virtual void _SubWinT_54();
+    virtual void _SubWinT_58();
+    virtual void _SubWinT_5c();
+    virtual void _SubWinT_60();
+    virtual void _SubWinT_64();
+    virtual void _SubWinT_68();
+    virtual void _SubWinT_6c();
+    virtual void _SubWinT_70();
+    virtual void _SubWinT_74();
+    virtual void _SubWinT_78();
+    virtual void _SubWinT_7c();
+    virtual void _SubWinT_80();
+    virtual void _SubWinT_84();
+    virtual void _SubWinT_88();
+    virtual void _SubWinT_8c();
+    virtual void _SubWinT_90();
+    virtual void _SubWinT_94();
+    virtual void _SubWinT_98();
+    virtual void _SubWinT_9c();
+    virtual void _SubWinT_a0();
+    virtual void _SubWinT_a4();
+    virtual void _SubWinT_a8();
+    virtual void _SubWinT_ac();
+    virtual void _SubWinT_b0();
+    virtual void _SubWinT_b4();
+    virtual void _SubWinT_b8();
+    virtual void _SubWinT_bc();
+    virtual void _SubWinT_c0();
+    virtual void _SubWinT_c4();
+    virtual void _SubWinT_c8();
+    virtual void _SubWinT_cc();
+    virtual void _SubWinT_d0();
+    virtual void _SubWinT_d4();
+    virtual void _SubWinT_d8();
+    virtual void SetP(SubP* p); // +0xdc
+};
+struct SubWinA {
+    virtual void _SubWinA_00();
+    virtual void Release(); // +0x4
+    virtual void _SubWinA_08();
+    virtual void _SubWinA_0c();
+    virtual SubP* GetP(); // +0x10
+    virtual void _SubWinA_14();
+    virtual void _SubWinA_18();
+    virtual void _SubWinA_1c();
+    virtual void _SubWinA_20();
+    virtual void _SubWinA_24();
+    virtual void _SubWinA_28();
+    virtual void _SubWinA_2c();
+    virtual void _SubWinA_30();
+    virtual void _SubWinA_34();
+    virtual void SetColor(float a, float b, float c, float d); // +0x38
+};
+struct SubSrv {
+    virtual void _SubSrv_00();
+    virtual void _SubSrv_04();
+    virtual void _SubSrv_08();
+    virtual void _SubSrv_0c();
+    virtual void _SubSrv_10();
+    virtual void _SubSrv_14();
+    virtual void _SubSrv_18();
+    virtual void _SubSrv_1c();
+    virtual void _SubSrv_20();
+    virtual void _SubSrv_24();
+    virtual void _SubSrv_28();
+    virtual void Post(struct SubtitlesListener* who, int id, int pri); // +0x2c
+};
 // @ 0x00832790
 void Subtitles::Clear()
 {
@@ -250,29 +428,24 @@ void Subtitles::Clear()
         ((VFv)FUN_008324d0)(this);
     ((void (__thiscall*)(void*, int))FUN_004c1c80)((char*)this + 0x88, 0);
     ((VFv)FUN_007f8f00)((char*)this + 0x40);
-    void* p = ((VFi)VT(mpWindow)[0x10 / 4])(mpWindow);
-    ((VFv)VT(mpTextWin)[0x38 / 4])(mpTextWin);
-    ((void (__thiscall*)(void*, void*))VT(mpTextWin)[0xdc / 4])(mpTextWin, p);
-    void* q = ((VFi)VT(mpTextWin)[0x10 / 4])(mpTextWin);
-    ((void (__thiscall*)(void*, void*))VT(q)[0xd8 / 4])(q, p);
-    q = ((VFi)VT(mpTextWin)[0x10 / 4])(mpTextWin);
-    ((void (__thiscall*)(void*, void*))VT(q)[0xe0 / 4])(q, mpTextWin);
-    ((void (__thiscall*)(void*, float, float, float, float))VT(mpWindow)[0x38 / 4])
-        (mpWindow, v78, v7c, v80, v84);
-    ((void (__thiscall*)(void*, void*))VT(p)[0x6c / 4])(p, (char*)this + 0x68);
+    SubP* p = ((SubWinA*)mpWindow)->GetP();
+    ((SubWinT*)mpTextWin)->Reset();
+    ((SubWinT*)mpTextWin)->SetP(p);
+    ((SubWinT*)mpTextWin)->GetQ()->SetP(p);
+    ((SubWinT*)mpTextWin)->GetQ()->SetT(mpTextWin);
+    ((SubWinA*)mpWindow)->SetColor(v78, v7c, v80, v84);
+    p->SetRect((char*)this + 0x68);
     if (mpTextWin != 0) {
-        void* t = mpTextWin;
+        SubWinT* t = (SubWinT*)mpTextWin;
         mpTextWin = 0;
-        ((VFv)VT(t)[4 / 4])(t);
+        t->Release();
     }
     if (mpWindow != 0) {
-        void* t = mpWindow;
+        SubWinA* t = (SubWinA*)mpWindow;
         mpWindow = 0;
-        ((VFv)VT(t)[4 / 4])(t);
+        t->Release();
     }
-    void* srv = FUN_00883860();
-    ((void (__thiscall*)(void*, void*, int, int))VT(srv)[0x2c / 4])
-        (srv, (char*)this + 8, 0x61dd1b7, -9999);
+    ((SubSrv*)FUN_00883860())->Post(static_cast<SubtitlesListener*>(this), 0x61dd1b7, -9999);
 }
 
 // @ 0x008328b0
