@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 007c9fa0  158 eastl vector DoAssignFromIterator: allocator-grow + relocate call schedule differs
 007ca060  151 eastl vector<pair> operator=: call conventions fixed (Reserve/DestroyRange are thiscall from the vector; Pair16 must be 16 bytes; size compares are unsigned) [equiv: WEAK, 861 valid inputs, 0 mismatches, 41.0% coverage; --src identical]
-007ca150  91  GetOptionIDs: prologue register allocation (this/out) and push_back load order differ
 007ca1c0  1474 cConfigManager::Initialize complete (parser setup, Options.txt, per-option property lists); block layout, register allocation and frame slots differ
 007c99e0  367/422  Vec4::InsertOne complete (EASTL intrusive-ptr insert: construct-at-end + copy_backward 0x42f5b0 + addref/release; grow = EA_New + memcpy prefix/suffix). [equiv: UNSUPPORTED, 0/400 valid inputs; fault(read) harness artifact]
 007c9bc0  431/501  Vec4::InsertN complete (free-space check, in-place shift vs uninitialized-fill + displace 0x4e8ee0, grow = EA_New + memcpy + UninitFill 0x42ed50). [equiv: WEAK, 177 valid, 15.6% coverage]

@@ -327,6 +327,17 @@ struct UIntVec {
             UIntVecPushSlow(this, &v);
         }
     }
+    void DoInsertValue(uint32_t* pos, const uint32_t& v);    // 0x004558a0 (grow path)
+    void push_back_ref(const uint32_t& v) {                  // push_back(const T&) shape
+        if (mpEnd < mpCap) {
+            uint32_t* p = mpEnd;
+            mpEnd = p + 1;
+            if (p)
+                *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
 };
 struct AutoRefVec_s007c_9910 {
     AutoRef* mpBegin;
@@ -3082,7 +3093,7 @@ void cConfigManager_s007c_9910::GetOptionIDs(UIntVec* out)
     out->reserve((unsigned)((int)((char*)mOptionsEnd - (char*)mOptionsBegin) / 0xac));
     cOption_s007c_9910* p = mOptionsBegin;
     while (p != mOptionsEnd) {
-        out->push_back(p->id);
+        out->push_back_ref(p->id);
         p++;
     }
 }
