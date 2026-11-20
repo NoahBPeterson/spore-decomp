@@ -696,7 +696,7 @@ struct IWindow {
   virtual void  Slot48();               // 0x48
   virtual void  Slot4c();               // 0x4c
   virtual void  Slot50();               // 0x50
-  virtual void  Slot54();               // 0x54
+  virtual void  Slot54(void* def, void* community);  // 0x54
   virtual void  Slot58(s32 v, void* p);  // 0x58
   virtual void  Slot5c(s32 v, void* p);  // 0x5c
   virtual void  Slot60();               // 0x60
@@ -5259,21 +5259,24 @@ u32 cCommunityEditor_s00d0_a160::UpdateVehiclePlacement()
   return 0;
 }
 
+struct NounMgr_d0b0 {
+  void  RemoveNoun(void* noun);   // 0x00b225d0
+  void* CreateNoun(u32 id);       // 0x00b20c60
+};
 // @ 0x00d0b010
 void cCommunityEditor_s00d0_a160::SetRotationRingVisibility(u8 bShow)
 {
   void* ring = mpRotationRing_bc;
   if (ring != 0) {
-    NounMgr_RemoveNoun(NounManager(ring), ring);
+    ((NounMgr_d0b0*)NounManagerObj())->RemoveNoun(ring);
     mpRotationRing_bc = 0;
   }
   if (bShow != 0 && mpRingDefinition_c4 != 0 && mpCommunity_40 != 0) {
-    void* noun = NounMgr_CreateNoun(NounManagerObj(), 0x2ee8ce8);
-    IWindow* iface = 0;
-    if (noun != 0)
-      iface = (IWindow*)((IProperty*)noun)->Slot0c(0x2ee8eeb);
+    NounMgr_d0b0* mgr = (NounMgr_d0b0*)NounManagerObj();
+    void* noun = mgr->CreateNoun(0x2ee8ce8);
+    IWindow* iface = noun ? (IWindow*)((IProperty*)noun)->Slot0c(0x2ee8eeb) : 0;
     mpRotationRing_bc = iface;
-    iface->Slot54();
+    iface->Slot54(mpRingDefinition_c4, mpCommunity_40);
   }
 }
 
