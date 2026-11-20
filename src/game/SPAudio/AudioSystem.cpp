@@ -3745,7 +3745,11 @@ struct Key16 { unsigned a, b, c, d; };
 struct PairU { unsigned first; void* second; };
 struct Tag { bool b; };
 struct HNode;
-struct HIter_s00a2_90b0 { void* node; HNode** bucket; };
+struct HIter_s00a2_90b0 {
+    void* node; HNode** bucket;
+    HIter_s00a2_90b0() {}
+    HIter_s00a2_90b0(const HIter_s00a2_90b0& x) : node(x.node), bucket(x.bucket) {}
+};
 struct InsertRes_s00a2_90b0 { void* node; HNode** bucket; bool inserted; };
 struct HNode { unsigned key; void* value; HNode* next; };
 struct FactoryB;
@@ -3852,7 +3856,7 @@ struct HTable_s00a2_90b0 {
 
     void  find(HIter_s00a2_90b0* out, const unsigned* key);                    // 0x00645ed0
     void  findKey12(HIter_s00a2_90b0* out, const void* key);                   // 0x00833840
-    void  erase(HIter_s00a2_90b0 it, HIter_s00a2_90b0* out);                              // 0x00d2c9f0
+    HIter_s00a2_90b0* erase(HIter_s00a2_90b0* out, HIter_s00a2_90b0 it);    // 0x00d2c9f0 (returns the iterator through out)
     HIter_s00a2_90b0* eraseNode(HIter_s00a2_90b0 node, HIter_s00a2_90b0* out);                       // 0x00a27660
     void  FreeBuckets(HNode** buckets, unsigned count);             // 0x00a24480
     void  InsertKey(InsertRes_s00a2_90b0* out, const unsigned* key, Tag t);    // 0x00a26be0
@@ -7922,11 +7926,12 @@ bool Sys_s00a2_90b0::UnregisterKey(void* key)
     if (!key)
         return false;
     unsigned id = ((KeyObj*)key)->GetId18();
+    HTable_s00a2_90b0* t = &mUnregTable;
     HIter_s00a2_90b0 it;
-    mUnregTable.find(&it, &id);
-    if (it.node == mUnregTable.mpBuckets[mUnregTable.mnBuckets])
+    t->find(&it, &id);
+    if (it.node == t->mpBuckets[t->mnBuckets])
         return false;
-    mUnregTable.erase(it, &it);
+    t->erase(&it, it);
     return true;
 }
 
