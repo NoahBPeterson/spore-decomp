@@ -68,7 +68,19 @@ extern "C" void   __cdecl FUN_007eb820(int);              // 0x7eb820
 extern "C" void   __cdecl FUN_00e394f0(uint32_t, void*, void*, void*, void*); // 0xe394f0
 extern "C" float  __cdecl FUN_01041cd0(float, float, float); // 0x1041cd0
 extern "C" void*  __cdecl EA_IO_WriteUint32(void*, void*, int, int); // 0x93aa70
-extern "C" int    __cdecl SP_sGetSourceLevel();           // 0xe4ee60
+static __declspec(noinline) int __fastcall SP_sGetSourceLevel(int, int level)
+{
+  if (level == 1000) return gTable_1483c14[147];
+  int i = 0;
+  if (level >= 0) {
+    int* threshold = gTable_1483c14 + 8;
+    do {
+      threshold += 7;
+      ++i;
+    } while (level >= *threshold);
+  }
+  return gTable_1483c14[i * 7];
+}           // 0xe4ee60
 extern "C" int    __fastcall SP_sGetSourceLevelReg(void* self, int level); // 0xe4ee60
 struct cVarListSerializer {
   void Ctor(int a, void* b, uint32_t c);   // 0x692f90
@@ -509,16 +521,18 @@ int FUN_00e51690(int obj) {
 int FUN_00e516c0(int obj) {
   int level = *(int*)(*(int*)((char*)gCellGame_16b3c04 + 0x5190) + 0x1c);
   int* row;
-  if (level == 1000) row = (int*)0x1483e60;
+  if (level == 1000) row = gTable_1483c14 + 147;
   else {
     int i = 0;
-    int* p = (int*)0x1483c34;
-    if (level >= 0) { do { p += 7; ++i; } while (*p <= level); }
-    row = (int*)(0x1483c14 + i * 0x1c);
+    if (level >= 0) {
+      int* p = gTable_1483c14 + 8;
+      do { p += 7; ++i; } while (level >= *p);
+    }
+    row = gTable_1483c14 + i * 7;
   }
-  int base = row[0];
-  int sl = *(int*)(obj + 0x358);
-  if (sl == -1) sl = SP_sGetSourceLevel();
+  int base = static_cast<volatile int*>(row)[0];
+  int sl = *(int*)(static_cast<volatile int&>(obj) + 0x358);
+  if (sl == -1) sl = SP_sGetSourceLevel(0, level);
   return (sl - base) + 2;
 }
 
