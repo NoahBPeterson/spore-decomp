@@ -31,3 +31,6 @@ slices/s013bed20/s013bed20.cpp  ?f_013c0fc0@@YAXXZ  013c0fc0  /O2 /MD /Gy /EHsc 
 slices/s013bed20/s013bed20.cpp  ?f_013c1ea0@@YAXXZ  013c1ea0  /O2 /MD /Gy /EHsc /TP
 slices/s013bed20/s013bed20.cpp  ?f_013c08e0@@YAXXZ  013c08e0  /O2 /MD /Gy /EHsc /TP
 slices/s013bed20/s013bed20.cpp  ?f_013c0f40@@YAXXZ  013c0f40  /O2 /MD /Gy /EHsc /TP
+slices/s013bed20/s013bed20.cpp  ?f_013c0da0@@YAXXZ  013c0da0  /O2 /MD /Gy /EHsc /TP
+slices/s013bed20/s013bed20.cpp  ?f_013c0de0@@YAXXZ  013c0de0  /O2 /MD /Gy /EHsc /TP
+slices/s013bed20/s013bed20.cpp  ?f_013c1060@@YAXXZ  013c1060  /O2 /MD /Gy /EHsc /TP
