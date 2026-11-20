@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/SPMissionWar.cpp  ?M_ReturnForRewards@@YIXPAXH@Z  00c631b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionWar.cpp  ?M_C63330@@YIXPAXH@Z  00c63330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionWar.cpp  ?M_GetProgressDisplayText@@YIXPAXH0@Z  00c63570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_GetTagString@@YI_NPAXHH0@Z  00c63740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
