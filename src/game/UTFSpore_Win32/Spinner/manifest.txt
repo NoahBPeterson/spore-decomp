@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/Spinner.cpp  ?ScalarDtor@WinSpinner@@QAEPAXI@Z  00987470  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

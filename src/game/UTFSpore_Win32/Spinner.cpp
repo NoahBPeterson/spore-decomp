@@ -235,17 +235,25 @@ void* WinSpinner::Ctor()
     return self;
 }
 
+extern "C" char g_1445060[];  // WinSpinner vtables
+extern "C" char g_1444f40[];
+extern "C" char g_1444ee8[];
+extern "C" char g_13eb938[];
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x00987470
 void* WinSpinner::ScalarDtor(unsigned flags)
 {
     WinSpinner* self = this;
-    *(void**)self = (void*)0x1445060;
-    *(void**)((char*)self + 4) = (void*)0x1444f40;
-    *(void**)((char*)self + 0x20c) = (void*)0x1444ee8;
+    *(void**)self = g_1445060;
+    *(void**)((char*)self + 4) = g_1444f40;
+    *(void**)((char*)self + 0x20c) = g_1444ee8;
+    _ReadWriteBarrier();
     void* p = self->mText;
     if (p)
         (*(void(__thiscall**)(void*))((char*)*(void**)p + 4))(p);
-    *(void**)((char*)self + 0x20c) = (void*)0x13eb938;
+    *(void**)((char*)self + 0x20c) = g_13eb938;
     ((WinBase*)self)->dtor962740();
     if (flags & 1)
         FUN_00951330(self);
