@@ -81,6 +81,14 @@ struct MyVector8 {
 };
 typedef void* (__thiscall* AddSplitInstanceFn)(void* self, void* out, int key, cSPTransform_s007e_06b0* t, int flag);
 void* AddSplitInstance(void* out, int key, cSPTransform_s007e_06b0* t, int flag);  // 0x007d7640
+struct SplitInstRef_s007e_15b0 {
+    int mKey;
+    int mIndex;
+    SplitInstRef_s007e_15b0() {}
+};
+struct SplitMgr_s007e_15b0 {
+    SplitInstRef_s007e_15b0 AddSplitInstance(int key, cSPTransform_s007e_06b0* t, int flag);  // 0x007d7640
+};
 struct VtblObj {
 virtual void v0();
 virtual void v1();
@@ -521,17 +529,11 @@ void cSplitControllerEffect::Start(int unused)
 {
     (void)unused;
     if (!field14 && mpState) {
-        int* end = (int*)vecEnd;
-        int* it = (int*)vecBegin;
-        if (it != end) {
-            do {
-                int pair[2];
-                int key = *it;
-                int* r = (int*)((AddSplitInstanceFn)AddSplitInstance)(mpState, pair, key, &mTransform, 0);
-                it[0] = r[0];
-                it[1] = r[1];
-                it += 2;
-            } while (it != end);
+        SplitInstRef_s007e_15b0* end = (SplitInstRef_s007e_15b0*)vecEnd;
+        for (SplitInstRef_s007e_15b0* it = (SplitInstRef_s007e_15b0*)vecBegin; it != end; ++it)
+        {
+            SplitMgr_s007e_15b0* mgr = (SplitMgr_s007e_15b0*)mpState;
+            *it = mgr->AddSplitInstance(it->mKey, &mTransform, 0);
         }
         field14 = 1;
     }

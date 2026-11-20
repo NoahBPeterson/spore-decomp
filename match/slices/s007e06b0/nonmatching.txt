@@ -10,4 +10,3 @@
 007e1010  80   cSplitControllerEffect::cSplitControllerEffect; vptr/field init schedule differs
 007e10c0  300  cSplitControllerEffect::AddInstance; equiv: PASS (1200 inputs, 482 valid, 100% cov) -- PreTransformBy (0x00537f40) and Propagate (0x0079a0d0) are __thiscall (ecx=this, one stack arg) called through typedef casts; the old cdecl Propagate call also unbalanced the stack because the original ends in ret 4, which corrupted the second loop iteration; the 0x78-stride instance record now names ops (+0x04) and transform (+0x08)
 007e1450  190  cSplitControllerEffect::CopyFrom; rbtree/vector copy schedule differs
-007e15b0  34   cSplitControllerEffect::Start; callee-saved register allocation differs
