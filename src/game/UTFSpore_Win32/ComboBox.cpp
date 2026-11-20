@@ -1233,13 +1233,13 @@ bool WinComboBox::SetValue(unsigned idx, const wchar_t* s)
 // @ 0x00969920
 bool WinComboBox::RemoveValue(unsigned idx)
 {
-    char* self = (char*)this;
-    unsigned count = (unsigned)((*(int*)(self + 0x40) - *(int*)(self + 0x3c)) >> 4);
-    if (idx >= count)
-        return false;
-    void* p = (char*)*(void**)(self + 0x3c) + idx * 16;
-    ((WStringVec*)(self + 0x3c))->erase(p);
-    return true;
+    WStringVec* v = (WStringVec*)((char*)this + 0x3c);
+    if (idx < (unsigned)(((int)v->mpEnd - (int)v->mpBegin) >> 4)) {
+        _ReadWriteBarrier();
+        v->erase((char*)v->mpBegin + idx * 16);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x00969950
