@@ -484,34 +484,41 @@ int32_t cInteractionStack::Count()
     return mObjects.size();
 }
 
+struct tBlockVector4Iter {
+    cInteraction**  mpCurrent;
+    cInteraction**  mpBlock;
+    cInteraction**  mpBlockEnd;
+    cInteraction*** mpBlockSlot;
+
+    tBlockVector4Iter& operator--()
+    {
+        if (mpCurrent == mpBlock) {
+            mpBlockSlot = mpBlockSlot - 1;
+            mpBlock = *mpBlockSlot;
+            mpBlockEnd = mpBlock + 64;
+            mpCurrent = mpBlockEnd;
+        }
+        --mpCurrent;
+        return *this;
+    }
+};
 // @ 0x00abf890
 cInteraction* cInteractionStack::FindActive()
 {
     tBlockVector4& vec = mObjects;
-    cInteraction** pSlot = vec.mpEnd;
     cInteraction** pBegin = vec.mpBegin;
-    cInteraction** pLastBlock = vec.mpLastBlock;
-    cInteraction*** pLastSlot = vec.mpLastBlockSlot;
-    while (pSlot != pBegin)
+    tBlockVector4Iter it;
+    it.mpCurrent = vec.mpEnd;
+    it.mpBlock = vec.mpLastBlock;
+    it.mpBlockEnd = vec.mpLastBlockEnd;
+    it.mpBlockSlot = vec.mpLastBlockSlot;
+    for (; it.mpCurrent != pBegin; --it)
     {
-        cInteraction** pLastBlockEnd = vec.mpLastBlockEnd;
-        cInteraction** pCur = pSlot;
-        if (pCur == pLastBlock)
-            pCur = pLastSlot[-1] + 64;
-        cInteraction* pObject = pCur[-1];
+        tBlockVector4Iter tmp = it;
+        --tmp;
+        cInteraction* pObject = *tmp.mpCurrent;
         if (pObject->mn6c == 0)
             return pObject;
-        if (pSlot == pLastBlock)
-        {
-            pLastBlock = pLastSlot[-1];
-            pLastSlot = pLastSlot - 1;
-            vec.mpLastBlock = pLastBlock;
-            vec.mpLastBlockSlot = pLastSlot;
-            pLastBlockEnd = pLastBlock + 64;
-            vec.mpLastBlockEnd = pLastBlockEnd;
-            pSlot = pLastBlockEnd;
-        }
-        --pSlot;
     }
     return 0;
 }
