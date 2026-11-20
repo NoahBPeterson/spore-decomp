@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 009234f0 252 ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates
 009236d0 32 Server::Release: complete; interlocked schedule + dec/sub differ
-00923700 21 LogReporter::FilterEnabled: complete; `this` in eax vs ecx
-00923740 21 LogReporter::FilterEnabled2: complete; `this` in eax vs ecx
 009237c0 95 Server::GetLogReporter: complete; vector walk/return schedule differs
 00923990 126 ITracer::Trace (needs /GS-): complete; counter/sender load order and lea-vs-inc schedule differ; difftest PASS after annotating g_timeoutP (0x143dc78) and fixing the symbol lookup (declaration comments no longer look like @ markers)
 00923ac0 91 rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)

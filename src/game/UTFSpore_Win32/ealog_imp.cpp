@@ -1221,11 +1221,12 @@ int EA::Trace::Server::Release()
 // @ 0x00923700
 int EA::Trace::LogReporter_s0092_34f0::FilterEnabled(void* rec)
 {
-    EA::Trace::LogReporter_s0092_34f0* self = this;
-    if (self->mIsEnabled && self->mFilter.mpObject != 0 && self->mFormatter.mpObject != 0) {
-        bool r = ((bool(__thiscall*)(void*, void*))(*(void***)self->mFilter.mpObject)[5])(self->mFilter.mpObject, rec);
-        if (!r)
-            return 0;
+    if (mIsEnabled) {
+        void* filter = mFilter.mpObject;
+        if (filter != 0 && mFormatter.mpObject != 0) {
+            if (!((bool(__thiscall*)(void*, void*))(*(void***)filter)[5])(filter, rec))
+                return 0;
+        }
     }
     return 1;
 }
@@ -1233,11 +1234,12 @@ int EA::Trace::LogReporter_s0092_34f0::FilterEnabled(void* rec)
 // @ 0x00923740
 int EA::Trace::LogReporter_s0092_34f0::FilterEnabled2(void* rec)
 {
-    EA::Trace::LogReporter_s0092_34f0* self = this;
-    if (self->mIsEnabled && self->mFilter.mpObject != 0 && self->mFormatter.mpObject != 0) {
-        bool r = ((bool(__thiscall*)(void*, void*))(*(void***)self->mFilter.mpObject)[4])(self->mFilter.mpObject, rec);
-        if (!r)
-            return 0;
+    if (mIsEnabled) {
+        void* filter = mFilter.mpObject;
+        if (filter != 0 && mFormatter.mpObject != 0) {
+            if (!((bool(__thiscall*)(void*, void*))(*(void***)filter)[4])(filter, rec))
+                return 0;
+        }
     }
     return 1;
 }
