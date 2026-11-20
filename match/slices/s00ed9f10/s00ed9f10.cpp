@@ -547,10 +547,10 @@ extern "C" unsigned char FUN_00edabf0(uint32_t idx)
     struct { uint32_t a; uint32_t b; uint32_t c; } key;
     key.a = *(uint32_t*)(t + 8);
     key.b = *(uint32_t*)(t + 0xc);
-    uint32_t x = *(uint32_t*)(t + 0x10);
-    uint32_t y = ((idx + 1) ^ x) & 0xff;
-    key.c = y ^ x;
+    key.c = *(uint32_t*)(t + 0x10);
+    uint32_t c = key.c ^ (((idx + 1) ^ key.c) & 0xff);
     key.b = 0x2f7d0004;
+    key.c = c;
     ResourceMan* m = ResourceMan_GetManager();
     return (unsigned char)m->Load(&key, 0, 0, 0, 0, 0);
 }
