@@ -536,7 +536,7 @@ extern float   g_f16c7b9c;        // 0x016c7b9c
 extern float   g_f16c7ba0;        // 0x016c7ba0
 extern "C" void* __cdecl operator_new6(unsigned, const char*, int, int, const char*, int); // 0xf473a0
 extern "C" void  __cdecl operator_delete_(void*);          // 0x00f47380
-extern "C" void* __fastcall FUN_00f31fd0(void* self, int dummy); // 0x00f31fd0
+extern "C" void* __fastcall FUN_00f31fd0(void* self); // 0x00f31fd0
 extern "C" void* __cdecl FUN_00efc830(void*);               // 0x00efc830
 extern "C" void* __cdecl FUN_007dcb00(void*, const void*, const void*); // 0x007dcb00
 extern "C" void  __cdecl FUN_00f01140(void*, void*, void*, int, int);   // 0x00f01140
@@ -544,7 +544,8 @@ extern "C" void  __cdecl FUN_00eec940(void*, int);          // 0x00eec940
 extern "C" void  __cdecl SP_QuaternionFromDirections(void*, const void*, const void*); // 0x698180
 extern "C" void f_eff0c0_ext();   // 0x00eff0c0
 extern "C" void f00f80_ext();     // 0x00f00f80
-extern void* g_vtbl_148b708[];   // 0x0148b708  (the PL vtable itself)
+extern "C" char g_148b708[];   // 0x0148b708  (the PL vtable itself)
+extern "C" char g_148b76c[];   // 0x0148b76c  "Simulator/ScearioMode/UI"
 extern void* g_vtbl_148b788[];   // 0x0148b788  (the ScenarioTutorialsPlacement vtable)
 struct Quat4 { float x, y, z, w; };                 // EA::Quaternion (16 bytes)
 struct Plane4 { float x, y, z, w; void build(); };  // 0x00efd8e0 (plane ctor)
@@ -1718,7 +1719,7 @@ void PL::f02670()
     b6 = 0;
     b7 = 0;
     V4_s00f0_2160 tmp;
-    V4_s00f0_2160* t = (V4_s00f0_2160*)FUN_00f31fd0(&tmp, 0);
+    V4_s00f0_2160* t = (V4_s00f0_2160*)FUN_00f31fd0(&tmp);
     V4_s00f0_2160* dst = pC;
     void* old = dst->p0;
     void* nw = t->p0;
@@ -1913,17 +1914,12 @@ void PL::f02c50()
 PL* PL::ctor_2cd0()
 {
     PL* self = this;
-    *(void**)self = g_vtbl_148b708;
+    *(void**)self = g_148b708;
     *(void**)((char*)self + 8) = 0;
     *(void**)((char*)self + 0xc) = 0;
     *(void**)((char*)self + 0x10) = 0;
-    void* m = operator_new6(0x10, (const char*)0x148b76c, 0, 0, 0, 0);
-    if (m) {
-        void* v = FUN_00f31fd0(m, 0);
-        *(void**)((char*)self + 0xc) = v;
-    } else {
-        *(void**)((char*)self + 0xc) = 0;
-    }
+    void* m = operator_new6(0x10, g_148b76c, 0, 0, 0, 0);
+    *(void**)((char*)self + 0xc) = m ? FUN_00f31fd0(m) : 0;
     self->f02670();
     return self;
 }
@@ -1932,7 +1928,7 @@ PL* PL::ctor_2cd0()
 PL* PL::f02d30(int flag)
 {
     V4_s00f0_2160* p = pC;
-    vtable = g_vtbl_148b708;
+    vtable = g_148b708;
     if (p) {
         void* o = p->p0;
         if (o) ((Ref*)o)->v4();
