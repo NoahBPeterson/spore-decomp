@@ -8,6 +8,8 @@
 //   009d0c10 ( 106B)
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include <math.h>
 #include <xmmintrin.h>
 
@@ -498,19 +500,19 @@ struct HostI {
 
 bool HostI::FUN_009d0c10()
 {
-    if (((int)((char*)end - (char*)begin) >> 2) != 2)
+    unsigned n = (unsigned)(end - begin);
+    _ReadWriteBarrier();
+    if (n != 2)
         return false;
     SA** p = begin;
-    for (int i = 0; i < 2; i++) {
-        SA*  e = p[i];
+    for (unsigned i = 0; i < n; i++, p++) {
+        SA*  e = *p;
         int** pp = (int**)e->fC8;
         int* q = *pp;
-        int arr = *(int*)((char*)q + 0x384);
-        int base = e->f58 * 0x468;
-        int sub = *(int*)(base + arr + 0x1fc);
-        base += arr;
-        int v = *(int*)(base + 0x430);
-        if (v != *(int*)(sub * 0x468 + arr + 0x1fc))
+        struct Bone468 { char pad0[0x1fc]; int parent; char pad1[0x430 - 0x200]; int id; char pad2[0x468 - 0x434]; };
+        Bone468* arr = *(Bone468**)((char*)q + 0x384);
+        Bone468* bone = &arr[e->f58];
+        if (bone->id != arr[bone->parent].parent)
             return false;
     }
     return true;
