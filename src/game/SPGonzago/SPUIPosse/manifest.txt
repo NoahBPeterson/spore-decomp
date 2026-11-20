@@ -78,3 +78,4 @@
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e23900@@YAPAXPAX00@Z  00e23900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e23950@@YAPAXPAX00@Z  00e23950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e21590@@YGIH@Z  00e21590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e23ee0@@YAPAXPAX0PAI@Z  00e23ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

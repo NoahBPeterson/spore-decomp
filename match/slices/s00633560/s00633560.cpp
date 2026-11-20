@@ -592,7 +592,7 @@ void __fastcall FUN_00634030(void* self) {
   char* s = (char*)self;
   cSPPlayModePhotoBrowser* b = (cSPPlayModePhotoBrowser*)self;
   RBTreeHead* map = &b->mPhotoTypeMap;
-  map->DoNuke(*(RBNode**)(s + 0x74));
+  map->DoNuke(map->mAnchor.parent);
   RBNode* anchor = (RBNode*)&map->mAnchor;
   map->mAnchor.left = anchor;
   map->mAnchor.parent = 0;
@@ -605,10 +605,10 @@ void __fastcall FUN_00634030(void* self) {
   b->mCurrentFirstPhotoIndex = 0;
   b->ShowImageThumbnail();
   ((PMB*)b)->UpdatePhotoCountText();
-  if (b->mPhotos.size() == 0)
-    b->mUI->SetUIGroupVisible(0x4463e78, 0);
-  else
+  if (b->mPhotos.size() > 0)
     b->mUI->SetUIGroupVisible(0x4463e78, 1);
+  else
+    b->mUI->SetUIGroupVisible(0x4463e78, 0);
 }
 
 // @ 0x006340c0
@@ -633,7 +633,7 @@ bool __fastcall FUN_006340c0(void* self) {
 // @ 0x00634380
 void cSPPlayModePhotoBrowser::SetSelectedPhoto(unsigned idx) {
   RBTreeHead* map = &mPhotoTypeMap;
-  map->DoNuke(*(RBNode**)((char*)this + 0x74));
+  map->DoNuke(map->mAnchor.parent);
   RBNode* anchor = (RBNode*)&map->mAnchor;
   map->mAnchor.right = anchor;
   map->mAnchor.left = anchor;
@@ -660,7 +660,7 @@ void __fastcall FUN_006343f0(void* self) {
     }
   }
   RBTreeHead* map = &b->mPhotoTypeMap;
-  map->DoNuke(*(RBNode**)((char*)b + 0x74));
+  map->DoNuke(map->mAnchor.parent);
   RBNode* anchor = (RBNode*)&map->mAnchor;
   map->mAnchor.right = anchor;
   map->mAnchor.left = anchor;
@@ -676,15 +676,12 @@ void __fastcall FUN_006343f0(void* self) {
   unsigned idx = b->mCurrentFirstPhotoIndex;
   unsigned nidx = idx + 5;
   b->mCurrentFirstPhotoIndex = nidx;
-  if (nidx < cnt) {
-    ((PMB*)b)->ClearLoadedPhotos();
-    b->ShowImageThumbnail();
-    ((PMB*)b)->UpdatePhotoCountText();
-  } else {
+  if (nidx >= cnt)
     b->mCurrentFirstPhotoIndex = idx;
-    b->ShowImageThumbnail();
-    ((PMB*)b)->UpdatePhotoCountText();
-  }
+  else
+    ((PMB*)b)->ClearLoadedPhotos();
+  b->ShowImageThumbnail();
+  ((PMB*)b)->UpdatePhotoCountText();
 }
 
 // ===========================================================================

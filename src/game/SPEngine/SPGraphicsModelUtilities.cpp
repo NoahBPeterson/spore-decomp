@@ -991,6 +991,7 @@ struct Ext {
   void   FUN_006913c0(void*);                  // cJob::AddWeakDependency
   bool   FUN_0068f9f0(void*, void*);           // cJob::Continuation
   void   FUN_0059c410(void*, void*);           // ReleaseAutoRefRange (ecx = &range)
+  int    FUN_00fc7e50();                       // EA::XHTML::DOM::Node::Type
 };
 struct IObject_s0075_6280 {
   virtual int AddRef();
@@ -2196,13 +2197,13 @@ void V_755570::FUN_00755570(unsigned int param_2, int param_3)
   int* param_1 = (int*)this;
   int iVar2 = param_1[1];
   unsigned int uVar3 = (unsigned int)((iVar2 - *param_1) >> 2);
-  if (uVar3 < param_2) {
+  if (param_2 > uVar3) {
     ((void (__thiscall*)(void*, int, unsigned int, int))FUN_00429e00)(this, iVar2, param_2 - uVar3, param_3);
     return;
   }
   int iVar1 = *param_1 + param_2 * 4;
   int uVar4 = FUN_006df700(iVar2, iVar2, iVar1);
-  FUN_0059c410(uVar4, param_1[1]);
+  ((Ext*)this)->FUN_0059c410((void*)uVar4, (void*)param_1[1]);
   param_1[1] = param_1[1] + ((iVar2 - iVar1 >> 2) * -4);
 }
 
@@ -2236,7 +2237,7 @@ char FUN_00755810(int a1, int a2, int a3, void* a4, int a5, int a6)
 // @ 0x00755c80
 void CS553::f55c80(void* job)
 {
-  void* mgr = GetManager_755d40();
+  void* mgr = GetManager();
   if (m20) { void* p = m20; m20 = 0; Rel0(p); }
   if (m1c) { void* p = m1c; m1c = 0; Rel0(p); }
   ((void(__thiscall*)(void*, void*, void*, void*, void*, void*, void*, void*, void*))VTSLOT(mgr, 0x10))
@@ -2245,12 +2246,11 @@ void CS553::f55c80(void* job)
   if (r) {
     void* n = ((void*(__thiscall*)(void*, void*))VTSLOT(r, 0xc))(r, (void*)0x3a212ac);
     if (n) {
-      int t = FUN_00fc7e50(n);
-      FUN_006913c0(job, (void*)t);
+      ((Ext*)job)->FUN_006913c0((void*)((Ext*)n)->FUN_00fc7e50());
     }
   }
   *(int*)((char*)job + 0x18) = 1;
-  FUN_0068f9f0(job, (void*)FUN_00755560, this);
+  ((Ext*)job)->FUN_0068f9f0((void*)FUN_00755560, this);
 }
 
 // @ 0x00755fe0

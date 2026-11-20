@@ -47,6 +47,7 @@ public:
 
 extern "C" void* SP_Pool_AllocGlobal(uint32 size, uint32* pActual, void* ctx); // 0x00928ad0
 extern "C" void  operator_delete__f47410(void* p, void* ctx);                  // 0x00f47410
+void operator_delete__(void* p);                                                 // 0x00f47380
 void EA_Text_ConvertEncoding(const wchar_t* src, int enc, int dstEnc, void* dst, uint32* pLen,
                              int a6);                                          // 0x0093c950
 
@@ -283,7 +284,7 @@ void BigFile::FUN_00929450()
     FUN_00929290();
     char* p = *(char**)this;
     if (p != 0 && *(int*)(p - 4) != 0)
-        operator_delete__f47410(p, 0);
+        operator_delete__(p);
 }
 
 // ===========================================================================

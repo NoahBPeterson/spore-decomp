@@ -268,6 +268,7 @@ struct VecEntry {           // 0x14 (POD: the 2-arg Construct does the real init
 struct EntryArrG {          // at Gcmdst+0x18 (same layout as EntryArr)
     unsigned count;
     VecEntry v;
+    EntryArrG() : count(0) { char tmp; v.Construct(0, (const Entry*)&tmp); }
     void __thiscall Insert(const Entry* e);   // 0x009e4a00
 };
 
@@ -278,7 +279,7 @@ struct Vec0C {              // 0x14
     Elem0C* e;
     Elem0C* cap;
     int     alloc[2];
-    Vec0C() : b(0), e(0), cap(0) {}
+    Vec0C() { b = 0; cap = 0; e = 0; }
     ~Vec0C() { if (b && ((int*)b)[-1]) operator delete[](b); }
     void __thiscall AddElem(const Elem0C* e);   // 0x009e1610
 };
@@ -351,14 +352,8 @@ struct RBTree {
 
 // @ 0x009e56a0
 Gcmdst::Gcmdst()
+    : count(0)
 {
-    char tmp;                    // stack temp whose address is handed to the ctor
-    count = 0;
-    v.b = 0;
-    v.e = 0;
-    v.cap = 0;
-    arr.count = 0;
-    arr.v.Construct(0, (const Entry*)&tmp);
     ResetDefault();
 }
 

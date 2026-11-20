@@ -253,12 +253,13 @@ int FUN_01021240()
 // @ 0x01021370
 void* FUN_01021370()
 {
-    void* emp = FUN_01021300();
-    if (!emp) return 0;
-    void* home = E(FUN_01021300())->FUN_00c31730();
-    if (home) return E(FUN_01021300())->FUN_00c31730();
-    void* ap = FUN_01021260();
-    return *(void**)((char*)ap + 0x13c);
+    if (FUN_01021300()) {
+        void* home = E(FUN_01021300())->FUN_00c31730();
+        if (home) return E(FUN_01021300())->FUN_00c31730();
+        void* ap = FUN_01021260();
+        return *(void**)((char*)ap + 0x13c);
+    }
+    return 0;
 }
 
 // @ 0x010213b0

@@ -1173,21 +1173,24 @@ void cPlanetModel_s00b8_d190::FUN_00b8de60()
     }
 }
 
+struct IntVec_b8dec0 {
+    int32_t* mpBegin;
+    int32_t* mpEnd;
+    int32_t size() const { return (int32_t)(mpEnd - mpBegin); }
+};
 // @ 0x00b8dec0
 int32_t cPlanetModel_s00b8_d190::FUN_00b8dec0(int32_t index)
 {
-    if (index < (int32_t)(mField160 - mField15C) >> 2) {
-        return *(int32_t*)(mField15C + index * 4);
-    }
+    if (index < ((const IntVec_b8dec0*)&mField15C)->size())
+        return ((const IntVec_b8dec0*)&mField15C)->mpBegin[index];
     return 0;
 }
 
 // @ 0x00b8def0
 int32_t cPlanetModel_s00b8_d190::FUN_00b8def0(int32_t index)
 {
-    if (index < (int32_t)(mField174 - mField170) >> 2) {
-        return *(int32_t*)(mField170 + index * 4);
-    }
+    if (index < ((const IntVec_b8dec0*)&mField170)->size())
+        return ((const IntVec_b8dec0*)&mField170)->mpBegin[index];
     return 0;
 }
 

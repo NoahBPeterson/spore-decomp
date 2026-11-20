@@ -467,12 +467,12 @@ void SerAutoUpdate::ProcessChanges()
 // @ 0x00998d30
 void __cdecl ReloadChangedLayouts(void* iface)
 {
-    unsigned ms = 100;
-    FUN_00921df0(&ms);
-    SerAutoUpdate* s = 0;
-    if (iface)
-        s = (SerAutoUpdate*)VF(iface, 0xc, void*(__thiscall*)(void*, unsigned))(iface, 0x2fbf2058);
-    s->ProcessChanges();
+    {
+        unsigned ms = 100;
+        FUN_00921df0(&ms);
+    }
+    (iface ? (SerAutoUpdate*)VF(iface, 0xc, void*(__thiscall*)(void*, unsigned))(iface, 0x2fbf2058)
+           : (SerAutoUpdate*)0)->ProcessChanges();
 }
 
 // @ 0x00998d70

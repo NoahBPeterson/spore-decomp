@@ -659,7 +659,7 @@ u8 SP::cGameEditModeStrategy::Init(int unused)
 SP::cGameEditModeStrategy::cGameEditModeStrategy()
 {
     mpVftable0 = (void**)&vtbl_1477530;
-    mpVftable4 = (void**)&vtbl_13eb384;
+    *(void** volatile*)&mpVftable4 = (void**)&vtbl_13eb384;
     mBase.ctorRaw();
     mpInputStrategy = 0;
     mpDisplayStrategy = 0;
@@ -667,6 +667,7 @@ SP::cGameEditModeStrategy::cGameEditModeStrategy()
     mpVftable4 = (void**)&vtbl_1479f10;
     mBase.mpVftable0 = (void**)&vtbl_1479ec0;
     mBase.mpVftable4 = (void**)&vtbl_1479eb8;
+    _ReadWriteBarrier();
     mpServer = 0;
     mpHandler = 0;
     mpIdArray = 0;

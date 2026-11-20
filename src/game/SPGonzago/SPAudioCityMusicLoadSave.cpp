@@ -48,6 +48,58 @@ public:
     virtual void* GetArea();
     virtual void SetFont(void* pFont);
     virtual void SetText(const wchar_t* pText);
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void SetFlag(int nFlag, int bValue);           // 0x7c
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void v90();
+    virtual void v94();
+    virtual void v98();
+    virtual void v9c();
+    virtual void va0();
+    virtual void va4();
+    virtual void va8();
+    virtual void vac();
+    virtual void vb0();
+    virtual void vb4();
+    virtual void vb8();
+    virtual void vbc();
+    virtual void vc0();
+    virtual void vc4();
+    virtual void vc8();
+    virtual void vcc();
+    virtual void vd0();
+    virtual void vd4();
+    virtual void vd8();
+    virtual void vdc();
+    virtual void ve0();
+    virtual void ve4();
+    virtual void ve8();
+    virtual void vec();
+    virtual void vf0();
+    virtual void vf4();
+    virtual void vf8();
+    virtual void vfc();
+    virtual void v100();
+    virtual void AddWinProc(IWinProc* pProc);              // 0x104
+    virtual void RemoveWinProc(IWinProc* pProc);           // 0x108
 };
 class cSPUILayout_s00ea_1900 : public IRefCounted {
 public:
@@ -258,19 +310,23 @@ void RetailCityMusic::cCityMusicLoadSave::Load()
 }
 
 // @ 0x00ea20d0
+// The retail object carries its IWinProc base at +0xc (the window procedure handed to AddWinProc).
+struct CityMusicLoadSavePad0c { virtual void v00(); uint8_t mPad04[8]; };
+struct CityMusicLoadSaveBases : CityMusicLoadSavePad0c, IWinProc {};
+
 void cCityMusicLoadSave::StartDialog(IWindow* pDialog)
 {
     BeginModal(pDialog, 0, 1);
-    pDialog->v24();
-    pDialog->v10();
+    pDialog->SetFlag(1, 1);
+    pDialog->AddWinProc((CityMusicLoadSaveBases*)this);
     mbWaitingForThumbnail = 1;
 }
 
 // @ 0x00ea2120
 void cCityMusicLoadSave::StopDialog(IWindow* pDialog)
 {
-    pDialog->v18();
-    pDialog->v24();
+    pDialog->RemoveWinProc((CityMusicLoadSaveBases*)this);
+    pDialog->SetFlag(1, 0);
     EndModal(pDialog, 0, 1);
     mbWaitingForThumbnail = 0;
 }

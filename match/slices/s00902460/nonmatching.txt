@@ -6,4 +6,3 @@
 009027b0  155  sReadString: complete; register roles (stream/out) and in-place widen loop schedule differ
 00902950  508  ReadToken: complete; register roles and local slot layout differ (alloc failure faithfully not checked)
 00902d40  186  ReadTokenList: complete; local slot order for header words differs
-009032b0  22   FreeTokenList (static helper): complete; owner arg passed on stack instead of ebx (stand-in caller added)

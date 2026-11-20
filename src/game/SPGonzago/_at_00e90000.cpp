@@ -170,15 +170,18 @@ struct cCreature
 // ---- items of slice s00e972b0 end
 
 // @ 0x00e90b50
+extern "C" char g_1486934[];
+struct ColonyCursorKey_e90b50 {
+    u32 type, group, instance;
+    ColonyCursorKey_e90b50(u32 i, u32 t, u32 g) : type(t), group(g), instance(i) {}
+};
 __declspec(noinline) void* SP::cPlaceholderColonyEditorCursorAttachment::Construct()
 {
     BaseCtor();
     Vec3 c = { 0.0f, 1.0f, 0.0f };
     mColor = c;
-    mKeyType = 0xd749c1;
-    mKeyGroup = 0;
-    mVTable = (void**)0x1486934;
-    mKeyInstance = 0x5c4fce4c;
+    mVTable = (void**)g_1486934;
+    *(ColonyCursorKey_e90b50*)&mKeyType = ColonyCursorKey_e90b50(0x5c4fce4c, 0xd749c1, 0);
     return this;
 }
 

@@ -758,8 +758,7 @@ void Cmd_ec70::Execute(void* args)
     void* r = ((Arguments*)args)->MainArguments(&args, 0, 1);
     unsigned v = 0x32;
     if ((int)args > 0)
-        v = ((unsigned (__thiscall*)(void*, void*))VT(*(void**)p4)[0x9c / 4])
-                (*(void**)p4, *(void**)r);
+        v = ((unsigned (__thiscall*)(void*, void*))VT(p4)[0x9c / 4])(p4, *(void**)r);
     p10->ActivateConsole(v);
 }
 

@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "EA/Stopwatch.h"
 #include <stddef.h>
 #include "EA/ArgScript/cIParser.h"
@@ -802,13 +804,10 @@ FileWatcher* FileWatcher::Construct()
     m_callbackData = 0;
     m_thread.Init();
     m_hFile = 0;
+    _ReadWriteBarrier();
     m_bRunning = false;
     m_path[0] = 0;
-    m_ov.Internal = 0;
-    m_ov.InternalHigh = 0;
-    m_ov.Offset = 0;
-    m_ov.OffsetHigh = 0;
-    m_ov.hEvent = 0;
+    memset(&m_ov, 0, sizeof(m_ov));
     m_hChange = 0;
     m_hEvent = 0;
     return this;

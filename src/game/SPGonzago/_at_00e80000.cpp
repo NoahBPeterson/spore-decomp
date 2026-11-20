@@ -989,8 +989,10 @@ SP::cCreatureView::cCreatureView()
 // @ 0x00e8ded0
 cNestView::cNestView()
 {
-    mColor.mX = 1.0f;
-    mColor.mY = 1.0f;
+    Vec3 c;
+    c.mX = 1.0f;
+    c.mY = 1.0f;
+    c.mZ = 1.0f;
     mpVftable = &gVtableNest;
-    mColor.mZ = 1.0f;
+    mColor = c;
 }

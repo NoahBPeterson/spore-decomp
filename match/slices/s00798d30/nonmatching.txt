@@ -2,7 +2,6 @@
 00798ed0 5 complete equivalence PASS; x87 unsigned rounding (fild/fistp + FPU control word) not reproduced
 00799110 276 complete equivalence PASS; case-body register schedule differs
 00799290 69 UNSUPPORTED only 4/400 valid inputs (fault read/write); refcounted copy kept as written
-007992e0 25 complete refcounted copy; register allocation differs
 00799320 92 complete equivalence FAIL-KEPT dead eax residue (orig leaves dest ptr in eax, ours leaves source)
 007993a0 10 complete cSplitInstance constructor; first three zero-stores scheduled differently
 007994d0 306 complete equivalence FAIL-KEPT dead eax residue (orig leaves dest ptr in eax)
