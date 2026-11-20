@@ -14,11 +14,14 @@ void EASTL_allocator_deallocate(void* p);                                       
 void FixedVec_Destroy();   // 0x004c0b80 (called on an element address)
 struct Keyed { char pad[0x60]; float k60; float k64; };
 inline float KeyOf(Keyed* p) { return p->k64 - p->k60; }
-inline bool StopCmp(Keyed* value, Keyed* cur, uint8_t desc)
+inline bool KeyLess(Keyed* value, Keyed* cur, uint8_t desc)
 {
     const float a = KeyOf(value);
     const float b = KeyOf(cur);
-    return desc ? (b <= a) : (a <= b);
+    if (desc)
+        return b > a;
+    else
+        return a > b;
 }
 void QuickSortCmp(Keyed** first, Keyed** last, int n, uint8_t desc);   // 0x0050f950
 Keyed** MedianCmp(Keyed** a, Keyed** b, Keyed** c, uint8_t d1, uint8_t d2);  // 0x005111b0
@@ -982,7 +985,7 @@ void InsertionSortCmp(Keyed** first, Keyed** last, uint8_t desc)
         for (++iSorted; iSorted != last; ++iSorted) {
             Keyed* const temp(*iSorted);
             iNext = iCurrent = iSorted;
-            for (--iCurrent; (iNext != first) && !StopCmp(temp, *iCurrent, desc); --iNext, --iCurrent)
+            for (--iCurrent; (iNext != first) && KeyLess(temp, *iCurrent, desc); --iNext, --iCurrent)
                 *iNext = *iCurrent;
             *iNext = temp;
         }
@@ -996,7 +999,7 @@ void InsertionSortSimpleCmp(Keyed** first, Keyed** last, uint8_t desc)
         Keyed** end = current;
         Keyed** prev = current;
         Keyed* value = *current;
-        for (--prev; !StopCmp(value, *prev, desc); --end, --prev)
+        for (--prev; KeyLess(value, *prev, desc); --end, --prev)
             *end = *prev;
         *end = value;
     }
