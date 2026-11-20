@@ -4,6 +4,7 @@
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb938[];
 extern "C" char g_13fb19c[];
+extern "C" char g_143f258[];   // 0x0143f258 HTTPRequest vftable
 extern "C" char g_143f23c[];
 extern "C" char g_143f240[];
 
@@ -549,14 +550,17 @@ void HeapString::push_back(char c) {
 // @ 0x009442e0  UTFInternet::HTTPRequest::HTTPRequest  (ecx = this)
 // ---------------------------------------------------------------------------
 UTFHTTPRequest* UTFHTTPRequest::Construct() {
-    *(void**)this = (void*)0x13fb19c;
+    *(void**)this = (void*)g_13fb19c;
     _InterlockedExchange((volatile long*)&mnRefCount, 0);
-    *(void**)this = (void*)0x143f258;
+    *(void**)this = (void*)g_143f258;
     mMethod.mpSelf     = mMethod.mBuffer;
+    _ReadWriteBarrier();
     mMethod.mpEnd      = mMethod.mBuffer;
     mMethod.mpBegin    = mMethod.mBuffer;
     mMethod.mpCapacity = mMethod.mpBegin + 0x10;
-    mMethod.mpBegin[0] = 0;
+    char* b = mMethod.mpBegin;
+    _ReadWriteBarrier();
+    b[0] = 0;
     m2c = 0;
     mURL.Construct();
     mStr0e0.mpSelf     = mStr0e0.mBuffer;
