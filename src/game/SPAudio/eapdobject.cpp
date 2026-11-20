@@ -429,15 +429,15 @@ t_inlet* inlet_new(t_object* owner, t_pd* dest, t_symbol s1, t_symbol s2)
 {
     t_inlet* x = (t_inlet*)pd_new(spInletClass);
     if (x) {
-        t_inlet* i2;
+        t_inlet *i2, *i3;
         x->i_owner = owner;
         x->i_dest = dest;
         x->u.i_symto = s2;
         x->i_symfrom = s1;
         x->i_next = 0;
         if ((i2 = owner->te_inlet)) {
-            for (; i2->i_next; i2 = i2->i_next)
-                ;
+            while ((i3 = i2->i_next))
+                i2 = i3;
             i2->i_next = x;
         } else {
             owner->te_inlet = x;
@@ -528,15 +528,15 @@ t_inlet* floatinlet_new(t_object* owner, float* dest)
 {
     t_inlet* x = (t_inlet*)pd_new(spFloatinletClass);
     if (x) {
-        t_inlet* i2;
+        t_inlet *i2, *i3;
         x->i_owner = owner;
         x->i_dest = 0;
         x->i_symfrom = gFloatSymbol;
         x->u.i_destp = dest;
         x->i_next = 0;
         if ((i2 = owner->te_inlet)) {
-            for (; i2->i_next; i2 = i2->i_next)
-                ;
+            while ((i3 = i2->i_next))
+                i2 = i3;
             i2->i_next = x;
         } else {
             owner->te_inlet = x;
@@ -562,15 +562,15 @@ t_inlet* symbolinlet_new(t_object* owner, t_symbol* dest)
 {
     t_inlet* x = (t_inlet*)pd_new(spSymbolinletClass);
     if (x) {
-        t_inlet* i2;
+        t_inlet *i2, *i3;
         x->i_owner = owner;
         x->i_dest = 0;
         x->i_symfrom = gSymbolSymbol;
         x->u.i_destp = dest;
         x->i_next = 0;
         if ((i2 = owner->te_inlet)) {
-            for (; i2->i_next; i2 = i2->i_next)
-                ;
+            while ((i3 = i2->i_next))
+                i2 = i3;
             i2->i_next = x;
         } else {
             owner->te_inlet = x;
