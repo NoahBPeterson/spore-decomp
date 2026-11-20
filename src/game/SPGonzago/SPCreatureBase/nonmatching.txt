@@ -68,7 +68,6 @@
 00c0f9b0 68 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) regalloc: find slot by key with index out; retail walks 0x24-strided slots comparing [p] with the key and returns p, ours re-derives &mpSlotsBegin[i] (adds begin back) after the hit; the out-parameter branch is ordered after the hit rather than inside it, fix1: quick check UNSUPPORTED (time limit)
 00c0fa10 94 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) logic: retail tests the argument (0 -> nullptr) before it loads the slot range, and walks a moving slot pointer comparing +0x20; the compare and out-parameter order still differ from retail, fix1: quick check UNSUPPORTED (time limit)
 00c0fa70 99 PASS         find animation entry by mask bit; complete; equiv PASS (400/600 inputs); not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c0fae0 17 PASS         clear animation binding + release; complete; equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0fba0 87 UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0fc40 124 UNSUPPORTED  uniquify pointer array (release dups); complete; 0 valid inputs (read fault) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0fcf0 172 UNSUPPORTED  read bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -9165,9 +9165,9 @@ void __thiscall CAN::fae0(int param_2)
     b->f0c = 0;
     b->f10 = 0;
     b->weight = 0.0f;
-    void* q = b->target;
-    if (q != 0) {
-        b->target = 0;
+    void** slot = (void**)&b->target;
+    if (void* q = *slot) {
+        *slot = 0;
         ((void (__thiscall *)(void*))(*(int**)q)[0xc0 / 4])(q);
     }
 }
