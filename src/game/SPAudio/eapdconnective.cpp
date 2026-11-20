@@ -8,6 +8,7 @@ extern "C" void FUN_00a5bea0();
 extern "C" void FUN_00a5c400();
 extern "C" char g_16753f4[];
 extern "C" char g_167562c[];
+extern "C" char g_1675648[];
 extern "C" char g_1675640[];
 extern "C" char g_1675654[];
 extern "C" char g_1675664[];
@@ -217,7 +218,7 @@ using EA::Audio::Eapd::t_symbol;
 #define g_spBangClass     (*(void**)g_1675664)
 #define g_spSendClass     (*(void**)g_1675654)
 #define g_spForwardClass  (*(void**)0x01675630u)
-#define g_spReceiveClass  (*(void**)0x01675648u)
+#define g_spReceiveClass  (*(void**)g_1675648)
 #define g_spSelectClass   (*(void**)0x0167565cu)
 #define g_spSelect2Class  (*(void**)0x01675660u)
 #define g_gFloatSymbol    (*(t_symbol*)g_16758c4)
@@ -1526,6 +1527,11 @@ void* receive_new(uint32_t a, uint32_t b)
     return o;
 }
 
+void FUN_00a4c2e0(void*);       // 0x00a4c2e0 EA::Audio::Eapd::stub_vgui
+void FUN_00a61460(void*, float); // 0x00a61460 inlet_float_all
+void FUN_00a614b0();            // 0x00a614b0 vinlet_list
+void FUN_00a614e0();            // 0x00a614e0 vinlet_anything
+
 // @ 0x00a5a1b0
 bool receive_setup()
 {
@@ -1533,18 +1539,18 @@ bool receive_setup()
 
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "receive");
     g_spReceiveClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&receive_new,
-                                                  (void*)0x00a4c2e0, 0x30, 8, 6, 0);
-    bool ok = (g_spReceiveClass != 0);
+                                                  (void*)&FUN_00a4c2e0, 0x30, 8, 6, 0);
+    unsigned char ok = (unsigned char)((g_spReceiveClass != 0) & 1);
 
     sp = EA::Audio::Eapd::gensym(&sym, "receive");
-    ok &= (EA::Audio::Eapd::class_addcreator((void*)&receive_new, sp->s_name, sp->s_name2, 6, 0) != 0);
+    ok &= (unsigned char)(int)EA::Audio::Eapd::class_addcreator((void*)&receive_new, sp->s_name, sp->s_name2, 6, 0);
 
-    ok &= (EA::Audio::Eapd::class_addbang(g_spReceiveClass, (void*)&FUN_00a59db0) != 0);
-    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spReceiveClass, (void*)0x00a61460) != 0);
-    ok &= (EA::Audio::Eapd::class_addsymbol(g_spReceiveClass, (void*)&FUN_00a5a140) != 0);
-    ok &= (EA::Audio::Eapd::class_addlist(g_spReceiveClass, (void*)0x00a614b0) != 0);
-    ok &= (EA::Audio::Eapd::class_addanything(g_spReceiveClass, (void*)0x00a614e0) != 0);
-    return ok;
+    ok &= (unsigned char)EA::Audio::Eapd::class_addbang(g_spReceiveClass, (void*)&FUN_00a59db0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_doaddfloat(g_spReceiveClass, (void*)&FUN_00a61460);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addsymbol(g_spReceiveClass, (void*)&FUN_00a5a140);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addlist(g_spReceiveClass, (void*)&FUN_00a614b0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addanything(g_spReceiveClass, (void*)&FUN_00a614e0);
+    return *(bool*)&ok;
 }
 
 // @ 0x00a5a280

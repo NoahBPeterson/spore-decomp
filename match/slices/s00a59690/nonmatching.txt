@@ -28,7 +28,6 @@
 00a5a050  forward_new         UNSUP  forward constructor (symbolinlet_new failure path)
 00a5a0a0  forward_setup       UNSUP  forward class registration
 00a5a160  receive_new         UNSUP  receive constructor (pd_bind + outlet_new)
-00a5a1b0  receive_setup       UNSUP  receive class registration
 00a5a280  FUN_00a5a280        PASS   select-1 float handler
 00a5a330  sel2_float          PASS   select-2 float handler (table scan + fan-out)
 00a5a410  select_new          UNSUP  select/select2 constructor; largest function in the slice

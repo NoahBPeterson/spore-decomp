@@ -67,3 +67,4 @@
 ../src/game/SPAudio/eapdconnective.cpp  ?moses_new@Eapd@Audio@EA@@YAPADM@Z  00a5bd50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?swap_new@Eapd@Audio@EA@@YAPADM@Z  00a5c1f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?change_new@Eapd@Audio@EA@@YAPADM@Z  00a5c3c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?receive_setup@@YA_NXZ  00a5a1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

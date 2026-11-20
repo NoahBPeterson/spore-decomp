@@ -7,7 +7,6 @@
 00a5a050 12 UNSUP  forward constructor (symbolinlet_new failure path) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a0a0 65 UNSUP  forward class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a160 33 UNSUP  receive constructor (pd_bind + outlet_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00a5a1b0 94 UNSUP  receive class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a280 25 PASS   select-1 float handler flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a330 61 PASS   select-2 float handler (table scan + fan-out) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a410 286 UNSUP  select/select2 constructor; largest function in the slice flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
