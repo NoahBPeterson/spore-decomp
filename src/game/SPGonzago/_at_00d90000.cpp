@@ -2042,12 +2042,8 @@ bool FUN_00d9b5b0(int a, int b, int c, int d, int e, int* out, int* in)
     if (in[8] != 0) v = 1i64 << in[8];
     else v = 0;
     *(long long*)(out + 6) = v;
-    int* p = in + 3;
     struct Triple { int a, b, c; };
-    Triple* t = (Triple*)p;
-    out[2] = t->a;
-    out[3] = t->b;
-    out[4] = t->c;
+    *(Triple*)(out + 2) = *(Triple*)(in + 3);
     out[5] = 0;
     (void)a;(void)b;(void)c;(void)d;(void)e;
     return true;
