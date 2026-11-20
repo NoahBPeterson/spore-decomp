@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" int atexit(void (__cdecl*)(void));              // 0x011e07ef CRT atexit
@@ -88,6 +89,7 @@ void FUN_013a55c0(void)
         p->mpVtbl  = (void*)&g_vtbl_1499738;
         p->mpVtbl2 = (void*)&g_vtbl_1499724;
         p->m74b = 1;
+        _ReadWriteBarrier();
         IntAlloc* a = (IntAlloc*)&p->mTimer.mp0c;
         memset(&a->m04, 0, 0xc);          // clears object +0x88/+0x8c/+0x90
         p->mTimer.mp14 = 0;
