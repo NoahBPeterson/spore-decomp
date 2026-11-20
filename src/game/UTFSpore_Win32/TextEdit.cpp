@@ -987,6 +987,10 @@ namespace EA {
 namespace UTFWinControls {
 void __fastcall WString_Replace(void* self, void*, const wchar_t* first, const wchar_t* last,
                                 const wchar_t* srcFirst, const wchar_t* srcLast);               // 005F8400
+struct WTextString_s0098 {                                  // eastl::basic_string<wchar_t> at +0xb0
+    WTextString_s0098& replace(wchar_t* first, wchar_t* last,
+                               const wchar_t* srcFirst, const wchar_t* srcLast);           // 005F8400
+};
 }
 }
 namespace EA {
@@ -3042,11 +3046,11 @@ void WinTextEdit_s0098_b910::ApplyUndoRedo(UndoAction* a)
 {
     uint32_t* w = (uint32_t*)a;
     uint32_t idx = w[0];
-    uint32_t tail = ((textEnd - textBegin) >> 1) - idx;
-    uint32_t cnt = (w[6] - w[5]) >> 1;
-    const uint32_t& mn = (cnt <= tail) ? cnt : tail;
-    WString_Replace((char*)this + 0xb0, 0, textBegin + idx, textBegin + (mn + idx),
-                    (wchar_t*)w[1], (wchar_t*)w[2]);
+    uint32_t cnt = (uint32_t)((wchar_t*)w[6] - (wchar_t*)w[5]);
+    uint32_t tail = (uint32_t)(textEnd - textBegin) - idx;
+    const uint32_t& mn = (tail < cnt) ? tail : cnt;
+    ((WTextString_s0098*)&textBegin)->replace(textBegin + idx, textBegin + (mn + idx),
+                                              (wchar_t*)w[1], (wchar_t*)w[2]);
     cursor = (int)w[9];
     anchor = (int)w[0xb];
 }
@@ -3058,11 +3062,11 @@ void WinTextEdit_s0098_b910::ApplyRedoUndo(UndoAction* a)
 {
     uint32_t* w = (uint32_t*)a;
     uint32_t idx = w[0];
-    uint32_t cnt = (w[2] - w[1]) >> 1;
-    uint32_t tail = ((textEnd - textBegin) >> 1) - idx;
-    const uint32_t& mn = (cnt <= tail) ? cnt : tail;
-    WString_Replace((char*)this + 0xb0, 0, textBegin + idx, textBegin + (mn + idx),
-                    (wchar_t*)w[5], (wchar_t*)w[6]);
+    uint32_t cnt = (uint32_t)((wchar_t*)w[2] - (wchar_t*)w[1]);
+    uint32_t tail = (uint32_t)(textEnd - textBegin) - idx;
+    const uint32_t& mn = (tail < cnt) ? tail : cnt;
+    ((WTextString_s0098*)&textBegin)->replace(textBegin + idx, textBegin + (mn + idx),
+                                              (wchar_t*)w[5], (wchar_t*)w[6]);
     cursor = (int)w[10];
     anchor = (int)w[0xc];
 }

@@ -27,3 +27,5 @@
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphLength@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEII@Z  0098e880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetTextExtent@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEXPAUPoint2@23@@Z  0098e9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?OnMouseMove@WinTextEdit_s0098_c880@UTFWinControls@EA@@QAE_NMMI@Z  0098d540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?ApplyUndoRedo@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z  0098bc80  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?ApplyRedoUndo@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z  0098bd00  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
