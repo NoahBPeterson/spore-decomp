@@ -64,3 +64,6 @@
 ../src/game/SPAudio/eapdconnective.cpp  ?spigot_float@Eapd@Audio@EA@@YAXPADM@Z  00a5b6a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?moses_float@Eapd@Audio@EA@@YAXPADM@Z  00a5bdb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?swap_float@Eapd@Audio@EA@@YAXPADM@Z  00a5c300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?moses_new@Eapd@Audio@EA@@YAPADM@Z  00a5bd50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?swap_new@Eapd@Audio@EA@@YAPADM@Z  00a5c1f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?change_new@Eapd@Audio@EA@@YAPADM@Z  00a5c3c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -973,6 +973,7 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 void* outlet_new(void* owner, t_symbol_s00a5_b510 a, t_symbol_s00a5_b510 b);                   // 0xa49d30
+void* outlet_new(void* owner, t_symbol_s00a5_b510 s);                                            // 0xa49d30
 }
 }
 }
@@ -2502,8 +2503,8 @@ char* moses_new(float f)
     char* x = (char*)pd_new(spMosesClass);
     if (x != 0) {
         floatinlet_new(x, x + 0x2c);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
-        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
+        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510);
         setObjP(x, 0x28, o);
         setObjF(x, 0x2c, f);
     }
@@ -2667,8 +2668,8 @@ char* swap_new(float f)
     if (x != 0) {
         setObjF(x, 0x30, f);
         setObjF(x, 0x2c, 0.0f);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
-        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
+        char* o = (char*)outlet_new(x, gFloatSymbol_s00a5_b510);
         setObjP(x, 0x28, o);
         floatinlet_new(x, x + 0x30);
     }
@@ -2725,7 +2726,7 @@ char* change_new(float f)
     char* x = (char*)pd_new(spChangeClass);
     if (x != 0) {
         setObjF(x, 0x28, f);
-        outlet_new(x, gFloatSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gFloatSymbol_s00a5_b510 /*DAT_016758c8*/);
+        outlet_new(x, gFloatSymbol_s00a5_b510);
     }
     return x;
 }
