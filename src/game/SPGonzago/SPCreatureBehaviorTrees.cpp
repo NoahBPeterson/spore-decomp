@@ -2102,17 +2102,16 @@ void FUN_00d9b770(Creature** first, Creature** last)
     }
 }
 
+// Slot-0 view of the band held in each entry (its virtual release, called with 0).
+struct cSocialBandRelease { virtual void Release(int flags); };
+
 // @ 0x00d9b7f0
 char* FUN_00d9b7f0(char* first, char* last, char* out)
 {
     while (first != last) {
-        unsigned f = *(unsigned*)first;
-        unsigned bit = f >> 31;
-        if (bit == 0) {
-            typedef void (__thiscall *RelFn)(void*, int);
-            void* obj = first + 4;
-            ((RelFn)(*(void***)obj)[0])(obj, 0);
-        }
+        if (!(bool)((*(unsigned*)first >> 31) & 1))
+            ((cSocialBandRelease*)(first + 4))->Release(0);
+
         first += 0x210;
         out += 0x210;
     }
