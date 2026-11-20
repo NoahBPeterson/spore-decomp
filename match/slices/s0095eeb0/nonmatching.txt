@@ -8,7 +8,6 @@
 0095f5c0  262  CM::SetRotationAtLeast2: complete; type is an int field (cmp dword, not a float compare), FUN_0045EAC0 returns the destination pointer; frame/register schedule differs; equiv: PASS (400 inputs, 100% coverage)
 0095f620  501  CM::Invert: complete; type-1/2/3 paths rebuilt, type-2 feeds SetAxes three stack row copies (as the original does) then Inv3; equiv PASS (400 inputs, 100% coverage); remaining diff is SSE/allocator schedule
 0095f8c0  147  ModulateARGB32: complete; all three colour terms are OR-ed then shifted right by 8 (alpha term packed separately); arithmetic schedule differs; equiv: PASS (400 inputs, 100% coverage)
-0095f960  14   Window::AsInterface: complete; shared tail branch layout differs
 0095f9a0  36   Window::Release: complete; lock xadd / vtable call schedule differs
 0095fa60  56   Window::Set1D8: complete; vtable slot 0x90/0x10 call layout differs
 0095fad0  69   Window::IsAncestorOf: complete; ancestor walk register schedule differs
