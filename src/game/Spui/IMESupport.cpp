@@ -67,11 +67,16 @@ struct TS {
   void LayoutLine(int text, int style, float a, float b, int len);
   void* GetLineLayout();
 };
+struct IMECompWindow {                 // subobject at +0x20c of IMECompColors
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual void SetColor(int index, int color);   // +0x20
+};
 struct IMECompColors {
   char pad0[4];
   char mAt4[4];        // +0x04 (subobject with a vtable)
   char pad1[0x20c - 8];
-  char mAt20c[4];      // +0x20c (subobject with a vtable)
+  IMECompWindow mAt20c; // +0x20c (subobject with a vtable)
   char pad2[0x6a8 - 0x210];
   int c6a8;            // +0x6a8
   int c6ac;            // +0x6ac
@@ -381,13 +386,12 @@ void IMECompositionBig(void* self, int a, int b)
 // @ 0x007f3a90
 void IMECompColors::SetWindowColors()
 {
-  char* p = mAt20c;
   c6ac = (int)0xff000000;
   c6b0 = (int)0xff000000;
   c6a8 = 0xffffffff;
   c6b4 = 0xff0000f0;
-  ((void(__thiscall*)(void*, int, int))VSLOT(p, 0x20))(p, 0, (int)0xff000000);
-  ((void(__thiscall*)(void*, int, int))VSLOT(p, 0x20))(p, 1, (int)0xffefefef);
+  mAt20c.SetColor(0, (int)0xff000000);
+  mAt20c.SetColor(1, (int)0xffefefef);
   ((void(__thiscall*)(void*, int))VSLOT(mAt4, 0xac))(mAt4, -1);
 }
 
