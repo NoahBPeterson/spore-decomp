@@ -11,6 +11,7 @@ extern "C" char g_1480390[];
 extern "C" char g_14803ac[];
 
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cSPMission.h"
 #include "SP/cIGonzagoSubsystem.h"
 #include "SP/cString.h"
@@ -2141,16 +2142,20 @@ int __cdecl FUN_00e1f2c0(ListRec* first, ListRec* last, void* cmp)
     return r;
 }
 
+extern "C" char g_vtbl_14803ac[];  // 0x014803ac panel vtable
+extern "C" char g_vtbl_1480390[];  // 0x01480390 its vtable at +8
+extern "C" char g_vtbl_1480388[];  // 0x01480388 its vtable at +0xc
 // @ 0x00e1f390
 void* __fastcall FUN_00e1f390(void* self)
 {
     FUN_00e18bb0(self);
-    *(void**)self = (void*)0x14803ac;
-    *(void**)((char*)self + 8) = (void*)0x1480390;
-    *(void**)((char*)self + 0xc) = (void*)0x1480388;
+    *(void**)self = g_vtbl_14803ac;
+    *(void**)((char*)self + 8) = g_vtbl_1480390;
+    *(void**)((char*)self + 0xc) = g_vtbl_1480388;
+    _ReadWriteBarrier();
     *(void**)((char*)self + 0x40) = 0;
     *(void**)((char*)self + 0x44) = 0;
-    *(void**)((char*)self + 0x48) = 0;
+    *(void* volatile*)((char*)self + 0x48) = 0;
     FUN_00e0a390((char*)self + 0x4c);
     *(void**)((char*)self + 0xbc) = 0;
     *(void**)((char*)self + 0xc0) = 0;
