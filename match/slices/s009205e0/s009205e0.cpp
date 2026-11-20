@@ -155,20 +155,21 @@ wchar_t* SkipComponentBack(wchar_t* first, wchar_t* last) {
 wchar_t* ComponentAt(wchar_t* first, wchar_t* last, int index) {
     if (index >= 0) {
         wchar_t* p = first;
-        for (index = index + 1; p < last && index > 0; --index)
+        for (++index; p < last && index > 0; --index)
             p = SkipComponent(p, last);
-        if (index == 0 && first < p && (p[-1] == L'\\' || p[-1] == L'/'))
+        if (index == 0 && p > first && (p[-1] == L'\\' || p[-1] == L'/'))
             --p;
         return p;
     }
-    if (first < last) {
-        while (index = index + 1, index < 0) {
-            last = SkipComponentBack(first, last);
-            if (last <= first)
-                return last;
+    ++index;
+    while (last > first) {
+        if (index >= 0) {
+            if (last > first && (last[-1] == L'\\' || last[-1] == L'/'))
+                --last;
+            return last;
         }
-        if (first < last && (last[-1] == L'\\' || last[-1] == L'/'))
-            --last;
+        last = SkipComponentBack(first, last);
+        ++index;
     }
     return last;
 }
