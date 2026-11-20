@@ -1516,11 +1516,10 @@ void __thiscall EA::IO::GraphicsFactoryAsyncRequest::SetProperty(int index, floa
 // @ 0x0093bbf0
 int __thiscall EA::IO::MemoryStream_s0093_b9e0::ReadBuffer(void* pData, size_type nSize)
 {
-    if (nSize != 0) {
+    if (nSize > 0) {
         size_type avail = mnSize - mnPosition;
         if (avail != 0) {
-            if (avail < nSize)
-                nSize = avail;
+            nSize = (nSize > avail) ? avail : nSize;
             MemCpyThunk(pData, (char*)mpSharedPointer->field_10 + mnPosition, nSize);
             mnPosition += nSize;
             return nSize;

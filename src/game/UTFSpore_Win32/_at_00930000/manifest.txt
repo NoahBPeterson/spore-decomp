@@ -18,3 +18,4 @@
 ../src/game/UTFSpore_Win32/_at_00930000.cpp  ?FUN_0093c430@@YIPAXPAPAX@Z  0093c430  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GetTextLine@Text@EA@@YAPBDPBD0PAPBD@Z  0093d0b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00930000.cpp  ?FUN_0093c6f0@EA@@YAXPBD@Z  0093c6f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?ReadBuffer@MemoryStream_s0093_b9e0@IO@EA@@QAEHPAXI@Z  0093bbf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
