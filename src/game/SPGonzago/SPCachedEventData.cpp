@@ -78,6 +78,7 @@ struct Rbtree {                 // eastl set header
     };
     uint32_t mField14;          // +0x14
     uint32_t mField18;          // +0x18
+    void Nuke() { ((MC*)this)->f_009a9600(mRoot); }
 };
 struct cCachedEventData {
     void*    mpVtbl;            // +0x00
@@ -114,13 +115,14 @@ struct cCachedEventData {
 };
 // ---- items of slice s00fe68a0 end
 
+extern "C" char g_13eb394[];   // IHandler vtable
 // @ 0x00fe6a00
 cCachedEventData::~cCachedEventData()
 {
-    ((MC*)&mInactivePlayers)->f_009a9600(mInactivePlayers.mRoot);
-    ((MC*)&mActiveEmpires)->f_009a9600(mActiveEmpires.mRoot);
-    ((MC*)&mLocalEmpires)->f_009a9600(mLocalEmpires.mRoot);
-    ((MC*)&mNearbyEmpires)->f_009a9600(mNearbyEmpires.mRoot);
+    mInactivePlayers.Nuke();
+    mActiveEmpires.Nuke();
+    mLocalEmpires.Nuke();
+    mNearbyEmpires.Nuke();
 
     ((MC*)&mNearbyKnownEmpireStars)->f_00ae6970();
     ((MC*)&mNearbyEmpireStars)->f_00ae6970();
@@ -135,7 +137,7 @@ cCachedEventData::~cCachedEventData()
         FUN_00571db0(h, (void*)(uintptr_t)mArg08, (void*)(uintptr_t)mArg0c,
                      (void*)(uintptr_t)mArg10, (void*)(uintptr_t)mArg14);
     }
-    mpVtbl = (void*)0x13eb394;
+    mpVtbl = g_13eb394;
 }
 
 // @ 0x00fe6ad0
