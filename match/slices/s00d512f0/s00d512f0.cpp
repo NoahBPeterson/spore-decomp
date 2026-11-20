@@ -580,9 +580,12 @@ void DramaManager::Method1700(u32 arg)
     if (o == 0)
         return;
 
-    u32 v = o->mCounters[0x5f10cdd];
-    o->mCounters[0x5f10cdd] = v + 1;
-    if (v + 1 == o->mCounters[0x5f10ce1])
+    key = 0x5f10cdd;
+    u32 v = o->mCounters[key] + 1;
+    key = 0x5f10cdd;
+    o->mCounters[key] = v;
+    key = 0x5f10ce1;
+    if (v == o->mCounters[key])
         o->FUN_00d4edd0(0x5f11333, *(volatile u32*)&arg);
 }
 
