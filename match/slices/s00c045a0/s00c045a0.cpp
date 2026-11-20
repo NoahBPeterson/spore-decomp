@@ -454,11 +454,16 @@ void __thiscall CreatureBase::OnStartSwimming()
     FUN_00d2e580(this);
 }
 
+extern "C" char g_1654c10[];
+struct CreatureBase_c22210 {
+  void FUN_00c22210(int mode);   // 0x00c22210 (thiscall)
+  void FUN_00c042e0();           // 0x00c042e0 (thiscall)
+};
 // @ 0x00c04dd0
 void __thiscall CreatureBase::Sub4dd0(int mode)
 {
-  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
-    FUN_00c22210(this, mode);
+  if (SP_GetCurrentGameMode() == (void*)g_1654c10) {
+    ((CreatureBase_c22210*)this)->FUN_00c22210(mode);
     return;
   }
   if (mB34 == mode)
@@ -469,10 +474,11 @@ void __thiscall CreatureBase::Sub4dd0(int mode)
     mState1688 = 1;
     return;
   }
-  FUN_00c22210(this, mode);
-  if ((((unsigned)mFlags0b58 >> 9) & 1) == 0) {
+  ((CreatureBase_c22210*)this)->FUN_00c22210(mode);
+  bool noRefresh = (((unsigned)mFlags0b58 >> 9) & 1) != 0;
+  if (!noRefresh) {
     FUN_00c0d3a0(this);
-    FUN_00c042e0(this);
+    ((CreatureBase_c22210*)this)->FUN_00c042e0();
   }
   FUN_00c035f0(this);
 }
