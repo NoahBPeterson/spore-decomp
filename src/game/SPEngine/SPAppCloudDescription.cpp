@@ -1240,12 +1240,18 @@ void BattleCommand::FloatListCommand(EA::ArgScript::cArguments_s007e_d1b0* args)
   FloatVec& sv = mDesc->mScaleVec;
   sv.erase(sv.mpBegin, sv.mpEnd);
   for (int i = 0; i < count; ++i)
-    mDesc->mScaleVec.push_back(ArgToFloat(mIface, list[i]));
+    mDesc->mScaleVec.push_back(((ArgConverter*)mIface)->ToFloat(list[i]));
   char* text = (*args)[0];
   if (StrStr(text, "255") != 0) {
-    const float k = kInv255;
     FloatVec& v = mDesc->mScaleVec;
-    for (uint32_t i = 0; i < v.size(); ++i) v[i] *= k;
+    uint32_t i = 0;
+    if (i < v.size()) {
+      const float k = kInv255;
+      do {
+        v[i] *= k;
+        ++i;
+      } while (i < v.size());
+    }
   }
 }
 

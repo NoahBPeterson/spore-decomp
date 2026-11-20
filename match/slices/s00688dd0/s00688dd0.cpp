@@ -689,7 +689,6 @@ struct CMessageCommandDispatcher : IDispBase, GmeRC {
     ArcRef           mpIn;       // +0x38
     ArcRef           mpOut;      // +0x3c
     ArcRef           mpGen;      // +0x40
-    CMessageCommandDispatcher();
     ~CMessageCommandDispatcher();
     int ExecuteCommand(unsigned id, ParamSetObj* in, ParamSetObj* out);
 };
@@ -770,13 +769,7 @@ int CMessageCommandDispatcher::ExecuteCommand(unsigned id, ParamSetObj* in, Para
     return result;
 }
 
-// ===========================================================================
-// (see marker at definition) App::cMessageCommandDispatcher constructor
-// ===========================================================================
-// @ 0x00689D40
-CMessageCommandDispatcher::CMessageCommandDispatcher()
-{
-}
+// App::cMessageCommandDispatcher constructor is defined in command_dispatcher.cpp.
 // --- equivalence checker address annotations
     void SP_MessageServer(...); // 0x0067dcc0
 

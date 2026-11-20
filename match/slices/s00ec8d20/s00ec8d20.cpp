@@ -8,6 +8,8 @@ struct Ctx;
 struct Pair { int key; int val; };
 
 // ------------------------------------------------------------------ globals
+extern "C" char g_13f09b4[];  // Allocator name "Simulator"
+extern "C" char g_13ebb38[];  // Allocator source file
 extern int  g_14892a8[];      // 0x014892a8
 extern int* g_16c75a0;        // current insert pointer
 extern int* g_16c75a4;        // end
@@ -221,17 +223,18 @@ int* RbTree::Insert(int* param_2, int param_3, int* param_4, char param_5)
 {
     int param_1 = (int)this;
     unsigned dir;
-    if (param_5 == 0 && param_3 != param_1 + 4 && *(int*)(param_3 + 0x10) <= *param_4)
+    if (param_5 == 0 && param_3 != param_1 + 4 && *param_4 >= *(int*)(param_3 + 0x10))
         dir = 1;
     else
         dir = 0;
-    int node = (int)FUN_00f473a0(0x28, (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    int node = (int)FUN_00f473a0(0x28, g_13f09b4, 0, 0, g_13ebb38, 0xd1);
     if ((char*)node + 0x10)
         ((KeyNode*)((char*)node + 0x10))->FUN_01012f30(param_4);
     RBTreeInsert(node, param_3, param_1 + 4, dir);
+    int* out = *static_cast<int* volatile*>(&param_2);
     *(int*)(param_1 + 0x14) += 1;
-    *param_2 = node;
-    return param_2;
+    *out = node;
+    return out;
 }
 
 // ------------------------------------------------------------------ 0x00ec9250

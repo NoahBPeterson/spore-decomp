@@ -18,6 +18,7 @@ struct DispatcherInterface : Unknown32 {
 struct RefCount {
     virtual ~RefCount() {}  // body 0x005725f0; deleting helper 0x0041d780
     int count;
+    RefCount() : count(0) {}
 };
 struct MessageInterface : Unknown32 {
     virtual void* AsInterface(unsigned id) = 0;
@@ -32,12 +33,12 @@ struct MessageBasic2 {
 };
 // Release is dispatched through slot 1 of each runtime parameter object.
 struct RefObject {
-    virtual void Slot0();
+    virtual void AddRef();
     virtual void Release();
 };
 struct MessageRef {
     RefObject* p;
-    MessageRef() : p(0) {}
+    MessageRef() : p(0) { if (p) p->AddRef(); }
     ~MessageRef() { if (p) p->Release(); }
 };
 struct DispatcherMessage : MessageInterface, MessageBasic2 {
@@ -60,6 +61,7 @@ struct Dispatcher : DispatcherInterface, RefCount {
     virtual int AddRef();  // 0x00c6a960
     virtual int Release();  // 0x007b86e0
     virtual void* AsInterface(unsigned id);  // 0x00689660
+    Dispatcher();
     ~Dispatcher();  // body 0x00689880; deleting helper 0x00689da0
     virtual int ExecuteCommand(unsigned id, ParameterSet* in, ParameterSet* out);  // 0x006899d0
 };
@@ -72,4 +74,7 @@ struct Dispatcher : DispatcherInterface, RefCount {
 // 0x00689640, 0x00a42730, and 0x00ff35d0.
 // @ 0x00689880
 Dispatcher::~Dispatcher() {}
+
+// @ 0x00689d40
+Dispatcher::Dispatcher() {}
 }

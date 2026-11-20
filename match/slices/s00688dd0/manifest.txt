@@ -14,3 +14,4 @@ slices/s00688dd0/s00688dd0.cpp  ?ExecuteCommand@StringCmdGenExec@@QAEHII@Z  0068
 slices/s00688dd0/s00688dd0.cpp  ?SetStatusParameterValue@ParamSetStatus@@QAEXH@Z  00689c80  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00688dd0/command_dispatcher.cpp  ??1Dispatcher@DispatcherReconstruction@@UAE@XZ  00689880  /O2 /MD /Gy /EHsc /TP /GS- /GR-
 slices/s00688dd0/s00688dd0.cpp  ?PostMsgA@@YAXH@Z  00688dd0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00688dd0/command_dispatcher.cpp  ??0Dispatcher@DispatcherReconstruction@@QAE@XZ  00689d40  /O2 /MD /Gy /EHsc /TP /GS-
