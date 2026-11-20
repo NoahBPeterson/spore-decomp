@@ -24,3 +24,4 @@
 ../src/game/SPGonzago/SPTribePlanner.cpp  ?Init@WorkerIter@@QAEAAU1@PAUWorkerList_s00ce_1390@@PBUWorkerFilter@@@Z  00ce0b20  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribePlanner.cpp  ?PLANNER_STEALING_FOOD_Activate@@YA_NPAUcTribePlannerContext@@HHHHPAUStealState@@@Z  00ce1690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce0d90@@YAHPAD00@Z  00ce0d90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce0e00@@YGXPAD0@Z  00ce0e00  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

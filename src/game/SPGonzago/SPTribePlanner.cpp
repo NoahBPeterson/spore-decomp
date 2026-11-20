@@ -1406,9 +1406,8 @@ void __stdcall FUN_00ce0e00(char* pBegin, char* pEnd)
 {
     for (; pBegin < pEnd; pBegin += 0x58) {
         cTribePlanData* pData = (cTribePlanData*)pBegin;
-        int** ppIter = (int**)&pData->mWorkers.mpBegin;
-        int** ppEnd = (int**)&pData->mWorkers.mpEnd;
-        for (ppIter = (int**)&pData->mWorkers.mpBegin; ppIter < ppEnd; ++ppIter) {
+        void** ppEnd = (void**)pData->mWorkers.mpEnd;
+        for (void** ppIter = (void**)pData->mWorkers.mpBegin; ppIter < ppEnd; ++ppIter) {
             if (*ppIter)
                 (*(void (__thiscall**)(void*))(*(int*)*ppIter + 4)) (*ppIter);
         }
