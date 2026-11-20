@@ -1377,6 +1377,8 @@ struct cSortTriple {                                                    // 12-by
     float mX;                                                           // +0x00
     float mY;                                                           // +0x04
     uint32_t mZ;                                                        // +0x08 (third word copied as an integer)
+    cSortTriple() {}
+    cSortTriple(const cSortTriple& o) : mX(o.mX), mY(o.mY), mZ(o.mZ) {}
 };
 struct cRunInfo {                                                       // 16-byte typesetter run
     float mX;                                                           // +0x00
