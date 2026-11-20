@@ -216,7 +216,8 @@ extern "C" void* interface_cast_Building(int a);                           // 0x
 // Other interface classes reached through thiscall helpers.
 struct NounMgr     { int GetAvatar(); };              // 0xb1fdb0
 struct GameData    { int Get(); };                    // 0xb18530
-struct RecOwner    { void slot(void* a, void* b, int c); };   // 0xde5df0
+struct BoolTag_f09910 { bool b; };   // bool tag passed by value
+struct RecOwner    { void slot(void* a, void* b, BoolTag_f09910 c); };   // 0xde5df0
 struct Day78       { void slot(int a, void* rec, void* flag); }; // 0xf19e70
 
 extern "C" char g_eastlAllocator;    // 0x13ebb38 (EASTL allocator instance)
@@ -725,7 +726,9 @@ void AttachTaskRecord(int a, int b, uint rec)
     FUN_00b6d160(a, b);
     if (rec != 0) {
         local = ((GameData*)a)->Get();
-        ((RecOwner*)rec)->slot(buf, &local, (int)(rec & 0xffffff00));
+        BoolTag_f09910 tag;
+        tag.b = false;
+        ((RecOwner*)rec)->slot(buf, &local, tag);
     }
 }
 
