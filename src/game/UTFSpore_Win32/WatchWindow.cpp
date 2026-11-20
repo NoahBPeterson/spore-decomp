@@ -45,21 +45,20 @@ extern float g_negMask;        // 0x013eb8b0  (-x sign flip); 0x013ec4d8 for Wat
 // ---- items of slice s00992480 end
 
 // @ 0x00992600
+struct WatchItem_992600 { virtual void Destroy(int flags); };
 void __fastcall WatchWindow_Clear(char* self)
 {
     char* sentinel = self + 0x20c;
-    char* cur = *(char**)sentinel;
     while (*(char**)(sentinel + 4) != sentinel) {
-        char* obj = cur ? cur - 4 : 0;
-        char* link = *(char**)cur;
-        *(char**)(link + 4) = sentinel;
-        *(char**)sentinel = *(char**)link;
+        char* cur = *(char**)sentinel;
+        WatchItem_992600* obj = cur ? (WatchItem_992600*)(cur - 4) : 0;
+        *(char**)(*(char**)cur + 4) = sentinel;
+        *(char**)sentinel = **(char***)sentinel;
         if (cur != sentinel) {
             *(char**)(cur + 4) = 0;
             *(char**)cur = 0;
         }
-        if (obj) (*(void(__fastcall**)(char*))(*(u32*)obj + 0))(obj);
-        cur = *(char**)sentinel;
+        if (obj) obj->Destroy(1);
     }
 }
 
