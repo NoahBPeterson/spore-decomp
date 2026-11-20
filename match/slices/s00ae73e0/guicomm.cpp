@@ -202,13 +202,16 @@ struct Gonzago {
 void cGonzagoSubsystem_ctor2(cGonzagoSubsystem* self);   // 0xb5b960
 extern "C" void __stdcall cGonzagoSubsystem_ctor2_sc(void* self);  // 0xb5b960
 
+extern "C" char g_145bde0[];   // Gonzago vftable
+extern "C" char g_145bdd8[];   // Gonzago vftable (second base)
+
 // @ 0x00ae7f00
 Gonzago* Gonzago::Init()
 {
     ((cGonzagoSubsystem*)this)->ctor();
-    *(void**)this = (void*)0x0145bde0;
-    *(void**)((char*)this + 4) = (void*)0x0145bdd8;
-    mpA1c = 0;
+    *(void* volatile*)this = (void*)g_145bde0;
+    *(void* volatile*)((char*)this + 4) = (void*)g_145bdd8;
+    *(void* volatile*)&mpA1c = 0;
     mpA20 = 0;
     mpA24 = 0;
     mpA28 = 0;
@@ -226,8 +229,8 @@ Gonzago* Gonzago::Init()
 // @ 0x00ae7f90
 Gonzago* Gonzago::Destroy()
 {
-    *(void**)this = (void*)0x0145bde0;
-    *(void**)((char*)this + 4) = (void*)0x0145bdd8;
+    *(void**)this = (void*)g_145bde0;
+    *(void**)((char*)this + 4) = (void*)g_145bdd8;
 
     for (int i = 1; i >= 0; --i) {          // +0x0c, +0x10
         eGameMode* m = mObj[i].mpMode;
