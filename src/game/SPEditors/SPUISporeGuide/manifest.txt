@@ -8,3 +8,4 @@
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?push_back@EStrVec@@QAEXABUEStr@@@Z  006745d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?Detokenize@Detok2@@QAEXPBGPAX@Z  00674d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?FUN_00672910@@YAPAXPAX00@Z  00672910  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISporeGuide.cpp  ?MoveAssignBackward@@YAPAUEStr@@PAU1@00@Z  006742f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
