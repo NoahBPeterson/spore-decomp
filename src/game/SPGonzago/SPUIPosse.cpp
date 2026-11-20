@@ -2261,17 +2261,24 @@ void* __cdecl FUN_00e24290(void* first, void* last, void* out)
   return out;
 }
 
+struct RefPairIter_e24310 {
+  Ref* p;
+  RefPairIter_e24310(const RefPairIter_e24310& o) : p(o.p) {}
+  bool operator!=(const RefPairIter_e24310& o) const { return p != o.p; }
+  RefPairIter_e24310& operator++() { p += 2; return *this; }
+};
 // @ 0x00e24310
-void* __cdecl FUN_00e24310(void** out, void* first, void* last, void* val)
+void* __cdecl FUN_00e24310(void** out, RefPairIter_e24310 first, RefPairIter_e24310 last, void* val)
 {
   *out = val;
-  for (; first != last; first = (char*)first + 8) {
+  for (; first != last; ++first) {
     Ref* dst = (Ref*)*out;
     if (dst) {
-      Ref a = *(Ref*)first;
+      Ref* src = first.p;
+      Ref a = src[0];
       dst[0] = a;
       if (a) ((TFv)(*(void***)a)[0])(a);
-      Ref b = *(Ref*)((char*)first + 4);
+      Ref b = src[1];
       dst[1] = b;
       if (b) ((TFv)(*(void***)b)[0])(b);
     }
