@@ -156,6 +156,9 @@ struct AnimatedIconGeometryView {
     IconReference* mpIcon;
 };
 
+// stand-in vtable shapes: slot 0x98 (38) and slot 0x90 (36)
+struct VSlot98 { virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b(); virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b(); virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void Slot98(); };
+struct VSlot90 { virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b(); virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b(); virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void Slot90(); };
 // --------------------------------------------------------------------------
 struct Obj {
     void  M5300(void* p);
@@ -223,14 +226,13 @@ int Obj::M53C0(void* p)
 // @ 0x007F53D0
 bool Obj::M53D0()
 {
-    if (*(char*)((char*)this + 0x22c) != 0)
-        return true;
-    void* f = VTOBJ(this)[0x98 / 4];
-    *(char*)((char*)this + 0x22c) = 1;
-    ((void(__thiscall*)(void*))f)(this);
-    void* sub = (char*)this + 4;
-    ((FV0)VTOBJ(sub)[0x90 / 4])(sub);
-    return ((WT*)this)->Initialize();
+    if (*(char*)((char*)this + 0x22c) == 0) {
+        *(char*)((char*)this + 0x22c) = 1;
+        ((VSlot98*)this)->Slot98();
+        ((VSlot90*)((char*)this + 4))->Slot90();
+        return ((WT*)this)->Initialize();
+    }
+    return true;
 }
 
 // @ 0x007F5410
