@@ -6598,22 +6598,23 @@ uint8_t Entry::Init(IWindow_s00ee_9840* pOwner, float pos, float r, float g, flo
 uint8_t Entry::DoMessage(uint32_t msgId, Msg* msg)
 {
     (void)msgId;
-    if (msg->mType != 0x287259f6) return 0;
-    if (msg->mId == 0xf68ed165) {
-        int n = (int)((uint8_t*)((IRefObj*)this->mPoints)->mEnd -
-                      (uint8_t*)((IRefObj*)this->mPoints)->mBegin) & ~3;
-        if (n > 4) {
+    if (msg->mType == 0x287259f6) {
+        uint32_t id = msg->mId;
+        if (id != 0xf68ed165) {
+            if (id == 0x7e099a3)
+                NotifyChanged();
+            return 0;
+        }
+        void** v = &this->mPoints->mBegin;
+        if ((int)((uint8_t*)v[1] - (uint8_t*)v[0] & ~3) > 4) {
             IAudioSystem* at = GetSystemAT();
-            uint32_t v = at ? at->GetCounter() : 0;
-            KillSetiEffects(0xe76c9b4f, (void*)v);
+            uint32_t c = at ? at->GetCounter() : 0;
+            KillSetiEffects(0xe76c9b4f, (void*)c);
             IMsgServer_s00ee_9840* ms = (IMsgServer_s00ee_9840*)MessageServer_s00ee_9840();
             ms->Send(0x7e1ea71, 0, 0);
             this->mPressed = 1;
         }
         return 1;
-    }
-    if (msg->mId == 0x7e099a3) {
-        NotifyChanged();
     }
     return 0;
 }
