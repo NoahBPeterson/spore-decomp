@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0067ec70  21  complete: command-history Execute; vtable/temp register scheduling differs from original
 0067eae0  286  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
 0067ed00  183  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest WEAK (no mismatch; 341 valid, 14% coverage)
 0067ee60  89  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)

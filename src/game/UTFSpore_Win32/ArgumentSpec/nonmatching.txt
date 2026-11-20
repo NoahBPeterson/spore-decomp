@@ -13,7 +13,6 @@
 0083a3c0 256 complete: vector<cArgInfo>::DoInsertValue; /GS- EH frame + this/arg register swap differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083a580 260 complete: vector<cEnumSpec>::DoInsertValue; /GS- EH frame + this/arg register swap differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083a740 125 complete: vector<cArgInfo>::operator=; uc first-arg handling and grow-tail scheduling differ; equiv: WEAK (443 valid, 40.2% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
-0083a8b0 23 complete: cOptionsSpec::operator=; this/arg register assignment swapped (esi/edi); equiv: UNSUPPORTED (0/1200 valid: memcpy import discards) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083a9f0 73 layout: R49 (2026-11-17): header member types lack empty-string ctors/dtors (retail EH state 5); needs header approval | Earlier note: complete: cArgumentSpec ctor; EH handler residual + arg-load scheduling + EH state number differ
 0083aaa0 303 complete: ParseVectorArgument (no parser); switch dispatch/stack layout differs
 0083ac80 508 complete: ParseVectorArgument (parser); raw-vtable parser calls and schedule differ

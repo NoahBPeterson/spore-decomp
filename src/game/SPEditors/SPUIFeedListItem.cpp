@@ -1414,17 +1414,24 @@ Obj9360* Obj9360::init(int p2, Vec* p3)
 }
 
 // @ 0x006693c0
+struct AssetEntry_s0066_93c0 { uint32_t w[4]; };
+struct AssetVec_s0066_93c0 {
+    AssetEntry_s0066_93c0* begin;
+    AssetEntry_s0066_93c0* end;
+    AssetEntry_s0066_93c0* cap;
+    uint32_t alloc[2];
+};
 __declspec(noinline) int FeedItem_s0066_8be0::FUN_006693c0()
 {
-    Vec v;
+    AssetVec_s0066_93c0 v;
     v.begin = 0;
     v.end = 0;
     v.cap = 0;
-    ((AssetListSource*)this)->GetAssetList(&v);
-    int n = (int)((char*)v.end - (char*)v.begin);
+    ((AssetListSource*)this)->GetAssetList((Vec*)&v);
+    int n = (int)(v.end - v.begin);
     if (v.begin && *(int*)((char*)v.begin - 4) != 0)
         EASTL_allocator_deallocate(v.begin);
-    return n >> 4;
+    return n;
 }
 
 // @ 0x00669410

@@ -312,22 +312,23 @@ void* guiconnect_new(t_glist* target, t_symbol s)
 
     if (gc) {
         gc->gc_target = target;
-        return gc;
-    }
-    gc = (t_guiconnect*)pd_new(spGuiconnectClass);
-    if (gc) {
-        gc->gc_target = target;
-        gc->gc_symA = s;
-        pd_bind(gc, s);
-        gc->gc_next = 0;
-        gc->gc_prev = guiconnectlist;
-        if (guiconnectlist)
-            guiconnectlist->gc_next = gc;
-        guiconnectlist = gc;
+    } else {
+        gc = (t_guiconnect*)pd_new(spGuiconnectClass);
+        if (gc) {
+            gc->gc_target = target;
+            gc->gc_symA = s;
+            pd_bind(gc, s);
+            t_guiconnect* head = guiconnectlist;
+            gc->gc_next = 0;
+            gc->gc_prev = head;
+            if (head)
+                head->gc_next = gc;
+            guiconnectlist = gc;
+        }
     }
     return gc;
 }
-}}}  // namespace EA::Audio::Eapd
+}}}
 
 // @ 0x00a4e750
 namespace EA { namespace Audio { namespace Eapd {

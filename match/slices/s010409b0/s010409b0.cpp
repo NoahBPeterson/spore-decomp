@@ -366,10 +366,12 @@ void cTuningEntryVector::Insert(cTuningEntry* pPos, const cTuningEntry& value)
                            ? (cTuningEntry*)EastlAllocate(nNewCap * (int)sizeof(cTuningEntry),
                                                           "Simulator", 0, 0, &gEastlAllocator, 0xd1)
                            : 0;
-  cTuningEntry* pNewEnd = CopyEntries(mpBegin, pPos, pNew);
+  cTuningEntry* oldBegin = mpBegin;
+  cTuningEntry* pNewEnd = CopyEntries(oldBegin, pPos, pNew);
   if (pNewEnd != 0)
     *pNewEnd = value;
-  pNewEnd = CopyEntries(pPos, mpEnd, pNewEnd + 1);
+  cTuningEntry* oldEnd = mpEnd;
+  pNewEnd = CopyEntries(pPos, oldEnd, pNewEnd + 1);
   if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
     EastlDeallocate(mpBegin);
   mpEnd = pNewEnd;

@@ -1635,13 +1635,16 @@ void* __thiscall cSPUIInfoLineTray::ScalarDeletingDtor(u8 flags)
     return this;
 }
 
+extern "C" char g_13ec458[];   // 0x013ec458 EA::RefCountVTemplate<int> vftable
+extern "C" char g_1417d14[];   // 0x01417d14 cSPUILaunchScreenWinProc vftable
+extern "C" char g_1417d04[];   // 0x01417d04 cSPUILaunchScreenWinProc vftable (+4)
 // @ 0x0080cf00
 cSPUILaunchScreenWinProc* __thiscall cSPUILaunchScreenWinProc::ctor()
 {
-    vtbl2 = (void**)0x13ec458;
+    *(void** volatile*)&vtbl2 = (void**)g_13ec458;
     f8 = 0;
-    vtbl = (void**)0x1417d14;
-    vtbl2 = (void**)0x1417d04;
+    vtbl = (void**)g_1417d14;
+    vtbl2 = (void**)g_1417d04;
     fC = 3;
     f10 = -1;
     return this;

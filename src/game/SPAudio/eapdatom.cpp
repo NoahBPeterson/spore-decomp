@@ -47,16 +47,11 @@ int atom_getint(Atom* a)
 }
 
 // @ 0x00a46790
-Sym2* atom_getsymbol(Sym2* out, Atom* in)
+Sym2 atom_getsymbol(Atom* in)
 {
-    if (in->type == 2) {
-        Sym2 t(*(Sym2*)in->v);
-        *out = t;
-    } else {
-        Sym2 t(gFloatSymbol);
-        *out = t;
-    }
-    return out;
+    if (in->type == 2)
+        return *(Sym2*)in->v;
+    return gFloatSymbol;
 }
 
 // @ 0x00a467c0

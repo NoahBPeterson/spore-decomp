@@ -2908,7 +2908,7 @@ struct CActTarget {
 struct CTerrain {
     char pad[0x1150];
     int mCityHallPos[3];                                         // +0x1150
-    unsigned char F772c0(int key);       // 0x00c772c0
+    unsigned char HasFlag(int key);       // 0x00c772c0
     void F77300(int a);                  // 0x00c77300
     void F77380(int key, int* out);      // 0x00c77380
     void F77bf0(int a);                  // 0x00c77bf0
@@ -2994,7 +2994,7 @@ struct TM {
     void F_cd43c0(void* a);
     bool F_cd4490();
     unsigned int F_cd4460(int a);
-    unsigned int F_cd44a0();
+    bool F_cd44a0();
     unsigned int F_cd44e0(void* a, void* b);
     // PostTerrainAction is a free cdecl function (see below).
     void F_cd3e60();
@@ -3998,16 +3998,17 @@ done0:
 TM::TM()
 {
     M_b70820();
-    *(void**)this = g_vt147734c;
-    *(void**)((char*)this + 8) = g_vt1477328;
-    *(void**)((char*)this + 0x10) = g_vt1477318;
-    *(int*)((char*)this + 0x74) = 0;
-    *(float*)((char*)this + 0x88) = g_fltOne;
-    *(float*)((char*)this + 0x8c) = g_fltTwo;
-    *(int*)((char*)this + 0x84) = 0;
-    *(int*)((char*)this + 0x90) = 0;
-    *(int*)((char*)this + 0x80) = 1;
-    *(void**)((char*)this + 0x7c) = g_vt154df28;
+    float one = g_fltOne;
+    *(void* volatile*)this = g_vt147734c;
+    *(void* volatile*)((char*)this + 8) = g_vt1477328;
+    *(void* volatile*)((char*)this + 0x10) = g_vt1477318;
+    *(volatile int*)((char*)this + 0x74) = 0;
+    *(volatile float*)((char*)this + 0x88) = one;
+    *(volatile float*)((char*)this + 0x8c) = g_fltTwo;
+    *(volatile int*)((char*)this + 0x84) = 0;
+    *(volatile int*)((char*)this + 0x90) = 0;
+    *(volatile int*)((char*)this + 0x80) = 1;
+    *(void* volatile*)((char*)this + 0x7c) = g_vt154df28;
     g_169b27c = (uint32_t)this;
 }
 
@@ -4298,7 +4299,7 @@ unsigned int TM::F_cd4460(int a)
 {
     CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
     if (s != 0) {
-        if (s->F772c0(a))
+        if (s->HasFlag(a))
             return 1;
     }
     return 0;
@@ -4311,14 +4312,11 @@ bool TM::F_cd4490()
 }
 
 // @ 0x00cd44a0
-unsigned int TM::F_cd44a0()
+bool TM::F_cd44a0()
 {
     CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
-    if (s != 0) {
-        if (s->F772c0(0x056d1871))
-            return 0;
-    }
-    return 1;
+    int hasKey = s != 0 && s->HasFlag(0x056d1871);
+    return (char)hasKey == 0;
 }
 
 // @ 0x00cd44e0

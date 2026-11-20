@@ -3827,7 +3827,7 @@ cGameData_s00b2_5c30* cGameNounManager_s00b2_5c30::FindNounByEmpireID(uint32_t c
 // @ 0x00b25fb0
 cCivilization* cGameNounManager_s00b2_5c30::GetPlayerCivilization()
 {
-    cCivilization* pCiv = (cCivilization*)this;
+    cCivilization* pCiv;
     cEmpire* pEmpire = GetPlayerEmpire();
     if (pEmpire != 0)
         return (cCivilization*)FindNounByEmpireID(pEmpire->mCivilizationID);

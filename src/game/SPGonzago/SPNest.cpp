@@ -3,6 +3,13 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+// addresses retail relocates here, named so the build relocates them too
+extern "C" char g_1471ba0[];
+extern "C" char g_1471b8c[];
+extern "C" char g_1471ac8[];
+extern "C" char g_1471aac[];
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "SP/cGameData.h"
 #include "SP/cHerd.h"
 #include "SP/cPlanetModel.h"
@@ -905,10 +912,11 @@ SP::cNest_s00c6_a550::cNest_s00c6_a550()
     ((ThisStubs*)((char*)this + 0x108))->C();         // cInteractionTarget ctor
     mbShowPlacement = 0;
     mp124 = 0;
-    *(void**)this = (void*)0x1471ba0;
-    *(void**)((char*)this + 4) = (void*)0x1471b8c;
-    *(void**)((char*)this + 0x34) = (void*)0x1471ac8;
-    *(void**)((char*)this + 0x108) = (void*)0x1471aac;
+    *(void**)this = (void*)g_1471ba0;
+    *(void**)((char*)this + 4) = (void*)g_1471b8c;
+    *(void**)((char*)this + 0x34) = (void*)g_1471ac8;
+    *(void**)((char*)this + 0x108) = (void*)g_1471aac;
+    _ReadWriteBarrier();
     mpOwner128 = 0;
     mpFootprint12c = 0;
 }
@@ -918,10 +926,11 @@ SP::cNest_s00c6_a550::cNest_s00c6_a550()
 namespace SP {
 SP::cNest_s00c6_a550::~cNest_s00c6_a550()
 {
-    *(void**)this = (void*)0x1471ba0;
-    *(void**)((char*)this + 4) = (void*)0x1471b8c;
-    *(void**)((char*)this + 0x34) = (void*)0x1471ac8;
-    *(void**)((char*)this + 0x108) = (void*)0x1471aac;
+    *(void**)this = (void*)g_1471ba0;
+    *(void**)((char*)this + 4) = (void*)g_1471b8c;
+    *(void**)((char*)this + 0x34) = (void*)g_1471ac8;
+    *(void**)((char*)this + 0x108) = (void*)g_1471aac;
+    _ReadWriteBarrier();
     if (mpOwner128)
         mpOwner128->Release();
     ((ThisStubs*)((char*)this + 0x108))->D();         // cInteractionTarget dtor-ish

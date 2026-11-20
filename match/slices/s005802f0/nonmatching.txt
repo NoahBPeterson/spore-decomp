@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 00580c10  14   editor user name: byte-identical size (157); only the inlined eastl empty-string ctor is scheduled differently (the original hoists the GetName vtable load before the three field stores)
-005810a0  29   cBoolVec::EraseAll: complete; EraseAll's memmove pointer-shift arithmetic codegen differs (40 vs 43 bytes)

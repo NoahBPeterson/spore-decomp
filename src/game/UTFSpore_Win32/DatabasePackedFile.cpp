@@ -2852,15 +2852,9 @@ unsigned PFIndexModifiable_s008d_aff0::GetAllFiles(int a2, unsigned a3, int a4, 
 // @ 0x008dbeb0
 void PFIndexModifiable_s008d_aff0::PutFileInfo(int a1, int* info)
 {
-    int c = info[2];
-    int d = info[3];
-    int a = info[0];
-    int b = info[1];
-    unsigned* out = (unsigned*)mItemsMap.GetFileInfoRef((const void*)a1);
-    out[0] = a;
-    out[1] = b;
-    out[2] = c;
-    out[3] = d;
+    struct FI { int v[4]; };
+    FI tmp = *(FI*)info;
+    *(FI*)mItemsMap.GetFileInfoRef((const void*)a1) = tmp;
 }
 
 // @ 0x008dbef0
@@ -2874,8 +2868,11 @@ struct HoleTreeDoInsertThunk {
 
 void* HoleTreeDoInsertThunk::DoInsert(void** ppOut, void* pAfter, const int* pRange)
 {
-    unsigned aligned = (unsigned)this & 0xffffff00u;
-    ((Fn8dbc20)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, aligned);
+    struct Flag { bool b; };
+    typedef void* (__thiscall* Fn)(void*, void*, void*, void*, Flag);
+    Flag f;
+    f.b = false;
+    ((Fn)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, f);
     return ppOut;
 }
 

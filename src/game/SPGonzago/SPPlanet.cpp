@@ -6862,15 +6862,16 @@ int** FUN_00b056e0(int** out, int* first, int* last, int* obj)
 }
 
 // @ 0x00b05730
-void FUN_00b05730(int* p, uint n, int, void* src)
+void FUN_00b05730(int* p, uint n, int src, void*)
 {
+    int* d = p;
     while (n > 0) {
-        if (p) {
-            ((PoolOwner_s00b0_47b0*)p)->rbcontainer_copy(src);
-            *p = 0x145c660;
+        if (d) {
+            ((PoolOwner_s00b0_47b0*)d)->rbcontainer_copy((void*)src);
+            *d = (int)g_145c660;
         }
         --n;
-        p = (int*)((char*)p + 0x24);
+        d = (int*)((char*)d + 0x24);
     }
 }
 

@@ -963,7 +963,7 @@ int THREAD_cleanup()
 SSLManager_s0094_fb80* SSLManager_s0094_fb80::Ctor(ICoreAllocator* alloc)
 {
     void* self = this;
-    PTR(self, 0) = (void*)0x0143FF28;
+    PTR(self, 0) = (void*)g_143ff28;
     I8(self, 8) = 0;
     I32(self, 0xc) = 1;
     PTR(self, 0x10) = alloc;
@@ -972,6 +972,7 @@ SSLManager_s0094_fb80* SSLManager_s0094_fb80::Ctor(ICoreAllocator* alloc)
     Fn0094fa00(B(self) + 0x48);
     PTR(self, 0x14c) = 0;
     PTR(self, 0x150) = 0;
+    _ReadWriteBarrier();
     void* pool = B(self) + 0x16c;
     PTR(self, 0x164) = pool;
     PTR(self, 0x158) = pool;

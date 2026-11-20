@@ -260,15 +260,16 @@ int Obj44::FUN_00549d20(int param_2, int param_3)
     if (param_2 != ((int*)this)[1] || ((int*)this)[1] == ((int*)this)[2]) {
         sub_54a920(param_2, param_3);
     } else {
-        Elem14* e = (Elem14*)((int*)this)[1];
+        struct Insertion
+        {
+            unsigned unused[2];
+            Elem14* end;
+            Elem14* storage;
+        } insertion;
+        insertion.end = (Elem14*)((int*)this)[1];
         ((int*)this)[1] = ((int*)this)[1] + 0x14;
-        Elem14* q = e;
-        int r;
-        if (q != 0)
-            r = q->sub_54a470(param_3);
-        else
-            r = 0;
-        (void)r;
+        insertion.storage = insertion.end;
+        (void)(insertion.storage != 0 ? insertion.storage->sub_54a470(param_3) : 0);
     }
     return n * 0x14 + ((int*)this)[0];
 }

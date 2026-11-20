@@ -4,3 +4,4 @@
 ../src/game/Havok/_at_010f0000.cpp  _hkBoxBoxAgent3_create  010fdb50  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010f0000.cpp  ?warpTime@hkContinuousSimulation@@UAEXPAVhkWorld_s010e_f580@@M@Z  010f03a0  /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
 ../src/game/Havok/_at_010f0000.cpp  ?resetEntities@ContinuousSim@@QAEXHHH@Z  010f1a60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_010f0000.cpp  ?hkCapsuleTriangleAgent3_register@@YAXPAVhkCollisionDispatcher_s010f_d4c0@@@Z  010fda70  /O2 /MD /Gy /TP /Isrc/game/include

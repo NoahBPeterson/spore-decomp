@@ -663,11 +663,8 @@ cSpatialObjectView* MakeDeepSpaceProjectileView(void* pObject)
 // @ 0x00cc2c90
 cSpaceDefenseMissileView::cSpaceDefenseMissileView()
 {
-    mpEffectInfo = nullptr;
-    mFlag38 = 0;
-    mFlag39 = 0;
-    mFlag3a = 0;
-    mFlag3b = 0;
+    *(void* volatile*)&mpEffectInfo = nullptr;
+    *(uint32_t*)&mFlag38 = 0;
 }
 
 // @ 0x00cc2cb0

@@ -1539,12 +1539,11 @@ EA::Trace::LogFilterGroupLevels_s0092_34f0::LogFilterGroupLevels_s0092_34f0(void
 // @ 0x00923f90
 EA::Trace::LogFilterGroupLevels_s0092_34f0::~LogFilterGroupLevels_s0092_34f0()
 {
-    _ReadWriteBarrier();
     mGlobalLevel = 1;
     char dummy = 0;
     RemoveGroupLevel(&dummy);
-    EA::Trace::RBNode* root = (EA::Trace::RBNode*)mGroupLevelMap.mAnchor.mpParent;
-    mGroupLevelMap.DoNukeSubtree(root);
+    EA::Trace::RBTreeMap& groupLevels = mGroupLevelMap;
+    groupLevels.DoNukeSubtree((EA::Trace::RBNode*)groupLevels.mAnchor.mpParent);
     if ((mName.mpCapacity - mName.mpBegin) > 1 && mName.mpBegin != 0)
         EA_operator_delete(mName.mpBegin);
 }

@@ -1003,13 +1003,14 @@ bool __cdecl FUN_00c7e9f0(void* io, void** out)
 }
 
 // @ 0x00c7ea30
-void __cdecl FUN_00c7ea30(int* a, int* b, int* out)
+int* __cdecl FUN_00c7ea30(int* a, int* b, int* out)
 {
     while (a != b) {
         if (out != 0) { out[0] = a[0]; out[1] = a[1]; out[2] = a[2]; out[3] = a[3]; }
         a += 4;
         out += 4;
     }
+    return out;
 }
 
 // @ 0x00c7ea70

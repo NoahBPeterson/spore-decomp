@@ -4133,10 +4133,10 @@ void __fastcall FUN_00e39350(Timeline_s00e3_8ce0* self, void* dummy, s32 v)
 s32 __fastcall FUN_00e393b0(Timeline_s00e3_8ce0* self, void* dummy)
 {
   (void)dummy;
-  if (self->b370 != 0) goto ret1;
-  if (self->p30 != 0 && self->p30->IsVisible() != 0) goto ret1;
-  return 0;
-ret1:
+  if (self->b370 == 0) {
+    int visible = self->p30 != 0 ? self->p30->IsVisible() : 0;
+    if (visible == 0) return 0;
+  }
   return 1;
 }
 

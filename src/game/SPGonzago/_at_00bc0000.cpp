@@ -4283,11 +4283,10 @@ WE** __fastcall FUN_00bc7f80(WE** param_1)
         puVar1->activeI = 0x3fffffff;
         puVar1->FUN_00bc7b70(0x32);
         cHierGrid_ctor((char*)puVar1 + 0x1c);
-        *param_1 = puVar1;
-        return param_1;
+    } else {
+        puVar1 = 0;
     }
-    WE* p = puVar1;
-    *param_1 = p;
+    *param_1 = puVar1;
     return param_1;
 }
 

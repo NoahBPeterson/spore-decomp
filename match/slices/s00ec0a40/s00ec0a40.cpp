@@ -149,12 +149,14 @@ u8 __cdecl FUN_00ec0b90(int self, void* a2, void* a3, void* a4, void* a5, u8* ou
     char* v = (char*)((H_00bc96a0*)((char*)*(void**)(s + 0xb4c) + 8))->Play(0, 0x40000);
     if (v == 0 || *(int*)(v + 0xc) != 6) return 1;
     char* p = *(char**)(v + 0x14);
-    if (p == 0) return 0;
-    void* g = (*(void*(__thiscall**)(char*, int))((char*)*(void**)p + 0xc))(p, 0x1186577);
-    if (g == 0) return 0;
-    ((H_00c70110*)out)->Assign(g);
-    out[0xd] = 1;
-    return 1;
+    if (p != 0) {
+        void* g = (*(void*(__thiscall**)(char*, int))((char*)*(void**)p + 0xc))(p, 0x1186577);
+        if (g == 0) return 0;
+        ((H_00c70110*)out)->Assign(g);
+        out[0xd] = 1;
+        return 1;
+    }
+    return 0;
 }
 
 // ================================================================ 0x00ec0c40

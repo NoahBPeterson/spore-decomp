@@ -1891,10 +1891,13 @@ void cTimerList::DestroyAll()
     }
 }
 
+struct TimerTail_fecb50 { uint32_t a, b, c; };   // cGonzagoTimer +0x20..+0x2c, copied as one block
+
 // @ 0x00fecb50
 tTimerValue* tTimerValue::CopyFrom(const tTimerValue* pSrc)
 {
     m00 = pSrc->m00;
+    _ReadWriteBarrier();
     mTimer.mpVtbl00 = (void*)&g_vtbl_01465d54;
     mTimer.m04 = 0;
     mTimer.m08 = pSrc->mTimer.m08;
@@ -1904,9 +1907,8 @@ tTimerValue* tTimerValue::CopyFrom(const tTimerValue* pSrc)
     mTimer.m18 = pSrc->mTimer.m18;
     mTimer.m1c = pSrc->mTimer.m1c;
     mTimer.mpVtbl00 = (void*)&g_vtbl_01464450;
-    mTimer.m20 = pSrc->mTimer.m20;
-    mTimer.m24 = pSrc->mTimer.m24;
-    mTimer.m28 = pSrc->mTimer.m28;
+    _ReadWriteBarrier();
+    *(TimerTail_fecb50*)&mTimer.m20 = *(const TimerTail_fecb50*)&pSrc->mTimer.m20;
     return this;
 }
 

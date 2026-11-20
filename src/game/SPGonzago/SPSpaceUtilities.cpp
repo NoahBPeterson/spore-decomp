@@ -587,6 +587,8 @@ bool FUN_01043500(uint32_t uEffectId, int iParam)
     }
     if (pManager->CreateEffect(uEffectId, iParam, &pEffect)) {
         pEffect->Start(0);
+        if (pEffect)
+            pEffect->Release();
         return true;
     }
     if (pEffect)

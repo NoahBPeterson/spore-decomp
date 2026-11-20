@@ -1489,9 +1489,9 @@ void cPlayerCityMusic_s00ea_d1a0::Stop()
     if (mp_10c == 0) return;
     Reset(0);
     FUN_00572020(mp_10c, 0);
-    mp_10c = 0;
-    if (t->mp_208 != 0) {
-        void* h = t->mp_208;
+    *(void* volatile*)&mp_10c = 0;
+    void* h = *(void* volatile*)&t->mp_208;
+    if (h != 0) {
         t->mp_208 = 0;
         RemoveHandler(h, t->mp_20c, t->mp_210, (void*)t->mn_214, (void*)t->mn_218);
     }

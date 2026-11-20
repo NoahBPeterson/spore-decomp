@@ -287,29 +287,33 @@ RefVec::~RefVec()
 // @ 0x00432DE0
 TObjVecVec::~TObjVecVec()
 {
-    int pad1[3];
-    (void)&pad1;
-    TObjVec* p;
-    TObjVec* last;
-    int pad2[3];
-    last = mEnd;
-    p = mBegin;
-    for (; p < last; ++p)
-        p->~TObjVec();
+    struct DestroyRange
+    {
+        int unusedBefore[3];
+        TObjVec* last;
+        TObjVec* current;
+        int unusedAfter[8];
+    } range;
+    range.last = mEnd;
+    range.current = mBegin;
+    for (; range.current < range.last; ++range.current)
+        range.current->~TObjVec();
 }
 
 // @ 0x00432E80
 TObjVec::~TObjVec()
 {
-    int pad1[3];
-    (void)&pad1;
-    TObjElem* p;
-    TObjElem* last;
-    int pad2[3];
-    last = mEnd;
-    p = mBegin;
-    for (; p < last; ++p)
-        p->~TObjElem();
+    struct DestroyRange
+    {
+        int unusedBefore[3];
+        TObjElem* last;
+        TObjElem* current;
+        int unusedAfter[3];
+    } range;
+    range.last = mEnd;
+    range.current = mBegin;
+    for (; range.current < range.last; ++range.current)
+        range.current->~TObjElem();
 }
 
 // ---------------------------------------------------------------- member-function call thunk

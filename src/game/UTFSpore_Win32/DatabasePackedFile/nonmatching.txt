@@ -33,8 +33,6 @@
 008dbb10 73 complete: HT::GetFileInfoRef; hash lookup + insert-on-miss; InsertUnique val construction differs
 008dbcf0 159 complete: PFIndexModifiable::GetFiles (enumerate into vector); iteration/alloc differs
 008dbdb0 213 complete: PFIndexModifiable::GetAllFiles (recursive enumeration); register allocation/iteration differs
-008dbeb0 23 complete: PFIndexModifiable::PutFileInfo; field load/register assignment differs
-008dbef0 24 complete: FUN_008dbef0 thunk -> FUN_008dbc20; bool flag materialisation differs (push 0 vs stack byte temp)
 008dbf20 152 complete: HoleSet::AllocAt (rbtree insert + split); register allocation/insert path differs
 008dc000 201 complete: HoleSet::Release (rbtree erase + merge); register allocation/erase path differs
 008dc120 62 complete: HoleSet::MergeFrom (rbtree merge); register allocation differs

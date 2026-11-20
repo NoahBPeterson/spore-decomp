@@ -112,6 +112,12 @@ struct string8_s0083_9950 {
     void append(const char* first, const char* last);   // 0x00455d60
     void RangeInitialize(unsigned n);                   // 0x00475ab0
     string8_s0083_9950(const string8_s0083_9950& x);                          // 0x0057cb10
+    string8_s0083_9950& operator=(const string8_s0083_9950& x)
+    {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
 };
 }
 namespace eastl {
@@ -1113,10 +1119,8 @@ VecArgInfo& VecArgInfo::operator=(const VecArgInfo& x)
 // @ 0x0083a8b0
 cOptionsSpec& cOptionsSpec::operator=(const cOptionsSpec& x)
 {
-    if (this != &x)
-        mName.assign(x.mName.mpBegin, x.mName.mpEnd);
-    if (&mDescription != &x.mDescription)
-        mDescription.assign(x.mDescription.mpBegin, x.mDescription.mpEnd);
+    mName = x.mName;
+    mDescription = x.mDescription;
     mArguments = x.mArguments;
     mFlagToSet = x.mFlagToSet;
     return *this;

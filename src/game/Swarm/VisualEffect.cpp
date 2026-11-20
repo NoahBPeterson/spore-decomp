@@ -753,11 +753,9 @@ bool cVisualEffect::SetUnknownParam(u32 idx, void* val)
 bool EA::Swarm::cVisualEffect::IsRunning() const
 {
     u32 f = *(const u32*)((const char*)this + 0x2c);
-    if (((f >> 9) & 1) == 0) {
-        if (((f >> 13) & 1) == 0)
-            return 0;
-    }
-    return 1;
+    bool running = ((f >> 9) & 1) != 0;
+    bool paused = ((f >> 13) & 1) != 0;
+    return running || paused;
 }
 
 // @ 0x00a840c0

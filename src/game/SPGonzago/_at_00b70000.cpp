@@ -2898,14 +2898,15 @@ void __cdecl Fn_00b71b90(IStream* pStream, FeedbackTree* pTree)
 // @ 0x00b71dc0
 cOwner::cOwner()
 {
+    _ReadWriteBarrier();
     eastl::nb* pAnchor = &mFeedback.mAnchor;
     pAnchor->mpNodeLeft   = 0;
     pAnchor->mpNodeParent = 0;
     pAnchor->mColor       = 0;
-    pAnchor->mpNodeLeft   = pAnchor;
+    mFeedback.mAnchor.mpNodeLeft = pAnchor;
     pAnchor->mpNodeRight  = pAnchor;
-    pAnchor->mpNodeParent = 0;
-    pAnchor->mColor       = 0;
+    mFeedback.mAnchor.mpNodeParent = 0;
+    *(char*)&mFeedback.mAnchor.mColor = 0;
     mFeedback.mnSize      = 0;
 }
 
@@ -6819,10 +6820,10 @@ void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value)
 // @ 0x00b7d420
 bool ServerObj::OnPieMsg(int msg, int arg)
 {
-    bool r = true;
     if (msg == 0x29ffa8d && mMode == 3)
         mMode = 4;
-    return r;
+    _ReadWriteBarrier();
+    return true;
 }
 
 // @ 0x00b7d440
