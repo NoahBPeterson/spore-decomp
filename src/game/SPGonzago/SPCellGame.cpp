@@ -3061,13 +3061,18 @@ int FUN_00e4ee30(int n)
 // @ 0x00e4ee60
 int __fastcall SP_sGetSourceLevel(int, int n)
 {
-    if (n == 1000) return g_1483e60;
-    int i = 0;
-    if (n >= 0) {
-        int* p = g_1483c34;
-        do { p += 7; ++i; } while (n >= *p);
+    const int* r;
+    if (n == 1000) {
+        r = &g_1483e60;
+    } else {
+        int i = 0;
+        if (n >= 0) {
+            int* p = g_1483c34;
+            do { p += 7; ++i; } while (n >= *p);
+        }
+        r = &g_1483c14[i * 7];
     }
-    return g_1483c14[i * 7];
+    return *r;
 }
 
 // @ 0x00e4ef60
