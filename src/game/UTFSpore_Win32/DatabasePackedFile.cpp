@@ -2868,8 +2868,11 @@ struct HoleTreeDoInsertThunk {
 
 void* HoleTreeDoInsertThunk::DoInsert(void** ppOut, void* pAfter, const int* pRange)
 {
-    unsigned aligned = (unsigned)this & 0xffffff00u;
-    ((Fn8dbc20)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, aligned);
+    struct Flag { bool b; };
+    typedef void* (__thiscall* Fn)(void*, void*, void*, void*, Flag);
+    Flag f;
+    f.b = false;
+    ((Fn)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, f);
     return ppOut;
 }
 
