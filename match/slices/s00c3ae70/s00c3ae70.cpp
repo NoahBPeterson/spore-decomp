@@ -720,16 +720,16 @@ void cSPGameDataUFO::UpdateDestinationFromTarget()
     if (pTarget == 0)
         return;
 
-    if ((*(U32*)((char*)pTarget + 4) >> 0x11) & 1) {
+    bool bit = ((*(U32*)((char*)pTarget + 4) >> 0x11) & 1) != 0;
+    if (bit) {
         mFlags84 |= 0x40;
         float f = *(float*)((char*)pTarget + 0x6c);
         mf090 = f;
         mf094 = f;
     }
     if ((*(U8*)((char*)pTarget + 6) & 1) != 0) {
-        float r = GetScaleFactor() * ((FnC37DC0*)this)->f();
         typedef void (__thiscall* Vf)(void*, void*, float);
-        ((Vf)(*(void**)(*(char**)((char*)this + 0x34) + 0x64)))(pLoco, (char*)pTarget + 0x70, r);
+        ((Vf)(*(void**)(*(char**)pLoco + 0x64)))(pLoco, (char*)pTarget + 0x70, GetScaleFactor() * ((FnC37DC0*)this)->f());
         mFlags84 = (mFlags84 & ~0x10) | 0x20;
     }
 }
