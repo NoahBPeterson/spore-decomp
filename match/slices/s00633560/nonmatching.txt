@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00633ea0  235  SP::cSPPlayModePhotoBrowser::UpdateViewerImage: complete; AutoRef temp + tail-jmp release shape, size 254 vs 230; difftest WEAK (205/400 valid, 17.7% cov)
 00634030   51  SP::cSPPlayModePhotoBrowser::ClearPhotoList: complete; rbtree reset store order + DeletePhoto loop shape, size 138 vs 137; difftest UNSUPPORTED (0/400 valid)
-00634380   21  SP::cSPPlayModePhotoBrowser::SetSelectedPhoto: complete; this/map register allocation (esi/edi swap); difftest UNSUPPORTED (0/400 valid)
 006343f0   24  SP::cSPPlayModePhotoBrowser::NextPage: complete; ContinueJob loop + page-bounds branch shape, size 158 vs 160; difftest UNSUPPORTED (0/400 valid)

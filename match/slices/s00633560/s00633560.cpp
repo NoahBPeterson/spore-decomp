@@ -633,7 +633,7 @@ bool __fastcall FUN_006340c0(void* self) {
 // @ 0x00634380
 void cSPPlayModePhotoBrowser::SetSelectedPhoto(unsigned idx) {
   RBTreeHead* map = &mPhotoTypeMap;
-  map->DoNuke(*(RBNode**)((char*)this + 0x74));
+  map->DoNuke(map->mAnchor.parent);
   RBNode* anchor = (RBNode*)&map->mAnchor;
   map->mAnchor.right = anchor;
   map->mAnchor.left = anchor;
