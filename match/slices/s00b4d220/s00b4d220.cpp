@@ -396,16 +396,14 @@ void __cdecl FUN_00b4d8c0(void)
 void __cdecl FUN_00b4d8e0(char* self, char* obj)
 {
     typedef u32 (__thiscall *TagFn)(void* self, u32 tag);
-    TagFn fn = (TagFn)(*(void***)self)[0xb8 / 4];
     i32 v;
     if (ld8(self, 0x50) & 0x80)
-        v = (i32)((-(u32)(fn(self, 0x116dd1bu) != 0)) & 0xfffffffeu) + 5;
+        v = ((TagFn)(*(void***)self)[0xb8 / 4])(self, 0x116dd1bu) ? 3 : 5;
     else
-        v = (i32)((-(u32)(fn(self, 0x116dd1bu) != 0)) & 0xfffffffeu) + 4;
+        v = ((TagFn)(*(void***)self)[0xb8 / 4])(self, 0x116dd1bu) ? 2 : 4;
     if (ld32(obj, 8) != 0) {
-        st32(obj, 0x38, (u32)v);
-        void* t = (void*)ld32(obj, 8);
-        ((HkObj*)t)->hk104fa0((int)(size_t)obj, 0, 1);
+        *(volatile u32*)(obj + 0x38) = (u32)v;
+        ((HkObj*)ld32(obj, 8))->hk104fa0((int)(size_t)obj, 0, 1);
     }
 }
 
