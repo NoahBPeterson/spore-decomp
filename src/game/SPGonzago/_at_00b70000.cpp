@@ -6368,13 +6368,14 @@ void cSPPieMenu::sub_b7bd50(int a, int b)
 // @ 0x00b7c160
 void cSPPieMenu::SetSomething(int value)
 {
+    volatile unsigned& flags = *(volatile unsigned*)((char*)this + 0x20);
     if (b2) {
-        b2 = 0;
+        flags &= ~4u;
         mField55a0 = 0;
         sub_b77aa0();
     }
-    if (b0) b2 = 1;
-    else    b2 = 0;
+    if (b0) flags |= 4;
+    else                                      flags &= ~4u;
     if (b2) {
         mField55a0 = value;
         sub_b7a710();
