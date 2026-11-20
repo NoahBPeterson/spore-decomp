@@ -747,6 +747,7 @@ struct cHash16 {
     void Destroy();                            // 0x00c2e4e0
     void SetBuckets(void* buckets, int count); // 0x00693230
     void FreeNodes(void* buckets, int count);  // 0x007611f0
+    void Clear() { FreeNodes(mBuckets, mBucketCount); mNodeCount = 0; }
     void Find(void* out, void* key);           // 0x00645ed0
     Iter Erase(Iter it);                       // 0x01068380
 };
@@ -3433,8 +3434,7 @@ void cObj452b0::F()
 
     FUN_00b5a390();
 
-    mHash40.FreeNodes(mHash40.mBuckets, mHash40.mBucketCount);
-    mHash40.mNodeCount = 0;
+    mHash40.Clear();
 }
 
 // @ 0x00b452f0
