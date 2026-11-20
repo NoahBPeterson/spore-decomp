@@ -2432,10 +2432,17 @@ void VO::FUN_00acd2d0(void* p)
     }
 }
 
+// The staged object's type query is virtual slot 8 (+0x20).
+struct ITypedObj_acd410 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual int  GetType();                                  // +0x20
+};
+
 // @ 0x00acd410
 void VO::FUN_00acd410(void* p)
 {
-    switch (objType(p)) {
+    switch (((ITypedObj_acd410*)p)->GetType()) {
     case 0x18eb45e: {
         int key = ((CStage*)p)->mKey24;
         mCountMap.erase(&key);
