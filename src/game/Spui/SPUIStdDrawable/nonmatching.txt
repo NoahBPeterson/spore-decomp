@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008304c0 45 FactoryRegistry::CreateInstance: register (esi) output convention differs; equiv: UNSUPPORTED (0 valid inputs)
 008306e0 180 bbox adjust: x87 double Validate calls / register alloc differ; equiv: FAIL (1 ulp float)
 00830810 182 cSPUIStdDrawableImageInfo ctor: vptr + descriptor store schedule differs; equiv: PASS
 00830910 29 SmallSet::Do: /Od frame layout (force /Od flags) differs; equiv: PASS
