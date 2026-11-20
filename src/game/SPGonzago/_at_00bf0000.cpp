@@ -5696,17 +5696,14 @@ int AI::FUN_00bf7730(int param_2)
 void AI::FUN_00bf7760(u32 param_2)
 {
   void** vec = (void**)this;
-  void* begin = vec[0];
-  void* end = vec[1];
-  int count = (int)((char*)end - (char*)begin) >> 5;
-  if ((u32)count < param_2) {
+  if (param_2 > (u32)(((char*)vec[1] - (char*)vec[0]) >> 5)) {
     struct Timer20 { u32 w[8]; } local_20;      // 0x20-byte cGonzagoTimer (no /GS cookie)
-    ((ThTimer*)&local_20)->FUN_00b63890();
-    ((ThVec2*)this)->FUN_00bf5220(end, param_2 - count, &local_20);
+    void* pValue = ((ThTimer*)&local_20)->FUN_00b63890();
+    ((ThVec2*)this)->FUN_00bf5220(vec[1], param_2 - (((char*)vec[1] - (char*)vec[0]) >> 5), pValue);
     ((ThTimer*)&local_20)->FUN_00b638b0();
     return;
   }
-  ((ThVec2*)this)->FUN_00bf51d0((char*)begin + param_2 * 0x20, end);
+  ((ThVec2*)this)->FUN_00bf51d0((char*)vec[0] + param_2 * 0x20, vec[1]);
 }
 
 // @ 0x00bf77d0
