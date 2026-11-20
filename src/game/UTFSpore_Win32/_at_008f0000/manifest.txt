@@ -12,3 +12,4 @@
 ../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?SetFlagBool@HTTPx@@QAEX_NM@Z  008fd050  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?GetOrInsert@UMap@@QAEPAPAUResourceRequest@@PAI@Z  008ffdf0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?F_8f2440@PropNodeX@Layout@XHTML@EA@@QAEPAV1234@HPBG@Z  008f2440  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?ClampWidth@StackingContext@@QAEMM@Z  008f0240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
