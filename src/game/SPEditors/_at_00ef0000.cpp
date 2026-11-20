@@ -363,6 +363,7 @@ struct SHandle {
     void __thiscall B2F7E0(u32 tag);  // 0xb2f7e0
     void __thiscall C2E4E0();         // 0xc2e4e0 (no-op; keeps ecx = receiver)
     void __thiscall B7E1D0();      // 0xb7e1d0
+    void __thiscall B7E1D0(u32 mask); // 0xb7e1d0 SP::cPlanetModel::MaskContinentBits
     void __thiscall F32440(int a); // 0xf32440
     void __thiscall Ef72b0();      // 0xef72b0
 };
@@ -3660,12 +3661,14 @@ void __thiscall Strategy::FUN_00ef0a70(u32 a)
     *(u32*)((char*)gm + 0x110) += 1;
 
     FUN_00eff790(a);
+    FUN_00c2e4e0();
+    FUN_00c2e4e0();
     ((SHandle*)this_->mp10)->Eda130();
     ((SHandle*)this_->mp14)->Ed6a10();
 
     ((SHandle*)((char*)this_ + 0xc8))->B2F7E0(0x5e51bb6);
     FUN_00b6c280();
-    ((SHandle*)FUN_00b3d350(0x8000000))->B7E1D0();
+    ((SHandle*)FUN_00b3d350())->B7E1D0(0x8000000);
     ((SHandle*)this_->mp18)->F32440(1);
     ((SHandle*)*(void**)((char*)DAT_016c7aa4 + 0xd4))->Ef72b0();
     FUN_00ef0bkey();
