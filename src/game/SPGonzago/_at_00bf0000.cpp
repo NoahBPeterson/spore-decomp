@@ -2210,6 +2210,8 @@ struct Container {
     V4    FUN_00c95660(Iter iter);
     void  FUN_00c92b70();
     void  FUN_00c92bd0(RefObj** p);
+    bool  empty() const { return begin.cur == end.cur; }
+    int&  front() { return *begin.cur; }
 };
 struct CommodityNode {
     void* vt0;                    // +0x000
@@ -7278,12 +7280,11 @@ bool __cdecl FUN_00bff220(Container* c, int* key)
 // @ 0x00bff290
 void CommodityNode::FUN_00bff290(int key)
 {
-    Container* c = &m230;
-    if (m230.begin.cur != m230.end.cur && key == *m230.begin.cur) {
-        c->FUN_00c92b70();
+    if (!m230.empty() && key == m230.front()) {
+        m230.FUN_00c92b70();
         return;
     }
-    FUN_00bff220(c, &key);
+    FUN_00bff220(&m230, &key);
 }
 
 // @ 0x00bff2d0
