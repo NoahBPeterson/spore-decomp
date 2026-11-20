@@ -5050,16 +5050,37 @@ void FUN_007477d0(int self)
     *(int*)(b + 0x24) = *(int*)(b + 0x14);
 }
 
-// @ 0x007478b0
-void FUN_007478b0(uint32_t* v)
-{
-    uint32_t beg = *v, end = v[1];
-    for (; beg < end; beg += 0x1c) {
-        RCObj* r = (RCObj*)*(void**)(beg + 4);
-        if (r) (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)r) + 4)))(r, 1);
+// A load-queue value occupies 0x1c bytes and holds its reference in the second word.
+struct LoadQueueVectorEntryView {
+    uint32_t mKey;
+    RCObj* mpReference;
+    uint32_t mData[5];
+};
+struct LoadQueueVectorStorageView {
+    LoadQueueVectorEntryView* mpBegin;    // +0x00
+    LoadQueueVectorEntryView* mpEnd;      // +0x04
+    uint32_t mCapacityData[2];            // +0x08
+    LoadQueueVectorEntryView* mpPool;     // +0x10
+    ~LoadQueueVectorStorageView()
+    {
+        if (mpBegin && mpBegin != mpPool)
+            operator_delete__(mpBegin);
     }
-    if (*v != 0 && *v != v[4])
-        operator_delete_((void*)*v);
+};
+struct LoadQueueVectorDtorView : LoadQueueVectorStorageView {
+    ~LoadQueueVectorDtorView();
+};
+
+// @ 0x007478b0
+LoadQueueVectorDtorView::~LoadQueueVectorDtorView()
+{
+    LoadQueueVectorEntryView* end = mpEnd;
+    LoadQueueVectorEntryView* beg = mpBegin;
+    for (; beg < end; ++beg) {
+        RCObj* reference = beg->mpReference;
+        if (reference)
+            reference->s1();
+    }
 }
 
 // @ 0x00747920

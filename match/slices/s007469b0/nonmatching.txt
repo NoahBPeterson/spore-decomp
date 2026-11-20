@@ -12,4 +12,3 @@
 00747640 199 deque entry lookup complete; by-value 16B iterator args not reproduced (equiv: PASS 100% cov)
 00747720 121 deque< cLoadQueueEntry >::~deque shape differs
 007477d0 215 deque< cLoadQueueEntry >::clear shape differs
-007478b0  57 vector< cLoadQueueEntry >::~vector shape differs
