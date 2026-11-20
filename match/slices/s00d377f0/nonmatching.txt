@@ -8,4 +8,3 @@
 00d38150  568  cSPCreatureMissionManager::OnTick (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction of the 854-byte tick (mission creation, card setup, input loop with many inlined eastl/noun calls); structural codegen divergence; ours is 882 bytes
 00d38530  322  cSPCreatureMissionManager::SweepDeadMissions (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction of the list sweep (multi-key erase + list compaction via inlined eastl ops); structural codegen divergence; ours is 361 bytes vs 380
 00d386a0  117  FUN_00d386a0 (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction; the original does the species-fraction average and clamp with SSE scalar ops (movss/addss/comiss/maxss/minss) while ours keeps the sum in x87
-00d38780   35  FUN_00d38780 (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction of the three-way sign classification; x87 constant load (`fst`/`fxch` vs `fstp`/`fld`) and comparison operand order differ; ours is 57 bytes vs 56
