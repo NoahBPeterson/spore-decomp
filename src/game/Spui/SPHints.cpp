@@ -558,11 +558,11 @@ void cHint::dtor()
 cHintManager* cHintManager::init()
 {
     f4 = 0;
-    vt8 = g_HM_14426a0;
+    *(void* volatile*)&vt8 = g_HM_14426a0;
     vt0 = g_HM_1401510;
     vt8 = g_HM_14014f4;
-    p0c = p10 = p14 = 0;
-    p20 = p24 = p28 = 0;
+    p0c = 0; p10 = 0; p14 = 0;
+    p20 = 0; p24 = 0; p28 = 0;
     f34 = 0.0f; f38 = 0.0f; f3c = 0; f40 = 0.0f; f44 = 0.0f;
     f48 = 3; f4c = 0; f50 = 0.0f;
     return this;
