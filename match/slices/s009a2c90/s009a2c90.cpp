@@ -394,8 +394,9 @@ __declspec(noinline) int* S9a3760::f(int* out, unsigned* key) {
 // ---------------------------------------------------------------------------
 __declspec(noinline) int FUN_009a37a0(int key) {
   int local;
+  int k = key;
   int* tree = g_166c058;
-  ((Rbtree99*)tree)->find(&local, &key);
+  ((Rbtree99*)tree)->find(&local, &k);
   if ((char*)local != (char*)tree + 4) return *(int*)((char*)(size_t)local + 0x14);
   return 0;
 }
