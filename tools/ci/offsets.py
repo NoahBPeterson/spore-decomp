@@ -3,14 +3,12 @@
 
 usage: offsets.py BASE_REF HEAD_REF [--json OUT]
        prints a summary and one line per file whose count changed; exit 1 if a file that exists on the base branch
-       now has more of them.
+       now has more of them (the workflow only turns that into a warning).
 
 Readable source names members (`mpOSData = new (mem) Win32Clipboard(this);`), it does not cast and add a byte
-offset (`*(void**)((char*)this + 8) = ...`). The code base still has tens of thousands of these, so instead of a
-ban this is a ratchet over the files a pull request changes (decision 2026-11-20):
-  - a file that exists on the base branch may not gain any (exit 1; a maintainer's `offsets-approved` label
-    overrides it when there really is no member to name);
-  - a new file that has some only gets a warning;
+offset (`*(void**)((char*)this + 8) = ...`). More matching functions matter far more than fewer offsets, so
+nothing fails on them (decision 2026-11-20):
+  - a file that gains some, or a new file that has some, gets a warning annotation;
   - a pull request that lowers the total and raises no file counts as a cleanup, which the "Require a new
     byte-exact function" step accepts in place of a new match (every function that matched must still match).
 
