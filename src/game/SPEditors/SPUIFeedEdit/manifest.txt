@@ -23,3 +23,4 @@
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Dispatch@PanelCallout@@QAEXII@Z  00ed74f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ??4AssetInfo@@QAEAAU0@ABU0@@Z  0065cd70  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?SelectionChanged@Panel_s00ed_6720@@QAEXH@Z  00ed7490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?InitLayout@cSPUIFeedEdit_s0065_ea00@@QAEXXZ  0065f4d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

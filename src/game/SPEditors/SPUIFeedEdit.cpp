@@ -3420,6 +3420,12 @@ char cSPUIFeedEdit_s0065_ea00::AddAsset(int a, int b, int c, void* img)
     return result;
 }
 
+extern "C" void FUN_0065e9e0();   // 0x0065e9e0, the layout reload callback
+struct LayoutKey_s0065_f4d0 {                  // ResourceKey built in place for cSPUILayout::Init
+    uint32_t instance, type, group;
+    LayoutKey_s0065_f4d0(uint32_t i, uint32_t t, uint32_t g) : instance(i), type(t), group(g) {}
+    const void* ptr() const { return this; }
+};
 // @ 0x0065f4d0
 void cSPUIFeedEdit_s0065_ea00::InitLayout()
 {
@@ -3432,14 +3438,12 @@ void cSPUIFeedEdit_s0065_ea00::InitLayout()
         mpLayout = (cSPUILayout_s0065_ea00*)nw;
         if (old) (*(FnP)Vslot(old, 8))(old);
     }
-    uint32_t keyv = *(uint32_t*)0x1526cb0;
-    uint32_t key[3];
-    key[0] = 0xa153f7a1; key[1] = 0x510a95b; key[2] = keyv;
-    mpLayout->Init(key, 1, 0x5b598fa);
+    mpLayout->Init(LayoutKey_s0065_f4d0(0xa153f7a1, 0x510a95b, g_1526cb0).ptr(), 1, 0x5b598fa);
     mpLayout->SetParentWin(*(void**)(s + 0x7c), 1, 0x5b598fa);
-    mpLayout->SetReloadCallback((void*)0x65e9e0, this);
+    mpLayout->SetReloadCallback((void*)FUN_0065e9e0, this);
     LoadLayout();
 }
+
 
 // @ 0x0065f580
 char cSPUIFeedEdit_s0065_ea00::HandleMessage(int msg, int* data)
