@@ -726,15 +726,20 @@ void FUN_00ec4e80(Rec* first, Rec* last, int depth)
         FUN_00ec4de0(first, last, last);
 }
 
+static inline int SortLog2(int x)
+{
+    int i;
+    for (i = 0; x; ++i)
+        x >>= 1;
+    return i;
+}
+
 // @ 0x00ec4f00  -- sort dispatcher
 void FUN_00ec4f00(Rec* first, Rec* last)
 {
     if (first == last) return;
-    int n = (int)(last - first);
-    int depth = 0;
-    for (int t = n; t != 0; t >>= 1) ++depth;
-    FUN_00ec4e80(first, last, depth * 2 - 2);
-    if (n > 0x1c)
+    FUN_00ec4e80(first, last, SortLog2((int)(last - first)) * 2 - 2);
+    if ((int)(last - first) > 0x1c)
     {
         FUN_00ec44a0(first, first + 0x1c);   // 0xe0 bytes = 0x1c records
         FUN_00ec4500(first + 0x1c, last);
