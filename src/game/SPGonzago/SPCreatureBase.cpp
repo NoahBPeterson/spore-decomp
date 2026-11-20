@@ -4021,6 +4021,8 @@ struct Fnc0c0e0   { bool __thiscall f(int,int); };             // 0x00c0c0e0
 struct Fnc12310   { void __thiscall f(int); };                 // 0x00c12310
 struct Fnf25080   { bool __thiscall f(void*); };               // 0x00f25080
 struct Fnc7dc20   { void __thiscall f(); };                    // 0x00c7dc20
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #define ERASE_ALL(self, off) do { \
     P* end_ = *(P**)((char*)(self)+(off)+4); \
     P* beg_ = *(P**)((char*)(self)+(off)); \
@@ -6319,7 +6321,14 @@ void __thiscall CCCh::funcCCh(int a)
     ((SPTimer*)(self + 0xfc0))->Restart();
     ((Fn3170*)(self + 0xfe0))->f();
     *(float*)(self + 0x1000) = 0.0f;
-    ERASE_ALL(self, 0x1020);
+    _ReadWriteBarrier();
+    {
+        P* const last = *(P**)(self + 0x1024);
+        P* const first = *(P**)(self + 0x1020);
+        memmove(first, last, (char*)*(P**)(self + 0x1024) - (char*)last);
+        int d = (int)last - (int)first; d >>= 2; d = -d; d += d; d += d;
+        *(int*)(self + 0x1024) += d;
+    }
     *(uint32_t*)(self + 0x1678) = 0;
     *(uint32_t*)(self + 0x101c) = 0;
 }
