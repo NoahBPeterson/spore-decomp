@@ -2515,19 +2515,22 @@ PairPtr* CopyPairs(PairPtr* first, PairPtr* last, PairPtr* dst)
     return dst;
 }
 
+struct RefObjVD {                   // RefObjV seen through its virtual destructor
+    virtual ~RefObjVD();
+    int mnRefCount;
+};
 // @ 0x0073c450
 PairPtr* ReleasePairs(PairPtr* first, PairPtr* last, PairPtr* dst)
 {
     if (first != last) {
         do {
-            RefObjV* p = first->b;
-            if (p != 0) {
+            if (first->b != 0) {
+                RefObjVD* p = (RefObjVD*)first->b;
                 volatile long* r = (volatile long*)&p->mnRefCount;
                 long n = _InterlockedDecrement(r);
                 if (n == 0) {
                     _InterlockedExchange(r, 1);
-                    if (p != 0)
-                        ((void(__thiscall*)(RefObjV*, int))p->vftable[0])(p, 1);
+                    delete p;
                 }
             }
             first = (PairPtr*)((char*)first + 8);
