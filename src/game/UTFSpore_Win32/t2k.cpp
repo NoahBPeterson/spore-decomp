@@ -143,17 +143,14 @@ void T2K_TransformXFunits(void* t, short units, int* outScaled, int* outRounded)
 // @ 0x008bfe10
 void T2K_TransformYFunits(void* t, short units, int* outScaled, int* outRounded)
 {
-    int scaled = util_FixMul((int)units << 16, I32(t, 0x13c));
-    int rounded = 0;
+    int x = 0, y;
+    y = util_FixMul((int)units << 16, I32(t, 0x13c));
     if (I32(t, 0x1c) == 0) {
-        int a = util_FixMul(I32(t, 0xc), scaled);
-        rounded = util_FixMul(I32(t, 0x14), scaled);
-        *outScaled = a;
-        *outRounded = rounded;
-    } else {
-        *outScaled = rounded;
-        *outRounded = scaled;
+        x = util_FixMul(I32(t, 0xc), y);
+        y = util_FixMul(I32(t, 0x14), y);
     }
+    *outScaled = x;
+    *outRounded = y;
 }
 
 // @ 0x008bfe80
