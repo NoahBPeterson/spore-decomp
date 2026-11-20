@@ -1500,7 +1500,7 @@ struct cDistributeEffect_s00a8_7fb0 {
 
     void FUN_00a87fb0(void* stream, int base);                        // 0x00a87fb0
     __int64 FUN_00a88220();                                       // 0x00a88220
-    bool FUN_00a88350();                                              // 0x00a88350
+    int FUN_00a88350();                                              // 0x00a88350
     int  FUN_00a88390(int count, void** outBegin, void** outStride);  // 0x00a88390
     void FUN_00a886f0(int visible);                                   // 0x00a886f0
     void FUN_00a887b0(int index, float value);                        // 0x00a887b0
@@ -2454,18 +2454,13 @@ __int64 cDistributeEffect_s00a8_7fb0::FUN_00a88220()
 }
 
 // @ 0x00a88350
-bool cDistributeEffect_s00a8_7fb0::FUN_00a88350()
+int cDistributeEffect_s00a8_7fb0::FUN_00a88350()
 {
     void* v = *(void**)((char*)this + 0x15c);
-    if (v == 0)
-        return false;
-    unsigned x = mFlags >> 10;
-    if (x & 1)
-        return false;
-    int r = ((int(__thiscall*)(void*))(*(void***)v)[0x10 / 4])(v);
-    if (r != *(int*)((char*)this + 0x168))
-        return true;
-    return false;
+    if (v != 0 && !(bool)((mFlags >> 10) & 1) &&
+        ((int(__thiscall*)(void*))(*(void***)v)[0x10 / 4])(v) != *(int*)((char*)this + 0x168))
+        return 1;
+    return 0;
 }
 
 // @ 0x00a88390
