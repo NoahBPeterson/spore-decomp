@@ -641,14 +641,17 @@ struct Elem16VectorD {
 };
 template struct eastl::pair_s0061_2270<uint32_t, EA::Variant_s0061_2270>;
 struct cStreamWriter {
-    EA::IO::IStream_s0061_2270* mpStream;
-    int mEndian;
-    bool mbOk;
-    char pad[7];
+    uint32_t m00;                                   // +0x00
+    uint32_t m04;                                   // +0x04
+    EA::IO::IStream_s0061_2270* mpStream;           // +0x08
+    int mEndian;                                    // +0x0c
+    bool mbOk;                                      // +0x10
     cStreamWriter(EA::IO::IStream_s0061_2270* pStream, bool bBigEndian);  // 0x006b4f60
     void Accumulate(bool bResult);                              // 0x006b4f90
     void WriteVariant(const EA::Variant_s0061_2270* v);                    // 0x006b4fa0
     ~cStreamWriter();                                           // 0x006b5000
+    void WriteU32(uint32_t v) { if (mbOk) Accumulate(EA::IO::WriteUint32(mpStream, &v, 1, mEndian)); }
+    void WriteU64(uint64_t v) { if (mbOk) Accumulate(EA::IO::WriteUint64(mpStream, &v, 1, mEndian)); }
 };
 struct RefCountBase {
     virtual ~RefCountBase() {}
@@ -1250,17 +1253,15 @@ void cAssetCache::AddAsset(u64 id, const void* data)
 bool cPropertyListWriter::Write(EA::IO::IStream_s0061_2270* pStream, const cPropertyBag* pBag)
 {
     cStreamWriter w(pStream, true);
-    uint32_t version = 3;
-    if (w.mbOk) w.Accumulate(EA::IO::WriteUint32(w.mpStream, &version, 1, w.mEndian));
-    uint64_t id = *(const uint64_t*)&pBag->mField18;
-    if (w.mbOk) w.Accumulate(EA::IO::WriteUint64(w.mpStream, &id, 1, w.mEndian));
-    uint32_t count = (uint32_t)(pBag->mpEnd - pBag->mpBegin);
-    if (w.mbOk) w.Accumulate(EA::IO::WriteUint32(w.mpStream, &count, 1, w.mEndian));
+    w.WriteU32(3);
+    w.WriteU64(*(const uint64_t*)&pBag->mField18);
+    w.WriteU32((uint32_t)(pBag->mpEnd - pBag->mpBegin));
     for (const PropPair* it = pBag->mpBegin; it != pBag->mpEnd; ++it) {
-        PropPair tmp;
-        tmp = *it;
-        if (w.mbOk) w.Accumulate(EA::IO::WriteUint32(w.mpStream, &tmp.first, 1, w.mEndian));
-        w.WriteVariant(&tmp.second);
+        uint32_t key = it->first;
+        EA::Variant_s0061_2270 v;
+        v = it->second;
+        w.WriteU32(key);
+        w.WriteVariant(&v);
     }
     return w.mbOk;
 }
