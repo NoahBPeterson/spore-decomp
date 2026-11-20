@@ -44,7 +44,6 @@
 006ec730 99 complete; state ctor, register/temp ordering differs (extra esi zero reg) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006ecdd0 69 complete; vector<Pair3> push_back, local temp placement/`add ecx,8` differs
 006ece90 106 complete; vector<Pair3> fill_n loop, schedule differs
-006ecf10 97 complete; builds two resource-vector lists, loop shape/register differs
 006ecfc0 126 complete; struct copy-assign, field schedule differs
 006ed1a0 87 complete; per-entity enable flag, register/schedule differs
 006ed210 147 complete; per-entity teardown + free-id push, schedule differs
