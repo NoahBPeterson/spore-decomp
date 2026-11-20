@@ -3497,7 +3497,8 @@ struct PaletteSwatch_ece140 {
     float mAmount_64;                // +0x64  amount (negative -> default)
     void SetMode(int mode);
 };
-struct Obj_ecdc70 { int FUN_00ecdc70(); };
+struct Obj_ecdc70 { bool FUN_00ecdc70(); };
+struct Vec4_ecdc70 { float x, y, z, w; };
 // ---- items of slice s00ecda80 end
 
 // ---- items of slice s00eceab0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -5473,20 +5474,18 @@ SP::cSPSwatch::cSPSwatch()
 }
 
 // @ 0x00ecdc70
-int Obj_ecdc70::FUN_00ecdc70()
+bool Obj_ecdc70::FUN_00ecdc70()
 {
     int param_1 = (int)this;
-    char c = FUN_005f3060();
-    if (c) {
-        char buf[8];
-        FUN_00805fe0(buf, *(int*)(param_1 + 0x18c));
-        float f = *(float*)(buf + 8);
-        if (f < *(float*)(param_1 + 0x84)) {
+    if (FUN_005f3060()) {
+        Vec4_ecdc70 v;
+        FUN_00805fe0(&v, *(int*)(param_1 + 0x18c));
+        if (*(float*)(param_1 + 0x84) > v.z) {
             if (FUN_00efc9c0())
-                return 1;
+                return true;
         }
     }
-    return 0;
+    return false;
 }
 
 // @ 0x00ecdcc0
