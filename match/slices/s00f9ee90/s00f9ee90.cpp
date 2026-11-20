@@ -626,25 +626,27 @@ void __cdecl FUN_00f9f810(Elem16* first, Elem16* last, unsigned key)
     } while (n > 1);
 }
 
+struct Rec5Iter {
+    Rec5* mp;
+    Rec5Iter(Rec5* p) : mp(p) {}
+};
+struct Rec5CIter { const Rec5* mp; };
 // -------------------------------------------------------------------------------------
 // @ 0x00f9f8f0
-void __cdecl FUN_00f9f8f0(Rec5** out, const Rec5* src, const Rec5* srcEnd, Rec5* dst)
+Rec5Iter __cdecl FUN_00f9f8f0(Rec5CIter src, Rec5CIter srcEnd, Rec5* dst)
 {
-    *out = dst;
-    if (src == srcEnd)
-        return;
-    do {
-        if (dst) {
-            dst->f[0] = src->f[0];
-            dst->f[1] = src->f[1];
-            dst->f[2] = src->f[2];
-            dst->f[3] = src->f[3];
-            dst->f[4] = src->f[4];
+    Rec5Iter out(dst);
+    for (; src.mp != srcEnd.mp; ++src.mp, ++out.mp) {
+        const Rec5& s = *src.mp;
+        if (Rec5* d = out.mp) {
+            d->f[0] = s.f[0];
+            d->f[1] = s.f[1];
+            d->f[2] = s.f[2];
+            d->f[3] = s.f[3];
+            d->f[4] = s.f[4];
         }
-        ++src;
-        ++dst;
-    } while (src != srcEnd);
-    *out = dst;
+    }
+    return out;
 }
 
 // -------------------------------------------------------------------------------------
