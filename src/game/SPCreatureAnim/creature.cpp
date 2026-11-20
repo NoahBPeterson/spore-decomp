@@ -3785,31 +3785,26 @@ void nSPCreatureAnim::Solver::SortRange(int* a, int* b)
 // @ 0x009b5930
 void nSPCreatureAnim::Solver::SortFlaggedRuns()
 {
-    Solver* self = this;
-    unsigned int n = (unsigned int)((int)((char*)self->mOrderPairsEnd - (char*)self->mOrderPairs) >> 3);
-    int first = 0;
-    int last = 0;
-    if (self->mFlaggedCount == 0) {
-        self->SortRange(self->mOrderPairs, (int*)((char*)self->mOrderPairs - 8 + n * 8));
-        return;
-    }
-    unsigned int i = 0;
-    if (n != 0) {
-        do {
-            char flag = *(char*)((char*)self->mOrderPairs + 4 + i * 8);
-            int cur = (int)((char*)self->mOrderPairs + i * 8);
-            if (flag != 0 && last == 0)
+    unsigned int n = (unsigned int)((int)((char*)mOrderPairsEnd - (char*)mOrderPairs) >> 3);
+    int* first = 0;
+    int* last = 0;
+    if (mFlaggedCount != 0) {
+        for (unsigned int i = 0; i < n; ++i) {
+            char flag = *(char*)((char*)mOrderPairs + 4 + i * 8);
+            int* cur = (int*)((char*)mOrderPairs + i * 8);
+            if (flag != 0) {
+                if (first == 0)
+                    first = cur;
                 last = cur;
-            if (first == 0) {
-                first = cur;
             }
-            if ((first != 0 && last != 0) && (flag == 0 || i == n - 1)) {
-                self->SortRange((int*)first, (int*)last);
+            if (first != 0 && last != 0 && (flag == 0 || i == n - 1)) {
+                SortRange(first, last);
                 last = 0;
                 first = 0;
             }
-            ++i;
-        } while (i < n);
+        }
+    } else {
+        SortRange(mOrderPairs, (int*)((char*)mOrderPairs - 8 + n * 8));
     }
 }
 
