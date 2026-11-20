@@ -11697,19 +11697,20 @@ bool cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea200()
     if (this->mn108 == 1)
         this->mn10c = 2;
 
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x4360e14);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x56bbd7f);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x44db12e);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x5bd6378);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x5dd52c7);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x6203fdc);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x4519b5f);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x625d27d);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x67c75bd6);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x634297ad);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x275a9c8c);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0xeda117de);
-    ((cUIObject*)MessageServer())->v20(&this->mHandler08, 0x8085c4c);
+    void* pHandler = &this->mHandler08;
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x4360e14);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x56bbd7f);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x44db12e);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x5bd6378);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x5dd52c7);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x6203fdc);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x4519b5f);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x625d27d);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x67c75bd6);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x634297ad);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x275a9c8c);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0xeda117de);
+    ((cUIObject*)MessageServer())->v20(pHandler, 0x8085c4c);
 
     cIEffectsWorld* pWorld = this->mp38;
     if (this->mb24c != 0)
@@ -11717,6 +11718,7 @@ bool cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea200()
         if (pWorld != 0)
             pWorld->v48(this->mp250);
         this->mb24c = 0;
+        _ReadWriteBarrier();
         tRefObj* pEffect = this->mp250;
         if (pEffect != 0)
         {
@@ -11731,8 +11733,8 @@ bool cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea200()
             pWorld->v4c();
     }
 
-    uint8_t* pEnd = (uint8_t*)&this->mp128;
     uint8_t* pCur = (uint8_t*)this->mp12c;
+    uint8_t* pEnd = (uint8_t*)&this->mp128;
     for (; pCur != pEnd; pCur = (uint8_t*)RBTreeIncrement(pCur))
         ((cVisitNode*)pCur)->mp14->v38();
 
