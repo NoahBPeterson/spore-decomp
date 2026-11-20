@@ -592,7 +592,7 @@ void __fastcall FUN_00634030(void* self) {
   char* s = (char*)self;
   cSPPlayModePhotoBrowser* b = (cSPPlayModePhotoBrowser*)self;
   RBTreeHead* map = &b->mPhotoTypeMap;
-  map->DoNuke(*(RBNode**)(s + 0x74));
+  map->DoNuke(map->mAnchor.parent);
   RBNode* anchor = (RBNode*)&map->mAnchor;
   map->mAnchor.left = anchor;
   map->mAnchor.parent = 0;
@@ -605,10 +605,10 @@ void __fastcall FUN_00634030(void* self) {
   b->mCurrentFirstPhotoIndex = 0;
   b->ShowImageThumbnail();
   ((PMB*)b)->UpdatePhotoCountText();
-  if (b->mPhotos.size() == 0)
-    b->mUI->SetUIGroupVisible(0x4463e78, 0);
-  else
+  if (b->mPhotos.size() > 0)
     b->mUI->SetUIGroupVisible(0x4463e78, 1);
+  else
+    b->mUI->SetUIGroupVisible(0x4463e78, 0);
 }
 
 // @ 0x006340c0
