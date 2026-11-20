@@ -553,17 +553,20 @@ hkWorldOperation::Result hkRigidBody::setShape(const hkShape* shape)
 // @ 0x010876d0
 void hkRigidBody::setDeactivator(hkRigidBodyDeactivator::DeactivatorType type)
 {
-	if (m_deactivator == 0 || m_deactivator->getDeactivatorType() != type)
+	hkEntityDeactivator* current = m_deactivator;
+	if (current != 0 && current->getDeactivatorType() == type)
+		return;
+	switch (type)
 	{
-		if (type == hkRigidBodyDeactivator::DEACTIVATOR_NEVER)
-		{
+		case hkRigidBodyDeactivator::DEACTIVATOR_NEVER:
 			hkEntity::setDeactivator((hkEntityDeactivator*)g_hkRigidBodyDeactivatorNever);
-		}
-		else if (type == hkRigidBodyDeactivator::DEACTIVATOR_SPATIAL)
+			break;
+		case hkRigidBodyDeactivator::DEACTIVATOR_SPATIAL:
 		{
 			hkSpatialRigidBodyDeactivator* d = new hkSpatialRigidBodyDeactivator();
 			hkEntity::setDeactivator(d);
 			d->removeReference();
+			break;
 		}
 	}
 }
