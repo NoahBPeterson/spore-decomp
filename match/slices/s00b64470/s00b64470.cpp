@@ -352,7 +352,8 @@ int BuildShapeFromSource(void* owner, float scale, IShapeSource* source)
     if (!key)
         return 0;
     int result = 0;
-    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, 0);
+    hkShapeBuilderMap* map = GetShapeBuilderMap();
+    ShapeBuilderFn builder = (ShapeBuilderFn)map->find(key, 0);
     if (builder)
         result = builder(owner, scale, source);
     return result;
