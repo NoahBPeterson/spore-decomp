@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00bc96a0 53 complete (register allocation only: params land in edx/edi with ebx as loop scratch vs retail edi/ebx with eax/ecx scratch; identical instruction count, +2 bytes from the loop-exhaust xor eax,eax); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv: PASS 400 valid, 82.9% coverage, 0 mismatches
-00c06500 62 Simulator::cCreatureBase::CreateLocomotionStrategy: complete; equiv UNSUPPORTED (2 unresolved callees); flag test (test imm vs shr) and m[8] compare differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c06630 78 eastl partial_sort(first,middle,last,comp): complete; equiv WEAK (56.2% coverage); heap/extract fully translated, register allocation differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c066a0 153 pool node emplace (refcounted first field): complete; equiv UNSUPPORTED (unresolved pool allocator call) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c06750 160 pool node emplace (ptr +8, refcount +0x10): complete; equiv UNSUPPORTED (unresolved pool allocator call) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

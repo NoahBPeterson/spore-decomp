@@ -5907,6 +5907,12 @@ void* Stimuli::Find(uint a, uint b)
     return 0;
 }
 
+struct ActionCtx;
+void FUN_00b498d0(ActionCtx* ctx);   // 0x00b498d0
+void FUN_00b49730(void* ctx);        // 0x00b49730
+void FUN_00b493e0(void* ctx);        // 0x00b493e0
+void FUN_00b4c730(void* ctx);        // 0x00b4c730
+
 // @ 0x00c06500
 void CB_s00c0_53b0::func6500()
 {
@@ -5914,17 +5920,20 @@ void CB_s00c0_53b0::func6500()
     SP_GetCurrentGameMode();
     *(uint32_t*)((char*)self + 0x2b0) = 0;
     char* body = (char*)self + 0xc0;
-    FUN_00b3d310();
-    void* v = FUN_00c06000();
+    void* v = (void*)FUN_00c06000_tc(FUN_00b3d310());
     ((Fn421b0*)body)->f(v);
     ((Fn44040*)body)->f();
     int* m = (int*)FUN_00b3d310();
-    if (m[0x20 / 4] == 0 || m[0x20 / 4] == 2)
-        ((Fn43fe0*)body)->f((void*)0x00b498d0);
-    if (((*(uint32_t*)((char*)self + 0xb58) >> 9) & 1) && SP_GetCurrentGameMode() == (void*)0x01654c05) {
-        ((Fn43fe0*)body)->f((void*)0x00b49730);
-        ((Fn43fe0*)body)->f((void*)0x00b493e0);
-        ((Fn43fe0*)body)->f((void*)0x00b4c730);
+    switch (m[0x20 / 4]) {
+    case 0:
+    case 2:
+        ((Fn43fe0*)body)->f((void*)&FUN_00b498d0);
+    }
+    bool on = ((*(uint32_t*)((char*)self + 0xb58) >> 9) & 1) != 0;
+    if (on && SP_GetCurrentGameMode() == (void*)0x01654c05) {
+        ((Fn43fe0*)body)->f((void*)&FUN_00b49730);
+        ((Fn43fe0*)body)->f((void*)&FUN_00b493e0);
+        ((Fn43fe0*)body)->f((void*)&FUN_00b4c730);
     }
 }
 
