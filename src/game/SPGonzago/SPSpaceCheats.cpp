@@ -1645,6 +1645,10 @@ LayoutNode* FUN_01023180(LayoutNode* b, LayoutNode* e, LayoutNode* d);  // 0x010
 namespace SP {
 namespace nSpaceCheats {
 struct LayoutRefObj { virtual void vSlot(); };
+struct LayoutRef {                      // intrusive pointer passed by value (AddRef = slot 0)
+    int* p;
+    LayoutRef(const LayoutRef& o) : p(o.p) { if (p) ((LayoutRefObj*)p)->vSlot(); }
+};
 }
 }
 namespace SP {
@@ -1659,7 +1663,7 @@ int** FUN_01021180(int** a, int** b, int** c, LayoutRefCmp cmp);              //
 }
 namespace SP {
 namespace nSpaceCheats {
-int** FUN_01023270(int** begin, int** end, int* obj, LayoutRefCmp cmp);      // 0x01023270
+int** FUN_01023270(int** begin, int** end, LayoutRef obj, LayoutRefCmp cmp);      // 0x01023270
 }
 }
 namespace SP {
@@ -1970,11 +1974,8 @@ namespace SP { namespace nSpaceCheats {
 void FUN_01024920(int** begin, int** end, int depth, LayoutRefCmp cmp)
 {
     while (((int)((char*)end - (char*)begin) & ~3) > 0x70 && depth > 0) {
-        int** p = FUN_01021180(begin, begin + (end - begin) / 2, end - 1, cmp);
-        int* obj = *p;
-        if (obj)
-            ((LayoutRefObj*)obj)->vSlot();
-        int** pivot = FUN_01023270(begin, end, obj, cmp);
+        int** pivot = FUN_01023270(begin, end,
+            *(LayoutRef*)FUN_01021180(begin, begin + (end - begin) / 2, end - 1, cmp), cmp);
         --depth;
         FUN_01024920(pivot, end, depth, cmp);
         end = pivot;
