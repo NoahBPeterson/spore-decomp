@@ -1318,8 +1318,6 @@ int BehaviorLookup(uint32* p)
     return (int)(size_t)g_166c07c;
 }
 
-
-
 // @ 0x009fe560
 uint32* MapIdxC::insert(const uint32& key)
 {

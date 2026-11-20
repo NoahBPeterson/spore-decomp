@@ -6243,8 +6243,6 @@ void cTribeModeStrategy_s00cd_ab10::FUN_00cdba90()
     }
 }
 
-
-
 // @ 0x00cdbb10
 int SP::cTribeModeStrategy_s00cd_bb10::FUN_00cdbb10()
 {

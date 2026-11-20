@@ -1045,8 +1045,6 @@ bool EA::ResourceMan::DatabasePackedFile::SetStream(EA::IO::IStream * s)
     return false;
 }
 
-
-
 // @ 0x008d8710
 unsigned int EA::ResourceMan::DatabasePackedFile::GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * a, EA::ResourceMan::KeyFilter * b)
 {

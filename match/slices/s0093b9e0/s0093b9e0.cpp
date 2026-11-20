@@ -580,8 +580,6 @@ bool __thiscall EA::IO::MemoryStream::SetSize(size_type size)
     return result;
 }
 
-
-
 // @ 0x0093c3f0
 int __fastcall FUN_0093c3f0(void** self)
 {

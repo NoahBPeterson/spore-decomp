@@ -5677,8 +5677,6 @@ cAgentOrder* cAgentOrderManager::FindNode(int key, bool (*pred)(void*, void*), v
     return 0;
 }
 
-
-
 // @ 0x00bca670
 void FUN_00bca670(void* p)
 {

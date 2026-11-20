@@ -5291,8 +5291,6 @@ TObj* TObj::FUN_00cb94b0()
     return this;
 }
 
-
-
 // @ 0x00cb9600
 void* TObj::_virtual_dtor(uint8_t param_2)
 {

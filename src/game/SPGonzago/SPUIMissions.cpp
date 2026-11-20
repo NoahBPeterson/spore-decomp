@@ -4157,8 +4157,6 @@ void PaintSystem::FUN_00e17470(int id)
     }
 }
 
-
-
 // @ 0x00e17570
 void cMissionPanel::FUN_00e17570(void* mission)
 {

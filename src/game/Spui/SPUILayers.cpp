@@ -1028,8 +1028,6 @@ UI_LayerManager* __thiscall UI_LayerManager::ctor()
     return this;
 }
 
-
-
 // @ 0x0080ee10
 void* __thiscall UI_LayerManager::VectorDtor(u8 flags)
 {

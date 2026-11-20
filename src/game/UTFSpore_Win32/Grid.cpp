@@ -7132,7 +7132,6 @@ void IWinGridIface::SetColumnHeading(unsigned key, const wchar_t* text)
     w->assign(text, text + (e - text));
 }
 
-
 // @ 0x009766f0
 void IWinGridIface::GetColumnHeading(unsigned key, void** pOut)
 {

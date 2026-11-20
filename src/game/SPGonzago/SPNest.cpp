@@ -1048,8 +1048,6 @@ void* SP::cHerd_s00c6_a550::GetProfileForGeneration(unsigned gen)
 }
 }
 
-
-
 // @ 0x00c6ac40
 namespace SP {
 bool SP::cHerd_s00c6_a550::UnbrokenEggsInNest()

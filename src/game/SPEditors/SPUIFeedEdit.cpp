@@ -3444,7 +3444,6 @@ void cSPUIFeedEdit_s0065_ea00::InitLayout()
     LoadLayout();
 }
 
-
 // @ 0x0065f580
 char cSPUIFeedEdit_s0065_ea00::HandleMessage(int msg, int* data)
 {
