@@ -3656,7 +3656,7 @@ float FUN_00e563e0(void* obj)
     float f = g_1485720;
     int idx = *(int*)((char*)obj + 0x358);
     if (idx != -1) {
-        int lvl = SP_sGetSourceLevel();
+        int lvl = SP_sGetSourceLevel(gspCellGame_s00e6_e8c0, gspCellGame_s00e6_e8c0->mpLevelInfo->mLevel);
         f = g_1483bd0[idx] / g_1483bd0[lvl];
     }
     return FUN_00e837c0(0x7ac2e49f, f);

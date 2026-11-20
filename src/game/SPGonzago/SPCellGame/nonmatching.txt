@@ -16,7 +16,6 @@
 00e560d0 210 apply impulse to fluid cell + accumulate: complete; index/loop register allocation differs
 00e56200 152 cell "population" getter (x100): complete; fld/fstp value forwarding schedule differs
 00e56300 149 cell "growth" getter (x20): complete; fld/fstp value forwarding schedule differs
-00e563e0 28 level-relative scale (SQRT/table): complete; call/const schedule differs
 00e56450 63 level-relative multiplier curve: complete; x87 branch/const schedule differs
 00e56560 225 cell gravity/velocity vector: complete; register allocation (esi/edx) differs
 00e56700 174 keyframe-interp table lookup: complete; clamps and x87 schedule differ
