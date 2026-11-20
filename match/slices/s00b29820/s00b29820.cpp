@@ -760,15 +760,24 @@ SgVec3 __stdcall FUN_00b2a790()
     return gVec167e0a0;
 }
 
+// map<uint32_t, SgVal*> iterator and the find_if predicate matching an SgVal id pair
+struct SgPair { uint32_t first; SgVal* second; };
+struct SgIter {
+    SgNode* mpNode;
+    SgIter(const SgIter& x) : mpNode(x.mpNode) {}
+    const SgPair& operator*() const { return *(const SgPair*)&mpNode->m10; }
+    SgIter& operator++() { mpNode = (SgNode*)RBTreeIncrement(mpNode); return *this; }
+    bool operator!=(const SgIter& x) const { return mpNode != x.mpNode; }
+};
+struct SgIdPred {
+    uint32_t idLo, idHi;
+    bool operator()(SgPair p) const { return p.second->m120 == idLo && p.second->m124 == idHi; }
+};
 // @ 0x00b2a880
-void FUN_00b2a880(void** out, void* begin, void* end, uint32_t idLo, uint32_t idHi)
+SgIter FUN_00b2a880(SgIter first, SgIter last, SgIdPred pred)
 {
-    while (begin != end)
-    {
-        SgVal* v = (SgVal*)((SgNode*)begin)->m14;
-        if (v->m120 == idLo && v->m124 == idHi)
+    for (; first != last; ++first)
+        if (pred(*first))
             break;
-        begin = RBTreeIncrement(begin);
-    }
-    *out = begin;
+    return first;
 }
