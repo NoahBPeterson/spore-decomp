@@ -6383,7 +6383,7 @@ cAutoRef12* AssignRefPairRange(cAutoRef12* pSrc, cAutoRef12* pEnd, cAutoRef12* p
 }
 
 // @ 0x00bdaa90
-void CopyBucket28(uint8_t* pSrc, uint8_t* pEnd, uint8_t* pDst)
+uint8_t* CopyBucket28(uint8_t* pSrc, uint8_t* pEnd, uint8_t* pDst)
 {
     while (pSrc != pEnd) {
         if (pDst) {
@@ -6398,6 +6398,7 @@ void CopyBucket28(uint8_t* pSrc, uint8_t* pEnd, uint8_t* pDst)
         pSrc += 0x1c;
         pDst += 0x1c;
     }
+    return pDst;
 }
 
 // @ 0x00bdaae0
