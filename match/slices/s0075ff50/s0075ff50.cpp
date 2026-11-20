@@ -183,17 +183,18 @@ RefTriple* copy_triples(RefTriple* first, RefTriple* last, RefTriple* dest)
 // --------------------------------------------------------------- 0x760c00 (ctor)
 struct Base2 {
     virtual void b0();
-    int x, y, z, w;
-    Base2() : x(0), y(0), z(0), w(0) {}
+    int mRefCount;
+    Base2() : mRefCount(0) {}
 };
 struct Base1 {
     virtual void a0();
 };
 struct Poly2 : Base1, Base2 {
+    int x, y, z;
     Poly2();
 };
 // @ 0x00760c00
-Poly2::Poly2() {}
+Poly2::Poly2() : x(0), y(0), z(0) {}
 
 // ---------------------------------------------------------------- 0x760c40 (erase)
 struct RefCountedAt8 {
