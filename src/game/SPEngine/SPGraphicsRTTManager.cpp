@@ -147,6 +147,8 @@ extern "C" long _InterlockedIncrement(volatile long* Addend);
 extern "C" const float g_kBytesToMB;           // 0x0140e4b0 = 9.536743e-07f
 #pragma intrinsic(_InterlockedExchangeAdd)
 #pragma intrinsic(_InterlockedIncrement)
+extern "C" long _InterlockedDecrement(volatile long* Addend);
+#pragma intrinsic(_InterlockedDecrement)
 inline void* operator new(unsigned int, void* p) { return p; }
 struct PageRecord {
     int a[7];             // +0x00
@@ -864,9 +866,9 @@ void Rec3c::DestroyOne()
     if (mTexture) {
         // AutoRefCount release: atomic decrement at +8, restore when it would drop below 1.
         volatile long* rc = (volatile long*)((char*)mTexture + 8);
-        _InterlockedExchangeAdd(rc, -1);
+        _InterlockedDecrement(rc);
         if (_InterlockedExchangeAdd(rc, 0) < 1)
-            _InterlockedIncrement(rc);
+            _InterlockedExchangeAdd(rc, 1);
         else
             _InterlockedExchangeAdd(rc, 0);
     }
