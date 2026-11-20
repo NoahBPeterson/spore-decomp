@@ -2395,7 +2395,7 @@ found:
         return false;
     if (i >= (int)((p->mResEnd - p->mResBegin) >> 2))
         return false;
-    uint32_t prop = ((uint32_t*)p->mResBegin)[i];
+    uint32_t prop = (*(uint32_t* volatile*)&p->mResBegin)[i];
     *p1 = 0;
     *p2 = 0;
     *p3 = 0;

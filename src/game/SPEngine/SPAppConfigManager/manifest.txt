@@ -40,3 +40,4 @@
 ../src/game/SPEngine/SPAppConfigManager.cpp  ??1cConfigManagerDtorView_7cc260@SP@@QAE@XZ  007cc260  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppConfigManager.cpp  ??1cConfigScriptStateView_7cc190@@QAE@XZ  007cc190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppConfigManager.cpp  ?GetConfigString@cConfigManager_s007c_8940@@QAE_NIPAUStr16@@@Z  007c9760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?GetScreenResolutionInfo@cConfigManager@@QAE_NHPAI00@Z  007c7cd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
