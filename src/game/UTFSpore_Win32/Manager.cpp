@@ -307,12 +307,15 @@ struct RbTree {
 
     void DoInsertValueImpl(void* p2, char* pPos, void* pValue, char flag); // @ 0x008dee90
 };
+struct AutoRefVecAllocator {                 // eastl allocator: core allocator + name
+    EA::ResourceMan::IAllocatorV* mpCoreAllocator;
+    const char* mpName;
+};
 struct AutoRefVec {
     void* mpBegin;      // +0x00
     void* mpEnd;        // +0x04
     void* mpCapacity;   // +0x08
-    void* mpAllocator;  // +0x0c
-    void* mpName;       // +0x10
+    AutoRefVecAllocator mAllocator;  // +0x0c
 
     void* Fn8def20(int n, void* pAllocPair); // @ 0x008def20
 };
@@ -1417,20 +1420,11 @@ void RbTree::DoInsertValueImpl(void* p2, char* pPos, void* pValue, char flag)
 // @ 0x008def20
 void* AutoRefVec::Fn8def20(int n, void* pAllocPair)
 {
-    void* alloc = *(void**)pAllocPair;
-    mpAllocator = alloc;
-    void* name = *((void**)pAllocPair + 1);
-    mpName = name;
-    if (n) {
-        void* mem = ((EA::ResourceMan::IAllocatorV*)alloc)->Allocate(n * 8, 0, (const char*)name);
-        mpBegin = mem;
-        mpEnd = mem;
-        mpCapacity = (char*)mem + n * 8;
-        return this;
-    }
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
+    mAllocator = *(const AutoRefVecAllocator*)pAllocPair;
+    void* mem = n ? mAllocator.mpCoreAllocator->Allocate(n * 8, 0, mAllocator.mpName) : 0;
+    mpBegin = mem;
+    mpEnd = mem;
+    mpCapacity = (char*)mem + n * 8;
     return this;
 }
 
