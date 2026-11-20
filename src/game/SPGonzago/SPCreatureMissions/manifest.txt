@@ -40,3 +40,4 @@
 ../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2e420@MissionStub@@QAEEH@Z  00c2e420  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2f3e0@@YIXPAH@Z  00c2f3e0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2f520@MissionStub@@QAEXXZ  00c2f520  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2f650@@YIMPAH@Z  00c2f650  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

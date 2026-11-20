@@ -914,14 +914,19 @@ void MissionStub::FUN_00c2f5f0()
 }
 
 // @ 0x00c2f650
-void __fastcall FUN_00c2f650(int* self)
+struct cRelationshipManager {
+    float ClampRelationship(void* a, void* b, void* c);   // 0x00d00a10
+};
+struct PoliticalIdSource {
+    void* GetPlayerPoliticalID();                         // 0x00b1f9d0
+};
+float __fastcall FUN_00c2f650(int* self)
 {
     int* p = *(int**)((char*)self + 0x80);
-    void* noun = FUN_00b3d300(0);
-    int empire = FUN_00b1f9d0(noun);
-    int rel = ((int(__thiscall*)(void*, int))(*(void***)p)[0x4c / 4])(p, empire);
-    void* relMgr = FUN_00b3d2c0(rel);
-    FUN_00d00a10(relMgr);
+    return ((cRelationshipManager*)((void*(*)())FUN_00b3d2c0)())->ClampRelationship(
+        ((void*(__thiscall*)(void*))(*(void***)p)[0x4c / 4])(p),
+        ((PoliticalIdSource*)((void*(*)())FUN_00b3d300)())->GetPlayerPoliticalID(),
+        0);
 }
 
 // @ 0x00c2f690
