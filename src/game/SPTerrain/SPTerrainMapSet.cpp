@@ -279,6 +279,7 @@ cTerrainMapSet::~cTerrainMapSet()
         hr->mCells = 0;
         op_delete(hr);
     }
+    mHeightRanges = 0;
 
     cTerrainMapBase** p = mMaps + 11;
     int n = 10;
