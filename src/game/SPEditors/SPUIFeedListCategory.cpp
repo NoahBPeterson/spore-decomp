@@ -613,7 +613,8 @@ void cSPUIFeedListCategory::FUN_00664480(bool expanded)
     if (expanded == m9c) return;
     m9c = expanded;
     if (m80) {
-        IWindow* btn = m80 ? m80->FindWindow(0x8ed27e7a) : 0;
+        IWindow* w = *(IWindow* volatile*)&m80;
+        IWindow* btn = w ? w->FindWindow(0x8ed27e7a) : 0;
         ((IWindow*)btn)->SetStateFlag(4, m9c);
     }
     if (m60) ((FeedNotify*)m60)->FUN_00662b00(this);
