@@ -2,3 +2,4 @@
 slices/s00b159e0/s00b159e0.cpp  ?FUN_00b159e0@cTerrainCameraController@@QAEXH@Z  00b159e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b159e0/s00b159e0.cpp  ?FUN_00b15a80@cTerrainCameraController@@QAE_NHMMH@Z  00b15a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b159e0/s00b159e0.cpp  ?FUN_00b16450@@YAXPAMPAH@Z  00b16450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b159e0/s00b159e0.cpp  ?FUN_00b15a20@cTerrainCameraController@@QAEXI@Z  00b15a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
