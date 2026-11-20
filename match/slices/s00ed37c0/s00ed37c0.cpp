@@ -173,16 +173,13 @@ struct RecordMap {
 
 // callees shared with the record-map / palette code (SLICE s00ed2600).
 extern "C" {
-    void* __stdcall FUN_00ed1f00(void* tab, int key);            // 0x00ed1f00 (find by key)
     int   __cdecl   FUN_00ed29b0(Record* a, Record* b, int* key, int flag);  // 0x00ed29b0 (lower_bound)
     Record* __cdecl FUN_00ed3740(RecordMap* self, Record* pos, int* key);    // 0x00ed3740 (insert)
-    void  __cdecl   FUN_00ed3120(void* self, void* item, int one);           // 0x00ed3120 (select)
 }
 Record* __cdecl FUN_00f2d260(Record* p);                         // 0x00f2d260 (construct element)
 char*   __cdecl FUN_00dff1a0(char* dst, char* src);              // 0x00dff1a0 (copy-construct)
 void    __cdecl FUN_00dfce90(void* p);                           // 0x00dfce90 (destroy element)
 int     __cdecl FUN_00eece20(int key);                           // 0x00eece20 (key -> icon)
-void*   __cdecl FUN_00ed1f70(void* tab, int key);                // 0x00ed1f70 (insert into vec)
 Record* __cdecl FUN_00ed1ec0(RecordMap* self);                   // 0x00ed1ec0
 
 
@@ -254,6 +251,9 @@ struct ScnRecBody {                 // helper view (ecx == ProcessMessage this -
     void ClearTwo(int key);         // 0x00ed3920
     void DeselectTwo(int key);      // 0x00ed39a0
     void ChooseSubCategory(void* sub, int key);  // 0x00ed3b20
+    void* FUN_00ed1f00(void* tab, int key);      // 0x00ed1f00 (find by key)
+    void* FUN_00ed1f70(void* tab, int key);      // 0x00ed1f70 (insert into vec)
+    void  FUN_00ed3120(void* item, int one);     // 0x00ed3120 (select)
 };
 
 struct ScnRec {                     // ProcessMessage view (this == ScnRecBody + 8)
@@ -449,13 +449,14 @@ Record* RecordMap::Find(int* key)
 // virtual hand-off and select the record.
 void ScnRecBody::RemoveIcon(int key)
 {
-    if (key == -1)
+    int id = key;
+    if (id == -1)
         return;
 
-    RecordMap* map = (RecordMap*)(g_16c7aa4->sub->db + 0x2bf4);
-    Record* rec = map->Find(&key);
+    char* db = g_16c7aa4->sub->db;
+    Record* rec = ((RecordMap*)(db + 0x2bf4))->Find(&key);
 
-    PalEntry* e = (PalEntry*)FUN_00ed1f00(&palVecA, key);
+    PalEntry* e = (PalEntry*)FUN_00ed1f00(&palVecA, id);
     if (!e) {
         int icon = FUN_00eece20((int)rec);
         e = (PalEntry*)FUN_00ed1f70(&palVecA, icon);
@@ -464,7 +465,7 @@ void ScnRecBody::RemoveIcon(int key)
         void* obj = e->item;
         ((void(__thiscall*)(void*, int))(*(void***)obj)[0x1c / 4])(obj, key);
     }
-    FUN_00ed3120(this, e->pal, 1);
+    FUN_00ed3120(e->pal, 1);
 }
 
 // @ 0x00ed3920 -- ScnRecBody::ClearTwo(key): clear the key from both palVecA and
@@ -478,14 +479,14 @@ void ScnRecBody::ClearTwo(int key)
     if (e) {
         void* obj = e->item;
         ((void(__thiscall*)(void*))(*(void***)obj)[0x20 / 4])(obj);
-        FUN_00ed3120(this, e->pal, 1);
+        FUN_00ed3120(e->pal, 1);
     }
 
     e = (PalEntry*)FUN_00ed1f00(&palVecB, key);
     if (e) {
         void* obj = e->item;
         ((void(__thiscall*)(void*))(*(void***)obj)[0x20 / 4])(obj);
-        FUN_00ed3120(this, e->pal, 1);
+        FUN_00ed3120(e->pal, 1);
     }
 }
 
@@ -550,7 +551,7 @@ void ScnRecBody::Finish()
                     if (FUN_00ecdb80(*(void**)p)) {
                         void* obj = *(void**)p;
                         ((void(__thiscall*)(void*, int))(*(void***)obj)[0x1c / 4])(obj, key);
-                        FUN_00ed3120(this, *(void**)(p + 4), 1);
+                        FUN_00ed3120(*(void**)(p + 4), 1);
                         break;
                     }
                 }
@@ -631,7 +632,7 @@ bool ScnRec::ProcessMessage(unsigned id, Any* arg)
             }
         }
         Any* sub0 = (Any*)ui->GetSubCategory(ui->GetCurrentCategoryIndex());
-        FUN_00ed3120((char*)this - 8, sub0, 0);
+        ((ScnRecBody*)((char*)this - 8))->FUN_00ed3120(sub0, 0);
         return false;
     }
 
