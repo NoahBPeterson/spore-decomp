@@ -529,9 +529,10 @@ void CPlanet::FUN_00c723d0()
     if (p != 0) {
         void* inner = *(void**)p;
         ((void(__thiscall*)(void*, void*, int))(*(void***)inner)[0x16c / 4])(inner, p, 0);
-        void* q = *(void**)((char*)mp138 + 0x64);
+        void** slot = (void**)((char*)mp138 + 0x64);
+        void* q = *slot;
         if (q != 0) {
-            *(void**)((char*)mp138 + 0x64) = 0;
+            *slot = 0;
             ((void(__thiscall*)(void*))(*(void***)q)[1])(q);
         }
         p = mp138;
@@ -541,9 +542,9 @@ void CPlanet::FUN_00c723d0()
             if (rc > 1) {
                 *(int*)((char*)p + 0x40) = rc - 1;
             } else {
-                int f = (*(unsigned*)((char*)p + 4)) >> 31;
+                bool f = (bool)(((*(unsigned*)((char*)p + 4)) >> 31) & 1);
                 void* inner2 = *(void**)p;
-                ((void(__thiscall*)(void*, void*, int))(*(void***)inner2)[0x170 / 4])(inner2, p, f);
+                ((void(__thiscall*)(void*, void*, bool))(*(void***)inner2)[0x170 / 4])(inner2, p, f);
             }
         }
     }
