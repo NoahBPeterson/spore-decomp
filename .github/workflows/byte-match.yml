@@ -304,6 +304,40 @@ jobs:
             exit 1
           fi
 
+      # Third-party code (decision 2026-11-20, THIRD_PARTY.md): open-source library source is #included from work/
+      # (tools/ci/setup_oss.sh), never copied in, since some of it (OpenSSL 0.9.8g) cannot be combined with GPL-2.0.
+      - name: No copied third-party source
+        if: always() && steps.refs.outcome == 'success'
+        run: |
+          if python3 tools/ci/license_check.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" --notices > "$RUNNER_TEMP/notices.txt"; then
+            echo "No third-party copyright or license notices added." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "This pull request adds lines with a third-party copyright or license notice:"
+              sed 's/^/    /' "$RUNNER_TEMP/notices.txt"
+              echo "Open-source library source is not copied into the repository: #include the published file from"
+              echo "work/ (tools/ci/setup_oss.sh fetches it) instead (THIRD_PARTY.md)."; } | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      # Matches of open-source library functions add nothing to Spore's own code and are counted apart from it; a
+      # maintainer checks that each one compiles the published source unchanged, then adds the oss-reviewed label.
+      - name: Open-source library matches need a maintainer's review
+        if: always() && steps.refs.outcome == 'success'
+        env:
+          REVIEWED: ${{ contains(github.event.pull_request.labels.*.name, 'oss-reviewed') || github.event_name == 'merge_group' }}
+        run: |
+          if python3 tools/ci/license_check.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" --oss > "$RUNNER_TEMP/oss.txt"; then
+            echo "No open-source library functions added." | tee -a "$GITHUB_STEP_SUMMARY"
+          elif [ "$REVIEWED" = "true" ]; then
+            echo "$(wc -l < "$RUNNER_TEMP/oss.txt") open-source library functions added, reviewed by a maintainer (oss-reviewed)." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "This pull request adds $(wc -l < "$RUNNER_TEMP/oss.txt") open-source library functions (first 20):"
+              head -20 "$RUNNER_TEMP/oss.txt" | sed 's/^/    /'
+              echo "A maintainer checks that they compile the published source unchanged and adds the oss-reviewed"
+              echo "label (THIRD_PARTY.md)."; } | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
       - name: Upload results
         if: always() && steps.affected.outputs.count != '0'
         uses: actions/upload-artifact@v4

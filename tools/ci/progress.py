@@ -3,13 +3,15 @@
 
 A function counts when a manifest row lists it and it is not in tools/ci/known_failures.txt (the pull-request check
 verifies every row it touches against the retail fingerprints).  Totals are over every retail function with a
-fingerprint (tools/ci/fingerprints.jsonl.gz).  No names, no equivalence results.
+fingerprint (tools/ci/fingerprints.jsonl.gz).  No names, no equivalence results.  Open-source library functions (the
+"Open-source libraries" module of tools/site/modules.json) are counted on their own line, not in the totals (decision
+2026-11-20): compiling their published sources recovers none of Spore's own code.
 
 usage: progress.py [--out PROGRESS.md]
 The site workflow (.github/workflows/site.yml) publishes it at https://noahbpeterson.github.io/spore-decomp/PROGRESS.md
 after every change to main; it is no longer committed.
 """
-import argparse, datetime, glob, gzip, json, os, subprocess, sys
+import argparse, bisect, datetime, glob, gzip, json, os, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [os.path.join(ROOT, "tools", "ci"), os.path.join(ROOT, "tools", "matching")]
@@ -27,10 +29,18 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "PROGRESS.md"))
     a = ap.parse_args()
     fps = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    mm = json.load(open(os.path.join(ROOT, "tools", "site", "modules.json")))
+    starts = [int(r[0], 16) for r in mm["runs"]]
+    def module(va):
+        i = bisect.bisect_right(starts, va) - 1
+        return mm["modules"][mm["runs"][i][1]] if i >= 0 else mm["modules"][0]
+    oss = {va: s for va, s in fps.items() if module(va) == "Open-source libraries"}
+    fps = {va: s for va, s in fps.items() if va not in oss}
     known = {int(l.split()[0], 16) for l in open(os.path.join(ROOT, "tools", "ci", "known_failures.txt"))
              if l.strip() and not l.startswith("#")}
     manifests = R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True))
     done = {r[2] for r in R.read_rows(manifests, "")} - known
+    oss_done = done & set(oss)
     done &= set(fps)
     in_src_game = {r[2] for r in R.read_rows(sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"),
                                                             recursive=True)), "")} & done
@@ -51,6 +61,10 @@ def main():
         f.write("| **bytes** | %s | %s | **%.1f%%** |\n" % (format(done_b, ","), format(tot_b, ","), 100.0 * done_b / tot_b))
         f.write("| functions | %s | %s | %.1f%% |\n\n" % (format(len(done), ","), format(tot_f, ","), 100.0 * len(done) / tot_f))
         f.write("Bytes are the honest measure: most of what remains is in large functions.\n\n")
+        f.write("These are Spore's own functions. The open-source libraries the game links are rebuilt from their published "
+                "sources and counted apart: %s of %s functions, %s of %s bytes (%.1f%%).\n\n" % (
+                    format(len(oss_done), ","), format(len(oss), ","), format(sum(oss[v] for v in oss_done), ","),
+                    format(sum(oss.values()), ","), 100.0 * sum(oss[v] for v in oss_done) / max(1, sum(oss.values()))))
         f.write("## By function size\n\n| size | functions done | of | bytes done | of |\n|---|---:|---:|---:|---:|\n")
         for name, d, n, db, nb in rows:
             f.write("| %s | %s | %s | %s (%.0f%%) | %s |\n" % (name, format(d, ","), format(n, ","), format(db, ","),

@@ -152,7 +152,10 @@ into the generator's inputs so they are not lost.
   or the fingerprints need a maintainer; put them in a separate pull request.
 - Never commit game files, the analysis image, disassembly or dumps of game code.
 - The open-source libraries the game links (jpeg, libpng, OpenSSL, EA's EABase/EASTL/EAText/EAWebKit) are out of scope:
-  they are rebuilt from their published sources, not decompiled.
+  they are rebuilt from their published sources, not decompiled. Never copy their source into the repository: a wrapper
+  `#include`s the published file from `work/` (`tools/ci/setup_oss.sh`), and the check fails a line with a third-party
+  copyright or license notice. Matches of these functions need a maintainer's `oss-reviewed` label and are counted
+  apart from Spore's own code (`THIRD_PARTY.md`).
 
 ## Where to read more
 
