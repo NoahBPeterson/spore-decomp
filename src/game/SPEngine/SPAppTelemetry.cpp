@@ -322,7 +322,8 @@ struct TItemList {
   TItemList(const TItemList& x);
   ~TItemList();
   __declspec(noinline) TItemListNode* AllocNode(const cTelemetryItem_s007e_b430& value);
-  void CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, TListAllocator allocator);
+  struct iterator { TItemListNode* mpNode; };
+  void CopyRange(TItemListNode* dst, iterator first, iterator last, TListAllocator allocator);
 };
 struct TItemListHead {
   TItemListNode* mpNext;
@@ -833,10 +834,10 @@ SP::TItemListNode* SP::TItemList::AllocNode(const cTelemetryItem_s007e_b430& val
 }
 
 // @ 0x007eb7d0
-void SP::TItemList::CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, TListAllocator allocator)
+void SP::TItemList::CopyRange(TItemListNode* dst, iterator first, iterator last, TListAllocator allocator)
 {
-  for (; first != (TItemListNode*)last; first = first->mpNext) {
-    TItemListNode* pNode = AllocNode(first->mValue);
+  for (; first.mpNode != last.mpNode; first.mpNode = first.mpNode->mpNext) {
+    TItemListNode* pNode = AllocNode(first.mpNode->mValue);
     pNode->mpNext = dst;
     pNode->mpPrev = dst->mpPrev;
     dst->mpPrev->mpNext = pNode;
@@ -860,7 +861,9 @@ void SP::IntVector::resize(uint32_t n)
 SP::TItemListCopyView::TItemListCopyView(const TItemListCopyView& x) : TItemListHead(TListAllocator())
 {
   TListAllocator allocator;
-  ((TItemList*)this)->CopyRange((TItemListNode*)this, x.mpNext, (TItemList*)&x, allocator);
+  TItemList::iterator first = { x.mpNext };
+  TItemList::iterator last = { (TItemListNode*)&x };
+  ((TItemList*)this)->CopyRange((TItemListNode*)this, first, last, allocator);
 }
 
 // Node allocation of the telemetry item map (0x007eb8d0): the value (key + item list copied by 0x007eb870) is

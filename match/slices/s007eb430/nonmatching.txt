@@ -2,7 +2,6 @@
 007eb430 413 eastl::vector<int>::DoInsertValues - codegen differs (move/fill loops, register schedule)
 007eb600 274 SP::cTelemetry::FileDump: complete source, telemetry path build (WString16 RangeInitialize/GetBasePath/WstrFormat) plus FileStream open/setpos/write/close against annotated EA::IO callees; SEH frame and inline schedule differs; equiv WEAK 21.7% cov (316 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2]
 007eb720 112 eastl list-node allocate+copy - inlined ctor/AutoRefCount schedule differs
-007eb7d0 52 eastl list range transfer - register/loop schedule differs; equiv: PASS (407 valid inputs)
 007eb820 63 eastl::vector<int>::resize - tail erase call shape differs; equiv: PASS (1049 valid inputs)
 007eb870 58 eastl list copy-ctor - inlined range copy schedule differs
 007eb950 119 eastl hashtable::DoFreeNodes - inlined list dtor differs
