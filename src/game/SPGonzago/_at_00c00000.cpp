@@ -124,10 +124,6 @@ bool  __thiscall CreatureBase_s00c0_45a0::Flag388()
   void* p = *(void**)((char*)this + 0xe84);
   return p != 0 && *(char*)((char*)p + 0x388) != 0;
 }
-bool __declspec(noinline) __thiscall CreatureBase_s00c0_45a0::SubB770()
-{
-  return mB34 == 1;
-}
 template <typename T> struct AutoRef { T* mpObject; };
 struct SpeciesProfile {
   char pad000[0x554];
@@ -410,29 +406,28 @@ bool __thiscall CreatureBase_s00c0_45a0::Flag04710()
 {
   if ((mFlags0b58 & 0x4000) != 0)
     return true;
-  if (SubB770())
-    return false;
-  HerdObj* h = (HerdObj*)mpHerd1674;
-  if (h == 0) return false;
-  CreatureBase_s00c0_45a0* a = (CreatureBase_s00c0_45a0*)*(void**)((char*)h + 0x164);
-  if (a == 0) return false;
-  if ((a->mFlags0b58 & 0x4000) != 0)
-    return true;
+  if (!SubB770()) {
+    HerdObj* h = (HerdObj*)mpHerd1674;
+    CreatureBase_s00c0_45a0* a = (CreatureBase_s00c0_45a0*)*(void**)((char*)h + 0x164);
+    if (a != 0 && (a->mFlags0b58 & 0x4000) != 0)
+      return true;
+  }
   return false;
 }
+
+extern "C" char g_1654c10[];   // 0x01654c10: the creature game mode object (GetCurrentGameMode result)
 
 // @ 0x00c04750
 void* __thiscall CreatureBase_s00c0_45a0::Sub4750()
 {
-  void* p = 0;
-  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+  if (SP_GetCurrentGameMode() == (void*)g_1654c10) {
     int g = ((GameDataStub*)this)->GetObjectData();
     if (g != 0) {
       int idx = ((ThingMgrStub*)*(int*)((char*)g_16c7aa4 + 0x74))->GetThing();
-      p = (void*)(idx * 0x4e0 + *(int*)((char*)g + 0x70));
+      return (void*)(idx * 0x4e0 + *(int*)((char*)g + 0x70));
     }
   }
-  return p;
+  return 0;
 }
 
 // @ 0x00c04790
