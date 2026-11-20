@@ -70,3 +70,7 @@
 ../src/game/SPAudio/eapdconnective.cpp  ?receive_setup@@YA_NXZ  00a5a1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?forward_new@@YAPAXUt_symbol@Eapd@Audio@EA@@@Z  00a5a050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?receive_new@@YAPAXUt_symbol@Eapd@Audio@EA@@@Z  00a5a160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pdsymbol_setup@Eapd@Audio@EA@@YA_NXZ  00a59cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?bang_setup@Eapd@Audio@EA@@YA_NXZ  00a59dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?send_setup@@YA_NXZ  00a59f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?forward_setup@@YA_NXZ  00a5a0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
