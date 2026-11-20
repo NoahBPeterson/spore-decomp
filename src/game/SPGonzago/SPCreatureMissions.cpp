@@ -895,6 +895,9 @@ void MissionStub::FUN_00c2f590()
     *(int*)(self + 0x90) = FUN_00b6e290((q != 0) ? (q + 0x230) : 0);
 }
 
+struct PoliticalIdSource {
+    void* GetPlayerPoliticalID();                         // 0x00b1f9d0
+};
 // @ 0x00c2f5f0
 void MissionStub::FUN_00c2f5f0()
 {
@@ -902,10 +905,11 @@ void MissionStub::FUN_00c2f5f0()
     FUN_00c2e520();
 
     int* obj = *(int**)(self + 0x80);
-    int empire = FUN_00b1f9d0(obj);
-    int rel = ((int(__thiscall*)(void*, int))(*(void***)obj)[0x4c / 4])(obj, empire);
-    void* mgr = ((void*(*)())FUN_00b3d2c0)();
-    int cls = ((int(__thiscall*)(void*, int, int, int))FUN_00d00a70)(mgr, rel, empire, 1);
+    int cls = ((int(__thiscall*)(void*, void*, void*, int))FUN_00d00a70)(
+        ((void*(*)())FUN_00b3d2c0)(),
+        ((void*(__thiscall*)(void*))(*(void***)obj)[0x4c / 4])(obj),
+        ((PoliticalIdSource*)((void*(*)())FUN_00b3d300)())->GetPlayerPoliticalID(),
+        1);
 
     if (cls == 4)
         ((void(__thiscall*)(void*))(*(void***)self)[0x78 / 4])(self);
@@ -917,9 +921,6 @@ void MissionStub::FUN_00c2f5f0()
 // @ 0x00c2f650
 struct cRelationshipManager {
     float ClampRelationship(void* a, void* b, void* c);   // 0x00d00a10
-};
-struct PoliticalIdSource {
-    void* GetPlayerPoliticalID();                         // 0x00b1f9d0
 };
 float __fastcall FUN_00c2f650(int* self)
 {
