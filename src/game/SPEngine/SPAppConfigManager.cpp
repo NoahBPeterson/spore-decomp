@@ -2876,6 +2876,7 @@ void cConfigManager_s007c_8940::ApplyAllOptions()
 bool cConfigManager_s007c_8940::GetConfigString(unsigned i, Str16* out)
 {
     if (i < (unsigned)(mStringsEnd - mStrings)) {
+        _ReadWriteBarrier();
         Str16* p = mStrings + i;
         if (p != out)
             out->assign(p->a, p->b);
