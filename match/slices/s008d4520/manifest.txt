@@ -9,3 +9,4 @@ slices/s008d4520/s008d4520.cpp  ?toLower@ByteRange@@QAEXXZ                      
 slices/s008d4520/s008d4520.cpp  ?push@SmallVec@@QAEXPAX@Z                           008d48d0
 slices/s008d4520/s008d4520.cpp  ?clear@ClearTwo@@QAEXXZ                            008d49b0
 slices/s008d4520/s008d4520.cpp  _FUN_008d4ad0                                      008d4ad0
+slices/s008d4520/s008d4520.cpp  ?MatchString@TokenReader@@QAEEXZ  008d52f0  /O2 /MD /Gy /EHsc /TP
