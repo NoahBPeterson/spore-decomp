@@ -9998,17 +9998,19 @@ void GameEntry::FUN_de3300()
 GameEntry* GameEntry::Ctor_de3370()
 {
     BaseCtor();
-    mpVtbl = (void*)0x147dd00;
+    mpVtbl = g_147dd00;
     mStopwatch.Ctor(0, 0);
-    mStr20.mpBegin = 0x1667bac;
-    mStr20.mpEnd = 0x1667bac;
-    mStr20.mpCap = 0x1667bae;
-    mStr30.mpCap = 0x1667bae;
-    mStr30.mpBegin = 0x1667bac;
-    mStr30.mpEnd = 0x1667bac;
+    mStr20.mpBegin = (u32)g_1667bac;
+    mStr20.mpEnd = (u32)g_1667bac;
+    _ReadWriteBarrier();
+    mStr20.mpCap = (u32)g_1667bae;
+    mStr30.mpCap = (u32)g_1667bae;
+    mStr30.mpBegin = (u32)g_1667bac;
+    mStr30.mpEnd = (u32)g_1667bac;
+    _ReadWriteBarrier();
     mp48 = 0;
     mStopwatch.SetUnits(4);
-    *(u32*)0x16a11b4 = (u32)this;
+    g_16a11b4 = (cUISingleton48*)this;
     return this;
 }
 
