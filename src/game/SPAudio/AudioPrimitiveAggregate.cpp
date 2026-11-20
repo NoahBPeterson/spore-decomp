@@ -207,18 +207,17 @@ void* FUN_00a16ad0(u32 size)
 bool Agg::RemoveElement(IPrimitive* p)
 {
     void** it = mpBegin;
-    while (it != mpEnd) {
-        if (*it == (void*)p)
-            break;
-        ++it;
+    void** end = mpEnd;
+    for (; it != end; ++it) {
+        if (*it == (void*)p) {
+            *it = *(end - 1);
+            --mpEnd;
+            p->v04();
+            mbDirty = true;
+            return true;
+        }
     }
-    if (it == mpEnd)
-        return false;
-    *it = *(mpEnd - 1);
-    --mpEnd;
-    p->v04();
-    mbDirty = true;
-    return true;
+    return false;
 }
 
 // @ 0x00a16bc0
