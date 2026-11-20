@@ -179,16 +179,11 @@ Vec3* CopyVec3Range(Vec3* first, Vec3* last, Vec3* result)
 // @ 0x007ec580
 extern "C" void* WriteVec3Vec(void* writer, Vec3Vec* v)
 {
-  uint32_t n = (uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) / 0xc;
+  uint32_t size = (uint32_t)(v->mpEnd - v->mpBegin);
+  uint32_t n = size;
   EA::IO::WriteUint32(writer, &n, 1, 0);
-  if (n != 0) {
-    uint32_t off = 0;
-    do {
-      WriteBytes(writer, (char*)v->mpBegin + off, 0xc);
-      off += 0xc;
-      --n;
-    } while (n != 0);
-  }
+  for (uint32_t i = 0; i < size; ++i)
+    WriteBytes(writer, &v->mpBegin[i], 0xc);
   return writer;
 }
 

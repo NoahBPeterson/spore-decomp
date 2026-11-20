@@ -1,6 +1,5 @@
 # va diff reason
 0061e200 53 eastl::basic_string<char>::erase(position,n): complete; min() emitted as cmov instead of a branch
-007ec580 80 write vector<Vector3> - virtual writer call + temp slots differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 007ec5e0 88 Swarm effect ctor - field/vtable store schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 007ec660 72 Swarm effect dtor - inlined vector dtor differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 007ec6d0 129 Swarm effect serialize - field layout/read helper shape differs flags: /O2 /MD /Gy /EHsc /TP /GS-

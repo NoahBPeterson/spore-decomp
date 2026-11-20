@@ -1,5 +1,4 @@
 # va diff reason
-007ec580 80 write vector<Vector3> - virtual writer call + temp slots differ
 007ec5e0 92 Swarm effect ctor - field/vtable store schedule differs
 007ec660 72 Swarm effect dtor - inlined vector dtor differs
 007ec6d0 129 Swarm effect serialize - field layout/read helper shape differs
