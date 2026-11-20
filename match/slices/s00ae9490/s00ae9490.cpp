@@ -692,14 +692,16 @@ bool visit_vec(void* visitor, Vec12* v)
 // @ 0x00ae9f10
 bool SpaceTool::MatchesCiv(int civ)
 {
-    if (!FUN_00ae9390())
-        return false;
-    void* e = mp20;
-    SP_NounManager()->FUN_00b20750(EI(e, 0x18));
-    int c = EI(e, 0x28);
-    if (c == 0)
-        c = ((City*)E(e, 0x20))->FUN_00bd9bf0();
-    return c == civ;
+    if (FUN_00ae9390()) {
+        void* e = mp20;
+        SP_NounManager()->FUN_00b20750(EI(e, 0x18));
+        int c = EI(e, 0x28);
+        if (c == 0)
+            c = ((City*)E(e, 0x20))->FUN_00bd9bf0();
+        if (c == civ)
+            return true;
+    }
+    return false;
 }
 
 // ===========================================================================
