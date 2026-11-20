@@ -184,29 +184,39 @@ def model_field(body):
     return k.group(1) if k else ""
 
 
+_ROWS = {}   # manifest blob sha -> its addresses, shared by every present_before call
+
+
 def present_before(sha, vas):
     """The addresses of `vas` that already had byte-exact source in the merge's first parent: a manifest row of a slice
     or a src/game module.  Rows of the generated manifests (match/synth/*, match/clones.txt) do not count: replacing a
-    template or clone match with written C++ is new work."""
+    template or clone match with written C++ is new work.  Reads only the manifests, each blob once (a `git grep` of
+    the whole tree per merged pull request took minutes on every core)."""
     if not vas:
         return set()
-    args = ["grep", "-I", "-F"]
-    for v in vas:
-        args += ["-e", "%08x" % v]
-    try:
-        out = git(*args, "%s^" % sha, "--", "match", "src/game")
-    except subprocess.CalledProcessError:   # git grep exits 1 when nothing matches
-        return set()
+    blobs = []
+    for line in git("ls-tree", "-r", "%s^" % sha, "--", "match/slices", "src/game").splitlines():
+        meta, path = line.split("\t", 1)
+        if MANIFEST_RE.match(path):
+            blobs.append(meta.split()[2])
+    need = [s for s in set(blobs) if s not in _ROWS]
+    if need:
+        out = subprocess.run(["git", "cat-file", "--batch"], cwd=ROOT, capture_output=True,
+                             input="\n".join(need).encode() + b"\n", check=True).stdout
+        i = 0
+        for s in need:
+            hdr_end = out.index(b"\n", i)
+            size = int(out[i:hdr_end].split()[2])
+            _ROWS[s] = rows_vas(out[hdr_end + 1:hdr_end + 1 + size].decode("utf-8", "replace"))
+            i = hdr_end + 1 + size + 1
     found = set()
-    for line in out.splitlines():
-        _rev, path, text = line.split(":", 2)   # "<sha>^:<path>:<line>"
-        if MANIFEST_RE.match(path) and path.startswith(("match/slices/", "src/game/")):
-            found |= rows_vas(text)
+    for s in blobs:
+        found |= _ROWS[s] & vas
     try:   # rows listed but failing the fingerprint check (tools/ci/known_failures.txt) were not byte-exact yet
         found -= known_vas(git("show", "%s^:tools/ci/known_failures.txt" % sha))
     except subprocess.CalledProcessError:
         pass
-    return found & vas
+    return found
 
 
 def shape_before(sha, vas):
