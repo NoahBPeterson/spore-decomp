@@ -1392,15 +1392,10 @@ void __cdecl FUN_00f20ef0(V4* self)
 // @ 0x00f20fe0
 void __cdecl FUN_00f20fe0(void)
 {
-    void* p = sub_new(0x1c, "Simulator", 0, 0, 0, 0);
-    if (p) {
-        ((SimCtx*)p)->ctor743b50();
-        g_pSimCtor = p;
-        ((SimCtx*)p)->b72080(0x14, 0x80);
-    } else {
-        g_pSimCtor = 0;
-        ((SimCtx*)0)->b72080(0x14, 0x80);
-    }
+    SimCtx* p = (SimCtx*)sub_new(0x1c, "Simulator", 0, 0, 0, 0);
+    SimCtx* s = p ? (p->ctor743b50(), p) : 0;
+    g_pSimCtor = s;
+    s->b72080(0x14, 0x80);
 }
 
 // @ 0x00f21080
