@@ -3292,15 +3292,28 @@ struct RefVec2 {
 };
 void* FUN_00bdaae0(void* a, void* b, void* c);
 void* FUN_00bda760(void* self, void* value);
-void* SPVector_DoInsertValueI(void* self, void* pos, void* value);   // 0x004558a0
 struct IdVec {                          // vector<unsigned> at +0x1e0
     uint32_t* mpBegin;
     uint32_t* mpEnd;
     uint32_t* mpCapacity;
     uint32_t  mAlloc;
+    void DoInsertValue(uint32_t* pos, const uint32_t& value);   // 0x004558a0
+    void push_back(const uint32_t& value)
+    {
+        if (mpEnd < mpCapacity) {
+            uint32_t* slot = mpEnd++;
+            if (slot) *slot = value;
+        } else {
+            DoInsertValue(mpEnd, value);
+        }
+    }
 };
 struct IdHost {                         // the object owning the +0x1e0 vector
-    uint32_t AddUniqueId(uint32_t id);
+    char mPad0[0x1d8];
+    int mCount1d8;                      // +0x1d8
+    int mPad1dc;
+    IdVec mIds;                         // +0x1e0
+    bool AddUniqueId(uint32_t id);
 };
 struct PairVec {
     void* mpBegin;                  // +0x0
@@ -8267,35 +8280,21 @@ void LogReporterVec::do_assign(void** first, void** last, false_type)
 }
 
 // @ 0x00bdf6d0
-uint32_t IdHost::AddUniqueId(uint32_t id)
+bool IdHost::AddUniqueId(uint32_t id)
 {
-    IdVec* vec = (IdVec*)((char*)this + 0x1e0);
-    uint32_t* p = vec->mpBegin;
-    uint32_t* e = vec->mpEnd;
-    uint32_t result = 0;
+    IdVec* vec = &mIds;
+    bool result = false;
     bool found = false;
-    if (p != e) {
-        do {
-            if (found)
-                goto done;
-            found = (*p == id);
-            p++;
-        } while (p != e);
-        if (found)
-            goto done;
+    uint32_t* p = mIds.mpBegin;
+    uint32_t* e = mIds.mpEnd;
+    for (; p != e && !found; ++p)
+        found = (*p == id);
+    if (!found) {
+        vec->push_back(id);
+        result = true;
     }
-    if (vec->mpEnd < vec->mpCapacity) {
-        uint32_t* slot = vec->mpEnd;
-        vec->mpEnd = slot + 1;
-        if (slot != 0)
-            *slot = id;
-    } else {
-        SPVector_DoInsertValueI(vec, vec->mpEnd, &id);
-    }
-    result = 1;
-done:
-    if (*(int*)((char*)this + 0x1d8) < 1)
-        *(int*)((char*)this + 0x1d8) = 1;
+    if (mCount1d8 < 1)
+        mCount1d8 = 1;
     return result;
 }
 
