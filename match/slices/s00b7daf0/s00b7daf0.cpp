@@ -302,6 +302,7 @@ struct cVecObj {
 void __thiscall cVecObj::FUN_00b7ea30(uint32_t idx, char v) {
   if ((int)idx > 0 &&
       idx < (unsigned)((mEnd - mBegin) / 0x18)) {
+    _ReadWriteBarrier();
     char* p = mBegin + 0x11 + idx * 0x18;
     if (*p != v) {
       *p = v;
