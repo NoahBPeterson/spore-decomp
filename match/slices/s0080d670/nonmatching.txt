@@ -7,7 +7,6 @@
 0080dd50  75  complete; scalar local avoids /GS cookie; branch layout differs
 0080dda0  96  complete; refcount/vtable call schedule differs
 0080de20  61  complete; ModelManager call/bit-clear schedule differs
-0080df50  32  complete; this-adjustment expression shape differs
 0080df80  51  complete; interlocked refcount/release schedule differs
 0080dfe0 595  complete; early-return eax = last object / bbox; float path matches
 0080d810  542  complete; float->Vec2 arg copies use x87 fld/fstp vs retail movss and SSE helper temps clobber xmm4; frame 16- vs 8-byte aligned

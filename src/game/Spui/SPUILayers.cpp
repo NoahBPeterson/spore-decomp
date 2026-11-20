@@ -614,7 +614,8 @@ void* __cdecl FUN_0080df00(void** first, void** last, void** dest)
 // @ 0x0080df50
 int __fastcall FUN_0080df50(char* p)
 {
-    char* b = (p && p != (char*)0x250) ? p - 0x24c : 0;
+    char* d = p ? p - 0x250 : 0;
+    char* b = d ? d + 4 : 0;
     return _InterlockedIncrement((long*)(b + 4));
 }
 
