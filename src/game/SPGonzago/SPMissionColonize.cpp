@@ -16,36 +16,37 @@ extern "C" int   __cdecl FUN_0041e920();
 extern "C" int   __cdecl FUN_0041ea00();
 // ---- items of slice s00c4dbf0 end
 
+struct Prop_c4e390 {
+    char pad[0x12];
+    short mType;                               // +0x12
+    u8*  FUN_0041e920();                       // Property::GetBool
+    u32* FUN_0041ea00();                       // Property::GetUInt
+};
+struct IPropList_c4e390 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); 
+    virtual bool GetProperty(u32 id, Prop_c4e390** out);
+};
+struct Mission_c4e390 {
+    char pad[0x180];
+    IPropList_c4e390* mpPropList;              // +0x180
+    void FUN_00c4e390(u8* pb, u32* pu, u8* pflag);
+};
 // @ 0x00c4e390
-void __fastcall FUN_00c4e390(void* ecx_this, void* edx, u8* pb, u32* pu, int* pflag)
+void Mission_c4e390::FUN_00c4e390(u8* pb, u32* pu, u8* pflag)
 {
-    // pb = *this+0x1f4? no: caller passes (this+0x1f4, &local, this+0x1f5) reversed; here pb/pu/pflag
-    // map to the three property reads in order.
-    void* pl = *(void**)((char*)ecx_this + 0x180);
-    if (pl) {
-        void* prop = 0;
-        char ok = (*(char(__thiscall**)(void*, u32, void**))(*(char**)pl + 0x24))(pl, 0x36758b07u, &prop);
-        if (ok && *(short*)((char*)prop + 0x12) == 1) {
-            u8* v = (u8*)FUN_0041e920();
-            *pb = *v;
-        }
+    if (IPropList_c4e390* pl = mpPropList) {
+        Prop_c4e390* prop;
+        if (pl->GetProperty(0x36758b07u, &prop) && prop->mType == 1)
+            *pb = *prop->FUN_0041e920();
     }
-    pl = *(void**)((char*)ecx_this + 0x180);
-    if (pl) {
-        void* prop = 0;
-        char ok = (*(char(__thiscall**)(void*, u32, void**))(*(char**)pl + 0x24))(pl, 0x1f707861u, &prop);
-        if (ok && *(short*)((char*)prop + 0x12) == 10) {
-            u32* v = (u32*)FUN_0041ea00();
-            *pu = *v;
-        }
+    if (IPropList_c4e390* pl = mpPropList) {
+        Prop_c4e390* prop;
+        if (pl->GetProperty(0x1f707861u, &prop) && prop->mType == 10)
+            *pu = *prop->FUN_0041ea00();
     }
-    pl = *(void**)((char*)ecx_this + 0x180);
-    if (pl) {
-        void* prop = 0;
-        char ok = (*(char(__thiscall**)(void*, u32, void**))(*(char**)pl + 0x24))(pl, 0xf924ebf9u, &prop);
-        if (ok && *(short*)((char*)prop + 0x12) == 1) {
-            u8* v = (u8*)FUN_0041e920();
-            *pflag = *v;
-        }
+    if (IPropList_c4e390* pl = mpPropList) {
+        Prop_c4e390* prop;
+        if (pl->GetProperty(0xf924ebf9u, &prop) && prop->mType == 1)
+            *pflag = *prop->FUN_0041e920();
     }
 }

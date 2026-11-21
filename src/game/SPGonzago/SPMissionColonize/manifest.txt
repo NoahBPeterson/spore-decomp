@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPMissionColonize.cpp  ?FUN_00c4e390@Mission_c4e390@@QAEXPAEPAI0@Z  00c4e390  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
