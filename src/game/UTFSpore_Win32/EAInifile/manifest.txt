@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/EAInifile.cpp  ??1IniFile_s0093_4260@@QAE@XZ  00935040  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAInifile.cpp  ?Close@IniFile_s0093_4260@@UAE_NXZ  00935080  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAInifile.cpp  ?scalar_deleting_destructor@EA_IO_IniFile_s0093_50f0@@QAEPAV1@E@Z  00935510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAInifile.cpp  ?ReadEntryRaw@IniFile@@QAEHPAX0PA_WH@Z  00933850  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
