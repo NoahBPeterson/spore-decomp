@@ -3388,27 +3388,45 @@ static void FUN_00e52060(cCellStats* self, int count, const cPart* parts, bool s
 #pragma auto_inline(on)
 
 // @ 0x00e54b80
-void FUN_00e54b80(void* arg)
+struct Raster_e54b80 { int x, y; };
+struct Viewer_e54b80 {
+    void FUN_007c4be0(Raster_e54b80* r, bool b);   // cViewer::SetRaster
+    void FUN_007c3c50(unsigned flags) const;       // cViewer::Clear
+};
+struct Tri_e54b80 { int a, b, c; };
+struct Src_e54b80 { int f0; Tri_e54b80 t; };
+struct Msg_e54b80 { Viewer_e54b80* viewer; Tri_e54b80 t; };
+struct IHandler_e54b80 {
+    virtual void v00(); virtual void v01(); virtual void v02(); 
+    virtual void Handle(int id, int type, Msg_e54b80* msg, void* ctx);
+};
+struct IGfxA_e54b80 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55(); virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59(); virtual void v60(); virtual void v61(); virtual void v62(); virtual void v63(); virtual void v64(); virtual void v65(); virtual void v66(); virtual void v67(); virtual void v68(); virtual void v69(); virtual void v70(); virtual void v71(); virtual void v72(); virtual void v73(); virtual void v74(); virtual void v75(); virtual void v76(); virtual void v77(); virtual void v78(); 
+    virtual IHandler_e54b80* GetHandler();
+};
+struct IGfxB_e54b80 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); 
+    virtual IHandler_e54b80* GetHandler();
+};
+struct IRender_e54b80 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41(); 
+    virtual void SetRaster(int a, Raster_e54b80* r, int b);
+};
+void __stdcall FUN_00e54b80(int id, int unused, Src_e54b80* src, void* ctx)
 {
-    unsigned local18 = 0xffffffff, local14 = 0xffffffff;
-    void* s = FUN_0067dd40();
-    (*(void(__thiscall**)(void*, int, void*, int, void*))((char*)Vt(s) + 0xa8))(s, 0, &local14, 0, &local14);
-    FUN_007c4be0((void*)0x016b42b8, &local18, 1);
-    int a = *(int*)((char*)arg + 4);
-    int b = *(int*)((char*)arg + 8);
-    int c = *(int*)((char*)arg + 0xc);
-    unsigned v3 = (unsigned)c;
-    int v4 = (int)(unsigned)a;
-    unsigned v5 = (unsigned)b;
-    void* o = *(void**)((char*)g_16b3c08 + 0x161c0);
-    void* r = (*(void*(__thiscall**)(void*))((char*)Vt(o) + 0x13c))(o);
-    (*(void(__thiscall**)(void*, int, int, unsigned*, void*))((char*)Vt(r) + 0xc))(r, v4, 0xd, &v5, arg);
-    o = *(void**)((char*)g_16b3c08 + 0x161c4);
-    (*(void(__thiscall**)(void*, int, int, unsigned*, void*))((char*)Vt(o) + 0xc))(o, v4, 0xd, &v5, arg);
-    o = *(void**)((char*)g_16b3c08 + 0x161b8);
-    r = (*(void*(__thiscall**)(void*))((char*)Vt(o) + 0xa0))(o);
-    (*(void(__thiscall**)(void*, int, int, unsigned*, void*))((char*)Vt(r) + 0xc))(r, v4, 0x12, &v3, arg);
-    FUN_007c3c50(6);
+    (void)unused;
+    Raster_e54b80 r;
+    r.x = -1;
+    r.y = -1;
+    ((IRender_e54b80*)FUN_0067dd40())->SetRaster(0, &r, 0);
+    ((Viewer_e54b80*)g_16b42b8)->FUN_007c4be0(&r, true);
+    Msg_e54b80 m;
+    m.viewer = (Viewer_e54b80*)g_16b42b8;
+    m.t = src->t;
+    (*(IGfxA_e54b80**)((char*)g_16b3c08 + 0x161c0))->GetHandler()->Handle(id, 0xd, &m, ctx);
+    (*(IHandler_e54b80**)((char*)g_16b3c08 + 0x161c4))->Handle(id, 0xd, &m, ctx);
+    (*(IGfxB_e54b80**)((char*)g_16b3c08 + 0x161b8))->GetHandler()->Handle(id, 0x12, &m, ctx);
+    ((Viewer_e54b80*)g_16b42b8)->FUN_007c3c50(6);
 }
 
 struct CellLayerApply_e54c70 {

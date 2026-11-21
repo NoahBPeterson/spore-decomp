@@ -1,3 +1,2 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE)
-00e54b80  157  cell raster setup; complete. difftest: UNSUPPORTED (0/400 valid)
 00e54d10    8  layer tail-jump; complete. difftest: UNSUPPORTED (0/400 valid)
