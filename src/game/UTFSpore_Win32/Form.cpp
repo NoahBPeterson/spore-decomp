@@ -549,7 +549,8 @@ void Form::ExcludeGroups(Element* elem, const u16* group, const u16* value)
     }
     IntList* list = &elem->mChildNodes;
     void* end = (char*)elem + 0x18;
-    for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
+    Node* first = ListHead(list);
+    for (Node* n = first; n != ListEndP(end); n = ListNext(n)) {
         if (n->Type() == 1)
             self->ExcludeGroups((Element*)n, group, value);
     }
