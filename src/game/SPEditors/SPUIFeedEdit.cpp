@@ -4,6 +4,12 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb844[];
+extern "C" char g_14426a0[];
+extern "C" char g_13eb384[];
+extern "C" char g_1489e8c[];
+extern "C" char g_1489e70[];
+extern "C" char g_1489e64[];
+extern "C" char g_1489e54[];
 extern "C" char g_13eb90c[];
 
 #include "game/types.h"
@@ -4118,31 +4124,55 @@ bool Obj5190::f(int w)
 }
 
 // @ 0x00ed5220
+struct IRef_ed5220 { virtual void AddRef(); virtual void Release(); };
+struct IMsgSrv_ed5220 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void AddListener(void* listener, unsigned id);
+};
+struct Obj5220A { void* vt00; int f04; void* vt08; void* vt0c; };
+struct Obj5220L { void* vt10; };
+struct Obj5220Layout : Obj5220A, Obj5220L {
+    int f14, f18, f1c, f20;
+    int z[27];
+    void* Construct();
+};
+__forceinline void* Obj5220Layout::Construct()
+{
+    Obj5220Layout* o = this;
+    o->f04 = 0;
+    *(void* volatile*)&o->vt08 = g_14426a0;
+    *(void* volatile*)&o->vt10 = g_13eb384;
+    *(void* volatile*)&o->vt00 = g_1489e8c;
+    *(void* volatile*)&o->vt08 = g_1489e70;
+    *(void* volatile*)&o->vt0c = g_1489e64;
+    *(void* volatile*)&o->vt10 = g_1489e54;
+    o->f14 = 0;
+    o->f18 = 0;
+    o->f1c = -1;
+    o->f20 = -1;
+    int* z = o->z;
+    z[0] = 0; z[1] = 0; z[2] = 0; z[3] = 0; z[4] = 0; z[5] = 0; z[6] = 0; z[7] = 0;
+    z[8] = 0; z[9] = 0; z[10] = 0; z[11] = 0; z[12] = 0; z[13] = 0;
+    IRef_ed5220** pp = (IRef_ed5220**)&o->z[5];
+    z[14] = 0; z[15] = 0;
+    z[16] = 0; z[17] = 0; z[18] = 0; z[19] = 0; z[20] = 0; z[21] = 0; z[22] = 0; z[23] = 0;
+    z[24] = 0; z[25] = 0; z[26] = 0;
+    if (SP_MessageServer() != 0)
+        ((IMsgSrv_ed5220*)SP_MessageServer())->AddListener(static_cast<Obj5220L*>(this), 0x65ff54a);
+    int n = 2;
+    do {
+        if (IRef_ed5220* p = *pp) {
+            *pp = 0;
+            p->Release();
+        }
+        pp++;
+    } while (--n);
+    return o;
+}
 void* Obj5220::f()
 {
-    char* s = (char*)this;
-    *(int*)(s + 4) = 0;
-    *(int*)(s + 8) = 0x14426a0;
-    *(int*)(s + 0x10) = 0x13eb384;
-    *(int*)s = 0x1489e8c;
-    *(int*)(s + 8) = 0x1489e70;
-    *(int*)(s + 0xc) = 0x1489e64;
-    *(int*)(s + 0x10) = 0x1489e54;
-    *(int*)(s + 0x14) = 0;
-    *(int*)(s + 0x18) = 0;
-    *(int*)(s + 0x1c) = -1;
-    *(int*)(s + 0x20) = -1;
-    for (int off = 0x24; off <= 0x8c; off += 4) *(int*)(s + off) = 0;
-    if (SP_MessageServer() != 0) {
-        int* sv = (int*)SP_MessageServer();
-        ((FV_ii)(*(void***)sv)[0x20 / 4])(sv, 0x65ff54a, (int)(s + 0x10));
-    }
-    for (int i = 0; i < 2; i++) {
-        int off = 0x38 + i * 4;
-        int* p = *(int**)(s + off);
-        if (p) { *(int**)(s + off) = 0; ((FV_v)(*(void***)p)[4 / 4])(p); }
-    }
-    return s;
+    return ((Obj5220Layout*)this)->Construct();
 }
 
 struct IEffect_ed5400 {
