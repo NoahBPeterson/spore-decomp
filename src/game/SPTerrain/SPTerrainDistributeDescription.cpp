@@ -1,3 +1,4 @@
+#include <string.h>
 // src/game/SPTerrain/SPTerrainDistributeDescription.cpp -- migrated from slice(s) s00f63a50, s00f62930 by tools/migrate/rewrite.py
 // Object file: SPTerrain/SPTerrainDistributeDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -795,10 +796,7 @@ void cEffectCommand::Execute(cArgScriptArgs* args)
     const char** argv = cArgMain::MainArguments(args, &count, 1, 3);
 
     const char* p = argv[0];
-    const char* q = p;
-    while (*q)
-        ++q;
-    mString.assign(p, q);
+    mString.assign(p, p + strlen(p));
 
     mDesc = SP::cTerrainDistributeDescription_s00f6_3a50();
     if (count > 1) {
