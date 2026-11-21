@@ -293,8 +293,13 @@ struct Variant_s00a1_7690 {
 struct Helper5ed0 {
     void Call();                                    // 0x685ed0
 };
+struct PropTreeTag {};
+struct PropTreeInsertResult { void* mpNode; bool mbInserted; };
+struct PropTreeSub { virtual void v0(); virtual void v1(); virtual void v2(); virtual void GetPropertyIDs(void* out, bool clear); };
+struct PropTreeParent { uint8_t pad[0x14]; PropTreeSub mSub; };
 struct PropTree {
     void Nuke(void* node);                          // 0x9a9600
+    PropTreeInsertResult InsertUnique(const uint32_t& key, PropTreeTag tag); // 0xa17a70
     void Insert(const void* first, const void* last, void* out);  // 0xa17a70
 };
 // Retail IConfiguration prefix; the canonical interface still has unnamed slots.
@@ -931,18 +936,14 @@ void ResourceConfiguration_s00a1_7690::GetPropertyIDs(void* out, bool clear)
         *(void**)((char*)out + 0x14) = 0;
     }
 
-    uint8_t* p = *(uint8_t**)(m + 0x10);
-    uint8_t* e = *(uint8_t**)(m + 0x14);
-    for (; p != e; p += 0x18) {
+    for (uint8_t* p = *(uint8_t**)(m + 0x10), *e = *(uint8_t**)(m + 0x14); p != e; p += 0x18) {
         uint32_t key = *(uint32_t*)p;
-        ((PropTree*)out)->Insert(&key, 0, 0);
+        ((PropTree*)out)->InsertUnique(key, PropTreeTag());
     }
 
     if (*(uint8_t*)(m + 0xc) == 0) {
-        void* q = *(void**)(m + 0x28);
-        if (q != 0) {
-            ((void(__thiscall*)(void*, void*, int))VtOf((char*)q + 0x14)[3])((char*)q + 0x14, out, 0);
-        }
+        if (PropTreeParent* q = *(PropTreeParent**)(m + 0x28))
+            q->mSub.GetPropertyIDs(out, false);
     }
 }
 
