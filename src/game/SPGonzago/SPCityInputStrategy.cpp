@@ -1613,35 +1613,37 @@ bool cCityInputStrategy_s00cf_1ca0::RestoreCommunityEditorOrShopping(int id)
 }
 }  // namespace SP
 
+struct CityElemPrimary {
+    virtual void AddRef();     // +0x00
+    virtual void Release();    // +0x04
+    char pad04[0x30];
+};
+struct CityElemKey { int mKey; };                     // base at +0x34
+struct CityElem : CityElemPrimary, CityElemKey {};
+struct CityElemRef {
+    CityElem* mpObject;
+    CityElemRef(const CityElemRef& x);
+    ~CityElemRef() { if (mpObject) mpObject->Release(); }
+    operator CityElem*() const { return mpObject; }
+};
+struct CityElemCompare {
+    bool operator()(CityElemKey* a, CityElemKey* b);  // 0x00ac0730
+};
+
 // @ 0x00cf2010
 namespace SP {
-int* __fastcall FUN_00cf2010(int* ecx_this, void* edx, int* last, int* value)
+CityElemRef* FUN_00cf2010(CityElemRef* first, CityElemRef* last, CityElemRef pivot, CityElemCompare compare)
 {
-    int* first = ecx_this;
-    int* vp;
-    while (true) {
-        int a;
-        vp = (value == 0) ? 0 : value + 0x0d;
-        a  = (*first == 0) ? 0 : *first + 0x34;
-        if (!FUN_00ac0730((void*)a, (void*)vp)) break;
-        first++;
-    }
-    do {
-        int a;
-        int* vp2;
-        last--;
-        a   = (*last == 0) ? 0 : *last + 0x34;
-        vp2 = (value == 0) ? 0 : value + 0x0d;
-        if (FUN_00ac0730((void*)vp2, (void*)a)) break;
-    } while (true);
-    if (first < last) {
+    for (;; ++first) {
+        while (compare(*first, pivot))
+            ++first;
+        --last;
+        while (compare(pivot, *last))
+            --last;
+        if (first >= last)
+            return first;
         FUN_00b2af00(first, last);
-        first++;
     }
-    if (value != 0) {
-        ((void(__thiscall**)(int*))(*(int**)value + 4))[0](value);
-    }
-    return last;
 }
 }  // namespace SP
 
