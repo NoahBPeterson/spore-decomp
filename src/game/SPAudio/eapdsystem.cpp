@@ -917,7 +917,7 @@ struct TaskListAllocator {
     void*       mpVtbl;   // +0x00
     int         mA;       // +0x04
     const char* mpName;   // +0x08
-    ~TaskListAllocator() { mpVtbl = (void*)0x1403934; }
+    ~TaskListAllocator() { mpVtbl = g_vtbl_1403934; }
 };
 class TaskListObj_s00a6_70b0 {
 public:

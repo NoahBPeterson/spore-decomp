@@ -226,7 +226,7 @@ void operator_delete__(void* p);                                     // 0x00f474
 #define VA_EMPTY16    0x01667bac
 #define VA_EMPTY16_1  0x01667bad
 #define VA_EMPTY16_2  0x01667bae
-#define VA_REG_FORMAT 0x013fa490
+extern "C" char g_13fa490[];   // registry DWORD format string (L"%d" style)
 #define VA_ONE_F      0x01485720
 #define VA_TWO_F      0x01470f1c
 
@@ -434,7 +434,7 @@ bool FUN_006ab840(void* hRoot, const wchar_t* subKey, const wchar_t* valueName, 
             if (type == 4) {
                 size = type;
                 if (RegQueryValueExW(hKey, valueName, 0, &type, (unsigned char*)&value, &size) == 0) {
-                    WStr_Format(out, (const wchar_t*)VA_REG_FORMAT, value);
+                    WStr_Format(out, (const wchar_t*)g_13fa490, value);
                     ok = true;
                 }
             } else if (type == 1) {

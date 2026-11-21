@@ -13,12 +13,14 @@ extern void* sub_11e22c0(u32);                             // ArenaTypeRegGetTyp
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern void* sub_11e22c0(u32);                             // ArenaTypeRegGetType
 
+extern "C" void FUN_006c1180();                             // arena pointer fixup
+
 // @ 0x006c12a0
 void RegisterArenaReadCallbacks()
 {
     u32* t = (u32*)sub_11e22c0(0x200af);
     t[1] = 0;
     t[2] = 0;
-    t[3] = 0x6c1180;
+    t[3] = (u32)&FUN_006c1180;
     t[4] = 0;
 }
