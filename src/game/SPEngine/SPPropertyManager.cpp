@@ -1656,7 +1656,7 @@ Vec38* Vec38::Init(int n, const void* alloc)
 
 struct EmptyStr16 {
     char* mpBegin; char* mpEnd; char* mpCapacity; void* mAlloc;
-    EmptyStr16() { char* const p = (char*)0x01667bac; mpBegin = p; mpEnd = p; mpCapacity = (char*)0x01667bad; }
+    EmptyStr16() { char* const p = gEmptyStr; mpBegin = p; mpEnd = p; mpCapacity = gEmptyStr + 1; }
     ~EmptyStr16() { if (mpCapacity - mpBegin > 1 && mpBegin) Fun_00f47380(mpBegin); }
 };
 struct ArgParserView {
