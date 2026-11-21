@@ -11,3 +11,4 @@ slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3c120@W@@QAEPAPAXPAPAXH@Z  00f3c120  /O2
 slices/s00f3c060/s00f3c060.cpp  ??0cContentValidationSummarizer@@QAE@IPAX0@Z  00f3cc40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3cb60@cContentValidationSummarizer@@QAE_NXZ  00f3cb60  /O2 /MD /Gy /EHs- /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3c330@W@@QAE_NPAH@Z  00f3c330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3c7f0@W@@QAEII@Z  00f3c7f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

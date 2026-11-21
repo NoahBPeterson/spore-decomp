@@ -423,12 +423,13 @@ unsigned W::FUN_00f3c7f0(unsigned id)
         if (*(unsigned*)(p + 4) == id)
             ++count;
         do {
-            unsigned f = *(unsigned*)p;
+            const char* previous = p;
             p += 0x238;
-            bool stop = (f >> 30) & 1;
+            const unsigned previousFlags = *reinterpret_cast<const unsigned*>(previous);
+            const bool stop = (previousFlags >> 30) & 1;
             if (stop)
                 break;
-        } while ((*(unsigned*)p >> 31) & 1);
+        } while (static_cast<unsigned char>(*reinterpret_cast<const volatile unsigned*>(p) >> 31) & 1);
     }
     return count;
 }
