@@ -1963,7 +1963,7 @@ namespace UI {
 bool  __cdecl cScenarioPlayProgressBar_KindOk(void* p);      // 0x00f19220
 }
 namespace UI {
-void  __cdecl cScenarioPlayProgressBar_Link(void* a);        // 0x00f195a0
+void  __cdecl cScenarioPlayProgressBar_Link(void* noun, void* a);   // 0x00f195a0
 }
 namespace UI {
 bool  __cdecl cScenarioPlayProgressBar_IsReady();            // 0x00f19640
@@ -5284,19 +5284,131 @@ bool __cdecl cScenarioPlayProgressBar_KindOk(void* p)
 }
 }  // namespace UI
 
+struct Avatar_s00f1_95a0 { void* GetAvatar(); };                // 0x00b1fdb0
+struct NounMgr_s00f1_95a0 { void RemoveNoun(void* noun); };       // 0x00b225d0
+struct Obj_s00f1_95a0 { void ProcessEA(); };                      // 0x00ca04a0
+struct Owner_s00f1_95a0 { void RefreshModelKeys(); };             // 0x00bcda90
+struct Effect_s00f1_95a0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void v7c();
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void v90();
+    virtual void v94();
+    virtual void v98();
+    virtual void v9c();
+    virtual void va0();
+    virtual void va4();
+    virtual void va8();
+    virtual void vac();
+    virtual void vb0();
+    virtual void vb4();
+    virtual void vb8();
+    virtual void vbc();
+    virtual void vc0();
+    virtual void vc4();
+    virtual void SetActive(int on);                // +0xc8
+};
+struct Noun_s00f1_95a0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void v7c();
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void v90();
+    virtual void v94();
+    virtual void v98();
+    virtual void v9c();
+    virtual void va0();
+    virtual void va4();
+    virtual void va8();
+    virtual void vac();
+    virtual void vb0();
+    virtual void vb4();
+    virtual void* Cast(uint32_t id);               // +0xb8
+};
+extern "C" char g_137e8e0[];                       // 0x0137e8e0
 // @ 0x00f195a0
 namespace UI {
-void __cdecl cScenarioPlayProgressBar_Link(void* a)
+void __cdecl cScenarioPlayProgressBar_Link(void* noun, void* a)
 {
-    void* g = sub_b3d300();
-    void* h = ((Xb1fdb0*)g)->Find(0);
-    if (h)
-        ((Xc15d50*)h)->Add(a, 0, 0);
-    if (!a)
-        return;
-    void* c = ((void* (__thiscall*)(void*, uint32_t))(*(void***)a)[0xb8 / 4])(a, 0xce9f6639);
-    if (c)
-        ((void (__thiscall*)(void*, int))(*(void***)c)[0xc8 / 4])(c, 1);
+    if (void* av = ((Avatar_s00f1_95a0*)sub_b3d300())->GetAvatar())
+        ((Xc15d50*)av)->Add(a, 0, 0);
+    if (a) {
+        Noun_s00f1_95a0* n = (Noun_s00f1_95a0*)a;
+        if (Effect_s00f1_95a0* e = (Effect_s00f1_95a0*)n->Cast(0xce9f6639)) {
+            e->SetActive(1);
+            return;
+        }
+        if (Obj_s00f1_95a0* o = (Obj_s00f1_95a0*)n->Cast((uint32_t)g_137e8e0))
+            o->ProcessEA();
+        if (Owner_s00f1_95a0* w = (Owner_s00f1_95a0*)n->Cast(0xe9cb8ba))
+            w->RefreshModelKeys();
+    }
+    ((NounMgr_s00f1_95a0*)sub_b3d300())->RemoveNoun(noun);
 }
 }  // namespace UI
 

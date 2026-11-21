@@ -45,3 +45,4 @@
 ../src/game/SPGonzago/_at_00f10000.cpp  ?Shutdown@cScenarioPaletteOwner@@QAEXXZ  00f16fd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00f10000.cpp  ?SetValue@cScenarioPlayProgressBar@UI@@QAEXM@Z  00f18a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00f10000.cpp  ?Init@cScenarioUnlockItemUI@@QAEXPAX00PAUcSPPaletteItem@@@Z  00f12140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?cScenarioPlayProgressBar_Link@UI@@YAXPAX0@Z  00f195a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
