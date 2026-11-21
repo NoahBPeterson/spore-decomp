@@ -8654,22 +8654,40 @@ void __cdecl FUN_00efe310(int flag)
     ((PluginObj*)(g + 0xb0))->FUN_0093a2e0();
 }
 
+struct EfeLayout { virtual void f0(); virtual void f1(); virtual void f2(); virtual void* FindWindow(uint32_t id); };
+struct EfeUI {
+    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03(); virtual void f04();
+    virtual void f05(); virtual void f06(); virtual void f07(); virtual void f08(); virtual void f09();
+    virtual void f0a(); virtual void f0b(); virtual void f0c(); virtual void f0d();
+    virtual EfeLayout* GetLayout();             // +0x38
+};
+struct EfeApp {
+    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03(); virtual void f04();
+    virtual void f05(); virtual void f06(); virtual void f07(); virtual void f08(); virtual void f09();
+    virtual void f0a(); virtual void f0b(); virtual void f0c(); virtual void f0d(); virtual void f0e();
+    virtual void f0f(); virtual void f10(); virtual void f11(); virtual void f12(); virtual void f13();
+    virtual EfeUI* GetUI();                     // +0x50
+};
+struct EfeInput {
+    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03(); virtual void f04();
+    virtual void f05(); virtual void f06(); virtual void f07(); virtual void f08(); virtual void f09();
+    virtual void f0a(); virtual void f0b(); virtual void f0c(); virtual void f0d();
+    virtual void Refresh();                     // +0x38
+};
 // @ 0x00efe4a0
 void __cdecl FUN_00efe4a0(int flag)
 {
-    void* app = (void*)SP_App_s00ef_dee0();
-    void* a = (void*)((FN0_i)((*(void***)app)[0x14]))(app);
-    void* b = (void*)((FN0_i)((*(void***)a)[0xe]))(a);
+    EfeApp* app = (EfeApp*)SP_App_s00ef_dee0();
+    EfeLayout* b = app->GetUI()->GetLayout();
     if (b == 0)
         return;
-    void* o = (void*)((FN0_i)((*(void***)b)[3]))(b);
+    PluginObj* o = (PluginObj*)b->FindWindow(0x11966ed);
     if (o == 0)
         return;
-    if (*(char*)((char*)o + 0x319) == 0 && flag == 0) {
-        void* d4 = *(void**)((char*)gSimulator_s00ef_dee0 + 0xd4);
-        ((FN2_ii)((*(void***)d4)[4]))(d4, 0x13, 0x14);
-    }
-    FUN_00b10c40(o, flag);
+    if (*(char*)((char*)o + 0x319) == 0 && (char)flag == 0)
+        ((CUI*)*(void**)((char*)gSimulator_s00ef_dee0 + 0xd4))->f_efbbe0(0x13, 0x14);
+    o->FUN_00b10c40(flag);
+    ((EfeInput*)g_15ad298_s00ef_dee0)->Refresh();
 }
 
 // @ 0x00efe510

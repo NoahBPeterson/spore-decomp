@@ -94,3 +94,4 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?HandleCategoryMessage@cScenarioTutorials_s00ef_9e40@@QAEXHH@Z  00efa110  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef0a70@Strategy@@QAEXI@Z  00ef0a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?f_eff6c0@@YAXPAXD@Z  00eff6c0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efe4a0@@YAXH@Z  00efe4a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
