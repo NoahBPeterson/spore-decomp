@@ -321,6 +321,7 @@ void ShowEntry(IWin* w)
 // @ 0x00f0b690
 void HideEntry(IWin* w)
 {
+    extern char g_13ec468[];  // 0x013ec468
     Entry* e = FindEntry(w);
     Rec* r = GetListRec(e->idx);
     e->savedA = r->kind;
@@ -332,17 +333,16 @@ void HideEntry(IWin* w)
         IWin* b = a->QueryInterface(0xcf428691);
         if (b) {
             b->SetFontStyle(0xc0);
-            b->SetText((const void*)0x13ec468, 0);
+            b->SetText(g_13ec468, 0);
         }
     }
-    uint id = 0xcefa1210;
     for (int i = 0; i < 4; i++) {
         IWin* t = w->FindChild(0x7da65e0 + i, 1);
         if (i == r->kind)
             t->SetVisible(1, 1);
         else
             t->SetVisible(1, 0);
-        IWin* c = w->FindChild(id, 0);
+        IWin* c = w->FindChild((uint)(i * 0x10 - 0x3105edf0), 0);
         if (c) {
             IWin* d = c->QueryInterface(0x8ed27e7a);
             if (d)
@@ -351,9 +351,9 @@ void HideEntry(IWin* w)
             if (d)
                 d->SetState(4, 0);
         }
-        id += 0x10;
     }
-    IWin* c = w->FindChild((uint)(r->kind * 0x10 - 0x3105edf0), 0);
+    int k = r->kind;
+    IWin* c = w->FindChild((uint)(k * 0x10 - 0x3105edf0), 0);
     if (c) {
         IWin* d = c->QueryInterface(0x8ed27e7a);
         if (d)

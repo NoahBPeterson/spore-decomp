@@ -2,3 +2,4 @@
 slices/s00f0ac40/s00f0ac40.cpp  ?GetListRec@@YAPAURec@@H@Z  00f0b420  /O2 /MD /Gy /EHsc /TP
 slices/s00f0ac40/s00f0ac40.cpp  ?erase@RecVec@@QAEPAURec@@PAU2@0@Z  00f0b0e0  /O2 /MD /Gy /EHsc /TP
 slices/s00f0ac40/s00f0ac40.cpp  ?RefreshEntries@@YAXXZ  00f0b8b0  /O2 /MD /Gy /EHsc /TP
+slices/s00f0ac40/s00f0ac40.cpp  ?HideEntry@@YAXPAUIWin@@@Z  00f0b690  /O2 /MD /Gy /EHsc /TP
