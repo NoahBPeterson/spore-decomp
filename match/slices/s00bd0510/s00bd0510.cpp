@@ -555,23 +555,33 @@ struct PropertyManagerObj {
 
 void* SP_PropertyManager();                                   // 0x0067de30
 
+struct RefObj_bd0ce0 {
+    virtual void AddRef();
+    virtual void Release();                                           // +0x04
+};
+struct PropMgr_bd0ce0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a();
+    virtual bool GetPropertyList(void* pOwner, int b, PropertyList** pOut);  // +0x2c
+};
 // @ 0x00bd0ce0
 // SP::cPropertyInfo<float>::cPropertyInfo - bind the value to a named property.
 PropertyInfoF* PropertyInfoF::Ctor(void* pOwner, uint32_t id, float value)
 {
     mValue = value;
-    mpObject = 0;
+    void** pp = &mpObject;
+    *pp = 0;
     mPropertyID = id;
     mModCount = 0;
 
-    PropertyManagerObj* mgr = (PropertyManagerObj*)SP_PropertyManager();
+    PropMgr_bd0ce0* mgr = (PropMgr_bd0ce0*)SP_PropertyManager();
     if (mpObject != 0) {
-        void* p = mpObject;
+        RefObj_bd0ce0* p = (RefObj_bd0ce0*)mpObject;
         mpObject = 0;
-        (*(void (__thiscall**)(void*))(*(void***)p)[1])(p);
+        p->Release();
     }
-    if (((bool (__thiscall*)(void*, void*, int, PropertyList**))
-         (*(void***)mgr)[0x2c / 4])(mgr, pOwner, 0, (PropertyList**)&mpObject))
+    if (mgr->GetPropertyList(pOwner, 0, (PropertyList**)&mpObject))
         Set(*(PropertyList**)&mpObject);
     return this;
 }
