@@ -9470,7 +9470,7 @@ Blk28_s0106_ea40* Blk28Vec::erase(Blk28_s0106_ea40* first, Blk28_s0106_ea40* las
             p->mpRef->Release();
         p += 1;
     }
-    mpEnd += last - first;
+    mpEnd -= last - first;
     return first;
 }
 
