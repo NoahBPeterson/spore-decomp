@@ -22,7 +22,6 @@
 00e24b10 74 container teardown: MSVC keeps mFieldA8 in eax across the popped-item read and picks mFieldA8 for both begin/end compares; original reloads mFieldA8 and uses mFieldA4 in the compares (133 vs 139 bytes)
 00e25710 192 UI::Posse::Posse: full member-init sequence + MissionCardAnimator new present; vtable/base-ctor ordering and EA new arg schedule differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e25bd0 70 vector<AutoRefCount<ILogReporter>>::erase: CopyImpl::do_copy shift + tail release + end adjust complete; replay None; residual register/frame schedule (79 vs 82 B); fresh equiv UNSUPPORTED 0/400 (original faults on random pointer args) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e25f40 61 heap sift helper: all AddRef calls and sift recursion present; pointer-vs-index schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e260a0 69 cSPUIPosseItem::update_control_values: complete (tick gate + update_control_value loop); best-symbol size mismatch flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e264b0 185 partition over 8-byte pairs: complete (hoare loop + release); predecessor/successor scheduling differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e26530 239 insertion pass over 8-byte pair stable sort: predicate now pred(i,first), heapify + shift loop complete; replay None; fresh equiv WEAK 302/800 valid, 27.7% coverage, 0 mismatches; residual loop/register schedule (269 vs 328 B) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

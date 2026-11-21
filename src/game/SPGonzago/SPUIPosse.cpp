@@ -2737,19 +2737,32 @@ void __cdecl FUN_00e25df0(void* first, void* last, void* end, void* pred)
   }
 }
 
+struct PairRef_e25f40 {
+    virtual void AddRef();
+};
+struct RefPtr_e25f40 {
+    PairRef_e25f40* p;
+    RefPtr_e25f40(const RefPtr_e25f40& o) : p(o.p)
+    {
+        if (p) p->AddRef();
+    }
+};
+struct Pair_e25f40 {
+    RefPtr_e25f40 a;
+    RefPtr_e25f40 b;
+};
+// The adjust-heap helper takes the moved pair by value (callee destroys it).
+void __cdecl FUN_00e25240(char* begin, int hole, int n, int top, Pair_e25f40 v, void* ctx);  // 0x00e25240
+
 // @ 0x00e25f40
 void __cdecl FUN_00e25f40(char* begin, char* end, void* ctx)
 {
   int n = (int)((end - begin) >> 3);
-  if (1 < n) {
+  if (n >= 2) {
     int i = ((n - 2) >> 1) + 1;
     do {
-      void* a = *(void**)(begin + i * 8 - 8);
       --i;
-      if (a) { void* o = *(void**)a; ((void(__thiscall*)(void*))o)(a); }
-      void* b = *(void**)(begin + 4 + i * 8);
-      if (b) { void* o = *(void**)b; ((void(__thiscall*)(void*))o)(b); }
-      FUN_00e25240(begin, i, n, i);
+      FUN_00e25240(begin, i, n, i, *(Pair_e25f40*)(begin + i * 8), ctx);
     } while (i != 0);
   }
 }
