@@ -850,17 +850,26 @@ int __fastcall FUN_00ece8f0(int param_1)
 }
 
 // ============================================================ 0x00ece920
+struct PropList_s00ec_e920 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(uint32_t id, PropObj** out);   // +0x24
+};
 // @ 0x00ece920
 void FUN_00ece920(void)
 {
     int* p = ((Mgr167eaec*)FUN_00b3d320_get())->Fn_b1de80();
     if (p != 0) {
-        int local = 0;
-        char c = ((char(__thiscall*)(void*, int, int*))VTB(p, 0x24))(p, 0xa143f717, &local);
-        if (c != 0 && *(short*)((char*)local + 0x12) == 0xd) {
-            int* v = ((PropObj*)local)->GetFloat();
-            g_15abee4 = *(float*)v;
-        }
+        PropObj* prop;
+        if (((PropList_s00ec_e920*)p)->GetProperty(0xa143f717, &prop) && *(short*)((char*)prop + 0x12) == 0xd)
+            g_15abee4 = *(float*)prop->GetFloat();
     }
     FUN_006a1400(p, 0x27c26ec0, &g_15abf0c);
     FUN_006a1400(p, 0x92bb2e5f, &g_15abf1c);
