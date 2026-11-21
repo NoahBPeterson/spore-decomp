@@ -438,6 +438,7 @@ public:
     Hashtable* Construct(void* name);                                 // 0xa665f0
     void      Destruct();                                             // 0xa66550
     void      ClearBuckets(HashNode** arr, uint32_t n);               // 0xa660e0
+    void      ClearBucketsRaw(HashNode** arr, uint32_t n);            // 0xa66bf0
     HeapIter  find(const uint32_t& key);                              // 0x645ed0
     // eastl's equal_range (0x9a6dd0) returns its 16-byte range in a hidden destination (the result pointer is the
     // first stack argument, [esp+4]); the caller's `this` (ecx) and key follow it. Every retail caller passes only a
@@ -503,7 +504,6 @@ uint32_t EapdPrimeBelow(uint32_t n);                              // 0x921340
 void  OutletBang(void* atom);                                     // 0xa49560
 void  OutletFloat(void* atom, float f);                           // 0xa49570
 void  OutletSymbol(void* atom, EA::Audio::Eapd::t_symbol name);   // 0xa49590
-void  EapdClearBucketsRaw(Hashtable* self, HashNode** arr, uint32_t n);  // 0xa66bf0
 // ---- items of slice s00a65f90 end
 
 // ---- items of slice s00a670b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1333,12 +1333,14 @@ void Hashtable::Rehash(uint32_t n)
 }
 
 // @ 0x00a66bf0
-void EapdClearBucketsRaw(Hashtable* self, HashNode** arr, uint32_t n)
+void Hashtable::ClearBucketsRaw(HashNode** arr, uint32_t n)
 {
+    Hashtable* self = this;
     for (uint32_t i = 0; i < n; ++i) {
-        HashNode* node = arr[i];
-        while (node) {
-            HashNode* next = node->mpNext;
+        HashNode* next = arr[i];
+        while (next) {
+            HashNode* node = next;
+            next = node->mpNext;
             if (node != (HashNode*)self->mAlloc.mpBucketBuffer) {
                 --self->mAlloc.mnCurrentSize;
                 if ((uint8_t*)node < (uint8_t*)self->mAlloc.mpPoolBegin ||
@@ -1350,7 +1352,6 @@ void EapdClearBucketsRaw(Hashtable* self, HashNode** arr, uint32_t n)
                     self->mAlloc.mpHead = node;
                 }
             }
-            node = next;
         }
         arr[i] = 0;
     }

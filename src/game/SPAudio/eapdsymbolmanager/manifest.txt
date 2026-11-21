@@ -12,3 +12,4 @@
 ../src/game/SPAudio/eapdsymbolmanager.cpp  ?gensym@@YAPAUt_symbol@Eapd@Audio@EA@@PAU1234@PBD@Z  00a675f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/eapdsymbolmanager.cpp  ?Init@SymbolManager_s00a6_70b0@@QAE_NIIIIIP6AIPBD@Z@Z  00a67670  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/eapdsymbolmanager.cpp  ??1HashtableObj_s00a6_70b0@@QAE@XZ  00a672e0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?ClearBucketsRaw@Hashtable@@QAEXPAPAUHashNode@@I@Z  00a66bf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
