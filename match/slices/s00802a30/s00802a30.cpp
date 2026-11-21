@@ -171,36 +171,41 @@ C_803020* C_803020::Ctor() {
 // ===========================================================================
 // @ 0x00803140  cSPUIDebugConsole destructor
 // ===========================================================================
-extern char dbg_c[], dbg_d[];
-void  __cdecl cSPUILayout_Dtor_Extern(void*);
+extern "C" char g_1417604[], g_14175e8[], g_14175d8[], g_13ec458[], g_13eb938[];
+struct FixedBufferAlloc_803140 { void destroy_shared(); };          // 0x004bca10
+struct cSPUILayout_803140 { void dtor(); };                          // 0x00811fe0
+struct WStrVec_803140 {
+  void* mpBegin; void* mpEnd;
+  void DoDestroyValues(void* b, void* e);                            // 0x0084aad0
+};
 struct C_803140 {
   char data[0x50];
   void Dtor();
 };
 void C_803140::Dtor() {
   char* p = (char*)this;
-  void* alloc = *(void**)(p + 0x48);
-  *(void**)p = (void*)dbg_c;
-  *(void**)(p + 4) = (void*)sb_b;
-  *(void**)(p + 8) = (void*)dbg_d;
+  void** alloc = *(void***)(p + 0x48);
+  *(void**)p = (void*)g_1417604;
+  *(void**)(p + 4) = (void*)g_14175e8;
+  *(void**)(p + 8) = (void*)g_14175d8;
   if (alloc) {
-    void* bi = *(void**)alloc;
+    void* bi = *alloc;
     if (bi && (*(uint32_t*)((char*)bi + 0x10) & 0x40000000))
-      ((void(__thiscall*)(void*))0x4bca10)(alloc);
-    *(void**)alloc = 0;
+      ((FixedBufferAlloc_803140*)alloc)->destroy_shared();
+    *alloc = 0;
     EASTL_allocator_deallocate(alloc);
   }
   EASTL_allocator_deallocate(*(void**)(p + 0x4c));
-  Vector_DoDestroyValues(*(void**)(p + 0x30), *(void**)(p + 0x34));
-  int v = *(int*)(p + 0x30);
-  if (v && *(int*)(v - 4))
-    EASTL_allocator_deallocate((void*)v);
+  WStrVec_803140* v = (WStrVec_803140*)(p + 0x30);
+  v->DoDestroyValues(v->mpBegin, v->mpEnd);
+  if (v->mpBegin && *(int*)((char*)v->mpBegin - 4))
+    EASTL_allocator_deallocate(v->mpBegin);
   if (*(void**)(p + 0x2c)) ((RCObj*)*(void**)(p + 0x2c))->Release();
   if (*(void**)(p + 0x28)) ((RCObj*)*(void**)(p + 0x28))->Release();
-  cSPUILayout_Dtor_Extern(p + 0x10);
-  *(void**)(p + 8) = (void*)dbg_d;
-  *(void**)(p + 4) = (void*)sb_b;
-  *(void**)p = (void*)sb_b;
+  ((cSPUILayout_803140*)(p + 0x10))->dtor();
+  *(void**)(p + 8) = (void*)g_13ec458;
+  *(void**)(p + 4) = (void*)g_13eb938;
+  *(void**)p = (void*)g_13eb938;
 }
 
 // ===========================================================================

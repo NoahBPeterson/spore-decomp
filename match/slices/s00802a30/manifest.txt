@@ -3,3 +3,4 @@ slices/s00802a30/s00802a30.cpp  ?Forward@DbgOut@@QAEXPBD@Z  00802fb0  /O2 /MD /G
 slices/s00802a30/s00802a30.cpp  ?OnShow@Dbg@@QAEXHH@Z      00802fd0  /O2 /MD /Gy /TP /arch:SSE2
 slices/s00802a30/s00802a30.cpp  ?f_803730@@YAXPAX0@Z       00803730  /O2 /MD /Gy /TP /arch:SSE2
 slices/s00802a30/s00802a30.cpp  ?f_803750@@YAXPAX0@Z       00803750  /O2 /MD /Gy /TP /arch:SSE2
+slices/s00802a30/s00802a30.cpp  ?Dtor@C_803140@@QAEXXZ  00803140  /O2 /MD /Gy /TP /arch:SSE2
