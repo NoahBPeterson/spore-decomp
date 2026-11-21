@@ -1196,29 +1196,23 @@ namespace SP {
 int __cdecl FUN_00c6af40(AnimalNoun* a, void* herdPtr)
 {
     cHerd_s00c6_a550* herd = (cHerd_s00c6_a550*)herdPtr;
-    if (!a)
-        return 0;
-    if (a->mbB5e)
-        return 0;
-    if (!((int(__thiscall*)(void*))FUN_00c0b770)(a))
-        return 0;
-    if ((a->mFlagsB58 >> 8) & 1)
-        return 0;
-    if (a->mSpeciesKey != herd->mSpeciesKey)
-        return 0;
-    if ((a->mFlagsB58 >> 9) & 1) {
-        const Vec3* p1 = ((cNearNoun*)((void*(__thiscall*)(void*))FUN_00c04590)(a))->GetPosition();
-        const Vec3* p2 = a->spatialC0()->GetPosition();
-        float dx = p2->x - p1->x;
-        float dy = p2->y - p1->y;
-        float dz = p2->z - p1->z;
-        float d2 = dx * dx;
-        d2 += dy * dy;
-        d2 += dz * dz;
-        if (gFiftyF * gFiftyF <= d2)
-            return 0;
+    if (a && !a->mbB5e && ((bool(__thiscall*)(void*))FUN_00c0b770)(a)
+        && !(bool)((a->mFlagsB58 >> 8) & 1) && a->mSpeciesKey == herd->mSpeciesKey) {
+        if ((bool)((a->mFlagsB58 >> 9) & 1)) {
+            const Vec3* p1 = ((cNearNoun*)((void*(__thiscall*)(void*))FUN_00c04590)(a))->GetPosition();
+            const Vec3* p2 = a->spatialC0()->GetPosition();
+            float dx = p2->x - p1->x;
+            float dy = p2->y - p1->y;
+            float dz = p2->z - p1->z;
+            float d2 = dx * dx;
+            d2 += dy * dy;
+            d2 += dz * dz;
+            if (!(d2 < gFiftyF * gFiftyF))
+                return 0;
+        }
+        return 1;
     }
-    return 1;
+    return 0;
 }
 }  // namespace SP
 

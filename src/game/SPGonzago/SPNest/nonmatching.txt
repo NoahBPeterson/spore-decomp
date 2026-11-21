@@ -8,7 +8,6 @@
 00c6ac90 19 logic: the caller sees eax = the argument (retail leaves eax=i), so the method returns int i; bounds check unchanged. Residual begin/end register allocation. fix1: quick check PASS
 00c6adc0 60 Complete evolved-key vector serialiser; residual is loop/call scheduling.
 00c6ae70 81 Complete copy_if filter; residual is iterator/refcount register allocation and ordering.
-00c6af40 135 logic: FUN_00c0b770 and FUN_00c04590 are __thiscall (ecx=object, no extra stack args); the old __cdecl calls corrupted the frame. The 2500 <= d2 -> return 0 test stands. Residual SSE compare-tree/regalloc. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp] fix1: quick check WEAK
 00c6b040 567 Complete cEgg::Update hatch path; residual is large scheduling delta across vector/quat temps.
 00c6b440 227 logic: FUN_00c02c20 is __thiscall (ecx=animal, 0), and the herd loop recomputes mpHerdEnd - mpHerdBegin (pointer subtraction) each iteration instead of caching a count. Residual eax/edx regalloc. fix1: quick check WEAK
 00c6bf20 382 Vector2 "list"/"type" serializer: retail shares one empty-string path for the name/type wstrings; ours keeps the empty-name branch separate. equiv=UNSUPPORTED (0/400 inputs valid; every input hits import _fcvt) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
