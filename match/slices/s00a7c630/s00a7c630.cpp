@@ -378,19 +378,31 @@ bool __cdecl ClampToShell(float* p, float* dir, float radius, void* unused)
   return moved;
 }
 
+namespace EA { namespace Random {
+struct RandomLinearCongruential {
+  uint32 RandomUint32Uniform(uint32 n);                              // 0x00a68fb0
+};
+} }
+struct ColorTarget_a7d1a0 {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+  virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+  virtual void v10();
+  virtual void SetValue(int id, float* v, int n);                    // +0x44
+};
 // @ 0x00a7d1a0
 // Draws a random colour sample: a random uniform value, a random 0/1 pair and a fixed 1.0.
-unsigned __stdcall RandomSpawnSeed(void* arg, float* outv, void* target)
+void __stdcall RandomSpawnSeed(void* arg, float* outv, void* target)
 {
-  uint32 r = RandomUint32Uniform(&sRandom, 4);
-  outv[0] = (float)(int)r;
+  int r = (int)((EA::Random::RandomLinearCongruential*)sRandom)->RandomUint32Uniform(4);
+  outv[0] = (float)r;
   float local[3];
   local[0] = (float)(r & 1);
-  local[1] = (float)((int)r >> 1);
+  local[1] = (float)(r >> 1);
   local[2] = 1.0f;
   if (target != 0)
-    ((void (__thiscall*)(void*, int, float*, int))(*(void***)target)[0x44 / 4])(target, 5, local, 3);
-  return 0;
+    ((ColorTarget_a7d1a0*)target)->SetValue(5, local, 3);
 }
 
 // @ 0x00a7d210
