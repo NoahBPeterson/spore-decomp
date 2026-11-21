@@ -215,10 +215,29 @@ struct ScrollBtn2 {
   void OnButtonClicked(int);
   void OnButtonClicked2(int arg);
 };
-struct MB {
-  char pad00[0x3c];
-  int* head;      // +0x3c
-  char pad01[0x8a8 - 0x40];
+struct MBListNode { MBListNode* next; MBListNode* prev; };
+struct MBChildBase { virtual void c0(); };
+struct MBChildWin { virtual void w0(); };
+struct MBChild : MBChildBase, MBChildWin { MBListNode node; };   // node at +8
+struct MBWin {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void v30(); virtual void v31();
+    virtual void SetSkin(void* skin);  // slot 32 (+0x80)
+    virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38();
+    virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44();
+    virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50();
+    virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54();
+    virtual void RemoveChild(MBChildWin* child);  // slot 55 (+0xdc)
+};
+struct MBBase0 { virtual void b0(); };
+struct MB : MBBase0, MBWin {
+  char pad08[0x3c - 8];
+  MBListNode children;  // +0x3c
+  char pad01[0x8a8 - 0x44];
   int f8a8;       // +0x8a8
   int f8ac;       // +0x8ac
   void Do030();
@@ -800,15 +819,15 @@ void PMW::OnScrollButtonClicked(char down, int p3)
 // @ 0x0081cce0
 void MB::Reset()
 {
-  int* h = (int*)((char*)this + 0x3c);
-  if (*(int**)((char*)this + 0x40) != h) {
+  MBListNode* h = &children;
+  if (h->prev != h) {
     do {
-      int v = *h;
-      if (v == 0 || v == 8) v = 0; else v = v - 4;
-      ((void (__thiscall*)(void*, int))VTSLOT((char*)this + 4, 0xdc))((char*)this + 4, v);
-    } while (*(int**)((char*)this + 0x40) != h);
+      MBListNode* n = h->next;
+      MBChild* c = n ? (MBChild*)((char*)n - 8) : 0;
+      RemoveChild(c);
+    } while (h->prev != h);
   }
-  ((void (__thiscall*)(void*, void*))VTSLOT((char*)this + 4, 0x80))((char*)this + 4, (void*)&g_13ec468);
+  SetSkin(&g_13ec468);
   Do030();
   f8a8 = 0;
   f8ac = 0;
