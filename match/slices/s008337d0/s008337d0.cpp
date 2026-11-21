@@ -435,6 +435,16 @@ void TextZoomName::Anim2(int a2, int a3, int a4)
     // full Variant/SPUICreateObjectAnimation path not translated; see partial.txt
 }
 
+struct IWin_834930 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24();
+    virtual char GetFlags();              // +0x28
+};
+struct IOwner_834930 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual IWin_834930* GetWindow();     // +0x10
+};
 // @ 0x00834930
 void TextZoomName::Tick(char param)
 {
@@ -442,12 +452,13 @@ void TextZoomName::Tick(char param)
         void* anim = (char*)this + 0x10;
         ((VFv)FUN_007f63b0)(anim);
         char e = ((char (__thiscall*)(void*))FUN_007f6340)(anim);
-        ((void (__thiscall*)(void*, int))FUN_00834660)(this, e == 0);
+        ((void (__thiscall*)(void*, bool))FUN_00834660)(this, e == 0);
     }
-    if (param != 0 && f64 != 0) {
-        void* p = ((VFi)VT(f64)[0x10 / 4])(f64);
-        char c = ((char (__thiscall*)(void*))VT(p)[0x28 / 4])(p);
-        if (c & 1)
+    if (param != 0) {
+        IOwner_834930* o = (IOwner_834930*)f64;
+        if (o == 0)
+            return;
+        if (o->GetWindow()->GetFlags() & 1)
             ((void (__thiscall*)(void*))FUN_00834220)(this);
     }
 }
