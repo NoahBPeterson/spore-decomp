@@ -15,7 +15,6 @@
 00f02160 989 update dispatcher: 4-way window-message state dispatch; branch/register schedule differs throughout (equiv WEAK 344/400 valid, 11.7% cov)
 00f02700 493 build: plane ctor + App::v58 + planet query + SSE quaternion product + slot 0x38/0x3c schedule differs (equiv UNSUPPORTED 0/400 valid: original faults on uninitialised reads)
 00f02a10 139 message switch: jump-table layout and case block ordering differ (equiv PASS 375/400 valid, 83.3% cov)
-00f02b00 46 update gate: FUN_0067dd10 chain + g_mgr branch/tail-jmp schedule differs
 00f02b80 81 ctor: Stopwatch arg setup hoisted above the zero-store block by cl
 00f02e00 374 scene build: window path + VecBox temp schedule differs (equiv WEAK 400/400 valid, 5.4% cov)
 00f03010 16 list dtor: outer/inner callee-saved register swap (edi<->esi) only (equiv PASS 260/400 valid, 100% cov)

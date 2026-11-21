@@ -700,6 +700,8 @@ struct PL {
     void  f02700();              // 0x00f02700
     int   f02a10(int, int, float); // 0x00f02a10 ret 0xc
     void  f02b00();              // 0x00f02b00
+    void  Dispatch_f00f80();     // 0x00f00f80
+    void  Tail_eff0c0();         // 0x00eff0c0
     PL*   f02b80();              // 0x00f02b80
     PL*   ctor_2cd0();           // 0x00f02cd0
     void  f02c50();              // 0x00f02c50
@@ -1819,27 +1821,65 @@ int PL::f02a10(int msg, int, float c)
     }
 }
 
+struct Cap_s00f0_2b00 {
+    char pad[0x319];
+    bool b319;         // +0x319
+    bool IsEnabled() const { return b319; }
+};
+struct Space_s00f0_2b00 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual Cap_s00f0_2b00* GetCap(uint32_t id);    // +0x0c
+};
+struct Mode_s00f0_2b00 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual Space_s00f0_2b00* GetSpace();           // +0x38
+};
+struct App_s00f0_2b00 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual Mode_s00f0_2b00* GetMode();             // +0x50
+};
+struct PLVt_s00f0_2b00 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual bool IsActive();                        // +0x38
+};
+struct MgrQ_s00f0_2b00 { char pad[0xc]; int mc; int m10; };
 // @ 0x00f02b00
 void PL::f02b00()
 {
-    void** vt = *(void***)this;
-    if (!((bool(__thiscall*)(void*))vt[0x38 / 4])(this)) return;
-    void* a = FUN_0067dd10();
-    void** va = *(void***)a;
-    void* b = ((void*(__thiscall*)(void*))va[0x50 / 4])(a);
-    void** vb = *(void***)b;
-    void* c = ((void*(__thiscall*)(void*))vb[0x38 / 4])(b);
-    if (c) {
-        void** vc = *(void***)c;
-        void* d = ((void*(__thiscall*)(void*, int))vc[0x0c / 4])(c, 0x11966ed);
-        if (d) {
-            if (*(uint8_t*)((char*)d + 0x319) == 0) return;
+    if (((PLVt_s00f0_2b00*)this)->IsActive()) {
+        Space_s00f0_2b00* c = ((App_s00f0_2b00*)FUN_0067dd10())->GetMode()->GetSpace();
+        bool blocked = false;
+        if (c) {
+            Cap_s00f0_2b00* d = c->GetCap(0x11966ed);
+            if (d)
+                blocked = !d->IsEnabled();
         }
+        if (blocked)
+            return;
+        MgrQ_s00f0_2b00* m = (MgrQ_s00f0_2b00*)g_mgr;
+        if (m->m10 == 0) {
+            if (m->mc != 0) {
+                f02700();
+                Tail_eff0c0();
+                return;
+            }
+            if (!b5)
+                goto tail;
+        }
+        Dispatch_f00f80();
     }
-    if (*(int*)((char*)g_mgr + 0x10) != 0) { f00f80_ext(); f_eff0c0_ext(); return; }
-    if (*(int*)((char*)g_mgr + 0xc) != 0) { f02700(); f_eff0c0_ext(); return; }
-    if (b5) f00f80_ext();
-    f_eff0c0_ext();
+tail:
+    Tail_eff0c0();
 }
 
 // @ 0x00f02b80
