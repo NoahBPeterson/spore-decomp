@@ -4,6 +4,13 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb844[];
+extern "C" char g_15ac2a4[];
+extern "C" char g_1489eac[];
+extern "C" char g_140b5a0[];
+extern "C" char g_1489d70[];
+extern "C" char g_1489d58[];
+extern "C" char g_1489d48[];
+extern "C" char g_1489d44[];
 extern "C" char g_13eb394[];
 extern "C" char g_13eb938[];
 extern "C" char g_13ec458[];
@@ -4363,45 +4370,120 @@ bool __stdcall Panel_Match(int a1, int a2, int a3)
 }
 
 // @ 0x00ed5640
+struct tPosseIndex_ed5640 {
+    void* vt;
+    int f04;
+    int index;
+};
+struct PosseItem_ed5640 {
+    void* vt00;
+    void* vt04;
+    int f08;
+    void* vt0c;
+    char pad[0x13c];
+    void* vt14c;
+    void Construct(tPosseIndex_ed5640* idx, void* arg);   // 0x00e25460
+    void FUN_00e22700(int flag);
+};
+struct IPosseItem_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void SetKey(const void* key, int flags);
+};
+struct IPosse_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40();
+    virtual void AddItem(PosseItem_ed5640* item);
+};
+struct IWin_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30();
+    virtual void SetFlag(int flag, bool on);
+};
+struct ILayout_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
+    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59();
+    virtual IWin_ed5640* FindWindow(unsigned id, bool recurse);
+};
+struct IWM_ed5640 { virtual void v0(); virtual ILayout_ed5640* GetMainWindow(); };
+struct Key_ed5640 { unsigned instance, type, group; };
+struct PosseSim_ed5640 { char pad[0x18]; int count; };
 void Obj5640::f()
 {
     char* s = (char*)this;
-    int* mgr = *(int**)(g_16c7aa4_s00ed_4730 + 0x74);
+    char* mgr = *(char**)(g_16c7aa4_s00ed_4730 + 0x74);
     int count = ((S_f3bf60*)mgr)->f();
-    unsigned count2 = ((S_f3bf70*)mgr)->f();
-    int* wm = (int*)SP_WindowManager();
-    int* wm2 = (int*)((FV_p)(*(void***)wm)[4 / 4])(wm);
-    int* win = (int*)((FV_iir)(*(void***)wm2)[0xf0 / 4])(wm2, 0x774b060, 1);
+    int count2 = (int)((S_f3bf70*)mgr)->f();
+    IWin_ed5640* win = ((IWM_ed5640*)SP_WindowManager())->GetMainWindow()->FindWindow(0x774b060, true);
     if (win != 0)
-        ((FV_ii)(*(void***)win)[0x7c / 4])(win, 2, count < 3);
+        win->SetFlag(2, count < 3);
     ((S_e281a0*)(*(int*)(s + 0x40)))->f(1);
-    int* x = (int*)FUN_00d539d0();
-    if (x != 0) *(int*)((char*)x + 0x18) = count;
+    if (PosseSim_ed5640* x = (PosseSim_ed5640*)FUN_00d539d0())
+        x->count = count;
     for (int i = 0; i < count; i++) {
-        int pos = ((unsigned)i < count2) ? i : -1;
-        int* pi = (int*)operator_new(0xc, "Simulator/tPosseIndex", 0, 0, 0, 0);
-        if (pi != 0) {
-            pi[1] = 0;
-            pi[0] = 0x1489eac;
-            pi[2] = pos;
+        int pos = i < count2 ? i : -1;
+        tPosseIndex_ed5640* pi = 0;
+        tPosseIndex_ed5640* mem = (tPosseIndex_ed5640*)operator_new(0xc, "Simulator/tPosseIndex", 0, 0, 0, 0);
+        if (mem != 0) {
+            mem->f04 = 0;
+            mem->vt = g_1489eac;
+            mem->index = pos;
+            pi = mem;
         }
         void* u = FUN_009512c0();
-        int* item = (int*)FUN_009512d0(0x150, 4, "UI/cScenarioEditPosseItem", u);
+        PosseItem_ed5640* item = (PosseItem_ed5640*)FUN_009512d0(0x150, 4, "UI/cScenarioEditPosseItem", u);
         if (item != 0) {
-            ((S_e226c0*)item)->f();
-            item[0x14c / 4] = 0x140b5a0;
-            item[0] = 0x1489d70;
-            item[1] = 0x1489d58;
-            item[3] = 0x1489d48;
-            item[0x14c / 4] = 0x1489d44;
+            item->Construct(pi, g_15ac2a4);
+            *(void* volatile*)&item->vt14c = g_140b5a0;
+            item->vt00 = g_1489d70;
+            item->vt04 = g_1489d58;
+            item->vt0c = g_1489d48;
+            item->vt14c = g_1489d44;
+        } else {
+            item = 0;
         }
-        ((S_e281a0*)(*(int*)(s + 0x40)))->f((int)item);
-        if ((unsigned)i < count2) {
-            int* v = (int*)((S_f3bfa0*)mgr)->f(i);
-            int v0 = v[0], v1 = v[1], v2 = v[2];
-            char c = ((S_f3bde0*)mgr)->f(i);
-            ((FV_ii)(*(void***)item)[0x90 / 4])(item, (int)&v0, 0);
-            ((S_e22700*)item)->f(c);
+        (*(IPosse_ed5640**)(s + 0x40))->AddItem(item);
+        if (i < count2) {
+            Key_ed5640* k = (Key_ed5640*)((S_f3bfa0*)mgr)->f(i);
+            Key_ed5640 ref = *k;
+            ref.type = 0x2f7d0004;
+            ((IPosseItem_ed5640*)item)->SetKey(&ref, 0);
+            item->FUN_00e22700((unsigned char)((S_f3bde0*)mgr)->f(pos));
         }
     }
 }

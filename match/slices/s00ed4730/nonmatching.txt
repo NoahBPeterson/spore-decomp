@@ -2,4 +2,3 @@
 00ed4c70 308  UTFWin input-capture window create/show: heavy virtual-call schedule differs; equiv: WEAK (6.5% coverage)
 00ed4e30 51   uint64 vtable compare: 64-bit return handling differs; equiv: WEAK (50% coverage)
 00ed5020 273  complete: posse-index lookup + cEditorLaunchData construction + cSPUIAssetBrowserLaunch fill + launcher call + smart-ptr release; frame/register scheduling differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; equiv WEAK (399 valid, 7.3% coverage)
-00ed5640 337  posse item list rebuild: inlined UI item ctor/vcall schedule differs; equiv: UNSUPPORTED (unresolved callee stubs)
