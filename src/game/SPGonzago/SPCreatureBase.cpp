@@ -9293,22 +9293,47 @@ int* __cdecl FUN_00c0fcf0(int* iface, int param_2)
     return iface;
 }
 
-// @ 0x00c0fda0
-int* __cdecl FUN_00c0fda0(int* iface, int param_2)
-{
-    int n = 0x58;
-    int* o = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-    void* s = (*(void*(__thiscall**)(void*))((*(void***)o)[0x18 / 4]))(o);
-    FUN_0093aa70(s, &n, 1, 0);
-    uint32_t bit = 1;
-    for (int i = 0; i < 0x58; ++i) {
-        char b = ((*(uint32_t*)(param_2 + (i >> 5) * 4) & bit) != 0);
-        int* o2 = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-        void* s2 = (*(void*(__thiscall**)(void*))((*(void***)o2)[0x18 / 4]))(o2);
-        FUN_0093a9a0(s2, &b, 1);
-        bit = (bit << 1) | (bit >> 31);
+struct SerStream_s00c0_fda0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void* GetStream();
+};
+struct SerIface_s00c0_fda0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual SerStream_s00c0_fda0* GetSer();
+};
+struct Bits88_s00c0_fda0 {
+    uint32_t mWord[3];
+    bool test(uint32_t i) const
+    {
+        if (i < 0x58)
+            return (mWord[i >> 5] & (1u << (i & 31))) != 0;
+        return false;
     }
-    return iface;
+};
+static inline void WriteBool_s00c0_fda0(void* s, bool v)
+{
+    char b = v ? 1 : 0;
+    FUN_0093a9a0(s, &b, 1);
+}
+
+static inline void WriteU32_s00c0_fda0(void* s, uint32_t v)
+{
+    FUN_0093aa70(s, &v, 1, 0);
+}
+
+// @ 0x00c0fda0
+int* __cdecl FUN_00c0fda0(int* piface, int param_2)
+{
+    SerIface_s00c0_fda0* iface = (SerIface_s00c0_fda0*)piface;
+    const Bits88_s00c0_fda0& bits = *(const Bits88_s00c0_fda0*)param_2;
+    WriteU32_s00c0_fda0(iface->GetSer()->GetStream(), 0x58);
+    for (int i = 0; i < 0x58; ++i) {
+        bool t = bits.test(i);
+        WriteBool_s00c0_fda0(iface->GetSer()->GetStream(), t);
+    }
+    return piface;
 }
 
 // @ 0x00c0fe30
