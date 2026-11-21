@@ -66,11 +66,11 @@ void hkSphereMotionEx::applyPointImpulse(const hkVector4& impulse, const hkVecto
     cross.w = 0.0f;
 
     hkVector4& av = m_angularVelocity;
-    float inertia = m_particleMinInertiaDiagInv;
+    const double inertia = m_particleMinInertiaDiagInv;
     av.x = inertia * cross.x + av.x;
     av.y = inertia * cross.y + av.y;
     av.z = inertia * cross.z + av.z;
-    av.w = inertia * cross.w + av.w;
+    av.w = static_cast<float>(inertia) * cross.w + av.w;
 }
 
 // @ 0x01090b50
