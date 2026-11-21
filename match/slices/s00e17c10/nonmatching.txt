@@ -5,7 +5,6 @@
 # Bounded gate: --budget 200000 --time-limit 60 --min-valid 1 --min-cov 0
 00e17c10  cUIMissionCard::UpdateDetails -- mission substream switch + state-driven relayout; resists byte-exactness (switch table reloc + branchy-vs-branchless state computation)
 00e17cf0  cUIMissionCard::DoExpand -- expand card then post 0xf46092d0 message via MessageServer; message-frame construction differs
-00e17df0  cUIMissionCardPanel::Refresh -- iterate card vector calling UpdateDetails on each; register allocator differs
 00e17e40  cUIMissionCardPanel::UpdateCardDetails -- iterate card vector matching mission then UpdateDetails
 00e180d0  cUIMissionCardList::ReleaseAll -- release every card, erase vector, shut down layout + field3c
 00e18150  cUIMissionCardPanel::AddMissionCard -- allocate cUIMissionCard (0x9c), push into vector, init from mission

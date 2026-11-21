@@ -4263,7 +4263,7 @@ void cUIMissionCardPanel_s00e1_7c10::Refresh()
 {
     int n = (int)(m_vec2c - m_vec28);
     for (int i = 0; i < n; i++) {
-        void *card = m_vec28[i];
+        void *&card = m_vec28[i];
         if (card == 0) {
             continue;
         }
@@ -4279,7 +4279,7 @@ void cUIMissionCardPanel_s00e1_7c10::UpdateCardDetails(void *mission)
 {
     int count = (int)(m_vec2c - m_vec28);
     for (int i = 0; i < count; i++) {
-        void *card = m_vec28[i];
+        void *&card = m_vec28[i];
         if (card == 0) {
             continue;
         }
