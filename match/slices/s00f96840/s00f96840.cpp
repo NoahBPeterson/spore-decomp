@@ -643,23 +643,89 @@ bool cTerrainSphere::m00f97700(int value)
 }
 
 // @ 0x00f97750
+struct AppSys_s00f97750 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void Lock();                    // +0x6c
+    virtual void Unlock();                  // +0x70
+};
+struct Mgr_s00f97750 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void f74();
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual char Begin();                   // +0x88
+    virtual void End();                     // +0x8c
+};
+struct Job_s00f97750 {
+    virtual void f00();
+    virtual char Run(void* owner, int flags);   // +0x04
+};
 void cTerrainSphere::m00f97750()
 {
     char* self = (char*)this;
-    void* app = SP_AppSystem();
-    (*(void (__thiscall**)(void*))(*(int*)app + 0x6c))(app);
-    void* o = FUN_0067dd50();
-    if ((*(char (__thiscall**)(void*))(*(int*)o + 0x88))(o))
+    ((AppSys_s00f97750*)SP_AppSystem())->Lock();
+    if (((Mgr_s00f97750*)FUN_0067dd50())->Begin())
     {
-        while (*(char**)(self + 0xfc) != 0)
-        {
-            char* obj = *(char**)(self + 0xfc);
-            if ((*(char (__thiscall**)(char*, char*, int))(*(int*)obj + 4))(obj, self, 0) != 0)
-                break;
-        }
-        o = FUN_0067dd50();
-        (*(void (__thiscall**)(void*))(*(int*)o + 0x8c))(o);
+        while (*(Job_s00f97750**)(self + 0xfc) != 0 &&
+               !(*(Job_s00f97750**)(self + 0xfc))->Run(self, 0))
+            ;
+        ((Mgr_s00f97750*)FUN_0067dd50())->End();
     }
-    app = SP_AppSystem();
-    (*(void (__thiscall**)(void*))(*(int*)app + 0x70))(app);
+    ((AppSys_s00f97750*)SP_AppSystem())->Unlock();
 }

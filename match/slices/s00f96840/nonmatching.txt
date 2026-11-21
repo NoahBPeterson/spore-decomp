@@ -8,4 +8,3 @@
 00f97530  136  bounds-mask loop: register allocation (this in ecx vs target ebp)
 00f975d0  102  id lookup: loop counter unsigned (matches target jb) but MSVC reg-alloc/reload differs
 00f97700  76  id lookup: MSVC CSE/reg-alloc, member reload vs cached register
-00f97750  60  object scan loop: target cmp [esi+0xfc],0 + reload vs ours mov reg,[mem];test (loop rotation)
