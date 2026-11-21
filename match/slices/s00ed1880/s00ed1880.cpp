@@ -168,16 +168,15 @@ void* __stdcall FUN_00ed1dc0(int a, void* spec)
 // @ 0x00ed1e10
 // ===========================================================================
 int __fastcall FUN_00ed1e10(Container* self, int* unused, int param)
-{
-    int   i;
+{    int   i;
     void* p;
     void* cat;
 
     p = self->hPaletteCatUI;
-    if (p == 0)
-        cat = 0;
-    else
+    if (p != 0)
         cat = ((FV_i)(*(void***)p)[0xc / 4])(p, 0x52deed23);
+    else
+        cat = 0;
 
     i = 0;
     if ((*(int*)((char*)cat + 0x38) - *(int*)((char*)cat + 0x34) & -4) > 0) {

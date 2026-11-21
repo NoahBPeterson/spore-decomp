@@ -691,12 +691,12 @@ void FUN_00ff9390()
 
 // @ 0x00ff9520
 void FUN_00ff9520()
-{
-    cGameNounManager* nouns = NounManager();
+{    cGameNounManager* nouns = NounManager();
     PtrVector<cGameNoun*>* cities = &nouns->GetGameDataVector(GameData_cd7d10, GameData_d3d420,
                                                               GameData_acdff0, GameData_b1e500,
                                                               0x18c43e8)->mData;
-    void* ctx = FUN_010666a0()->FUN_01067e60();
+    cCategoryCtxBuilder* builder = FUN_010666a0();
+    void* ctx = builder->FUN_01067e60();
 
     uint32_t i = 0;
     int count = (int)(cities->mpEnd - cities->mpBegin);

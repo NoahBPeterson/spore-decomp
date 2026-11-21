@@ -293,24 +293,22 @@ void f_013c0d40() {
 }
 
 // @ 0x013C0DA0
-void f_013c0da0() {
-    if (cdecl_f935ad0((void*)g_1668e9c)) {
-        if (g_1668e9c) {
-            Obj10* m = ((CleanObj*)g_1668e9c)->m;
-            if (m) m->b();
-            cdecl_free((void*)g_1668e9c);
-        }
+void f_013c0da0() {    if (cdecl_f935ad0((void*)g_1668e9c)) {
+        int v = g_1668e9c;
+        if (!g_1668e9c) return;
+        Obj10* m = *(Obj10**)(g_1668e9c + 0x10);
+        if (m) m->b();
+        cdecl_free((void*)v);
     }
 }
 
 // @ 0x013C0DE0
-void f_013c0de0() {
-    if (cdecl_f935ad0((void*)g_1668ea4)) {
-        if (g_1668ea4) {
-            Obj10* m = ((CleanObj*)g_1668ea4)->m;
-            if (m) m->b();
-            cdecl_free((void*)g_1668ea4);
-        }
+void f_013c0de0() {    if (cdecl_f935ad0((void*)g_1668ea4)) {
+        int v = g_1668ea4;
+        if (!g_1668ea4) return;
+        Obj10* m = *(Obj10**)(g_1668ea4 + 0x10);
+        if (m) m->b();
+        cdecl_free((void*)v);
     }
 }
 
@@ -354,13 +352,12 @@ void f_013c0fd0() {
 }
 
 // @ 0x013C1060
-void f_013c1060() {
-    if (cdecl_f935ad0((void*)g_166b0f0)) {
-        if (g_166b0f0) {
-            Obj10* m = ((CleanObj*)g_166b0f0)->m;
-            if (m) m->b();
-            cdecl_free((void*)g_166b0f0);
-        }
+void f_013c1060() {    if (cdecl_f935ad0((void*)g_166b0f0)) {
+        int v = g_166b0f0;
+        if (!g_166b0f0) return;
+        Obj10* m = *(Obj10**)(g_166b0f0 + 0x10);
+        if (m) m->b();
+        cdecl_free((void*)v);
     }
 }
 

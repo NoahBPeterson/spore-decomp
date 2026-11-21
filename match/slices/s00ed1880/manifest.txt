@@ -12,3 +12,4 @@ slices/s00ed1880/s00ed1880.cpp  ?FUN_00ed20c0@@YIHPAUContainer@@PAHH@Z  00ed20c0
 slices/s00ed1880/s00ed1880.cpp  ?FUN_00ed1d70@@YGPAXHPAX@Z  00ed1d70  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ed1880/s00ed1880.cpp  ?FUN_00ed1dc0@@YGPAXHPAX@Z  00ed1dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ed1880/s00ed1880.cpp  ?FUN_00ed1e70@@YIHPAUContainer@@PAHHH@Z  00ed1e70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ed1880/s00ed1880.cpp  ?FUN_00ed1e10@@YIHPAUContainer@@PAHH@Z  00ed1e10  /O2 /MD /Gy /EHsc /TP /arch:SSE
