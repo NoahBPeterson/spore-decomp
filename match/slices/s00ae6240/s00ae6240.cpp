@@ -613,7 +613,19 @@ void CollectSubsystemB(void* db, IQuery0C* noun)
     if (obj != 0)
         obj->AddRef();
     VecTB* const v = (VecTB*)((char*)db + 4);
-    v->push_back(tmp);
+    IRefB** const end = v->mpEnd;
+    if (end < v->mpCapacity) {
+        v->mpEnd = end + 1;
+        if (end != 0) {
+            *end = obj;
+            if (obj == 0)
+                return;
+            obj->AddRef();
+        }
+    } else {
+        v->Insert(end, &tmp);
+        obj = tmp;
+    }
     if (obj != 0)
         obj->Release();
 }
