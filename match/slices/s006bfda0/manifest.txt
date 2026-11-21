@@ -9,3 +9,4 @@ slices/s006bfda0/s006bfda0.cpp  ??1BackgroundLoadingDtorView@@UAE@XZ  006c0710  
 slices/s006bfda0/s006bfda0.cpp  ??0PFRecordWriteCtorView@@QAE@IIIPBIPAUDatabasePackedFile@@@Z  006c0c40  /O2 /MD /Gy /EHsc /TP /GS- /GR-
 slices/s006bfda0/s006bfda0.cpp  ?GetRemaining@StreamSub@@QAEIXZ  006c0260  /O2 /MD /Gy /EHsc /TP
 slices/s006bfda0/s006bfda0.cpp  ?m55@DualStream@@QAE_NHH@Z  006c0550  /O2 /MD /Gy /EHsc /TP
+slices/s006bfda0/s006bfda0.cpp  ?Seek@StreamSub@@QAE_NHH@Z  006c0840  /O2 /MD /Gy /EHsc /TP
