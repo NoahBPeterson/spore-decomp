@@ -5,3 +5,4 @@ slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb250@@YIHPAXHII@Z  00adb250  /O2 /MD /G
 slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb360@@YIDPAXHI@Z  00adb360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb680@@YGXPAXI@Z  00adb680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb2a0@@YIDPAXHII@Z  00adb2a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00adaad0/s00adaad0.cpp  ?FUN_00adb3d0@@YIDPAXHIPAI@Z  00adb3d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

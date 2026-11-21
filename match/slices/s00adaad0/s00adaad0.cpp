@@ -449,7 +449,9 @@ char __fastcall FUN_00adb3d0(void* self, int /*edx*/, unsigned int a, unsigned i
         if (local[0] != h->arr[h->count]) {
             out[0] = *(unsigned int*)(local[0] + 4);
             out[1] = *(unsigned int*)(local[0] + 8);
-            out[2] = *(unsigned int*)(local[0] + 0xc);
+            const unsigned int third = *(unsigned int*)(local[0] + 0xc);
+            _ReadWriteBarrier();
+            out[2] = third;
             return 1;
         }
     }
