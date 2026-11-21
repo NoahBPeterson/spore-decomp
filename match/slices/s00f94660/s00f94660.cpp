@@ -407,7 +407,7 @@ extern "C" int __fastcall FUN_00f94f80(int self, int)
 // 0x00f94fa0 -- refresh the property-derived arrays from the model.
 // ===========================================================================
 // @ 0x00f94fa0
-extern "C" void __fastcall FUN_00f94fa0(int* self, int)
+extern "C" void __fastcall FUN_00f94fa0(int* self)
 {
     int model = self[0x2f];
     int* vecHead = self + 0x31;
@@ -459,29 +459,37 @@ extern "C" void __fastcall FUN_00f94fa0(int* self, int)
 // ===========================================================================
 // 0x00f95150 -- reload the property list from the model and refresh.
 // ===========================================================================
+struct PropMgr_s00f95150 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28();
+    virtual bool GetPropertyList(int instance, int group, void* out);   // +0x2c
+};
+struct RefObj_s00f95150 {
+    virtual void AddRef();
+    virtual void Release();   // +0x04
+};
 // @ 0x00f95150
 extern "C" void __fastcall FUN_00f95150(char* self, int, int a2, int a3, int a4)
 {
-    if ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 1 & 1) != 0)
+    bool b1 = ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 1) & 1) != 0;
+    if (b1)
         *(uint32_t*)(self + 0x9c) = 1;
-    if ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 2 & 1) != 0)
+    bool b2 = ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 2) & 1) != 0;
+    if (b2)
         *(uint32_t*)(self + 0xa0) = 1;
     *(int*)(self + 0x10) = a2;
     *(int*)(self + 0x14) = a4;
 
-    void* pm = FUN_0067de30();
-    char* slot = self + 0xbc;
-    int old = *(int*)slot;
+    PropMgr_s00f95150* pm = (PropMgr_s00f95150*)FUN_0067de30();
+    RefObj_s00f95150** slot = (RefObj_s00f95150**)(self + 0xbc);
+    RefObj_s00f95150* old = *slot;
     if (old) {
-        *(int*)slot = 0;
-        ((FnV)(*(void***)old)[4 / 4])((void*)old);
+        *slot = 0;
+        old->Release();
     }
-    int ok = ((FnIV)(*(void***)pm)[0x2c / 4])(pm,
-                 *(int*)(*(int*)(self + 0xc) + 0xc),
-                 *(int*)(*(int*)(self + 0xc) + 0x14),
-                 (int)slot, 0);
-    if (ok)
-        FUN_00f94fa0((int*)self, 0);
+    if (pm->GetPropertyList(*(int*)(*(int*)(self + 0xc) + 0xc), *(int*)(*(int*)(self + 0xc) + 0x14), slot))
+        FUN_00f94fa0((int*)self);
 }
 
 // ===========================================================================
@@ -519,24 +527,23 @@ void XfPair_s00f951e0::Set(const void* a, const void* b)
 // 0x00f95230 -- reload from an args descriptor (opcode 6).
 // ===========================================================================
 // @ 0x00f95230
-extern "C" int __fastcall FUN_00f95230(char* self, int, int code, int* desc)
+extern "C" bool __fastcall FUN_00f95230(char* self, int, int code, int* desc, int)
 {
     if (code != 6)
-        return 0;
+        return false;
     *(uint32_t*)(self + 0xc4) = 0;
     *(int*)(self + 0xe0) = desc[2];
 
-    void* pm = FUN_0067de30();
-    char* slot = self + 0xbc;
-    int old = *(int*)slot;
+    PropMgr_s00f95150* pm = (PropMgr_s00f95150*)FUN_0067de30();
+    RefObj_s00f95150** slot = (RefObj_s00f95150**)(self + 0xbc);
+    RefObj_s00f95150* old = *slot;
     if (old) {
-        *(int*)slot = 0;
-        ((FnV)(*(void***)old)[4 / 4])((void*)old);
+        *slot = 0;
+        old->Release();
     }
-    int ok = ((FnIV)(*(void***)pm)[0x2c / 4])(pm, desc[0], desc[1], (int)slot, 0);
-    if (ok)
-        FUN_00f94fa0((int*)self, 0);
-    return 1;
+    if (pm->GetPropertyList(desc[0], desc[1], slot))
+        FUN_00f94fa0((int*)self);
+    return true;
 }
 
 // ===========================================================================
