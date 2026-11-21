@@ -9,4 +9,3 @@
 00e53580  137  mission panel teardown: complete (window, 3 gfx vtable[0xc], messaging); vcall schedule differs
 00e53660  370  mission-complete toggle: complete (cString load/tooltip, 3 gfx vtable[0xc], SetBoolProperty, messaging); frame + vcall schedule differs [equiv: UNSUPPORTED - derefs globals, 0/400 valid]
 00e538b0   80  OnKeyDown handler: complete (both message ids); FIND/schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target, call#2 ecx]
-00e53a80   41  reset window: complete; allocator/FIND schedule differs [equiv: WEAK 175 valid inputs (need 200), 72% cov]

@@ -11,3 +11,4 @@ slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53950@@YAXD@Z  00e53950  /O2 /MD /Gy /TP
 slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53860@@YAXD@Z  00e53860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53a20@@YAXXZ  00e53a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e52d80/s00e52d80.cpp  _FUN_00e53b40  00e53b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53a80@@YAXXZ  00e53a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
