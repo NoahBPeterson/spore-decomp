@@ -181,31 +181,31 @@ struct Owner {
 // @ 0x00433210
 void ApplyOwnerEntries(Owner* o, WeightVector* w)
 {
+    Factory* __cdecl FUN_00401010();
     if (o) {
-        Entry* e;
-        int j;
-        int num;
         IntVec used;
         InitSlotWeights(w, o->GetKey());
         used.mBegin = 0; used.mEnd = 0; used.mCap = 0;
         used.mAlloc.Init(AllocTag());
-        j = 0;
-        num = o->entries.size();
-        for (; j < num; ++j) {
-            if (Find(used.begin(), used.end(), j) != used.end())
-                continue;
-            {
-                e = &o->entries.mBegin[j];
-                RefPtr pRes(GetFactory()->Create(e->id1, e->id0));
-                pRes.AddRef();
-                Pad<4>();
-                ApplyEntry(pRes.mp, w);
-                used.push_back(j);
-                if (e->other != -1) {
-                    int temp = e->other;
-                    used.push_back(temp);
+        {
+            int j = 0;
+            int num = o->entries.size();
+            for (; j < num; ++j) {
+                Entry* e;
+                if (Find(used.begin(), used.end(), j) != used.end())
+                    continue;
+                {
+                    e = &o->entries.mBegin[j];
+                    RefPtr pRes(FUN_00401010()->Create(e->id1, e->id0));
+                    pRes.AddRef();
+                    Pad<4>();
+                    ApplyEntry(pRes.mp, w);
+                    used.push_back(j);
+                    if (e->other != -1) {
+                        used.push_back(+e->other);
+                    }
+                    pRes.Release();
                 }
-                pRes.Release();
             }
         }
         NormalizeSlotWeights(w, 0.0f, 20.0f);
