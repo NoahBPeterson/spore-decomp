@@ -1,4 +1,3 @@
-00799e00 96 complete reverse refcounted copy; lock/branch schedule differs
 00799e70 0 complete switch dispatcher over DAT_0153b208; case-body layout differs (no same-size symbol)
 0079a0d0 417 complete transform-combine with scalar-SSE product + rep movsd matrix copies; branch layout and register allocation differ
 0079a4f0 105 complete EASTL vector reserve (20-byte); byte/20 capacity, DoInsertValue args and post-copy re-reads differ
