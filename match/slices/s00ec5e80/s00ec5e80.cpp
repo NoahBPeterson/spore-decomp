@@ -330,29 +330,50 @@ struct CardSlot {
     char    pad08[0x20 - 8];
 };
 
+struct CardObj_ec6d00 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58();
+    virtual void SetState(int s);                    // +0x5c
+    virtual void v60();
+    virtual void Fade(float from, float to);         // +0x64
+    virtual void v68(); virtual void v6c(); virtual void v70(); virtual void v74();
+    virtual void v78();
+    virtual void Enable(int a, int b);               // +0x7c
+};
+struct CardSlot_ec6d00 {
+    u8              mbUsed;   // +0x00
+    char            pad01[3];
+    CardObj_ec6d00* mpObj;    // +0x04
+    char            pad08[0x18];
+};
+struct CardRoot_ec6d00 {
+    int              pad00;
+    CardSlot_ec6d00  mSlots[10];   // +0x004
+    int              mUsed;        // +0x144
+};
+extern "C" CardRoot_ec6d00* g_16c7584;   // 0x016c7584
 void* __cdecl FUN_00ec6d00()
 {
-    int* root = *(int**)0x16c7584;
-    if (*(int*)((char*)root + 0x144) == 10) {
+    CardRoot_ec6d00* root = g_16c7584;
+    if (root->mUsed == 10)
         return 0;
-    }
-    CardSlot* slot = (CardSlot*)((char*)root + 4);
+    CardSlot_ec6d00* slot;
     int i = 0;
-    for (;;) {
-        CardSlot* cur = slot;
-        if (cur->mbUsed == 0) {
-            slot = cur;
+    CardSlot_ec6d00* p = root->mSlots;
+    for (; i < 10; ++i, ++p) {
+        slot = p;
+        if (p->mbUsed == 0)
             break;
-        }
-        i++;
-        slot = (CardSlot*)((char*)slot + 0x20);
-        if (i >= 10) break;
     }
     slot->mbUsed = 1;
-    ((void(__thiscall*)(void*, int, int))((void**)((RefObj*)slot->mpObj)->mpVtbl)[0x7c / 4])(slot->mpObj, 1, 1);
-    ((void(__thiscall*)(void*, float, float))((void**)((RefObj*)slot->mpObj)->mpVtbl)[0x64 / 4])(slot->mpObj, 0.0f, 200.0f);
-    ((void(__thiscall*)(void*, int))((void**)((RefObj*)slot->mpObj)->mpVtbl)[0x5c / 4])(slot->mpObj, -1);
-    (*(int*)((char*)(*(int**)0x16c7584) + 0x144))++;
+    slot->mpObj->Enable(1, 1);
+    slot->mpObj->Fade(0.0f, 200.0f);
+    slot->mpObj->SetState(-1);
+    g_16c7584->mUsed++;
     return slot;
 }
 
