@@ -1728,24 +1728,30 @@ bool SP::cTextureManager::Shutdown()
 }
 
 // @ 0x007ab5f0
+struct AutoMutex_7ab5f0 {
+    EA::Thread::Mutex_s007a_abb0* mpMutex;
+    AutoMutex_7ab5f0(EA::Thread::Mutex_s007a_abb0& m) : mpMutex(&m) { mpMutex->Lock(&g_mutexAttribute); }
+    ~AutoMutex_7ab5f0() { mpMutex->Unlock(); }
+};
+struct ResMgr_7ab5f0 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual char GetResource(ResourceKey* key, int a, int b, int c, int d, int e);   // +0x0c
+};
 bool cTextureManager_s007a_abb0::HasTexture(ResourceKey key)
 {
+    AutoMutex_7ab5f0 lock(mMutex);
     TextureInstanceMap& map = mTextureInstanceMap;
-    EA::Thread::Mutex_s007a_abb0& mtx = mMutex;
-    mtx.Lock(&g_mutexAttribute);
     key.mType = 0;
     HashIterator it = map.find(key);
-    if (it.mpNode != map.mpBucketArray[map.mnBucketCount]) {
-        mtx.Unlock();
+    TextureNode** end = &map.mpBucketArray[map.mnBucketCount];
+    HashIterator e;
+    e.mpNode = *end;
+    e.mpBucket = (void**)end;
+    if (it.mpNode != e.mpNode)
         return true;
-    }
-    ResourceManager* mgr = GetResourceManager();
+    ResMgr_7ab5f0* mgr = (ResMgr_7ab5f0*)GetResourceManager();
     key.mType = 0x2f4e681c;
-    typedef char (__thiscall* GetResourceFn)(void*, void*, int, int, int, int, int);
-    GetResourceFn fn = (GetResourceFn)(*(void***)mgr)[3];
-    char b = fn(mgr, &key, 0, 0, 0, 0, 0);
-    mtx.Unlock();
-    return b != 0;
+    return mgr->GetResource(&key, 0, 0, 0, 0, 0) != 0;
 }
 
 // @ 0x007ab6c0
