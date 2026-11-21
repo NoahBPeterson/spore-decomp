@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPAppMode.cpp  ?InitAppModes@cApp@SP@@QAE_NXZ  007d8230  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppMode.cpp  ?AppMode@cApp@SP@@QAEPAXI@Z  007d8270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppMode.cpp  ?SetAppMode@cApp_s007d_85b0@SP@@QAE_NI@Z  007d8c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppMode.cpp  ?PreInitAppModes@cApp@SP@@QAE_NXZ  007d81f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
