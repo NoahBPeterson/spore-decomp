@@ -1628,7 +1628,7 @@ char  __cdecl FUN_00e00ac0(void);                               // 0xe00ac0
 void* __cdecl SP_WindowManager(void);                           // 0x67caa0
 void* __cdecl FUN_00d539d0(void);                               // 0xd539d0
 struct S_e277b0 {
-    int f(int w);   // 0x00e277b0  cSPUIPosseItem::init (char in al; declared int to keep the full eax)
+    bool f(int w);  // 0x00e277b0  cSPUIPosseItem::init
 };
 void  __cdecl FUN_00571db0(int, int, int, int, int);            // EA::Messaging::RemoveHandler
 void  __cdecl FUN_006447c0(char flag, void** out);              // 0x006447c0
@@ -1695,7 +1695,7 @@ struct Obj5020 {
     void* m_pLaunchArg;   // +0x14c
     char  f(void*, void*, void*, void*, void*);
 };
-struct Obj5190 { int f(int w); };
+struct Obj5190 { bool f(int w); };
 struct Obj5220 { void* f(); };
 struct Obj5330 { int f(int a); };
 struct Obj5400 { void f(int a); };
@@ -4068,21 +4068,53 @@ char Obj5020::f(void* a1, void* a2, void* a3, void* a4, void* a5)
 }
 
 // @ 0x00ed5190
-int Obj5190::f(int w)
+struct Win_ed5190 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30();
+    virtual void SetFlag(int flag, bool on);
+};
+struct Rec_ed5190 { int a, b, id; };
+struct Obj_ed5190 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual Rec_ed5190* Get(u32 id);
+};
+struct Lay_ed5190 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
+    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59();
+    virtual Win_ed5190* FindWindow(u32 id, bool recurse);
+};
+bool Obj5190::f(int w)
 {
     char* s = (char*)this;
-    int r0 = ((S_e277b0*)s)->f(w);
-    if ((unsigned char)r0 == 0) return (int)(r0 & 0xffffff00u);
-    int* win = (int*)((S_8105b0*)(w + 0x1bc))->f(0x3dae412, 1);
-    ((FV_ii)(*(void***)win)[0x7c / 4])(win, 0x10, 1);
-    int* q = *(int**)(s + 0x50);
-    int* r = q ? (int*)((FV_ip)(*(void***)q)[0xc / 4])(q, 0x774c96f) : 0;
-    int b = (*(int*)((char*)r + 8) != -1) ? 1 : 0;
-    int* lay = *(int**)(s + 0x13c);
-    int* win2 = lay ? (int*)((FV_iir)(*(void***)lay)[0xf0 / 4])(lay, 0x7c4b4a0, 1) : 0;
-    if (win2 != 0)
-        ((FV_ii)(*(void***)win2)[0x7c / 4])(win2, 1, b);
-    return 1;
+    if (((S_e277b0*)s)->f(w)) {
+        ((Win_ed5190*)((S_8105b0*)(w + 0x1bc))->f(0x3dae412, 1))->SetFlag(0x10, true);
+        Obj_ed5190* q = *(Obj_ed5190**)(s + 0x50);
+        bool b = (q ? q->Get(0x774c96f) : 0)->id != -1;
+        Win_ed5190* win2 = (*(Lay_ed5190**)(s + 0x13c))->FindWindow(0x7c4b4a0, true);
+        if (win2 != 0)
+            win2->SetFlag(1, b);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x00ed5220
