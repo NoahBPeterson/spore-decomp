@@ -132,16 +132,14 @@ void AmbLayer::UpdatePrimitives(float a, int b)
         typedef float (__thiscall* F1c)(void*);
         ((F28)(*(void***)obj)[0x28 / 4])(obj, a, b);
         float f = ((F1c)(*(void***)obj)[0x1c / 4])(obj);
-        if (key == 0xc1a03855)
-            goto B89;
-        if (key == 0xf8cbbf4c) {
+        switch (key) {
+        case 0xf8cbbf4c:
             s[0x88] = (f != 0.0f);
-            goto end;
+            break;
+        case 0xc1a03855:
+            s[0x89] = (f != 0.0f);
+            break;
         }
-        goto end;
-B89:
-        s[0x89] = (f != 0.0f);
-end:    ;
     }
 }
 
