@@ -1484,7 +1484,7 @@ public:
     void Init(void* list, void* type, int id);  // 0x00692f90
     bool Serialize(void* out);                  // 0x00692900
 private:
-    unsigned char mData[0x9ec];
+    unsigned char mData[0xa14];
 };
 struct Rec1c {
     uint8_t b0;         // @0x00
@@ -5607,26 +5607,36 @@ bool cSpear::Update()
     return true;
 }
 
+struct Raw_s00c92a90 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14();
+    virtual void* GetRaw();                       // +0x18
+};
+struct Out_s00c92a90 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18();
+    virtual void Done();                          // +0x1c
+    virtual Raw_s00c92a90* GetStream();           // +0x20
+};
+static inline void WriteU32_s00c92a90(void* raw, unsigned int v)
+{
+    FUN_0093aa70(raw, &v, 1, 0);
+}
 // @ 0x00c92a90
 void __cdecl FUN_00c92a90(void* p1, int** p2)
 {
+    Out_s00c92a90* out = (Out_s00c92a90*)p1;
     int count = (int)((char*)p2[1] - (char*)p2[0]) / 0x60;
-    void* s = ((void*(__thiscall*)(void*))VF(p1, 0x20))(p1);
-    void* w = ((void*(__thiscall*)(void*))VF(s, 0x18))(s);
-    FUN_0093aa70(w, &count, 1, 0);
-    int* cur = p2[0];
-    for (; cur != p2[1]; cur += 0x18) {
-        void* s2 = ((void*(__thiscall*)(void*))VF(p1, 0x20))(p1);
-        count = *cur;
-        void* w2 = ((void*(__thiscall*)(void*))VF(s2, 0x18))(s2);
-        FUN_0093aa70(w2, &count, 1, 0);
-        ((void(__thiscall*)(void*))VF(p1, 0x1c))(p1);
+    WriteU32_s00c92a90(out->GetStream()->GetRaw(), count);
+    for (int* cur = p2[0], *end = p2[1]; cur != end; cur += 0x18) {
+        WriteU32_s00c92a90(out->GetStream()->GetRaw(), *cur);
+        out->Done();
         cVarListSerializer_s00c9_2a90 ser;
         ser.Init(cur + 2, &DAT_0157b7d0, 0x1a80d26);
         ser.Serialize(p1);
-        ((void(__thiscall*)(void*))VF(p1, 0x1c))(p1);
+        out->Done();
     }
-    ((void(__thiscall*)(void*))VF(p1, 0x1c))(p1);
+    out->Done();
 }
 
 // @ 0x00c92b70
