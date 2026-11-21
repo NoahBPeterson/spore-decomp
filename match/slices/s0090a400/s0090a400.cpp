@@ -2,7 +2,7 @@
 // XML_ParserReset/XML_ParserCreate_MM/XML_ParserCreate/XML_ExternalEntityParserCreate and the
 // prolog/external-PE processor entry points) plus the xmlrole.c handlers prolog2/entity5/
 // condSect1/condSect2/declClose/entity6/notation3/notation4, as linked into SporeApp.exe.
-// MIT license: Copyright (c) 1998-2000 Thai Open Source Software Center Ltd and Clark Cooper.
+// MIT license, see expat's COPYING.
 #include "types.h"
 #include "../s00908c00/s00908c00.h"
 

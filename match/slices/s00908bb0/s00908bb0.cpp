@@ -1,7 +1,6 @@
 // Slice s00908bb0: expat 2.0.1 xmlparse.c -- contentProcessor (the content
 // Processor entry that runs doContent and then stores the raw names).
-// MIT license: Copyright (c) 1998-2000 Thai Open Source Software Center Ltd
-// and Clark Cooper.
+// MIT license, see expat's COPYING.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 #include "../s00908c00/s00908c00.h"

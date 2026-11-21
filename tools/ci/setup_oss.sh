@@ -2,10 +2,12 @@
 # Download, verify and unpack the open-source library sources some manifest rows compile (THIRD_PARTY.md), then
 # recreate the configured trees and include directories those rows name.  Linux (CI) or macOS; needs curl, tar,
 # unzip, patch, perl, make, python3, sha256sum/shasum.  Nothing here is game code; no third-party source is committed.
-#   work/third_party/src/{jpeg-6a,libpng-1.2.25,zlib-1.2.3,openssl-0.9.8g}   pristine upstream releases
+#   work/third_party/src/{jpeg-6a,libpng-1.2.25,zlib-1.2.3,openssl-0.9.8g,expat-2.0.1}   pristine upstream releases
 #   work/third_party/build/jpeg-6a-inc/jconfig.h                              third_party/jpeg-6a/jconfig.h (ours)
 #   work/third_party/build/jpeg-6a-retail                                     jpeg-6a plus tools/ci/oss/jpeg-6a-retail.patch
 #                                                                             (SporeApp.exe's changes; libjpeg slices use it)
+#   work/third_party/build/expat-retail                                       expat-2.0.1/lib plus tools/ci/oss/expat-retail.patch
+#                                                                             (SporeApp.exe's changes; the expat slices use it)
 #   work/third_party/build/openssl-0.9.8g-d2110920                            perl Configure VC-WIN32 + make links, as
 #                                                                             tools/third_party/build_faithful.py does
 #   work/ext/EAWebKitSupportPackages                                          from EA's EAWebKit 1.21.00 GPL release,
@@ -45,6 +47,8 @@ untar https://www.openssl.org/source/old/0.9.x/openssl-0.9.8g.tar.gz \
   0e26886845de95716c9f1b9b75c0e06e9d4075d2bdc9e11504eaa5f7ee901cf0 openssl-0.9.8g.tar.gz openssl-0.9.8g
 untar https://zlib.net/fossils/zlib-1.2.3.tar.gz \
   1795c7d067a43174113fdf03447532f373e1c6c57c08d61d9e4e9be5e244b05e zlib-1.2.3.tar.gz zlib-1.2.3
+untar https://github.com/libexpat/libexpat/releases/download/R_2_0_1/expat-2.0.1.tar.gz \
+  847660b4df86e707c9150e33cd8c25bc5cd828f708c7418e765e3e983a2e5e93 expat-2.0.1.tar.gz expat-2.0.1
 untar https://downloads.sourceforge.net/project/libpng/libpng12/older-releases/1.2.25/libpng-1.2.25.tar.gz \
   295ba7b7744efe93fb4c34d4973cc1099055d9c379a1e9397209857e80611e18 libpng-1.2.25.tar.gz libpng-1.2.25
 
@@ -57,6 +61,14 @@ rm -rf "$tp/build/jpeg-6a-retail"
 cp -R "$tp/src/jpeg-6a" "$tp/build/jpeg-6a-retail"
 cp "$root/third_party/jpeg-6a/jconfig.h" "$tp/build/jpeg-6a-retail/jconfig.h"
 patch -s -p1 -d "$tp/build/jpeg-6a-retail" < "$oss/jpeg-6a-retail.patch"
+# SporeApp.exe's expat 2.0.1 makes some xmltok_impl.c functions external (tools/ci/oss/expat-retail.patch); one patched
+# copy of xmltok_impl.c per slice instantiation.  Rebuilt every run, it is small
+rm -rf "$tp/build/expat-retail"
+cp -R "$tp/src/expat-2.0.1/lib" "$tp/build/expat-retail"
+for f in $(sed -n 's/^--- a\/\(xmltok_impl_.*\.c\)$/\1/p' "$oss/expat-retail.patch"); do
+  cp "$tp/src/expat-2.0.1/lib/xmltok_impl.c" "$tp/build/expat-retail/$f"
+done
+patch -s -p1 -d "$tp/build/expat-retail" < "$oss/expat-retail.patch"
 
 # OpenSSL configured for VC-WIN32 with the options in third_party/manifest.json (directory suffix = their hash)
 ossl=$(cd "$root" && python3 -c 'import sys; sys.path.insert(0, "tools/third_party"); import build_faithful as b
