@@ -473,13 +473,16 @@ double __cdecl FUN_00ec15b0(void* self_, void* a2, void* a3, void* a5, void* sti
 double __cdecl FUN_00ec1610(void* self_, void* a2, void* a3, void* a5, void* stimuli, u8* out, int evt) {
     char* s = (char*)self_;
     uint* p = (uint*)(*(ushort*)((char*)evt + 0x12) * 0x20 + *(uint*)(s + 0x674));
-    if (!FUN_00ec0d00(s, p)) return 0.0;
-    void* mgr = *(void**)0x016c7aa4;
-    int limit = *(int*)(*(char**)((char*)mgr + 0x78) + 0xb8);
-    int v = *(int*)(s + 0x1648);
-    if (v > limit) return 0.0;
-    *(Rec*)(s + 0x688) = *(Rec*)p;
-    return 1.0;
+    if (FUN_00ec0d00(s, p)) {
+        void* mgr = g_16c7aa4;
+        int limit = *(int*)(*(char**)((char*)mgr + 0x78) + 0xb8);
+        int v = *(int*)(s + 0x1648);
+        if (v <= limit) {
+            *(Rec*)(s + 0x688) = *(Rec*)p;
+            return 1.0;
+        }
+    }
+    return 0.0;
 }
 
 // ================================================================ 0x00ec1670
