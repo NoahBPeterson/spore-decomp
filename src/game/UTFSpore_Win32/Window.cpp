@@ -59,8 +59,8 @@ struct Window {
     int     GetAt34();
     void    Set1D8(int v);
     bool    IsAncestorOf(void* other);
-    bool    Test30Slot48(int v);
-    bool    Test30Slot54(int v);
+    int     Test30Slot48(int v);
+    int     Test30Slot54(int v);
     bool    AllDescendants(char param);
     int     AllDescendantsAll(bool param);
     void    FindChild();
@@ -387,39 +387,53 @@ void Window::Set1D8(int v)
 }
 
 // @ 0x0095fad0
+struct WinHead_95fb20 { int mHead; };
+struct WinOuter_95fb20 : WinHead_95fb20, Window {};
+struct WinNode_95fad0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual WinNode_95fad0* GetParent();
+};
 bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
 {
-    if (other == 0)
-        return false;
-    void* p = (*(void*(__thiscall**)(void*))((char*)*(void**)other + 0x10))(other);
-    while (p != 0) {
-        if (p == (void*)(this))
-            return true;
-        p = (*(void*(__thiscall**)(void*))((char*)*(void**)p + 0x10))(p);
+    if (other != 0) {
+        for (WinNode_95fad0* p = ((WinNode_95fad0*)other)->GetParent(); p != 0; p = p->GetParent()) {
+            if ((void*)p == (::Window*)(WinOuter_95fb20*)((char*)this - 4))
+                return true;
+        }
     }
     return false;
 }
 
 // @ 0x0095fb20
-bool Window::Test30Slot48(int v)
+struct WinOwner_95fb20 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual void* Slot48(int v);
+    virtual void v4c(); virtual void v50();
+    virtual void* Slot54(int v);
+};
+int Window::Test30Slot48(int v)
 {
     if (m30 != 0) {
-        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)m30 + 0x48))(m30, v);
-        if (r == (int)this)
-            return true;
+        Window* self = (WinOuter_95fb20*)((char*)this - 4);
+        if (((WinOwner_95fb20*)m30)->Slot48(v) == self)
+            return 1;
     }
-    return false;
+    return 0;
 }
 
 // @ 0x0095fb60
-bool Window::Test30Slot54(int v)
+int Window::Test30Slot54(int v)
 {
     if (m30 != 0) {
-        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)m30 + 0x54))(m30, v);
-        if (r == (int)this)
-            return true;
+        Window* self = (WinOuter_95fb20*)((char*)this - 4);
+        if (((WinOwner_95fb20*)m30)->Slot54(v) == self)
+            return 1;
     }
-    return false;
+    return 0;
 }
 
 // @ 0x0095fbb0
@@ -1177,13 +1191,13 @@ bool FUN_009616f0(unsigned* param_1, void* param_2, char* param_3, void* param_4
         param_4, count * 4, 4);
     param_1[1] = (unsigned)arr;
     param_1[0] = g_SerTypeTable[(*(unsigned short*)(param_3 + 0xc)) & 0xfff];
-    if (arr == 0)
-        return false;
-    for (unsigned* p = (unsigned*)*lhead; p != lhead; p = (unsigned*)*p) {
-        *arr = p[2];
-        arr++;
+    if (arr) {
+        unsigned* out = arr;
+        for (unsigned* p = (unsigned*)*lhead; p != lhead; p = (unsigned*)*p)
+            *out++ = p[2];
+        return true;
     }
-    return true;
+    return false;
 }
 
 // @ 0x00961760
@@ -1340,18 +1354,25 @@ void Win::ClearProcs()
 }
 
 // @ 0x00961ae0
+struct ProcAllocator_s00961ae0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void Free(void* p, unsigned size);   // +0x0c
+};
+extern "C" char g_154ef48[];
 void EA::UTFWin::Window::RemoveAllProcs()
 {
     char* a = (char*)this;
     Node* head = (Node*)(a + 0x64);
-    Node* p = *(Node**)(a + 0x64);
+    Node* p = head->next;
     while (p != head) {
-        if (p->field8 == (void*)0x154ef48) {
+        if (p->field8 == g_154ef48) {
             Node* nxt = p->next;
-            Node* pv = p->prev;
-            pv->next = nxt;
-            nxt->prev = pv;
-            (*(void(__thiscall**)(void*, Node*, int))((char*)*(void**)mText.mpBegin + 0xc))(mText.mpBegin, p, 0x10);
+            Node* n = nxt->prev;
+            n->prev->next = n->next;
+            n->next->prev = n->prev;
+            (*(ProcAllocator_s00961ae0**)(a + 0x6c))->Free(n, 0x10);
             p = nxt;
         } else {
             p = p->next;
