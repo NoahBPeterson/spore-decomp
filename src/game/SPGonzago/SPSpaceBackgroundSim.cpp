@@ -318,9 +318,67 @@ void FUN_01021d40()
     }
 }
 
+struct cPlanetRefObj {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void v7c();
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void v90();
+    virtual void v94();
+    virtual void v98();
+    virtual void v9c();
+    virtual void va0();
+    virtual void va4();
+    virtual void va8();
+    virtual void vac();
+    virtual void vb0();
+    virtual void vb4();
+    virtual void vb8();
+    virtual void AddRef();     // +0xbc
+    virtual void Release();    // +0xc0
+};
+struct PlanetRef {
+    cPlanetRefObj* p;
+    PlanetRef(void* x) : p((cPlanetRefObj*)x) { if (p) p->AddRef(); }
+    PlanetRef(const PlanetRef& o) : p(o.p) { if (p) p->AddRef(); }
+};
+
 // @ 0x01021e50
-void** PartitionPlanets(void** ppFirst, void** ppLast, void* pPivot, cPointerCompare pCompare)
+void** PartitionPlanets(void** ppFirst, void** ppLast, PlanetRef pivot, cPointerCompare pCompare)
 {
+    void* pPivot = pivot.p;
     for (;;) {
         while (pCompare(*ppFirst, pPivot) != 0)
             ++ppFirst;
@@ -331,8 +389,8 @@ void** PartitionPlanets(void** ppFirst, void** ppLast, void* pPivot, cPointerCom
         SwapPlanetSlots(ppFirst, ppLast);
         ++ppFirst;
     }
-    if (pPivot != nullptr)
-        ((void (__thiscall*)(void*))(*(void***)pPivot)[0xc0 / 4])(pPivot);
+    if (pivot.p != nullptr)
+        pivot.p->Release();
     return ppFirst;
 }
 
@@ -370,12 +428,9 @@ void QuickSortPlanets(void** ppFirst, void** ppLast, int32_t nDepth, cPointerCom
             break;
         if (nDepth <= 0)
             break;
-        void** ppMiddle = SelectMedianPlanet(ppFirst, ppFirst + (ppLast - ppFirst) / 2,
-                                             ppLast - 1, pCompare);
-        void* pPivot = *ppMiddle;
-        if (pPivot != nullptr)
-            ((void (__thiscall*)(void*))(*(void***)pPivot)[0xbc / 4])(pPivot);
-        void** ppSplit = PartitionPlanets(ppFirst, ppLast, pPivot, pCompare);
+        void** ppSplit = PartitionPlanets(ppFirst, ppLast,
+            *(PlanetRef*)SelectMedianPlanet(ppFirst, ppFirst + (ppLast - ppFirst) / 2,
+                                          ppLast - 1, pCompare), pCompare);
         QuickSortPlanets(ppSplit, ppLast, --nDepth, pCompare);
         ppLast = ppSplit;
     }
