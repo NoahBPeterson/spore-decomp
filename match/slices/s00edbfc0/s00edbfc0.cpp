@@ -118,18 +118,22 @@ void ObjCC90::f(int param)
 
 // ---------------------------------------------------------------- 0x00edcce0
 // @ 0x00edcce0
+struct Node_s00edcce0 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual Node_s00edcce0* GetParent();        // +0x10
+    virtual void f14(); virtual void f18();
+    virtual int GetID();                        // +0x1c
+};
 int FUN_00edcce0(int* p)
 {
-    for (;;) {
-        if (p == 0)
-            return 0;
-        int id = ((FGi)(*(void***)p)[0x1c / 4])(p);
+    for (Node_s00edcce0* n = (Node_s00edcce0*)p; n != 0; n = n->GetParent()) {
+        int id = n->GetID();
         for (unsigned j = 0; j < 0xc; j += 4) {
-            if (id == g_148a694[j / 4])
+            if (id == *(int*)((char*)g_148a694 + j))
                 return id;
         }
-        p = (int*)((FGp)(*(void***)p)[0x10 / 4])(p);
     }
+    return 0;
 }
 
 // ---------------------------------------------------------------- 0x00edce00
