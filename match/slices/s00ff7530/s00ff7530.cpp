@@ -615,19 +615,21 @@ inline void SimSwap(T& a, T& b)
 // @ 0x00ff8170
 int* SimPartition(int* first, int* last, int pivot)
 {
-	for (;;) {
-		while (*first < pivot)
-			++first;
-		--last;
-		while (pivot < *last)
-			--last;
-		if (!(first < last))
-			return first;
-		const int value = *first;
-		*first = *last;
-		*last = value;
+scan:
+	const int value = *first;
+	if (value < pivot) {
 		++first;
+		goto scan;
 	}
+	--last;
+	while (pivot < *last)
+		--last;
+	if (first >= last)
+		return first;
+	*first = *last;
+	*last = value;
+	++first;
+	goto scan;
 }
 
 // @ 0x00ff81b0
