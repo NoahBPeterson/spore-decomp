@@ -874,25 +874,36 @@ bool FUN_00dc0550(char* self)
     return true;
 }
 
+struct TargetInfo_dc06a0 {
+    virtual void AddRef();                 // +0x00
+    virtual void Release();                // +0x04
+    virtual void v08();
+    virtual TargetInfo_dc06a0* Cast(unsigned type);   // +0x0c
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual char IsLocked();               // +0x2c
+};
+
 // @ 0x00dc06a0
 bool FUN_00dc06a0(char* self)
 {
-    char* o = ((Sub*)self)->B00();
-    if (o == 0) return false;
-    void* info = (*(void* (__thiscall**)(char*, unsigned))((char*)*(void**)o + 0xc))(o, 0xb033b403);
-    if (info == 0) return false;
-    if ((*(char (__thiscall**)(void*))((char*)*(void**)info + 0x2c))(info) != 0) {
-        ((Sub*)self)->B10();
-        return false;
+    if (TargetInfo_dc06a0* o = (TargetInfo_dc06a0*)((Sub*)self)->B00()) {
+        if (TargetInfo_dc06a0* info = o->Cast(0xb033b403)) {
+            if (info->IsLocked() != 0) {
+                ((Sub*)self)->B10();
+            } else if (info->IsLocked() == 0) {
+                TargetInfo_dc06a0*& cur = *(TargetInfo_dc06a0**)(self + 0x68c);
+                TargetInfo_dc06a0* old = cur;
+                if (info != old) {
+                    info->AddRef();
+                    cur = info;
+                    if (old != 0) old->Release();
+                }
+                return true;
+            }
+        }
     }
-    if ((*(char (__thiscall**)(void*))((char*)*(void**)info + 0x2c))(info) != 0) return false;
-    void* old = *(void**)(self + 0x68c);
-    if (info != old) {
-        (*(void (__thiscall**)(void*))(*(void**)info))(info);
-        *(void**)(self + 0x68c) = info;
-        if (old != 0) (*(void (__thiscall**)(void*))((char*)*(void**)old + 4))(old);
-    }
-    return true;
+    return false;
 }
 
 // @ 0x00dc0720
