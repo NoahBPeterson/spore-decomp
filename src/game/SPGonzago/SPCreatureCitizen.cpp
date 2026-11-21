@@ -625,6 +625,7 @@ struct COps
     void  FUN_00c15bd0(u32 a, u32 b, u32 c);         // 0x00c15bd0
     void* FUN_00ac79d0();                            // 0x00ac79d0
     void  FUN_00ac7de0(void* a, void* b);            // 0x00ac7de0
+    void  FUN_00bca040(u32 a);                       // 0x00bca040 cAgentOrderManager::DeactivateSlot
     void  FUN_00b137d0(void* a);                     // 0x00b137d0 (GetTargetOrientation)
     void  FUN_00c3f160(u32 a);                       // 0x00c3f160 (SetEffectId)
     void  FUN_00b225d0(void* a);                     // 0x00b225d0 (RemoveNoun)
@@ -2506,37 +2507,60 @@ u32 cCreatureBase_s00c2_3f80::FUN_00c23f80(u32 param_2, u32 param_3, u32 param_4
 }
 
 // @ 0x00c24040
+struct OrderEntry_c24040 {
+    u32 mSlot;              // +0x00
+    char pad04[0x1c];
+    u16 mId;                // +0x20
+    char pad22[2];
+    u32 mType;              // +0x24
+    u32 mState;             // +0x28
+    char pad2c[0x18];
+};
+struct RefObj_c24040 {
+    virtual void AddRef();  // +0x00
+    virtual void Release(); // +0x04
+};
+struct SlotObj_c24040 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4();
+    virtual RefObj_c24040* Find(u32 key);                       // +0xb8
+};
 void cCreatureBase_s00c2_3f80::FUN_00c24040(u32 param_2)
 {
     u32 slot = 0;
     void* s = MOPS(this)->FUN_00c0f9b0(param_2, &slot);
     if (!s)
         return;
-    u8* e = (u8*)mpOrderMgr_b48;
-    for (u32 i = 0; i < 8; i++)
+    u32 i = 0;
+    OrderEntry_c24040* e = (OrderEntry_c24040*)mpOrderMgr_b48;
+    for (; i < 8; i++, e++)
     {
-        if (*(u32*)(e + 0x24) == 5 && *(u32*)(e + 0x28) == 0 && *(u32*)e == slot)
+        if (e->mType == 5 && e->mState == 0 && e->mSlot == slot)
         {
-            FUN_00bca040(*(u16*)(e + 0x20) | (i << 0x10));
+            MOPS(mpOrderMgr_b48)->FUN_00bca040(e->mId | (i << 0x10));
             break;
         }
-        e += 0x44;
     }
-    void* obj = *(void**)((u8*)s + 0x20);
-    u32 r = 0;
-    if (obj)
-    {
-        r = (u32)((void* (__thiscall*)(void*, u32))VT(obj)[0xb8 / 4])(obj, 0x4ffcdeda);
-        if (r)
-            ((void (__thiscall*)(void*))VT(r)[0])((void*)r);
-    }
+    SlotObj_c24040* obj = *(SlotObj_c24040**)((u8*)s + 0x20);
+    RefObj_c24040* r = obj ? obj->Find(0x4ffcdeda) : 0;
+    if (r)
+        r->AddRef();
     MOPS(this)->FUN_00c15bd0(slot, 0, 0);
     if (r)
     {
-        void* out = FUN_00b3d2b0();
-        void* v = MOPS(out)->FUN_00ac79d0();
-        MOPS(FUN_00b3d2b0())->FUN_00ac7de0((void*)r, v);
-        ((void (__thiscall*)(void*))VT(r)[1])((void*)r);
+        void* v = MOPS(FUN_00b3d2b0())->FUN_00ac79d0();
+        MOPS(FUN_00b3d2b0())->FUN_00ac7de0(r, v);
+        r->Release();
     }
 }
 
