@@ -1,1 +1,2 @@
 slices/s0100f3e0/s0100f3e0.cpp  ?FUN_010103f0@@YANPAX@Z  010103f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0100f3e0/s0100f3e0.cpp  ?FUN_0100fee0@@YAXPAPAXHHHUcAutoRef@@P6AHPAX2@Z@Z  0100fee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

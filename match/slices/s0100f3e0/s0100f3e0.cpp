@@ -561,8 +561,11 @@ void FUN_0100fee0(void** pArray, int nTop, int nLen, int nHole, cAutoRef value, 
         cRefCounted* pNew = (cRefCounted*)pArray[nChild];
         cRefCounted* pOld = (cRefCounted*)pArray[nHoleIndex];
         if (pNew != pOld) {
-            if (pNew)
-                pNew->AddRef();
+            void** vtNew = 0;
+            if (pNew) {
+                vtNew = *(void***)pNew;
+                ((void (__thiscall*)(void*))vtNew[0])(pNew);
+            }
             pArray[nHoleIndex] = pNew;
             if (pOld)
                 pOld->Release();

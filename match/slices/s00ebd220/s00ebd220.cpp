@@ -455,9 +455,18 @@ void cAnimViewer::FUN_00ebd340()
 
     Entry* oldEnd = vec.mpEnd;
     Entry* oldBegin = vec.mpBegin;
-    Entry* moved = MoveRange(vec.mpBegin, vec.mpEnd, vec.mpEnd);
-    vec.DestroyRange(moved, vec.mpEnd);
-    vec.mpEnd += (int)((char*)oldEnd - (char*)oldBegin) / 0x50;
+    Entry* first = vec.mpEnd;
+    Entry* dst = vec.mpBegin;
+    Entry* src = first;
+    if (first != oldEnd) {
+        do {
+            dst->MoveFrom(src);
+            ++src;
+            ++dst;
+        } while (src != oldEnd);
+    }
+    vec.DestroyRange(dst, vec.mpEnd);
+    vec.mpEnd += (int)((char*)oldEnd - (char*)oldBegin) / -0x50;
 
     RbTree* tree = &mTree30;
     RbNode* node = tree->m_root;

@@ -395,8 +395,7 @@ char FUN_00ebffd0(int obj)
 
 // @ 0x00ec0010
 char FUN_00ec0010(int obj, int a, int b, int c, int d, DeciderState* st)
-{
-    if (st->active != 0) {
+{    if (st->active != 0) {
         char flag;
         if (EXT(obj).i0() != 0 &&
             *(char*)(EXT(obj).i0() + 0x4c8) == 0 &&
@@ -416,7 +415,10 @@ char FUN_00ec0010(int obj, int a, int b, int c, int d, DeciderState* st)
         }
         return 1;
     }
-    return (char)(CREATURE(obj).AnimFinished(st->anim) == 0);
+    struct Running {
+        bool AnimIsRunning(int p, DeciderState* s) { return CREATURE(p).AnimFinished(s->anim) == 0; }
+    };
+    return (char)Running().AnimIsRunning(obj, st);
 }
 
 // @ 0x00ec00e0

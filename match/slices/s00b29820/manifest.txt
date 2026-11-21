@@ -10,3 +10,4 @@ slices/s00b29820/s00b29820.cpp  ??0SgElement24@@QAE@ABU0@@Z  00b2a460  /O2 /MD /
 slices/s00b29820/s00b29820.cpp  ?FUN_00b2a750@SgHandler750@@QAEXI@Z  00b2a750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b29820/s00b29820.cpp  ?FUN_00b2a690@SgEntryList@@QAEPAUSgEntry@@III@Z  00b2a690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b29820/s00b29820.cpp  ?FUN_00b2a880@@YA?AUSgIter@@U1@0USgIdPred@@@Z  00b2a880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ?IsCloser@SgVec3@@QBEHABUSgTarget@@0@Z  00b2a540  /O2 /MD /Gy /TP /arch:SSE /fp:fast

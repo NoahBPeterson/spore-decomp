@@ -3,3 +3,4 @@ slices/s00b5f040/s00b5f040.cpp  ??4?$AutoRefCount@VIWinText@UTFWinControls@EA@@@
 slices/s00b5f040/s00b5f040.cpp  ??0cSuperPowersCommand@@QAE@XZ  00b5f620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b5f040/s00b5f040.cpp  ?FUN_00b5f1b0@@YAEHH@Z  00b5f1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b5f040/s00b5f040.cpp  ?FUN_00b60070@@YIPAHPAH@Z  00b60070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b5f040/s00b5f040.cpp  ?FUN_00b600a0@@YIXPAH@Z  00b600a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

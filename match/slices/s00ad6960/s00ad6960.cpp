@@ -508,21 +508,19 @@ void** FUN_00ad73a0(void** first, void** last, void** out)
 // @ 0x00ad7400
 // ===========================================================================
 void** FUN_00ad7400(void* last_, void* first_, void** out)
-{
-    char* last = (char*)last_;
+{    char* last = (char*)last_;
     char* first = (char*)first_;
     while (first != last) {
-        void* a = *(void**)(first - 4);
-        void* b = out[-1];
         first -= 4; --out;
+        void* a = *(void**)first;
+        void* b = *out;
         if (a != b) {
             if (a) ((CSub*)((char*)a + 8))->AddRef();
             *out = a;
             if (b) ((CSub*)((char*)b + 8))->Release();
         }
     }
-    return out;
-}
+    return out;}
 
 // ===========================================================================
 extern "C" char g_145b328[];   // 0x145b328: CUID vtable (primary)
