@@ -4,6 +4,9 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb844[];
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
 extern "C" char g_14426a0[];
 extern "C" char g_13eb384[];
 extern "C" char g_1489e8c[];
@@ -3839,46 +3842,78 @@ void FUN_00ed4930(void)
 }
 
 // @ 0x00ed49a0
+struct IRef_ed49a0 { virtual void AddRef(); virtual void Release(); };
+struct IObj_ed49a0 { virtual void v0(); virtual void v1(); virtual void Release(); };
+struct IMsgSrv_ed49a0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual void RemoveListener(void* listener, unsigned id, int priority);
+};
+struct Handler_ed49a0 { int h, a, b, c, d; };
+struct Obj49a0Layout {
+    void* vt00;
+    int f04;
+    void* vt08;
+    void* vt0c;
+    void* vt10;
+    IObj_ed49a0* p14;
+    IObj_ed49a0* p18;
+    int f1c, f20;
+    IObj_ed49a0* p24;
+    IObj_ed49a0* p28;
+    IRef_ed49a0* p2c;
+    IRef_ed49a0* p30;
+    IRef_ed49a0* p34;
+    IRef_ed49a0* arr38[2];
+    IRef_ed49a0* p40;
+    IRef_ed49a0* p44;
+    int f48[5];
+    Handler_ed49a0 h5c;
+    Handler_ed49a0 h70;
+    IRef_ed49a0* p84;
+    IRef_ed49a0* p88;
+    IRef_ed49a0* p8c;
+};
+static inline void Unhook_ed49a0(Handler_ed49a0* h)
+{
+    if (h->h) {
+        int x = h->h;
+        h->h = 0;
+        FUN_00571db0(x, h->a, h->b, h->c, h->d);
+    }
+}
 void Obj49a0::f()
 {
-    char* s = (char*)this;
-    *(int**)s = (int*)0x1489e8c;
-    *(int**)(s + 8) = (int*)0x1489e70;
-    *(int**)(s + 0xc) = (int*)0x1489e64;
-    *(int**)(s + 0x10) = (int*)0x1489e54;
-    if (SP_MessageServer() != 0) {
-        int* sv = (int*)SP_MessageServer();
-        ((FV_iip)(*(void***)sv)[0x2c / 4])(sv, 0xffffd8f1, 0x65ff54a, s + 0x10);
+    Obj49a0Layout* o = (Obj49a0Layout*)this;
+    o->vt00 = g_1489e8c;
+    o->vt08 = g_1489e70;
+    o->vt0c = g_1489e64;
+    o->vt10 = g_1489e54;
+    if (SP_MessageServer() != 0)
+        ((IMsgSrv_ed49a0*)SP_MessageServer())->RemoveListener(&o->vt10, 0x65ff54a, -9999);
+    if (o->p8c) o->p8c->Release();
+    if (o->p88) o->p88->Release();
+    if (o->p84) o->p84->Release();
+    Unhook_ed49a0(&o->h70);
+    Unhook_ed49a0(&o->h5c);
+    if (o->p44) o->p44->Release();
+    if (o->p40) o->p40->Release();
+    IRef_ed49a0** pp = &o->arr38[2];
+    for (int i = 1; i >= 0; i--) {
+        --pp;
+        if (*pp) (*pp)->Release();
     }
-    if (*(int**)(s + 0x8c)) ((FV_v)(*(void***)*(int**)(s + 0x8c))[4 / 4])(*(int**)(s + 0x8c));
-    if (*(int**)(s + 0x88)) ((FV_v)(*(void***)*(int**)(s + 0x88))[4 / 4])(*(int**)(s + 0x88));
-    if (*(int**)(s + 0x84)) ((FV_v)(*(void***)*(int**)(s + 0x84))[4 / 4])(*(int**)(s + 0x84));
-    if (*(int*)(s + 0x70)) {
-        int h = *(int*)(s + 0x70);
-        *(int*)(s + 0x70) = 0;
-        FUN_00571db0(h, *(int*)(s + 0x74), *(int*)(s + 0x78), *(int*)(s + 0x7c), *(int*)(s + 0x80));
-    }
-    if (*(int*)(s + 0x5c)) {
-        int h = *(int*)(s + 0x5c);
-        *(int*)(s + 0x5c) = 0;
-        FUN_00571db0(h, *(int*)(s + 0x60), *(int*)(s + 0x64), *(int*)(s + 0x68), *(int*)(s + 0x6c));
-    }
-    if (*(int**)(s + 0x44)) ((FV_v)(*(void***)*(int**)(s + 0x44))[4 / 4])(*(int**)(s + 0x44));
-    if (*(int**)(s + 0x40)) ((FV_v)(*(void***)*(int**)(s + 0x40))[4 / 4])(*(int**)(s + 0x40));
-    for (int i = 0; i < 2; i++) {
-        int* p = *(int**)(s + 0x3c - i * 4);
-        if (p) ((FV_v)(*(void***)p)[4 / 4])(p);
-    }
-    if (*(int**)(s + 0x34)) ((FV_v)(*(void***)*(int**)(s + 0x34))[4 / 4])(*(int**)(s + 0x34));
-    if (*(int**)(s + 0x30)) ((FV_v)(*(void***)*(int**)(s + 0x30))[4 / 4])(*(int**)(s + 0x30));
-    if (*(int**)(s + 0x2c)) ((FV_v)(*(void***)*(int**)(s + 0x2c))[4 / 4])(*(int**)(s + 0x2c));
-    if (*(int**)(s + 0x28)) ((FV_v)(*(void***)*(int**)(s + 0x28))[8 / 4])(*(int**)(s + 0x28));
-    if (*(int**)(s + 0x24)) ((FV_v)(*(void***)*(int**)(s + 0x24))[8 / 4])(*(int**)(s + 0x24));
-    if (*(int**)(s + 0x18)) ((FV_v)(*(void***)*(int**)(s + 0x18))[8 / 4])(*(int**)(s + 0x18));
-    if (*(int**)(s + 0x14)) ((FV_v)(*(void***)*(int**)(s + 0x14))[8 / 4])(*(int**)(s + 0x14));
-    *(int**)(s + 0x10) = (int*)0x13eb394;
-    *(int**)(s + 8) = (int*)0x13eb938;
-    *(int**)s = (int*)0x13ec458;
+    if (o->p34) o->p34->Release();
+    if (o->p30) o->p30->Release();
+    if (o->p2c) o->p2c->Release();
+    if (o->p28) o->p28->Release();
+    if (o->p24) o->p24->Release();
+    if (o->p18) o->p18->Release();
+    if (o->p14) o->p14->Release();
+    o->vt10 = g_13eb394;
+    o->vt08 = g_13eb938;
+    o->vt00 = g_13ec458;
 }
 
 // @ 0x00ed4b70
