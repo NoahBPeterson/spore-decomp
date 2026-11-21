@@ -399,11 +399,12 @@ __declspec(noinline) int FUN_009a37a0(int key) {
 // @ 0x009a37e0
 // ---------------------------------------------------------------------------
 __declspec(noinline) int FUN_009a37e0(int key) {
-  if (!key) return 0;
   int count = 0;
+  if (!key) return 0;
   int* tree = g_166c05c;
+  char* node = *(char**)((char*)tree + 8);
   char* end = (char*)tree + 4;
-  for (char* node = *(char**)((char*)tree + 8); node != end; node = (char*)(size_t)FUN_921580((int)(size_t)node))
+  for (; node != end; node = (char*)(size_t)FUN_921580((int)(size_t)node))
     if (*(int*)(node + 0x10) == key) count++;
   return count;
 }
