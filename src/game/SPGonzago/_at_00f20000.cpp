@@ -1319,14 +1319,18 @@ void __cdecl FUN_00f20cb0(void* key, void* p)
     } while ((void*)node != (void*)end);
 }
 
+struct IRefCounted_f20d20 {
+    virtual int AddRef();
+    virtual int Release();
+};
 // @ 0x00f20d20
 void* __cdecl FUN_00f20d20(void* p)
 {
     void* keep = p;
     void* found;
-    if (p) ((void(__cdecl*)(void*))(*(void***)p)[0])(p);
+    if (p) ((IRefCounted_f20d20*)p)->AddRef();
     g_pEventLog->find(&found, (int*)&keep);
-    if (p) ((void(__cdecl*)(void*))(*(void***)p)[1])(p);
+    if (p) ((IRefCounted_f20d20*)p)->Release();
     TreeHeader* g = g_pEventLog;
     if (found == (void*)((char*)g + 4)) return 0;
     return *(void**)((char*)found + 0x14);
