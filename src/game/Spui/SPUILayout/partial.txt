@@ -2,7 +2,6 @@
 0080fd60  89  approximate: Init second Get() branch and key fields omitted
 0080fe10  95  approximate: subscribe notification path handling simplified
 00810460  156  approximate: WriteResource branches reconstructed, arg roles guessed
-008106a0  113  approximate: rbtree iteration via RBTreeIncrement, node layout approximate
 008107d0  148  approximate: CreateResource callback arg roles + vtable slots guessed
 008108a0  269  approximate: resource reload/binary-stream path simplified
 00810e30  242  approximate: vector insert grow path uses generic copy/memmove

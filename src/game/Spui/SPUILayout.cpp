@@ -810,19 +810,52 @@ void __thiscall cSPUILayoutManager_s0080_f7c0::Method10660(u32 id, bool vis)
     }
 }
 
+struct WorldWin_s0081_06a0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); 
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c(); 
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); 
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c(); 
+    virtual void v70(); virtual void v74(); virtual void v78(); 
+    virtual void SetVisible(int a, bool visible);    // +0x7c
+};
+static inline const int& MaxRef_s0081_06a0(const int& a, const int& b) { return (a < b) ? b : a; }
+struct World_s0081_06a0 {
+    u8 pad0[8];
+    WorldWin_s0081_06a0* mpWindow;   // +0x08
+    int mHideCount;                  // +0x0c
+    void AddHide(int delta)
+    {
+        int zero = 0;
+        int count = mHideCount + delta;
+        int n = MaxRef_s0081_06a0(zero, count);
+        if (n >= 0) {
+            if (n < 2)
+                mpWindow->SetVisible(1, n == 0);
+            mHideCount = n;
+        }
+    }
+};
+struct WorldNode_s0081_06a0 {
+    u8 pad0[0x14];
+    World_s0081_06a0 mWorld;         // +0x14
+};
+
 // @ 0x008106a0
 void __thiscall cSPUILayoutManager_s0080_f7c0::SetAllWorldsVisibility(bool vis)
 {
-    u8* s = (u8*)this;
-    void* anchor = (void*)(s + 0x10);
-    void* node = *(void**)(s + 0x14);
-    if (node == anchor) return;
-    int delta = vis ? -1 : 1;
-    do {
-        u8* cur = (u8*)node;
-        node = (void*)(size_t)eastl_RBTreeIncrement(node);
-        SetNodeVisibility(cur + 0x20, (char)delta);
-    } while (node != anchor);
+    void* node = *(void**)((u8*)this + 0x14);
+    void* anchor = (void*)((u8*)this + 0x10);
+    if (node != anchor) {
+        int delta = vis ? -1 : 1;
+        do {
+            WorldNode_s0081_06a0* cur = (WorldNode_s0081_06a0*)node;
+            node = (void*)(size_t)eastl_RBTreeIncrement(node);
+            cur->mWorld.AddHide(delta);
+        } while (node != anchor);
+    }
 }
 
 // @ 0x00810730

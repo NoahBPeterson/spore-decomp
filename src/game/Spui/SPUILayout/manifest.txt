@@ -28,3 +28,4 @@
 ../src/game/Spui/SPUILayout.cpp  ?Method10660@cSPUILayoutManager_s0080_f7c0@@QAEXI_N@Z  00810660  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?IsWorldVisible@cSPUILayoutManager_s0080_f7c0@@QAE_NI@Z  00810760  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?OnUnload@cSPUILayoutObjectCollectionV8@@QAEXXZ  00810270  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?SetAllWorldsVisibility@cSPUILayoutManager_s0080_f7c0@@QAEX_N@Z  008106a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
