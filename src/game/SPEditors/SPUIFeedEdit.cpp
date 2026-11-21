@@ -4,6 +4,22 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb844[];
+extern "C" char g_15ac2a4[];
+extern "C" char g_1489eac[];
+extern "C" char g_140b5a0[];
+extern "C" char g_1489d70[];
+extern "C" char g_1489d58[];
+extern "C" char g_1489d48[];
+extern "C" char g_1489d44[];
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" char g_13ec458[];
+extern "C" char g_14426a0[];
+extern "C" char g_13eb384[];
+extern "C" char g_1489e8c[];
+extern "C" char g_1489e70[];
+extern "C" char g_1489e64[];
+extern "C" char g_1489e54[];
 extern "C" char g_13eb90c[];
 
 #include "game/types.h"
@@ -1628,7 +1644,7 @@ char  __cdecl FUN_00e00ac0(void);                               // 0xe00ac0
 void* __cdecl SP_WindowManager(void);                           // 0x67caa0
 void* __cdecl FUN_00d539d0(void);                               // 0xd539d0
 struct S_e277b0 {
-    int f(int w);   // 0x00e277b0  cSPUIPosseItem::init (char in al; declared int to keep the full eax)
+    bool f(int w);  // 0x00e277b0  cSPUIPosseItem::init
 };
 void  __cdecl FUN_00571db0(int, int, int, int, int);            // EA::Messaging::RemoveHandler
 void  __cdecl FUN_006447c0(char flag, void** out);              // 0x006447c0
@@ -1695,9 +1711,9 @@ struct Obj5020 {
     void* m_pLaunchArg;   // +0x14c
     char  f(void*, void*, void*, void*, void*);
 };
-struct Obj5190 { int f(int w); };
+struct Obj5190 { bool f(int w); };
 struct Obj5220 { void* f(); };
-struct Obj5330 { int f(int a); };
+struct Obj5330 { bool f(int a); };
 struct Obj5400 { void f(int a); };
 struct Obj54b0 { void f(int a); };
 struct PanelMatchDesc {
@@ -3833,80 +3849,124 @@ void FUN_00ed4930(void)
 }
 
 // @ 0x00ed49a0
+struct IRef_ed49a0 { virtual void AddRef(); virtual void Release(); };
+struct IObj_ed49a0 { virtual void v0(); virtual void v1(); virtual void Release(); };
+struct IMsgSrv_ed49a0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual void RemoveListener(void* listener, unsigned id, int priority);
+};
+struct Handler_ed49a0 { int h, a, b, c, d; };
+struct Obj49a0Layout {
+    void* vt00;
+    int f04;
+    void* vt08;
+    void* vt0c;
+    void* vt10;
+    IObj_ed49a0* p14;
+    IObj_ed49a0* p18;
+    int f1c, f20;
+    IObj_ed49a0* p24;
+    IObj_ed49a0* p28;
+    IRef_ed49a0* p2c;
+    IRef_ed49a0* p30;
+    IRef_ed49a0* p34;
+    IRef_ed49a0* arr38[2];
+    IRef_ed49a0* p40;
+    IRef_ed49a0* p44;
+    int f48[5];
+    Handler_ed49a0 h5c;
+    Handler_ed49a0 h70;
+    IRef_ed49a0* p84;
+    IRef_ed49a0* p88;
+    IRef_ed49a0* p8c;
+};
+static inline void Unhook_ed49a0(Handler_ed49a0* h)
+{
+    if (h->h) {
+        int x = h->h;
+        h->h = 0;
+        FUN_00571db0(x, h->a, h->b, h->c, h->d);
+    }
+}
 void Obj49a0::f()
 {
-    char* s = (char*)this;
-    *(int**)s = (int*)0x1489e8c;
-    *(int**)(s + 8) = (int*)0x1489e70;
-    *(int**)(s + 0xc) = (int*)0x1489e64;
-    *(int**)(s + 0x10) = (int*)0x1489e54;
-    if (SP_MessageServer() != 0) {
-        int* sv = (int*)SP_MessageServer();
-        ((FV_iip)(*(void***)sv)[0x2c / 4])(sv, 0xffffd8f1, 0x65ff54a, s + 0x10);
+    Obj49a0Layout* o = (Obj49a0Layout*)this;
+    o->vt00 = g_1489e8c;
+    o->vt08 = g_1489e70;
+    o->vt0c = g_1489e64;
+    o->vt10 = g_1489e54;
+    if (SP_MessageServer() != 0)
+        ((IMsgSrv_ed49a0*)SP_MessageServer())->RemoveListener(&o->vt10, 0x65ff54a, -9999);
+    if (o->p8c) o->p8c->Release();
+    if (o->p88) o->p88->Release();
+    if (o->p84) o->p84->Release();
+    Unhook_ed49a0(&o->h70);
+    Unhook_ed49a0(&o->h5c);
+    if (o->p44) o->p44->Release();
+    if (o->p40) o->p40->Release();
+    IRef_ed49a0** pp = &o->arr38[2];
+    for (int i = 1; i >= 0; i--) {
+        --pp;
+        if (*pp) (*pp)->Release();
     }
-    if (*(int**)(s + 0x8c)) ((FV_v)(*(void***)*(int**)(s + 0x8c))[4 / 4])(*(int**)(s + 0x8c));
-    if (*(int**)(s + 0x88)) ((FV_v)(*(void***)*(int**)(s + 0x88))[4 / 4])(*(int**)(s + 0x88));
-    if (*(int**)(s + 0x84)) ((FV_v)(*(void***)*(int**)(s + 0x84))[4 / 4])(*(int**)(s + 0x84));
-    if (*(int*)(s + 0x70)) {
-        int h = *(int*)(s + 0x70);
-        *(int*)(s + 0x70) = 0;
-        FUN_00571db0(h, *(int*)(s + 0x74), *(int*)(s + 0x78), *(int*)(s + 0x7c), *(int*)(s + 0x80));
-    }
-    if (*(int*)(s + 0x5c)) {
-        int h = *(int*)(s + 0x5c);
-        *(int*)(s + 0x5c) = 0;
-        FUN_00571db0(h, *(int*)(s + 0x60), *(int*)(s + 0x64), *(int*)(s + 0x68), *(int*)(s + 0x6c));
-    }
-    if (*(int**)(s + 0x44)) ((FV_v)(*(void***)*(int**)(s + 0x44))[4 / 4])(*(int**)(s + 0x44));
-    if (*(int**)(s + 0x40)) ((FV_v)(*(void***)*(int**)(s + 0x40))[4 / 4])(*(int**)(s + 0x40));
-    for (int i = 0; i < 2; i++) {
-        int* p = *(int**)(s + 0x3c - i * 4);
-        if (p) ((FV_v)(*(void***)p)[4 / 4])(p);
-    }
-    if (*(int**)(s + 0x34)) ((FV_v)(*(void***)*(int**)(s + 0x34))[4 / 4])(*(int**)(s + 0x34));
-    if (*(int**)(s + 0x30)) ((FV_v)(*(void***)*(int**)(s + 0x30))[4 / 4])(*(int**)(s + 0x30));
-    if (*(int**)(s + 0x2c)) ((FV_v)(*(void***)*(int**)(s + 0x2c))[4 / 4])(*(int**)(s + 0x2c));
-    if (*(int**)(s + 0x28)) ((FV_v)(*(void***)*(int**)(s + 0x28))[8 / 4])(*(int**)(s + 0x28));
-    if (*(int**)(s + 0x24)) ((FV_v)(*(void***)*(int**)(s + 0x24))[8 / 4])(*(int**)(s + 0x24));
-    if (*(int**)(s + 0x18)) ((FV_v)(*(void***)*(int**)(s + 0x18))[8 / 4])(*(int**)(s + 0x18));
-    if (*(int**)(s + 0x14)) ((FV_v)(*(void***)*(int**)(s + 0x14))[8 / 4])(*(int**)(s + 0x14));
-    *(int**)(s + 0x10) = (int*)0x13eb394;
-    *(int**)(s + 8) = (int*)0x13eb938;
-    *(int**)s = (int*)0x13ec458;
+    if (o->p34) o->p34->Release();
+    if (o->p30) o->p30->Release();
+    if (o->p2c) o->p2c->Release();
+    if (o->p28) o->p28->Release();
+    if (o->p24) o->p24->Release();
+    if (o->p18) o->p18->Release();
+    if (o->p14) o->p14->Release();
+    o->vt10 = g_13eb394;
+    o->vt08 = g_13eb938;
+    o->vt00 = g_13ec458;
 }
 
 // @ 0x00ed4b70
+struct Ctl_ed4b70 {
+    void FUN_00ef00b0();
+    void FUN_00b781d0();
+    void FUN_00b5a390();
+    void FUN_00b515e0();
+    void FUN_00b79aa0();
+    void FUN_00f190a0();
+    char FUN_00f46630(void*);
+};
+struct MsgSrv_ed4b70 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void Post(u32 id, int a, int b);
+};
+struct Cheat_ed4b70 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void Execute(const char* cmd);
+};
+struct Key_ed4b70 { int a, b, c; Key_ed4b70() : a(0), b(0), c(0) {} };
 void Obj4b70::f()
 {
     char* s = (char*)this;
     switch (*(int*)(s + 0x58)) {
     case 1: case 3: case 6:
-        ((S_ef00b0*)s)->f();
+        ((Ctl_ed4b70*)g_16c7aa4_s00ed_4730)->FUN_00ef00b0();
+        *(int*)(s + 0x58) = 0;
+        return;
+    case 7:
+        ((Cheat_ed4b70*)SP_CheatManager())->Execute("quit");
         *(int*)(s + 0x58) = 0;
         return;
     case 4: {
-        ((S_b3d3c0*)FUN_00b3d3c0())->f();
-        ((S_b3d3c0*)FUN_00b3d310())->f();
-        ((S_b3d3c0*)FUN_00b3d310())->f();
-        ((S_b3d3c0*)FUN_00b3d3c0())->f();
+        ((Ctl_ed4b70*)FUN_00b3d3c0())->FUN_00b781d0();
+        ((Ctl_ed4b70*)FUN_00b3d310())->FUN_00b5a390();
+        ((Ctl_ed4b70*)FUN_00b3d310())->FUN_00b515e0();
+        ((Ctl_ed4b70*)FUN_00b3d3c0())->FUN_00b79aa0();
         FUN_00efc8c0(0);
-        ((S_ef00b0*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x78)))->f();
-        char c = ((S_f46630*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f(s + 0x48);
-        if (c) {
-            int* sv = (int*)SP_MessageServer();
-            ((FV_ii)(*(void***)sv)[0x14 / 4])(sv, 0x86a4609d, 0);
-        }
-        *(int*)(s + 0x48) = 0;
-        *(int*)(s + 0x4c) = 0;
-        *(int*)(s + 0x50) = 0;
+        (*(Ctl_ed4b70**)(g_16c7aa4_s00ed_4730 + 0x78))->FUN_00f190a0();
+        if ((*(Ctl_ed4b70**)(g_16c7aa4_s00ed_4730 + 0x74))->FUN_00f46630(s + 0x48))
+            ((MsgSrv_ed4b70*)SP_MessageServer())->Post(0x86a4609d, 0, 0);
+        *(Key_ed4b70*)(s + 0x48) = Key_ed4b70();
         *(int*)(s + 0x58) = 0;
         break;
-    }
-    case 7: {
-        int* cm = (int*)SP_CheatManager();
-        ((FV_i_s00ed_4730)(*(void***)cm)[0x20 / 4])(cm, (int)"quit");
-        *(int*)(s + 0x58) = 0;
-        return;
     }
     }
     *(int*)(s + 0x58) = 0;
@@ -4007,151 +4067,240 @@ bool Obj4f90::f(int a, int b)
 }
 
 // @ 0x00ed5020
+struct IPosse_ed5020 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual PosseEntry* Get(unsigned id);
+};
+struct ILaunch_ed5020 {
+    virtual void v0(); virtual void AddRef(); virtual void Release();
+};
+struct Roles_ed5020 { int r0, r1, r2, r3; };
+void __cdecl FUN_00ad0e52();   // asset-browser launch callback
+static inline void Assign_ed5020(ILaunch_ed5020** pp, ILaunch_ed5020* p)
+{
+    if (p != *pp) {
+        ILaunch_ed5020* old = *pp;
+        if (p != 0) p->AddRef();
+        *pp = p;
+        if (old != 0) old->Release();
+    }
+}
 char Obj5020::f(void* a1, void* a2, void* a3, void* a4, void* a5)
 {
     (void)a2; (void)a3; (void)a4; (void)a5;
-    if (m_pOwner != a1) return 0;
+    if (m_pOwner == a1) {
+        int v0 = 0, v1 = 0, v2 = 0;
+        IPosse_ed5020* q = (IPosse_ed5020*)m_pPosse;
+        PosseEntry* r = q ? q->Get(0x774c96f) : 0;
+        unsigned idx = (unsigned)r->m_index;
+        if (idx < ((S_f3bf70*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f()) {
+            S_f3bfa0* m = *(S_f3bfa0**)(g_16c7aa4_s00ed_4730 + 0x74);
+            int* v = (int*)m->f(idx);
+            v0 = v[0]; v1 = v[1]; v2 = v[2];
+        }
 
-    int v0 = 0, v1 = 0, v2 = 0;
-    void* q = m_pPosse;
-    void* r = q ? (void*)((FV_ip)(*(void***)q)[0xc / 4])(q, 0x774c96f) : 0;
-    unsigned idx = (unsigned)((PosseEntry*)r)->m_index;
-    unsigned n = ((S_f3bf70*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f();
-    if (idx < n) {
-        int* v = (int*)((S_f3bfa0*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f(idx);
-        v0 = v[0]; v1 = v[1]; v2 = v[2];
+        ILaunch_ed5020* launch = 0;
+        FUN_006447c0(0, (void**)&launch);
+        *(Roles_ed5020*)&((EditorLaunchData*)launch)->m_pRole0 = *(Roles_ed5020*)&g_15da7c4;
+        ((EditorLaunchData*)launch)->m_flag34 = 0;
+
+        AssetBrowserLaunch b;
+        ((S_644b10*)&b)->f();
+        b.m_pVtbl = (void*)0xf25aef31;
+        b.m_gameMode = FUN_00b5b800();
+        b.m_pOwner38 = (void*)&m_pLaunchArg;
+        b.m_v18 = v0;
+        b.m_pFn30 = (void*)&FUN_00ad0e52;
+        b.m_v1c = v1;
+        b.m_v20 = v2;
+        b.m_flag24 = 0;
+        b.m_flag11 = 1;
+        b.m_pEntry = r;
+        Assign_ed5020((ILaunch_ed5020**)&b.m_pData44, launch);
+
+        FUN_0064a990(&b);
+        ((S_644b60*)&b)->f();
+        if (launch != 0) launch->Release();
+        return 1;
     }
-
-    void* launch = 0;
-    FUN_006447c0(0, &launch);
-    ((EditorLaunchData*)launch)->m_pRole0 = (void*)g_15da7c4;
-    ((EditorLaunchData*)launch)->m_pRole1 = (void*)g_15da7c8;
-    ((EditorLaunchData*)launch)->m_pRole2 = (void*)g_15da7cc;
-    ((EditorLaunchData*)launch)->m_pRole3 = (void*)g_15da7d0;
-    ((EditorLaunchData*)launch)->m_flag34 = 0;
-
-    AssetBrowserLaunch b;
-    ((S_644b10*)&b)->f();
-    b.m_pVtbl = (void*)0xf25aef31;
-    b.m_gameMode = FUN_00b5b800();
-    b.m_flag11 = 1;
-    b.m_pEntry = r;
-    b.m_v18 = v0;
-    b.m_v1c = v1;
-    b.m_v20 = v2;
-    b.m_flag24 = 0;
-    b.m_pFn30 = (void*)0xad0e52;
-    b.m_pOwner38 = (void*)&m_pLaunchArg;
-    if (b.m_pData44 != launch) {
-        if (launch != 0) ((FV_v)(*(void***)launch)[4 / 4])(launch);
-        void* old = b.m_pData44;
-        b.m_pData44 = launch;
-        if (old != 0) ((FV_v)(*(void***)old)[8 / 4])(old);
-    }
-
-    FUN_0064a990(&b);
-    ((S_644b60*)&b)->f();
-    if (launch != 0) ((FV_v)(*(void***)launch)[8 / 4])(launch);
-    return 1;
+    return 0;
 }
 
 // @ 0x00ed5190
-int Obj5190::f(int w)
+struct Win_ed5190 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30();
+    virtual void SetFlag(int flag, bool on);
+};
+struct Rec_ed5190 { int a, b, id; };
+struct Obj_ed5190 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual Rec_ed5190* Get(u32 id);
+};
+struct Lay_ed5190 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
+    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59();
+    virtual Win_ed5190* FindWindow(u32 id, bool recurse);
+};
+bool Obj5190::f(int w)
 {
     char* s = (char*)this;
-    int r0 = ((S_e277b0*)s)->f(w);
-    if ((unsigned char)r0 == 0) return (int)(r0 & 0xffffff00u);
-    int* win = (int*)((S_8105b0*)(w + 0x1bc))->f(0x3dae412, 1);
-    ((FV_ii)(*(void***)win)[0x7c / 4])(win, 0x10, 1);
-    int* q = *(int**)(s + 0x50);
-    int* r = q ? (int*)((FV_ip)(*(void***)q)[0xc / 4])(q, 0x774c96f) : 0;
-    int b = (*(int*)((char*)r + 8) != -1) ? 1 : 0;
-    int* lay = *(int**)(s + 0x13c);
-    int* win2 = lay ? (int*)((FV_iir)(*(void***)lay)[0xf0 / 4])(lay, 0x7c4b4a0, 1) : 0;
-    if (win2 != 0)
-        ((FV_ii)(*(void***)win2)[0x7c / 4])(win2, 1, b);
-    return 1;
+    if (((S_e277b0*)s)->f(w)) {
+        ((Win_ed5190*)((S_8105b0*)(w + 0x1bc))->f(0x3dae412, 1))->SetFlag(0x10, true);
+        Obj_ed5190* q = *(Obj_ed5190**)(s + 0x50);
+        bool b = (q ? q->Get(0x774c96f) : 0)->id != -1;
+        Win_ed5190* win2 = (*(Lay_ed5190**)(s + 0x13c))->FindWindow(0x7c4b4a0, true);
+        if (win2 != 0)
+            win2->SetFlag(1, b);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x00ed5220
+struct IRef_ed5220 { virtual void AddRef(); virtual void Release(); };
+struct IMsgSrv_ed5220 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void AddListener(void* listener, unsigned id);
+};
+struct Obj5220A { void* vt00; int f04; void* vt08; void* vt0c; };
+struct Obj5220L { void* vt10; };
+struct Obj5220Layout : Obj5220A, Obj5220L {
+    int f14, f18, f1c, f20;
+    int z[27];
+    void* Construct();
+};
+__forceinline void* Obj5220Layout::Construct()
+{
+    Obj5220Layout* o = this;
+    o->f04 = 0;
+    *(void* volatile*)&o->vt08 = g_14426a0;
+    *(void* volatile*)&o->vt10 = g_13eb384;
+    *(void* volatile*)&o->vt00 = g_1489e8c;
+    *(void* volatile*)&o->vt08 = g_1489e70;
+    *(void* volatile*)&o->vt0c = g_1489e64;
+    *(void* volatile*)&o->vt10 = g_1489e54;
+    o->f14 = 0;
+    o->f18 = 0;
+    o->f1c = -1;
+    o->f20 = -1;
+    int* z = o->z;
+    z[0] = 0; z[1] = 0; z[2] = 0; z[3] = 0; z[4] = 0; z[5] = 0; z[6] = 0; z[7] = 0;
+    z[8] = 0; z[9] = 0; z[10] = 0; z[11] = 0; z[12] = 0; z[13] = 0;
+    IRef_ed5220** pp = (IRef_ed5220**)&o->z[5];
+    z[14] = 0; z[15] = 0;
+    z[16] = 0; z[17] = 0; z[18] = 0; z[19] = 0; z[20] = 0; z[21] = 0; z[22] = 0; z[23] = 0;
+    z[24] = 0; z[25] = 0; z[26] = 0;
+    if (SP_MessageServer() != 0)
+        ((IMsgSrv_ed5220*)SP_MessageServer())->AddListener(static_cast<Obj5220L*>(this), 0x65ff54a);
+    int n = 2;
+    do {
+        if (IRef_ed5220* p = *pp) {
+            *pp = 0;
+            p->Release();
+        }
+        pp++;
+    } while (--n);
+    return o;
+}
 void* Obj5220::f()
 {
-    char* s = (char*)this;
-    *(int*)(s + 4) = 0;
-    *(int*)(s + 8) = 0x14426a0;
-    *(int*)(s + 0x10) = 0x13eb384;
-    *(int*)s = 0x1489e8c;
-    *(int*)(s + 8) = 0x1489e70;
-    *(int*)(s + 0xc) = 0x1489e64;
-    *(int*)(s + 0x10) = 0x1489e54;
-    *(int*)(s + 0x14) = 0;
-    *(int*)(s + 0x18) = 0;
-    *(int*)(s + 0x1c) = -1;
-    *(int*)(s + 0x20) = -1;
-    for (int off = 0x24; off <= 0x8c; off += 4) *(int*)(s + off) = 0;
-    if (SP_MessageServer() != 0) {
-        int* sv = (int*)SP_MessageServer();
-        ((FV_ii)(*(void***)sv)[0x20 / 4])(sv, 0x65ff54a, (int)(s + 0x10));
-    }
-    for (int i = 0; i < 2; i++) {
-        int off = 0x38 + i * 4;
-        int* p = *(int**)(s + off);
-        if (p) { *(int**)(s + off) = 0; ((FV_v)(*(void***)p)[4 / 4])(p); }
-    }
-    return s;
+    return ((Obj5220Layout*)this)->Construct();
 }
 
-// @ 0x00ed5330
-int Obj5330::f(int a)
+struct IEffect_ed5400 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void Start(int flags);
+    virtual void Stop(int flags);
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17();
+    virtual void SetParam(int id, const void* value, int count);
+    virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22();
+    virtual void v23();
+    virtual unsigned __int64 GetID();
+    virtual void SetSource(unsigned id, int flags);
+};
+struct IEffectsMgr_ed5400 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual bool CreateEffect(unsigned id, unsigned group, IEffect_ed5400** out);
+};
+static inline void Reset_ed5400(IEffect_ed5400** pp)
 {
-    (void)a;
-    char* s = (char*)this;
-    char* f84 = s + 0x84;
-    int* p = *(int**)(s + 0x84);
-    if (p != 0 && ((FV_q)(*(void***)p)[0x60 / 4])(p) != 0x6ca35b3bull) {
-        ((FV_i_s00ed_4730)(*(void***)*(int**)f84)[0xc / 4])(*(int**)f84, 0);
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
+    IEffect_ed5400* p = *pp;
+    if (p != 0) {
+        *pp = 0;
+        p->Release();
     }
-    if (*(int**)f84 == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0x6ca35b3b);
-        if (c) {
-            if (FUN_00e00ac0()) ((S_e02e80*)(*(int*)(s + 0x44)))->f();
-            ((S_ed4c70*)s)->f(0);
-            int* z = *(int**)f84;
-            ((FV_ii)(*(void***)z)[0x48 / 4])(z, 6, 1);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
-            return 1;
+}
+// @ 0x00ed5330
+bool Obj5330::f(int a)
+{
+    IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x84);
+    if (IEffect_ed5400* cur = *fx) {
+        if (cur->GetID() != 0x6ca35b3bu) {
+            (*fx)->Stop(0);
+            Reset_ed5400(fx);
         }
     }
-    return 0;
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0x6ca35b3bu, 0, fx)) {
+            if (FUN_00e00ac0())
+                ((S_e02e80*)(*(int*)((char*)this + 0x44)))->f();
+            ((S_ed4c70*)this)->f(0);
+            int v = a;
+            (*fx)->SetParam(6, &v, 1);
+            (*fx)->Start(0);
+            return true;
+        }
+    }
+    return false;
 }
 
 // @ 0x00ed5400
 void Obj5400::f(int a)
 {
-    (void)a;
-    char* s = (char*)this;
-    char* f84 = s + 0x84;
-    int* p = *(int**)(s + 0x84);
-    if (p != 0 && ((FV_q)(*(void***)p)[0x60 / 4])(p) != 0xf08ce134ull) {
-        ((FV_i_s00ed_4730)(*(void***)*(int**)f84)[0xc / 4])(*(int**)f84, 0);
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
+    IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x84);
+    if (IEffect_ed5400* cur = *fx) {
+        if (cur->GetID() != 0xf08ce134u) {
+            (*fx)->Stop(1);
+            Reset_ed5400(fx);
+        }
     }
-    if (*(int**)f84 == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0xf08ce134);
-        if (c) {
-            int* z = *(int**)f84;
-            ((FV_ii)(*(void***)z)[0x48 / 4])(z, 6, 1);
-            ((FV_ii)(*(void***)z)[0x64 / 4])(z, 0x7ec5866, 0);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0xf08ce134u, 0, fx)) {
+            int v = a;
+            (*fx)->SetParam(6, &v, 1);
+            (*fx)->SetSource(0x7ec5866, 0);
+            (*fx)->Start(0);
         }
     }
 }
@@ -4159,115 +4308,193 @@ void Obj5400::f(int a)
 // @ 0x00ed54b0
 void Obj54b0::f(int a)
 {
-    char* s = (char*)this;
-    if (*(int**)(s + 0x88) == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)(s + 0x88);
-        if (q != 0) { *(int**)(s + 0x88) = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0x54248876);
-        if (c) {
-            int* z = *(int**)(s + 0x88);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
-        }
+    IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x88);
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0x54248876u, 0, fx))
+            (*fx)->Start(0);
     }
-    if (*(int**)(s + 0x8c) == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)(s + 0x8c);
-        if (q != 0) { *(int**)(s + 0x8c) = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0x14785c1);
-        if (c) {
-            int* z = *(int**)(s + 0x8c);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
-        }
+    fx = (IEffect_ed5400**)((char*)this + 0x8c);
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0x14785c1u, 0, fx))
+            (*fx)->Start(0);
     }
-    *(int*)(s + 0x90) = a;
+    *(int*)((char*)this + 0x90) = a;
 }
 
 // @ 0x00ed5580
+struct IRes_ed5580 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void v02();
+    virtual S_5508a0* Cast(unsigned typeId);
+};
+struct ResPtr_ed5580 {
+    IRes_ed5580* mp;
+    ResPtr_ed5580() : mp(0) {}
+    void Drop() { if (mp) mp->Release(); }
+    IRes_ed5580** AsPointer()
+    {
+        if (mp) {
+            IRes_ed5580* t = mp;
+            mp = 0;
+            t->Release();
+        }
+        return &mp;
+    }
+};
+struct IResMgr_ed5580 {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual bool GetResource(const PanelMatchDesc* key, IRes_ed5580** out,
+                             int a, int b, int c, int d);
+};
+struct IAuth_ed5580 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual unsigned long long GetUserID();
+};
 bool __stdcall Panel_Match(int a1, int a2, int a3)
 {
-    (void)a3;
+    (void)a2; (void)a3;
     PanelMatchDesc* desc = (PanelMatchDesc*)&a1;
     desc->m_typeId = 0x30bdee3;
-
-    void* local = 0;
-    if (local != 0) {
-        void* t = local; local = 0;
-        ((FV_v)(*(void***)t)[4 / 4])(t);
-    }
-    void* factory = FUN_008de1a0();
-
-    char ok = ((FV_ppiiii)(*(void***)factory)[0xc / 4])(factory, (void*)desc, (void*)&local, 0, 0, 0, 0);
-    if (!ok) {
-        if (local != 0) {
-            void* t = local; local = 0;
-            ((FV_v)(*(void***)t)[4 / 4])(t);
+    ResPtr_ed5580 res;
+    if (((IResMgr_ed5580*)FUN_008de1a0())->GetResource(desc, res.AsPointer(), 0, 0, 0, 0)) {
+        if (res.mp == 0)
+            return false;
+        if (S_5508a0* meta = res.mp->Cast(0x30bdee3)) {
+            unsigned long long user = ((IAuth_ed5580*)FUN_00607a60())->GetUserID();
+            bool r = meta->f() == user;
+            res.Drop();
+            return r;
         }
+        res.Drop();
         return false;
     }
-    if (local == 0) return false;
-
-    void* meta = (void*)((FV_ip)(*(void***)local)[0xc / 4])(local, 0x30bdee3);
-    if (meta == 0) {
-        if (local != 0) {
-            void* t = local; local = 0;
-            ((FV_v)(*(void***)t)[4 / 4])(t);
-        }
-        return false;
-    }
-
-    void* auth = FUN_00607a60();
-    unsigned long long a = ((FV_q)(*(void***)auth)[0x40 / 4])(auth);
-    unsigned long long c = ((S_5508a0*)meta)->f();
-    bool r = (a == c);
-
-    if (local != 0) {
-        void* t = local; local = 0;
-        ((FV_v)(*(void***)t)[4 / 4])(t);
-    }
-    return r;
+    res.Drop();
+    return false;
 }
 
 // @ 0x00ed5640
+struct tPosseIndex_ed5640 {
+    void* vt;
+    int f04;
+    int index;
+};
+struct PosseItem_ed5640 {
+    void* vt00;
+    void* vt04;
+    int f08;
+    void* vt0c;
+    char pad[0x13c];
+    void* vt14c;
+    void Construct(tPosseIndex_ed5640* idx, void* arg);   // 0x00e25460
+    void FUN_00e22700(int flag);
+};
+struct IPosseItem_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void SetKey(const void* key, int flags);
+};
+struct IPosse_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40();
+    virtual void AddItem(PosseItem_ed5640* item);
+};
+struct IWin_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30();
+    virtual void SetFlag(int flag, bool on);
+};
+struct ILayout_ed5640 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
+    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59();
+    virtual IWin_ed5640* FindWindow(unsigned id, bool recurse);
+};
+struct IWM_ed5640 { virtual void v0(); virtual ILayout_ed5640* GetMainWindow(); };
+struct Key_ed5640 { unsigned instance, type, group; };
+struct PosseSim_ed5640 { char pad[0x18]; int count; };
 void Obj5640::f()
 {
     char* s = (char*)this;
-    int* mgr = *(int**)(g_16c7aa4_s00ed_4730 + 0x74);
+    char* mgr = *(char**)(g_16c7aa4_s00ed_4730 + 0x74);
     int count = ((S_f3bf60*)mgr)->f();
-    unsigned count2 = ((S_f3bf70*)mgr)->f();
-    int* wm = (int*)SP_WindowManager();
-    int* wm2 = (int*)((FV_p)(*(void***)wm)[4 / 4])(wm);
-    int* win = (int*)((FV_iir)(*(void***)wm2)[0xf0 / 4])(wm2, 0x774b060, 1);
+    int count2 = (int)((S_f3bf70*)mgr)->f();
+    IWin_ed5640* win = ((IWM_ed5640*)SP_WindowManager())->GetMainWindow()->FindWindow(0x774b060, true);
     if (win != 0)
-        ((FV_ii)(*(void***)win)[0x7c / 4])(win, 2, count < 3);
+        win->SetFlag(2, count < 3);
     ((S_e281a0*)(*(int*)(s + 0x40)))->f(1);
-    int* x = (int*)FUN_00d539d0();
-    if (x != 0) *(int*)((char*)x + 0x18) = count;
+    if (PosseSim_ed5640* x = (PosseSim_ed5640*)FUN_00d539d0())
+        x->count = count;
     for (int i = 0; i < count; i++) {
-        int pos = ((unsigned)i < count2) ? i : -1;
-        int* pi = (int*)operator_new(0xc, "Simulator/tPosseIndex", 0, 0, 0, 0);
-        if (pi != 0) {
-            pi[1] = 0;
-            pi[0] = 0x1489eac;
-            pi[2] = pos;
+        int pos = i < count2 ? i : -1;
+        tPosseIndex_ed5640* pi = 0;
+        tPosseIndex_ed5640* mem = (tPosseIndex_ed5640*)operator_new(0xc, "Simulator/tPosseIndex", 0, 0, 0, 0);
+        if (mem != 0) {
+            mem->f04 = 0;
+            mem->vt = g_1489eac;
+            mem->index = pos;
+            pi = mem;
         }
         void* u = FUN_009512c0();
-        int* item = (int*)FUN_009512d0(0x150, 4, "UI/cScenarioEditPosseItem", u);
+        PosseItem_ed5640* item = (PosseItem_ed5640*)FUN_009512d0(0x150, 4, "UI/cScenarioEditPosseItem", u);
         if (item != 0) {
-            ((S_e226c0*)item)->f();
-            item[0x14c / 4] = 0x140b5a0;
-            item[0] = 0x1489d70;
-            item[1] = 0x1489d58;
-            item[3] = 0x1489d48;
-            item[0x14c / 4] = 0x1489d44;
+            item->Construct(pi, g_15ac2a4);
+            *(void* volatile*)&item->vt14c = g_140b5a0;
+            item->vt00 = g_1489d70;
+            item->vt04 = g_1489d58;
+            item->vt0c = g_1489d48;
+            item->vt14c = g_1489d44;
+        } else {
+            item = 0;
         }
-        ((S_e281a0*)(*(int*)(s + 0x40)))->f((int)item);
-        if ((unsigned)i < count2) {
-            int* v = (int*)((S_f3bfa0*)mgr)->f(i);
-            int v0 = v[0], v1 = v[1], v2 = v[2];
-            char c = ((S_f3bde0*)mgr)->f(i);
-            ((FV_ii)(*(void***)item)[0x90 / 4])(item, (int)&v0, 0);
-            ((S_e22700*)item)->f(c);
+        (*(IPosse_ed5640**)(s + 0x40))->AddItem(item);
+        if (i < count2) {
+            Key_ed5640* k = (Key_ed5640*)((S_f3bfa0*)mgr)->f(i);
+            Key_ed5640 ref = *k;
+            ref.type = 0x2f7d0004;
+            ((IPosseItem_ed5640*)item)->SetKey(&ref, 0);
+            item->FUN_00e22700((unsigned char)((S_f3bde0*)mgr)->f(pos));
         }
     }
 }

@@ -2764,6 +2764,7 @@ struct PanelIDs_s00de_e450 {                     // kGUI_PanelIDs target (pointe
     byte     mFlag;                   // +0x1f5
 
     void FUN_00de5d00(void* a, void* b, void* c, void* d, void* e, void* f, void* g);
+    void FUN_00de5d00(void* a, void* b, void* c, const struct PanelIds_s00de_ef20& d, int e, void* f, void* g);
 };
 struct GridObj {                      // the editor grid object (at GalaxyUI + 0x628)
     char      pad_00[0x20];
@@ -2799,6 +2800,15 @@ struct Rbtree {                       // eastl::rbtree header (0x18 bytes)
     uint32_t  mnSize;                 // +0x14
 
     void DoNukeSubtree(void* node);   // 0x009a9600
+    void reset_s00de_ed40()
+    {
+        DoNukeSubtree(mp0c);
+        mpRoot   = &mpAnchor;
+        mp0c     = 0;
+        mFlag    = 0;
+        mnSize   = 0;
+        mpAnchor = &mpAnchor;
+    }
 };
 struct UIDrawable {                    // a drawable window returned by a window vtable slot
     void** vtbl;                       // +0x00
@@ -2886,7 +2896,7 @@ public:
     void      FUN_00deed40();
     void      FUN_00deede0();
     char      FUN_00deee80(int mode);
-    void      FUN_00deef20(unsigned a, unsigned b, void* map);
+    void      FUN_00deef20(int key, void* map, unsigned b);
     uint32_t  FUN_00deefb0(uint32_t key);
     void      FUN_00dee9a0(float a, float b);
     void      FUN_00dee770(uint32_t id, void* refObj);
@@ -13727,23 +13737,50 @@ char SP::GalaxyUI::FUN_00dee450(int msg, void* ctx)
     return 1;
 }
 
+struct Res_s00de_e770 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct Img_s00de_e770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); 
+    virtual void SetImage(int index, Res_s00de_e770* image);
+};
+struct Drawable_s00de_e770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); 
+    virtual Img_s00de_e770* Cast(uint32_t iid);
+};
+struct Win_s00de_e770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); 
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c(); 
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); 
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c(); 
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c(); 
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c(); 
+    
+    virtual void Invalidate();
+    virtual void w94(); virtual void w98(); virtual void w9c(); virtual void wa0(); virtual void wa4(); 
+    virtual Drawable_s00de_e770* GetDrawable();
+};
+
 // @ 0x00dee770
 void SP::GalaxyUI::FUN_00dee770(uint32_t id, void* refObj)
 {
-    void* w = mLayout.FindWindowByID(id, 1);
+    Win_s00de_e770* w = (Win_s00de_e770*)mLayout.FindWindowByID(id, 1);
     if (w == 0) return;
-    void** wvt = *(void***)w;
-    void*  d   = ((VFP)wvt[0xa8 / 4])(w);
+    Drawable_s00de_e770* d = w->GetDrawable();
     if (d == 0) return;
-    void** dvt = *(void***)d;
-    void*  img = ((VFP1)dvt[0x0c / 4])(d, 0x103c1908);
+    Img_s00de_e770* img = d->Cast(0x103c1908);
     if (img == 0) return;
-    void*  res = 0;                     // the original keeps it in id's argument slot
-    CreateImageFromResource2(refObj, &res, 0, -1, -1);
-    ((VFIP)(*(void***)img)[0x14 / 4])(img, 0, res);
-    ((VF0)wvt[0x90 / 4])(w);
+    Res_s00de_e770* res = 0;            // the original keeps it in id's argument slot
+    CreateImageFromResource2(refObj, (void**)&res, 0, -1, -1);
+    img->SetImage(0, res);
+    w->Invalidate();
     if (res != 0)
-        ((VF0)(*(void***)res)[1])(res);    // Release
+        res->Release();
 }
 
 struct ImageRef_s00dee800 {
@@ -13898,18 +13935,8 @@ void SP::GalaxyUI::FUN_00deed40()
         mpRef614 = 0;
         ((VF0)(*(void***)r)[2])(r);
     }
-    mMap520.DoNukeSubtree(mMap520.mp0c);
-    mMap520.mpRoot  = &mMap520.mpAnchor;
-    mMap520.mp0c    = 0;
-    mMap520.mFlag   = 0;
-    mMap520.mnSize  = 0;
-    mMap520.mpAnchor = &mMap520.mpAnchor;
-    mMap40.DoNukeSubtree(mMap40.mp0c);
-    mMap40.mp0c     = 0;
-    mMap40.mFlag    = 0;
-    mMap40.mnSize   = 0;
-    mMap40.mpRoot   = &mMap40.mpAnchor;
-    mMap40.mpAnchor = &mMap40.mpAnchor;
+    mMap520.reset_s00de_ed40();
+    mMap40.reset_s00de_ed40();
 }
 
 // @ 0x00deede0
@@ -13959,22 +13986,37 @@ char SP::GalaxyUI::FUN_00deee80(int mode)
     return 1;
 }
 
+struct PanelIds_s00de_ef20 {
+    uint32_t a, b, c;
+    PanelIds_s00de_ef20() : a(0), b(0), c(0) {}
+};
+struct IntRbIter {
+    RBNode_s00de_e450* mpNode;
+    IntRbIter(RBNode_s00de_e450* p) : mpNode(p) {}
+};
+struct IntRbTree {
+    IntRbIter find(const int32_t* pKey);   // 0x00e39fb0
+};
+struct PanelWindow_s00de_ef20 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78();
+    virtual void SetVisible(int a, int b);
+};
+
 // @ 0x00deef20
-void SP::GalaxyUI::FUN_00deef20(unsigned a, unsigned b, void* map)
+void SP::GalaxyUI::FUN_00deef20(int key, void* map, unsigned b)
 {
-    Rbtree* tree = (Rbtree*)map;
-    void*   end  = &tree->mpAnchor;
-    void*   it[2];
-    uint32_t key = b;
-    void**  found = (void**)RbtreeFind(it, &key, map);
-    RBNode_s00de_e450* node  = (RBNode_s00de_e450*)*found;
-    if (node == (RBNode_s00de_e450*)end) return;
-    void* w = mLayout.FindWindowByID(0x5384881, 1);
-    ((VF2)(*(void***)w)[0x7c / 4])(w, 1, 0);
-    GridObj* g = this->mpGrid;
-    void* self = (this != 0) ? (void*)&this->field_08 : 0;
-    gkGUI_PanelIDs_s00de_e450->FUN_00de5d00((void*)(size_t)node->mValue, self,
-                                  (void*)g->mB0, 0, 0, (void*)(size_t)b, 0);
+    RBNode_s00de_e450* node = ((IntRbTree*)map)->find(&key).mpNode;
+    if (node == (RBNode_s00de_e450*)&((Rbtree*)map)->mpAnchor) return;
+    ((PanelWindow_s00de_ef20*)mLayout.FindWindowByID(0x5384881, 1))->SetVisible(1, 0);
+    gkGUI_PanelIDs_s00de_e450->FUN_00de5d00((void*)(size_t)node->mValue, this ? (void*)&this->field_08 : 0,
+                                  (void*)mpGrid->mB0, PanelIds_s00de_ef20(), 0, (void*)(size_t)b, 0);
 }
 
 // @ 0x00deefb0

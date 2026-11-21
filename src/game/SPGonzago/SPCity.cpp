@@ -3277,7 +3277,7 @@ struct RefElemVec {
     char* mpBegin;
     char* mpEnd;
     char* mpCapacity;
-    void* erase_last(void* pos);
+    __declspec(noinline) void* erase_last(void* pos);
 };
 struct RefVecElem {
     RefCounted* m_p0;               // +0x0
@@ -8378,46 +8378,57 @@ void CityFlatten::Flatten5dc(PairVec* dst)
 }
 
 // @ 0x00bdf920
+struct NounObj_00bdf920 {
+    virtual void v00(); virtual void Release(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual bool IsPersistent();        // +0x2c
+};
+struct AutoRef_00bdf920 {
+    NounObj_00bdf920* p;
+    AutoRef_00bdf920& operator=(NounObj_00bdf920* q)
+    {
+        if (q != p) {
+            NounObj_00bdf920* old = p;
+            p = q;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    NounObj_00bdf920* operator->() const { return p; }
+    operator NounObj_00bdf920*() const { return p; }
+};
+struct RefElem_00bdf920 { AutoRef_00bdf920 p0; AutoRef_00bdf920 p4; uint32_t u8; };
+struct PlanetModel_00bdf920 {
+    void RemoveEdge(void* a, void* b);  // 0x00b86790
+    void Remove(void* obj);             // 0x00b7e360
+};
+struct NounMgr_00bdf920 { void RemoveNoun(void* noun); };   // 0x00b225d0
 void CreatureHost::RemoveByPointer(void* target)
 {
+    RefElem_00bdf920* it = *(RefElem_00bdf920**)((char*)this + 0x55c);
+    RefElem_00bdf920* end = *(RefElem_00bdf920**)((char*)this + 0x560);
     RefElemVec* vec = (RefElemVec*)((char*)this + 0x55c);
-    char* it = vec->mpBegin;
-    char* end = vec->mpEnd;
-    if (it == end)
-        return;
-    while (*(void**)it != target) {
-        it += 0xc;
-        if (it == end)
-            return;
-    }
-    if (it == end)
-        return;
-    char* found = it;
-    if (*(void**)found != target)
-        return;
-    RefCounted* p0 = *(RefCounted**)found;
-    if (p0 != 0) {
-        *(void**)found = 0;
-        p0->Release();
-    }
-    if (SP_PlanetModel() != 0) {
-        FUN_00b86790(this, target);
-        FUN_00b7e360(*(void**)(found + 4));
-    }
-    RefCounted* p4 = *(RefCounted**)(found + 4);
-    if (p4 != 0) {
-        // vt[0x2c]() must return false before removing the noun.
-        if (!((bool (*)(void*))((void**)p4->m_vtbl)[0x2c / 4])(p4)) {
-            void* nm = SP_NounManager();
-            SP_cGameNounManager_RemoveNoun(nm, p4);
+    for (; it != end; ++it)
+        if (it->p0.p == target)
+            break;
+    if (it != end && it->p0.p == target) {
+        if (NounObj_00bdf920* p = it->p0.p) {
+            it->p0.p = 0;
+            p->Release();
         }
+        if (SP_PlanetModel()) {
+            ((PlanetModel_00bdf920*)SP_PlanetModel())->RemoveEdge(this, target);
+            ((PlanetModel_00bdf920*)SP_PlanetModel())->Remove(it->p4);
+        }
+        if (it->p4 && !it->p4->IsPersistent())
+            ((NounMgr_00bdf920*)SP_NounManager())->RemoveNoun(it->p4);
+        if (NounObj_00bdf920* p = it->p4.p) {
+            it->p4.p = 0;
+            p->Release();
+        }
+        vec->erase_last(it);
     }
-    RefCounted* p4b = *(RefCounted**)(found + 4);
-    if (p4b != 0) {
-        *(void**)(found + 4) = 0;
-        p4b->Release();
-    }
-    vec->erase_last(found);
 }
 
 // @ 0x00bdf9e0

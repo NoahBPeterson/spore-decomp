@@ -407,7 +407,7 @@ extern "C" int __fastcall FUN_00f94f80(int self, int)
 // 0x00f94fa0 -- refresh the property-derived arrays from the model.
 // ===========================================================================
 // @ 0x00f94fa0
-extern "C" void __fastcall FUN_00f94fa0(int* self, int)
+extern "C" void __fastcall FUN_00f94fa0(int* self)
 {
     int model = self[0x2f];
     int* vecHead = self + 0x31;
@@ -459,29 +459,37 @@ extern "C" void __fastcall FUN_00f94fa0(int* self, int)
 // ===========================================================================
 // 0x00f95150 -- reload the property list from the model and refresh.
 // ===========================================================================
+struct PropMgr_s00f95150 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28();
+    virtual bool GetPropertyList(int instance, int group, void* out);   // +0x2c
+};
+struct RefObj_s00f95150 {
+    virtual void AddRef();
+    virtual void Release();   // +0x04
+};
 // @ 0x00f95150
 extern "C" void __fastcall FUN_00f95150(char* self, int, int a2, int a3, int a4)
 {
-    if ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 1 & 1) != 0)
+    bool b1 = ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 1) & 1) != 0;
+    if (b1)
         *(uint32_t*)(self + 0x9c) = 1;
-    if ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 2 & 1) != 0)
+    bool b2 = ((*(uint32_t*)(*(int*)(self + 0xc) + 8) >> 2) & 1) != 0;
+    if (b2)
         *(uint32_t*)(self + 0xa0) = 1;
     *(int*)(self + 0x10) = a2;
     *(int*)(self + 0x14) = a4;
 
-    void* pm = FUN_0067de30();
-    char* slot = self + 0xbc;
-    int old = *(int*)slot;
+    PropMgr_s00f95150* pm = (PropMgr_s00f95150*)FUN_0067de30();
+    RefObj_s00f95150** slot = (RefObj_s00f95150**)(self + 0xbc);
+    RefObj_s00f95150* old = *slot;
     if (old) {
-        *(int*)slot = 0;
-        ((FnV)(*(void***)old)[4 / 4])((void*)old);
+        *slot = 0;
+        old->Release();
     }
-    int ok = ((FnIV)(*(void***)pm)[0x2c / 4])(pm,
-                 *(int*)(*(int*)(self + 0xc) + 0xc),
-                 *(int*)(*(int*)(self + 0xc) + 0x14),
-                 (int)slot, 0);
-    if (ok)
-        FUN_00f94fa0((int*)self, 0);
+    if (pm->GetPropertyList(*(int*)(*(int*)(self + 0xc) + 0xc), *(int*)(*(int*)(self + 0xc) + 0x14), slot))
+        FUN_00f94fa0((int*)self);
 }
 
 // ===========================================================================
@@ -519,24 +527,23 @@ void XfPair_s00f951e0::Set(const void* a, const void* b)
 // 0x00f95230 -- reload from an args descriptor (opcode 6).
 // ===========================================================================
 // @ 0x00f95230
-extern "C" int __fastcall FUN_00f95230(char* self, int, int code, int* desc)
+extern "C" bool __fastcall FUN_00f95230(char* self, int, int code, int* desc, int)
 {
     if (code != 6)
-        return 0;
+        return false;
     *(uint32_t*)(self + 0xc4) = 0;
     *(int*)(self + 0xe0) = desc[2];
 
-    void* pm = FUN_0067de30();
-    char* slot = self + 0xbc;
-    int old = *(int*)slot;
+    PropMgr_s00f95150* pm = (PropMgr_s00f95150*)FUN_0067de30();
+    RefObj_s00f95150** slot = (RefObj_s00f95150**)(self + 0xbc);
+    RefObj_s00f95150* old = *slot;
     if (old) {
-        *(int*)slot = 0;
-        ((FnV)(*(void***)old)[4 / 4])((void*)old);
+        *slot = 0;
+        old->Release();
     }
-    int ok = ((FnIV)(*(void***)pm)[0x2c / 4])(pm, desc[0], desc[1], (int)slot, 0);
-    if (ok)
-        FUN_00f94fa0((int*)self, 0);
-    return 1;
+    if (pm->GetPropertyList(desc[0], desc[1], slot))
+        FUN_00f94fa0((int*)self);
+    return true;
 }
 
 // ===========================================================================
@@ -665,29 +672,50 @@ extern "C" void __fastcall FUN_00f95490(char* self, int, int newUd)
 // ===========================================================================
 // 0x00f95540 -- compact the list, keeping only the "ready" members.
 // ===========================================================================
+struct Elem_s00f95540 {
+    virtual void AddRef();                     // +0x00
+    virtual void Release();                    // +0x04
+    virtual void f08();
+    virtual void f0c();
+    virtual bool IsReady();                    // +0x10
+};
+struct Ptr_s00f95540 {
+    Elem_s00f95540* mp;
+    Ptr_s00f95540& operator=(const Ptr_s00f95540& o) {
+        Elem_s00f95540* p = o.mp;
+        if (p != mp) {
+            Elem_s00f95540* old = mp;
+            if (p)
+                p->AddRef();
+            mp = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
+    Elem_s00f95540* operator->() const { return mp; }
+};
+struct Vec_s00f95540 {
+    Ptr_s00f95540* mpBegin;
+    Ptr_s00f95540* mpEnd;
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    Ptr_s00f95540& operator[](unsigned i) { return mpBegin[i]; }
+    Ptr_s00f95540* erase(Ptr_s00f95540* first, Ptr_s00f95540* last);   // 0x00533500
+};
+struct Owner_s00f95540 {
+    char pad00[0xa8];
+    Vec_s00f95540 mItems;           // +0xa8
+};
 // @ 0x00f95540
-extern "C" void __fastcall FUN_00f95540(char* self, int)
+extern "C" void __fastcall FUN_00f95540(Owner_s00f95540* self, int)
 {
-    char* vec = self + 0xa8;
-    unsigned n = (unsigned)(*(int*)(self + 0xac) - *(int*)vec) >> 2;
     unsigned w = 0;
-    for (unsigned i = 0; i < n; ++i) {
-        int el = *(int*)(*(int*)vec + i * 4);
-        if (((FnI)(*(void***)el)[0x10 / 4])((void*)el, 0)) {
-            if (w < i) {
-                int* arr = *(int**)vec;
-                int cur = arr[i];
-                int old = arr[w];
-                if (cur != old) {
-                    if (cur)
-                        ((FnV)(*(void***)cur)[0 / 4])((void*)cur);
-                    arr[w] = cur;
-                    if (old)
-                        ((FnV)(*(void***)old)[4 / 4])((void*)old);
-                }
-            }
+    for (unsigned i = 0; i < self->mItems.size(); ++i) {
+        if (self->mItems[i]->IsReady()) {
+            if (i > w)
+                self->mItems[w] = self->mItems[i];
             ++w;
         }
     }
-    FUN_00533500((void*)(*(int*)vec + w * 4), (void*)*(int*)(self + 0xac));
+    self->mItems.erase(self->mItems.mpBegin + w, self->mItems.mpEnd);
 }

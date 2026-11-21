@@ -3,5 +3,4 @@
 00edb4c0  420  acts-bar init/popup menu build; abridged cString/menu loop. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
 00edb750  478  message handler switch; complete. flags /O2 /MD /Gy /TP; difftest WEAK (400 valid, 10.4% coverage, no mismatch)
 00edbac0  398  UI init; complete (thiscall cSPUILayout/cConnectionDialog). flags /O2 /MD /Gy /TP; equiv: WEAK (85 valid, 29.0% coverage, no mismatch)
-00edbd30  131  register/unregister message handler; complete. flags /O2 /MD /Gy /TP; equiv: PASS (270 valid, 98.2% coverage)
 00edbef0  141  message handler; complete (fastcall/ecx=this, bool). flags /O2 /MD /Gy /TP; equiv: WEAK (400 valid, 55.6% coverage, no mismatch)

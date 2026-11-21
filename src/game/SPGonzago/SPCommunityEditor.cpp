@@ -3459,7 +3459,7 @@ struct C103 {
     void* Destroy(u8 flags);               // 0x00d07890
     u8    CreateLayout(void* param);       // 0x00d078d0
     void* Init(void* param);               // 0x00d07a40
-    u8    PickEventId();                   // 0x00d07ab0
+    u8    PickEventId(int unused);         // 0x00d07ab0
     int   GetValue(int which);             // 0x00d07bb0
     void  SetValue(int which, int amount); // 0x00d07ca0
     int   GetFlag(int which);              // 0x00d07d00
@@ -4183,54 +4183,62 @@ void* C103::Init(void* param)
     return this;
 }
 
+struct Checker_s00d07ab0 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40(); virtual void f44(); virtual void f48(); virtual void f4c();
+    virtual void f50(); virtual void f54();
+    virtual bool IsReady();                   // +0x58
+};
+struct Tool_s00d07ab0 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual bool IsActive();                  // +0x10
+};
+struct ToolMgr_s00d07ab0 {
+    virtual void f00(); virtual void f04(); virtual void f08();
+    virtual void* GetTool(u32 id);            // +0x0c
+};
+struct Host_s00d07ab0 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30();
+    virtual ToolMgr_s00d07ab0* GetToolMgr();  // +0x34
+};
 // @ 0x00d07ab0
-u8 C103::PickEventId()
+u8 C103::PickEventId(int unused)
 {
-    void* q = FUN_00b3d240();
-    void* mgr = (*(void*(__thiscall**)(void*))((char*)*(void**)q + 0x34))(q);
-    u32 id;
+    ToolMgr_s00d07ab0* mgr = ((Host_s00d07ab0*)FUN_00b3d240())->GetToolMgr();
     if (mgr != 0) {
-        void* v1 = ((Ext*)mgr)->FindLocalV(0xe89adf71);
-        void* v2 = ((Ext*)mgr)->FindLocalV(0xe9cb8ba);
-        void* v3 = ((Ext*)mgr)->FindLocalV(0x137e8e0);
-        void* v4 = ((Ext*)mgr)->FindLocalV(0x436f315);
-        void* v5 = ((Ext*)mgr)->FindLocalV(0x175cdc9);
-        void* v6;
-        u8 ok;
-        if (v1 != 0) {
-            ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v1 + 0x10))(v1);
-            if (ok == 0) goto fallback;
-        }
-        if (v2 == 0) {
-            if (v3 == 0) {
-                if (v4 == 0) {
-                    if (v5 == 0) goto fallback;
-                    v6 = (char*)v5 + 0x70;
-                } else {
-                    v6 = (char*)v4 + 0x34;
-                }
-                ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v6 + 0x58))(v6);
-            } else {
-                v6 = (char*)v3 + 0x34;
-                ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v6 + 0x58))(v6);
-                if (ok == 0) goto fallback;
-                ok = (u8)FUN_00d09740(v3);
-            }
-        } else {
-            v6 = (char*)v2 + 0x34;
-            ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v6 + 0x58))(v6);
-            if (ok == 0) goto fallback;
-            ok = (u8)FUN_00d09740(v2);
-        }
-        if (ok != 0) {
-            id = 0x648fbf1;
-            goto dispatch;
+        Tool_s00d07ab0* v1 = (Tool_s00d07ab0*)mgr->GetTool(0xe89adf71);
+        char* v2 = (char*)mgr->GetTool(0xe9cb8ba);
+        char* v3 = (char*)mgr->GetTool(0x137e8e0);
+        char* v4 = (char*)mgr->GetTool(0x436f315);
+        char* v5 = (char*)mgr->GetTool(0x175cdc9);
+        if (v1 != 0 && !v1->IsActive())
+            goto fallback;
+        bool ok;
+        if (v2 != 0)
+            ok = ((Checker_s00d07ab0*)(v2 + 0x34))->IsReady();
+        else if (v3 != 0) {
+            if (!((Checker_s00d07ab0*)(v3 + 0x34))->IsReady())
+                goto fallback;
+            ok = (*(cCommunityEditor_s00d0_91c0**)((char*)this + 8))->FUN_00d09740(v3);
+        } else if (v4 != 0)
+            ok = ((Checker_s00d07ab0*)(v4 + 0x34))->IsReady();
+        else if (v5 != 0)
+            ok = ((Checker_s00d07ab0*)(v5 + 0x70))->IsReady();
+        else
+            goto fallback;
+        if (ok) {
+            ((Ext*)FUN_0067cab0())->FindLocal(0x648fbf1);
+            return 0;
         }
     }
 fallback:
-    id = 0x1002;
-dispatch:
-    ((Ext*)FUN_0067cab0(id))->FindLocal(id);
+    ((Ext*)FUN_0067cab0())->FindLocal(0x1002);
     return 0;
 }
 

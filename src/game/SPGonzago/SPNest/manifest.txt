@@ -23,3 +23,5 @@
 ../src/game/SPGonzago/SPNest.cpp  ?GetProfileForGeneration@cHerd_s00c6_a550@SP@@QAEPAXI@Z  00c6abf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SpawnAnimalsIfUnderfilled@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6bd60@@YIXPAX@Z  00c6bd60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6af40@SP@@YAHPAUAnimalNoun@1@PAX@Z  00c6af40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6ce30@@YAXPAXPAUIntVec_s00c6_ce30@@@Z  00c6ce30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -779,46 +779,26 @@ void EapdAssetManager::DisposeArray(void** arr, unsigned n)
 
 // @ 0x00a64ad0
 namespace EA { namespace Audio { namespace Eapd {
+struct ObjectHashNode;
 void ObjectHashMap::Resize(unsigned newCount)
 {
-    unsigned oldCount = mNumBuckets08;
-    unsigned* oldBuckets = (unsigned*)mpBuckets04;
-    void* alloc = (char*)this + 0x1c;
-    void** vtbl = *(void***)alloc;
-    void* fn = vtbl[2];
-    unsigned* nb = (unsigned*)((void* (__thiscall*)(void*, unsigned))fn)(alloc, newCount * 4 + 4);
+    ObjectHashMapAlloc* alloc = &((ObjectHashMapObj*)this)->mAlloc;
+    ObjectHashNode** nb = (ObjectHashNode**)alloc->Alloc(newCount * 4 + 4);
     memset_f(nb, 0, newCount * 4);
-    nb[newCount] = 0xffffffff;
-    unsigned i = 0;
-    unsigned* newb = nb;
-    if (oldCount > 0) {
-        do {
-            unsigned* n = (unsigned*)oldBuckets[i];
-            if (n) {
-                unsigned* b = newb;
-                do {
-                    unsigned h = *n % newCount;
-                    unsigned* next = (unsigned*)((char*)n + 0xc);
-                    unsigned* node = n;
-                    mpBuckets04 = 0;
-                    oldBuckets[i] = (unsigned)*(unsigned**)((char*)n + 0xc);
-                    node = n;
-                    unsigned* slot = b + h;
-                    *(unsigned**)((char*)n + 0xc) = (unsigned*)*slot;
-                    *slot = (unsigned)n;
-                    n = (unsigned*)oldBuckets[i];
-                } while (n);
-            }
-            ++i;
-        } while (i < oldCount);
+    nb[newCount] = (ObjectHashNode*)0xffffffff;
+    for (unsigned i = 0; i < mNumBuckets08; ++i) {
+        ObjectHashNode* n;
+        while ((n = ((ObjectHashNode**)mpBuckets04)[i]) != 0) {
+            unsigned h = *(unsigned*)n % newCount;
+            ((ObjectHashNode**)mpBuckets04)[i] = *(ObjectHashNode**)((char*)n + 0xc);
+            *(ObjectHashNode**)((char*)n + 0xc) = nb[h];
+            nb[h] = n;
+        }
     }
-    if (oldCount > 1) {
-        void** a2 = *(void***)((char*)this + 0x1c);
-        void* f2 = a2[3];
-        ((void (__thiscall*)(void*, void*))f2)((char*)this + 0x1c, oldBuckets);
-    }
-    mpBuckets04 = nb;
+    if (mNumBuckets08 > 1)
+        alloc->Free(mpBuckets04);
     mNumBuckets08 = newCount;
+    mpBuckets04 = nb;
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -835,27 +815,24 @@ ObjectHashMapObj::~ObjectHashMapObj()
 
 // @ 0x00a64be0
 namespace EA { namespace Audio { namespace Eapd {
+struct ObjectHashNode { uint32_t mKey; uint32_t m04; uint32_t m08; ObjectHashNode* mpNext; };
 unsigned ObjectHashMap::Erase(uint32_t* key)
 {
     unsigned before = mSize0c;
-    unsigned idx = *key % mNumBuckets08;
-    unsigned** bucket = (unsigned**)((char*)mpBuckets04 + idx * 4);
+    ObjectHashNode** bucket = (ObjectHashNode**)mpBuckets04 + *key % mNumBuckets08;
     if (*bucket) {
-        unsigned* cur = *bucket;
-        while (*cur != *key) {
-            bucket = (unsigned**)((char*)cur + 0xc);
-            cur = *bucket;
-            if (!cur)
+        uint32_t k = *key;
+        do {
+            if (k == (*bucket)->mKey)
                 break;
-        }
+            bucket = &(*bucket)->mpNext;
+        } while (*bucket);
         while (*bucket) {
-            unsigned* node = *bucket;
-            if (*node != *key)
+            ObjectHashNode* node = *bucket;
+            if (*key != node->mKey)
                 break;
-            *bucket = *(unsigned**)((char*)node + 0xc);
-            void** a = *(void***)((char*)this + 0x1c);
-            void* f = a[3];
-            ((void (__thiscall*)(void*, void*))f)((char*)this + 0x1c, node);
+            *bucket = node->mpNext;
+            ((ObjectHashMapObj*)this)->mAlloc.Free(node);
             --mSize0c;
         }
     }

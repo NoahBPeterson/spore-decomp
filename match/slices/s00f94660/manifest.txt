@@ -5,3 +5,6 @@ slices/s00f94660/s00f94660.cpp  @FUN_00f94f50@12  00f94f50  /O2 /MD /Gy /TP /arc
 slices/s00f94660/s00f94660.cpp  @FUN_00f94f80@8  00f94f80  /O2 /MD /Gy /TP /arch:SSE
 slices/s00f94660/s00f94660.cpp  @FUN_00f95430@12  00f95430  /O2 /MD /Gy /TP /arch:SSE
 slices/s00f94660/s00f94660.cpp  ?Set@XfPair_s00f951e0@@QAEXPBX0@Z  00f951e0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00f94660/s00f94660.cpp  @FUN_00f95150@20  00f95150  /O2 /MD /Gy /TP /arch:SSE
+slices/s00f94660/s00f94660.cpp  @FUN_00f95230@20  00f95230  /O2 /MD /Gy /TP /arch:SSE
+slices/s00f94660/s00f94660.cpp  @FUN_00f95540@8  00f95540  /O2 /MD /Gy /TP /arch:SSE

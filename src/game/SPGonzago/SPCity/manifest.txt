@@ -87,3 +87,4 @@
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd85c0@@YIXPAUcCity@@PAXPAMPAH@Z  00bd85c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?CopyBucket28@@YAPAEPAE00@Z  00bdaa90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?AddUniqueId@IdHost@@QAE_NI@Z  00bdf6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?RemoveByPointer@CreatureHost@@QAEXPAX@Z  00bdf920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
