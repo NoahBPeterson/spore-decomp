@@ -672,29 +672,50 @@ extern "C" void __fastcall FUN_00f95490(char* self, int, int newUd)
 // ===========================================================================
 // 0x00f95540 -- compact the list, keeping only the "ready" members.
 // ===========================================================================
+struct Elem_s00f95540 {
+    virtual void AddRef();                     // +0x00
+    virtual void Release();                    // +0x04
+    virtual void f08();
+    virtual void f0c();
+    virtual bool IsReady();                    // +0x10
+};
+struct Ptr_s00f95540 {
+    Elem_s00f95540* mp;
+    Ptr_s00f95540& operator=(const Ptr_s00f95540& o) {
+        Elem_s00f95540* p = o.mp;
+        if (p != mp) {
+            Elem_s00f95540* old = mp;
+            if (p)
+                p->AddRef();
+            mp = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
+    Elem_s00f95540* operator->() const { return mp; }
+};
+struct Vec_s00f95540 {
+    Ptr_s00f95540* mpBegin;
+    Ptr_s00f95540* mpEnd;
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    Ptr_s00f95540& operator[](unsigned i) { return mpBegin[i]; }
+    Ptr_s00f95540* erase(Ptr_s00f95540* first, Ptr_s00f95540* last);   // 0x00533500
+};
+struct Owner_s00f95540 {
+    char pad00[0xa8];
+    Vec_s00f95540 mItems;           // +0xa8
+};
 // @ 0x00f95540
-extern "C" void __fastcall FUN_00f95540(char* self, int)
+extern "C" void __fastcall FUN_00f95540(Owner_s00f95540* self, int)
 {
-    char* vec = self + 0xa8;
-    unsigned n = (unsigned)(*(int*)(self + 0xac) - *(int*)vec) >> 2;
     unsigned w = 0;
-    for (unsigned i = 0; i < n; ++i) {
-        int el = *(int*)(*(int*)vec + i * 4);
-        if (((FnI)(*(void***)el)[0x10 / 4])((void*)el, 0)) {
-            if (w < i) {
-                int* arr = *(int**)vec;
-                int cur = arr[i];
-                int old = arr[w];
-                if (cur != old) {
-                    if (cur)
-                        ((FnV)(*(void***)cur)[0 / 4])((void*)cur);
-                    arr[w] = cur;
-                    if (old)
-                        ((FnV)(*(void***)old)[4 / 4])((void*)old);
-                }
-            }
+    for (unsigned i = 0; i < self->mItems.size(); ++i) {
+        if (self->mItems[i]->IsReady()) {
+            if (i > w)
+                self->mItems[w] = self->mItems[i];
             ++w;
         }
     }
-    FUN_00533500((void*)(*(int*)vec + w * 4), (void*)*(int*)(self + 0xac));
+    self->mItems.erase(self->mItems.mpBegin + w, self->mItems.mpEnd);
 }

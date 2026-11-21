@@ -4,4 +4,3 @@
 00f94fa0 230 /O2 /MD /Gy /TP /arch:SSE equiv PASS -- property-array refresh (size 422 vs 425); 297/400 valid, 95.9% coverage; residual is spill/scheduling
 00f952b0 247 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- GmeRefCount-derived component ctor (size 276 vs 320); 5/5 mismatch, first: execution (orig calls into a ctor chain ours does not); incomplete [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 esp]
 00f95490 113 /O2 /MD /Gy /TP /arch:SSE equiv WEAK -- attach/notify user-data (size 169 vs 163); 210/400 valid (need 200), 51.6% coverage (need 60%)
-00f95540 158 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- compact ready list (size 177 vs 175); 5/5 mismatch, first: execution
