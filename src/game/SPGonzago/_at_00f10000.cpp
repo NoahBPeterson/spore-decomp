@@ -169,6 +169,7 @@ struct cSPPaletteItemUI {
 };
 template <class T> struct AutoRefCount {
     T* mp;
+    T* operator->() const { return mp; }
     AutoRefCount& operator=(T* p)
     {
         T* old = mp;
@@ -2741,8 +2742,7 @@ void cScenarioUnlockItemUI::Init(void* a, void* b, void* c, cSPPaletteItem* d)
         ids[1] = 0x4d7d9be4;
         ids[2] = 0x0e03db96;
         for (int i = 0; i < 3; i++) {
-            u32 id = ids[i];
-            IWin* w = mpLayout.mp->FindWindowByID(id, 1);
+            IWin* w = mpLayout->FindWindowByID(ids[i], 1);
             if (w)
                 w->SetVisible(1, 0);
         }
