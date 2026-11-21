@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs
 008dd820 99 complete: FUN_008dd820; body/register allocation differs
 008ddb00 122 complete: FUN_008ddb00; body/register allocation differs

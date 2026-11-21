@@ -2149,20 +2149,25 @@ void* PFRecordWrite_s008d_d0d0::ctor(int a2, int a3, int a4, void* a5, int a6)
     return this;
 }
 
+struct IDb_8dd1f0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual void CloseRecord(void* rec);   // +0x3c
+};
 // @ 0x008dd1f0
 void* PFRecordWrite_s008d_d0d0::_virtual_dtor(int flags)
 {
-    vtbl = (void**)0x1436968;
-    vtbl20 = (void**)0x143692c;
-    if (mField1c != 0) {
-        void* db = mpDatabase;
-        ((void (__thiscall*)(void*, void*))(((void**)*(void**)db)[0x3c / 4]))(db, this);
-    }
-    FUN_008dcbf0(this);
-    FUN_00931e70(mFileStream);
-    FUN_0093bde0(mMemStream);
-    vtbl20 = (void**)0x13f3a68;
-    vtbl = (void**)0x13effb8;
+    vtbl = (void**)g_1436968;
+    vtbl20 = (void**)g_143692c;
+    if (mField1c != 0)
+        ((IDb_8dd1f0*)mpDatabase)->CloseRecord(this);
+    ((void* (__thiscall*)(void*))FUN_008dcbf0)(this);
+    ((void* (__thiscall*)(void*))FUN_00931e70)(mFileStream);
+    ((void* (__thiscall*)(void*))FUN_0093bde0)(mMemStream);
+    vtbl20 = (void**)g_13f3a68;
+    vtbl = (void**)&gVtbl13effb8;
     if (flags & 1)
         operator_delete__(this);
     return this;
