@@ -1462,15 +1462,23 @@ const float* Bounds::UnionBounds(const float* r)
         mMinX = r[0]; mMinY = r[1]; mMaxX = r[2]; mMaxY = r[3];
         return r;
     }
-    if (mMaxX <= r[0] || r[2] <= mMinX || mMaxY <= r[1] || r[3] <= mMinY) {
-        mMinX = 0; mMinY = 0; mMaxX = 0; mMaxY = 0;
-        return r;
-    }
+    float rx = r[0];
+    if (mMaxX <= rx)
+        goto empty;
+    {
+    float mnx = mMinX;
+    if (r[2] <= mnx || mMaxY <= r[1] || r[3] <= mMinY)
+        goto empty;
     _ReadWriteBarrier();
-    if (r[0] > mMinX) mMinX = r[0];
-    if (r[1] > mMinY) mMinY = r[1];
-    if (r[2] < mMaxX) mMaxX = r[2];
-    if (r[3] < mMaxY) mMaxY = r[3];
+    if (!(mnx > rx)) mnx = rx;
+    mMinX = mnx;
+    float y = mMinY; if (!(y > r[1])) y = r[1]; mMinY = y;
+    float x2 = mMaxX; if (!(r[2] > x2)) x2 = r[2]; mMaxX = x2;
+    float y2 = mMaxY; if (!(r[3] > y2)) y2 = r[3]; mMaxY = y2;
+    return r;
+    }
+empty:
+    mMinY = 0; mMaxX = 0; mMinX = 0; mMaxY = 0;
     return r;
 }
 
