@@ -1161,19 +1161,28 @@ void DialogSub::OnModalEnd(void* pWindow, int id)
   (void)pWindow;
 }
 
+extern "C" char g_1520ce4[];
+struct IRegWnd_620e {   // UTFWin::IWindow slots 0x28/0x2c
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24();
+    virtual unsigned GetFlags();   // +0x28
+    virtual unsigned GetState();   // +0x2c
+};
+
 // @ 0x00620e50
 void cRegDialog::DialogUiNotify()
 {
   cRegDialog* self = this;
-  void* w = self->mLayout.FindWindowByID(0x519d9b8, true);
+  IRegWnd_620e* w = (IRegWnd_620e*)self->mLayout.FindWindowByID(0x519d9b8, true);
   if (w == 0) return;
-  if ((WndFlags28(w) & 2) == 0) return;
-  if ((WndFlags28(w) & 1) == 0) return;
-  void* w2 = self->mLayout.FindWindowByID(0x6555770, true);
-  if (gFlag1520a24 != 0 && w2 != 0 && (WndFlags2c(w2) & 4) != 0) {
+  if ((w->GetFlags() & 2) == 0) return;
+  if ((w->GetFlags() & 1) == 0) return;
+  IRegWnd_620e* w2 = (IRegWnd_620e*)self->mLayout.FindWindowByID(0x6555770, true);
+  if (gFlag1520a24 != 0 && w2 != 0 && (w2->GetState() & 4) != 0) {
     gFlag1520a24 = 0;
-    void* p = (char*)self + 8;
-    if (FUN_00809db0(p, (const void*)0x1520ce4)) {
+    void* p = self ? (char*)self + 8 : 0;
+    if (FUN_00809db0(p, g_1520ce4)) {
       self->mState = 2;
       return;
     }

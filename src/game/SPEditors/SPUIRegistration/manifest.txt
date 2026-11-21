@@ -20,3 +20,4 @@
 ../src/game/SPEditors/SPUIRegistration.cpp  ?DispatchA@Element@@QAEXPAX@Z  008e4ab0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIRegistration.cpp  ?DispatchB@Element@@QAEEPAX@Z  008e4ad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIRegistration.cpp  ?DispatchC@Element@@QAEXPAX@Z  008e4af0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIRegistration.cpp  ?DialogUiNotify@cRegDialog@@QAEXXZ  00620e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
