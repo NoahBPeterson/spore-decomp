@@ -6,3 +6,4 @@ slices/s00b5cfe0/s00b5cfe0.cpp  _FUN_00b5d7a0@4  00b5d7a0  /O2 /MD /Gy /EHsc /TP
 slices/s00b5cfe0/s00b5cfe0.cpp  ?FUN_00b5db90@cGonzagoMode@@QAEXXZ  00b5db90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5cfe0/s00b5cfe0.cpp  ?FUN_00b5da50@cGonzagoMode@@QAEXPAXD@Z  00b5da50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5cfe0/s00b5cfe0.cpp  ?FUN_00b5d130@cGonzagoMode@@QAEXI@Z  00b5d130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5cfe0/s00b5cfe0.cpp  ??1cGonzagoMode@@QAE@XZ  00b5d7c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

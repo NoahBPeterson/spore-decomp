@@ -6,8 +6,10 @@
 extern "C" char g_13ebb38[];
 extern "C" char g_13f09b4[];
 extern "C" char g_1667bad[];
+extern "C" char g_1462818[], g_1462810[], g_13eb394[], g_13ef094[];
 
 #include "s00b5cfe0.h"
+#include <intrin.h>
 
 extern "C" void* operator_new_ea(unsigned, const char*, int, int, int, int);
 extern "C" int   atexit(void (*)(void));
@@ -75,32 +77,36 @@ bool cGonzagoMode::FUN_00b5d510(int param)
 }
 
 // @ 0x00b5d7c0 (destructor)
+struct RefVector_b5d7c0 { void Destroy(); };                    // 0x00ae6970
+struct RecordList_b5d7c0 { void DoClear(); };                   // 0x0060c4a0
+struct HandlerReg_b5d7c0 { void* mpServer; void* mpHandler; void* mpIds; uint32_t mnCount; int mnFlag; };
+struct IRefA_b5d7c0 { virtual void v00(); virtual void v04(); virtual void v08(); virtual void Release(); };
+struct IRefB_b5d7c0 { virtual void v00(); virtual void v04(); virtual void Release(); };
 cGonzagoMode::~cGonzagoMode()
 {
-    vt0 = (void**)&g_vt0dummy;
-    vt4 = (void**)&g_vt1dummy;
-    // eastl::vector<AutoRefCount<cStarRecord>> dtor at +0x5c
-    // (approximated: the vector release is not reconstructed here)
-    FUN_00ae6970((char*)this + 0x5c);
-    if (*(int*)((char*)this + 0x48))
+    vt0 = (void**)g_1462818;
+    vt4 = (void**)g_1462810;
+    ((RefVector_b5d7c0*)((char*)this + 0x5c))->Destroy();
+    HandlerReg_b5d7c0* r = (HandlerReg_b5d7c0*)((char*)this + 0x48);
+    if (void* srv = r->mpServer)
     {
-        *(int*)((char*)this + 0x48) = 0;
-        RemoveHandler_571db0((char*)this + 0x48, (char*)this + 0x4c,
-                             (char*)this + 0x50, (char*)this + 0x54, (char*)this + 0x58);
+        r->mpServer = 0;
+        RemoveHandler_571db0(srv, r->mpHandler, r->mpIds, (void*)r->mnCount, (void*)r->mnFlag);
     }
-    if (*(int*)((char*)this + 0x34))
+    r = (HandlerReg_b5d7c0*)((char*)this + 0x34);
+    if (void* srv = r->mpServer)
     {
-        *(int*)((char*)this + 0x34) = 0;
-        RemoveHandler_571db0((char*)this + 0x34, (char*)this + 0x38,
-                             (char*)this + 0x3c, (char*)this + 0x40, (char*)this + 0x44);
+        r->mpServer = 0;
+        RemoveHandler_571db0(srv, r->mpHandler, r->mpIds, (void*)r->mnCount, (void*)r->mnFlag);
     }
-    FUN_0060c4a0((char*)this + 0x20);
-    if (*(void**)((char*)this + 0x1c))
-        ((void(__thiscall*)(void*))g_vfn(*(void**)((char*)this + 0x1c), 0xc))(*(void**)((char*)this + 0x1c));
-    if (*(void**)((char*)this + 0x18))
-        ((void(__thiscall*)(void*))g_vfn(*(void**)((char*)this + 0x18), 8))(*(void**)((char*)this + 0x18));
-    vt0 = (void**)&g_vt0dummy;
-    vt4 = (void**)&g_vt1dummy;
+    ((RecordList_b5d7c0*)((char*)this + 0x20))->DoClear();
+    if (IRefA_b5d7c0* a = *(IRefA_b5d7c0**)((char*)this + 0x1c))
+        a->Release();
+    if (IRefB_b5d7c0* b = *(IRefB_b5d7c0**)((char*)this + 0x18))
+        b->Release();
+    vt0 = (void**)g_13eb394;
+    _ReadWriteBarrier();
+    vt4 = (void**)g_13ef094;
 }
 
 // Intrusive list node used by the cGonzagoMode sample/key list at this+0x20 (EASTL layout).
