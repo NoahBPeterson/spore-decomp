@@ -8,5 +8,4 @@
 00e210b0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL external aggregate copy, huge memmove under harness
 00e21260 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution mismatch (calling convention of unnamed helper)
 00e213f0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL xmm1 clobber (register-ABI external callee)
-00e215d0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK equivalence weak/discarded inputs
 00e21640 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution mismatch (register-ABI external callee)

@@ -1143,8 +1143,7 @@ void __fastcall FUN_00e215d0(void* self_, s32, u8 flags)
 {
   u32 state;
   if (flags & 1) {
-    bool b = (flags & 2) != 0;
-    state = b * 2 + 2;
+    state = (flags & 2) ? 4 : 2;
   } else {
     state = (flags & 2) | 1;
   }
