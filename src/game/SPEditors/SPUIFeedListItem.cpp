@@ -176,6 +176,25 @@ struct P184Obj { void FUN_00829160(int v); };      // 0x00829160
 struct P40Obj  { void SetCallToActionMessage(void* p); }; // 0x006455b0
 struct Sub54   { unsigned char FUN_0054eac0(int v); };     // 0x0054eac0
 struct Key16 { uint32_t a, b, c, d; };
+struct IRefFI { virtual void AddRef(); virtual void Release(); };
+struct IAudioSysFI {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void* GetState();                          // +0x20
+    virtual void v09(); virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void v13();
+    virtual void SetEvent(int id);                     // +0x38
+    virtual void v15();
+    virtual void SetParam(int id, int v);              // +0x40
+    virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20();
+    virtual void v21();
+    virtual void Commit();                             // +0x58
+};
+struct IMsgServerFI {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04();
+    virtual void PostMessage(int id, void* msg, int z); // +0x14
+};
 struct FeedItemMessage {       // id 0xb3d53f95 browser message (WidA: B0+B1 bases)
     void*      mpVtbl0;        // +0x00  B0 vtable 0x0140029c
     void*      mpVtbl1;        // +0x04  B1 vtable 0x01400298
@@ -1078,28 +1097,28 @@ void FeedItem::FUN_00667ae0()
 // @ 0x00667b00
 void FeedItem::FUN_00667b00()
 {
-    void* at = EA_Audio_GetSystemAT();
-    void* r = at ? ((FnPtrV)VT(at)[8])(at) : 0;
+    IAudioSysFI* at = (IAudioSysFI*)EA_Audio_GetSystemAT();
+    void* r = at ? at->GetState() : 0;
 
-    void* at2 = EA_Audio_GetSystemAT();
+    IAudioSysFI* at2 = (IAudioSysFI*)EA_Audio_GetSystemAT();
     if (at2) {
-        ((FnVoidI)VT(at2)[14])(at2, 0x03475365);
-        ((FnVoidII)VT(at2)[16])(at2, 0x03475381, 0x0f05a8af);
-        ((FnVoidII)VT(at2)[16])(at2, 0x03475385, (int)r);
-        ((FnVoid)VT(at2)[22])(at2);
+        at2->SetEvent(0x03475365);
+        at2->SetParam(0x03475381, 0x0f05a8af);
+        at2->SetParam(0x03475385, (int)r);
+        at2->Commit();
     }
 
-    void* ms = SP_MessageServer();
+    IMsgServerFI* ms = (IMsgServerFI*)SP_MessageServer();
     FeedItemMessage buf;
     buf.mReserved08 = 0;
     buf.mpVtbl0 = vtFeedMsg0;
     buf.mpVtbl1 = vtFeedMsg1;
     buf.mnFeedItemID = 0;
     buf.mpItem = this;
-    if (this) ((FnVoid)VT(this)[0])(this);
+    if (this) ((IRefFI*)this)->AddRef();
     buf.mbByItem = 0;
     buf.mbForceReset = 0;
-    ((FnVoidIIP)VT(ms)[5])(ms, 0xb3d53f95, &buf, 0);
+    ms->PostMessage(0xb3d53f95, &buf, 0);
 
     mbMouseDownFlag = 0;
     const uint32_t extraId = mnExtraMessageID;
@@ -1111,12 +1130,12 @@ void FeedItem::FUN_00667b00()
         extra.mData[0][0] = (uint32_t)mpExtraMessageData;
         extra.mpVtbl = vtMessage5;
         extra.mnRCFlags = 0;
-        ((FnVoidIIP)VT(ms)[5])(ms, (int)extraId, &extra, 0);
+        ms->PostMessage((int)extra.mnId, &extra, 0);
         extra.Destruct();
     }
 
     if (mpField184) mpField184->FUN_00829160(1);
-    if (this) ((FnVoid)VT(this)[1])(this);
+    if (buf.mpItem) ((IRefFI*)buf.mpItem)->Release();
 }
 
 // @ 0x00667c40
