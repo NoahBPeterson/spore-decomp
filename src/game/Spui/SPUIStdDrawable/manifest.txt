@@ -12,3 +12,4 @@
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair28@Drawable_s0083_0c00@@QAE?AUDrawablePoint2@@H@Z  00830c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair30@Drawable_s0083_0c00@@QAE?AUDrawablePoint2@@H@Z  00830cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?CreateInstance@FactoryRegistry@@QAEPAHHPAPAXHH@Z  008304c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetImageInfo@Drawable_s0083_0c00@@QAEPAXH@Z  00830c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
