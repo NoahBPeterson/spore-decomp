@@ -2132,23 +2132,29 @@ void FUN_00aca730(void* obj, int* vec)
 }
 
 // @ 0x00aca7b0
-void __stdcall FUN_00aca7b0(uchar* p, uchar* end)
+struct Elem_s00aca7b0 { virtual void Destroy(int flags); int a, b; };
+struct Rec_s00aca7b0 {
+    int f0;
+    void* vt;                       // +0x04
+    int f8;
+    Elem_s00aca7b0* mpBegin;        // +0x0c
+    Elem_s00aca7b0* mpEnd;          // +0x10
+    int f14, f18, f1c;
+};
+void __stdcall FUN_00aca7b0(uchar* first, uchar* last)
 {
-    if (p < end) {
-        uint n = (((uint)(end - p) - 1) >> 5) + 1;
-        do {
-            *(void**)(p + 4) = (void*)0x145a164;
-            uchar* b = *(uchar**)(p + 0xc);
-            uchar* e2 = *(uchar**)(p + 0x10);
-            for (; b < e2; b += 0xc) {
-                void* o = *(void**)b;
-                ((void (__thiscall*)(void*, int))vc(o, 0))(o, 0);
-            }
-            uchar* base = *(uchar**)(p + 0xc);
-            if (base && *(int*)(base - 4) != 0)
-                operator_delete(base);
-            p += 0x20;
-        } while (--n);
+    Rec_s00aca7b0* p = (Rec_s00aca7b0*)first;
+    Rec_s00aca7b0* end = (Rec_s00aca7b0*)last;
+    for (; p < end; ++p) {
+        p->vt = g_145a164;
+        _ReadWriteBarrier();
+        Elem_s00aca7b0* e2 = p->mpEnd;
+        Elem_s00aca7b0* b = p->mpBegin;
+        for (; b < e2; ++b)
+            b->Destroy(0);
+        uchar* base = (uchar*)p->mpBegin;
+        if (base && *(int*)(base - 4) != 0)
+            operator_delete(base);
     }
 }
 
