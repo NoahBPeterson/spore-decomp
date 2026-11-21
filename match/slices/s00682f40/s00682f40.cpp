@@ -353,40 +353,43 @@ NodeY** MapY::InsertPair(NodeY** out, NodeY* pos, int* key, char flag) {
 // =====================================================================
 // @ 0x00683560  MapY insert_unique (create 0x683480)
 // =====================================================================
-void MapY::InsertUnique(void* pairOut, const int* key, int flag) {
-    (void)flag;
-    NodeY* hdr = (NodeY*)&anchor;
-    NodeY* pos = hdr;
-    int bLess = 1;
+void MapY::InsertUnique(void* pairOut, const int* key, int) {
+    struct PairOutY { NodeY* first; bool second; };
+    PairOutY* pOut = (PairOutY*)pairOut;
+    NodeY* pos = (NodeY*)&anchor;
+    bool bLess = true;
     NodeY* n = root;
     if (n) {
-        do { pos = n; bLess = (*key < n->key); n = bLess ? n->l : n->r; } while (n);
+        do {
+            pos = n;
+            bLess = (*key < n->key);
+            n = bLess ? n->l : n->r;
+        } while (n);
     }
     NodeY* found = pos;
     if (bLess) {
-        if (pos == begin) {
-            int bIns = (pos != hdr && *key >= pos->key) ? 1 : 0;
-            NodeY* nn = CreateNode(key);
-            RBTreeInsert(nn, pos, hdr, bIns);
+        if (pos != begin) {
+            pos = (NodeY*)RBTreeDecrement(pos);
+        } else {
+            int bIns = (pos != (NodeY*)&anchor && *key >= pos->key);
+            NodeY* nNew = CreateNode(key);
+            RBTreeInsert(nNew, pos, &anchor, bIns);
             ++size;
-            ((void**)pairOut)[0] = nn;
-            *((uint8_t*)pairOut + 4) = 1;
+            pOut->first = nNew;
+            pOut->second = true;
             return;
         }
-        pos = (NodeY*)RBTreeDecrement(pos);
     }
-    if (pos->key >= *key) {
-        ((void**)pairOut)[0] = pos;
-        *((uint8_t*)pairOut + 4) = 0;
-        return;
-    }
-    {
-        int bIns = (found != hdr && *key >= found->key) ? 1 : 0;
-        NodeY* nn = CreateNode(key);
-        RBTreeInsert(nn, found, hdr, bIns);
+    if (pos->key < *key) {
+        int bIns = (found != (NodeY*)&anchor && *key >= found->key);
+        NodeY* nNew = CreateNode(key);
+        RBTreeInsert(nNew, found, &anchor, bIns);
         ++size;
-        ((void**)pairOut)[0] = nn;
-        *((uint8_t*)pairOut + 4) = 1;
+        pOut->first = nNew;
+        pOut->second = true;
+    } else {
+        pOut->first = pos;
+        pOut->second = false;
     }
 }
 

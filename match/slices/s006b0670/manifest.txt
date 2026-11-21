@@ -1,0 +1,3 @@
+slices/s006b0670/s006b0670.cpp  ?DoInsertValue@?$HoleTreeT@UResourceCacheTree@@@@QAE?AUHolePairIB@@ABUHoleValue@@Utrue_type@@@Z  006b0670  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b0670/s006b0670.cpp  ?DoInsertValue@?$HoleTreeT@UCreatureAnimTree@@@@QAE?AUHolePairIB@@ABUHoleValue@@Utrue_type@@@Z  00a09420  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b0670/s006b0670.cpp  ?DoInsertValue@?$HoleTreeT@UCreatureModeTree@@@@QAE?AUHolePairIB@@ABUHoleValue@@Utrue_type@@@Z  00d3bcc0  /O2 /MD /Gy /EHsc /TP /GS-

@@ -54,3 +54,4 @@
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?SetMode@ShaderHost@@QAEXHH@Z  006e69e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?me30@S8@@QAEXHHH@Z  006ece30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mf10@S8@@QAEXH@Z  006ecf10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?resize@vbvec@@QAEXI@Z  006eea80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

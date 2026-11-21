@@ -2502,23 +2502,28 @@ void* HT::InsertUnique(void* out, const void* val, unsigned flags)
 }
 
 // @ 0x008db560
+// Same tail as RBSet::Insert (0x0068daf0): the output pointer is reloaded before the count update.
 int* RBTree::insertUnique(int* out, int* parent, int* value, char flag)
 {
-    unsigned lazy = 0;
-    if (flag == 0 && parent != (int*)((char*)this + 4) && *(int*)((char*)parent + 0x10) <= *value)
+    int lazy;
+    if (flag == 0 && parent != (int*)((char*)this + 4) && *value >= *(int*)((char*)parent + 0x10))
         lazy = 1;
+    else
+        lazy = 0;
     int node = (int)operator_new(
         0x18, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
-    if ((int*)(node + 0x10) != 0) {
-        *(int*)(node + 0x10) = *value;
-        *(int*)(node + 0x14) = value[1];
+    int* pKey = (int*)(node + 0x10);
+    if (pKey) {
+        pKey[0] = value[0];
+        pKey[1] = value[1];
     }
-    RBTreeInsert((void*)node, (void*)parent, (void*)((char*)this + 4), (int)lazy);
-    *(int*)((char*)this + 0x14) = *(int*)((char*)this + 0x14) + 1;
-    *out = node;
-    return out;
+    RBTreeInsert((void*)node, (void*)parent, (void*)((char*)this + 4), lazy);
+    int* pp = *(int* volatile*)&out;
+    *(volatile int*)((char*)this + 0x14) += 1;
+    *pp = node;
+    return pp;
 }
 
 // @ 0x008db5e0

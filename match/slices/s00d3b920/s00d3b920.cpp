@@ -337,43 +337,6 @@ void cCreatureModeStrategy::dtor()
 }
 
 // =============================================================================
-// @ 0x00d3bcc0
-// eastl::rbtree key lookup: finds the first node whose key is >= the probe key and
-// reports it (with an "inserted" flag) through the caller's result buffer.
-u32** cKeyMap::LowerBound(u32** result, u32* key)
-{
-    cRBNode* node = (cRBNode*)&mpHead;                  // walk starts at the header
-    bool wentLeft = true;
-    if (mpRoot) {
-        cRBNode* cur = mpRoot;
-        do {
-            node = cur;
-            if ((u32)cur->mKeyFirst < key[1] ||
-                ((u32)cur->mKeyFirst <= key[1] && (u32)cur->mKeySecond <= key[0]))
-                wentLeft = false;
-            else
-                wentLeft = true;
-            cur = wentLeft ? (cRBNode*)cur->mpRight : (cRBNode*)cur->mpLeft;
-        } while (cur);
-    }
-    cRBNode* lower = node;
-    if (wentLeft) {
-        if (node == mpHead)
-            goto insert;
-        lower = (cRBNode*)FUN_009215c0(node);
-    }
-    if (key[1] < (u32)lower->mKeyFirst ||
-        (key[1] <= (u32)lower->mKeyFirst && key[0] <= (u32)lower->mKeySecond)) {
-        *result = (u32*)lower;
-        *(u8*)(result + 1) = 0;
-        return result;
-    }
-insert:
-    FUN_00d3b880(result, node, key, 0);
-    *result = (u32*)key;
-    *(u8*)(result + 1) = 1;
-    return result;
-}
 
 // =============================================================================
 // @ 0x00d3bdb0

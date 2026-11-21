@@ -1828,6 +1828,7 @@ struct vbvec {
     unsigned short* mpEnd;        // +0x04
     unsigned short* mpCapacity;   // +0x08
     void resize(unsigned int n);  // 0x6eea80
+    void insert(unsigned short* pos, unsigned int n, const unsigned short* value);  // 0x006ecb40
 };
 struct Elem70 { uint8_t b[0x70]; };
 struct Vector70 {
@@ -5441,20 +5442,18 @@ void cEffectsRenderer_s006e_e1f0::DispatchWithAdditionalMaterial(void* ctx, int 
 // @ 0x006eea80
 void vbvec::resize(unsigned int n)
 {
-    unsigned short* cur = mpEnd;
-    unsigned int sz = (unsigned int)((char*)cur - (char*)mpBegin) >> 1;
-    if (n > sz) {
-        unsigned int extra = n - sz;
+    // same shape as FloatVector::resize (0x00aba330), for 2-byte elements
+    unsigned short* e = mpEnd;
+    unsigned short* b = mpBegin;
+    unsigned int count = (unsigned int)(e - b);
+    if (n > count) {
         unsigned short zero = 0;
-        FUN_006ecb40(cur, extra, &zero);
+        insert(e, n - count, &zero);
         return;
     }
-    // Shrink: the original memmoves zero bytes at the cut point (a no-op for
-    // the 2-byte element) and then re-links the end pointer.
-    unsigned short* dst = mpBegin + n;
-    memcpy(dst, cur, 0);
-    unsigned int removed = (unsigned int)((char*)cur - (char*)dst) >> 1;
-    mpEnd = cur - removed;
+    unsigned short* first = b + n;
+    memcpy(first, e, (char*)mpEnd - (char*)e);
+    mpEnd -= (e - first);
 }
 
 // @ 0x006eeb60

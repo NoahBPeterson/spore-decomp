@@ -348,7 +348,7 @@ const hkShape* hkTriSampledHeightFieldCollection::getChildShape(uint32_t key, ch
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x010c4d40  hkTriSampledHeightFieldCollection destructor (deleting)
+// 0x010c4d40  hkTriSampledHeightFieldCollection destructor (deleting): matched in slice s010c4d40
 // ---------------------------------------------------------------------------
 hkTriSampledHeightFieldCollection::~hkTriSampledHeightFieldCollection()
 {

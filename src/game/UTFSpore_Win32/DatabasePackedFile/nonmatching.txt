@@ -20,7 +20,6 @@
 008db280 104 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); loop/register allocation differs
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs
-008db560 96 complete: RBTree::insertUnique (rbtree insert + alloc); register allocation (this/node in edi/esi) swapped vs retail [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
 008db730 54 complete: PFIndexModifiable ctor; vtable/alloc sequence close but differs
 008db7b0 92 complete: PFIndexModifiable::_virtual_dtor; vtable store order / allocator call differs

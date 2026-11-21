@@ -618,53 +618,6 @@ Rec::Rec(const Rec& o)
 }
 
 // =========================================================================== 0x00a09420
-// @ 0x00a09420
-Pair* Tree::insertHint(Pair* out, const uint* key, void* dummy)
-{
-    char  side = 1;
-    void* pos = (char*)this + 4;
-    void* cur = *(void**)((char*)this + 0xc);
-    if (cur != 0) {
-        uint k0 = key[0];
-        uint k1 = key[1];
-        do {
-            uint n1 = *(uint*)((char*)cur + 0x14);
-            uint n0 = *(uint*)((char*)cur + 0x10);
-            if (k1 > n1)
-                side = 0;
-            else if (k1 < n1)
-                side = 1;
-            else
-                side = (k0 < n0);
-            pos = cur;
-            cur = side ? *(void**)((char*)cur + 4) : *(void**)cur;
-        } while (cur != 0);
-    }
-
-    void* probe = pos;                       // the node the insert is parented to
-    void* prev  = pos;                       // the neighbour the lower-bound test uses
-    if (side) {
-        if (pos == *(void**)((char*)this + 8))
-            goto doInsert;
-        prev = RBTreeDecrement(pos);
-    }
-    if (*(uint*)((char*)prev + 0x14) > key[1]
-        || (*(uint*)((char*)prev + 0x14) == key[1]
-            && *(uint*)((char*)prev + 0x10) >= key[0])) {
-        out->node = prev;
-        out->inserted = 0;
-        return out;
-    }
-
-doInsert:
-    {
-        void* n;
-        insertAt(&n, probe, (uint*)key, 0);
-        out->node = n;
-        out->inserted = 1;
-    }
-    return out;
-}
 
 // =========================================================================== 0x00a094d0
 // @ 0x00a094d0

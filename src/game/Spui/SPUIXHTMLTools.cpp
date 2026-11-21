@@ -652,16 +652,17 @@ RawFixed* RawFixed::AppendN(uint32_t count, uint8_t ch)
 // @ 0x00837310
 void RawFixed::Resize(uint32_t n)
 {
-    uint8_t* src = mEnd;
-    uint32_t size = (uint32_t)(src - mBegin);
-    if (n < size) {
-        uint8_t* dst = mBegin + n;
-        if (dst != src) {
-            memmove_1(dst, src, 1);
-            mEnd = dst + (mEnd - src);
+    // eastl::basic_string<char>::resize(n, 0) (same shape as string8::Resize0 0x006174e0).
+    const uint32_t nLength = (uint32_t)(mEnd - mBegin);
+    if (n < nLength) {
+        uint8_t* first = mBegin + n;
+        uint8_t* last = mEnd;
+        if (first != last) {
+            memmove(first, last, (size_t)((mEnd - last) + 1));
+            mEnd -= (last - first);
         }
-    } else if (size < n) {
-        AppendN(n - size, 0);
+    } else if (n > nLength) {
+        AppendN(n - nLength, 0);
     }
 }
 

@@ -218,27 +218,6 @@ void hkCapsuleTriangleAgent::getClosestPointsWrapper(const void* bodyA, const vo
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x010d4170
-// Snapshot the contact-point count, forward to the triangle agent's
-// processCollision with (bodyB, bodyA) swapped, flip every newly added contact
-// point, and negate the separating normal if the count changed.
-// ---------------------------------------------------------------------------
-void hkCapsuleTriangleAgent::processCollisionThunk(const void* bodyA, const void* bodyB,
-                                                   const void* input, void* output)
-{
-    float oldNormal = *(float*)((char*)output + 0x3034);
-    const void* first = *(const void**)output;
-    processCollision(*(const hkCdBody*)bodyB, *(const hkCdBody*)bodyA, input, output);
-    for (unsigned cp = (unsigned)first; cp < *(unsigned*)output; cp += 0x30)
-        ((hkContactPoint*)cp)->setFlipped(*(const hkContactPoint*)cp);
-    if (oldNormal != *(float*)((char*)output + 0x3034))
-    {
-        float* n = (float*)((char*)output + 0x20);
-        n[0] = -n[0];
-        n[1] = -n[1];
-        n[2] = -n[2];
-    }
-}
 
 // ---------------------------------------------------------------------------
 // @ 0x010d4280  ?createCapsuleCapsuleAgent@hkCapsuleCapsuleAgent@@KA...

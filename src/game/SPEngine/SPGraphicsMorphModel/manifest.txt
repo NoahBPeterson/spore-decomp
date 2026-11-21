@@ -9,3 +9,6 @@
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?New70@ClassX@@QAEPAXXZ  0075a620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?IVecFillN_758950@@YAXUIVecIt_758950@@IABUIVec_758950@@@Z  00758950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_007580a0@@YAPAUC0755b@@PAU1@@Z  007580a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_00758e20@@YAPAUElem50@@PAU1@00@Z  00758e20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_00758e80@@YAPAUElem50@@PAU1@00@Z  00758e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_00758f70@@YAXPAUElem50@@00@Z  00758f70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

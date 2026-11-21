@@ -13,3 +13,4 @@
 ../src/game/SPEngine/_at_006c0000.cpp  ?QuickSort@@YAXPAURec24_s006c_4a70@@0@Z  006c4c20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_006c0000.cpp  ??0BakedArenaThing@@QAE@XZ  006c3510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_006c0000.cpp  ?MakeStream@@YAIPAI0@Z  006c1c80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?insert@RBTree@@QAEPAPAURBNode@@PAPAU2@PAU2@PBH_N@Z  006c3330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

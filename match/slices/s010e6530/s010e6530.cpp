@@ -145,7 +145,7 @@ hkCollisionAgent* hkMultiSphereAgent::createListBAgent(const hkCdBody& a, const 
 template void hkSymmetricAgent<hkMultiSphereAgent>::getPenetrations(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdBodyPairCollector&);
 // @ 0x010e6810 getClosestPoints
 template void hkSymmetricAgent<hkMultiSphereAgent>::getClosestPoints(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdPointCollector&);
-// @ 0x010e6850 processCollision
+// 0x010e6850 processCollision -- matched in slice s010cec70 (hkSymmetricAgent wrapper)
 template void hkSymmetricAgent<hkMultiSphereAgent>::processCollision(const hkCdBody&, const hkCdBody&, const hkProcessCollisionInput&, hkProcessCollisionOutput&);
 // @ 0x010e6910 linearCast
 template void hkSymmetricAgent<hkMultiSphereAgent>::linearCast(const hkCdBody&, const hkCdBody&, const hkLinearCastCollisionInput&, hkCdPointCollector&, hkCdPointCollector*);

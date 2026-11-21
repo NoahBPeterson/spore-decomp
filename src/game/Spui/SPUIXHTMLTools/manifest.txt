@@ -6,3 +6,4 @@
 ../src/game/Spui/SPUIXHTMLTools.cpp  ?AssignCStr@RawFixed@@QAEPAU1@PB_W@Z  008369e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIXHTMLTools.cpp  ?Reserve2@RawFixed@@QAEXI@Z  00837230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIXHTMLTools.cpp  ?Reserve@RawFixed@@QAEXI@Z  00837020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIXHTMLTools.cpp  ?Resize@RawFixed@@QAEXI@Z  00837310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

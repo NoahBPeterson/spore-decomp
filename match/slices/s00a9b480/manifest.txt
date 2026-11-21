@@ -1,1 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a9b480/s00a9b480.cpp  ?SetEnabled@Group_s00a9_b480@@QAEX_N@Z  00a9bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a9b480/s00a9b480.cpp  ?SetParam@Group_s00a9_b480@@QAE_NHPBIH@Z  00a9bd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

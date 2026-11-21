@@ -243,23 +243,6 @@ void __stdcall FUN_010cec10(int a, int b, int c, int d)
 // ---------------------------------------------------------------------------
 // 0x010cec70 — run the pair query and flip the normals of every new contact.
 // ---------------------------------------------------------------------------
-// @ 0x010cec70
-void __fastcall FUN_010cec70(void* self, int, int a, int b, int c, int* d)
-{
-    float old = *(float*)((char*)d + 0x3034);
-    int* first = (int*)*d;
-
-    ((BvAgentApi*)self)->processCollision(b, a, c, d);
-    while (first < (int*)*d) {
-        cpSetFlipped((ContactPoint*)first, 0, (ContactPoint*)first);
-        first += 0xc;
-    }
-    if (old != *(float*)((char*)d + 0x3034)) {
-        *(float*)((char*)d + 0x20) = -*(float*)((char*)d + 0x20);
-        *(float*)((char*)d + 0x24) = -*(float*)((char*)d + 0x24);
-        *(float*)((char*)d + 0x28) = -*(float*)((char*)d + 0x28);
-    }
-}
 
 // ---------------------------------------------------------------------------
 // 0x010cecf0 — hkContactPoint::setFlipped.

@@ -964,23 +964,6 @@ NOINLINE void CollRecv_s00a5_86d0::FUN_00a587a0()
 }
 }}}  // namespace EA::Audio::Eapd
 
-// @ 0x00a58950
-namespace EA { namespace Audio { namespace Eapd {
-NOINLINE bool CollRecv_s00a5_86d0::FUN_00a58950(int count, void* a, void* b)
-{
-    if (!mTable.pool()->Init(count, a, b))
-        return false;
-    mTable.FreeChains((int)mTable.mSize - 1);
-    mTable.f10 = 0x461c4000;    // 10000.0f
-    mTable.f14 = 0x40000000;    // 2.0f
-    mTable.f18 = 0;
-    unsigned n = Fn921340(mTable.mElems);
-    if (n > mTable.mBucketCount)
-        mTable.FreeChains(n);
-    return true;
-}
-}}}  // namespace EA::Audio::Eapd
-
 // @ 0x00a589e0
 namespace EA { namespace Audio { namespace Eapd {
 NOINLINE void CollRecv_s00a5_86d0::FUN_00a589e0()

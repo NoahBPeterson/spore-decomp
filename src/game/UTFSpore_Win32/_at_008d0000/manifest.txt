@@ -24,3 +24,4 @@
 ../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?GetRecordCount@DatabaseDirectoryFiles_s008d_62f0@ResourceMan@EA@@QAEHABUKey_s008d_62f0@23@@Z  008d64a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?GetRecordName@DatabaseDirectoryFiles_s008d_62f0@ResourceMan@EA@@QAE_NABUKey_s008d_62f0@23@PA_W@Z  008d6510  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?_virtual_dtor@PFRecordWrite_s008d_d0d0@@QAEPAXH@Z  008dd1f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?FUN_008d40b0@@YAXHHH@Z  008d40b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
