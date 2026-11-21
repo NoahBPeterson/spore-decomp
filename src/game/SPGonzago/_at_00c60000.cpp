@@ -1387,7 +1387,7 @@ void* __cdecl FUN_00c87770(void* self);           // 0x00c87770 cSPSpaceInventor
 bool  __cdecl FUN_00c87580(void* self);           // 0x00c87580 serialize helper
 bool  __cdecl FUN_00c879a0(void* self);           // 0x00c879a0 deserialize helper
 bool  __cdecl FUN_00e3aa70(void* stream, const u32* value, int count, int); // 0x00e3aa70 IO::WriteUint32
-bool  __cdecl FUN_00e3a780(void* stream, void* out, int count, int);        // 0x00e3a780 IO::ReadInt32
+bool  __cdecl FUN_0093a780(void* stream, void* out, int count, int);        // 0x0093a780 IO::ReadInt32
 void* __cdecl FUN_00692f90(void* self, void* a, void* b, int c); // 0x00692f90 cVarListSerializer ctor
 bool  __cdecl FUN_00692900(void* self, void* stream);            // 0x00692900 Serialize (write)
 bool  __cdecl FUN_00693e10(void* self, void* stream);            // 0x00693e10 Serialize (read)
@@ -4221,7 +4221,7 @@ u8 __fastcall FUN_00c6f500(void* self, void* /*edx*/, void* stream)
   char* a = (char*)((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
   void* s = ((void*(__thiscall*)(void*))(*(void***)a)[0x18 / 4])(a);
   u32 tag;
-  FUN_00e3a780(s, &tag, 1, 0);
+  FUN_0093a780(s, &tag, 1, 0);
   u8 ok = ((u8(__thiscall*)(void*, void*))FUN_00c879a0)(self, stream);
   u32 ser[645];   // cVarListSerializer, 0xa14 bytes
   ((void*(__thiscall*)(void*, void*, void*, int))FUN_00692f90)(
