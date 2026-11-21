@@ -26,6 +26,7 @@ template <typename T> struct gi
 };
 struct Tag {};
 struct TagB { char c; TagB() : c(0) {} };
+struct Tag3c { char x, y, z; };
 
 void* __cdecl AllocatorAllocate(Allocator* alloc, uint32_t size, uint32_t align, uint32_t offset);  // FUN_0042dee0
 void  __cdecl AllocatorDeallocate(void* block);                                                    // EASTL_allocator_deallocate
@@ -129,11 +130,11 @@ gi<Pair> __cdecl UninitCopyPairs(gi<const Pair> a, gi<const Pair> b, gi<Pair> c,
 inline gi<Pair> UninitCopyW(const Pair* a, const Pair* b, Pair* c)
 {
     ScratchSlots<6>();
-    gi<Pair> gc(c);
-    gi<const Pair> gb(b);
-    gi<const Pair> ga(a);
-    Tag t;
-    return UninitCopyPairs(ga, gb, gc, t);
+    gi<Pair> f(c);
+    gi<const Pair> g(b);
+    gi<const Pair> e(a);
+    Tag3c h;
+    return UninitCopyPairs(e, g, f, *(Tag*)&h.z);
 }
 
 inline void DestroyElem(IdPtrVec* p, int flags)
