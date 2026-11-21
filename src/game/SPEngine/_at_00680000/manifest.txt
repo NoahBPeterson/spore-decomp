@@ -33,3 +33,4 @@
 ../src/game/SPEngine/_at_00680000.cpp  ?ser_6842c0@FactSer@@QAE_NPAH0HH@Z  006842c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?ser_684b40@FactSer@@QAE_NPAH0HH@Z  00684b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?Create@Factory@@QAEDPAHPAPAHHH@Z  00684040  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??AMap1@@QAEPAUObjC30_s0068_1f10@@ABH@Z  00682af0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

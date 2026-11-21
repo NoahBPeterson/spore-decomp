@@ -1070,18 +1070,19 @@ void* HolderMap::Resolve(const uint16_t* s)
             const uint16_t* key;
         } tk;
         HIter it;
-        PMap& m = map;
         WStr2 str(s, p, tk.t);
-        tk.key = str.b;
+        uint16_t* b = str.b;
+        PMap& m = map;
+        tk.key = b;
         m.find(&it, &tk.key);
         if (it.node == m.mBuckets[m.mBucketCount]) {
-            if (((int)((char*)str.c - (char*)tk.key) & ~1) > 2 && tk.key)
-                operator_delete__((void*)tk.key);
+            if (((int)((char*)str.c - (char*)b) & ~1) > 2 && b)
+                operator_delete__(b);
             return 0;
         }
         void* r = it.node->p4;
-        if (((int)((char*)str.c - (char*)tk.key) & ~1) > 2 && tk.key)
-            operator_delete__((void*)tk.key);
+        if (((int)((char*)str.c - (char*)b) & ~1) > 2 && b)
+            operator_delete__(b);
         return r;
     }
     return 0;
