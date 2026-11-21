@@ -138,11 +138,11 @@ struct SwatchMsgTarget {
 // @ 0x00ecefc0
 void SwatchRecvUI::M_00ecefc0(int param_2, int param_3)
 {
-    if (mpValue != 0) {
-        C1(mpValue, 0x24, param_2);
-        void* v = mpValue;              // reload: the slot-0x24 call may write it
-        void* manager = FUN_00401020();
-        ((ValueSink*)manager)->SetValue((int)v, 5.0f);
+    void* value = mpValue;
+    if (value != 0) {
+        C1(value, 0x24, param_2);
+        void* updatedValue = mpValue;
+        static_cast<ValueSink*>(FUN_00401020())->SetValue((int)updatedValue, 5.0f);
     }
     (void)param_3;
 }
