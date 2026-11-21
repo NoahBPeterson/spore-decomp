@@ -11,7 +11,7 @@ diffs that show what still differs; everything else runs from the repo.
 
 Every pull request is checked by the **Byte-match check** (`.github/workflows/byte-match.yml`). It compiles the files
 your change can affect with the original compilers and compares every function listed in a `manifest.txt` with a
-**retail fingerprint** (`tools/ci/fingerprints.jsonl.gz`): the function's size, which byte positions hold addresses,
+**retail fingerprint** (`tools/ci/fingerprints.jsonl`): the function's size, which byte positions hold addresses,
 the addresses retail uses there, and a SHA-256 of the rest. Fingerprints contain no instructions and no names; the
 check never sees the game. Because addresses are masked, the bytes match whatever your names point at, so the check
 also compares each name that claims an address (`g_15b7458`, `FUN_00abcdef`, or a mangled name `symbols/` records)

@@ -12,7 +12,7 @@ starts the Galactic Adventures decompilation.
                decrypted image tools/steamstub_analysis_image.py makes from it.
       out      default work/ga_map.json (game addresses only, no code; stays in work/ until we decide otherwise)
 
-Base functions come from the retail fingerprints (tools/ci/fingerprints.jsonl.gz), their bytes from
+Base functions come from the retail fingerprints (tools/ci/fingerprints.jsonl), their bytes from
 work/SporeApp.analysis.bin (tools/contrib/make_image.py). A function is compared with its relocated dwords and its
 outward call/jmp/jcc rel32 displacements zeroed ("normalized"), since those differ between the two executables
 even when the code is the same.
@@ -36,7 +36,7 @@ functions, 150 are global variables, 2 are GA-only functions. Where names disagr
 synonyms (cGameModeManager is the debug database's SP::cApp), identical small functions the linker folded, or a wrong
 guess in symbols/pdb_names.json (0x0117ca60 is SSL_CTX_new there, as ModAPI and our source say, not AddStat).
 """
-import bisect, collections, difflib, gzip, hashlib, json, os, struct, sys
+import bisect, collections, difflib, hashlib, json, os, struct, sys
 
 import capstone
 import pefile
@@ -112,7 +112,7 @@ def ga_starts(g):
 
 def main(ga_path=GA_DEFAULT, outp=OUT_DEFAULT):
     b, g = Image(BASE_IMG), Image(ga_path)
-    fps = sorted((int(d["va"], 16), d["size"]) for d in map(json.loads, gzip.open(W("tools", "ci", "fingerprints.jsonl.gz"), "rt")))
+    fps = sorted((int(d["va"], 16), d["size"]) for d in map(json.loads, open(W("tools", "ci", "fingerprints.jsonl"), "rt")))
     base = {va: (sz,) + b.norm(va, sz) for va, sz in fps}
     S = ga_starts(g)
     ga = {}

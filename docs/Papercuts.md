@@ -1248,7 +1248,7 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   Fix idea: note the RTM marker in matching.md's RTM-vs-SP1 section.
 - [bare-fistp census, 2026-11-11 session] codegen/flags — **45 functions carry a bare `fistp qword`
   (no fnstcw chain); 38 of them also contain SSE, and no flag combination can produce the two together.**
-  Capstone census over `tools/ci/fingerprints.jsonl.gz` (fnstcw-adjacent fistps excluded — those are the
+  Capstone census over `tools/ci/fingerprints.jsonl` (fnstcw-adjacent fistps excluded — those are the
   0x005e4c90 interleaved-chain family, which stays RTM-only). `/QIfist` (still accepted by cl 15.00.30729
   with D9035) inlines the bare fistp but is x87-only: D8016 against `/arch:SSE` (VC7.1: D2016), while
   every `/arch`-less intrinsic spelling of an SSE scalar float copy (`_mm_store_ss`/`_mm_load_ss`/

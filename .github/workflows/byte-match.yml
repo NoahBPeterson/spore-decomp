@@ -4,7 +4,7 @@
 # what checks it: tools/ci/pr_files.py takes only src/game/, match/slices/ and match/include/ from the pull request and
 # fails on anything else.  The contributed code is only compiled, never run; the token is read-only and the job has
 # no secrets.  No game file is on the runner: functions are compared with retail fingerprints
-# (tools/ci/fingerprints.jsonl.gz, tools/ci/fingerprint.py).
+# (tools/ci/fingerprints.jsonl, tools/ci/fingerprint.py).
 #
 # Passes when every manifest the pull request can affect (tools/ci/affected.py) matches its fingerprints, apart from
 # tools/ci/known_failures.txt, no function that matched on main has been dropped from the manifests, and at least one
