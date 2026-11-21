@@ -364,7 +364,7 @@ struct ArgMgr {
     bool FUN_006a5f70(const char* name, uint32_t* out);
     bool FUN_006a5fd0(const char* name, uint32_t* out);
     bool FUN_006a60b0(int a, int b, int* out);
-    void FUN_006a61c0(int a, int b);
+    void FUN_006a61c0(void* obj, unsigned a, unsigned b);
     bool FUN_006a6240(const char* name, uint32_t* out);
 };
 struct Vec10s {
@@ -2186,21 +2186,19 @@ bool ArgMgr::FUN_006a60b0(int a, int b, int* out)
 }
 
 // @ 0x006a61c0
-void ArgMgr::FUN_006a61c0(int a, int b)
+void ArgMgr::FUN_006a61c0(void* obj, unsigned a, unsigned b)
 {
-    char* self = (char*)this;
-    *(uint32_t*)(self + 8) = a;
-    *(uint32_t*)(self + 0xc) = 0xb1b104;
-    *(uint32_t*)(self + 0x10) = b;
-    VariantHold((int*)self);
-    char key[0x10];
-    *(uint32_t*)key = a;
-    *(uint32_t*)(key + 4) = b;
-    void** slot = (void**)((HashMapKey8*)(self + 0x74))->operator[](key);
+    char* p = (char*)obj;
+    struct Key3 { uint32_t instance, type, group; };
+    Key3 k = { a, 0xb1b104, b };
+    *(Key3*)(p + 8) = k;
+    VariantHold((int*)p);
+    unsigned __int64 key = ((unsigned __int64)b << 32) | a;
+    void** slot = (void**)((HashMapKey8*)((char*)this + 0x74))->operator[](&key);
     void* old = *slot;
-    if (self != old) {
-        (*(void (__thiscall**)(char*))(*(int*)self))(self);
-        *slot = self;
+    if (obj != old) {
+        (*(void (__thiscall**)(void*))(*(int*)obj))(obj);
+        *slot = obj;
         if (old)
             (*(void (__thiscall**)(void*))(*(int*)old + 4))(old);
     }
