@@ -277,29 +277,24 @@ extern "C" extern PropDesc_s0137_a490 g_16b24d4[7];   // 0x016b24d4
 // ---- items of slice s0137a490 end
 
 // @ 0x00e4cc50
+struct ResKey_e4cc50 { unsigned mInstance; unsigned mType; unsigned mGroup; };
+struct ResMgr_e4cc50 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual bool GetResource(const ResKey_e4cc50* key, void* out, int a, int b, int c, int d);   // +0x0c
+};
 void SP_LoadAdvectMap(void* key, void* p2)
 {
-    struct { void* k; unsigned h; unsigned z; } k1, k2;
-    k2.z = 0; k2.h = 0x4805684; k1.k = key; k1.h = 0; k1.z = 0;
-    (void)k1;
-    void* out;
-    void* rm = EA_ResourceMan_GetManager();
-    bool ok = (*(bool(__thiscall**)(void*, void*, void*, int, int, int))((char*)Vt(rm) + 0xc))(rm, key, p2, 0, 0, 0);
-    (void)ok; (void)out;
-    {
-        int outbuf[3];
-        outbuf[0] = 0; outbuf[1] = 0x4805684; outbuf[2] = 0;
-        int keyb[3]; keyb[0] = 0; keyb[1] = 0x4805684; keyb[2] = 0;
-        (void)outbuf;
-        char* rmgr = (char*)EA_ResourceMan_GetManager();
-        char local[12]; *(void**)local = key; *(unsigned*)(local+4) = 0x4805684; *(unsigned*)(local+8) = 0;
-        bool ok2 = (*(bool(__thiscall**)(void*, void*, void*, int, int, int))((char*)Vt(rmgr) + 0xc))(rmgr, local, p2, 0, 0, 0);
-        if (!ok2) {
-            FUN_00e84e40("invalid advection map (key:%X) using empty.advect instead", key);
-            unsigned local2[3]; local2[0] = 0xc7ee8594; local2[1] = 0x4805684; local2[2] = 0;
-            char* rmgr2 = (char*)EA_ResourceMan_GetManager();
-            (*(bool(__thiscall**)(void*, unsigned*, void*, int, int, int))((char*)Vt(rmgr2) + 0xc))(rmgr2, local2, p2, 0, 0, 0);
-        }
+    ResKey_e4cc50 k;
+    k.mGroup = 0;
+    k.mType = 0x4805684;
+    k.mInstance = (unsigned)key;
+    if (!((ResMgr_e4cc50*)EA_ResourceMan_GetManager())->GetResource(&k, p2, 0, 0, 0, 0)) {
+        FUN_00e84e40("invalid advection map (key:%X) using empty.advect instead", key);
+        ResKey_e4cc50 empty;
+        empty.mInstance = 0xc7ee8594;
+        empty.mType = 0x4805684;
+        empty.mGroup = 0;
+        ((ResMgr_e4cc50*)EA_ResourceMan_GetManager())->GetResource(&empty, p2, 0, 0, 0, 0);
     }
 }
 
