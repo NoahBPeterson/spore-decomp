@@ -424,9 +424,10 @@ bool FUN_00b90cb0(float* param_1, float param_2)
     if (0 < iVar1) {
         float* pfVar3 = (float*)(DAT_016888ec + 8);
         do {
-            if (sqrt((*param_1 - pfVar3[-2]) * (*param_1 - pfVar3[-2]) +
-                     ((param_1[1] - pfVar3[-1]) * (param_1[1] - pfVar3[-1]) +
-                      (param_1[2] - *pfVar3) * (param_1[2] - *pfVar3))) < pfVar3[1] + param_2)
+            float dx = param_1[0] - pfVar3[-2];
+            float dy = param_1[1] - pfVar3[-1];
+            float dz = param_1[2] - pfVar3[0];
+            if (sqrt(dz * dz + (dx * dx + dy * dy)) < pfVar3[1] + param_2)
                 return true;
             iVar2 = iVar2 + 1;
             pfVar3 = pfVar3 + 0xd;
