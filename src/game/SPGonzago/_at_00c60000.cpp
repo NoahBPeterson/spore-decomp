@@ -4193,7 +4193,7 @@ struct IStreamHolder_c6f4 {
 };
 inline void WriteUint32_c6f4(void* stream, u32 value)
 {
-  FUN_00e3aa70(stream, &value, 1, 0);
+  FUN_0093aa70(stream, &value, (void*)1, 0);
 }
 struct IStreamOwner_c6f4 {
   virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
