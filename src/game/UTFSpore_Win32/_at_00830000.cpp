@@ -12,17 +12,24 @@ extern "C" void* __cdecl Messaging_GetServer();
 extern "C" void* __cdecl Messaging_GetServer();
 // ---- items of slice s0083f140 end
 
+struct IListener_83f580 {
+    virtual void v00();
+    virtual int HandleMessage(unsigned id, void* msg);   // +0x04
+};
+struct Base0_83f580 { virtual void v00(); };
+struct FileListener_83f580 : Base0_83f580, IListener_83f580 {};
+struct IServer_83f580 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual int Post(unsigned id, void* a, void* b, IListener_83f580* l);   // +0x18
+};
 // @ 0x0083f580
-int __cdecl FileMessageCallback(void*, void*, void*, void*, void* arg)
+void __cdecl FileMessageCallback(void*, void*, void*, void*, void* arg)
 {
-    int* server = (int*)Messaging_GetServer();
-    if (server) {
-        void* p = (arg == 0) ? 0 : (char*)arg + 4;
-        return ((int(__thiscall*)(int*, int, int, int, void*))(*(void***)server)[6])(server, 0x6f41f272, 0, 0, p);
-    }
-    if (arg) {
-        int P = *(int*)((char*)arg + 4);
-        return ((int(__thiscall*)(int*, int, int))(*(void**)(P + 4)))((int*)((char*)arg + 4), 0x6f41f272, 0);
-    }
-    return 0;
+    FileListener_83f580* f = (FileListener_83f580*)arg;
+    IServer_83f580* server = (IServer_83f580*)Messaging_GetServer();
+    if (server)
+        server->Post(0x6f41f272, 0, 0, f);
+    else if (f)
+        ((IListener_83f580*)f)->HandleMessage(0x6f41f272, 0);
 }
