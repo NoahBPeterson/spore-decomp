@@ -7,7 +7,7 @@
 #   work/third_party/build/openssl-0.9.8g-d2110920                            perl Configure VC-WIN32 + make links, as
 #                                                                             tools/third_party/build_faithful.py does
 #   work/ext/EAWebKitSupportPackages                                          from EA's EAWebKit 1.21.00 GPL release,
-#                                                                             plus tools/ci/oss/EATextOpenType.patch, EATextFontServer.patch
+#                                                                             plus tools/ci/oss/EATextOpenType.patch
 #   work/match/scratch_*_inc                                                  include dirs manifest rows name with
 #                                                                             /Iscratch_*_inc (run_all.py resolve_flags)
 # Downloads are cached in $OSS_CACHE (default work/toolchain/downloads/oss).  Steps whose output exists are skipped.
@@ -65,14 +65,20 @@ if [ ! -d "$root/work/ext/EAWebKitSupportPackages" ]; then
   f="$x/EAWebKitSupportPackages/EATextEAWebKit/local/source/internal/EATextOpenType.cpp"
   tr -d '\r' < "$f" > "$f.lf" && mv "$f.lf" "$f"
   patch -s -p1 -d "$x" < "$oss/EATextOpenType.patch"
-  for g in source/EATextFontServer.cpp include/EAText/EATextFontServer.h include/EAText/EATextStyle.h; do
-    f="$x/EAWebKitSupportPackages/EATextEAWebKit/local/$g"
-    tr -d '\r' < "$f" > "$f.lf" && mv "$f.lf" "$f"
-  done
-  patch -s -p1 -d "$x" < "$oss/EATextFontServer.patch"
   mv "$x/EAWebKitSupportPackages" "$root/work/ext/EAWebKitSupportPackages"
   rm -rf "$x"
 fi
+
+# Retail's changed copies of three EAText files, kept apart so other slices still build against the published ones
+# (wrappers in match/slices/s0088b250 and s0088e210/inc include them).  Rebuilt on every run.
+et="$root/work/third_party/build/EAText-retail"
+rm -rf "$et"
+for g in source/EATextFontServer.cpp include/EAText/EATextFontServer.h include/EAText/EATextStyle.h; do
+  src="$root/work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/$g"
+  mkdir -p "$et/EAWebKitSupportPackages/EATextEAWebKit/local/$(dirname "$g")"
+  tr -d '\r' < "$src" > "$et/EAWebKitSupportPackages/EATextEAWebKit/local/$g"
+done
+patch -s -p1 -d "$et" < "$oss/EATextFontServer.patch"
 
 # include dirs named by manifest rows (/Iscratch_*_inc, resolved against work/match)
 sh "$root/tools/third_party/eawebkit_include_links.sh" >/dev/null
