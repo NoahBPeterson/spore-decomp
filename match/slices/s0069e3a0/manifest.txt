@@ -1,2 +1,4 @@
 # source  symbol  va  [flags override]
 slices/s0069e3a0/s0069e3a0.cpp  ?f@F940@@QAE_NXZ  0069f940 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069e3a0/s0069e3a0.cpp  ?OpenIStream@cObjDB@@QAE_NHPAPAX@Z  0069e3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069e3a0/s0069e3a0.cpp  ?OpenOStream@cObjDB@@QAE_NHPAPAXH@Z  0069e470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
