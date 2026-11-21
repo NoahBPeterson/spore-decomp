@@ -748,7 +748,9 @@ hkCollisionDispatcher* hkCollisionDispatcher::init(hkpContactMgrFactory* factory
 // @ 0x010cd810  hkCollisionDispatcher::~hkCollisionDispatcher
 hkCollisionDispatcher::~hkCollisionDispatcher()
 {
-	m_vptr = (void**)0x014a4360;
+	extern void* vtbl_014a4360[];
+	extern void* vtbl_013ef094[];
+	m_vptr = vtbl_014a4360;
 	disableDebugging();
 
 	for (int i = 0; i < 8; i++)
@@ -763,11 +765,11 @@ hkCollisionDispatcher::~hkCollisionDispatcher()
 	if (!(m_shapeInheritance.m_capacityAndFlags & (int)0x80000000))
 	{
 		hkThreadMemory* tm = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
-		int capacity = m_shapeInheritance.m_capacityAndFlags & HK_ARRAY_CAPACITY_MASK;
-		tm->deallocateChunk(m_shapeInheritance.m_data, capacity << 3, 0x14);
+		const unsigned int capacity = m_shapeInheritance.getCapacity();
+		tm->deallocateChunk(m_shapeInheritance.m_data, capacity * sizeof(*m_shapeInheritance.m_data), 0x14);
 	}
 
-	m_vptr = (void**)0x013ef094;
+	m_vptr = vtbl_013ef094;
 }
 
 // @ 0x010cd8e0  hkAabbUtil::calcAabb
