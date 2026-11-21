@@ -23,7 +23,6 @@
 00ba4520 31 frame: sorted-vector find-or-add; the LowerBound16/InsertAt calls, the WKeyLess test and the +0xc result are all right. Retail keeps a 0x10-byte by-value WKey temp (sub esp,0x10 plus `mov byte [esp+0x20],0` zeroing the 4th dword) where cl allocates only 0xc for `WKey tmp = *key`, and the prologue keeps self in edi/end in ebx rather than ebx/edi. equiv UNSUPPORTED (emulator wall-clock) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE fix1: quick check UNSUPPORTED
 00ba45a0 49 backward range copy of 0xb0-byte elements; MSVC strength-reduced the dual decrement induction flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba4600 121 object post-spawn hookup; equivalence-WEAK, inlined accessors and vector walk diverge flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00ba46f0 35 object flag setter; equivalence-WEAK, thiscall vs stack arg for cGameData accessor differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba47b0 125 mode-vector rebuild (CModeObj::Update): EASTL temp vector construction/cleanup not recovered; 165 vs 246 bytes; equiv UNSUPPORTED 0/400 valid. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba4c70 230 vector grow/insert: operator_new EASTL allocator args not reconstructed; equiv UNSUPPORTED (0/400 valid) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ba4e60 156 map find-or-insert: EASTL iterator/temp layout differs; equiv FAIL 5/9 valid flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
