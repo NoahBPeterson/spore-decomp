@@ -319,8 +319,13 @@ int StarMgr::FUN_00bb3a40(u32* flags) {
     if (b0)
         GetIntProp(0x2c37907, v.mpBegin);
     u8 b6 = (u8)((*flags >> 6) & 1);
-    if (b6)
-        GetIntProp(0x42a2267, v.mpBegin + 6);
+    if (b6) {
+        PropOwner* owner = mpPropOwner;
+        int* slot = v.mpBegin + 6;
+        Prop* prop;
+        if (owner != 0 && owner->GetProp(0x42a2267, &prop) && prop->mType == 9)
+            *slot = *prop->GetInt();
+    }
 
     int r = FUN_00ba7320(&v);
     if (r == 7)
