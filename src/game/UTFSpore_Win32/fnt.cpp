@@ -1196,8 +1196,9 @@ void fnt_WCVT(TTExecCtx* c)
     int v = popInt(c);
     int idx = popInt(c);
     if (scale != 0x10000 && scale != 0)
-        v = util_FixDiv(v, scale);
-    GS(c)->mCvt[idx] = v;
+        GS(c)->mCvt[idx] = util_FixDiv(v, scale);
+    else
+        GS(c)->mCvt[idx] = v;
 }
 
 // @ 0x008ae5d0
