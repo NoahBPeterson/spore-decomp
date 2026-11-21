@@ -901,7 +901,7 @@ namespace G7
             if (key)
                 ObjRelease(key);
         }
-}
+    }
 
 // @ 0x00ba2400
     void Owner::CommitPending(void* a, void* b, char flag)
