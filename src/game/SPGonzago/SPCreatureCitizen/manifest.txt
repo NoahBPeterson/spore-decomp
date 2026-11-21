@@ -53,3 +53,4 @@
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c26310@cSPCreatureCitizen_s00c2_5a50@@QAEXPAX@Z  00c26310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?ApplyToolOrder@cCreatureCitizen@@QAEXIPAX@Z  00c26c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24040@cCreatureBase_s00c2_3f80@@QAEXI@Z  00c24040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24560@cCreatureBase_s00c2_3f80@@QAE_NXZ  00c24560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -2745,9 +2745,7 @@ bool cCreatureBase_s00c2_3f80::FUN_00c24560()
             return true;
         void* a = MOPS(mpFieldb4c)->FUN_00bca2c0();
         void* b = (void*)((void* (__thiscall*)(void*))VT((u8*)this + 0x58)[0x20 / 4])((u8*)this + 0x58);
-        if (a || b)
-            return false;
-        return true;
+        return a == 0 && b == 0;
     }
     bool r = false;
     void* p = (void*)((void* (__thiscall*)(void*))VT((u8*)this + 0x58)[0x20 / 4])((u8*)this + 0x58);
