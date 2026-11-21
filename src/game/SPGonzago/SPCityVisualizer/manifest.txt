@@ -29,3 +29,4 @@
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FindSlot@CCitizenManager@@QAEPAUCRecord12@@PAUCCitizen@@@Z  00d579a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00accec0@@YAPAXPAE00@Z  00accec0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00d58a80@@YIXPAUCityVis@@PAX@Z  00d58a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00d57ef0@@YIXPAX00@Z  00d57ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
