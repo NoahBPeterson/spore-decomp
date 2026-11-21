@@ -66,7 +66,6 @@
 00c0fa70 99 PASS         find animation entry by mask bit; complete; equiv PASS (400/600 inputs); not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0fba0 87 UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0fe30 40 PASS         copy animation binding (addref/release +0x20); complete; equiv PASS; not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c0ffc0 134 WEAK         reverse-copy array of 0x24-byte bindings; complete flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c10050 440 PASS         play animation by id/name predicate; complete; equiv PASS; not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c10250 121 PASS         resolve + apply animation remap ids; complete flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c10330 174 PASS         pack byte array -> remap id and apply; complete flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -120,3 +120,4 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0fda0@@YAPAHPAHH@Z  00c0fda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0fcf0@@YAPAHPAHH@Z  00c0fcf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0fc40@@YAPAHPAH0@Z  00c0fc40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0ffc0@@YAPAXHHPAH@Z  00c0ffc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

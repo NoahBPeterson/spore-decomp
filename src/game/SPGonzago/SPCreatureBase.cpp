@@ -9419,32 +9419,38 @@ void __cdecl FUN_00c0fea0(int* src, int* dst)
     if (p != 0) (*(void(__thiscall**)(void*))(*(char**)p + 0xc0))(p);
 }
 
+struct AnimBindingRec_s00c0_ffc0 {   // 0x24-byte binding record
+    int   m00;
+    int   m04;
+    int   m08;
+    int   m0c;
+    int   m10;
+    float m14;
+    char  m18;
+    int   m1c;
+    RefPtr_s00c0_fc40 mpObj;          // +0x20
+    __forceinline AnimBindingRec_s00c0_ffc0& operator=(const AnimBindingRec_s00c0_ffc0& x)
+    {
+        m00 = x.m00; m04 = x.m04; m08 = x.m08; m0c = x.m0c; m10 = x.m10;
+        m14 = x.m14; m18 = x.m18; m1c = x.m1c;
+        mpObj = x.mpObj;
+        return *this;
+    }
+};
+
 // @ 0x00c0ffc0
 void* __cdecl FUN_00c0ffc0(int param_1, int param_2, int* param_3)
 {
-    if (param_2 == param_1) return param_3;
-    int* dst;
-    do {
-        param_2 -= 0x24;
-        param_3 -= 9;
-        dst = param_3;
-        dst[0] = *(int*)(param_2 + 0x00);
-        dst[1] = *(int*)(param_2 + 0x04);
-        dst[2] = *(int*)(param_2 + 0x08);
-        dst[3] = *(int*)(param_2 + 0x0c);
-        dst[4] = *(int*)(param_2 + 0x10);
-        dst[5] = *(int*)(param_2 + 0x14);
-        *(char*)(dst + 6) = *(char*)(param_2 + 0x18);
-        dst[7] = *(int*)(param_2 + 0x1c);
-        int* piVar1 = *(int**)(param_2 + 0x20);
-        int* piVar2 = (int*)dst[8];
-        if (piVar1 != piVar2) {
-            if (piVar1 != 0) (*(void(__thiscall**)(void*))((*(void***)piVar1)[0xbc / 4]))((void*)piVar1);
-            dst[8] = (int)piVar1;
-            if (piVar2 != 0) (*(void(__thiscall**)(void*))((*(void***)piVar2)[0xc0 / 4]))((void*)piVar2);
-        }
-    } while (param_2 != param_1);
-    return dst;
+    if (param_2 != param_1) {
+        AnimBindingRec_s00c0_ffc0* dest = (AnimBindingRec_s00c0_ffc0*)param_3;
+        do {
+            param_2 -= 0x24;
+            --dest;
+            *dest = *(AnimBindingRec_s00c0_ffc0*)param_2;
+        } while (param_2 != param_1);
+        return dest;
+    }
+    return param_3;
 }
 
 // @ 0x00c10050
