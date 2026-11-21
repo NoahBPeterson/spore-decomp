@@ -1,8 +1,7 @@
 # expat 2.0.1 (as linked into SporeApp.exe)
 
-These files are copied unmodified from the published expat 2.0.1 sources (`match/slices/s00906030/expat/`, identical to the
-copy in `s00906e00`), with their copyright headers: Copyright (c) 1998-2000 Thai Open Source Software Center Ltd and
-Clark Cooper, under the MIT license. Do not edit them; anything Spore's bytes need
+These files are `#include` wrappers around the published expat 2.0.1 sources (expat is MIT-licensed; its notice stays in
+the release, which `tools/ci/setup_oss.sh` unpacks to `work/third_party/src/expat-2.0.1`). Do not edit them; anything Spore's bytes need
 differently belongs in `../xmltok.cpp`.
 
 Used by `../xmltok.cpp`, which follows expat's `xmltok.c`: `xmltok_impl.c` is included once for each of the `normal_`,

@@ -1,0 +1,264 @@
+SporeApp.exe's expat 2.0.1 is the release with a few functions of xmltok_impl.c made external instead of static (or non-inlinable), so
+that the slices can compile and match them one by one (found by byte-matching).  Each xmltok_impl.c instantiation
+(normal_, little2_, big2_) in a slice is compiled from its own copy, xmltok_impl_<slice>_<n>.c.  tools/ci/setup_oss.sh
+copies the release's lib/ to work/third_party/build/expat-retail, makes those copies and applies this patch; the expat
+slices #include from there.  Everything else in the expat slices is the release, included unchanged.
+
+--- a/xmltok_impl_s0090e9f0_1.c
++++ b/xmltok_impl_s0090e9f0_1.c
+@@ -970,3 +970,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1201,3 +1201,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1259,3 +1259,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1316,3 +1316,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr,
+@@ -1369,3 +1369,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1429,3 +1429,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
+@@ -1566,3 +1566,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(predefinedEntityName)(const ENCODING *enc, const char *ptr,
+@@ -1620,3 +1620,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
+@@ -1684,3 +1684,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(nameMatchesAscii)(const ENCODING *enc, const char *ptr1,
+@@ -1697,3 +1697,3 @@
+ 
+-static int PTRFASTCALL
++int PTRFASTCALL
+ PREFIX(nameLength)(const ENCODING *enc, const char *ptr)
+--- a/xmltok_impl_s00911f60_1.c
++++ b/xmltok_impl_s00911f60_1.c
+@@ -970,3 +970,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1201,3 +1201,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1259,3 +1259,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1316,3 +1316,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr,
+@@ -1369,3 +1369,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1429,3 +1429,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
+@@ -1566,3 +1566,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(predefinedEntityName)(const ENCODING *enc, const char *ptr,
+--- a/xmltok_impl_s009108d0_1.c
++++ b/xmltok_impl_s009108d0_1.c
+@@ -303,3 +303,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr,
+@@ -783,3 +783,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
+--- a/xmltok_impl_s00913ca0_1.c
++++ b/xmltok_impl_s00913ca0_1.c
+@@ -783,3 +783,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -970,3 +970,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1259,3 +1259,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
+--- a/xmltok_impl_s00914b70_1.c
++++ b/xmltok_impl_s00914b70_1.c
+@@ -970,3 +970,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1201,3 +1201,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1259,3 +1259,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1316,3 +1316,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr,
+@@ -1369,3 +1369,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
+--- a/xmltok_impl_s0090f980_1.c
++++ b/xmltok_impl_s0090f980_1.c
+@@ -783,3 +783,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -970,3 +970,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1201,3 +1201,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(attributeValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1259,3 +1259,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(entityValueTok)(const ENCODING *enc, const char *ptr,
+@@ -1316,3 +1316,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(ignoreSectionTok)(const ENCODING *enc, const char *ptr,
+@@ -1369,3 +1369,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -1429,3 +1429,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
+@@ -1566,3 +1566,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(predefinedEntityName)(const ENCODING *enc, const char *ptr,
+--- a/xmltok_impl_s00912e90_1.c
++++ b/xmltok_impl_s00912e90_1.c
+@@ -1620,3 +1620,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(sameName)(const ENCODING *enc, const char *ptr1, const char *ptr2)
+@@ -1684,3 +1684,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(nameMatchesAscii)(const ENCODING *enc, const char *ptr1,
+@@ -1697,3 +1697,3 @@
+ 
+-static int PTRFASTCALL
++int PTRFASTCALL
+ PREFIX(nameLength)(const ENCODING *enc, const char *ptr)
+@@ -1724,3 +1724,3 @@
+ 
+-static const char * PTRFASTCALL
++const char * PTRFASTCALL
+ PREFIX(skipS)(const ENCODING *enc, const char *ptr)
+@@ -1740,3 +1740,3 @@
+ 
+-static void PTRCALL
++void PTRCALL
+ PREFIX(updatePosition)(const ENCODING *enc,
+--- a/xmltok_impl_s00912e90_2.c
++++ b/xmltok_impl_s00912e90_2.c
+@@ -303,3 +303,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr,
+@@ -783,3 +783,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -970,3 +970,3 @@
+ 
+-static int PTRCALL
++int PTRCALL
+ PREFIX(prologTok)(const ENCODING *enc, const char *ptr, const char *end,
+--- a/xmltok_impl_s0090c240_1.c
++++ b/xmltok_impl_s0090c240_1.c
+@@ -91,3 +91,3 @@
+ 
+-static int PTRCALL
++__declspec(noinline) int PTRCALL
+ PREFIX(scanComment)(const ENCODING *enc, const char *ptr,
+@@ -129,3 +129,3 @@
+ 
+-static int PTRCALL
++__declspec(noinline) int PTRCALL
+ PREFIX(scanDecl)(const ENCODING *enc, const char *ptr,
+@@ -176,3 +176,3 @@
+ 
+-static int PTRCALL
++__declspec(noinline) int PTRCALL
+ PREFIX(checkPiTarget)(const ENCODING *enc, const char *ptr,
+@@ -494,3 +494,3 @@
+ 
+-static int PTRCALL
++__declspec(noinline) static int PTRCALL
+ PREFIX(scanRef)(const ENCODING *enc, const char *ptr, const char *end,
+@@ -524,3 +524,3 @@
+ 
+-static int PTRCALL
++__declspec(noinline) int PTRCALL
+ PREFIX(scanAtts)(const ENCODING *enc, const char *ptr, const char *end,
