@@ -4186,18 +4186,30 @@ void* __fastcall FUN_00c6f3d0(void* self, void* /*edx*/)
   return self;
 }
 
+struct IStreamHolder_c6f4 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14();
+  virtual void* GetStream();   // +0x18
+};
+inline void WriteUint32_c6f4(void* stream, u32 value)
+{
+  FUN_00e3aa70(stream, &value, 1, 0);
+}
+struct IStreamOwner_c6f4 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual IStreamHolder_c6f4* GetHolder();   // +0x20
+};
+
 // @ 0x00c6f470
 u8 __fastcall FUN_00c6f470(void* self, void* /*edx*/, void* stream)
 {
   char* p = (char*)self;
-  char* a = (char*)((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  u32 tag = 0x073905ae;
-  void* s = ((void*(__thiscall*)(void*))(*(void***)a)[0x18 / 4])(a);
-  FUN_00e3aa70(s, &tag, 1, 0);
+  WriteUint32_c6f4(((IStreamOwner_c6f4*)stream)->GetHolder()->GetStream(), 0x073905ae);
   u8 ok = ((u8(__thiscall*)(void*, void*))FUN_00c87580)(self, stream);
   u32 ser[645];   // cVarListSerializer, 0xa14 bytes
   ((void*(__thiscall*)(void*, void*, void*, int))FUN_00692f90)(
-      ser, p - 0xc, (void*)0x01578618, 0x1a80d26);
+      ser, p - 0xc, (void*)g_1578618, 0x1a80d26);
   u8 ok2 = ((u8(__thiscall*)(void*, void*))FUN_00692900)(ser, stream);
   return (ok2 != 0 && ok != 0);
 }
