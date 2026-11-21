@@ -476,9 +476,8 @@ unsigned ExceptionHandlerWin32_s0091_e650::ExceptionFilter(void* ep)
     mpExceptionAddress = *(void**)(*(char**)ep + 0xc);
     __int64 t = _time64(0);
     void* lt = _localtime64(&t);
-    void* prev = mPreviousFilter;
     memcpy(mTime, lt, 0x24);
-    prev = SetUnhandledExceptionFilter(prev);
+    void* prev = SetUnhandledExceptionFilter(mPreviousFilter);
     if (mpOwner != 0)
         mpOwner->NotifyClients(0);
     if (mReportFieldMask != 0)
@@ -488,8 +487,7 @@ unsigned ExceptionHandlerWin32_s0091_e650::ExceptionFilter(void* ep)
         mpOwner->NotifyClients(1);
     SetUnhandledExceptionFilter(prev);
     if (mAction == 1) {
-        UINT code = (UINT)mnTerminateReturnValue;
-        TerminateProcess(GetCurrentProcess(), code);
+        TerminateProcess(GetCurrentProcess(), (UINT)mnTerminateReturnValue);
         return (unsigned)mnTerminateReturnValue;
     }
     return mAction != 2;
