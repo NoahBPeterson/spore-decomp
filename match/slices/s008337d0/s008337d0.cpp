@@ -463,21 +463,25 @@ void TextZoomName::Tick(char param)
     }
 }
 
+struct IServer_834990 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void Post(int id, void* msg, int a, int b);   // +0x18
+};
 // @ 0x00834990
 bool TextZoomMsg::HandleMessage(int msgId, void* msg)
 {
     if (msgId == 0x61dd1b7) {
         if (*(void**)((char*)msg + 8) != (char*)this - 8)
             return false;
-        if (*(uint8_t*)((char*)this + 0x58) != 0) {
-            void* anim = (char*)this + 8;
+        char* owner = (char*)this - 8;   // the enclosing TextZoomName
+        if (*(uint8_t*)(owner + 0x60) != 0) {
+            void* anim = owner + 0x10;
             ((VFv)FUN_007f63b0)(anim);
             char e = ((char (__thiscall*)(void*))FUN_007f6340)(anim);
-            ((void (__thiscall*)(void*, int))FUN_00834660)((char*)this - 8, e == 0);
+            ((void (__thiscall*)(void*, bool))FUN_00834660)(owner, e == 0);
         }
-        void* srv = FUN_00883860();
-        ((void (__thiscall*)(void*, int, void*, int, int))VT(srv)[0x18 / 4])
-            (srv, 0x61dd1b7, msg, 0, 0);
+        ((IServer_834990*)FUN_00883860())->Post(0x61dd1b7, msg, 0, 0);
     }
     return true;
 }
