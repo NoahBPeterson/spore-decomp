@@ -15,8 +15,10 @@ float* __cdecl Sub2(float* out, float* a, float* b)
 // @ 0x0050d020  (2-component scale: out *= s)
 float* __cdecl Scale2(float* out, float* s)
 {
-    out[0] = out[0] * s[0];
-    out[1] = out[1] * s[0];
+    struct Components { float x, y; };
+    Components scaled = {out[0] * s[0], out[1] * s[0]};
+    out[0] = scaled.x;
+    out[1] = scaled.y;
     return out;
 }
 
