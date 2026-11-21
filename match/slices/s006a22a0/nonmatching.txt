@@ -3,7 +3,6 @@
 006a24d0  40   SP::cPropertyList::GetPropertyValue - complete; same fold difference
 006a2530  57   SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference; equiv: PASS (lower_bound annotated 0x612db0 after the hybrid crashed on a wrong instantiation, 2026-10-11)
 006a27d0  38   SP::cDirectPropertyList::HasProperty - complete; 0<key<num returns true, otherwise the inherited lookup is called (no tail call) and its bool widened to a full-width 0/1 [equiv: PASS]
-006a2800  140  SP::cDirectPropertyList::GetPropertyValue - complete; PropertyManager slot +0x50 lookup copied into mTempDirectVariant, then bool/int/float re-assigned from the direct slot when flag 0x10 is clear [equiv: WEAK: those type branches are unreachable with generated inputs]
 006a2940  150  eastl::vector<pair>::insert(iterator,value) - complete; append fast path inlined, DoInsertValue only when growing [equiv: PASS]
 006a2a80  64   SP::cPropertyList::Clear - complete; same copy/destroy/shrink sequence plus the modification count [equiv: PASS]
 006a2b20  75   SP::cDirectPropertyList::Clear - complete

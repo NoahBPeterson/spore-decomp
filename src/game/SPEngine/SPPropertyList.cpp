@@ -1802,20 +1802,26 @@ bool SP::cDirectPropertyList::HasProperty(unsigned int key) const
 }
 
 // @ 0x006a2800
+struct IPropMgr_6a2800 {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); 
+  virtual const EA::Variant_s006a_22a0* GetPropertyDef(unsigned int key);
+};
 EA::Variant_s006a_22a0 const& SP::cDirectPropertyList_s006a_22a0::GetProperty(unsigned int key) const
 {
   if (key < mNumDirectProps) {
-    EA::Variant_s006a_22a0* out = const_cast<EA::Variant_s006a_22a0*>(&mTempDirectVariant);
-    void* mgr = PropertyManager();
-    void* entry = (*(PropertyLookup*)(*(int*)mgr + 0x50))(mgr, 0, key);
-    VariantCopyAssign(out, 0, (EA::Variant_s006a_22a0*)entry);
-    if (!(out->mFlags & 0x10)) {
-      if (out->mTypeId == 1)
-        *out = (bool)(mDirectProps[key] != 0);
-      else if (out->mTypeId == 9)
-        *out = mDirectProps[key];
-      else if (out->mTypeId == 0xd)
-        *out = ((float*)mDirectProps)[key];
+    const_cast<EA::Variant_s006a_22a0&>(mTempDirectVariant) =
+        *((IPropMgr_6a2800*)PropertyManager())->GetPropertyDef(key);
+    if (!(mTempDirectVariant.mFlags & 0x10)) {
+      if (mTempDirectVariant.mTypeId == 1) {
+        bool b = mDirectProps[key] != 0;
+        const_cast<EA::Variant_s006a_22a0&>(mTempDirectVariant) = b;
+      } else if (mTempDirectVariant.mTypeId == 9) {
+        int v = mDirectProps[key];
+        const_cast<EA::Variant_s006a_22a0&>(mTempDirectVariant) = v;
+      } else if (mTempDirectVariant.mTypeId == 0xd) {
+        float f = ((float*)mDirectProps)[key];
+        const_cast<EA::Variant_s006a_22a0&>(mTempDirectVariant) = f;
+      }
     }
     return mTempDirectVariant;
   }

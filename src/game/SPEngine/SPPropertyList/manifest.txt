@@ -20,3 +20,4 @@
 ../src/game/SPEngine/SPPropertyList.cpp  ?GetPropertyIDs@cPropertyList_s006a_22a0@SP@@UAEIPAI@Z  006a3070  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?ClearMapOnly@VariantMap@SP@@QAEXXZ  006a28f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?Write@cPropertyListWriter@@QAE_NPAUIStream_s0061_2270@IO@EA@@PBUcPropertyBag@@@Z  00612ba0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?GetProperty@cDirectPropertyList_s006a_22a0@SP@@QBEABUVariant_s006a_22a0@EA@@I@Z  006a2800  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
