@@ -236,6 +236,7 @@ struct IView_e8f3c0 {
     virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
     virtual void v08(); virtual void v09();
     virtual void Init(void* gameData, void* world, void* key, void* pos);
+    virtual u32* GetFlags();
 };
 class cAnimalTrapView : public cSpatialObjectView {
 public:
@@ -661,27 +662,26 @@ bool GetOrnamentModelKey(cSpatialObject* obj, ModelKey* out)
 // @ 0x00e8fa00
 cOrnamentView* cOrnamentView::MakeView(void* gameData)
 {
-    ModelKey key = { 0, 0, 0 };
     void* sub;
     if (gameData != 0
-        && (sub = (void*)VC1(void*, gameData, 0xc, u32, kKeyOrnamentView)) != 0
-        && GetOrnamentModelKey((cSpatialObject*)sub, &key)) {
-        cOrnamentView* p = (cOrnamentView*)operator_new(0x34, "Simulator/cOrnamentView", 0, 0, 0, 0);
-        if (p != 0) {
-            p->cSpatialObjectView::cSpatialObjectView();
-            *(void**)p = (void*)kVtblOrnamentView;
-        } else {
-            p = 0;
+        && (sub = ((IQuery_e8f3c0*)gameData)->QueryInterface(kKeyOrnamentView)) != 0) {
+        ModelKey key = { 0, 0, 0 };
+        if (GetOrnamentModelKey((cSpatialObject*)sub, &key)) {
+            cOrnamentView* p = (cOrnamentView*)operator_new(0x34, "Simulator/cOrnamentView", 0, 0, 0, 0);
+            if (p != 0) {
+                p->cSpatialObjectView::cSpatialObjectView();
+                *(void**)p = (void*)kVtblOrnamentView;
+            } else {
+                p = 0;
+            }
+            if (key.mName != 0)
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &key, &mModelPos);
+            else
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &mModelRot, &mModelPos);
+            if (u32* r = ((IView_e8f3c0*)p)->GetFlags())
+                r[1] &= 0xfffffffd;
+            return p;
         }
-        void** vt = *(void***)p;
-        void* world = key.mName != 0
-            ? SP_GonzagoModelWorld(&key, &mModelPos)
-            : SP_GonzagoModelWorld(&mModelRot, &mModelPos);
-        ((void (__thiscall*)(void*, void*, void*))vt[0x28 / 4])(p, gameData, world);
-        u32* r = (u32*)VC0(void*, p, 0x2c);
-        if (r != 0)
-            r[1] &= 0xfffffffd;
-        return p;
     }
     return 0;
 }
