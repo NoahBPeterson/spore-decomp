@@ -373,6 +373,10 @@ void* CPlanet::FUN_00c71e70()
     return mp154;
 }
 
+struct SgFlags_s00c71f00 {
+    uint32_t mBits;
+    uint32_t Test(uint32_t mask) const { return mBits & mask; }
+};
 // @ 0x00c71f00
 float __cdecl FUN_00c71f00(float m, float b, float maxSpice, char hw, char storage, char param7, float param8, int planet, char param10)
 {
@@ -380,13 +384,11 @@ float __cdecl FUN_00c71f00(float m, float b, float maxSpice, char hw, char stora
     float cap = (float)((int(__thiscall*)(void*))FUN_01029900_00)(colony);
     void* econ = (void*)((void*(__cdecl*)())FUN_0102f810v)();
     m = ((float(__thiscall*)(void*))FUN_0102fad0_00)(econ) * m * 0.0166666675f;
-    if (hw == 0) {
-        if (planet > 4) {
-            m = (4.5f / (float)planet) * m;
-        }
-    } else {
+    if (hw != 0) {
         void* e2 = (void*)((void*(__cdecl*)())FUN_0102f810v)();
         m = ((float(__thiscall*)(void*))FUN_0102fa80_00)(e2) * m;
+    } else if (planet > 4) {
+        m = (4.5f / (float)planet) * m;
     }
     m = m * maxSpice;
     if (param7 != 0) {
@@ -394,20 +396,18 @@ float __cdecl FUN_00c71f00(float m, float b, float maxSpice, char hw, char stora
         cap = ((float(__thiscall*)(void*))FUN_0102fb20_00)(e3) * cap;
     }
     if (storage != 0) {
-        void* sg = SpaceGameGet_01002bd0();
-        if ((*(uint32_t*)((char*)sg + 0xc4) & 0x400) != 0) {
+        if (((SgFlags_s00c71f00*)((char*)SpaceGameGet_01002bd0() + 0xc4))->Test(0x400)) {
             float v = ((float(__thiscall*)(void*, int))FUN_01005c60_00)(SpaceGameGet_01002bd0(), 10);
             m = v * m;
         }
     }
-    void* nm = NounManager_00b3d300();
-    void* sphere = ((void*(__thiscall*)(void*))GetCurrentTerrainSphere_00f67d90)(nm);
-    float t = ((float(__thiscall*)(void*, int))FUN_00c75c30_00)(sphere, 0xcde375c9);
-    float result = t * m * param8;
-    if (param10 == 0 && (result + b) > cap) {
-        result = cap - b;
+    m = ((float(__thiscall*)(void*, int))FUN_00c75c30_00)(
+            ((void*(__thiscall*)(void*))GetCurrentTerrainSphere_00f67d90)(NounManager_00b3d300()), 0xcde375c9)
+        * m * param8;
+    if (param10 == 0 && (m + b) > cap) {
+        m = cap - b;
     }
-    return result;
+    return m;
 }
 
 // @ 0x00c72030
