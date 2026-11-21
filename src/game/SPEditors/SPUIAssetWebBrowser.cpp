@@ -455,11 +455,13 @@ void cSPUIAssetWebBrowser::FUN_0065b5f0()
     if (pOld)
       ((ILayoutObj*)pOld)->a2();
   }
-  ResourceKey key;
-  key.a = 0xfcd77c3b;
-  key.b = 0x510a95b;
-  key.c = g_152685c;
-  mpLayout->Init(&key, 1, 0x5b598fa);
+  {
+    ResourceKey key;
+    key.a = 0xfcd77c3b;
+    key.b = 0x510a95b;
+    key.c = g_152685c;
+    mpLayout->Init(&key, 1, 0x5b598fa);
+  }
   mpLayout->SetParentWin(mpParentWin, 1, 0x5b598fa);
   mpLayout->SetReloadCallback((void*)&FUN_0065b410, this);
   FUN_0065b380();
