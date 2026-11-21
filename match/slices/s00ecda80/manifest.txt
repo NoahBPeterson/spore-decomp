@@ -16,3 +16,4 @@ slices/s00ecda80/s00ecda80.cpp  ?FUN_00ecdbb0@@YIHH@Z  00ecdbb0  /O2 /MD /Gy /EH
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece8c0@@YIXPAH@Z  00ece8c0  /O2 /MD /Gy /EHsc /TP
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece8f0@@YIHH@Z  00ece8f0  /O2 /MD /Gy /EHsc /TP
 slices/s00ecda80/s00ecda80.cpp  ?FUN_00ece730@Obj_ece730@@QAE_NPAHHHHH@Z  00ece730  /O2 /MD /Gy /EHsc /TP
+slices/s00ecda80/s00ecda80.cpp  ?SetColors@PaletteItem_ece010@@QAEXPAH_N@Z  00ece010  /O2 /MD /Gy /EHsc /TP

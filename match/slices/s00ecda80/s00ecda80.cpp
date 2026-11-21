@@ -403,6 +403,47 @@ void __fastcall FUN_00ecdfc0(int param_1)
 // Refresh the preview colours of the palette item: validate the requested
 // triple against the UI helpers, falling back to the item's own colours and
 // finally to "no image"; then tint the window's text.
+struct ColorSys_s00ec_e010 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual int Lookup(int* rgb, int a, int b);   // +0x30
+};
+struct TintWin_s00ec_e010 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void SetTextColor(int argb);   // +0x5c
+};
 // @ 0x00ece010
 void PaletteItem_ece010::SetColors(int* rgb, bool highlight)
 {
@@ -418,34 +459,25 @@ void PaletteItem_ece010::SetColors(int* rgb, bool highlight)
     local[1] = rgb[1];
     local[2] = rgb[2];
 
-    void* sys = FUN_008de1a0();
-    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) != 0)
-        goto useImage;
-
-    local[2] = 0x65928944;
-    sys = FUN_008de1a0();
-    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) != 0)
-        goto useImage;
-
-    local[0] = mpColorSource_48->mRgb[0];
-    local[1] = mpColorSource_48->mRgb[1];
-    local[2] = mpColorSource_48->mRgb[2];
-    sys = FUN_008de1a0();
-    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) == 0)
-        goto clearImage;
-
-useImage:
-    FUN_00807bb0(w, local, -1);
-    goto tint;
-
-clearImage:
-    FUN_008068d0((int)w, 0, -1);
-
-tint:
-    if (highlight)
-        C1(w, 0x5c, 0x77ffffff);
+    int found = ((ColorSys_s00ec_e010*)FUN_008de1a0())->Lookup(local, 0, 0);
+    if (!found) {
+        local[2] = 0x65928944;
+        found = ((ColorSys_s00ec_e010*)FUN_008de1a0())->Lookup(local, 0, 0);
+        if (!found) {
+            local[0] = mpColorSource_48->mRgb[0];
+            local[1] = mpColorSource_48->mRgb[1];
+            local[2] = mpColorSource_48->mRgb[2];
+            found = ((ColorSys_s00ec_e010*)FUN_008de1a0())->Lookup(local, 0, 0);
+        }
+    }
+    if (found)
+        FUN_00807bb0(w, local, -1);
     else
-        C1(w, 0x5c, -1);
+        FUN_008068d0((int)w, 0, -1);
+    if (highlight)
+        ((TintWin_s00ec_e010*)w)->SetTextColor(0x77ffffff);
+    else
+        ((TintWin_s00ec_e010*)w)->SetTextColor(-1);
 }
 
 // ============================================================ 0x00ece110
