@@ -3853,7 +3853,14 @@ struct SimPlanet {
     void* GetNameRow(bool wantCol0) const;       // 0x00c707f0
     void  Func70860();                           // 0x00c70860
 };
-struct VarListSerializer { uchar mData_000[0xa14]; };
+struct VarListSerializer {
+    uchar mData_000[0xa14];
+    VarListSerializer(const void* obj, void* desc, unsigned count); // 0x692f90
+    bool Serialize(void* pArchive);                               // 0x692900
+    bool Read(void* pArchive);                                    // 0x693e10
+};
+struct GameDataPart { bool Write(void* pArchive); bool Read(void* pArchive); };     // 0xb18590 / 0xb18600
+struct SpatialObjPart { bool Write(void* pArchive); bool Read(void* pArchive); };   // 0xc88a90 / 0xc88b00
 struct VisiblePlanet {
     uchar mSpatial_000[0xd4];   // 0x00..0xd4 cSpatialObject
     uchar mGameData_d4[0x44];   // 0xd4..    cGameData
@@ -9023,14 +9030,9 @@ void* VisiblePlanet::Cast(unsigned type)
 // @ 0x00c6ff00
 bool VisiblePlanet::Write(void* pArchive)
 {
-    bool b = ((bool (__thiscall*)(void*, void*))FUN_00b18590)((uchar*)this + 0xd4, pArchive);
-    if (b) b = ((bool (__thiscall*)(void*, void*))FUN_00c88a90)(this, pArchive);
-    VarListSerializer ser;
-    FUN_00692f90(&ser, this, &DAT_01578890, (void*)0x1a80d26);
-    if (b) {
-        if (FUN_00692900(&ser, pArchive)) return true;
-    }
-    return false;
+    bool b = ((GameDataPart*)mGameData_d4)->Write(pArchive) && ((SpatialObjPart*)this)->Write(pArchive);
+    VarListSerializer ser(this, &DAT_01578890, 0x1a80d26);
+    return b && ser.Serialize(pArchive);
 }
 
 // @ 0x00c6ffd0
@@ -9047,26 +9049,18 @@ void* VisiblePlanet::Cast2(unsigned type)
 // @ 0x00c70010
 bool VisiblePlanet::Write2(void* pArchive)
 {
-    bool b = ((bool (__thiscall*)(void*, void*))FUN_00b18590)((uchar*)this + 0xd4, pArchive);
-    if (b) b = ((bool (__thiscall*)(void*, void*))FUN_00c88a90)(this, pArchive);
-    VarListSerializer ser;
-    FUN_00692f90(&ser, this, &DAT_01578ba0, (void*)0x1a80d26);
-    if (b) {
-        if (FUN_00692900(&ser, pArchive)) return true;
-    }
+    bool b = ((GameDataPart*)mGameData_d4)->Write(pArchive) && ((SpatialObjPart*)this)->Write(pArchive);
+    VarListSerializer ser(this, &DAT_01578ba0, 0x1a80d26);
+    if (b && ser.Serialize(pArchive)) return true;
     return false;
 }
 
 // @ 0x00c70090
 bool VisiblePlanet::Read(void* pArchive)
 {
-    bool b = ((bool (__thiscall*)(void*, void*))FUN_00b18600)((uchar*)this + 0xd4, pArchive);
-    if (b) b = ((bool (__thiscall*)(void*, void*))FUN_00c88b00)(this, pArchive);
-    VarListSerializer ser;
-    FUN_00692f90(&ser, this, &DAT_01578ba0, (void*)0x1a80d26);
-    if (b) {
-        if (FUN_00693e10(&ser, pArchive)) return true;
-    }
+    bool b = ((GameDataPart*)mGameData_d4)->Read(pArchive) && ((SpatialObjPart*)this)->Read(pArchive);
+    VarListSerializer ser(this, &DAT_01578ba0, 0x1a80d26);
+    if (b && ser.Read(pArchive)) return true;
     return false;
 }
 
