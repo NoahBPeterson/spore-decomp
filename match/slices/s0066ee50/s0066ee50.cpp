@@ -47,22 +47,25 @@ struct LargeView {
     void FUN_0066f980(void* arg);
 };
 
+struct FadeWindow {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09();
+    virtual unsigned GetFlags();   // +0x28
+};
+
 void LargeView::FUN_0066f980(void* arg) {
     (void)arg;
-    void** p = (void**)((char*)this + 0xa8);
+    FadeWindow** p = (FadeWindow**)((char*)this + 0xa8);
     int n = 2;
     do {
-        void* w = *p;
-        if (w) {
-            if (((FnIntV)VT(w)[10])(w) & 1) {
-                float t = SPUIHelpers_GetElapsedSeconds() * gF13ef61c;
-                float v[4];
-                v[0] = 0.0f;
-                v[1] = 0.0f;
-                v[2] = gF1485720;
-                v[3] = t;
-                FUN_00808230(w, v);
-            }
+        if (*p && ((*p)->GetFlags() & 1)) {
+            float v[4];
+            v[3] = SPUIHelpers_GetElapsedSeconds() * gF13ef61c;
+            v[0] = 0.0f;
+            v[1] = 0.0f;
+            v[2] = gF1485720;
+            FUN_00808230(*p, v);
         }
         ++p;
     } while (--n);
