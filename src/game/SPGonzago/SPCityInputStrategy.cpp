@@ -6,6 +6,12 @@
 extern "C" char g_147875c[];
 extern "C" char g_1478774[];
 extern "C" char g_1478788[];
+extern "C" char g_14787bc[];
+extern "C" char g_14787ac[];
+extern "C" char g_147879c[];
+extern "C" char g_13ec458[];
+extern "C" char g_13eb394[];
+extern "C" char g_14771e0[];
 
 #include "game/types.h"
 #include <math.h>
@@ -420,6 +426,12 @@ struct AutoRefVector {
     u8   mPad[8];                    // +0x0c
     void Dtor();                     // 0x00ae6970
 };
+struct TreeHalf_cf4ea0 {
+    u32 mn00, mn04, mn08;
+    u32 mnRoot;                      // +0x0c
+    void ClearA() { ((TreeOps*)this)->ResetA(mnRoot); }
+    void ClearB() { ((TreeOps*)this)->ResetB(mnRoot); }
+};
 struct TreePairLayout {
     u32 mn00;                        // +0x00 tree A header
     u32 mn04;                        // +0x04 self pointer
@@ -434,6 +446,11 @@ struct TreePairLayout {
     u32 mn28;                        // +0x28 element count
     union { u32 mn2C; u8 mb2C; };    // +0x2c
     u32 mn30;                        // +0x30
+    void Reset()
+    {
+        ((TreeHalf_cf4ea0*)&mn1C)->ClearB();
+        ((TreeHalf_cf4ea0*)this)->ClearA();
+    }
 };
 struct ScanObj {
     u32* FUN_c0bc00();               // 0x00c0bc00
@@ -2712,9 +2729,9 @@ CityInputStrategy* CityInputStrategy::Ctor(u32 param)
 // @ 0x00cf4ea0
 void CityInputStrategy::Destroy()
 {
-    mpVtbl = (void*)0x14787bc;
-    mpVtbl3C = (void*)0x14787ac;
-    mpVtbl40 = (void*)0x147879c;
+    mpVtbl = (void*)g_14787bc;
+    mpVtbl3C = (void*)g_14787ac;
+    mpVtbl40 = (void*)g_147879c;
 
     PieMenuVec* v = (PieMenuVec*)mp50;
     if (v != 0) {
@@ -2772,9 +2789,7 @@ void CityInputStrategy::Destroy()
     if (o != 0)
         ((void(__fastcall*)(void*))(*(void***)o)[4 / 4])(o);
 
-    TreePairLayout* t84 = (TreePairLayout*)&mTreeBase84;
-    ((TreeOps*)&t84->mn1C)->ResetB(t84->mn28);
-    ((TreeOps*)t84)->ResetA(t84->mn0C);
+    ((TreePairLayout*)&mTreeBase84)->Reset();
     o = mp80;
     if (o != 0)
         ((void(__fastcall*)(void*))(*(void***)o)[0xc / 4])(o);
@@ -2785,12 +2800,10 @@ void CityInputStrategy::Destroy()
         RemoveHandler(handler, mp70, mp74, (void*)mn78, (void*)mn7C);
     }
 
-    mpVtbl40 = (void*)0x13ec458;
-    mpVtbl3C = (void*)0x13eb394;
-    mpVtbl = (void*)0x14771e0;
-    TreePairLayout* t = (TreePairLayout*)&mTreeBase04;
-    ((TreeOps*)&t->mn1C)->ResetB(t->mn28);
-    ((TreeOps*)t)->ResetA(t->mn0C);
+    mpVtbl40 = (void*)g_13ec458;
+    mpVtbl3C = (void*)g_13eb394;
+    mpVtbl = (void*)g_14771e0;
+    ((TreePairLayout*)&mTreeBase04)->Reset();
 }
 
 // @ 0x00cf50e0
