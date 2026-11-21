@@ -7,8 +7,11 @@ typedef unsigned int uint32_t;
 // @ 0x0050cfb0  (2-component subtract: out = a - b)
 float* __cdecl Sub2(float* out, float* a, float* b)
 {
-    out[0] = a[0] - b[0];
-    out[1] = a[1] - b[1];
+    struct Components { float x, y; };
+    Components result = {a[0] - b[0], a[1] - b[1]};
+    Components difference = {result.x, result.y};
+    out[0] = difference.x;
+    out[1] = difference.y;
     return out;
 }
 
