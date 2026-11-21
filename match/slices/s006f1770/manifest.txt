@@ -7,3 +7,4 @@ slices/s006f1770/s006f1770.cpp  ?FreeBucketList@@YGXPAPAUHashNode@@I@Z  006f2270
 slices/s006f1770/s006f1770.cpp  ?ClearAll@EffectsRenderer@@QAE_NXZ  006f2620  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s006f1770/s006f1770.cpp  ?FindOrInsert@HtTableB@@QAEPAPAUResSub@@PBUKey8@@@Z  006f20f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s006f1770/s006f1770.cpp  ?AssignByKey@@YAXIPAUResSub@@@Z  006f24a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006f1770/s006f1770.cpp  ?FreeBucketList2@@YGXPAPAUBucketNode@@I@Z  006f2430  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
