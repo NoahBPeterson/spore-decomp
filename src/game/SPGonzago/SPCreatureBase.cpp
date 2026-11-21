@@ -9270,29 +9270,6 @@ int* __cdecl FUN_00c0fc40(int* first, int* last)
     return last;
 }
 
-// @ 0x00c0fcf0
-int* __cdecl FUN_00c0fcf0(int* iface, int param_2)
-{
-    int count = 0;
-    int* o = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-    void* s = (*(void*(__thiscall**)(void*))((*(void***)o)[0x18 / 4]))(o);
-    FUN_0093a780(s, &count, 1, 0);
-    if (count > 0) {
-        for (int i = 0; i < count; ++i) {
-            char b = 0;
-            int* o2 = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-            void* s2 = (*(void*(__thiscall**)(void*, void*))((*(void***)o2)[0x18 / 4]))(o2, &b);
-            FUN_0093ac80(s2);
-            if (i < 0x58) {
-                uint32_t* pu = (uint32_t*)(param_2 + (i >> 5) * 4);
-                if (b == 0) *pu &= ~(1u << (i & 0x1f));
-                else *pu |= 1u << (i & 0x1f);
-            }
-        }
-    }
-    return iface;
-}
-
 struct SerStream_s00c0_fda0 {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14();
@@ -9303,6 +9280,35 @@ struct SerIface_s00c0_fda0 {
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
     virtual SerStream_s00c0_fda0* GetSer();
 };
+struct Bits88Set_s00c0_fcf0 {
+    uint32_t mWord[3];
+    void set(uint32_t i, bool value)
+    {
+        if (i < 0x58) {
+            if (value)
+                mWord[i >> 5] |= 1u << (i & 31);
+            else
+                mWord[i >> 5] &= ~(1u << (i & 31));
+        }
+    }
+};
+
+// @ 0x00c0fcf0
+int* __cdecl FUN_00c0fcf0(int* piface, int param_2)
+{
+    SerIface_s00c0_fda0* iface = (SerIface_s00c0_fda0*)piface;
+    Bits88Set_s00c0_fcf0& bits = *(Bits88Set_s00c0_fcf0*)param_2;
+    int count;
+    void* st = iface->GetSer()->GetStream();
+    FUN_0093a780(st, &count, 1, 0);
+    for (int i = 0; i < count; ++i) {
+        bool b = false;
+        FUN_0093ac80(iface->GetSer()->GetStream(), &b);
+        bits.set(i, b);
+    }
+    return piface;
+}
+
 struct Bits88_s00c0_fda0 {
     uint32_t mWord[3];
     bool test(uint32_t i) const
