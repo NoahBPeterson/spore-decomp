@@ -1451,6 +1451,20 @@ void FUN_01017150()
     inv->FUN_00c37120();
 }
 
+struct IStreamHolder_1017 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void* GetStream();                         // +0x18
+};
+struct ISerStream_1017 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual IStreamHolder_1017* GetHolder();           // +0x20
+    virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual u32 GetVersion();                          // +0x3c
+};
+
 // @ 0x01017290
 void cSPCameraControllerSolarSystem::Write(void* stream)
 {
@@ -1468,12 +1482,11 @@ u8 cSPCameraControllerSolarSystem::Read(void* stream)
 {
     cVarListSerializer buf;
     u32 tmp;
-    void* p = (void*)(**(int(__thiscall**)(void*))(vpt(stream) + 0x20))(stream);
-    void* io = (void*)(**(int(__thiscall**)(void*))(vpt(p) + 0x18))(p);
+    void* io = ((ISerStream_1017*)stream)->GetHolder()->GetStream();
     EA_IO_ReadInt32(io, &tmp, 1, 0);
-    buf.Ctor(this, (void*)0x15b6e28, 0x1a80d26);
+    buf.Ctor(this, g_props_0c40, 0x1a80d26);
     u8 ok = buf.Read(stream);
-    if ((**(u32(__thiscall**)(void*))(vpt(stream) + 0x3c))(stream) < 0x220001) {
+    if (((ISerStream_1017*)stream)->GetVersion() < 0x220001) {
         mVec_74 = mVec_68;
     }
     return ok;
