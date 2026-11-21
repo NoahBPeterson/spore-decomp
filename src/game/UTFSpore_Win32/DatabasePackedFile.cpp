@@ -2559,21 +2559,29 @@ extern "C" void FUN_008db630(int* lo, int* mid, int* hi, int d)
     FUN_008daef0(lo, mid, d);
 }
 
+extern "C" char g_1436878[];        // 0x01436878 PFIndexModifiable vtable
+extern "C" char g_154df28[];        // 0x0154df28
+extern "C" const float g_1485720;   // 0x01485720
+extern "C" const float g_1470f1c;   // 0x01470f1c
+struct FixedPool_8db730 {
+    void* FUN_00925f30(void* alloc, unsigned n, unsigned size);   // 0x00925f30
+};
 // @ 0x008db730
 PFIndexModifiable_s008d_aff0::PFIndexModifiable_s008d_aff0(void* alloc)
 {
     (void)alloc;
-    vtbl = (void**)0x1436878;
+    vtbl = (void**)g_1436878;
     mpAllocator = alloc;
-    ((void (__thiscall *)(void*, void*, unsigned, unsigned))0x925f30)((char*)this + 8, alloc, 0x80, 0x20);   // 0x925f30
-    *(float*)((char*)this + 0x38) = *(float*)0x1485720;
-    *(float*)((char*)this + 0x3c) = *(float*)0x1470f1c;
+    ((FixedPool_8db730*)((char*)this + 8))->FUN_00925f30(alloc, 0x80, 0x20);
+    *(float*)((char*)this + 0x38) = g_1485720;
+    *(float*)((char*)this + 0x3c) = g_1470f1c;
+    _ReadWriteBarrier();
     *(void**)((char*)this + 0x44) = (char*)this + 8;
     *(unsigned*)((char*)this + 0x48) = 0;
     *(unsigned*)((char*)this + 0x34) = 0;
     *(unsigned*)((char*)this + 0x40) = 0;
     *(unsigned*)((char*)this + 0x30) = 1;
-    *(void**)((char*)this + 0x2c) = (void*)0x154df28;
+    *(void**)((char*)this + 0x2c) = (void*)g_154df28;
 }
 
 // @ 0x008db7b0
