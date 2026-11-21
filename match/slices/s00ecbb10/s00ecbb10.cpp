@@ -242,14 +242,14 @@ int __cdecl FUN_00ecc100(int key)
 // @ 0x00ecc920
 void __fastcall FUN_00ecc920(S920* s)
 {
-    s->m00 = 0;
-    s->m04 = 0;
-    s->m08 = 0;
-    s->m0c = 0;
-    s->m0e = 0;
-    s->m10 = 0;
-    s->m14 = 0.0f;
-    s->m18 = 0.0f;
+    volatile S920& fields = *s;
+    fields.m00 = 0;
+    fields.m04 = 0;
+    fields.m08 = 0;
+    fields.m0c = 0;
+    fields.m0e = 0;
+    fields.m10 = 0;
+    s->m18 = s->m14 = 0.0f;
     s->m1c = 0xfffff;
     s->m20 = -1;
     s->m24 = -1;
