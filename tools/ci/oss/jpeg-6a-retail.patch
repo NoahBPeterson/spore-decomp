@@ -1,7 +1,8 @@
-SporeApp.exe's libjpeg 6a differs from IJG's release in two files (found by byte-matching): jpeglib.h's
-jpeg_decompress_struct inserts 0x404 bytes and gains a trailing read_dht flag, the error manager's msg_parm is 80
-bytes, and read_markers sets read_dht after a DHT marker.  tools/ci/setup_oss.sh applies this to a copy of the
-release in work/third_party/build/jpeg-6a-retail; the libjpeg slices #include from there.
+SporeApp.exe's libjpeg 6a differs from IJG's release (found by byte-matching): jpeglib.h's jpeg_decompress_struct
+inserts 0x404 bytes and gains a trailing read_dht flag, the error manager's msg_parm is 80 bytes, read_markers sets
+read_dht after a DHT marker, jpeg_CreateDecompress clears it and jpeg_read_header installs the standard Huffman tables
+without one, jdatasrc reads through the engine's gread, and jcmarker writes an AVI1 APP0 block.
+tools/ci/setup_oss.sh applies this to a copy of the release in work/third_party/build/jpeg-6a-retail; the libjpeg slices #include from there.
 
 --- a/jpeglib.h
 +++ b/jpeglib.h
@@ -52,3 +53,132 @@ release in work/third_party/build/jpeg-6a-retail; the libjpeg slices #include fr
        break;
        
      case M_DQT:
+--- a/jdapimin.c
++++ b/jdapimin.c
+@@ -21,5 +21,10 @@
+ #include "jpeglib.h"
+ 
++/* Retail patch: jcparam.c's std_huff_tables is a global in the retail link, so
++ * jpeg_read_header can install the standard Huffman tables when the datastream
++ * carried no DHT marker (0x008552d0). */
++extern void std_huff_tables (j_common_ptr cinfo);
+ 
++
+ /*
+  * Initialization of a JPEG decompression object.
+@@ -73,4 +78,7 @@
+   jinit_input_controller(cinfo);
+ 
++  /* Retail patch: clear the "a DHT marker was seen" flag. */
++  cinfo->read_dht = FALSE;
++
+   /* OK, I'm ready */
+   cinfo->global_state = DSTATE_START;
+@@ -259,4 +267,8 @@
+ 
+   retcode = jpeg_consume_input(cinfo);
++
++  /* Retail patch: without a DHT marker, build the standard Huffman tables. */
++  if (! cinfo->read_dht)
++    std_huff_tables((j_common_ptr) cinfo);
+ 
+   switch (retcode) {
+--- a/jdatasrc.c
++++ b/jdatasrc.c
+@@ -20,5 +20,10 @@
+ #include "jerror.h"
+ 
++/* ?gread@@YGHPAX0H@Z -- __stdcall int gread(void * stream, void * buffer, int size).
++ * Retail patch: the source manager reads its JPEG bytes with this engine helper
++ * (0x0087d4e0) instead of fread. */
++extern int __stdcall gread (void * context, void * buffer, int size);
+ 
++
+ /* Expanded data source object for stdio input */
+ 
+@@ -93,5 +98,5 @@
+   size_t nbytes;
+ 
+-  nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
++  nbytes = gread(src->infile, src->buffer, INPUT_BUF_SIZE);
+ 
+   if (nbytes <= 0) {
+--- a/jcmarker.c
++++ b/jcmarker.c
+@@ -94,4 +94,11 @@
+  */
+ 
++/* Spore patch: the AVI1-marker selector lives at +0x168 of jpeg_compress_struct,
++ * past the end of the upstream 6a struct (sizeof == 0x168); it is set to 1 by
++ * jpeg_CreateCompress and cleared by the AVI1 writer for video JPEGs.  Read as a
++ * raw word so the field layout of the rest of the struct stays upstream's. */
++#define AVI1_FLAG(cinfo)  (*(int *) ((char *) (cinfo) + 0x168))
++
++
+ LOCAL(void)
+ emit_byte (j_compress_ptr cinfo, int val)
+@@ -126,4 +133,16 @@
+ 
+ 
++/* Spore patch: upstream 6a has no 4-byte emitter; the binary does (0x00853320). */
++LOCAL(void)
++emit_4bytes (j_compress_ptr cinfo, int value)
++/* Emit a 4-byte integer, MSB first */
++{
++  emit_byte(cinfo, (value >> 24) & 0xFF);
++  emit_byte(cinfo, (value >> 16) & 0xFF);
++  emit_byte(cinfo, (value >> 8) & 0xFF);
++  emit_byte(cinfo, value & 0xFF);
++}
++
++
+ /*
+  * Routines to write specific marker types.
+@@ -374,4 +393,34 @@
+ 
+ LOCAL(void)
++emit_avi1_app0 (j_compress_ptr cinfo)
++/* Emit the Spore AVI1 video APP0 marker (upstream 6a has no counterpart) */
++{
++  /*
++   * Length of APP0 block	(2 bytes)
++   * Block ID			(4 bytes - ASCII "AVI1")
++   * Zero byte			(1 byte to terminate the ID string)
++   * Padding			(1 byte)
++   * Frame counts / rates	(8 bytes - four big-endian longs)
++   *
++   * Written verbatim from the binary (0x00853c80): length 0x10, the ASCII tag
++   * "AVI1", a zero byte, then two 4-byte zero fields.
++   */
++  
++  emit_marker(cinfo, M_APP0);
++  
++  emit_2bytes(cinfo, 2 + 4 + 1 + 1 + 4 + 4); /* length */
++
++  emit_byte(cinfo, 0x41);	/* Identifier: ASCII "AVI1" */
++  emit_byte(cinfo, 0x56);
++  emit_byte(cinfo, 0x49);
++  emit_byte(cinfo, 0x31);
++  emit_byte(cinfo, 0);
++  emit_byte(cinfo, 0);
++  emit_4bytes(cinfo, 0);
++  emit_4bytes(cinfo, 0);
++}
++
++
++LOCAL(void)
+ emit_adobe_app14 (j_compress_ptr cinfo)
+ /* Emit an Adobe APP14 marker */
+@@ -461,6 +510,10 @@
+   emit_marker(cinfo, M_SOI);	/* first the SOI */
+ 
+-  if (cinfo->write_JFIF_header)	/* next an optional JFIF APP0 */
+-    emit_jfif_app0(cinfo);
++  if (cinfo->write_JFIF_header) {	/* next an optional APP0 */
++    if (AVI1_FLAG(cinfo))		/* Spore patch: AVI1 files get JFIF ... */
++      emit_jfif_app0(cinfo);
++    else
++      emit_avi1_app0(cinfo);		/* ... others get the AVI1 block */
++  }
+   if (cinfo->write_Adobe_marker) /* next an optional Adobe APP14 */
+     emit_adobe_app14(cinfo);
