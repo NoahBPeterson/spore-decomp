@@ -379,29 +379,26 @@ void HideEntry(IWin* w)
 // @ 0x00f0b8b0
 void RefreshEntries()
 {
+    struct Tree {
+        static bool Contains(IWin* p, IWin* w)
+        {
+            for (; p; p = p->GetParent()) {
+                if (p == w)
+                    return true;
+            }
+            return false;
+        }
+    };
     if (g_16c7d90 == 0)
         return;
     IWin* list = WindowManager()->GetWindowList(0);
-    for (int off = 0; off < 0x50; off += 0x10) {
-        Entry* e = (Entry*)((char*)g_16c7d90 + off + 0x10);
+    for (int i = 0; i < 5; i++) {
+        Entry* e = &g_16c7d90->entries[i];
         Rec* r = GetListRec(e->idx);
-        if (r->sub.Flags() > 0)
-            goto show;
-        {
-            IWin* w = e->win;
-            IWin* p = list;
-            if (p) {
-                do {
-                    if (p == w)
-                        goto show;
-                    p = p->GetParent();
-                } while (p);
-            }
+        if (r->sub.Flags() > 0 || Tree::Contains(list, e->win))
+            ShowEntry(e->win);
+        else
             HideEntry(e->win);
-            continue;
-        }
-    show:
-        ShowEntry(e->win);
     }
 }
 

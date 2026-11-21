@@ -4,6 +4,5 @@
 00f0b390  74  complete; reg alloc
 00f0b4d0  237  complete; k range check (test/jl vs ja) and loop reg alloc
 00f0b690  28  complete; id loop var spill vs reg
-00f0b8b0  28  complete; reg alloc (ebp/ebx/edi)
 00f0b940  75  complete; per-case tail layout
 00f0ba10  119  complete; reg alloc (edx/ecx) only; needs /fp:fast
