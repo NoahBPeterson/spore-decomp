@@ -6,7 +6,6 @@
 01141020  217  SNDVOICEI_free: leaf; unlink/clear voice slot and its partner; complete; the original's leftover EAX values are now modeled explicitly: (index*0x84)&0xffffff00 on the b==0 path, other*0x84 on the double-free/partner paths, and g_tick on the default path. difftest FAIL-KEPT ecx (1/307 valid inputs mismatched): the original preserves caller ecx via a `push ecx`/`pop ecx` frame-scratch slot, while our single-object /vc71 build uses ecx as scratch; no source-level way to force that save/restore without asm. coverage 50.0%. flags /vc71 /O2 /MD /Gy /TP
 01141150   34  voice-handle validation leaf; complete; difftest WEAK 58.8% cov. flags /vc71 /O2 /MD /Gy /TP
 01141200   31  intrusive list pop-front leaf; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP; fixed 2026-10-12: returns the popped node in eax as the original does (void gave callers the list pointer: hybrid black screen)
-01141230   47  intrusive list unlink leaf; complete; difftest PASS 84.6% cov. flags /vc71 /O2 /MD /Gy /TP
 01141270   40  find object by handle and walk its +0x114 list; complete; difftest WEAK 53.8% cov. flags /vc71 /O2 /MD /Gy /TP
 011412b0  183  SNDI_patchtohdr: parse the SNDI tag stream into header/buffers/timestretch arrays; complete; difftest PASS 86.8% cov. flags /vc71 /O2 /MD /Gy /TP
 011416b0   48  unregister callback leaf; complete; difftest WEAK 21.4% cov. flags /vc71 /O2 /MD /Gy /TP
