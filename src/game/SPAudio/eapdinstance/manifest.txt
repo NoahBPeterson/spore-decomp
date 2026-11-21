@@ -15,3 +15,4 @@
 ../src/game/SPAudio/eapdinstance.cpp  ??1ObjectHashMapObj@Eapd@Audio@EA@@QAE@XZ  00a64b70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?Op1@GroupOwnerL@@QAE_NII@Z  00a68670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?NewEntryNode@EapdAssetManager@Eapd@Audio@EA@@QAEPAUAssetEntry@234@PAX0@Z  00a643b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?Erase@ObjectHashMap@Eapd@Audio@EA@@QAEIPAI@Z  00a64be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -835,27 +835,24 @@ ObjectHashMapObj::~ObjectHashMapObj()
 
 // @ 0x00a64be0
 namespace EA { namespace Audio { namespace Eapd {
+struct ObjectHashNode { uint32_t mKey; uint32_t m04; uint32_t m08; ObjectHashNode* mpNext; };
 unsigned ObjectHashMap::Erase(uint32_t* key)
 {
     unsigned before = mSize0c;
-    unsigned idx = *key % mNumBuckets08;
-    unsigned** bucket = (unsigned**)((char*)mpBuckets04 + idx * 4);
+    ObjectHashNode** bucket = (ObjectHashNode**)mpBuckets04 + *key % mNumBuckets08;
     if (*bucket) {
-        unsigned* cur = *bucket;
-        while (*cur != *key) {
-            bucket = (unsigned**)((char*)cur + 0xc);
-            cur = *bucket;
-            if (!cur)
+        uint32_t k = *key;
+        do {
+            if (k == (*bucket)->mKey)
                 break;
-        }
+            bucket = &(*bucket)->mpNext;
+        } while (*bucket);
         while (*bucket) {
-            unsigned* node = *bucket;
-            if (*node != *key)
+            ObjectHashNode* node = *bucket;
+            if (*key != node->mKey)
                 break;
-            *bucket = *(unsigned**)((char*)node + 0xc);
-            void** a = *(void***)((char*)this + 0x1c);
-            void* f = a[3];
-            ((void (__thiscall*)(void*, void*))f)((char*)this + 0x1c, node);
+            *bucket = node->mpNext;
+            ((ObjectHashMapObj*)this)->mAlloc.Free(node);
             --mSize0c;
         }
     }
