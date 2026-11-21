@@ -664,33 +664,51 @@ done:
     return 1;
 }
 
+struct PosseItem_e285a0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
+    virtual void vc0();
+    virtual void* GetID();                                   // +0xc4
+    virtual void vc8();
+    virtual void RemoveRefs();                               // +0xcc
+};
 // @ 0x00e285a0  SP::cSPUIPosse::RemoveItem
 char cSPUIPosse16::RemoveItem(void* item, char removeRefs)
 {
     if (item == 0)
         return 0;
 
-    void* idObj = ((void* (__thiscall*)(void*))VFN(item)[0xc4 / 4])(item);
-    cRefPair16* found = (cRefPair16*)find_item((u32)idObj);
+    cRefPair16* found = (cRefPair16*)find_item((u32)((PosseItem_e285a0*)item)->GetID());
     if (found != mpItemsEnd) {
-        void* pSecond = found->mpSecond;
+        PosseItem_e285a0* pSecond = (PosseItem_e285a0*)found->mpSecond;
         if (removeRefs != 0)
-            ((void (__thiscall*)(void*))VFN(pSecond)[0xcc / 4])(pSecond);
+            pSecond->RemoveRefs();
 
-        // Remove every ref-list entry that points at the pair's second object.
-        {
-            u32* it = (u32*)mpRefsBegin;
-            u32* end = (u32*)mpRefsEnd;
-            while (it != end && *it != (u32)pSecond)
-                ++it;
-            if (it != end) {
-                ((void (__thiscall*)(void*, void*))FUN_00bf3420)((void*)((char*)this + 0x0c), it);
-                FUN_00e26de0(mpRefsBegin, mpRefsEnd, (void*)0x00e22760);
-            }
+        // Remove the ref-list entry that points at the pair's second object.
+        struct RefVec { void** mpBegin; void** mpEnd; };
+        RefVec& refs = *(RefVec*)((char*)this + 0x0c);
+        void** last = refs.mpEnd;
+        void** it = refs.mpBegin;
+        for (; it != last; ++it)
+            if (*it == (void*)pSecond)
+                break;
+        if (it != refs.mpEnd) {
+            ((void (__thiscall*)(void*, void*))FUN_00bf3420)(&refs, it);
+            FUN_00e26de0(mpRefsBegin, mpRefsEnd, (void*)&FUN_00e22760);
         }
 
         ((void (__thiscall*)(void*, void*))FUN_00e26bf0)((void*)((char*)this + 0xa4), (void*)found);
-        FUN_00e28130(mpItemsBegin, mpItemsEnd, (void*)0x00e23c00);
+        FUN_00e28130(mpItemsBegin, mpItemsEnd, (void*)&FUN_00e23c00);
         mDirty1d4 = 1;
         return 1;
     }
