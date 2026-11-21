@@ -1,7 +1,6 @@
 # complete behaviourally-equivalent source, not byte-exact (yet)
 006a58a0  183  message-server handler: rebuilt from the MessageServer/vtable dispatch; frame and register schedule differ; equiv: WEAK (400 valid inputs, 21.8% coverage)
 006a5a90  217  regalloc: R49 (2026-11-17): this/count registers in the loop differ (retail ebp/edi) after guard+key struct reproduced the frame; tried n=count, bool ok, vcall via held.mgr | Earlier note: batch key insert (3 args): rebuilt with named members; loop/frame schedule differs; equiv: PASS (254 valid inputs, 91.0% coverage)
-006a5b80  192  regalloc: R49 (2026-11-17): loop register assignment differs (retail this=ebp, table=ebx, count=edi); tried held-ref/guard struct with this slot (size equal), hoisted table, count copy, local m | Earlier note: batch key insert (2 args): 12-byte-stride key loop rebuilt; frame schedule differs; equiv: PASS (254 valid inputs, 90.3% coverage)
 006a5fd0  219  name lookup with a temporary eastl string key: rebuilt; equiv: PASS (207 valid inputs, 100% coverage)
 006a60b0  264  property lookup/apply with a 12-byte variant value: rebuilt; equiv: UNSUPPORTED (0/400 valid: the original itself faults on 357 inputs)
 006a6240   50  name/id lookup with isdigit/strtoul fast path: rebuilt; equiv: WEAK (140 valid inputs, 59.7% coverage)

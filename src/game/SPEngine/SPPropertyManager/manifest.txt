@@ -25,3 +25,4 @@
 ../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a4190@@YGIPAXPAUArgParserView@@@Z  006a4190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyManager.cpp  ?GetPropertyGroupID@cPropertyManager@SP@@UAE_NHPAI@Z  006a39d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a61c0@ArgMgr@@QAEXPAXII@Z  006a61c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a5b80@ArgMgr@@QAEXHPAH@Z  006a5b80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

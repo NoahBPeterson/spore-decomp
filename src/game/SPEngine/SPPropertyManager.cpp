@@ -2053,31 +2053,34 @@ void ArgMgr::FUN_006a5a90(int a, int count, int* p)
     }
 }
 
+struct HeldRef_006a5b80 {
+    virtual void AddRef(); virtual void Release();
+};
+struct HeldPtr_006a5b80 {
+    HeldRef_006a5b80* p;
+    HeldPtr_006a5b80() : p(0) {}
+    ~HeldPtr_006a5b80() { if (p) p->Release(); }
+    void reset() { if (p) { HeldRef_006a5b80* q = p; p = 0; q->Release(); } }
+};
+struct PropDb_006a5b80 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual bool GetProperty(int* key, HeldRef_006a5b80** out);   // +0x14
+};
 // @ 0x006a5b80
 void ArgMgr::FUN_006a5b80(int count, int* p)
 {
-    int* held = 0;
+    HeldPtr_006a5b80 held;
     if (count > 0) {
+        HashTable* table = (HashTable*)((char*)this + 0x74);
+        int n = count;
         do {
-            if (held) {
-                int* h = held;
-                held = 0;
-                (*(void (__thiscall**)(int*))(*h + 4))(h);
-            }
-            char ok = (*(char (__thiscall**)(void*, int*, int**))(**(int**)((char*)this + 0x18) + 0x14))(
-                *(void**)((char*)this + 0x18), p, &held);
-            if (ok)
-                VariantRelease(held);
-            char key[0x10];
-            *(uint32_t*)key = p[0];
-            *(uint32_t*)(key + 4) = p[2];
-            ((HashTable*)((char*)this + 0x74))->Find2(&key[0], key);
+            held.reset();
+            if ((*(PropDb_006a5b80**)((char*)this + 0x18))->GetProperty(p, &held.p))
+                VariantRelease((int*)held.p);
+            unsigned __int64 key = ((unsigned __int64)(unsigned)p[2] << 32) | (unsigned)p[0];
+            table->Find2(&key);
             p += 3;
-        } while (--count);
-    }
-    if (held) {
-        int* h = held;
-        (*(void (__thiscall**)(int*))(*h + 4))(h);
+        } while (--n);
     }
 }
 
