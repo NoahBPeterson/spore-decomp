@@ -648,32 +648,47 @@ bool __stdcall FUN_00a17a00(void* reader, EAString* str)
 }
 
 // @ 0x00a17c70
+struct ResKey_00a17c70 { uint32_t a, b, c; };
+struct ResStream_00a17c70 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual ResKey_00a17c70* GetKey();          // +0x10
+};
+struct ResCfgObj_00a17c70 {
+    virtual int AddRef(); virtual int Release();
+    uint32_t m04;
+    ResKey_00a17c70 mKey;                       // +0x08
+    uint8_t pad[0x84 - 0x14];
+    ResCfgObj_00a17c70* Construct();            // 0xa17be0 (constructor, returns this)
+};
+struct ResCfgRef_00a17c70 {
+    ResCfgObj_00a17c70* p;
+    ResCfgRef_00a17c70(ResCfgObj_00a17c70* q) : p(q) { if (p) p->AddRef(); }
+    ~ResCfgRef_00a17c70() { if (p) p->Release(); }
+};
+extern "C" char g_1452340[];   // 0x01452340 (mutex lock tag)
+struct MutexLock_00a17c70 {
+    Mutex_s00a1_7690* m;
+    MutexLock_00a17c70(Mutex_s00a1_7690* mm) : m(mm) { m->Lock((uint32_t)g_1452340); }
+    ~MutexLock_00a17c70() { m->Unlock(); }
+};
+struct FactoryVt_00a17c70 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual bool Read(void* stream, void* obj, uint32_t a, uint32_t b);   // +0x24
+};
 bool FactoryConfiguration_s00a1_7690::CreateResource(void* stream, void** out, uint32_t a, uint32_t b)
 {
-    Mutex_s00a1_7690* mutex = (Mutex_s00a1_7690*)(m + 0x10);
-    mutex->Lock(0x1452340u);
-
-    ResourceConfiguration_s00a1_7690* obj = (ResourceConfiguration_s00a1_7690*)FUN_00f473a0(0x84, "audio", 0, 0, 0, 0);
-    if (obj != 0) obj->ctor();
-
-    if (obj != 0) ((void(__thiscall*)(void*))VtOf(obj)[0])(obj);
-
-    if (obj != 0) {
-        uint32_t* key = (uint32_t*)((void*(__thiscall*)(void*))VtOf(stream)[0x10 / 4])(stream);
-        *(uint32_t*)(obj->m + 8) = key[0];
-        *(uint32_t*)(obj->m + 0xc) = key[1];
-        *(uint32_t*)(obj->m + 0x10) = key[2];
-        if (((bool(__thiscall*)(void*, void*, void*, uint32_t, uint32_t))Vt()[0x24 / 4])(this, stream, obj, a, b)) {
-            *out = obj;
-            ((void(__thiscall*)(void*))VtOf(obj)[0])(obj);
-            ((void(__thiscall*)(void*))VtOf(obj)[1])(obj);
-            mutex->Unlock();
+    MutexLock_00a17c70 lock((Mutex_s00a1_7690*)(m + 0x10));
+    ResCfgObj_00a17c70* mem = (ResCfgObj_00a17c70*)FUN_00f473a0(0x84, "audio", 0, 0, 0, 0);
+    ResCfgRef_00a17c70 obj(mem ? mem->Construct() : 0);
+    if (obj.p) {
+        obj.p->mKey = *((ResStream_00a17c70*)stream)->GetKey();
+        if (((FactoryVt_00a17c70*)this)->Read(stream, obj.p, a, b)) {
+            *out = obj.p;
+            obj.p->AddRef();
             return true;
         }
     }
-
-    if (obj != 0) ((void(__thiscall*)(void*))VtOf(obj)[1])(obj);
-    mutex->Unlock();
     return false;
 }
 
