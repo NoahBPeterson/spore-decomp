@@ -551,30 +551,53 @@ void cScenarioEditModeScriptActsBarUI::dtor()
 // 0x00edbd30  register/unregister message handler
 // ---------------------------------------------------------------------------
 // @ 0x00edbd30
+extern "C" char g_148a46c[];   // 0x0148a46c message id list
+struct MsgServer_00edbd30 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual void AddHandler(void* handler, unsigned id);   // +0x24
+};
+struct Window_00edbd30 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
+    virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+    virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void v30();
+    virtual void SetFlag(int flag, int on);                 // +0x7c
+};
+struct ActsBarView_00edbd30 {
+    char pad00[8];
+    char mHandler[4];           // +0x08 IHandler base
+    cSPUILayout* mpLayout;      // +0x0c
+    Window_00edbd30* mpWindow;  // +0x10
+    char pad14[4];
+    MsgServer_00edbd30* mpServer; // +0x18
+    void* mpHandler;            // +0x1c
+    void* mpIds;                // +0x20
+    int   mCount;               // +0x24
+    int   mPriority;            // +0x28
+};
 void cScenarioEditModeScriptActsBarUI::FUN_00edbd30(int on)
 {
-    char* s = (char*)this;
+    ActsBarView_00edbd30* s = (ActsBarView_00edbd30*)this;
     if ((char)on) {
-        char* h = (char*)EA_Messaging_MessageServer();
-        char* sub = s ? s + 8 : 0;
-        *(char**)(s + 0x18) = h;
-        *(char**)(s + 0x1c) = sub;
-        *(void**)(s + 0x20) = (void*)0x148a46c;
-        *(int*)(s + 0x24) = 1;
-        *(int*)(s + 0x28) = 0;
+        void* sub = s ? s->mHandler : 0;
+        MsgServer_00edbd30* h = (MsgServer_00edbd30*)EA_Messaging_MessageServer();
+        s->mpServer = h;
+        s->mpHandler = sub;
+        s->mpIds = g_148a46c;
+        s->mCount = 1;
+        s->mPriority = 0;
         if (h && sub)
-            (*(FnII)(*(void**)(*(char**)h + 0x24)))(h, (int)sub, 0x7c41ae9);
-    } else {
-        int h = *(int*)(s + 0x18);
-        if (h) {
-            *(int*)(s + 0x18) = 0;
-            EA_Messaging_RemoveHandler((void*)h, *(void**)(s + 0x1c), *(void**)(s + 0x20),
-                                       *(void**)(s + 0x24), *(void**)(s + 0x28));
-        }
+            h->AddHandler(sub, 0x7c41ae9);
+    } else if (void* h = s->mpServer) {
+        s->mpServer = 0;
+        EA_Messaging_RemoveHandler(h, s->mpHandler, s->mpIds, (void*)s->mCount, (void*)s->mPriority);
     }
-    char* w = *(char**)(s + 0x10);
-    (*(FnII)(*(void**)(*(char**)w + 0x7c)))(w, 1, on);
-    ((cSPUILayout*)*(void**)(s + 0xc))->SetVisibility(1);
+    s->mpWindow->SetFlag(1, on);
+    s->mpLayout->SetVisibility(1);
 }
 
 // ---------------------------------------------------------------------------
