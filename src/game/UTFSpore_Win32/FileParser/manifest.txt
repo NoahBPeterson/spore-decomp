@@ -14,3 +14,4 @@
 ../src/game/UTFSpore_Win32/FileParser.cpp  ??0FPDtorView@@QAE@XZ  00840700  /O2 /MD /Gy /EHsc /TP /GS- /GR- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?Construct@FileWatcher@@QAEPAU1@XZ  0092f960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?CopyBackwardSpecsRev@@YAPAHPAH00@Z  0083fd20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?FileParser_Parser@@YIPAUcIParser@@PAH@Z  0083f740  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
