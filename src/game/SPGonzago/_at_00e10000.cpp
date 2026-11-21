@@ -185,7 +185,8 @@ struct cFeedbackTree {
 
     void  FUN_00e19160(void* node);                                  // 0x00e19160
     void* FUN_00e191a0(void* out, void* key, void* flag);            // 0x00e191a0
-    void  FUN_00e18d40(void** out, void* pos, int* value, char flag); // 0x00e18d40
+    struct iterator { void* mpNode; iterator(void* n) : mpNode(n) {} };
+    iterator FUN_00e18d40(void* pos, int* value, char flag); // 0x00e18d40
     void* FUN_00e5c780(void* out, void* key);                        // 0x00e5c780
 };
 struct cPanel {
@@ -894,12 +895,15 @@ void cUIMissionCardPanel::SetSlotAndMission(u32 slot)
     }
 }
 
+struct FeedbackValueRef {
+    virtual void v00();
+    virtual void AddRef();   // +0x04
+};
+
 // @ 0x00e18d40
-void cFeedbackTree::FUN_00e18d40(void** out, void* pos, int* value, char flag)
+cFeedbackTree::iterator cFeedbackTree::FUN_00e18d40(void* pos, int* value, char flag)
 {
-    int b = 0;
-    if (flag == 0 && pos != &mAnchor && (unsigned)*value >= *(unsigned*)((char*)pos + 0x10))
-        b = 1;
+    int b = (flag || pos == &mAnchor || (unsigned)*value < *(unsigned*)((char*)pos + 0x10)) ? 0 : 1;
     char* node = (char*)operator new(0x18, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     char* v = node + 0x10;
@@ -908,11 +912,11 @@ void cFeedbackTree::FUN_00e18d40(void** out, void* pos, int* value, char flag)
         int* rc = (int*)value[1];
         *(int**)(v + 4) = rc;
         if (rc)
-            (*(void(__thiscall**)(int*))((char*)(*(int**)rc) + 4))(rc);
+            ((FeedbackValueRef*)rc)->AddRef();
     }
     eastl_RBTreeInsert(node, pos, &mAnchor, b);
     ++mSize2;
-    *out = node;
+    return iterator(node);
 }
 
 // @ 0x00e18dd0
