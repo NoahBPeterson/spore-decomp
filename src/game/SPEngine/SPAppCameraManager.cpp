@@ -202,21 +202,41 @@ void** Obj6370::Destroy6370(int flags)
 }
 
 // @ 0x007c63a0
+struct Ctrl_s007c63a0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void Update(int dt, void* viewer);      // +0x20
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual char* GetPropertyList();                // +0x4c
+};
 void SP::cCameraManager::Update(unsigned int dt)
 {
     if (mActiveControllerIndex < 0) return;
     if (mViewer == 0) return;
-    void* ctrl = mControllers.mpBegin[mActiveControllerIndex];
-    void** vt = *(void***)ctrl;
-    void* p = (void*)((int(__thiscall*)(void*))vt[0x4c / 4])(ctrl);
-    if (p != 0) {
-        p = (void*)((int(__thiscall*)(void*))vt[0x4c / 4])(ctrl);
-        void* parent = *(void**)((char*)p + 0x30);
-        unsigned int mods = parent != 0 ? ((SP::cPropertyList*)parent)->GetModificationCount() : 0;
-        if (*(unsigned int*)((char*)p + 0x34) + mods != mPropModCount)
+    Ctrl_s007c63a0* ctrl = *(Ctrl_s007c63a0**)&mControllers.mpBegin[mActiveControllerIndex];
+    if (ctrl->GetPropertyList() != 0) {
+        char* p = ctrl->GetPropertyList();
+        SP::cPropertyList* parent = *(SP::cPropertyList**)(p + 0x30);
+        unsigned int mods = parent != 0 ? parent->GetModificationCount() : 0;
+        if (*(unsigned int*)(p + 0x34) + mods != mPropModCount)
             this->UpdateFromControllerProperties();
     }
-    ((void(__thiscall*)(void*, int, void*))vt[0x20 / 4])(ctrl, (int)dt, mViewer);
+    ctrl->Update((int)dt, mViewer);
 }
 
 // @ 0x007c6420
