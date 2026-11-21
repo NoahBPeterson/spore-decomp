@@ -22,3 +22,4 @@
 ../src/game/UTFSpore_Win32/Window.cpp  ?Test30Slot54@Window@@QAEHH@Z  0095fb60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?IsChild@Window@UTFWin@EA@@UAE_NPAVIWindow@23@@Z  0095fad0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?RemoveAllProcs@Window@UTFWin@EA@@QAEXXZ  00961ae0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?FUN_009616f0@@YA_NPAIPAXPAD1@Z  009616f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

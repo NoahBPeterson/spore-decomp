@@ -1191,13 +1191,13 @@ bool FUN_009616f0(unsigned* param_1, void* param_2, char* param_3, void* param_4
         param_4, count * 4, 4);
     param_1[1] = (unsigned)arr;
     param_1[0] = g_SerTypeTable[(*(unsigned short*)(param_3 + 0xc)) & 0xfff];
-    if (arr == 0)
-        return false;
-    for (unsigned* p = (unsigned*)*lhead; p != lhead; p = (unsigned*)*p) {
-        *arr = p[2];
-        arr++;
+    if (arr) {
+        unsigned* out = arr;
+        for (unsigned* p = (unsigned*)*lhead; p != lhead; p = (unsigned*)*p)
+            *out++ = p[2];
+        return true;
     }
-    return true;
+    return false;
 }
 
 // @ 0x00961760

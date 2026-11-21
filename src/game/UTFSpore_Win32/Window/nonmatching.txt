@@ -17,7 +17,6 @@
 009613a0 24 Find60: loop read/increment order differs
 009614a0 336 SerUpdate: transform copy and vcall schedule differ
 00961680 71 CloneNode: allocator vcall and field-copy order differ
-009616f0 38 serialization table build: list walk and store order differ
 00961760 200 SetFlag: switch tree and event-block layout differ
 00961860 84 Show: flag test/event schedule differs
 009618e0 77 Hide: flag clear/event schedule differs
