@@ -129,14 +129,33 @@ struct ModelsRenderer {
     int __thiscall Release();   // 0x80df80
 };
 
+struct Win_80d670 {
+    virtual void s00();
+    virtual void s01();
+    virtual void s02();
+    virtual void s03();
+    virtual void s04();
+    virtual void s05();
+    virtual void s06();
+    virtual void s07();
+    virtual void s08();
+    virtual void s09();
+    virtual void s10();
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual void s14();
+    virtual void s15();
+    virtual void s16();
+    virtual void s17();
+    virtual void s18();
+    virtual void* GetText();  // +0x4c
+};
 // @ 0x0080d670
 u8 __cdecl FUN_0080d670(void* p, u8* p2)
 {
-    int v = 0;
-    if (p) {
-        void* x = ((VF0)VT(p)[0x4c / 4])(p);
-        if (x) v = Fun104(x);
-    }
+    void* x;
+    int v = (p != 0 && (x = ((Win_80d670*)p)->GetText()) != 0) ? Fun104(x) : 0;
     VisitSeq(p, (u8*)(*(i32*)(p2 + 4) + v));
     return *p2;
 }
@@ -149,16 +168,13 @@ u8 __cdecl FUN_0080d6b0(void* p, u8* p2)
 }
 
 // @ 0x0080d6d0
-u16 __cdecl FUN_0080d6d0(void* p, u8* p2)
+u8 __cdecl FUN_0080d6d0(void* p, u8* p2)
 {
-    int v = 0;
-    if (p) {
-        void* x = ((VF0)VT(p)[0x4c / 4])(p);
-        if (x) v = Fun104(x);
-    }
+    void* x;
+    int v = (p != 0 && (x = ((Win_80d670*)p)->GetText()) != 0) ? Fun104(x) : 0;
     if (*(i32*)(p2 + 4) > v) *(i32*)(p2 + 4) = v;
     if (*(i32*)(p2 + 8) < v) *(i32*)(p2 + 8) = v;
-    return (u16)((v & 0xff00) | *p2);
+    return *p2;
 }
 
 // @ 0x0080d710  SP::Renderer

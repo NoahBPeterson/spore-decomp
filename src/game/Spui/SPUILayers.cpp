@@ -337,7 +337,7 @@ struct ObjStub {
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 u8 __cdecl FUN_0080d670(void* p, u8* p2);  // 0x0080d670 (stays in the slice: not this object's)
-u16 __cdecl FUN_0080d6d0(void* p, u8* p2);  // 0x0080d6d0 (stays in the slice: not this object's)
+u8 __cdecl FUN_0080d6d0(void* p, u8* p2);  // 0x0080d6d0 (stays in the slice: not this object's)
 
 // @ 0x0080d590
 void __stdcall SetFlag8(char* p)
