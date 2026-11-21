@@ -20,3 +20,5 @@ slices/s00922500/s00922500.cpp  ?SetPriority@Thread@1EA@@QAE_NH@Z  00922ab0  /O2
 slices/s00922500/s00922500.cpp  ?EAThreadEntryPlain@Thread@EA@@YGIPAX@Z  00922e30  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00922500/s00922500.cpp  ?EAThreadEntryWrapped@Thread@EA@@YGIPAX@Z  009230a0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00922500/s00922500.cpp  ?FUN_00923310@@YAXPAPAX@Z  00923310  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00922500/s00922500.cpp  ??0Semaphore@Thread@EA@@QAE@H_N@Z  00922820  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00922500/s00922500.cpp  ??0Semaphore@Thread@EA@@QAE@H@Z  00922880  /O2 /MD /Gy /EHsc /TP /GS-

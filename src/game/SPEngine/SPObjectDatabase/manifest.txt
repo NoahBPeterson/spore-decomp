@@ -31,3 +31,5 @@
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?AllocA@Tree@@QAEPAURBNode@@PAUP550@@@Z  0069e550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?AllocB@Tree@@QAEPAURBNode@@PAUP_ecc0@@@Z  0069ecc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?Release@C7@@QAEHXZ  0069d3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?CopyA@Tree@@QAEPAURBNode@@PAU2@0@Z  0069e6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?CopyB@Tree@@QAEPAURBNode@@PAU2@0@Z  0069edb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
