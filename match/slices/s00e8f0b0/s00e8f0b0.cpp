@@ -513,24 +513,24 @@ bool cTribeFoodMatView::BuildKey(cTribeFoodMatView* self, ModelKey* out)
 // @ 0x00e8f5e0
 cTribeFoodMatView* cTribeFoodMatView::MakeView(void* gameData)
 {
-    ModelKey key = { 0, 0, 0 };
     void* sub;
     if (gameData != 0
-        && (sub = (void*)VC1(void*, gameData, 0xc, u32, kKeyTribeFoodMatView)) != 0
-        && ((cTribeFoodMatView*)this)->BuildKey((cTribeFoodMatView*)sub, &key)) {
-        cTribeFoodMatView* p = (cTribeFoodMatView*)operator_new(0x34, "Simulator/cTribeFoodMatView", 0, 0, 0, 0);
-        if (p != 0) {
-            p->cSpatialObjectView::cSpatialObjectView();
-            *(void**)p = (void*)kVtblTribeFoodMatView;
-        } else {
-            p = 0;
+        && (sub = ((IQuery_e8f3c0*)gameData)->QueryInterface(kKeyTribeFoodMatView)) != 0) {
+        ModelKey key = { 0, 0, 0 };
+        if (BuildKey((cTribeFoodMatView*)sub, &key)) {
+            cTribeFoodMatView* p = (cTribeFoodMatView*)operator_new(0x34, "Simulator/cTribeFoodMatView", 0, 0, 0, 0);
+            if (p != 0) {
+                p->cSpatialObjectView::cSpatialObjectView();
+                *(void**)p = (void*)kVtblTribeFoodMatView;
+            } else {
+                p = 0;
+            }
+            if (key.mName != 0)
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &key, &mModelPos);
+            else
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &mModelRot, &mModelPos);
+            return p;
         }
-        void** vt = *(void***)p;
-        void* world = key.mName != 0
-            ? SP_GonzagoModelWorld(&key, &mModelPos)
-            : SP_GonzagoModelWorld(&mModelRot, &mModelPos);
-        ((void (__thiscall*)(void*, void*, void*))vt[0x28 / 4])(p, gameData, world);
-        return p;
     }
     return 0;
 }
