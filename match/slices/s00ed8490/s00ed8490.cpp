@@ -1,6 +1,7 @@
 // Slice s00ed8490 -- resource/array lookup helpers and a small refcounted container.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+extern "C" char g_148a22c[];
 
 typedef void  (__thiscall *FV_v)(void*);
 typedef void* (__thiscall *FV_p)(void*);
@@ -92,7 +93,7 @@ struct Obj85e0 { void* f(); };
 void* Obj85e0::f()
 {
     char* s = (char*)this;
-    *(int*)s = 0x148a22c;
+    *(void**)s = g_148a22c;
     *(int*)(s + 4) = 0;
     *(int*)(s + 8) = 0;
     *(int*)(s + 0xc) = 0;
@@ -106,31 +107,45 @@ void* Obj85e0::f()
 }
 
 // ================================================================ 0x00ed8610
-struct Obj8610 { void f(); };
+struct RefObj_ed8610 {
+    virtual void AddRef();
+    virtual void Release();                  // +0x04
+};
+struct Ref_ed8610 {
+    RefObj_ed8610* mp;
+    ~Ref_ed8610() { if (mp) mp->Release(); }
+};
+struct RefArr3_ed8610 {
+    Ref_ed8610 m[3];
+};
+struct Obj8610 {
+    void* mpVtbl;                            // +0x00
+    Ref_ed8610 m04;                          // +0x04
+    Ref_ed8610 m08;                          // +0x08
+    Ref_ed8610 m0c;                          // +0x0c
+    RefArr3_ed8610 m10;                      // +0x10
+    RefArr3_ed8610 m1c;                      // +0x1c
+    void f();
+};
 // @ 0x00ed8610
 void Obj8610::f()
 {
-    char* s = (char*)this;
-    *(int*)s = 0x148a22c;
+    mpVtbl = (void*)g_148a22c;
+    Ref_ed8610* q = m1c.m + 3;
     int i = 2;
-    char* e = s + 0x28;
     do {
-        int* p = *(int**)(e - 4);
-        e -= 4;
-        if (p) ((FV_v)(*(void***)p)[4 / 4])(p);
-        i--;
-    } while (i >= 0);
+        --q;
+        q->~Ref_ed8610();
+    } while (--i >= 0);
+    q = m10.m + 3;
     i = 2;
-    e = s + 0x1c;
     do {
-        int* p = *(int**)(e - 4);
-        e -= 4;
-        if (p) ((FV_v)(*(void***)p)[4 / 4])(p);
-        i--;
-    } while (i >= 0);
-    if (*(int**)(s + 0xc)) ((FV_v)(*(void***)*(int**)(s + 0xc))[4 / 4])(*(int**)(s + 0xc));
-    if (*(int**)(s + 8)) ((FV_v)(*(void***)*(int**)(s + 8))[4 / 4])(*(int**)(s + 8));
-    if (*(int**)(s + 4)) ((FV_v)(*(void***)*(int**)(s + 4))[4 / 4])(*(int**)(s + 4));
+        --q;
+        q->~Ref_ed8610();
+    } while (--i >= 0);
+    m0c.~Ref_ed8610();
+    m08.~Ref_ed8610();
+    m04.~Ref_ed8610();
 }
 
 
