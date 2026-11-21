@@ -153,6 +153,13 @@ struct GObj {
     void* F445C0(void*);       // 0x00f445c0 ret 4
     void  F3BBD0(int, int);    // 0x00f3bbd0 ret 8
 };
+struct VObjF34 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12();
+    virtual float GetValue();  // +0x34
+};
 struct VObj {
     void  v0();                // vtable slot 0 (addref)
     void  v4();                // vtable slot 1 (release)
@@ -1275,11 +1282,9 @@ void UI::f01030(void* p, float f)
     if (b5 == 0) {
         b5 = 1;
         pGame->F33BF0();
-        pGame->F36450(0, 0, p);
+        pGame->F36450((int)p, 0, 0);
     }
-    VObj* r = (VObj*)FUN_00b18e00(p);
-    float cur = r->v34();
-    ((void(__thiscall*)(void*, void*, float))f_eff4c0_impl)(this, p, f * 0.01f + cur);
+    Adjust(p, ((VObjF34*)FUN_00b18e00(p))->GetValue() + f * 0.01f);
 }
 
 // @ 0x00f01090
