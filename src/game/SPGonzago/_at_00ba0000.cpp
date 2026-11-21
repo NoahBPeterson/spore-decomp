@@ -2791,21 +2791,40 @@ void __cdecl FUN_00ba4600(void* obj)
 }
 
 // @ 0x00ba46f0
+void __cdecl FUN_00cd7d10();   // 0x00cd7d10 noun filter callback
+void __cdecl FUN_00d3d420();   // 0x00d3d420 noun filter callback
+void __cdecl FUN_00accc30();   // 0x00accc30
+void __cdecl FUN_00b1e500();   // 0x00b1e500
+typedef void (__cdecl* NounFilter_ba46f0)();
+struct NounElem_ba46f0 { char pad[0xa4]; int f0a4; void __thiscall Set(u8); };  // 0x00c6a070
+struct NounList_ba46f0 { NounElem_ba46f0** mpBegin; NounElem_ba46f0** mpEnd; };
+struct NounVec_ba46f0 { int f00; NounList_ba46f0 mList; };
+struct NounMgr_ba46f0 {
+    NounVec_ba46f0* GetGameDataVector(NounFilter_ba46f0, NounFilter_ba46f0, NounFilter_ba46f0,
+                                      NounFilter_ba46f0, uint);                 // 0x00b21340
+};
+struct CreatureRef_ba46f0 { NounElem_ba46f0* Get(); };                           // 0x00c04590
+struct CastObj_ba46f0 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual CreatureRef_ba46f0* Cast(uint id);
+};
 void __cdecl FUN_00ba46f0(void* obj, int flag)
 {
     if (obj == 0) return;
-    void* o = (*(void*(__thiscall**)(void*, uint))((char*)*(void**)obj + 0xc))(obj, 0xd0036e08);
+    CreatureRef_ba46f0* o = ((CastObj_ba46f0*)obj)->Cast(0xd0036e08);
     if (o == 0) return;
-    if ((char)flag != 0 && SP_GetCurrentGameMode() == (void*)0x01654c01)
+    if ((char)flag != 0 && SP_GetCurrentGameMode() == &DAT_01654c01)
         ((ContObj*)SP_AchievementsController())->AutoTest(0x19d844e6, 1);
-    char* cm = (char*)FUN_00c04590(o);
-    void* nm = SP_NounManager();
-    AnimCtx* vec = (AnimCtx*)FUN_00b21340(nm, 0xcd7d10, 0xd3d420, 0xaccc30, 0xb1e500, 0x1be418e);
-    char** end = (char**)((char*)vec + 8);
-    for (char** v = (char**)*(void**)((char*)vec + 4); v != end; ++v) {
-        char* e = *v;
-        if (*(int*)(e + 0xa4) == *(int*)(cm + 0xa4))
-            ((ThingIn2*)e)->Set((u8)flag);
+    NounElem_ba46f0* cm = o->Get();
+    NounMgr_ba46f0* nm = (NounMgr_ba46f0*)SP_NounManager();
+    NounVec_ba46f0* vec = nm->GetGameDataVector(
+        FUN_00cd7d10, FUN_00d3d420, FUN_00accc30, FUN_00b1e500, 0x1be418e);
+    NounList_ba46f0& list = vec->mList;
+    NounElem_ba46f0** v = list.mpBegin;
+    NounElem_ba46f0** end = list.mpEnd;
+    for (; v != end; ++v) {
+        if ((*v)->f0a4 == cm->f0a4)
+            (*v)->Set((u8)flag);
     }
 }
 
