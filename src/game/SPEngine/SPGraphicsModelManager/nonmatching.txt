@@ -25,7 +25,6 @@
 00745f90 181 0x94-byte render/cull record ctor shape differs
 007460b0 352 FilterModelFrustum register allocation differs
 00746250 69 cModelWorld::SetMaterialInfo register/arg shape differs
-00746910 106 model-group assignment shape differs; now a GroupWorld member (ECX this); difftest FAIL (5/5 valid mismatched, 68.5% cov)
 00746b90 233 cModelWorld::ShutdownModel shape/order differs
 00746fc0 140 load-entry destructor shape differs
 007470c0 142 member release sequence shape differs; equiv: WEAK 81.8% cov
