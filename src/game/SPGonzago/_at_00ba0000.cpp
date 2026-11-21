@@ -3427,16 +3427,30 @@ void FUN_00ba7220(StarManagerCore* self, int* key)
   } while (grp != end);
 }
 
+struct IStreamSource_72c0 {
+  virtual void s0(); virtual void s1(); virtual void s2();
+  virtual void s3(); virtual void s4(); virtual void s5();
+  virtual void* GetWriter();                    // +0x18
+};
+struct ISerializer_72c0 {
+  virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+  virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+  virtual IStreamSource_72c0* GetStream();      // +0x20
+  virtual void s9(); virtual void s10();
+  virtual void WriteInt(int v);                 // +0x2c
+};
+static inline void WriteCount_72c0(void* w, int count)
+{
+  FUN_0093aa70(w, &count, 1, 0);
+}
 // @ 0x00ba72c0
 void* FUN_00ba72c0(void* writer, int* vec)
 {
-  int count = (vec[1] - vec[0]) >> 2;
-  IStream* s = (IStream*)((void*(__thiscall*)(void*))(*(int**)writer)[8])(writer);
-  IWriter* w = (IWriter*)((void*(__thiscall*)(void*))(*(int**)s)[6])(s);
-  FUN_0093aa70(w, &count, 1, 0);
-  for (int i = 0; i < count; ++i) {
-    ((void(__thiscall*)(void*, int))(*(int**)writer)[11])(writer, ((int*)vec[0])[i]);
-  }
+  ISerializer_72c0* ser = (ISerializer_72c0*)writer;
+  int n = (vec[1] - vec[0]) >> 2;
+  WriteCount_72c0(ser->GetStream()->GetWriter(), n);
+  for (int i = 0; i < n; ++i)
+    ser->WriteInt(((int*)vec[0])[i]);
   return writer;
 }
 
