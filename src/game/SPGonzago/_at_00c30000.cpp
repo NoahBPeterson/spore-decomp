@@ -1260,23 +1260,33 @@ void cGameBundleGroundContainer::Dtor2c()
     }
 }
 
+struct FFDirObj_c367e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
+    virtual float* GetDirection();  // slot 11 (+0x2c)
+    virtual void v12(); virtual void v13();
+    virtual void SetDirection(const float* v);  // slot 14 (+0x38)
+};
+struct FFApply_c367e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void Dispatch(void* obj);  // slot 12 (+0x30)
+};
+
 // @ 0x00c367e0
 void FF367E0::Apply(void* obj)
 {
-    typedef float* (__thiscall* FnDir)(void*);
-    typedef void (__thiscall* FnSet)(void*, const float*);
-    void* base = (char*)obj + 0x34;
-    float* f = ((FnDir)(*(void***)base)[11])(base);
+    FFDirObj_c367e0* base = (FFDirObj_c367e0*)((char*)obj + 0x34);
+    float* f = base->GetDirection();
     if (f[0] == g_f168df38 && f[1] == g_f168df3c && f[2] == g_f168df40)
     {
         float v[3];
         v[0] = g_kOne;
         v[1] = 0.0f;
         v[2] = 0.0f;
-        ((FnSet)(*(void***)base)[14])(base, v);
+        base->SetDirection(v);
     }
-    typedef void (__thiscall* Fn30)(void*, void*);
-    ((Fn30)(*(void***)this)[12])(this, obj);
+    ((FFApply_c367e0*)this)->Dispatch(obj);
 }
 
 // @ 0x00c36870
