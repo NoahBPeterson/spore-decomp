@@ -619,30 +619,41 @@ void* __thiscall cSPUILayoutObjectCollection_s0080_f7c0::FindWindowByID(i32 id, 
 }
 
 // @ 0x00810270
+struct ResKey_s0081_0270 { u32 instance, type, group; };
+struct AutoUpdate_s0081_0270 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10();
+    virtual void Unregister(ResKey_s0081_0270* key, void* listener);
+};
+struct Service_s0081_0270 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual AutoUpdate_s0081_0270* Get(unsigned int iid);
+};
+struct CollView_s0081_0270 {
+    u8     pad0[0xc];
+    Service_s0081_0270*    mService;    // +0x0c
+    AutoUpdate_s0081_0270* mAutoUpdate; // +0x10
+    u32    mKeyA;                       // +0x14
+    u8     pad18[4];
+    u32    mKeyB;                       // +0x1c
+};
 void __thiscall cSPUILayoutObjectCollectionV8::OnUnload()
 {
-    u8* self = (u8*)this;
-    cSPUILayoutObjectCollection_s0080_f7c0* coll = (cSPUILayoutObjectCollection_s0080_f7c0*)(self - 8);
+    CollView_s0081_0270* coll = (CollView_s0081_0270*)((u8*)this - 8);
     if (bSerFlags & 1) {
-        void* svc = mService;
-        void* au = ((void*(__thiscall*)(void*, unsigned int))VT(svc)[0x10 / 4])(svc, 0x2fbf2058);
-        mAutoUpdate = au;
-        if (au) {
-            struct { u32 x, y, z; } k0 = { *(u32*)&mKeyA, 0xefbda3ff, *(u32*)&mKeyB };
-            struct { u32 x, y, z; } k1 = { *(u32*)&mKeyA, 0x050f4731, *(u32*)&mKeyB };
-            ((VF2v)VT(au)[0x14 / 4])(au, &k0, (void*)this);
-            au = mAutoUpdate;
-            ((VF2v)VT(au)[0x14 / 4])(au, &k1, (void*)this);
+        coll->mAutoUpdate = coll->mService->Get(0x2fbf2058);
+        if (coll->mAutoUpdate) {
+            ResKey_s0081_0270 k0 = { coll->mKeyA, 0xefbda3ff, coll->mKeyB };
+            ResKey_s0081_0270 k1 = { coll->mKeyA, 0x050f4731, coll->mKeyB };
+            void* listener = (u8*)coll + 8;
+            coll->mAutoUpdate->Unregister(&k0, listener);
+            coll->mAutoUpdate->Unregister(&k1, listener);
         }
     }
     ResetChildWindowCache_();
-    if (p8c) {
-        void* fn = p8c;
-        void* a1 = p90;
-        void* a2 = p88;
-        ((void(__cdecl*)(void*, void*, int))fn)(a1, a2, 0);
-    }
-    coll->detach_parent();
+    if (p8c)
+        ((void(__cdecl*)(void*, void*, int))p8c)(p90, p88, 0);
+    ((cSPUILayoutObjectCollection_s0080_f7c0*)coll)->detach_parent();
 }
 
 // @ 0x00810310
