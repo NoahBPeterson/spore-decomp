@@ -295,24 +295,27 @@ struct TutorG {                   // *[0x16c757c]
 };
 
 // @ 0x00ec6d70
+struct TutorGlobals_ec6d70 {
+    char pad00[0x74];
+    TutorObj* mTutorObj;          // +0x74
+};
+extern "C" TutorG* g_16c757c;                 // 0x016c757c
+extern "C" TutorGlobals_ec6d70* g_16c7aa4;    // 0x016c7aa4
 u8 FUN_00ec6d70(int* a)
 {
     int n = (int)FUN_00efc520();
-    int cnt = *(int*)((char*)(*(int*)(*(int*)0x16c757c) + 0x70) + n * 0x4e0 + 0x4a8) - 1;
+    int cnt = *(int*)((char*)g_16c757c->mInner->mBase + n * 0x4e0 + 0x4a8) - 1;
     int kind = *a;
     if (kind == 1) {
-        if (cnt == 0 || cnt == kind || a[1] != cnt) return 1;
-        return 0;
-    }
-    if (kind == 2) {
-        TutorObj* obj = *(TutorObj**)(*(int*)0x16c7aa4 + 0x74);
+        if (cnt != 0 && cnt != kind && a[1] == cnt) return 0;
+    } else if (kind == 2) {
+        TutorObj* obj = g_16c7aa4->mTutorObj;
         TutorRes* m = (TutorRes*)obj->Fn((void*)a[1]);
-        if (*(int*)(*(int*)0x16c757c) == (int)m) return 0;
-        if (m->ChkA()) return 1;
-        if (m->ChkB()) return 1;
+        if ((void*)g_16c757c->mInner == (void*)m) return 0;
+        if (!m->ChkA() && !m->ChkB()) return 0;
+    } else if (kind == 8 && cnt == 1) {
         return 0;
     }
-    if (kind == 8 && cnt == 1) return 0;
     return 1;
 }
 
