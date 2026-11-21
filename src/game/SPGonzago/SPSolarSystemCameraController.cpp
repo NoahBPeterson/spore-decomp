@@ -1465,15 +1465,14 @@ struct ISerStream_1017 {
     virtual u32 GetVersion();                          // +0x3c
 };
 
+static __forceinline void WriteU32_1017(void* s, u32 v) { EA_IO_WriteUint32(s, &v, 1, 0); }
+
 // @ 0x01017290
 void cSPCameraControllerSolarSystem::Write(void* stream)
 {
-    void* p = (void*)(**(int(__thiscall**)(void*))(vpt(stream) + 0x20))(stream);
-    u32 tag = 0x303154cc;
-    void* io = (void*)(**(int(__thiscall**)(void*))(vpt(p) + 0x18))(p);
-    EA_IO_WriteUint32(io, &tag, 1, 0);
+    WriteU32_1017(((ISerStream_1017*)stream)->GetHolder()->GetStream(), 0x303154cc);
     cVarListSerializer buf;
-    buf.Ctor(this, (void*)0x15b6e28, 0x1a80d26);
+    buf.Ctor(this, g_props_0c40, 0x1a80d26);
     buf.Serialize(stream);
 }
 

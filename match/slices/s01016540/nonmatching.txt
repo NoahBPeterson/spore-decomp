@@ -3,4 +3,3 @@
 010166c0  499  cSPSimulatorWalkAround::SetHighLODPlant: complete behaviour (8-plant cap, desc copy, species lookup, obstacle relink); stack/register layout and inlined helper boundaries differ
 01016950  376  SP::cSPSimulatorWalkAround teardown FUN_01016950: complete call sequence reconstructed; differs in stack-slot layout and vcall scheduling
 01016ad0  885  SP::cSPSimulatorWalkAround beaming tick FUN_01016ad0: complete behaviour; state machine and inlined blocks reconstructed, differ in switch codegen, layout and register allocation
-01017290  102  SP::cSPCameraControllerSolarSystem::Write: complete behaviour; writer vcall/WriteUint32 scheduling and register choice differ (cVarListSerializer construction identical)
