@@ -387,6 +387,35 @@ struct Gm {
 struct GmList { void __thiscall FUN_00b7d710(); };   // 0xb7d710 (list at +0x20)
 struct GmSec { void __thiscall FUN_00b7e070(); };
 
+struct GmListNode { GmListNode* next; GmListNode* prev; };
+struct GmPropList {
+  virtual int AddRef();                          // +0x00
+  virtual int Release();                         // +0x04
+};
+struct GmPropRef {
+  GmPropList* p;
+  GmPropRef() : p(0) {}
+  ~GmPropRef() { if (p) p->Release(); }
+  GmPropList** AsPPTypeParam() {
+    *this = 0;
+    return &p;
+  }
+  GmPropRef& operator=(GmPropList* o) {
+    if (p != o) {
+      GmPropList* old = p;
+      p = o;
+      if (old) old->Release();
+    }
+    return *this;
+  }
+};
+struct GmPropManager {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v10();
+  virtual bool OpenProperties(uint32_t instance, uint32_t group, GmPropList** out); // +0x2c
+};
+
 // @ 0x00b7df80
 Gm* __thiscall Gm::ctor() {
   *(void**)this = &gVt_a;
@@ -394,15 +423,15 @@ Gm* __thiscall Gm::ctor() {
   *(void**)this = &gVt_b;
   *(void**)((char*)this + 4) = &gVt_c;
   *(void**)((char*)this + 8) = &gVt_d;
-  listNext = (char*)this + 0x20;
-  listPrev = (char*)this + 0x20;
+  _ReadWriteBarrier();
+  GmListNode* head = (GmListNode*)&listNext;
+  head->next = head;
+  head->prev = head;
   f2c = 0;
   f31 = 0;
   f34 = 0;
-  void* local = 0;
-  void* pm = SP_PropertyManager();
-  (*(void(__thiscall*)(void*, int, int, void**))((*(void***)pm)[0x2c / 4]))(pm, 0x5f848353, 0x243ad2b, &local);
-  if (local) (*(void(__thiscall*)(void*))((*(void***)local)[1]))(local);
+  GmPropRef props;
+  ((GmPropManager*)SP_PropertyManager())->OpenProperties(0x5f848353, 0x243ad2b, props.AsPPTypeParam());
   return this;
 }
 
