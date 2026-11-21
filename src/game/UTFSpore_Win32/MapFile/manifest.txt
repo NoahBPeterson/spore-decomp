@@ -9,3 +9,4 @@
 ../src/game/UTFSpore_Win32/MapFile.cpp  ?ListPushString@MapFile@@QAEPAXPBD@Z  0091c330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/MapFile.cpp  ?LowerBoundPair@@YAPAIPAI0PBI@Z  0091bf30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/MapFile.cpp  ?DoInsertValueImpl@MapRBTree@@QAE?AUMapRBTreeIter@@PAEPBI_N@Z  0091bf80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/MapFile.cpp  ?Insert@Vec16@@QAEPAUElem16_s0091_c4d0@@PAU2@PBU2@@Z  0091c4d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

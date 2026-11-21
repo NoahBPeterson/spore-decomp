@@ -35,3 +35,4 @@
 ../src/game/SPGonzago/SPGameNounManager.cpp  ??0cListenerBase@@QAE@XZ  00b232b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?GetPlayerCivilization@cGameNounManager_s00b2_5c30@@QAEPAVcCivilization@@XZ  00b25fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?Flush@FlushMgr@@QAEXXZ  00b206d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?resize@ByteString@@QAEXI@Z  00b20610  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

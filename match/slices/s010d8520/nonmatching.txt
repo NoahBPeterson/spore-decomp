@@ -1,5 +1,4 @@
 010d8520 538 havok +vc71; equiv PASS 274 valid 86.3% cov
-010d88c0 25 havok +vc71; equiv PASS 292 valid 78.6% cov
 010d8a30 432 havok +vc71; equiv FAIL contact-point float: orig bfec2631 vs ours 00002631 (distance term)
 010d8c80 380 havok +vc71; equiv PASS 397 valid 83.6% cov
 010d8e90 378 havok +vc71; equiv PASS 396 valid 83.6% cov

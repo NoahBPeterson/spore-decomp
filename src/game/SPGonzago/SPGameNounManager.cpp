@@ -182,7 +182,7 @@ inline const void* SerializerOwner(const void* pSelf) { return (const uint32_t*)
 
 // ---- items of slice s00b1fd50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl memset(void*, int, unsigned);
-extern "C" void* __cdecl memmove(void*, const void*, unsigned);
+extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
 extern char gEmptyChar;  // 0x01667bac
 extern char gSigInfo;    // 0x015685a8
@@ -2401,15 +2401,17 @@ SmallObj* __stdcall AllocSmallObj(SmallObj* src)
 // @ 0x00b20610
 void __thiscall ByteString::resize(unsigned n)
 {
-    unsigned size = (unsigned)(mpEnd - mpBegin);
-    if (n < size) {
-        char* p = mpBegin + n;
-        if (p != mpEnd) {
-            memmove(p, mpEnd, 1);
-            mpEnd += p - mpEnd;
+    // eastl::basic_string<char>::resize(n, 0) (same shape as string8::Resize0 0x006174e0).
+    const unsigned nLength = (unsigned)(mpEnd - mpBegin);
+    if (n < nLength) {
+        char* first = mpBegin + n;
+        char* last = mpEnd;
+        if (first != last) {
+            memmove(first, last, (size_t)((mpEnd - last) + 1));
+            mpEnd -= (last - first);
         }
-    } else if (size < n) {
-        append(n - size, 0);
+    } else if (n > nLength) {
+        append(n - nLength, 0);
     }
 }
 

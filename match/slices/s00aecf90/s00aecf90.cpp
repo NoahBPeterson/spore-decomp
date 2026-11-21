@@ -1337,77 +1337,20 @@ void FUN_00aed3d0()
     }
 }
 
-// @ 0x00aed4d0  (52 bytes)
-__declspec(naked) void FUN_00aed4d0()
+// The lazily created singleton behind 0x0167acf4 (a 4-byte object: just its vtable 0x0145c0b4).
+struct Service_s00ae_d4d0 {
+    virtual void v00();
+};
+void* operator new(unsigned int size, const char* name, int flags, int debugFlags, int file, int line);  // 0x00f473a0
+inline void operator delete(void*, const char*, int, int, int, int) {}
+extern Service_s00ae_d4d0* g_pService_s00ae_d4d0;  // 0x0167acf4
+
+// @ 0x00aed4d0
+Service_s00ae_d4d0* GetService_s00ae_d4d0()
 {
-    __asm {
-        _emit 0xA1
-        _emit 0xF4
-        _emit 0xAC
-        _emit 0x67
-        _emit 0x01
-        // mov eax, dword ptr [0x167acf4]
-        _emit 0x85
-        _emit 0xC0
-        // test eax, eax
-        _emit 0x75
-        _emit 0x2A
-        // jne 0xaed503
-        _emit 0x50
-        // push eax
-        _emit 0x50
-        // push eax
-        _emit 0x50
-        // push eax
-        _emit 0x50
-        // push eax
-        _emit 0x68
-        _emit 0xB4
-        _emit 0x09
-        _emit 0x3F
-        _emit 0x01
-        // push 0x13f09b4
-        _emit 0x6A
-        _emit 0x04
-        // push 4
-        call FUN_00f473a0
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x18
-        // add esp, 0x18
-        _emit 0x85
-        _emit 0xC0
-        // test eax, eax
-        _emit 0x74
-        _emit 0x0C
-        // je 0xaed4fc
-        _emit 0xC7
-        _emit 0x00
-        _emit 0xB4
-        _emit 0xC0
-        _emit 0x45
-        _emit 0x01
-        // mov dword ptr [eax], 0x145c0b4
-        _emit 0xA3
-        _emit 0xF4
-        _emit 0xAC
-        _emit 0x67
-        _emit 0x01
-        // mov dword ptr [0x167acf4], eax
-        _emit 0xC3
-        // ret 
-        _emit 0x33
-        _emit 0xC0
-        // xor eax, eax
-        _emit 0xA3
-        _emit 0xF4
-        _emit 0xAC
-        _emit 0x67
-        _emit 0x01
-        // mov dword ptr [0x167acf4], eax
-        _emit 0xC3
-        // ret 
-    }
+    if (g_pService_s00ae_d4d0 == 0)
+        g_pService_s00ae_d4d0 = new ("Simulator", 0, 0, 0, 0) Service_s00ae_d4d0;
+    return g_pService_s00ae_d4d0;
 }
 
 // @ 0x00aed550  (45 bytes)  scalar deleting destructor (ret 4, this in ECX)

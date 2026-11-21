@@ -231,9 +231,10 @@ struct Vec12 { u32* mpBegin; u32* mpEnd; u32* mpCap;
     void Push(const u32* v);            // 0x0091c490
     void Grow(u8* cur, const u32* v);   // 0x00a3d6e0
 };
-struct Vec16 { u32* mpBegin; u32* mpEnd; u32* mpCap;
-    u8* Insert(u8* pos, const u32* v);                 // 0x0091c4d0
-    u8* Grow(u8* first, u8* pos, const u32* v);        // 0x0092a100
+struct Elem16_s0091_c4d0 { u32 a, b, c, d; };   // 16-byte element
+struct Vec16 { Elem16_s0091_c4d0* mpBegin; Elem16_s0091_c4d0* mpEnd; Elem16_s0091_c4d0* mpCap;
+    Elem16_s0091_c4d0* Insert(Elem16_s0091_c4d0* pos, const Elem16_s0091_c4d0* v);  // 0x0091c4d0
+    void DoInsertValue(Elem16_s0091_c4d0* pos, const Elem16_s0091_c4d0* v);         // 0x0092a100
 };
 struct StrStub { char* mpBegin; char* mpEnd; char* mpCap; void* AllocCopy(u32 n, const char* src); };
 struct MapFile {
@@ -489,24 +490,19 @@ void Vec12::Push(const u32* v)
 }
 
 // @ 0x0091c4d0
-u8* Vec16::Insert(u8* pos, const u32* v)
+Elem16_s0091_c4d0* Vec16::Insert(Elem16_s0091_c4d0* pPos, const Elem16_s0091_c4d0* pValue)
 {
-    u8* p = (u8*)this;
-    u8* first = *(u8**)p;
-    u32 idx = (u32)(pos - first) >> 4;
-    u8* last = *(u8**)(p + 4);
-    if (pos != last || last == *(u8**)(p + 8)) {
-        ((Vec16*)p)->Grow(first, pos, (const u32*)v);
+    // same shape as Elem16Vec::insert (0x00676370)
+    int nIndex = (int)(pPos - mpBegin);
+    if (pPos == mpEnd && mpEnd != mpCap) {
+        Elem16_s0091_c4d0* pNew = mpEnd;
+        mpEnd = pNew + 1;
+        if (pNew != 0)
+            *pNew = *pValue;
     } else {
-        *(u8**)(p + 4) = last + 0x10;
-        if (last != 0) {
-            *(u32*)last = v[0];
-            *(u32*)(last + 4) = v[1];
-            *(u32*)(last + 8) = v[2];
-            *(u32*)(last + 0xc) = v[3];
-        }
+        DoInsertValue(pPos, pValue);
     }
-    return first + ((idx << 4) & 0xfffffff0);
+    return mpBegin + nIndex;
 }
 
 // @ 0x0091c540

@@ -34,3 +34,6 @@
 ../src/game/SPEngine/_at_00680000.cpp  ?ser_684b40@FactSer@@QAE_NPAH0HH@Z  00684b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?Create@Factory@@QAEDPAHPAPAHHH@Z  00684040  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ??AMap1@@QAEPAUObjC30_s0068_1f10@@ABH@Z  00682af0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?InsertUnique@Map2@@QAEXPAUPairOut2@@PBHUAllocArg@@@Z  00682900  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?InsertUnique@MapC@@QAEXPAXPBXD@Z  00684500  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?InsertHint@Map2@@QAEPAPAUNode2@@PAPAU2@PAU2@PAHD@Z  006828a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

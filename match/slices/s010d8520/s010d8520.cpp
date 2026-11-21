@@ -105,23 +105,6 @@ void hkSymmetricAgent_hkSphereCapsuleAgent::getClosestPoints(const hkCdBody& bod
 	hkSphereCapsuleAgent::getClosestPoints(bodyB, bodyA, input, *(hkCdPointCollector*)&flipCollector);
 }
 
-// @ 0x010d88c0
-void hkSymmetricAgent_hkSphereCapsuleAgent::processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
-                                                             const hkProcessCollisionInput& input, hkProcessCollisionOutput& output)
-{
-	float toiTimeBefore = output.m_toiTime;
-	hkProcessCdPoint* firstNewPoint = output.m_firstFreeContactPoint;
-	hkSphereCapsuleAgent::processCollision(bodyB, bodyA, input, output);
-	for (hkProcessCdPoint* p = firstNewPoint; p < output.m_firstFreeContactPoint; ++p)
-		p->m_contact.setFlipped(p->m_contact);
-	if (toiTimeBefore != output.m_toiTime)
-	{
-		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
-		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
-		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
-	}
-}
-
 // ---- sphere/sphere agent ------------------------------------------------------------------------------------
 // @ 0x010d89d0
 void hkSphereSphereAgent::cleanup()
