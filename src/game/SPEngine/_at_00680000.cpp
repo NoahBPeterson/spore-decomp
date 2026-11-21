@@ -393,12 +393,22 @@ struct VV12 {
     VV12() {}
     VV12(const VV12& o);                        // 0x0682740 (below)
 };
+extern "C" char  g_emptyStr[];                          // 0x1667bac (empty string sentinel)
 struct ObjC30_s0068_1f10 {
     S8_s0068_1f10 mStr;                                    // +0x00
     uint32_t padC;                              // +0x0c
     M5a0_s0068_1f10 mVec;                                  // +0x10
+    ObjC30_s0068_1f10() { mStr.mpBegin = g_emptyStr; mStr.mpEnd = g_emptyStr; mStr.mpCap = g_emptyStr + 1; mVec.mpBegin = 0; mVec.mpEnd = 0; mVec.mpCap = 0; }
     ObjC30_s0068_1f10(const ObjC30_s0068_1f10& o);                    // 0x0680c30 (out-of-slice)
+    ~ObjC30_s0068_1f10();                                             // 0x06809f0 (folded)
 };
+struct PairC30 {
+    int first;
+    ObjC30_s0068_1f10 second;
+    PairC30(const int& k, const ObjC30_s0068_1f10& v) : first(k), second(v) {}
+};
+struct Iter1 { struct Node1* mpNode; Iter1(struct Node1* p) : mpNode(p) {} Iter1(const Iter1& x) : mpNode(x.mpNode) {} };
+struct TrueTag1 {};
 struct Obj1700_s0068_1f10 {
     S8_s0068_1f10 mStr;                                    // +0x00
     uint32_t padC;                              // +0x0c
@@ -478,9 +488,19 @@ struct Map1 {
     uint32_t mColor;                            // +0x10
     uint32_t mnSize;                            // +0x14
     uint32_t mAlloc;                            // +0x18
-    void InsertHint(Node1** out, Node1* hint, int* key, char flag); // 0x06825d0 (below)
+    Iter1 InsertHint(Iter1 hint, const PairC30& value, TrueTag1);
+    Iter1 insert(Iter1 position, const PairC30& value) { return InsertHint(position, value, TrueTag1()); } // 0x06825d0 (below)
     void InsertUnique(PairOut2* out, const int* key);               // 0x06815f0 (out-of-slice)
     ObjC30_s0068_1f10* operator[](const int& key);                // 0x0682af0 (below)
+    Iter1 LowerBound(const int& key) {
+        Node1* cur = mpRoot;
+        Node1* pos = (Node1*)&mpAnchor;
+        while (cur) {
+            if (!(cur->mKey < key)) { pos = cur; cur = cur->mpLeft; }
+            else cur = cur->mpRight;
+        }
+        return Iter1(pos);
+    }
 };
 struct Node3 {
     Node3* mpRight;
@@ -1535,8 +1555,10 @@ void SerCtx::WriteVecA(VV12* v, IWrt* w)
 }
 
 // @ 0x006825d0
-void Map1::InsertHint(Node1** out, Node1* hint, int* key, char flag)
+Iter1 Map1::InsertHint(Iter1 hintIt, const PairC30& value, TrueTag1)
 {
+    Node1* hint = hintIt.mpNode;
+    int* key = (int*)&value.first;
     Node1* anchor = (Node1*)&mpAnchor;
     Node1* pos = anchor;
     int side = 0;
@@ -1554,14 +1576,13 @@ void Map1::InsertHint(Node1** out, Node1* hint, int* key, char flag)
         PairOut2 pair;
         pair.first = 0;
         InsertUnique(&pair, key);
-        *out = (Node1*)pair.first;
-        return;
+        return Iter1((Node1*)pair.first);
     }
     side = side || pos == anchor || *key < pos->mKey;
     Node1* nNew = (Node1*)CreateNode1(key);
     RBTreeInsert(nNew, pos, anchor, side);
     ++mnSize;
-    *out = nNew;
+    return Iter1(nNew);
 }
 
 // @ 0x00682740
@@ -1652,24 +1673,10 @@ Obj2A10::Obj2A10(const Obj2A10& o)
 // @ 0x00682af0
 ObjC30_s0068_1f10* Map1::operator[](const int& key)
 {
-    Node1* anchor = (Node1*)&mpAnchor;
-    Node1* pos = anchor;
-    Node1* cur = mpRoot;
-    while (cur) {
-        if (cur->mKey < key) {
-            cur = cur->mpRight;
-        } else {
-            pos = cur;
-            cur = cur->mpLeft;
-        }
-    }
-    if (pos == anchor || key < pos->mKey) {
-        Node1* nNew = 0;
-        Node1** out = &nNew;
-        InsertHint(out, pos, (int*)&key, 0);
-        return &nNew->mVal;
-    }
-    return &pos->mVal;
+    Iter1 itLower(LowerBound(key));
+    if (itLower.mpNode == (Node1*)&mpAnchor || key < itLower.mpNode->mKey)
+        itLower = insert(itLower, PairC30(key, ObjC30_s0068_1f10()));
+    return &itLower.mpNode->mVal;
 }
 
 // @ 0x00682be0
