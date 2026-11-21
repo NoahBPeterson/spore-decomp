@@ -12,3 +12,4 @@ slices/s00a22220/s00a22220.cpp  ?FindObject2@Mgr@@QAE_NHPAPAUIZ@@H@Z  00a23090  
 slices/s00a22220/s00a22220.cpp  ?FindByName@Mgr@@QAE_NPAUSnd@@PAPAU2@@Z  00a23160  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a22220/s00a22220.cpp  ?AttachEffect@Mgr@@QAE_NHHPAUIRC@@PAPAUIZ@@@Z  00a22df0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a22220/s00a22220.cpp  ??0PropListA22@@QAE@XZ  00a22cf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?PickBest@Mgr@@QAE_NHH_NPAPAUSnd@@@Z  00a231e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

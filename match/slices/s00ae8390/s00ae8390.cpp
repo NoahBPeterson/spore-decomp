@@ -74,6 +74,7 @@ struct ThViewer { void FUN_007c4b50(float); };                  // cViewer::FUN_
 namespace SP {
 class cSPUICommScreen { public:
   void FUN_00dd2780(int kind, int count);                      // 0x00dd2780, thiscall ret 8
+  void FUN_00dd4260(const void* key);                          // 0x00dd4260 Init, thiscall ret 4
 };
 }
 SP::cSPUICommScreen* GetCommScreen();                          // 0x00dd1ca0, cdecl singleton getter
@@ -90,7 +91,7 @@ struct Host {
   int FUN_00ae9040(int a, int b, u32* out1, u32* out2);
   void FUN_00ae90d0();
   int FUN_00ae9390();
-  void FUN_00ae9330();
+  void FUN_00ae9330(int unused);
   void FUN_00ae9170(int* stream);
   int FUN_00ae93f0(int a2, int a3, int a4, int a5, int a6);
   void FUN_00ae8ea0();
@@ -101,15 +102,15 @@ struct Host {
   void FUN_00ae8510(int dtMs);
 };
 
+struct CommScreenKey {
+  u32 instance, type, group;
+};
 // @ 0x00ae9000
 void Host::FUN_00ae9000(int a) {
-  u32 local[3];
   (void)a;
-  local[0] = 0x85498e7d;
-  local[1] = 0x0510a95b;
-  local[2] = 0x40464100;
-  void* lay = ((ThCtor*)(void*)this)->FUN_00dd1ca0(local);
-  ((ThInit*)(void*)lay)->FUN_00dd4260();
+  const CommScreenKey kKey = {0x85498e7d, 0x510a95b, 0x40464100};
+  CommScreenKey key = kKey;
+  GetCommScreen()->FUN_00dd4260(&key);
 }
 // @ 0x00ae9150
 void Host::FUN_00ae9150(int a, int b) {
@@ -151,20 +152,23 @@ int Host::FUN_00ae9390() {
   return 0;
 }
 // @ 0x00ae9330
-void Host::FUN_00ae9330() {
-  int* o = (int*)PP(this, 0x20);
-  if (o != 0) {
+struct HostHandle20 {
+  virtual void v00();
+  virtual void Release();     // +0x04
+};
+struct HostResetTarget {
+  virtual void Reset();       // +0x00
+};
+void Host::FUN_00ae9330(int unused) {
+  (void)unused;
+  if (HostHandle20* o = *(HostHandle20**)PP(this, 0x20)) {
     PI(this, 0x20) = 0;
-    ((void(__thiscall*)(void*, int))(*(void***)o)[1])(o, 0);
+    o->Release();
   }
-  int g = FUN_00aed4d0();
-  ((void(__thiscall*)(void*))(*(void***)g)[0])((void*)g);
-  u32 local[3];
-  local[0] = 0x85498e7d;
-  local[1] = 0x40464100;
-  local[2] = 0x510a95b;
-  void* s = FUN_00dd1ca0(local);
-  FUN_00dd4260(s, local);
+  ((HostResetTarget*)FUN_00aed4d0())->Reset();
+  const CommScreenKey kKey = {0x85498e7d, 0x510a95b, 0x40464100};
+  CommScreenKey key = kKey;
+  GetCommScreen()->FUN_00dd4260(&key);
 }
 struct CommStreamHolder {
   virtual void slot0();

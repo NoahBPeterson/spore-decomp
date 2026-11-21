@@ -27,3 +27,4 @@ slices/s00b5b540/s00b5b540.cpp  _FUN_00b5b690  00b5b690  /O2 /MD /Gy /EHsc /TP /
 slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cb20  00b5cb20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5b540/s00b5b540.cpp  ?f@S5bf30@@QAE_NXZ  00b5bf30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5b540/s00b5b540.cpp  ?f@S5be10@@QAEXPAX@Z  00b5be10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?Initialize@S5bf80@@QAE_NXZ  00b5bf80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

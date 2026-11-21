@@ -144,29 +144,51 @@ Simulator::cCivModeStrategy::cCivModeStrategy()
     }
 }
 
+// The cSpatialObject sub-object of a game-data object (at +0x120): the slot Execute calls.
+struct TradeSpatialObj {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54();
+    virtual bool IsDestroyed();                         // +0x58
+};
+struct TradeGameData {
+    char pad000[0x120];
+    TradeSpatialObj mSpatial;                           // +0x120
+};
+struct TradeDataVector {                                // eastl::vector<TradeGameData*>
+    TradeGameData **mpBegin;
+    TradeGameData **mpEnd;
+};
+struct TradeDataResult {
+    u32 m_field00;
+    TradeDataVector mData;                              // +0x04
+};
+struct TradeRouteMgr {
+    void FUN_00be1340(TradeGameData *obj, u32 flags);   // 0x00be1340
+};
+struct TradeNounManager {
+    TradeDataResult *FUN_00b21340(void *a, void *b, void *c, void *d, void *cls);  // 0x00b21340
+    TradeRouteMgr *FUN_00b25c30();                                                 // 0x00b25c30
+};
+
 // @ 0x00cee1c0
 void cCommandMakeTradeRoutes::Execute(void *args)
 {
-    GameDataVec *v;
-    void *mgr;
-    int count;
-    int i;
+    TradeNounManager *nouns = (TradeNounManager *)FUN_00b3d300();
+    TradeDataVector &v = nouns->FUN_00b21340(
+        (void *)FUN_00cd7d10, (void *)FUN_00d3d420,
+        (void *)FUN_00acdff0, (void *)FUN_00b1e500,
+        &g_dat018c43e8)->mData;
 
-    v = (GameDataVec *)((void *(__thiscall *)(void *, void *, void *, void *, void *, void *))FUN_00b21340)
-            ((void *)FUN_00b3d300(),
-             (void *)FUN_00cd7d10, (void *)FUN_00d3d420,
-             (void *)FUN_00acdff0, (void *)FUN_00b1e500,
-             &g_dat018c43e8);
-
-    mgr = ((void *(__thiscall *)(void *))FUN_00b25c30)((void *)FUN_00b3d300());
+    TradeRouteMgr *mgr = ((TradeNounManager *)FUN_00b3d300())->FUN_00b25c30();
     if (mgr) {
-        count = (int)(v->mpEnd - v->mpBegin);
-        for (i = 0; i < count; ++i) {
-            void *obj = v->mpBegin[i];
-            u8 *pSpatial = (u8 *)obj + 0x120;   // the object's cSpatialObject sub-object
-            char c = ((char(__thiscall *)(void *))(*(void ***)pSpatial)[0x58 / 4])(pSpatial);
-            if (!c)
-                ((void(__thiscall *)(void *, void *, u32))FUN_00be1340)(mgr, obj, 0);
+        int count = (int)(v.mpEnd - v.mpBegin);
+        for (int i = 0; i < count; ++i) {
+            if (!v.mpBegin[i]->mSpatial.IsDestroyed())
+                mgr->FUN_00be1340(v.mpBegin[i], 0);
         }
     }
 }

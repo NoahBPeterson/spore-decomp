@@ -9117,16 +9117,16 @@ bool WinGrid_s0097_bfb0::MakeRoomForColumn(int col, int amount, int dir)
     if (!((bool(__thiscall*)(void*, RectT<int>*))GVT((char*)this + 0x20c, 0xc4 / 4))((char*)this + 0x20c, &r))
         return true;
 
-    RBNode_s0097_bfb0* anchor = (RBNode_s0097_bfb0*)((char*)&mCells + 4);
     for (int row = r.top; row <= r.bottom; ++row) {
+        RBNode_s0097_bfb0* anchor = (RBNode_s0097_bfb0*)((char*)&mCells + 4);
         RBNode_s0097_bfb0* best = anchor;
-        RBNode_s0097_bfb0* n = anchor->parent;
+        RBNode_s0097_bfb0* n = mCells.mRoot;
         while (n) {
-            if (n->key < row) {
-                n = n->right;
-            } else {
+            if (n->key >= row) {
                 best = n;
                 n = n->left;
+            } else {
+                n = n->right;
             }
         }
         if (best != anchor && row >= best->key && *(void**)((char*)best + 0x2c) != 0)

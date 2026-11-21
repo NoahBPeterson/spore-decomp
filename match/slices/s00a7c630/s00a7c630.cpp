@@ -327,16 +327,25 @@ bool __cdecl ClipSegmentToQuad(float t, const float* src, float* hit, float* exi
 
 // @ 0x00a7cf50
 // Distance from a point to the surface meshed ahead of it (0 when the test fails).
-float __stdcall DistanceFromPlaneSurface(void* self, float* p)
+struct PlaneSurface
 {
-  float tmp[3];
-  typedef char (__thiscall *TestFn)(void*, float*);
-  if (!((TestFn)(*(void***)self)[0x10 / 4])(self, p))
-    return 0.0f;
-  float dx = p[0] - tmp[0];
-  float dy = p[1] - tmp[1];
-  float dz = p[2] - tmp[2];
-  return sqrtf(dz * dz + (dy * dy + dx * dx));
+  virtual void v00();
+  virtual void v04();
+  virtual void v08();
+  virtual void v0c();
+  virtual bool Intersect(const float* p, float* hit, int a, int b, int c, int d);   // +0x10
+  float DistanceFromPlaneSurface(const float* p, int c, int d);
+};
+float PlaneSurface::DistanceFromPlaneSurface(const float* p, int c, int d)
+{
+  float hit[3];
+  if (Intersect(p, hit, 0, 0, c, d)) {
+    float dx = p[0] - hit[0];
+    float dy = p[1] - hit[1];
+    float dz = p[2] - hit[2];
+    return sqrtf(dy * dy + (dx * dx + dz * dz));
+  }
+  return 0.0f;
 }
 
 // @ 0x00a7cfb0

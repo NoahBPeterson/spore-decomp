@@ -4,3 +4,4 @@ slices/s00a7c630/s00a7c630.cpp  ?Assign@SurfaceSpec@@QAEPAU1@ABU1@@Z  00a7d540  
 slices/s00a7c630/s00a7c630.cpp  ?SwapAssign@SurfaceSpec@@QAEPAU1@ABU1@@Z  00a7d580  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a7c630/s00a7c630.cpp  ?SubtractEdges@@YAXHPBM0PAM@Z  00a7cb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a7c630/s00a7c630.cpp  ?RandomSpawnSeed@@YGXPAXPAM0@Z  00a7d1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a7c630/s00a7c630.cpp  ?DistanceFromPlaneSurface@PlaneSurface@@QAEMPBMHH@Z  00a7cf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

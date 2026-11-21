@@ -2,5 +2,4 @@
 00a22410  63  SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
 00a228d0  65  worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
 00a22b90  66  LoadShared: complete; inline Release uses dec vs add -1 and register order
-00a231e0  75  PickBest: complete; double compare emitted fcompi vs original fxch/fcomi form
 00a232a0  100  PickNearest: complete; best-local stack slot and float compare orientation differ

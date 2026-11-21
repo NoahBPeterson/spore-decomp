@@ -18,3 +18,4 @@
 ../src/game/SPGonzago/InteractionAgent.cpp  ?assign@BasicString@@QAEPAU1@PBD0@Z  00454cb0  /Od /MD /Gy /EHsc /TP /Ob1 /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/InteractionAgent.cpp  ?resize@Vec32@@QAEXI@Z  00475260  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/InteractionAgent.cpp  ?resize@Vec16@@QAEXI@Z  004751a0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ??0Big@@QAE@ABU0@@Z  0047bb70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

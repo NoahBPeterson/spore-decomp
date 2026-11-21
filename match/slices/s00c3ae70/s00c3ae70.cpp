@@ -548,6 +548,17 @@ static __forceinline void* GetAppCameraManager()
     return ((cAppBase*)App())->GetCameraManager();
 }
 
+extern "C" cUFOKinestheticsTuning* g_168df68;
+
+// cLocomotiveObject subobject at +0x34: the slots UpdateScale calls.
+struct UFOLocomotive {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void SetScale(float scale);   // +0x40
+};   // UFO kinesthetics tuning instance
+
 // ---------------------------------------------------------------- 0x00c3ae70
 // @ 0xc3ae70
 float cSPGameDataUFO::GetScale()
@@ -701,17 +712,17 @@ void cSPGameDataUFO::UpdateScale()
 
     float scale = gF_1485720;
     if (extent > gF_146bb70) {
-        cUFOKinestheticsTuning* pTuning = *(cUFOKinestheticsTuning**)0x168df68;
-        if (extent > pTuning->mFighterScale)        // +0x2c
-            scale = pTuning->mFighterScale / extent;
-        else if (extent < pTuning->mBomberScale)    // +0x28
-            scale = pTuning->mBomberScale / extent;
+        cUFOKinestheticsTuning* pTuning = g_168df68;
+        float fighter = pTuning->mFighterScale;    // +0x2c
+        float bomber = pTuning->mBomberScale;      // +0x28
+        if (extent > fighter)
+            scale = fighter / extent;
+        else if (bomber > extent)
+            scale = bomber / extent;
     }
 
     float r = GetScaleFactor() * GetScale() * scale;
-    void* pLoco = (char*)this + 0x34;
-    typedef void (__thiscall* Vf)(void*, float);
-    ((Vf)(*(void**)(*(char**)pLoco + 0x40)))(pLoco, r);
+    ((UFOLocomotive*)&mpVftbl34)->SetScale(r);
 }
 
 // ---------------------------------------------------------------- 0x00c3b4d0

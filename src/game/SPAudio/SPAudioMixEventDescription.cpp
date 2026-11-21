@@ -20,23 +20,31 @@ namespace ArgScript {
 void cCommandBase_ctor(void* p);
 }
 }
-void MixEventAddCommands(int* mgr);   // 0xa3cce0
 inline char* VT(int obj) { return *(char**)obj; }
 // ---- items of slice s00a3cbb0 end
 
+void operator delete(void*, const char*, int, int, int, int);
+extern "C" const char* g_1553c4c;           // 0x01553c4c: keyword the inline mix-event command registers under
+struct CommandBase_a3cce0 {
+    const void* mpVTable;                   // +0x00
+    void Init();                            // 0x0083c800 cCommandBase::cCommandBase
+};
+struct MixEventInlineCommand : CommandBase_a3cce0 {
+    char pad04[0xc];
+    MixEventInlineCommand() { Init(); mpVTable = PTR_FUN_01453930; }
+};
+struct MixEventCommand : CommandBase_a3cce0 {
+    char pad04[0x8];
+    MixEventCommand() { Init(); mpVTable = PTR_FUN_01453918; }
+};
+struct IParser_a3cce0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
+    virtual void AddBlock(const char* keyword, void* command);       // +0x14
+    virtual void AddCommand(const char* keyword, void* command);     // +0x18
+};
 // @ 0x00a3cce0
-void MixEventAddCommands(int* mgr)
+void MixEventAddCommands(IParser_a3cce0* inlineParser, IParser_a3cce0* blockParser)
 {
-    void* c1 = ::operator new(0x10, "ArgScript/MixEventInline", 0, 0, 0, 0);
-    if (c1) {
-        EA::ArgScript::cCommandBase_ctor(c1);
-        *(void**)c1 = (void*)PTR_FUN_01453930;
-    }
-    (*(void(__thiscall**)(int*, const char*, void*))(VT((int)mgr) + 0x18))(mgr, "mixevent", c1);
-    void* c2 = ::operator new(0xc, "Swarm", 0, 0, 0, 0);
-    if (c2) {
-        EA::ArgScript::cCommandBase_ctor(c2);
-        *(void**)c2 = (void*)PTR_FUN_01453918;
-    }
-    (*(void(__thiscall**)(int*, const char*, void*))(VT((int)mgr) + 0x14))(mgr, "mixevent", c2);
+    inlineParser->AddCommand(g_1553c4c, new ("ArgScript/MixEventInline", 0, 0, 0, 0) MixEventInlineCommand);
+    blockParser->AddBlock("mixevent", new ("Swarm", 0, 0, 0, 0) MixEventCommand);
 }
