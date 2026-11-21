@@ -1273,15 +1273,22 @@ void SP::cCelestialBody_s00bd_5ea0::RemoveOwner()
   }
 }
 
+struct IHolder_bd6230 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14();
+  virtual IOStream* GetStream();   // +0x18
+};
+struct ISer_bd6230 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual IHolder_bd6230* GetHolder();   // +0x20
+};
+static __forceinline void WriteU32_bd6230(IOStream* s, uint v) { EA_IO_WriteUint32(s, &v, 1, 0); }
 // @ 0x00bd6230
 void SP::cGameData_s00bd_5ea0::WriteTagged(void* stream)
 {
   cVarListSerializer_s00bd_5ea0 s;
-  IV* obj = (IV*)stream;
-  IV* writer = (IV*)((Fn_p_v)VT(obj, 0x20))(obj);
-  uint magic = 0x38cfb68;
-  void* w = ((Fn_p_v)VT(writer, 0x18))(writer);
-  EA_IO_WriteUint32((IOStream*)w, &magic, 1, 0);
+  WriteU32_bd6230(((ISer_bd6230*)stream)->GetHolder()->GetStream(), 0x38cfb68);
   s.ctor(this, gVarTable_B, 0x1a80d26);
   s.Write(stream);
 }
