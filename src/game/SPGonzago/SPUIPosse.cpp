@@ -1883,22 +1883,21 @@ void __stdcall FUN_00e23870(void* begin, void* end)
   }
 }
 
+struct IRef_e238b0 { virtual int AddRef(); };
 // @ 0x00e238b0
 void __cdecl FUN_00e238b0(void* dst, u32 n, void* src)
 {
-  if (n == 0) return;
-  do {
-    if (dst) {
+  Ref* cur = (Ref*)dst;
+  for (; n > 0; --n, cur += 2) {
+    if (cur) {
       Ref a = *(Ref*)src;
-      *(Ref*)dst = a;
-      if (a) ((TFv)(*(void***)a)[0])(a);
+      cur[0] = a;
+      if (a) ((IRef_e238b0*)a)->AddRef();
       Ref b = *(Ref*)((char*)src + 4);
-      *(Ref*)((char*)dst + 4) = b;
-      if (b) ((TFv)(*(void***)b)[0])(b);
+      cur[1] = b;
+      if (b) ((IRef_e238b0*)b)->AddRef();
     }
-    n--;
-    dst = (char*)dst + 8;
-  } while (n != 0);
+  }
 }
 
 // @ 0x00e23900
