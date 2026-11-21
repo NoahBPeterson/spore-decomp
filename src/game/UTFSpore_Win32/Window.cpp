@@ -1354,18 +1354,25 @@ void Win::ClearProcs()
 }
 
 // @ 0x00961ae0
+struct ProcAllocator_s00961ae0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void Free(void* p, unsigned size);   // +0x0c
+};
+extern "C" char g_154ef48[];
 void EA::UTFWin::Window::RemoveAllProcs()
 {
     char* a = (char*)this;
     Node* head = (Node*)(a + 0x64);
-    Node* p = *(Node**)(a + 0x64);
+    Node* p = head->next;
     while (p != head) {
-        if (p->field8 == (void*)0x154ef48) {
+        if (p->field8 == g_154ef48) {
             Node* nxt = p->next;
-            Node* pv = p->prev;
-            pv->next = nxt;
-            nxt->prev = pv;
-            (*(void(__thiscall**)(void*, Node*, int))((char*)*(void**)mText.mpBegin + 0xc))(mText.mpBegin, p, 0x10);
+            Node* n = nxt->prev;
+            n->prev->next = n->next;
+            n->next->prev = n->prev;
+            (*(ProcAllocator_s00961ae0**)(a + 0x6c))->Free(n, 0x10);
             p = nxt;
         } else {
             p = p->next;

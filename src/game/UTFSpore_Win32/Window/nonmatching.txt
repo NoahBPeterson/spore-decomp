@@ -23,7 +23,6 @@
 009618e0 77 Hide: flag clear/event schedule differs
 00961990 108 other: list walk, found-node test, unlink stores and callee register order now follow retail (esi stays the found node, `mov [ecx],edx` / `mov [ecx+4],edx` pair, `push eax; push esi` for the free call); what remains is frame (retail sub esp,0x1c vs 0xc: a 0x1c-byte stack buffer, not the 12-byte one) and the +0x18 vcall's register order is not reproducible without changing those call-shape levers; fix1: quick check UNSUPPORTED (emulator timeout)
 00961a50 103 ClearProcs: list purge loop schedule differs
-00961ae0 37 PurgeProcs: list walk and free schedule differ
 00961b40 281 vector-of-lists copy: allocation and node clone schedule differ; equiv: WEAK (member Copy, 28.7% coverage)
 00961db0 43 complete hashtable DoFreeNodes; register allocation swaps the node/next roles (edi<->esi)
 00962180 123 complete hashtable DoEraseNode; bucket-advance loop/pointer scheduling differs
