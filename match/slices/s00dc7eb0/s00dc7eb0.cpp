@@ -493,6 +493,10 @@ extern "C" void* __cdecl memset(void*, int, unsigned int);
 // @ 0x00dc8a60
 CultureHash::CultureHash(const CultureHash& src)
 {
+    extern char g_13f09b4[];
+    extern char g_13ebb38[];
+    extern CultureHashNode* g_154df28[];
+
     mField00 = src.mField00;
     mBucketCount = src.mBucketCount;
     mElementCount = src.mElementCount;
@@ -504,7 +508,7 @@ CultureHash::CultureHash(const CultureHash& src)
         uint32_t count = mBucketCount;
         uint32_t byteSize = count * 4;
         CultureHashNode** buckets = (CultureHashNode**)FUN_00f473a0(
-            byteSize + 4, (const char*)0x13f09b4, 0, 0, (void*)0x13ebb38, 0xd1);
+            byteSize + 4, g_13f09b4, 0, 0, g_13ebb38, 0xd1);
         memset(buckets, 0, byteSize);
         buckets[count] = (CultureHashNode*)0xffffffff;
         mBuckets = buckets;
@@ -516,10 +520,22 @@ CultureHash::CultureHash(const CultureHash& src)
                 CultureHashNode** dstSlot = &mBuckets[i];
                 while (srcNode) {
                     CultureHashNode* newNode = (CultureHashNode*)FUN_00f473a0(
-                        sizeof(CultureHashNode), (const char*)0x13f09b4, 0, 0,
-                        (void*)0x13ebb38, 0xd1);
+                        sizeof(CultureHashNode), g_13f09b4, 0, 0,
+                        g_13ebb38, 0xd1);
                     if (newNode) {
-                        newNode->mPayload = srcNode->mPayload;
+                        const CultureHashPayload& from = srcNode->mPayload;
+                        CultureHashPayload& to = newNode->mPayload;
+                        double firstValue = from.mField04;
+                        _ReadWriteBarrier();
+                        uint32_t id = from.mField00;
+                        to.mField04 = (float)firstValue;
+                        to.mField00 = id;
+                        to.mField08 = from.mField08;
+                        to.mField0c = from.mField0c;
+                        to.mField10 = from.mField10;
+                        to.mField14 = from.mField14;
+                        to.mField18 = from.mField18;
+                        to.mField1c = from.mField1c;
                     }
                     newNode->mpNext = 0;
                     *dstSlot = newNode;
@@ -531,7 +547,7 @@ CultureHash::CultureHash(const CultureHash& src)
         }
     } else {
         mBucketCount = 1;
-        mBuckets = (CultureHashNode**)0x154df28;
+        mBuckets = g_154df28;
         mElementCount = 0;
         mTail.c = 0;
     }
