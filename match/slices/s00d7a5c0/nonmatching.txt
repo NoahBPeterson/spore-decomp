@@ -1,4 +1,3 @@
-00d7a700 109 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl shrink-wraps the esi push and folds the two return-true blocks into setne; equiv PASS
 00d7a920 246 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: distance-call temp slots and register allocation differ; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)
 00d7aa50 101 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: first FUN_00d38a30 result kept in the original, dropped as a dead store by ours; equiv PASS
 00d7ab10 194 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (long long) cast calls __ftol2 while the original inlines fnstcw/fldcw/fistp; equiv WEAK (29% coverage)
