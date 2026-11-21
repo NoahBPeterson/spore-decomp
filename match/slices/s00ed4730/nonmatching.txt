@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00ed4730 117  list-walk + temp cleanup: this kept in frame reg, call scheduling differs; equiv: UNSUPPORTED (unresolved callee stubs)
 00ed49a0 163  destructor: vtable/refcount release schedule differs from original (our 383 bytes vs 384). The two-pointer release loop must run +0x3c first and +0x38 second (retail starts edi=esi+0x40 and does `[edi-4]`/`edi-=4`); the old `for (i=1;i>=0;i--) s+0x3c-i*4` released +0x38 first and swapped call #5/#6. Fixed to `for (i=0;i<2;i++) s+0x3c-i*4`; saved replay first difference None; equiv: PASS (895/1500 valid, 94.3% coverage).
 00ed4c70 308  UTFWin input-capture window create/show: heavy virtual-call schedule differs; equiv: WEAK (6.5% coverage)
 00ed4e30 51   uint64 vtable compare: 64-bit return handling differs; equiv: WEAK (50% coverage)
