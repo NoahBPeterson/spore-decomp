@@ -2800,6 +2800,15 @@ struct Rbtree {                       // eastl::rbtree header (0x18 bytes)
     uint32_t  mnSize;                 // +0x14
 
     void DoNukeSubtree(void* node);   // 0x009a9600
+    void reset_s00de_ed40()
+    {
+        DoNukeSubtree(mp0c);
+        mpRoot   = &mpAnchor;
+        mp0c     = 0;
+        mFlag    = 0;
+        mnSize   = 0;
+        mpAnchor = &mpAnchor;
+    }
 };
 struct UIDrawable {                    // a drawable window returned by a window vtable slot
     void** vtbl;                       // +0x00
@@ -13926,18 +13935,8 @@ void SP::GalaxyUI::FUN_00deed40()
         mpRef614 = 0;
         ((VF0)(*(void***)r)[2])(r);
     }
-    mMap520.DoNukeSubtree(mMap520.mp0c);
-    mMap520.mpRoot  = &mMap520.mpAnchor;
-    mMap520.mp0c    = 0;
-    mMap520.mFlag   = 0;
-    mMap520.mnSize  = 0;
-    mMap520.mpAnchor = &mMap520.mpAnchor;
-    mMap40.DoNukeSubtree(mMap40.mp0c);
-    mMap40.mp0c     = 0;
-    mMap40.mFlag    = 0;
-    mMap40.mnSize   = 0;
-    mMap40.mpRoot   = &mMap40.mpAnchor;
-    mMap40.mpAnchor = &mMap40.mpAnchor;
+    mMap520.reset_s00de_ed40();
+    mMap40.reset_s00de_ed40();
 }
 
 // @ 0x00deede0
