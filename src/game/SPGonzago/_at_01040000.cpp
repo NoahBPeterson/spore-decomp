@@ -218,7 +218,8 @@ namespace SP {
 cApp* __cdecl App();                                       // 0x0067dd10
 }
 namespace SP {
-void* __cdecl FUN_00b3d4a0();                              // 0x00b3d4a0
+struct CommScreen_1044920 { bool IsActive(); };             // 0x00ae9390
+CommScreen_1044920* __cdecl FUN_00b3d4a0();                 // 0x00b3d4a0
 }
 namespace SP {
 char __cdecl FUN_00ae9390();                               // 0x00ae9390
@@ -727,6 +728,25 @@ bool __cdecl FUN_01044640()
 }
 }  // namespace SP
 
+extern "C" char g_16dfb34[];   // k_interplanetarydrive
+extern "C" char g_142db2a[];
+struct IInventory_1044920 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70();
+    virtual bool HasItem(const void* id);              // +0x74
+};
+struct ISubsystem_1044920 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual bool IsBusy();                             // +0x24
+};
 // @ 0x01044920
 namespace SP {
 bool __cdecl FUN_01044920()
@@ -734,32 +754,24 @@ bool __cdecl FUN_01044920()
     cApp* app = App();
     cCameraController* camera = app->GetCameraController();
     cPlanetView* view = camera->GetPlanetView();
-    if (!view)
-        return false;
-    void* object = view->FindObject(0x303154cd);
-    if (!object)
-        return false;
-    FUN_00b3d4a0();
-    if (FUN_00ae9390())
-        return false;
-    if (((uint8_t*)GameTimeManager())[0x48] & 1)
-        return false;
-    void* game = SpaceGameGet();
-    cPlayerInventory* inventory = ((cSPSimulatorSpaceGame*)game)->GetPlayerInventory();
-    if (!inventory->mpOwner->HasItem(&gBannerName))
-        return false;
-    if (((char*)GetUFOSimulator())[0x20])
-        return false;
-    SubsystemVec* vec = NounManager()->GetSubsystemVec((void*)0x0142db2a);
-    void** it = vec->mpBegin;
-    void** last = vec->mpEnd;
-    while (it != last) {
-        void* entry = *it;
-        if (((bool (__thiscall*)(void*))((void**)*(void**)entry)[0x24 / 4])(entry))
-            return false;
-        ++it;
+    if (view && view->FindObject(0x303154cd)) {
+        if (!FUN_00b3d4a0()->IsActive() && !(((uint8_t*)GameTimeManager())[0x48] & 1)) {
+            void* game = SpaceGameGet();
+            IInventory_1044920* inventory =
+                (IInventory_1044920*)((cSPSimulatorSpaceGame*)game)->GetPlayerInventory();
+            if (inventory->HasItem(g_16dfb34) && !((char*)GetUFOSimulator())[0x20]) {
+                SubsystemVec* vec = NounManager()->GetSubsystemVec(g_142db2a);
+                ISubsystem_1044920** it = (ISubsystem_1044920**)vec->mpBegin;
+                ISubsystem_1044920** last = (ISubsystem_1044920**)vec->mpEnd;
+                for (; it != last; ++it) {
+                    if ((*it)->IsBusy())
+                        return false;
+                }
+                return true;
+            }
+        }
     }
-    return true;
+    return false;
 }
 }  // namespace SP
 
