@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/_at_00940000.cpp  ??1LayoutCache@@QAE@XZ  0094cf40  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00940000.cpp  ?Bind@SocketBindingView_s0094_d2f0@@UAE_NXZ  0094d2f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00940000.cpp  ?InitVariantTable@@YA_NXZ  009414f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?Forward@SockIface_s0094d310@@QAEXHHH@Z  0094d310  /O2 /MD /Gy /TP /GS- /Isrc/game/include

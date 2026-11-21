@@ -371,11 +371,48 @@ bool SocketBindingView_s0094_d2f0::Bind()
 }
 
 // @ 0x0094d310
-void __fastcall Socket_ForwardError(char* self, void* edx, int a, int b)
+struct SockOwner_s0094d310 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void OnError(int code);                 // +0x54
+};
+struct SockIface_s0094d310 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void ForwardError(int a, int b);        // +0x28
+    void Forward(int code, int a, int b);
+};
+void SockIface_s0094d310::Forward(int code, int a, int b)
 {
-    Owner* owner = *(Owner**)(self - 0x78);
-    (*(void(__thiscall**)(void*, int))((char*)owner + 0x54))(owner, a);
-    (*(void(__thiscall**)(char*, int, int))((char*)*(void**)self + 0x28))(self, a, b);
+    ((SockOwner_s0094d310*)((char*)this - 0x78))->OnError(code);
+    ForwardError(a, b);
 }
 
 // @ 0x0094d350
