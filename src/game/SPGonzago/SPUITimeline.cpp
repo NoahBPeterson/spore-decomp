@@ -3509,17 +3509,40 @@ void cSPUITimeline::BeginCloseTimeline()
         ((VisNode*)mpNodesBegin[i])->SetVisibleRecursive(0);
 }
 
+struct Vec2_e37b40 {
+    float x, y;
+    Vec2_e37b40(float ax, float ay) : x(ax), y(ay) {}
+    Vec2_e37b40(const Vec2_e37b40& o) : x(o.x), y(o.y) {}
+};
+struct TimelineX_e37b40 {
+    void FUN_00e46d80(Vec2_e37b40 a, int b, Vec2_e37b40 d, bool f);  // 0x00e46d80
+};
+struct RectSrc_e37b40 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual const Rect* GetRect();                                   // +0x38
+};
 // @ 0x00e37b40
 double cSPUITimeline::FUN_00e37b40(TimelineNode* n, float a, int b)
 {
     float f74 = n->m74.f;
     float f70 = n->mf70;
-    if (n->p1c != 0) {
-        Rect* r = (Rect*)((const Rect* (__thiscall*)(void*))(*(void***)n->p1c)[0x38 / 4])(n->p1c);
-        Vector2 p;
-        p.x = a;
-        p.y = ((r->bottom - r->top) - f70) * 0.5f;
-        ((Timeline*)n)->FUN_00e46d80(p, b, gVacc90, false);
+    if (RectSrc_e37b40* src = (RectSrc_e37b40*)n->p1c) {
+        const Rect* r = src->GetRect();
+        float y = ((r->bottom - r->top) - f70) * 0.5f;
+        ((TimelineX_e37b40*)n)->FUN_00e46d80(Vec2_e37b40(a, y), b, *(Vec2_e37b40*)&gVacc90, false);
     }
     return f74 + a + 5.0f;
 }
