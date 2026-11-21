@@ -1665,9 +1665,9 @@ void* __cdecl CreateAssetDiscoveryData()
 void* AssetDiscovery_Data::ConstructPlain()
 {
     ConstructBase();
-    ((void**)this)[0] = (void*)0x147c9f8;
-    ((void**)this)[4] = (void*)0x147cc88;
-    ((void**)this)[5] = (void*)0x147cc78;
+    ((void**)this)[0] = (void*)g_147c9f8;
+    ((void**)this)[4] = (void*)g_147cc88;
+    ((void**)this)[5] = (void*)g_147cc78;
     return this;
 }
 
