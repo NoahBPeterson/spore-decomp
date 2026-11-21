@@ -48,7 +48,7 @@ extern "C" unsigned __cdecl FNV1_String8(const char* s, unsigned seed, int mode)
 extern "C" void  __cdecl config_0e50450(unsigned key, void* val);   // 0x00e50450
 extern "C" void  __cdecl apply_0e504b0(void* w, float a);           // 0x00e504b0
 extern "C" void  __cdecl toggle_0e53660(int a, int b);              // 0x00e53660
-extern "C" float __cdecl curve_0e56700(const void* tbl, int n, float x, float z); // 0x00e56700
+extern "C" float __cdecl curve_0e56700(const void* tbl, int n, float x); // 0x00e56700
 extern "C" int   __cdecl FUN_00e87260(int a, int b, float c, int* out, int max, int fl); // 0x00e87260
 extern "C" float __cdecl FUN_00e4f9d0(void* guard);                 // 0x00e4f9d0
 __declspec(noinline) int* __cdecl FUN_00e52910(void* e);           // 0x00e52910
@@ -76,7 +76,7 @@ static inline float SqrtF(float x) {
 
 // @ 0x00e56820
 bool FUN_00e56820(float a, float b) {
-  float r = curve_0e56700(&g_1483f08, 4, a, b);
+  float r = curve_0e56700(&g_1483f08, 4, a);
   void* layout = *(void**)(*(char**)g_16b3c0c + 0x90);
   void* w = ((Layout*)layout)->FindWindowByID(0x5af4ae5, 1);
   apply_0e504b0(w, r);
