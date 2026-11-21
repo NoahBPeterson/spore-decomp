@@ -25,3 +25,4 @@
 ../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?bad0@UFO@@QAEXHH@Z  0101bad0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?Read@cSPCameraControllerSolarSystem@@QAEEPAX@Z  01017300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?Write@cSPCameraControllerSolarSystem@@QAEXPAX@Z  01017290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?InitListener@Cam@@QAEXXZ  01020fc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
