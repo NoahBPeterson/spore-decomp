@@ -9241,33 +9241,66 @@ char __cdecl FUN_00c0fc10(int param_1, int* param_2)
     return 1;
 }
 
-// @ 0x00c0fc40
-int* __cdecl FUN_00c0fc40(int* first, int* last)
+struct RefObj_s00c0_fc40 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); 
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c(); 
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); 
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c(); 
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c(); 
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c(); 
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c(); 
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac(); 
+    virtual void vb0(); virtual void vb4(); virtual void vb8(); 
+    virtual void AddRef();     // +0xbc
+    virtual void Release();    // +0xc0
+};
+struct RefPtr_s00c0_fc40 {
+    RefObj_s00c0_fc40* mp;
+    RefPtr_s00c0_fc40& operator=(const RefPtr_s00c0_fc40& x)
+    {
+        RefObj_s00c0_fc40* const p = x.mp;
+        if (p != mp) {
+            RefObj_s00c0_fc40* const old = mp;
+            if (p) p->AddRef();
+            mp = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+inline bool operator==(const RefPtr_s00c0_fc40& a, const RefPtr_s00c0_fc40& b) { return a.mp == b.mp; }
+static inline RefPtr_s00c0_fc40* AdjacentFind_s00c0_fc40(RefPtr_s00c0_fc40* first, RefPtr_s00c0_fc40* last)
 {
     if (first != last) {
-        int* prev;
-        do {
-            prev = first;
-            ++first;
-            if (first == last) return last;
-        } while (*prev != *first);
-        int* dst = prev;
-        int* cur = dst;
-        while (++cur != last) {
-            int* v = (int*)*cur;
-            if ((int*)*dst != v) {
-                int* old = (int*)dst[1];
-                ++dst;
-                if (v != old) {
-                    if (v != 0) (*(void(__thiscall**)(void*))((*(void***)v)[0xbc / 4]))((void*)v);
-                    *dst = (int)v;
-                    if (old != 0) (*(void(__thiscall**)(void*))((*(void***)old)[0xc0 / 4]))((void*)old);
-                }
-            }
+        RefPtr_s00c0_fc40* i = first;
+        for (++i; i != last; ++i) {
+            if (*first == *i)
+                return first;
+            first = i;
         }
-        return dst + 1;
     }
     return last;
+}
+
+// @ 0x00c0fc40
+int* __cdecl FUN_00c0fc40(int* pfirst, int* plast)
+{
+    RefPtr_s00c0_fc40* first = (RefPtr_s00c0_fc40*)pfirst;
+    RefPtr_s00c0_fc40* last = (RefPtr_s00c0_fc40*)plast;
+    first = AdjacentFind_s00c0_fc40(first, last);
+    if (first != last) {
+        RefPtr_s00c0_fc40* i = first;
+        for (++i; i != last; ++i) {
+            if (!(*first == *i))
+                *++first = *i;
+        }
+        ++first;
+        return (int*)first;
+    }
+    return (int*)last;
 }
 
 struct SerStream_s00c0_fda0 {
