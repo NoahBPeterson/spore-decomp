@@ -593,15 +593,18 @@ void* CPlanet::FUN_00c72470(int free)
 uint32_t* FUN_00c72540(uint32_t* begin, uint32_t* end, uint32_t* key)
 {
     int n = (int)((char*)end - (char*)begin) / 0xb0;
-    while (n > 0) {
-        int half = n >> 1;
-        uint32_t* mid = (uint32_t*)((char*)begin + (size_t)half * 0xb0);
-        if (*mid < *(volatile uint32_t*)key) {
-            begin = (uint32_t*)((char*)mid + 0xb0);
-            n = n - half - 1;
-        } else {
-            n = half;
-        }
+    if (n > 0) {
+        const uint32_t value = *key;
+        do {
+            int half = n >> 1;
+            uint32_t* mid = (uint32_t*)((char*)begin + (size_t)half * 0xb0);
+            if (*mid < value) {
+                begin = (uint32_t*)((char*)mid + 0xb0);
+                n = n - half - 1;
+            } else {
+                n = half;
+            }
+        } while (n > 0);
     }
     return begin;
 }

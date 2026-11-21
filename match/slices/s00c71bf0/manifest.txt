@@ -7,3 +7,4 @@ slices/s00c71bf0/s00c71bf0.cpp  ?FUN_00c72b80@CPlanet@@QAE_NPAX@Z  00c72b80  /O2
 slices/s00c71bf0/s00c71bf0.cpp  ?FUN_00c723d0@CPlanet@@QAEXXZ  00c723d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c71bf0/s00c71bf0.cpp  ?FUN_00c71e70@CPlanet@@QAEPAXXZ  00c71e70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c71bf0/s00c71bf0.cpp  ?FUN_00c71f00@@YAMMMMDDDMHD@Z  00c71f00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c71bf0/s00c71bf0.cpp  ?FUN_00c72540@@YAPAIPAI00@Z  00c72540  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
