@@ -5524,14 +5524,20 @@ void FUN_00ecdf60_fn(void)
 }
 
 // @ 0x00ecdfc0
+struct Target_s00ec_dfc0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual ColorStore* Cast(uint32_t id);          // +0x0c
+};
 void __fastcall FUN_00ecdfc0(int param_1)
 {
-    void* obj = *(void**)(param_1 + 0x4c);
-    if (obj != 0) {
+    if (*(void**)(param_1 + 0x4c) != 0) {
         float f = *(float*)(param_1 + 0x64);
-        if (f < 0.0f)
+        if (0.0f > f)
             f = g_15abee4;
-        ColorStore* u = (ColorStore*)((int(__thiscall*)(void*, int))VTB(obj, 0xc))(obj, 0x3349c94);
+        Target_s00ec_dfc0* obj = *(Target_s00ec_dfc0* volatile*)(param_1 + 0x4c);
+        ColorStore* u = obj ? obj->Cast(0x3349c94) : 0;
         if (u != 0)
             u->Set(f);
     }
