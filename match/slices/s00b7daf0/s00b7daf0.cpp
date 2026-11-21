@@ -450,27 +450,66 @@ Gm* __thiscall Gm::dtor(char del) {
 }
 
 // @ 0x00b7dec0
+struct TerrainEd_s00b7dec0 {
+  bool __thiscall FUN_00f678a0();                // 0xf678a0
+  bool __thiscall FUN_00f678c0();                // 0xf678c0
+  void __thiscall ResetEditor();                 // 0xf6bc10
+  void __thiscall FUN_00f67890(int);             // 0xf67890
+  void __thiscall FUN_00f678b0(int);             // 0xf678b0
+};
+struct Vis_s00b7dec0 {
+  virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+  virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+  virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+  virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+  virtual void Refresh();                        // +0x40
+};
+struct Obj34_s00b7dec0 {
+  virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+  virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+  virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+  virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+  virtual void f40(); virtual void f44(); virtual void f48(); virtual void f4c();
+  virtual void f50(); virtual void f54(); virtual void f58(); virtual void f5c();
+  virtual void f60(); virtual void f64(); virtual void f68(); virtual void f6c();
+  virtual void f70(); virtual void f74(); virtual void f78(); virtual void f7c();
+  virtual void f80(); virtual void f84(); virtual void f88(); virtual void f8c();
+  virtual void f90(); virtual void f94(); virtual void f98(); virtual void f9c();
+  virtual void fa0(); virtual void fa4(); virtual void fa8(); virtual void fac();
+  virtual void fb0(); virtual void fb4(); virtual void fb8(); virtual void fbc();
+  virtual void Shutdown();                       // +0xc0
+};
+struct PlanetModel_s00b7dec0 {
+  char pad00[0x24];
+  Vis_s00b7dec0* mpVis;                          // +0x24
+  void __thiscall Shutdown();                    // 0xb8c0f0
+};
 void __thiscall Gm::FUN_00b7dec0() {
-  void* pm = SP_PlanetModel();
-  void* edi = *(void**)((char*)pm + 0x24);
-  if (FUN_00f678a0() || FUN_00f678c0()) {
-    SP_TerrainEditor(); FUN_00f6bc10();
-    SP_TerrainEditor(); FUN_00f67890(0);
-    SP_TerrainEditor(); FUN_00f678b0(0);
+  PlanetModel_s00b7dec0* pm = (PlanetModel_s00b7dec0*)SP_PlanetModel();
+  Vis_s00b7dec0* vis = pm->mpVis;
+  if (((TerrainEd_s00b7dec0*)SP_TerrainEditor())->FUN_00f678a0() ||
+      ((TerrainEd_s00b7dec0*)SP_TerrainEditor())->FUN_00f678c0()) {
+    ((TerrainEd_s00b7dec0*)SP_TerrainEditor())->ResetEditor();
+    ((TerrainEd_s00b7dec0*)SP_TerrainEditor())->FUN_00f67890(0);
+    ((TerrainEd_s00b7dec0*)SP_TerrainEditor())->FUN_00f678b0(0);
   }
-  void* c = edi ? edi : g_16c9e5c;
-  if (c) (*(void(__thiscall*)(void*))((*(void***)c)[0x40 / 4]))(c);
+  if (vis)
+    vis->Refresh();
+  else if (g_16c9e5c)
+    ((Vis_s00b7dec0*)g_16c9e5c)->Refresh();
   f2c = 0;
+  _ReadWriteBarrier();
   if (f34 != 0) {
-    void* p = f34;
+    Obj34_s00b7dec0* p = (Obj34_s00b7dec0*)f34;
     f34 = 0;
-    (*(void(__thiscall*)(void*))((*(void***)p)[0xc0 / 4]))(p);
+    p->Shutdown();
   }
-  if (f31 != 0) FUN_00b8c0f0();
+  if (f31 != 0) pm->Shutdown();
   f31 = 0;
-  FUN_00b7d710((char*)this + 0x20);
-  listNext = (char*)this + 0x20;
-  listPrev = (char*)this + 0x20;
+  GmListNode* l = (GmListNode*)((char*)this + 0x20);
+  ((GmList*)l)->FUN_00b7d710();
+  l->next = l;
+  l->prev = l;
 }
 
 // @ 0x00b7e070

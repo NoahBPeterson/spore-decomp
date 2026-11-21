@@ -14,3 +14,4 @@ slices/s00b7daf0/s00b7daf0.cpp  ?dtor@Gm@@QAEPAU1@D@Z  00b7e010  /O2 /MD /Gy /TP
 slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e500@cPlanetModel@@QAEMXZ  00b7e500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7ea30@cVecObj@@QAEXID@Z  00b7ea30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b7daf0/s00b7daf0.cpp  ?ctor@Gm@@QAEPAU1@XZ  00b7df80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7dec0@Gm@@QAEXXZ  00b7dec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
