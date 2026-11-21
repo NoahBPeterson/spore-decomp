@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
-00e3c000   96  UI manager rebind: full translation (operator new + create-effect + attach); call/vcall
                layout matches, register scheduling and temp-object lifetime differ. equiv=WEAK
                (278 valid inputs, coverage limited by early faults while walking engine pointers).
 00e3c100   95  angle-wrap helper for mode key 0x2500e82c vs default: logic and constants identical; complete (ours 135B, orig 145B) but cl contracts the branch arithmetic into fld/fsub where the original uses addss/subss. equiv PASS (345 valid inputs, 100% coverage, no mismatch).

@@ -52,11 +52,18 @@ void* FUN_0067de90();                                       // 0x0067de90
 void  SP_cTelemetry_Reset(void*);                           // 0x007ebb60
 void  eastl_rbtree_DoNukeSubtree(unsigned int);             // 0x009a9600
 void* operator_new(unsigned int, void*, int, int, int, int);// 0x00f473a0
-void* FUN_00e471e0();                                       // 0x00e471e0
-void  FUN_00e46600(unsigned int, unsigned int, int, int);   // 0x00e46600
-void  FUN_00e48dc0();                                       // 0x00e48dc0
-void  FUN_00e37b40(void*, int, int);                        // 0x00e37b40
-void  FUN_00e46020(int);                                    // 0x00e46020
+struct TimelineNode_e3c000
+{
+    virtual void AddRef();                                  // slot 0
+    virtual void Release();                                 // slot 1
+    TimelineNode_e3c000* FUN_00e471e0();                    // 0x00e471e0 (constructor, returns this)
+    void  FUN_00e46600(unsigned int, unsigned int, int, int); // 0x00e46600
+    void  FUN_00e48dc0();                                   // 0x00e48dc0
+};
+struct VisNode_e3c000
+{
+    void  FUN_00e46020(char);                               // 0x00e46020
+};
 void  FUN_00e37840(unsigned int, ...);                      // 0x00e37840
 void  SlotMessage_Destruct(void*);                          // 0x00421cf0
 
@@ -65,6 +72,7 @@ void  SlotMessage_Destruct(void*);                          // 0x00421cf0
 struct cUIManager
 {
     int   FUN_00e3b5d0();   // @0x00e3b5d0 helper (defined in the binary; declaration only here)
+    float FUN_00e37b40(TimelineNode_e3c000* node, float t, int flag);  // 0x00e37b40
     void  FUN_00e3b9e0(int dt);
     void  FUN_00e3be20(unsigned int p2, float a, float b, float c, float d, float e,
                        float f, float g, float h, float i, char p8);
@@ -238,36 +246,35 @@ void cUIManager::FUN_00e3be20(unsigned int p2, float a, float b, float c, float 
 // @ 0x00e3c000
 void cUIManager::FUN_00e3c000()
 {
-    int iVar1 = *(int*)(MEM(unsigned int, 0x188) - 4);
-    if (iVar1 != 0)
+    VisNode_e3c000* vis = *(VisNode_e3c000**)(MEM(unsigned int, 0x188) - 4);
+    if (vis != 0)
     {
-        int iVar3 = FUN_00e36f50(*(unsigned int*)(iVar1 + 0xe4));
-        if (iVar3 != 4)
+        int mode = FUN_00e36f50(*(unsigned int*)((char*)vis + 0xe4));
+        if (mode != 4)
         {
-            unsigned int local_4;
-            if (iVar3 == 3)
-                local_4 = (unsigned int)FUN_00e3b5d0();
+            unsigned int palette;
+            if (mode == 3)
+                palette = (unsigned int)FUN_00e3b5d0();
             else
-                local_4 = DAT_01481d84[iVar3];
+                palette = DAT_01481d84[mode];
 
-            int* piVar4 = (int*)operator_new(0x10c, &DAT_013f6b3c, 0, 0, 0, 0);
-            if (piVar4 != 0)
-                piVar4 = (int*)FUN_00e471e0();
+            TimelineNode_e3c000* mem = (TimelineNode_e3c000*)operator_new(0x10c, &DAT_013f6b3c, 0, 0, 0, 0);
+            TimelineNode_e3c000* node = mem ? mem->FUN_00e471e0() : 0;
 
-            int* piVar2 = (int*)MEM(unsigned int, 0x1c8);
-            if (piVar4 != piVar2)
+            TimelineNode_e3c000* old = MEM(TimelineNode_e3c000*, 0x1c8);
+            if (node != old)
             {
-                if (piVar4 != 0)
-                    ((void(__thiscall*)(void*))(*(unsigned int**)(char*)piVar4)[0])(piVar4);
-                MEM(unsigned int, 0x1c8) = (unsigned int)piVar4;
-                if (piVar2 != 0)
-                    ((void(__thiscall*)(void*))piVar2[1])(piVar2);
+                if (node != 0)
+                    node->AddRef();
+                MEM(TimelineNode_e3c000*, 0x1c8) = node;
+                if (old != 0)
+                    old->Release();
             }
-            FUN_00e46600(MEM(unsigned int, 0x60), local_4, 1, 0);
-            FUN_00e48dc0();
-            FUN_00e37b40((void*)MEM(unsigned int, 0x1c8), 0, 1);
-            if (*(int*)(iVar1 + 0xf0) != 0)
-                FUN_00e46020(0);
+            MEM(TimelineNode_e3c000*, 0x1c8)->FUN_00e46600(MEM(unsigned int, 0x60), palette, 1, 0);
+            MEM(TimelineNode_e3c000*, 0x1c8)->FUN_00e48dc0();
+            FUN_00e37b40(MEM(TimelineNode_e3c000*, 0x1c8), 0.0f, 1);
+            if (*(int*)((char*)vis + 0xf0) != 0)
+                vis->FUN_00e46020(0);
         }
     }
 }
