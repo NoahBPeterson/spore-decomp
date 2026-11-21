@@ -304,9 +304,11 @@ void App::cPauseUIVisibleCommand::FUN_00b603b0(EA::ArgScript::cArguments* args)
         frame->SetVisible(false);
     } else {
         uint32_t flags = *(volatile uint32_t*)&mSpec.mFlags;
-        if ((flags >> 1) & 1)
+        bool show = (bool)((flags >> 1) & 1);
+        bool toggle = (bool)((flags >> 2) & 1);
+        if (show)
             frame->SetVisible(true);
-        else if ((flags >> 2) & 1)
+        else if (toggle)
             frame->SetVisible(!frame->IsVisible());
     }
 
@@ -454,7 +456,7 @@ void App::cAdventureLook::FUN_00b60920(EA::ArgScript::cArguments* args)
     PObj* target = (PObj*)g_p016c7aa4->m18;
 
     if (FUN_00b5b800() == 0x01654c10u) {
-        uint32_t flags = mSpec.mFlags;
+        uint32_t flags = *(volatile uint32_t*)&mSpec.mFlags;
         if ((flags >> 6) & 1)
             values[0] = 0;
         else if (flags & 1)
