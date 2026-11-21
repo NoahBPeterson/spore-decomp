@@ -17,14 +17,21 @@ extern "C" void* __fastcall FUN_0083c800(void*);        // 0x0083c800  cCommandB
 extern "C" void* FUN_00f473a0(uint32_t, const char*, int, int, int, int); // 0x00f473a0  EAAllocate
 
 // @ 0x00f94d00
+extern "C" char g_14902a0[];     // 0x014902a0  vtable of the terrain-script command
+extern "C" void* g_15b0fec;      // 0x015b0fec  command name key
+struct Parser_s00f94d00 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14();
+    virtual void AddCommand(void* key, void* cmd);
+};
 extern "C" void FUN_00f94d00(void* script)
 {
-    void* cmd = FUN_00f473a0(0x10, (const char*)0x14902b8, 0, 0, 0, 0);
+    void* cmd = FUN_00f473a0(0x10, "ArgScript/GroupTerrainScript", 0, 0, 0, 0);
     if (cmd) {
         FUN_0083c800(cmd);
-        *(void**)((char*)cmd + 0) = (void*)0x14902a0;
-        ((FnVVV)(*(void***)script)[0x18 / 4])(script, *(void**)0x15b0fec, cmd);
-        return;
+        *(void**)cmd = g_14902a0;
+    } else {
+        cmd = 0;
     }
-    ((FnVVV)(*(void***)script)[0x18 / 4])(script, *(void**)0x15b0fec, 0);
+    ((Parser_s00f94d00*)script)->AddCommand(g_15b0fec, cmd);
 }

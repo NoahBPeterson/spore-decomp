@@ -48,21 +48,41 @@ extern "C" unsigned FUN_008ddb00(void* self, int a2, int a3, int a4, int a5, int
     return result;
 }
 
+struct IStrm_8ddb90 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual char Read(int a, int b);                 // +0x38
+};
+struct IRec_8ddb90 {
+    virtual void v00(); virtual void v04();
+    virtual void Release();                          // +0x08
+    virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual IStrm_8ddb90* GetStream();               // +0x18
+    virtual void v1c(); virtual void v20();
+    virtual void Close();                            // +0x24
+};
+struct IDb_8ddb90 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30();
+    virtual char OpenRecord(int key, IRec_8ddb90** out, int a, int b, int c, int d);   // +0x34
+};
 // @ 0x008ddb90
 extern "C" char FUN_008ddb90(void* self, int a2, int a3, int a4, int a5)
 {
-    void* io = 0;
     char result = 0;
-    int r = ((char (__thiscall*)(void*, int, void**, int, int, int, int))
-             (((void**)*(void**)self)[0x34 / 4]))(self, a2, &io, 2, 2, a5, 0);
-    if (r) {
-        void* s = ((void* (__thiscall*)(void*))(((void**)*(void**)io)[0x18 / 4]))(io);
+    IRec_8ddb90* io = 0;
+    if (((IDb_8ddb90*)self)->OpenRecord(a2, &io, 2, 2, a5, 0)) {
+        IStrm_8ddb90* s = io->GetStream();
         if (s != 0)
-            result = ((char (__thiscall*)(void*, int, int))(((void**)*(void**)s)[0x38 / 4]))(s, a3, a4);
-        ((void (__thiscall*)(void*))(((void**)*(void**)io)[0x24 / 4]))(io);
+            result = s->Read(a3, a4);
+        io->Close();
     }
     if (io != 0)
-        ((void (__thiscall*)(void*))(((void**)*(void**)io)[8 / 4]))(io);
+        io->Release();
     return result;
 }
 

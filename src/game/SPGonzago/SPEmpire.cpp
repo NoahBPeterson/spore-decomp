@@ -2279,22 +2279,27 @@ cSPColorRGB_s00c3_2980 SP::cEmpire_s00c3_2980::GetColor()
     return r;
 }
 
+struct EmpIO_c33820 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void* GetStream();  // slot 6 (+0x18)
+};
+struct EmpStream_c33820 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6();
+    virtual void Done();  // slot 7 (+0x1c)
+    virtual EmpIO_c33820* GetIO();  // slot 8 (+0x20)
+};
+static __forceinline void EmpWriteInt32_c332a0(void* w, int value) { FUN_0093aa70(w, &value, 1, 0); }
+
 // @ 0x00c332a0
 void __cdecl FUN_00c332a0(void* stream, ListAnchor* list)
 {
     int count = 0;
     for (void* n = list->mpNext; n != (void*)list; n = *(void**)n) ++count;
-    int c = count;
-    void* io = ((TFVP)((*(void***)stream)[8]))(stream);
-    void* w = ((TFVP)((*(void***)io)[6]))(io);
-    FUN_0093aa70(w, &c, 1, 0);
-    for (void* n = list->mpNext; n != (void*)list; n = *(void**)n) {
-        void* io2 = ((TFVP)((*(void***)stream)[8]))(stream);
-        int v = (int)((ListNode_s00c3_2980*)n)->mValue;
-        void* w2 = ((TFVP)((*(void***)io2)[6]))(io2);
-        FUN_0093aa70(w2, &v, 1, 0);
-    }
-    ((TFVP)((*(void***)stream)[7]))(stream);
+    EmpWriteInt32_c332a0(((EmpStream_c33820*)stream)->GetIO()->GetStream(), count);
+    for (void* n = list->mpNext; n != (void*)list; n = *(void**)n)
+        EmpWriteInt32_c332a0(((EmpStream_c33820*)stream)->GetIO()->GetStream(), (int)((ListNode_s00c3_2980*)n)->mValue);
+    ((EmpStream_c33820*)stream)->Done();
 }
 
 // @ 0x00c33410
@@ -2415,6 +2420,7 @@ void SP::cEmpire_s00c3_2980::SetSpecies(void* speciesp)
     }
 }
 
+
 // @ 0x00c33820
 void __cdecl FUN_00c33820(void* stream, ListAnchor* list)
 {
@@ -2427,14 +2433,12 @@ void __cdecl FUN_00c33820(void* stream, ListAnchor* list)
     list->mpNext = list;
     list->mpPrev = list;
     int count = 0;
-    void* io = ((TFVP)((*(void***)stream)[8]))(stream);
-    void* w = ((TFVP)((*(void***)io)[6]))(io);
+    void* w = ((EmpStream_c33820*)stream)->GetIO()->GetStream();
     FUN_0093a780(w, &count, 1, 0);
     u32 i = 0;
     while (i < (u32)count) {
         int v;
-        void* io2 = ((TFVP)((*(void***)stream)[8]))(stream);
-        void* w2 = ((TFVP)((*(void***)io2)[6]))(io2);
+        void* w2 = ((EmpStream_c33820*)stream)->GetIO()->GetStream();
         FUN_0093a780(w2, &v, 1, 0);
         ListNode_s00c3_2980* node = (ListNode_s00c3_2980*)FUN_00f473a0(0xc, "Simulator", 0, 0, g_13ebb38, 0xd1);
         if ((char*)node + 8) node->mValue = (u32)v;
@@ -2444,7 +2448,7 @@ void __cdecl FUN_00c33820(void* stream, ListAnchor* list)
         ++i;
         ((ListNode_s00c3_2980*)list)->mpPrev = node;
     }
-    ((TFVP)((*(void***)stream)[7]))(stream);
+    ((EmpStream_c33820*)stream)->Done();
 }
 
 // @ 0x00c338f0

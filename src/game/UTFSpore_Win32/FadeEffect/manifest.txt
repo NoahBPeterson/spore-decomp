@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/FadeEffect.cpp  ?BasicFactory_FadeEffect_CreateInstance@@YGPAXHH@Z  0096f120  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/FadeEffect.cpp  ?BiStateEffect_func84h@@YGXPAHM@Z  0096f080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -18,3 +18,5 @@
 ../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c59f00@cMissionMultiStep@@QAEXXZ  00c59f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiStep.cpp  ?UpdateActiveStep@cMissionMultiStep_s00c5_a580@@QAEXXZ  00c5a580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiStep.cpp  ?OnAccept@cMissionMultiStep_s00c5_a580@@QAEXXZ  00c5a790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c5a0b0@cMissionMultiStep@@QAEXXZ  00c5a0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c59dc0@cMissionMultiStep@@QAEXXZ  00c59dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

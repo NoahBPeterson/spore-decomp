@@ -6,7 +6,6 @@
 00e51ee0 202 construct an effect spawn descriptor: complete (all field stores + default vectors); parameter/register schedule differs
 00e52060 1325 register-convention (eax=count, esi=this reproduced), remaining diffs are register allocation and stack-slot order; body complete, size 2150 equals original
 00e54b80 136 cell raster setup; complete. difftest: UNSUPPORTED (0/400 valid)
-00e54c70 10 layer Apply sweep; complete. difftest: UNSUPPORTED (0/400 valid) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#7 esp]
 00e54d10 8 layer tail-jump; complete. difftest: UNSUPPORTED (0/400 valid)
 00e552f0  114  cCellMode::Activate; complete (now a SP::cCellMode member, this in ecx). difftest: UNSUPPORTED (only 0/712 inputs valid: fault(read) 686)
 00e558c0 631 fluid-sample + reflect force: complete; x87 sqrt/SSE shuffle schedule differs

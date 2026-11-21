@@ -29,7 +29,6 @@
 00ecdf60 28 complete; editor object allocation/ctor differs; equiv UNSUPPORTED (3 unresolved reference(s): ?vtbl_BakeSprites@@3PADA, ?vtbl_cSPScenarioSwatchItemUI@@3PADA,) flags: /O2 /MD /Gy /EHsc /TP
 00ecdfc0 59 complete; float clamp + vcall-arg/store scheduling differs (proper 2-level vtable dispatch, ColorStore::Set thiscall); equiv PASS (325 valid inputs, 100.0% coverage) flags: /O2 /MD /Gy /EHsc /TP
 00ece140 137 complete; swatch mode notify/recolour chain differs (thiscall SetMode, ret 4); equiv WEAK (262 valid inputs, 9.1% coverage) flags: /O2 /MD /Gy /EHsc /TP
-00ed10b0 29 window value setter: base call + virtual protocol; register allocation differs [equiv: WEAK 175 valid 79.4% coverage] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ed1380 100 float bounds check: local order and comiss operands differ [equiv: UNSUPPORTED import _decode_pointer] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ed1460 17 new-object factory: cl merges the two ctor+tail branches [equiv: UNSUPPORTED 0 valid inputs (faults)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ed1550 610 species/avatar edit update (809 B): register scheduling and pointer arithmetic differ [equiv: UNSUPPORTED 0 valid inputs (profile-manager global faults)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -273,7 +273,7 @@ virtual void v20();
 virtual void v24();
     virtual bool IsVisible();                // +0x28
 virtual void v2c();
-virtual void v30();
+    virtual uint GetShadeColor();                          // +0x30
 virtual void v34();
 virtual void v38();
 virtual void v3c();
@@ -284,7 +284,7 @@ virtual void v4c();
 virtual void v50();
 virtual void v54();
 virtual void v58();
-virtual void v5c();
+    virtual void SetShadeColor(uint color);                // +0x5c
 virtual void v60();
 virtual void v64();
 virtual void v68();
@@ -955,25 +955,20 @@ void cSPUISocialRainbow_s00e3_2580::FUN_00e32f00()
     arr[0] = MOPS(&mLayout)->FUN_008105b0(0x562c1b8, 1);
     arr[1] = MOPS(&mLayout)->FUN_008105b0(0x562c170, 1);
     for (u32 k = 0; k < 2; k++) {
-        void* w = arr[k];
+        IWindow* w = (IWindow*)arr[k];
         if (w) {
             MOPS(&mAnimator)->FUN_007f6210(w, -1);
-            void** vt = VT(w);
-            u32 v = ((u32 (__thiscall*)(void*))vt[0x30 / 4])(w);
-            ((void (__thiscall*)(void*, u32))vt[0x5c / 4])(w, (v & 0xffffff) - 0x1000000);
+            w->SetShadeColor((w->GetShadeColor() & 0xffffff) - 0x1000000);
         }
     }
 
     arr[0] = MOPS(&mLayout)->FUN_008105b0(0x562c178, 1);
     arr[1] = MOPS(&mLayout)->FUN_008105b0(0x564f020, 1);
-    u32 i2;
-    for (i2 = 0; i2 < 2; i2++) {
-        void* w = arr[i2];
+    for (u32 i2 = 0; i2 < 2; i2++) {
+        IWindow* w = (IWindow*)arr[i2];
         if (w) {
-            ((void (__thiscall*)(void*, s32, s32))VT(w)[0x7c / 4])(w, 1, 1);
-            u32* vt2 = (u32*)VT(w);
-            u32 v = ((u32 (__thiscall*)(void*))vt2[0x30 / 4])(w);
-            ((void (__thiscall*)(void*, u32))vt2[0x5c / 4])(w, (v & 0xffffff) - 0x1000000);
+            w->SetFlag(1, true);
+            w->SetShadeColor((w->GetShadeColor() & 0xffffff) - 0x1000000);
         }
     }
 

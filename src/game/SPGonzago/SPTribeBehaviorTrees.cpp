@@ -6598,6 +6598,9 @@ float TribeMemberStateFraction(Creature* pCreature, int state)
     return (float)count / (unsigned)(members->mEnd - members->mBegin);
 }
 
+struct AnimalHead_da8960 { char pad[0x5a8]; };
+struct AnimalLink_da8960 { int m0; };
+struct AnimalObj_da8960 : AnimalHead_da8960, AnimalLink_da8960 {};
 // @ 0x00da8960
 float10 FUN_00da8960(int self, int a2, int a3, int a4, void* stimuli, char* out)
 {
@@ -6607,7 +6610,7 @@ float10 FUN_00da8960(int self, int a2, int a3, int a4, void* stimuli, char* out)
         if (s && *(char*)((char*)s + 0xb5e) != 0 && *(float*)((char*)s + 0xb84) > 0.0f) {
             if (stimuli)
                 ((Stimuli*)stimuli)->GetAny();
-            *(int*)((char*)stimuli + 4) = (int)((int*)s + 0x16a);
+            *(AnimalLink_da8960**)((char*)stimuli + 4) = (AnimalObj_da8960*)s;
             *out = 1;
             return (float10)1;
         }

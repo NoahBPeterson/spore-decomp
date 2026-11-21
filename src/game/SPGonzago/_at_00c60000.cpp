@@ -1387,7 +1387,7 @@ void* __cdecl FUN_00c87770(void* self);           // 0x00c87770 cSPSpaceInventor
 bool  __cdecl FUN_00c87580(void* self);           // 0x00c87580 serialize helper
 bool  __cdecl FUN_00c879a0(void* self);           // 0x00c879a0 deserialize helper
 bool  __cdecl FUN_00e3aa70(void* stream, const u32* value, int count, int); // 0x00e3aa70 IO::WriteUint32
-bool  __cdecl FUN_00e3a780(void* stream, void* out, int count, int);        // 0x00e3a780 IO::ReadInt32
+bool  __cdecl FUN_0093a780(void* stream, void* out, int count, int);        // 0x0093a780 IO::ReadInt32
 void* __cdecl FUN_00692f90(void* self, void* a, void* b, int c); // 0x00692f90 cVarListSerializer ctor
 bool  __cdecl FUN_00692900(void* self, void* stream);            // 0x00692900 Serialize (write)
 bool  __cdecl FUN_00693e10(void* self, void* stream);            // 0x00693e10 Serialize (read)
@@ -4186,18 +4186,30 @@ void* __fastcall FUN_00c6f3d0(void* self, void* /*edx*/)
   return self;
 }
 
+struct IStreamHolder_c6f4 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14();
+  virtual void* GetStream();   // +0x18
+};
+inline void WriteUint32_c6f4(void* stream, u32 value)
+{
+  FUN_0093aa70(stream, &value, (void*)1, 0);
+}
+struct IStreamOwner_c6f4 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual IStreamHolder_c6f4* GetHolder();   // +0x20
+};
+
 // @ 0x00c6f470
 u8 __fastcall FUN_00c6f470(void* self, void* /*edx*/, void* stream)
 {
   char* p = (char*)self;
-  char* a = (char*)((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  u32 tag = 0x073905ae;
-  void* s = ((void*(__thiscall*)(void*))(*(void***)a)[0x18 / 4])(a);
-  FUN_00e3aa70(s, &tag, 1, 0);
+  WriteUint32_c6f4(((IStreamOwner_c6f4*)stream)->GetHolder()->GetStream(), 0x073905ae);
   u8 ok = ((u8(__thiscall*)(void*, void*))FUN_00c87580)(self, stream);
   u32 ser[645];   // cVarListSerializer, 0xa14 bytes
   ((void*(__thiscall*)(void*, void*, void*, int))FUN_00692f90)(
-      ser, p - 0xc, (void*)0x01578618, 0x1a80d26);
+      ser, p - 0xc, (void*)g_1578618, 0x1a80d26);
   u8 ok2 = ((u8(__thiscall*)(void*, void*))FUN_00692900)(ser, stream);
   return (ok2 != 0 && ok != 0);
 }
@@ -4209,7 +4221,7 @@ u8 __fastcall FUN_00c6f500(void* self, void* /*edx*/, void* stream)
   char* a = (char*)((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
   void* s = ((void*(__thiscall*)(void*))(*(void***)a)[0x18 / 4])(a);
   u32 tag;
-  FUN_00e3a780(s, &tag, 1, 0);
+  FUN_0093a780(s, &tag, 1, 0);
   u8 ok = ((u8(__thiscall*)(void*, void*))FUN_00c879a0)(self, stream);
   u32 ser[645];   // cVarListSerializer, 0xa14 bytes
   ((void*(__thiscall*)(void*, void*, void*, int))FUN_00692f90)(
@@ -4310,12 +4322,20 @@ void* SimOrnament::Cast(unsigned type)
     return ((void* (__thiscall*)(void*, unsigned))FUN_00c751c0)(&mpVftbl_144, type);
 }
 
+struct ISetModel_c6f770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual void SetModel(void* a);   // +0x48
+};
 // @ 0x00c6f770
 void SimOrnament::SetStyleModel(int style, void* a, int model)
 {
     mStyle_228   = style;
     mModelID_22c = model;
-    ((void (__thiscall*)(SimOrnament*, void*))vc(this, 0x48))(this, a);
+    ((ISetModel_c6f770*)this)->SetModel(a);
     if (mStyle_228 == 0x65658d2) mbField_116 = false;
 }
 

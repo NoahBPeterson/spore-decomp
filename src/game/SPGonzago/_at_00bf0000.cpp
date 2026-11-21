@@ -2314,10 +2314,8 @@ int CStub::FUN_00bf0260(int arg)
 void CStub::FUN_00bf02b0(void* arg, int b, int c, int d)
 {
     (void)b; (void)c; (void)d;
-    NounMgrStub* nm = (NounMgrStub*)SP_NounManager();
-    void* src = nm->FUN_00b25f40((int)arg);
-    nm = (NounMgrStub*)SP_NounManager();
-    void* player = nm->FUN_00b25fb0();
+    void* src = ((NounMgrStub*)SP_NounManager())->FUN_00b25f40((int)arg);
+    void* player = ((NounMgrStub*)SP_NounManager())->FUN_00b25fb0();
 
     if ((**(u8(__thiscall**)(CStub*))(*(void***)this + 0x2c / 4))(this)) return;
     if (src == 0) return;

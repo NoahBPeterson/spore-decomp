@@ -409,17 +409,50 @@ bool EmitterSndPlayer::q11270(float f)
 }
 
 // @ 0x00a112c0
+struct SysAT_s00a112c0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void Remove(void* item);        // +0x74
+};
+struct Self_s00a112c0 { virtual void f00(); virtual void Finish(); };
+struct Item_s00a112c0 { virtual void i00(); };
+struct MI_s00a112c0 : Self_s00a112c0, Item_s00a112c0 {};
 void EmitterSndPlayer::q112c0()
 {
     if (!g_16e61a8) return;
     if (!((SysGlobal*)g_16e61a8)->Check(*(void**)(m + 0xcec))) return;
     if (*(uint32_t*)(m + 0xd84) & 2) {
         *(uint32_t*)(m + 0xd84) &= ~2;
-        void* arg = m + 4;
-        void* sys = f_00a206f0_GetSystemAT();
-        ((void(__thiscall*)(void*, void*))((void**)*(void**)sys)[0x74 / 4])(sys, arg);
+        ((SysAT_s00a112c0*)f_00a206f0_GetSystemAT())->Remove(static_cast<Item_s00a112c0*>((MI_s00a112c0*)this));
     }
-    ((void(__thiscall*)(void*))Vt()[4 / 4])(this);
+    ((Self_s00a112c0*)this)->Finish();
 }
 
 // @ 0x00a11310
@@ -468,28 +501,60 @@ bool EmitterSndPlayer::Shutdown()
 }
 
 // @ 0x00a113c0
+struct Cfg_s00a113c0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual bool HasKey(uint32_t key);                       // +0x18
+    virtual void f1c();
+    virtual void f20();
+    virtual bool GetUInt(uint32_t key, uint32_t* out);       // +0x24
+    virtual void f28();
+    virtual void GetFloat(uint32_t key, void* out);          // +0x2c
+    virtual void f30();
+    virtual void GetKey(uint32_t key, uint32_t* out);        // +0x34
+};
+struct Self_s00a113c0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual char Start();                                    // +0x4c
+};
 bool EmitterSndPlayer::Create()
 {
     if (*(uint32_t*)(m + 0xd84) & 0x20) return false;
-    if (*(void**)(m + 0x374)) {
-        void* cfg = *(void**)(m + 0x374);
-        if (((bool(__thiscall*)(void*, int))((void**)*(void**)cfg)[0x18 / 4])(cfg, 0x79da6d74)) {
+    if (*(Cfg_s00a113c0**)(m + 0x374)) {
+        if ((*(Cfg_s00a113c0**)(m + 0x374))->HasKey(0x79da6d74)) {
             uint32_t local[3] = {0, 0, 0};
-            void* c = *(void**)(m + 0x374);
-            ((void(__thiscall*)(void*, int, void*))((void**)*(void**)c)[0x34 / 4])(c, 0x79da6d74, local);
+            (*(Cfg_s00a113c0**)(m + 0x374))->GetKey(0x79da6d74, local);
             *(uint32_t*)(m + 0xd14) = local[0];
         }
-        void* c1 = *(void**)(m + 0x374);
-        ((ResponseCurve_s00a1_02e0*)(m + 0x10))->InitFromConfiguration(c1, 0x1e4db1eb);
-        void* c2 = *(void**)(m + 0x374);
-        ((void(__thiscall*)(void*, int, void*))((void**)*(void**)c2)[0x2c / 4])(c2, 0xed1f36d5, m + 0xd20);
-        void* c3 = *(void**)(m + 0x374);
+        ((ResponseCurve_s00a1_02e0*)(m + 0x10))->InitFromConfiguration(*(void**)(m + 0x374), 0x1e4db1eb);
+        (*(Cfg_s00a113c0**)(m + 0x374))->GetFloat(0xed1f36d5, m + 0xd20);
         uint32_t r;
-        if (((bool(__thiscall*)(void*, int, void*))((void**)*(void**)c3)[0x24 / 4])(c3, 0x12d2a4d4, &r)) {
+        if ((*(Cfg_s00a113c0**)(m + 0x374))->GetUInt(0x12d2a4d4, &r))
             SetFlag(4, (char)r);
-        }
     }
-    return ((((int(__thiscall*)(void*))Vt()[0x4c / 4])(this)) & 0xff) != 0;
+    return ((Self_s00a113c0*)this)->Start() ? true : false;
 }
 
 // @ 0x00a114a0

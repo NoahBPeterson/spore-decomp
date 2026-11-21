@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
 007d8180 95 SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
-007d81f0 34 SP::cApp::PreInitAppModes; complete loop over modes calling vtable+0xc, count/register shape differs
 007d8360 93 SP::cApp::SetAppModeByName; complete _stricmp search + SetAppModeByIndex vcall, schedule differs
 007d8470 160 schedule: R49 (2026-11-17): a SlotMsg class gives the EH frame; 6 lines remain: retail stores the message ID after the argument pushes | Earlier note: SP::cApp::SwitchMode; complete (leave mode, build/send 2 messages, clear index), message ctor/EH schedule differs
 007d85b0 274 SP::cApp::ApplyAppMode; complete (leave old mode, set index, send 2 app-mode messages, enter new mode), MessageBasicRC/EH schedule differs

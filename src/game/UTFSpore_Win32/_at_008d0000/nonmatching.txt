@@ -21,5 +21,4 @@
 008d62f0 205 reconstruction (DatabaseDirectoryFiles::RemoveRecord); flags /O2 /MD /GS- /GR- /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference: SetSource, defined in the sibling migrated slice s008d7220)
 008d6410 31 reconstruction (DatabaseDirectoryFiles::CloseUnreferencedRecords); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the record stream path blocks on import:WaitForSingleObject)
 008dcea0 387 PFRecordWrite ctor; MemoryStream/FileStream Construct + temp-file open path codegen differs (equiv UNSUPPORTED: unresolved stub MemoryStream SetOption/SetData/GetData)
-008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs

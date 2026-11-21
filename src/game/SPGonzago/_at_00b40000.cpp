@@ -1276,6 +1276,10 @@ void* F_f473a0(unsigned size, const char* pName, int flags, int dbgFlags,
                const char* pFile, int line);        // 0x00f473a0  operator new
 void  F_f47380(void* p);                            // 0x00f47380  operator delete
 Elem44* F_b3d890(Elem44* first, Elem44* last, Elem44* dest);   // 0x00b3d890
+inline Elem44* UninitializedCopy44(Elem44* first, Elem44* last, Elem44* dest)
+{
+    return F_b3d890(first, last, dest);
+}
 static inline void CopyBackward44(Elem44* first, Elem44* last, Elem44* result)
 {
     while (last != first)
@@ -4214,9 +4218,9 @@ void Vec44::DoInsertValue(Elem44* position, const Elem44& value)
         unsigned nPrevSize = (unsigned)(mpEnd - mpBegin);
         unsigned nNewSize = nPrevSize ? 2 * nPrevSize : 1;
         Elem44* const pNewData = DoAllocate44(nNewSize);
-        Elem44* pNewPosition = F_b3d890(mpBegin, position, pNewData);
+        Elem44* pNewPosition = UninitializedCopy44(mpBegin, position, pNewData);
         new(pNewPosition) Elem44(value);
-        Elem44* pNewEnd = F_b3d890(position, mpEnd, pNewPosition + 1);
+        Elem44* pNewEnd = UninitializedCopy44(position, mpEnd, pNewPosition + 1);
         if (mpBegin && ((int*)mpBegin)[-1])
             F_f47380(mpBegin);
         mpEnd = pNewEnd;

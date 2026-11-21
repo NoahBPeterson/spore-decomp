@@ -327,6 +327,7 @@ class cSPUILayerManager { public:
     void __thiscall DrawLayer(void* a, void* b, void* c, void* d);
     bool __thiscall Shutdown();
     void* __thiscall AddObject(void* a, void* b, void* cb);
+    void __thiscall DrawLayerObjects(void* mgr, int layer, void* c, void* d);  // 0x80e6b0
 };
 struct ObjStub {
     void __thiscall go();                  // 0x80f380
@@ -1205,10 +1206,22 @@ void __thiscall cSPUILayerManager::RemoveAllObjects()
     mRemoved.erase(mRemoved.mBegin, mRemoved.mEnd);
 }
 
+struct LayerMsgServer_f920 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void Post(u32 id, int a, int b);  // slot 5 (+0x14)
+};
+struct LayerWinMgr_f920 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual void Refresh();  // slot 10 (+0x28)
+};
+
+bool __cdecl IsLayerUsed(unsigned layer);   // 0x82e700
+
 // @ 0x0080f920
 void __thiscall cSPUILayerManager::DrawLayer(void* a, void* b, void* c, void* d)
 {
-    void* mgr = EA_UTFWin_GetManager();
+    LayerWinMgr_f920* mgr = (LayerWinMgr_f920*)EA_UTFWin_GetManager();
     if (!mgr) return;
     void* g = g_15fd918;
     if (g) {
@@ -1217,18 +1230,16 @@ void __thiscall cSPUILayerManager::DrawLayer(void* a, void* b, void* c, void* d)
     if (b94 == 0) {
         b94 = 1;
     } else if (b94 == 1) {
-        void* ms = SP_MessageServer();
-        if (ms) {
-            ms = SP_MessageServer();
-            ((void(__thiscall*)(void*, u32, int, int))VT(ms)[0x14 / 4])(ms, 0x0366b9aa, 0, 0);
-        }
+        if (SP_MessageServer())
+            ((LayerMsgServer_f920*)SP_MessageServer())->Post(0x0366b9aa, 0, 0);
         b94++;
     }
-    mRemoved.erase(mRemoved.mBegin, mRemoved.mEnd);
-    ((VF0v)VT(mgr)[0x28 / 4])(mgr);
+    PtrVec_s0080_f7c0& rem = mRemoved;
+    rem.erase(rem.mBegin, rem.mEnd);
+    mgr->Refresh();
     for (int i = 0; i < 0xf; ++i) {
-        if (FUN_0082e700(i))
-            ((ObjStub*)mgr)->doE6B0(i, c, d);
+        if (IsLayerUsed(i))
+            DrawLayerObjects(mgr, i, c, d);
     }
     (void)a; (void)b;
 }

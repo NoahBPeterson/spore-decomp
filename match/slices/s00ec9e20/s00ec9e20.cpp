@@ -456,13 +456,14 @@ void __cdecl FUN_00eca9c0(void)
     }
 }
 
+struct RegionTable_ecaab0 { int pad0; Region slots[2][5]; };
 // @ 0x00ecaab0
 // Drop a region slot and renumber the ones above it.
 void __cdecl FUN_00ecaab0(Region* param_1)
 {
-    for (int base = 0; base < 0x140; base += 0xa0) {
+    for (int i = 0; i < 2; ++i) {
         for (int k = 0; k < 5; ++k) {
-            Region* r = (Region*)(g_16c7584 + base + 4 + 0x20 * k);
+            Region* r = &((RegionTable_ecaab0*)g_16c7584)->slots[i][k];
             if (r->enabled != 0 && param_1->index != -1 && r->index > param_1->index)
                 r->index -= 1;
         }

@@ -6,3 +6,4 @@ slices/s00ae2e20/s00ae2e20.cpp  ?Head@Sim@@QAE_NXZ  00ae3740  /O2 /MD /Gy /TP /a
 slices/s00ae2e20/s00ae2e20.cpp  ?Tally@Sim@@QAEXPAH00@Z  00ae3750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ae2e20/s00ae2e20.cpp  ?HasId@Sim@@QAE_NH@Z  00ae3d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ae2e20/s00ae2e20.cpp  ?CopyFrom@Desc@@QAEPAU1@PBU1@@Z  00ae3a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ae2e20/s00ae2e20.cpp  ?FUN_00ae2e40@@YAPAXPAXPAI@Z  00ae2e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast

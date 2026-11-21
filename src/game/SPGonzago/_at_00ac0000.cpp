@@ -1084,24 +1084,32 @@ int* ThiscallStub::FUN_00ac06c0(float* pos, float a, float b)
     return self;
 }
 
+struct IPos_ac0730 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual float* GetPosition();   // +0x2c
+};
+extern "C" float g_13eb960;   // 0x013eb960  +0.01
+extern "C" float g_140ced4;   // 0x0140ced4  -0.01
 // @ 0x00ac0730
 int ThiscallStub::FUN_00ac0730(void* a, void* b)
 {
     float* self = (float*)this;
-    float* pa = ((GetVecFn)((*(void***)a)[0x2c / 4]))(a);
+    float* pa = ((IPos_ac0730*)a)->GetPosition();
     float dxa = self[0] - pa[0];
     float dya = self[1] - pa[1];
     float dza = self[2] - pa[2];
-    float da  = dya * dya + dxa * dxa + dza * dza;
+    float da  = dza * dza + (dxa * dxa + dya * dya);
 
-    float* pb = ((GetVecFn)((*(void***)b)[0x2c / 4]))(b);
+    float* pb = ((IPos_ac0730*)b)->GetPosition();
     float dxb = self[0] - pb[0];
     float dyb = self[1] - pb[1];
     float dzb = self[2] - pb[2];
     float db  = dzb * dzb + dyb * dyb + dxb * dxb;
 
     float diff = db - da;
-    if (diff < G_013eb960 && G_0140ced4 < diff)
+    if (diff < g_13eb960 && g_140ced4 < diff)
         return (int)(a < b);
     if (da < db)
         return 1;
@@ -1117,7 +1125,7 @@ int ThiscallStub::FUN_00ac0810(void* a, void* b)
     float dxa = self[0] - pa[0];
     float dya = self[1] - pa[1];
     float dza = self[2] - pa[2];
-    float da  = dya * dya + dxa * dxa + dza * dza;
+    float da  = dza * dza + (dxa * dxa + dya * dya);
 
     float* pb = cCivData_GetCities(b);
     float dxb = self[0] - pb[0];
@@ -2132,23 +2140,29 @@ void FUN_00aca730(void* obj, int* vec)
 }
 
 // @ 0x00aca7b0
-void __stdcall FUN_00aca7b0(uchar* p, uchar* end)
+struct Elem_s00aca7b0 { virtual void Destroy(int flags); int a, b; };
+struct Rec_s00aca7b0 {
+    int f0;
+    void* vt;                       // +0x04
+    int f8;
+    Elem_s00aca7b0* mpBegin;        // +0x0c
+    Elem_s00aca7b0* mpEnd;          // +0x10
+    int f14, f18, f1c;
+};
+void __stdcall FUN_00aca7b0(uchar* first, uchar* last)
 {
-    if (p < end) {
-        uint n = (((uint)(end - p) - 1) >> 5) + 1;
-        do {
-            *(void**)(p + 4) = (void*)0x145a164;
-            uchar* b = *(uchar**)(p + 0xc);
-            uchar* e2 = *(uchar**)(p + 0x10);
-            for (; b < e2; b += 0xc) {
-                void* o = *(void**)b;
-                ((void (__thiscall*)(void*, int))vc(o, 0))(o, 0);
-            }
-            uchar* base = *(uchar**)(p + 0xc);
-            if (base && *(int*)(base - 4) != 0)
-                operator_delete(base);
-            p += 0x20;
-        } while (--n);
+    Rec_s00aca7b0* p = (Rec_s00aca7b0*)first;
+    Rec_s00aca7b0* end = (Rec_s00aca7b0*)last;
+    for (; p < end; ++p) {
+        p->vt = g_145a164;
+        _ReadWriteBarrier();
+        Elem_s00aca7b0* e2 = p->mpEnd;
+        Elem_s00aca7b0* b = p->mpBegin;
+        for (; b < e2; ++b)
+            b->Destroy(0);
+        uchar* base = (uchar*)p->mpBegin;
+        if (base && *(int*)(base - 4) != 0)
+            operator_delete(base);
     }
 }
 

@@ -18,5 +18,4 @@
 00e18980  cUIMissionCardPanel::DestroyMembers -- tear down vtables/tree/handler/layout
 00e18a30  cUIMissionCardPanel::ShutdownA -- unregister handler, clear tree, hide layout
 00e18bb0  cUIMissionCardPanel::Construct -- constructor: set vtables, init fields, register message handler
-00e18c70  cUIMissionCardPanel::ShouldShow -- visibility + current-mission check; branch layout differs
 00e18cb0  cUIMissionCardPanel::SetSlotAndMission -- find mission in rbtree, bind window slot, swap current mission

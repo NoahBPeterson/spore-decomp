@@ -251,30 +251,45 @@ void cTerrainSphere::m00f96a90(int, int idx, float val)
 struct TexRef { int mHandle; int mIndex; };
 
 // @ 0x00f96b40
+struct Rnd_s00f96b40 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual TexRef* CreateRTT(TexRef* out, int w, int h, int fmt, int a, int id, int b);  // +0x10
+    virtual void f14();
+    virtual void f18();
+    virtual int* GetTexture(int handle, int index);                                     // +0x1c
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void SetName(int handle, int index, const char* name);                      // +0x48
+};
 void cTerrainSphere::InitializeStaticRTTTextures()
 {
-    void* r = GetRenderer();
+    Rnd_s00f96b40* r = (Rnd_s00f96b40*)GetRenderer();
     TexRef local;
-    TexRef* t = (TexRef*)(*(void* (__thiscall**)(void*, TexRef*, int, int, int, int, int, int))(*(int*)r + 0x10))
-                            (r, &local, 0x100, 0x100, 0x15, 0, 0x5a6f2fee, 0);
+    TexRef* t = r->CreateRTT(&local, 0x100, 0x100, 0x15, 0, 0x5a6f2fee, 0);
     DAT_015b1200 = t->mHandle;
     DAT_015b1204 = t->mIndex;
-    (*(void (__thiscall**)(void*, int, int, const char*))(*(int*)r + 0x48))
-        (r, t->mHandle, t->mIndex, "TerrainRefractionBuffers");
-    DAT_016c9e68 = (int*)(*(void* (__thiscall**)(void*, int, int))(*(int*)r + 0x1c))(r, DAT_015b1200, DAT_015b1204);
-    t = (TexRef*)(*(void* (__thiscall**)(void*, TexRef*, int, int, int, int, int, int))(*(int*)r + 0x10))
-                     (r, &local, 0x100, 0x100, 0x15, 0, 0x43ec615b, 0);
+    r->SetName(t->mHandle, t->mIndex, "TerrainRefractionBuffers");
+    DAT_016c9e68 = r->GetTexture(DAT_015b1200, DAT_015b1204);
+    t = r->CreateRTT(&local, 0x100, 0x100, 0x15, 0, 0x43ec615b, 0);
     DAT_015b1208 = t->mHandle;
     DAT_015b120c = t->mIndex;
-    (*(void (__thiscall**)(void*, int, int, const char*))(*(int*)r + 0x48))
-        (r, t->mHandle, t->mIndex, "TerrainRefractionBlur1");
-    t = (TexRef*)(*(void* (__thiscall**)(void*, TexRef*, int, int, int, int, int, int))(*(int*)r + 0x10))
-                     (r, &local, 0x100, 0x100, 0x15, 0, 0x43ec6158, 0);
+    r->SetName(t->mHandle, t->mIndex, "TerrainRefractionBlur1");
+    t = r->CreateRTT(&local, 0x100, 0x100, 0x15, 0, 0x43ec6158, 0);
     DAT_015b1210 = t->mHandle;
     DAT_015b1214 = t->mIndex;
-    (*(void (__thiscall**)(void*, int, int, const char*))(*(int*)r + 0x48))
-        (r, t->mHandle, t->mIndex, "TerrainRefractionBlur2");
-    ((cViewer_s007c_4be0*)0x016ca0d8)->Init(false);
+    r->SetName(t->mHandle, t->mIndex, "TerrainRefractionBlur2");
+    ((cViewer_s007c_4be0*)g_16ca0d8)->Init(false);
 }
 
 // @ 0x00f96c60
@@ -628,23 +643,89 @@ bool cTerrainSphere::m00f97700(int value)
 }
 
 // @ 0x00f97750
+struct AppSys_s00f97750 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void Lock();                    // +0x6c
+    virtual void Unlock();                  // +0x70
+};
+struct Mgr_s00f97750 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void f74();
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual char Begin();                   // +0x88
+    virtual void End();                     // +0x8c
+};
+struct Job_s00f97750 {
+    virtual void f00();
+    virtual char Run(void* owner, int flags);   // +0x04
+};
 void cTerrainSphere::m00f97750()
 {
     char* self = (char*)this;
-    void* app = SP_AppSystem();
-    (*(void (__thiscall**)(void*))(*(int*)app + 0x6c))(app);
-    void* o = FUN_0067dd50();
-    if ((*(char (__thiscall**)(void*))(*(int*)o + 0x88))(o))
+    ((AppSys_s00f97750*)SP_AppSystem())->Lock();
+    if (((Mgr_s00f97750*)FUN_0067dd50())->Begin())
     {
-        while (*(char**)(self + 0xfc) != 0)
-        {
-            char* obj = *(char**)(self + 0xfc);
-            if ((*(char (__thiscall**)(char*, char*, int))(*(int*)obj + 4))(obj, self, 0) != 0)
-                break;
-        }
-        o = FUN_0067dd50();
-        (*(void (__thiscall**)(void*))(*(int*)o + 0x8c))(o);
+        while (*(Job_s00f97750**)(self + 0xfc) != 0 &&
+               !(*(Job_s00f97750**)(self + 0xfc))->Run(self, 0))
+            ;
+        ((Mgr_s00f97750*)FUN_0067dd50())->End();
     }
-    app = SP_AppSystem();
-    (*(void (__thiscall**)(void*))(*(int*)app + 0x70))(app);
+    ((AppSys_s00f97750*)SP_AppSystem())->Unlock();
 }

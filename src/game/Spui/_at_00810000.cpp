@@ -640,6 +640,26 @@ struct cSPUIProgressBarWin {
 }
 struct ImgRect { float x, y, w, h; };
 struct ImgColor { unsigned r, g, b, a; };
+struct ProgressImage_81d5e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void Draw(RenderCtx* ctx, ImgRect* rect, ImgColor* color);  // slot 4 (+0x10)
+};
+struct ProgressBatch_81d5e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13();
+    virtual void FillRect(float x, float y, float w, float h);  // slot 14 (+0x38)
+};
+struct ProgressWinIface_81d5e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41();
+    virtual ProgressImage_81d5e0* GetImage();  // slot 42 (+0xa8)
+};
 // ---- items of slice s0081c9c0 end
 
 // @ 0x008129c0
@@ -1165,18 +1185,14 @@ UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin()
 // @ 0x0081d5e0
 bool UTFWin::cSPUIProgressBarWin::Draw(RenderCtx* ctx)
 {
-  void* batch = ctx->f95bc10(0);
-  void* obj = ((void* (__thiscall*)(void*))VTSLOT((char*)this + 4, 0xa8))((char*)this + 4);
+  ProgressBatch_81d5e0* batch = (ProgressBatch_81d5e0*)ctx->f95bc10(0);
+  ProgressImage_81d5e0* obj = ((ProgressWinIface_81d5e0*)&mVtbl4)->GetImage();
   if (obj != 0) {
-    void* fn = VTSLOT(obj, 0x10);
     ImgRect rect = {0.0f, 0.0f, (mX2 - mX1) * mValue218 * 0.01f, mY2 - mY1};
     ImgColor color = {0, 0, 0, 0xffffffff};
-    ((void (__thiscall*)(void*, RenderCtx*, ImgRect*, ImgColor*))fn)(
-        obj, ctx, &rect, &color);
+    obj->Draw(ctx, &rect, &color);
   } else {
-    void* fn = VTSLOT(batch, 0x38);
-    ((void (__thiscall*)(void*, float, float, float, float))fn)(
-        batch, 0.0f, 0.0f, mX2 - mX1, mY2 - mY1);
+    batch->FillRect(0.0f, 0.0f, mX2 - mX1, mY2 - mY1);
   }
   ctx->f95bb20();
   return true;
