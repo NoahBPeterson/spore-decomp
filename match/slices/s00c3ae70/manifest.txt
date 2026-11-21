@@ -3,3 +3,4 @@ slices/s00c3ae70/s00c3ae70.cpp  ?GetFieldValues@cSPGameDataUFO@@QAEHPAX@Z  00c3b
 slices/s00c3ae70/s00c3ae70.cpp  ?GetScaleRadius@cSPGameDataUFO@@QAEMXZ  00c3be10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c3ae70/s00c3ae70.cpp  ?UpdateDestinationFromTarget@cSPGameDataUFO@@QAEXXZ  00c3b4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c3ae70/s00c3ae70.cpp  ?SetNPCTool@cSPGameDataUFO@@QAEXPAX@Z  00c3b5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c3ae70/s00c3ae70.cpp  ?UpdateScale@cSPGameDataUFO@@QAEXXZ  00c3b3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1115,6 +1115,23 @@ void cCivModeStrategy::DoCVGCompletionAchievements()
     }
 }
 
+// The serializer stream and the IO stream it hands out: the slots FUN_00cf7710/7770 call.
+struct CivIOStream;
+struct CivSerBase;
+struct CivSerStream {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual CivSerBase *GetBase();                      // +0x20
+};
+struct CivSerBase {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual CivIOStream *GetStream();                   // +0x18
+};
+struct CivSerRecord { u8 mData[0x1c]; };
+extern "C" CivSerRecord g_168caf0[3];                  // serialized civ-event records
+typedef bool (__cdecl *CivIOFn)(CivIOStream *, u32 *, int, int);
+
 // @ 0x00cf7710
 bool FUN_00cf7710(void *stream)
 {
@@ -1131,24 +1148,22 @@ bool FUN_00cf7710(void *stream)
 }
 
 // @ 0x00cf7770
-bool FUN_00cf7770(void *stream)
+bool __stdcall FUN_00cf7770(void *stream)
 {
-    if (g_serVersion < 0x1c0007) {
-        return true;
+    bool result = true;
+    if (g_serVersion >= 0x1c0007) {
+        u32 version = 0;
+        CivSerStream *s = (CivSerStream *)stream;
+        CivIOStream *io = s->GetBase()->GetStream();
+        ((CivIOFn)ReadInt32)(io, &version, 1, 0);
+        if (version == 3) {
+            for (int i = 0; i < 3; ++i)
+                FUN_00befbc0(stream, &g_168caf0[i]);
+        } else {
+            result = false;
+        }
     }
-    u32 version = 0;
-    void *o1 = ((void *(__thiscall *)(void *))(*(void ***)stream)[0x20 / 4])(stream);
-    void *o2 = ((void *(__thiscall *)(void *))(*(void ***)o1)[0x18 / 4])(o1);
-    ((bool (__cdecl *)(void *, u32 *, int, int))ReadInt32)(o2, &version, 1, 0);
-    if (version != 3) {
-        return false;
-    }
-    u8 *p = g_serTable;
-    while (p < (u8 *)0x168cb44) {
-        FUN_00befbc0(stream, p);
-        p += 0x1c;
-    }
-    return true;
+    return result;
 }
 
 // @ 0x00cf77f0

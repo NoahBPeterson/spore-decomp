@@ -1001,6 +1001,18 @@ void __thiscall Sim::Build()
         (h, &local, cc->w0c);
 }
 
+// Effect handle stand-in: the slots Sim::Deactivate calls.
+struct SimEffectHandle {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void Stop(int32_t id);                         // +0x14
+    virtual void Hide();                                   // +0x18
+    virtual void Detach(uint32_t key, void* transform);    // +0x1c
+};
+
 // @ 0x00a85790
 void __thiscall Sim::Deactivate(bool)
 {
@@ -1013,16 +1025,16 @@ void __thiscall Sim::Deactivate(bool)
         if (this->cfg->flags & 1)
             this->Build();
         if (Bit(this->cfg->flags, 3))
-            (*(void (__thiscall**)(void*))(*(uint32_t**)this->h10 + 0x18 / 4))(this->h10);
+            ((SimEffectHandle*)this->h10)->Hide();
         if (Bit(this->cfg->flags, 5)) {
-            void* arg = Bit(this->cfg->flags, 6) ? (void*)((char*)this + 0x28) : 0;
-            (*(void (__thiscall**)(void*, uint32_t, void*))(*(uint32_t**)this->h10 + 0x1c / 4))
-                (this->h10, this->cfg->wa8, arg);
+            if (Bit(this->cfg->flags, 6))
+                ((SimEffectHandle*)this->h10)->Detach(this->cfg->wa8, &this->f28);
+            else
+                ((SimEffectHandle*)this->h10)->Detach(this->cfg->wa8, 0);
         }
     }
     if (this->i68 >= 0) {
-        (*(void (__thiscall**)(void*, int32_t))(*(uint32_t**)this->h10 + 0x14 / 4))
-            (this->h10, this->i68);
+        ((SimEffectHandle*)this->h10)->Stop(this->i68);
         this->i68 = -1;
     }
 }

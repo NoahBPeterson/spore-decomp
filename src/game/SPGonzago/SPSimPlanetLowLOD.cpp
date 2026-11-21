@@ -1292,27 +1292,31 @@ done:
   return 0;
 }
 
+// Mission-list stand-ins for FUN_00c7f390.
+struct LodMissionObj { u32 pad[0x130 / 4]; u32 mFlags; };    // +0x130 flags (bit 3: complete)
+struct LodMission {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual LodMissionObj* Cast(u32 iid);                    // +0x0c
+    void* FUN_00970b30();                                    // GetTargetPlanet (thiscall)
+};
+struct LodMissionList { LodMission** mpBegin; LodMission** mpEnd; };
+struct LodMissionMgr { LodMissionList* FUN_00fedd50(); };    // GetMissionList (thiscall)
+extern "C" char g_1473368[];                                 // achievement/event table
+
 // @ 0x00c7f390
 void __cdecl FUN_00c7f390(void)
 {
-  void* mm = FUN_00feb9f0();
-  void* list = ((MMC*)mm)->GetMissionList();
-  s32 n = (*(s32*)((char*)list + 4) - *(s32*)list) >> 2;
-  s32 i = 0;
-  if (n > 0) {
-    for (;;) {
-      void* m = *(void**)((char*)(*(void**)list) + i * 4);
-      void* tp = ((MissionC*)m)->GetTargetPlanet();
-      void* ap = FUN_01021260();
-      if (tp == ap && m != 0) {
-        void* o = ((TFpu)(*(void***)m)[0xc / 4])(m, 0x35988ee);
-        if (o != 0 && ((*(u32*)((char*)o + 0x130) >> 3) & 1)) break;
+  LodMissionList* list = ((LodMissionMgr*)FUN_00feb9f0())->FUN_00fedd50();
+  s32 n = (s32)(list->mpEnd - list->mpBegin);
+  for (s32 i = 0; i < n; i++) {
+    LodMission* m = list->mpBegin[i];
+    if (m->FUN_00970b30() == FUN_01021260() && m != 0) {
+      LodMissionObj* o = m->Cast(0x35988ee);
+      if (o != 0 && (bool)((o->mFlags >> 3) & 1)) {
+        if (FUN_01044640() != 0)
+          FUN_01041c50(g_1473368, 0x9fc86b19, 1);
+        return;
       }
-      i++;
-      if (i >= n) return;
-    }
-    if (FUN_01044640() != 0) {
-      FUN_01041c50((void*)0x1473368, 0x9fc86b19, 1);
     }
   }
 }
