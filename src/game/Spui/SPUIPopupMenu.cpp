@@ -186,7 +186,15 @@ struct Menu2 {
   void HideMenuItems(bool, bool);
   void OnMenuItemSelected(Menu2* b, Menu2* a);
 };
-struct OnMouseUpArg { char pad00[0x14]; int d14; int d18; int d1c; };
+struct OnMouseUpArg { int d00; int d04; int d08; int d0c; int d10; int d14; int d18; };
+struct IMouseUpWin {   // IWindow interface at +4
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual IMouseUpWin* GetParent();   // +0x10
+};
+struct IMouseUpHandler {
+  virtual void v00(); virtual void v04(); virtual void v08();
+  virtual void* Cast(int id);   // +0x0c
+};
 struct ItemMouseUp {
   char pad00[0x80];
   int f80;                     // +0x80
@@ -735,19 +743,16 @@ void cAutoPropertyBaseLink::Update(void* except)
 char ItemMouseUp::OnMouseUp(float a1, float a2, int a3, int a4)
 {
   ((void (__thiscall*)(void*, int, int))VTSLOT((char*)this + 0x20c, 0x28))((char*)this + 0x20c, 4, 1);
-  int v = f84 != 0 ? f84 : f80;
   OnMouseUpArg args;
-  args.d14 = 0x4cab02d;
-  args.d18 = v;
-  args.d1c = f888;
-  void* self = (char*)this + 4;
-  void* p = ((void* (__thiscall*)(void*))VTSLOT(self, 0x10))(self);
-  if (p != 0) {
-    void* q = ((void* (__thiscall*)(void*, int))VTSLOT(p, 0xc))(p, 0x4c058d5);
-    if (q != 0) ((ItemMouseUp*)q)->OnMenuItemSelected2(0, this);
+  args.d08 = 0x4cab02d;
+  args.d0c = f84 != 0 ? f84 : f80;
+  args.d10 = f888;
+  IMouseUpWin* self = (IMouseUpWin*)((char*)this + 4);
+  if (IMouseUpHandler* p = (IMouseUpHandler*)self->GetParent()) {
+    if (void* q = p->Cast(0x4c058d5)) ((ItemMouseUp*)q)->OnMenuItemSelected2(0, this);
   }
   char r = WinButtonOnMouseUp(a1, a2, a3, a4);
-  Call114(&args);
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0x114))(self, &args);
   return r;
 }
 
