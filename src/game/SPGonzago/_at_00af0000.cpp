@@ -4155,7 +4155,7 @@ void cContactProxy::SetFromSource(cContactRecord* src)
         m_vec50.y = p->y;
         m_vec50.z = p->z;
         m_vec50.w = p->w;
-        m_b48 = 0;
+        *(volatile uint8_t*)&m_b48 = 0;
 
         if (src->mType == 3)
         {
@@ -4175,7 +4175,7 @@ void cContactProxy::SetFromSource(cContactRecord* src)
         m_vec50.y = p->y;
         m_vec50.z = p->z;
         m_vec50.w = p->w;
-        m_b48 = 0;
+        *(volatile uint8_t*)&m_b48 = 0;
     }
 }
 
