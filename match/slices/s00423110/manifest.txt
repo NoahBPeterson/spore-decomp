@@ -6,3 +6,4 @@ slices/s00423110/s00423110.cpp  ?Find@WString  00423700  /Od /Ob1 /MD /Gy /EHsc 
 slices/s00423110/s00423110.cpp  FreeBuffer  004237d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00423110/s00423110.cpp  AllocateSelf  00423820  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00423110/s00423110.cpp  RFindChar  00423890  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  ?AppendSprintfVa@WString@@QAEAAU1@PB_WPAD@Z  004234b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
