@@ -673,6 +673,39 @@ struct AutoRefObj_s008e_0eb0 {
 };
 }
 }
+struct IAllocator_8e1200 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void Free(void* p, uint32 n);                        // +0x0c
+};
+struct RefObj_8e1200 {
+    virtual void v0(); virtual void v1();
+    virtual void Release();                                      // +0x08
+};
+struct RefPair_8e1200 {
+    RefObj_8e1200* mpObject;
+    uint32         mExtra;
+};
+struct RefPairVec_8e1200 {
+    RefPair_8e1200*     mpBegin;                                 // +0x00
+    RefPair_8e1200*     mpEnd;                                   // +0x04
+    RefPair_8e1200*     mpCapacity;                              // +0x08
+    IAllocator_8e1200*  mpAllocator;                             // +0x0c
+    ~RefPairVec_8e1200()
+    {
+        RefPair_8e1200* const pEnd = mpEnd;
+        for (RefPair_8e1200* p = mpBegin; p < pEnd; ++p)
+            if (p->mpObject)
+                p->mpObject->Release();
+        if (mpBegin)
+            mpAllocator->Free(mpBegin, (uint32)((mpCapacity - mpBegin) * sizeof(RefPair_8e1200)));
+    }
+};
+struct HashNode_8e1200 {
+    uint32            mKey;                                      // +0x00
+    RefPairVec_8e1200 mValue;                                    // +0x04
+    uint32            mPad14;                                    // +0x14
+    HashNode_8e1200*  mpNext;                                    // +0x18
+};
 namespace EA {
 namespace ResourceMan {
 struct AutoRefVec_s008e_0eb0 {
@@ -686,7 +719,7 @@ struct AutoRefVec_s008e_0eb0 {
     AutoRefObj_s008e_0eb0* insertGrow(AutoRefObj_s008e_0eb0* pPos, const AutoRefObj_s008e_0eb0* pSrc);      // 0x008E1070
     AutoRefObj_s008e_0eb0* insertAt(AutoRefObj_s008e_0eb0* pPos, const AutoRefObj_s008e_0eb0* pSrc);        // 0x008E12C0
     AutoRefObj_s008e_0eb0* pushBack(AutoRefObj_s008e_0eb0* pPos, const AutoRefObj_s008e_0eb0* pSrc);        // 0x008E1690
-    void        clearRange(AutoRefObj_s008e_0eb0* pFirst, AutoRefObj_s008e_0eb0* pLast);         // 0x008E1200
+    void        clearRange(struct HashNode_8e1200** ppBuckets, uint32 nBucketCount);   // 0x008E1200 hashtable DoFreeNodes
 };
 }
 }
@@ -1696,30 +1729,19 @@ void EA::ResourceMan::HashTable::eraseNode20(void* pOut, const void* pKey)
 }
 
 // @ 0x008e1200
-void EA::ResourceMan::AutoRefVec_s008e_0eb0::clearRange(EA::ResourceMan::AutoRefObj_s008e_0eb0* pFirst, EA::ResourceMan::AutoRefObj_s008e_0eb0* pLast)
+void EA::ResourceMan::AutoRefVec_s008e_0eb0::clearRange(HashNode_8e1200** ppBuckets, uint32 nBucketCount)
 {
-    uint32 n = static_cast<uint32>(pLast - pFirst);
-    for (uint32 i = 0; i < n; ++i)
+    for (uint32 i = 0; i < nBucketCount; ++i)
     {
-        void* pEntry = pFirst[i].mpObject;
-        if (pEntry == 0)
-            continue;
-        // Each entry heads an intrusive list of vector-holding nodes.
-        uint8* pNode = reinterpret_cast<uint8*>(pEntry);
-        while (pNode != 0)
+        HashNode_8e1200* pNode = ppBuckets[i];
+        while (pNode)
         {
-            uint8* pBegin = *reinterpret_cast<uint8**>(pNode + 4);
-            uint8* pEnd   = *reinterpret_cast<uint8**>(pNode + 8);
-            uint8* pNext  = *reinterpret_cast<uint8**>(pNode + 0x18);
-            for (uint8* p = pBegin; p < pEnd; p += 8)
-            {
-                void* pObj = *reinterpret_cast<void**>(p);
-                if (pObj != 0)
-                    (*(void (__thiscall**)(void*))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(pObj)) + 8)))(pObj);
-            }
-            FreeAutoRefVectorNode(pNode);
-            pNode = pNext;
+            HashNode_8e1200* const pTempNode = pNode;
+            pNode = pNode->mpNext;
+            pTempNode->mValue.~RefPairVec_8e1200();
+            (*(IAllocator_8e1200**)((char*)this + 0x1c))->Free(pTempNode, sizeof(HashNode_8e1200));
         }
+        ppBuckets[i] = 0;
     }
 }
 
