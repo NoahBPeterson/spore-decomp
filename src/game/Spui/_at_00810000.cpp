@@ -849,19 +849,18 @@ void MatEffect::sub8167d0(IObj* p, float f)
 }
 
 // @ 0x00816860
+extern "C" char g_1418d00[];   // 0x01418d00 MatEffect vtable
+extern "C" char g_1418ce4[];   // 0x01418ce4 MatEffect vtable (2nd base)
+extern "C" char g_1418ca8[];   // 0x01418ca8 MatEffect vtable (3rd base)
 struct FadeEffectBase { void Ctor(); };   // 0x00963db0  FadeEffect base ctor
 MatEffect* MatEffect::ctor816860()
 {
     ((FadeEffectBase*)this)->Ctor();
-    *(void**)((char*)this + 0x00) = (void*)0x1418d00;
-    *(void**)((char*)this + 0x04) = (void*)0x1418ce4;
-    *(void**)((char*)this + 0x0c) = (void*)0x1418ca8;
-    f60 = 0x1667bac;
-    f64 = 0x1667bac;
-    f68 = 0x1667bae;
-    f70 = 0x1667bac;
-    f74 = 0x1667bac;
-    f78 = 0x1667bae;
+    *(void* volatile*)((char*)this + 0x00) = g_1418d00;
+    *(void**)((char*)this + 0x04) = g_1418ce4;
+    *(void**)((char*)this + 0x0c) = g_1418ca8;
+    InitStrW((Str16*)&f60);
+    InitStrW((Str16*)&f70);
     p80 = 0;
     b84 = 0;
     f88 = 0.5f;
@@ -869,16 +868,15 @@ MatEffect* MatEffect::ctor816860()
 }
 
 // @ 0x00816910
+struct FadeEffectBaseD { void FUN_00980420(); };   // 0x00980420  FadeEffect base dtor
 void MatEffect::dtor816910()
 {
-    *(void**)((char*)this + 0x00) = (void*)0x1418d00;
-    *(void**)((char*)this + 0x04) = (void*)0x1418ce4;
-    *(void**)((char*)this + 0x0c) = (void*)0x1418ca8;
-    if (((int)((f78 - f70) & 0xfffffffe)) > 2 && f70)
-        ((void(__cdecl*)(void*))0xf47380)((void*)f70);
-    if (((int)((f68 - f60) & 0xfffffffe)) > 2 && f60)
-        ((void(__cdecl*)(void*))0xf47380)((void*)f60);
-    ((void(__thiscall*)(void*))0x980420)(this);
+    *(void* volatile*)((char*)this + 0x00) = g_1418d00;
+    *(void**)((char*)this + 0x04) = g_1418ce4;
+    *(void**)((char*)this + 0x0c) = g_1418ca8;
+    FreeStrW((Str16*)&f70);
+    FreeStrW((Str16*)&f60);
+    ((FadeEffectBaseD*)this)->FUN_00980420();
 }
 
 // @ 0x00816a20
