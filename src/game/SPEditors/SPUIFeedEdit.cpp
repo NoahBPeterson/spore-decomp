@@ -1651,7 +1651,8 @@ struct Obj49a0 { void f(); };
 struct Obj4b70 { void f(); };
 struct Obj4c70 { void f(int flag); };
 struct Obj4e30 { char pad[0x84]; int f(); };
-struct Obj4f90 { int f(int a, int b); };
+struct PosseItemBase_ed4f90 { bool FUN_00e247f0(int a, int b); };   // 0x00e247f0 base message handler
+struct Obj4f90 { bool f(int a, int b); };
 struct AssetBrowserLaunch {
     void* m_pVtbl;        // +0x00
     int   m_gameMode;     // +0x04
@@ -3975,9 +3976,8 @@ int Obj4e30::f()
 }
 
 // @ 0x00ed4f90
-int Obj4f90::f(int a, int b)
+bool Obj4f90::f(int a, int b)
 {
-    (void)a;
     char* s = (char*)this;
     int* msg = (int*)b;
     if (msg[2] == 0x287259f6 && msg[3] == 0x7c4b4a0) {
@@ -3988,9 +3988,9 @@ int Obj4f90::f(int a, int b)
         char c = ((S_e226c0*)s)->f();
         ((S_f3bd90*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f((void*)v, (unsigned char)c);
         ((S_f45a80*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f();
-        return 1;
+        return true;
     }
-    return 0;
+    return ((PosseItemBase_ed4f90*)this)->FUN_00e247f0(a, b);
 }
 
 // @ 0x00ed5020
