@@ -8,5 +8,4 @@
 00ff35f0  371  bilinear cube-image sample, thresholded: complete; the target's SSE sample maths (movss/comiss/cvttss2si) cannot be reproduced under flags without /arch:SSE2.  [equiv PASS: 374 valid inputs, 100% coverage]
 00ff3810   89  ImageModifier ctor: complete; the target's SSE constant loads/stores (movss) cannot be reproduced (x87 under our flags).  [equiv PASS: 400 valid inputs, 100% coverage]
 00ff38e0  381  full image-modify loop: complete; the target's SSE per-sample maths cannot be reproduced under flags without /arch:SSE2, and the x87 form clobbers ecx.  [equiv FAIL: 5/5 valid inputs, first mismatch ecx (untouched by the original)]
-00ff3d40  146  cSPPlayerInventory::GetToolFromToolID (two-list lookup): complete; target caches begin/end in callee-saved registers and holds pId in edi; our allocation reloads the end each iteration.  [equiv WEAK: 207 valid inputs, 26.3% coverage, no mismatch]
 00ff3e80   15  cSPPlayerInventory::SetActiveTool: complete; single register-allocation difference (target stages the tool pointer through ecx before the virtual call).  [equiv WEAK: 266 valid inputs, 45.5% coverage, no mismatch]
