@@ -716,7 +716,7 @@ struct cTDS {
 
     void  SendSelectMessage(void* key, uint32_t kind);                          // 0x00ccaff0
     void  MaintainSelectionState(void* key);                                    // 0x00ccb0f0
-    void  FUN_00ccb2c0();                                                       // 0x00ccb2c0
+    void  FUN_00ccb2c0(float dt);                                               // 0x00ccb2c0
     bool  HandleMessage(uint32_t id, void* msg);                                // 0x00ccb420
     void  FUN_00ccbb60(void* key);                                              // 0x00ccbb60
     void  FUN_00ccbd10(void* a, Vector3* p, float f, int kind, bool b);         // 0x00ccbd10
@@ -2499,10 +2499,10 @@ void cTDS::MaintainSelectionState(void* key)
 }
 
 // @ 0x00ccb2c0
-void cTDS::FUN_00ccb2c0()
+void cTDS::FUN_00ccb2c0(float dt)
 {
     void* posse = mpPosse;
-    (*(void (__thiscall*)(void*, void*, void*))VF(posse, 0xa0))(posse, (void*)0x00ccaf60, this);
+    (*(void (__thiscall*)(void*, void*, void*))VF(posse, 0xa0))(posse, (void*)&FUN_00ccaf60, this);
     void* mgr = FUN_00b3d300();
     void* tribe = ((S00bfc5f0*)mgr)->FUN_00bfc5f0();
     uint32_t maxPop = ((S00c8eae0*)tribe)->FUN_00c8eae0();
@@ -2528,16 +2528,14 @@ void cTDS::FUN_00ccb2c0()
         ((S00cc8be0*)this)->FUN_00cc8be0();
         return;
     }
-    if (maxPop < have) {
-        uint32_t n = have - maxPop;
-        do {
+    if (have > maxPop) {
+        for (uint32_t i = maxPop; i < have; ++i) {
             void* item = ((S00e24c90*)mpPosse)->FUN_00e24c90(0);
             if (item) {
                 void* p2 = mpPosse;
                 (*(void (__thiscall*)(void*, void*, int))VF(p2, 0xa8))(p2, item, 1);
             }
-            if (--n == 0) break;
-        } while (true);
+        }
         ((S00cc8be0*)this)->FUN_00cc8be0();
     }
 }
