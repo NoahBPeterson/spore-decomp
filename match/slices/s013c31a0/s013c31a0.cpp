@@ -142,16 +142,16 @@ void r45_04_link_pad_ret() {}
 
 // @ 0x013C33A0
 void f_013c33a0() {
-    char* base = g_168cb28;
-    for (int i = 2; i >= 0; i--) {
-        void* p = *(void**)(base + 0xc);
-        while (p) {
-            void* next = *(void**)((char*)p + 4);
-            ((MethodI*)base)->M(*(int*)p);
-            cdecl_free(p);
-            p = next;
+    char* end = g_168cb28 + 0x1c;
+    for (int i = 2; i >= 0; --i) {
+        void* node = *(void**)(end - 0x10);
+        end -= 0x1c;
+        while (node) {
+            ((MethodI*)end)->M(*(int*)node);
+            void* next = *(void**)((char*)node + 4);
+            cdecl_free(node);
+            node = next;
         }
-        base -= 0x1c;
     }
 }
 
