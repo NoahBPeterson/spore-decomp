@@ -156,6 +156,7 @@ struct C_e6e0 {
     bool b2;           // +0x1d
     C_e6e0(const Key3* src, void* p2, void* p3, bool b1, bool b2);
 };
+struct IRef_e740 { virtual int AddRef(); };
 struct C_e740 : PBase1, PBase2 {
     void* p;           // +0x0c
     bool b1;           // +0x10
@@ -1596,11 +1597,11 @@ C_e740::C_e740(void* p, bool b1, int n, bool b2, bool b3)
 {
     this->p = p;
     if (p)
-        ((void(__thiscall*)(void*))VT(p)[0])(p);
+        ((IRef_e740*)p)->AddRef();
     this->b1 = b1;
-    this->b3 = b3;
     this->n = n;
     this->b2 = b2;
+    this->b3 = b3;
 }
 
 // @ 0x0064e7a0
