@@ -1,5 +1,3 @@
-0069e6c0  64  rbtree<...cFeedbackEvent...>::DoCopySubtree: complete behaviour (recursive copy of left spine + right iteration), but cl emits call/jump structure and EH differing from the original; equiv WEAK: 486 valid inputs, 82.3% coverage
-0069edb0 310 rbtree cClassInfo DoCopySubtree: complete (left spine + right iteration via thiscall AllocB); equiv WEAK (183 valid, 51.6% coverage)
 0069ec20 144  decode one blob entry through the virtual IO object: complete; thiscall resize on this+0x54, read into that buffer, CRC32 writes the out param [equiv: WEAK: 262 valid inputs, 19.4% coverage]
 0069e3a0  142  cObjectDatabase::OpenIStream complete (alloc+inline ctor, AddRef guard, virtual open, release); frame/regalloc differ: orig keeps `out` in memory with zero in ebx, ours enregisters out [equiv: PASS: 204 valid inputs, 90.8% coverage]
 0069e470  146  cObjectDatabase::OpenOStream complete, same shape as OpenIStream; regalloc/frame differ [equiv: WEAK: 193 valid inputs, 90.9% coverage]
