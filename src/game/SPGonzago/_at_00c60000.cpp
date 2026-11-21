@@ -4310,12 +4310,20 @@ void* SimOrnament::Cast(unsigned type)
     return ((void* (__thiscall*)(void*, unsigned))FUN_00c751c0)(&mpVftbl_144, type);
 }
 
+struct ISetModel_c6f770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual void SetModel(void* a);   // +0x48
+};
 // @ 0x00c6f770
 void SimOrnament::SetStyleModel(int style, void* a, int model)
 {
     mStyle_228   = style;
     mModelID_22c = model;
-    ((void (__thiscall*)(SimOrnament*, void*))vc(this, 0x48))(this, a);
+    ((ISetModel_c6f770*)this)->SetModel(a);
     if (mStyle_228 == 0x65658d2) mbField_116 = false;
 }
 
