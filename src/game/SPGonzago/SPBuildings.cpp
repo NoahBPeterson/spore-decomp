@@ -1860,30 +1860,63 @@ void __thiscall cVehicle::WriteAsText(void* s)
 }
 
 // @ 0x00bcd130
+struct Target_s00bcd130 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40(); virtual void f44(); virtual void f48(); virtual void f4c();
+    virtual void f50(); virtual void f54(); virtual void f58(); virtual void f5c();
+    virtual void f60(); virtual void f64(); virtual void f68(); virtual void f6c();
+    virtual void f70(); virtual void f74(); virtual void f78(); virtual void f7c();
+    virtual void f80(); virtual void f84(); virtual void f88(); virtual void f8c();
+    virtual void f90(); virtual void f94(); virtual void f98(); virtual void f9c();
+    virtual void fa0(); virtual void fa4(); virtual void fa8(); virtual void fac();
+    virtual void fb0(); virtual void fb4(); virtual void fb8(); virtual void fbc();
+    virtual void fc0();
+    virtual void SetSource(void* src);                       // +0xc4
+};
+struct Owner_s00bcd130 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40(); virtual void f44(); virtual void f48(); virtual void f4c();
+    virtual void f50(); virtual void f54(); virtual void f58(); virtual void f5c();
+    virtual void f60(); virtual void f64(); virtual void f68(); virtual void f6c();
+    virtual void f70(); virtual void f74(); virtual void f78(); virtual void f7c();
+    virtual void f80(); virtual void f84(); virtual void f88(); virtual void f8c();
+    virtual void f90(); virtual void f94(); virtual void f98(); virtual void f9c();
+    virtual void fa0(); virtual void fa4(); virtual void fa8();
+    virtual void* GetSource(int a, int b, int c);           // +0xac
+    virtual Target_s00bcd130* GetTarget();                   // +0xb0
+};
+struct Timed_s00bcd130 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40(); virtual void f44(); virtual void f48(); virtual void f4c();
+    virtual void Reset(int v);                               // +0x50
+};
+static inline bool IsBusy_s00bcd130(char* self)
+{
+    return *(int*)(self + 0x684) > 0 || ((cCombatant*)(self + 0x588))->IsSomething();
+}
 void __thiscall cVehicle::bcd130(int delta)
 {
-    bool before = *(int*)((char*)this + 0x684) > 0 ||
-                  ((cCombatant*)((char*)this + 0x588))->IsSomething() != 0;
+    bool before = IsBusy_s00bcd130((char*)this);
     *(int*)((char*)this + 0x684) += delta;
-    int  after  = *(int*)((char*)this + 0x684) > 0 ||
-                  ((cCombatant*)((char*)this + 0x588))->IsSomething() != 0;
-    if (before != (after != 0)) {        char* o = (char*)this + 0x34;
-        if (*(int*)((char*)this + 0x684) > 0 ||
-            ((cCombatant*)((char*)this + 0x588))->IsSomething() != 0) {
-            ((void(__thiscall*)(void*, int))VF((char*)this + 0x588, 0x50 / 4))((char*)this + 0x588, 0);
-            void* tgt = ((void*(__thiscall*)(void*))VF(o, 0xb0 / 4))(o);
-            if (tgt != 0) {
-                void* t2 = ((void*(__thiscall*)(void*))VF(o, 0xb0 / 4))(o);
-                ((void(__thiscall*)(void*, void*))VF(t2, 0xc4 / 4))(t2,
-                    ((void*(__thiscall*)(void*, int, int, int))VF(o, 0xac / 4))(o, 0, 1, 0));
-            }
+    if (before != IsBusy_s00bcd130((char*)this)) {
+        if (IsBusy_s00bcd130((char*)this)) {
+            ((Timed_s00bcd130*)((char*)this + 0x588))->Reset(0);
+            Owner_s00bcd130* o = (Owner_s00bcd130*)((char*)this + 0x34);
+            if (o->GetTarget() != 0)
+                o->GetTarget()->SetSource(o->GetSource(0, 1, 0));
         } else {
-            void* tgt = ((void*(__thiscall*)(void*))VF(o, 0xb0 / 4))(o);
-            if (tgt != 0) {
-                void* t2 = ((void*(__thiscall*)(void*))VF(o, 0xb0 / 4))(o);
-                ((void(__thiscall*)(void*, void*))VF(t2, 0xc4 / 4))(t2,
-                    ((void*(__thiscall*)(void*, int, int, int))VF(o, 0xac / 4))(o, 1, 1, 0));
-            }
+            Owner_s00bcd130* o = (Owner_s00bcd130*)((char*)this + 0x34);
+            if (o->GetTarget() != 0)
+                o->GetTarget()->SetSource(o->GetSource(1, 1, 0));
         }
     }
 }

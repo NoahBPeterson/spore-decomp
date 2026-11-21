@@ -60,3 +60,4 @@
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcd480_@@YAMHMM@Z  00bcd480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?GetOwnerCivilization@cOwnerT@@QAEPAXXZ  00bcd630  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?ReadBase@cSerializableNoun@@QAEDPAX@Z  00bcc400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcd130@cVehicle@@QAEXH@Z  00bcd130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
