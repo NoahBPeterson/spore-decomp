@@ -528,14 +528,7 @@ void CPlanet::FUN_00c72190(float a)
 // @ 0x00c72370
 bool CPlanet::FUN_00c72370()
 {
-    PlanetData* pd = mpPlanet;
-    if (pd != 0 && pd->fn_00b8dab0() == 5) {
-        void* e = ((HasSlots*)mpGDvptr)->h4c();
-        void* sm = StarManager_00b3d2a0(e);
-        void* emp = cStarManager_GetEmpireByID_00ba9370(sm);
-        return emp == cSPLivingUniverse_GetPlayerEmpire_01021300();
-    }
-    return 0 == cSPLivingUniverse_GetPlayerEmpire_01021300();
+    return FUN_00c71e30() == cSPLivingUniverse_GetPlayerEmpire_01021300();
 }
 
 // @ 0x00c723d0
