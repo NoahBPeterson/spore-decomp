@@ -928,7 +928,8 @@ char LocaleFormatter_UpdateFormatElements(FmtElem* dst, int count, const wchar_t
 void* Loc16Ex::FUN_0087f4f0(Loc16Ex* src)
 {
     wchar_t* p = s.buf;
-    s.f10 = p;
+    wchar_t* volatile& buffer = s.f10;
+    buffer = p;
     s.f08 = p + 16;
     s.f04 = p;
     s.f00 = p;

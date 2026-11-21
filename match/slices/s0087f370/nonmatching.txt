@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 # All twelve are complete (compile cleanly) but not byte-exact. difftest verdicts noted per line.
 0087f370  346  register schedule / code layout in the large format-string loop (371B); equiv WEAK 175 valid 9.0% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
-0087f4f0   13  single store reorder: original keeps `mov [esi+0x10],eax` (f10=buf) before the `lea ecx,[eax+0x20]` (end) emission; MSVC hoists the end `lea` above the f10 store; proven not fixable by source ordering; equiv WEAK 172 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087f580   16  same buf/end-store scheduling as 0087f4f0 (93B); equiv WEAK 151 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087f5e0  197  register allocation / instruction selection in IsLocaleAvailable (274B); equiv WEAK 316 valid 48.5% cov; flags /O2 /MD /Gy /EHsc /TP /GS-
 0087f700  271  register allocation in CRTFindAliasDataByLocaleId (497B); equiv WEAK 329 valid 22.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS-

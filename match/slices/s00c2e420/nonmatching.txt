@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c2e4b0  20  complete: state change + two vtable calls, scheduling differs
 00c2ec30  52  complete: property getter (vtbl[0xc0] -> vtbl[0x24](key 0x63ff8cc5) -> type tag 0x12==10 -> Property::GetUInt), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
 00c2ec80  61  complete: property getter (vtbl[0xc0] -> vtbl[0x24](key 0x5d6796fd) -> type tag 0x12==10 -> Property::GetUInt), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
 00c2e5a0  87  complete: base 0x00c449c0 + game-mode dispatch + vtbl[0x2c] gate + SetGlobalProperty(0xc1fa4704, 1.0f) + RecordEvent2(0xc871d6e, audio id); mode compare chain differs; difftest UNSUPPORTED (0/400 valid: fake-arity 386, fault(read) 14)

@@ -101,10 +101,36 @@ inline void UninitCopy24_Tail(Elem24* first, Elem24* last, Elem24* dest)
     for (; z != last; ++z, ++n2) { }
 }
 
-// @ 0x00424340  (not byte-exact: the placement-new null-check temp sits below the loop locals)
+// @ 0x00424340
 Elem24* __cdecl UninitCopy24(Elem24* first, Elem24* last, Elem24* dest)
 {
-    Elem24* s1 = UninitCopy24_Impl(first, last, dest);
+    struct Copy {
+        static __forceinline void ConstructAt(Elem24* dest, Elem24* src)
+        {
+            ::new((void*)dest) Elem24(*src);
+        }
+
+        static __forceinline void ReserveScratch()
+        {
+            int spare1, spare2;
+        }
+
+        static __forceinline Elem24* Walk(Elem24* first, Elem24* last, Elem24* dest)
+        {
+            for (; first != last; ++first, ++dest) {
+                ConstructAt(dest, first);
+                ReserveScratch();
+            }
+            return dest;
+        }
+
+        static __forceinline Elem24* Construct(Elem24* first, Elem24* last, Elem24* dest)
+        {
+            bool hasTrivialCopy = false;
+            return Walk(first, last, dest);
+        }
+    };
+    Elem24* s1 = Copy::Construct(first, last, dest);
     UninitCopy24_Tail(first, last, dest);
     return s1;
 }
