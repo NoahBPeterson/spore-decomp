@@ -40,3 +40,4 @@
 ../src/game/SPGonzago/_at_00be0000.cpp  ?IsTimer108Elapsed@cCivilization_s00be_eb70@SP@@QAE_NXZ  00bef8a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00befa50@@YGHH@Z  00befa50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00beccf0@S@@QAEXXZ  00beccf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00befee0@CStub@@QAEPAXPAMH@Z  00befee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

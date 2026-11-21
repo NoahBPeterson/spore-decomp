@@ -2614,7 +2614,7 @@ void* CStub::FUN_00befee0(float* pos, int skip)
         float dx = p[0] - pos[0];
         float dy = p[1] - pos[1];
         float dz = p[2] - pos[2];
-        float d = sqrtf(dx * dx + dy * dy + dz * dz);
+        float d = sqrtf(dy * dy + (dx * dx + dz * dz));
         if (d < best) { best = d; found = (void*)c; }
     }
     return found;
