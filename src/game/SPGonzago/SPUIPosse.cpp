@@ -3522,12 +3522,7 @@ u8 cSPUIPosseItemTribeBaby::SetControlValue(u32 id, float value, u32 a, u32 b)
 {
     if (id == 0x3dea7f0)
     {
-        float v = value;
-        if (v < 0.0f)
-            v = 0.0f;
-        if (v > 100.0f)
-            v = 100.0f;
-        mControlValue01 = v * 0.01f;
+        mControlValue01 = SseClamp(value, 0.0f, 100.0f) * 0.01f;
 
         void* coll = mWindows.mpData[4];
         if (coll != 0)

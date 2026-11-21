@@ -6696,18 +6696,37 @@ uint AudioSystem_s00a2_5c40::Lookup_260c0(uint key)
 }
 
 // @ 0x00a26100
+struct IHandler_26100 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+    virtual void v28();
+    virtual bool Handle(uint arg);             // +0x2c
+};
+struct HIter_26100 {
+    void*  mpNode;
+    void** mpBucket;
+    HIter_26100(void** pBucket) : mpNode(*pBucket), mpBucket(pBucket) {}
+};
+struct HandlerRef_26100 {
+    IHandler_26100* mpObject;
+    HandlerRef_26100() : mpObject(0) {}
+    ~HandlerRef_26100() { if (mpObject) mpObject->Release(); }
+};
 bool AudioSystem_s00a2_5c40::Map_26100(uint key, uint arg)
 {
-    uint it[2] = {0, 0};
-    mMap_119bb8.find(it, &key);
-    void* node = (void*)(size_t)it[0];
-    if (mMap_119bb8.NotFound(node)) return false;
-    void* obj = *(void**)((uchar*)node + 4);
-    void* hold = 0;
-    if (obj) { ((void(__thiscall*)(void*))vc_s00a2_5c40(obj, 0))(obj); hold = obj; }
-    bool r = ((bool(__thiscall*)(void*, uint))vc_s00a2_5c40(hold, 0x2c))(hold, arg);
-    ((void(__thiscall*)(void*))vc_s00a2_5c40(hold, 4))(hold);
-    return r;
+    HandlerRef_26100 hold;
+    HTable& map = mMap_119bb8;
+    struct { void* mpNode; void** mpBucket; } it;
+    map.find(&it, &key);
+    HIter_26100 end(map.mpBucketArray + map.mnBucketCount);
+    if (it.mpNode == end.mpNode) return false;
+    IHandler_26100* obj = *(IHandler_26100**)((uchar*)it.mpNode + 4);
+    if (obj) { obj->AddRef(); hold.mpObject = obj; }
+    if (!hold.mpObject->Handle(arg))
+        return false;
+    return true;
 }
 
 // eastl::hashtable_iterator over the node chain (next at +8)
@@ -6745,24 +6764,36 @@ void AudioSystem_s00a2_5c40::Map_261c0(uint arg)
 }
 
 // @ 0x00a26230
-void AudioSystem_s00a2_5c40::Map_26230(uint a, uint b)
-{
-    void** ba = mMap_119bb8.mpBucketArray;
-    void* cur = *ba;
-    if (!cur) {
-        void** p = ba;
-        do { ++p; cur = *p; } while (!cur);
-    }
-    void* end = ba[mMap_119bb8.mnBucketCount];
-    while (cur != end) {
-        void* obj = *(void**)((uchar*)cur + 4);
-        ((void(__thiscall*)(void*, uint, uint))vc_s00a2_5c40(obj, 0x30))(obj, a, b);
-        cur = *(void**)((uchar*)cur + 8);
-        while (!cur) {
-            ++ba;
-            cur = *ba;
+struct IBroadcast_26230 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void Notify(uint a, uint b);       // +0x30
+};
+struct HNode_26230 { uint key; IBroadcast_26230* value; HNode_26230* next; };
+struct HIter_26230 {
+    HNode_26230*  mpNode;
+    HNode_26230** mpBucket;
+    HIter_26230(HNode_26230** pBucket) : mpNode(*pBucket), mpBucket(pBucket) {
+        if (!mpNode) {
+            ++mpBucket;
+            while (*mpBucket == 0) ++mpBucket;
+            mpNode = *mpBucket;
         }
     }
+    HIter_26230(HNode_26230* node, HNode_26230** pBucket) : mpNode(node), mpBucket(pBucket) {}
+    void increment() {
+        mpNode = mpNode->next;
+        while (mpNode == 0) mpNode = *++mpBucket;
+    }
+};
+void AudioSystem_s00a2_5c40::Map_26230(uint a, uint b)
+{
+    HIter_26230 it((HNode_26230**)mMap_119bb8.mpBucketArray);
+    HIter_26230 end(((HNode_26230**)mMap_119bb8.mpBucketArray)[mMap_119bb8.mnBucketCount],
+                    (HNode_26230**)mMap_119bb8.mpBucketArray + mMap_119bb8.mnBucketCount);
+    for (; it.mpNode != end.mpNode; it.increment())
+        it.mpNode->value->Notify(a, b);
 }
 
 // @ 0x00a262a0

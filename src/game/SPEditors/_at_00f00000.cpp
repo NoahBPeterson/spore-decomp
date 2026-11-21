@@ -1708,16 +1708,20 @@ void PL::f02160()
     }
 }
 
+struct PLV_f02670 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void v18(int);
+};
 // @ 0x00f02670
 void PL::f02670()
 {
     void* sim = g_Simulator;
     *(void**)((char*)this + 8) = sim ? *(void**)((char*)sim + 0x18) : 0;
-    void** vt = *(void***)this;
-    ((void(__thiscall*)(void*, int))vt[0x18 / 4])(this, 0);
     b5 = 0;
     b6 = 0;
     b7 = 0;
+    ((PLV_f02670*)this)->v18(0);
     V4_s00f0_2160 tmp;
     V4_s00f0_2160* t = (V4_s00f0_2160*)FUN_00f31fd0(&tmp);
     V4_s00f0_2160* dst = pC;
@@ -1731,7 +1735,7 @@ void PL::f02670()
     dst->f4 = t->f4;
     dst->f8 = t->f8;
     dst->fC = t->fC;
-    if (t->p0) ((Ref*)t->p0)->v4();
+    if (tmp.p0) ((Ref*)tmp.p0)->v4();
 }
 
 // @ 0x00f02700

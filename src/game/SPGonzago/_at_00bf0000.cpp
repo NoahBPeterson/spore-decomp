@@ -6676,28 +6676,45 @@ void cCommunity_s00bf_d9f0::Push(void* lo, void* hi)
   }
 }
 
+struct CommunityTimer {
+  unsigned int mTimer[8];          // +0x00 cSPTimer
+  void* mKey;                      // +0x20
+  unsigned int m24;                // +0x24
+  CommunityTimer();                // 0x00b63890 cGonzagoTimer::cGonzagoTimer
+  ~CommunityTimer();               // 0x00b638b0 cGonzagoTimer::~cGonzagoTimer
+  void Restart();                  // 0x00bc3130 cSPTimer::Restart
+  static void* operator new(unsigned int, void* p) { return p; }
+  static void operator delete(void*, void*) {}
+};
+struct CommunityTimerVector {
+  CommunityTimer* mpBegin;         // +0x00
+  CommunityTimer* mpEnd;           // +0x04
+  CommunityTimer* mpCapacity;      // +0x08
+  CommunityTimer& back() { return *(mpEnd - 1); }
+  __forceinline void push_back() {
+    if (mpEnd < mpCapacity) {
+      new (mpEnd++) CommunityTimer();
+    } else {
+      CommunityTimer tmp;
+      ((cCommunity_s00bf_d9f0*)this)->Push(mpEnd, &tmp);
+    }
+  }
+};
+
 // @ 0x00bfddc0
 void cCommunity_s00bf_d9f0::EnsureTimer(void* key)
 {
-  char* v = (char*)this + 0x84;
-  char* p = *(char**)(v + 0);
-  char* e0 = *(char**)(v + 4);
-  for (; p != e0; p += 0x28)
-    if (*(void**)(p + 0x20) == key) { ((C_THISCALL*)p)->FUN_00bc3130(); return; }
-  {
-    char* e = *(char**)(v + 4);
-    if (e < *(char**)(v + 8)) {
-      *(char**)(v + 4) = e + 0x28;
-      if (e) ((C_THISCALL*)e)->FUN_00b63890();
-    } else {
-      uint32_t tmp[0x28 / 4];
-      ((C_THISCALL*)tmp)->FUN_00b63890();
-      ((cCommunity_s00bf_d9f0*)((char*)this + 0x84))->Push(*(void**)(v + 4), tmp);
-      ((C_THISCALL*)tmp)->FUN_00b638b0();
+  CommunityTimer* it = ((CommunityTimerVector*)((char*)this + 0x84))->mpBegin;
+  CommunityTimer* end = ((CommunityTimerVector*)((char*)this + 0x84))->mpEnd;
+  for (; it != end; ++it) {
+    if (it->mKey == key) {
+      it->Restart();
+      return;
     }
-    *(void**)(*(char**)(v + 4) - 8) = key;
-    ((C_THISCALL*)(*(char**)(v + 4) - 0x28))->FUN_00bc3130();
   }
+  ((CommunityTimerVector*)((char*)this + 0x84))->push_back();
+  ((CommunityTimerVector*)((char*)this + 0x84))->back().mKey = key;
+  ((CommunityTimerVector*)((char*)this + 0x84))->back().Restart();
 }
 
 // @ 0x00bfde50
@@ -6865,25 +6882,44 @@ void cCommunity_s00bf_d9f0::Deactivate()
   if (sh) *(int*)((char*)sh + 4) = 0;
 }
 
+extern "C" char g_00b1b104[];   // 0x00b1b104, the model resource type id
+struct SceneryKey {
+  unsigned int instanceID;
+  unsigned int typeID;
+  unsigned int groupID;
+  SceneryKey(unsigned int i, unsigned int t, unsigned int g) : instanceID(i), typeID(t), groupID(g) {}
+};
+struct SceneryPlanetModel {
+  int GetContinent(const void* position);   // 0x00b88590
+};
+struct ScenerySpatial {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v10();
+  virtual const void* GetPosition();                 // +0x2c
+  virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+  virtual void SetScale(float scale);                // +0x40
+  virtual void v17(); virtual void v18(); virtual void v19();
+  virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+  virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+  virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+  virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+  virtual void v36();
+  virtual void SetModelKey(const SceneryKey& key);   // +0x94
+  virtual int* GetModel();                           // +0x98
+};
+
 // @ 0x00bfe530
 void cCommunity_s00bf_d9f0::SetupScenery()
 {
-  void* sub = (char*)this + 0x34;
-  void* r = ((void*(__thiscall*)(void*))(((void**)*(void**)sub)[0x98 / 4]))(sub);
-  if (*(int*)r != 0) return;
-  float one = 1.0f;
-  ((void(__thiscall*)(void*, int, float))(((void**)*(void**)sub)[0x40 / 4]))(sub, 0, one);
-  void* pm = FUN_00b3d350();
-  int cont = ((C_THISCALL*)pm)->FUN_00b88590();
-  void* p2 = FUN_00b3d350();
-  unsigned char b = *(unsigned char*)(cont + *(int*)((char*)p2 + 0x64));
-  if (b) {
-    unsigned k = 0x4728435;
-    ((void(__thiscall*)(void*, unsigned*))(((void**)*(void**)sub)[0x94 / 4]))(sub, &k);
-  } else {
-    unsigned k = 0xa6b33a2f;
-    ((void(__thiscall*)(void*, unsigned*))(((void**)*(void**)sub)[0x94 / 4]))(sub, &k);
-  }
+  ScenerySpatial* sub = (ScenerySpatial*)((char*)this + 0x34);
+  if (*sub->GetModel() != 0) return;
+  sub->SetScale(1.0f);
+  int cont = ((SceneryPlanetModel*)FUN_00b3d350())->GetContinent(sub->GetPosition());
+  if (*(unsigned char*)(cont + *(int*)((char*)FUN_00b3d350() + 0x64)))
+    sub->SetModelKey(SceneryKey(0x4728435, (unsigned int)g_00b1b104, 0));
+  else
+    sub->SetModelKey(SceneryKey(0xa6b33a2f, (unsigned int)g_00b1b104, 0));
 }
 
 // @ 0x00bfe5d0

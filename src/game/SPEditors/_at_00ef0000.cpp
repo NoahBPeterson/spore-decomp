@@ -9380,41 +9380,89 @@ void UI_s00ef_ee60::f_eff600(int arg)
     FUN_00efccd0();
 }
 
+struct TrackedRef_eff6c0 {
+    virtual void AddRef();    // +0x00
+    virtual void Release();   // +0x04
+};
+struct TrackedSlot_eff6c0 {
+    TrackedRef_eff6c0* mp;
+    TrackedSlot_eff6c0& operator=(TrackedRef_eff6c0* p) {
+        TrackedRef_eff6c0* old = mp;
+        if (p != old) {
+            if (p) p->AddRef();
+            mp = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    void reset() {
+        TrackedRef_eff6c0* old = mp;
+        if (old) { mp = 0; old->Release(); }
+    }
+};
+struct TrackedMgr_eff6c0 {
+    void* p0;
+    void* p4;
+    TrackedSlot_eff6c0 mCurrent;   // +0x08
+};
+struct RenderFlags_eff6c0 { int f0; int mFlags; };
+struct TrackedObj_eff6c0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09();
+    virtual void SetHighlighted(char flag);   // +0x28
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void v15();
+    virtual void v16();
+    virtual void v17();
+    virtual void v18();
+    virtual void v19();
+    virtual void v1a();
+    virtual void v1b();
+    virtual void v1c();
+    virtual void v1d();
+    virtual void v1e();
+    virtual void v1f();
+    virtual void v20();
+    virtual void v21();
+    virtual void v22();
+    virtual void v23();
+    virtual void v24();
+    virtual void v25();
+    virtual void v26();
+    virtual void v27();
+    virtual void v28();
+    virtual void v29();
+    virtual void v2a();
+    virtual RenderFlags_eff6c0* GetRenderFlags();   // +0xac
+};
+
 // @ 0x00eff6c0
 void __cdecl f_eff6c0(void* obj, char flag)
 {
     if (obj == 0)
         return;
-
-    void* r = FUN_00ae66d0(obj);
-
-    // Refresh the obj-side visual state, then commit (flag set) or drop (flag clear) the tracked
-    // object in the manager's +0x08 slot.
-    ((void (__thiscall*)(void*, char))Vt(obj)[0x28 / 4])(obj, flag);
-
-    if (flag != 0) {
-        void** slot = &((MgrState*)g_mgr)->p8;
-        void* old = *slot;
-        if (r != old) {
-            if (r) VCall0(r, 0x00);
-            *slot = r;
-            if (old) VCall0(old, 0x04);
-        }
-    } else {
-        void* cur = *(void**)((char*)g_mgr + 8);
-        if (r == cur && cur != 0) {
-            *(void**)((char*)g_mgr + 8) = 0;
-            VCall0(cur, 0x04);
-        }
-    }
-
-    // Toggle bit 3 of the render object's flag word.
-    void* x = ((void* (__thiscall*)(void*))Vt(obj)[0xac / 4])(obj);
-    if (x != 0) {
-        if (flag != 0)
-            *(int*)((char*)x + 4) |= 8;
+    TrackedObj_eff6c0* o = (TrackedObj_eff6c0*)obj;
+    TrackedRef_eff6c0* r = (TrackedRef_eff6c0*)FUN_00ae66d0(obj);
+    o->SetHighlighted(flag);
+    if (flag)
+        ((TrackedMgr_eff6c0*)g_mgr)->mCurrent = r;
+    else if (r == ((TrackedMgr_eff6c0*)g_mgr)->mCurrent.mp)
+        ((TrackedMgr_eff6c0*)g_mgr)->mCurrent.reset();
+    if (RenderFlags_eff6c0* x = o->GetRenderFlags()) {
+        if (flag)
+            x->mFlags |= 8;
         else
-            *(int*)((char*)x + 4) &= ~8;
+            x->mFlags &= ~8;
     }
 }
 
