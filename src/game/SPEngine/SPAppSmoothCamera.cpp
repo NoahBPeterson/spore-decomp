@@ -879,6 +879,62 @@ void cSmoothCameraController::SetSavedCamera(float* src)
 }
 
 // @ 0x007dbf20
+struct VT_s007dbf20 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void Slot68(int);
+    virtual void f6c();
+    virtual void f70();
+    virtual void Slot74(int);
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual void Slot88(int);
+    virtual void f8c();
+    virtual void f90();
+    virtual void f94();
+    virtual void f98();
+    virtual void f9c();
+    virtual void fa0();
+    virtual void fa4();
+    virtual void fa8();
+    virtual void fac();
+    virtual void fb0();
+    virtual void fb4();
+    virtual void SlotB8(void*);
+    virtual void fbc();
+    virtual void fc0();
+    virtual void fc4();
+    virtual void fc8();
+    virtual void fcc();
+    virtual void fd0();
+    virtual float SlotD4(float);
+};
 void cSmoothCameraController::RestoreCameraPosition(int index)
 {
     if ((unsigned)index > 6)
@@ -886,19 +942,19 @@ void cSmoothCameraController::RestoreCameraPosition(int index)
     char* p = (char*)this + index * 56 + 0x208;
     if (!*p)
         return;
-    CVT(0x74, void, int)(this, *(int*)(p + 4));
-    float r = CVT(0xd4, float, float)(this, *(float*)(p + 8));
+    VT_s007dbf20* v = (VT_s007dbf20*)this;
+    v->Slot74(*(int*)(p + 4));
+    float r = v->SlotD4(*(float*)(p + 8));
     CF(float, 0x2c) = r;
-    CVT(0x88, void, int)(this, *(int*)(p + 0xc));
+    v->Slot88(*(int*)(p + 0xc));
     CF(float, 0x9c) = *(float*)(p + 0x10);
-    void (__thiscall* setPos)(void*, void*) = CVT(0xb8, void, void*);
     CF(float, 0xbc) = *(float*)(p + 0x14);
     CF(float, 0xcc) = *(float*)(p + 0x18);
     CF(float, 0xdc) = *(float*)(p + 0x1c);
     CF(float, 0xec) = *(float*)(p + 0x20);
     CF(float, 0xac) = r;
-    setPos(this, p + 0x24);
-    CVT(0x68, void, int)(this, 0);
+    v->SlotB8(p + 0x24);
+    v->Slot68(0);
 }
 
 // @ 0x007dbfe0
