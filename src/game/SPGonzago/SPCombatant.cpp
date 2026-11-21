@@ -378,11 +378,10 @@ float VtObj::NodeValue()
 }
 
 // @ 0x00bfc430
+struct SimVt { virtual void f0(); virtual void f1(); virtual void f2(); virtual void* GetObj(); };
 void Sim::NodeApply(int value)
 {
-    void* p = ((void* (__thiscall*)(void*, int))this->vt[3])(this, value);
-    float f = FUN_00b685e0(p);
-    FUN_00b69930(((void* (__thiscall*)(void*, float))this->vt[3])(this, f), f, value);
+    FUN_00b69930(((SimVt*)this)->GetObj(), FUN_00b685e0(((SimVt*)this)->GetObj()), value);
 }
 
 // @ 0x00bfc490
