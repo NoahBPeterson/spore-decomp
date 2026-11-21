@@ -173,7 +173,7 @@ struct IcOwner {
     virtual void v08();
     virtual void v0c();
     virtual void v10();
-    virtual void v14();
+    virtual bool Load(int kind, int a, int b, void** out);         // slot 0x14
     virtual bool RequestGrid(void* src, int* a, int* b, int* out); // slot 0x18
 };
 }
@@ -228,7 +228,7 @@ struct cMapInfo {
     void   Fill(float* out, uint32_t a);                     // 0x00a75720
     void   GetBounds(float* out);                            // 0x00a75750
     bool   Contains(const float* p);                         // 0x00a757c0
-    void   InitA(const float* rect, uint8_t a, void* b, int c, uint8_t d); // 0x00a75810
+    void   InitA(const float* rect, int p2, int p3, uint8_t a, IcOwner* b, uint8_t d); // 0x00a75810
     void   InitB(const float* rect, uint8_t a, void* b, int c, uint8_t d, int e); // 0x00a758b0
     float  SampleBilinear(const float* p);                   // 0x00a75960
     void   SampleBicubic(float* out, const float* p);        // 0x00a75a30
@@ -429,7 +429,7 @@ void cMapInfo::SetPoint(int idx, uint32_t a, uint32_t b)
 
 // @ 0x00a75810
 namespace EA { namespace Swarm {
-void cMapInfo::InitA(const float* rect, uint8_t a, void* b, int c, uint8_t d)
+void cMapInfo::InitA(const float* rect, int p2, int p3, uint8_t a, IcOwner* b, uint8_t d)
 {
     mbWrap3c = d;
     mMinX = rect[0];
@@ -437,12 +437,12 @@ void cMapInfo::InitA(const float* rect, uint8_t a, void* b, int c, uint8_t d)
     mMaxX = rect[2];
     mMaxY = rect[3];
     mbWrap1c = a;
-    mpOwner38 = (IcOwner*)b;
-    mbValid34 = ((bool (__thiscall*)(void*, int, void*, int))(*(void***)b)[0x14 / 4])(b, 10, 0, 0);
+    mpOwner38 = b;
+    mbValid34 = b->Load(10, p2, p3, &mpGrid);
     if (!mbValid34) {
         m20 = 2;
         m24 = 2;
-        mpPixels40 = (uint32_t*)0x014575d4;
+        mpPixels40 = (uint32_t*)g_14575d4;
         mScaleX = 1.0f / (mMaxX - mMinX);
         mScaleY = 1.0f / (mMaxY - mMinY);
     }
