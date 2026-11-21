@@ -1224,29 +1224,30 @@ static void* vc(void* obj, int off) { return ((void**)*(void**)obj)[off / 4]; }
 bool  FUN_00acca00(int* vec, int* val);
 // ---- items of slice s00acc140 end
 
+struct AutoRefObj_acca00 { virtual void f0(); virtual void Release(); };
+struct AutoRef_s0067_75f0 {
+    AutoRefObj_acca00* p;
+    ~AutoRef_s0067_75f0() { if (p) p->Release(); }
+};
+struct CopyImpl {
+    static AutoRef_s0067_75f0* do_copy(const AutoRef_s0067_75f0* first, const AutoRef_s0067_75f0* last,
+                                       AutoRef_s0067_75f0* dest);   // 0x006782c0
+};
 // @ 0x00acca00
 bool FUN_00acca00(int* vec, int* val)
 {
-    int* p = (int*)*vec;
-    int* end = (int*)vec[1];
-    if (p != end) {
-        do {
-            if (*p == *val) {
-                if (p + 1 < end) {
-                    // shift left
-                    int* d = p;
-                    int* s = p + 1;
-                    for (; s < end; s++, d++) *d = *s;
-                }
-                vec[1] -= 4;
-                int* last = (int*)vec[1];
-                if (*last) ((void (__thiscall*)(void*))vc((void*)*last, 4))((void*)*last);
-                return 1;
-            }
-            p++;
-        } while (p != end);
+    AutoRef_s0067_75f0* p = (AutoRef_s0067_75f0*)vec[0];
+    AutoRef_s0067_75f0* end = (AutoRef_s0067_75f0*)vec[1];
+    for (; p != end; p++) {
+        if (*(int*)p == *val) {
+            if (p + 1 < end)
+                CopyImpl::do_copy(p + 1, end, p);
+            vec[1] -= 4;
+            ((AutoRef_s0067_75f0*)vec[1])->~AutoRef_s0067_75f0();
+            return true;
+        }
     }
-    return 0;
+    return false;
 }
 
 // @ 0x00d90ac0
