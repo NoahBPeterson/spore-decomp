@@ -286,19 +286,33 @@ void cGonzagoMode::FUN_00b5cfe0(unsigned t)
 }
 
 // @ 0x00b5d130
+struct cGameTimeManager_b5d130 { unsigned GetTicks(unsigned t); };              // 0x00b31c60
+struct cPlanetModel_b5d130 { void UpdateMinimap(unsigned t, int a, int b); };   // 0x00b8c330
+struct WERef_b5d130 { void FUN_00bc7ac0(unsigned ticks); };                     // 0x00bc7ac0
+struct IMode_b5d130 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30();
+    virtual void Update(unsigned t);                          // +0x34
+};
+struct ILayer_b5d130 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual void Update(unsigned t, unsigned ticks);          // +0x3c
+};
 void cGonzagoMode::FUN_00b5d130(unsigned t)
 {
-    unsigned ticks = GameTimeArg_b31c60(GameTimeManager_b3d380(), 0, t);
-    ((void (__thiscall*)(void*, unsigned))g_vfn(this, 0x34))(this, t);
-    Minimap_b8c330(PlanetModel_b3d350(), 0, t, 0, 0);
+    unsigned ticks = ((cGameTimeManager_b5d130*)GameTimeManager_b3d380())->GetTicks(t);
+    ((IMode_b5d130*)this)->Update(t);
+    ((cPlanetModel_b5d130*)PlanetModel_b3d350())->UpdateMinimap(t, 0, 0);
 
-    int n = (*(int*)((char*)this + 0x60) - *(int*)((char*)this + 0x5c)) >> 2;
-    for (int i = 0; i < n; ++i)
-    {
-        void* e = (*(void***)((char*)this + 0x5c))[i];
-        ((void (__thiscall*)(void*, unsigned, unsigned))g_vfn(e, 0x3c))(e, t, ticks);
-    }
-    FUN_bc7ac0(FUN_bc8000(), 0, ticks);
+    unsigned n = (unsigned)((*(int*)((char*)this + 0x60) - *(int*)((char*)this + 0x5c)) >> 2);
+    for (unsigned i = 0; i < n; ++i)
+        (*(ILayer_b5d130***)((char*)this + 0x5c))[i]->Update(t, ticks);
+    ((WERef_b5d130*)FUN_bc8000())->FUN_00bc7ac0(ticks);
 }
 
 // @ 0x00b5d220
