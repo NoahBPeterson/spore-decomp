@@ -4216,19 +4216,25 @@ void Sort24(P6* first, P6* last, Compare24 compare)
 }
 
 // @ 0x00745bb0
+struct Vec4_s0074_5bb0 {
+    float x, y, z, w;
+    Vec4_s0074_5bb0() {}
+    Vec4_s0074_5bb0(const Vec4_s0074_5bb0& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
+};
+struct E20Copy_s0074_5bb0 {
+    uint32_t flags;
+    Vec4_s0074_5bb0 v;
+    E20Copy_s0074_5bb0(const E20Copy_s0074_5bb0& o) : flags(o.flags)
+    {
+        bool neg = ((o.flags >> 31) & 1) != 0;
+        if (!neg)
+            new (&v) Vec4_s0074_5bb0(o.v);
+    }
+};
 E20* Copy20(E20* first, E20* last, E20* dest)
 {
-    for (; first != last; first += 1, dest += 1) {
-        if (dest) {
-            dest->flags = first->flags;
-            if (!(first->flags >> 31)) {
-                dest->x = first->x;
-                dest->y = first->y;
-                dest->z = first->z;
-                dest->w = first->w;
-            }
-        }
-    }
+    for (; first != last; first += 1, dest += 1)
+        new (dest) E20Copy_s0074_5bb0(*(const E20Copy_s0074_5bb0*)first);
     return dest;
 }
 

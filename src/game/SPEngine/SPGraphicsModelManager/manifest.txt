@@ -88,3 +88,4 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Init@CspVec_753810@@QAEPAXPAXHPAPAX@Z  00753810  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?AssignGroup@GroupWorld@@QAEXPAXH_N@Z  00746910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?F@Stub00747190@@QAEPAXPAH@Z  00747190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Copy20@@YAPAUE20@@PAU1@00@Z  00745bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
