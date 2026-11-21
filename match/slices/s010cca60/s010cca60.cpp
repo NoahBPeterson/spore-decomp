@@ -306,30 +306,35 @@ void hkCollisionDispatcher::resetCreationFunctions()
 		}
 	}
 
-	m_agent2Func[0].m_createFunc = (void (*)())hkNullAgent_getNullAgent;
-	m_agent2Func[0].m_getPenetrationsFunc = (void (*)())hkNullAgent_getPenetrations;
-	m_agent2Func[0].m_getClosestPointFunc = (void (*)())hkNullAgent_getClosestPoint;
-	m_agent2Func[0].m_linearCastFunc = (void (*)())hkNullAgent_linearCast;
-	m_agent2Func[0].m_isFlipped = 0;
-	m_agent2Func[0].m_isPredictive = 1;
-
-	m_agent3Func[0].m_createFunc = (void (*)())hkNullAgent3_create;
-	m_agent3Func[0].m_destroyFunc = (void (*)())hkNullAgent3_destroy;
-	m_agent3Func[0].m_cleanupFunc = 0;
-	m_agent3Func[0].m_removePointFunc = 0;
-	m_agent3Func[0].m_commitPotentialFunc = 0;
-	m_agent3Func[0].m_createZombieFunc = 0;
-	m_agent3Func[0].m_updateFilterFunc = 0;
-	m_agent3Func[0].m_sepNormalFunc = 0;
-	m_agent3Func[0].m_invalidateTimFunc = 0;
-	m_agent3Func[0].m_warpTimeFunc = 0;
-	m_agent3Func[0].m_processFunc = (void (*)())FUN_010cca50;
-	m_agent3Func[0].m_symmetric = 0;
+	{
+		m_agent2Func[0].m_createFunc = (void (*)())hkNullAgent_getNullAgent;
+		m_agent2Func[0].m_getPenetrationsFunc = (void (*)())hkNullAgent_getPenetrations;
+		m_agent2Func[0].m_getClosestPointFunc = (void (*)())hkNullAgent_getClosestPoint;
+		m_agent2Func[0].m_linearCastFunc = (void (*)())hkNullAgent_linearCast;
+		m_agent2Func[0].m_isFlipped = 0;
+		m_agent2Func[0].m_isPredictive = 1;
+	}
+	{
+		Agent3FuncsIntern& funcs = m_agent3Func[0];
+		funcs.m_createFunc = (void (*)())hkNullAgent3_create;
+		funcs.m_destroyFunc = (void (*)())hkNullAgent3_destroy;
+		funcs.m_cleanupFunc = 0;
+		funcs.m_removePointFunc = 0;
+		funcs.m_commitPotentialFunc = 0;
+		funcs.m_createZombieFunc = 0;
+		funcs.m_updateFilterFunc = 0;
+		funcs.m_sepNormalFunc = 0;
+		funcs.m_invalidateTimFunc = 0;
+		funcs.m_warpTimeFunc = 0;
+		funcs.m_processFunc = (void (*)())FUN_010cca50;
+		funcs.m_symmetric = 0;
+	}
 
 	hkAgent3Bridge_registerBridgeAgent3(this);
 	m_collisionAgentRegistered = 0;
 
-	if (m_debugAgent3Table)
+	DebugEntry (*&debugAgent3Table)[32][32] = m_debugAgent3Table;
+	if (debugAgent3Table)
 	{
 		for (int i = 0; i < 32; i++)
 		{
