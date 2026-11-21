@@ -746,12 +746,16 @@ void cUIMissionCardPanel::DestroyMembers()
 }
 
 // @ 0x00e18a30
+struct MissionMsgHub_e18a30 {
+    void FUN_00e30a60(void *handler);   // 0x00e30a60
+    void FUN_00e30ae0(u32 msg);         // 0x00e30ae0
+};
 void cUIMissionCardPanel::ShutdownA()
 {
     void *mgr = FUN_00b3d3f0();
-    FUN_00e30a60(*(void **)((u8 *)mgr + 0x5c), m_field10);
+    (*(MissionMsgHub_e18a30 **)((u8 *)mgr + 0x5c))->FUN_00e30a60(m_field14);
     void *mgr2 = FUN_00b3d3f0();
-    FUN_00e30ae0(*(void **)((u8 *)mgr2 + 0x5c), 0xf45f7d78);
+    (*(MissionMsgHub_e18a30 **)((u8 *)mgr2 + 0x5c))->FUN_00e30ae0(0xf45f7d78);
     void *node = m_treeBegin34;
     void *base = &m_treeBegin34;
     while (node != base) {
@@ -2214,24 +2218,43 @@ u8 __fastcall FUN_00e1f4a0(void* self, int, void* arg1, void* msg)
     return (u8)(r & 0xffffff00);
 }
 
-// @ 0x00e1f500
-void __stdcall FUN_00e1f500(void* head, void* first, void* last, void* extra)
+struct E1fPair {
+    u32 a, b;
+    static void* operator new(size_t, void* p) throw() { return p; }
+};
+struct E1fNode {
+    E1fNode* mpNext;
+    E1fNode* mpPrev;
+    E1fPair  mValue;
+};
+struct E1fIter {
+    E1fNode* mpNode;
+    E1fPair& operator*() const { return mpNode->mValue; }
+    E1fIter& operator++() { mpNode = mpNode->mpNext; return *this; }
+    bool operator!=(const E1fIter& o) const { return mpNode != o.mpNode; }
+};
+static inline E1fNode* E1fCreateNode(const E1fPair& value)
 {
-    char* cur = (char*)first;
+    E1fNode* node = (E1fNode*)FUN_00f473a0(0x10, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    new (&node->mValue) E1fPair(value);
+    return node;
+}
+static inline void E1fInsertBefore(E1fNode* pos, const E1fPair& value)
+{
+    E1fNode* node = E1fCreateNode(value);
+    node->mpNext = pos;
+    node->mpPrev = pos->mpPrev;
+    pos->mpPrev->mpNext = node;
+    pos->mpPrev = node;
+}
+// @ 0x00e1f500
+void __stdcall FUN_00e1f500(void* head, E1fIter first, E1fIter last, void* extra)
+{
     (void)extra;
-    while (cur != last) {
-        char* node = (char*)FUN_00f473a0(0x10, "Simulator", 0, 0,
-            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-            0xd1);
-        node = node;
-        *(u32*)(node + 8) = *(u32*)(cur + 8);
-        *(u32*)(node + 0xc) = *(u32*)(cur + 0xc);
-        *(void**)node = head;
-        *(void**)(node + 4) = *(void**)((char*)head + 4);
-        *(void**)(*(void**)((char*)head + 4)) = node;
-        *(void**)((char*)head + 4) = node;
-        cur = *(char**)cur;
-    }
+    for (; first != last; ++first)
+        E1fInsertBefore((E1fNode*)head, *first);
 }
 
 // @ 0x00e1f570
@@ -2454,7 +2477,8 @@ erase:
             FUN_00973d10(&o, p1);
             return self;
         }
-        FUN_00e1f500(s, p2, o, o);
+        E1fIter i0 = {(E1fNode*)p2}, i1 = {(E1fNode*)o};
+        FUN_00e1f500(s, i0, i1, o);
     }
     return self;
 }

@@ -27,7 +27,6 @@
 005f6bd0 428 cSPSwatch::cSPSwatch: complete (member zero/one init, Matrix3::Assign, default material key, flag defaults); 497 bytes ours - base-class vtable store VALUES (ours stores its own vtable copies, the original stores image vtables 0x13f9e20/0x13f9e0c/0x13f9e04) plus schedule differences; equivalence UNSUPPORTED (local vtable address mapping) -- non-target functions already present in this slice source (kept from before) -- flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ecdcc0 115 complete; property-layout position math scheduling differs; equiv UNSUPPORTED (2 unresolved reference(s): ?SP_WindowManager@@YAPAHXZ, ?cSPUIPropertyLayout_SetPositionAnd) flags: /O2 /MD /Gy /EHsc /TP
 00ecdf60 28 complete; editor object allocation/ctor differs; equiv UNSUPPORTED (3 unresolved reference(s): ?vtbl_BakeSprites@@3PADA, ?vtbl_cSPScenarioSwatchItemUI@@3PADA,) flags: /O2 /MD /Gy /EHsc /TP
-00ecdfc0 59 complete; float clamp + vcall-arg/store scheduling differs (proper 2-level vtable dispatch, ColorStore::Set thiscall); equiv PASS (325 valid inputs, 100.0% coverage) flags: /O2 /MD /Gy /EHsc /TP
 00ece140 137 complete; swatch mode notify/recolour chain differs (thiscall SetMode, ret 4); equiv WEAK (262 valid inputs, 9.1% coverage) flags: /O2 /MD /Gy /EHsc /TP
 00ed1380 100 float bounds check: local order and comiss operands differ [equiv: UNSUPPORTED import _decode_pointer] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ed1460 17 new-object factory: cl merges the two ctor+tail branches [equiv: UNSUPPORTED 0 valid inputs (faults)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

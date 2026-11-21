@@ -127,6 +127,7 @@ struct PtrVec {
   void** mpEnd;             // +0x04
   void** mpCap;             // +0x08
   void   FUN_00d01790(int n);   // 0x00d01790
+  uint   size() const { return (uint)(mpEnd - mpBegin); }
 };
 struct cProperty {
   char   pad00[0x12];       // +0x00..0x11
@@ -190,6 +191,7 @@ struct cEradicateTarget {
 struct RandomLCG {
   uint RandomUint32Uniform(int n);                    // 0x00a68fb0
 };
+extern RandomLCG g_1601760;
 struct cSPMissionEradicate_s00c4_ef00 : cSPMission {
   void*  mpVtbl0;           // +0x000
   void*  mpVtbl1;           // +0x004
@@ -618,30 +620,25 @@ void cSPMissionEradicate_s00c4_ef00::ValidateHerds()
   void* target = GetTargetPlanet();
   if (FUN_01021260() != target)
     return;
-  void** it = mVec220.mpBegin;
-  void** end = mVec220.mpEnd;
   int count = 0;
-  for (; it != end; ++it) {
+  for (void** it = mVec220.mpBegin; it != mVec220.mpEnd; ++it) {
     char* obj = (char*)*it;
-    uint* b = *(uint**)(obj + 0x40);
-    uint* e = *(uint**)(obj + 0x44);
-    for (; b != e; ++b) {
+    for (uint* b = *(uint**)(obj + 0x40); b != *(uint**)(obj + 0x44); ++b) {
       char* c = (char*)*b;
       if (c[0xb62] != 0 && c[0xb5e] == 0)
         count++;
     }
   }
-  int need = ((int(__thiscall*)(void*))VT(this, 0x1b0))(this);
-  if (count >= need)
+  if (count >= ((int(__thiscall*)(void*))VT(this, 0x1b0))(this))
     return;
   if (mVec220.mpBegin == mVec220.mpEnd)
     return;
   int total = ((int(__thiscall*)(void*))VT(this, 0x1b0))(this);
-  int n = (int)(mVec220.mpEnd - mVec220.mpBegin);
-  uint idx = ((RandomLCG*)0x1601760)->RandomUint32Uniform(n);
-  void* elem = mVec220.mpBegin[idx];
+  total -= count;
+  uint political = mPoliticalID;
+  void* elem = mVec220.mpBegin[g_1601760.RandomUint32Uniform(mVec220.size())];
   uint disease = GetDiseaseEffectID();
-  AddInfectedAnimalsToHerd(mp16c, elem, total - count, mPoliticalID, disease);
+  AddInfectedAnimalsToHerd(mp16c, elem, total, political, disease);
 }
 
 // @ 0x00c4f320

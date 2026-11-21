@@ -410,16 +410,19 @@ void __thiscall BigFile::FUN_00928f00(wchar_t* dst, unsigned n, int index)
     EA_Snprintf16(dst, n, L"%ls.%03d", mName, index);
 }
 
+struct IBlock_928fc0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6();
+    virtual u32 GetSize();   // +0x1c
+};
 // @ 0x00928fc0
 __int64 __thiscall BigFile::FUN_00928fc0()
 {
-    if (mpBegin == mpEnd)
-        return (__int64)0xffffffffu;
-    void** e = mpEnd;
-    u32 n = (u32)((e - mpBegin)) - 1;
-    void* obj = e[-1];
-    u32 sz = (*(u32(__thiscall**)(void*))((char*)*(void**)obj + 0x1c))(obj);
-    return (__int64)((unsigned __int64)n * 0x40000000u) + (unsigned __int64)sz;
+    if (mpBegin != mpEnd) {
+        unsigned __int64 base = (unsigned __int64)(u32)((mpEnd - mpBegin) - 1) * 0x40000000u;
+        return (__int64)(base + ((IBlock_928fc0*)mpEnd[-1])->GetSize());
+    }
+    return (__int64)0xffffffffu;
 }
 
 // @ 0x00929000

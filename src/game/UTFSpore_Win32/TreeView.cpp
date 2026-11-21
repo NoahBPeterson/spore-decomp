@@ -1418,17 +1418,17 @@ void* CustomWinProc_s0095_0bb0::AsInterfaceA(int typeId)
 }
 }}  // namespace EA::UTFWin
 
+struct TvAllocator { virtual void f0(); virtual void* Alloc(int size, int extra, int flags, unsigned n, int align); };
+struct TvMemPool { void* LockedAligned(int size, unsigned n, int align, int a, int b, int c, int d, int e); };   // 0x00928a30
 // @ 0x009512d0
 void* AllocAligned(int base, int size, int extra, int* allocator)
 {
     unsigned n = (size - 1U | 7) + 1;
     void* p;
-    if (allocator == 0) {
-        p = LockedAlignedCall(g_pMemPool16c8b44, 0, base + 8, n, 8,
-                              0, 0, 0, 0, 0);
-    } else {
-        p = ((void*(__thiscall*)(void*, int, int, int, unsigned, int))((void**)*(void**)allocator)[1])(allocator, base + 8, extra, 0, n, 8);
-    }
+    if (allocator)
+        p = ((TvAllocator*)allocator)->Alloc(base + 8, extra, 0, n, 8);
+    else
+        p = ((TvMemPool*)g_pMemPool16c8b44)->LockedAligned(base + 8, n, 8, 0, 0, 0, 0, 0);
     if (p == 0) return 0;
     *(void**)p = allocator;
     return (char*)p + 8;

@@ -337,7 +337,7 @@ struct ObjStub {
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 u8 __cdecl FUN_0080d670(void* p, u8* p2);  // 0x0080d670 (stays in the slice: not this object's)
-u16 __cdecl FUN_0080d6d0(void* p, u8* p2);  // 0x0080d6d0 (stays in the slice: not this object's)
+u8 __cdecl FUN_0080d6d0(void* p, u8* p2);  // 0x0080d6d0 (stays in the slice: not this object's)
 
 // @ 0x0080d590
 void __stdcall SetFlag8(char* p)
@@ -487,24 +487,112 @@ void Layered::ReleaseAll()
     }
 }
 
+struct LayerWin_80dc50 {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+    virtual void Apply(int);   // +0x30
+    virtual void* Get();       // +0x34
+};
+struct LayerObj_80dc50 {
+    virtual void f000();
+    virtual void f001();
+    virtual void f002();
+    virtual void f003();
+    virtual void f004();
+    virtual void f005();
+    virtual void f006();
+    virtual void f007();
+    virtual void f008();
+    virtual void f009();
+    virtual void f010();
+    virtual void f011();
+    virtual void f012();
+    virtual void f013();
+    virtual void f014();
+    virtual void f015();
+    virtual void f016();
+    virtual void f017();
+    virtual void f018();
+    virtual void f019();
+    virtual void f020();
+    virtual void f021();
+    virtual void f022();
+    virtual void f023();
+    virtual void f024();
+    virtual void f025();
+    virtual void f026();
+    virtual void f027();
+    virtual void f028();
+    virtual void f029();
+    virtual void f030();
+    virtual void f031();
+    virtual void f032();
+    virtual void f033();
+    virtual void f034();
+    virtual void f035();
+    virtual void f036();
+    virtual void f037();
+    virtual void f038();
+    virtual void f039();
+    virtual void f040();
+    virtual void f041();
+    virtual void f042();
+    virtual void f043();
+    virtual void f044();
+    virtual void f045();
+    virtual void f046();
+    virtual void f047();
+    virtual void f048();
+    virtual void f049();
+    virtual void f050();
+    virtual void f051();
+    virtual void f052();
+    virtual void f053();
+    virtual void f054();
+    virtual void f055();
+    virtual void f056();
+    virtual void f057();
+    virtual void f058();
+    virtual void f059();
+    virtual void f060();
+    virtual void f061();
+    virtual void f062();
+    virtual void f063();
+    virtual void f064();
+    virtual void f065();
+    virtual void f066();
+    virtual void f067();
+    virtual void f068();
+    virtual void f069();
+    virtual void f070();
+    virtual void f071();
+    virtual void f072();
+    virtual void f073();
+    virtual void f074();
+    virtual void f075();
+    virtual void f076();
+    virtual void f077();
+    virtual void f078();
+    virtual void f079();
+    virtual void f080();
+    virtual LayerWin_80dc50* GetWindow(int); // +0x144
+};
+
 // @ 0x0080dc50
-void Layered::MethodDC50(int)
+void Layered::MethodDC50(int a)
 {
-    if (!obj3c) return;
-    void* r = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
-    if (!r) return;
-    void* r2 = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
-    ((VF0v)VT(r2)[0x30 / 4])(r2);
+    LayerObj_80dc50* o = (LayerObj_80dc50*)obj3c;
+    if (!o || !o->GetWindow(0)) return;
+    ((LayerObj_80dc50*)obj3c)->GetWindow(0)->Apply(a);
 }
 
 // @ 0x0080dc90
 void* Layered::MethodDC90()
 {
-    if (!obj3c) return 0;
-    void* r = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
-    if (!r) return 0;
-    void* r2 = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
-    return ((VF0)VT(r2)[0x34 / 4])(r2);
+    LayerObj_80dc50* o = (LayerObj_80dc50*)obj3c;
+    if (!o || !o->GetWindow(0)) return 0;
+    return ((LayerObj_80dc50*)obj3c)->GetWindow(0)->Get();
 }
 
 // @ 0x0080dcd0

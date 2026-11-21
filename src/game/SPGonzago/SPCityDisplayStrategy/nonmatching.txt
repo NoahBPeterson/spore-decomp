@@ -4,7 +4,6 @@
 00ce8de0 220 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 14.1% coverage, equivalence-only flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ce8f70 206 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ce90c0 567 GodModeUpdateReticles: complete-ish logic but structurally short (620 vs 697 bytes); the four-posse reticle-layout loop and the trailing enable pass do not match MSVC's stack layout. equiv: UNSUPPORTED (0/400 valid inputs, all fault(read)) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ce9460 43 SetVehicleTask: complete; task-ID switch table matches, but MSVC keeps the first arg in esi and reloads it from the stack at the tail call where the original spills it. equiv: UNSUPPORTED (0/400 valid, import:_decode_pointer) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ce9920 478 HandleMessage: complete-ish reconstruction of the 3 message branches; structurally short (574 vs 581 bytes) and the branch bodies differ. equiv: FAIL (5/5 valid inputs mismatch on eax) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ce9b70 132 SelectVehicle: complete-ish (rbtree lower_bound over 4 maps + FindItem + SetVehicleTask); caller-visible call schedule differs. equiv: FAIL (call #4 differs, cAgentOrder) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ce9c30 171 RefreshVehicleIcons: complete-ish; per-map rbtree walk + FindItem + continent check present but codegen short (236 vs 253 bytes). equiv: WEAK (180/400 valid, 13.9% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

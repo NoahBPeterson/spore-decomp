@@ -5,7 +5,6 @@
 0073b530 298 cModelInstance::SetWeight: complete; group-array base reload / register schedule differs (loop A uses ecx/edx swapped)  [equiv: WEAK (400 valid, 40% cov, no mismatch)]
 0073b6d0 205 cModelInstance::GetAnimationRange: complete (4x unrolled loop reproduced); prologue register allocation (esi vs eax for grp) differs  [equiv: PASS (373 valid, 98% cov)]
 0073b840 90 cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs
-0073bab0 47 cModelInstance::Notify: complete; ecx/eax use in the second loop and epilogue sharing differ  [equiv: WEAK (234 valid, 31% cov, no mismatch)]
 0073bf20 206 SampleA (model channel sampler): complete lookup (key match a/b/c/d, head+frame channel chain, float out); MSVC register allocation differs (original restores the modified argument and the element base from its frame slot, ours keeps them in registers, so encodings/sizes differ) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0073c040 220 Sample4 (four-dword variant of the same lookup); register allocation differs as 0073bf20 flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0073c170 208 Sample2 (two-dword variant of the same lookup); register allocation differs as 0073bf20 flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

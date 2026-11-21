@@ -38,8 +38,8 @@ int   __cdecl FUN_00ec6b20(int*, int);                  // 0x00ec6b20
 int   __cdecl FUN_00ec6a00(void*);                      // 0x00ec6a00
 int   __cdecl FUN_00ec6940(float*, float);              // 0x00ec6940
 void  __cdecl FUN_008d2f30(void*, void*);               // 0x008d2f30
-int   __cdecl FUN_00809970(void);                       // 0x00809970
-int   __cdecl FUN_008053b0(void);                       // 0x008053b0
+bool  __cdecl FUN_00809970(void);                       // 0x00809970
+bool  __cdecl FUN_008053b0(void);                       // 0x008053b0
 bool  __fastcall FUN_00f25730(void* self);              // 0x00f25730
 bool  __fastcall FUN_00f25680(void* self);              // 0x00f25680
 bool  __fastcall FUN_00f25670(void* self);              // 0x00f25670
@@ -63,6 +63,7 @@ typedef void* (__thiscall *FV_i)(void*, int);
 typedef int   (__thiscall *FV_ii)(void*, int, int);
 typedef void  (__thiscall *FV_v)(void*);
 typedef int   (__thiscall *FB_i)(void*, int);
+typedef bool  (__thiscall *FZ_i)(void*, int);
 typedef bool  (__thiscall *FBb_i)(void*, int);
 
 // ---------------------------------------------------------------- small types
@@ -320,26 +321,21 @@ bool FUN_00ec74e0(void)
 {
     char* iVar1 = *(char**)(*(char**)((char*)g_16c7aa4 + 0x14) + 0x18);
     char* w = (char*)((ILayout*)*g_16c7584)->FindWindowByID(0x73e6ba0, 1);
-    if (FUN_00809970() != 0)
-        return false;
-    if (FUN_008053b0() != 0)
-        return false;
-    if (w != 0) {
-        char* wm = (char*)SP_WindowManager();
-        char* r = (char*)((FV_i)(*(void***)wm)[0x48 / 4])(wm, 0);
-        if (w == r)
-            return false;
-        if (((FB_i)(*(void***)w)[0xf8 / 4])(w, (int)r))
-            return false;
-    }
-    char* p = *(char**)(iVar1 + 0x20);
-    if (p == 0)
+    if (!FUN_00809970() && !FUN_008053b0()) {
+        if (w != 0) {
+            char* wm = (char*)SP_WindowManager();
+            char* r = (char*)((FV_i)(*(void***)wm)[0x48 / 4])(wm, 0);
+            if (w == r || ((FZ_i)(*(void***)w)[0xf8 / 4])(w, (int)r))
+                return false;
+        }
+        char* p = *(char**)(iVar1 + 0x20);
+        if (p != 0) {
+            char* wm = (char*)SP_WindowManager();
+            char* r = (char*)((FV_i)(*(void***)wm)[0x48 / 4])(wm, 0);
+            if (p == r || ((FZ_i)(*(void***)p)[0xf8 / 4])(p, (int)r))
+                return false;
+        }
         return true;
-    {
-        char* wm = (char*)SP_WindowManager();
-        char* r = (char*)((FV_i)(*(void***)wm)[0x48 / 4])(wm, 0);
-        if (p != r && !((FB_i)(*(void***)p)[0xf8 / 4])(p, (int)r))
-            return true;
     }
     return false;
 }

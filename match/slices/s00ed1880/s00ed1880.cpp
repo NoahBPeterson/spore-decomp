@@ -76,6 +76,7 @@ struct Entry {
     int   sub;       // +0x10
 };
 
+struct EntryVec { Entry* b; Entry* e; char pad[4]; };
 struct Container {
     char   pad00[8];
     int    f08;                 // +0x08
@@ -94,11 +95,20 @@ struct Container {
     int    notifier;            // +0x4c
     char   pad50[8];
     int    callback;            // +0x58
+    union {
+    struct {
     Entry* vec0;                // +0x5c
     Entry* vec0End;             // +0x60
     char   pad64[0x0c];
     Entry* vec1;                // +0x70
     Entry* vec1End;             // +0x74
+    };
+    struct {
+    EntryVec v0;                // +0x5c
+    char   pad68[0x08];
+    EntryVec v1;                // +0x70
+    };
+    };
 };
 
 // ===========================================================================
@@ -186,14 +196,12 @@ int __fastcall FUN_00ed1e10(Container* self, int* unused, int param)
 // ===========================================================================
 int __fastcall FUN_00ed1e70(Container* self, int* unused, int key, int arg)
 {
-    Entry* e = self->vec0;
-    Entry* end = self->vec0End;
-    int    count = 0;
-
-    if (key == 7) {
-        e = self->vec1;
-        end = self->vec1End;
-    }
+    EntryVec* v = &self->v0;
+    if (key == 7)
+        v = &self->v1;
+    Entry* e = v->b;
+    Entry* end = v->e;
+    int count = 0;
     for (; e != end; ++e) {
         if (e->cat == key && e->page == arg && ((char(__thiscall*)(void*))FUN_00ecdb80)(e->a) == 0)
             ++count;

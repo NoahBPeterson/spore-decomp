@@ -549,16 +549,138 @@ void DeviceRelease()
     ((void (__thiscall*)(void*, int, int, int))*(void**)(*p + 0x14))(p, 0x44edd9b, 0, 0);
 }
 
+struct PaintDevice_75d990 {
+    virtual void __stdcall f000();
+    virtual void __stdcall f001();
+    virtual void __stdcall f002();
+    virtual void __stdcall f003();
+    virtual void __stdcall f004();
+    virtual void __stdcall f005();
+    virtual void __stdcall f006();
+    virtual void __stdcall f007();
+    virtual void __stdcall f008();
+    virtual void __stdcall f009();
+    virtual void __stdcall f010();
+    virtual void __stdcall f011();
+    virtual void __stdcall f012();
+    virtual void __stdcall f013();
+    virtual void __stdcall f014();
+    virtual void __stdcall f015();
+    virtual void __stdcall f016();
+    virtual void __stdcall f017();
+    virtual void __stdcall f018();
+    virtual void __stdcall f019();
+    virtual void __stdcall f020();
+    virtual void __stdcall f021();
+    virtual void __stdcall f022();
+    virtual void __stdcall f023();
+    virtual void __stdcall f024();
+    virtual void __stdcall f025();
+    virtual void __stdcall f026();
+    virtual void __stdcall f027();
+    virtual void __stdcall f028();
+    virtual void __stdcall f029();
+    virtual void __stdcall f030();
+    virtual void __stdcall f031();
+    virtual void __stdcall f032();
+    virtual void __stdcall f033();
+    virtual void __stdcall f034();
+    virtual void __stdcall f035();
+    virtual void __stdcall f036();
+    virtual void __stdcall f037();
+    virtual void __stdcall f038();
+    virtual void __stdcall f039();
+    virtual void __stdcall f040();
+    virtual void __stdcall f041();
+    virtual void __stdcall f042();
+    virtual void __stdcall f043();
+    virtual void __stdcall f044();
+    virtual void __stdcall f045();
+    virtual void __stdcall f046();
+    virtual void __stdcall f047();
+    virtual void __stdcall f048();
+    virtual void __stdcall f049();
+    virtual void __stdcall f050();
+    virtual void __stdcall f051();
+    virtual void __stdcall f052();
+    virtual void __stdcall f053();
+    virtual void __stdcall f054();
+    virtual void __stdcall f055();
+    virtual void __stdcall f056();
+    virtual void __stdcall f057();
+    virtual void __stdcall f058();
+    virtual void __stdcall f059();
+    virtual void __stdcall f060();
+    virtual void __stdcall f061();
+    virtual void __stdcall f062();
+    virtual void __stdcall f063();
+    virtual void __stdcall f064();
+    virtual void __stdcall f065();
+    virtual void __stdcall f066();
+    virtual void __stdcall f067();
+    virtual void __stdcall f068();
+    virtual void __stdcall f069();
+    virtual void __stdcall f070();
+    virtual void __stdcall f071();
+    virtual void __stdcall f072();
+    virtual void __stdcall f073();
+    virtual void __stdcall f074();
+    virtual void __stdcall f075();
+    virtual void __stdcall f076();
+    virtual void __stdcall f077();
+    virtual void __stdcall f078();
+    virtual void __stdcall f079();
+    virtual void __stdcall f080();
+    virtual void __stdcall f081();
+    virtual void __stdcall f082();
+    virtual void __stdcall f083();
+    virtual void __stdcall f084();
+    virtual void __stdcall f085();
+    virtual void __stdcall f086();
+    virtual void __stdcall f087();
+    virtual void __stdcall f088();
+    virtual void __stdcall f089();
+    virtual void __stdcall f090();
+    virtual void __stdcall f091();
+    virtual void __stdcall f092();
+    virtual void __stdcall f093();
+    virtual void __stdcall f094();
+    virtual void __stdcall f095();
+    virtual void __stdcall f096();
+    virtual void __stdcall f097();
+    virtual void __stdcall f098();
+    virtual void __stdcall f099();
+    virtual void __stdcall f100();
+    virtual void __stdcall f101();
+    virtual void __stdcall f102();
+    virtual void __stdcall f103();
+    virtual void __stdcall f104();
+    virtual void __stdcall f105();
+    virtual void __stdcall f106();
+    virtual void __stdcall f107();
+    virtual void __stdcall f108();
+    virtual void __stdcall f109();
+    virtual void __stdcall f110();
+    virtual void __stdcall f111();
+    virtual void __stdcall f112();
+    virtual void __stdcall f113();
+    virtual void __stdcall f114();
+    virtual void __stdcall f115();
+    virtual void __stdcall f116();
+    virtual void __stdcall f117();
+    virtual long __stdcall GetResource(int kind, void* out); // +0x1d8
+};
+struct MsgServer_75d990 {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual void m4();
+    virtual void Post(int id, int a, int b);                 // +0x14
+};
+
 // @ 0x0075d990
 void PaintSystemInit()
 {
-    int dev = (int)g_paintDevice;
-    int vt = *(int*)dev;
-    int r = ((int (__thiscall*)(void*, int, int))*(void**)(vt + 0x1d8))((void*)vt, 8, 0);
-    if (r >= 0)
-        ((int (__thiscall*)(void*, int, void**))*(void**)(vt + 0x1d8))((void*)vt, 8, (void**)&g_deviceGlobal);
-    int* p = (int*)SP_MessageServer();
-    ((void (__thiscall*)(void*, int, int, int))*(void**)(*p + 0x14))(p, 0x44edd9c, 0, 0);
+    if (((PaintDevice_75d990*)g_paintDevice)->GetResource(8, 0) >= 0)
+        ((PaintDevice_75d990*)g_paintDevice)->GetResource(8, &g_deviceGlobal);
+    ((MsgServer_75d990*)SP_MessageServer())->Post(0x44edd9c, 0, 0);
 }
 
 // @ 0x0075d9e0

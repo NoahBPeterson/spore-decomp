@@ -363,6 +363,13 @@ char MissionStub::FUN_00c2e4f0(int param)
     return 0;
 }
 
+struct MissionListener {
+    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03(); virtual void f04();
+    virtual void f05(); virtual void f06(); virtual void f07(); virtual void f08(); virtual void f09();
+    virtual void Notify(int a);                 // +0x28
+    virtual void f0b();
+    virtual void OnMission(void* stub);         // +0x30
+};
 // @ 0x00c2e520
 void MissionStub::FUN_00c2e520()
 {
@@ -370,25 +377,21 @@ void MissionStub::FUN_00c2e520()
     SP_cSPTimer* timer = (SP_cSPTimer*)(self + 0x38);
     if (timer->IsRunning())
     {
-        unsigned long long elapsed = timer->GetElapsedTime();
-        if ((unsigned int)(elapsed >> 32) != 0 || (unsigned int)elapsed > 3000)
+        if (timer->GetElapsedTime() > 3000)
         {
             timer->Stop();
-            char* mode = (char*)FUN_00b5b800();
-            void* obj;
-            if (mode == &DAT_01654c01)
-                obj = FUN_00d37cb0();
-            else if (mode == &DAT_01654c02)
-                obj = FUN_00cd3440();
-            else if (mode == &DAT_01654c04)
-                obj = FUN_00d004b0();
-            else
-                return;
+            MissionListener* obj;
+            switch ((int)FUN_00b5b800()) {
+            case 0x1654c01: obj = (MissionListener*)FUN_00d37cb0(); break;
+            case 0x1654c02: obj = (MissionListener*)FUN_00cd3440(); break;
+            case 0x1654c04: obj = (MissionListener*)FUN_00d004b0(); break;
+            default: return;
+            }
             if (obj != 0)
             {
                 if (*(int*)(self + 0x7c) == 5)
-                    ((void(__thiscall*)(void*, void*))(*(void***)obj)[0x30 / 4])(obj, self);
-                ((void(__thiscall*)(void*, int))(*(void***)obj)[0x28 / 4])(obj, 0);
+                    obj->OnMission(self);
+                obj->Notify(0);
             }
         }
     }

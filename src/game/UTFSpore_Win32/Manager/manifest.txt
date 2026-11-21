@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/Manager.cpp  ?Fn8decb0@Vec8@@QAEXXZ  008decb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?Fn8def20@AutoRefVec@@QAEPAXHPAX@Z  008def20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Manager.cpp  ?clearRange@AutoRefVec_s008e_0eb0@ResourceMan@EA@@QAEXPAPAUHashNode_8e1200@@I@Z  008e1200  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/Manager.cpp  ??1InternalDatabaseList_s008e_0eb0@ResourceMan@EA@@QAE@XZ  008e1420  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

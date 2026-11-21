@@ -1036,7 +1036,7 @@ void MainWin_s0081_43a0::RemoveElem(int val)
 {
     Vec* v = &mVec;
     Elem** pi = (Elem**)v->mBegin;
-    Elem** end = (Elem**)v->mEnd;
+    Elem** end = (Elem**)mVec.mEnd;
     _ReadWriteBarrier();
     for (; pi != end; ++pi) {
         if ((int)*pi == val) {
@@ -1076,10 +1076,10 @@ void MainWin_s0081_43a0::AddElem(Elem* p)
 void MainWin_s0081_43a0::CloseAll()
 {
     Vec* v = &mVec;
-    Elem** i = (Elem**)mVec.mBegin;
+    Elem** i = (Elem**)v->mBegin;
     Elem** end = (Elem**)mVec.mEnd;
     for (; i != end; ++i) (*i)->OnWindowClosed();
-    v->erase(mVec.mBegin, mVec.mEnd);
+    v->erase(v->mBegin, v->mEnd);
 }
 
 

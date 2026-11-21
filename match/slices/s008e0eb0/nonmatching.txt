@@ -12,7 +12,6 @@
 008e0fe0  127  reconstruction (hashtable<Key,string>::erase node-20 variant); flags as above; difftest UNSUPPORTED (0/400 valid inputs: node-chain reads fault on the synthesized iterator)
 008e1070  349  reconstruction (AutoRefVec::insert grow path); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the vector allocator call faults under the harness)
 008e12c0  329  reconstruction (AutoRefVec::insertAt); flags as above; difftest WEAK (112 valid inputs, 54.1% coverage) -- equivalent on the covered paths
-008e1420   50  reconstruction (InternalDatabaseList::~InternalDatabaseList); flags as above; difftest FAIL (5/5 valid inputs mismatched) -- not proven equivalent
 008e14e0  142  reconstruction (Manager::ForgetKeyName); flags as above; difftest FAIL (5/5 valid inputs mismatched); the map find/erase pair is passed a synthesized 8-byte {node,key} temp in retail, which the reconstruction cannot express
 008e1560  106  reconstruction (Manager::SetTypename); flags as above; difftest FAIL (5/5 valid inputs mismatched) -- not proven equivalent
 008e1610  142  reconstruction (Manager::ResetTypename); flags as above; difftest FAIL (5/5 valid inputs mismatched); same {node,key} temp shape as ForgetKeyName

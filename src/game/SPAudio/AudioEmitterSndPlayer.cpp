@@ -483,20 +483,25 @@ void EmitterSndPlayer::q11370()
     if (g_16e61a8) ((SysGlobal*)g_16e61a8)->DoB();
 }
 
+struct SndRefObj { virtual void f0(); virtual void Release(); };
+static inline void SndRefAssign(SndRefObj*& slot, SndRefObj* p)
+{
+    if (p != slot) {
+        SndRefObj* old = slot;
+        slot = p;
+        if (old)
+            old->Release();
+    }
+}
 // @ 0x00a11380
 bool EmitterSndPlayer::Shutdown()
 {
-    void* z = 0;
     if (*(uint32_t*)(m + 0xd84) & 1) {
         ((void(__thiscall*)(void*))Vt()[0x18 / 4])(this);
         *(uint32_t*)(m + 0xd84) &= ~1;
     }
-    void* p = *(void**)(m + 0x378);
-    if (p != z) {
-        *(void**)(m + 0x378) = z;
-        ((void(__thiscall*)(void*))((void**)*(void**)p)[4 / 4])(p);
-    }
-    *(void**)(m + 0xdc8) = z;
+    SndRefAssign(*(SndRefObj**)(m + 0x378), 0);
+    *(void**)(m + 0xdc8) = 0;
     return true;
 }
 

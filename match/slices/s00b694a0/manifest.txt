@@ -2,3 +2,4 @@
 slices/s00b694a0/s00b694a0.cpp  ?FUN_00b69990@@YAXPAUIV@@@Z  00b69990  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00b694a0/s00b694a0.cpp  ?FUN_00b69aa0@@YAXPAUIV@@MMI@Z  00b69aa0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00b694a0/s00b694a0.cpp  ?FUN_00b69930@@YAXPAUIV@@MD@Z  00b69930  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b694a0/s00b694a0.cpp  ?FUN_00b69890@@YAXXZ  00b69890  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

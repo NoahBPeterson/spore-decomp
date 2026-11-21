@@ -1,7 +1,6 @@
 00928dc0  10   StackAllocator::Reset thunk: 8-byte `push 0; call 0x928c40; ret` matches; 10 diff bytes are the image's int3 padding; difftest PASS (363 valid, 100.0% cov)
 009290c0  20   "all valid" loop: complete; begin/end now loaded from [this]/[this+4] (not their addresses); difftest PASS (218 valid, 100.0% cov)
 00928e20 203  big-file name/base/ext split: complete; strlen cap (0xff), name->base copy, mpExt=&base[blen-1], backward scan for \ / ., '.' clear + mpExt+2; difftest FAIL (5/59, single harness memory-pool dword, see fixlog)
-00928fc0  61   big-file total size: complete; (count-1)*0x40000000 + last stream size (0x1c vcall), empty => 0xffffffff (zero-extended); difftest WEAK (209 valid, 22.2% cov)
 00929000 239  big-file delete-last-part: complete; flag&2 + count>=2 guards, 0x34/0x18/8 vcalls, pop back, FUN_00928f00 name + File::Remove; difftest WEAK (367 valid, 43.6% cov)
 00929100 260  big-file write loop: complete; 0x40000000 segment walk with 0x30/0x28/0x24/0x14 vcalls; difftest PASS (315 valid, 76.1% cov)
 00929310 414  big-file open-next-part: complete; count caps 0x3e6/0xfffffffe, flags&2 guard, operator_new/FileStream ctor, 0x4/0x4c/0x14/8 vcalls, insert-or-grow; difftest WEAK (399 valid, 26.5% cov)

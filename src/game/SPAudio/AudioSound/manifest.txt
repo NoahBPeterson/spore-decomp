@@ -20,3 +20,4 @@
 ../src/game/SPAudio/AudioSound.cpp  ?RunningAttenuation@Sound_s00a1_a590@@QAEMXZ  00a1ae90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?Tick@Sound_s00a1_a590@@QAEXMM@Z  00a1b230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?Dispatch@SoundGraph@@QAE_NII@Z  00a1b1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?SetData@Sound@@QAEXIPAXI@Z  00a1d310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

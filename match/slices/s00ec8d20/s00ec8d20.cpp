@@ -297,23 +297,23 @@ void FUN_00ec92b0(void)
 }
 
 // ------------------------------------------------------------------ 0x00ec94d0
+struct cVec15 { void* f(void** first, void** last); };   // 0x00e25bd0 (erase)
+struct DlgObj { virtual void f0(); virtual void f1(); virtual void Release(); };
+struct DlgHolder {
+    DlgObj* p;
+    ~DlgHolder() { if (p) p->Release(); }
+};
 // @ 0x00ec94d0
 void FUN_00ec94d0(void)
 {
     FUN_00ec9250();
-    if (g_16c759c)
-        g_16c75a0 = g_16c759c;
-    int* p = (int*)*g_16c7584;
-    if (p) {
-        *g_16c7584 = 0;
-        ((void(__thiscall*)(void*))((int*)p[0])[2])(p);
+    ((cVec15*)&g_16c759c)->f((void**)g_16c759c, (void**)g_16c75a0);
+    DlgHolder* h = (DlgHolder*)g_16c7584;
+    if (DlgObj* p = h->p) {
+        h->p = 0;
+        p->Release();
     }
-    p = g_16c7584;
-    if (g_16c7584) {
-        if ((int*)*g_16c7584)
-            ((void(__thiscall*)(void*))((int*)*(int*)*g_16c7584)[2])((void*)*g_16c7584);
-        operator delete(p);
-    }
+    delete (DlgHolder*)g_16c7584;
 }
 
 // ------------------------------------------------------------------ 0x00ec9530
