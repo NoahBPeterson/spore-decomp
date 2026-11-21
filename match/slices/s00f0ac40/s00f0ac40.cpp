@@ -150,10 +150,17 @@ static const char kEastlFile[] =
 // @ 0x00f0b0e0
 Rec* RecVec::erase(Rec* first, Rec* last)
 {
-    Rec* dst = FUN_00dfb930(last, mpEnd, first);
-    Rec* end = mpEnd;
-    for (; dst < end; ++dst)
-        dst->sub.Dtor();
+    struct Destroy {
+        static void Range(Rec* p, Rec* end)
+        {
+            for (; p < end; ++p)
+                p->sub.Dtor();
+        }
+    };
+    Rec* src = last;
+    Rec* e = mpEnd;
+    Rec* dst = FUN_00dfb930(src, e, first);
+    Destroy::Range(dst, mpEnd);
     mpEnd -= (last - first);
     return first;
 }
