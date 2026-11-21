@@ -347,11 +347,8 @@ __declspec(noinline) int S9a2f80::f(int p2, int p3) {
   char* self = (char*)this;
   int r = FUN_009a1c20(p3, *(int*)(self + 4), p2);
   ((S9a1b00*)self)->f(r, *(int*)(self + 4));
-  int diff = p3 - p2;
-  int v = (int)(((long long)diff * 0x7bdef7bdLL) >> 32) - diff;
-  v >>= 8;
-  v = (int)((unsigned)v >> 31) + v;
-  *(int*)(self + 4) += v * 0x1f0;
+  int displacement = p3 - p2;
+  *(int*)(self + 4) += (displacement / -0x1f0) * 0x1f0;
   return p2;
 }
 

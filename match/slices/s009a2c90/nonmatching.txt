@@ -1,5 +1,4 @@
 009a2cc0 94 complete animation-object init; float return discarded via (void) call; equiv PASS: 221 valid inputs, 100.0% coverage (all insns)
-009a2f80 44 complete element erase; division-by-0x1f0 sequence differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?f@S9a1b00@@QAEHHH@Z, __allshr
 009a34a0 172 complete animation-object field init; calls partial 009a3080 via undefined symbol resolved to original image; equiv PASS: 400 valid inputs, 100.0% coverage (all insns)
 009a37e0 40 complete rbtree count; induction variable ordering differs; equiv WEAK: 300 valid inputs (need 200), 34.5% coverage (need 100%% (all insns))
 009a3890 61 complete rbtree node allocate; scheduling differs; equiv UNSUPPORTED: 3 unresolved reference(s): ?operator_new@@YAPAXHPBDHH0H@Z, ?f@S9b3450@@QAEXXZ, ?f@S99c980@ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
