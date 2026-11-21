@@ -3,7 +3,6 @@
                loaded into eax instead of the original's edx. flags /O2 /MD /Gy /TP /arch:SSE
                76.2% coverage); the FUN_00c8b360 result is fetched/released
                through a different temp schedule. flags /O2 /MD /Gy /TP /arch:SSE
-01020fc0   66  camera ctor tail: complete; the MessageServer registration block
                and the +4 subobject setup differ. flags /O2 /MD /Gy /TP /arch:SSE;
                difftest UNSUPPORTED (now member fn; 0/1200 valid inputs, read faults)
                call and the AutoRefCount release schedule differ.

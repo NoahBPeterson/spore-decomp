@@ -403,6 +403,47 @@ void __fastcall FUN_00ecdfc0(int param_1)
 // Refresh the preview colours of the palette item: validate the requested
 // triple against the UI helpers, falling back to the item's own colours and
 // finally to "no image"; then tint the window's text.
+struct ColorSys_s00ec_e010 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual int Lookup(int* rgb, int a, int b);   // +0x30
+};
+struct TintWin_s00ec_e010 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void SetTextColor(int argb);   // +0x5c
+};
 // @ 0x00ece010
 void PaletteItem_ece010::SetColors(int* rgb, bool highlight)
 {
@@ -418,34 +459,25 @@ void PaletteItem_ece010::SetColors(int* rgb, bool highlight)
     local[1] = rgb[1];
     local[2] = rgb[2];
 
-    void* sys = FUN_008de1a0();
-    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) != 0)
-        goto useImage;
-
-    local[2] = 0x65928944;
-    sys = FUN_008de1a0();
-    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) != 0)
-        goto useImage;
-
-    local[0] = mpColorSource_48->mRgb[0];
-    local[1] = mpColorSource_48->mRgb[1];
-    local[2] = mpColorSource_48->mRgb[2];
-    sys = FUN_008de1a0();
-    if (((int(__thiscall*)(void*, int*, int, int))VTB(sys, 0x30))(sys, local, 0, 0) == 0)
-        goto clearImage;
-
-useImage:
-    FUN_00807bb0(w, local, -1);
-    goto tint;
-
-clearImage:
-    FUN_008068d0((int)w, 0, -1);
-
-tint:
-    if (highlight)
-        C1(w, 0x5c, 0x77ffffff);
+    int found = ((ColorSys_s00ec_e010*)FUN_008de1a0())->Lookup(local, 0, 0);
+    if (!found) {
+        local[2] = 0x65928944;
+        found = ((ColorSys_s00ec_e010*)FUN_008de1a0())->Lookup(local, 0, 0);
+        if (!found) {
+            local[0] = mpColorSource_48->mRgb[0];
+            local[1] = mpColorSource_48->mRgb[1];
+            local[2] = mpColorSource_48->mRgb[2];
+            found = ((ColorSys_s00ec_e010*)FUN_008de1a0())->Lookup(local, 0, 0);
+        }
+    }
+    if (found)
+        FUN_00807bb0(w, local, -1);
     else
-        C1(w, 0x5c, -1);
+        FUN_008068d0((int)w, 0, -1);
+    if (highlight)
+        ((TintWin_s00ec_e010*)w)->SetTextColor(0x77ffffff);
+    else
+        ((TintWin_s00ec_e010*)w)->SetTextColor(-1);
 }
 
 // ============================================================ 0x00ece110
@@ -818,17 +850,26 @@ int __fastcall FUN_00ece8f0(int param_1)
 }
 
 // ============================================================ 0x00ece920
+struct PropList_s00ec_e920 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(uint32_t id, PropObj** out);   // +0x24
+};
 // @ 0x00ece920
 void FUN_00ece920(void)
 {
     int* p = ((Mgr167eaec*)FUN_00b3d320_get())->Fn_b1de80();
     if (p != 0) {
-        int local = 0;
-        char c = ((char(__thiscall*)(void*, int, int*))VTB(p, 0x24))(p, 0xa143f717, &local);
-        if (c != 0 && *(short*)((char*)local + 0x12) == 0xd) {
-            int* v = ((PropObj*)local)->GetFloat();
-            g_15abee4 = *(float*)v;
-        }
+        PropObj* prop;
+        if (((PropList_s00ec_e920*)p)->GetProperty(0xa143f717, &prop) && *(short*)((char*)prop + 0x12) == 0xd)
+            g_15abee4 = *(float*)prop->GetFloat();
     }
     FUN_006a1400(p, 0x27c26ec0, &g_15abf0c);
     FUN_006a1400(p, 0x92bb2e5f, &g_15abf1c);

@@ -4,3 +4,4 @@
 ../src/game/UTFSpore_Win32/Form.cpp  ?Reset@Form@@QAEXXZ  008e5130  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Form.cpp  ?ClearCounterReset@StyleState@Style@@QAEXXZ  008fbbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Form.cpp  ?Dtor1@Element@@QAEXXZ  008e4bd0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Form.cpp  ?ExcludeGroups@Form@@QAEXPAUElement@@PBG1@Z  008e4c00  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include

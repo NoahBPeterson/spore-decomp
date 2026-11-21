@@ -6,3 +6,4 @@ slices/s00b60110/s00b60110.cpp  ??0cAdventureLook@App@@QAE@XZ  00b60870  /O2 /MD
 slices/s00b60110/s00b60110.cpp  ?FUN_00b60a70@UnnamedCommandA70@@QAEXPAUcArguments@ArgScript@EA@@@Z  00b60a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b60110/s00b60110.cpp  ?OnKeyDown@cAppModeSpace@@QAEXH@Z  00b60bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b60110/s00b60110.cpp  ?Execute@cTextureCheat@?A0x30d88e99@@QAEXPAUcArguments@ArgScript@EA@@@Z  00b60c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b60110/s00b60110.cpp  ?FUN_00b603b0@cPauseUIVisibleCommand@App@@QAEXPAUcArguments@ArgScript@EA@@@Z  00b603b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

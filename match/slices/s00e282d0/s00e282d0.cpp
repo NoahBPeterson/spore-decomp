@@ -491,12 +491,13 @@ bool cPropertyBinding::RefreshFloat(Variant* param_2)
 // vector at the end of this one.  The element payload is copied by the helper
 // calls, so the 8-byte element is undone by subtracting count*8 from end.
 // ---------------------------------------------------------------------------
+struct cSizedVec8Tag { cSizedVec8Tag() {} };
 struct cSizedVec8 {
     int mBegin;                       // +0x00
     int mEnd;                         // +0x04
 
     void* FUN_00e23870(void* a, int b);          // 0x00e23870
-    void  FUN_00e27170(int a, int b, void* c);   // 0x00e27170
+    void  FUN_00e27170(int a, int b, cSizedVec8Tag c);   // 0x00e27170
     void* FUN_00e28660(void* param_2);           // 0x00e28660
 };
 
@@ -511,7 +512,7 @@ void* cSizedVec8::FUN_00e28660(void* param_2)
         void* u = FUN_00e24290(iVar2, iVar2, iVar1);
         FUN_00e23870(u, mEnd);
         mEnd = mEnd + ((iVar2 - iVar1) >> 3) * -8;
-        FUN_00e27170(*(int*)param_2, *((int*)param_2 + 1), param_2);
+        FUN_00e27170(*(int*)param_2, *((int*)param_2 + 1), cSizedVec8Tag());
     }
     return this;
 }

@@ -1,9 +1,5 @@
-0080d670  53  complete; callee 0x80d620 argument/return shape and register use differ
-0080d6d0  65  complete; return high byte (ah) from scanned value needs explicit u16 mask
 0080da50 258  complete; first stack arg is the rect; 0x14 frame needed for callee stack residue
 0080dbb0 151  complete; early-out gate on +0x258 added; virtual call register schedule differs
-0080dc50  49  complete; vtable slot 0x144/0x30 call schedule differs
-0080dc90  47  complete; vtable slot 0x144/0x34 call schedule differs
 0080dd50  75  complete; scalar local avoids /GS cookie; branch layout differs
 0080dfe0 595  complete; early-return eax = last object / bbox; float path matches
 0080d810  542  complete; float->Vec2 arg copies use x87 fld/fstp vs retail movss and SSE helper temps clobber xmm4; frame 16- vs 8-byte aligned

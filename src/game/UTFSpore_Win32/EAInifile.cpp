@@ -153,7 +153,7 @@ struct IniFile {
 
     void* V(int off) const { return ((void**)vtbl)[off / 4]; }
 
-    int   ReadEntryRaw(void* a, wchar_t* b);
+    int   ReadEntryRaw(void* a, void* b, wchar_t* dst, int maxn);
     bool  WriteEntryFormatted(void* a, unsigned n, void* args);
     int   ReadBinary(void* a, void* b);
     bool  WriteBinary(void* a, unsigned n, void* b);
@@ -598,18 +598,28 @@ WString* WString_ctor(WString* dst, const WString* src)
 }
 
 // @ 0x00933850
-int IniFile::ReadEntryRaw(void* a, wchar_t* b)
+extern "C" __declspec(dllimport) wchar_t* __cdecl wcsncpy(wchar_t*, const wchar_t*, size_t);
+struct WStrTmp_s0093_3850 {
+    char16_t* mpBegin; char16_t* mpEnd; char16_t* mpCapacity; void* mpAlloc;
+    WStrTmp_s0093_3850() { mpBegin = (char16_t*)&gEmptyString16; mpEnd = (char16_t*)&gEmptyString16; mpCapacity = (char16_t*)&gEmptyString16B; }
+};
+struct IniFileVt_s0093_3850 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual int  ReadEntry(void* a, void* b, WStrTmp_s0093_3850* out);   // +0x24
+};
+int IniFile::ReadEntryRaw(void* a, void* b, wchar_t* dst, int maxn)
 {
-    void* loc[3];
-    loc[0] = &gEmptyString16; loc[1] = &gEmptyString16; loc[2] = &gEmptyString16B;
-    int r = ((int(__fastcall*)(void*, void*, void*, void*))V(0x24))(this, a, b, loc);
+    WStrTmp_s0093_3850 loc;
+    int r = ((IniFileVt_s0093_3850*)this)->ReadEntry(a, b, &loc);
     if (r >= 0) {
-        int n = (int)(size_t)a;
+        int n = maxn;
         if (n > r) n = r;
-        wcsncpy_f(b, (const wchar_t*)a, n);
-        b[n - 1] = 0;
+        wcsncpy(dst, (const wchar_t*)loc.mpBegin, n);
+        dst[n - 1] = 0;
     }
-    if ((int)((int)loc[1] - (int)loc[0] & 0xfffffffeU) > 2 && loc[0]) operator delete[](loc[0]);
+    if ((int)((int)loc.mpCapacity - (int)loc.mpBegin & 0xfffffffeU) > 2 && loc.mpBegin) operator delete[](loc.mpBegin);
     return r;
 }
 

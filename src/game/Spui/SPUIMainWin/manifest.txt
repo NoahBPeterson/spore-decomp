@@ -13,3 +13,4 @@
 ../src/game/Spui/SPUIMainWin.cpp  ?FUN_0080a320@@YG_NPAXPAUMsg@@@Z  0080a320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIMainWin.cpp  ?RemoveElem@MainWin_s0081_43a0@@QAEXH@Z  00815310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIMainWin.cpp  ?KeyHandler2@MainWin_s0081_43a0@@QAE_NHHH@Z  00814d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIMainWin.cpp  ?CloseAll@MainWin_s0081_43a0@@QAEXXZ  008153e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

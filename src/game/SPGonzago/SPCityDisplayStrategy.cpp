@@ -318,6 +318,21 @@ struct cPlanetModel_s00ce_90c0 {
     int  mContinentFlags;  // +0x64
     void* __thiscall GetContinent(void* key);   // 0x00b88590
 };
+struct CVehicleIcon_ce94 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38();
+    virtual void SetTask(u32 id, void* layout, int); // +0x9c
+    virtual void v40();
+    virtual void ClearTask(int);                     // +0xa4
+};
 struct CDS {
     void*  mpVtbl;                    // +0x00
     char   pad04[0x38 - 4];
@@ -1689,14 +1704,13 @@ void CDS::GodModeUpdateReticles()
 // @ 0x00ce9460
 void CDS::SetVehicleTask(cGameData* data, cGameData* vehicle)
 {
-    (void)vehicle;
-    CTaskSource* src = (CTaskSource*)((CIcon*)data)->GetTaskSource();
+    CTaskSource* src = (CTaskSource*)((CIcon*)vehicle)->GetTaskSource();
     u32 taskID;
     switch (src->mTask) {
     case 1:
-        if (data->mCivIndex == 0) taskID = 0x5d68776;
-        else if (data->mCivIndex == 1) taskID = 0x5d687f1;
-        else taskID = (data->mCivIndex == 2 ? 0 : 0x14) + 0x5d68802;
+        if (vehicle->mCivIndex == 0) taskID = 0x5d68776;
+        else if (vehicle->mCivIndex == 1) taskID = 0x5d687f1;
+        else taskID = (vehicle->mCivIndex == 2 ? 0 : 0x14) + 0x5d68802;
         break;
     case 2:  taskID = 0x5d68851; break;
     case 3:  taskID = 0x5d688bc; break;
@@ -1709,11 +1723,10 @@ void CDS::SetVehicleTask(cGameData* data, cGameData* vehicle)
     case 10:
     case 11: taskID = 0x5d68f22; break;
     default:
-        ((void(__thiscall*)(cGameData*, int))(*(void**)(*(char**)data + 0xa4)))(data, 0);
+        ((CVehicleIcon_ce94*)data)->ClearTask(0);
         return;
     }
-    ((void(__thiscall*)(cGameData*, u32, void*, int))
-     (*(void**)(*(char**)data + 0x9c)))(data, taskID, mpPosseIconLayout, 0);
+    ((CVehicleIcon_ce94*)data)->SetTask(taskID, mpPosseIconLayout, 0);
 }
 
 // @ 0x00ce9560

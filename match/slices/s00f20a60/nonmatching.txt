@@ -6,7 +6,6 @@
 00f20c60   29  wrapper around 0xf20be0: complete; cl did not coalesce the three zero
                default arguments into the reserved 12-byte block equiv: PASS.
                schedule differs equiv: UNSUPPORTED (0/1200 valid inputs).
-00f20d20   53  event-log map lookup: complete; AutoRefCount guard and find() result handling differ; find is a thiscall on g_pEventLog equiv: PASS.
                and thiscall scheduling differ equiv: UNSUPPORTED (unresolved IdObj::m4).
 00f20ef0  196  proximity effect start/cancel: complete logic; vcall order and x87/SSE
                distance computation diverge equiv: UNSUPPORTED (0/1200 valid inputs).

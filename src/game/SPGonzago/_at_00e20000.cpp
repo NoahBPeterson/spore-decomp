@@ -1461,10 +1461,7 @@ void __fastcall FUN_00e21040(SwModelPair* self, s32, s32 frame)
 {
   if (!self->p0)
     return;
-  float f = (float)frame;
-  if (frame < 0)
-    f += DAT_013f4fd0;
-  f = (f / DAT_016a0d80) * DAT_0148054c;
+  float f = (float)(u32)frame / DAT_016a0d80 * DAT_0148054c;
   ((void(__thiscall*)(void*, float))FUN_004099b0)((char*)self->p0 + 8, f);
   ((void(__thiscall*)(void*, float))FUN_004099b0)((char*)self->p1 + 8, f);
   FUN_00e20f10(self->p0, (float*)&DAT_016a0dd0);

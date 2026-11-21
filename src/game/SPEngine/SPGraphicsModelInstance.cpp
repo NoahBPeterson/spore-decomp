@@ -272,7 +272,7 @@ namespace SP {
 void NotifyAdd(void* info, void* blender, void* other, int arg);   // 0x006c1cd0 cdecl
 }
 namespace SP {
-void NotifyAlloc();                    // 0x007c5490
+struct cBindInfo_s0073_afb0; void __fastcall NotifyAlloc(cBindInfo_s0073_afb0* info);   // 0x007c5490 (thiscall, no args)
 }
 namespace SP {
 struct cBindInfo_s0073_afb0;
@@ -2330,7 +2330,7 @@ void cModelInstance_s0073_afb0::Notify(cNotifyOther* other)
                     *(cBlender_s0073_afb0**)f->mInfo = f->mBlender;
                     FinishNotify(f->mInfo);
                 } else {
-                    NotifyAlloc();
+                    NotifyAlloc(f->mInfo);
                 }
             }
         }

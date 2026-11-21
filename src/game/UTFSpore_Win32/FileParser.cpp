@@ -384,17 +384,30 @@ int** __fastcall RefAssign(int** self, int, int** other)
     return self;
 }
 
-// @ 0x0083fa00
-__declspec(noinline) void __fastcall HashNodeDtorRef(int* self)
-{
-    int* o = (int*)self[4];
-    if (o && --*(int*)((char*)o + 0x240) == 0) {
-        *(int*)((char*)o + 0x240) = 1;
-        ((void(__thiscall*)(int*, int))(*(void***)o)[0])(o, 1);
+struct RefPtr_83fa00 {
+    FileChangeNotificationRef* p;
+    __forceinline ~RefPtr_83fa00()
+    {
+        if (p) p->Release();
     }
-    int b = self[0];
-    if ((self[2] - b) > 1 && b)
-        EASTL_allocator_deallocate((void*)b);
+};
+struct Buf_83fa00 {
+    int mBegin, mEnd, mCap;
+    __forceinline ~Buf_83fa00()
+    {
+        if ((mCap - mBegin) > 1 && mBegin)
+            EASTL_allocator_deallocate((void*)mBegin);
+    }
+};
+struct HashNode_83fa00 {
+    Buf_83fa00    mKey;     // +0x00
+    int           mPad;     // +0x0c
+    RefPtr_83fa00 mValue;   // +0x10
+    __declspec(noinline) ~HashNode_83fa00();
+};
+// @ 0x0083fa00
+HashNode_83fa00::~HashNode_83fa00()
+{
 }
 
 // @ 0x0083fbc0
@@ -503,7 +516,7 @@ void __stdcall DoFreeNodesFileNotify(char** bucketArray, unsigned bucketCount)
         while (node) {
             char* cur = node;
             node = *(char**)(node + 0x14);
-            HashNodeDtorRef((int*)cur);
+            ((HashNode_83fa00*)cur)->~HashNode_83fa00();
             EASTL_allocator_deallocate(cur);
         }
         *(char**)((char*)bucketArray + i * 4) = 0;

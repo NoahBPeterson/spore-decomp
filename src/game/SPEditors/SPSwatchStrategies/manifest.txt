@@ -34,3 +34,4 @@
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?GetViewportMaxScale@cSPSwatch@SP@@UBE?BMXZ  00f0d3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?FUN_00ecdc70@Obj_ecdc70@@QAE_NXZ  00ecdc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchStrategies.cpp  ?f@Obj10B0@@QAEXHHHH@Z  00ed10b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?FUN_00ecdfc0@@YIXH@Z  00ecdfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

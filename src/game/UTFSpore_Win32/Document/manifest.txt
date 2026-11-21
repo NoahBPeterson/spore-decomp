@@ -18,3 +18,5 @@
 ../src/game/UTFSpore_Win32/Document.cpp  ?FindBody@DocX@@QAEPAXXZ  008e2810  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Document.cpp  ?HandleEvent@Form@@QAEXPAXH@Z  008e5210  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Document.cpp  ?RemoveAllChildren@DocX@@QAEXXZ  008e2930  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?ReleaseChildren@Element@@QAEXXZ  008e48a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?ReleaseChildren2@Element@@QAEXXZ  008e48f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

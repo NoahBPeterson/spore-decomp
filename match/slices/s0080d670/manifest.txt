@@ -6,3 +6,5 @@ slices/s0080d670/s0080d670.cpp  ?FUN_0080de80@@YAPAXPAPAX00@Z  0080de80  /O2 /MD
 slices/s0080d670/s0080d670.cpp  ?FUN_0080df00@@YAPAXPAPAX00@Z  0080df00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s0080d670/s0080d670.cpp  ?FUN_0080dfc0@@YIXPAD@Z  0080dfc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s0080d670/s0080d670.cpp  ?FUN_0080d770@@YAXPAX00@Z  0080d770  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0080d670/s0080d670.cpp  ?FUN_0080d670@@YAEPAXPAE@Z  0080d670  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0080d670/s0080d670.cpp  ?FUN_0080d6d0@@YAEPAXPAE@Z  0080d6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

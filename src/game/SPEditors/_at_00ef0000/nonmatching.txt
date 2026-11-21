@@ -86,7 +86,6 @@
 00efe110 204 camera/view state: complete; x87 instead of the original's SSE int->float chain and different regalloc; equiv FAIL (layout-shifted call site -> fake-arity) flags: /O2 /MD /Gy /TP /arch:SSE
 00efe260 40 view reset: vtable chain / FUN_00eebf80 + x87 fabs compare schedule differs flags: /O2 /MD /Gy /TP /arch:SSE
 00efe310 244 stopwatch state machine: complete (both flag branches, reset/visibility-tail paths); vtable chain and SSE schedule differ; equiv WEAK (208 valid, 12.4% coverage) flags: /O2 /MD /Gy /TP /arch:SSE
-00efe4a0 53 toggle window: vtable chain (App+0x50+0x38) and tail-jump not reproduced flags: /O2 /MD /Gy /TP /arch:SSE
 00efe510 9 set visibility: vtable chain + cvttss2si float->int path not matched flags: /O2 /MD /Gy /TP /arch:SSE
 00efe5d0 48 list membership: bounds/pointer-increment schedule differs flags: /O2 /MD /Gy /TP /arch:SSE
 00efe630 96 FIXED can-trigger predicate: __cdecl (the original ends in a plain ret) and the spurious 0x5b3d1d0a case removed (only 0x5b3d1d0d is tested); equiv PASS (390 valid, 94.3% coverage); chk ~size 104 vs 99 (schedule) flags: /O2 /MD /Gy /TP /arch:SSE

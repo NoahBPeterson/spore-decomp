@@ -1550,14 +1550,7 @@ void cSPMissionManager::FUN_00febf20(void* mission)
     void* old = mMostRecentMission;
     if (old != mission)
     {
-        if (mission != old)
-        {
-            if (mission != 0)
-                (*(void (__thiscall**)(void*))vtbl(mission))(mission);
-            mMostRecentMission = mission;
-            if (old != 0)
-                (*(void (__thiscall**)(void*))((char*)vtbl(old) + 4))(old);
-        }
+        AssignTrackedRef_febeb0(mMostRecentMission, mission);
         if (old != 0)
             MOPS(old)->FUN_00c47d80();
         if (mMostRecentMission != 0)

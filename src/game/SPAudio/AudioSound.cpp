@@ -1533,12 +1533,11 @@ void Sound::CommitAllProperties()
 // @ 0x00a1d310
 void Sound::SetData(u32 id, void* arg, u32 arg4)
 {
-    void* target = 0;
     switch (id) {
-    case 0x173c2710: target = &mCurveC; break;
-    case 0x8adce22f: target = &mCurveB; break;
-    case 0x9b3918c4: target = &mCurveE; break;
-    case 0xbdc98ce5: target = &mCurveA; break;
+    case 0x173c2710: ((CurveData*)&mCurveC)->SetFrom(arg, 0); break;
+    case 0x8adce22f: ((CurveData*)&mCurveB)->SetFrom(arg, 0); break;
+    case 0x9b3918c4: ((CurveData*)&mCurveE)->SetFrom(arg, 0); break;
+    case 0xbdc98ce5: ((CurveData*)&mCurveA)->SetFrom(arg, 0); break;
     case 0x2fe09c83: {
         ((BasicString*)&mStrBegin)->assign(arg);
         ISystem* sys = GetSystemAT();
@@ -1555,8 +1554,6 @@ void Sound::SetData(u32 id, void* arg, u32 arg4)
     default:
         break;
     }
-    if (target != 0)
-        ((CurveData*)target)->SetFrom(arg, 0);
     IEmitter* em = mpEmitter;
     if (em != 0 && arg != 0)
         em->SetData(id, arg, arg4);

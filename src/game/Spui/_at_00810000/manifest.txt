@@ -21,3 +21,5 @@
 ../src/game/Spui/_at_00810000.cpp  ?FUN_00817a40raw@@YIPAUcSPUIMovieRecordUI@@PAU1@@Z  00817a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/_at_00810000.cpp  ?Init@Zoom@@QAE_NPAUZoomWin@@@Z  00812aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00810000.cpp  ?Draw@cSPUIProgressBarWin@UTFWin@@QAE_NPAURenderCtx@@@Z  0081d5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?ctor816860@MatEffect@@QAEPAU1@XZ  00816860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?dtor816910@MatEffect@@QAEXXZ  00816910  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -11,7 +11,6 @@
 #
 00988710    15   codegen shape: original keeps the v10() result in whole eax and computes
                  (b ^ 0xff) & 1 in ebx; cl widens through bl/movzx (same value).
-009887b0  40/11  default 40; under `/O2 /arch:SSE /fp:fast` only 11 (original `mov eax,
                  [ecx-0x208]; mov edx,[eax+0x90]; movss [ecx+8]; add ecx,-0x208; call edx`,
                  cl schedules the vtable-slot load after the store). Same size (48),
                  identical logic; /fp:fast fixes the whole SSE compare.
