@@ -14,3 +14,4 @@
 ../src/game/Swarm/VisualEffect.cpp  ?GetTransform@cVisualEffect@@QAEXPAX@Z  00a82870  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Swarm/VisualEffect.cpp  ?GetSourceTransform@cVisualEffect@@QAEXPAX@Z  00a82880  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Swarm/VisualEffect.cpp  ?IsRunning@cVisualEffect@Swarm@EA@@UBE_NXZ  00a83ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?Stop@cVisualEffect@Swarm@EA@@UAEXW4tTransitionType@cIVisualEffect@23@@Z  00a82050  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

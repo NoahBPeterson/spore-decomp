@@ -288,22 +288,23 @@ void EA::Swarm::cVisualEffect::Init(EA::Swarm::cIEffectsWorld * desc, EA::Swarm:
 // @ 0x00a82050
 void EA::Swarm::cVisualEffect::Stop(EA::Swarm::cIVisualEffect::tTransitionType flag)
 {
-    char* p = (char*)this;
-    void* e = *(void**)(p + 0x28);
-    if (e == 0) return;
+    ::cVisualEffect* self = (::cVisualEffect*)this;
+    u32* desc = (u32*)self->m28;
+    if (desc == 0) return;
 
     int b = flag;
-    if (b == 0 && ((*(u32*)e >> 5) & 1)) b = 1;
-
-    char* rec = *(char**)(p + 0x144);
-    char* end = *(char**)(p + 0x148);
-    for (; rec != end; rec += 0x5c) {
-        void* c = *(void**)(rec + 0x38);
-        ((void(__thiscall*)(void*, int))(*(void***)c)[3])(c, b);
+    if (b == 0) {
+        bool hard = ((*desc >> 5) & 1) != 0;
+        if (hard) b = 1;
     }
 
-    if (b != 0) *(u32*)(p + 0x2c) &= 0xfffff9ffu;
-    else        *(u32*)(p + 0x2c) |= 0x400u;
+    cComponentRec* rec = (cComponentRec*)self->p144;
+    cComponentRec* end = (cComponentRec*)self->p148;
+    for (; rec != end; ++rec)
+        ((cIComponent*)rec->mComponent)->Stop(b);
+
+    if (b != 0) self->m2c &= 0xfffff9ffu;
+    else        self->m2c |= 0x400u;
 }
 
 // @ 0x00a820e0
