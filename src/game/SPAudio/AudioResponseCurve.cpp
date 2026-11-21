@@ -345,6 +345,13 @@ bool EA::Audio::ResponseCurve::SetResponseCurveData(float const * pts, int n)
     return mResponseCurveDataArray.mpBegin != mResponseCurveDataArray.mpEnd;
 }
 
+struct RcConfig {
+    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03(); virtual void f04();
+    virtual void f05(); virtual void f06(); virtual void f07(); virtual void f08(); virtual void f09();
+    virtual void f0a(); virtual void f0b(); virtual void f0c(); virtual void f0d(); virtual void f0e();
+    virtual void f0f(); virtual void f10();
+    virtual bool GetFloats(uint32_t key, int* count, float** data);   // +0x44
+};
 // @ 0x00a1a9d0
 bool ResponseCurve_s00a1_a590::InitFromConfiguration(void* cfg, uint32_t key)
 {
@@ -358,12 +365,12 @@ bool ResponseCurve_s00a1_a590::InitFromConfiguration(void* cfg, uint32_t key)
     if (cfg == 0)
         return false;
 
-    float* pData = 0;
-    float  count = 0.0f;
-    if (!((int(__thiscall*)(void*, uint32_t, void*, void*))VtOf(cfg)[0x44 / 4])(cfg, key, &count, &pData))
+    float* pData;
+    int    count;
+    if (!((RcConfig*)cfg)->GetFloats(key, &count, &pData))
         return false;
 
-    SetResponseCurveData(pData, (int)count >> 1);
+    SetResponseCurveData(pData, count >> 1);
     return true;
 }
 

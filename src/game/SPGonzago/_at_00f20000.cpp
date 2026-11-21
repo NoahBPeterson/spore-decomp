@@ -647,7 +647,7 @@ extern "C" int*         FUN_00f21e60(int* a);                  // 0x00f21e60
 extern "C" char         FUN_00f22070(int* a);                  // 0x00f22070
 extern "C" char         FUN_00f20350(void* a);                 // 0x00f20350
 extern "C" void*        operator_delete(void* p);              // 0x00f47380
-extern "C" void         RBTreeIncrement(void* node);           // 0x00921580
+extern "C" void*        RBTreeIncrement(void* node);           // 0x00921580
 extern "C" void         RBTreeInsert(void* node, void* a, void* b, int side);  // 0x009216a0
 extern "C" void         RBTreeErase(void* a, void* b);         // 0x00921880
 extern "C" void         WordCtor_16c8318();
@@ -1319,14 +1319,18 @@ void __cdecl FUN_00f20cb0(void* key, void* p)
     } while ((void*)node != (void*)end);
 }
 
+struct IRefCounted_f20d20 {
+    virtual int AddRef();
+    virtual int Release();
+};
 // @ 0x00f20d20
 void* __cdecl FUN_00f20d20(void* p)
 {
     void* keep = p;
     void* found;
-    if (p) ((void(__cdecl*)(void*))(*(void***)p)[0])(p);
+    if (p) ((IRefCounted_f20d20*)p)->AddRef();
     g_pEventLog->find(&found, (int*)&keep);
-    if (p) ((void(__cdecl*)(void*))(*(void***)p)[1])(p);
+    if (p) ((IRefCounted_f20d20*)p)->Release();
     TreeHeader* g = g_pEventLog;
     if (found == (void*)((char*)g + 4)) return 0;
     return *(void**)((char*)found + 0x14);
@@ -1721,25 +1725,30 @@ int FUN_00f23c80(int a, int b)
     return -1;
 }
 
+struct IEvent_f24060 {
+    virtual void v0();
+    virtual void* GetTarget();   // +0x04
+};
 // @ 0x00f24060
 int FUN_00f24060(int* ev)
 {
-    int* piVar1 = (int*)((int(__thiscall*)(void*))*(void**)(*ev + 4))(ev);
-    unsigned int key = (uint)piVar1;
-    if (piVar1 != 0)
-        ((void(__thiscall*)(void*))*(void**)*piVar1)(piVar1);
+    IRefCounted_f20d20* p = (IRefCounted_f20d20*)((IEvent_f24060*)ev)->GetTarget();
+    unsigned int key = (uint)p;
+    if (p != 0)
+        p->AddRef();
 
-    void* lower;
-    void* upper;
-    ((DramaEventMultiMap*)DAT_016c8318)->equal_range(&lower, &key);
+    struct { void* first; void* second; } range;
+    ((DramaEventMultiMap*)DAT_016c8318)->equal_range(&range.first, &key);
 
     int iVar2 = 0;
-    while (lower != upper) {
-        lower = RBTreeIncrementPtr(lower);
-        iVar2 = iVar2 + 1;
+    void* it = range.first;
+    void* end = range.second;
+    while (it != end) {
+        it = RBTreeIncrement(it);
+        ++iVar2;
     }
-    if (piVar1 != 0)
-        ((void(__thiscall*)(void*))*(void**)(*piVar1 + 4))(piVar1);
+    if (p != 0)
+        p->Release();
     return iVar2;
 }
 
@@ -1749,10 +1758,10 @@ void EventTree::Destroy(int* node)
     while (node != 0) {
         Destroy((int*)node[0]);
         int* next = (int*)node[1];
-        if (node[5] != 0)
-            ((void(__thiscall*)(void*))*(void**)(*(int*)node[5] + 4))((void*)node[5]);
-        if (node[4] != 0)
-            ((void(__thiscall*)(void*))*(void**)(*(int*)node[4] + 4))((void*)node[4]);
+        if (IRefCounted_f20d20* p = (IRefCounted_f20d20*)node[5])
+            p->Release();
+        if (IRefCounted_f20d20* p = (IRefCounted_f20d20*)node[4])
+            p->Release();
         operator_delete(node);
         node = next;
     }

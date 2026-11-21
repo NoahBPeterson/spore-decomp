@@ -73,3 +73,5 @@
 ../src/game/SPGonzago/SPMission.cpp  ?Validate@cSPMission_s00c4_7a10@@QAE_NXZ  00c484e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ExportSpecies@cSPMission_s00c4_6ab0@SP@@QAEXII@Z  00c473f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?CanShowOnMap@cSPMission_s00c4_5860@@QAE_NXZ  00c460f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?OnFail@cSPMission_s00c4_5860@@QAEXXZ  00c469f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ShutdownSystems@cSPMission_s00c4_5860@@QAEXXZ  00c46590  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

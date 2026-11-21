@@ -873,6 +873,13 @@ int SList_s00fc_c260::InsertAfterOne(int a, SNode* at, void* ctx)
 
 // @ 0x00fcd170
 namespace rw {
+// stand-in for the list's vtable: GetAt(idx) is slot 12 (+0x30)
+struct SListVt_s00fc_d170 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual SNode* GetAt(unsigned idx);     // +0x30
+};
 int SList_s00fc_c260::InsertAtOne(int a, unsigned idx, int b)
 {
     if (idx > mLength)
@@ -891,8 +898,7 @@ int SList_s00fc_c260::InsertAtOne(int a, unsigned idx, int b)
         return 0;
     }
     {
-        SNode* (*getAt)(void*, unsigned) = (SNode* (*)(void*, unsigned))((*(void***)this)[0x30 / 4]);
-        SNode* at = getAt(this, idx - 1);
+        SNode* at = ((SListVt_s00fc_d170*)this)->GetAt(idx - 1);
         node->SetNext(at->Next());
         at->SetNext(node);
     }

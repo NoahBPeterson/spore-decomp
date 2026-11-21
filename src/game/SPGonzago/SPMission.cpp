@@ -1780,6 +1780,8 @@ struct Vec {
     T*  mpBegin;      // 0x00
     T*  mpEnd;        // 0x04
     T*  mpCap;        // 0x08
+    T& back() { T* p = mpEnd - 1; return *p; }
+    void pop_back() { --mpEnd; }
 };
 typedef Vec<u32> VecU32_s00c4_5860;
 struct Timer20 {                 // cSPMission + 0x38 / +0x58
@@ -1991,6 +1993,11 @@ cCommManager* __cdecl CommManager();                     // 0x00b3d4a0
 void  __cdecl WriteUint32(void* stream, void* value, u32 count, u32 flag); // 0x0093aa70
 void  __cdecl cSPUILayoutCtor();                         // 0x00dd1ca0
 void  __cdecl cSPUILayoutAdd();                          // 0x00dd27c0
+struct CommScreen_c469f0 { void FUN_00dd27c0(); };
+CommScreen_c469f0* __cdecl cSPUILayoutGet_c469f0();       // 0x00dd1ca0
+struct IntVector_c469f0 { u32 a, b, c; f32* mpData; void FUN_007eb820(u32 n); };
+struct SpaceGame_c469f0 { IntVector_c469f0* FUN_01005180(int idx); };
+SpaceGame_c469f0* __cdecl SpaceGameGet_c469f0();          // 0x01002bd0
 struct cTerraformingManager {
     void  AddPlanet();                                   // 0x00bc1b10
 };
@@ -2789,14 +2796,10 @@ void cSPMission_s00c4_5860::ShutdownSystems()
         GetStarMap()->RemoveVisual(mStarMapDestEffect, 0);
         mStarMapDestEffect = 0xffffffff;
     }
-    i32 n = (i32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
-    if (n > 0) {
-        do {
-            u32 handle = mStarMapEffects.mpEnd[-1];
-            GetStarMap()->RemoveVisual(handle, 0);
-            mStarMapEffects.mpEnd -= 1;
-            --n;
-        } while (n != 0);
+    u32 n = (u32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
+    for (u32 i = 0; i < n; ++i) {
+        GetStarMap()->RemoveVisual(mStarMapEffects.back(), 0);
+        mStarMapEffects.pop_back();
     }
     if (mpTargetPlanet != 0) {
         cPlanetClueObj* clue = mpTargetPlanet->mpPlanetClue;
@@ -2807,14 +2810,10 @@ void cSPMission_s00c4_5860::ShutdownSystems()
         mProgressEventID = 0xffffffff;
     }
     (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x148))(this);
-    i32 m = (i32)(mEventLogsToRemove.mpEnd - mEventLogsToRemove.mpBegin);
-    if (m > 0) {
-        do {
-            u32 id = mEventLogsToRemove.mpEnd[-1];
-            mEventLogsToRemove.mpEnd -= 1;
-            EventLog()->RemoveEvent(id, 0);
-            --m;
-        } while (m != 0);
+    u32 m = (u32)(mEventLogsToRemove.mpEnd - mEventLogsToRemove.mpBegin);
+    for (u32 i = 0; i < m; ++i) {
+        EventLog()->RemoveEvent(mEventLogsToRemove.back(), 0);
+        mEventLogsToRemove.pop_back();
     }
 }
 
@@ -2954,27 +2953,16 @@ void cSPMission_s00c4_5860::OnFail()
 {
     cEntity* owner = (cEntity*)GetOwnerEmpire();
     if (owner != 0 && owner != (cEntity*)GetPlayerEmpire()) {
-        f32 rel = GetPunishmentRelation();
-        rel = fabsf(rel);
-        {
-            u32 oid = owner->mEmpireID;
-            u32 id = GetPlayerEmpireID();
-            cRelationshipManager* rm = RelationshipManager();
-            rm->RecordEvent(oid, id, 0x526e51c, rel);
-        }
-        {
-            u32 oid2 = owner->mEmpireID;
-            u32 id2 = GetPlayerEmpireID();
-            cRelationshipManager* rm2 = RelationshipManager();
-            rm2->RelGetRelation(oid2, id2, 0);
-        }
-        cSPUILayoutCtor();
-        cSPUILayoutAdd();
+        f32 rel = fabsf(GetPunishmentRelation());
+        u32 oid = owner->mEmpireID;
+        RelationshipManager()->RecordEvent(oid, GetPlayerEmpireID(), 0x526e51c, rel);
+        u32 oid2 = owner->mEmpireID;
+        RelationshipManager()->RelGetRelation(oid2, GetPlayerEmpireID(), 0);
+        cSPUILayoutGet_c469f0()->FUN_00dd27c0();
     }
-    SpaceGameGet(7);
-    void* v = FUN_01005180(7);
-    IntVectorResize(v, 8);
-    *(f32*)((char*)*(void**)((char*)v + 0xc) + 0x1c) = mRewardMoney;
+    IntVector_c469f0* v = SpaceGameGet_c469f0()->FUN_01005180(7);
+    v->FUN_007eb820(8);
+    ((u32*)v->mpData)[7] = *(u32*)&mRewardMoney;
     if ((mFlags130 & 1) != 0)
         UpdateHints(0);
     (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x84))(this);

@@ -768,7 +768,7 @@ bool Mgr::PickBest(int a, int b, bool onlyActive, Snd** out)
         if ((!onlyActive || !SVT(s, 0x20, SndFlagFn)(s, -1, 0)) &&
             *(int*)((char*)s + 0x38) == a && *(int*)((char*)s + 0x3c) != b) {
             double d = SVT(s, 0x4c, SndFloatFn)(s);
-            if (best > d) {
+            if (!(d >= best)) {
                 best = d;
                 found = s;
             }

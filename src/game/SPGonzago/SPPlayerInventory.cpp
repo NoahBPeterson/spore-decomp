@@ -468,28 +468,36 @@ void __fastcall FUN_00ff3b70(Inv* ecx_this)
     ((void(__thiscall*)(void*, int))pVtbl[0x58 / 4])(ecx_this, max);
 }
 
+struct Key_s00ff3d40 {
+    u32 a, b, c;
+    bool operator==(const Key_s00ff3d40& o) const { return a == o.a && b == o.b && c == o.c; }
+};
+struct ItemBase_s00ff3d40 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14();
+    virtual const Key_s00ff3d40& GetID();          // +0x18
+    u32 pad04[2];
+};
+struct IObj_s00ff3d40 {
+    virtual void f00(); virtual void f04(); virtual void f08();
+    virtual void* Cast(u32 type);                  // +0x0c
+};
+struct Item_s00ff3d40 : ItemBase_s00ff3d40, IObj_s00ff3d40 {};
+static inline void* ObjCast_s00ff3d40(Item_s00ff3d40* p, u32 type) { return p ? ((IObj_s00ff3d40*)p)->Cast(type) : 0; }
 // @ 0x00ff3d40
-void* __fastcall FUN_00ff3d40(Inv* ecx_this, void* edx, const u32* pId)
+void* __fastcall FUN_00ff3d40(Inv* ecx_this, void* edx, const Key_s00ff3d40* pId)
 {
-    for (void** p = (void**)ecx_this->m34.mBegin; p != (void**)ecx_this->m34.mEnd; ++p) {
-        InvItem* o = (InvItem*)*p;
-        u32* pid = ((u32*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
-        if (pid[0] == pId[0] && pid[1] == pId[1] && pid[2] == pId[2]) {
-            if (o == 0) {
-                return 0;
-            }
-            return ((void*(__thiscall*)(void*, u32))((void**)o->mpVtblC)[0xc / 4])(&o->mpVtblC, 0x707459f0);
-        }
+    Item_s00ff3d40** it = (Item_s00ff3d40**)ecx_this->m34.mBegin;
+    Item_s00ff3d40** end = (Item_s00ff3d40**)ecx_this->m34.mEnd;
+    for (; it != end; ++it) {
+        if ((*it)->GetID() == *pId)
+            return ObjCast_s00ff3d40(*it, 0x707459f0);
     }
-    for (void** p = (void**)ecx_this->m4C.mBegin; p != (void**)ecx_this->m4C.mEnd; ++p) {
-        InvItem* o = (InvItem*)*p;
-        u32* pid = ((u32*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
-        if (pid[0] == pId[0] && pid[1] == pId[1] && pid[2] == pId[2]) {
-            if (o == 0) {
-                return 0;
-            }
-            return ((void*(__thiscall*)(void*, u32))((void**)o->mpVtblC)[0xc / 4])(&o->mpVtblC, 0x707459f0);
-        }
+    it = (Item_s00ff3d40**)ecx_this->m4C.mBegin;
+    end = (Item_s00ff3d40**)ecx_this->m4C.mEnd;
+    for (; it != end; ++it) {
+        if ((*it)->GetID() == *pId)
+            return ObjCast_s00ff3d40(*it, 0x707459f0);
     }
     return 0;
 }

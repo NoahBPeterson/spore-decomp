@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/SPCityModeStrategy.cpp  ?GetTerrainEditModeHeight@@YAMXZ  00cf7a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityModeStrategy.cpp  ?HasActiveTrack@cCivModeStrategy_s00cf_8d70@SP@@QAEHXZ  00cf94b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityModeStrategy.cpp  ?IsEitherDialogueIdle@cCivModeStrategy@@QAE_NXZ  00cf7880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?FUN_00cf7770@@YG_NPAX@Z  00cf7770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

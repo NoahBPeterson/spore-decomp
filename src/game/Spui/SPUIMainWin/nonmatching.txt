@@ -5,6 +5,5 @@
 008138e0 113 complete: MainWin::ShutdownStringFactories; thiscall release + refcount store schedule differ
 00813ca0 305 complete: cSPUIMainWin destructor; field-release order/registers differ [equiv: UNSUPPORTED, 0/1012 valid inputs (read faults)]
 00815370 76 complete: vector push_back; AutoRefCount temp/dup AddRef ordering differs
-008153e0 47 complete: vector clear; cl saves `this` in ebx and vector addr in ebp, original uses ecx/ebx
 00815aa0 59 complete: hashtable DoFreeNodes; thiscall vs free-function call shape and EASTL free-list details differ [equiv: PASS 571 valid, 100% cov]
 00815dd0 1162 cSPUIMainWin::Init complete (all calls/vcalls/constants in order); diff is register allocation (esi/edi/ebx roles) and frame size

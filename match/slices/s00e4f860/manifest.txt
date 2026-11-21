@@ -17,3 +17,4 @@ slices/s00e4f860/s00e4f860.cpp  ?FUN_00e4f920@@YAXHPAMMMMM@Z  00e4f920  /O2 /MD 
 slices/s00e4f860/s00e4f860.cpp  ?FUN_00e4f9d0@@YAMH@Z  00e4f9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e4f860/s00e4f860.cpp  ?FUN_00e50750@@YAXHPAM0@Z  00e50750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e4f860/s00e4f860.cpp  ?FUN_00e4fde0@@YAIH@Z  00e4fde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e4f860/s00e4f860.cpp  ?FUN_00e50450@@YAXPAHPAX@Z  00e50450  /O2 /MD /Gy /TP /arch:SSE /fp:fast

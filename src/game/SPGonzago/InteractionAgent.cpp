@@ -480,7 +480,6 @@ struct Counted_s0047_b480 {
 };
 struct E16 { float a, b, c, d; };
 struct M33 { float m[12]; };
-struct Big { uint a, b, c, d, e; M33 mat; Big* CopyBig(const Big* src); };
 void  MoveBig(void* dst, void* src);                     // copy-construct a 0x29c element (0x0047bbf0)
 void  CopyElems29(void* first, void* last, void* dest);  // @ 0x0047c980
 void  Move16(void* p);                                   // @ 0x00401b80
@@ -1364,14 +1363,15 @@ Obj8C::Obj8C(const Obj8C& o)
 {
 }
 
+struct Big {                                            // 0x38 bytes
+    uint a, b;                                          // +0x00
+    Vec3f v;                                            // +0x08
+    cSPMatrix3_s0047_b480 mat;                          // +0x14
+    Big(const Big& o);
+};
+
 // @ 0x0047bb70
-Big* Big::CopyBig(const Big* src)
-{
-    Big* dst = this;
-    dst->a = src->a; dst->b = src->b; dst->c = src->c; dst->d = src->d; dst->e = src->e;
-    ((void(__thiscall*)(void*, const void*))FUN_0041cb40)(&dst->mat, &src->mat);
-    return dst;
-}
+Big::Big(const Big& o) : a(o.a), b(o.b), v(o.v), mat(o.mat) {}
 
 // @ 0x0047bbf0
 Obj29C::Obj29C(const Obj29C& o)

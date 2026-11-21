@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?GetCommunityCenter@cCommunityEditor_s00d0_91c0@@QAEPBUVector3@@XZ  00d09960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0ca00@SP@@YIPAPAUtTreeNode@1@PAUcMapInsert@1@HPAPAU21@PAU21@PAUtMapValue@1@_N@Z  00d0ca00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetRotationRingVisibility@cCommunityEditor_s00d0_a160@@QAEXE@Z  00d0b010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?PickEventId@C103@@QAEEH@Z  00d07ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

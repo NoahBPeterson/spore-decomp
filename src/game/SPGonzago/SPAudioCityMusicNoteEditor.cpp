@@ -387,19 +387,24 @@ void cCityMusicNoteEditor_s00ea_28f0::SetTempo(u32 tempo)
     mTempo_5c = tempo;
 }
 
+struct NoteChildIter { s32* mp; };
+struct NoteLayoutVt {
+    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03(); virtual void f04(); virtual void f05(); virtual void f06(); virtual void f07(); virtual void f08(); virtual void f09(); virtual void f0a(); virtual void f0b(); virtual void f0c(); virtual void f0d(); virtual void f0e(); virtual void f0f(); virtual void f10(); virtual void f11(); virtual void f12(); virtual void f13(); virtual void f14(); virtual void f15(); virtual void f16(); virtual void f17(); virtual void f18(); virtual void f19(); virtual void f1a(); virtual void f1b(); virtual void f1c(); virtual void f1d(); virtual void f1e(); 
+    virtual void SetDuration(s32 kind, s32 value);     // +0x7c
+    virtual void g20(); virtual void g21(); virtual void g22(); virtual void g23(); virtual void g24(); virtual void g25(); virtual void g26(); virtual void g27(); virtual void g28(); virtual void g29(); virtual void g2a(); virtual void g2b(); virtual void g2c(); virtual void g2d(); virtual void g2e(); virtual void g2f(); virtual void g30(); virtual void g31(); virtual void g32(); 
+    virtual void FirstChild(NoteChildIter* out);       // +0xcc
+    virtual void LastChild(NoteChildIter* out);        // +0xd0
+};
 // @ 0x00ea30b0
 void __cdecl RedrawNoteDuration(cUILayout_s00ea_28f0* p, s32 value)
 {
-    s32 first;
-    s32 last;
-    ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32*))p->mpVtbl_00[0xcc / 4])(p, &first);
-    ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32*))p->mpVtbl_00[0xd0 / 4])(p, &last);
-    while (first != last) {
-        NoteLayoutRow* row = (NoteLayoutRow*)(gNoteLayoutTable + first);
-        RedrawNoteDuration((cUILayout_s00ea_28f0*)row, value);
-        first = row->mNext_00;
-    }
-    ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32, s32))p->mpVtbl_00[0x7c / 4])(p, 2, value);
+    NoteChildIter first;
+    NoteChildIter last;
+    ((NoteLayoutVt*)p)->FirstChild(&first);
+    ((NoteLayoutVt*)p)->LastChild(&last);
+    for (; first.mp != last.mp; first.mp = (s32*)*first.mp)
+        RedrawNoteDuration((cUILayout_s00ea_28f0*)(gNoteLayoutTable + (s32)first.mp), value);
+    ((NoteLayoutVt*)p)->SetDuration(2, value);
 }
 
 // @ 0x00ea3120

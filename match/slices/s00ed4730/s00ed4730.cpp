@@ -95,31 +95,40 @@ typedef void  (__thiscall *FV_ff)(void*, float, float);
 typedef char  (__thiscall *FV_ppiiii)(void*, void*, void*, int, int, int, int);
 
 // ================================================================ 0x00ed4730
-struct Obj4730 { char pad[0x38]; int f(int* list); };
+struct Item_ed4730 { int a, b, c; };
+struct Vec_ed4730 {
+    Item_ed4730* mpBegin;
+    Item_ed4730* mpEnd;
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+};
+struct Getter_ed4730 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void* Get(unsigned id);
+};
+struct Obj4730 { char pad[0x38]; void f(Vec_ed4730* list); };
 // @ 0x00ed4730
-int Obj4730::f(int* list)
+void Obj4730::f(Vec_ed4730* list)
 {
     ((S_ef72b0*)*(int*)(g_16c7aa4 + 0xd4))->f();
-    if (*list != list[1] && *list != 0) {
+    if (list->mpBegin != list->mpEnd && list->mpBegin->a != 0) {
         ((S_f45970*)*(int*)(g_16c7aa4 + 0x74))->f();
-        int* q = *(int**)((char*)this + 0x38);
-        int* r = *(int**)((char*)q + 0xc);
-        void* a = r ? ((FV_ip)(*(void***)r)[3])(r, 0x722de52) : 0;
-        ((S_ed3b20*)((char*)this - 0xc))->f(a, (void*)*list);
-        for (unsigned i = 1; i < (unsigned)((list[1] - *list) / 0xc); i++) {
-            int v = ((S_f46450*)*(int*)(g_16c7aa4 + 0x74))->f((void*)(*list + i * 0xc));
+        Getter_ed4730* r = *(Getter_ed4730**)(*(char**)((char*)this + 0x38) + 0xc);
+        ((S_ed3b20*)((char*)this - 0xc))->f(r ? r->Get(0x722de52) : 0, list->mpBegin);
+        for (unsigned i = 1; i < list->size(); i++) {
+            S_f46450* m = *(S_f46450**)(g_16c7aa4 + 0x74);
+            Item_ed4730* it = &list->mpBegin[i];
+            int v = m->f(it);
             if (v != -1)
                 ((S_ed38a0*)((char*)this - 0xc))->f(v);
         }
         ((S_f45a80*)*(int*)(g_16c7aa4 + 0x74))->f();
-        int obj = *(int*)((char*)this + 0x38);
+        S_644b60* obj = *(S_644b60**)((char*)this + 0x38);
         if (obj != 0) {
-            ((S_644b60*)obj)->f();
-            operator_delete((void*)obj);
+            obj->f();
+            operator_delete(obj);
             *(int*)((char*)this + 0x38) = 0;
         }
     }
-    return 0;
 }
 
 // ================================================================ 0x00ed4840

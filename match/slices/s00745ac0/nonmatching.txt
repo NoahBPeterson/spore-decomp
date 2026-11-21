@@ -1,5 +1,4 @@
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
-00745bb0  63 copy-20 shape differs (dead address guard)
 00745cf0  86 FIXED PromoteOccluder is the adjust_heap wrapper (sift-down loop, then the out-of-line promote half 0x00743e50); equiv PASS (323 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00745e00 113 FIXED PromotePairGt is the adjust_heap wrapper for the greater comparator (no comparator argument; out-of-line promote half 0x00743f00); equiv PASS (358 valid, 88.1% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00745e80 113 FIXED PromotePairLt is the adjust_heap wrapper for the less comparator (out-of-line promote half 0x00743f60); equiv PASS (353 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

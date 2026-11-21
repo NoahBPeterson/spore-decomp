@@ -19,7 +19,6 @@
 0047b3d0 140 complete source; 0x14-byte-element uninitialized copy loop (first, last, dest) returning the running dest, NOT byte-exact (orig 172B, ours 159B, 153 diff); element assignment is an in-class memberwise operator=; the trailing no-op loop over the original range is real and kept; leftover diffs are the /Od inlined copy helper's pointer-return temp ([ebp-0x24]) and bool tag slots ([ebp-5], [ebp-0x15]) not reproduced; flags /Od /Ob1 /MD /Gy /TP; difftest WEAK (468 valid / 44.3% coverage / 0 mismatches at --inputs 1600 --alias 1.0 --seed 3; the default profile is UNSUPPORTED because random pointers never satisfy the copy loop)
 0047b7b0 200 complete source; returns first for 0/1 pairs and last otherwise; sort/frame differs from original flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047b890 131 complete source; insertion sort over 8-byte float pairs, NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047bb70 78 complete source; copies five leading dwords then calls cSPMatrix3::Assign at +0x14; frame/layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047bf30 106 complete source; two-arg resize(n,fill) grows via reserve(0x47c600), memsets n-1 bytes, null-terminates; frame differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047c010 77 complete source; refcounted-pointer range copy (AddRef), NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047c0d0 85 complete source; refcounted-pointer range assign, NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

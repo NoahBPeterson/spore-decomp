@@ -79,6 +79,7 @@ struct SolarSystem {
 
 struct PlanetModel {
     int FUN_00b8d9b0();                            // 0xb8d9b0
+    bool FUN_00b8d9f0();                           // 0xb8d9f0
 };
 
 struct MissionManager {
@@ -979,14 +980,13 @@ bool cStarRecord::HasActivePlanets(bool checkMission)
 // ===========================================================================
 bool cStarRecord::HasUndiscoveredPlanets()
 {
-    if (((mFlags >> 3) & 1) != 0)
-        return false;
-    Vec* v = (Vec*)GetPlanetRecords();
-    void** begin = (void**)v->mpBegin;
-    void** end = (void**)v->mpEnd;
-    for (; begin != end; ++begin) {
-        if (((bool(__thiscall*)(void*))0xb8d9f0)(*begin))
-            return true;
+    bool discovered = ((mFlags >> 3) & 1) != 0;
+    if (!discovered) {
+        Vec* v = (Vec*)GetPlanetRecords();
+        for (void** it = (void**)v->mpBegin; it != (void**)v->mpEnd; ++it) {
+            if (((PlanetModel*)*it)->FUN_00b8d9f0())
+                return true;
+        }
     }
     return false;
 }

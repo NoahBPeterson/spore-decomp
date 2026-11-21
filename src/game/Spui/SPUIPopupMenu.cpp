@@ -25,7 +25,7 @@ extern "C" char g_1546094[];
 #include "EA/Text/Typesetter.h"
 
 // unnamed retail callees and globals (address in the comment)
-extern "C" double ceil(double);
+extern "C" __declspec(dllimport) double ceil(double);
 extern int g_1440aec;   // offset-pool base used by UI object iterators
 extern int g_164dd8c;   // default scroll-button time limit
 extern void Mark1();
@@ -327,7 +327,7 @@ void cSPUIPopupMenuItemWin::OnAttach()
   (*(int*)((char*)q + 0x8a8))++;
   void* rect = ((void* (__thiscall*)(void*))VTSLOT(self, 0x38))(self);
   if (*(char*)((char*)q + 0x8c5) != 0) {
-    ((void (__thiscall*)(void*))VTSLOT((char*)this + 0x20c, 0x14))((char*)this + 0x20c);
+    ((void (__thiscall*)(void*, int))VTSLOT((char*)this + 0x20c, 0x14))((char*)this + 0x20c, 0);
     float w = *(float*)((char*)rect + 8) - *(float*)rect;
     if (*(float*)((char*)q + 0x8bc) < w) {
       *(float*)((char*)q + 0x8bc) = FUN_0083ce70(w);

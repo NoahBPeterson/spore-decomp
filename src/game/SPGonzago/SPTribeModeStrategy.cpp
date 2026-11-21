@@ -2996,7 +2996,7 @@ struct TM {
     bool F_cd4490();
     unsigned int F_cd4460(int a);
     bool F_cd44a0();
-    unsigned int F_cd44e0(void* a, void* b);
+    static bool F_cd44e0(void* a, void* b);
     // PostTerrainAction is a free cdecl function (see below).
     void F_cd3e60();
 
@@ -4318,14 +4318,27 @@ bool TM::F_cd44a0()
     return (char)hasKey == 0;
 }
 
+struct IStreamHolder_cd44e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5();
+    virtual void* GetStream();   // +0x18
+};
+struct ISerializer_cd44e0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void* GetHolder();   // +0x20
+};
+static __forceinline void WriteUint32Value_cd44e0(void* s, uint32_t value)
+{
+    WriteUint32(s, &value, 1, 0);
+}
 // @ 0x00cd44e0
-unsigned int TM::F_cd44e0(void* a, void* b)
+bool TM::F_cd44e0(void* a, void* b)
 {
     uint32_t v = *(uint32_t*)b;
-    void* p = ((void*(__thiscall*)(void*))(*(void***)a)[0x20 / 4])(a);
-    void* s = ((void*(__thiscall*)(void*))(*(void***)p)[0x18 / 4])(p);
-    WriteUint32(s, &v, 1, 0);
-    return 1;
+    void* p = ((ISerializer_cd44e0*)a)->GetHolder();
+    WriteUint32Value_cd44e0(((IStreamHolder_cd44e0*)p)->GetStream(), v);
+    return true;
 }
 
 // @ 0x00cd4580

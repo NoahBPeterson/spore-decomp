@@ -500,23 +500,30 @@ struct ListPayload {            // what the arena node's owner points at
     char   pad00[0x7c];     // +0x00
     FV_vii handler;         // +0x7c  called as handler(owner, 1, arg)
 };
+struct ItemNode1180 { ItemNode1180* next; };
+struct ItemList1180 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b(); virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b(); virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29(); virtual void v2a(); virtual void v2b(); virtual void v2c(); virtual void v2d(); virtual void v2e(); virtual void v2f(); virtual void v30(); virtual void v31(); virtual void v32();
+    virtual void Begin(ItemNode1180** out);     // +0xcc
+    virtual void End(ItemNode1180** out);       // +0xd0
+};
+struct ItemOwner1180 {
+    virtual void w00(); virtual void w01(); virtual void w02(); virtual void w03(); virtual void w04(); virtual void w05(); virtual void w06(); virtual void w07(); virtual void w08(); virtual void w09(); virtual void w0a(); virtual void w0b(); virtual void w0c(); virtual void w0d(); virtual void w0e(); virtual void w0f(); virtual void w10(); virtual void w11(); virtual void w12(); virtual void w13(); virtual void w14(); virtual void w15(); virtual void w16(); virtual void w17(); virtual void w18(); virtual void w19(); virtual void w1a(); virtual void w1b(); virtual void w1c(); virtual void w1d(); virtual void w1e();
+    virtual void SetSelected(int on, int arg);  // +0x7c
+};
+struct Releasable1180 { virtual void v0(); virtual void v1(); virtual void Release(); };
+struct Refresh1180 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void Refresh(); };
 // @ 0x00ed1180
 void Obj1180::f(int arg)
 {
     if (list10 != 0) {
-        void* first;
-        void* last;
-        void* l1 = list10;
-        ((FV_vi)(*(void***)l1)[0xcc / 4])(l1, (int)&first);
-        void* l2 = list10;
-        ((FV_vi)(*(void***)l2)[0xd0 / 4])(l2, (int)&last);
-        char* node = (char*)first;
-        while (node != (char*)last) {
-            char* next = *(char**)node;
-            char* owner = (char*)g_1440aec + (int)node;
-            ListPayload* obj = *(ListPayload**)owner;
-            obj->handler(owner, 1, arg);
-            node = next;
+        ItemNode1180* it;
+        ItemNode1180* last;
+        ((ItemList1180*)list10)->Begin(&it);
+        ((ItemList1180*)list10)->End(&last);
+        while (it != last) {
+            ItemNode1180* cur = it;
+            it = it->next;
+            ((ItemOwner1180*)((char*)g_1440aec + (int)cur))->SetSelected(1, arg);
         }
     }
     void* cb = cb38;
@@ -526,15 +533,13 @@ void Obj1180::f(int arg)
             ListNode* p34 = (ListNode*)f34;
             if (p34->b44 == 0)
                 ((Fn00f42580*)*(void**)((char*)g_16c7aa4 + 0x74))->fn((void*)&p34->f18);
-            ListNode* old = (ListNode*)f34;
-            if (old != 0) {
+            if (Releasable1180* old = (Releasable1180*)f34) {
                 f34 = 0;
-                ((FV_v)(*(void***)old)[8 / 4])(old);
+                old->Release();
             }
             f0c = 0;
         }
-        void* f18 = this->f18;
-        ((FV_v)(*(void***)f18)[0x14 / 4])(f18);
+        ((Refresh1180*)f18)->Refresh();
         return;
     }
     ((Fn00929c60*)cb)->fn();

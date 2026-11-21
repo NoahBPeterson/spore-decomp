@@ -1858,18 +1858,23 @@ void PM::FUN_0062bdb0()
 
 
 // @ 0x0062bec0
+struct IRel_0062bec0 {
+  virtual void v0();
+  virtual void v1();
+  virtual void Release();  // +0x08
+};
 void PM::FUN_0062bec0()
 {
   char* s = (char*)this;
-  unsigned n = (*(unsigned*)(s + 0x80) - *(unsigned*)(s + 0x7c)) >> 2;
+  unsigned n = (unsigned)(*(IRel_0062bec0***)(s + 0x80) - *(IRel_0062bec0***)(s + 0x7c));
   Vec* vec = (Vec*)(s + 0x7c);
   unsigned i = 0;
   while (i < n) {
-    int* arr = *(int**)vec;
-    int o = arr[i];
+    IRel_0062bec0** slot = &(*(IRel_0062bec0***)vec)[i];
+    IRel_0062bec0* o = *slot;
     if (o != 0) {
-      arr[i] = 0;
-      ((TF0)(*(void**)(*(char**)o + 8)))((void*)o);
+      *slot = 0;
+      o->Release();
     }
     ++i;
   }

@@ -7,5 +7,4 @@
 00bba2a0 484   complete: OnBan species-key search loop; equiv WEAK, extensive register/scheduling differences
 00bba500  77   complete: GetCitizenSpecies lazy profile lookup; equiv PASS, scheduling differs
 00bba790 180   complete: GetPlanetRecords filtered copy; equiv WEAK, call encoding and scheduling differ
-00bba8c0  49   complete: HasUndiscoveredPlanets iteration; equiv WEAK, call encoding differs
 00bba900  81   complete: HasVisitableObject iteration; equiv WEAK, call encoding differs

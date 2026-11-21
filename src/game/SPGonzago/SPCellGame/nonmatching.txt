@@ -5,9 +5,7 @@
 00e51990 118 compact destroyed effect pointers from a vector: complete; loop/register schedule differs
 00e51ee0 202 construct an effect spawn descriptor: complete (all field stores + default vectors); parameter/register schedule differs
 00e52060 1325 register-convention (eax=count, esi=this reproduced), remaining diffs are register allocation and stack-slot order; body complete, size 2150 equals original
-00e54b80 136 cell raster setup; complete. difftest: UNSUPPORTED (0/400 valid)
 00e54d10 8 layer tail-jump; complete. difftest: UNSUPPORTED (0/400 valid)
-00e552f0  114  cCellMode::Activate; complete (now a SP::cCellMode member, this in ecx). difftest: UNSUPPORTED (only 0/712 inputs valid: fault(read) 686)
 00e558c0 631 fluid-sample + reflect force: complete; x87 sqrt/SSE shuffle schedule differs
 00e55c40 569 fluid-sample force (wide): complete; operand/eval order and helper-arg slots differ
 00e55f60 268 fluid-sample push-out force: complete; x87 sqrt/pick schedule differs

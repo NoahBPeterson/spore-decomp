@@ -6,3 +6,4 @@ slices/s00e282d0/s00e282d0.cpp  ?FUN_00e28be0@@YAXPAXPAUVariant@@1@Z  00e28be0  
 slices/s00e282d0/s00e282d0.cpp  ?FUN_00e28d60@@YAXPAXPAUVariant@@1@Z  00e28d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e282d0/s00e282d0.cpp  ?RefreshInt@cPropertyBinding@@QAE_NPAUVariant@@@Z  00e28df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e282d0/s00e282d0.cpp  ?RemoveItem@cSPUIPosse16@@QAEDPAXD@Z  00e285a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e282d0/s00e282d0.cpp  ?FUN_00e28660@cSizedVec8@@QAEPAXPAX@Z  00e28660  /O2 /MD /Gy /TP /arch:SSE /fp:fast

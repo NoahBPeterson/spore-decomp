@@ -7,6 +7,4 @@
 00c461d0 94 RemoveToolVector1bc: byte-diff vs retail; equiv WEAK (332 valid, 40.8% coverage)
 00c46250 95 RemoveToolVector1a8: byte-diff vs retail; equiv WEAK (329 valid, 40.8% coverage)
 00c46470 120 WriteUintVector: byte-diff vs retail; equiv UNSUPPORTED (original faults read on 394/400 generated inputs)
-00c46590 202 ShutdownSystems: byte-diff vs retail; equiv UNSUPPORTED (original faults read on 266/400 generated inputs)
 00c468b0 214 OnReject: byte-diff vs retail; equiv UNSUPPORTED (original faults read on 399/400 generated inputs)
-00c469f0 146 OnFail: byte-diff vs retail; equiv UNSUPPORTED (original faults read on 399/400 generated inputs)

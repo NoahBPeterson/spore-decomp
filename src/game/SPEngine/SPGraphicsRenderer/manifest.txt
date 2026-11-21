@@ -21,3 +21,4 @@
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?ClearLayer@cRenderer_s0075_ff50@SP@@QAE_NI@Z  0075ff50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?insert@LayerVector@SP@@QAEPAUcLayerInfo_s0075_ff50@2@PAU32@ABU32@@Z  00760030  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?UpdateCursorPosition@cRendererCursor_75df60@@QAEXXZ  0075df60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?PaintSystemInit@@YAXXZ  0075d990  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

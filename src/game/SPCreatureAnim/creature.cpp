@@ -4814,15 +4814,9 @@ void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8f40(float para
         Vector30* v = anim_15b8.FUN_00ad2800();
         if (v != 0 && 3u <= (unsigned)(((char*)v->end - (char*)v->begin) / 0x30)) {
             Vector104* g = anim_15b8.GetPoliticalID();
-            int ebx = (int)(((char*)g->end - (char*)g->begin) / 0x104);
-            if (ebx != 0) {
-                int esi = 0;
-                do {
-                    BoneGoal* p = (BoneGoal*)((char*)g->begin + esi);
-                    p->FUN_009d63e0(param_2);
-                    esi += 0x104;
-                } while (--ebx != 0);
-            }
+            unsigned n = (unsigned)(((char*)g->end - (char*)g->begin) / 0x104);
+            for (unsigned i = 0; i < n; ++i)
+                ((BoneGoal*)((char*)g->begin + i * 0x104))->FUN_009d63e0(param_2);
         }
     }
 }

@@ -21,7 +21,6 @@
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
-008db730 54 complete: PFIndexModifiable ctor; vtable/alloc sequence close but differs
 008db7b0 92 complete: PFIndexModifiable::_virtual_dtor; vtable store order / allocator call differs
 008db850 99 complete: PFIndexModifiable::RemoveFile; hashtable erase iterator passed via struct-return/this-thunk; call shape differs
 008db8f0 120 complete: FUN_008db8f0 quicksort helper; body shape differs

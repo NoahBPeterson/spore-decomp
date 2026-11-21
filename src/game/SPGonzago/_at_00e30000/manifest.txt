@@ -18,3 +18,4 @@
 ../src/game/SPGonzago/_at_00e30000.cpp  ?ResetState@cUITimedTooltip@@QAEXXZ  00e36de0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?FindWindow@cUITimedTooltip@@QAEPAXI_N@Z  00e36650  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?hide@CardView@@QAEXXZ  00e31550  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?destroy@NodeList@@QAEXPAPAXI@Z  00e308d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

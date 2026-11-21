@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-0081ad50  105  OnAttach: rect/ceil + multiple interface vcalls; scheduling differs
 0081b000  145  ctor cSPUIPopupMenuWin: 12 pointer + float + flag initialisers, vptr stores
 0081b510  224  OnDetach: interface query + member releases, register scheduling differs
 0081b6a0  159  AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact

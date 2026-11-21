@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a34ee0  39  AmbLayer::UpdatePrimitives: equivalent; difftest WEAK (360 valid, 23.4% coverage); original sinks the 0xc1a03855 branch out of line, MSVC keeps it inline
 00a35070  49  FUN_00a35070 (assign-copy range with AddRef/Release): equivalent; difftest WEAK (92 valid, 17.5% coverage); register allocation differs (dst in ebx vs edi)
 00a35150  -   FUN_00a35150 (ambience-cluster recentre): complete implementation; difftest UNSUPPORTED (unresolved SP_App / Memset32)
 00a355e0  47  F_a355e0::call (basic_string::assign(const char*)): equivalent; difftest WEAK (182 valid, 100.0% coverage); end-pointer arithmetic codegen differs

@@ -1,8 +1,5 @@
 # va  diff-bytes  reason
 0095fa60 46 Window::Set1D8: complete; vtable slot 0x90/0x10 call layout differs
-0095fad0 44 Window::IsAncestorOf: complete; ancestor walk register schedule differs
-0095fb20 39 Window::Test30Slot48: complete; this-adjust mask differs
-0095fb60 39 Window::Test30Slot54: complete; this-adjust mask differs
 0095fe40 33 Window::SetArea: complete; float compare/set order differs
 0095fec0 54 Window::ResizeBy: complete; area composition order differs
 0095ff20 35 Window::MoveBy: complete; +0x60 call and SSE add schedule differ
@@ -20,13 +17,11 @@
 009613a0 24 Find60: loop read/increment order differs
 009614a0 336 SerUpdate: transform copy and vcall schedule differ
 00961680 71 CloneNode: allocator vcall and field-copy order differ
-009616f0 38 serialization table build: list walk and store order differ
 00961760 200 SetFlag: switch tree and event-block layout differ
 00961860 84 Show: flag test/event schedule differs
 009618e0 77 Hide: flag clear/event schedule differs
 00961990 108 other: list walk, found-node test, unlink stores and callee register order now follow retail (esi stays the found node, `mov [ecx],edx` / `mov [ecx+4],edx` pair, `push eax; push esi` for the free call); what remains is frame (retail sub esp,0x1c vs 0xc: a 0x1c-byte stack buffer, not the 12-byte one) and the +0x18 vcall's register order is not reproducible without changing those call-shape levers; fix1: quick check UNSUPPORTED (emulator timeout)
 00961a50 103 ClearProcs: list purge loop schedule differs
-00961ae0 37 PurgeProcs: list walk and free schedule differ
 00961b40 281 vector-of-lists copy: allocation and node clone schedule differ; equiv: WEAK (member Copy, 28.7% coverage)
 00961db0 43 complete hashtable DoFreeNodes; register allocation swaps the node/next roles (edi<->esi)
 00962180 123 complete hashtable DoEraseNode; bucket-advance loop/pointer scheduling differs

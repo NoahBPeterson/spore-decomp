@@ -497,13 +497,51 @@ void __thiscall WinText::m_988780(int v)
     }
 }
 
+struct TextOwner_s0098_87b0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void v7c();
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void Relayout();                       // +0x90
+};
 // @ 0x009887b0
 void __thiscall WinText::m_9887b0(float v)
 {
     if (FF(this, 8) != v) {
         FF(this, 8) = v;
-        void* fn = *(void**)(*(uint32_t*)((uint8_t*)this - 0x208) + 0x90);
-        ((void (__thiscall*)(void*))fn)((uint8_t*)this - 0x208);
+        ((TextOwner_s0098_87b0*)((uint8_t*)this - 0x208))->Relayout();
     }
 }
 

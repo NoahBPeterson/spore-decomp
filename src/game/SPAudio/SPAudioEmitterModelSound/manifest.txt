@@ -9,3 +9,4 @@
 ../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?ReadTuningValues@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXXZ  00a383f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ??1EmitterModelSoundView@Audio@SP@@UAE@XZ  00a38b30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?CreateEmitter@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NIPAXPAPAX@Z  00a38900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?SetPaused@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_ND@Z  00a38030  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00997ba0 44 Obj33::clear: end-pointer kept in a register instead of reloaded; zero arg folded flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998920 168 KeyHT::equal_range: complete; returns `out` in eax on both exits like the original; difftest PASS (219 valid inputs, 86.8% coverage, no mismatch) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 009989d0 88 KeyHT::insert (multi): complete; schedule differs; flag param is now eastl::false_type (by-value empty tag); difftest FAIL is a checker artifact: the input's bucket index is out of range and the bucket slot it reads is a pool page that the first-run side wrote (buckets[idx] = new node) and that is not restored before the second side runs; swapping run order moves the 'difference' to the original (verified with work/match/scratch_s00997f50_trace.py) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998ac0 45 SerAutoUpdate::RemoveEntry: complete; schedule not checked flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

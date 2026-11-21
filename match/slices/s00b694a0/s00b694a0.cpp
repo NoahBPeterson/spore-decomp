@@ -242,10 +242,11 @@ void FUN_00b69890(void)
         IV* w = e->mpWidget;
         if (w) {
             if ((((unsigned char(__thiscall*)(IV*))VT(w, 0x28))(w) & 1) == 0) {
-                Label* t = g_pMgr->Find(e->mLink);
+                int link = e->mLink;
+                Label* t = g_pMgr->Find(link);
                 if (t) {
                     if (t->mpWidget) {
-                        IV* r = t->mpWidget;
+                        IV* r = *(IV* volatile*)&t->mpWidget;
                         if (r) {
                             t->mpWidget = 0;
                             ((void(__thiscall*)(IV*))VT(r, 4))(r);

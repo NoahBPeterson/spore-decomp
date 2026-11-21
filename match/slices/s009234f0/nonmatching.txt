@@ -3,7 +3,6 @@
 00923bc0  -    LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
 00923c90  13   LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
-00924010  52   LogReporter::SetName: complete; notify-vcall local vs memory loads
 00924060  144  rbtree::DoInsertValue: complete; traversal/insert schedule differs
 00924170  34   LogReporter::LogReporter: complete; string/notify schedule differs
 009241f0  60   Server::RemoveLogReporter: complete; copy/erase schedule differs

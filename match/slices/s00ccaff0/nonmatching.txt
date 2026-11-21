@@ -2,7 +2,6 @@
 
 00ccaff0  173  cTDS::SendSelectMessage (/O2 /MD /Gy /EHsc /TP): register allocation and block ordering differ; equiv WEAK (363 valid inputs, 36% coverage)
 00ccb0f0  128  cTDS::MaintainSelectionState (/O2 /MD /Gy /EHsc /TP): register allocation and block ordering differ; equiv WEAK (361 valid inputs, 54% coverage)
-00ccb2c0  61  cTDS::FUN_00ccb2c0 (/O2 /MD /Gy /EHsc /TP): instruction stream nearly identical; equiv UNSUPPORTED (0/400 valid inputs: fault(read)=153 fault(fetch)=137 budget=92)
 00ccb420  686  cTDS::HandleMessage (/O2 /MD /Gy /EHsc /TP): large switch/layout differences (982 vs 1006); equiv WEAK (381 valid inputs, 21% coverage)
 00ccb810  247  Vec3D::Assign (/O2 /MD /Gy /EHsc /TP): grow/copy structure matches but register allocation differs (212 vs 288); equiv WEAK (182 valid inputs, 45% coverage)
 00ccba20  240  Vec3D::InsertAt (/O2 /MD /Gy /EHsc /TP): value spills/no-security-cookie differences; equiv WEAK (55 valid inputs, 40% coverage)

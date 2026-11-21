@@ -396,22 +396,28 @@ void Drawable::Destroy()
 }
 
 // @ 0x00830c00
+struct ImgInfoRef_s0083_0c00 {
+    virtual void AddRef();                          // +0x00
+    virtual void Release();                         // +0x04
+};
+static inline void AssignRef_s0083_0c00(void** slot, ImgInfoRef_s0083_0c00* p)
+{
+    ImgInfoRef_s0083_0c00* old = *(ImgInfoRef_s0083_0c00* volatile*)slot;
+    if (p != old) {
+        if (p) p->AddRef();
+        *slot = p;
+        if (old) old->Release();
+    }
+}
 void *Drawable_s0083_0c00::GetImageInfo(int index)
 {
-    void *def = mInfo;
-    if ((unsigned)index >= 8)
-        return def;
-    if (mImageInfos[index] == 0) {
-        void *old = mImageInfos[index];
-        if (def != old) {
-            if (def)
-                ((void (__thiscall *)(void *))(*(void ***)def)[0])(def);
-            mImageInfos[index] = def;
-            if (old)
-                ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
-        }
+    ImgInfoRef_s0083_0c00* def = (ImgInfoRef_s0083_0c00*)mInfo;
+    if ((unsigned)index < 8) {
+        if (mImageInfos[index] == 0)
+            AssignRef_s0083_0c00(&mImageInfos[index], def);
+        return mImageInfos[index];
     }
-    return mImageInfos[index];
+    return def;
 }
 
 // @ 0x00830c60

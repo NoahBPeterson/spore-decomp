@@ -1,11 +1,8 @@
 00807880  36  complete: CreateImageWindow - resource-key pack + ImageDrawable/Window composition; only the v[2]/v[3] int->float store schedule differs; equiv: WEAK 248 valid inputs, 15.8% coverage (early-return path dominates)
 00807a50  244 complete; button-drawable selection/register schedule differs
-00807bb0  159 complete; SSE/call scheduling differs
 00807cb0  93  complete; register/scheduling differences
 00807d30  52  complete: SPUIHelpers::VisitWindowTreeDepthFirst - callback test + child-list walk; differs only in the loop-body instruction order and the shrink-wrapped push edi; equiv: PASS 314 valid inputs, 75.8% coverage
-00807dc0  107 complete; shader refcount/loop scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#3 esp]
 00807f50  252 complete; rotation switch/register differences; thiscall layout fixed (ecx=self, stack a,b), rotation helpers get ecx=b, and the abs tests use x87 fabs (no XMM clobber); slice/hybrid equiv PASS 400 valid, 100.0% coverage; replay PASS
 00808050  257 complete; transform update SSE schedule differs; helper calls now pass b in ecx and FUN_00807f50 receives (this,a,b); slice/hybrid equiv PASS 400 valid, 93.2% coverage; replay PASS
 00808370  368 complete: recursive union-of-bounds walk (v28/v38/vtable 0xcc/0xd0 + FUN_0064e6b0 empty-rect test + min/max merge); original batches all four addss before the compare chain, ours interleaves; equiv: UNSUPPORTED 0/400 valid inputs (needs a live window + child list)
 008085d0  59  complete; ctor field-store/register differences
-00808660  209 complete; property/stream loop register differences

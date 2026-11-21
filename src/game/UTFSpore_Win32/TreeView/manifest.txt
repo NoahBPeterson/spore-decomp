@@ -23,3 +23,4 @@
 ../src/game/UTFSpore_Win32/TreeView.cpp  ?CalcVisibleLines@TreeNode_s0099_0450@UTFWinControls@EA@@QAEXXZ  00991280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TreeView.cpp  ?SetScrollbarDrawable@WinTreeView_s0099_13d0@UTFWinControls@EA@@UAEXHPAX@Z  00991930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TreeView.cpp  ?DoMessage@WinTreeView_s0098_f400@UTFWinControls@EA@@QAE_NPAX@Z  0098fab0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?AllocAligned@@YAPAXHHHPAH@Z  009512d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

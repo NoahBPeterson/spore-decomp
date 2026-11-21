@@ -115,17 +115,18 @@ namespace SP { namespace Audio {
 bool cEmitterModelSound_s00a3_7dd0::SetPaused(char b)
 {
     char* self = (char*)this;
-    char c = *(char*)(self + 0x1c);
     if (b != 0) {
-        if (c != 0) { *(char*)(self + 0x1c) = b; return true; }
-    } else {
-        if (c == 0) { *(char*)(self + 0x1c) = b; return true; }
-    }
+        if (*(char*)(self + 0x1c) != 0) { *(char*)(self + 0x1c) = b; return true; }
+    } else if (*(char*)(self + 0x1c) == 0)
+        goto done;
+    {
     void* e;
     if ((e = *(void**)(self + 0xc)) != 0)
         ((void(__thiscall*)(void*, char))VFN(e, 0x1c))(e, b);
     if ((e = *(void**)(self + 0x10)) != 0)
         ((void(__thiscall*)(void*, char))VFN(e, 0x1c))(e, b);
+    }
+done:
     *(char*)(self + 0x1c) = b;
     return true;
 }

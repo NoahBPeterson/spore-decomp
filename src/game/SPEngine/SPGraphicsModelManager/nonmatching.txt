@@ -18,7 +18,6 @@
 007458d0 163 deque init: chunk allocation loop register schedule differs [equiv: UNSUPPORTED (unresolved EA_New)]
 007459c0 175 sort of 24-byte records: temp/compare schedule differs [equiv: UNSUPPORTED (0/220 valid inputs)]
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
-00745bb0 63 copy-20 shape differs (dead address guard)
 00745cf0 143 adjust_heap<cOccluder*,...> value-pass copy flavour differs
 00745e00 66 adjust_heap pair (greater) value-copy/schedule differs
 00745e80 68 adjust_heap pair (less) value-copy/schedule differs
@@ -28,7 +27,6 @@
 00746b90 233 cModelWorld::ShutdownModel shape/order differs
 00746fc0 140 load-entry destructor shape differs
 007470c0 142 member release sequence shape differs; equiv: WEAK 81.8% cov
-00747190 53 entry copy-assign register shape differs; equiv: WEAK 90.2% cov
 00747270 90 cLoadingModel dtor shape differs; equiv: FAIL 5/5 mismatch (execution)
 00747720 121 deque< cLoadQueueEntry >::~deque shape differs
 007477d0 215 deque< cLoadQueueEntry >::clear shape differs

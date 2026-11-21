@@ -194,11 +194,11 @@ int __cdecl ParseRangedInt(Args_s00840dc0* args, int index, int lo, int hi)
 float* __cdecl ParseRangedVector3(float* out, int* expr, int arg, float lo, float hi)
 {
     ((void(__thiscall*)(int*, float*, int))(*(void***)expr)[0xa8 / 4])(expr, out, arg);
-    float x = out[0], y = out[1], z = out[2];
-    if (lo <= x && x <= hi && lo <= y && y <= hi && lo <= z && z <= hi)
-        return out;
-    throw cError("argument out of range: expecting components (%g..%g), got (%g, %g, %g)",
-                 (double)lo, (double)hi, (double)x, (double)y, (double)z);
+    float x = out[0];
+    if (x < lo || x > hi || out[1] < lo || out[1] > hi || out[2] < lo || out[2] > hi)
+        throw cError("argument out of range: expecting components (%g..%g), got (%g, %g, %g)",
+                     (double)lo, (double)hi, (double)x, (double)out[1], (double)out[2]);
+    return out;
 }
 
 // @ 0x00840ec0

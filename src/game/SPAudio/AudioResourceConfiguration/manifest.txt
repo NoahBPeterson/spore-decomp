@@ -20,3 +20,5 @@
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ??1FactoryConfigurationObj@@QAE@XZ  00a19e00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ??1ResourceConfigurationView_a17910@@QAE@XZ  00a17910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?FUN_00a17a00@@YG_NPAXPAUEAString@@@Z  00a17a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyIDs@ResourceConfiguration_s00a1_7690@@QAEXPAX_N@Z  00a18760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?CreateResource@FactoryConfiguration_s00a1_7690@@QAE_NPAXPAPAXII@Z  00a17c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

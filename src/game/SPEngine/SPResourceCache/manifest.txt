@@ -21,3 +21,4 @@
 ../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006b08a0@@YGPAXPAX0@Z  006b08a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006b0020@@YI_NPAD@Z  006b0020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?serialize@C_006af670@@QAEXPAX@Z  006af670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?f@V5d0@@QAE_N_NPAX0@Z  006af5d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

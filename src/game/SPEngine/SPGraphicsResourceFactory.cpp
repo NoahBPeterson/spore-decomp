@@ -3832,19 +3832,28 @@ bool __cdecl CreateConvertedResourceAsync(void* out, void* a, void* b, IConvCtx*
     return true;
 }
 
+// Stand-ins for CreateResourceAsync: the request's type slot and the created resource's holder.
+struct AsyncResRequest {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual int GetTypeID();                       // +0x10
+};
+struct AsyncResHolder {
+    RefIface* mpObject;
+    AsyncResHolder() : mpObject(0) {}
+    ~AsyncResHolder() { if (mpObject) mpObject->Release(); }
+    RefIface* Detach() { RefIface* p = mpObject; mpObject = 0; return p; }
+};
+
 // @ 0x0076ac30
 bool __fastcall CreateResourceAsync(void* self, int, void* out, void* unused2, int* param_4, void* p5, void* p6, int p7)
 {
-    int* local = 0;
+    AsyncResHolder local;
+    AsyncResRequest* req = (AsyncResRequest*)param_4;
     if (p7 == 0)
-        p7 = ((int(__thiscall**)(int*))*(void***)param_4)[4](param_4);
-    char r = FUN_0076a940v(&local, self, (void*)p7, param_4, p6);
-    if (!r) {
-        if (local)
-            ((void(__thiscall**)(int*))*(void***)local)[1](local);
+        p7 = req->GetTypeID();
+    if (!FUN_0076a940v(&local.mpObject, self, (void*)p7, param_4, p6))
         return false;
-    }
-    *(int**)out = local;
+    *(RefIface**)out = local.Detach();
     (void)p5;
     (void)unused2;
     return true;

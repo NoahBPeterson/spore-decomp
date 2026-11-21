@@ -1252,27 +1252,32 @@ void* __fastcall Fn8e37e0(Document* pThis)
     return (void*)&pThis->mStylesheets;
 }
 
+struct NodeVt_8e48a0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09();
+    virtual void Release_28();   // +0x28
+    virtual void Release_2c();   // +0x2c
+};
 // @ 0x008e48a0
 void Element::ReleaseChildren()
 {
-    Element* self = this;
-    void* end = (char*)self + 0x18;
-    IntList* list = (IntList*)end;
-    for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
-        if (Fnfc7e50(n) == 1)
-            ((void (__thiscall*)(Node*))(*(void***)n)[0x28 / 4])(n);
+    void* end = (char*)this + 0x18;
+    // the first child is the successor of the list sentinel node at +0x14
+    for (Node* n = ListNext((Node*)((char*)this + 0x14)); n != ListEndP(end); n = ListNext(n)) {
+        if (n->Type() == 1)
+            ((NodeVt_8e48a0*)n)->Release_28();
     }
 }
 
 // @ 0x008e48f0
 void Element::ReleaseChildren2()
 {
-    Element* self = this;
-    void* end = (char*)self + 0x18;
-    IntList* list = (IntList*)end;
-    for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
-        if (Fnfc7e50(n) == 1)
-            ((void (__thiscall*)(Node*))(*(void***)n)[0x2c / 4])(n);
+    void* end = (char*)this + 0x18;
+    // the first child is the successor of the list sentinel node at +0x14
+    for (Node* n = ListNext((Node*)((char*)this + 0x14)); n != ListEndP(end); n = ListNext(n)) {
+        if (n->Type() == 1)
+            ((NodeVt_8e48a0*)n)->Release_2c();
     }
 }
 

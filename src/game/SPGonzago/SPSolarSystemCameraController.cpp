@@ -580,7 +580,7 @@ void  FUN_00ad92d0();
 };
 static inline Ext* E(void* p) { return (Ext*)p; }
 static inline void** VTP(void* o) { return *(void***)o; }
-struct Cam { char f20e80(int msg, int* p); void f20fc0(); void f21020(); };
+struct Cam { char f20e80(int msg, int* p); void InitListener(); void f21020(); };
 // ---- items of slice s01020e80 end
 
 // ---- items of slice s01399700 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -3409,11 +3409,12 @@ void FUN_01020eb0(void* self, int param_2, int param_3)
 }
 
 // @ 0x01020fc0
-void Cam::f20fc0()
+void Cam::InitListener()
 {
     char* s = (char*)this;
     E(s)->FUN_0101fb40();
-    void* edi = (s == 0) ? 0 : (s + 4);
+    ((UFO*)s)->b0f0();
+    void* edi = s ? (s + 4) : 0;
     void* ms = FUN_0067dcc0();
     *(void**)(s + 0x18) = ms;
     *(void**)(s + 0x1c) = edi;
@@ -3428,7 +3429,7 @@ void Cam::f20fc0()
 void Cam::f21020()
 {
     char* s = (char*)this;
-    f20fc0();
+    InitListener();
     int* p = (int*)(s + 0x84);
     if (*p == 0) {
         void* pman = FUN_0067de30();

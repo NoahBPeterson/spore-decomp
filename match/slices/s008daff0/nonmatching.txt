@@ -4,7 +4,6 @@
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 292 complete: HT::InsertUnique (hash-map insert w/ growth); returns out (void*), rehash flag=byte[0]/count=[1]; difftest PASS (366 valid @800 inputs, 92.0% cov)
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
-008db730 49 complete: PFIndexModifiable ctor; difftest PASS (400 valid, 100.0% cov)
 008db7b0 76 complete: PFIndexModifiable::_virtual_dtor; hashtable teardown (freeNodes/vtable clear) fixed; difftest PASS (276 valid, 100.0% cov)
 008db850 21 complete: PFIndexModifiable::RemoveFile; erase(out,node,bucket) 3-arg call + iterator bucket pointer fixed; difftest PASS (243 valid, 100.0% cov)
 008db8f0 120 complete: FUN_008db8f0 quicksort helper; body shape differs

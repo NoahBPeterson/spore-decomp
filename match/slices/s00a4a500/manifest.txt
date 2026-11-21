@@ -20,3 +20,4 @@ slices/s00a4a500/s00a4a500.cpp  ?canvas_deletelinesfor@Eapd@Audio@EA@@YAXPAUt_gl
 slices/s00a4a500/s00a4a500.cpp  ?canvas_deletelinesforio@Eapd@Audio@EA@@YAXPAUt_glist@123@PAX11@Z  00a4b2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4a500/s00a4a500.cpp  ?canvas_fixlinesfor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAX@Z  00a4b1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4a500/s00a4a500.cpp  ?canvas_create_editor@Eapd@Audio@EA@@YAXPAUt_glist@123@H@Z  00a4aac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?editor_free@Eapd@Audio@EA@@YAXPAXPAUt_glist@123@@Z  00a4aa80  /O2 /MD /Gy /TP /arch:SSE /fp:fast

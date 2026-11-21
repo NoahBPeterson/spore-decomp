@@ -1523,20 +1523,26 @@ void Vec1c::insert_(Elem1c* pos, const Elem1c* val)
 }
 
 // @ 0x00e308d0
+struct NodeObj_e308d0 { virtual void v0(); virtual void Release(); };
+struct Node_e308d0 {
+    char pad0[8];
+    NodeObj_e308d0* o8;     // +0x08
+    char pad1[4];
+    NodeObj_e308d0* o10;    // +0x10
+    Node_e308d0* next;      // +0x14
+};
 void NodeList::destroy(void** a, unsigned n)
 {
     for (unsigned i = 0; i < n; ++i) {
-        void* p = a[i];
-        if (p) {
-            do {
-                void* o10 = *(void**)((char*)p + 0x10);
-                void* next = *(void**)((char*)p + 0x14);
-                if (o10) ((void(__thiscall*)(void*))(*(void***)o10)[1])(o10);
-                void* o8 = *(void**)((char*)p + 0x8);
-                if (o8) ((void(__thiscall*)(void*))(*(void***)o8)[1])(o8);
-                operator_delete(p);
-                p = next;
-            } while (p);
+        Node_e308d0* p = (Node_e308d0*)a[i];
+        while (p) {
+            Node_e308d0* node = p;
+            p = p->next;
+            NodeObj_e308d0* o10 = node->o10;
+            if (o10) o10->Release();
+            NodeObj_e308d0* o8 = node->o8;
+            if (o8) o8->Release();
+            operator_delete(node);
         }
         a[i] = 0;
     }

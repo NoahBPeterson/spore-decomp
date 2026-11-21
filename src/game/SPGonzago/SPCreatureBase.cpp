@@ -9241,74 +9241,138 @@ char __cdecl FUN_00c0fc10(int param_1, int* param_2)
     return 1;
 }
 
-// @ 0x00c0fc40
-int* __cdecl FUN_00c0fc40(int* first, int* last)
+struct RefObj_s00c0_fc40 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); 
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c(); 
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); 
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c(); 
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c(); 
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c(); 
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c(); 
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac(); 
+    virtual void vb0(); virtual void vb4(); virtual void vb8(); 
+    virtual void AddRef();     // +0xbc
+    virtual void Release();    // +0xc0
+};
+struct RefPtr_s00c0_fc40 {
+    RefObj_s00c0_fc40* mp;
+    RefPtr_s00c0_fc40& operator=(const RefPtr_s00c0_fc40& x)
+    {
+        RefObj_s00c0_fc40* const p = x.mp;
+        if (p != mp) {
+            RefObj_s00c0_fc40* const old = mp;
+            if (p) p->AddRef();
+            mp = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+inline bool operator==(const RefPtr_s00c0_fc40& a, const RefPtr_s00c0_fc40& b) { return a.mp == b.mp; }
+static inline RefPtr_s00c0_fc40* AdjacentFind_s00c0_fc40(RefPtr_s00c0_fc40* first, RefPtr_s00c0_fc40* last)
 {
     if (first != last) {
-        int* prev;
-        do {
-            prev = first;
-            ++first;
-            if (first == last) return last;
-        } while (*prev != *first);
-        int* dst = prev;
-        int* cur = dst;
-        while (++cur != last) {
-            int* v = (int*)*cur;
-            if ((int*)*dst != v) {
-                int* old = (int*)dst[1];
-                ++dst;
-                if (v != old) {
-                    if (v != 0) (*(void(__thiscall**)(void*))((*(void***)v)[0xbc / 4]))((void*)v);
-                    *dst = (int)v;
-                    if (old != 0) (*(void(__thiscall**)(void*))((*(void***)old)[0xc0 / 4]))((void*)old);
-                }
-            }
+        RefPtr_s00c0_fc40* i = first;
+        for (++i; i != last; ++i) {
+            if (*first == *i)
+                return first;
+            first = i;
         }
-        return dst + 1;
     }
     return last;
 }
 
-// @ 0x00c0fcf0
-int* __cdecl FUN_00c0fcf0(int* iface, int param_2)
+// @ 0x00c0fc40
+int* __cdecl FUN_00c0fc40(int* pfirst, int* plast)
 {
-    int count = 0;
-    int* o = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-    void* s = (*(void*(__thiscall**)(void*))((*(void***)o)[0x18 / 4]))(o);
-    FUN_0093a780(s, &count, 1, 0);
-    if (count > 0) {
-        for (int i = 0; i < count; ++i) {
-            char b = 0;
-            int* o2 = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-            void* s2 = (*(void*(__thiscall**)(void*, void*))((*(void***)o2)[0x18 / 4]))(o2, &b);
-            FUN_0093ac80(s2);
-            if (i < 0x58) {
-                uint32_t* pu = (uint32_t*)(param_2 + (i >> 5) * 4);
-                if (b == 0) *pu &= ~(1u << (i & 0x1f));
-                else *pu |= 1u << (i & 0x1f);
-            }
+    RefPtr_s00c0_fc40* first = (RefPtr_s00c0_fc40*)pfirst;
+    RefPtr_s00c0_fc40* last = (RefPtr_s00c0_fc40*)plast;
+    first = AdjacentFind_s00c0_fc40(first, last);
+    if (first != last) {
+        RefPtr_s00c0_fc40* i = first;
+        for (++i; i != last; ++i) {
+            if (!(*first == *i))
+                *++first = *i;
+        }
+        ++first;
+        return (int*)first;
+    }
+    return (int*)last;
+}
+
+struct SerStream_s00c0_fda0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void* GetStream();
+};
+struct SerIface_s00c0_fda0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual SerStream_s00c0_fda0* GetSer();
+};
+struct Bits88Set_s00c0_fcf0 {
+    uint32_t mWord[3];
+    void set(uint32_t i, bool value)
+    {
+        if (i < 0x58) {
+            if (value)
+                mWord[i >> 5] |= 1u << (i & 31);
+            else
+                mWord[i >> 5] &= ~(1u << (i & 31));
         }
     }
-    return iface;
+};
+
+// @ 0x00c0fcf0
+int* __cdecl FUN_00c0fcf0(int* piface, int param_2)
+{
+    SerIface_s00c0_fda0* iface = (SerIface_s00c0_fda0*)piface;
+    Bits88Set_s00c0_fcf0& bits = *(Bits88Set_s00c0_fcf0*)param_2;
+    int count;
+    void* st = iface->GetSer()->GetStream();
+    FUN_0093a780(st, &count, 1, 0);
+    for (int i = 0; i < count; ++i) {
+        bool b = false;
+        FUN_0093ac80(iface->GetSer()->GetStream(), &b);
+        bits.set(i, b);
+    }
+    return piface;
+}
+
+struct Bits88_s00c0_fda0 {
+    uint32_t mWord[3];
+    bool test(uint32_t i) const
+    {
+        if (i < 0x58)
+            return (mWord[i >> 5] & (1u << (i & 31))) != 0;
+        return false;
+    }
+};
+static inline void WriteBool_s00c0_fda0(void* s, bool v)
+{
+    char b = v ? 1 : 0;
+    FUN_0093a9a0(s, &b, 1);
+}
+
+static inline void WriteU32_s00c0_fda0(void* s, uint32_t v)
+{
+    FUN_0093aa70(s, &v, 1, 0);
 }
 
 // @ 0x00c0fda0
-int* __cdecl FUN_00c0fda0(int* iface, int param_2)
+int* __cdecl FUN_00c0fda0(int* piface, int param_2)
 {
-    int n = 0x58;
-    int* o = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-    void* s = (*(void*(__thiscall**)(void*))((*(void***)o)[0x18 / 4]))(o);
-    FUN_0093aa70(s, &n, 1, 0);
-    uint32_t bit = 1;
+    SerIface_s00c0_fda0* iface = (SerIface_s00c0_fda0*)piface;
+    const Bits88_s00c0_fda0& bits = *(const Bits88_s00c0_fda0*)param_2;
+    WriteU32_s00c0_fda0(iface->GetSer()->GetStream(), 0x58);
     for (int i = 0; i < 0x58; ++i) {
-        char b = ((*(uint32_t*)(param_2 + (i >> 5) * 4) & bit) != 0);
-        int* o2 = (int*)(*(void*(__thiscall**)(int*))((*(int**)iface)[0x20 / 4]))(iface);
-        void* s2 = (*(void*(__thiscall**)(void*))((*(void***)o2)[0x18 / 4]))(o2);
-        FUN_0093a9a0(s2, &b, 1);
-        bit = (bit << 1) | (bit >> 31);
+        bool t = bits.test(i);
+        WriteBool_s00c0_fda0(iface->GetSer()->GetStream(), t);
     }
-    return iface;
+    return piface;
 }
 
 // @ 0x00c0fe30
@@ -9355,32 +9419,38 @@ void __cdecl FUN_00c0fea0(int* src, int* dst)
     if (p != 0) (*(void(__thiscall**)(void*))(*(char**)p + 0xc0))(p);
 }
 
+struct AnimBindingRec_s00c0_ffc0 {   // 0x24-byte binding record
+    int   m00;
+    int   m04;
+    int   m08;
+    int   m0c;
+    int   m10;
+    float m14;
+    char  m18;
+    int   m1c;
+    RefPtr_s00c0_fc40 mpObj;          // +0x20
+    __forceinline AnimBindingRec_s00c0_ffc0& operator=(const AnimBindingRec_s00c0_ffc0& x)
+    {
+        m00 = x.m00; m04 = x.m04; m08 = x.m08; m0c = x.m0c; m10 = x.m10;
+        m14 = x.m14; m18 = x.m18; m1c = x.m1c;
+        mpObj = x.mpObj;
+        return *this;
+    }
+};
+
 // @ 0x00c0ffc0
 void* __cdecl FUN_00c0ffc0(int param_1, int param_2, int* param_3)
 {
-    if (param_2 == param_1) return param_3;
-    int* dst;
-    do {
-        param_2 -= 0x24;
-        param_3 -= 9;
-        dst = param_3;
-        dst[0] = *(int*)(param_2 + 0x00);
-        dst[1] = *(int*)(param_2 + 0x04);
-        dst[2] = *(int*)(param_2 + 0x08);
-        dst[3] = *(int*)(param_2 + 0x0c);
-        dst[4] = *(int*)(param_2 + 0x10);
-        dst[5] = *(int*)(param_2 + 0x14);
-        *(char*)(dst + 6) = *(char*)(param_2 + 0x18);
-        dst[7] = *(int*)(param_2 + 0x1c);
-        int* piVar1 = *(int**)(param_2 + 0x20);
-        int* piVar2 = (int*)dst[8];
-        if (piVar1 != piVar2) {
-            if (piVar1 != 0) (*(void(__thiscall**)(void*))((*(void***)piVar1)[0xbc / 4]))((void*)piVar1);
-            dst[8] = (int)piVar1;
-            if (piVar2 != 0) (*(void(__thiscall**)(void*))((*(void***)piVar2)[0xc0 / 4]))((void*)piVar2);
-        }
-    } while (param_2 != param_1);
-    return dst;
+    if (param_2 != param_1) {
+        AnimBindingRec_s00c0_ffc0* dest = (AnimBindingRec_s00c0_ffc0*)param_3;
+        do {
+            param_2 -= 0x24;
+            --dest;
+            *dest = *(AnimBindingRec_s00c0_ffc0*)param_2;
+        } while (param_2 != param_1);
+        return dest;
+    }
+    return param_3;
 }
 
 // @ 0x00c10050

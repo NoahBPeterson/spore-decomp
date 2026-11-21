@@ -815,24 +815,28 @@ class Manager_s008e_0eb0 { public:
 }
 namespace EA {
 namespace ResourceMan {
+struct IDLHash_s008e_0eb0 {
+    uint8 mData[0x24];
+    void Fn926640();            // 0x00926640 (hashtable dtor thunk)
+};
+struct IDLMutex_s008e_0eb0 : Thread::Mutex_s008e_0eb0 {
+    ~IDLMutex_s008e_0eb0();     // 0x00922130 (Thread::Mutex::~Mutex)
+};
 struct InternalDatabaseList_s008e_0eb0 {
     uint8       _pad00[0x10];
-    Thread::Mutex_s008e_0eb0 mMutex;        // +0x10
-    uint8       _pad40[0x30];
+    IDLMutex_s008e_0eb0 mMutex;  // +0x10
     void**      mpVecBegin;      // +0x40
     void**      mpVecEnd;        // +0x44
     void**      mpVecCap;        // +0x48
-    void*       mpVecAllocator;  // +0x4c
+    Alloc*      mpVecAllocator;  // +0x4c
     uint8       _pad50[4];
-    uint8       mHashBase[0x24]; // +0x54
+    IDLHash_s008e_0eb0 mHashBase; // +0x54
 
     void Flush();               // 0x008E0840
     ~InternalDatabaseList_s008e_0eb0();    // 0x008E1420
 };
 }
 }
-extern "C" void __cdecl Fn926640(void* p);   // 0x00926640 (hashtable dtor thunk)
-extern "C" void __cdecl Fn922130(void* p);   // 0x00922130 (Thread::Mutex::~Mutex)
 static void FreeWStringBuffer(void* pBegin, void* pEnd)
 {
     uint32 nBytes = (reinterpret_cast<uint32>(pEnd) - reinterpret_cast<uint32>(pBegin)) & 0xfffffffeu;
@@ -1751,15 +1755,12 @@ EA::ResourceMan::InternalDatabaseList_s008e_0eb0::~InternalDatabaseList_s008e_0e
     Flush();
 
     while (mpVecBegin != mpVecEnd)
-        mpVecEnd = reinterpret_cast<void**>(reinterpret_cast<uint8*>(mpVecEnd) - 4);
+        --mpVecEnd;
 
-    Fn926640(mHashBase);
+    mHashBase.Fn926640();
 
     if (mpVecBegin != 0)
-        (*(void (__thiscall**)(void*, uint32))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(mpVecAllocator)) + 0xc)))(
-            mpVecBegin, static_cast<uint32>(reinterpret_cast<uint8*>(mpVecCap) - reinterpret_cast<uint8*>(mpVecBegin)));
-
-    Fn922130(&mMutex);
+        mpVecAllocator->Free(mpVecBegin, (uint32)(mpVecCap - mpVecBegin) * sizeof(void*));
 }
 
 // @ 0x008e1480

@@ -14,6 +14,7 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned long long u64;
 void* __cdecl   SP_NounManager(int p);                  // 0x00b3d300 (ret 4)
+void* __cdecl   SP_NounManager();                       // 0x00b3d300 (no args)
 void* __cdecl   SP_SimTicker();                         // 0x00b3d330
 void   __cdecl  FUN_00572020(void* p, int a);           // 0x00572020 (ret 8)
 void   __cdecl  copy_impl(void* first, void* last, void* dst); // 0x006782c0 (ret 0xc)
@@ -84,6 +85,7 @@ struct ObstacleData {
     u8  pad_58[0x24];                                  // 0x58..0x7b
     void* mpKey_7c;                                    // +0x7c
     void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
+    void SetFlag(bool on);                             // 0x00b73de0
     void FUN_00b73e70_desc(void* out);                 // 0x00b73e70 ret 4
 };
 struct Plant {
@@ -97,6 +99,7 @@ struct Plant {
     void* mpKey_7c;                                    // +0x7c
     void* GetDesc();                                   // 0x00b73e70 ret 4 (thiscall)
     void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
+    void SetFlag(bool on);                             // 0x00b73de0
 };
 struct PlantDesc {
     u16 a;            // +0x00
@@ -130,50 +133,48 @@ struct EditorSpeciesManager {
 // ---- items of slice s01016540 end
 
 // @ 0x01016540
+struct WalkRef_01016540 { virtual void AddRef(); virtual void Release(); };
+struct WalkObstacle_01016540 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual bool IsStatic();            // +0x2c
+};
 void cSPSimulatorWalkAround::RemoveHighLODPlant(void* plant, char flag)
 {
-    void** begin = mHighLODPlantsBegin;
-    void** end   = mHighLODPlantsEnd;
-    void** obst  = mHighLODObstaclesBegin;
-    if (plant != 0)
-        (**(void(__thiscall**)(void*))(*(void***)plant + 0))(plant);
-    ((cGameNounManager*)SP_NounManager((int)plant))->RemoveNoun(plant);
-    void** p = begin;
-    void** o = obst;
-    for (;;) {
-        if (p == end)
-            goto cleanup;
+    void** end = mHighLODPlantsEnd;
+    void** o = mHighLODObstaclesBegin;
+    void** p = mHighLODPlantsBegin;
+    if (plant)
+        ((WalkRef_01016540*)plant)->AddRef();
+    ((cGameNounManager*)SP_NounManager())->RemoveNoun(plant);
+    for (; p != end; ++p, ++o) {
         if (*p == plant) {
-            void** e = mHighLODPlantsEnd;
-            if ((char*)p + 4 < (char*)e)
-                copy_impl((char*)p + 4, e, p);
-            mHighLODPlantsEnd = (void**)((char*)mHighLODPlantsEnd - 4);
-            void* last = *(void**)((char*)mHighLODPlantsEnd);
-            if (last != 0)
-                (**(void(__thiscall**)(void*))(*(void***)last + 1))(last);
+            void** next = p + 1;
+            if (next < mHighLODPlantsEnd)
+                copy_impl(next, mHighLODPlantsEnd, p);
+            --mHighLODPlantsEnd;
+            if (WalkRef_01016540* q = *(WalkRef_01016540**)mHighLODPlantsEnd)
+                q->Release();
             ObstacleData* ob = (ObstacleData*)*o;
-            if (!(**(u8(__thiscall**)(void*))(*(void***)ob + 0xb))(ob) && ob->mFlag_54 != 0) {
-                ob->FUN_00b73de0(flag == 0);
+            if (!((WalkObstacle_01016540*)ob)->IsStatic() && ob->mFlag_54 != 0) {
+                ob->SetFlag(flag == 0);
                 if (flag == 0)
                     ob->mFlags_34 |= 2;
                 else
                     ob->mFlags_34 &= 0xfffffffd;
             }
-            void** e2 = mHighLODObstaclesEnd;
-            if ((char*)o + 4 < (char*)e2)
-                copy_impl((char*)o + 4, e2, o);
-            mHighLODObstaclesEnd = (void**)((char*)mHighLODObstaclesEnd - 4);
-            void* last2 = *(void**)((char*)mHighLODObstaclesEnd);
-            if (last2 != 0)
-                (**(void(__thiscall**)(void*))(*(void***)last2 + 1))(last2);
-            goto cleanup;
+            void** onext = o + 1;
+            if (onext < mHighLODObstaclesEnd)
+                copy_impl(onext, mHighLODObstaclesEnd, o);
+            --mHighLODObstaclesEnd;
+            if (WalkRef_01016540* q = *(WalkRef_01016540**)mHighLODObstaclesEnd)
+                q->Release();
+            break;
         }
-        ++p;
-        ++o;
     }
-cleanup:
-    if (plant != 0)
-        (**(void(__thiscall**)(void*))(*(void***)plant + 1))(plant);
+    if (plant)
+        ((WalkRef_01016540*)plant)->Release();
 }
 
 // @ 0x01016630

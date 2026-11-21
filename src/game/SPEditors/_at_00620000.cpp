@@ -874,25 +874,32 @@ void* __fastcall FUN_0062cd30(void* self)
   return self;
 }
 
+struct RefObj_s0062_cdb0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void Release();                         // +0x08
+};
+struct Obj_s0062_cdb0 {
+    void* mpVtable;                                 // +0x00
+    char  pad04[0x14];
+    RefObj_s0062_cdb0* mp18;                        // +0x18
+    char  pad1c[0x1c];
+    RefObj_s0062_cdb0* mp38;                        // +0x38
+    void* FUN_0062cdb0(unsigned flag);
+};
 // @ 0x0062cdb0
-void* __fastcall FUN_0062cdb0(void* self, char flag)
+void* Obj_s0062_cdb0::FUN_0062cdb0(unsigned flag)
 {
-  char* s = (char*)self;
-  *(void**)s = (void*)&gVt13fe1bc;
-  VecDtorFn(s + 0x3c);
-  {
-    void* p = *(void**)(s + 0x38);
-    if (p != 0) { ((TF0)(*(void**)(*(char**)p + 8)))(p); }
-  }
-  {
-    void* p = *(void**)(s + 0x18);
-    if (p != 0) { ((TF0)(*(void**)(*(char**)p + 8)))(p); }
-  }
-  *(void**)s = (void*)&gVt13ec458;
-  if (flag & 1) {
-    EASTL_free(s);
-  }
-  return self;
+  mpVtable = (void*)&gVt13fe1bc;
+  VecDtorFn((char*)this + 0x3c);
+  if (mp38 != 0)
+    mp38->Release();
+  if (mp18 != 0)
+    mp18->Release();
+  mpVtable = (void*)&gVt13ec458;
+  if (flag & 1)
+    EASTL_free(this);
+  return this;
 }
 
 // @ 0x0062d8a0

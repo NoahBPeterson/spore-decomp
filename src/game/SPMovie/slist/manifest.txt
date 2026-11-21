@@ -9,3 +9,4 @@
 ../src/game/SPMovie/slist.cpp  ?InsertBeforeOne@SList_s00fc_c260@rw@@QAEHHPAVSNode@2@PAX@Z  00fcd080  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/slist.cpp  ?InsertAfterOne@SList_s00fc_c260@rw@@QAEHHPAVSNode@2@PAX@Z  00fcd120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/slist.cpp  ?IsMember@SList_s00fc_c260@rw@@QAEDPAVSNode@2@@Z  00fcc330  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?InsertAtOne@SList_s00fc_c260@rw@@QAEHHIH@Z  00fcd170  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

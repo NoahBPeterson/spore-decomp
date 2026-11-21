@@ -930,7 +930,7 @@ struct cPlantCargoInfo {
   char pad0[4];
   void* vf1;                    // +0x08
   void* vf2;                    // +0x0c
-  char pad1[0x70];              // +0x10 .. +0x7f
+  char pad1[0x6c];              // +0x10 .. +0x7b
   int   f7c;                    // +0x7c
   int   f80;                    // +0x80
   int   f84;                    // +0x84
@@ -1687,20 +1687,25 @@ char __cdecl FUN_00b8f470(void* param, void* a, void* b, void* c)
 }
 
 // @ 0x00b8f690
+extern void __fastcall FUN_00c87660(void* self);   // 0x00c87660 cSpaceInventoryItem::cSpaceInventoryItem
+extern "C" char g_1465798[];                        // 0x01465798 cPlantCargoInfo vtable
+extern "C" char g_1465790[];                        // 0x01465790
+extern "C" char g_146576c[];                        // 0x0146576c
+extern "C" const float g_1470f1c;                   // 0x01470f1c
 cPlantCargoInfo* S::FUN_00b8f690()
 {
   cPlantCargoInfo* self = (cPlantCargoInfo*)this;
-  ((void (__thiscall*)(void*))0x00c87660)(this);   // Simulator::cAnimalCargoInfo ctor
-  self->f90 = *(float*)0x01470f1c;
+  FUN_00c87660(this);
+  self->f90 = g_1470f1c;
   self->f7c = 0;
   self->f80 = 0;
   self->f84 = 0;
   self->f88 = 0;
   self->f8c = 0;
   self->fa0 = 0;
-  self->vf0 = (void*)0x01465798;
-  self->vf1 = (void*)0x01465790;
-  self->vf2 = (void*)0x0146576c;
+  self->vf0 = g_1465798;
+  self->vf1 = g_1465790;
+  self->vf2 = g_146576c;
   self->f94 = 0.0f;
   self->f98 = 0.0f;
   self->f9c = 0.0f;

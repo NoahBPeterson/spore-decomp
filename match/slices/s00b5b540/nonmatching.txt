@@ -1,7 +1,6 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
 00b5b6f0   26  free-list push_back; grow path now calls SPVector::DoInsertKey4 as __thiscall (ecx=0x1686a18, args end/&v) instead of cdecl; remaining diff is the capacity-check/add register schedule. [equiv: WEAK 52.9% coverage (grow path); replay PASS]
 00b5b840   22  CheckGonzagoSubsystemInitState; virtual call schedule differs
-00b5bf80   71  multi-message registration loop; loop body schedule differs
 00b5c9d0   88  game-mode id remap; restored the original compare-tree shape and fixed 0x8916f92d to return 0x1654c11 (was returning the input); remaining diff is branch layout (the c10 arm constant-folds its return). [equiv: PASS]
 00b5ca70  n/a  current-game-mode predicate; switch/jump-table layout differs
 00b5cc80   76  regalloc: the first call was a vtable slot-0 dispatch but retail calls 0x00c2e4e0 directly with ecx=gt, and RegisterPauseGate/RegisterDefaultPauseGates are __thiscall GameTimeManager members (ecx=gt, args popped by the callee); both fixed, so calls/args/order now match exactly. Only the allocator differs: retail keeps the 3/1 bit masks in ebx/edi (mov ebx,3; lea edi,[ebx-2]; push ebx/push edi/pop/pop) where ours pushes immediates (137 vs 143 bytes). fix1: quick check UNSUPPORTED

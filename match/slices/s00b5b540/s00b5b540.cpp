@@ -711,21 +711,59 @@ bool S5bf30::f()
     return true;
 }
 
-// @ 0x00b5bf80
-bool FUN_00b5bf80(void* self, void*)
+extern "C" unsigned int g_1461810[12];   // 0x01461810: the twelve message ids registered below
+struct IMessageServer_5bf80
 {
-    void* ms = SP_MessageServer_67dcc0();
-    *(void**)((char*)self + 0x34) = ms;
-    *(void**)((char*)self + 0x38) = self;
-    *(int*)((char*)self + 0x3c) = (int)&g_vt0dummy;
-    *(int*)((char*)self + 0x40) = 0xc;
-    *(int*)((char*)self + 0x44) = 0;
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void AddHandler(void* handler, unsigned int message);       // +0x24
+};
+struct ICheatManager_5bf80
+{
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void AddCheat(int id, void* fn);                            // +0x20
+};
+struct IApp_5bf80
+{
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual ICheatManager_5bf80* GetCheatManager();                     // +0x50
+};
+struct MessageRegistration_5bf80
+{
+    IMessageServer_5bf80* mpServer;  // +0x00
+    void*         mpHandler;         // +0x04
+    unsigned int* mpMessages;        // +0x08
+    int           mMessageCount;     // +0x0c
+    int           m10;               // +0x10
+};
+struct S5bf80
+{
+    char pad_00[0x34];
+    MessageRegistration_5bf80 mReg;  // +0x34
+
+    bool Initialize();
+};
+// @ 0x00b5bf80
+bool S5bf80::Initialize()
+{
+    void* self = this;
+    IMessageServer_5bf80* ms = (IMessageServer_5bf80*)SP_MessageServer_67dcc0();
+    MessageRegistration_5bf80* reg = &mReg;
+    reg->mpServer = ms;
+    reg->mpHandler = self;
+    reg->mpMessages = g_1461810;
+    reg->mMessageCount = 0xc;
+    reg->m10 = 0;
     if (ms && self)
-        for (unsigned i = 0; i < 0x30; i += 4)
-            ((void(__thiscall*)(void*, void*, int))g_vfn(ms, 0x24))(ms, self, 0);
-    void* app = SP_App_67dd10();
-    void* q = (void*)((int(__thiscall*)(void*))g_vfn(app, 0x50))(app);
-    ((void(__thiscall*)(void*, int, void*))g_vfn(q, 0x20))(q, 0xebb802, (void*)&FUN_00b13b20);
+        for (unsigned i = 0; i < 0xc; i++)
+            ms->AddHandler(self, g_1461810[i]);
+    ((IApp_5bf80*)SP_App_67dd10())->GetCheatManager()->AddCheat(0xebb802, (void*)&FUN_00b13b20);
     FUN_00b6a530();
     FUN_00c103f0();
     FUN_00d1f2a0();
