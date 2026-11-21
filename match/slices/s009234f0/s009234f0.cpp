@@ -619,14 +619,16 @@ void LogFilterGroupLevels::SetName(const char* name)
     ((EaStringOps*)&mName)->assign(name, name + strlen(name));
 }
 
+struct LogNameSink6 { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5(); virtual void SetName(const char* name); };
+struct LogNameSink5 { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void SetName(const char* name); };
 // @ 0x00924010
 void LogReporter::SetName(const char* name)
 {
     ((EaStringOps*)&mName)->assign(name, name + strlen(name));
-    if (mFilter.mpObject)
-        ((void(__thiscall*)(void*, const char*))(*(void***)mFilter.mpObject)[6])(mFilter.mpObject, name);
-    if (mFormatter.mpObject)
-        ((void(__thiscall*)(void*, const char*))(*(void***)mFormatter.mpObject)[5])(mFormatter.mpObject, name);
+    if (LogNameSink6* f = (LogNameSink6*)mFilter.mpObject)
+        f->SetName(name);
+    if (LogNameSink5* f = (LogNameSink5*)mFormatter.mpObject)
+        f->SetName(name);
 }
 
 // @ 0x00924170
@@ -640,10 +642,10 @@ LogReporter::LogReporter(const char* name)
     mName.mpEnd = (char*)&DAT_01667bac;
     mName.mpCapacity = (char*)&DAT_01667bac + 1;
     ((EaStringOps*)&mName)->assign(name, name + strlen(name));
-    if (mFilter.mpObject)
-        ((void(__thiscall*)(void*, const char*))(*(void***)mFilter.mpObject)[6])(mFilter.mpObject, name);
-    if (mFormatter.mpObject)
-        ((void(__thiscall*)(void*, const char*))(*(void***)mFormatter.mpObject)[5])(mFormatter.mpObject, name);
+    if (LogNameSink6* f = (LogNameSink6*)mFilter.mpObject)
+        f->SetName(name);
+    if (LogNameSink5* f = (LogNameSink5*)mFormatter.mpObject)
+        f->SetName(name);
 }
 
 // @ 0x00924270
