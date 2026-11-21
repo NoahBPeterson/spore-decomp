@@ -668,27 +668,49 @@ void FUN_00e4d6c0(void* a, void* b, int base)
 }
 
 // @ 0x00e4d840
+extern "C" wchar_t g_1667bac[];         // 0x01667bac eastl empty-string16 sentinel
+struct WStr_e4d840 {                    // eastl::string16
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    int      mAllocator;
+    WStr_e4d840() : mpBegin(g_1667bac), mpEnd(g_1667bac), mpCapacity(g_1667bac + 1) {}
+    ~WStr_e4d840() { if ((mpCapacity - mpBegin) > 1 && mpBegin) operator_delete__(mpBegin); }
+};
+WStr_e4d840* WStr_Format_e4d840(WStr_e4d840* out, const wchar_t* fmt, ...);   // 0x0041e050
+struct DDFiles_e4d840 {
+    void Construct(const wchar_t* dir, void* alloc);                    // 0x008d7400 (ctor)
+};
+struct CellData_e4d840 {
+    virtual void v00();
+    virtual void Init();                                                // +0x04
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void SetTypes(int a, int b, int c);                         // +0x18
+};
+struct ResMgr_e4d840 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void AddDatabase(int a, CellData_e4d840* db, int prio);     // +0x50
+};
 namespace SP {
 void LayerLoaderInit()
 {
-    wchar_t buf[6];
-    buf[0] = 0x67bac & 0xffff; buf[1] = 0x67bac & 0xffff; buf[2] = 0x67bae & 0xffff;
-    void* dd = SP_GetDataDir(L"CellGame/Layers/");
-    WStr_Format(buf, L"%s%s", dd);
+    WStr_e4d840 buf;
+    WStr_Format_e4d840(&buf, L"%s%s", SP_GetDataDir(L"CellGame/Layers/"));
     void* obj = ZoneObject_operator_new(0x168, "Simulator/Cell/Data", 0, 0, 0, 0);
-    if (!obj) obj = 0;
-    else {
-        EA_ResourceMan_DatabaseDirectoryFiles_ctor(obj, buf, 0);
+    if (obj) {
+        ((DDFiles_e4d840*)obj)->Construct(buf.mpBegin, 0);
         *(void**)obj = vtbl_1482d38;
         *(void**)((char*)obj + 4) = vtbl_1482d24;
-    }
-    *(void**)g_pCellCellData = obj;
-    void* cd = *(void**)g_pCellCellData;
-    (*(void(__thiscall**)(void*))((char*)Vt(cd) + 4))(cd);
-    void* rm = EA_ResourceMan_GetManager();
-    (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm) + 0x50))(rm, 1, *(void**)g_pCellCellData, 100);
-    void* cd2 = *(void**)g_pCellCellData;
-    (*(void(__thiscall**)(void*, int, int, int))((char*)Vt(cd2) + 0x18))(cd2, 3, 4, 0);
+    } else
+        obj = 0;
+    *(CellData_e4d840**)g_pCellCellData = (CellData_e4d840*)obj;
+    (*(CellData_e4d840**)g_pCellCellData)->Init();
+    ((ResMgr_e4d840*)EA_ResourceMan_GetManager())->AddDatabase(1, *(CellData_e4d840**)g_pCellCellData, 100);
+    (*(CellData_e4d840**)g_pCellCellData)->SetTypes(3, 4, 0);
 }
 }  // namespace SP
 
