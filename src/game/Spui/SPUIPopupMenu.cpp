@@ -75,8 +75,14 @@ class cSPUIPopupMenuScrollButton { public:
   void OnMouseWheel(float a1, float a2, int a3, int a4);
   void OnMouseWheelBase(float a1, float a2, int a3, int a4);
 };
+struct IPopupRef {
+  virtual int AddRef();
+  virtual int Release();
+};
 class cSPUIPopupMenuWin { public:
-  char pad00[0x8a8];
+  char pad00[0x888];
+  IPopupRef* r0; IPopupRef* r1; IPopupRef* r2; IPopupRef* r3;   // +0x888..0x894 (AutoRefCount)
+  IPopupRef* r4; IPopupRef* r5; IPopupRef* r6; IPopupRef* r7;   // +0x898..0x8a4 (AutoRefCount)
   int mNumItemChildren;          // +0x8a8
   int mSelectedItemIndex;        // +0x8ac
   int mCenteredItemIndex;        // +0x8b0
@@ -86,6 +92,7 @@ class cSPUIPopupMenuWin { public:
   bool mbF2;                     // +0x8c2
   bool mbF3;                     // +0x8c3
 
+  ~cSPUIPopupMenuWin();
   void Reset();
   void* FindChild(int idx);
   void RemoveChild(int idx);
@@ -386,10 +393,39 @@ void PopupWinCtor::Ctor()
   d0 = 0;
 }
 
-// @ 0x0081b100
 static void ReleaseRef(void* p)
 {
   ((void (__thiscall*)(void*))((void**)*(void**)p)[1])(p);
+}
+
+extern "C" char g_14196a8[];   // vtbl cSPUIPopupMenuWin (Window)
+extern "C" char g_1419588[];   // vtbl cSPUIPopupMenuWin (IWindow)
+extern "C" char g_1419518[];   // vtbl cSPUIPopupMenuWin (third base)
+struct S_966e40 { void __thiscall m(); };   // 0x00966e40, base-class (Window) destructor
+
+// @ 0x0081b100
+cSPUIPopupMenuWin::~cSPUIPopupMenuWin()
+{
+  *(void**)this = g_14196a8;
+  *(void**)((char*)this + 4) = g_1419588;
+  *(void**)((char*)this + 0x20c) = g_1419518;
+  _ReadWriteBarrier();
+  if (IPopupRef* q = r0) { r0 = 0; q->Release(); }
+  if (IPopupRef* q = r1) { r1 = 0; q->Release(); }
+  if (IPopupRef* q = r2) { r2 = 0; q->Release(); }
+  if (IPopupRef* q = r3) { r3 = 0; q->Release(); }
+  if (IPopupRef* q = r4) { r4 = 0; q->Release(); }
+  if (IPopupRef* q = r5) { r5 = 0; q->Release(); }
+  // member AutoRefCount destructors, in reverse order
+  if (r7) r7->Release();
+  if (r6) r6->Release();
+  if (r5) r5->Release();
+  if (r4) r4->Release();
+  if (r3) r3->Release();
+  if (r2) r2->Release();
+  if (r1) r1->Release();
+  if (r0) r0->Release();
+  ((S_966e40*)this)->m();
 }
 
 // @ 0x0081b240

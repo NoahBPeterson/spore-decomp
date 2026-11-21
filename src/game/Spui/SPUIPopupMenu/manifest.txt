@@ -20,3 +20,4 @@
 ../src/game/Spui/SPUIPopupMenu.cpp  ?Ctor@ScrollBtnCtor@@QAEPAU1@XZ  0081ae90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?OnScrollButtonClicked@PMW@@QAEXDH@Z  0081cc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?Reset@MB@@QAEXXZ  0081cce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ??1cSPUIPopupMenuWin@@QAE@XZ  0081b100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
