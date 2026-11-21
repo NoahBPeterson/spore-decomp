@@ -43,3 +43,4 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Setup@cUIMissionCard@@QAEXPAXDD@Z  00e17f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e13160@@YG_NPAX0@Z  00e13160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Refresh@cUIMissionCardPanel_s00e1_7c10@@QAEXXZ  00e17df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateCardDetails@cUIMissionCardPanel_s00e1_7c10@@QAEXPAX@Z  00e17e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
