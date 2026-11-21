@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 0095fa60 46 Window::Set1D8: complete; vtable slot 0x90/0x10 call layout differs
 0095fad0 44 Window::IsAncestorOf: complete; ancestor walk register schedule differs
-0095fb20 39 Window::Test30Slot48: complete; this-adjust mask differs
-0095fb60 39 Window::Test30Slot54: complete; this-adjust mask differs
 0095fe40 33 Window::SetArea: complete; float compare/set order differs
 0095fec0 54 Window::ResizeBy: complete; area composition order differs
 0095ff20 35 Window::MoveBy: complete; +0x60 call and SSE add schedule differ

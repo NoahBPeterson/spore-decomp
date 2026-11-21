@@ -59,8 +59,8 @@ struct Window {
     int     GetAt34();
     void    Set1D8(int v);
     bool    IsAncestorOf(void* other);
-    bool    Test30Slot48(int v);
-    bool    Test30Slot54(int v);
+    int     Test30Slot48(int v);
+    int     Test30Slot54(int v);
     bool    AllDescendants(char param);
     int     AllDescendantsAll(bool param);
     void    FindChild();
@@ -401,25 +401,37 @@ bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
 }
 
 // @ 0x0095fb20
-bool Window::Test30Slot48(int v)
+struct WinHead_95fb20 { int mHead; };
+struct WinOuter_95fb20 : WinHead_95fb20, Window {};
+struct WinOwner_95fb20 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual void* Slot48(int v);
+    virtual void v4c(); virtual void v50();
+    virtual void* Slot54(int v);
+};
+int Window::Test30Slot48(int v)
 {
     if (m30 != 0) {
-        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)m30 + 0x48))(m30, v);
-        if (r == (int)this)
-            return true;
+        Window* self = (WinOuter_95fb20*)((char*)this - 4);
+        if (((WinOwner_95fb20*)m30)->Slot48(v) == self)
+            return 1;
     }
-    return false;
+    return 0;
 }
 
 // @ 0x0095fb60
-bool Window::Test30Slot54(int v)
+int Window::Test30Slot54(int v)
 {
     if (m30 != 0) {
-        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)m30 + 0x54))(m30, v);
-        if (r == (int)this)
-            return true;
+        Window* self = (WinOuter_95fb20*)((char*)this - 4);
+        if (((WinOwner_95fb20*)m30)->Slot54(v) == self)
+            return 1;
     }
-    return false;
+    return 0;
 }
 
 // @ 0x0095fbb0
