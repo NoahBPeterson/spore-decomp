@@ -77,6 +77,17 @@ if [ ! -d "$root/work/ext/EAWebKitSupportPackages" ]; then
   rm -rf "$x"
 fi
 
+# Retail's changed copies of three EAText files, kept apart so other slices still build against the published ones
+# (wrappers in match/slices/s0088b250 and s0088e210/inc include them).  Rebuilt on every run.
+et="$root/work/third_party/build/EAText-retail"
+rm -rf "$et"
+for g in source/EATextFontServer.cpp include/EAText/EATextFontServer.h include/EAText/EATextStyle.h; do
+  src="$root/work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/$g"
+  mkdir -p "$et/EAWebKitSupportPackages/EATextEAWebKit/local/$(dirname "$g")"
+  tr -d '\r' < "$src" > "$et/EAWebKitSupportPackages/EATextEAWebKit/local/$g"
+done
+patch -s -p1 -d "$et" < "$oss/EATextFontServer.patch"
+
 # include dirs named by manifest rows (/Iscratch_*_inc, resolved against work/match)
 sh "$root/tools/third_party/eawebkit_include_links.sh" >/dev/null
 d="$root/work/match/scratch_s00894440_inc/eathread"     # our minimal EAThread headers for EAText's StyleManager

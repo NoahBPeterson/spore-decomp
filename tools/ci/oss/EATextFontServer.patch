@@ -1,0 +1,101 @@
+Our change to EA's EAWebKit 1.21.00 support packages (EAText, BSD 3-clause, copyright Electronic Arts): the retail
+build's font server scores only the first requested family name (case-sensitive), truncates the weight/stretch
+differences with cvttss2si, keeps a padding word in the hash-node Face and uses 27-char family names.  Applied by
+tools/ci/setup_oss.sh after converting the three files' CRLF line ends to LF.
+
+--- a/EAWebKitSupportPackages/EATextEAWebKit/local/include/EAText/EATextFontServer.h
++++ b/EAWebKitSupportPackages/EATextEAWebKit/local/include/EAText/EATextFontServer.h
+@@ -415,6 +415,7 @@
+             {
+                 Char           mFamily[kFamilyNameCapacity];    /// Family is stored in lower case.
+                 FaceSourceList mFaceSourceList;                 /// List of FaceSources -- one per FontDescription (not necessarily one per .ttf file)
++                uint32_t       mPad;                            /// retail hash node: mpNext is 4 bytes after this list
+ 
+                 Face();
+             };
+--- a/EAWebKitSupportPackages/EATextEAWebKit/local/include/EAText/EATextStyle.h
++++ b/EAWebKitSupportPackages/EATextEAWebKit/local/include/EAText/EATextStyle.h
+@@ -429,7 +429,7 @@
+         /// decoration (e.g. underline). 
+         ///
+         const uint32_t kFamilyNameArrayCapacity = EATEXT_FAMILY_NAME_ARRAY_CAPACITY;
+-        const uint32_t kMaxFamilyNameSize       = 31;
++        const uint32_t kMaxFamilyNameSize       = 27;
+         const uint32_t kFamilyNameCapacity      = kMaxFamilyNameSize + 1;
+ 
+         struct NoInit{ };
+--- a/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextFontServer.cpp
++++ b/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextFontServer.cpp
+@@ -54,6 +54,7 @@
+ #include <stddef.h>
+ #include <string.h>
+ #include <math.h>
++#include <xmmintrin.h>
+ #if defined(EA_PLATFORM_WINDOWS)
+     #pragma warning(push, 0)
+     #include <windows.h>
+@@ -683,24 +684,17 @@
+ 
+     int nScore = 1000; // We start with a perfect score and subtract as we find mismatches.
+ 
+-    // We subtract a lot of points if there is no matching family name.
+-    // We subtract a few points if the name matches but it isn't the first in user-requested list.
+-    bool bFamilyNameMatch = false;
+-    int  nFamilyNameMatch = 0;
+-
+-    for(int i = 0; !bFamilyNameMatch && (i < (int)kFamilyNameCapacity) && ssCSS.mFamilyNameArray[i][0]; i++)
++    // Retail scores only the first requested family name, with a case-sensitive compare.
++    const char16_t* pFamilyA = fd.mFamily;
++    const char16_t* pFamilyB = ssCSS.mFamilyNameArray[0];
++    while(*pFamilyA == *pFamilyB)
+     {
+-        if(Stricmp(fd.mFamily, ssCSS.mFamilyNameArray[i]) == 0)
+-        {
+-            bFamilyNameMatch = true;
+-            nFamilyNameMatch = i;
++        if(*pFamilyA == 0)
+             break;
+-        }
++        ++pFamilyA;
++        ++pFamilyB;
+     }
+-
+-    if(bFamilyNameMatch)
+-        nScore -= (2 * nFamilyNameMatch);
+-    else
++    if(*pFamilyA != *pFamilyB)
+         nScore -= 100;
+ 
+     // A FontDescription whose mfSize matches the ssCSS mfSize loses no points.
+@@ -710,10 +704,7 @@
+     if(fd.mfSize == 0)
+         nScore -= 10;
+     else
+-    {
+-        const float fDifference = fabsf(ssCSS.mfSize - fd.mfSize);
+-        nScore -= (int)(20 * fDifference);
+-    }
++        nScore -= (int)(20 * fabsf(ssCSS.mfSize - fd.mfSize));
+ 
+     // Compare style.
+     if(fd.mStyle != ssCSS.mStyle)
+@@ -726,11 +717,17 @@
+     }
+ 
+     // Compare weight
+-    nScore -= (int)(fabs(fd.mfWeight - ssCSS.mfWeight) / 4);
++    {
++        float fWeightDifference = fabsf(fd.mfWeight - ssCSS.mfWeight) / 4;
++        nScore -= _mm_cvtt_ss2si(_mm_set_ss(fWeightDifference));
++    }
+ 
+     // Compare stretch
+     if(fd.mfStretch != ssCSS.mfStretch)
+-        nScore -= (int)(20 + (20 * fabs(fd.mfStretch - ssCSS.mfStretch))); // Not being a perfect match subtracts a fixed amount. Then extra is added depending on the distance.
++    {
++        float fStretchDifference = 20.0f + (20.0f * fabsf(fd.mfStretch - ssCSS.mfStretch));
++        nScore -= _mm_cvtt_ss2si(_mm_set_ss(fStretchDifference)); // Not being a perfect match subtracts a fixed amount. Then extra is added depending on the distance.
++    }
+ 
+     // Compare pitch
+     if(fd.mPitch != ssCSS.mPitch)
