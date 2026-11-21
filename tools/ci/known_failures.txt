@@ -345,7 +345,7 @@
 013cb8a0
 013cb950
 
-# a relocation where retail has fixed bytes (125 constants written as addresses were fixed on 2026-11-09): a thread-local variable (s004bd850, a real match the fingerprint cannot express yet), a string literal where retail passes the number 5 (s009515e0 "AnimationCurve": wrong code, needs a person), and calls to T_ thunks from inline assembly (synth/uninit_copy_wrapped_od), and two rows the size splits of 2026-11-20 showed write a number where retail relocates (25)
+# a relocation where retail has fixed bytes (125 constants written as addresses were fixed on 2026-11-09): a thread-local variable (s004bd850, a real match the fingerprint cannot express yet), a string literal where retail passes the number 5 (s009515e0 "AnimationCurve": wrong code, needs a person), and calls to T_ thunks from inline assembly (synth/uninit_copy_wrapped_od) (23)
 00456c10
 00475b30
 004b1760
@@ -370,27 +370,8 @@
 0107ac10
 01082580
 
-006c12a0
-00dd0da0
 # compiled size differs from the retail function size the fingerprint uses (function-boundary cases still open; 10 of them
-# compile from the open-source sources tools/ci/setup_oss.sh fetches; 2026-11-20: 75 rows that ran into the next function were split, 73 now pass) (17)
-00851400
-008594d0
-0085c5b0
-008e5730
-008fb8a0
-0090b460
-0090b830
-0090baa0
-0090bb60
-0090bd20
-0090c100
-0090c5b0
-0090c700
-009879f0
-00d48cb0
-011a81e0
-011c0060
+# compile from the open-source sources tools/ci/setup_oss.sh fetches; 2026-11-20: 92 rows that ran into the next function, most after a switch jump table, were split and all pass) (0)
 
 # no retail fingerprint for the address (1)
 013cbf20
