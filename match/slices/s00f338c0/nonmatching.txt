@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00f33ac0   45  complete: eastl::copy_backward<E> (same)
 00f33b50   40  complete: triple-int compare setter calling two methods (operand order differs)
 00f338c0  254  complete: fill run of 0x38-byte cSPTransform from one source, memberwise copy (codegen splits float stores differently); equiv FAIL (void loop leaves a different residual eax)
 00f33bf0  307  complete: cTerrainSphere::ResetCurrent reporter/property-list setup (0x40 reporter + 0x38 property list, global list); equiv UNSUPPORTED (0/400 valid inputs, fault traps)

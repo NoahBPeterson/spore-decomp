@@ -2,3 +2,4 @@
 slices/s00f338c0/s00f338c0.cpp  ?resetParent@PObj@@QAEXPAUCPL@@@Z  00f33bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f338c0/s00f338c0.cpp  ?UpdateTerrainState@cTerrainSphere@@QAEXD@Z  00f343a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f338c0/s00f338c0.cpp  ?CopyFwd@@YAPAUE@@PAU1@00@Z  00f33a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f338c0/s00f338c0.cpp  ?CopyBwd@@YAPAUE@@PAU1@00@Z  00f33ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
