@@ -27,8 +27,8 @@ static inline uint32_t id(const char* s) { return FNVHash(s, 0x811c9dc5, 1); }
 void* __cdecl operator_new_sp(unsigned int size, const char* pName,
                               int a, int b, int c, int d);               // 0x00f473a0
 void* __cdecl GonzagoModelWorld();                                       // 0x00b3d520
-void* FUN_00b3d310(void* p, int a);                                      // 0x00b3d310
-void  FUN_00b48770(void* p, int a);                                      // 0x00b48770
+struct cSim_s00b4_8110 { void Fn_00b48770(void* obj, bool b); };       // 0x00b48770
+cSim_s00b4_8110* FUN_00b3d310();                                         // 0x00b3d310
 void* FUN_00ae66d0(void* p);                                             // 0x00ae66d0
 void* FUN_00efe5a0();                                                    // 0x00efe5a0
 extern float g_defaultColorR;   // 0x15a89c0
@@ -331,24 +331,25 @@ cSpatialObjectView::~cSpatialObjectView()
 }
 
 // @ 0x00e926d0
+struct ISpatialObj_926d0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30();
+    virtual float GetScale();                         // +0x34
+    virtual void v38(); virtual void v3c(); virtual void v40(); virtual void v44();
+    virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
+    virtual void v58(); virtual void v5c(); virtual void v60();
+    virtual void SetModel(void* key, float scale);    // +0x64
+};
 void cSpatialObjectView::SetModel_926d0(void* model)
 {
     *(uint32_t*)((char*)mpObject + 0x50) &= 0xffffffefu;
-    void* o = mpObject;
-    void** vt = *(void***)o;
-    float scale = ((float(__thiscall*)(void*))vt[0x34 / 4])(o);
-    ((void(__thiscall*)(void*, void*, float))vt[0x64 / 4])(o, (char*)model + 0x70, scale);
-
-    if (mpObject != 0) {
-        void* p = (void*)VC1(void*, mpObject, 0xb8, uint32_t, 0x17f243b);
-        void* q = FUN_00b3d310(p, 1);
-        FUN_00b48770(q, 1);
-        return;
-    }
-    {
-        void* q = FUN_00b3d310(0, 1);
-        FUN_00b48770(q, 1);
-    }
+    ISpatialObj_926d0* o = (ISpatialObj_926d0*)mpObject;
+    o->SetModel((char*)model + 0x70, o->GetScale());
+    cSpatialObject* obj = mpObject;
+    void* go = obj ? (void*)VC1(void*, obj, 0xb8, uint32_t, 0x17f243b) : 0;
+    FUN_00b3d310()->Fn_00b48770(go, true);
 }
 
 // @ 0x00e92740
