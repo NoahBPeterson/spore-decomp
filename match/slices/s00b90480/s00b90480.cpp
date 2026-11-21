@@ -388,23 +388,17 @@ void FUN_00b90b10(int param_1, int param_2, int param_3, int* param_4)
 // @ 0x00b90bd0
 int* FUN_00b90bd0(int* param_1, int* param_2, int* param_3, char (*param_4)(int, int))
 {
-    char cVar1 = (*param_4)(*param_1, *param_2);
-    if (cVar1 == '\0') {
-        cVar1 = (*param_4)(*param_1, *param_3);
-        if (cVar1 != '\0')
+    if ((*param_4)(*param_1, *param_2)) {
+        if ((*param_4)(*param_2, *param_3))
+            return param_2;
+        else if ((*param_4)(*param_1, *param_3))
+            return param_3;
+        else
             return param_1;
-        cVar1 = (*param_4)(*param_2, *param_3);
-        if (cVar1 != '\0')
-            return param_3;
-    } else {
-        cVar1 = (*param_4)(*param_2, *param_3);
-        if (cVar1 == '\0') {
-            cVar1 = (*param_4)(*param_1, *param_3);
-            if (cVar1 == '\0')
-                return param_1;
-            return param_3;
-        }
-    }
+    } else if ((*param_4)(*param_1, *param_3))
+        return param_1;
+    else if ((*param_4)(*param_2, *param_3))
+        return param_3;
     return param_2;
 }
 
