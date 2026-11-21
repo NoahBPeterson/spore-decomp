@@ -83,9 +83,22 @@ static __declspec(noinline) int __fastcall SP_sGetSourceLevel(int, int level)
 }           // 0xe4ee60
 extern "C" int    __fastcall SP_sGetSourceLevelReg(void* self, int level); // 0xe4ee60
 struct cVarListSerializer {
+  char storage[0xa14];
   void Ctor(int a, void* b, uint32_t c);   // 0x692f90
   void Serialize(void* o);                 // 0x692900
 };
+extern "C" char g_15a7d48[];              // 0x15a7d48 cDataSerializerGeneric table
+struct SaveIO_e51250 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14();
+  virtual void* GetWriter();                                   // +0x18
+};
+struct SaveSrc_e51250 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual SaveIO_e51250* GetIO();                              // +0x20
+};
+static inline void WriteU32_e51250(void* s, uint32_t v) { EA_IO_WriteUint32(s, &v, 1, 0); }
 struct cLocalInputState {
   uint32_t OnKeyUp(int, int);              // 0x697a80
   uint32_t OnMouseWheel(float, float, int);// 0x697b20
@@ -383,18 +396,15 @@ float FUN_00e511e0(int a, int b) {
 }
 
 // @ 0x00e51250
-int FUN_00e51250(void* owner, int a) {
-  void* p = (void*)((int(__thiscall*)(void*))Vt(owner)[0x20 / 4])(owner);
-  uint32_t n = 6;
-  void* stream = (void*)((int(__thiscall*)(void*))Vt(p)[0x18 / 4])(p);
-  EA_IO_WriteUint32(stream, &n, 1, 0);
-  char buf[0xa00];
+bool FUN_00e51250(void* owner, int a) {
+  WriteU32_e51250(((SaveSrc_e51250*)owner)->GetIO()->GetWriter(), 6);
   for (int i = 0; i < 6; ++i) {
-    ((cVarListSerializer*)buf)->Ctor(a, (void*)0x15a7d48, 0x1a80d26);
-    ((cVarListSerializer*)buf)->Serialize(owner);
+    cVarListSerializer ser;
+    ser.Ctor(a, g_15a7d48, 0x1a80d26);
+    ser.Serialize(owner);
     a += 0x10;
   }
-  return 1;
+  return true;
 }
 
 struct ObjectStreamHolder {

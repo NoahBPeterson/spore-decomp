@@ -13,3 +13,4 @@ slices/s00e50810/s00e50810.cpp  ?FUN_00e50f30@@YADXZ  00e50f30  /O2 /MD /Gy /TP 
 slices/s00e50810/s00e50810.cpp  ?FUN_00e50940@@YAXHE@Z  00e50940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e50810/s00e50810.cpp  ?Write@Obj51300@@QAEXPAX@Z  00e51300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e50810/s00e50810.cpp  ?FUN_00e516c0@@YAHH@Z  00e516c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e50810/s00e50810.cpp  ?FUN_00e51250@@YA_NPAXH@Z  00e51250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

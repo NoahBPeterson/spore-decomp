@@ -9,7 +9,6 @@
 00e51060   94  zoom add clamp: complete; helper argument slot and (float)(int) handling differ
 00e510f0  124  interaction-state selector: complete (all calls/branches); return-value folding differs
 00e511e0   89  source-level interpolation: complete; fild/fmul sequence differs
-00e51250  103  save six var-lists: complete; cVarListSerializer buffer/args approximated
 00e51430  103  level->cube-root table selection: complete; loop/index schedule differs
 00e514c0  111  emit grid-line marker: complete; local struct offsets for FUN_00e394f0 approximated
 00e51580  128  emit source-level marker: complete; table lookup/local struct offsets approximated
