@@ -409,17 +409,50 @@ bool EmitterSndPlayer::q11270(float f)
 }
 
 // @ 0x00a112c0
+struct SysAT_s00a112c0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void Remove(void* item);        // +0x74
+};
+struct Self_s00a112c0 { virtual void f00(); virtual void Finish(); };
+struct Item_s00a112c0 { virtual void i00(); };
+struct MI_s00a112c0 : Self_s00a112c0, Item_s00a112c0 {};
 void EmitterSndPlayer::q112c0()
 {
     if (!g_16e61a8) return;
     if (!((SysGlobal*)g_16e61a8)->Check(*(void**)(m + 0xcec))) return;
     if (*(uint32_t*)(m + 0xd84) & 2) {
         *(uint32_t*)(m + 0xd84) &= ~2;
-        void* arg = m + 4;
-        void* sys = f_00a206f0_GetSystemAT();
-        ((void(__thiscall*)(void*, void*))((void**)*(void**)sys)[0x74 / 4])(sys, arg);
+        ((SysAT_s00a112c0*)f_00a206f0_GetSystemAT())->Remove(static_cast<Item_s00a112c0*>((MI_s00a112c0*)this));
     }
-    ((void(__thiscall*)(void*))Vt()[4 / 4])(this);
+    ((Self_s00a112c0*)this)->Finish();
 }
 
 // @ 0x00a11310

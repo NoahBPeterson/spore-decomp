@@ -18,3 +18,4 @@
 ../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?Tick@EmitterSndPlayer2@@QAEXHM@Z  00a11e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?UpdateParameters@EmitterSndPlayer_s00a1_14a0@@QAEXM_N@Z  00a11f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?KeyToText@ResourceDeviceDriver@Audio@EA@@SA_NPAEPADPAI@Z  00a10f70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q112c0@EmitterSndPlayer@@QAEXXZ  00a112c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
