@@ -4783,29 +4783,55 @@ Simulator_cTreeData::Simulator_cTreeData()
     this->f78 = 0xffffffff;
 }
 
+extern "C" char g_145c6d0[];   // 0x0145c6d0 Simulator::cFruitView vtable
+struct FruitOwnerSub {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42();
+    virtual void* IsVisible();                   // +0xac
+};
+struct FruitOwner {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual FruitOwner* Cast(u32 type);          // +0x0c
+    char pad04[0x30];
+    FruitOwnerSub mSub;                          // +0x34
+};
+struct FruitViewBase {
+    void ConstructSpatialObjectView();           // 0x00e92af0 cSpatialObjectView::cSpatialObjectView
+};
+struct FruitView {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08();
+    virtual void SetOwner(void* owner);          // +0x24
+};
+
 // @ 0x00b01890
 void* cFruitViewFactory::Create(void* owner)
 {
-    void* v;
-    if (owner == 0) {
-        v = 0;
-    } else {
-        v = (*(void*(__thiscall**)(void*, u32))((char*)vtbl(owner) + 0xc))(owner, 0x02c9cc8e);
+    FruitOwner* obj = owner ? ((FruitOwner*)owner)->Cast(0x02c9cc8e) : 0;
+    FruitView* view = 0;
+    if (obj->mSub.IsVisible()) {
+        u8* o = (u8*)op_new(0x38, "Simulator/cFruitView", 0, 0, 0, 0);
+        if (o != 0) {
+            ((FruitViewBase*)o)->ConstructSpatialObjectView();
+            *(void**)o = g_145c6d0;
+            *(u32*)(o + 0x34) = 0;
+            view = (FruitView*)o;
+        } else {
+            view = 0;
+        }
+        view->SetOwner(owner);
     }
-    void* sub = at(v, 0x34);
-    if ((*(void*(__thiscall**)(void*))((char*)vtbl(sub) + 0xac))(sub) == 0) {
-        return 0;
-    }
-    u8* o = (u8*)op_new(0x38, "Simulator/cFruitView", 0, 0, 0, 0);
-    if (o != 0) {
-        ((Op*)o)->Mc92af0();
-        *(void**)o = (void*)0x0145c6d0;
-        *(u32*)(o + 0x34) = 0;
-        (*(void(__thiscall**)(void*, void*))((char*)vtbl(o) + 0x24))(o, owner);
-        return o;
-    }
-    (*(void(__thiscall**)(void*, void*))((char*)vtbl((void*)0) + 0x24))((void*)0, owner);
-    return 0;
+    return view;
 }
 
 // @ 0x00b01910

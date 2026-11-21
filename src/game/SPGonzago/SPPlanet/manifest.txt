@@ -95,3 +95,4 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ??0cTreeData@@QAE@PAX@Z  00b03680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00b05730@@YAXPAHIHPAX@Z  00b05730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?GetDefaultValue_A@@YAPAXXZ  00b024a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Create@cFruitViewFactory@@QAEPAXPAX@Z  00b01890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
