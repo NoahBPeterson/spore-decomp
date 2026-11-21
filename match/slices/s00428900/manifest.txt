@@ -9,3 +9,4 @@ slices/s00428900/s00428900.cpp  ?CallUpdaterUpdateModels@@  00429000  /Od /Ob1 /
 slices/s00428900/s00428900.cpp  ?CallUpdaterDispatch@@  00429040  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s00428900/s00428900.cpp  ?CallUpdaterHandler41A0C0@@  00429080  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s00428900/s00428900.cpp  ?DoInsertValue@Tree@@  004290c0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00428900/s00428900.cpp  ?DoInsertValue@Vec20@@QAEXPAUElem20@@ABU2@@Z  00428900  /Od /Ob1 /MD /Gy /EHsc /TP

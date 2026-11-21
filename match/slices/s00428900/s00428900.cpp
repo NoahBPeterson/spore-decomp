@@ -135,7 +135,15 @@ void Vec20::DoInsertValue(Elem20* position, const Elem20& value)
         if (pValue >= position && pValue < mEnd)
             ++pValue;
         new(mEnd) Elem20(*(mEnd - 1));
-        copy_backward(position, mEnd - 1, mEnd);
+        struct BackwardCopy {
+            static __forceinline void Run(Elem20* first, Elem20* last, Elem20* resultEnd)
+            {
+                const bool isTrivial = false;
+                const bool canMove = false;
+                move_backward_impl(first, last, resultEnd, false, canMove, isTrivial);
+            }
+        };
+        BackwardCopy::Run(position, mEnd - 1, mEnd);
         *position = *pValue;
         ++mEnd;
     } else {
