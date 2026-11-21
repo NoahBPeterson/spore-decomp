@@ -4067,52 +4067,63 @@ bool Obj4f90::f(int a, int b)
 }
 
 // @ 0x00ed5020
+struct IPosse_ed5020 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual PosseEntry* Get(unsigned id);
+};
+struct ILaunch_ed5020 {
+    virtual void v0(); virtual void AddRef(); virtual void Release();
+};
+struct Roles_ed5020 { int r0, r1, r2, r3; };
+void __cdecl FUN_00ad0e52();   // asset-browser launch callback
+static inline void Assign_ed5020(ILaunch_ed5020** pp, ILaunch_ed5020* p)
+{
+    if (p != *pp) {
+        ILaunch_ed5020* old = *pp;
+        if (p != 0) p->AddRef();
+        *pp = p;
+        if (old != 0) old->Release();
+    }
+}
 char Obj5020::f(void* a1, void* a2, void* a3, void* a4, void* a5)
 {
     (void)a2; (void)a3; (void)a4; (void)a5;
-    if (m_pOwner != a1) return 0;
+    if (m_pOwner == a1) {
+        int v0 = 0, v1 = 0, v2 = 0;
+        IPosse_ed5020* q = (IPosse_ed5020*)m_pPosse;
+        PosseEntry* r = q ? q->Get(0x774c96f) : 0;
+        unsigned idx = (unsigned)r->m_index;
+        if (idx < ((S_f3bf70*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f()) {
+            S_f3bfa0* m = *(S_f3bfa0**)(g_16c7aa4_s00ed_4730 + 0x74);
+            int* v = (int*)m->f(idx);
+            v0 = v[0]; v1 = v[1]; v2 = v[2];
+        }
 
-    int v0 = 0, v1 = 0, v2 = 0;
-    void* q = m_pPosse;
-    void* r = q ? (void*)((FV_ip)(*(void***)q)[0xc / 4])(q, 0x774c96f) : 0;
-    unsigned idx = (unsigned)((PosseEntry*)r)->m_index;
-    unsigned n = ((S_f3bf70*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f();
-    if (idx < n) {
-        int* v = (int*)((S_f3bfa0*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f(idx);
-        v0 = v[0]; v1 = v[1]; v2 = v[2];
+        ILaunch_ed5020* launch = 0;
+        FUN_006447c0(0, (void**)&launch);
+        *(Roles_ed5020*)&((EditorLaunchData*)launch)->m_pRole0 = *(Roles_ed5020*)&g_15da7c4;
+        ((EditorLaunchData*)launch)->m_flag34 = 0;
+
+        AssetBrowserLaunch b;
+        ((S_644b10*)&b)->f();
+        b.m_pVtbl = (void*)0xf25aef31;
+        b.m_gameMode = FUN_00b5b800();
+        b.m_pOwner38 = (void*)&m_pLaunchArg;
+        b.m_v18 = v0;
+        b.m_pFn30 = (void*)&FUN_00ad0e52;
+        b.m_v1c = v1;
+        b.m_v20 = v2;
+        b.m_flag24 = 0;
+        b.m_flag11 = 1;
+        b.m_pEntry = r;
+        Assign_ed5020((ILaunch_ed5020**)&b.m_pData44, launch);
+
+        FUN_0064a990(&b);
+        ((S_644b60*)&b)->f();
+        if (launch != 0) launch->Release();
+        return 1;
     }
-
-    void* launch = 0;
-    FUN_006447c0(0, &launch);
-    ((EditorLaunchData*)launch)->m_pRole0 = (void*)g_15da7c4;
-    ((EditorLaunchData*)launch)->m_pRole1 = (void*)g_15da7c8;
-    ((EditorLaunchData*)launch)->m_pRole2 = (void*)g_15da7cc;
-    ((EditorLaunchData*)launch)->m_pRole3 = (void*)g_15da7d0;
-    ((EditorLaunchData*)launch)->m_flag34 = 0;
-
-    AssetBrowserLaunch b;
-    ((S_644b10*)&b)->f();
-    b.m_pVtbl = (void*)0xf25aef31;
-    b.m_gameMode = FUN_00b5b800();
-    b.m_flag11 = 1;
-    b.m_pEntry = r;
-    b.m_v18 = v0;
-    b.m_v1c = v1;
-    b.m_v20 = v2;
-    b.m_flag24 = 0;
-    b.m_pFn30 = (void*)0xad0e52;
-    b.m_pOwner38 = (void*)&m_pLaunchArg;
-    if (b.m_pData44 != launch) {
-        if (launch != 0) ((FV_v)(*(void***)launch)[4 / 4])(launch);
-        void* old = b.m_pData44;
-        b.m_pData44 = launch;
-        if (old != 0) ((FV_v)(*(void***)old)[8 / 4])(old);
-    }
-
-    FUN_0064a990(&b);
-    ((S_644b60*)&b)->f();
-    if (launch != 0) ((FV_v)(*(void***)launch)[8 / 4])(launch);
-    return 1;
+    return 0;
 }
 
 // @ 0x00ed5190
