@@ -604,19 +604,21 @@ void __cdecl FUN_00ba6120(int obj)
 }
 
 // ---------------------------------------------------------------- 0x00ba61b0
+struct Key_ba61b0 {
+    int instance; int type; int group;
+    Key_ba61b0(int i, int t, int g) : instance(i), type(t), group(g) {}
+};
+struct IRef_ba61b0 { virtual int AddRef(); };
 // @ 0x00ba61b0
 void __cdecl FUN_00ba61b0(int planetID, int* dst)
 {
     int o = (int)operator_new(0x1b0, "Simulator/cPlanetRecord", 0, 0, 0, 0);
-    o = o ? ((int (__thiscall*)(int))FUN_00b8e180)(o) : 0;
-    *dst = o;
-    ((void (__thiscall*)(int, int))FUN_00b8da80)(o, planetID);
-    *(int*)(o + 8) = planetID;
-    *(int*)(o + 0xc) = 0x05220cb8;
-    *(int*)(o + 0x10) = 1;
-    ((void (__thiscall*)(int))((void**)*(void**)o)[0])(o);
-    SetCachingType(1, o);
-    FUN_006ad010(o);
+    *dst = o ? ((int (__thiscall*)(int))FUN_00b8e180)(o) : 0;
+    ((void (__thiscall*)(int, int))FUN_00b8da80)(*dst, planetID);
+    *(Key_ba61b0*)(*dst + 8) = Key_ba61b0(planetID, 0x05220cb8, 1);
+    ((IRef_ba61b0*)*dst)->AddRef();
+    SetCachingType(1, *dst);
+    FUN_006ad010(*dst);
 }
 
 // ---------------------------------------------------------------- 0x00ba6230

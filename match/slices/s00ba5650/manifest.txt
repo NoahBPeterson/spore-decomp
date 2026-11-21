@@ -17,3 +17,4 @@ slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba57a0@@YAPAXPAUTelemetrySource@@H@Z  00b
 slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5d30@@YAXPAUTelemetrySource@@@Z  00ba5d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5d90@@YAXPAH0@Z  00ba5d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5f80@@YAXH@Z  00ba5f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba61b0@@YAXHPAH@Z  00ba61b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
