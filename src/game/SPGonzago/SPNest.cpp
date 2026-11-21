@@ -1427,20 +1427,23 @@ void SP::cHerd_s00c6_a550::FindWateringHole()
 }
 }  // namespace SP
 
+struct NestRef_c6bd60 { virtual void v0(); virtual void Release(); };
+struct NestNode_c6bd60 { NestNode_c6bd60* mpNext; NestNode_c6bd60* mpPrev; NestRef_c6bd60* mpRef; };
+struct NestList_c6bd60 { NestNode_c6bd60* mpNext; NestNode_c6bd60* mpPrev; char pad08[0x10]; NestNode_c6bd60* mpFree; };
+
 // @ 0x00c6bd60
-void** __fastcall FUN_00c6bd60(void* self)
+void __fastcall FUN_00c6bd60(void* self)
 {
-    char* node = *(char**)self;
-    while (node != (char*)self) {
-        char* cur = node;
-        void* ref = *(void**)(cur + 8);
-        node = *(char**)node;
-        if (ref)
-            (*(void(__thiscall**)(void*))(*(char**)ref + 4))(ref);
-        *(char**)cur = *(char**)((char*)self + 0x18);
-        *(char**)((char*)self + 0x18) = cur;
+    NestList_c6bd60* list = (NestList_c6bd60*)self;
+    NestNode_c6bd60* node = list->mpNext;
+    while (node != (NestNode_c6bd60*)list) {
+        NestNode_c6bd60* cur = node;
+        node = node->mpNext;
+        if (cur->mpRef)
+            cur->mpRef->Release();
+        cur->mpNext = list->mpFree;
+        list->mpFree = cur;
     }
-    return (void**)self;
 }
 
 // @ 0x00c6bdc0
