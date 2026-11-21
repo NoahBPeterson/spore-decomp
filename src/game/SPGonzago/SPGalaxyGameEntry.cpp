@@ -13728,23 +13728,50 @@ char SP::GalaxyUI::FUN_00dee450(int msg, void* ctx)
     return 1;
 }
 
+struct Res_s00de_e770 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct Img_s00de_e770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); 
+    virtual void SetImage(int index, Res_s00de_e770* image);
+};
+struct Drawable_s00de_e770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); 
+    virtual Img_s00de_e770* Cast(uint32_t iid);
+};
+struct Win_s00de_e770 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); 
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c(); 
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); 
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c(); 
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c(); 
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c(); 
+    
+    virtual void Invalidate();
+    virtual void w94(); virtual void w98(); virtual void w9c(); virtual void wa0(); virtual void wa4(); 
+    virtual Drawable_s00de_e770* GetDrawable();
+};
+
 // @ 0x00dee770
 void SP::GalaxyUI::FUN_00dee770(uint32_t id, void* refObj)
 {
-    void* w = mLayout.FindWindowByID(id, 1);
+    Win_s00de_e770* w = (Win_s00de_e770*)mLayout.FindWindowByID(id, 1);
     if (w == 0) return;
-    void** wvt = *(void***)w;
-    void*  d   = ((VFP)wvt[0xa8 / 4])(w);
+    Drawable_s00de_e770* d = w->GetDrawable();
     if (d == 0) return;
-    void** dvt = *(void***)d;
-    void*  img = ((VFP1)dvt[0x0c / 4])(d, 0x103c1908);
+    Img_s00de_e770* img = d->Cast(0x103c1908);
     if (img == 0) return;
-    void*  res = 0;                     // the original keeps it in id's argument slot
-    CreateImageFromResource2(refObj, &res, 0, -1, -1);
-    ((VFIP)(*(void***)img)[0x14 / 4])(img, 0, res);
-    ((VF0)wvt[0x90 / 4])(w);
+    Res_s00de_e770* res = 0;            // the original keeps it in id's argument slot
+    CreateImageFromResource2(refObj, (void**)&res, 0, -1, -1);
+    img->SetImage(0, res);
+    w->Invalidate();
     if (res != 0)
-        ((VF0)(*(void***)res)[1])(res);    // Release
+        res->Release();
 }
 
 struct ImageRef_s00dee800 {
