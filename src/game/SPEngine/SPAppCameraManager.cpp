@@ -285,16 +285,23 @@ int cCameraManager::SetActiveControllerByID(int id)
 }
 
 // @ 0x007c6700
+struct HashNode_s007c6700 { unsigned int key; int value; HashNode_s007c6700* next; };
+struct HashIt_s007c6700 {
+    HashNode_s007c6700* mpNode;
+    HashNode_s007c6700** mpBucket;
+};
+struct HashTable_s007c6700 {
+    int pad0;
+    HashNode_s007c6700** mpBucketArray;     // +0x04
+    int mnBucketCount;                      // +0x08
+    HashIt_s007c6700 find(const unsigned int& key) const;   // 0x00645ed0
+};
 void* cCameraManager::Controller(int id)
 {
-    char* map = (char*)this + 0x60;
-    HashIter it;
-    HashFind_645ed0(map, 0, &it, (const unsigned int*)&id);
-    void* end = *(void**)(*(char**)(map + 4) + *(int*)(map + 8) * 4);
-    if (it.node != end) {
-        int idx = *(int*)((char*)it.node + 4);
-        return mControllersBegin[idx];
-    }
+    const HashTable_s007c6700* map = (const HashTable_s007c6700*)((char*)this + 0x60);
+    HashIt_s007c6700 it = map->find(*reinterpret_cast<const unsigned int*>(&id));
+    if (it.mpNode != map->mpBucketArray[map->mnBucketCount])
+        return mControllersBegin[it.mpNode->value];
     return 0;
 }
 
