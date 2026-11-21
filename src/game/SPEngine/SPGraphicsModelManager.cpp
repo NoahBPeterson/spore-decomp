@@ -4889,24 +4889,41 @@ void Stub007470c0::F()
     self = this;
 }
 
+struct RefC_s0074_7190 {
+    virtual void AddRef();                          // +0x00
+    virtual void Release();                         // +0x04
+};
+struct RefPtr_s0074_7190 {
+    RefC_s0074_7190* mp;
+    RefPtr_s0074_7190& operator=(RefC_s0074_7190* p)
+    {
+        RefC_s0074_7190* old = mp;
+        if (p != old) {
+            if (p) p->AddRef();
+            mp = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+struct Entry_s0074_7190 {
+    int mKey;
+    RefPtr_s0074_7190 mPtr;
+    int m8, mC, m10, m14, m18;
+};
 // @ 0x00747190
 void* Stub00747190::F(int* src)
 {
-    int* dst = (int*)this;
-    *dst = *src;
-    int* old = (int*)dst[1];
-    int* nw = (int*)src[1];
-    if (nw != old) {
-        if (nw) (*(void(__thiscall**)(int*))(*(void**)nw))(nw);
-        dst[1] = (int)nw;
-        if (old) (*(void(__thiscall**)(int*, int))(((char*)(*(void**)old) + 4)))(old, 1);
-    }
-    dst[2] = src[2];
-    dst[3] = src[3];
-    dst[4] = src[4];
-    dst[5] = src[5];
-    dst[6] = src[6];
-    return dst;
+    Entry_s0074_7190* d = (Entry_s0074_7190*)this;
+    const Entry_s0074_7190* s = (const Entry_s0074_7190*)src;
+    d->mKey = s->mKey;
+    d->mPtr = s->mPtr.mp;
+    d->m8 = s->m8;
+    d->mC = s->mC;
+    d->m10 = s->m10;
+    d->m14 = s->m14;
+    d->m18 = s->m18;
+    return d;
 }
 
 // @ 0x007471f0
