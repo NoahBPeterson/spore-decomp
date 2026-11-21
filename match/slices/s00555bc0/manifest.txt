@@ -9,3 +9,4 @@ slices/s00555bc0/s00555bc0.cpp  ?FindModelPart@W1G2_55@SP@@YAIPAVKey@ResourceMan
 slices/s00555bc0/s00555bc0.cpp  ?KeyHasAxis@W1G2_55@SP@@YA_NPAVKey@ResourceMan@EA@@PAX@Z  00556210  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00555bc0/s00555bc0.cpp  ?KeyCombine@W1G2_55@SP@@YAIHHHH@Z  00556440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00555bc0/s00555bc0.cpp  ?KeyResetAxis@W1G2_55@SP@@YAXPAVKey@ResourceMan@EA@@I@Z  005562a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00555bc0/s00555bc0.cpp  ?SummarizeVehiclePart@W1G2_55@SP@@YAXPAVKey@ResourceMan@EA@@I@Z  00555f70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
