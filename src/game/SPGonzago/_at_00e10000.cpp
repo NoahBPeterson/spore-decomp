@@ -746,12 +746,16 @@ void cUIMissionCardPanel::DestroyMembers()
 }
 
 // @ 0x00e18a30
+struct MissionMsgHub_e18a30 {
+    void FUN_00e30a60(void *handler);   // 0x00e30a60
+    void FUN_00e30ae0(u32 msg);         // 0x00e30ae0
+};
 void cUIMissionCardPanel::ShutdownA()
 {
     void *mgr = FUN_00b3d3f0();
-    FUN_00e30a60(*(void **)((u8 *)mgr + 0x5c), m_field10);
+    (*(MissionMsgHub_e18a30 **)((u8 *)mgr + 0x5c))->FUN_00e30a60(m_field14);
     void *mgr2 = FUN_00b3d3f0();
-    FUN_00e30ae0(*(void **)((u8 *)mgr2 + 0x5c), 0xf45f7d78);
+    (*(MissionMsgHub_e18a30 **)((u8 *)mgr2 + 0x5c))->FUN_00e30ae0(0xf45f7d78);
     void *node = m_treeBegin34;
     void *base = &m_treeBegin34;
     while (node != base) {

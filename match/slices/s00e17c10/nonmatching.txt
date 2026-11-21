@@ -14,6 +14,5 @@
 00e186d0  cUIMissionCardPanel::OnNotify -- rebuild layout, SetParentWin, FindWindowByID + vtbl[0x104]
 00e188b0  cUIMissionCardPanel::InitHints -- allocate hint object (0x18), Init layout, SetVisibility, bind window
 00e18980  cUIMissionCardPanel::DestroyMembers -- tear down vtables/tree/handler/layout
-00e18a30  cUIMissionCardPanel::ShutdownA -- unregister handler, clear tree, hide layout
 00e18bb0  cUIMissionCardPanel::Construct -- constructor: set vtables, init fields, register message handler
 00e18cb0  cUIMissionCardPanel::SetSlotAndMission -- find mission in rbtree, bind window slot, swap current mission

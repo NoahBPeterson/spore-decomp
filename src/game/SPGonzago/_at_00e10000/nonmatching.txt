@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00e188b0 142 -- allocate hint object (0x18), Init layout, SetVisibility, bind window flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e18980 64 -- tear down vtables/tree/handler/layout flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00e18a30 63 -- unregister handler, clear tree, hide layout flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e18bb0 88 -- constructor: set vtables, init fields, register message handler flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e18cb0 128 -- find mission in rbtree, bind window slot, swap current mission flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e192a0 138 HandleMessage for feedback panel; large dispatch body, slots not fitted. difftest: WEAK (400 valid, 28.8% cov) flags: /O2 /MD /Gy /EHsc /TP
