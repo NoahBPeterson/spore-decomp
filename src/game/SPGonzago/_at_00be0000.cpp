@@ -1606,22 +1606,34 @@ void S::FUN_00becc80()
   }
 }
 
+struct V3_beccf0 { int x, y, z; };
+struct Xform_beccf0 {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13();
+    virtual void SetPosition(void* pos);   // +0x38
+    virtual void SetOrientation(void* q);  // +0x3c
+};
+struct Src_beccf0 {
+    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void s04(); virtual void s05(); virtual void s06(); virtual void s07();
+    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
+    virtual void* GetOrientation();        // +0x30
+};
+
 // @ 0x00beccf0
 void S::FUN_00beccf0()
 {
   char* self = (char*)this;
   if (*(int*)(self + 0x10c) != 0) {
     float tmp[3];
-    int* r = (int*)FUN_00becb10(tmp, (float*)(self + 0x23c));
-    *(int*)(self + 0x248) = r[0];
-    *(int*)(self + 0x24c) = r[1];
-    *(int*)(self + 0x250) = r[2];
-    char* p = *(char**)(self + 0x10c);
-    ((void (__thiscall*)(void*, void*))VFn(p + 0x70, 0x38))(p + 0x70, self + 0x248);
+    *(V3_beccf0*)(self + 0x248) = *(V3_beccf0*)FUN_00becb10(tmp, (float*)(self + 0x23c));
+    ((Xform_beccf0*)(*(char**)(self + 0x10c) + 0x70))->SetPosition(self + 0x248);
     char* p2 = *(char**)(self + 0x10c);
-    int inner = *(int*)(p2 + 0x70);
-    void* q = ((void* (__thiscall*)(void*))VFn(self + 0x34, 0x30))(self + 0x34);
-    ((void (__thiscall*)(void*, void*))((void**)(inner + 0x3c))[0])(p2 + 0x70, q);
+    void** slot = (void**)(*(int*)(p2 + 0x70) + 0x3c);
+    void* q = ((Src_beccf0*)(self + 0x34))->GetOrientation();
+    ((void (__thiscall*)(void*, void*))*slot)(p2 + 0x70, q);
   }
 }
 
