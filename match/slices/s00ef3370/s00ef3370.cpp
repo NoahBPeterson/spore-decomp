@@ -621,40 +621,48 @@ void __fastcall FUN_00ef3e40(char *self)
     }
 }
 
+struct KeyOwner_ef4050 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual const void *GetKey();                                 /* +0x40 */
+};
+struct AssetDirectory_ef4050 {
+    bool GetServerId(const void *key, unsigned __int64 *out, bool b) const;  /* 0x0054e530 */
+};
 // @ 0x00ef4050
 uchar __fastcall FUN_00ef4050(void *self, void *dummy, int magic, char *param_3)
 {
-    int *h;
-    void *dir;
-    void *key;
-    int local_8;
-    int local_4;
-    uchar ok;
-
-    if ((magic != 0x9818ab6c) || (param_3 == 0)) {
+    if (magic != 0x9818ab6c) {
         return 0;
     }
-    h = *(int **)((char *)self + 0x18);
+    if (param_3 == 0) {
+        return 0;
+    }
+    KeyOwner_ef4050 *h = *(KeyOwner_ef4050 **)((char *)self + 0x18);
     if (h == 0) {
         return 0;
     }
-    dir = *(void **)((char *)FUN_0067cb30() + 0x58);
-    local_8 = 0;
-    local_4 = 0;
-    key = ((void *(__fastcall *)(void *))(*(void ***)h)[0x10])(h);
-    ok = cAssetDirectory_GetServerId(dir, 0, key, &local_8, 0);
-    if (ok == 0) {
-        return 0;
+    AssetDirectory_ef4050 *dir = *(AssetDirectory_ef4050 **)((char *)FUN_0067cb30() + 0x58);
+    unsigned __int64 id;
+    if (dir->GetServerId(h->GetKey(), &id, false) &&
+        ((int *)&id)[0] == *(int *)(param_3 + 8) &&
+        ((int *)&id)[1] == *(int *)(param_3 + 0xc) &&
+        *param_3 != 0) {
+        FUN_00ef3e40((char *)self - 0x108);
     }
-    if (local_8 != *(int *)(param_3 + 8)) {
-        return 0;
-    }
-    if (local_4 != *(int *)(param_3 + 0xc)) {
-        return 0;
-    }
-    if (*param_3 == 0) {
-        return 0;
-    }
-    FUN_00ef3e40((char *)self - 0x108);
     return 0;
 }
