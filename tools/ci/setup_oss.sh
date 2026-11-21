@@ -7,7 +7,7 @@
 #   work/third_party/build/openssl-0.9.8g-d2110920                            perl Configure VC-WIN32 + make links, as
 #                                                                             tools/third_party/build_faithful.py does
 #   work/ext/EAWebKitSupportPackages                                          from EA's EAWebKit 1.21.00 GPL release,
-#                                                                             plus tools/ci/oss/EATextOpenType.patch
+#                                                                             plus tools/ci/oss/EATextOpenType.patch, EATextFontServer.patch
 #   work/match/scratch_*_inc                                                  include dirs manifest rows name with
 #                                                                             /Iscratch_*_inc (run_all.py resolve_flags)
 # Downloads are cached in $OSS_CACHE (default work/toolchain/downloads/oss).  Steps whose output exists are skipped.
@@ -65,6 +65,11 @@ if [ ! -d "$root/work/ext/EAWebKitSupportPackages" ]; then
   f="$x/EAWebKitSupportPackages/EATextEAWebKit/local/source/internal/EATextOpenType.cpp"
   tr -d '\r' < "$f" > "$f.lf" && mv "$f.lf" "$f"
   patch -s -p1 -d "$x" < "$oss/EATextOpenType.patch"
+  for g in source/EATextFontServer.cpp include/EAText/EATextFontServer.h include/EAText/EATextStyle.h; do
+    f="$x/EAWebKitSupportPackages/EATextEAWebKit/local/$g"
+    tr -d '\r' < "$f" > "$f.lf" && mv "$f.lf" "$f"
+  done
+  patch -s -p1 -d "$x" < "$oss/EATextFontServer.patch"
   mv "$x/EAWebKitSupportPackages" "$root/work/ext/EAWebKitSupportPackages"
   rm -rf "$x"
 fi
