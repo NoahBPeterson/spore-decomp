@@ -546,8 +546,8 @@ void __cdecl FUN_00ba5f80(int obj)
 {
     void* g = FUN_00f48a80();
     float tmp[5];
-    int v = ((VecSource*)obj)->GetVec();
-    ((void (__thiscall*)(void*, int, float*))((void**)g)[2])(g, v, tmp);
+    void** slot = *(void***)g + 2;   // vtable slot 2, fetched before the argument call
+    ((void (__thiscall*)(void*, int, float*))*slot)(g, ((VecSource*)obj)->GetVec(), tmp);
     *(float*)(obj + 0xb0) = tmp[3];
     *(float*)(obj + 0xb4) = tmp[2];
 }
