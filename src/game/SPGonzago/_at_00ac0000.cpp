@@ -1084,24 +1084,32 @@ int* ThiscallStub::FUN_00ac06c0(float* pos, float a, float b)
     return self;
 }
 
+struct IPos_ac0730 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual float* GetPosition();   // +0x2c
+};
+extern "C" float g_13eb960;   // 0x013eb960  +0.01
+extern "C" float g_140ced4;   // 0x0140ced4  -0.01
 // @ 0x00ac0730
 int ThiscallStub::FUN_00ac0730(void* a, void* b)
 {
     float* self = (float*)this;
-    float* pa = ((GetVecFn)((*(void***)a)[0x2c / 4]))(a);
+    float* pa = ((IPos_ac0730*)a)->GetPosition();
     float dxa = self[0] - pa[0];
     float dya = self[1] - pa[1];
     float dza = self[2] - pa[2];
-    float da  = dya * dya + dxa * dxa + dza * dza;
+    float da  = dza * dza + (dxa * dxa + dya * dya);
 
-    float* pb = ((GetVecFn)((*(void***)b)[0x2c / 4]))(b);
+    float* pb = ((IPos_ac0730*)b)->GetPosition();
     float dxb = self[0] - pb[0];
     float dyb = self[1] - pb[1];
     float dzb = self[2] - pb[2];
     float db  = dzb * dzb + dyb * dyb + dxb * dxb;
 
     float diff = db - da;
-    if (diff < G_013eb960 && G_0140ced4 < diff)
+    if (diff < g_13eb960 && g_140ced4 < diff)
         return (int)(a < b);
     if (da < db)
         return 1;
@@ -1117,7 +1125,7 @@ int ThiscallStub::FUN_00ac0810(void* a, void* b)
     float dxa = self[0] - pa[0];
     float dya = self[1] - pa[1];
     float dza = self[2] - pa[2];
-    float da  = dya * dya + dxa * dxa + dza * dza;
+    float da  = dza * dza + (dxa * dxa + dya * dya);
 
     float* pb = cCivData_GetCities(b);
     float dxb = self[0] - pb[0];
