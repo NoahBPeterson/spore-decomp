@@ -542,23 +542,27 @@ void __stdcall DestroySlots(cKeySlot* pBegin, cKeySlot* pEnd)
 // @ 0x00b0d010
 int CountSlots(cKeySlot* pBegin, cKeySlot* pEnd)
 {
+    cKeySlot* pCurrent = pBegin;
+    cKeySlot* const pLimit = pEnd;
     int nRuns = 0;
-    do {
-        if (pEnd == pBegin)
-            return nRuns;
-        for (;;) {
-            cKeySlot* pPrev = pBegin;
-            ++pBegin;
-            bool bLast = ((pPrev->mFlags >> 30) & 1) != 0;
-            if (!bLast) {
-                bool bContinues = ((pBegin->mFlags >> 31) & 1) != 0;
-                if (bContinues)
-                    continue;
+    if (pLimit != pCurrent) {
+        do {
+            for (;;) {
+                cKeySlot* pPrev = pCurrent++;
+                // Update the argument slot before reading the previous slot flags.
+                static_cast<cKeySlot* volatile&>(pBegin) = pCurrent;
+                const uint nFlags = static_cast<const volatile uint&>(pPrev->mFlags);
+                bool bLast = ((nFlags >> 30) & 1) != 0;
+                if (!bLast) {
+                    bool bContinues = ((pCurrent->mFlags >> 31) & 1) != 0;
+                    if (bContinues)
+                        continue;
+                }
+                break;
             }
-            break;
-        }
-        ++nRuns;
-    } while (pEnd != pBegin);
+            ++nRuns;
+        } while (pLimit != pCurrent);
+    }
     return nRuns;
 }
 
