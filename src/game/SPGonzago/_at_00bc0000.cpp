@@ -6451,13 +6451,21 @@ void cAnimalTrap::Destroy()
     ((CSpatialOps*)&mSpatial)->Destroy();
 }
 
+struct TrapChannel_bcbad0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void* GetStream();  // slot 6 (+0x18)
+};
+struct TrapOStream_bcbad0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7();
+    virtual TrapChannel_bcbad0* GetChannel();  // slot 8 (+0x20)
+};
+static __forceinline void TrapWriteUint32_bcbad0(void* s, uint32_t value) { WriteUint32_93aa70(s, &value, 1, 0); }
+
 // @ 0x00bcbad0
 bool cAnimalTrap::Write(void* stream)
 {
-    void* a = ((void* (__thiscall*)(void*))(*(void***)stream)[8])(stream);
-    uint32_t version = 0x61494bd;
-    void* b = ((void* (__thiscall*)(void*))(*(void***)a)[6])(a);
-    WriteUint32_93aa70(b, &version, 1, 0);
+    TrapWriteUint32_bcbad0(((TrapOStream_bcbad0*)stream)->GetChannel()->GetStream(), 0x61494bd);
     bool ok = ((CGameDataOps*)this)->Write(stream)
            && ((CSpatialOps*)&mSpatial)->Write(stream);
     cVarListSerializer ser;
