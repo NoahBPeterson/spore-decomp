@@ -843,25 +843,65 @@ namespace G7
 // @ 0x00ba22e0
     void Owner::AddKey(Obj* key)
     {
-        for (Node* n = mActive.pNext; n != (Node*)&mActive; n = n->pNext) {
-            if (n->pObj == key) {
-                if (n != (Node*)&mActive)
-                    return;
-                break;
+        // eastl::find over the list iterators, inlined for each duplicate check.
+        struct Find {
+            static __forceinline NodeIt Run(NodeIt first, NodeIt last, Obj* const& value)
+            {
+                for (; first.p != last.p; first.p = first.p->pNext) {
+                    if (first.p->pObj == value)
+                        return first;
+                }
+                return last;
             }
-        }
-        for (Node* n = mPending.pNext; n != (Node*)&mPending; n = n->pNext) {
-            if (n->pObj == key) {
-                if (n != (Node*)&mPending)
-                    return;
-                break;
+        };
+
+        NodeIt activeEnd((Node*)&mActive);
+        if (Find::Run(NodeIt(mActive.pNext), activeEnd, key).p != activeEnd.p)
+            return;
+        NodeIt pendingEnd((Node*)&mPending);
+        if (Find::Run(NodeIt(mPending.pNext), pendingEnd, key).p != pendingEnd.p)
+            return;
+
+        if (mCommitted) {
+            List* list = &mPending;
+            if (key)
+                ObjAddRef(key);
+            Node* n = (Node*)operator new(sizeof(Node), "Simulator", 0, 0,
+                    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                    0xd1);
+            if (&n->pObj) {
+                n->pObj = key;
+                if (key)
+                    ObjAddRef(key);
             }
+            n->pNext = (Node*)list;
+            n->pPrev = list->pPrev;
+            list->pPrev->pNext = n;
+            list->pPrev = n;
+            if (key)
+                ObjRelease(key);
+            return;
         }
-        if (mCommitted)
-            InsertNode(&mPending, key);
-        else
-            InsertNode(&mActive, key);
-    }
+        {
+            List* list = &mActive;
+            if (key)
+                ObjAddRef(key);
+            Node* n = (Node*)operator new(sizeof(Node), "Simulator", 0, 0,
+                    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                    0xd1);
+            if (&n->pObj) {
+                n->pObj = key;
+                if (key)
+                    ObjAddRef(key);
+            }
+            n->pNext = (Node*)list;
+            n->pPrev = list->pPrev;
+            list->pPrev->pNext = n;
+            list->pPrev = n;
+            if (key)
+                ObjRelease(key);
+        }
+}
 
 // @ 0x00ba2400
     void Owner::CommitPending(void* a, void* b, char flag)

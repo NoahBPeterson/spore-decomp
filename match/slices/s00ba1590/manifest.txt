@@ -9,3 +9,4 @@ slices/s00ba1590/s00ba1590.cpp  ?Ctor@Owner@G7@@QAEPAU12@XZ  00ba2250  /O2 /MD /
 slices/s00ba1590/s00ba1590.cpp  ?EraseRange@G7@@YG?AUIterator@1@U21@0@Z  00ba2110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ba1590/s00ba1590.cpp  ?erase@List@G7@@QAE?AUNodeIt@2@U32@@Z  00ba1e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ba1590/s00ba1590.cpp  ?RemoveKey@Owner@G7@@QAEXPAUObj@2@@Z  00ba2070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba1590/s00ba1590.cpp  ?AddKey@Owner@G7@@QAEXPAUObj@2@@Z  00ba22e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
