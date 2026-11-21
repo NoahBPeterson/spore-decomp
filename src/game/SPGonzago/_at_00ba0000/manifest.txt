@@ -39,3 +39,5 @@
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba46f0@@YAXPAXH@Z  00ba46f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba72c0@@YAPAXPAXPAH@Z  00ba72c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba73b0@@YAXPAXPAH@Z  00ba73b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba7490@@YAXPAXPAH@Z  00ba7490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba7510@@YAXPAXPAH@Z  00ba7510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

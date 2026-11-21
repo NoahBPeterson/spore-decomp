@@ -995,8 +995,8 @@ void*    __cdecl FUN_00b5b800();                       // 0xb5b800 GetCurrentGam
 void*    __cdecl FUN_01021300();                       // 0x1021300 GetPlayerEmpire
 void*    __cdecl FUN_00921580(void*);                  // 0x921580 RBTreeIncrement
 bool     __cdecl FUN_0093aa70(void*, const void*, int, int); // 0x93aa70 WriteUint32
-unsigned char __cdecl FUN_00692e00(void*);             // 0x692e00 WriteBlob32
-unsigned char __cdecl FUN_00692e50(void*);             // 0x692e50 WriteBlob16
+unsigned char __cdecl FUN_00692e00(void* w, void* range); // 0x692e00 WriteBlob32
+unsigned char __cdecl FUN_00692e50(void* w, void* range); // 0x692e50 WriteBlob16
 struct GameObj {
   int  AddRef();                    // 0x801920
   int  Kind();                      // 0xbb9ae0
@@ -3502,35 +3502,27 @@ char FUN_00ba7450(int arg, char* node)
 // @ 0x00ba7490
 void FUN_00ba7490(void* writer, int* vec)
 {
-  int count = (vec[1] - vec[0]) >> 4;
-  IStream* s = (IStream*)((void*(__thiscall*)(void*))(*(int**)writer)[8])(writer);
-  IWriter* w = (IWriter*)((void*(__thiscall*)(void*))(*(int**)s)[6])(s);
-  FUN_0093aa70(w, &count, 1, 0);
+  ISerializer_72c0* ser = (ISerializer_72c0*)writer;
+  int n = (vec[1] - vec[0]) >> 4;
+  WriteCount_72c0(ser->GetStream()->GetWriter(), n);
   char* p = (char*)vec[0];
   char* e = (char*)vec[1];
-  for (; p != e; p += 0x10) {
-    IStream* s2 = (IStream*)((void*(__thiscall*)(void*))(*(int**)writer)[8])(writer);
-    IWriter* w2 = (IWriter*)((void*(__thiscall*)(void*))(*(int**)s2)[6])(s2);
-    FUN_00692e00(((void*(__thiscall*)(void*, char*))(*(int**)w2)[6])(w2, p));
-  }
-  ((void(__thiscall*)(void*))(*(int**)writer)[7])(writer);
+  for (; p != e; p += 0x10)
+    FUN_00692e00(ser->GetStream()->GetWriter(), p);
+  ser->EndBlock();
 }
 
 // @ 0x00ba7510
 void FUN_00ba7510(void* writer, int* vec)
 {
-  int count = (vec[1] - vec[0]) >> 4;
-  IStream* s = (IStream*)((void*(__thiscall*)(void*))(*(int**)writer)[8])(writer);
-  IWriter* w = (IWriter*)((void*(__thiscall*)(void*))(*(int**)s)[6])(s);
-  FUN_0093aa70(w, &count, 1, 0);
+  ISerializer_72c0* ser = (ISerializer_72c0*)writer;
+  int n = (vec[1] - vec[0]) >> 4;
+  WriteCount_72c0(ser->GetStream()->GetWriter(), n);
   char* p = (char*)vec[0];
   char* e = (char*)vec[1];
-  for (; p != e; p += 0x10) {
-    IStream* s2 = (IStream*)((void*(__thiscall*)(void*))(*(int**)writer)[8])(writer);
-    IWriter* w2 = (IWriter*)((void*(__thiscall*)(void*))(*(int**)s2)[6])(s2);
-    FUN_00692e50(((void*(__thiscall*)(void*, char*))(*(int**)w2)[6])(w2, p));
-  }
-  ((void(__thiscall*)(void*))(*(int**)writer)[7])(writer);
+  for (; p != e; p += 0x10)
+    FUN_00692e50(ser->GetStream()->GetWriter(), p);
+  ser->EndBlock();
 }
 
 // @ 0x00ba7590
