@@ -1780,6 +1780,8 @@ struct Vec {
     T*  mpBegin;      // 0x00
     T*  mpEnd;        // 0x04
     T*  mpCap;        // 0x08
+    T& back() { T* p = mpEnd - 1; return *p; }
+    void pop_back() { --mpEnd; }
 };
 typedef Vec<u32> VecU32_s00c4_5860;
 struct Timer20 {                 // cSPMission + 0x38 / +0x58
@@ -2794,14 +2796,10 @@ void cSPMission_s00c4_5860::ShutdownSystems()
         GetStarMap()->RemoveVisual(mStarMapDestEffect, 0);
         mStarMapDestEffect = 0xffffffff;
     }
-    i32 n = (i32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
-    if (n > 0) {
-        do {
-            u32 handle = mStarMapEffects.mpEnd[-1];
-            GetStarMap()->RemoveVisual(handle, 0);
-            mStarMapEffects.mpEnd -= 1;
-            --n;
-        } while (n != 0);
+    u32 n = (u32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
+    for (u32 i = 0; i < n; ++i) {
+        GetStarMap()->RemoveVisual(mStarMapEffects.back(), 0);
+        mStarMapEffects.pop_back();
     }
     if (mpTargetPlanet != 0) {
         cPlanetClueObj* clue = mpTargetPlanet->mpPlanetClue;
@@ -2812,14 +2810,10 @@ void cSPMission_s00c4_5860::ShutdownSystems()
         mProgressEventID = 0xffffffff;
     }
     (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x148))(this);
-    i32 m = (i32)(mEventLogsToRemove.mpEnd - mEventLogsToRemove.mpBegin);
-    if (m > 0) {
-        do {
-            u32 id = mEventLogsToRemove.mpEnd[-1];
-            mEventLogsToRemove.mpEnd -= 1;
-            EventLog()->RemoveEvent(id, 0);
-            --m;
-        } while (m != 0);
+    u32 m = (u32)(mEventLogsToRemove.mpEnd - mEventLogsToRemove.mpBegin);
+    for (u32 i = 0; i < m; ++i) {
+        EventLog()->RemoveEvent(mEventLogsToRemove.back(), 0);
+        mEventLogsToRemove.pop_back();
     }
 }
 
