@@ -251,8 +251,16 @@ struct C_006af670 {
     void serialize(void* stream);
 };
 struct V5d0 {
-    char pad[0x14];
-    void* m14;              // +0x14
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40();
+    virtual bool Unlink(int mode, V5d0* other, bool quiet);     // +0x44
+    virtual void f48(); virtual void f4c();
+    virtual bool Link(bool attach, V5d0* other, bool quiet);    // +0x50
+    char pad[0x10];
+    V5d0* m14;              // +0x14
     bool f(bool a, void* b, bool c);
 };
 // ---- items of slice s006ae940 end
@@ -317,30 +325,29 @@ void __stdcall FUN_006af5c0(void* p)
 }
 
 // @ 0x006af5d0
-bool V5d0::f(bool a, void* b, bool c)
+bool V5d0::f(bool a, void* pb, bool c)
 {
+    V5d0* b = (V5d0*)pb;
     bool result = false;
     if (a) {
-        void* x = m14;
-        if (x && b != x)
-            ((bool(__thiscall*)(void*, int, void*, bool))(*(void***)this)[17])(this, 0, x, c);
+        if (m14 && b != m14)
+            Unlink(result, m14, c);
         if (b) {
             if (c) {
                 m14 = b;
-                return true;
+                result = true;
+            } else {
+                result = b->Link(true, this, result);
             }
-            return ((bool(__thiscall*)(void*, int, void*, int))(*(void***)b)[20])(b, 1, this, 0);
         }
-    } else {
-        if (b) {
-            if (b != m14)
-                return false;
-            if (c) {
-                m14 = 0;
-                return true;
-            }
-            void* old = m14;
-            return ((bool(__thiscall*)(void*, int, void*, int))(*(void***)old)[20])(old, 0, this, 0);
+    } else if (b) {
+        if (b != m14)
+            return false;
+        if (c) {
+            m14 = 0;
+            result = true;
+        } else {
+            result = m14->Link(false, this, result);
         }
     }
     return result;
