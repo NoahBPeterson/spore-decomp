@@ -216,19 +216,34 @@ void FUN_00e5c560() {
 }
 
 // @ 0x00e5c5d0
-int FUN_00e5c5d0(void* stream, int* out) {
-  void* p = (void*)((int(__thiscall*)(void*))Vt(stream)[0x20 / 4])(stream);
-  void* io = (void*)((int(__thiscall*)(void*))Vt(p)[0x18 / 4])(p);
+struct StreamIO_e5c5d0 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14();
+  virtual void* GetStream();                                   // +0x18
+};
+struct StreamOwner_e5c5d0 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual StreamIO_e5c5d0* GetIO();                            // +0x20
+};
+static inline const int& MinI_e5c5d0(const int& a, const int& b) { return a > b ? b : a; }
+bool FUN_00e5c5d0(void* stream, int* out) {
+  StreamOwner_e5c5d0* s = (StreamOwner_e5c5d0*)stream;
+  void* io = s->GetIO()->GetStream();
   int n;
   EA_IO_ReadInt32(io, &n, 1, 0);
-  if (n > 0xd) n = 0xd;
-  for (int i = 0; i < n; ++i) {
-    void* q = (void*)((int(__thiscall*)(void*))Vt(stream)[0x20 / 4])(stream);
-    void* io2 = (void*)((int(__thiscall*)(void*))Vt(q)[0x18 / 4])(q);
-    EA_IO_ReadInt32(io2, out, 1, 0);
-    ++out;
+  int count = MinI_e5c5d0(n, 0xd);
+  int* dst = out;
+  if (count > 0) {
+    do {
+      void* io2 = s->GetIO()->GetStream();
+      int v;
+      EA_IO_ReadInt32(io2, &v, 1, 0);
+      *dst = v;
+      ++dst;
+    } while (--count != 0);
   }
-  return 1;
+  return true;
 }
 
 // @ 0x00e5c660
