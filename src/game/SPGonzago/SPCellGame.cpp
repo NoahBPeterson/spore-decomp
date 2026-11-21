@@ -146,7 +146,7 @@ void  FUN_007c4be0(void* self, void* p, int b);         // 0x007c4be0
 void  FUN_007c3c50(int v);                              // 0x007c3c50
 void* SP_EffectsManager();                              // 0x0067ddd0
 void* FUN_00b3d400();                                   // 0x00b3d400
-void* FUN_00b3d410(int a, void* b, int c);              // 0x00b3d410
+void* FUN_00b3d410();                                   // 0x00b3d410
 void* SPUIHelpers_GetLayoutManager();                   // 0x00805070
 char  FUN_00810760(int id);                             // 0x00810760
 void  FUN_00810660(int id, int v);                      // 0x00810660
@@ -3454,37 +3454,55 @@ void FUN_00e54d10()
 }
 
 // @ 0x00e552f0
+extern "C" char g_1654c00[];
+struct EditorObj_e552f0 { void FUN_00e3e350(char a, const void* b, char c); };
+struct LayoutMgr_e552f0 {
+    bool FUN_00810760(unsigned id);
+    void FUN_00810660(unsigned id, bool v);
+};
+struct Panel_e552f0 { void FUN_00e17df0(); };
+struct InputState_e552f0 { void FUN_00697980(); };
+struct IEffectsMgr_e552f0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37();
+    virtual void SetLayer(int layer, int on);
+};
 namespace SP
 {
 class cCellMode { public:
     char pad0[9];
     char f9, fa;
-    int Activate();
+    bool Activate();
     void HandleSimulationUpdate(float, float);
 };
-int cCellMode::Activate()
+bool cCellMode::Activate()
 {
     f9 = 0;
     fa = 0;
     *(char*)((char*)g_16b3c04 + 0x5169) = 0;
     *(char*)((char*)g_16b3c0c + 0x937) = 0;
-    cLocalInputState_Reset(g_16b3c0c);
+    ((InputState_e552f0*)g_16b3c0c)->FUN_00697980();
     SP_sActivateGfx();
     FUN_00e4f550_();
-    void* em = SP_EffectsManager();
-    (*(void(__thiscall**)(void*, int, int))((char*)Vt(em) + 0x98))(em, 7, 1);
+    ((IEffectsMgr_e552f0*)SP_EffectsManager())->SetLayer(7, 1);
     if (g_16b3c00) {
         g_16b3c00 = 0;
-        void* c = FUN_00b3d410(0, (void*)0x01654c00, 0);
-        FUN_00e3e350(0, (void*)0x01654c00, 0);
-        (void)c;
+        ((EditorObj_e552f0*)FUN_00b3d410())->FUN_00e3e350(0, g_1654c00, 0);
     }
-    void* lm = SPUIHelpers_GetLayoutManager();
-    if (FUN_00810760(0x614de4c)) FUN_00810660(0x614de4c, 0);
-    void* mcp = FUN_00b3d400();
-    if (mcp) cUIMissionCardPanel_Refresh(FUN_00b3d400());
-    (void)lm;
-    return 1;
+    LayoutMgr_e552f0* lm = (LayoutMgr_e552f0*)SPUIHelpers_GetLayoutManager();
+    if (lm->FUN_00810760(0x614de4c))
+        lm->FUN_00810660(0x614de4c, false);
+    if (FUN_00b3d400())
+        ((Panel_e552f0*)FUN_00b3d400())->FUN_00e17df0();
+    return true;
 }
 }
 
