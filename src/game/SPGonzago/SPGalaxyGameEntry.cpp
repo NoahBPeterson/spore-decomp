@@ -2764,6 +2764,7 @@ struct PanelIDs_s00de_e450 {                     // kGUI_PanelIDs target (pointe
     byte     mFlag;                   // +0x1f5
 
     void FUN_00de5d00(void* a, void* b, void* c, void* d, void* e, void* f, void* g);
+    void FUN_00de5d00(void* a, void* b, void* c, const struct PanelIds_s00de_ef20& d, int e, void* f, void* g);
 };
 struct GridObj {                      // the editor grid object (at GalaxyUI + 0x628)
     char      pad_00[0x20];
@@ -2886,7 +2887,7 @@ public:
     void      FUN_00deed40();
     void      FUN_00deede0();
     char      FUN_00deee80(int mode);
-    void      FUN_00deef20(unsigned a, unsigned b, void* map);
+    void      FUN_00deef20(int key, void* map, unsigned b);
     uint32_t  FUN_00deefb0(uint32_t key);
     void      FUN_00dee9a0(float a, float b);
     void      FUN_00dee770(uint32_t id, void* refObj);
@@ -13959,22 +13960,37 @@ char SP::GalaxyUI::FUN_00deee80(int mode)
     return 1;
 }
 
+struct PanelIds_s00de_ef20 {
+    uint32_t a, b, c;
+    PanelIds_s00de_ef20() : a(0), b(0), c(0) {}
+};
+struct IntRbIter {
+    RBNode_s00de_e450* mpNode;
+    IntRbIter(RBNode_s00de_e450* p) : mpNode(p) {}
+};
+struct IntRbTree {
+    IntRbIter find(const int32_t* pKey);   // 0x00e39fb0
+};
+struct PanelWindow_s00de_ef20 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78();
+    virtual void SetVisible(int a, int b);
+};
+
 // @ 0x00deef20
-void SP::GalaxyUI::FUN_00deef20(unsigned a, unsigned b, void* map)
+void SP::GalaxyUI::FUN_00deef20(int key, void* map, unsigned b)
 {
-    Rbtree* tree = (Rbtree*)map;
-    void*   end  = &tree->mpAnchor;
-    void*   it[2];
-    uint32_t key = b;
-    void**  found = (void**)RbtreeFind(it, &key, map);
-    RBNode_s00de_e450* node  = (RBNode_s00de_e450*)*found;
-    if (node == (RBNode_s00de_e450*)end) return;
-    void* w = mLayout.FindWindowByID(0x5384881, 1);
-    ((VF2)(*(void***)w)[0x7c / 4])(w, 1, 0);
-    GridObj* g = this->mpGrid;
-    void* self = (this != 0) ? (void*)&this->field_08 : 0;
-    gkGUI_PanelIDs_s00de_e450->FUN_00de5d00((void*)(size_t)node->mValue, self,
-                                  (void*)g->mB0, 0, 0, (void*)(size_t)b, 0);
+    RBNode_s00de_e450* node = ((IntRbTree*)map)->find(&key).mpNode;
+    if (node == (RBNode_s00de_e450*)&((Rbtree*)map)->mpAnchor) return;
+    ((PanelWindow_s00de_ef20*)mLayout.FindWindowByID(0x5384881, 1))->SetVisible(1, 0);
+    gkGUI_PanelIDs_s00de_e450->FUN_00de5d00((void*)(size_t)node->mValue, this ? (void*)&this->field_08 : 0,
+                                  (void*)mpGrid->mB0, PanelIds_s00de_ef20(), 0, (void*)(size_t)b, 0);
 }
 
 // @ 0x00deefb0
