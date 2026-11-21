@@ -1206,6 +1206,7 @@ virtual int slot0c();
     virtual uint32_t GetSize();             // 0x18
 };
 struct IFactory { virtual void slot0(); virtual int AddRef(); virtual int Release(); };
+// @ 0x00614280
 void cAssetCache::AddAsset(u64 id, const void* data)
 {
     cPollenAsset* a;
@@ -1446,7 +1447,6 @@ fail:
     return false;
 }
 
-// @ 0x00614280
 inline void* cPollenAsset::operator new(size_t n, const char* name, int a, int b, int c, int d)
 {
     return PollNew((unsigned)n, name, a, b, c, d);
