@@ -633,11 +633,13 @@ void CollectSubsystemB(void* db, IQuery0C* noun)
 // @ 0x00ae7350
 void cCitySimulator::AttachSubsystems()
 {
-    int* const db = (int*)((char*)GDV(NounManager(), (void*)0xcd7d10, (void*)0xae7060,
-                                                    (void*)0xae7080, iid_subsystem) + 4);
+    int* const db = (int*)((char*)GDV(NounManager(), (void*)FUN_00cd7d10,
+                                      (void*)FUN_00ae7060, (void*)FUN_00ae7080,
+                                      iid_subsystem) + 4);
     mV0.assign((const VecT*)db);
     *((char*)this + 0x3c) = 0;
     *((char*)this + 0x3d) = 0;
+    void* const listener = this ? (void*)&mpVtbl3 : 0;
     IMessageServer* const ms = MessageServer();
-    ms->Method20((char*)this + 0x10, 0x1a0219e);
+    ms->Method20(listener, 0x1a0219e);
 }
