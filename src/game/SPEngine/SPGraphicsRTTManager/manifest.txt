@@ -16,3 +16,4 @@
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyOne@Rec3c@@QAEXXZ  0076e2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyRecRange@@YAPAURec3c@@PAU1@00@Z  0076e320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?Destroy@SomeObj3@@QAEXXZ  0076e5c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?AllocateNewPage@cRTTManager_s0076_db40@@QAE_NHHHHPAX@Z  0076e110  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

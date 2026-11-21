@@ -5,3 +5,5 @@
 ../src/game/SPGonzago/SPTribeMissionManager.cpp  ??1TM@@QAE@XZ  00cd3ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeMissionManager.cpp  ?FUN_0135d720@@YAXXZ  0135d720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribeMissionManager.cpp  ?F_cd3670@TM@@QAEXPAX@Z  00cd3670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ?WriteTribe@TM@@QAEEPAX@Z  00cd3480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ?ReadTribe@TM@@QAEEPAX@Z  00cd3530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

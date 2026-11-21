@@ -3509,17 +3509,40 @@ void cSPUITimeline::BeginCloseTimeline()
         ((VisNode*)mpNodesBegin[i])->SetVisibleRecursive(0);
 }
 
+struct Vec2_e37b40 {
+    float x, y;
+    Vec2_e37b40(float ax, float ay) : x(ax), y(ay) {}
+    Vec2_e37b40(const Vec2_e37b40& o) : x(o.x), y(o.y) {}
+};
+struct TimelineX_e37b40 {
+    void FUN_00e46d80(Vec2_e37b40 a, int b, Vec2_e37b40 d, bool f);  // 0x00e46d80
+};
+struct RectSrc_e37b40 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual const Rect* GetRect();                                   // +0x38
+};
 // @ 0x00e37b40
 double cSPUITimeline::FUN_00e37b40(TimelineNode* n, float a, int b)
 {
     float f74 = n->m74.f;
     float f70 = n->mf70;
-    if (n->p1c != 0) {
-        Rect* r = (Rect*)((const Rect* (__thiscall*)(void*))(*(void***)n->p1c)[0x38 / 4])(n->p1c);
-        Vector2 p;
-        p.x = a;
-        p.y = ((r->bottom - r->top) - f70) * 0.5f;
-        ((Timeline*)n)->FUN_00e46d80(p, b, gVacc90, false);
+    if (RectSrc_e37b40* src = (RectSrc_e37b40*)n->p1c) {
+        const Rect* r = src->GetRect();
+        float y = ((r->bottom - r->top) - f70) * 0.5f;
+        ((TimelineX_e37b40*)n)->FUN_00e46d80(Vec2_e37b40(a, y), b, *(Vec2_e37b40*)&gVacc90, false);
     }
     return f74 + a + 5.0f;
 }
@@ -5063,28 +5086,45 @@ char cUIManager::FUN_00e3c1a0(unsigned int* p2, float* p3, unsigned int* p4, flo
     return cVar4;
 }
 
+extern "C" char g_13eb90c[];   // ??_7RefBaseA22@@6B@
+extern "C" char g_13eb844[];   // MessageBasicRC<5> vtable
+struct MessageRC5_e3c6f0 {
+    void*         mpVtbl;          // +0x00
+    volatile long mnRefCount;      // +0x04
+    unsigned int  mData0;          // +0x08
+    unsigned int  mPad0c;          // +0x0c
+    unsigned int  mData1;          // +0x10
+    unsigned int  mPad14[7];       // +0x14
+    unsigned int  mId30;           // +0x30
+    unsigned int  mPad34;          // +0x34
+    unsigned int  mF38;            // +0x38
+    unsigned int  mPad3c;          // +0x3c
+    void Destruct();               // 0x00421cf0 SlotMessage::Destruct
+};
+struct MsgServer_e3c6f0 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void PostMessage(unsigned int id, MessageRC5_e3c6f0* msg, void* target);  // +0x14
+};
 // @ 0x00e3c6f0
 void FUN_00e3c6f0(char param_1, unsigned int param_2)
 {
-    void* iVar1 = FUN_00b3d410();
-    if (iVar1 != 0)
+    void* target = FUN_00b3d410();
+    if (target != 0)
     {
-        unsigned char local_40_data[0x40];
-        (void)local_40_data;
-        *(unsigned int*)(local_40_data + 0x00) = 0;   // local_10
-        *(unsigned int*)(local_40_data + 0x04) = 0;   // local_3c[0] xchg
-        *(unsigned int*)(local_40_data + 0x08) = DAT_013eb844;
-        *(unsigned int*)(local_40_data + 0x0c) = (param_1 != 0) ? 1u : 0u;
-        *(unsigned int*)(local_40_data + 0x10) = 0;
-        *(unsigned int*)(local_40_data + 0x14) = param_2;
-
-        void* server = SP_MessageServer();
-        // vcall slot 0x14: PostMessage(0x6256b62, &local, iVar1)
-        struct { unsigned int vt; unsigned int data[0x40 / 4]; } msg;
-        msg.vt = (unsigned int)(local_40_data + 4);
-        ((void(__thiscall*)(void*, unsigned int, void*, void*))(*(unsigned int**)(char*)server)[0x14 / 4])
-            (server, 0x06256b62u, &msg, iVar1);
-        SlotMessage_Destruct(local_40_data);
+        MessageRC5_e3c6f0 msg;
+        msg.mId30 = 0;
+        msg.mpVtbl = g_13eb90c;
+        _InterlockedExchange(&msg.mnRefCount, 0);
+        msg.mpVtbl = g_13eb844;
+        msg.mData0 = param_1 != 0;
+        msg.mF38 = 0;
+        msg.mData1 = param_2;
+        ((MsgServer_e3c6f0*)SP_MessageServer())->PostMessage(0x06256b62u, &msg, target);
+        msg.Destruct();
     }
 }
 

@@ -181,41 +181,29 @@ VCtor16 *VCtor16::c0(int *param_2)
     return this;
 }
 
-// @ 0x00799e00
-int *FUN_00799e00(int param_1, int param_2, int *param_3)
-{
-    int iVar6;
-    int *piVar5;
-    int iVar2;
-
-    if (param_2 == param_1) {
-        return param_3;
-    }
-    do {
-        int *puVar3 = *(int **)(param_2 - 8);
-        int *puVar4 = (int *)param_3[-2];
-        iVar6 = param_2 - 8;
-        piVar5 = param_3 - 2;
-        if (puVar3 != puVar4) {
-            if (puVar3 != 0) {
-                _InterlockedIncrement((volatile long *)((char *)puVar3 + 4));
-            }
-            *piVar5 = (int)puVar3;
-            if (puVar4 != 0) {
-                long *piVar1 = (long *)(puVar4 + 1);
-                iVar2 = (int)*piVar1;
-                *piVar1 = *piVar1 + -1;
-                if (iVar2 == 1) {
-                    *piVar1 = 1;
-                    (*(void (__thiscall **)(int *, int)) * puVar4)(puVar4, 1);
-                }
-            }
+struct SharedPair {
+    AtomicSharedObject *mpObject;
+    int mValue;
+    __forceinline SharedPair &operator=(const SharedPair &other) {
+        AtomicSharedObject *object = other.mpObject;
+        AtomicSharedObject *old = mpObject;
+        if (object != old) {
+            if (object)
+                _InterlockedIncrement(&object->mRefCount);
+            mpObject = object;
+            if (old)
+                old->Release();
         }
-        param_3[-1] = *(int *)(param_2 - 4);
-        param_3 = piVar5;
-        param_2 = iVar6;
-    } while (iVar6 != param_1);
-    return piVar5;
+        mValue = other.mValue;
+        return *this;
+    }
+};
+// @ 0x00799e00
+SharedPair *FUN_00799e00(SharedPair *first, SharedPair *last, SharedPair *dest)
+{
+    while (last != first)
+        *--dest = *--last;
+    return dest;
 }
 
 // @ 0x00799e70

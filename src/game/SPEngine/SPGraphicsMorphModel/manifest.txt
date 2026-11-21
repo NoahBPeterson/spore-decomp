@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_007585c0@@YAPAUHolder841@@PAH@Z  007585c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?New70@ClassX@@QAEPAXXZ  0075a620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?IVecFillN_758950@@YAXUIVecIt_758950@@IABUIVec_758950@@@Z  00758950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_007580a0@@YAPAUC0755b@@PAU1@@Z  007580a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

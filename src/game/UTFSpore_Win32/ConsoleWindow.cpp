@@ -17,6 +17,8 @@
 // unnamed retail callees and globals (address in the comment)
 extern "C" uint32_t __cdecl FNV1_String8(const char*, uint32_t, uint32_t);  // 0x932e80
 
+extern "C" char g_1441c18[];
+extern "C" char g_1441af8[];
 // ---- items of slice s00969e30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl FUN_011e0744(void*, const void*, int);            // 0x11e0744  vector<bool> DoInsertValue
 extern "C" void  __cdecl FUN_0093c950(const char*, int, int, void*, int*, int); // 0x93c950 ConvertEncoding
@@ -761,24 +763,52 @@ void CW::Find(int* out, void** pkey)
     out[1] = v1;
 }
 
+struct StyleMgr_96ac10 {
+    void RemoveStyle(uint32_t id);             // 0x894700
+};
+extern "C" StyleMgr_96ac10* f_GetStyleManager_96ac10(int b);  // 0x885bd0
+struct RefObj_96ac10 {
+    virtual void AddRef();
+    virtual void Release();                    // +0x04
+};
+struct LineLayoutDtor_96ac10 { void Dtor(); };   // 0x8323d0 LineLayout::~LineLayout
+struct TypesetterDtor_96ac10 { void Dtor(); };   // 0x89c540 Typesetter::~Typesetter
+void operator_delete_arr_96ac10(void* p);        // 0xf47380 operator delete[]
+struct HashTable_96ac10 {
+    uint32_t mn00;
+    void**   mpBuckets;                        // +0x04
+    uint32_t mnBucketCount;                    // +0x08
+    uint32_t mnElementCount;                   // +0x0c
+    void DoFreeNodes(void** buckets, uint32_t n);  // 0x693230
+    void Destroy()
+    {
+        DoFreeNodes(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            operator_delete_arr_96ac10(mpBuckets);
+    }
+};
+struct IntrusiveListDtor_96ac10 { void Dtor(); };  // 0x620230
+struct PtrDel_96ac10 { void del(); };              // 0x7e6690
+struct WindowBase_96ac10 { void Teardown(); };     // 0x962740
 // @ 0x0096ac10
 void CW::Destroy()
 {
-    *(void**)this = (void*)0x1441c18;
-    *(void**)((char*)this + 4) = (void*)0x1441af8;
+    *(void**)this = (void*)g_1441c18;
+    *(void**)((char*)this + 4) = (void*)g_1441af8;
     ((CW*)this)->Clear();
-    void* sm = ((void*(__cdecl*)(int))0x885bd0)(1);
+    StyleMgr_96ac10* sm = f_GetStyleManager_96ac10(1);
     if (sm != 0)
-        (*(void(__thiscall**)(void*, uint32_t))((char*)*(void**)sm + 0))(sm, 0xefe945b2);
-    int* p = *(int**)((char*)this + 0x864);
+        sm->RemoveStyle(0xefe945b2);
+    RefObj_96ac10* p = *(RefObj_96ac10**)((char*)this + 0x864);
     if (p != 0)
-        (*(void(__thiscall**)(int*))((char*)*p + 4))(p);
-    ((Sub*)((char*)this + 0x788))->m_967690();
-    ((Sub*)((char*)this + 0x258))->m_967690();
-    ((Sub*)((char*)this + 0x238))->m_9676f0(*(void**)((char*)this + 0x240), *(int*)((char*)this + 0x23c));
-    ((Sub*)((char*)this + 0x22c))->m_967690();
-    ((Sub*)((char*)this + 0x20c))->m_967690();
-    ((CW*)this)->m_969d40();
+        p->Release();
+    ((LineLayoutDtor_96ac10*)((char*)this + 0x788))->Dtor();
+    ((TypesetterDtor_96ac10*)((char*)this + 0x258))->Dtor();
+    ((HashTable_96ac10*)((char*)this + 0x238))->Destroy();
+    ((IntrusiveListDtor_96ac10*)((char*)this + 0x22c))->Dtor();
+    ((PtrDel_96ac10*)((char*)this + 0x20c))->del();
+    ((WindowBase_96ac10*)this)->Teardown();
 }
 
 // @ 0x0096acd0

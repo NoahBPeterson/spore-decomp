@@ -1386,9 +1386,7 @@ struct StreamRef {                                 // EA::AutoRefCount<Stream>
 // ---- items of slice s00769310 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" char  __cdecl FUN_00767170(void* a, void* b, void* c);                      // 0x767170
 extern "C" char  __cdecl ReadMaterialList(void* a, void* b, void* c);                  // 0x767c80
-extern "C" void  __cdecl FUN_007006d0(void* p);                                        // 0x7006d0
-extern "C" char  __cdecl FUN_007638a0(void* a, void* b, void* c, void* d);             // 0x7638a0
-extern "C" char  __cdecl FUN_00769310b(void* a, void* b, void* c, void* d);            // 0x769310
+struct cCellList { void Clear(); };                                                     // 0x7006d0
 extern "C" void* __cdecl FUN_0093b530(int a, int b, void* c);                          // 0x93b530
 struct M69310 { char Meth(int a, int b, int c); };
 struct cGraphicsResourceFactory {
@@ -1400,6 +1398,14 @@ struct cGraphicsResourceFactory {
     char ReadVia64ce0(void* holder, void* a2, void* obj);              // 0x764ce0
     char ReadVia637d0(void* holder, void* a2, int four, void* obj);    // 0x7637d0
     char ReadVia67170(void* holder, void* a2, void* obj);              // 0x767170
+    bool ReadTriplets(void* stream, void* a2, void* a3, int version);  // 0x7638a0
+    bool ReadResourceGameModel(void* stream, void* a2, void* a3, int version); // 0x769310
+};
+struct IStream69cf0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual int Read(void* dst, int n);                                // +0x30
 };
 // ---- items of slice s00769310 end
 
@@ -3462,16 +3468,16 @@ char __fastcall Func69cb0(void* self, int, int unused)
 // @ 0x00769cf0
 char __fastcall Func69cf0(void* self, int, void* stream, void* a2, void* a3)
 {
-    (void)self;
-    int local;
-    if (((int(__thiscall**)(void*, int*, int))*(void***)stream)[12](stream, &local, 4) != 4)
+    cGraphicsResourceFactory* f = (cGraphicsResourceFactory*)self;
+    int version;
+    if (((IStream69cf0*)stream)->Read(&version, 4) != 4)
         return 0;
-    if ((uint32_t)(local - 8) > 1)
+    if ((uint32_t)(version - 8) > 1)
         return 0;
-    FUN_007006d0(a2);
-    if (!FUN_007638a0(stream, a3, a2, (void*)local))
+    ((cCellList*)a2)->Clear();
+    if (!f->ReadTriplets(stream, a2, a3, version))
         return 0;
-    return FUN_00769310b(stream, a3, a2, (void*)local);
+    return f->ReadResourceGameModel(stream, a2, a3, version);
 }
 
 // @ 0x00769d80

@@ -955,19 +955,49 @@ void EA::XHTML::Layout::Page_s008e_b250::SetImageRequester(void* pNew, int flag)
     }
 }
 
+struct PageTypesetterMember {
+    char mData[0x574];
+    ~PageTypesetterMember();                     // 0x0089C540 (~Typesetter)
+};
+struct PageRenderingContext {
+    int mHeader;                                 // +0x00
+    PageTypesetterMember mTypesetter;            // +0x04
+    PageRenderingContext(EA::XHTML::Text::Typesetter* pTS, const float* pRect, const void* pState);  // 0x008EE810
+};
+struct PageRenderItem {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
+    virtual void Render(PageRenderingContext* ctx);   // +0x14
+};
+struct PageTypesetterV {
+    virtual void v00();
+    virtual void SetLayoutLimit(int limit);      // +0x04
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void SetLayoutRect(float l, float t, float r, float b);   // +0x38
+};
+
 // @ 0x008eb870
 void EA::XHTML::Layout::Page_s008e_b250::Render(Text::Typesetter* pTS, const float* pRect, const void* pState)
 {
     if (mpRootItem) {
-        char ctx[0x578];
-        RenderingContext_Ctor(ctx, pTS, pRect, pState);
-        (*(void (**)(void*, void*))(*(int*)mpRootItem + 0x14))(mpRootItem, ctx);
-        Typesetter_Dtor(ctx);
+        PageRenderingContext ctx(pTS, pRect, pState);
+        ((PageRenderItem*)mpRootItem)->Render(&ctx);
         return;
     }
-    (*(void (**)(void*, int))(*(int*)pTS + 4))(pTS, 0x7fffffff);
-    (*(void (**)(void*, float, float, float, float))(*(int*)pTS + 0x38))(pTS, pRect[0], pRect[1],
-                                                                        pRect[2], pRect[3]);
+    PageTypesetterV* ts = (PageTypesetterV*)pTS;
+    ts->SetLayoutLimit(0x7fffffff);
+    const float* r = (const float*)pState;
+    ts->SetLayoutRect(r[0], r[1], r[2], r[3]);
 }
 
 // @ 0x008eb910

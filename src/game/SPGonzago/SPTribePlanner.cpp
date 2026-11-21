@@ -149,7 +149,9 @@ struct PlanEntry {
     uint8_t  mByte3c;             // +0x3c
     uint8_t  mPad3d[3];           // +0x3d
     void*    mpObject;            // +0x40  AutoRefCount payload (AddRef/Release)
+    PlanEntry* Assign(const PlanEntry* pSrc);   // 0x00cdffc0
 };
+struct IPlanRef { virtual void AddRef(); virtual void Release(); };
 struct cAIFlags;
 struct cCitizen {
     uint32_t mPad00[0x4d];          // +0x00 .. +0x133 (vtable pointer at +0x00, IsBusy in slot 0x2c)
@@ -235,7 +237,6 @@ extern void* EventLog(uint32_t uId, uint32_t uSubId, void* pPos, int iA, int iB,
 extern void PostFeedbackEvent(void* pLog, uint32_t uId, uint32_t uSubId, void* pPos,
                               int iA, int iB, int iC);
 extern void Start3dSoundByName(uint32_t uName, int iHandle, float x, float y, float z);
-PlanEntry* FUN_00cdffc0(PlanEntry* pThis, const PlanEntry* pSrc);
 PlanTableEntry* FUN_00ce0e60(PlanTable* pTable, uint32_t uPlanId, uint32_t uIndex);
 static bool ReadVariant(cPropertyList* pList, uint32_t uPropertyId, Variant** ppValue)
 {
@@ -1231,22 +1232,22 @@ int** __fastcall FUN_00cdff70(int*** pIter)
 }
 
 // @ 0x00cdffc0
-PlanEntry* FUN_00cdffc0(PlanEntry* pThis, const PlanEntry* pSrc)
+PlanEntry* PlanEntry::Assign(const PlanEntry* pSrc)
 {
-    pThis->mPosition[0] = pSrc->mPosition[0];
-    pThis->mPosition[1] = pSrc->mPosition[1];
-    pThis->mPosition[2] = pSrc->mPosition[2];
+    mPosition[0] = pSrc->mPosition[0];
+    mPosition[1] = pSrc->mPosition[1];
+    mPosition[2] = pSrc->mPosition[2];
     for (int i = 0; i < 8; ++i)
-        pThis->mPad0c[i] = pSrc->mPad0c[i];
-    pThis->mPad2c = pSrc->mPad2c;
-    pThis->mScale = pSrc->mScale;
-    pThis->mPad34 = pSrc->mPad34;
-    pThis->mPad38 = pSrc->mPad38;
-    pThis->mByte3c = pSrc->mByte3c;
-    pThis->mpObject = pSrc->mpObject;
-    if (pThis->mpObject)
-        (*(void (__thiscall**)(void*))pThis->mpObject) (pThis->mpObject);
-    return pThis;
+        mPad0c[i] = pSrc->mPad0c[i];
+    mPad2c = pSrc->mPad2c;
+    mScale = pSrc->mScale;
+    mPad34 = pSrc->mPad34;
+    mPad38 = pSrc->mPad38;
+    mByte3c = pSrc->mByte3c;
+    mpObject = pSrc->mpObject;
+    if (mpObject)
+        ((IPlanRef*)mpObject)->AddRef();
+    return this;
 }
 
 // @ 0x00ce0150
@@ -1448,7 +1449,7 @@ int FUN_00ce0ed0(PlanTable* pTable, const PlanEntry* pOrder)
     uint32_t uValue[18];
     uValue[0] = *(const uint32_t*)pOrder;
     entry.mpObject = 0;
-    FUN_00cdffc0(&entry, pOrder);
+    entry.Assign(pOrder);
     uEntry[0] &= 0xffffff00u;
     FUN_00ce0c50(uEntry, uValue, uEntry[0]);
     int iResult = (int)(uEntry[0] + 4);

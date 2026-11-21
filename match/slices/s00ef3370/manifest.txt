@@ -2,3 +2,4 @@ slices/s00ef3370/s00ef3370.cpp  ?FUN_00ef38c0@@YIXPAD@Z  00ef38c0  /O2 /MD /Gy /
 slices/s00ef3370/s00ef3370.cpp  ?FUN_00ef3950@@YIXPAD@Z  00ef3950  /O2 /MD /Gy /TP
 slices/s00ef3370/s00ef3370.cpp  ?FUN_00ef3b40@@YIPAXPAD@Z  00ef3b40  /O2 /MD /Gy /TP
 slices/s00ef3370/s00ef3370.cpp  ?FUN_00ef3bf0@@YIXPAD@Z  00ef3bf0  /O2 /MD /Gy /TP
+slices/s00ef3370/s00ef3370.cpp  ?FUN_00ef4050@@YIEPAX0HPAD@Z  00ef4050  /O2 /MD /Gy /TP

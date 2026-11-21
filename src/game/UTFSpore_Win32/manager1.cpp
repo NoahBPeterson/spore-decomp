@@ -101,6 +101,18 @@ struct StreamSocket {
     char  mPadRest[0x88 - 0xc];          // +0xc..+0x88
     StreamSocket();                      // 0x0094E9A0
 };
+inline void* operator new(size_t size, const char* pName, int a3, int a4, const char* file, int line)
+{
+    return operator_new(size, pName, a3, a4, file, line);
+}
+inline void operator delete(void*, const char*, int, int, const char*, int) {}
+struct SocketSub_s0094 {
+    virtual void Init();                 // slot 0
+};
+struct SocketHead_s0094 {
+    char            mPad08[8];
+    SocketSub_s0094 mSub;                // +8
+};
 // ---- items of slice s0094bb50 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -208,20 +220,13 @@ bool EA::Sockets::Manager::IsNetworkConnected(char const * p, bool q)
 // @ 0x0094c490
 void* Manager::CreateSocket(int type)
 {
-    void* s = 0;
-    if (type == 2) {
-        s = operator_new(sizeof(DatagramSocket), "UTF/Sockets", 0, 0, 0, 0);
-        if (s == 0)
-            return 0;
-        new (s) DatagramSocket();
-    } else if (type == 3) {
-        s = operator_new(sizeof(StreamSocket), "UTF/Sockets", 0, 0, 0, 0);
-        if (s == 0)
-            return 0;
-        new (s) StreamSocket();
-    }
+    SocketHead_s0094* s = 0;
+    if (type == 2)
+        s = (SocketHead_s0094*)new ("UTF/Sockets", 0, 0, 0, 0) DatagramSocket();
+    else if (type == 3)
+        s = (SocketHead_s0094*)new ("UTF/Sockets", 0, 0, 0, 0) StreamSocket();
     if (s != 0)
-        ((void(__thiscall*)(void*))((*(void***)((char*)s + 8))[0]))((char*)s + 8);
+        s->mSub.Init();
     return s;
 }
 

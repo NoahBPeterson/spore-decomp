@@ -140,7 +140,7 @@ void  glist_noselect(t_glist* g);                                               
 t_glist* glist_getcanvas(t_glist* g);                                                // 0xa4d410
 void  glist_delete(t_glist* g, t_gobj* o);                                           // 0xa4de50
 void  pd_bind(void* obj, void* sel_a, void* sel_b);                                  // 0xa67620
-bool  pd_checkobject(t_gobj* o);                                                     // 0xa4a1c0
+t_gobj* pd_checkobject(t_gobj* o);                                                   // 0xa4a1c0
 void  pd_pushsym(void* x, ...);                                                      // 0xa49490
 void  pd_popsym(void* x, ...);                                                       // 0xa49500
 void  canvas_resortinlets(t_glist* g);                                               // 0xa4d4d0
@@ -380,7 +380,7 @@ void canvas_drawredrect(t_glist* g, int flag)
 }
 
 // @ 0x00a4aa00
-void* editor_new(t_glist* glist)
+static void* editor_new(t_glist* glist)
 {
     void* x = getbytes(0x54, "EAPd/t_editor");
     *(void**)((char*)x + 0x24) = binbuf_new();
@@ -399,7 +399,7 @@ void* editor_new(t_glist* glist)
 }
 
 // @ 0x00a4aa80
-void editor_free(void* x, t_glist* glist)
+static void editor_free(void* x, t_glist* glist)
 {
     glist_noselect(glist);
     if (*(void**)((char*)x + 0x2c) != 0)
@@ -412,21 +412,21 @@ void editor_free(void* x, t_glist* glist)
 // @ 0x00a4aac0
 void canvas_create_editor(t_glist* g, int flag)
 {
-    if (flag == 0) {
-        if (*(void**)((char*)g + 0x60) == 0)
-            return;
-        while (*(void**)(*(char**)((char*)g + 0x60) + 0xc) != 0)
-            rtext_free(*(void**)(*(char**)((char*)g + 0x60) + 0xc));
-        editor_free(*(void**)((char*)g + 0x60), g);
-        *(void**)((char*)g + 0x60) = 0;
+    if (flag) {
+        if (*(void**)((char*)g + 0x60) == 0) {
+            *(void**)((char*)g + 0x60) = editor_new(g);
+            for (t_gobj* o = *(t_gobj**)((char*)g + 0x28); o != 0; o = o->g_next) {
+                t_gobj* c = pd_checkobject(o);
+                if (c != 0)
+                    rtext_new(g, c);
+            }
+        }
     } else {
-        if (*(void**)((char*)g + 0x60) != 0)
-            return;
-        *(void**)((char*)g + 0x60) = editor_new(g);
-        for (t_gobj* o = *(t_gobj**)((char*)g + 0x28); o != 0; o = o->g_next) {
-            t_gobj* c = (t_gobj*)pd_checkobject(o);
-            if (c != 0)
-                rtext_new(g, c);
+        if (*(void**)((char*)g + 0x60) != 0) {
+            while (*(void**)(*(char**)((char*)g + 0x60) + 0xc) != 0)
+                rtext_free(*(void**)(*(char**)((char*)g + 0x60) + 0xc));
+            editor_free(*(void**)((char*)g + 0x60), g);
+            *(void**)((char*)g + 0x60) = 0;
         }
     }
 }

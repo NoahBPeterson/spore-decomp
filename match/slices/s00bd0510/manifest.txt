@@ -6,3 +6,4 @@ slices/s00bd0510/s00bd0510.cpp  ?PropGetA@SP_BLD@@YA_NPAUPropBinder@1@PAPAUPropO
 slices/s00bd0510/s00bd0510.cpp  ?PropGetB@SP_BLD@@YA_NPAUPropBinder@1@PAPAUPropObject@1@@Z  00bd17b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00bd0510/s00bd0510.cpp  ?Dtor@cBuildingCityHall@SP_BLD@@QAEXXZ  00bd1100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00bd0510/s00bd0510.cpp  ?ReadStarRecordDeque@SP_BLD@@YAXPAUSaveReaderView@1@AAUDeque64@1@@Z  00bd16d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00bd0510/s00bd0510.cpp  ?Ctor@PropertyInfoF@SP_BLD@@QAEPAU12@PAXIM@Z  00bd0ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

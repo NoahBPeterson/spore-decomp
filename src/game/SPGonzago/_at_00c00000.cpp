@@ -758,19 +758,65 @@ float CB::func5bf0()
     return (float)i;
 }
 
+struct SpeciesMgr_c05d40 {
+    void* GetProfile(const void* key);                               // 0x004df550 (__thiscall, ret 4)
+};
+SpeciesMgr_c05d40* __cdecl SpeciesManager_c05d40();                 // 0x00401090
+struct Listener_c05d40 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void OnChange(int arg);                                  // +0x3c
+};
+struct Self_c05d40 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void Refresh();                                          // +0x54
+};
 // @ 0x00c05d40
 char CB::func5d40(int param_2)
 {
     char* self = (char*)this;
     void* key = self + 0xb28;
-    void* prof = GetProfile(GetSetting9(key));
-    void* ecx = *(void**)(self + 0x1674);
-    if (ecx)
-        (*(void(__thiscall**)(void*, int))((*(void***)ecx)[0x3c / 4]))(ecx, param_2);
+    void* prof = SpeciesManager_c05d40()->GetProfile(key);
+    Listener_c05d40* l = *(Listener_c05d40**)(self + 0x1674);
+    if (l)
+        l->OnChange(param_2);
     char bl = ((Fn22470*)self)->f(param_2);
     if (bl) {
         if (*(void**)key != 0) {
-            void* prof2 = GetProfile(GetSetting9(key));
+            void* prof2 = SpeciesManager_c05d40()->GetProfile(key);
             bl = ((Fn37c0*)self)->f(prof2, 0, 1);
             if (prof != prof2) {
                 ((Fn21090*)self)->f();
@@ -781,7 +827,7 @@ char CB::func5d40(int param_2)
         }
         if (bl) {
             ((Fn42e0*)self)->f();
-            (*(void(__thiscall**)(void*))((*(void***)self)[0x54 / 4]))(self);
+            ((Self_c05d40*)self)->Refresh();
         }
     }
     return bl;

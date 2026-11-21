@@ -937,8 +937,17 @@ extern "C" char  __cdecl FUN_00ac0730(void* a, void* b);           // 0x00ac0730
 extern "C" void  __cdecl FUN_00d9b950(void* arr, void* a, int n, float f1, float f2,
                                       float f3, float f4, float f5, float f6,
                                       float f7, float f8, void* cmp);  // 0x00d9b950
-extern "C" void  __cdecl FUN_00d9b9b0(void* arr, void* a, int n, float f1,
-                                      float f2, float f3);         // 0x00d9b9b0
+
+
+struct HeapBase0_d9da80 { char pad[0xc0]; };
+struct HeapBase1_d9da80 { int key; };
+struct HeapNode_d9da80 : HeapBase0_d9da80, HeapBase1_d9da80 { };
+struct HeapCmp_d9da80 {
+  float x, y, z;
+  HeapCmp_d9da80(const HeapCmp_d9da80& o) : x(o.x), y(o.y), z(o.z) {}
+};               // distance-to-point comparator (operator() at 0x00ac0730)
+extern "C" void  __cdecl FUN_00d9b9b0(HeapNode_d9da80** arr, int top, int pos,
+                                      HeapNode_d9da80* value, HeapCmp_d9da80 cmp);  // 0x00d9b9b0 promote_heap
 extern "C" void  __cdecl FUN_00c0ba10(void* creature);              // 0x00c0ba10
 extern "C" int   __cdecl FUN_00c22dc0(void* creature);              // 0x00c22dc0
 extern "C" void* __cdecl FUN_00c0bbd0(void* creature);             // 0x00c0bbd0 SP::cSPCreatureBase::GetSpeciesProfile
@@ -966,7 +975,7 @@ struct S {
                      float f1, float f2, float f3, float f4,
                      float f5, float f6, float f7, void* cmp);  // 0x00d9d9a0
   void  FUN_00d9da80(void* arr, void* a, int n, int i, float f1,
-                     float f2, float f3);                       // 0x00d9da80
+                     float f2, float f3);                       // 0x00d9da80 (see the free function)
   void  FUN_00d9db30(void* src, void* end, void* dst);          // 0x00d9db30
   char  FUN_00d9dba0(void* creature);                            // 0x00d9dba0
   void  FUN_00d9dc80(void* creature, void* block);               // 0x00d9dc80
@@ -2369,28 +2378,23 @@ void __cdecl FUN_00d9d9a0(void* arr, int a, int n, int i, int v, float f1, float
 }
 
 // @ 0x00d9da80
-void __cdecl FUN_00d9da80(void* arr, void* a, int n, int i, float f1, float f2, float f3)
+// eastl::adjust_heap over HeapNode* with the distance comparator
+void __cdecl FUN_00d9da80(HeapNode_d9da80** first, int top, int n, int i,
+                          HeapNode_d9da80* value, HeapCmp_d9da80 cmp)
 {
-  int* base = (int*)arr;
   int child = i * 2 + 2;
-  if (child < n) {
-    do {
-      int l = base[child - 1];
-      void* c0 = l == 0 ? 0 : (void*)(l + 0xc0);
-      int r = base[child];
-      void* c1 = r == 0 ? 0 : (void*)(r + 0xc0);
-      char ok = ((char (__thiscall*)(void*, void*, void*))FUN_00ac0730)((void*)&f2, c1, c0);
-      if (ok != 0) --child;
-      base[i] = base[child];
-      i = child;
-      child = i * 2 + 2;
-    } while (child < n);
+  for (; child < n; child = i * 2 + 2) {
+    if (((char (__thiscall*)(void*, HeapBase1_d9da80*, HeapBase1_d9da80*))FUN_00ac0730)(
+            &cmp, first[child], first[child - 1]))
+      --child;
+    first[i] = first[child];
+    i = child;
   }
   if (child == n) {
-    base[i] = base[child - 1];
+    first[i] = first[child - 1];
     i = child - 1;
   }
-  FUN_00d9b9b0(arr, a, i, f1, f2, f3);
+  FUN_00d9b9b0(first, top, i, value, cmp);
 }
 
 // @ 0x00d9db30

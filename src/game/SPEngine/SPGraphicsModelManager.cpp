@@ -4607,28 +4607,47 @@ int FUN_007467f0(void* self, void* a, void* b, Vec3* out1, Vec3* out2, Vec3* out
 }
 
 // @ 0x00746910
+struct GroupRefObj_746910 {
+    virtual void AddRef();                               // +0x00
+    virtual void Release();                              // +0x04
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c();
+    virtual void Remove(void* obj);                      // +0x20
+};
+struct GroupSlot_746910 {
+    int mCount;                                          // +0x00
+    char pad04[0x14];
+    GroupRefObj_746910* mObj;                            // +0x18
+    bool mFlag;                                          // +0x1c
+    char pad1d[3];
+};
+struct GroupWorld_746910 {
+    unsigned char pad0[0x19c];
+    ListNode mGroupList;                                 // +0x19c
+    unsigned char pad1a4[0x1b4 - 0x1a4];
+    GroupSlot_746910 mSlots[1];                          // +0x1b4, stride 0x20
+};
 void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
 {
-    GroupWorld* w = this;
-    void* self = this;
+    GroupWorld_746910* w = (GroupWorld_746910*)this;
     if (idx == 0) {
-        for (ListNode* n = w->mGroupList.pNext; n != (ListNode*)&w->mGroupList; n = n->pNext) {
+        for (ListNode* n = w->mGroupList.pNext; n != &w->mGroupList; n = n->pNext) {
             GroupInternal* g = (GroupInternal*)n;
             if (g->mObj != 0)
-                (*(void(__thiscall**)(void*, void*))((char*)(*(void**)w->mSlotObj) + 0x20))(w->mSlotObj, g->mObj);
+                w->mSlots[0].mObj->Remove(g->mObj);
             g->mObj = 0;
         }
     }
-    GroupSlot* s = (GroupSlot*)((char*)self + idx * 0x20);
-    void* old = s->mSlotObj;
-    if (newObj != s->mSlotObj) {
-        if (newObj) (*(void(__thiscall**)(void*))(*(void**)newObj))(newObj);
-        s->mSlotObj = newObj;
-        if (old) (*(void(__thiscall**)(void*))((char*)(*(void**)old) + 4))(old);
+    GroupRefObj_746910* p = (GroupRefObj_746910*)newObj;
+    GroupRefObj_746910* old = w->mSlots[idx].mObj;
+    if (p != old) {
+        if (p) p->AddRef();
+        w->mSlots[idx].mObj = p;
+        if (old) old->Release();
     }
-    s->mFlag = flag;
-    if (s->mCount < 0)
-        s->mCount = 0;
+    w->mSlots[idx].mFlag = flag;
+    if (w->mSlots[idx].mCount < 0)
+        w->mSlots[idx].mCount = 0;
 }
 
 // @ 0x007469b0

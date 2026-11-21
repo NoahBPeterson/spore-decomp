@@ -3774,19 +3774,42 @@ void RebuildStaticCollision()
 }
 
 // @ 0x00b5b540
-bool FUN_00b5b540(int* a, int* b, int, int p4)
+struct Key_b5b540 { int mInstance; int mType; int mGroup; };
+struct KeySrc_b5b540 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual Key_b5b540* GetKey();                                    // +0x10
+    virtual void v14();
+    virtual struct Stream_b5b540* GetStream();                       // +0x18
+};
+struct Stream_b5b540 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18();
+    virtual unsigned GetSize();                                      // +0x1c
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual int Read(void* dst, unsigned n);                         // +0x30
+};
+struct Buf_b5b540 {
+    char pad00[0x18];
+    struct Vec { void* mpBegin; void* mpEnd; void* mpCap; void resize(unsigned n); } mData;   // +0x18 (resize 0x004cd3c0)
+};
+struct KeyDst_b5b540 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual Buf_b5b540* Find(unsigned id);                           // +0x0c
+};
+bool __stdcall FUN_00b5b540(int* a, int* b, int, int p4)
 {
-    int* s = (int*)((int(__thiscall*)(void*))g_vfn(a, 0x10))(a);
-    b[2] = s[0];
-    b[3] = p4;
-    b[4] = s[2];
-    int r = ((int(__thiscall*)(void*, unsigned))g_vfn(b, 0xc))(b, 0x532dc8b);
-    if (!r) return false;
-    int* t = (int*)((int(__thiscall*)(void*))g_vfn(a, 0x18))(a);
-    unsigned u = ((unsigned(__thiscall*)(void*))g_vfn(t, 0x1c))(t);
-    FUN_004cd3c0((void*)u);
-    int q = ((int(__thiscall*)(void*, int, unsigned))g_vfn(t, 0x30))(t, *(int*)(r + 0x18), u);
-    return q != -1;
+    Key_b5b540 key = *((KeySrc_b5b540*)a)->GetKey();
+    key.mType = p4;
+    *(Key_b5b540*)(b + 2) = key;
+    if (Buf_b5b540* r = ((KeyDst_b5b540*)b)->Find(0x532dc8b)) {
+        Stream_b5b540* t = ((KeySrc_b5b540*)a)->GetStream();
+        unsigned u = t->GetSize();
+        Buf_b5b540::Vec& v = r->mData;
+        v.resize(u);
+        void* dst = v.mpBegin;
+        return t->Read(dst, u) != -1;
+    }
+    return false;
 }
 
 // @ 0x00b5b6f0

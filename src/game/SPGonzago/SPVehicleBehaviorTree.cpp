@@ -2901,18 +2901,35 @@ NOINLINE bool IsOpportunityTarget(cVehicle* self, void* target, void* cmp, bool 
     return false;
 }
 
+struct GameDataCheck_dc69a0 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual bool CanTarget(void* target);                            // +0x40
+};
 // @ 0x00dc69a0
-NOINLINE void* GetBestOpportunityTarget(cVehicle* self, void* a1, void* a2, void* a3, char a4)
+NOINLINE void* GetBestOpportunityTarget(cVehicle* self, void* a1, bool a2, bool a3, char a4)
 {
-    EntityVector* v = self->GetHostiles();
-    for (void** it = v->mpBegin; it != v->mpEnd; ++it) {
+    EntityVector v = *self->GetHostiles();
+    for (void** it = v.mpBegin; it != v.mpEnd; ++it) {
         void* cur = *it;
-        if (IsOpportunityTarget(self, cur, a1, (bool)a2, (bool)a3)) {
+        if (IsOpportunityTarget(self, cur, a1, a2, a3)) {
             if (!a4)
                 return cur;
-            bool ok = (*(bool(__thiscall**)(cGameData*, void*))VFn(&self->mGameData, 0x40))(
-                          &self->mGameData, cur);
-            if (ok)
+            if (((GameDataCheck_dc69a0*)&self->mGameData)->CanTarget(cur))
                 return cur;
         }
     }

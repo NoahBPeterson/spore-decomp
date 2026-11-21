@@ -277,29 +277,24 @@ extern "C" extern PropDesc_s0137_a490 g_16b24d4[7];   // 0x016b24d4
 // ---- items of slice s0137a490 end
 
 // @ 0x00e4cc50
+struct ResKey_e4cc50 { unsigned mInstance; unsigned mType; unsigned mGroup; };
+struct ResMgr_e4cc50 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual bool GetResource(const ResKey_e4cc50* key, void* out, int a, int b, int c, int d);   // +0x0c
+};
 void SP_LoadAdvectMap(void* key, void* p2)
 {
-    struct { void* k; unsigned h; unsigned z; } k1, k2;
-    k2.z = 0; k2.h = 0x4805684; k1.k = key; k1.h = 0; k1.z = 0;
-    (void)k1;
-    void* out;
-    void* rm = EA_ResourceMan_GetManager();
-    bool ok = (*(bool(__thiscall**)(void*, void*, void*, int, int, int))((char*)Vt(rm) + 0xc))(rm, key, p2, 0, 0, 0);
-    (void)ok; (void)out;
-    {
-        int outbuf[3];
-        outbuf[0] = 0; outbuf[1] = 0x4805684; outbuf[2] = 0;
-        int keyb[3]; keyb[0] = 0; keyb[1] = 0x4805684; keyb[2] = 0;
-        (void)outbuf;
-        char* rmgr = (char*)EA_ResourceMan_GetManager();
-        char local[12]; *(void**)local = key; *(unsigned*)(local+4) = 0x4805684; *(unsigned*)(local+8) = 0;
-        bool ok2 = (*(bool(__thiscall**)(void*, void*, void*, int, int, int))((char*)Vt(rmgr) + 0xc))(rmgr, local, p2, 0, 0, 0);
-        if (!ok2) {
-            FUN_00e84e40("invalid advection map (key:%X) using empty.advect instead", key);
-            unsigned local2[3]; local2[0] = 0xc7ee8594; local2[1] = 0x4805684; local2[2] = 0;
-            char* rmgr2 = (char*)EA_ResourceMan_GetManager();
-            (*(bool(__thiscall**)(void*, unsigned*, void*, int, int, int))((char*)Vt(rmgr2) + 0xc))(rmgr2, local2, p2, 0, 0, 0);
-        }
+    ResKey_e4cc50 k;
+    k.mGroup = 0;
+    k.mType = 0x4805684;
+    k.mInstance = (unsigned)key;
+    if (!((ResMgr_e4cc50*)EA_ResourceMan_GetManager())->GetResource(&k, p2, 0, 0, 0, 0)) {
+        FUN_00e84e40("invalid advection map (key:%X) using empty.advect instead", key);
+        ResKey_e4cc50 empty;
+        empty.mInstance = 0xc7ee8594;
+        empty.mType = 0x4805684;
+        empty.mGroup = 0;
+        ((ResMgr_e4cc50*)EA_ResourceMan_GetManager())->GetResource(&empty, p2, 0, 0, 0, 0);
     }
 }
 
@@ -435,22 +430,32 @@ int __stdcall CellFactory_GetSupportedTypes(unsigned* out, unsigned n)
 }
 
 // @ 0x00e4d000
+struct CellStream_e4d000 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18();
+    virtual unsigned GetSize();                                      // +0x1c
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual unsigned Read(void* dst, unsigned n);                    // +0x30
+};
+struct CellRes_e4d000 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual cCellDataObj* Cast(unsigned id);                         // +0x0c
+    int  pad04;
+    int  mKey[3];                                                    // +0x08
+};
+struct CellKey_e4d000 { int v[3]; };
 unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, void* k, void* unused)
 {
     unsigned char ok = 0;
-    void* obj;
-    if (s) obj = (*(void*(__thiscall**)(void*, int))((char*)Vt(s) + 0xc))(s, 0x355d6f5);
-    else obj = 0;
-    unsigned n = (*(unsigned(__thiscall**)(void*))((char*)Vt(self) + 0x1c))(self);
-    cCellDataObj* c = (cCellDataObj*)obj;
-    c->mKeyType[0] = *(int*)k;
-    c->mKeyType[1] = *((int*)k + 1);
-    c->mKeyType[2] = *((int*)k + 2);
+    CellRes_e4d000* res = (CellRes_e4d000*)s;
+    cCellDataObj* c = res ? res->Cast(0x355d6f5) : 0;
+    CellStream_e4d000* stream = (CellStream_e4d000*)self;
+    unsigned n = stream->GetSize();
+    *(CellKey_e4d000*)res->mKey = *(CellKey_e4d000*)k;
     if (c->mp18) ((cLightCtx*)g_lightCtx)->Dtor(c->mp18);
-    void* mem = ((cLightCtx*)g_lightCtx)->LockedAlloc(n, 0, 0, 0, 0, 0);
-    c->mp18 = mem;
-    if (mem) {
-        unsigned got = (*(unsigned(__thiscall**)(void*, void*, unsigned))((char*)Vt(self) + 0x30))(self, mem, n);
+    c->mp18 = ((cLightCtx*)g_lightCtx)->LockedAlloc(n, 0, 0, 0, 0, 0);
+    if (c->mp18) {
+        unsigned got = stream->Read(c->mp18, n);
         if (got == n) {
             c->mp1c = (void*)got;
             ok = 1;
@@ -459,7 +464,7 @@ unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, vo
             c->mp18 = 0;
         }
     }
-    c->mp1c = (void*)(((int)c->mp18 != 0) ? (int)n : 0);
+    c->mp1c = (void*)(c->mp18 ? n : 0);
     SP_SetCachingType(7, c);
     return ok;
 }
@@ -668,27 +673,49 @@ void FUN_00e4d6c0(void* a, void* b, int base)
 }
 
 // @ 0x00e4d840
+extern "C" wchar_t g_1667bac[];         // 0x01667bac eastl empty-string16 sentinel
+struct WStr_e4d840 {                    // eastl::string16
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    int      mAllocator;
+    WStr_e4d840() : mpBegin(g_1667bac), mpEnd(g_1667bac), mpCapacity(g_1667bac + 1) {}
+    ~WStr_e4d840() { if ((mpCapacity - mpBegin) > 1 && mpBegin) operator_delete__(mpBegin); }
+};
+WStr_e4d840* WStr_Format_e4d840(WStr_e4d840* out, const wchar_t* fmt, ...);   // 0x0041e050
+struct DDFiles_e4d840 {
+    void Construct(const wchar_t* dir, void* alloc);                    // 0x008d7400 (ctor)
+};
+struct CellData_e4d840 {
+    virtual void v00();
+    virtual void Init();                                                // +0x04
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void SetTypes(int a, int b, int c);                         // +0x18
+};
+struct ResMgr_e4d840 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void AddDatabase(int a, CellData_e4d840* db, int prio);     // +0x50
+};
 namespace SP {
 void LayerLoaderInit()
 {
-    wchar_t buf[6];
-    buf[0] = 0x67bac & 0xffff; buf[1] = 0x67bac & 0xffff; buf[2] = 0x67bae & 0xffff;
-    void* dd = SP_GetDataDir(L"CellGame/Layers/");
-    WStr_Format(buf, L"%s%s", dd);
+    WStr_e4d840 buf;
+    WStr_Format_e4d840(&buf, L"%s%s", SP_GetDataDir(L"CellGame/Layers/"));
     void* obj = ZoneObject_operator_new(0x168, "Simulator/Cell/Data", 0, 0, 0, 0);
-    if (!obj) obj = 0;
-    else {
-        EA_ResourceMan_DatabaseDirectoryFiles_ctor(obj, buf, 0);
+    if (obj) {
+        ((DDFiles_e4d840*)obj)->Construct(buf.mpBegin, 0);
         *(void**)obj = vtbl_1482d38;
         *(void**)((char*)obj + 4) = vtbl_1482d24;
-    }
-    *(void**)g_pCellCellData = obj;
-    void* cd = *(void**)g_pCellCellData;
-    (*(void(__thiscall**)(void*))((char*)Vt(cd) + 4))(cd);
-    void* rm = EA_ResourceMan_GetManager();
-    (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm) + 0x50))(rm, 1, *(void**)g_pCellCellData, 100);
-    void* cd2 = *(void**)g_pCellCellData;
-    (*(void(__thiscall**)(void*, int, int, int))((char*)Vt(cd2) + 0x18))(cd2, 3, 4, 0);
+    } else
+        obj = 0;
+    *(CellData_e4d840**)g_pCellCellData = (CellData_e4d840*)obj;
+    (*(CellData_e4d840**)g_pCellCellData)->Init();
+    ((ResMgr_e4d840*)EA_ResourceMan_GetManager())->AddDatabase(1, *(CellData_e4d840**)g_pCellCellData, 100);
+    (*(CellData_e4d840**)g_pCellCellData)->SetTypes(3, 4, 0);
 }
 }  // namespace SP
 

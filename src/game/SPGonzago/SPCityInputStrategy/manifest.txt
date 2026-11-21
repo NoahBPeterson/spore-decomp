@@ -17,3 +17,5 @@
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1560@@YGIPAXI@Z  00cf1560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1630@cCityInputStrategy@@QAEIPAXI@Z  00cf1630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1440@cCityInputStrategy@@QAEXXZ  00cf1440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf2010@SP@@YAPAUCityElemRef@@PAU2@0U2@UCityElemCompare@@@Z  00cf2010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?Destroy@CityInputStrategy@@QAEXXZ  00cf4ea0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

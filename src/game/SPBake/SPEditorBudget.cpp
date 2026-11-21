@@ -298,18 +298,11 @@ void cSPEditorBudget::Init(const void* key, cSPEditorEconomy* economy, unsigned 
 // @ 0x004581d0
 void SP::cSPEditorBudget::Shutdown()
 {
-    if (mLayout.mpObject != 0) {
-        ((cSPUILayout_s0045_75d0*)mLayout.mpObject)->Shutdown(1);
-        if (mLayout.mpObject != 0) {
-            void* old = mLayout.mpObject;
-            mLayout.mpObject = 0;
-            ((void(__thiscall*)(void*))(*(void***)old)[2])(old);
-        }
+    if (mLayout.get()) {
+        ((cSPUILayout_s0045_75d0*)mLayout.get())->Shutdown(1);
+        (ARCv<cSPUILayout_s0045_75d0>&)mLayout = 0;
     }
-    MessageServer* ms = (MessageServer*)SP_MessageServer();
-    ms->Send(this, 0x522f9ce, 0xffffd8f1);
-    ms = (MessageServer*)SP_MessageServer();
-    ms->Send(this, 0x522f9cd, 0xffffd8f1);
-    ms = (MessageServer*)SP_MessageServer();
-    ms->Send(this, 0x3150c27, 0xffffd8f1);
+    ((MessageServer*)SP_MessageServer())->Send(this, 0x522f9ce, 0xffffd8f1);
+    ((MessageServer*)SP_MessageServer())->Send(this, 0x522f9cd, 0xffffd8f1);
+    ((MessageServer*)SP_MessageServer())->Send(this, 0x3150c27, 0xffffd8f1);
 }

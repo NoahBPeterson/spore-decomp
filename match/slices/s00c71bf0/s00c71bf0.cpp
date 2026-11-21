@@ -13,6 +13,7 @@ extern "C" char g_1472480[];
 
 struct PlanetData;
 struct CPlanet;
+struct PlanetSimObject;
 struct IntVec2 { int* begin; int* end; int* cap; };
 struct MinMax { float mn, mx; };
 struct CtorScratch { float f0, f1, f2, f3, f4, f5, f6, f7, f8; };
@@ -136,7 +137,7 @@ struct CPlanet {
     uint32_t mField140;            // +0x140
     uint32_t mField144;            // +0x144
     char pad_148[0x154 - 0x148];
-    void* mp154;                   // +0x154
+    PlanetSimObject* mp154;        // +0x154
     uint32_t mField158;            // +0x158
     void* mStr15C;                 // +0x15c
     void* mStr160;                 // +0x160
@@ -336,23 +337,38 @@ void* CPlanet::FUN_00c71e30()
     return 0;
 }
 
+struct PlanetSimObject {
+    virtual void AddRef();                         // +0x00
+    virtual void Release();                        // +0x04
+    virtual void v08();
+    virtual PlanetSimObject* Cast(uint32_t type);  // +0x0c
+    void FUN_00c7e280(CPlanet* planet);            // 0x00c7e280
+    void FUN_00c82f00();                           // 0x00c82f00
+};
+struct PlanetNounManager {
+    PlanetSimObject* CreateNoun(uint32_t type);    // 0x00b20c60
+};
+inline PlanetSimObject* CastPlanetSim(PlanetSimObject* n) {
+    return n ? n->Cast(0x3572e6c) : 0;
+}
+inline void AssignPlanetSim(PlanetSimObject*& dst, PlanetSimObject* r) {
+    PlanetSimObject* old = dst;
+    if (r != old) {
+        if (r != 0) r->AddRef();
+        dst = r;
+        if (old != 0) old->Release();
+    }
+}
+
 // @ 0x00c71e70
 void* CPlanet::FUN_00c71e70()
 {
     if (mp154 == 0) {
-        void* mgr = NounManager_00b3d300();
-        void* n = NounManager_CreateNoun_00b20c60(mgr, 0x3572e72);
-        void* r;
-        if (n == 0) r = 0;
-        else r = ((void*(__thiscall*)(void*, uint32_t))(*(void***)n)[3])(n, 0x3572e6c);
-        void* old = mp154;
-        if (r != old) {
-            if (r != 0) ((void(__thiscall*)(void*))(*(void***)r)[0])(r);
-            mp154 = r;
-            if (old != 0) ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
-        }
-        FUN_00c7e280_00(mp154);
-        FUN_00c82f00_00(mp154);
+        PlanetNounManager* mgr = (PlanetNounManager*)NounManager_00b3d300();
+        PlanetSimObject* noun = mgr->CreateNoun(0x3572e72);
+        AssignPlanetSim(mp154, CastPlanetSim(noun));
+        mp154->FUN_00c7e280(this);
+        mp154->FUN_00c82f00();
     }
     return mp154;
 }

@@ -11,3 +11,4 @@
 ../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4790@CreatureBase_s00c0_45a0@@QAEHXZ  00c04790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?Pop@NodePool@@QAEXXZ  00c05ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c04870@@YIXPAPAX@Z  00c04870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?func5d40@CB@@QAEDH@Z  00c05d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

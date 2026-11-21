@@ -356,29 +356,39 @@ struct cTextRendererCtx {
     void* mStyle;     // +0x18
 };
 
-// @ 0x007a9130
+struct TextureItemVector {
+    int** mpBegin;               // +0x00
+    int** mpEnd;                 // +0x04
+    int size() const { return (int)(mpEnd - mpBegin); }
+    void erase(int** pos);       // 0x00760c40
+};
+struct TextureManagerV {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12();
+    virtual void Load(int* texture);   // +0x34
+};
 struct TextureListOwner {
     uint32_t pad000[0x190 / 4];   // +0x000
-    int**    mpItems;             // +0x190
-    int**    mpItemsEnd;          // +0x194
+    TextureItemVector mItems;     // +0x190
     bool FindAndErase(int* obj);  // 007a9130
 };
 
+// @ 0x007a9130
 bool TextureListOwner::FindAndErase(int* obj)
 {
     int key = *(int*)((char*)obj + 0x34);
-    if (key == 0)
-        return false;
-    int count = (int)(mpItemsEnd - mpItems);
-    for (int i = 0; i < count; ++i) {
-        int* p = mpItems[i];
-        if ((*(unsigned char*)((char*)p + 4) & 1) == 0) {
-            void* mgr = FUN_0067dd60();
-            ((void(__thiscall*)(void*, void*))(*(void***)mgr)[0x34 / 4])(mgr, p);
-        }
-        if (*p == key) {
-            FUN_00760c40(&mpItems[i]);
-            return true;
+    if (key != 0) {
+        int count = mItems.size();
+        for (int i = 0; i < count; ++i) {
+            int* p = mItems.mpBegin[i];
+            if ((*(unsigned char*)((char*)p + 4) & 1) == 0)
+                ((TextureManagerV*)FUN_0067dd60())->Load(p);
+            if (*p == key) {
+                mItems.erase(&mItems.mpBegin[i]);
+                return true;
+            }
         }
     }
     return false;

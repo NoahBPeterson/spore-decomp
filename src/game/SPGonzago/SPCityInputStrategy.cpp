@@ -6,6 +6,12 @@
 extern "C" char g_147875c[];
 extern "C" char g_1478774[];
 extern "C" char g_1478788[];
+extern "C" char g_14787bc[];
+extern "C" char g_14787ac[];
+extern "C" char g_147879c[];
+extern "C" char g_13ec458[];
+extern "C" char g_13eb394[];
+extern "C" char g_14771e0[];
 
 #include "game/types.h"
 #include <math.h>
@@ -420,6 +426,12 @@ struct AutoRefVector {
     u8   mPad[8];                    // +0x0c
     void Dtor();                     // 0x00ae6970
 };
+struct TreeHalf_cf4ea0 {
+    u32 mn00, mn04, mn08;
+    u32 mnRoot;                      // +0x0c
+    void ClearA() { ((TreeOps*)this)->ResetA(mnRoot); }
+    void ClearB() { ((TreeOps*)this)->ResetB(mnRoot); }
+};
 struct TreePairLayout {
     u32 mn00;                        // +0x00 tree A header
     u32 mn04;                        // +0x04 self pointer
@@ -434,6 +446,11 @@ struct TreePairLayout {
     u32 mn28;                        // +0x28 element count
     union { u32 mn2C; u8 mb2C; };    // +0x2c
     u32 mn30;                        // +0x30
+    void Reset()
+    {
+        ((TreeHalf_cf4ea0*)&mn1C)->ClearB();
+        ((TreeHalf_cf4ea0*)this)->ClearA();
+    }
 };
 struct ScanObj {
     u32* FUN_c0bc00();               // 0x00c0bc00
@@ -1613,35 +1630,37 @@ bool cCityInputStrategy_s00cf_1ca0::RestoreCommunityEditorOrShopping(int id)
 }
 }  // namespace SP
 
+struct CityElemPrimary {
+    virtual void AddRef();     // +0x00
+    virtual void Release();    // +0x04
+    char pad04[0x30];
+};
+struct CityElemKey { int mKey; };                     // base at +0x34
+struct CityElem : CityElemPrimary, CityElemKey {};
+struct CityElemRef {
+    CityElem* mpObject;
+    CityElemRef(const CityElemRef& x);
+    ~CityElemRef() { if (mpObject) mpObject->Release(); }
+    operator CityElem*() const { return mpObject; }
+};
+struct CityElemCompare {
+    bool operator()(CityElemKey* a, CityElemKey* b);  // 0x00ac0730
+};
+
 // @ 0x00cf2010
 namespace SP {
-int* __fastcall FUN_00cf2010(int* ecx_this, void* edx, int* last, int* value)
+CityElemRef* FUN_00cf2010(CityElemRef* first, CityElemRef* last, CityElemRef pivot, CityElemCompare compare)
 {
-    int* first = ecx_this;
-    int* vp;
-    while (true) {
-        int a;
-        vp = (value == 0) ? 0 : value + 0x0d;
-        a  = (*first == 0) ? 0 : *first + 0x34;
-        if (!FUN_00ac0730((void*)a, (void*)vp)) break;
-        first++;
-    }
-    do {
-        int a;
-        int* vp2;
-        last--;
-        a   = (*last == 0) ? 0 : *last + 0x34;
-        vp2 = (value == 0) ? 0 : value + 0x0d;
-        if (FUN_00ac0730((void*)vp2, (void*)a)) break;
-    } while (true);
-    if (first < last) {
+    for (;; ++first) {
+        while (compare(*first, pivot))
+            ++first;
+        --last;
+        while (compare(pivot, *last))
+            --last;
+        if (first >= last)
+            return first;
         FUN_00b2af00(first, last);
-        first++;
     }
-    if (value != 0) {
-        ((void(__thiscall**)(int*))(*(int**)value + 4))[0](value);
-    }
-    return last;
 }
 }  // namespace SP
 
@@ -2710,9 +2729,9 @@ CityInputStrategy* CityInputStrategy::Ctor(u32 param)
 // @ 0x00cf4ea0
 void CityInputStrategy::Destroy()
 {
-    mpVtbl = (void*)0x14787bc;
-    mpVtbl3C = (void*)0x14787ac;
-    mpVtbl40 = (void*)0x147879c;
+    mpVtbl = (void*)g_14787bc;
+    mpVtbl3C = (void*)g_14787ac;
+    mpVtbl40 = (void*)g_147879c;
 
     PieMenuVec* v = (PieMenuVec*)mp50;
     if (v != 0) {
@@ -2770,9 +2789,7 @@ void CityInputStrategy::Destroy()
     if (o != 0)
         ((void(__fastcall*)(void*))(*(void***)o)[4 / 4])(o);
 
-    TreePairLayout* t84 = (TreePairLayout*)&mTreeBase84;
-    ((TreeOps*)&t84->mn1C)->ResetB(t84->mn28);
-    ((TreeOps*)t84)->ResetA(t84->mn0C);
+    ((TreePairLayout*)&mTreeBase84)->Reset();
     o = mp80;
     if (o != 0)
         ((void(__fastcall*)(void*))(*(void***)o)[0xc / 4])(o);
@@ -2783,12 +2800,10 @@ void CityInputStrategy::Destroy()
         RemoveHandler(handler, mp70, mp74, (void*)mn78, (void*)mn7C);
     }
 
-    mpVtbl40 = (void*)0x13ec458;
-    mpVtbl3C = (void*)0x13eb394;
-    mpVtbl = (void*)0x14771e0;
-    TreePairLayout* t = (TreePairLayout*)&mTreeBase04;
-    ((TreeOps*)&t->mn1C)->ResetB(t->mn28);
-    ((TreeOps*)t)->ResetA(t->mn0C);
+    mpVtbl40 = (void*)g_13ec458;
+    mpVtbl3C = (void*)g_13eb394;
+    mpVtbl = (void*)g_14771e0;
+    ((TreePairLayout*)&mTreeBase04)->Reset();
 }
 
 // @ 0x00cf50e0

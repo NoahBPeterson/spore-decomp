@@ -4,5 +4,4 @@
 00c89630  225 cSO ctor: complete; store order / register-constant reuse of the member-init list differs (vtable now via g_vtable1473758). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (400/400).
 00c898f0  103 funcA4h: complete; model ref-count release chain; register/addr-form scheduling differs (model->vtbl reached through [model]+0x16c). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 12% coverage).
 00c893f0  422  func93F0: complete; scale-to-fit loop. difftest UNSUPPORTED (0/400 valid: original faults on generated `this`). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
-00c897e0  126 LocalToWorldTransform: complete; transform build. difftest UNSUPPORTED (0/400 valid: virtual calls through generated vtable fault). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c899a0  714  func7Ch: complete; 2-arg thiscall (`ret 8`) screen-space projection: viewer ProjectToScreen, projection-matrix dot guard, GetMainWindowArea screen mapping. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. [equiv: PASS 224 valid, 70.5% cov, seed 3]

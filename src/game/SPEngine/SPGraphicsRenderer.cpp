@@ -183,6 +183,7 @@ void __cdecl DevStop1();
 void __cdecl DevStop2();
 void __cdecl DevStop3();
 void __cdecl timeEndPeriod_(int);
+extern "C" char g_140dca0[];                             // EA::Thread::kTimeoutNone
 extern const unsigned int kTimeoutNone;                 // @ 0x140dca0 (EA::Thread::kTimeoutNone, 0xffffffff)
 namespace EA {
 namespace Thread {
@@ -592,7 +593,7 @@ void __stdcall GetDisplayName(int param_1)
 // @ 0x0075daa0
 void cRenderer::SetViewer(int idx, void* viewer)
 {
-    mMutex.Lock((const void*)0x140dca0);
+    mMutex.Lock((const void*)g_140dca0);
     mViewers[idx] = viewer;
     mMutex.Unlock();
 }
@@ -600,7 +601,7 @@ void cRenderer::SetViewer(int idx, void* viewer)
 // @ 0x0075dad0
 void* cRenderer::GetRenderStats(int idx)
 {
-    mMutex.Lock((const void*)(int*)0x140dca0);
+    mMutex.Lock((const void*)g_140dca0);
     void* r = mViewers[idx];
     mMutex.Unlock();
     return r;
@@ -625,7 +626,7 @@ void __stdcall RendererFlush(bool noSleep)
 void cRenderer::NumLayers(int* out)
 {
     cRenderer* self = this;
-    self->mMutex.Lock((const void*)0x140dca0);
+    self->mMutex.Lock((const void*)g_140dca0);
     __movsd((unsigned long*)out, (const unsigned long*)self->mStats, 0xb);
     self->mMutex.Unlock();
 }
@@ -634,7 +635,7 @@ void cRenderer::NumLayers(int* out)
 void cRenderer::LayerAtIndex(int v)
 {
     cRenderer* self = this;
-    self->mMutex.Lock((const void*)0x140dca0);
+    self->mMutex.Lock((const void*)g_140dca0);
     self->mRenderJobBudget = v;
     self->mMutex.Unlock();
 }
@@ -783,22 +784,30 @@ tail:
 }
 
 // @ 0x0075df60
-void SP::cRenderer::Render(unsigned char a1)
+struct ICanvas_75df60 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual void GetRect(int* r);                 // +0x3c
+};
+struct Point_75df60 { int x, y; Point_75df60() : x(0), y(0) {} };
+// The header files this address under cRenderer::Render(unsigned char) (slot 14), but retail
+// takes no stack argument (plain ret): it maps the cursor into the screen-space position at +0x64.
+struct cRendererCursor_75df60 { void UpdateCursorPosition(); };
+void cRendererCursor_75df60::UpdateCursorPosition()
 {
-    int param_1 = (int)this;
-    int a = 0;
-    int b = 0;
-    Canvas_GetRect(&a, &b);
-    int* canvas = SP_Canvas();
+    Point_75df60 pt;
+    Canvas_GetRect(&pt.x, &pt.y);
     int r[4];
-    ((void (__thiscall*)(void*, int*))*(void**)(*canvas + 0x3c))(canvas, r);
+    ((ICanvas_75df60*)SP_Canvas())->GetRect(r);
+    pt.x -= r[0];
+    pt.y -= r[1];
     int w = r[2] - r[0];
     int h = r[3] - r[1];
-    int dx = a - r[0];
-    int dy = b - r[1];
     if (w > 0 && h > 0) {
-        *(int*)(param_1 + 0x64) = (g_screenW * dx) / w;
-        *(int*)(param_1 + 0x68) = (g_screenH * dy) / h;
+        *(int*)((char*)this + 0x64) = (g_screenW * pt.x) / w;
+        *(int*)((char*)this + 0x68) = (g_screenH * pt.y) / h;
     }
 }
 
@@ -827,7 +836,7 @@ void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char fl
 
 struct LayerLock_s0075_de80 {
     EA::Thread::Mutex_s0075_de80* mMutex;
-    LayerLock_s0075_de80(EA::Thread::Mutex_s0075_de80* m) : mMutex(m) { mMutex->Lock((const void*)0x140dca0); }
+    LayerLock_s0075_de80(EA::Thread::Mutex_s0075_de80* m) : mMutex(m) { mMutex->Lock((const void*)g_140dca0); }
     ~LayerLock_s0075_de80() { mMutex->Unlock(); }
 };
 
@@ -894,7 +903,7 @@ unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
 // @ 0x0075e330
 int cRenderer_s0075_de80::NumLayers()
 {
-    mMutex.Lock((const void*)0x140dca0);
+    mMutex.Lock((const void*)g_140dca0);
     int n = (int)((LayerEnd(this) - LayerBegin(this)) / 0x14);
     mMutex.Unlock();
     return n;
@@ -903,7 +912,7 @@ int cRenderer_s0075_de80::NumLayers()
 // @ 0x0075e370
 void* cRenderer_s0075_de80::LayerInfoAt(int idx)
 {
-    mMutex.Lock((const void*)0x140dca0);
+    mMutex.Lock((const void*)g_140dca0);
     void* r = *(void**)(LayerBegin(this) + idx * 0x14);
     mMutex.Unlock();
     return r;
@@ -912,7 +921,7 @@ void* cRenderer_s0075_de80::LayerInfoAt(int idx)
 // @ 0x0075e3b0
 void* cRenderer_s0075_de80::LayerInfoAtIndex(int idx)
 {
-    mMutex.Lock((const void*)0x140dca0);
+    mMutex.Lock((const void*)g_140dca0);
     void* r = LayerBegin(this) + idx * 0x14;
     mMutex.Unlock();
     return r;

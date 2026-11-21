@@ -513,19 +513,21 @@ void FUN_00ec02e0(int obj)
     }
 }
 
+struct CastObj_ec0340 {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual void* Cast(unsigned int typeID);   // +0x0c
+};
+
 // @ 0x00ec0340
-int FUN_00ec0340(int* obj)
+bool FUN_00ec0340(CastObj_ec0340* obj)
 {
-    int v;
-    if (obj == 0)
-        return 0;
-    v = (*(int (__thiscall**)(int*, int))((*obj) + 0xc))(obj, 0xd0036e08);
-    if (v != 0)
-        return (*(uint32*)(*(int*)(v + 0xb4c) + 0x1cc) & 0x40000) != 0;
-    v = (*(int (__thiscall**)(int*, int))((*obj) + 0xc))(obj, 0x137e8e0);
-    if (v == 0)
-        return 0;
-    return (*(uint32*)(*(int*)(v + 0xaf0) + 0x1c8) & 0x8000) != 0;
+    if (obj) {
+        if (char* v = (char*)obj->Cast(0xd0036e08))
+            return (*(unsigned __int64*)(*(char**)(v + 0xb4c) + 0x1c8) & 0x4000000000000ULL) != 0;
+        if (char* v = (char*)obj->Cast(0x137e8e0))
+            return (*(unsigned __int64*)(*(char**)(v + 0xaf0) + 0x1c8) & 0x8000) != 0;
+    }
+    return false;
 }
 
 // @ 0x00ec03c0 — first entry of the object-vector at obj+0x670 whose payload

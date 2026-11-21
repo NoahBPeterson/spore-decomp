@@ -7,3 +7,4 @@ slices/s007a8a50/s007a8a50.cpp  ?AddGlyphRun@cTextRenderer@SP@@QAEXPBGIMM@Z  007
 slices/s007a8a50/s007a8a50.cpp  ?RegisterGameTexture@cTextureManager@@QAEXHH@Z  007a9540  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007a8a50/s007a8a50.cpp  ?FUN_007a95b0@@YGXHD@Z  007a95b0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007a8a50/s007a8a50.cpp  ?FUN_007a93b0@@YAXXZ  007a93b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a8a50/s007a8a50.cpp  ?FindAndErase@TextureListOwner@@QAE_NPAH@Z  007a9130  /O2 /MD /Gy /EHsc /TP /GS-

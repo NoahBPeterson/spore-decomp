@@ -1707,11 +1707,15 @@ cPlantCargoInfo* S::FUN_00b8f690()
   return self;
 }
 
+struct PlantCargoItemBase {
+  PlantCargoItemBase* Assign(const PlantCargoItemBase* other);   // 0x00c870b0 cSpaceInventoryItem::operator=
+};
+
 // @ 0x00b8f730
 cPlantCargoInfo* S::FUN_00b8f730(cPlantCargoInfo* other)
 {
   char* self = (char*)this;
-  ((void (__thiscall*)(void*, void*))0x00c870b0)(this, other);
+  ((PlantCargoItemBase*)this)->Assign((PlantCargoItemBase*)other);
   if (self != (char*)other) {
     *(int*)(self + 0x7c) = *(int*)((char*)other + 0x7c);
     *(int*)(self + 0x80) = *(int*)((char*)other + 0x80);

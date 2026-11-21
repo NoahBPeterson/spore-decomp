@@ -293,9 +293,9 @@ struct MainWin_s0081_43a0 {
     char pad4[0x2a8 - 0x28e];
     Vec   mVec;                 // +0x2a8
 
-    void OnKeyDown();                  // 0x8143a0
+    __declspec(noinline) void OnKeyDown();   // 0x8143a0
     void MovieToggle();                // 0x8145d0
-    bool SaveReadme(int);              // 0x8148b0
+    __declspec(noinline) bool SaveReadme(int);   // 0x8148b0
     bool KeyHandler2(int a, int key, int mod);  // 0x814d50
     void HandleMessage(unsigned id, int* msg);  // 0x814e40
     void RemoveElem(int val);          // 0x815310
@@ -973,6 +973,30 @@ void sTextStyleCallback(int n, void* args, void* p)
 
 
 
+struct AppSystem_814d50 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual bool IsDebugEnabled();                                   // +0x54
+};
 // @ 0x00814d50
 bool MainWin_s0081_43a0::KeyHandler2(int a, int key, int mod)
 {
@@ -981,8 +1005,7 @@ bool MainWin_s0081_43a0::KeyHandler2(int a, int key, int mod)
     if (key == 0x56) {
         if (mod == 0) { MovieToggle(); return true; }
     } else if (key == 0x70) {
-        void* as = SP_AppSystem();
-        if (((bool(__thiscall*)(void*))Vtbl(as)[0x54 / 4])(as) && SaveReadme(mod)) return true;
+        if (((AppSystem_814d50*)SP_AppSystem())->IsDebugEnabled() && SaveReadme(mod)) return true;
     }
     if (b220) {
         if (mp268) {

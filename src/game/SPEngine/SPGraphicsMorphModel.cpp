@@ -291,27 +291,48 @@ Val7ff0Obj::Val7ff0Obj(RCObj* a2, int* a3)
     f24 = a3[5];
 }
 
+struct RefObj_7580a0 {
+    virtual void AddRef();                                           // +0x00
+    virtual void Release();                                          // +0x04
+};
+struct Ref_7580a0 {
+    RefObj_7580a0* mp;
+    Ref_7580a0(const Ref_7580a0& o) : mp(o.mp) { if (mp) mp->AddRef(); }
+    ~Ref_7580a0() { if (mp) mp->Release(); }
+};
+struct StreamEntry_7580a0 {
+    int            mCount;                                           // +0x00
+    void**         mpData;                                           // +0x04
+    unsigned short mA;                                               // +0x08
+    unsigned short mB;                                               // +0x0a
+    Ref_7580a0     mRef;                                             // +0x0c
+};
+struct MatMgr_7580a0 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual char* FindMaterial(void* key);                           // +0x28
+};
 // @ 0x007580a0
 C0755b* __cdecl FUN_007580a0(C0755b* self)
 {
-    void* mm = SP_MaterialManager();
+    MatMgr_7580a0* mm = (MatMgr_7580a0*)SP_MaterialManager();
     int idx = FUN_0071ddc0(self, 0x15, 0, 6, 0xe);
-    if (idx < 0) return 0;
-    char* base = *(char**)((char*)self + 8);
-    char* e = base + idx * 0x20;
-    RCObj* p1 = *(RCObj**)(e + 0x1c);
-    void** p2 = *(void***)(e + 0x14);
-    int v = *(int*)(e + 0x10);
-    if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[0])(p1);
-    if (v) {
-        int r = (*(int (__thiscall**)(void*, void*))(*(int*)mm + 0x28))(mm, *p2);
-        if (r) {
-            int out = *(int*)(r + 4);
-            if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[1])(p1);
-            return (C0755b*)out;
+    if (idx >= 0) {
+        StreamEntry_7580a0 e = *(StreamEntry_7580a0*)(*(char**)((char*)self + 8) + idx * 0x20 + 0x10);
+        if (e.mCount) {
+            char* r = mm->FindMaterial(*e.mpData);
+            if (r)
+                return *(C0755b**)(r + 4);
         }
     }
-    if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[1])(p1);
     return 0;
 }
 

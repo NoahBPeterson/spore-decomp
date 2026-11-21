@@ -49,3 +49,4 @@
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Delete@IResEdView_765f80@@QAEPAU1@I@Z  00765f80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??0C68240View_768240@@QAE@PAX@Z  00768240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?MoveOut@ResB@@QAEXPAX@Z  00766100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Func69cf0@@YIDPAXH000@Z  00769cf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

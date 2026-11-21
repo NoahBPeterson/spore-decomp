@@ -648,31 +648,49 @@ bool IMEProxyS::Update()
     return true;
 }
 
+struct IWinX_7f4500 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+    virtual void v1c(); virtual void v1d(); virtual void v1e();
+    virtual void SetFlag(int flag, int on);                      // +0x7c
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v2a(); virtual void v2b();
+    virtual void v2c(); virtual void v2d(); virtual void v2e(); virtual void v2f();
+    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33();
+    virtual void v34(); virtual void v35();
+    virtual void AddWindow(IWinX_7f4500* w);                     // +0xd8
+    virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void BringToFront(IWinX_7f4500* w);                  // +0xe8
+};
+struct IWinMgrX_7f4500 {
+    virtual void v0();
+    virtual IWinX_7f4500* GetMainWindow();                       // +0x04
+};
 // @ 0x007f4500
 void IMEProxyS::StartCandidateList()
 {
     if (!mbWinCandidateListEnabled)
         return;
-    void* pCand = (char*)this + 0x3c;
     if (mpWinCandidateList != 0)
         return;
-    void* window = ((FPR0)VTOBJ(mpWinMgr)[4 / 4])(mpWinMgr);
-    void* caller = FUN_009512c0();
-    void* mem = FUN_009512d0(0x244, 4, g_name_IMECandidateList, caller);
-    void* obj;
-    if (mem) {
-        obj = ((IMECandidateListCtor_s007f_42e0*)mem)->Ctor();
-    } else {
-        obj = 0;
+    IWinX_7f4500* window = ((IWinMgrX_7f4500*)mpWinMgr)->GetMainWindow();
+    if (mpWinCandidateList == 0) {
+        void* mem = FUN_009512d0(0x244, 4, g_name_IMECandidateList, FUN_009512c0());
+        ((AutoRefAssign*)&mpWinCandidateList)->Assign(mem ? ((IMECandidateListCtor_s007f_42e0*)mem)->Ctor() : 0);
     }
-    ((AutoRefAssign*)pCand)->Assign(obj);
-    if (*(void**)pCand == 0)
+    if (mpWinCandidateList == 0)
         return;
     SetupDefaultFonts();
-    void* win = (char*)*(void**)pCand + 4;
-    ((FVP)VTOBJ(window)[0xd8 / 4])(window, win);
-    ((FVP)VTOBJ(window)[0xe8 / 4])(window, win);
-    ((void(__thiscall*)(void*, int, int))VTOBJ(win)[0x7c / 4])(win, 4, 0);
+    IWinX_7f4500* win = mpWinCandidateList ? (IWinX_7f4500*)((char*)mpWinCandidateList + 4) : 0;
+    window->AddWindow(win);
+    window->BringToFront(win);
+    win->SetFlag(4, 0);
     ((IMECandidateListInit*)mpWinCandidateList)->Init(mpMessageServer);
 }
 

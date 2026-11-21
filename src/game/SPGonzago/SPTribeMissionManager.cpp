@@ -180,22 +180,42 @@ struct TM {
 // ---- items of slice s00cd3480 end
 
 // @ 0x00cd3480
+struct StreamIO_cd3480 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void* GetStream();                                   // +0x18
+};
+struct StreamOwner_cd3480 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual StreamIO_cd3480* GetIO();                            // +0x20
+};
+struct Mission_cd3480 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual unsigned int GetState();                             // +0x60
+};
+struct Mgr_cd3480 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void OnMission(void* mission);                       // +0x30
+};
+static inline void WriteU32_cd3480(void* s, uint32_t v) { WriteUint32(s, &v, 1, 0); }
 unsigned char TM::WriteTribe(void* stream)
 {
-    uint32_t sig = 0xf4336f3c;
-    {
-        void* o = ((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
-        void* s = ((void*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
-        WriteUint32(s, &sig, 1, 0);
-    }
+    WriteU32_cd3480(((StreamOwner_cd3480*)stream)->GetIO()->GetStream(), 0xf4336f3c);
     unsigned char b = ((MissionMgrBase*)this)->Write(stream);
-    if (*(void**)((char*)this + 0x6c) != 0) {
-        void* o = *(void**)((char*)this + 0x6c);
-        if (((unsigned int(__thiscall*)(void*))(*(void***)o)[0x60 / 4])(o) == 5)
-            ((void(__thiscall*)(void*, void*))(*(void***)((char*)this - 8))[0x30 / 4])((char*)this - 8, o);
+    if (Mission_cd3480* m = (Mission_cd3480*)mp6c) {
+        if (m->GetState() == 5)
+            ((Mgr_cd3480*)((char*)this - 8))->OnMission(mp6c);
     }
     cVarListSerializer ser;
-    ser.Ctor((char*)this - 8, (void*)0x0157ee90, 0x1a80d26);
+    ser.Ctor((char*)this - 8, &g_0157ee90, 0x1a80d26);
     if (b) {
         if (ser.Serialize(stream))
             return 1;
@@ -207,14 +227,13 @@ unsigned char TM::WriteTribe(void* stream)
 unsigned char TM::ReadTribe(void* stream)
 {
     {
-        void* o = ((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
-        void* s = ((void*(__thiscall*)(void*))(*(void***)o)[0x18 / 4])(o);
-        uint32_t sig = 0;
+        void* s = ((StreamOwner_cd3480*)stream)->GetIO()->GetStream();
+        uint32_t sig;
         ReadInt32(s, &sig, 1, 0);
     }
     unsigned char b = ((MissionMgrBase*)this)->Read(stream);
     cVarListSerializer ser;
-    ser.Ctor((char*)this - 8, (void*)0x0157ee90, 0x1a80d26);
+    ser.Ctor((char*)this - 8, &g_0157ee90, 0x1a80d26);
     if (b) {
         if (ser.Read(stream))
             return 1;

@@ -22,3 +22,4 @@
 ../src/game/SPGonzago/_at_00b50000.cpp  ?FUN_00b5a260@HavokSystem@@QAEXPAX0@Z  00b5a260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b50000.cpp  ?FUN_00b521f0@@YAHPAX@Z  00b521f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00b50000.cpp  ?FUN_00b54be0@@YAPAHPAHH@Z  00b54be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?FUN_00b5b540@@YG_NPAH0HH@Z  00b5b540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

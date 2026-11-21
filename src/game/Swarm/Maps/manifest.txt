@@ -13,3 +13,5 @@
 ../src/game/Swarm/Maps.cpp  ??0MapInfoD4@@QAE@XZ  00a78050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/Maps.cpp  ??0MapInfoD5@@QAE@XZ  00a780a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/Maps.cpp  ??0MapInfoD6@@QAE@XZ  00a781a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?InitA@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z  00a75810  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?InitB@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@HE@Z  00a758b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
