@@ -686,15 +686,27 @@ void DualStream::m52()
     return ((void(__thiscall*)(void*))(*(void***)&file)[0x34 / 4])(&file);
 }
 
+struct IDualStreamPart {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual int IsOpen();                                       // +0x10
+    virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20();
+    virtual void v24(int a); virtual void v28(); virtual void v2c();
+    virtual void v30(int a, int b); virtual void v34();
+    virtual bool Read(int a, int b);                            // +0x38
+};
+
 // @ 0x006c0550
 bool DualStream::m55(int a, int b)
 {
-    if (*(int*)((char*)this - 4) == 0)
-        return false;
-    void* p = (char*)this + 0x28;
-    if (((int(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p))
-        return ((bool(__thiscall*)(void*, int, int))(*(void***)p)[0x38 / 4])(p, a, b);
-    return ((bool(__thiscall*)(void*, int, int))(*(void***)&file)[0x38 / 4])(&file, a, b);
+    bool r = false;
+    if (*(int*)((char*)this - 4) != 0) {
+        IDualStreamPart* p = (IDualStreamPart*)&mem;
+        if (p->IsOpen())
+            r = p->Read(a, b);
+        else
+            r = ((IDualStreamPart*)&file)->Read(a, b);
+    }
+    return r;
 }
 
 // ---------------------------------------------------------------------------
