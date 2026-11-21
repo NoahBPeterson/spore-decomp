@@ -414,19 +414,38 @@ cSPUILayoutCheat_s0081_24a0::cSPUILayoutCheat_s0081_24a0() {
 }
 // ---- items of slice s008124a0 end
 
+struct ResKey_s0080_fd60 { u32 instance, type, group; };
+struct WinMgrIface_s0080_fd60 {
+    virtual void v00();
+    virtual struct WinMgrIfaceB_s0080_fd60* GetIface();        // +0x04
+};
+struct WinMgrPad_s0080_fd60 { virtual void a00(); };
+struct WinMgrIfaceB_s0080_fd60 { virtual void b00(); };
+struct WinMgrObj_s0080_fd60 : WinMgrPad_s0080_fd60, WinMgrIfaceB_s0080_fd60 {
+    void* FUN_00812da0();                                     // 0x00812da0
+};
+struct Ser_s0080_fd60 {
+    void __thiscall Set(void* a, int b);   // 0x998f60
+    bool __thiscall Get(ResKey_s0080_fd60* key); // 0x998f80
+};
+
 // @ 0x0080fd60
-void __thiscall cSPUILayoutObjectCollection_s0080_f7c0::Init(void* key)
+void __thiscall cSPUILayoutObjectCollection_s0080_f7c0::Init(void* pkey)
 {
-    u32 k0 = ((u32*)key)[0], k1 = ((u32*)key)[1], k2 = ((u32*)key)[2];
-    if (g_b164cf58) k2 = (k2 & 0xffff42ff) | 0x4200;
-    void* wm = SP_WindowManager();
-    void* iface = ((void*(__thiscall*)(void*))VT(wm)[1])(wm);
-    void* obj = iface ? (void*)((u8*)iface - 4) : 0;
-    void* a = FUN_00812da0(obj);
-    ((SerStub*)((u8*)this + 8))->Set(a, 1);
+    ResKey_s0080_fd60 k;
+    k.instance = ((ResKey_s0080_fd60*)pkey)->instance;
+    k.type = ((ResKey_s0080_fd60*)pkey)->type;
+    k.group = ((ResKey_s0080_fd60*)pkey)->group;
+    if (g_b164cf58) k.group = (k.group & 0xffff42ff) | 0x4200;
+    WinMgrIfaceB_s0080_fd60* iface = ((WinMgrIface_s0080_fd60*)SP_WindowManager())->GetIface();
+    void* a = static_cast<WinMgrObj_s0080_fd60*>(iface)->FUN_00812da0();
+    Ser_s0080_fd60* ser = (Ser_s0080_fd60*)((u8*)this + 8);
+    ser->Set(a, 1);
     b8d = 0;
-    u32 k[3] = { k0, k1, k2 };
-    ((SerStub*)((u8*)this + 8))->Get(k);
+    if (!ser->Get(&k) && !g_b164cf58) {
+        k.group = (k.group & 0xffff42ff) | 0x4200;
+        ser->Get(&k);
+    }
 }
 
 // @ 0x0080fe10

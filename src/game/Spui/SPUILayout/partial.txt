@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0080fd60  89  approximate: Init second Get() branch and key fields omitted
 0080fe10  95  approximate: subscribe notification path handling simplified
 008107d0  148  approximate: CreateResource callback arg roles + vtable slots guessed
 008108a0  269  approximate: resource reload/binary-stream path simplified
