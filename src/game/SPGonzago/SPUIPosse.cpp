@@ -3438,36 +3438,27 @@ u8 cSPUIPosseItem_s00e2_7310::init(cSPUIPosse_s00e2_7310* posse)
     return 1;
 }
 
+extern "C" const char g_13f6b3c[];
+struct PosseCtrl { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5(); virtual void f6(); virtual u32 GetId(); };
+struct PosseMsgServer { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5(); virtual void Post(u32 id, void* msg, int a, int b); };
 // @ 0x00e27b20
 u8 cSPUIPosse_s00e2_7310::OnCtrlActivated(void* ctrl, u32 a2, u32 id, u32 a4)
 {
-    u32 v = ((u32 (__thiscall*)(void*))VT(ctrl)[0x1c / 4])(ctrl);
+    u32 v = ((PosseCtrl*)ctrl)->GetId();
     if (v != 0x3d98298)
         return 0;
     if (id != 0x3dae412)
         return 0;
 
     void* mode = FUN_00b5b800();
-    if (mode != (void*)0x1654c02 && mode != (void*)0x1654c04)
+    if (mode == (void*)0x1654c02 || mode == (void*)0x1654c04)
     {
+        Msg40* obj = new (g_13f6b3c, 0, 0, 0, 0) Msg40(0x61ed580);
+        obj->mData[0] = (uint32_t)this;
+        ((PosseMsgServer*)FUN_0067dcc0())->Post(0x61ed580, obj, 0, 0);
+    }
+    else
         toggle_select_all();
-        MOPS(this)->FUN_00e26680();
-        return 0;
-    }
-
-    void* obj = FUN_00f473a0(0x40, (void*)0x13f6b3c, 0, 0, 0, 0);
-    if (obj != 0)
-    {
-        *(u32*)((char*)obj + 0x30) = 0x61ed580;
-        *(void**)obj = (void*)0x13eb90c;
-        *(u32*)((char*)obj + 4) = 0;
-        *(void**)obj = (void*)0x13eb844;
-        *(u32*)((char*)obj + 0x38) = 0;
-    }
-    *(void**)((char*)obj + 8) = this;
-
-    void* server = FUN_0067dcc0();
-    ((void (__thiscall*)(void*, u32, void*, int, int))VT(server)[0x18 / 4])(server, 0x61ed580, obj, 0, 0);
     MOPS(this)->FUN_00e26680();
     return 0;
 }
