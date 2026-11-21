@@ -331,6 +331,7 @@ cSpatialObjectView::~cSpatialObjectView()
 }
 
 // @ 0x00e926d0
+extern "C" char g_17f243b[];
 struct ISpatialObj_926d0 {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
@@ -348,7 +349,7 @@ void cSpatialObjectView::SetModel_926d0(void* model)
     ISpatialObj_926d0* o = (ISpatialObj_926d0*)mpObject;
     o->SetModel((char*)model + 0x70, o->GetScale());
     cSpatialObject* obj = mpObject;
-    void* go = obj ? (void*)VC1(void*, obj, 0xb8, uint32_t, 0x17f243b) : 0;
+    void* go = obj ? (void*)VC1(void*, obj, 0xb8, uint32_t, (uint32_t)g_17f243b) : 0;
     FUN_00b3d310()->Fn_00b48770(go, true);
 }
 
