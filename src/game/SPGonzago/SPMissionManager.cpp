@@ -1627,18 +1627,25 @@ i32 FUN_00fec010(int* v)
 }
 
 // @ 0x00fec3c0
+struct StreamIO_fec3c0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void* GetStream();                       // +0x18
+};
+struct StreamOwner_fec3c0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual StreamIO_fec3c0* GetIO();                // +0x20
+};
+static inline void WriteU32_fec3c0(void* s, u32 v) { FUN_0093aa70(s, &v, 1, 0); }
+static inline void WriteBool_fec3c0(void* s, bool v) { FUN_0093a9a0(s, &v, 1); }
 void* FUN_00fec3c0(void* obj, u8* value)
 {
-    u32 one = 1;
-    void* a = (*(void* (__thiscall**)(void*))((char*)vtbl(obj) + 0x20))(obj);
-    void* b = (*(void* (__thiscall**)(void*))((char*)vtbl(a) + 0x18))(a);
-    FUN_0093aa70(b, &one, 1, 0);
-
+    StreamOwner_fec3c0* o = (StreamOwner_fec3c0*)obj;
+    WriteU32_fec3c0(o->GetIO()->GetStream(), 1);
     u8 flag = (u8)(*value & 1);
-    void* c = (*(void* (__thiscall**)(void*))((char*)vtbl(obj) + 0x20))(obj);
-    void* d = (*(void* (__thiscall**)(void*))((char*)vtbl(c) + 0x18))(c);
-    bool bv = flag != 0;
-    FUN_0093a9a0(d, &bv, 1);
+    void* s2 = o->GetIO()->GetStream();
+    WriteBool_fec3c0(s2, flag != 0);
     return obj;
 }
 
