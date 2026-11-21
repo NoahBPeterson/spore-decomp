@@ -176,24 +176,23 @@ bool __stdcall FUN_00ae2e20(int a, int b)
 
 // =============================================================================================
 // 0x00ae2e40 -- write a 3-field triple to a stream (fields 2, 1, 0 in that order).
+struct IHolder_ae2e40 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void* GetStream();   // +0x18
+};
+struct ISer_ae2e40 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual IHolder_ae2e40* GetHolder();   // +0x20
+};
+static __forceinline void WriteU32_ae2e40(void* s, uint v) { WriteTriple_WriteUint32(s, &v, 1, 0); }
 // @ 0x00ae2e40
 void* FUN_00ae2e40(void* self, uint* triple)
 {
-    int v;
-    void* w = (*(void*(__thiscall**)(void*))(*(uint*)self + 0x20))(self);
-    v = triple[2];
-    void* io = (*(void*(__thiscall**)(void*))(*(uint*)w + 0x18))(w);
-    WriteTriple_WriteUint32(io, &v, 1, 0);
-
-    w = (*(void*(__thiscall**)(void*))(*(uint*)self + 0x20))(self);
-    v = triple[1];
-    io = (*(void*(__thiscall**)(void*))(*(uint*)w + 0x18))(w);
-    WriteTriple_WriteUint32(io, &v, 1, 0);
-
-    w = (*(void*(__thiscall**)(void*))(*(uint*)self + 0x20))(self);
-    v = triple[0];
-    io = (*(void*(__thiscall**)(void*))(*(uint*)w + 0x18))(w);
-    WriteTriple_WriteUint32(io, &v, 1, 0);
+    WriteU32_ae2e40(((ISer_ae2e40*)self)->GetHolder()->GetStream(), triple[2]);
+    WriteU32_ae2e40(((ISer_ae2e40*)self)->GetHolder()->GetStream(), triple[1]);
+    WriteU32_ae2e40(((ISer_ae2e40*)self)->GetHolder()->GetStream(), triple[0]);
     return self;
 }
 

@@ -277,20 +277,25 @@ void __fastcall FileParser_SetParser(int* self, int, cIParser* p)
         ((void(__thiscall*)(cIParser*))(*(void***)old)[2])(old);
 }
 
+struct IParserRef_83f740 {
+    virtual int AddRef();     // +0x00
+    virtual int Release();    // +0x04
+    virtual void Init();      // +0x08
+};
 // @ 0x0083f740
 cIParser* __fastcall FileParser_Parser(int* self)
 {
     if (self[4] == 0) {
-        cIParser* p = CreateParser();
-        cIParser* old = (cIParser*)self[4];
+        IParserRef_83f740* p = (IParserRef_83f740*)CreateParser();
+        IParserRef_83f740* old = (IParserRef_83f740*)self[4];
         if (p != old) {
             if (p)
-                ((void(__thiscall*)(cIParser*))(*(void***)p->vftable)[0])(p);
+                p->AddRef();
             self[4] = (int)p;
             if (old)
-                ((void(__thiscall*)(cIParser*))(*(void***)old->vftable)[1])(old);
+                old->Release();
         }
-        ((void(__thiscall*)(cIParser*))(*(void***)((cIParser*)self[4])->vftable)[2])((cIParser*)self[4]);
+        ((IParserRef_83f740*)self[4])->Init();
     }
     return (cIParser*)self[4];
 }

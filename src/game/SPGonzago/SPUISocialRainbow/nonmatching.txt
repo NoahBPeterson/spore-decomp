@@ -4,7 +4,6 @@
 00e32580 1177 huge reload callback; transformed image/window/trig math and register/scheduling layout diverge
 00e32b20 303 transform matrix builder; stack array layout and x87/sincos scheduling diverge
 00e32c80 18 destructor loop; compiler hoists callee-saved push ebx/push edi above the m1ec release
-00e32f00 7 second loop register allocation swaps index/vtable (ebx/ebp) versus original
 00e330c0 300 constructor; dead-store elimination removes first vtable store and zero/float init scheduling diverges
 00e33270 1195 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: update/render path differs in block layout and register allocation around the animator and per-side loops (1299 bytes differ); equiv UNSUPPORTED (unresolved IWinProc::DoMessage tail call) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00e33850 220 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: in-place branch differs in register allocation, the growth branch keeps nNewCapacity in ebx instead of ebp (222 bytes differ); equiv FAIL call #0 (operator new name tag: ours "Simulator" 0x013f3f09, original 0x013f09b4) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

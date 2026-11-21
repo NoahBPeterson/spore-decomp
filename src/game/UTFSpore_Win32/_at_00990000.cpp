@@ -253,6 +253,17 @@ void Obj33::clear()
     *(int*)((char*)this + 0x10) = (int)b + n;
 }
 
+struct HitMaskReq_997b { int a, b, c; };
+struct IHitMaskMgr_997b {   // resource manager slots used by Bind
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual char Load(int* key, int* out, int, int, int type, HitMaskReq_997b* req);   // +0x0c
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual int FindType(int group, int type);                                         // +0x48
+};
+
 // @ 0x00997bf0
 bool FrameSet::Bind(int** a1, int id, int* a3)
 {
@@ -260,14 +271,13 @@ bool FrameSet::Bind(int** a1, int id, int* a3)
     if (id == 0x3ff) {
         short* hdr = (short*)a1[0];
         if (*hdr == 0x13 && *(int*)(hdr + 2) == (int)0xf074e1c8) {
-            void* o = FUN_008de1a0();
-            int r = VF(o, 0x48, int(__thiscall*)(void*, int, int))(o, a3[1], 0x19aef76);
+            IHitMaskMgr_997b* o = (IHitMaskMgr_997b*)FUN_008de1a0();
+            int r = o->FindType(a3[1], 0x19aef76);
             if (r != 0) {
-                struct Req { int a, b, c; };
-                Req req = *(Req*)a3;
+                HitMaskReq_997b req = *(HitMaskReq_997b*)a3;
                 req.b = 0x19aef76;
                 int out = 0;
-                char ok = VF(o, 0xc, char(__thiscall*)(void*, int*, int*, int, int, int, Req*))(o, a3, &out, 0, 0, r, &req);
+                char ok = o->Load(a3, &out, 0, 0, r, &req);
                 if (ok) {
                     *a1[1] = out;
                     unsigned v = (unsigned)out;

@@ -275,18 +275,17 @@ bool SP::IHandlerRC::HandleMessage(int msg, void* data)
     return false;
 }
 
+struct IAppModePreInit {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual void PreInit();   // +0x0c
+};
+
 // @ 0x007d81f0
 bool SP::cApp::PreInitAppModes()
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    if (n > 0) {
-        SP::cAppModeInfo* p = mAppModesBegin;
-        for (int i = 0; i < n; ++i, ++p) {
-            void* mode = p->mpMode;
-            void** vt = *(void***)mode;
-            ((void(__thiscall*)(void*))vt[0x0c / 4])(mode);
-        }
-    }
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    for (int i = 0; i < n; ++i)
+        (*(IAppModePreInit**)&mAppModesBegin[i])->PreInit();   // AutoRefCount<cIAppMode> at +0
     return true;
 }
 

@@ -855,13 +855,7 @@ bool cUIMissionCardPanel::ShouldShow(u32 id)
         || !((bool (__thiscall *)(void *))FUN_00810070)(m_visObj)) {
         return false;
     }
-    if (id == 0) {
-        return true;
-    }
-    if (FindMission(id) == m_curMission) {
-        return true;
-    }
-    return false;
+    return id == 0 || FindMission(id) == m_curMission;
 }
 
 // @ 0x00e18cb0

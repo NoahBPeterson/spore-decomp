@@ -1216,24 +1216,92 @@ void WinXHTML_s0099_4240::FUN_00994240()
 }
 
 // @ 0x009946b0
+struct Win_s009946b0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual int GetID();                    // +0x20
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void f74();
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual void f88();
+    virtual void f8c();
+    virtual void Invalidate();              // +0x90
+    virtual void f94();
+    virtual void f98();
+    virtual void f9c();
+    virtual void fa0();
+    virtual void fa4();
+    virtual void fa8();
+    virtual void fac();
+    virtual void fb0();
+    virtual void fb4();
+    virtual void fb8();
+    virtual void fbc();
+    virtual void fc0();
+    virtual void fc4();
+    virtual void fc8();
+    virtual void fcc();
+    virtual void fd0();
+    virtual void fd4();
+    virtual void fd8();
+    virtual void fdc();
+    virtual void fe0();
+    virtual void fe4();
+    virtual void fe8();
+    virtual void fec();
+    virtual void ff0();
+    virtual void ff4();
+    virtual void ff8();
+    virtual void ffc();
+    virtual void f100();
+    virtual void f104();
+    virtual void f108();
+    virtual void f10c();
+    virtual void f110();
+    virtual void SendMsg(void* msg);        // +0x114
+};
 void WinXHTMLCmd::OnDOMEvent(void* param_2)
 {
     char* self = (char*)this;      // WinXHTML base + 0x210
     int*  p = (int*)param_2;
 
     if (p[1] == 4) {
-        char* win = self - 0x20c;
-        void* (__thiscall* fn1)(void*) =
-            *(void*(__thiscall**)(void*))((char*)*(void**)win + 0x20);
+        Win_s009946b0* win = (Win_s009946b0*)(self - 0x20c);
         WinMsg m;
         m.code = 0x3326e8b;
-        m.f3 = (int)fn1(win);
+        m.f3 = win->GetID();
         m.f6 = p[0];
-        void (__thiscall* fn2)(void*, void*) =
-            *(void(__thiscall**)(void*, void*))((char*)*(void**)win + 0x114);
         m.f4 = 0;
         m.f5 = 0;
-        fn2(win, &m);
+        win->SendMsg(&m);
         return;
     }
     if (p[1] == 6) {

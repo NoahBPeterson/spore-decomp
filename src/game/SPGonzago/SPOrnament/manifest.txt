@@ -7,3 +7,4 @@
 ../src/game/SPGonzago/SPOrnament.cpp  ?resize@Vec0C@@QAEXIABUVec3_s00c8_db30@@@Z  00c8de50  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPOrnament.cpp  ?PostDataLoad@TotemPole@@QAE_NI@Z  00c8df10  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPOrnament.cpp  ??1cTotemPole@@UAE@XZ  00c8d800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ?Write@cTotemPole@@QAE_NPAVcOutStream@@@Z  00c8d330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

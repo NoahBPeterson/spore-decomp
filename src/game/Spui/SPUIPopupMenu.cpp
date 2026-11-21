@@ -75,8 +75,14 @@ class cSPUIPopupMenuScrollButton { public:
   void OnMouseWheel(float a1, float a2, int a3, int a4);
   void OnMouseWheelBase(float a1, float a2, int a3, int a4);
 };
+struct IPopupRef {
+  virtual int AddRef();
+  virtual int Release();
+};
 class cSPUIPopupMenuWin { public:
-  char pad00[0x8a8];
+  char pad00[0x888];
+  IPopupRef* r0; IPopupRef* r1; IPopupRef* r2; IPopupRef* r3;   // +0x888..0x894 (AutoRefCount)
+  IPopupRef* r4; IPopupRef* r5; IPopupRef* r6; IPopupRef* r7;   // +0x898..0x8a4 (AutoRefCount)
   int mNumItemChildren;          // +0x8a8
   int mSelectedItemIndex;        // +0x8ac
   int mCenteredItemIndex;        // +0x8b0
@@ -86,6 +92,7 @@ class cSPUIPopupMenuWin { public:
   bool mbF2;                     // +0x8c2
   bool mbF3;                     // +0x8c3
 
+  ~cSPUIPopupMenuWin();
   void Reset();
   void* FindChild(int idx);
   void RemoveChild(int idx);
@@ -179,7 +186,15 @@ struct Menu2 {
   void HideMenuItems(bool, bool);
   void OnMenuItemSelected(Menu2* b, Menu2* a);
 };
-struct OnMouseUpArg { char pad00[0x14]; int d14; int d18; int d1c; };
+struct OnMouseUpArg { int d00; int d04; int d08; int d0c; int d10; int d14; int d18; };
+struct IMouseUpWin {   // IWindow interface at +4
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual IMouseUpWin* GetParent();   // +0x10
+};
+struct IMouseUpHandler {
+  virtual void v00(); virtual void v04(); virtual void v08();
+  virtual void* Cast(int id);   // +0x0c
+};
 struct ItemMouseUp {
   char pad00[0x80];
   int f80;                     // +0x80
@@ -215,10 +230,29 @@ struct ScrollBtn2 {
   void OnButtonClicked(int);
   void OnButtonClicked2(int arg);
 };
-struct MB {
-  char pad00[0x3c];
-  int* head;      // +0x3c
-  char pad01[0x8a8 - 0x40];
+struct MBListNode { MBListNode* next; MBListNode* prev; };
+struct MBChildBase { virtual void c0(); };
+struct MBChildWin { virtual void w0(); };
+struct MBChild : MBChildBase, MBChildWin { MBListNode node; };   // node at +8
+struct MBWin {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void v30(); virtual void v31();
+    virtual void SetSkin(void* skin);  // slot 32 (+0x80)
+    virtual void v33(); virtual void v34(); virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38();
+    virtual void v39(); virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44();
+    virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49(); virtual void v50();
+    virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54();
+    virtual void RemoveChild(MBChildWin* child);  // slot 55 (+0xdc)
+};
+struct MBBase0 { virtual void b0(); };
+struct MB : MBBase0, MBWin {
+  char pad08[0x3c - 8];
+  MBListNode children;  // +0x3c
+  char pad01[0x8a8 - 0x44];
   int f8a8;       // +0x8a8
   int f8ac;       // +0x8ac
   void Do030();
@@ -367,10 +401,39 @@ void PopupWinCtor::Ctor()
   d0 = 0;
 }
 
-// @ 0x0081b100
 static void ReleaseRef(void* p)
 {
   ((void (__thiscall*)(void*))((void**)*(void**)p)[1])(p);
+}
+
+extern "C" char g_14196a8[];   // vtbl cSPUIPopupMenuWin (Window)
+extern "C" char g_1419588[];   // vtbl cSPUIPopupMenuWin (IWindow)
+extern "C" char g_1419518[];   // vtbl cSPUIPopupMenuWin (third base)
+struct S_966e40 { void __thiscall m(); };   // 0x00966e40, base-class (Window) destructor
+
+// @ 0x0081b100
+cSPUIPopupMenuWin::~cSPUIPopupMenuWin()
+{
+  *(void**)this = g_14196a8;
+  *(void**)((char*)this + 4) = g_1419588;
+  *(void**)((char*)this + 0x20c) = g_1419518;
+  _ReadWriteBarrier();
+  if (IPopupRef* q = r0) { r0 = 0; q->Release(); }
+  if (IPopupRef* q = r1) { r1 = 0; q->Release(); }
+  if (IPopupRef* q = r2) { r2 = 0; q->Release(); }
+  if (IPopupRef* q = r3) { r3 = 0; q->Release(); }
+  if (IPopupRef* q = r4) { r4 = 0; q->Release(); }
+  if (IPopupRef* q = r5) { r5 = 0; q->Release(); }
+  // member AutoRefCount destructors, in reverse order
+  if (r7) r7->Release();
+  if (r6) r6->Release();
+  if (r5) r5->Release();
+  if (r4) r4->Release();
+  if (r3) r3->Release();
+  if (r2) r2->Release();
+  if (r1) r1->Release();
+  if (r0) r0->Release();
+  ((S_966e40*)this)->m();
 }
 
 // @ 0x0081b240
@@ -680,19 +743,16 @@ void cAutoPropertyBaseLink::Update(void* except)
 char ItemMouseUp::OnMouseUp(float a1, float a2, int a3, int a4)
 {
   ((void (__thiscall*)(void*, int, int))VTSLOT((char*)this + 0x20c, 0x28))((char*)this + 0x20c, 4, 1);
-  int v = f84 != 0 ? f84 : f80;
   OnMouseUpArg args;
-  args.d14 = 0x4cab02d;
-  args.d18 = v;
-  args.d1c = f888;
-  void* self = (char*)this + 4;
-  void* p = ((void* (__thiscall*)(void*))VTSLOT(self, 0x10))(self);
-  if (p != 0) {
-    void* q = ((void* (__thiscall*)(void*, int))VTSLOT(p, 0xc))(p, 0x4c058d5);
-    if (q != 0) ((ItemMouseUp*)q)->OnMenuItemSelected2(0, this);
+  args.d08 = 0x4cab02d;
+  args.d0c = f84 != 0 ? f84 : f80;
+  args.d10 = f888;
+  IMouseUpWin* self = (IMouseUpWin*)((char*)this + 4);
+  if (IMouseUpHandler* p = (IMouseUpHandler*)self->GetParent()) {
+    if (void* q = p->Cast(0x4c058d5)) ((ItemMouseUp*)q)->OnMenuItemSelected2(0, this);
   }
   char r = WinButtonOnMouseUp(a1, a2, a3, a4);
-  Call114(&args);
+  ((void (__thiscall*)(void*, void*))VTSLOT(self, 0x114))(self, &args);
   return r;
 }
 
@@ -800,15 +860,15 @@ void PMW::OnScrollButtonClicked(char down, int p3)
 // @ 0x0081cce0
 void MB::Reset()
 {
-  int* h = (int*)((char*)this + 0x3c);
-  if (*(int**)((char*)this + 0x40) != h) {
+  MBListNode* h = &children;
+  if (h->prev != h) {
     do {
-      int v = *h;
-      if (v == 0 || v == 8) v = 0; else v = v - 4;
-      ((void (__thiscall*)(void*, int))VTSLOT((char*)this + 4, 0xdc))((char*)this + 4, v);
-    } while (*(int**)((char*)this + 0x40) != h);
+      MBListNode* n = h->next;
+      MBChild* c = n ? (MBChild*)((char*)n - 8) : 0;
+      RemoveChild(c);
+    } while (h->prev != h);
   }
-  ((void (__thiscall*)(void*, void*))VTSLOT((char*)this + 4, 0x80))((char*)this + 4, (void*)&g_13ec468);
+  SetSkin(&g_13ec468);
   Do030();
   f8a8 = 0;
   f8ac = 0;

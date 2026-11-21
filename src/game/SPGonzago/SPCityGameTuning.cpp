@@ -439,44 +439,21 @@ void cCityGameTuning::Init()
 // @ 0x00cf0cf0
 void cCityGameTuning_s00cf_0cf0::FUN_00cf0cf0()
 {
-    void* prop = 0;
-    void* mgr = FUN_0067de30();
-    if (prop)
-    {
-        void* old = prop;
-        prop = 0;
-        ((void (__thiscall*)(void*))VT(old)[1])(old);
+    App::PropertyList* pList = 0;
+    App::PropertyManager* mgr = SP::PropertyManager();
+    if (pList) {
+        App::PropertyList* pTemp = pList;
+        pList = 0;
+        pTemp->Release();
     }
-    if (!((u8 (__thiscall*)(void*, u32, void**))VT(mgr)[0x30 / 4])(mgr, 0xb6a5c63d, &prop))
-    {
-        if (prop)
-            Release(prop);
+    if (!mgr->GetPropertyList(0xb6a5c63d, &pList)) {
+        if (pList)
+            pList->Release();
         return;
     }
-    if (!prop)
-        return;
-    void* sub;
-    if (((u8 (__thiscall*)(void*, u32, void**))VT(prop)[0x24 / 4])(prop, 0x1ac13b9, &sub)
-        && *(u16*)((u8*)sub + 0x12) == 0xd)
-    {
-        mEntertainmentThreshold = *FUN_0041ea70();
-    }
-    if (prop)
-    {
-        if (((u8 (__thiscall*)(void*, u32, void**))VT(prop)[0x24 / 4])(prop, 0x1ac13ba, &sub)
-            && *(u16*)((u8*)sub + 0x12) == 0xd)
-        {
-            mProtestDuration = *FUN_0041ea70();
-        }
-        if (prop)
-        {
-            if (((u8 (__thiscall*)(void*, u32, void**))VT(prop)[0x24 / 4])(prop, 0x1ac13bb, &sub)
-                && *(u16*)((u8*)sub + 0x12) == 0xd)
-            {
-                mLurkDuration = *FUN_0041ea70();
-            }
-        }
-    }
-    if (prop)
-        Release(prop);
+    SP::GetPropertyAsFloat(pList, 0x1ac13b9, mEntertainmentThreshold);
+    SP::GetPropertyAsFloat(pList, 0x1ac13ba, mProtestDuration);
+    SP::GetPropertyAsFloat(pList, 0x1ac13bb, mLurkDuration);
+    if (pList)
+        pList->Release();
 }

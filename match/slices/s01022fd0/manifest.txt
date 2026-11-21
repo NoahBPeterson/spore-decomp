@@ -2,3 +2,4 @@
 slices/s01022fd0/s01022fd0.cpp  ?vector_dtor_IntVector@nSpaceCheats@SP@@YGXPAUIntVectorElem@12@0@Z  01023030  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s01022fd0/s01022fd0.cpp  ?FUN_010231e0@nSpaceCheats@SP@@YGXPAULayoutNode@12@0@Z  010231e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s01022fd0/s01022fd0.cpp  ?FUN_01023180@nSpaceCheats@SP@@YAPAULayoutNode@12@PAU312@00@Z  01023180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01022fd0/s01022fd0.cpp  ?VerifyMission@cCommandMission@nSpaceCheats@SP@@QAEPAXI@Z  01022fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

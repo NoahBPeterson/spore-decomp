@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCityGameTuning.cpp  ?FUN_00cf0cf0@cCityGameTuning_s00cf_0cf0@@QAEXXZ  00cf0cf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

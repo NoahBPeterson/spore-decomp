@@ -541,18 +541,25 @@ void __fastcall FUN_00ff3e80(Inv* ecx_this)
     }
 }
 
+struct InvStreamCh_ff3f20 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void* GetStream();  // slot 6 (+0x18)
+};
+struct InvHost_ff3f20 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7();
+    virtual InvStreamCh_ff3f20* GetChannel();  // slot 8 (+0x20)
+};
+static __forceinline void InvWriteUint32_ff3f20(void* stream, u32 value) { FUN_0093aa70(stream, &value, 1, 0); }
+
 // @ 0x00ff3f20
 bool __fastcall FUN_00ff3f20(Inv* ecx_this, void* edx, void* host)
 {
-    void* obj = ((void*(__thiscall*)(void*))(*(void***)host)[0x20 / 4])(host);
-    void* fn = ((void**)*(void***)obj)[0x18 / 4];
-    u32 tag = 0x9073163b;
-    void* ch = ((void*(__thiscall*)(void*))fn)(obj);
-    FUN_0093aa70(ch, &tag, 1, 0);
+    InvWriteUint32_ff3f20(((InvHost_ff3f20*)host)->GetChannel()->GetStream(), 0x9073163b);
 
     char ok = ecx_this->BaseWrite(host);
     cVarListSerializer ser;
-    ser.Ctor(ecx_this, (void*)0x15b5ed8, 0x1a80d26);
+    ser.Ctor(ecx_this, (void*)&g_15b5ed8, 0x1a80d26);
     if (ok != 0) {
         if (ser.Serialize(host) != 0) {
             return true;

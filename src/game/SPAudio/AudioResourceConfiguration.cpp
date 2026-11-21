@@ -278,7 +278,7 @@ struct EAString {
     char* mpBegin;
     char* mpEnd;
     char* mpCapacity;
-    void Resize(int n, int c);                     // 0x47bf30
+    EAString* Resize(int n, char c);               // 0x47bf30
 };
 struct Mutex_s00a1_7690 {
     void Lock(uint32_t id);                        // 0x9221b0
@@ -619,6 +619,12 @@ ResourceConfigurationView_a17910::~ResourceConfigurationView_a17910()
     }
 }
 
+struct IStream_a17a00 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual int Read(char* p, int n);
+};
 // @ 0x00a17a00
 bool __stdcall FUN_00a17a00(void* reader, EAString* str)
 {
@@ -630,7 +636,8 @@ bool __stdcall FUN_00a17a00(void* reader, EAString* str)
     FUN_0093a780(reader, &n, 1, 0);
     if (n != 0) {
         str->Resize(n, 0);
-        return ((int(__thiscall*)(void*, char*, int))VtOf(reader)[0xc])(reader, str->mpBegin, n) == n;
+        str = (EAString*)str->mpBegin;   // retail reuses the str register for the buffer
+        return n == ((IStream_a17a00*)reader)->Read((char*)str, n);
     }
     return true;
 }

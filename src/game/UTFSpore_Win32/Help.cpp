@@ -20,6 +20,7 @@ extern "C" __declspec(dllimport) int   __cdecl tolower(int);
 extern "C" int   __cdecl Vsnprintf8(char* buf, unsigned n, const char* fmt, void* args);   // 0x00938400
 extern char gEmptyString[];
 struct cError {
+    char mData[0x10];
     cError(const char* fmt, ...);
     cError(const cError&);
 };
@@ -89,22 +90,104 @@ void __cdecl MakeCaseInsensitiveChars(char* p, int* s)
 { (void)p; (void)s; }
 
 // @ 0x00840d50
-float __cdecl ParseRangedFloat(int* expr, float lo, float hi)
+struct FArgs_s00840d50 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void f74();
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual void f88();
+    virtual void f8c();
+    virtual void f90();
+    virtual void f94();
+    virtual float GetFloat(int index);   // +0x98
+};
+float __cdecl ParseRangedFloat(FArgs_s00840d50* args, int index, float lo, float hi)
 {
-    float v = ((float(__thiscall*)(int*))(*(void***)expr)[0x98 / 4])(expr);
-    if (lo <= v && v <= hi)
-        return v;
-    throw cError("argument out of range: expecting [%g..%g], got %g", (double)lo, (double)hi, (double)v);
+    float v = args->GetFloat(index);
+    if (lo > v || v > hi)
+        throw cError("argument out of range: expecting [%g..%g], got %g", (double)lo, (double)hi, (double)v);
+    return v;
 }
 
 // @ 0x00840dc0
-int __cdecl ParseRangedInt(int* expr, int lo, int hi)
+struct Args_s00840dc0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void f74();
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual void f88();
+    virtual void f8c();
+    virtual void f90();
+    virtual void f94();
+    virtual void f98();
+    virtual int GetInt(int index);       // +0x9c
+};
+int __cdecl ParseRangedInt(Args_s00840dc0* args, int index, int lo, int hi)
 {
-    int v = ((int(__thiscall*)(int*))(*(void***)expr)[0x9c / 4])(expr);
-    if (lo <= v && v <= hi)
+    int v = args->GetInt(index);
+    if (v >= lo && v <= hi)
         return v;
     throw cError("argument out of range: expecting [%d..%d], got %d", lo, hi, v);
-    return v;
 }
 
 // @ 0x00840e10

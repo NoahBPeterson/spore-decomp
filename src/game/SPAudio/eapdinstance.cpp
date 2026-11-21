@@ -582,24 +582,25 @@ PgSymbol* GetGroupSymbol(PgSymbol* out)
 }
 }}}  // namespace EA::Audio::Eapd
 
+struct EapdNodeAlloc_a643b0 { virtual void v0(); virtual void v1(); virtual void* Alloc(unsigned size); };
 // @ 0x00a643b0
 namespace EA { namespace Audio { namespace Eapd {
 AssetEntry* EapdAssetManager::NewEntryNode(void* a1, void* a2)
 {
-    AssetEntry* n = (AssetEntry*)((void* (__thiscall*)(void*, unsigned))
-        ((*(void***)((char*)this + 0xc))[2]))((char*)this + 0xc, 0x1c);
+    AssetEntry* n = (AssetEntry*)((EapdNodeAlloc_a643b0*)((char*)this + 0xc))->Alloc(0x1c);
     if (n != 0) {
-        n->mpLink1 = 0;
+        *(void* volatile*)&n->mpLink1 = 0;
         n->mpLink0 = 0;
-        n->mpFieldC = a1;
+        *(void* volatile*)&n->mpFieldC = a1;
         n->mpField8 = a2;
         char* head = (char*)this + 0x4c;
         n->mpLink1 = *(void**)(head + 4);
         n->mpLink0 = head;
         *(void**)(head + 4) = n;
         *(void**)(*(void**)((char*)n + 4)) = n;
+        return n;
     }
-    return n;
+    return 0;
 }
 }}}  // namespace EA::Audio::Eapd
 

@@ -596,6 +596,12 @@ SWARM_TerrainBrushCreate::~SWARM_TerrainBrushCreate()
     vtbl2 = (void*)&kGmeRefCountVtbl;
 }
 
+struct TerrainTexMgr_f4b420 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7();
+    virtual void* GetTexture(uint32 lo, uint32 hi, uint32 flags);  // slot 8 (+0x20)
+};
+
 // @ 0x00f4b420
 void cTerrainBrushEffect::Initialize(void*, void*, void*)
 {
@@ -607,14 +613,13 @@ void cTerrainBrushEffect::Initialize(void*, void*, void*)
         denom = &epsilon;
     mInvLifetime = 1.0f / *denom;
     mDoSpacing = (d->mSpacingCurve.mpBegin != d->mSpacingCurve.mpEnd);
-    uint32 texLo = d->mTexture[0];              // mov ecx, [eax+0x18]
-    if ((texLo & d->mTexture[1]) != 0xffffffff) {
-        void* mgr = Singleton67dd60();
+    if (*(uint64*)&d->mTexture[0] != 0xffffffffffffffffULL) {
+        TerrainTexMgr_f4b420* mgr = (TerrainTexMgr_f4b420*)Singleton67dd60();
         cTerrainBrushDescription* d2 = mDesc;
         uint64 tex = *(uint64*)&d2->mTexture[0];
         uint32 hi = (uint32)(tex >> 32);
-        void** vtbl = *(void***)mgr;
-        void* res = ((void* (__thiscall*)(void*, uint32, uint32, uint32))vtbl[0x20 / 4])(mgr, d2->mTexture[0], hi, 0);
+        uint32 lo = d2->mTexture[0];
+        void* res = mgr->GetTexture(lo, hi, 0);
         ((TextureRef*)&mpTexture)->Assign(res);
     }
 }

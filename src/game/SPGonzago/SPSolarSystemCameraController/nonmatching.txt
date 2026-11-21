@@ -1,6 +1,4 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
-01017290 18 SP::cSPCameraControllerSolarSystem::Write: complete behaviour; writer vcall/WriteUint32 scheduling and register choice differ (cVarListSerializer construction identical)
-01017300 13 SP::cSPCameraControllerSolarSystem::Read: complete behaviour; reader vcall + version gate + vector copy identical in shape; version-vcall register choice (eax vs edx) differs
 010175b0 287 table lookup/interpolation source shape; x87 vs SSE math and lookup loop layout differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 01017790 188 stack-local high/low selection and clamp lowering differ; cl15 branches instead of maxss/minss flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 01017910 302 aggregate identity/zero initialization stack temporaries omitted; store scheduling differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

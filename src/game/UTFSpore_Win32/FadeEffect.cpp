@@ -13,6 +13,7 @@ extern "C" char g_14422f8[];
 extern "C" void* FUN_009512c0(void);                        // 0x9512c0
 extern "C" void* FUN_009512d0(int size, int align, const char* name, void* alloc); // 0x9512d0
 #include <math.h>
+#include "sse_helpers.h"
 #pragma intrinsic(sqrt)
 
 // ---- items of slice s0096e3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -26,13 +27,19 @@ struct ExtBase {
 // ---- items of slice s0096e3a0 end
 
 // @ 0x0096f080
-void __cdecl BiStateEffect_func84h(int* self, float f)
+struct IEffect_96f080 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58();
+    virtual void SetColor(int c);   // +0x5c
+};
+void __stdcall BiStateEffect_func84h(int* self, float f)
 {
     f = (1.0f - f) * 255.0f;
-    int a = (int)f;
-    a <<= 24;
-    a += 0xffffff;
-    (*(void(__thiscall**)(int*, int))((char*)*self + 0x5c))(self, a);
+    ((IEffect_96f080*)self)->SetColor((SseTruncToInt(f) << 24) + 0xffffff);
 }
 
 // @ 0x0096f120

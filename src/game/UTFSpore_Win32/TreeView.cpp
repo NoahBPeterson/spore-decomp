@@ -320,7 +320,8 @@ class WinTreeView_s0098_f400 { public:
     void     SetDefaultIconDrawable(void* d);                     // 0098F850 0x0098f850
     void     SetExpanderDrawable(void* d);                        // 0098F8B0 0x0098f8b0
     void     DrawTreeNode(void* ctx, TreeNode* node, float* rect);  // 0098F950
-    int      DoMessage(void* msg);                                // 0098FAB0 0x0098fab0
+    bool     DoMessage(void* msg);                                // 0098FAB0 0x0098fab0
+    bool     FUN_00950bb0(void* msg);                             // 00950BB0 CustomWindow::DoMessage
     void*    GetScrollbarDrawable(int idx);                       // 0098FB80 0x0098fb80
     int      IsScrollbarVisible(int idx);                         // 0098FBA0 0x0098fba0
     void     CalculateVisibleArea();                              // 0098FBE0 0x0098fbe0
@@ -1717,25 +1718,24 @@ void __fastcall FUN_0098f950(void* self, void* unused, void* ctx, TreeNode* node
 
 // @ 0x0098fab0
 namespace EA { namespace UTFWinControls {
-int WinTreeView_s0098_f400::DoMessage(void* msg)
+bool WinTreeView_s0098_f400::DoMessage(void* msg)
 {
     if (*(uint32_t*)((char*)msg + 8) != 0x8ef0c8dd) {
         return FUN_00950bb0(msg);
     }
-    float x = mScrollSlot1.mScrollbar
+    struct { float x, y; } pos;
+    pos.x = mScrollSlot1.mScrollbar
         ? (float)VSLOT(int (__thiscall*)(void*), mScrollSlot1.mScrollbar, 0x28)(mScrollSlot1.mScrollbar)
         : 0.0f;
-    float y = mScrollSlot2.mScrollbar
+    pos.y = mScrollSlot2.mScrollbar
         ? (float)VSLOT(int (__thiscall*)(void*), mScrollSlot2.mScrollbar, 0x28)(mScrollSlot2.mScrollbar)
         : 0.0f;
-    if (x != mLastScrollX || y != mLastScrollY) {
-        IWindowLike* w = (IWindowLike*)((char*)this + 4);
-        void (__thiscall* fn)(void*) = VSLOT(void (__thiscall*)(void*), w, 0x90);
-        mLastScrollX = x;
-        mLastScrollY = y;
-        fn(w);
+    if (pos.x != mLastScrollX || pos.y != mLastScrollY) {
+        mLastScrollX = pos.x;
+        mLastScrollY = pos.y;
+        ((IWindowLike*)((char*)this + 4))->v90();
     }
-    return 1;
+    return true;
 }
 }}  // namespace EA::UTFWinControls
 

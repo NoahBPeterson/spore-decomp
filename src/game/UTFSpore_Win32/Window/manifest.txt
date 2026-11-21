@@ -17,3 +17,4 @@
 ../src/game/UTFSpore_Win32/Window.cpp  ?Shutdown@Window@UTFWin@EA@@UAE_NXZ  00961e80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?AsInterface@Window@UTFWin@EA@@UAEPAXW4InterfaceId@COM@3@@Z  0095f960  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?Release@Window@@QAEHXZ  0095f9a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?SetA8@Window@@QAEXH@Z  0095fd60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

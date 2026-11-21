@@ -488,16 +488,30 @@ extern "C" void __fastcall FUN_00f95150(char* self, int, int a2, int a3, int a4)
 // 0x00f951e0 -- assign the two transform ops and refresh them.
 // ===========================================================================
 // @ 0x00f951e0
-extern "C" void __fastcall FUN_00f951e0(char* self, int, int a2, int a3)
+struct XfOps_s00f951e0 {
+    char mData[0x38];
+    XfOps_s00f951e0* Assign(const void* src);      // 0x00537dc0 cSPTransformOps::Assign
+};
+struct Listener_s00f951e0 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c(); virtual void f10();
+    virtual void SetB(XfOps_s00f951e0* ops);       // +0x14
+    virtual void SetA(XfOps_s00f951e0* ops);       // +0x18
+};
+struct XfPair_s00f951e0 {
+    char pad00[0x2c];
+    XfOps_s00f951e0 mA;                            // +0x2c
+    XfOps_s00f951e0 mB;                            // +0x64
+    char pad9c[0xa4 - 0x9c];
+    Listener_s00f951e0* mpListener;                // +0xa4
+    void Set(const void* a, const void* b);
+};
+void XfPair_s00f951e0::Set(const void* a, const void* b)
 {
-    char* op1 = self + 0x2c;
-    char* op2 = self + 0x64;
-    FUN_00537dc0(op1, 0, (const void*)a2);
-    FUN_00537dc0(op2, 0, (const void*)a3);
-    int ud = *(int*)(self + 0xa4);
-    if (ud) {
-        ((FnVV)(*(void***)ud)[0x18 / 4])((void*)ud, op1);
-        ((FnVV)(*(void***)ud)[0x14 / 4])((void*)ud, op2);
+    mA.Assign(a);
+    mB.Assign(b);
+    if (Listener_s00f951e0* l = mpListener) {
+        l->SetA(&mA);
+        mpListener->SetB(&mB);
     }
 }
 

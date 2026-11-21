@@ -699,20 +699,20 @@ cSPUISwarmEffect::cSPUISwarmEffect()
 }
 
 // @ 0x008331a0
+struct Fx_s008331a0 {
+    virtual void f00(); virtual void f04(); virtual void f08();
+    virtual void Stop(int hard);            // +0x0c
+};
 void cSPUISwarmEffect::DoMessage(int event, void* msg)
 {
     int code = *(int*)((char*)msg + 8);
     if (code == 0x12) {
-        if (mpVisualEffect != 0) {
-            if (FUN_0067ddd0() != 0)
-                ((void (__thiscall*)(void*, int))VT(mpVisualEffect)[0xc / 4])(mpVisualEffect, 0);
-        }
+        if (mpVisualEffect != 0 && FUN_0067ddd0() != 0)
+            ((Fx_s008331a0*)mpVisualEffect)->Stop(0);
         mpVisualEffect = 0;
-        ((void (__thiscall*)(void*, int, void*))FUN_00963780)(this, event, msg);
-        return;
-    }
-    if (code == 0x10 || code == 0x15 || code == 0x10002)
+    } else if (code == 0x10 || code == 0x15 || code == 0x10002) {
         ((void (__thiscall*)(void*, int))FUN_00832e70)(this, event);
+    }
     ((void (__thiscall*)(void*, int, void*))FUN_00963780)(this, event, msg);
 }
 

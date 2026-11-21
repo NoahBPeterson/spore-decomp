@@ -2799,24 +2799,25 @@ bool cUICard_s00e1_2f80::HandleMessage(int, void* msg)
   return false;
 }
 
+struct ICardQuery_e131 {
+  virtual void v00(); virtual void v04(); virtual void v08();
+  virtual void* Cast(int id);   // +0x0c
+};
+
 // @ 0x00e13160
-int __stdcall FUN_00e13160(void* a, void* b)
+bool __stdcall FUN_00e13160(void* a, void* b)
 {
-  void* x;
-  if (a) x = (void*)((int(__thiscall*)(void*, int))Vt(a)[0xc / 4])(a, 0x334c6eec);
-  else x = 0;
-  void* y;
-  if (b) y = (void*)((int(__thiscall*)(void*, int))Vt(b)[0xc / 4])(b, 0x334c6eec);
-  else y = 0;
-  if (a) ((void(__thiscall*)(void*, int))Vt(a)[0xc / 4])(a, 0x334c6eef);
-  void* z;
-  if (b) z = (void*)((int(__thiscall*)(void*, int))Vt(b)[0xc / 4])(b, 0x334c6eef);
-  else z = 0;
+  ICardQuery_e131* qa = (ICardQuery_e131*)a;
+  ICardQuery_e131* qb = (ICardQuery_e131*)b;
+  void* x = qa ? qa->Cast(0x334c6eec) : 0;
+  void* y = qb ? qb->Cast(0x334c6eec) : 0;
+  if (qa) qa->Cast(0x334c6eef);
+  void* z = qb ? qb->Cast(0x334c6eef) : 0;
   if (x) {
     if (y) return *(float*)((char*)x + 0x98) > *(float*)((char*)y + 0x98);
-    if (z) return (int)(((unsigned)z & 0xffffff00u) | 1u);
+    if (z) return true;
   }
-  return (int)((unsigned)z & 0xffffff00u);
+  return false;
 }
 
 // @ 0x00e13210

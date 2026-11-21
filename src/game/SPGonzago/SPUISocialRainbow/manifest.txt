@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPUISocialRainbow.cpp  ?FUN_00e32de0@cSPUISocialRainbow_s00e3_2580@@QAEEXZ  00e32de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUISocialRainbow.cpp  ?ReleaseResources@cSPUISocialRainbow_s00e3_3270@@QAE_NXZ  00e33a00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISocialRainbow.cpp  ?Reset@cSPUISocialRainbow_s00e3_3270@@QAEXXZ  00e33ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISocialRainbow.cpp  ?FUN_00e32f00@cSPUISocialRainbow_s00e3_2580@@QAEXXZ  00e32f00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -34,3 +34,4 @@
 ../src/game/SPGonzago/_at_00b40000.cpp  ?NewNode@Pool@@QAEPAUPoolNode@@PAPAUObj@@@Z  00b41dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b40000.cpp  ?F@cObj452b0@@QAEXXZ  00b452b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b40000.cpp  ?Destroy@cObj45170@@QAEXXZ  00b45170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b40000.cpp  ?DoInsertValue@Vec44@@QAEXPAUElem44@@ABU2@@Z  00b47600  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

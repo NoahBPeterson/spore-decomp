@@ -5596,16 +5596,18 @@ void FUN_00eceab0(int param_1, int param_2)
     C1(pm, 0x2c, 0);
 }
 
+struct SwatchWinFinder_ed10b0 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void* FindWindow(int id);  // slot 3 (+0xc)
+};
+
 // @ 0x00ed10b0
 void Obj10B0::f(int a1, int a2, int a3, int a4)
 {
     ((Fn00ecf320*)this)->fn(a1, a2, a3, a4);
     FUN_00ed1030();
-    void* cb = cb28;
-    void* w = 0;
-    if (cb != 0)
-        w = (void*)((FV_i)(*(void***)cb)[0xc / 4])(cb, 0x3349c94);
-    ((Fn005f22f0*)w)->fn(g_15abf5c);
+    SwatchWinFinder_ed10b0* cb = (SwatchWinFinder_ed10b0*)cb28;
+    ((Fn005f22f0*)(cb ? cb->FindWindow(0x3349c94) : 0))->fn(g_15abf5c);
 }
 
 // @ 0x00ed1380

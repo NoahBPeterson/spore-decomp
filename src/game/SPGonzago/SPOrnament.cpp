@@ -1013,15 +1013,17 @@ int COrn::Ef30(int id)
 // Closest attempt, same size. The tag store now sits inside the second
 // virtual call, one instruction early: before `mov ecx, eax` instead of
 // after `mov eax, [edx+0x18]`.
+static __forceinline void TotemWriteUint32_c8d330(tIStream* pSink, uint32_t value) { EA_IO_WriteUint32(pSink, &value, 1, 0); }
+struct tVarListBlock_c8d330 {
+    cVarListSerializer_s00c8_c9d0  mSerializer;        // +0x000
+    uint32_t            mPad14[0x280];      // +0x014
+};
+
 // @ 0x00c8d330
 bool cTotemPole::Write(cOutStream* pStream)
 {
-    tVarListFrame frame;
-    void* a = pStream->v20();
-    void** vt = *(void***)a;
-    frame.mnValue = 0x055cf8e3;
-    tIStream* pSink = ((tIStream* (__thiscall*)(void*))vt[6])(a);
-    EA_IO_WriteUint32(pSink, &frame.mnValue, 1, 0);
+    TotemWriteUint32_c8d330(pStream->v20()->v18(), 0x055cf8e3);
+    tVarListBlock_c8d330 frame;
     bool bOk = cGameData_s00c8_c9d0::Write(pStream) && cSpatialObject_s00c8_c9d0::Write(pStream);
     frame.mSerializer.Construct(this, g_varListBase, 0x1a80d26);
     if (bOk)

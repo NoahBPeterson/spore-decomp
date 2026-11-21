@@ -48,26 +48,28 @@ void FUN_01023070(int** a, int** b, int (*cmp)(void*, void*));  // 0x01023070
 // ===========================================================================
 // 0x01022fd0  VerifyMission: linear-scan of the game-noun list for a pointer
 // ===========================================================================
+// The noun list links each noun through an intrusive link held by its second base (+0x0c).
+struct NounListLink {
+    NounListLink* mpNext;                                       // 0x000
+};
+struct NounListHead {
+    virtual void vf00(); virtual void vf04(); virtual void vf08();
+    virtual void* Verify(void* magic);                          // vtable +0x0c
+    uint32_t pad04[2];                                          // 0x004..0x00c
+};
+struct ListedNoun : NounListHead, NounListLink {};
+
 // @ 0x01022fd0
 void* cCommandMission::VerifyMission(uint32_t id)
 {
-    int** list = (int**)NounManager()->GetAllNouns();
-    int*  node = *list;
-    int*  cur  = node ? (int*)((char*)node - 0xc) : 0;
-    int*  end  = (int*)((char*)list - 0xc);
-    if (cur == end)
-        return 0;
-    for (;;) {
-        if (cur == (int*)id && id != 0)
-            break;
-        int* next = (int*)cur[3];
-        cur = next ? (int*)((char*)next - 0xc) : 0;
-        if (cur == end)
-            return 0;
+    NounListLink* anchor = (NounListLink*)NounManager()->GetAllNouns();
+    ListedNoun* cur = static_cast<ListedNoun*>(anchor->mpNext);
+    for (ListedNoun* end = static_cast<ListedNoun*>(anchor); cur != end;
+         cur = static_cast<ListedNoun*>(cur->mpNext)) {
+        if (cur == (ListedNoun*)id && id != 0)
+            return ((ListedNoun*)id)->Verify((void*)0x2aa5ada);
     }
-    int** vtbl = *(int***)cur;
-    void* (__thiscall *fn)(void*, void*) = (void* (__thiscall *)(void*, void*))vtbl[3];
-    return fn(cur, (void*)0x2aa5ada);
+    return 0;
 }
 
 // ===========================================================================
