@@ -245,8 +245,11 @@ void init_15d98f0()
 // @ 0x0124aab0
 void init_15d9834()
 {
-    *(float*)0x15d9834 = *(float*)0x15d9bc4;
-    *(float*)0x15d9838 = *(float*)0x15d9bc8;
+    extern float g_15d9bc4[2];
+    extern float g_15d9834[2];
+
+    g_15d9834[0] = g_15d9bc4[0];
+    g_15d9834[1] = g_15d9bc4[1];
 }
 
 // @ 0x0124aae0
