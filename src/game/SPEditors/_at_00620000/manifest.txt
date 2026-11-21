@@ -24,3 +24,4 @@
 ../src/game/SPEditors/_at_00620000.cpp  ?HandleLinkMessage@Pollen@SP@@YG_NPAXPBULinkMessage@12@@Z  00622f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00620000.cpp  ?FUN_0062cb90@@YIXPAX@Z  0062cb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00620000.cpp  ?FUN_0062ca80@@YIXPAX@Z  0062ca80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?FUN_0062cdb0@Obj_s0062_cdb0@@QAEPAXI@Z  0062cdb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
