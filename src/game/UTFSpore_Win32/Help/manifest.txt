@@ -2,3 +2,4 @@
 ../src/game/UTFSpore_Win32/Help.cpp  ?ParseRangedInt@@YAHPAUArgs_s00840dc0@@HHH@Z  00840dc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Help.cpp  ?ParseEnum@@YAHPBDPAH@Z  00840bb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Help.cpp  ?ParseRangedFloat@@YAMPAUFArgs_s00840d50@@HMM@Z  00840d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Help.cpp  ?ParseRangedVector3@@YAPAMPAMPAHHMM@Z  00840e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
