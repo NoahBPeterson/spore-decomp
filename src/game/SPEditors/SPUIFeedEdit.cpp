@@ -4243,48 +4243,58 @@ void Obj54b0::f(int a)
 }
 
 // @ 0x00ed5580
+struct IRes_ed5580 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void v02();
+    virtual S_5508a0* Cast(unsigned typeId);
+};
+struct ResPtr_ed5580 {
+    IRes_ed5580* mp;
+    ResPtr_ed5580() : mp(0) {}
+    void Drop() { if (mp) mp->Release(); }
+    IRes_ed5580** AsPointer()
+    {
+        if (mp) {
+            IRes_ed5580* t = mp;
+            mp = 0;
+            t->Release();
+        }
+        return &mp;
+    }
+};
+struct IResMgr_ed5580 {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual bool GetResource(const PanelMatchDesc* key, IRes_ed5580** out,
+                             int a, int b, int c, int d);
+};
+struct IAuth_ed5580 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual unsigned long long GetUserID();
+};
 bool __stdcall Panel_Match(int a1, int a2, int a3)
 {
-    (void)a3;
+    (void)a2; (void)a3;
     PanelMatchDesc* desc = (PanelMatchDesc*)&a1;
     desc->m_typeId = 0x30bdee3;
-
-    void* local = 0;
-    if (local != 0) {
-        void* t = local; local = 0;
-        ((FV_v)(*(void***)t)[4 / 4])(t);
-    }
-    void* factory = FUN_008de1a0();
-
-    char ok = ((FV_ppiiii)(*(void***)factory)[0xc / 4])(factory, (void*)desc, (void*)&local, 0, 0, 0, 0);
-    if (!ok) {
-        if (local != 0) {
-            void* t = local; local = 0;
-            ((FV_v)(*(void***)t)[4 / 4])(t);
+    ResPtr_ed5580 res;
+    if (((IResMgr_ed5580*)FUN_008de1a0())->GetResource(desc, res.AsPointer(), 0, 0, 0, 0)) {
+        if (res.mp == 0)
+            return false;
+        if (S_5508a0* meta = res.mp->Cast(0x30bdee3)) {
+            unsigned long long user = ((IAuth_ed5580*)FUN_00607a60())->GetUserID();
+            bool r = meta->f() == user;
+            res.Drop();
+            return r;
         }
+        res.Drop();
         return false;
     }
-    if (local == 0) return false;
-
-    void* meta = (void*)((FV_ip)(*(void***)local)[0xc / 4])(local, 0x30bdee3);
-    if (meta == 0) {
-        if (local != 0) {
-            void* t = local; local = 0;
-            ((FV_v)(*(void***)t)[4 / 4])(t);
-        }
-        return false;
-    }
-
-    void* auth = FUN_00607a60();
-    unsigned long long a = ((FV_q)(*(void***)auth)[0x40 / 4])(auth);
-    unsigned long long c = ((S_5508a0*)meta)->f();
-    bool r = (a == c);
-
-    if (local != 0) {
-        void* t = local; local = 0;
-        ((FV_v)(*(void***)t)[4 / 4])(t);
-    }
-    return r;
+    res.Drop();
+    return false;
 }
 
 // @ 0x00ed5640
