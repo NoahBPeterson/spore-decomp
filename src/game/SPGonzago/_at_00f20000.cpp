@@ -1753,10 +1753,10 @@ void EventTree::Destroy(int* node)
     while (node != 0) {
         Destroy((int*)node[0]);
         int* next = (int*)node[1];
-        if (node[5] != 0)
-            ((void(__thiscall*)(void*))*(void**)(*(int*)node[5] + 4))((void*)node[5]);
-        if (node[4] != 0)
-            ((void(__thiscall*)(void*))*(void**)(*(int*)node[4] + 4))((void*)node[4]);
+        if (IRefCounted_f20d20* p = (IRefCounted_f20d20*)node[5])
+            p->Release();
+        if (IRefCounted_f20d20* p = (IRefCounted_f20d20*)node[4])
+            p->Release();
         operator_delete(node);
         node = next;
     }

@@ -70,3 +70,4 @@
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn251f0@Obj@@QAE?AUVec3i@@XZ  00f251f0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn25580@Obj@@QAE_NXZ  00f25580  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00f20000.cpp  ?FUN_00f20d20@@YAPAXPAX@Z  00f20d20  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?Destroy@EventTree@@QAEXPAH@Z  00f240d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
