@@ -263,7 +263,7 @@ struct IWin {
     virtual void Fne8(IWin* w);                         // 58 (+0xe8)
     virtual void s59(); virtual void s60(); virtual void s61(); virtual void s62(); virtual void s63();
     virtual void s64();
-    virtual void Fn104(void* proc);                     // 65 (+0x104) add window proc
+    virtual void Fn104(struct IWinProc_s0067* proc);    // 65 (+0x104) add window proc
 };
 struct Layout {                       // cSPUILayout
     uint32_t pad[6];
@@ -341,8 +341,9 @@ struct HintVec {                      // eastl::vector<AutoRefCount<cHint>> at t
     void DestroyRange(cHint_s0067_b4c0** a, cHint_s0067_b4c0** b);                     // 0x00a693f0
 };
 cHint_s0067_b4c0** __cdecl HintCopy(cHint_s0067_b4c0** last, cHint_s0067_b4c0** end, cHint_s0067_b4c0** first);   // 0x00d3b3c0
-class cUIHints { public:
-    uint32_t pad0[3];
+struct cUIHintsBase0 { uint32_t pad0[2]; };       // +0x00
+struct IWinProc_s0067 { uint32_t mVtbl; };         // +0x08 IWinProc base
+class cUIHints : public cUIHintsBase0, public IWinProc_s0067 { public:
     uint32_t* mCondBegin;   // +0x0c  (vector of condition processors)
     uint32_t* mCondEnd;     // +0x10
     uint32_t pad1[3];
@@ -708,7 +709,7 @@ void cUIHints::InitHints()
     mpLayout = lay;
     lay->Init(L"Hint", 0x40464100, 1, 0xcbdf6e1d);
     IWin* w = mpLayout->FindWindowByID(-1, 1);
-    if (w) ((FnV1p)(*(void***)w)[0x104 / 4])(w, (char*)this + 8);
+    if (w) w->Fn104(this);
     mpLayout->SetVisibility(0);
     w = mpLayout->FindWindowByID(0x5244c08, 1);
     mIconArea = *(Rect4*)w->GetArea();
