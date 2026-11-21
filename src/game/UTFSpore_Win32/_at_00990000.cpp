@@ -234,23 +234,19 @@ Obj33* Obj33::ctor()
 }
 
 // @ 0x00997ba0
+struct Obj33Item { virtual void f0(); virtual void Release(); };
 void Obj33::clear()
 {
-    unsigned* p = *(unsigned**)((char*)this + 0xc);
-    unsigned* end = *(unsigned**)((char*)this + 0x10);
-    for (; p != end; p++) {
-        void* o = (void*)*p;
-        if (o)
-            (*(void(__thiscall**)(void*))((char*)*(void**)o + 4))(o);
+    Obj33Item**& b0 = *(Obj33Item***)((char*)this + 0xc);
+    Obj33Item**& e0 = *(Obj33Item***)((char*)this + 0x10);
+    for (Obj33Item** p = b0; p != e0; p++) {
+        if (*p)
+            (*p)->Release();
     }
-    unsigned* a = *(unsigned**)((char*)this + 0xc);
-    unsigned* b = *(unsigned**)((char*)this + 0x10);
-    FUN_011e0744(a, b, 0);
-    int n = (int)((char*)b - (char*)a) >> 2;
-    n = -n;
-    n = n + n;
-    n = n + n;
-    *(int*)((char*)this + 0x10) = (int)b + n;
+    Obj33Item** first = b0;
+    Obj33Item** last = e0;
+    FUN_011e0744(first, last, (unsigned)((char*)e0 - (char*)last));
+    e0 = e0 - (last - first);
 }
 
 struct HitMaskReq_997b { int a, b, c; };
