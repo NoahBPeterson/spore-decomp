@@ -730,7 +730,7 @@ void hkBreakableConstraintData::buildJacobian(const hkConstraintQueryIn& in, hkC
         results[i * 2] = 0.0f;                          // dword stores of 0 (impulses reset)
 }
 
-// @ 0x010980d0
+// 0x010980d0 (scalar deleting destructor): matched in slice s010c4d40
 hkBreakableConstraintData::~hkBreakableConstraintData()
 {
     m_constraintData->removeReference();      // no null test in the original

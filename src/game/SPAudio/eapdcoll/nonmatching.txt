@@ -8,7 +8,6 @@
 00a58480 207 CollTable::InsertIns(out,key,unused): 3 stack args (ret 0xc), Find + policy Rehash + AllocNode + bucket insert; frame/regalloc differ (compiled 242 vs original 225). flags /O2 /MD /Gy /EHsc /TP; difftest PASS (261 valid, 77.3% coverage)
 00a58570 263 CollLess::Less(a,b): key comparator (type@8, float/int@0xc, string@0x10) with swap logic; string loop and branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (200 valid, 58.8% coverage)
 00a587a0 185 flags: /O2 /MD /Gy /EHsc /TP
-00a58950 99 flags: /O2 /MD /Gy /EHsc /TP
 00a589e0 90 flags: /O2 /MD /Gy /EHsc /TP
 00a58a70 103 flags: /O2 /MD /Gy /EHsc /TP
 00a58b00 98 flags: /O2 /MD /Gy /EHsc /TP

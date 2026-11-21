@@ -604,21 +604,6 @@ END:
 // hkConvexListAgent::processCollisionFlip -- run the convex-list agent with the two bodies swapped, then flip
 // every contact point that was created (the caller had the list as bodyB).
 // ============================================================================================================
-// @ 0x010de760
-void hkConvexListAgent::processCollisionFlip(const hkCdBody& bodyA, const hkCdBody& bodyB,
-                                             const hkProcessCollisionInput& input, hkProcessCollisionOutput& result)
-{
-    const hkTime oldToiTime = result.m_toiTime;
-    hkProcessCdPoint* pStart = result.m_firstFreeContactPoint;
-    hkConvexListAgent::processCollision(bodyB, bodyA, input, result);
-    for (hkProcessCdPoint* p = pStart; p < result.m_firstFreeContactPoint; ++p)
-        p->m_contact.setFlipped(p->m_contact);
-    if (oldToiTime != result.m_toiTime) {
-        result.m_toiContact.m_separatingNormal.x = -result.m_toiContact.m_separatingNormal.x;
-        result.m_toiContact.m_separatingNormal.y = -result.m_toiContact.m_separatingNormal.y;
-        result.m_toiContact.m_separatingNormal.z = -result.m_toiContact.m_separatingNormal.z;
-    }
-}
 
 // ============================================================================================================
 // hkListAgent::cleanup -- release every child agent, then delete the list agent.
@@ -822,21 +807,6 @@ hkListAgent::hkListAgent(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkC
 // ============================================================================================================
 // hkListAgent::processCollisionFlip -- body-swapped wrapper around hkListAgent::processCollision.
 // ============================================================================================================
-// @ 0x010df040
-void hkListAgent::processCollisionFlip(const hkCdBody& bodyA, const hkCdBody& bodyB,
-                                       const hkProcessCollisionInput& input, hkProcessCollisionOutput& result)
-{
-    const hkTime oldToiTime = result.m_toiTime;
-    hkProcessCdPoint* pStart = result.m_firstFreeContactPoint;
-    hkListAgent::processCollision(bodyB, bodyA, input, result);
-    for (hkProcessCdPoint* p = pStart; p < result.m_firstFreeContactPoint; ++p)
-        p->m_contact.setFlipped(p->m_contact);
-    if (oldToiTime != result.m_toiTime) {
-        result.m_toiContact.m_separatingNormal.x = -result.m_toiContact.m_separatingNormal.x;
-        result.m_toiContact.m_separatingNormal.y = -result.m_toiContact.m_separatingNormal.y;
-        result.m_toiContact.m_separatingNormal.z = -result.m_toiContact.m_separatingNormal.z;
-    }
-}
 
 // ============================================================================================================
 // hkListAgent::getPenetrationsDefault -- run getPenetrations with a throw-away body-pair collector.

@@ -1191,10 +1191,14 @@ void SP::cSPEditorVerbIconTray::Shutdown()
 
 // @ 0x005e77e0
 namespace SP {
-void VectorResize(void* self, unsigned int count)
+// eastl::vector::resize(n) for the icon list (same shape as IntVector::resize 0x00a730c0)
+template <>
+void IconVector<AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830> >::Resize(unsigned int n)
 {
-  (void)self;
-  (void)count;
+  if (n > size())
+    insert(mpEnd, n - size(), RawRef());
+  else
+    erase(mpBegin + n, mpEnd);
 }
 }  // namespace SP
 

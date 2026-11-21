@@ -1336,15 +1336,14 @@ void** FUN_00ac89e0(void** first, void** last, void** out)
 }
 
 // @ 0x00ac8a30
-void** FUN_00ac8a30(void* last_, void* first_, void** out)
+void** FUN_00ac8a30(void* first_, void* last_, void** out)
 {
-    char* last = (char*)last_;
-    char* first = (char*)first_;
-    while (first != last) {
-        void* a = *(void**)(first - 4);
-        void* b = out[-1];
-        first -= 4;
-        --out;
+    // eastl::copy_backward over ref-counted pointers (same shape as CopyBackward 0x009aa720).
+    void** first = (void**)first_;
+    void** last = (void**)last_;
+    while (last != first) {
+        void* a = *--last;
+        void* b = *--out;
         if (a != b) {
             if (a) ((CAnim*)a)->AddRef();
             *out = a;

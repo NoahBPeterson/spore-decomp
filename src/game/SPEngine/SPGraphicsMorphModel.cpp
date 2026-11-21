@@ -113,7 +113,12 @@ struct Elem14 {
                 void Clear(int);                         // 0x00758ee0
                 int* DoInit(unsigned n, int* first, int* last);  // 0x00758630
                 Elem14* OpAssign(Elem14* o); };
-struct Elem50 { Elem14 a; Elem14 b; Elem14 c; IntVec d; Elem50* Ctor(int* src); };
+// the fourth sub-vector is another vector type with its own operator=
+struct Elem14d {
+                int* begin; int* end; int* cap; int a, b;
+                void Init(int n, void* src);             // 0x00733070
+                Elem14d* OpAssign(Elem14d* o); };        // 0x0050d4e0
+struct Elem50 { Elem14 a; Elem14 b; Elem14 c; Elem14d d; Elem50* Ctor(int* src); };  // 0x50 bytes
 struct Sub9100 { void f(); };
 struct C591f0 {
     char pad[0xc];
@@ -538,19 +543,21 @@ Elem50* Elem50::Ctor(int* src)
     c.Init((src[0xb] - src[10]) >> 2, src + 0xd);
     c.end = (int*)memcpy(c.begin, (void*)src[10], src[0xb] - src[10]) + ((src[0xb] - src[10]) >> 2);
     d.Init((src[0x10] - src[0xf]) >> 2, src + 0x12);
-    d.mEnd = (int*)memcpy(d.mBegin, (void*)src[0xf], src[0x10] - src[0xf]) + ((src[0x10] - src[0xf]) >> 2);
+    d.end = (int*)memcpy(d.begin, (void*)src[0xf], src[0x10] - src[0xf]) + ((src[0x10] - src[0xf]) >> 2);
     return this;
 }
 
 // @ 0x00758e20
 Elem50* __cdecl FUN_00758e20(Elem50* first, Elem50* last, Elem50* out)
 {
-    for (; first != last; first = (Elem50*)((char*)first + 0x50),
-                       out = (Elem50*)((char*)out + 0x50)) {
+    // eastl::copy (same shape as copyFwd50 0x00717ad0)
+    while (first != last) {
         out->a.OpAssign(&first->a);
         out->b.OpAssign(&first->b);
         out->c.OpAssign(&first->c);
-        out->d = first->d;
+        out->d.OpAssign(&first->d);
+        ++first;
+        ++out;
     }
     return out;
 }
@@ -558,25 +565,27 @@ Elem50* __cdecl FUN_00758e20(Elem50* first, Elem50* last, Elem50* out)
 // @ 0x00758e80
 Elem50* __cdecl FUN_00758e80(Elem50* first, Elem50* last, Elem50* out)
 {
+    // eastl::copy_backward (same shape as copyBack50 0x00717b70)
     while (last != first) {
-        last = (Elem50*)((char*)last - 0x50);
-        out = (Elem50*)((char*)out - 0x50);
+        --last;
+        --out;
         out->a.OpAssign(&last->a);
         out->b.OpAssign(&last->b);
         out->c.OpAssign(&last->c);
-        out->d = last->d;
+        out->d.OpAssign(&last->d);
     }
     return out;
 }
 
 // @ 0x00758f70
-void __cdecl FUN_00758f70(Elem50* first, Elem50* last, Elem50* out)
+void __cdecl FUN_00758f70(Elem50* first, Elem50* last, Elem50* value)
 {
-    for (; first != last; first = (Elem50*)((char*)first + 0x50)) {
-        out->a.OpAssign(&first->a);
-        out->b.OpAssign(&first->b);
-        out->c.OpAssign(&first->c);
-        out->d = first->d;
+    // eastl::fill: every element gets a copy of *value
+    for (; first != last; ++first) {
+        first->a.OpAssign(&value->a);
+        first->b.OpAssign(&value->b);
+        first->c.OpAssign(&value->c);
+        first->d.OpAssign(&value->d);
     }
 }
 

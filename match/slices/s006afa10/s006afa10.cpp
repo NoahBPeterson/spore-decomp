@@ -425,41 +425,6 @@ void* C_6b04a0::f(void** out, char* pos, unsigned* key, char flag)
 // ---------------------------------------------------------------------------
 // 006b0670  eastl rbtree lower-bound lookup
 // ---------------------------------------------------------------------------
-// @ 0x006b0670
-void* C_6b0670::f(void* out, unsigned* key, int extra)
-{
-    char* self = (char*)this;
-    char* node = self + 4;
-    bool goLeft = true;
-    char* cur = *(char**)(self + 0xc);
-    while (cur != 0) {
-        node = cur;
-        if (*(unsigned*)(cur + 0x14) < key[1] ||
-            (*(unsigned*)(cur + 0x14) <= key[1] && *(unsigned*)(cur + 0x10) <= key[0]))
-            goLeft = false;
-        else
-            goLeft = true;
-        cur = goLeft ? *(char**)(node + 4) : *(char**)node;
-    }
-    char* lb = node;
-    if (goLeft) {
-        if (node == *(char**)(self + 8))
-            goto insert;
-        lb = (char*)FUN_009215c0(node);
-    }
-    if (key[1] < *(unsigned*)(lb + 0x14) ||
-        (key[1] <= *(unsigned*)(lb + 0x14) && key[0] <= *(unsigned*)(lb + 0x10))) {
-        *(void**)out = lb;
-        *(char*)((char*)out + 4) = 0;
-        return out;
-    }
-insert:
-    void* tmp = 0;
-    ((C_6b04a0*)self)->f(&tmp, node, key, 0);
-    *(void**)out = tmp;
-    *(char*)((char*)out + 4) = 1;
-    return out;
-}
 
 // ---------------------------------------------------------------------------
 // 006b0720  lock-free push of `src` onto the list at `self`

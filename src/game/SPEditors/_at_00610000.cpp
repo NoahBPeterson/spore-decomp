@@ -806,15 +806,19 @@ O96* O96::DeletingDtor(unsigned int flags)
 namespace SP { namespace Pollen {
 unsigned int String8::find_last_not_of(const char* p, unsigned int position) const
 {
+  // same shape as EStr::find_last_of (0x0091bec0)
   const unsigned int n = (unsigned int)strlen(p);
   char* const begin = mpBegin;
   const unsigned int len = (unsigned int)(mpEnd - begin);
-  if (len == 0) return 0xffffffffu;
-  const unsigned int lenMinus1 = len - 1;
-  const unsigned int& pos = position < lenMinus1 ? position : lenMinus1;
-  const char* const r = FindLastNotOf(begin + pos + 1, begin, p, p + n);
-  if (r == begin) return 0xffffffffu;
-  return (unsigned int)(r - begin) - 1;
+  unsigned int pcopy = position;
+  if (len != 0) {
+    const unsigned int lenMinus1 = len - 1;
+    const unsigned int& pos = pcopy < lenMinus1 ? pcopy : lenMinus1;
+    const char* const r = FindLastNotOf(begin + pos + 1, begin, p, p + n);
+    if (r != begin)
+      return (unsigned int)(r - begin) - 1;
+  }
+  return 0xffffffffu;
 }
 }}  // namespace SP::Pollen
 

@@ -1768,23 +1768,6 @@ const hkShape_s010c_44d0* hkTriSampledHeightFieldCollection::getChildShape(uint3
     return tri;
 }
 
-// @ 0x010c4d40
-// hkTriSampledHeightFieldCollection scalar deleting destructor (`this` in ecx, delete flag on the stack: ret 4).
-// The original restores the base vtable, releases the heightfield through 0x010e0a90 (removeReference),
-// then repeats the base vtable store and frees the instance through hkMemory::deallocate.
-hkTriSampledHeightFieldCollection::~hkTriSampledHeightFieldCollection()
-{
-    // the destructor stays empty: the scalar deleting destructor below does the work, and cl would
-    // fold any statement here into it
-}
-hkTriSampledHeightFieldCollection* __fastcall hkTriSampledHeightFieldCollection_scalarDeletingDtor(hkTriSampledHeightFieldCollection* self, int, char flags)
-{
-    *(void**)self = (void*)0x014a3c78;   // hkReferencedObject vtable (relocated in the original image)
-    hkReferencedObjectRemoveReference_s010c_44d0((hkReferencedObject_s010c_44d0*)self->m_heightfield);
-    if (flags & 1)
-        hkReferencedObjectDeallocate_s010c_44d0((hkReferencedObject_s010c_44d0*)self);
-    return self;
-}
 
 // @ 0x010c4d90
 hkBool_s010c_44d0 hkTriSampledHeightFieldBvTreeShape::castRay(const hkShapeRayCastInput_s010c_44d0& in, hkShapeRayCastOutput_s010c_44d0& out) const
@@ -2568,24 +2551,6 @@ void __stdcall FUN_010cec10(int a, int b, int c, int d)
     local[1] = 0x7f7fffee;
     local[0] = (int)g_14a43a4;
     FUN_010e4d50(b, a, c, local);
-}
-
-// @ 0x010cec70
-void __fastcall FUN_010cec70(void* self, int, int a, int b, int c, int* d)
-{
-    float old = *(float*)((char*)d + 0x3034);
-    int* first = (int*)*d;
-
-    ((BvAgentApi*)self)->processCollision(b, a, c, d);
-    while (first < (int*)*d) {
-        cpSetFlipped((ContactPoint*)first, 0, (ContactPoint*)first);
-        first += 0xc;
-    }
-    if (old != *(float*)((char*)d + 0x3034)) {
-        *(float*)((char*)d + 0x20) = -*(float*)((char*)d + 0x20);
-        *(float*)((char*)d + 0x24) = -*(float*)((char*)d + 0x24);
-        *(float*)((char*)d + 0x28) = -*(float*)((char*)d + 0x28);
-    }
 }
 
 // @ 0x010cecf0

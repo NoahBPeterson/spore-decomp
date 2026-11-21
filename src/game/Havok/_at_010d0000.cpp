@@ -3588,23 +3588,6 @@ void hkCapsuleTriangleAgent_s010d_37d0::getClosestPointsWrapper(const void* body
                      *(const hkCollisionInput_s010d_37d0*)input, *(hkCdPointCollector_s010d_37d0*)&tmp);
 }
 
-// @ 0x010d4170
-void hkCapsuleTriangleAgent_s010d_37d0::processCollisionThunk(const void* bodyA, const void* bodyB, const void* input, void* output)
-{
-    float oldNormal = *(float*)((char*)output + 0x3034);
-    const void* first = *(const void**)output;
-    processCollision(*(const hkCdBody_s010d_37d0*)bodyB, *(const hkCdBody_s010d_37d0*)bodyA, input, output);
-    for (unsigned cp = (unsigned)first; cp < *(unsigned*)output; cp += 0x30)
-        ((hkContactPoint_s010d_37d0*)cp)->setFlipped(*(const hkContactPoint_s010d_37d0*)cp);
-    if (oldNormal != *(float*)((char*)output + 0x3034))
-    {
-        float* n = (float*)((char*)output + 0x20);
-        n[0] = -n[0];
-        n[1] = -n[1];
-        n[2] = -n[2];
-    }
-}
-
 // @ 0x010d4280
 void* hkCapsuleCapsuleAgent__create(const void* bodyA, const void* bodyB, const void* input, void* contactMgr)
 {
@@ -4773,22 +4756,6 @@ void hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520::getClosestPoints(const hk
 	flipCollector.m_earlyOutDistance = hkRealMax();
 	flipCollector.m_vftable = (void*)g_14a43a4;
 	hkSphereCapsuleAgent_s010d_8520::getClosestPoints(bodyB, bodyA, input, *(hkCdPointCollector_s010d_8520*)&flipCollector);
-}
-
-// @ 0x010d88c0
-void hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520::processCollision(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkProcessCollisionInput_s010d_8520& input, hkProcessCollisionOutput_s010d_8520& output)
-{
-	float toiTimeBefore = output.m_toiTime;
-	hkProcessCdPoint_s010d_8520* firstNewPoint = output.m_firstFreeContactPoint;
-	hkSphereCapsuleAgent_s010d_8520::processCollision(bodyB, bodyA, input, output);
-	for (hkProcessCdPoint_s010d_8520* p = firstNewPoint; p < output.m_firstFreeContactPoint; ++p)
-		p->m_contact.setFlipped(p->m_contact);
-	if (toiTimeBefore != output.m_toiTime)
-	{
-		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
-		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
-		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
-	}
 }
 
 // @ 0x010d89d0

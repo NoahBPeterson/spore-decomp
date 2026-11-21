@@ -729,22 +729,29 @@ Descriptor* Container::MakeDescriptor(Descriptor* out)
 }
 
 // @ 0x006c3330
+// Same tail as RBSet::Insert (0x0068daf0): the output pointer is reloaded before the count update.
 RBNode** RBTree::insert(RBNode** out, RBNode* hint, const int* key, bool flag)
 {
-  int side = (!flag && (char*)hint != (char*)this + 4 && !(key[0] < hint->key0)) ? 1 : 0;
+  int side;
+  if (flag == 0 && (char*)hint != (char*)this + 4 && key[0] >= hint->key0)
+    side = 1;
+  else
+    side = 0;
   RBNode* node = (RBNode*)EASTL_alloc(0x18, "Graphics", 0, 0,
                                       "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
                                       "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
                                       "EASTL/allocator.h",
                                       0xd1);
-  if ((char*)node + 0x10 != 0) {
-    node->key0 = key[0];
-    node->key1 = key[1];
+  int* pKey = (int*)((char*)node + 0x10);
+  if (pKey) {
+    pKey[0] = key[0];
+    pKey[1] = key[1];
   }
   RBTreeInsert(node, hint, (RBNode*)((char*)this + 4), side);
-  ++count;
-  *out = node;
-  return out;
+  RBNode** pp = *(RBNode** volatile*)&out;
+  *(volatile int*)&count += 1;
+  *pp = node;
+  return pp;
 }
 
 // @ 0x006c33b0

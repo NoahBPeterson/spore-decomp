@@ -301,8 +301,8 @@ void      FUN_008d3820(unsigned* a, unsigned* b);
 unsigned* FUN_008d38d0(unsigned* a, unsigned* b, unsigned* c);
 void*     FUN_008d3a10(int base, int start, int idx, unsigned k0, unsigned k1,
                        unsigned k2, unsigned k3);
-void      FUN_008d3b70(int a, int b, int c, int d, unsigned e, unsigned f,
-                       unsigned g, unsigned h, int i);
+struct HeapKey16 { unsigned k0, k1, k2, k3; };  // the 16-byte heap node, passed by value
+void      FUN_008d3b70(int a, int b, int c, int d, HeapKey16 value, int i);
 void* FUN_008d4040(void** pOut, void* head, void* tail, void* key, void* unused);
 void      FUN_008d40b0(int a, int b, int c);
 void      FUN_008d4110(unsigned* a, int b, int c);
@@ -1256,8 +1256,9 @@ void TSI::FUN_008d3b10(OwnerNode* node)
 }
 
 // @ 0x008d3b70
-void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned param_5, unsigned param_6, unsigned param_7, unsigned param_8, int param_9)
+void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, HeapKey16 value, int param_9)
 {
+    unsigned param_5 = value.k0, param_6 = value.k1, param_7 = value.k2, param_8 = value.k3;
     unsigned u;
     int i2, i3, i4, i6;
     unsigned* p;
@@ -1507,19 +1508,17 @@ void* FUN_008d4040(void** pOut, void* head, void* tail, void* key, void* unused)
 // @ 0x008d40b0
 void FUN_008d40b0(int param_1, int param_2, int param_3)
 {
-    int i1, i2, i3;
-    i1 = param_2 - param_1 >> 4;
-    if (2 <= i1) {
-        i3 = (i1 - 2 >> 1) + 1;
-        i2 = i3 * 0x10 + param_1;
-        do {
-            i3 = i3 - 1;
-            FUN_008d3b70(param_1, i3, i1, i3,
-                         *(unsigned*)(i2 - 0x10), *(unsigned*)(i2 - 0xc),
-                         *(unsigned*)(i2 - 8), *(unsigned*)(i2 - 4), param_3);
-            i2 = i2 - 0x10;
-        } while (i3 != 0);
-    }
+    // eastl::make_heap over 16-byte nodes (same shape as MakeHeap 0x007ef5d0)
+    HeapKey16* first = (HeapKey16*)param_1;
+    int len = (int)((HeapKey16*)param_2 - first);
+    if (len < 2)
+        return;
+    int parent = ((len - 2) >> 1) + 1;
+    do {
+        --parent;
+        HeapKey16 value = first[parent];
+        FUN_008d3b70(param_1, parent, len, parent, value, param_3);
+    } while (parent != 0);
 }
 
 // @ 0x008d4110
@@ -1534,7 +1533,8 @@ void FUN_008d4110(unsigned* param_1, int param_2, int param_3)
         do {
             u1 = p6[3]; u2 = p6[0]; u3 = p6[1]; u4 = p6[2];
             p6[0] = param_1[0]; p6[1] = param_1[1]; p6[2] = param_1[2]; p6[3] = param_1[3];
-            FUN_008d3b70((int)param_1, 0, i5 - 1, 0, u2, u3, u4, u1, param_3);
+            HeapKey16 v = { u2, u3, u4, u1 };
+            FUN_008d3b70((int)param_1, 0, i5 - 1, 0, v, param_3);
             p6 = p6 - 4;
             i5 = (0x10 - (int)param_1) + (int)p6 >> 4;
         } while (1 < i5);
@@ -1637,8 +1637,8 @@ void FUN_008d4320(unsigned* param_1, unsigned* param_2, unsigned* param_3, int p
             u1 = *p5; u2 = p5[1]; u3 = p5[2]; u4 = p5[3];
             *p5 = *param_1;
             p5[1] = param_1[1]; p5[2] = param_1[2]; p5[3] = param_1[3];
-            FUN_008d3b70((int)param_1, 0, ((int)param_2 - (int)param_1) >> 4, 0, u1, u2, u3, u4,
-                         param_4);
+            HeapKey16 v = { u1, u2, u3, u4 };
+            FUN_008d3b70((int)param_1, 0, ((int)param_2 - (int)param_1) >> 4, 0, v, param_4);
         }
     }
     FUN_008d4110(param_1, (int)param_2, param_4);

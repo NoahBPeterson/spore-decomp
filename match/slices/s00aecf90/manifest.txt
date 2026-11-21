@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00aecf90/s00aecf90.cpp  ?FUN_00aed3d0@@YAXXZ  00aed3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00aecf90/s00aecf90.cpp  ?Destroy@ServiceObj@@QAEPAXH@Z  00aed550  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aecf90/s00aecf90.cpp  ?GetService_s00ae_d4d0@@YAPAUService_s00ae_d4d0@@XZ  00aed4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

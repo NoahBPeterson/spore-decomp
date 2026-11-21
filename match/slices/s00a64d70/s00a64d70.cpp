@@ -265,42 +265,10 @@ void* HashtableBig::Rehash20(uint32_t newCount)
 // HashtableBig::InitPool10 -- init the node pool, seed the table, set the load
 // factor and rehash if the initial count is still too small (PatchMap shape)
 // ===========================================================================
-// @ 0x00a65db0
-bool HashtableBig::InitPool10(uint32_t a, uint32_t b, uint32_t c)
-{
-    if (mAlloc.InitPool(a, b, c))
-    {
-        Rehash16(mAlloc.mnBucketCount - 1);
-        mfMaxLoadFactor = 10000.0f;
-        mnGrowthFactor  = 2;
-        mnNextResize    = 0;
-        uint32_t want = FUN_009213c0(mnElementCount);
-        if (mnBucketCount < want)
-            Rehash16(want);
-        return true;
-    }
-    return false;
-}
 
 // ===========================================================================
 // HashtableBig::InitPool20 -- same, InstanceMap shape
 // ===========================================================================
-// @ 0x00a65e40
-bool HashtableBig::InitPool20(uint32_t a, uint32_t b, uint32_t c)
-{
-    if (mAlloc.InitBuckets(a, b, c))
-    {
-        Rehash20(mAlloc.mnBucketCount - 1);
-        mfMaxLoadFactor = 10000.0f;
-        mnGrowthFactor  = 2;
-        mnNextResize    = 0;
-        uint32_t want = FUN_009213c0(mnElementCount);
-        if (mnBucketCount < want)
-            Rehash20(want);
-        return true;
-    }
-    return false;
-}
 
 // ===========================================================================
 // SymbolDispatchSlot::Dispatch -- forward to the interface, then look the

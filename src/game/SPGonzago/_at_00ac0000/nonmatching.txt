@@ -5,7 +5,6 @@
 00ac0810 22 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; only the SSE subtract/square scheduling order of the two distance accumulations differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00ac0bb0 60 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; clone path complete, vtable temp register (eax vs edx) and the profile load register differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00ac88f0 13 complete; float writer, f stack-store scheduled before the vtable-slot load; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (100% cov)
-00ac8a30 19 approximate; reverse range assign, out-register schedule differs (77 bytes); difftest UNSUPPORTED 0/400 valid flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ac8df0 155 complete; SSE sphere-list point test (<= radius at +0xc), schedule differs (171 vs 111); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
 00ac8f00 53 complete; property->vector resolve with tag-type dispatch; register schedule differs (148 vs 145); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (399 valid, 60.4% cov)
 00ac9040 164 complete; serialize vector of 0x20-stride records via cVarListSerializer; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid, fault(read))

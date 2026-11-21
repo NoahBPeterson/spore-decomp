@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   flags /O2 /MD /Gy /TP /arch:SSE /GS-
-0061e3c0  68  String8::find_last_not_of(p, position): complete behaviour; the min-select (eastl::min on a const ref) and the shared early-return slot are allocated differently (95 vs 99 bytes)
 0061e4a0  73  PaintSystem::Ctor: complete behaviour; MSVC zero-register allocation (edi/eax/ebx) and the placement of the explicit vptr stores differ from the original's schedule
 0061e5b0  313  SP::Pollen::HeaderHandler::operator(): complete behaviour; the prologue loads the temp-file prefix into eax (5-byte a1 form) instead of edx (6-byte 8b15), shifting every later offset by one byte. Equiv UNSUPPORTED: emulator discards the _time64 import, 0/400 valid inputs
 0061e740  714  Pollen helper (886 bytes): complete behaviour; register allocation/stack colouring keeps this/&m3c in ebx/edi instead of edi/ebp and reloads the AutoRef slots. Equiv WEAK: 246/400 valid inputs, 6.7% coverage, 0 mismatches

@@ -8,7 +8,6 @@
 008d3dc0 131 FUN_008d3dc0(obj,key,pOut,a4,a5): walk list calling per-node vtable slot4; ecx-receiver member, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (375 valid, 100.0% coverage)
 008d3e30 444 FUN_008d3e30(obj,rec,flags): add glyph run to container (dup merge + notify + descend); large frame, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (339 valid, 57.8% coverage)
 008d4040 93 FUN_008d4040(pOut,head,tail,key): binary search over intrusive run list (original returns pOut in eax); regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (211 valid, 90.2% coverage)
-008d40b0 60 FUN_008d40b0(a,b,p3): heapify-all driver (bottom-up sift-down); same results, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (344 valid, 34.9% coverage)
 008d4110 116 FUN_008d4110(a,b,p3): shell/heap extraction pass over 16-byte keys; same results, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (362 valid, 30.5% coverage)
 008d41b0 121 FUN_008d41b0(obj,rec): reinsert run node in key order then drop runs it no longer matches; ecx-receiver member, layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, faults on synthetic list)
 008d4250 217 FUN_008d4250(a,b,p3,p4,p5): quicksort partition on 16-byte keys; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (376 valid, 100.0% coverage)

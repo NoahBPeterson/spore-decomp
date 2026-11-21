@@ -469,8 +469,9 @@ struct Map2 {
     uint32_t mnSize;                            // +0x14
     uint32_t mAlloc;                            // +0x18
     Node2* Clone(Node2* src, Node2* parent);                // 0x0682be0 (below)
-    void InsertHint(Node2** out, Node2* hint, int* key, char flag); // 0x06828a0 (below)
-    void InsertUnique(PairOut2* out, const int* key);       // 0x0682900 (below)
+    Node2** InsertHint(Node2** out, Node2* hint, int* key, char flag); // 0x06828a0 (below)
+    Node2* CreateNode(const int* key);                      // 0x006826c0
+    void InsertUnique(PairOut2* out, const int* key, AllocArg alloc);  // 0x0682900 (below)
 };
 struct Node1 {
     Node1* mpRight;
@@ -630,6 +631,8 @@ struct ObjY {
     ObjY() {}
     ObjY(const ObjY& o);                            // 0x0683670 (out-of-slice)
 };
+struct NodeC;
+struct PairOutC { NodeC* first; bool second; };
 struct NodeC { NodeC* mpRight; NodeC* mpLeft; NodeC* mpParent; uint32_t mColor; int mKey; ObjY mVal; };
 struct MapC {
     void* pad0; NodeC* mpAnchor; NodeC* mpBegin; NodeC* mpRoot; uint32_t mColor; uint32_t mnSize; uint32_t mAlloc;
@@ -1609,59 +1612,61 @@ void Map3::FreeNodes(Node3* p)
 }
 
 // @ 0x006828a0
-void Map2::InsertHint(Node2** out, Node2* hint, int* key, char flag)
+Node2** Map2::InsertHint(Node2** out, Node2* hint, int* key, char flag)
 {
-    Node2* anchor = (Node2*)&mpAnchor;
+    // same shape as MapV::InsertPair (0x00681590)
     int bIns;
-    if (flag == 0 && hint != anchor && hint->mKey <= *key)
+    if (!flag && hint != (Node2*)&mpAnchor && *key >= hint->mKey)
         bIns = 1;
     else
         bIns = 0;
-    Node2* nNew = (Node2*)CreateNode2(key);
-    RBTreeInsert(nNew, hint, anchor, bIns);
-    ++mnSize;
-    *out = nNew;
+    Node2* nNew = CreateNode(key);
+    RBTreeInsert(nNew, hint, &mpAnchor, bIns);
+    Node2** output = static_cast<Node2** volatile&>(out);
+    static_cast<volatile uint32_t&>(mnSize) += 1;
+    *output = nNew;
+    return output;
 }
 
 // @ 0x00682900
-void Map2::InsertUnique(PairOut2* pairOut, const int* key)
+void Map2::InsertUnique(PairOut2* pOut, const int* key, AllocArg)
 {
-    Node2* anchor = (Node2*)&mpAnchor;
-    Node2* pos = anchor;
-    int bLess = 1;
+    
+    
+    Node2* pos = (Node2*)&mpAnchor;
+    bool bLess = true;
     Node2* n = mpRoot;
     if (n) {
         do {
             pos = n;
             bLess = (*key < n->mKey);
-            n = bLess ? n->mpRight : n->mpLeft;
+            n = bLess ? n->mpLeft : n->mpRight;
         } while (n);
     }
     Node2* found = pos;
     if (bLess) {
-        if (pos == mpBegin) {
-            int bIns = (pos != anchor && *key >= pos->mKey) ? 1 : 0;
-            Node2* nNew = (Node2*)CreateNode2(key);
-            RBTreeInsert(nNew, pos, anchor, bIns);
+        if (pos != mpBegin) {
+            pos = (Node2*)RBTreeDecrement(pos);
+        } else {
+            int bIns = (pos != (Node2*)&mpAnchor && *key >= pos->mKey);
+            Node2* nNew = (Node2*)CreateNode(key);
+            RBTreeInsert(nNew, pos, &mpAnchor, bIns);
             ++mnSize;
-            pairOut->first = nNew;
-            pairOut->second = true;
+            pOut->first = nNew;
+            pOut->second = true;
             return;
         }
-        pos = (Node2*)RBTreeDecrement(pos);
     }
-    if (pos->mKey >= *key) {
-        pairOut->first = pos;
-        pairOut->second = false;
-        return;
-    }
-    {
-        int bIns = (found != anchor && *key >= found->mKey) ? 1 : 0;
-        Node2* nNew = (Node2*)CreateNode2(key);
-        RBTreeInsert(nNew, found, anchor, bIns);
+    if (pos->mKey < *key) {
+        int bIns = (found != (Node2*)&mpAnchor && *key >= found->mKey);
+        Node2* nNew = (Node2*)CreateNode(key);
+        RBTreeInsert(nNew, found, &mpAnchor, bIns);
         ++mnSize;
-        pairOut->first = nNew;
-        pairOut->second = true;
+        pOut->first = nNew;
+        pOut->second = true;
+    } else {
+        pOut->first = pos;
+        pOut->second = false;
     }
 }
 
@@ -1910,12 +1915,11 @@ void* Map844::insert(void** out, void* at, int* key, char flag)
 }
 
 // @ 0x00684500
-void MapC::InsertUnique(void* pairOut, const void* pair, char flag)
+void MapC::InsertUnique(void* pairOut, const void* pair, char)
 {
-    (void)flag;
     const int* key = (const int*)pair;
-    NodeC* anchor = (NodeC*)&mpAnchor;
-    NodeC* pos = anchor;
+    PairOutC* pOut = (PairOutC*)pairOut;
+    NodeC* pos = (NodeC*)&mpAnchor;
     bool bLess = true;
     NodeC* n = mpRoot;
     if (n) {
@@ -1927,29 +1931,28 @@ void MapC::InsertUnique(void* pairOut, const void* pair, char flag)
     }
     NodeC* found = pos;
     if (bLess) {
-        if (pos == mpBegin) {
-            int bIns = (pos != anchor && *key >= pos->mKey) ? 1 : 0;
-            NodeC* nn = CreateNode(pair);
-            RBTreeInsert(nn, pos, anchor, bIns);
+        if (pos != mpBegin) {
+            pos = (NodeC*)RBTreeDecrement(pos);
+        } else {
+            int bIns = (pos != (NodeC*)&mpAnchor && *key >= pos->mKey);
+            NodeC* nNew = CreateNode(pair);
+            RBTreeInsert(nNew, pos, &mpAnchor, bIns);
             ++mnSize;
-            ((void**)pairOut)[0] = nn;
-            *((uint8_t*)pairOut + 4) = 1;
+            pOut->first = nNew;
+            pOut->second = true;
             return;
         }
-        pos = (NodeC*)RBTreeDecrement(pos);
     }
-    if (pos->mKey >= *key) {
-        ((void**)pairOut)[0] = pos;
-        *((uint8_t*)pairOut + 4) = 0;
-        return;
-    }
-    {
-        int bIns = (found != anchor && *key >= found->mKey) ? 1 : 0;
-        NodeC* nn = CreateNode(pair);
-        RBTreeInsert(nn, found, anchor, bIns);
+    if (pos->mKey < *key) {
+        int bIns = (found != (NodeC*)&mpAnchor && *key >= found->mKey);
+        NodeC* nNew = CreateNode(pair);
+        RBTreeInsert(nNew, found, &mpAnchor, bIns);
         ++mnSize;
-        ((void**)pairOut)[0] = nn;
-        *((uint8_t*)pairOut + 4) = 1;
+        pOut->first = nNew;
+        pOut->second = true;
+    } else {
+        pOut->first = pos;
+        pOut->second = false;
     }
 }
 

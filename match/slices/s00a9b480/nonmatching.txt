@@ -6,6 +6,4 @@
 00a9b8d0  0  FAIL-KEPT: ecx (this) + x87/SSE temporaries; naked `_emit` transcription, byte-exact (329 B) but disallowed.  difftest: UNSUPPORTED (ecx at entry).
 00a9ba20  0  FAIL-KEPT: edx/eax virtual-call targets + integer loop state; naked `_emit` transcription, byte-exact (349 B) but disallowed.  difftest: PASS (310/400 valid, 96% coverage) only via transcription.
 00a9bb80  0  FAIL-KEPT: ecx (this) + x87/SSE temporaries + eax indirect target; naked `_emit` transcription, byte-exact (494 B) but disallowed.  difftest: UNSUPPORTED (ecx at entry).
-00a9bd70  0  FAIL-KEPT: ecx (this) + edx indirect target; naked `_emit` transcription, byte-exact (146 B) but disallowed.  difftest: WEAK (212/400 valid, 32.2% coverage).
 00a9be10  0  FAIL-KEPT: ecx (this) + three eax virtual-call targets; naked `_emit` transcription, byte-exact (137 B) but disallowed.  difftest: UNSUPPORTED (ecx at entry).
-00a9bea0  0  FAIL-KEPT: ecx (this) + edx indirect target; naked `_emit` transcription, byte-exact (124 B) but disallowed.  difftest: UNSUPPORTED (ecx at entry).
