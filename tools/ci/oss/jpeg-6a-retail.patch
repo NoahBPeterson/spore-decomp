@@ -1,0 +1,54 @@
+SporeApp.exe's libjpeg 6a differs from IJG's release in two files (found by byte-matching): jpeglib.h's
+jpeg_decompress_struct inserts 0x404 bytes and gains a trailing read_dht flag, the error manager's msg_parm is 80
+bytes, and read_markers sets read_dht after a DHT marker.  tools/ci/setup_oss.sh applies this to a copy of the
+release in work/third_party/build/jpeg-6a-retail; the libjpeg slices #include from there.
+
+--- a/jpeglib.h
++++ b/jpeglib.h
+@@ -539,6 +539,15 @@
+   UINT8 Adobe_transform;	/* Color transform code from Adobe marker */
+ 
+   boolean CCIR601_sampling;	/* TRUE=first samples are cosited */
++
++  /* ------------------------------------------------------------------------
++   * Retail (SporeApp.exe) additions, inserted right here: a 1024-byte comment
++   * buffer plus one 4-byte field, i.e. 0x404 bytes.  Everything from
++   * max_h_samp_factor on is therefore shifted by +0x404 vs. stock IJG 6a
++   * (sample_range_limit +0x544, unread_marker +0x5a0, marker +0x5b8).
++   * ------------------------------------------------------------------------ */
++  unsigned char retail_comment[1024];	/* +0x130 */
++  int           retail_comment_flag;	/* +0x530 */
+ 
+   /* Remaining fields are known throughout decompressor, but generally
+    * should not be touched by a surrounding application.
+@@ -602,6 +611,9 @@
+   struct jpeg_upsampler * upsample;
+   struct jpeg_color_deconverter * cconvert;
+   struct jpeg_color_quantizer * cquantize;
++
++  /* Retail trailer: set to TRUE by read_markers when a DHT marker is read. */
++  boolean read_dht;		/* +0x5d0 */
+ };
+ 
+ 
+@@ -624,7 +636,9 @@
+   JMETHOD(void, output_message, (j_common_ptr cinfo));
+   /* Format a message string for the most recent JPEG error or message */
+   JMETHOD(void, format_message, (j_common_ptr cinfo, char * buffer));
+-#define JMSG_LENGTH_MAX  200	/* recommended size of format_message buffer */
++#define JMSG_LENGTH_MAX  80	/* recommended size of format_message buffer */
++/* Retail (SporeApp.exe) build: the error manager's msg_parm union is 80 bytes, so
++ * trace_level sits at +0x68 and num_warnings at +0x6c.  Proven by byte-matching. */
+   /* Reset error state variables at start of a new image */
+   JMETHOD(void, reset_error_mgr, (j_common_ptr cinfo));
+   
+--- a/jdmarker.c
++++ b/jdmarker.c
+@@ -805,6 +805,7 @@
+     case M_DHT:
+       if (! get_dht(cinfo))
+ 	return JPEG_SUSPENDED;
++      cinfo->read_dht = TRUE;	/* retail addition: remember a Huffman table was seen */
+       break;
+       
+     case M_DQT:

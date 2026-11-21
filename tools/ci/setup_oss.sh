@@ -4,6 +4,8 @@
 # unzip, patch, perl, make, python3, sha256sum/shasum.  Nothing here is game code; no third-party source is committed.
 #   work/third_party/src/{jpeg-6a,libpng-1.2.25,zlib-1.2.3,openssl-0.9.8g}   pristine upstream releases
 #   work/third_party/build/jpeg-6a-inc/jconfig.h                              third_party/jpeg-6a/jconfig.h (ours)
+#   work/third_party/build/jpeg-6a-retail                                     jpeg-6a plus tools/ci/oss/jpeg-6a-retail.patch
+#                                                                             (SporeApp.exe's changes; libjpeg slices use it)
 #   work/third_party/build/openssl-0.9.8g-d2110920                            perl Configure VC-WIN32 + make links, as
 #                                                                             tools/third_party/build_faithful.py does
 #   work/ext/EAWebKitSupportPackages                                          from EA's EAWebKit 1.21.00 GPL release,
@@ -49,6 +51,12 @@ untar https://downloads.sourceforge.net/project/libpng/libpng12/older-releases/1
 # libjpeg 6a ships no jconfig.h: ours is jconfig.vc (third_party/jpeg-6a/jconfig.h)
 mkdir -p "$tp/build/jpeg-6a-inc"
 cp "$root/third_party/jpeg-6a/jconfig.h" "$tp/build/jpeg-6a-inc/jconfig.h"
+
+# SporeApp.exe's libjpeg is 6a with a few changes (tools/ci/oss/jpeg-6a-retail.patch); rebuilt every run, it is small
+rm -rf "$tp/build/jpeg-6a-retail"
+cp -R "$tp/src/jpeg-6a" "$tp/build/jpeg-6a-retail"
+cp "$root/third_party/jpeg-6a/jconfig.h" "$tp/build/jpeg-6a-retail/jconfig.h"
+patch -s -p1 -d "$tp/build/jpeg-6a-retail" < "$oss/jpeg-6a-retail.patch"
 
 # OpenSSL configured for VC-WIN32 with the options in third_party/manifest.json (directory suffix = their hash)
 ossl=$(cd "$root" && python3 -c 'import sys; sys.path.insert(0, "tools/third_party"); import build_faithful as b
