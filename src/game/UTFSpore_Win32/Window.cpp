@@ -387,22 +387,24 @@ void Window::Set1D8(int v)
 }
 
 // @ 0x0095fad0
+struct WinHead_95fb20 { int mHead; };
+struct WinOuter_95fb20 : WinHead_95fb20, Window {};
+struct WinNode_95fad0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual WinNode_95fad0* GetParent();
+};
 bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
 {
-    if (other == 0)
-        return false;
-    void* p = (*(void*(__thiscall**)(void*))((char*)*(void**)other + 0x10))(other);
-    while (p != 0) {
-        if (p == (void*)(this))
-            return true;
-        p = (*(void*(__thiscall**)(void*))((char*)*(void**)p + 0x10))(p);
+    if (other != 0) {
+        for (WinNode_95fad0* p = ((WinNode_95fad0*)other)->GetParent(); p != 0; p = p->GetParent()) {
+            if ((void*)p == (::Window*)(WinOuter_95fb20*)((char*)this - 4))
+                return true;
+        }
     }
     return false;
 }
 
 // @ 0x0095fb20
-struct WinHead_95fb20 { int mHead; };
-struct WinOuter_95fb20 : WinHead_95fb20, Window {};
 struct WinOwner_95fb20 {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
