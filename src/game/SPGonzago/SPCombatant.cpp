@@ -511,7 +511,7 @@ bool VtObj::GateCheck(VtObj* other)
         float dx = pb->x - pa->x;
         float dy = pb->y - pa->y;
         float dz = pb->z - pa->z;
-        float dist = sqrtf(dx * dx + dz * dz + dy * dy);
+        float dist = sqrtf(dy * dy + (dx * dx + dz * dz));
         float limit = ((Node0x14* (__thiscall*)(void*))this->vt[5])(this)->Fn104be30();
         return dist <= limit;
     }
