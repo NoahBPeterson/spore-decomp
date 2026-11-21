@@ -12,9 +12,9 @@ Statuses, per function and per day (the last first-parent commit on main of each
   1  source written: a nonmatching.txt or partial.txt note exists for it (its C++ is in the repo, bytes still differ)
   0  not started
 The tiers are build.py's (matching, proven, tested). No names, symbols or code; the page
-carries only addresses and sizes (already public in tools/ci/fingerprints.jsonl.gz) and module names (src/game/).
+carries only addresses and sizes (already public in tools/ci/fingerprints.jsonl) and module names (src/game/).
 """
-import argparse, bisect, datetime, gzip, json, os, re, subprocess, sys
+import argparse, bisect, datetime, json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -133,7 +133,7 @@ NSTATES = 5
 
 
 def map_data():
-    fps = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    fps = {int(d["va"], 16): d["size"] for d in map(json.loads, open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt"))}
     vas = sorted(fps)
     index = {v: i for i, v in enumerate(vas)}
     mods = json.load(open(os.path.join(ROOT, "tools", "site", "modules.json")))

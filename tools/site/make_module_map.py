@@ -20,7 +20,7 @@ folders under src/game/: no function names, no code.
 
   .venv/bin/python tools/site/make_module_map.py
 """
-import bisect, collections, gzip, json, os, re, sys
+import bisect, collections, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SOUND_DIRS = ("cmn", "plugins", "mix", "decoders", "ealayer30", "ealayer31")   # EA's sound library: one module
@@ -45,8 +45,8 @@ def main():
     except OSError:
         kinds = {}
         print("work/kinds.json missing (run tools/status.py once): startup code stays unattributed")
-    vas = sorted(int(d["va"], 16) for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci",
-                                                                                   "fingerprints.jsonl.gz"), "rt")))
+    vas = sorted(int(d["va"], 16) for d in map(json.loads, open(os.path.join(ROOT, "tools", "ci",
+                                                                                   "fingerprints.jsonl"), "rt")))
     def topdir(m):
         top = m.split("/")[0] if "/" in m else ""
         return "EA sound library" if top in SOUND_DIRS else top
@@ -151,13 +151,13 @@ def main():
         if i != last:
             runs.append(["%08x" % va, i])
             last = i
-    out = {"_comment": "Runs over the retail function addresses (tools/ci/fingerprints.jsonl.gz): from each address on, "
+    out = {"_comment": "Runs over the retail function addresses (tools/ci/fingerprints.jsonl): from each address on, "
                        "functions belong to modules[index] until the next run. Made by tools/site/make_module_map.py.",
            "modules": names, "runs": runs}
     path = os.path.join(ROOT, "tools", "site", "modules.json")
     json.dump(out, open(path, "w"), separators=(",", ":"))
     print("%s: %d modules, %d runs, %d bytes" % (os.path.relpath(path, ROOT), len(names), len(runs), os.path.getsize(path)))
-    size = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    size = {int(d["va"], 16): d["size"] for d in map(json.loads, open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt"))}
     by = collections.Counter()
     for va in vas:
         by[lab[va]] += size[va]

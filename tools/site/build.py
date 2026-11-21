@@ -17,7 +17,7 @@ Open-source libraries (the "Open-source libraries" module) are not in the headli
 function counts (decision 2026-11-20): compiling their published sources recovers none of Spore's own code. They have
 their own line and their module row; the credits leave them out.
 """
-import argparse, bisect, collections, datetime, glob, gzip, html, json, os, re, subprocess
+import argparse, bisect, collections, datetime, glob, html, json, os, re, subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BANDS = [(0, 63), (64, 255), (256, 1023), (1024, 4095), (4096, 1 << 30)]
@@ -430,7 +430,7 @@ def line_chart(pts, total_f, total_b):
 
 
 def build(out, prs_path, repo):
-    fps_all = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    fps_all = {int(d["va"], 16): d["size"] for d in map(json.loads, open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt"))}
     modof = module_of(fps_all)
     oss = frozenset(va for va, m in modof.items() if m == LIBS)
     fps = {va: s for va, s in fps_all.items() if va not in oss}       # Spore's own code: every total below

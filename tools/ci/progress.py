@@ -3,7 +3,7 @@
 
 A function counts when a manifest row lists it and it is not in tools/ci/known_failures.txt (the pull-request check
 verifies every row it touches against the retail fingerprints).  Totals are over every retail function with a
-fingerprint (tools/ci/fingerprints.jsonl.gz).  No names, no equivalence results.  Open-source library functions (the
+fingerprint (tools/ci/fingerprints.jsonl).  No names, no equivalence results.  Open-source library functions (the
 "Open-source libraries" module of tools/site/modules.json) are counted on their own line, not in the totals (decision
 2026-11-20): compiling their published sources recovers none of Spore's own code.
 
@@ -11,7 +11,7 @@ usage: progress.py [--out PROGRESS.md]
 The site workflow (.github/workflows/site.yml) publishes it at https://noahbpeterson.github.io/spore-decomp/PROGRESS.md
 after every change to main; it is no longer committed.
 """
-import argparse, bisect, datetime, glob, gzip, json, os, subprocess, sys
+import argparse, bisect, datetime, glob, json, os, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [os.path.join(ROOT, "tools", "ci"), os.path.join(ROOT, "tools", "matching")]
@@ -28,7 +28,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "PROGRESS.md"))
     a = ap.parse_args()
-    fps = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    fps = {int(d["va"], 16): d["size"] for d in map(json.loads, open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt"))}
     mm = json.load(open(os.path.join(ROOT, "tools", "site", "modules.json")))
     starts = [int(r[0], 16) for r in mm["runs"]]
     def module(va):

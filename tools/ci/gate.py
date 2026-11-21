@@ -12,7 +12,7 @@ A row listed in --known (VA per line, default tools/ci/known_failures.txt: rows 
 fingerprint check existed but that fail it) is reported without failing the check.  --keep FILE (VAs) requires each of
 those functions to still be a manifest row somewhere: a pull request may not drop a match.
 
-usage: gate.py MANIFEST... [--fingerprints tools/ci/fingerprints.jsonl.gz] [--known FILE] [--keep FILE] [--jobs 4]
+usage: gate.py MANIFEST... [--fingerprints tools/ci/fingerprints.jsonl] [--known FILE] [--keep FILE] [--jobs 4]
                [--json out.json] [--summary out.md]
 exit 0 iff every row passes (or is known) and nothing in --keep went missing
 """
@@ -63,7 +63,7 @@ def row_problem(src, flags):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("manifests", nargs="+")
-    ap.add_argument("--fingerprints", default=os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"))
+    ap.add_argument("--fingerprints", default=os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"))
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--known", default=os.path.join(ROOT, "tools", "ci", "known_failures.txt"))
     ap.add_argument("--keep")

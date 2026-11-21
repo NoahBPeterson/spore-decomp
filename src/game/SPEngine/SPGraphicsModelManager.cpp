@@ -609,7 +609,19 @@ static inline void RelObj(RCObj* o)
         (*(void(__thiscall**)(RCObj*, int))(*(void**)o))(o, 1);
     }
 }
-struct Stub00747920 { void F(); };
+struct DequeElem_7920 {                    // 0x1c
+    int key;                                // +0x00
+    RCObj_s0074_4ad0* obj;                  // +0x04
+    int rest[5];                            // +0x08
+};
+struct Stub00747920 {
+    char pad00[0x18];
+    DequeElem_7920*  mpCurrent;             // +0x18
+    DequeElem_7920*  mpBegin;               // +0x1c
+    DequeElem_7920*  mpEnd;                 // +0x20
+    DequeElem_7920** mpCurrentArrayPtr;     // +0x24
+    void F();
+};
 struct Mat3_s0074_7920 { float m[9]; Mat3_s0074_7920() {} Mat3_s0074_7920(const Mat3_s0074_7920& o) { for (int i = 0; i < 9; ++i) m[i] = o.m[i]; } };
 struct Rec38 {
     int a; short b, c; int d, e, f, g;
@@ -5128,25 +5140,19 @@ LoadQueueVectorDtorView::~LoadQueueVectorDtorView()
 // @ 0x00747920
 void Stub00747920::F()
 {
-    unsigned char* b = (unsigned char*)this;
-    int beg = *(int*)(b + 0x18);
-    int end = *(int*)(b + 0x1c);
-    if (beg == end) {
-        if (end) operator_delete_((void*)end);
-        int* mapEnd = (int*)(*(int*)(b + 0x24) - 4);
-        *(int**)(b + 0x24) = mapEnd;
-        int blk = *mapEnd;
-        *(int*)(b + 0x1c) = blk;
-        *(int*)(b + 0x20) = blk + 0xe0;
-        *(int*)(b + 0x18) = blk + 0xc4;
-        if (*(int**)(blk + 200)) {
-            RCObj* r = *(RCObj**)(blk + 200);
-            (*(void(__thiscall**)(RCObj*, int))((char*)(*(void**)r) + 4))(r, 1);
-        }
+    if (mpCurrent != mpBegin) {
+        --mpCurrent;
+        if (RCObj_s0074_4ad0* r = mpCurrent->obj)
+            r->Release();
     } else {
-        *(int*)(b + 0x18) = beg - 0x1c;
-        RCObj* r = *(RCObj**)(beg - 0x18);
-        if (r) (*(void(__thiscall**)(RCObj*, int))((char*)(*(void**)r) + 4))(r, 1);
+        if (mpBegin) operator_delete_(mpBegin);
+        DequeElem_7920** pArray = mpCurrentArrayPtr - 1;
+        mpCurrentArrayPtr = pArray;
+        mpBegin = *pArray;
+        mpEnd = mpBegin + 8;
+        mpCurrent = mpEnd - 1;
+        if (RCObj_s0074_4ad0* r = mpCurrent->obj)
+            r->Release();
     }
 }
 

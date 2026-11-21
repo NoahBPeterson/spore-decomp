@@ -4084,7 +4084,18 @@ void cMI::SetAnimationResource(RC_s0074_2b30* p)
         return;
     }
     E8 e = { 0xff, 0, 0, 0, 0, 0 };
-    ((VecE8*)((char*)this + 0x14))->push(e);
+    VecE8* entries = (VecE8*)((char*)this + 0x14);
+    E8* end = entries->mpEnd;
+    if (end < entries->mpCap) {
+        entries->mpEnd = end + 1;
+        if (end) {
+            E8 value = e;
+            _ReadWriteBarrier();
+            *end = value;
+        }
+    } else {
+        entries->Grow(end, e);
+    }
 }
 
 // @ 0x00742db0

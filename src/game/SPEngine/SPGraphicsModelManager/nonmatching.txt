@@ -30,7 +30,6 @@
 00747270 90 cLoadingModel dtor shape differs; equiv: FAIL 5/5 mismatch (execution)
 00747720 121 deque< cLoadQueueEntry >::~deque shape differs
 007477d0 215 deque< cLoadQueueEntry >::clear shape differs
-00747920 73 deque pop_back shape differs; equiv: WEAK 67.5% cov
 00747ac0 112 0x38-record copy ctor register shape differs; equiv: PASS 1200 inputs 100% cov
 00747b70 179 uninitialized_copy of refcounted 0x3c elements shape differs
 00747c90 128 uninitialized_fill_n shape differs

@@ -3,7 +3,6 @@
 Run: python3 -m unittest tools/matching/test_try_variants.py
 """
 import contextlib
-import gzip
 import io
 import json
 from pathlib import Path
@@ -82,9 +81,9 @@ class CliTests(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
-        path = self.root/'tools/ci/fingerprints.jsonl.gz'
+        path = self.root/'tools/ci/fingerprints.jsonl'
         path.parent.mkdir(parents=True)
-        with gzip.open(path, 'wt') as stream:
+        with open(path, 'wt') as stream:
             stream.write(json.dumps(fingerprint())+'\n')
         self.compiler = Mock(returncode=0, stdout='', stderr='')
         def compile_object(command, **kwargs):

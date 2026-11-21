@@ -7,11 +7,11 @@
 // volatile load/AND/store never is.  See nonmatching.txt.
 #include "types.h"
 
-extern volatile uint32_t g_16f33b78;   // 0x1633b78 (retail address)
+extern volatile uint32_t g_1633b78;   // 0x1633b78 (retail address)
 
 // @ 0x012138a0
 void __cdecl ClearFlagBit0()
 {
-    uint32_t v = g_16f33b78;
-    g_16f33b78 = v & 0xfffffffeu;
+    uint32_t v = g_1633b78;
+    g_1633b78 = v & 0xfffffffeu;
 }

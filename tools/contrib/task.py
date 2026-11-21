@@ -31,21 +31,21 @@ inline, layout, data, other: why the function still differs, see AGENTS.md step 
 (each failed attempt updates the note). It is an estimate: bulk tooling edits count too. A shallow clone has no
 history, so tries are unknown and the list falls back to size order.
 """
-import argparse, collections, datetime, glob, gzip, hashlib, json, os, re, subprocess, sys, time, urllib.request
+import argparse, collections, datetime, glob, hashlib, json, os, re, subprocess, sys, time, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [os.path.join(ROOT, "tools", "difftest"), os.path.join(ROOT, "tools", "matching"),
                 os.path.join(ROOT, "tools", "ci")]
 import slice as S       # noqa: E402
 
-FP = os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz")
+FP = os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl")
 _fps = None
 
 
 def fingerprints():
     global _fps
     if _fps is None:
-        _fps = {int(d["va"], 16): d for d in map(json.loads, gzip.open(FP, "rt"))}
+        _fps = {int(d["va"], 16): d for d in map(json.loads, open(FP, "rt"))}
     return _fps
 
 
@@ -54,7 +54,7 @@ def fingerprint(va):
     if _fps is not None:
         return _fps.get(va)
     key = '{"va":"%08x"' % va
-    for line in gzip.open(FP, "rt"):
+    for line in open(FP, "rt"):
         if line.startswith(key):
             return json.loads(line)
     return None

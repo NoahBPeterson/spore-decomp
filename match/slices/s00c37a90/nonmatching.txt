@@ -79,7 +79,6 @@
 #                arithmetic.
 #                equiv UNSUPPORTED: 0/400 valid (the reconstruction faults at 0x00bcb678, inside the
 #                stubbed FUN_00bcb660 path).
-00c38740  17   TickUFOBehaviorTree(float,double): early-outs on a missing tree, then forwards the root,
 #                this, the motion block, mInt5e8, mFlags5fc and FUN_00bc9980's result to FUN_00bc8ff0
 #                and returns its answer.  Complete reconstruction, size-exact; only the register names
 #                of the outgoing argument pushes differ (eax vs edx).

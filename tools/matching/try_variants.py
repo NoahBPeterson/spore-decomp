@@ -6,7 +6,7 @@ Every function symbol in the object is compared; prints heuristic distances, bes
 and the independent retail fingerprint verdict. FINGERPRINT_PASS is diagnostic only:
 run the contribution gate for source-policy, manifest, and regression checks.
 """
-import argparse, gzip, json, os, shutil, subprocess, sys, tempfile
+import argparse, json, os, shutil, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pefile
 
@@ -60,7 +60,7 @@ def main(argv=None):
     parser.add_argument("flags", nargs=argparse.REMAINDER)
     args = parser.parse_args(argv)
     flags = _normalize_flags(parser, args.opt_flags, args.flags)
-    with gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt") as stream:
+    with open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt") as stream:
         fp = next((row for row in map(json.loads, stream) if int(row["va"], 16) == args.address), None)
     if fp is None:
         parser.error("No retail fingerprint for 0x%08x" % args.address)

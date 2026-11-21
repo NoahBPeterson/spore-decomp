@@ -31,3 +31,4 @@
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?CopyPairs@@YAPAUPairPtr@@PAU1@00@Z  0073c410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?ReleasePairs@@YAPAUPairPtr@@PAU1@00@Z  0073c450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?Notify@cModelInstance_s0073_afb0@SP@@QAEXPAUcNotifyOther@2@@Z  0073bab0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetAnimationResource@cMI@@QAEXPAURC_s0074_2b30@@@Z  00742cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

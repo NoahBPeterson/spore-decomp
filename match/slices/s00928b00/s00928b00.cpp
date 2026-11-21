@@ -326,23 +326,18 @@ void BigFile::FUN_00928f80(const wchar_t* name)
 char BigFile::FUN_009290c0()
 {
     void* self = this;
-    int** begin = *(int***)self;
+    int** it = *(int***)self;
     int** end = *(int***)((char*)self + 4);
     char r = 0;
-    if (begin != end) {
+    if (it != end) {
         r = 1;
-        for (int** it = begin; it != end; it++) {
-            if (r != 0) {
-                int* obj = *it;
-                r = (*(char(__thiscall**)(int*))((char*)*obj + 0x34))(obj);
-                if (r != 0)
-                    r = 1;
-                else
-                    r = 0;
-            } else {
+        do {
+            if (r != 0 &&
+                (*(char(__thiscall**)(int*))((char*)**it + 0x34))(*it) != 0)
+                r = 1;
+            else
                 r = 0;
-            }
-        }
+        } while (++it != end);
     }
     return r;
 }

@@ -312,9 +312,10 @@ void EA::Swarm::cVisualEffect::SetIsHidden(bool hidden)
 {
     if (hidden == (u8)((((unsigned int *)&mEffectID)[1] >> 1) & 1))
         return;
+    typedef void (__thiscall *SetVisibleFn)(void*, bool);
     void** vt = *(void***)((char*)this + 4);
-    Fn1 f = (Fn1)vt[0x28 / 4];
-    f((char*)this + 4, hidden == 0);
+    SetVisibleFn setVisible = (SetVisibleFn)vt[0x28 / 4];
+    return setVisible((char*)this + 4, !hidden);
 }
 
 // @ 0x00a82130

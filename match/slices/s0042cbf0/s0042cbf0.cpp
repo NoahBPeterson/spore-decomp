@@ -228,6 +228,21 @@ inline void FillN(char16* dest, size_t n, char16 c) { FillImpl(dest, n, c); }
 
 // @ 0x0042d2e0
 WString& WString::append(size_t n, char16 c) {
+    struct AppendFill {
+        static __forceinline void Run(char16* dest, const size_t& n, char16 c) {
+            char16* pEnd = dest;
+            char16* const p = dest + n;
+            while (pEnd < p) {
+                *pEnd = c;
+                ++pEnd;
+            }
+        }
+
+        static __forceinline void RunN(char16* dest, size_t n, char16 c) {
+            Run(dest, n, c);
+        }
+    };
+
     const size_t nSize = size_t(mpEnd - mpBegin);
     const size_t nCap = size_t(mpCapacity - mpBegin) - 1;
     if (nSize + n > nCap) {
@@ -235,7 +250,7 @@ WString& WString::append(size_t n, char16 c) {
         reserve(Max(GetNewCapacity(nCap), nNeed));
     }
     if (n > 0) {
-        FillN(mpEnd + 1, n - 1, c);
+        AppendFill::RunN(mpEnd + 1, n - 1, c);
         *mpEnd = c;
         mpEnd += n;
         *mpEnd = 0;

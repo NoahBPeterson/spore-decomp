@@ -8,3 +8,4 @@ slices/s011e8640/s011e8640.cpp  ?StringCompareNoCase@@YAHPBD0@Z  011e8bd0  /vc71
 slices/s011e8640/s011e8640.cpp  ?StringLength@@YAHPBD@Z  011e8c40  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011e8640/s011e8640.cpp  ?StringFindChar@@YAPADPBDD@Z  011e8c60  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011e8640/s011e8640.cpp  ?TrimZeros@@YAPADPAD@Z  011e9170  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e8640/s011e8640.cpp  ?StringAppend@@YAPADPADPBD@Z  011e8b50  /vc71 /O2 /MD /Gy /EHsc /TP
