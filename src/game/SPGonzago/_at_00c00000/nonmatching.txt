@@ -9,7 +9,6 @@
 00c05810 455 Simulator::cSPCreatureBase::func58h: complete; equiv UNSUPPORTED (13 unresolved callees); 64-bit timer compare and vtable slot dispatch schedules differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05a80 336 Simulator::cSPCreatureBase::func5a8h: complete; equiv UNSUPPORTED (6 unresolved callees); XformMsg stack object / vtable arg-passing shape differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05bf0 195 Simulator::cSPCreatureBase::func5bf0: complete; equiv UNSUPPORTED (1 unresolved callee); branchy rounding (cvtss2si+cvtsi2ss) and global loads differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c05d40 122 Simulator::cGameData::cGameData_func3Ch: complete; equiv UNSUPPORTED (3 unresolved callees); vtable slot 0x3c/0x54 dispatch differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05df0 84 intrusive pool Free (0x14-byte elements): complete; equiv FAIL (5/207 mismatch, execution); loop/call schedule around ref-releases differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05e80 18 intrusive pool Cur: complete; equiv PASS (381 valid inputs, 100% coverage); cl loads the two tail fields lazily instead of up-front flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05ee0 270 intrusive pool Reset: complete; equiv FAIL (5/5 mismatch, memory pool @40010010); nested release loops reordered relative to original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
