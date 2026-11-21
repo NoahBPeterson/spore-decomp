@@ -210,8 +210,8 @@ def gate_headers(path):
 
 
 def F_load():
-    import gzip, json
-    with gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt") as f:
+    import json
+    with open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt") as f:
         return [json.loads(l) for l in f]
 
 

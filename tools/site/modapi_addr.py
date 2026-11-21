@@ -27,7 +27,7 @@ work/ga_map.json.
 
   .venv/bin/python tools/site/modapi_addr.py [DLL dir]     prints the counts
 """
-import bisect, collections, glob, gzip, json, os, re, sys
+import bisect, collections, glob, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DLL = os.path.join(ROOT, "work", "modapi", "DLL")
@@ -97,6 +97,6 @@ def mapping(fstarts, dll=DLL):
 
 
 if __name__ == "__main__":
-    fs = {int(d["va"], 16) for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
+    fs = {int(d["va"], 16) for d in map(json.loads, open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt"))}
     m = mapping(fs, sys.argv[1] if len(sys.argv) > 1 else DLL)
     print("%d ModAPI rows, %d placed on this build" % (len(rows(sys.argv[1] if len(sys.argv) > 1 else DLL)), len(m)))

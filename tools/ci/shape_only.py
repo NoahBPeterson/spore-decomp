@@ -17,7 +17,7 @@ script then drops its shape_only.txt line.
 usage: shape_only.py [--synth-audit LOG]   (rewrites match/clones.txt, match/synth/*.manifest, match/shape_only.txt)
        shape_only.py --check               (exit 1 if a clones.txt row should move; changes nothing)
 """
-import argparse, glob, gzip, json, os, re, sys
+import argparse, glob, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "tools", "ci"))
@@ -32,7 +32,7 @@ VA = re.compile(r"[0-9a-fA-F]{8}")
 
 
 def fingerprints():
-    with gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt") as f:
+    with open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt") as f:
         return {int(d["va"], 16): d for d in map(json.loads, f)}
 
 

@@ -5,7 +5,7 @@
 
 Steam or GOG. The Steam SporeApp.exe is protected with SteamStub v3.1; tools/steamstub_analysis_image.py decrypts its
 code section into a non-runnable image. The GOG one is not protected and is used as it is: apart from Steam's DRM
-section the two are identical. The result is checked against the retail fingerprints (tools/ci/fingerprints.jsonl.gz).
+section the two are identical. The result is checked against the retail fingerprints (tools/ci/fingerprints.jsonl).
 Known good (SporeBin/SporeApp.exe):
   Steam, 20,626,168 bytes, SHA-256 f9716458cdc232a507686dcb490e75680c514e31a5b1f33601b0dfcd05baf75d
   GOG,   20,454,960 bytes, SHA-256 25d42a7a5c4d438fb155233230f57d29e2849bfdff5c889a5d0847f0469d914e
@@ -14,7 +14,7 @@ addresses; the fingerprints are for SporeBin's, so use that one.
 
 The image is game code: it stays in work/ (git-ignored).  Never commit, upload or share it.
 """
-import gzip, hashlib, json, os, random, subprocess, sys
+import hashlib, json, os, random, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [os.path.join(ROOT, "tools", "matching"), os.path.join(ROOT, "tools", "ci")]
@@ -27,7 +27,7 @@ def probe(n=400, out=OUT):
     import run_all as R, fingerprint as F
     R.IMAGE = out
     orig = R.Original()
-    fps = [json.loads(l) for l in gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt")]
+    fps = [json.loads(l) for l in open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"), "rt")]
     random.seed(1)
     ok = 0
     for fp in random.sample(fps, n):
