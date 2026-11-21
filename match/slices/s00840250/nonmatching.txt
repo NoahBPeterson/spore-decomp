@@ -1,5 +1,4 @@
 008409b0  52   complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
-00840bb0  70   complete: ParseEnum; table walk + throw frame differ
 00840c20  21   complete: Sprintf; buf scan loop shape differs
 00840c70  21   complete: SprintfAppend; buf scan loop shape differs
 00840d50  67   complete: ParseRangedFloat; x87 range compare + throw frame differ
