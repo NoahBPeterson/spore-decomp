@@ -707,33 +707,58 @@ void __fastcall cEditorResource_dtor(void* thisp)
     s[0] = (u32)&vtbl_EditorResource;
 }
 
+struct IOStream_s0081_0460 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); 
+    virtual bool SetPosition(int pos, int whence);      // +0x28
+};
+struct LayoutRes_s0081_0460 {                           // the layout payload behind 0x05adf5fb
+    u8 pad0[0x18];
+    IOStream_s0081_0460* mpStream;                      // +0x18
+    int  m1c;                                           // +0x1c
+};
+struct Resource_s0081_0460 {
+    virtual void v00(); virtual void v04(); virtual void v08(); 
+    virtual LayoutRes_s0081_0460* Cast(u32 iid);        // +0x0c
+    u8 pad4[0x1c - 4];
+    void* mpTokens;                                     // +0x1c
+    u32   mTokenFlags;                                  // +0x20
+};
+struct Record_s0081_0460 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); 
+    virtual IOStream_s0081_0460* GetStream();           // +0x18
+};
+bool __cdecl FUN_0082e1d0(LayoutRes_s0081_0460* p);                           // 0x82e1d0 LayerProc1
+int  __cdecl FUN_0093a610(IOStream_s0081_0460* dst, IOStream_s0081_0460* src, u32 size); // 0x93a610 StreamCopy
+bool __cdecl FUN_00902fc0(IOStream_s0081_0460* s, void* tokens, u32 a, u32 b);  // 0x902fc0 WriteTokenList
+
 // @ 0x00810460
-bool cSPUILayoutResourceFactory::WriteResource(EA::ResourceMan::Resource * a, EA::ResourceMan::Record * b, void * type, unsigned int d)
+bool cSPUILayoutResourceFactory::WriteResource(EA::ResourceMan::Resource * pa, EA::ResourceMan::Record * pb, void * type, unsigned int d)
 {
     (void)type;
-    int type_v = (int)d;
-    u8 bl = 0;
-    if (type_v == 0x250fe9a2) {
-        if (!a) return (void*)(size_t)bl;
-        void* x = ((void*(__thiscall*)(void*, unsigned int))VT(a)[0xc / 4])(a, 0x05adf5fb);
-        if (!x) return (void*)(size_t)bl;
-        if (*(int*)((u8*)x + 0x1c)) bl = (u8)(size_t)FUN_0082e1d0(x);
-        void* y = *(void**)((u8*)x + 0x18);
-        if (!y) return (void*)(size_t)bl;
-        ((void(__thiscall*)(void*, int, int))VT(y)[0x28 / 4])(y, 0, 0);
-        void* z = *(void**)((u8*)x + 0x18);
-        u32 w = ((u32(__thiscall*)(void*, int))VT(b)[0x18 / 4])(b, -1);
-        FUN_0093a610(z, (void*)(size_t)w);
-        return (void*)1;
-    } else if (type_v == 0x050f4731) {
-        if (!a) return (void*)(size_t)bl;
-        void* pp = *(void**)((u8*)a + 0x1c);
-        if (!pp) return (void*)(size_t)bl;
-        void* qq = *(void**)((u8*)a + 0x20);
-        u32 w = ((u32(__thiscall*)(void*, void*, int, void*))VT(b)[0x18 / 4])(b, pp, 1, qq);
-        bl = (u8)(size_t)FUN_00902fc0((void*)(size_t)w);
+    Resource_s0081_0460* a = (Resource_s0081_0460*)pa;
+    Record_s0081_0460* b = (Record_s0081_0460*)pb;
+    bool ok = false;
+    if (d == 0x250fe9a2) {
+        if (a) {
+            if (LayoutRes_s0081_0460* x = a->Cast(0x05adf5fb)) {
+                if (x->m1c)
+                    ok = FUN_0082e1d0(x);
+                if (IOStream_s0081_0460* st = x->mpStream) {
+                    st->SetPosition(0, 0);
+                    IOStream_s0081_0460* dst = x->mpStream;
+                    FUN_0093a610(dst, b->GetStream(), (u32)-1);
+                    ok = true;
+                }
+            }
+        }
+    } else if (d == 0x050f4731) {
+        if (a && a->mpTokens)
+            ok = FUN_00902fc0(b->GetStream(), a->mpTokens, 1, a->mTokenFlags);
     }
-    return (void*)(size_t)bl;
+    return ok;
 }
 
 // @ 0x00810520

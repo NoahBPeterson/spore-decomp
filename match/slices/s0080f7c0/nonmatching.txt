@@ -5,7 +5,6 @@
 0080fd60  142  complete; this kept in edx in retail vs ebx here, operand loads from the Init record are reordered (retail reads [eax+4] first), same call sequence; size 178 vs 168. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (245 valid, 92.5% coverage).
 0080fe10  47  complete; vcall target loaded into eax instead of edx and the mService reload is scheduled after the push, loop tail re-ordered; same call targets. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (361 valid, 30.4% coverage).
 008103a0  70  complete; retail materialises the delta in a stack slot ([esp+0xc]=0, [esp+0x10]=count) and tests it with jg, ours folds the clamp into lea/test with the vcall bracket laid out differently; size 65 vs 86. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (387 valid, 100.0% coverage).
-00810460  158  complete; extra callee-saved push (esi) shifts the arg slots by 4 bytes and the two type-id comparisons are laid out in a different order; same vcall/comparison semantics; size 177 vs 179. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (389 valid, 26.4% coverage).
 00810020  20  complete; ctor register allocation (zero in eax, this in esi) differs
 008100d0  7   complete; derived-vtable store scheduling / pop edi placement differ
 00810310  90  complete; visibility compare/object re-load schedule differs; equiv PASS (250 valid, 100% cov)
