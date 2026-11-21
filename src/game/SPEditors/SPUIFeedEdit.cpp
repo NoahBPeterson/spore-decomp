@@ -4225,28 +4225,21 @@ void Obj5400::f(int a)
 // @ 0x00ed54b0
 void Obj54b0::f(int a)
 {
-    char* s = (char*)this;
-    if (*(int**)(s + 0x88) == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)(s + 0x88);
-        if (q != 0) { *(int**)(s + 0x88) = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0x54248876);
-        if (c) {
-            int* z = *(int**)(s + 0x88);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
-        }
+    IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x88);
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0x54248876u, 0, fx))
+            (*fx)->Start(0);
     }
-    if (*(int**)(s + 0x8c) == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)(s + 0x8c);
-        if (q != 0) { *(int**)(s + 0x8c) = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0x14785c1);
-        if (c) {
-            int* z = *(int**)(s + 0x8c);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
-        }
+    fx = (IEffect_ed5400**)((char*)this + 0x8c);
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0x14785c1u, 0, fx))
+            (*fx)->Start(0);
     }
-    *(int*)(s + 0x90) = a;
+    *(int*)((char*)this + 0x90) = a;
 }
 
 // @ 0x00ed5580
