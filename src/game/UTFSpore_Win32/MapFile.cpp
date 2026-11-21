@@ -423,7 +423,7 @@ void* MapFile::StrStubInit(const char* b, const char* e)
     *(u8**)(p + 4) = base;
     *(u8**)p = base;
     *base = 0;
-    ((StrObj*)p)->AssignRange(b, e);
+    ((StrObj*)p)->AssignRange(b, b + (unsigned)e);   // retail passes (b, b + e): the second argument is a length
     return p;
 }
 
