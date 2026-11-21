@@ -752,10 +752,15 @@ int __thiscall StratMapErase::Erase(unsigned* key)
     unsigned idx    = *key % map->mnBucketCount;
     NodeUIntARC** pp = &map->mpBucket[idx];
     if (*pp) {
-        while (*pp && (*pp)->key != *key)
-            pp = &(*pp)->next;
-        while (*pp && (*pp)->key == *key) {
+        while (*pp) {
             NodeUIntARC* node = *pp;
+            if (*key == node->key) break;
+            pp = &node->next;
+        }
+        while (*pp) {
+            const unsigned value = *key;
+            NodeUIntARC* node = *pp;
+            if (value != node->key) break;
             *pp = node->next;
             IRefLite* v = node->value;
             if (v) v->Release();

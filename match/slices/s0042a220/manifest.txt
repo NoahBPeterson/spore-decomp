@@ -9,3 +9,4 @@ slices/s0042a220/s0042a220.cpp  ?PushFront@Deque30@@QAEXABUElem30@@@Z  0042a9b0 
 slices/s0042a220/s0042a220.cpp  ?PushBack@Deque30@@QAEXABUElem30@@@Z  0042aa60  /Od /Ob1 /MD /Gy /TP
 slices/s0042a220/s0042a220.cpp  ?PopFront@Deque30@@QAEXXZ  0042ab10  /Od /Ob1 /MD /Gy /TP
 slices/s0042a220/s0042a220.cpp  ?UninitMove20@@YAPAUElem20@@PAU1@00@Z  0042a730  /Od /Ob1 /MD /Gy /TP
+slices/s0042a220/s0042a220.cpp  ?UninitMove7c@@YAPAUElem7c@@PAU1@00@Z  0042a680  /Od /Ob1 /MD /Gy /TP

@@ -12,3 +12,4 @@
 ../src/game/SPGonzago/SPMissionManagerBase.cpp  ?InitMissionAttributes@Simulator@@YAXXZ  01321080  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManagerBase.cpp  ?ClearCard@MMgr@@QAEXPAX@Z  00b6f820  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Shutdown@MissionMgr@@QAEXXZ  00b70070  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Erase@StratMapErase@@QAEHPAI@Z  00b6faa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
