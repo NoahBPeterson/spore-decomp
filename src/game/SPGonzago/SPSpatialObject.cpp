@@ -114,6 +114,8 @@ struct Transform {
     Vec3     pos;
     float    scale;
     Matrix3  rot;
+    void SetOffset(const Vec3& v) { pos = v; flags |= 4; ++version; }
+    void SetRotation(const Matrix3& m) { rot = m; flags |= 2; ++version; }
 };
 extern Vec3    g_vec1695248;   // 0x01695248
 extern Quat    g_quat157a1c8;  // 0x0157a1c8
@@ -640,24 +642,27 @@ cSO::cSO()
     mC8 = 0;
 }
 
+struct SpatialTransformV {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual const Vec3* GetPosition();      // +0x2c
+    virtual Quat* GetOrientation();         // +0x30
+};
+
 // @ 0x00c897e0
 void cSO::LocalToWorldTransform(Transform* out)
 {
+    float one = DAT_01485720;
     out->rot = g_mat16952ac;
-    out->scale = 1.0f;
+    out->scale = one;
     out->pos = g_vec1695248;
     out->flags = 0;
     out->version = 0;
-    Vec3* pos = (Vec3*)((void*(__thiscall*)(cSO*))VT(0x2c))(this);
-    out->pos = *pos;
-    out->flags |= 4;
-    out->version++;
-    Quat* q = (Quat*)((void*(__thiscall*)(cSO*))VT(0x30))(this);
+    out->SetOffset(*((SpatialTransformV*)this)->GetPosition());
     Matrix3 m;
-    Matrix3FromQuaternion(&m, q);
-    out->flags |= 2;
-    out->version++;
-    out->rot = m;
+    Matrix3FromQuaternion(&m, ((SpatialTransformV*)this)->GetOrientation());
+    out->SetRotation(m);
 }
 
 // @ 0x00c89890

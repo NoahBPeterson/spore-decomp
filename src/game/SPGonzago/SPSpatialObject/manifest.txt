@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPSpatialObject.cpp  ?InitSpatialObjectAttributes@@YAXXZ  01353d90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObject.cpp  ?Write@cSpatialObject@@QAEXPAX@Z  00c88a90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObject.cpp  ?func9C@cSO@@QAE_NXZ  00c893b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObject.cpp  ?LocalToWorldTransform@cSO@@QAEXPAUTransform@@@Z  00c897e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
