@@ -2505,28 +2505,42 @@ bool VisitWindowTreeDepthFirst(W_s0080_7840* w, bool (*fn)(W_s0080_7840*, void*)
     return 1;
 }
 
+struct SPShader_s0080_7dc0 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct SPShaderPtr_s0080_7dc0 {
+    SPShader_s0080_7dc0* mp;
+    __forceinline SPShaderPtr_s0080_7dc0() : mp(0) {}
+    __forceinline SPShaderPtr_s0080_7dc0& operator=(SPShader_s0080_7dc0* p)
+    {
+        SPShader_s0080_7dc0* old = mp;
+        if (p != old) {
+            if (p) p->AddRef();
+            mp = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+struct SetShaderCtx_s0080_7dc0 {
+    SPShaderPtr_s0080_7dc0 shader;
+    unsigned char flag;
+};
+
 // @ 0x00807dc0
 #pragma auto_inline(off)
 void* SetWindowSPShader(W_s0080_7840* w, unsigned char flag, void* shader)
 {
-    void* local = 0;
-    unsigned char lflag = flag;
-    (void)lflag;
-    if (shader != 0) {
-        (*(void(__thiscall**)(void*))VSlot(shader, 0))(shader);
-        local = shader;
-    } else {
-        void* p = SPUIShader_AcquireShaderProxy();
-        void* old = local;
-        if (p != old) {
-            if (p != 0) (*(void(__thiscall**)(void*))VSlot(p, 0))(p);
-            local = p;
-            if (old != 0) (*(void(__thiscall**)(void*, int))VSlot(old, 4))(old, 0);
-        }
-    }
-    VisitWindowTreeDepthFirst(w, (bool (*)(W_s0080_7840*, void*))FUN_00806db0, &local);
-    void* r = local;
-    if (local != 0) (*(void(__thiscall**)(void*, int))VSlot(local, 4))(local, 0);
+    SetShaderCtx_s0080_7dc0 ctx;
+    ctx.flag = flag;
+    if (shader != 0)
+        ctx.shader = (SPShader_s0080_7dc0*)shader;
+    else
+        ctx.shader = (SPShader_s0080_7dc0*)SPUIShader_AcquireShaderProxy();
+    VisitWindowTreeDepthFirst(w, (bool (*)(W_s0080_7840*, void*))FUN_00806db0, &ctx);
+    SPShader_s0080_7dc0* r = ctx.shader.mp;
+    if (r) r->Release();
     return r;
 }
 #pragma auto_inline(on)

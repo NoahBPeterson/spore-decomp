@@ -26,7 +26,6 @@
 00807bb0 137 complete; SSE/call scheduling differs
 00807cb0 70 complete; register/scheduling differences
 00807d30 49 complete: SPUIHelpers::VisitWindowTreeDepthFirst - callback test + child-list walk; differs only in the loop-body instruction order and the shrink-wrapped push edi; equiv: PASS 314 valid inputs, 75.8% coverage
-00807dc0 109 complete; shader refcount/loop scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#3 esp]
 00807f50 185 complete; rotation switch/register differences
 00808050 158 complete; transform update SSE schedule differs
 00808370 337 complete: recursive union-of-bounds walk (v28/v38/vtable 0xcc/0xd0 + FUN_0064e6b0 empty-rect test + min/max merge); original batches all four addss before the compare chain, ours interleaves; equiv: UNSUPPORTED 0/400 valid inputs (needs a live window + child list)
