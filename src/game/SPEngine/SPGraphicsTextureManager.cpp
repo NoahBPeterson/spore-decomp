@@ -734,14 +734,31 @@ struct RefHolder {
     uint32_t GetE();
 };
 struct HashNode { uint32_t key; uint32_t hash; uint32_t field8; uint32_t f0c; HashNode* next; };
+struct HashAllocator_s0083_3300 {
+    virtual void v00(); virtual void v04();
+    virtual void* allocate(uint32_t n, int flags, uint32_t name);
+    virtual void deallocate(void* p, uint32_t n);
+};
 struct Hashtable {
     uint32_t   f0;
     HashNode** mpBuckets;   // +0x04
     uint32_t   mnElementCount; // +0x08
     char       pad0c[0x10];
-    void*      mpAllocator; // +0x1c
+    HashAllocator_s0083_3300* mpAllocator; // +0x1c
     uint32_t   f20;         // +0x20
     void Rehash(uint32_t nNewBucketCount);
+    HashNode** DoAllocateBuckets(uint32_t n)
+    {
+        HashNode** p = (HashNode**)mpAllocator->allocate((n + 1) * sizeof(HashNode*), 0, f20);
+        ((void (__cdecl*)(void*, int, uint32_t))FUN_0011e073e)(p, 0, n * sizeof(HashNode*));
+        p[n] = (HashNode*)~(uintptr_t)0;
+        return p;
+    }
+    void DoFreeBuckets(HashNode** p, uint32_t n)
+    {
+        if (n > 1)
+            mpAllocator->deallocate(p, (n + 1) * sizeof(HashNode*));
+    }
 };
 // ---- items of slice s00832790 end
 
@@ -2264,26 +2281,19 @@ uint32_t RefHolder::GetE()
 // @ 0x00833300
 void Hashtable::Rehash(uint32_t nNewBucketCount)
 {
-    uint32_t size = nNewBucketCount * 4;
-    HashNode** pNew = (HashNode**)((void* (__thiscall*)(void*, uint32_t, int, uint32_t))
-        VT(mpAllocator)[8 / 4])(mpAllocator, f20, 0, size + 4);
-    ((void (__cdecl*)(void*, int, uint32_t))FUN_0011e073e)(pNew, 0, size);
-    *(uint32_t*)((char*)pNew + size) = 0xffffffff;
+    HashNode** const pNew = DoAllocateBuckets(nNewBucketCount);
     for (uint32_t i = 0; i < mnElementCount; ++i) {
-        HashNode* node = mpBuckets[i];
-        while (node != 0) {
-            uint32_t b = (node->hash ^ node->key) % nNewBucketCount;
+        HashNode* node;
+        while ((node = mpBuckets[i]) != 0) {
+            const uint32_t b = (node->field8 ^ node->key) % nNewBucketCount;
             mpBuckets[i] = node->next;
             node->next = pNew[b];
             pNew[b] = node;
-            node = mpBuckets[i];
         }
     }
-    if (mnElementCount > 1)
-        ((void (__thiscall*)(void*, HashNode**, uint32_t))VT(mpAllocator)[0xc / 4])
-            (mpAllocator, mpBuckets, mnElementCount * 4 + 4);
-    mpBuckets = pNew;
+    DoFreeBuckets(mpBuckets, mnElementCount);
     mnElementCount = nNewBucketCount;
+    mpBuckets = pNew;
 }
 
 // @ 0x008337d0
