@@ -1511,7 +1511,22 @@ struct WorldObject {                    // the `b8de30`/`b8dab0`/`b8dad0` result
     int   GetType();                    // 0xbb9ae0
     void  SetSomething(void* a);        // 0xbb9b90
 };
-struct VarListSerializer { uchar mData_000[0xa14]; };
+struct VarListSerializer {
+    uchar mData_000[0xa14];
+    VarListSerializer(const void* obj, void* desc, unsigned count); // 0x692f90
+    bool Serialize(void* pArchive);                               // 0x692900
+};
+struct GameDataPart_c6f990 { bool Write(void* pArchive); };      // 0xb18590
+struct SpatialObjPart_c6f990 { bool Write(void* pArchive); };    // 0xc88a90
+struct ArcStream_c6f990 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void* GetHandle();      // +0x18
+};
+struct Archive_c6f990 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual ArcStream_c6f990* GetStream();  // +0x20
+};
 struct GameDataBase_s00c6_f6e0 { void ctor(); };              // 0xb18660
 struct SpatialBase_s00c6_f6e0  { void ctor(); };              // 0xc89630
 struct CombatantBase{ void ctor(); };              // 0xbfd4e0
@@ -4381,22 +4396,17 @@ SimOrnament::SimOrnament()
     *(void**)mCombatant_148 = &PTR_FUN_014720b8;
 }
 
+static __forceinline void WriteClassId_c6f990(void* handle, unsigned id)
+{
+    FUN_0093aa70(handle, &id, (void*)1, 0);
+}
 // @ 0x00c6f990
 bool SimOrnament::Write(void* pArchive)
 {
-    void* p1 = ((void* (__thiscall*)(void*))vc(pArchive, 0x20))(pArchive);
-    unsigned id = 0x175cdc9;
-    unsigned handle = ((unsigned (__thiscall*)(void*))vc(p1, 0x18))(p1);
-    FUN_0093aa70((void*)handle, &id, (void*)1, 0);
-    bool b = ((bool (__thiscall*)(void*, void*))FUN_00b18590)(this, pArchive);
-    if (b) {
-        b = ((bool (__thiscall*)(void*, void*))FUN_00c88a90)(mSpatial_70, pArchive);
-    }
-    VarListSerializer ser;
-    FUN_00692f90(&ser, this, &DAT_01578698, (void*)0x1a80d26);
-    if (b) {
-        if (FUN_00692900_s00c6_f6e0(&ser, pArchive)) return true;
-    }
+    WriteClassId_c6f990(((Archive_c6f990*)pArchive)->GetStream()->GetHandle(), 0x175cdc9);
+    bool b = ((GameDataPart_c6f990*)this)->Write(pArchive) && ((SpatialObjPart_c6f990*)mSpatial_70)->Write(pArchive);
+    VarListSerializer ser(this, &DAT_01578698, 0x1a80d26);
+    if (b && ser.Serialize(pArchive)) return true;
     return false;
 }
 
