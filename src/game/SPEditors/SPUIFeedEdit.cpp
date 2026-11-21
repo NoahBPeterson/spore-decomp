@@ -1697,7 +1697,7 @@ struct Obj5020 {
 };
 struct Obj5190 { bool f(int w); };
 struct Obj5220 { void* f(); };
-struct Obj5330 { int f(int a); };
+struct Obj5330 { bool f(int a); };
 struct Obj5400 { void f(int a); };
 struct Obj54b0 { void f(int a); };
 struct PanelMatchDesc {
@@ -4145,36 +4145,6 @@ void* Obj5220::f()
     return s;
 }
 
-// @ 0x00ed5330
-int Obj5330::f(int a)
-{
-    (void)a;
-    char* s = (char*)this;
-    char* f84 = s + 0x84;
-    int* p = *(int**)(s + 0x84);
-    if (p != 0 && ((FV_q)(*(void***)p)[0x60 / 4])(p) != 0x6ca35b3bull) {
-        ((FV_i_s00ed_4730)(*(void***)*(int**)f84)[0xc / 4])(*(int**)f84, 0);
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-    }
-    if (*(int**)f84 == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0x6ca35b3b);
-        if (c) {
-            if (FUN_00e00ac0()) ((S_e02e80*)(*(int*)(s + 0x44)))->f();
-            ((S_ed4c70*)s)->f(0);
-            int* z = *(int**)f84;
-            ((FV_ii)(*(void***)z)[0x48 / 4])(z, 6, 1);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-// @ 0x00ed5400
 struct IEffect_ed5400 {
     virtual void AddRef();
     virtual void Release();
@@ -4204,6 +4174,33 @@ static inline void Reset_ed5400(IEffect_ed5400** pp)
         p->Release();
     }
 }
+// @ 0x00ed5330
+bool Obj5330::f(int a)
+{
+    IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x84);
+    if (IEffect_ed5400* cur = *fx) {
+        if (cur->GetID() != 0x6ca35b3bu) {
+            (*fx)->Stop(0);
+            Reset_ed5400(fx);
+        }
+    }
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0x6ca35b3bu, 0, fx)) {
+            if (FUN_00e00ac0())
+                ((S_e02e80*)(*(int*)((char*)this + 0x44)))->f();
+            ((S_ed4c70*)this)->f(0);
+            int v = a;
+            (*fx)->SetParam(6, &v, 1);
+            (*fx)->Start(0);
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00ed5400
 void Obj5400::f(int a)
 {
     IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x84);
