@@ -26,3 +26,4 @@
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?InitLayout@cSPUIFeedEdit_s0065_ea00@@QAEXXZ  0065f4d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Shutdown@cSPUIFeedEdit@@QAEXXZ  0065ca10  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj4f90@@QAE_NHH@Z  00ed4f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj4b70@@QAEXXZ  00ed4b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

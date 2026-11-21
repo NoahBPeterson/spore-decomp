@@ -3876,37 +3876,49 @@ void Obj49a0::f()
 }
 
 // @ 0x00ed4b70
+struct Ctl_ed4b70 {
+    void FUN_00ef00b0();
+    void FUN_00b781d0();
+    void FUN_00b5a390();
+    void FUN_00b515e0();
+    void FUN_00b79aa0();
+    void FUN_00f190a0();
+    char FUN_00f46630(void*);
+};
+struct MsgSrv_ed4b70 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void Post(u32 id, int a, int b);
+};
+struct Cheat_ed4b70 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void Execute(const char* cmd);
+};
+struct Key_ed4b70 { int a, b, c; Key_ed4b70() : a(0), b(0), c(0) {} };
 void Obj4b70::f()
 {
     char* s = (char*)this;
     switch (*(int*)(s + 0x58)) {
     case 1: case 3: case 6:
-        ((S_ef00b0*)s)->f();
+        ((Ctl_ed4b70*)g_16c7aa4_s00ed_4730)->FUN_00ef00b0();
+        *(int*)(s + 0x58) = 0;
+        return;
+    case 7:
+        ((Cheat_ed4b70*)SP_CheatManager())->Execute("quit");
         *(int*)(s + 0x58) = 0;
         return;
     case 4: {
-        ((S_b3d3c0*)FUN_00b3d3c0())->f();
-        ((S_b3d3c0*)FUN_00b3d310())->f();
-        ((S_b3d3c0*)FUN_00b3d310())->f();
-        ((S_b3d3c0*)FUN_00b3d3c0())->f();
+        ((Ctl_ed4b70*)FUN_00b3d3c0())->FUN_00b781d0();
+        ((Ctl_ed4b70*)FUN_00b3d310())->FUN_00b5a390();
+        ((Ctl_ed4b70*)FUN_00b3d310())->FUN_00b515e0();
+        ((Ctl_ed4b70*)FUN_00b3d3c0())->FUN_00b79aa0();
         FUN_00efc8c0(0);
-        ((S_ef00b0*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x78)))->f();
-        char c = ((S_f46630*)(*(int*)(g_16c7aa4_s00ed_4730 + 0x74)))->f(s + 0x48);
-        if (c) {
-            int* sv = (int*)SP_MessageServer();
-            ((FV_ii)(*(void***)sv)[0x14 / 4])(sv, 0x86a4609d, 0);
-        }
-        *(int*)(s + 0x48) = 0;
-        *(int*)(s + 0x4c) = 0;
-        *(int*)(s + 0x50) = 0;
+        (*(Ctl_ed4b70**)(g_16c7aa4_s00ed_4730 + 0x78))->FUN_00f190a0();
+        if ((*(Ctl_ed4b70**)(g_16c7aa4_s00ed_4730 + 0x74))->FUN_00f46630(s + 0x48))
+            ((MsgSrv_ed4b70*)SP_MessageServer())->Post(0x86a4609d, 0, 0);
+        *(Key_ed4b70*)(s + 0x48) = Key_ed4b70();
         *(int*)(s + 0x58) = 0;
         break;
-    }
-    case 7: {
-        int* cm = (int*)SP_CheatManager();
-        ((FV_i_s00ed_4730)(*(void***)cm)[0x20 / 4])(cm, (int)"quit");
-        *(int*)(s + 0x58) = 0;
-        return;
     }
     }
     *(int*)(s + 0x58) = 0;
