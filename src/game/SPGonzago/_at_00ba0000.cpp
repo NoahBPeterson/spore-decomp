@@ -720,9 +720,23 @@ struct PosseReload {
 };
 void* __cdecl FUN_00bc3e60(unsigned, int, int);            // 0xbc3e60
 void  __cdecl FUN_00ac4440(void*, void*, void*);           // 0xac4440
-struct cVarListSerializer { char storage[0xa14]; };
-cVarListSerializer* __fastcall cVarListSerializer_ctor(cVarListSerializer* self, ...);
-void __fastcall cVarListSerializer_Serialize(cVarListSerializer* self, ...);
+struct cVarListSerializer {
+  char storage[0xa14];
+  void __thiscall Init(const void* base, void* desc, unsigned count);   // 0x692f90 (ctor)
+  void __thiscall Serialize(void* obj);                                // 0x692900
+};
+extern "C" char g_156c370[];   // 0x156c370 cDataSerializerGeneric table
+struct SaveIO_ba2670 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14();
+  virtual void* GetWriter();                                   // +0x18
+};
+struct SaveSrc_ba2670 {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+  virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+  virtual SaveIO_ba2670* GetIO();                              // +0x20
+};
+static inline void WriteU32_ba2670(void* s, uint32_t v) { EA_IO_WriteUint32(s, &v, 1, 0); }
 struct SaveBlob {
   uint32_t magic;                 // +0x00
   cVarListSerializer ser;         // +0x04
@@ -2130,13 +2144,10 @@ void __thiscall W::Run_00ba2590(void* obj)
 // @ 0x00ba2670
 void __thiscall W::Run_00ba2670(void* p)
 {
-  SaveBlob blob;
-  blob.magic = 0xf2dcc8bc;
-  void* io = (*(void*(__thiscall*)(void*))((*(void***)p)[0x20 / 4]))(p);
-  void* wr = (*(void*(__thiscall*)(void*))((*(void***)io)[0x18 / 4]))(io);
-  EA_IO_WriteUint32(wr, &blob.magic, 1, 0);
-  cVarListSerializer_ctor(&blob.ser, (char*)this - 4, 0x156c370, 0x1a80d26);
-  cVarListSerializer_Serialize(&blob.ser, p);
+  WriteU32_ba2670(((SaveSrc_ba2670*)p)->GetIO()->GetWriter(), 0xf2dcc8bc);
+  cVarListSerializer ser;
+  ser.Init((char*)this - 4, g_156c370, 0x1a80d26);
+  ser.Serialize(p);
 }
 
 // @ 0x00ba2750
