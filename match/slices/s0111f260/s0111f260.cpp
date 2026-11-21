@@ -202,8 +202,9 @@ MoppChainNode* MoppQuery::newNode(MoppChainNode* parent, MoppPrimArray* prims)
     m_nFree--;
     MoppChainNode* ret = node;
     node->reset();
+    uint8_t& flag = node->m_b04;
+    flag = 1;
     node->m_parent = parent;
-    node->m_b04 = 1;
     node->m_iB8 = (uint32_t)prims->m_first;
     collectBounds(prims, node);
     for (int i = 0; i < 0x60; i += 0x20)
