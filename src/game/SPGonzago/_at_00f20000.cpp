@@ -647,7 +647,7 @@ extern "C" int*         FUN_00f21e60(int* a);                  // 0x00f21e60
 extern "C" char         FUN_00f22070(int* a);                  // 0x00f22070
 extern "C" char         FUN_00f20350(void* a);                 // 0x00f20350
 extern "C" void*        operator_delete(void* p);              // 0x00f47380
-extern "C" void         RBTreeIncrement(void* node);           // 0x00921580
+extern "C" void*        RBTreeIncrement(void* node);           // 0x00921580
 extern "C" void         RBTreeInsert(void* node, void* a, void* b, int side);  // 0x009216a0
 extern "C" void         RBTreeErase(void* a, void* b);         // 0x00921880
 extern "C" void         WordCtor_16c8318();
@@ -1725,25 +1725,30 @@ int FUN_00f23c80(int a, int b)
     return -1;
 }
 
+struct IEvent_f24060 {
+    virtual void v0();
+    virtual void* GetTarget();   // +0x04
+};
 // @ 0x00f24060
 int FUN_00f24060(int* ev)
 {
-    int* piVar1 = (int*)((int(__thiscall*)(void*))*(void**)(*ev + 4))(ev);
-    unsigned int key = (uint)piVar1;
-    if (piVar1 != 0)
-        ((void(__thiscall*)(void*))*(void**)*piVar1)(piVar1);
+    IRefCounted_f20d20* p = (IRefCounted_f20d20*)((IEvent_f24060*)ev)->GetTarget();
+    unsigned int key = (uint)p;
+    if (p != 0)
+        p->AddRef();
 
-    void* lower;
-    void* upper;
-    ((DramaEventMultiMap*)DAT_016c8318)->equal_range(&lower, &key);
+    struct { void* first; void* second; } range;
+    ((DramaEventMultiMap*)DAT_016c8318)->equal_range(&range.first, &key);
 
     int iVar2 = 0;
-    while (lower != upper) {
-        lower = RBTreeIncrementPtr(lower);
-        iVar2 = iVar2 + 1;
+    void* it = range.first;
+    void* end = range.second;
+    while (it != end) {
+        it = RBTreeIncrement(it);
+        ++iVar2;
     }
-    if (piVar1 != 0)
-        ((void(__thiscall*)(void*))*(void**)(*piVar1 + 4))(piVar1);
+    if (p != 0)
+        p->Release();
     return iVar2;
 }
 
