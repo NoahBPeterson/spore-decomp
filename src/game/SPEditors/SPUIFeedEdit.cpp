@@ -4175,27 +4175,52 @@ int Obj5330::f(int a)
 }
 
 // @ 0x00ed5400
+struct IEffect_ed5400 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void Start(int flags);
+    virtual void Stop(int flags);
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17();
+    virtual void SetParam(int id, const void* value, int count);
+    virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22();
+    virtual void v23();
+    virtual unsigned __int64 GetID();
+    virtual void SetSource(unsigned id, int flags);
+};
+struct IEffectsMgr_ed5400 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual bool CreateEffect(unsigned id, unsigned group, IEffect_ed5400** out);
+};
+static inline void Reset_ed5400(IEffect_ed5400** pp)
+{
+    IEffect_ed5400* p = *pp;
+    if (p != 0) {
+        *pp = 0;
+        p->Release();
+    }
+}
 void Obj5400::f(int a)
 {
-    (void)a;
-    char* s = (char*)this;
-    char* f84 = s + 0x84;
-    int* p = *(int**)(s + 0x84);
-    if (p != 0 && ((FV_q)(*(void***)p)[0x60 / 4])(p) != 0xf08ce134ull) {
-        ((FV_i_s00ed_4730)(*(void***)*(int**)f84)[0xc / 4])(*(int**)f84, 0);
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
+    IEffect_ed5400** fx = (IEffect_ed5400**)((char*)this + 0x84);
+    if (IEffect_ed5400* cur = *fx) {
+        if (cur->GetID() != 0xf08ce134u) {
+            (*fx)->Stop(1);
+            Reset_ed5400(fx);
+        }
     }
-    if (*(int**)f84 == 0) {
-        int* em = (int*)SP_EffectsManager();
-        int* q = *(int**)f84;
-        if (q != 0) { *(int**)f84 = 0; ((FV_v)(*(void***)q)[4 / 4])(q); }
-        char c = (char)((FV_ipr)(*(void***)em)[0x2c / 4])(em, 0xf08ce134);
-        if (c) {
-            int* z = *(int**)f84;
-            ((FV_ii)(*(void***)z)[0x48 / 4])(z, 6, 1);
-            ((FV_ii)(*(void***)z)[0x64 / 4])(z, 0x7ec5866, 0);
-            ((FV_i_s00ed_4730)(*(void***)z)[8 / 4])(z, 0);
+    if (*fx == 0) {
+        IEffectsMgr_ed5400* em = (IEffectsMgr_ed5400*)SP_EffectsManager();
+        Reset_ed5400(fx);
+        if (em->CreateEffect(0xf08ce134u, 0, fx)) {
+            int v = a;
+            (*fx)->SetParam(6, &v, 1);
+            (*fx)->SetSource(0x7ec5866, 0);
+            (*fx)->Start(0);
         }
     }
 }
