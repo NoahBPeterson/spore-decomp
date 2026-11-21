@@ -55,7 +55,7 @@ struct cCameraManager {
     int  ControllerIDByIndex(int idx);           // 0x7c6480
     int  ControllerIDByName(void* name);         // 0x7c64e0
     int  HandleMessage(int msg, int arg);        // 0x7c6610
-    int  SetActiveControllerByID(int id);        // 0x7c66b0
+    bool SetActiveControllerByID(int id);        // 0x7c66b0
     void* Controller(int id);                    // 0x7c6700
 };
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
@@ -273,18 +273,6 @@ int cCameraManager::HandleMessage(int msg, int arg)
     return 0;
 }
 
-// @ 0x007c66b0
-int cCameraManager::SetActiveControllerByID(int id)
-{
-    int found = CtrlIDMapFind(&id);
-    if (found != 0) {
-        ((void(__thiscall*)(void*, int))((void**)vftable)[0x54 / 4])(this, found);
-        return 1;
-    }
-    return 0;
-}
-
-// @ 0x007c6700
 struct HashNode_s007c6700 { unsigned int key; int value; HashNode_s007c6700* next; };
 struct HashIt_s007c6700 {
     HashNode_s007c6700* mpNode;
@@ -296,6 +284,43 @@ struct HashTable_s007c6700 {
     int mnBucketCount;                      // +0x08
     HashIt_s007c6700 find(const unsigned int& key) const;   // 0x00645ed0
 };
+// @ 0x007c66b0
+struct VT_s007c66b0 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void SetActiveController(int idx);    // +0x54
+};
+bool cCameraManager::SetActiveControllerByID(int id)
+{
+    const HashTable_s007c6700* map = (const HashTable_s007c6700*)((char*)this + 0x60);
+    HashIt_s007c6700 it = map->find(*reinterpret_cast<const unsigned int*>(&id));
+    if (it.mpNode != map->mpBucketArray[map->mnBucketCount]) {
+        ((VT_s007c66b0*)this)->SetActiveController(it.mpNode->value);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x007c6700
 void* cCameraManager::Controller(int id)
 {
     const HashTable_s007c6700* map = (const HashTable_s007c6700*)((char*)this + 0x60);
