@@ -195,7 +195,7 @@ struct cRTTManager_s0076_db40 {
     // @ 0x0076e040  per-page rectangle scale (1/pageSize) in float.
     bool  GetScaledRect(int i, int sub, float* a, float* b);  // 0x0076e040 (cRTTManager::GetScaledRect)
     // @ 0x0076e110  allocate a new texture page.
-    bool  AllocateNewPage(int pageId, int w, int h, int depth);  // 0x0076e110 (cRTTManager::AllocateNewPage)
+    bool  AllocateNewPage(int pageId, int w, int h, int depth, void* page);  // 0x0076e110 (cRTTManager::AllocateNewPage)
 };
 struct RTTRaster {
     unsigned D3D9GetMipLevelSize(unsigned char level);          // 0x011f0000, ret 4
@@ -829,32 +829,69 @@ bool cRTTManager_s0076_db40::GetScaledRect(int i, int sub, float* a, float* b)
     return true;
 }
 
+struct RTTMgrLock_76e110 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void Lock();                                             // +0x1c
+};
+struct IDGen_76e110 {
+    virtual void v00();
+    virtual void Generate(int* key, int group, int a, int b, int type, int c);  // +0x04
+};
+struct Resolver_76e110 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void* CreateRaster(int id, int type, int w, int h, int a, int fmt, int depth, int c);  // +0x3c
+};
+struct ImageRef_76e110 { void GetImageResource(void* res); };     // 0x00576650
+struct RTTPage_76e110 {
+    char            pad00[0x28];
+    int             mDepth;                                          // +0x28
+    int             mWidth;                                          // +0x2c
+    int             mHeight;                                         // +0x30
+    int             mUsed;                                           // +0x34
+    ImageRef_76e110 mImage;                                          // +0x38
+    void AddNode(int w, int h);                                      // 0x007b0fa0
+};
 // @ 0x0076e110
-bool cRTTManager_s0076_db40::AllocateNewPage(int pageId, int w, int h, int depth)
+bool cRTTManager_s0076_db40::AllocateNewPage(int pageId, int w, int h, int depth, void* page)
 {
-    void* mgr = FUN_0067dd50();
-    ((void(__thiscall*)(void*))((void**)mgr)[0x1c / 4])(mgr);
+    ((RTTMgrLock_76e110*)FUN_0067dd50())->Lock();
 
-    void* resolver = GetRTTResolver_s0076_db40();
+    Resolver_76e110* resolver = (Resolver_76e110*)GetRTTResolver_s0076_db40();
     int buf[3];
     buf[0] = pageId;
     buf[1] = 0;
     buf[2] = 0x40002a00;
-    if (pageId == -1) {
-        void* gen = SP_IDGenerator();
-        ((void(__thiscall*)(void*, int*, int, int, int, int, int))((void**)gen)[1])
-            (gen, buf, 0x2f4e681c, 0, 0, 0x2a, 0);
-    }
-    void* res = ((void*(__thiscall*)(void*, int, int, int, int, int, int, int, int))
-                     ((void**)resolver)[0x3c / 4])
-        (resolver, buf[0], buf[2], w, h, 1, 9, depth, 0);
+    if (pageId == -1)
+        ((IDGen_76e110*)SP_IDGenerator())->Generate(buf, 0x2f4e681c, 0, 0, 0x2a, 0);
+    void* res = resolver->CreateRaster(buf[0], buf[2], w, h, 1, 9, depth, 0);
     if (res != 0) {
-        ((void(__thiscall*)(void*, void*))GetImageResource)((char*)this + 0x38, res);
-        *(int*)((char*)this + 0x28) = depth;
-        *(int*)((char*)this + 0x34) = 0;
-        *(int*)((char*)this + 0x2c) = w;
-        *(int*)((char*)this + 0x30) = h;
-        ((void(__thiscall*)(void*, int, int))FUN_007b0fa0)(this, w, h);
+        RTTPage_76e110* pg = (RTTPage_76e110*)page;
+        pg->mImage.GetImageResource(res);
+        pg->mDepth = depth;
+        pg->mUsed = 0;
+        pg->mWidth = w;
+        pg->mHeight = h;
+        pg->AddNode(w, h);
         return true;
     }
     return false;
