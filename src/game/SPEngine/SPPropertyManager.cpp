@@ -1539,6 +1539,7 @@ int SP::cPropertyManager::GetPropertyGroupCount()
 bool SP::cPropertyManager::GetPropertyGroupID(int idx, unsigned int * out)
 {
     if (((char *)mPropertyGroupIDs.mpBegin) != ((char *)mPropertyGroupIDs.mpEnd) && idx < (int)((((char *)mPropertyGroupIDs.mpEnd) - ((char *)mPropertyGroupIDs.mpBegin)) >> 2)) {
+        _ReadWriteBarrier();
         *out = ((uint32_t*)((char *)mPropertyGroupIDs.mpBegin))[idx];
         return true;
     }
