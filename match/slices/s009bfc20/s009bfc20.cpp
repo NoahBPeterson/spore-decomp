@@ -449,11 +449,11 @@ sp_body_static_vector* sp_body_static_vector::Ctor(size_t n, const void* allocat
     mpEnd = pNew;
     value = builder.Build();
     creature_body_static_data* p = mpBegin;
-    while (n != 0) {
+    for (size_t remaining = n; remaining > 0; ) {
         if (p != 0)
             p->SetFromBuilt(value);
-        p = (creature_body_static_data*)((int32_t)p + 0x468);
-        --n;
+        --remaining;
+        ++p;
     }
     mpEnd = (creature_body_static_data*)((int32_t)mpBegin + bytes);
     return this;
