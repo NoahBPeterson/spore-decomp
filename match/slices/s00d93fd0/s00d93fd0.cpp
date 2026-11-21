@@ -442,9 +442,7 @@ float FleeNearbyCreature_Decide(Citizen* c, int a2, int a3, int a4, int a5, int 
 
 // @ 0x00d94590
 float AttackNearbyCreature_Decide(Citizen* c, int a2, int a3, int a4, void* stimuli, uint8_t* out, int a7, FleeContext* ctx)
-{
-    BehaviorTree* tree = c->mpBehaviorTree_0b4c;
-    int* slot = StimuliLookup((char*)tree + 0x1d0, (void*)ctx->mValue_2d);
+{    int* slot = StimuliLookup((char*)c->mpBehaviorTree_0b4c + 0x1d0, (void*)ctx->mValue_2d);
     StimulusObj* so = slot ? (StimulusObj*)slot[0] : 0;
     void* obj = so ? so->Slot5c(0xce9f6639) : 0;
     Citizen* found = (Citizen*)StimuliResolve(obj);
@@ -452,8 +450,8 @@ float AttackNearbyCreature_Decide(Citizen* c, int a2, int a3, int a4, void* stim
     {
         if (stimuli)
             ((BehaviorStimuli*)stimuli)->GetAny();
-        void* payload = &found->mStimulusPayload_5a8;
         *out = 1;
+        void* payload = found ? &found->mStimulusPayload_5a8 : 0;
         *(void**)((char*)stimuli + 4) = payload;
         return 1.0f;
     }

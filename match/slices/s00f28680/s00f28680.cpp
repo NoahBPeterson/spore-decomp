@@ -503,18 +503,18 @@ struct E34 {
 };
 
 // @ 0x00f292c0
-void fn292c0(E34* dst, int n, E34* src) {
-  if ((uint)n <= 0) return;
+void fn292c0(E34* dst, int n, E34* src) {  if ((uint)n <= 0) return;
   E34* d = dst;
+  float* p = (float*)dst + 3;
   do {
     if (d != 0) {
-      d->f00 = src->f00; d->f04 = src->f04; d->f08 = src->f08; d->f0c = src->f0c;
-      d->f10 = src->f10; d->f14 = src->f14; d->f18 = src->f18;
-      d->v.ctor(src->v);
-      d->f30 = src->f30;
+      p[-3] = src->f00;d->f04 = src->f04;p[-1] = src->f08;d->f0c = src->f0c;p[1] = src->f10;p[2] = src->f14;p[3] = src->f18;
+      ((Vec3*)((char*)p + 0x10))->ctor(src->v);
+      *(int*)((char*)p + 0x24) = src->f30;
     }
     --n;
     d = (E34*)((char*)d + 0x34);
+    p += 0xd;
   } while ((uint)n > 0);
 }
 

@@ -12,3 +12,4 @@ slices/s00453250/s00453250.cpp  ??1BlockVector@eastl@@QAE@XZ  00453eb0  /Od /Ob1
 slices/s00453250/s00453250.cpp  ?push_back@BlockVector@eastl@@QAEXABV?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@@Z  004541f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
 slices/s00453250/s00453250.cpp  ?erase@BlockVector@eastl@@QAEPAV?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@PAV34@0@Z  00454280  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
 slices/s00453250/s00453250.cpp  ??0string32@@QAE@XZ  00453630  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?substr@wstring@eastl@@QBE?AU12@II@Z  00453d20  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy

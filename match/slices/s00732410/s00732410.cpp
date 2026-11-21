@@ -347,23 +347,25 @@ EltArray* ContV::Make4(EltArray* out)
 
 // @ 0x007330d0
 int FUN_007330d0(int param_1, int param_2, int* param_3)
-{
-    int iVar4 = (param_2 - param_1) / 0xc;
+{    int iVar4 = (param_2 - param_1) / 0xc;
     if (iVar4 > 0)
     {
-        int iVar3;
         do
         {
-            iVar3 = iVar4 >> 1;
+            int iVar3 = iVar4 >> 1;
             int iVar2 = *(int*)(param_1 + iVar3 * 0xc);
             int iVar1 = param_1 + iVar3 * 0xc;
-            if ((iVar2 < *param_3) || (iVar2 <= *param_3 && *(int*)(iVar1 + 4) < param_3[1]))
-            {
+            if (*param_3 > iVar2) goto advance;
+            if (*param_3 < iVar2) goto keep_lbl;
+            if (*(int*)(iVar1 + 4) < param_3[1]) {
+advance:
                 param_1 = iVar1 + 0xc;
-                iVar3 = iVar4 + (-1 - iVar3);
+                iVar4 += -1 - iVar3;
+            } else {
+keep_lbl:
+                iVar4 = iVar3;
             }
-            iVar4 = iVar3;
-        } while (iVar3 > 0);
+        } while (iVar4 > 0);
     }
     return param_1;
 }

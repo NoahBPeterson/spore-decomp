@@ -74,14 +74,23 @@ inline void Swap(T& a, T& b)
 
 // @ 0x00898e60
 void WString::swap(WString& other)
-{
-    if (mpAllocator == other.mpAllocator && mFlags == other.mFlags) {
+{    if (mpAllocator == other.mpAllocator && mFlags == other.mFlags) {
         Swap(mpBegin, other.mpBegin);
         Swap(mpEnd, other.mpEnd);
         Swap(mpCapacity, other.mpCapacity);
     } else {
-        WString temp(*this);
-        *this = other;
-        other = temp;
-    }
-}
+        char raw[5 * 4];
+        WString& temp = *(WString*)raw;
+        temp.mFlags = mFlags;
+        temp.mpAllocator = mpAllocator;
+        temp.mpBegin = 0; temp.mpEnd = 0; temp.mpCapacity = 0;
+        temp.RangeInitialize(mpBegin, mpEnd);
+        if (&other != this)
+            assign(other.mpBegin, other.mpEnd);
+        wchar_t* p = temp.mpBegin;
+        if (&temp != &other)
+            other.assign(p, temp.mpEnd);
+        int n = (int)(temp.mpCapacity - p);
+        if ((n > 1) && p)
+            temp.mpAllocator->Free(p, n * sizeof(wchar_t));
+    }}

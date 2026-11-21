@@ -10,3 +10,4 @@ slices/s007cd6d0/s007cd6d0.cpp  _FUN_007cdd80  007cdd80  /O2 /MD /Gy /EHsc /TP /
 slices/s007cd6d0/s007cd6d0.cpp  _FUN_007cddc0  007cddc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  _FUN_007cde30  007cde30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s007cd6d0/s007cd6d0.cpp  ??$uninitialized_copy_ptr@U?$pair@_KV?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@@eastl@@YAPAU?$pair@_KV?$AutoRefCount@VcPropertyList@SP@@@EA@@@0@PBU10@0PAU10@@Z  007cd9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s007cd6d0/s007cd6d0.cpp  ?cConfigManagerUnnamedBE0@@YAPAMPAMPAX@Z  007cdbe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
