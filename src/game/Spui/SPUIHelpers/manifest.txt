@@ -60,3 +60,4 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808230@@YAXPAUW_s0080_7840@@PAM@Z  00808230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SetWindowSPShader@@YAPAXPAUW_s0080_7840@@EPAX@Z  00807dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SetWindowImage@@YAEPAUW_s0080_7840@@PAXH@Z  00807bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?OpenRecordAsStream@@YAHPAXPAH0@Z  00808660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
