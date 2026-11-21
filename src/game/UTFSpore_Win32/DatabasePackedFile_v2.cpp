@@ -785,18 +785,23 @@ bool DatabasePackedFile::DecompressData(uint32 a, uint32 b, uint32 c, uint32 d, 
     return false;
 }
 
+struct DbpfAllocator {
+    virtual void v00(); virtual void v01();
+    virtual void* Alloc(uint32 size, const char* name, int flags);   // +0x08
+    virtual void Free(void* p, int size);                            // +0x0c
+};
+
 // @ 0x006bccb0
 bool DatabasePackedFile::DecompressRecord(uint32 a, uint32 b, uint32 c, uint32 d, uint32 e, uint32 f)
 {
     bool result = false;
-    if (b != 0 || c != 0) {
-        void* buf = ((void*(__thiscall*)(void*, uint32, const char*, int))(*(void***)mpAllocator)[8 / 4])
-            (mpAllocator, d, "Resource/Raw", 0);
+    if ((b | c) != 0) {
+        void* buf = ((DbpfAllocator*)mpAllocator)->Alloc(d, "Resource/Raw", 0);
         if (buf != 0) {
             if (ReadFileSpan((uint32)buf, b, c, d)) {
                 result = DecompressData(a, (uint32)buf, d, e, f);
             }
-            ((void(__thiscall*)(void*, void*, int))(*(void***)mpAllocator)[0xc / 4])(mpAllocator, buf, 0);
+            ((DbpfAllocator*)mpAllocator)->Free(buf, 0);
         }
     }
     return result;
