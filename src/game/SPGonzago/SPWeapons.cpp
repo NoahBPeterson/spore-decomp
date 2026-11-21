@@ -734,7 +734,8 @@ public:
     TObj* FUN_00cb94b0();                                   // 0x00cb94b0 Simulator::cICBM::cICBM
     void* _virtual_dtor(uint8_t);                           // 0x00cb9600 Object::_virtual_dtor
     void* FUN_00cb9b90(uint8_t);                            // 0x00cb9b90 deleting dtor
-    void  FUN_00cb9780(void**, void*, void**, char);        // 0x00cb9780 eastl rbtree insert helper
+    struct Iter { void* mpNode; Iter(void* n) : mpNode(n) {} };
+    Iter  FUN_00cb9780(void*, void**, char);                // 0x00cb9780 eastl rbtree insert helper
     void  FUN_00cb91d0();                                   // 0x00cb91d0 SP::cResourceProjectile::Explode
     void  FUN_00cb9650();                                   // 0x00cb9650 SP::cICBM::Explode
     void  FUN_00cb9810();                                   // 0x00cb9810 SpatialQuery helper
@@ -5350,7 +5351,57 @@ void TObj::FUN_00cb9650()
 }
 
 // @ 0x00cb9780
-void TObj::FUN_00cb9780(void** param_2, void* param_3, void** param_4, char param_5)
+struct RC_s00cb9780 {
+    virtual void f00();
+    virtual void f04();
+    virtual void f08();
+    virtual void f0c();
+    virtual void f10();
+    virtual void f14();
+    virtual void f18();
+    virtual void f1c();
+    virtual void f20();
+    virtual void f24();
+    virtual void f28();
+    virtual void f2c();
+    virtual void f30();
+    virtual void f34();
+    virtual void f38();
+    virtual void f3c();
+    virtual void f40();
+    virtual void f44();
+    virtual void f48();
+    virtual void f4c();
+    virtual void f50();
+    virtual void f54();
+    virtual void f58();
+    virtual void f5c();
+    virtual void f60();
+    virtual void f64();
+    virtual void f68();
+    virtual void f6c();
+    virtual void f70();
+    virtual void f74();
+    virtual void f78();
+    virtual void f7c();
+    virtual void f80();
+    virtual void f84();
+    virtual void f88();
+    virtual void f8c();
+    virtual void f90();
+    virtual void f94();
+    virtual void f98();
+    virtual void f9c();
+    virtual void fa0();
+    virtual void fa4();
+    virtual void fa8();
+    virtual void fac();
+    virtual void fb0();
+    virtual void fb4();
+    virtual void fb8();
+    virtual void AddRef();   // +0xbc
+};
+TObj::Iter TObj::FUN_00cb9780(void* param_3, void** param_4, char param_5)
 {
     int side;
     if (param_5 == 0 && param_3 != (void*)((char*)this + 4)
@@ -5359,18 +5410,19 @@ void TObj::FUN_00cb9780(void** param_2, void* param_3, void** param_4, char para
     } else {
         side = 0;
     }
-    void* node = FUN_00f473a0(0x14, "Simulator", 0, 0, 0x13ebb38, 0xd1);
+    void* node = FUN_00f473a0(0x14, "Simulator", 0, 0,
+        (int)"c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     void** slot = (void**)((char*)node + 0x10);
     if (slot != 0) {
         void* val = *param_4;
         *slot = val;
         if (val != 0) {
-            ((void(__thiscall*)(void*))VF(val, 0xbc))(val);
+            ((RC_s00cb9780*)val)->AddRef();
         }
     }
     FUN_009216a0(node, param_3, (char*)this + 4, side);
-    *(uint32_t*)((char*)this + 0x14) += 1;
-    *(uint32_t*)param_2 = (uint32_t)node;
+    ++*(int*)((char*)this + 0x14);
+    return Iter(node);
 }
 
 // @ 0x00cb9810
