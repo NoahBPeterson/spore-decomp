@@ -1196,29 +1196,23 @@ namespace SP {
 int __cdecl FUN_00c6af40(AnimalNoun* a, void* herdPtr)
 {
     cHerd_s00c6_a550* herd = (cHerd_s00c6_a550*)herdPtr;
-    if (!a)
-        return 0;
-    if (a->mbB5e)
-        return 0;
-    if (!((int(__thiscall*)(void*))FUN_00c0b770)(a))
-        return 0;
-    if ((a->mFlagsB58 >> 8) & 1)
-        return 0;
-    if (a->mSpeciesKey != herd->mSpeciesKey)
-        return 0;
-    if ((a->mFlagsB58 >> 9) & 1) {
-        const Vec3* p1 = ((cNearNoun*)((void*(__thiscall*)(void*))FUN_00c04590)(a))->GetPosition();
-        const Vec3* p2 = a->spatialC0()->GetPosition();
-        float dx = p2->x - p1->x;
-        float dy = p2->y - p1->y;
-        float dz = p2->z - p1->z;
-        float d2 = dx * dx;
-        d2 += dy * dy;
-        d2 += dz * dz;
-        if (gFiftyF * gFiftyF <= d2)
-            return 0;
+    if (a && !a->mbB5e && ((bool(__thiscall*)(void*))FUN_00c0b770)(a)
+        && !(bool)((a->mFlagsB58 >> 8) & 1) && a->mSpeciesKey == herd->mSpeciesKey) {
+        if ((bool)((a->mFlagsB58 >> 9) & 1)) {
+            const Vec3* p1 = ((cNearNoun*)((void*(__thiscall*)(void*))FUN_00c04590)(a))->GetPosition();
+            const Vec3* p2 = a->spatialC0()->GetPosition();
+            float dx = p2->x - p1->x;
+            float dy = p2->y - p1->y;
+            float dz = p2->z - p1->z;
+            float d2 = dx * dx;
+            d2 += dy * dy;
+            d2 += dz * dz;
+            if (!(d2 < gFiftyF * gFiftyF))
+                return 0;
+        }
+        return 1;
     }
-    return 1;
+    return 0;
 }
 }  // namespace SP
 
@@ -1658,39 +1652,49 @@ struct IntVec_s00c6_ce30 {
     int* cap;
     void Reserve(uint32_t n);                       // 0x00d01790
     void InsertSlow(int* pos, const int* value);    // 0x00b96600
+    int* erase(int* first, int* last) {
+        memmove(first, last, (size_t)((char*)end - (char*)last));
+        end -= (last - first);
+        return first;
+    }
+    void clear() { erase(begin, end); }
+    void push_back(int v) {
+        if (end < cap) {
+            int* p = end++;
+            if (p) *p = v;
+        } else {
+            InsertSlow(end, &v);
+        }
+    }
+};
+struct IoStream_s00c6ce30 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14();
+    virtual void* GetStream();                      // +0x18
+};
+struct Reader_s00c6ce30 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18();
+    virtual void Done();                            // +0x1c
+    virtual IoStream_s00c6ce30* GetIO();            // +0x20
 };
 
 // @ 0x00c6ce30
-void __cdecl FUN_00c6ce30(void* stream, IntVec_s00c6_ce30* vec)
+void __cdecl FUN_00c6ce30(void* pstream, IntVec_s00c6_ce30* vec)
 {
-    int* last = vec->end;
-    int* first = vec->begin;
-    memmove(first, last, 0);
-    vec->end -= (last - first);
-
+    Reader_s00c6ce30* stream = (Reader_s00c6ce30*)pstream;
+    vec->clear();
     uint32_t count = 0;
-    void* a = (*(void*(__thiscall**)(void*))(*(char**)stream + 0x20))(stream);
-    void* b = (*(void*(__thiscall**)(void*))(*(char**)a + 0x18))(a);
-    ReadInt32_00c6ce30(b, &count, 1, 0);
+    void* io = stream->GetIO()->GetStream();
+    ReadInt32_00c6ce30(io, &count, 1, 0);
     vec->Reserve(count);
-
-    uint32_t i = 0;
-    if (count != 0) {
-        do {
-            void* c = (*(void*(__thiscall**)(void*))(*(char**)stream + 0x20))(stream);
-            void* d = (*(void*(__thiscall**)(void*))(*(char**)c + 0x18))(c);
-            int value = 0;
-            ReadInt32_00c6ce30(d, &value, 1, 0);
-            if (vec->end < vec->cap) {
-                *vec->end++ = value;
-            } else {
-                vec->InsertSlow(vec->end, &value);
-            }
-            ++i;
-        } while (i < count);
+    for (uint32_t i = 0; i < count; ++i) {
+        int value;
+        void* io2 = stream->GetIO()->GetStream();
+        ReadInt32_00c6ce30(io2, &value, 1, 0);
+        vec->push_back(value);
     }
-
-    (*(void(__thiscall**)(void*))(*(char**)stream + 0x1c))(stream);
+    stream->Done();
 }
 
 // @ 0x00c6cf10

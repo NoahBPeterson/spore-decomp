@@ -96,3 +96,6 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00b05730@@YAXPAHIHPAX@Z  00b05730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?GetDefaultValue_A@@YAPAXXZ  00b024a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?Create@cFruitViewFactory@@QAEPAXPAX@Z  00b01890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Write@VisiblePlanet@@QAE_NPAX@Z  00c6ff00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Write2@VisiblePlanet@@QAE_NPAX@Z  00c70010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Read@VisiblePlanet@@QAE_NPAX@Z  00c70090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

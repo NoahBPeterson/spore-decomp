@@ -20,3 +20,4 @@
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?FUN_00834000@TexLoader_834000@@QAEXPAXH0@Z  00834000  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?PushBack@DequeMap@@QAEXPAH@Z  007aa850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?HasTexture@cTextureManager_s007a_abb0@@QAE_NUResourceKey@@@Z  007ab5f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Rehash@Hashtable@@QAEXI@Z  00833300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

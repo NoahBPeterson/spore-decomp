@@ -26,3 +26,13 @@
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?InitLayout@cSPUIFeedEdit_s0065_ea00@@QAEXXZ  0065f4d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Shutdown@cSPUIFeedEdit@@QAEXXZ  0065ca10  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj4f90@@QAE_NHH@Z  00ed4f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj4b70@@QAEXXZ  00ed4b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj5190@@QAE_NH@Z  00ed5190  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj5400@@QAEXH@Z  00ed5400  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj5330@@QAE_NH@Z  00ed5330  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj54b0@@QAEXH@Z  00ed54b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?Panel_Match@@YG_NHHH@Z  00ed5580  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj5220@@QAEPAXXZ  00ed5220  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj49a0@@QAEXXZ  00ed49a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj5640@@QAEXXZ  00ed5640  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?f@Obj5020@@QAEDPAX0000@Z  00ed5020  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

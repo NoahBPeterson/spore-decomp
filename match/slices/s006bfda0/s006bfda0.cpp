@@ -457,33 +457,51 @@ u32 StreamSub::GetRemaining()
 }
 
 // @ 0x006c0840
+struct MemStreamV_006c0840 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+    virtual bool SetPosition(int offset, int origin);   // +0x28
+};
 bool StreamSub::Seek(int offset, int origin)
 {
-    PFRecordRead* owner = (PFRecordRead*)((char*)this - 0x20);
-    if (owner->mnAccessFlags == 0)
-        return false;
-    owner->LoadOnDemand();
-    if (mStreamFlags != 0)
-        return ((bool(__thiscall*)(void*, int, int))(*(void***)&mStreamMemory)[0x28 / 4])(&mStreamMemory, offset, origin);
-    if (origin == 0) {
-        if (offset < 0) { mnPosition = 0; return true; }
-        if ((u32)offset > mnSize) { mnPosition = mnSize; return true; }
-        mnPosition = (u32)offset;
+    if (((PFRecordRead*)((char*)this - 0x20))->mnAccessFlags != 0) {
+        ((PFRecordRead*)((char*)this - 0x20))->LoadOnDemand();
+        if (!*(volatile u8*)&mStreamFlags) {
+        switch (origin) {
+        case 0:
+            if (offset < 0)
+                mnPosition = 0;
+            else if ((u32)offset > mnSize)
+                mnPosition = mnSize;
+            else
+                mnPosition = (u32)offset;
+            break;
+        case 1:
+            if (offset < 0 && (u32)-offset > mnPosition)
+                mnPosition = 0;
+            else if (offset > 0 && mnPosition + (u32)offset > mnSize)
+                mnPosition = mnSize;
+            else
+                mnPosition += (u32)offset;
+            break;
+        case 2: {
+            u32 n = mnSize;
+            if (offset < 0) {
+                if ((u32)-offset > n) {
+                    mnPosition = 0;
+                    break;
+                }
+                n += offset;
+            }
+            mnPosition = n;
+            break;
+        }
+        }
         return true;
+        }
+        return ((MemStreamV_006c0840*)&mStreamMemory)->SetPosition(offset, origin);
     }
-    if (origin == 1) {
-        if (offset < 0 && (u32)(-offset) > mnPosition) { mnPosition = 0; return true; }
-        if (offset > 0 && mnPosition + (u32)offset > mnSize) { mnPosition = mnSize; return true; }
-        mnPosition += (u32)offset;
-        return true;
-    }
-    if (origin == 2) {
-        if (offset >= 0) { mnPosition = mnSize; return true; }
-        if ((u32)(-offset) > mnSize) { mnPosition = 0; return true; }
-        mnPosition = mnSize + (u32)offset;
-        return true;
-    }
-    return true;
+    return false;
 }
 
 // @ 0x006c0900

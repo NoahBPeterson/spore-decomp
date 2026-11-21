@@ -420,74 +420,64 @@ u8 MapFile::Parse(u8* buf)
 }
 
 // @ 0x0091bc30
+struct MapStream_0091bce0 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual u32 Read(void* dst, u32 n);     // +0x30
+};
+struct MapRecord32_0091bc30 { u32 a, b, c, d, e, f, g, h, i, j; };
+struct MapRecord64_0091bc30 {
+    u32 a, b;
+    unsigned __int64 c, d, e, f;
+    u32 g, h;
+    unsigned __int64 i, j;
+};
 u8 MapFile::ReadRecord(u8* dst)
 {
     if (mOpened == 0)
         return 0;
-    if (mKind == 1) {
-        void* stream = mpStream;
-        void** vtbl = *(void***)stream;
-        u8 tmp[0x28];
-        if (((u32 (__thiscall*)(void*, u8*, u32))vtbl[0x30 / 4])(stream, tmp, 0x28) != 0x28)
+    switch (mKind) {
+    case 1: {
+        MapRecord32_0091bc30 t;
+        if (((MapStream_0091bce0*)mpStream)->Read(&t, 0x28) != 0x28)
             return 0;
-        *(u32*)(dst + 0x00) = *(u32*)(tmp + 0x00);
-        *(u32*)(dst + 0x04) = *(u32*)(tmp + 0x04);
-        *(u32*)(dst + 0x08) = *(u32*)(tmp + 0x08);
-        *(u32*)(dst + 0x0c) = 0;
-        *(u32*)(dst + 0x10) = *(u32*)(tmp + 0x0c);
-        *(u32*)(dst + 0x14) = 0;
-        *(u32*)(dst + 0x18) = *(u32*)(tmp + 0x10);
-        *(u32*)(dst + 0x1c) = 0;
-        *(u32*)(dst + 0x20) = *(u32*)(tmp + 0x14);
-        *(u32*)(dst + 0x24) = 0;
-        *(u32*)(dst + 0x28) = *(u32*)(tmp + 0x18);
-        *(u32*)(dst + 0x2c) = *(u32*)(tmp + 0x1c);
-        *(u32*)(dst + 0x30) = *(u32*)(tmp + 0x20);
-        *(u32*)(dst + 0x34) = 0;
-        *(u32*)(dst + 0x38) = *(u32*)(tmp + 0x24);
-        *(u32*)(dst + 0x3c) = 0;
-        return 1;
+        MapRecord64_0091bc30* r = (MapRecord64_0091bc30*)dst;
+        r->a = t.a;
+        r->b = t.b;
+        r->c = t.c;
+        r->d = t.d;
+        r->e = t.e;
+        r->f = t.f;
+        r->g = t.g;
+        r->h = t.h;
+        r->i = t.i;
+        r->j = t.j;
+        break;
     }
-    if (mKind == 2) {
-        void* stream = mpStream;
-        void** vtbl = *(void***)stream;
-        if (((u32 (__thiscall*)(void*, u8*, u32))vtbl[0x30 / 4])(stream, dst, 0x40) != 0x40)
+    case 2:
+        if (((MapStream_0091bce0*)mpStream)->Read(dst, 0x40) != 0x40)
             return 0;
-        return 1;
+        break;
+    default:
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 // @ 0x0091bce0
 u8 MapFile::CompareName(const char* other)
 {
-    u8 scratch;
-    void* stream = mpStream;
-    void** vtbl = *(void***)stream;
-    ((u32 (__thiscall*)(void*, u8*, int))vtbl[0x30 / 4])(stream, &scratch, 1);
-    u8 c = scratch;
+    char c;
+    ((MapStream_0091bce0*)mpStream)->Read(&c, 1);
     const char* p = other;
-    if (c != 0) {
-        if (*p == 0)
-            goto done;
+    while (c != 0 && *p != 0) {
         if (c != *p)
             return 0;
-        for (;;) {
-            stream = mpStream;
-            vtbl = *(void***)stream;
-            ((u32 (__thiscall*)(void*, u8*, int))vtbl[0x30 / 4])(stream, &scratch, 1);
-            c = scratch;
-            ++p;
-            if (c == 0)
-                break;
-            if (c != *p)
-                return 0;
-        }
+        ((MapStream_0091bce0*)mpStream)->Read(&c, 1);
+        ++p;
     }
-done:
-    if (c == *p)
-        return 1;
-    return 0;
+    return (u8)(c == *p ? 1 : 0);
 }
 
 // @ 0x0091bd40

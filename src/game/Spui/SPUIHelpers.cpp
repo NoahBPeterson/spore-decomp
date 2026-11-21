@@ -2450,19 +2450,36 @@ int* FUN_00807a50(void* p1, int type, void* p3)
     return piVar6;
 }
 
+struct Image_s0080_7bb0 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct ImagePtr_s0080_7bb0 {
+    Image_s0080_7bb0* mp;
+    ImagePtr_s0080_7bb0() : mp(0) {}
+    Image_s0080_7bb0** AsOutParam()
+    {
+        if (mp) {
+            Image_s0080_7bb0* t = mp;
+            mp = 0;
+            t->Release();
+        }
+        return &mp;
+    }
+};
+
 // @ 0x00807bb0
 unsigned char SetWindowImage(W_s0080_7840* w, void* res, int flag)
 {
     if (w == 0) return 0;
-    float* a = (float*)w->v34();
-    float x0 = a[0], y0 = a[1], x1 = a[2], y1 = a[3];
-    void* img = 0;
-    char c1 = CreateImageFromResource(res, &img, 0, (int)(x1 - x0 + 0.5f), (int)(y1 - y0 + 0.5f));
-    char c2 = FUN_008068d0((W_s0080_68d0*)w, (int)img, flag);
-    unsigned char r;
-    if (c2 == 0 || c1 == 0) r = 0;
-    else r = 1;
-    if (img != 0) (*(void(__thiscall**)(void*))VSlot(img, 4))(img);
+    ImagePtr_s0080_7bb0 img;
+    Vec4* a = (Vec4*)w->v34();
+    int height = SseRoundToInt(a->w - a->y);
+    int width = SseRoundToInt(a->z - a->x);
+    char c1 = CreateImageFromResource(res, (void**)img.AsOutParam(), 0, width, height);
+    char c2 = FUN_008068d0((W_s0080_68d0*)w, (int)img.mp, flag);
+    unsigned char r = (c2 && c1) ? 1 : 0;
+    if (img.mp != 0) img.mp->Release();
     return r;
 }
 
@@ -2505,28 +2522,42 @@ bool VisitWindowTreeDepthFirst(W_s0080_7840* w, bool (*fn)(W_s0080_7840*, void*)
     return 1;
 }
 
+struct SPShader_s0080_7dc0 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct SPShaderPtr_s0080_7dc0 {
+    SPShader_s0080_7dc0* mp;
+    __forceinline SPShaderPtr_s0080_7dc0() : mp(0) {}
+    __forceinline SPShaderPtr_s0080_7dc0& operator=(SPShader_s0080_7dc0* p)
+    {
+        SPShader_s0080_7dc0* old = mp;
+        if (p != old) {
+            if (p) p->AddRef();
+            mp = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+struct SetShaderCtx_s0080_7dc0 {
+    SPShaderPtr_s0080_7dc0 shader;
+    unsigned char flag;
+};
+
 // @ 0x00807dc0
 #pragma auto_inline(off)
 void* SetWindowSPShader(W_s0080_7840* w, unsigned char flag, void* shader)
 {
-    void* local = 0;
-    unsigned char lflag = flag;
-    (void)lflag;
-    if (shader != 0) {
-        (*(void(__thiscall**)(void*))VSlot(shader, 0))(shader);
-        local = shader;
-    } else {
-        void* p = SPUIShader_AcquireShaderProxy();
-        void* old = local;
-        if (p != old) {
-            if (p != 0) (*(void(__thiscall**)(void*))VSlot(p, 0))(p);
-            local = p;
-            if (old != 0) (*(void(__thiscall**)(void*, int))VSlot(old, 4))(old, 0);
-        }
-    }
-    VisitWindowTreeDepthFirst(w, (bool (*)(W_s0080_7840*, void*))FUN_00806db0, &local);
-    void* r = local;
-    if (local != 0) (*(void(__thiscall**)(void*, int))VSlot(local, 4))(local, 0);
+    SetShaderCtx_s0080_7dc0 ctx;
+    ctx.flag = flag;
+    if (shader != 0)
+        ctx.shader = (SPShader_s0080_7dc0*)shader;
+    else
+        ctx.shader = (SPShader_s0080_7dc0*)SPUIShader_AcquireShaderProxy();
+    VisitWindowTreeDepthFirst(w, (bool (*)(W_s0080_7840*, void*))FUN_00806db0, &ctx);
+    SPShader_s0080_7dc0* r = ctx.shader.mp;
+    if (r) r->Release();
     return r;
 }
 #pragma auto_inline(on)
@@ -2739,36 +2770,58 @@ void FUN_008085d0(W_s0080_7840* w, void* fn, void* ctx, void* a, void* b)
     w->m104(p);
 }
 
+struct PropList_s0080_8660 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct PropListPtr_s0080_8660 {
+    PropList_s0080_8660* mp;
+    PropListPtr_s0080_8660() : mp(0) {}
+    PropList_s0080_8660** AsOutParam()
+    {
+        if (mp) {
+            PropList_s0080_8660* t = mp;
+            mp = 0;
+            t->Release();
+        }
+        return &mp;
+    }
+};
+struct PropMgr_s0080_8660 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    
+    virtual bool GetPropertyList(uint32_t id, PropList_s0080_8660** out);   // +0x30
+};
+struct ResKey_s0080_8660 {
+    int instance, type, group;
+    ResKey_s0080_8660(int i, int t, int g) : instance(i), type(t), group(g) {}
+};
+
 // @ 0x00808660
 int OpenRecordAsStream(void* key, int* rec, void* stream)
 {
     int result = -1;
     if ((char)key != 0) {
-        void* prop = SP_PropertyManager();
-        void* list = 0;
-        if (list != 0) (*(void(__thiscall**)(void*, int))VSlot(list, 4))(list, 0);
-        char c = (*(char(__thiscall**)(void*, int, void**))VSlot(prop, 0x30))(prop, 0x5c770db7, &list);
-        if (c != 0) {
-            int count = 0, arr = 0;
-            char ok = SP_GetPropertyAsUint32Array(list, rec[1], &count, &arr);
-            if (ok != 0 && count > 0) {
-                int i = 0;
-                do {
+        PropListPtr_s0080_8660 list;
+        PropMgr_s0080_8660* prop = (PropMgr_s0080_8660*)SP_PropertyManager();
+        if (prop->GetPropertyList(0x5c770db7, list.AsOutParam())) {
+            int* arr = 0;
+            int count = 0;
+            if (SP_GetPropertyAsUint32Array(list.mp, rec[1], &count, (int*)&arr) && count > 0) {
+                for (int i = 0; i < count; ++i) {
                     if (result != -1) break;
-                    int u = *(int*)(arr + i * 4);
-                    int k[2];
-                    k[0] = rec[0];
-                    k[1] = rec[1];
-                    (void)u;
-                    result = SP_OpenRecordAsStream(k, stream);
-                    i++;
-                } while (i < count);
+                    ResKey_s0080_8660 k(rec[0], rec[1], arr[i]);
+                    result = SP_OpenRecordAsStream(&k, stream);
+                }
             }
         }
-        if (list != 0) (*(void(__thiscall**)(void*, int))VSlot(list, 4))(list, 0);
-        if (result != -1) return result;
+        if (list.mp != 0) list.mp->Release();
     }
-    return SP_OpenRecordAsStream(rec, stream);
+    if (result == -1)
+        result = SP_OpenRecordAsStream(rec, stream);
+    return result;
 }
 
 // @ 0x00808780

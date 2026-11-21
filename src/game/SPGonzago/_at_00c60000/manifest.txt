@@ -78,3 +78,4 @@
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Fn64940@PathObj@@QAEXPAX@Z  00c64940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?SetStyleModel@SimOrnament@@QAEXHPAXH@Z  00c6f770  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c6f470@@YIEPAX00@Z  00c6f470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?Write@SimOrnament@@QAE_NPAX@Z  00c6f990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

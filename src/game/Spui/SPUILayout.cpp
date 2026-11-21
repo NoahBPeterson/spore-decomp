@@ -414,19 +414,38 @@ cSPUILayoutCheat_s0081_24a0::cSPUILayoutCheat_s0081_24a0() {
 }
 // ---- items of slice s008124a0 end
 
+struct ResKey_s0080_fd60 { u32 instance, type, group; };
+struct WinMgrIface_s0080_fd60 {
+    virtual void v00();
+    virtual struct WinMgrIfaceB_s0080_fd60* GetIface();        // +0x04
+};
+struct WinMgrPad_s0080_fd60 { virtual void a00(); };
+struct WinMgrIfaceB_s0080_fd60 { virtual void b00(); };
+struct WinMgrObj_s0080_fd60 : WinMgrPad_s0080_fd60, WinMgrIfaceB_s0080_fd60 {
+    void* FUN_00812da0();                                     // 0x00812da0
+};
+struct Ser_s0080_fd60 {
+    void __thiscall Set(void* a, int b);   // 0x998f60
+    bool __thiscall Get(ResKey_s0080_fd60* key); // 0x998f80
+};
+
 // @ 0x0080fd60
-void __thiscall cSPUILayoutObjectCollection_s0080_f7c0::Init(void* key)
+void __thiscall cSPUILayoutObjectCollection_s0080_f7c0::Init(void* pkey)
 {
-    u32 k0 = ((u32*)key)[0], k1 = ((u32*)key)[1], k2 = ((u32*)key)[2];
-    if (g_b164cf58) k2 = (k2 & 0xffff42ff) | 0x4200;
-    void* wm = SP_WindowManager();
-    void* iface = ((void*(__thiscall*)(void*))VT(wm)[1])(wm);
-    void* obj = iface ? (void*)((u8*)iface - 4) : 0;
-    void* a = FUN_00812da0(obj);
-    ((SerStub*)((u8*)this + 8))->Set(a, 1);
+    ResKey_s0080_fd60 k;
+    k.instance = ((ResKey_s0080_fd60*)pkey)->instance;
+    k.type = ((ResKey_s0080_fd60*)pkey)->type;
+    k.group = ((ResKey_s0080_fd60*)pkey)->group;
+    if (g_b164cf58) k.group = (k.group & 0xffff42ff) | 0x4200;
+    WinMgrIfaceB_s0080_fd60* iface = ((WinMgrIface_s0080_fd60*)SP_WindowManager())->GetIface();
+    void* a = static_cast<WinMgrObj_s0080_fd60*>(iface)->FUN_00812da0();
+    Ser_s0080_fd60* ser = (Ser_s0080_fd60*)((u8*)this + 8);
+    ser->Set(a, 1);
     b8d = 0;
-    u32 k[3] = { k0, k1, k2 };
-    ((SerStub*)((u8*)this + 8))->Get(k);
+    if (!ser->Get(&k) && !g_b164cf58) {
+        k.group = (k.group & 0xffff42ff) | 0x4200;
+        ser->Get(&k);
+    }
 }
 
 // @ 0x0080fe10
@@ -619,30 +638,41 @@ void* __thiscall cSPUILayoutObjectCollection_s0080_f7c0::FindWindowByID(i32 id, 
 }
 
 // @ 0x00810270
+struct ResKey_s0081_0270 { u32 instance, type, group; };
+struct AutoUpdate_s0081_0270 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10();
+    virtual void Unregister(ResKey_s0081_0270* key, void* listener);
+};
+struct Service_s0081_0270 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual AutoUpdate_s0081_0270* Get(unsigned int iid);
+};
+struct CollView_s0081_0270 {
+    u8     pad0[0xc];
+    Service_s0081_0270*    mService;    // +0x0c
+    AutoUpdate_s0081_0270* mAutoUpdate; // +0x10
+    u32    mKeyA;                       // +0x14
+    u8     pad18[4];
+    u32    mKeyB;                       // +0x1c
+};
 void __thiscall cSPUILayoutObjectCollectionV8::OnUnload()
 {
-    u8* self = (u8*)this;
-    cSPUILayoutObjectCollection_s0080_f7c0* coll = (cSPUILayoutObjectCollection_s0080_f7c0*)(self - 8);
+    CollView_s0081_0270* coll = (CollView_s0081_0270*)((u8*)this - 8);
     if (bSerFlags & 1) {
-        void* svc = mService;
-        void* au = ((void*(__thiscall*)(void*, unsigned int))VT(svc)[0x10 / 4])(svc, 0x2fbf2058);
-        mAutoUpdate = au;
-        if (au) {
-            struct { u32 x, y, z; } k0 = { *(u32*)&mKeyA, 0xefbda3ff, *(u32*)&mKeyB };
-            struct { u32 x, y, z; } k1 = { *(u32*)&mKeyA, 0x050f4731, *(u32*)&mKeyB };
-            ((VF2v)VT(au)[0x14 / 4])(au, &k0, (void*)this);
-            au = mAutoUpdate;
-            ((VF2v)VT(au)[0x14 / 4])(au, &k1, (void*)this);
+        coll->mAutoUpdate = coll->mService->Get(0x2fbf2058);
+        if (coll->mAutoUpdate) {
+            ResKey_s0081_0270 k0 = { coll->mKeyA, 0xefbda3ff, coll->mKeyB };
+            ResKey_s0081_0270 k1 = { coll->mKeyA, 0x050f4731, coll->mKeyB };
+            void* listener = (u8*)coll + 8;
+            coll->mAutoUpdate->Unregister(&k0, listener);
+            coll->mAutoUpdate->Unregister(&k1, listener);
         }
     }
     ResetChildWindowCache_();
-    if (p8c) {
-        void* fn = p8c;
-        void* a1 = p90;
-        void* a2 = p88;
-        ((void(__cdecl*)(void*, void*, int))fn)(a1, a2, 0);
-    }
-    coll->detach_parent();
+    if (p8c)
+        ((void(__cdecl*)(void*, void*, int))p8c)(p90, p88, 0);
+    ((cSPUILayoutObjectCollection_s0080_f7c0*)coll)->detach_parent();
 }
 
 // @ 0x00810310
@@ -696,33 +726,58 @@ void __fastcall cEditorResource_dtor(void* thisp)
     s[0] = (u32)&vtbl_EditorResource;
 }
 
+struct IOStream_s0081_0460 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); 
+    virtual bool SetPosition(int pos, int whence);      // +0x28
+};
+struct LayoutRes_s0081_0460 {                           // the layout payload behind 0x05adf5fb
+    u8 pad0[0x18];
+    IOStream_s0081_0460* mpStream;                      // +0x18
+    int  m1c;                                           // +0x1c
+};
+struct Resource_s0081_0460 {
+    virtual void v00(); virtual void v04(); virtual void v08(); 
+    virtual LayoutRes_s0081_0460* Cast(u32 iid);        // +0x0c
+    u8 pad4[0x1c - 4];
+    void* mpTokens;                                     // +0x1c
+    u32   mTokenFlags;                                  // +0x20
+};
+struct Record_s0081_0460 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); 
+    virtual IOStream_s0081_0460* GetStream();           // +0x18
+};
+bool __cdecl FUN_0082e1d0(LayoutRes_s0081_0460* p);                           // 0x82e1d0 LayerProc1
+int  __cdecl FUN_0093a610(IOStream_s0081_0460* dst, IOStream_s0081_0460* src, u32 size); // 0x93a610 StreamCopy
+bool __cdecl FUN_00902fc0(IOStream_s0081_0460* s, void* tokens, u32 a, u32 b);  // 0x902fc0 WriteTokenList
+
 // @ 0x00810460
-bool cSPUILayoutResourceFactory::WriteResource(EA::ResourceMan::Resource * a, EA::ResourceMan::Record * b, void * type, unsigned int d)
+bool cSPUILayoutResourceFactory::WriteResource(EA::ResourceMan::Resource * pa, EA::ResourceMan::Record * pb, void * type, unsigned int d)
 {
     (void)type;
-    int type_v = (int)d;
-    u8 bl = 0;
-    if (type_v == 0x250fe9a2) {
-        if (!a) return (void*)(size_t)bl;
-        void* x = ((void*(__thiscall*)(void*, unsigned int))VT(a)[0xc / 4])(a, 0x05adf5fb);
-        if (!x) return (void*)(size_t)bl;
-        if (*(int*)((u8*)x + 0x1c)) bl = (u8)(size_t)FUN_0082e1d0(x);
-        void* y = *(void**)((u8*)x + 0x18);
-        if (!y) return (void*)(size_t)bl;
-        ((void(__thiscall*)(void*, int, int))VT(y)[0x28 / 4])(y, 0, 0);
-        void* z = *(void**)((u8*)x + 0x18);
-        u32 w = ((u32(__thiscall*)(void*, int))VT(b)[0x18 / 4])(b, -1);
-        FUN_0093a610(z, (void*)(size_t)w);
-        return (void*)1;
-    } else if (type_v == 0x050f4731) {
-        if (!a) return (void*)(size_t)bl;
-        void* pp = *(void**)((u8*)a + 0x1c);
-        if (!pp) return (void*)(size_t)bl;
-        void* qq = *(void**)((u8*)a + 0x20);
-        u32 w = ((u32(__thiscall*)(void*, void*, int, void*))VT(b)[0x18 / 4])(b, pp, 1, qq);
-        bl = (u8)(size_t)FUN_00902fc0((void*)(size_t)w);
+    Resource_s0081_0460* a = (Resource_s0081_0460*)pa;
+    Record_s0081_0460* b = (Record_s0081_0460*)pb;
+    bool ok = false;
+    if (d == 0x250fe9a2) {
+        if (a) {
+            if (LayoutRes_s0081_0460* x = a->Cast(0x05adf5fb)) {
+                if (x->m1c)
+                    ok = FUN_0082e1d0(x);
+                if (IOStream_s0081_0460* st = x->mpStream) {
+                    st->SetPosition(0, 0);
+                    IOStream_s0081_0460* dst = x->mpStream;
+                    FUN_0093a610(dst, b->GetStream(), (u32)-1);
+                    ok = true;
+                }
+            }
+        }
+    } else if (d == 0x050f4731) {
+        if (a && a->mpTokens)
+            ok = FUN_00902fc0(b->GetStream(), a->mpTokens, 1, a->mTokenFlags);
     }
-    return (void*)(size_t)bl;
+    return ok;
 }
 
 // @ 0x00810520
@@ -799,19 +854,52 @@ void __thiscall cSPUILayoutManager_s0080_f7c0::Method10660(u32 id, bool vis)
     }
 }
 
+struct WorldWin_s0081_06a0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); 
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c(); 
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c(); 
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); 
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c(); 
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); 
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c(); 
+    virtual void v70(); virtual void v74(); virtual void v78(); 
+    virtual void SetVisible(int a, bool visible);    // +0x7c
+};
+static inline const int& MaxRef_s0081_06a0(const int& a, const int& b) { return (a < b) ? b : a; }
+struct World_s0081_06a0 {
+    u8 pad0[8];
+    WorldWin_s0081_06a0* mpWindow;   // +0x08
+    int mHideCount;                  // +0x0c
+    void AddHide(int delta)
+    {
+        int zero = 0;
+        int count = mHideCount + delta;
+        int n = MaxRef_s0081_06a0(zero, count);
+        if (n >= 0) {
+            if (n < 2)
+                mpWindow->SetVisible(1, n == 0);
+            mHideCount = n;
+        }
+    }
+};
+struct WorldNode_s0081_06a0 {
+    u8 pad0[0x14];
+    World_s0081_06a0 mWorld;         // +0x14
+};
+
 // @ 0x008106a0
 void __thiscall cSPUILayoutManager_s0080_f7c0::SetAllWorldsVisibility(bool vis)
 {
-    u8* s = (u8*)this;
-    void* anchor = (void*)(s + 0x10);
-    void* node = *(void**)(s + 0x14);
-    if (node == anchor) return;
-    int delta = vis ? -1 : 1;
-    do {
-        u8* cur = (u8*)node;
-        node = (void*)(size_t)eastl_RBTreeIncrement(node);
-        SetNodeVisibility(cur + 0x20, (char)delta);
-    } while (node != anchor);
+    void* node = *(void**)((u8*)this + 0x14);
+    void* anchor = (void*)((u8*)this + 0x10);
+    if (node != anchor) {
+        int delta = vis ? -1 : 1;
+        do {
+            WorldNode_s0081_06a0* cur = (WorldNode_s0081_06a0*)node;
+            node = (void*)(size_t)eastl_RBTreeIncrement(node);
+            cur->mWorld.AddHide(delta);
+        } while (node != anchor);
+    }
 }
 
 // @ 0x00810730

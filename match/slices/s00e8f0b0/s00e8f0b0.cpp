@@ -56,6 +56,7 @@ void* FUN_00ac8730(void* handle);                                               
 void* FUN_00b3d240();                                                             // 0x00b3d240
 void* FUN_00d08d70();                                                             // 0x00d08d70
 void* SP_GonzagoModelWorld(void* a, void* b);                                     // 0x00b3d520
+void* SP_GonzagoModelWorld();                                                     // 0x00b3d520
 
 // The patchwork of static model names (the "Simulator/..." literals live at these VAs).
 // Vftables stored by the constructors.
@@ -226,6 +227,17 @@ public:
 };
 
 // The plain 0x34-byte spatial views built by the remaining factories.
+struct IQuery_e8f3c0 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void* QueryInterface(u32 id);
+};
+struct IView_e8f3c0 {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09();
+    virtual void Init(void* gameData, void* world, void* key, void* pos);
+    virtual u32* GetFlags();
+};
 class cAnimalTrapView : public cSpatialObjectView {
 public:
     cAnimalTrapView* MakeView(void* gameData);    // 0x00e8f3c0
@@ -421,24 +433,24 @@ u8 cTotemPoleView::GetIsVisible()
 // @ 0x00e8f3c0
 cAnimalTrapView* cAnimalTrapView::MakeView(void* gameData)
 {
-    ModelKey key = { 0, 0, 0 };
     void* sub;
     if (gameData != 0
-        && (sub = (void*)VC1(void*, gameData, 0xc, u32, kKeyAnimalTrapView)) != 0
-        && FUN_00e8eb90(sub, &key)) {
-        cAnimalTrapView* p = (cAnimalTrapView*)operator_new(0x34, "Simulator/cAnimalTrapView", 0, 0, 0, 0);
-        if (p != 0) {
-            p->cSpatialObjectView::cSpatialObjectView();
-            *(void**)p = (void*)kVtblAnimalTrapView;
-        } else {
-            p = 0;
+        && (sub = ((IQuery_e8f3c0*)gameData)->QueryInterface(kKeyAnimalTrapView)) != 0) {
+        ModelKey key = { 0, 0, 0 };
+        if (BuildSubKey(sub, &key)) {
+            cAnimalTrapView* p = (cAnimalTrapView*)operator_new(0x34, "Simulator/cAnimalTrapView", 0, 0, 0, 0);
+            if (p != 0) {
+                p->cSpatialObjectView::cSpatialObjectView();
+                *(void**)p = (void*)kVtblAnimalTrapView;
+            } else {
+                p = 0;
+            }
+            if (key.mName != 0)
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &key, &mModelPos);
+            else
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &mModelRot, &mModelPos);
+            return p;
         }
-        void** vt = *(void***)p;
-        void* world = key.mName != 0
-            ? SP_GonzagoModelWorld(&key, &mModelPos)
-            : SP_GonzagoModelWorld(&mModelRot, &mModelPos);
-        ((void (__thiscall*)(void*, void*, void*))vt[0x28 / 4])(p, gameData, world);
-        return p;
     }
     return 0;
 }
@@ -501,24 +513,24 @@ bool cTribeFoodMatView::BuildKey(cTribeFoodMatView* self, ModelKey* out)
 // @ 0x00e8f5e0
 cTribeFoodMatView* cTribeFoodMatView::MakeView(void* gameData)
 {
-    ModelKey key = { 0, 0, 0 };
     void* sub;
     if (gameData != 0
-        && (sub = (void*)VC1(void*, gameData, 0xc, u32, kKeyTribeFoodMatView)) != 0
-        && ((cTribeFoodMatView*)this)->BuildKey((cTribeFoodMatView*)sub, &key)) {
-        cTribeFoodMatView* p = (cTribeFoodMatView*)operator_new(0x34, "Simulator/cTribeFoodMatView", 0, 0, 0, 0);
-        if (p != 0) {
-            p->cSpatialObjectView::cSpatialObjectView();
-            *(void**)p = (void*)kVtblTribeFoodMatView;
-        } else {
-            p = 0;
+        && (sub = ((IQuery_e8f3c0*)gameData)->QueryInterface(kKeyTribeFoodMatView)) != 0) {
+        ModelKey key = { 0, 0, 0 };
+        if (BuildKey((cTribeFoodMatView*)sub, &key)) {
+            cTribeFoodMatView* p = (cTribeFoodMatView*)operator_new(0x34, "Simulator/cTribeFoodMatView", 0, 0, 0, 0);
+            if (p != 0) {
+                p->cSpatialObjectView::cSpatialObjectView();
+                *(void**)p = (void*)kVtblTribeFoodMatView;
+            } else {
+                p = 0;
+            }
+            if (key.mName != 0)
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &key, &mModelPos);
+            else
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &mModelRot, &mModelPos);
+            return p;
         }
-        void** vt = *(void***)p;
-        void* world = key.mName != 0
-            ? SP_GonzagoModelWorld(&key, &mModelPos)
-            : SP_GonzagoModelWorld(&mModelRot, &mModelPos);
-        ((void (__thiscall*)(void*, void*, void*))vt[0x28 / 4])(p, gameData, world);
-        return p;
     }
     return 0;
 }
@@ -650,27 +662,26 @@ bool GetOrnamentModelKey(cSpatialObject* obj, ModelKey* out)
 // @ 0x00e8fa00
 cOrnamentView* cOrnamentView::MakeView(void* gameData)
 {
-    ModelKey key = { 0, 0, 0 };
     void* sub;
     if (gameData != 0
-        && (sub = (void*)VC1(void*, gameData, 0xc, u32, kKeyOrnamentView)) != 0
-        && GetOrnamentModelKey((cSpatialObject*)sub, &key)) {
-        cOrnamentView* p = (cOrnamentView*)operator_new(0x34, "Simulator/cOrnamentView", 0, 0, 0, 0);
-        if (p != 0) {
-            p->cSpatialObjectView::cSpatialObjectView();
-            *(void**)p = (void*)kVtblOrnamentView;
-        } else {
-            p = 0;
+        && (sub = ((IQuery_e8f3c0*)gameData)->QueryInterface(kKeyOrnamentView)) != 0) {
+        ModelKey key = { 0, 0, 0 };
+        if (GetOrnamentModelKey((cSpatialObject*)sub, &key)) {
+            cOrnamentView* p = (cOrnamentView*)operator_new(0x34, "Simulator/cOrnamentView", 0, 0, 0, 0);
+            if (p != 0) {
+                p->cSpatialObjectView::cSpatialObjectView();
+                *(void**)p = (void*)kVtblOrnamentView;
+            } else {
+                p = 0;
+            }
+            if (key.mName != 0)
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &key, &mModelPos);
+            else
+                ((IView_e8f3c0*)p)->Init(gameData, SP_GonzagoModelWorld(), &mModelRot, &mModelPos);
+            if (u32* r = ((IView_e8f3c0*)p)->GetFlags())
+                r[1] &= 0xfffffffd;
+            return p;
         }
-        void** vt = *(void***)p;
-        void* world = key.mName != 0
-            ? SP_GonzagoModelWorld(&key, &mModelPos)
-            : SP_GonzagoModelWorld(&mModelRot, &mModelPos);
-        ((void (__thiscall*)(void*, void*, void*))vt[0x28 / 4])(p, gameData, world);
-        u32* r = (u32*)VC0(void*, p, 0x2c);
-        if (r != 0)
-            r[1] &= 0xfffffffd;
-        return p;
     }
     return 0;
 }

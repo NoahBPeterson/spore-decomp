@@ -281,6 +281,54 @@ struct ReleaseGuard {
     ReleaseGuard(void* q) : p(q) { if (q) ((VFn0)(*(void***)q)[4 / 4])(q); }
     ~ReleaseGuard() { ((VFn0)(*(void***)p)[8 / 4])(p); }
 };
+struct IStreamSub_0069e3a0 {
+    virtual void AddRef(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual bool Open(void* db, int a);            // +0x10
+};
+struct IStreamObj_0069e3a0 {
+    VP vt0;                 // +0
+    int mRefCount;          // +4
+    VP vt8;                 // +8
+    unsigned char mb0c;     // +0xc
+    char pad0d[3];
+    void* p10;
+    void* p14;
+    void* p18;
+    IStreamObj_0069e3a0()
+    {
+        mRefCount = 0;
+        *(VP volatile*)&vt8 = g_vtbl_1408550;
+        vt0 = g_vtbl_14085dc;
+        vt8 = g_vtbl_1408598;
+        mb0c = 1;
+        p10 = 0;
+        p14 = 0;
+        p18 = 0;
+    }
+};
+struct OStreamSub_0069e470 {
+    virtual void AddRef(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual bool Open(void* db, int a, int b);     // +0x10
+};
+struct OStreamObj_0069e470 {
+    VP vt0;                 // +0
+    int mRefCount;          // +4
+    VP vt8;                 // +8
+    void* p0c;
+    void* p10;
+    unsigned char mb14;     // +0x14
+    char pad15[3];
+    OStreamObj_0069e470()
+    {
+        mRefCount = 0;
+        *(VP volatile*)&vt8 = g_vtbl_14085f0;
+        vt0 = g_vtbl_1408668;
+        vt8 = g_vtbl_140862c;
+        p0c = 0;
+        p10 = 0;
+        mb14 = 1;
+    }
+};
 struct ResKey { int a, b, c; };
 extern "C" ResKey* FUN_00ac0d80(ResKey* first, ResKey* last, const ResKey* key); // 0x00ac0d80 eastl::find<Key*,Key>
 struct DbVt { void* pad[0x30 / 4]; };
@@ -296,23 +344,12 @@ struct cObjDB {
 bool cObjDB::OpenIStream(int a, void** out)
 {
     *out = 0;
-    void* p = operator_new6(0x1c, "App", 0, 0, 0, 0);
-    if (p) {
-        *(void**)((char*)p + 4) = 0;
-        *(void**)((char*)p + 8) = g_vtbl_1408550;
-        *(void**)p = g_vtbl_14085dc;
-        *(void**)((char*)p + 8) = g_vtbl_1408598;
-        *(unsigned char*)((char*)p + 0xc) = 1;
-        *(void**)((char*)p + 0x10) = 0;
-        *(void**)((char*)p + 0x14) = 0;
-        *(void**)((char*)p + 0x18) = 0;
-    }
+    IStreamObj_0069e3a0* p = new (operator_new6(0x1c, "App", 0, 0, 0, 0)) IStreamObj_0069e3a0;
     ReleaseGuard g(p);
-    void* sub = (char*)p + 8;
-    char ok = ((char(__thiscall*)(void*, void*, int))(*(void***)sub)[0x10 / 4])(sub, this, a);
-    if (ok) {
+    IStreamSub_0069e3a0* sub = (IStreamSub_0069e3a0*)&p->vt8;
+    if (sub->Open(this, a)) {
         *out = sub;
-        ((VFn0)(*(void***)sub)[0])(sub);
+        sub->AddRef();
     }
     return *out != 0;
 }
@@ -321,22 +358,12 @@ bool cObjDB::OpenIStream(int a, void** out)
 bool cObjDB::OpenOStream(int a, void** out, int b)
 {
     *out = 0;
-    void* p = operator_new6(0x18, "App", 0, 0, 0, 0);
-    if (p) {
-        *(void**)((char*)p + 4) = 0;
-        *(void**)((char*)p + 8) = g_vtbl_14085f0;
-        *(void**)p = g_vtbl_1408668;
-        *(void**)((char*)p + 8) = g_vtbl_140862c;
-        *(unsigned char*)((char*)p + 0xc) = 0;
-        *(void**)((char*)p + 0x10) = 0;
-        *(unsigned char*)((char*)p + 0x14) = 1;
-    }
+    OStreamObj_0069e470* p = new (operator_new6(0x18, "App", 0, 0, 0, 0)) OStreamObj_0069e470;
     ReleaseGuard g(p);
-    void* sub = (char*)p + 8;
-    char ok = ((char(__thiscall*)(void*, void*, int, int))(*(void***)sub)[0x10 / 4])(sub, this, a, b);
-    if (ok) {
+    OStreamSub_0069e470* sub = (OStreamSub_0069e470*)&p->vt8;
+    if (sub->Open(this, a, b)) {
         *out = sub;
-        ((VFn0)(*(void***)sub)[0])(sub);
+        sub->AddRef();
     }
     return *out != 0;
 }

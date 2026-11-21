@@ -7,3 +7,6 @@ slices/s00e8f0b0/s00e8f0b0.cpp  ?Update@cTribeFoodMatView@@QAEXPAX0@Z  00e8f6b0 
 slices/s00e8f0b0/s00e8f0b0.cpp  ?MakeView@cInteractableObjectView@@QAEPAV1@PAX@Z  00e8fe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e8f0b0/s00e8f0b0.cpp  ?Update@cInteractableObjectView@@QAEXPAX0@Z  00e8ff10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e8f0b0/s00e8f0b0.cpp  ?UpdateLoyaltyBar@cMineralView_e8f0@@QAEPAUcSPUIMeter_e8f0@@PAU2@DI@Z  00e8f120
+slices/s00e8f0b0/s00e8f0b0.cpp  ?MakeView@cAnimalTrapView@@QAEPAV1@PAX@Z  00e8f3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?MakeView@cOrnamentView@@QAEPAV1@PAX@Z  00e8fa00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e8f0b0/s00e8f0b0.cpp  ?MakeView@cTribeFoodMatView@@QAEPAV1@PAX@Z  00e8f5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

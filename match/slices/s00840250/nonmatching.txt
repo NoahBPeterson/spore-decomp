@@ -1,5 +1,4 @@
 008409b0  52   complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
 00840c20  21   complete: Sprintf; buf scan loop shape differs
 00840c70  21   complete: SprintfAppend; buf scan loop shape differs
-00840e10  169  complete: ParseRangedVector3; aligned frame + SSE range compare differ
 00840340  198  complete: ClearFilePaths; node walk/hash free and spec-vector clear codegen differs

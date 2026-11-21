@@ -26,25 +26,45 @@ extern "C" int FUN_008dd8f0(int* self, void* out)
     return 0;
 }
 
+struct Stream_s008ddb00 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18();
+    virtual unsigned GetSize();                              // +0x1c
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual unsigned Read(int buf, unsigned n);              // +0x30
+};
+struct Record_s008ddb00 {
+    virtual void f00(); virtual void f04();
+    virtual void Release();                                  // +0x08
+    virtual void f0c(); virtual void f10(); virtual void f14();
+    virtual Stream_s008ddb00* GetStream();                   // +0x18
+    virtual void f1c(); virtual void f20();
+    virtual void Close();                                    // +0x24
+};
+struct Db_s008ddb00 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30();
+    virtual bool OpenRecord(int key, Record_s008ddb00** out, int mode, int flags, int a5, int a6);   // +0x34
+};
 // @ 0x008ddb00
-extern "C" unsigned FUN_008ddb00(void* self, int a2, int a3, int a4, int a5, int a6)
+extern "C" unsigned FUN_008ddb00(Db_s008ddb00* self, int a2, int a3, unsigned a4, int a5, int a6)
 {
-    void* io = 0;
-    int r = ((char (__thiscall*)(void*, int, void**, int, int, int, int))
-             (((void**)*(void**)self)[0x34 / 4]))(self, a2, &io, 1, 3, a5, a6);
     unsigned result = 0;
-    if (r) {
-        void* s = ((void* (__thiscall*)(void*))(((void**)*(void**)io)[0x18 / 4]))(io);
+    Record_s008ddb00* io = 0;
+    if (self->OpenRecord(a2, &io, 1, 3, a5, a6)) {
+        Stream_s008ddb00* s = io->GetStream();
         if (s != 0) {
-            unsigned avail = ((unsigned (__thiscall*)(void*))(((void**)*(void**)s)[0x1c / 4]))(s);
-            if (a4 < (int)avail)
-                avail = (unsigned)a4;
-            result = ((unsigned (__thiscall*)(void*, int, unsigned))(((void**)*(void**)s)[0x30 / 4]))(s, a6, avail);
-            ((void (__thiscall*)(void*))(((void**)*(void**)io)[0x24 / 4]))(io);
+            unsigned avail = s->GetSize();
+            if (avail > a4)
+                avail = a4;
+            result = s->Read(a3, avail);
+            io->Close();
         }
     }
     if (io != 0)
-        ((void (__thiscall*)(void*))(((void**)*(void**)io)[8 / 4]))(io);
+        io->Release();
     return result;
 }
 
