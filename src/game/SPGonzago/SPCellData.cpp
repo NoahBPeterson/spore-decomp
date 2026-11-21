@@ -430,22 +430,32 @@ int __stdcall CellFactory_GetSupportedTypes(unsigned* out, unsigned n)
 }
 
 // @ 0x00e4d000
+struct CellStream_e4d000 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18();
+    virtual unsigned GetSize();                                      // +0x1c
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual unsigned Read(void* dst, unsigned n);                    // +0x30
+};
+struct CellRes_e4d000 {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual cCellDataObj* Cast(unsigned id);                         // +0x0c
+    int  pad04;
+    int  mKey[3];                                                    // +0x08
+};
+struct CellKey_e4d000 { int v[3]; };
 unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, void* k, void* unused)
 {
     unsigned char ok = 0;
-    void* obj;
-    if (s) obj = (*(void*(__thiscall**)(void*, int))((char*)Vt(s) + 0xc))(s, 0x355d6f5);
-    else obj = 0;
-    unsigned n = (*(unsigned(__thiscall**)(void*))((char*)Vt(self) + 0x1c))(self);
-    cCellDataObj* c = (cCellDataObj*)obj;
-    c->mKeyType[0] = *(int*)k;
-    c->mKeyType[1] = *((int*)k + 1);
-    c->mKeyType[2] = *((int*)k + 2);
+    CellRes_e4d000* res = (CellRes_e4d000*)s;
+    cCellDataObj* c = res ? res->Cast(0x355d6f5) : 0;
+    CellStream_e4d000* stream = (CellStream_e4d000*)self;
+    unsigned n = stream->GetSize();
+    *(CellKey_e4d000*)res->mKey = *(CellKey_e4d000*)k;
     if (c->mp18) ((cLightCtx*)g_lightCtx)->Dtor(c->mp18);
-    void* mem = ((cLightCtx*)g_lightCtx)->LockedAlloc(n, 0, 0, 0, 0, 0);
-    c->mp18 = mem;
-    if (mem) {
-        unsigned got = (*(unsigned(__thiscall**)(void*, void*, unsigned))((char*)Vt(self) + 0x30))(self, mem, n);
+    c->mp18 = ((cLightCtx*)g_lightCtx)->LockedAlloc(n, 0, 0, 0, 0, 0);
+    if (c->mp18) {
+        unsigned got = stream->Read(c->mp18, n);
         if (got == n) {
             c->mp1c = (void*)got;
             ok = 1;
@@ -454,7 +464,7 @@ unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, vo
             c->mp18 = 0;
         }
     }
-    c->mp1c = (void*)(((int)c->mp18 != 0) ? (int)n : 0);
+    c->mp1c = (void*)(c->mp18 ? n : 0);
     SP_SetCachingType(7, c);
     return ok;
 }
