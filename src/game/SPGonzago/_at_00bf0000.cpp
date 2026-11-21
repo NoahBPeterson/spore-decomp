@@ -6676,28 +6676,45 @@ void cCommunity_s00bf_d9f0::Push(void* lo, void* hi)
   }
 }
 
+struct CommunityTimer {
+  unsigned int mTimer[8];          // +0x00 cSPTimer
+  void* mKey;                      // +0x20
+  unsigned int m24;                // +0x24
+  CommunityTimer();                // 0x00b63890 cGonzagoTimer::cGonzagoTimer
+  ~CommunityTimer();               // 0x00b638b0 cGonzagoTimer::~cGonzagoTimer
+  void Restart();                  // 0x00bc3130 cSPTimer::Restart
+  static void* operator new(unsigned int, void* p) { return p; }
+  static void operator delete(void*, void*) {}
+};
+struct CommunityTimerVector {
+  CommunityTimer* mpBegin;         // +0x00
+  CommunityTimer* mpEnd;           // +0x04
+  CommunityTimer* mpCapacity;      // +0x08
+  CommunityTimer& back() { return *(mpEnd - 1); }
+  __forceinline void push_back() {
+    if (mpEnd < mpCapacity) {
+      new (mpEnd++) CommunityTimer();
+    } else {
+      CommunityTimer tmp;
+      ((cCommunity_s00bf_d9f0*)this)->Push(mpEnd, &tmp);
+    }
+  }
+};
+
 // @ 0x00bfddc0
 void cCommunity_s00bf_d9f0::EnsureTimer(void* key)
 {
-  char* v = (char*)this + 0x84;
-  char* p = *(char**)(v + 0);
-  char* e0 = *(char**)(v + 4);
-  for (; p != e0; p += 0x28)
-    if (*(void**)(p + 0x20) == key) { ((C_THISCALL*)p)->FUN_00bc3130(); return; }
-  {
-    char* e = *(char**)(v + 4);
-    if (e < *(char**)(v + 8)) {
-      *(char**)(v + 4) = e + 0x28;
-      if (e) ((C_THISCALL*)e)->FUN_00b63890();
-    } else {
-      uint32_t tmp[0x28 / 4];
-      ((C_THISCALL*)tmp)->FUN_00b63890();
-      ((cCommunity_s00bf_d9f0*)((char*)this + 0x84))->Push(*(void**)(v + 4), tmp);
-      ((C_THISCALL*)tmp)->FUN_00b638b0();
+  CommunityTimer* it = ((CommunityTimerVector*)((char*)this + 0x84))->mpBegin;
+  CommunityTimer* end = ((CommunityTimerVector*)((char*)this + 0x84))->mpEnd;
+  for (; it != end; ++it) {
+    if (it->mKey == key) {
+      it->Restart();
+      return;
     }
-    *(void**)(*(char**)(v + 4) - 8) = key;
-    ((C_THISCALL*)(*(char**)(v + 4) - 0x28))->FUN_00bc3130();
   }
+  ((CommunityTimerVector*)((char*)this + 0x84))->push_back();
+  ((CommunityTimerVector*)((char*)this + 0x84))->back().mKey = key;
+  ((CommunityTimerVector*)((char*)this + 0x84))->back().Restart();
 }
 
 // @ 0x00bfde50
