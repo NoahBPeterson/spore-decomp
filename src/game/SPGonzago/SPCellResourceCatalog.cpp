@@ -10,7 +10,7 @@ extern int* gListSentinel;        // 0x016b44f0
 
 // ---- items of slice s00e819b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int* gListSentinel;        // 0x016b44f0
-int   DebugNameFromSPID(int a, int b, int c);  // 0x00e4bf30
+const char* DebugNameFromSPID(int id);  // 0x00e4bf30
 void  FUN_00e84e40(const char* fmt, ...); // 0x00e84e40
 int   EA_ResourceMan_GetManager();        // 0x0067dcd0 (returns ptr)
 int   FUN_00e823e0();                     // 0x00e823e0
@@ -90,9 +90,8 @@ void LoadResource(int* param_1)
     }
     char c = FUN_00e821d0((unsigned)*param_1, param_1[1], piVar1) ? 1 : 0;
     if (c == 0) {
-        int uVar4 = DebugNameFromSPID(*param_1, *param_1, *(int*)param_1[1]);
-        FUN_00e84e40("cannot load asset id:%s (0x%X)", uVar4);
-        _ReadWriteBarrier();
+        FUN_00e84e40("cannot load asset id:%s (0x%X), type:%s",
+                     DebugNameFromSPID(*param_1), *param_1, *(int*)param_1[1]);
         int* piVar2b = (int*)*piVar1;
         if (piVar2b != 0) {
             *piVar1 = 0;
