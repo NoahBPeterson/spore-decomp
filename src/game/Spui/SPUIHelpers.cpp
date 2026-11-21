@@ -2450,19 +2450,36 @@ int* FUN_00807a50(void* p1, int type, void* p3)
     return piVar6;
 }
 
+struct Image_s0080_7bb0 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct ImagePtr_s0080_7bb0 {
+    Image_s0080_7bb0* mp;
+    ImagePtr_s0080_7bb0() : mp(0) {}
+    Image_s0080_7bb0** AsOutParam()
+    {
+        if (mp) {
+            Image_s0080_7bb0* t = mp;
+            mp = 0;
+            t->Release();
+        }
+        return &mp;
+    }
+};
+
 // @ 0x00807bb0
 unsigned char SetWindowImage(W_s0080_7840* w, void* res, int flag)
 {
     if (w == 0) return 0;
-    float* a = (float*)w->v34();
-    float x0 = a[0], y0 = a[1], x1 = a[2], y1 = a[3];
-    void* img = 0;
-    char c1 = CreateImageFromResource(res, &img, 0, (int)(x1 - x0 + 0.5f), (int)(y1 - y0 + 0.5f));
-    char c2 = FUN_008068d0((W_s0080_68d0*)w, (int)img, flag);
-    unsigned char r;
-    if (c2 == 0 || c1 == 0) r = 0;
-    else r = 1;
-    if (img != 0) (*(void(__thiscall**)(void*))VSlot(img, 4))(img);
+    ImagePtr_s0080_7bb0 img;
+    Vec4* a = (Vec4*)w->v34();
+    int height = SseRoundToInt(a->w - a->y);
+    int width = SseRoundToInt(a->z - a->x);
+    char c1 = CreateImageFromResource(res, (void**)img.AsOutParam(), 0, width, height);
+    char c2 = FUN_008068d0((W_s0080_68d0*)w, (int)img.mp, flag);
+    unsigned char r = (c2 && c1) ? 1 : 0;
+    if (img.mp != 0) img.mp->Release();
     return r;
 }
 
