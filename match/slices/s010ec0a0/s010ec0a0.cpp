@@ -584,15 +584,16 @@ int hkBoxBoxManifold::addPoint(const hkCdBody& bodyA, const hkCdBody& bodyB,
     const hkUchar count = self->m_numPoints;
     if (count > 8)
         return -1;
-    if (self->findInManifoldExtern(*point))
-        goto fail;
-    const int index = count;
-    if (index >= 8)
-        goto fail;
-    self->m_contactPoints[index] = *point;
-    ++self->m_numPoints;
-    return index;
-fail:
+    if (!self->findInManifoldExtern(*point))
+    {
+        const int index = count;
+        if (index < 8)
+        {
+            self->m_contactPoints[index] = *point;
+            ++self->m_numPoints;
+            return index;
+        }
+    }
     return -1;
 }
 
