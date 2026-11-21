@@ -9,7 +9,6 @@
 
 extern "C" void* GonzagoModelWorld_00b3d520();
 extern "C" float FUN_00b0f880(void*);
-extern "C" void FUN_00b14370(void*, unsigned, void*);
 extern "C" void* eastl_copy_runinfo(void*, void*, void*);
 
 struct cTerrainSphere { float GetRadius(); };      // 0x00f987f0 (thiscall, float in st0)
@@ -34,20 +33,27 @@ void cTerrainCameraController::FUN_00b159e0(int n)
 // @ 0x00b15a20
 // Resizes a vector<RunInfo> (stride 0x10) at this+0: grow via reserve helper, or
 // shift the tail down with eastl::copy and shrink the end.
+struct Quad16 { float x, y, z, w; };
+struct QuadVec
+{
+    Quad16* mpBegin;
+    Quad16* mpEnd;
+    void FUN_00b14370(Quad16* pos, unsigned n, const Quad16& value);   // DoInsertValues
+};
 void cTerrainCameraController::FUN_00b15a20(unsigned n)
 {
-    char* v = (char*)this;
-    unsigned cur = (unsigned)((*(char**)(v + 4) - *(char**)v) >> 4);
-    if (cur < n)
+    QuadVec* v = (QuadVec*)this;
+    Quad16* e = v->mpEnd;
+    unsigned cur = (unsigned)(e - v->mpBegin);
+    if (n > cur)
     {
-        char tmp[16];
-        FUN_00b14370(*(void**)(v + 4), n - cur, tmp);
+        Quad16 tmp;
+        v->FUN_00b14370(e, n - cur, tmp);
         return;
     }
-    char* dst = *(char**)v + n * 16;
-    char* e = *(char**)(v + 4);
+    Quad16* dst = v->mpBegin + n;
     eastl_copy_runinfo(e, e, dst);
-    *(char**)(v + 4) = e + ((e - dst) >> 4) * -16;
+    v->mpEnd -= (e - dst);
 }
 
 // @ 0x00b15a80

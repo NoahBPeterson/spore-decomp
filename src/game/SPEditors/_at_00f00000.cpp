@@ -2508,13 +2508,10 @@ bool UI_s00f0_31a0::f03ff0(unsigned idx, V3* out, char alt)
 // @ 0x00f04070
 void UI_s00f0_31a0::f04070(char b)
 {
-    int raw = *(int*)&b;
-    int v = 0;
-    if (b)
-        v = ((unsigned)(vD4 - vD0) < 0x32) ? 1 : 0;
-    int arg = (raw & ~0xff) | v;
-    if (w38) {
-        IW* q = (IW*)w38->vf0(0x78d57d8, true);
+    b = (b && (unsigned)(vD4 - vD0) < 0x32);
+    int arg = *(int*)&b;
+    if (IW* w = w38) {
+        IW* q = (IW*)w->vf0(0x78d57d8, true);
         if (q)
             q->v7c(2, arg);
     }

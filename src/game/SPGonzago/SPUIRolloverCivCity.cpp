@@ -782,6 +782,7 @@ struct RBTree_s00e2_b9d0
     uint32_t  mField18;    // +0x18
     uint32_t  mFieldF8;    // +0x1c
     void DoNukeSubtree(void* node);                     // 0x00e2b680 (this = tree)
+    ~RBTree_s00e2_b9d0() { DoNukeSubtree(mpRoot); }
 };
 }
 namespace civroll {
@@ -1167,13 +1168,14 @@ void cStringVec::Insert(cString_s00e2_b9d0* pos, uint32_t n, const cString_s00e2
 }
 }  // namespace civroll
 
+extern "C" char g_148175c[];   // civroll::cSPUIRolloverCivRelationship vftable
+extern "C" char g_148174c[];   // civroll::cSPUIRolloverCivRelationship vftable (second base)
 // @ 0x00e2c4f0
 namespace civroll {
 cSPUIRolloverCivRelationship_s00e2_b9d0::~cSPUIRolloverCivRelationship_s00e2_b9d0()
 {
-    mpVftable = (void*)0x148175c;
-    mpVftable2 = (void*)0x148174c;
-    mMapDC.DoNukeSubtree(mMapDC.mpRoot);
+    mpVftable = g_148175c;
+    mpVftable2 = g_148174c;
 }
 }  // namespace civroll
 

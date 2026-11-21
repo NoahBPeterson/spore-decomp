@@ -16,5 +16,4 @@
 009246c0 101 LogFilterGroupLevels::Clone: complete; inline rbtree ctor store order/zero-register differs, extra push ecx slot flags: /O2 /MD /Gy /TP /GS-
 009248f0 301 Server::AddLogReporter: complete; ebp mutex-pointer spill/reload pattern differs flags: /O2 /MD /Gy /TP /GS-
 00924c60 48 FString::push_back: complete; eastl::max temp/register layout differs flags: /O2 /MD /Gy /TP /GS-
-00924d10 96 LogFormatterSimple::FormatRecord: complete; register allocation (ebx/ebp) and size() load order flags: /O2 /MD /Gy /TP /GS-
 00924d90 442 LogFormatterFancy::FormatRecord: complete; strlen+end-pointer fold (dec eax vs sub/lea) and register allocation differ flags: /O2 /MD /Gy /TP /GS-

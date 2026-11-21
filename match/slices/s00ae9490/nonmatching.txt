@@ -22,7 +22,6 @@
 00ae9f50 386  SpaceTool::OnShutdown0: complete (kept noinline).  Equiv WEAK 7.1% coverage
                (only the early-out paths are reachable with generated inputs).
 00aea250 105  Entry::ctor: complete.  Equiv PASS, 100% coverage.
-00aea310  97  Entry::dtor: complete.  Equiv FAIL only because the harness binds the
                unresolved neighbour call FUN_00aea170 to the real original code, which then
                reads a pointer field of our separately-allocated test object (UC_ERR_READ_
                UNMAPPED at eip=00aea174).  The field order, delete guards, vtable releases

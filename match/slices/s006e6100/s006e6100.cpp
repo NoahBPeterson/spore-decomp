@@ -549,24 +549,14 @@ void FillSix(float* p)
     p[5] = nv;
 }
 
-// The vc71 <math.h> sqrtf is a double-precision wrapper; the retail module takes the
-// root inline with x87 fsqrt, so use a small primitive helper instead.
-static double Normalize3_Sqrt(double f)
-{
-    __asm fld f
-    __asm fsqrt
-    __asm fstp f
-    return f;
-}
 
 // @ 0x006e6df0
 float* Normalize3(float* out, const float* in)
 {
-    double sum = (double)in[0] * in[0] + (double)in[1] * in[1] + (double)in[2] * in[2];
-    double inv = 1.0 / Normalize3_Sqrt(sum + 1e-08f);
-    out[0] = (float)(in[0] * inv);
-    out[1] = (float)(inv * in[1]);
-    out[2] = (float)(inv * in[2]);
+    float inv = 1.0f / sqrtf(in[0] * in[0] + in[1] * in[1] + in[2] * in[2] + 1e-08f);
+    out[0] = in[0] * inv;
+    out[1] = inv * in[1];
+    out[2] = inv * in[2];
     return out;
 }
 

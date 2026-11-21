@@ -347,7 +347,7 @@ struct CInputState {
     void __thiscall ResetIf(u32 k);                            // 0x697a10
     void __thiscall OnKeyUp(u32 a, u32 b);                     // 0x697a80
     void __thiscall OnMouseWheel(float x, float y, u32 arg);   // 0x697b20
-    void __thiscall OnMouseMove(float a, float b, u32 c, u32 d); // 0x697b40
+    void __thiscall OnMouseMove(u32 a, float b, float c, u32 d); // 0x697b40
     void __thiscall Reset();                                   // 0x697980
 };
 struct SHandle {
@@ -363,6 +363,7 @@ struct SHandle {
     void __thiscall B2F7E0(u32 tag);  // 0xb2f7e0
     void __thiscall C2E4E0();         // 0xc2e4e0 (no-op; keeps ecx = receiver)
     void __thiscall B7E1D0();      // 0xb7e1d0
+    void __thiscall B7E1D0(u32 mask); // 0xb7e1d0 SP::cPlanetModel::MaskContinentBits
     void __thiscall F32440(int a); // 0xf32440
     void __thiscall Ef72b0();      // 0xef72b0
 };
@@ -450,7 +451,7 @@ public:
     void __thiscall FUN_00ef07d0(u32 k);
     u8   __thiscall FUN_00ef08b0(u32 a, u32 b);
     u8   __thiscall FUN_00ef0900(u32 x, u32 y, u32 arg);
-    u8   __thiscall FUN_00ef09f0(u32 a, u32 b, u32 c, u32 d);
+    u8   __thiscall FUN_00ef09f0(u32 a, float b, float c, u32 d);
     void __thiscall FUN_00ef0a70(u32 a);
     void __thiscall FUN_00ef0b80();
     void __thiscall FUN_00ef0c80();
@@ -2557,7 +2558,11 @@ struct InputFwd  { void f(int); };                       // 0x00ef8a10, ret 4
 struct CatState  { unsigned f(int); };               // 0x00ef7330, ret 4
 struct CatValid  { bool f(int); };                   // 0x00ef72d0, ret 4
 struct Stopwatch_s00ef_9e40 { void SetTimeLimit(int, int); };       // 0x0093a480, ret 8
-struct HashFind  { void find(void*, void*); };           // 0x00a23ef0, ret 8
+struct HashFind  {
+    u32 m00; int* mpBucketArray; int mnBucketCount;         // +0 / +4 / +8
+    void find(void*, void*);                                // 0x00a23ef0, ret 8
+};
+struct HashIt_s00ef_a110 { int mpNode; int mpBucket; };
 struct Mgr830    { void f(int); };                       // 0x0067c830, ret 4
 struct PrimeRehashPolicyData {
     float mfMaxLoadFactor;   // +0
@@ -3636,16 +3641,16 @@ u8 __thiscall Strategy::FUN_00ef0900(u32 x, u32 y, u32 arg)
 }
 
 // @ 0x00ef09f0
-u8 __thiscall Strategy::FUN_00ef09f0(u32 a, u32 b, u32 c, u32 d)
+u8 __thiscall Strategy::FUN_00ef09f0(u32 a, float b, float c, u32 d)
 {
     Strategy* this_ = this;
     if (DAT_015acc34 != 4)
         return 1;
     ((CInputState*)((char*)this_ + 0x20))->OnMouseMove(a, b, c, d);
     void* im = DAT_015ad298;
-    ((void(__thiscall*)(void*, u32, u32, u32, u32))(*((char**)((char*)*(void**)im + 0x5c))))(im, a, b, c, d);
+    ((void(__thiscall*)(void*, u32, float, float, u32))(*((char**)((char*)*(void**)im + 0x5c))))(im, a, b, c, d);
     void* gm = FUN_00b3d250();
-    return ((u32(__thiscall*)(void*, u32, u32, u32, u32))(*((char**)((char*)*(void**)gm + 0x60))))(gm, a, b, c, d);
+    return ((u8(__thiscall*)(void*, u32, float, float, u32))(*((char**)((char*)*(void**)gm + 0x60))))(gm, a, b, c, d);
 }
 
 // @ 0x00ef0a70
@@ -3656,12 +3661,14 @@ void __thiscall Strategy::FUN_00ef0a70(u32 a)
     *(u32*)((char*)gm + 0x110) += 1;
 
     FUN_00eff790(a);
+    FUN_00c2e4e0();
+    FUN_00c2e4e0();
     ((SHandle*)this_->mp10)->Eda130();
     ((SHandle*)this_->mp14)->Ed6a10();
 
     ((SHandle*)((char*)this_ + 0xc8))->B2F7E0(0x5e51bb6);
     FUN_00b6c280();
-    ((SHandle*)FUN_00b3d350(0x8000000))->B7E1D0();
+    ((SHandle*)FUN_00b3d350())->B7E1D0(0x8000000);
     ((SHandle*)this_->mp18)->F32440(1);
     ((SHandle*)*(void**)((char*)DAT_016c7aa4 + 0xd4))->Ef72b0();
     FUN_00ef0bkey();
@@ -7391,10 +7398,11 @@ void cScenarioTutorials_s00ef_9e40::SetCategoryState(int category, char flag)
 void cScenarioTutorials_s00ef_9e40::HandleCategoryMessage(int category, int arg)
 {
     char* self = (char*)this;
-    int local;
+    HashIt_s00ef_a110 it;
     int k = category;
-    ((HashFind*)(self + 0x5c))->find(&local, &k);
-    if (local == *(int*)(*(int*)(self + 0x60) + *(int*)(self + 0x64) * 4)) {
+    HashFind& h = *(HashFind*)(self + 0x5c);
+    h.find(&it, &k);
+    if (it.mpNode == h.mpBucketArray[h.mnBucketCount]) {
         ((InputFwd*)self)->f(category);
         ((CatUpdate*)self)->f(category);
         unsigned state = ((CatState*)self)->f(category);

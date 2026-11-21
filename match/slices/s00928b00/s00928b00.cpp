@@ -155,13 +155,14 @@ bool StackAllocator::AllocateNewBlock(uint32 size)
 // @ 0x00928d40
 int StackAllocator::MallocAligned(int size, int align, int offset, char flag)
 {
-    uint32 mask = (uint32)(align - 1) | 7;
+    uint32 alignment = ((uint32)(align - 1) | 7) + 1;
     uint32 sz = (uint32)(size + 7) & 0xfffffff8;
-    int p = (int)(((uint32)mpCurrentObjectBegin + offset + mask) & ~mask) - offset;
+    int p = (int)(((uint32)mpCurrentObjectBegin + offset + alignment - 1) & ~(alignment - 1)) - offset;
     if (flag != 0 && (char*)(p + sz) > mpCurrentBlockEnd) {
-        if (!AllocateNewBlock(sz + mask + 1 + offset))
+        if (AllocateNewBlock(sz + alignment + offset))
+            p = (int)(((uint32)mpCurrentObjectBegin + offset + alignment - 1) & ~(alignment - 1)) - offset;
+        else
             return 0;
-        p = (int)(((uint32)mpCurrentObjectBegin + offset + mask) & ~mask) - offset;
     }
     mpCurrentObjectBegin = (char*)(p + sz);
     mpCurrentObjectEnd = (char*)(p + sz);
@@ -250,31 +251,28 @@ int BigFile::FUN_00929220(const wchar_t* name)
     return (int)self;
 }
 
+extern "C" void* __cdecl EASTL_memmove(void* dst, const void* src, unsigned int n);   // E8 call (0x011e0744)
 // @ 0x00929290
 char BigFile::FUN_00929290()
 {
-    void* self = this;
-    char* p = (char*)self;
-    char** begin = *(char***)p;
-    char** end = *(char***)(p + 4);
-    if (begin == end)
+    void** endCheck = mpEnd;
+    if (mpBegin == endCheck)
         return 1;
-    for (char** it = begin; it != end; it++) {
-        int* obj = (int*)*it;
-        (*(void(__thiscall**)(int*))((char*)*obj + 0x18))(obj);
-        if (*it != 0) {
-            void** vt = *(void***)*it;
-            (*(void(__thiscall**)(void*, int))vt[0])(*it, 1);
-        }
+    void** end = mpEnd;
+    for (void** it = mpBegin; it != end; it++) {
+        void* obj = *it;
+        ((void(__thiscall*)(void*))(*(void***)obj)[0x18 / 4])(obj);
+        if (*it != 0)
+            ((void(__thiscall*)(void*, int))(*(void***)*it)[0])(*it, 1);
     }
-    char** b2 = *(char***)p;
-    char** e2 = *(char***)(p + 4);
-    memmove(b2, e2, 0);
-    *(char**)(p + 4) = (char*)((char*)e2 - ((char*)e2 - (char*)b2));
-    *(int*)(p + 0x434) = 0;
-    *(int*)(p + 0x438) = 0;
-    *(int*)(p + 0x43c) = 0;
-    *(int*)(p + 0x440) = 0;
+    void** first = mpBegin;
+    void** last = mpEnd;
+    EASTL_memmove(first, last, (char*)mpEnd - (char*)last);
+    mpEnd -= (last - first);
+    *(int*)((char*)this + 0x434) = 0;
+    *(int*)((char*)this + 0x438) = 0;
+    *(int*)((char*)this + 0x43c) = 0;
+    *(int*)((char*)this + 0x440) = 0;
     return 1;
 }
 

@@ -17,6 +17,7 @@
 #include "cSPTransform.h"
 #include <float.h>
 #include <new>
+#include "sse_helpers.h"
 
 // ---- items of slice s00d20620 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct tVec3 { float x, y, z; };
@@ -730,16 +731,6 @@ extern float gRotAxisZ;       // 0x0169df64
 #define PV2 PV PV
 #define PV4 PV2 PV2
 #define PV8 PV4 PV4
-__forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
 struct Vec3_s00d2_7a70 {
     float x, y, z;
     Vec3_s00d2_7a70() {}
@@ -1788,10 +1779,8 @@ void cCreatureCamera::FUN_00d21b10(float x, float y, float z)
 void cCreatureCamera::FUN_00d21bc0(float x, float y, float z)
 {
     mF180 = x;
-    float yy = y > mPitchLimits.x ? y : mPitchLimits.x;
-    yy = yy < mPitchLimits.y ? yy : mPitchLimits.y;
-    mF184 = yy;
-    mF188 = z > 0.1f ? z : 0.1f;
+    mF184 = SseClamp(y, mPitchLimits.x, mPitchLimits.y);
+    mF188 = Max(0.1f, z);
 }
 
 // @ 0x00d21c50
@@ -2719,7 +2708,7 @@ void cCreatureCamera_s00d2_7a70::ApplyPlayerDeltas(bool flag)
                 float v = minT;
                 float lo = avatar->mBody.GetMinDistance();
                 float hi = m17c;
-                v = Clamp(v, lo, hi);
+                v = SseClamp(v, lo, hi);
                 mP1.x = mA0.x + dir.x * v;
                 mP1.y = mA0.y + dir.y * v;
                 mP1.z = mA0.z + dir.z * v;
@@ -2840,7 +2829,7 @@ void cFreeCamera::Update(float dt)
     mDistance = r;
     mDistance2 = r;
     mYaw = a * kDeg2Rad_s00d2_7a70 + mYaw;
-    mPitch = Clamp(mPitch, mMinPitch, mMaxPitch);
+    mPitch = SseClamp(mPitch, mMinPitch, mMaxPitch);
     if (c != 0.0f || b != 0.0f) {
         float half = mRollAngle * 0.5f;
         float sn = (float)sin((double)half);

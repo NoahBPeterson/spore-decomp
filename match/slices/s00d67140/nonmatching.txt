@@ -57,7 +57,6 @@
 #                materialises the payload dwords into registers before the branch rather
 #                than inside each arm, so the original's ebx/ebp shrink-wrap of the append
 #                arm is not reproduced.  equiv WEAK: 323/400 inputs valid, 38.3% coverage.
-00d67660  108  Acquire a fresh fight-slot payload: zero a payload, allocate it from the pool,
 #                and when its token index is in range and the slot is live stamp
 #                token/type/timer into it and return the payload address (else 0).  Ours
 #                (147 vs 159) keeps the zero constant in edi across the allocation call

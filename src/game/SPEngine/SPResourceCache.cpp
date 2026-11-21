@@ -353,15 +353,15 @@ void C_006af670::serialize(void* stream)
     header[0] = mFlags;
     header[1] = mKind;
     FUN_0093ab10(stream, header, 1, 0);
-    int count = (int)(mpEnd - mpBegin) >> 4;
-    IO_WriteUint32(stream, &count, 1, 0);
-    for (char* p = mpBegin; p != mpEnd; p += 0x10) {
-        int v8 = *(int*)(p + 8);
-        IO_WriteUint32(stream, &v8, 1, 0);
-        int v4 = *(int*)(p + 4);
-        IO_WriteUint32(stream, &v4, 1, 0);
-        int vc = *(int*)(p + 0xc);
-        IO_WriteUint32(stream, &vc, 1, 0);
+    int value = (int)(mpEnd - mpBegin) >> 4;
+    IO_WriteUint32(stream, &value, 1, 0);
+    for (char* p = mpBegin, *end = mpEnd; p != end; p += 0x10) {
+        value = *(int*)(p + 8);
+        IO_WriteUint32(stream, &value, 1, 0);
+        value = *(int*)(p + 4);
+        IO_WriteUint32(stream, &value, 1, 0);
+        value = *(int*)(p + 0xc);
+        IO_WriteUint32(stream, &value, 1, 0);
     }
 }
 
@@ -740,18 +740,18 @@ bool __fastcall FUN_006b0020(char* self)
     volatile long* c = (volatile long*)(self + 8);
     if (_InterlockedExchangeAdd(c, 0) == 0)
         return false;
-    if (_InterlockedExchangeAdd(c, -1) == 1) {
-        void* p = *(void**)(self + 0x10);
-        int* r = (int*)((int(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p);
+    if (_InterlockedDecrement(c) == 0) {
+        void** p = (void**)(self + 0x10);
+        int* r = (int*)((int(__thiscall*)(void*))(*(void***)*p)[0x10 / 4])(*p);
         int v[3];
         v[0] = r[0];
         v[1] = r[1];
         v[2] = r[2];
-        void* q = (*(void*(__thiscall**)(void*))(*(void***)p)[0x18 / 4])(p);
+        void* q = ((void*(__thiscall*)(void*))(*(void***)*p)[0x18 / 4])(*p);
         int a = ((int(__thiscall*)(void*))(*(void***)q)[0x1c / 4])(q);
         void* z = *(void**)(*(char**)(self + 0xc) + 0x10);
         ((void(__thiscall*)(void*, int*, int))(*(void***)z)[0x18 / 4])(z, v, a);
-        (*(void(__thiscall**)(void*))(*(void***)p)[0x24 / 4])(p);
+        ((void(__thiscall*)(void*))(*(void***)*p)[0x24 / 4])(*p);
     }
     return true;
 }

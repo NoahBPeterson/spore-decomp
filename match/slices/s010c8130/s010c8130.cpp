@@ -498,10 +498,11 @@ void hkMeshShape::getAabb(const hkTransform& localToWorld, float tolerance, hkAa
 // @ 0x010c8b00
 void hkMeshShape::addSubpart(const hkMeshShapeSubpart& part)
 {
-    if (m_subparts.m_size == (m_subparts.m_capacityAndFlags & 0x3fffffff))
-        hkArrayUtil_reserveMore(&m_subparts, 0x30);
-    hkMeshShapeSubpart* dst = &m_subparts.m_data[m_subparts.m_size];
-    m_subparts.m_size++;
+    hkArray<hkMeshShapeSubpart>& a = m_subparts;
+    if (a.m_size == (a.m_capacityAndFlags & 0x3fffffff))
+        hkArrayUtil_reserveMore(&a, 0x30);
+    hkMeshShapeSubpart* dst = &a.m_data[a.m_size];
+    a.m_size++;
     *dst = part;                                    // twelve dword copies
     if (dst->m_materialIndexBase == 0) {            // no materials: point at the shared dummy material
         dst->m_numMaterials = 1;

@@ -540,20 +540,19 @@ void Canvas_s0084_7200::OnMouseEnter(HWND hwnd)
 {
     if (mbMouseInClientArea)
         return;
+    FARPROC proc;
     if (!(g_01650384 & 1)) {
         g_01650384 |= 1;
-        g_01650380 = GetProcAddress(GetModuleHandleA("user32.dll"), "TrackMouseEvent");
+        proc = GetProcAddress(GetModuleHandleA("user32.dll"), "TrackMouseEvent");
+        g_01650380 = proc;
+    } else {
+        proc = g_01650380;
     }
-    FARPROC proc = g_01650380;
     if (!proc)
         return;
-    TRACKMOUSEEVENT tme;
-    tme.cbSize = 0;
-    tme.dwFlags = 0;
-    tme.hwndTrack = 0;
-    tme.dwHoverTime = 0;
+    TRACKMOUSEEVENT tme = { 0 };
     mbMouseInClientArea = true;
-    tme.cbSize = 0x10;
+    tme.cbSize = sizeof(TRACKMOUSEEVENT);
     tme.dwFlags = 2;
     tme.hwndTrack = hwnd;
     ((BOOL(__stdcall*)(TRACKMOUSEEVENT*))proc)(&tme);

@@ -18,3 +18,4 @@
 ../src/game/SPEditors/SPCreatureCameraBase.cpp  ?ReloadTuning@cCreatureCameraBase@@QAEXXZ  00626290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPCreatureCameraBase.cpp  ?Deactivate@cCreatureCameraBase@SP@@UAEXXZ  00624ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPCreatureCameraBase.cpp  ?translateTransform@@YAPAXPAX00@Z  006271a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?UpdateOffsets@cCreatureCameraDepends_s0062_4fb0@SP@@QAEXM@Z  00625750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

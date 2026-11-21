@@ -21,3 +21,5 @@
 ../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?GetExtensionByType@DatabaseDirectoryFiles@ResourceMan@EA@@QAEPB_WI@Z  008d6290  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?FUN_008d3ca0@TSI@@QAEXXZ  008d3ca0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?FUN_008d3690@TSI@@QAEXPAURunRec@@@Z  008d3690  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?GetRecordCount@DatabaseDirectoryFiles_s008d_62f0@ResourceMan@EA@@QAEHABUKey_s008d_62f0@23@@Z  008d64a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008d0000.cpp  ?GetRecordName@DatabaseDirectoryFiles_s008d_62f0@ResourceMan@EA@@QAE_NABUKey_s008d_62f0@23@PA_W@Z  008d6510  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

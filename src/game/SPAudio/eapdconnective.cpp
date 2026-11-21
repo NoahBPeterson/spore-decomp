@@ -8,6 +8,13 @@ extern "C" void FUN_00a5bea0();
 extern "C" void FUN_00a5c400();
 extern "C" char g_16753f4[];
 extern "C" char g_167562c[];
+extern "C" char g_1675648[];
+extern "C" char g_167589c[];
+extern "C" char g_16758a0[];
+extern "C" char g_167545c[];
+extern "C" char g_1675630[];
+extern "C" char g_167565c[];
+extern "C" char g_1675660[];
 extern "C" char g_1675640[];
 extern "C" char g_1675654[];
 extern "C" char g_1675664[];
@@ -53,6 +60,9 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 void* class_addcreator(void* fn, void* s_name, void* s_name2, int nargs, int c);    // 0x00a48db0 / 0x00a48e00
+void* class_addcreator(void* fn, void* s_name, void* s_name2, int c);               // 0x00a48db0 (no arg types)
+void* class_new(void* s_name, void* s_name2, void* nnew,
+                void* a, int size, int b, int c);                                   // 0x00a48e50 (one arg type)
 }
 }
 }
@@ -216,20 +226,20 @@ using EA::Audio::Eapd::t_symbol;
 #define g_spPdsymbolClass (*(void**)g_1675640)
 #define g_spBangClass     (*(void**)g_1675664)
 #define g_spSendClass     (*(void**)g_1675654)
-#define g_spForwardClass  (*(void**)0x01675630u)
-#define g_spReceiveClass  (*(void**)0x01675648u)
-#define g_spSelectClass   (*(void**)0x0167565cu)
-#define g_spSelect2Class  (*(void**)0x01675660u)
+#define g_spForwardClass  (*(void**)g_1675630)
+#define g_spReceiveClass  (*(void**)g_1675648)
+#define g_spSelectClass   (*(void**)g_167565c)
+#define g_spSelect2Class  (*(void**)g_1675660)
 #define g_gFloatSymbol    (*(t_symbol*)g_16758c4)
 #define g_gSymbolSymbol   (*(t_symbol*)g_1675894)
 #define g_gBangSymbol     (*(t_symbol*)g_16758b4)
-#define g_gEmptySymbol    (*(t_symbol*)0x0167589cu)
+#define g_gEmptySymbol    (*(t_symbol*)g_167589c)
 #define g_gFloatSymbol2   (*(void**)g_16758c8)
 #define g_gSymbolSymbol2  (*(void**)g_1675898)
 #define g_gBangSymbol2    (*(void**)g_16758b8)
-#define g_gEmptySymbol2   (*(void**)0x016758a0u)
+#define g_gEmptySymbol2   (*(void**)g_16758a0)
 #define g_gpNewestObject  (*(void**)g_16753f4)
-#define g_gOutletCount    (*(int*)0x0167545cu)
+#define g_gOutletCount    (*(int*)g_167545c)
 struct PdObject
 {
     uint32_t pad_00[3];     // +0x00
@@ -266,9 +276,9 @@ void  FUN_00a59ed0(PdObject* o, void* a, void* b, void* c, void* d);
 void* FUN_00a59f00(uint32_t a, uint32_t b);
 void  FUN_00a5a000(PdObject* o, float f);
 void  FUN_00a5a020(PdObject* o, void* a, void* b, void* c, void* d);
-void* forward_new(uint32_t a, uint32_t b);
+void* forward_new(t_symbol s);
 void  FUN_00a5a140(PdObject* o, void* a, void* b);
-void* receive_new(uint32_t a, uint32_t b);
+void* receive_new(t_symbol s);
 void* FUN_00a598f0(float f);
 void FUN_00a59940(PdObject* o);
 void FUN_00a599a0(PdObject* o, float v);
@@ -287,10 +297,10 @@ void* FUN_00a59f00(uint32_t a, uint32_t b);
 bool send_setup();
 void FUN_00a5a000(PdObject* o, float f);
 void FUN_00a5a020(PdObject* o, void* a, void* b, void* c, void* d);
-void* forward_new(uint32_t a, uint32_t b);
+void* forward_new(t_symbol s);
 bool forward_setup();
 void FUN_00a5a140(PdObject* o, void* a, void* b);
-void* receive_new(uint32_t a, uint32_t b);
+void* receive_new(t_symbol s);
 bool receive_setup();
 void FUN_00a5a280(PdObject* o, float v);
 void sel1_symbol(PdObject* o, int sym, void* b);
@@ -1338,12 +1348,12 @@ bool pdsymbol_setup()
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "symbol");
     g_spPdsymbolClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&pdsymbol_new,
                                                    0, 0x30, 0, 2, 0);
-    bool ok = (g_spPdsymbolClass != 0);
+    unsigned char ok = (unsigned char)((g_spPdsymbolClass != 0) & 1);
 
-    ok &= (EA::Audio::Eapd::class_addbang(g_spPdsymbolClass, (void*)&pdsymbol_symbol) != 0);
-    ok &= (EA::Audio::Eapd::class_addsymbol(g_spPdsymbolClass, (void*)&pdsymbol_anything) != 0);
-    ok &= (EA::Audio::Eapd::class_addanything(g_spPdsymbolClass, (void*)&pdsymbol_anything) != 0);
-    return ok;
+    ok &= (unsigned char)EA::Audio::Eapd::class_addbang(g_spPdsymbolClass, (void*)&pdsymbol_symbol);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addsymbol(g_spPdsymbolClass, (void*)&pdsymbol_anything);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addanything(g_spPdsymbolClass, (void*)&pdsymbol_anything);
+    return *(bool*)&ok;
 }
 }
 }
@@ -1377,18 +1387,18 @@ bool bang_setup()
 
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "bang");
     g_spBangClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&bang_new2,
-                                               0, 0x28, 0, 0, 0);
-    bool ok = (g_spBangClass != 0);
+                                               0, 0x28, 0, 0);
+    unsigned char ok = (unsigned char)((g_spBangClass != 0) & 1);
 
     sp = EA::Audio::Eapd::gensym(&sym, "bang");
-    ok &= (EA::Audio::Eapd::class_addcreator((void*)&bang_new2, sp->s_name, sp->s_name2, 0, 0) != 0);
+    ok &= (unsigned char)(int)EA::Audio::Eapd::class_addcreator((void*)&bang_new2, sp->s_name, sp->s_name2, 0);
 
-    ok &= (EA::Audio::Eapd::class_addbang(g_spBangClass, (void*)&FUN_00a59db0) != 0);
-    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spBangClass, (void*)&FUN_00a59db0) != 0);
-    ok &= (EA::Audio::Eapd::class_addsymbol(g_spBangClass, (void*)&FUN_00a59db0) != 0);
-    ok &= (EA::Audio::Eapd::class_addlist(g_spBangClass, (void*)&FUN_00a59db0) != 0);
-    ok &= (EA::Audio::Eapd::class_addanything(g_spBangClass, (void*)&FUN_00a59db0) != 0);
-    return ok;
+    ok &= (unsigned char)EA::Audio::Eapd::class_addbang(g_spBangClass, (void*)&FUN_00a59db0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_doaddfloat(g_spBangClass, (void*)&FUN_00a59db0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addsymbol(g_spBangClass, (void*)&FUN_00a59db0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addlist(g_spBangClass, (void*)&FUN_00a59db0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addanything(g_spBangClass, (void*)&FUN_00a59db0);
+    return *(bool*)&ok;
 }
 }
 }
@@ -1439,17 +1449,17 @@ bool send_setup()
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "send");
     g_spSendClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&FUN_00a59f00,
                                                0, 0x30, 0, 6, 0);
-    bool ok = (g_spSendClass != 0);
+    unsigned char ok = (unsigned char)((g_spSendClass != 0) & 1);
 
     sp = EA::Audio::Eapd::gensym(&sym, "send");
-    ok &= (EA::Audio::Eapd::class_addcreator((void*)&FUN_00a59f00, sp->s_name, sp->s_name2, 6, 0) != 0);
+    ok &= (unsigned char)(int)EA::Audio::Eapd::class_addcreator((void*)&FUN_00a59f00, sp->s_name, sp->s_name2, 6, 0);
 
-    ok &= (EA::Audio::Eapd::class_addbang(g_spSendClass, (void*)&FUN_00a59e90) != 0);
-    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spSendClass, (void*)&FUN_00a5a000) != 0);
-    ok &= (EA::Audio::Eapd::class_addsymbol(g_spSendClass, (void*)&send_symbol) != 0);
-    ok &= (EA::Audio::Eapd::class_addlist(g_spSendClass, (void*)&FUN_00a5a020) != 0);
-    ok &= (EA::Audio::Eapd::class_addanything(g_spSendClass, (void*)&FUN_00a59ed0) != 0);
-    return ok;
+    ok &= (unsigned char)EA::Audio::Eapd::class_addbang(g_spSendClass, (void*)&FUN_00a59e90);
+    ok &= (unsigned char)EA::Audio::Eapd::class_doaddfloat(g_spSendClass, (void*)&FUN_00a5a000);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addsymbol(g_spSendClass, (void*)&send_symbol);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addlist(g_spSendClass, (void*)&FUN_00a5a020);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addanything(g_spSendClass, (void*)&FUN_00a59ed0);
+    return *(bool*)&ok;
 }
 
 // @ 0x00a5a000
@@ -1469,18 +1479,17 @@ void FUN_00a5a020(PdObject* o, void* a, void* b, void* c, void* d)
 }
 
 // @ 0x00a5a050
-void* forward_new(uint32_t a, uint32_t b)
+void* forward_new(t_symbol s)
 {
     void* o = EA::Audio::Eapd::pd_new(g_spForwardClass);
     if (o != 0)
     {
-        PdPayload* p = (PdPayload*)((char*)o + 0x28);
-        p->at28 = a;
-        p->at2c = b;
-        if (EA::Audio::Eapd::symbolinlet_new(o, (char*)o + 0x28) == 0)
+        t_symbol* p = (t_symbol*)((char*)o + 0x28);
+        *p = s;
+        if (EA::Audio::Eapd::symbolinlet_new(o, p) == 0)
         {
             EA::Audio::Eapd::pd_free(o);
-            return 0;
+            o = 0;
         }
     }
     return o;
@@ -1494,14 +1503,14 @@ bool forward_setup()
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "forward");
     g_spForwardClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&forward_new,
                                                   0, 0x30, 0, 6, 0);
-    bool ok = (g_spForwardClass != 0);
+    unsigned char ok = (unsigned char)((g_spForwardClass != 0) & 1);
 
-    ok &= (EA::Audio::Eapd::class_addbang(g_spForwardClass, (void*)&FUN_00a59e90) != 0);
-    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spForwardClass, (void*)&FUN_00a5a000) != 0);
-    ok &= (EA::Audio::Eapd::class_addsymbol(g_spForwardClass, (void*)&send_symbol) != 0);
-    ok &= (EA::Audio::Eapd::class_addlist(g_spForwardClass, (void*)&FUN_00a5a020) != 0);
-    ok &= (EA::Audio::Eapd::class_addanything(g_spForwardClass, (void*)&FUN_00a59ed0) != 0);
-    return ok;
+    ok &= (unsigned char)EA::Audio::Eapd::class_addbang(g_spForwardClass, (void*)&FUN_00a59e90);
+    ok &= (unsigned char)EA::Audio::Eapd::class_doaddfloat(g_spForwardClass, (void*)&FUN_00a5a000);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addsymbol(g_spForwardClass, (void*)&send_symbol);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addlist(g_spForwardClass, (void*)&FUN_00a5a020);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addanything(g_spForwardClass, (void*)&FUN_00a59ed0);
+    return *(bool*)&ok;
 }
 
 // @ 0x00a5a140
@@ -1512,19 +1521,22 @@ void FUN_00a5a140(PdObject* o, void* a, void* b)
 }
 
 // @ 0x00a5a160
-void* receive_new(uint32_t a, uint32_t b)
+void* receive_new(t_symbol s)
 {
     void* o = EA::Audio::Eapd::pd_new(g_spReceiveClass);
     if (o != 0)
     {
-        PdPayload* p = (PdPayload*)((char*)o + 0x28);
-        p->at28 = a;
-        p->at2c = b;
-        EA::Audio::Eapd::pd_bind(o, (void*)(uintptr_t)a, (void*)(uintptr_t)b);
+        *(t_symbol*)((char*)o + 0x28) = s;
+        EA::Audio::Eapd::pd_bind(o, s.s_name, s.s_name2);
         EA::Audio::Eapd::outlet_new(o, g_gEmptySymbol.s_name, g_gEmptySymbol2);
     }
     return o;
 }
+
+void FUN_00a4c2e0(void*);       // 0x00a4c2e0 EA::Audio::Eapd::stub_vgui
+void FUN_00a61460(void*, float); // 0x00a61460 inlet_float_all
+void FUN_00a614b0();            // 0x00a614b0 vinlet_list
+void FUN_00a614e0();            // 0x00a614e0 vinlet_anything
 
 // @ 0x00a5a1b0
 bool receive_setup()
@@ -1533,18 +1545,18 @@ bool receive_setup()
 
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "receive");
     g_spReceiveClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&receive_new,
-                                                  (void*)0x00a4c2e0, 0x30, 8, 6, 0);
-    bool ok = (g_spReceiveClass != 0);
+                                                  (void*)&FUN_00a4c2e0, 0x30, 8, 6, 0);
+    unsigned char ok = (unsigned char)((g_spReceiveClass != 0) & 1);
 
     sp = EA::Audio::Eapd::gensym(&sym, "receive");
-    ok &= (EA::Audio::Eapd::class_addcreator((void*)&receive_new, sp->s_name, sp->s_name2, 6, 0) != 0);
+    ok &= (unsigned char)(int)EA::Audio::Eapd::class_addcreator((void*)&receive_new, sp->s_name, sp->s_name2, 6, 0);
 
-    ok &= (EA::Audio::Eapd::class_addbang(g_spReceiveClass, (void*)&FUN_00a59db0) != 0);
-    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spReceiveClass, (void*)0x00a61460) != 0);
-    ok &= (EA::Audio::Eapd::class_addsymbol(g_spReceiveClass, (void*)&FUN_00a5a140) != 0);
-    ok &= (EA::Audio::Eapd::class_addlist(g_spReceiveClass, (void*)0x00a614b0) != 0);
-    ok &= (EA::Audio::Eapd::class_addanything(g_spReceiveClass, (void*)0x00a614e0) != 0);
-    return ok;
+    ok &= (unsigned char)EA::Audio::Eapd::class_addbang(g_spReceiveClass, (void*)&FUN_00a59db0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_doaddfloat(g_spReceiveClass, (void*)&FUN_00a61460);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addsymbol(g_spReceiveClass, (void*)&FUN_00a5a140);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addlist(g_spReceiveClass, (void*)&FUN_00a614b0);
+    ok &= (unsigned char)EA::Audio::Eapd::class_addanything(g_spReceiveClass, (void*)&FUN_00a614e0);
+    return *(bool*)&ok;
 }
 
 // @ 0x00a5a280
@@ -2275,18 +2287,16 @@ bool spigot_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
-    bool ok = true;
-
     sym = gensym(&s, "spigot");
     spSpigotClass = class_new_t2(*sym, (void*)spigot_new, 0, 0x30, 0, 5, 0);
-    ok = ok && (spSpigotClass != 0);
+    unsigned char ok = (unsigned char)((spSpigotClass != 0) & 1);
 
-    ok = class_addbang(spSpigotClass, (void*)spigot_bang) && ok;
-    ok = class_doaddfloat(spSpigotClass, (void*)spigot_float) && ok;
-    ok = class_addsymbol_s00a5_b510(spSpigotClass, (void*)spigot_symbol) && ok;
-    ok = class_addlist_s00a5_b510(spSpigotClass, (void*)spigot_list) && ok;
-    ok = class_addanything_s00a5_b510(spSpigotClass, (void*)spigot_anything) && ok;
-    return ok;
+    ok &= (unsigned char)class_addbang(spSpigotClass, (void*)spigot_bang);
+    ok &= (unsigned char)class_doaddfloat(spSpigotClass, (void*)spigot_float);
+    ok &= (unsigned char)class_addsymbol_s00a5_b510(spSpigotClass, (void*)spigot_symbol);
+    ok &= (unsigned char)class_addlist_s00a5_b510(spSpigotClass, (void*)spigot_list);
+    ok &= (unsigned char)class_addanything_s00a5_b510(spSpigotClass, (void*)spigot_anything);
+    return *(bool*)&ok;
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -2394,18 +2404,17 @@ bool gate_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
-    bool ok = true;
 
     sym = gensym(&s, "gate");
     spGateClass = class_new_t3(*sym, (void*)gate_new, (void*)gate_free, 0x34, 0, 5, 5, 0);
-    ok = ok && (spGateClass != 0);
+    unsigned char ok = (unsigned char)((spGateClass != 0) & 1);
 
-    ok = class_addbang(spGateClass, (void*)gate_bang) && ok;
-    ok = class_doaddfloat(spGateClass, (void*)gate_float) && ok;
-    ok = class_addsymbol_s00a5_b510(spGateClass, (void*)gate_symbol) && ok;
-    ok = class_addlist_s00a5_b510(spGateClass, (void*)gate_list) && ok;
-    ok = class_addanything_s00a5_b510(spGateClass, (void*)gate_anything) && ok;
-    return ok;
+    ok &= (unsigned char)class_addbang(spGateClass, (void*)gate_bang);
+    ok &= (unsigned char)class_doaddfloat(spGateClass, (void*)gate_float);
+    ok &= (unsigned char)class_addsymbol_s00a5_b510(spGateClass, (void*)gate_symbol);
+    ok &= (unsigned char)class_addlist_s00a5_b510(spGateClass, (void*)gate_list);
+    ok &= (unsigned char)class_addanything_s00a5_b510(spGateClass, (void*)gate_anything);
+    return *(bool*)&ok;
 }
 }}}  // namespace EA::Audio::Eapd
 

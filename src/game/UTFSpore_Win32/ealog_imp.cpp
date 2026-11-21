@@ -1991,7 +1991,7 @@ namespace EA { namespace Trace {
 const char* LogFormatterSimple_s0092_45b0::FormatRecord(ILogRecord* r)
 {
     const char* text = r->GetText();
-    mLine.append(text, cstrend(text));
+    mLine.append(text, text + strlen(text));
     unsigned n = mLine.size();
     if (n == 0 || mLine.mpBegin[n - 1] != '\n') mLine.push_back('\n');
     LogRecordInfo* info = r->mpInfo;

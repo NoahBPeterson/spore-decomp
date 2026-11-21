@@ -234,20 +234,41 @@ void __cdecl ReadRenderQueueSlots(QueueInputHost* host, QueueObjectVector* vec, 
     }
 }
 
+struct IStream_s00b0_e610 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5();
+    virtual void* GetReader();           // +0x18
+};
+struct IHost_s00b0_e610 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void* GetStream();           // +0x20
+};
+struct SlotVec_s00b0_e610 {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    uint32_t mAlloc[2];
+    void swap(void* other);              // 0x00b0e250
+    void* erase(void* first, void* last); // 0x00b0dec0
+    void destroy();                      // 0x00afb7a0
+};
 // @ 0x00b0e610
 // Clears the +0x20 slot vector then reads a replacement from the stream.
 bool cRenderQueue::FUN_00b0e610(int host_)
 {
     char* self = (char*)this;
     char* host = (char*)host_;
-    uint32_t tmp[3] = { 0, 0, 0 };
-    FUN_00b0e250(tmp, self + 0x20);
-    FUN_00b0dec0(tmp, (void*)0, (void*)0);
-    void* obj = vcall0<void*>(host, 0x20);
-    void* reader = vcall0<void*>(obj, 0x18);
+    SlotVec_s00b0_e610 tmp;
+    tmp.mpBegin = 0;
+    tmp.mpEnd = 0;
+    tmp.mpCapacity = 0;
+    tmp.swap(self + 0x20);
+    tmp.erase(tmp.mpBegin, tmp.mpEnd);
+    void* reader = ((IStream_s00b0_e610*)((IHost_s00b0_e610*)host)->GetStream())->GetReader();
     ReadInt32(reader, self + 0x94, 1, 0);
-    FUN_00b0e560(host_, (int)(self + 0x20), 0x11c0ba3u);
-    ctor_00afb7a0();
+    ReadRenderQueueSlots((QueueInputHost*)host, (QueueObjectVector*)(self + 0x20), 0x11c0ba3u);
+    tmp.destroy();
     return true;
 }
 

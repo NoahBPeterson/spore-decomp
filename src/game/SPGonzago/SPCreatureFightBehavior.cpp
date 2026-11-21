@@ -2138,12 +2138,7 @@ void FightMem::Release()
 // @ 0x00d67660
 SlotPayload* FUN_00d67660()
 {
-    SlotPayload value;
-    value.mNounID    = 0;
-    value.mType      = 0;
-    value.mToken     = 0;
-    value.mTimerBits = 0;
-    value.mCount     = 0;
+    SlotPayload value = SlotPayload();
 
     U32 index = gTribeFightSlotsPool.alloc(&value);
     U32 token = index | 0x40000000;
@@ -2151,7 +2146,7 @@ SlotPayload* FUN_00d67660()
 
     SlotPayload* result;
     if (i < gTribeFightSlotsPool.count() &&
-        (int)gTribeFightSlotsPool.mpBegin[i].mFlags >= 0) {
+        !(bool)((gTribeFightSlotsPool.mpBegin[i].mFlags >> 31) & 1)) {
         result = &gTribeFightSlotsPool.mpBegin[i].mPayload;
     } else {
         result = 0;

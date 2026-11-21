@@ -5397,38 +5397,40 @@ void cTerrainSphere141::FUN_00f9a610()
 void cTerrainSphere141::FUN_00f9a680(int key, const float3* v)
 {
     int n = (int)(mpArr2f8 - mpArr2f4) >> 2;
+    int i = 0;
     if (n <= 0)
         return;
-    uint8_t** p = (uint8_t**)mpArr2f4;
-    int i = 0;
-    while (*(int*)*p != key) {
-        i++;
-        p++;
-        if (n <= i)
+    uint8_t** arr = *(uint8_t** volatile*)&mpArr2f4;
+    uint8_t** p = arr;
+    do {
+        if (*(int*)*p == key) {
+            ((ElemA*)arr[i])->pos = *v;
+            ((ElemA*)((uint8_t**)mpArr2f4)[i])->flag20 = 1;
             return;
-    }
-    ElemA* e = (ElemA*)((uint8_t**)mpArr2f4)[i];
-    e->pos = *v;
-    ((ElemA*)((uint8_t**)mpArr2f4)[i])->flag20 = 1;
+        }
+        ++i;
+        ++p;
+    } while (i < n);
 }
 
 // @ 0x00f9a6f0
 void cTerrainSphere141::FUN_00f9a6f0(int key, const float3* v)
 {
     int n = (int)(mpArr2f8 - mpArr2f4) >> 2;
+    int i = 0;
     if (n <= 0)
         return;
-    uint8_t** p = (uint8_t**)mpArr2f4;
-    int i = 0;
-    while (*(int*)*p != key) {
-        i++;
-        p++;
-        if (n <= i)
+    uint8_t** arr = *(uint8_t** volatile*)&mpArr2f4;
+    uint8_t** p = arr;
+    do {
+        if (*(int*)*p == key) {
+            ((ElemB*)arr[i])->pos = *v;
+            ((ElemB*)((uint8_t**)mpArr2f4)[i])->flag20 = 1;
             return;
-    }
-    ElemB* e = (ElemB*)((uint8_t**)mpArr2f4)[i];
-    e->pos = *v;
-    ((ElemB*)((uint8_t**)mpArr2f4)[i])->flag20 = 1;
+        }
+        ++i;
+        ++p;
+    } while (i < n);
 }
 
 // @ 0x00f9a760

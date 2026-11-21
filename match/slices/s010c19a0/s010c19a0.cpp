@@ -383,15 +383,15 @@ void hkConvexVerticesShape::castRay(unsigned char* hitOut, const void* input_, v
 void hkConvexVerticesShape::calcStatistics(hkStatisticsCollector* c) const
 {
     c->beginObject("CvxVerts", 1, this);
-    if ((int)((hkUint32)m_rotatedVertices.m_capacityAndFlags) >= 0)
+    if ((m_rotatedVertices.m_capacityAndFlags & 0x80000000) == 0)
     {
         c->addArray("Verts", 1, m_rotatedVertices.m_data, m_rotatedVertices.m_size * 0x30,
                     m_rotatedVertices.getCapacity() * 0x30);
     }
-    if ((int)((hkUint32)m_planeEquations.m_capacityAndFlags) >= 0)
+    if ((m_planeEquations.m_capacityAndFlags & 0x80000000) == 0)
     {
         c->addArray("Verts", 1, m_planeEquations.m_data, m_planeEquations.m_size << 4,
-                    m_planeEquations.m_capacityAndFlags << 4);
+                    m_planeEquations.getCapacity() * 16);
     }
     c->endObject();
 }

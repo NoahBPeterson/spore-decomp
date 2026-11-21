@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/_at_00e10000.cpp  ?Activate@cTradeUI@@QAEXXZ  00e1dae0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f390@@YIPAXPAX@Z  00e1f390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e10000.cpp  ?ShutdownB@cUIMissionCardPanel@@QAEXXZ  00e18b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e10000.cpp  ?shutdown@SearchDlg@@QAEXXZ  00e1e120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -324,15 +324,21 @@ void ExprFunctionRef::ReleaseRefCount()
     }
 }
 
+static inline char* CharStringUninitializedCopy_s0083(const char* b, const char* e, char* dst)
+{
+    memcpy(dst, b, (size_t)(e - b));
+    return dst + (e - b);
+}
+
 // @ 0x0083cef0
 PairCtorStub* PairCtorStub::CtorA(const eastl::string8_s0083_c900* s, int** ref)
 {
     eastl::string8_s0083_c900* str = &mKey;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
-    int len = (int)(s->mpEnd - s->mpBegin);
-    str->RangeInitialize((unsigned)(len + 1));
-    memcpy(str->mpBegin, s->mpBegin, (unsigned)len);
-    str->mpEnd = str->mpBegin + (s->mpEnd - s->mpBegin);
+    const char* e = s->mpEnd;
+    const char* b = s->mpBegin;
+    str->RangeInitialize((unsigned)(e - b) + 1);
+    str->mpEnd = CharStringUninitializedCopy_s0083(b, e, str->mpBegin);
     *str->mpEnd = 0;
     int* obj = *ref;
     mpRef = obj;

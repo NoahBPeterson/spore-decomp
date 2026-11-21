@@ -42,6 +42,8 @@ struct MC {
     void  f_009a9600(void* root);        // 0x009a9600  rbtree nuke
     void  f_00e25bd0(void* first, void* last);   // 0x00e25bd0  vector::erase
     void  f_00a17a70(void* a, void* b, void* c);// 0x00a17a70  rbtree insert
+    struct InsertTag { char c; };
+    void  f_00a17a70(void* out, void* key, InsertTag t);// 0x00a17a70  rbtree insert (pair out, key, by-value tag)
     void* f_00d01790(int n);             // 0x00d01790
     void* f_00e012b0(unsigned id);       // 0x00e012b0
     void  f_00f13890();                  // 0x00f13890
@@ -172,8 +174,13 @@ void cCachedEventData::RebuildInactivePlayersCache()
         void* id  = *(void**)(it + 0x10);
         if (rec != cur) {
             uint32_t flags = *(uint32_t*)((char*)rec + 0x50);
-            if ((flags >> 6) & 1)
-                ((MC*)s)->f_00a17a70(&id, &id, 0);
+            bool inactive = ((flags >> 6) & 1) != 0;
+            if (inactive) {
+                char result[8];
+                MC::InsertTag tag;
+                tag.c = 0;
+                ((MC*)s)->f_00a17a70(result, &id, tag);
+            }
         }
         it = (char*)FUN_00921580(it);
     }

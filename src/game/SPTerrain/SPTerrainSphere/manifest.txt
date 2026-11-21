@@ -43,3 +43,5 @@
 ../src/game/SPTerrain/SPTerrainSphere.cpp  ?Destroy2@CGmeRefCount@@QAEXXZ  00f9b170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainSphere.cpp  ?AttachDecal@DecalHost@@QAEXXZ  00facfc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainSphere.cpp  ?GetExtents@cGridTool@@QAEPAXPAH00@Z  00f967d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9a680@cTerrainSphere141@@QAEXHPBUfloat3@@@Z  00f9a680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9a6f0@cTerrainSphere141@@QAEXHPBUfloat3@@@Z  00f9a6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

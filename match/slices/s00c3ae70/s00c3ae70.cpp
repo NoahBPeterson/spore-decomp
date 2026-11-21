@@ -75,7 +75,11 @@ void* __cdecl GetTriggerMgr();              // 0x00b3d4d0
 void* __cdecl GetUniverseContext();         // 0x01021080
 void* __cdecl IsArchivedState();            // 0x01021240
 void* __cdecl PlanetModel();                // 0x00b3d350
-void* __cdecl FUN_00b3d390(void*, void*);   // 0x00b3d390 (returns [0x167eb08], ignores args)
+struct ToolMgr_s00c3_b5c0 {
+    int  CreateToolFromToolID(void* pTool, void* pSlot);    // 0x0104e340 (ret 8)
+    void UseToolStop(void* pTool);                          // 0x0104fa90 (ret 4)
+};
+ToolMgr_s00c3_b5c0* __cdecl FUN_00b3d390();   // 0x00b3d390 ToolManager(): returns [0x167eb08]
 void* __cdecl FUN_00801920(void*);          // 0x00801920 (this+0x48)
 int   __cdecl FUN_00c8b520(void*);          // 0x00c8b520 (bool)
 float __cdecl FUN_01017030(int);            // 0x01017030
@@ -98,7 +102,7 @@ struct FnB184C0 { void  __thiscall f(); };           // 0x00b184c0 cGameData::~c
 struct FnBCAE90 { void  __thiscall f(); };           // 0x00bcae90 cAgentOrderManager::~cAgentOrderManager
 struct FnB18E40 { bool  __thiscall f(); };           // 0x00b18e40 (bool in AL)
 struct Fn104E340{ int   __thiscall f(unsigned int); };            // 0x0104e340 CreateToolFromToolID (ret 8)
-struct Fn104BD50{ int   __thiscall f(); };           // 0x0104bd50 (bool)
+struct Fn104BD50{ bool  __thiscall f(); };           // 0x0104bd50 (bool)
 struct Fn104FA90{ void  __thiscall f(void*); };      // 0x0104fa90 UseToolStop (ret 4)
 struct FnC38B10 { void  __thiscall f(); };           // 0x00c38b10
 struct FnC38B90 { void  __thiscall f(); };           // 0x00c38b90
@@ -720,16 +724,16 @@ void cSPGameDataUFO::UpdateDestinationFromTarget()
     if (pTarget == 0)
         return;
 
-    if ((*(U32*)((char*)pTarget + 4) >> 0x11) & 1) {
+    bool bit = ((*(U32*)((char*)pTarget + 4) >> 0x11) & 1) != 0;
+    if (bit) {
         mFlags84 |= 0x40;
         float f = *(float*)((char*)pTarget + 0x6c);
         mf090 = f;
         mf094 = f;
     }
     if ((*(U8*)((char*)pTarget + 6) & 1) != 0) {
-        float r = GetScaleFactor() * ((FnC37DC0*)this)->f();
         typedef void (__thiscall* Vf)(void*, void*, float);
-        ((Vf)(*(void**)(*(char**)((char*)this + 0x34) + 0x64)))(pLoco, (char*)pTarget + 0x70, r);
+        ((Vf)(*(void**)(*(char**)pLoco + 0x64)))(pLoco, (char*)pTarget + 0x70, GetScaleFactor() * ((FnC37DC0*)this)->f());
         mFlags84 = (mFlags84 & ~0x10) | 0x20;
     }
 }
@@ -757,21 +761,21 @@ bool cSPGameDataUFO::OnMessage(U32 messageID, int arg)
 void cSPGameDataUFO::SetNPCTool(void* pTool)
 {
     RefHolder* pSlot = &mRef790;
-    IRefObject* pKeep = pSlot->mpObject;
-    if (pKeep != 0)
-        pKeep->AddRef();
+    IRefObject* pKeep = 0;
+    IRefObject* pCur = pSlot->mpObject;
+    if (pCur != 0) {
+        pCur->AddRef();
+        pKeep = pCur;
+    }
     if (pSlot->mpObject != 0) {
         IRefObject* pOld = pSlot->mpObject;
         pSlot->mpObject = 0;
         pOld->Release();
     }
-    void* pMgr = FUN_00b3d390(pTool, pSlot);
-    ((Fn104E340*)pMgr)->f((unsigned int)pTool);
+    FUN_00b3d390()->CreateToolFromToolID(pTool, pSlot);
     if (pKeep != 0) {
-        if (((Fn104BD50*)pKeep)->f() && pKeep != pSlot->mpObject) {
-            void* pMgr2 = FUN_00b3d390(pKeep, 0);
-            ((Fn104FA90*)pMgr2)->f(pKeep);
-        }
+        if (((Fn104BD50*)pKeep)->f() && pKeep != pSlot->mpObject)
+            FUN_00b3d390()->UseToolStop(pKeep);
         pKeep->Release();
     }
 }

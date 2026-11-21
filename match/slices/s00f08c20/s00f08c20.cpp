@@ -162,6 +162,8 @@ struct UIState {
 extern UIState* g_16c7d90;        // 0x16c7d90
 extern UIState* g_16c7d94;        // 0x16c7d94
 extern UIState* g_16c7d98;        // 0x16c7d98
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 extern UIState* g_16c7d88;        // 0x16c7d88
 
 struct Global7aa4 { char pad[0x14]; void* ui14; char pad2[0x60]; void* day78; };
@@ -620,21 +622,23 @@ void CreateBubblePanels()
 // @ 0x00f096c0
 void ShutdownBubblePanels()
 {
-    UIState* st = g_16c7d88;
-    IWin* w = (IWin*)st->layout;
+    IWin* w = (IWin*)g_16c7d88->layout;
     if (w) {
-        st->layout = 0;
+        g_16c7d88->layout = 0;
         w->IRelease();
     }
-    st->ctx = 0;
+    g_16c7d88->ctx = 0;
     g_hash558.clearBuckets2(g_hash558.buckets, g_hash558.bucketCount);
     g_hash558.size = 0;
     g_hash538.clearBuckets(g_hash538.buckets, g_hash538.bucketCount);
     g_hash538.size = 0;
     ((Animator*)&g_animator)->ClearAll();
-    for (PBEntry* e = &g_pbEntries[0]; e < (PBEntry*)&g_animator; e++) {
-        if (e->layout)
+    for (int i = 0; i < 10; i++) {
+        PBEntry* e = &g_pbEntries[i];
+        if (e->layout) {
+            _ReadWriteBarrier();
             e->layout->SetVisibility(0);
+        }
         IWin* w2 = e->win;
         if (w2) {
             e->win = 0;

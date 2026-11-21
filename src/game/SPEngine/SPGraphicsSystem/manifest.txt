@@ -22,3 +22,4 @@
 ../src/game/SPEngine/SPGraphicsSystem.cpp  ?InitEditGifExportTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  007a5410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsSystem.cpp  ?InitDepthTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  007a5730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsSystem.cpp  ?InitShadowBlurTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  007a5860  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSystem.cpp  ?InitThumbnailBoundsTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  007a5a20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

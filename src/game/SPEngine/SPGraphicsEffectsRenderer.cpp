@@ -1686,7 +1686,7 @@ struct S8 {
     void mdd0(int a, int b);                                // 0x6ecdd0
     void me30(int a, int b, int c);                         // 0x6ece30
     void me90(int n, int* a, int* b);                       // 0x6ece90
-    void mf10();                                            // 0x6ecf10
+    void mf10(int unused);                                  // 0x6ecf10
     S8*  mfc0(void* src);                                   // 0x6ecfc0 (returns this)
     void md070();                                           // 0x6ed070
     void md1a0(int idx, char v);                            // 0x6ed1a0
@@ -4739,36 +4739,31 @@ void S8::me90(int n, int* a, int* b)
     }
 }
 
+extern "C" int g_1533cd0[10];   // 0x01533cd0 effect-resource ids (first list)
+extern "C" int g_1533ca8[10];   // 0x01533ca8 effect-resource ids (second list)
+struct VecInt_s006e_cf10 {
+    int* b;
+    int* e;
+    int* cap;
+    void DoInsertValue(int* pos, const int& v);   // 0x6ec4a0
+    void push_back(const int& v) {
+        if (e < cap) {
+            int* p = e;
+            e = p + 1;
+            if (p) *p = v;
+        } else {
+            DoInsertValue(e, v);
+        }
+    }
+};
 // @ 0x006ecf10
-void S8::mf10()
+void S8::mf10(int)
 {
     char* self = (char*)this;
-    for (int i = 0; i < 0x28; i += 4) {
-        int r = f_7c3af0(*(int*)(i + 0x1533cd0));
-        VecC* v = (VecC*)(self + 0x30d54);
-        int* p = v->e;
-        if (p < v->cap) {
-            v->e = p + 1;
-            if (p)
-                *p = r;
-        } else {
-            int loc = r;
-            f_grow4(v, &loc);
-        }
-    }
-    for (int i = 0; i < 0x28; i += 4) {
-        int r = f_7c3af0(*(int*)(i + 0x1533ca8));
-        VecC* v = (VecC*)(self + 0x30d68);
-        int* p = v->e;
-        if (p < v->cap) {
-            v->e = p + 1;
-            if (p)
-                *p = r;
-        } else {
-            int loc = r;
-            f_grow4(v, &loc);
-        }
-    }
+    for (unsigned i = 0; i < 10; ++i)
+        ((VecInt_s006e_cf10*)(self + 0x30d54))->push_back(f_7c3af0(g_1533cd0[i]));
+    for (unsigned i = 0; i < 10; ++i)
+        ((VecInt_s006e_cf10*)(self + 0x30d68))->push_back(f_7c3af0(g_1533ca8[i]));
 }
 
 // @ 0x006ecfc0

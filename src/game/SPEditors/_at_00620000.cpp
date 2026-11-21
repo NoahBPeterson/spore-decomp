@@ -805,18 +805,22 @@ Quaternion* __stdcall w_624e40(Quaternion* out, const Vector3* a, const Vector3*
 }
 
 // @ 0x0062ca80
+struct Vec3_s0062_ca80 { float x, y, z; };
+struct PtrVec_s0062_ca80 { char** mpBegin; char** mpEnd; };
+struct Placed_s0062_ca80 { char pad[0xc]; Vec3_s0062_ca80 mPos; };
 void __fastcall FUN_0062ca80(void* self)
 {
   char* s = (char*)self;
-  char* mgr = *(char**)(s + 0x14);
-  int n = (*(int*)(mgr + 0x80) - *(int*)(mgr + 0x7c)) >> 2;
+  PtrVec_s0062_ca80& v = *(PtrVec_s0062_ca80*)(*(char**)(s + 0x14) + 0x7c);
+  unsigned n = (unsigned)(v.mpEnd - v.mpBegin);
   if (n == 1) return;
-  for (int i = 0; i < n; ++i) {
-    char* c = *(char**)(*(int*)(mgr + 0x7c) + i * 4);
+  for (unsigned i = 0; i < n; ++i) {
+    char* c = (*(PtrVec_s0062_ca80*)(*(char**)(s + 0x14) + 0x7c)).mpBegin[i];
     if (c == s) continue;
-    char* e = *(char**)(*(char**)(c + 8) + 0x180);
-    float x = *(float*)(c + 0x20) + *(float*)(s + 0x20);
-    ((BlockPath*)*(void**)(s + 0x18))->BlockCircle(*(float*)(e + 0xc), *(float*)(e + 0x10), x, 1);
+    Placed_s0062_ca80* e = *(Placed_s0062_ca80**)(*(char**)(c + 8) + 0x180);
+    Vec3_s0062_ca80 pos = e->mPos;
+    float r = *(float*)(c + 0x20) + *(float*)(s + 0x20);
+    ((BlockPath*)*(void**)(s + 0x18))->BlockCircle(pos.x, pos.y, r, 1);
   }
 }
 

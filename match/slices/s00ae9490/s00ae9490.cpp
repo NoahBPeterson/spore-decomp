@@ -13,6 +13,10 @@
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_13eb938[];
 extern "C" char g_13ef094[];
+extern "C" char g_145bed8[];
+extern "C" char g_145bed4[];
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 #include "types.h"
 
@@ -233,7 +237,7 @@ struct AutoRef {
     AutoRef* Reset();                             // 0x00ae9790
 };
 
-void FUN_00aea170(void* p);                      // 0x00aea170
+struct EntryList50 { void FUN_00aea170(); };      // 0x00aea170 (thiscall)
 
 // ===========================================================================
 // 0x00ae9490 -- best visible entry matching (empire id, object id, priority)
@@ -867,8 +871,9 @@ Entry* Entry::ctor()
 void Entry::dtor()
 {
     int* p = (int*)m;
-    p[0] = 0x145bed8;
-    p[1] = 0x145bed4;
+    *(void* volatile*)&p[0] = g_145bed8;
+    p[1] = (int)g_145bed4;
+    _ReadWriteBarrier();
     void* a = *(void**)((char*)this + 0x8c);
     if (a && *(int*)((char*)a - 4) != 0)
         op_del(a);
@@ -878,24 +883,25 @@ void Entry::dtor()
     a = *(void**)((char*)this + 0x64);
     if (a && *(int*)((char*)a - 4) != 0)
         op_del(a);
-    FUN_00aea170((char*)this + 0x50);
+    ((EntryList50*)((char*)this + 0x50))->FUN_00aea170();
     void* r = *(void**)((char*)this + 0x40);
     if (r)
-        vt0(r, 1);
+        ((tc0_t)(*(void***)r)[1])(r);
     r = *(void**)((char*)this + 0x2c);
     if (r)
-        vt0(r, 1);
+        ((tc0_t)(*(void***)r)[1])(r);
     r = *(void**)((char*)this + 0x28);
     if (r)
-        vt0(r, 1);
+        ((tc0_t)(*(void***)r)[1])(r);
     r = *(void**)((char*)this + 0x24);
     if (r)
-        vt0(r, 1);
+        ((tc0_t)(*(void***)r)[1])(r);
     r = *(void**)((char*)this + 0x20);
     if (r)
-        vt0(r, 1);
-    p[0] = 0x13eb938;
-    p[1] = 0x13ef094;
+        ((tc0_t)(*(void***)r)[1])(r);
+    p[0] = (int)g_13eb938;
+    _ReadWriteBarrier();
+    p[1] = (int)g_13ef094;
 }
 
 // ===========================================================================

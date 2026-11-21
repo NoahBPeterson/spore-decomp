@@ -654,12 +654,11 @@ int ObjB0::FUN_007eb090()
     int count = 0;
     if (node == 0) {
         ++bucket;
-        node = *bucket;
-        while (node == 0) {
+        while (*bucket == 0)
             ++bucket;
-            node = *bucket;
-        }
+        node = *bucket;
     }
+    _ReadWriteBarrier();
     int end = *(int*)(*(int*)(self + 0x10) + *(int*)(self + 0x14) * 4);
     while (node != end) {
         int n = 0;
@@ -667,10 +666,8 @@ int ObjB0::FUN_007eb090()
             ++n;
         count += n;
         node = *(int*)(node + 0x10);
-        while (node == 0) {
-            ++bucket;
-            node = *bucket;
-        }
+        while (node == 0)
+            node = *++bucket;
     }
     return count;
 }

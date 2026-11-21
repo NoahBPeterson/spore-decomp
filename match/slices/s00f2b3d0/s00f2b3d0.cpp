@@ -311,7 +311,10 @@ void IntSet::insert(const int* first, const int* last)
 }
 
 // 0x00f2b9f0 (KeyMap::operator[]) map[key]: returns the value slot for key, inserting a zero value if absent.
-struct KeyPair { Key first; Key second; };
+struct KeyPair {
+    Key first; Key second;
+    KeyPair(const Key& a, const Key& b) : first(a), second(b) {}
+};
 struct KeyMap {
     KeyPair* b; KeyPair* e; KeyPair* c;
     char alloc[8];
@@ -335,9 +338,8 @@ Key* KeyMap::Lookup(const Key& k)
     KeyPair* end = e;
     KeyPair* it = LowerBound(b, end, &k, flag);
     if (it == end || KeyLess(k, it->first)) {
-        KeyPair p;
-        p.first = k;
-        p.second.a = 0; p.second.b = 0; p.second.c = 0;
+        Key v; v.a = 0; v.b = 0; v.c = 0;
+        KeyPair p(k, v);
         it = Insert(it, &p);
     }
     return &it->second;

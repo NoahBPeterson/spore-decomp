@@ -2307,6 +2307,22 @@ bool cSPUIFeedEditAssetView::FUN_0065c9a0(void* win)
   return false;
 }
 
+struct IMsgSrv_s0065_ca10 {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+  virtual void v8(); virtual void v9(); virtual void v10();
+  virtual void RemoveListener(void* h, uint32_t id, int pri);   // +0x2c
+};
+struct IObj20_s0065_ca10 {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+  virtual IObj20_s0065_ca10* Get();          // +0x20
+};
+struct IObj20b_s0065_ca10 {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+  virtual void Remove(void* o);              // +0x20
+};
 // @ 0x0065ca10
 void cSPUIFeedEdit::Shutdown()
 {
@@ -2314,21 +2330,18 @@ void cSPUIFeedEdit::Shutdown()
   if (!*(char*)(p + 0x91))
     return;
   ((cXHTMLFrameSet*)(p + 0x18))->FUN_00997140();
-  cSPUILayout_s0065_bf20* lay = *(cSPUILayout_s0065_bf20**)(p + 0x14);
-  lay->Shutdown(1);
-  if (lay) {
+  (*(cSPUILayout_s0065_bf20**)(p + 0x14))->Shutdown(1);
+  if (cSPUILayout_s0065_bf20* lay = *(cSPUILayout_s0065_bf20**)(p + 0x14)) {
     *(void**)(p + 0x14) = 0;
     (*(FnP)Vslot(lay, 8))(lay);
   }
   *(char*)(p + 0x91) = 0;
-  void* h = *(void**)(p + 0x10);
-  MessageServer_Unsub(h, 0x3cdd5f9, -1);
-  MessageServer_Unsub(h, 0x49a3777, -1);
-  MessageServer_Unsub(h, 0x1dd7bda9, -1);
-  MessageServer_Unsub(h, 0x3b27023, -1);
-  void* q = FUN_0067de40();
-  q = (*(FnRetP)Vslot(q, 0x20))(q);
-  (*(FnPv)Vslot(q, 0x20))(q, this);
+  void* h = p + 0x10;
+  ((IMsgSrv_s0065_ca10*)MessageServer())->RemoveListener(h, 0x3cdd5f9, -9999);
+  ((IMsgSrv_s0065_ca10*)MessageServer())->RemoveListener(h, 0x49a3777, -9999);
+  ((IMsgSrv_s0065_ca10*)MessageServer())->RemoveListener(h, 0x1dd7bda9, -9999);
+  ((IMsgSrv_s0065_ca10*)MessageServer())->RemoveListener(h, 0x3b27023, -9999);
+  ((IObj20b_s0065_ca10*)((IObj20_s0065_ca10*)FUN_0067de40())->Get())->Remove(this);
 }
 
 // @ 0x0065cae0

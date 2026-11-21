@@ -195,7 +195,8 @@ virtual void g68();
 virtual void g6c();
 virtual void g70();
 virtual void g74();
-    virtual void* GetNextMission();   // +0x78
+    virtual void g78();               // +0x78
+    void* GetNextMission();           // 0x00c2f430 SP::cSPCreatureTutorialMission::GetNextMission
 };
 struct MissionMgr {
 virtual void v00();
@@ -232,7 +233,7 @@ virtual void v09();
     void __thiscall OnStrategyGone(unsigned id);        // 0x00b700f0
     void __thiscall Dtor();                             // 0x00b705a0
     IRefLite* __thiscall Hint(unsigned key);            // 0x00b706a0
-    unsigned __thiscall HintClear(unsigned id);         // 0x00b707a0
+    bool __thiscall HintClear(unsigned id);             // 0x00b707a0
 };
 // ---- items of slice s00b6f4f0 end
 
@@ -2532,13 +2533,14 @@ void __fastcall FUN_00b7d7b0(ListNode** p);
 // ---- items of slice s00b7cc60 end
 
 // @ 0x00b707a0
-unsigned __thiscall MissionMgr::HintClear(unsigned id)
+bool __thiscall MissionMgr::HintClear(unsigned id)
 {
+    HashUIntARC& h = mStrategyMap;
     HashIt it;
-    ((HashFind*)&mStrategyMap)->find(&it, &id);
-    unsigned val = (unsigned)it.node;
-    if (it.node != mStrategyMap.mpBucket[mStrategyMap.mnBucketCount]) {
-        MissionStrategy* s = *(MissionStrategy**)((char*)it.node + 4);
+    unsigned key = id;
+    void* node = ((HashFind*)&h)->find(&it, &key)->node;
+    if (node != h.mpBucket[h.mnBucketCount]) {
+        MissionStrategy* s = *(MissionStrategy**)((char*)node + 4);
         if (s) {
             s->Step();
             TutorialMission* t = (TutorialMission*)s->Cast(0xd4066db3);
@@ -2546,10 +2548,10 @@ unsigned __thiscall MissionMgr::HintClear(unsigned id)
                 void* next = t->GetNextMission();
                 if (next) Hint((unsigned)next);
             }
-            val = this->g28(0);
+            this->g28(0);
         }
     }
-    return val & 0xffffff00u;
+    return false;
 }
 
 // @ 0x00b70820

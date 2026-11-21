@@ -20,8 +20,6 @@
 008d5fe0 181 SetLocation: complete; retail takes a third unused stack argument (ret 0xc) that the modelled signature omits, and cl15 duplicates the return-false epilogue per site where the original shares one block
 008d62f0 205 reconstruction (DatabaseDirectoryFiles::RemoveRecord); flags /O2 /MD /GS- /GR- /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference: SetSource, defined in the sibling migrated slice s008d7220)
 008d6410 31 reconstruction (DatabaseDirectoryFiles::CloseUnreferencedRecords); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the record stream path blocks on import:WaitForSingleObject)
-008d64a0 94 reconstruction (KeyTreeErase); flags as above; difftest FAIL (5/5 valid inputs mismatched; ours faults at 00a21dd6 = retail rbtree::find where the original returns)
-008d6510 104 reconstruction (ListRefAppend); flags as above; difftest FAIL (5/5 valid inputs mismatched: execution diverges inside the copied list nodes)
 008dcea0 387 PFRecordWrite ctor; MemoryStream/FileStream Construct + temp-file open path codegen differs (equiv UNSUPPORTED: unresolved stub MemoryStream SetOption/SetData/GetData)
 008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs

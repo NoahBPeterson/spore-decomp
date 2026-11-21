@@ -32,6 +32,7 @@ void* __cdecl FUN_010212a0();
 void* __cdecl FUN_01021370();
 void  __cdecl FUN_01041c50(const char* name, int key, int flag);
 int   __cdecl FUN_00b8de30(int a);
+struct cBioElemSort { unsigned SortBanners(); };   // 0x00b8de30
 int   __cdecl FUN_00b8dab0();                            // (this-shaped, unused directly)
 int   __cdecl FUN_00bb9ae0();
 char  __cdecl FUN_00bb9af0(int a);
@@ -387,24 +388,22 @@ void __fastcall FUN_00c4e0f0(void* ecx_this, void* edx, u32 msg, void* arg)
 // @ 0x00c4e1a0
 void __fastcall FUN_00c4e1a0(void* ecx_this, void* edx, int which)
 {
-    if (which == 1) {
+    switch (which) {
+    case 1:
         if (((SP::ThisStubs*)ecx_this)->IsActive()) {
-            void* tp = ((SP::ThisStubs*)ecx_this)->GetTargetPlanet();
-            if (tp == (void*)FUN_01021260())
+            if (((SP::ThisStubs*)ecx_this)->GetTargetPlanet() == (void*)FUN_01021260())
                 FUN_01041c50("SPG_ColonizeMissionPlanet", (int)0xb1a88fd1, 1);
         }
-    } else if (which == 3) {
+        break;
+    case 3:
         if (((SP::ThisStubs*)ecx_this)->IsActive()) {
-            void* tp = ((SP::ThisStubs*)ecx_this)->GetTargetPlanet();
-            if (tp) {
-                void* a = FUN_01021230();
-                int x = *(int*)((char*)a + 0x48);
-                void* tp2 = ((SP::ThisStubs*)ecx_this)->GetTargetPlanet();
-                int y = FUN_00b8de30(*(int*)((char*)tp2 + 0x13c));
-                if (x == y)
+            if (((SP::ThisStubs*)ecx_this)->GetTargetPlanet()) {
+                int x = *(int*)((char*)FUN_01021230() + 0x48);
+                if (x == (int)(*(cBioElemSort**)((char*)((SP::ThisStubs*)ecx_this)->GetTargetPlanet() + 0x13c))->SortBanners())
                     FUN_01041c50("SPG_ColonizeMissionSolar", (int)0x45a6efc2, 1);
             }
         }
+        break;
     }
 }
 

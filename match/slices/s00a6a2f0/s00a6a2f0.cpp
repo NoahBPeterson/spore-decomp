@@ -619,18 +619,20 @@ VecRec84& VecRec84::assign(const VecRec84& o)
 // @ 0x00a6afe0
 SlotVec* SlotVec::init(unsigned n, unsigned unused)
 {
-    char* buf = 0;
+    char* buf;
     if (n != 0)
         buf = (char*)operator_new(n * 0x14, kEastlTag, 0, 0, kEastlAllocFile, 0xd1);
+    else
+        buf = 0;
     cap = buf + n * 0x14;
     b = buf;
     e = buf;
-    RefVec local;
-    local.b = 0;
-    local.e = 0;
-    local.cap = 0;
-    FillSlots20N((Slot20*)buf, n, (const Slot20*)&local, (Slot20*)n);
-    local.DestroyRange((RefObject**)0, (RefObject**)0);
+    struct { RefVec vec; unsigned d10, d14; } local;   // Slot20-shaped fill value
+    local.vec.b = 0;
+    local.vec.e = 0;
+    local.vec.cap = 0;
+    FillSlots20N((Slot20*)buf, n, (const Slot20*)&local, *(Slot20* volatile*)&n);
+    local.vec.DestroyRange((RefObject**)0, (RefObject**)0);
     e = b + n * 0x14;
     return this;
 }

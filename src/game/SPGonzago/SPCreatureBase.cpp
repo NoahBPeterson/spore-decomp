@@ -9335,15 +9335,24 @@ void* __thiscall CAN::fe30(void* src)
 }
 
 // @ 0x00c0fea0
+struct AnimBind_c0fea0 {      // 0x24-byte animation binding record
+    int    m00, m04, m08, m0c, m10;
+    float  m14;
+    bool   m18;
+    int    m1c;
+    void*  m20;                // animation object (vtable +0xbc lock / +0xc0 unlock)
+    AnimBind_c0fea0(const AnimBind_c0fea0& o)
+        : m00(o.m00), m04(o.m04), m08(o.m08), m0c(o.m0c), m10(o.m10),
+          m14(o.m14), m18(o.m18), m1c(o.m1c), m20(o.m20) {}
+};
 void __cdecl FUN_00c0fea0(int* src, int* dst)
 {
-    int local[9];
-    for (int i = 0; i < 9; ++i) local[i] = src[i];
-    void* p = (void*)src[8];
-    if (p != 0) (*(void(__thiscall**)(void*))((*(void***)p)[0xbc / 4]))(p);
+    AnimBind_c0fea0 local = *(AnimBind_c0fea0*)src;
+    void* p = ((AnimBind_c0fea0*)src)->m20;
+    if (p != 0) (*(void(__thiscall**)(void*))(*(char**)p + 0xbc))(p);
     ((CAN*)src)->fe30(dst);
-    ((CAN*)dst)->fe30(local);
-    if (p != 0) (*(void(__thiscall**)(void*))((*(void***)p)[0xc0 / 4]))(p);
+    ((CAN*)dst)->fe30(&local);
+    if (p != 0) (*(void(__thiscall**)(void*))(*(char**)p + 0xc0))(p);
 }
 
 // @ 0x00c0ffc0

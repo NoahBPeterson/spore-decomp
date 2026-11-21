@@ -69,7 +69,12 @@ extern const float kVelocityAccel;             // 0x152187c
 
 struct cSPVector3_s0062_4fb0 {
     float x, y, z;
+    cSPVector3_s0062_4fb0& operator+=(const cSPVector3_s0062_4fb0& v) { x += v.x; y += v.y; z += v.z; return *this; }
 };
+inline cSPVector3_s0062_4fb0 operator-(const cSPVector3_s0062_4fb0& a, const cSPVector3_s0062_4fb0& b)
+{ cSPVector3_s0062_4fb0 r; r.x = a.x - b.x; r.y = a.y - b.y; r.z = a.z - b.z; return r; }
+inline cSPVector3_s0062_4fb0 operator*(const cSPVector3_s0062_4fb0& a, float s)
+{ cSPVector3_s0062_4fb0 r; r.x = a.x * s; r.y = a.y * s; r.z = a.z * s; return r; }
 struct Vector3Copy {   // Math::Vector3 with a user copy ctor (per-field copy, movss)
     float x, y, z;
     Vector3Copy() {}
@@ -884,9 +889,7 @@ void cCreatureCameraDepends_s0062_4fb0::UpdateOffsets(float dt)
         FUN_006280d0(mAnimCreature->mPos, 0);
     }
     float t = SseClamp(dt, 0.01f, 0.15f);
-    mActualCameraPositionOffset.x = mActualCameraPositionOffset.x + (mTargetCameraPositionOffset.x - mActualCameraPositionOffset.x) * t * 10.0f;
-    mActualCameraPositionOffset.y = (mTargetCameraPositionOffset.y - mActualCameraPositionOffset.y) * t * 10.0f + mActualCameraPositionOffset.y;
-    mActualCameraPositionOffset.z = (mTargetCameraPositionOffset.z - mActualCameraPositionOffset.z) * t * 10.0f + mActualCameraPositionOffset.z;
+    mActualCameraPositionOffset += (mTargetCameraPositionOffset - mActualCameraPositionOffset) * t * 10.0f;
 }
 }  // namespace SP
 

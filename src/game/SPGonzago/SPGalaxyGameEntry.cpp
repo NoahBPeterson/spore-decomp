@@ -2890,7 +2890,7 @@ public:
     uint32_t  FUN_00deefb0(uint32_t key);
     void      FUN_00dee9a0(float a, float b);
     void      FUN_00dee770(uint32_t id, void* refObj);
-    void      FUN_00dee800(uint32_t id);
+    void      FUN_00dee800(uint32_t id, uint32_t imageId);
     char      FUN_00dee450(int msg, void* ctx);
     char      FUN_00def050(void* nameObj);
 };
@@ -4699,6 +4699,26 @@ struct sHashTable {
     void Insert(sInsertResult* pOut, const sKeyValuePair* pPair, bool bFindExisting); // 0x00aeb960
     void DestroyBuckets(sHashNode** pBuckets, uint32_t nBucketCount);     // 0x00aeb030
     void DestroyStringBuckets(sHashNode** pBuckets, uint32_t nBucketCount); // 0x00de2350
+    void Reset() {
+        DestroyBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void ResetStrings() {
+        DestroyStringBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void Free() {
+        DestroyBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            SP::DeleteArray(mpBuckets);
+    }
+    void FreeStrings() {
+        DestroyStringBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            SP::DeleteArray(mpBuckets);
+    }
 };
 class cPropertyTableTriple {
 public:
@@ -8353,7 +8373,15 @@ struct cGameInfo_s00df_8730 {                                         // size 0x
     uint32_t mFieldb0;                                     // +0xb0
     uint32_t mFieldb4;                                     // +0xb4
     cGameUIData_s00df_8730* mpUIData;                                 // +0xb8
+    cGameInfo_s00df_8730& operator=(const cGameInfo_s00df_8730& other);   // 0x00b26fb0
 };
+inline cGameInfo_s00df_8730* CopyGameInfos(cGameInfo_s00df_8730* first, cGameInfo_s00df_8730* last,
+                                           cGameInfo_s00df_8730* dest)
+{
+    for (; first != last; ++first, ++dest)
+        *dest = *first;
+    return dest;
+}
 struct cGGECamera {
     void GetTransform(Transform& t);                       // 0x00dde590
     Transform GetTransform() { Transform t; GetTransform(t); return t; }
@@ -9780,29 +9808,17 @@ void cPropertyTableTriple::LoadStringPairs(uint32_t nObject, uint32_t nProperty)
 // @ 0x00de29f0
 void cPropertyTableTriple::Clear()
 {
-    mTable0.DestroyBuckets(mTable0.mpBuckets, mTable0.mnBucketCount);
-    mTable0.mnElementCount = 0;
-    mTable1.DestroyBuckets(mTable1.mpBuckets, mTable1.mnBucketCount);
-    mTable1.mnElementCount = 0;
-    mTable2.DestroyStringBuckets(mTable2.mpBuckets, mTable2.mnBucketCount);
-    mTable2.mnElementCount = 0;
+    mTable0.Reset();
+    mTable1.Reset();
+    mTable2.ResetStrings();
 }
 
 // @ 0x00de2a50
 void cPropertyTableTriple::Destroy()
 {
-    mTable2.DestroyStringBuckets(mTable2.mpBuckets, mTable2.mnBucketCount);
-    mTable2.mnElementCount = 0;
-    if (mTable2.mnBucketCount > 1)
-        SP::DeleteArray(mTable2.mpBuckets);
-    mTable1.DestroyBuckets(mTable1.mpBuckets, mTable1.mnBucketCount);
-    mTable1.mnElementCount = 0;
-    if (mTable1.mnBucketCount > 1)
-        SP::DeleteArray(mTable1.mpBuckets);
-    mTable0.DestroyBuckets(mTable0.mpBuckets, mTable0.mnBucketCount);
-    mTable0.mnElementCount = 0;
-    if (mTable0.mnBucketCount > 1)
-        SP::DeleteArray(mTable0.mpBuckets);
+    mTable2.FreeStrings();
+    mTable1.Free();
+    mTable0.Free();
 }
 
 // @ 0x00de2ae0
@@ -13730,21 +13746,24 @@ void SP::GalaxyUI::FUN_00dee770(uint32_t id, void* refObj)
         ((VF0)(*(void***)res)[1])(res);    // Release
 }
 
+struct ImageRef_s00dee800 {
+    void* mpImage;
+    ImageRef_s00dee800() : mpImage(0) {}
+    ~ImageRef_s00dee800() { if (mpImage) ((VF0)(*(void***)mpImage)[1])(mpImage); }
+};
 // @ 0x00dee800
-void SP::GalaxyUI::FUN_00dee800(uint32_t id)
+void SP::GalaxyUI::FUN_00dee800(uint32_t id, uint32_t imageId)
 {
     void* w = mLayout.FindWindowByID(id, 1);
     if (w == 0) return;
-    void** wvt = *(void***)w;
-    void*  d   = ((VFP)wvt[0xa8 / 4])(w);
+    void* d = ((VFP)(*(void***)w)[0xa8 / 4])(w);
     if (d == 0) return;
-    void** dvt = *(void***)d;
-    void*  obj = ((VFP1)dvt[0x0c / 4])(d, 0x53eb526);
+    void* obj = ((VFP1)(*(void***)d)[0x0c / 4])(d, 0x53eb526);
     if (obj == 0) return;
-    void*  res = 0;
-    CreateImageFromResource2((void*)(size_t)id, &res, 0, -1, -1);
-    ((UIDrawable*)obj)->SetImageIcon(0, res);
-    ((VF0)wvt[0x90 / 4])(w);
+    ImageRef_s00dee800 image;
+    CreateImageFromResource2((void*)(size_t)imageId, &image.mpImage, 0, -1, -1);
+    ((UIDrawable*)obj)->SetImageIcon(0, image.mpImage);
+    ((VF0)(*(void***)w)[0x90 / 4])(w);
 }
 
 // @ 0x00dee890
@@ -16536,19 +16555,17 @@ void cGalaxyGameEntryScreen_s00df_8730::BuildGames()
 // @ 0x00df9510
 void cGalaxyGameEntryScreen_s00df_8730::ClearGames()
 {
-    sp_vector_s00df_8730<cGameInfo_s00df_8730>& games = mGames;
-    uint32_t count = games.size();
+    uint32_t count = mGames.size();
     for (uint32_t i = 0; i < count; ++i) {
-        if (games[i].mpUIData)
-            FUN_00df9190((cGameUIDataBlock*)games[i].mpUIData);
-        games[i].mFieldb4 = 0;
-        games[i].mpUIData = 0;
+        if (mGames[i].mpUIData)
+            FUN_00df9190((cGameUIDataBlock*)mGames[i].mpUIData);
+        mGames[i].mFieldb4 = 0;
+        mGames[i].mpUIData = 0;
     }
+    sp_vector_s00df_8730<cGameInfo_s00df_8730>& games = mGames;
     cGameInfo_s00df_8730* first = games.mpBegin;
     cGameInfo_s00df_8730* last = games.mpEnd;
-    cGameInfo_s00df_8730* dst = first;
-    for (cGameInfo_s00df_8730* p = last; p != games.mpEnd; ++p, ++dst)
-        *dst = *p;
+    cGameInfo_s00df_8730* dst = CopyGameInfos(last, games.mpEnd, first);
     games.DestroyRange(dst, games.mpEnd);
     games.mpEnd -= (last - first);
 }

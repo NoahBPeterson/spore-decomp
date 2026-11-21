@@ -3,7 +3,6 @@
 0065c790 23 ctor: complete; dead base-vtable store and register choice differ
 0065c840 282 SetMode: complete; vcall scheduling/register allocation differs
 0065c9a0 76 OnTick: complete; float x87 compare and vcall schedule differ
-0065ca10 92 cSPUIFeedEdit::Shutdown: complete; IHandlerRC/MessageServer schedule differs
 0065cae0 117 enabled-state helper: complete; bool folding differs
 0065cc50 86 page-button enable helper: complete; register allocation differs
 0065ccd0 50 GetAssetIndex: complete; loop register allocation differs

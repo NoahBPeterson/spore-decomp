@@ -2,7 +2,6 @@
 006ec730  108  complete; state ctor, register/temp ordering differs (extra esi zero reg) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006ecdd0  77  complete; vector<Pair3> push_back fast path fixed (p==0 returns); slow-path/local temp layout differs. equiv PASS (291 valid, 100% cov).
 006ece90  110  complete; vector<Pair3> fill_n loop, schedule differs
-006ecf10  98  complete; builds two resource-vector lists, loop shape/register differs
 006ecfc0  141  complete; struct copy-assign with dword pointer compare, thiscall FUN_006ebd20 on d+4, returns this; field schedule differs. equiv WEAK (148 valid, 100% cov, no mismatch).
 006ed1a0  101  complete; cVecU16::push_back thiscall on self+0x5c; register/schedule differs. equiv PASS (351 valid, 100% cov).
 006ed210  144  complete; teardown + SPVector<unsigned int>::DoInsertValue thiscall on self+0x19c (p==0 returns); schedule differs. equiv PASS (321 valid, 93.1% cov).

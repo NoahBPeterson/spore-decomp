@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0071dbf0 99 writer: WriteUint32(count) + WriteUint16(format) then vtable +0x38 rows: complete; ours reserves a 4-byte local the original homes in an incoming argument slot. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0071dcc0 167 Model::sumSection over stride-0x14 sections with two int8 tables: complete; compiler hoists the per-mesh section count (the original recomputes it) and so also clobbers ecx, ours 192 vs 180 bytes. equiv FAIL (ecx untouched by original); callerdeps 71dcc0 ecx = SAFE flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0071dd80 29 Vec20_find(v, key) over stride-0x20 entries: complete; begin/end load order and a 2-byte vs 1-byte nop padding differ. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0071ddc0 88 Model::findStreamEntry(sem, usage, number, type): complete; original keeps a byte-offset induction and reloads the stream base, ours 101 vs 113 bytes. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

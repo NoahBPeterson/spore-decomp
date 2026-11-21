@@ -720,7 +720,8 @@ struct RefOps {
     void* __thiscall AssignA(void* src);       // 0x00ca0940
     void* __thiscall AssignB(void* src);       // 0x00ca09a0
 };
-struct E18 { void* p; float f0, f1, f2; unsigned u0, u1; };
+struct V3f_E18 { float x, y, z; };
+struct E18 { void* p; V3f_E18 v; unsigned u0, u1; };
 struct E16 { void* p; unsigned u0, u1; unsigned char b0; };
 // ---- items of slice s00c9ffd0 end
 
@@ -1595,7 +1596,6 @@ extern "C" void* __cdecl FUN_00f473a0(uint32_t size, const char* name, int a, in
 extern "C" void  __cdecl FUN_0093a780(void* stream, void* out, int n, int b);                          // 0x0093a780 ReadInt32
 extern "C" void  __cdecl FUN_0093aa70(void* stream, void* out, int n, int b);                          // 0x0093aa70 WriteUint32
 extern "C" void* __cdecl FUN_0093c5a0(void* out, int value, int unused);                               // 0x0093c5a0 EA::ConvertToString16
-extern "C" void  __cdecl FUN_00ca44f0(void* begin, int i, int n, int i2);                              // 0x00ca44f0 heap sift-down
 extern "C" char  __cdecl FUN_00ac8050(void* archive, int key, void* elem);                             // 0x00ac8050 read list element
 extern "C" void* __cdecl FUN_00b3d290(void* str, void* v);                                             // 0x00b3d290
 extern "C" void* __cdecl FUN_01021300();                                                               // 0x01021300 SP::cSPLivingUniverse::GetPlayerEmpire
@@ -1711,7 +1711,6 @@ struct cCity_s00ca_75e0 {
     cSPVector3_s00ca_75e0* FUN_00fa0e00();  // 0x00fa0e00 GetPositionPtr
     void*       FUN_00bd8210();  // 0x00bd8210 GetContinent
 };
-extern "C" void  __cdecl FUN_00ca4600(void* begin, void* end, cSPVector4_s00ca_75e0 v);                           // 0x00ca4600 heap pop
 extern "C" cPlanetModel_s00ca_75e0* __cdecl FUN_00b3d350_s00ca_75e0();                                                       // 0x00b3d350 SP::PlanetModel
 struct OrderMgr { void* FUN_00bcb2a0(); void FUN_00bcae90(); };  // 0x00bcb2a0 ctor / 0x00bcae90 dtor
 struct RcObj    { void FUN_00ac65d0(); };                        // 0x00ac65d0
@@ -4087,27 +4086,23 @@ void __cdecl FUN_00ca0ba0(void** first, void** last)
 // @ 0x00ca0cf0
 E18* __cdecl FUN_00ca0cf0(E18* s, E18* last, E18* d)
 {
-    if (s == last) return d;
-    do {
+    while (s != last) {
         if (d) {
             d->p = s->p;
             if (d->p) (*(TFnV)VTFN(d->p, 0))(d->p);
-            d->f0 = s->f0;
-            d->f1 = s->f1;
-            d->f2 = s->f2;
+            d->v = s->v;
             d->u0 = s->u0;
             d->u1 = s->u1;
         }
         s++; d++;
-    } while (s != last);
+    }
     return d;
 }
 
 // @ 0x00ca0da0
 E18* __cdecl FUN_00ca0da0(E18* s, E18* last, E18* d)
 {
-    if (s == last) return d;
-    do {
+    while (s != last) {
         void* nw = s->p;
         void* old = d->p;
         if (nw != old) {
@@ -4115,21 +4110,18 @@ E18* __cdecl FUN_00ca0da0(E18* s, E18* last, E18* d)
             d->p = nw;
             if (old) (*(TFnV)VTFN(old, 1))(old);
         }
-        d->f0 = s->f0;
-        d->f1 = s->f1;
-        d->f2 = s->f2;
+        d->v = s->v;
         d->u0 = s->u0;
         d->u1 = s->u1;
         s++; d++;
-    } while (s != last);
+    }
     return d;
 }
 
 // @ 0x00ca0e10
 E18* __cdecl FUN_00ca0e10(E18* first, E18* s, E18* d)
 {
-    if (s == first) return d;
-    do {
+    while (s != first) {
         s--; d--;
         void* nw = s->p;
         void* old = d->p;
@@ -4138,12 +4130,10 @@ E18* __cdecl FUN_00ca0e10(E18* first, E18* s, E18* d)
             d->p = nw;
             if (old) (*(TFnV)VTFN(old, 1))(old);
         }
-        d->f0 = s->f0;
-        d->f1 = s->f1;
-        d->f2 = s->f2;
+        d->v = s->v;
         d->u0 = s->u0;
         d->u1 = s->u1;
-    } while (s != first);
+    }
     return d;
 }
 
@@ -5370,6 +5360,42 @@ void __cdecl FUN_00ca7690(cListArchive* a, void** vec)
     a->v1c();
 }
 
+struct RefObj_ca77 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void v15();
+    virtual void v16();
+    virtual void v17();
+    virtual void AddRef();     // +0x60
+};
+struct RefPtr_ca77 {
+    RefObj_ca77* p;
+    __forceinline RefPtr_ca77(const RefPtr_ca77& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct Vec4c_ca77 {
+    float x, y, z, w;
+    __forceinline Vec4c_ca77(const cSPVector4_s00ca_75e0& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
+};
+extern "C" void  __cdecl FUN_00ca44f0(void* begin, int i, int n, int i2, RefPtr_ca77 val, Vec4c_ca77 v);   // 0x00ca44f0 heap sift-down
 // @ 0x00ca77b0
 void __cdecl FUN_00ca77b0(char* begin, char* end, cSPVector4_s00ca_75e0 v)
 {
@@ -5379,20 +5405,17 @@ void __cdecl FUN_00ca77b0(char* begin, char* end, cSPVector4_s00ca_75e0 v)
     int i = ((n - 2) >> 1) + 1;
     do {
         --i;
-        void* elem = *(void**)(begin + i * 4);
-        if (elem)
-            ((void(__cdecl*)(void*, cSPVector4_s00ca_75e0))VF(elem, 0x60 / 4))(elem, v);
-        FUN_00ca44f0(begin, i, n, i);
+        FUN_00ca44f0(begin, i, n, i, ((RefPtr_ca77*)begin)[i], v);
     } while (i != 0);
 }
 
+extern "C" void  __cdecl FUN_00ca4600(void* begin, void* end, Vec4c_ca77 v);                           // 0x00ca4600 heap pop
 // @ 0x00ca7830
 void __cdecl FUN_00ca7830(char* begin, char* end, cSPVector4_s00ca_75e0 v)
 {
-    for (int u = (int)(end - begin); 4 < (u & ~3); u -= 4) {
-        FUN_00ca4600(begin, end, v);
-        end -= 4;
-    }
+    void** first = (void**)begin;
+    for (void** last = (void**)end; (last - first) > 1; --last)
+        FUN_00ca4600(first, last, v);
 }
 
 // @ 0x00ca78a0

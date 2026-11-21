@@ -62,7 +62,22 @@ struct VTab {
     virtual void  v78(void*, int);
     virtual void  v7c();
 };
-struct SimpleVec { void DoInsertValue(unsigned* pos, const unsigned& v); };  // 0x004558A0
+extern "C" char g_14405d0[];
+struct SimpleVec {
+    unsigned* begin;
+    unsigned* end;
+    unsigned* cap;
+    void DoInsertValue(unsigned* pos, const unsigned& v);  // 0x004558A0
+    void push_back(const unsigned& v) {
+        if (end < cap) {
+            unsigned* p = end;
+            end = p + 1;
+            if (p) *p = v;
+        } else {
+            DoInsertValue(end, v);
+        }
+    }
+};
 struct ImageTable {
     char      _m[0x30];
     unsigned* begin;             // +0x30
@@ -97,15 +112,8 @@ void* __cdecl GetGlobalImageTable()
 // @ 0x00957bb0
 void ImageTable::Add(void* obj, uchar k)
 {
-    ((Ext*)this)->Lock((const void*)0x14405d0);
-    unsigned v = (unsigned)obj + (unsigned)k;
-    unsigned* end = this->end;
-    if (end < this->cap) {
-        this->end = end + 1;
-        if (end) *end = v;
-    } else {
-        ((SimpleVec*)((char*)this + 0x30))->DoInsertValue(end, v);
-    }
+    ((Ext*)this)->Lock(g_14405d0);
+    ((SimpleVec*)&begin)->push_back((unsigned)obj + (unsigned)k);
     ((VTab*)obj)->v00();
     Mutex_Unlock(this);
 }

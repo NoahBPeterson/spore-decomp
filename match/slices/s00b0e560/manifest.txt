@@ -9,3 +9,4 @@ slices/s00b0e560/s00b0e560.cpp  ?FUN_00b0f240@InputHost@@QAEXPAM00@Z  00b0f240  
 slices/s00b0e560/s00b0e560.cpp  ?FUN_00b0f060@@YAMMMM@Z  00b0f060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b0e560/s00b0e560.cpp  ?ReadRenderQueueSlots@@YAXPAUQueueInputHost@@PAUQueueObjectVector@@I@Z  00b0e560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b0e560/s00b0e560.cpp  ?FUN_00b0f0c0@@YAMMMM@Z  00b0f0c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b0e560/s00b0e560.cpp  ?FUN_00b0e610@cRenderQueue@@QAE_NH@Z  00b0e610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

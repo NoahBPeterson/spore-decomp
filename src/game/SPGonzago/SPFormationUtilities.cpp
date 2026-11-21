@@ -214,7 +214,8 @@ struct cSearchHost {
     int32_t     mnIndex;                            // +0x08
 
     int32_t*    FindAndInsert(const void* pKey);    // 0x00afc030
-    void        FUN_00afb7e0(void* pA, void* pB, int32_t nFlags); // 0x00afb7e0
+    struct tHint { char c; };
+    void        FUN_00afb7e0(void* pA, void* pB, tHint hint); // 0x00afb7e0
 };
 // ---- items of slice s00afbaf0 end
 
@@ -570,7 +571,6 @@ int32_t* cSearchHost::FindAndInsert(const void* pKey)
     if (aSlot[0] == mpTable[mnIndex]) {
         tInsertArgs aValue;
         aValue.nKey = *(int32_t*)pKey;
-        pKey = (const void*)((uint32_t)pKey & 0xFFFFFF00);
         aValue.f0 = 0.0f;
         aValue.f1 = g_fSpace;
         aValue.f2 = g_fSpaceB;
@@ -578,7 +578,9 @@ int32_t* cSearchHost::FindAndInsert(const void* pKey)
         aValue.f4 = g_fSpace;
         aValue.f5 = g_fSpaceB;
         aValue.f6 = g_fSpaceC;
-        FUN_00afb7e0(aSlot, &aValue, (int32_t)pKey);
+        tHint hint;
+        hint.c = 0;
+        FUN_00afb7e0(aSlot, &aValue, hint);
     }
     return (int32_t*)(aSlot[0] + 4);
 }

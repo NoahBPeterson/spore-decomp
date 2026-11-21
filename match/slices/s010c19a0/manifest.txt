@@ -5,3 +5,4 @@ slices/s010c19a0/s010c19a0.cpp  ?getCollisionSpheres@hkCapsuleShape@@UBEPBVhkSph
 slices/s010c19a0/s010c19a0.cpp  ??0hkCapsuleShape@@QAE@ABUhkVector4@@0M@Z  010c2730  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010c19a0/s010c19a0.cpp  ??1hkConvexVerticesShape@@UAE@XZ  010c21c0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010c19a0/s010c19a0.cpp  ?sortPoints@hkAllCdPointCollector@@QAEXXZ  010c2570  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010c19a0/s010c19a0.cpp  ?calcStatistics@hkConvexVerticesShape@@UBEXPAVhkStatisticsCollector@@@Z  010c1f40  /vc71 /O2 /MD /Gy /EHsc /TP

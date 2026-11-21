@@ -28,6 +28,11 @@ void  __cdecl operator_delete__(void*);                          // 0x00f47380
 void  __cdecl DoInsertValue(char*, const char*, uint32_t);   // 0x11e0744
 char* __cdecl SearchStr(void*, void*, void*, void*);         // 0x609d50
 template <typename T> static const T& min_alt(const T& a, const T& b) { return b < a ? b : a; }
+static __forceinline char* UninitCopy(const char* pSource, const char* pSourceEnd, char* pDest)
+{
+    DoInsertValue(pDest, pSource, (uint32_t)(pSourceEnd - pSource));
+    return pDest + (pSourceEnd - pSource);
+}
 struct RawStr {
     char* mpBegin;
     char* mpEnd;
@@ -44,6 +49,20 @@ struct RawStr {
     void AppendRange(const char* first, const char* last); // 0x455d60
     void Erase(uint32_t pos, uint32_t n);             // 0x61e200
     RawStr* AppendStr(const char* s);                 // 0x60c4e0
+    __forceinline void RangeInitialize(const char* pBegin, const char* pEnd)
+    {
+        const uint32_t n = (uint32_t)(pEnd - pBegin);
+        RangeInitialize(n + 1);
+        mpEnd = UninitCopy(pBegin, pEnd, mpBegin);
+        *mpEnd = 0;
+    }
+    __forceinline void CopyInit(const RawStr& x)
+    {
+        mpBegin = 0;
+        mpEnd = 0;
+        mpCapacity = 0;
+        RangeInitialize(x.mpBegin, x.mpEnd);
+    }
 };
 struct Ent {                 // 0x20 bytes
     int    field0;           // +0
@@ -647,21 +666,12 @@ int RawStr::Find(const char* p, uint32_t pos)
 // @ 0x00838ab0
 Ent* Ent::CopyFrom(const Ent* src)
 {
-    Ent* dst = this;
-    dst->field0 = src->field0;
-    dst->name.mpBegin = 0;
-    dst->name.mpEnd = 0;
-    dst->name.mpCapacity = 0;
-    uint32_t size = (uint32_t)(src->name.mpEnd - src->name.mpBegin);
-    dst->name.RangeInitialize(size + 1);
-    char* dstp = dst->name.mpBegin;
-    DoInsertValue(dstp, src->name.mpBegin, size);
-    dst->name.mpEnd = dstp + (src->name.mpEnd - src->name.mpBegin);
-    *dst->name.mpEnd = 0;
-    dst->field14 = src->field14;
-    dst->field18 = src->field18;
-    dst->field1c = src->field1c;
-    return dst;
+    field0 = src->field0;
+    name.CopyInit(src->name);
+    field14 = src->field14;
+    field18 = src->field18;
+    field1c = src->field1c;
+    return this;
 }
 
 // @ 0x00838b90
