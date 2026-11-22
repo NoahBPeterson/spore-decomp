@@ -11,3 +11,4 @@
 006de530 66 heap sift-up (signed); hoisted parent index / branch layout differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
 006de580 169 heap sift-up for 0x34-byte elements; 13-dword block copies scheduled differently; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
 006deb70 217  make-heap push for 0x34-byte element; saves the old element into a 0x34-byte record before copying the new element; equiv: PASS 537/600 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP
+006dde90  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

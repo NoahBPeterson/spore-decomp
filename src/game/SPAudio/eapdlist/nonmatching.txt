@@ -6,3 +6,4 @@
 00a5ce20 206 alloca/grow copy loops keep different induction registers than the original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00a5d430 193 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; per-branch global store and selector tests match, gensym call scheduling and the cold default block differ (size 360 vs 367); Pd externals unresolved flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 00a5d5a0 77 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the 128-byte range also covers the unnamed loadbang constructor at 0x00a5d5f0, so one symbol can never fill it (size 134 vs 128) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+00a5d200  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py
