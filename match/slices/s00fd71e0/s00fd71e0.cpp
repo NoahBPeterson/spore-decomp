@@ -2,6 +2,7 @@
 // SP::cMovieSystem methods; offsets are from the retail disassembly.
 #include "types.h"
 #include <intrin.h>
+#include "sse_helpers.h"
 
 struct IMessageServer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
@@ -778,23 +779,20 @@ cMovieSystem::~cMovieSystem()
 // @ 0x00fd7d80
 void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
 {
-    char* p = (char*)this;
     if (dtMs > 100)
         dtMs = 100;
-    MoviePlayer* pl = *(MoviePlayer**)(p + 0x34);
-    if (pl != 0) {
-        float dt = (float)dtMs;
-        *(float*)(p + 0x60) = dt * kFloat_13f9428 + *(float*)(p + 0x60);
+    if (MoviePlayer* pl = mPlayer) {
+        mField60 = (float)dtMs * kFloat_13f9428 + mField60;
         if (pl->CanPlay())
             ((IMovieSystemMethods*)this)->PauseMovie();
     }
-    if (!*(bool*)(p + 0xa0))
+    if (!mRecording)
         return;
-    EAMutex* mx = (EAMutex*)(p + 0x70);
+    EAMutex* mx = &mRecordMutex;
     mx->Lock(&g_MutexTagObj);
     IAudioSystem* au = EA_Audio_GetSystemAT();
-    while (*(void**)(p + 0x31c) != p + 0x31c && au != 0) {
-        PacketNode* n = *(PacketNode**)(p + 0x320);
+    while (mPacketList != &mPacketList && au != 0) {
+        PacketNode* n = (PacketNode*)mPacketList2;
         int payload = (int)n->payload;
         n->prev->next = n->next;
         n->next->prev = n->prev;
@@ -808,23 +806,16 @@ void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
     }
     mx->Unlock();
     float dt = (float)dtMs;
-    float frame = *(float*)(p + 0xc0) * kFloat_13f9428 * dt + *(float*)(p + 0x314);
-    *(float*)(p + 0x310) = dt * kFloat_13f9428 + *(float*)(p + 0x310);
-    *(float*)(p + 0x314) = frame;
+    float frame = mFieldC0 * kFloat_13f9428 * dt + mField314;
+    mField310 = dt * kFloat_13f9428 + mField310;
+    mField314 = frame;
     if (frame >= 1.0f) {
         float f = frame;
-        int r;
-        __asm {
-            movss xmm0, f
-            cvtss2si eax, xmm0
-            mov r, eax
-        }
-        int n = (f < (float)r) ? r - 1 : r;
-        n = RecordFrames(n);
-        *(float*)(p + 0x314) = *(float*)(p + 0x314) - (float)n;
+        int n = RecordFrames(SseFloorToInt(f));
+        mField314 = mField314 - (float)n;
     }
-    float t = *(float*)(p + 0xc4);
-    if (t > 0.0f && t < *(float*)(p + 0x310)) {
+    float t = mFieldC4;
+    if (t > 0.0f && t < mField310) {
         ((IMovieSystemMethods*)this)->ShutdownV();
         SP_MessageServer()->PostMsg(0x62ff415, 0, 0);
     }
