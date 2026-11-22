@@ -13,7 +13,6 @@
 0091bd70 ?ReadSymbolBytes@MapFile@@QAEEHPAE@Z  # MapFile::ReadSymbolBytes migrated from s0091b5d0 (verbatim, slice spelling)
 0091bdd0 ?FindByAddress@MapFile@@QAEPAEPAEI@Z  # MapFile::FindByAddress migrated from s0091b5d0 (verbatim, slice spelling)
 0091beb0 ?Reset@MapFile@@QAEEXZ  # MapFile::Reset migrated from s0091b5d0 (verbatim, slice spelling)
-0091bec0 ?find_last_of@EStr@@QBEIPBDI@Z  # EStr::find_last_of migrated from s0091b5d0 (verbatim, slice spelling)
 0091bf30 ?LowerBoundPair@@YAPAIPAI0PBI@Z  # LowerBoundPair migrated from s0091b5d0 (verbatim, slice spelling)
 0091bf80 ?RBTreeInsertValue@@YAPAXPAE0HPBI@Z  # RBTreeInsertValue migrated from s0091b5d0 (verbatim, slice spelling)
 0091c0a0 ?CtorEmpty@MapFile@@QAEPAXXZ  # MapFile::CtorEmpty migrated from s0091b5d0 (verbatim, slice spelling)

@@ -5,7 +5,6 @@
 012f6e50 ?init_154279c@@YAXXZ  # init_154279c migrated from s012f64e0 (verbatim, slice spelling)
 012f7570 ?init_1542c44@@YAXXZ  # init_1542c44 migrated from s012f64e0 (verbatim, slice spelling)
 012fc2b0 ?init_1546064@@YAXXZ  # init_1546064 migrated from s012f64e0 (verbatim, slice spelling)
-012fdfe0 ?init_1547690@@YAXXZ  # init_1547690 migrated from s012f64e0 (verbatim, slice spelling)
 012fe000 init_15477a4  # reflection/type registry table (12 entries)
 012fe300 ?init_15476e4@@YAXXZ  # init_15476e4 migrated from s012f64e0 (verbatim, slice spelling)
 012ffaf0 ?init_1548764@@YAXXZ  # init_1548764 migrated from s012f64e0 (verbatim, slice spelling)

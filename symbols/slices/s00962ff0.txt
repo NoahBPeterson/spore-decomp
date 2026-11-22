@@ -6,7 +6,7 @@
 009635e0 ?SetFade@Btn@@QAEX_N@Z  # Btn::SetFade migrated from s00962ff0 (verbatim, slice spelling)
 00963630 ?OnlyWhenVisible@Btn@@QAEXPAH_N@Z  # Btn::OnlyWhenVisible migrated from s00962ff0 (verbatim, slice spelling)
 009636f0 ?SetAlphaClamp@Btn@@QAEXMM@Z  # Btn::SetAlphaClamp migrated from s00962ff0 (verbatim, slice spelling)
-00963780 ?FUN_00963780@@YIHPAXH00@Z  # FUN_00963780 migrated from s00962ff0 (verbatim, slice spelling)
+00963780 EA::UTFWin::IWinProc::HandleUIMessage # card name
 00963db0 ?FadeEffect_Ctor@@YIPAXPAX@Z  # FadeEffect_Ctor migrated from s00962ff0 (verbatim, slice spelling)
 00963f60 ?GetEffectFlag@FlexFlag@@QAEHXZ  # FlexFlag::GetEffectFlag migrated from s00962ff0 (verbatim, slice spelling)
 00963f70 ?SetEffectFlag@FlexFlag@@QAEXI_N@Z  # FlexFlag::SetEffectFlag migrated from s00962ff0 (verbatim, slice spelling)

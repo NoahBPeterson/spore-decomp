@@ -3,7 +3,6 @@
 0052c950 ?quick_sort_impl_helper@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0HUSecondGreater@1@@Z  # quick_sort_impl_helper migrated from s0052c230 (verbatim, slice spelling)
 0052cc10 ?get_partition@eastl@@YAPAU?$pair_s0052_c230@HM@1@PAU21@0U21@USecondGreater@1@@Z  # get_partition migrated from s0052c230 (verbatim, slice spelling)
 0052ccd0 ?partial_sort@eastl@@YAXPAU?$pair_s0052_c230@HM@1@00USecondGreater@1@@Z  # partial_sort migrated from s0052c230 (verbatim, slice spelling)
-0052ce90 ??0?$VectorBase_s0052_c230@U?$pair_s0052_c230@HM@eastl@@@eastl@@QAE@IABUsp_vector_allocator_s0052_c230@@@Z  # VectorBase<pair<int,float>> ctor: inline in the class, emitted out of line; landed by hand (rewrite.py drops a marker over a class declaration)
 0052cf00 ?make_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0USecondGreater@1@@Z  # make_heap migrated from s0052c230 (verbatim, slice spelling)
 0052cf80 ?adjust_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@HHHU21@USecondGreater@1@@Z  # adjust_heap migrated from s0052c230 (verbatim, slice spelling)
 0052d160 cSPSkinPaintClearDescription::cSPSkinPaintClearDescription  # PDB layout of cSPSkinPaintClearDescription (0x70) matches every field store

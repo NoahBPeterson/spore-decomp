@@ -7,7 +7,6 @@
 0091ad30 ?DoInsert@cAddressRepCache@@QAEXPAPAXPBUcHashNode@@I@Z  # cAddressRepCache::DoInsert migrated from s0091a680 (verbatim, slice spelling)
 0091ae20 ?GetAddressRep@cAddressRepLookupSet@@QAEIIPBXPAUcAddressRepEntry@@PAH@Z  # cAddressRepLookupSet::GetAddressRep migrated from s0091a680 (verbatim, slice spelling)
 0091aeb0 ?DoFreeNodes@cAddressRepCache@@QAEXPAPAUcHashNode@@I@Z  # cAddressRepCache::DoFreeNodes migrated from s0091a680 (verbatim, slice spelling)
-0091af40 ??AcAddressRepCache@@QAEPAUcAddressRepEntry@@ABQBX@Z  # cAddressRepCache::operator[] migrated from s0091a680 (verbatim, slice spelling)
 0091b000 ?SetAddressRep@cAddressRepCache@@QAEXHABQBXPBDHH@Z  # cAddressRepCache::SetAddressRep migrated from s0091a680 (verbatim, slice spelling)
 0091b090 ??1cAddressRepCache@@QAE@XZ  # cAddressRepCache::~cAddressRepCache migrated from s0091a680 (verbatim, slice spelling)
 0091b0f0 ?GetAddressRep@cAddressRepCache@@QAEIIABQBXPAH1D@Z  # cAddressRepCache::GetAddressRep migrated from s0091a680 (verbatim, slice spelling)

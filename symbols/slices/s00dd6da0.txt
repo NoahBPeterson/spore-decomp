@@ -1,1 +1,0 @@
-00dd6da0 ?Shutdown@EventLogShutdownBase@@QAEXXZ  # EventLogShutdownBase::Shutdown migrated from s00dd6da0 (verbatim, slice spelling)

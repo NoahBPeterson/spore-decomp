@@ -1,6 +1,6 @@
 004554f0 ?Copy@?$vecE8a2@UE8@@$01@@SAPAUE8@@PAU2@00@Z  # range copy called by vec<E8,2>::DoInsertValue
 00475ef0 ?UninitCopy12@@YAPAUE12@@PAU1@00@Z  # UninitCopy12 migrated from s00475d00 (verbatim, slice spelling)
-00476000 ?DoInsertValue@?$vecE8a4@UE8@@$03@@QAEXPAUE8@@ABU2@@Z  # vec<E8,4>::DoInsertValue landed verbatim by hand (entry 1171, batch mig41)
+00476000 vecE8a4::DoInsertValue  # vec<E8,4>::DoInsertValue (template stamped per instantiation by DEFINE_VEC so the name matcher, which ignores template args, can tell them apart)
 004763a0 ?UninitCopy8Destruct@@YAPAUE8@@PAU1@00@Z  # UninitCopy8Destruct migrated from s00475d00 (verbatim, slice spelling)
 00476440 vecE8a2::DoInsertValue  # vec<E8,2>::DoInsertValue
 00476680 vecE16::DoInsertValue  # vec<E16,4>::DoInsertValue

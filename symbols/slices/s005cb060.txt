@@ -22,5 +22,4 @@
 005cbe40 ??0cStreamBuffer@@QAE@XZ  # cStreamBuffer::cStreamBuffer migrated from s005cb060 (verbatim, slice spelling)
 005cbec0 ??0cBufferedStream@@QAE@XZ  # cBufferedStream::cBufferedStream migrated from s005cb060 (verbatim, slice spelling)
 005cbf00 ??_GcBufferedStream@@UAEPAXI@Z  # cBufferedStream::~cBufferedStream migrated from s005cb060 (verbatim, slice spelling)
-005cbf60 ??0cSPUISellBackRollover@@QAE@XZ  # cSPUISellBackRollover::cSPUISellBackRollover migrated from s005cb060 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005cb060, named from the dev publics; slice address comment)

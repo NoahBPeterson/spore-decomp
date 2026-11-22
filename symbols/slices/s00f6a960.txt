@@ -6,4 +6,4 @@
 00f6b4b0 ??0TexVector@@QAE@ABU0@@Z  # TexVector::TexVector migrated from s00f6a960 (verbatim, slice spelling)
 00f6b670 ?CopyFrom@QuadSource@@QAEAAU1@ABU1@@Z  # QuadSource::CopyFrom migrated from s00f6a960 (verbatim, slice spelling)
 00f6b7c0 ?FreeAll@QuadNode@@QAEXXZ  # QuadNode::FreeAll migrated from s00f6a960 (verbatim, slice spelling)
-00f6b840 ?Destroy@QuadMgr@@QAEXXZ  # QuadMgr::Destroy migrated from s00f6a960 (verbatim, slice spelling)
+00f6b840 ?Destroy@QuadMgr@@QAEXXZ  # QuadMgr::Destroy from s00f6a960

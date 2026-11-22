@@ -2,7 +2,7 @@
 007ff0d0 ?HandleMessage@WinEventW@@QAE_NIPAX@Z  # (rewritten as member-shaped helper)
 007ff290 ?BoolHandleMessage@WinEventW@@QAE_NIPAX@Z  # (rewritten)
 007ff400 ?Ctor@WinEvent@@QAEPAU1@II_N@Z  # WinEvent base ctor (byte-exact)
-007ff470 ?Ctor@WinBoolStateEvent@@QAEPAU1@III_N@Z  # WinBoolStateEvent::Ctor migrated from s007fed20 (verbatim, slice spelling)
+007ff470 ?Ctor@WinBoolStateEvent@@QAEPAU1@III_N@Z  # bool-state event ctor (byte-exact)
 007ff510 ?Ctor@ShadeColorFull@@QAEPAU1@XZ  # ShadeColorFull::Ctor migrated from s007fed20 (verbatim, slice spelling)
 007ff570 ?Apply@ShadeColor@@QAEXMH@Z  # ShadeColor::Apply (complete, nonmatching)
 007ff5d0 ?Init@ShadeColor@@QAEXII@Z  # ShadeColor::Init (byte-exact, out of scope)

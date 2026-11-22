@@ -1,2 +1,0 @@
-00f4ef20 ?Stop@cTerrainBrushEffect@SP@@UAEXH@Z  # cTerrainBrushEffect::Stop migrated from s00f4ef20 (verbatim, slice spelling)
-00f987f0 ?GetWaterHeight@cTerrainSphere@SP@@QBEMXZ  # SP::cTerrainSphere::GetWaterHeight (callee of s00f4ef20, named from the dev publics; slice address comment)

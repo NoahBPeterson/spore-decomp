@@ -1,5 +1,5 @@
 00c87be0 ??1cSpaceInventory_s00c8_7be0@@UAE@XZ  # cSpaceInventory_s00c8_7be0::~cSpaceInventory migrated from s00c87be0 (verbatim, slice spelling)
-00c87c80 ??_GcSpaceInventory_s00c8_7be0@@UAEPAXI@Z  # cSpaceInventory_s00c8_7be0 scalar deleting destructor, compiler-generated from the migrated ~cSpaceInventory
+00c87c80 Object::_virtual_dtor  # PDB name
 00c87cc0 ?func40h@cSpaceInventory_s00c8_7be0@@QAE_NXZ  # cSpaceInventory_s00c8_7be0::func40h migrated from s00c87be0 (verbatim, slice spelling)
 00c87d80 ?RemoveItem@cSpaceInventory_s00c8_7be0@@UAE_NPAVcSpaceInventoryItem_s00c8_7be0@@@Z  # cSpaceInventory_s00c8_7be0::RemoveItem migrated from s00c87be0 (verbatim, slice spelling)
 00c87df0 ?TakeFromInventory@cSpaceInventory_s00c8_7be0@@QAE_NIPAU?$AutoRefCount@UcSpaceInventoryItem_s00c8_7be0@@@@H@Z  # cSpaceInventory_s00c8_7be0::TakeFromInventory migrated from s00c87be0 (verbatim, slice spelling)

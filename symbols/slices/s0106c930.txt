@@ -1,3 +1,1 @@
-00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s0106c930, named from the dev publics; slice address comment)
-0106c930 ?FUN_0106c930@cSPUISpace_s0106_c930@@QAEXXZ  # cSPUISpace::FUN_0106c930 landed verbatim in SPUISpace.cpp (stub class renamed for the TU)
 0106cbd0 ?Construct@cIntrusiveNode@SP@@QAEPAXPAPAX@Z  # cIntrusiveNode::Construct migrated from s0106c930 (verbatim, slice spelling)

@@ -9,8 +9,8 @@
 00b1dee0 FUN_00b1dee0  # init routine
 00b1dfc0 FUN_00b1dfc0  # refcounted member reset (vtable slots 4/8)
 00b1e020 FUN_00b1e020  # init routine
-00b1e0c0 ?ChangeEnvironmentMode@@YAHHH@Z  # ChangeEnvironmentMode migrated from s00b1d870 (verbatim, slice spelling)
-00b1e410 ?SetPlayMode@PaintSystemHost@@QAE_NH@Z  # PaintSystemHost::SetPlayMode migrated from s00b1d870 (verbatim, slice spelling)
+00b1e0c0 ?FUN_b1e0c0@@YAHXZ  # FUN_b1e0c0 migrated from s00b1d870 (verbatim, slice spelling)
+00b1e410 FUN_00b1e410  # environmental-switch notification
 00b1e4d0 Simulator::cSpaceInventoryItem::IsAvailableInCurrentPlanet  # PDB name
 00b1e500 FUN_00b1e500  # interface id equality
 00b1e520 FUN_00b1e520  # interface id check (vtable slot 3)

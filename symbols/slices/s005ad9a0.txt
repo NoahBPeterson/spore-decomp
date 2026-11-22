@@ -1,5 +1,5 @@
 005ad9a0 SP::cSPEditorManipulationInterpenetration::cSPEditorManipulationInterpenetration  # vtable 0x13f72bc slots match dev-build class; byte-exact
-005ada50 ?DoOnMouseDown@cSPEditorManipulationInterpenetration@SP@@QAE_NHMMH@Z  # cSPEditorManipulationInterpenetration::DoOnMouseDown migrated from s005ad9a0 (verbatim, slice spelling)
+005ada50 SP::cSPEditorManipulationInterpenetration::DoOnMouseDown  # vtable slot 6; same size as dev (113)
 005adb00 ?ClearSymmetricHighlights@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::ClearSymmetricHighlights migrated from s005ad9a0 (verbatim, slice spelling)
 005adb20 ?OnMouseUp@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  # cSPEditorManipulationLimb::OnMouseUp migrated from s005ad9a0 (verbatim, slice spelling)
 005addb0 ?GetMaxLimbPlacementHeight@cSPEditorManipulationLimb@SP@@QAEMXZ  # cSPEditorManipulationLimb::GetMaxLimbPlacementHeight migrated from s005ad9a0 (verbatim, slice spelling)

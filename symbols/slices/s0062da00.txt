@@ -9,7 +9,6 @@
 0062dea0 ??_GcSPCasual_Path@@UAEPAXI@Z  # cSPCasual_Path::~cSPCasual_Path migrated from s0062da00 (verbatim, slice spelling)
 0062df10 ?ExpandNode@cSPCasual_Path@@QAEXPAUPathNode@@@Z  # cSPCasual_Path::ExpandNode migrated from s0062da00 (verbatim, slice spelling)
 0062e010 ?FindPath@cSPCasual_Path@@QAE_NMMMM@Z  # cSPCasual_Path::FindPath migrated from s0062da00 (verbatim, slice spelling)
-0062e2b0 ??_GcNamedRefCount@@UAEPAXI@Z  # cNamedRefCount::~cNamedRefCount migrated from s0062da00 (verbatim, slice spelling)
 0062e2e0 ?StartNewAnimation@cSPPlayModeAnimation_s0062_da00__ui@@QAEMII_NIPAI@Z  # cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation migrated from s0062da00 (verbatim, slice spelling)
 0062e4b0 ?GetAnimCount@cSPPlayModeAnimation@@QAEHXZ  # cSPPlayModeAnimation::GetAnimCount migrated from s0062da00 (verbatim, slice spelling)
 0062e4f0 ?GetExpansionAnimInfo@cSPPlayModeAnimation@@QAE_NHPAI0PAM1@Z  # cSPPlayModeAnimation::GetExpansionAnimInfo migrated from s0062da00 (verbatim, slice spelling)
