@@ -179,21 +179,23 @@ void FUN_011f6e80(void)
 // parameter in edx at entry (cl 13.10 static convention, codegen 6.3).
 // ===========================================================================
 static void FUN_011f6f20(byte* p)
-{
-    byte b = *p;
+{    byte b = *p;
     int prev = 4;
-    const byte* q = p + 1;
     int* out = (int*)(p + 0x20);
+    const byte* q = p + 1;
     do {
         byte t = g_171be38[b];
-        int val = 0;
-        if (t != 0) {
+        int val;
+        if (t == 0) {
+            val = 0;
+        } else {
             val = prev;
             prev += t;
         }
         *out = val;
-        b = *q++;
+        b = *q;
         ++out;
+        ++q;
     } while (b > 0);
 }
 

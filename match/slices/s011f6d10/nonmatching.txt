@@ -9,7 +9,6 @@
                with the default key, else regenerate, then SetPixelShader vtbl+0x1ac):
                complete; the inlined strcmp/memcmp byte loop schedules differently.
                difftest UNSUPPORTED (default-descriptor image reads fault, 0/400 valid).
-011f6f20   29  attribute-offset generator (fills p+0x20 with register offsets from byte
                table 0x171be38): complete; now a TU-local static (cl 13.10 gives it the
                custom register convention, table in edx, which the matched 011f78b0
                wrapper needs). Residual: cl keeps the walker q in ecx/out in esi (retail

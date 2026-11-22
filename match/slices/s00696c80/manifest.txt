@@ -12,3 +12,4 @@ slices/s00696c80/s00696c80.cpp  ??0MutexLock@SP@@QAE@PAVMutex@Thread@EA@@@Z  006
 slices/s00696c80/s00696c80.cpp  ??1MutexLock@SP@@QAE@XZ  00697b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00696c80/s00696c80.cpp  ?ShouldLog@Server@Trace@EA@@QAEHI@Z  00697b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00696c80/s00696c80.cpp  ?BroadcastLocaleChange@cLocaleManager@SP@@QAEXI@Z  00697650  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?AssertControl@Server@Trace@EA@@QAEXXZ  00697bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

@@ -400,13 +400,15 @@ void* ResolveOne(void* obj, ResourceHolder* holder) {
 }
 
 // @ 0x007c54f0
-void ResolveOneToObject(void* obj, int unused, ResMgr1* mgr) {
-    int* p = (int*)((char*)obj + 0x3c);
-    if (*p == -1) {
-        *p = 0;
-        return;
+void ResolveOneToObject(void* obj, int unused, ResMgr1* mgr) {    int id = *(int*)((char*)obj + 0x3c);
+    int result;
+    if (id == -1) {
+        result = 0;
+    } else {
+        ArenaInner* inner = mgr->m_inner;
+        result = inner->m_arena->IdToObject(id);
     }
-    *p = mgr->m_inner->m_arena->IdToObject(*p);
+    *(int*)((char*)obj + 0x3c) = result;
 }
 
 // @ 0x007c5520

@@ -7,3 +7,4 @@ slices/s00537f40/s00537f40.cpp  ?CreateDesc538@@YAPAUDesc538@@PAX0@Z  00538200  
 slices/s00537f40/s00537f40.cpp  ?Release@Host5383c0@@QAEHXZ  005383c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00537f40/s00537f40.cpp  ??1Dtor538180@@QAE@XZ  00538180  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 slices/s00537f40/s00537f40.cpp  ??1PaintBlock538@@QAE@XZ  00538320  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00537f40/s00537f40.cpp  ?AddRef@Host538380@@QAEHXZ  00538380  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -421,8 +421,10 @@ FeatureLookup::FeatureLookup(const FeatureLookup& other)
   lookupArray.mpEnd = lookupArray.mpBuffer;
   lookupArray.mpBegin = lookupArray.mpBuffer;
   lookupArray.mpCapacity = lookupArray.mpBegin + 16;
-  mLookupPtrArray.AssignRange(other.mLookupPtrArray.mpBegin, other.mLookupPtrArray.mpEnd,
-                              (uint32_t)&other);
+  // The assign helper takes an empty iterator-category object by value: its argument slot is an
+  // uninitialised temporary that the frame overlays on the dead `other` parameter slot.
+  uint32_t nContext;
+  mLookupPtrArray.AssignRange(other.mLookupPtrArray.mpBegin, other.mLookupPtrArray.mpEnd, nContext);
 }
 
 // Default constructor used by vector::resize: zero feature tag, empty inline array.

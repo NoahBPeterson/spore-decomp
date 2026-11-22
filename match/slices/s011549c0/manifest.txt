@@ -2,3 +2,4 @@
 slices/s011549c0/s011549c0.cpp  ?Init@MixerTimer@@QAEXXZ  01154eb0  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s011549c0/s011549c0.cpp  ?Profiler_Init@@YAPAUProfilerLayout@@PAX@Z  01155090  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s011549c0/s011549c0.cpp  ?Tick@MixerTimer@@QAEXXZ  01154ee0  /O2 /MD /Gy /TP /arch:SSE
+slices/s011549c0/s011549c0.cpp  ??0Mixer@@QAE@XZ  01154e50  /vc71 /O2 /MD /Gy /TP /arch:SSE

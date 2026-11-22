@@ -378,35 +378,40 @@ TextZoomName::TextZoomName()
 
 // @ 0x00834660
 void TextZoomName::SetActive(char active)
-{
-    if (active == 0) {
+{    extern char g_13f6b3c[];   // allocator name tag
+    if (active != 0) {
+        if (b60 != 0)
+            return;
+        void* listener = this ? (char*)this + 8 : 0;
+        void* srv = FUN_00883860();
+        ((void (__thiscall*)(void*, void*, int))VT(srv)[0x20 / 4])(srv, listener, 0x61dd1b7);
+        void* m = ((void* (__cdecl*)(int, const void*, int, int, int, int))FUN_00f473a0)
+            (0x40, (const void*)g_13f6b3c, 0, 0, 0, 0);
+        void* msg;
+        if (m) {
+            *(uint32_t*)((char*)m + 0x30) = 0;
+            *(void**)m = &g_vtblBehavior0;
+            _InterlockedExchange((volatile long*)((char*)m + 4), 0);
+            *(void**)m = &g_vtblBehavior1;
+            *(uint32_t*)((char*)m + 0x38) = 0;
+            msg = m;
+        } else {
+            msg = 0;
+        }
+        *(void**)((char*)msg + 8) = this;
+        srv = FUN_00883860();
+        ((void (__thiscall*)(void*, int, void*, int, int))VT(srv)[0x18 / 4])
+            (srv, 0x61dd1b7, msg, 0, 0);
+        b60 = 1;
+    } else {
         if (b60 != 0) {
+            void* listener = this ? (char*)this + 8 : 0;
             void* srv = FUN_00883860();
             ((void (__thiscall*)(void*, void*, int, int))VT(srv)[0x2c / 4])
-                (srv, (char*)this + 8, 0x61dd1b7, -9999);
+                (srv, listener, 0x61dd1b7, -9999);
             b60 = 0;
         }
-        return;
     }
-    if (b60 != 0)
-        return;
-    void* srv = FUN_00883860();
-    ((void (__thiscall*)(void*, void*, int))VT(srv)[0x20 / 4])
-        (srv, (char*)this + 8, 0x61dd1b7);
-    void* m = ((void* (__cdecl*)(int, const void*, int, int, int, int))FUN_00f473a0)
-        (0x40, (const void*)0x13f6b3c, 0, 0, 0, 0);
-    if (m) {
-        *(uint32_t*)((char*)m + 0x30) = 0;
-        *(void**)m = &g_vtblBehavior0;
-        _InterlockedExchange((volatile long*)((char*)m + 4), 0);
-        *(void**)m = &g_vtblBehavior1;
-        *(uint32_t*)((char*)m + 0x38) = 0;
-    }
-    *(void**)((char*)m + 8) = this;
-    srv = FUN_00883860();
-    ((void (__thiscall*)(void*, int, void*, int, int))VT(srv)[0x18 / 4])
-        (srv, 0x61dd1b7, m, 0, 0);
-    b60 = 1;
 }
 
 // @ 0x00834730 (partial)
