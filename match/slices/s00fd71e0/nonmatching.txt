@@ -1,6 +1,5 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
 00fd71e0  82  no symbol of similar size; 5-arg cdecl, switch mapping + two vcalls
-00fd7660  162  RecordFrames loop [equiv: PASS]
 00fd7800  441  Shutdown: 5 message posts + layout release [equiv: PASS]
 00fd79e0  124  StopMovie
 00fd7b30  297  cMovieSystem constructor [equiv: PASS]

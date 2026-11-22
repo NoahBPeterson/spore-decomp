@@ -22,6 +22,7 @@ extern float kFloat_1486374;
 extern float kFloat_1485720;
 extern void* g_pMutexTag;                            // 0x01493900
 #include <intrin.h>
+#include "sse_helpers.h"
 #include "EA/ArgScript/cArgumentSpec.h"
 #include "EA/ArgScript/cCommandBase.h"
 
@@ -640,29 +641,29 @@ char cMovieSystem::PauseMovie2()
 int cMovieSystem::RecordFrames(int nFrames)
 {
     EAMutex* mx = &mRecordMutex;
-    mx->Lock((void*)0x1493900);
-    if (mField2fc == 0) {
+    mx->Lock(&g_pMutexTag);
+    if (mField2fc != 0) {
+        BlitArgs args;
+        args.a = 3;
+        args.b = mHeight;
+        args.c = *(int*)&mFPS;
+        args.d = (int)(intptr_t)mField30c;
+        int count = nFrames;
+        if ((float)count > mFieldC0)
+            count = SseRoundToInt(mFieldC0);
+        if (count > 0) {
+            int n = count;
+            do {
+                ((IVideoOps*)mWidth)->Blit2(args);
+                ++mCapturedFrames;
+            } while (--n != 0);
+        }
+        mField2fc = 0;
         mx->Unlock();
-        return 0;
+        return count;
     }
-    BlitArgs args;
-    args.a = 3;
-    args.b = mHeight;
-    args.c = *(int*)&mFPS;
-    args.d = (int)(intptr_t)mField30c;
-    float quality = mFieldC0;
-    if (quality < (float)nFrames)
-        nFrames = _mm_cvtss_si32(_mm_set_ss(quality));
-    int count = nFrames;
-    if (nFrames > 0) {
-        do {
-            ((IVideoOps*)mWidth)->Blit2(args);
-            ++mCapturedFrames;
-        } while (--nFrames != 0);
-    }
-    mField2fc = 0;
     mx->Unlock();
-    return count;
+    return 0;
 }
 
 // @ 0x00fd7730

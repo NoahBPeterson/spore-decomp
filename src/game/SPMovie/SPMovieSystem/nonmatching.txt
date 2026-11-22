@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00fd7660 161 RecordFrames loop
 00fd7800 188 Shutdown: 5 message posts + layout release
 00fd7b30 264 cMovieSystem constructor
 00fd8c40 155 `anonymous_namespace'::cMovieCheat::cMovieCheat: complete; the cCommandBase base ctor, the derived vtable store, the cArgumentSpec sub-object ctor and the full ConstructSpec argument list (all option pointers/flags/strings) are present in original order; remaining diff is register allocation and 4-byte frame slack. difftest: UNSUPPORTED (0/400 inputs valid; object-heavy). flags /O2 /MD /Gy /TP /arch:SSE
