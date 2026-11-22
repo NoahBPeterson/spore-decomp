@@ -246,13 +246,30 @@ Dtor538180::~Dtor538180() {
 
 // @ 0x00538320
 PaintBlock538::~PaintBlock538()
-{
-    m0 = (void*)0x13f2f58;
+{    U32VecHead* m;
+    m0 = (void*)g_13f2f58;
     mList.Destroy();
-    U32VecHead* head = &mVec;
-    for (uint32_t* p = head->mpBegin; p < head->mpEnd; p++) {}
-    head->Free();
-}
+    void* a;
+    void* b;
+    void* c;
+    void* d;
+    void* f;
+    void* g;
+    void* h;
+    void* i;
+    void* u;
+    void* k;
+    void* l;
+    void* n;
+    void* p2;
+    void* q2;
+    void* e;
+    void* o;
+    void* pvec;
+    m = &mVec;
+    uint32_t* t;
+    for (t = m->mpBegin; t < m->mpEnd; t++) {}
+    m->Free();}
 
 // ---------------------------------------------------------------- 0x00538200 factory
 void ReadDesc538(void* stream, void* name, Desc538* desc);   // 0x0053acc0

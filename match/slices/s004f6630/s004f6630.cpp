@@ -291,27 +291,35 @@ int FindLowestPriority(PriorityEntry* first, PriorityEntry* last, uint32_t group
 
 // @ 0x004F69E0
 int FindLowestPriority(PriorityEntry* first, PriorityEntry* last, uint32_t type)
-{
-    int minPriority = 0x7FFFFFFF;
-    int bestId = -1;
-    PriorityEntry* cur = first;
+{    PriorityEntry* id;
+    int it = 0x7FFFFFFF;
+    int minPriority = -1;
+    id = first;
+    int cur;
+    PriorityInfo* pInfo;
+    int bestId;
+    PriorityEntry* priority;
     for (;;) {
-        cur = find(cur, last, TypeKey(type));
-        if (cur != last) {
-            const int id = cur->mId;
-            PriorityInfo* const pInfo = GetPriorityManager() ? GetPriorityManager()->Find(id) : 0;
+        const TypeKey key(type);
+        priority = id;
+        while ((priority != last) && !(*priority == key))
+            ++priority;
+        id = priority;
+        if (id != last) {
+            cur = id->mId;
+            pInfo = GetPriorityManager() ? GetPriorityManager()->Find(cur) : 0;
             if (pInfo) {
-                const int priority = pInfo->mPriority;
-                if (priority < minPriority) {
-                    minPriority = priority;
-                    bestId = id;
+                bestId = pInfo->mPriority;
+                if (bestId < it) {
+                    it = bestId;
+                    minPriority = cur;
                 }
             }
-            ++cur;
+            ++id;
         } else
             break;
     }
-    return bestId;
+    return minPriority;
 }
 
 // ---------------------------------------------------------------------------

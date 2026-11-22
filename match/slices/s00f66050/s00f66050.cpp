@@ -615,8 +615,7 @@ void SP::cDistGrid::ActivateCell(cCell* cell, int level, float minHeight, float 
 
 // @ 0x00f66770
 void SP::cTerrainDistributeEffect::Shutdown()
-{
-    cEffectParams* params = mChildParams;
+{    cEffectParams* params = mChildParams;
     if (params) {
         params->~cEffectParams();
         EASTL_allocator_deallocate(params);
@@ -626,9 +625,10 @@ void SP::cTerrainDistributeEffect::Shutdown()
     if (grid) {
         grid->Stop();
         grid->mDistInfo = 0;
-        if (mDistGrid) {
-            mDistGrid->~cDistGrid();
-            EASTL_allocator_deallocate(mDistGrid);
+        cDistGrid* g2 = mDistGrid;
+        if (g2) {
+            g2->~cDistGrid();
+            EASTL_allocator_deallocate(g2);
         }
         mDistGrid = 0;
     }

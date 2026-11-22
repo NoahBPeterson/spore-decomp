@@ -162,8 +162,7 @@ static __forceinline cParticleNode* PopNode()
 // ================================================================================
 // @ 0x00a97830
 void cEmitter::Update(float dt)
-{
-    if (mInitialDelay > 0.0f) {
+{    if (mInitialDelay > 0.0f) {
         dt = mInitialDelay - dt;
         mInitialDelay = dt;
         if (dt > 0.0f)
@@ -174,9 +173,10 @@ void cEmitter::Update(float dt)
     if (limit > 0.01 && (limit = limit - 0.01f) < dt)
         dt = limit;
     u32 flags = mDesc->mFlags;
-    if (((flags >> 1) & 1) != 0) {
+    u8 mode = (u8)(flags >> 1);
+    if ((mode & 1) != 0) {
         SpawnC(dt);
-    } else if ((flags & 1) != 0) {
+    } else if (flags & 1) {
         SpawnB(dt);
     } else {
         SpawnA(dt);

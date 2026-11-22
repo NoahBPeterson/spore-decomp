@@ -318,9 +318,10 @@ void fnt_JROF(fnt_Ctx* ctx)
 
 // @ 0x008aecf0
 void fnt_Round(fnt_Ctx* ctx)
-{
-    ctx->stackTop--;
-    ctx->stackTop[0] = ctx->state->round.roundFn(ctx, ctx->stackTop[0], 0);
+{    ctx->stackTop--;
+    fnt_RoundState* rnd = (fnt_RoundState*)((uint8*)ctx->state + 0x58);
+    int32 v = ctx->stackTop[0];
+    ctx->stackTop[0] = rnd->roundFn(ctx, v, 0);
     ctx->stackTop++;
 }
 

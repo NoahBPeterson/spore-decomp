@@ -255,28 +255,30 @@ __declspec(noinline) double __cdecl cConfigManagerUnnamedB90(float* param_1)
 }
 // @ 0x007cdbe0
 float* __cdecl cConfigManagerUnnamedBE0(float* param_1, void* param_2)
-{
-    float* dst = param_1;
+{    float* dst = param_1;
     float* src = (float*)param_2;
+    struct ClampRange {
+        static double Run(double v, double lo, double hi) {
+            if (v >= hi) return hi;
+            if (v < lo) return lo;
+            return v;
+        }
+    };
     double lo, hi, v;
 
     lo = src[0]; hi = src[3];
-    v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
-    if (v >= hi) v = hi;
-    else if (v < lo) v = lo;
-    dst[0] = (float)v;
+    v = ((ExtRandom*)g_16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
+    dst[0] = (float)ClampRange::Run(v, lo, hi);
 
-    lo = src[1]; hi = src[4];
-    v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
-    if (v >= hi) v = hi;
-    else if (v < lo) v = lo;
-    dst[1] = (float)v;
+    double hi2, lo2;
+    lo2 = src[1]; hi2 = src[4];
+    v = ((ExtRandom*)g_16778dc)->RandomDoubleUniform() * (hi2 - lo2) + lo2;
+    dst[1] = (float)ClampRange::Run(v, lo2, hi2);
 
-    lo = src[2]; hi = src[5];
-    v = ((ExtRandom*)0x16778dc)->RandomDoubleUniform() * (hi - lo) + lo;
-    if (v >= hi) v = hi;
-    else if (v < lo) v = lo;
-    dst[2] = (float)v;
+    double hi3, lo3;
+    lo3 = src[2]; hi3 = src[5];
+    v = ((ExtRandom*)g_16778dc)->RandomDoubleUniform() * (hi3 - lo3) + lo3;
+    dst[2] = (float)ClampRange::Run(v, lo3, hi3);
     return dst;
 }
 // ---------------------------------------------------------------- ground-cover config

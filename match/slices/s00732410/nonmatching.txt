@@ -5,7 +5,6 @@
 00733230   200  COMPLETE fill_n over 9-dword elements. equiv PASS on the frozen replay (first difference: None) after changing the return type from void to float* and returning the advanced destination pointer, which is exactly the value the retail function leaves in eax. Fresh run WEAK (123 valid, 100% coverage, 0 mismatches). Not byte-exact (200 diff, size 81 vs 209: retail copies each float with `movss` through a stack temporary, cl15 emits x87 `fld`/`fstp`).
 00732fb0    51  COMPLETE EltArrayRef builder (stride 16); virtual-call arg materialisation and store order differ.
 00732ff0    51  COMPLETE EltArrayRef builder (stride 4); same dispatch/store differences.
-007330d0    27  COMPLETE lower_bound over 0xc-byte keys; operand order of the compare and the count update differ.
 00733140    85  COMPLETE uninitialized_copy over 9-dword elements; float-via-xmm copy flavour differs.
 00733310    78  COMPLETE copy over 9-dword elements; float-via-xmm copy flavour differs.
 00732410  1419  COMPLETE weighted element-array accumulate (indexed and per-array weights); same size, base-pointer reloads/scheduling differ

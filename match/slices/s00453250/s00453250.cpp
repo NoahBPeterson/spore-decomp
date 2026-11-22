@@ -248,7 +248,7 @@ struct wstring {
 };
 // @ 0x00453d20
 wstring wstring::substr(uint32_t position, uint32_t n) const
-{
+{    uint32_t hole[1];
     return wstring(mpBegin + position, mpBegin + position + min_alt(n, (uint32_t)(mpEnd - mpBegin) - position));
 }
 

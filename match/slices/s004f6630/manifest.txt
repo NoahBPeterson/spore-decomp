@@ -13,3 +13,4 @@ slices/s004f6630/s004f6630.cpp  ?insertion_sort_simple@@YAXPAVKey@ResourceMan@EA
 slices/s004f6630/s004f6630.cpp  ?median@@YAABVKey@ResourceMan@EA@@ABV123@00@Z  004f7210  /Od /Ob1 /MD /Gy /TP
 slices/s004f6630/s004f6630.cpp  ?get_partition@@YAPAVKey@ResourceMan@EA@@PAV123@0V123@@Z  004f7420  /Od /Ob1 /MD /Gy /TP
 slices/s004f6630/s004f6630.cpp  ?partial_sort@@YAXPAVKey@ResourceMan@EA@@00@Z  004f7550  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?FindLowestPriority@@YAHPAUPriorityEntry@@0I@Z  004f69e0  /Od /Ob1 /MD /Gy /TP

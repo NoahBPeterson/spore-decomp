@@ -58,19 +58,22 @@ struct Ability {
 
 // @ 0x004fcae0
 Ability::Ability()
-{
-    ScratchSlots<1>();
+{    uint32_t dead[1];
     *(int**)this = vtbl_Simulator_cCreatureAbility;
     *(int*)((char*)this + 4) = 0;
     *(int**)this = PTR_FUN_013f11b8;
-    int* p = (int*)((char*)this + 8);
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0;
-    int* q = (int*)((char*)this + 0x1c);
-    q[0] = 0;
-    q[1] = 0;
-    q[2] = 0;
+    {
+        int* p = (int*)((char*)this + 8);
+        p[0] = 0;
+        p[1] = 0;
+        p[2] = 0;
+    }
+    {
+        int* q = (int*)((char*)this + 0x1c);
+        q[0] = 0;
+        q[1] = 0;
+        q[2] = 0;
+    }
 }
 
 // @ 0x004fcb90
