@@ -6,6 +6,8 @@
 #include "EA/CommandLine.h"
 #include "EA/Variant.h"
 #include "SP/cDirectPropertyList.h"
+#include "SP/cStringTokenTranslator.h"
+#include "SP/cString.h"
 #include <xmmintrin.h>
 #include "sse_helpers.h"
 #include <intrin.h>
@@ -92,6 +94,19 @@ struct cSporeApp : IHandlerBase, RefCountBase {
     void f47930();
 };
 // ---- items of slice s00f47680 end
+
+// The token translator the app hands the string detokenizer: "demo" expands to L" Demo" in the demo build
+// (vtable 0x0148d7f4; its destructor only resets the vptr and runs the base one, 0x005725a0).
+class cSporeAppTokenTranslator : public SP::cStringTokenTranslator {
+ public:
+  cSporeAppTokenTranslator(bool demo) : mbDemo(demo) {}
+  virtual ~cSporeAppTokenTranslator() {}
+  virtual bool TranslateToken(wchar_t const* token, eastl::basic_string<wchar_t, eastl::allocator>& result);  // 0x00f47c20
+  bool mbDemo;                                                          // +0x8
+};
+
+// The compiler emits its scalar deleting destructor with the vtable:
+//   @ 0x00f47520 ??_GcSporeAppTokenTranslator@@UAEPAXI@Z
 
 // ---- items of slice s00f47ed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char gSinclude[];                                            // 0x0148d858 "sinclude \""
@@ -818,30 +833,39 @@ char cSporeApp::UpdateCheck(void* s, void* out)
     return result;
 }
 
-// @ 0x00f47ca0
-void f47ca0(char flag, void* outString)
+// App::cStringDetokenizer (vtable 0x01400f40; this file's App() accessor hides the namespace), itself an
+// SP::cStringTokenTranslator
+class cStringDetokenizer : public SP::cStringTokenTranslator {
+ public:
+  cStringDetokenizer();                                                                   // 0x006b6490
+  virtual void func18h();                                                                 // +0x18
+  virtual void AddTranslator(SP::cStringTokenTranslator* translator);                     // +0x1c
+  virtual void RemoveTranslator(SP::cStringTokenTranslator* translator);                  // +0x20
+  virtual bool HasTokens(wchar_t const* text);                                            // +0x24
+  virtual bool Detokenize(SP::cString* text, eastl::basic_string<wchar_t, eastl::allocator>& result);  // +0x28
+  char mPad[0x5c - 8];
+};
+
+static inline const wchar_t* WStrEnd(const wchar_t* p)
 {
-    ((WString*)outString)->assign(0x148d830, 0x148d830 + 9 * 2); // L"SPORE(TM)"
-    char local[0x10];
-    cStringCtor(local);
-    void* t = WrapperAlloc(0xc);
-    char* trans = 0;
-    if (t) {
-        cStringTokenTranslatorCtor(t);
-        *(char**)t = (char*)0x148d7f4;
-        ((char*)t)[8] = flag;
-        trans = (char*)t;
-    }
-    void* d = WrapperAlloc(0x5c);
-    char* detok = 0;
-    if (d) detok = (char*)cStringDetokenizerCtor(d);
-    VC0(detok, 0x20);
-    VC1(detok, 0x1c, (int)trans);
-    if (cStringLoad(local, 0x40e05d38, 0x319ad21d, 0)) {
-        VC2i(detok, 0x28, (int)local, (int)outString);
-    }
-    (*(void (__thiscall**)(void*, int))(*(char**)detok + 0x0))(detok, 1);
-    cStringDtor(local);
+    while (*p)
+        ++p;
+    return p;
+}
+
+// @ 0x00f47ca0
+void BuildStringTokenTranslator(bool demo, eastl::basic_string<wchar_t, eastl::allocator>& result)
+{
+    const wchar_t* name = L"SPORE(TM)";
+    result.assign(name, name + (WStrEnd(name) - name));
+    SP::cString text;
+    cSporeAppTokenTranslator* translator = new cSporeAppTokenTranslator(demo);
+    cStringDetokenizer* detokenizer = new cStringDetokenizer();
+    detokenizer->RemoveTranslator(detokenizer);
+    detokenizer->AddTranslator(translator);
+    if (text.Load(0x40e05d38, 0x319ad21d, 0))
+        detokenizer->Detokenize(&text, result);
+    delete detokenizer;
 }
 
 // @ 0x00f47d80
