@@ -845,6 +845,7 @@
 0138e430  -  synth/int_tweak_init.cpp  ??__Eg_016c8948@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 0138e480  -  synth/int_tweak_init.cpp  ??__Eg_016c8958@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 0138e4d0  -  synth/int_tweak_init.cpp  ??__Eg_016c8968@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01391690  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01396930  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_01396930@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
 01396ef0  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01396ef0@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
 01396fe0  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_01396fe0@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
