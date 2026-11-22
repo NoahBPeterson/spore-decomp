@@ -318,9 +318,9 @@ namespace movie {
 class IVideoRenderer
 { public:
     virtual void v00();                       // +0x00
-    virtual void v04(void* a);                // +0x04
+    virtual void v04(void* allocator, void* a, void* b);   // +0x04
     virtual int  v08();                       // +0x08
-    virtual int  v0c();                       // +0x0c
+    virtual float v0c();                      // +0x0c (returns the video delay)
     virtual void v10(int a, int b);           // +0x10
     virtual void v14(float a);                // +0x14
     virtual void v18(float a);                // +0x18
@@ -342,10 +342,10 @@ class IAudioRenderer
 { public:
     virtual void v00();                       // +0x00
     virtual void v04(int a, int b, int c);    // +0x04
-    virtual int  v08();                       // +0x08
+    virtual float v08();                      // +0x08 (returns the audio delay)
     virtual void v0c();
     virtual void v10(int a, int b);           // +0x10
-    virtual void v14(void* a);                // +0x14
+    virtual void v14(int a, int b);           // +0x14
     virtual void v18(void* a);                // +0x18
     virtual void v1c(void* a);                // +0x1c
 virtual void v20();
@@ -367,6 +367,15 @@ virtual void v5c();
 virtual void v60();
     virtual void v64();
     virtual void v68(void* a);                // +0x68
+};
+}
+}
+namespace rw {
+namespace movie {
+class ISubtitleRenderer
+{ public:
+    virtual void v00();                       // +0x00
+    virtual void Init(void* allocator);       // +0x04
 };
 }
 }
@@ -403,7 +412,7 @@ namespace movie {
 class MovieRenderer_s00fc_b210
 { public:
     ICoreAllocator_s00fc_b210* mAllocator;       // +0x00
-    void*           mVideoRenderer;   // +0x04
+    IVideoRenderer* mVideoRenderer;   // +0x04
     IAudioRenderer* mAudioRenderer;   // +0x08
     void*           mTimer;           // +0x0c
     int32_t         mAudioFormatA;    // +0x10
@@ -411,8 +420,8 @@ class MovieRenderer_s00fc_b210
     int32_t         mAudioChannels;   // +0x18
     int32_t         mSubtitleFormatA; // +0x1c
     int32_t         mSubtitleFormatB; // +0x20
-    float           mAudioDelay;      // +0x24
-    float           mVideoDelay;      // +0x28
+    float           mVideoDelay;      // +0x24
+    float           mAudioDelay;      // +0x28
     float           mDelay;           // +0x2c
     float           mVolume;          // +0x30
     float           mPosX;            // +0x34
@@ -1478,8 +1487,8 @@ rw::movie::MovieRenderer_s00fc_b210* rw::movie::MovieRenderer_s00fc_b210::Ctor(I
     mAudioChannels   = 0;
     mSubtitleFormatA = 0;
     mSubtitleFormatB = 0;
-    mAudioDelay      = 0.0f;
     mVideoDelay      = 0.0f;
+    mAudioDelay      = 0.0f;
     mDelay           = 0.0f;
     mVolume          = 1.0f;
     mPosX            = 0.0f;
@@ -1520,9 +1529,9 @@ void rw::movie::MovieRenderer_s00fc_b210::Prepare(void* a, void* b, void* c, voi
         if (mAudioRenderer != 0)
         {
             mAudioRenderer->v04((int)mAllocator, (int)c, (int)d);
-            mVideoDelay = (float)mAudioRenderer->v08();
+            mAudioDelay = mAudioRenderer->v08();
             mAudioRenderer->v10(mAudioFormatA, mAudioFormatB);
-            mAudioRenderer->v14((void*)mAudioChannels);
+            mAudioRenderer->v14(mAudioChannels, 0);
         }
         mVideoState = 1;
     }
@@ -1530,18 +1539,17 @@ void rw::movie::MovieRenderer_s00fc_b210::Prepare(void* a, void* b, void* c, voi
     {
         if (mVideoRenderer != 0)
         {
-            rw::movie::IVideoRenderer* vr = (rw::movie::IVideoRenderer*)mVideoRenderer;
-            vr->v04((void*)mAllocator);
-            vr->v0c();
-            vr->v10(mSubtitleFormatA, mSubtitleFormatB);
-            vr->v14(mPosX);
-            vr->v18(mPosY);
-            vr->v1c(mPosZ);
-            vr->v2c(mScaleX);
-            vr->v30(mScaleY);
+            mVideoRenderer->v04(mAllocator, a, b);
+            mVideoDelay = mVideoRenderer->v0c();
+            mVideoRenderer->v10(mSubtitleFormatA, mSubtitleFormatB);
+            mVideoRenderer->v14(mPosX);
+            mVideoRenderer->v18(mPosY);
+            mVideoRenderer->v1c(mPosZ);
+            mVideoRenderer->v2c(mScaleX);
+            mVideoRenderer->v30(mScaleY);
         }
         if (mTimer != 0)
-            ((rw::movie::IVideoRenderer*)mTimer)->v04((void*)mAllocator);
+            ((rw::movie::ISubtitleRenderer*)mTimer)->Init(mAllocator);
         mDelay = mVideoDelay - mAudioDelay;
         mState = 1;
     }

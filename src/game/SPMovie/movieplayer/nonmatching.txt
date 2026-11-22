@@ -4,4 +4,3 @@
 00fcb210 636 868	WEAK (21.8% cov; imports: WaitForSingleObject/SleepEx dominate) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcb5e0 120 219	WEAK (16.7% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcb920 415 661	FAIL (ecx clobber on entry) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00fcbd30 208 224	FAIL (float -inf vs +inf at +0x2c; iface slots) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
