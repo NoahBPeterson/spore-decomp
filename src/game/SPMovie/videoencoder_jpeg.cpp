@@ -19,7 +19,11 @@ typedef unsigned char u8;
 
 // rw::movie::ICoreAllocator, as the object spells it (see the slice's local copy).
 struct ICoreAllocator {
-    void* m_vtbl;  // +0x00
+    virtual ~ICoreAllocator();
+    virtual void* Alloc(unsigned int size, const char* name, unsigned int flags);
+    virtual void* Alloc(unsigned int size, const char* name, unsigned int flags,
+                        unsigned int align, unsigned int alignOffset);
+    virtual void  Free(void* p, unsigned int size);
 };
 
 // rw::movie::VideoEncoder_Jpeg (retail member offsets).
@@ -80,15 +84,14 @@ void VideoEncoder_Jpeg::Init(ICoreAllocator* alloc)
     unsigned int sz = mHeight * mWidth * 2 + 0x100;
     mEncodeBufferSize = sz;
     mAllocator = alloc;
-    mEncodeBuffer = (u8*)((void* (__thiscall*)(ICoreAllocator*, unsigned int, const char*, int))
-                          ((void**)alloc->m_vtbl)[2])(alloc, sz, "JPEG Encode Buffer", 1);
+    mEncodeBuffer = (u8*)alloc->Alloc(sz, "JPEG Encode Buffer", 1);
 }
 
 // @ 0x00fcdaa0
 void VideoEncoder_Jpeg::Shutdown()
 {
     if (mEncodeBuffer != 0 && mAllocator != 0) {
-        ((void (*)(void*, u8*, int))((void**)mAllocator->m_vtbl)[3])(mAllocator, mEncodeBuffer, 0);
+        mAllocator->Free(mEncodeBuffer, 0);
         mEncodeBuffer = 0;
         mEncodeBufferSize = 0;
     }
@@ -207,9 +210,7 @@ void VideoEncoder_Jpeg::Encode(void* frame)
     *(int*)(cinfo + 0x168) = 0;
     mEncodeBufferPos = 0;
     jpeg_start_compress(cinfo, 1);
-    u8* line = (u8*)((void* (__thiscall*)(ICoreAllocator*, unsigned int, const char*, int))
-                     ((void**)mAllocator->m_vtbl)[2])(mAllocator, *(int*)(cinfo + 0x34) * 3,
-                                                      "JPEG Line Buffer", 0);
+    u8* line = (u8*)mAllocator->Alloc(*(int*)(cinfo + 0x34) * 3, "JPEG Line Buffer", 0);
     if (line != 0) {
         // Bytes per source pixel: 24-bit data is packed, every other format is 32-bit.
         int bpp = 1;
@@ -221,8 +222,7 @@ void VideoEncoder_Jpeg::Encode(void* frame)
             FUN_00fcdb20(fi[0], (u8*)(fi[1] * y * bpp + fi[3]), line, *(int*)(cinfo + 0x30));
             jpeg_write_scanlines(cinfo, &line, 1);
         }
-        ((void (__thiscall*)(ICoreAllocator*, u8*, int))
-         ((void**)mAllocator->m_vtbl)[3])(mAllocator, line, 0);
+        mAllocator->Free(line, 0);
     }
     jpeg_finish_compress(cinfo);
     jpeg_destroy(cinfo);
