@@ -9,3 +9,4 @@ slices/s01200010/s01200010_vc71.cpp  ?Rebase3@@YAXPAURel3@@PAX@Z  012008b0  /vc7
 slices/s01200010/s01200010_vc71.cpp  ?RebaseTranslated@@YAXPAH0@Z  01201070  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s01200010/s01200010_vc71.cpp  ?Finish@FixupHolder@@QAEXXZ  01200940  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s01200010/s01200010_vc71.cpp  ?RebaseOneReversed@@YAPAUBase20Ctx@@PAHPAU1@@Z  01200fb0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01200010/s01200010.cpp  ?FixupCallback@@YAHHPAUFixup4@@@Z  01200f80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
