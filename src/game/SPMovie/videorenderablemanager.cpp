@@ -9,6 +9,7 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EA_Thread_Mutex_dtor(void*);   // 0x922130
+extern "C" char g_14613b8[];                   // comparator base vtable
 extern const char g_mutexName[];                        // 0x149219c
 
 // ---- items of slice s00fcd210 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -46,9 +47,11 @@ public:
 }
 }
 struct ICoreAllocator {
-    virtual void* s00();                                           // +0x00
-    virtual void* Alloc(u32 size, const char* name, int a, int b, int c);  // +0x04 (ret 0x14)
-    virtual void  Free(void* p, int a);                            // +0x08
+    virtual ~ICoreAllocator();                                     // +0x00
+    // cl places overloaded virtuals in reverse order: the 5-argument Alloc is +0x04.
+    virtual void* Alloc(u32 size, const char* name, int flags);   // +0x08
+    virtual void* Alloc(u32 size, const char* name, int flags, int align, int alignOffset);  // +0x04 (ret 0x14)
+    virtual void  Free(void* p, int size);                         // +0x0c
 };
 namespace rw {
  class SList {
@@ -83,6 +86,11 @@ public:
     virtual void  s6c();                                     // +0x6c
     virtual void  s70();                                     // +0x70
     virtual void  Remove(void* node, int a);                 // +0x74
+    virtual void  s78();                                     // +0x78
+    virtual void  s7c();                                     // +0x7c
+    virtual void  s80();                                     // +0x80
+    virtual void  s84();                                     // +0x84
+    virtual void  Clear(int a);                              // +0x88
     SList();                                                 // 0x00FCCE10
 }; 
 }
@@ -129,19 +137,20 @@ extern "C" int __stdcall FUN_00fcdfe0(int* a, int* b)
 }
 
 // @ 0x00fce010
+// Releases the four frame lists and tears down the comparator and the list mutex.
 void RVRenderable::ShutdownAll()
 {
-    char* self = (char*)this;
-    ((void (*)(void*))((void**)*(void**)(self + 0x0c))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x0c), 0);
-    ((void (*)(void*))((void**)*(void**)(self + 0x10))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x10), 0);
-    ((void (*)(void*))((void**)*(void**)(self + 0x08))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x08), 0);
-    ((void (*)(void*))((void**)*(void**)(self + 0x04))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x04), 0);
-    *(int*)(self + 0x48) = 0x14613b8;
-    EA_Thread_Mutex_dtor((void*)(self + 0x18));
+    VideoRenderableManager* self = (VideoRenderableManager*)this;
+    self->mSentToDecoderList->Clear(0);
+    self->mAllocator->Free(self->mSentToDecoderList, 0);
+    self->mSentToRendererList->Clear(0);
+    self->mAllocator->Free(self->mSentToRendererList, 0);
+    self->mFilledList->Clear(0);
+    self->mAllocator->Free(self->mFilledList, 0);
+    self->mEmptyList->Clear(0);
+    self->mAllocator->Free(self->mEmptyList, 0);
+    self->mComparator.vftable = g_14613b8;
+    self->mListMutex.~Mutex_s00fc_e1e0();
 }
 
 // @ 0x00fce0a0
