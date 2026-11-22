@@ -316,6 +316,32 @@ void* EA_Audio_GetSystemAT_s00fd_8190();                               // 0x00a2
 void* LockedAlloc(int,int,int,int,int,int);                 // 0x009289f0
 void  MemPool_Free(void* thisp, void* p);                   // 0x009276c0
 void* FUN_00fca2c0(void* p, int a);                         // 0x00fca2c0
+// Pool the recorder hands unused audio buffers back to (BindPool, thiscall Free).
+struct BindPool {
+    void Free(void* p);                                     // 0x009276c0
+};
+extern BindPool* g_spBindPool;                              // 0x016c8b44
+extern "C" char g_13ebb38[];                                // EASTL allocator name
+// eastl::list<int> node and sentinel.
+struct PacketListNode {
+    PacketListNode* mpNext;     // +0x00
+    PacketListNode* mpPrev;     // +0x04
+    int             mValue;     // +0x08
+};
+struct PacketList {
+    PacketListNode* mpNext;     // +0x00
+    PacketListNode* mpPrev;     // +0x04
+};
+// The audio encoder the recorder submits sample descriptions to (slot +0x38).
+struct AudioPacketDesc { int mType, mSampleRate, mChannels, mBlockSize, mData; };
+struct IAudioEncoderSink {
+    virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
+    virtual void v0c() = 0; virtual void v10() = 0; virtual void v14() = 0;
+    virtual void v18() = 0; virtual void v1c() = 0; virtual void v20() = 0;
+    virtual void v24() = 0; virtual void v28() = 0; virtual void v2c() = 0;
+    virtual void v30() = 0; virtual void v34() = 0;
+    virtual void Submit(AudioPacketDesc* desc) = 0;   // +0x38
+};
 class cMovieSystem_s00fd_8190 {
 public:
     char  mHead[0x64];          // +0x00
@@ -337,6 +363,7 @@ public:
     bool  mExcludeUI;           // +0xcd
     char  mPadCe[2];
     char  mRecordStream[0x228]; // +0xd0
+    int   mField2f8;            // +0x2f8
     int   mField2fc;            // +0x2fc
     int   mCapturedFrames;      // +0x300
     int   mField304;            // +0x304
@@ -345,7 +372,8 @@ public:
     float mField310;            // +0x310
     float mField314;            // +0x314
     void* mLetterbox;           // +0x318
-    void* mPacketList;          // +0x31c
+    PacketList mPackets;        // +0x31c (eastl::list<int> sentinel)
+    char  mPad324[4];
     int   mAudioSampleRate;     // +0x328
 
     bool RecordMovie(int unused, int* pInfo);       // 0x00fd8190
@@ -1065,33 +1093,31 @@ bool cMovieSystem_s00fd_8190::RecordMovie(int /*unused*/, int* pInfo)
 // @ 0x00fd86f0
 void cMovieSystem_s00fd_8190::SubmitFrame(int param)
 {
-    char* p = (char*)this;
-    void* mx = p + 0x70;
-    ((EAMutex_s00fd_8190*)mx)->Lock((void*)0x01493900);
-    if (*(bool*)(p + 0xa0)) {
-        int vals[5];
-        vals[0] = 1;
-        vals[1] = *(int*)(p + 0x328);
-        vals[2] = 2;
-        vals[3] = 0x200;
-        vals[4] = param;
+    EAMutex_s00fd_8190* mx = (EAMutex_s00fd_8190*)mRecordMutex;
+    mx->Lock(&g_pMutexTag);
+    if (mRecording) {
+        AudioPacketDesc desc;
+        desc.mType = 1;
+        desc.mSampleRate = mAudioSampleRate;
+        desc.mChannels = 2;
+        desc.mBlockSize = 0x200;
+        desc.mData = param;
+        ((IAudioEncoderSink*)mWidth)->Submit(&desc);
 
-        void* rec = *(void**)(p + 0xb4);
-        ((Fv)Vt(rec)[0x38 / 4])(rec, (void*)vals);
-
-        int* node = (int*)operator_new(0xc, "EASTL", 0, 0,
-                                       (int)0x013ebb38, 0xd1);
-        if (node + 2 != 0)
-            node[2] = param;
-        node[0] = (int)(p + 0x31c);
-        node[1] = *(int*)(p + 0x320);
-        *(int**)(*(void**)(p + 0x320)) = node;
-        *(int**)(p + 0x320) = node;
-        ((EAMutex_s00fd_8190*)mx)->Unlock();
-        return;
+        PacketList* list = &mPackets;
+        PacketListNode* node = (PacketListNode*)operator_new(sizeof(PacketListNode), "EASTL", 0, 0,
+                                                             (int)g_13ebb38, 0xd1);
+        int* value = &node->mValue;
+        if (value != 0)
+            *value = param;
+        node->mpNext = (PacketListNode*)list;
+        node->mpPrev = list->mpPrev;
+        list->mpPrev->mpNext = node;
+        list->mpPrev = node;
+    } else {
+        g_spBindPool->Free((void*)param);
     }
-    MemPool_Free(*(void**)&g_spMemPool, (void*)param);
-    ((EAMutex_s00fd_8190*)mx)->Unlock();
+    mx->Unlock();
 }
 
 // @ 0x00fd87c0
