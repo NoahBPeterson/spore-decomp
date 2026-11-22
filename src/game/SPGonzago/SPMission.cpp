@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPMission.cpp -- migrated from slice(s) s00c45860, s00b9bed0, s00c4a850, s00c498e0, s00c48970, s00c47a10, s00c46ab0, s00c44a20, s00c44080 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPMission.cpp -- migrated from slice(s) s00c44c70, s00c44c30, s00c45860, s00b9bed0, s00c4a850, s00c498e0, s00c48970, s00c47a10, s00c46ab0, s00c44a20, s00c44080 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPMission.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -2015,6 +2015,22 @@ void  __cdecl OperatorDeleteArray(void* p);              // 0x00f47380
 
 // ---- items of slice s00c45860 end
 
+// ---- items of slice s00c44c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Obj00c44c30 { char pad[0x16c]; int value; int Get(); };
+// ---- items of slice s00c44c30 end
+
+// ---- items of slice s00c44c70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cSPMission_s00c4_4c70 {
+public:
+    uint32_t mUnknown000[0x84 / sizeof(uint32_t)];
+    eMissionState mState;
+
+    eMissionState GetState() const;
+};
+}
+// ---- items of slice s00c44c70 end
+
 // @ 0x00b9c630
 void Clue::Read(GenParams* src, int count, float value)
 {
@@ -2148,6 +2164,10 @@ void GameObj::UnregisterIds_c44bd0()
   v84(0x4249453);
 }
 
+// @ 0x00c44c30
+int Obj00c44c30::Get()
+{ return value; }
+
 // @ 0x00c44c40
 void GameObj::ForwardToResource_c44c40(void* p)
 {
@@ -2160,6 +2180,14 @@ int GameObj::CallV48_c44c60(int a)
 {
   return v48(a);
 }
+
+// @ 0x00c44c70
+namespace SP {
+eMissionState cSPMission_s00c4_4c70::GetState() const
+{
+    return mState;
+}
+}  // namespace SP
 
 // @ 0x00c44c90
 bool GameObj::CallV42_c44c90()

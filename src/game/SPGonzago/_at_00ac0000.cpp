@@ -383,7 +383,7 @@ extern "C" void  __cdecl FUN_00401090(void*);              // 0x401090 GetSettin
 typedef unsigned int  u32;
 typedef unsigned char u8;
 typedef float* (__fastcall* GetVecFn)(void*);
-extern "C" void* __cdecl operator_new(u32, const char*, int, int, int, int); // 0xf473a0
+extern "C" void* __cdecl operator_new(unsigned int, const char*, int, int, const char*, int); // 0xf473a0 (EASTL allocator.h form)
 #define VTBL_01459c04  ((void*)0x1459c04)
 #define VTBL_01459c20  ((void*)0x1459c20)
 #define VTBL_01459c30  ((void*)0x1459c30)
@@ -702,11 +702,57 @@ struct FourVecDtorStub { void* FUN_00acb150(uchar flags); };
 // ---- items of slice s00ac9f70 end
 
 // ---- items of slice s00acb1b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" const wchar_t DAT_013f6254[];   // L"map"
+extern "C" const wchar_t DAT_013f5890[];   // L"int32_t"
+extern "C" void* const DAT_0145a158;       // Element vtable for the 0xc-stride container
+void* __cdecl FUN_00ac96b0(void* a, void* b, void* c);
+void* __cdecl FUN_00f9b050(void* a, void* b, void* c);
+void  __cdecl FUN_00c50ad0(void* a, void* b, void* c);
 void* __cdecl FUN_00ac9740(void* a, void* b, void* c);
 void* __cdecl FUN_00ac89e0(void* a, void* b, void* c);
+void* __cdecl FUN_00ac9200(void* src);
+struct Elem2c { uchar raw[0x2c]; void FUN_00ac9200(Elem2c* src); };
+void* __cdecl FUN_00ac95f0(void* outIter, void* begin, void* initVal, void* end);
 void* __cdecl FUN_00ac94c0(void* outIter, void* begin, void* initVal, void* end, void* extra);
+void  __cdecl FUN_00ac9680(void* dest, int n, const void* val);        // 4-stride
+void  __cdecl FUN_00ac9560(void* dest, int n, const void* val);        // 0c-stride
+void* __cdecl FUN_00ac9630(void* begin, void* end, void* val);
+void* __cdecl FUN_00ac9510(void* begin, void* end, void* val);
+void* __cdecl FUN_00ac8a30(void* begin, void* end, void* dest);
+void* __cdecl FUN_00ac97f0_s00ac_b1b0(void* begin, void* end, void* dest);
+void* __cdecl FUN_00ac95a0(void* begin, void* end, void* dest);        // 0c-stride
+struct RefPtr_s00ac_b1b0 {
+    void* mpObject;
+};
 void __cdecl FUN_00a02c30(void* obj);   // addref  (thiscall-style, ecx = obj)
 void __cdecl FUN_00a05270(void* obj);   // release (thiscall-style, ecx = obj)
+struct ElemC {
+    void** vptr;      // +0
+    uchar  flag;      // +4
+    uchar  pad5[3];
+    void*  ref;       // +8
+};
+struct String16 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+};
+String16 __cdecl FUN_0093c5a0(const char* s, int len);   // EA::ConvertToString16
+String16 __cdecl FUN_00579a90(const wchar_t* s);         // RangeInitialize(empty)
+static void destroy16(String16& s) {
+    if (s.mpBegin && (((char*)s.mpEnd - (char*)s.mpBegin) & ~1) > 2)
+        operator_delete(s.mpBegin);
+    s.mpBegin = 0; s.mpEnd = 0; s.mpCapacity = 0;
+}
+struct Archive {
+    virtual bool v0(const wchar_t* name);
+    virtual bool v1(const wchar_t* name);
+    virtual bool v2(const wchar_t* name);
+    virtual bool v3(const wchar_t* name);
+    virtual bool v4(const wchar_t* name);
+};
+bool  __cdecl FUN_00ac8050(Archive* ar, int unused, const void* name);
+bool  __cdecl FUN_0057c770(Archive* ar, int unused, const void* value, const wchar_t* type);
 struct XC {
     void  FUN_00aca9d0(void*);
     void  FUN_00b93c60(uint, void*);
@@ -727,11 +773,15 @@ struct VO {
     void* FUN_00acaa50(uint n, void* a, void* b);
     void  FUN_00ac8930(void* a, void* b);
 };
+char FUN_00acb1b0(int* obj, int p2, int p3);          // 00acb1b0
+char FUN_00acb340(int* obj, int p2, int* p3);         // 00acb340
 void* FUN_00acbb20(uchar* p, uchar* end, uchar* out); // 00acbb20
+char FUN_00acbc10(int* obj, int p2, int p3);          // 00acbc10
 // ---- items of slice s00acb1b0 end
 
 // ---- items of slice s00acc140 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* DAT_01654c04;
+struct Vec3_s00ac_c140 { float x, y, z; };
 struct Vec3 { float x, y, z; };
 struct Key3 { int a, b, c; };
 struct KeyVec {                         // vector header passed to LoadSelector
@@ -743,13 +793,13 @@ struct KeyVec {                         // vector header passed to LoadSelector
 };
 struct RareEntry {                      // 0x2c record appended to planet+0x134
     uint          mUnk00;               // +0x00 (not written by sGetClosestRare)
-    Vec3          mPos;                 // +0x04
+    Vec3_s00ac_c140          mPos;                 // +0x04
     unsigned short mUnk10;              // +0x10 (not written)
     uchar         mUnk12;               // +0x12 (not written)
     uchar         mUnk13;               // +0x13
     uint          mUnk14;               // +0x14 (not written)
     int           mZero18;              // +0x18
-    Vec3          mOther;               // +0x1c
+    Vec3_s00ac_c140          mOther;               // +0x1c
     uchar         mKind28;              // +0x28
     uchar         mPad29[3];
 };
@@ -818,7 +868,6 @@ static void* vcall0p(void* o, int slot)       { return ((PtrFn)vc(o, slot))(o); 
 static void  vcall2i(void* o, int slot, void* a, int b)  { ((Void2IntFn)vc(o, slot))(o, a, b); }
 void  __cdecl FUN_00ac97f0(void* a, void* b, void* c);
 void  __cdecl FUN_00ac89a0(void* a, void* b, void* c);
-void* __cdecl FUN_00ac95a0(void* a, void* b, void* c);
 void* __cdecl FUN_00b33f40();
 void* __cdecl FUN_00b5b800_s00ac_c140();
 void* __cdecl FUN_01021260();
@@ -882,15 +931,15 @@ struct VO_s00ac_c140 {
     CountMap mCountMap;            // +0xe0
 
     void  FUN_00acc140(uchar* pos, uchar* val);
-    void  FUN_00acc610(void* p);
-    void  FUN_00acc700(void* p, float a, float b);
-    void  FUN_00acc770();
-    void  FUN_00acc9b0(uint n);
-    void  FUN_00acc390();
-    bool  FUN_00accf80(void* p);
-    void  FUN_00acd210();
-    void  FUN_00acd2d0(void* p);
-    void  FUN_00acd410(void* p);
+    void  FUN_00acc610(void* p);  // 0x00acc610 (VO::FUN_00acc610)
+    void  FUN_00acc700(void* p, float a, float b);  // 0x00acc700 (VO::FUN_00acc700)
+    void  FUN_00acc770();  // 0x00acc770 (VO::FUN_00acc770)
+    void  FUN_00acc9b0(uint n);  // 0x00acc9b0 (VO::FUN_00acc9b0)
+    void  FUN_00acc390();  // 0x00acc390 (VO::FUN_00acc390)
+    bool  FUN_00accf80(void* p);  // 0x00accf80 (VO::FUN_00accf80)
+    void  FUN_00acd210();  // 0x00acd210 (VO::FUN_00acd210)
+    void  FUN_00acd2d0(void* p);  // 0x00acd2d0 (VO::FUN_00acd2d0)
+    void  FUN_00acd410(void* p);  // 0x00acd410 (VO::FUN_00acd410)
     void  FUN_00ac84f0(void* p);   // 0x00ac84f0, defined in another slice
 };
 void  __stdcall FUN_00acc800(KeyVec* v);
@@ -1092,6 +1141,7 @@ struct IPos_ac0730 {
 };
 extern "C" float g_13eb960;   // 0x013eb960  +0.01
 extern "C" float g_140ced4;   // 0x0140ced4  -0.01
+
 // @ 0x00ac0730
 int ThiscallStub::FUN_00ac0730(void* a, void* b)
 {
@@ -2195,6 +2245,34 @@ int* VecCopyStub::FUN_00aca970(int* src)
     return obj;
 }
 
+// @ 0x00acaab0
+int* FUN_00acaab0(int* p, int* end, int* out)
+{
+    if (p != end) {
+        int* cur = out;
+        do {
+            if (cur) {
+                void* o = (void*)*p;
+                *cur = (int)o;
+                if (o) ((void (__thiscall*)(void*))vc(o, 0))(o);
+                int n = (p[2] - p[1]) >> 2;
+                int mem = 0;
+                if (n) mem = (int)operator_new(n * 4, "Simulator", 0, 0,
+                    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+                cur[1] = mem;
+                cur[2] = mem;
+                cur[3] = mem + n * 4;
+                int* r = 0;
+                FUN_00829110(&r, (void*)p[1], (void*)p[2], (void*)mem, (void*)end);
+                cur[2] = (int)r;
+            }
+            p += 6; cur += 6;
+        } while (p != end);
+        return cur;
+    }
+    return out;
+}
+
 // @ 0x00acab70
 int FUN_00acab70(int* p, int* end, int out)
 {
@@ -2371,6 +2449,67 @@ void __fastcall FUN_00acb190(void* self)
     if (o) ((void (__thiscall*)(void*))vc(o, 4))(o);
 }
 
+// @ 0x00acb1b0
+char FUN_00acb1b0(int* obj, int p2, int p3)
+{
+    Archive* ar = (Archive*)obj;
+    int* ht = (int*)p3;
+    if (ht[3] == 0) return 1;
+    char ok = 1;
+    String16 s = p2 ? FUN_0093c5a0((const char*)p2, -1) : FUN_00579a90(0);
+    const wchar_t* nm = s.mpBegin == s.mpEnd ? DAT_013f6254 : s.mpBegin;
+    ar->v0(nm);
+    int* buckets = (int*)ht[1];
+    int* p = buckets;
+    int* node = (int*)p[0];
+    if (!node) {
+        p = buckets + 1;
+        while (*p == 0) p++;
+        node = (int*)p[0];
+    }
+    int* endNode = (int*)buckets[ht[2]];
+    while (node != endNode) {
+        if (ok) {
+            ok = 1;
+            if (!FUN_00ac8050(ar, 0, node + 1)) ok = 0;
+        } else {
+            ok = 0;
+        }
+        node = (int*)node[0x68 / 4];
+        if (!node) {
+            p++;
+            while (*p == 0) p++;
+            node = (int*)p[0];
+        }
+    }
+    ar->v1(nm);
+    destroy16(s);
+    return ok;
+}
+
+// @ 0x00acb340
+char FUN_00acb340(int* obj, int p2, int* p3)
+{
+    Archive* ar = (Archive*)obj;
+    if (p3[0] == p3[1]) return 1;
+    char ok = 1;
+    String16 s = p2 ? FUN_0093c5a0((const char*)p2, -1) : FUN_00579a90(0);
+    const wchar_t* nm = s.mpBegin == s.mpEnd ? DAT_013f6254 : s.mpBegin;
+    ar->v0(nm);
+    uchar* end = (uchar*)p3[1];
+    for (uchar* it = (uchar*)p3[0]; it != end; it += 0x20) {
+        if (ok) {
+            ok = 1;
+            if (!FUN_00ac8050(ar, 0, it + 4)) ok = 0;
+        } else {
+            ok = 0;
+        }
+    }
+    ar->v1(nm);
+    destroy16(s);
+    return ok;
+}
+
 // @ 0x00acb490
 void* VO::FUN_00acb490(int* src)
 {
@@ -2396,6 +2535,33 @@ void* VO::FUN_00acb490(int* src)
     return p;
 }
 
+// @ 0x00acb680
+void VO::FUN_00acb680(uchar* pos, uchar* val)
+{
+    int* v = (int*)this;
+    uchar* cur = (uchar*)v[1];
+    if (cur != (uchar*)v[2]) {
+        if (pos <= val && val < cur) val += 0x14;
+        if (cur) memcpy(cur, cur - 0x14, 0x14);
+        FUN_00c50ad0(pos, (void*)(v[1] - 0x14), (void*)v[1]);
+        memcpy(pos, val, 0x14);
+        v[1] += 0x14;
+        return;
+    }
+    int n = (int)(cur - (uchar*)v[0]) / 0x14;
+    int cap = n ? n * 2 : 1;
+    uchar* mem = cap ? (uchar*)operator_new(cap * 0x14, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    uchar* p1 = (uchar*)FUN_00f9b050((void*)v[0], pos, mem);
+    if (p1) memcpy(p1, val, 0x14);
+    uchar* p2 = (uchar*)FUN_00f9b050(pos, (void*)v[1], p1 + 0x14);
+    void* old = (void*)v[0];
+    if (old && *(int*)((char*)old - 4) != 0) operator_delete(old);
+    v[0] = (int)mem;
+    v[1] = (int)p2;
+    v[2] = (int)(mem + cap * 0x14);
+}
+
 // @ 0x00acb7c0
 void VO::FUN_00acb7c0(void* a2, void* a3)
 {
@@ -2407,6 +2573,91 @@ void VO::FUN_00acb7c0(void* a2, void* a3)
     }
     int n = (int)((char*)a3 - (char*)a2) >> 2;
     *(int*)((uchar*)p + 4) -= n * 4;
+}
+
+// @ 0x00acb810
+void VO::FUN_00acb810(uchar* pos, uchar* val)
+{
+    int* v = (int*)this;
+    uchar* end = (uchar*)v[1];
+    if (end != (uchar*)v[2]) {
+        if (pos <= val && val < end) val += 0x2c;
+        if (end) ((Elem2c*)end)->FUN_00ac9200((Elem2c*)(end - 0x2c));
+        uchar* d = end - 0x2c;
+        while (d != pos) {
+            d -= 0x2c;
+            memcpy(d + 0x2c, d, 0x2c);
+        }
+        memcpy(pos, val, 0x2c);
+        v[1] += 0x2c;
+        return;
+    }
+    int n = (int)(end - (uchar*)v[0]) / 0x2c;
+    int cap = n ? n * 2 : 1;
+    uchar* mem = cap ? (uchar*)operator_new(cap * 0x2c, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    uchar* p1 = (uchar*)FUN_00ac96b0((void*)v[0], pos, mem);
+    if (p1) ((Elem2c*)p1)->FUN_00ac9200((Elem2c*)val);
+    uchar* p2 = (uchar*)FUN_00ac96b0(pos, (void*)v[1], p1 + 0x2c);
+    void* old = (void*)v[0];
+    if (old && *(int*)((char*)old - 4) != 0) operator_delete(old);
+    v[0] = (int)mem;
+    v[1] = (int)p2;
+    v[2] = (int)(mem + cap * 0x2c);
+}
+
+// @ 0x00acb930
+void VO::FUN_00acb930(int a2, int a3, int a4)
+{
+    int* v = (int*)this;
+    RefPtr_s00ac_b1b0* pos = (RefPtr_s00ac_b1b0*)a2;
+    int     n   = a3;
+    RefPtr_s00ac_b1b0* val = (RefPtr_s00ac_b1b0*)a4;
+    int spare = (v[2] - v[1]) >> 2;
+    if ((uint)n > (uint)spare) {
+        int size = (v[1] - v[0]) >> 2;
+        int cap  = size ? size * 2 : 1;
+        int want = size + n;
+        int newcap = cap > want ? cap : want;
+        RefPtr_s00ac_b1b0* mem = newcap ? (RefPtr_s00ac_b1b0*)operator_new(newcap * 4, "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        memcpy(mem, (void*)v[0], (char*)pos - (char*)v[0]);
+        RefPtr_s00ac_b1b0* it = (RefPtr_s00ac_b1b0*)((char*)mem + ((char*)pos - (char*)v[0]));
+        FUN_00ac9680(it, n, val);
+        it += n;
+        memcpy(it, pos, (char*)v[1] - (char*)pos);
+        it = (RefPtr_s00ac_b1b0*)((char*)it + ((char*)v[1] - (char*)pos));
+        if (v[0] && *(int*)(v[0] - 4) != 0) operator_delete((void*)v[0]);
+        v[0] = (int)mem;
+        v[1] = (int)it;
+        v[2] = (int)(mem + newcap);
+        return;
+    }
+    if (n <= 0) return;
+
+    RefPtr_s00ac_b1b0 tmp;
+    tmp.mpObject = val->mpObject;
+    if (tmp.mpObject) ((XC*)tmp.mpObject)->FUN_00a02c30();
+
+    int     after = (v[1] - a2) >> 2;
+    RefPtr_s00ac_b1b0* end   = (RefPtr_s00ac_b1b0*)v[1];
+    if (n < after) {
+        RefPtr_s00ac_b1b0* src = end - n;
+        RefPtr_s00ac_b1b0* it  = end;
+        FUN_00ac95f0(&it, src, end, end);
+        v[1] += n * 4;
+        FUN_00ac8a30(it, src, end);
+        FUN_00ac9630(it, it + n, &tmp);
+    } else {
+        int m = n - after;
+        FUN_00ac9680(end, m, &tmp);
+        v[1] += m * 4;
+        RefPtr_s00ac_b1b0* it = (RefPtr_s00ac_b1b0*)v[1];
+        FUN_00ac95f0(&it, end - after, end, (RefPtr_s00ac_b1b0*)v[1]);
+        v[1] += after * 4;
+        FUN_00ac9630(it, end, &tmp);
+    }
+    if (tmp.mpObject) ((XC*)tmp.mpObject)->FUN_00a05270();
 }
 
 // @ 0x00acbaf0
@@ -2439,6 +2690,44 @@ void* FUN_00acbb20(uchar* p, uchar* end, uchar* out)
         return o;
     }
     return out;
+}
+
+// @ 0x00acbc10
+char FUN_00acbc10(int* obj, int p2, int p3)
+{
+    Archive* ar = (Archive*)obj;
+    int* ht = (int*)p3;
+    if (ht[3] == 0) return 1;
+    char ok = 1;
+    String16 s = p2 ? FUN_0093c5a0((const char*)p2, -1) : FUN_00579a90(0);
+    const wchar_t* nm = s.mpBegin == s.mpEnd ? DAT_013f6254 : s.mpBegin;
+    ar->v0(nm);
+    int* buckets = (int*)ht[1];
+    int* p = buckets;
+    int* node = (int*)p[0];
+    if (!node) {
+        p = buckets + 1;
+        while (*p == 0) p++;
+        node = (int*)p[0];
+    }
+    int* endNode = (int*)buckets[ht[2]];
+    while (node != endNode) {
+        if (ok) {
+            ok = 1;
+            if (!FUN_0057c770(ar, 0, node + 1, DAT_013f5890)) ok = 0;
+        } else {
+            ok = 0;
+        }
+        node = (int*)node[8 / 4];
+        if (!node) {
+            p++;
+            while (*p == 0) p++;
+            node = (int*)p[0];
+        }
+    }
+    ar->v1(nm);
+    destroy16(s);
+    return ok;
 }
 
 // @ 0x00acbd90
@@ -2488,6 +2777,110 @@ int VO::FUN_00acbed0(int a2, int a3)
     int n = (a2 - a3) / 0xc;
     *(int*)((uchar*)p + 4) += n * 0xc;
     return a2;
+}
+
+// @ 0x00acbf30
+void VO::FUN_00acbf30(int a2, uint a3, int a4)
+{
+    int*  v   = (int*)this;
+    ElemC* pos = (ElemC*)a2;
+    int    n   = (int)a3;
+    ElemC* val = (ElemC*)a4;
+    int spare = (int)((uint)(v[2] - v[1]) / 0xc);
+    if ((uint)n > (uint)spare) {
+        int size = (int)((uint)(v[1] - v[0]) / 0xc);
+        int cap  = size * 2;
+        if (cap == 0) cap = 1;
+        int want = size + n;
+        int newcap = cap > want ? cap : want;
+        ElemC* mem = newcap ? (ElemC*)operator_new(newcap * 0xc, "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        ElemC* it = (ElemC*)FUN_00ac95a0((void*)v[0], pos, mem);
+        FUN_00ac9560(it, n, val);
+        ElemC* after = (ElemC*)((char*)it + n * 0xc);
+        ElemC* stop  = (ElemC*)FUN_00ac95a0(pos, (void*)v[1], after);
+        if (v[0] && *(int*)(v[0] - 4) != 0) operator_delete((void*)v[0]);
+        v[0] = (int)mem;
+        v[1] = (int)stop;
+        v[2] = (int)(mem + newcap * 0xc);
+        return;
+    }
+    if (n <= 0) return;
+
+    ElemC tmp;
+    tmp.vptr = (void**)&DAT_0145a158;
+    tmp.flag = val->flag;
+    tmp.ref  = val->ref;
+    if (tmp.ref) ((void (__thiscall*)(void*))((void**)tmp.ref)[0])(tmp.ref);
+
+    int    after = (int)((uint)(v[1] - a2) / 0xc);
+    ElemC* end   = (ElemC*)v[1];
+    if (n < after) {
+        ElemC* src = end - n;
+        ElemC* it  = end;
+        FUN_00ac94c0(&it, src, end, end, src);
+        v[1] += n * 0xc;
+        FUN_00ac97f0_s00ac_b1b0(it, src, end);
+        FUN_00ac9510(it, it + n, &tmp);
+    } else {
+        int m = n - after;
+        FUN_00ac9560(end, m, &tmp);
+        v[1] += m * 0xc;
+        ElemC* it = (ElemC*)v[1];
+        FUN_00ac94c0(&it, end - after, end, (ElemC*)v[1], end - after);
+        v[1] += after * 0xc;
+        FUN_00ac9510(it, end, &tmp);
+    }
+    if (tmp.ref) ((void (__thiscall*)(void*))((void**)tmp.ref)[1])(tmp.ref);
+}
+
+// @ 0x00acc140
+void VO_s00ac_c140::FUN_00acc140(uchar* pos, uchar* val)
+{
+    int* p = (int*)this;
+    uchar* cur = (uchar*)p[1];
+    if (cur != (uchar*)p[2]) {
+        if (pos <= val && val < cur) val += 0xc;
+        if (cur) {
+            *(void**)cur = (void*)0x145a158;
+            *(cur + 4) = *(cur - 8);
+            void* o = *(void**)(cur - 4);
+            *(void**)(cur + 8) = o;
+            if (o) ((void (__thiscall*)(void*))vc(o, 0))(o);
+        }
+        FUN_00ac97f0(pos, (void*)(p[1] - 0xc), (void*)p[1]);
+        *(pos + 4) = *(val + 4);
+        void* a = *(void**)(val + 8);
+        void* b = *(void**)(pos + 8);
+        if (a != b) {
+            if (a) ((void (__thiscall*)(void*))vc(a, 0))(a);
+            *(void**)(pos + 8) = a;
+            if (b) ((void (__thiscall*)(void*))vc(b, 4))(b);
+        }
+        p[1] += 0xc;
+        return;
+    }
+    int n = (int)(cur - (uchar*)p[0]) / 0xc;
+    int cap = n ? n * 2 : 1;
+    uchar* mem = cap ? (uchar*)operator_new(cap * 0xc, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    int old = p[0];
+    void* e1 = FUN_00ac95a0((void*)old, pos, mem);
+    FUN_00ac89a0((void*)old, pos, mem);
+    if (e1) {
+        *(void**)e1 = (void*)0x145a158;
+        *(uchar*)((uchar*)e1 + 4) = *(uchar*)(val + 4);
+        void* o = *(void**)(val + 8);
+        *(void**)((uchar*)e1 + 8) = o;
+        if (o) ((void (__thiscall*)(void*))vc(o, 0))(o);
+    }
+    int oldend = p[1];
+    void* e2 = FUN_00ac95a0(pos, (void*)oldend, (uchar*)e1 + 0xc);
+    FUN_00ac89a0(pos, (void*)oldend, (uchar*)e1 + 0xc);
+    if (old && *(int*)(old - 4) != 0) operator_delete((void*)old);
+    p[1] = (int)e2;
+    p[0] = (int)mem;
+    p[2] = (int)(mem + cap * 0xc);
 }
 
 // @ 0x00acc2d0
@@ -2563,8 +2956,8 @@ void VO_s00ac_c140::FUN_00acc390()
                 void* stage = *it;
                 if (!stage || !((CStage*)stage)->canDo()) continue;
 
-                Vec3* a = (Vec3*)vcall0p(&((CStage*)stage)->mSubC0, 0x2c);
-                Vec3* b = (Vec3*)((CStage*)stage)->getFrame();
+                Vec3_s00ac_c140* a = (Vec3_s00ac_c140*)vcall0p(&((CStage*)stage)->mSubC0, 0x2c);
+                Vec3_s00ac_c140* b = (Vec3_s00ac_c140*)((CStage*)stage)->getFrame();
 
                 RareEntry e;
                 e.mPos = *a;

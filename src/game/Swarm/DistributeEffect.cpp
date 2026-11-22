@@ -2263,6 +2263,52 @@ static inline void FreeVecBuffer(void* p) {
 }
 // ---- items of slice s00a92d90 end
 
+// ---- items of slice s00a87fb0_x87 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const uint8_t DAT_014582d4[];// cube->sphere index table
+// ---- items of slice s00a87fb0_x87 end
+
+// ---- items of slice s00a89de0_x87 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Matrix3_s00a8_9de0__x87 {
+  float m[3][3];
+  Matrix3_s00a8_9de0__x87() {}
+};
+static __forceinline Vector3 Scale(const float& s, const Vector3& v)
+{
+  Vector3 out;
+  out.x = s * v.x;
+  out.y = s * v.y;
+  out.z = s * v.z;
+  return out;
+}
+static __forceinline Vector3 Rot(const Vector3& v, const Matrix3_s00a8_9de0__x87& m)
+{
+  Vector3 out;
+  out.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];
+  out.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1];
+  out.z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2];
+  return out;
+}
+static __forceinline Matrix3_s00a8_9de0__x87 Mul(const Matrix3_s00a8_9de0__x87& a, const Matrix3_s00a8_9de0__x87& b)
+{
+  Matrix3_s00a8_9de0__x87 out;
+  for (int i = 0; i < 3; ++i) {
+    out.m[i][0] = a.m[i][0] * b.m[0][0] + a.m[i][1] * b.m[1][0] + a.m[i][2] * b.m[2][0];
+    out.m[i][1] = a.m[i][0] * b.m[0][1] + a.m[i][1] * b.m[1][1] + a.m[i][2] * b.m[2][1];
+    out.m[i][2] = a.m[i][0] * b.m[0][2] + a.m[i][1] * b.m[1][2] + a.m[i][2] * b.m[2][2];
+  }
+  return out;
+}
+struct cTransform_s00a8_9de0__x87 {
+  uint16_t mFlags;       // +0x00
+  uint16_t mModCount;    // +0x02
+  Vector3  mTranslation; // +0x04
+  float    mScale;       // +0x10
+  Matrix3_s00a8_9de0__x87  mRotation;    // +0x14
+
+  cTransform_s00a8_9de0__x87& PostTransformBy(const cTransform_s00a8_9de0__x87& b);  // 0x00a8a140 (cTransform::PostTransformBy)
+};
+// ---- items of slice s00a89de0_x87 end
+
 // @ 0x00705290
 void mul_705290(V3* a, V3* b)
 {
@@ -2453,6 +2499,30 @@ __int64 cDistributeEffect_s00a8_7fb0::FUN_00a88220()
     return r.v;
 }
 
+// @ 0x00a88250
+uint32_t* FUN_00a88250(uint32_t* first, uint32_t* last, uint32_t* dst)
+{
+    if (first != last) {
+        float* d5 = (float*)dst + 5;
+        float* s5 = (float*)first + 5;
+        do {
+            if (dst != 0) {
+                *(float*)dst = *(float*)first;
+                d5[-4] = s5[-4];
+                d5[-3] = s5[-3];
+                d5[-2] = s5[-2];
+                d5[-1] = s5[-1];
+                *d5 = *s5;
+            }
+            first = first + 6;
+            s5 = s5 + 6;
+            dst = dst + 6;
+            d5 = d5 + 6;
+        } while (first != last);
+    }
+    return dst;
+}
+
 // @ 0x00a88350
 int cDistributeEffect_s00a8_7fb0::FUN_00a88350()
 {
@@ -2482,6 +2552,20 @@ int cDistributeEffect_s00a8_7fb0::FUN_00a88390(int count, void** outBegin, void*
     *(int*)((char*)this + 0xc) -= count;
     *(int*)((char*)this + 0x10) += *(int*)((char*)this + 0x14) * count * 4;
     return count;
+}
+
+// @ 0x00a88400
+void FUN_00a88400(float* out, const float* p)
+{
+    float inv = 1.0f / sqrtf(p[1] * p[1] + p[0] * p[0] + 1.0f);
+    int sel = _mm_cvt_ss2si(_mm_set_ss(p[2]));
+    int idx = (sel >> 1) * 4;
+    float s = inv;
+    if (sel & 1)
+        s = -inv;
+    out[DAT_014582d4[idx + 0]] = p[0] * s;
+    out[DAT_014582d4[idx + 1]] = p[1] * inv;
+    out[DAT_014582d4[idx + 2]] = s;
 }
 
 // @ 0x00a88490
@@ -3077,6 +3161,21 @@ cDistributeSample_s00a8_9de0* FUN_00a8a0f0(cDistributeSample_s00a8_9de0* first, 
         out = dst;
     }
     return out;
+}
+
+// @ 0x00a8a140
+cTransform_s00a8_9de0__x87& cTransform_s00a8_9de0__x87::PostTransformBy(const cTransform_s00a8_9de0__x87& b)
+{
+  mTranslation = Scale(b.mScale, mTranslation);
+  mTranslation = Rot(mTranslation, b.mRotation);
+  mTranslation.x += b.mTranslation.x;
+  mTranslation.y += b.mTranslation.y;
+  mTranslation.z += b.mTranslation.z;
+  mRotation = Mul(mRotation, b.mRotation);
+  mScale = mScale * b.mScale;
+  mFlags |= b.mFlags;
+  ++mModCount;
+  return *this;
 }
 
 // @ 0x00a8a450

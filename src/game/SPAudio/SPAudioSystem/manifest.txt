@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPAudio/SPAudioSystem.cpp  ??0cSound@Audio@SP@@QAE@XZ  00a41ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?FUN_00a41fc0@@YANXZ  00a41fc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?ConstructcEmitterModelSound@@YAPAVcEmitterModelSound@Audio@SP@@XZ  00a42190  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?StaticConvertSymbolToId@Audio@SP@@YAIPBD@Z  00a42200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?PreInit@cAudioSystem@Audio@SP@@QAE_NPAX@Z  00a42220  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -20,7 +21,6 @@
 ../src/game/SPAudio/SPAudioSystem.cpp  ?UnregisterHandler@cAudioSystem@Audio@SP@@QAE_NI@Z  00a42c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?ReadTuningValues@cSystemTuning@SP@@QAE_NPBUResourceKey@2@@Z  00a43a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?SetListener@Eapd_s00a4_3d30@@QAEXPBUEapdGroupParam@@@Z  00a44230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPAudio/SPAudioSystem.cpp  ?Set@Holder@@QAEXPAVRefC@@@Z  00a45cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?FUN_00a44f70@cSystem@@QAEXH@Z  00a44f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ??0FixedString@@QAE@PBDH@Z  00a450c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPAudio/SPAudioSystem.cpp  ?FUN_00a41fc0@@YANXZ  00a41fc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?Set@Holder@@QAEXPAVRefC@@@Z  00a45cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

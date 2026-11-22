@@ -440,8 +440,6 @@ struct ResourceObj {
 // ---- items of slice s00a41c40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const float kEpsilon;    // 0x013ec4b8
 extern char gEmptyString16[];   // 0x01667bac
-extern double gSecondsPerTick;      // 0x0166f398
-extern int gTimerFlags;             // 0x0166f3a8
 extern void* gFn1675f58;                            // 0x01675f58
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
@@ -471,7 +469,6 @@ union LARGE_INTEGER
 };
 unsigned __int64 GetStopwatchFrequency();                                   // 0x0093a470
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(LARGE_INTEGER*);
-extern LARGE_INTEGER gStart;        // 0x0166f3a0
 namespace EA {
 namespace Audio {
 class ResponseCurve_s00a4_1c40

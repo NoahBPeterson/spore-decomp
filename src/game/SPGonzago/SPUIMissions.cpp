@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIMissions.cpp -- migrated from slice(s) s00e1bbc0, s00e18d40, s00e16a70, s00e15c00, s00e13b50, s00e12f80, s00e2e6e0, s00e1d020, s00e19dd0, s00e17c10, s00e14a30 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIMissions.cpp -- migrated from slice(s) s00e1b2d0, s00e1a040, s00e19f60, s00e1bbc0, s00e18d40, s00e16a70, s00e15c00, s00e13b50, s00e12f80, s00e2e6e0, s00e1d020, s00e19dd0, s00e17c10, s00e14a30 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIMissions.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -23,6 +23,9 @@ extern "C" char g_16c7aa4[];
 #include "SP/cIGonzagoSubsystem.h"
 #include <intrin.h>
 #include "SP/cSPUIFeedList.h"
+#include "SP/cCelestialBody.h"
+#include "SP/cPlanet.h"
+#include "SP/cPlanetRecord.h"
 
 // ---- items of slice s00e14a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
@@ -2736,6 +2739,124 @@ extern const uint32_t g_missionButtonVtbl40[];
 }
 // ---- items of slice s00e1bbc0 end
 
+// ---- items of slice s00e19f60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int __cdecl wcscmp(const wchar_t* a, const wchar_t* b);
+#pragma intrinsic(wcscmp)
+void* __fastcall FUN_00c451e0(void* record);   // 0xc451e0 owner empire of record
+void* __fastcall FUN_005c65e0(void* empire);   // 0x5c65e0 -> &empire->mName (+0x3c)
+u32   __cdecl    FUN_01021090();               // 0x1021090 local player empire id
+struct KeyObject_s00e19f60 {
+    virtual void* GetSlot0();
+    virtual void* GetSlot1();
+    virtual void* GetSlot2();
+    virtual void* GetRecord(u32 key);          // vtable + 0xc
+};
+struct Empire_s00e19f60 {
+    u8  mUnknown000[0x84];
+    u32 mEmpireID;                             // +0x84
+};
+struct Name_s00e19f60 {
+    const wchar_t* mpName;                     // +0x0
+};
+// ---- items of slice s00e19f60 end
+
+// ---- items of slice s00e1a040 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPMission;
+struct cPlanet;
+struct cPlanetRecord;
+struct cCelestialBody;
+struct cIObject {
+    virtual void vf00();
+    virtual void vf04();
+    virtual void vf08();
+    virtual cSPMission* AsInterface(uint32_t iid);   // vtable +0x0c
+};
+struct cSPMission {
+    cPlanet* GetSourcePlanet();                      // 0x00c45ce0
+};
+struct cPlanet {
+    char pad00[0x13c];
+    cPlanetRecord* mpRecord;                         // +0x13c
+};
+struct cCelestialBody {
+    Vec3* GetPosition();                             // 0x005c65e0
+};
+struct cPlanetRecord {
+    cCelestialBody* GetCelestialBody();              // 0x00b8de30
+};
+struct cGameState {
+    char pad00[0x48];
+    cCelestialBody* mpReferenceBody;                 // +0x48
+};
+cGameState* GetGameState();                          // 0x01021230
+inline Vec3 DeltaToReference(cCelestialBody* body, cGameState* game) {
+    Vec3* ref = game->mpReferenceBody->GetPosition();
+    Vec3* pos = body->GetPosition();
+    Vec3 d;
+    d.x = pos->x - ref->x;
+    d.y = pos->y - ref->y;
+    d.z = pos->z - ref->z;
+    return d;
+}
+inline float LengthSqA(const Vec3& v) {
+    float r = v.y * v.y;
+    r = r + v.z * v.z;
+    r = r + v.x * v.x;
+    return r;
+}
+inline float LengthSqB(const Vec3& v) {
+    float r = v.z * v.z;
+    r = r + v.y * v.y;
+    r = r + v.x * v.x;
+    return r;
+}
+enum { kMissionInterfaceId = 0x2aa5ada };
+// ---- items of slice s00e1a040 end
+
+// ---- items of slice s00e1b2d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_1480218[];
+extern "C" char g_1480224[];
+extern "C" char g_148022c[];
+extern "C" char g_1480248[];
+struct cUIMissionCardPanelStub
+{
+    void* vf00;            // +0x00 primary vftable
+    int   pad04;           // +0x04
+    void* vf08;            // +0x08 secondary vftable
+    void* vf0c;            // +0x0c secondary vftable
+    char  pad10[0x30];     // +0x10 .. +0x3f
+
+    void* Construct();     // 0x00e18bb0
+};
+struct cMissionPanelDerived : cUIMissionCardPanelStub
+{
+    void* vf40;            // +0x40 secondary base vftable
+    void* m44;             // +0x44
+    void* m48;             // +0x48
+    void* m4c;             // +0x4c
+    void* m50;             // +0x50 (left untouched by Construct)
+    void* m54;             // +0x54 (left untouched by Construct)
+    void* m58;             // +0x58
+    void* m5c;             // +0x5c
+    void* m60;             // +0x60
+    void* m64;             // +0x64
+    void* m68;             // +0x68
+    void* m6c;             // +0x6c
+    void* m70;             // +0x70
+    void* m74;             // +0x74
+    void* m78;             // +0x78
+    void* m7c;             // +0x7c
+    void* m80;             // +0x80
+    void* m84;             // +0x84
+    void* m88;             // +0x88
+    void* m8c;             // +0x8c
+    int   m90;             // +0x90
+    void* m94;             // +0x94
+
+    cMissionPanelDerived* Construct();
+};
+// ---- items of slice s00e1b2d0 end
+
 // @ 0x00e12f80
 void FUN_00e12f80(void* p, int v)
 {
@@ -4667,6 +4788,55 @@ extern "C" bool __stdcall cSortMissionsByMode(int* a, int* b)
     }
 }
 
+// @ 0x00e19f60
+bool __stdcall CompareWString(void* pa, void* pb)
+{
+    KeyObject_s00e19f60* a = (KeyObject_s00e19f60*)pa;
+    KeyObject_s00e19f60* b = (KeyObject_s00e19f60*)pb;
+
+    void* recA = a ? a->GetRecord(0x2aa5ada) : 0;
+    void* recB = b ? b->GetRecord(0x2aa5ada) : 0;
+
+    Empire_s00e19f60* ea = (Empire_s00e19f60*)FUN_00c451e0(recA);
+    Empire_s00e19f60* eb = (Empire_s00e19f60*)FUN_00c451e0(recB);
+
+    if (!ea)
+        return false;
+    if (!eb)
+        return true;
+
+    u32 playerEmpire = FUN_01021090();
+
+    if (ea->mEmpireID == playerEmpire && eb->mEmpireID != playerEmpire)
+        return true;
+    if (ea->mEmpireID != playerEmpire && eb->mEmpireID == playerEmpire)
+        return false;
+
+    const wchar_t* nameB = ((Name_s00e19f60*)FUN_005c65e0(eb))->mpName;
+    const wchar_t* nameA = ((Name_s00e19f60*)FUN_005c65e0(ea))->mpName;
+    return wcscmp(nameA, nameB) < 0;
+}
+
+// @ 0x00e1a040
+bool __stdcall CompareMissionsByDistanceToReference(cIObject* a, cIObject* b)
+{
+    cSPMission* missionA = a ? a->AsInterface(kMissionInterfaceId) : 0;
+    cSPMission* missionB = b ? b->AsInterface(kMissionInterfaceId) : 0;
+
+    cPlanet* planetA = missionA->GetSourcePlanet();
+    cPlanet* planetB = missionB->GetSourcePlanet();
+    if (!planetA)
+        return false;
+    if (!planetB)
+        return true;
+
+    cCelestialBody* bodyA = planetA->mpRecord->GetCelestialBody();
+    cCelestialBody* bodyB = planetB->mpRecord->GetCelestialBody();
+    cGameState* game = GetGameState();
+
+    return LengthSqA(DeltaToReference(bodyA, game)) < LengthSqB(DeltaToReference(bodyB, game));
+}
+
 // @ 0x00e1a1a0
 uint32_t __fastcall FUN_00e1a1a0(CIndexedArray* pThis)
 {
@@ -4674,6 +4844,48 @@ uint32_t __fastcall FUN_00e1a1a0(CIndexedArray* pThis)
     if ((iIndex >= 0) && (iIndex < (int32_t)(pThis->mEnd_48 - pThis->mBegin_44)))
         return pThis->mBegin_44[iIndex];
     return 0;
+}
+
+// @ 0x00e1b2d0
+cMissionPanelDerived* cMissionPanelDerived::Construct()
+{
+    cUIMissionCardPanelStub::Construct();
+
+    // Retail stores the four vftable pointers immediately after the base
+    // Construct call, ahead of the zero-fill block, with the shared
+    // `xor eax,eax` hoisted above them. If all four are plain member stores
+    // the scheduler sinks the whole group below the zero fill, so the +0x40
+    // slot is written through the member's address (the base-subobject
+    // vftable assignment), which keeps the group in place.
+    vf00 = (void*)g_1480248;
+    vf08 = (void*)g_148022c;
+    vf0c = (void*)g_1480224;
+    void** const ppVft40 = &vf40;
+    *ppVft40 = (void*)g_1480218;
+
+    m44 = 0;
+    m48 = 0;
+    m4c = 0;
+
+    m58 = 0;
+    m5c = 0;
+    m60 = 0;
+    m64 = 0;
+    m68 = 0;
+    m6c = 0;
+    m70 = 0;
+    m74 = 0;
+    m78 = 0;
+    m7c = 0;
+    m80 = 0;
+    m84 = 0;
+    m88 = 0;
+
+    m94 = 0;
+    m8c = (void*)0x67a2ae0;
+    m90 = -1;
+
+    return this;
 }
 
 // @ 0x00e1bbc0

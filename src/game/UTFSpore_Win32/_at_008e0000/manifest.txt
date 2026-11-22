@@ -5,9 +5,11 @@
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ??0DerV@@QAE@HHPBHEE@Z  008e2380  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ??_GNode46@@UAEPAXI@Z  008e2460  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?LookupStyle@DocX@@QAEHXZ  008e24a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e3850@@YIHPAX@Z  008e3850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e42c0@@YIHPAX@Z  008e42c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e42d0@@YIXPAX@Z  008e42d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e42e0@StylesheetQueue@@QAEXPAX@Z  008e42e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?AddSubElement@Element@@QAEEPBG@Z  008e4b10  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e5320@@YGDPAM@Z  008e5320  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e5370@GuiThing@@QAEPAXHHH@Z  008e5370  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e55d0@GuiThing2@@QAEPAXHHH@Z  008e55d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
@@ -17,11 +19,9 @@
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Pick@ContainerItem@Layout@XHTML@EA@@UAE_NAAVPickingContext@234@PAVPickEntry@234@@Z  008eaba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?PlaceControls@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  008ead40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?SetStyle@Block@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@ABVStyleState@Style@34@@Z  008eadb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?StyleCtorForward@Typesetter_s008e_dd30@@QAEPAXPAX0@Z  008edd30  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?ScrollbarStyleSet@@YGXPBUVec2@Layout@XHTML@EA@@@Z  008edd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?ScrollbarStyleGet@@YGXPAUVec2@Layout@XHTML@EA@@@Z  008edd80  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?AddRun@SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAEXPB_WIH@Z  008ef8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ??0StackingContext@@QAE@I@Z  008efad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?SetContextRect@StackingContext@@QAEXABURectF@@@Z  008efc80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?StyleCtorForward@Typesetter_s008e_dd30@@QAEPAXPAX0@Z  008edd30  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?ScrollbarStyleGet@@YGXPAUVec2@Layout@XHTML@EA@@@Z  008edd80  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?Fn8e3850@@YIHPAX@Z  008e3850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?AddSubElement@Element@@QAEEPBG@Z  008e4b10  /O2 /MD /Gy /TP /GS- /Isrc/game/include

@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioCityMusicViewer.cpp  ?SetNoteSounds@cCityMusicViewer@Audio@SP@@QAEX_N@Z  00ea4330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicViewer.cpp  ?UpdatePulseWindows@cCityMusicEditor@@QAEXXZ  00ea4610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicViewer.cpp  ?SetMusic@Viewer@@QAEXPAUIFace@@@Z  00ea4af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicViewer.cpp  ?FUN_00ea4b40@Obj@@QAEXXZ  00ea4b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicViewer.cpp  ??1Object_s00ea_4bd0@@UAE@XZ  00ea4bd0  /O2 /MD /Gy /TP /Isrc/game/include

@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include <math.h>
 #include <xmmintrin.h>
+#include "EA/UTFWinControls/IScrollbarDrawable.h"
 
 // ---- items of slice s00982780 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -95,6 +96,282 @@ class ScrollbarDrawable { public:
 // ---- items of slice s00980760 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VSLOT(T, obj, off) ((T)(*(void***)(obj))[(off) / 4])
 struct XWin { void SerUpdate(); void InvalidateLayout(); };            // 009614a0 / 009609b0
+struct XStopwatch {
+    bool IsRunning() const { return *(const int64_t*)this != 0; }
+    void Restart();                                                    // 00571e80
+    void Init(int a, int b);                                           // 0093a560
+    void SetUnits(int u);                                              // 0093a1a0
+    int64_t GetElapsed();                                              // 0093a5e0
+    int64_t GetElapsedFloat();                                         // 0093a3a0
+};
+struct XPropList { void SetBoolProperty(); };                          // 0093a2e0
+namespace EA {
+namespace UTFWinControls {
+class WinScrollbar_s0098_0760;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollbarWindowInvalidation {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void Invalidate();
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IWinScrollbar_s0098_0760 { public:
+    void* vt;                                                          // +0x00 (abs 0x20c)
+    int current;                                                       // +0x04 (0x210)
+    int minVal;                                                        // +0x08 (0x214)
+    int maxVal;                                                        // +0x0c (0x218)
+    int visibleRange;                                                  // +0x10 (0x21c)
+    int pageOverlap;                                                   // +0x14 (0x220)
+    int arrowDelta;                                                    // +0x18 (0x224)
+    int pageDelta;                                                     // +0x1c (0x228)
+    int minThumbSize;                                                  // +0x20 (0x22c)
+    int orientation;                                                   // +0x24 (0x230)
+    uint8_t hlComp;                                                    // +0x28 (0x234)
+    uint8_t selComp;                                                   // +0x29 (0x235)
+    uint8_t pad02a[2];
+    float thumbOffset;                                                 // +0x2c (0x238)
+    uint8_t refresh;                                                   // +0x30 (0x23c)
+    uint8_t pad031[3];
+    int flags;                                                         // +0x34 (0x240)
+    int f244;                                                          // +0x38 (0x244)
+    uint8_t timer[0x18];                                               // +0x3c (0x248)
+    float compArea[7][4];                                              // +0x54 (0x260)
+    WinScrollbar_s0098_0760* win();
+    void SetOrientation(int o);                                        // 00981000
+    void SetFlags(uint32_t mask, char on);                             // 00981030
+    void SetDrawable(void* d);                                         // 00981060
+    void SetValue(int v, char notify);                                 // 009810a0
+    void SetMinimumValue(int v, int notify);                           // 00981130
+    void SetMaximumValue(int v, int notify);                           // 00981170
+    void SetVisibleRange(int v, int notify);                           // 009811b0
+    void SetPageOverlap(int v);                                        // 00981200
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct XWinMgr {                                  // window manager held at WinScrollbar +0x34
+    virtual void wm00();
+    virtual void wm04();
+    virtual void wm08();
+    virtual void wm0c();
+    virtual void wm10();
+    virtual void wm14();
+    virtual void wm18();
+    virtual void wm1c();
+    virtual void wm20();
+    virtual void wm24();
+    virtual void wm28();
+    virtual void wm2c();
+    virtual void wm30();
+    virtual void wm34();
+    virtual void wm38();
+    virtual void wm3c();
+    virtual void wm40();
+    virtual void wm44();
+    virtual void wm48();
+    virtual void wm4c();
+    virtual void wm50();
+    virtual void* GetMouseCapture(int which);     // +0x54
+    virtual void wm58();
+    virtual void ReleaseMouseCapture(int which, struct ScrollbarSecondaryCalls* w);   // +0x5c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollbarActiveCall {
+    virtual void active0();
+    virtual void active1();
+    virtual void active2();
+    virtual void active3();
+    virtual void active4();
+    virtual void active5();
+    virtual void active6();
+    virtual void active7();
+    virtual void active8();
+    virtual void active9();
+    virtual void active10();
+    virtual void active11();
+    virtual void active12();
+    virtual void active13();
+    virtual void active14();
+    virtual void active15();
+    virtual void active16();
+    virtual void active17();
+    virtual void active18();
+    virtual void active19();
+    virtual void active20();
+    virtual void active21();
+    virtual void active22();
+    virtual void active23();
+    virtual void active24();
+    virtual void active25();
+    virtual void active26();
+    virtual void active27();
+    virtual void active28();
+    virtual void active29();
+    virtual void active30();
+    virtual void active31();
+    virtual void active32();
+    virtual void active33();
+    virtual void active34();
+    virtual bool IsActive();
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollbarPrimaryCalls {
+    virtual void primary0();
+    virtual void primary1();
+    virtual void primary2();
+    virtual void primary3();
+    virtual void primary4();
+    virtual void primary5();
+    virtual void primary6();
+    virtual void primary7();
+    virtual void primary8();
+    virtual void primary9();
+    virtual void primary10();
+    virtual void primary11();
+    virtual void primary12();
+    virtual void primary13();
+    virtual void primary14();
+    virtual void primary15();
+    virtual void primary16();
+    virtual void primary17();
+    virtual void primary18();
+    virtual void primary19();
+    virtual void primary20();
+    virtual void primary21();
+    virtual void primary22();
+    virtual void primary23();
+    virtual void primary24();
+    virtual void primary25();
+    virtual void primary26();
+    virtual void primary27();
+    virtual void primary28();
+    virtual void primary29();
+    virtual void primary30();
+    virtual void primary31();
+    virtual void primary32();
+    virtual void primary33();
+    virtual void primary34();
+    virtual int IsActive();
+    virtual void SetRefreshFlag(char on);
+    virtual void SetRefresh(char on);
+    virtual void primary38();
+    virtual void primary39();
+    virtual char HitTestComponent(float x, float y);                   // +0xa0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollbarSecondaryCalls {
+    virtual void secondary0();
+    virtual void secondary1();
+    virtual void secondary2();
+    virtual void secondary3();
+    virtual void secondary4();
+    virtual void secondary5();
+    virtual void secondary6();
+    virtual void secondary7();
+    virtual void secondary8();
+    virtual void secondary9();
+    virtual void secondary10();
+    virtual void secondary11();
+    virtual void secondary12();
+    virtual void secondary13();
+    virtual void secondary14();
+    virtual void secondary15();
+    virtual void secondary16();
+    virtual void secondary17();
+    virtual void secondary18();
+    virtual void secondary19();
+    virtual void secondary20();
+    virtual void secondary21();
+    virtual void secondary22();
+    virtual void secondary23();
+    virtual void secondary24();
+    virtual void secondary25();
+    virtual void secondary26();
+    virtual void secondary27();
+    virtual void secondary28();
+    virtual void secondary29();
+    virtual void secondary30();
+    virtual void SetFlag(unsigned mask, bool on);
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinScrollbar_s0098_0760 : public ScrollbarPrimaryCalls, public ScrollbarSecondaryCalls { public:
+    char  pad008[0x34 - 8];
+    void* winMgr;                                                      // +0x034
+    char  pad038[0x80 - 0x38];
+    int   id0;                                                         // +0x080
+    int   id1;                                                         // +0x084
+    char  pad088[0x20c - 0x88];
+    IWinScrollbar_s0098_0760 sb;                                                  // +0x20c
+    void* iw() { return (char*)this + 4; }
+    void  UpdateAndSync();                                             // 00980fa0
+    int   IsActive();                                                  // 009816e0
+    void  SetRefreshFlag(char on);                                     // 00981700
+    void  SetRefresh(char on);                                         // 00981770
+    bool  OnMouseDown(float x, float y, int a3, int button);           // 00981220 0x00981220
+    bool  OnMouseUp(float x, float y, int a3, int flags);              // 00981430 0x00981430
+    bool  OnFocusChange(int state, void* w);                           // 009814c0 0x009814c0
+    bool  OnTick();                                                    // 00981500 0x00981500
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+inline WinScrollbar_s0098_0760* IWinScrollbar_s0098_0760::win() { return (WinScrollbar_s0098_0760*)((char*)this - 0x20c); }
+}
+}
 namespace EA {
 namespace UTFWinControls {
 struct IWinSB2 {
@@ -170,12 +447,182 @@ class WinScrollbar { public:
 inline WinScrollbar* IWinScrollbar::win() { return (WinScrollbar*)((char*)this - 0x20c); }
 // ---- items of slice s00981980 end
 
+// @ 0x00980fa0
+void EA::UTFWinControls::WinScrollbar_s0098_0760::UpdateAndSync()
+{
+    VSLOT(void(__thiscall*)(void*, int), this, 0x94)(this, 1);
+    ((XWin*)this)->SerUpdate();
+}
+
+// @ 0x00981030
+void EA::UTFWinControls::IWinScrollbar_s0098_0760::SetFlags(uint32_t mask, char on)
+{
+    if (on) flags |= (int)mask;
+    else flags &= ~(int)mask;
+}
+
+// @ 0x00981060
+void EA::UTFWinControls::IWinScrollbar_s0098_0760::SetDrawable(void* d)
+{
+    void* iwv = (char*)this - 0x208;
+    VSLOT(void(__thiscall*)(void*, void*), iwv, 0xb0)(iwv, d);
+    EA::UTFWinControls::WinScrollbar_s0098_0760* w = (EA::UTFWinControls::WinScrollbar_s0098_0760*)((char*)this - 0x20c);
+    VSLOT(void(__thiscall*)(void*, int), w, 0x94)(w, 1);
+}
+
+// @ 0x00981200
+void EA::UTFWinControls::IWinScrollbar_s0098_0760::SetPageOverlap(int v)
+{
+    int d = visibleRange - v;
+    pageOverlap = v;
+    pageDelta = d;
+    if (d < 1) pageDelta = 1;
+}
+
+// @ 0x00981220
+bool EA::UTFWinControls::WinScrollbar_s0098_0760::OnMouseDown(float x, float y, int a3, int button)
+{
+    (void)a3;
+    if (button != 8) return false;
+    VSLOT(void(__thiscall*)(void*, int), this, 0x90)(this, 0);
+    char c = VSLOT(char(__thiscall*)(void*, float, float), this, 0xa0)(this, x, y);
+    sb.selComp = (uint8_t)c;
+    if (c == -1) return true;
+    void* mgr = winMgr;
+    void* iwv = (char*)this + 4;
+    if (VSLOT(void*(__thiscall*)(void*, int), mgr, 0x54)(mgr, 1) != iwv)
+        VSLOT(void(__thiscall*)(void*, int, void*), mgr, 0x58)(mgr, 1, iwv);
+    switch (sb.selComp) {
+    case 1:
+        if (!(sb.flags & 1))
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current - sb.arrowDelta, 1);
+        break;
+    case 2:
+        VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current - sb.pageDelta, 1);
+        break;
+    case 3:
+        if (sb.orientation == 1)
+            sb.thumbOffset = (x - sb.compArea[4][0]) + sb.compArea[6][0];
+        else
+            sb.thumbOffset = (y - sb.compArea[4][1]) + sb.compArea[6][1];
+        break;
+    case 5:
+        VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current + sb.pageDelta, 1);
+        break;
+    case 6:
+        if (!(sb.flags & 1))
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current + sb.arrowDelta, 1);
+        break;
+    }
+    VSLOT(void(__thiscall*)(void*, int), this, 0x90)(this, 1);
+    VSLOT(void(__thiscall*)(void*), (char*)this + 4, 0x90)((char*)this + 4);
+    return true;
+}
+
+// @ 0x00981430
+bool EA::UTFWinControls::WinScrollbar_s0098_0760::OnMouseUp(float x, float y, int a3, int flags)
+{
+    (void)a3;
+    if ((flags & 8) == 0) {
+        void* iwv = this ? (char*)this + 4 : 0;
+        if (((EA::UTFWinControls::XWinMgr*)winMgr)->GetMouseCapture(1) == iwv)
+            ((EA::UTFWinControls::XWinMgr*)winMgr)->ReleaseMouseCapture(1, this);
+        sb.selComp = 0xff;
+        sb.hlComp = (uint8_t)HitTestComponent(x, y);
+        SetRefreshFlag(0);
+        VSLOT(void(__thiscall*)(void*), (char*)this + 4, 0x90)((char*)this + 4);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x009814c0
+bool EA::UTFWinControls::WinScrollbar_s0098_0760::OnFocusChange(int state, void* w)
+{
+    if (state == 1) {
+        void* iwv = this ? (char*)this + 4 : 0;
+        if (w != iwv && static_cast<signed char>(sb.hlComp) != -1) {
+            sb.hlComp = 0xff;
+            ((EA::UTFWinControls::ScrollbarWindowInvalidation*)((char*)this + 4))->Invalidate();
+        }
+    }
+    return true;
+}
+
+// @ 0x00981500
+bool EA::UTFWinControls::WinScrollbar_s0098_0760::OnTick()
+{
+    VSLOT(void(__thiscall*)(void*), this, 0x98)(this);
+    int64_t* tstamp = (int64_t*)((char*)this + 0x248);
+    if (*tstamp == 0) return true;
+    if ((sb.flags & 1) && (sb.selComp == 1 || sb.selComp == 6)) {
+        int64_t e = ((XStopwatch*)((char*)this + 0x248))->GetElapsedFloat();
+        float f = (float)((double)e * (double)*(float*)((char*)this + 0x25c));
+        float arrow = (float)sb.arrowDelta;
+        float v = arrow * f * 0.001f;
+        if (1.0f > v) return true;
+        if (sb.selComp != sb.hlComp) goto notify;
+        if (sb.selComp == 1)
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current - (int)v, 1);
+        else
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, (int)v + sb.current, 1);
+    } else {
+        int64_t e = ((XStopwatch*)((char*)this + 0x248))->GetElapsed();
+        if ((uint32_t)((uint64_t)e >> 32) == 0 && (uint32_t)e <= 0x96) return true;
+        if (sb.selComp != sb.hlComp) goto notify;
+        switch (sb.selComp) {
+        case 1:
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current - sb.arrowDelta, 1);
+            break;
+        case 2:
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current - sb.pageDelta, 1);
+            break;
+        case 5:
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current + sb.pageDelta, 1);
+            break;
+        case 6:
+            VSLOT(void(__thiscall*)(void*, int, int), &sb, 0x24)(&sb, sb.current + sb.arrowDelta, 1);
+            break;
+        }
+    }
+notify:
+    VSLOT(void(__thiscall*)(void*, int), this, 0x90)(this, 1);
+    return true;
+}
+
 // @ 0x009816c0
 void EA::UTFWinControls::IWinSB2::InvalidateLayoutNoArgs()
 {
     void* w = (char*)this - 4;
     VSLOT(void(__thiscall*)(void*, int), w, 0x94)(w, 1);
     ((XWin*)this)->InvalidateLayout();
+}
+
+// @ 0x009816e0
+int EA::UTFWinControls::WinScrollbar_s0098_0760::IsActive()
+{
+    if (sb.refresh != 0 || *(int64_t*)((char*)this + 0x248) != 0)
+        return 1;
+    return 0;
+}
+
+// @ 0x00981700
+void EA::UTFWinControls::WinScrollbar_s0098_0760::SetRefreshFlag(char on)
+{
+    XStopwatch* sw = (XStopwatch*)((char*)this + 0x248);
+    const bool old = sw->IsRunning();
+    if (on) sw->Restart();
+    else ((XPropList*)sw)->SetBoolProperty();
+    if (old != sw->IsRunning())
+        SetFlag(8, ((EA::UTFWinControls::ScrollbarActiveCall*)this)->IsActive());
+}
+
+// @ 0x00981770
+void EA::UTFWinControls::WinScrollbar_s0098_0760::SetRefresh(char on)
+{
+    if (sb.refresh == (uint8_t)on) return;
+    sb.refresh = (uint8_t)on;
+    SetFlag(8, ((EA::UTFWinControls::ScrollbarActiveCall*)this)->IsActive());
 }
 
 // @ 0x00981980

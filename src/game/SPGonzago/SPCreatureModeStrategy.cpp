@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureModeStrategy.cpp -- migrated from slice(s) s00d48010, s00d41a70, s00d41560, s00d3c970, s01364b20, s00d47630, s00d463a0, s00d425f0, s00d40930, s00d3f9e0, s00d3d870, s00d3b920, s00d3a830, s00d38930, s00d377f0, s00d2dd20, s00b8c330 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureModeStrategy.cpp -- migrated from slice(s) s00d39670, s00d39360, s00d391d0, s00d38f40, s00d38a30, s00d48010, s00d41a70, s00d41560, s00d3c970, s01364b20, s00d47630, s00d463a0, s00d425f0, s00d40930, s00d3f9e0, s00d3d870, s00d3b920, s00d3a830, s00d38930, s00d377f0, s00d2dd20, s00b8c330 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -37,6 +37,11 @@ extern int g_ResourceNodesDirty;                      // 0x16881ec
 #include "eastl/allocator.h"
 #include "SP/cAnimState.h"
 #include "SP/cHerd.h"
+#include "EA/Random/RandomLinearCongruential.h"
+#include "SP/cTexturePreload.h"
+#include "SP/cSpeciesProfile.h"
+#include "SP/cTelemetry.h"
+#include "SP/cTelemetryItem.h"
 #pragma warning(disable: 4035)
 #pragma warning(default: 4035)
 
@@ -339,11 +344,31 @@ extern cCurveParams g_WaterCurveParams;               // 0x1565b2c ("water", ...
 extern Vector3 g_InvalidPosition;                     // 0x16881f0
 
 // ---- items of slice s00d2dd20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float kTwoPow32;        // 0x013f4fd0  4.2949673e+09f (int -> float, negative)
+extern float kFloatMax;        // 0x0147a528  3.402823466e+38F
+extern float kRealOne;         // 0x01485720  _HK_REAL_ONE
 extern float kRealZero;        // 0x01485378  _HK_REAL_ZERO
+extern float kTier0Height;     // 0x01582e38
+extern float kTier1Height;     // 0x01582e3c
+extern float kTier2Height;     // 0x01582e40
+extern float kTier3Height;     // 0x01582e44
 extern float kTierMaxHeight;   // 0x01582e54  clamp ceiling for mClampedValue
+extern float kViewScale1;      // 0x01582fc4
+extern float kViewScale2;      // 0x01582fc8
+extern float kViewScale3;      // 0x01582fcc
+extern float kViewScale4;      // 0x01582fd0
+extern float kViewScale5;      // 0x01582fd4
+extern unsigned int g_0145f8d4;    // 0x0145f8d4  serialized blob version
+extern unsigned int g_0145f8d8;    // 0x0145f8d8  serialized blob sub-version
+extern unsigned char g_015829b8;   // 0x015829b8  var-list descriptor table
 extern char g_01654c10;            // 0x01654c10  "space" game-mode record
+extern char g_01654c01;            // 0x01654c01  "creature" game-mode record
+extern float g_0169e13c;   // 0x0169e13c  last-seen avatar x
+extern float g_0169e140;   // 0x0169e140  last-seen avatar y
+extern float g_0169e144;   // 0x0169e144  last-seen avatar z
 #pragma pack(push, 4)
 #pragma pack(pop)
+struct Vector2 { float x, y; };
 struct Vector3_s00d2_dd20 { float x, y, z; };
 struct CreatureModeState {
     int           mSelectedIndex;   // +0x00
@@ -367,6 +392,22 @@ public:
     float         mHeight;      // +0x10f0
     float         mHeightMax;   // +0x10f4
 };
+class cGameNounManager_s00d2_dd20 {
+public:
+    cAvatar*        GetAvatar();                     // 0x00b1fdb0
+    cTerrainSphere* GetCurrentTerrainSphere();       // 0x00f67d90
+};
+cGameNounManager_s00d2_dd20* NounManager_s00d2_dd20();                     // 0x00b3d300
+class cAvatarProfile {
+public:
+    unsigned char mPad00[0x55c];
+    float         mZoomSpan;    // +0x55c
+};
+class cEditorSpeciesManager {
+public:
+    cAvatarProfile* GetAvatarProfile();              // 0x004df420
+};
+cEditorSpeciesManager* GetEditorSpeciesManager();    // 0x00401090
 class cGameNounManager {
 public:
     cAvatar*        GetAvatar();                     // 0x00b1fdb0
@@ -515,6 +556,28 @@ virtual void vD4();
     unsigned char  mSlotB5c;     // +0xb5c
     unsigned char  mFieldB5e;    // +0xb5e
 };
+class cAchievements {
+public:
+    bool FUN_00675e80();                         // 0x00675e80
+    int  FUN_006766e0();                         // 0x006766e0
+    void Award();                                // 0x00676710
+};
+cAchievements* GetAchievements(unsigned int id); // 0x00675250
+class cModeUi {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+    virtual void FUN_0028(int arg);              // +0x28
+};
+cModeUi* GetBanningModeUi();                     // 0x00d37cb0
 class cSub128 {
 public:
     void FUN_00d2d560(float value);              // 0x00d2d560
@@ -539,7 +602,27 @@ public:
     unsigned char           mPad6c[0xb4 - 0x6c];
     cPropertyList*          mpPropList;   // +0xb4
 };
+bool GetPropertyAsVector2Array(const cPropertyList* list, unsigned int id,
+                               int* pCount, Vector2** pArray);   // 0x006a0920
+class cVarListSerializer_s00d2_dd20 {
+public:
+    cVarListSerializer_s00d2_dd20(void* source, const void* desc, unsigned int id);  // 0x00692f90
+    bool Serialize(unsigned int version);                                 // 0x00693e10
+    bool Load(unsigned int version);                                      // 0x00d2e9b0
+
+    unsigned char    mPad00[0x30];
+    unsigned __int64 mMask30;      // +0x30
+    unsigned int     mBits38[3];   // +0x38  (0x58-bit result mask)
+    unsigned char    mTail[0xa14 - 0x44];
+};
+void  SetGlobalProperty(unsigned int id, float value);   // 0x005ca880
 void* GetCurrentGameMode();                              // 0x00b5b800
+void  FUN_00bc97f0(unsigned int a, int b, float c, int d); // 0x00bc97f0
+void* FUN_00b3d4c0(void* p, int mode);                   // 0x00b3d4c0
+void  FUN_00ba4350(void* p, int mode);                   // 0x00ba4350
+double GetTerrainHeight();                               // 0x00d2e360  (this file)
+__declspec(noinline) double GetTierHeight(int tier);     // 0x00d2e380  (this file)
+void   RecomputeZoom();                                  // 0x00d2e720  (this file)
 // ---- items of slice s00d2dd20 end
 
 // ---- items of slice s00d377f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1615,7 +1698,7 @@ inline bool GetFloat(cPropertyList_s00d3_d870* pl, uint32_t id, float& v)
     if (pl && pl->GetProperty(id, p) && p->mnType == 13) { v = *p->GetValueFloat(); return true; }
     return false;
 }
-struct Vector2 { float x, y; };
+
 struct Vector3_s00d3_d870 { float x, y, z; };
 bool TryGetUIntProperty(cPropertyList_s00d3_d870* pl, uint32_t id, int& value);        // 0x00410370
 bool GetFloatProperty(cPropertyList_s00d3_d870* pl, uint32_t id, float& value);        // 0x0040cf10
@@ -3233,6 +3316,399 @@ public:
 extern cUILayoutManager* gUILayoutManager;   // 0x016c7aa4
 // ---- items of slice s00d48010 end
 
+// ---- items of slice s00d38a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1485720;   // 0x01485720  _HK_REAL_ONE = 1.0f
+extern float g_1582e90;   // 0x01582e90  10.0f
+extern float g_1582e94;   // 0x01582e94  50.0f
+extern float g_1582e98;   // 0x01582e98  10.0f
+extern float g_1582e9c;   // 0x01582e9c   1.0f
+extern float g_1582ea0;   // 0x01582ea0   1.5f
+extern float g_1582ea4;   // 0x01582ea4   3.0f
+extern float g_1582eac;   // 0x01582eac  20.0f
+struct cForageRadiusSource {
+    char  mPad_0000[0x358];
+    float mRadius;                                        // +0x358
+};
+struct cSPCreatureBase {
+    char mPad_0000[0xe84];
+    cForageRadiusSource* GetForageRadiusSource();          // 0x00c0c1a0
+};
+// ---- items of slice s00d38a30 end
+
+// ---- items of slice s00d38f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct RandomLinearCongruential_s00d3_8f40 {
+    double RandomDoubleUniform();                        // 0x009360d0
+};
+extern RandomLinearCongruential_s00d3_8f40 g_random;                // 0x01601760
+struct KeyedEntry {
+    int mValue;                                          // +0x00
+    int mKey;                                            // +0x04
+};
+struct KeyedEntryList {
+    KeyedEntry* mBegin;                                  // +0x00
+    KeyedEntry* mEnd;                                    // +0x04
+};
+extern KeyedEntryList g_keyedEntries;                    // 0x01583298
+// ---- items of slice s00d38f40 end
+
+// ---- items of slice s00d391d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint8_t      g_textureKeys[];                       // 0x015834e0
+struct PropKey {
+    uint32_t group;                                        // +0x00
+    uint32_t x;                                            // +0x04
+    uint32_t inst;                                         // +0x08
+};
+struct CRefCount {
+    virtual void AddRef();                                 // slot 0
+    virtual void Release();                                // slot 1
+};
+struct CDisplayStrategy {
+    uint8_t   mPad00[0x38];
+    CRefCount mRef;                                        // +0x38
+    uint8_t   mPad3c[0x320 - 0x3c];
+
+    CDisplayStrategy();                                    // 0x00d2d690
+    void Activate(bool nMode);                             // 0x00d2cb10
+};
+struct CTexturePreload {
+    virtual void AddRef();                                 // slot 0
+    virtual void Release();                                // slot 1
+    void PreloadTextureList(PropKey* key);                 // 0x007b1e90
+
+    CTexturePreload(int n);                                // 0x007b07e0
+    uint8_t mPad04[0x34 - 0x04];
+};
+struct COwner {
+    uint8_t mPad00[0x68];
+    CDisplayStrategy* mpDisplay;                           // +0x68
+    uint8_t mPad6c[0xd4 - 0x6c];
+    CTexturePreload*  mpTextures;                          // +0xd4
+};
+struct CTestSystem {
+    uint8_t mPad00[0x70];
+    void*   mpList;                                        // +0x70
+};
+void* operator new(unsigned int size, const char* pName, int flags, int debugFlags,
+                   const char* file, int line);        // 0x00f473a0
+extern COwner*      g_pOwner;                              // 0x0169e294
+extern CTestSystem* g_pTestSystem;                         // 0x015fd928
+static __forceinline void PreloadCreatureKeys(COwner* o)
+{
+    PropKey key;
+    key.x = 0xefbda3ff;
+    key.inst = 0x40464100;
+    for (uint32_t i = 0; i < 0x50; i += 4) {
+        key.group = *(uint32_t*)(g_textureKeys + i);
+        o->mpTextures->PreloadTextureList(&key);
+    }
+}
+// ---- items of slice s00d391d0 end
+
+// ---- items of slice s00d39360 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSpeciesData;
+struct cCreatureEventPos {
+    unsigned int mWord0;    // +0x00
+    unsigned int mWord1;    // +0x04
+    unsigned int mWord2;    // +0x08
+    void Clear() { mWord0 = 0; mWord1 = 0; mWord2 = 0; }
+};
+struct cCreatureBase_s00d3_9360;
+class cCreatureAnimal;
+class cCreatureModeStrategy_s00d3_9360;
+class cGameNounManager_s00d3_9360 {
+public:
+    cCreatureBase_s00d3_9360* GetAvatar();                      // 0x00b1fdb0
+};
+cGameNounManager_s00d3_9360* NounManager_s00d3_9360();                     // 0x00b3d300
+extern cCreatureModeStrategy_s00d3_9360* g_pCreatureModeStrategy;   // 0x0169e294
+void ReportCreatureEvent(unsigned int msgID, const char* pAvatarSpecies,
+                         const char* pAnimalSpecies,
+                         const cCreatureEventPos& animalPos,
+                         const cCreatureEventPos& avatarPos);   // 0x00e39710
+struct cKillInfo {
+    cCreatureBase_s00d3_9360* mpVictim;    // +0x00
+    cCreatureBase_s00d3_9360* mpAttacker;  // +0x04
+    int            mField08;    // +0x08
+};
+struct cEventTarget {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual bool IsEventTargetActive();     // +0x58
+};
+struct cCreatureBase_s00d3_9360 {
+    virtual void v00();                     // +0x00
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual unsigned int GetNounID();       // +0x20
+    unsigned char mPad24[0xc0 - 0x24];
+    cEventTarget  mEventTarget;             // +0xc0
+    unsigned char mPadC4[0xb20 - 0xc4];
+    cSpeciesData* mpSpecies;                // +0xb20
+    unsigned char mPadB24[0xb28 - 0xb24];
+    char          mInlineSpeciesName[0x14]; // +0xb28  used when mpSpecies is null
+
+    const char* GetSpeciesName();           // 0x00c0bc00
+};
+enum { kCreatureAnimalNoun = 0x18eb45e };
+class cCreatureAnimal : public cCreatureBase_s00d3_9360 {
+};
+static __forceinline cCreatureAnimal* TypeCheckedAnimal(cCreatureBase_s00d3_9360* p) {
+    if (p->GetNounID() != kCreatureAnimalNoun)
+        return 0;
+    return static_cast<cCreatureAnimal*>(p);
+}
+static __forceinline cCreatureAnimal* AsCreatureAnimal(cCreatureBase_s00d3_9360* p) {
+    cCreatureAnimal* result;
+    if (p != 0)
+        result = TypeCheckedAnimal(p);
+    else
+        result = 0;
+    return result;
+}
+static __forceinline cEventTarget* EventTargetOf(cCreatureBase_s00d3_9360* p) {
+    return reinterpret_cast<cEventTarget*>(reinterpret_cast<char*>(p) + 0xc0);
+}
+struct IListener {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void OnCreatureEvent(unsigned int eventID, cKillInfo* info);  // +0x18
+};
+class cCreatureModeStrategy_s00d3_9360 {
+public:
+    void OnCreatureEvent(unsigned int eventID, cKillInfo* info);   // 0x00d39360
+
+    unsigned char mPad00[0x24];
+    int           mField24;      // +0x24  counter toggled by the link event
+    unsigned char mPad28[0x48 - 0x28];
+    unsigned char mField48;      // +0x48  set when the avatar is the victim
+    unsigned char mPad49[0xbc - 0x49];
+    IListener**   mpListenersBegin;   // +0xbc
+    IListener**   mpListenersEnd;     // +0xc0
+};
+// ---- items of slice s00d39360 end
+
+// ---- items of slice s00d39670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct Vector3_s00d3_9670 {
+    float x, y, z;
+};
+}
+namespace SP {
+struct cStatMessage {
+    uint32_t m00;      // +0x00  stored into the payload at +0x24
+    uint32_t m04;
+    uint32_t m08;      // +0x08  stored into the payload at +0x20
+};
+}
+namespace SP {
+struct cStatData {
+    int32_t  mTicks;       // +0x00  0x011e0970(now, 1000, 0)
+    int32_t  mNounId;      // +0x04  avatar vtable slot 0xd8
+    float    mTimeA;       // +0x08  0x00d2e360
+    float    mTimeB;       // +0x0c  0x00d2e350
+    int32_t  mNounCount;   // +0x10  noun list end - begin, in dwords
+    Vector3_s00d3_9670  mPosition;    // +0x14
+    uint32_t mMsg08;       // +0x20
+    uint32_t mMsg00;       // +0x24
+    uint32_t mColor;       // +0x28
+};
+}
+namespace SP {
+struct cTelemetryItem_s00d3_9670 {
+    char mPad00[0x0c];
+    cStatData* mpData;                     // +0x0c
+    void SetMetric(int metricId);          // 0x007eb820
+};
+}
+namespace SP {
+struct cSpatialObject_s00d3_9670 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+    virtual const Vector3_s00d3_9670& GetPosition();                 // slot 0x2c
+};
+}
+namespace SP {
+struct cSpeciesProfile_s00d3_9670 {
+    char  mPad0000[0x4ec];
+    float mColor[3];                                      // +0x4ec
+};
+}
+namespace SP {
+struct cCreatureBase_s00d3_9670 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
+virtual void v48();
+virtual void v49();
+virtual void v50();
+virtual void v51();
+virtual void v52();
+virtual void v53();
+    virtual int GetNounID();                              // slot 0xd8
+
+    char mPad0004[0xc0 - 4];
+    cSpatialObject_s00d3_9670 mSpatial;                               // +0xc0
+    char mPad00c4[0xb20 - 0xc4];
+    cSpeciesProfile_s00d3_9670* mpProfile;                            // +0xb20
+};
+}
+namespace SP {
+struct cNounList {
+    int* mpBegin;                                          // +0x00
+    int* mpEnd;                                            // +0x04
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+}
+namespace SP {
+struct cGameNounManager_s00d3_9670 {
+    cCreatureBase_s00d3_9670* GetAvatar();                            // 0x00b1fdb0
+    cNounList* GetNounList();                              // 0x00b1f9c0
+};
+}
+namespace SP {
+cGameNounManager_s00d3_9670* NounManager_s00d3_9670();                          // 0x00b3d300
+}
+namespace SP {
+struct cPropertyQuery {
+    virtual void v00();
+    virtual void v01();
+    // Retail calls this zero-argument slot twice: once as the guard and once
+    // for the value handed to GetPropertyAsKey (whose other two arguments are
+    // pushed first, right-to-left, hence `add esp,0xc` after that call).
+    virtual int GetKey();                                  // vtable +0x08
+};
+}
+namespace SP {
+struct cPropertyHolder {
+    char mPad00[0x24];
+    cPropertyQuery* mpQuery;                               // +0x24
+};
+}
+namespace SP {
+cPropertyHolder* PropertyManager_s00d3_9670();                        // 0x00b3d350
+}
+namespace SP {
+void __cdecl GetPropertyAsKey(int32_t value, uint32_t key, cStatMessage* out); // 0x006a1250
+}
+namespace SP {
+struct cTelemetry_s00d3_9670 {
+    cTelemetryItem_s00d3_9670* BeginItem();                           // 0x007ec160
+};
+}
+namespace SP {
+cTelemetry_s00d3_9670* __stdcall GetTelemetry(int flag, unsigned int kind);   // 0x0067de90
+}
+namespace SP {
+struct cGameTimeManager_s00d3_9670 {
+    int64_t GetTicks();                                    // 0x00b316c0
+};
+}
+namespace SP {
+cGameTimeManager_s00d3_9670* GameTimeManager_s00d3_9670();                       // 0x00b3d380
+}
+namespace SP {
+int32_t __stdcall ScaleTicks(int64_t ticks, int32_t scale, int32_t flags); // 0x011e0970
+}
+namespace SP {
+float FUN_d2e360();                                        // 0x00d2e360
+}
+namespace SP {
+float FUN_d2e350();                                        // 0x00d2e350
+}
+namespace SP {
+uint32_t __cdecl ColorRGBToU32(const float* rgb);          // 0x00458a40
+}
+namespace SP {
+class cCreatureModeStrategy_s00d3_9670 {
+public:
+    cTelemetryItem_s00d3_9670* AddStat(unsigned int kind, unsigned int sub);   // 0x00d39670
+};
+}
+// ---- items of slice s00d39670 end
+
 // @ 0x00b8c330
 void cPlanetModel_s00b8_c330::UpdateMinimap(int arg0, int arg1, int modeOverride)
 {
@@ -3358,10 +3834,140 @@ void cPlanetModel_s00b8_c330::UpdateMinimap(int arg0, int arg1, int modeOverride
     }
 }
 
+// @ 0x00d2e360
+double GetTerrainHeight()
+{
+    return NounManager_s00d2_dd20()->GetCurrentTerrainSphere()->mHeight;
+}
+
+// @ 0x00d2e380
+__declspec(noinline) double GetTierHeight(int tier)
+{
+    float v = 0.0f;
+    if (tier == -1)
+        tier = NounManager_s00d2_dd20()->GetAvatar()->FUN_00D8();
+    switch (tier) {
+    case 0: v = kTier0Height; break;
+    case 1: v = kTier1Height; break;
+    case 2: v = kTier2Height; break;
+    case 3: v = kTier3Height; break;
+    }
+    return v;
+}
+
 // @ 0x00d2e480
 void SetClampedValue(float value)
 {
     g_0169e370.mClampedValue = value;
+}
+
+// @ 0x00d2e4a0
+void SetCreatureDisplayMode(int mode, char apply)
+{
+    int prev = g_0169e370.mMode;
+    g_0169e370.mMode = mode;
+    if (prev != mode) {
+        cAvatar* avatar = NounManager_s00d2_dd20()->GetAvatar();
+        FUN_00bc97f0(0x100000, 0, kFloatMax, 0);
+        avatar->FUN_0084(avatar->FUN_00c0ee60(avatar->mSlotB5c, 0));
+        cAvatar* target = avatar->FUN_00c0ee90();
+        if (target != 0) {
+            FUN_00b3d4c0(target->mCombatDataB28, mode);
+            FUN_00ba4350(target->mCombatDataB28, mode);
+        }
+        if (GetCurrentGameMode() == &g_01654c01)
+            GetBanningModeUi()->FUN_0028(0);
+    }
+    if (apply) {
+        if (mode == 0)
+            SetGlobalProperty(0x843467a7, 1.0f);
+        else
+            SetGlobalProperty(0x16ba4108, 1.0f);
+    }
+}
+
+// @ 0x00d2e580
+void RefreshViewScale()
+{
+    cAvatar* avatar = NounManager_s00d2_dd20()->GetAvatar();
+    switch (avatar->mpSpecies->mMode) {
+    case 1: g_0169e370.mViewScale = kViewScale1; break;
+    case 2: g_0169e370.mViewScale = kViewScale2; break;
+    case 3: g_0169e370.mViewScale = kViewScale3; break;
+    case 4: g_0169e370.mViewScale = kViewScale4; break;
+    case 5: g_0169e370.mViewScale = kViewScale5; break;
+    default: g_0169e370.mViewScale = 0.0f; break;
+    }
+
+    if (g_0169e370.mPrevX != g_0169e13c || g_0169e370.mPrevY != g_0169e140
+        || g_0169e370.mPrevZ != g_0169e144) {
+        if (!GetAchievements(0x4913ee1)->FUN_00675e80()
+            && GetCurrentGameMode() != &g_01654c10) {
+            const Vector3_s00d2_dd20* pos = avatar->mLocomotive.GetPosition();
+            double dx = (double)g_0169e370.mPrevX - (double)pos->x;
+            double dy = (double)g_0169e370.mPrevY - (double)pos->y;
+            double dz = (double)g_0169e370.mPrevZ - (double)pos->z;
+            float dist = (float)sqrt(dz * dz + (dy * dy + dx * dx));
+            int radius = GetAchievements(0x4913ee1)->FUN_006766e0();
+            float fr = (float)radius;
+            if (radius < 0)
+                fr = fr + kTwoPow32;
+            if (fr <= dist)
+                GetAchievements(0x4913ee1)->Award();
+        }
+    }
+    g_0169e370.mPrevX = g_0169e13c;
+    g_0169e370.mPrevY = g_0169e140;
+    g_0169e370.mPrevZ = g_0169e144;
+}
+
+// @ 0x00d2e720
+void RecomputeZoom()
+{
+    g_0169e370.mZoom = kRealOne;
+
+    cAvatarProfile* profile = GetEditorSpeciesManager()->GetAvatarProfile();
+    if (profile == 0)
+        return;
+
+    NounManager_s00d2_dd20()->GetAvatar();
+    float span = profile->mZoomSpan;
+    int count = 0;
+    Vector2* array = 0;
+    if (!GetPropertyAsVector2Array(cCreatureModeStrategy::Instance()->mpPropList,
+                                   0xb561b9eb, &count, &array))
+        return;
+    if (count == 0)
+        return;
+
+    int index = (count <= g_0169e370.mSelectedIndex) ? count : g_0169e370.mSelectedIndex;
+    if (span < array[index].x)
+        g_0169e370.mZoom = array[index].x / span;
+    else if (array[index].y < span)
+        g_0169e370.mZoom = array[index].y / span;
+}
+
+// @ 0x00d2e800
+double GetRecomputedZoom(cAvatar* avatar)
+{
+    if (avatar != 0 && ((unsigned char)(avatar->mFlagsB58.mFlag9) & 1))
+        RecomputeZoom();
+    return g_0169e370.mZoom;
+}
+
+// @ 0x00d2e830
+int GetTierForTerrain()
+{
+    float height = NounManager_s00d2_dd20()->GetCurrentTerrainSphere()->mHeight;
+    float acc = 0.0f;
+    int i = 0;
+    do {
+        acc = (float)GetTierHeight(i) + acc;
+        if (acc > height)
+            return i;
+        ++i;
+    } while (i < 4);
+    return 4;
 }
 
 // @ 0x00d2e8a0
@@ -3375,7 +3981,7 @@ void cCreatureModeStrategy::NotifyEvent(float amount)
             pf = &kTierMaxHeight;
         g_0169e370.mClampedValue = *pf;
 
-        NounManager()->GetCurrentTerrainSphere()->mHeight += amount;
+        NounManager_s00d2_dd20()->GetCurrentTerrainSphere()->mHeight += amount;
 
         if (GetCurrentGameMode() != &g_01654c10) {
             cCreatureModeStrategy* inst = Instance();
@@ -3389,7 +3995,7 @@ void cCreatureModeStrategy::NotifyEvent(float amount)
                     int      pad10;     // +0x10
                     int      pad14;     // +0x14
                 } ctx;
-                ctx.avatar = NounManager()->GetAvatar();
+                ctx.avatar = NounManager_s00d2_dd20()->GetAvatar();
                 ctx.zero = 0;
                 ctx.amount = amount;
                 inst->FUN_00d39360(0x45ab96e, &ctx);
@@ -3405,6 +4011,31 @@ void ResetCreatureModeState()
     g_0169e370.mFlags38 |= 0x40000000;
     g_0169e370.mFlags3c |= 0x20;
     g_0169e370.mMode = 1;
+}
+
+// @ 0x00d2e9b0
+bool cVarListSerializer_s00d2_dd20::Load(unsigned int version)
+{
+    mBits38[0] = 0;
+    mBits38[1] = 0;
+    mBits38[2] = 0;
+    memset(&g_0169e370, 0, 0x50);
+    g_0169e370.mFlags38 |= 0x40000000;
+    g_0169e370.mFlags3c |= 0x20;
+    g_0169e370.mMode = 1;
+
+    cVarListSerializer_s00d2_dd20 s(this, &g_015829b8, 0x1a80d26);
+    bool ok = s.Serialize(version);
+
+    if (g_0145f8d4 < 0x25 || (g_0145f8d4 == 0x25 && g_0145f8d8 < 1)) {
+        for (int i = 0; i < 0x40; ++i) {
+            if ((mMask30 & ((unsigned __int64)1 << i)) != 0) {
+                if (i < 0x58)
+                    mBits38[i >> 5] |= 1u << (i & 0x1f);
+            }
+        }
+    }
+    return ok;
 }
 
 // @ 0x00d37f10
@@ -3689,6 +4320,41 @@ void __stdcall FUN_00d389d0(int param_1, int param_2)
   SP::GetTriggerMgr()->PostTrigger(param_1, 1, 1, 0, 0, 0);
 }
 
+// @ 0x00d38a30
+float __cdecl FUN_00d38a30(int mode, cSPCreatureBase* creature)
+{
+    float radius = g_1485720;
+
+    if (creature->GetForageRadiusSource() != 0) {
+        radius = creature->GetForageRadiusSource()->mRadius;
+        if (radius < 0.0f)
+            radius = g_1485720;
+    }
+
+    switch (mode) {
+    case 0:
+    case 1:
+    case 2:
+        return radius;
+    case 3:
+        return g_1582e90 * radius;
+    case 4:
+        return g_1582e94 * radius;
+    case 5:
+        return g_1582e98 * radius;
+    case 6:
+        return g_1582e9c * radius;
+    case 7:
+        return g_1582ea0 * radius;
+    case 8:
+        return g_1582ea4 * radius;
+    case 9:
+        return g_1582eac;
+    default:
+        return 1.0f;
+    }
+}
+
 // @ 0x00d38b10
 CRefSlot* CRefSlot::FUN_00d38b10(CRefCounted* other)
 {
@@ -3844,6 +4510,72 @@ bool CStateNode::FUN_00d38ec0(int type, void* src)
   return false;
 }
 
+// @ 0x00d38f40
+void ShuffleEqualKeyRuns()
+{
+    int i = 0;
+    int j = 0;
+    int count = (int)(g_keyedEntries.mEnd - g_keyedEntries.mBegin);
+
+    while (j < count) {
+        while (j < count && g_keyedEntries.mBegin[i].mKey == g_keyedEntries.mBegin[j].mKey)
+            j++;
+        j--;
+        if (i < j) {
+            while (i < j) {
+                float r = (float)g_random.RandomDoubleUniform();
+                if (g_random.RandomDoubleUniform() >= r) {
+                    KeyedEntry t = g_keyedEntries.mBegin[i];
+                    g_keyedEntries.mBegin[i] = g_keyedEntries.mBegin[j];
+                    g_keyedEntries.mBegin[j] = t;
+                }
+                i++;
+            }
+        }
+        i++;
+        j++;
+    }
+}
+
+// @ 0x00d391d0
+void InitCreatureDisplay(bool force)
+{
+    COwner* owner = g_pOwner;
+
+    if (owner->mpDisplay == 0) {
+        CDisplayStrategy* display = new ("Simulator", 0, 0, 0, 0) CDisplayStrategy();
+        CDisplayStrategy* old = owner->mpDisplay;
+        if (display != old) {
+            if (display != 0)
+                display->mRef.AddRef();
+            owner->mpDisplay = display;
+            if (old != 0)
+                old->mRef.Release();
+        }
+        owner->mpDisplay->Activate(force);
+    }
+
+    if (g_pTestSystem != 0 &&
+        g_pTestSystem->mpList != (void*)&g_pTestSystem->mpList &&
+        force)
+        return;
+
+    CTexturePreload* preload = new ("Simulator", 0, 0, 0, 0) CTexturePreload(-1);
+    CTexturePreload* oldPreload = owner->mpTextures;
+    if (preload != oldPreload) {
+        if (preload != 0)
+            preload->AddRef();
+        owner->mpTextures = preload;
+        if (oldPreload != 0)
+            oldPreload->Release();
+    }
+
+    // Residual diff, solved by the inlined helper above: keeping the key loop
+    // in one inlined body makes cl sink `key.group` past the argument push and
+    // the `this` load (retail: push ecx / mov ecx,[edi+0xd4] / mov [esp+0x10],eax).
+    PreloadCreatureKeys(owner);
+}
+
 // @ 0x00d392f0
 void CLocatingOwner::FUN_00d392f0()
 {
@@ -3858,6 +4590,130 @@ void CLocatingOwner::FUN_00d392f0()
   }
   mpNode->mSlot1c();
 }
+
+// @ 0x00d39360
+void cCreatureModeStrategy_s00d3_9360::OnCreatureEvent(unsigned int eventID, cKillInfo* info)
+{
+    // One pair of position records per reporting arm; all four pairs are live for
+    // the whole function, which is what the retail frame (0x64 = 4 + 8 * 12) says.
+    cCreatureEventPos avatarPos1, animalPos1;
+    cCreatureEventPos avatarPos2, animalPos2;
+    cCreatureEventPos avatarPos3, animalPos3;
+    cCreatureEventPos avatarPos4, animalPos4;
+
+    IListener** const pListenersEnd = mpListenersEnd;
+    IListener** pp = mpListenersBegin;
+    while (pp != pListenersEnd) {
+        (*pp)->OnCreatureEvent(eventID, info);
+        ++pp;
+    }
+
+    switch (eventID) {
+    case 0x045ab96e:                                   // avatar died
+        if (info->mpVictim != NounManager_s00d3_9360()->GetAvatar())
+            return;
+        mField48 = 1;
+        return;
+
+    case 0x060b4124: {                                 // animal attack on the avatar
+        cCreatureBase_s00d3_9360* avatar = NounManager_s00d3_9360()->GetAvatar();
+        cCreatureAnimal* animal = AsCreatureAnimal(info->mpAttacker);
+        if (info->mpVictim != avatar || animal == 0)
+            return;
+        avatarPos1.Clear();
+        animalPos1.Clear();
+        ReportCreatureEvent(0x3b29c983, avatar->GetSpeciesName(),
+                            animal->GetSpeciesName(), animalPos1, avatarPos1);
+        return;
+    }
+
+    case 0x060b4123: {                                 // second animal attack flavour
+        cCreatureBase_s00d3_9360* avatar = NounManager_s00d3_9360()->GetAvatar();
+        cCreatureAnimal* animal = AsCreatureAnimal(info->mpAttacker);
+        if (info->mpVictim != avatar || animal == 0)
+            return;
+        avatarPos2.Clear();
+        animalPos2.Clear();
+        ReportCreatureEvent(0xfc6ce3b4, avatar->GetSpeciesName(),
+                            animal->GetSpeciesName(), animalPos2, avatarPos2);
+        return;
+    }
+
+    case 0x533535da: {                                 // animal socialising with the avatar
+        cCreatureBase_s00d3_9360* avatar = NounManager_s00d3_9360()->GetAvatar();
+        cCreatureAnimal* animal = AsCreatureAnimal(info->mpAttacker);
+        if (info->mpVictim != avatar || animal == 0)
+            return;
+        avatarPos3.Clear();
+        animalPos3.Clear();
+        ReportCreatureEvent(0x81ad32e9, avatar->GetSpeciesName(),
+                            animal->GetSpeciesName(), animalPos3, avatarPos3);
+        return;
+    }
+
+    case 0xd335362c: {                                 // attack that must be seen
+        cCreatureBase_s00d3_9360* avatar = NounManager_s00d3_9360()->GetAvatar();
+        cCreatureAnimal* animal = AsCreatureAnimal(info->mpAttacker);
+        cCreatureBase_s00d3_9360* victim = info->mpVictim;
+        if (victim == 0)
+            return;
+        if (!EventTargetOf(victim)->IsEventTargetActive())
+            return;
+        if (animal == 0 || avatar == 0)
+            return;
+        avatarPos4.Clear();
+        animalPos4.Clear();
+        ReportCreatureEvent(0x64487065, avatar->GetSpeciesName(),
+                            animal->GetSpeciesName(), animalPos4, avatarPos4);
+        return;
+    }
+
+    case 0xd3353637:                                   // link / unlink
+        if (info->mField08 == 0)
+            --g_pCreatureModeStrategy->mField24;
+        else
+            ++g_pCreatureModeStrategy->mField24;
+        return;
+    }
+}
+
+// @ 0x00d39670
+namespace SP {
+cTelemetryItem_s00d3_9670* cCreatureModeStrategy_s00d3_9670::AddStat(unsigned int kind, unsigned int sub)
+{
+    cGameNounManager_s00d3_9670* pNouns = NounManager_s00d3_9670();
+    cCreatureBase_s00d3_9670* pAvatar = pNouns->GetAvatar();
+    const Vector3_s00d3_9670& position = pAvatar->mSpatial.GetPosition();
+
+    cStatMessage msg;
+    msg.m00 = 0;
+    msg.m04 = 0;
+    msg.m08 = 0;
+
+    cPropertyQuery* pQuery = PropertyManager_s00d3_9670()->mpQuery;
+    if (pQuery != 0 && pQuery->GetKey() != 0)
+        GetPropertyAsKey(pQuery->GetKey(), 0x3D03F84, &msg);
+
+    cTelemetryItem_s00d3_9670* pItem = GetTelemetry(1, kind)->BeginItem();
+    pItem->SetMetric((int)sub + 0x0b);
+
+    int64_t ticks = GameTimeManager_s00d3_9670()->GetTicks();
+    pItem->mpData->mTicks = ScaleTicks(ticks, 1000, 0);
+    pItem->mpData->mNounId = pAvatar->GetNounID();
+    pItem->mpData->mTimeA = FUN_d2e360();
+    pItem->mpData->mTimeB = FUN_d2e350();
+    pItem->mpData->mNounCount = pNouns->GetNounList()->size();
+    // Retail copies the three floats separately, reloading the payload pointer
+    // after each store.
+    pItem->mpData->mPosition.x = position.x;
+    pItem->mpData->mPosition.y = position.y;
+    pItem->mpData->mPosition.z = position.z;
+    pItem->mpData->mMsg08 = msg.m08;
+    pItem->mpData->mMsg00 = msg.m00;
+    pItem->mpData->mColor = ColorRGBToU32(pAvatar->mpProfile->mColor);
+    return pItem;
+}
+}  // namespace SP
 
 // @ 0x00d397c0
 bool FUN_00d397c0(int key, CPtrRange* range)

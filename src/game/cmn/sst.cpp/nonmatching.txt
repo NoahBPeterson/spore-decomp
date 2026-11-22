@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+01131f00 347 complete; cl register/scheduling choice in the six unlink blocks; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 90.8% coverage)
+01132090 326 complete; LTCG + inlined gain loops; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (299 valid, 37.1% coverage, no mismatch)
+01132280 45 complete; cl keeps the constant in esi vs imul-immediate (register allocation only); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400 valid, 50% coverage, no mismatch)
+01132320 24 logic: rewrote the body — retail returns the previous line (the value FUN_01141270 yields is kept in eax and the guard reads [esi+0x12c], jne past the body) and the two unlink calls sit outside the compare; table entries are now `SndStreamState*`, so the load has the [ecx*4+0x16e61e0] displacement instead of [ecx*4]. Quick check still flags a spurious extra store at 0x00000000, but the disassembly now only differs by the callee immediates (my obj prints `<+0x1b>`/`<+0x37>`/`<+0x44>` elses for the three calls, retail `<ext>`: check.py built this row as a plain object, not the /GL+/LTCG link the slice needs, and there is no ltcg/ stubs file for it), the stack adjust split (add esp,4 / add esp,0x10 instead of one add esp,0x14) and the branch falling through to the body. fix1: quick check DIFFERS flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
+011323a0 167 complete; LTCG + line-accounting loop; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (181 valid, 42.4% coverage, no mismatch; input-limited, 219/400 fault(read))
+01132450 310 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (85 valid, 45.4% coverage, no mismatch; PASS at --inputs 1500)
+011325d0 97 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (392/400, 100% coverage)
+01132660 212 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400 valid, 4.6% coverage, no mismatch)
+01132770 256 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (102 valid, 98.2% coverage, no mismatch; PASS at --inputs 1500)
+011328c0 238 complete; LTCG + inlined isheld/parsedata; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (179 valid, 7.0% coverage, no mismatch)
+01132a10 115 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400 valid, 6.8% coverage, no mismatch)

@@ -1373,6 +1373,7 @@ static inline void vcall_release8(IRefObject_s00c3_a180* p)          // vtable +
 // ---- items of slice s00c3a180 end
 
 // ---- items of slice s00c3ae70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gF_146bb70;   // 1.5258789e-05 (min extent threshold)
 extern float gF_1471064;   // 0.5
 #pragma intrinsic(sqrt, fabs)
 struct Vector3_s00c3_ae70 {
@@ -1392,7 +1393,14 @@ struct IReleased {
 };
 void* __cdecl PropertyManager();            // 0x0067de30
 void* __cdecl SpaceGameGet_s00c3_ae70();               // 0x01002bd0
+struct ToolMgr_s00c3_b5c0 {
+    int  CreateToolFromToolID(void* pTool, void* pSlot);    // 0x0104e340 (ret 8)
+    void UseToolStop(void* pTool);                          // 0x0104fa90 (ret 4)
+};
+ToolMgr_s00c3_b5c0* __cdecl FUN_00b3d390();   // 0x00b3d390 ToolManager(): returns [0x167eb08]
 struct FnB18E40 { bool  __thiscall f(); };           // 0x00b18e40 (bool in AL)
+struct Fn104BD50{ bool  __thiscall f(); };           // 0x0104bd50 (bool)
+struct FnC37DC0 { float __thiscall f(); };           // 0x00c37dc0
 struct FnC382E0 { void  __thiscall f(); };           // 0x00c382e0
 struct Fn1005C60{ float __thiscall f(int); };        // 0x01005c60 GetWarpScale (this=SpaceGame)
 struct FnB18420 { int   __thiscall f(void*); };      // 0x00b18420 cGameData::WriteAsText (ret 4)
@@ -1546,7 +1554,7 @@ struct cUFOKinestheticsTuning_s00c3_ae70 : public IHandler_s00c3_ae70 {
     U32   md1b8;                             // +0x1B8 (= 0)
 
     void  ReadProps();                       // 0x00c38d00
-    void  Init();
+    void  Init();  // 0x00c3b7f0 (cUFOKinestheticsTuning::Init)
     float GetGalaxyWarpMultiplier(int index, int warpMode);  // 0x00c3b880 (cUFOKinestheticsTuning::GetGalaxyWarpMultiplier)
 };
 struct cSPGameDataUFO_s00c3_ae70 {
@@ -1557,12 +1565,12 @@ struct cSPGameDataUFO_s00c3_ae70 {
     float GetScale();
     void  UpdateScale();
     void  UpdateDestinationFromTarget();
-    bool  OnMessage(U32 messageID, int arg);
+    bool  OnMessage(U32 messageID, int arg);  // 0x00c3b560 (cSPGameDataUFO::OnMessage)
     void  SetNPCTool(void* pTool);
     int   ClearAttackBehaviorTarget(IRefObject_s00c3_ae70* pTarget);   // this is the +0x7a8 target 0x00c3b630
     int   ClearDefenseBehaviorTarget(IRefObject_s00c3_ae70* pTarget);  // this is the +0x7ac target
     int   GetFieldValues(void* pOut);  // 0x00c3bc80 (cSPGameDataUFO::GetFieldValues)
-    float GetScaleRadius();
+    float GetScaleRadius();  // 0x00c3be10 (cSPGameDataUFO::GetScaleRadius)
     void  SetHeading(const Vector3_s00c3_ae70* pDir);
     void  Destroy();
 
@@ -1656,6 +1664,26 @@ struct cVarListSerializer_s00c3_ae70 {
     void ctor(void* pA, void* pB, int pC);   // 0x00692f90
     int  GetFields(void* pOut);              // 0x00695960
 };
+extern "C" cUFOKinestheticsTuning_s00c3_ae70* g_168df68_s00c3_ae70;
+struct UFOLocomotive {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+    virtual void SetScale(float scale);   // +0x40
+};   // UFO kinesthetics tuning instance
 // ---- items of slice s00c3ae70 end
 
 // ---- items of slice s0105b960 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2765,6 +2793,64 @@ char cSPGameDataUFO_s00c3_a180::vtableSlot40Wrapper(int arg)
     return ok;
 }
 
+// @ 0x00c3b3f0
+void cSPGameDataUFO_s00c3_ae70::UpdateScale()
+{
+    if ((mFlags84 & 0x10) != 0 && (mFlags84 & 0x20) == 0)
+        return;
+
+    float ex = mf060 - mf054;
+    float ey = mf064 - mf058;
+    float ez = mf068 - mf05c;
+    float v[3];
+    v[0] = ex;
+    v[1] = ey;
+    v[2] = ez;
+    float* pExtent = v + 1;
+    if (!(v[0] < v[1]))
+        pExtent = v;
+    if (v[2] > *pExtent)
+        pExtent = v + 2;
+    float extent = *pExtent;
+
+    float scale = gF_1485720;
+    if (extent > gF_146bb70) {
+        cUFOKinestheticsTuning_s00c3_ae70* pTuning = g_168df68_s00c3_ae70;
+        float fighter = pTuning->mFighterScale;    // +0x2c
+        float bomber = pTuning->mBomberScale;      // +0x28
+        if (extent > fighter)
+            scale = fighter / extent;
+        else if (bomber > extent)
+            scale = bomber / extent;
+    }
+
+    float r = GetScaleFactor() * GetScale() * scale;
+    ((UFOLocomotive*)&mpVftbl34)->SetScale(r);
+}
+
+// @ 0x00c3b4d0
+void cSPGameDataUFO_s00c3_ae70::UpdateDestinationFromTarget()
+{
+    void* pLoco = (char*)this + 0x34;
+    typedef void* (__thiscall* VGet)(void*);
+    void* pTarget = ((VGet)(*(void**)(*(char**)pLoco + 0xac)))(pLoco);
+    if (pTarget == 0)
+        return;
+
+    bool bit = ((*(U32*)((char*)pTarget + 4) >> 0x11) & 1) != 0;
+    if (bit) {
+        mFlags84 |= 0x40;
+        float f = *(float*)((char*)pTarget + 0x6c);
+        mf090 = f;
+        mf094 = f;
+    }
+    if ((*(U8*)((char*)pTarget + 6) & 1) != 0) {
+        typedef void (__thiscall* Vf)(void*, void*, float);
+        ((Vf)(*(void**)(*(char**)pLoco + 0x64)))(pLoco, (char*)pTarget + 0x70, GetScaleFactor() * ((FnC37DC0*)this)->f());
+        mFlags84 = (mFlags84 & ~0x10) | 0x20;
+    }
+}
+
 // @ 0x00c3b560
 bool cSPGameDataUFO_s00c3_ae70::OnMessage(U32 messageID, int arg)
 {
@@ -2780,6 +2866,29 @@ bool cSPGameDataUFO_s00c3_ae70::OnMessage(U32 messageID, int arg)
         ((FnC382E0*)((char*)this - 0x5e8))->f();
     }
     return false;
+}
+
+// @ 0x00c3b5c0
+void cSPGameDataUFO_s00c3_ae70::SetNPCTool(void* pTool)
+{
+    RefHolder_s00c3_ae70* pSlot = &mRef790;
+    IRefObject_s00c3_ae70* pKeep = 0;
+    IRefObject_s00c3_ae70* pCur = pSlot->mpObject;
+    if (pCur != 0) {
+        pCur->AddRef();
+        pKeep = pCur;
+    }
+    if (pSlot->mpObject != 0) {
+        IRefObject_s00c3_ae70* pOld = pSlot->mpObject;
+        pSlot->mpObject = 0;
+        pOld->Release();
+    }
+    FUN_00b3d390()->CreateToolFromToolID(pTool, pSlot);
+    if (pKeep != 0) {
+        if (((Fn104BD50*)pKeep)->f() && pKeep != pSlot->mpObject)
+            FUN_00b3d390()->UseToolStop(pKeep);
+        pKeep->Release();
+    }
 }
 
 // @ 0x00c3b7f0

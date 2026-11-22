@@ -3,32 +3,60 @@
 ../src/game/SPGonzago/SPMission.cpp  ?Write_c44ad0@GameObj@@QAE_NPAX@Z  00c44ad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?Serialize_c44b40@GameObj@@QAEXPAX@Z  00c44b40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?RegisterIds_c44b80@GameObj@@QAEXXZ  00c44b80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?UnregisterIds_c44bd0@GameObj@@QAEXXZ  00c44bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?Get@Obj00c44c30@@QAEHXZ  00c44c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ForwardToResource_c44c40@GameObj@@QAEXPAX@Z  00c44c40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?CallV48_c44c60@GameObj@@QAEHH@Z  00c44c60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?CallV42_c44c90@GameObj@@QAE_NXZ  00c44c90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetTypeId_c44cb0@GameObj@@QAEIXZ  00c44cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetFactor_c44d00@@YGMPAUThing@@PB_N@Z  00c44d00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SetVisibleInStarmap@cSPMission_s00c4_6ab0@SP@@QAEX_N@Z  00c44ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SetEmpire@cSPMission@@QAEXPAUcEmpire@@@Z  00c45250  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?SetUITextValue@cSPMission@@QAEHH@Z  00c45310  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?IsVisibleInUI@cSPMission@@QAE_NXZ  00c45340  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetNumAvailable@cSPMission@@QAEHXZ  00c45380  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetTotalTravelCost@cSPMission@@QAEHXZ  00c45510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetTotalTravelCostFloat@cSPMission@@QAEMXZ  00c45560  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetDynamicResponseID@cSPMission@@QAEHHH@Z  00c45740  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ReadTargetPlanetType@cSPMission_s00c4_5860@@QAEIXZ  00c45b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ReadTargetAnimalSpeciesType@cSPMission_s00c4_5860@@QAEIXZ  00c45b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ReadPickClosestStar@cSPMission_s00c4_5860@@QAEEXZ  00c45c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SetOwnerEmpire@cSPMission_s00c4_5860@@QAEXPAUcEntity@@@Z  00c45d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?IsTargetPlanetClue@cSPMission_s00c4_5860@@QAEII@Z  00c45d80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetMissionIconEffect@cSPMission_s00c4_5860@@QAEIXZ  00c45db0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetMissionIconEffectGroup@cSPMission_s00c4_5860@@QAEIXZ  00c45de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?IsTutorialMission@cSPMission_s00c4_5860@@QAEEXZ  00c45f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?CanShowOnMap@cSPMission_s00c4_5860@@QAE_NXZ  00c460f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?HasValidDescription@cSPMission_s00c4_5860@@QAEIXZ  00c46120  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SerializeVarList@cSPMission_s00c4_5860@@QAEEPAX@Z  00c46310  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ReleaseRefMember@@YIPAPAXPAPAX@Z  00c463d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ctor@cGenericPressureEvent@@QAEPAV1@XZ  00c46500  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ScalarDeletingDtor@cGenericPressureEvent@@QAEPAXI@Z  00c46540  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ShutdownSystems@cSPMission_s00c4_5860@@QAEXXZ  00c46590  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?PostLoad@cSPMission_s00c4_5860@@QAEXXZ  00c466d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?PickTargetAnimalSpecies@cSPMission_s00c4_5860@@QAEEXZ  00c46790  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?QueueConversation@cSPMission_s00c4_5860@@QAEIXZ  00c46800  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?CanAccept@cSPMission_s00c4_5860@@QAEIXZ  00c46840  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?OnFail@cSPMission_s00c4_5860@@QAEXXZ  00c469f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c46ab0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c46ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetConversationFileID@cSPMission_s00c4_6ab0@SP@@QAEIXZ  00c47040  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c470a0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c470a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SetMissionID@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c470f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47140@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c47140  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47180@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c47180  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c471c0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c471c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47240@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c47240  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472c0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c472c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472e0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c472e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ExportPlanet@cSPMission@SP@@QAEXPAVcPlanet@2@I@Z  00c47350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ExportSpecies@cSPMission_s00c4_6ab0@SP@@QAEXII@Z  00c473f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?StartCompletedFeedbackTimer@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c47440  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetAnimalSpeciesFromType@cSPMission@SP@@QAEXIAAVKey@ResourceMan@EA@@@Z  00c47610  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?OnAccept@cSPMission_s00c4_7a10@@QAEXXZ  00c47a10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?SetState@cSPMission_s00c4_7a10@@QAEXI@Z  00c47cc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?TriggerUIUpdate@cSPMission_s00c4_7a10@@QAEXXZ  00c47d80  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?DataExportOnInit@cSPMission_s00c4_7a10@@QAEXXZ  00c483d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?Validate@cSPMission_s00c4_7a10@@QAE_NXZ  00c484e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?PickPlanetClue@cSPMission_s00c4_7a10@@QAE_NXZ  00c48600  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c486f0@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c486f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48740@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c48740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -36,42 +64,15 @@
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48900@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c48900  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48940@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  00c48940  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48970@SPObject@@QAEXHPAUWStr@@@Z  00c48970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48a90@SPObject@@QAEXPAUWStr@@@Z  00c48a90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48ae0@SPObject@@QAEXPAUWStr@@@Z  00c48ae0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48db0@SPObject@@QAEXPAUWStr@@@Z  00c48db0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48e00@SPObject@@QAEXPAUWStr@@@Z  00c48e00  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49140@SPObject@@QAEXPAUWStr@@@Z  00c49140  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49180@SPObject@@QAEXPAUWStr@@@Z  00c49180  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49800@SPObject@@QAEXPAUWStr@@@Z  00c49800  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49840@SPObject@@QAEXPAUWStr@@@Z  00c49840  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49890@SPObject@@QAEXPAUWStr@@@Z  00c49890  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ReadBannerList@cBannerListHost@@QAE_NPAX@Z  00c4a850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ??0cMissionAdventure@Simulator@@QAE@XZ  00c4af60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ??0cMissionBalance@Simulator@@QAE@XZ  00c4b570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472c0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c472c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?GetConversationFileID@cSPMission_s00c4_6ab0@SP@@QAEIXZ  00c47040  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47140@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c47140  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47180@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c47180  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472e0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c472e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47240@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c47240  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?ExportPlanet@cSPMission@SP@@QAEXPAVcPlanet@2@I@Z  00c47350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?GetAnimalSpeciesFromType@cSPMission@SP@@QAEXIAAVKey@ResourceMan@EA@@@Z  00c47610  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?UnregisterIds_c44bd0@GameObj@@QAEXXZ  00c44bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?SetVisibleInStarmap@cSPMission_s00c4_6ab0@SP@@QAEX_N@Z  00c44ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c470a0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c470a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?SetMissionID@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c470f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c471c0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c471c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?IsVisibleInUI@cSPMission@@QAE_NXZ  00c45340  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49800@SPObject@@QAEXPAUWStr@@@Z  00c49800  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49890@SPObject@@QAEXPAUWStr@@@Z  00c49890  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?GetTotalTravelCost@cSPMission@@QAEHXZ  00c45510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?GetTotalTravelCostFloat@cSPMission@@QAEMXZ  00c45560  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49840@SPObject@@QAEXPAUWStr@@@Z  00c49840  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?SetEmpire@cSPMission@@QAEXPAUcEmpire@@@Z  00c45250  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?SetOwnerEmpire@cSPMission_s00c4_5860@@QAEXPAUcEntity@@@Z  00c45d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?ReadPickClosestStar@cSPMission_s00c4_5860@@QAEEXZ  00c45c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48a90@SPObject@@QAEXPAUWStr@@@Z  00c48a90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?SerializeVarList@cSPMission_s00c4_5860@@QAEEPAX@Z  00c46310  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?ReadBannerList@cBannerListHost@@QAE_NPAX@Z  00c4a850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?FUN_00c46ab0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c46ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?StartCompletedFeedbackTimer@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c47440  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?Validate@cSPMission_s00c4_7a10@@QAE_NXZ  00c484e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?ExportSpecies@cSPMission_s00c4_6ab0@SP@@QAEXII@Z  00c473f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?CanShowOnMap@cSPMission_s00c4_5860@@QAE_NXZ  00c460f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?OnFail@cSPMission_s00c4_5860@@QAEXXZ  00c469f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMission.cpp  ?ShutdownSystems@cSPMission_s00c4_5860@@QAEXXZ  00c46590  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

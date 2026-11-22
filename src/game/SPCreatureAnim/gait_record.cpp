@@ -340,6 +340,7 @@ template <> AnalysisInfo* Vec_s009d_e8b0<AnalysisInfo>::allocate_copy(int n, Ana
 
 // ---- items of slice s009e5070 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int g_AssignGaits;   // 0x015515dc
+extern void* g_name_map;        // 0x0166c06c name -> object map
 inline void* operator new(unsigned, void* p) { return p; }
 void operator delete[](void*);   // 0x00f47380
 struct Slot {            // 16 bytes
@@ -364,6 +365,10 @@ struct GaitCData {       // copied as one block of dwords
     bool c0, c1;
     short c2;
     int pad;
+};
+struct GaitC_s009e_5070 : IdBase {  // 0x1c, vtable 0x01447cc8
+    virtual void f0();
+    GaitCData d;
 };
 struct GaitC : IdBase {  // 0x1c, vtable 0x01447cc8
     virtual void f0();
@@ -391,7 +396,7 @@ struct Gait {            // 0x40
     int id;
     Vec<GaitA> a;
     Vec<GaitB> b;
-    Vec<GaitC> c;
+    Vec<GaitC_s009e_5070> c;
     Gait();   // 0x009e1030
     Gait(const Gait& o) : id(o.id) { a.assign(o.a); b.assign(o.b); c.assign(o.c); }
 };
@@ -450,11 +455,58 @@ struct Table {
     EntryArr arr;        // +0x18
     void __thiscall Load(const Src* s);   // 0x009e5070
 };
+typedef unsigned int uint32;
+void*  EAAllocate(unsigned size, const char* tag, int a, int b, int* allocator, int line); // 0x00f473a0
+struct Elem0C_s009e_5070;   // defined with Vec0C below
+struct VecEntry_s009e_5070 {           // 0x14 (POD: the 2-arg Construct does the real init)
+    Entry* b;
+    Entry* e;
+    Entry* cap;
+    int    alloc[2];
+    VecEntry_s009e_5070() {}
+    VecEntry_s009e_5070(unsigned n, const Entry* v);                        // 0x009e4630
+    ~VecEntry_s009e_5070() { if (b && ((int*)b)[-1]) operator delete[](b); }
+    void __thiscall DoInsertValue(Entry* pos, const Entry& v);   // 0x009e04e0
+    void __thiscall Construct(unsigned n, const Entry* v);       // 0x009e4630
+};
+struct EntryArrG {          // at Gcmdst+0x18 (same layout as EntryArr)
+    unsigned count;
+    VecEntry_s009e_5070 v;
+    EntryArrG() : count(0) { char tmp; v.Construct(0, (const Entry*)&tmp); }
+    void __thiscall Insert(const Entry* e);   // 0x009e4a00
+};
+struct Elem0C_s009e_5070 { float a, b; int c; };                            // 0x0c
+struct Vec0C_s009e_5070 {              // 0x14
+    Elem0C_s009e_5070* b;
+    Elem0C_s009e_5070* e;
+    Elem0C_s009e_5070* cap;
+    int     alloc[2];
+    Vec0C_s009e_5070() { b = 0; cap = 0; e = 0; }
+    ~Vec0C_s009e_5070() { if (b && ((int*)b)[-1]) operator delete[](b); }
+    void __thiscall AddElem(const Elem0C_s009e_5070* e);   // 0x009e1610
+};
+struct Gcmdst_s009e_5070 {             // 0x30
+    unsigned  count;        // +0x00
+    Vec0C_s009e_5070     v;            // +0x04   sampled list
+    EntryArrG arr;          // +0x18
+    Gcmdst_s009e_5070();                                                       // 0x009e56a0
+    void __thiscall ResetDefault();                                // 0x009e4aa0
+    void __thiscall ReadFromText(void* buf, int n);                // 0x009e4e30
+};
+void*  BuildGaits(void* self, void* g);                         // 0x009e2490
+struct RBNode {
+    RBNode* c0;
+    RBNode* c4;
+    RBNode* par;
+    int     color;
+    uint32  key;
+    void*   value;
+};
 // ---- items of slice s009e5070 end
 
 // ---- items of slice s009db6d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int g_skipScalars;
-typedef unsigned int uint32;
+
 float __cdecl sub_9B3C10(float a, float b);                       // 0x009b3c10
 struct ValPath;
 struct Val3 {               // 0x0c -- one interpolated sample
@@ -817,7 +869,7 @@ struct AnimC {                          // destructor @ 0x009dfd30
 
 // ---- items of slice s009e0d90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const float g_gait_default_id;                                 // 0x013f1cac 50.0f
-extern void* g_name_map;                                              // 0x0166c06c global name->object map
+
 void*  CreateByName(const uint32 key);                                // 0x00a08a20
 uint32 HashName(const char* s, uint32 basis, int one);                // 0x00932e80 FNV-1a
 struct CArgs { void** MainArguments(int n); };                        // 0x00838320 __thiscall ret 4
@@ -937,14 +989,7 @@ struct ItemArr {                                                       // 0x18
     void Build(const void* src);                                       // 0x009e1760
 };
 struct RPair { float a, b; };
-struct RBNode {
-    RBNode* c0;                                                        // +0x00
-    RBNode* c4;                                                        // +0x04
-    RBNode* par;                                                       // +0x08
-    int     color;                                                     // +0x0c
-    uint32  key;                                                       // +0x10
-    void*   value;                                                     // +0x14
-};
+
 struct RBTree {
     int      f00;                                                      // +0x00
     RBNode*  sentinel;                                                 // +0x04 (its address is the sentinel)
@@ -1327,7 +1372,7 @@ Entry_s009e_3580::Entry_s009e_3580(const Entry_s009e_3580& o)
 extern float g_Zero;                                                    // 0x01485378 0.0f
 extern float g_One;                                                     // 0x01485720 1.0f
 extern int   g_alloc;                                                   // 0x013ebb38 (allocator)
-void* EAAllocate(unsigned size, const char* tag, int a, int b, int* allocator, int line);  // 0x00f473a0
+
 void* ArgScriptCreateParser();                                          // 0x008408d0
 struct Slot_s009e_4450 {                                                           // 0x10
     float a, b;
@@ -3376,8 +3421,8 @@ void __thiscall Table::Load(const Src* s)
             for (unsigned k = 0; k < gr->nB; k++, q += sizeof(GaitB))
                 g.b.push_back(*(const GaitB*)q);
             g.c.reserve(gr->nC);
-            for (unsigned k = 0; k < gr->nC; k++, q += sizeof(GaitC))
-                g.c.push_back(*(const GaitC*)q);
+            for (unsigned k = 0; k < gr->nC; k++, q += sizeof(GaitC_s009e_5070))
+                g.c.push_back(*(const GaitC_s009e_5070*)q);
             in.gaits.push_back(g);
             gr = (const GRec*)q;
         }
@@ -3389,4 +3434,11 @@ void __thiscall Table::Load(const Src* s)
         arr.Insert(&e);
         r = (const Rec*)gr;
     }
+}
+
+// @ 0x009e56a0
+Gcmdst_s009e_5070::Gcmdst_s009e_5070()
+: count(0)
+{
+    ResetDefault();
 }

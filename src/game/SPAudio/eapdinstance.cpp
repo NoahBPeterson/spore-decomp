@@ -18,7 +18,8 @@ extern "C" void FUN_00a64870();
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ResourceMan/KeyFilter.h"
 
-// ---- items of slice s00a64d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Hand-kept views for the 0x00a64cf0/0x00a64ed0 rows (landed earlier from another slice).  They sit outside the
+// slice block because rewrite.py drops an item that only other items use (cNodeEx18/cPair18 are used by cIter18 only).
 struct cEntry18 {                  // param object: key at +0x2c, +0x30, +0x34, list link at +0x40
   uint8_t   pad0[0x2c];
   uint32_t  mKey;                  // +0x2c
@@ -55,7 +56,6 @@ struct cEapdOwner18 {
 
   bool RemoveGroupEntry(cEntry18* p);   // 0x00a64ed0 thiscall, ret 4
 };
-// ---- items of slice s00a64d70 end
 
 // ---- items of slice s00a68140 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct GEntry {                            // object passed in: key at +0x2c
@@ -507,6 +507,603 @@ public:
 };
 // ---- items of slice s00a65f90 end
 
+// ---- items of slice s00a64d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_1403934[];
+extern "C" char g_1455648[];
+extern "C" char g_1454fac[];
+extern "C" char g_1455668[];
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct NamedAllocator_s00a6_4d70 {
+    void*       mpVtbl;   // +0x00
+    int         mA;       // +0x04
+    const char* mpName;   // +0x08
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class FixedPool_s00a6_4d70 {
+public:
+    NamedAllocator_s00a6_4d70 mInitAllocator;       // +0x00
+    NamedAllocator_s00a6_4d70 mOverflowAllocator;   // +0x0c
+    uint32_t  mnNodeSize;                // +0x18
+    void*     mpPoolBegin;               // +0x1c
+    void*     mpPoolEnd;                 // +0x20
+    void*     mpHead;                    // +0x24
+    uint32_t  mnCurrentSize;             // +0x28
+    uint32_t  mnPeakSize;                // +0x2c
+
+    bool  Init(uint32_t nodeSize, uint32_t count, void* a1, void* a2);  // 0xa53210
+    void* AllocSize(uint32_t size);                                     // vtable slot 2
+    void* AllocNode();                                                  // pool head pop
+    void* AllocPooled();                                                // overflow vtbl[2](nodeSize)
+    void  Free(void* node);                                             // pool push
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class FixedHashtableAllocator_s00a6_4d70 : public FixedPool_s00a6_4d70 {
+public:
+    uint32_t mnBucketCount;              // +0x30
+    void*    mpBucketBuffer;             // +0x34
+
+    bool  InitBuckets(uint32_t a, uint32_t b, uint32_t c);   // 0xa53360
+    bool  InitBucketsEx(uint32_t size, uint32_t a1, uint32_t a2); // 0xa656b0
+    bool  InitPool(uint32_t a, uint32_t b, uint32_t c);      // legacy
+    void* AllocNode();                                       // pop a pooled node
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class PoolFreeView {
+public:
+    uint32_t  mPad00;     // +0x00
+    FixedPool_s00a6_4d70 mPool;      // +0x04
+    void FreeNode(void* node);   // 0xa65800
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct HashNode16 {
+    uint32_t mKey;        // +0x00
+    uint32_t mV1;         // +0x04
+    uint32_t mV2;         // +0x08
+    HashNode16* mpNext;   // +0x0c
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct InsertResult_s00a6_4d70 {
+    void*    mpNode;        // +0x00
+    void*    mpBucket;      // +0x04
+    uint8_t  mbInserted;    // +0x08
+    uint8_t  pad09[3];
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class Hashtable_s00a6_4d70 {
+public:
+    uint8_t    pad00[0x04];               // +0x00
+    HashNode16** mpBucketArray;           // +0x04
+    uint32_t   mnBucketCount;             // +0x08
+    uint32_t   mnElementCount;            // +0x0c
+    float      mfMaxLoadFactor;           // +0x10
+    uint32_t   mnGrowthFactor;            // +0x14
+    uint32_t   mnNextResize;              // +0x18
+    // The small table embeds only a 12-byte allocator face (vtable, field,
+    // name) at +0x1c; the table itself is 0x28 bytes.  The 0x30-byte FixedPool
+    // is only used by the big tables.
+    NamedAllocator_s00a6_4d70 mPool;                 // +0x1c
+
+    __declspec(noinline) Hashtable_s00a6_4d70* Construct(const void* nameSlot);   // 0xa64f80
+    __declspec(noinline) Hashtable_s00a6_4d70* InitNamed(void* nameSlot, const char* name); // 0xa65180
+    __declspec(noinline) void Dispose();                        // 0xa65000
+    void       Finalize();                                      // 0xa64b70
+    void       BaseDtor();                                      // 0xa651e0
+    void       Insert(InsertResult_s00a6_4d70* out, const HashNode16* pair,
+                      const uint32_t* pKey);                    // 0xa64d70
+    uint32_t   Erase(uint32_t* key);                            // 0xa64be0
+    void       DisposeArray2(void** arr, uint32_t n);           // 0xa64c50
+    void       ResizeBuckets(uint32_t newCount);                // 0xa64ad0
+    void       FindNode(HashNode16** out, const uint32_t* key);// 0x685f30
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct HashPolicy {
+    float      mfMaxLoad;    // +0x00
+    uint32_t   mnGrow;       // +0x04
+    uint32_t   mnNextResize; // +0x08
+    // 0x921440: pick the next bucket count (out[0]=changed flag, out[1]=count)
+    void NextBucketCount(uint32_t* out, uint32_t bucketCount,
+                         uint32_t elementCount, uint32_t force);   // 0x921440
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct HashNode20 {
+    uint32_t mKey;        // +0x00
+    uint32_t mV1;         // +0x04
+    uint32_t mV2;         // +0x08
+    uint32_t mV3;         // +0x0c
+    HashNode20* mpNext;   // +0x10
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class HashtableBig {
+public:
+    uint8_t    pad00[0x04];               // +0x00
+    HashNode20** mpBucketArray;           // +0x04
+    uint32_t   mnBucketCount;             // +0x08
+    uint32_t   mnElementCount;            // +0x0c
+    float      mfMaxLoadFactor;           // +0x10
+    uint32_t   mnGrowthFactor;            // +0x14
+    uint32_t   mnNextResize;              // +0x18
+    FixedHashtableAllocator_s00a6_4d70 mAlloc;       // +0x1c
+
+    void*  AllocBuckets(uint32_t n);                             // 0xa65830
+    void*  AllocBuckets20(uint32_t n);                           // 0xa65960
+    void*  Find(void** out, const uint32_t* key);                // 0xa3b2c0
+    void*  Rehash16(uint32_t newCount);                          // 0xa658b0
+    void*  Rehash20(uint32_t newCount);                          // 0xa659e0
+    void*  EraseFn(void* out, void* node, void** bucket);        // 0xa65b10
+    void*  AllocNode(const void* value);                         // 0xa65c70
+    bool   InitPool10(uint32_t a, uint32_t b, uint32_t c);       // 0xa65db0
+    bool   InitPool20(uint32_t a, uint32_t b, uint32_t c);       // 0xa65e40
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class GroupMap {
+public:
+    void*      mpVtbl;     // +0x00
+    GroupMap*  mpSelf;     // +0x04
+    uint32_t   mField08;   // +0x08
+    uint32_t   mField0c;   // +0x0c
+    Hashtable_s00a6_4d70  mGroups;    // +0x10
+
+    __declspec(noinline) GroupMap* GroupMapCtor(void* nameSlot);   // 0xa654a0
+    void       DisposeInner();                               // 0xa651e0
+    GroupMap*  ScalarDtor(uint32_t flags);                   // 0xa65500
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct VtblOwner { void* DispatchSlot2(void* arg, void* unused); };
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct Copyable38 {
+    uint32_t mW[14];        // +0x00 .. +0x37
+    Copyable38* CopyCtor(const Copyable38* src);
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class Instance {
+public:
+    void*      mpVtbl;       // +0x00
+    uint32_t   mField04;     // +0x04
+    const char* mpClassName; // +0x08
+    Hashtable_s00a6_4d70  mGroups;      // +0x0c  the Instance/Group table
+    GroupMap   mGroupMap;    // +0x34
+    uint32_t   mField6c;     // +0x6c
+    void*      mpCanvas;     // +0x70
+    uint8_t    mField74;     // +0x74  (original writes a single byte here)
+    uint8_t    mPad75[3];    // +0x75
+
+    Instance*  InstanceCtor(void* sys, void* a3, void* a4);   // 0xa65560
+    void       Destroy();                                     // 0xa65230
+    void*      CreateGroup(uint32_t* sym, void* a3, void* a4, uint32_t a5); // 0xa65360
+    void       FreeGroup(uint32_t key, uint32_t unused, void* group); // 0xa65470
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+class InstanceManager_s00a6_4d70 {
+public:
+    void*      mpVtbl;       // +0x00
+    uint32_t   mField04;     // +0x04
+    void*      mpAlloc08;    // +0x08
+    uint32_t   mField0c;     // +0x0c
+    float      mfMaxLoad10;  // +0x10
+    uint32_t   mnGrow14;     // +0x14
+    uint32_t   mnNextResize18; // +0x18
+    uint8_t    pad1c[0x3c - 0x1c];
+    HashtableBig mSymbols;   // +0x3c  (PatchMap)
+    HashtableBig mBindings;  // +0x90  (InstanceMap)
+    uint32_t   mCurId;       // +0xe4
+    uint32_t   mCurId2;      // +0xe8
+
+    __declspec(noinline) uint32_t CreateCanvas(void* a2, void* a3, uint32_t a4, uint32_t a5); // 0xa655f0
+    bool       CanvasOrId(void* a2, void* a3, uint32_t* out); // 0xa657a0
+    bool       RemoveInstance(uint32_t id);                   // 0xa65cd0
+    void*      FindInstance(uint32_t id);                     // 0xa65d60
+};
+}
+}
+}
+class AnyGroup {
+public:
+    void*    mpSamples;   // +0x00  the group's sample list
+    uint32_t mField04;    // +0x04
+    uint32_t mField08;    // +0x08
+    void*    mpVtbl0c;    // +0x0c  vtable face of the trailing sub-object
+
+    bool Init(uint32_t* sym, void* a3, void* a4, uint32_t a5);  // 0xa52ff0
+    void Destroy();                                             // 0xa52af0
+};
+class GroupHelp {
+public:
+    void* Init(void* owner);    // 0xa52f70
+};
+uint32_t FUN_00921340(uint32_t n);                                   // 0x00921340
+uint32_t MakeFloatHandler(void* self, float f);                      // 0xa648a0
+uint32_t PushNode(void* self);                                       // 0xa64730
+void*    MakeEntryIter(void* self);                                  // 0xa646f0
+void     ResetAndClear(void* self);                                  // 0xa64710
+void  pd_free(void* p);                                              // 0xa493d0
+void* Eapd_GetOwnerA();                                              // 0xa67ce0
+class EapdOwner {
+public:
+    void ClearLists(void* instance);    // 0xa646a0
+};
+class SymbolDispatchSlot {
+public:
+    uint32_t   mField00;    // +0x00
+    EA::Audio::Eapd::Hashtable_s00a6_4d70* mpMap;       // +0x04   the small symbol table
+    uint32_t   mField08;    // +0x08
+    void*      mpTarget;    // +0x0c   interface with a vtable
+
+    uint32_t Dispatch(uint32_t sym, float f);   // 0xa64e60
+};
+class GroupAdder {
+public:
+    uint32_t mField00;      // +0x00
+    EA::Audio::Eapd::Hashtable_s00a6_4d70* mpMap;       // +0x04   the small symbol table
+    void*    mpListener;    // +0x08   notified via vtbl[1]
+
+    uint32_t AddGroup(void* group);     // 0xa65070
+};
+void* EA::Audio::Eapd::FixedPool_s00a6_4d70::AllocSize(uint32_t size)
+{
+    typedef void* (__thiscall* Fn)(void*, uint32_t);
+    return ((Fn)(*(void***)this)[2])(this, size);
+}
+void* EA::Audio::Eapd::FixedPool_s00a6_4d70::AllocPooled()
+{
+    typedef void* (__thiscall* Fn)(void*, uint32_t);
+    return ((Fn)(*(void***)&mOverflowAllocator)[2])(&mOverflowAllocator, mnNodeSize);
+}
+void* EA::Audio::Eapd::HashtableBig::Rehash16(uint32_t newCount)
+{
+    void** newBuckets = (void**)AllocBuckets(newCount);
+    uint32_t i = 0;
+    if (mnBucketCount > i)
+    {
+        do
+        {
+            void* node = mpBucketArray[i];
+            while (node)
+            {
+                uint32_t h = *(uint32_t*)node % newCount;
+                EA::Audio::Eapd::HashNode20* next = *(EA::Audio::Eapd::HashNode20**)((char*)node + 0x10);
+                mpBucketArray[i] = next;
+                *(void**)((char*)node + 0x10) = newBuckets[h];
+                newBuckets[h] = node;
+                node = mpBucketArray[i];
+            }
+            ++i;
+        } while (i < mnBucketCount);
+    }
+    void** old = (void**)mpBucketArray;
+    if (mnBucketCount > 1 && old != (void**)mAlloc.mpBucketBuffer)
+    {
+        --mAlloc.mnCurrentSize;
+        if (old >= (void**)mAlloc.mpPoolBegin && old < (void**)mAlloc.mpPoolEnd)
+        {
+            *old = mAlloc.mpHead;
+            mAlloc.mpHead = old;
+        }
+        else
+        {
+            typedef void (__thiscall* Fn)(void*, void*);
+            ((Fn)(*(void***)&mAlloc.mOverflowAllocator)[3])(&mAlloc.mOverflowAllocator, old);
+        }
+    }
+    mpBucketArray = (EA::Audio::Eapd::HashNode20**)newBuckets;
+    mnBucketCount = newCount;
+    /* retail returns the OLD bucket array (the value left in eax by the free
+       path), not the freshly allocated one */
+    return old;
+}
+
+// ===========================================================================
+// HashtableBig::Rehash20 -- same, nodes whose next-link lives at +0x14
+// ===========================================================================
+void* EA::Audio::Eapd::HashtableBig::Rehash20(uint32_t newCount)
+{
+    void** newBuckets = (void**)AllocBuckets20(newCount);
+    uint32_t i = 0;
+    void** old = (void**)mpBucketArray;
+    if (mnBucketCount > 1 && old != (void**)mAlloc.mpBucketBuffer)
+    {
+        --mAlloc.mnCurrentSize;
+        if (old >= (void**)mAlloc.mpPoolBegin && old < (void**)mAlloc.mpPoolEnd)
+        {
+            *old = mAlloc.mpHead;
+            mAlloc.mpHead = old;
+        }
+        else
+        {
+            typedef void (__thiscall* Fn)(void*, void*);
+            ((Fn)(*(void***)&mAlloc.mOverflowAllocator)[3])(&mAlloc.mOverflowAllocator, old);
+        }
+    }
+    mpBucketArray = (EA::Audio::Eapd::HashNode20**)newBuckets;
+    mnBucketCount = newCount;
+    /* retail returns the OLD bucket array (the value left in eax by the free
+       path), not the freshly allocated one */
+    return old;
+}
+
+// ===========================================================================
+// HashtableBig::InitPool10 -- init the node pool, seed the table, set the load
+// factor and rehash if the initial count is still too small (PatchMap shape)
+// ===========================================================================
+
+// ===========================================================================
+// HashtableBig::InitPool20 -- same, InstanceMap shape
+// ===========================================================================
+
+// ===========================================================================
+// SymbolDispatchSlot::Dispatch -- forward to the interface, then look the
+// symbol up and hand it to the table's float handler
+// ===========================================================================
+// ===========================================================================
+// GroupAdder::AddGroup -- insert the group's symbol, then notify the listener
+// ===========================================================================
+
+// ===========================================================================
+// GroupMap::~GroupMap (scalar deleting)
+// ===========================================================================
+// ===========================================================================
+// FixedHashtableAllocator::InitBucketsEx -- size the bucket buffer from the
+// element count and hand a new buffer to the overflow allocator
+// ===========================================================================
+
+// ===========================================================================
+// Hashtable::Construct -- initialise the fields the small table ctor owns
+// ===========================================================================
+// The allocator InitNamed builds on the stack: its destructor (resetting the vtable) covers the Construct call.
+// Out-of-line entry points as other objects see them (bodies not visible to this caller).
+struct HashtableCalls_a65180 {
+    EA::Audio::Eapd::Hashtable_s00a6_4d70* Construct(const void* nameSlot);                 // 0xa64f80
+    EA::Audio::Eapd::Hashtable_s00a6_4d70* InitNamed(void* nameSlot, const char* name);    // 0xa65180
+};
+struct NamedAllocTemp_a65180 {
+    void*       mpVtbl;   // +0x00
+    int         mA;       // +0x04
+    const char* mpName;   // +0x08
+    NamedAllocTemp_a65180(const NamedAllocTemp_a65180& o, const char* name) : mpVtbl((void*)&g_1454fac), mA(o.mA), mpName(name) {}
+    ~NamedAllocTemp_a65180() { mpVtbl = (void*)g_1403934; }
+};
+
+EA::Audio::Eapd::Hashtable_s00a6_4d70* EA::Audio::Eapd::Hashtable_s00a6_4d70::Construct(const void* nameSlot)
+{
+    const uint32_t* slot = (const uint32_t*)nameSlot;
+    mnElementCount   = 0;
+    mfMaxLoadFactor  = 1.0f;
+    /* +0x14 is the growth factor, a float in the original (retail stores
+       2.0f with movss, not a plain integer 2) */
+    *(float*)&mnGrowthFactor = 2.0f;
+    mnNextResize     = 0;
+    mPool.mpVtbl = (void*)&g_1454fac;
+    mPool.mA     = slot[1];
+    mPool.mpName = (const char*)slot[2];
+    mnBucketCount    = 1;
+    mpBucketArray    = (EA::Audio::Eapd::HashNode16**)0x154df28;  // static empty-bucket sentinel
+    return this;
+}
+
+// ===========================================================================
+// Hashtable::InitNamed -- build a name slot and construct the table
+// ===========================================================================
+// ===========================================================================
+// Hashtable::Dispose -- release the bucket array and reset the allocator face
+// ===========================================================================
+// Destruction view of Hashtable (0x00a65000; callers reach it as Hashtable::Dispose): the bucket nodes are freed, then
+// the array through the allocator member, whose own destructor resets its vtable.
+struct HashPoolVt_a65000 {
+    void* s0; void* s1; void* s2;
+    void (__thiscall* Free)(void* self, void* p);   // +0xc
+};
+struct HashPool_a65000 {
+    HashPoolVt_a65000* vt;
+    uint32_t mA;
+    const char* mpName;
+    void Free(void* p) { vt->Free(this, p); }
+    ~HashPool_a65000() { vt = (HashPoolVt_a65000*)g_1403934; }
+};
+struct HashtableDtorView_a65000 {
+    uint32_t pad0;
+    void** mpBucketArray;     // +0x04
+    uint32_t mnBucketCount;   // +0x08
+    uint32_t mnElementCount;  // +0x0c
+    uint32_t pad10[3];
+    HashPool_a65000 mPool;    // +0x1c
+    void DoFreeBuckets(void** buckets, uint32_t n);   // 0x00a64c50
+    ~HashtableDtorView_a65000();
+};
+
+// ===========================================================================
+// Hashtable::Insert -- find-or-insert one {key,v1,v2} triple
+// ===========================================================================
+
+// ===========================================================================
+// Hashtable::Erase -- key-erase shared with the ObjectHashMap (0xa64be0)
+// ===========================================================================
+
+// ===========================================================================
+// GroupMap::~GroupMap (base destructor) -- tear down the GroupMap's inner
+// table at this+0x10 and install the base vtable.  The old duplicate
+// `Hashtable::BaseDtor` definition that shared this address (and compiled to
+// Dispose() on `this`) was removed: retail disposes this+0x10.
+// ===========================================================================
+// Destruction view of GroupMap (0x00a651e0, GroupMap::DisposeInner): the table member is destroyed, then the base
+// resets the vtable.
+struct GroupMapBase_a651e0 {
+    void*      mpVtbl;     // +0x00
+    void*      mpSelf;     // +0x04
+    uint32_t   mField08;   // +0x08
+    uint32_t   mField0c;   // +0x0c
+    GroupMapBase_a651e0() : mpSelf((char*)this + 0x10), mField08(0), mField0c(0) {}
+    ~GroupMapBase_a651e0() { mpVtbl = (void*)g_1455648; }
+};
+struct GroupMapDtorView_a651e0 : GroupMapBase_a651e0 {
+    HashtableDtorView_a65000 mGroups;   // +0x10
+    ~GroupMapDtorView_a651e0();
+};
+
+// GroupMap's deleting destructor (0x00a65500, GroupMap::ScalarDtor) with the destructor inlined.
+void OperatorDeleteNothrow_a65500(void* p) throw();   // 0xf47380
+struct GroupMapDelView_a65500 : GroupMapBase_a651e0 {
+    HashtableDtorView_a65000 mGroups;   // +0x10
+    GroupMapDelView_a65500* ScalarDtor(uint32_t flags);
+};
+
+// ===========================================================================
+// Instance::~Instance
+// ===========================================================================
+// @ 0x00a65230
+// ===========================================================================
+// Instance::~Instance -- free the canvas, destroy every group in the
+// Instance/Group table, run the owner ClearLists pass, dispose the GroupMap and
+// the two embedded tables, and finally re-stamp the object's vtable.
+// ===========================================================================
+
+// ===========================================================================
+// Instance::CreateGroup -- find the symbol, and when it is absent allocate a
+// 0x20-byte group, initialise it (failing soft if Init returns false) and
+// insert {symbol, a3, group} into the Instance/Group table.
+// ===========================================================================
+
+void* EA::Audio::Eapd::Instance::CreateGroup(uint32_t* sym, void* a3, void* a4, uint32_t a5)
+{
+    void* group = 0;
+    EA::Audio::Eapd::HashNode16* foundNode = 0;
+    /* The original keys the table on the caller's 4-byte symbol token (it hands
+       `find` the address of its own argument slot), not on the pointee. */
+    uint32_t key = (uint32_t)sym;
+    mGroups.FindNode(&foundNode, &key);
+    /* sentinel == foundNode means the symbol is absent -> build a group */
+    if (mGroups.mpBucketArray[mGroups.mnBucketCount] != foundNode)
+        return group;
+
+    typedef void* (__thiscall* AllocFn)(void*, uint32_t);
+    void* block = ((AllocFn)(*(void***)this)[2])(this, 0x20);
+    if (block)
+        group = ((GroupHelp*)block)->Init(this);
+    else
+        group = 0;
+    if (group == 0)
+        return group;
+
+    EA::Audio::Eapd::HashNode16 pair;
+    pair.mKey = key;
+    pair.mV1  = (uint32_t)a3;
+    pair.mV2  = (uint32_t)group;
+    pair.mpNext = 0;
+    EA::Audio::Eapd::InsertResult_s00a6_4d70 res;
+    mGroups.Insert(&res, &pair, 0);
+    return group;
+}
+
+// ===========================================================================
+// Instance::FreeGroup -- erase the key, destroy and free the group record
+// ===========================================================================
+
+// ===========================================================================
+// GroupMap::GroupMapCtor
+// ===========================================================================
+// Construction view of GroupMap (0x00a654a0, GroupMap::GroupMapCtor).
+struct GroupMapCtorView_a654a0 : GroupMapBase_a651e0 {
+    EA::Audio::Eapd::Hashtable_s00a6_4d70 mGroups;   // +0x10
+    GroupMapCtorView_a654a0(void* nameSlot);
+};
+
+// ===========================================================================
+// Instance ctor -- install the vtables, name the Instance/Group table, build
+// the GroupMap wrapper, then stash the two caller pointers.
+// ===========================================================================
+
+// ===========================================================================
+// InstanceManager::CanvasOrId -- create a canvas, hand back its id
+// ===========================================================================
+
+// ===========================================================================
+// InstanceManager::RemoveInstance -- find the binding, unlink the node from the
+// map's intrusive iterator list, erase it (fixing the pool free list), then
+// destroy and free the Instance.  Returns true when something was removed.
+// ===========================================================================
+
+// ===========================================================================
+// InstanceManager::FindInstance
+// ===========================================================================
+
+// ===========================================================================
+// InstanceManager::CreateCanvas  -- build a canvas for a {name,id} pair via the
+// canvas interface (vtable slot 3), register the filename symbols, then tell
+// the interface we are done (slot 4).  Returns the canvas id (0 on failure).
+// ===========================================================================
+
+// ---- items of slice s00a64d70 end
+
 // @ 0x006859b0
 int* S2::FUN_006859b0(int* pOut, int* pNode, int** pBucket)
 {
@@ -583,6 +1180,7 @@ PgSymbol* GetGroupSymbol(PgSymbol* out)
 }}}  // namespace EA::Audio::Eapd
 
 struct EapdNodeAlloc_a643b0 { virtual void v0(); virtual void v1(); virtual void* Alloc(unsigned size); };
+
 // @ 0x00a643b0
 namespace EA { namespace Audio { namespace Eapd {
 AssetEntry* EapdAssetManager::NewEntryNode(void* a1, void* a2)
@@ -909,6 +1507,72 @@ void* ObjectHashMap::Insert(void* out, void* node, void* bucketPtr)
 }
 }}}  // namespace EA::Audio::Eapd
 
+// @ 0x00a64d70
+void EA::Audio::Eapd::Hashtable_s00a6_4d70::Insert(EA::Audio::Eapd::InsertResult_s00a6_4d70* out, const EA::Audio::Eapd::HashNode16* pair, const uint32_t* pKey)
+{
+    (void)pKey;
+    uint32_t key = pair->mKey;
+    EA::Audio::Eapd::HashNode16* node = *(&mpBucketArray[key % mnBucketCount]);
+    EA::Audio::Eapd::HashNode16** bucket = &mpBucketArray[key % mnBucketCount];
+    while (node)
+    {
+        if (key == node->mKey)
+        {
+            out->mpNode   = node;
+            out->mbInserted = 0;
+            out->mpBucket = bucket;
+            return;
+        }
+        node = node->mpNext;
+    }
+
+    uint32_t local[2];
+    ((EA::Audio::Eapd::HashPolicy*)&mfMaxLoadFactor)->NextBucketCount(local, mnBucketCount, mnElementCount, 1);
+    typedef void* (__thiscall* AllocFn)(void*, uint32_t);
+    EA::Audio::Eapd::HashNode16* fresh = (EA::Audio::Eapd::HashNode16*)((AllocFn)(*(void***)&mPool)[2])(&mPool, 0x10);
+    if (fresh)
+    {
+        fresh->mKey = pair->mKey;
+        fresh->mV1  = pair->mV1;
+        fresh->mV2  = pair->mV2;
+    }
+    fresh->mpNext = 0;
+
+    /* NextBucketCount writes the "changed" flag as a single byte (retail tests
+       it with `cmp byte ptr [..]`), then the new count in the next dword */
+    if (((uint8_t*)local)[0])
+    {
+        ResizeBuckets(local[1]);
+        bucket = &mpBucketArray[key % local[1]];
+    }
+
+    fresh->mpNext = *bucket;
+    *bucket = fresh;
+    ++mnElementCount;
+
+    out->mpNode   = fresh;
+    out->mbInserted = 1;
+    out->mpBucket = bucket;
+}
+
+// @ 0x00a64e60
+uint32_t SymbolDispatchSlot::Dispatch(uint32_t sym, float f)
+{
+    uint8_t found = 0;
+    if (mpTarget)
+    {
+        typedef void (__thiscall* Fn)(void*, uint32_t, float);
+        ((Fn)(*(void***)mpTarget)[2])(mpTarget, sym, f);
+    }
+    EA::Audio::Eapd::HashNode16* local[2];
+    mpMap->FindNode(local, &sym);
+    if (mpMap->mpBucketArray[mpMap->mnBucketCount] == local[0])
+        return found;
+    /* the float handler is a member (thiscall): `this` = local[0]+4 in ecx */
+    typedef uint32_t (__thiscall* FloatFn)(void*, float);
+    return ((FloatFn)MakeFloatHandler)((char*)local[0] + 4, f);
+}
+
 // @ 0x00a64ed0
 bool cEapdOwner18::RemoveGroupEntry(cEntry18* p)
 {
@@ -926,6 +1590,333 @@ bool cEapdOwner18::RemoveGroupEntry(cEntry18* p)
     (void)dummy;
   }
   return r;
+}
+
+// @ 0x00a65000
+HashtableDtorView_a65000::~HashtableDtorView_a65000()
+{
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
+    mnElementCount = 0;
+    if (mnBucketCount > 1)
+        mPool.Free(mpBucketArray);
+}
+
+// @ 0x00a65070
+uint32_t GroupAdder::AddGroup(void* group)
+{
+    uint32_t key = *(uint32_t*)((char*)group + 0x2c);
+    EA::Audio::Eapd::Hashtable_s00a6_4d70* map = mpMap;
+    EA::Audio::Eapd::HashNode16* local[2];
+    map->FindNode(local, &key);
+    if (map->mpBucketArray[map->mnBucketCount] == (EA::Audio::Eapd::HashNode16*)local[0])
+    {
+        /* 0xa646f0 is IterHelper::MakeEntryIter(entry): this = a stack
+           IterHelper, entry = group; it[0] = *(group+0x34), it[1] = group. */
+        typedef void* (__thiscall* MakeIterFn)(void*, void*);
+        uint32_t entry[2];
+        ((MakeIterFn)MakeEntryIter)(entry, group);
+        /* retail fills mKey, mV1 = it[0] and mV2 = it[1] (it leaves mpNext
+           unused: Insert only copies the three leading words) */
+        EA::Audio::Eapd::HashNode16 pair;
+        pair.mKey   = key;
+        pair.mV1    = entry[0];
+        pair.mV2    = entry[1];
+        pair.mpNext = 0;
+        EA::Audio::Eapd::InsertResult_s00a6_4d70 res;
+        map->Insert(&res, &pair, 0);
+        /* 0xa64710 is a thiscall taking the argument in ecx */
+        typedef void (__thiscall* ResetFn)(void*);
+        ((ResetFn)ResetAndClear)(&res);
+        ((ResetFn)ResetAndClear)(&local);
+        if (mpListener)
+        {
+            typedef void (__thiscall* Fn)(void*, void*, uint32_t, void*);
+            ((Fn)(*(void***)mpListener)[1])(mpListener,
+                *(void**)((char*)group + 0x34), key, *(void**)((char*)group + 0x30));
+        }
+        return 1;
+    }
+    /* 0xa64730 is EapdAssetManager::PushNode(node), called with this = the
+       found node's value word (local[0]+4) */
+    typedef uint32_t (__thiscall* PushFn)(void*, void*);
+    return ((PushFn)PushNode)((char*)local[0] + 4, group);
+}
+
+// @ 0x00a65180
+EA::Audio::Eapd::Hashtable_s00a6_4d70* EA::Audio::Eapd::Hashtable_s00a6_4d70::InitNamed(void* nameSlot, const char* name)
+{
+    const uint32_t* src = (const uint32_t*)nameSlot;
+    NamedAllocTemp_a65180 slot(*(const NamedAllocTemp_a65180*)src, name);
+    ((HashtableCalls_a65180*)this)->Construct(&slot);
+    return this;
+}
+
+// @ 0x00a651e0
+GroupMapDtorView_a651e0::~GroupMapDtorView_a651e0()
+{
+}
+
+// @ 0x00a65230
+void EA::Audio::Eapd::Instance::Destroy()
+{
+    pd_free(mpCanvas);                          // 0xa493d0
+
+    /* walk every group in mGroups and destroy/free it */
+    EA::Audio::Eapd::HashNode16** bucket = mGroups.mpBucketArray;
+    EA::Audio::Eapd::HashNode16* node = *bucket;
+    if (node == 0) {
+        while (*++bucket == 0) { }
+        node = *bucket;
+    }
+    if (mGroups.mpBucketArray[mGroups.mnBucketCount] != node) {
+        do {
+            EA::Audio::Eapd::HashNode16* cur = node;
+            node = cur->mpNext;
+            if (node == 0) {
+                while (*++bucket == 0) { }
+                node = *bucket;
+            }
+            AnyGroup* group = (AnyGroup*)cur->mV2;
+            void* samples = group->mpSamples;            // group->+0x00
+            if (samples != 0) {
+                /* the allocator sub-object begins at group+0x0c: its vtable is
+                   the pointer stored there and `this` is the address itself */
+                typedef void (__thiscall* Fn)(void*, void*);
+                ((Fn)(*(void***)&group->mpVtbl0c)[3])((void*)&group->mpVtbl0c, samples);
+            }
+            group->mpVtbl0c = (void*)g_1403934;
+            typedef void (__thiscall* FreeFn)(void*, void*);
+            ((FreeFn)(*(void***)this)[3])(this, group);
+        } while (mGroups.mpBucketArray[mGroups.mnBucketCount] != node);
+    }
+
+    void* owner = Eapd_GetOwnerA();             // 0xa67ce0
+    ((EapdOwner*)owner)->ClearLists(this);      // 0xa646a0
+
+    mGroupMap.mGroups.Dispose();                // 0xa65000
+    mGroupMap.mpVtbl = (void*)g_1455648;        // 0x01455648
+    mGroups.Finalize();                         // 0xa64b70
+    mpVtbl = (void*)g_1403934;                  // 0x01403934
+}
+
+// @ 0x00a65470
+void EA::Audio::Eapd::Instance::FreeGroup(uint32_t key, uint32_t unused, void* group)
+{
+    (void)unused;
+    mGroups.Erase(&key);
+    ((AnyGroup*)group)->Destroy();
+    typedef void (__thiscall* Fn)(void*, void*);
+    ((Fn)(*(void***)this)[3])(this, group);
+}
+
+// @ 0x00a654a0
+GroupMapCtorView_a654a0::GroupMapCtorView_a654a0(void* nameSlot)
+{
+    mpVtbl = (void*)g_1455668;
+    ((HashtableCalls_a65180*)&mGroups)->InitNamed(nameSlot, "EAPd/InputManager");
+}
+
+// @ 0x00a65500
+GroupMapDelView_a65500* GroupMapDelView_a65500::ScalarDtor(uint32_t flags)
+{
+    this->~GroupMapDelView_a65500();
+    if (flags & 1)
+        OperatorDeleteNothrow_a65500(this);
+    return this;
+}
+
+// @ 0x00a65560
+EA::Audio::Eapd::Instance* EA::Audio::Eapd::Instance::InstanceCtor(void* sys, void* a3, void* a4)
+{
+    mpVtbl       = (void*)&g_1454fac;
+    mField04     = *(uint32_t*)((char*)sys + 4);
+    mpClassName  = "EAPd/Instance";     // 0x014556ac
+    mGroups.InitNamed(sys, "EAPd/GroupMap");   // 0x0145569c
+    mGroupMap.GroupMapCtor(sys);
+    mField6c = (uint32_t)a4;
+    mpCanvas = a3;
+    mField74 = 1;
+    return this;
+}
+
+// @ 0x00a656b0
+bool EA::Audio::Eapd::FixedHashtableAllocator_s00a6_4d70::InitBucketsEx(uint32_t size, uint32_t a1, uint32_t a2)
+{
+    if (mpBucketBuffer)
+    {
+        typedef void (__thiscall* Fn)(void*, void*);
+        ((Fn)(*(void***)this)[3])(this, mpBucketBuffer);
+        mpBucketBuffer = 0;
+    }
+    uint32_t n = (uint32_t)(uint64_t)((float)size * 1.3333334f);
+    mnBucketCount = n;
+    if (n < 3)
+        mnBucketCount = 3;
+    else
+        mnBucketCount = FUN_00921340(n) + 1;
+    uint32_t want = mnBucketCount * 4;
+    if (want == 0x14)
+        return Init(0x14, size + 1, (void*)a1, (void*)a2);
+    if (Init(0x14, size, (void*)a1, (void*)a2))
+    {
+        typedef void* (__thiscall* Fn)(void*, uint32_t);
+        void* buf = ((Fn)(*(void***)this)[2])(this, mnBucketCount * 4);
+        mpBucketBuffer = buf;
+        return buf != 0;
+    }
+    return false;
+}
+
+// @ 0x00a657a0
+bool EA::Audio::Eapd::InstanceManager_s00a6_4d70::CanvasOrId(void* a2, void* a3, uint32_t* out)
+{
+    mCurId2 = 0xffffffff;
+    CreateCanvas(a2, a3, 0, 0);
+    *out = mCurId2;
+    mCurId2 = 0xffffffff;
+    return *out != 0xffffffff;
+}
+
+// @ 0x00a657f0
+void* EA::Audio::Eapd::VtblOwner::DispatchSlot2(void* arg, void* unused)
+{
+    (void)unused;
+    typedef void* (__thiscall* Fn)(void*, void*);
+    Fn fn = (Fn)(*(void***)this)[2];
+    return fn(this, arg);
+}
+
+// @ 0x00a65800
+void EA::Audio::Eapd::PoolFreeView::FreeNode(void* node)
+{
+    EA::Audio::Eapd::FixedPool_s00a6_4d70* pool = &mPool;
+    --pool->mnCurrentSize;
+    if (node >= pool->mpPoolBegin && node < pool->mpPoolEnd)
+    {
+        *(void**)node = pool->mpHead;
+        pool->mpHead = node;
+        return;
+    }
+    typedef void (__thiscall* Fn)(void*, void*);
+    ((Fn)(*(void***)&pool->mOverflowAllocator)[3])(&pool->mOverflowAllocator, node);
+}
+
+// @ 0x00a65ab0
+EA::Audio::Eapd::Copyable38* EA::Audio::Eapd::Copyable38::CopyCtor(const EA::Audio::Eapd::Copyable38* src)
+{
+    uint32_t* d = mW;
+    const uint32_t* s = src->mW;
+    d[0]  = (int)g_1454fac;      // own vtable
+    d[1]  = s[1];
+    d[2]  = s[2];
+    d[3]  = (int)g_1454fac;      // nested holder's vtable
+    d[4]  = s[4];
+    d[5]  = s[5];
+    d[6]  = s[6];
+    d[7]  = s[7];
+    d[8]  = s[8];
+    d[9]  = s[9];
+    d[10] = s[10];
+    d[11] = s[11];
+    d[12] = s[12];
+    d[13] = s[13];
+    return this;
+}
+
+// @ 0x00a65b10
+void* EA::Audio::Eapd::HashtableBig::EraseFn(void* out, void* node, void** bucket)
+{
+    EA::Audio::Eapd::HashNode20* n = (EA::Audio::Eapd::HashNode20*)node;          // edx
+    uint32_t* o = (uint32_t*)out;               // esi
+    void** b = bucket;                          // ebx (never advanced)
+    EA::Audio::Eapd::HashNode20* next = *(EA::Audio::Eapd::HashNode20**)((char*)n + 0x14);
+    o[1] = (uint32_t)b;
+    o[0] = (uint32_t)next;
+    /* if the next-link is null, advance the stored bucket cursor to the next
+       non-empty slot (the original bumps o->bucket, not the ebx copy) */
+    while (next == 0) {
+        o[1] += 4;
+        next = *(EA::Audio::Eapd::HashNode20**)o[1];
+        o[0] = (uint32_t)next;
+    }
+    /* unlink `node` from its chain: walk the +0x14 links to its predecessor */
+    EA::Audio::Eapd::HashNode20* p = *(EA::Audio::Eapd::HashNode20**)b;
+    if (p == n) {
+        *(EA::Audio::Eapd::HashNode20**)b = *(EA::Audio::Eapd::HashNode20**)((char*)p + 0x14);
+    } else {
+        EA::Audio::Eapd::HashNode20* c = p;
+        EA::Audio::Eapd::HashNode20* e = *(EA::Audio::Eapd::HashNode20**)((char*)c + 0x14);
+        while (e != n) {
+            c = e;
+            e = *(EA::Audio::Eapd::HashNode20**)((char*)e + 0x14);
+        }
+        *(EA::Audio::Eapd::HashNode20**)((char*)c + 0x14) = *(EA::Audio::Eapd::HashNode20**)((char*)e + 0x14);
+    }
+    uint32_t minus1 = 0xffffffffu;
+    if ((uint32_t*)n != *(uint32_t**)((char*)this + 0x50)) {
+        *(uint32_t*)((char*)this + 0x44) += minus1;
+        if ((void*)n >= *(void**)((char*)this + 0x38) &&
+            (void*)n <  *(void**)((char*)this + 0x3c)) {
+            *(uint32_t*)((char*)n) = *(uint32_t*)((char*)this + 0x40);
+            *(void**)((char*)this + 0x40) = n;
+            *(uint32_t*)((char*)this + 0x0c) += minus1;
+            return o;
+        }
+        typedef void (__thiscall* Fn)(void*, void*);
+        ((Fn)(*(void***)((char*)this + 0x28))[3])((char*)this + 0x28, n);
+    }
+    *(uint32_t*)((char*)this + 0x0c) += minus1;
+    return o;
+}
+
+// @ 0x00a65c70
+void* EA::Audio::Eapd::HashtableBig::AllocNode(const void* value)
+{
+    void* node = mAlloc.mpHead;
+    if (node)
+        mAlloc.mpHead = *(void**)node;
+    else
+        node = mAlloc.AllocPooled();
+    if (node)
+    {
+        uint32_t cur = ++mAlloc.mnCurrentSize;
+        if (cur > mAlloc.mnPeakSize)
+            mAlloc.mnPeakSize = cur;
+        *(uint32_t*)node = *(const uint32_t*)value;
+        *(uint32_t*)((char*)node + 4) = *(const uint32_t*)((const char*)value + 4);
+        void** link = (void**)((char*)node + 8);
+        link[1] = link;
+        *link = link;
+    }
+    *(uint32_t*)((char*)node + 0x10) = 0;
+    return node;
+}
+
+// @ 0x00a65cd0
+bool EA::Audio::Eapd::InstanceManager_s00a6_4d70::RemoveInstance(uint32_t id)
+{
+    /* InstanceMap iterator node: +4 = prev link, +8 = next link, +0x10 = value */
+    void* iter[2];                       // {node, bucket}
+    mBindings.Find(iter, &id);
+    void* raw = iter[0];
+    if (raw == (void*)mBindings.mpBucketArray[mBindings.mnBucketCount])
+        return false;
+
+    uint32_t* node = (uint32_t*)raw;
+    uint32_t* next = *(uint32_t**)((char*)node + 8);
+    uint32_t* prev = *(uint32_t**)((char*)node + 4);
+    void* instance = *(void**)((char*)node + 0x10);
+    *next = (uint32_t)prev;
+    *(uint32_t**)((char*)prev + 4) = next;
+    *(uint32_t*)((char*)node + 4) = 0;
+    *(uint32_t*)((char*)node + 8) = 0;
+
+    mBindings.EraseFn(iter, raw, (void**)iter[1]);
+
+    ((EA::Audio::Eapd::Instance*)instance)->Destroy();
+    typedef void (__thiscall* FreeFn)(void*, void*);
+    ((FreeFn)(*(void***)((char*)this + 4))[3])((char*)this + 4, instance);
+    return true;
 }
 
 // @ 0x00a66300

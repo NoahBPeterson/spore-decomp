@@ -2,17 +2,23 @@
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cceae0@cSPUITCCCursorStrategy@@QAEIPAXI0@Z  00cceae0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?RestorePlanner@cTribeInputStrategy@SP@@QAEXH@Z  00ccef10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cd0260@@YGEPAX@Z  00cd0260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ??0TM@@QAE@XZ  00cd3b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd3e60@TM@@QAEXXZ  00cd3e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd3f20@@YAXI@Z  00cd3f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd3fb0@@YAXH@Z  00cd3fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd3fd0@@YAXH@Z  00cd3fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?PostTerrainAction@@YAXHPAX@Z  00cd3ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd40f0@TM@@QAEXPAX@Z  00cd40f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd4160@TM@@QAEEPAX@Z  00cd4160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd4180@TM@@QAEXHMMH@Z  00cd4180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd41d0@TM@@QAEXMMH@Z  00cd41d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd4220@TM@@QAEXHMMH@Z  00cd4220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd43c0@TM@@QAEXPAX@Z  00cd43c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?RegisterCityHallAndStartCinematic@TM@@QAEXPAH@Z  00cd43e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd4460@TM@@QAEIH@Z  00cd4460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd4490@TM@@QAE_NXZ  00cd4490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd44a0@TM@@QAE_NXZ  00cd44a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd44e0@TM@@SA_NPAX0@Z  00cd44e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ??0ThemeMgr@@QAE@XZ  00cd4580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cd46d0@@YA_NPAPAX@Z  00cd46d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cd49a0@@YAXXZ  00cd49a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -34,10 +40,21 @@
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd5e40@cTribeModeStrategy@@QAE_NXZ  00cd5e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cd6040@@YAXXZ  00cd6040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?Clear@HashElem@@QAEXXZ  00cd6610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?ClearEntryBlock@@YA_NPAUcOwner@@PAPAUcEntry@@@Z  00cd6680  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?DestroyRange@@YAPAUcPosseInfo@@PAU1@00@Z  00cd6710  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?CopyRange@@YAPAUcPosseInfo@@PAU1@00@Z  00cd6760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?CopyRangeBackward@@YAPAUcPosseInfo@@PAU1@00@Z  00cd67b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cd6800@cTribeModeStrategy@@QAEXXZ  00cd6800  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?Teardown@cTribeModeStrategy@@QAEXXZ  00cd68d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?RaiseEvent@cTribeModeStrategy_s00cd6980@@QAEXI@Z  00cd6980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?HasObject@cTribeModeStrategy@@QAE_NI@Z  00cd6e40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?IsObjectAllowed@cTribeModeStrategy@@QAE_NI@Z  00cd6ef0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?WriteTribeObjectArray@@YA_NPAVcIObjectDatabaseOStream@SP@@PBQAX@Z  00cd6f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?DoDestroyValues@@YGXPAUcPosseInfo@@0@Z  00cd6fd0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cd7100@@YAXH@Z  00cd7100  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?OnMouseWheel@cTribeModeStrategy@@QAEXHMMH@Z  00cd7530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?OnInput@cTribeModeStrategy_s00cd75f0@@QAE_NHH@Z  00cd75f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ??1cTribeModeStrategy_s00cd_7d90@@QAE@XZ  00cd7d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?CreateGameDataVector@@YAPAUtGameDataVectorT@Simulator@@XZ  00cd7d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?GetSelectedCreatureCount@cTribeModeStrategy_s00cd_8e70@SP@@QAEIXZ  00cd91b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?push_back@Vec12@SP@@QAEXABUElem12@2@@Z  00cd92b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -45,12 +62,7 @@
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdb3a0@cTribeModeStrategy_s00cd_ab10@@QAEXII@Z  00cdb3a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdb430@cVec1c@@QAEXXZ  00cdb430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdba50@cTribeModeStrategy_s00cd_ab10@@QAEIXZ  00cdba50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_0135db90@@YAXXZ  0135db90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdba90@cTribeModeStrategy_s00cd_ab10@@QAEXXZ  00cdba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FindClosestNPCHut@cTribeModeStrategy_s00cd_bb10@SP@@QAEPAUcHut@@I@Z  00cdbcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdd960@@YAHXZ  00cdd960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd44a0@TM@@QAE_NXZ  00cd44a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ??0TM@@QAE@XZ  00cd3b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?PostTerrainAction@@YAXHPAX@Z  00cd3ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdba90@cTribeModeStrategy_s00cd_ab10@@QAEXXZ  00cdba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd40f0@TM@@QAEXPAX@Z  00cd40f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd44e0@TM@@SA_NPAX0@Z  00cd44e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_0135db90@@YAXXZ  0135db90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

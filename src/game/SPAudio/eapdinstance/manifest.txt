@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdinstance.cpp  ?NewEntryNode@EapdAssetManager@Eapd@Audio@EA@@QAEPAUAssetEntry@234@PAX0@Z  00a643b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?DetachList@EapdAssetManager@Eapd@Audio@EA@@QAEXPAX0@Z  00a64510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?ClearLists@EapdAssetManager@Eapd@Audio@EA@@QAEXPAX@Z  00a646a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?MakeEntryIter@IterHelper@Eapd@Audio@EA@@QAEPAXPAX@Z  00a646f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -9,11 +10,19 @@
 ../src/game/SPAudio/eapdinstance.cpp  ?MakeSymbolHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NPBD@Z  00a648f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?MakeListHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NXZ  00a64950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?DisposeArray@EapdAssetManager@Eapd@Audio@EA@@QAEXPAPAXI@Z  00a64a50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?Resize@ObjectHashMap@Eapd@Audio@EA@@QAEXI@Z  00a64ad0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ??1ObjectHashMapObj@Eapd@Audio@EA@@QAE@XZ  00a64b70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?Erase@ObjectHashMap@Eapd@Audio@EA@@QAEIPAI@Z  00a64be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?DisposeArray2@ObjectHashMap@Eapd@Audio@EA@@QAEXPAPAXI@Z  00a64c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?GetGroup@ObjectHashMap@Eapd@Audio@EA@@QAEPAXUPgSymbol@234@@Z  00a64cb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ??1HashtableDtorView_a65000@@QAE@XZ  00a65000  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ??1GroupMapDtorView_a651e0@@QAE@XZ  00a651e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?FreeGroup@Instance@Eapd@Audio@EA@@QAEXIIPAX@Z  00a65470  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ??0GroupMapCtorView_a654a0@@QAE@PAX@Z  00a654a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?ScalarDtor@GroupMapDelView_a65500@@QAEPAU1@I@Z  00a65500  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?DispatchSlot2@VtblOwner@Eapd@Audio@EA@@QAEPAXPAX0@Z  00a657f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?FreeNode@PoolFreeView@Eapd@Audio@EA@@QAEXPAX@Z  00a65800  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?CopyCtor@Copyable38@Eapd@Audio@EA@@QAEPAU1234@PBU1234@@Z  00a65ab0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?AllocNode@HashtableBig@Eapd@Audio@EA@@QAEPAXPBX@Z  00a65c70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?RemoveAllFor@CursorRegistry@@QAEXPAXH@Z  00a663e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdinstance.cpp  ??1ObjectHashMapObj@Eapd@Audio@EA@@QAE@XZ  00a64b70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdinstance.cpp  ?Op1@GroupOwnerL@@QAE_NII@Z  00a68670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdinstance.cpp  ?NewEntryNode@EapdAssetManager@Eapd@Audio@EA@@QAEPAUAssetEntry@234@PAX0@Z  00a643b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdinstance.cpp  ?Erase@ObjectHashMap@Eapd@Audio@EA@@QAEIPAI@Z  00a64be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdinstance.cpp  ?Resize@ObjectHashMap@Eapd@Audio@EA@@QAEXI@Z  00a64ad0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

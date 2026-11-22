@@ -22,10 +22,15 @@ struct cGameTimeMgr {                   // 0x00b316c0  Ticks() (thiscall, return
 // ---- items of slice s00bffad0 end
 
 // ---- items of slice s00c035f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1582e28;                                  // 0x1582e28
+extern float g_1582e2c;                                  // 0x1582e2c
+void* __cdecl FUN_00401090();                            // 0x401090 (GetSetting9)
+void* __fastcall FUN_004e0050(void*, int, int);          // 0x4e0050 (GetSpeciesArchetype)
 int   __fastcall FUN_00bc9980(void*, float);             // 0xbc9980
 uint64_t __fastcall FUN_00b316c0(void*);                 // 0xb316c0
 void  __cdecl FUN_00d995f0(float, double, int, void*, void*, int, unsigned, int); // 0xd995f0
 float __cdecl FUN_00d38a30(int, void*);                  // 0xd38a30
+float __cdecl FUN_00c03440(int);                         // 0xc03440
 struct CreatureBase {
   char raw[0x1a00];
 
@@ -72,18 +77,32 @@ struct CreatureBase {
 // ---- items of slice s00c045a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_16c7aa4;
 extern float gF_150c8d0, gF_150c8d4, gF_150c8cc_, gF_1582df0, gF_15d992c, gF_15d9930;
+extern "C" char g_1654c10[];
+extern void* g_168d828;                                 // cached reflection object
+extern unsigned g_168d82c;                              // its init guard
 void* __cdecl SP_GetCurrentGameMode();                  // 0xb5b800
 void* __cdecl SP_NounManager();                         // 0xb3d300
-void* __cdecl FUN_00401090();                           // 0x401090
 void* __cdecl FUN_004df420();                           // 0x4df420
 float __cdecl FUN_00572a10(float lo, float hi);         // 0x572a10
 void  __cdecl operator_delete_(void*);                  // 0xf47380
 float __cdecl FUN_00c0b440(void*);                      // 0xc0b440
 float __cdecl FUN_00d2e800(void*);                      // 0xd2e800
+void  __cdecl FUN_00d2e580(void*);                      // 0xd2e580
+int   __cdecl FUN_00d51660(int);                        // 0xd51660
 void* __cdecl FUN_00d1e660();                           // 0xd1e660
+void  __cdecl FUN_00d4d5c0(int);                        // 0xd4d5c0
+void  __cdecl FUN_00c0d3a0(void*);                      // 0xc0d3a0
+void  __cdecl FUN_00c035f0(void*);                      // 0xc035f0
+void  __cdecl FUN_00c1d400(unsigned, unsigned);         // 0xc1d400
+void  __cdecl FUN_00c22210(void*, int);                 // 0xc22210
+void  __cdecl FUN_00c0bbe0(void*);                      // 0xc0bbe0
+void  __cdecl FUN_00c17350(void*, unsigned, int);       // 0xc17350
 void* __cdecl FUN_00c032c0(void*, void*, void*, void*); // 0xc032c0
 struct GameDataStub { int GetObjectData(); };
 struct ThingMgrStub { int GetThing(); };
+void* __cdecl SP_PlanetModel();                         // 0xb3d350
+void  __cdecl FUN_00c042e0(void*);                      // 0xc042e0
+struct LocomotionRequest { void* mpData; char pad[0x48]; };
 struct Vec3 { float x, y, z; };
 static __forceinline bool GetBit(uint32_t v, int n) { return ((v >> n) & 1) != 0; }
 struct CreatureBase_s00c0_45a0 {
@@ -107,16 +126,16 @@ struct CreatureBase_s00c0_45a0 {
   bool  __declspec(noinline) SubB770();
   void  Sub4dd0(int);
   void  Sub4e50(float);
-  __declspec(noinline) void* Sub4750();
-  int   Sub4790();
-  int   Sub47d0();
-  bool  Flag04710();
-  void  SetHerd(void*);
-  int   GetAbilitiesCount();
-  int   GetAbility(unsigned);
-  float CalculateScale(char, float);
+  __declspec(noinline) void* Sub4750();  // 0x00c04750 (CreatureBase::Sub4750)
+  int   Sub4790();  // 0x00c04790 (CreatureBase::Sub4790)
+  int   Sub47d0();  // 0x00c047d0 (CreatureBase::Sub47d0)
+  bool  Flag04710();  // 0x00c04710 (CreatureBase::Flag04710)
+  void  SetHerd(void*);  // 0x00c045a0 (CreatureBase::SetHerd)
+  int   GetAbilitiesCount();  // 0x00c045f0 (CreatureBase::GetAbilitiesCount)
+  int   GetAbility(unsigned);  // 0x00c04670 (CreatureBase::GetAbility)
+  float CalculateScale(char, float);  // 0x00c049f0 (CreatureBase::CalculateScale)
   void  OnJumpLand();
-  void  OnStartSwimming();
+  void  OnStartSwimming();  // 0x00c14e10 (CreatureBase::OnStartSwimming)
   void  Sub50b0();
 };
 bool  __thiscall CreatureBase_s00c0_45a0::Flag388()
@@ -124,6 +143,11 @@ bool  __thiscall CreatureBase_s00c0_45a0::Flag388()
   void* p = *(void**)((char*)this + 0xe84);
   return p != 0 && *(char*)((char*)p + 0x388) != 0;
 }
+void  __cdecl FUN_00c14cb0(void*);                      // 0xc14cb0 (base OnJumpLand)
+void  __cdecl FUN_00c14e10(void*);                      // 0xc14e10 (base OnStartSwimming)
+int   __cdecl FUN_00c0be70(int);                        // 0xc0be70
+int   __cdecl FUN_00c0bea0(int);                        // 0xc0bea0
+struct AnimGUIDHolder { unsigned GetCurrentAnimationGUID(); };  // 0xc0e040
 template <typename T> struct AutoRef { T* mpObject; };
 struct SpeciesProfile {
   char pad000[0x554];
@@ -144,8 +168,34 @@ struct HerdObj {
 struct GameThing { void* GetProfile(); };   // avatar, slot 0xd8
 struct cGameNounManagerStub { void* GetAvatar(); };
 typedef void  (__thiscall *FnVoid)(void*);
+typedef float (__thiscall *FnFloat)(void*);
+typedef void  (__thiscall *FnFloatArg)(void*, float);
+typedef void* (__thiscall *FnPtr)(void*);
+typedef int   (__thiscall *FnInt)(void*);
 float __cdecl FUN_00c0c1c0(void*, char);                // 0xc0c1c0 (Speed1)
 bool  __cdecl FUN_00c0c2d0(void*);                      // 0xc0c2d0 (IsDefaultSpecies)
+struct CreatureBase_c22210 {
+  void FUN_00c22210(int mode);   // 0x00c22210 (thiscall)
+  void FUN_00c042e0();           // 0x00c042e0 (thiscall)
+};
+struct Matrix33T { float m[9]; };
+struct Quaternion { float x, y, z, w; };
+struct XformMsg_s00c0_45a0 {
+  unsigned short mFlags;    // +0x0
+  unsigned short mSeq;      // +0x2
+  XformMsg_s00c0_45a0();
+  void SetMatrix(Matrix33T const&);
+  void SetPosition(Vec3 const&);
+  float mPos[3];            // +0x4  (filled after the notify)
+  Matrix33T mMat;           // +0x10
+};
+void* __cdecl SP_EffectsManagerI();                     // 0x67ddd0
+Matrix33T& __cdecl Matrix3FromQuaternion(Matrix33T&, Quaternion const&); // 0x59c190
+struct PlanetModelStub {
+  Quaternion& BuildSurfaceOrientation(Quaternion& q, Vec3 const& v);  // 0xb7f190
+  void SnapA(Vec3& out, unsigned flags, Vec3 const& in);              // 0xb82b40
+};
+void  __cdecl FUN_013c34a0();                           // 0x13c34a0 (atexit fn)
 // ---- items of slice s00c045a0 end
 
 // ---- items of slice s00c053b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -347,6 +397,31 @@ void CreatureBase::func3EC0(float f)
   FUN_00d995f0(f, d, *(int*)bt, this, bt + 0x1d0, *(int*)(bt + 0x5e8), fl, ebx);
 }
 
+// @ 0x00c04140
+float CreatureBase::func4140(int boolFlag)
+{
+  float local = 100.0f;
+  char* herd = *(char**)((char*)this + 0x1674);
+  if (herd != 0 && *(int*)(herd + 0x88) != 0) {
+    char* arch = (char*)FUN_004e0050(FUN_00401090(), *(int*)(herd + 0x88),
+                                     *(int*)(herd + 0xf0));
+    if (arch != 0) {
+      if (boolFlag)
+        local = *(float*)(arch + 0x324);
+      else
+        local = *(float*)(arch + 0x320);
+    }
+  }
+  if (!FUN_00c0b770())
+    local = local * g_1582e28;
+  else if ((*(unsigned char*)((char*)this + 0xb58) & 1) != 0)
+    local = local * g_1582e2c;
+  float x = FUN_00c03440(FUN_00c0b8d0());
+  float r = x * local;
+  float one = 1.0f;
+  return (r > one) ? r : one;
+}
+
 // @ 0x00c045a0
 void __thiscall CreatureBase_s00c0_45a0::SetHerd(void* p)
 {
@@ -497,6 +572,60 @@ void __fastcall FUN_00c04870(void** p)
     ((FnVoid)(*(void***)b)[1])(b);
 }
 
+// @ 0x00c048c0
+void* __fastcall FUN_00c048c0(void* dst, int, const void* src)
+{
+  *(int*)  ((char*)dst + 0)  = *(int*)  ((char*)src + 0);
+  *(char*) ((char*)dst + 4)  = *(char*) ((char*)src + 4);
+  *(char*) ((char*)dst + 5)  = *(char*) ((char*)src + 5);
+  *(int*)  ((char*)dst + 8)  = *(int*)  ((char*)src + 8);
+  *(int*)  ((char*)dst + 8)  = *(int*)  ((char*)src + 8);
+  *(int*)  ((char*)dst + 8)  = *(int*)  ((char*)src + 8);
+  *(int*)  ((char*)dst + 8)  = *(int*)  ((char*)src + 8);
+  void** o3 = (void**)((char*)src + 0xc);
+  *(void**)((char*)dst + 0xc) = *o3;
+  if (*o3)
+    (*(FnVoid)(*(char**)*o3 + 0))(*o3);
+  void** o4 = (void**)((char*)src + 0x10);
+  *(void**)((char*)dst + 0x10) = *o4;
+  if (*o4)
+    (*(FnVoid)(*(char**)*o4 + 0))(*o4);
+  return dst;
+}
+
+// @ 0x00c04960
+void __cdecl FUN_00c04960(void** heap, int root, int i, void* value)
+{
+  int child = 2 * i + 2;
+  while (child < root) {
+    void* a = heap[child];
+    void* b = heap[child - 1];
+    if (*(float*)a <= *(float*)b)
+      --child;
+    heap[i] = heap[child];
+    i = child;
+    child = 2 * child + 2;
+  }
+  if (child == root) {
+    heap[i] = heap[child - 1];
+    i = child - 1;
+  }
+  if (i <= 0) {
+    heap[i] = value;
+    return;
+  }
+  float v = *(float*)value;
+  int parent = (i - 1) >> 1;
+  while (i > parent) {
+    void* p = heap[parent];
+    if (v < *(float*)p) break;
+    heap[i] = p;
+    i = parent;
+    parent = (i - 1) >> 1;
+  }
+  heap[i] = value;
+}
+
 // @ 0x00c049f0
 float __thiscall CreatureBase_s00c0_45a0::CalculateScale(char param_2, float param_3)
 {
@@ -531,6 +660,216 @@ float __thiscall CreatureBase_s00c0_45a0::CalculateScale(char param_2, float par
       return v * FUN_00c0b440(av->GetProfile()) * gF_1582df0;
   }
   return v * gF_1582df0;
+}
+
+// @ 0x00c04b50
+void __thiscall CreatureBase_s00c0_45a0::OnJumpLand()
+{
+  unsigned guid = ((AnimGUIDHolder*)this)->GetCurrentAnimationGUID();
+  bool b = FUN_00c0be70(guid) != 0;
+  bool c = false;
+  if (!b)
+    c = FUN_00c0bea0(guid) != 0;
+  FUN_00c14cb0(this);
+  if (*(int*)((char*)this + 0x310) != 0 && (b || c)) {
+    char* loco = (char*)this + 0xc0;
+    Vec3* vp = (Vec3*)(*(FnPtr)(*(char**)loco + 0x2c))(loco);
+    Vec3 d;
+    d.x = *(float*)((char*)this + 0x2c8) - vp->x;
+    d.y = *(float*)((char*)this + 0x2cc) - vp->y;
+    d.z = *(float*)((char*)this + 0x2d0) - vp->z;
+    (*(FnVoid)(*(char**)loco + 0x5c))(loco);
+    float dot = vp->z * d.z + vp->y * d.y + vp->x * d.x;
+    if (0.0f < dot)
+      return;
+    LocomotionRequest req;
+    (*(FnVoid)(*(char**)loco + 0xdc))(loco);
+    if (req.mpData && *(int*)((char*)req.mpData - 4) != 0)
+      operator_delete_(req.mpData);
+  }
+  if ((((unsigned)mFlags0b58 >> 9) & 1) != 0)
+    FUN_00d2e580(this);
+}
+
+// @ 0x00c04c90
+void __thiscall CreatureBase_s00c0_45a0::OnStartSwimming()
+{
+  unsigned guid = ((AnimGUIDHolder*)this)->GetCurrentAnimationGUID();
+  bool b = FUN_00c0be70(guid) != 0;
+  bool c = false;
+  if (!b)
+    c = FUN_00c0bea0(guid) != 0;
+  if (b || c)
+    FUN_00c14e10(this);
+  if (*(int*)((char*)this + 0x310) != 0 && (b || c)) {
+    char* loco = (char*)this + 0xc0;
+    Vec3* vp = (Vec3*)(*(FnPtr)(*(char**)loco + 0x2c))(loco);
+    Vec3 d;
+    d.x = *(float*)((char*)this + 0x2c8) - vp->x;
+    d.y = *(float*)((char*)this + 0x2cc) - vp->y;
+    d.z = *(float*)((char*)this + 0x2d0) - vp->z;
+    (*(FnVoid)(*(char**)loco + 0x5c))(loco);
+    float dot = vp->z * d.z + vp->y * d.y + vp->x * d.x;
+    if (0.0f < dot)
+      return;
+    LocomotionRequest req;
+    (*(FnVoid)(*(char**)loco + 0xdc))(loco);
+    if (req.mpData && *(int*)((char*)req.mpData - 4) != 0)
+      operator_delete_(req.mpData);
+  }
+  if ((((unsigned)mFlags0b58 >> 9) & 1) != 0)
+    FUN_00d2e580(this);
+}
+
+// @ 0x00c04dd0
+void __thiscall CreatureBase_s00c0_45a0::Sub4dd0(int mode)
+{
+  if (SP_GetCurrentGameMode() == (void*)g_1654c10) {
+    ((CreatureBase_c22210*)this)->FUN_00c22210(mode);
+    return;
+  }
+  if (mB34 == mode)
+    return;
+  if (mode == 1) {
+    if (mState1688 != 0)
+      return;
+    mState1688 = 1;
+    return;
+  }
+  ((CreatureBase_c22210*)this)->FUN_00c22210(mode);
+  bool noRefresh = (((unsigned)mFlags0b58 >> 9) & 1) != 0;
+  if (!noRefresh) {
+    FUN_00c0d3a0(this);
+    ((CreatureBase_c22210*)this)->FUN_00c042e0();
+  }
+  FUN_00c035f0(this);
+}
+
+// @ 0x00c04e50
+void __thiscall CreatureBase_s00c0_45a0::Sub4e50(float dt)
+{
+  switch (mState1688) {
+  case 1: {
+    FUN_00c1d400(0x3a616fee, 0x715fb4a7);
+    float a = (*(FnFloat)(*(char**)this + 0x80))(this);
+    float b = (*(FnFloat)(*(char**)this + 0x80))(this);
+    mState1688 = 2;
+    mDepth1690 = a + (b - a) * 0.5f;
+    return;
+  }
+  case 2: {
+    char* loco = (char*)this + 0xc0;
+    float cur = (*(FnFloat)(*(char**)loco + 0x34))(loco);
+    float* tgt = &mDepth1690;
+    if (cur < *tgt) {
+      float nv = cur + gF_150c8d4 * dt;
+      if (nv > *tgt)
+        nv = *tgt;
+      (*(FnFloatArg)(*(char**)loco + 0x40))(loco, nv);
+      return;
+    }
+    FUN_00c22210(this, 1);
+    char* herd = (char*)this + 0x5a8;
+    (*(FnVoid)(*(char**)herd + 0x2c))(herd);
+    (*(FnFloatArg)(*(char**)loco + 0x40))(loco, *tgt);
+    mState1688 = 3;
+    if ((((unsigned)mFlags0b58 >> 9) & 1) != 0)
+      FUN_00d4d5c0(FUN_00d51660(4));
+    if ((((unsigned)mFlags0b58 >> 9) & 1) == 0 && (((unsigned)mFlags0b58 >> 8) & 1) == 0) {
+      FUN_00c0d3a0(this);
+      FUN_00c042e0(this);
+      FUN_00c035f0(this);
+    }
+    return;
+  }
+  case 3: {
+    char* loco = (char*)this + 0xc0;
+    float cur = (*(FnFloat)(*(char**)loco + 0x34))(loco);
+    float want = (*(FnFloat)(*(char**)this + 0x80))(this);
+    if (want < cur) {
+      float nv = cur + gF_150c8d4 * dt;
+      if (nv > want)
+        nv = want;
+      (*(FnFloatArg)(*(char**)loco + 0x40))(loco, nv);
+      return;
+    }
+    mState1688 = 4;
+    return;
+  }
+  default: {
+    char* loco = (char*)this + 0xc0;
+    float v = (*(FnFloat)(*(char**)this + 0x80))(this);
+    (*(FnFloatArg)(*(char**)loco + 0x40))(loco, v);
+    FUN_00c0bbe0(this);
+    FUN_00c17350(this, 0x715fb4a7, 0);
+    mState1688 = 0;
+    return;
+  }
+  }
+}
+
+// @ 0x00c050b0
+void CreatureBase_s00c0_45a0::Sub50b0()
+{
+  if (*(char*)((char*)this + 0x137) != 0)
+    (*(FnVoid)(*(char**)this + 0x58))(this);
+  if (SP_GetCurrentGameMode() != (void*)0x1654c10)
+    return;
+  if ((((unsigned)mFlags0b58 >> 9) & 1) == 0)
+    return;
+
+  char* loco = (char*)this + 0xc0;
+  Vec3* p = (Vec3*)(*(FnPtr)(*(char**)loco + 0x2c))(loco);
+  Vec3 a;
+  a.x = p->x; a.y = p->y; a.z = p->z;
+  Vec3 b;
+  ((PlanetModelStub*)SP_PlanetModel())->SnapA(b, 0, a);
+  bool far = 49.0f < (a.z - b.z) * (a.z - b.z) + (a.y - b.y) * (a.y - b.y) + (a.x - b.x) * (a.x - b.x);
+
+  if ((g_168d82c & 1) == 0) {
+    g_168d82c |= 1;
+    g_168d828 = 0;
+    atexit(FUN_013c34a0);
+  }
+
+  if (g_168d828 == 0) {
+    if (!far)
+      return;
+    void* em = SP_EffectsManagerI();
+    if (g_168d828 != 0) {
+      g_168d828 = 0;
+      (*(FnVoid)(*(char**)em + 4))(em);
+    }
+    (*(FnVoid)(*(char**)em + 0x2c))(em);   // Create(...)
+    if (g_168d828 == 0)
+      return;
+    XformMsg_s00c0_45a0 msg;
+    (*(FnVoid)(*(char**)g_168d828 + 0x20))(g_168d828);
+    Quaternion q;
+    ((PlanetModelStub*)SP_PlanetModel())->BuildSurfaceOrientation(q, a);
+    Matrix33T* m = &Matrix3FromQuaternion(*(Matrix33T*)&msg.mMat, q);
+    (*(FnVoid)(*(char**)loco + 0x74))(loco);
+    (*(FnVoid)(*(char**)g_168d828 + 0x18))(g_168d828);
+    (*(FnVoid)(*(char**)g_168d828 + 8))(g_168d828);
+    (void)m;
+    return;
+  }
+  if (!far) {
+    (*(FnVoid)(*(char**)g_168d828 + 0xc))(g_168d828);
+    if (g_168d828 != 0) {
+      g_168d828 = 0;
+      (*(FnVoid)(*(char**)g_168d828 + 4))(g_168d828);
+    }
+    return;
+  }
+  if ((*(FnInt)(*(char**)g_168d828 + 0x10))(g_168d828) == 0)
+    (*(FnVoid)(*(char**)g_168d828 + 8))(g_168d828);
+  XformMsg_s00c0_45a0 msg;
+  (*(FnVoid)(*(char**)g_168d828 + 0x20))(g_168d828);
+  Quaternion q;
+  ((PlanetModelStub*)SP_PlanetModel())->BuildSurfaceOrientation(q, a);
+  Matrix3FromQuaternion(*(Matrix33T*)&msg.mMat, q);
+  (*(FnVoid)(*(char**)g_168d828 + 0x18))(g_168d828);
 }
 
 // @ 0x00c053b0
@@ -804,6 +1143,7 @@ struct Self_c05d40 {
     virtual void v14();
     virtual void Refresh();                                          // +0x54
 };
+
 // @ 0x00c05d40
 char CB::func5d40(int param_2)
 {

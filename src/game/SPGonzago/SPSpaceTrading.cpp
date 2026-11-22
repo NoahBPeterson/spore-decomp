@@ -15,6 +15,7 @@
 #include "SP/cStarManager.h"
 #include "SP/cStarRecord.h"
 #include "SP/cTradeRouteData.h"
+inline void* operator new(size_t, void* p) { return p; }   // placement new kept outside the slice blocks (see papercut: the guard below disables <new>'s)
 #include <math.h>
 #include <intrin.h>
 #include "SP/cString.h"
@@ -28,11 +29,11 @@
 #include "SP/cGameData.h"
 #include "SP/cTerrainSphere.h"
 #include "SP/cRelationshipManager.h"
+#include "SP/cSPSpaceEconomyTuning.h"
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s010393a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VSLOT(n) virtual void _v##n();
-inline void* operator new(size_t, void* p) { return p; }
 struct ResourceKey {
     uint32_t instance, type, group;
 };
@@ -61,11 +62,47 @@ struct PropertyList : IRefCounted {
     virtual Property* GetPropertyObject(uint32_t id);                        // +0x28
 };
 void GetPropertyAsKey(PropertyList* pList, uint32_t id, ResourceKey* pOut);      // 0x006a1250
+bool GetPropertyAsKeyInstance(PropertyList* pList, uint32_t id, uint32_t* pOut);  // 0x006a12a0
+struct cPropertyListPtr {
+    PropertyList* mpObject;
+    cPropertyListPtr() : mpObject((PropertyList*)0) {}
+    cPropertyListPtr& operator=(PropertyList* p)
+    {
+        PropertyList* const pTemp = mpObject;
+        if (p != pTemp) {
+            if (p)
+                p->AddRef();
+            mpObject = p;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+    ~cPropertyListPtr()
+    {
+        PropertyList* p = mpObject;
+        if (p)
+            p->Release();
+    }
+    PropertyList* get() const { return mpObject; }
+    PropertyList* operator->() const { return mpObject; }
+};
+struct cPropertyManager_s0103_93a0 {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9)
+    VSLOT(10)
+    virtual void GetProperty(uint32_t key, uint32_t id, void** pOut);        // +0x2c
+};
+cPropertyManager_s0103_93a0* PropertyManager_s0103_93a0();                                         // 0x0067de30
 struct IMessageServer {
     VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4)
     virtual void SendMSG(uint32_t id, void* msg, void* target);              // +0x14
     VSLOT(6) VSLOT(7) VSLOT(8)
     virtual void AddHandler(void* pHandler, uint32_t msgID);                 // +0x24
+};
+IMessageServer* MessageServer_s0103_93a0();                                             // 0x0067dcc0
+struct cObject {
+    VSLOT(0) VSLOT(1) VSLOT(2)
+    virtual void* Cast(uint32_t typeID);                                     // +0x0c
 };
 struct cEmpire_s0103_93a0 {
     uint32_t pad00[0x84 / 4];
@@ -87,8 +124,19 @@ namespace SP {
 uint32_t GetPlayerEmpireID();                                                // 0x01021090
 }
 namespace SP {
+int __stdcall AddTradingItems(PropertyList* pList, bool bAddMissing);          // 0x01039520
+}
+namespace SP {
 void __stdcall MapRareToSpiceKey(ResourceKey* pKey);                           // 0x01039690
 }
+namespace SP {
+int __stdcall HasTradingItems(PropertyList* pList);                            // 0x01039990
+}
+namespace SP {
+bool IsItemARare(uint32_t* pItemID);                                           // 0x0103a3c0
+}
+struct cMissionManager { bool IsRunning(); };                                // 0x00feba90
+cMissionManager* GetMissionManager();                                        // 0x00feb9f0
 struct cSpaceInventoryItem {
     enum { TYPE = 0x707459dd };
     VSLOT(0)
@@ -185,6 +233,14 @@ struct cSpaceGame {
     cPlayerItemStore* GetItemStore();                                        // 0x00bfc5f0
 };
 cSpaceGame* SpaceGameGet();                                                  // 0x01002bd0
+struct cSpaceEconomyTuning_s0103_93a0 {
+    int GetMaxCargo();                                                       // 0x0102ff00
+};
+cSpaceEconomyTuning_s0103_93a0* SpaceEconomyTuning_s0103_93a0();                                   // 0x0102f810
+struct cGameNounManager_s0103_93a0 {
+    cObject* CreateNoun(uint32_t nounID);                                    // 0x00b20c60
+    void* CreatePlanetaryArtifact();
+};
 struct cGonzagoTimer_s0103_93a0 { uint32_t pad00[8]; };
 struct cNPCStore {
     uint32_t pad00[3];
@@ -256,7 +312,7 @@ public:
     cSpaceInventoryItem* FindStoreItem(cSpaceInventoryItem* pItem);
     int GetTradeBalance();
     int AdjustTradeValue(bool bSetCountToOne, cSpaceInventoryItem* pItem);
-    void GetRareKey(ResourceKey* pOut, uint32_t groupIndex, uint32_t rareIndex);
+    ResourceKey GetRareKey(uint32_t groupIndex, uint32_t rareIndex);
     int GetRareKeyCount(uint32_t groupIndex);
     void* PopValue();
     cSpaceInventoryItem* GetUserItem(uint32_t index);
@@ -264,12 +320,17 @@ public:
 };
 }
 using SP::cSPSpaceTrading;
+static __forceinline bool PlayerHasItem(uint32_t item)
+{
+    ResourceKey id = {item, 0, 0};
+    return SpaceGameGet()->GetPlayerInventory()->HasItem(id);
+}
 typedef int (*ItemPtrCompare)(cSpaceInventoryItem*, cSpaceInventoryItem*);
 // ---- items of slice s010393a0 end
 
 // ---- items of slice s0103b3e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float g_13f4fd0;           // 0x013f4fd0
-bool GetPropertyAsKeyInstance(PropertyList* pList, uint32_t id, uint32_t* pOut);  // 0x006a12a0
+
 void GetPropertyAsText(PropertyList* pList, uint32_t id, void* pOut);             // 0x006a1360
 class cString_s0103_b3e0 {
 public:
@@ -279,12 +340,7 @@ public:
     ~cString_s0103_b3e0();                                                              // 0x006b5240
     const uint16_t* GetText();                                               // 0x006b55c0
 };
-namespace SP {
-int __stdcall AddTradingItems(PropertyList* pList, bool bAddMissing);         // 0x01039520
-}
-namespace SP {
-int __stdcall HasTradingItems(PropertyList* pList);                           // 0x01039990
-}
+
 template <class T> struct vector_s0103_b3e0 {
     T* mpBegin;                                                              // +0x00
     T* mpEnd;                                                                // +0x04
@@ -1808,10 +1864,7 @@ struct PropertyList_s0103_eff0 {
 };
 void GetPropertyAsKey(PropertyList_s0103_eff0* list, uint32_t id, ResourceKey* out);    // 0x006a1250
 void GetPropertyAsKeyInstance(PropertyList_s0103_eff0* list, uint32_t id, uint32_t* out);  // 0x006a12a0
-struct cObject {
-    VSLOT(0) VSLOT(1) VSLOT(2)
-    virtual void* Cast(uint32_t typeID);                                     // +0x0c
-};
+
 template <class T> inline T* object_cast(cObject* p) { return p ? (T*)p->Cast(T::TYPE) : 0; }
 struct cSpaceInventoryItem_s0103_eff0 {
     enum { TYPE = 0x707459dd };
@@ -2082,6 +2135,38 @@ template <> struct intrusive_ptr_s0103_eff0<cNPCStore_s0103_eff0> {
 };
 // ---- items of slice s0103eff0 end
 
+// @ 0x01039520
+int __stdcall SP::AddTradingItems(PropertyList* pList, bool bAddMissing)
+{
+    cPlayerItemStore* pStore = SpaceGameGet()->GetItemStore();
+    uint32_t item0;
+    uint32_t item1;
+    uint32_t item2;
+    bool b3 = !GetPropertyAsKeyInstance(pList, 0x5107709, &item0) ||
+              pStore->DoInsertValue((cSpaceInventoryItem*)item0);
+    bool b2 = !GetPropertyAsKeyInstance(pList, 0x510770a, &item1) ||
+              pStore->DoInsertValue((cSpaceInventoryItem*)item1);
+    bool b1 = GetPropertyAsKeyInstance(pList, 0x510770b, &item2) &&
+              pStore->DoInsertValue((cSpaceInventoryItem*)item2);
+    if (bAddMissing && GetMissionManager()->IsRunning()) {
+        if (!b3) {
+            cSpaceInventoryItem* pReplacement = pStore->GetReplacement((cSpaceInventoryItem*)item0);
+            b3 = pReplacement == 0 || pStore->DoInsertValue(pReplacement);
+        }
+        if (!b2) {
+            cSpaceInventoryItem* pReplacement = pStore->GetReplacement((cSpaceInventoryItem*)item1);
+            b2 = pReplacement == 0 || pStore->DoInsertValue(pReplacement);
+        }
+        if (!b1) {
+            cSpaceInventoryItem* pReplacement = pStore->GetReplacement((cSpaceInventoryItem*)item2);
+            b1 = pReplacement == 0 || pStore->DoInsertValue(pReplacement);
+        }
+    }
+    if (!((b3 && b2) || b1))
+        return 0;
+    return 1;
+}
+
 // @ 0x01039690
 void __stdcall SP::MapRareToSpiceKey(ResourceKey* pKey)
 {
@@ -2107,6 +2192,25 @@ void __stdcall SP::MapRareToSpiceKey(ResourceKey* pKey)
     }
 }
 
+// @ 0x01039730
+void SP::cSPSpaceTrading::RegisterMessages()
+{
+    static const uint32_t sMessageIDs[2] = {0x1499b04, 0x1499b05};
+    if (MessageServer_s0103_93a0() == 0)
+        return;
+    void* pHandler = this ? (void*)&mHandler.mIface : 0;
+    IMessageServer* pServer = MessageServer_s0103_93a0();
+    mAutoHandler.mpServer = pServer;
+    mAutoHandler.mpHandler = pHandler;
+    mAutoHandler.mpIDs = sMessageIDs;
+    mAutoHandler.mnCount = 2;
+    mAutoHandler.mnIndex = 0;
+    if (pServer != 0 && pHandler != 0) {
+        for (const uint32_t* pID = sMessageIDs; pID != sMessageIDs + 2; ++pID)
+            pServer->AddHandler(pHandler, *pID);
+    }
+}
+
 // @ 0x010397b0
 void* SP::cHandlerIface::Cast(uint32_t typeID)
 {
@@ -2117,6 +2221,33 @@ void* SP::cHandlerIface::Cast(uint32_t typeID)
         return pSelf != 0 ? this : 0;
     }
     return 0;
+}
+
+// @ 0x010398e0
+bool SP::cSPSpaceTrading::IsToolAvailableForTrading(uint32_t toolKey, uint32_t, uint32_t, PropertyList** ppProperty)
+{
+    int count = mToolKeys.size();
+    for (int i = 0; i < count; ++i) {
+        cPropertyManager_s0103_93a0* pManager = PropertyManager_s0103_93a0();
+        pManager->GetProperty(mToolKeys.mpBegin[i].instance, 0x34d97fa, (void**)ppProperty);
+        uint32_t itemToolKey = 0;
+        if (GetPropertyAsKeyInstance(*ppProperty, 0x35d5cb4, &itemToolKey) && toolKey == itemToolKey)
+            return true;
+    }
+    *ppProperty = 0;
+    return false;
+}
+
+// @ 0x01039990
+int __stdcall SP::HasTradingItems(PropertyList* pList)
+{
+    uint32_t item = 0;
+    bool b3 = !GetPropertyAsKeyInstance(pList, 0x5107706, &item) || PlayerHasItem(item);
+    bool b2 = !GetPropertyAsKeyInstance(pList, 0x5107707, &item) || PlayerHasItem(item);
+    bool b1 = GetPropertyAsKeyInstance(pList, 0x5107707, &item) && PlayerHasItem(item);
+    if (!((b3 && b2) || b1))
+        return 0;
+    return 1;
 }
 
 // @ 0x01039ab0
@@ -2162,6 +2293,23 @@ int SP::cSPSpaceTrading::GetItemValue(cSpaceInventoryItem* pItem)
     return 1;
 }
 
+// @ 0x01039c00
+cSpaceInventoryItem* SP::cSPSpaceTrading::FindStoreItem(cSpaceInventoryItem* pItem)
+{
+    cSpaceInventoryItem* pBest = 0;
+    int bestCount = -1;
+    vector<cSpaceInventoryItemPtr>& inventory = mNPCStore.mpBegin[mLastNPCStoreIndex]->mNPCInventory;
+    int count = inventory.size();
+    for (int index = 0; index < count; ++index) {
+        cSpaceInventoryItem* pStock = inventory.mpBegin[index].get();
+        if (pStock->GetItemID() == pItem->GetItemID() && pStock->mItemCount > bestCount) {
+            bestCount = pStock->mItemCount;
+            pBest = pStock;
+        }
+    }
+    return pBest;
+}
+
 // @ 0x01039ca0
 int SP::cSPSpaceTrading::GetTradeBalance()
 {
@@ -2180,11 +2328,88 @@ int SP::cSPSpaceTrading::GetTradeBalance()
     return balance;
 }
 
+// @ 0x01039d20
+int SP::cSPSpaceTrading::AdjustTradeValue(bool bSetCountToOne, cSpaceInventoryItem* pItem)
+{
+    int itemCount = pItem->mItemCount;
+    if (bSetCountToOne)
+        pItem->mItemCount = 1;
+    int value = 0;
+    cSpaceInventory* pInventory = SpaceGameGet()->GetPlayerInventory();
+    int maxCargo = SpaceEconomyTuning_s0103_93a0()->GetMaxCargo();
+    int count = mUserItems.size();
+    for (int i = 0; i < count; ++i) {
+        cSpaceInventoryItem* pUser = mUserItems.mpBegin[i].get();
+        ResourceKey id = pUser->GetItemID();
+        SP::MapRareToSpiceKey(&id);
+        if (pInventory->IndexOf(pUser->mItemType, id) == -1 && pUser->mItemCount != 0)
+            ++value;
+    }
+    count = mNPCItems.size();
+    for (int i = 0; i < count; ++i) {
+        cSpaceInventoryItem* pNPC = mNPCItems.mpBegin[i].get();
+        int index = pInventory->IndexOf(pNPC->mItemType, pNPC->GetItemID());
+        if (index != -1 && pNPC->mItemCount >= pInventory->GetItemEntry(index)->mItemCount)
+            --value;
+    }
+    int index = pInventory->IndexOf(pItem->mItemType, pItem->GetItemID());
+    if (index == -1) {
+        if (!bSetCountToOne) {
+            pItem->mItemCount = itemCount;
+            return value;
+        }
+        bool bFound = false;
+        if (!pItem->mTradeState) {
+            int userCount = mUserItems.size();
+            for (int i = 0; i < userCount; ++i) {
+                cSpaceInventoryItem* pUser = mUserItems.mpBegin[i].get();
+                if (pUser->GetItemID() == pItem->GetItemID() &&
+                    pUser->mItemType == pItem->mItemType && pUser->mItemCount < maxCargo) {
+                    bFound = true;
+                    break;
+                }
+            }
+        }
+        if (!bFound)
+            ++value;
+    } else if (!bSetCountToOne && pItem->mItemCount >= pInventory->GetItemEntry(index)->mItemCount) {
+        --value;
+        pItem->mItemCount = itemCount;
+        return value;
+    }
+    pItem->mItemCount = itemCount;
+    return value;
+}
+
+// @ 0x01039fb0
+ResourceKey SP::cSPSpaceTrading::GetRareKey(uint32_t groupIndex, uint32_t rareIndex)
+{
+    return mRareGroups.mpBegin[groupIndex].mRares.mpBegin[rareIndex];
+}
+
 // @ 0x01039ff0
 int SP::cSPSpaceTrading::GetRareKeyCount(uint32_t groupIndex)
 {
     uvector<ResourceKey>* pRares = &mRareGroups.mpBegin[groupIndex].mRares;
     return (int)(pRares->mpEnd - pRares->mpBegin);
+}
+
+// @ 0x0103a060
+void* SP::cSPSpaceTrading::PopValue()
+{
+    void* value = mpStackTop[-1];
+    _ReadWriteBarrier();
+    --mpStackTop;
+    return value;
+}
+
+// @ 0x0103a080
+void* cGameNounManager_s0103_93a0::CreatePlanetaryArtifact()
+{
+    cObject* pNoun = CreateNoun(0x2dd8c42);
+    if (pNoun != 0)
+        return pNoun->Cast(0x2dd8c33);
+    return 0;
 }
 
 // @ 0x0103a0e0
@@ -2203,12 +2428,52 @@ void eastl_insertion_sort(cSpaceInventoryItemPtr* pBegin, cSpaceInventoryItemPtr
     }
 }
 
+// @ 0x0103a1b0
+void eastl_unguarded_insertion_sort(cSpaceInventoryItemPtr* pBegin, cSpaceInventoryItemPtr* pEnd, ItemPtrCompare pCompare)
+{
+    for (cSpaceInventoryItemPtr* i = pBegin; i != pEnd; ++i) {
+        cSpaceInventoryItemPtr value = *i;
+        if (pCompare(value.get(), (*(i - 1)).get())) {
+            cSpaceInventoryItemPtr* j = i;
+            do {
+                *j = *(j - 1);
+                --j;
+            } while (pCompare(value.get(), (*(j - 1)).get()));
+            *j = value;
+        }
+    }
+}
+
+// @ 0x0103a280
+void eastl_adjust_heap(cSpaceInventoryItemPtr* pFirst, int topIndex, int holeIndex, cSpaceInventoryItemPtr value, ItemPtrCompare pCompare)
+{
+    int parent = (holeIndex - 1) / 2;
+    while (holeIndex > topIndex && pCompare(pFirst[parent].get(), value.get())) {
+        pFirst[holeIndex] = pFirst[parent];
+        holeIndex = parent;
+        parent = (holeIndex - 1) / 2;
+    }
+    pFirst[holeIndex] = value;
+}
+
 // @ 0x0103a330
 void eastl_iter_swap(cSpaceInventoryItemPtr& a, cSpaceInventoryItemPtr& b)
 {
     cSpaceInventoryItemPtr temp = a;
     a = b;
     b = temp;
+}
+
+// @ 0x0103a3c0
+bool SP::IsItemARare(uint32_t* pItemID)
+{
+    cPropertyListPtr pPropList;
+    PropertyManager_s0103_93a0()->GetProperty(*pItemID, 0x34d97fa, (void**)&pPropList);
+    if (!(pPropList.get() != 0 && pPropList->HasProperty(0x34f1a4f)))
+        return false;
+    ResourceKey tradeType = {0, 0, 0};
+    GetPropertyAsKey(pPropList.get(), 0x34f1a4f, &tradeType);
+    return tradeType.instance == 0x7ecbe6f5;
 }
 
 // @ 0x0103a480

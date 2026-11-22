@@ -59,7 +59,7 @@ struct M3_s0075_8240 {
     float m[9];
     void Assign(const M3_s0075_8240* src);                      // 0x0041cb40
 };
-extern M3_s0075_8240    g_m3_162f16c_s0075_8240;                                                  // 0x0162f16c
+extern M3_s0075_8240    g_m3_162f16c;                                                  // 0x0162f16c
 struct At6 {
     RCObj_s0075_8240* p;
     int a, b, c, d, e;
@@ -211,9 +211,13 @@ extern int g_vtbl_13ef094[];
 extern float g_f162f028, g_f162f02c, g_f162f030, g_f1485720;
 extern int g_vtbl_140da78[];
 extern int g_vtbl_140da74[];
+// the one matrix 0x0162f16c, written by 0x00757E20 (`M3Assign(&this->m14, (const M3*)&g_m3_162f16c_s00758240)`; the cast
+// only converts the s00758240 block's M3_s0075_8240 spelling of the same object) and by 0x00759280 through that block's
+// `M3_s0075_8240 g_m3_162f16c`.  A plain `extern M3 g_m3_162f16c;` here is the second declaration of one name as soon as a
+// re-apply of s00758240 renames its own (C2371), which holds the whole slice back.
 struct RCObj;
 struct M3 { float m[9]; };
-extern M3 g_m3_162f16c;
+extern M3 g_m3_162f16c_s00758240;
 extern "C" void __cdecl M3Assign(M3* dst, const M3* src);
 struct Val7e20 {
     uint16_t w00;      // +0
@@ -269,7 +273,7 @@ Val7e20* Val7e20::Ctor(Val7e20* src, RCObj* a2, RCObj* a3)
     this->f08 = g_f162f02c;
     this->f0c = g_f162f030;
     this->f10 = g_f1485720;
-    M3Assign(&this->m14, &g_m3_162f16c);
+    M3Assign(&this->m14, (const M3*)&g_m3_162f16c_s00758240);
     this->w38 = src->w00;
     this->w3a = src->w02;
     this->f3c = src->f04;
@@ -692,7 +696,7 @@ Big140* __cdecl FUN_00759280(void* param)
     src.f08 = g_f162f02c;
     src.f0c = g_f162f030;
     src.f10 = g_f1485720;
-    src.m14.Assign(&g_m3_162f16c_s0075_8240);
+    src.m14.Assign(&g_m3_162f16c);
     Val7e20_s0075_8240 tmp;
     Val7e20_s0075_8240* vt = tmp.Ctor(&src, param, (void*)0);
     ((Elem7cVec*)((char*)obj + 0x108))->push_back(vt);

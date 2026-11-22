@@ -285,6 +285,13 @@ struct VectorOps {
 namespace EA {
 namespace XHTML {
 namespace Layout {
+void FUN_011e0744(void* first, void* last, int zero);   // 0x011e0744
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
 void FUN_011e0744(void* dest, void* src, int nbytes);   // 0x011e0744 (memmove)
 }
 }
@@ -801,6 +808,26 @@ struct Fn8e69b0Target {
 typedef unsigned char uchar;
 namespace EA {
 namespace XHTML {
+namespace Style {
+class FontMetrics_s008e_9a10 { public:
+    float mfFontSize, mfEmSize, mfExSize, mfAscent, mfDescent;
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Style {
+struct Length_s008e_9a10 {
+    float mValue;   // +0
+    int mUnits;     // +4
+    float ToPixelsNonNeg(float reference, const FontMetrics_s008e_9a10& fm) const;   // 0x008f9660
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
 namespace Layout {
 class RenderingContext_s008e_9a10 {
 public:
@@ -812,7 +839,23 @@ public:
 }
 }
 }
+namespace EA {
+namespace XHTML {
+namespace Layout {
+struct BlockMetrics {
+    int   m0, m1, m2, m3;          // +0x00
+    int   m4, m5, m6, m7;          // +0x10
+    float f8, f9, f10, f11;        // +0x20
+    uchar mFlag;                   // +0x30
+
+    void FUN_008e9e30(const char* src, float reference);   // 0x008e9e30 (thiscall)
+};
+}
+}
+}
 void __cdecl FUN_008e9900(int color, int x, float* out, int count);   // 0x008e9900
+using EA::XHTML::Style::Length_s008e_9a10;
+using EA::XHTML::Style::FontMetrics_s008e_9a10;
 // ---- items of slice s008e9a10 end
 
 // ---- items of slice s008ea290 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1636,6 +1679,120 @@ public:
 };
 }
 }
+namespace EA {
+namespace Drawing {
+class IDrawContext_s008e_ebb0 { public:
+    virtual void v0();
+    virtual void SetColor(unsigned c);                    // +4
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+    virtual void DrawGlyphs(const uint16_t* g, const EA::Text::GlyphLayoutInfo_s008e_ebb0* info, unsigned n);   // +0x30
+    virtual void v13();
+    virtual void FillRect(float x1, float y1, float x2, float y2);   // +0x38
+virtual void v15();
+virtual void v16();
+virtual void v17();
+    // +0x48: draw four offset quads (retail FUN_008eebb0 receiver)
+    virtual void DrawQuadSet(const float* p1, void* v1, const float* p2, void* v2,
+                             const float* p3, void* v3, const float* p4, void* v4);
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    // +0x58: textured rectangle (retail FUN_008eec80 receiver)
+    virtual void DrawImage(const float* rect, void* tex, const float* uv);
+};
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext_s008e_ebb0;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Background_s008e_ebb0 { public:
+    char pad[0x44];
+    void Draw(RenderingContext_s008e_ebb0* ctx, const float* pen, const float* rect);   // 0x008e6710
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class InlineItem { public:
+    char pad0[0x3c];
+    unsigned mColor;                // +0x3c
+    char pad1[0x44 - 0x40];
+    Background_s008e_ebb0* mpBackground;       // +0x44
+    char pad2[0x50 - 0x48];
+    InlineItem* mpNext;             // +0x50
+    unsigned mBegin;                // +0x54
+    unsigned mEnd;                  // +0x58
+    InlineItem* mpNextFloat;        // +0x5c (float list link)
+    char pad4[0x70 - 0x60];
+    float mfFloatBottom;            // +0x70
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+struct ContextRectF { float mfOffsetX, mfOffsetY, mfWidth, mfHeight; };
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext_s008e_ebb0 { public:
+    EA::Drawing::IDrawContext_s008e_ebb0* mpDC;       // +0
+    EA::Text::Typesetter_s008e_ebb0 mTypesetter;      // +4  (0x530 bytes)
+    union {
+        struct { float mfOffsetX, mfOffsetY, mfWidth, mfHeight; };   // +0x534
+        ContextRectF mRect;
+    };
+    float mPen[4];                         // +0x544 (pen origin passed to Background::Draw)
+    float mfLineHeight;                    // +0x554
+    float mfBaseline;                      // +0x558
+    float mYPos;                           // +0x55c
+    union { unsigned mSelectionStart; float mfSelectionStart; };   // +0x560
+    unsigned mSelectionEnd;                // +0x564
+    unsigned mLineBaseIndex;               // +0x568
+    InlineItem* mpFloatHead;               // +0x56c
+    InlineItem* mpFloatTail;               // +0x570
+    union { InlineItem* mpActiveSpans; unsigned char mFlag574; };  // +0x574
+
+    // 16-byte context rectangle covering +0x534..+0x543
+
+    void DrawTextLine(EA::Text::LineLayout_s008e_ebb0* pLine);   // 0x008eeee0
+    void RefreshMargins();                           // 0x008eea30
+    void SetContextRect(const ContextRectF* r);      // 0x008eed80
+    void SetContextRectRelative(float l, float t, float r, float b);   // 0x008eedb0
+    void PlaceFloat(InlineItem* item);               // 0x008eee30
+    void DrawQuadSet2(const float* p1, void* v1, const float* p2, void* v2,
+                      const float* p3, void* v3, const float* p4, void* v4);  // 0x008eebb0
+    void DrawImage2(float x, float y, float w, float h, void* tex);          // 0x008eec80
+    void BeginContent();                             // 0x008ef550
+    void Reset();                                    // 0x008ef6d0
+    void AddTextRun(const wchar_t* s, unsigned n, int style);      // 0x008efa50
+    void AddLineBreak(const wchar_t* s, unsigned n, int style);    // 0x008efa90
+};
+}
+}
+}
 template <typename T> inline const T& tmax(const T& a, const T& b) { return (a < b) ? b : a; }
 namespace Simulator {
  struct cGameData { char mPad[0x348]; int mMode; }; 
@@ -1824,6 +1981,113 @@ struct ItemListOwner {
 static inline Item_s008e_fad0* EndOf(ListNode* a) { return a ? (Item_s008e_fad0*)((char*)a - 4) : 0; }
 // ---- items of slice s008efad0 end
 
+// ---- items of slice s008f0740_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_1437ed8[];
+extern "C" void FUN_008f05f0(void* dst, const void* srcBegin, const void* srcEnd, const void* end);
+extern "C" void FUN_00c50ad0(void* dst, const void* src, const void* end);
+extern "C" char* FUN_00951bb0(const void* first, const void* last, char* dst);   // uninitialized_copy
+extern "C" void* FUN_00f96e70(void* dst, void* end, const void* src);
+extern "C" void  operator_delete(void* p);
+extern void* g_01437ed8[];   // 0x01437ed8 Table_Layout_XHTML_EA vftable
+extern void* g_01437c00[];   // 0x01437c00 Block base vftable
+struct StyleState_s008f_0740__g7
+{
+	char  pad000[0x36c];
+	float mHeightValue;   // +0x36c
+	char  pad370[0x3a8 - 0x370];
+	int   mHeightKind;    // +0x3a8
+};
+struct StackingContext_s008f_0740__g7
+{
+	char  pad000[0x530];
+	float mWidth;       // +0x530
+	float mHeight;      // +0x534
+	float mLineHeight;  // +0x538
+};
+struct IntrusiveList
+{
+	void* mAnchor0;     // +0x00
+	void* mAnchor1;     // +0x04
+	~IntrusiveList();   // out-of-line (0x620230)
+};
+struct Table_Layout_XHTML_EA
+{
+	// Base Block::Layout state; opaque here so the derived offsets line up.
+	char pad0[0x18];
+	IntrusiveList mItems;       // +0x18 (anchor node of the child item list)
+	char pad20[0x94 - 0x20];
+	RectF mContentRect;         // +0x94
+	char padA4[0xc4 - 0xa4];
+	int   mColCount;            // +0xc4
+	int   mRowIndex;            // +0xc8
+	int   mColIndex;            // +0xcc
+	float mRowSpacing;          // +0xd0
+	float mColSpacing;          // +0xd4
+	TableColumn* mColsBegin;    // +0xd8
+	TableColumn* mColsEnd;      // +0xdc
+	TableColumn* mColsCap;      // +0xe0
+	char  padE4[0xec - 0xe4];
+	TableRow** mRowsBegin;      // +0xec
+	TableRow** mRowsEnd;        // +0xf0
+	TableRow** mRowsCap;        // +0xf4
+	float mMinWidth;            // +0x100
+	float mMaxWidth;            // +0x104
+	unsigned char mHasSize;     // +0x108
+
+	void* ResizeRows(char* pos, u32 n, TableColumn* value);   // @ 0x008f1210
+	void  Sizing(StackingContext_s008f_0740__g7* ctx, StyleState_s008f_0740__g7* style);   // @ 0x008f13f0
+	void* Table_Layout_XHTML_EA_ctor(void* a, void* b);      // @ 0x008f1120
+	void* Table_Layout_XHTML_EA_dtor(unsigned char flags);   // @ 0x008f11b0
+};
+struct LayoutBase
+{
+	void ctor008e7f90(void* a, void* b, int kind);
+};
+extern "C" void FUN_008f0640(void* dst, u32 n, const void* src, void* end);
+extern "C" void* operator_new(u32 size, const char* name, int a, int b, const char* file, int line);
+struct Length_s008f_0740__g7 { char raw[0x10]; };   // EA::XHTML::Style::Length, passed as a stack temp
+struct StyleRule;
+struct StyleStateOps
+{
+	void copyCtor(const StyleState_s008f_0740__g7* src);
+};
+extern "C" void StyleState_dtor(StyleState_s008f_0740__g7* self);
+extern "C" void ComputeStyle(void* host, StyleRule** rules, u32 n, StyleState_s008f_0740__g7* st);
+struct TextStyleOps
+{
+	void update();
+};
+struct BlockOps
+{
+	void setUpBox(StackingContext_s008f_0740__g7* ctx, StyleState_s008f_0740__g7* st);
+};
+struct SizingContextOps
+{
+	void clear();
+	void finish();
+};
+extern "C" float Length_ToPixelsNonNeg(Length_s008f_0740__g7* len, float base);
+struct LayoutVt
+{
+	virtual void s0();
+	virtual void s1();
+	virtual void s2();
+	virtual void s3();
+	virtual void s4();
+	virtual void s5();
+	virtual void s6();
+	virtual void s7();
+	virtual void s8();   // +0x20
+};
+struct StyleCarrier
+{
+	char pad000[0x20];
+	void*        mpHost;      // +0x20
+	StyleRule**  mpRules;     // +0x24
+	u32          mRuleCount;  // +0x28
+};
+// ---- items of slice s008f0740_g7 end
+
 // @ 0x008e68f0
 namespace EA { namespace XHTML { namespace Layout {
 void Background::SetStyle(Style::StyleState_s008e_6340& style)
@@ -1989,6 +2253,32 @@ void __stdcall FUN_008e9b10(EA::XHTML::Layout::RenderingContext_s008e_9a10* ctx,
             } while (a[2] >= cur);
         }
     }
+}
+
+// @ 0x008e9e30
+void EA::XHTML::Layout::BlockMetrics::FUN_008e9e30(const char* src, float reference)
+{
+    m0 = *(int*)(src + 0x368);
+    m2 = *(int*)(src + 0x328);
+    m1 = *(int*)(src + 0x308);
+    m3 = *(int*)(src + 0x348);
+    if (m0 == 0) m0 = *(int*)(src + 0x2c0);
+    if (m2 == 0) m2 = *(int*)(src + 0x2c0);
+    if (m1 == 0) m1 = *(int*)(src + 0x2c0);
+    if (m3 == 0) m3 = *(int*)(src + 0x2c0);
+    m4 = *(int*)(src + 0x364);
+    m6 = *(int*)(src + 0x324);
+    m5 = *(int*)(src + 0x304);
+    m7 = *(int*)(src + 0x344);
+    const FontMetrics_s008e_9a10& fm = *(FontMetrics_s008e_9a10*)(src + 0x430);
+    f8  = (float)floor((double)(((const Length_s008e_9a10*)(src + 0x35c))->ToPixelsNonNeg(reference, fm) + 0.5f));
+    f10 = (float)floor((double)(((const Length_s008e_9a10*)(src + 0x31c))->ToPixelsNonNeg(reference, fm) + 0.5f));
+    f9  = (float)floor((double)(((const Length_s008e_9a10*)(src + 0x2fc))->ToPixelsNonNeg(reference, fm) + 0.5f));
+    f11 = (float)floor((double)(((const Length_s008e_9a10*)(src + 0x33c))->ToPixelsNonNeg(reference, fm) + 0.5f));
+    mFlag = 1;
+    if ((f8 == 0.0f || m4 == 0) && (f10 == 0.0f || m6 == 0) &&
+        (f9 == 0.0f || m5 == 0) && (f11 == 0.0f || m7 == 0))
+        mFlag = 0;
 }
 
 // @ 0x008e9fe0
@@ -2335,6 +2625,15 @@ void EA::XHTML::Layout::SizingContext_s008e_ebb0::Finish()
     if (mfMaxWidth == *(const float*)0x01485378)
         mfMaxWidth = mfMaxHeight;
     Reset(1);
+}
+
+// @ 0x008efa90
+void EA::XHTML::Layout::RenderingContext_s008e_ebb0::AddLineBreak(const wchar_t* s, unsigned n, int style)
+{
+    mTypesetter.SetRunStyle(style);
+    mTypesetter.AddLineBreak(s, n, 0, 0);
+    mFlag574 = 0;
+    mfSelectionStart = 0.0f;
 }
 
 // @ 0x008efba0
@@ -2797,6 +3096,163 @@ void Table::LayoutRows(StackingContext* ctx, StyleState* style)
             cell->mContentRect.b = contentH + cell->mContentRect.t;
         }
     }
+}
+
+// @ 0x008f1120
+void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
+{
+	char* self = (char*)this;
+	((LayoutBase*)self)->ctor008e7f90(a, b, 6);
+
+	*(u32*)(self + 0xc4) = 0;          // mColCount
+	*(u32*)(self + 0xc8) = 0;          // mRowIndex
+	*(u32*)(self + 0xcc) = 0;          // mColIndex
+	*(u32*)(self + 0x00) = (int)g_1437ed8;  // table vtable
+
+	*(float*)(self + 0xd0) = 0.0f;     // mRowSpacing
+	*(float*)(self + 0xd4) = 0.0f;     // mColSpacing
+	_ReadWriteBarrier();
+	*(u32*)(self + 0xd8) = 0;          // mColsBegin
+	*(u32*)(self + 0xdc) = 0;          // mColsEnd
+	*(u32*)(self + 0xe0) = 0;          // mColsCap
+	*(u32*)(self + 0xec) = 0;          // mRowsBegin
+	*(u32*)(self + 0xf0) = 0;          // mRowsEnd
+	*(u32*)(self + 0xf4) = 0;          // mRowsCap
+	*(unsigned char*)(self + 0x108) = 0;
+	*(float*)(self + 0x100) = 0.0f;    // mMinWidth
+	*(float*)(self + 0x104) = 0.0f;    // mMaxWidth
+	return self;
+}
+
+// @ 0x008f11b0
+void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_dtor(unsigned char flags)
+{
+	char* self = (char*)this;
+	*(volatile u32*)(self + 0x00) = (u32)g_01437ed8;  // table vtable
+
+	void* rows = *(void* volatile*)(self + 0xec);
+	if (rows != 0 && *(int*)((char*)rows - 4) != 0)
+		operator_delete(rows);
+
+	void* cols = *(void**)(self + 0xd8);
+	if (cols != 0 && *(int*)((char*)cols - 4) != 0)
+		operator_delete(cols);
+
+	((IntrusiveList*)(self + 0x18))->~IntrusiveList();
+	*(u32*)(self + 0x00) = (u32)g_01437c00;  // Block base vtable
+
+	if (flags & 1)
+		operator_delete(self);
+
+	return self;
+}
+
+// @ 0x008f1210
+void* Table_Layout_XHTML_EA::ResizeRows(char* pos, u32 n, TableColumn* value)
+{
+	char* self = (char*)this;
+	u32 cap = (u32)((*(char**)(self + 8) - *(char**)(self + 4)) / 0x14);
+
+	if (n > cap)
+	{
+		u32 have = (u32)((*(char**)(self + 4) - *(char**)(self + 0)) / 0x14);
+		u32 grow = have * 2;
+		if (have == 0)
+			grow = 1;
+		u32 want = have + n;
+		if (want < grow)
+			want = grow;
+
+		char* mem;
+		if (want != 0)
+			mem = (char*)operator_new(want * 0x14, "EASTL", 0, 0,
+			                          "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+			                          0xd1);
+		else
+			mem = 0;
+
+		char* mid = FUN_00951bb0(*(char**)(self + 0), pos, mem);
+		FUN_008f0640(mid, n, pos, 0);
+		char* tail = FUN_00951bb0(pos, *(char**)(self + 4), mid + n * 0x14);
+
+		char* old = *(char**)(self + 0x00);
+		if (old != 0 && *(int*)(old - 4) != 0)
+			operator_delete(old);
+
+		*(char**)(self + 0x00) = mem;
+		*(char**)(self + 4) = tail;
+		*(char**)(self + 8) = mem + want * 0x14;
+	}
+	else if (n != 0)
+	{
+		TableColumn val = *value;
+
+		char* end = *(char**)(self + 4);
+		u32 have2 = (u32)((end - pos) / 0x14);
+
+		if (n < have2)
+		{
+			char* last = end - n * 0x14;
+			FUN_008f05f0(&val, last, end, end);
+			end = end + n * 0x14;
+			*(char**)(self + 4) = end;
+			FUN_00c50ad0(pos, last, end);
+			FUN_00f96e70(pos, pos + n * 0x14, &val);
+			return 0;
+		}
+
+		u32 extra = n - have2;
+		FUN_008f0640(end, extra, &val, pos);
+		*(char**)(self + 4) = *(char**)(self + 4) + extra * 0x14;
+		FUN_008f05f0(pos, pos, end, *(char**)(self + 4));
+		*(char**)(self + 4) = *(char**)(self + 4) + have2 * 0x14;
+		FUN_00f96e70(pos, end, &val);
+		return 0;
+	}
+	return 0;
+}
+
+// @ 0x008f13f0
+void Table_Layout_XHTML_EA::Sizing(StackingContext_s008f_0740__g7* ctx, StyleState_s008f_0740__g7* style)
+{
+	char* self = (char*)this;
+
+	StyleState_s008f_0740__g7 local;
+	((StyleStateOps*)&local)->copyCtor(style);
+	float base = ctx->mLineHeight;
+	if (local.mHeightKind != 0)
+	{
+		StyleCarrier* sc = (StyleCarrier*)self;
+		if (sc->mpHost != 0)
+			ComputeStyle(sc->mpHost, sc->mpRules, sc->mRuleCount, &local);
+		((TextStyleOps*)&local)->update();
+		((BlockOps*)self)->setUpBox(ctx, &local);
+		((SizingContextOps*)ctx)->clear();
+		((LayoutVt*)self)->s8();                 // retail vtable slot +0x20 (block pass)
+		((SizingContextOps*)ctx)->finish();
+
+		*(float*)(self + 0xd4) = ctx->mHeight;
+		*(float*)(self + 0xd8) = ctx->mWidth;
+		*(float*)(self + 0xdc) = 0.0f;
+		Length_s008f_0740__g7 scratch;
+		if (local.mHeightKind == 9)
+		{
+			*(float*)(self + 0xdc) = local.mHeightValue * *(float*)0x13eb960;
+		}
+		else if (local.mHeightKind != 10)
+		{
+			*(float*)(self + 0xd8) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		}
+		*(float*)(self + 0xb4) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xbc) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xb8) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xc0) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xe0) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xe8) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xe4) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+		*(float*)(self + 0xec) = (float)iat_floor((double)(Length_ToPixelsNonNeg(&scratch, base) + 0.5f));
+	}
+	StyleState_dtor(&local);
 }
 
 // @ 0x008f16c0

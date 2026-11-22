@@ -1,14 +1,22 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?on_ban_content_button@@YAXXZ  00e009f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?MenuKind@@YAHXZ  00e00aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00ac0_impl@@YADXZ  00e00ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00bb0_impl@@YAXXZ  00e00bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00bd0_impl@@YAXXZ  00e00bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00bf0_impl@@YAXXZ  00e00bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?GetEventFlags@NetObj@@QBEIXZ  00e00d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00e90@NetObj@@QAEDIPAX@Z  00e00e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@OptObj@@QAEXXZ  00e00f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Reset@OptObj@@QAEXXZ  00e00fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?DelDtor@OptObj@@QAEPAXI@Z  00e01090  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@WinObj@@QAEXXZ  00e011a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_1250@GlobalUI@@QAEXPAX@Z  00e01250  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FindWindowByID@GlobalUI@@QAEPAXPAX@Z  00e012b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?SetVisibility@GlobalUI@@QAEXPAX@Z  00e01350  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?IsVisible@GlobalUI@@QAEDXZ  00e01380  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Enable@cSPUIGlobalOptions@@QAEXD@Z  00e018c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FindWin@GlobalOpts2@@QAEPAVIWindow@UTFWin@EA@@I@Z  00e01ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02900@UIThing@@QAEXXZ  00e02900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02950@UIThing@@QAEXXZ  00e02950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02a20@UIThing@@QAEXXZ  00e02a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -18,13 +26,10 @@
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02d30@@YAPAUElem24@@PAU1@00@Z  00e02d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02da0@@YAPAUElem24@@PAU1@00@Z  00e02da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02e80@UIThing@@QAEXXZ  00e02e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?SetText@BanContent@@QAEXHPB_WPBX@Z  00e03590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@BanContent@@QAEXXZ  00e03930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnMessage@CivPauseUI@@QAE_NHH@Z  00e03a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?GetEventFlags@NetObj@@QBEIXZ  00e00d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FindWin@GlobalOpts2@@QAEPAVIWindow@UTFWin@EA@@I@Z  00e01ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Enable@cSPUIGlobalOptions@@QAEXD@Z  00e018c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_1250@GlobalUI@@QAEXPAX@Z  00e01250  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Format@BanTranslator@@QAE_NPB_WPA_W@Z  00e03b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?EraseLast@BanVec@@QAEPAUBanEntry@@PAU2@@Z  00e03c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnDeactivate@BanContent@@QAEXHH@Z  00e03e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnToggle@BanContent@@QAEXD@Z  00e03f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@OptObj@@QAEXXZ  00e00f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@WinObj@@QAEXXZ  00e011a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00bf0_impl@@YAXXZ  00e00bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00ac0_impl@@YADXZ  00e00ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

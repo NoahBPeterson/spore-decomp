@@ -16,9 +16,13 @@
 #include "cSPUIAnimator.h"
 #define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
 #include <new>
+inline void* __cdecl operator new(size_t, void* p) { return p; }   // placement new (restore: the <new> suite is hidden by the guard)
+
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s00647f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* operator_new(unsigned int n, const char* tag, int a, int b, const char* file, int line); // 0xf473a0
+extern "C" void  operator_delete(void* p);                                                                // 0xf47380
 struct Primary {
     virtual void p0();
     uint8_t pad[0xc];
@@ -37,6 +41,13 @@ struct AutoRef {
     IRef2* p;
     ~AutoRef() { if (p) p->Release(); }
 };
+struct Entry14_s0064_7f40 {
+    uint32_t f00, f04, f08;
+    AutoRef  h0c;   // +0xc  (primary base)
+    AutoRefObj h10; // +0x10 (secondary base)
+    void Construct(const Entry14_s0064_7f40& v);      // 0x645390: copy whole element
+    void AssignHandles(const Entry14_s0064_7f40& v);  // 0x645db0: assign the two handles (this=&h0c)
+};
 struct Entry14 {
     uint32_t f00, f04, f08;
     AutoRef  h0c;   // +0xc  (primary base)
@@ -44,6 +55,38 @@ struct Entry14 {
     void Construct(const Entry14& v);
 };
 struct Key12 { uint32_t a, b, c; };
+struct GridVec_s0064_7f40 {
+    Entry14_s0064_7f40* mpBegin;
+    Entry14_s0064_7f40* mpEnd;
+    Entry14_s0064_7f40* mpCapacity;
+    uint32_t mFieldC;    // +0xc
+    uint32_t mField10;   // +0x10
+    uint8_t  mField14;   // +0x14
+
+    Entry14_s0064_7f40* EraseAt(Entry14_s0064_7f40* pos);   // 0x648af0
+    Entry14_s0064_7f40* Insert(Entry14_s0064_7f40* pos, const Entry14_s0064_7f40& v); // 0x648b40
+    void InsertAt(Entry14_s0064_7f40* pos, const Entry14_s0064_7f40& v);   // 0x6485e0 (declared)
+    Entry14_s0064_7f40* InsertSorted(Entry14_s0064_7f40* pos, const Entry14_s0064_7f40& v); // 0x648c60 (declared)
+    Entry14_s0064_7f40* FindOrInsert(const Key12& k);           // 0x648ce0
+    void GrowTo(unsigned int n);                     // 0x648bb0
+    void ClearAssetViews();                          // 0x648aa0
+    void DoInsertValuesEnd(Entry14_s0064_7f40* pos, unsigned int n, const Entry14_s0064_7f40& v); // 0x6483d0
+};
+extern "C" Entry14_s0064_7f40* __cdecl f646140_s0064_7f40(Entry14_s0064_7f40* a, Entry14_s0064_7f40* b, Entry14_s0064_7f40* c);   // move range
+struct EntryOps {
+    Entry14_s0064_7f40* Copy(const Entry14_s0064_7f40* src);                 // 0x645390 (this = dst)
+    void     AssignHandles(const void* src);           // 0x645db0 (this = &dst->h0c)
+};
+struct GridOps {
+    void DestroyRange(Entry14_s0064_7f40* first, Entry14_s0064_7f40* last);  // 0x645ff0 (this = GridVec)
+    void Sift(Entry14_s0064_7f40* first, Entry14_s0064_7f40* last);          // 0x648380 (this = GridVec)
+};
+extern "C" void     f6453e0(void* out, Entry14_s0064_7f40* first, Entry14_s0064_7f40* last, Entry14_s0064_7f40* dest);    // write dest to *out, copy range
+extern "C" Entry14_s0064_7f40* f645450(Entry14_s0064_7f40* first, Entry14_s0064_7f40* last, Entry14_s0064_7f40* dst);                // UninitCopy
+extern "C" void     f6454c0(Entry14_s0064_7f40* first, Entry14_s0064_7f40* last, Entry14_s0064_7f40* dst);                // DestroyRange
+extern "C" void     f645510(Entry14_s0064_7f40* dst, unsigned int n, const Entry14_s0064_7f40* v);             // UninitFillN
+extern "C" Entry14_s0064_7f40* f6461d0(Entry14_s0064_7f40* dstEnd, Entry14_s0064_7f40* first, Entry14_s0064_7f40* last);             // move backward
+extern "C" void     f6460b0(Entry14_s0064_7f40* first, Entry14_s0064_7f40* last, const Entry14_s0064_7f40* v);            // assign v over range
 struct GridVec {
     Entry14* mpBegin;
     Entry14* mpEnd;
@@ -58,33 +101,6 @@ struct GridVec {
     Entry14* InsertSorted(Entry14* pos, const Entry14& v); // 0x648c60 (declared)
     Entry14* FindOrInsert(const Key12& k);           // 0x648ce0
 };
-extern "C" Entry14* __cdecl f646140(Entry14* a, Entry14* b, Entry14* c);   // move range
-extern "C" Entry14* __cdecl f646030(Entry14* first, Entry14* last, const Key12* key, uint8_t flag);
-Entry14* GridVec::FindOrInsert(const Key12& k) {
-    Entry14* const end = mpEnd;
-    Entry14* p = f646030(mpBegin, end, &k, mField14);
-    if (p != end) {
-        bool less;
-        if (k.a == p->f00) {
-            if (k.c == p->f08)
-                less = k.b < p->f04;
-            else
-                less = k.c < p->f08;
-        } else {
-            less = k.a < p->f00;
-        }
-        if (!less)
-            return (Entry14*)((char*)p + 0xc);
-    }
-    Entry14 value;
-    value.f00 = k.a;
-    value.f04 = k.b;
-    value.f08 = k.c;
-    value.h0c.p = 0;
-    value.h10.p = 0;
-    Entry14* r = InsertSorted(p, value);
-    return (Entry14*)((char*)r + 0xc);
-}
 // ---- items of slice s00647f40 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -581,10 +597,12 @@ struct AssetView {                               // UI::AssetDiscovery_View (0x1
     float GetHeight();                                                  // @ 0x6578d0
     float GetWidth();                                                   // @ 0x6578f0
 };
+struct IMsg;
 struct IMsgServer {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
     virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20();
     virtual void AddHandler(void* handler, unsigned int id);            // 0x24
+    virtual void PostMessage(unsigned id, IMsg* msg);      // 0x14
 };
 struct IAppSystem {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
@@ -660,6 +678,23 @@ struct GB0 { virtual ~GB0() {} virtual void b0f1(); };
 struct GB1 { virtual ~GB1() {} virtual void b1f1(); };
 struct GB2 { virtual void b2f0(); virtual void b2f1(); };
 struct GB3 { GB3() : mRefCount(0) {} virtual ~GB3() {} int mRefCount; };
+struct Stopwatch_s0065_53b0 {
+    unsigned long long mStart;
+    unsigned long long mElapsed;
+    int mMode;
+    int mUnits;
+    unsigned long long GetElapsedTime();                                 // 0x0093a5e0
+    void Restart();                                                      // 0x00571e80
+    void Start()
+    {
+        unsigned long long t;
+        if (mMode == 1) t = __rdtsc();
+        else QueryPerformanceCounter((long long*)&t);
+        mStart = t;
+        mElapsed = 0;
+    }
+};
+
 struct cSPUIAssetGrid_s0065_15a0 : GB0, GB1, GB2, GB3 {
     // GB0 @0, GB1 @4, GB2 @8, GB3 @0xc (mRefCount @0x10)
     bool mIsVisible;                              // +0x14
@@ -809,7 +844,6 @@ struct StatsGrid {
 
 // ---- items of slice s006553b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int __cdecl GetTutorialToolPrice(void* tool, unsigned id, int def);   // 0x004e1c30
-inline void* operator new(size_t, void* p) { return p; }
 struct Key {                           // EA::ResourceMan::Key (instance, type, group)
     int a, b, c;
 };
@@ -830,19 +864,39 @@ struct AutoRefCount_s0065_53b0 {
     }
 };
 struct AssetDataPrimary {              // primary vtable of a cached asset record; IRefCount sub-object at +0x10
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
     virtual bool IsReady();                    // 0x2c
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
     virtual const Key* GetKey();               // 0x40
-    virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50();
-    virtual void v54(); virtual void v58(); virtual void v5c();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
     virtual bool PassesFilterC();              // 0x60
-    virtual void v64(); virtual void v68(); virtual void v6c(); virtual void v70();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
     virtual bool PassesFilterB();              // 0x74
     virtual bool PassesFilterA();              // 0x78
-    virtual void v7c(); virtual void v80();
+virtual void v7c();
+virtual void v80();
     virtual bool IsHidden();                   // 0x84
     char pad0[0xc];
 };
@@ -850,11 +904,18 @@ struct AssetData : AssetDataPrimary, IRefCount {};
 struct AssetView_s0065_53b0 {                             // UI::AssetDiscovery_View
     virtual int AddRef();                      // 0x00
     virtual int Release();                     // 0x04
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
     virtual void Attach(void* win, AssetData* data, int a, int b);   // 0x1c
     virtual void v20();
     virtual void OnUpdate(int arg, bool flag); // 0x24
-    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
     virtual void SetEnabled(bool enabled);     // 0x38
     char pad04[0xf4 - 4];
     bool mSelectable;                          // +0xf4
@@ -867,29 +928,76 @@ struct FcObj {                                 // object pointed to by the grid'
     AssetView_s0065_53b0* mpView;                         // +0x10
 };
 struct IWindow_s0065_53b0 {
-    virtual int AddRef(); virtual int Release();
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
-    virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c(); virtual void v40();
-    virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
-    virtual void v58(); virtual void v5c(); virtual void v60();
+virtual int AddRef();
+virtual int Release();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
     virtual void SetPos(float x, float y);     // 0x64
     virtual void SetSize(float w, float h);    // 0x68
-    virtual void v6c(); virtual void v70(); virtual void v74(); virtual void v78();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
     virtual void SetVisible(bool a, bool b);   // 0x7c
     virtual void SetText(const wchar_t* text); // 0x80
 };
 struct IScrollbar {
-    virtual int AddRef(); virtual int Release();
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
-    virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+virtual int AddRef();
+virtual int Release();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
     virtual int GetMin();                      // 0x40
 };
 struct ScrollFrame_s0065_53b0 {
-    virtual int AddRef(); virtual int Release();
+virtual int AddRef();
+virtual int Release();
     char pad4[0x1c];
     IScrollbar* mScrollbar;                    // +0x20
+};
+struct IMsg {
+    virtual void v00();
+    virtual int AddRef();                      // 0x04
+    virtual int Release();                     // 0x08
+};
+struct cString_s0065_53b0 {                               // SP::cString (one word)
+    int mData;
+    cString_s0065_53b0();                                                       // 0x006b5060
+    void Load(unsigned tableId, unsigned groupId, const wchar_t* fallback);   // 0x006b54b0
+    const wchar_t* GetText();                                        // 0x006b55c0
+    ~cString_s0065_53b0();                                                      // 0x006b5240
 };
 struct GridEntry_s0065_53b0 {
     Key                     mKey;      // +0x00
@@ -916,7 +1024,7 @@ struct GridVec_s0065_53b0 {
             mpEnd = p + 1;
             if (p) new (p) GridEntry_s0065_53b0(v);
         } else
-            DoInsertValue(mpEnd, v);
+            DoInsertValue(mpEnd, v);  // 0x006535b0 (GridVec::DoInsertValue)
     }
 };
 struct KeyVec {                                // eastl::vector<Key>
@@ -966,24 +1074,11 @@ struct AssetBrowser_s0065_53b0 {
     AssetView_s0065_53b0* GetViewFor(AssetData* data);                              // 0x006462b0
     AssetView_s0065_53b0* GetDefaultView();                                         // 0x006452c0
 };
+struct GlobalStats { char pad[0x28]; int mFilteredOut; };
 extern AssetBrowser_s0065_53b0* __cdecl GetAssetBrowser();                          // 0x00401030
-extern IAppSystem* __cdecl GetAppSystem();                               // 0x0067dd00
-struct Stopwatch_s0065_53b0 {
-    unsigned long long mStart;
-    unsigned long long mElapsed;
-    int mMode;
-    int mUnits;
-    unsigned long long GetElapsedTime();                                 // 0x0093a5e0
-    void Restart();                                                      // 0x00571e80
-    void Start()
-    {
-        unsigned long long t;
-        if (mMode == 1) t = __rdtsc();
-        else QueryPerformanceCounter((long long*)&t);
-        mStart = t;
-        mElapsed = 0;
-    }
-};
+extern IMsgServer* __cdecl GetMessageServer();                           // 0x0067dcc0
+extern GlobalStats* g_pStats;                                            // 0x015ee298
+extern IMsg* __fastcall AssetMsg_ctor(void* mem, void* edx, AssetView_s0065_53b0* view, int a, int b, int c, int d);   // 0x0064e740 (thiscall)
 struct cSPUIAssetGrid_s0065_53b0 : GB0, GB1, GB2, GB3 {
     bool mIsVisible;                              // +0x14
     char pad18[0x2c - 0x18];
@@ -1003,8 +1098,8 @@ struct cSPUIAssetGrid_s0065_53b0 : GB0, GB1, GB2, GB3 {
     float       mCardHeight;                      // +0x108
     bool        m10c;                             // +0x10c
     char pad110[0x150 - 0x110];
-    Stopwatch_s0065_53b0   mTimerA;                          // +0x150
-    Stopwatch_s0065_53b0   mTimerB;                          // +0x168
+    Stopwatch_s0065_53b0 mTimerA;                          // +0x150
+    Stopwatch_s0065_53b0 mTimerB;                          // +0x168
     float       m180, m184;                       // +0x180
     char pad188[0x18c - 0x188];
     ScrollFrame_s0065_53b0* mpScrollFrame;                   // +0x18c
@@ -1032,10 +1127,10 @@ struct cSPUIAssetGrid_s0065_53b0 : GB0, GB1, GB2, GB3 {
     bool        mNeedsFocus;                      // +0x1e7
     bool        m1e8;                             // +0x1e8
 
-    void RefreshAssetStates();                                   // @ 0x006553b0
-    bool SelectKey(const Key* key, bool a, bool b, const Rect_s0065_53b0* rc);   // @ 0x00655840
-    void AddEntries(KeyVec* keys);                               // @ 0x00655b00
-    void Update(int arg);                                        // @ 0x00655ed0
+    void RefreshAssetStates();                                   // 0x006553b0
+    bool SelectKey(const Key* key, bool a, bool b, const Rect_s0065_53b0* rc);   // 0x00655840
+    void AddEntries(KeyVec* keys);                               // 0x00655b00
+    void Update(int arg);                                        // 0x00655ed0
     void UpdateAll();                                            // 0x0064ecc0
     void FUN_654d00();                                           // 0x00654d00
     void UpdateStatsText();                                      // 0x006528f0
@@ -1049,6 +1144,35 @@ struct cSPUIAssetGrid_s0065_53b0 : GB0, GB1, GB2, GB3 {
     void FUN_650470();                                           // 0x00650470
     void UpdateScrolling(int a);                                 // 0x0064fa20
 };
+struct IntKeyVecBase { void* mpBegin; IntKeyVecBase() : mpBegin(0) {} };
+struct IntKeyVec : IntKeyVecBase {
+    void*         mpEnd;             // +0x04
+    void*         mpCapacityEnd;     // +0x08
+    void*         mAlloc;            // +0x0c
+    void*         mAllocBuf;         // +0x10 (inline buffer)
+    void*         mAllocSize;        // +0x14
+    unsigned int  mStore[30];        // +0x18..0x8f
+    unsigned char mFlag;             // +0x90
+    IntKeyVec()
+    {
+        mAllocBuf = mStore;
+        mpEnd = mStore;
+        mpBegin = mStore;
+        mpCapacityEnd = (char*)mStore + sizeof(mStore);
+    }
+    IntKeyVec(void* first, void* last, void* extra)
+    {
+        mAllocBuf = mStore;
+        mpEnd = mStore;
+        mpBegin = mStore;
+        mpCapacityEnd = (char*)mStore + sizeof(mStore);
+        Assign(first, last, extra);
+    }
+    void Assign(void* first, void* last, void* extra);   // 0x00654050
+};
+extern "C" void* __cdecl FUN_006536e0(void* first, void* last, IntKeyVec keys);                    // 0x006536e0
+extern "C" void* __cdecl FUN_00653780(void* dst, void* last, void* src, IntKeyVec keys);            // 0x00653780
+extern IAppSystem* __cdecl GetAppSystem();                               // 0x0067dd00
 // ---- items of slice s006553b0 end
 
 // ---- items of slice s0064eb60 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1500,9 +1624,110 @@ __forceinline KeyVec_s0065_6310 MakeKeys(void* first, void* last, void* extra) {
 extern "C" void* __cdecl FUN_00656240(void* first, void* last, KeyVec_s0065_6310 v);
 // ---- items of slice s00656310 end
 
+// @ 0x006483d0
+void GridVec_s0064_7f40::DoInsertValuesEnd(Entry14_s0064_7f40* pos, unsigned int n, const Entry14_s0064_7f40& v)
+{
+    if ((unsigned int)(mpCapacity - mpEnd) < n) {
+        const unsigned int oldSize = (unsigned int)(mpEnd - mpBegin);
+        unsigned int newCapacity = oldSize ? oldSize * 2 : 1;
+        unsigned int want = oldSize + n;
+        if (want < newCapacity)
+            want = newCapacity;
+        Entry14_s0064_7f40* pNew;
+        if (want)
+            pNew = (Entry14_s0064_7f40*)operator_new(want * 0x14, "Editor", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+        else
+            pNew = 0;
+        Entry14_s0064_7f40* pNewEnd = f645450(mpBegin, pos, pNew);
+        f6454c0(mpBegin, pos, pNew);
+        f645510(pNewEnd, n, &v);
+        Entry14_s0064_7f40* pFillEnd = pNewEnd + n;
+        Entry14_s0064_7f40* const oldEnd = mpEnd;
+        Entry14_s0064_7f40* pNewEnd2 = f645450(pos, oldEnd, pFillEnd);
+        f6454c0(pos, oldEnd, pFillEnd);
+        if (mpBegin)
+            operator_delete(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pNewEnd2;
+        mpCapacity = pNew + want;
+    } else if (n != 0) {
+        Entry14_s0064_7f40 local;
+        reinterpret_cast<EntryOps*>(&local)->Copy(&v);
+        const unsigned int elemsAfter = (unsigned int)(mpEnd - pos);
+        if (n < elemsAfter) {
+            Entry14_s0064_7f40* const oldEnd = mpEnd;
+            Entry14_s0064_7f40* const pSplit = oldEnd - n;
+            Entry14_s0064_7f40* pOut;
+            f6453e0(&pOut, pSplit, oldEnd, oldEnd);
+            mpEnd += n;
+            f6461d0(pOut, pSplit, oldEnd);
+            f6460b0(pOut, pOut + n, &local);
+        } else {
+            f645510(mpEnd, n - elemsAfter, &local);
+            const unsigned int added = n - elemsAfter;
+            Entry14_s0064_7f40* const oldEnd = mpEnd;
+            Entry14_s0064_7f40* pOut2;
+            mpEnd += added;
+            f6453e0(&pOut2, pos, oldEnd, mpEnd);
+            mpEnd += elemsAfter;
+            f6460b0(pos, oldEnd, &local);
+        }
+        if (local.h10.p)
+            local.h10.p->Release();
+        if (local.h0c.p)
+            local.h0c.p->Release();
+    }
+}
+
+// @ 0x006485e0
+void GridVec_s0064_7f40::InsertAt(Entry14_s0064_7f40* pos, const Entry14_s0064_7f40& v)
+{
+    if (mpEnd != mpCapacity) {
+        const Entry14_s0064_7f40* value = &v;
+        if (!(value < pos) && value < mpEnd)
+            value = value + 1;
+        if (mpEnd)
+            reinterpret_cast<EntryOps*>(mpEnd)->Copy(mpEnd - 1);
+        f6461d0(pos, mpEnd - 1, mpEnd);
+        pos->f00 = value->f00;
+        pos->f04 = value->f04;
+        pos->f08 = value->f08;
+        reinterpret_cast<EntryOps*>(&pos->h0c)->AssignHandles(&value->h0c);
+        mpEnd += 1;
+        return;
+    }
+    const unsigned int oldSize = (unsigned int)(mpEnd - mpBegin);
+    unsigned int newCapacity = oldSize ? oldSize * 2 : 1;
+    Entry14_s0064_7f40* pNew;
+    if (newCapacity)
+        pNew = (Entry14_s0064_7f40*)operator_new(newCapacity * 0x14, "Editor", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    else
+        pNew = 0;
+    Entry14_s0064_7f40* pNewEnd = f645450(mpBegin, pos, pNew);
+    f6454c0(mpBegin, pos, pNew);
+    if (pNewEnd)
+        reinterpret_cast<EntryOps*>(pNewEnd)->Copy(&v);
+    Entry14_s0064_7f40* const oldEnd = mpEnd;
+    Entry14_s0064_7f40* pNewEnd2 = f645450(pos, oldEnd, pNewEnd + 1);
+    f6454c0(pos, oldEnd, pNewEnd + 1);
+    if (mpBegin)
+        operator_delete(mpBegin);
+    mpEnd = pNewEnd2;
+    mpBegin = pNew;
+    mpCapacity = pNew + newCapacity;
+}
+
 // @ 0x00648aa0
-void __cdecl sub_648b40()
-{}
+void GridVec_s0064_7f40::ClearAssetViews()
+{
+    Entry14_s0064_7f40* first = mpBegin;
+    Entry14_s0064_7f40* last = mpEnd;
+    Entry14_s0064_7f40* moved = f646140_s0064_7f40(last, last, first);
+    reinterpret_cast<GridOps*>(this)->DestroyRange(moved, mpEnd);
+    mpEnd -= last - first;
+}
 
 // @ 0x00648af0
 Entry14* GridVec::EraseAt(Entry14* pos)
@@ -1536,8 +1761,20 @@ Entry14* GridVec::Insert(Entry14* pos, const Entry14& v)
 }
 
 // @ 0x00648bb0
-void __cdecl sub_648bb0()
-{}
+void GridVec_s0064_7f40::GrowTo(unsigned int n)
+{
+    if (n > (unsigned int)(mpEnd - mpBegin)) {
+        Entry14_s0064_7f40 value;
+        value.f00 = 0;
+        value.f04 = 0;
+        value.f08 = 0;
+        value.h0c.p = 0;
+        value.h10.p = 0;
+        DoInsertValuesEnd(mpEnd, n - (unsigned int)(mpEnd - mpBegin), value);
+    } else {
+        reinterpret_cast<GridOps*>(this)->Sift(mpBegin + n, mpEnd);
+    }
+}
 
 // @ 0x0064e5b0
 void Outer168::Do()
@@ -3540,89 +3777,320 @@ void AssetGrid::OnSelectCommit(void* item, void* filter)
     ((StopwatchHelper*)(s + 0x168))->Restart();
 }
 
-// @ 0x00655ed0
-void cSPUIAssetGrid_s0065_53b0::Update(int arg)
+// @ 0x006553b0
+void cSPUIAssetGrid_s0065_53b0::RefreshAssetStates()
 {
-    if (!m10c) {
-        if (mLoadingFeed) {
-            m10c = true;
-            GetAppSystem()->SetFlag(1);
-        }
-    } else if (!mLoadingFeed) {
-        m10c = false;
-        GetAppSystem()->SetFlag(0);
+    mNeedsRefresh = false;
+    if (mpFc) {
+        if (mpFc->mpView)
+            mpFc->mpView->Destroy();
+        mpFc = 0;
     }
-    if (m1e5) {
-        int t = 2000;
-        if (GetAssetBrowser() && GetAssetBrowser()->mpTool)
-            t = GetTutorialToolPrice(GetAssetBrowser()->mpTool, 0x1df98401, 2000);
-        if ((unsigned long long)(long long)t < mTimerB.GetElapsedTime()) {
-            FUN_654f50(mpFeed, mpViewState);
-            mTimerB.Restart();
-        }
-    }
-    if (mLoadingFeed && mpFeed) {
-        KeyVec keys;
-        keys.mpBegin = 0;
-        keys.mpEnd = 0;
-        keys.mpCapacity = 0;
-        if (!mpFeed->FUN_642910()) {
-            FeedListItem* f = mpFeed;
-            int n = f->FUN_643060();
-            n += f->FUN_642900();
-            keys.reserve(n);
-            mpFeed->FUN_644040(&keys);
-        }
-        AddEntries(&keys);
-        if (mLoadingFeed) {
-            FeedListItem* f = mpFeed;
-            int n = f->FUN_643060();
-            n += f->FUN_642900();
-            int done = mpFeed->mTotal;
-            FUN_64e880(true, (unsigned)(done * 100) / (unsigned)(done + n));
-        } else {
-            if (mWinFeedFilter.mpObject)
-                mWinFeedFilter.mpObject->SetVisible(true, false);
-            if (mWinFeedHeader.mpObject)
-                mWinFeedHeader.mpObject->SetVisible(true, true);
-        }
-        if (keys.mpBegin && ((int*)keys.mpBegin)[-1] != 0)
-            EASTL_allocator_deallocate(keys.mpBegin);
-    } else {
-        if (mWinFeedFilter.mpObject)
-            mWinFeedFilter.mpObject->SetVisible(true, false);
-        if (mWinFeedHeader.mpObject)
-            mWinFeedHeader.mpObject->SetVisible(true, true);
-    }
-    if (!mLoadingFeed) {
-        if (mNeedsRefresh)
-            RefreshAssetStates();
-        if (m1e8)
-            FUN_654d00();
-        int t = 0x4b;
-        if (GetAssetBrowser() && GetAssetBrowser()->mpTool)
-            t = GetTutorialToolPrice(GetAssetBrowser()->mpTool, 0xb6c69eb8, 0x4b);
-        if ((unsigned long long)(long long)t < mTimerA.GetElapsedTime() && m198 != 0
-            && fabsf(m180 - m184) <= (float)mpScrollFrame->mScrollbar->GetMin()
-            && FUN_64fde0(&m198))
-            mTimerA.Restart();
+    m100 = false;
+    mNumTotal = 0;
+    mNumShown = 0;
+    mNumEnabled = 0;
+    if (mFeedFilter && mSearchBox) {
         int count = (int)(mGridEntries.mpEnd - mGridEntries.mpBegin);
         for (int i = 0; i < count; ++i) {
             GridEntry_s0065_53b0* e = mGridEntries.mpBegin + i;
-            AssetView_s0065_53b0* v = e->mView.mpObject;
-            if (v && v->mSelectable) {
-                Vec2 pos(e->mX, e->mY);
-                mGridEntries.mpBegin[i].mView.mpObject->SetPos(pos, true);
-                AssetView_s0065_53b0* v2 = mGridEntries.mpBegin[i].mView.mpObject;
-                v2->OnUpdate(arg, FUN_64e7d0(i));
+            if (e->mData.mpObject && e->mView.mpObject) {
+                bool notFiltered = !mFeedFilter->Check(e->mData.mpObject, 1);
+                bool tryMatch;
+                if (mFeedFilter->mF14 == mFeedFilter->mF18)
+                    tryMatch = notFiltered;
+                else
+                    tryMatch = notFiltered && !mFeedFilter->Check(mGridEntries.mpBegin[i].mData.mpObject, 0);
+                bool enabled = tryMatch && mSearchBox->Match(mGridEntries.mpBegin[i].mData.mpObject);
+                if (m1bb && !mGridEntries.mpBegin[i].mData.mpObject->PassesFilterA()) {
+                    enabled = false;
+                    notFiltered = false;
+                }
+                if (m1b9 && !mGridEntries.mpBegin[i].mData.mpObject->PassesFilterB()) {
+                    enabled = false;
+                    notFiltered = false;
+                }
+                if (m1ba && !mGridEntries.mpBegin[i].mData.mpObject->PassesFilterC()) {
+                    enabled = false;
+                    notFiltered = false;
+                }
+                if (mGridEntries.mpBegin[i].mData.mpObject->IsHidden()) {
+                    notFiltered = false;
+                    enabled = false;
+                }
+                mNumTotal++;
+                if (notFiltered)
+                    mNumShown++;
+                if (enabled)
+                    mNumEnabled++;
+                bool enabledArg = enabled;
+                mGridEntries.mpBegin[i].mView.mpObject->SetEnabled(enabledArg);
+                if (!enabled) {
+                    AssetContainer* cont = GetAssetBrowser()->GetContainer();
+                    AssetContainer::IterPair r;
+                    cont->FindEntry(&r, mGridEntries.mpBegin + i);
+                    void* it = r.first;
+                    if (it == r.second)
+                        it = cont->mpEnd;
+                    if (it != cont->mpEnd) {
+                        void* mem = EASTL_allocator_allocate(0x1c, g_assetViewName, 0, 0, 0, 0);
+                        IMsg* msg;
+                        if (mem) {
+                            msg = AssetMsg_ctor(mem, 0, mGridEntries.mpBegin[i].mView.mpObject, 0, 0, 1, 0);
+                            if (msg)
+                                msg->AddRef();
+                        } else
+                            msg = 0;
+                        GetMessageServer()->PostMessage(0x94174b89, msg);
+                        if (msg)
+                            msg->Release();
+                    }
+                }
             }
         }
-        if (mFeedFilter)
-            mFeedFilter->FUN_10829f0(arg);
-        if (mSearchBox)
-            mSearchBox->Update(arg);
-        UpdateScrolling(arg);
     }
+    UpdateAll();
+    FUN_654d00();
+    UpdateStatsText();
+    UpdateScrollRegion();
+    int shown = mNumShown;
+    int enabledCount = mNumEnabled;
+    IWindow_s0065_53b0* w;
+    bool flag;
+    if (shown == enabledCount) {
+        w = mWinMessagePrimary.mpObject;
+        if (!w)
+            goto done;
+        flag = false;
+    } else {
+        int idx = enabledCount;
+        if (mpViewState == 0) {
+            if (m1b8)
+                idx = enabledCount + 1;
+        } else if (m1b8 && mpViewState->f16) {
+            idx = enabledCount + 1;
+        }
+        if (idx >= (int)(mGridEntries.mpEnd - mGridEntries.mpBegin)
+            || !mGridEntries.mpBegin[idx].mHasData
+            || !mWinMessagePrimary.mpObject)
+            goto done;
+        if (mWinMessageSecondary.mpObject) {
+            g_pStats->mFilteredOut = shown - enabledCount;
+            cString_s0065_53b0 s;
+            s.Load(0x21671745, 0x30007, L"*Filtered out items*");
+            IWindow_s0065_53b0* w2 = mWinMessageSecondary.mpObject;
+            w2->SetText(s.GetText());
+        }
+        int price = 5;
+        if (GetAssetBrowser() && GetAssetBrowser()->mpTool)
+            price = GetTutorialToolPrice(GetAssetBrowser()->mpTool, 0x86cf5fc5, 5);
+        GridEntry_s0065_53b0* e = mGridEntries.mpBegin + idx;
+        mWinMessagePrimary.mpObject->SetPos(e->mX + (float)price, e->mY + (float)price);
+        mWinMessagePrimary.mpObject->SetSize(mCardWidth - (float)(price * 2), mCardHeight - (float)(price * 2));
+        w = mWinMessagePrimary.mpObject;
+        flag = true;
+    }
+    w->SetVisible(true, flag);
+done:
+    if (mNeedsFocus) {
+        int first = FindFirstVisibleEntry();
+        if (first >= 0) {
+            AssetView_s0065_53b0* v = mGridEntries.mpBegin[first].mView.mpObject;
+            if (v) {
+                v->AddRef();
+                FUN_654e20(v);
+                v->Release();
+            }
+        }
+        mNeedsFocus = false;
+    }
+}
+
+// @ 0x00655840
+bool cSPUIAssetGrid_s0065_53b0::SelectKey(const Key* key, bool a, bool b, const Rect_s0065_53b0* rc)
+{
+    Rect_s0065_53b0 zero;
+    if (key->a == 0 && key->b == 0 && key->c == 0)
+        return false;
+    if (mLoadingFeed) {
+        if (a) {
+            if (!mpFeed)
+                goto lookup;
+            KeyIter it;
+            KeyMap* m = &mpFeed->mMap;
+            KeyIter endIt;
+            endIt.mpNode = (char*)m + 4;
+            if (!(*m->find(&it, key) == endIt))
+                goto lookup;
+        }
+        if (mpFeed && mpFeed->FUN_6442e0(key)) {
+            mPendingKey = *key;
+            mPendingA = a;
+            mPendingB = b;
+            if (!rc) {
+                zero.l = 0.0f;
+                zero.t = 0.0f;
+                zero.r = 0.0f;
+                zero.b = 0.0f;
+                rc = &zero;
+            }
+            mPendingL = rc->l;
+            mPendingT = rc->t;
+            mPendingR = rc->r;
+            mPendingB2 = rc->b;
+            return true;
+        }
+    }
+lookup:
+    AssetData* data = 0;
+    AssetView_s0065_53b0* view = 0;
+    int count = (int)(mGridEntries.mpEnd - mGridEntries.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        AssetData* d = mGridEntries.mpBegin[i].mData.mpObject;
+        if (d) {
+            const Key* k = d->GetKey();
+            if (k->a == key->a && k->b == key->b && k->c == key->c)
+                goto found;
+        }
+        {
+            const GridEntry_s0065_53b0* e = mGridEntries.mpBegin + i;
+            if (e->mKey.a == key->a && e->mKey.b == key->b && e->mKey.c == key->c)
+                goto found;
+        }
+        continue;
+    found:
+        d = mGridEntries.mpBegin[i].mData.mpObject;
+        if (d) {
+            d->AddRef();
+            data = d;
+        }
+        AssetView_s0065_53b0* v = mGridEntries.mpBegin[i].mView.mpObject;
+        if (v) {
+            v->AddRef();
+            view = v;
+        }
+        break;
+    }
+    if (mSearchBox && !mSearchBox->Match(data))
+        mSearchBox->FUN_6720e0();
+    if (mFeedFilter && mFeedFilter->Check(data, 0) && !mFeedFilter->Check(data, 1)) {
+        int f = mFeedFilter->mF14;
+        mFeedFilter->FUN_662750(f, f, 0);
+    }
+    if (mNeedsRefresh)
+        RefreshAssetStates();
+    if (view) {
+        if (view->mSelectable) {
+            view->SelectAsset((int)a, b, rc, 0, 0);
+            view->Release();
+            if (data)
+                data->Release();
+            return true;
+        }
+        view->Release();
+    }
+    if (data)
+        data->Release();
+    return false;
+}
+
+// @ 0x00655b00
+void cSPUIAssetGrid_s0065_53b0::AddEntries(KeyVec* keys)
+{
+    if (mpFc) {
+        if (mpFc->mpView)
+            mpFc->mpView->Destroy();
+        mpFc = 0;
+    }
+    m100 = false;
+    if (mWinFeedHeader.mpObject && mpFeed) {
+        int existing = (int)(mGridEntries.mpEnd - mGridEntries.mpBegin);
+        mGridEntries.reserve(existing + (int)(keys->mpEnd - keys->mpBegin));
+        int n = (int)(keys->mpEnd - keys->mpBegin);
+        for (int i = 0; i < n; ++i) {
+            Key* key = keys->mpBegin + i;
+            KeyIter it;
+            if (mpFeed->mMap.find(&it, key)->mpNode == (char*)&mpFeed->mMap + 4)
+                goto next;
+            {
+                AssetData* data = *(AssetData**)((char*)it.mpNode + 0x1c);
+                if (data->IsReady()) {
+                    AssetView_s0065_53b0* view = GetAssetBrowser()->GetViewFor(data);
+                    if (view)
+                        view->AddRef();
+                    GridEntry_s0065_53b0 tmp(key, data, view, false, false);
+                    view->Attach(mWinFeedHeader.mpObject, data, 0, 1);
+                    mGridEntries.push_back(tmp);
+                    view->Release();
+                } else {
+                    mNumPending++;
+                }
+                Key* cur = &mPendingKey;
+                if (cur->a != 0 || cur->b != 0 || cur->c != 0) {
+                    bool match = (cur->a == key->a && cur->b == key->b && cur->c == key->c);
+                    if (!match) {
+                        const Key* dk = data->GetKey();
+                        if (!(cur->a == dk->a && cur->b == dk->b && cur->c == dk->c))
+                            goto next;
+                    }
+                    bool pa = mPendingA;
+                    if (pa) {
+                        const Rect_s0065_53b0* rc = (const Rect_s0065_53b0*)&mPendingL;
+                        if (mPendingL == mPendingR || mPendingT == mPendingB2)
+                            rc = 0;
+                        SelectKey(cur, pa, mPendingB, rc);
+                        cur->a = 0;
+                        cur->b = 0;
+                        cur->c = 0;
+                    }
+                }
+            }
+        next:;
+        }
+    }
+    if (!mpFeed->FUN_642910())
+        return;
+    mLoadingFeed = false;
+    FeedListItem* feed = mpFeed;
+    if (feed) {
+        mpFeed = 0;
+        ((IRefCount*)feed)->Release();
+    }
+    mNeedsRefresh = true;
+    mNeedsFocus = true;
+    UpdateScrolling(0);
+    FUN_650470();
+    m194 = 1;
+    mTimerA.Start();
+    mGridEntries.FUN_654490(-1);
+    Key* cur = &mPendingKey;
+    if (cur->a == 0 && cur->b == 0 && cur->c == 0) {
+        AssetView_s0065_53b0* v = GetAssetBrowser()->GetDefaultView();
+        if (v) {
+            v->AddRef();
+            FUN_654e20(v);
+            v->Release();
+        }
+    } else {
+        const Rect_s0065_53b0* rc = (const Rect_s0065_53b0*)&mPendingL;
+        if (mPendingL == mPendingR || mPendingT == mPendingB2)
+            rc = 0;
+        SelectKey(cur, mPendingA, mPendingB, rc);
+        cur->a = 0;
+        cur->b = 0;
+        cur->c = 0;
+    }
+}
+
+// @ 0x00656240
+void* FUN_00656240(void* first, void* last, IntKeyVec keys)
+{
+    void* pos = FUN_006536e0(first, last, IntKeyVec(keys.mpBegin, keys.mpEnd, last));
+    if (pos != last)
+        pos = FUN_00653780((char*)pos + 0x10, last, pos, IntKeyVec(keys.mpBegin, keys.mpEnd, last));
+    if (keys.mpBegin && keys.mpBegin != keys.mAllocBuf)
+        EASTL_allocator_deallocate(keys.mpBegin);
+    return pos;
 }
 
 // @ 0x00656310

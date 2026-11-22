@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPNest.cpp -- migrated from slice(s) s0134d380, s00c6b660, s00c6e710, s00c6c630, s00c6a550, s00c69300 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPNest.cpp -- migrated from slice(s) s01347830, s00c6a4d0, s00c6a430, s00c6a270, s00c69be0, s00c69a70, s00c69a00, s00c699a0, s0134d380, s00c6b660, s00c6e710, s00c6c630, s00c6a550, s00c69300 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPNest.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,10 @@ extern "C" void _ReadWriteBarrier(void);
 #include "SP/cEgg.h"
 #include "SP/cVarListSerializer.h"
 #include <math.h>
+#include "SP/cSpatialObject.h"
+#include "SP/cInteractionTarget.h"
+#include "SP/cCombatant.h"
+#include "SP/cGonzagoTimer.h"
 
 // ---- items of slice s00c69300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char u8;
@@ -401,6 +405,15 @@ extern "C" char  __cdecl FUN_00ac8050(void* ser, int nameChar, void* elem);   //
 extern "C" char  __cdecl FUN_00ae5530(void* ser, int nameChar, void* elem, const wchar_t* cls); // 0x00ae5530 write list<Key>
 extern u8    gUnknownFlag;  // 0x015d8b55
 namespace SP {
+class RefObj_s00c6_b660
+{
+  public:
+    virtual void AddRef();              // +0x00
+    virtual void Release();             // +0x04
+    virtual bool IsValid();             // +0x2c
+};
+}
+namespace SP {
 class ISpatial_s00c6_b660
 {
   public:
@@ -465,7 +478,7 @@ class cHerd_s00c6_b660
     float mDamageMultiplier;             // 0x158
     unsigned char pad15c[0x160 - 0x15c];
     void* mpNest;                        // 0x160
-    RefObj* mpHerdMom;                   // 0x164
+    RefObj_s00c6_b660* mpHerdMom;                   // 0x164
     unsigned char pad168[0x190 - 0x168];
     u8    mbExtinction;                  // 0x190
     u8    mbBestFriends;                 // 0x191
@@ -765,6 +778,415 @@ AttrStorage cHerd_sAttributes[43];   // 0x01577bc8
 }
 // ---- items of slice s0134d380 end
 
+// ---- items of slice s00c699a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Component_s00c6_99a0 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+    virtual bool IsBlocked();  // slot 0x58
+};
+struct Object_s00c6_99a0 {
+    char pad000[0xc0];
+    Component_s00c6_99a0 mComponent;  // +0xc0
+    char pad0c4[0xb20 - 0xc4];
+    int mOwnerId;                     // +0xb20
+
+    bool IsActive();  // 0x00c0b770
+};
+struct Target_s00c6_99a0 {
+    char pad00[0xa4];
+    int mOwnerId;  // +0xa4
+};
+struct Manager_s00c6_99a0 {
+    Object_s00c6_99a0* GetCurrent();  // 0x00a1ad10
+};
+int IsRegistered_s00c6_99a0(Object_s00c6_99a0* obj);  // 0x00d99500
+Manager_s00c6_99a0* GetManager_s00c6_99a0();          // 0x00d51660
+// ---- items of slice s00c699a0 end
+
+// ---- items of slice s00c69a00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Base00_s00c6_9a00 {
+    char pad00[0x34];
+    void* Cast(unsigned int type);  // 0x00b18460
+};
+struct Base34_s00c6_9a00 {
+    char pad00[0x108 - 0x34];
+    void* Cast(unsigned int type);  // 0x00c884f0
+};
+struct Base108_s00c6_9a00 {
+    char pad00[0x120 - 0x108];
+};
+struct Base120_s00c6_9a00 {
+    char pad00[4];
+    void* Cast(unsigned int type);  // 0x00bfc380
+};
+struct Object_s00c6_9a00 : Base00_s00c6_9a00, Base34_s00c6_9a00, Base108_s00c6_9a00, Base120_s00c6_9a00 {
+    void* Cast(unsigned int type);
+};
+// ---- items of slice s00c69a00 end
+
+// ---- items of slice s00c6a270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRefObj_s00c6_a270 {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct RefPtr_s00c6_a270 {
+    IRefObj_s00c6_a270* mp;
+
+    RefPtr_s00c6_a270() : mp(0) {}
+};
+struct Member1f8_s00c6_a270 {
+    char pad00[0x20];
+    Member1f8_s00c6_a270();  // 0x00b63890
+};
+struct Base00a_s00c6_a270 { virtual void v00(); };
+struct Base00b_s00c6_a270 { virtual void v00(); };
+struct Base00_s00c6_a270 : Base00a_s00c6_a270, Base00b_s00c6_a270 {
+    char pad08[0x34 - 8];
+    Base00_s00c6_a270();  // 0x00b18660
+};
+struct ResourceKey_s00c6_a270 {
+    unsigned int mInstanceID;
+    unsigned int mTypeID;
+    unsigned int mGroupID;
+
+    ResourceKey_s00c6_a270(unsigned int instance, unsigned int type, unsigned int group)
+        : mInstanceID(instance), mTypeID(type), mGroupID(group) {}
+};
+struct Base34_s00c6_a270 {
+    virtual void v00();
+    char pad38[0x88 - 0x38];
+    int m88;               // +0x88
+    char pad8c[0xa5 - 0x8c];
+    bool ma5;              // +0xa5
+    char pada6[0xc4 - 0xa6];
+    ResourceKey_s00c6_a270 mKey;  // +0xc4
+    char padd0[0x108 - 0xd0];
+    Base34_s00c6_a270();  // 0x00c89630 (leaves mKey to the derived class)
+};
+struct Base108_s00c6_a270 {
+    virtual void v00();
+    char pad04[0x120 - 0x10c];
+    Base108_s00c6_a270();  // 0x00ac03d0
+};
+struct Base120_s00c6_a270 {
+    virtual void v00();
+    char pad04[0x1e8 - 0x124];
+    Base120_s00c6_a270();  // 0x00bfd4e0
+};
+struct Object_s00c6_a270 : Base00_s00c6_a270, Base34_s00c6_a270, Base108_s00c6_a270, Base120_s00c6_a270 {
+    int m1e8;                       // +0x1e8
+    bool m1ec;                      // +0x1ec
+    int m1f0;                       // +0x1f0
+    RefPtr_s00c6_a270 mpRef1f4;     // +0x1f4
+    Member1f8_s00c6_a270 m1f8;      // +0x1f8
+    RefPtr_s00c6_a270 mpRef218;     // +0x218
+    RefPtr_s00c6_a270 mpRef21c;     // +0x21c
+    float m220;                     // +0x220
+
+    virtual void v00();
+    Object_s00c6_a270();
+};
+// ---- items of slice s00c6a270 end
+
+// ---- items of slice s00c6a430 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRefObj_s00c6_a430 {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct RefPtr_s00c6_a430 {
+    IRefObj_s00c6_a430* mp;
+
+    ~RefPtr_s00c6_a430() { if (mp) mp->Release(); }
+};
+struct Member1f8_s00c6_a430 {
+    char pad00[0x20];
+    ~Member1f8_s00c6_a430();  // 0x00b638b0
+};
+struct Base00a_s00c6_a430 { virtual void v00(); };
+struct Base00b_s00c6_a430 { virtual void v00(); };
+struct Base00_s00c6_a430 : Base00a_s00c6_a430, Base00b_s00c6_a430 {
+    char pad08[0x34 - 8];
+    ~Base00_s00c6_a430();  // 0x00b184c0
+};
+struct Base34_s00c6_a430 {
+    virtual void v00();
+    char pad04[0x108 - 0x38];
+    ~Base34_s00c6_a430();  // 0x00c8a420
+};
+struct Base108_s00c6_a430 {
+    virtual void v00();
+    char pad04[0x120 - 0x10c];
+    ~Base108_s00c6_a430();  // 0x00ac0520
+};
+struct Base120_s00c6_a430 {
+    virtual void v00();
+    char pad04[0x1f4 - 0x124];
+    ~Base120_s00c6_a430();  // 0x00bfcd00
+};
+struct Object_s00c6_a430 : Base00_s00c6_a430, Base34_s00c6_a430, Base108_s00c6_a430, Base120_s00c6_a430 {
+    RefPtr_s00c6_a430 mpRef1f4;     // +0x1f4
+    Member1f8_s00c6_a430 m1f8;      // +0x1f8
+    RefPtr_s00c6_a430 mpRef218;     // +0x218
+    RefPtr_s00c6_a430 mpRef21c;     // +0x21c
+
+    virtual void v00();
+    ~Object_s00c6_a430();
+};
+// ---- items of slice s00c6a430 end
+
+// ---- items of slice s00c6a4d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class RefObj_c6a4d0
+{
+  public:
+    virtual void AddRef();   // +0x00
+    virtual void Release();  // +0x04
+};
+class SpatialObject_c6a4d0
+{
+  public:
+    void Clear();            // 0x00c8b2e0
+
+  private:
+    unsigned char mBytes[0xd4];
+};
+class InteractionTarget_c6a4d0
+{
+  public:
+    void Clear();            // 0x00ac0450
+
+  private:
+    unsigned char mBytes[0x18];
+};
+class Combatant_c6a4d0
+{
+  public:
+    void ReleaseSlots();     // 0x00bfc720
+
+  private:
+    unsigned char mBytes[0xc8];
+};
+class Egg_c6a4d0
+{
+  public:
+    void Shutdown();
+
+  private:
+    unsigned char beforeRef2c[0x2c];
+    RefObj_c6a4d0* mpRef2c;                              // +0x2c
+    unsigned char afterRef2c[0x34 - 0x30];               // cGameData retail size 0x34
+    SpatialObject_c6a4d0 mSpatialObject;                 // +0x34
+    InteractionTarget_c6a4d0 mInteractionTarget;         // +0x108
+    Combatant_c6a4d0 mCombatant;                         // +0x120
+    unsigned char beforeHerd[0x1f4 - 0x120 - 0xc8];
+    RefObj_c6a4d0* mpHerd;                               // +0x1f4
+    unsigned char beforeToHatch[0x218 - 0x1f8];
+    RefObj_c6a4d0* mpToHatch;                            // +0x218
+    RefObj_c6a4d0* mpWhoIsInteractingWithMe;             // +0x21c
+};
+// ---- items of slice s00c6a4d0 end
+
+// ---- items of slice s01347830 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0134_7830; 
+}
+typedef eastl::string8_s0134_7830 string8_s0134_7830;
+namespace Simulator {
+struct Attribute_s0134_7830;
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t_s0134_7830)(const string8_s0134_7830&, void*);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t_s0134_7830)(Attribute_s0134_7830*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t_s0134_7830)(Attribute_s0134_7830*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute_s0134_7830* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+void* StaticOffset(Attribute_s0134_7830* pAttr);    // 0x011874d0: (void*)pAttr->offset (class statics)
+}
+namespace Simulator {
+struct Attribute_s0134_7830
+{
+    // Member attribute: offset is relative to the current object.
+    Attribute_s0134_7830(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t_s0134_7830 pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t_s0134_7830 pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Static attribute: the offset field holds the static's address; no ToXml callback.
+    Attribute_s0134_7830(const char* pName, uint32_t nID, void* pStatic,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t_s0134_7830 pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = 0;
+        offsetFunction = StaticOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = 0;
+        offset = (uint32_t)pStatic;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t_s0134_7830 setDefaultFunction;
+    /* 20h */ OffsetFunction_t_s0134_7830 offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t_s0134_7830 readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+template<typename T> bool Read4(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+template<typename T> bool Write4(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+template<typename T> void ReadTextInt(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+template<typename T> bool AlwaysValid();
+}
+namespace Simulator {
+bool Read_00ac8750_s0134_7830(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac8780_s0134_7830(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac88f0_s0134_7830(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+void ReadText_00692ff0_s0134_7830(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void ReadText_006930b0_s0134_7830(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void WriteText_00694ee0_s0134_7830(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694fa0_s0134_7830(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694fc0_s0134_7830(char* pBuffer, void* pData);
+}
+namespace Simulator {
+bool ToXml_0057cde0_s0134_7830(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_0057ce00_s0134_7830(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00acbb80_s0134_7830(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+struct AttrSlot { uint32_t d[15]; };
+}
+namespace Simulator {
+#define INT_ATTR   Read4<int>, Write4<int>, ReadText_00692ff0_s0134_7830, WriteText_00694ee0_s0134_7830, AlwaysValid<int>, ToXml_0057cde0_s0134_7830
+}
+namespace Simulator {
+#define FLOAT_ATTR Read4<float>, Write_00ac88f0_s0134_7830, ReadText_006930b0_s0134_7830, WriteText_00694fc0_s0134_7830, AlwaysValid<float>, ToXml_00acbb80_s0134_7830
+}
+namespace Simulator {
+#define BOOL_ATTR  Read_00ac8750_s0134_7830, Write_00ac8780_s0134_7830, ReadTextInt<bool>, WriteText_00694fa0_s0134_7830, AlwaysValid<bool>, ToXml_0057ce00_s0134_7830
+}
+namespace Simulator {
+bool Read_00b20540(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00b02540(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+extern AttrSlot cEgg_sAttributes[6];         // 0x015778f0
+}
+namespace Simulator {
+#define ADD_EGG(IDX, ...)   { Attribute_s0134_7830 a(__VA_ARGS__); *(Attribute_s0134_7830*)&cEgg_sAttributes[IDX] = a; }
+}
+// ---- items of slice s01347830 end
+
+// @ 0x00c699a0
+int CanTarget_s00c6_99a0(Object_s00c6_99a0* obj, Target_s00c6_99a0* target)
+{
+    if (IsRegistered_s00c6_99a0(obj) && obj->IsActive() && !obj->mComponent.IsBlocked() &&
+        obj->mOwnerId == target->mOwnerId && GetManager_s00c6_99a0()->GetCurrent() != obj)
+        return 1;
+    return 0;
+}
+
+// @ 0x00c69a00
+void* Object_s00c6_9a00::Cast(unsigned int type)
+{
+    if (type == 0xee3f516e || type == 0x02a0349a)
+        return this;
+    if (type != 0x102a041a) {
+        if (void* p = Base00_s00c6_9a00::Cast(type))
+            return p;
+        if (void* p = Base120_s00c6_9a00::Cast(type))
+            return p;
+        return Base34_s00c6_9a00::Cast(type);
+    }
+    return static_cast<Base108_s00c6_9a00*>(this);
+}
+
 // @ 0x00c69bc0
 u32 __stdcall SP_CreatePlanetAndSnap(u32 a, u32 b)
 {
@@ -811,6 +1233,44 @@ bool cHerd::ShouldActivate()
         return false;
     }
     return true;
+}
+
+// @ 0x00c6a270
+Object_s00c6_a270::Object_s00c6_a270()
+: m1e8(0), m1ec(true), m1f0(10000), m220(1.0f)
+{
+    m88 = 5;
+    mKey = ResourceKey_s00c6_a270(0xa76cd528, 0, 0);
+    ma5 = false;
+}
+
+// @ 0x00c6a430
+Object_s00c6_a430::~Object_s00c6_a430()
+{
+}
+
+// @ 0x00c6a4d0
+void Egg_c6a4d0::Shutdown()
+{
+    if (RefObj_c6a4d0* p = mpHerd) {
+        mpHerd = 0;
+        p->Release();
+    }
+    if (RefObj_c6a4d0* p = mpToHatch) {
+        mpToHatch = 0;
+        p->Release();
+    }
+    if (RefObj_c6a4d0* p = mpWhoIsInteractingWithMe) {
+        mpWhoIsInteractingWithMe = 0;
+        p->Release();
+    }
+    if (RefObj_c6a4d0* p = mpRef2c) {
+        mpRef2c = 0;
+        p->Release();
+    }
+    mSpatialObject.Clear();
+    mCombatant.ReleaseSlots();
+    mInteractionTarget.Clear();
 }
 
 // @ 0x00c6a550
@@ -1472,7 +1932,7 @@ u8 __cdecl FUN_00c6bf20(void** serializer, int name, const void* vec2, int elem)
             FUN_0093c5a0(&B, name, -1);
         }
         WStr C;
-        ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &B);
+        FUN_0056e2d0(&C, &B);
         if (noName && ((char*)B.cap - (char*)B.begin & ~1) > 2 && B.begin)
             FUN_00f47380(B.begin);
         if (!noName && ((char*)B.cap - (char*)B.begin & ~1) > 2 && B.begin)
@@ -1526,12 +1986,12 @@ u8 __cdecl FUN_00c6c390(void** serializer, int name, void** list)
     WStr N;
     if (noName) {
         N.begin = 0; N.end = 0; N.cap = 0;
-        ((void(__thiscall*)(void*, int))FUN_00579a90)(&N, 0);
+        FUN_00579a90(&N, 0);
     } else {
         FUN_0093c5a0(&N, name, -1);
     }
     WStr C;
-    ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &N);
+    FUN_0056e2d0(&C, &N);
     if (noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
         FUN_00f47380(N.begin);
     if (!noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
@@ -1564,12 +2024,12 @@ u8 __cdecl FUN_00c6c4e0(void** serializer, int name, void** list)
     WStr N;
     if (noName) {
         N.begin = 0; N.end = 0; N.cap = 0;
-        ((void(__thiscall*)(void*, int))FUN_00579a90)(&N, 0);
+        FUN_00579a90(&N, 0);
     } else {
         FUN_0093c5a0(&N, name, -1);
     }
     WStr C;
-    ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &N);
+    FUN_0056e2d0(&C, &N);
     if (noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
         FUN_00f47380(N.begin);
     if (!noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
@@ -1940,6 +2400,19 @@ u8 __fastcall FUN_00c6e8f0(void* self, void* /*edx*/, void* def, void* keys, cha
   }
   return 1;
 }
+
+// @ 0x0134cf40
+namespace Simulator {
+void InitEggAttributes()
+{
+    ADD_EGG(0, "mState",       0x5268a36e, 0x1e8, Read4<int>, Write4<int>, ReadText_00692ff0_s0134_7830, WriteText_00694ee0_s0134_7830, AlwaysValid<int>, ToXml_0057cde0_s0134_7830)
+    ADD_EGG(1, "mpHerd",       0xd2afa598, 0x1f4, Read_00b20540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050)
+    ADD_EGG(2, "mTimeToHatch", 0xf301c18b, 0x1f0, Read4<int>, Write4<int>, ReadText_00692ff0_s0134_7830, WriteText_00694ee0_s0134_7830, AlwaysValid<int>, ToXml_0057cde0_s0134_7830)
+    ADD_EGG(3, "mBrokenTimer", 0xd301c1ab, 0x1f8, Read_00ae3470, Write_00ae3490, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00ae3310, ToXml_00ac8050)
+    ADD_EGG(4, "mpToHatch",    0x5301c42e, 0x218, Read_00b02540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050)
+    ADD_EGG(5, "mEffectScale", 0x7301c22a, 0x220, Read4<float>, Write_00ac88f0_s0134_7830, ReadText_006930b0_s0134_7830, WriteText_00694fc0_s0134_7830, AlwaysValid<float>, ToXml_00acbb80_s0134_7830)
+}
+}  // namespace Simulator
 
 // @ 0x0134d380
 namespace Simulator {

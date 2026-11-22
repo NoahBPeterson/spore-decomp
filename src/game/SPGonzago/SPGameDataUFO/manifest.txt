@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c36ee0@@YIEPAUUfo@@PAX1@Z  00c36ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c37040@@YI_NPAUUfo@@PAX@Z  00c37040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c370e0@@YI_NPAUUfo@@PAX@Z  00c370e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c37130@@YIXPAUUfo@@PAXE@Z  00c37130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c37230@@YIXPAUUfo@@PAXPAIPAE@Z  00c37230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -14,10 +16,13 @@
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c37a30@@YIXPAUUfo@@PAXH@Z  00c37a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c38b10@UFOThing@@QAEXXZ  00c38b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c38b90@UFOThing@@QAEXXZ  00c38b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?GetPos@OffsetHolder@@QAE?AUVec3@@XZ  00c38c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ??0PaintSystemExt@@QAE@XZ  00c38c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ??1PaintSystemExt@@UAE@XZ  00c38c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?ReadProps@cUFOKinestheticsTuning@@QAEXXZ  00c38d00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?HandleMessage@cUFOKinestheticsTuning_s00c3_a180@@QAEDHH@Z  00c3a180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?GetGalaxyWarpTime@cUFOKinestheticsTuning_s00c3_a180@@QAEMHMM@Z  00c3a1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?enableWeapon@@YAXHHPAPAUIRefObject_s00c3_a180@@@Z  00c3a220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?Initialize@cSPGameDataUFO_s00c3_a180@@QAEDXZ  00c3a9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?vtableSlot40Wrapper@cSPGameDataUFO_s00c3_a180@@QAEDH@Z  00c3aa10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?OnMessage@cSPGameDataUFO_s00c3_ae70@@QAE_NIH@Z  00c3b560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -30,8 +35,3 @@
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?func3e010@UFO@@QAEXPAX@Z  00c3e010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_0105d180@@YIPAXPAUcSummarizerD180@@@Z  0105d180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_0105d1d0@@YIPAXPAUcSummarizerD1D0@@@Z  0105d1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameDataUFO.cpp  ??1PaintSystemExt@@UAE@XZ  00c38c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c36ee0@@YIEPAUUfo@@PAX1@Z  00c36ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameDataUFO.cpp  ?GetPos@OffsetHolder@@QAE?AUVec3@@XZ  00c38c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c37040@@YI_NPAUUfo@@PAX@Z  00c37040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameDataUFO.cpp  ?enableWeapon@@YAXHHPAPAUIRefObject_s00c3_a180@@@Z  00c3a220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

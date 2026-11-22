@@ -20,6 +20,9 @@
 #include "EA/IO/IStream.h"
 #include "EA/IO/MemoryStream.h"
 #include "evp_cipher_ctx_st.h"
+#include "EA/Thread/Futex.h"
+#include "EA/Internet/HTTPHeaders.h"
+#include "eastl/allocator.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) unsigned int __stdcall GetDriveTypeA(const char* root);
@@ -307,19 +310,19 @@ class cSPVerbTrayCollection_s0060_5870 : public EA::COM::IUnknown32_s0060_5870, 
   typedef eastl::vector_s0060_5870<AutoRefCount_s0060_5870<cSPEditorVerbIconTray_s0060_5870> > TrayVector;
   typedef eastl::map_s0060_5870<AutoRefCount_s0060_5870<IWindow_s0060_5870>, TrayVector> TrayMap;
 
-  cSPVerbTrayCollection_s0060_5870();
-  ~cSPVerbTrayCollection_s0060_5870();
+  cSPVerbTrayCollection_s0060_5870();  // 0x00605e60 (SP::cSPVerbTrayCollection::cSPVerbTrayCollection_s0060_5870)
+  ~cSPVerbTrayCollection_s0060_5870();  // 0x00605e60 (SP::cSPVerbTrayCollection::cSPVerbTrayCollection_s0060_5870)
   PV(4) PV(5) PV(6) PV(7)
   virtual IWindow_s0060_5870* GetTrayWindow(uint32_t controlID);                          // +0x20
   virtual void InitTrays(ResourceKey propList, const ResourceKey* trayKeys, int trayCount);  // +0x24 0x00605f90
   virtual void Layout();                                                         // +0x28
 
-  void SetValue(void* value);
-  float GetTotalLevel();
-  IWindow_s0060_5870* FindWindow(uint32_t controlID);
-  void SetVerbIconList(void* list);
+  void SetValue(void* value);  // 0x00605870 (SP::cSPVerbTrayCollection::SetValue)
+  float GetTotalLevel();  // 0x006058b0 (SP::cSPVerbTrayCollection::GetTotalLevel)
+  IWindow_s0060_5870* FindWindow(uint32_t controlID);  // 0x00605900 (SP::cSPVerbTrayCollection::FindWindow)
+  void SetVerbIconList(void* list);  // 0x00605940 (SP::cSPVerbTrayCollection::SetVerbIconList)
   void Init(IWindow_s0060_5870* parent, ResourceKey propList, const ResourceKey* trayKeys, int trayCount, bool ignoreKeyPress);  // 0x00605980 (SP::cSPVerbTrayCollection::Init)
-  void ShutdownTrays();
+  void ShutdownTrays();  // 0x00605d10 (SP::cSPVerbTrayCollection::ShutdownTrays)
 
   TrayVector mVerbTrays;                  // +0xc
   AutoRefCount_s0060_5870<IWindow_s0060_5870> mWinParent;       // +0x20
@@ -334,12 +337,6 @@ class cSPVerbTrayCollection_s0060_5870 : public EA::COM::IUnknown32_s0060_5870, 
 template struct eastl::pair_s0060_5870<const AutoRefCount_s0060_5870<IWindow_s0060_5870>, SP::cSPVerbTrayCollection_s0060_5870::TrayVector>;
 template void SP::cSPVerbTrayCollection_s0060_5870::TrayMap::DoNukeSubtree(SP::cSPVerbTrayCollection_s0060_5870::TrayMap::node_type*);
 template SP::cSPVerbTrayCollection_s0060_5870::TrayVector& SP::cSPVerbTrayCollection_s0060_5870::TrayMap::operator[](const AutoRefCount_s0060_5870<IWindow_s0060_5870>&);
-extern "C" __declspec(dllimport) unsigned int __stdcall GetDriveTypeA(const char* root);
-extern "C" __declspec(dllimport) int __stdcall GetVolumeInformationA(const char* root, char* name, unsigned long nameSize,
-                                                                     unsigned long* serial, unsigned long* maxComponent,
-                                                                     unsigned long* flags, char* fsName, unsigned long fsNameSize);
-extern "C" __declspec(dllimport) int __stdcall GetDiskFreeSpaceExA(const char* dir, uint64_t* freeToCaller, uint64_t* total, uint64_t* totalFree);
-extern "C" __declspec(dllimport) unsigned long __stdcall GetLogicalDrives();
 extern "C" __declspec(dllimport) int __cdecl strncmp(const char* a, const char* b, size_t n);
 namespace EA {
 namespace ResourceMan {
@@ -407,13 +404,11 @@ inline size_t wstrlen(const wchar_t* p) {
   return (size_t)(e - p);
 }
 inline WStr& operator+=(WStr& s, const wchar_t* p) { return s.append(p, p + wstrlen(p)); }
-extern const wchar_t kSlash[];                                     // 0x13fa030  L"/"
 bool GetSpecialFolder(uint32_t folderID, WStr& path, int flags);   // 0x688830
 bool CreateFolder(const wchar_t* path);                            // 0x932ae0
 // ---- items of slice s00605870 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" __declspec(dllimport) int __cdecl strncmp(const char* a, const char* b, size_t n);
 
 // ---- items of slice s00609790 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" unsigned int __cdecl strlen(const char*);

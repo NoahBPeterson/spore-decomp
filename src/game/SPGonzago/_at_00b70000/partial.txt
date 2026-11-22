@@ -1,1 +1,1 @@
-# va  size (ours/orig)  reason
+# va  diff-bytes  reason

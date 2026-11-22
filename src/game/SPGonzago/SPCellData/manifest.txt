@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCellData.cpp  ?SP_LoadAdvectMap@@YAXPAX0@Z  00e4cc50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4cce0@@YAPAXH@Z  00e4cce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?SP_sIsLayerDataPacked@@YA_NXZ  00e4ccf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?CellDataShutdownForApp@SP@@YAXXZ  00e4cd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -8,6 +9,9 @@
 ../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4ce60@@YAXPAX@Z  00e4ce60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4ce80@cLightObj@@QAEPAXI@Z  00e4ce80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?PreloadAdvectMap@SP@@YAXH@Z  00e4ced0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?ReadResourceFromStream@cCellFactoryBinary@@QAEEPAX000@Z  00e4d000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?WriteResource@cCellFactoryBinary@@QAE_NPAX000@Z  00e4d0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?LayerLoaderInit@SP@@YAXXZ  00e4d840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2c40@@YAXXZ  01373c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1430@@YAXXZ  01373ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2f10@@YAXXZ  01374160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -38,7 +42,3 @@
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b24d4@@YAXXZ  0137b270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?E311_InitTilingTable@@YAXXZ  0137b550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?E315_InitEffectMapTable@@YAXXZ  0137b890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellData.cpp  ?WriteResource@cCellFactoryBinary@@QAE_NPAX000@Z  00e4d0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellData.cpp  ?LayerLoaderInit@SP@@YAXXZ  00e4d840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellData.cpp  ?SP_LoadAdvectMap@@YAXPAX0@Z  00e4cc50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellData.cpp  ?ReadResourceFromStream@cCellFactoryBinary@@QAEEPAX000@Z  00e4d000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

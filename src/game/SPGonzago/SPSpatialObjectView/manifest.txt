@@ -1,10 +1,21 @@
 # source  symbol  va  flags
-../src/game/SPGonzago/SPSpatialObjectView.cpp  ??1cSpatialObjectView@@QAE@XZ  00e92660  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?Sync@SpatialA@@QAEXH@Z  00c88550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?FindEntry@GameData@@QAEHH@Z  00c888e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?HasEffect@GameData@@QAE_NH@Z  00c88910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?F40@Effects@@QAEHH@Z  00c88940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?StartEffect@Effects@@QAEXHH@Z  00c88980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ??0ToolData@@QAE@ABU0@@Z  00c88ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ??4ToolData@@QAEAAU0@ABU0@@Z  00c88c30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?CreateEffect3@cSpatialObjectView_s00c8_aa60@@QAEXPAX00@Z  00c8b060  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?CreateEffect1@cSpatialObjectView_s00c8_aa60@@QAEXPAX@Z  00c8b080  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?sub_b2e0@cSpatialObjectView_s00c8_aa60@@QAEXXZ  00c8b2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObjectView.cpp  ?SetIsInWorld@cSpatialObjectView@@QAEX_N@Z  00e92620  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ??1cSpatialObjectView@@QAE@XZ  00e92660  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?SetModel_926d0@cSpatialObjectView@@QAEXPAX@Z  00e926d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObjectView.cpp  ?SetModel@cSpatialObjectView@@QAEPAXXZ  00e929b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObjectView.cpp  ?GetData@cSpatialObjectView@@QAEPAXXZ  00e929f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObjectView.cpp  ??0cSpatialObjectView@@QAE@XZ  00e92af0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSpatialObjectView.cpp  ??0cTribeToolView@@QAE@XZ  00e932a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSpatialObjectView.cpp  ?GetIsVisible@cSpatialObjectView@@QAEEXZ  00e92c80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpatialObjectView.cpp  ?GetIsInWorld@cSpatialObjectView@@QAEEXZ  00e92c60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSpatialObjectView.cpp  ?SetModel_926d0@cSpatialObjectView@@QAEXPAX@Z  00e926d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ?GetIsVisible@cSpatialObjectView@@QAEEXZ  00e92c80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ??0cTribeToolView@@QAE@XZ  00e932a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObjectView.cpp  ??1cTribeToolView@@QAE@XZ  00e932d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

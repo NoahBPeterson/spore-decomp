@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/_at_00900000.cpp -- migrated from slice(s) s00903400, s00902460, s009013e0, s008ff610 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/_at_00900000.cpp -- migrated from slice(s) s00903390, s00903400, s00902460, s009013e0, s008ff610 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/_at_00900000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -97,6 +97,14 @@ extern "C" size_t wcslen(const wchar_t*);
 // ---- items of slice s00903400 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uint;
 // ---- items of slice s00903400 end
+
+// ---- items of slice s00903390 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Obj_s0090_3390 {
+    char pad00[0x64];
+    int mField64;  // +0x64
+    int mField68;  // +0x68
+};
+// ---- items of slice s00903390 end
 
 // @ 0x00900310
 ResourceRequest::ResourceRequest(const uint16_t* url, ILogListener* el)
@@ -201,6 +209,13 @@ void FUN_00903370(char* p, int a, int b)
 {
     *(int*)(p + 0x54) = a;
     *(int*)(p + 0x58) = b;
+}
+
+// @ 0x00903390
+void FUN_00903390(Obj_s0090_3390* p, int a, int b)
+{
+    p->mField64 = a;
+    p->mField68 = b;
 }
 
 // @ 0x009033d0

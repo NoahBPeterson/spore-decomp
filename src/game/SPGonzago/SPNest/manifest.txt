@@ -1,27 +1,33 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPNest.cpp  ?CanTarget_s00c6_99a0@@YAHPAUObject_s00c6_99a0@@PAUTarget_s00c6_99a0@@@Z  00c699a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?Cast@Object_s00c6_9a00@@QAEPAXI@Z  00c69a00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SP_CreatePlanetAndSnap@@YGIII@Z  00c69bc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?Cast@cObject@@QAEPAXH@Z  00c69db0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SP_ObjectCheck@@YAHPAX@Z  00c69e30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SetTarget@cHerd@@QAEXPBUcVec3@@@Z  00c69ff0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?ShouldActivate@cHerd@@QAE_NXZ  00c6a030  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ??0Object_s00c6_a270@@QAE@XZ  00c6a270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ??1Object_s00c6_a430@@QAE@XZ  00c6a430  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?Shutdown@Egg_c6a4d0@@QAEXXZ  00c6a4d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?Write@cEgg_s00c6_a550@SP@@QAE_NPAVIOStream@2@@Z  00c6a550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SetState@cEgg_s00c6_a550@SP@@QAEXW4EggState@12@@Z  00c6a670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ??0cNest_s00c6_a550@SP@@QAE@XZ  00c6a870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ??1cNest_s00c6_a550@SP@@QAE@XZ  00c6a970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?RemoveOwner@cNest_s00c6_a550@SP@@QAEXXZ  00c6a9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6aa10@SP@@YIEPAX0@Z  00c6aa10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?GetProfileForGeneration@cHerd_s00c6_a550@SP@@QAEPAXI@Z  00c6abf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?GetPosition@cNearNoun@SP@@QAEPBUVec3@2@XZ  00c6acc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SetEnabled@cHerd_s00c6_a550@SP@@QAEXE@Z  00c6ace0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SetEnabled@cNearNoun@SP@@QAEXXZ  00c6ad30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6ad60@SP@@YIXPAX0@Z  00c6ad60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6ae30@SP@@YAXPAX@Z  00c6ae30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b350@SP@@YIXPAX0HHHHH@Z  00c6b350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?GetWateringHolePosition@cHerd_s00c6_b660@SP@@QAEPAUVec3@2@XZ  00c6bdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b410@@YI_NPAX0PAVcIModelWorld@SP@@@Z  00c6b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?AsInterface@cNest_s00c6_a550@SP@@QAEPAXH@Z  00c6b390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?FindWateringHole@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?Write@cEgg_s00c6_a550@SP@@QAE_NPAVIOStream@2@@Z  00c6a550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ??0cNest_s00c6_a550@SP@@QAE@XZ  00c6a870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ??1cNest_s00c6_a550@SP@@QAE@XZ  00c6a970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?GetProfileForGeneration@cHerd_s00c6_a550@SP@@QAEPAXI@Z  00c6abf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?SpawnAnimalsIfUnderfilled@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6bd60@@YIXPAX@Z  00c6bd60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6af40@SP@@YAHPAUAnimalNoun@1@PAX@Z  00c6af40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b350@SP@@YIXPAX0HHHHH@Z  00c6b350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?AsInterface@cNest_s00c6_a550@SP@@QAEPAXH@Z  00c6b390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b410@@YI_NPAX0PAVcIModelWorld@SP@@@Z  00c6b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?SpawnAnimalsIfUnderfilled@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?FindWateringHole@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6bd60@@YIXPAX@Z  00c6bd60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?GetWateringHolePosition@cHerd_s00c6_b660@SP@@QAEPAUVec3@2@XZ  00c6bdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6ce30@@YAXPAXPAUIntVec_s00c6_ce30@@@Z  00c6ce30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?InitEggAttributes@Simulator@@YAXXZ  0134cf40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

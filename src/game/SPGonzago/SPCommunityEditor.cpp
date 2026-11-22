@@ -2498,10 +2498,30 @@ public:
 SPCOMMUNITYEDITOR_FWD_VTBLOBJ;
 typedef void  (VtblObj::*PMF0)();
 typedef void  (VtblObj::*PMF1)(void*);
+// the rest of s00d124e0's VCall2/VCall3/VRet*/VBool1 helpers need them too (C2065 otherwise)
+typedef void  (VtblObj::*PMF2)(void*, void*);
+typedef void  (VtblObj::*PMF3)(void*, void*, void*);
+typedef void* (VtblObj::*PMR0)();
+typedef void* (VtblObj::*PMR1)(void*);
+typedef void* (VtblObj::*PMR2)(void*, void*);
+typedef u8    (VtblObj::*PMB1)(void*);
 
 // ---- items of slice s00d124e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma warning(disable: 4100 4189 4244 4311 4312)
 void  Free5(void* a, void* b, void* c, void* d, void* e);                    // 0x00571db0
+void  FreePair(void* a, void* b);                                            // 0x00571d40
+void* GlobalManagerA();                                                      // 0x0067ddd0
+void* GlobalManagerB();                                                      // 0x00b3d240
+void* GlobalManagerC();                                                      // 0x00b3d280
+void* GlobalManagerD();                                                      // 0x00b3d250
+void* GlobalManagerE();                                                      // 0x00b3d300
+u32   FUN_00b5b800();                                                        // 0x00b5b800
+void* PropertyServer();                                                      // 0x0067de30
+void  FUN_006a12a0(void* pSelf, u32 key, void* pArg);                        // 0x006a12a0
+void  FUN_0064aba0(void* p);                                                 // 0x0064aba0
+void* FUN_00422eb0(void* a, void* b);                                        // 0x00422eb0
+void  FUN_0093db80(void* a, void* b);                                        // 0x0093db80
+void* FUN_00804ed0(void* a, void* b);                                        // 0x00804ed0
 struct CalleeSet {
     void  FUN_00d11f80(void* a, int n, void* b);      // 0x00d11f80
     void  FUN_00d0c5b0(void* a);                      // 0x00d0c5b0
@@ -2544,6 +2564,15 @@ struct CalleeSet {
     void  FUN_00811ad0(void* a);                      // 0x00811ad0
 };
 #define SELF(o) ((CalleeSet*)(o))
+struct BaseView {
+    u8      mGap00[0xb4];
+    void*   mpB4;              // +0x0b4  (this-8 + 0xb4  == this + 0xac)
+};
+#define BASEB(o) ((BaseView*)((u8*)(o) - 8))
+struct SelObj { u8 mGap00[0x6e]; u8 mB6e; };          // selection object, flag at +0x6e
+struct Vec3_s00d1_24e0   { float x, y, z; };                        // 3-float vector
+struct MgrC   { u8 mGap00[0x390]; u8 mB390; };          // global manager C, flag at +0x390
+struct PropVal { u8 mGap00[0x10]; u8 mFlags; u8 mGap11; u16 mW12; };  // property value blob
 struct VtblObj {
     void  C0();
     void  C1(void*);
@@ -2556,6 +2585,10 @@ struct VtblObj {
 };
 inline void  VCall0(void* p, u32 o)                            { (((VtblObj*)p)->*(*(PMF0*)((u8*)*(void**)p + o)))(); }
 inline void  VCall1(void* p, u32 o, void* a)                   { (((VtblObj*)p)->*(*(PMF1*)((u8*)*(void**)p + o)))(a); }
+inline void  VCall2(void* p, u32 o, void* a, void* b)          { (((VtblObj*)p)->*(*(PMF2*)((u8*)*(void**)p + o)))(a, b); }
+inline void  VCall3(void* p, u32 o, void* a, void* b, void* c) { (((VtblObj*)p)->*(*(PMF3*)((u8*)*(void**)p + o)))(a, b, c); }
+inline void* VRet0(void* p, u32 o)                             { return (((VtblObj*)p)->*(*(PMR0*)((u8*)*(void**)p + o)))(); }
+inline void* VRet1(void* p, u32 o, void* a)                    { return (((VtblObj*)p)->*(*(PMR1*)((u8*)*(void**)p + o)))(a); }
 inline void RefRelease(void* p) { if (p) VCall0(p, 0x04); }
 struct Class12 {
     u8      mGap00[0x28];
@@ -3860,6 +3893,7 @@ struct LinkMap {                                                            // e
     Node* End() { return mpAnchorParent; }
     Node* Begin() { return mpAnchorLeft; }
 };
+void operator_delete__(void* p);                                            // 0x00f47380 (cdecl)
 struct IEditorObj {
     virtual void   s00();                                   // +0x00
     virtual void   s01();                                   // +0x04
@@ -3912,6 +3946,10 @@ virtual void s45();
     void ApplyViewport(void* pRect, void* pPoint);          // 0x007c4900 (thiscall)
     void DisbandUnit(char bFlag);                           // 0x00caa610 (thiscall)
 };
+struct ILinkAnchor : IEditorObj {                           // editor proxy with per-slot link flags
+    uint8_t mPad04[0x274 - 4];
+    bool    mLinkable[0x100];                               // +0x274
+};
 struct ICreatureProxy : IEditorObj {                        // proxy with the placed flag
     uint8_t mPad04[0x289 - 4];
     bool    mbPlaced;                                       // +0x289
@@ -3951,6 +3989,18 @@ virtual void s1();
 struct IPalette {
     int GetCurrentCategoryIndex();                          // 0x005ca9c0
 };
+struct ICircleSlot {                                        // cActionCircle slot
+    uint8_t mPad00[0x0c];
+    SVec3   mPosition;                                      // +0x0c
+    uint8_t mPad18[0x289 - 0x18];
+    bool    mbLinkable;                                     // +0x289
+    IEditorObj* GetObject();                                // 0x00fcc210
+};
+struct IActionCircle {
+    ICircleSlot* SlotAt(unsigned nIndex);                   // 0x00af9ff0
+};
+struct LinkPair { uint32_t a, b; uint8_t mPad08[0x50 - 8]; };
+struct LinkPairList { LinkPair* mpBegin; LinkPair* mpEnd; };
 struct PlacementTrail {
     SVec3* Add(IEditorObj** ppVehicle);                     // 0x00d0fee0
 };
@@ -3972,8 +4022,32 @@ float        DistancePointSegment(const SVec3* pA, const SVec3* pB,
 IEditorObj*  PlanetModel(const SVec3* pOut1, const SVec3* pOut2,
                          const SVec3* pIn);                 // 0x00b3d350
 void         BuildSurfaceOrientation(IEditorObj* pModel);   // 0x00b7f1f0
+IActionCircle* FUN_00bd7f40(ICreatureProxy* pCurrent);      // 0x00bd7f40
+LinkPairList*  FUN_00bd8230(ICreatureProxy* pCurrent);      // 0x00bd8230
+bool         FUN_00c3f540(ILinkAnchor* pAnchor);            // 0x00c3f540
+void         FUN_00d0d880(void* pArg, tBuildingLinkEffect* pValue);  // 0x00d0d880
 IEffectHost* GetAudioSystem();                              // 0x00a206f0 (EA::Audio::GetSystemAT)
 void         KillSetiEffects(uint32_t nID, void* pAudio);            // 0x00435ed0
+Node*        RBTreeIncrement(Node* pNode);                  // 0x00921580
+void         RBTreeErase(Node* pNode, Node* pHeader);       // 0x00921880
+static int LinkKind(IEditorObj* pObj1, IEditorObj* pObj2)
+{
+    uint32_t k1 = pObj1->GetKind();
+    uint32_t k2 = pObj2->GetKind();
+    if (k1 == 0x1007ae63u || k1 == 0x0ff10521u) {
+        if (k2 == 0x0ecade42u || k2 == 0x1007ae63u || k2 == 0x0ff10521u)
+            return 4;
+        return (k2 == 0x01a55e4du) ? 2 : 1;
+    }
+    if (k1 == 0x0ecade42u) {
+        if (k2 == 0x1007ae63u || k2 == 0x0ff10521u)
+            return 4;
+        return (k2 == 0x01a55e4du) ? 3 : 1;
+    }
+    if (k2 == 0x1007ae63u || k2 == 0x0ff10521u)
+        return 2;
+    return (k2 == 0x0ecade42u) ? 3 : 1;
+}
 struct cCommunityEditor_s00d1_1730 {
     uint8_t         mPad00[0x40];
     IEditorObj*     mpSelection;                            // +0x40
@@ -4207,6 +4281,7 @@ struct Host_s00d07ab0 {
     virtual void f30();
     virtual ToolMgr_s00d07ab0* GetToolMgr();  // +0x34
 };
+
 // @ 0x00d07ab0
 u8 C103::PickEventId(int unused)
 {
@@ -5271,6 +5346,7 @@ struct NounMgr_d0b0 {
   void  RemoveNoun(void* noun);   // 0x00b225d0
   void* CreateNoun(u32 id);       // 0x00b20c60
 };
+
 // @ 0x00d0b010
 void cCommunityEditor_s00d0_a160::SetRotationRingVisibility(u8 bShow)
 {
@@ -6964,6 +7040,495 @@ int cCommunityEditor_s00d1_1730::EndVehiclePlacement(int nArg0, int nArg1)
         mpSellBackRollover->Hide();
     UpdatePlacementOverlay();
     return 0;
+}
+
+// @ 0x00d11f80
+void cCommunityEditor_s00d1_1730::UpdateBuildingLinkEffects(LinkMap* map, int nMode, void* pArg)
+{
+    if (!mpSelection)
+        return;
+    ICreatureProxy* pCurrent = (ICreatureProxy*)mpSelection->GetObject(0xee9b2232);
+    if (!pCurrent)
+        return;
+
+    IActionCircle* pActionCircle = FUN_00bd7f40(pCurrent);
+
+    for (Node* pNode = map->Begin(); pNode != map->End(); pNode = RBTreeIncrement(pNode))
+        pNode->value.mTicked = false;
+
+    if (mpPalette && mpPalette->GetCurrentCategoryIndex() == 0) {
+        if (nMode == 0) {
+            LinkPairList* pPairs = FUN_00bd8230(pCurrent);
+            int nCount = (int)(pPairs->mpEnd - pPairs->mpBegin);
+            for (int i = 0; i < nCount; ++i) {
+                LinkPair* pPair = &pPairs->mpBegin[i];
+                ICircleSlot* pSlot1 = pActionCircle->SlotAt(pPair->a);
+                ICircleSlot* pSlot2 = pActionCircle->SlotAt(pPair->b);
+                if (!pSlot1 || !pSlot2)
+                    continue;
+                IEditorObj* pObj1 = pSlot1->GetObject()
+                    ? (IEditorObj*)pSlot1->GetObject()->GetObject(0xe9cb8ba) : 0;
+                IEditorObj* pObj2 = pSlot2->GetObject()
+                    ? (IEditorObj*)pSlot2->GetObject()->GetObject(0xe9cb8ba) : 0;
+                bool bPlaced = (pObj1 && ((ICreatureProxy*)pObj1)->mbPlaced)
+                            || (pObj2 && ((ICreatureProxy*)pObj2)->mbPlaced);
+                if (!bPlaced)
+                    continue;
+                // The two slots may reference the same editor object only when both are
+                // present; a lone null endpoint is skipped.
+                if ((!pObj1 || !pObj2) && (pObj1 != pObj2))
+                    continue;
+                RefreshOrCreateBuildingLinkEffect(map, (int)pPair->a, (int)pPair->b,
+                                                 pSlot1->mPosition, pSlot2->mPosition,
+                                                 LinkKind(pObj1, pObj2));
+            }
+        } else if (nMode == 1 && mPlacementVehicle.p) {
+            ILinkAnchor* pAnchor = (ILinkAnchor*)mPlacementVehicle.p->FindEditorObject(0xe9cb8ba);
+            if (pAnchor) {
+                int nSlotOffset = pAnchor->GetSlotOffset();
+                int nBase = 0;
+                for (int nRow = 0; nRow < 0xc4; nRow += 14) {
+                    for (int nCol = 0; nCol < 14; ++nCol) {
+                        if ((!FUN_00c3f540(pAnchor)
+                             || nRow == mCurrentSlot || nCol == mCurrentSlot)
+                            && pAnchor->mLinkable[nSlotOffset + nBase + nCol]) {
+                            ICircleSlot* pSlot1 = pActionCircle->SlotAt(nRow);
+                            ICircleSlot* pSlot2 = pActionCircle->SlotAt(nCol);
+                            if (pSlot1 && pSlot2) {
+                                IEditorObj* pObj1 = pSlot1->GetObject()
+                                    ? (IEditorObj*)pSlot1->GetObject()->GetObject(0xe9cb8ba) : 0;
+                                IEditorObj* pObj2 = pSlot2->GetObject()
+                                    ? (IEditorObj*)pSlot2->GetObject()->GetObject(0xe9cb8ba) : 0;
+                                if ((pObj1 && ((ICreatureProxy*)pObj1)->mbPlaced)
+                                    || (pObj2 && ((ICreatureProxy*)pObj2)->mbPlaced)) {
+                                    if (pObj1 == (IEditorObj*)pAnchor || pObj2 == (IEditorObj*)pAnchor)
+                                        continue;
+                                    RefreshOrCreateBuildingLinkEffect(map, nRow, nCol,
+                                                                     pSlot1->mPosition,
+                                                                     pSlot2->mPosition, 0);
+                                }
+                            }
+                        }
+                    }
+                    nBase += 14;
+                }
+            }
+        }
+    }
+
+    Node* pNode = map->Begin();
+    while (pNode != map->End()) {
+        FUN_00d0d880(pArg, &pNode->value);
+        if (!pNode->value.mTicked && pNode->value.mState != 2 && pNode->value.mState != 3)
+            pNode->value.mState = 2;
+        if (pNode->value.mState != 3) {
+            pNode = RBTreeIncrement(pNode);
+            continue;
+        }
+        if (pNode->value.mLinkEffect.p)
+            pNode->value.mLinkEffect.p->Stop(0);
+        if (pNode->value.mIconEffect.p)
+            pNode->value.mIconEffect.p->Stop(0);
+        --map->mCount;
+        Node* pNext = RBTreeIncrement(pNode);
+        RBTreeErase(pNode, map->End());
+        if (pNode->value.mIconEffect.p)
+            pNode->value.mIconEffect.p->Release();
+        if (pNode->value.mLinkEffect.p)
+            pNode->value.mLinkEffect.p->Release();
+        operator_delete__(pNode);
+        pNode = pNext;
+    }
+}
+
+// @ 0x00d124e0
+void Class12::FUN_00d124e0(void* pArg)
+{
+    if (mp40 == 0) {
+        SELF(this)->FUN_00d08ad0();
+        return;
+    }
+
+    void* edi = mp40 ? VRet1(mp40, 0x0c, (void*)0xee9b2232) : 0;
+    if (mp40)
+        VCall1(mp40, 0x0c, (void*)0x4f396a66);
+
+    void* esi = pArg;
+
+    if (edi) {
+        SELF(this)->FUN_00d11f80(&mp20c, 0, pArg);
+        SELF(this)->FUN_00d11f80(&mp228, 1, pArg);
+    }
+    if (mpB4) SELF(mpB4)->FUN_005ca980(esi);
+
+    if (mp68) {
+        void* eax = VRet1(mp68, 0x04, 0);
+        if (mp74 != eax) {
+            SELF(mp68)->FUN_005a7840();
+            eax = VRet1(mp68, 0x04, 0);
+            mp74 = eax;
+        }
+    }
+    if (mp6c) SELF(mp6c)->FUN_004582b0(esi);
+    SELF(this)->FUN_00d0c5b0(esi);
+
+    if (edi && mpA0)
+        SELF(edi)->FUN_00bdde70(mpA0);
+
+    if (mpC0 == 0)
+        goto tail;
+
+    {
+        u8 al = ((SelObj*)mpC0)->mB6e;
+
+        if (mp278 == 0) {
+            mB274 = al;
+            void* edi2 = (al ? mp294 : mp290);
+            void* esi2 = GlobalManagerA();
+            RefRelease(mp278);
+            mp278 = 0;
+            VCall3(esi2, 0x2c, edi2, 0, &mp278);
+            if (mp278 == 0)
+                goto tail;
+            {
+                u8 local44[0x1c];
+                SELF(local44)->FUN_00434040();
+                {
+                    void* eax = VRet0(mpC0, 0x2c);
+                    void* t = SELF(local44 + 0x04)->FUN_00b3d350(eax);
+                    void* u = SELF(t)->FUN_00b7f190();
+                    void* v = SELF(local44 + 0x14)->FUN_0059c190(u);
+                    for (int i = 0; i < 9; ++i) ((u32*)local44)[9 + i] = ((u32*)v)[i];
+                    *(u16*)(local44 + 0x08) |= 2;
+                    *(u16*)(local44 + 0x0a) += 1;
+                    {
+                        void* w = VRet0(mpC0, 0x2c);
+                        *(u32*)(local44 + 0x04) = ((u32*)w)[0];
+                        *(u32*)(local44 + 0x08) = ((u32*)w)[1];
+                        *(u32*)(local44 + 0x0c) = ((u32*)w)[2];
+                    }
+                    *(u16*)(local44 + 0x00) |= 4;
+                    *(u16*)(local44 + 0x02) += 1;
+                    VCall1(mp278, 0x18, local44);
+                    {
+                        void* ep = mp278;
+                        VCall2(*(void**)ep, 0x08, 0, 0);
+                    }
+                }
+            }
+        } else if (mB274 != al) {
+            mB274 = al;
+            VCall1(mp278, 0x0c, (void*)1);
+            RefRelease(mp278);
+            mp278 = 0;
+            {
+                void* edi2 = (mB274 ? mp294 : mp290);
+                void* esi2 = GlobalManagerA();
+                VCall3(esi2, 0x2c, edi2, 0, &mp278);
+                if (mp278 == 0)
+                    goto tail;
+                {
+                    u8 local44[0x1c];
+                    SELF(local44)->FUN_00434040();
+                    {
+                        void* eax = VRet0(mpC0, 0x2c);
+                        void* t = SELF(local44 + 0x04)->FUN_00b3d350(eax);
+                        void* u = SELF(t)->FUN_00b7f190();
+                        void* v = SELF(local44 + 0x14)->FUN_0059c190(u);
+                        for (int i = 0; i < 9; ++i) ((u32*)local44)[9 + i] = ((u32*)v)[i];
+                        *(u16*)(local44 + 0x08) |= 2;
+                        *(u16*)(local44 + 0x0a) += 1;
+                        {
+                            void* w = VRet0(mpC0, 0x2c);
+                            FreePair(local44 + 0x04, w);
+                        }
+                        *(u16*)(local44 + 0x00) |= 4;
+                        *(u16*)(local44 + 0x02) += 1;
+                        VCall1(mp278, 0x18, local44);
+                        {
+                            void* ep = mp278;
+                            VCall2(*(void**)ep, 0x08, 0, 0);
+                        }
+                    }
+                }
+            }
+        } else {
+            u8 local44[0x1c];
+            SELF(local44)->FUN_00434040();
+            {
+                void* eax = VRet0(mpC0, 0x2c);
+                void* t = SELF(local44 + 0x04)->FUN_00b3d350(eax);
+                void* u = SELF(t)->FUN_00b7f190();
+                void* v = SELF(local44 + 0x14)->FUN_0059c190(u);
+                for (int i = 0; i < 9; ++i) ((u32*)local44)[9 + i] = ((u32*)v)[i];
+                *(u16*)(local44 + 0x08) |= 2;
+                *(u16*)(local44 + 0x0a) += 1;
+                {
+                    void* w = VRet0(mpC0, 0x2c);
+                    *(u32*)(local44 + 0x04) = ((u32*)w)[0];
+                    *(u32*)(local44 + 0x08) = ((u32*)w)[1];
+                    *(u32*)(local44 + 0x0c) = ((u32*)w)[2];
+                }
+                *(u16*)(local44 + 0x00) |= 4;
+                *(u16*)(local44 + 0x02) += 1;
+                VCall1(mp278, 0x18, local44);
+                {
+                    void* ep = mp278;
+                    VCall2(*(void**)ep, 0x08, 0, 0);
+                }
+            }
+        }
+    }
+
+tail:
+    if (mB2bc) {
+        SELF(this)->FUN_00d099c0(mp2c0);
+        mp2c0 = 0;
+    }
+    if (mB208 == 0) {
+        if (GlobalManagerC()) {
+            Vec3_s00d1_24e0* w = (Vec3_s00d1_24e0*)SELF(GlobalManagerC())->FUN_00b10260();
+            float v[3];
+            v[0] = w->x;
+            v[1] = w->y;
+            v[2] = w->z;
+            SELF(this)->FUN_00d0b540(v);
+        }
+        if (GlobalManagerC()) {
+            float v[3];
+            SELF(GlobalManagerC())->FUN_00b13bb0(v, 0);
+        }
+    }
+    {
+        void* mgr = GlobalManagerB();
+        void* f = VRet0(mgr, 0x34);
+        if (f == 0) {
+            SELF(this)->FUN_00d08ad0();
+            return;
+        }
+        {
+            void* e = VRet1(f, 0x0c, (void*)0x17f243b);
+            SELF(e)->FUN_00d08ad0();
+        }
+    }
+}
+
+// @ 0x00d12910
+u8 Class12::FUN_00d12910(void* pMsg, int nType)
+{
+    u8 bFlag = (mp40 != 0 && mB208 == 0) ? 1 : 0;
+
+    void* ebp = VRet0(pMsg, 0x10);
+    void* eax = VRet1(ebp, 0x1c, 0);
+    void* ebx;
+    if (((PropVal*)eax)->mFlags & 0x30)
+        ebx = *(void**)eax;
+    else if (((PropVal*)eax)->mW12 == 0)
+        ebx = 0;
+    else
+        ebx = eax;
+
+    void* edi = 0;
+    if (ebx) {
+        edi = VRet1(ebx, 0x0c, (void*)0x17f243b);
+        VCall1(ebx, 0x0c, (void*)0x1186577);
+        ebx = *(void**)VRet1(ebp, 0x1c, (void*)1);
+    }
+
+    u32 nResult = 0;
+    if (bFlag == 0) {
+        void* esi = VRet0(pMsg, 0x14);
+        nResult = 2;
+        u8 local30[0x18];
+        *(u16*)(local30 + 0x12) = 0;
+        *(u16*)(local30 + 0x16) = 0;
+        FUN_00422eb0(local30, &nResult);
+        VCall2(esi, 0x20, 0, local30);
+        if (*(u8*)(local30 + 0x10) & 4) {
+            FUN_0093db80(local30, 0);
+            return 0;
+        }
+    }
+
+    switch (nType) {
+    case 0x62ec2a6:
+        SELF(this)->FUN_00d08a70(edi, (void*)&ebx);
+        goto commit;
+    case 0x609ea30:
+        SELF(this)->FUN_00d0d570(edi);
+        goto commit;
+    case 0x332a303a:
+        mB2bc = (edi == (void*)1);
+        mp2c0 = mB2bc ? edi : 0;
+        if (edi == (void*)2) {
+            SELF(this)->FUN_00d099c0(edi);
+            if (GlobalManagerC()) {
+                Vec3_s00d1_24e0* w = (Vec3_s00d1_24e0*)SELF(GlobalManagerC())->FUN_00b10260();
+                float v[3];
+                v[0] = w->x;
+                v[1] = w->y;
+                v[2] = w->z;
+                SELF(this)->FUN_00d0b540(v);
+                SELF(this)->FUN_00d08aa0();
+            }
+        }
+        nResult = 0;
+        goto commit;
+    case 0x332a303b:
+        SELF(this)->FUN_00d0b3b0(edi);
+        goto commit;
+    case 0x71d4dfc3:
+        if (edi)
+            SELF(this)->FUN_00d0fcc0(VRet1(edi, 0x0c, (void*)0x1186577));
+        else
+            SELF(this)->FUN_00d0fcc0(0);
+        goto commit;
+    default:
+        {
+            u32 idx = (u32)nType + 0x8e2b203c;
+            if (idx > 0xa) { nResult = 0; goto commit; }
+            switch (idx) {
+            case 0:
+                FUN_00804ed0(&mF2c8, &mF2cc);
+                if (GlobalManagerC() && ((MgrC*)GlobalManagerC())->mB390 == 0)
+                    SELF(GlobalManagerC())->FUN_00b10c40(1);
+                nResult = 0;
+                goto commit;
+            case 1:
+                FUN_00804ed0(&mF2c8, &mF2cc);
+                if (GlobalManagerC()) {
+                    SELF(GlobalManagerC())->FUN_00b0f210();
+                    SELF(GlobalManagerC())->FUN_00b10340();
+                }
+                nResult = 0;
+                goto commit;
+            case 2:
+                if (GlobalManagerC())
+                    SELF(GlobalManagerC())->FUN_00b10c40(0);
+                nResult = 0;
+                goto commit;
+            case 3:
+                SELF(this)->FUN_00d10840(edi, (void*)&ebx);
+                goto commit;
+            case 4:
+                SELF(this)->FUN_00d10f90(edi, (void*)&ebx);
+                goto commit;
+            case 5:
+                SELF(this)->FUN_00d09770(edi, (void*)&ebx);
+                goto commit;
+            case 6:
+                SELF(this)->FUN_00d0c170(edi, (void*)&ebx);
+                goto commit;
+            case 7:
+                SELF(this)->FUN_00d0ae50(edi, (void*)&ebx);
+                goto commit;
+            case 8:
+                SELF(this)->FUN_00d11730(edi, (void*)&ebx);
+                goto commit;
+            }
+        }
+    }
+
+commit:
+    {
+        void* esi = VRet0(pMsg, 0x14);
+        u8 local44[0x18];
+        *(u16*)(local44 + 0x12) = 0;
+        *(u16*)(local44 + 0x16) = 0;
+        FUN_00422eb0(local44, &nResult);
+        VCall2(esi, 0x20, 0, local44);
+        if (*(u8*)(local44 + 0x10) & 4)
+            FUN_0093db80(local44, 0);
+    }
+    return 0;
+}
+
+// @ 0x00d12d00
+u8 Class12::FUN_00d12d00(void* pMsg, int nType)
+{
+    u8* pB = (u8*)pMsg;
+    u32 key0 = *(u32*)(pB + 0x08);
+    u32 key1 = *(u32*)(pB + 0x0c);
+
+    if (key0 != 0x287259f6) {
+        if (key0 == 0x0a && key1 == 1) {
+            int b0 = 0, b1 = 0;
+            void* pSub = *(void**)(pB + 0x18);
+            if (pSub) {
+                void* r = VRet0(pSub, 0x1c);
+                if (r == (void*)0x65f6003) b0 = 1;
+                else if (r == (void*)0x65f6004) b1 = 1;
+            }
+            {
+                void* a = SELF((u8*)this + 0x80)->FUN_00705b0((void*)0x66758d6, (void*)1);
+                if (a) VCall2(a, 0x7c, (void*)1, (void*)b0);
+                SELF((u8*)this - 8)->FUN_00d0a470((void*)0x66758d6, (void*)0x66f3f12);
+            }
+            {
+                void* a = SELF((u8*)this + 0x80)->FUN_00705b0((void*)0x66758d7, (void*)1);
+                if (a) VCall2(a, 0x7c, (void*)1, (void*)b1);
+                SELF((u8*)this - 8)->FUN_00d0a470((void*)0x66758d7, (void*)0x66f3f13);
+            }
+        }
+        return 0;
+    }
+
+    if (key1 == 0x1036a039) {
+        VCall2(GlobalManagerD(), 0x64, (void*)0x3e80, (void*)1);
+        return 1;
+    }
+    if (key1 == 0x44efe63) {
+        void* out = 0;
+        void* other = 0;
+        void* srv = PropertyServer();
+        VCall2(srv, 0x30, (void*)0x6b3f727b, &out);
+        u32 g = FUN_00b5b800() - 0x1654c02;
+        if (g == 0)      FUN_006a12a0(out, 0xd3a9b56, &other);
+        else if (g == 2) FUN_006a12a0(out, 0x5ca318f3, &other);
+        else if (g == 3) FUN_006a12a0(out, 0x2fd9f52e, &other);
+        if (other) FUN_0064aba0(other);
+        RefRelease(out);
+        return 1;
+    }
+
+    {
+        u32 k = key1 + 0x8b4412c3;
+        if (k > 1)
+            return 0;
+        void* p38 = mp38;
+        if (p38 == 0)
+            return 0;
+        void* ebx = VRet1(p38, 0x0c, (void*)0xee9b2232);
+        if (ebx == 0)
+            return 0;
+        {
+            void* h = SELF(GlobalManagerE())->FUN_00b25fb0();
+            if (h == 0) return 0;
+            void* v = SELF(h)->FUN_00bef6c0();
+            void* beg = *(void**)v;
+            void* end = *(void**)((u8*)v + 4);
+            int n = (int)(((u8*)end - (u8*)beg) / 4);
+            int idx = 0;
+            for (int i = 0; i < n; ++i)
+                if (((void**)beg)[i] == ebx) { idx = i; break; }
+            if (key1 == 0x74bbed3d) {
+                if (++idx >= n) idx = 0;
+            } else {
+                if (--idx < 0) idx = n - 1;
+            }
+            void* pElem = ((void**)beg)[idx];
+            if (pElem == 0 || pElem == ebx)
+                return 0;
+            void* sub = (u8*)this - 8;
+            if (!SELF(sub)->FUN_00d0a160())
+                return 0;
+            SELF(sub)->FUN_00d100b0(0, 0);
+            SELF(sub)->FUN_00d0e170(pElem, 1);
+            if (BASEB(this)->mpB4)
+                SELF(BASEB(this)->mpB4)->FUN_005cb240((void*)(u32)mF2ec);
+            return 0;
+        }
+    }
 }
 
 // @ 0x00d12fc0

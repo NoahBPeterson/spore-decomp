@@ -1,4 +1,4 @@
-// src/game/Havok/_at_010a0000.cpp -- migrated from slice(s) s010aed40, s010adab0, s010abb90, s010ab2d0, s010aa5f0, s010a98c0, s010a8b90, s010a7720, s010a6860, s010a3ed0, s010a32c0, s010a22b0 by tools/migrate/rewrite.py
+// src/game/Havok/_at_010a0000.cpp -- migrated from slice(s) s0109f870, s010aed40, s010adab0, s010abb90, s010ab2d0, s010aa5f0, s010a98c0, s010a8b90, s010a7720, s010a6860, s010a3ed0, s010a32c0, s010a22b0 by tools/migrate/rewrite.py
 // Object file: Havok/_at_010a0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1535,6 +1535,508 @@ __forceinline void setRotatedInverseDirNeg(hkVector4_s010a_bb90& d, const hkRota
 // ---- items of slice s010aed40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct hkVector4_s010a_ed40 { hkReal x, y, z, w; };
 // ---- items of slice s010aed40 end
+
+// ---- items of slice s0109f870 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_ReadWriteBarrier)
+typedef short hkInt16;
+class hkBool_s0109_f870
+{
+public:
+	hkBool_s0109_f870(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+private:
+	char m_bool;
+};
+enum
+{
+	HK_MEMORY_CLASS_ARRAY = 0x14,
+	HK_MEMORY_CLASS_COLLIDE = 0x1c,
+	HK_MEMORY_CLASS_CDINFO = 0x1e
+};
+class hkMemory_s0109_f870
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                          // 0
+	virtual void deallocate(void* p);                                    // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);    // 2
+	virtual void alignedDeallocate(void* p);                             // 3
+	virtual void* allocateChunk(int nbytes, int cl);                     // 4 (+0x10)
+	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5 (+0x14)
+	static hkMemory_s0109_f870* s_instance;
+};
+struct hkArrayUtil_s0109_f870
+{
+	static void _reserveMore(void* arrayBase, int elemSize);             // 0x0107F530
+	static void _reserveExactly(void* arrayBase, int numElem, int elemSize); // 0x0107F4A0
+};
+enum { HK_ARRAY_CAPACITY_MASK = 0x3fffffff };
+template <typename T>
+class hkArray_s0109_f870
+{ public:
+	T* m_data;
+	int m_size;
+	int m_capacityAndFlags;
+
+	int getCapacity() const { return m_capacityAndFlags & HK_ARRAY_CAPACITY_MASK; }
+	void pushBack(const T& t)
+	{
+		if (m_size == getCapacity())
+			hkArrayUtil_s0109_f870::_reserveMore(this, (int)sizeof(T));
+		m_data[m_size] = t;
+		m_size = m_size + 1;
+	}
+	void setSize(int n)
+	{
+		int cap = getCapacity();
+		if (cap < n)
+		{
+			int newCap = cap * 2;
+			if (newCap <= n) newCap = n;
+			hkArrayUtil_s0109_f870::_reserveExactly(this, newCap, (int)sizeof(T));
+		}
+		m_size = n;
+	}
+};
+#define HK_ALIGN16 __declspec(align(16))
+class hkRotation_s0109_f870;
+struct HK_ALIGN16 hkVector4_s0109_f870
+{
+	float x, y, z, w;
+	void setRotatedInverseDir(const hkRotation_s0109_f870& a, const hkVector4_s0109_f870& b);     // 0x01081440 (this = transpose(a) * b)
+};
+class hkRotation_s0109_f870 { public: hkVector4_s0109_f870 m_col[3]; };
+class hkTransform_s0109_f870
+{ public:
+	hkVector4_s0109_f870 m_rot[3];
+	hkVector4_s0109_f870 m_trans;
+	void setMulInverseMul(const hkTransform_s0109_f870& a, const hkTransform_s0109_f870& b);      // 0x010810F0 (this = inverse(a) * b)
+};
+class hkBaseObject_s0109_f870 { public: virtual ~hkBaseObject_s0109_f870() {} };
+class hkReferencedObject_s0109_f870 : public hkBaseObject_s0109_f870
+{
+public:
+	virtual ~hkReferencedObject_s0109_f870() {}                                     // 0
+	virtual void calcStatistics(class hkStatisticsCollector_s0109_f870* c) const {} // 1 (0x0052E650 is the empty default)
+
+	// HK_DECLARE_CLASS_ALLOCATOR: chunk allocation, size stored in m_memSizeAndFlags.
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s0109_f870::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_COLLIDE);
+		((hkReferencedObject_s0109_f870*)p)->m_memSizeAndFlags = (unsigned short)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s0109_f870::s_instance->deallocateChunk(p, ((hkReferencedObject_s0109_f870*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_COLLIDE);
+	}
+	static void* operator new(size_t, void* p) { return p; }
+	static void operator delete(void*, void*) {}
+
+	// memSize == 0 means "not heap owned": never reference counted.
+	void addReference() { if (m_memSizeAndFlags != 0) ++m_referenceCount; }
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			m_referenceCount = (hkInt16)(m_referenceCount - 1);
+			if (m_referenceCount == 0)
+				delete this;
+		}
+	}
+
+	unsigned short m_memSizeAndFlags;  // 0x04
+	hkInt16 m_referenceCount;   // 0x06
+
+protected:
+	hkReferencedObject_s0109_f870() : m_referenceCount(1) {}
+};
+class hkStatisticsCollector_s0109_f870
+{ public:
+	virtual void s0();
+	virtual void beginObject(const char* name, int mode, const void* obj);                                     // +4
+	virtual void addArray(const char* name, int elemSize, const void* ptr, int usedBytes, int allocBytes);    // +8
+	virtual void addReferencedObject(const char* name, int mode, const void* obj);                             // +0xc
+	virtual void s4();
+	virtual void s5();
+	virtual void endObject();                                                                                  // +0x18
+};
+class hkQuaternion_s0109_f870 { public: float x, y, z, w; };
+class hkMatrix3_s0109_f870 { public: hkVector4_s0109_f870 m_col0, m_col1, m_col2; };   // 0x30 bytes
+class hkSweptTransform                                   // 0x50 bytes
+{ public:
+	hkVector4_s0109_f870 m_centerOfMass0;      // +0   (w = time0)
+	hkVector4_s0109_f870 m_centerOfMass1;      // +0x10 (w = invDeltaTime)
+	hkQuaternion_s0109_f870 m_rotation0;       // +0x20
+	hkQuaternion_s0109_f870 m_rotation1;       // +0x30
+	hkVector4_s0109_f870 m_centerOfMassLocal;  // +0x40
+};
+class hkMotionState                                      // 0xb0 bytes
+{ public:
+	hkTransform_s0109_f870 m_transform;        // +0
+	hkSweptTransform m_sweptTransform;   // +0x40
+	hkVector4_s0109_f870 m_deltaAngle;         // +0x90
+	float m_objectRadius;           // +0xa0
+	float m_linearDamping;          // +0xa4
+	float m_angularDamping;         // +0xa8
+	float m_pad;                    // +0xac
+	hkMotionState& operator=(const hkMotionState&);       // 0x010888C0 (0xb0-byte copy)
+};
+struct hkSweptTransformUtil
+{
+	static void setTimeInformation(float time0, float time1, hkMotionState& ms);   // 0x01209B70
+	static void freezeMotionState(float time, hkMotionState& ms);                  // 0x0120A570
+};
+class hkMotion_s0109_f870
+{ public:
+	virtual void* destroy(unsigned flags);                                   // 0
+	virtual void s1();
+	virtual int getType() const;                                             // 2 (+8)
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+	virtual void getInertiaLocal(hkMatrix3_s0109_f870& out) const;                      // 11 (+0x2c)
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+	virtual void setLinearVelocity(const hkVector4_s0109_f870& v);                      // 22 (+0x58)
+	virtual void setAngularVelocity(const hkVector4_s0109_f870& v);                     // 23 (+0x5c)
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+	virtual void getMotionStateAndVelocities(hkMotion_s0109_f870* motionOut) const;     // 30 (+0x78)
+
+	char m_pad8[0x10 - 8];
+	hkMotionState m_motionState;     // +0x10
+	float getMass() const;           // 0x01088270 (hkRigidMotion::getMass: 0 if inverse mass is 0, else 1/inverseMass)
+	// members behind the motion state (inverse mass at +0xc0, saved motion at +0xf0, ...) are read through the
+	// HK_MOTION_* accessors below
+};
+#define HK_MOTION_U32(m, off)  (*(uint32_t*)((char*)(m) + (off)))
+#define HK_MOTION_PTR(m, off)  (*(hkMotion_s0109_f870**)((char*)(m) + (off)))
+struct hkFixedRigidMotion { static hkMotion_s0109_f870* construct(void* mem, const hkVector4_s0109_f870& position, const hkQuaternion_s0109_f870& rotation); };       // ctor @ 0x01097110
+struct hkKeyframedRigidMotion { static hkMotion_s0109_f870* construct(void* mem, const hkVector4_s0109_f870& position, const hkQuaternion_s0109_f870& rotation); };    // ctor @ 0x01095B60
+hkMotion_s0109_f870* hkRigidBody_createMotion(int motionType, const hkVector4_s0109_f870& position, const hkQuaternion_s0109_f870& rotation, float mass, const hkMatrix3_s0109_f870& inertiaLocal,
+                          const hkVector4_s0109_f870& centerOfMassLocal, float linearDamping, float angularDamping); // 0x01087290
+class hkWorld_s0109_f870;
+class hkSimulationIsland_s0109_f870;
+struct hkAgentNnEntry_s0109_f870;
+struct hkConstraintInstance_s0109_f870;
+class hkAction_s0109_f870;
+class hkEntity_s0109_f870;
+struct hkAgentNnTrack_s0109_f870 { char m_pad[0x24]; };
+struct hkCollisionInputStub_s0109_f870 { char m_pad[1]; };
+class hkCollidable_s0109_f870 { public: char m_pad0[0x10]; int m_ownerOffset; };   // +0x10: offset from the collidable to its owner entity
+struct hkCollisionEntry { hkAgentNnEntry_s0109_f870* m_agentEntry; hkCollidable_s0109_f870* m_partner; };   // 8 bytes (32-bit)
+struct hkConstraintInternalStub { hkConstraintInstance_s0109_f870* m_constraint; char m_pad[0x1c - 4]; };   // 0x1c bytes per entry
+class hkEntity_s0109_f870
+{ public:
+	char m_pad0[8];
+	hkWorld_s0109_f870* m_world;                                   // +8
+	char m_pad1[0x24 - 0xc];
+	hkMotionState* m_motionStatePtr;                    // +0x24
+	char m_pad2[0x36 - 0x28];
+	hkUint16 m_broadPhaseHandleType;                    // +0x36 (inferred; 1 = fixed, 2 = moving)
+	char m_pad3[0x40 - 0x38];
+	hkCollisionEntry* m_collisionEntriesData;           // +0x40
+	int m_collisionEntriesSize;                         // +0x44
+	char m_pad4[0x58 - 0x48];
+	hkMotion_s0109_f870* m_motion;                                 // +0x58
+	hkSimulationIsland_s0109_f870* m_island;                       // +0x5c
+	char m_pad5[0x70 - 0x60];
+	hkConstraintInternalStub* m_constraintsMasterData;  // +0x70
+	int m_constraintsMasterSize;                        // +0x74
+	int m_constraintsMasterCap;                         // +0x78
+	hkConstraintInstance_s0109_f870** m_constraintsSlaveData;      // +0x7c
+	int m_constraintsSlaveSize;                         // +0x80
+	char m_pad6[0x94 - 0x84];
+	hkUint16 m_storageIndex;                            // +0x94 (index inside the island's entity array)
+	char m_pad7[0x99 - 0x96];
+	hkUint8 m_isFixed;                                  // +0x99
+	hkUint8 m_isFixedOrKeyframed;                       // +0x9a
+	char m_pad8[0xc0 - 0x9b];
+	hkAction_s0109_f870** m_actionsData;                           // +0xc0
+	int m_actionsSize;                                  // +0xc4
+};
+class hkSimpleConstraintOwner_s0109_f870
+{ public:
+	virtual void* destroy(unsigned flags);               // 0 (scalar deleting destructor)
+virtual void v1();
+virtual void v2();
+	virtual void addConstraintInfo(hkConstraintInstance_s0109_f870* c, struct hkConstraintInfo_s0109_f870& info);   // 3, 0x0109F9C0
+	virtual void subConstraintInfo(hkConstraintInstance_s0109_f870* c, struct hkConstraintInfo_s0109_f870& info);   // 4, 0x0109F900
+	int m_pad4;                                         // +4
+	int m_maxSizeOfJacobians;                           // +8
+	int m_sizeOfJacobians;                              // +0xc
+	int m_sizeOfSchemas;                                // +0x10
+	int m_numMotionInfo;                                // +0x14 (inferred, addMotionInfo/subMotionInfo)
+	int m_numSolverResults;                             // +0x18
+};
+struct hkConstraintInfo_s0109_f870 { int m_maxSizeOfJacobians, m_sizeOfJacobians, m_sizeOfSchemas, m_numSolverResults; };
+class hkAction_s0109_f870
+{ public:
+	char m_pad0[4];
+	hkUint16 m_memSizeAndFlags;                         // +4
+	hkUint16 m_referenceCount;                          // +6
+	char m_pad1[4];
+	hkSimulationIsland_s0109_f870* m_island;                       // +0xc
+};
+class hkSimulationIsland_s0109_f870 : public hkSimpleConstraintOwner_s0109_f870 { public:
+	void internalAddEntity(hkEntity_s0109_f870* e);                 // 0x010A2250
+	void construct(hkWorld_s0109_f870* world);                      // 0x010A2810 (placement ctor)
+	hkWorld_s0109_f870* m_world;                                   // +0x1c
+	hkUint16 m_storageIndex;                            // +0x20
+	hkUint16 m_dirtyListIndex;                          // +0x22 (0xffff = not on the dirty list)
+	hkUint8 m_activeCounter0;                           // +0x24 (inferred, merged with min())
+	hkUint8 m_activeCounter1;                           // +0x25 (inferred, merged with min())
+	hkUint8 m_actionListCleanupNeeded;                  // +0x26
+	hkUint8 m_splitCheckRequested;                      // +0x27
+	hkUint8 m_activeMark;                               // +0x28 (inferred)
+	hkUint8 m_active;                                   // +0x29 (1 = in the world's active islands array)
+	char m_pad2a[0x34 - 0x2a];
+	int m_pad34;                                        // +0x34 cleared on activation (inferred timers)
+	int m_pad38;                                        // +0x38
+	hkEntity_s0109_f870** m_entitiesData;                          // +0x3c
+	int m_entitiesSize;                                 // +0x40
+	int m_entitiesCap;                                  // +0x44
+	char m_pad48[0x4c - 0x48];
+	hkAgentNnTrack_s0109_f870 m_agentTrack;                        // +0x4c (data, size, cap, inplace, bytes used, stride...)
+	// the remaining fields (+0x64 actions array, +0x70 time) are addressed through the accessor macros below
+};
+#define HK_ISLAND_TIME(i)          (*(float*)((char*)(i) + 0x70))
+struct hkEntityListenerStub { virtual void v0(); virtual void v1(); virtual void inactiveEntityMovedCallback(hkEntity_s0109_f870* entity); };   // slot 2
+class hkWorld_s0109_f870
+{ public:
+	char m_pad0[0xc];
+	float m_currentTime;                                // +0xc (inferred)
+	char m_pad1[0x30 - 0x10];
+	hkSimulationIsland_s0109_f870* m_fixedIsland;                  // +0x30
+	hkEntity_s0109_f870* m_fixedRigidBody;                         // +0x34
+	hkArray_s0109_f870<hkSimulationIsland_s0109_f870*> m_activeSimulationIslands;     // +0x38
+	hkArray_s0109_f870<hkSimulationIsland_s0109_f870*> m_inactiveSimulationIslands;   // +0x44
+	hkArray_s0109_f870<hkSimulationIsland_s0109_f870*> m_dirtySimulationIslands;      // +0x50
+	char m_pad2[0x78 - 0x5c];
+	hkCollisionInputStub_s0109_f870* m_collisionInput;             // +0x78
+	char m_pad3[0x88 - 0x7c];
+	int m_pendingOperationQueueCount;                   // +0x88 (inferred)
+	int m_criticalOperationsLockCount;                  // +0x8c
+	char m_pad4[0x94 - 0x90];
+	hkUint8 m_blockExecutingPendingOperations;          // +0x94
+	char m_pad5[0xb4 - 0x95];
+	hkUint8 m_wantSimulationIslands;                    // +0xb4
+	char m_pad6[0x100 - 0xb5];
+	void* m_constraintListenersData;                    // +0x100 first dword of the listener array (tested for non-zero)
+	char m_pad7[0x120 - 0x104];
+	hkEntityListenerStub** m_entityListenersData;       // +0x120 (inferred)
+	int m_entityListenersSize;                          // +0x124
+	char m_pad8[0x170 - 0x128];
+	float m_simulationTime;                             // +0x170 (hkTime, inferred)
+	void executePendingOperations();                    // 0x01082BF0
+};
+struct hkWorldCallbackUtil_s0109_f870
+{
+	static void fireInactiveEntityMoved(hkWorld_s0109_f870* world, hkEntity_s0109_f870* entity);     // 0x0109F870
+	static void fireConstraintAdded(hkWorld_s0109_f870* world, hkConstraintInstance_s0109_f870* c);  // 0x0109EF20
+	static void fireConstraintRemoved(hkWorld_s0109_f870* world, hkConstraintInstance_s0109_f870* c);// 0x0109EFB0
+	static void fireIslandActivated(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* i);    // 0x0109F300
+	static void fireIslandDeactivated(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* i);  // 0x0109F450
+};
+extern hkVector4_s0109_f870 g_hkVector4Zero;                                              // 0x016E42D0 (static zero vector, set up elsewhere)
+void hkSimulationIsland_internalRemoveEntity(hkSimulationIsland_s0109_f870* island, hkEntity_s0109_f870* e);// 0x010A2040 (thiscall)
+struct hkWorldOperationUtil
+{
+	static hkConstraintInstance_s0109_f870* addConstraintImmediately(hkWorld_s0109_f870* world, hkConstraintInstance_s0109_f870* constraint, int fireCallbacks);   // 0x0109F930
+	static void removeConstraintImmediately(hkWorld_s0109_f870* world, hkConstraintInstance_s0109_f870* constraint, int fireCallbacks);                  // 0x0109FA10
+	static void removeAttachedAgentsConnectingTheEntityAndAFixedPartnerEntityPlus(hkAgentNnTrack_s0109_f870& trackToScan, hkEntity_s0109_f870* entity,
+	                                                                              hkAgentNnTrack_s0109_f870& agentsRemoved, int newMotionType);   // 0x0109FAB0
+	static void removeIslandFromDirtyList(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);   // 0x0109FB40
+	static void addEntitySI(hkWorld_s0109_f870* world, hkEntity_s0109_f870* entity, int initialActivationState);   // 0x0109FB70
+	static void removeAttachedActionsFromFixedIsland(hkWorld_s0109_f870* world, hkEntity_s0109_f870* entity, hkArray_s0109_f870<hkAction_s0109_f870*>& actionsToBeMoved);   // 0x0109FC70
+	static void removeIsland(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);                // 0x0109FD50
+	static void removeAttachedConstraints(hkEntity_s0109_f870* entity, hkArray_s0109_f870<hkConstraintInstance_s0109_f870*>& constraintsToBeMoved);   // 0x0109FDD0
+	static void internalActivateIsland(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);      // 0x0109FF50
+	static void internalDeactivateIsland(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);    // 0x010A0020
+	static void markIslandInactive(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);          // 0x010A00E0
+	static void markIslandActive(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);            // 0x010A0130
+	static void replaceMotionObject(class hkRigidBody_s0109_f870* body, int newMotionType, hkBool_s0109_f870 newStateNeedsInertia, hkBool_s0109_f870 oldStateNeedsInertia, hkWorld_s0109_f870* world);   // 0x010A0190
+	static void removeEntitySI(hkWorld_s0109_f870* world, hkEntity_s0109_f870* entity);                        // 0x010A03C0
+	static hkSimulationIsland_s0109_f870* internalMergeTwoIslands(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* islandA, hkSimulationIsland_s0109_f870* islandB);   // 0x010A0410
+	static inline void putIslandOnDirtyList(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island);
+};
+class hkRigidBody_s0109_f870 : public hkEntity_s0109_f870 { public:};
+static inline void hkWorldOperationUtil_pushIsland(hkArray_s0109_f870<hkSimulationIsland_s0109_f870*>& a, hkSimulationIsland_s0109_f870* island)
+{
+	if (a.m_size == (a.m_capacityAndFlags & 0x3fffffff))
+		hkArrayUtil_s0109_f870::_reserveMore(&a, 4);
+	a.m_data[a.m_size] = island;
+	a.m_size = a.m_size + 1;
+}
+inline void hkWorldOperationUtil::putIslandOnDirtyList(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island)
+{
+	island->m_dirtyListIndex = (hkUint16)world->m_dirtySimulationIslands.m_size;
+	hkWorldOperationUtil_pushIsland(world->m_dirtySimulationIslands, island);
+}
+namespace __equiv_ann1 {
+struct hkFixedRigidMotion {
+    void construct();   // 0x01088270 (equiv t3)
+};
+}
+// ---- items of slice s0109f870 end
+
+// @ 0x010a0020
+void hkWorldOperationUtil::internalDeactivateIsland(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island)
+{
+	hkWorldOperationUtil_pushIsland(world->m_inactiveSimulationIslands, island);
+	hkArray_s0109_f870<hkSimulationIsland_s0109_f870*>& active = world->m_activeSimulationIslands;
+	active.m_data[island->m_storageIndex] = active.m_data[active.m_size - 1];
+	active.m_data[island->m_storageIndex]->m_storageIndex = island->m_storageIndex;
+	active.m_size = active.m_size - 1;
+	island->m_storageIndex = (hkUint16)(world->m_inactiveSimulationIslands.m_size - 1);
+	island->m_active = 0;
+	HK_ISLAND_TIME(island) = world->m_simulationTime;
+	for (int i = 0; i < island->m_entitiesSize; i++)
+	{
+		hkEntity_s0109_f870* e = island->m_entitiesData[i];
+		hkSweptTransformUtil::freezeMotionState(HK_ISLAND_TIME(island), e->m_motion->m_motionState);
+		e->m_motion->setLinearVelocity(g_hkVector4Zero);
+		e->m_motion->setAngularVelocity(g_hkVector4Zero);
+	}
+	hkWorldCallbackUtil_s0109_f870::fireIslandDeactivated(world, island);
+}
+
+// @ 0x010a00e0
+void hkWorldOperationUtil::markIslandInactive(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island)
+{
+	island->m_activeMark = 0;
+	_ReadWriteBarrier();
+	if (island->m_dirtyListIndex == 0xffff)
+		putIslandOnDirtyList(world, island);
+}
+
+// @ 0x010a0130
+void hkWorldOperationUtil::markIslandActive(hkWorld_s0109_f870* world, hkSimulationIsland_s0109_f870* island)
+{
+	island->m_activeMark = 1;
+	island->m_activeCounter1 = 0;
+	island->m_activeCounter0 = 0;
+	if (island->m_dirtyListIndex == 0xffff)
+		putIslandOnDirtyList(world, island);
+}
+
+// @ 0x010a0190
+void hkWorldOperationUtil::replaceMotionObject(hkRigidBody_s0109_f870* body, int newMotionType, hkBool_s0109_f870 newStateNeedsInertia, hkBool_s0109_f870 oldStateNeedsInertia, hkWorld_s0109_f870* world)
+{
+	if (!newStateNeedsInertia)
+	{
+		hkMotion_s0109_f870* oldMotion = body->m_motion;
+		hkMotion_s0109_f870* newMotion;
+		void* mem = hkMemory_s0109_f870::s_instance->allocateChunk(0x100, 0x2b);
+		if (newMotionType == 7)
+		{
+			((hkReferencedObject_s0109_f870*)mem)->m_memSizeAndFlags = 0x100;
+			newMotion = hkFixedRigidMotion::construct(mem, body->m_motion->m_motionState.m_transform.m_trans,
+			                                         *(const hkQuaternion_s0109_f870*)&body->m_motion->m_motionState.m_sweptTransform.m_rotation1);
+			newMotion->m_motionState = oldMotion->m_motionState;
+			// fucompp with 0.0 + test ah,0x44 / jnp: skip only when invDeltaTime == 0 (a NaN does the freeze)
+			if (!(oldMotion->m_motionState.m_sweptTransform.m_centerOfMass1.w == 0.0f))
+			{
+				float time;
+				if (world == 0)
+				{
+					// X87-PRECISION: 1.0f / invDeltaTime is added to time0 unrounded, rounded at the float store.
+					time = (float)((hkX87Real)1.0f / oldMotion->m_motionState.m_sweptTransform.m_centerOfMass1.w +
+					               oldMotion->m_motionState.m_sweptTransform.m_centerOfMass0.w);
+				}
+				else
+				{
+					time = world->m_currentTime;
+				}
+				hkSweptTransformUtil::freezeMotionState(time, newMotion->m_motionState);
+			}
+		}
+		else
+		{
+			((hkReferencedObject_s0109_f870*)mem)->m_memSizeAndFlags = 0x100;
+			newMotion = hkKeyframedRigidMotion::construct(mem, body->m_motion->m_motionState.m_transform.m_trans,
+			                                             *(const hkQuaternion_s0109_f870*)&body->m_motion->m_motionState.m_sweptTransform.m_rotation1);
+			oldMotion->getMotionStateAndVelocities(newMotion);
+		}
+
+		if (oldStateNeedsInertia)
+		{
+			HK_MOTION_PTR(newMotion, 0xf0) = oldMotion;
+			HK_MOTION_U32(newMotion, 0xf4) = (uint32_t)body->m_broadPhaseHandleType;
+			body->m_motion = newMotion;
+		}
+		else
+		{
+			HK_MOTION_PTR(newMotion, 0xf0) = HK_MOTION_PTR(oldMotion, 0xf0);
+			HK_MOTION_U32(newMotion, 0xf4) = HK_MOTION_U32(oldMotion, 0xf4);
+			body->m_motion = newMotion;
+			oldMotion->destroy(1);
+		}
+		body->m_broadPhaseHandleType = (hkUint16)((newMotionType != 7) + 1);
+	}
+	else
+	{
+		if (!oldStateNeedsInertia)
+		{
+			hkMotion_s0109_f870* oldMotion = body->m_motion;
+			hkMotion_s0109_f870* saved = HK_MOTION_PTR(oldMotion, 0xf0);
+			body->m_motion = saved;
+			body->m_broadPhaseHandleType = (hkUint16)HK_MOTION_U32(oldMotion, 0xf4);
+			oldMotion->getMotionStateAndVelocities(saved);
+			HK_MOTION_PTR(oldMotion, 0xf0) = 0;
+			oldMotion->destroy(1);
+		}
+		if (body->m_motion->getType() != newMotionType && newMotionType != 1)
+		{
+			hkMotion_s0109_f870* oldMotion = body->m_motion;
+			hkMatrix3_s0109_f870 inertiaLocal;
+			oldMotion->getInertiaLocal(inertiaLocal);
+			float mass = oldMotion->getMass();
+			hkMotion_s0109_f870* newMotion = hkRigidBody_createMotion(newMotionType, oldMotion->m_motionState.m_transform.m_trans,
+			                                      *(const hkQuaternion_s0109_f870*)&oldMotion->m_motionState.m_sweptTransform.m_rotation1, mass,
+			                                      inertiaLocal, oldMotion->m_motionState.m_sweptTransform.m_centerOfMassLocal,
+			                                      oldMotion->m_motionState.m_linearDamping, oldMotion->m_motionState.m_angularDamping);
+			oldMotion->getMotionStateAndVelocities(newMotion);
+			HK_MOTION_U32(newMotion, 0xc8) = HK_MOTION_U32(oldMotion, 0xc8);
+			HK_MOTION_U32(newMotion, 0xcc) = HK_MOTION_U32(oldMotion, 0xcc);
+			body->m_motion = newMotion;
+			oldMotion->destroy(1);
+		}
+	}
+	body->m_motionStatePtr = &body->m_motion->m_motionState;
+	body->m_isFixed = (newMotionType == 7);
+	body->m_isFixedOrKeyframed = (newMotionType == 7 || newMotionType == 6) ? 1 : 0;
+}
+
+// @ 0x010a03c0
+void hkWorldOperationUtil::removeEntitySI(hkWorld_s0109_f870* world, hkEntity_s0109_f870* entity)
+{
+	hkSimulationIsland_s0109_f870* island = entity->m_island;
+	entity->m_world = 0;
+	hkSimulationIsland_internalRemoveEntity(island, entity);
+	if (island->m_storageIndex != 0xffff && island->m_entitiesSize == 0 && world->m_wantSimulationIslands)
+	{
+		removeIsland(world, island);
+		island->destroy(1);     // scalar deleting destructor, vtable slot 0
+	}
+}
 
 // @ 0x010a22b0
 void hkSimulationIsland_s010a_22b0::calcStatistics(hkStatisticsCollector* collector) const

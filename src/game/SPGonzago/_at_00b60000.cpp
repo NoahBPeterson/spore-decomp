@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00b60000.cpp -- migrated from slice(s) s00b6e3d0, s00b6d3c0, s00b6baf0, s00b6b1a0, s00b6a420, s00b68720, s00b677e0, s00b66aa0, s00b65b10, s00b64470, s00b634d0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00b60000.cpp -- migrated from slice(s) s00b694a0, s00b6e3d0, s00b6d3c0, s00b6baf0, s00b6b1a0, s00b6a420, s00b68720, s00b677e0, s00b66aa0, s00b65b10, s00b64470, s00b634d0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00b60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -25,6 +25,7 @@ extern "C" char g_16c7aa4[];
 #include "SP/cEmpire.h"
 #include "SP/cStringTokenTranslator.h"
 #include "sse_helpers.h"
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern char gSig2;   // 0x0156ad88
@@ -81,12 +82,132 @@ struct Obj63D50 { void F(void* menu, int x, int y, int w, int h, void* text); };
 // ---- items of slice s00b634d0 end
 
 // ---- items of slice s00b64470 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
-extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
-extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+extern unsigned long g_hkThreadMemoryTls;       // 0x016E4174
+extern signed char g_PrimTab84[12];     // 0x0140cf84
+extern signed char g_PrimTab90[12];     // 0x0140cf90
+extern const uint32_t g_FormatMask[];   // 0x01464904
+extern uint8_t g_hkClassHull[];                        // 0x016E5700
+extern uint8_t g_hkClassMesh[];                        // 0x016E5214
+extern uint8_t g_hkClassCompound[];                    // 0x016E537C
+extern uint8_t g_hkClassSphere[];                      // 0x016E588C
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue_s00b6_4470(unsigned long index);
+#define PVCAT2_s00b6_4470(a, b) a##b
+#define PVCAT_s00b6_4470(a, b) PVCAT2_s00b6_4470(a, b)
+#define PV_s00b6_4470 virtual void PVCAT_s00b6_4470(pv_, __COUNTER__)();
+#define PV2 PV_s00b6_4470 PV_s00b6_4470
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
 void operator_delete__(void* p);   // 0x00f47380
+struct __declspec(align(16)) Vector3 {
+    float x, y, z;
+    Vector3(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+class hkThreadMemory { public:
+    virtual void vslot0();
+    virtual void vslot1();
+    virtual void vslot2();
+    virtual void* onStackOverflow(int numBytes);         // +0x0c
+    virtual void onStackUnderflow(void* p);               // +0x10
+    uint32_t pad04[7];
+    char* m_stackCurrent;     // +0x20
+    char* m_stackPrev;        // +0x24
+    char* m_stackBase;        // +0x28
+    char* m_stackEnd;         // +0x2c
+    void deallocateChunk(void* p, int numBytes, int memoryClass);          // 0x0107DB10
+
+    static __forceinline hkThreadMemory& getInstance() { return *(hkThreadMemory*)TlsGetValue_s00b6_4470(g_hkThreadMemoryTls); }
+};
+enum { HK_MEMORY_CLASS_ARRAY = 0x14 };
+namespace hkArrayUtil {
+void _reserveExactly(void* array, int numElem, int sizeElem);   // 0x0107f4a0
+}
+namespace hkArrayUtil {
+void _reserveMore(void* array, int sizeElem);                   // 0x0107f530
+}
+template <typename T> __forceinline T* hkAllocateStack(int n)
+{
+    hkThreadMemory& tm = hkThreadMemory::getInstance();
+    int size = (n * (int)sizeof(T) + 0x10) & ~0xf;
+    char* cur = tm.m_stackCurrent;
+    char* next = cur + size;
+    T* r;
+    if ((uint32_t)next <= (uint32_t)tm.m_stackEnd) {
+        tm.m_stackCurrent = next;
+        r = (T*)cur;
+    } else {
+        r = (T*)tm.onStackOverflow(size);
+    }
+    return r;
+}
+template <typename T> __forceinline void hkDeallocateStack(T* p)
+{
+    hkThreadMemory& tm = hkThreadMemory::getInstance();
+    tm.m_stackCurrent = (char*)p;
+    if ((char*)p == tm.m_stackBase)
+        tm.onStackUnderflow(p);
+}
+template <typename T> class hkArray { public:
+    enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = 0x80000000 };
+    T* m_data;
+    int m_size;
+    int m_capacityAndFlags;
+
+    __forceinline ~hkArray() { releaseMemory(); }
+    __forceinline void releaseMemory()
+    {
+        if ((m_capacityAndFlags & DONT_DEALLOCATE_FLAG) == 0)
+            hkThreadMemory::getInstance().deallocateChunk(m_data, getCapacity() * sizeof(T), HK_MEMORY_CLASS_ARRAY);
+    }
+    int getSize() const { return m_size; }
+    int getCapacity() const { return m_capacityAndFlags & CAPACITY_MASK; }
+    T& operator[](int i) { return m_data[i]; }
+    __forceinline void reserveExactly(int n) { hkArrayUtil::_reserveExactly(this, n, sizeof(T)); }
+    __forceinline void setSize(int n)
+    {
+        int cap = getCapacity();
+        if (cap < n) {
+            int c2 = cap * 2;
+            reserveExactly(n < c2 ? c2 : n);
+        }
+        m_size = n;
+    }
+    __forceinline void pushBackXYZ0(const Vector3& v)
+    {
+        if (m_size == getCapacity())
+            hkArrayUtil::_reserveMore(this, sizeof(T));
+        T* e = &m_data[m_size++];
+        e->x = v.x; e->y = v.y; e->z = v.z; e->w = 0.0f;
+    }
+    __forceinline void pushBack(const T& t)
+    {
+        if (m_size == getCapacity())
+            hkArrayUtil::_reserveMore(this, sizeof(T));
+        m_data[m_size++] = t;
+    }
+};
+template <typename T> struct hkLocalArray : hkArray<T> {
+    T* m_localMemory;
+    __forceinline hkLocalArray(int capacity)
+    {
+        this->m_data = 0;
+        this->m_size = 0;
+        this->m_capacityAndFlags = (int)hkArray<T>::DONT_DEALLOCATE_FLAG;
+        this->m_data = hkAllocateStack<T>(capacity);
+        this->m_capacityAndFlags = capacity | hkArray<T>::DONT_DEALLOCATE_FLAG;
+        m_localMemory = this->m_data;
+    }
+    __forceinline ~hkLocalArray() { hkDeallocateStack(m_localMemory); }
+};
+struct __declspec(align(16)) Vec16 { float x, y, z, w; };
+struct Tri { int a, b, c; };
 struct cSPTransform_s00b6_4470 { uint8_t d[0x38]; };
+cSPTransform_s00b6_4470& translateTransform(cSPTransform_s00b6_4470& out, const cSPTransform_s00b6_4470& in, const cSPTransform_s00b6_4470& delta);   // 0x006271a0
+struct Property {
+    uint8_t pad[0x12];
+    short type;                 // +0x12 (9 = int)
+    int* GetInt();              // 0x0041e990
+};
 struct MeshGroup {
     virtual void* Destroy(int flag);
     long mRefCount;
@@ -137,6 +258,110 @@ struct RefVec3 {
             operator_delete__(mpBegin);
     }
 };
+struct IntVec3 {
+    int* mpBegin;
+    int* mpEnd;
+    int* mpCap;
+    ~IntVec3()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1])
+            operator_delete__(mpBegin);
+    }
+};
+struct VertexRec {                 // 0x20 bytes
+    uint32_t pad00[4];
+    int mCount;                    // +0x10
+    float* mpData;                 // +0x14
+    uint16_t pad18;
+    uint16_t mStrideBits;          // +0x1a (bytes/4 << 2)
+    uint32_t pad1c;
+};
+struct V16Rec {                    // 16 bytes
+    uint32_t pad00;
+    char* mpData;                  // +0x04
+    uint16_t mFormat;              // +0x08
+    uint16_t mStride;              // +0x0a
+    uint32_t pad0c;
+};
+struct Entry8c {
+    uint32_t pad00;
+    char* mpData;                  // +0x04
+    uint16_t mFormat;              // +0x08
+    uint16_t mStride;              // +0x0a
+    uint32_t pad0c[2];
+    short* mpIds;                  // +0x14 (pairs of shorts)
+    uint8_t pad18[0x44 - 0x18];
+    V16Rec* mpV16Begin;            // +0x44
+    V16Rec* mpV16End;              // +0x48
+    uint8_t pad4c[0x8c - 0x4c];
+};
+struct Prim14 {
+    int mType, mEntry, mStart, mEnd, mAux;
+};
+struct Mesh {
+    uint32_t pad00[2];
+    VertexRec* mpVert;             // +0x08
+    uint32_t pad0c[4];
+    Entry8c* mpEntryBegin;         // +0x1c
+    Entry8c* mpEntryEnd;           // +0x20
+    uint32_t pad24[3];
+    Prim14* mpPrimBegin;           // +0x30
+};
+int FindVertexIndex(Mesh* m, unsigned a, unsigned b, unsigned c, int d);   // 0x0071ddc0
+int FindPairIndex(Mesh* m, int entry, int key);                           // 0x0071e040
+void FindPrimitives(Mesh* m, IntVec3* out, int typeEntry, int start, int aux);   // 0x0071ee10
+struct Base;
+struct Sec;
+struct IOwner {
+    PV8 PV8 PV4 PV2
+    virtual void Notify(Sec* s);      // +0x58
+};
+struct IProps {
+    PV8 PV_s00b6_4470
+    virtual bool GetProp(uint32_t id, Property** out);   // +0x24
+};
+struct Sec {                           // object+8 (secondary base)
+    IOwner* mpOwner;                   // +0x00
+    uint8_t pad04[0x90 - 0x04];
+    IProps* mpProps;                   // +0x90
+};
+struct Base {                          // the layered object
+    uint8_t pad00[0x9c];
+    Mesh* mpMeshes[18];                // +0x9c
+    cSPTransform_s00b6_4470 mXform;               // +0xe4
+};
+bool FUN_00b64870(Mesh* m, int hash, const cSPTransform_s00b6_4470* xf, MGRefExt* out, int* n1, int* n2);   // 0x00b64870
+int FUN_00b63f70(Base* b, int idx);                                                                // 0x00b63f70
+struct hkMemoryAllocator {
+    PV4
+    virtual void* alloc(int numBytes, int memClass);   // +0x10
+};
+extern hkMemoryAllocator* g_hkMemoryInstance;          // 0x016E4178
+struct hkShapeBuilderMap {
+    void Init();                                       // 0x0107DE00 (hkPointerMapBase ctor)
+    void insert(void* key, void* value);               // 0x0107DE70
+    void* find(void* key, void* def);                  // 0x0107E540
+};
+extern hkShapeBuilderMap* g_hkShapeBuilders;           // 0x016872E4
+void FUN_00b63eb0();                                   // 0x00b63eb0
+void FUN_00b64040();                                   // 0x00b64040
+void FUN_00b63e30();                                   // 0x00b63e30
+void FUN_00b64470();                                   // 0x00b64470
+struct IShapeSource {
+    PV2 PV_s00b6_4470
+    virtual void* MakeShapeKey(void* owner);           // +0x0c
+};
+struct IShapeContainer {
+    PV2 PV_s00b6_4470
+    virtual void* MakeShapeKey(void* owner);           // +0x0c
+    virtual IShapeContainer* Self();                   // +0x10
+};
+struct ICollisionWorld {
+    PV4
+    virtual IShapeContainer* GetContainer();           // +0x10
+};
+extern ICollisionWorld* g_hkCollisionWorld;            // 0x016E60A8
+typedef int (*ShapeBuilderFn)(void* owner, float scale, void* source);
 struct cModelInstance {
     bool GetMeshes(void* out);                                // 0x0073EB90 (fills a RefVec3)
 };
@@ -1617,6 +1842,28 @@ struct IHostObj {                                               // the host of a
     PVQ8 PVQ8 PVQ8 PVQ8 PVQ8 PVQ8 PVQ8 PVQ PVQ
     virtual void V3A(IWinObj* w);                               // +0xe8
 };
+struct IWindowMgr {
+    PVQ8 PVQ8 PVQ8 PVQ8 PVQ
+    virtual int V21();                                          // +0x84
+};
+struct CTriggerMgr {
+    char pad00[0x2c];
+    int mMode;                                                  // +0x2c
+};
+struct CState {
+    bool ShouldShow();                                          // 0x00e18c70
+};
+void* GetTriggerMgr();                                          // 0x00b3d4d0 (cdecl)
+IWindowMgr* WindowManager_s00b6_d3c0();                                    // 0x0067caa0 (cdecl)
+bool CommManagerIsActive();                                     // 0x00ae9390 (thiscall, ecx = CommManager())
+void* FUN_00b3d3f0(int a);                                      // 0x00b3d3f0 (cdecl)
+void FUN_00b6c200(int key);                                     // 0x00b6c200 (cdecl, RemoveUICtx)
+void FUN_00b686a0(int key);                                     // 0x00b686a0 (key in EAX originally)
+void FUN_00b6a610(Event* e);                                    // 0x00b6a610 (cdecl)
+void FUN_00b6c710(float dt);                                    // 0x00b6c710 (cdecl, UpdateUIContexts)
+void FUN_00b69890();                                            // 0x00b69890 (cdecl)
+void AnchorWindowToWindow(IWinObj* win, IWinObj* base, int mode, IWinObj* p4);   // 0x00807340
+float* SPUIHelpers_GetBoundingScreenRect(float* out, IWinObj* win, char flag);   // 0x00808d20
 struct SimState_s00b6_d3c0 {                                               // the simulator's global state object
     char pad00[0x28];
     int mField28;                                               // +0x28
@@ -1654,7 +1901,7 @@ struct IStreamHost {
     PVQ8
     virtual IStreamObj* V8();                                   // +0x20
 };
-struct cVarListSerializer_s00b6_d3c0 {                                     // 0xa14-byte serializer, built on the stack
+struct cVarListSerializer {                                     // 0xa14-byte serializer, built on the stack
     uint8_t mData[0xa14];
     void Init(void* owner, void* dataset, uint32_t tag);         // 0x00692f90
     void Serialize(void* obj);                                  // 0x00692900
@@ -1869,6 +2116,122 @@ static __forceinline unsigned int PackARGB(const Vec3& c) {
 }
 // ---- items of slice s00b6e3d0 end
 
+// ---- items of slice s00b694a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int   g_idsA[4];                     // 0x0156ae94
+extern int   g_idsB[4];                     // 0x0156aea4
+extern int   g_widgetIds[4];                // 0x0156aeb4
+extern int   g_layout[16];                  // 0x0156aec8
+extern float g_1687940, g_1687944, g_1687948;
+extern float g_20000;                       // 0x01464c14 = 20000.0f
+extern float g_half;                        // 0x01471064 = 0.5f
+extern float g_0f;                          // 0x01485378 = 0.0f
+extern float g_1f;                          // 0x01485720 = 1.0f
+extern float g_neg05;                       // 0x013ec488 = -0.5f
+extern float g_11f;                         // 0x0140c7a4 = 11.0f
+extern float g_neg1;                        // 0x013eb1bc = -1.0f
+extern float g_eps;                         // 0x01464984 = 1.5258789e-05f
+extern float g_fltmax;                      // 0x01464980
+extern float g_09f;                         // 0x013ec4b4 = 0.9f
+struct IV_s00b6_94a0 {
+    VS(0)  VS(1)  VS(2)  VS(3)  VS(4)  VS(5)  VS(6)  VS(7)
+    VS(8)  VS(9)  VS(10) VS(11) VS(12) VS(13) VS(14) VS(15)
+    VS(16) VS(17) VS(18) VS(19) VS(20) VS(21) VS(22) VS(23)
+    VS(24) VS(25) VS(26) VS(27) VS(28) VS(29) VS(30) VS(31)
+    VS(32) VS(33) VS(34) VS(35) VS(36) VS(37) VS(38) VS(39)
+    VS(40) VS(41) VS(42) VS(43) VS(44) VS(45) VS(46) VS(47)
+    VS(48) VS(49) VS(50) VS(51) VS(52) VS(53) VS(54) VS(55)
+    VS(56) VS(57) VS(58) VS(59) VS(60) VS(61) VS(62) VS(63)
+    VS(64) VS(65) VS(66)
+};
+struct Label_s00b6_94a0 {
+    int     mLink;      // +0x000  pool handle of the annotated object
+    IV_s00b6_94a0*     mpObj;      // +0x004
+    char    mFlag;      // +0x008
+    float   mX;         // +0x00c
+    float   mY;         // +0x010
+    float   mX2;        // +0x014
+    float   mY2;        // +0x018
+    float   f1c;        // +0x01c
+    float   f20;        // +0x020
+    float   f24;        // +0x024
+    float   f28;        // +0x028
+    float   f2c;        // +0x02c
+    float   f30;        // +0x030
+    uint8_t b34;        // +0x034
+    char    pad35[3];
+    float   f38;        // +0x038
+    float   f3c;        // +0x03c
+    float   f40;        // +0x040
+    float   f44;        // +0x044
+    float   f48;        // +0x048
+    float   f4c;        // +0x04c
+    void*   p50;        // +0x050
+    void*   p54;        // +0x054
+    void*   p58;        // +0x058
+    void*   p5c;        // +0x05c
+    void*   p60;        // +0x060
+    void*   p64;        // +0x064
+    void*   p68;        // +0x068
+    void*   p6c;        // +0x06c
+    void*   p70;        // +0x070
+    void*   p74;        // +0x074
+    void*   p78;        // +0x078
+    void*   p7c;        // +0x07c
+    void*   p80;        // +0x080
+    void*   p84;        // +0x084
+    void*   p88;        // +0x088
+    void*   p8c;        // +0x08c
+    void*   p90;        // +0x090
+    void*   p94;        // +0x094
+    void*   p98;        // +0x098
+    void*   p9c;        // +0x09c
+    void*   pA0;        // +0x0a0
+    void*   pA4;        // +0x0a4
+    void*   pA8;        // +0x0a8
+    void*   pAc;        // +0x0ac
+    uint32_t padB0[0x1c];
+    IV_s00b6_94a0*     mpWidget;   // +0x120  ref-counted widget (AddRef vt[0], Release vt[4])
+    IV_s00b6_94a0*     mpWidget2;  // +0x124
+    int     mSel;       // +0x128
+    int     mSel2;      // +0x12c
+};
+struct Mgr_s00b6_94a0 {
+    char    pad00[0x10];
+    int     mCount;                         // +0x10
+    int     mStride;                        // +0x14
+    int     pad18;                          // +0x18
+    float   f1c;                            // +0x1c  (label lifetime)
+    float   f20;                            // +0x20
+    int     GetPriority();                  // 0x00e31100
+    Label_s00b6_94a0*  Next(int* cookie);              // 0x00b72230  (ret 4)
+    Label_s00b6_94a0*  Find(int handle);               // 0x00b721d0  (ret 4)
+    Label_s00b6_94a0*  At(int handle);                 // 0x00b72210  (ret 4)
+};
+Mgr_s00b6_94a0* g_pMgr_s00b6_94a0;                                // 0x01687348
+void*  __cdecl GetTriggerMgr();             // 0x00b3d4d0
+void*  __cdecl FUN_00b3d230();              // 0x00b3d230
+struct Checkable { unsigned char Check(); };// 0x00b5ca60
+void*  __cdecl WindowManager();             // 0x0067caa0
+int    __cdecl GetRecorderState();          // 0x00435e90
+void   __cdecl KillSetiEffects(uint32_t id, int state);   // 0x00435ed0
+int    __cdecl FUN_00b67c70(IV_s00b6_94a0* o);         // 0x00b67c70
+Label_s00b6_94a0* __cdecl FUN_00b68aa0(IV_s00b6_94a0* o, int kind, float f);   // 0x00b68aa0
+void*  __cdecl FUN_00b676e0(IV_s00b6_94a0* o);         // 0x00b676e0
+int    __cdecl FUN_00b687d0(int handle);    // 0x00b687d0
+bool   __cdecl FUN_00b67ef0(void* ctx, Vec2* out, Vec2* out2);  // 0x00b67ef0
+void*  __cdecl GetUniverseContext_s00b6_94a0();        // 0x01021080
+Vec2*  __cdecl FUN_007c4180(Vec2* out, const Vec3* p);       // 0x007c4180
+Vec4*  __cdecl GetMainWindowArea(Vec4* out);                 // 0x00805ea0
+void   __cdecl AnchorWindowToScreen(Vec4* out, void* win, int flags, void* parent);  // 0x008070d0
+bool   __cdecl CtxE30(IV_s00b6_94a0* ctx);             // 0x00c88e30
+bool   __cdecl ProjectPoint(const Vec3* p, Vec2* out);   // 0x00b67dc0
+void*  __cdecl GetLayoutManager();          // 0x00805070
+struct LayoutMgr { void* GetWorldMainWindow(uint32_t id); };  // 0x00810620
+struct Layout { bool SetParentWin(void* win, int a, uint32_t b); };  // 0x008121b0
+extern "C" const char DAT_01654c01_s00b6_94a0[], DAT_01654c02_s00b6_94a0[], DAT_01654c10_s00b6_94a0[];
+extern const Vec3 kDir;                     // 0x0156af14 = (0,0,1)
+// ---- items of slice s00b694a0 end
+
 // @ 0x00b63930
 bool SP::cGonzagoTimer::Read(SP::cIObjectDatabaseIStream& stream)
 {
@@ -1975,6 +2338,20 @@ void __cdecl FUN_00b64040()
 void __cdecl FUN_00b64390(void* a, int* b, int* c)
 { (void)a; *b = 0; *c = 0; }
 
+// @ 0x00b647e0
+hkShapeBuilderMap* GetShapeBuilderMap()
+{
+    if (g_hkShapeBuilders)
+        return g_hkShapeBuilders;
+    hkShapeBuilderMap* map = (hkShapeBuilderMap*)g_hkMemoryInstance->alloc(0xc, 0x19);
+    g_hkShapeBuilders = map ? (map->Init(), map) : 0;
+    g_hkShapeBuilders->insert(g_hkClassHull, (void*)&FUN_00b63eb0);
+    g_hkShapeBuilders->insert(g_hkClassMesh, (void*)&FUN_00b64040);
+    g_hkShapeBuilders->insert(g_hkClassCompound, (void*)&FUN_00b64470);
+    g_hkShapeBuilders->insert(g_hkClassSphere, (void*)(void(__cdecl*)())FUN_00b63e30);
+    return g_hkShapeBuilders;
+}
+
 // @ 0x00b64870
 bool BuildMeshGroup(cModelInstance* model, int index, const cSPTransform_s00b6_4470* xf, MGRef* out, int unusedA, int unusedB, int* numVerts, int* numTris)
 {
@@ -1993,6 +2370,166 @@ bool BuildMeshGroup(cModelInstance* model, int index, const cSPTransform_s00b6_4
     FUN_00734d00(xf, out->p);
     FUN_00b64390(out->p, numVerts, numTris);
     return true;
+}
+
+// @ 0x00b649b0
+int BuildShapeFromSource(void* owner, float scale, IShapeSource* source)
+{
+    void* key = source->MakeShapeKey(owner);
+    if (!key)
+        return 0;
+    int result = 0;
+    hkShapeBuilderMap* map = GetShapeBuilderMap();
+    ShapeBuilderFn builder = (ShapeBuilderFn)map->find(key, 0);
+    if (builder)
+        result = builder(owner, scale, source);
+    return result;
+}
+
+// @ 0x00b64a00
+int BuildShapeFromWorld(void* owner, float scale)
+{
+    IShapeContainer* container = g_hkCollisionWorld->GetContainer();
+    void* key = container->MakeShapeKey(owner);
+    if (!key)
+        return 0;
+    int result = 0;
+    hkShapeBuilderMap* map = GetShapeBuilderMap();
+    ShapeBuilderFn builder = (ShapeBuilderFn)map->find(key, 0);
+    if (builder)
+        result = builder(owner, scale, container);
+    return result;
+}
+
+// @ 0x00b64a60
+bool CollectLayerGeometry(Sec* p, int idx, bool useParent, int maxCount, const cSPTransform_s00b6_4470& delta, hkArray<Vec16>* outVerts, hkArray<Tri>* outTris)
+{
+    Base* self = (Base*)((char*)p - 8);
+    p->mpOwner->Notify(p);
+    int hash = 0;
+    Property* prop;
+    IProps* props = p->mpProps;
+    if (props && props->GetProp(0x7ff150b, &prop) && prop->type == 9)
+        hash = *prop->GetInt();
+    if (idx >= 0) {
+        Mesh** q = &self->mpMeshes[idx];
+        while (*q == 0) {
+            idx--;
+            q--;
+            if (idx < 0)
+                return false;
+        }
+        if (idx >= 0) {
+            Mesh* mesh = self->mpMeshes[idx];
+            cSPTransform_s00b6_4470 xf;
+            translateTransform(xf, self->mXform, delta);
+            MGRef refptr;
+            int n1, n2;
+            if (FUN_00b64870(mesh, hash, &xf, (MGRefExt*)&refptr, &n1, &n2) && n1 > 0 && n2 > 0) {
+                if (useParent && n2 <= maxCount) {
+                    int pi = FUN_00b63f70(self, idx - 1);
+                    if (pi >= 0) {
+                        MGRefExt tmp;
+                        int m1, m2;
+                        if (FUN_00b64870(self->mpMeshes[pi], hash, &xf, &tmp, &m1, &m2)) {
+                            refptr = tmp;
+                            n1 = m1;
+                            n2 = m2;
+                        }
+                    }
+                }
+                RefVec3 group;
+                group.mpBegin = 0;
+                group.mpEnd = 0;
+                group.mpCap = 0;
+                group.push_back(refptr);
+                int n = (int)(group.mpEnd - group.mpBegin);
+                hkLocalArray<int> offsets(n);
+                offsets.setSize(n);
+                if (outVerts->getCapacity() < n1)
+                    outVerts->reserveExactly(n1);
+                for (int i = 0; i < n; i++) {
+                    Mesh* m = (Mesh*)group.mpBegin[i].p;
+                    int e = FindVertexIndex(m, 1, 0xffffffff, 3, 0xe);
+                    if (e >= 0) {
+                        offsets[i] = outVerts->getSize();
+                        VertexRec* vr = &m->mpVert[e];
+                        const float* src = vr->mpData;
+                        int cnt = vr->mCount;
+                        int stride = (vr->mStrideBits >> 2);
+                        for (; cnt > 0; cnt--) {
+                            Vector3 p3 = *(const Vector3*)src;
+                            outVerts->pushBackXYZ0(p3);
+                            src += stride;
+                        }
+                    }
+                }
+                if (outTris) {
+                    if (outTris->getCapacity() < n2)
+                        outTris->reserveExactly(n2);
+                    for (int i = 0; i < n; i++) {
+                        Mesh* m = (Mesh*)group.mpBegin[i].p;
+                        int base = offsets[i];
+                        int e = FindVertexIndex(m, 1, 0xffffffff, 3, 0xe);
+                        if (e < 0)
+                            continue;
+                        int nSub = (int)(m->mpEntryEnd - m->mpEntryBegin);
+                        for (int sub = 0; sub < nSub; sub++) {
+                            Entry8c* ent = &m->mpEntryBegin[sub];
+                            int idx2 = FindPairIndex(m, sub, e);
+                            if (idx2 < 0)
+                                continue;
+                            IntVec3 prims;
+                            prims.mpBegin = 0;
+                            prims.mpEnd = 0;
+                            prims.mpCap = 0;
+                            FindPrimitives(m, &prims, sub, 4, -1);
+                            int nPrims = (int)(prims.mpEnd - prims.mpBegin);
+                            for (int k = 0; k < nPrims; k++) {
+                                Prim14* pr = &m->mpPrimBegin[prims.mpBegin[k]];
+                                int t = pr->mType;
+                                int cnt;
+                                if (t > 0 && t < 10) {
+                                    if (t == 9)
+                                        cnt = 1;
+                                    else
+                                        cnt = (g_PrimTab84[t] - pr->mStart + pr->mEnd) / g_PrimTab90[t];
+                                } else {
+                                    cnt = 0;
+                                }
+                                int s = pr->mStart;
+                                if (ent->mpV16Begin == ent->mpV16End) {
+                                    for (; cnt > 0; cnt--) {
+                                        uint32_t mask = g_FormatMask[ent->mFormat];
+                                        Tri tr;
+                                        tr.a = (*(uint32_t*)(ent->mpData + ent->mStride * s) & mask) + base;
+                                        tr.b = (*(uint32_t*)(ent->mpData + ent->mStride * (s + 1)) & mask) + base;
+                                        tr.c = (*(uint32_t*)(ent->mpData + ent->mStride * (s + 2)) & mask) + base;
+                                        s += 3;
+                                        outTris->pushBack(tr);
+                                    }
+                                } else {
+                                    V16Rec* r2 = &ent->mpV16Begin[ent->mpIds[idx2 * 2 + 1]];
+                                    for (; cnt > 0; cnt--) {
+                                        uint32_t m1 = g_FormatMask[ent->mFormat];
+                                        uint32_t m2 = g_FormatMask[r2->mFormat];
+                                        Tri tr;
+                                        tr.a = (*(uint32_t*)(r2->mpData + (*(uint32_t*)(ent->mpData + ent->mStride * s) & m1) * r2->mStride) & m2) + base;
+                                        tr.b = (*(uint32_t*)(r2->mpData + (*(uint32_t*)(ent->mpData + ent->mStride * (s + 1)) & m1) * r2->mStride) & m2) + base;
+                                        tr.c = (*(uint32_t*)(r2->mpData + (*(uint32_t*)(ent->mpData + ent->mStride * (s + 2)) & m1) * r2->mStride) & m2) + base;
+                                        s += 3;
+                                        outTris->pushBack(tr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // @ 0x00b65b10
@@ -3742,6 +4279,354 @@ void FUN_00b69460(void* pWindow, int mode)
     (*(void(__thiscall**)(void*, int))(*(int*)pWindow + 0x14))(pWindow, mode);
 }
 
+// @ 0x00b694a0
+static void FUN_00b694a0(Label_s00b6_94a0* e)
+{
+    int sel = e->mSel;
+    float bx0 = e->mX, by0 = e->mY, bx1 = e->mX, by1 = e->mY;
+    IV_s00b6_94a0* w = e->mpWidget;
+    if (!e->mFlag) { bx0 = by0 = bx1 = by1 = g_20000; }
+    float box[4];
+    box[0] = bx0 - g_half;
+    box[1] = by0 - g_half;
+    box[2] = bx1 + g_half;
+    box[3] = by1 + g_half;
+
+    IV_s00b6_94a0* wa = 0;
+    IV_s00b6_94a0* wb = 0;
+    for (int i = 0; i < 4; i++) {
+        IV_s00b6_94a0* a = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(w, 0xf0))(w, g_idsA[i], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(a, 0x7c))(a, 1, 0);
+        if (i == sel) wb = a;
+        IV_s00b6_94a0* b = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(w, 0xf0))(w, g_idsB[i], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(b, 0x7c))(b, 1, 0);
+        if (i == sel) wa = b;
+    }
+    ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wa, 0x7c))(wa, 1, 1);
+    ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wb, 0x7c))(wb, 1, 1);
+    IV_s00b6_94a0* last;
+    if (wa == wb) {
+        for (unsigned o = 0; o < 0x10; o += 4) {
+            IV_s00b6_94a0* q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wb, 0xf0))(wb, *(int*)((char*)g_widgetIds + o), 1);
+            ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 1);
+        }
+        last = w;
+    } else {
+        int idx = 0;
+        for (int i = 0; i < 4; i++) {
+            IV_s00b6_94a0* q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wa, 0xf0))(wa, g_widgetIds[g_layout[i * 4]], 1);
+            IV_s00b6_94a0* t = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0xf0))(q, 0x7392bd8, 0);
+            ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(t, 0x7c))(t, 1, 0);
+            AnchorWindowToScreen((Vec4*)box, t, 0x300, w);
+
+            Vec4 r1 = *(Vec4*)(((void*(__thiscall*)(IV_s00b6_94a0*))VT(w, 0x38))(w));
+            IV_s00b6_94a0* par = (IV_s00b6_94a0*)(((void*(__thiscall*)(IV_s00b6_94a0*))VT(w, 0x10))(w));
+            Vec4* r2 = (Vec4*)(((void*(__thiscall*)(IV_s00b6_94a0*))VT(par, 0x38))(par));
+            if (r1.x >= r2->x && r1.y >= r2->y && r1.x < r2->z && r1.y < r2->w &&
+                r1.z >= r2->x && r1.w >= r2->y && r1.z < r2->z && r1.w < r2->w) {
+                idx = i;
+                break;
+            }
+        }
+        e->mSel2 = idx;
+        int* row = g_layout + idx * 4;
+        last = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wa, 0xf0))(wa, g_widgetIds[row[0]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(last, 0x7c))(last, 1, 1);
+        IV_s00b6_94a0* q;
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wa, 0xf0))(wa, g_widgetIds[row[1]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 0);
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wa, 0xf0))(wa, g_widgetIds[row[2]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 0);
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wa, 0xf0))(wa, g_widgetIds[row[3]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 0);
+
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wb, 0xf0))(wb, g_widgetIds[row[0]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 1);
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wb, 0xf0))(wb, g_widgetIds[row[1]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 1);
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wb, 0xf0))(wb, g_widgetIds[row[2]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 1);
+        q = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(wb, 0xf0))(wb, g_widgetIds[row[3]], 1);
+        ((void(__thiscall*)(IV_s00b6_94a0*, int, int))VT(q, 0x7c))(q, 1, 1);
+    }
+    IV_s00b6_94a0* win = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int, int))VT(last, 0xf0))(last, 0x7392bd8, 0);
+    e->mpWidget2 = win;
+    AnchorWindowToScreen((Vec4*)box, win, 0x300, w);
+}
+
+// @ 0x00b69890
+void FUN_00b69890(void)
+{
+    int cookie = g_pMgr_s00b6_94a0->GetPriority();
+    Label_s00b6_94a0* e = g_pMgr_s00b6_94a0->Next(&cookie);
+    while (e) {
+        IV_s00b6_94a0* w = e->mpWidget;
+        if (w) {
+            if ((((unsigned char(__thiscall*)(IV_s00b6_94a0*))VT(w, 0x28))(w) & 1) == 0) {
+                int link = e->mLink;
+                Label_s00b6_94a0* t = g_pMgr_s00b6_94a0->Find(link);
+                if (t) {
+                    if (t->mpWidget) {
+                        IV_s00b6_94a0* r = *(IV_s00b6_94a0* volatile*)&t->mpWidget;
+                        if (r) {
+                            t->mpWidget = 0;
+                            ((void(__thiscall*)(IV_s00b6_94a0*))VT(r, 4))(r);
+                        }
+                    }
+                }
+            } else {
+                FUN_00b694a0(e);
+            }
+        }
+        e = g_pMgr_s00b6_94a0->Next(&cookie);
+    }
+}
+
+// @ 0x00b69930
+void FUN_00b69930(IV_s00b6_94a0* o, float f, char b)
+{
+    Label_s00b6_94a0* e = FUN_00b68aa0(o, FUN_00b67c70(o), f);
+    if (!e) return;
+    e->f40 = g_pMgr_s00b6_94a0->f1c;
+    e->f3c = b ? g_fltmax : g_pMgr_s00b6_94a0->f20;
+}
+
+// @ 0x00b69990
+void FUN_00b69990(IV_s00b6_94a0* o)
+{
+    if (!o) return;
+    void* trig = GetTriggerMgr();
+    int st = *(int*)((char*)trig + 0x2c);
+    if (st == 1 || st == 2) return;
+    Checkable* c = (Checkable*)FUN_00b3d230();
+    if (c->Check()) {
+        IV_s00b6_94a0* wm = (IV_s00b6_94a0*)WindowManager();
+        IV_s00b6_94a0* win = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, int))VT(wm, 0x48))(wm, 1);
+        if (GetCurrentGameMode() != DAT_01654c02_s00b6_94a0 && GetCurrentGameMode() != DAT_01654c01_s00b6_94a0)
+            return;
+        if (!win) return;
+        int t = ((int(__thiscall*)(IV_s00b6_94a0*))VT(win, 0x1c))(win);
+        if (t != 0x36ad4a4 && ((int(__thiscall*)(IV_s00b6_94a0*))VT(win, 0x1c))(win) != 0x625cd52)
+            return;
+    }
+    Label_s00b6_94a0* e = FUN_00b68aa0(o, FUN_00b67c70(o), g_neg1);
+    if (!e) return;
+    if (GetCurrentGameMode() == DAT_01654c02_s00b6_94a0 && e->f44 == g_0f) {
+        void* t = FUN_00b676e0(o);
+        if (t && ((bool(__thiscall*)(void*))VT((char*)t + 0x34, 0x58))((char*)t + 0x34)) {
+            int r = GetRecorderState();
+            KillSetiEffects(0xa47319c2, r);
+        }
+    }
+    e->f44 = g_11f;
+}
+
+// @ 0x00b69aa0
+void FUN_00b69aa0(IV_s00b6_94a0* o, float x, float y, uint32_t layoutId)
+{
+    if (!o) return;
+    void* trig = GetTriggerMgr();
+    int st = *(int*)((char*)trig + 0x2c);
+    if (st == 1 || st == 2) return;
+    Label_s00b6_94a0* e = FUN_00b68aa0(o, FUN_00b67c70(o), g_neg1);
+    if (!e) return;
+    if (layoutId) {
+        void* win = ((LayoutMgr*)GetLayoutManager())->GetWorldMainWindow(layoutId);
+        if (win)
+            ((Layout*)e->p50)->SetParentWin(win, 1, 0x5b598fa);
+    }
+    e->f44 = g_11f;
+    e->f48 = x;
+    e->f4c = y;
+}
+
+// @ 0x00b69b30
+void FUN_00b69b30(int handle, IV_s00b6_94a0* widget, int sel)
+{
+    int h = FUN_00b687d0(handle);
+    Label_s00b6_94a0* e = g_pMgr_s00b6_94a0->At(h);
+    if (!e) return;
+    IV_s00b6_94a0* old = *(IV_s00b6_94a0* volatile*)&e->mpWidget;
+    if (e->mpWidget == 0) {
+        if (widget != old) {
+            if (widget)
+                ((void(__thiscall*)(IV_s00b6_94a0*))VT(widget, 0))(widget);
+            e->mpWidget = widget;
+            if (old)
+                ((void(__thiscall*)(IV_s00b6_94a0*))VT(old, 4))(old);
+        }
+        IV_s00b6_94a0* cur = e->mpWidget;
+        if (cur)
+            ((void(__thiscall*)(IV_s00b6_94a0*, float, float))VT(cur, 0x70))(cur, g_20000, g_20000);
+    }
+    e->mSel = sel;
+    e->mpWidget2 = 0;
+}
+
+// @ 0x00b69bd0
+static Vec2* FUN_00b69bd0(Vec2* result, const Vec2* pt, const Vec2* a)
+{
+    result->x = a->x;
+    result->y = a->y;
+    float px = pt->x;
+    float py = pt->y;
+    Vec4 area;
+    GetMainWindowArea(&area);
+    if (result->y > py) {
+        float ox = result->x, oy = result->y;
+        result->x = px; result->y = py;
+        px = ox; py = oy;
+    }
+    float dx = result->x - px;
+    if (fabsf(dx) >= g_eps) {
+        float dy = result->y - py;
+        if (fabsf(dy) > g_eps) {
+            float slope = dy / dx;
+            float nx = -result->y / slope + result->x;
+            result->x = nx;
+            result->y = 0.0f;
+            if (nx < 0.0f) {
+                result->y = -nx * slope;
+                result->x = 0.0f;
+            } else if (nx > area.z) {
+                result->y = (area.z - nx) * slope;
+                result->x = area.z;
+            }
+        }
+    } else {
+        result->y = 0.0f;
+    }
+    return result;
+}
+
+// @ 0x00b69cf0
+static bool FUN_00b69cf0(IV_s00b6_94a0* ctx, Vec2* out, Vec2* out2)
+{
+    if (CtxE30(ctx)) return 0;
+    float r[6];
+    r[0] = g_neg05; r[1] = g_neg05; r[2] = 0.0f; r[3] = g_half; r[4] = g_half; r[5] = g_1f;
+    unsigned flags = *(unsigned*)((char*)ctx + 0x50);
+    float* pv;
+    if ((flags & 0x10) && !(flags & 0x20))
+        pv = r;
+    else
+        pv = (float*)((void*(__thiscall*)(IV_s00b6_94a0*))VT(ctx, 0x68))(ctx);
+    float h = pv[5];
+
+    Vec3* d = (Vec3*)((void*(__thiscall*)(IV_s00b6_94a0*))VT(ctx, 0x2c))(ctx);
+    float dx = d->x, dy = d->y, dz = d->z;
+    float inv = 1.0f / sqrtf(dx * dx + dy * dy + dz * dz);
+    float ux = dx * inv, uy = dy * inv, uz = dz * inv;
+    Vec3 dir; dir.x = ux; dir.y = uy; dir.z = uz;
+    Vec3 pos;
+    pos.x = ux * h + dx;
+    pos.y = uy * h + dy;
+    pos.z = uz * h + dz;
+
+    Vec2 cur;
+    bool vis = ProjectPoint(&pos, &cur);
+    float step = h * 0.14285715f;
+    h -= step;
+    char cv = vis;
+    for (;;) {
+        if (cv) {
+            Vec4 area;
+            GetMainWindowArea(&area);
+            out->x = ((cur.x + g_1f) * area.z) * g_half;
+            out->y = ((g_1f - cur.y) * area.w) * g_half;
+            if (out2) { out2->x = out->x; out2->y = out->y; }
+            if (!vis) {
+                pos.x = ux * h + dx;
+                pos.y = uy * h + dy;
+                pos.z = uz * h + dz;
+                vis = ProjectPoint(&pos, &cur);
+                if (vis) {
+                    Vec4 a2;
+                    GetMainWindowArea(&a2);
+                    Vec2 t;
+                    t.x = ((out->x + g_1f) * a2.z) * g_half;
+                    t.y = ((g_1f - out->y) * a2.w) * g_half;
+                    Vec2* q = FUN_00b69bd0(&t, &cur, (Vec2*)out);
+                    out->x = q->x;
+                    out->y = q->y;
+                }
+            }
+            if (out2) {
+                pos.x = ux * step + dx;
+                pos.y = uy * step + dy;
+                pos.z = uz * step + dz;
+                vis = ProjectPoint(&pos, &cur);
+                if (vis) {
+                    Vec4 a3;
+                    GetMainWindowArea(&a3);
+                    out2->x = ((cur.x + g_1f) * a3.z) * g_half;
+                    out2->y = ((g_1f - cur.y) * a3.w) * g_half;
+                }
+            }
+            return cv;
+        }
+        if (h <= 0.0f) return 0;
+        pos.x = ux * h + dx;
+        pos.y = uy * h + dy;
+        pos.z = uz * h + dz;
+        void* app = SP_App();
+        char* cam = (char*)((void*(__thiscall*)(void*))VT(app, 0x58))(app);
+        float z = (((*(float*)(cam + 0x48) * pos.x + *(float*)(cam + 0x68) * pos.z) +
+                    *(float*)(cam + 0x58) * pos.y) + *(float*)(cam + 0x78)) * g_1687948;
+        float y = (((*(float*)(cam + 0x44) * pos.x + *(float*)(cam + 0x64) * pos.z) +
+                    *(float*)(cam + 0x54) * pos.y) + *(float*)(cam + 0x74)) * g_1687944;
+        float x = (((*(float*)(cam + 0x40) * pos.x + *(float*)(cam + 0x60) * pos.z) +
+                    *(float*)(cam + 0x50) * pos.y) + *(float*)(cam + 0x70)) * g_1687940;
+        float s = z + y + x;
+        if (0.0f > s) { cv = 0; continue; }
+        Vec2 t;
+        FUN_007c4180(&t, &pos);
+        if (!(g_1f >= t.x && t.x >= g_neg1 && g_1f >= t.y && t.y >= g_neg1)) { cv = 0; continue; }
+        cur = t;
+        cv = 1;
+    }
+}
+
+// @ 0x00b6a200
+bool FUN_00b6a200(IV_s00b6_94a0* o, Vec2* out)
+{
+    IV_s00b6_94a0* c;
+    if (o)
+        c = (IV_s00b6_94a0*)((void*(__thiscall*)(IV_s00b6_94a0*, uint32_t))VT(o, 0xc))(o, 0xb033b403);
+    else
+        c = 0;
+    if (!GetUniverseContext_s00b6_94a0()) {
+        char* p = c ? (char*)c + 0x34 : 0;
+        if (GetCurrentGameMode() == DAT_01654c10_s00b6_94a0)
+            return FUN_00b69cf0((IV_s00b6_94a0*)p, out, 0);
+        return FUN_00b67ef0(p, out, 0);
+    }
+    char* s = (char*)c + 0x34;
+    float h = *(float*)((char*)((void*(__thiscall*)(char*))VT(s, 0x68))(s) + 0x14) * g_09f;
+    Vec3* d = (Vec3*)((void*(__thiscall*)(char*))VT(s, 0x2c))(s);
+    Vec3 pos;
+    pos.x = kDir.x * h + d->x;
+    pos.y = kDir.y * h + d->y;
+    pos.z = kDir.z * h + d->z;
+    void* app = SP_App();
+    char* cam = (char*)((void*(__thiscall*)(void*))VT(app, 0x58))(app);
+    Vec2 q;
+    FUN_007c4180(&q, &pos);
+    float f0 = (((*(float*)(cam + 0x68) * pos.z + *(float*)(cam + 0x58) * pos.y) +
+                 *(float*)(cam + 0x48) * pos.x) + *(float*)(cam + 0x78)) * g_1687948;
+    float f1 = (((*(float*)(cam + 0x60) * pos.z + *(float*)(cam + 0x50) * pos.y) +
+                 *(float*)(cam + 0x40) * pos.x) + *(float*)(cam + 0x70)) * g_1687940;
+    float f2 = (((*(float*)(cam + 0x64) * pos.z + *(float*)(cam + 0x54) * pos.y) +
+                 *(float*)(cam + 0x44) * pos.x) + *(float*)(cam + 0x74)) * g_1687944;
+    float sum = f0 + f1 + f2;
+    if (sum < 0.0f) return false;
+    Vec4 area;
+    GetMainWindowArea(&area);
+    out->x = ((q.x + g_1f) * area.z) * g_half;
+    out->y = ((g_1f - q.y) * area.w) * g_half;
+    return true;
+}
+
 // @ 0x00b6a420
 bool FUN_00b6a420(Obj_s00b6_a420* obj, float* p2, float* p3)
 {
@@ -4729,6 +5614,126 @@ void ProcessLabelEvents(float dt)
     }
 }
 
+// @ 0x00b6dbd0
+void FUN_00b6dbd0(float dt)
+{
+    // retire the contexts whose label died, drop the slots of the ones that cannot be shown any more
+    int cookie = FUN_00e31100();
+    for (Event* e = g_pMgr_s00b6_d3c0->FUN_00b72230(&cookie); e != 0; e = g_pMgr_s00b6_d3c0->FUN_00b72230(&cookie)) {
+        if (e->mpObj->IsLabelAlive()) {
+            FUN_00b6c200(e->mKey);
+            continue;
+        }
+        if (e->mArmed) {
+            int mode = ((CTriggerMgr*)GetTriggerMgr())->mMode;
+            if (mode == 1 || mode == 2
+                || WindowManager_s00b6_d3c0()->V21() != 0
+                || CommManagerIsActive()
+                || ((CState*)FUN_00b3d3f0(0))->ShouldShow())
+                FUN_00b686a0(e->mKey);
+        }
+        if (e->mArmed) {
+            FUN_00b6a610(e);
+        }
+        else if (e->mpLayout == 0 && e->mpWin120 == 0) {
+            FUN_00b6c200(e->mKey);
+        }
+        else {
+            FUN_00b6a610(e);
+        }
+    }
+
+    ProcessLabelEvents(dt);
+    FUN_00b6c710(dt);
+    FUN_00b69890();
+
+    // anchor the label windows of the live records
+    cookie = FUN_00e31100();
+    Event* e;
+    while ((e = g_pMgr_s00b6_d3c0->FUN_00b72230(&cookie)) != 0) {
+        if (!e->mFlag)
+            continue;
+        if (e->mArmed) {
+            if (e->mpWin120 != 0 && e->mState128 == 2) {
+                IWinObj* base = e->mpWin58;
+                if (base == 0)
+                    base = e->mpWin70;
+                if (base != 0)
+                    AnchorWindowToWindow(e->mpWin120, base, 0x102, e->mpWin54);
+                float* pos = e->mpWin54->GetPos();
+                e->mpWin54->SetPos(pos[0], pos[1] - 12.0f);
+            }
+            if (e->mpLayout != 0) {
+                IWinObj* target = 0;
+                if (e->mpField90 != 0)
+                    target = (IWinObj*)e->mpField90->Cast(0xeeee8218);
+                e->mpWinBC->GetHost()->V3A(e->mpWinBC);
+                if (target != 0) {
+                    if ((target->V0A() & 1) != 0)
+                        AnchorWindowToWindow(target, e->mpWinBC, 0x220, (IWinObj*)0);
+                    else
+                        AnchorWindowToWindow(target, e->mpWinBC, 0x300, (IWinObj*)0);
+                }
+                else if (e->mpWin58 != 0 && (e->mpWin58->V0A() & 1) != 0) {
+                    AnchorWindowToWindow(e->mpWin58, e->mpWinBC, 0x102, (IWinObj*)0);
+                }
+                else if (e->mpWin70 != 0 && (e->mpWin58->V0A() & 1) != 0) {
+                    AnchorWindowToWindow(e->mpWin70, e->mpWinBC, 0x102, (IWinObj*)0);
+                }
+            }
+        }
+        else if (e->mpLayout != 0 && e->mpWin120 != 0 && e->mpWinBC != 0 && e->mState128 == 2) {
+            AnchorWindowToWindow(e->mpWin120, e->mpWinBC, 0x102, (IWinObj*)0);
+        }
+    }
+
+    // scroll the visible records so their label windows stay inside the screen
+    cookie = FUN_00e31100();
+    while ((e = g_pMgr_s00b6_d3c0->FUN_00b72230(&cookie)) != 0) {
+        if (!e->mFlag)
+            continue;
+        float off;
+        if (e->mpLayout != 0) {
+            float rect[4];
+            SPUIHelpers_GetBoundingScreenRect(rect, e->mpWinBC, 0);
+            off = 20.0f - rect[2];
+        }
+        else if (e->mArmed != 0) {
+            float rect[4];
+            SPUIHelpers_GetBoundingScreenRect(rect, e->mpWin58, 0);
+            off = 20.0f - rect[2];
+        }
+        else {
+            if (e->mpWin120 == 0)
+                continue;
+            float rect[4];
+            SPUIHelpers_GetBoundingScreenRect(rect, e->mpWin120, 0);
+            off = 20.0f - rect[2];
+        }
+        if (off > 0.0f) {
+            float y = e->mY + off;
+            float over = y - e->mLimitY;
+            if (over > 0.0f) {
+                off -= over;
+                y -= over;
+            }
+            e->mY = y;
+            if (e->mArmed != 0 && e->mpWin54 != 0) {
+                float* pos = e->mpWin54->GetPos();
+                e->mpWin54->SetPos(pos[0], pos[1] + off);
+            }
+            if (e->mpLayout != 0 && e->mpWinBC != 0) {
+                float* pos = e->mpWinBC->GetPos();
+                e->mpWinBC->SetPos(pos[0], pos[1] + off);
+            }
+            if (e->mpWin120 != 0) {
+                float* pos = e->mpWin120->GetPos();
+                e->mpWin120->SetPos(pos[0], pos[1] + off);
+            }
+        }
+    }
+}
+
 // @ 0x00b6e050
 void FUN_00b6e050()
 {
@@ -4794,18 +5799,14 @@ int FUN_00b6e2b0(int value)
     return old;
 }
 
-// Closest attempt, same size. The id store now sits inside the second
-// virtual call, one instruction early: before `mov ecx, eax` instead of
-// after `mov eax, [edx+0x18]`.
 // @ 0x00b6e2d0
 void cSimulatorUIStore::Save(IStreamHost* owner)
 {
     IStreamObj* streamObj = owner->V8();
-    void** vt = *(void***)streamObj;
     uint32_t id = 0x5593a1a;
-    void* stream = ((void* (__thiscall*)(void*))vt[6])(streamObj);
+    void* stream = streamObj->V6();
     EA::IO::WriteUint32(stream, &id, 1, 0);
-    cVarListSerializer_s00b6_d3c0 ser;
+    cVarListSerializer ser;
     ser.Init(this, &g_dataset0156b0d8, 0x1a80d26);
     ser.Serialize(owner);
 }

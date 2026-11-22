@@ -992,6 +992,7 @@ public:
 // ---- items of slice s008ea290 end
 
 // ---- items of slice s008edc30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_ReadWriteBarrier)
 namespace EA {
 namespace XHTML {
 namespace Layout {
@@ -1004,7 +1005,100 @@ struct Vec2 {
 namespace EA {
 namespace XHTML {
 namespace Layout {
-void* __fastcall StyleCtor(void* self, int, void* rect, int a, int b);  // 0x0089b250
+struct FloatEntry_s008e_dc30 {                 // 0x74
+    uint32_t mPad00[0x54 / 4];      // +0x00
+    int      mKind;                 // +0x54
+    uint32_t mPad58;                // +0x58
+    FloatEntry_s008e_dc30* mpNext;             // +0x5c
+    uint32_t mPad60;                // +0x60
+    float    mSizeBig;              // +0x64
+    float    mSizeSmall;            // +0x68
+    float    mSizeOther;            // +0x6c
+    float    mMaxY;                 // +0x70
+    uint32_t mPad74;
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+struct TranslationEntry {           // 0x0c
+    int mValue;                     // +0x00
+    int mIndex;                     // +0x04
+    int mExtra;                     // +0x08
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+struct TranslationVector {          // eastl vector<TranslationEntry>, 0x14
+    TranslationEntry* mpBegin;      // +0x00
+    TranslationEntry* mpEnd;        // +0x04
+    TranslationEntry* mpCapacity;   // +0x08
+    uint32_t mAllocator[2];         // +0x0c
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+struct ScrollInfo {
+    void** mpVtbl;                  // +0x00
+    void Release();                 // 0x008ee7a0
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void* __fastcall Page_CreatePageLayout(void* self, int);         // 0x008e2810
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void  __cdecl PageLayoutCtor(void* dst, void* a);                // 0x008fbe00
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void  __cdecl PageLayoutDtor(void* p);                           // 0x008e8650
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void* __cdecl PageLayout_Build(void* self, void* layout, void* a, int b); // 0x008ecfa0
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Typesetter_s008e_dc30 {
+public:
+    void AddLineBreak(void* item, const void* pickBox);          // 0x0089b250
+    void AddTextRun(const wchar_t* s, unsigned n);               // 0x0089b1e0
+    void StyleAssign(void* v);                                   // 0x0089b360
+    int  ContentSize();                                          // 0x00897690
+    void* GetApp();                                              // 0x006e64f0
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void  __fastcall StyleAssign(void* self, int, void* v);          // 0x0089b360
 }
 }
 }
@@ -1012,6 +1106,75 @@ namespace EA {
 namespace XHTML {
 namespace Layout {
 void* __cdecl  ScrollAppGet(void);                               // 0x006e64f0
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext_s008e_dc30 { public:
+    ScrollInfo* mpScroll00;                 // +0x0000
+    uint32_t mPad04[8];                     // +0x0004
+    void*    mpNode24;                      // +0x0024
+    uint32_t mPad28[5];                     // +0x0028
+    void*    mpLayout3c;                    // +0x003c
+    int      mVal40;                        // +0x0040
+    TranslationVector mBlocks44;            // +0x0044
+    uint32_t mPad58[(0x264 - 0x58) / 4];
+    int      mVal264;                       // +0x0264
+    uint32_t mPad268[(0x530 - 0x268) / 4];
+    float    mX530;                         // +0x0530
+    float    mY534;                         // +0x0534
+    float    mX538;                         // +0x0538
+    float    mY53c;                         // +0x053c
+    int      mVal540;                       // +0x0540
+    float    mX544;                         // +0x0544
+    float    mY548;                         // +0x0548
+    float    mW54c;                         // +0x054c
+    float    mH550;                         // +0x0550
+    float    mMarginX554;                   // +0x0554
+    float    mMarginY558;                   // +0x0558
+    float    mExtra55c;                     // +0x055c
+    uint32_t mCount560;                     // +0x0560
+    uint32_t mMax564;                       // +0x0564
+    uint32_t mVal568;                       // +0x0568
+    FloatEntry_s008e_dc30* mpFloatHead56c;             // +0x056c
+    uint32_t mPad570;                       // +0x0570
+    void*    mpInline574;                   // +0x0574
+
+    RenderingContext_s008e_dc30(void* scroll, const float* screenRect, const float* marginRect);
+    RenderingContext_s008e_dc30(const RenderingContext_s008e_dc30& src);
+    void Place(void* item, int style);
+    void RefreshMargins();  // 0x008eea30 (EA::XHTML::Layout::RenderingContext::RefreshMargins)
+    int TestRect(float x0, float y0, float x1, float y1);
+    void ScrollViewport(float x0, float y0, float x1, float y1);
+    void ScrollRect(float x0, float y0, float x1, float y1);
+    void SubStyleSet(void* a, void* b);          // 0x008ee720 (uses this+4)
+    void SubStyleSetValue(const Vec2* value);    // 0x008ee740 (uses this+4)
+    void SubStyleGet(Vec2* out);                 // 0x008ee770 (uses this+4)
+    void ReleaseScroll();                        // 0x008ee7a0 (uses *(this))
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Page_s008e_dc30 { public:
+    uint32_t mPad00[0x24 / 4];
+    void*    mpNode24;                      // +0x24
+    uint32_t mPad28[(0x3c - 0x28) / 4];
+    void*    mpLayout3c;                    // +0x3c
+    int      mVal40;                        // +0x40
+    TranslationVector mBlocks44;            // +0x44
+    uint32_t mPad58[(0x260 - 0x58) / 4];
+    int      mVal260;                       // +0x260
+    int      mVal264;                       // +0x264
+    int      mVal268;                       // +0x268
+
+    void CreatePageLayout();
+    void SetDocument(void* document);
+};
 }
 }
 }
@@ -1141,6 +1304,120 @@ public:
     void AddTextRun(const wchar_t* s, unsigned n);       // 0x0089b1e0
     void AddLineBreak(const wchar_t* s, unsigned n, int a, int b);   // 0x0089b250
 };
+}
+}
+namespace EA {
+namespace Drawing {
+class IDrawContext_s008e_ebb0 { public:
+    virtual void v0();
+    virtual void SetColor(unsigned c);                    // +4
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+    virtual void DrawGlyphs(const uint16_t* g, const EA::Text::GlyphLayoutInfo_s008e_ebb0* info, unsigned n);   // +0x30
+    virtual void v13();
+    virtual void FillRect(float x1, float y1, float x2, float y2);   // +0x38
+virtual void v15();
+virtual void v16();
+virtual void v17();
+    // +0x48: draw four offset quads (retail FUN_008eebb0 receiver)
+    virtual void DrawQuadSet(const float* p1, void* v1, const float* p2, void* v2,
+                             const float* p3, void* v3, const float* p4, void* v4);
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    // +0x58: textured rectangle (retail FUN_008eec80 receiver)
+    virtual void DrawImage(const float* rect, void* tex, const float* uv);
+};
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext_s008e_ebb0;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Background_s008e_ebb0 { public:
+    char pad[0x44];
+    void Draw(RenderingContext_s008e_ebb0* ctx, const float* pen, const float* rect);   // 0x008e6710
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class InlineItem { public:
+    char pad0[0x3c];
+    unsigned mColor;                // +0x3c
+    char pad1[0x44 - 0x40];
+    Background_s008e_ebb0* mpBackground;       // +0x44
+    char pad2[0x50 - 0x48];
+    InlineItem* mpNext;             // +0x50
+    unsigned mBegin;                // +0x54
+    unsigned mEnd;                  // +0x58
+    InlineItem* mpNextFloat;        // +0x5c (float list link)
+    char pad4[0x70 - 0x60];
+    float mfFloatBottom;            // +0x70
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+struct ContextRectF { float mfOffsetX, mfOffsetY, mfWidth, mfHeight; };
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext_s008e_ebb0 { public:
+    EA::Drawing::IDrawContext_s008e_ebb0* mpDC;       // +0
+    EA::Text::Typesetter_s008e_ebb0 mTypesetter;      // +4  (0x530 bytes)
+    union {
+        struct { float mfOffsetX, mfOffsetY, mfWidth, mfHeight; };   // +0x534
+        ContextRectF mRect;
+    };
+    float mPen[4];                         // +0x544 (pen origin passed to Background::Draw)
+    float mfLineHeight;                    // +0x554
+    float mfBaseline;                      // +0x558
+    float mYPos;                           // +0x55c
+    union { unsigned mSelectionStart; float mfSelectionStart; };   // +0x560
+    unsigned mSelectionEnd;                // +0x564
+    unsigned mLineBaseIndex;               // +0x568
+    InlineItem* mpFloatHead;               // +0x56c
+    InlineItem* mpFloatTail;               // +0x570
+    union { InlineItem* mpActiveSpans; unsigned char mFlag574; };  // +0x574
+
+    // 16-byte context rectangle covering +0x534..+0x543
+
+    void DrawTextLine(EA::Text::LineLayout_s008e_ebb0* pLine);   // 0x008eeee0
+    void RefreshMargins();                           // 0x008eea30
+    void SetContextRect(const ContextRectF* r);      // 0x008eed80
+    void SetContextRectRelative(float l, float t, float r, float b);   // 0x008eedb0
+    void PlaceFloat(InlineItem* item);               // 0x008eee30
+    void DrawQuadSet2(const float* p1, void* v1, const float* p2, void* v2,
+                      const float* p3, void* v3, const float* p4, void* v4);  // 0x008eebb0
+    void DrawImage2(float x, float y, float w, float h, void* tex);          // 0x008eec80
+    void BeginContent();                             // 0x008ef550
+    void Reset();                                    // 0x008ef6d0
+    void AddTextRun(const wchar_t* s, unsigned n, int style);      // 0x008efa50
+    void AddLineBreak(const wchar_t* s, unsigned n, int style);    // 0x008efa90
+};
+}
 }
 }
 namespace Simulator {
@@ -1622,6 +1899,22 @@ struct Typesetter_s008e_dd30 {
     void* StyleCtorForward(void* a, void* b);
 };
 
+// @ 0x008edc30
+void EA::XHTML::Layout::Page_s008e_dc30::CreatePageLayout()
+{
+    if (mpLayout3c)
+        return;
+    void* layout = EA::XHTML::Layout::Page_CreatePageLayout(mpNode24, 0);
+    if (!layout)
+        return;
+    char stack[0x450];
+    EA::XHTML::Layout::PageLayoutCtor(stack, this);
+    mVal40 = 0;
+    mVal268 = 0;
+    mpLayout3c = EA::XHTML::Layout::PageLayout_Build(this, layout, stack, 1);
+    EA::XHTML::Layout::PageLayoutDtor(stack);
+}
+
 // @ 0x008edd30
 void* Typesetter_s008e_dd30::StyleCtorForward(void* a, void* b)
 {
@@ -1644,11 +1937,64 @@ void __stdcall ScrollbarStyleGet(EA::XHTML::Layout::Vec2* out)
     *(int*)&out->y = *(int*)(p + 0x244);
 }
 
+// @ 0x008ee720
+void EA::XHTML::Layout::RenderingContext_s008e_dc30::SubStyleSet(void* a, void* b)
+{
+    ((EA::XHTML::Layout::Typesetter_s008e_dc30*)((char*)this + 4))->AddLineBreak(b, a);
+}
+
+// @ 0x008ee740
+void EA::XHTML::Layout::RenderingContext_s008e_dc30::SubStyleSetValue(const EA::XHTML::Layout::Vec2* value)
+{
+    char* p = (char*)((EA::XHTML::Layout::Typesetter_s008e_dc30*)((char*)this + 4))->GetApp() + 0xf8;
+    *(int*)(p + 0x250) = *(int*)&value->x;
+    *(int*)(p + 0x244) = *(int*)&value->y;
+}
+
+// @ 0x008ee770
+void EA::XHTML::Layout::RenderingContext_s008e_dc30::SubStyleGet(EA::XHTML::Layout::Vec2* out)
+{
+    char* p = (char*)((EA::XHTML::Layout::Typesetter_s008e_dc30*)((char*)this + 4))->GetApp();
+    int a = *(int*)(p + 0x348);
+    EA::XHTML::Layout::Vec2* q = (EA::XHTML::Layout::Vec2*)(p + 0xf8);
+    *(int*)&out->x = a;
+    *(int*)&out->y = *(int*)((char*)q + 0x244);
+}
+
+// @ 0x008ee7a0
+void EA::XHTML::Layout::RenderingContext_s008e_dc30::ReleaseScroll()
+{
+    EA::XHTML::Layout::ScrollInfo* scroll = mpScroll00;
+    typedef void (__thiscall* ReleaseFunction)(EA::XHTML::Layout::ScrollInfo*);
+    ReleaseFunction release = (ReleaseFunction)scroll->mpVtbl[1];
+    _ReadWriteBarrier();
+    release(scroll);
+}
+
+// @ 0x008ee7b0
+void EA::XHTML::Layout::RenderingContext_s008e_dc30::ScrollViewport(float a, float b, float c, float d)
+{
+    EA::XHTML::Layout::ScrollInfo* s = mpScroll00;
+    float bX = mY534;
+    float bY = mX538;
+    (*(void(__thiscall**)(EA::XHTML::Layout::ScrollInfo*, float, float, float, float))(
+        *(int*)s + 0x38))(s, bX + a, bY + b, bX + c, bY + d);
+}
+
 // @ 0x008ef8d0
 void EA::XHTML::Layout::SizingContext_s008e_ebb0::AddRun(const wchar_t* s, unsigned n, int style)
 {
     SetRunStyle(style);
     AddTextRun(s, n);
+}
+
+// @ 0x008efa50
+void EA::XHTML::Layout::RenderingContext_s008e_ebb0::AddTextRun(const wchar_t* s, unsigned n, int style)
+{
+    mTypesetter.SetRunStyle(style);
+    mTypesetter.AddTextRun(s, n);
+    mFlag574 = 0;
+    mfSelectionStart = 0.0f;
 }
 
 // @ 0x008efad0

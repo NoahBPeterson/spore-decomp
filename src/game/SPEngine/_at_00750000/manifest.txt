@@ -2,3 +2,4 @@
 ../src/game/SPEngine/_at_00750000.cpp  ?FUN_00755d40@@YAXHHD@Z  00755d40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/_at_00750000.cpp  ?FUN_00756790@@YA_NPAUcJobRef@@PAXH1@Z  00756790  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00750000.cpp  ?FUN_007564b0@X_7565a0@@QAE_NPAUcJobRef@@@Z  007564b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00750000.cpp  ?AnyAnimating@cMultiBlender@@QAE_NXZ  0075a6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
