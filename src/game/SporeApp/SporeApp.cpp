@@ -260,14 +260,14 @@ struct IAudioSystem {
     virtual bool Init4(CommandLine* cmd);  // +0x4
     virtual void s08();
     virtual void s0c();
-    virtual void s10();
+    virtual void AddRef();  // +0x10
     virtual void Release();  // +0x14
 };
 struct IEditorSystem {
     virtual void s00();
     virtual void s04();
-    virtual void s08();
-    virtual void s0c();
+    virtual void AddRef();  // +0x8
+    virtual void Release();  // +0xc
     virtual bool Init10(CommandLine* cmd);  // +0x10
     virtual bool Init14(CommandLine* cmd);  // +0x14
 };
@@ -448,11 +448,11 @@ struct IMovie {
 };
 struct AudioRef {
     IAudioSystem* mpObject;
-    void operator=(IAudioSystem* p);                                // 0x00f475f0
+    AudioRef& operator=(IAudioSystem* p);                           // 0x00f475f0
 };
 struct EditorRef {
     IEditorSystem* mpObject;
-    void operator=(IEditorSystem* p);                               // 0x00f47630
+    EditorRef& operator=(IEditorSystem* p);                         // 0x00f47630
 };
 struct GonzagoRef {
     IGonzago* mpObject;
@@ -581,6 +581,34 @@ void InitExceptionHandler(const char* name);
 void InitSearchPath();
 void InitModules(int a, int b);
 // ---- items of slice s00f47ed0 end
+
+// @ 0x00f475f0
+AudioRef& AudioRef::operator=(IAudioSystem* p)
+{
+    if (p != mpObject) {
+        IAudioSystem* const old = mpObject;
+        if (p)
+            p->AddRef();
+        mpObject = p;
+        if (old)
+            old->Release();
+    }
+    return *this;
+}
+
+// @ 0x00f47630
+EditorRef& EditorRef::operator=(IEditorSystem* p)
+{
+    if (p != mpObject) {
+        IEditorSystem* const old = mpObject;
+        if (p)
+            p->AddRef();
+        mpObject = p;
+        if (old)
+            old->Release();
+    }
+    return *this;
+}
 
 // @ 0x00f475b0
 int Timer::Elapsed()

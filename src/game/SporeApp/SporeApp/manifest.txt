@@ -7,3 +7,5 @@
 ../src/game/SporeApp/SporeApp.cpp  ??_EcSporeApp@@W3AEPAXI@Z  00f47670  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ?BuildStringTokenTranslator@@YAX_NAAV?$basic_string@_WVallocator@eastl@@@eastl@@@Z  00f47ca0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ??_GcSporeAppTokenTranslator@@UAEPAXI@Z  00f47520  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SporeApp/SporeApp.cpp  ??4AudioRef@@QAEAAU0@PAUIAudioSystem@@@Z  00f475f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SporeApp/SporeApp.cpp  ??4EditorRef@@QAEAAU0@PAUIEditorSystem@@@Z  00f47630  /O2 /MD /Gy /TP /Isrc/game/include
