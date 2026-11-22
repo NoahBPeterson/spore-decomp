@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00fd75a0 126 frame-count vs elapsed-time check; register/rounding
 00fd7660 161 RecordFrames loop
 00fd7800 188 Shutdown: 5 message posts + layout release
 00fd7b30 264 cMovieSystem constructor

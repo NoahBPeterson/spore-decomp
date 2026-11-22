@@ -141,6 +141,11 @@ void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
 void EAMutex_Lock(void* p, void* tag);             // 0x009221b0
 void EAMutex_Unlock(void* p);                      // 0x00922270
+// The movie stream header the player keeps at +0xb8.
+struct MovieStreamInfo {
+    char mPad00[0x34];
+    int  mFrameCount;            // +0x34
+};
 struct MoviePlayer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0; virtual void v14() = 0;
@@ -156,6 +161,11 @@ struct MoviePlayer {
     void Stop();                                       // 0x00fcb710
     void Kill();                                       // 0x00fcb740
     void Shutdown();                                   // 0x00fcb860
+
+    char             mPad04[0xb4];
+    MovieStreamInfo* mpStreamInfo;                      // +0xb8
+    char             mPadBc[0x34];
+    float            mFrameRate;                        // +0xf0
 };
 class cMovieSystem {
 public:
@@ -588,20 +598,19 @@ char cMovieSystem::OnMovieMsg(int msg, int)
 // @ 0x00fd75a0
 bool cMovieSystem::MovieIsPlaying()
 {
-    char* p = (char*)this;
-    if (!((IMovieSystemMethods*)this)->IsPlaying())
-        return false;
-    float t = *(float*)(p + 0x48);
-    if (!(t >= 0.0f))
-        return false;
-    void* d = *(void**)(p + 0x34);
-    int e = *(int*)((char*)d + 0xb8);
-    int n = (e != 0) ? *(int*)((char*)e + 0x34) : 0;
-    if (t < (float)n / *(float*)((char*)d + 0xf0))
-        return true;
-    SP_MessageServer()->PostMsg(0x61d72de, 0, 0);
-    ((IMovieSystemMethods*)this)->PauseMovie();
-    return true;
+    if (((IMovieSystemMethods*)this)->IsPlaying()) {
+        float t = mField48;
+        if (!(0.0f > t)) {
+            MovieStreamInfo* info = mPlayer->mpStreamInfo;
+            int n = (info != 0) ? info->mFrameCount : 0;
+            if ((float)n / mPlayer->mFrameRate >= t) {
+                SP_MessageServer()->PostMsg(0x61d72de, 0, 0);
+                ((IMovieSystemMethods*)this)->PauseMovie();
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 // @ 0x00fd7610

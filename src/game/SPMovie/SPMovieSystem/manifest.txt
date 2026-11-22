@@ -10,3 +10,4 @@
 ../src/game/SPMovie/SPMovieSystem.cpp  ?Construct@cMovieLetterbox@@QAEPAU1@XZ  00fd7ab0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?OnMovieMsg@cMovieSystem@@QAEDHH@Z  00fd74f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?Init@cMovieLetterbox@@QAEXXZ  00fd7750  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?MovieIsPlaying@cMovieSystem@@QAE_NXZ  00fd75a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
