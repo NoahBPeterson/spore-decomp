@@ -137,13 +137,7 @@ struct BitReaderA {
     int    m_10;
     byte*  m_14;
 };
-struct BitReader {
-    int    m_00;
-    unsigned m_04;
-    byte*  m_08;
-};
-extern "C" int  FUN_00fcf080(BitReader* r, int n);           // 0xfcf080  get n bits
-extern "C" int  FUN_00fcf0e0(BitReader* r);                  // 0xfcf0e0  get 1 bit
+extern "C" int  FUN_00fcf080(BitCache* r, int n);            // 0xfcf080  get n bits
 extern "C" byte FUN_00fd36c0(int p, short* dst, int flag,
                              byte* a4, byte* a5);            // 0xfd36c0  plain PCM
 extern "C" byte DAT_014931f0[];      // sf-band -> pcm format table
@@ -637,14 +631,17 @@ u32 ReadCachedBits(BitCache* s, int count)
 }
 
 // @ 0x00fcf0e0
-u32 ReadCachedBit(BitCache* s)
+static __declspec(noinline) u32 ReadCachedBit(BitCache* s)
 {
     if (s->count != 0) {
         int n = --s->count;
         return (s->cache >> n) & 1;
     }
     const u8* p = s->p;
-    s->cache = ((u32)p[0] << 24) | ((u32)p[1] << 16) | ((u32)p[2] << 8) | p[3];
+    u32 word = p[0];
+    word = (word << 8) + p[1];
+    word = (word << 8) + p[2];
+    s->cache = (word << 8) + p[3];
     s->p = p + 4;
     s->count = 0x1f;
     return s->cache >> 31;
@@ -715,23 +712,23 @@ void FUN_00fcf1b0(int p, int band, int coeffs, int reader, int prev)
 }
 
 // @ 0x00fcf230
-int FUN_00fcf230(int table, BitReader* r, int groups)
+int FUN_00fcf230(int table, BitCache* r, int groups)
 {
-    int      bits = r->m_00;
-    unsigned idx  = ((1u << (bits & 0x1f)) - 1) & r->m_04;
+    int      bits = r->count;
+    unsigned idx  = ((1u << (bits & 0x1f)) - 1) & r->cache;
 
     if (bits < 6)
-        idx = ((unsigned)r->m_08[0] | (idx << 8)) >> ((bits + 2) & 0x1f);
+        idx = ((unsigned)r->p[0] | (idx << 8)) >> ((bits + 2) & 0x1f);
     else
         idx = idx >> ((bits - 6) & 0x1f);
 
-    r->m_00 -= (int)(*(unsigned short*)(table + idx * 2) >> 0xc);
-    if (r->m_00 < 0) {
-        byte* q = r->m_08;
-        r->m_04 = ((unsigned)q[0] << 24) | ((unsigned)q[1] << 16) |
+    r->count -= (int)(*(unsigned short*)(table + idx * 2) >> 0xc);
+    if (r->count < 0) {
+        const byte* q = r->p;
+        r->cache = ((unsigned)q[0] << 24) | ((unsigned)q[1] << 16) |
                   ((unsigned)q[2] << 8) | (unsigned)q[3];
-        r->m_08 = q + 4;
-        r->m_00 += 0x20;
+        r->p = q + 4;
+        r->count += 0x20;
     }
 
     unsigned code = *(unsigned short*)(table + idx * 2);
@@ -741,18 +738,18 @@ int FUN_00fcf230(int table, BitReader* r, int groups)
     unsigned sel = code & 0x3e;
     unsigned bit;
     for (;;) {
-        if (r->m_00 == 0) {
-            byte* q = r->m_08;
-            r->m_04 = ((unsigned)q[0] << 24) | ((unsigned)q[1] << 16) |
+        if (r->count == 0) {
+            const byte* q = r->p;
+            r->cache = ((unsigned)q[0] << 24) | ((unsigned)q[1] << 16) |
                       ((unsigned)q[2] << 8) | (unsigned)q[3];
-            r->m_08 = q + 4;
-            r->m_00 = 0x1f;
+            r->p = q + 4;
+            r->count = 0x1f;
             bit = (unsigned)(q[0] >> 7);
         }
         else {
-            int nb = r->m_00 - 1;
-            r->m_00 = nb;
-            bit = (r->m_04 >> nb) & 1;
+            int nb = r->count - 1;
+            r->count = nb;
+            bit = (r->cache >> nb) & 1;
         }
         sel = (sel >> 1) & 0x7f;
         sel = *(unsigned*)(groups + (bit != 0 ? 4 : 0) + sel * 0xc);
@@ -765,7 +762,7 @@ int FUN_00fcf230(int table, BitReader* r, int groups)
 // @ 0x00fcf330
 byte FUN_00fcf330(int p, short* out, int ch)
 {
-    BitReader* r = (BitReader*)(p + 0x13c);
+    BitCache* r = (BitCache*)(p + 0x13c);
     int* count = (int*)(p + 0x3790 + ch * 4);
     int  n = *count;
     byte ret;
@@ -791,7 +788,7 @@ byte FUN_00fcf330(int p, short* out, int ch)
             }
             else {
                 if (x == 4) {
-                    if (FUN_00fcf0e0(r) != 0) {
+                    if (ReadCachedBit(r) != 0) {
                         *count = FUN_00fcf080(r, 6) + 10;
                         ret = 0;
                         goto next;
@@ -808,7 +805,7 @@ byte FUN_00fcf330(int p, short* out, int ch)
                 int neb = (i > 9) ? 11 : i - 4;
                 val += (unsigned)FUN_00fcf080(r, neb);
             }
-            int sgn = FUN_00fcf0e0(r);
+            int sgn = ReadCachedBit(r);
             *out = (short)((-sgn ^ (int)val) + sgn);
             ret = (val > 1) ? 2 : 1;
             k = ret;
@@ -837,7 +834,7 @@ next:
             if (x == 3)
                 x = FUN_00fcf080(r, 2) + 3;
             else if (x == 4) {
-                if (FUN_00fcf0e0(r) != 0)
+                if (ReadCachedBit(r) != 0)
                     x = FUN_00fcf080(r, 6) + 0xb;
                 else
                     x = FUN_00fcf080(r, 2) + 7;
@@ -862,17 +859,17 @@ next:
                 val += (unsigned)FUN_00fcf080(r, neb);
             }
             unsigned bit;
-            if (r->m_00 != 0) {
-                int nb = r->m_00 - 1;
-                r->m_00 = nb;
-                bit = (r->m_04 >> nb) & 1;
+            if (r->count != 0) {
+                int nb = r->count - 1;
+                r->count = nb;
+                bit = (r->cache >> nb) & 1;
             }
             else {
-                byte* q = r->m_08;
-                r->m_04 = ((unsigned)q[0] << 24) | ((unsigned)q[1] << 16) |
+                const byte* q = r->p;
+                r->cache = ((unsigned)q[0] << 24) | ((unsigned)q[1] << 16) |
                           ((unsigned)q[2] << 8) | (unsigned)q[3];
-                r->m_08 = q + 4;
-                r->m_00 = 0x1f;
+                r->p = q + 4;
+                r->count = 0x1f;
                 bit = (unsigned)(q[0] >> 7);
             }
             out[*(byte*)(p + 0x1e8 + i)] = (short)((-(int)bit ^ (int)val) + (int)bit);

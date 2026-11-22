@@ -4,7 +4,6 @@
 00fcef80 79 DecodeBitProb: complete (rescale prob, read the next bit, select the low/high subrange, renormalise).  Equiv PASS (400 valid inputs, 100.0% coverage).  Not byte-exact: register allocation only.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcefe0 103 ReadBits: complete (cached multi-bit read with byte refill and cache maintenance).  Equiv PASS (372 valid inputs, 100.0% coverage).  Not byte-exact: register allocation only.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcf080 89 ReadCachedBits: complete (shifted multi-bit read from the bit cache).  Equiv UNSUPPORTED: the original reads the state pointer in eax and the count in ecx at entry (an LTCG/custom register ABI no C++ signature expresses), so our declaration passes nothing there; the body is the direct translation of the card decompile.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00fcf0e0 73 ReadCachedBit: complete (single-bit read from the bit cache, refilling from the byte stream).  Equiv UNSUPPORTED: same register-ABI issue as 00fcf080 (state in eax, count in ecx).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcf130 89 flags: /O2 /MD /Gy /TP
 00fcf1b0 107 flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00fcf230 244 flags: /O2 /MD /Gy /TP
