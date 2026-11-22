@@ -88,9 +88,33 @@ extern "C" char g_1491fd8[];
 struct Vp6Ext {
     Vp6Ext* Ctor3c0();
     Vp6Ext* Ctor940(int p2);
-    void CtorDE80();
     void Ctor3E0(int p2, int p3, int p4);
 };
+extern "C" char g_1492140[];   // rw::movie::VideoEncoder_Jpeg vtable
+// rw::movie::VideoEncoder_Jpeg (retail member offsets; see SPMovie/videoencoder_jpeg.cpp).
+namespace rw {
+namespace movie {
+struct VideoEncoder_Jpeg {
+    void*        m_vtbl;                                  // +0x00
+    void*        mAllocator;                              // +0x04
+    void*        mEncodedDataCallback;                    // +0x08
+    void*        mEncodingErrorCallback;                  // +0x0c
+    void*        mEncodedDataCallbackData;                // +0x10
+    void*        mEncodingErrorCallbackData;              // +0x14
+    u8*          mEncodeBuffer;                           // +0x18
+    unsigned int mEncodeBufferSize;                       // +0x1c
+    unsigned int mEncodeBufferPos;                        // +0x20
+    unsigned int mWidth;                                  // +0x24
+    unsigned int mHeight;                                 // +0x28
+    float        mFrameRate;                              // +0x2c
+    unsigned int mBitsPerSecond;                          // +0x30
+    unsigned int mQuality;                                // +0x34
+    unsigned int mFrameNumber;                            // +0x38
+
+    VideoEncoder_Jpeg();
+};
+}
+}
 void EmptyCleanup();                                       // 0x00c2e4e0, folded empty target
 struct Vp6DecoderHandle {
     void* mpDecoder;  // +0x00, passed by address to the VP6 decoder API
@@ -503,22 +527,21 @@ extern "C" void FUN_00fcd9e0(int self)
 }
 
 // @ 0x00fcde80
-void Vp6Ext::CtorDE80()
+rw::movie::VideoEncoder_Jpeg::VideoEncoder_Jpeg()
 {
-    int self = (int)this;
-    *(int*)(self + 0x00) = 0x1492140;
-    *(int*)(self + 0x04) = 0;
-    *(int*)(self + 0x08) = 0;
-    *(int*)(self + 0x0c) = 0;
-    *(int*)(self + 0x18) = 0;
-    *(int*)(self + 0x1c) = 0;
-    *(int*)(self + 0x20) = 0;
-    *(int*)(self + 0x24) = 0;
-    *(int*)(self + 0x28) = 0;
-    *(int*)(self + 0x2c) = 0;
-    *(int*)(self + 0x30) = 0;
-    *(int*)(self + 0x34) = 0;
-    *(int*)(self + 0x38) = 0;
+    m_vtbl = g_1492140;
+    mAllocator = 0;
+    mEncodedDataCallback = 0;
+    mEncodingErrorCallback = 0;
+    mEncodeBuffer = 0;
+    mEncodeBufferSize = 0;
+    mEncodeBufferPos = 0;
+    mWidth = 0;
+    mHeight = 0;
+    mFrameRate = 0.0f;
+    mBitsPerSecond = 0;
+    mQuality = 0;
+    mFrameNumber = 0;
 }
 
 // @ 0x00fcef00
