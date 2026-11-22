@@ -581,6 +581,7 @@ inline ListNode* FindReverse(ListNode* first, ListNode* last, IStream* value) {
 // ---- items of slice s00948de0 end
 
 // ---- items of slice s00949cc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl operator_delete___s0094_9cc0(void*);
 bool  __cdecl CreateDirectoryPath(const wchar_t*);
 bool  __cdecl Directory_Exists(const wchar_t*);
 void  __cdecl GetDriveFreeSpace(wchar_t*);
@@ -605,8 +606,6 @@ bool INetFileCache_s0094_7d50::CreateMemoryStream(MemoryStream** out)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x00947de0
 bool EA::Internet::INetFileCache::RemoveCachedFile(eastl::basic_string<wchar_t, eastl::allocator> const & name)
 {
@@ -617,8 +616,6 @@ bool EA::Internet::INetFileCache::RemoveCachedFile(eastl::basic_string<wchar_t, 
     }
     return false;
 }
-
-
 
 // @ 0x00947e30
 bool EA::Internet::INetFileCache::WriteDataToFile(wchar_t const * name, unsigned char * data, unsigned int size)
@@ -635,8 +632,6 @@ bool EA::Internet::INetFileCache::WriteDataToFile(wchar_t const * name, unsigned
     return ok;
 }
 
-
-
 // @ 0x00947ec0
 bool EA::Internet::INetFileCache::ReadDataFromFile(wchar_t const * name, unsigned char * buf, unsigned int size)
 {
@@ -652,15 +647,11 @@ bool EA::Internet::INetFileCache::ReadDataFromFile(wchar_t const * name, unsigne
     return ok;
 }
 
-
-
 // @ 0x00948020
 namespace EA { namespace Internet {
 Pair::~Pair()
 {}
 }}  // namespace EA::Internet
-
-
 
 // @ 0x00948080
 namespace EA { namespace Internet {
@@ -710,8 +701,6 @@ bool INetFileCache_s0094_7d50::UpdateCacheIniFile()
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x009481b0
 namespace EA { namespace Internet {
 Iter* INetFileCache_s0094_7d50::FindOldest(Iter* out, unsigned mask)
@@ -753,8 +742,6 @@ Iter* INetFileCache_s0094_7d50::FindOldest(Iter* out, unsigned mask)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x00948230
 namespace EA { namespace Internet {
 Info_s0094_7d50::Info_s0094_7d50(const Info_s0094_7d50& o)
@@ -768,8 +755,6 @@ Info_s0094_7d50::Info_s0094_7d50(const Info_s0094_7d50& o)
     mnTimeTimeout = o.mnTimeTimeout;
 }
 }}  // namespace EA::Internet
-
-
 
 // @ 0x00948300
 namespace EA { namespace Internet {
@@ -803,15 +788,11 @@ Iter HashTable::FindAs(const char* const& key, Tag1, Tag2)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x009483a0
 namespace EA { namespace Internet {
 Pair::Pair(const str8& k, const Info_s0094_7d50& v)
 : first(k), second(v) {}
 }}  // namespace EA::Internet
-
-
 
 // @ 0x00948400
 namespace EA { namespace Internet {
@@ -833,8 +814,6 @@ bool INetFileCache_s0094_7d50::SetCacheDirectory(const wchar_t* dir)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x00948460
 namespace EA { namespace Internet {
 bool INetFileCache_s0094_7d50::SetIniFileName(const wchar_t* name)
@@ -850,8 +829,6 @@ bool INetFileCache_s0094_7d50::SetIniFileName(const wchar_t* name)
     return true;
 }
 }}  // namespace EA::Internet
-
-
 
 // @ 0x009484e0
 namespace EA { namespace Internet {
@@ -890,8 +867,6 @@ bool INetFileCache_s0094_7d50::CreateNewCachedDataStream(EA::IO::IStreamV** out)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x009485f0
 namespace EA { namespace Internet {
 bool INetFileCache_s0094_7d50::GetNewCacheFileName(int a, int b, wstr16* out)
@@ -914,8 +889,6 @@ bool INetFileCache_s0094_7d50::GetNewCacheFileName(int a, int b, wstr16* out)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x00948780
 namespace EA { namespace Internet {
 Pair __cdecl PairConstructByValue(str8 key, Info_s0094_7d50 info)
@@ -924,15 +897,11 @@ Pair __cdecl PairConstructByValue(str8 key, Info_s0094_7d50 info)
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x00948800
 namespace EA { namespace Internet {
 Pair::Pair(const Pair& o)
 : first(o.first), second(o.second) {}
 }}  // namespace EA::Internet
-
-
 
 // @ 0x00948860
 namespace EA { namespace Internet {
@@ -946,8 +915,6 @@ bool INetFileCache_s0094_7d50::IsEntryValid(const char* key)
     return (unsigned)GetTime64() < it.mpNode->second.mnTimeTimeout;
 }
 }}  // namespace EA::Internet
-
-
 
 // @ 0x00948940
 namespace EA { namespace Internet {
@@ -1007,8 +974,6 @@ bool INetFileCache_s0094_7d50::MoveEntryToLocation(Info_s0094_7d50* info, unsign
 }
 }}  // namespace EA::Internet
 
-
-
 // @ 0x00948aa0
 namespace EA { namespace Internet {
 bool INetFileCache_s0094_7d50::ForceAllDataToLocation(unsigned loc)
@@ -1038,8 +1003,6 @@ bool INetFileCache_s0094_7d50::ForceAllDataToLocation(unsigned loc)
     return ok;
 }
 }}  // namespace EA::Internet
-
-
 
 // @ 0x00948cb0
 namespace EA { namespace Internet {
@@ -1087,7 +1050,6 @@ InsertResult* HashTable::DoInsert(InsertResult* out, const Pair* v)
 }
 }}  // namespace EA::Internet
 
-
 // @ 0x00948de0
 void HT::DoFreeNodes(Node_s0094_8de0** pNodeArray, uint nBucketCount)
 {
@@ -1104,7 +1066,6 @@ void HT::DoFreeNodes(Node_s0094_8de0** pNodeArray, uint nBucketCount)
         pNodeArray[i] = 0;
     }
 }
-
 
 // @ 0x00948e80
 Iter_s0094_8de0 HT::erase(ConstIter i)
@@ -1130,7 +1091,6 @@ Iter_s0094_8de0 HT::erase(ConstIter i)
     return iNext;
 }
 
-
 // @ 0x00948f00
 void EA::Internet::INetFileCache_s0094_8de0::ClearCacheMap()
 {
@@ -1140,7 +1100,6 @@ void EA::Internet::INetFileCache_s0094_8de0::ClearCacheMap()
     }
     mDataMap.clear();
 }
-
 
 // @ 0x00948f80
 bool __cdecl IniFileCallbackFunction(const wchar_t* pKey, const wchar_t* pValue, void* pCacheVoid)
@@ -1206,7 +1165,6 @@ bool __cdecl IniFileCallbackFunction(const wchar_t* pKey, const wchar_t* pValue,
     }
     return true;
 }
-
 
 // @ 0x009492e0
 void EA::Internet::INetFileCache_s0094_8de0::DoPeriodicCacheMaintenance()
@@ -1276,7 +1234,6 @@ void EA::Internet::INetFileCache_s0094_8de0::DoPeriodicCacheMaintenance()
         UpdateCacheIniFile();
 }
 
-
 // @ 0x00949530
 bool EA::Internet::INetFileCache_s0094_8de0::RemoveCachedData(const char* pURL)
 {
@@ -1301,7 +1258,6 @@ bool EA::Internet::INetFileCache_s0094_8de0::RemoveCachedData(const char* pURL)
     }
     return false;
 }
-
 
 // @ 0x00949620
 bool EA::Internet::INetFileCache_s0094_8de0::CommitNewCachedDataStream(IStream* pStream, const char* pURL, uint nLocations, bool bClose, const char* pMIMEType, uint nTimeoutSeconds)
@@ -1378,7 +1334,6 @@ bool EA::Internet::INetFileCache_s0094_8de0::CommitNewCachedDataStream(IStream* 
     return bResult;
 }
 
-
 // @ 0x009498c0
 bool EA::Internet::INetFileCache_s0094_8de0::GetCachedDataStream(const char* pURL, IStream** ppStream, const char** ppMIMEType)
 {
@@ -1454,7 +1409,6 @@ bool EA::Internet::INetFileCache_s0094_8de0::GetCachedDataStream(const char* pUR
     return bResult;
 }
 
-
 // @ 0x00949b00
 bool EA::Internet::INetFileCache::ReadCacheIniFile()
 {
@@ -1469,7 +1423,6 @@ bool EA::Internet::INetFileCache::ReadCacheIniFile()
     return true;
 }
 
-
 // @ 0x00949b80
 EA::Internet::INetFileCache_s0094_8de0::INetFileCache_s0094_8de0()
 : mbInitialized(false), mRefCount(0) {
@@ -1481,7 +1434,6 @@ EA::Internet::INetFileCache_s0094_8de0::INetFileCache_s0094_8de0()
     mnCacheAccessCount = 0;
     mnCacheAccessCountSinceLastMaintenance = 0;
 }
-
 
 // @ 0x00949c10
 EA::Internet::INetFileCache_s0094_8de0::~INetFileCache_s0094_8de0()
@@ -1521,4 +1473,14 @@ bool EA::Internet::INetFileCache::Init()
         mbInitialized = true;
     }
     return bOk;
+}
+
+// @ 0x00949d90
+int EA::Internet::INetFileCache::Release()
+{
+    if (mRefCount > 1)
+        return --mRefCount;
+    this->~INetFileCache();
+    operator_delete___s0094_9cc0(this);
+    return 0;
 }

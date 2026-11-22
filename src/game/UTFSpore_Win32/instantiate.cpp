@@ -20,6 +20,45 @@
 // ---- items of slice s00475d00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint;
 struct E8  { uint a, b; };
+// vec<E8,4>::DoInsertValue (0x00476000) verbatim: the expansion of the slice's DEFINE_VEC(vecE8a4,
+// FUN_004763a0, FUN_004763a0, VEC_COPY_ELEM) macro, with DEFINE_VEC <T,A> = <E8,4> substituted. The two Copy
+// helpers (0x4763a0) are declared hex-named so the relocated call keeps its source address.
+E8* __cdecl FUN_004763a0(E8*, E8*, E8*);                          // 0x004763a0
+template<class T, int A>
+struct vecE8a4 {
+    T* mpBegin; T* mpEnd; T* mpCapacity; void* mAllocator;
+    T* DoAllocate(uint n) { return n ? (T*)EASTL_Allocate(&mAllocator, n * sizeof(T), A, 0) : 0; }
+    void DoFree(T* p) { if (p && ((int*)p)[-1]) EASTL_allocator_deallocate(p); }
+    static T* Copy(T* first, T* last, T* dest) { return FUN_004763a0(first, last, dest); }
+    void DoInsertValue(T* position, const T& value);
+};
+template<class T, int A>
+void vecE8a4<T,A>::DoInsertValue(T* position, const T& value)
+{
+    if (mpEnd != mpCapacity) {
+        const T* pv = &value;
+        if (pv >= position && pv < mpEnd) ++pv;
+        const T& v = *pv;
+        T* pEnd = mpEnd;
+        *pEnd = *(pEnd - 1);
+        T* p = pEnd;
+        T* q = pEnd - 1;
+        while (q != position) { p[-1] = q[-1]; --p; --q; }
+        *position = v;
+        ++mpEnd;
+    } else {
+        const uint oldSize = (uint)(mpEnd - mpBegin);
+        uint newSize = oldSize ? oldSize * 2 : 1;
+        T* pNewData = DoAllocate(newSize);
+        T* p = Copy(mpBegin, position, pNewData);
+        if (p) *p = value;
+        T* pNewEnd = Copy(position, mpEnd, p + 1);
+        DoFree(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + newSize;
+    }
+}
 // ---- items of slice s00475d00 end
 
 // ---- items of slice s0050c6c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1089,6 +1128,9 @@ int* FixedC::InitFixed(void* p)
     FUN_0050d750(p);
     return (int*)this;
 }
+
+// @ 0x00476000
+template void vecE8a4<E8, 4>::DoInsertValue(E8*, const E8&);
 
 // @ 0x004763a0
 E8* UninitCopy8Destruct(E8* first, E8* last, E8* dest)

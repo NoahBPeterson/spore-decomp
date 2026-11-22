@@ -124,8 +124,14 @@ struct TranslatorVector {
 };
 }
 namespace App {
-struct ITokenTranslator {
-    virtual void Slot00();                                                     // +0x00
+struct SlotGuard {
+    intrusive_ptr* mpSlot;
+    ~SlotGuard();
+};
+}
+namespace App {
+struct __declspec(novtable) ITokenTranslator {
+    virtual ~ITokenTranslator();                                               // +0x00
     virtual int  AddRef();                                                     // +0x04
     virtual int  Release();                                                    // +0x08
     virtual void* Cast(uint32_t typeID);                                       // +0x0c
@@ -133,6 +139,7 @@ struct ITokenTranslator {
     virtual void func14h(int);                                                 // +0x14
 
     int mnRefCount;   // +0x04
+    ITokenTranslator() : mnRefCount(0) {}
 };
 }
 namespace App {
@@ -183,6 +190,18 @@ struct SPCString {
 };
 }
 namespace App {
+struct TranslatorVectorD : TranslatorVector {
+    TranslatorVectorD() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    ~TranslatorVectorD();
+};
+}
+namespace App {
+struct GenericToken : eastl::string16_s006b_5770 {
+    GenericToken();    // 0x005e93a0
+    ~GenericToken();   // 0x00933960
+};
+}
+namespace App {
 struct cStringDetokenizer : ITokenTranslator {
     virtual void func18h();                                                    // +0x18
     virtual void AddTranslator(ITokenTranslator*);                             // +0x1c
@@ -197,14 +216,13 @@ struct cStringDetokenizer : ITokenTranslator {
     // Override of ITokenTranslator::TranslateToken (slot +0x10).
     virtual bool TranslateToken(const wchar16* pToken, eastl::string16_s006b_5770& dst);
 
-    TranslatorVector mTranslators;       // +0x08 (begin/end/cap)
+    cStringDetokenizer();                // 0x006b6490
+
+    TranslatorVectorD mTranslators;      // +0x08 (begin/end/cap)
     uint32_t mPad14;                     // +0x14
     uint32_t mPad18;                     // +0x18
-    eastl::string16_s006b_5770 mGenericTokens[4];   // +0x1c
+    GenericToken mGenericTokens[4];      // +0x1c
 };
-}
-namespace App {
-void ITokenTranslator::Slot00() {}
 }
 namespace App {
 int  ITokenTranslator::AddRef() { return 1; }
@@ -226,12 +244,24 @@ static inline unsigned CharStrlen16(const wchar16* p)
 {
     return wcslen((const wchar_t*)p);
 }
+__declspec(noinline) App::SlotGuard::~SlotGuard()
+{
+    if (mpSlot && mpSlot->ptr)
+        mpSlot->ptr->Release();
+}
 static unsigned HandStrlen16(const wchar16* p)
 {
     const wchar16* e = p;
     while (*e)
         ++e;
     return (unsigned)(e - p);
+}
+struct InitTableFn {
+    void InitTable(int n);   // 0x006b58c0
+};
+__declspec(noinline) App::TranslatorVectorD::~TranslatorVectorD()
+{
+    if (mpBegin) eastl::operator_delete_array(mpBegin);
 }
 // ---- items of slice s006b5770 end
 
@@ -414,8 +444,24 @@ bool App::cStringDetokenizer::ProcessStringEx(const wchar16* pStr, eastl::string
 }
 
 // @ 0x006b5f80
-void TranslatorVector_pushback_stub()
-{}
+void App::TranslatorVector::push_back(const intrusive_ptr& v)
+{
+    SlotGuard guard;                 // SEH: destroy the new slot if AddRef throws
+    guard.mpSlot = 0;
+    if (mpEnd < mpCapacity) {
+        intrusive_ptr* slot = mpEnd;
+        mpEnd = slot + 1;
+        guard.mpSlot = slot;
+        if (slot) {
+            ITokenTranslator* p = v.ptr;
+            slot->ptr = p;
+            if (p)
+                p->AddRef();
+        }
+    } else {
+        DoInsertValue(mpEnd, &v);
+    }
+}
 
 // @ 0x006b6000
 void App::cStringDetokenizer::func18h()
@@ -499,4 +545,11 @@ bool App::cStringDetokenizer::TranslateToken(const wchar16* tok, eastl::string16
         return false;
     }
     }
+}
+
+// @ 0x006b6490
+App::cStringDetokenizer::cStringDetokenizer()
+{
+    ((InitTableFn*)&mTranslators)->InitTable(10);
+    func18h();
 }

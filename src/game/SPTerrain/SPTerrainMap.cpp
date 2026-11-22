@@ -1018,6 +1018,7 @@ struct CubeMapBuffer {
     void SmoothEdges();                // 0x00f918d0
     void SetSize(int size, int fill); // 0x00f921d0
 };
+void __cdecl FaceTangentBasis(float* out, int face, float r, float g, float b, float a); // 0x00f88090
 struct CubeMapVec {
     uint8_t* mpBegin;    // +0x10
     uint8_t* mpEnd;      // +0x14
@@ -2937,4 +2938,3 @@ void CubeMapBuffer::SetSize(int size, int fill)
     v->Fit(0, 0);
     v->Fit((unsigned)(size * size * 6), (const char*)&fill);
 }
-

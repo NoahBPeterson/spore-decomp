@@ -9,12 +9,33 @@
 #include "EA/Thread/Thread.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern void EA_operator_delete_cdecl(void* p);
+namespace EA { namespace CallbackSystem {
+struct CallbackProcessor;   // forward (removed when 0x929f80/0x92a220 stop being verbatim)
+inline CallbackProcessor* ProcFor(int proc);
+} }
 extern unsigned g_timeNone;                                // 0x143e340
 extern const float kFloatOne;                              // 0x1485720
 #include <intrin.h>
 #include <new>
 
 // ---- items of slice s00929a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA { namespace CallbackSystem {
+extern CallbackProcessor* g_pProcA;    // 0x1668eec
+extern CallbackProcessor* g_pProcB;    // 0x1668ef0
+// retail 0x929c6d: cmp [this+4],1 / mov ecx,[g_pProcA] / cmove ecx,[g_pProcB]: the index select compiles to a
+// branchless cmov (the slice's if-statement branched and compared against 1 without the cmp).
+inline CallbackProcessor* ProcFor(int proc)
+{
+    CallbackProcessor* p = g_pProcA;
+    if (proc == 1) {
+        p = g_pProcB;
+    }
+    return p;
+}
+} }
+// manual: EA_operator_delete_cdecl is reached only by the verbatim 0x929a70 and is declared nowhere in this TU
+extern void EA_operator_delete_cdecl(void* p);
 void* operator new(size_t, const char*, int, int, int, int);
 void  EA_operator_delete_cdecl(void* p);
 extern unsigned g_timeNone;                                // 0x143e340
@@ -246,6 +267,20 @@ struct Callback {
 }
 }
 // ---- items of slice s00929a70 end
+
+// @ 0x00929c60
+namespace EA { namespace CallbackSystem {
+bool Callback::Cancel()
+{
+    if (mbActive) {
+        ProcFor(mProc)->Remove(this);
+        mbActive = false;
+        _ReadWriteBarrier();
+        SetObj(0);
+    }
+    return true;
+}
+}}  // namespace EA::CallbackSystem
 
 // @ 0x00929f80
 namespace EA { namespace CallbackSystem {

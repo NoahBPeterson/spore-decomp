@@ -268,6 +268,9 @@ public:
 };
 void SetMissionFlag(void* pTarget, int nValue);
 void PlayMissionEvent(uint32_t nEvent);
+void* GetMissionText(uint8_t* pBuffer, uint32_t nValue);
+void* GetStringKey(void* pString);
+void ShowDialogue(void* pKey);
 void AddInfectedAnimalsToHerd(void* pOwner, void* pHerd, int nCount, int nMissionId,
                               uint32_t nEffect);
 uint32_t RandomUint32Uniform(int32_t nRange);
@@ -317,6 +320,25 @@ void cSPMissionFlight101::Shutdown()
 {
     BaseShutdown();
     mpEradicateMission = nullptr;
+}
+
+// @ 0x00c55810
+void cSPMissionFlight101::SetupEradicateObjects()
+{
+    cSubMission* pSub = mpEradicateMission;
+    if (pSub == nullptr)
+        return;
+
+    uint32_t nEffect = pSub->GetDiseaseEffectID();
+    mnDiseaseEffectID = (int32_t)nEffect;
+
+    cDispatchObject* pObject = (cDispatchObject*)pSub;
+    void* pA = pObject->Call3(0x1b8, (uint32_t)mMissionId, nEffect, &mHerds);
+    void* pB = pObject->Call1(0x1b4, (uint32_t)(intptr_t)pA);
+    void* pC = pObject->Call1(0x1b0, (uint32_t)(intptr_t)pB);
+    void* pText = GetMissionText(mTextBuilder, (uint32_t)(intptr_t)pC);
+    void* pKey = GetStringKey(pText);
+    ShowDialogue(pKey);
 }
 
 // @ 0x00c558f0

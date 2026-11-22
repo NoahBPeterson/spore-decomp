@@ -356,6 +356,11 @@ struct cEmpireGrowthSim_s00fe_8630 {
     void  ExpandRules(int row, char* action);                                    // 0x00fe8b90
     ~cEmpireGrowthSim_s00fe_8630();                                                         // 0x00fe8e20
 };
+struct ActionData {
+    char pad00[0x104];
+    unsigned int id;                     // +0x104
+    char* mode;                          // +0x108
+};
 struct StarMgr2 { void __thiscall FUN_00bb1200(); };             // 0x00bb1200
 struct CivData { void* __thiscall GetCities(float a, void* b); };// 0x005c65e0
 struct StarList { char* mBegin; char* mEnd; };
@@ -440,6 +445,31 @@ void cEmpireGrowthSim_s00fe_8630::SetWeightsForAction(int rule, int row, int ind
     dst[10] = ((const float*)src)[0xf0 / 4];
 }
 
+// @ 0x00fe8b90
+void cEmpireGrowthSim_s00fe_8630::ExpandRules(int row, char* action)
+{
+    ActionData* a = (ActionData*)action;
+    unsigned index = (unsigned)SP::sIndexFromAction((const char*)a->id);
+    char* mode = a->mode;
+    if (*mode == 0) {
+        SetWeightsForAction(row, (int)index, 1, (const Brush*)action);
+        SetWeightsForAction(row, (int)index, 0, (const Brush*)action);
+        SetWeightsForAction(row, (int)index, 2, (const Brush*)action);
+        return;
+    }
+    unsigned h = FNVHash(mode, 0x811c9dc5u, 1);
+    switch (h) {
+    case 0x3a72d292u:
+        SetWeightsForAction(row, (int)index, 0, (const Brush*)action);
+        break;
+    case 0x4f068569u:
+        SetWeightsForAction(row, (int)index, 2, (const Brush*)action);
+        break;
+    default:
+        SetWeightsForAction(row, (int)index, 1, (const Brush*)action);
+        break;
+    }
+}
 // @ 0x00fe8c50
 void __cdecl FUN_00fe8c50(void* self, int extra, int scale)
 {

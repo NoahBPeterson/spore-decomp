@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPMissionFindAliens.cpp  ?FUN_00c4e1a0@@YIXPAX0H@Z  00c4e1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionFindAliens.cpp  ?FUN_00c4e230@@YIXPAX0@Z  00c4e230  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFindAliens.cpp  ?GetUIMediumDescription@cMissionFindAliens@@QAEXPAX@Z  00c552d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFindAliens.cpp  ?GetUILongDescription@cMissionFindAliens@@QAEXPAX@Z  00c55330  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionFindAliens.cpp  ?FUN_00c4e230@@YIXPAX0@Z  00c4e230  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

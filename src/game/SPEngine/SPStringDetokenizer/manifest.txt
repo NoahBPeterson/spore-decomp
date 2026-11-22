@@ -5,3 +5,4 @@
 ../src/game/SPEngine/SPStringDetokenizer.cpp  ?ProcessString@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  006b5bd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPStringDetokenizer.cpp  ?func30h@cStringDetokenizer@App@@UAE_NPAUSPCString@2@PAUTokenEntry@2@I@Z  006b5c50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPStringDetokenizer.cpp  ?TranslateToken@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  006b6160  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPStringDetokenizer.cpp  ??0cStringDetokenizer@App@@QAE@XZ  006b6490  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

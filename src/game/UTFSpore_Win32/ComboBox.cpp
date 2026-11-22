@@ -255,8 +255,9 @@ struct CBD2 {                                      // `this` = the owning object
 };
 void WCB::SetAlignment(uint32_t value)
 {
+    void** vtbl = *(void***)Real(this);
     Real(this)->i240 = (int32_t)value;
-    ((IWnd*)Real(this))->SetAlignment(1);
+    ((void (__thiscall*)(void*, int))vtbl[0x8c / 4])(Real(this), 1);
 }extern float g_kOneQuarter;                                   // 0x013eb8a0
 // ---- items of slice s00967d40 end
 

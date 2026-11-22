@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/glyph.cpp -- migrated from slice(s) s008af670 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/glyph.cpp -- migrated from slice(s) s008b0560, s008af670 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/glyph.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -90,12 +90,68 @@ struct GlyphClass {
 };
 // ---- items of slice s008af670 end
 
+// The T2K slice s008b0560 spells the same retail InputStream struct with other member names (readToRam, tmp_ch,
+// bytesLeft, maxPos, posZero2, ctorType); its stub is renamed InputStream_s008b_0560, so its verbatim body reaches the
+// TU's InputStream through this alias (same layout, 0x000..0x22c).
+typedef InputStream InputStreamGlyph;
+
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern "C" void tsi_Error(tsiMemObject* mem, int32 errCode);   // 0x008d10c0
 extern "C" void PrimeT2KInputStream(InputStream* in);          // 0x008cc0b0
 extern "C" void* tsi_AllocMem(tsiMemObject* mem, int32 size);  // 0x008d1260
 extern "C" void tsi_DeAllocMem(tsiMemObject* mem, void* p);    // 0x008d1440
 extern "C" void* tsi_FastAllocN(tsiMemObject* mem, int32 size, int32 zero); // 0x008d14d0
+
+// ---- items of slice s008b0560 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct InputStream_s008b_0560;
+extern "C" void*  tsi_ReAllocMem(tsiMemObject* mem, void* p, int32 size);     // 0x008d1330
+extern "C" int16  ReadInt16(InputStream_s008b_0560* in);                                 // 0x008cc190
+struct InputStream_s008b_0560 {
+    uint8*         privateBase;   // 0x000
+    PF_READ_TO_RAM readToRam;     // 0x004
+    void*          nonRamID;      // 0x008
+    uint8          tmp_ch;        // 0x00c  one-byte staging area for readToRam
+    uint8          pad00d[0x210 - 0x00d];
+    uint32         bytesLeft;     // 0x210
+    uint32         cacheCount;    // 0x214
+    uint32         posZero;       // 0x218
+    uint32         pos;           // 0x21c
+    uint32         maxPos;        // 0x220
+    uint32         posZero2;      // 0x224
+    int            ctorType;      // 0x228
+    tsiMemObject*  mem;           // 0x22c
+};
+struct GlyphClass_s008b_0560 {
+    tsiMemObject* mem;            // 0x00
+    uint16        w04;            // 0x04  T2K: point count
+    uint16        pad06;
+    uint32        w08;            // 0x08  T2K: number of contours (state: "has coords")
+    uint32        d0c;            // 0x0c  composite record pointer (small glyphs)
+    uint32        d10;            // 0x10  composite record end   (small glyphs)
+    char          pad14[0x34 - 0x14];
+    uint16        tag34;          // 0x34  glyph kind (3 for T2K glyphs)
+    uint16        compFlag;       // 0x36  < 0 => composite
+    uint16        contour;        // 0x38  current contour index
+    uint16        pad3a;
+    uint32        d3c;            // 0x3c  contour-offset table / composite record pointer
+    uint32        d40;            // 0x40  contour-end table
+    uint32        d44;            // 0x44  x array pointer
+    uint32        d48;            // 0x48  y array pointer
+    uint32        d4c;            // 0x4c  per-point tag array
+    uint32        d50;            // 0x50  packed component blob
+    uint32        d54;            // 0x54  end of the packed component blob
+    uint32        d58;            // 0x58  decoded components
+    uint32        d5c;            // 0x5c
+    uint32        d60;            // 0x60  component capacity
+    char          pad64[0x68 - 0x64];
+    uint32        d68;            // 0x68  component count
+    int16         cnt6c;          // 0x6c
+    int16         cnt6e;          // 0x6e
+    uint16        w70;            // 0x70  min x of the point set
+    uint16        w72;            // 0x72  max y of the point set
+    uint8         b74;            // 0x74
+};
+// ---- items of slice s008b0560 end
 
 // @ 0x008af670
 uint32 ReadDeltaXYValue(InputStream* in, int16* dx, int16* dy)
@@ -445,5 +501,174 @@ GlyphClass* New_EmptyGlyph(tsiMemObject* mem, int32 unused, int16 a, int16 b, in
     pys[3] = pys[2] - c;
     pxs[3] = 0;
     g->pointCount = 0;
+    return g;
+}
+
+// @ 0x008b0560
+extern "C" GlyphClass_s008b_0560* New_GlyphClassT2K(tsiMemObject* mem, InputStream_s008b_0560* in, uint32 a3, int16 lsb, int16 adv, int16 tsb, int16 adv2)
+{
+    GlyphClass_s008b_0560* g = (GlyphClass_s008b_0560*)tsi_FastAllocN(mem, 0x78, 0);
+    g->mem = mem;
+    g->d68 = 0;
+    g->d3c = 0;
+    g->d58 = 0;
+    g->d54 = 0;
+    g->d50 = 0;
+    g->d0c = 0;
+    g->d10 = 0;
+    g->tag34 = 3;
+    g->w04 = 0;
+    g->w08 = 0;
+
+    int16 contourDelta = ReadInt16(in);
+    g->compFlag = contourDelta;
+    g->cnt6c = 0;
+    g->cnt6e = 0;
+    g->w70 = 0;
+    g->w72 = 0;
+    g->d5c = 0;
+    g->d68 = 0;
+    g->d60 = 0;
+
+    uint32 nAll = 0;        // points already in the arrays (also the phantom index)
+    uint32 limit;           // packed-blob capacity (composite) or nPts (simple)
+
+    if (contourDelta < 0) {
+        // ---- composite glyph: the point deltas are packed back to front ----
+        g->d60 = 0x400;
+        int16* buf = (int16*)tsi_AllocMem(mem, 0x800);
+        uint16 f;
+        do {
+            if ((int)g->d60 <= (int)nAll + 10) {
+                g->d60 = g->d60 / 2 + g->d60;
+                buf = (int16*)tsi_ReAllocMem(mem, buf, g->d60 * 2);
+            }
+            f = (uint16)ReadInt16(in);
+            buf[nAll] = (int16)f;
+            nAll++;
+            buf[nAll] = ReadInt16(in);
+            nAll++;
+            if (f & 1)
+                buf[nAll++] = ReadInt16(in);
+            buf[nAll++] = ReadInt16(in);
+            if (f & 8) {
+                buf[nAll++] = ReadInt16(in);
+            } else if (f & 0x40) {
+                buf[nAll++] = ReadInt16(in);
+            } else if (f & 0x80) {
+                buf[nAll++] = ReadInt16(in);
+                buf[nAll++] = ReadInt16(in);
+                buf[nAll++] = ReadInt16(in);
+            }
+            if (f & 0x20)
+                continue;
+            break;
+        } while (true);
+
+        limit = 0;
+        g->d68 = 0;
+        uint32 m = (uint32)tsi_FastAllocN(mem, 0x34, 1);
+        g->d50 = m;
+        g->d54 = m + 0x10;
+        g->d3c = m + 0x10;
+        g->d44 = m + 0x20;
+        g->d48 = m + 0x28;
+        g->d4c = m + 0x30;
+        g->d58 = (uint32)buf;
+        g->d5c = nAll;
+    } else if (contourDelta > 0) {
+        // ---- simple glyph: cumulative contour ends ----
+        int total = 0;
+        int16* tbl;
+        if (contourDelta <= 8) {
+            g->d3c = (uint32)((char*)g + 0x44);
+            tbl = (int16*)((char*)g + 0x50);
+        } else {
+            tbl = (int16*)tsi_AllocMem(mem, contourDelta * 4);
+            g->d3c = (uint32)tbl;
+            tbl = (int16*)((char*)tbl + contourDelta * 2);
+        }
+        int16* pEnd = tbl;
+        for (int i = 0; i < contourDelta; i++) {
+            *(int16*)((char*)g->d3c + i * 2) = (int16)total;
+            total = (int16)(pEnd[i] + total);
+            pEnd[i] = (int16)(total + 1);
+            total++;
+        }
+        int nPts = total;
+        int stride = nPts + 4;
+        limit = (uint32)nPts;
+        g->d68 = 0;
+        char* m = (char*)tsi_FastAllocN(mem, stride * 0xd, 1);
+        g->d50 = (uint32)m;
+        g->d54 = (uint32)(m + stride * 4);
+        g->d3c = (uint32)(m + stride * 4);
+        g->d44 = (uint32)(m + stride * 8);
+        g->d48 = (uint32)(m + stride * 0xa);
+        g->d4c = (uint32)(m + stride * 0xc);
+        g->w04 = g->compFlag;
+        g->w08 = g->compFlag;
+        int16 minX = 0x7fff;
+        int16 maxY = (int16)0x8001;
+        int16* pX = (int16*)g->d44;
+        int16* pY = (int16*)g->d48;
+        int16* pT = (int16*)g->d4c;
+        int xAcc = 0;
+        int yAcc = 0;
+        for (int i = 0; i < nPts; i++) {
+            int16 dx, dy;
+            uint8 t = (uint8)ReadDeltaXYValue((InputStreamGlyph*)in, &dx, &dy);
+            xAcc += dx;
+            yAcc += dy;
+            pT[i] = t;
+            if ((int16)xAcc < minX)
+                minX = (int16)xAcc;
+            if ((int16)yAcc > maxY)
+                maxY = (int16)yAcc;
+            pX[i] = (int16)xAcc;
+            pY[i] = (int16)yAcc;
+        }
+        g->w70 = (uint16)minX;
+        g->w72 = (uint16)maxY;
+    } else {
+        // ---- empty glyph ----
+        limit = 0;
+        g->d3c = 0;
+        g->w08 = 0;
+    }
+
+    if (contourDelta <= 0) {
+        // composite / empty: the four phantom points live in the packed blob
+        uint32 m = g->d50;
+        uint32 e = g->d54;
+        int16* pp = (int16*)(m + 4);
+        pp[0] = (int16)(g->w70 - lsb);
+        pp[1] = (int16)(pp[0] + adv);
+        int mid = ((int)pp[0] + (int)pp[1]) >> 1;
+        *(int16*)(m + 2) = 0;
+        *(int16*)(m + 4 + 4) = (int16)(g->w72 + tsb);
+        *(int16*)(e) = (int16)(g->w72 + tsb - adv2);
+        *(int16*)(e + 2) = (int16)mid;
+        *(int16*)(e + 4) = (int16)mid;
+        g->contour = (uint16)nAll;
+        return g;
+    }
+
+    // simple glyph: the four phantom points follow the real points
+    int16* pX = (int16*)(g->d44 + nAll * 2);
+    int16* pY = (int16*)(g->d48 + nAll * 2);
+    char*  pT = (char*)g->d4c + nAll * 2;
+    *(int16*)(g->d58 + nAll * 2) = 0;
+    pX[1] = (int16)(g->w70 - lsb);
+    pT[2] = 0;
+    int16 v = pX[1];
+    pX[2] = (int16)(v + adv);
+    pT[4] = (int16)(g->w72 + tsb);
+    int mid = ((int)v + (int)pX[2]) >> 1;
+    pT[6] = (int16)(pT[4] - adv2);
+    pT[8] = (int16)mid;
+    pT[10] = (int16)mid;
+    g->contour = (uint16)limit;
+    g->d54 = g->d58;
     return g;
 }

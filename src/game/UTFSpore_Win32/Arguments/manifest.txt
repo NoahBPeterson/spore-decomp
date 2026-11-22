@@ -4,6 +4,10 @@
 ../src/game/UTFSpore_Win32/Arguments.cpp  ?GetArguments@cArguments@@QAEXPAHPAPAPAD@Z  00837f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ??1cArguments@@QAE@XZ  00837fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ??0cArguments@@QAE@XZ  00837ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Arguments.cpp  ?MainArguments@cArguments@@QAEPAPADPAHHH@Z  00838020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Arguments.cpp  ?HasFlag@cArguments@ArgScript@EA@@QAE_NPBD@Z  008380b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Arguments.cpp  ?OptionArguments@cArguments@@QAEPAPADPBDPAHHH@Z  00838130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ?MainArguments@cArguments@@QAEXH@Z  00838320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ?OptionArguments@cArguments@@QAEXPBDH@Z  00838330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Arguments.cpp  ?GatherUnprocessed@cArguments@@QAEXPAX@Z  00838350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ??0cArgumentsEH@@QAE@H@Z  008386d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /EHsc /GS- /Isrc/game/include

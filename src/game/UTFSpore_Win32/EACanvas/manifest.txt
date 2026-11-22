@@ -12,6 +12,7 @@
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?GetClassAtom@Canvas_s0084_7200@@QAEGXZ  00847b40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?GetActiveMonitor@Canvas_s0084_7200@@QAEPAXXZ  00847b50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?OnEraseBackground@Canvas_s0084_7200@@QAEHPAX0@Z  00847b60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?OnMouseEnter@Canvas_s0084_7200@@QAEXPAX@Z  00847bb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00847c70@Canvas_s0084_7200@@QAEXHH@Z  00847c70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00847da0@Canvas_s0084_7200@@QAEXHIH@Z  00847da0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00847e20@Canvas_s0084_7200@@QAEXG@Z  00847e20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -22,6 +23,8 @@
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00847f60@@YGHHPAXPAURECT@@PAH@Z  00847f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00847f90@@YAHE@Z  00847f90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?Shutdown@Canvas_s0084_7200@@QAE_NXZ  00848020  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?GetMinClientArea@Canvas_s0084_7200@@QAEPAIPAI@Z  00848100  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetMinClientArea@Canvas_s0084_7200@@QAEXII@Z  00848120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?GetClientArea@Canvas_s0084_7200@@QAEXPAJ@Z  00848190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetClientRect@Canvas_s0084_8210@@QAEXXZ  00848450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?TrackClientRect@Canvas_s0084_8210@@QAEXXZ  008484f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -47,10 +50,7 @@
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00848e40@Canvas_s0084_8210@@QAEXHPAX@Z  00848e40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetFullscreen@Canvas_s0084_8210@@QAEXDHH@Z  00848fe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?Show@Canvas_s0084_8210@@QAEXXZ  008490d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ??0Canvas@@QAE@XZ  00849a40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetStyle@Canvas@@QAEXH@Z  00849d20  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?ScalarDtor@Canvas@@QAEPAU1@I@Z  00849da0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetCaption@Canvas@@QAEXPB_W@Z  00849df0  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/UTFSpore_Win32/EACanvas.cpp  ?GetMinClientArea@Canvas_s0084_7200@@QAEPAIPAI@Z  00848100  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/EACanvas.cpp  ?SetMinClientArea@Canvas_s0084_7200@@QAEXII@Z  00848120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/EACanvas.cpp  ??0Canvas@@QAE@XZ  00849a40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/EACanvas.cpp  ?OnMouseEnter@Canvas_s0084_7200@@QAEXPAX@Z  00847bb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

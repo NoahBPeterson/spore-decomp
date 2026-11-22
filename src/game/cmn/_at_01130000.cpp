@@ -1,4 +1,4 @@
-// src/game/cmn/_at_01130000.cpp -- migrated from slice(s) s0113fc50, s0113ec90, s01133a80, s01132ad0 by tools/migrate/rewrite.py
+// src/game/cmn/_at_01130000.cpp -- migrated from slice(s) s01131b70, s0113fc50, s0113ec90, s01133a80, s01132ad0 by tools/migrate/rewrite.py
 // Object file: cmn/_at_01130000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,7 @@ extern "C" char g_16e8110[];
 extern "C" char g_16e8114[];
 
 #include "game/types.h"
+#include "rw/audio/core/System.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern uint8_t g_numStreams;              // 0x016e7bfe  number of stream slots
@@ -255,6 +256,186 @@ void  __cdecl Sub_1143210(int);                         // 0x1143210
 #define NCH (A32(0x15bfe38))
 int  F_01140a70(int a, int ch);
 // ---- items of slice s0113fc50 end
+
+// ---- items of slice s01131b70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace rw {
+namespace audio {
+namespace core {
+struct Stream {
+    void* GetChunk();                 // 0x011e6b50
+    int   FUN_011e6bf0();             // 0x011e6bf0
+    int   FUN_011e6c40();             // 0x011e6c40
+    int   FUN_011e6cc0();             // 0x011e6cc0
+    void  ReleaseChunk(void* chunk);  // 0x011e7c70
+    void  FUN_011e7b70();             // 0x011e7b70
+    void  FUN_011e7cf0();             // 0x011e7cf0
+};
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+int      Mp3Player_parseHeader(unsigned char* data, void* self);   // 0x01130c50
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+unsigned Mp3Player_findSync(unsigned char* data, int len);         // 0x01130d90
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+struct SndStreamState;
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+struct SndStreamState { char m[0x224]; };  // stream-state table 0x016e61e0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+static inline int&     fi(SndStreamState* s, int off) { return *(int*)(s->m + off); }
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+int  SndStream_parseHeader(unsigned char* data, unsigned len, int a2, SndStreamState* self, unsigned* out);
+}
+}
+}
+// ---- items of slice s01131b70 end
+
+// @ 0x01131b70
+namespace rw { namespace audio { namespace core {
+int SndStream_parseHeader(unsigned char* data, unsigned len, int a2, SndStreamState* self, unsigned* out)
+{
+    if (len < 4) {
+        *out = 0;
+        return 0;
+    }
+    int r = Mp3Player_parseHeader(data, self);
+    if (r > 0 && r <= (int)len) {
+        int v = fi(self, 0xa0) - r;
+        fi(self, 0xa0) = v;
+        *out = r;
+        if (v > 0)
+            return 1;
+        if (v < 0) {
+            *out = 0;
+            fi(self, 0xa0) = 0;
+        }
+        return 2;
+    }
+    if (r == -2) {
+        unsigned v = ((((data[6] & 0x7f) << 7 | (data[7] & 0x7f)) << 7 | (data[8] & 0x7f)) << 7 |
+                      (data[9] & 0x7f)) + 10;
+        if (v < len) {
+            fi(self, 0xa0) -= v;
+            *out = v;
+            return 1;
+        }
+    } else if (r == -3) {
+        if (len < 0x14)
+            return 0;
+        if ((((unsigned)data[8] << 24) | ((unsigned)data[9] << 16) | ((unsigned)data[10] << 8) |
+             (unsigned)data[11]) != 0x57415645) {
+            *out = 0;
+            fi(self, 0xa0) = 0;
+            return 2;
+        }
+        unsigned char* p = data + 0xc;
+        unsigned char* end = data + len;
+        while (p < end) {
+            unsigned tag = ((unsigned)p[0] << 24) | ((unsigned)p[1] << 16) |
+                           ((unsigned)p[2] << 8) | (unsigned)p[3];
+            unsigned sz = ((unsigned)p[4] << 24) | ((unsigned)p[5] << 16) |
+                          ((unsigned)p[6] << 8) | (unsigned)p[7];
+            if (tag == 0x666d7420) {
+                if (sz < 0x10)
+                    goto checkp;
+                if ((((unsigned)p[8] << 8) | (unsigned)p[9]) != 0x55) {
+                    *out = 0;
+                    fi(self, 0xa0) = 0;
+                    return 2;
+                }
+            } else if (tag == 0x64617461) {
+                p += 8;
+                goto checkp;
+            }
+            p = p + sz + 8;
+        }
+checkp:
+        if (p < end) {
+            *out = (unsigned)(p - data);
+            return 1;
+        }
+    } else if (r == -1) {
+        fi(self, 0xa0) = 0;
+        *out = 0;
+        return 2;
+    } else if (r == 0) {
+        unsigned char* q = (unsigned char*)Mp3Player_findSync(data, (int)len);
+        if (q == 0) {
+            fi(self, 0xa0) += 3;
+            *out = 0;
+            return 0;
+        }
+        unsigned d = (unsigned)(q - data);
+        if (d < len) {
+            fi(self, 0xa0) -= d;
+            fi(self, 0xe4) = 0;
+            *out = d;
+            return 1;
+        }
+    }
+    *out = 0;
+    return 0;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x01131e00
+namespace rw { namespace audio { namespace core {
+SndStreamState* SndStream_init(int a0, int a1, int a2, int a3, int a4, int* out, int a6, SndStreamState* self)
+{
+    fi(self, 0x9c) = a6;
+    fi(self, 0x20) = a0;
+    fi(self, 0xac) = a1;
+    fi(self, 0xa8) = a2;
+    fi(self, 0xe0) = a4;
+    fi(self, 0x00) = 0;
+    fi(self, 0xe8) = 0;
+    fi(self, 0xec) = 0;
+    fi(self, 0xf0) = 0;
+    fi(self, 0x04) = 0;
+    fi(self, 0x08) = 0;
+    fi(self, 0xe4) = 0;
+    fi(self, 0xb8) = 0; fi(self, 0xbc) = 0; fi(self, 0xc0) = 0; fi(self, 0xc4) = 0;
+    fi(self, 0xc8) = 0; fi(self, 0xcc) = 0; fi(self, 0xd0) = 0; fi(self, 0xd4) = 0;
+    fi(self, 0xd8) = 0; fi(self, 0xdc) = 0;
+    fi(self, 0x0c) = -1;
+    if (fi(self, 0x9c) == -1)
+        fi(self, 0x9c) = ((Stream*)a4)->FUN_011e6cc0();
+    fi(self, 0xa0) = fi(self, 0x9c);
+    fi(self, 0xa4) = fi(self, 0x00);
+    fi(self, 0xa0) = fi(self, 0x9c) - fi(self, 0x00);
+    fi(self, 0xb4) = -1;
+    *out = fi(self, 0x00);
+    SndStream_parseHeader((unsigned char*)a1, (unsigned)a2, 0, self, (unsigned*)out);
+    return self;
+}
+}}}  // namespace rw::audio::core
 
 // @ 0x01132ad0
 int __cdecl SNDSTRMI_parsedata(int* hdr, uint32_t size, uint32_t a3, void* a4, char (__cdecl *cb)(int*, int), int cbArg, uint32_t* out)

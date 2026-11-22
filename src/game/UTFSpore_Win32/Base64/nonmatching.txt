@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
-009415f0 322 EncodeBase64: complete; group/line-wrap loop register schedule and tail-padding branches differ
-00941790 414 DecodeBase64Core: complete; loop index/bound registers swapped (original keeps bound in esi, index in edx); equiv PASS (95.4% cov, 380 inputs)
+009415f0 322 EncodeBase64: complete; group/line-wrap loop register schedule and tail-padding branches differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+00941790 414 DecodeBase64Core: complete; loop index/bound registers swapped (original keeps bound in esi, index in edx); equiv PASS (95.4% cov, 380 inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00941af0  161  Base64DecodeString: complete; eastl resize/memmove growth sequence differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, call#0 ecx, call#1 esp, call#2 target] flags: /O2 /MD /Gy /EHsc /TP /GS-

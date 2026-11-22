@@ -115,6 +115,9 @@ struct RandomLCG {
 };
 }
 namespace SP {
+extern RandomLCG sMathRandom_s00d6_aa30;                             // 0x01601760
+}
+namespace SP {
 extern RandomLCG sMathRandom;                             // 0x01601760
 }
 namespace SP {
@@ -211,6 +214,9 @@ struct LocoMoveParams {
 };
 }
 namespace SP {
+extern CreatureModeStrategy* gCreatureModeStrategy_s00d6_aa30;       // 0x0169e294
+}
+namespace SP {
 extern CreatureModeStrategy* gCreatureModeStrategy;       // 0x0169e294
 }
 namespace SP {
@@ -226,6 +232,12 @@ namespace SP {
 TargetRef* FUN_00d998f0(void* x);                         // 0x00d998f0 (cdecl)
 }
 namespace SP {
+float FUN_00d99ac0(Loco* loco, ThreatOwner* owner, int flag);   // 0x00d99ac0 (cdecl)
+}
+namespace SP {
+float FUN_00d38a30(int which, cSPCreatureBase_s00d6_aa30* c);        // 0x00d38a30 (cdecl)
+}
+namespace SP {
 void* FUN_00d998d0(void* idle, int type);                 // 0x00d998d0 (cdecl)
 }
 namespace SP {
@@ -233,6 +245,9 @@ cSPCreatureBase_s00d6_aa30* FUN_00d99470(cSPCreatureBase_s00d6_aa30* c);        
 }
 namespace SP {
 void operator delete(void* p);                            // 0x00f47380 (cdecl)
+}
+namespace SP {
+extern Vec3 DAT_0169ed0c_s00d6_aa30;                                 // 0x0169ed0c
 }
 namespace SP {
 extern Vec3 DAT_0169ed0c;                                 // 0x0169ed0c
@@ -603,7 +618,7 @@ void PlayScaredAnimation(cSPCreatureBase_s00d6_aa30* p, ThreatOwner* param_2, in
     if (*slot == 0 || p->AnimationFinished2(*slot)) {
         int id;
         do {
-            id = sMathRandom.RandomUint32Uniform(3) + 0x40e01e0;
+            id = sMathRandom_s00d6_aa30.RandomUint32Uniform(3) + 0x40e01e0;
         } while (id == *slot);
         p->PlayAnimationWithTarget(id, param_2, -1, -1);
         *slot = id;
@@ -629,6 +644,40 @@ bool FUN_00d6ab50(cSPCreatureBase_s00d6_aa30* p, int a1, int a2, int a3, int a4,
 }
 }  // namespace SP
 
+// @ 0x00d6abe0
+namespace SP {
+bool FUN_00d6abe0(cSPCreatureBase_s00d6_aa30* p, int a1, int a2, int a3, int a4, ScaredState* st, int a6, float dt)
+{
+    TargetRef* obj = FUN_00d998f0(p->GetTargetObj());
+    if (!obj)
+        return false;
+    cSPCreatureBase_s00d6_aa30* tgt = p->GetTargetAsCreature();
+    if (tgt != 0 && tgt->FUN_00c0c130()) {
+        ((BehStim*)((char*)p->mBehav + 8))->FUN_00bc97f0(0x1000000, 0, 10.0f, tgt);
+        return false;
+    }
+    st->mTimer1 = st->mTimer1 - dt;
+    if (!(st->mTimer1 < 0.0f))
+        return true;
+    st->mTimer1 = 2.0f;
+    Loco* loco = &p->mLoco;
+    loco->GetPosition();
+    Vec3* ownerPos = obj->GetOwner()->GetPosition();
+    float f2 = FUN_00d99ac0(loco, obj->GetOwner(), 1);
+    float f9 = FUN_00d38a30(1, p);
+    float f10 = FUN_00d38a30(2, p);
+    bool ok;
+    if (tgt != 0)
+        ok = p->FUN_00c0d560(tgt, f9, f2) || p->CanReach(tgt, f10, f2);
+    else
+        ok = p->FUN_00c11480(ownerPos, f2, f10);
+    if (!ok)
+        return false;
+    PlayScaredAnimation(p, obj->GetOwner(), (int*)st);
+    return true;
+}
+}  // namespace SP
+
 // @ 0x00d6ad60
 namespace SP {
 bool FUN_00d6ad60(cSPCreatureBase_s00d6_aa30* p, int a2, int a3, unsigned a4, unsigned char a5, ScaredState* st, RefObj* o)
@@ -644,7 +693,7 @@ bool FUN_00d6ad60(cSPCreatureBase_s00d6_aa30* p, int a2, int a3, unsigned a4, un
 
     Property* prop;
     float f;
-    cPropertyList_s00d6_aa30* props = gCreatureModeStrategy->mProps;
+    cPropertyList_s00d6_aa30* props = gCreatureModeStrategy_s00d6_aa30->mProps;
     if (props != 0 && props->GetProperty(0x82fb1acc, prop)) {
         const float* pData;
         if (prop->mnType == 0xd || prop->mnType == 0x10) {
@@ -661,7 +710,7 @@ bool FUN_00d6ad60(cSPCreatureBase_s00d6_aa30* p, int a2, int a3, unsigned a4, un
     }
     st->mTimer5 = f;
 
-    st->mVec = DAT_0169ed0c;
+    st->mVec = DAT_0169ed0c_s00d6_aa30;
     st->mF2c = 0.0f;
     st->mAnim = 0;
 
@@ -707,9 +756,9 @@ bool FUN_00d6ad60(cSPCreatureBase_s00d6_aa30* p, int a2, int a3, unsigned a4, un
     s.mpResult = 0;
     s.mp04 = 0;
     s.mp08 = 0;
-    s.mPos.x = DAT_0169ed0c.x;
-    s.mPos.y = DAT_0169ed0c.y;
-    s.mPos.z = DAT_0169ed0c.z;
+    s.mPos.x = DAT_0169ed0c_s00d6_aa30.x;
+    s.mPos.y = DAT_0169ed0c_s00d6_aa30.y;
+    s.mPos.z = DAT_0169ed0c_s00d6_aa30.z;
     s.f20 = 1.0f;
     s.pad24 = 0;
     s.b4c = 0;

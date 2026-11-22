@@ -1,2 +1,3 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-0096e3a0 339 CopyWithQualityAdjustment: branch layout / float clamp schedule differs (399 vs 338 bytes)
+0096e3a0 324 CopyWithQualityAdjustment: the q==2/two path now calls the CRT floor on the float product (promoted to double) instead of truncating; branch layout / float clamp schedule still differs. | difftest: PASS - 303 valid inputs, 63.0% coverage (63/100), 0 mismatches flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+0096e740  1133  DropShadowText::draw (DrawTextGlyphs): the inner +0x30 call must pass the vector data pointers (g_vec1c0[0], g_vec1d4[0]), not the globals' addresses; the rest (ebp frame with 8-aligned fistp slot, loop scheduling) still differs. | difftest: PASS - 390 valid inputs, 63.4% coverage (218/344), 0 mismatches (800-input run) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

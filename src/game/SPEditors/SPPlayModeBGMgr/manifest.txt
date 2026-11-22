@@ -7,3 +7,5 @@
 ../src/game/SPEditors/SPPlayModeBGMgr.cpp  ??1SharedLibList@@QAE@XZ  0062f8e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?LoadAllBGInfoFromGroup@cSPPlayModeBGMgr_s0062_f6e0@@QAEXE@Z  0062fbc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?Init@cSPPlayModeBGMgr_s0062_f6e0@@QAEXIIIIE@Z  0062fc90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?ChangeEnvironmentMode@@YAHHH@Z  00b1e0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPPlayModeBGMgr.cpp  ?SetPlayMode@PaintSystemHost@@QAE_NH@Z  00b1e410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

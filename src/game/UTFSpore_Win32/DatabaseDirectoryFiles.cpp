@@ -556,6 +556,7 @@ void  WStrAllocateSelf(void* pThis, unsigned int nCapacity);             // 0x00
 void  WStrAssign(void* pThis, const wchar_t* pBegin, const wchar_t* pEnd);// 0x00423650
 void  WStrFreeSelf(void* pThis);                                         // 0x00931770
 void  ListBaseDoClear(void* pList);                                      // 0x0060c4a0
+void  cWStringRangeInitialize(void* pThis, const wchar_t* pStr);         // 0x00579a90
 void** RbTreeFind(void* pTree, void** ppOut, const void* pKey);          // 0x00a21dc0 (ret 8)
 void** HoleFind(void* pTree, void** ppOut, const void* pKey);            // 0x00e5c780
 void   HoleErase(void* pTree, void* pNode);                              // 0x008dae70 (HoleSet::Erase)
@@ -957,6 +958,7 @@ struct HoleSet_s008d_62f0
 };
 }
 }
+namespace EA { namespace ResourceMan { void ExtTreeDoInsertValue(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0** ppOutNode, bool* pbInserted, const String16_s008d_62f0* pKey); }}  // 0x008d69f0 (stays in the slice: not this object's)
 
 // ---- items of slice s008d62f0 end
 
@@ -1353,6 +1355,39 @@ void ExtTreeDoNukeSubtree(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
         FreeTreeNode(pTree, pNode, 0x24);
         pNode = pRight;
     }
+}
+}}  // namespace EA::ResourceMan
+
+// @ 0x008d6c40
+namespace EA { namespace ResourceMan {
+bool DatabaseDirectoryFiles_s008d_62f0::AddExtensionMapping(const wchar_t* pExtension, uint32_t nValue)
+{
+    mMutex.Lock(reinterpret_cast<void*>(0x1436624));
+
+    if (*pExtension == L'.')
+        ++pExtension;
+
+    if (*pExtension == 0)
+    {
+        mMutex.Unlock();
+        return false;
+    }
+
+    String16_s008d_62f0 key;
+    cWStringRangeInitialize(&key, pExtension);
+
+    ExtPair pair;
+    pair.Construct(key, nValue);
+
+    RBNode_s008d_62f0* pOut = 0;
+    bool bInserted = false;
+    ExtTreeDoInsertValue(&mExtensionToTypeMap, &pOut, &bInserted, &pair.mKey);
+
+    FreeString16(&pair.mKey);
+    FreeString16(&key);
+
+    mMutex.Unlock();
+    return true;
 }
 }}  // namespace EA::ResourceMan
 

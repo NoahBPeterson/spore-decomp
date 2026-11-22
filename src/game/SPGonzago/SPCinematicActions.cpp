@@ -2,6 +2,7 @@
 // Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/ArgScript/cArgumentSpec.h"
 
 // retail vtables (address in the comment)
 extern char vtbl_App_cLocaleChangeMessage[];     // 0x013eb918
@@ -111,6 +112,13 @@ Elem24Vec2::~Elem24Vec2()
     ReserveStackSlots<3>();
     Free();
 }
+
+// @ 0x00405050
+namespace EA { namespace ArgScript {
+cArgumentSpec::~cArgumentSpec()
+{
+}
+}}
 
 // @ 0x005726e0
 namespace SP {

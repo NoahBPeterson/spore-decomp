@@ -7,11 +7,17 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* g_mixvoices;     // 0x16e8174
+extern "C" int g_numChannels;     // 0x15bfe38
 extern "C" uint8_t g_numOutputs;  // 0x16e8079
 extern "C" uint8_t g_16e807c;     // 0x16e807c
+extern "C" float* g_16e8124;      // 0x16e8124
 extern "C" void* g_16e8120;       // 0x16e8120
 extern "C" void* g_16e8118;       // 0x16e8118
 extern "C" void* g_16e8128[];     // 0x16e8128
+extern "C" void* g_16e8140[];     // 0x16e8140  mixer output buffers (aligned)
+extern "C" int* g_16e8084;        // 0x16e8084
+extern "C" int* g_16f16fc;        // 0x16f16fc
+extern "C" int g_16e8178;         // 0x16e8178
 extern "C" void FUN_01142270(float, float, float*, float*);  // 0x1142270
 
 // ---- items of slice s01141a90 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -19,11 +25,17 @@ struct SndFilter;
 struct Dec19;
 struct System;
 extern "C" void* g_mixvoices;     // 0x16e8174
+extern "C" int g_numChannels;     // 0x15bfe38
 extern "C" uint8_t g_numOutputs;  // 0x16e8079
 extern "C" uint8_t g_16e807c;     // 0x16e807c
+extern "C" float* g_16e8124;      // 0x16e8124
 extern "C" void* g_16e8120;       // 0x16e8120
 extern "C" void* g_16e8118;       // 0x16e8118
 extern "C" void* g_16e8128[];     // 0x16e8128
+extern "C" void* g_16e8140[];     // 0x16e8140  mixer output buffers (aligned)
+extern "C" int* g_16e8084;        // 0x16e8084
+extern "C" int* g_16f16fc;        // 0x16f16fc
+extern "C" int g_16e8178;         // 0x16e8178
 extern "C" System* g_system;      // 0x16e61a8
 struct Dec19 {               // EALayer3 decoder node
     void*    codec;          // +0x00
@@ -61,6 +73,22 @@ public:
     uint8_t pad00[0x14];
     void* Alloc(int size, const char* name, int align, int flags); // 0x112c820
     void  Free(void* p, int flags);                                // 0x112c850
+};
+struct MixVoice {            // 0x5c bytes
+    uint8_t state;           // +0x00
+    uint8_t b01;             // +0x01
+    uint8_t pad02[2];
+    float   f04[12];         // +0x04
+    float*  p34;             // +0x34
+    float*  p38;             // +0x38
+    float   f3c;             // +0x3c
+    void*   p40;             // +0x40
+    int     f44;             // +0x44
+    void*   p48;             // +0x48
+    void*   p4c;             // +0x4c
+    int     f50;             // +0x50
+    int     f54;             // +0x54
+    int     f58;             // +0x58
 };
 void  FUN_01158b10(void*, void*, int, int);        // 0x1158b10
 void* FUN_011e0744(void*, const void*, uint32_t);// 0x11e0744  (memcpy thunk)
@@ -192,6 +220,47 @@ extern "C" void FUN_01142270(float a, float b, float* c, float* d)
     d[13] = (f * 14.0f + a) * c[13] + d[13];
     d[14] = (f * 15.0f + a) * c[14] + d[14];
     d[15] = (f * 16.0f + a) * c[15] + d[15];
+}
+
+// @ 0x01142470
+extern "C" int FUN_01142470(MixVoice* v)
+{
+    int r = (*(int (__cdecl **)(void*, int, void*, void*, int))(*(void**)((char*)v + 0x40)))(
+        *(void**)((char*)v + 0x40), 0x10, g_16e8120, g_16e8124, 0);
+    if (r > 0) {
+        v->f3c = g_16e8124[15];
+        for (int i = 0; i < g_numChannels; i++) {
+            if (g_16e8084[i] != 0) {
+                float f1 = v->p38[i];
+                float f2 = v->p34[i];
+                if (f2 != f1) {
+                    FUN_01142270(f2, f1, g_16e8124, (float*)(size_t)g_16f16fc[i]);
+                    v->p34[i] = v->p38[i];
+                } else if (f1 != 0.0f) {
+                    ((int (__cdecl *)(int, float, float*, float*))g_16e8178)(0x10, f1, g_16e8124,
+                                           (float*)(size_t)g_16f16fc[i]);
+                }
+            }
+        }
+        for (int i = 0; i < (int)g_numOutputs; i++) {
+            float f1 = *(float*)((char*)v + 0x1c + i * 4);
+            float lo = *(float*)((char*)v + 0x04 + i * 4);
+            if (lo != f1) {
+                FUN_01142270(lo, f1, g_16e8124,
+                             (float*)(size_t)g_16e8140[i]);
+                *(float*)((char*)v + 0x04 + i * 4) = *(float*)((char*)v + 0x1c + i * 4);
+            } else if (f1 != 0.0f) {
+                ((int (__cdecl *)(int, float, float*, float*))g_16e8178)(0x10, f1, g_16e8124,
+                                       (float*)(size_t)g_16e8140[i]);
+            }
+        }
+        return 0x10;
+    }
+    for (int i = 0; i < g_numChannels; i++)
+        v->p34[i] = v->p38[i];
+    for (int i = 0; i < (int)g_numOutputs; i++)
+        v->f04[i] = v->f04[6 + i];
+    return 0;
 }
 
 // @ 0x01142650

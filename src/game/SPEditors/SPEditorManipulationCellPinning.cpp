@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorManipulationCellPinning.cpp -- migrated from slice(s) s005ac950, s005aad00, s005a9d40 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorManipulationCellPinning.cpp -- migrated from slice(s) s005ad9a0, s005ac950, s005aad00, s005a9d40 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorManipulationCellPinning.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -587,6 +587,262 @@ class cSPEditorManipulationCellPinning_s005a_c950 : public cSPEditorManipulation
 }
 // ---- items of slice s005ac950 end
 
+// ---- items of slice s005ad9a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void operator delete(void* p);  // EASTL_allocator_deallocate
+#define PV(n) virtual void pv##n();
+namespace rw {
+namespace math {
+namespace fpu {
+template <typename T, int N>
+class Vector3Template_s005a_d9a0 {
+ public:
+  T x, y, z;
+  Vector3Template_s005a_d9a0() {}
+  Vector3Template_s005a_d9a0(T ax, T ay, T az) : x(ax), y(ay), z(az) {}
+};
+}
+}
+}
+namespace rw {
+namespace math {
+namespace fpu {
+template <typename T, int N>
+inline Vector3Template_s005a_d9a0<T, N> operator+(const Vector3Template_s005a_d9a0<T, N>& a, const Vector3Template_s005a_d9a0<T, N>& b) {
+  return Vector3Template_s005a_d9a0<T, N>(a.x + b.x, a.y + b.y, a.z + b.z);
+}
+}
+}
+}
+namespace rw {
+namespace math {
+namespace fpu {
+template <typename T, int N>
+inline Vector3Template_s005a_d9a0<T, N> operator-(const Vector3Template_s005a_d9a0<T, N>& a, const Vector3Template_s005a_d9a0<T, N>& b) {
+  return Vector3Template_s005a_d9a0<T, N>(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+}
+}
+}
+namespace rw {
+namespace math {
+namespace fpu {
+template <typename T, int N>
+inline Vector3Template_s005a_d9a0<T, N> operator-(const Vector3Template_s005a_d9a0<T, N>& a) {
+  return Vector3Template_s005a_d9a0<T, N>(-a.x, -a.y, -a.z);
+}
+}
+}
+}
+namespace rw {
+namespace math {
+namespace fpu {
+template <typename T, int N>
+inline Vector3Template_s005a_d9a0<T, N> operator*(const Vector3Template_s005a_d9a0<T, N>& a, T s) {
+  return Vector3Template_s005a_d9a0<T, N>(a.x * s, a.y * s, a.z * s);
+}
+}
+}
+}
+struct cSPVector3_s005a_d9a0 : public rw::math::fpu::Vector3Template_s005a_d9a0<float, 0> {
+  typedef rw::math::fpu::Vector3Template_s005a_d9a0<float, 0> base;
+  cSPVector3_s005a_d9a0() {}
+  cSPVector3_s005a_d9a0(float ax, float ay, float az) : base(ax, ay, az) {}
+  cSPVector3_s005a_d9a0(const base& v) { x = v.x; y = v.y; z = v.z; }
+  cSPVector3_s005a_d9a0& operator=(const base& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+struct cSPBoundingBox_s005a_d9a0 { cSPVector3_s005a_d9a0 mMin, mMax; };
+struct eastl_bitset54 {
+  uint32_t mWord[2];
+  bool test(unsigned int i) const { return ((mWord[i >> 5] >> (i & 31)) & 1) != 0; }
+};
+namespace eastl {
+struct sp_vector_allocator_s005a_d9a0 {
+  uint32_t mData[2];
+  void deallocate(void* p, uint32_t) {
+    if (((int*)p)[-1])
+      EASTL_allocator_deallocate(p);
+  }
+};
+}
+namespace eastl {
+template <typename T>
+class sp_vector_s005a_d9a0 {
+ public:
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  sp_vector_allocator_s005a_d9a0 mAllocator;
+  sp_vector_s005a_d9a0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~sp_vector_s005a_d9a0() {
+    if (mpBegin)
+      mAllocator.deallocate(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+  }
+  T* begin() { return mpBegin; }
+  T* end() { return mpEnd; }
+  int size() const { return (int)(mpEnd - mpBegin); }
+  T& operator[](int i) { return mpBegin[i]; }
+  sp_vector_s005a_d9a0& operator=(const sp_vector_s005a_d9a0& x);  // 0x0050d4e0 (float)
+  T* erase(T* first, T* last);               // out of line for non-trivial T
+  void clear() { erase(mpBegin, mpEnd); }
+};
+}
+namespace eastl {
+template <typename InputIterator, typename T>
+inline InputIterator find(InputIterator first, InputIterator last, const T& value) {
+  while ((first != last) && !(*first == value))
+    ++first;
+  return first;
+}
+}
+namespace EA {
+template <typename T>
+class AutoRefCount_s005a_d9a0 {
+ public:
+  T* mpObject;
+  AutoRefCount_s005a_d9a0() : mpObject(0) {}
+  AutoRefCount_s005a_d9a0(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+  ~AutoRefCount_s005a_d9a0() { if (mpObject) mpObject->Release(); }
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+};
+}
+namespace EA {
+template <typename T>
+inline bool operator==(const AutoRefCount_s005a_d9a0<T>& a, const AutoRefCount_s005a_d9a0<T>& b) { return a.mpObject == b.mpObject; }
+}
+namespace EA {
+template <typename T>
+class RefCountVTemplate_s005a_d9a0 {
+ public:
+  RefCountVTemplate_s005a_d9a0() : mRefCount(0) {}
+  virtual ~RefCountVTemplate_s005a_d9a0() {}
+  virtual int AddRef();
+  virtual int Release();
+  T mRefCount;
+};
+}
+namespace EA {
+namespace COM {
+class IUnknown32_s005a_d9a0 {
+ public:
+  virtual int AddRef() = 0;
+  virtual int Release() = 0;
+};
+}
+}
+namespace SP {
+class RefCountedBase {
+ public:
+  virtual ~RefCountedBase();
+  volatile int mRefCount;
+  void AddRef() { ++mRefCount; }
+  int Release() {
+    const int rc = --mRefCount;
+    if (rc == 0) {
+      mRefCount = 1;
+      delete this;
+    }
+    return rc;
+  }
+};
+}
+namespace SP {
+class cSPEditorModelBase { public: PV(0) };
+}
+namespace SP {
+class cSPEditorModel_s005a_d9a0 : public cSPEditorModelBase, public RefCountedBase {
+ public:
+  void GetBoundingBox(cSPBoundingBox_s005a_d9a0& box, bool includeHidden);  // FUN_004ad550
+  float GetHeight();                                             // FUN_004adb40
+  bool IsUsingSymmetry();                                        // FUN_004adc40
+};
+}
+namespace SP {
+class cSPEditorBlockPart {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+  virtual void SetState(int a, int b);  // +0x30
+};
+}
+namespace SP {
+class cSPEditorBlock_s005a_d9a0 {
+ public:
+  virtual void v0();
+  virtual void AddRef();
+  virtual void Release();
+  char pad04[0x28 - 4];
+  cSPEditorModel_s005a_d9a0* mEditorModel;   // +0x28
+  char pad2c[0x48 - 0x2c];
+  cSPVector3_s005a_d9a0 mPosition;           // +0x48
+  char pad54[0x33c - 0x54];
+  void* mpParent;                 // +0x33c (guessed: current pin parent)
+  char pad340[0x3e0 - 0x340];
+  cSPEditorBlock_s005a_d9a0* mSymmetricBlock;  // +0x3e0
+  char pad3e4[0x3ec - 0x3e4];
+  cSPEditorBlockPart* mpPart;     // +0x3ec
+  char pad3f0[0xdc8 - 0x3f0];
+  eastl_bitset54 mFlags;          // +0xdc8
+  void SetFlag(int flag, bool value);  // FUN_00435a10
+  void OnManipulationEnd();            // FUN_0044ede0
+  bool IsPinned();                     // FUN_00435c80
+  void SetPartActive(cSPEditorBlockPart* part, bool b);  // FUN_0043cfc0
+};
+}
+namespace SP {
+typedef eastl::sp_vector_s005a_d9a0<EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0> > BlockRefVector;
+}
+namespace SP {
+void GetPile(cSPEditorBlock_s005a_d9a0* block, BlockRefVector& pile, bool b);    // FUN_0048c790
+}
+namespace SP {
+void SetPileState(cSPEditorBlock_s005a_d9a0* block, BlockRefVector* pile);       // FUN_004961d0
+}
+namespace SP {
+class cSPEditorManipulationObject_s005a_d9a0 : public EA::COM::IUnknown32_s005a_d9a0 {
+ public:
+  cSPEditorManipulationObject_s005a_d9a0();  // FUN_005b0f80
+  virtual ~cSPEditorManipulationObject_s005a_d9a0() {}
+  bool mChangedObject;         // +0x4
+  bool mUseDeadZone;           // +0x5
+  bool mMovedOutsideDeadZone;  // +0x6
+  float mDeadZoneSize;         // +0x8
+  float mInitialX;             // +0xc
+  float mInitialY;             // +0x10
+};
+}
+namespace SP {
+EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* remove_copy(EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* first, EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* last,
+                                              EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* result,
+                                              const EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>& value);  // FUN_005aa740
+}
+namespace SP {
+inline EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* remove(EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* first, EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* last,
+                                               const EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>& value) {
+  first = eastl::find(first, last, value);
+  if (first != last) {
+    EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0>* i(first);
+    return remove_copy(++i, last, first, value);
+  }
+  return first;
+}
+}
+namespace SP {
+class cSPEditorManipulationInterpenetration : public cSPEditorManipulationObject_s005a_d9a0, public EA::RefCountVTemplate_s005a_d9a0<int> {
+ public:
+  EA::AutoRefCount_s005a_d9a0<cSPEditorBlock_s005a_d9a0> mBlock;  // +0x1c
+  cSPEditorBlock_s005a_d9a0* mOriginalParent;          // +0x20
+  BlockRefVector mPileList;                 // +0x24
+  cSPVector3_s005a_d9a0 mMouseOffset;                  // +0x38
+  bool mZAxisOnly;                          // +0x44
+
+  cSPEditorManipulationInterpenetration();
+  virtual int AddRef();
+  virtual int Release();
+  bool DoOnMouseDown(int button, float x, float y, int modifiers);
+};
+}
+// ---- items of slice s005ad9a0 end
+
 // @ 0x005aa580
 void cBigThing::SetVec(uint32_t x, uint32_t y, uint32_t z)
 {
@@ -793,3 +1049,15 @@ void* SP::cSPEditorManipulationCellPinning_s005a_c950::AsInterface(uint32_t type
     result = 0;
   return result;
 }
+
+// @ 0x005ada50
+namespace SP {
+bool cSPEditorManipulationInterpenetration::DoOnMouseDown(int button, float x, float y, int modifiers)
+{
+  mPileList.clear();
+  GetPile(mBlock, mPileList, false);
+  mPileList.erase(remove(mPileList.begin(), mPileList.end(), mBlock), mPileList.end());
+  SetPileState(mBlock, &mPileList);
+  return false;
+}
+}  // namespace SP

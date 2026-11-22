@@ -166,3 +166,48 @@ int MIMETypesToFileExtension(MIMEType type, MIMEType sub, wchar_t * out, unsigne
 }
 }
 }  // namespace EA::Internet
+
+// @ 0x0094a3f0
+namespace EA { namespace Internet {
+int MIMEStringToMIMETypes(const char* str, int* pType, int* pSubType, int len)
+{
+    const char* p = str;
+    const char* end = (len == -1) ? str - 1 : str + len;
+    *pSubType = 0;
+    *pType = 0;
+    while (p < end) {
+        if (*p == 0)
+            break;
+        if (*p == '/')
+            goto found;
+        ++p;
+    }
+    {
+        int t = MIMETypeStringToMIMEType(str, true, (int)(p - str));
+        *pType = t;
+        if (t != 0) {
+            if (*pSubType != 0)
+                return 1;
+        }
+        return 0;
+    }
+found:
+    {
+        *pType = MIMETypeStringToMIMEType(str, true, (int)(p - str));
+        ++p;
+        const char* q = p;
+        while (q < end) {
+            if (*q == 0)
+                break;
+            ++q;
+        }
+        int sub = MIMETypeStringToMIMEType(p, false, (int)(q - p));
+        *pSubType = sub;
+        if (*pType != 0) {
+            if (sub != 0)
+                return 1;
+        }
+        return 0;
+    }
+}
+}}  // namespace EA::Internet

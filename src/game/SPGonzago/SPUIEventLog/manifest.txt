@@ -12,9 +12,11 @@
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?ModifyUserData@cSPUIEventLog@@QAE_NIPAUIUnknown32@@@Z  00dd6980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?GetEventData@cSPUIEventLog@@QAE_NIPAI00PAPAUIUnknown32@@@Z  00dd69f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?RestartTimer@cSPUIEventLog_s00dd_6a70@@QAE_NI@Z  00dd6a70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?SetEventDuration@cSPUIEventLog_s00dd_6a70@@QAEXIM@Z  00dd6ac0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?RegisterCallback@cSPUIEventLog_s00dd_6a70@@QAEHI@Z  00dd6b20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?RegisterCloseCallback@cSPUIEventLog_s00dd_6a70@@QAE_NIH@Z  00dd6b70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUIEventLog.cpp  ?clear_events@cSPUIEventLog_s00dd_6a70@@QAEXXZ  00dd6d70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUIEventLog.cpp  ?SetEventDuration@cSPUIEventLog_s00dd_6a70@@QAEXIM@Z  00dd6ac0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUIEventLog.cpp  ?ModifyEventText@cSPUIEventLog_s00dd_6a70@@QAE_NIPB_W@Z  00dd6df0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?RemoveEvent@cSPUIEventLog_s00dd_6a70@@QAEXID@Z  00dd6d10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?clear_events@cSPUIEventLog_s00dd_6a70@@QAEXXZ  00dd6d70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?Shutdown@EventLogShutdownBase@@QAEXXZ  00dd6da0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?ModifyEventText@cSPUIEventLog_s00dd_6a70@@QAE_NIPB_W@Z  00dd6df0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ??1Manager_s00dd_7160@@UAE@XZ  00dd7160  /O2 /MD /Gy /TP /Isrc/game/include

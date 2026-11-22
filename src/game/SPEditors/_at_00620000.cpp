@@ -655,6 +655,20 @@ struct cSPPlayModePhotoBrowser {
 };
 // ---- items of slice s0062f6e0 end
 
+// ---- items of slice s0062da00_ui begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct RefCountVTemplate_s0062_da00__ui {
+  int mRefCount;
+  RefCountVTemplate_s0062_da00__ui() : mRefCount(0) {}
+  virtual ~RefCountVTemplate_s0062_da00__ui() {}
+};
+class cNamedRefCount : public RefCountVTemplate_s0062_da00__ui {
+ public:
+  uint32_t pad[13];
+  cString mName;      // +0x3c
+  virtual ~cNamedRefCount();
+};
+// ---- items of slice s0062da00_ui end
+
 // @ 0x00621bf0
 void cXHTMLControlAppearance::Apply(WinXHTML* w)
 {
@@ -887,6 +901,7 @@ struct Obj_s0062_cdb0 {
     RefObj_s0062_cdb0* mp38;                        // +0x38
     void* FUN_0062cdb0(unsigned flag);
 };
+
 // @ 0x0062cdb0
 void* Obj_s0062_cdb0::FUN_0062cdb0(unsigned flag)
 {
@@ -984,6 +999,10 @@ bool cSPCasual_Path::GetNextPathPoint(Vec2* out)
   mCurrentPathNode = mCurrentPathNode->mChild;
   return atGoal;
 }
+
+// @ 0x0062e2b0
+cNamedRefCount::~cNamedRefCount()
+{}
 
 // @ 0x0062f1e0
 void cSPPlayModeAnimation::LoadAllAnimInfo()

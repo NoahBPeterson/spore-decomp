@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeTokenTranslator.cpp  ?TranslateToken@cTribeTokenTranslator@SP@@QAE_NPB_WPAUWString@2@@Z  00ce6660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -659,7 +659,7 @@ struct cTribe_s00da_7780 {
     cSPTimer mTimer270;                    // +0x270
     u8  pad_290[0x2c8];
     cSub558 mSub558;                       // +0x558
-    void FindSpot(u32 a, u32 b);
+    void FindSpot(u32 a, u32 b);  // 0x00c98750 (cTribe::FindSpot)
     void FUN_00c950f0(Creature* p);
     void V_9c(Creature* p, u32 a) { (*(void (__thiscall**)(void*, Creature*, u32))(*(char**)this + 0x9c))(this, p, a); }
 };

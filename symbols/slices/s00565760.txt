@@ -1,1 +1,2 @@
+00565d20 ?insert@?$vector_map2@IIU?$less@I@eastl@@Vallocator@2@V?$vector2@U?$pair@II@eastl@@Vallocator@2@@2@@eastl@@QAEPAU?$pair@II@2@PAU32@ABU32@@Z  # insert migrated from s00565760 (verbatim, slice spelling)
 00565f50 eastl::vector2<uint32_t>::reserve  # explicit instantiation reserve

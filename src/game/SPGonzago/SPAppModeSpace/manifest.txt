@@ -1,26 +1,27 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9c90@AppMode@@QAEXH@Z  00fd9c90  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9ce0@AppMode@@QAEDHH@Z  00fd9ce0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9d00@AppMode@@QAEHXZ  00fd9d00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9d30@AppMode@@QAEXXZ  00fd9d30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9d90@AppMode@@QAEXXZ  00fd9d90  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9e80@@YADHPAH@Z  00fd9e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?ShutdownGonzagoSubsystem@cAppModeSpace@SP@@QAEXXZ  00fda4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdb9a0@cAppModeSpace_s00fd_ade0@SP@@QAEXXZ  00fdb9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?StopEditorPlay@cAppModeSpace_s00fd_bd60@@QAEXXZ  00fdc490  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?Shutdown@cAppModeSpace_s00fd_dba0@@QAE_NXZ  00fde180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdf9f0@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  00fdf9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fe0e10@cAppModeSpace_s00fe_0570__g7@@QAEXXZ  00fe0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda480@cAppModeSpace@SP@@QAEXXZ  00fda480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda1f0@cAppModeSpace@SP@@QAE_NMMH@Z  00fda1f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda2e0@cAppModeSpace@SP@@QAE_NPAX@Z  00fda2e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?Deactivate@cAppModeSpace@SP@@QAEXXZ  00fda390  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda9f0@cAppModeSpace@SP@@QAEXXZ  00fda9f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda940@cAppModeSpace@SP@@QAEXXZ  00fda940  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?PlanetOnMouseDown@cAppModeSpace_s00fd_bd60@@QAEXXZ  00fdc9e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda1f0@cAppModeSpace@SP@@QAE_NMMH@Z  00fda1f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?erase@KeyList@@QAE?AUListIter@@U2@@Z  00fdc4b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda5e0@cAppModeSpace@SP@@QAEXXZ  00fda5e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?OnPlanetRecordReady@cAppModeSpace_s00fd_eac0@SP@@QAEXXZ  00fdf5b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdab40@cAppModeSpace@SP@@QAE_NPAX@Z  00fdab40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda480@cAppModeSpace@SP@@QAEXXZ  00fda480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?ShutdownGonzagoSubsystem@cAppModeSpace@SP@@QAEXXZ  00fda4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?SetPlanetTimeOnFirstEntry@cAppModeSpace@SP@@QAEXXZ  00fda530  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9d90@AppMode@@QAEXXZ  00fd9d90  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9d00@AppMode@@QAEHXZ  00fd9d00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda5e0@cAppModeSpace@SP@@QAEXXZ  00fda5e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda940@cAppModeSpace@SP@@QAEXXZ  00fda940  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda9f0@cAppModeSpace@SP@@QAEXXZ  00fda9f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdab40@cAppModeSpace@SP@@QAE_NPAX@Z  00fdab40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdb9a0@cAppModeSpace_s00fd_ade0@SP@@QAEXXZ  00fdb9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?StopEditorPlay@cAppModeSpace_s00fd_bd60@@QAEXXZ  00fdc490  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?erase@KeyList@@QAE?AUListIter@@U2@@Z  00fdc4b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?PlanetOnMouseDown@cAppModeSpace_s00fd_bd60@@QAEXXZ  00fdc9e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?Shutdown@cAppModeSpace_s00fd_dba0@@QAE_NXZ  00fde180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?OnPlanetRecordReady@cAppModeSpace_s00fd_eac0@SP@@QAEXXZ  00fdf5b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdf9f0@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  00fdf9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fe0e10@cAppModeSpace_s00fe_0570__g7@@QAEXXZ  00fe0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?CompleteTransitionFromSolarToPlanet@cAppModeSpace_s00fe_0570__g7@@QAEXXZ  00fe0c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?TransitionFromSolarToGalaxy@@YA_NXZ  010422e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

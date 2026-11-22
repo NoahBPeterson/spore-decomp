@@ -1,4 +1,5 @@
 #include "game/types.h"
+#include "rw/graphics/BuildState.h"
 
 // Local stand-ins for the retail classes; the generated headers carry no
 // class at these addresses (0x9634c0 / 0x9634f0).
@@ -11,17 +12,36 @@ struct Btn {
 };
 struct EaseFx { long double Ease(float t); };
 
+struct IBtnWnd_9636 {   // UTFWin::IWindow slots used here
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98();
+    virtual void Invalidate();                                  // +0x9c
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
+    virtual void vc0(); virtual void vc4(); virtual void vc8(); virtual void vcc();
+    virtual void vd0(); virtual void vd4(); virtual void vd8(); virtual void vdc();
+    virtual void ve0(); virtual void ve4(); virtual void ve8(); virtual void vec();
+    virtual void vf0(); virtual void vf4(); virtual void vf8(); virtual void vfc();
+    virtual void v100(); virtual void v104(); virtual void v108(); virtual void v10c();
+    virtual void v110();
+    virtual void SendMsg(void* msg);                            // +0x114
+};
+
 // @ 0x009634c0
 int Btn::GetEventMask()
 {
-    // Base event mask for a button, plus extra events while it is fading (state != 0).
-    const uint32_t kBaseEventMask = 0x10459;
-    const uint32_t kFadingEventMask = 0x200;
-
     uint32_t f = (*(uint32_t(__thiscall**)(void*))((char*)*(void**)this + 0x80))(this);
-    uint32_t r = *(uint32_t*)((char*)this + 0x54) | kBaseEventMask;
+    uint32_t r = *(uint32_t*)((char*)this + 0x54) | 0x10459;
     if (f & 1)
-        r |= kFadingEventMask;
+        r |= 0x200;
     return (int)r;
 }
 
@@ -53,7 +73,6 @@ long double EaseFx::Ease(float t)
 // @ 0x009635e0
 void Btn::SetFade(bool on)
 {
-    // Fade state stored at 0x54: 0 = idle, 2 = fading.
     int* p = *(int**)((char*)this + 0x58);
     if (p == 0)
         return;
@@ -69,29 +88,6 @@ void Btn::SetFade(bool on)
         (*(void(__thiscall**)(int*, void*))((char*)*p + 0x104))(p, this);
     }
 }
-
-struct IBtnWnd_9636 {   // UTFWin::IWindow slots used here
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
-    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
-    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
-    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
-    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
-    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
-    virtual void v90(); virtual void v94(); virtual void v98();
-    virtual void Invalidate();                                  // +0x9c
-    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
-    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
-    virtual void vc0(); virtual void vc4(); virtual void vc8(); virtual void vcc();
-    virtual void vd0(); virtual void vd4(); virtual void vd8(); virtual void vdc();
-    virtual void ve0(); virtual void ve4(); virtual void ve8(); virtual void vec();
-    virtual void vf0(); virtual void vf4(); virtual void vf8(); virtual void vfc();
-    virtual void v100(); virtual void v104(); virtual void v108(); virtual void v10c();
-    virtual void v110();
-    virtual void SendMsg(void* msg);                            // +0x114
-};
 
 // @ 0x00963630
 void Btn::OnlyWhenVisible(int* wnd, bool on)
@@ -119,7 +115,6 @@ void Btn::OnlyWhenVisible(int* wnd, bool on)
 // @ 0x009636f0
 void Btn::SetAlphaClamp(float a, float b)
 {
-    // Clamp both alpha clamps to [0, 1], then scale them down so they sum to at most 1.
     if (0.0f > a) a = 0.0f;
     if (0.0f > b) b = 0.0f;
     if (a > 1.0f) a = 1.0f;
@@ -131,4 +126,12 @@ void Btn::SetAlphaClamp(float a, float b)
     }
     *(float*)((char*)this + 0x2c) = a;
     *(float*)((char*)this + 0x30) = b;
+}
+
+// @ 0x00963780
+int __fastcall FUN_00963780(void* self, int, void* wnd, void* msg)
+{
+    (void)self; (void)wnd;
+    unsigned code = *(unsigned*)((char*)msg + 8);
+    return (int)(code & 0xffffff00u);
 }

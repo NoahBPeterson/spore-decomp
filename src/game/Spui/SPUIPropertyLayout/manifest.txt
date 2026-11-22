@@ -1,11 +1,12 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?GetEventMask@CPL@@UAEIXZ  00828070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?DoMessage@CPL@@UAE_NHPAX@Z  00828080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ?AsInterface@cSPUIPropertyLayout@@UAEPAXW4InterfaceId@COM@EA@@@Z  008280d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?GetRootWindow@cSPUIPropertyLayout@@QAEPAVIWindow@UTFWin@EA@@XZ  00828100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?Init@CPL@@UAE_NXZ  00828250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  008283a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ??4Record_s0082_84a0@@QAEAAU0@ABU0@@Z  008284a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ??1CPL@@QAE@XZ  00828670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ??0CPL@@QAE@XZ  008286d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?func24h@CPL@@UAE_NXZ  00828be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?AddRef@cSPUIPropertyLayout@@UAEHXZ  00c6a960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIPropertyLayout.cpp  ?AsInterface@cSPUIPropertyLayout@@UAEPAXW4InterfaceId@COM@EA@@@Z  008280d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

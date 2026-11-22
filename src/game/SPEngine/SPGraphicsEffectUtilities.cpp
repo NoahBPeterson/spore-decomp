@@ -10,10 +10,22 @@ extern float g_153415c;   // 0x153415c
 #include <math.h>
 
 // ---- items of slice s006f3410 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void  __cdecl EASTL_allocator_deallocate(void* p) throw();                                  // 0xf47380
 extern float g_153415c;   // 0x153415c
 struct IVertexSink {
     virtual int  Lock(int wanted, char** pDst, int* pStride);   // returns how many it granted
     virtual void Unlock();
+};
+struct ModelSetVector {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    unsigned mAllocator[2];
+    ModelSetVector() {}
+    ~ModelSetVector() {
+        if (mpBegin && ((int*)mpBegin)[-1])
+            EASTL_allocator_deallocate(mpBegin);
+    }
 };
 class cModelInstanceSet {
 public:
@@ -22,16 +34,8 @@ public:
 
     unsigned int mModelInstance;                 // +0x4
     unsigned int mModelGroup;                    // +0x8
-    void* mTBegin;                               // +0xc
-    void* mTEnd;                                 // +0x10
-    void* mTCap;                                 // +0x14
-    int   m18;                                   // +0x18
-    void* mRBegin;                               // +0x1c
-    void* mREnd;                                 // +0x20
-    void* mRCap;                                 // +0x24
-    int   m28;                                   // +0x28
-    int   m2c;                                   // +0x2c
-    int   m30;                                   // +0x30
+    ModelSetVector mTransforms;                 // +0x0c
+    ModelSetVector mColors;                     // +0x20
     void* mRenderer;                             // +0x34
     int   m38;                                   // +0x38
     int   m3c;                                   // +0x3c
@@ -73,12 +77,44 @@ void cModelInstanceSet::Update()
     b[0] = g_153415c; b[1] = g_153415c; b[2] = g_153415c;
     b[3] = -g_153415c; b[4] = -g_153415c; b[5] = -g_153415c;
     float radius = 0.0f;
-    float* p = (float*)mTBegin;
-    int n = (int)(((char*)mTEnd - (char*)mTBegin) / 0x38);
+    float* p = (float*)mTransforms.mpBegin;
+    int n = (int)(((char*)mTransforms.mpEnd - (char*)mTransforms.mpBegin) / 0x38);
     while (n-- > 0) {
         UpdateBounds(b, p);
         UpdateRadius(&radius, p);
         p += 0x38 / 4;
     }
     (*(void (__thiscall**)(void*, int, float*, float))(Vt(mRenderer) + 13))(mRenderer, mSetID, b, radius);
+}
+
+// @ 0x006f3df0
+void cModelInstanceSet::AddToRenderer(void* pRenderer)
+{
+    if (mSetID >= 0) {
+        void* old = mRenderer;
+        if (old == pRenderer) return;
+        (*(void (__thiscall**)(void*, int))(Vt(old) + 12))(old, mSetID);
+        if (mRenderer) {
+            void* r = mRenderer;
+            mRenderer = 0;
+            (*(void (__thiscall**)(void*))(Vt(r) + 1))(r);
+        }
+        mSetID = -1;
+    }
+    m38 = (int)mModelInstance;
+    m3c = (int)mModelGroup;
+    m40 = 9;
+    void* old = mRenderer;
+    if (old != pRenderer) {
+        if (pRenderer) (*(void (__thiscall**)(void*))(Vt(pRenderer) + 0))(pRenderer);
+        mRenderer = pRenderer;
+        if (old) (*(void (__thiscall**)(void*))(Vt(old) + 1))(old);
+    }
+    if (mRenderer) {
+        if ((*(char (__thiscall**)(void*, void*, int*, int*))(Vt(mRenderer) + 11))(mRenderer, this, &m38, &mSetID)) {
+            (*(void (__thiscall**)(void*, int, int*))(Vt(mRenderer) + 4))(mRenderer, 9, &m5c);
+            (*(void (__thiscall**)(void*, int, int))(Vt(mRenderer) + 14))(mRenderer, mSetID, 1);
+            Update();
+        }
+    }
 }

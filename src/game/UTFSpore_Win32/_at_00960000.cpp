@@ -117,6 +117,11 @@ extern "C" void FUN_00980be0(void);
 extern "C" void FUN_009804c0(void);
 extern "C" void FUN_009806f0(void);
 extern "C" void FUN_0097d9e0(void);
+extern "C" void* FUN_00c033a0(void* a, void* b, void* c);        // 0xc033a0 uninitialized_copy-ish
+extern "C" void  FUN_00898550(void* a, unsigned n, void* v);     // uninitialized_fill_n
+extern "C" void  FUN_00c04920(void* sret, void* a, void* b, void* c, void* d); // uninitialized_copy
+extern "C" void  FUN_00898520(void* a, void* b, void* v);        // fill
+extern "C" void  FUN_00898f90(void* a, void* b, void* c);        // copy_backward
 #pragma intrinsic(sqrt)
 struct ExtBase {
     void ctor963db0();      // 0x963db0
@@ -370,6 +375,59 @@ void SetComboAlpha(float v)
 {
     if (v >= 0.0f && v <= 1.0f)
         g_166b1bc = v;
+}
+
+// @ 0x0096e540
+void GlyphVec::insert(GlyphLayoutInfo* pos, unsigned n, GlyphLayoutInfo* val)
+{
+    int begin = (int)v[0];
+    int end   = (int)v[1];
+    unsigned room = (unsigned)(((int)v[2] - end) >> 5);   // free capacity
+    if (n > room) {
+        unsigned cnt = (unsigned)((end - begin) >> 5);
+        unsigned cap = cnt * 2;
+        if (cnt == 0) cap = 1;
+        unsigned want = cnt + n;
+        if (want > cap) cap = want;
+        unsigned char* nb;
+        if (cap == 0)
+            nb = 0;
+        else
+            nb = (unsigned char*)FUN_00f473a0(cap << 5, "EASTL", 0, 0, 0, 0xd1);
+        unsigned char* mid = (unsigned char*)FUN_00c033a0((void*)v[0], pos, nb);
+        FUN_00898550(mid, n, val);
+        unsigned char* tail = (unsigned char*)FUN_00c033a0(pos, (void*)v[1], mid + n * 0x20);
+        if (v[0] != 0 && *(int*)((char*)v[0] - 4) != 0)
+            FUN_00f47380((void*)v[0]);
+        v[0] = (unsigned)nb;
+        v[1] = (unsigned)tail;
+        v[2] = (unsigned)(nb + cap * 0x20);
+        return;
+    }
+    if (n == 0)
+        return;
+    unsigned before = (unsigned)((end - (int)pos) >> 5);
+    GlyphLayoutInfo tmp;
+    for (int i = 0; i < 8; i++)
+        ((unsigned*)&tmp)[i] = ((unsigned*)val)[i];
+    if (before <= n) {
+        unsigned extra = n - before;
+        FUN_00898550((void*)end, extra, &tmp);
+        v[1] = (unsigned)(end + extra * 0x20);
+        // the original reuses the dead `val` argument slot for uninitialized_copy's returned iterator
+        FUN_00c04920(&val, pos, (void*)end, (void*)v[1], pos);
+        v[1] = (unsigned)(v[1] + before * 0x20);
+        FUN_00898520(pos, (void*)end, &tmp);
+        return;
+    } else {
+        unsigned bytes = n * 0x20;
+        unsigned char* mid = (unsigned char*)(end - bytes);
+        FUN_00c04920(&val, mid, (void*)end, (void*)end, pos);
+        v[1] = (unsigned)(v[1] + bytes);
+        FUN_00898f90(pos, mid, (void*)end);
+        FUN_00898520(pos, (void*)(bytes + (unsigned)pos), &tmp);
+        return;
+    }
 }
 
 // @ 0x0096e6d0

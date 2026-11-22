@@ -595,9 +595,7 @@ extern "C" __declspec(dllimport) void* __stdcall GetProcessHeap();
 extern "C" __declspec(dllimport) void* __stdcall HeapAlloc(void*, unsigned long, unsigned int);
 extern char* g_16c8b44;
 extern "C" void  FUN_00571db0(void*, void*, void*, void*, void*);  // 0x00571db0  EA::Messaging::RemoveHandler
-struct Method {
-    void M();   // 0x009289e0
-};
+struct Method { void M(); };
 struct Method1 { void FUN_009276c0(void*); };
 struct Method6 { void M(int, int, int, int, int, int); };
 struct Method8 { void M(int, int, int, int, int, int, int, int); };
@@ -646,7 +644,7 @@ struct cOnlineTab {
     void  FUN_00f46cf0(int a1, int a2, int a3, int a4); // url builder
 };
 extern "C" __declspec(dllimport) int __stdcall HeapFree(void*, unsigned long, void*);
-extern char __cdecl cdecl_00935ad0(void*);
+extern char __cdecl cdecl_f935ad0(void*);
 extern char* g_16c8b40;
 // ---- items of slice s00f46560 end
 
@@ -1186,12 +1184,11 @@ void ShutdownSharedAllocator()
 {
     char* p = g_16c8b40;
     if (p) {
-        if (cdecl_00935ad0(p)) {
-            char* q = g_16c8b40;
-            if (q) {
-                ((Method*)(q + 0x18))->M();
-                HeapFree(GetProcessHeap(), 0, q);
-            }
+        char ok = cdecl_f935ad0(p);
+        p = g_16c8b40;
+        if (ok && p) {
+            ((Method*)(p + 0x18))->M();
+            HeapFree(GetProcessHeap(), 0, p);
         }
         g_16c8b40 = 0;
     }

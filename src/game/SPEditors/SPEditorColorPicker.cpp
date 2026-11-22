@@ -16,6 +16,7 @@
 #include "SP/cString.h"
 #include "SP/cEditorResource.h"
 #include <intrin.h>
+#include <xmmintrin.h>
 #pragma intrinsic(sqrt)
 
 // ---- items of slice s005a5ec0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -64,7 +65,7 @@ class IUnknown32_s005a_5ec0 {
 }
 }
 namespace EA {
-struct RectT_s005a_5ec0 { float left, top, right, bottom; RectT_s005a_5ec0() {} float Width() const { return right - left; } float Height() const { return bottom - top; } };
+class RectT_s005a_5ec0 { public: float left, top, right, bottom; RectT_s005a_5ec0() {} float Width() const { return right - left; } float Height() const { return bottom - top; } };
 }
 struct cPropertyList {
     virtual int AddRef();
@@ -112,12 +113,12 @@ __declspec(noinline) T* sp_vector<T>::erase(T* first, T* last) {
 }
 }
 struct cSPColorRGB_s005a_5ec0 { float r, g, b; cSPColorRGB_s005a_5ec0() {} cSPColorRGB_s005a_5ec0(const cSPColorRGB_s005a_5ec0& c) : r(c.r), g(c.g), b(c.b) {} };
-struct IWindow {
+struct IWindow_s005a_5ec0 {
     virtual int AddRef();   // slot 0 (+0x0)
     virtual int Release();   // slot 1 (+0x4)
     virtual void v2();   // slot 2 (+0x8)
     virtual void v3();   // slot 3 (+0xc)
-    virtual IWindow* GetParent();   // slot 4 (+0x10)
+    virtual IWindow_s005a_5ec0* GetParent();   // slot 4 (+0x10)
     virtual void v5();   // slot 5 (+0x14)
     virtual void v6();   // slot 6 (+0x18)
     virtual void v7();   // slot 7 (+0x1c)
@@ -171,7 +172,7 @@ struct IWindow {
     virtual void v55();   // slot 55 (+0xdc)
     virtual void v56();   // slot 56 (+0xe0)
     virtual void v57();   // slot 57 (+0xe4)
-    virtual void AddWindow(IWindow* w);   // slot 58 (+0xe8)
+    virtual void AddWindow(IWindow_s005a_5ec0* w);   // slot 58 (+0xe8)
     virtual void v59();   // slot 59 (+0xec)
     virtual void v60();   // slot 60 (+0xf0)
     virtual void v61();   // slot 61 (+0xf4)
@@ -190,9 +191,17 @@ extern cSPColorRGB_s005a_5ec0 gWhiteColor;               // 0x0150F470 {1,1,1}
 cSPColorRGB_s005a_5ec0* __cdecl HSLToRGB(cSPColorRGB_s005a_5ec0* out, float h, float s, float l);   // 0x0067FE30
 bool __cdecl GetPropertyArray(cPropertyList* list, uint32_t id, int* pCount, cSPColorRGB_s005a_5ec0** pData); // 0x006A0A70
 struct PropertyManager {
-    virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3();
-    virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7();
-    virtual void p8(); virtual void p9(); virtual void p10();
+virtual void p0();
+virtual void p1();
+virtual void p2();
+virtual void p3();
+virtual void p4();
+virtual void p5();
+virtual void p6();
+virtual void p7();
+virtual void p8();
+virtual void p9();
+virtual void p10();
     virtual bool GetPropertyList(uint32_t id, uint32_t group, cPropertyList** out);  // slot 11 (+0x2C)
 };
 PropertyManager* __cdecl GetPropertyManager();             // 0x0067DE30
@@ -228,12 +237,12 @@ public:
     cSPColorRGB_s005a_5ec0 mBaseColor;                    // +0x24
     cSPColorRGB_s005a_5ec0 mDisplayColor;                 // +0x30
     EA::RectT_s005a_5ec0 mOriginalArea;                   // +0x3c
-    EA::AutoRefCount_s005a_5ec0<IWindow> mWinFrame;       // +0x4c
-    EA::AutoRefCount_s005a_5ec0<IWindow> mWinFrameGlow;   // +0x50
-    EA::AutoRefCount_s005a_5ec0<IWindow> mWinShine;       // +0x54
-    EA::AutoRefCount_s005a_5ec0<IWindow> mWinColor;       // +0x58
-    EA::AutoRefCount_s005a_5ec0<IWindow> mWinRoot;        // +0x5c
-    EA::AutoRefCount_s005a_5ec0<IWindow> mWinExpansion;   // +0x60
+    EA::AutoRefCount_s005a_5ec0<IWindow_s005a_5ec0> mWinFrame;       // +0x4c
+    EA::AutoRefCount_s005a_5ec0<IWindow_s005a_5ec0> mWinFrameGlow;   // +0x50
+    EA::AutoRefCount_s005a_5ec0<IWindow_s005a_5ec0> mWinShine;       // +0x54
+    EA::AutoRefCount_s005a_5ec0<IWindow_s005a_5ec0> mWinColor;       // +0x58
+    EA::AutoRefCount_s005a_5ec0<IWindow_s005a_5ec0> mWinRoot;        // +0x5c
+    EA::AutoRefCount_s005a_5ec0<IWindow_s005a_5ec0> mWinExpansion;   // +0x60
     EA::AutoRefCount_s005a_5ec0<OwnerObject> mOwner;      // +0x64
     SwatchRefVector mExpansionSwatches;        // +0x68
     EA::AutoRefCount_s005a_5ec0<cPropertyList> mColorPickerConfig;  // +0x7c
@@ -245,7 +254,7 @@ public:
 
     cSPColorSwatch();                          // 0x005a5000
     void Cleanup();                            // 0x005a5db0
-    void Init(cPropertyList* config, cSPColorRGB_s005a_5ec0 color, EA::RectT_s005a_5ec0 area, IWindow* root,
+    void Init(cPropertyList* config, cSPColorRGB_s005a_5ec0 color, EA::RectT_s005a_5ec0 area, IWindow_s005a_5ec0* root,
               void* owner);     // 0x005a51c0
     void SetArea(EA::RectT_s005a_5ec0 area, int flag);    // 0x005a4500
     void SetExpansionArea(int flag);           // 0x005a4990
@@ -256,7 +265,7 @@ public:
 class cSPEditorColorPicker : public EA::RefCountVTemplate_s005a_5ec0<int>, public EA::COM::IUnknown32_s005a_5ec0 {
 public:
     EA::AutoRefCount_s005a_5ec0<cSPColorSwatch> mSelectedSwatch;  // +0xc
-    IWindow* mWinRoot;          // +0x10
+    IWindow_s005a_5ec0* mWinRoot;          // +0x10
     float mRootWidth;           // +0x14
     float mRootHeight;          // +0x18
     cSPColorRGB_s005a_5ec0 mSelectedColor; // +0x1c
@@ -267,7 +276,7 @@ public:
     EA::AutoRefCount_s005a_5ec0<cPropertyList> mColorPickerConfig;  // +0x48
     int mUserData;              // +0x4c
 
-    bool Init(IWindow* winRoot, uint32_t configId, int userData, const ColorVector* colors); // 0x005a5ec0
+    bool Init(IWindow_s005a_5ec0* winRoot, uint32_t configId, int userData, const ColorVector* colors); // 0x005a5ec0
     void Clear();                      // 0x005a6390
     void Update(int deltaTime);        // 0x005a6db0
     EA::RectT_s005a_5ec0 GetSwatchArea(int index, int flag);   // 0x005a4750
@@ -289,7 +298,6 @@ static inline void PushSwatch(eastl::sp_vector<cSPColorSwatch*>& v, cSPColorSwat
 // ---- items of slice s005a5ec0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern cSPColorRGB_s005a_5ec0 gWhiteColor;               // 0x0150F470 {1,1,1}
 
 // ---- items of slice s005a4250 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Property_s005a_4250 {
@@ -1351,7 +1359,7 @@ void cSPColorSwatch_s005a_51c0::Cleanup()
 }
 
 // @ 0x005a5ec0
-bool cSPEditorColorPicker::Init(IWindow* winRoot, uint32_t configId, int userData, const ColorVector* colors)
+bool cSPEditorColorPicker::Init(IWindow_s005a_5ec0* winRoot, uint32_t configId, int userData, const ColorVector* colors)
 {
     mUserData = userData;
     mWinRoot = winRoot;
@@ -1460,4 +1468,14 @@ void cSPEditorColorPicker::Clear()
     for (int i = 0; i < n; i++)
         v.mpBegin[i]->Cleanup();
     v.erase(v.mpBegin, v.mpEnd);
+}
+
+// @ 0x005a6db0
+void cSPEditorColorPicker::Update(int deltaTime)
+{
+    int n = (int)(mSwatches.mpEnd - mSwatches.mpBegin);
+    for (int i = 0; i < n; i++) {
+        cSPColorSwatch* sw = mSwatches.mpBegin[i];
+        sw->Update(deltaTime, sw == mSelectedSwatch.mpObject);
+    }
 }

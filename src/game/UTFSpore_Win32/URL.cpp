@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/URL.cpp -- migrated from slice(s) s0094abe0, s00949cc0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/URL.cpp -- migrated from slice(s) s0094bb50, s0094abe0, s00949cc0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/URL.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,6 +10,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <wctype.h>
+#include "EA/Sockets/DatagramSocket.h"
+#include "EA/Sockets/IPAddress.h"
+#include "EA/Sockets/Manager.h"
+#include "EA/Sockets/StreamSocket.h"
+#include "WSAData.h"
+#include <new>
 
 // ---- items of slice s00949cc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 char* __cdecl Sprintf8(char* buf, const char* fmt, ...);
@@ -195,6 +201,78 @@ static unsigned int FindChar(const Str* s, char ch) {
     return 0xffffffffu;
 }
 // ---- items of slice s0094abe0 end
+
+// ---- items of slice s0094bb50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl operator_new(unsigned int size, const char* pName, int a3, int a4,
+                           const char* file, int line);                           // 0x00F473A0
+namespace eastl {
+class allocator_s0094_bb50 { public: int mAlloc; };
+}
+namespace eastl {
+template <class T>
+struct basic_string_s0094_bb50 {
+    T* mpBegin;                 // +0x00
+    T* mpEnd;                   // +0x04
+    T* mpCapacity;              // +0x08
+    allocator_s0094_bb50 mAllocator;       // +0x0c
+
+    void clear() { if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; } }
+    unsigned int length() const { return (unsigned int)(mpEnd - mpBegin); }
+    bool empty() const { return mpBegin == mpEnd; }
+
+    void AssignRange(const T* first, const T* last);  // 0x00454cb0
+    void AssignCStr(const T* p);                      // 0x006a4380
+    void Append(const T* first, const T* last);       // 0x00455d60
+    void CopyFrom(const basic_string_s0094_bb50& o);             // 0x0057cb10
+    unsigned int RFind(T c, unsigned int pos) const;  // 0x00609f40
+    void Erase(unsigned int pos, unsigned int n);     // 0x0061e200
+    void Destroy();                                   // 0x00530670
+};
+}
+namespace eastl {
+typedef basic_string_s0094_bb50<char> string_s0094_bb50;
+}
+struct URL_s0094_bb50 {
+    bool          mbStrictConformance;    // +0x00
+    int           mnMaxComponentLength;   // +0x04
+    bool          mbParsed;               // +0x08
+    int           mURLType;               // +0x0c
+    eastl::string_s0094_bb50 msURL;                  // +0x10
+    eastl::string_s0094_bb50 msComponent[9];         // +0x20
+
+    void Construct(const char* p);                 // 0x0094a560
+    void Destroy();                                // 0x0060a100
+    URL_s0094_bb50& Assign(const URL_s0094_bb50& o);                     // 0x0094a630
+    void SetComponent(int index, const char* p);   // 0x0094a6f0
+    void SetPort(unsigned int port);               // 0x0094a750
+    eastl::string_s0094_bb50* GetComponent(int index);        // 0x0094baf0
+    bool ParseURL(eastl::string_s0094_bb50* pstr);            // 0x0094b760
+    void Finalize();                               // 0x0094b8e0
+    static void CanonicalizePath(const char* pszPath, eastl::string_s0094_bb50* pstr);  // 0x0094a7a0
+
+    bool FUN_0094bb50(char* a, char* b);
+};
+static void EaStrAssign(eastl::string_s0094_bb50& s, const char* p) {
+    unsigned int n = (unsigned int)strlen(p);
+    unsigned int size = n + 1;
+    if (size < 2) {
+        s.mpBegin = (char*)0x01667bac;
+        s.mpCapacity = (char*)0x01667bad;
+    } else {
+        s.mpBegin = (char*)operator_new(size, "EASTL", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+        s.mpCapacity = s.mpBegin + size;
+    }
+    memcpy(s.mpBegin, p, n);
+    s.mpEnd = s.mpBegin + n;
+    *s.mpEnd = 0;
+}
+static void EaStrFree(eastl::string_s0094_bb50& s) {
+    if ((int)(s.mpCapacity - s.mpBegin) > 1 && s.mpBegin != 0)
+        operator_delete__(s.mpBegin);
+}
+// ---- items of slice s0094bb50 end
 
 // @ 0x0094a6a0
 namespace EA { namespace Internet {
@@ -840,4 +918,106 @@ Str* URL::GetPart(int which)
             operator_delete__(tmp.mpBegin);
     }
     return (Str*)((which + 2) * 0x10 + (char*)this);
+}
+
+// @ 0x0094bb50
+bool URL_s0094_bb50::FUN_0094bb50(char* a, char* b)
+{
+    mbParsed = false;            // +0x08
+    mURLType = 0;                // +0x0c
+    msURL.clear();               // +0x10
+    msComponent[0].clear();      // +0x20
+    msComponent[2].clear();      // +0x40
+    msComponent[3].clear();      // +0x50
+    msComponent[4].clear();      // +0x60
+    msComponent[5].clear();      // +0x70
+
+    // b is null or empty: parse `a` straight into this object.
+    if (b == 0 || *b == 0) {
+        eastl::string_s0094_bb50 tmp;
+        EaStrAssign(tmp, a);
+        if (a != 0)
+            msURL.AssignRange(a, a + strlen(a));
+        else
+            msURL.clear();
+        bool r = ParseURL(&tmp);
+        EaStrFree(tmp);
+        return r;
+    }
+
+    // a is null or empty: keep `b` verbatim.
+    if (a == 0 || *a == 0) {
+        msURL.AssignRange(b, b + strlen(b));
+        return true;
+    }
+
+    // Both present: parse each side, then resolve the relative URL.
+    URL_s0094_bb50 urlA;
+    URL_s0094_bb50 urlB;
+
+    eastl::string_s0094_bb50 ta;
+    EaStrAssign(ta, a);
+    urlA.Construct(a);
+    urlA.ParseURL(&ta);
+    urlA.msURL.clear();
+
+    eastl::string_s0094_bb50 tb;
+    EaStrAssign(tb, b);
+    urlB.Construct(b);
+    urlB.ParseURL(&tb);
+
+    if (!urlA.GetComponent(0)->empty()) {
+        msURL.AssignCStr(a);
+    } else {
+        urlA.SetComponent(0, urlB.GetComponent(0)->mpBegin);
+
+        if (urlA.GetComponent(3)->empty())
+            urlA.SetComponent(3, urlB.GetComponent(3)->mpBegin);
+        if (urlA.GetComponent(1)->empty())
+            urlA.SetComponent(1, urlB.GetComponent(1)->mpBegin);
+        if (urlA.GetComponent(2)->empty())
+            urlA.SetComponent(2, urlB.GetComponent(2)->mpBegin);
+
+        unsigned long port = strtoul(urlA.msComponent[4].mpBegin, 0, 10);
+        if (port == 0) {
+            port = strtoul(urlB.msComponent[4].mpBegin, 0, 10);
+            urlA.SetPort((unsigned int)port);
+        }
+
+        eastl::string_s0094_bb50* c5 = urlA.GetComponent(5);
+        if ((int)(c5->mpEnd - c5->mpBegin) >= 1) {
+            if (*c5->mpBegin != '/') {
+                eastl::string_s0094_bb50 path;
+                path.CopyFrom(*urlB.GetComponent(5));
+                unsigned int pos = path.RFind('/', 0xffffffff);
+                unsigned int plen = path.length();
+                if (pos < plen)
+                    path.Erase(pos + 1, (plen - pos) - 1);
+                eastl::string_s0094_bb50* ac5 = urlA.GetComponent(5);
+                path.Append(ac5->mpBegin, ac5->mpEnd);
+                URL_s0094_bb50::CanonicalizePath(path.mpBegin, &path);
+                urlA.SetComponent(5, path.mpBegin);
+                path.Destroy();
+            }
+        } else {
+            urlA.SetComponent(5, urlB.GetComponent(5)->mpBegin);
+            if (urlA.GetComponent(6)->empty()) {
+                urlA.SetComponent(6, urlB.GetComponent(6)->mpBegin);
+                if (urlA.GetComponent(7)->empty()) {
+                    urlA.SetComponent(7, urlB.GetComponent(7)->mpBegin);
+                    if (urlA.GetComponent(8)->empty())
+                        urlA.SetComponent(8, urlB.GetComponent(8)->mpBegin);
+                }
+            }
+        }
+
+        urlA.Finalize();
+        Assign(urlA);
+    }
+
+    urlB.Destroy();
+    EaStrFree(tb);
+    urlA.Destroy();
+    EaStrFree(ta);
+    return true;
 }

@@ -723,19 +723,19 @@ public:
     virtual int  IndexOfNthItem(uint32_t type, uint32_t nth);      // 0x6c 0x00c872e0
     virtual bool HasItem(uint32_t type, const ResourceKey& id);    // 0x70 0x00c87320
     virtual bool HasTool(const ResourceKey& id);                   // 0x74 0x00c87020
-    virtual bool RemoveItem(cSpaceInventoryItem_s00c8_7be0* pItem);           // 0x78
+    virtual bool RemoveItem(cSpaceInventoryItem_s00c8_7be0* pItem);           // 0x78 0x00c87d80
     virtual bool func7Ch();                                        // 0x7c
-    virtual bool AddItem(cSpaceInventoryItem_s00c8_7be0* pItem, cResource* pResource, bool bAdd); // 0x80
+    virtual bool AddItem(cSpaceInventoryItem_s00c8_7be0* pItem, cResource* pResource, bool bAdd); // 0x80 0x00c88060
     virtual cSpaceInventoryItem_s00c8_7be0* GetItemByCargoSlot(cSpaceInventoryItem_s00c8_7be0* pSlot);// 0x84 0x00c87390
     virtual uint32_t GetCargoSlotsCount();                         // 0x88 0x00c87420
     virtual uint32_t GetAvailableCargoSlotsCount();                // 0x8c 0x00c873d0
     virtual bool GetFreeCargoSlot(cSpaceInventoryItem_s00c8_7be0*& pDst);     // 0x90 0x00c87450
-    virtual void AddCargoSlots(int count);                         // 0x94
+    virtual void AddCargoSlots(int count);                         // 0x94 0x00c88310
     virtual bool CargoSlotIsFree(void* pSlot);                     // 0x98 0x00c874a0
 
-    bool func40h();
-    bool TakeFromInventory(uint32_t index, AutoRefCount<cSpaceInventoryItem_s00c8_7be0>* pOut, int amount);
-    bool Read(void* pStream);
+    bool func40h();  // 0x00c87cc0 (cSpaceInventory::func40h)
+    bool TakeFromInventory(uint32_t index, AutoRefCount<cSpaceInventoryItem_s00c8_7be0>* pOut, int amount);  // 0x00c87df0 (cSpaceInventory::TakeFromInventory)
+    bool Read(void* pStream);  // 0x00c883d0 (cSpaceInventory::Read)
 };
 struct cVarListSerializer_s00c8_7be0 {
     uint32_t mData[0xa14 / 4];

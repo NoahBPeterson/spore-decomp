@@ -1,5 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp  ??0cSPUISellBackRollover@@QAE@XZ  005cbf60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp  ?Init@cDetachedRollover@@QAE_NG@Z  005cbfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp  ?Shutdown@cSPEditorSellBackDetachedRollover@SP@@UAE_NXZ  005cc0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp  ?HideWin@cDetachedRollover@@QAEXXZ  005cc0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp  ?IsWinVisible@cDetachedRollover@@QAE_NXZ  005cc100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp  ?Shutdown@cSPEditorSellBackDetachedRollover@SP@@UAE_NXZ  005cc0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

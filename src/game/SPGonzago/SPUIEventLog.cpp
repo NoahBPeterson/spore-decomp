@@ -470,6 +470,86 @@ extern cSPUILayout_s00dd_4b20** gpLayoutStackBegin;                           //
 extern cSPUILayout_s00dd_4b20** gpLayoutStackEnd;                             // 0x015a2c44
 // ---- items of slice s00dd4b20 end
 
+// ---- items of slice s00dd6da0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct EventNode_s00dd_6da0 {
+    EventNode_s00dd_6da0* mpNodeLeft;
+    EventNode_s00dd_6da0* mpNodeRight;
+    EventNode_s00dd_6da0* mpNodeParent;
+    unsigned mColor;
+    unsigned mKey;
+};
+struct cSPUILayout_s00dd_6da0 {
+    void Shutdown(unsigned flags); // 0x00811ad0
+};
+extern cSPUILayout_s00dd_6da0* DAT_016a095c;
+void ShutdownLayoutStack(); // 0x00dd5950
+struct cSPUIEventLog_s00dd_6da0 {
+    char pad000[0x30];
+    EventNode_s00dd_6da0* mpNodeRight;
+    char pad034[8];
+    unsigned mnSize;
+    void remove_event(unsigned id); // 0x00dd6bc0
+};
+struct EventLogShutdownBase {
+    char pad000[0x38];
+    unsigned mnSize;
+    void Shutdown();
+};
+// ---- items of slice s00dd6da0 end
+
+// ---- items of slice s00dd7160 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void ModuleCleanup_s00dd_7160();  // 0x00dd5950
+struct IRefObj_s00dd_7160 {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct Owned_s00dd_7160 {
+    virtual ~Owned_s00dd_7160();
+};
+struct MapNode_s00dd_7160 {
+    MapNode_s00dd_7160* mpNodeRight;   // +0x00
+    MapNode_s00dd_7160* mpNodeLeft;    // +0x04
+    MapNode_s00dd_7160* mpNodeParent;  // +0x08
+    char mColor;                       // +0x0c
+    int mKey;                          // +0x10
+};
+struct Map_s00dd_7160 {
+    int mCompare;                      // +0x00
+    MapNode_s00dd_7160* mpNodeRight;   // +0x04 (anchor)
+    MapNode_s00dd_7160* mpNodeLeft;    // +0x08
+    MapNode_s00dd_7160* mpNodeParent;  // +0x0c
+    int mColor;                        // +0x10
+    int mnSize;                        // +0x14
+    int mAllocator;                    // +0x18
+
+    ~Map_s00dd_7160() { DoNukeSubtree(mpNodeParent); }
+    void DoNukeSubtree(MapNode_s00dd_7160* node);  // 0x00d0c930
+};
+struct BaseA_s00dd_7160 {
+    virtual ~BaseA_s00dd_7160() {}
+};
+struct BaseB1_s00dd_7160 {
+    virtual void v00();
+};
+struct BaseB2_s00dd_7160 {
+    virtual void v00();
+};
+struct BaseB_s00dd_7160 : BaseB1_s00dd_7160, BaseB2_s00dd_7160 {
+    char pad0c[0x28 - 0xc];
+    ~BaseB_s00dd_7160();  // 0x00b5b9a0
+};
+struct Manager_s00dd_7160 : BaseA_s00dd_7160, BaseB_s00dd_7160 {
+    Map_s00dd_7160 mEntries;              // +0x28
+    char pad44[0x68 - 0x44];
+    Owned_s00dd_7160* mpOwned;            // +0x68
+    IRefObj_s00dd_7160* mpHelper;         // +0x6c
+
+    virtual ~Manager_s00dd_7160();
+    virtual void v00();
+    void Remove(int key);  // 0x00dd6bc0
+};
+// ---- items of slice s00dd7160 end
+
 // @ 0x00dd5950
 void ShutdownLayoutStack()
 {
@@ -1042,6 +1122,23 @@ void cSPUIEventLog_s00dd_6a70::clear_events()
         this->remove_event(((EventNode_s00dd_6a70*)this->mEvents.mAnchor.mpNodeRight)->mKey);
 }
 
+// @ 0x00dd6da0
+void EventLogShutdownBase::Shutdown()
+{
+    cSPUIEventLog_s00dd_6da0* log = reinterpret_cast<cSPUIEventLog_s00dd_6da0*>(
+        reinterpret_cast<char*>(this) - 4);
+    if (mnSize != 0) {
+        do {
+            log->remove_event(log->mpNodeRight->mKey);
+        } while (log->mnSize != 0);
+    }
+    if (DAT_016a095c != 0) {
+        DAT_016a095c->Shutdown(1);
+        DAT_016a095c = 0;
+    }
+    ShutdownLayoutStack();
+}
+
 // @ 0x00dd6df0
 bool cSPUIEventLog_s00dd_6a70::ModifyEventText(unsigned id, const wchar_t* text)
 {
@@ -1092,3 +1189,14 @@ void cSPUIEventLog_s00dd_6a70::add_to_history(cFeedbackEvent_s00dd_6a70* ev)
     this->FUN_00dd6570(ev, 0);
 }
 
+// @ 0x00dd7160
+Manager_s00dd_7160::~Manager_s00dd_7160()
+{
+    while (mEntries.mnSize)
+        Remove(mEntries.mpNodeLeft->mKey);
+    delete mpOwned;
+    mpOwned = 0;
+    ModuleCleanup_s00dd_7160();
+    if (mpHelper)
+        mpHelper->Release();
+}

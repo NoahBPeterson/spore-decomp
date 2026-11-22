@@ -1292,6 +1292,12 @@ void SimSubDtor::FUN_00bbebb0()
     ((ViewGonzago*)p)->dtor();
 }
 
+// @ 0x00bbec40
+void SimSelf::FUN_00bbec40(int a, float b)
+{
+    FUN_00bbdff0((float*)(long)a, b);
+}
+
 // @ 0x00bbec60
 bool SimHashOwner::FUN_00bbec60(int key)
 {

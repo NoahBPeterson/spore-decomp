@@ -1,2 +1,7 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ?FUN_0093bd50@@YIPAXPAXHH@Z  0093bd50  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ?FUN_0093bde0@@YIXPAVGraphicsFactoryAsyncRequest@IO@EA@@@Z  0093bde0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ?Attach@GraphicsFactoryAsyncRequest@IO@EA@@QAE_NPAXI@Z  0093bf70  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ?SetSizeEx@MemoryStream_s0093_b9e0@IO@EA@@QAE_NI@Z  0093c130  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ??0GraphicsFactoryAsyncRequest@IO@EA@@QAE@PAX0H@Z  0093c270  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamMemory.cpp  ?SetSize@MemoryStream_s0093_b9e0@IO@EA@@UAE_NI@Z  0093c370  /O2 /MD /Gy /TP /Isrc/game/include

@@ -411,10 +411,35 @@ struct TexTable {
 // ---- items of slice s0065f970 end
 
 // ---- items of slice s00660dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_00d0c930(void* p);
+extern "C" void  FUN_00646d70(void* first, void* last);
+extern "C" void* SP_PropertyManager(); // 0x0067de30
+extern "C" void  FUN_0066a5e0(void* self, int a, int b);
+extern "C" void* FUN_00660720(void* a, void* b);
+extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);
 extern "C" void  DoCopyKeys(void* first, void* last, void* dest);
+extern "C" void  Fun0066_0ad0(void* a, void* b, void* c, void* d, void* e);   // 0x00660ad0 (equiv t1)
+extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv t1)
+extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
+extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
+extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
 extern "C" void* FUN_006603d0();   // 0x006603d0  AreaRec::AssignChecked (__thiscall dst,key,src; ret 8)
 extern "C" void  FUN_00660ca0();   // 0x00660ca0  map node insert (__thiscall map,out,node,value,key; ret 0x10)
 extern "C" char  FUN_006a12a0(void* obj, int k, void* out);
+struct Blob14 { uint8_t x[0x14];
+    void Assign(Blob14* src);        // 0x006609a0
+    void FUN_006606a0(Blob14* src);  // 0x006606a0
+};
+struct E34 {
+    uint32_t a;          // 0x00
+    uint8_t  b;          // 0x04
+    char     pad5[3];
+    Blob14   c;          // 0x08
+    uint8_t  d;          // 0x1c
+    char     pad1d[3];
+    Blob14   e;          // 0x20
+};
+struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
 struct MapVal20 {
     void*   mp0;        // +0x00  refcounted object
     uint8_t mb4;        // +0x04
@@ -443,32 +468,6 @@ struct MapRoot34 {
     MapNode24* pRoot;   // +0x0c
     void* FUN_006612b0(void* key);
 };
-struct Key3 { uint32_t a, b, c; };
-extern "C" void  FUN_00d0c930(void* p);
-extern "C" void  FUN_00646d70(void* first, void* last);
-extern "C" void* SP_PropertyManager(); // 0x0067de30
-extern "C" void  FUN_0066a5e0(void* self, int a, int b);
-extern "C" void* FUN_00660720(void* a, void* b);
-extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);
-extern "C" void  Fun0066_0ad0(void* a, void* b, void* c, void* d, void* e);   // 0x00660ad0 (equiv t1)
-extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv t1)
-extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
-extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
-extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
-struct Blob14 { uint8_t x[0x14];
-    void Assign(Blob14* src);        // 0x006609a0
-    void FUN_006606a0(Blob14* src);  // 0x006606a0
-};
-struct E34 {
-    uint32_t a;          // 0x00
-    uint8_t  b;          // 0x04
-    char     pad5[3];
-    Blob14   c;          // 0x08
-    uint8_t  d;          // 0x1c
-    char     pad1d[3];
-    Blob14   e;          // 0x20
-};
-struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
 struct SubD8 { void FUN_0065f9e0(); };
 struct cSPUIFeedFilter {
     void* vt;                          // 0x00
@@ -516,6 +515,7 @@ struct cSPUIFeedFilter {
     bool AllHaveAssets(unsigned key);                  // 0x00661b10
     bool MatchRecursive(unsigned key, int* pCount);    // 0x00661c00
 };
+struct Key3 { uint32_t a, b, c; };
 uint32_t* __cdecl LowerBoundU32(uint32_t* first, uint32_t* last, const uint32_t* val, unsigned char flag);   // 0x00555a20
 struct PropertyList {
     virtual void AddRef();
@@ -1572,7 +1572,7 @@ char FUN_00661180(void* vec, void* key)
     return r;
 }
 
-// @ 0x006612b0  eastl::map<unsigned, 0x20-byte value>::find-or-insert
+// @ 0x006612b0
 void* MapRoot34::FUN_006612b0(void* key)
 {
     char* p = (char*)this;

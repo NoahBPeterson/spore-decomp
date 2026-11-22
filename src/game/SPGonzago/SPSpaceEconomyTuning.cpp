@@ -4,6 +4,8 @@ extern "C" char g_14996d4[];
 
 #include "game/types.h"
 #include <intrin.h>
+#include "SP/cSPCreatureCitizen.h"
+#include <math.h>
 
 // Retail tuning constants loaded from the game's data segments.
 extern float g_1;        // 0x01485720
@@ -66,6 +68,55 @@ void* __stdcall GetStarManagerForEmpire(cEmpire* e);     // 0x00b3d2a0, ret 4
 struct StarManagerObj { void* GetHomeStar(); };          // 0x00baf700, thiscall(ecx=mgr)
 float RandomFloatRange(float lo, float hi);              // 0x00572a10
 float f010307a0(void* props, uint idA, uint idB);        // 0x010307a0
+
+// ---- items of slice s01030b10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct PropertyBlock;
+template <class T> struct AutoRefCount {
+    T* mpObject;                                            // +0x00
+    T** AsPropertyParam()
+    {
+        T* p = mpObject;
+        if (p) {
+            mpObject = 0;
+            p->Release();
+        }
+        return &mpObject;
+    }
+};
+struct PropertyBlock {
+    virtual void v00();                                     // +0x00
+    virtual void Release();                                 // +0x04
+};
+struct PropertyMgr {
+virtual void p00();
+virtual void p01();
+virtual void p02();
+virtual void p03();
+virtual void p04();
+virtual void p05();
+virtual void p06();
+virtual void p07();
+virtual void p08();
+virtual void p09();
+virtual void p10();
+    virtual void GetProperty(unsigned id, unsigned name, PropertyBlock** out);   // 0x2c
+};
+PropertyMgr* PropertyManager();                              // 0x0067de30
+template <class T> struct SPVector {
+    T* mpBegin;                                             // +0x00
+    T* mpEnd;                                               // +0x04
+    T* mpCapacity;                                          // +0x08
+    void reserve(unsigned n);                               // 0x004e0880
+};
+void FUN_00bb15d0(void* prop, unsigned id, int index, void* values);               // 0x00bb15d0
+struct EconomyTuning {
+    char pad00[8];                                          // +0x00
+    AutoRefCount<PropertyBlock> mProperties;                // +0x08
+    SPVector<unsigned> mValues;                             // +0x0c
+    void Init();                                            // 0x01030b10
+    int  ComputeAmount(float amount, float* out);           // 0x01030b70
+};
+// ---- items of slice s01030b10 end
 
 // @ 0x0102fa30
 int cSPSpaceEconomyTuning::GetTradeCaptureOfferPrice(int index)
@@ -279,4 +330,13 @@ int cSPSpaceEconomyTuning::GetPeaceGoodOfferDelta(cEmpire* e)
         return (int)(f * value);
     }
     return value;
+}
+
+// @ 0x01030b10
+void EconomyTuning::Init()
+{
+    PropertyMgr* manager = PropertyManager();
+    manager->GetProperty(0xd0cd1d4b, 0x2ae0c7e, mProperties.AsPropertyParam());
+    mValues.reserve(3);
+    FUN_00bb15d0(mProperties.mpObject, 0x566a42f, 0xd, &mValues);
 }

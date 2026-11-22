@@ -70,7 +70,7 @@ class IUnknown32_s005c_1d70 {
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s005c_1d70 {
+class Key_s005c_1d70 { public:
   unsigned int mInstance, mType, mGroup;
   Key_s005c_1d70() {}
   Key_s005c_1d70(unsigned int i, unsigned int t, unsigned int g) : mInstance(i), mType(t), mGroup(g) {}
@@ -277,4 +277,10 @@ cSPPaletteCategory_s005c_1d70::cSPPaletteCategory_s005c_1d70()
 : mLayoutInstanceID(0x89845152), mSequenceNumber(0), mPaintByNumber(false), mRegionFilter(0xffffffff),
       mSkinPaintIndex(0xffffffff), mHasMultiImageButton(false), mCategoryId(0), mParentCategory(0),
       mButtonImageKey(0, 0, 0), mpButtonImageKeys(0), mIsSubCategory(false) {}
+}  // namespace SP
+
+// @ 0x005c20b0
+namespace SP {
+cSPPaletteCategory_s005c_1d70::~cSPPaletteCategory_s005c_1d70()
+{}
 }  // namespace SP

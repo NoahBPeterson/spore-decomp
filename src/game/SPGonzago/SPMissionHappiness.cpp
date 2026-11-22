@@ -193,6 +193,18 @@ public:
 };
 }
 namespace SP {
+cEmpire_s00c5_62b0* __cdecl FUN_01021300();                       // 0x01021300 player empire
+}
+namespace SP {
+class cCommManager {
+public:
+    IRefCounted* FUN_00aeb3e0();                       // 0x00aeb3e0
+};
+}
+namespace SP {
+cCommManager* __stdcall CommManager(uint32_t key, int32_t context, void* pCommContext);   // 0x00b3d4a0
+}
+namespace SP {
 struct tU32Vector {
     uint32_t* mpBegin;                                 // +0x00
     uint32_t* mpEnd;                                   // +0x04
@@ -271,6 +283,31 @@ public:
 };
 }
 // ---- items of slice s00c562b0 end
+
+// @ 0x00c56760
+namespace SP {
+void cSPMissionHappinessEvent_s00c5_62b0::OnAcceptMission()
+{
+    cSPMission_s00c5_62b0::OnAccept();
+    cPlanet_s00c5_62b0* pTargetPlanet = GetTargetPlanet();
+    pTargetPlanet->mPendingEventCount++;
+
+    cEmpire_s00c5_62b0* pOwnerEmpire = GetOwnerEmpire();
+    cEmpire_s00c5_62b0* pPlayerEmpire = FUN_01021300();
+    if (!pOwnerEmpire)
+        return;
+    if (pOwnerEmpire != pPlayerEmpire && !pOwnerEmpire->FUN_00c31bc0(pPlayerEmpire))
+        return;
+
+    cStarRecordRef* pStarRecord = GetTargetPlanet()->mpStarRecord;
+    cStarRecordRef* pContextRecord = GetTargetPlanet()->mpStarRecord;
+    uint32_t empireKey = pOwnerEmpire->mKey;
+    void* pCommData = GetCommData(0x8b756f4b, 2, this, pOwnerEmpire == pPlayerEmpire);
+    cCommManager* pCommManager = CommManager(empireKey, pContextRecord->FUN_00b8de30(),
+                                             pStarRecord->GetCommContext(pCommData));
+    mpCommTarget = pCommManager->FUN_00aeb3e0();
+}
+}  // namespace SP
 
 // @ 0x00c56850
 namespace SP {

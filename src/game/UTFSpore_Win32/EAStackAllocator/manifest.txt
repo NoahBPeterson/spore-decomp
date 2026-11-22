@@ -1,5 +1,5 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/EAStackAllocator.cpp  ?Init@StackAllocator_s0092_8b00@Allocator@EA@@QAEXPAUBlock_s0092_8b00@23@IP6APAXIPAIPAX@ZP6AX22@Z2@Z  00928b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStackAllocator.cpp  ?AllocateNewBlock@StackAllocator_s0092_8b00@Allocator@EA@@QAE_NI@Z  00928ba0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/UTFSpore_Win32/EAStackAllocator.cpp  ??0StackAllocator_s0092_8b00@Allocator@EA@@QAE@PAXIP6APAXIPAI0@ZP6AX00@Z0@Z  00928cd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStackAllocator.cpp  ?Reset@StackAllocator_s0092_8b00@Allocator@EA@@QAEXPAX@Z  00928c40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStackAllocator.cpp  ??0StackAllocator_s0092_8b00@Allocator@EA@@QAE@PAXIP6APAXIPAI0@ZP6AX00@Z0@Z  00928cd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

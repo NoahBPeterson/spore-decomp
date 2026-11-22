@@ -28,7 +28,7 @@ extern "C" void* __cdecl operator_new(size_t nSize, const char* pName, int nFlag
 extern "C" void  operator_delete_array(void* pBlock);                   // 0x00f47380
 extern "C" void* __cdecl memset(void* pDst, int nValue, size_t nLen);
 extern "C" wchar_t* __cdecl wcscpy(wchar_t* pDst, const wchar_t* pSrc);
-extern const char gEastlAllocatorFile[];    // 0x013ebb38 "â€¦/EASTL/allocator.h"
+extern const char gEastlAllocatorFile[];    // 0x013ebb38 "…/EASTL/allocator.h"
 extern const wchar_t gEmptyString16[];      // 0x01667bac
 extern const void* gWideTokenTable;         // 0x01667b34
 extern "C" void FUN_00406540(void* pDst, void* pSrc, int nElemSize, int nCount, void* pCtor); // 0x00406540
@@ -155,6 +155,8 @@ void* FUN_00921150(const wchar_t* pText, const wchar_t* pToken,
 void  FUN_00920f00(wchar_t* pText);                                   // 0x00920f00
 void* FUN_00920c60(const wchar_t* pText, const void* pTable);         // 0x00920c60
 char* FUN_0093d0b0(char* pBegin, char* pEnd, char** ppNext);          // 0x0093d0b0
+void  FUN_00ce0bf0(void** ppIter, const void* const& pKey);           // 0x00ce0bf0
+void  __fastcall FUN_0091a4f0(cAddressRepEntry* pEntry);              // 0x0091a4f0
 void  FUN_00401930(cAddressRepEntry* pDst, int nSize, int nCount,
                    void* pCtor);                                      // 0x00401930
 // ---- items of slice s0091a680 end
@@ -438,6 +440,32 @@ void cAddressRepCache::DoFreeNodes(cHashNode** ppBuckets, uint32_t nBucketCount)
         }
         ppBuckets[i] = 0;
     }
+}
+
+// @ 0x0091af40
+cAddressRepEntry* cAddressRepCache::operator[](const void* const& pKey)
+{
+    void* aIter[3];
+    FUN_00ce0bf0(aIter, pKey);
+    if (aIter[0] != (void*)mpBucketArray[mnBucketCount]) {
+        cAddressRepEntry value;
+        for (int i = 0; i < 4; i++) {
+            value.mBlocks[i].mpBegin = (uint16_t*)gEmptyString16;
+            value.mBlocks[i].mpCapacityEnd = (uint16_t*)gEmptyString16;
+            value.mBlocks[i].mpEnd = (uint16_t*)gEmptyString16;
+            value.mBlocks[i].mpSSOBuffer = (uint16_t*)((const char*)gEmptyString16 + 1);
+        }
+        value.mFlags.mKind = 0;
+        value.mFlags.mInfo = 0;
+        value.mFlags.mExtra = 0;
+
+        cHashNode node(pKey, value);
+        *((uint8_t*)aIter + 8) = 0;
+        DoInsert(aIter, &node, *((uint8_t*)aIter + 8));
+        FUN_0091a4f0(&node.mValue);
+        FUN_0091a4f0(&value);
+    }
+    return (cAddressRepEntry*)((uint8_t*)aIter[0] + 4);
 }
 
 // @ 0x0091b000

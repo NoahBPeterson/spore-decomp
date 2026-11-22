@@ -33,6 +33,7 @@ struct VerbObject {
     virtual void v06();
     virtual bool HasCategory(int key); // +0x1c
 };
+bool GetPropertyAsKeyInstance_s004e_5050(VerbObject* p, int key, int* out); // 0x006a12a0, cdecl
 bool GetPropertyAsKeyInstance(VerbObject* p, int key, int* out); // 0x006a12a0, cdecl
 struct RefCounted {                     // EA::RefCounted base: vtbl[1] = Release
     virtual void v0();
@@ -50,10 +51,8 @@ struct AutoRef {
         return &mp;
     }
 };
-extern "C" int   __cdecl Editor_GetConfigFromModelType(int modelType);       // 0x432f10
-extern "C" void* __cdecl GetPropertyManager67de30();                         // 0x67de30
 extern "C" char  __cdecl GetPropertyAsKey(void* list, uint32_t id, void* out);        // 0x6a1250
-extern "C" char  __cdecl GetPropertyAsKeyInstance(void* list, uint32_t id, void* out); // 0x6a12a0
+extern "C" char  __cdecl GetPropertyAsKeyInstance_s004e_5050(void* list, uint32_t id, void* out); // 0x6a12a0
 extern uint32_t  DAT_015d9ed8;
 struct Key3 { uint32_t w[3]; };
 struct PropList {
@@ -78,19 +77,8 @@ struct PtrVector {
     int* mpEnd;                         // +0x4
     int  mCapacity;                     // +0x8
 };
-extern "C" void* __cdecl GetPropertyManager();                            // 0x67de30
-extern "C" void* __cdecl Func4e8850(void* self);                          // 0x4e8850
-extern "C" int*  __cdecl Func4e88a0(void* self, void* key);               // 0x4e88a0
-extern "C" void* __cdecl PrepareRef(void* ref);                                 // 0x41d870  releases old, returns ref
-extern "C" char  __cdecl NameCompare(void* key, void* cfg);                     // 0x4bafc0
-extern "C" int   __cdecl VerbIdToIconParam(int id);                             // 0x4d1370
-extern "C" void  __cdecl BuildNamedIcon(void* ref, int* host, int param, float rate); // 0x4e87f0
 extern "C" void  __cdecl Emit7990(RefList3* out, int id);                        // 0x4e7990
 extern "C" void  __cdecl Func4b5440v(RefList3* v);                              // 0x4b5440
-extern "C" void  __cdecl Emit7da0(int res, int* host);                          // 0x4e7da0
-extern "C" void  __cdecl Emit6c10(int res, int* host);                          // 0x4e6c10
-extern "C" int   __cdecl InterfaceCastEditor(void** ref);                       // 0x421eb0
-extern "C" void* __cdecl ResourceMan_GetManager2();                             // 0x67dcd0
 struct ResMan {
     virtual void v0();
     virtual void v1();
@@ -120,15 +108,51 @@ struct VerbHost {
     BitSet60  mDisabled;                // +0xdc8
     bool      IsAvailable();            // 0x44c030
 };
+void* __cdecl Func5a9050(void* id);                        // 0x5a9050
+int   __cdecl VerbIconWeight(int id);                      // 0x4e6920
+void  __cdecl Func4b54b0v(void** vec, int* value);         // 0x4b54b0
+extern "C" int* __cdecl FNV1_String8_s004e_5050(int* str);            // 0x41e990
+struct VerbObject2 {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual char Lookup(int iconId, int* out);  // +0x24
+};
+struct VerbIconData {                   // cSPEditorVerbIconData
+    virtual void d0();
+    virtual void d1();
+    virtual void d2();
+    virtual void d3();
+    virtual void SetId(int id);         // +0x10 (idx 4)
+};
+struct VerbIconWeightEntry {            // {id, ...}
+    int   mId;                          // +0x0
+    int   mPad;                         // +0x4
+    float mWeight;                      // +0x18
+    float mCap;                         // +0x1c
+    char  mClamped;                     // +0x4d
+};
+extern "C" void* __cdecl OperatorNewEditor(uint32_t size, const char* tag, int a, int b, int c, int d); // 0xf473a0
+void* __cdecl CtorVerbIconData(void* self);         // 0x5e5a70
+void* __cdecl NewVerbIconData();
+void* __cdecl NewVerbIconData()
+{
+    void* mem = OperatorNewEditor(0xc4, "Editor", 0, 0, 0, 0);
+    if (mem == 0)
+        return 0;
+    return CtorVerbIconData(mem);
+}
 // ---- items of slice s004e5050 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" char  __cdecl GetPropertyAsKey(void* list, uint32_t id, void* out);        // 0x6a1250
+
 extern "C" char  __cdecl GetPropertyAsKeyInstance(void* list, uint32_t id, void* out); // 0x6a12a0
-extern uint32_t  DAT_015d9ed8;
-extern "C" void* __cdecl ReserveAutoRef(void* list, uint32_t id, int* count, void** data); // 0x6a0ae0
-extern "C" void  __cdecl Emit7990(RefList3* out, int id);                        // 0x4e7990
-extern "C" void  __cdecl Func4b5440v(RefList3* v);                              // 0x4b5440
 
 // ---- items of slice s004e5d00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct PropertyList {
@@ -527,7 +551,7 @@ bool ComputeCategoryRankImageMap(VerbHost5180* self, int category, int modelType
             mgr2->GetPropertyList(models->mpBegin[i * 3], 0xaf028f41, (void**)&inner.mp);
 
             Key3 iconKey;
-            GetPropertyAsKeyInstance(inner.mp, 0x6286814, &iconKey);
+            GetPropertyAsKeyInstance_s004e_5050(inner.mp, 0x6286814, &iconKey);
 
             Key3 outKey;
             outKey.w[0] = 0;
@@ -683,7 +707,7 @@ int GetVerbCategory(VerbObject* p)
 {
     if (p->HasCategory(0x4abbb0d)) {
         int local = 0;
-        if (GetPropertyAsKeyInstance(p, 0x4abbb0d, &local))
+        if (GetPropertyAsKeyInstance_s004e_5050(p, 0x4abbb0d, &local))
             return local;
     }
     return 0;
@@ -699,6 +723,69 @@ bool IsDietCategory(SP::eVerbIconCategory id)
 }
 }
 }  // namespace SP::EditorUtils
+
+// @ 0x004e5960
+void AccumulateVerbIconData(VerbObject2* host, int* existing, uint32_t* flags)
+{
+    int resId = ((int*)host)[2];        // host[2]
+    int* list = (int*)Func5a9050((void*)resId);
+    if (list == 0)
+        return;
+
+    int total = (list[1] - list[0]) >> 2;
+    for (int i = 0; i < total; ++i) {
+        int* verbPtr = (int*)(list[0] + i * 4);
+        int verb = *verbPtr;
+        int category = GetVerbCategory((VerbObject*)verb);
+        char isDiet = IsDietCategory(category);
+        if (isDiet) {
+            if (category == (int)0xdfa0d6bf)
+                *flags |= 1;
+            else if (category == (int)0xd9bcb9f0)
+                *flags |= 2;
+            else if (category == 0x521a15d5)
+                *flags |= 4;
+        } else {
+            VerbIconWeightEntry* data = 0;
+            int count = (existing[1] - existing[0]) >> 2;
+            for (int j = 0; j < count; ++j) {
+                int* slot = (int*)(existing[0] + j * 4);
+                int cand = *slot;
+                int candId = *(int*)(cand + 0xc0);
+                if (candId == verb) {
+                    int* slot2 = (int*)(existing[0] + j * 4);
+                    data = (VerbIconWeightEntry*)*slot2;
+                }
+            }
+            if (data == 0) {
+                data = (VerbIconWeightEntry*)NewVerbIconData();
+                ((VerbIconData*)data)->SetId(verb);
+                data->mWeight = 0.0f;
+                void* keep = data;
+                if (data != 0)
+                    (*(void(**)(void))data)();
+                Func4b54b0v((void**)existing, (int*)&keep);
+                if (keep != 0)
+                    ((RefCounted*)keep)->Release();
+            }
+            int iconId = VerbIconWeight(*(int*)(verb + 8));
+            if (iconId != 0) {
+                int hash = 0;
+                int found = 0;
+                if (host != 0 &&
+                    host->Lookup(iconId, &found) &&
+                    *(short*)(found + 0x12) == 9) {
+                    int* p = FNV1_String8_s004e_5050((int*)found);
+                    hash = *p;
+                }
+                data->mWeight = (float)hash + data->mWeight;
+                if (data->mClamped && data->mWeight > data->mCap) {
+                    data->mWeight = data->mCap;
+                }
+            }
+        }
+    }
+}
 
 // @ 0x004e6720
 void Collect6720(VerbOwner* owner, IconVec* out)

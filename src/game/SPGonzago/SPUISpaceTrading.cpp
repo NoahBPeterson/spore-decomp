@@ -637,7 +637,11 @@ struct cSPUISpaceTrading_s0107_6540 {
     void AddNPCItems();                                       // 0x01076a00
     void AddUserItems();                                      // 0x01076a60
 };
+void* EAlloc(uint32_t size, const char* name, uint32_t a, uint32_t b, uint32_t c, uint32_t d);  // 0x00f473a0
 char FUN_00807690(void* p, int v);                                  // 0x00807690
+void FUN_005c8480(cSPUILayout_s0107_6540** pos, cSPUILayout_s0107_6540** value);          // 0x005c8480
+struct PropKey { uint32_t v0, v1, v2; };
+void GetPropertyAsKey(uint32_t prop, uint32_t key, PropKey* out);   // 0x006a1250
 struct PlayerInventory {
 PAD(0);
 PAD(1);
@@ -1349,6 +1353,111 @@ void cSPUISpaceTrading::Fn10763C0()
             }
         }
     }
+}
+
+// @ 0x01076540
+void cSPUISpaceTrading_s0107_6540::AddItem(IWindow_s0107_6540* parent, uint32_t index, uint32_t field, uint32_t type, TradeItem_s0107_6540* item)
+{
+    cSPUILayout_s0107_6540* layout = (cSPUILayout_s0107_6540*)EAlloc(0x18, (const char*)0x013f6b3c, 0, 0, 0, 0);
+    if (layout)
+        layout = layout->Ctor();
+    if (layout)
+        layout->AddRef();
+    layout->Init(L"tradingItem", 0x40464100, 1, 0x5b598fa);
+
+    IWindow_s0107_6540* win = layout->FindWindowByID(0x5da5f30, 1);
+    if (win->GetParent())
+        win->GetParent()->SlotDC(win);
+    parent->SlotD8(win);
+
+    Rect* pr = parent->GetParent()->GetParent()->GetArea();
+    float parentWidth = pr->right - pr->left;
+    Rect* wr = win->GetArea();
+    float cellW = (wr->right - wr->left) + 6.0f;
+    Rect* wr2 = win->GetArea();
+    float cellH = (wr2->bottom - wr2->top) + 6.0f;
+
+    uint32_t columns = (uint32_t)(int)parentWidth / (uint32_t)(int)cellW;
+    uint32_t row = index / columns;
+    uint32_t col = index % columns;
+    win->SetPosition((float)col * cellW, (float)row * cellH);
+
+    win->SetFlag(1, 1);
+    win->SetFlag(2, 1);
+    IWindow_s0107_6540* itemName = win->FindWindowByID(0x3504b00, 1);
+    IWindow_s0107_6540* itemPrice = win->FindWindowByID(0x3504c10, 1);
+
+    wchar_t nameBuf[16];
+    wchar_t priceBuf[16];
+
+    if (item) {
+        itemName->SetFlag(1, 1);
+        FUN_008822e0((double)item->Get18(), nameBuf, 0x10, *(int*)0x015b9448,
+                     (int)0x0149c570);
+    } else {
+        itemName->SetFlag(1, 0);
+        nameBuf[0] = 0;
+    }
+
+    itemPrice->SetFlag(1, 0);
+    priceBuf[0] = 0;
+
+    if (item && field != 0) {
+        PropKey key;
+        key.v0 = key.v1 = key.v2 = 0;
+        GetPropertyAsKey(item->f30, 0x34f1a4f, &key);
+        if (key.v0 != 0x4edcc2bf && key.v0 != 0xeb1a8062) {
+            itemPrice->SetFlag(1, 1);
+            SetNumberString(field, 0, priceBuf, 0x10);
+        }
+    }
+
+    nameBuf[15] = 0;
+    priceBuf[15] = 0;
+
+    IWindow_s0107_6540* label = win->FindWindowByID(0x4c07191, 1);
+    label->Slot50(index + type);
+    itemName->Slot80(nameBuf);
+    itemPrice->Slot80(priceBuf);
+
+    if (item) {
+        if (item->Get18() == 0 && type == 0x20000)
+            win->FindWindowByID(0x5dce858, 1)->SetFlag(1, 1);
+
+        uint32_t state = GetSpaceTrading_s0107_6540()->Fn103b950(1, (type == 0x10000), item, 0);
+        label->SetFlag(2, state == 0);
+        if (state == 2) {
+            ITextWindow* text = itemName->Slot0C(0xf15f4bd);
+            text->SetColor(0xffaa1111);
+        }
+        itemName->SetFlag(1, state != 4);
+        win->FindWindowByID(0x5dce858, 1)->SetFlag(1, state == 4);
+
+        IWindow_s0107_6540* image = win->FindWindowByID(0x3504bc0, 1);
+        PropKey imgBuf;
+        imgBuf.v0 = imgBuf.v1 = imgBuf.v2 = 0;
+        ((void (__cdecl *)(void*, const void*))SetImageFromKey)(image, item->Slot30(&imgBuf));
+
+        if (item->f14 == 4) {
+            void* v = GetSpaceTrading_s0107_6540()->Fn103a540(item);
+            if (v)
+                image->Slot5C((uint32_t)v);
+        }
+    }
+
+    label->Slot104(this);
+
+    cSPUILayout_s0107_6540** pos = mItemsEnd;
+    if (pos < mItemsCap) {
+        mItemsEnd = pos + 1;
+        *pos = layout;
+        if (layout)
+            layout->AddRef();
+    } else {
+        FUN_005c8480(pos, &layout);
+    }
+    if (layout)
+        layout->Release();
 }
 
 // @ 0x01076a00

@@ -9,7 +9,6 @@
 #include "eastl/string.h"
 #include "EA/ArgScript/cExprFunction.h"
 #include "SP/cHashFunction.h"
-#include <math.h>
 #include "EA/ArgScript/cIParser.h"
 #include "EA/DateTime/DateTime.h"
 #include "EA/LimitStopwatch.h"
@@ -22,6 +21,7 @@
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" __declspec(dllimport) int   __cdecl isspace(int);
+extern "C" __declspec(dllimport) float __cdecl ceil(double);   // 0x0083ce70: retail calls [__imp_ceil] and returns st0 untouched
 extern char gEmptyString[];
 extern void* g_TI_cError;                                     // 0x014f9174 (ThrowInfo of cError)
 __declspec(noreturn) void  __cdecl CxxThrowException(void* obj, void* throwInfo);   // 0x011e0912 (_CxxThrowException)
@@ -301,6 +301,12 @@ struct cExpression_s0083_f140 {
 }
 }
 // ---- items of slice s0083f140 end
+
+// @ 0x0083ce70
+float __cdecl CeilToFloat(float x)
+{
+    return (float)ceil((double)x);
+}
 
 // @ 0x0083ce90
 void DiscardWhiteSpace(const char** p)

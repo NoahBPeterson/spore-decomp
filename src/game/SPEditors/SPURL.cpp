@@ -8,6 +8,8 @@
 extern char  gEmptyString[];        // @ 0x1667bac
 #include <wchar.h>
 #include "cSPUILayout.h"
+#include <ctype.h>
+#include <string.h>
 
 // ---- items of slice s00546160 begin (TODO(rewrite): local stubs, replace by canonical classes)
 int*   LowerBound(int* first, int* last, unsigned int* key, char cmp);
@@ -41,12 +43,18 @@ extern uint8_t   gMapACmp;     // 0x15f5bd0
 extern uint32_t* gMapB;        // 0x15f5bd4
 extern uint32_t* gMapBEnd;     // 0x15f5bd8
 extern uint8_t   gMapBCmp;     // 0x15f5be8
+extern char gEmptyString16[];                 // 0x01667bac
+extern const char gSchemeSeparators[];        // 0x013fce5c ":/\"
+void* __cdecl EA_Allocate(unsigned size, const char* name, int a, int b,
+                          const char* file, int line);                              // 0xf473a0
 extern const wchar_t gURLFormat[];  // 0x13f3da0
 void  __cdecl EA_Free(void* p);                                                     // 0xf47380
 void* __cdecl WStr_Format(void* dst, const void* fmt, ...);                         // 0x41e050
 uint32_t* __cdecl eastl_lower_bound(uint32_t* first, uint32_t* last,
                                     const uint32_t* key, int comp);                 // 0x549dc0
 void* __cdecl String8_CtorSprintf(void* self, int tag, const char* fmt, ...);       // 0x472f50
+char* __cdecl eastl_find_first_not_of(const char* first, const char* last,
+                                      const char* pBegin, const char* pEnd);  // 0x61df60
 struct String8 {
   char* mpBegin;      // +0x00
   char* mpEnd;        // +0x04
@@ -57,6 +65,10 @@ struct String8 {
 struct URLMap {
   String8* op_index(const void* key);                  // 0x546930
 };
+void String8_Erase(String8* self, int position, int n);   // 0x61e200
+struct MapEntryIt { uint32_t* p; };
+inline bool operator!=(MapEntryIt a, MapEntryIt b) { return a.p != b.p; }
+inline MapEntryIt operator+(MapEntryIt a, int n) { MapEntryIt r = { a.p + 5 }; return r; }
 // ---- items of slice s00620bd0 end
 
 // ---- items of slice s00621830 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -112,6 +124,18 @@ struct URLEntryIt {
 inline bool operator!=(URLEntryIt a, URLEntryIt b) { return a.p != b.p; }
 inline URLEntryIt operator+(URLEntryIt a, int) { URLEntryIt r = { a.p + 5 }; return r; }
 
+// @ 0x00621460
+bool MapLookup(uint32_t key, String8* out)
+{
+  MapEntryIt end = { gMapBEnd };
+  MapEntryIt r = { eastl_lower_bound(gMapB, end.p, &key, (int)gMapBCmp) };
+  if (r != end && key >= *r.p && r != r + 1) {
+    if (out != 0) out->assign((char*)r.p[1], (char*)r.p[2]);
+    return true;
+  }
+  return false;
+}
+
 // @ 0x006214c0
 bool GetURL(uint32_t key, String8* out)
 {
@@ -125,15 +149,36 @@ bool GetURL(uint32_t key, String8* out)
 }
 
 // @ 0x00621540
-void SanitizeURL(void* out, char* url)
+void SanitizeURL(uint32_t key, char* url)
 {
   if (url == 0) return;
-  char* end = url;
-  while (*end) ++end;
-  String8 tmp;
-  tmp.mpBegin = 0; tmp.mpEnd = 0; tmp.mpCapacity = 0; tmp.mpAllocator = 0;
-  (void)end;
-  (void)out;
+  size_t len = strlen(url);
+  String8 text;
+  if (len + 1 <= 1) {
+    text.mpBegin = gEmptyString16;
+    text.mpCapacity = gEmptyString16 + 1;
+  } else {
+    text.mpBegin = (char*)EA_Allocate((unsigned)(len + 1), "Editor", 0, 0,
+                                      "EASTL/allocator.h", 0xd1);
+    text.mpCapacity = text.mpBegin + len + 1;
+  }
+  text.mpEnd = text.mpBegin;
+  text.mpAllocator = 0;
+  memcpy(text.mpBegin, url, len);
+  text.mpEnd = text.mpBegin + len;
+  *text.mpEnd = 0;
+  char* first = eastl_find_first_not_of(text.mpBegin, text.mpEnd, gSchemeSeparators,
+                                        gSchemeSeparators + 3);
+  String8_Erase(&text, 0, first == text.mpEnd ? -1 : (int)(first - text.mpBegin));
+  while (text.mpBegin != text.mpEnd) {
+    if (isalnum((unsigned char)*(text.mpEnd - 1))) break;
+    String8_Erase(&text, (int)(text.mpEnd - text.mpBegin) - 1, 1);
+  }
+  if (text.mpBegin != text.mpEnd) {
+    String8* slot = ((URLMap*)&gMapB)->op_index(&key);
+    if (slot != &text) slot->assign(text.mpBegin, text.mpEnd);
+  }
+  if ((text.mpCapacity - text.mpBegin) > 1 && text.mpBegin) EA_Free(text.mpBegin);
 }
 
 // @ 0x006216b0

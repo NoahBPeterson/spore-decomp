@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIPropertyLayout.cpp -- migrated from slice(s) s00828c30, s00827bf0 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIPropertyLayout.cpp -- migrated from slice(s) s008284a0, s00828c30, s00827bf0 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIPropertyLayout.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -432,6 +432,44 @@ class cEntryMap {
 MapNode* LowerBound(MapNode* first, MapNode* last, unsigned* key, bool flag);   // 0x00d01210
 // ---- items of slice s00828c30 end
 
+// ---- items of slice s008284a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRefObj_s0082_84a0 {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct RefPtr_s0082_84a0 {
+    IRefObj_s0082_84a0* mpObject;
+
+    RefPtr_s0082_84a0& operator=(const RefPtr_s0082_84a0& ip) { return operator=(ip.mpObject); }
+
+    RefPtr_s0082_84a0& operator=(IRefObj_s0082_84a0* pObject)
+    {
+        if (pObject != mpObject) {
+            IRefObj_s0082_84a0* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+};
+struct String_s0082_84a0 {
+    char pad00[0x14];
+
+    String_s0082_84a0& operator=(const String_s0082_84a0& x);  // 0x00542b80
+};
+struct Record_s0082_84a0 {
+    int mId;                       // +0x00
+    RefPtr_s0082_84a0 mpObject;    // +0x04
+    String_s0082_84a0 mName;       // +0x08
+    int mValue;                    // +0x1c
+
+    Record_s0082_84a0& operator=(const Record_s0082_84a0& x);
+};
+// ---- items of slice s008284a0 end
+
 // @ 0x00828070
 unsigned int CPL::GetEventMask()
 {
@@ -449,6 +487,17 @@ bool CPL::DoMessage(int a, void* b)
     mTime = (float)sw.GetElapsedTime() * sw.mUnitsPerSecond;
   }
   return false;
+}
+
+// @ 0x008280d0
+void* cSPUIPropertyLayout::AsInterface(EA::COM::InterfaceId id)
+{
+    void* result = this;
+    if ((unsigned int)id == 0xae9cb0fa)
+        return result;
+    if ((unsigned int)id == 0xee3f516e)
+        return result;
+    return (unsigned int)id == 0x2f009dd0 ? result : 0;
 }
 
 // @ 0x00828100
@@ -537,6 +586,16 @@ Elem::Elem(const Elem& o)
   if (mpObject) ((IRefThing*)mpObject)->AddRef();
   mVariant = o.mVariant;
   mLast = o.mLast;
+}
+
+// @ 0x008284a0
+Record_s0082_84a0& Record_s0082_84a0::operator=(const Record_s0082_84a0& x)
+{
+    mId = x.mId;
+    mpObject = x.mpObject;
+    mName = x.mName;
+    mValue = x.mValue;
+    return *this;
 }
 
 // @ 0x008284f0
@@ -716,13 +775,3 @@ int cSPUIPropertyLayout::AddRef()
     return next;
 }
 
-// @ 0x008280d0
-void* cSPUIPropertyLayout::AsInterface(EA::COM::InterfaceId id)
-{
-    void* result = this;
-    if ((unsigned int)id == 0xae9cb0fa)
-        return result;
-    if ((unsigned int)id == 0xee3f516e)
-        return result;
-    return (unsigned int)id == 0x2f009dd0 ? result : 0;
-}

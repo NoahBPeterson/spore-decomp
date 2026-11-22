@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUICursorAttachmentLayout.cpp  ?Dtor@C_8011f0@@QAEXXZ  008011f0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUICursorAttachmentLayout.cpp  ?Thunk@C_801210@@QAEPAXXZ  00801210  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorAttachmentLayout.cpp  ?Ctor@C_801280@@QAEPAXXZ  00801280  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

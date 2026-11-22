@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00802a30 167 show/hide cursor window (complete)
-00802b20 39 query cursor-window enabled flag (complete)
-00802b80 211 console alpha/colour application (complete)
+00802a30 167 show/hide cursor window (complete) flags: /O2 /MD /Gy /TP /arch:SSE2
+00802b20 39 query cursor-window enabled flag (complete) flags: /O2 /MD /Gy /TP /arch:SSE2
+00802b80 211 console alpha/colour application (complete) flags: /O2 /MD /Gy /TP /arch:SSE2

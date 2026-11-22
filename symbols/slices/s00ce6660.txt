@@ -1,0 +1,1 @@
+00ce6660 ?TranslateToken@cTribeTokenTranslator@SP@@QAE_NPB_WPAUWString@2@@Z  # cTribeTokenTranslator::TranslateToken migrated from s00ce6660 (verbatim, slice spelling)

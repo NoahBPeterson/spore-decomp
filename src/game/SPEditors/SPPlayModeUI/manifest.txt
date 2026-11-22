@@ -46,3 +46,4 @@
 ../src/game/SPEditors/SPPlayModeUI.cpp  ?GetEditorText@cSPPlayModeUI_s0063_73e0@@QAEXIPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  006377d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeUI.cpp  ?GetYTUsername@cSPPlayModeUI_s0063_73e0@@QAEXPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  00637800  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeUI.cpp  ?GetYTPassword@cSPPlayModeUI_s0063_73e0@@QAEXPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  00637830  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?find_last_of@EStr@@QBEIPBDI@Z  0091bec0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

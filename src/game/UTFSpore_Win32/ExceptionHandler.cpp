@@ -153,6 +153,7 @@ extern "C" __declspec(dllimport) size_t __cdecl strlen(const char*);
 extern "C" __declspec(dllimport) BOOL __stdcall TerminateProcess(HANDLE, UINT);
 void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned dbg,
                                const char* file, int line);   // 0x00f473a0
+void  EASTL_allocator_deallocate(void* p);                     // 0x00f47380
 void  DoInsertValue(void* dst, const void* src, unsigned n);   // 0x011e0744
 struct CString {
     char* mpBegin; char* mpEnd; char* mpCapacity;
@@ -171,16 +172,16 @@ struct ReportWriter_s0091_e650 {
     virtual bool r09(const char* fmt, ...);           // +0x24  (variadic)
     virtual bool r10(const char* name, const char* value); // +0x28
     virtual bool r11(const char* name, const char* fmt, ...); // +0x2c (variadic)
-    virtual void r12();                               // +0x30
+    virtual bool r12();                               // +0x30
     virtual bool r13(const void* data, int n);        // +0x34
     virtual int  r14();                               // +0x38
 
-    ReportWriter_s0091_e650();                                   // e970
+    ReportWriter_s0091_e650();                                   // e970 0x0091e970
     void GetFileNameExtension(char* dst, unsigned n);// e990 0x0091e990
     bool Open(const char* path);                      // e9c0
     bool Close();                                     // ea20
     bool BeginSection(const char* name);              // ea50 0x0091ea50
-    void EndSection();                                // ea80 0x0091ea80
+    bool EndSection(const char* name);                // ea80 0x0091ea80
     bool WriteSubstr(const char* data, bool flag);    // ea90
     bool WriteFormattedV(const char* fmt, va_list ap);// ead0
     bool WritePair(const char* a, const char* b);     // eb20
@@ -216,9 +217,9 @@ struct ExceptionHandler_s0091_e650 {
     HandlerNode mNode;           // +0x30
     CString msBuildDescription;  // +0x3c
     wchar_t mDir[255];           // +0x4c
-    ExceptionHandler_s0091_e650();                             // e810
-    ~ExceptionHandler_s0091_e650();                            // e8d0
-    void SetBuildDescription(const char* s);        // e650
+    ExceptionHandler_s0091_e650();                             // e810 0x0091e810
+    ~ExceptionHandler_s0091_e650();                            // e8d0 0x0091e810
+    void SetBuildDescription(const char* s);        // e650 0x0091e650
     void NotifyClients(int action);                 // 91e3b0 (other slice) 0x0091e3b0
 };
 struct ExceptionHandlerWin32_s0091_e650 {
@@ -234,8 +235,8 @@ struct ExceptionHandlerWin32_s0091_e650 {
     void* mPreviousFilter;       // +0x20
     char mTime[0x24];            // +0x24
     char mBaseReportName[0x40];  // +0x48
-    ExceptionHandlerWin32_s0091_e650(ExceptionHandler_s0091_e650* owner); // e770
-    unsigned ExceptionFilter(void* ep);             // e690
+    ExceptionHandlerWin32_s0091_e650(ExceptionHandler_s0091_e650* owner); // e770 0x0091e770
+    unsigned ExceptionFilter(void* ep);             // e690 0x0091e690
     void WriteMiniDump();                           // 91e190 (other slice) 0x0091e190
     void WriteExceptionReport();                    // 91e5c0 (other slice) 0x0091e5c0
 };
@@ -552,6 +553,36 @@ ExceptionHandler_s0091_e650::ExceptionHandler_s0091_e650()
         }
         NotifyClients(2);
     }
+}
+
+// @ 0x0091e8d0
+ExceptionHandler_s0091_e650::~ExceptionHandler_s0091_e650()
+{
+    if (mpPlatformHandler != 0 && !mbRunningTrapped) {
+        NotifyClients(3);
+        ExceptionHandlerWin32_s0091_e650* w = (ExceptionHandlerWin32_s0091_e650*)mpPlatformHandler;
+        if (w != 0) {
+            g_pExceptionHandler = 0;
+            if (w->mbEnabled) {
+                w->mbEnabled = false;
+                SetUnhandledExceptionFilter(w->mPreviousFilter);
+                w->mPreviousFilter = 0;
+            }
+            EASTL_allocator_deallocate(w);
+        }
+        mpPlatformHandler = 0;
+    }
+    char* b = msBuildDescription.mpBegin;
+    if ((int)(msBuildDescription.mpCapacity - b) > 1 && b != 0)
+        EASTL_allocator_deallocate(b);
+    HandlerNode* sentinel = &mNode;
+    for (HandlerNode* n = sentinel->mpNext; n != sentinel; ) {
+        HandlerNode* nx = n->mpNext;
+        EASTL_allocator_deallocate(n);
+        n = nx;
+    }
+    if (mpBegin != 0 && mpBegin != mPoolBegin)
+        EASTL_allocator_deallocate(mpBegin);
 }
 
 // @ 0x0091e970

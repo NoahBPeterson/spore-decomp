@@ -1159,6 +1159,7 @@ struct AutoRefCount {
     u32  mPtr;
     void operator=(void* p);
 };
+#pragma pack(push, 1)  // the slice's pack(1): OrderRec is 0xac bytes, mField78 at +0x78 (retail reads +0x1d8)
 struct OrderSub39 {
     u32          mField00;                 // +0x39 +0x00
     u8           pad_04[0xc];
@@ -1177,6 +1178,7 @@ struct OrderRec {
     u32          mField7c;                 // +0x7c
     u8           pad_80[0x2c];
 };
+#pragma pack(pop)
 struct BehaviorStimuli {
     u32   mField00;                        // +0x00
     void* mField04;                        // +0x04
@@ -3460,7 +3462,6 @@ i32_s00c2_5a50 cSPCreatureCitizen_s00c2_5a50::FUN_00c26170()
     return 0;
 }
 
-
 static inline bool IsLeader_c26310(cSPCreatureCitizen_s00c2_5a50* who)
 {
     cCommunity* pComm = (cCommunity*)who->mpOwnerCity_1010;
@@ -4126,7 +4127,7 @@ void FUN_00da7c50(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
         p->GetTribe()->FindSpot(s->mField0c, s->mField08);
     if (p->mByte_b5e == 0) {
         p->mObjC0.V_ec();
-        bool b = (p->mObjC0.V_f8() == 0);
+        u8 b = (p->mObjC0.V_f8() == 0);
         p->FUN_00c14750(b);
     }
 }
@@ -4135,7 +4136,7 @@ void FUN_00da7c50(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
 void FUN_00da7dc0(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, IdleBlock* s)
 {
     p->d0c0(6, 0);
-    bool b = (p->mObjC0.V_f8() == 0);
+    u8 b = (p->mObjC0.V_f8() == 0);
     p->FUN_00c14750(b);
     if (s->mField04 != -1) {
         cTribe* t = s->mpCreature14->GetTribe();
@@ -4236,6 +4237,19 @@ f32 FUN_00da8190(Creature* p)
 bool FUN_00da81c0(Creature* p)
 {
     return p->FUN_00c25480(p->FUN_00c26120(), 0) == 0;
+}
+
+// @ 0x00da81f0
+u32 FUN_00da81f0(Creature* p)
+{
+    u32 h = p->mpAgentOrders->mStimuli.Play(0, 0x80);
+    i32_s00da_7780 v = p->mpAgentOrders->mRecs[0].mField78;
+    bool b = false;
+    if (v == 0x462854e)
+        b = p->mpAgentOrders->mRecs[p->mpAgentOrders->mRecs[0].mField7c].mField00 >= 4;
+    if (h == 0 && !b && v != 0x5218bb3 && v != 0x562c0fb)
+        return 1;
+    return 0;
 }
 
 // @ 0x01335fe0

@@ -7,14 +7,24 @@
 #include <intrin.h>
 
 // ---- items of slice s00802a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern float g_164bee8;
+extern "C" char g_1417604[], g_14175e8[], g_14175d8[], g_13ec458[], g_13eb938[];
 #define VFN(p, off) (*(void***)(p))[((off) >> 2)]
 void* __cdecl SP_WindowManager();
 void  __cdecl FUN_00969ae0(float v);
-struct cSPUILayout_s0080_2a30 {
+struct RCObj { virtual void r0(); virtual void Release(); };
+class cSPUILayout_s0080_2a30 { public:
   void* FindWindowByID(uint32_t id, int recursive);  // 0x008105b0 (cSPUILayout::FindWindowByID)
   bool Init();
   void Shutdown(bool recursive);  // 0x00811ad0 (cSPUILayout::Shutdown)
+};
+struct Dbg_s0080_2a30 {
+  char data[0x50];
+  __declspec(noinline) void Show(int show);   // 0x00802a30
+  __declspec(noinline) bool IsEnabled();      // 0x00802b20
+  void OnShow(int a, int b);                  // 0x00802fd0
+  void OnToggle(int a);                       // 0x00802ff0
 };
 struct Dbg {
   char data[0x50];
@@ -25,6 +35,16 @@ struct Dbg {
 };
 struct C_802b80 { char data[0x50]; void f(); };
 struct DbgOut { void Output(const char* a, const char* b); void Forward(const char* a); };
+struct FixedBufferAlloc_803140 { void destroy_shared(); };          // 0x004bca10
+struct cSPUILayout_803140 { void dtor(); };                          // 0x00811fe0
+struct WStrVec_803140 {
+  void* mpBegin; void* mpEnd;
+  void DoDestroyValues(void* b, void* e);                            // 0x0084aad0
+};
+struct C_803140 {
+  char data[0x50];
+  void Dtor();
+};
 // ---- items of slice s00802a30 end
 
 // Message fields follow EA::UTFWin::Message's retail layout.
@@ -62,7 +82,7 @@ void __cdecl DebugConsole_Output(void* self, char* a, char* b)
 }
 
 // @ 0x00802a30
-void Dbg::Show(bool show)
+void Dbg_s0080_2a30::Show(int show)
 {
   char* p = (char*)this;
   void* w = ((cSPUILayout_s0080_2a30*)(p + 0x10))->FindWindowByID(0x14a4606, 1);
@@ -94,7 +114,7 @@ void Dbg::Show(bool show)
 }
 
 // @ 0x00802b20
-bool Dbg::IsEnabled()
+bool Dbg_s0080_2a30::IsEnabled()
 {
   char* p = (char*)this;
   void* w = ((cSPUILayout_s0080_2a30*)(p + 0x10))->FindWindowByID(0x14a4606, 1);
@@ -154,7 +174,7 @@ void DbgOut::Forward(const char* a)
 }
 
 // @ 0x00802fd0
-void Dbg::OnShow(bool a, int b)
+void Dbg_s0080_2a30::OnShow(int a, int b)
 {
   if (b == 1)
     this->Show(a);
@@ -166,4 +186,32 @@ void Dbg::OnToggle(int a)
   if (a == 1) {
     Show(!IsEnabled());
   }
+}
+
+// @ 0x00803140
+void C_803140::Dtor()
+{
+  char* p = (char*)this;
+  void** alloc = *(void***)(p + 0x48);
+  *(void**)p = (void*)g_1417604;
+  *(void**)(p + 4) = (void*)g_14175e8;
+  *(void**)(p + 8) = (void*)g_14175d8;
+  if (alloc) {
+    void* bi = *alloc;
+    if (bi && (*(uint32_t*)((char*)bi + 0x10) & 0x40000000))
+      ((FixedBufferAlloc_803140*)alloc)->destroy_shared();
+    *alloc = 0;
+    EASTL_allocator_deallocate(alloc);
+  }
+  EASTL_allocator_deallocate(*(void**)(p + 0x4c));
+  WStrVec_803140* v = (WStrVec_803140*)(p + 0x30);
+  v->DoDestroyValues(v->mpBegin, v->mpEnd);
+  if (v->mpBegin && *(int*)((char*)v->mpBegin - 4))
+    EASTL_allocator_deallocate(v->mpBegin);
+  if (*(void**)(p + 0x2c)) ((RCObj*)*(void**)(p + 0x2c))->Release();
+  if (*(void**)(p + 0x28)) ((RCObj*)*(void**)(p + 0x28))->Release();
+  ((cSPUILayout_803140*)(p + 0x10))->dtor();
+  *(void**)(p + 8) = (void*)g_13ec458;
+  *(void**)(p + 4) = (void*)g_13eb938;
+  *(void**)p = (void*)g_13eb938;
 }

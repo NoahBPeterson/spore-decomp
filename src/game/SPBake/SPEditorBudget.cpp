@@ -27,7 +27,7 @@ struct cSPEditorEconomy {                  // refcounted, vptr +0, count +4
     void AddRef() { int r = mRefCount + 1; mRefCount = mRefCount + 1; (void)r; }
     void Release();                        // 0x00453540 (RefCountTemplate<int>::Release)
 };
-struct cSPUILayout_s0045_75d0 {                       // vtable: +4 AddRef, +8 Release
+class cSPUILayout_s0045_75d0 { public:                       // vtable: +4 AddRef, +8 Release
     virtual void v0();
     virtual int AddRef();
     virtual int Release();
@@ -105,7 +105,7 @@ virtual void p63();
     virtual void p64();
     virtual void AddWinProc(void* proc);                 // +0x104
 };
-struct cSPUITooltipWinProc_s0045_75d0 {               // 0x68 bytes, vtable: +0 AddRef, +4 Release
+class cSPUITooltipWinProc_s0045_75d0 { public:               // 0x68 bytes, vtable: +0 AddRef, +4 Release
     virtual int AddRef();
     virtual int Release();
     char pad[0x68 - 4];
@@ -152,8 +152,6 @@ void* GetAllocContext();                                              // 0x00951
 void* AllocNamed(unsigned int size, int align, const char* name, void* ctx);   // 0x009512d0 (cdecl)
 void SetMoneyString(double value, wchar_t* buf, int n, const wchar_t* fmt, const wchar_t* sym);   // 0x008822e0 (cdecl)
 void* operator_new_named(unsigned int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0 (cdecl)
-extern const char kEditorAllocName[];                                 // 0x013eb430
-extern float kBudgetColor[3];                                         // 0x015d2998
 struct cSPEditorBudget {
     char pad0[0x14];
     unsigned short mCurrencyChar;           // +0x14
@@ -172,9 +170,6 @@ struct cSPEditorBudget {
     void  Shutdown();                     // 0x004581d0
     void  Init(const void* key, cSPEditorEconomy* economy, unsigned short currency, IWinX* parent, const wchar_t* tooltipText);   // 0x00457af0
 };
-extern void* SP_MessageServer();                    // 0x0067dcc0
-extern int   FUN_00458b80(int id);                  // 0x00458b80
-extern float kOne;                                  // 0x01485720
 struct MessageServer {
 virtual void v0();
 virtual void v1();

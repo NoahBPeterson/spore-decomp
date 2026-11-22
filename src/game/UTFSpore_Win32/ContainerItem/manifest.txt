@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/ContainerItem.cpp  ?PlaceControls@ContainerItem@Layout@XHTML@EA@@UAEXI@Z  008e85d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ContainerItem.cpp  ?MeasureContent@ContainerItem_s008e_a290@Layout@XHTML@EA@@UAEXAAVSizingContext_s008e_a290@234@AAVStyleState_s008e_a290@Style@34@@Z  008eaa90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

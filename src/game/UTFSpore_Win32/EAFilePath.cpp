@@ -1,9 +1,14 @@
-// src/game/UTFSpore_Win32/EAFilePath.cpp -- migrated from slice(s) s00930180, s0092f220 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/EAFilePath.cpp -- migrated from slice(s) s00931460, s00930180, s0092f220 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/EAFilePath.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include <wchar.h>
+#include "EA/IO/FileStream.h"
+#include <windows.h>
+#include <string.h>
+#include <direct.h>
+#include <sys/stat.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned);
@@ -83,6 +88,43 @@ void* VectorDoInsertValue(void* self, const void* value, uint32 pos); // 0x011e0
 }
 // ---- items of slice s00930180 end
 
+// ---- items of slice s00931460 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const wchar_t* kTempPathPrefix[23];  // 0x0154e028
+extern const wchar_t kReservedSubstring[];   // 0x0143e664
+struct FixedPathString {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    int      mAllocPad;    // +0x0c
+    wchar_t* mpFixed;      // +0x10  the in-object buffer
+    wchar_t  mBuffer[260]; // +0x14
+
+    FixedPathString() {
+        mpBegin = mBuffer;
+        mpEnd = mBuffer;
+        mpCapacity = mBuffer + 260;
+        mpFixed = mBuffer;
+        mBuffer[0] = 0;
+    }
+    void assign(const wchar_t* b, const wchar_t* e);           // 0x0088c3d0
+    void make_lower();                                         // 0x005e8e80
+    void erase(unsigned pos, unsigned n);                      // 0x008e3a70
+    void DeallocateSelf() {
+        wchar_t* b = mpBegin;
+        if ((int)((int)mpCapacity - (int)b & 0xfffffffeU) > 2 && b && b != mpFixed)
+            operator delete[](b);
+    }
+};
+bool operator==(const FixedPathString& s, const wchar_t* p);   // 0x006ab760
+wchar_t* PathSearch(wchar_t* first, wchar_t* last, const wchar_t* first2, const wchar_t* last2);  // 0x00930ba0
+static inline unsigned CharStrlen(const wchar_t* s) {
+    const wchar_t* p = s;
+    while (*p)
+        ++p;
+    return (unsigned)(p - s);
+}
+// ---- items of slice s00931460 end
+
 // @ 0x0092fcd0
 bool EA::IO::FilePath::SafeReplace(const unsigned short* arg0, const unsigned short* arg1, const unsigned short* arg2, const unsigned short* arg3, unsigned short ch0, unsigned short ch1)
 {
@@ -117,7 +159,6 @@ bool EA::IO::FilePath::SafeReplace(const unsigned short* arg0, const unsigned sh
     return true;
 }
 
-
 // @ 0x0092fe00
 bool EnsureTrailingPathSeparator(unsigned short* path, int length)
 {
@@ -134,7 +175,6 @@ bool EnsureTrailingPathSeparator(unsigned short* path, int length)
     path[length + 1] = 0;
     return true;
 }
-
 
 // @ 0x0092fe60
 int ConcatenatePathComponents(unsigned short* dst, const unsigned short* c1, const unsigned short* c2)
@@ -156,7 +196,6 @@ int ConcatenatePathComponents(unsigned short* dst, const unsigned short* c1, con
     *p = 0;
     return (int)(p - dst);
 }
-
 
 // @ 0x0092fee0
 int StripPathComponent(unsigned short* path, int component)
@@ -216,7 +255,6 @@ int StripPathComponent(unsigned short* path, int component)
     }
     }
 }
-
 
 // @ 0x00930070
 void SplitPathPtrs(unsigned short* path, void** pFile, void** pExt, void** pEnd)
@@ -946,3 +984,56 @@ bool MakeFileNameValid(const wchar_t* src, wchar_t* dst)
     return n != 0;
 }
 }}  // namespace EA::IO
+
+// @ 0x00931460
+bool __cdecl CheckPathName(const wchar_t* name, int mode)
+{
+    FixedPathString s1;
+    s1.assign(name, name + CharStrlen(name));
+    unsigned len = (unsigned)(s1.mpEnd - s1.mpBegin);
+    if (len > 0x100) {
+        s1.DeallocateSelf();
+        return true;
+    }
+    for (unsigned i = 0; i < len; ++i) {
+        wchar_t c = s1.mpBegin[i];
+        if (c == '<' || c == '>' || c == ':' || c == '\\' || c == '/' || c == '"' || c == '|' || c == '*' || c == '?') {
+            s1.DeallocateSelf();
+            return false;
+        }
+    }
+    if (mode == 2 || mode == 3 || mode == 4 || mode == 5) {
+        FixedPathString s2;
+        s2.assign(s1.mpBegin, s1.mpEnd);
+        s2.make_lower();
+        if (s2.mpEnd - s2.mpBegin != 0) {
+            for (wchar_t* p = s2.mpBegin; p != s2.mpEnd; ++p) {
+                if (*p == '.') {
+                    if (p != s2.mpEnd) {
+                        unsigned idx = (unsigned)(p - s2.mpBegin);
+                        if (idx != (unsigned)-1)
+                            s2.erase(idx, (unsigned)-1);
+                    }
+                    break;
+                }
+            }
+        }
+        for (unsigned i = 0; i < 0x5c; i += 4) {
+            if (s2 == *(const wchar_t**)((char*)kTempPathPrefix + i)) {
+                s2.DeallocateSelf();
+                s1.DeallocateSelf();
+                return false;
+            }
+        }
+        s2.DeallocateSelf();
+    }
+    wchar_t* b = s1.mpBegin;
+    wchar_t* e = s1.mpEnd;
+    wchar_t* hit = PathSearch(b, e, kReservedSubstring, kReservedSubstring + CharStrlen(kReservedSubstring));
+    if (hit != e && (hit - b) != -1) {
+        s1.DeallocateSelf();
+        return true;
+    }
+    s1.DeallocateSelf();
+    return false;
+}

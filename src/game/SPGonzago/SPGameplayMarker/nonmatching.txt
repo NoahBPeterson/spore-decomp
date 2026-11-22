@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include)
 00c3ef00 106 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker shutdown; the trigger releases are modelled on named members but the noun removal and extension teardown are unresolved; equiv UNSUPPORTED (only 0/40 inputs valid)
 00c3efb0 67 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker constructor; the vtable stores and the zero-fill order differ from retail; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3f040 149 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker definition init; the property queries are unresolved so the branch bodies are simplified; equiv UNSUPPORTED (unresolved property helpers)

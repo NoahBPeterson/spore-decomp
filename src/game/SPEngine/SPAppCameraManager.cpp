@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppCameraManager.cpp -- migrated from slice(s) s007c6750, s007c5a90 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppCameraManager.cpp -- migrated from slice(s) s007c2ab0, s007c6750, s007c5a90 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppCameraManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,8 @@
 #include "game/types.h"
 #include "SP/cCameraManager.h"
 #include "eastl/string.h"
+#include <xmmintrin.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
@@ -134,6 +136,34 @@ struct cCameraManager_s007c_6750 {
     cCameraManager_s007c_6750();               // 0x7c75e0
 };
 // ---- items of slice s007c6750 end
+
+// ---- items of slice s007c2ab0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct HNode { unsigned key; int value; HNode* next; };
+struct HIter { HNode* node; HNode** bucket; };
+struct HMap {
+    HNode** mpBucketArray; unsigned mnBucketCount; unsigned mnElementCount;
+    void DoFreeNodes(HNode** b, unsigned n);
+    HIter find(const unsigned& k) const;
+    int& operator[](const unsigned& k);
+};
+struct HMapHolder { int pad; HMap m; };
+extern HMapHolder gTable;
+int FUN_007625d0(const char*);
+unsigned FNV1_String8(const char*, unsigned, int);
+// ---- items of slice s007c2ab0 end
+
+// @ 0x007c3af0
+int FUN_007c3af0(const char* name)
+{
+    unsigned h = FNV1_String8(name, 0x811c9dc5, 2);
+    HIter it = gTable.m.find(h);
+    int v;
+    if (it.node == gTable.m.mpBucketArray[gTable.m.mnBucketCount] || (v = it.node->value) == 0) {
+        v = FUN_007625d0(name);
+        if (v) gTable.m[h] = v;
+    }
+    return v;
+}
 
 // @ 0x007c6110
 void cCameraManager::SetActiveController(void* name)
@@ -304,6 +334,7 @@ struct HashTable_s007c6700 {
     int mnBucketCount;                      // +0x08
     HashIt_s007c6700 find(const unsigned int& key) const;   // 0x00645ed0
 };
+
 // @ 0x007c66b0
 struct VT_s007c66b0 {
     virtual void f00();

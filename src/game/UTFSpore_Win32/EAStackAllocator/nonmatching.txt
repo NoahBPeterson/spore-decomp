@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00928dc0  10   StackAllocator::Reset thunk: 8-byte `push 0; call 0x928c40; ret` matches; 10 diff bytes are the image's int3 padding; difftest PASS (363 valid, 100.0% cov) flags: /O2 /MD /Gy /TP

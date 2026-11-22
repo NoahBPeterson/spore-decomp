@@ -2,4 +2,4 @@
 ../src/game/SPEngine/SPAppVolumeDescription.cpp  ??_GcVolumeEffectCommand@@UAEPAXI@Z  007ef220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppVolumeDescription.cpp  ??0cVolumeDescription@SP@@QAE@ABU01@@Z  007ee9f0  /O2 /MD /Gy /EHsc /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppVolumeDescription.cpp  ?Register@VolumeRegistrar@@QAEXD@Z  007eec80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPEngine/SPAppVolumeDescription.cpp  ?Alpha@VolumeCmd@@QAEXPAVcArguments_s007e_e060@ArgScript@EA@@@Z  007ee700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppVolumeDescription.cpp  ?Alpha@VolumeCmd@@QAEXPAVcArguments_s007e_e060@ArgScript@EA@@@Z  007ee700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

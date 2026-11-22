@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPSwatchPlanner.cpp  ??0cSPSwatchPlanner@SP@@QAE@XZ  005f0d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ??1cSPSwatchPlanner@SP@@UAE@XZ  005f0e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ?Shutdown@cSPSwatchPlanner@SP@@UAEXXZ  005f0ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ?UpdateCost@cSPSwatchPlanner@SP@@QAEXXZ  005f10b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -6,5 +7,5 @@
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ?OffRollover@cSPSwatchPlanner@SP@@UAEXXZ  005f1430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ?CanDrag@cSPSwatchPlanner@SP@@QAE_NXZ  005f1460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ?GetImageWindow@cSPSwatchPlanner@SP@@QAEPAVIWindow_s005f_07e0@UTFWin@EA@@XZ  005f14a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPSwatchPlanner.cpp  ?SetImage@cSPSwatchPlanner@SP@@QAEXABUKey_s005f_07e0@ResourceMan@EA@@@Z  005f1500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchPlanner.cpp  ?SetImage@cSPSwatchPlanner@SP@@QAEXABVKey_s005f_07e0@ResourceMan@EA@@@Z  005f1500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSwatchPlanner.cpp  ?HandleMessage@cSPSwatchPlanner@SP@@UAE_NIPAX@Z  005f1630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

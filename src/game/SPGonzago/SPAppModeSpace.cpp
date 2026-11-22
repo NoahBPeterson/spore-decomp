@@ -3544,6 +3544,29 @@ struct IMessageServer_s00fe_0570__g7 {
     virtual void PostEx(uint32_t id, int a, int b, int c);       // +0x18
 };
 IMessageServer_s00fe_0570__g7* MessageServer_s00fe_0570__g7();                              // 0x0067dcc0
+struct cGameTimeManager_s00fe_0570__g7 {
+    void DecPauseGate(uint32_t id);                           // 0x00b32250
+};
+cGameTimeManager_s00fe_0570__g7* GameTimeManager_s00fe_0570__g7();                          // 0x00b3d380
+struct cSolarView {
+    void Hide();                                              // 0x00801380
+};
+cSolarView* FUN_0067cab0_s00fe_0570__g7();                                   // 0x0067cab0
+struct cGameInputManager_s00fe_0570__g7 {
+    uint32_t pad00[0x110 / 4];
+    int mField110;                                            // +0x110
+};
+cGameInputManager_s00fe_0570__g7* GameInputManager_s00fe_0570__g7();                        // 0x00b3d250
+struct IInputManager_s00fe_0570__g7 {
+    PV8 PV8 PV4 PV2 PV
+    virtual void IsControlActive(int control, int flag);      // +0x5c
+};
+IInputManager_s00fe_0570__g7* InputManager_s00fe_0570__g7();                                // 0x0067dd50
+struct cPropertyList_s00fe_0570__g7 {
+    int GetIntProperty(uint32_t id);                          // 0x006a2660
+    bool GetDescription(uint32_t id);                         // 0x006a25a0
+};
+extern cPropertyList_s00fe_0570__g7* sAppProperties_s00fe_0570__g7;                         // 0x015fd918
 struct cSPUISpace_s00fe_0570__g7 {
     void ShowBakeTimeSplash();                                // 0x01065af0
 };
@@ -6249,6 +6272,50 @@ void cAppModeSpace_s00fe_0570::InitSpaceMode()
     mpSimulatorSpaceGame->mFlags |= 0x10;
 }
 
+// @ 0x00fe0c60
+void cAppModeSpace_s00fe_0570__g7::CompleteTransitionFromSolarToPlanet()
+{
+    cGameTimeManager_s00fe_0570__g7* timeMgr = GameTimeManager_s00fe_0570__g7();
+    timeMgr->DecPauseGate(0x4bf38a7);
+    FUN_0067cab0_s00fe_0570__g7()->Hide();
+    cGameInputManager_s00fe_0570__g7* input = GameInputManager_s00fe_0570__g7();
+    input->mField110--;
+
+    if (mbBakeStarted) {
+        eastl::list_s00fe_0570__g7<bool>::node_type* it = (eastl::list_s00fe_0570__g7<bool>::node_type*)mInputFlags.mNode.mpNext;
+        for (int i = 0; i <= 0x1b; ++i) {
+            if (it->mValue)
+                InputManager_s00fe_0570__g7()->IsControlActive(i, 1);
+            it = (eastl::list_s00fe_0570__g7<bool>::node_type*)it->mpNext;
+        }
+        mInputFlags.clear();
+        mbBakeStarted = false;
+    }
+
+    if (sAppProperties_s00fe_0570__g7->GetDescription(0x7ae23adf)) {
+        if (mpSimulatorSpaceGame->mpUI)
+            mpSimulatorSpaceGame->mpUI->ShowBakeTimeSplash();
+    }
+
+    mpSimulatorSpaceGame->DestroyNPC_UFOs(1, 1, 0);
+    cSPSimulatorSpaceGame_s00fe_0570__g7* sim = mpSimulatorSpaceGame;
+    sim->FUN_010039c0((cStar*)FUN_01021230());
+    mpSimulatorSpaceGame->StepC();
+    GetUFOSimulator_s00fe_0570__g7()->InitForPlanet();
+    SetPlanetTimeOnFirstEntry();
+    FUN_00fdf9f0();
+    mpSimulatorSpaceGame->ChaseFromSolarToPlanet();
+    if (cTerrainSphere_s00fe_0570__g7* sphere = NounManager_s00fe_0570__g7()->GetCurrentTerrainSphere())
+        sphere->FUN_00c77bf0(0x574ac67);
+    mpSimulatorSpaceGame->mFlags &= ~2u;
+
+    SlotMessage msg;
+    msg.mTarget = (uint32_t)GetActivePlanet_s00fe_0570__g7();
+    NounManager_s00fe_0570__g7()->ProcessPending();
+    MessageServer_s00fe_0570__g7()->Post(0x248975f, &msg, 0);
+    MessageServer_s00fe_0570__g7()->PostEx(0x5e37a53, 0, 0, 0);
+}
+
 // @ 0x00fe0e10
 void cAppModeSpace_s00fe_0570__g7::FUN_00fe0e10()
 {
@@ -6925,7 +6992,4 @@ bool __cdecl TransitionFromSolarToGalaxy()
         return true;
     return false;
 }
-
-
-
 

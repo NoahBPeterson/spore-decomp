@@ -180,9 +180,20 @@ struct RandomLinearCongruential_s00af_ab70 {
 // ---- items of slice s00afab70 end
 
 // ---- items of slice s00afbaf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float    g_f2f1c;            // 0x01470f1c
+extern float    g_f8a0;             // 0x013eb8a0
 extern float    g_fSpace;           // 0x0167aec4
 extern float    g_fSpaceB;          // 0x0167aec8
 extern float    g_fSpaceC;          // 0x0167aecc
+extern float    g_fVec7c;           // 0x0156737c
+extern float    g_fVec80;           // 0x01567380
+extern float    g_fVec84;           // 0x01567384
+extern float    g_fVec88;           // 0x01567388
+extern float    g_f8c5448;          // 0x01485548
+extern float    g_f3eb1bc;          // 0x013eb1bc
+extern int32_t  g_nSlots;           // 0x0156734c
+extern void*    g_pSlotVtable;      // 0x0154df28
+extern float    g_f1_48;            // 0x01485720  (1.0f)
 struct tFloat4 {
     float       x;
     float       y;
@@ -198,6 +209,124 @@ void    __cdecl FUN_00afb8f0(int32_t* pBase, int32_t nFirst, int32_t nCount, int
                              int32_t nKey, tFloat4 v);                          // 0x00afb8f0
 void    __cdecl FUN_00afbf40(int32_t* pBase, int32_t* pLast, tFloat4 v);        // 0x00afbf40
 void    __cdecl FUN_00afbfb0(int32_t* pBase, int32_t* pLast, tFloat4 v);        // 0x00afbfb0
+class tSlot {
+public:
+    virtual void    v00();
+    virtual void    v04();                          // +0x04 destructor slot
+    void*           mpOwned;                        // +0x04  (owned sub-object pointer)
+    uint8_t         mPad08[0x18 - 0x08];
+
+    void        CopyConstruct(const tSlot& src);    // 0x00afa110 (thiscall)
+    void        Assign(const tSlot& src);           // 0x00afa230 (thiscall)
+};
+class cSlotVec {
+public:
+    tSlot*  mpBegin;                                // +0x00
+    tSlot*  mpEnd;                                  // +0x04
+    tSlot*  mpCap;                                  // +0x08
+
+    tSlot*      EraseRange(tSlot* pFirst, tSlot* pLast);        // 0x00afc0d0
+    void        InsertOne(tSlot* pPos, tSlot* pValue);          // 0x00afc150
+};
+class cActionCircle {
+public:
+    cSlotVec    mSlots;                             // +0x000  (slot vector: begin/end/cap)
+    int32_t     mnField0c;                          // +0x00c
+    int32_t     mnField10;                          // +0x010
+    int32_t     mnField14;                          // +0x014
+    float       mf18;                               // +0x018 (inline slot buffer x)
+    float       mf1c;                               // +0x01c
+    float       mf20;                               // +0x020
+    float       mf24;                               // +0x024
+    int32_t     mnField28;                          // +0x028
+    int32_t     mnField2c;                          // +0x02c
+    int32_t     mnField30;                          // +0x030
+    int32_t     mnField34;                          // +0x034
+    int32_t     mnField38;                          // +0x038
+    void*       mpField3c;                          // +0x03c
+    int32_t     mnField40;                          // +0x040
+    int32_t     mnField44;                          // +0x044
+    float       mfField48;                          // +0x048
+    float       mfField4c;                          // +0x04c
+    cSlotVec    mSlots2;                            // +0x050  (second slot vector)
+    float       mf5c;                               // +0x05c
+    int32_t     mn60;                               // +0x060
+    float       mf64;                               // +0x064
+    float       mf68;                               // +0x068
+    float       mf6c;                               // +0x06c
+    float       mf70;                               // +0x070
+    float       mf74;                               // +0x074
+    float       mf78;                               // +0x078
+    float       mf7c;                               // +0x07c
+    float       mf80;                               // +0x080
+    float       mf84;                               // +0x084
+    float       mf88;                               // +0x088
+    float       mf8c;                               // +0x08c
+    float       mf90;                               // +0x090
+    float       mf94;                               // +0x094
+    uint8_t     mb98;                               // +0x098
+    uint8_t     mPad99[3];                          // +0x099
+    float       mf9c;                               // +0x09c
+    float       mfa0;                               // +0x0a0
+    float       mfa4;                               // +0x0a4
+    float       mfa8;                               // +0x0a8
+    float       mfac;                               // +0x0ac
+    float       mfb0;                               // +0x0b0
+    float       mfb4;                               // +0x0b4
+    float       mfb8;                               // +0x0b8
+    float       mfbc;                               // +0x0bc
+    float       mfc0;                               // +0x0c0
+    float       mfc4;                               // +0x0c4 (unwritten in ctor)
+    uint8_t     mbc8;                               // +0x0c8
+    uint8_t     mPadc9[3];                          // +0x0c9
+    float       mfcc;                               // +0x0cc
+    float       mfd0;                               // +0x0d0
+    float       mfd4;                               // +0x0d4
+    float       mfd8;                               // +0x0d8
+    int32_t     mdc;                                // +0x0dc
+    int32_t     me0;                                // +0x0e0
+    int32_t     me4;                                // +0x0e4
+    int32_t     me8;                                // +0x0e8 (unwritten in ctor)
+    int32_t     mec;                                // +0x0ec (unwritten in ctor)
+    int32_t     mf0;                                // +0x0f0
+    int32_t     mf4;                                // +0x0f4
+    int32_t     mf8;                                // +0x0f8
+    float       mffc;                               // +0x0fc (unwritten in ctor)
+    float       mf100;                              // +0x100 (unwritten in ctor)
+    float       mf104;                              // +0x104
+    float       mf108;                              // +0x108
+    float       mf10c;                              // +0x10c
+    float       mf110;                              // +0x110
+    float       mf114;                              // +0x114
+    float       mf118;                              // +0x118
+    float       mf11c;                              // +0x11c
+    float       mf120;                              // +0x120
+    float       mf124;                              // +0x124
+    float       mf128;                              // +0x128 (unwritten in ctor)
+    uint8_t     mbc12c;                             // +0x12c
+    uint8_t     mPad12d[3];                         // +0x12d
+    float       mf130;                              // +0x130
+    float       mf134;                              // +0x134
+    float       mf138;                              // +0x138
+    float       mf13c;                              // +0x13c
+    int32_t     m140;                               // +0x140
+    int32_t     m144;                               // +0x144
+    int32_t     m148;                               // +0x148
+    int32_t     m14c;                               // +0x14c (unwritten in ctor)
+    int32_t     m150;                               // +0x150 (unwritten in ctor)
+    int32_t     m154;                               // +0x154
+    int32_t     m158;                               // +0x158
+    int32_t     m15c;                               // +0x15c
+    int32_t     m160;                               // +0x160 (unwritten in ctor)
+    int32_t     m164;                               // +0x164 (unwritten in ctor)
+    int32_t     m168;                               // +0x168
+    int32_t     m16c;                               // +0x16c
+    int32_t     m170;                               // +0x170
+    int32_t     mnField174;                         // +0x174
+
+    cActionCircle();                                // 0x00afbaf0
+    bool        EraseOne(tSlot* pPos);              // 0x00afc410
+};
 struct tInsertArgs {
     int32_t     nKey;                               // +0x00
     float       f0;                                 // +0x04
@@ -532,6 +661,83 @@ SP::cActionCircle_s00af_ab70::~cActionCircle_s00af_ab70()
 {
   mSlots.Destroy();
   mAgents.Destroy();
+}
+
+// @ 0x00afbaf0
+cActionCircle::cActionCircle()
+{
+    mnField14 = 0;
+    mSlots.mpBegin = (tSlot*)((char*)this + 0x18);
+    mSlots.mpEnd = (tSlot*)((char*)this + 0x18);
+    mSlots.mpCap = (tSlot*)((char*)this + 0x38);
+    mfField4c = g_f2f1c;
+    mfField48 = g_f1_48;
+    mnField40 = 1;
+    mpField3c = &g_pSlotVtable;
+    mnField44 = 0;
+    mSlots2.mpBegin = 0;
+    mSlots2.mpCap = 0;
+    mf5c = 0.0f;
+    mn60 = 0;
+    mf64 = g_fSpace;
+    mf68 = g_fSpaceB;
+    mf6c = g_fSpaceC;
+    mf70 = g_fSpace;
+    mf74 = g_fSpaceB;
+    mf78 = g_fSpaceC;
+    mf7c = 0.0f;
+    mf80 = 0.0f;
+    mf84 = g_f1_48;
+    mf88 = g_f1_48;
+    mf8c = g_f8c5448;
+    mf90 = g_f3eb1bc;
+    mf94 = g_f8a0;
+    mb98 = 0;
+    mf9c = g_f1_48;
+    mfa0 = g_fSpace;
+    mfa4 = g_fSpaceB;
+    mfa8 = g_fSpaceC;
+    mfac = g_f3eb1bc;
+    mfb0 = g_f3eb1bc;
+    mfb4 = g_fSpace;
+    mfb8 = g_fSpaceB;
+    mfbc = g_fSpaceC;
+    mfc0 = 0.0f;
+    mbc8 = 0;
+    mfcc = g_fVec7c;
+    mfd0 = g_fVec80;
+    mfd4 = g_fVec84;
+    mfd8 = g_fVec88;
+    mdc = 0;
+    me0 = 0;
+    me4 = 0;
+    mf0 = 0;
+    mf4 = 0;
+    mf8 = 0;
+    mf104 = g_fSpace;
+    mf108 = g_fSpaceB;
+    mf10c = g_fSpaceC;
+    mf110 = g_f3eb1bc;
+    mf114 = g_f3eb1bc;
+    mf118 = g_fSpace;
+    mf11c = g_fSpaceB;
+    mf120 = g_fSpaceC;
+    mbc12c = 0;
+    mf124 = 0.0f;
+    mf130 = g_fVec7c;
+    mf134 = g_fVec80;
+    mf138 = g_fVec84;
+    mf13c = g_fVec88;
+    m140 = 0;
+    m144 = 0;
+    m148 = 0;
+    m154 = 0;
+    m158 = 0;
+    m15c = 0;
+    m168 = 0;
+    m16c = 0;
+    m170 = 0;
+    mnField174 = g_nSlots++;
 }
 
 // @ 0x00afbf40

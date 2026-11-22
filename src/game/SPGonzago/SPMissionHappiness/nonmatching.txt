@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00c56760 232 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 33 bytes - same instruction set, different schedule: retail tests pOwnerEmpire==pPlayerEmpire before it loads mKey/vtable slot 0xa4, this build loads the key and the vtable first, so sete lands in al instead of cl and the empire-key slot is filled one push earlier flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

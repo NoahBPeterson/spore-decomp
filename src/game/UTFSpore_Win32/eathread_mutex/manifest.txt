@@ -3,3 +3,4 @@
 ../src/game/UTFSpore_Win32/eathread_mutex.cpp  ?Init@Mutex_s0092_15c0@Thread@EA@@QAE_NPBUMutexParameters@23@@Z  00922150  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/eathread_mutex.cpp  ?Unlock@Mutex@Thread@EA@@QAEHXZ  00922270  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/eathread_mutex.cpp  ??0Mutex_s0092_15c0@Thread@EA@@QAE@PBUMutexParameters@12@_N@Z  009222a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/eathread_mutex.cpp  ??1RWMutex@Thread@EA@@QAE@XZ  00922310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

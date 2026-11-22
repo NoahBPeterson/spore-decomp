@@ -3,6 +3,8 @@
 // Space-stage tuning values, read from the game's property-list store.
 
 #include "game/types.h"
+#include "SP/cCity.h"
+#include "SP/cPropertyManager.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void _ReadWriteBarrier(void);
@@ -284,6 +286,23 @@ static const int kStarPropTravelTimeHigh = 0x068d696b;
 // Travel time is scaled to hundredths before being returned.
 static const int kTravelTimePercentScale = 100;
 
+// ---- items of slice s010414c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ShaderMsgHandler {
+    uint32_t mPad00;               // +0x00
+    void*    mHandler;             // +0x04
+    void*    mSelf;                // +0x08
+    void*    mCallback;            // +0x0c
+    uint32_t mMsg;                 // +0x10
+    uint32_t mUserData;            // +0x14
+    uint8_t  mPad18[0x18];         // +0x18 mInfos (owned by RegisterShaderDataInfo)
+
+    bool OnMessage(int msg, void* obj);   // 0x01041b90
+};
+// ---- items of slice s010414c0 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void __fastcall RegisterShaderDataInfo(void* mgr);  // 0x010414c0 (stays in the slice: not this object's)
+
 // @ 0x010407d0
 int __thiscall cSpaceTuning::FUN_010407d0(void* param)
 {
@@ -447,3 +466,14 @@ void* cTuningEntrySet::ScalarDeletingDestructor(unsigned char nFlags)
   return this;
 }
 }  // namespace SP
+
+// @ 0x01041b90
+bool ShaderMsgHandler::OnMessage(int msg, void* obj)
+{
+    if (msg == 0xf62def) {
+        uint32_t group = *(uint32_t*)((uint8_t*)obj + 0x10);
+        if (group == 0xf0bf332c || group == 0x073a7400)
+            RegisterShaderDataInfo((void*)this);
+    }
+    return false;
+}

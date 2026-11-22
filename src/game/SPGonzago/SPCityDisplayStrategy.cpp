@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCityDisplayStrategy.cpp -- migrated from slice(s) s00ce8160, s00b8bb70, s00cec6d0, s00ceb710, s00cea090, s00ce90c0, s00ae3ed0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCityDisplayStrategy.cpp -- migrated from slice(s) s00ceb350, s00ce8160, s00b8bb70, s00cec6d0, s00ceb710, s00cea090, s00ce90c0, s00ae3ed0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCityDisplayStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1286,6 +1286,52 @@ struct CityDisplayRatioCalls {
     float NodeRatio();                              // 0x00bfc490, thiscall, no arguments
 };
 // ---- items of slice s00ce8160 end
+
+// ---- items of slice s00ceb350 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_ElemX;        // 0x0169ba50
+extern const float g_ElemY;        // 0x0169ba54
+extern const float g_ElemZ;        // 0x0169ba58
+extern const float g_ElemScale;    // 0x01485720
+struct Vec3 {
+    float x;
+    float y;
+    float z;
+};
+struct Basis {
+    Vec3 m0;
+    Vec3 m1;
+    Vec3 m2;
+    Basis(const Basis& other) throw();
+    Basis& operator=(const Basis& other) throw();
+};
+extern const Basis g_DefaultBasis; // 0x0169c054
+struct Elem {
+    uint16_t m_Flags;   // +0x00
+    uint16_t m_Id;      // +0x02
+    float m_X;          // +0x04
+    float m_Y;          // +0x08
+    float m_Z;          // +0x0c
+    float m_Scale;      // +0x10
+    Basis m_Basis;      // +0x14 (0x24 bytes)
+
+    __forceinline Elem()
+        : m_Flags(0),
+          m_Id(0),
+          m_X(g_ElemX),
+          m_Y(g_ElemY),
+          m_Z(g_ElemZ),
+          m_Scale(g_ElemScale),
+          m_Basis(g_DefaultBasis) {}
+};
+struct ElemVector {
+    Elem* m_Begin;    // +0x00
+    Elem* m_End;      // +0x04
+    Elem* m_Capacity; // +0x08
+
+    Elem* Insert(Elem* pos, const Elem* value);
+    Elem* push_back();
+};
+// ---- items of slice s00ceb350 end
 
 // @ 0x00ae4ec0
 namespace SP {
@@ -2636,6 +2682,31 @@ void* CDS_s00ce_a090::ctor(void* a)
     *(int*)(self + 0x104) = 0;
     *(int*)(self + 0x108) = 0;
     return self;
+}
+
+// @ 0x00ceb350
+Elem* ElemVector::push_back()
+{
+    Elem* pElem = m_End;
+    if (pElem < m_Capacity) {
+        m_End = pElem + 1;
+        if (pElem) {
+            pElem->m_Flags = 0;
+            pElem->m_Id = 0;
+            pElem->m_X = g_ElemX;
+            pElem->m_Y = g_ElemY;
+            pElem->m_Z = g_ElemZ;
+            pElem->m_Scale = g_ElemScale;
+            // The original returns what the basis copy leaves in eax, i.e. the address of
+            // the copied block (element + 0x14), not the element itself; no caller of this
+            // function in the image looks at the result.
+            pElem = reinterpret_cast<Elem*>(&(pElem->m_Basis = g_DefaultBasis));
+        }
+    } else {
+        Elem value;
+        pElem = Insert(m_End, &value);
+    }
+    return pElem;
 }
 
 // @ 0x00ceb710

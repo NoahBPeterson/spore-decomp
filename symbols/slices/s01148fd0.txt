@@ -3,6 +3,6 @@
 01149490 rw::audio::core::HELPER_CEALayer3DecF::Decode  # PDB caller-single name
 011495b0 ?SkipBlocks@EaLayer3DecBase@core@audio@rw@@QAEXXZ  # EaLayer3DecBase::SkipBlocks migrated from s01148fd0 (verbatim, slice spelling)
 01149760 rw::audio::core::ConvertSamples  # 16-bit big-endian -> float de-interleave; __stdcall
-01149a00 rw::audio::core::DecodeRawSamples  # raw int16 sample expansion; __stdcall
-01149ac0 rw::audio::core::Decoder::GetCurrentRequestDesc  # PDB callee-single name
+01149a00 ?DecodeRawSamples@core@audio@rw@@YGHPAEHH@Z  # DecodeRawSamples migrated from s01148fd0 (verbatim, slice spelling)
+01149ac0 ?GetCurrentRequestDesc@Decoder@core@audio@rw@@QAEHPADPAHHPAI22H@Z  # Decoder::GetCurrentRequestDesc migrated from s01148fd0 (verbatim, slice spelling)
 01149d60 rw::audio::core::EaLayer3DecBase::DecodeEvent  # PDB caller-single name

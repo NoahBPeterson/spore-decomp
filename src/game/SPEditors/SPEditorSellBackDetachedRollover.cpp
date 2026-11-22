@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp -- migrated from slice(s) s005cbfd0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorSellBackDetachedRollover.cpp -- migrated from slice(s) s005cb060, s005cbfd0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorSellBackDetachedRollover.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,6 +9,16 @@
 #include "cSPUILayout.h"
 #include "cSPUILayoutManager.h"
 #include <new>
+#include "EA/UTFWinControls/IWinButton.h"
+#include "EA/UTFWin/IWinProc.h"
+#include "EA/UTFWin/Message.h"
+#include "SP/cSPPalette.h"
+#include "SP/cSPPaletteCategory.h"
+#include "SP/cSPPaletteCategoryUI.h"
+#include "SP/cSPPaletteUI.h"
+#include "cSPUIPropertyLayout.h"
+#include "SP/cString.h"
+#include <string.h>
 
 // ---- items of slice s005cbfd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
@@ -72,6 +82,42 @@ class cDetachedRollover {
 };
 // ---- items of slice s005cbfd0 end
 
+// ---- items of slice s005cb060 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class ILayoutListener {
+ public:
+  virtual void OnLayout();
+};
+class cSPUIPropertyLayoutBase {
+ public:
+  virtual ~cSPUIPropertyLayoutBase();
+};
+class cSPUIPropertyLayout_s005c_b060 : public cSPUIPropertyLayoutBase, public ILayoutListener {
+ public:
+  cSPUIPropertyLayout_s005c_b060();  // 0x008286d0
+  virtual ~cSPUIPropertyLayout_s005c_b060();
+  virtual void OnLayout();
+  void SetLayoutName(const wchar_t* name, uint32_t groupID);  // 0x00827fc0
+  uint32_t pad08[0x78 / 4 - 2];
+};
+class cSPUISellBackRollover : public cSPUIPropertyLayout_s005c_b060 {
+ public:
+  cSPUISellBackRollover();
+  virtual ~cSPUISellBackRollover();
+  virtual void OnLayout();
+  uint32_t mField78, mField7c, mField80, mField84, mField88, mField8c, mField90;
+  short mShort94;     // +0x94
+  bool mbVisible;     // +0x96
+  int mField98;       // +0x98
+};
+// ---- items of slice s005cb060 end
+
+// @ 0x005cbf60
+cSPUISellBackRollover::cSPUISellBackRollover()
+: mField78(0), mField7c(0), mField80(0), mField84(0), mField88(0), mField8c(0), mField90(0), mShort94(0),
+      mbVisible(true), mField98(0) {
+  SetLayoutName(L"RolloverEditorSellBack", 0x40464100);
+}
+
 // @ 0x005cbfd0
 bool cDetachedRollover::Init(unsigned short value)
 {
@@ -96,6 +142,13 @@ bool cDetachedRollover::Init(unsigned short value)
     mFlag96 = false;
   }
   return ok;
+}
+
+// @ 0x005cc0d0
+bool SP::cSPEditorSellBackDetachedRollover::Shutdown()
+{
+    mNeedToInit = true;
+    return cSPUIPropertyLayout::Shutdown();
 }
 
 // @ 0x005cc0e0
@@ -127,9 +180,3 @@ void cSellBackRolloverCtor(void* a)
   (void)a;
 }
 
-// @ 0x005cc0d0
-bool SP::cSPEditorSellBackDetachedRollover::Shutdown()
-{
-    mNeedToInit = true;
-    return cSPUIPropertyLayout::Shutdown();
-}

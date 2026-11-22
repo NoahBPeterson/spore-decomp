@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a528e0 68 non-byte-exact; control class-registration setup; class_new arg order and method-add ordering differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))

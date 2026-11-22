@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPStarmap.cpp -- migrated from slice(s) s01044360, s010488e0, s01047850, s01046160, s01045200, s00995b20 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPStarmap.cpp -- migrated from slice(s) s01048c10, s01047300, s01044360, s010488e0, s01047850, s01046160, s01045200, s00995b20 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPStarmap.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,7 @@ extern "C" char g_16e0688[];
 #include "SP/cGameNounManager.h"
 #include "SP/cPropertyManager.h"
 #include "SP/cVarListSerializer.h"
+#include "SP/cPlanetRecord.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  __cdecl FUN_00f47380(void* p);
@@ -1056,6 +1057,85 @@ struct SharedRefBlock {
 };
 }
 // ---- items of slice s01044360 end
+
+// ---- items of slice s01048c10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct cStarMap_s0104_8c10 {
+    uint8_t mPad00;                                          // +0x00
+    uint8_t mRequestZoom;                                    // +0x01
+    uint8_t mPad02[2];                                       // +0x02 .. +0x03
+    int32_t mFilterStates[8];                                // +0x04 ..
+
+    void FilterHelperRebuild(int32_t index);                 // 0x01048c10
+    bool FilterEnabled(int32_t index);                       // inlined predicate
+    void FilterHelperLayer(int32_t index, bool value);       // 0x01044a10
+    void FilterHelperSpecial(bool value);                    // 0x01044df0
+    void FilterHelperAdd(uint32_t which);                    // 0x01048aa0
+    void FilterHelperRemove(int32_t index);                  // 0x01045c30
+    void FilterHelper(int32_t index, int32_t mode);          // 0x01048b40
+};  // namespace SP
+}
+__forceinline bool SP::cStarMap_s0104_8c10::FilterEnabled(int32_t index)
+{
+    if (index < 0)
+        return false;
+    if ((uint32_t)index > 7)
+        return false;
+    return mFilterStates[index] == 1;
+}
+__forceinline void SP::cStarMap_s0104_8c10::FilterHelper(int32_t index, int32_t mode)
+{
+    const int32_t kFilterOff = 0;
+    const int32_t kFilterOn = 1;
+    const int32_t kFilterOnPreview = 3;
+    const int32_t kFilterOffPreview = 4;
+
+    bool changed = false;
+
+    switch (mode) {
+    case kFilterOff:
+        if (mFilterStates[index] == kFilterOnPreview) {
+            changed = true;
+            mode = kFilterOn;
+        }
+        break;
+    case kFilterOn:
+        changed = true;
+        if (mFilterStates[index] == kFilterOnPreview)
+            mode = kFilterOnPreview;
+        break;
+    case 2:
+        changed = true;
+        if (mFilterStates[index] == kFilterOff) {
+            mode = kFilterOffPreview;
+        } else if (mFilterStates[index] == kFilterOn) {
+            mode = kFilterOnPreview;
+        } else {
+            return;
+        }
+        break;
+    }
+
+    int32_t oldState = mFilterStates[index];
+    mFilterStates[index] = mode;
+
+    if (index >= 0) {
+        if (index > 1) {
+            if (index == 5)
+                FilterHelperSpecial(changed);
+        } else {
+            FilterHelperLayer(index, changed);
+        }
+    }
+
+    if (changed) {
+        if (oldState == kFilterOff)
+            FilterHelperAdd((uint32_t)index);
+    } else {
+        FilterHelperRemove(index);
+    }
+}
+// ---- items of slice s01048c10 end
 
 // @ 0x00996460
 void __thiscall StarDeque::clear()
@@ -2583,6 +2663,16 @@ void SP::cStarMap_s0104_88e0::FilterHelper(int32_t index, int32_t mode)
     } else {
         FilterHelperRemove(index);
     }
+}
+
+// @ 0x01048c10
+void SP::cStarMap_s0104_8c10::FilterHelperRebuild(int32_t index)
+{
+    if (!FilterEnabled(index))
+        return;
+
+    FilterHelper(index, 0);
+    FilterHelper(index, 1);
 }
 
 // @ 0x01048ce0

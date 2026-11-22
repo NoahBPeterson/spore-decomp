@@ -26,6 +26,16 @@ int* __cdecl SP_CoordToIndex(int* out, int n, float* c)
     return out;
 }
 
+// @ 0x00684c50
+int __cdecl IndexToCoord_684c50(float* out, int n, int* c)
+{
+    float inv = 1.0f / (float)n;
+    out[0] = ((float)c[0] + 0.5f) * inv;
+    out[2] = ((float*)c)[2];
+    out[1] = ((float)c[1] + 0.5f) * inv;
+    return (int)out;
+}
+
 // @ 0x00684ca0
 int __cdecl SP_WrapCubeFace(int n, uint32_t* face, uint32_t* x, int* y, int* u, int* v)
 {

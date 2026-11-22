@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-0093be30 278 complete: MemoryStream::SetData, intrusive_ptr/alloc schedule differs
-0093c000 164 complete: MemoryStream grow/copy, refcount schedule differs
-0093c0c0 97 complete: MemoryStream position arithmetic, branch layout differs
-0093c150 188 complete: MemoryStream resize-on-write, float path scheduling differs
-0093c210 48 complete: scalar deleting dtor, refcount schedule differs
+0093be30  295  complete: MemoryStream::SetData; equiv PASS (5-param ABI restored, allocator vtable slot 2 / DefaultAllocator() call fixed) flags: /O2 /MD /Gy /TP; re-measured 2026-11-21: module TU FAIL (5/179 valid inputs, fake call #0), slice source WEAK - the body is verbatim slice text, the difference is the typed-input/fake-call path of the renamed stub
+0093c000 165 complete: MemoryStream grow/copy; equiv PASS (helper takes this in ecx, allocator vtable slot 2 / DefaultAllocator() fixed) flags: /O2 /MD /Gy /TP
+0093c0c0 97 complete: MemoryStream position arithmetic, branch layout differs flags: /O2 /MD /Gy /TP
+0093c150  219  complete: MemoryStream resize-on-write; equiv PASS (explicit round-to-nearest reproduces retail's x87 fistp) flags: /O2 /MD /Gy /TP
+0093c210 67 complete: scalar deleting dtor, refcount schedule differs flags: /O2 /MD /Gy /TP

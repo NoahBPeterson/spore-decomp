@@ -1,11 +1,17 @@
-// src/game/SPGonzago/_at_00cb0000.cpp -- migrated from slice(s) s00cb1270, s00cb1110 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00cb0000.cpp -- migrated from slice(s) s00cb2480, s00cb1270, s00cb1110 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00cb0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/cLocomotiveObject.h"
 #include "SP/cSpatialObject.h"
-#include <math.h>
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
+// no <math.h>: slice s00cb2480 supplies its own inline `sqrtf`, which <math.h> also declares (C2084);
+// both slices declare `sqrt` themselves.
+extern "C" double __cdecl sqrt(double);
+#pragma intrinsic(sqrt)
 
 // ---- items of slice s00cb1110 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
@@ -184,6 +190,121 @@ typedef unsigned (__thiscall* FnU0)(void*);
 typedef int (__thiscall* FnI0)(void*);
 typedef void (__thiscall* FnWorld)(void*, const Vec3*, Vec3*, HitVec*, Filter*, float);
 // ---- items of slice s00cb1270 end
+
+// ---- items of slice s00cb2480 begin (TODO(rewrite): local stubs, replace by canonical classes)
+inline float sqrtf(float x) { return (float)sqrt((double)x); }
+struct Waypoint {
+    Vec3  pos;        // 0x00
+    float weight;     // 0x0c
+    int   kind;       // 0x10
+    Vec3  v14, v20, v2c;
+    unsigned char flags;   // 0x38 (bit 0 = "tracked" waypoint)
+    char  pad39[3];
+    Waypoint(const Vec3& p) : pos(p), weight(1.0f), kind(0) { flags = 0; }
+    Waypoint(const Waypoint& o);                        // 0x00ac1ff0
+};
+struct WaypointPath {                // creature path (eastl::vector<Waypoint> + extras)
+    Waypoint* mpBegin;               // +0x00
+    Waypoint* mpEnd;                 // +0x04
+    Waypoint* mpCapacity;            // +0x08
+    int       mAlloc;                // +0x0c
+    int       pad10;
+    Waypoint  cur;                   // +0x14 current waypoint
+    char      pad50[0x20];
+    unsigned  mode;                  // +0x70 (bit 1 = hold)
+    Waypoint* erase(Waypoint* first, Waypoint* last);                    // 0x00ac4570
+    void      InsertRange(Waypoint* where, Waypoint* first, Waypoint* last, float f);   // 0x00b96360
+    void      EraseOne(Waypoint* where);                                  // 0x00b47520
+};
+struct Hit_s00cb_2480 {
+    char  p00[4];
+    int   f04;                       // +0x04 (cache entry: "has limit")
+    float f08;                       // +0x08 (cache entry: limit)
+    int   f0c;                       // +0x0c (cache entry: kind)
+    char  p10[0x20 - 0x10];
+    unsigned id;                     // +0x20
+    char  p24[0x34 - 0x24];
+    Vec3  normal;                    // +0x34
+    bool  flag;                      // +0x40
+    char  p41[3];
+    float dist;                      // +0x44
+    char  p48[0xf0 - 0x48];
+    float w;                         // +0xf0
+    Vec3  pos;                       // +0xf4
+
+    Hit_s00cb_2480();                           // 0x00af4da0
+    ~Hit_s00cb_2480();                          // 0x00c2e4e0 (just `ret`)
+};
+struct TraceCtx {                    // context handed to SweepTick
+    void* self;
+    Vec3  pos;
+    Vec3  goal;
+    float radius;
+};
+float __cdecl SweepTick(TraceCtx* ctx, const Vec3* origin, const Vec3* dir, float t, Hit_s00cb_2480* out);   // 0x00cb1270
+typedef float (__cdecl* CastFn)(TraceCtx*, const Vec3*, const Vec3*, float, Hit_s00cb_2480*);
+int __cdecl TracePlanetPath(TraceCtx* ctx, const Vec3* initDir, float p3, CastFn cast, const Vec3* start,
+                            const Vec3* end, Hit_s00cb_2480* out, int maxHits, unsigned* state, float* outLen,
+                            const Hit_s00cb_2480* prev, int extra);                 // 0x00af6bf0
+Hit_s00cb_2480* __cdecl GetTraceCache(void* creature);                              // 0x00cb1210
+extern const Vec3 kZeroVector;                                           // 0x0169a37c
+#define PAD(n) virtual void pad##n();
+struct SpatialPart {                 // sub-object at creature + 0x34
+    PAD(0) PAD(1) PAD(2) PAD(3) PAD(4) PAD(5) PAD(6) PAD(7) PAD(8) PAD(9) PAD(10)
+    virtual const Vec3* GetPosition();            // +0x2c
+    PAD(12) PAD(13) PAD(14) PAD(15) PAD(16) PAD(17) PAD(18) PAD(19) PAD(20) PAD(21) PAD(22) PAD(23)
+    PAD(24) PAD(25) PAD(26) PAD(27) PAD(28)
+    virtual float GetRadius();                    // +0x74
+    const Vec3* GetVelocity();                    // 0x00d20610
+};
+struct Creature_s00cb_2480 {
+    char pad0[0x34];
+    // SpatialPart lives at +0x34 (accessed through a cast below)
+    char pad34[0x2a4 - 0x34];
+    unsigned flags;                               // +0x2a4
+    bool  IsOnSurface(const Vec3* p);             // 0x00c9e940
+    float SurfaceHeight(const Vec3* p);           // 0x00c9ffd0
+};
+class cCacheObjectResult {
+public:
+virtual void p00();
+virtual void p04();
+virtual void p08();
+virtual void p0c();
+virtual void p10();
+virtual void p14();
+virtual void p18();
+virtual void p1c();
+virtual void p20();
+virtual void p24();
+virtual void p28();
+    virtual const Vec3* GetPosition();                 // +0x2c
+};
+class cCacheObject {
+public:
+virtual void p00();
+virtual void p04();
+virtual void p08();
+    virtual cCacheObjectResult* Resolve(unsigned int type);   // +0x0c
+};
+struct CacheHit {                      // 0x100-byte cached trace hit
+    char     pad00[4];
+    int      f04;                      // +0x04
+    float    f08;                      // +0x08
+    int      f0c;                      // +0x0c
+    char     pad10[0x20 - 0x10];
+    unsigned id;                       // +0x20
+    char     pad24[4];
+    Vec3     pos28;                    // +0x28
+    char     pad34[0x40 - 0x34];
+    bool     flag;                     // +0x40
+    char     pad41[0x100 - 0x41];
+};
+struct TraceCache_s00cb_2480 {
+    CacheHit      hits[8];             // +0x000
+    cCacheObject* objects[8];          // +0x800
+};
+// ---- items of slice s00cb2480 end
 
 // @ 0x00cb1110
 InsertResult Ht::DoInsertValue(const Value& value, bool trueType)
@@ -529,4 +650,75 @@ float __cdecl SweepTick(Ctx* ctx, const Vec3* origin, const Vec3* dir, float t, 
         FUN_00af4870(origin, dir, R, 2.0f, out, &t);
     }
     return t;
+}
+
+// @ 0x00cb2480
+bool __cdecl IsPathAheadClear(Creature_s00cb_2480* self, WaypointPath* path, const Vec3* fallbackDir, float* pScale,
+                              int* pKind)
+{
+    TraceCache_s00cb_2480* cache = (TraceCache_s00cb_2480*)GetTraceCache((void*)self);
+    if (cache->hits[0].f04 != 0)
+        return true;
+
+    for (int i = 0; i < 8; i++) {
+        CacheHit& hit = cache->hits[i];
+        if (hit.id == 0)
+            continue;
+        cCacheObject* object = cache->objects[i];
+        if (object == 0)
+            continue;
+        if (!hit.flag)
+            continue;
+        cCacheObjectResult* result = object->Resolve(0x1186577);
+        const Vec3* p = result->GetPosition();
+        float dx = p->x - hit.pos28.x;
+        float dy = p->y - hit.pos28.y;
+        float dz = p->z - hit.pos28.z;
+        if ((dz * dz + dy * dy) + dx * dx > 0.1f)
+            return true;
+    }
+
+    unsigned state = 0;
+    float outLen = 0.0f;
+    Hit_s00cb_2480 hits[8];
+
+    SpatialPart* loco = (SpatialPart*)((char*)self + 0x34);
+    const Vec3* pos = loco->GetPosition();
+    const Vec3* vel = loco->GetVelocity();
+    Vec3 velDir;
+    const Vec3* dirp;
+    if (vel->x != kZeroVector.x || vel->y != kZeroVector.y || vel->z != kZeroVector.z) {
+        const Vec3* v = loco->GetVelocity();
+        float k = 1.0f / sqrtf((v->x * v->x + v->y * v->y) + v->z * v->z + 1e-08f);
+        velDir.x = v->x * k;
+        velDir.y = v->y * k;
+        velDir.z = v->z * k;
+        dirp = &velDir;
+    } else {
+        dirp = fallbackDir;
+    }
+
+    Vec3 initDir;
+    initDir.x = dirp->x;
+    initDir.y = dirp->y;
+    initDir.z = dirp->z;
+    TraceCtx ctx;
+    ctx.radius = loco->GetRadius();
+    ctx.self = (void*)self;
+    ctx.pos.x = pos->x; ctx.pos.y = pos->y; ctx.pos.z = pos->z;
+    ctx.goal.x = path->cur.pos.x; ctx.goal.y = path->cur.pos.y; ctx.goal.z = path->cur.pos.z;
+
+    int n = TracePlanetPath(&ctx, &initDir, 0.25f, (CastFn)SweepTick, pos, &path->cur.pos, hits, 1,
+                            &state, &outLen, (const Hit_s00cb_2480*)cache, 1);
+
+    bool clear = true;
+    if (n == 1 && state == 3) {
+        if (hits[0].f04 != 0 && *pScale > hits[0].f08) {
+            *pScale = hits[0].f08;
+            *pKind = hits[0].f0c;
+        }
+        self->flags &= 0xfffffff4;
+        clear = false;
+    }
+    return clear;
 }

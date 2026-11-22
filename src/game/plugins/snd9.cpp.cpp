@@ -12,6 +12,8 @@
 #include "rw/audio/core/TimerManager.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" int  FUN_01142690(void);                            // 0x01142690
+extern "C" int  MIX_create(void* desc);                        // 0x01142a80
 extern "C" int  FUN_01141710(void);                            // 0x01141710
 extern "C" int  FUN_011332c0(void);                            // 0x011332c0
 extern "C" int  FUN_01133290(void);                            // 0x01133290
@@ -25,7 +27,7 @@ template <class T> static inline T& A(void* p, int off) { return *(T*)((char*)p 
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s0113_88f0;
+class System_s0113_88f0;
 }
 }
 }
@@ -39,14 +41,14 @@ class Decoder;
 namespace rw {
 namespace audio {
 namespace core {
-struct DecoderRegistry_s0113_88f0;
+class DecoderRegistry_s0113_88f0;
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-struct TimerHandle_s0113_88f0 {
+class TimerHandle_s0113_88f0 { public:
     void* mItemHandle; void* mpCallback; void* mpContext; char* mpName;
     unsigned int mCpuTicks; unsigned char mStage; unsigned char mTimerVisibility; unsigned char pad16[2];
 };
@@ -56,7 +58,7 @@ struct TimerHandle_s0113_88f0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s0113_88f0 {
+class System_s0113_88f0 { public:
     char pad00[0x20]; char* mpCommandBuffer; char pad24[0x90]; unsigned int mCommandIndex; // +0xb4
 void* Alloc(int size, const char* name, int align, int alloc);
 void Free(void* p, int alloc);
@@ -82,8 +84,8 @@ void FUN_01133f40();
 namespace rw {
 namespace audio {
 namespace core {
-struct DecoderRegistry_s0113_88f0 {
-    int FUN_01133ed0(int);
+class DecoderRegistry_s0113_88f0 {
+    public: int FUN_01133ed0(int);
     Decoder* DecoderFactory(int, int, int, System_s0113_88f0*);  // 0x01133fc0 (rw::audio::core::DecoderRegistry::DecoderFactory)
 };
 }
@@ -98,6 +100,9 @@ struct TimerMgr {
 }
 }
 }
+extern u8 g_sndCfg00, g_sndCfg01, g_sndCfg02;      // 0x016e7c00,0x016e7bff,0x016e7bfa
+extern "C" int  FUN_01142690(void);                            // 0x01142690
+extern "C" int  MIX_create(void* desc);                        // 0x01142a80
 extern "C" int  FUN_01141710(void);                            // 0x01141710
 extern "C" int  FUN_011332c0(void);                            // 0x011332c0
 extern "C" int  FUN_01133290(void);                            // 0x01133290
@@ -105,8 +110,23 @@ extern "C" int  FUN_011431a0(void* ptrs, int n);               // 0x011431a0
 extern "C" int  FUN_0113f940(void);                            // 0x0113f940
 // ---- items of slice s011388f0 end
 
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-namespace rw { namespace audio { namespace core { void __stdcall FUN_01138d40(float rate); }}}  // 0x01138d40 (stays in the slice: not this object's)
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern u8 g_sndCfg00, g_sndCfg01, g_sndCfg02;      // 0x016e7c00,0x016e7bff,0x016e7bfa
+
+// @ 0x01138d40
+namespace rw { namespace audio { namespace core {
+void __stdcall FUN_01138d40(float rate)
+{
+    struct Desc { int value; u8 f4; u8 f5; u8 pad6[2]; void* cb; int f0c; } d;
+    FUN_01142690();
+    d.value = _mm_cvtss_si32(_mm_load_ss(&rate));
+    d.f4 = g_sndCfg02;
+    d.f5 = (u8)(g_sndCfg00 + g_sndCfg01);
+    d.cb = (void*)&FUN_01142690;   /* 0x01142690: original takes the address of the first call */
+    d.f0c = 0;
+    MIX_create(&d);
+}
+}}}  // namespace rw::audio::core
 
 // @ 0x01138d90
 namespace rw { namespace audio { namespace core {

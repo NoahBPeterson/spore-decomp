@@ -1,4 +1,4 @@
-# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+# va  diff-bytes  reason
 00bbc630 35 CityLessBuildings: thiscall helper schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbc7c0 53 RecordMedian3: three-compare tree now correct polarity, register roles differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bbcd40 43 complete reconstruction of the face-count comparator (`?FUN_00bbcd40@@YA_NHH@Z`, 82 bytes): CountFaces(param_1) < CountFaces(param_2) with CountFaces(p) = (*(int*)(p+0x358)-*(int*)(p+0x354)>>2)+(*(int*)(p+0x344)-*(int*)(p+0x340)>>2); not byte-exact: ours 82 bytes vs 82 but 43 diff bytes — cl computes the LHS (param_1) sub-expressions first whereas the original evaluates both of param_2's sub-expressions before param_1's; the `cmp ecx,edx; setl` comparison itself is identical; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (400 valid inputs, 100.0% coverage)

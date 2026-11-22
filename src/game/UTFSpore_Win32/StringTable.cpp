@@ -19,8 +19,21 @@ extern "C" void  operator_delete(void*) throw();   // 0x00f47380
 // ---- items of slice s00999110 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl operator new(size_t, const char*, int, int, int, int);
 typedef unsigned int uint;
-extern "C" void  operator_delete(void*) throw();   // 0x00f47380
 struct Key { uint mInstance; uint mType; uint mGroup; };
+struct IUnknown32 {
+  virtual void AddRef();
+  virtual void Release();
+  virtual void v08();
+  virtual void* Cast(uint type);
+  virtual void v10();
+  virtual void v14();
+  virtual void v18();
+  virtual void v1c();
+  virtual void v20();
+  virtual void v24();
+  virtual void v28();
+  virtual void v2c();
+};
 struct ResourceBase {
   virtual ~ResourceBase();
   volatile long mRefCount;   // +0x04
@@ -41,6 +54,15 @@ struct StringTable : ResourceBase, IntrusiveNode {
   Key mLastKey;           // +0x2c
   __declspec(noinline) StringTable();
   ~StringTable();                                   // out of line at 0xa16a20
+};
+struct IntrusiveListHead_s0099_9110 { void* mpNext; void* mpPrev; };
+struct UIStringMan_s0099_9110 {
+  virtual ~UIStringMan_s0099_9110();
+  int    mField04;         // +0x04
+  void*  mpArg;            // +0x08
+  IntrusiveListHead_s0099_9110 mList; // +0x0c
+  UIStringMan_s0099_9110(void* arg);
+  __declspec(noinline) void ClearList();  // 0x00999790 (UIStringMan::ClearList)
 };
 struct IntrusiveListHead {
   void* mpNext;
@@ -93,6 +115,23 @@ struct StringTableFilter : KeyFilter {
   }
 };
 // ---- items of slice s00999110 end
+
+// @ 0x00999790
+void UIStringMan_s0099_9110::ClearList()
+{
+  IntrusiveListHead_s0099_9110* head = &mList;
+  while (head->mpPrev != head) {
+    IntrusiveListHead_s0099_9110* node = (IntrusiveListHead_s0099_9110*)head->mpNext;
+    IUnknown32* obj = node ? (IUnknown32*)((char*)node - 0x14) : 0;
+    ((IntrusiveListHead_s0099_9110*)node->mpNext)->mpPrev = head;
+    head->mpNext = ((IntrusiveListHead_s0099_9110*)head->mpNext)->mpNext;
+    if (node != head) {
+      node->mpPrev = 0;
+      node->mpNext = 0;
+    }
+    obj->Release();
+  }
+}
 
 // @ 0x009997e0
 StringTable::StringTable()

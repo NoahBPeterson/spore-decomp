@@ -356,6 +356,13 @@ extern t_widgetbehavior text_widgetbehavior;   // 0x1554364
 namespace EA {
 namespace Audio {
 namespace Eapd {
+extern t_class* gpTextClass_s00a5_10e0;   // 0x016754f0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
 extern t_class* gpTextClass;   // 0x016754f0
 }
 }
@@ -602,6 +609,62 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 void    pd_typedmess(t_text* x, t_symbol s, int argc, t_atom* argv);
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_canvas_setup();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_guiconnect_setup();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool FUN_00a618a0();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_function_setup();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_bng_setup();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_toggle_setup();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_hslider_setup();
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool g_vslider_setup();
 }
 }
 }
@@ -1426,6 +1489,9 @@ extern const char gGatomDialogFmt[];  // 0x1454b80
 }
 }
 // ---- items of slice s00a50150 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+namespace EA { namespace Audio { namespace Eapd { bool g_text_setup(); }}}  // 0x00a516e0 (stays in the slice: not this object's)
 
 // @ 0x00a4f1e0
 void glist_text(Glist* gl, t_symbol s, int argc, t_atom_s00a4_f1e0* argv)
@@ -2421,7 +2487,7 @@ void text_drawborder(t_text* x, t_glist* glist, const char* tag, int width2, int
     int x1, y1, x2, y2;
     text_getrect(x, glist, &x1, &y1, &x2, &y2);
     if (x->te_type == T_OBJECT) {
-        const char* pattern = (x->te_g.g_pd == gpTextClass ? "-" : "\"\"");
+        const char* pattern = (x->te_g.g_pd == gpTextClass_s00a5_10e0 ? "-" : "\"\"");
         if (firsttime)
             sys_gui(".x%lx.c create line %d %d %d %d %d %d %d %d %d %d -dash %s -tags %sR\n",
                     glist_getcanvas(glist), x1, y1, x2, y1, x2, y2, x1, y2, x1, y1, pattern, tag);
@@ -2619,5 +2685,23 @@ void gatom_vis(t_gobj* z, t_glist* glist, int vis)
     }
     if (!vis)
         sys_unqueuegui(x);
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a51f40
+namespace EA { namespace Audio { namespace Eapd {
+bool graphics_objects_init()
+{
+    bool ok = true;
+    ok &= g_canvas_setup();
+    ok &= g_guiconnect_setup();
+    ok &= FUN_00a618a0();
+    ok &= g_text_setup();
+    ok &= g_function_setup();
+    ok &= g_bng_setup();
+    ok &= g_toggle_setup();
+    ok &= g_hslider_setup();
+    ok &= g_vslider_setup();
+    return ok;
 }
 }}}  // namespace EA::Audio::Eapd

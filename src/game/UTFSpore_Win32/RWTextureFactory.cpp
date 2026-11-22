@@ -1,50 +1,57 @@
-// EA::UTFWinTools::RWTextureFactory -- the image -> RenderWare texture resource factory
-// (with the image reader/writer helper objects it drives).
-
-// addresses retail relocates here, named so the build relocates them too
-extern "C" char g_13ebcdc[];
-extern "C" char g_141aa84[];
-extern "C" char g_14469dc[];
-extern "C" char g_14469f0[];
+// src/game/UTFSpore_Win32/RWTextureFactory.cpp -- migrated from slice(s) s00997f50 by tools/migrate/rewrite.py
+// Object file: UTFSpore_Win32/RWTextureFactory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
+// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/UTFWinTools/RWTextureFactory.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/UTFWinTools/SerCollection.h"
+#include "EA/UTFWinTools/SerScope.h"
+#include "EA/ResourceMan/Key.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" char g_13ebcdc[];
+extern "C" char g_13effa8[];
+extern "C" char g_141aa84[];
+extern "C" char g_14469dc[];
+extern "C" char g_14469f0[];
+extern "C" char g_1446a3c[];
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long _InterlockedExchange(volatile long*, long);
 extern "C" void* FUN_00f473a0(unsigned size, const char* cat, int a, int b, int c, int d); // operator new
 extern "C" void* g_16c8b44;
 extern "C" void* FUN_011f0220(void* out, int w, int h, int a, int b, int fmt);   // cdecl, descriptor builder
 extern "C" void* FUN_011efeb0(void* raster, int w, int h, int a, int b, int fmt); // rw::graphics::Raster::Initialize
-#pragma intrinsic(_InterlockedExchange)
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
 
-struct Inner { void f11eff60(); };          // rw::graphics::Raster (destroy half)
-struct Mgr   { void f276c0(void* p); };      // the raster pool the resource frees into
-// RWTextureResource seen through its Texture base (the object at the factory's
-// own address; the ids it answers to are in the enum below).
+// ---- items of slice s00997f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13ebcdc[];
+extern "C" char g_13effa8[];
+extern "C" char g_141aa84[];
+extern "C" char g_14469dc[];
+extern "C" char g_14469f0[];
+extern "C" char g_1446a3c[];
+extern "C" long _InterlockedExchange(volatile long*, long);
+extern "C" void* FUN_00f473a0(unsigned size, const char* cat, int a, int b, int c, int d); // operator new
+extern "C" void* g_16c8b44;
+struct Inner { void f11eff60(); };
+struct Mgr   { void f276c0(void* p); };
 struct Misc34 {
     int  AsInterface(int iid);     // 0x998100
-    void f98140();                 // 0x998140 — release the image reader at +4
+    void f98140();                 // 0x998140
+    void f98f80(int* p);           // 0x998f80
+    void f98fc0(void* o);          // 0x998fc0
 };
-// The factory's CreateResource (the object is the canonical
-// EA::UTFWinTools::RWTextureFactory, but its body is only approximately recovered).
 struct RWTexFactory {
+    int GetSupportedTypes(unsigned* out, unsigned n);   // 0x998170
+    bool CanConvert(int a, int id);                     // 0x9981b0
+    int Release();                                      // 0x998200
     bool CreateResource(int param2, void** out, void* p4, void* p5); // 0x998770
 };
 #define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
-
-// COM interface ids this object answers to (names are guesses; values from the code)
-enum {
-    kIIDRWTextureResource = 0xef7d16e1,   // EA::UTFWinTools::RWTextureResource
-    kIIDTexture           = 0xee3f516e,   // EA::UTFWin::Texture (secondary base at +8)
-    kIIDUnknown           = 0x01be8ca6,   // IUnknown (this)
-};
-
-// One decoded image: the codec fills a header whose +0x10/+0x14/+0x18 are
-// width, height and bits per pixel.
+extern "C" void* FUN_011f0220(void* out, int w, int h, int a, int b, int fmt);   // cdecl, descriptor builder
+extern "C" void* FUN_011efeb0(void* raster, int w, int h, int a, int b, int fmt); // rw::graphics::Raster::Initialize
 struct ImgInfo { int pad[4]; int w; int h; int bpp; };   // +0x10 w, +0x14 h, +0x18 bpp
-// The image codec reader/writer objects (EA::UTFWinTools image layer); only the
-// six-word header is modelled because every method is an out-of-line call.
 struct ImgReader {
     unsigned s[6];
     void   __thiscall ctor();                              // 0x87cde0
@@ -64,9 +71,6 @@ struct ImgWriter {
     void   __thiscall Finish();                            // 0x87cff0
     void   __thiscall Close();                             // 0x87d260
 };
-// The decoded texture as stored in the resource: +4 the rw::graphics::Raster,
-// +0x1c the image reader kept while streaming, +0x28/+0x2c the (possibly
-// power-of-two rounded) tile size that InitTextureResources builds the raster at.
 struct RWTexResource {
     char pad0[4];
     void* mRaster;       // +4
@@ -86,8 +90,6 @@ struct RasterObj {
     void   __thiscall Destroy();                           // 0x11eff60
 };
 struct PoolMgr { void __thiscall Free(void* p); };         // 0x9276c0
-// The header the codec writer is handed: size fields at +0x10..+0x18 and a
-// format flag far out at +0x438 (a colour palette table sits in between).
 struct WriteHdr {
     unsigned a[4];
     unsigned w;        // +0x10
@@ -99,16 +101,16 @@ struct WriteHdr {
 };
 struct TexDesc { int fmt; int pad; unsigned short w; unsigned short h; unsigned char bpp; };
 struct SpriteTex { void __thiscall Fill(void* buf, unsigned size, int a); };   // 0x11f0440
+// ---- items of slice s00997f50 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" void  FUN_00f47380(void* p);                           // operator delete
-extern "C" unsigned g_rwTypes[];                                  // 0x14469c4: supported resource type ids
-extern "C" void* FUN_011e073e(void* dst, int v, unsigned n);      // memset
+extern "C" void  FUN_00f47380(void* p);                                 // operator delete
+extern "C" unsigned g_rwTypes[];      // 0x14469c4
+extern "C" void* FUN_011e073e(void* dst, int v, unsigned n);   // memset
 extern "C" void  FUN_00957c20_(void* t, int v);
+extern "C" MemPool* g_memPool_16c8b44;
 
 // @ 0x009980d0
-// Bit-smear finalizer: fills every bit below the highest set bit, then folds
-// the low half back over the high half (a CPU-friendly integer hash).
 unsigned __cdecl FUN_009980d0(unsigned x)
 {
     x = x | (x >> 1);
@@ -120,20 +122,17 @@ unsigned __cdecl FUN_009980d0(unsigned x)
 }
 
 // @ 0x00998100
-// QueryInterface on the Texture base: +0 (the object itself) for IUnknown,
-// +8 (the Resource base) for Texture, and the object itself only for its own
-// resource id.
 int Misc34::AsInterface(int iid)
 {
     void* self = this;
-    if (iid == kIIDUnknown)
+    if (iid == 0x1be8ca6)
         return (int)self;
-    if (iid != (int)kIIDTexture) {
-        unsigned d = (iid == (int)kIIDRWTextureResource) ? 0xffffffffu : 0u;
+    if (iid != (int)0xee3f516e) {
+        unsigned d = (iid == (int)0xef7d16e1) ? 0xffffffffu : 0u;
         return (int)self & (int)d;
     }
     if (self)
-        return (int)self + 8;   // the Texture base sits at +8
+        return (int)self + 8;
     return 0;
 }
 
@@ -141,16 +140,15 @@ int Misc34::AsInterface(int iid)
 void Misc34::f98140()
 {
     void* self = this;
-    void* p = *(void**)((char*)self + 4);   // +4: the loaded image reader
+    void* p = *(void**)((char*)self + 4);
     if (p) {
-        ((Inner*)p)->f11eff60();            // destroy the reader
-        ((Mgr*)g_16c8b44)->f276c0(p);       // free it back to the pool
+        ((Inner*)p)->f11eff60();
+        ((Mgr*)g_16c8b44)->f276c0(p);
         *(void**)((char*)self + 4) = 0;
     }
 }
 
 // @ 0x00998170
-// Writes up to n of the six supported resource type ids and returns the total.
 unsigned int EA::UTFWinTools::RWTextureFactory::GetSupportedTypes(unsigned int * out, unsigned int n)
 {
     unsigned i = 0;
@@ -169,15 +167,10 @@ unsigned int EA::UTFWinTools::RWTextureFactory::GetSupportedTypes(unsigned int *
 bool EA::UTFWinTools::RWTextureFactory::CanConvert(unsigned int a, unsigned int id) const
 {
     (void)a;
-    return id == (int)kIIDRWTextureResource;
+    return id == (int)0xef7d16e1;
 }
 
-// ---- the four functions below are behaviourally complete but not yet
-// ---- byte-exact (see nonmatching.txt); their bodies are kept verbatim.
-
 // @ 0x00998250
-// Decodes the stored image reader into a new rw::graphics::Raster (default
-// 8-bit paletted format), keeping the raster on success and closing the reader.
 void RWTexResource::InitTextureResources()
 {
     if (mReader == 0)
@@ -228,9 +221,6 @@ void RWTexResource::InitTextureResources()
 }
 
 // @ 0x009983d0
-// Decodes the record's image into the container resource: copies the record
-// key/size into the resource, keeps the reader, then (optionally rounding the
-// tile size up to powers of two) fills in the stored texture dimensions.
 bool EA::UTFWinTools::RWTextureFactory::ReadResource(EA::ResourceMan::Record * reader, EA::ResourceMan::Resource * container, void * a3, unsigned int a4)
 {
     int a3_v = (int)a3;
@@ -286,9 +276,6 @@ bool EA::UTFWinTools::RWTextureFactory::ReadResource(EA::ResourceMan::Record * r
 }
 
 // @ 0x00998530
-// Serialises the container's texture out through the record's stream: builds the
-// codec header from the texture descriptor, fills a scratch buffer from the
-// sprite, writes it, and closes the stream if we opened it.
 bool EA::UTFWinTools::RWTextureFactory::WriteResource(EA::ResourceMan::Resource * container, EA::ResourceMan::Record * stream, void * a3, unsigned int base)
 {
     int a3_v = (int)a3;
@@ -337,28 +324,23 @@ bool EA::UTFWinTools::RWTextureFactory::WriteResource(EA::ResourceMan::Resource 
 }
 
 // @ 0x009986e0
-// RWTextureResource constructor: installs the Texture (+0) and Resource (+8)
-// vptrs, zeroes the Resource ref count and key, then the final vptrs.
 void* __fastcall FUN_009986e0(void* self)
 {
     char* a = (char*)self;
-    *(void**)(a + 0) = (void*)g_141aa84;   // Texture base vptr
-    *(void**)(a + 8) = (void*)g_13ebcdc;   // Resource base vptr
-    _InterlockedExchange((volatile long*)(a + 0xc), 0);   // Resource::mRefCount
-    *(unsigned*)(a + 0x10) = 0;            // Resource::mKey (instance)
-    *(unsigned*)(a + 0x14) = 0;            // Resource::mKey (type)
-    *(unsigned*)(a + 0x18) = 0;            // Resource::mKey (group)
-    *(void**)(a + 0) = (void*)g_14469f0;   // final Texture vptr
-    *(void**)(a + 8) = (void*)g_14469dc;   // final Resource vptr
-    *(unsigned*)(a + 0x1c) = 0;            // mRecord
-    *(unsigned*)(a + 4) = 0;               // Texture::mRawTexture
+    *(void**)(a + 0) = (void*)g_141aa84;
+    *(void**)(a + 8) = (void*)g_13ebcdc;
+    _InterlockedExchange((volatile long*)(a + 0xc), 0);
+    *(unsigned*)(a + 0x10) = 0;
+    *(unsigned*)(a + 0x14) = 0;
+    *(unsigned*)(a + 0x18) = 0;
+    *(void**)(a + 0) = (void*)g_14469f0;
+    *(void**)(a + 8) = (void*)g_14469dc;
+    *(unsigned*)(a + 0x1c) = 0;
+    *(unsigned*)(a + 4) = 0;
     return a;
 }
 
 // @ 0x00998770
-// Allocates and constructs an RWTextureResource (0x30 bytes), calls its first
-// method, and if an id was given reads that resource into it (releasing the
-// object and failing if the read fails).
 bool RWTexFactory::CreateResource(int param2, void** out, void* p4, void* p5)
 {
     char* self = (char*)this;
@@ -378,4 +360,15 @@ bool RWTexFactory::CreateResource(int param2, void** out, void* p4, void* p5)
     }
     *out = res;
     return true;
+}
+
+// @ 0x00998820
+void* __fastcall FUN_00998820(void* self)
+{
+    char* a = (char*)self;
+    *(void**)(a + 0) = (void*)g_13effa8;
+    _InterlockedExchange((volatile long*)(a + 4), 0);
+    *(void**)(a + 0) = (void*)g_1446a3c;
+    *(unsigned char*)(a + 8) = 1;
+    return a;
 }

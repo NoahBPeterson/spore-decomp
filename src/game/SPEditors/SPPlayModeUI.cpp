@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPPlayModeUI.cpp -- migrated from slice(s) s00634490, s00637f80, s006373e0, s00636560, s00636320, s006354c0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPPlayModeUI.cpp -- migrated from slice(s) s0091b5d0, s00634490, s00637f80, s006373e0, s00636560, s00636320, s006354c0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPPlayModeUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -28,6 +28,8 @@ extern "C" char g_13fe714[];
 #include "SP/cPlayModeTokenTranslator.h"
 #include "cSPUITooltipWinProc.h"
 #include "SP/cStringTokenTranslator.h"
+#include "EA/Dasm/DisassemblerX86.h"
+#include <string.h>
 
 // ---- items of slice s006354c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 class IWindow {
@@ -1022,6 +1024,18 @@ struct RectF {
     bool Intersect(const RectF& a, const RectF& b);
 };
 // ---- items of slice s00634490b end
+
+// ---- items of slice s0091b5d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int   u32;
+const char* RFindFirstOf(const char* last, const char* first, const char* s, const char* sEnd); // 0x0062ff90
+struct EStr {
+    char* mpBegin;   // 0
+    char* mpEnd;     // 4
+    char* mpCap;     // 8
+    u32   find_last_of(const char* s, u32 pos) const;   // 0x0091bec0
+};
+template <class T> static inline const T& MinRef(const T& a, const T& b) { return (a < b) ? a : b; }
+// ---- items of slice s0091b5d0 end
 
 // @ 0x00634b10
 void cSPPlayModeUI_s0063_4490::AttachWinProc()
@@ -2102,4 +2116,21 @@ void SP::cSPPlayModeUI_s0063_7f80::ShowMovieSavedDialogCustom()
     void* m = GetWindowManager()->GetCurrent();
     cWinOwner* o = m ? (cWinOwner*)((char*)m - 4) : 0;
     o->mpSub->Func(false);
+}
+
+// @ 0x0091bec0
+u32 EStr::find_last_of(const char* s, u32 pos) const
+{
+    u32 n = (u32)strlen(s);
+    const char* base = mpBegin;
+    u32 len = (u32)(mpEnd - base);
+    u32 p = pos;
+    if (len != 0) {
+        u32 cap = len - 1;
+        u32 use = MinRef(p, cap);
+        const char* r = RFindFirstOf(base + use + 1, base, s, s + n);
+        if (r != base)
+            return (u32)(r - base) - 1;
+    }
+    return 0xffffffff;
 }

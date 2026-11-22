@@ -9,7 +9,7 @@
 00a527b0 ?FUN_00a527b0@@YAXPADHH@Z  # complete, non-exact
 00a52840 ?FUN_00a52840@@YAXPADHHHPAH@Z  # complete, non-exact
 00a528b0 ?FUN_00a528b0@@YAXPADHHHPAH@Z  # complete, non-exact
-00a528e0 ?a_control_setup@@YAEXZ  # complete, non-exact
+00a528e0 ?a_control_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::a_control_setup migrated from s00a52080
 00a529c0 ?GetPair@CM_Hash@@QAEPAXPAX@Z  # complete, non-exact
 00a529e0 ?FUN_00a529e0@@YAPAXHHHPAH@Z  # complete, non-exact
 00a52a90 ?FUN_00a52a90@@YAXPAD@Z  # byte-exact

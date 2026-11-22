@@ -1,34 +1,40 @@
-// EA::ArgScript command-line parsing: cArguments (the tokeniser and its accessors).
-// Object file: UTFSpore_Win32/Arguments.obj.
+// src/game/UTFSpore_Win32/Arguments.cpp -- migrated from slice(s) s00837820 by tools/migrate/rewrite.py
+// Object file: UTFSpore_Win32/Arguments.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
+// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
+#include "EA/ArgScript/cError.h"
 
-// Retail helpers this translation unit calls but does not define (address in the comment).
-void  __cdecl operator_delete__(void*);
-__declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
+// unnamed retail callees and globals (address in the comment)
+extern "C" char g_14f9174[];
 extern "C" __declspec(dllimport) int __cdecl isspace(int);
 extern "C" __declspec(dllimport) int __cdecl isalpha(int);
 extern "C" unsigned int __cdecl strlen(const char*);
 #pragma intrinsic(strlen)
+
+// ---- items of slice s00837820 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_14f9174[];
+void  __cdecl operator_delete__(void*);                                          // 0x00f47380
+__declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
+extern "C" __declspec(dllimport) int __cdecl isspace(int);
+extern "C" __declspec(dllimport) int __cdecl isalpha(int);
+extern "C" unsigned int __cdecl strlen(const char*);
 void* __cdecl EASTL_memmove(void* dst, const void* src, unsigned int n);   // 0x011e0744
-void  __cdecl ThrowError(const char* fmt, ...);
 struct cOptionArgInfo;
 cOptionArgInfo* __cdecl CopyOptionArgInfo(const cOptionArgInfo* first, const cOptionArgInfo* last, cOptionArgInfo* dest);   // 0x00705250
-
 inline void CopyElems(const char** first, const char** last, const char** dest) {
     EASTL_memmove(dest, first, (unsigned)((char*)last - (char*)first));
 }
 inline void CopyElems(cOptionArgInfo* first, cOptionArgInfo* last, cOptionArgInfo* dest) {
     CopyOptionArgInfo(first, last, dest);
 }
-
 struct cError {
     uint32_t m0, m1, m2, m3;
     cError(const char* fmt, ...);   // 0x0052df30 (cdecl, this pushed)
     cError(const cError&);
 };
-
+__declspec(noreturn) void __cdecl CxxThrow(void*, void*);                  // 0x011e0912 _CxxThrowException
 struct cOptionArgInfo {
     char* mName;                 // +0
     int   mFirstArgumentIndex;   // +4
@@ -60,13 +66,6 @@ struct sp_vector {
         }
     }
 };
-
-// Release a vector's storage unless its allocator is a no-op (retail's flag at p[-1]).
-template <class T>
-inline void DestroyVector(sp_vector<T>& v) {
-    if (v.mpBegin && ((int*)v.mpBegin)[-1] != 0) operator_delete__(v.mpBegin);
-}
-
 inline void DoInsertValue(sp_vector<const char*>* vec, const char** pos, const char* const& v) { vec->DoInsertValueP(pos, v); }
 inline void DoInsertValue(sp_vector<cOptionArgInfo>* vec, cOptionArgInfo* pos, const cOptionArgInfo& v) { vec->DoInsertValueO(pos, v); }
 struct cArguments {
@@ -77,6 +76,7 @@ struct cArguments {
     int mNumMainArguments;                       // +0x40
 
     cArguments();
+    cArguments(int text);
     ~cArguments();
     void  Advance();                                   // 0x837ed0
     bool  HasArgument(const char* p);                  // 0x837ee0
@@ -84,6 +84,7 @@ struct cArguments {
     void  FindUnprocessed();                           // 0x837f40
     void  MarkAllProcessed();                          // 0x837f60
     void  GetArguments(int* count, char*** begin);     // 0x837f80
+    void  GatherUnprocessed(void* outList);            // 0x838350
     __declspec(noinline) char** MainArguments(int* count, int min, int max);     // 0x838020
     char** OptionArguments(const char* label, int* count, int min, int max); // 0x838130
     void  MainArguments(int n);                        // 0x838320
@@ -109,6 +110,7 @@ struct cArgumentsEH {
     int mNumMainArguments;
     cArgumentsEH(int text);
 };
+// ---- items of slice s00837820 end
 
 // @ 0x00837f40
 void cArguments::FindUnprocessed()
@@ -136,9 +138,15 @@ void cArguments::GetArguments(int* count, char*** begin)
 // @ 0x00837fa0
 cArguments::~cArguments()
 {
-    DestroyVector(mOptionArguments);
-    DestroyVector(mArguments);
-    DestroyVector(mArgStorage);
+    if (mOptionArguments.mpBegin && ((int*)mOptionArguments.mpBegin)[-1] != 0) {
+        operator_delete__(mOptionArguments.mpBegin);
+    }
+    if (mArguments.mpBegin && ((int*)mArguments.mpBegin)[-1] != 0) {
+        operator_delete__((void*)mArguments.mpBegin);
+    }
+    if (mArgStorage.mpBegin && ((int*)mArgStorage.mpBegin)[-1] != 0) {
+        operator_delete__(mArgStorage.mpBegin);
+    }
 }
 
 // @ 0x00837ff0
@@ -161,8 +169,14 @@ cArguments::cArguments()
 char** cArguments::MainArguments(int* count, int min, int max)
 {
     int n = mNumMainArguments;
-    if (n < min) ThrowError("Expecting at least %d arguments", min);
-    if (n > max) ThrowError("Expecting at most %d arguments", max);
+    if (n < min) {
+        cError err("Expecting at least %d arguments", min);
+        CxxThrow(&err, (void*)g_14f9174);
+    }
+    if (n > max) {
+        cError err("Expecting at most %d arguments", max);
+        CxxThrow(&err, (void*)g_14f9174);
+    }
     if (count) *count = n;
     if (mNumMainArguments > 0) {
         return (char**)mArguments.mpBegin + mMainArgumentsStart;
@@ -177,11 +191,12 @@ bool EA::ArgScript::cArguments::HasFlag(char const * label)
     if (it != mOptionArguments.mpEnd) {
         do {
             if (!it->mProcessed && _stricmp(it->mName, label) == 0) {
-                if (it->mNumArguments == 0) {
-                    it->mProcessed = true;
-                    return true;
+                if (it->mNumArguments != 0) {
+                    EA::ArgScript::cError err("Not expecting any arguments for option '%s'", label);
+                    CxxThrow(&err, (void*)g_14f9174);
                 }
-                ThrowError("Not expecting any arguments for option '%s'", label);
+                it->mProcessed = true;
+                return true;
             }
             ++it;
         } while (it != mOptionArguments.mpEnd);
@@ -197,14 +212,17 @@ char** cArguments::OptionArguments(const char* label, int* count, int min, int m
         do {
             if (!it->mProcessed && _stricmp(it->mName, label) == 0) {
                 int n = it->mNumArguments;
-                if (n < min)
-                    ThrowError("Expecting at least %d arguments for option '%s'", min, label);
-                if (n <= max) {
-                    if (count) *count = n;
-                    it->mProcessed = true;
-                    return (char**)mArguments.mpBegin + it->mFirstArgumentIndex;
+                if (n < min) {
+                    cError err("Expecting at least %d arguments for option '%s'", min, label);
+                    CxxThrow(&err, (void*)g_14f9174);
                 }
-                ThrowError("Expecting at most %d arguments for option '%s'", max, label);
+                if (n > max) {
+                    cError err("Expecting at most %d arguments for option '%s'", max, label);
+                    CxxThrow(&err, (void*)g_14f9174);
+                }
+                if (count) *count = n;
+                it->mProcessed = true;
+                return (char**)mArguments.mpBegin + it->mFirstArgumentIndex;
             }
             ++it;
         } while (it != mOptionArguments.mpEnd);
@@ -222,6 +240,16 @@ void cArguments::MainArguments(int n)
 void cArguments::OptionArguments(const char* label, int n)
 {
     OptionArguments(label, 0, n, n);
+}
+
+// @ 0x00838350
+void cArguments::GatherUnprocessed(void* outList)
+{
+    sp_vector<const char*>* out = (sp_vector<const char*>*)outList;
+    out->clear();
+    for (cOptionArgInfo* it = mOptionArguments.mpBegin; it != mOptionArguments.mpEnd; ++it) {
+        if (!it->mProcessed) out->push_back(it->mName);
+    }
 }
 
 // @ 0x008383c0

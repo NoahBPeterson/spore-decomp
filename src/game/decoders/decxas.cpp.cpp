@@ -24,6 +24,13 @@ public:
 namespace rw {
 namespace audio {
 namespace core {
+extern void ScaleSamples(float* pData, float scale, int numSamples);  // 0x1148da0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
 class Decoder {
 public:
     void** vftable;                           // +0x00
@@ -331,5 +338,105 @@ LAB:
         }
     }
     return param_8;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x01149d60
+namespace rw { namespace audio { namespace core {
+int EaLayer3DecBase::DecodeEvent(EaLayer3DecBase* self, char* param_2)
+{
+    unsigned int local_18 = 0;    // latency samples consumed
+    unsigned int local_14 = 0;    // skip samples consumed
+    int produced = 0;             // samples the request parser produced
+    int local_8[2];
+    unsigned char* local_c;
+    int coreIdx;
+    int chanOff;
+    int i;
+
+    // No request descriptor loaded?  Pull the next one off the inline ring.
+    if (self->mRemainingSamples < 1) {
+        unsigned char* desc = (unsigned char*)self + self->mRequestDescOffset
+                              + (unsigned int)self->mPrepareSlot * 0x14;
+        if (*(int*)(desc + 0xc) == 0) {
+            desc = 0;
+        } else {
+            self->mPrepareSlot++;
+            if (self->mPrepareSlot >= self->mMaxSlots)
+                self->mPrepareSlot = 0;
+        }
+        if (*(unsigned char*)(desc + 0x10) == 0) {
+            self->mNewFeed = true;
+            self->mLatency = 0x451;
+            self->mSkipSamples = 0;
+        }
+        self->mpEncodedSample = *(unsigned char**)(desc + 0x00);
+        self->mSkipSamples = *(int*)(desc + 0x08);
+        self->mRemainingSamples = *(int*)(desc + 0x0c) - *(int*)(desc + 0x08);
+        if (self->mSkipSamples > 0)
+            self->SkipBlocks();
+    }
+
+    local_18 = 0;
+    local_14 = 0;
+    produced = 0;
+    do {
+        local_c = self->mpEncodedSample;
+        coreIdx = 0;
+        chanOff = 0;
+        if (self->mNumEaLayer3CoreInstances > 0) {
+            do {
+                self->mpLoadedEALayer3Core = self->mppEaLayer3Core[coreIdx];
+                int count = (coreIdx != self->mTotalChannels / 2) + 1;
+                unsigned short stride = *(unsigned short*)(param_2 + 0xe);
+                int stride4 = (int)stride * 4;
+                {
+                    unsigned char* base = (unsigned char*)
+                        (*(int*)(param_2 + 4) + chanOff * (int)stride * 4);
+                    int* outp = local_8;
+                    for (i = 0; i < count; ++i) {
+                        *outp = (int)base;
+                        base += stride4;
+                        ++outp;
+                    }
+                }
+                int r = self->GetCurrentRequestDesc((char*)self->mpEncodedSample,
+                            local_8, (int)self->mpLoadedEALayer3Core,
+                            (unsigned int*)&produced, &local_18, &local_14, count);
+                if (r < 0) {
+                    for (i = 0; i < (int)(unsigned int)self->mNumChannels; ++i)
+                        memset((void*)(*(int*)(param_2 + 4) +
+                                       (int)*(unsigned short*)(param_2 + 0xe) * i * 4),
+                               0, 0x900);
+                    self->mpEncodedSample = local_c;
+                    return -1;
+                }
+                self->mpEncodedSample += r;
+                ++coreIdx;
+                chanOff += 2;
+            } while (coreIdx < self->mNumEaLayer3CoreInstances);
+        }
+        if (self->mNewFeed)
+            self->mNewFeed = false;
+        if (self->mLatency > 0)
+            self->mLatency -= (int)local_18;
+        if (self->mSkipSamples > 0)
+            self->mSkipSamples -= (int)local_14;
+        i = 0;
+        if (self->mNumChannels != 0) {
+            do {
+                unsigned short stride = *(unsigned short*)(param_2 + 0xe);
+                ScaleSamples((float*)(*(int*)(param_2 + 4) + (int)stride * i * 4),
+                             3.0517578125e-05f, produced);
+                ++i;
+            } while (i < (int)(unsigned int)self->mNumChannels);
+        }
+    } while (produced < 1);
+
+    if (self->mRemainingSamples < produced)
+        produced = self->mRemainingSamples;
+    if (self->mRemainingSamples >= 0)
+        self->mRemainingSamples -= produced;
+    return produced;
 }
 }}}  // namespace rw::audio::core

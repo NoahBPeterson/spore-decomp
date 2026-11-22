@@ -174,3 +174,11 @@ StackAllocator_s0092_8b00::StackAllocator_s0092_8b00(void* pBlock, uint32 blockS
         Init((Block_s0092_8b00*)pBlock, blockSize, alloc, free, ctx);
 }
 }}  // namespace EA::Allocator
+
+// @ 0x00928dc0
+namespace EA { namespace Allocator {
+void __fastcall FUN_00928dc0(StackAllocator_s0092_8b00* self)
+{
+    self->Reset(0);
+}
+}}  // namespace EA::Allocator

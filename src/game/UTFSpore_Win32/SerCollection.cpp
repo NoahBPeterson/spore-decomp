@@ -1,4 +1,9 @@
 #include "game/types.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/UTFWinTools/RWTextureFactory.h"
+#include "EA/UTFWinTools/SerCollection.h"
+#include "EA/UTFWinTools/SerScope.h"
+#include "EA/ResourceMan/Key.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void FUN_011e0744_(void* a, void* b, int c);
@@ -155,6 +160,34 @@ struct SerCollection_s0099_9110 : IListener {
   bool Reload();  // 0x00999250 (SerCollection::Reload)
 };
 
+// ---- items of slice s00997f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long _InterlockedExchange(volatile long*, long);
+extern "C" void  FUN_00a80dd0(void* a, void* b);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
+struct Misc34 {
+    int  AsInterface(int iid);     // 0x998100
+    void f98140();                 // 0x998140
+    void f98f80(int* p);           // 0x998f80
+    void f98fc0(void* o);          // 0x998fc0
+};
+// ---- items of slice s00997f50 end
+
+// @ 0x00998fc0
+void Misc34::f98fc0(void* o)
+{
+    char* self = (char*)this;
+    (*(void(__thiscall**)(void*))*(void**)o)(o);
+    void** p = *(void***)(self + 0x60);
+    if (p < *(void***)(self + 0x64)) {
+        *(void***)(self + 0x60) = p + 1;
+        if (p != 0)
+            *p = o;
+        return;
+    }
+    FUN_00a80dd0(p, &o);
+}
+
 // @ 0x00999000
 void __fastcall SerCollection_RemoveAll(char* self)
 {
@@ -174,13 +207,11 @@ void __fastcall SerCollection_RemoveAll(char* self)
 }
 
 // @ 0x00999050
-// Drops the auto-update subscription, lets the listener clear its objects
-// (vtable slot 4) and then releases the objects left in the list.
 void __fastcall FUN_00999050(char* self)
 {
-    char* autoUpdate = *(char**)(self + 8);
-    if (autoUpdate) {
-        (*(void(__thiscall**)(char*, char*, char*))((char*)*(void**)autoUpdate + 0x14))(autoUpdate, self + 0xc, self);
+    char* au = *(char**)(self + 8);
+    if (au) {
+        (*(void(__thiscall**)(char*, char*, char*))((char*)*(void**)au + 0x14))(au, self + 0xc, self);
         *(unsigned*)(self + 8) = 0;
     }
     (*(void(__thiscall**)(char*))((char*)*(void**)self + 0x10))(self);

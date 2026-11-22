@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAudioNPCCityMusic.cpp -- migrated from slice(s) s00eaa9a0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAudioNPCCityMusic.cpp -- migrated from slice(s) s00a37320, s00eaa9a0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAudioNPCCityMusic.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -433,8 +433,6 @@ cNPCCityMusicManager* GetMusicManager();               // 0x00b3d500
 }
 }
 
-
-
 namespace SP {
 namespace Audio {
 void __cdecl UpdateAudioPosition(void* handle, void* object, float x, float y, float z);  // 0x00571f80
@@ -548,6 +546,61 @@ namespace SP { namespace Audio {
 extern SP::cDataSerializerGeneric gNPCCityMusicSerializer;    // 0x015a9018
 }}
 
+// ---- items of slice s00a37320 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl GetSystemAT_s00a3_7320();              // 0xa206f0 EA::Audio::GetSystemAT
+#define VFN(p, off) ((*(void***)(p))[(off) / 4])
+typedef void (__thiscall* VFn1)(void*, unsigned int);
+typedef void (__thiscall* VFn2)(void*, unsigned int, unsigned int);
+typedef void (__thiscall* VFn2f)(void*, unsigned int, float);
+typedef void (__thiscall* VFn0)(void*);
+struct cAudioPropertyOwner {
+    char  pad_00[0x20];
+    void* field_20;
+    char  pad_24[8];
+    float field_2c;
+
+    bool Update(int id, const float* value, void* unused);
+};
+// ---- items of slice s00a37320 end
+
+// @ 0x00a37320
+bool __thiscall cAudioPropertyOwner::Update(int id, const float* value, void* unused)
+{
+    switch (id) {
+    case 21:
+        if (field_20 != 0) {
+            void* sys = GetSystemAT_s00a3_7320();
+            if (sys != 0) {
+                ((VFn1)VFN(sys, 0x38))(sys, 0x03475376u);
+                ((VFn2)VFN(sys, 0x40))(sys, 0x03475385u, (unsigned int)field_20);
+                ((VFn2)VFN(sys, 0x40))(sys, 0x034753a7u, 0xc57f4567u);
+                ((VFn2f)VFN(sys, 0x3c))(sys, 0x034753aau, *value);
+                ((VFn0)VFN(sys, 0x58))(sys);
+            }
+        }
+        return true;
+
+    case 15:
+        field_2c = *value;
+        return true;
+
+    case 1:
+        if (field_20 != 0) {
+            void* sys = GetSystemAT_s00a3_7320();
+            if (sys != 0) {
+                ((VFn1)VFN(sys, 0x38))(sys, 0x03475376u);
+                ((VFn2)VFN(sys, 0x40))(sys, 0x03475385u, (unsigned int)field_20);
+                ((VFn2)VFN(sys, 0x40))(sys, 0x034753a7u, 0x70e47545u);
+                ((VFn2f)VFN(sys, 0x3c))(sys, 0x034753aau, *value);
+                ((VFn0)VFN(sys, 0x58))(sys);
+            }
+        }
+        return true;
+    }
+
+    return false;
+}
+
 // @ 0x00eab2e0
 namespace SP { namespace Audio {
 bool cNPCCityMusic::Read(SP::cIObjectDatabaseIStream& stream)
@@ -637,6 +690,7 @@ cNPCCityMusic::cNPCCityMusic()
 }}  // namespace SP::Audio
 
 extern "C" char g_13eb938[];
+
 // @ 0x00eab4d0
 namespace SP { namespace Audio {
 cNPCCityMusic* cNPCCityMusic::Destroy(int flags)

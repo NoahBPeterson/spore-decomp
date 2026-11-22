@@ -4,10 +4,10 @@
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?CopyMap@?$cTerrainMap_s00f8_7b30@M@SP@@QAEXABV12@@Z  00f88360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?CopyMap@?$cTerrainMap_s00f8_7b30@UcSPVector3_s00f8_7b30@SP@@@SP@@QAEXABV12@@Z  00f88400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?ComputeThresholdFraction@@YAXABUMapU32@@ABUMapU16@@MPAM222@Z  00f8afd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize16@EastlVec@@QAEXI@Z  00f8fce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize4F@EastlVec@@QAEXI@Z  00f8fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPTerrain/SPTerrainMap.cpp  ?Ctor@SimVec12@@QAEPAU1@HPBX@Z  00f8fa10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorF@GmeListF@@QAEXXZ  00f8f970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorH@GmeListS@@QAEXXZ  00f8f9c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?Ctor@SimVec12@@QAEPAU1@HPBX@Z  00f8fa10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorI@GmeListFB@@QAEPAXH@Z  00f8fb10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorC@GmeListSB@@QAEPAXH@Z  00f8fb70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize16@EastlVec@@QAEXI@Z  00f8fce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize4F@EastlVec@@QAEXI@Z  00f8fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

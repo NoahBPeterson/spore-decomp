@@ -7,6 +7,7 @@
 #include "EA/Stopwatch.h"
 #include "EA/UTFWin/cDropShadowDescriptor.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 // Filler vtable slots: each VP expands to one `virtual void _pN();` declaration,
 // VP4 to four of them.
@@ -148,6 +149,59 @@ struct StdDrawable : StdDrawableBase {
     StdDrawable();                                                     // 0x988420
 };
 
+// ---- items of slice s00980760 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void __fastcall Navigator_dtor(void* p);                               // 00980420
+struct XCM {
+    void SetX(float v);                                                // 0095eb00
+    void SetY(float v);                                                // 0095ec30
+    void SetZ(float v);                                                // 0095ed60
+    void SetRotationAtLeast2(float* face, float v);                    // 0095f5c0
+};
+namespace EA {
+namespace UTFWinControls {
+extern void* vt_1444368[];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* vt_1444350[];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* vt_1444314[];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* vt_gme_13eb938[];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class RotateEffect { public:
+    void* vt0;                                                         // +0x00
+    void* vt4;                                                         // +0x04
+    int   f08;                                                         // +0x08
+    void* vtc;                                                         // +0x0c
+    int   f10;                                                         // +0x10
+    int   f14;                                                         // +0x14
+    int   f18;                                                         // +0x18
+    int   f1c;                                                         // +0x1c
+    char  pad20[0x60 - 0x20];
+    void* vt60;                                                        // +0x60
+    float fx;                                                          // +0x64
+    float fy;                                                          // +0x68
+    float fz;                                                          // +0x6c
+    float scale;                                                       // +0x70
+    RotateEffect();                                                    // 00980e30
+    ~RotateEffect();                                                   // 00980c00
+    void SetRotation(void* unused, XCM* cm, float deg);               // 00980cf0
+};
+}
+}
+// ---- items of slice s00980760 end
+
 // @ 0x00980520
 namespace EA { namespace UTFWinControls {
 bool IOwner::Process2(IObj* arg1, Arg2* arg2)
@@ -173,6 +227,16 @@ void FloatHolder::Apply(FloatSink* sink)
     sink->Set(m10);
 }
 }}  // namespace EA::UTFWinControls
+
+// @ 0x00980c00
+EA::UTFWinControls::RotateEffect::~RotateEffect()
+{
+    *(void**)this = EA::UTFWinControls::vt_1444368;
+    *(void**)((char*)this + 4) = EA::UTFWinControls::vt_1444350;
+    *(void**)((char*)this + 0xc) = EA::UTFWinControls::vt_1444314;
+    *(void**)((char*)this + 0x60) = EA::UTFWinControls::vt_gme_13eb938;
+    Navigator_dtor(this);
+}
 
 // @ 0x00987900
 void StdDrawable::FUN_00987900()
