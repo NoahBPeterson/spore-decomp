@@ -19,4 +19,5 @@
 00c3eac0 ?f@C3eac0@@QAEPAXPAX@Z  # C3eac0::f migrated from s00c3daa0 (verbatim, slice spelling)
 00c3ebd0 ?f@C3ebd0@@QAEXPAH@Z  # C3ebd0::f migrated from s00c3daa0 (verbatim, slice spelling)
 00c3ec00 ?f@C3ec00@@QAEXPAH@Z  # C3ec00::f migrated from s00c3daa0 (verbatim, slice spelling)
+00c3ec40 ?f@C3ec40@@QAEXXZ  # C3ec40::f migrated from s00c3daa0 (verbatim, slice spelling)
 00c3ed20 ?FUN_00c3ed20@@YADPADPAX@Z  # FUN_00c3ed20 migrated from s00c3daa0 (verbatim, slice spelling)

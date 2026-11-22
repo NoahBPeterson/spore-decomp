@@ -17,7 +17,7 @@
 005f1430 ?OffRollover@cSPSwatchPlanner@SP@@UAEXXZ  # cSPSwatchPlanner::OffRollover migrated from s005f07e0 (verbatim, slice spelling)
 005f1460 ?CanDrag@cSPSwatchPlanner@SP@@QAE_NXZ  # cSPSwatchPlanner::CanDrag migrated from s005f07e0 (verbatim, slice spelling)
 005f14a0 ?GetImageWindow@cSPSwatchPlanner@SP@@QAEPAVIWindow_s005f_07e0@UTFWin@EA@@XZ  # cSPSwatchPlanner::GetImageWindow migrated from s005f07e0 (verbatim, slice spelling)
-005f1500 ?SetImage@cSPSwatchPlanner@SP@@QAEXABUKey_s005f_07e0@ResourceMan@EA@@@Z  # cSPSwatchPlanner::SetImage migrated from s005f07e0 (verbatim, slice spelling)
+005f1500 ?SetImage@cSPSwatchPlanner@SP@@QAEXABVKey_s005f_07e0@ResourceMan@EA@@@Z  # cSPSwatchPlanner::SetImage migrated from s005f07e0 (verbatim, slice spelling; the slice's stub spells EA::ResourceMan::Key_s005f_07e0 a class, so the parameter decorates as ABV: the old ABU line matched no object)
 005f1630 ?HandleMessage@cSPSwatchPlanner@SP@@UAE_NIPAX@Z  # cSPSwatchPlanner::HandleMessage migrated from s005f07e0 (verbatim, slice spelling)
 005f4f80 ?Init@cSPSwatch@SP@@QAEXABVKey@ResourceMan@EA@@PAVIWindow@UTFWin@5@_N2W4eLODType@cAnimatingCreature@2@2@Z  # SP::cSPSwatch::Init (callee of s005f07e0, named from the dev publics; slice address comment)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f07e0, named from the dev publics; slice address comment)

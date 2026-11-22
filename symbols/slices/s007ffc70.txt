@@ -8,7 +8,7 @@
 00801100 ?f_801100@@YGPAXHPAX@Z  # f_801100 migrated from s007ffc70 (verbatim, slice spelling)
 008011f0 ?Dtor@C_8011f0@@QAEXXZ  # C_8011f0::Dtor migrated from s007ffc70 (verbatim, slice spelling)
 00801210 ?Thunk@C_801210@@QAEPAXXZ  # C_801210::Thunk migrated from s007ffc70 (verbatim, slice spelling)
-00801280 cSPUICursorAttachmentLayout::cSPUICursorAttachmentLayout  # PDB type cSPUICursorAttachmentLayout; vtable 0x1416EC4 at +0x78
+00801280 ?Ctor@C_801280@@QAEPAXXZ  # C_801280::Ctor migrated from s007ffc70 (verbatim, slice spelling)
 00801330 ?f_801330@@YGHPAXI@Z  # f_801330 migrated from s007ffc70 (verbatim, slice spelling)
 00801360 ?Show@C_801360@@QAEXXZ  # C_801360::Show migrated from s007ffc70 (verbatim, slice spelling)
 00801380 ?Hide@C_801360@@QAEXXZ  # C_801360::Hide migrated from s007ffc70 (verbatim, slice spelling)
@@ -20,3 +20,4 @@
 008017f0 ?Set@C_8017f0@@QAE_NPAX@Z  # C_8017f0::Set migrated from s007ffc70 (verbatim, slice spelling)
 00801950 ?Run@C_801950@@QAE_NH@Z  # C_801950::Run migrated from s007ffc70 (verbatim, slice spelling)
 00801980 ?Set@C_801980@@QAEX_N@Z  # C_801980::Set migrated from s007ffc70 (verbatim, slice spelling)
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s007ffc70, named from the dev publics; slice address comment)

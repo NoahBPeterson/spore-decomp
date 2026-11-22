@@ -12,7 +12,7 @@
 00838130 ?OptionArguments@cArguments@@QAEPAPADPBDPAHHH@Z  # cArguments::OptionArguments migrated from s00837820 (verbatim, slice spelling)
 00838320 ?MainArguments@cArguments@@QAEXH@Z  # cArguments::MainArguments migrated from s00837820 (verbatim, slice spelling)
 00838330 ?OptionArguments@cArguments@@QAEXPBDH@Z  # cArguments::OptionArguments migrated from s00837820 (verbatim, slice spelling)
-00838350 ?FUN_00838350@@YAXHPAX@Z  # FUN_00838350 migrated from s00837820 (verbatim, slice spelling)
+00838350 ?GatherUnprocessed@cArguments@@QAEXPAX@Z  # cArguments::GatherUnprocessed migrated from s00837820 (verbatim, slice spelling)
 008383c0 ?SplitIntoArguments@cArguments@@QAEXPBD@Z  # cArguments::SplitIntoArguments migrated from s00837820 (verbatim, slice spelling)
 008386d0 ??0cArgumentsEH@@QAE@H@Z  # cArgumentsEH::cArgumentsEH migrated from s00837820 (verbatim, slice spelling)
 00838740 ?FUN_00838740@@YAXH@Z  # FUN_00838740 migrated from s00837820 (verbatim, slice spelling)

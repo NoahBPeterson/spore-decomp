@@ -2,8 +2,8 @@
 00620dc0 ?OnModalEnd@DialogSub@@QAEXPAXH@Z  # DialogSub::OnModalEnd migrated from s00620bd0 (verbatim, slice spelling)
 00620e50 ?DialogUiNotify@cRegDialog@@QAEXXZ  # cRegDialog::DialogUiNotify migrated from s00620bd0 (verbatim, slice spelling)
 00620ef0 ?DoMessage@cTOSDialog@@QAEHPAXPAH@Z  # SP::Pollen::cTOSDialog::DoMessage (this = dialog, 2 stack args, ret 8)
-00621460 ?MapLookup@@YA_NIPAUString8@@@Z  # id -> URL map lookup, optional string out
+00621460 ?MapLookup@@YA_NIPAUString8@@@Z  # MapLookup migrated from s00620bd0 (verbatim, slice spelling)
 006214c0 ?GetURL@@YA_NIPAUString8@@@Z  # GetURL migrated from s00620bd0 (verbatim, slice spelling)
-00621540 ?SanitizeURL@@YAXIPAD@Z  # SanitizeURL (map key, url)
+00621540 ?SanitizeURL@@YAXIPAD@Z  # SanitizeURL migrated from s00620bd0 (verbatim, slice spelling)
 006216b0 ?RegisterURL@@YA_NIIPBD@Z  # RegisterURL migrated from s00620bd0 (verbatim, slice spelling)
 00621770 ?RegisterInsecureURL@@YA_NIIPBD@Z  # RegisterInsecureURL migrated from s00620bd0 (verbatim, slice spelling)

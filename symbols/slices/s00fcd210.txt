@@ -8,6 +8,7 @@
 00fcd970 _FUN_00fcd970  # FUN_00fcd970 migrated from s00fcd210 (verbatim, slice spelling)
 00fcd9a0 _FUN_00fcd9a0  # FUN_00fcd9a0 migrated from s00fcd210 (verbatim, slice spelling)
 00fcd9e0 _FUN_00fcd9e0  # FUN_00fcd9e0 migrated from s00fcd210 (verbatim, slice spelling)
+00fcda10 _FUN_00fcda10  # FUN_00fcda10 migrated from s00fcd210 (verbatim, slice spelling)
 00fcda60 ?Init@VideoEncoder_Jpeg@@QAEXPAUICoreAllocator@@@Z  # VideoEncoder_Jpeg::Init migrated from s00fcd210 (verbatim, slice spelling)
 00fcdaa0 ?Shutdown@VideoEncoder_Jpeg@@QAEXXZ  # VideoEncoder_Jpeg::Shutdown migrated from s00fcd210 (verbatim, slice spelling)
 00fcdb00 ?GetSuggestedDecoderBufferSize@VideoEncoder_Jpeg@@QAEIXZ  # VideoEncoder_Jpeg::GetSuggestedDecoderBufferSize migrated from s00fcd210 (verbatim, slice spelling)

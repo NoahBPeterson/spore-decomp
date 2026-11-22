@@ -5,6 +5,7 @@
 00c4deb0 ?FUN_00c4deb0@@YIHPAX0H0@Z  # FUN_00c4deb0 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4def0 ?FUN_00c4def0@@YIPAXPAX0@Z  # FUN_00c4def0 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4e0f0 ?FUN_00c4e0f0@@YIXPAX0I0@Z  # FUN_00c4e0f0 migrated from s00c4dbf0 (verbatim, slice spelling)
+00c4e1a0 ?FUN_00c4e1a0@@YIXPAX0H@Z  # FUN_00c4e1a0 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4e230 ?FUN_00c4e230@@YIXPAX0@Z  # FUN_00c4e230 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4e280 ?FUN_00c4e280@@YIMPAX0HH@Z  # FUN_00c4e280 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4e390 ?FUN_00c4e390@@YIXPAX0PAEPAIPAH@Z  # FUN_00c4e390 migrated from s00c4dbf0 (verbatim, slice spelling)

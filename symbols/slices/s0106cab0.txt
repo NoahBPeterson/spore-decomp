@@ -1,0 +1,1 @@
+0106cab0 ?FUN_0106cab0@cSPUISpace_s0106_cab0@SP@@QAEXXZ  # SP::cSPUISpace::FUN_0106cab0 landed verbatim in SPUISpace.cpp (stub class renamed for the TU)

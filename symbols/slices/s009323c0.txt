@@ -6,7 +6,7 @@
 00932ae0 EnsureDirectoryExists  # dc: GetFileAttributesW + CreateDirectoryPath
 00932b20 CopyDirectoryTree  # dc: recursive CopyFileW over WalkDirectory listing
 00932d00 ?InitCRC32Table@Hash@EA@@YAXXZ  # EA::Hash::InitCRC32Table migrated from s009323c0
-00932da0 EA::Hash::CRC32  # pdb callee-single
+00932da0 ?CRC32@@YAIPBEHI_N@Z  # CRC32 migrated from s009323c0 (verbatim, slice spelling)
 00932df0 ?CRC64@@YA_KPBEH_K_N@Z  # CRC64 migrated from s009323c0 (verbatim, slice spelling)
 00932e50 ?FNV1@@YAIPBEHI@Z  # FNV1 migrated from s009323c0 (verbatim, slice spelling)
 00932e80 ?FNV1_String8@@YAIPBDIH@Z  # FNV1_String8 migrated from s009323c0 (verbatim, slice spelling)

@@ -14,7 +14,7 @@
 006b6000 ?func18h@cStringDetokenizer@App@@UAEXXZ  # cStringDetokenizer::func18h migrated from s006b5770 (verbatim, slice spelling)
 006b6080 ?AddTranslator@cStringDetokenizer@App@@UAEXPAUITokenTranslator@2@@Z  # cStringDetokenizer::AddTranslator migrated from s006b5770 (verbatim, slice spelling)
 006b6160 ?TranslateToken@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::TranslateToken migrated from s006b5770 (verbatim, slice spelling)
-006b6490 App::cStringDetokenizer::cStringDetokenizer  # vtbl 0x1400f40; vector + 4 generic tokens at +0x1c
+006b6490 ??0cStringDetokenizer@App@@QAE@XZ  # cStringDetokenizer::cStringDetokenizer migrated from s006b5770 (verbatim, slice spelling)
 006b6540 ?GetSupportedTypes@cStringTableResourceFactory@SP@@UAEHPAIH@Z  # cStringTableResourceFactory::GetSupportedTypes migrated from s006b5770 (verbatim, slice spelling)
 006b65d0 ?FUN_006b65d0@@YAXXZ  # FUN_006b65d0 migrated from s006b5770 (verbatim, slice spelling)
 006b6620 ?FUN_006b6620@@YAXXZ  # FUN_006b6620 migrated from s006b5770 (verbatim, slice spelling)
