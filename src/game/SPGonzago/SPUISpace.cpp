@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUISpace.cpp -- migrated from slice(s) s01078120, s010727e0, s01074bb0, s01079260, s01071a00, s0106f5b0, s01070ba0, s01070290, s010691e0, s01065c30, s00bbca30, s00b181d0, s007f5300, s00433800, s0107a510, s01077470, s010743a0, s0106ea40, s0106da70, s0106c930, s0106ada0, s0106a0a0, s01068800, s010678e0, s01066a40, s01064990, s00bbb9d0, s00b1fd50, s00435d40 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUISpace.cpp -- migrated from slice(s) s0106cab0, s01078120, s010727e0, s01074bb0, s01079260, s01071a00, s0106f5b0, s01070ba0, s01070290, s010691e0, s01065c30, s00bbca30, s00b181d0, s007f5300, s00433800, s0107a510, s01077470, s010743a0, s0106ea40, s0106da70, s0106c930, s0106ada0, s0106a0a0, s01068800, s010678e0, s01066a40, s01064990, s00bbb9d0, s00b1fd50, s00435d40 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUISpace.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -34,6 +34,9 @@ extern "C" char g_149c1f0[];
 #include "EA/UTFWin/RenderContext.h"
 #include "SP/cSPCreatureBase.h"
 #include "SP/cSpeciesProfile.h"
+#include "SP/cSPSpaceToolData.h"
+#include "SP/cStar.h"
+#include "SP/cStarManager.h"
 
 // ---- items of slice s00435d40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Recorder {
@@ -1041,6 +1044,77 @@ struct cSPUISpace_s0106_ada0 {
 // ---- items of slice s0106ada0 end
 
 // ---- items of slice s0106c930 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef char  (__thiscall *VFn_cpp)(void*, void*, void*, int);
+typedef int*  (__thiscall *VFn_pvp)(void*, void*);
+struct ToolKeyOut { uint32_t mHash; uint32_t mPad0; uint32_t mPad1; };
+struct InputMgr_s0106_c930 {
+    char IsActiveMode();                 // 0x00fd9d00  input manager mode test
+};
+InputMgr_s0106_c930* FUN_00fd9c60();                // 0x00fd9c60  InputManager::Get
+struct EffectsMgr_s0106_c930 {
+    char FUN_00b5ca60();                 // 0x00b5ca60
+};
+EffectsMgr_s0106_c930* FUN_00b3d230_s0106_c930();              // 0x00b3d230  SP::EffectsManager
+int  FUN_01021080_s0106_c930();                     // 0x01021080  SP::cSPLivingUniverse::GetUniverseContext
+struct SimCheck {
+    char FUN_00d09660();                 // 0x00d09660
+};
+struct SpaceGame_s0106_c930 {
+    uint8_t   mPad00[0x20];
+    SimCheck* mSimCheck;                 // +0x20
+};
+SpaceGame_s0106_c930* FUN_01002bd0_s0106_c930();               // 0x01002bd0  SP::SpaceGameGet
+struct cSpaceTool;
+struct cSpaceToolView {
+    cSpaceTool* GetShownTool();          // 0x00ff3f00  currently shown item
+    cSpaceTool* GetOtherTool();          // 0x00ff3f10
+};
+struct cToolStrategy;                    // virtual slots 0x24 / 0x3c
+struct cSpaceTool {
+    cToolStrategy* GetStrategy();        // 0x0104f930  dispatch the tool strategy
+    char FUN_0104ff10();                 // 0x0104ff10
+    char FUN_0104bd50();                 // 0x0104bd50
+};
+struct cStar;
+struct cSPSimulatorPlayerUFO {
+    cStar* GetStarRecordUnderMouse();    // 0x00fff8e0
+};
+cSPSimulatorPlayerUFO* FUN_00ffbe50();   // 0x00ffbe50  SP::GetUFOSimulator
+struct cEmpire_s0106_c930 {
+    uint8_t  mPad00[0x84];
+    uint32_t mEmpireKey;                 // +0x84
+};
+struct cStarManager {
+    cEmpire_s0106_c930* GetEmpireByID(uint32_t avatarID);   // 0x00ba9370 (ret 4)
+};
+cStarManager* FUN_00b3d2a0_s0106_c930();            // 0x00b3d2a0  SP::StarManager
+struct cStar {
+    uint8_t  mPad00[0x70];
+    uint32_t mKey;                       // +0x70
+    int  GetState();                     // 0x00bb9ae0
+    uint32_t GetAvatar();                // 0x00b1fdb0
+};
+struct cCommMgr_s0106_c930 {
+    char Has();                           // 0x00ae9c10
+};
+cCommMgr_s0106_c930* __stdcall FUN_00b3d4a0(uint32_t empireKey, uint32_t starKey); // 0x00b3d4a0 SP::CommManager
+struct CurMgr_s0106_c930 {
+    uint32_t GetCursor();                // 0x008013c0
+    char     FindLocal(uint32_t id);     // 0x00801bb0
+};
+CurMgr_s0106_c930* FUN_0067cab0_s0106_c930();                  // 0x0067cab0  GetCurMgr
+struct cSPUISpace_s0106_c930 {
+    uint8_t          mPad000[0x238];
+    cSpaceToolView*  mToolView;          // +0x238
+
+    int  FUN_0106b9b0(int key, int index);   // 0x0106b9b0 badge-table lookup
+    void FUN_0106c930();                     // 0x0106c930
+};
+// ---- items of slice s0106c930 end
+
+// The already-landed 0x0106cbd0 (SP::cIntrusiveNode::Construct) needs this stub, but the slice source no longer
+// defines it, so a re-apply of s0106c930 would drop it from that slice's items section.  Kept here, outside the
+// section, so the landed block keeps compiling (report work/migrate/report_s0106c930_SPUISpace.md).
 namespace SP {
 struct cIntrusiveNode {
     cIntrusiveNode* mpNext;                                  // +0x00
@@ -1048,9 +1122,8 @@ struct cIntrusiveNode {
 
     void Init(cIntrusiveNode* self, void* value, void** src, uint32_t dummy); // 0x0106b950
     void* Construct(void** src);
-};  // namespace SP
+};
 }
-// ---- items of slice s0106c930 end
 
 // ---- items of slice s0106da70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* gOneBucket[1];                                // 0x0154df28
@@ -5744,6 +5817,110 @@ virtual void v20();
 };
 // ---- items of slice s01078120 end
 
+// ---- items of slice s0106cab0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_ReadWriteBarrier)
+typedef unsigned int uint32;
+namespace eastl {
+struct hash_node_s0106_cab0 {
+    uint32 mKey;                              // +0x00
+    void*  mpValue;                           // +0x04
+    hash_node_s0106_cab0* mpNext;                        // +0x08
+};
+}
+namespace eastl {
+struct hashtable_iterator {
+    hash_node_s0106_cab0*  mpNode;                       // +0x00
+    hash_node_s0106_cab0** mpBucket;                     // +0x04
+};
+}
+namespace eastl {
+struct hashtable_range {
+    hashtable_iterator first;                 // +0x00
+    hashtable_iterator second;                // +0x08
+};
+}
+struct IReleasable {
+virtual void r00();
+virtual void r04();
+virtual void r08();
+virtual void r0c();
+virtual void r10();
+virtual void r14();
+virtual void r18();
+virtual void r1c();
+virtual void r20();
+virtual void r24();
+virtual void r28();
+    virtual void Release();                   // +0x2c
+};
+struct Hashtable_s0106_cab0 {
+    uint32                          mUnknown00;   // +0x00
+    eastl::hash_node_s0106_cab0**              mpBucketArray;  // +0x04
+    uint32                          mnBucketCount;  // +0x08
+    void equal_range(eastl::hashtable_range* out, const uint32& key);   // 0x009a6dd0
+};
+struct Win_s0106_cab0 {
+virtual void w00();
+virtual void w04();
+virtual void w08();
+virtual void w0c();
+virtual void w10();
+virtual void w14();
+virtual void w18();
+virtual void w1c();
+virtual void w20();
+virtual void w24();
+virtual void w28();
+virtual void w2c();
+virtual void w30();
+virtual void w34();
+virtual void w38();
+virtual void w3c();
+virtual void w40();
+virtual void w44();
+virtual void w48();
+virtual void w4c();
+virtual void w50();
+virtual void w54();
+virtual void w58();
+virtual void w5c();
+virtual void w60();
+virtual void w64();
+virtual void w68();
+virtual void w6c();
+virtual void w70();
+virtual void w74();
+virtual void w78();
+    virtual void SetVisible(int a, bool b);   // +0x7c
+};
+struct cSPUIGlobalUI_s0106_cab0 {
+    Win_s0106_cab0* FindWindowByID(uint32 id);           // 0x00e012b0
+};
+namespace SP {
+struct cSPUISpaceCursor {
+    char pad00[0x94];
+    bool IsActive();                          // 0x00ff3ce0
+};
+}
+namespace SP {
+class cSPUISpace_s0106_cab0 {
+public:
+    char            pad000[0x224];
+    cSPUIGlobalUI_s0106_cab0*  mpGlobalUI;               // +0x224
+    char            pad228[0x238 - 0x228];
+    cSPUISpaceCursor* mpCursor;               // +0x238
+    uint32          mCursorKey;               // +0x23c
+    char            pad240[0x25c - 0x240];
+    Hashtable_s0106_cab0       mCursorTable;             // +0x25c
+    char            pad268[0x298 - 0x268];
+    IReleasable*    mpRollover298;            // +0x298
+    IReleasable*    mpRollover29c;            // +0x29c
+
+    void FUN_0106cab0();
+};
+}
+// ---- items of slice s0106cab0 end
+
 // @ 0x00433b30
 void FadeController::Update(float dt)
 {
@@ -9212,6 +9389,100 @@ int cSPUISpace_s0106_ada0::FUN_0106b9b0(int key, int index)
     if (h->mpBuckets[h->mBucketCount] != v)
         result = ((BadgeHashNode*)(int)v)->mValues[index];
     return result;
+}
+
+// @ 0x0106c930
+void cSPUISpace_s0106_c930::FUN_0106c930()
+{
+    if (FUN_00fd9c60()->IsActiveMode())
+        return;
+
+    int id = 0x1002;
+
+    if (!FUN_00b3d230_s0106_c930()->FUN_00b5ca60()) {
+        cSpaceTool* tool = this->mToolView->GetShownTool();
+
+        if (tool != 0 && FUN_01021080_s0106_c930() == 0) {
+            // the engine looks the sim-check slot up by reference, so the
+            // original keeps the address of the +0x20 member as well as its value
+            SimCheck*& simCheck = FUN_01002bd0_s0106_c930()->mSimCheck;
+
+            if (!simCheck->FUN_00d09660()) {
+            ToolKeyOut scratch;
+            ToolKeyOut keyOut;
+
+            cToolStrategy* strategy = tool->GetStrategy();
+
+            ((VFn_vp)VSLOT(strategy, 0x3c))(strategy, &scratch);
+
+            cSpaceTool* other = this->mToolView->GetOtherTool();
+
+            if (tool->FUN_0104ff10()) {
+                id = 3;
+            } else if (tool->FUN_0104bd50()) {
+                id = 2;
+            } else {
+                id = !((VFn_cpp)VSLOT(strategy, 0x24))(strategy, tool, &scratch, 0);
+            }
+
+            int* key;
+            if (other != 0)
+                key = ((VFn_pvp)VSLOT(other, 0x38))(other, &keyOut);
+            else
+                key = ((VFn_pvp)VSLOT(tool, 0x38))(tool, &keyOut);
+
+            id = this->FUN_0106b9b0(*key, id);
+            }
+        }
+
+        if (FUN_01021080_s0106_c930() == 2) {
+            cStar* star = FUN_00ffbe50()->GetStarRecordUnderMouse();
+            if (star != 0 && star->GetState() == 5) {
+                uint32_t avatar = star->GetAvatar();
+                cEmpire_s0106_c930* empire = FUN_00b3d2a0_s0106_c930()->GetEmpireByID(avatar);
+                uint32_t starKey = star->mKey;
+                uint32_t empireKey = empire->mEmpireKey;
+                if (FUN_00b3d4a0(empireKey, starKey)->Has())
+                    id = 0x057f997d;
+            }
+        }
+    }
+
+    CurMgr_s0106_c930* mgr = FUN_0067cab0_s0106_c930();
+    if (mgr->GetCursor() != (uint32_t)id)
+        mgr->FindLocal((uint32_t)id);
+}
+
+// @ 0x0106cab0
+void SP::cSPUISpace_s0106_cab0::FUN_0106cab0()
+{
+    bool active = mpCursor->IsActive();
+    if (active) {
+        eastl::hashtable_range range;
+        mCursorTable.equal_range(&range, mCursorKey);
+        eastl::hash_node_s0106_cab0*  node = range.first.mpNode;
+        eastl::hash_node_s0106_cab0*  end  = range.second.mpNode;
+        _ReadWriteBarrier();          // keeps end's load before the bucket load, so cl picks ebx directly
+        eastl::hash_node_s0106_cab0** bucket = range.first.mpBucket;
+        while (node != end) {
+            ((IReleasable*)node->mpValue)->Release();
+            node = node->mpNext;
+            if (!node) {
+                do {
+                    node = *++bucket;
+                } while (!node);
+            }
+        }
+        IReleasable* rollover = mpRollover298;
+        if (rollover)
+            rollover->Release();
+        rollover = mpRollover29c;
+        if (rollover)
+            rollover->Release();
+    }
+
+    Win_s0106_cab0* window = mpGlobalUI->FindWindowByID(0x5d42af0);
+    window->SetVisible(1, active && !GetUISoundHelper()->GetFlag());
 }
 
 // @ 0x0106cbd0

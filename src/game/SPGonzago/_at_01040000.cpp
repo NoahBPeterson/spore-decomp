@@ -747,6 +747,7 @@ struct ISubsystem_1044920 {
     virtual void v20();
     virtual bool IsBusy();                             // +0x24
 };
+
 // @ 0x01044920
 namespace SP {
 bool __cdecl FUN_01044920()
@@ -814,6 +815,16 @@ cSpaceTokenTranslator::cSpaceTokenTranslator()
 	uint32_t tableId = FNVHash("ui_space", 0x811c9dc5u, 1);
 	mMoneyFormatString.Load(tableId, kMoneyFormatInstanceId, 0);
 	mUiSpaceName.Load(0x2db6dad3, kUiSpaceNameInstanceId, 0);
+}
+
+// @ 0x0104bfa0
+i32 SP::cSPSpaceToolData_s0104_bcc0::FUN_0104bfa0()
+{
+    // The original converts the scaled value with the CRT __ftol2 sequence
+    // (`fnstcw`/`or 0xc00`/`fldcw`/`fistp qword`), which is what cl 15 emits for a
+    // float->unsigned conversion; the signed 64-bit form goes to the `_ftol2` helper.
+    unsigned v = (unsigned)(mField1f0 * 1000.0f);
+    return (i32)v;
 }
 
 // @ 0x0104bff0

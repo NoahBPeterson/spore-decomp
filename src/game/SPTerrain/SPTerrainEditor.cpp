@@ -26,6 +26,10 @@ inline void operator delete(void*, void*) {}   // placement delete (<new>'s is s
 extern "C" void* __stdcall GetImageResource(void* handle);          // 0x00576650 (ret 4)
 extern "C" void* __cdecl operator_new(int size, const char* file, int line, int a3,
                                       const char* name, int line2);  // 0x00f473a0
+extern "C" void  __cdecl EA_MsgRemoveHandler(void* h, void* a, void* b, void* c, void* d);  // 0x00571db0
+extern "C" void  __fastcall FUN_00f674c0(void* self);               // 0x00f674c0 (ecx=this, no args)
+extern "C" void  __stdcall FUN_00f672b0(void* p);                   // 0x00f672b0 (ret 4)
+extern "C" void  __fastcall cViewer_dtor(void* self);               // 0x007c4000
 extern const char kAllocFile[];      // 0x013f09b4  "Simulator"
 extern const char kAllocFile2[];     // 0x013ebb38
 extern "C" void __cdecl VectorCopy(void* dst, const void* src, int elemSize, int count,
@@ -110,6 +114,19 @@ static inline uint32_t ResolveHandle(Handle* h)
         GetResolver()->Resolve(h);
     return h->value;
 }
+struct IViewport {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+    virtual void v4();
+    virtual void ReleaseSlot(uint32_t a, uint32_t b);   // +0x14
+};
+struct ISlot {
+    virtual void v0();
+    virtual void Release();                             // +0x04
+};
+IViewport* __cdecl GetViewportInfo2();                              // 0x0067dda0
 static inline void RefRelease(int* p)
 {
     volatile long* c = (volatile long*)p;
@@ -201,6 +218,26 @@ struct QuadNode {                   // intrusive list node; the sentinel embeds 
     uint32_t  pad8c[(0x1dc - 0x8c) / 4];
     void*     mpRes1dc;             // +0x1dc intrusive resource pointer (counter at -4)
     void FreeAll();                 // 0x00f6b7c0  (called on the sentinel)
+};
+struct QuadMgr {
+    uint32_t  pad000[0x08 / 4];
+    void*     mpHandler08;          // +0x08  EA::Messaging handler
+    uint32_t  m0c, m10, m14, m18;   // +0x0c..+0x18
+    void*     mpViewer1c;           // +0x1c  viewer (cViewer)
+    uint32_t  mSlots20[6];          // +0x20..+0x34  per-slot "in use" flags
+    uint32_t  mSlotArgs38[12];      // +0x38..+0x64  6 (arg,arg) pairs
+    uint32_t  mSlot68;              // +0x68
+    uint32_t  mSlotArgs6c[2];       // +0x6c,+0x70
+    void*     mp74;                 // +0x74
+    uint32_t  pad78[(0x17c - 0x78) / 4];
+    void*     mpRef17c;             // +0x17c refcounted pointer (counter at +8)
+    uint32_t  mBlob180[0x24 / 4];   // +0x180 (FUN_00f674c0)
+    uint32_t  mBlob1a4[0x24 / 4];   // +0x1a4 (FUN_00f674c0)
+    uint32_t  pad1c8[(0x200 - 0x1c8) / 4];
+    void*     mp200;                // +0x200
+    void*     mp204;                // +0x204
+    void*     mp208;                // +0x208
+    void Destroy();                 // 0x00f6b840
 };
 struct ImgDescRaw {
     uint32_t mHandle;            // +0x00
@@ -3131,6 +3168,59 @@ void QuadNode::FreeAll()
             RefRelease((int*)((char*)cnt + 8));
         operator_delete(it);
     }
+}
+
+// @ 0x00f6b840
+void QuadMgr::Destroy()
+{
+    void* h = mpHandler08;
+    if (h != 0) {
+        mpHandler08 = 0;
+        EA_MsgRemoveHandler(h, (void*)m0c, (void*)m10, (void*)m14, (void*)m18);
+    }
+    IViewport* vp = GetViewportInfo2();
+    ISlot* cb = (ISlot*)mp74;
+    if (cb != 0) {
+        mp74 = 0;
+        cb->Release();
+    }
+    uint32_t* slot = mSlots20;
+    uint32_t* arg = mSlotArgs38;
+    for (int i = 6; i != 0; --i) {
+        if (*slot != 0) {
+            vp->ReleaseSlot(arg[0], arg[1]);
+            *slot = 0;
+        }
+        arg += 2;
+        ++slot;
+    }
+    if (mSlot68 != 0) {
+        vp->ReleaseSlot(mSlotArgs6c[0], mSlotArgs6c[1]);
+        mSlot68 = 0;
+    }
+    FUN_00f674c0(mBlob180);
+    FUN_00f674c0(mBlob1a4);
+    void* c17c = mpRef17c;
+    if (c17c != 0) {
+        mpRef17c = 0;
+        RefRelease((int*)((char*)c17c + 8));
+    }
+    void* viewer = mpViewer1c;
+    if (viewer != 0) {
+        cViewer_dtor(viewer);
+        operator_delete(viewer);
+    }
+    mpViewer1c = 0;
+    QuadNode* sentinel = (QuadNode*)0x015b0e48;
+    sentinel->FreeAll();
+    sentinel->mpNext = sentinel;
+    sentinel->mpPrev = sentinel;
+    FUN_00f672b0(mp200);
+    mp200 = 0;
+    FUN_00f672b0(mp204);
+    mp204 = 0;
+    FUN_00f672b0(mp208);
+    mp208 = 0;
 }
 
 // @ 0x00f6bc10

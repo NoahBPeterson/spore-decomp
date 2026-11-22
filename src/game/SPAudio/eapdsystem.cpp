@@ -211,6 +211,7 @@ typedef char CallbackNextListSize[(sizeof(IntrusiveListBase2) == 8) ? 1 : -1];
 typedef char CallbackManagerSize[(sizeof(CallbackManager) == 0x54) ? 1 : -1];
 typedef char CallbackCurrentListOffset[(offsetof(CallbackManager, mCurrentCallbacks) == 0x44) ? 1 : -1];
 typedef char CallbackNextListOffset[(offsetof(CallbackManager, mNextCallbacks) == 0x4c) ? 1 : -1];
+class FixedAllocator_held { public: char pad[0x34]; };   // scratch: never defined -> C2079 marks where the tool put the block
 class AllocA {
 public:
     AllocA(int d) : mpVtbl(g_vtbl_1454fac), mData(d), mpName(g_vtbl_145581c) {}
@@ -226,16 +227,6 @@ public:
     void*       mpVtbl;                    // +0x00
     int         mData;                     // +0x04
     const char* mpName;                    // +0x08
-};
-class AssetManagerExt {
-public:
-    AssetManagerExt(AllocA&);              // 0x00a63c90 thiscall ret 4
-    ~AssetManagerExt();                    // 0x00a63d20
-    virtual void v0();
-    virtual bool OnX(unsigned char v);     // +4
-    virtual void v2();
-    void Setup(int v);                     // 0x00a63490 ret 4
-    char pad[0x5c];
 };
 class SymMgrSub {
 public:
@@ -254,6 +245,16 @@ public:
     SymMgrSub m2c;                         // +0x2c
     SymMgrSub m80;                         // +0x80
     char    padEnd[4];                     // up to 0xd8
+};
+class AssetManagerExt {
+public:
+    AssetManagerExt(AllocA&);              // 0x00a63c90 thiscall ret 4
+    ~AssetManagerExt();                    // 0x00a63d20
+    virtual void v0();
+    virtual bool OnX(unsigned char v);     // +4
+    virtual void v2();
+    void Setup(int v);                     // 0x00a63490 ret 4
+    char pad[0x5c];
 };
 class InstanceManagerExt {
 public:
@@ -369,8 +370,8 @@ public:
 };
 class EapdSystemImpl {
 public:
-    EapdSystemImpl(AllocA& alloc, int arg);         // va 0xa68cb0 thiscall ret 8
-    bool Init(EapdInitArgs* a);                     // va 0xa68890 thiscall ret 4
+    EapdSystemImpl(AllocA& alloc, int arg);         // 0x00a68cb0 thiscall ret 8
+    bool Init(EapdInitArgs* a);                     // 0x00a68890 thiscall ret 4
     void*               mpVtbl;            // +0x000
     AllocA              mAllocator;        // +0x004
     AllocB              mOverflowAllocator;// +0x010

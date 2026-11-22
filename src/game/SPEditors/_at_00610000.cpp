@@ -16,6 +16,7 @@
 #include "EA/DateTime/DateTime.h"
 #include "SP/cJob.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
+#include "EA/UTFWin/Message.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
@@ -606,6 +607,27 @@ class AutoRefCount_s0061_fbd0 {
   operator T*() const { return mpObject; }
 };
 }
+namespace EA {
+namespace Messaging {
+class IHandler_s0061_fbd0 {
+ public:
+  virtual ~IHandler_s0061_fbd0() {}
+  virtual bool HandleMessage(uint32_t messageID, void* pMessage) = 0;
+};  // namespace Messaging
+}
+}
+namespace EA {
+class IMessageServer_s0061_fbd0 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4)
+  virtual void PostMSG(uint32_t messageID, void* p1, void* p2);  // +0x14
+  PV(6) PV(7)
+  virtual void RegisterHandler(Messaging::IHandler_s0061_fbd0* pHandler, uint32_t messageID);  // +0x20
+  virtual void AddListener(Messaging::IHandler_s0061_fbd0* pHandler, uint32_t messageID);  // +0x24
+  PV(10)
+  virtual void RemoveListener(Messaging::IHandler_s0061_fbd0* pHandler, uint32_t messageID, int priority);  // +0x2c
+};
+}
 using EA::AutoRefCount_s0061_fbd0;
 namespace SP {
 namespace Pollen {
@@ -667,7 +689,77 @@ struct WorkItemRef {
 }
 namespace SP {
 namespace Pollen {
+void WorkFn_61fad0();
+}
+}
+namespace SP {
+namespace Pollen {
 void WorkFn_61fae0();
+}
+}
+namespace SP {
+namespace Pollen {
+struct IPropertyValue {
+  uint8_t pad[0x12];
+  uint16_t mType;  // +0x12
+  uint32_t* GetUInt();  // 0x0041ea00
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct IPropertyList {
+  virtual int AddRef();
+  virtual int Release();
+  PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
+  virtual bool GetProperty(uint32_t id, IPropertyValue** ppValue);  // +0x24
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct IPropertyManager {
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+  virtual void GetPropertyList(uint32_t group, uint32_t id, IPropertyList** ppList);  // +0x2c
+};
+}
+}
+namespace SP {
+namespace Pollen {
+IPropertyManager* PropertyManager();  // 0x0067de30
+}
+}
+namespace SP {
+namespace Pollen {
+bool FUN_00688830(uint32_t id, void* dst, int flag);
+}
+}
+namespace SP {
+namespace Pollen {
+struct PollTimerBase {
+  void SetCallback(void* fn, void* obj, int flag);  // 0x00929da0
+  void SetPeriod(uint32_t ms);                   // 0x00929bc0
+  uint32_t pad[0x24 / 4];
+};
+}
+}
+namespace SP {
+namespace Pollen {
+class cPollinatorPoller : public PollTimerBase {
+ public:
+  bool Init();  // 0x0061fbd0
+  void* mpSelf;       // +0x24
+  void* mpCallback;   // +0x28
+  uint32_t mUnk2c, mUnk30, mUnk34;
+  uint32_t mHandler[(0x6c - 0x38) / 4];  // +0x38: IHandler subobject
+  uint32_t mnTimeoutSecs;                 // +0x6c
+  uint32_t mBuffer[4];                    // +0x70
+};
+}
+}
+namespace SP {
+namespace Pollen {
+void PollerCallback();  // 0x0061fbc0
 }
 }
 namespace SP {
@@ -1460,6 +1552,47 @@ bool cFeedManager::Dispatch2(uint32_t, void*)
 {
   return StartJob();
 }
+
+// @ 0x0061fbd0
+namespace SP { namespace Pollen {
+bool cPollinatorPoller::Init()
+{
+  mpCallback = (void*)PollerCallback;
+  mUnk2c = 0;
+  mUnk30 = 0;
+  mUnk34 = 0;
+  mpSelf = this;
+  SetCallback((void*)0x00ed1cf0, this, 0);
+  AutoRefCount_s0061_fbd0<IPropertyList> props;
+  PropertyManager()->GetPropertyList(0x21d4b8c, 0x21403e6, &props.AsOutParam());
+  if (props.mpObject) {
+    IPropertyValue* value;
+    if (props.mpObject->GetProperty(0x609d3a2, &value) && value->mType == 10) mnTimeoutSecs = *value->GetUInt();
+  }
+  uint32_t secs = 300;
+  if (props.mpObject) {
+    IPropertyValue* value;
+    if (props.mpObject->GetProperty(0x609d3d5, &value) && value->mType == 10) secs = *value->GetUInt();
+  }
+  SetPeriod(secs * 1000);
+  if (FUN_00688830(0x60ba02f, mBuffer, 0)) {
+    EA::Messaging::IHandler_s0061_e250* h = (EA::Messaging::IHandler_s0061_e250*)mHandler;
+    MessageServer()->AddListener(h, 0x44db12e);
+    MessageServer()->AddListener(h, 0x60ba744);
+    MessageServer()->AddListener(h, 0x685f4af);
+    WorkItemRef item;
+    if (GetWorkScheduler()->CreateItem(&item.AsOutParam())) {
+      item.mp->mpFunc = (void*)WorkFn_61fad0;
+      item.mp->mpContext = this;
+      item.mp->mPriority = 4;
+      SubmitWorkItem(item.mp);
+      item.mp->Submit();
+      return true;
+    }
+  }
+  return false;
+}
+}}  // namespace SP::Pollen
 
 // @ 0x0061fdb0
 namespace SP { namespace Pollen {

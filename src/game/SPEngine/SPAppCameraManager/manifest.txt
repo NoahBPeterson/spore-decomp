@@ -1,10 +1,11 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPAppCameraManager.cpp  ?FUN_007c3af0@@YAHPBD@Z  007c3af0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveController@cCameraManager@@QAEXPAX@Z  007c6110  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?ActiveControllerID@cCameraManager@@QAEXXZ  007c6150  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?ActiveController@cCameraManager@SP@@UAEPAVcICameraController@2@XZ  007c61a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPEngine/SPAppCameraManager.cpp  ?VariantGetTPTR@@YAPAXXZ  007c65a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveControllerByIndex@cCameraManager@SP@@UAEXH@Z  007c6420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveController@cCameraManager@@QAEXPAX@Z  007c6110  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?Destroy6370@Obj6370@@QAEPAPAXH@Z  007c6370  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPEngine/SPAppCameraManager.cpp  ?Controller@cCameraManager@@QAEPAXH@Z  007c6700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveControllerByID@cCameraManager@@QAE_NH@Z  007c66b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?Update@cCameraManager@SP@@UAEXI@Z  007c63a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveControllerByIndex@cCameraManager@SP@@UAEXH@Z  007c6420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?VariantGetTPTR@@YAPAXXZ  007c65a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveControllerByID@cCameraManager@@QAE_NH@Z  007c66b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?Controller@cCameraManager@@QAEPAXH@Z  007c6700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

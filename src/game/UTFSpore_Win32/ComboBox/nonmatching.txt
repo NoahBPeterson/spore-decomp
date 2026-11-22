@@ -1,14 +1,14 @@
 # va  diff-bytes  reason
 00967b10 143 bool return and 4-arg ABI match, but the original marshals the two float args through x87 stack slots.
 00967bc0 167 same float-argument marshalling difference.
-00967d80 164 OnModalWindowEnd /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity/fault-read, 0/400 valid)
-00967f00 47 GetNaturalSize /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 400/400
-009680f0 205 WinComboBox_TransformComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fault-read, 0/400 valid)
-00968230 99 RenderComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/328; RenderContext_Begin2D ecx ABI not reproducible)
-00968400 543 Refresh /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/285; component-area layout uncertain)
-009686b0 710 ShowListBox /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK (317 valid, 4.0% coverage)
-00968c10 27 GetValue /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 317/317
-00968c50 106 SetCurrentSelection /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 369/369
+00967d80 164 OnModalWindowEnd /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity/fault-read, 0/400 valid) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00967f00 47 GetNaturalSize /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 400/400 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+009680f0 205 WinComboBox_TransformComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fault-read, 0/400 valid) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00968230 99 RenderComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/328; RenderContext_Begin2D ecx ABI not reproducible) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00968400 543 Refresh /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/285; component-area layout uncertain) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+009686b0 710 ShowListBox /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK (317 valid, 4.0% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00968c10 27 GetValue /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 317/317 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00968c50 106 SetCurrentSelection /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 369/369 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00968da0 396 complete (((int*)this)[i+5] renderable dispatch + DrawStdButton/UV-quad paths) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (312 valid, 18.3% cov); size 548 vs 600, structural: MSVC vectorized the switch into a jump table the decompiler cannot reproduce from plain C
 00969060 15 complete (BasicFactory_ComboBoxDrawable::CreateInstance) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (unresolved ?g_szComboBoxDrawable@@3QBDB); size 74 vs 94
 009690c0 475 complete (WinComboBox::OnRebuild) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid; _decode_pointer + read faults on fabricated ctx); size 573 vs 666

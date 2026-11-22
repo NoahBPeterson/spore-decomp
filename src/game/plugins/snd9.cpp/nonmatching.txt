@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
+01138d40  46 inline: fixed the descriptor callback (was &SNDVOICEI_free, original stores the address of the first call, &FUN_01142690) and the +0xc field (was u8, original stores a dword 0; now int). Still differs: the original has no frame (no ebp/and esp) and loads the cfg bytes in cl/al before the cvtss2si, and it is registered as __stdcall ret 4 while the source spells a single float arg (our this-less shape needs a frame). /vc71 prologue/regalloc shape. fix1: quick check UNSUPPORTED (0/150 inputs; 2 unresolved cfg globals) flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 01138d90 304 complete Snd9Service timer client mix loop; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (127 valid, 100% coverage, no mismatch)
 01138ec0 117 complete Snd9Service::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (329 valid, 100% coverage)

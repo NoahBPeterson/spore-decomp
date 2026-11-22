@@ -1,16 +1,17 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPStarmap.cpp  ?clear@StarDeque@@QAEXXZ  00996460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?SerializeSlots@cStarMap_s0104_4360@SP@@QAEXPAUcIOStream@2@@Z  01044a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?SetNodeFlag@cStarMap_s0104_4360@SP@@QAEXHD@Z  01044d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?SetNodeFlag2@cStarMap_s0104_4360@SP@@QAEXHD@Z  01044db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?ForEachFlagEntry@SP@@YA_NPAXPBUcFlagGrid@1@@Z  01044f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?AllocSharedRef@SP@@YGPAUSharedRefBlock@1@PBUSharedRefSrc@1@@Z  010450b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?FindEntryByLongId@cStarMap_s0104_4360@SP@@QAEIIII@Z  01045190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?DoInsertValueImpl@RBTree@@QAE?AUiterator@1@PBI_N@Z  01045490  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?CreateStarRecordVisual@cStarMap@@QAEPAVVEffect@@PAVcStarRecord@@HH@Z  010458f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?ResetTravelTrail@cStarMap@@QAEXXZ  01045c10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRemove@cStarMap@@QAEXH@Z  01045c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ??1cPropView@@QAE@XZ  01046eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?Fill_01046f30@cPropView@@QAEXPAX@Z  01046f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperAdd@cStarMap_s0104_88e0@SP@@QAEXI@Z  01048aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRebuild@cStarMap_s0104_8c10@SP@@QAEXH@Z  01048c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRebuildAll@cStarMap_s0104_88e0@SP@@QAEXXZ  01048ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPStarmap.cpp  ?FindEntryByLongId@cStarMap_s0104_4360@SP@@QAEIIII@Z  01045190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPStarmap.cpp  ?SerializeSlots@cStarMap_s0104_4360@SP@@QAEXPAUcIOStream@2@@Z  01044a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPStarmap.cpp  ?ForEachFlagEntry@SP@@YA_NPAXPBUcFlagGrid@1@@Z  01044f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRemove@cStarMap@@QAEXH@Z  01045c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPStarmap.cpp  ?DoInsertValueImpl@RBTree@@QAE?AUiterator@1@PBI_N@Z  01045490  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

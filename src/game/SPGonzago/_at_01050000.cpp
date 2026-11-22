@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_01050000.cpp -- migrated from slice(s) s0105d790, s0105b960 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_01050000.cpp -- migrated from slice(s) s0105e6d0, s0105d790, s0105b960 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_01050000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,6 +9,8 @@
 #include "SP/cStarManager.h"
 #include "SP/cSpatialObject.h"
 #include "SP/cStar.h"
+#include <math.h>
+#include <stddef.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" double __cdecl sqrt(double);
@@ -311,10 +313,6 @@ extern "C" double __cdecl sin(double);
 extern "C" double __cdecl cos(double);
 #pragma pack(push, 8)
 #pragma intrinsic(sqrt, fabs, sin, cos)
-inline float sqrtf(float x) { return (float)sqrt((double)x); }
-inline float fabsf(float x) { return (float)fabs((double)x); }
-inline float sinf(float x) { return (float)sin((double)x); }
-inline float cosf(float x) { return (float)cos((double)x); }
 struct Vector3_s0105_d790 {
     float x, y, z;
     Vector3_s0105_d790() {}
@@ -521,6 +519,160 @@ extern const float kMinLength;           // 0x0149bfc0 = 1.5258789e-05
 }
 // ---- items of slice s0105d790 end
 
+// ---- items of slice s0105e6d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float __cdecl GetVelocityLimit();
+extern const float kVectorEpsilon;         // 0x013ec4b8: 1e-8f
+extern const float kHalf;                  // 0x01471064: 0.5f
+extern const float kSpeedScale;            // 0x013ebc5c: 25.0f
+extern const float kOne;                   // 0x01485720: 1.0f
+extern const float kNormalSpeed;           // 0x015b8d8c
+extern const float kBoostSpeed;            // 0x015b8d90
+typedef unsigned char uchar;
+struct Vector3_s0105_e6d0 {
+    float x;
+    float y;
+    float z;
+};
+struct Quaternion_s0105_e6d0 {
+    float x;
+    float y;
+    float z;
+    float w;
+};
+extern Vector3_s0105_e6d0* __cdecl TransformVector(Vector3_s0105_e6d0* out, const Vector3_s0105_e6d0* v, const Quaternion_s0105_e6d0* q);
+extern Vector3_s0105_e6d0* __cdecl OrthogonalVector(Vector3_s0105_e6d0* out, const Vector3_s0105_e6d0* v);
+extern Vector3_s0105_e6d0* __cdecl RotateTowards(Vector3_s0105_e6d0* out, const Vector3_s0105_e6d0* from, const Vector3_s0105_e6d0* to,
+                                      float maxAngle);
+extern Quaternion_s0105_e6d0* __cdecl QuaternionFromFacingAndUp(Quaternion_s0105_e6d0* out, const Vector3_s0105_e6d0* facing,
+                                                    const Vector3_s0105_e6d0* up);
+extern const Vector3_s0105_e6d0 kOrigin;              // 0x016e2114: (0,0,0)
+extern const Vector3_s0105_e6d0 kLocalForward;        // 0x015b8da8: local forward axis
+struct SpatialObject {
+    virtual void vf00();
+    virtual void vf01();
+    virtual void vf02();
+    virtual void vf03();
+    virtual void vf04();
+    virtual void vf05();
+    virtual void vf06();
+    virtual void vf07();
+    virtual void vf08();
+    virtual void vf09();
+    virtual void vf10();
+    virtual Vector3_s0105_e6d0* GetPosition();                 // +0x2c
+    virtual void vf12();
+    virtual void vf13();
+    virtual void vf14();
+    virtual void SetOrientation(const Quaternion_s0105_e6d0* q); // +0x3c
+};
+struct BodyRecord {
+    char mPad00[0xa0];
+    Vector3_s0105_e6d0 mPosition;                              // +0xa0
+};
+struct ObstacleKindData {
+    char mPad00[0x28];
+    int mKind;                                      // +0x28
+};
+struct Obstacle : SpatialObject {
+    char mPad04[0x138];
+    ObstacleKindData* mpKindData;                   // +0x13c
+
+    // Retail 0x00c70880: kind stored in the attached kind record, or 2.
+    int GetKind();
+};
+struct PlayerInventory {
+    char mPad00[0x10];
+    Obstacle** mpObstacleBegin;                     // +0x10
+    Obstacle** mpObstacleEnd;                       // +0x14
+    char mPad18[0x20];
+    BodyRecord* mpStarRecord;                       // +0x38
+    BodyRecord* mpPlanetRecord;                     // +0x3c
+};
+struct UFOState {
+    virtual void vf00();
+    virtual void vf01();
+    virtual void vf02();
+    virtual void vf03();
+    virtual void vf04();
+    virtual void vf05();
+    virtual void vf06();
+    virtual void vf07();
+    virtual void vf08();
+    virtual void vf09();
+    virtual void vf10();
+    virtual void vf11();
+    virtual void vf12();
+    virtual void vf13();
+    virtual void vf14();
+    virtual void vf15();
+    virtual void vf16();
+    virtual void vf17();
+    virtual void vf18();
+    virtual void* GetPlanet();                      // +0x4c
+
+    char mPad04[0x10];
+    SpatialObject* mpSpatialObject;                 // +0x14: points at mSpatial
+    char mPad18[0x1c];
+    SpatialObject mSpatial;                         // +0x34
+    char mPad38[0x718 - 0x38];
+    Vector3_s0105_e6d0 mDesiredVelocity;                       // +0x718
+    char mPad724[0x730 - 0x724];
+    Quaternion_s0105_e6d0 mOrientation;                        // +0x730
+    char mPad740[0x74c - 0x740];
+    uchar mIgnoreAvoidance;                         // +0x74c
+    char mPad74d[0x13];
+};
+struct cSPSimulatorSpaceGame {
+    char mPad00[0x34];
+    int mCurrentStarType;                           // +0x34
+    char mPad38[8];
+    PlayerInventory* mpPlayerState;                 // +0x40
+    __declspec(noinline) PlayerInventory* GetPlayerInventory();
+    __declspec(noinline) bool IsGalaxyView();
+    __declspec(noinline) int GetCurrentStarType();
+};
+struct cStarManager_s0105_e6d0 {
+    void* GetCurrentPlanet();
+};
+extern cStarManager_s0105_e6d0* __cdecl GetStarManager();
+struct MotionOutput {
+    Vector3_s0105_e6d0 mVelocity;                              // +0x00
+    float mPad0c;
+    float mTurnAmount;                              // +0x10
+    SpatialObject* mpSpatial;                       // +0x14
+};
+namespace SP {
+class cUFOLocomotion {
+public:
+    virtual void vf00();
+    virtual void vf01();
+    virtual void vf02();
+    virtual void vf03();
+    char mPad04[0xc];
+    Vector3_s0105_e6d0 mFacing;                                // +0x10
+
+    void FUN_0105eb90(MotionOutput* out);
+    void AvoidSolarObstacles(cSPSimulatorSpaceGame* sim, UFOState* ufo, Vector3_s0105_e6d0* position);
+};  // namespace SP
+}
+int __thiscall Obstacle::GetKind()
+{
+    return mpKindData ? mpKindData->mKind : 2;
+}
+PlayerInventory* __thiscall cSPSimulatorSpaceGame::GetPlayerInventory()
+{
+    return mpPlayerState;
+}
+bool __thiscall cSPSimulatorSpaceGame::IsGalaxyView()
+{
+    return false; // retail 0x00c8b7e0
+}
+int __thiscall cSPSimulatorSpaceGame::GetCurrentStarType()
+{
+    return 0; // retail 0x00c8b550
+}
+// ---- items of slice s0105e6d0 end
+
 // @ 0x0105bfb0
 void cSPRallyCallToolStrategy::StartTool(cSpaceToolData* pTool, const Vector3& position, int a3)
 {
@@ -673,3 +825,68 @@ void __stdcall FUN_0105e290(void* pWrapper, int nMagnitude)
     p->mbAimValid = 1;
 }
 }  // namespace SP
+
+// @ 0x0105eb90
+void __thiscall SP::cUFOLocomotion::FUN_0105eb90(MotionOutput* out)
+{
+    UFOState* ufo = 0;
+    if (out->mpSpatial)
+        ufo = (UFOState*)((char*)out->mpSpatial - offsetof(UFOState, mSpatial));
+
+    Vector3_s0105_e6d0 local;
+    TransformVector(&local, &kLocalForward, &ufo->mOrientation);
+
+    Vector3_s0105_e6d0 desired = ufo->mDesiredVelocity;
+    float desiredInv = 1.0f / sqrtf(desired.x * desired.x +
+                                    (desired.y * desired.y + desired.z * desired.z) +
+                                    kVectorEpsilon);
+    desired.x *= desiredInv;
+    desired.y *= desiredInv;
+    desired.z *= desiredInv;
+
+    if (mFacing.x == kOrigin.x && mFacing.y == kOrigin.y && mFacing.z == kOrigin.z) {
+        mFacing = local;
+        float dot = desired.x * local.x + (desired.y * local.y + desired.z * local.z);
+        if (dot < 0.0f) {
+            Vector3_s0105_e6d0 orthogonal;
+            OrthogonalVector(&orthogonal, &desired);
+            float orthoInv = 1.0f / sqrtf(orthogonal.x * orthogonal.x +
+                                          (orthogonal.y * orthogonal.y +
+                                           orthogonal.z * orthogonal.z) +
+                                          kVectorEpsilon);
+            mFacing.x = orthogonal.x * orthoInv;
+            mFacing.y = orthogonal.y * orthoInv;
+            mFacing.z = orthogonal.z * orthoInv;
+        }
+    }
+
+    float turnAmount = out->mTurnAmount * kHalf;
+    if (turnAmount > kOne)
+        turnAmount = kOne;
+
+    Vector3_s0105_e6d0 rotated;
+    RotateTowards(&rotated, &local, &mFacing, turnAmount);
+    local = rotated;
+
+    Quaternion_s0105_e6d0 orientation;
+    QuaternionFromFacingAndUp(&orientation, &local, &desired);
+    ufo->mSpatial.SetOrientation(&orientation);
+
+    float speed = kNormalSpeed;
+    cStarManager_s0105_e6d0* starManager = GetStarManager();
+    void* currentPlanet = starManager->GetCurrentPlanet();
+    if (ufo->GetPlanet() == currentPlanet)
+        speed = kBoostSpeed;
+    speed *= kSpeedScale;
+
+    out->mVelocity.x = local.x * speed;
+    out->mVelocity.y = local.y * speed;
+    out->mVelocity.z = local.z * speed;
+
+    Vector3_s0105_e6d0* ufoPosition = ufo->mSpatial.GetPosition();
+    float distance = sqrtf(ufoPosition->x * ufoPosition->x +
+                           (ufoPosition->y * ufoPosition->y +
+                            ufoPosition->z * ufoPosition->z));
+    if (GetVelocityLimit() < distance)
+        out->mVelocity = kOrigin;
+}

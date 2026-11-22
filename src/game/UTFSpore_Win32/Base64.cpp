@@ -5,11 +5,20 @@
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
 extern "C" const unsigned char g_base64DecodeTable[256];   // 0x143EE70
 
 // ---- items of slice s009413d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
 static const char kBase64Chars[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+struct EAString {
+    char* begin;                                                  // +0x00
+    char* end;                                                    // +0x04
+    void FUN_0047BF30(unsigned n, char c);                        // 0x0047BF30 resize
+    void FUN_005306C0(char c);                                    // 0x005306C0 push_back
+    void FUN_00455D60(const char* first, const char* last);       // 0x00455D60 append
+};
 extern "C" const unsigned char g_base64DecodeTable[256];   // 0x143EE70
 // ---- items of slice s009413d0 end
 
@@ -137,4 +146,36 @@ bool DecodeBase64Core(const uint8_t* src, int len, char* dst, int* outLen)
     }
     *outLen = out;
     return !invalid;
+}
+
+// @ 0x00941af0
+bool Base64DecodeString(int* srcStr, int* dstStr)
+{
+    const uint8_t* src = (const uint8_t*)srcStr[0];
+    int len = srcStr[1] - srcStr[0];
+    int need = ((len + 3) >> 2) * 3;
+    int dlen = dstStr[1] - dstStr[0];
+    if (need < dlen) {
+        char* to = (char*)(dstStr[0] + need);
+        if (to != (char*)dstStr[1]) {
+            memmove(to, (void*)dstStr[1], 1);
+            dstStr[1] = (int)(to + (dstStr[1] - (int)dstStr[1]));
+        }
+    } else if (dlen < need) {
+        ((EAString*)dstStr)->FUN_0047BF30((unsigned)(need - dlen), 0);
+    }
+    extern bool DecodeBase64Core(const uint8_t*, int, char*, int*);
+    int written = 0;
+    DecodeBase64Core(src, len, (char*)dstStr[0], &written);
+    int dlen2 = dstStr[1] - dstStr[0];
+    if (written < dlen2) {
+        char* to = (char*)(dstStr[0] + written);
+        if (to != (char*)dstStr[1]) {
+            memmove(to, (void*)dstStr[1], 1);
+            dstStr[1] = (int)(to + (dstStr[1] - (int)dstStr[1]));
+        }
+    } else if (dlen2 < written) {
+        ((EAString*)dstStr)->FUN_0047BF30((unsigned)(written - dlen2), 0);
+    }
+    return true;
 }

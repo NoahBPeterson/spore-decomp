@@ -1,4 +1,4 @@
-// src/game/SPAudio/eapdeditor.cpp -- migrated from slice(s) s00a4c300 by tools/migrate/rewrite.py
+// src/game/SPAudio/eapdeditor.cpp -- migrated from slice(s) s00a4d340, s00a4c300 by tools/migrate/rewrite.py
 // Object file: SPAudio/eapdeditor.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -562,6 +562,135 @@ inline int glist_getindex(t_glist* x, t_gobj* y) {
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 namespace EA { namespace Audio { namespace Eapd { void gfxstub_new(t_gobj* owner, void* key, const char* cmd); }}}  // 0x00a4c470 (stays in the slice: not this object's)
 
+// ---- items of slice s00a4d340 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_class_s00a4_d340;
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_glist_s00a4_d340;
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_gobj_s00a4_d340 {
+    t_class_s00a4_d340* g_pd;      // +0x00
+    t_gobj_s00a4_d340*  g_next;    // +0x04
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_text {        // t_object
+    t_gobj_s00a4_d340  te_g;       // +0x00
+    uint32_t pad08[3];  // binbuf, outlet, inlet
+    int16_t te_xpix;    // +0x14
+    int16_t te_ypix;    // +0x16
+    uint32_t pad18[4];
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_editor_s00a4_d340 {
+    uint32_t pad00[3];
+    void*    e_textedfor;   // +0x0c
+    uint32_t pad10[2];
+    t_gobj_s00a4_d340*  e_grab;        // +0x18
+    void*    e_motionfn;    // +0x1c
+    void*    e_keyfn;       // +0x20
+    uint32_t pad24[4];
+    int      e_xwas;        // +0x34
+    int      e_ywas;        // +0x38
+    uint32_t pad3c[5];
+    unsigned e_onmotion : 3; // +0x50
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_glist_s00a4_d340 {
+    t_text    gl_obj;        // +0x00
+    t_gobj_s00a4_d340*   gl_list;       // +0x28
+    t_glist_s00a4_d340*  gl_owner;      // +0x2c
+    int       gl_pixwidth;   // +0x30
+    int       gl_pixheight;  // +0x34
+    float     gl_x1;         // +0x38
+    float     gl_y1;         // +0x3c
+    float     gl_x2;         // +0x40
+    float     gl_y2;         // +0x44
+    int       gl_screenx1;   // +0x48
+    int       gl_screeny1;   // +0x4c
+    int       gl_screenx2;   // +0x50
+    int       gl_screeny2;   // +0x54
+    int       gl_xmargin;    // +0x58
+    int       gl_ymargin;    // +0x5c
+    t_editor_s00a4_d340* gl_editor;     // +0x60
+    uint32_t  pad64[5];
+    unsigned  gl_havewindow : 1;   // +0x78
+    unsigned  gl_mapped : 1;
+    unsigned  gl_dirty : 1;
+    unsigned  gl_loading : 1;
+    unsigned  gl_willvis : 1;
+    unsigned  gl_edit : 1;
+    unsigned  gl_isdeleting : 1;
+    unsigned  gl_goprect : 1;
+    unsigned  gl_isgraph : 1;
+    unsigned  gl_hidetext : 1;
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+t_text* pd_checkobject(t_class_s00a4_d340** x);
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+int     glist_isvisible(t_glist_s00a4_d340* x);
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void    gobj_vis(t_gobj_s00a4_d340* x, t_glist_s00a4_d340* parent, int flag);
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void    canvas_drawredrect(t_glist_s00a4_d340* x, int doit);
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void    rtext_new(t_glist_s00a4_d340* x, t_text* ob);
+}
+}
+}
+// ---- items of slice s00a4d340 end
+
 // @ 0x00a4c630
 namespace EA { namespace Audio { namespace Eapd {
 void gobj_getrect(t_gobj* x, t_glist* glist, int* x1, int* y1, int* x2, int* y2)
@@ -965,5 +1094,32 @@ void canvas_startmotion(t_glist* x)
     x->gl_editor->e_flags = (x->gl_editor->e_flags & ~6u) | 1;
     x->gl_editor->e_xwas = xval;
     x->gl_editor->e_ywas = yval;
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4d340
+namespace EA { namespace Audio { namespace Eapd {
+void glist_add(t_glist_s00a4_d340* x, t_gobj_s00a4_d340* y)
+{
+    t_gobj_s00a4_d340* y2;
+    y->g_next = 0;
+    if (!x->gl_list)
+        x->gl_list = y;
+    else {
+        for (y2 = x->gl_list; y2->g_next; y2 = y2->g_next)
+            ;
+        y2->g_next = y;
+    }
+    if (x->gl_editor) {
+        t_text* ob = pd_checkobject(&y->g_pd);
+        if (ob)
+            rtext_new(x, ob);
+        if (x->gl_editor && x->gl_isgraph && !x->gl_goprect && pd_checkobject(&y->g_pd)) {
+            x->gl_goprect = 1;
+            canvas_drawredrect(x, 1);
+        }
+    }
+    if (glist_isvisible(x))
+        gobj_vis(y, x, 1);
 }
 }}}  // namespace EA::Audio::Eapd

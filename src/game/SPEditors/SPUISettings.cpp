@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUISettings.cpp -- migrated from slice(s) s00604890, s00603820, s00602940, s00601fd0, s00600e80, s00600260, s005ff230 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUISettings.cpp -- migrated from slice(s) s005fe1d0, s00604890, s00603820, s00602940, s00601fd0, s00600e80, s00600260, s005ff230 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUISettings.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -24,15 +24,21 @@
 #include "cSPUIPropertyLayout.h"
 #include "cSPVerbIconRollover.h"
 #include "EA/UTFWin/IWindow.h"
+#include "EA/LimitStopwatch.h"
+#include "EA/Variant.h"
+#include "EA/Stopwatch.h"
+#include "SP/cPropertyManager.h"
+#include "SP/cSPUICredits.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
-extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(uint64_t* count);
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* count);
 extern "C" unsigned __int64 __rdtsc();
 #pragma intrinsic(__rdtsc)
 
 // ---- items of slice s005ff230 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
-extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(uint64_t* count);
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* count);
 extern "C" unsigned __int64 __rdtsc();
 namespace EA {
 template <typename T>
@@ -64,9 +70,9 @@ class Stopwatch_s005f_f230 {
 
   static uint64_t GetCPUCycle() { return __rdtsc(); }
   static uint64_t GetStopwatchCycle() {
-    uint64_t t;
+    int64_t t;
     QueryPerformanceCounter(&t);
-    return t;
+    return (uint64_t)t;
   }
   void Reset() {
     mnStartTime = 0;
@@ -2144,6 +2150,41 @@ struct cSPUILayout_s0060_4890 {
   char pad[0x18];
 };
 // ---- items of slice s00604890 end
+
+// ---- items of slice s005fe1d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+class Stopwatch_s005f_e1d0 {
+ public:
+  uint64_t mnStartTime;                          // +0x00
+  uint64_t mnTotalElapsedTime;                   // +0x08
+  int mnUnits;                                   // +0x10
+  float mfStopwatchCyclesToUnitsCoefficient;     // +0x14
+  int64_t GetElapsedTimeCycles() const;          // 0x0093a3a0
+  float GetElapsedTimeFloat() const;  // 0x0093a3a0 (EA::Stopwatch::GetElapsedTimeFloat)
+  static uint64_t GetStopwatchCycle() {
+    int64_t t;
+    QueryPerformanceCounter(&t);
+    return (uint64_t)t;
+  }
+};
+}
+namespace EA {
+class LimitStopwatch_s005f_e1d0 : public Stopwatch_s005f_e1d0 {
+ public:
+  uint64_t mnEndTime;  // +0x18
+  bool IsTimeUp() const;
+};
+}
+// ---- items of slice s005fe1d0 end
+
+// @ 0x005ff1c0
+namespace EA {
+bool LimitStopwatch_s005f_e1d0::IsTimeUp() const
+{
+  const uint64_t t = GetStopwatchCycle();
+  return ((int64_t)(mnEndTime - t) < 0);
+}
+}  // namespace EA
 
 // @ 0x005ff230
 void cTimedObject::RestartTimer()

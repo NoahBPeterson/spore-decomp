@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_01310000.cpp -- migrated from slice(s) s01318c70 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_01310000.cpp -- migrated from slice(s) s01317710, s01318c70 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_01310000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -24,6 +24,17 @@ extern "C" int atexit(void (*pfn)(void));   // 0x011e07ef
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern Obj_167c988 g_167c988;   // 0x0167c988
+
+// ---- items of slice s01317710 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t g_15673a4;   // 0x015673a4
+extern uint32_t g_167b550;   // 0x0167b550
+// ---- items of slice s01317710 end
+
+// @ 0x01317710
+void FUN_01317710()
+{
+    g_167b550 = g_15673a4 + 0x4e20;
+}
 
 // @ 0x0131aa90
 void InitGlobal_167c988()

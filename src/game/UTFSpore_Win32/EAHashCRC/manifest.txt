@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/EAHashCRC.cpp  ?InitCRC32Table@Hash@EA@@YAXXZ  00932d00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAHashCRC.cpp  ?CRC32@@YAIPBEHI_N@Z  00932da0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

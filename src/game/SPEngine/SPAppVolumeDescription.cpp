@@ -124,6 +124,10 @@ struct VolumeRegistrar {
 extern void  cErrorCtor(void* buf, const char* msg);   // 0x0052df30
 extern void  CxxThrow(void* obj, void* info);          // 0x011e0912
 extern char  TypeInfo_cError;                          // 0x014f9174
+extern char VtblVolumeEffect;    // 0x01414744
+extern char VtblGroupVolume;     // 0x0141472c
+extern char Data1667bac;         // 0x01667bac
+extern const char* g_sVolume;    // 0x0154038c  pointer to "volume"
 struct HeapNode {
   double d;
   uint32_t x, y;
@@ -165,8 +169,15 @@ namespace ArgScript {
 }
 namespace EA {
 namespace ArgScript {
-  struct cArguments_s007e_ed10 {
+  class cArguments_s007e_ed10 { public:
     void* MainArguments(int* out, int a, int b);                 // 0x00838020
+  };
+}
+}
+namespace EA {
+namespace ArgScript {
+  class cCommandBase_s007e_ed10 { public:
+    cCommandBase_s007e_ed10();                                              // 0x0083c800
   };
 }
 }
@@ -185,6 +196,9 @@ namespace SP {
 }
 struct EStringLite {
   void assign(const char* first, const char* last);              // 0x00454cb0
+};
+struct AppPropsFields {
+  AppPropsFields();                                              // 0x0083cdd0
 };
 struct cVolumeSetCommand {
   virtual void Execute(EA::ArgScript::cArguments_s007e_ed10* args);
@@ -426,6 +440,28 @@ void cVolumeEffectCommand::Execute(void* args)
   }
   void* mgr = *(void**)((char*)this + 4);
   ((void(__thiscall*)(void*, void*))VSLOT(mgr, 0x8c))(mgr, this);
+}
+
+// @ 0x007ef120
+void RegisterVolumeCommands(void* unused, void* mgr)
+{
+  void* cmd = operator new(0x140, "ArgScript/VolumeEffect", 0, 0, 0, 0);
+  if (cmd) {
+    new (cmd) AppPropsFields();
+    *(void**)cmd = &VtblVolumeEffect;
+    *(int*)((char*)cmd + 0x38) = 0x2cf2626;
+    new ((void*)((char*)cmd + 0x40)) SP::cVolumeDescription_s007e_ed10();
+    *(void**)((char*)cmd + 0x130) = &Data1667bac;
+    *(void**)((char*)cmd + 0x134) = &Data1667bac;
+    *(void**)((char*)cmd + 0x138) = (void*)0x1667bad;
+  }
+  ((void(__thiscall*)(void*, const char*, void*))VSLOT(mgr, 0x14))(mgr, g_sVolume, cmd);
+  void* grp = operator new(0x10, "ArgScript/GroupVolume", 0, 0, 0, 0);
+  if (grp) {
+    new (grp) EA::ArgScript::cCommandBase_s007e_ed10();
+    *(void**)grp = &VtblGroupVolume;
+  }
+  ((void(__thiscall*)(void*, const char*, void*))VSLOT(mgr, 0x18))(mgr, g_sVolume, grp);
 }
 
 // @ 0x007ef220

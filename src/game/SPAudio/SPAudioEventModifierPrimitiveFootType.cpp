@@ -1,4 +1,4 @@
-// src/game/SPAudio/SPAudioEventModifierPrimitiveFootType.cpp -- migrated from slice(s) s00a39ce0 by tools/migrate/rewrite.py
+// src/game/SPAudio/SPAudioEventModifierPrimitiveFootType.cpp -- migrated from slice(s) s00a3af80, s00a39ce0 by tools/migrate/rewrite.py
 // Object file: SPAudio/SPAudioEventModifierPrimitiveFootType.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,7 @@ extern char gStrSurfaceA[];              // 0x1433614
 extern char gStrSurfaceB[];              // 0x141c53c
 #include <ctype.h>
 #include <string.h>
+#include "SP/Audio/cListener.h"
 
 // ---- items of slice s00a39ce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define CAT2(a, b) a##b
@@ -370,6 +371,64 @@ class cEventModifierPrimitiveEpicFootType : public cEventModifierPrimitiveFootTy
     void operator delete[](void*); // 0x00f47380
 // ---- items of slice s00a39ce0 end
 
+// ---- items of slice s00a3af80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" const float _HK_REAL_ONE;     // 0x01485720
+typedef unsigned int uint32;
+namespace EA {
+namespace Audio {
+struct ResourceKey;
+}
+}
+namespace EA {
+namespace Audio {
+struct IConfiguration_s00a3_af80;
+}
+}
+namespace EA {
+namespace Audio {
+struct ResponseCurve_s00a3_af80 {
+    unsigned char mData[0x364];           // inline fixed_vector<ResponseCurveData,42>
+    bool InitFromConfiguration(IConfiguration_s00a3_af80* pConfiguration, uint32 nId);  // 0x00a1a9d0
+    void SetResponseCurveData(float* pData, int nCount);                      // 0x00a1a590
+};
+}
+}
+namespace EA {
+namespace Audio {
+struct IConfiguration_s00a3_af80 {
+    V
+    virtual void Release();                                        // slot 1  +0x04
+    V
+    virtual void GetKeys(void* pKeys, int nFlags);                 // slot 3  +0x0c
+    V4 V4 V4
+    virtual char* GetDisplayName(uint32 nKey);                     // slot 16 +0x40
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct cEventModifierPrimitive_s00a3_af80 {
+    void*  mpVtable;                             // +0x00
+    int    mnRefCount;                           // +0x04
+    uint32 mKeyInstance;                         // +0x08
+    uint32 mKeyType;                             // +0x0c
+    uint32 mKeyGroup;                            // +0x10
+    EA::Audio::IConfiguration_s00a3_af80* mConfiguration;   // +0x14
+    bool ReadTuningValues(const EA::Audio::ResourceKey* pKey);    // 0x00a3a610
+    void Append(char* pDst, int nCapacity, char* pStr, bool bSep); // 0x00a3a4c0
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct cEventModifierPrimitiveFootTypeBase_s00a3_af80 : cEventModifierPrimitive_s00a3_af80 {
+    EA::Audio::ResponseCurve_s00a3_af80 mCurves[10];        // +0x18, stride 0x364
+    bool ReadTuningValues(const EA::Audio::ResourceKey* pKey);    // 0x00a3af80
+};
+}
+}
+// ---- items of slice s00a3af80 end
+
 // @ 0x00a3ac40
 namespace SP { namespace Audio {
 void cEventModifierPrimitiveFootTypeBase::ModifyEventWithFootName(char* footName, Command_s00a3_9ce0* cmd, int unused, char* dst, int capacity)
@@ -433,3 +492,34 @@ void cEventModifierPrimitiveEpicFootType::ModifyEvent(Command_s00a3_9ce0* cmd, i
         ModifyEventWithFootName(gEpicFootName, cmd, a, dst, capacity);
 }
 }}  // namespace SP::Audio
+
+// @ 0x00a3af80
+bool SP::Audio::cEventModifierPrimitiveFootTypeBase_s00a3_af80::ReadTuningValues(const EA::Audio::ResourceKey* pKey)
+{
+    bool bResult = false;
+    if (cEventModifierPrimitive_s00a3_af80::ReadTuningValues(pKey)) {
+        float v[2];
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[0].InitFromConfiguration(mConfiguration, 0x39b853a3u)) mCurves[0].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[1].InitFromConfiguration(mConfiguration, 0x7f30f249u)) mCurves[1].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[2].InitFromConfiguration(mConfiguration, 0x61e3ee74u)) mCurves[2].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[3].InitFromConfiguration(mConfiguration, 0xa1d9e5f7u)) mCurves[3].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[4].InitFromConfiguration(mConfiguration, 0x04db21b5u)) mCurves[4].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[5].InitFromConfiguration(mConfiguration, 0x0a15b885u)) mCurves[5].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = _HK_REAL_ONE;
+        if (!mCurves[6].InitFromConfiguration(mConfiguration, 0xd9534bb0u)) mCurves[6].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = 0.0f;
+        if (!mCurves[7].InitFromConfiguration(mConfiguration, 0xd7e85196u)) mCurves[7].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = 0.0f;
+        if (!mCurves[8].InitFromConfiguration(mConfiguration, 0x917ee1dbu)) mCurves[8].SetResponseCurveData(v, 1);
+        v[0] = 0.0f; v[1] = 0.0f;
+        if (!mCurves[9].InitFromConfiguration(mConfiguration, 0x6f5b6da8u)) mCurves[9].SetResponseCurveData(v, 1);
+        bResult = true;
+    }
+    return bResult;
+}

@@ -10,7 +10,7 @@
 // ---- items of slice s005002d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint;
 namespace eastl {
-struct allocator_s0050_02d0 {};
+class allocator_s0050_02d0 { public:};
 }
 namespace eastl {
 template <typename T, typename A = allocator_s0050_02d0>
@@ -191,6 +191,64 @@ void cExportHelper::ExportSkeleton()
     }
     fprintf(t2, "</SKELETON>\n");
     fclose(t2);
+}
+
+// @ 0x00500920
+void cExportHelper::ExportSubmesh(cMeshData* mesh, cSkinWeights* weights)
+{
+    FILE* owner = export_mesh_FILE;
+    uint v36 = mesh->material;
+    uint t5 = mesh->indices.size() / 3;
+    fprintf(owner,
+            "\t<SUBMESH MATERIAL=\"%d\" NUMVERTICES=\"%d\" NUMFACES=\"%d\" NUMLODSTEPS=\"0\" NUMSPRINGS=\"0\" "
+            "NUMTEXCOORDS=\"1\">\n",
+            export_submesh_idx, v36, t5);
+    int m26 = 0;
+    cSPVector3_s0050_02d0 q33;
+    cVec2 count;
+    for (uint s = 0; s < mesh->submeshes.size(); ++s) {
+        cSubMesh* p38 = mesh->submeshes.mpBegin[s];
+        uint q17 = p38->verts.size();
+        for (uint v = 0; v < q17; ++v) {
+            cMeshVertexRef* q51 = &p38->verts.mpBegin[v];
+            uint t6 = q51->vertex;
+            cSkinWeights* m2 = (cSkinWeights*)(t6 * 0x14 + (char*)weights);
+            const cVec2& p26 = mesh->uvs.empty() ? count : mesh->uvs.mpBegin[q51->uv];
+            uint key = 0;
+            for (uint k = 0; k < 4 && m2->weight[k] > 0.0f; ++k)
+                ++key;
+            fprintf(owner, "\t\t<VERTEX ID=\"%d\" NUMINFLUENCES=\"%d\">\n", m26, key);
+            cSPVector3_s0050_02d0 p20(*(cSPVector3_s0050_02d0*)(t6 * 0xc + (char*)mesh->mpPositions));
+            cSPVector3_s0050_02d0 q18(*(cSPVector3_s0050_02d0*)(t6 * 0xc + (char*)mesh->mpNormals));
+            if (mMoveRootToOrigin)
+                TransformPoint(&p20, mNodes.mpBegin + root_nidx);
+            fprintf(owner, "\t\t\t<POS>%owner %owner %owner</POS>\n", p20[0], p20[1], p20[2]);
+            fprintf(owner, "\t\t\t<NORM>%owner %owner %owner</NORM>\n", q18[0], q18[1], q18[2]);
+            fprintf(owner, "\t\t\t<TEXCOORD>%owner %owner</TEXCOORD>\n", p26[0], 1.0 - p26[1]);
+            for (uint k2 = 0; k2 < key; ++k2)
+                fprintf(owner, "\t\t\t<INFLUENCE ID=\"%d\">%owner</INFLUENCE>\n", mBones.mpBegin[*((unsigned char*)m2 + k2)].jidx,
+                        m2->weight[k2]);
+            fprintf(owner, "\t\t</VERTEX>\n");
+            ++m26;
+        }
+    }
+    int m51 = 0;
+    for (uint s2 = 0; s2 < mesh->submeshes.size(); ++s2) {
+        cSubMesh* v35 = mesh->submeshes.mpBegin[s2];
+        uint t32 = v35->indices.size();
+        uint t8 = t32 / 3;
+        for (uint face = 0; face < t8; ++face) {
+            fprintf(owner, "\t\t<FACE VERTEXID=\"");
+            for (uint c = 0; c < 3; ++c) {
+                uint idx = v35->indices.mpBegin[face * 3 + c] + m51;
+                fprintf(owner, "%d%s", idx, (c == 2) ? "" : " ");
+            }
+            fprintf(owner, "\"/>\n");
+        }
+        m51 = v35->verts.size() + m51;
+    }
+    fprintf(owner, "\t</SUBMESH>\n");
+    ++export_submesh_idx;
 }
 
 // @ 0x00500ef0

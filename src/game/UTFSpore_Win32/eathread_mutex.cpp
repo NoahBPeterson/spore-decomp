@@ -203,6 +203,22 @@ namespace Thread {
 __declspec(noinline) EASemaphoreData::~EASemaphoreData() { if (mhSemaphore) CloseHandle(mhSemaphore); }  // namespace EA::Thread
 }
 }
+namespace EA {
+namespace Thread {
+// The slice defines these two stub destructors in its own TU (0x00922130 / 0x00921e40, other objects' functions).
+// Without them the implicit EARWMutexData::~EARWMutexData is compiled with an EH frame (the calls may throw) and
+// RWMutex::~RWMutex (0x00922310) tail-calls it; with them it inlines the three member destructor calls, as retail does.
+Mutex_s0092_15c0::~Mutex_s0092_15c0()
+{
+    if (mMutexData.mbIntraProcess) { DeleteCriticalSection((CRITICAL_SECTION*)this); return; }
+    CloseHandle(*(HANDLE*)mMutexData.mData);
+}
+Condition_s0092_15c0::~Condition_s0092_15c0()
+{
+    // member destructors run automatically after this (empty) body
+}
+}
+}
 // ---- items of slice s009215c0 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -335,6 +351,15 @@ Mutex_s0092_15c0::Mutex_s0092_15c0(const MutexParameters* p, bool bDefault)
         return;
     }
     Init(p);
+}
+}}  // namespace EA::Thread
+
+// @ 0x00922310
+namespace EA { namespace Thread {
+RWMutex::~RWMutex()
+{
+    // member destructors run automatically after this (empty) body: write condition,
+    // read condition, then the mutex -- the original's 0xa0 / 0x40 / 0x10 sequence.
 }
 }}  // namespace EA::Thread
 

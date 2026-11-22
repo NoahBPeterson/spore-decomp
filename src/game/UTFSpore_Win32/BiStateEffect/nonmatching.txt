@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-009634f0 195 faithful easing curve (mode 0/1/2); x87/SSE mix and constant pooling differ
+009634f0 195 faithful easing curve (mode 0/1/2); x87/SSE mix and constant pooling differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

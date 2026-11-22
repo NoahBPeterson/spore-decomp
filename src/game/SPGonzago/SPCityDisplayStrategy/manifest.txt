@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?FUN_00ce8d00@@YIXPAX000@Z  00ce8d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?SetVehicleTask@CDS@@QAEXPAUcGameData@@0@Z  00ce9460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?ResetPosses@CDS@@QAEXXZ  00ce9560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?UpdateUI@CDS@@QAEXH@Z  00ce9590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?SetReticlesVisible@CDS@@QAEXE@Z  00ce96b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -6,5 +8,4 @@
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?FUN_00cea030@@YIPAXPAX0PAPAX@Z  00cea030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?Init@CDS_s00ce_a090@@QAEXXZ  00cea090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?RemoveVehicle@CDS_s00ce_a090@@QAEPAXPAX0@Z  00ceaac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?FUN_00ce8d00@@YIXPAX000@Z  00ce8d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?SetVehicleTask@CDS@@QAEXPAUcGameData@@0@Z  00ce9460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?push_back@ElemVector@@QAEPAUElem@@XZ  00ceb350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

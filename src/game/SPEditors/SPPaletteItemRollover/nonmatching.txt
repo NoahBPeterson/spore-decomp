@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+005ed360  -  cSPPaletteItemRollover ctor: full body (base ctor, both vtables, window/refcounted fields zeroed, name byte stored, SetKey + SetRootWindowId). Not byte-exact (base-ctor call and zero-store scheduling differ). Equiv: UNSUPPORTED (0/150 valid, import:iswctype on both sides; the slice is UNSUPPORTED too).
+005ed420  -  cSPPaletteItemRollover::Init: full init (base Init gate, embedded layout FindWindowByID x13, price/info rect deltas into +0xbc/+0xc0, attach-or-detach world main window, cleanup release of +0xb4, clears +0xb8). Not byte-exact (instruction scheduling differs). Equiv: WEAK (same 6/12 edges as the slice).

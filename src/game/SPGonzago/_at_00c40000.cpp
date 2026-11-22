@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00c40000.cpp -- migrated from slice(s) s00c4dbf0, s00c4cb90, s00c4bc00, s00c4a850 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00c40000.cpp -- migrated from slice(s) s00c44940, s00c4dbf0, s00c4cb90, s00c4bc00, s00c4a850 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00c40000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -26,6 +26,7 @@ extern "C" char g_146dfc8[];
 #include "SP/cSpeciesProfile.h"
 #include "SP/cTribe.h"
 #include <intrin.h>
+#include <new>
 
 // ---- items of slice s00c4a850 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ResourceKey {
@@ -601,6 +602,36 @@ class cMission
 };
 }
 // ---- items of slice s00c4dbf0 end
+
+// ---- items of slice s00c44940 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Point3_s00c4_4940 {
+    float x, y, z;
+
+    Point3_s00c4_4940(const Point3_s00c4_4940& o) : x(o.x), y(o.y), z(o.z) {}
+};
+struct PointVector_s00c4_4940 {
+    Point3_s00c4_4940* mpBegin;     // +0x0
+    Point3_s00c4_4940* mpEnd;       // +0x4
+    Point3_s00c4_4940* mpCapacity;  // +0x8
+
+    void DoInsertValue(Point3_s00c4_4940* position, const Point3_s00c4_4940& value);  // 0x004b5ad0
+
+    void push_back(const Point3_s00c4_4940& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) Point3_s00c4_4940(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+extern PointVector_s00c4_4940 g_PointList_s00c4_4940;  // 0x0168e81c
+// ---- items of slice s00c44940 end
+
+// @ 0x00c44940
+void AddPoint_s00c4_4940(Point3_s00c4_4940 p)
+{
+    g_PointList_s00c4_4940.push_back(p);
+}
 
 // @ 0x00c4b220
 void* cSPMissionAdventureBase::PickAdventureAsset()

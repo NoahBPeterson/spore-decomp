@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
 0091e080 167 GetReportFilePath: local buffers/format arg schedule differ from the original _snprintf use
-0091e770 66 ExceptionHandlerWin32 ctor: field-init order + strncpy/memset scheduling differ
-0091e810 115 ExceptionHandler ctor: fixed-vector inline storage / DoInsertValue clear schedule differ
+0091e770 66 ExceptionHandlerWin32 ctor: field-init order + strncpy/memset scheduling differ flags: /O2 /MD /Gy /EHsc /TP
+0091e810 115 ExceptionHandler ctor: fixed-vector inline storage / DoInsertValue clear schedule differ flags: /O2 /MD /Gy /EHsc /TP
+0091e8d0  107  ExceptionHandler dtor: platform-handler teardown / list walk schedule differ flags: /O2 /MD /Gy /EHsc /TP

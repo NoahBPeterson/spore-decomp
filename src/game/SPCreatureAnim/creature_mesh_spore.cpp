@@ -684,6 +684,14 @@ void creature_mesh_instance_data::UpdateBodyShapes(int body, int arg2, int arg3)
     }
 }
 
+static float rsqrt_fast(float x)   // 0x009c5e90 is UpdateBodyShapes2, which stays in the slice
+{
+    float r = _mm_cvtss_f32(_mm_rsqrt_ss(_mm_set_ss(x)));
+    r = (1.0f - (r * r) * x) * (r * 0.5f) + r;
+    r = (1.0f - (r * r) * x) * (r * 0.5f) + r;
+    return r;
+}
+
 // @ 0x009c6440
 void creature_mesh_instance_data::SetStateInWorld(int, int, void* world)
 {

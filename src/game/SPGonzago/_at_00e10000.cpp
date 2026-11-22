@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00e10000.cpp -- migrated from slice(s) s00e1eab0, s00e1df10, s00e1d020, s00e18d40, s00e17c10 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00e10000.cpp -- migrated from slice(s) s00e18ac0, s00e1eab0, s00e1df10, s00e1d020, s00e18d40, s00e17c10 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00e10000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -396,7 +396,6 @@ public:
     void Activate();                    // 0x00e1dae0
     void* Destroy(uint32_t nFlags);     // 0x00e1dc20
 
-
     cSPUILayout_s00e1_d020 mLayout;        // +0x008
     bool mbInitialized;         // +0x020
 };
@@ -681,6 +680,38 @@ class PanelBase
 };
 // ---- items of slice s00e1eab0 end
 
+// ---- items of slice s00e18ac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Thing {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v18(int value); // slot 0x18
+};
+struct Node {
+    Node* mpRight;  // +0x00
+    Node* mpLeft;   // +0x04
+    Node* mpParent; // +0x08
+    char mColor;    // +0x0c
+    char mPad0d[3];
+    int mKey;       // +0x10
+    Thing* mpObj;   // +0x14
+};
+Node* RBTreeIncrement(Node* node); // 0x00921580
+struct MgrVec {
+    void update(int value); // 0x00e30990
+};
+struct cTreeOwner {
+    char mPad00[0x3c];
+    Node mAnchor; // +0x3c
+    char mPad54[0x58 - 0x3c - sizeof(Node)];
+    MgrVec* mpMgr; // +0x58
+    void FUN_00e18ac0(int value, int updateArg);
+};
+// ---- items of slice s00e18ac0 end
+
 // @ 0x00e188b0
 void *cUIMissionCardPanel::InitHints(void *param)
 {
@@ -782,6 +813,19 @@ void cUIMissionCardPanel::ClearTree()
     }
     *(void **)base = base;
     *(void **)((u8 *)base + 4) = base;
+}
+
+// @ 0x00e18ac0
+void cTreeOwner::FUN_00e18ac0(int value, int updateArg)
+{
+    if (mpMgr)
+        mpMgr->update(updateArg);
+    Node* n = mAnchor.mpLeft;
+    Node* end = &mAnchor;
+    while (n != end) {
+        n->mpObj->v18(value);
+        n = RBTreeIncrement(n);
+    }
 }
 
 // @ 0x00e18b10
@@ -2150,6 +2194,7 @@ int __cdecl FUN_00e1f2c0(ListRec* first, ListRec* last, void* cmp)
 extern "C" char g_vtbl_14803ac[];  // 0x014803ac panel vtable
 extern "C" char g_vtbl_1480390[];  // 0x01480390 its vtable at +8
 extern "C" char g_vtbl_1480388[];  // 0x01480388 its vtable at +0xc
+
 // @ 0x00e1f390
 void* __fastcall FUN_00e1f390(void* self)
 {
@@ -2249,6 +2294,7 @@ static inline void E1fInsertBefore(E1fNode* pos, const E1fPair& value)
     pos->mpPrev->mpNext = node;
     pos->mpPrev = node;
 }
+
 // @ 0x00e1f500
 void __stdcall FUN_00e1f500(void* head, E1fIter first, E1fIter last, void* extra)
 {

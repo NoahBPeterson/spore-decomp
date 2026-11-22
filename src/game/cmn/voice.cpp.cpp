@@ -12,6 +12,27 @@
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 namespace rw { namespace audio { namespace core { int FUN_0112e700(int param); }}}  // 0x0112e700 (stays in the slice: not this object's)
 
+// ---- items of slice s01132ad0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void*   g_sysObj;                  // 0x016e61a8  Snd9 system object
+extern void*   g_voice;                   // 0x016e6260  Snd9 service voice
+class SndSysObj
+{
+public:
+	void Lock(void);                 // 0x0112c600
+	void Unlock(void);               // 0x0112c620
+	bool FUN_0112c640(int);          // 0x0112c640
+	int  FUN_0112ce00(void);         // 0x0112ce00
+	int  FUN_0112cd60(int);          // 0x0112cd60
+	int  FUN_00ff35d0(void);         // 0x00ff35d0
+	void FUN_0112ccc0(int, void*);   // 0x0112ccc0  __thiscall, ret 8
+};
+class Voice
+{
+public:
+	void Release(void);              // 0x0112e950
+};
+// ---- items of slice s01132ad0 end
+
 // @ 0x0112e950
 void rw::audio::core::Voice::Release()
 {
@@ -50,4 +71,14 @@ int __cdecl Voice_CreateInstance(int code)
 	default:
 		return -6;
 	}
+}
+
+// @ 0x011330f0
+int __cdecl FUN_011330f0(void)
+{
+	SndSysObj* sys = (SndSysObj*)g_sysObj;
+	sys->Lock();
+	((Voice*)g_voice)->Release();
+	sys->Unlock();
+	return 0;
 }

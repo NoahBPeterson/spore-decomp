@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionTrade.cpp  ?InitTradeOfferAttributes@Simulator@@YAXXZ  0134b6b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

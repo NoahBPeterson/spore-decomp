@@ -12,10 +12,11 @@ extern "C" void  __cdecl FUN_00c47d80(void* self);
 #pragma warning(disable : 4100)
 
 // ---- items of slice s00c4dbf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl FUN_01021230();
+extern "C" void* __cdecl FUN_01021260();
+extern "C" void  __cdecl FUN_01041c50(const char* name, int key, int flag);
 typedef unsigned int u32;
-extern "C" void  __cdecl FUN_00c472e0(void* self);
-extern "C" void  __cdecl FUN_00c471c0(void* self);
-extern "C" void  __cdecl FUN_00c47d80(void* self);
+struct cBioElemSort { unsigned SortBanners(); };   // 0x00b8de30
 namespace SP {
 class ThisStubs
 {
@@ -155,6 +156,28 @@ struct MissionVt_c4e230 {
     char pad04[0x1f0 - 4];
     int  mState;             // +0x1f0
 };
+
+// @ 0x00c4e1a0
+void __fastcall FUN_00c4e1a0(void* ecx_this, void* edx, int which)
+{
+    switch (which) {
+    case 1:
+        if (((SP::ThisStubs*)ecx_this)->IsActive()) {
+            if (((SP::ThisStubs*)ecx_this)->GetTargetPlanet() == (void*)FUN_01021260())
+                FUN_01041c50("SPG_ColonizeMissionPlanet", (int)0xb1a88fd1, 1);
+        }
+        break;
+    case 3:
+        if (((SP::ThisStubs*)ecx_this)->IsActive()) {
+            if (((SP::ThisStubs*)ecx_this)->GetTargetPlanet()) {
+                int x = *(int*)((char*)FUN_01021230() + 0x48);
+                if (x == (int)(*(cBioElemSort**)((char*)((SP::ThisStubs*)ecx_this)->GetTargetPlanet() + 0x13c))->SortBanners())
+                    FUN_01041c50("SPG_ColonizeMissionSolar", (int)0x45a6efc2, 1);
+            }
+        }
+        break;
+    }
+}
 
 // @ 0x00c4e230
 void __fastcall FUN_00c4e230(void* ecx_this, void* edx)

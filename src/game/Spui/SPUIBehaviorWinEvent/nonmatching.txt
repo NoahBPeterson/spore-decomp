@@ -1,5 +1,8 @@
-# va diff reason
+# va diff-bytes reason (equiv verdict in brackets)
 007fe7d0 140 logic: predicate switch; the stub's Pred returned bool, but retail case 1 returns the raw char argument in al (no bool normalize; quick check flagged eax&0xff), so the stub now returns char and case 1 is `return a;`. still differs: switch compiles to an out-of-line jump table (retail's 16-byte table is inside the function) and the register/local schedule differs. fix1: quick check UNSUPPORTED (emulator wall-clock cut-off; no mismatch in 226 inputs)
 007feb40 32 logic: out->type was stored as 0; retail stores the address of the bool-state-event SerTypeInfo at 0x014161f4 (mType 0x13, objectSize 0x8c, read/write/update 0x7fea00/0x7fe9d0/0x7fe9f0), now out->type = &gBoolStateEventSerTypeInfo. still differs: vcall base offset / register schedule. fix1: quick check PASS (emulator found no mismatch on random inputs) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esi]
 007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs
 007fec90 27 complete; SetMessageWinId; message-manager vcall schedule differs
+007fed20 - complete [WEAK 399/18.2%]; behavior-message factory (kind switch + ARef/Factory + SerItem binding); vtable dispatch + temp schedule differ (LTCG) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007ff0d0 - complete [WEAK 391/31.6%]; WinEvent HandleMessage (register/visibility/dispatch paths); refcount + vcall scheduling differs (LTCG) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007ff290 - complete [WEAK 399/23.1%]; BoolStateEvent HandleMessage (predicate/allocator + vtable dispatch); LTCG register allocation differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

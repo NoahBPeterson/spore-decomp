@@ -68,6 +68,13 @@ void      inlet_float_all(TX* x, float f);                            // 0x00a61
 
 }  // namespace Eapd
 
+// ---- items of slice s00a617b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Obj_s00a6_17b0 {
+    char pad00[0x2c];
+    int mField2c;  // +0x2c
+};
+// ---- items of slice s00a617b0 end
+
 // @ 0x00a61510
 namespace Eapd {
 void vinlet_free(TX* x)
@@ -140,6 +147,12 @@ void voutlet_free(TX* x)
     canvas_rmoutlet((t_glist*)x->mpCanvas, (t_outlet*)x->mpPort);
 }
 }  // namespace Eapd
+
+// @ 0x00a617b0
+int FUN_00a617b0(Obj_s00a6_17b0* p)
+{
+    return p->mField2c;
+}
 
 // @ 0x00a617c0
 namespace Eapd {

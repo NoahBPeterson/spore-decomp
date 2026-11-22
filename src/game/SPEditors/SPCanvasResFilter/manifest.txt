@@ -7,3 +7,4 @@
 ../src/game/SPEditors/SPCanvasResFilter.cpp  ?Init@cBuddyModeFilter@Pollen@SP@@QAE_NXZ  00609630  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPCanvasResFilter.cpp  ?HandleMessage@cBuddyModeFilter@Pollen@SP@@UAE_NIPAX@Z  00609690  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPCanvasResFilter.cpp  ?UpdateHeaderString@cCanvasResFilter@Pollen@SP@@QAE_NXZ  00609710  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPCanvasResFilter.cpp  ?Init@cCanvasResFilter@Pollen@SP@@QAE_NXZ  00609760  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

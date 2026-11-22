@@ -338,28 +338,13 @@ struct Obj10 : Obj10Primary, Obj10RefCounted {
     virtual ~Obj10();
     static void* operator new(size_t s) { return EastlAllocate(s, "Graphics", 0, 0, 0, 0); }
 };
-void  EastlFree(void* p) throw();
-// the destructor's view of Vec12: the storage base frees the heap block, the vector releases each element first
-struct Vec12Storage {
-    E12* begin;                     // +0x0
-    E12* end;                       // +0x4
-    E12* cap;                       // +0x8
-    ~Vec12Storage() {
-        if (begin && *(int*)((char*)begin - 4) != 0)
-            EastlFree(begin);
-    }
-};
-struct Vec12Obj : Vec12Storage { ~Vec12Obj(); };
 void  FUN_00743b50(void* p);
 void  FUN_00576620(void* p);
 struct Sub14 { void FreeRange(void* a, void* b); };
 struct ShadowBase { void Notify(); };
 void  FUN_Memset(void* dst, int val, unsigned size);        // 0x11e073e
-__declspec(noinline) void __fastcall FUN_00781CF0(void* v);  // E36 vector destroy
 void __stdcall EhVecCtorIterator(void* p, unsigned elemSize, int count,
                                  void (*ctor)(void*), void (*dtor)(void*));
-void __stdcall EhVecDtorIterator(void* p, unsigned elemSize, int count,
-                                 void (*dtor)(void*));
 static void DecRefOrRestore(void* obj)
 {
     long* rc = (long*)((char*)obj + 8);
@@ -428,6 +413,68 @@ float FUN_00782bb0(int n);
 float FUN_00782db0(float t, int m, float x);
 float FUN_00782d40(int a, int b);
 // ---- items of slice s00782860 end
+
+// ---- hand-written stub views (not tool-managed: rewrite.py rebuilds the "items of slice" sections above and prunes
+// an item no emitted function of that slice uses, which dropped these and broke the blocks below; keep them here)
+// the placement delete is what makes cl emit the EH frame of a `new (p) T(copy)` whose copy ctor can throw
+// (Vec12::push_back 0x782540: the original restores the vector's end pointer through an __ehhandler)
+inline void operator delete(void*, void*) {}
+void  EastlFree(void* p) throw();
+// the destructor's view of Vec12: the storage base frees the heap block, the vector releases each element first
+struct Vec12Storage {
+    E12* begin;                     // +0x0
+    E12* end;                       // +0x4
+    E12* cap;                       // +0x8
+    ~Vec12Storage() {
+        if (begin && *(int*)((char*)begin - 4) != 0)
+            EastlFree(begin);
+    }
+};
+struct Vec12Obj : Vec12Storage { ~Vec12Obj(); };
+// the E36 vector: the storage base frees the heap block, the vector destroys each element's inner vector first
+struct E36VecStorage {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCap;
+    ~E36VecStorage() { if (mpBegin && *(int*)(mpBegin - 4) != 0) EastlFree(mpBegin); }
+};
+struct E36Vec : E36VecStorage { ~E36Vec(); };
+__declspec(noinline) void __fastcall FUN_00781CF0(void* v);  // E36 vector destroy
+void __stdcall EhVecDtorIterator(void* p, unsigned elemSize, int count,
+                                 void (*dtor)(void*));
+// the destructor's view of cShadowWorld: two bases (vtables 0x13ef094 at +0 and 0x13eb938 at +8 restored on exit)
+// and the members it tears down in reverse order: the reference at +0x18, the element vector at +0x1c (0x781b10), the
+// E36 vector at +0x30 (0x781cf0), the two rasterizer arrays (element destructor 0x576620) and the reference at +0x1bc
+struct cShadowWorldBase0 { virtual void Slot0(); int refcount; ~cShadowWorldBase0() {} };
+struct cShadowWorldBase8 { virtual void Slot0(); unsigned char b0c, b0d, b0e, b0f; ~cShadowWorldBase8() {} };
+struct cShadowWorldRef {
+    IRefObj* mp;
+    ~cShadowWorldRef() { if (mp) mp->Release(); }
+};
+struct cShadowWorldVec12 { E12* begin; E12* end; E12* cap; ~cShadowWorldVec12(); };   // 0x781b10
+struct cShadowWorldE36Vec { E36* b; E36* e; E36* c; int u0c; int u10; ~cShadowWorldE36Vec(); };   // 0x781cf0
+struct cShadowWorldRast { void* p; ~cShadowWorldRast(); };   // 0x576620
+struct __declspec(novtable) cShadowWorldObj : cShadowWorldBase0, cShadowWorldBase8 {
+    void*   p10;                    // +0x010
+    int     u14;                    // +0x014
+    cShadowWorldRef p18;            // +0x018
+    cShadowWorldVec12 vec1c;        // +0x01c
+    int     u28;                    // +0x028
+    int     u2c;                    // +0x02c
+    cShadowWorldE36Vec e36;         // +0x030
+    char    arr44[0xa4];            // +0x044
+    int     ue8;                    // +0x0e8
+    int     uec;                    // +0x0ec
+    int     uf0;                    // +0x0f0
+    cShadowWorldRast rastA[2];      // +0x0f4
+    int     iafc[4];                // +0x0fc
+    cShadowWorldRast rastB[8];      // +0x10c
+    int     ib12c[16];              // +0x12c
+    float   f16c[20];               // +0x16c
+    cShadowWorldRef i1bc;           // +0x1bc
+    ~cShadowWorldObj();
+};
+// ---- end hand-written stub views
 
 // @ 0x007806a0
 void cShadowWorld::Cleanup()
@@ -560,15 +607,6 @@ E36* Func_00781CB0(E36* first, E36* last, E36* dst)
     return dst;
 }
 
-// the E36 vector: the storage base frees the heap block, the vector destroys each element's inner vector first
-struct E36VecStorage {
-    char* mpBegin;
-    char* mpEnd;
-    char* mpCap;
-    ~E36VecStorage() { if (mpBegin && *(int*)(mpBegin - 4) != 0) EastlFree(mpBegin); }
-};
-struct E36Vec : E36VecStorage { ~E36Vec(); };
-
 // @ 0x00781cf0
 E36Vec::~E36Vec()
 {
@@ -654,39 +692,6 @@ cShadowWorld_s0078_19d0* cShadowWorld_ctor(cShadowWorld_s0078_19d0* p)
     return p;
 }
 
-// the destructor's view of cShadowWorld: two bases (vtables 0x13ef094 at +0 and 0x13eb938 at +8 restored on exit)
-// and the members it tears down in reverse order: the reference at +0x18, the element vector at +0x1c (0x781b10), the
-// E36 vector at +0x30 (0x781cf0), the two rasterizer arrays (element destructor 0x576620) and the reference at +0x1bc
-struct cShadowWorldBase0 { virtual void Slot0(); int refcount; ~cShadowWorldBase0() {} };
-struct cShadowWorldBase8 { virtual void Slot0(); unsigned char b0c, b0d, b0e, b0f; ~cShadowWorldBase8() {} };
-struct cShadowWorldRef {
-    IRefObj* mp;
-    ~cShadowWorldRef() { if (mp) mp->Release(); }
-};
-struct cShadowWorldVec12 { E12* begin; E12* end; E12* cap; ~cShadowWorldVec12(); };   // 0x781b10
-struct cShadowWorldE36Vec { E36* b; E36* e; E36* c; int u0c; int u10; ~cShadowWorldE36Vec(); };   // 0x781cf0
-struct cShadowWorldRast { void* p; ~cShadowWorldRast(); };   // 0x576620
-struct __declspec(novtable) cShadowWorldObj : cShadowWorldBase0, cShadowWorldBase8 {
-    void*   p10;                    // +0x010
-    int     u14;                    // +0x014
-    cShadowWorldRef p18;            // +0x018
-    cShadowWorldVec12 vec1c;        // +0x01c
-    int     u28;                    // +0x028
-    int     u2c;                    // +0x02c
-    cShadowWorldE36Vec e36;         // +0x030
-    char    arr44[0xa4];            // +0x044
-    int     ue8;                    // +0x0e8
-    int     uec;                    // +0x0ec
-    int     uf0;                    // +0x0f0
-    cShadowWorldRast rastA[2];      // +0x0f4
-    int     iafc[4];                // +0x0fc
-    cShadowWorldRast rastB[8];      // +0x10c
-    int     ib12c[16];              // +0x12c
-    float   f16c[20];               // +0x16c
-    cShadowWorldRef i1bc;           // +0x1bc
-    ~cShadowWorldObj();
-};
-
 // @ 0x007821b0
 cShadowWorldObj::~cShadowWorldObj()
 {
@@ -720,6 +725,16 @@ E36* Func_00782470(E36* first, E36* last, E36* dst)
         dst->c = last->c;
     }
     return dst;
+}
+
+// @ 0x00782540
+void Vec12::push_back(const E12& value)
+{
+    if (end < cap) {
+        new (end++) E12(value);
+    } else {
+        InsertAux(end, value);
+    }
 }
 
 // @ 0x007825d0

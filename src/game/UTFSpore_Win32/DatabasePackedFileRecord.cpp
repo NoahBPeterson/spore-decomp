@@ -30,10 +30,6 @@ extern char vtbl_PFRecordRead_IStream[];      // 0x14368c4
 // ---- items of slice s008dc1a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uint32;
 typedef unsigned short uint16;
-extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
-extern "C" long __cdecl _InterlockedDecrement(volatile long*);
-extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
-extern "C" void* __cdecl ZoneObject_delete(void* p);                          // 0x926060
 struct Key { uint32 mInstance; uint32 mType; uint32 mGroup; };   // 0xc
 struct IAllocator {
     virtual void a0();                          // +0x00
@@ -136,12 +132,14 @@ struct PFRecordReadIstream {
     bool       IStreamAddRef();                   // 0x8dca50
     bool       IStreamRelease();                  // 0x8dca70
 };
-extern char vtbl_ZoneObject_PFRecordRead[];   // 0x13effa8
-extern char vtbl_ZoneObject_PFRecordWrite[];  // 0x13effb8
-extern char vtbl_PFRecordRead_base[];         // 0x140a2e0
-extern char vtbl_IStream_default[];           // 0x13f3a68
-extern char vtbl_PFRecordRead[];              // 0x1436900
-extern char vtbl_PFRecordRead_IStream[];      // 0x14368c4
+void* PFRecordRead::GetBuffer()
+{
+    EnsureLoaded();
+    unsigned char flags = *(unsigned char*)(raw + 0x68);
+    if (flags == 3)
+        return *(void**)(raw + 0x30);
+    return 0;
+}
 static void InitReadStream(PFRecordRead* self)
 {
     *(void**)(self->raw + 0x20) = vtbl_IStream_default;

@@ -7,24 +7,14 @@
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParserEvent3c@@YI_NPAHHPAX@Z  00841290  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParserEvent40@@YI_NPAHHPAX@Z  00841300  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?cParser_InstantiateMacroNoThrow@@YI_NPAHHPBDPAUcArguments_s0084_1370@ArgScript@EA@@@Z  00841370  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?OnRegister@cCommandStateMeta_s0084_1370@?A0x7be24c0f@@UAEXPAXPAUcState_s0084_1370@ArgScript@EA@@@Z  00841410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?OnRegister@cCommandStateBlock_s0084_1370@?A0x7be24c0f@@UAEXPAXPAUcState_s0084_1370@ArgScript@EA@@@Z  00841440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?SetFlag@cParser_s0084_1370@ArgScript@EA@@QAEXW4tFlag@123@_N@Z  00841490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?LineLocationInfo@cParser_s0084_1370@ArgScript@EA@@UAEPBDXZ  008414d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParseVector2@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  00841540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParseVector3@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  00841590  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParseRGBA@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  00841610  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParseRGB@cParser_s0084_1370@ArgScript@EA@@QAEPAMPAMPBD@Z  008416b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?insert@string8_s0084_2620@eastl@@QAEAAU12@IABU12@@Z  00842760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?EvalReal@cMatchFunction_s0084_2620@?A0x2d0954f8@@QAEXXZ  00842a90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?Command@cParser_s0084_2620@ArgScript@EA@@UBEPAXPBD@Z  00842c10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ??1MacroPair@@QAE@XZ  00844680  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?DoFreeNodes@StrHashtable@@QAEXPAPAUStrNode@@I@Z  00844700  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?OnEndParse@If_s0084_2620@?A0x703b9496@@UAEX_N@Z  00842b50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?erase@MacroHashtable@@QAE?AUMacroHashIterator@@U2@@Z  00846c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?DoInsertValue@bool_vec_s0084_3650@eastl@@QAEXPA_NPB_N@Z  00843bc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?DoFreeNodes@StrHashtable_s0084_6280@eastl@@QAEXPAPAUMacroHashNode@@I@Z  00846630  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?FindParentDir@@YAXPBDPAUstring8_s0084_2620@eastl@@@Z  008428b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?OnRegister@cCommandStateMeta_s0084_1370@?A0x7be24c0f@@UAEXPAXPAUcState_s0084_1370@ArgScript@EA@@@Z  00841410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?OnRegister@cCommandStateBlock_s0084_1370@?A0x7be24c0f@@UAEXPAXPAUcState_s0084_1370@ArgScript@EA@@@Z  00841440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?Execute@cEvalCommand_s0084_1370@?A0x7be24c0f@@QAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  008418b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ??0cSetECommand_s0084_1370@?A0x7be24c0f@@QAE@XZ  00841900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?Execute@cNamespaceCommand_s0084_1370@?A0x7be24c0f@@UAEXPAUcArguments_s0084_1370@ArgScript@EA@@@Z  008419d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
@@ -41,19 +31,29 @@
 ../src/game/UTFSpore_Win32/Parser.cpp  ?EvalInt@cEqFunction_s0084_1370@?A0x7be24c0f@@QAEHPAPBDPAUcExpression_s0084_1370@ArgScript@EA@@@Z  00842520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?EvalInt@cMatchFunction_s0084_2620@?A0x7be24c0f@@QAEHPAPBDPAUcExpression_s0084_2620@ArgScript@EA@@@Z  00842620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ??1StringStringPair_s0084_2620@?A0x7be24c0f@@QAE@XZ  00842720  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?insert@string8_s0084_2620@eastl@@QAEAAU12@IABU12@@Z  00842760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?FindParentDir@@YAXPBDPAUstring8_s0084_2620@eastl@@@Z  008428b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?Execute@cVersionCommand_s0084_2620@?A0x7be24c0f@@UAEXPAUcArguments_s0084_2620@ArgScript@EA@@@Z  00842a00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?EvalReal@cMatchFunction_s0084_2620@?A0x2d0954f8@@QAEXXZ  00842a90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ??0If_s0084_2620@?A0x7be24c0f@@QAE@XZ  00842ac0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?OnEndParse@If_s0084_2620@?A0x703b9496@@UAEX_N@Z  00842b50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?Command@cParser_s0084_2620@ArgScript@EA@@UBEPAXPBD@Z  00842c10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?GetLineLocationInfo@cParser_s0084_2620@ArgScript@EA@@UBEXPAUstring8_s0084_2620@eastl@@PAH@Z  00843240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?DefinitionExists@cParser_s0084_2620@ArgScript@EA@@UBE_NPBD@Z  00843280  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?HasName6c@cParser_s0084_2620@ArgScript@EA@@QBE_NPBD@Z  008432d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?DoInsertValue@bool_vec_s0084_3650@eastl@@QAEXPA_NPB_N@Z  00843bc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ??1MacroPair@@QAE@XZ  00844680  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?DoFreeNodes@StrHashtable@@QAEXPAPAUStrNode@@I@Z  00844700  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ??0cMacroDefinition@ArgScript@EA@@QAE@XZ  00844860  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ??0MacroPair@@QAE@ABUstring8_s0084_4270@eastl@@ABU?$AutoRefCount@UcMacroDefinition@ArgScript@EA@@@ArgScript@EA@@@Z  00844a00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ??0MacroPair@@QAE@ABU0@@Z  00844a60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?DoFreeNodes@StrHashtable_s0084_6280@eastl@@QAEXPAPAUMacroHashNode@@I@Z  00846630  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846680  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetBCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetICommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  008467c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetFCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846810  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetCCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846870  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetV2Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  008468f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetV3Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846960  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetV4Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  008469d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ??0MacroPair@@QAE@ABUstring8_s0084_4270@eastl@@ABU?$AutoRefCount@UcMacroDefinition@ArgScript@EA@@@ArgScript@EA@@@Z  00844a00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ??0MacroPair@@QAE@ABU0@@Z  00844a60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ??0cMacroDefinition@ArgScript@EA@@QAE@XZ  00844860  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetBCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?GetLineLocationInfo@cParser_s0084_2620@ArgScript@EA@@UBEXPAUstring8_s0084_2620@eastl@@PAH@Z  00843240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?DefinitionExists@cParser_s0084_2620@ArgScript@EA@@UBE_NPBD@Z  00843280  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?HasName6c@cParser_s0084_2620@ArgScript@EA@@QBE_NPBD@Z  008432d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/Parser.cpp  ?ExecuteBody@cSetICommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  008467c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?erase@MacroHashtable@@QAE?AUMacroHashIterator@@U2@@Z  00846c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

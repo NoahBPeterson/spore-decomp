@@ -6,7 +6,9 @@
 #include "nSPCreatureAnim/queued_blender.h"
 #include "EA/ArgScript/cCommandBase.h"
 #include "nSPCreatureAnim/creature_instance_data.h"
-#pragma optimize("gt", off)
+
+// unnamed retail callees and globals (address in the comment)
+extern "C" void  __cdecl FUN_009a1ad0(void* p);                      // 0x009a1ad0
 
 // ---- items of slice s009feb30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vec3 { float x, y, z; Vec3() {} Vec3(float a, float b, float c) : x(a), y(b), z(c) {} Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {} };
@@ -150,6 +152,37 @@ int AnimGoal::IsActive()
     if (field_00 == 0 && ((uint32_t)mChildCount >= 8 || mChildren[mChildCount * 3] == 0))
         return 0;
     return 1;
+}
+
+// @ 0x009ff380
+int QueuedBlender::FindFreeSlot()
+{
+    int result = (int)mCurrent;
+    if (mPending == 0xffffffff)
+        return result;
+    for (int k = 0; k < 16; ++k) {
+        if (mActive[k] == mPending)
+            mActive[k] = 0xffffffff;
+    }
+    uint32_t* p = mActive;
+    int i;
+    for (i = 0; i < 16; ++i, ++p) {
+        uint32_t v = *p;
+        if (v > 0x10)
+            goto found;
+        AnimGoal* a = (AnimGoal*)((char*)this + v * 0xf0 + 8);
+        if (a->field_00 == 0 && ((uint32_t)a->mChildCount >= 8 || a->mChildren[a->mChildCount * 3] == 0))
+            goto found;
+    }
+    return result;
+found:
+    AnimGoal* g = (AnimGoal*)((char*)this + mPending * 0xf0 + 8);
+    if (g->field_00 != 0)
+        FUN_009a1ad0((void*)g->field_00);
+    g->field_c4 = 0.0f;
+    g->field_c0 = 0;
+    mActive[i] = mPending;
+    return i;
 }
 
 // @ 0x009ff440

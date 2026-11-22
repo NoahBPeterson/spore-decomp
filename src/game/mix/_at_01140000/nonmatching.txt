@@ -1,2 +1,3 @@
 # s01141a90: complete, behavior-equivalent source that is not byte-exact.
 01141dd0  269  mono/stereo-decode filter pull; complete; difftest PASS 82.9% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142470  279  mixer instance tick: codec pull + per-channel/per-bus ramp mixing; complete; difftest WEAK 58.3% cov (object-heavy, 398/399 inputs need fake calls). flags /vc71 /O2 /MD /Gy /TP /arch:SSE

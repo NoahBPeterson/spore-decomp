@@ -18,6 +18,6 @@
 00a50c70 45 complete; text_shouldvis - the canvas-class/widgetbehavior compares now share the single `return 1` tail block via a `goto one` label at the end (was 47 with duplicated early returns); the remaining delta is the mid-section branch order - the original tests the class first with a je/jmp merge and mine emits the widgetbehavior arm first, plus branch-encoding sizes. difftest WEAK flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00a50cc0 272 complete; text_click - the gensym("click")/zgetfn probe, the pd_vmess("fffff") and the gatom_click/message_click dispatch are inlined differently flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a50e00 395 complete; text_save - the saveto/zgetfn special case, the gatom_escapit + binbuf_addv("ssiiifffsss") tail and the obj/msg/text/meta cases are laid out differently flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00a51240 353 enregistered x1..y2 and pattern slot sharing differ (register allocation) ; difftest PASS (gpTextClass annotated 0x016754f0)
-00a51510 233 register assignment (b/vec) and canvas_objtext is a register-convention static (edi=b)
-00a51ae0 7 sret temp for canvas_realizedollar overlaps x2/y2 in original (frame 0x14 vs 0x18)
+00a51240 353 enregistered x1..y2 and pattern slot sharing differ (register allocation) ; difftest PASS (gpTextClass annotated 0x016754f0) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a51510 233 register assignment (b/vec) and canvas_objtext is a register-convention static (edi=b) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a51ae0 7 sret temp for canvas_realizedollar overlaps x2/y2 in original (frame 0x14 vs 0x18) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

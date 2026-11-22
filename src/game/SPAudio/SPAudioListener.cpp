@@ -1,5 +1,6 @@
-// Object file: SPAudio/SPAudioListener.obj.  Types, members and virtual calls use the canonical headers under
-// src/game/include; each function keeps its '// @ 0xVA' marker.
+// src/game/SPAudio/SPAudioListener.cpp -- migrated from slice(s) s00a3bc70 by tools/migrate/rewrite.py
+// Object file: SPAudio/SPAudioListener.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
+// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/Audio/cListener.h"
@@ -8,24 +9,23 @@
 #include "EA/Audio/ResponseCurve.h"
 #include "SP/cViewer.h"
 
-// A 3-float vector as the listener stores it (offset/size only; the canonical type is cSPVector3).
-struct V3 {
-    float x, y, z;
-    V3() {}
-    V3(const V3& o) : x(o.x), y(o.y), z(o.z) {}
-    V3(float a, float b, float c) : x(a), y(b), z(c) {}
-};
+// unnamed retail callees and globals (address in the comment)
+extern "C" void __cdecl FUN_00f47380(void* pBuffer);   // 0x00f47380 operator delete
+#include <math.h>
+
+// ---- items of slice s00a3bc70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct V3 { float x, y, z; V3() {} V3(const V3& o) : x(o.x), y(o.y), z(o.z) {} V3(float a, float b, float c) : x(a), y(b), z(c) {}
+    V3 operator*(float s) const { return V3(x * s, y * s, z * s); }
+    friend V3 operator*(float s, const V3& v) { return V3(s * v.x, s * v.y, s * v.z); }
+    V3& operator+=(const V3& o) { x += o.x; y += o.y; z += o.z; return *this; } };
 struct M33 { float m[9]; };
 extern const V3 kZeroVec;                          // 0x0166eae0..e8
-
 extern "C" void __cdecl FUN_00f47380(void* pBuffer);   // 0x00f47380 operator delete
-
-// EA::Audio::ResponseCurve as the listener stores it: {begin, end, size, capacity, ...} (0x364 bytes retail).
-class IConfiguration_s00a3_bc70;
-struct ResponseCurve_s00a3_bc70 {
-    ResponseCurve_s00a3_bc70();                               // 0x00a1aa50 thiscall
-    ~ResponseCurve_s00a3_bc70() { if (mpBegin != 0 && mpBegin != mpCapacity) FUN_00f47380(mpBegin); }
-    bool InitFromConfiguration(IConfiguration_s00a3_bc70* pConfig, uint32_t tag);   // 0x00a1a9d0 thiscall ret 8
+class IConfiguration;
+struct ResponseCurve {
+    ResponseCurve();                               // 0x00a1aa50 thiscall
+    ~ResponseCurve() { if (mpBegin != 0 && mpBegin != mpCapacity) FUN_00f47380(mpBegin); }
+    bool InitFromConfiguration(IConfiguration* pConfig, uint32_t tag);   // 0x00a1a9d0 thiscall ret 8
     float GetOutputValue(float x);                 // 0x00a1a110
     bool GetMinInput(float* out);                  // 0x00a1a1c0
     bool GetMaxInput(float* out);                  // 0x00a1a1a0
@@ -37,24 +37,18 @@ struct ResponseCurve_s00a3_bc70 {
     uint32_t m14;                                  // +0x14
     uint8_t  pad18[0x364 - 0x18];                  // +0x18
 };
-
-// The process-wide EA::Messaging::Server, seen through the two slots cListener uses.
-class IHandler_s00a3_bc70;
+class IHandler;
 struct MessageServer {
     virtual void pad0() {} virtual void pad1() {} virtual void pad2() {} virtual void pad3() {}
     virtual void pad4() {}
     virtual void Post(uint32_t id, const void* msg, int flag);   // slot 5 (+0x14)
     virtual void pad6() {} virtual void pad7() {} virtual void pad8() {}
-    virtual void AddHandler(IHandler_s00a3_bc70* pHandler, uint32_t id);    // slot 9 (+0x24)
+    virtual void AddHandler(IHandler* pHandler, uint32_t id);    // slot 9 (+0x24)
 };
 MessageServer* GetMessageServer();                 // 0x0067dcc0
-
-// SP::cViewer, only the camera readout cListener::Update uses.
 struct cViewer {
     void GetCameraLocationInfo(V3* pos, V3* a, V3* b, V3* c);   // 0x007c3d30
 };
-
-// cListener's owning base: a refcount (vptr + count) at +0x00.
 class cRefCountBase {
 public:
     virtual void Release();
@@ -62,39 +56,57 @@ public:
     int32_t mRefCount;                             // +0x04
     cRefCountBase() : mRefCount(0) {}
 };
-
-// cListener's message handler sub-object (IHandler at cListener+0x08).
 class cListener;
-class IHandler_s00a3_bc70 {
+class IHandler {
 public:
     virtual bool HandleMessage(uint32_t id, void* pMsg);   // 0x00a3c830
-    virtual ~IHandler_s00a3_bc70() {}
-    // the listener that owns this sub-object
+    virtual ~IHandler() {}
+    // the listener that owns this sub-object (IHandler sits at cListener+0x08)
     cListener* Listener() { return (cListener*)((char*)this - sizeof(cRefCountBase)); }
 };
-
-class cListener : public cRefCountBase, public IHandler_s00a3_bc70 {
+class cListener : public cRefCountBase, public IHandler {
 public:
     cListener();                                   // 0x00a3c970
     bool Init();                                   // 0x00a3c710
     void ReadTuningValues();                       // 0x00a3c5a0
     void SetTuningId(uint32_t id);                 // 0x00a3c800
-    uint32_t mTuningId;                            // +0x0c  (canonical mListenerTuningId)
-    uint32_t mPendingId;                           // +0x10  (canonical mPrevListenerTuningId)
+    uint32_t mTuningId;                            // +0x0c
+    uint32_t mPendingId;                           // +0x10
     bool mbStaticMic;                              // +0x14
     bool mbEnableBoom;                             // +0x15
     uint8_t pad16[2];                              // +0x16
-    ResponseCurve_s00a3_bc70 mCurveBoom;                      // +0x18  (canonical mCurveBoomDistance)
-    ResponseCurve_s00a3_bc70 mCurveOffset;                    // +0x37c (canonical mCurveListenerOffset)
+    ResponseCurve mCurveBoom;                      // +0x18
+    ResponseCurve mCurveOffset;                    // +0x37c
     V3 mListenerOffset;                            // +0x6e0
     V3 mListenerPosition;                          // +0x6ec
     M33 mListenerMatrix;                           // +0x6f8
     V3 mCellMicrophonePos;                         // +0x71c
     V3 mAnchorPos;                                 // +0x728
+    ResponseCurve* CurveBoom() { return &mCurveBoom; }
+    ResponseCurve* CurveOffset() { return &mCurveOffset; }
     void Update(cViewer* viewer);
 };
-
-// The microphone-position message cListener::HandleMessage consumes.
+template <class T>
+class AutoRefCount {
+public:
+    T* mpPtr;                                      // +0x00
+    AutoRefCount() : mpPtr(0) {}
+    ~AutoRefCount() { T* p = mpPtr; if (p) p->Release(); }
+    T* operator->() const { return mpPtr; }
+};
+class IConfiguration {
+public:
+    virtual void v00();
+    virtual void Release();                                                   // slot 1 (+0x04)
+    virtual void v08() {} virtual void v0c() {} virtual void v10() {}
+    virtual void GetConfiguration(uint32_t id, AutoRefCount<IConfiguration>* pOut, uint32_t tag);  // +0x14
+    virtual bool GetBool(uint32_t id);                                        // +0x18
+    virtual void v1c() {} virtual void v20() {}
+    virtual void SetPointer(uint32_t id, void* pValue);                       // +0x24
+    virtual void v28() {} virtual void v2c() {} virtual void v30() {} virtual void v34() {}
+    virtual void v38() {} virtual void v3c() {} virtual void v40() {}
+    virtual bool QueryValue(uint32_t id, void* pOutA, void* pOutB);           // +0x44
+};
 struct cMicrophoneMessage {
     uint32_t mA;                                   // +0x00
     uint32_t mB;                                   // +0x04
@@ -105,6 +117,10 @@ struct cMicrophoneMessage {
     float    mZ;                                   // +0x18
     uint32_t mZTag;                                // +0x1c
 };
+// ---- items of slice s00a3bc70 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern const V3 kZeroVec;                          // 0x0166eae0..e8
 
 // @ 0x00a3c710
 bool cListener::Init()
@@ -140,7 +156,7 @@ void cListener::SetTuningId(uint32_t id)
 }
 
 // @ 0x00a3c830
-bool IHandler_s00a3_bc70::HandleMessage(uint32_t id, void* pMsg)
+bool IHandler::HandleMessage(uint32_t id, void* pMsg)
 {
     // IHandler is the sub-object at cListener+0x08; the original folds that -8 into its
     // member displacements and only re-adjusts ecx before the ReadTuningValues calls.

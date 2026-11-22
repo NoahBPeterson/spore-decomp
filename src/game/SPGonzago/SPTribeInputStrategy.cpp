@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeInputStrategy.cpp -- migrated from slice(s) s00ccfc20, s00cd0aa0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeInputStrategy.cpp -- migrated from slice(s) s00cd16a0, s00ccfc20, s00cd0aa0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -414,6 +414,85 @@ struct CInput {
     int  F_cd0660(void* flags, void* pos, void* c);      // 0x00cd0660
 };
 // ---- items of slice s00ccfc20 end
+
+// ---- items of slice s00cd16a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace Simulator {
+struct cListRoot {
+    void* mpNext;                                            // +0x00
+    void* mpPrev;                                            // +0x04
+};
+}
+namespace Simulator {
+struct cNested1c {
+    uint32_t  mTag00;                                        // +0x00
+    cListRoot mRoot;                                         // +0x04  self-referential sentinel
+    void*     mpValue0c;                                     // +0x0c
+    uint8_t   mFlag10;                                       // +0x10
+    uint32_t  mPad14;                                        // +0x14
+    uint32_t  mPad18;                                        // +0x18
+
+    void Release(void* value);                               // 0x00e4b990
+    void Reset(void);                                        // inlined by the caller
+};
+}
+namespace Simulator {
+struct cSub04 {
+    uint32_t  mTag00;                                        // +0x00
+    cListRoot mRoot;                                         // +0x04  self-referential sentinel
+    void*     mpValue0c;                                     // +0x0c
+    uint8_t   mFlag10;                                       // +0x10
+    uint32_t  mPad14;                                        // +0x14
+    uint32_t  mPad18;                                        // +0x18
+    cNested1c mNested1c;                                     // +0x1c
+
+    void Release(void* value);                               // 0x00b1b830
+    void Reset(void);                                        // inlined by the caller
+};
+}
+namespace Simulator {
+struct cScenarioEditModeInputStrategy {
+    void*    mpVtable;                                       // +0x00
+    cSub04   mSub;                                           // +0x04
+
+    void* Destroy(uint8_t flags);
+    void  InitUIStateMachines(int mode);
+};
+}
+namespace Simulator {
+struct cStateMachineHost {
+    uint32_t mPad00[4];                                      // +0x00 .. +0x0f
+    void*    mpOwner;                                        // +0x10
+
+    cStateMachineHost(void* owner);                          // 0x00b198d0
+    void DeclareState(int state, const char* name);          // 0x00b1c080
+    void LoadStateMachine(const char* name);                 // 0x00b1b410
+    void Finish();                                           // 0x00b19b60
+    ~cStateMachineHost();                                    // 0x0083c750
+};
+}
+namespace Simulator {
+inline void cNested1c::Reset(void)
+{
+    Release(mpValue0c);
+    mRoot.mpNext = &mRoot;
+    mRoot.mpPrev = &mRoot;
+    mpValue0c = 0;
+    mFlag10 = 0;
+    mPad14 = 0;
+}
+}
+namespace Simulator {
+inline void cSub04::Reset(void)
+{
+    Release(mpValue0c);
+    mRoot.mpNext = &mRoot;
+    mRoot.mpPrev = &mRoot;
+    mpValue0c = 0;
+    mFlag10 = 0;
+    mPad14 = 0;
+}
+}
+// ---- items of slice s00cd16a0 end
 
 // @ 0x00cd07c0
 void CInput::F_cd07c0(void* a, void* b, void* c)
@@ -843,4 +922,28 @@ void SP::cTribeInputStrategy::Init(cSPUIInputOwner* pOwner)
     default:
         return;
     }
+}
+
+// @ 0x00cd16a0
+void Simulator::cScenarioEditModeInputStrategy::InitUIStateMachines(int mode)
+{
+    mSub.Reset();
+    mSub.mNested1c.Reset();
+
+    cStateMachineHost host(&mSub);
+    host.DeclareState(0, "CISNeutral");
+    switch (mode)
+    {
+    case 0:
+        host.LoadStateMachine("UIMachineLeftRightTranslate");
+        break;
+    case 1:
+        host.LoadStateMachine("UIMachineTribeRotate");
+        break;
+    default:
+        host.LoadStateMachine("UIMachineLeftRightTranslate");
+        break;
+    }
+    host.LoadStateMachine("UIMachineTribe");
+    host.Finish();
 }

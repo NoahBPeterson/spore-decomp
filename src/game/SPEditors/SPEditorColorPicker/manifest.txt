@@ -7,3 +7,4 @@
 ../src/game/SPEditors/SPEditorColorPicker.cpp  ??0cX@@QAE@XZ  005a5a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorColorPicker.cpp  ?SetFromSwatch@cSPColorSwatch_s005a_51c0@@QAEXPAV1@@Z  005a5ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorColorPicker.cpp  ?Clear@cSPEditorColorPicker@@QAEXXZ  005a6390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorColorPicker.cpp  ?Update@cSPEditorColorPicker@@QAEXH@Z  005a6db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

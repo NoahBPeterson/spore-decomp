@@ -13,6 +13,10 @@
 extern uint32_t g_modelGroup;                                       // 0x015d4308
 
 // ---- items of slice s0047d450 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtblA;
+extern void* g_vtblC;
+extern void* g_vtblD;
+extern void* g_vtblE;
 struct cPropertyList;
 struct cSPEditorBlock;
 template <int N, class B> struct VPad : VPad<N - 1, B> { virtual void vpad(VPad<N, B>*) {} };
@@ -59,7 +63,6 @@ struct cSPEditorHandle {
     void  Init(cSPEditorBlock* block, bool loadProps, uint32_t modelKey, uint32_t overdrawKey);
     void  Shutdown();
 };
-extern uint32_t g_modelGroup;                                       // 0x015d4308
 struct cSPEditorBlock {
     char  pad_00[0x0c];
     void* mPropList;              // +0x0c (unused here)
@@ -121,9 +124,18 @@ struct Bitset32 {
 };
 struct V3 { float x, y, z; };
 struct HandleV : IUnknown32 {
-    virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
-    virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
-    virtual void s12(); virtual void s13();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
     virtual float GetHighlight(int state);                              // 0x38
     virtual float GetOverdrawHighlight(int state);                      // 0x3c
     virtual const V3* GetColor(V3* out, int state);         // 0x40
@@ -261,6 +273,22 @@ inline void GetFloatProperty_s0047_e4b0(cPropertyList* pl, uint32_t key, float* 
 }
 extern Vector3 g_defaultHandleColor;   // 0x015d443c (equiv t2)
 // ---- items of slice s0047e4b0 end
+
+// @ 0x0047d870
+void cSPEditorHandle::Destroy()
+{
+    this->vptr = &g_vtblD;
+    this->vptr2 = &g_vtblE;
+    Shutdown();
+    if (this->mOverdrawModel)
+        ((void(__thiscall*)(cMWModel*))((void**)(*(void**)this->mOverdrawModel))[1])(this->mOverdrawModel);
+    if (this->mModel)
+        this->mModel->Release();
+    if (this->mPropList)
+        ((void(__thiscall*)(cPropertyList*))this->mPropList->vptr[1])(this->mPropList);
+    this->vptr2 = &g_vtblC;
+    this->vptr = &g_vtblA;
+}
 
 // @ 0x0047d950
 void cSPEditorHandle::LoadProps()

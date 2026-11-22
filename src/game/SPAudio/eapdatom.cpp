@@ -3,6 +3,10 @@
 // Eapd's atom accessors: pull a float, an int or a symbol out of a t_atom.
 
 #include "game/types.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
 
 // Atom kinds stored in t_atom::mType.
 enum {
@@ -31,6 +35,33 @@ extern Sym2 gEmptySymbol;   // 0x167589c
 
 extern "C" int  __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);   // 0x0107f390 (equiv t2)
 extern "C" void __cdecl gensym(Sym2* out, const char* name);                            // 0x00a675f0 (equiv t2)
+
+// ---- items of slice s00a469b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_symbol {
+    uint32_t    mHash;   // +0
+    const char* mpName;  // +4
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_atom {          // 12 bytes
+    int32_t a_type;
+    union {
+        float    w_float;
+        int32_t  w_index;
+        t_symbol w_symbol;
+    } a_w;
+};
+}
+}
+}
+// ---- items of slice s00a469b0 end
 
 // @ 0x00a46760
 inline float atom_getfloat(Atom* a)
@@ -128,3 +159,88 @@ Sym2* atom_getsymbol_at(Sym2* out, int i, int n, Atom* arr)
     }
     return out;
 }
+
+// @ 0x00a469b0
+namespace EA { namespace Audio { namespace Eapd {
+void atom_string(const t_atom* a, char* buf, int bufsize)
+{
+    char tbuf[32];
+
+    switch (a->a_type)
+    {
+    case 3:      // A_SEMI
+        strcpy(buf, ";");
+        return;
+    case 4:      // A_COMMA
+        strcpy(buf, ",");
+        return;
+
+    case 1:      // A_FLOAT
+        sprintf(tbuf, "%g", (double)a->a_w.w_float);
+        if ((unsigned int)strlen(tbuf) < (unsigned int)(bufsize - 1)) {
+            strcpy(buf, tbuf);
+            return;
+        }
+        if (a->a_w.w_float < 0.0f)
+            strcpy(buf, "-");
+        else
+            strcat(buf, "+");
+        return;
+
+    case 2:      // A_SYMBOL
+        {
+            char* bufp = buf;
+            const char* sourceptr = a->a_w.w_symbol.mpName;
+            unsigned int count = 0;
+
+            if (sourceptr[0]) {
+                const char* p = sourceptr;
+                int quote = 0;
+                char c = *p;
+                do {
+                    if (c == ';' || c == ',' || c == '\\' ||
+                        (c == '$' && p == sourceptr && p[1] >= '0' && p[1] <= '9'))
+                        quote = 1;
+                    c = p[1];
+                    count++;
+                    p++;
+                } while (c);
+                if (quote) {
+                    const char* e = buf + bufsize - 2;
+                    char c;
+                    while (bufp < e) {
+                        c = *sourceptr;
+                        if (c == '\0')
+                            break;
+                        if (c == ';' || c == ',' || c == '\\' ||
+                            (c == '$' && bufp == buf && sourceptr[1] >= '0' &&
+                             sourceptr[1] <= '9'))
+                            *bufp++ = '\\';
+                        *bufp++ = c;
+                        sourceptr++;
+                    }
+                    if (*sourceptr)
+                        *bufp++ = '*';
+                    *bufp = 0;
+                    return;
+                }
+            }
+            if (count < (unsigned int)(bufsize - 1)) {
+                strcpy(buf, sourceptr);
+                return;
+            }
+            strncpy(buf, sourceptr, bufsize - 2);
+            buf[bufsize - 2] = '*';
+            buf[bufsize - 1] = 0;
+            return;
+        }
+
+    case 7:      // A_DOLLAR
+        sprintf(buf, "$%d", a->a_w.w_index);
+        return;
+    case 8:      // A_DOLLSYM
+        sprintf(buf, "$%s", a->a_w.w_symbol.mpName);
+        return;
+    }
+}
+}}}  // namespace EA::Audio::Eapd

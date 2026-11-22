@@ -49,11 +49,30 @@ struct VideoEncoder_Jpeg {
     void Encode(void* frame);
 };
 
-// Defined elsewhere in the slice, not in this object.
-extern "C" void FUN_00fcda10(int self, int p2, int p3);  // 0x00fcda10
+// The three callbacks FUN_00fcda10 installs are free functions of SPMovie/_at_00fc0000.obj.
+extern "C" void FUN_00fcd970(int self);   // 0x00fcd970
+extern "C" int  FUN_00fcd9a0(int self);   // 0x00fcd9a0
+extern "C" void FUN_00fcd9e0(int self);   // 0x00fcd9e0
 
 // Highest quality the caller may ask for; higher values are clamped with an error.
 static const unsigned int kMaxQuality = 10000;
+
+// @ 0x00fcda10
+// Lazily allocates the 0x20-byte callback block at this+0x14 and fills it: three callbacks
+// (0x00fcd970/0x00fcd9a0/0x00fcd9e0) plus the two arguments.
+extern "C" void FUN_00fcda10(int self, int p2, int p3)
+{
+    if (*(int*)(self + 0x14) == 0) {
+        int v = ((int (*)(int, int, int))**(void***)(self + 4))(self, 0, 0x20);
+        *(int*)(self + 0x14) = v;
+    }
+    int* p = *(int**)(self + 0x14);
+    p[2] = (int)&FUN_00fcd970;
+    p[3] = (int)&FUN_00fcd9a0;
+    p[4] = (int)&FUN_00fcd9e0;
+    p[5] = p2;
+    p[6] = p3;
+}
 
 // @ 0x00fcda60
 void VideoEncoder_Jpeg::Init(ICoreAllocator* alloc)

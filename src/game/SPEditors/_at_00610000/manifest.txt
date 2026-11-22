@@ -4,8 +4,8 @@
 ../src/game/SPEditors/_at_00610000.cpp  ??0O96@Pollen@SP@@QAE@PAXPBX@Z  0061e250  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ??0O96@Pollen@SP@@QAE@PAXHHPBX@Z  0061e2c0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ?DeletingDtor@O96@Pollen@SP@@QAEPAU123@I@Z  0061e330  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00610000.cpp  ?find_last_not_of@String8@Pollen@SP@@QBEIPBDI@Z  0061e3c0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ?ConvertToString8@Pollen@SP@@YAXPAXPB_W@Z  0061e430  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00610000.cpp  ?Dtor@PaintSystem@Pollen@SP@@QAEXXZ  0061e540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ?Init@cFeedManager@@QAEXXZ  0061faf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ?Dispatch2@cFeedManager@@QAE_NIPAX@Z  0061fbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/_at_00610000.cpp  ?Dtor@PaintSystem@Pollen@SP@@QAEXXZ  0061e540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPEditors/_at_00610000.cpp  ?find_last_not_of@String8@Pollen@SP@@QBEIPBDI@Z  0061e3c0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

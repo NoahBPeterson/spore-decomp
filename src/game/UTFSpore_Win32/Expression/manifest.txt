@@ -1,18 +1,19 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/Expression.cpp  ?CeilToFloat@@YAMM@Z  0083ce70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?DiscardWhiteSpace@@YAXPAPBD@Z  0083ce90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?ReleaseRefCount@ExprFunctionRef@@QAEXXZ  0083ced0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?CtorA@PairCtorStub@@QAEPAU1@PBUstring8_s0083_c900@eastl@@PAPAH@Z  0083cef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?EvalExpectCharThrow@@YGXPAPBDD@Z  0083d240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?EvalContinueChar@@YGEPAPBDD@Z  0083d290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?erase@ExprTable@@QAEHABUstring8_s0083_d3d0@eastl@@@Z  0083dea0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ??0cExpression@@QAE@XZ  0083e430  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalRealExpression@cExpression@ArgScript@EA@@QAEMAAPBD@Z  0083e470  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?ParseReal@cExpression@ArgScript@EA@@QAEMPBD@Z  0083e4f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?EvalRealParentheses2@cExpression@@QAEMPAPBD@Z  0083e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalSignedIntNumber@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083e9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntFactor@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083ea10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntTerm@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083ea70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntExpression@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083eb00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?ParseInt@cExpression@ArgScript@EA@@QAEHPBD@Z  0083edc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?ReleaseRefCount@ExprFunctionRef@@QAEXXZ  0083ced0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalExpectCharThrow@@YGXPAPBDD@Z  0083d240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalContinueChar@@YGEPAPBDD@Z  0083d290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalRealParentheses2@cExpression@@QAEMPAPBD@Z  0083e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalChar@cExpression_s0083_f140@ArgScript@EA@@QAEHPAPBD@Z  0083f480  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?ParseBool@cExpression_s0083_f140@ArgScript@EA@@QAE_NPBD@Z  0083f510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ??0cExpression@@QAE@XZ  0083e430  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntFactor@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083ea10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?CtorA@PairCtorStub@@QAEPAU1@PBUstring8_s0083_c900@eastl@@PAPAH@Z  0083cef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

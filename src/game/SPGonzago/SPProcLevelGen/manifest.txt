@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPProcLevelGen.cpp  ?Notify@PropChangeNotifier@Pollen@SP@@QAE_NPAVcPropertyList@3@@Z  006237d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

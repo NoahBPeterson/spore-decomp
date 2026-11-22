@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
-00921bc0 10 regalloc: all four paths (EnterCriticalSection, both loops, CloseHandle/LeaveCriticalSection ordering) already match retail; only the remove branch restores esi after the LeaveCriticalSection call where retail pops it before the `push ebp` argument, in both the found and table-full exits (esp at those calls differs by 4). Sweep: 250 random inputs, all 12 edges, 100% insns, 0 mismatches. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp] fix1: quick check PASS (emulator; angr not installed)
-00921cc0 66 GetThreadId: reconstruction of the DuplicateHandle/TLS sequence does not match cl's scheduling
+00921bc0 10 thread-handle add/remove: register-save ordering in the "table full" path (pop esi vs push ebp first) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp] flags: /O2 /MD /Gy /EHsc /TP
+00921cc0 66 GetThreadId: reconstruction of the DuplicateHandle/TLS sequence does not match cl's scheduling flags: /O2 /MD /Gy /EHsc /TP

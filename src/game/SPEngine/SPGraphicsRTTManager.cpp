@@ -129,7 +129,7 @@ struct cRTTManager {
 struct PageRecord_s0076_cc00 {
     int32_t mData[7];   // +0x00
     uint8_t mFlag;      // +0x1c
-    PageRecord_s0076_cc00(const PageRecord_s0076_cc00& o);
+    PageRecord_s0076_cc00(const PageRecord_s0076_cc00& o);  // 0x0076d9a0 (PageRecord::PageRecord_s0076_cc00)
 };
 struct OwnedSub {
     void Destroy();    // 0x007c3ba0
@@ -871,6 +871,7 @@ struct RTTPage_76e110 {
     ImageRef_76e110 mImage;                                          // +0x38
     void AddNode(int w, int h);                                      // 0x007b0fa0
 };
+
 // @ 0x0076e110
 bool cRTTManager_s0076_db40::AllocateNewPage(int pageId, int w, int h, int depth, void* page)
 {
@@ -1099,6 +1100,7 @@ struct CheatCtorView : CheatBaseView {
     CheatCtorView(int owner);
     virtual ~CheatCtorView();
 };
+
 // @ 0x0076ea60
 CheatCtorView::CheatCtorView(int owner) : mSpec(true)
 {

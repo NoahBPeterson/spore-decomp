@@ -9,6 +9,7 @@ extern "C" char g_13fd3fc[];
 #include <intrin.h>
 
 // ---- items of slice s00621830 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13ec458[];
 uint32_t __cdecl FUN_00a35070(void* a, void* b, void* c);                    // 0xa35070
 void* __cdecl FUN_008de1a0();                                                // 0x8de1a0 (resource manager)
 uint32_t __cdecl Hash_FNV1_String16(const void* s, uint32_t basis, int a);    // 0x932f30
@@ -30,7 +31,9 @@ struct WinXHTML {
   void SetFormControlDrawable(uint32_t id, Drawable* p);
   void SetScrollbarDrawable(int which, void* p);
 };
-struct __declspec(novtable) cXHTMLControlAppearance {
+struct DESC1 { uint32_t hash; uint32_t kind;  int* owner; };
+struct DESC2 { uint32_t hash; uint32_t magic; int* owner; };
+struct cXHTMLControlAppearance {
   virtual void v0();          // +0x00
   uint32_t mPad4;             // +0x04
   ControlDrawable* mpBegin;   // +0x08
@@ -47,14 +50,18 @@ struct __declspec(novtable) cXHTMLControlAppearance {
   void Apply(WinXHTML* w);                         // 0x621bf0
   bool CreateHitMaskFromResource(int* p1, int* p2, void** out);  // 0x621db0
 };
+void __fastcall ControlDrawableVecDtor(void* self);   // 0x00621ea0 (thiscall; ecx = &vector)
 namespace eastl {
-struct vector_s0062_1830 {   // stub for vector<ControlDrawable>; receiver arrives in ECX
+class vector_s0062_1830 { public:   // stub for vector<ControlDrawable>; receiver arrives in ECX
   ControlDrawable* mpBegin; ControlDrawable* mpEnd; ControlDrawable* mpCap;
-  ControlDrawable* erase(ControlDrawable* first, ControlDrawable* last);
-  void DoInsertValue(ControlDrawable* position, const ControlDrawable& value);
+  ControlDrawable* erase(ControlDrawable* first, ControlDrawable* last);  // 0x00621f50 (eastl::vector::erase)
+  void DoInsertValue(ControlDrawable* position, const ControlDrawable& value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
 };
 }
 // ---- items of slice s00621830 end
+
+// the module TU's copy of the class (the ctor/dtor of the slice are members of it):
+// keeps the unsuffixed name so it stays the class SPEditors/_at_00620000.cpp's Apply uses.
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 ControlDrawable* UninitCopyBackward(ControlDrawable* first, ControlDrawable* last, ControlDrawable* destEnd);  // 0x00621d50 (stays in the slice: not this object's)
@@ -192,31 +199,60 @@ ControlDrawable* UninitCopy(ControlDrawable* first, ControlDrawable* last, Contr
   return dest;
 }
 
-// @ 0x00621db0
-bool cXHTMLControlAppearance::CreateHitMaskFromResource(int* p1, int* p2, void** out)
+// @ 0x00621d50
+ControlDrawable* UninitCopyBackward(ControlDrawable* first, ControlDrawable* last, ControlDrawable* destEnd)
 {
-  uint32_t hash = Hash_FNV1_String16(p2, 0x811c9dc5, 0);
-  void* local18 = (void*)0x2f7d0004;
-  (void)local18;
-  uint32_t localc = hash;
-  (void)localc;
+  while (last != first) {
+    --last;
+    --destEnd;
+    destEnd->mId = last->mId;
+    _ReadWriteBarrier();
+    Drawable* p = last->mpDrawable;
+    Drawable* old = destEnd->mpDrawable;
+    if (p != old) {
+      if (p) ((void(__thiscall*)(Drawable*))Vt(p)[0])(p);
+      destEnd->mpDrawable = p;
+      if (old) ((void(__thiscall*)(Drawable*))Vt(old)[1])(old);
+    }
+  }
+  return destEnd;
+}
+
+// @ 0x00621db0
+bool cXHTMLControlAppearance::CreateHitMaskFromResource(int* name, int* appearance, void** out)
+{
+  uint32_t hash = Hash_FNV1_String16(name, 0x811c9dc5, 0);   // FNV over the wide name
+
+  // Two 3-dword request descriptors built on the stack; slot 3 takes desc2 first
+  // and desc1 last.
+  DESC1 desc1;
+  desc1.hash  = hash;
+  desc1.kind  = 0x19aef76u;
+  desc1.owner = appearance;
+
+  DESC2 desc2;
+  desc2.hash  = hash;
+  desc2.magic = 0x2f7d0004u;
+  desc2.owner = appearance;
+
   *out = 0;
   void* req = 0;
   void* mgr = FUN_008de1a0();
   if (req) { void* o = req; req = 0; ((void(__thiscall*)(void*))Vt(o)[1])(o); }
+
   bool ok = ((bool(__thiscall*)(void*, void*, void**, int, int, int, void*))Vt(mgr)[3])
-               (mgr, &localc, &req, 0, 0, 0, &local18);
+                (mgr, &desc2, &req, 0, 0, 0, &desc1);
   if (ok) {
-    if (p1 == 0) return false;
-    void* r = ((void*(__thiscall*)(void*, uint32_t))Vt(p1)[3])(p1, 0xf074e1c8);
+    if (appearance == 0) return false;
+    void* r = ((void*(__thiscall*)(void*, uint32_t))Vt(appearance)[3])(appearance, 0xf074e1c8);
     if (r) {
       *out = r;
       ((void(__thiscall*)(void*))Vt(r)[0])(r);
-      if (p1) ((void(__thiscall*)(void*))Vt(p1)[1])(p1);
+      if (appearance) ((void(__thiscall*)(void*))Vt(appearance)[1])(appearance);
       return true;
     }
   }
-  if (p1) ((void(__thiscall*)(void*))Vt(p1)[1])(p1);
+  if (appearance) ((void(__thiscall*)(void*))Vt(appearance)[1])(appearance);
   return false;
 }
 
@@ -229,19 +265,14 @@ cXHTMLControlAppearance::cXHTMLControlAppearance()
 }
 
 // @ 0x00621f00
-// The VA is the ??_G deleting destructor: retail inlines the destructor body into it, sets the
-// class vtable first and restores the base vtable after the body (both as absolute immediates).
-// The vector member at +0x08 is torn down by vector<ControlDrawable>::~vector @0x621ea0.
-void __fastcall ControlDrawableVecDtor(void* self);   // 0x00621ea0 (thiscall; ecx = &vector)
-
 cXHTMLControlAppearance::~cXHTMLControlAppearance()
 {
-  *(const uint32_t**)this = (const uint32_t*)0x013FD3FC;   // own vtable
+  *(const uint32_t**)this = (const uint32_t*)g_13fd3fc;   // own vtable
   _ReadWriteBarrier();                                     // retail stores the vptr before loading +0x20
   if (mpScroll2) ((void(__thiscall*)(Drawable*))Vt(mpScroll2)[1])(mpScroll2);
   if (mpScroll1) ((void(__thiscall*)(Drawable*))Vt(mpScroll1)[1])(mpScroll1);
   ControlDrawableVecDtor((char*)this + 8);
-  *(const uint32_t**)this = (const uint32_t*)0x013EC458;   // base vtable (inlined base dtor)
+  *(const uint32_t**)this = (const uint32_t*)g_13ec458;   // base vtable (inlined base dtor)
 }
 
 // @ 0x00621f50

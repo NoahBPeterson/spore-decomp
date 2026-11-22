@@ -1,1 +1,2 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (incomplete / approximated source)
+00963780  -  stub: placeholder body (ours 15 bytes, retail 1536 bytes); needs real source. Was noted as complete: partial; IWinProc::HandleUIMessage dispatch skeleton only (returns the message code masked); the retail 1536-byte /LTCG body has per-message fade/visibility state writes and virtual callbacks not yet transcribed. [equiv: FAIL 5/15 valid, scratch return only] flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

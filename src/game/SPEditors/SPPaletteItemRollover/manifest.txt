@@ -1,2 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPPaletteItemRollover.cpp  ?Shutdown@cSPPaletteItemRollover_s005e_cf80@SP@@QAE_NXZ  005ed650  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemRollover.cpp  ?ResetRollover@cSPPaletteItemRollover_s005e_cf80@SP@@QAEXXZ  005ed6c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPPaletteItemRollover.cpp  ?ScalarDeletingDtor@cSPPaletteItemRollover_s005e_cf80@SP@@QAEPAXI@Z  005ed700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

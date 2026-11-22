@@ -66,6 +66,13 @@ void Ctx96::a(float* p, float f)
         this, p[0], p[1], p[2], p[3], f);
 }
 
+// @ 0x0096f1f0
+void Ctx96::b(float* p)
+{
+    (*(void(__thiscall**)(void*, float, float, float, float))((char*)*(void**)this + 0x38))(
+        this, p[0], p[1], p[2], p[3]);
+}
+
 // @ 0x0096f240
 int Ctx96::q(int iid)
 {

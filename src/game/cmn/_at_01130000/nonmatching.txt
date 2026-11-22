@@ -1,4 +1,6 @@
-# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+# va  diff-bytes  reason
+01131b70 400 complete; LTCG + jump-table tag dispatch; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400 valid, 28.2% coverage, no mismatch)
+01131e00 189 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (383/400, 95.3% coverage)
 01132ad0 75 complete SNDSTRMI_parsedata: size<8 / optional cb(hdr,arg) / size<hdr[1] guards, *out=hdr[1], return (hdr[0]==g_key)+1; /GL keeps the header dword byte-decomposed into a stack slot and 2003 zeroes eax on the early returns, so a single-object /vc71 compile differs; flags /vc71 /O2 /MD /Gy /TP; equiv PASS 400/400 valid 100.0% cov.
 01132b50 11 complete SNDSTRMI_destroyall: do/while i<g_numStreams calling SNDSTRMI_Destroy(i); 2003 hoists the byte compare, single-object reloads; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK 400/400 valid 46.7% cov (loop body barely reachable with random byte count).
 01132b80 662 complete SNDSTRMI_create: full stream-creation path (slot scan, SNDMEMI_alloc, two FUN_01141190 lists, per-track FUN_011411a0, FUN_0113f1d0 stream open, alignment, FUN_011e7910 buffer, key/channel init, parse-chunk install, purge, return slot); /GL register allocation across the many calls cannot be reproduced single-object; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK 400/400 valid 2.7% cov.

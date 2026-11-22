@@ -522,6 +522,21 @@ void __fastcall LayerFrameInit(char* self, int dummy, char* param)
   *(int*)((char*)state + 0x18) = h;
 }
 
+// @ 0x0082e670
+bool LayerWinProc::SetLayer(int v)
+{
+  int old = mLayer;
+  if (old != v) {
+    if ((unsigned)old <= 0xe) --sLayerRCs[old];
+    mLayer = v;
+    if (v >= 0) {
+      if (v < 0xf) ++sLayerRCs[v];
+      _ReadWriteBarrier();
+    }
+  }
+  return true;
+}
+
 // @ 0x0082e6b0
 void __fastcall LayerPoolTick(void* arg)
 {

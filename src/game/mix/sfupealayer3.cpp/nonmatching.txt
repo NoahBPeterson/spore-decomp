@@ -1,0 +1,2 @@
+# s01141a90: complete, behavior-equivalent source that is not byte-exact.
+01141f90  229  SFILTER_unpackealayer3init (mono/stereo decoder init via g_16e8068); complete; difftest WEAK 28.3% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE

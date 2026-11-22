@@ -1,15 +1,16 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUIStdDrawable.cpp  ?FillDefaults@@YAXPAUShadowDesc@@PBU1@@Z  00830380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?CreateInstance@FactoryRegistry@@QAEPAHHPAPAXHH@Z  008304c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?FUN_008306a0@@YAXPAUImageInfoFull@@@Z  008306a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?SetPoint@DrawableTail@@QAEXPBM@Z  00830af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetImageInfo@Drawable_s0083_0c00@@QAEPAXH@Z  00830c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetFieldC@DSub@@QAEHH@Z  00830c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?GetField10@DSub@@QAEHH@Z  00830cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?ScalarDtor@ImageInfo2@@QAEPAXI@Z  00831030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair38@DSub@@QAEPAMPAMH@Z  00830d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair40@DSub@@QAEPAMPAMH@Z  00830d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?init_15476e4@@YAXXZ  012fe300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?EnsureImageInfo0@Drawable_s0083_0c00@@QAEXXZ  00831650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair28@Drawable_s0083_0c00@@QAE?AUDrawablePoint2@@H@Z  00830c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair30@Drawable_s0083_0c00@@QAE?AUDrawablePoint2@@H@Z  00830cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?CreateInstance@FactoryRegistry@@QAEPAHHPAPAXHH@Z  008304c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIStdDrawable.cpp  ?GetImageInfo@Drawable_s0083_0c00@@QAEPAXH@Z  00830c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetField10@DSub@@QAEHH@Z  00830cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair38@DSub@@QAEPAMPAMH@Z  00830d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair40@DSub@@QAEPAMPAMH@Z  00830d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?ScalarDtor@ImageInfo2@@QAEPAXI@Z  00831030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?EnsureImageInfo0@Drawable_s0083_0c00@@QAEXXZ  00831650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?init_1547690@@YAXXZ  012fdfe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?init_15476e4@@YAXXZ  012fe300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

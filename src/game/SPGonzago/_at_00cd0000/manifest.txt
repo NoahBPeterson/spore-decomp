@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/_at_00cd0000.cpp  ??1Object_s00cd_18a0@@UAE@XZ  00cd18a0  /O2 /MD /Gy /TP /Isrc/game/include

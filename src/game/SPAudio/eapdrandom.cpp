@@ -27,6 +27,13 @@ struct t_symbol {
 namespace EA {
 namespace Audio {
 namespace Eapd {
+inline bool operator==(const t_symbol& a, const t_symbol& b) { return a.mHash == b.mHash; }
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
 struct t_object;
 }
 }
@@ -113,8 +120,8 @@ void* outlet_new(void* owner, t_symbol s);                              // 0xa49
 namespace EA {
 namespace Audio {
 namespace Eapd {
-struct RandomLinearCongruential {
-    char pad[0x2c];
+struct RandomLinearCongruential_s00a5_e0f0 {
+    unsigned mnSeed;
     unsigned RandomUint32Uniform();            // 0x9360b0
     unsigned RandomUint32UniformN(unsigned n); // 0xa68fb0
     void     SetSeed(unsigned seed);           // 0x936090
@@ -126,7 +133,27 @@ struct RandomLinearCongruential {
 namespace EA {
 namespace Audio {
 namespace Eapd {
-extern RandomLinearCongruential sSystemRandom;   // 0x16756fc
+typedef char RandomSeedWordSizeCheck[sizeof(RandomLinearCongruential_s00a5_e0f0) == 4 ? 1 : -1];
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+extern RandomLinearCongruential_s00a5_e0f0 sSystemRandom;   // 0x16756fc
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct RandomLinearCongruential {
+    char pad[0x2c];
+    unsigned RandomUint32Uniform();            // 0x9360b0
+    unsigned RandomUint32UniformN(unsigned n); // 0xa68fb0
+    void     SetSeed(unsigned seed);           // 0x936090
+    float    NextFloat();                      // 0xa69020 (thiscall)
+};
 }
 }
 }
@@ -147,6 +174,11 @@ __forceinline void outlet_cnt(t_outlet* lst, float v)
 }
 // ---- items of slice s00a5e0f0 end
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+namespace EA { namespace Audio { namespace Eapd { void random_seed(unsigned seed); }}}  // 0x00a5ecb0 (stays in the slice: not this object's)
+namespace EA { namespace Audio { namespace Eapd { void random_seed_method(char* x, unsigned seed); }}}  // 0x00a5ecc0 (stays in the slice: not this object's)
+namespace EA { namespace Audio { namespace Eapd { void* random_new(float f); }}}  // 0x00a5ece0 (stays in the slice: not this object's)
+
 // @ 0x00a5ed40
 namespace EA { namespace Audio { namespace Eapd {
 void* frandom_new(float f)
@@ -154,7 +186,7 @@ void* frandom_new(float f)
     char* x = (char*)pd_new(spFloatRandomClass);
     if (x) {
         *(float*)(x + 0x28) = f;
-        (*(RandomLinearCongruential*)(x + 0x2c)).SetSeed(sSystemRandom.RandomUint32Uniform());
+        (*(RandomLinearCongruential_s00a5_e0f0*)(x + 0x2c)).SetSeed(sSystemRandom.RandomUint32Uniform());
         floatinlet_new(x, x + 0x28);
         outlet_new(x, gFloatSymbol);
     }
@@ -182,7 +214,7 @@ void frandom_bang(char* x)
 {
     if (*(float*)(x + 0x28) < 0.0f)
         *(float*)(x + 0x28) = 0.0f;
-    float v = *(float*)(x + 0x28) * (*(RandomLinearCongruential*)(x + 0x2c)).NextFloat();
+    float v = *(float*)(x + 0x28) * (*(RandomLinearCongruential_s00a5_e0f0*)(x + 0x2c)).NextFloat();
     t_outlet* o = *(t_outlet**)(x + 0xc);
     outlet_cnt(o, v);
 }

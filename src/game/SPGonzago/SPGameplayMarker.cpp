@@ -18,12 +18,18 @@
 #include "SP/cVarListSerializer.h"
 
 // ---- items of slice s00c3daa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_146c388[];
+extern "C" char g_146c44c[];
+extern "C" char g_146c460[];
+struct FnB184c0 { void __thiscall f(); };                      // 0x00b184c0 cGameData::~cGameData
+struct FnC8a420 { void __thiscall f(); };                      // 0x00c8a420
 bool  __cdecl FUN_0093aa70(void*, void*, int, int);            // 0x0093aa70 WriteUint32
 bool  __cdecl FUN_0093a9d0(void*, void*, int, int);            // 0x0093a9d0 WriteUint16
 struct Fn88670 { void __thiscall f(void*); };                 // 0x00c88670
 struct Fn886d0 { void __thiscall f(void*); };                 // 0x00c886d0
 struct C3ebd0 { void f(int* p); };                             // 0x00c3ebd0
 struct C3ec00 { void f(int* p); };                             // 0x00c3ec00
+struct C3ec40 { void f(); };                                   // 0x00c3ec40
 // ---- items of slice s00c3daa0 end
 
 // ---- items of slice s00c3ee20 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -233,6 +239,27 @@ void C3ec00::f(int* p)
     *(int*)(self + 0x184) = p[1];
     *(int*)(self + 0x188) = p[2];
     *(int*)(self + 0x18c) = p[3];
+}
+
+// @ 0x00c3ec40
+void C3ec40::f()
+{
+    char* self = (char*)this;
+    char* p34 = self + 0x34;
+    *(int*)(self) = (int)g_146c460;
+    *(int*)(self + 4) = (int)g_146c44c;
+    *(int*)(p34) = (int)g_146c388;
+
+    void* p;
+    p = *(void**)(self + 0x1a4);
+    if (p) { typedef void(__thiscall* Vf)(void*); ((Vf)(*(void**)(*(char**)p + 4)))(p); }
+    p = *(void**)(self + 0x1a0);
+    if (p) { typedef void(__thiscall* Vf)(void*); ((Vf)(*(void**)(*(char**)p + 4)))(p); }
+    p = *(void**)(self + 0x19c);
+    if (p) { typedef void(__thiscall* Vf)(void*); ((Vf)(*(void**)(*(char**)p + 4)))(p); }
+
+    ((FnC8a420*)p34)->f();
+    ((FnB184c0*)self)->f();
 }
 
 // @ 0x00c3ed20

@@ -32,7 +32,6 @@ extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 #include "SP/cSwatch3DView.h"
 
 // ---- items of slice s005f07e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                    const char* file, int line);  // 0x00f473a0
 #define EASTL_ALLOCATOR_FILE \
@@ -104,7 +103,7 @@ class IUnknown32_s005f_07e0 {
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s005f_07e0 {
+class Key_s005f_07e0 { public:
   unsigned int mInstance, mType, mGroup;
   Key_s005f_07e0() : mInstance(0), mType(0), mGroup(0) {}
   Key_s005f_07e0(unsigned int instance, unsigned int type, unsigned int group)
@@ -113,7 +112,7 @@ struct Key_s005f_07e0 {
 }
 }
 namespace EA {
-struct RectT_s005f_07e0 {
+class RectT_s005f_07e0 { public:
   float left, top, right, bottom;
   RectT_s005f_07e0(const RectT_s005f_07e0& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
 };
@@ -148,7 +147,7 @@ class IWindow_s005f_07e0 : public COM::IUnknown32_s005f_07e0 {
 }
 namespace EA {
 namespace UTFWin {
-struct Message_s005f_07e0 {
+class Message_s005f_07e0 { public:
   uint32_t pad0[2];
   uint32_t mEventType;  // +0x8
   uint32_t mControlID;  // +0xc
@@ -206,9 +205,6 @@ class cSPUILayout_s005f_07e0 : public EA::RefCountVTemplate_s005f_07e0<int> {
   IWindow_s005f_07e0* FindWindowByID(uint32_t id, bool recursive);                            // 0x008105b0
   uint32_t pad[4];
 };
-namespace SPUIHelpers {
-void SetWindowImage(IWindow_s005f_07e0* window, const Key_s005f_07e0* key, int index);  // 0x00807bb0
-}
 namespace SP {
 class cPropertyList_s005f_07e0 {
  public:
@@ -579,9 +575,6 @@ struct cSwatchPlannerMessage {
 };
 }
 namespace SP {
-bool GetPropertyAsKeyArray(cPropertyList_s005f_07e0* list, uint32_t id, int& count, const Key_s005f_07e0*& keys);  // 0x006a0ae0
-}
-namespace SP {
 class cSPSwatchPlanner : public cSPPaletteItemUI_s005f_07e0, public EA::Messaging::IHandler_s005f_07e0 {
  public:
   cSPSwatchPlanner();
@@ -615,11 +608,18 @@ class cSPSwatchPlanner : public cSPPaletteItemUI_s005f_07e0, public EA::Messagin
   AutoRefCount_s005f_07e0<cSPPaletteInfo_s005f_07e0> mInfo;      // +0x68
 };
 }
+// s005f07e0's preamble items, dropped by merge_preamble when the re-applied block moved behind s005f16d0's section:
+// the helper and the array getter its bodies call were declared there.
+extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
+namespace SPUIHelpers {
+void SetWindowImage(IWindow_s005f_07e0* window, const Key_s005f_07e0* key, int index);  // 0x00807bb0
+}
+namespace SP {
+bool GetPropertyAsKeyArray(cPropertyList_s005f_07e0* list, uint32_t id, int& count, const Key_s005f_07e0*& keys);  // 0x006a0ae0
+}
 // ---- items of slice s005f07e0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C++" void RBTreeInsert(eastl::rbtree_node_base_s005f_07e0* pNode, eastl::rbtree_node_base_s005f_07e0* pNodeParent,
-                               eastl::rbtree_node_base_s005f_07e0* pNodeAnchor, int insertionSide);  // 0x009216a0
 
 // ---- items of slice s005f16d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV_s005f_16d0(n) virtual void _pv##n();
@@ -1001,6 +1001,13 @@ class cSPSwatchPlannerReal : public cSPPaletteItemUI, public IHandler {
 }
     void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
 // ---- items of slice s005f16d0 end
+
+// @ 0x005f0d80
+namespace SP {
+cSPSwatchPlanner::cSPSwatchPlanner()
+: mModelType(0), mCost(0), mIsLocked(false), mCanDrag(true), mIsEditable(false),
+      mReadyForMessages(false), mModelChosen(false) {}
+}  // namespace SP
 
 // @ 0x005f0e30
 namespace SP {

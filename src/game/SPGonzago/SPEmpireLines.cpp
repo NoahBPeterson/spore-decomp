@@ -61,6 +61,75 @@ struct QuadVert
     float uv2[2];         // +0x20
 };
 
+// ---- items of slice s00feb120 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned __int64   u64;
+#define MOPS_s00fe_b120(p) ((COps_s00fe_b120*)(p))
+void* FUN_00ffbe50();                                  // 0x00ffbe50
+void* __stdcall FUN_00b3d3f0(void* avatar);            // 0x00b3d3f0
+void* __stdcall FUN_00b3d2a0(void* arg);               // 0x00b3d2a0
+void* __stdcall FUN_01021230(void* box, void* vec);    // 0x01021230
+i32   __cdecl   atexit(void (*fn)(void));              // 0x011e07ef
+u32*  __cdecl   FUN_00555a20(u32* begin, u32* end, u32* value, u8 flag); // 0x00555a20
+void* __cdecl   memcpy(void* d, const void* s, unsigned int n);    // 0x011e0744
+u32   FUN_01021090();                                  // 0x01021090
+struct COps_s00fe_b120
+{
+    u8  FUN_00bb9c00();                    // 0x00bb9c00
+    void* FUN_00bfc5f0();                  // 0x00bfc5f0
+    u8  FUN_00fe4180();                    // 0x00fe4180
+    u8  FUN_00c31c50();                    // 0x00c31c50
+    u8  FUN_00c31bc0();                    // 0x00c31bc0
+    u8  FUN_00e18c70();                    // 0x00e18c70
+    u8  FUN_00feba90();                    // 0x00feba90
+    u8  FUN_007c4fd0();                    // 0x007c4fd0
+    u8  FUN_01044bf0(void* civ);           // 0x01044bf0
+    u8  FUN_010449e0(u32 arg);             // 0x010449e0
+    i32  FUN_00dd5d80(u32 a, u32 b);       // 0x00dd5d80
+    void FUN_00dd6d10(u32 a, u32 b);       // 0x00dd6d10
+    void FUN_00695b40(void* a, void* b, void* c); // 0x00695b40
+    void FUN_00c47d80();                   // 0x00c47d80
+    void FUN_00c32cd0(float* out);         // 0x00c32cd0
+    void FUN_007c3d30(float* a, float* b, int c, int d); // 0x007c3d30
+    void FUN_007c3c10();                   // 0x007c3c10
+    void FUN_007c50b0(void* src, u8 a, u8 b); // 0x007c50b0
+    void FUN_005481d0(u32* pos, u32* value);  // 0x005481d0
+    void FUN_00bc3110();                   // 0x00bc3110
+    void FUN_00bb1080();                   // 0x00bb1080
+    void FUN_00e25bd0(void* begin, void* end); // 0x00e25bd0
+    u32  FUN_00b1fdb0();                   // 0x00b1fdb0
+    u32  FUN_00ba9370();                   // 0x00ba9370
+    i32  FUN_00c317a0();                   // 0x00c317a0
+    void* FUN_00c308d0();                  // 0x00c308d0
+    void* FUN_00bef6c0();                  // 0x00bef6c0
+    void* FUN_00c8b360();                  // 0x00c8b360
+    float* FUN_005c65e0();                 // 0x005c65e0
+    float FUN_00ffbfd0();                  // 0x00ffbfd0
+    double FUN_009360d0();                 // 0x009360d0
+    u64  FUN_00bc3190();                   // 0x00bc3190
+};
+void FUN_013ca260(void);                   // 0x013ca260
+void FUN_013ca240(void);                   // 0x013ca240
+class cEmpireLayer_s00fe_b120
+{
+public:
+    u8    pad0[0x04];                  // +0x00
+    void* mpViewer;                    // +0x04
+
+    void DrawEmpire(void* empire, void* mesh);  // 0x00feb510 (cEmpireLayer::DrawEmpire)
+    void DrawLayer(void* arg1, u32 layer, u32* viewer, void* mesh);
+};
+struct SpaceQuery
+{
+    u32   a;
+    u32   b;
+    u32   c;
+    float d;
+    float e;
+    float f;
+    u32   g;
+};
+// ---- items of slice s00feb120 end
+
 // @ 0x00feb060
 void __fastcall FUN_00feb060(ViewerHolder* self)
 {
@@ -104,8 +173,8 @@ void __fastcall FUN_00feb0f0(ViewerHolder* self)
 // @ 0x00feb120
 void FUN_00feb120(void* mesh, void* civA, void* civB, float* dir, float t, u8 flags)
 {
-    float* pa = MOPS(civA)->FUN_005c65e0();
-    float* pb = MOPS(civB)->FUN_005c65e0();
+    float* pa = MOPS_s00fe_b120(civA)->FUN_005c65e0();
+    float* pb = MOPS_s00fe_b120(civB)->FUN_005c65e0();
 
     float dx = pb[0] - pa[0];
     float dy = pb[1] - pa[1];
@@ -113,9 +182,9 @@ void FUN_00feb120(void* mesh, void* civA, void* civB, float* dir, float t, u8 fl
     float length = (float)sqrt((double)(dz * dz + (dy * dy + dx * dx)));
 
     u8 flagA = 0;
-    if (MOPS(FUN_01046fc0())->FUN_01044bf0(civA) != 0)
+    if (MOPS_s00fe_b120(FUN_01046fc0())->FUN_01044bf0(civA) != 0)
     {
-        if (flags == 0 && MOPS(civA)->FUN_00bb9c00() == 0 &&
+        if (flags == 0 && MOPS_s00fe_b120(civA)->FUN_00bb9c00() == 0 &&
             *(u8*)FUN_01046fc0() == 0)
             flagA = 0;
         else
@@ -123,9 +192,9 @@ void FUN_00feb120(void* mesh, void* civA, void* civB, float* dir, float t, u8 fl
     }
 
     u8 flagB = 0;
-    if (MOPS(FUN_01046fc0())->FUN_01044bf0(civB) != 0)
+    if (MOPS_s00fe_b120(FUN_01046fc0())->FUN_01044bf0(civB) != 0)
     {
-        if (flags == 0 && MOPS(civB)->FUN_00bb9c00() == 0 &&
+        if (flags == 0 && MOPS_s00fe_b120(civB)->FUN_00bb9c00() == 0 &&
             *(u8*)FUN_01046fc0() == 0)
             flagB = 0;
         else
@@ -208,14 +277,14 @@ void FUN_00feb120(void* mesh, void* civA, void* civB, float* dir, float t, u8 fl
 }
 
 // @ 0x00feb510
-void cEmpireLayer::DrawEmpire(void* empire, void* mesh)
+void cEmpireLayer_s00fe_b120::DrawEmpire(void* empire, void* mesh)
 {
-    void** stars = (void**)MOPS(empire)->FUN_00c308d0();
-    void** other = (void**)MOPS(empire)->FUN_00bef6c0();
+    void** stars = (void**)MOPS_s00fe_b120(empire)->FUN_00c308d0();
+    void** other = (void**)MOPS_s00fe_b120(empire)->FUN_00bef6c0();
     i32 count = ((char*)stars[1] - (char*)stars[0]) >> 2;
     bool drew = false;
 
-    if (MOPS(empire)->FUN_00c31c50() != 0)
+    if (MOPS_s00fe_b120(empire)->FUN_00c31c50() != 0)
         return;
 
     float posA[3];
@@ -228,7 +297,7 @@ void cEmpireLayer::DrawEmpire(void* empire, void* mesh)
     posB[1] = *(float*)0x16dac18;
     posB[2] = *(float*)0x16dac1c;
     if (mpViewer != 0)
-        MOPS(mpViewer)->FUN_007c3d30(posA, posB, 0, 0);
+        MOPS_s00fe_b120(mpViewer)->FUN_007c3d30(posA, posB, 0, 0);
 
     double len2 = (double)posB[2] * posB[2] +
                   ((double)posB[1] * posB[1] + (double)posB[0] * posB[0]);
@@ -238,7 +307,7 @@ void cEmpireLayer::DrawEmpire(void* empire, void* mesh)
     dir[2] = inv * posB[2];
 
     void* playerEmpire = FUN_01021300();
-    u8 colorEnabled = MOPS(playerEmpire)->FUN_00c31bc0();
+    u8 colorEnabled = MOPS_s00fe_b120(playerEmpire)->FUN_00c31bc0();
 
     void* mat = (*(void* (__thiscall**)(u32, void*))((char*)vtbl(MaterialManager()) + 0x28))(0x71f30f82, empire);
 
@@ -249,8 +318,8 @@ void cEmpireLayer::DrawEmpire(void* empire, void* mesh)
         if (a == 0 || b == 0 || a == b)
             continue;
 
-        if (MOPS((void*)a)->FUN_00bb9c00() == 0 &&
-            MOPS((void*)b)->FUN_00bb9c00() == 0 &&
+        if (MOPS_s00fe_b120((void*)a)->FUN_00bb9c00() == 0 &&
+            MOPS_s00fe_b120((void*)b)->FUN_00bb9c00() == 0 &&
             *(u8*)FUN_01046fc0() == 0 &&
             colorEnabled == 0)
             continue;
@@ -258,7 +327,7 @@ void cEmpireLayer::DrawEmpire(void* empire, void* mesh)
         if (!drew)
         {
             float color[3];
-            MOPS(empire)->FUN_00c32cd0(color);
+            MOPS_s00fe_b120(empire)->FUN_00c32cd0(color);
             *(u32*)0x16f9528 = *(u32*)0x16f9528 | 0x10;
             *(float*)0x16f96a8 = color[0];
             *(float*)0x16f96ac = color[1];
@@ -274,4 +343,109 @@ void cEmpireLayer::DrawEmpire(void* empire, void* mesh)
 
     if (drew)
         FUN_006ddef0(mesh);
+}
+
+// @ 0x00feb770
+void cEmpireLayer_s00fe_b120::DrawLayer(void* arg1, u32 layer, u32* viewer, void* mesh)
+{
+    if (layer != 0x17)
+        return;
+
+    MOPS_s00fe_b120(mpViewer)->FUN_007c50b0((void*)*viewer, 0, 0);
+    if (!MOPS_s00fe_b120(mpViewer)->FUN_007c4fd0())
+        return;
+
+    u32* guard = (u32*)0x16dac10;
+    if ((*guard & 1) == 0)
+    {
+        *guard = *guard | 1;
+        *(u32*)0x16dabfc = 0;
+        *(u32*)0x16dac00 = 0;
+        *(u32*)0x16dac04 = 0;
+        atexit(FUN_013ca260);
+    }
+
+    SpaceQuery box;
+    box.a = 0x1fff;
+    box.b = 0x20;
+    box.c = 0;
+    box.d = 0.0f;
+    box.e = *(float*)0x13eb1bc;
+    box.f = *(float*)0x13eb1bc;
+    box.g = 0;
+    box.e = MOPS_s00fe_b120(FUN_00ffbe50())->FUN_00ffbfd0();
+
+    MOPS_s00fe_b120((void*)0x16dabfc)->FUN_00e25bd0((void*)*(u32*)0x16dac00,
+                                         (void*)*(u32*)0x16dabfc);
+
+    void* rec = FUN_01021230(&box, (void*)0x16dabfc);
+    void* r2 = MOPS_s00fe_b120(rec)->FUN_00c8b360();
+    void* sm = FUN_00b3d2a0(r2);
+    MOPS_s00fe_b120(sm)->FUN_00bb1080();
+
+    if ((*guard & 2) == 0)
+    {
+        *guard = *guard | 2;
+        *(u32*)0x16dabe4 = 0;
+        *(u32*)0x16dabe8 = 0;
+        *(u32*)0x16dabec = 0;
+        atexit(FUN_013ca240);
+    }
+
+    u32* avBegin = *(u32**)0x16dabe4;
+    u32* avEnd = *(u32**)0x16dabe8;
+    memcpy(avBegin, avEnd, 0);
+
+    i32 starCount = ((i32)*(u32*)0x16dac00 - (i32)*(u32*)0x16dabfc) >> 2;
+    *(u32**)0x16dabe8 = avBegin;
+
+    for (i32 i = 0; i < starCount; i++)
+    {
+        void* entry = *(void**)(*(u32*)0x16dabfc + i * 4);
+        u32 avatar = MOPS_s00fe_b120(entry)->FUN_00b1fdb0();
+        u8 flag = *(u8*)0x16dabf8;
+
+        u32* pos = FUN_00555a20(*(u32**)0x16dabe4, *(u32**)0x16dabe8, &avatar, flag);
+        if (pos == *(u32**)0x16dabe8)
+        {
+            if (pos == *(u32**)0x16dabec)
+            {
+                MOPS_s00fe_b120((void*)0x16dabe4)->FUN_005481d0(pos, &avatar);
+            }
+            else
+            {
+                *(u32**)0x16dabe8 = pos + 1;
+                *pos = avatar;
+            }
+        }
+        else if (avatar < *pos)
+        {
+            MOPS_s00fe_b120((void*)0x16dabe4)->FUN_005481d0(pos, &avatar);
+        }
+    }
+
+    i32 n = ((i32)*(u32*)0x16dabe8 - (i32)*(u32*)0x16dabe4) >> 2;
+    for (i32 i = 0; i < n; i++)
+    {
+        u32 id = (*(u32**)0x16dabe4)[i];
+        void* star = FUN_00b3d2a0((void*)id);
+        void* emp = (void*)MOPS_s00fe_b120(star)->FUN_00ba9370();
+
+        FUN_01021090();
+
+        bool draw = false;
+        if (MOPS_s00fe_b120(FUN_01046fc0())->FUN_010449e0(1) != 0)
+            draw = true;
+        else if (MOPS_s00fe_b120(FUN_01046fc0())->FUN_010449e0(id) != 0 &&
+                 FUN_01021300() == emp)
+            draw = true;
+
+        if (draw)
+        {
+            if (MOPS_s00fe_b120(FUN_00b3d3f0((void*)id))->FUN_00e18c70() == 0)
+                DrawEmpire(emp, mesh);
+        }
+    }
+
+    MOPS_s00fe_b120(mpViewer)->FUN_007c3c10();
 }

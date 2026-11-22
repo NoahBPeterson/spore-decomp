@@ -349,8 +349,8 @@ const int kCellUpgradeCreature = 0x1654c05;
 extern "C" void*  __cdecl SP_WindowManager();                                       // 0x0067caa0
 extern "C" void*  __cdecl SP_MessageServer();                                       // 0x0067dcc0
 extern "C" void*  __cdecl SP_GetCurrentGameMode();                                  // 0x00b5b800
-extern "C" void   __cdecl SP_GetPropertyAsKeyInstance(int obj, int key, void* out); // 0x006a12a0
-extern "C" void   __cdecl SP_GetPropertyAsText(int obj, int key, void* out);        // 0x006a1360
+extern "C" void   __cdecl SP_GetPropertyAsKeyInstance(void* obj, int key, void* out); // 0x006a12a0
+extern "C" char   __cdecl SP_GetPropertyAsText(void* obj, int key, void* out);        // 0x006a1360
 extern "C" bool   __cdecl GetBoolProperty(int obj, int key, void* out);             // 0x00407190
 extern "C" void   __cdecl SetGlobalProperty(int key, float v);                      // 0x005ca880
 extern "C" float  __cdecl FUN_005a6e00(float v);                                   // 0x005a6e00 Clamp01
@@ -571,11 +571,16 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 void  __cdecl operator_delete(void* p);                                      // 0xf47380  ??3
+struct CPL_s00e4_6600 { void dtor(); };                                                 // 0x828670  ??1CPL
 struct CPL { void dtor(); void ctor(); };                                    // 0x828670 ??1CPL, 0x8286d0 ??0CPL
 struct Helper4b { void dtor(); };                                            // 0x4b5440
 struct EaVector { int dtor(); };                                             // 0xae6970
 struct PropObj {
     u8* GetBool();      // 0x41e920  Property::GetBool
+};
+struct LayoutObj_s00e4_6600 {                                                           // 0x167eb28 instance
+    float* GetF1(void* a, void* b);   // 0xe40010
+    float* GetF2(void* a);            // 0xe40080
 };
 struct GmeGlobal {                                                           // 0xe37f30 (thiscall, 1 arg, ret 4)
     float FUN_00e37f30(void* arg);
@@ -590,6 +595,8 @@ struct CString {
 struct WString {
     void Assign(const u16* begin, const u16* end);       // 0x423650
 };
+void* __cdecl SP_PropertyManager();                                          // 0x67de30
+char  __cdecl SP_VectorReserve(void* pm, u32 key, void* out, void* out2);    // 0x6a0ae0
 void* __cdecl SP_GlobalGet();                                                // 0xb3d410 (returns *(void**)0x167eb28)
 void* __cdecl cSPUILayout_FindWindowByID(void* layout, u32 id, int b);       // 0x8105b0
 struct Vec2 { float x, y; };
@@ -2276,7 +2283,7 @@ void FUN_00e45e90(int a1, IntVector* out, uint32_t key, int obj)
     uint32_t uVar1 = *(uint32_t*)(*(int*)(self + 0xc) + 0x2c + (uint32_t)(bVar2 ? 0 : 1) * 4);
     uint32_t uVar4 = 0;
     uint32_t param_3 = 0;
-    SP_GetPropertyAsKeyInstance(obj, 0x91ad064, &param_3);
+    SP_GetPropertyAsKeyInstance((void*)obj, 0x91ad064, &param_3);
 
     int param_1 = (int)uVar1;
     if (param_3 < 0xad56080du) {
@@ -2376,10 +2383,10 @@ void cSPUITimeline_s00e4_5760::FUN_00e46140(void* out)
     int obj = *(int*)((char*)this + 0x64);
     if (obj != 0) {
         if (mb108 != 0) {
-            SP_GetPropertyAsText(obj, 0xd5624e29, out);
+            SP_GetPropertyAsText((void*)obj, 0xd5624e29, out);
             return;
         }
-        SP_GetPropertyAsText(obj, 0x66e8f2d2, out);
+        SP_GetPropertyAsText((void*)obj, 0x66e8f2d2, out);
     }
 }
 
@@ -2389,10 +2396,10 @@ void cSPUITimeline_s00e4_5760::FUN_00e46180(void* out)
     int obj = *(int*)((char*)this + 0x64);
     if (obj != 0) {
         if (mb108 != 0) {
-            SP_GetPropertyAsText(obj, 0xd5624e2a, out);
+            SP_GetPropertyAsText((void*)obj, 0xd5624e2a, out);
             return;
         }
-        SP_GetPropertyAsText(obj, 0x74f7a11b, out);
+        SP_GetPropertyAsText((void*)obj, 0x74f7a11b, out);
     }
 }
 
@@ -2576,6 +2583,145 @@ uint32_t cSPUIPropertyLayout_s00e4_5760::OnLayoutMessage(int a, int* msg)
         break;
     }
     return result & 0xffffff00u;
+}
+
+// @ 0x00e46600
+void Timeline::FUN_00e46600(void* p2, int p3, u32 p4, u32 p5)
+{
+    void**  slot64 = (void**)((char*)this + 0x64);
+    void*   old;
+    void*   prop;
+    u32     out1;
+    u32     out2;
+    float   tmp[4];
+    CString cs;
+
+    this->id68 = (u32)p3;
+
+    old = *slot64;
+    if (old != 0) {
+        *slot64 = 0;
+        void** vt = *(void***)old;
+        ((void(__thiscall*)(void*))vt[1])(old);
+    }
+
+    this->ud4 = p4;
+    this->ud8 = p5;
+
+    old = this->p1c;
+    if (p2 != old) {
+        if (p2 != 0) {
+            void** vt = *(void***)p2;
+            ((void(__thiscall*)(void*))vt[0])(p2);
+        }
+        this->p1c = p2;
+        if (old != 0) {
+            void** vt = *(void***)old;
+            ((void(__thiscall*)(void*))vt[1])(old);
+        }
+    }
+
+    if (*slot64 == 0) {
+        void* propmgr = SP_PropertyManager();
+        old = *slot64;
+        if (old != 0) {
+            *slot64 = 0;
+            void** vt = *(void***)old;
+            ((void(__thiscall*)(void*))vt[1])(old);
+        }
+        void** vt = *(void***)propmgr;
+        ((void(__thiscall*)(void*, int, u32, void**))vt[0x2c / 4])(propmgr, p3, 0xe1d7164f, slot64);
+    }
+
+    SP_GetPropertyAsKeyInstance(*slot64, 0x91ad064, (char*)this + 0xe4);
+
+    {
+        void* pm = *slot64;
+        if (pm != 0) {
+            void** vt = *(void***)pm;
+            if (((char(__thiscall*)(void*, u32, void*))vt[0x24 / 4])(pm, 0xd53426dd, &prop)) {
+                if (*(u16*)((char*)prop + 0x12) == 1) {
+                    u8* b = (u8*)((PropObj*)prop)->GetBool();
+                    this->bed = *b;
+                }
+            }
+        }
+    }
+
+    {
+        void* pm = *slot64;
+        if (pm != 0) {
+            void** vt = *(void***)pm;
+            if (((char(__thiscall*)(void*, u32, void*))vt[0x24 / 4])(pm, 0x60bc73a, &prop)) {
+                if (*(u16*)((char*)prop + 0x12) == 1) {
+                    u8* b = (u8*)((PropObj*)prop)->GetBool();
+                    this->bec = *b;
+                }
+            }
+        }
+    }
+
+    {
+        void* pm = *slot64;
+        if (pm != 0) {
+            void** vt = *(void***)pm;
+            if (((char(__thiscall*)(void*, u32, void*))vt[0x24 / 4])(pm, 0x65e6c46, &prop)) {
+                if (*(u16*)((char*)prop + 0x12) == 1) {
+                    u8* b = (u8*)((PropObj*)prop)->GetBool();
+                    this->bf4 = *b;
+                }
+            }
+        }
+    }
+
+    {
+        SP_GetPropertyAsKeyInstance(*slot64, 0xd553f870, (char*)this + 0xe8);
+        SP_GetPropertyAsKeyInstance(*slot64, 0x34e3b684, (char*)this + 0x18);
+        SP_GetPropertyAsKeyInstance(*slot64, 0x89abe050, (char*)this + 0xf0);
+    }
+
+    cs.ctor();
+    if (SP_GetPropertyAsText(*slot64, 0xd5624e29, &cs))
+        this->b109 = 1;
+    else if (SP_GetPropertyAsText(*slot64, 0xd5624e2a, &cs))
+        this->b109 = 1;
+
+    {
+        void* r;
+        r = SP_GlobalGet();
+        {
+            float* f = ((LayoutObj_s00e4_6600*)r)->GetF1(tmp, this);
+            this->f74 = f[0];
+        }
+        r = SP_GlobalGet();
+        {
+            float* f = ((LayoutObj_s00e4_6600*)r)->GetF1(tmp, this);
+            this->f70 = f[1];
+        }
+        r = SP_GlobalGet();
+        {
+            float* f = ((LayoutObj_s00e4_6600*)r)->GetF2(tmp);
+            this->f78  = f[0];
+            this->f7c  = f[1];
+            this->f80  = f[2];
+            this->f84  = f[3];
+        }
+    }
+
+    {
+        void* pm  = *(void**)((char*)this + 0x64);
+        if (SP_VectorReserve(pm, 0x65263b4, &out1, &out2)) {
+            void* c = this->p1c;
+            if (c != 0 && out1 == 3) {
+                void** vt = *(void***)c;
+                float* f = (float*)((void* (*)(void*))vt[0x38 / 4])(c);
+                this->f70 = f[3] - f[1];
+            }
+        }
+    }
+
+    this->b6c = 1;
+    cs.dtor();
 }
 
 // @ 0x00e46880
@@ -2808,7 +2954,7 @@ void* SPUIPropertyLayout::FUN_00e47180(u8 flags)
     if (c != 0) {
         ((void (__thiscall*)(void*))(*(void***)c)[1])(c);
     }
-    ((CPL*)this)->dtor();
+    ((CPL_s00e4_6600*)this)->dtor();
     if (flags & 1)
         operator_delete(this);
     return this;

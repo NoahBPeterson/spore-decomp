@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorPalettePageUI.cpp -- migrated from slice(s) s005c9230, s005c85d0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorPalettePageUI.cpp -- migrated from slice(s) s005c9070, s005c9230, s005c85d0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorPalettePageUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -185,6 +185,54 @@ class cSPPalettePageUI_s005c_9230 {
 };
 // ---- items of slice s005c9230 end
 
+// ---- items of slice s005c9070 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const void* const cSPPalettePageUI_IWinProc_vtable[];
+extern const void* const cSPPalettePageUI_RefCount_vtable[];
+extern const void* const cRC_vtable[];
+extern const void* const ITracerBase_vtable[];
+class cSPUILayout_s005c_9070 {
+public:
+    virtual void QueryInterface();
+    virtual int AddRef();
+    virtual int Release();
+};
+class cRefVector_s005c_9070 {
+public:
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    int mAllocator[2];
+    ~cRefVector_s005c_9070(); // 0x005c8fd0
+};
+namespace eastl {
+template<class T> class sp_vector_s005c_9070 {
+public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    int mAllocator[2];
+    ~sp_vector_s005c_9070(); // 0x005c7f10
+};
+}
+namespace SP {
+class cSPPalettePageUI_s005c_9070 {
+public:
+    const void* const* mWinProcVtable;
+    const void* const* mRefCountVtable;
+    int mRefCount;
+    cSPUILayout_s005c_9070* mLayout;
+    void* mWinPage;
+    cSPUILayout_s005c_9070* mData;
+    float mScaleX;
+    float mScaleY;
+    eastl::sp_vector_s005c_9070<void*> mOldItemUIs;
+    cRefVector_s005c_9070 mItemUIs;
+
+    cSPPalettePageUI_s005c_9070* ScalarDeletingDestructor(unsigned int flags);
+};
+}
+// ---- items of slice s005c9070 end
+
 // @ 0x005c8bf0
 void cSPPalettePageUI::SetSwatchFlag(int value)
 {
@@ -312,6 +360,26 @@ cRefVector::~cRefVector()
 cSPPalettePageUI::cSPPalettePageUI()
 : mField8(0), mLayout(0), mSwatch(0), mField14(0), mFloat18(g_one), mFloat1c(g_one),
       mNodes20(), mRefs34() {}
+
+// @ 0x005c9070
+namespace SP {
+cSPPalettePageUI_s005c_9070* cSPPalettePageUI_s005c_9070::ScalarDeletingDestructor(unsigned int flags)
+{
+    mWinProcVtable = cSPPalettePageUI_IWinProc_vtable;
+    mRefCountVtable = cSPPalettePageUI_RefCount_vtable;
+    mItemUIs.~cRefVector_s005c_9070();
+    mOldItemUIs.~sp_vector_s005c_9070();
+    if (mData)
+        mData->Release();
+    if (mLayout)
+        mLayout->Release();
+    mRefCountVtable = cRC_vtable;
+    mWinProcVtable = ITracerBase_vtable;
+    if (flags & 1)
+        EASTL_allocator_deallocate(this);
+    return this;
+}
+}  // namespace SP
 
 // @ 0x005c90d0
 void cVectorInsertBig(void* vec, void* pos, void* value)

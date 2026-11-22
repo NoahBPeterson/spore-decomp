@@ -1,4 +1,14 @@
 #include <windows.h>
+#include "game/types.h"
+#include "EA/Thread/Condition.h"
+#include "EAConditionData.h"
+#include "EAMutexData.h"
+#include "EASemaphoreData.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/Thread/Semaphore.h"
+#include <stddef.h>
+#include <string.h>
+#include <new>
 
 namespace EA {
 namespace Thread {
@@ -23,8 +33,7 @@ extern unsigned long g_ThreadTlsIndex;   // 0x0154DF38
 }  // namespace EA
 
 // @ 0x00921b40
-namespace EA {
-namespace Thread {
+namespace EA { namespace Thread {
 void ThreadGroup::ClearThreads(bool bWait)
 {
     EnterCriticalSection(&mCS);
@@ -33,7 +42,6 @@ void ThreadGroup::ClearThreads(bool bWait)
         if (h) {
             DWORD code = 0;
             if (!bWait) {
-                // A thread still marked "exit in progress" is left alone.
                 if (GetExitCodeThread(h, &code) && code == 0x103) continue;
             }
             CloseHandle(mThreads[i]);
@@ -42,8 +50,7 @@ void ThreadGroup::ClearThreads(bool bWait)
     }
     LeaveCriticalSection(&mCS);
 }
-}  // namespace Thread
-}  // namespace EA
+}}  // namespace EA::Thread
 
 // @ 0x00921bc0
 namespace EA { namespace Thread {
@@ -63,13 +70,34 @@ void ThreadGroup::AddRemoveThread(HANDLE h, char bAdd)
         if (mThreads[i] == h) {
             CloseHandle(h);
             mThreads[i] = 0;
-            LeaveCriticalSection(&mCS);
-            return;
+            break;
         }
     }
     LeaveCriticalSection(&mCS);
 }
 }}  // namespace EA::Thread
+
+// @ 0x00921c50
+namespace EA {
+namespace Thread {
+void SetCurrentThreadHandle(void * h, bool bAdd)
+{
+    if (g_ThreadTlsIndex == 0xfffffffful) {
+        g_ThreadTlsIndex = TlsAlloc();
+        if (g_ThreadTlsIndex == 0xfffffffful) return;
+    }
+    g_ThreadGroup.ClearThreads(false);
+    if (bAdd) {
+        if (h) g_ThreadGroup.AddRemoveThread(h, 1);
+        else {
+            HANDLE t = TlsGetValue(g_ThreadTlsIndex);
+            if (t) g_ThreadGroup.AddRemoveThread(t, 0);
+        }
+    }
+    TlsSetValue(g_ThreadTlsIndex, h);
+}
+}
+}  // namespace EA::Thread
 
 // @ 0x00921cc0
 namespace EA {
@@ -101,14 +129,10 @@ void * GetThreadId()
 }  // namespace EA::Thread
 
 // @ 0x00921d70
-namespace EA {
-namespace Thread {
+namespace EA { namespace Thread {
 void GetCurrentThreadPriority()
-{
-    GetThreadPriority(GetCurrentThread());
-}
-}  // namespace Thread
-}  // namespace EA
+{ GetThreadPriority(GetCurrentThread()); }
+}}  // namespace EA::Thread
 
 // @ 0x00921d80
 namespace EA { namespace Thread {
@@ -130,8 +154,6 @@ bool SetCurrentThreadPriority(int nPriority)
 namespace EA {
 namespace Thread {
 void ThreadSleep(unsigned int const & pMilliseconds)
-{
-    SleepEx(pMilliseconds, TRUE);
+{ SleepEx(pMilliseconds, TRUE); }
 }
-}  // namespace Thread
-}  // namespace EA
+}  // namespace EA::Thread

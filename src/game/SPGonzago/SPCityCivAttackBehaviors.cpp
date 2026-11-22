@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCityCivAttackBehaviors.cpp -- migrated from slice(s) s00d79470, s00d56630, s00d557f0, s00d53b50, s00d54ce0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCityCivAttackBehaviors.cpp -- migrated from slice(s) s00d56c30, s00d79470, s00d56630, s00d557f0, s00d53b50, s00d54ce0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCityCivAttackBehaviors.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -23,6 +23,8 @@ extern float gsSpaceHelixStep;                                  // 0x0169ebf0
 #include "SP/cSPCreatureBase.h"
 #include "SP/cSpatialObject.h"
 #include "SP/cTribe.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cPlanet.h"
 
 // ---- items of slice s00d54ce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* gInteractionAgentTypeInfo;                         // 0x013f94d4
@@ -809,6 +811,364 @@ void InitEditorParamsInner(uint32_t* params);        // 0x00abedb0
 }
 // ---- items of slice s00d79470 end
 
+// ---- items of slice s00d56c30_action begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int u32;
+typedef unsigned char u8;
+typedef long long i64;
+struct Vec3f {
+    float x, y, z;
+
+    Vec3f operator-(const Vec3f& other) const
+    {
+        Vec3f r;
+        r.x = x - other.x;
+        r.y = y - other.y;
+        r.z = z - other.z;
+        return r;
+    }
+};
+struct Matrix3Rows {
+    float mRows[9];
+};
+struct cSlotEntry_s00d5_6c30__action;
+struct cSlotBlock_s00d5_6c30__action;
+struct cSlotEntry_s00d5_6c30__action {
+    void* mpObject;                                    // +0x00 AutoRefCount payload
+    u32   mnFlags;                                     // +0x04
+};
+struct cSlotBlock_s00d5_6c30__action {
+    u32        mnHeader;                               // +0x00
+    cSlotEntry_s00d5_6c30__action mEntries[128];                          // +0x04
+};
+struct cSlotIterator_s00d5_6c30__action {
+    u8* mpBase;                                        // +0x00 address of the owning vector
+    u32 mnIndex;                                       // +0x04
+
+    void Increment();                                  // 0x00abe9b0
+
+    bool operator!=(const cSlotIterator_s00d5_6c30__action& other) const
+    {
+        return mpBase + mnIndex != other.mpBase + other.mnIndex;
+    }
+
+    bool operator==(const cSlotIterator_s00d5_6c30__action& other) const
+    {
+        return mpBase + mnIndex == other.mpBase + other.mnIndex;
+    }
+};
+struct cSlotVector {
+    cSlotBlock_s00d5_6c30__action** mpBlocks;                             // +0x00
+    cSlotBlock_s00d5_6c30__action** mpEnd;                                // +0x04
+    u32          mn08;                                 // +0x08
+    u32          mn0c;                                 // +0x0c
+    u32          mn10;                                 // +0x10
+    u32          mnFreeChain;                          // +0x14
+    u32          mnIndex;                              // +0x18
+    u32          mnPad1c;                              // +0x1c
+
+    u32 Size();                                        // 0x00abefd0
+    cSlotIterator_s00d5_6c30__action* Begin(cSlotIterator_s00d5_6c30__action* pOut);         // 0x00abeaf0
+
+    u32 EndIndex() const
+    {
+        return ((int)((char*)mpEnd - (char*)mpBlocks) >> 2) * 0x80 - 0x7f
+               + mnFreeChain;
+    }
+
+    cSlotIterator_s00d5_6c30__action End() const
+    {
+        cSlotIterator_s00d5_6c30__action it;
+        it.mpBase = (u8*)this;
+        it.mnIndex = EndIndex();
+        return it;
+    }
+
+    cSlotEntry_s00d5_6c30__action& At(const cSlotIterator_s00d5_6c30__action& it)
+    {
+        return mpBlocks[it.mnIndex >> 7]->mEntries[it.mnIndex & 0x7f];
+    }
+};
+class cSpatialObject_s00d5_6c30__action {
+public:
+virtual void s00();
+virtual void s01();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
+virtual void s07();
+virtual void s08();
+virtual void s09();
+virtual void s10();
+    virtual Vec3f* GetPosition();                                 // +0x2c
+    char mPad04[0x48];
+};
+struct XformMsg {
+    XformMsg();                                                   // 0x00434040
+    void SetPosition(const Vec3f* pPosition);                      // 0x00571d40
+
+    char           mPad00[0x0c];                                  // +0x00
+    unsigned short mFlags;                                        // +0x0c
+    unsigned short mPad0e;                                        // +0x0e
+    unsigned short mSeq;                                          // +0x10
+    char           mPad12[0x0e];                                  // +0x12..+0x1f
+    Matrix3Rows    mOrientation;                                  // +0x20
+    char           mPad44[0x30];                                  // +0x44
+};
+class cVisualEffect {
+public:
+    virtual void e00();                                           // +0x00
+    virtual void Release();                                       // +0x04
+    virtual void e08(int nValue);                                 // +0x08
+    virtual void e0c(int nValue);                                 // +0x0c
+    virtual bool IsActive();                                      // +0x10
+    virtual void e14();                                           // +0x14
+    virtual void SetXform(XformMsg* pMsg);                        // +0x18
+};
+class cEffectRef {
+public:
+    cVisualEffect** AsPPTypeParam();                              // 0x00a16f40
+    cVisualEffect*  mpObject;                                     // +0x00
+};
+class cEffectManager {
+public:
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
+virtual void m10();
+    virtual bool CreateEffect(const void* pTypeId, int nFlags,
+                              cVisualEffect** ppEffect);           // +0x2c
+};
+cEffectManager* EffectsManagerPtr_s00d5_6c30__action();                              // 0x0067ddd0
+class cSpaceToolData {
+public:
+    int    GetCooldown();                                          // 0x0104bde0
+    float  GetMinRange();                                          // 0x0104be20
+    float  GetMaxRange();                                          // 0x0104be30
+    float  GetField1e8();                                          // 0x00e21850
+};
+class cCombatant_s00d5_6c30__action {
+public:
+virtual void c00();
+virtual void c01();
+    virtual cSpatialObject_s00d5_6c30__action* GetSpatial();                          // +0x08
+virtual void c03();
+virtual void c04();
+virtual void c05();
+virtual void c06();
+virtual void c07();
+virtual void c08();
+virtual void c09();
+virtual void c10();
+virtual void c11();
+virtual void c12();
+virtual void c13();
+virtual void c14();
+virtual void c15();
+virtual void c16();
+virtual void c17();
+virtual void c18();
+virtual void c19();
+    virtual void SetTarget(const Vec3f* pTarget);                  // +0x50
+
+    int  GetDamageState();                                         // 0x008e7f80
+    bool IsHostileAlive();                                         // 0x00bfc600
+
+    char mPad04[0xf4];                                             // +0x04
+};
+class cTurret_s00d5_6c30__action {
+public:
+    virtual void t00();                                            // +0x00
+virtual void t01();
+virtual void t02();
+virtual void t03();
+virtual void t04();
+virtual void t05();
+virtual void t06();
+virtual void t07();
+virtual void t08();
+virtual void t09();
+virtual void t10();
+virtual void t11();
+virtual void t12();
+virtual void t13();
+virtual void t14();
+virtual void t15();
+virtual void t16();
+virtual void t17();
+virtual void t18();
+    virtual void OnTargetSelected();                               // +0x4c
+
+    cSpaceToolData* GetToolData694();                              // 0x00bce3f0
+    cSpaceToolData* GetToolData698();                              // 0x00bce3d0
+    cSpaceToolData* GetToolData69c();                              // 0x00bce3e0
+    void FaceAtTarget(const Vec3f* pTarget);                       // 0x00bce480
+    bool AcceptTarget(int nMode);                                  // 0x00c38990
+
+    char           mPad04[0x30];                                   // +0x04..+0x33
+    cSpatialObject_s00d5_6c30__action mSpatial;                                       // +0x34
+    char           mPad80[0xa0];                                   // +0x80..+0x11f
+    cSpatialObject_s00d5_6c30__action mBody;                                          // +0x120
+    char           mPad16c[0x39c];                                 // +0x16c..+0x507
+    Vec3f          mTargetPos;                                     // +0x508
+    char           mPad514[0x74];                                  // +0x514..+0x587
+    cCombatant_s00d5_6c30__action     mCombatant;                                     // +0x588
+    cEffectRef     mAirRaidEffect;                                 // +0x680
+    char           mPad684[0xc4];                                  // +0x684..+0x747
+    float          mField748;                                      // +0x748
+};
+class cInteractionAgent_s00d5_6c30__action {
+public:
+    virtual void a00();                                            // +0x00
+    virtual cTurret_s00d5_6c30__action* GetTargetInterface(const void* pTypeId);      // +0x04
+    virtual cTurret_s00d5_6c30__action* GetTurretInterface(const void* pTypeId);      // +0x08
+};
+class cPlanet_s00d5_6c30__action {
+public:
+    int GetToolMode();                                             // 0x00c70e00
+};
+class cCivilization_s00d5_6c30__action;
+class cGameNounManager_s00d5_6c30__action {
+public:
+    cCivilization_s00d5_6c30__action* GetPlayerCivilization();                        // 0x00b25fb0
+};
+class cSPToolManager {
+public:
+    void UseToolStart(cSpaceToolData* pTool, cCombatant_s00d5_6c30__action* pActor,
+                      const Vec3f* pPosition, int nMode, int nFlags,
+                      cSpatialObject_s00d5_6c30__action* pOwner, int nCount);          // 0x01050070
+    void UseToolStop(cSpaceToolData* pTool);                        // 0x0104fa90
+};
+cSPToolManager* ToolManager();                                      // 0x00b3d390
+class cSPTimer_s00d5_6c30__action {
+public:
+    i64 GetElapsedTime();                                           // 0x00bc3190
+    char mPad00[0x20];                                              // +0x00..+0x1f
+    i64  mNextEventTime;                                            // +0x20
+};
+struct cTurretState {
+    char mPad00[8];                                                 // +0x00
+    i64  mLastFireTime;                                             // +0x08
+    i64  mNextFireTime;                                             // +0x10
+    i64  mNextEffectTime;                                           // +0x18
+    int  mnFlag;                                                    // +0x20
+};
+class cTurretStateTree_s00d5_6c30__action {
+public:
+    cTurretState* Find(cInteractionAgent_s00d5_6c30__action* const* ppAgent);          // 0x00d56510
+    char mPad00[0x24];
+};
+struct cFireSlot {
+    float x, y, z;
+};
+struct cFirePattern {
+    cFireSlot* mpBegin;
+    cFireSlot* mpEnd;
+    cFireSlot* mpCapacity;
+};
+namespace SP {
+void* GetCurrentGameMode();                                         // 0x00b5b800
+}
+namespace SP {
+class cSPLivingUniverse {
+public:
+    static cPlanet_s00d5_6c30__action* GetActivePlanet();                              // 0x01021260
+};
+}
+namespace SP {
+cGameNounManager_s00d5_6c30__action* NounManager();                                    // 0x00b3d300
+}
+namespace SP {
+void ClearAllTargets(cSlotVector* pAgents);                         // 0x00d54c10
+}
+namespace SP {
+bool IsPlanetAttackableByPlayer(const void* pTarget);               // 0x01029950
+}
+namespace SP {
+bool IsMissionOfTypeActiveAtPlanet(cPlanet_s00d5_6c30__action* pPlanet);               // 0x0102ae60
+}
+namespace SP {
+bool FUN_01041cf0();                                                // 0x01041cf0
+}
+namespace SP {
+bool UpdateAirRaidSiren(cCivilization_s00d5_6c30__action* pCiv, const void* pTarget);   // 0x00d54940
+}
+namespace SP {
+cTurret_s00d5_6c30__action* ResolveTurret(cInteractionAgent_s00d5_6c30__action* pAgent);                   // 0x00d546f0
+}
+namespace SP {
+cTurret_s00d5_6c30__action* ResolveSlotTurret(cSlotEntry_s00d5_6c30__action* pSlot);                       // 0x00d54710
+}
+namespace SP {
+cTurret_s00d5_6c30__action* FindNearestCreature(Vec3f vProbe, bool bModeA, bool bModeB); // 0x00cc26a0
+}
+namespace SP {
+void UpdateFirePattern(cFirePattern* pPattern, int nCount,
+                       cTurret_s00d5_6c30__action* pTarget);                           // 0x00d56070
+}
+namespace SP {
+void DestroyFirePattern(cFirePattern* pPattern);                    // 0x00540520
+}
+namespace SP {
+Vec3f* Vec3_Normalize(Vec3f* pOut, const Vec3f* pIn);                // 0x00436ce0
+}
+namespace SP {
+Vec3f* OrthogonalVector(Vec3f* pOut, const Vec3f* pIn);              // 0x006985b0
+}
+namespace SP {
+float Dot3(const Vec3f* pA, const Vec3f* pB);                        // 0x00455cc0
+}
+namespace SP {
+Matrix3Rows* Matrix3FromFacingAndUp(Matrix3Rows* pOut,
+                                    const Vec3f* pFacing,
+                                    const Vec3f* pUp);               // 0x0069b440
+}
+namespace SP {
+class cInteraction_s00d5_6c30__action {
+public:
+    void*        mpVtbl;                                            // +0x00
+    void*        mpVtbl04;                                          // +0x04
+    u32          mn08;                                              // +0x08
+    cSlotVector  mTargetList;                                       // +0x0c
+    cSlotVector  mAgentList;                                        // +0x2c
+};
+}
+namespace SP {
+class cBehaviorSpaceTurret_s00d5_6c30__action : public cInteraction_s00d5_6c30__action {
+public:
+    int  Action();  // 0x00d56c30 (SP::cBehaviorSpaceTurret::Action)
+    int  GetActiveTurretCount();                                    // 0x00d54ce0
+    int  CountAttackableTurrets();                                  // 0x00d54d90
+    void UpdateWeaponData();                                        // 0x00d547e0
+    void FUN_00d56630();                                            // 0x00d56630
+    void FUN_00d56870();                                            // 0x00d56870
+
+    char            mPad4c[0x28];                                   // +0x4c..+0x73
+    cTurretStateTree_s00d5_6c30__action mStateTree;                                    // +0x74
+    cSPTimer_s00d5_6c30__action        mLifeTimer;                                     // +0x90
+    u32             mnB8;                                           // +0xb8
+    Vec3f           mCityCenter;                                    // +0xbc
+    int             mnSdrBeamLifetime;                              // +0xc8
+    u32             mnCc;                                           // +0xcc
+    i64             mReattackDelay;                                 // +0xd0
+    bool            mbAirRaidOn;                                    // +0xd8
+    char            mPadD9[7];                                      // +0xd9..+0xdf
+    cSPTimer_s00d5_6c30__action        mAirRaidTimer;                                  // +0xe0
+};
+}
+namespace SP {
+extern float gAirRaidHealthLimit;                                   // 0x013ec4d0
+}
+// ---- items of slice s00d56c30_action end
+
 // @ 0x00d54730
 bool __stdcall SP::CanJoin(void* pObject, int nUnused)
 {
@@ -1375,6 +1735,239 @@ void cBehaviorSpaceTurret_s00d5_6630::StopDefense()
         it.increment();
     }
 }
+
+// @ 0x00d56c30
+namespace SP {
+int cBehaviorSpaceTurret_s00d5_6c30__action::Action()
+{
+    if (GetCurrentGameMode() == (void*)0x1654c05) {
+        if (cSPLivingUniverse::GetActivePlanet()->GetToolMode() == 4)
+            return 1;
+    }
+    if (mAgentList.mnIndex == 0x3fffffff) {
+        ClearAllTargets(&mAgentList);
+        return 0;
+    }
+    if (GetActiveTurretCount() == 0) {
+        ClearAllTargets(&mAgentList);
+        return 0;
+    }
+    if (mTargetList.Size() == 0) {
+        ClearAllTargets(&mAgentList);
+        return 0;
+    }
+
+    cCivilization_s00d5_6c30__action* pCiv = NounManager()->GetPlayerCivilization();
+
+    // The turret this behaviour currently watches is the head of the target list.
+    cTurret_s00d5_6c30__action* pTarget = 0;
+    {
+        cInteractionAgent_s00d5_6c30__action* pAgent0 =
+            (cInteractionAgent_s00d5_6c30__action*)mTargetList.mpBlocks[mTargetList.mnIndex >> 7]
+                ->mEntries[mTargetList.mnIndex & 0x7f].mpObject;
+        if (pAgent0 != 0) {
+            pTarget = pAgent0->GetTargetInterface((void*)0xee9b2232);
+            if (pTarget != 0)
+                pTarget->OnTargetSelected();
+        }
+    }
+
+    bool bAttack = false;
+    if (IsPlanetAttackableByPlayer(pTarget))
+        bAttack = true;
+    bool bMission = false;
+    if (IsMissionOfTypeActiveAtPlanet(cSPLivingUniverse::GetActivePlanet()))
+        bMission = true;
+    if (pTarget->mField748 >= gAirRaidHealthLimit)
+        bMission = false;
+    if (FUN_01041cf0())
+        bAttack = true;
+
+    if (!mbAirRaidOn) {
+        if (bAttack)
+            bAttack = UpdateAirRaidSiren(pCiv, pTarget);
+        else
+            StopAirRaidEffect();
+    } else if (!bAttack) {
+        StopAirRaidEffect();
+    }
+    bool bRaid = bAttack || bMission || FUN_01041cf0();
+
+    if (!mbAirRaidOn && bRaid)
+        FUN_00d56630();
+    mbAirRaidOn = bRaid;
+
+    if (!bRaid) {
+        // Raid over: drop the effect on every turret that still owns one.
+        FUN_00d56870();
+        cSlotIterator_s00d5_6c30__action it;
+        mAgentList.Begin(&it);
+        while (it != mAgentList.End()) {
+            cInteractionAgent_s00d5_6c30__action* pAgent = (cInteractionAgent_s00d5_6c30__action*)mAgentList.At(it).mpObject;
+            if (pAgent != 0) {
+                cTurret_s00d5_6c30__action* pTurret = pAgent->GetTurretInterface((void*)0x436f315);
+                if (pTurret != 0 && pTurret->mAirRaidEffect.mpObject != 0)
+                    pTurret->mAirRaidEffect.mpObject->e0c(0);
+            }
+            it.Increment();
+        }
+        return 1;
+    }
+
+    UpdateWeaponData();
+    i64 tNow = mLifeTimer.GetElapsedTime();
+    if (tNow > mLifeTimer.mNextEventTime) {
+        cSlotIterator_s00d5_6c30__action fireIt;
+        mAgentList.Begin(&fireIt);
+        cTurret_s00d5_6c30__action* pShooter = ResolveSlotTurret(&mAgentList.At(fireIt));
+        cSpaceToolData* pWeapon = pShooter->GetToolData69c();
+        mLifeTimer.mNextEventTime = tNow + pWeapon->GetCooldown();
+
+        cTurret_s00d5_6c30__action* pCreature = FindNearestCreature(
+            *pTarget->mBody.GetPosition(), bAttack, bMission);
+        if (pCreature != 0 && !pCreature->AcceptTarget(1)) {
+            Vec3f creaturePos = *pCreature->mSpatial.GetPosition();
+            Vec3f toCreature = creaturePos - mCityCenter;
+            pWeapon->GetField1e8();
+            pWeapon->GetMaxRange();
+            Vec3f nToCreature;
+            Vec3f nCenter;
+            if (Dot3(Vec3_Normalize(&nToCreature, &toCreature),
+                     Vec3_Normalize(&nCenter, &mCityCenter)) >= 0.0f) {
+                int nShots = (GetActiveTurretCount() - CountAttackableTurrets())
+                             * mnSdrBeamLifetime;
+                cFirePattern pattern;
+                pattern.mpBegin = 0;
+                pattern.mpEnd = 0;
+                pattern.mpCapacity = 0;
+                UpdateFirePattern(&pattern, nShots, pCreature);
+                int nSlots = (int)(pattern.mpEnd - pattern.mpBegin);
+                cSlotIterator_s00d5_6c30__action it2;
+                mAgentList.Begin(&it2);
+                cFireSlot* pSlot = &pattern.mpBegin[nSlots - 1];
+                for (; nSlots > 0; --nSlots, --pSlot) {
+                    cInteractionAgent_s00d5_6c30__action* pAgent = (cInteractionAgent_s00d5_6c30__action*)mAgentList.At(it2).mpObject;
+                    cTurret_s00d5_6c30__action* pTurret = ResolveTurret(pAgent);
+                    if (pTurret->mCombatant.GetDamageState() != 2
+                        && !pTurret->mCombatant.IsHostileAlive()) {
+                        Vec3f position;
+                        position.x = pSlot->x;
+                        position.y = pSlot->y;
+                        position.z = pSlot->z;
+                        cSpaceToolData* pTool = pTurret->GetToolData69c();
+                        ToolManager()->UseToolStart(
+                            pTool, pTurret != 0 ? &pTurret->mCombatant : (cCombatant_s00d5_6c30__action*)0,
+                            &position, -1, 0, &pCreature->mSpatial, 1);
+                        ToolManager()->UseToolStop(pTool);
+                    }
+                    it2.Increment();
+                    if (it2 == mAgentList.End())
+                        mAgentList.Begin(&it2);
+                }
+                DestroyFirePattern(&pattern);
+            }
+        }
+    }
+
+    cSlotIterator_s00d5_6c30__action it;
+    mAgentList.Begin(&it);
+    while (it != mAgentList.End()) {
+        cInteractionAgent_s00d5_6c30__action* pAgent = (cInteractionAgent_s00d5_6c30__action*)mAgentList.At(it).mpObject;
+        cTurret_s00d5_6c30__action* pTurret = 0;
+        if (pAgent != 0)
+            pTurret = pAgent->GetTurretInterface((void*)0x436f315);
+        cTurretState* pState = mStateTree.Find(&pAgent);
+        cCombatant_s00d5_6c30__action* pCombatant = &pTurret->mCombatant;
+
+        const Vec3f* pAim = 0;
+        if (pCombatant->GetDamageState() != 2 && !pCombatant->IsHostileAlive()) {
+            cSpaceToolData* pPrimary = pTurret->GetToolData698();
+            cSpaceToolData* pSecondary = pTurret->GetToolData694();
+            bool bFired = false;
+            if (tNow > pState->mLastFireTime) {
+                pState->mLastFireTime += pPrimary->GetCooldown();
+                bFired = true;
+            }
+            if (pState->mNextEffectTime == 0) {
+                pState->mNextEffectTime = tNow + mReattackDelay;
+                pState->mNextFireTime = tNow + pSecondary->GetCooldown();
+            }
+
+            if (tNow > pState->mNextFireTime - 1000) {
+                if (pState->mnFlag == 1 && pTurret->mAirRaidEffect.mpObject == 0) {
+                    cEffectManager* pEffects = EffectsManagerPtr_s00d5_6c30__action();
+                    if (pEffects->CreateEffect((void*)0xc19e6439, 0,
+                                               pTurret->mAirRaidEffect.AsPPTypeParam())) {
+                        XformMsg msg;
+                        msg.mFlags |= 2;
+                        msg.mSeq += 1;
+                        Matrix3Rows orientation;
+                        Vec3f nFacing;
+                        Vec3f nUp;
+                        Vec3_Normalize(&nFacing, pTurret->mSpatial.GetPosition());
+                        OrthogonalVector(&nUp, &nFacing);
+                        Vec3_Normalize(&nUp, &nUp);
+                        Matrix3FromFacingAndUp(&orientation, &nFacing, &nUp);
+                        msg.mOrientation = orientation;
+                        msg.SetPosition(pTurret->mSpatial.GetPosition());
+                        pTurret->mAirRaidEffect.mpObject->SetXform(&msg);
+                        pTurret->mAirRaidEffect.mpObject->e08(0);
+                    }
+                }
+            } else if (tNow > pState->mNextEffectTime) {
+                cVisualEffect* pEffect = pTurret->mAirRaidEffect.mpObject;
+                if (pEffect != 0 && pEffect->IsActive())
+                    pEffect->e0c(0);
+                cVisualEffect* pOld = pTurret->mAirRaidEffect.mpObject;
+                if (pOld != 0) {
+                    pTurret->mAirRaidEffect.mpObject = 0;
+                    pOld->Release();
+                }
+            }
+
+            if (tNow > pState->mNextFireTime) {
+                pState->mNextEffectTime = tNow + mReattackDelay;
+                pState->mNextFireTime = tNow + pSecondary->GetCooldown();
+                pState->mnFlag = (pState->mnFlag == 0);
+            }
+
+            cTurret_s00d5_6c30__action* pCreature = FindNearestCreature(
+                *pTarget->mBody.GetPosition(), bAttack, bMission);
+            if (pCreature != 0 && !pCreature->AcceptTarget(1)) {
+                Vec3f creaturePos = *pCreature->mSpatial.GetPosition();
+                Vec3f toCreature = creaturePos - mCityCenter;
+                Vec3f nToCreature;
+                Vec3f nCenter;
+                bool bFacing =
+                    Dot3(Vec3_Normalize(&nToCreature, &toCreature),
+                         Vec3_Normalize(&nCenter, &mCityCenter)) >= 0.0f;
+                pTurret->FaceAtTarget(&pCreature->mTargetPos);
+
+                Vec3f* pTurretPos = pCombatant->GetSpatial()->GetPosition();
+                float dx = creaturePos.x - pTurretPos->x;
+                float dy = creaturePos.y - pTurretPos->y;
+                float dz = creaturePos.z - pTurretPos->z;
+                float fDist = sqrtf(dz * dz + dy * dy + dx * dx);
+
+                bool bAim;
+                if (fDist <= pPrimary->GetMinRange()
+                    || fDist >= pPrimary->GetMaxRange()) {
+                    bAim = fDist < pSecondary->GetMaxRange()
+                           && tNow < pState->mNextEffectTime && bFacing
+                           && pState->mnFlag == 0;
+                } else {
+                    bAim = bFired && bFacing;
+                }
+                if (bAim)
+                    pAim = &pCreature->mTargetPos;
+            }
+        }
+        pCombatant->SetTarget(pAim);
+        it.Increment();
+    }
+    return 1;
+}
+}  // namespace SP
 
 // @ 0x00d7a020
 namespace SP {

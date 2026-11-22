@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+# va  diff-bytes  reason
 0065f820 14 WindowSet4::Set - complete, one pParent load scheduled before the two stores
 0065f970 84 four-window visibility update; cl picks this=ebp/n=ebx and materialises the bool args with setle instead of the original branch pushes
 0065fd30 661 cSPUIEventLog::DoMessage: complete (show/hide sweep with animation targets); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; frame is 0x34 bytes larger in the original (unused AnimTarget temp slots) and register roles differ [equiv: UNSUPPORTED 0/400 valid]
@@ -11,8 +11,8 @@
 00660b90 92 map clear; keeps w in a register and uses ebx, original reloads and uses ebp for the end anchor
 00660e30 232 cSPUIFeedFilter destructor - complete, EA cleanup scheduling differs; equiv WEAK (161/400 valid: 188 fault(read) + 35 fault(write) + 14 VirtualFree + 2 fake-arity, 84.0% cov, 0 mismatches): FUN_00660720/FUN_00d0c930/FUN_00646d70 are all __thiscall (this + stack args, callee pops) — the old cdecl declarations leaked 0x1c of stack and left a garbage `this` flags: /O2 /MD /Gy /TP /arch:SSE2
 00661020 219 cSPUIFeedFilter constructor - complete, many field stores not byte-exact; equiv PASS (400 valid, 100% cov): FUN_0066a5e0 is __thiscall on this+0x44 (2 stack args), the old cdecl form leaked 4 bytes flags: /O2 /MD /Gy /TP /arch:SSE2
-00661180 107 GetArcheTypeAssetKeys - complete, constraint/template path differs
-006612b0 83 map find-or-insert - complete, rbtree shape not byte-exact; equiv FAIL (5/5 inputs mismatched; ours faults reading unmapped at 0x006603e0, now member, ecx fixed)
+00661180 107 GetArcheTypeAssetKeys - complete, constraint/template path differs flags: /O2 /MD /Gy /TP /arch:SSE2
+006612b0 206 map find-or-insert - complete, rbtree shape not byte-exact; equiv PASS (315 valid, 91.9% cov): node layout is {left@0, right@4, key@0x10, 0x20-byte value@0x14}; the insert path is AssignChecked(tmp,key,&zeroSrc) then the thiscall insert 0x00660ca0(map,&key,found,tmp,(uint32)key&0xffffff00) which writes the node back through arg0, then releases tmp.mp0 and src.mp0 flags: /O2 /MD /Gy /TP /arch:SSE2
 00661390 243 vector<E34>::operator= - complete, three-branch assign not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE2
 006614d0 232 vector<E34>::insert - complete, reallocation path not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE2
 00661a10 198 cSPUIFeedFilter::HasAnyAsset - complete, lower_bound result compare folded and loop counter/this register allocation differ; equiv WEAK (55.8% coverage) flags: /O2 /MD /Gy /TP /arch:SSE2

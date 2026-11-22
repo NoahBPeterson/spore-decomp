@@ -1,4 +1,4 @@
 # source  symbol  va  flags
+../src/game/SPEngine/DebugConsoleW32.cpp  ?FUN_006bb670@@YIHPAX@Z  006bb670  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/DebugConsoleW32.cpp  ??1DebugMessage@@UAE@XZ  006bb690  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/DebugConsoleW32.cpp  ??_GDebugMessage@@UAEPAXI@Z  006bb760  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPEngine/DebugConsoleW32.cpp  ?FUN_006bb670@@YIHPAX@Z  006bb670  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include

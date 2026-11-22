@@ -1,6 +1,10 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/_at_00e40000.cpp  ?HandleTimelineMessage@cSPUITimeline@@QAE_NIPAX@Z  00e449b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?Tick@EditorValidity@@QAEXXZ  00e45460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e460d0@cSPUITimeline_s00e4_5760@@QAEMXZ  00e460d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e40000.cpp  ?GetItemColor@cSPUITimeline_s00e4_5760@@QAE?AUColorRGB_s00e4_61c0@@I@Z  00e461c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e40000.cpp  ?Construct@PropLayoutCtor@@QAEPAVcSPUIPropertyLayout_s00e4_5760@@XZ  00e46260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e40000.cpp  ?InitLayout@cSPUIPropertyLayout_s00e4_5760@@QAEDPAH@Z  00e462c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e47100@Timeline@@QAE_NPAX@Z  00e47100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e47180@SPUIPropertyLayout@@QAEPAXE@Z  00e47180  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e47300@SPUIPropertyLayout@@QAEXXZ  00e47300  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -14,11 +18,7 @@
 ../src/game/SPGonzago/_at_00e40000.cpp  ?LoadParams@C@@QAEXXZ  00e496d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e49d80@cUnlockPanel@@QAE_NHPAUcMessage@@@Z  00e49d80  /O2 /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e49db0@cKeyQueue@@QAEXXZ  00e49db0  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e49df0@cKeyQueue@@QAEXPAUKey12@@@Z  00e49df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e49e80@cUnlockPanel@@QAEXXZ  00e49e80  /O2 /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e4a790@cUnlockPanel@@QAEXUKey12@@@Z  00e4a790  /O2 /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e4cc10@@YGXPAF@Z  00e4cc10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPGonzago/_at_00e40000.cpp  ?GetItemColor@cSPUITimeline_s00e4_5760@@QAE?AUColorRGB_s00e4_61c0@@I@Z  00e461c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e49df0@cKeyQueue@@QAEXPAUKey12@@@Z  00e49df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00e40000.cpp  ?Construct@PropLayoutCtor@@QAEPAVcSPUIPropertyLayout_s00e4_5760@@XZ  00e46260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e460d0@cSPUITimeline_s00e4_5760@@QAEMXZ  00e460d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00e40000.cpp  ?InitLayout@cSPUIPropertyLayout_s00e4_5760@@QAEDPAH@Z  00e462c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

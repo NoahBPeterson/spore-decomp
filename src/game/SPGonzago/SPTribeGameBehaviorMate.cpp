@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeGameBehaviorMate.cpp -- migrated from slice(s) s00d77360 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeGameBehaviorMate.cpp -- migrated from slice(s) s00d77680, s00d77360 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeGameBehaviorMate.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -73,6 +73,10 @@ extern "C" void* __cdecl WatchMemoryBlock(void*); // 0x00d999d0
 extern "C" bool  __cdecl FUN_00da6270(void*, int); // 0x00da6270
 // ---- items of slice s00d77360 end
 
+// ---- items of slice s00d77680 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPCreatureCitizen;
+// ---- items of slice s00d77680 end
+
 // @ 0x00d77510
 namespace SP {
 bool TRIBE_MATE_Activate(Creature* self, int, int, int, int, Holder* holder)
@@ -117,3 +121,10 @@ bool TRIBE_MATE_Activate(Creature* self, int, int, int, int, Holder* holder)
     return FUN_00da6270(self, 0xb);
 }
 }  // namespace SP
+
+// @ 0x00d77680
+int TribeStealBabyTick(cSPCreatureCitizen* citizen)
+{
+  (void)citizen;
+  return 1;
+}

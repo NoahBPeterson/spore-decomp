@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPGameplayMarker.cpp  ?f@C3ebd0@@QAEXPAH@Z  00c3ebd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameplayMarker.cpp  ?f@C3ec00@@QAEXPAH@Z  00c3ec00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameplayMarker.cpp  ?f@C3ec40@@QAEXXZ  00c3ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameplayMarker.cpp  ?Write@cGameplayMarker@@QAE_NPAX@Z  00c3ed20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameplayMarker.cpp  ?Read@cGameplayMarker@@QAE_NPAX@Z  00c3ee20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

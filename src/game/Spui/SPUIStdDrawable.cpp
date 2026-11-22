@@ -50,6 +50,7 @@ extern "C" char g_154778c[];
 
 #include "game/types.h"
 #include <intrin.h>
+#include <stddef.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern char g_vtblImgInfo;      // 0x141a760 (primary)
@@ -198,15 +199,8 @@ static __forceinline void *MakeInfoAt(void *def, void *slot)
 // ---- items of slice s00830c00 end
 
 // ---- items of slice s012f64e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct TypeRegEntry {
-    void* f0;       // +0x00
-    int   f1;       // +0x04
-    short f2;       // +0x08
-    short f3;       // +0x0a
-    int   f4;       // +0x0c
-    int   f5;       // +0x10
-    int   f6;       // +0x14
-};
+extern "C" char g_1547690[];
+struct SetMode { void SetMode2(int); };
 // ---- items of slice s012f64e0 end
 
 // ---- items of slice s0082f9a0_b begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -741,6 +735,12 @@ void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
         v = 1;
     mbHasUserDefaults = v;
     EnsureImageInfo0();
+}
+
+// @ 0x012fdfe0
+void init_1547690()
+{
+    ((SetMode*)g_1547690)->SetMode2(2);
 }
 
 // @ 0x012fe300

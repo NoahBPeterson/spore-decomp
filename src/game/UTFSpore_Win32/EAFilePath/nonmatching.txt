@@ -10,3 +10,4 @@
 00930cb0 85 complete: extension copy; indexing form differs
 00930fc0 159 complete: ReplacePathComponent; SafeReplace arg register order differs
 00931250 161 complete: filename sanitizer reproduces behavior, string class differs
+00931460 749 CheckPathName: fixed_string locals init/ordering, shared cleanup block and register allocation differ flags: /O2 /MD /Gy /TP /GS-

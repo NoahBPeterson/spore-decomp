@@ -1,4 +1,4 @@
-// src/game/SPAudio/SPAudioEmitterEAPD.cpp -- migrated from slice(s) s00a36d60 by tools/migrate/rewrite.py
+// src/game/SPAudio/SPAudioEmitterEAPD.cpp -- migrated from slice(s) s00a37dd0, s00a36d60 by tools/migrate/rewrite.py
 // Object file: SPAudio/SPAudioEmitterEAPD.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,7 @@
 #include "EA/Audio/ResponseCurve.h"
 #include "EA/Audio/Sound.h"
 #include "SP/Audio/cEAPDVoiceManager.h"
+#include <math.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" char  g_gme_refcount;  // 0x013ef094  (GmeRefCount base)
@@ -120,6 +121,24 @@ struct EmitterSub {
     bool  SetPropertyEx(int a, int b, int c);           // 0xa37a10
 };
 // ---- items of slice s00a36d60 end
+
+// ---- items of slice s00a37dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char  g_0155332c;        // 0x155332c RB key base
+extern char  g_01553330;        // 0x1553330 RB loop end sentinel
+extern char  g_01553334;        // 0x1553334 RB loop head
+extern float f_01485720;        // 0x1485720  1.0f
+typedef unsigned short u16;
+#define VFN(p, off) ((*(void***)(p))[(off) / 4])
+void* __cdecl GetSingletonPtr();          // 0xa67c60 EA::Audio::Eapd::ISystem::GetSingletonPtr
+char* __cdecl FUN_00a37ae0();             // 0xa37ae0
+void* __cdecl FUN_005727e0();             // 0x5727e0
+void* __cdecl RBTreeIncrement(void* n);   // 0x921580
+void* __cdecl SPGetSystem_s00a3_7dd0();              // 0xa421f0 SP::Audio::SPGetSystem
+void* __cdecl GetSystemAT_s00a3_7dd0();              // 0xa206f0 EA::Audio::GetSystemAT
+struct EAPDLoad { bool Load(); };                          // 0xa37cc0 cEmitterEAPD::Load
+struct SysA { void Do439b0(); };                           // 0xa439b0
+struct SysB { void Do466b0(void* c, void* p); };           // 0xa466b0
+// ---- items of slice s00a37dd0 end
 
 // @ 0x00a377b0
 bool EmitterSub::Start(int, int)
@@ -313,3 +332,74 @@ bool cEmitterEAPD::Load()
         ((void (__thiscall*)(void*))((*(void***)local)[4 / 4]))(local);
     return false;
 }
+
+// @ 0x00a37dd0
+namespace SP { namespace Audio {
+bool __fastcall FUN_00a37dd0(void* ctx)
+{
+    char* esi = (char*)ctx;
+    void* sys = GetSingletonPtr();
+    if (!sys) return false;
+    if (*(u8*)(esi + 0x28) & 1) return false;
+
+    char* ebx4 = esi - 4;
+    if (!((EAPDLoad*)ebx4)->Load()) return false;
+
+    void* s2 = GetSingletonPtr();
+    if (s2) {
+        void* ecx = *(void**)(esi + 0x1c);
+        ecx = *(void**)((char*)ecx + 0x1c);
+        void* edi = esi + 0x18;
+        if (!((bool(__thiscall*)(void*, void*, void*))VFN(s2, 0x24))(s2, ecx, edi))
+            return false;
+    }
+
+    if (*(void**)(esi + 0x2c) != 0) {
+        void* c = *(void**)(esi + 0x2c);
+        ((void(__thiscall*)(void*, void*, u32))VFN(c, 0xc))(c, &g_0155332c, 1);
+        void* it = *(void**)&g_01553334;
+        if (it != &g_01553330) {
+            for (;;) {
+                void* pv = *(void**)((char*)it + 0x10);
+                void* cc = *(void**)(esi + 0x2c);
+                void* local = 0;
+                ((void(__thiscall*)(void*, void*, void**))VFN(cc, 0x1c))(cc, pv, &local);
+                void* rec = local;
+                u32 t = (u32)*(u16*)((char*)rec + 0x12);
+                float val;
+                if (t == 1) {
+                    char* p = FUN_00a37ae0();
+                    val = (*p == 0) ? 0.0f : f_01485720;
+                } else {
+                    if (t - 0xc != 0) {
+                        it = RBTreeIncrement(it);
+                        if (it == &g_01553330) break;
+                        continue;
+                    }
+                    val = *(float*)FUN_005727e0();
+                }
+                ((void(__thiscall*)(void*, void*, float))VFN(ebx4, 0xc))(ebx4, pv, val);
+                it = RBTreeIncrement(it);
+                if (it == &g_01553330) break;
+            }
+        }
+    }
+
+    void* s3 = SPGetSystem_s00a3_7dd0();
+    ((SysA*)s3)->Do439b0();
+    *(u32*)(ebx4 + 0x2c) |= 1;
+
+    void* s4 = SPGetSystem_s00a3_7dd0();
+    void* edi = *(void**)((char*)s4 + 0x15bc80);
+    *(void**)(esi + 0x24) = esi - 4;
+
+    void* at = GetSystemAT_s00a3_7dd0();
+    void* p = *(void**)(esi + 0x24);
+    ((void(__thiscall*)(void*, void*))VFN(at, 0x120))(at, p);
+
+    void* q = *(void**)(esi + 0x24);
+    void* r = *(void**)(esi + 0x18);
+    ((SysB*)edi)->Do466b0(r, q);
+    return true;
+}
+}}  // namespace SP::Audio

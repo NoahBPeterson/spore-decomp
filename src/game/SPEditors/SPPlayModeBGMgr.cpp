@@ -15,6 +15,15 @@
 #include "SP/cSPPlayModeBGInfo.h"
 #include "SP/cSPPlayModePhotoBrowser.h"
 #include <intrin.h>
+#include "EA/UTFWin/Window.h"
+#include "SP/cCelestialBody.h"
+#include "SP/cGonzagoSubsystem.h"
+#include "SP/cIGonzagoSubsystem.h"
+#include "SP/cPlanet.h"
+#include "SP/cSolarSystem.h"
+#include "SP/cTribePlanner.h"
+#include "SP/cVarListSerializer.h"
+#include "SP/cVisiblePlanet.h"
 
 // ---- items of slice s0062e7e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 class cString {
@@ -284,6 +293,202 @@ struct SharedLibList {
     ~SharedLibList();
 };
 // ---- items of slice s0062f6e0 end
+
+// ---- items of slice s00b1d870 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace UTFWin {
+struct Window { bool Initialize(); };
+}
+struct RCObj {
+    virtual int  AddRef();
+    virtual void Release();
+    virtual void Destroy();
+};
+struct ITransitionData {
+    virtual int  AddRef();        // +0x00
+    virtual void Release();       // +0x04
+    virtual void Reset(int arg);  // +0x08
+    virtual void Finish(int arg); // +0x0c
+};
+struct IEffect {
+    virtual int  AddRef();                                              // +0x00
+    virtual void Release();                                             // +0x04
+    virtual bool Query(uint32_t key, int arg, ITransitionData** ppOut);  // +0x08
+virtual void e0c();
+virtual void e10();
+virtual void e14();
+virtual void e18();
+virtual void e1c();
+virtual void e20();
+virtual void e24();
+virtual void e28();
+virtual void e2c();
+virtual void e30();
+    virtual void Stop();                                                // +0x34
+};
+struct IEditorData {
+    virtual void d00();        // +0x00
+    virtual int  AddRef();     // +0x04
+    virtual void Destroy();    // +0x08
+    uint32_t mUnused04;        // +0x04
+    uint32_t mUnused08;        // +0x08
+    uint32_t mEffectId;        // +0x0c  transition id handed to the ticker
+};
+struct IFat {
+    virtual void   s00();
+    virtual IFat*  s01();                                    // window manager: active manager
+virtual void   s02();
+virtual void s03();
+    virtual IFat*  s04();                                    // window face: scene
+    virtual void   s05();
+    virtual void*  s06();                                    // reader: underlying stream
+    virtual void   s07();
+    virtual IFat*  s08();                                    // reader: stream owner
+    virtual void   s09(void* pHandler, uint32_t id);         // message server: add handler
+    virtual void   s10(int code);                            // play-mode facade: change environment
+    virtual void   s11(uint32_t key, uint32_t tag, void* pOut);
+virtual void   s12();
+virtual void s13();
+    virtual int    s14(const char* pName);                   // play-mode facade: post mode name
+virtual void   s15();
+virtual void s16();
+virtual void s17();
+    virtual void   s18(int id);
+    virtual RCObj* s19(uint32_t id, const char* pName);      // effects manager: find effect
+virtual void   s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+    virtual void   s24(float* pVector);                      // window face: set position
+virtual void   s25();
+virtual void s26();
+virtual void s27();
+virtual void   s28();
+virtual void s29();
+virtual void s30();
+    virtual void   s31(int a, int b);                        // window face: set flags
+virtual void   s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void   s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void   s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void   s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void   s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void   s52();
+virtual void s53();
+    virtual void   s54(void* pArg);                          // window manager: set active window
+    virtual void   s55(void* pArg);                          // window face: release scene
+virtual void   s56();
+virtual void s57();
+virtual void s58();
+virtual void s59();
+virtual void   s60();
+virtual void s61();
+virtual void s62();
+virtual void s63();
+};
+IFat* GetPlayModeFacade();                         // 0x0067dd20
+struct ISimTicker {
+    char SmoothTickToggle();   // 0x00801400
+    void Enable(char enable);  // 0x010829f0
+};
+ISimTicker* SimTicker();       // 0x00b3d330
+class WindowSerializable : public RCObj {
+};
+class WindowFace : public IFat {
+};
+class Window : public WindowSerializable, public WindowFace {
+public:
+    Window();                                   // 0x00962a10
+};
+class TransitionWindow : public Window {
+public:
+    TransitionWindow() {}
+    WindowFace* Face() { return static_cast<WindowFace*>(this); }
+};
+struct cIGonzagoSubsystem {
+virtual void g0();
+virtual void g1();
+virtual void g2();
+virtual void g3();
+virtual void g4();
+virtual void g5();
+};
+struct RefCountSub {
+    virtual int  AddRef();
+    virtual void Release();
+};
+class cGonzagoSubsystem : public cIGonzagoSubsystem, public RefCountSub {
+public:
+    cGonzagoSubsystem();      // 0x00b5b960
+    ~cGonzagoSubsystem();     // 0x00b5b9a0
+private:
+    char pad00[0x14];         // 0x08..0x1b
+};
+class PaintHandler {
+public:
+    virtual void Dispatch(uint32_t id, uint32_t data);
+    bool HandleGonzagoMessage(uint32_t id, uint32_t data);   // 0x00b1e020
+
+    int   m20;                        // 0x04  current play mode
+    int   m24;                        // 0x08  pending play mode
+    bool  mb28;                       // 0x0c  environment change happened
+    bool  mb29;                       // 0x0d
+    short pad2a;                      // 0x0e
+    IEditorData*      mpTransition;        // 0x10  pending editor launch data
+    IEffect*          mpTransitionEffect;  // 0x14  world transition effect
+    ITransitionData*  mpTransitionData;    // 0x18  live transition data
+    TransitionWindow* mpBlockingWin;       // 0x1c  blocking window over the scene
+};
+class PaintSystemHost : public cGonzagoSubsystem, public PaintHandler {
+public:
+    PaintSystemHost();                              // 0x00b1d870
+    ~PaintSystemHost() throw();                     // 0x00b1d970
+    void ClearTransition();                         // 0x00b1da20
+    void InitTransition();                          // 0x00b1dc60
+    void SetTransitionData(IEditorData* pData);     // 0x00b1dee0
+    bool SetPlayMode(int mode);                     // 0x00b1e410
+
+    PaintHandler* HandlerView() { return static_cast<PaintHandler*>(this); }
+    static PaintSystemHost* HostOf(PaintHandler* pHandler) { return static_cast<PaintSystemHost*>(pHandler); }
+
+    RCObj* mEffects[21];                   // 0x3c  per-mode transition effects
+    RCObj* mWorldEffects[3];               // 0x90  world-layout transition effects
+};
+char gEmptyString;                                     // 0x01667bac
+class EAString {
+public:
+    char* mpBegin;        // +0x00
+    char* mpEnd;          // +0x04
+    char* mpCapacity;     // +0x08
+    uint32_t mPad0c;      // +0x0c  keeps the stack object 16-byte aligned
+
+    void Init() {
+        mpBegin = &gEmptyString;
+        mpEnd = mpBegin;
+        mpCapacity = &gEmptyString + 1;
+    }
+    void Release() {
+        if (mpCapacity - mpBegin > 1 && mpBegin != 0)
+            operator delete(mpBegin);
+    }
+    EAString& assign(const char* pText);   // 0x006a4380
+    EAString& append(const char* pText);   // 0x0060c4e0
+    const char* c_str() const { return mpBegin; }
+};
+// ---- items of slice s00b1d870 end
 
 // @ 0x0062f340
 void SP::cSPPlayModeBGMgr::SetBGHilite(unsigned int id)
@@ -586,5 +791,69 @@ void cSPPlayModeBGMgr_s0062_f6e0::Init(uint32_t a, uint32_t b, uint32_t c, uint3
 }
 
 // @ 0x00b1e0c0
-int FUN_b1e0c0()
-{ return 0; }
+int ChangeEnvironmentMode(int fromMode, int toMode)
+{
+    if (toMode == 0x01654c08)
+        return GetPlayModeFacade()->s14("LoadGame");
+    if (fromMode == 0x01654c06) {
+        switch (toMode) {
+        case 0x01654c00: return GetPlayModeFacade()->s14("CellGameFromLevelEditor");
+        case 0x01654c01: return GetPlayModeFacade()->s14("CreatureGameFromLevelEditor");
+        case 0x01654c02: return GetPlayModeFacade()->s14("TribeGameFromLevelEditor");
+        case 0x01654c04: return GetPlayModeFacade()->s14("CivilisationGameFromLevelEditor");
+        case 0x01654c05: return GetPlayModeFacade()->s14("SpaceGameFromLevelEditor");
+        }
+    }
+    if (toMode == 0x00dbdba1) {
+        switch (fromMode) {
+        case 0x01654c00: return GetPlayModeFacade()->s14("CellEditor");
+        case 0x01654c01: return GetPlayModeFacade()->s14("CreatureEditor");
+        case 0x01654c02: return GetPlayModeFacade()->s14("HutEditor");
+        case 0x01654c04: return GetPlayModeFacade()->s14("BuildingEditor");
+        case 0x01654c05: return GetPlayModeFacade()->s14("PlanetEditor");
+        }
+    } else if (toMode == 0x01654c06) {
+        switch (fromMode) {
+        case 0x01654c00: return GetPlayModeFacade()->s14("LevelEditorFromCellGame");
+        case 0x01654c01: return GetPlayModeFacade()->s14("LevelEditorFromCreatureGame");
+        case 0x01654c02: return GetPlayModeFacade()->s14("LevelEditorFromTribeGame");
+        case 0x01654c04: return GetPlayModeFacade()->s14("LevelEditorFromCivilisationGame");
+        case 0x01654c05: return GetPlayModeFacade()->s14("LevelEditorFromSpaceGame");
+        }
+    }
+    EAString modeName;
+    modeName.Init();
+    switch (toMode) {
+    case 0x01654c00: modeName.assign("CellGame"); break;
+    case 0x01654c01: modeName.assign("CreatureGame"); break;
+    case 0x01654c02: modeName.assign("TribeGame"); break;
+    case 0x01654c04: modeName.assign("CivilisationGame"); break;
+    case 0x01654c05: modeName.assign("SpaceGame"); break;
+    }
+    switch (fromMode) {
+    case 0x01654c00: modeName.append("FromCellGame"); break;
+    case 0x01654c01: modeName.append("FromCreatureGame"); break;
+    case 0x01654c02: modeName.append("FromTribeGame"); break;
+    case 0x01654c04: modeName.append("FromCivilisationGame"); break;
+    case 0x01654c05: modeName.append("FromSpaceGame"); break;
+    case 0x01654c08: modeName.append("FromLoadGame"); break;
+    }
+    int nResult = GetPlayModeFacade()->s14(modeName.c_str());
+    modeName.Release();
+    return nResult;
+}
+
+// @ 0x00b1e410
+bool PaintSystemHost::SetPlayMode(int mode)
+{
+    if (mode == -2)
+        mode = m24;
+    if (mode != m20) {
+        const char bTickerEnabled = SimTicker()->SmoothTickToggle();
+        SimTicker()->Enable(0);
+        GetPlayModeFacade()->s10(ChangeEnvironmentMode(m20, mode));
+        mb28 = true;
+        SimTicker()->Enable(bTickerEnabled);
+    }
+    return true;
+}

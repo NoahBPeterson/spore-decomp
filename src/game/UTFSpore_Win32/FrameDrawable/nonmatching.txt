@@ -1,2 +1,2 @@
-# <va>  <diff-bytes>  <reason>   (nonmatching: complete + behaviourally equivalent, but not byte-exact)
-0096f240 23 Ctx96::q(AsInterface): complete; return-this block placement differs; difftest PASS after fixing the base AsInterface tail call (thiscall on this; was a free cdecl call with the iid only)
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0096f240 23 Ctx96::q(AsInterface): complete; return-this block placement differs; difftest PASS after fixing the base AsInterface tail call (thiscall on this; was a free cdecl call with the iid only) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

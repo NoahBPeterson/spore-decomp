@@ -1010,7 +1010,6 @@ cEventModifierPrimitiveMouthType::cEventModifierPrimitiveMouthType(const char* n
 : cEventModifierPrimitive_s00a3_9ce0(name) {}
 }}  // namespace SP::Audio
 
-// @ 0x00a3a180
 namespace SP { namespace Audio {
 bool cEventModifier_s00a3_9ce0::Init()
 {

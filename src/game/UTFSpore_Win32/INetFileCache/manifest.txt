@@ -17,3 +17,4 @@
 ../src/game/UTFSpore_Win32/INetFileCache.cpp  ??0INetFileCache_s0094_8de0@Internet@EA@@QAE@XZ  00949b80  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/INetFileCache.cpp  ??1INetFileCache_s0094_8de0@Internet@EA@@QAE@XZ  00949c10  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/INetFileCache.cpp  ?Init@INetFileCache@Internet@EA@@QAE_NXZ  00949cc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/INetFileCache.cpp  ?Release@INetFileCache@Internet@EA@@QAEHXZ  00949d90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

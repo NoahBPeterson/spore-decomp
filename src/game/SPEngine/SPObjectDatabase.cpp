@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPObjectDatabase.cpp -- migrated from slice(s) s0069f950, s0069e3a0, s0069d090 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPObjectDatabase.cpp -- migrated from slice(s) s0069dc60, s0069d980, s0069f950, s0069e3a0, s0069d090 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPObjectDatabase.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -654,6 +654,60 @@ struct cObjectDatabase_s0069_f950 {
 };
 // ---- items of slice s0069f950 end
 
+// ---- items of slice s0069d980 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cISerializableObject_s0069_d980;
+}
+namespace SP {
+struct ObjectDatabaseOStreamInterface {
+    void* vtable;
+    void* mpRecord;
+    void* mpDatabase;
+    bool mbOK;
+
+    int WriteSerializableObject(const cISerializableObject_s0069_d980* object);
+};
+}
+// ---- items of slice s0069d980 end
+
+// ---- items of slice s0069dc60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Inner_0069dc60 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual bool Eval(void* a, void* b); // +0x38
+};
+struct Sub4_0069dc60 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual Inner_0069dc60* Get(); // +0x18
+};
+struct Cond_0069dc60 {
+    uint32_t mUnk00;      // +0x00
+    Sub4_0069dc60* mpSub; // +0x04
+    uint32_t mUnk08;      // +0x08
+    uint8_t mFlag0c;      // +0x0c
+
+    // @ 0x0069dc60
+    int Check(void* a, void* b);
+};
+// ---- items of slice s0069dc60 end
+
 // @ 0x0069d1d0
 bool C2a::f(int, int)
 { flag = 0; return false; }
@@ -861,6 +915,34 @@ void C950::emit(void* p)
     ((void(__thiscall*)(void*, void*))(*(void***)this)[0x2c / 4])(this, u);
 }
 
+// @ 0x0069d980
+namespace SP {
+int ObjectDatabaseOStreamInterface::WriteSerializableObject( const cISerializableObject_s0069_d980* object)
+{
+    if (mbOK) {
+        // Conversion through the complete object preserves null adjustment
+        // when this interface is reached from a null complete-object pointer.
+        void* stream = reinterpret_cast<char*>(this) - 8
+            ? this : 0;
+        // A live object is never null: this assumption emits no code, but it
+        // keeps the base pointer materialised before the virtual call below
+        // (otherwise cl sinks the conversion past the call).
+        __assume(stream != 0);
+        void* writer = ((void* (__thiscall*)(void*))
+            (*(void***)mpDatabase)[0x14 / 4])(mpDatabase);
+        if (((bool (__thiscall*)(void*, void*, const cISerializableObject_s0069_d980*))
+            (*(void***)writer)[0x20 / 4])(writer, stream, object)) {
+            mbOK = 1;
+            return 1;
+        }
+        mbOK = 0;
+        return 0;
+    }
+    mbOK = 0;
+    return 0;
+}
+}  // namespace SP
+
 // @ 0x0069d9d0
 bool W9d0::writeVariant(Variant* v)
 {
@@ -914,6 +996,14 @@ bool W9d0::writeVariant(Variant* v)
         }
     }
     return flag;
+}
+
+// @ 0x0069dc60
+int Cond_0069dc60::Check(void* a, void* b)
+{
+    int r = mFlag0c && mpSub->Get()->Eval(a, b);
+    mFlag0c = r;
+    return r;
 }
 
 // @ 0x0069dca0

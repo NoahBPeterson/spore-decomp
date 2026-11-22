@@ -70,17 +70,120 @@ struct BoolEvent {
 // ---- items of slice s007fd840 end
 
 // ---- items of slice s007fed20 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void* FUN_007fc880(void* self, int msg, void* arg);
-bool  FUN_007fead0(void* self, unsigned v);
-void  FUN_00c463d0();
+extern char vt_we_a[], vt_we_b[], vt_we_c[], vt_we_d[], vt_we_e[];  // 0x14161c4 0x14161ac 0x14162a4 0x141619c 0x1416140
+extern char vt_wb_a[], vt_wb_b[], vt_wb_c[], vt_wb_d[], vt_wb_e[];  // 0x14162cc 0x14162b4 0x14162a4 0x1416294 0x1416238
+inline void VCallPP(void* o, int off, void* a, void* b) {
+    ((void(__thiscall*)(void*, void*, void*))(*(void**)((char*)*(void**)o + off)))(o, a, b);
+}
+inline void* VCallPR(void* o, int off, int a) {
+    return ((void*(__thiscall*)(void*, int))(*(void**)((char*)*(void**)o + off)))(o, a);
+}
+struct EvApi {                                          // thiscall helpers
+    void BaseCtor();                                    // 0x7fbf40 ret 0
+    void SetWinMessageType(unsigned);                   // 0x7fec00 ret 4
+    void SetMessageWinId(unsigned);                     // 0x7fec90 ret 4
+    void InterpBaseCtor();                              // 0x7fba00 ret 0
+};
+struct C_7fa690 {
+    void* GetAt(int i);                                 // 0x7fa690 ret 4
+    bool  SetAt(int i, void* obj);                      // 0x7fa6d0 ret 8
+};
+struct MsgServer {
+    int Add(void* a, void* b, char c);                  // 0x7fa390 ret 0xc
+};
+struct ARef {
+    void* Reset();                                      // 0xc463d0 ret 0
+};
+struct Q {
+    bool IsWinState(unsigned v);                      // 0x7fead0 ret 4
+};
+struct C_7fe7d0 {
+    bool Pred(bool a, bool b);                        // 0x7fe7d0 ret 8
+};
+void* FUN_007fe950(void* p);                            // 0x7fe950
+void  FUN_007fcc40(void* out, void* arg);               // 0x7fcc40 Factory
+struct Edge {
+    void* Dispatch(unsigned msg, void* arg);          // 0x7fc880 ret 8
+};
+extern "C" MsgServer* g_164b1f8;                        // 0x164b1f8
 struct WinEvent_s007f_ed20 {
     char pad0[0x7c];
-    bool mbMessageTargetRegistered;  // +0x7c
-    unsigned mMessageType;           // +0x80
-    unsigned mMessageWinId;          // +0x84
-    char mbBroadcastMode;            // +0x88
-    char mbOrigialVisibility;        // +0x89
+    char mbMessageTargetRegistered; // +0x7c
+    unsigned mMessageType;          // +0x80
+    unsigned mMessageWinId;         // +0x84
+    char mbBroadcastMode;           // +0x88
+    char mbOrigialVisibility;       // +0x89
+    WinEvent_s007f_ed20* Ctor(unsigned type, unsigned winId, bool broadcast);
 };
+struct WinBoolStateEvent : WinEvent_s007f_ed20 {
+    char pad8c[0x4];                // +0x8c
+    WinBoolStateEvent* Ctor(unsigned a, unsigned type, unsigned winId, bool broadcast);
+};
+struct WinEventW {                 // = (char*)E + 0x10
+    char pad0[4];
+    void* mpWindow;                // +0x04
+    void* mpTarget;                // +0x08
+    char padC[0x5c];
+    void* mpBehaviorMsg;           // +0x68
+    char mbRegistered;             // +0x6c
+    unsigned mMessageType;         // +0x70
+    unsigned mMessageWinId;        // +0x74
+    char mbBroadcastMode;          // +0x78
+    char mbVisibility;             // +0x79
+    bool HandleMessage(unsigned msg, void* arg);     // 0x7ff0d0 ret 8
+    bool BoolHandleMessage(unsigned msg, void* arg); // 0x7ff290 ret 8
+};
+struct EvE {
+    char pad0[0x14];
+    void* mpWindow;                                   // +0x14
+    bool CreateBehaviorMessage(void** out, unsigned kind, void* a3); // 0x7fed20 ret 0xc
+};
+static int MakeEbfBody(EvE* E, void** out, unsigned kind, void* a3) {
+    void* win = *(void**)((char*)E + 0x14);
+    if (a3 != 0 && (*(int*)((char*)a3 + 8) != 0xe || *(int*)((char*)a3 + 0xc) != 1))
+        return 0;
+    unsigned mask = 0;
+    if (kind == 0x25a5f84) mask = 1;
+    else if (kind == 0x25c8cb3) mask = 2;
+    if (a3 != 0 && (mask & (*(unsigned*)((char*)a3 + 0x14) ^ *(unsigned*)((char*)a3 + 0x10))) == 0)
+        return 0;
+    void* local = 0;
+    void* fr = ((ARef*)&local)->Reset();
+    FUN_007fcc40(fr, (void*)(intptr_t)kind);
+    unsigned r = (unsigned)(intptr_t)VCallR(win, 0x28);
+    ((C_7fa690*)local)->SetAt(0, FUN_007fe950((char*)E + 0x14));
+    *(unsigned*)((char*)local + 0x10) = r & mask;
+    *(void**)((char*)local + 0x18) = VCallR(win, 0x1c);
+    *out = local;
+    VCallV(local, 4);
+    if (local) VCallV(local, 8);
+    return 1;
+}
+static int MakeE47Body(EvE* E, void** out, unsigned kind, void* a3) {
+    void* win = *(void**)((char*)E + 0x14);
+    void* piVar7 = 0;
+    if (win) piVar7 = VCallR(win, 0x0c);
+    if (a3 != 0 && (*(int*)((char*)a3 + 8) != 0x13 || piVar7 == 0))
+        return 0;
+    unsigned mask = 0;
+    if (kind == 0x25a5f8e) mask = 8;
+    else if (kind == 0x25a5f95) mask = 2;
+    else mask = 4;
+    if (a3 != 0 && (mask & (*(unsigned*)((char*)a3 + 0x10) ^ *(unsigned*)((char*)a3 + 0x0c))) == 0)
+        return 0;
+    void* local = 0;
+    void* fr = ((ARef*)&local)->Reset();
+    FUN_007fcc40(fr, (void*)(intptr_t)kind);
+    unsigned r = (unsigned)(intptr_t)VCallR(win, 0x2c);
+    void* u = piVar7 ? VCallR(piVar7, 0x0c) : 0;
+    ((C_7fa690*)local)->SetAt(0, u);
+    *(unsigned*)((char*)local + 0x10) = r & mask;
+    *(void**)((char*)local + 0x18) = VCallR(win, 0x1c);
+    *out = local;
+    VCallV(local, 4);
+    if (local) VCallV(local, 8);
+    return 1;
+}
 // ---- items of slice s007fed20 end
 
 // @ 0x007fe7a0
@@ -236,52 +339,199 @@ void WinEvent::SetMessageWinId(unsigned id)
 }
 
 // @ 0x007fed20
-int CreateBehaviorMessage(void* self, void** out, void* a, void* b)
+bool EvE::CreateBehaviorMessage(void** out, unsigned kind, void* a3)
 {
+    EvE* E = this;
     *out = 0;
-    FUN_00c463d0();
+    if (kind < 0x25a5f96) {
+        if (kind == 0x249f699 || kind == 0x25a5f5a) {
+            void* piVar7 = (kind == 0x249f699) ? (void*)1 : 0;
+            if (!(a3 == 0 || (*(int*)((char*)a3 + 8) == 10 &&
+                              *(void**)((char*)a3 + 0xc) == piVar7)))
+                return 0;
+            void* local = 0;
+            void* fr = ((ARef*)&local)->Reset();
+            FUN_007fcc40(fr, (void*)(intptr_t)kind);
+            void* win = *(void**)((char*)E + 0x14);
+            void* target;
+            if (a3 == 0)
+                target = VCallR(VCallR(win, 0x14), 0x48);
+            else
+                target = *(void**)((char*)a3 + 0x18);
+            ((C_7fa690*)local)->SetAt(0, FUN_007fe950((char*)E + 0x14));
+            *(unsigned*)((char*)local + 0x10) = (target == win);
+            *(void**)((char*)local + 0x18) = VCallR(win, 0x1c);
+            *out = local;
+            VCallV(local, 4);
+            if (local) { VCallV(local, 8); return *out != 0; }
+            return 0;
+        }
+        if (kind == 0x25a5f84)
+            return MakeEbfBody(E, out, kind, a3) ? (*out != 0) : 0;
+        if (kind == 0x25a5f8e || kind == 0x25a5f95)
+            return MakeE47Body(E, out, kind, a3) ? (*out != 0) : 0;
+        return 0;
+    }
+    if (kind == 0x25a5f9a)
+        return MakeE47Body(E, out, kind, a3) ? (*out != 0) : 0;
+    if (kind == 0x25a61c5) {
+        if (a3 != 0 && *(int*)((char*)a3 + 8) == 0x287259f6) {
+            void* local = 0;
+            void* fr = ((ARef*)&local)->Reset();
+            FUN_007fcc40(fr, (void*)(intptr_t)kind);
+            void* win = *(void**)((char*)E + 0x14);
+            void* u = VCallR(win, 0x0c);
+            ((C_7fa690*)local)->SetAt(0, u);
+            *(unsigned*)((char*)local + 0x10) = 1;
+            *(void**)((char*)local + 0x18) = VCallR(win, 0x1c);
+            *out = local;
+            VCallV(local, 4);
+            if (local) { VCallV(local, 8); return *out != 0; }
+        }
+        return 0;
+    }
+    if (kind == 0x25c8cb3)
+        return MakeEbfBody(E, out, kind, a3) ? (*out != 0) : 0;
     return 0;
 }
 
 // @ 0x007ff0d0
-int WinEventHandleMessage(void* self, unsigned msg, void* arg)
+bool WinEventW::HandleMessage(unsigned msg, void* arg)
 {
-    int r = (int)(intptr_t)FUN_007fc880(self, msg, arg);
+    ((Edge*)this)->Dispatch(msg, arg);
+    if (msg >= 0x1d)
+        return 0;
+    void* saved18 = *(void**)((char*)arg + 0x18);
     if (msg == 0x11) {
-        void* s = EA_Messaging_GetServer();
-        if (s && !*(char*)((char*)self + 0x6c)) {
-            void* w = *(void**)((char*)self + 4);
-            if (w) {
-                unsigned q = (unsigned)(intptr_t)VCallR(w, 0x1c);
-                if (!FUN_007fead0(self, q)) {
-                    VCallI1(s, 0x20, (int)(intptr_t)self);
-                    *(char*)((char*)self + 0x6c) = 1;
-                }
+        unsigned type = mMessageType;
+        void* srv = EA_Messaging_GetServer();
+        if (srv && !mbRegistered && mpWindow) {
+            unsigned q = (unsigned)(intptr_t)VCallR(mpWindow, 0x1c);
+            if (!((Q*)((char*)this - 0x10))->IsWinState(q)) {
+                VCallPP(srv, 0x20, this, (void*)(intptr_t)type);
+                mbRegistered = 1;
             }
         }
+        mbVisibility = (char)(VCallI(mpWindow, 0x28) & 1);
+        void* local = 0;
+        unsigned q = (unsigned)(intptr_t)VCallR(mpWindow, 0x1c);
+        if (((Q*)((char*)this - 0x10))->IsWinState(q) &&
+            ((EvE*)((char*)this - 0x10))->CreateBehaviorMessage(&local, mMessageType, 0)) {
+            *(int*)((char*)local + 0x20) = 1;
+            VCallPP(this, 0x04, *(void**)((char*)local + 0x30), local);
+            if (mbBroadcastMode)
+                ((MsgServer*)g_164b1f8)->Add(*(void**)((char*)local + 0x30), local, 0);
+        } else {
+            VCallPP(mpWindow, 0x7c, (void*)1, 0);
+        }
+        if (local) VCallV(local, 8);
+    } else if (msg == 0x12) {
+        void* srv = EA_Messaging_GetServer();
+        if (srv && mbRegistered) {
+            ((void(__thiscall*)(void*, void*, unsigned, int))(*(void**)((char*)*(void**)srv + 0x2c)))
+                (srv, this, mMessageType, -0x270f);
+            mbRegistered = 0;
+        }
     }
-    return r;
+    if (mpWindow) {
+        void* local = 0;
+        unsigned q = (unsigned)(intptr_t)VCallR(mpWindow, 0x1c);
+        if (((Q*)((char*)this - 0x10))->IsWinState(q)) {
+            if (((EvE*)((char*)this - 0x10))->CreateBehaviorMessage(&local, mMessageType, saved18)) {
+                *(int*)((char*)local + 0x20) = 0;
+                VCallPP(this, 0x04, *(void**)((char*)local + 0x30), local);
+                if (mbBroadcastMode)
+                    ((MsgServer*)g_164b1f8)->Add(*(void**)((char*)local + 0x30), local, 1);
+            }
+            if (local) VCallV(local, 8);
+        }
+    }
+    return 0;
 }
 
 // @ 0x007ff290
-int WinBoolHandleMessage(void* self, unsigned msg, void* arg)
+bool WinEventW::BoolHandleMessage(unsigned msg, void* arg)
 {
-    return WinEventHandleMessage(self, msg, arg);
+    HandleMessage(msg, arg);
+    if (msg != mMessageType)
+        return 0;
+    switch (msg) {
+    case 0x25a5f95: case 0x25a5f84: case 0x249f699: case 0x25a5f5a:
+    case 0x25a5f8e: case 0x25a5f9a: case 0x25a61c5: case 0x25c8cb3:
+        break;
+    default:
+        return 0;
+    }
+    char bFlag = (*(int*)((char*)arg + 0x20) != 0);
+    unsigned uVar2 = *(unsigned*)((char*)arg + 0x18);
+    unsigned uVar3 = mMessageWinId;
+    void* node = 0;
+    bool takeNode = false;
+    bool doLookup = false;
+    if (uVar3 == 0x7fffffff) {
+        doLookup = (mpWindow != 0 &&
+                    (unsigned)(intptr_t)VCallR(mpWindow, 0x1c) == uVar2);
+    } else {
+        doLookup = (uVar3 == uVar2);
+    }
+    if (doLookup) {
+        if (bFlag || (node = ((C_7fa690*)arg)->GetAt(0)) == 0)
+            takeNode = true;
+        else
+            node = VCallPR(node, 0x0c, (int)0xeeee8218);
+    } else {
+        if (!bFlag) return 0;
+    }
+    if (takeNode) node = 0;
+    void* old = mpBehaviorMsg;
+    if (node != old) {
+        if (node) VCallV(node, 0);
+        mpBehaviorMsg = node;
+        if (old) VCallV(old, 4);
+    }
+    if (bFlag) {
+        char vis = mbVisibility;
+        if (vis != (char)(VCallI(mpWindow, 0x28) & 1))
+            VCallPP(mpWindow, 0x7c, (void*)1, (void*)(intptr_t)vis);
+    }
+    bool pred = ((C_7fe7d0*)((char*)this - 0x10))->Pred((*(int*)((char*)arg + 0x10) != 0), bFlag);
+    if (pred) {
+        void* target = *(void**)((char*)this + 8);
+        VCallI1(target, 0x3c, 1);
+    }
+    return 0;
 }
 
 // @ 0x007ff400
-void WinEventCtor(WinEvent_s007f_ed20* self, unsigned type, unsigned winId, bool broadcast)
+WinEvent_s007f_ed20* WinEvent_s007f_ed20::Ctor(unsigned type, unsigned winId, bool broadcast)
 {
-    *(void**)((char*)self) = 0;
-    *(void**)((char*)self + 4) = 0;
-    *(void**)((char*)self + 8) = 0;
-    *(void**)((char*)self + 0xc) = 0;
-    self->mbMessageTargetRegistered = false;
-    self->mMessageType = 0;
-    self->mMessageWinId = 0;
-    self->mbBroadcastMode = false;
-    self->mbOrigialVisibility = true;
-    self->mMessageType = type;
-    self->mMessageWinId = winId;
-    self->mbBroadcastMode = broadcast;
+    ((EvApi*)this)->BaseCtor();
+    mbMessageTargetRegistered = 0;
+    mMessageType = 0;
+    mMessageWinId = 0;
+    mbBroadcastMode = 0;
+    *(void**)((char*)this + 0x00) = (void*)vt_we_a;
+    *(void**)((char*)this + 0x04) = (void*)vt_we_b;
+    *(void**)((char*)this + 0x08) = (void*)vt_we_c;
+    *(void**)((char*)this + 0x10) = (void*)vt_we_d;
+    *(void**)((char*)this + 0x18) = (void*)vt_we_e;
+    mbOrigialVisibility = 1;
+    ((EvApi*)this)->SetWinMessageType(type);
+    ((EvApi*)this)->SetMessageWinId(winId);
+    mbBroadcastMode = (char)broadcast;
+    return this;
+}
+
+// @ 0x007ff470
+WinBoolStateEvent* WinBoolStateEvent::Ctor(unsigned a, unsigned type, unsigned winId, bool broadcast)
+{
+    (void)a;
+    ((WinEvent_s007f_ed20*)this)->Ctor(type, winId, broadcast);
+    *(void**)((char*)this + 0x00) = (void*)vt_wb_a;
+    *(void**)((char*)this + 0x04) = (void*)vt_wb_b;
+    *(void**)((char*)this + 0x08) = (void*)vt_wb_c;
+    *(void**)((char*)this + 0x10) = (void*)vt_wb_d;
+    *(void**)((char*)this + 0x18) = (void*)vt_wb_e;
+    *(int*)((char*)this + 0x8c) = 3;
+    return this;
 }

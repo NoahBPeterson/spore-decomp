@@ -252,9 +252,19 @@ struct MSG {
     DWORD  time;
     POINT  pt;
 };
+struct PAINTSTRUCT {
+    HDC  hdc;
+    BOOL fErase;
+    RECT rcPaint;
+    BOOL fRestore;
+    BOOL fIncUpdate;
+    unsigned char rgbReserved[32];
+};
 extern "C" __declspec(dllimport) BOOL __stdcall PeekMessageW(MSG*, HWND, UINT, UINT, UINT);
 extern "C" __declspec(dllimport) BOOL __stdcall TranslateMessage(const MSG*);
 extern "C" __declspec(dllimport) LPARAM __stdcall DispatchMessageW(const MSG*);
+extern "C" __declspec(dllimport) HDC __stdcall BeginPaint(HWND, PAINTSTRUCT*);
+extern "C" __declspec(dllimport) BOOL __stdcall EndPaint(HWND, const PAINTSTRUCT*);
 extern "C" __declspec(dllimport) BOOL __stdcall ScreenToClient(HWND, POINT*);
 extern "C" __declspec(dllimport) HWND __stdcall SetCapture(HWND);
 extern "C" __declspec(dllimport) BOOL __stdcall ReleaseCapture(void);
@@ -266,6 +276,7 @@ extern "C" __declspec(dllimport) LONG __stdcall GetWindowLongA(HWND, int);
 extern "C" __declspec(dllimport) LONG __stdcall SetWindowLongA(HWND, int, LONG);
 extern "C" __declspec(dllimport) BOOL __stdcall SetWindowPos(HWND, HWND, int, int, int, int, UINT);
 extern "C" __declspec(dllimport) void __stdcall SetLastError(DWORD);
+extern "C" __declspec(dllimport) BOOL __stdcall EnumDisplayMonitors(HDC, const RECT*, void*, LPARAM);
 namespace EA {
 namespace Thread {
 void ThreadSleep(const int* milliseconds);
@@ -391,13 +402,14 @@ virtual void v38();
     void Show();  // 0x008490d0 (Canvas::Show)
     void SendCanvasEvent(CanvasEvent_s0084_8210*);  // 0x00847e70 (Canvas::SendCanvasEvent)
     void OnMouseEnter(HWND);  // 0x00847bb0 (Canvas::OnMouseEnter)
-    void FUN_00848bb0(unsigned, int*);
-    void FUN_00848d70(int, int, int, int);
-    void FUN_00848de0(int, int, int);
-    void FUN_00848e10(int, int, int, int);
-    void FUN_00848e40(int, HWND);
-    void FUN_00848ed0(int, int, int, int, int);
+    void FUN_00848bb0(unsigned, int*);  // 0x00848bb0 (Canvas::FUN_00848bb0)
+    void FUN_00848d70(int, int, int, int);  // 0x00848d70 (Canvas::FUN_00848d70)
+    void FUN_00848de0(int, int, int);  // 0x00848de0 (Canvas::FUN_00848de0)
+    void FUN_00848e10(int, int, int, int);  // 0x00848e10 (Canvas::FUN_00848e10)
+    void FUN_00848e40(int, HWND);  // 0x00848e40 (Canvas::FUN_00848e40)
+    void FUN_00848ed0(int, int, int, int, int);  // 0x00848ed0 (Canvas::FUN_00848ed0)
 };
+int  __cdecl FUN_00847f60(void* hmon, HDC hdc, RECT* rc, void* data);
 int  __cdecl FUN_00847f90(unsigned char flags);
 struct KeyPayload {
     unsigned mKind;        // +0x00
@@ -794,6 +806,42 @@ char Canvas_s0084_8210::Tick()
         }
     }
     return 1;
+}
+
+// @ 0x00848340
+void Canvas_s0084_8210::OnPaint(HWND hwnd)
+{
+    if (!v17() && (mnOptionFlags & 4)) {
+        int t = 15;
+        EA::Thread::ThreadSleep(&t);
+    }
+    PAINTSTRUCT ps;
+    HDC hdc = BeginPaint(hwnd, &ps);
+    if (mbEnablePaint) {
+        if (mnUpdateLockCount != 0) {
+            RECT rc;
+            GetClientRect(hwnd, &rc);
+            FillRect(hdc, &rc, mhBackgroundBrush);
+            EndPaint(hwnd, &ps);
+            return;
+        }
+        mbEnablePaint = false;
+        if (((unsigned char)~(mnOptionFlags >> 6) & 1) && !mbFullscreen) {
+            int r = v39();
+            if (r) {
+                struct { int a; HBRUSH b; } info;
+                info.a = r;
+                info.b = mhBackgroundBrush;
+                EnumDisplayMonitors(hdc, 0, (void*)(int (__stdcall*)(int, HDC, RECT*, int*))FUN_00847f60, (LPARAM)&info);
+            }
+        }
+        CanvasEvent_s0084_8210 ev;
+        ev.mType = 0x1ee100a;
+        ev.mpSender = this;
+        ev.mpData = 0;
+        SendCanvasEvent(&ev);
+    }
+    EndPaint(hwnd, &ps);
 }
 
 // @ 0x00848450
@@ -1353,6 +1401,7 @@ void Canvas::SetStyle(int style)
 }
 
 extern "C" char g_141ca70[];   // 0x0141ca70 Canvas vftable
+
 // @ 0x00849da0
 Canvas* Canvas::ScalarDtor(unsigned flags)
 {

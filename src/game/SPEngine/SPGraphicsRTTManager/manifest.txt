@@ -4,16 +4,16 @@
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ??0PageRecord_s0076_cc00@@QAE@ABU0@@Z  0076d9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?OnCaptureMessage@@YG_NHPAX@Z  0076db00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?CopyPageRecords@@YAPAUPageRecord@@PAU1@00@Z  0076de80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?AllocateNewPage@cRTTManager_s0076_db40@@QAE_NHHHHPAX@Z  0076e110  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DeallocateSelf@SpVec@@QAEXXZ  0076e1e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyOne@Rec3c@@QAEXXZ  0076e2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyRecRange@@YAPAURec3c@@PAU1@00@Z  0076e320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyValues@RecVec@@QAEXPAURec3c@@0@Z  0076e3b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?FreeElemArray@@YGXPAUVecElem@@0@Z  0076e430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?Destroy@SomeObj3@@QAEXXZ  0076e5c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?CreateObj2c@@YAPAUObj2c@@XZ  0076e610  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?CopyFrom@BigRecOps@@QAEHPAU1@@Z  0076e750  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyBigRecArray@@YGXPAUBigRec2@@0@Z  0076e7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?erase@PageVec_s0076_ed30@@QAEPAUPageInfo_s0076_ed30@@PAU2@0@Z  0076ed90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ??0CheatCtorView@@QAE@H@Z  0076ea60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?CopyBigRecRange@@YAHPAUBigRec@@00@Z  0076e840  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyValues@RecVec@@QAEXPAURec3c@@0@Z  0076e3b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyOne@Rec3c@@QAEXXZ  0076e2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyRecRange@@YAPAURec3c@@PAU1@00@Z  0076e320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?Destroy@SomeObj3@@QAEXXZ  0076e5c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?AllocateNewPage@cRTTManager_s0076_db40@@QAE_NHHHHPAX@Z  0076e110  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ??0CheatCtorView@@QAE@H@Z  0076ea60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?erase@PageVec_s0076_ed30@@QAEPAUPageInfo_s0076_ed30@@PAU2@0@Z  0076ed90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
