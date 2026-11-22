@@ -27,13 +27,18 @@ extern void* g_pMutexTag;                            // 0x01493900
 #include "EA/ArgScript/cCommandBase.h"
 
 // ---- items of slice s00fd71e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// cMovieSystem's three bases (vtables at +0x00/+0x04/+0x08); the third is the message handler.
+struct MovieSystemBase0 { void* mpVtbl; };
+struct MovieSystemBase1 { void* mpVtbl; };
+struct IMovieMessageHandler { void* mpVtbl; };
+struct MovieSystemBases : MovieSystemBase0, MovieSystemBase1, IMovieMessageHandler {};
 struct IMessageServer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0;
     virtual void PostMsg(int a, int b, int c) = 0;   // +0x14
     virtual void v18() = 0; virtual void v1c() = 0; virtual void v20() = 0;
     virtual void v24() = 0; virtual void v28() = 0;
-    virtual void PostMsg2(int a, int b, int c) = 0;  // +0x2c
+    virtual void RemoveHandler(IMovieMessageHandler* h, int msg, int pri) = 0;  // +0x2c
 };
 struct ICheatManager {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
@@ -728,21 +733,22 @@ void cMovieLetterbox::Init()
 // @ 0x00fd7800
 bool cMovieSystem::Shutdown()
 {
-    void* self2 = (void*)((char*)this + 8);
-    SP_MessageServer()->PostMsg2((int)self2, 0x1ee1008, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x1ee100e, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x1ee100f, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x44edd9a, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x44edd9c, -0x270f);
+    MovieSystemBases* self = (MovieSystemBases*)this;
+    SP_MessageServer()->RemoveHandler(self, 0x1ee1008, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x1ee100e, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x1ee100f, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x44edd9a, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x44edd9c, -0x270f);
     UILayoutBox* lb = (UILayoutBox*)mLetterbox;
     if (lb != 0) {
         UILayoutChild* child = (UILayoutChild*)lb->mChild;
-        if (child != 0)
+        if (child != 0) {
             child->Shutdown(1);
-        IMovieResource* child2 = (IMovieResource*)lb->mChild;
-        if (child2 != 0) {
-            lb->mChild = 0;
-            child2->Stop();
+            IMovieResource* child2 = (IMovieResource*)lb->mChild;
+            if (child2 != 0) {
+                lb->mChild = 0;
+                child2->Stop();
+            }
         }
         IMovieResource* lb2 = (IMovieResource*)mLetterbox;
         if (lb2 != 0) {
