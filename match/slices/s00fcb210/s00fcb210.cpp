@@ -26,6 +26,8 @@ class Stopwatch
     int32_t mElapsedHi;  // +0x1c
     float   mScale;      // +0x20
 
+    float FUN_011e8440(); // Stopwatch::ElapsedF
+
     virtual void Destroy(int a);        // +0x00 (deleting-ish dtor)
 
     // The other rw::core::timer virtuals (interfaces): they keep a null check on the pointer alive.
@@ -751,10 +753,10 @@ float MovieTimer::Elapsed()
     if (mCallback != 0)
     {
         float f = mCallback->v3();
-        if (f > 0.0f)
+        if (!(f < 0.0f))
             return f;
     }
-    return rw::core::timer::Stopwatch_ElapsedF(mStopwatch);
+    return mStopwatch->FUN_011e8440();
 }
 
 // @ 0x00fcc220

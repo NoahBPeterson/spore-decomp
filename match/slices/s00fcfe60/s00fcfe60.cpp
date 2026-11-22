@@ -436,13 +436,17 @@ void FUN_00fd06d0(const u8* src, u8* dst, int srcStride, int unused, int rows, i
     _mm_empty();
 }
 
+struct FilterScratch {
+    u8 leadingRow[8];
+    u8 pixels[248];
+};
+
 // @ 0x00fd07d0 -- two-pass expander: horizontal 4-tap then vertical 4-tap.
-void FUN_00fd07d0(int a1, int a2, int a3, int a4, int a5, int a6, int a7)
+void FUN_00fd07d0(int src, int dst, int srcStride, int horizontalKernel, int verticalKernel, int, int)
 {
-    uint32_t tmp[64];
-    FUN_00fd0410((const u8*)(a1 - a4), (u8*)tmp, a4, 1, 0xb, 8, (const s16*)a4);
-    FUN_00fd04f0((const u8*)tmp, (u8*)a2, 8, 8, 8, 8, (const s16*)a6);
-    (void)a3; (void)a5; (void)a7;
+    FilterScratch tmp;
+    FUN_00fd0410((const u8*)(src - srcStride), reinterpret_cast<u8*>(&tmp), srcStride, 1, 0xb, 8, (const s16*)horizontalKernel);
+    FUN_00fd04f0(tmp.pixels, (u8*)dst, 8, 8, 8, 8, (const s16*)verticalKernel);
 }
 
 // @ 0x00fd0830 -- per-edge filter dispatcher.
@@ -635,10 +639,9 @@ void FUN_00fd0c60(const u8* src, u8* dst, int srcStride, int unused, int rows, i
 }
 
 // @ 0x00fd0cc0 -- two-pass expander: horizontal 4-tap then vertical 4-tap (SSE variant).
-void FUN_00fd0cc0(int a1, int a2, const s16* a3, int a4, const s16* a5, int a6, int a7)
+void FUN_00fd0cc0(int src, int dst, int srcStride, int horizontalKernel, const s16* verticalKernel, int, int)
 {
-    uint32_t tmp[64];
-    FUN_00fd0a00((const u8*)(a1 - a4), (u8*)tmp, a4, 1, 0xb, 8, (const s16*)a4);
-    FUN_00fd0aa0((const u8*)tmp, (u8*)a2, 8, 8, 8, 8, a5);
-    (void)a3; (void)a6; (void)a7;
+    FilterScratch tmp;
+    FUN_00fd0a00((const u8*)(src - srcStride), reinterpret_cast<u8*>(&tmp), srcStride, 1, 0xb, 8, (const s16*)horizontalKernel);
+    FUN_00fd0aa0(tmp.pixels, (u8*)dst, 8, 8, 8, 8, verticalKernel);
 }

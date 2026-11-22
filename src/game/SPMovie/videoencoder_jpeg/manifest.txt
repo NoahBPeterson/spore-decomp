@@ -5,4 +5,5 @@
 ../src/game/SPMovie/videoencoder_jpeg.cpp  ?SetBitsPerSecond@VideoEncoder_Jpeg@@QAEXI@Z  00fcdc40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/videoencoder_jpeg.cpp  ?GetBitsPerSecond@VideoEncoder_Jpeg@@QAEIXZ  00fcdc60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/videoencoder_jpeg.cpp  ?SetQuality@VideoEncoder_Jpeg@@QAEXI@Z  00fcdc80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videoencoder_jpeg.cpp  ?Encode@VideoEncoder_Jpeg@@QAEXPAX@Z  00fcdcb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPMovie/videoencoder_jpeg.cpp  ?Shutdown@VideoEncoder_Jpeg@@QAEXXZ  00fcdaa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -51,6 +51,7 @@ struct VideoEncoder_Jpeg {
     unsigned int GetBitsPerSecond();
     void SetQuality(unsigned int v);
     void Encode(void* frame);
+    void FUN_00fcdb20(int format, u8* src, u8* dst, int width);
 };
 
 // The three callbacks FUN_00fcda10 installs are free functions of SPMovie/_at_00fc0000.obj.
@@ -107,7 +108,7 @@ unsigned int VideoEncoder_Jpeg::GetSuggestedDecoderBufferSize()
 // Repacks n 32-bit source pixels from format fmt into tightly packed 24-bit BGR
 // rows: fmt 0 (BGRA, the four bytes are read with the alpha first), 3 (RGBA),
 // 4 (BGRA) and 1 (24-bit, moved verbatim by DoInsertValue). Format 2 needs no work.
-extern "C" void FUN_00fcdb20(int fmt, unsigned char* src, unsigned char* dst, int n)
+void VideoEncoder_Jpeg::FUN_00fcdb20(int fmt, unsigned char* src, unsigned char* dst, int n)
 {
     switch (fmt) {
     case 0:
@@ -185,48 +186,79 @@ void VideoEncoder_Jpeg::SetQuality(unsigned int v)
     mQuality = v;
 }
 
+extern "C" const char g_149212c[];
+extern "C" const char g_14920e0[];
+
+struct JpegEncoderFrame {
+    int format;
+    int width;
+    int height;
+    u8* pixels;
+};
+
+struct JpegCompressState {
+    int errorManager;
+    u8 reserved04[0x14];
+    int width;
+    int height;
+    int inputComponents;
+    int colorSpace;
+    u8 reserved28[0x140];
+    int destinationState;
+    u8 reserved16c[4];
+    u8 errors[0x84];
+};
+
+struct JpegBufferAllocator {
+    virtual void Reserved0();
+    virtual void Reserved1();
+    virtual u8* Allocate(int size, const char* name, int flags);
+    virtual void Release(u8* buffer, int flags);
+};
+
 // @ 0x00fcdcb0
 void VideoEncoder_Jpeg::Encode(void* frame)
 {
-    int* fi = (int*)frame;
-    if (fi[1] != (int)mWidth || fi[2] != (int)mHeight) {
-        if (mEncodingErrorCallback != 0)
-            mEncodingErrorCallback(
-                "VideoEncoder_Jpeg: the supplied VideoFrame object has the wrong dimensions.",
-                mEncodingErrorCallbackData);
-        return;
-    }
-    u8 cinfo[0x1f4];  // jpeg_compress_struct; the fields written below are part of it.
-    int* ci = (int*)cinfo;
-    ci[0] = jpeg_std_error(cinfo + 0x174);
-    jpeg_create_compress_170(cinfo, 0x3d, 0x170);
-    FUN_00fcda10((int)cinfo, (int)&FUN_00fcdc10, (int)this);
-    *(int*)(cinfo + 0x34) = fi[1];
-    *(int*)(cinfo + 0x38) = fi[2];
-    *(int*)(cinfo + 0x3c) = 3;  // input_components
-    *(int*)(cinfo + 0x40) = 2;  // in_color_space
-    jpeg_set_defaults(cinfo);
-    jpeg_set_quality(cinfo, mQuality / 100, 1);
-    *(int*)(cinfo + 0x168) = 0;
-    mEncodeBufferPos = 0;
-    jpeg_start_compress(cinfo, 1);
-    u8* line = (u8*)mAllocator->Alloc(*(int*)(cinfo + 0x34) * 3, "JPEG Line Buffer", 0);
-    if (line != 0) {
-        // Bytes per source pixel: 24-bit data is packed, every other format is 32-bit.
-        int bpp = 1;
-        switch (fi[0]) {
-        case 0: case 3: case 4: bpp = 4; break;
-        case 1: bpp = 3; break;
+    JpegEncoderFrame* input = static_cast<JpegEncoderFrame*>(frame);
+    if (input->width == static_cast<int>(mWidth) && input->height == static_cast<int>(mHeight)) {
+        JpegCompressState state;
+        state.errorManager = jpeg_std_error(state.errors);
+        jpeg_create_compress_170(&state, 0x3d, 0x170);
+        FUN_00fcda10(reinterpret_cast<int>(&state), reinterpret_cast<int>(&FUN_00fcdc10), reinterpret_cast<int>(this));
+        state.width = input->width;
+        state.height = input->height;
+        const int components = 3;
+        state.inputComponents = components;
+        state.colorSpace = 2;
+        jpeg_set_defaults(&state);
+        jpeg_set_quality(&state, mQuality / 100, 1);
+        state.destinationState = 0;
+        mEncodeBufferPos = 0;
+        jpeg_start_compress(&state, 1);
+        u8* line = reinterpret_cast<JpegBufferAllocator*>(mAllocator)->Allocate(state.width * components, g_149212c, 0);
+        if (line) {
+            int bytesPerPixel = 1;
+            switch (input->format) {
+            case 0: case 3: case 4:
+                bytesPerPixel = 4;
+                break;
+            case 1:
+                bytesPerPixel = components;
+                break;
+            }
+            for (int row = 0; row < state.height; ++row) {
+                FUN_00fcdb20(input->format, input->pixels + input->width * row * bytesPerPixel, line, state.width);
+                u8* scanline = line;
+                jpeg_write_scanlines(&state, &scanline, 1);
+            }
+            reinterpret_cast<JpegBufferAllocator*>(mAllocator)->Release(line, 0);
         }
-        for (int y = 0; y < *(int*)(cinfo + 0x34); y++) {
-            FUN_00fcdb20(fi[0], (u8*)(fi[1] * y * bpp + fi[3]), line, *(int*)(cinfo + 0x30));
-            jpeg_write_scanlines(cinfo, &line, 1);
-        }
-        mAllocator->Free(line, 0);
+        jpeg_finish_compress(&state);
+        jpeg_destroy(&state);
+        if (mEncodedDataCallback)
+            mEncodedDataCallback(mEncodeBuffer, mEncodeBufferPos, mFrameNumber, mEncodedDataCallbackData);
+        ++mFrameNumber;
+    } else if (mEncodingErrorCallback) {
+        mEncodingErrorCallback(g_14920e0, mEncodingErrorCallbackData);
     }
-    jpeg_finish_compress(cinfo);
-    jpeg_destroy(cinfo);
-    if (mEncodedDataCallback != 0)
-        mEncodedDataCallback(mEncodeBuffer, mEncodeBufferPos, mFrameNumber, mEncodedDataCallbackData);
-    mFrameNumber++;
 }

@@ -4,5 +4,4 @@
 00fcc5c0 246 InsertBefore(src,at,ctx): forward chain + GetPrev splice; frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, fake-arity/read discards)
 00fcc700 239 InsertAfter(src,at,ctx): forward chain + splice after at; mTail=last; frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
 00fcc960 318 Merge(src,cmp,ctx): clone src chain then merge splice with cmp slot0; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
-00fccb80 162 RemoveIf(key,cmp,cb): head/prev unlink + optional callback; branch layout differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (272 valid, 15.1% coverage)
 00fcce30 45 InvokeKey(a,b): triple vtable dispatch through *b, *a and mHead; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)

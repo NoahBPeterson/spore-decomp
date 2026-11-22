@@ -564,35 +564,34 @@ int SList_s00fc_c260::RemoveIf(void* key, ICompare* cmp, ICallback* cb)
 {
     SNode* node = mHead;
     SNode* prev = 0;
-    for (;;) {
-        void* data;
-        if (node == 0)
-            return 0;
-        data = node->GetData();
-        if (cmp->Compare(key, data) != 0) {
+    while (node) {
+        void* data = node->GetData();
+        if (cmp->Compare(key, data) == 0) {
+            if (cb)
+                cb->Invoke(data);
+            if (prev == 0) {
+                SNode* next = (SNode*)node->Next();
+                mHead = next;
+                if (mTail == node)
+                    mTail = next;
+                mAllocator->Free(node, 0);
+                node = mHead;
+                --mLength;
+            } else {
+                prev->SetNext(node->Next());
+                if (mTail == node)
+                    mTail = prev;
+                mAllocator->Free(node, 0);
+                node = (SNode*)prev->Next();
+                --mLength;
+                _ReadWriteBarrier();
+            }
+        } else {
             prev = node;
             node = (SNode*)node->Next();
-            continue;
-        }
-        if (cb != 0)
-            cb->Invoke(data);
-        if (prev == 0) {
-            SNode* nx = (SNode*)node->Next();
-            mHead = nx;
-            if (mTail == node)
-                mTail = nx;
-            mAllocator->Free(node, 0);
-            node = mHead;
-            --mLength;
-        } else {
-            prev->SetNext(node->Next());
-            if (mTail == node)
-                mTail = prev;
-            mAllocator->Free(node, 0);
-            node = (SNode*)prev->Next();
-            --mLength;
         }
     }
+    return 0;
 }
 }  // namespace rw
 

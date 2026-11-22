@@ -40,16 +40,6 @@ extern "C" void* __cdecl memset(void*, int, unsigned int);
 int WillametteNewInstructionHWSupport(void);
 // ---- items of slice s00fd0d20 end
 
-// ---- items of slice s00fd1c60 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* p_vp6_filter_row_;
-extern "C" void* p_vp6_filter_[0x41];
-extern "C" void* p_vp6_a_;
-extern "C" void* p_vp6_b_;
-extern "C" void* p_vp6_c_;
-extern "C" void* p_vp6_d_;
-extern "C" void* p_vp6_e_;
-// ---- items of slice s00fd1c60 end
-
 // @ 0x00fd03c0
 void FUN_00fd03c0()
 {
@@ -137,63 +127,102 @@ void __cdecl FUN_00fd1ba0(int* a, int* b, int* c)
     }
 }
 
+typedef void (*Vp6Kernel)();
+
+struct Vp6DispatchTable {
+    Vp6Kernel filterRow;
+    Vp6Kernel addRows;
+    Vp6Kernel inverseTransforms[65];
+    Vp6Kernel addResidual;
+    Vp6Kernel fillRow;
+};
+
+struct Vp6ExpansionTable {
+    Vp6Kernel endMmx;
+    Vp6Kernel expandRow;
+};
+
+extern "C" Vp6DispatchTable g_16d9580;
+extern "C" Vp6ExpansionTable g_16d9418;
+void vp6_emms();
+void vp6_add_rows_16(u8* a, u8* b, u8* dst, int stride);
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00fd0d20();
+extern "C" void FUN_00fd0eb0();
+extern "C" void FUN_00fd0f10();
+extern "C" void FUN_00fd1610();
+extern "C" void FUN_00fd1a20();
+extern "C" void FUN_00fd1a60();
+extern "C" void FUN_00fd1f70();
+extern "C" void FUN_00fd2470();
+extern "C" void FUN_00fd2870();
+extern "C" void FUN_00fd28e0();
+extern "C" void FUN_00fd2920();
+extern "C" void FUN_00fd52c0();
+extern "C" void FUN_00fd5770();
+extern "C" void FUN_00fd5d50();
+extern "C" void FUN_00fd64b0();
+extern "C" void FUN_00fd6550();
+extern "C" void FUN_00fd6740();
+extern "C" void FUN_00fd6c60();
+extern "C" void FUN_00fd6ed0();
+
 // @ 0x00fd1c60
 void vp6_setup_tables(void)
 {
-    int hasSSE2 = 0;
-    int hasMMX = 0;
-    int has3DNow = 0;
+    int hasSSE2;
+    int hasMMX;
+    int has3DNow;
     FUN_00fd1ba0(&hasMMX, &has3DNow, &hasSSE2);
 
-    int i;
     if (hasSSE2 != 0) {
-        for (i = 0; i < 0x41; i++) {
-            if (i < 2)
-                p_vp6_filter_[i] = (void*)0x00fd2870;
-            else if (i < 0xb)
-                p_vp6_filter_[i] = (void*)0x00fd2470;
+        for (unsigned i = 0; i <= 0x40; ++i) {
+            if (i <= 1)
+                g_16d9580.inverseTransforms[i] = &FUN_00fd2870;
+            else if (i <= 0xa)
+                g_16d9580.inverseTransforms[i] = &FUN_00fd2470;
             else
-                p_vp6_filter_[i] = (void*)0x00fd1f70;
+                g_16d9580.inverseTransforms[i] = &FUN_00fd1f70;
         }
-        p_vp6_e_   = (void*)0x00fd28e0;
-        p_vp6_a_   = (void*)0x00fd2920;
-        p_vp6_b_   = (void*)0x00fd1e00;
-        p_vp6_c_   = (void*)0x00fd1e10;
-        p_vp6_d_   = (void*)0x00fd1e50;
-        p_vp6_filter_row_ = (void*)0x00fd0d20;
+        g_16d9580.fillRow = &FUN_00fd28e0;
+        g_16d9580.addRows = &FUN_00fd2920;
+        g_16d9418.endMmx = &vp6_emms;
+        g_16d9418.expandRow = reinterpret_cast<Vp6Kernel>(&vp6_expand_row_16);
+        g_16d9580.addResidual = reinterpret_cast<Vp6Kernel>(&vp6_add_rows_16);
+        g_16d9580.filterRow = &FUN_00fd0d20;
         return;
     }
     if (hasMMX != 0) {
-        for (i = 0; i < 0x41; i++) {
-            if (i < 2)
-                p_vp6_filter_[i] = (void*)0x00fd0eb0;
-            else if (i < 0xb)
-                p_vp6_filter_[i] = (void*)0x00fd1610;
+        for (unsigned i = 0; i <= 0x40; ++i) {
+            if (i <= 1)
+                g_16d9580.inverseTransforms[i] = &FUN_00fd0eb0;
+            else if (i <= 0xa)
+                g_16d9580.inverseTransforms[i] = &FUN_00fd1610;
             else
-                p_vp6_filter_[i] = (void*)0x00fd0f10;
+                g_16d9580.inverseTransforms[i] = &FUN_00fd0f10;
         }
-        p_vp6_e_   = (void*)0x00fd1a20;
-        p_vp6_a_   = (void*)0x00fd1a60;
-        p_vp6_b_   = (void*)0x00fd1e00;
-        p_vp6_c_   = (void*)0x00fd1e10;
-        p_vp6_d_   = (void*)0x00fd1e50;
-        p_vp6_filter_row_ = (void*)0x00fd0830;
+        g_16d9580.fillRow = &FUN_00fd1a20;
+        g_16d9580.addRows = &FUN_00fd1a60;
+        g_16d9418.endMmx = &vp6_emms;
+        g_16d9418.expandRow = reinterpret_cast<Vp6Kernel>(&vp6_expand_row_16);
+        g_16d9580.addResidual = reinterpret_cast<Vp6Kernel>(&vp6_add_rows_16);
+        g_16d9580.filterRow = reinterpret_cast<Vp6Kernel>(&FUN_00fd0830);
         return;
     }
-    for (i = 0; i < 0x41; i++) {
-        if (i < 2)
-            p_vp6_filter_[i] = (void*)0x00fd5d50;
-        else if (i < 0xb)
-            p_vp6_filter_[i] = (void*)0x00fd5770;
+    for (int i = 0; i <= 0x40; ++i) {
+        if (i <= 1)
+            g_16d9580.inverseTransforms[i] = &FUN_00fd5d50;
+        else if (i <= 0xa)
+            g_16d9580.inverseTransforms[i] = &FUN_00fd5770;
         else
-            p_vp6_filter_[i] = (void*)0x00fd52c0;
+            g_16d9580.inverseTransforms[i] = &FUN_00fd52c0;
     }
-    p_vp6_b_   = (void*)0x00c2e4e0;
-    p_vp6_e_   = (void*)0x00fd64b0;
-    p_vp6_a_   = (void*)0x00fd6550;
-    p_vp6_c_   = (void*)0x00fd6c60;
-    p_vp6_d_   = (void*)0x00fd6740;
-    p_vp6_filter_row_ = (void*)0x00fd6ed0;
+    g_16d9418.endMmx = &FUN_00c2e4e0;
+    g_16d9580.fillRow = &FUN_00fd64b0;
+    g_16d9580.addRows = &FUN_00fd6550;
+    g_16d9418.expandRow = &FUN_00fd6c60;
+    g_16d9580.addResidual = &FUN_00fd6740;
+    g_16d9580.filterRow = &FUN_00fd6ed0;
 }
 
 // @ 0x00fd1e00

@@ -273,13 +273,15 @@ void __cdecl FUN_00fd0eb0(short* a, short* b, unsigned* out)
     unsigned short ua = *(unsigned short*)a;
     if (ua != 0) {
         int v = (((int)*b * (short)ua + 15) >> 5 & 0xffff) * 0x10001;
-        for (int i = 0; i < 8; i++) {
-            out[0] = v;
-            out[1] = v;
-            out[2] = v;
-            out[3] = v;
-            out += 4;
-        }
+        unsigned* row = out + 2;
+        int rows = 8;
+        do {
+            row[-2] = v;
+            row[-1] = v;
+            row[0] = v;
+            row[1] = v;
+            row += 4;
+        } while (--rows);
     } else {
         memset(out, 0, 0x80);
     }
