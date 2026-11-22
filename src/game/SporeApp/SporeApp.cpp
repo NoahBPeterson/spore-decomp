@@ -114,6 +114,7 @@ struct CommandLine {
     ~CommandLine() throw();
     int FindSwitch(const wchar_t* name, int a = 0, WString_s00f4_7ed0* value = 0, int c = 0);   // 0x0092b300
     uint32_t* GetArgs();                                                              // 0x0092b6c0
+    WString_s00f4_7ed0* GetArg(int index);                                            // 0x0092b1b0
     uint32_t pad[0x38 / 4];
 };
 int EAMain(CommandLine* cmdLine) throw();
@@ -544,10 +545,22 @@ void CreateMouseCameraController();                                 // 0x007da79
 void CreateSmoothCameraController();                                // 0x007df710
 extern cDirectPropertyList* sAppProperties;                         // 0x015fd918
 extern CommandLine* gCommandLine;                                   // 0x015fd920
-struct cSporeApp_s00f4_7ed0 {
-    void* mVtbl0;                       // +0x00 IHandler
-    void* mVtbl4;                       // +0x04 RefCountVTemplate
-    int mRefCount;                      // +0x08
+// The app's message-handler interface (cSporeApp's primary base, vptr at +0x0).
+struct __declspec(novtable) IAppMessageHandler {
+    virtual ~IAppMessageHandler() {}
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage) = 0;
+};
+// EA::RefCountVTemplate<int> (vtable 0x013ec458) as cSporeApp inherits it: a vptr and an int count, AddRef/Release
+// in slots 1 and 2 (the shared header has no constructor; this copy keeps the inline one the app's constructor runs).
+class AppRefCount {
+ public:
+  AppRefCount() : mRefCount(0) {}
+  virtual ~AppRefCount() {}
+  virtual int AddRef();
+  virtual int Release();
+  int mRefCount;                        // +0x04
+};
+struct cSporeApp_s00f4_7ed0 : IAppMessageHandler, AppRefCount {
     bool mAppRunning;                   // +0x0c
     bool mFlag0d;                       // +0x0d
     unsigned __int64 mReferenceCycle;   // +0x10
@@ -564,34 +577,57 @@ struct cSporeApp_s00f4_7ed0 {
     int mExitCode;                      // +0x40
     void* mProfiler;                    // +0x44
 
-    cSporeApp_s00f4_7ed0();
+    __forceinline cSporeApp_s00f4_7ed0()
+        : mAppRunning(false), mFlag0d(false), mReferenceCycle(0), mMSPerCycle(0.0f), mCyclesPerMS(0.0f),
+          mAppSystem(), mFactoryRegistry(0), mUIMainWin(), mAudioSystem(), mMovieSystem(0), mEditorSystem(),
+          mTerrainSystem(), mGonzagoSystem(), mExitCode(0)
+    {
+    }
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage);
     bool Init(CommandLine* cmdLine);  // 0x00f47ed0 (cSporeApp::Init)
     void Run();
     void Shutdown();                        // 0x00f47700
-    void Release();
     void SetupShipDirsFromCommandLine();    // 0x00f47d80
     void Fn47550();                         // 0x00f47550
 };
-struct Mutex {
-    Mutex() throw();
-    ~Mutex() throw();
-    void Init();
-    int Lock();
-    void Unlock();
+namespace EA {
+namespace Thread {
+struct MutexParameters {
+    MutexParameters(bool intraprocess, const char* name);           // 0x00921e00
+    char mData[0x14];
 };
+class Mutex {
+ public:
+  Mutex(const MutexParameters* params, bool defaultParameters);     // 0x009222a0
+  ~Mutex();                                                         // 0x00922130
+  bool Init(const MutexParameters* params);                         // 0x00922150
+  int Lock(const unsigned& timeout);                                // 0x009221b0
+  int Unlock();                                                     // 0x00922270
+  char mData[0x30];
+};
+static const unsigned kTimeoutImmediate = 0;
+}  // namespace Thread
+}  // namespace EA
 struct ExceptionHandler {
-    ExceptionHandler();
-    ~ExceptionHandler();
-    void SetReportDirectory(const char* dir);
+    ExceptionHandler();                                             // 0x0091e810
+    ~ExceptionHandler();                                            // 0x0091e8d0
+    void SetBuildDescription(const char* text);                     // 0x0091e650
+    void SetReportDirectory(wchar_t* dir);                          // 0x0091e040
+    void Set(int a, int b);                                         // 0x0091e020
+    char mData[0x24c];
 };
+namespace EA {
+namespace IO {
 struct FilePath {
-    static void GetDriveAndDirectory(char* buffer, uint32_t size);
+    wchar_t* SetPath(const wchar_t* path);                          // 0x00930f60
+    unsigned GetDriveAndDirectory(wchar_t* buffer, unsigned size);  // 0x00930d20
+    wchar_t mPath[0x208];
 };
-void NamedMutexCreate();
-void SporeAlert(const char* message, int priority, int timeout);
-void InitExceptionHandler(const char* name);
-void InitSearchPath();
-void InitModules(int a, int b);
+}  // namespace IO
+}  // namespace EA
+namespace SP {
+void SporeAlert(const char* message, int timeout, int flags);       // 0x006baff0
+}
 // ---- items of slice s00f47ed0 end
 
 // @ 0x00f475f0
@@ -1197,36 +1233,36 @@ bool cSporeApp_s00f4_7ed0::Init(CommandLine* cmdLine)
 // @ 0x00f48850
 int EAMain(CommandLine* cmdLine) throw()
 {
-    int multipleInstances = cmdLine->FindSwitch(L"multipleInstances", 0, 0, 0);
-    Mutex mutex;
-    if (multipleInstances == -1) {
-        NamedMutexCreate();
-        mutex.Init();
-        if (mutex.Lock() == -2) {
-            SporeAlert("Another instance of the game is already running", 2, 1000);
+    bool multipleInstances = cmdLine->FindSwitch(L"multipleInstances", 0, 0, 0) != -1;
+    EA::Thread::Mutex mutex(0, true);
+    if (!multipleInstances) {
+        EA::Thread::MutexParameters params(false, "Global\\SporeEditorOrGame");
+        mutex.Init(&params);
+        if (mutex.Lock(EA::Thread::kTimeoutImmediate) == -2) {
+            SP::SporeAlert("Another instance of the game is already running", 1000, 2);
             return -1;
         }
     }
 
     ExceptionHandler handler;
-    InitExceptionHandler("Spore");
-    InitSearchPath();
-    char reportDirectory[0x104];
-    FilePath::GetDriveAndDirectory(reportDirectory, 0x104);
+    handler.SetBuildDescription("Spore");
+    wchar_t reportDirectory[0x104];
+    EA::IO::FilePath exePath;
+    exePath.SetPath(cmdLine->GetArg(0)->mpBegin);
+    exePath.GetDriveAndDirectory(reportDirectory, 0x104);
     handler.SetReportDirectory(reportDirectory);
-    InitModules(2, -1);
+    handler.Set(2, -1);
 
-    cSporeApp_s00f4_7ed0* app = new cSporeApp_s00f4_7ed0();
-    if (app != 0) {
-        if (app->Init(cmdLine)) {
-            app->Run();
-            app->Shutdown();
-        }
+    cSporeApp_s00f4_7ed0* app = new("App", 0, 0, 0, 0) cSporeApp_s00f4_7ed0();
+    if (app)
+        app->AddRef();
+    if (app->Init(cmdLine)) {
+        app->Run();
+        app->Shutdown();
     }
     int exitCode = app->mExitCode;
     app->Release();
-    if (multipleInstances == -1)
+    if (!multipleInstances)
         mutex.Unlock();
-    handler.~ExceptionHandler();
     return exitCode;
 }
