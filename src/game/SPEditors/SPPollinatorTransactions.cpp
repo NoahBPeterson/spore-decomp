@@ -2508,6 +2508,125 @@ bool UserMatchGetRequest(void** ppRequest);
 // ---- items of slice s0061a650 end
 
 // ---- items of slice s0061b3b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+
+// HAND-ADDED (agent, 2026-11-22): local stubs for the 5 s0061b3b0 rows of batch mig41 entry 851
+// (0061bc50/0061be80/0061bf50/0061c070/0061c280).  The tool cannot re-apply s0061b3b0 (its kept items
+// create SP::Pollen::EA/SP::Pollen::eastl and the module TU stops compiling), so these were spliced in
+// from the tool's own rewritten bodies; see work/migrate/report_s0061b3b0_SPPollinatorTransactions.md.
+extern "C" char g_13ec458[];
+extern "C" char g_13fc854[];
+namespace SP {
+namespace Pollen {
+struct String8S {
+  char* mpBegin;         // +0x00
+  char* mpEnd;           // +0x04
+  char* mpCapacity;      // +0x08
+  unsigned int mAlloc;   // +0x0c
+  String8S() {
+    mpBegin = gEmptyString;
+    mpEnd = gEmptyString;
+    mpCapacity = gEmptyString + 1;
+  }
+  void range_init(const char* p);      // 0x0057cc10
+  void sprintf(const char* fmt, ...);  // 0x00472fe0
+  void assign(const char* b, const char* e);      // 0x00454cb0
+  void append_sprintf(const char* fmt, ...);      // 0x005f9450
+  void clear() {
+    if (mpBegin != mpEnd) {
+      *mpBegin = 0;
+      mpEnd = mpBegin;
+    }
+  }
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct String16S {
+  char* mpBegin;         // +0x00
+  char* mpEnd;           // +0x04
+  char* mpCapacity;      // +0x08
+  unsigned int mAlloc;   // +0x0c
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct FixedVectorAllocator {
+  unsigned int mOverflowAllocator;  // +0x00
+  void* mpPoolBegin;                // +0x04
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct FixedString8 {
+  char* mpBegin;          // +0x00
+  char* mpEnd;            // +0x04
+  char* mpCapacity;       // +0x08
+  FixedVectorAllocator mAllocator;  // +0x0c
+  FixedString8(const FixedString8& x);   // 0x00618af0
+  void assign(const char* b, const char* e);  // 0x0060a2c0
+  void shrink_capacity(unsigned int n);       // 0x006174e0
+  void swap(FixedString8& x);                 // 0x0061bc50
+  void set_capacity(unsigned int n);          // 0x0061c280
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct Rec70 {  // 0x70-byte record with out-of-line ctor/dtor
+  unsigned int m0, m4, m8;
+  unsigned char pad[0x70 - 12];
+  Rec70();   // 0x00549500
+  ~Rec70();  // 0x00547840
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct Vec70S {  // 0x14-byte eastl::vector<T, sp_allocator> header
+  void* mpBegin;     // +0x00
+  void* mpEnd;       // +0x04
+  void* mpCapacity;  // +0x08
+  unsigned int mStateC;
+  unsigned int mState10;
+};
+}
+}
+namespace SP {
+namespace Pollen {
+long ByteVectorAllocate(unsigned int n, const void* src, unsigned int nbytes);  // 0x005968b0
+}
+}
+namespace SP {
+namespace Pollen {
+void VectorCopyBytes(void* dst, const void* src, unsigned int nbytes);          // 0x011e0744
+}
+}
+namespace SP {
+namespace Pollen {
+class cContentValidationTransaction {
+ public:
+  unsigned int* mVtbl;   // +0x00
+  unsigned int mPad4;    // +0x04
+  void* mp8;             // +0x08
+  void* mpC;             // +0x0c
+  void* mp10;            // +0x10
+  Vec70S mVec14;         // +0x14
+  Vec70S mVec28;         // +0x28
+  Vec70S mVec3c;         // +0x3c
+  String16S mStr50;      // +0x50
+  unsigned int mPad60[6];// +0x60
+  String8S mStr78;       // +0x78
+  String8S mStr88;       // +0x88
+  String8S mStr98;       // +0x98
+
+  cContentValidationTransaction(const char* a, const char* b, int c, void* d, void* e, void* f);
+  void Destroy();  // 0x0061bf50
+};
+}
+}
 namespace SP {
 namespace Pollen {
 struct sTimedRec_s0061_b3b0 {
@@ -4840,6 +4959,31 @@ void quick_sort_impl(unsigned int* first, unsigned int* last, int kRecursionCoun
 }
 }}  // namespace SP::Pollen
 
+// @ 0x0061bc50
+namespace SP { namespace Pollen {
+void FixedString8::swap(FixedString8& x)
+{
+  if ((char*)this + 0xc == (char*)&x + 0xc) {
+    char* p0 = mpBegin;
+    mpBegin = x.mpBegin;
+    x.mpBegin = p0;
+    char* p1 = mpEnd;
+    mpEnd = x.mpEnd;
+    x.mpEnd = p1;
+    char* p2 = mpCapacity;
+    mpCapacity = x.mpCapacity;
+    x.mpCapacity = p2;
+    return;
+  }
+  FixedString8 tmp(*this);
+  if (&x != this) assign(x.mpBegin, x.mpEnd);
+  if (&tmp != &x) x.assign(tmp.mpBegin, tmp.mpEnd);
+  if ((tmp.mpCapacity - tmp.mpBegin) > 1 && tmp.mpBegin &&
+      tmp.mpBegin != (char*)tmp.mAllocator.mpPoolBegin)
+    EASTL_allocator_deallocate(tmp.mpBegin);
+}
+}}  // namespace SP::Pollen
+
 // @ 0x0061bcf0
 namespace SP { namespace Pollen {
 void WritePropertyListAndPNG(void* self, void* a, void* b, void* c)
@@ -4851,6 +4995,71 @@ void WritePropertyListAndPNG(void* self, void* a, void* b, void* c)
 }
 }}  // namespace SP::Pollen
 
+// @ 0x0061bf50
+namespace SP { namespace Pollen {
+void cContentValidationTransaction::Destroy()
+{
+  *(unsigned int* volatile*)this = (unsigned int*)g_13fc854;
+  _ReadWriteBarrier();
+  if ((mStr98.mpCapacity - mStr98.mpBegin) > 1 && mStr98.mpBegin)
+    EASTL_allocator_deallocate(mStr98.mpBegin);
+  if ((mStr88.mpCapacity - mStr88.mpBegin) > 1 && mStr88.mpBegin)
+    EASTL_allocator_deallocate(mStr88.mpBegin);
+  if ((mStr78.mpCapacity - mStr78.mpBegin) > 1 && mStr78.mpBegin)
+    EASTL_allocator_deallocate(mStr78.mpBegin);
+  if ((((int)(mStr50.mpCapacity - mStr50.mpBegin) & ~1) > 2) && mStr50.mpBegin)
+    EASTL_allocator_deallocate(mStr50.mpBegin);
+  char* p;
+  char* e;
+  e = (char*)mVec3c.mpEnd;
+  for (p = (char*)mVec3c.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
+  if (mVec3c.mpBegin && *((int*)mVec3c.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec3c.mpBegin);
+  e = (char*)mVec28.mpEnd;
+  for (p = (char*)mVec28.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
+  if (mVec28.mpBegin && *((int*)mVec28.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec28.mpBegin);
+  e = (char*)mVec14.mpEnd;
+  for (p = (char*)mVec14.mpBegin; p < e; p += 0x70) ((Rec70*)p)->~Rec70();
+  if (mVec14.mpBegin && *((int*)mVec14.mpBegin - 1) != 0) EASTL_allocator_deallocate(mVec14.mpBegin);
+  mVtbl = (unsigned int*)g_13ec458;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061be80
+namespace SP { namespace Pollen {
+cContentValidationTransaction::cContentValidationTransaction(const char* a, const char* b, int c, void* d, void* e, void* f)
+{
+  mp8 = d;
+  mpC = e;
+  mVtbl = (unsigned int*)0x13fc854;
+  mp10 = f;
+  mPad4 = 0;
+  mVec14.mpBegin = 0;
+  mVec14.mpEnd = 0;
+  mVec14.mpCapacity = 0;
+  mVec28.mpBegin = 0;
+  mVec28.mpEnd = 0;
+  mVec28.mpCapacity = 0;
+  mVec3c.mpBegin = 0;
+  mVec3c.mpEnd = 0;
+  mVec3c.mpCapacity = 0;
+  mStr50.mpBegin = gEmptyString;
+  mStr50.mpEnd = gEmptyString;
+  mStr50.mpCapacity = gEmptyString + 2;
+  mStr78.mpBegin = 0;
+  mStr78.mpEnd = 0;
+  mStr78.mpCapacity = 0;
+  mStr78.range_init(a);
+  mStr88.mpBegin = 0;
+  mStr88.mpEnd = 0;
+  mStr88.mpCapacity = 0;
+  mStr88.range_init(b);
+  mStr98.mpBegin = gEmptyString;
+  mStr98.mpEnd = gEmptyString;
+  mStr98.mpCapacity = gEmptyString + 1;
+  if (c != 0) mStr98.sprintf((const char*)0x13fc850, c);
+}
+}}  // namespace SP::Pollen
+
 // @ 0x0061c1c0
 namespace SP { namespace Pollen {
 void* AllocateAndCopy70(unsigned int n, void* a, void* b)
@@ -4859,6 +5068,62 @@ void* AllocateAndCopy70(unsigned int n, void* a, void* b)
   (void)b;
   if (n == 0) return 0;
   return EASTL_allocator_allocate(n * 0x70, "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061c280
+namespace SP { namespace Pollen {
+void FixedString8::set_capacity(unsigned int n)
+{
+  if (n != 0xffffffffu && (unsigned int)(mpEnd - mpBegin) < n) {
+    char* dst = (char*)EASTL_allocator_allocate(
+        n, "Editor", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include"
+        "\\EASTL/allocator.h",
+        0xd1);
+    unsigned int size = (unsigned int)(mpEnd - mpBegin);
+    memcpy(dst, mpBegin, size);
+    dst[size] = 0;
+    if ((mpCapacity - mpBegin) > 1 && mpBegin && mpBegin != (char*)mAllocator.mpPoolBegin)
+      EASTL_allocator_deallocate(mpBegin);
+    mpBegin = dst;
+    mpEnd = dst + size;
+    mpCapacity = dst + n;
+    return;
+  }
+  if (n < (unsigned int)(mpEnd - mpBegin)) shrink_capacity(n);
+  FixedString8 tmp(*this);
+  swap(tmp);
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061c070
+namespace SP { namespace Pollen {
+void* VectorAssign(void* self, void* x)
+{
+  if (x == self) return self;
+  char** s = (char**)self;
+  char** o = (char**)x;
+  unsigned int n = (unsigned int)(o[1] - o[0]) >> 3;
+  if ((unsigned int)(s[2] - s[0]) >> 3 < n) {
+    char* p = (char*)ByteVectorAllocate(n, o[0], (unsigned int)(o[1] - o[0]));
+    if (s[0] && *((int*)s[0] - 1) != 0) EASTL_allocator_deallocate(s[0]);
+    s[0] = p;
+    s[2] = p + n * 8;
+    s[1] = p + n * 8;
+    return self;
+  }
+  unsigned int have = (unsigned int)(s[1] - s[0]) >> 3;
+  if (have < n) {
+    VectorCopyBytes(s[0], o[0], have * 8);
+    char* src = o[0] + ((char*)s[1] - (char*)s[0]);
+    VectorCopyBytes(s[1], src, (unsigned int)(o[1] - src));
+    s[1] = s[0] + n * 8;
+    return self;
+  }
+  VectorCopyBytes(s[0], o[0], (unsigned int)(o[1] - o[0]));
+  s[1] = s[0] + n * 8;
+  return self;
 }
 }}  // namespace SP::Pollen
 

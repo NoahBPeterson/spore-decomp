@@ -437,3 +437,176 @@ int EGifCompressLine(GifFileType* g, unsigned char* line, int len)
         }
     }
 }
+
+// @ 0x0084d6e0
+int __cdecl EGifPutImageDesc(GifFileType* g, int left, int top, int width, int height, int interlace, int colorRes, void* cmap)
+{
+    EGifPrivate* p = (EGifPrivate*)g->Private;
+    if (((p->FileState & 4) != 0 && p->Reserved2c > 0) || (p->FileState & 1) == 0)
+        return 0;
+    g->ImageWidth = width;
+    g->ImageLeft = left < 0 ? 0 : left;
+    g->ImageInterlace = interlace;
+    g->ImageTop = top < 0 ? 0 : top;
+    g->ImageHeight = height;
+    g->ImageColorRes = colorRes;
+    if (cmap) {
+        int n = (1 << (colorRes & 0x1f)) * 3;
+        if (g->SavedImageColorMap)
+            gfree(g->SavedImageColorMap);
+        void* dst = galloc(n);
+        g->SavedImageColorMap = dst;
+        memcpy(dst, cmap, n);
+    }
+    unsigned char b = 0x2c;
+    gwrite(p->fd, &b, 1);
+    unsigned short w;
+    w = (unsigned short)left;
+    gwrite(p->fd, &w, 2);
+    w = (unsigned short)top;
+    gwrite(p->fd, &w, 2);
+    w = (unsigned short)width;
+    gwrite(p->fd, &w, 2);
+    w = (unsigned short)height;
+    gwrite(p->fd, &w, 2);
+    b = (unsigned char)((cmap ? 0x80 : 0) | (interlace ? 0x40 : 0) | (colorRes - 1));
+    gwrite(p->fd, &b, 1);
+    if (cmap) {
+        int n = 1 << (colorRes & 0x1f);
+        unsigned char* src = (unsigned char*)cmap;
+        for (int k = 0; k < n; k++) {
+            unsigned char c[3];
+            c[0] = src[0];
+            c[1] = src[1];
+            c[2] = src[2];
+            if (gwrite(p->fd, c, 3) == 0)
+                return 0;
+            src += 3;
+        }
+    }
+    if (g->ImageColorMap == 0 && g->SavedImageColorMap == 0)
+        return 0;
+    p->FileState |= 4;
+    p->Reserved2c = width * height;
+    EGifSetupCompress(g);
+    return 1;
+}
+
+// @ 0x0084d8d0
+bool __stdcall GIF_write(void* info_, void* desc_, int param_3, int param_4)
+{
+    char* info = (char*)info_;
+    char* desc = (char*)desc_;
+    char* wf = *(char**)(info + 0x14);
+    char* g = *(char**)(wf + 0xc);
+    char* priv;
+    unsigned char* pixels = (unsigned char*)param_3;
+    bool ok = false;
+
+    if (*(int*)(desc + 0x18) > 8)
+        return false;
+    if (g == 0)
+        return false;
+    unsigned char* line = (unsigned char*)galloc(*(unsigned int*)(desc + 0x10));
+    if (line == 0)
+        return false;
+    ok = true;
+    priv = *(char**)(g + 0x48);
+
+    if (*(int*)(info + 0xc) == -1) {
+        *(int*)(priv + 0x2c) = -1;
+        gseek(*(void**)(info + 0x10), *(int*)(priv + 0x38), 0);
+        unsigned char pal[0x300];
+        memset(pal, 0, 0x300);
+        int n = *(int*)(desc + 0x24);
+        char* pu = desc + 0x29;
+        unsigned char* pv = pal;
+        for (int k = 0; k < n; k++) {
+            int flag = *(int*)(desc + 0x438);
+            pv[0] = pu[1];
+            pv[1] = pu[0];
+            pv[2] = pu[-1];
+            if (flag != 0 && (unsigned char)pu[2] < 0x40 && *(int*)(priv + 0x2c) < 0)
+                *(int*)(priv + 0x2c) = k;
+            pv += 3;
+            pu += 4;
+        }
+        if (EGifPutScreenDesc((GifFileType*)g, *(int*)(desc + 0x10), *(int*)(desc + 0x14),
+                              *(int*)(desc + 0x1c),
+                              ((*(int*)(priv + 0x2c) < 0) ? 0 : *(int*)(priv + 0x2c)),
+                              *(int*)(desc + 0x1c), pal) == 0)
+            ok = false;
+        *(int*)(wf + 8) = *(int*)(desc + 0x14);
+        *(int*)(wf + 4) = *(int*)(desc + 0x10);
+        *(int*)(priv + 0x38) = gtell(*(void**)(info + 0x10));
+    }
+
+    gseek(*(void**)(info + 0x10), *(int*)(priv + 0x38), 0);
+    int transparent = *(int*)(priv + 0x2c);
+    float fdelay = *(float*)(desc + 0x2a60);
+    int delay = 10;
+    if (fdelay != 0.0f) {
+        delay = (int)(100.0f / fdelay + 0.5f);
+        if (delay >= 0x1771)
+            delay = 6000;
+        else if (delay < 0)
+            delay = 0;
+    }
+    if (transparent >= 0 || fdelay != 0.0f) {
+        unsigned char ext[4];
+        *(unsigned short*)ext = (unsigned short)delay;
+        ext[2] = (unsigned char)transparent;
+        ext[3] = (unsigned char)((transparent >= 0) | 8);
+        if (EGifPutExtension((GifFileType*)g, 0xf9, 4, ext) == 0)
+            ok = false;
+    }
+    if (*(int*)(wf + 4) < *(int*)(desc + 0x10) || *(int*)(wf + 8) < *(int*)(desc + 0x14)) {
+        int pos = gtell(*(void**)(info + 0x10));
+        if (EGifUpdateLSD(*(void**)(info + 0x10), pos, *(int*)(desc + 0x14), pos) == 0)
+            ok = false;
+        *(int*)(wf + 4) = *(int*)(desc + 0x10);
+        *(int*)(wf + 8) = *(int*)(desc + 0x14);
+    }
+    if (EGifPutImageDesc((GifFileType*)g, *(int*)(desc + 0x450), *(int*)(desc + 0x454),
+                         *(int*)(desc + 0x10), *(int*)(desc + 0x14), 0,
+                         *(int*)(desc + 0x1c), 0) == 0)
+        ok = false;
+
+    int rows = 0;
+    while (rows < *(int*)(desc + 0x14)) {
+        if (!ok)
+            break;
+        int x = 0;
+        unsigned char* dst = line;
+        while (x < *(int*)(desc + 0x10)) {
+            unsigned char b = pixels[x];
+            if (*(unsigned char*)(desc + 0x2b + (unsigned)b * 4) < 0x40 && transparent >= 0)
+                b = (unsigned char)transparent;
+            dst[x] = b;
+            x++;
+        }
+        if ((*(unsigned char*)(g + 0x48) & 1) == 0) {
+            ok = false;
+        } else {
+            int len = *(int*)(desc + 0x10);
+            if (len == 0)
+                len = *(int*)(g + 0x1c);
+            *(int*)(priv + 0x2c) -= len;
+            if (*(int*)(priv + 0x2c) < 0) {
+                ok = false;
+            } else {
+                unsigned char mask = (unsigned char)priv[*(int*)(priv + 8) + 0x138];
+                for (int m = 0; m < len; m++)
+                    line[m] &= mask;
+                if (EGifCompressLine((GifFileType*)g, line, len) == 0)
+                    ok = false;
+            }
+        }
+        pixels += param_4;
+        rows++;
+    }
+    gfree(line);
+    *(int*)(priv + 0x38) = gtell(*(void**)(info + 0x10));
+    *(int*)(info + 0xc) = *(int*)(info + 0xc) + 1;
+    return ok;
+}

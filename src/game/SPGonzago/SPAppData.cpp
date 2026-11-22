@@ -875,6 +875,16 @@ bool FUN_00e4a960(int32_t type)
     return false;
 }
 
+// @ 0x00e4a9d0
+namespace SP {
+int sHash(char const * s)
+{
+    if (s == 0)
+        return 0;
+    return FNVHash(s, 0x811c9dc5, 1);
+}
+}  // namespace SP
+
 // @ 0x00e4a9f0
 void* FUN_00e4a9f0(const wchar_t* path)
 {

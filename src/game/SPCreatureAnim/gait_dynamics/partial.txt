@@ -1,1 +1,1 @@
-# va  size  reason (reconstruction; not byte-exact)
+# va  size  reason (complete/approximate; not byte-exact)

@@ -1,7 +1,17 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPToolStrategies.cpp  ?GetMouseRay@@YGXPAUVec3@@@Z  01052f90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?AdjustCost@cSPEnergyRepairToolStrategy@@QAEHH@Z  01053590  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?AdjustCostPercent@cSPEnergyRepairToolStrategy@@QAEHH@Z  010535e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?StopTool@cSPToolStrategy@@QAE_NPAVcSPToolStrategy_s0105_6160@@@Z  01053650  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CastToAnimalCargoInfo@@YAPAXPAUIItemHolder@@@Z  010536e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CastToPlantCargoInfo@@YAPAXPAUIItemHolder@@@Z  01053700  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?AttachToolEffect@cSPToolStrategy@@QAEXPBXH@Z  01053d50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?UseTool@cSPScanToolCheck_s0105_4080@@QAE_NPAVcSPToolStrategy_s0105_6160@@HH@Z  01054080  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseToolAtLocation@cSPGetOutOfUFOToolStrategy@@QAE_NHHH@Z  010540b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?ActivateTool@cSPGetOutOfUFOToolStrategy@@QAE_NH@Z  010540d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?RegisterStaticRegistrations@Simulator_s0105_54c0@@YAXXZ  01055890  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?StartTool@cSPDefaultAoETool_s0105_6160@@QAE_NHHH@Z  01056b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56bb0@cSPToolStrategyCheck_s0105_6bb0@@QAE_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56bf0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?StartTool@cSPRepairAOEToolStrategy@@QAE_NHHH@Z  01056c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56cb0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -13,13 +23,3 @@
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPArtilleryWeaponStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cCropCirclesToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPGenesisDeviceToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?AttachToolEffect@cSPToolStrategy@@QAEXPBXH@Z  01053d50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseToolAtLocation@cSPGetOutOfUFOToolStrategy@@QAE_NHHH@Z  010540b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?CastToAnimalCargoInfo@@YAPAXPAUIItemHolder@@@Z  010536e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?CastToPlantCargoInfo@@YAPAXPAUIItemHolder@@@Z  01053700  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?ActivateTool@cSPGetOutOfUFOToolStrategy@@QAE_NH@Z  010540d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?AdjustCostPercent@cSPEnergyRepairToolStrategy@@QAEHH@Z  010535e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?StopTool@cSPToolStrategy@@QAE_NPAVcSPToolStrategy_s0105_6160@@@Z  01053650  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56bb0@cSPToolStrategyCheck_s0105_6bb0@@QAE_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?UseTool@cSPScanToolCheck_s0105_4080@@QAE_NPAVcSPToolStrategy_s0105_6160@@HH@Z  01054080  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPToolStrategies.cpp  ?GetMouseRay@@YGXPAUVec3@@@Z  01052f90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

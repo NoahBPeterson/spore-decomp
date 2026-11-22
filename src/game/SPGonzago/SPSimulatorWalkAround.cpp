@@ -8,23 +8,65 @@
 #include "SP/cVarListSerializer.h"
 
 // ---- items of slice s01016540 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1471064;
+extern char  g_169e380, g_169e381;
+extern float g_169e384;
 typedef unsigned int   u32;
 typedef signed   int   i32;
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned long long u64;
 void* __cdecl   SP_NounManager(int p);                  // 0x00b3d300 (ret 4)
+void* __cdecl   FUN_00b3d3c0();                         // 0x00b3d3c0
+void* __cdecl   FUN_00b3d310();                         // 0x00b3d310
+void* __cdecl   FUN_00b3d230(int id);                   // 0x00b3d230 (ret 4)
+void* __cdecl   FUN_00b3d4d0();                         // 0x00b3d4d0
 void* __cdecl   SP_NounManager();                       // 0x00b3d300 (no args)
 void* __cdecl   SP_SimTicker();                         // 0x00b3d330
+void* __cdecl   SP_GetUFOSimulator();                   // 0x00ffbe50
+void* __cdecl   SP_App();                               // 0x0067dd10
+void* __cdecl   SP_ConfigManager();                     // 0x0067dd30
+void* __cdecl   SP_EffectsManager();                    // 0x0067ddd0
+void* __cdecl   FUN_010666a0();                         // 0x010666a0
+void* __cdecl   FUN_010408b0();                         // 0x010408b0
+void* __cdecl   FUN_0067cac0(int a, int b);             // 0x0067cac0 (ret 8)
+void* __cdecl   FUN_00fd9c60();                         // 0x00fd9c60
 void   __cdecl  FUN_00572020(void* p, int a);           // 0x00572020 (ret 8)
 void   __cdecl  copy_impl(void* first, void* last, void* dst); // 0x006782c0 (ret 0xc)
+void   __cdecl  AudioSetListener3(void* a, float x, float y, float z); // 0x009fbc50 (ret 0x10)
+void*  __cdecl  FUN_00c0ee60_dummy();
+void*  __cdecl  SP_SpaceGameGet(int a);                 // 0x01002bd0 (ret 4)
+void   __cdecl  FUN_00b76d20(void* a, float f, int b, int c, int d); // 0x00b76d20 (ret 0x14)
 void*  __cdecl   FUN_00b3d3b0();                        // 0x00b3d3b0
 void*  __cdecl   FUN_00b3d420_p();                     // 0x00b3d420 (0-arg getter)
 void*  __cdecl   FUN_00401090_p();                     // 0x00401090 (0-arg getter)
 void   __cdecl   FUN_00aea5d0(void* end, void* val);    // 0x00aea5d0 (ret 8)
+void   __cdecl   FUN_00b22930(void* noun);              // 0x00b22930 (ret 4)
+void*  __cdecl   FUN_00c04590();                        // 0x00c04590
 struct Vec3 { float x, y, z; };
 struct Mat3 {
     void Assign(const void* src);  // 0x41cb40 ret 4
+};
+struct TriggerMgr {
+    u8  pad_00[0x2c];
+    int mState_2c;                      // +0x2c
+};
+struct GameMgr {
+    u8  pad_00[0x20];
+    int mField_20;                      // +0x20
+};
+struct AvatarHandle {
+    u8   pad_00[0x80];
+    float mFloat_80;                    // +0x80
+};
+struct UFOInv {
+    void FUN_00c3daa0(float f);              // 0x00c3daa0 ret 4
+    void PopToDestination();                 // 0x00c37e60
+    void FUN_00c37120();                     // 0x00c37120
+    void StartPlayerDeathSequence();         // 0x00c3c520
+    void SetPlanetDestination(void* dest);   // 0x00ffc350 ret 0x14
+    float mCollisionTimer_540;               // +0x540
+    u8    mFlag_74c;                         // +0x74c
 };
 struct SimTimer {                            // cSPTimer, at +0x20
     void  Stop();                            // 0x00bc3110
@@ -74,6 +116,35 @@ struct cSPSimulatorWalkAround {
 struct cGameNounManager {
     void RemoveNoun(void* noun);                       // 0x00b225d0 ret 4
 };
+struct ObstacleData_s0101_6540 {
+    void* mpVtbl_00;                                   // +0x00
+    u8  pad_04[0x30];                                  // 0x04..0x33
+    u32 mFlags_34;                                     // +0x34 (bit2 used)
+    u8  pad_38[0xc];                                   // 0x38..0x43
+    float mFloat_44;                                   // +0x44
+    u8  pad_48[0xc];                                   // 0x48..0x53
+    u32 mFlag_54;                                      // +0x54
+    u8  pad_58[0x24];                                  // 0x58..0x7b
+    void* mpKey_7c;                                    // +0x7c
+    void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
+    void FUN_00b73e70_desc(void* out);                 // 0x00b73e70 ret 4
+};
+struct Plant {
+    void* mpVtbl;                                      // +0x00
+    u8  pad_04[0x30];
+    u32 mFlags_34;                                     // +0x34
+    u8  pad_38[0xc];
+    float mFloat_44;                                   // +0x44
+    u8  mFlag_54;                                      // +0x54
+    u8  pad_55[0x27];
+    void* mpKey_7c;                                    // +0x7c
+    void* GetDesc();                                   // 0x00b73e70 ret 4 (thiscall)
+    void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
+};
+struct AvatarFields {
+    u8    pad_00[0xb54];
+    void* mpHandle_b54;                                // +0xb54
+};
 struct ObstacleData {
     void* mpVtbl_00;                                   // +0x00
     u8  pad_04[0x30];                                  // 0x04..0x33
@@ -88,19 +159,6 @@ struct ObstacleData {
     void SetFlag(bool on);                             // 0x00b73de0
     void FUN_00b73e70_desc(void* out);                 // 0x00b73e70 ret 4
 };
-struct Plant {
-    void* mpVtbl;                                      // +0x00
-    u8  pad_04[0x30];
-    u32 mFlags_34;                                     // +0x34
-    u8  pad_38[0xc];
-    float mFloat_44;                                   // +0x44
-    u8  mFlag_54;                                      // +0x54
-    u8  pad_55[0x27];
-    void* mpKey_7c;                                    // +0x7c
-    void* GetDesc();                                   // 0x00b73e70 ret 4 (thiscall)
-    void FUN_00b73de0(int a);                          // 0x00b73de0 ret 4
-    void SetFlag(bool on);                             // 0x00b73de0
-};
 struct PlantDesc {
     u16 a;            // +0x00
     u16 b;            // +0x02
@@ -113,7 +171,7 @@ struct PlantDesc {
 struct NewPlant {
     void* mpVtbl_0;                                    // +0x00
     u8  pad_04[0x30];                                  // 0x04..0x33
-    ObstacleData mData_34;                             // +0x34 (embedded)
+    ObstacleData_s0101_6540 mData_34;                             // +0x34 (embedded)
     float mFloat_44;                                   // +0x44
     void FUN_00c3e270(float f);                        // 0x00c3e270 ret 4
 };
@@ -243,9 +301,9 @@ void cSPSimulatorWalkAround::SetHighLODPlant(void* plant)
     NewPlant* np = (NewPlant*)mgr->FUN_00b2b430(v, 0, profile, &pa->mpKey_7c, &desc);
     np->FUN_00c3e270(pa->mFloat_44);
 
-    ObstacleData* data = &np->mData_34;
-    void* r1 = (**(void*(__thiscall**)(ObstacleData*))(*(void***)data + 0x2c))(data);
-    void* r2 = (**(void*(__thiscall**)(ObstacleData*, int))(*(void***)data + 0x2b))(data, 1);
+    ObstacleData_s0101_6540* data = &np->mData_34;
+    void* r1 = (**(void*(__thiscall**)(ObstacleData_s0101_6540*))(*(void***)data + 0x2c))(data);
+    void* r2 = (**(void*(__thiscall**)(ObstacleData_s0101_6540*, int))(*(void***)data + 0x2b))(data, 1);
     (**(void(__thiscall**)(void*, void*))(*(void***)r1 + 0x2d))(r1, r2);
 
     if (mHighLODPlantsEnd < mHighLODPlantsCap) {
@@ -296,6 +354,207 @@ void cSPSimulatorWalkAround::ShutdownForGame()
             void* sub = (char*)c + 0x3c;
             mpStrategy = 0;
             (**(void(__thiscall**)(void*))(*(void***)sub + 2))(sub);
+        }
+    }
+}
+
+// @ 0x01016950
+void cSPSimulatorWalkAround::FUN_01016950()
+{
+    void* p0 = mpX_44;
+    if (p0 != 0)
+        FUN_00572020(p0, 1);
+    if (mpAvatar != 0) {
+        if (FUN_00b3d3c0() != 0) {
+            void* a = ((void*(__stdcall*)(int))FUN_00b3d3c0)(0x1654c05);
+            (**(void(__thiscall**)(void*))(*(void***)a + 0))(a);
+        }
+    }
+    if (mpAvatar != 0) {
+        if (FUN_00c0ee60_dummy() != 0) {
+            void* av = mpAvatar;
+            (**(void(__thiscall**)(void*, int, int, int))(*(void***)av + 0x21))(av, 0, 0, 0);
+        }
+    }
+    void* hints = FUN_0067cac0(1, 1);
+    (**(void(__thiscall**)(void*, int, int))(*(void***)hints + 0))(hints, 1, 1);
+    ((GameMgr*)FUN_00b3d310())->mField_20 = 2;
+    while (ClearOldestPlant())
+        ;
+    void* ui = FUN_010666a0();
+    if (ui != 0)
+        (**(void(__thiscall**)(void*, int))(*(void***)ui + 0))(ui, 1);
+    void* b = FUN_00b3d230(0x1103193);
+    (**(void(__thiscall**)(void*))(*(void***)b + 0))(b);
+    void* app = SP_App();
+    void* av1 = (**(void*(__thiscall**)(void*))(*(void***)app + 0x14))(app);
+    void* av2 = (**(void*(__thiscall**)(void*))(*(void***)av1 + 0xe))(av1);
+    if (av2 != 0)
+        (**(void(__thiscall**)(void*, int))(*(void***)av2 + 3))(av2, 0x303154cd);
+    mIsWalkingAround = false;
+    if (((void*)FUN_00fd9c60()) != 0) {
+        void* cm = SP_ConfigManager();
+        void* v = (**(void*(__thiscall**)(void*, int))(*(void***)cm + 0xc))(cm, 0x679b880);
+        void* x = ((void*(__stdcall*)(void*))FUN_00fd9c60)(v);
+        (**(void(__thiscall**)(void*))(*(void***)x + 0))(x);
+    }
+    mBeamingState = 0;
+    mBeamingTimer.Stop();
+    (**(void(__thiscall**)(void*))(*(void***)((char*)FUN_00b3d3c0())))(FUN_00b3d3c0());
+    void* em = SP_EffectsManager();
+    (**(void(__thiscall**)(void*, int, int))(*(void***)em + 0x26))(em, 0x11, 0);
+    void* em2 = SP_EffectsManager();
+    (**(void(__thiscall**)(void*, int, int))(*(void***)em2 + 0x26))(em2, 0x14, 1);
+    void* sim = SP_GetUFOSimulator();
+    UFOInv* inv = (UFOInv*)((void*(__thiscall*)(void*))(*(void***)sim + 0x10))(sim);
+    if (inv->mCollisionTimer_540 <= 0.0f)
+        inv->StartPlayerDeathSequence();
+    void* r = FUN_010408b0();
+    (**(void(__thiscall**)(void*))(*(void***)r + 0))(r);
+    void* sg = SP_SpaceGameGet(0xe);
+    (**(void(__thiscall**)(void*))(*(void***)sg + 0))(sg);
+}
+
+// @ 0x01016ad0
+void cSPSimulatorWalkAround::FUN_01016ad0()
+{
+    int state = mBeamingState;
+    SimTimer* tm = &mBeamingTimer;
+    if (state == 1) {
+        if (!tm->IsRunning()) {
+            tm->Restart();
+            return;
+        }
+        long long e = (long long)tm->GetElapsed();
+        if (e < 0) e = -e;
+        if ((float)e > mRescueDelay * 1000.0f) {
+            tm->Stop();
+            mBeamingState = 2;
+            if (mpAvatar != 0 && SP_GetUFOSimulator() != 0) {
+                void* o = (char*)mpAvatar + 0xc0;
+                (**(void(__thiscall**)(void*))(*(void***)o + 0xb))(o);
+                void* res = (**(void*(__thiscall**)(void*, int, int, int, int))(*(void***)o + 0xb))(o, 0, 1, 0, 0);
+                ((UFOInv*)((void*(__thiscall*)(void*))(*(void***)SP_GetUFOSimulator() + 0x10))(SP_GetUFOSimulator()))->SetPlanetDestination(res);
+            }
+        }
+    } else if (state == 2) {
+        if (!tm->IsRunning()) {
+            void* ufo = SP_GetUFOSimulator();
+            UFOInv* inv = ufo ? (UFOInv*)((void*(__thiscall*)(void*))(*(void***)ufo + 0x10))(ufo) : 0;
+            if (inv != 0) {
+                if (inv->mFlag_74c == 0) {
+                    if (mpAvatar != 0) {
+                        void* o = (char*)mpAvatar + 0xc0;
+                        (**(void(__thiscall**)(void*))(*(void***)o + 0xb))(o);
+                        void* res = (**(void*(__thiscall**)(void*, int, int, int, int))(*(void***)o + 0xb))(o, 0, 1, 0, 0);
+                        inv->SetPlanetDestination(res);
+                    }
+                } else {
+                    tm->Restart();
+                    if (mpAvatar != 0) {
+                        void* o = (char*)mpAvatar + 0xc0;
+                        (**(void(__thiscall**)(void*, int))(*(void***)o + 0x27))(o, 3);
+                    }
+                }
+            }
+        } else {
+            if (mpAvatar != 0) {
+                void* o = (char*)mpAvatar + 0xc0;
+                if ((**(u8(__thiscall**)(void*))(*(void***)o + 0x2b))(o)) {
+                    long long e = (long long)tm->GetElapsed();
+                    if (e < 0) e = -e;
+                    if ((float)e < 2000.0f) {
+                        void* m = ((AvatarFields*)mpAvatar)->mpHandle_b54;
+                        long long e2 = (long long)tm->GetElapsed();
+                        if (e2 < 0) e2 = -e2;
+                        ((AvatarHandle*)m)->mFloat_80 = (float)((2.0 - (double)e2 * 0.001) * 0.5);
+                    } else {
+                        (**(void(__thiscall**)(void*, int))(*(void***)o + 0x27))(o, 0);
+                        if (FUN_00b3d3c0() != 0) {
+                            void* a = ((void*(__stdcall*)(int))FUN_00b3d3c0)(0x1654c05);
+                            (**(void(__thiscall**)(void*))(*(void***)a + 0))(a);
+                        }
+                        void* u = FUN_00c04590();
+                        void* u2 = SP_NounManager((int)u);
+                        FUN_00b22930(u2);
+                        void* pi = mpAvatar;
+                        if (pi != 0) {
+                            mpAvatar = 0;
+                            (**(void(__thiscall**)(void*))(*(void***)pi + 1))(pi);
+                        }
+                        mIsWalkingAround = false;
+                        void* o18 = mpStrategy;
+                        (**(void(__thiscall**)(void*))(*(void***)o18 + 3))(o18);
+                        void* o18b = mpStrategy;
+                        if (o18b != 0) {
+                            mpStrategy = 0;
+                            void* sub = (char*)o18b + 0x3c;
+                            (**(void(__thiscall**)(void*))(*(void***)sub + 2))(sub);
+                        }
+                    }
+                }
+            }
+            long long e = (long long)tm->GetElapsed();
+            if (e < 0) e = -e;
+            if ((float)e >= 4000.0f) {
+                FUN_01016950();
+                return;
+            }
+        }
+    } else if (state == 3) {
+        if (!tm->IsRunning()) {
+            tm->Restart();
+            void* o = (char*)mpAvatar + 0xc0;
+            (**(void(__thiscall**)(void*, int))(*(void***)o + 0x27))(o, 2);
+            return;
+        }
+        long long e = (long long)tm->GetElapsed();
+        if (e < 0) e = -e;
+        if ((float)e >= 4000.0f) {
+            mBeamingState = 0;
+            tm->Stop();
+            void* o = (char*)mpAvatar + 0xc0;
+            (**(void(__thiscall**)(void*, int))(*(void***)o + 0x27))(o, 0);
+            return;
+        }
+    }
+}
+
+// @ 0x01016e50
+void cSPSimulatorWalkAround::FUN_01016e50(void* param_2)
+{
+    if (mBeamingState != 0)
+        FUN_01016ad0();
+    if (mIsWalkingAround && mpStrategy != 0) {
+        void* o = mpStrategy;
+        (**(void(__thiscall**)(void*, void*))(*(void***)o + 4))(o, param_2);
+    }
+    if (mpAvatar != 0) {
+        if (g_169e381 == 0 || g_169e380 == 0) {
+            g_169e384 = 0.0f;
+        } else {
+            void* o = (char*)mpAvatar + 0xc0;
+            g_169e384 = (**(float(__thiscall**)(void*))(*(void***)o + 0x32))(o);
+        }
+    }
+    if (mpAvatar != 0) {
+        if (FUN_00b3d3c0() != 0) {
+            int st = ((TriggerMgr*)FUN_00b3d4d0())->mState_2c;
+            if (st != 1 && st != 2) {
+                void* o = (char*)mpAvatar + 0xc0;
+                float tmp[6];
+                float* pf = (**(float*(__thiscall**)(void*, void*))(*(void***)o + 0x1b))(o, tmp);
+                float f1 = pf[0], f2 = pf[4], f3 = pf[5];
+                float f4 = pf[3], f5 = pf[1], f6 = pf[2];
+                float r = (**(float(__thiscall**)(void*, int, int, int))(*(void***)o + 0x1c))(o, 7, 1, 0);
+                FUN_00b76d20(tmp, r, 7, 1, 0);
+                if (mpX_44 != 0) {
+                    AudioSetListener3(mpX_44,
+                                      (f1 + f4) * g_1471064,
+                                      (f2 + f5) * g_1471064,
+                                      (f3 + f6) * g_1471064);
+                }
+            }
         }
     }
 }

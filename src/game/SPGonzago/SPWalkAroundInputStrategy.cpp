@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPWalkAroundInputStrategy.cpp -- migrated from slice(s) s0107b260, s0107c4b0, s0107c1e0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPWalkAroundInputStrategy.cpp -- migrated from slice(s) s0107d6a0, s0107b260, s0107c4b0, s0107c1e0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPWalkAroundInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -227,6 +227,11 @@ struct cWalkAroundInputStrategy_s0107_c4b0
 
 // ---- items of slice s0107b260 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VSLOT(n) virtual void _v##n();
+class cSPMission {
+public:
+    uint8_t mnPad00[0x17c];       // +0x000
+    cSPMission* mpParentMission;  // +0x17c
+};
 template <class T>
 class AutoRefCount_s0107_b260 {
 public:
@@ -304,6 +309,13 @@ public:
     uint32_t mnPad0c;            // +0x0c
     void* mpCard;                // +0x10
 };
+class cMissionCard {
+public:
+    virtual void AddRef();          // +0x00
+    virtual void Release();         // +0x04
+    uint8_t mnPad04[0x178];         // +0x004
+    cSPMission* mpParentMission;    // +0x17c
+};
 class IWinText {
 public:
     VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3)
@@ -362,11 +374,74 @@ class cWalkAroundInputStrategy_s0107_b260 : public cCreatureModeInputStrategy {
 public:
     EA::Messaging::AutoHandler_s0107_b260 mAutoHandler;          // +0x108
     AutoRefCount_s0107_b260<cSPPlanetaryArtifact> mpCollectingArtifact; // +0x11c
-    cWalkAroundInputStrategy_s0107_b260();
-    virtual ~cWalkAroundInputStrategy_s0107_b260();
+    cWalkAroundInputStrategy_s0107_b260();  // 0x0107c0b0 (cWalkAroundInputStrategy::cWalkAroundInputStrategy_s0107_b260)
+    virtual ~cWalkAroundInputStrategy_s0107_b260();  // 0x0107c0b0 (cWalkAroundInputStrategy::cWalkAroundInputStrategy_s0107_b260)
     bool HandleMessage(uint32_t nMessage, cToolsEvent* pEvent); // 0x0107bf40
 };
+class cUniverseContext {
+public:
+    bool IsAvailable();          // 0x00a98020
+};
+cUniverseContext* GetUniverseContext(); // 0x01015df0
 // ---- items of slice s0107b260 end
+
+// ---- items of slice s0107d6a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl __debugbreak(void);
+#pragma intrinsic(__debugbreak)
+#define VFN(p, slot) (((void**)*(void**)p)[(slot)/4])
+void EA_Messaging_RemoveHandler(int, int, int, int, int);
+void FUN_00b1b830(void*);
+void FUN_00e4b990(void*);
+struct cInputList {
+    int   m00;       // +0x00
+    void* mpLeft;    // +0x04
+    void* mpRight;   // +0x08
+    int   mSize;     // +0x0c
+    bool  mFlag;     // +0x10
+    char  pad11[3];
+    int   m14;       // +0x14
+};
+class cWalkAroundInputStrategy_s0107_d6a0 {
+public:
+    char       pad00[4];    // +0x00
+    cInputList mHooks;      // +0x04
+    char       pad1c[4];    // +0x1c
+    cInputList mHandlers;   // +0x20
+    char       pad38[0xd0]; // +0x38..+0x107
+    int        mHandlerId;  // +0x108
+    int        mHandlerArg0;// +0x10c
+    int        mHandlerArg1;// +0x110
+    int        mHandlerArg2;// +0x114
+    int        mHandlerArg3;// +0x118
+    void*      mObject;     // +0x11c
+    void Shutdown();  // 0x0107d6a0 (cWalkAroundInputStrategy::Shutdown)
+};
+// ---- items of slice s0107d6a0 end
+
+// @ 0x0107bf40
+bool cWalkAroundInputStrategy_s0107_b260::HandleMessage(uint32_t nMessage, cToolsEvent* pEvent)
+{
+    if (!GetUniverseContext()->IsAvailable())
+        return false;
+
+    cMissionCard* pCard = 0;
+    if (pEvent != 0) {
+        cUIObject* pObject = pEvent->mpObject;
+        if (pObject != 0)
+            pCard = (cMissionCard*)pObject->GetItem();
+    }
+
+    if (nMessage == 0x3f3eb2c || nMessage == 0x17dab3f || nMessage == 0x1a53705)
+        return false;
+
+    if (nMessage == 0x2df01f2) {
+        if (pCard == 0)
+            return false;
+        mHoverText.mpObject = 0;
+        return true;
+    }
+    return cCreatureModeInputStrategy::HandleMessage(nMessage, pEvent);
+}
 
 // @ 0x0107c0b0
 cWalkAroundInputStrategy_s0107_b260::cWalkAroundInputStrategy_s0107_b260()
@@ -520,4 +595,33 @@ void cWalkAroundInputStrategy_s0107_c4b0::Init()
     GetDispatcher()->Apply(&vec, 1);
     if (vec.b && ((int*)vec.b)[-1] != 0) operator delete[](vec.b);
     if (b.field && b.field[-1] != 0) operator delete[](b.field);
+}
+
+// @ 0x0107d6a0
+void cWalkAroundInputStrategy_s0107_d6a0::Shutdown()
+{
+    if (mHandlerId != 0) {
+        int id = mHandlerId;
+        mHandlerId = 0;
+        EA_Messaging_RemoveHandler(id, mHandlerArg0, mHandlerArg1, mHandlerArg2, mHandlerArg3);
+    }
+    cInputList* l = &mHooks;
+    ((void(__thiscall*)(cInputList*, int))FUN_00b1b830)(l, l->mSize);
+    l->mpRight = &l->mpLeft;
+    l->mSize = 0;
+    l->mFlag = false;
+    l->m14 = 0;
+    l->mpLeft = &l->mpLeft;
+    l = &mHandlers;
+    ((void(__thiscall*)(cInputList*, int))FUN_00e4b990)(l, l->mSize);
+    l->mpRight = &l->mpLeft;
+    l->mSize = 0;
+    l->mFlag = false;
+    l->m14 = 0;
+    l->mpLeft = &l->mpLeft;
+    void* obj = mObject;
+    if (obj != 0) {
+        mObject = 0;
+        ((void(__thiscall*)(void*))VFN(obj, 4))(obj);
+    }
 }

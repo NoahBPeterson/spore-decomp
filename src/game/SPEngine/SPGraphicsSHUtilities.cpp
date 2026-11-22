@@ -23,13 +23,27 @@ extern char  kBasisTriples3, kBasisTriples4, kBasisTriples5;
 static inline float shSqrt(const float* p) { return _mm_cvtss_f32(_mm_sqrt_ss(_mm_load_ss(p))); }
 
 // ---- items of slice s00783590 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern float kSH_Y_00, kSH_Y_1x;
-extern float kSH_Y_2_2, kSH_Y_2_1, kSH_Y_20, kSH_Y_21, kSH_Y_22;
-extern float kSH_Y_3_3, kSH_Y_3_2, kSH_Y_3_1, kSH_Y_30, kSH_Y_31, kSH_Y_32, kSH_Y_33;
-extern float kSH_Y_4_4, kSH_Y_4_3, kSH_Y_4_2, kSH_Y_4_1, kSH_Y_40, kSH_Y_41, kSH_Y_42, kSH_Y_43, kSH_Y_44;
-extern float g_153ae10;
-extern char  kBasisTriples3, kBasisTriples4, kBasisTriples5;
+static inline float isqrt(const float* p) { return _mm_cvtss_f32(_mm_sqrt_ss(_mm_load_ss(p))); }
 void SP_MultiplySH(int n, int a, int b, void* out, char* triples);
+float FUN_00783130(float theta, unsigned m, float phi, float extra);
+static inline const float* shp(const void* base, int idx) { return (const float*)((const char*)base + idx * 16); }
+static inline float* shm(void* base, int idx) { return (float*)((char*)base + idx * 16); }
+struct SHTriple { signed char i, j, k; float w; };
+static inline void shAddDiagonal(float* po, const char* pa, const char* pb, int acc, int i, int j, float wt)
+{
+    __m128 v = _mm_mul_ps(_mm_set1_ps(wt), _mm_load_ps(shp(pa, i)));
+    v = _mm_mul_ps(v, _mm_load_ps(shp(pb, j)));
+    v = _mm_add_ps(v, _mm_load_ps(shm(po, acc)));
+    _mm_store_ps(shm(po, acc), v);
+}
+static inline void shAddCross(float* po, const char* pa, const char* pb, int acc, int i, int j, float wt)
+{
+    __m128 v = _mm_mul_ps(_mm_load_ps(shp(pb, i)), _mm_load_ps(shp(pa, j)));
+    v = _mm_add_ps(v, _mm_mul_ps(_mm_load_ps(shp(pa, i)), _mm_load_ps(shp(pb, j))));
+    v = _mm_mul_ps(v, _mm_set1_ps(wt));
+    v = _mm_add_ps(v, _mm_load_ps(shm(po, acc)));
+    _mm_store_ps(shm(po, acc), v);
+}
 // ---- items of slice s00783590 end
 
 // ---- items of slice s00784420 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -338,7 +352,7 @@ void RemoveNormalizationConstants(int order, float* v)
 #undef MUL4
 }
 
-// @ 0x00783b20 -- eax holds the end of the degree-6+ tail run (or the accumulator start)
+// @ 0x00783b20
 float* ApplyDiffuseReflection(int order, const float* lit, const float* diff, float* out)
 {
     // The original works four lanes at a time: every band factor is a packed
@@ -400,33 +414,6 @@ void MirrorSHInZ(int n, float* data)
     }
 }
 
-// Shared helpers for the sparse SH product-table multiply below.  One SH projection
-// group (four coefficients) lives at base + index * 16 bytes.
-static inline const float* shp(const void* base, int idx) { return (const float*)((const char*)base + idx * 16); }
-static inline float* shm(void* base, int idx) { return (float*)((char*)base + idx * 16); }
-
-// One entry of the sparse SH product table: basis indices i, j, k plus the weight.
-struct SHTriple { signed char i, j, k; float w; };
-
-// out[acc] += a[i] * b[j] * w  (the two factors share one basis function only when i == j)
-static inline void shAddDiagonal(float* po, const char* pa, const char* pb, int acc, int i, int j, float wt)
-{
-    __m128 v = _mm_mul_ps(_mm_set1_ps(wt), _mm_load_ps(shp(pa, i)));
-    v = _mm_mul_ps(v, _mm_load_ps(shp(pb, j)));
-    v = _mm_add_ps(v, _mm_load_ps(shm(po, acc)));
-    _mm_store_ps(shm(po, acc), v);
-}
-
-// out[acc] += (b[i] * a[j] + a[i] * b[j]) * w
-static inline void shAddCross(float* po, const char* pa, const char* pb, int acc, int i, int j, float wt)
-{
-    __m128 v = _mm_mul_ps(_mm_load_ps(shp(pb, i)), _mm_load_ps(shp(pa, j)));
-    v = _mm_add_ps(v, _mm_mul_ps(_mm_load_ps(shp(pa, i)), _mm_load_ps(shp(pb, j))));
-    v = _mm_mul_ps(v, _mm_set1_ps(wt));
-    v = _mm_add_ps(v, _mm_load_ps(shm(po, acc)));
-    _mm_store_ps(shm(po, acc), v);
-}
-
 // @ 0x00783cf0
 void SP_MultiplySH(int count, int a, int b, void* out, char* triples)
 {
@@ -463,31 +450,55 @@ void FUN_00783f40(int order, int a, int b, void* out)
 }
 
 // @ 0x00783fb0
-namespace SP {
-void FindSHCoeffsFromHemiEnvMap(cImageData32 const * env, int order, rw::math::vpu::Vector4 * out)
+void FindSHCoeffsFromHemiEnvMap(int env, int order, float* out)
 {
-    int env_v = (int)env;
-    int w = *(int*)(env_v + 0x1c);
-    int h = *(int*)(env_v + 0x20);
-    float scale = (g_153ae10 * 2.0f) / (float)w;
+    const int w = *(const int*)(env + 0x1c);
+    const int h = *(const int*)(env + 0x20);
+    const unsigned char* row = (const unsigned char*)(*(const int*)(env + 0x28));
+    const float wf = (float)w;
+    const float hf = (float)h;
+    const float scale = (g_153ae10 * 2.0f) / wf;
+    const float scale2 = scale * scale;
     for (int y = 0; y < h; ++y) {
-        float ny = 1.0f - ((float)y + 0.5f + (float)y + 0.5f) / (float)h;
+        const float ny = (float)(1.0 - 2.0 * ((double)y + 0.5) / hf);
+        const float ny2 = ny * ny;
         for (int x = 0; x < w; ++x) {
-            float nx = ((float)x + 0.5f + (float)x + 0.5f) / (float)w - 1.0f;
-            float r2 = nx * nx + ny * ny;
-            if (r2 <= 1.0f) {
-                // omitted: texture sample, Legendre evaluation and 4-channel accumulate
-                (void)scale;
-                (void)order;
-                (void)out;
+            const unsigned char* tex = row + x * 4;
+            const float nx = (float)(2.0 * ((double)x + 0.5) / wf - 1.0);
+            const float r2 = nx * nx + ny2;
+            if (r2 > 1.0f)
+                continue;
+            const float pr = sqrtf(r2) * g_153ae10;
+            const float ang = atan2f(ny, nx);
+            const float sp = sinf(pr);
+            const float q = sp / pr;
+            const float sinc = q * scale2;
+            const float phi = atan2f(-cosf(pr), cosf(ang) * sp);
+            const float acosv = acosf(sinf(ang) * sp);
+            const float ch0 = (float)tex[0] * (1.0f / 255.0f);
+            const float ch1 = (float)tex[1] * (1.0f / 255.0f);
+            const float ch2 = (float)tex[2] * (1.0f / 255.0f);
+            const float ch3 = (float)tex[3] * (1.0f / 255.0f);
+            int l = 0;
+            float* o = out;
+            for (int m = 0; m < order; ++m) {
+                if ((float)m >= (float)(l + 1) * (float)(l + 1))
+                    ++l;
+                union { int i; float f; } tb;   // the original passes l's bit pattern as a float
+                tb.i = l;
+                float g = FUN_00783130(tb.f, (unsigned)(m - l * (l + 1)), acosv, phi) * sinc;
+                o[0] += ch2 * g;
+                o[1] += ch1 * g;
+                o[2] += ch0 * g;
+                o[3] += ch3 * g;
+                o += 4;
             }
         }
+        row += w * 4;
     }
 }
-}  // namespace SP
 
-// @ 0x00784330 -- returns the end of the written range (original leaves it in eax;
-// with an empty range eax is still the source pointer it loaded the seed qword from)
+// @ 0x00784330
 float* CalcHGPhaseZH(float a, const float* src, int order, float* dst)
 {
     float* p = (float*)src;
@@ -498,7 +509,7 @@ float* CalcHGPhaseZH(float a, const float* src, int order, float* dst)
         int i = 1;
         do {
             float t = (float)((double)i * g_153ae10 * 4.0f);
-            __m128 scale = _mm_set1_ps(shSqrt(&t));
+            __m128 scale = _mm_set1_ps(isqrt(&t));
             _mm_store_ps(p, _mm_mul_ps(scale, x));
             x = _mm_mul_ps(br, x);
             p += 4;
@@ -510,8 +521,7 @@ float* CalcHGPhaseZH(float a, const float* src, int order, float* dst)
     return (float*)src;
 }
 
-// @ 0x007843a0 -- additive variant, returns the end of the written range (eax keeps the
-// source pointer when the range is empty, as in the non-additive variant)
+// @ 0x007843a0
 float* CalcHGPhaseZHAdd(float a, const float* src, int order, float* dst)
 {
     float* p = (float*)src;
@@ -522,7 +532,7 @@ float* CalcHGPhaseZHAdd(float a, const float* src, int order, float* dst)
         int i = 1;
         do {
             float t = (float)((double)i * g_153ae10 * 4.0f);
-            __m128 scale = _mm_set1_ps(shSqrt(&t));
+            __m128 scale = _mm_set1_ps(isqrt(&t));
             _mm_store_ps(p, _mm_add_ps(_mm_mul_ps(scale, x), _mm_load_ps(p)));
             x = _mm_mul_ps(br, x);
             p += 4;

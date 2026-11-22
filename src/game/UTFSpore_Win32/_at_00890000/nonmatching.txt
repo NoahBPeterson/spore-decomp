@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00897620 13 ValueFlagPair::Assign complete: clear the paired flag, then store a non-null value. Not byte-exact: the original materialises the zero in edx (xor edx,edx / mov [ecx+4],edx / cmp eax,edx) whereas cl stores an immediate and tests (mov [ecx+4],0 / test eax,eax); size 20 vs 18. equiv PASS (400 valid, 100% coverage).

@@ -1,1 +1,3 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+# va  diff-bytes  reason
+0062cc20 192 FUN_0062cc20 (PlayModeCreature::SetTarget): complete; thiscall with 2 stack args (ret 8); mData->SetTargetPosition(p,0,1), early-out when the point equals mData->mActualPosition, fwd = -kFwd through the 0x13eb8b0 sign mask, dir = p - pos, angle = -SignedDot(dir,fwd,kUp) (0x69b760), mData->SetTargetAngle(angle,0) (0x59b2f0); equiv PASS 1200 valid / 100% cov at --inputs 1200 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062d0f0 1353 cSPPlayMode_Creature walk/dodge controller (PlayModeCreature::MoveTo, names Claude-coined): complete; 26/26 call sites in original order, size 1.0x; frame 0x48 vs 0x40 (original reuses dead argument home slots as spill slots); difftest WEAK (242 valid, no mismatch) and x87/SSE scheduling differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -382,7 +382,49 @@ void  freebytes(void* p, int n);                                         // 0xa4
 namespace EA {
 namespace Audio {
 namespace Eapd {
-void   pipe_tick(void* x);                                               // 0xa5ff10
+void   pipe_tick(char* x);                                               // 0xa5ff10
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void*  getbytes(int n, const char* tag);                                 // 0xa49610
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void   pd_free(void* p);                                                 // 0xa493d0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void*  symbolinlet_new(void* owner, void* dest);                         // 0xa49ab0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+bool   class_addlist(t_class* c, void* fn);                              // 0xa47f70
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+extern t_symbol  gSymbolSymbol;             // 0x1675894
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+extern t_class*  spPipeClass;              // 0x16757fc
 }
 }
 }
@@ -415,9 +457,6 @@ bool timer_setup();                                                      // 0xa5
 }
 }
 // ---- items of slice s00a5fff0 end
-
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-namespace EA { namespace Audio { namespace Eapd { bool pipe_setup(); }}}  // 0x00a60390 (stays in the slice: not this object's)
 
 // @ 0x00a5efd0
 namespace EA { namespace Audio { namespace Eapd {
@@ -941,7 +980,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void pipe_flush(void* x)
 {
     while (*(int*)((char*)x + 0x48) != 0)
-        pipe_tick(x);
+        pipe_tick((char*)x);
     clock_unset(*(void**)((char*)x + 0x50));
 }
 }}}  // namespace EA::Audio::Eapd
@@ -993,6 +1032,118 @@ void pipe_free(char* x)
     }
     if (*(void**)(x + 0x50) != 0)
         clock_free(*(void**)(x + 0x50));
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a60130
+namespace EA { namespace Audio { namespace Eapd {
+void* pipe_new(void* a, void* b, int argc, t_atom* argv)
+{
+    float v1 = 0.0f;
+    int   n  = argc;
+    int   m;
+
+    if (n != 0 && argv[n - 1].a_type == 1) {
+        v1 = argv[n - 1].a_w.w_float;
+        n--;
+    }
+    if (n != 0 && argv[n - 1].a_type == 1) {
+        m = (int)argv[n - 1].a_w.w_float;
+        n--;
+    } else {
+        m = (int)(v1 * 0.1f);
+    }
+    if (m < 1)
+        m = 100;
+
+    t_atom local;
+    if (n == 0) {
+        argv = &local;
+        n    = 1;
+        local.a_type      = 1;
+        local.a_w.w_float = 0.0f;
+    }
+
+    char*  pipe  = (char*)pd_new(spPipeClass);
+    char*  out   = (char*)getbytes(n << 4, "EAPd/t_pipeout");
+    int    recsz = n * 0xc + 8;
+    char*  hang  = (char*)getbytes(recsz * m, "EAPd/t_hang");
+    void*  clock = clock_new(pipe, (void*)pipe_tick);
+
+    if (pipe == 0)
+        return pipe;
+    if (out == 0 || hang == 0 || clock == 0) {
+        pd_free(pipe);
+        return pipe;
+    }
+
+    *(int*)(pipe + 0x28)   = n;
+    *(int*)(pipe + 0x2c)   = m;
+    *(float*)(pipe + 0x30) = v1;
+    *(char**)(pipe + 0x40) = out;
+    *(char**)(pipe + 0x44) = hang;
+    *(void**)(pipe + 0x48) = 0;
+    *(char**)(pipe + 0x4c) = hang;
+    *(void**)(pipe + 0x50) = clock;
+
+    for (int i = 0; i < n; i++) {
+        char*   rec = out + i * 0x10;
+        t_atom* at  = argv + i;
+
+        if (at->a_type == 2) {
+            t_symbol  tmp;
+            t_symbol* fs = gensym(&tmp, "f");
+            if (at->a_w.w_symbol.mHash == fs->mHash) {
+                at->a_type      = 1;
+                at->a_w.w_float = 0.0f;
+            } else {
+                *(void**)(rec + 0xc) = outlet_new(pipe, gSymbolSymbol);
+                if (i != 0)
+                    symbolinlet_new(pipe, rec + 4);
+            }
+        }
+        if (at->a_type == 1) {
+            *(void**)(rec + 0xc) = outlet_new(pipe, gFloatSymbol);
+            if (i != 0)
+                floatinlet_new(pipe, rec + 4);
+        }
+        *(int*)(rec + 0) = at->a_type;
+        *(int*)(rec + 4) = *(int*)((char*)at + 4);
+        *(int*)(rec + 8) = *(int*)((char*)at + 8);
+    }
+
+    floatinlet_new(pipe, pipe + 0x30);
+
+    char* p = *(char**)(pipe + 0x4c);
+    char* e = (char*)((m - 1) * recsz + (int)p);
+    while (p < e) {
+        *(char**)p = p + recsz;
+        p += recsz;
+    }
+    *(void**)e = 0;
+
+    return pipe;
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a60390
+namespace EA { namespace Audio { namespace Eapd {
+bool pipe_setup()
+{
+    t_symbol  s;
+    t_symbol* sym;
+
+    sym = gensym(&s, "pipe");
+    spPipeClass = class_new7(*sym, (void*)pipe_new, (void*)pipe_free, 0x58, 0, 9, 0);
+    bool ok = spPipeClass != 0;
+    ok &= class_addlist(spPipeClass, (void*)pipe_list);
+    sym = gensym(&s, "flush");
+    ok &= class_addmethod1(spPipeClass, (void*)pipe_flush, *sym, 0);
+    sym = gensym(&s, "clear");
+    ok &= class_addmethod1(spPipeClass, (void*)pipe_clear, *sym, 0);
+    sym = gensym(&s, "pause");
+    ok &= class_addmethod2(spPipeClass, (void*)pipe_pause, *sym, 1, 0);
+    return ok;
 }
 }}}  // namespace EA::Audio::Eapd
 

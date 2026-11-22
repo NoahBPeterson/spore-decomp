@@ -1,3 +1,5 @@
 # source  symbol  va  flags
-../src/game/SPGonzago/SPGameTimeManager.cpp  ?PushMatrix@cInterfaceState@@QAEXPBUcSPVector3@@@Z  00ddfb50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameTimeManager.cpp  ?ClearPauseGates@cGameTimeManager@@QAEXXZ  00b32110  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameTimeManager.cpp  ?IncPauseGate@cGameTimeManager@@QAEHI@Z  00b32220  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameTimeManager.cpp  ?init@cCameraCtl@@QAEXPAXPBV?$Vector3Template@M$0A@@fpu@math@rw@@@Z  00dde2b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameTimeManager.cpp  ?PushMatrix@cInterfaceState@@QAEXPBUcSPVector3@@@Z  00ddfb50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

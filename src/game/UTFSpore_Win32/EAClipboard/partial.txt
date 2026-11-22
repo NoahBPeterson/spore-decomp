@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-0092adb0  0  Win32Clipboard::WindowProcedure: only the GetClipboardData(CF_UNICODETEXT) read path is written; the message-pump/window-proc arms (WM_*) are omitted.
+0092adb0  0  Win32Clipboard::WindowProcedure: only the GetClipboardData(CF_UNICODETEXT) read path is written; the message-pump/window-proc arms (WM_*) are omitted. Retail is 505 bytes, ours 208 (the slice chunk spans two functions; FUN_0092ae80 is the hidden WndProc).

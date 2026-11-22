@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 00643a40 15 map<uint,uint>::operator[]: complete; only the placement of kv[1]=0 store differs
+00b31fa0 198 complete; old pause bits kept in a stack slot in original, bitset byte ops flags: /O2 /MD /Gy /TP /arch:SSE /GS-
+00b32190 100 complete; push_back temp slots (two locals) and gate field store order flags: /O2 /MD /Gy /TP /arch:SSE /GS-

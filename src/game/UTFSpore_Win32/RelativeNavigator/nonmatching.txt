@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00980760  828 Navigator::Navigate: complete; 7-mode iterator walk recovered from the disassembly (begin/end/set-iterator helper calls, node->object offset g_1440aec, wrap-around modes 2/3); equiv UNSUPPORTED (0/400 valid: fake-arity=297, fault(read)=102, fault=1) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00980b70  25  BasicFactory_RelativeNavigator::CreateInstance: complete; original keeps the dead base-vptr store to +0x18 (async vtable overwritten later) that our compiler DSEs; difftest PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

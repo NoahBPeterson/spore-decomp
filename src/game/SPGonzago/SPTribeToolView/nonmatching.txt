@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00e939c0 344 SP::cBabySackView::HandleSimulationUpdate: complete - every path and helper/virtual call of the original reproduced (438 vs 441 B, register allocation); equiv UNSUPPORTED: 0/400 inputs valid (harness cannot synthesise the object/vtables)
+00e939c0 344 SP::cBabySackView::HandleSimulationUpdate: complete - every path and helper/virtual call of the original reproduced (438 vs 441 B, register allocation); equiv UNSUPPORTED: 0/400 inputs valid (harness cannot synthesise the object/vtables) flags: /O2 /MD /Gy /TP /arch:SSE

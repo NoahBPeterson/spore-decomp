@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPPlanetaryArtifactView.cpp  ??0cPlanetaryArtifact@SP@@QAE@XZ  00e90d80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081d0f0  644  Gradient Draw: stack frame layout (volatile ctx slot) and heavy instruction scheduling differ  [equiv WEAK: 175 valid, 37% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSpaceTradeRouteManager.cpp -- migrated from slice(s) s010377f0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSpaceTradeRouteManager.cpp -- migrated from slice(s) s013a55c0, s010393a0, s010377f0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceTradeRouteManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -13,6 +13,17 @@ extern "C" char g_1499a30[];
 #include "SP/cTerrainSphere.h"
 #include "SP/cTradeRouteData.h"
 #include "SP/cVarListSerializer.h"
+#include "EA/ResourceMan/Key.h"
+#include "SP/cEmpire.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cGonzagoTimer.h"
+#include "SP/cPlanetRecord.h"
+#include "SP/cPropertyManager.h"
+#include "SP/cSPSpaceEconomyTuning.h"
+#include "SP/cSPSpaceInventoryItem.h"
+#include "SP/cStarRecord.h"
+#include <math.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float gCityRadius;               // 0x015b7d08
@@ -177,6 +188,123 @@ public:
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern cSerializerList gTradeRouteSerializerList;       // 0x015b7dc0
 extern cSerializerList gRouteManagerSerializerList;     // 0x015b7fe0
+
+// ---- items of slice s010393a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define VSLOT(n) virtual void _v##n();
+struct Vector3 {
+    float x, y, z;
+};
+struct IMessageServer {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4)
+    virtual void SendMSG(uint32_t id, void* msg, void* target);              // +0x14
+    VSLOT(6) VSLOT(7) VSLOT(8)
+    virtual void AddHandler(void* pHandler, uint32_t msgID);                 // +0x24
+};
+IMessageServer* MessageServer();                                             // 0x0067dcc0
+struct IRefSlot { VSLOT(0) virtual int Release(); };
+struct MessageBase0 { virtual ~MessageBase0() {} };
+struct MessageBase1 : MessageBase0 {
+    volatile long mnRefCount;
+    MessageBase1() { _InterlockedExchange((long*)&mnRefCount, 0); }
+};
+struct TradeMessage : MessageBase1 {
+    struct Slot { IRefSlot* p; uint32_t pad; } mSlots[5];
+    uint32_t mMessageID;                                                     // +0x30
+    uint32_t pad34;
+    uint32_t mRefMask;                                                       // +0x38
+    TradeMessage(uint32_t id) { mMessageID = id; mRefMask = 0; }
+    ~TradeMessage()
+    {
+        for (int i = 0; i < 32; ++i)
+            if ((mRefMask & (1u << i)) && mSlots[i].p)
+                mSlots[i].p->Release();
+    }
+    void SetValue(int i, uint32_t v) { *(uint32_t*)&mSlots[i].p = v; }
+};
+struct cSpatialEntity {
+    const Vector3& GetPosition();                                            // 0x005c65e0
+};
+struct cStarRecord_s0103_93a0 : cSpatialEntity {
+    uint32_t pad00[0x70 / 4];
+    uint32_t mKey;                                                           // +0x70
+};
+namespace SP {
+cSpatialEntity* GetActivePlanet();                                           // 0x01021230
+}
+struct cTradeRouteData_s0103_93a0 {
+    virtual ~cTradeRouteData_s0103_93a0() {}
+    virtual bool Write(void* stream);  // 0x01037ae0 (cTradeRouteData::Write)
+    virtual bool Read(void* stream);  // 0x01037b50 (cTradeRouteData::Read)
+
+    uint32_t mPoliticalID1;                                                  // +0x04
+    uint32_t mPoliticalID2;                                                  // +0x08
+    uint32_t mStarID1;                                                       // +0x0c
+    uint32_t mStarID2;                                                       // +0x10
+    float mTradeRouteProgress;                                               // +0x14
+    bool mInDetectableRange;                                                 // +0x18
+    uint32_t mTimeSinceLastUFOMS;                                            // +0x1c
+    uint32_t mTimeSinceLastSimMS;                                            // +0x20
+    float mRouteLength;                                                      // +0x24
+    int mLastMerchantVoyage;                                                 // +0x28
+};
+struct TradeKey { uint32_t first, second; };
+namespace eastl {
+struct rbtree_node_base_s0103_93a0 {
+    rbtree_node_base_s0103_93a0* mpNodeRight;
+    rbtree_node_base_s0103_93a0* mpNodeLeft;
+    rbtree_node_base_s0103_93a0* mpNodeParent;
+    char mColor;
+};
+}
+struct TradeRouteNode : eastl::rbtree_node_base_s0103_93a0 {
+    TradeKey mKey;                                                           // +0x10
+    cTradeRouteData_s0103_93a0 mValue;                                                  // +0x18
+};
+struct TradeRouteMap {
+    uint32_t mCompare;                                                       // +0x04
+    eastl::rbtree_node_base_s0103_93a0 mAnchor;                                         // +0x08
+    uint32_t mnSize;                                                         // +0x18
+    uint32_t mAllocator;                                                     // +0x1c
+
+    TradeRouteNode* end() { return (TradeRouteNode*)&mAnchor; }
+    void Find(TradeRouteNode** pOut, const TradeKey& key);                   // 0x00d00f80
+    TradeRouteNode* Insert(const TradeKey& key);                             // 0x010392f0
+};
+struct cSpaceTradeRouteManager_s0103_93a0 {
+    virtual ~cSpaceTradeRouteManager_s0103_93a0();
+    TradeRouteMap mTradeRoutes;                                              // +0x04
+    uint32_t mLastStarID;                                                    // +0x20
+
+    void UpdateRouteLength(cTradeRouteData_s0103_93a0* route, Vector3 pos);             // 0x01037c30
+    void AddTradeRoute(cStarRecord_s0103_93a0* pStar1, uint32_t politicalID1,
+                       cStarRecord_s0103_93a0* pStar2, uint32_t politicalID2);
+};
+// ---- items of slice s010393a0 end
+
+// ---- items of slice s013a55c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct AttrRec {
+    const char* mpName;              // +0x00
+    void*       mpField;             // +0x04
+    int32_t     mFieldOfs;           // +0x08
+    int32_t     mUnk0c;              // +0x0c  (left indeterminate, as in the original)
+    int32_t     mUnk10;              // +0x10
+    int32_t     mUnk14;              // +0x14
+    int32_t     mZero18;             // +0x18
+    int32_t     mZero1c;             // +0x1c
+    void*       mpFn20;              // +0x20
+    void*       mpFn24;              // +0x24
+    void*       mpFn28;              // +0x28
+    void*       mpFn2c;              // +0x2c
+    void*       mpFn30;              // +0x30
+    void*       mpFn34;              // +0x34
+    void*       mpFn38;              // +0x38
+};
+char g_55271b4;  char g_55271ba;  char g_55271c0;  char g_55271c4;
+char g_5540e28;  char g_5540e44;  char g_55271c7;  char g_55555c7;
+char g_692ca0;   char g_572810;   char g_572840;   char g_693090;
+char g_694f00;   char g_b1fbf0;   char g_675ca0;   char g_ac88f0;
+AttrRec g_t15b7dc0[8];
+// ---- items of slice s013a55c0 end
 
 // @ 0x01037a60
 cTradeRoutePair::cTradeRoutePair(const cTradeRoutePair& src)
@@ -554,4 +682,178 @@ bool cSpaceTradeRouteManager::RemoveAllTradeRoutesFromSystem(void* pSystem)
         }
     }
     return bRemoved;
+}
+
+// @ 0x010393a0
+void cSpaceTradeRouteManager_s0103_93a0::AddTradeRoute(cStarRecord_s0103_93a0* pStar1, uint32_t politicalID1, cStarRecord_s0103_93a0* pStar2, uint32_t politicalID2)
+{
+    uint32_t star1 = pStar1->mKey;
+    uint32_t star2 = pStar2->mKey;
+    uint32_t keyStar1 = star1;
+    uint32_t keyStar2 = star2;
+    if (keyStar1 > keyStar2) {
+        uint32_t swap = keyStar1;
+        keyStar1 = keyStar2;
+        keyStar2 = swap;
+    }
+    TradeKey key;
+    key.first = keyStar1;
+    key.second = keyStar2;
+    TradeRouteNode* pFound;
+    mTradeRoutes.Find(&pFound, key);
+    if (pFound != mTradeRoutes.end())
+        return;
+    if (star1 > star2) {
+        uint32_t swap = star1;
+        star1 = star2;
+        star2 = swap;
+        swap = politicalID1;
+        politicalID1 = politicalID2;
+        politicalID2 = swap;
+    }
+    TradeRouteNode* pNode = mTradeRoutes.Insert(key);
+    cTradeRouteData_s0103_93a0* pRoute = &pNode->mValue;
+    pRoute->mPoliticalID1 = politicalID1;
+    pRoute->mStarID1 = star1;
+    pRoute->mStarID2 = star2;
+    pRoute->mPoliticalID2 = politicalID2;
+    pRoute->mTradeRouteProgress = 0.0f;
+    pRoute->mTimeSinceLastUFOMS = 0;
+    pRoute->mTimeSinceLastSimMS = 0;
+
+    const Vector3& pos2 = pStar2->GetPosition();
+    const Vector3& pos1 = pStar1->GetPosition();
+    float dx = pos1.x - pos2.x;
+    float dy = pos1.y - pos2.y;
+    float dz = pos1.z - pos2.z;
+    pRoute->mRouteLength = sqrtf(dx * dx + (dy * dy + dz * dz));
+
+    Vector3 activePos = SP::GetActivePlanet()->GetPosition();
+    UpdateRouteLength(pRoute, activePos);
+
+    TradeMessage msg(0xf46092d1);
+    msg.SetValue(0, star1);
+    msg.SetValue(1, star2);
+    msg.SetValue(2, politicalID1);
+    msg.SetValue(3, politicalID2);
+    MessageServer()->SendMSG(msg.mMessageID, &msg, 0);
+}
+
+// @ 0x013a5c20
+void FUN_013a5c20(void)
+{
+    extern char g_55271b4; extern char g_55271ba; extern char g_55271c0; extern char g_55271c4; extern char g_55271c7; extern char g_5540e28; extern char g_5540e44; extern char g_55555c7; extern char g_572810; extern char g_572840; extern char g_675ca0; extern char g_692ca0; extern char g_693090; extern char g_6930b0; extern char g_694f00; extern char g_694fc0; extern char g_ac88f0; extern char g_acbb80; extern char g_b1fbf0;
+    AttrRec rec;
+
+    rec.mpName     = "mPoliticalID1";
+    rec.mpField    = (void*)&g_55271b4;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_572840;
+    rec.mpFn2c     = (void*)&g_693090;
+    rec.mpFn30     = (void*)&g_694f00;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_675ca0;
+    rec.mFieldOfs  = 4;
+    g_t15b7dc0[0] = rec;
+
+    rec.mpName     = "mPoliticalID2";
+    rec.mpField    = (void*)&g_55271ba;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_572840;
+    rec.mpFn2c     = (void*)&g_693090;
+    rec.mpFn30     = (void*)&g_694f00;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_675ca0;
+    rec.mFieldOfs  = 8;
+    g_t15b7dc0[1] = rec;
+
+    rec.mpName     = "mStarID1";
+    rec.mpField    = (void*)&g_55271c0;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_572840;
+    rec.mpFn2c     = (void*)&g_693090;
+    rec.mpFn30     = (void*)&g_694f00;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_675ca0;
+    rec.mFieldOfs  = 0xc;
+    g_t15b7dc0[2] = rec;
+
+    rec.mpName     = "mStarID2";
+    rec.mpField    = (void*)&g_55271c4;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_572840;
+    rec.mpFn2c     = (void*)&g_693090;
+    rec.mpFn30     = (void*)&g_694f00;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_675ca0;
+    rec.mFieldOfs  = 0x10;
+    g_t15b7dc0[3] = rec;
+
+    rec.mpName     = "mTimeSinceLastUFOMS";
+    rec.mpField    = (void*)&g_5540e28;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_572840;
+    rec.mpFn2c     = (void*)&g_693090;
+    rec.mpFn30     = (void*)&g_694f00;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_675ca0;
+    rec.mFieldOfs  = 0x1c;
+    g_t15b7dc0[4] = rec;
+
+    rec.mpName     = "mTimeSinceLastSimMS";
+    rec.mpField    = (void*)&g_5540e44;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_572840;
+    rec.mpFn2c     = (void*)&g_693090;
+    rec.mpFn30     = (void*)&g_694f00;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_675ca0;
+    rec.mFieldOfs  = 0x20;
+    g_t15b7dc0[5] = rec;
+
+    rec.mpName     = "mTradeRouteProgress";
+    rec.mpField    = (void*)&g_55271c7;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_ac88f0;
+    rec.mpFn2c     = (void*)&g_6930b0;
+    rec.mpFn30     = (void*)&g_694fc0;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_acbb80;
+    rec.mFieldOfs  = 0x14;
+    g_t15b7dc0[6] = rec;
+
+    rec.mpName     = "mRouteLength";
+    rec.mpField    = (void*)&g_55555c7;
+    rec.mZero18    = 0;
+    rec.mZero1c    = 0;
+    rec.mpFn20     = (void*)&g_692ca0;
+    rec.mpFn24     = (void*)&g_572810;
+    rec.mpFn28     = (void*)&g_ac88f0;
+    rec.mpFn2c     = (void*)&g_6930b0;
+    rec.mpFn30     = (void*)&g_694fc0;
+    rec.mpFn34     = (void*)&g_b1fbf0;
+    rec.mpFn38     = (void*)&g_acbb80;
+    rec.mFieldOfs  = 0x24;
+    g_t15b7dc0[7] = rec;
 }

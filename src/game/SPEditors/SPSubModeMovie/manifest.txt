@@ -53,3 +53,5 @@
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?SendPublicAuth@Movie@@QAEXXZ  00f05c40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?LoginToYouTube@cSPPlayModeSubModeMovie@SP@@QAEXXZ  00f05d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?BuildYtFeed@@YGXPAUEaStr@@@Z  00f05dc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ShowUploadProgressDialog@cSPPlayModeSubModeMovie_s00f0_5ee0@SP@@QAEXXZ  00f065d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ShowSendVideoURLDialog@cSPPlayModeSubModeMovie_s00f0_5ee0@SP@@QAEXXZ  00f06660  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

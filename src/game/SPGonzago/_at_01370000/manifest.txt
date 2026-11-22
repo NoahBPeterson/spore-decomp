@@ -6,6 +6,9 @@
 ../src/game/SPGonzago/_at_01370000.cpp  ?InitLineColorBottom@@YAXXZ  01373120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01370000.cpp  ?InitLineColorDropShadow@@YAXXZ  013731b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01370000.cpp  ?InitLineColorBorder@@YAXXZ  01373220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?InitObject@@YAXXZ  0137e810  /vc71 /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ea70@@YAXXZ  0137ea70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ea90@@YAXXZ  0137ea90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ec20@@YAXXZ  0137ec20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ec40@@YAXXZ  0137ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ec60@@YAXXZ  0137ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

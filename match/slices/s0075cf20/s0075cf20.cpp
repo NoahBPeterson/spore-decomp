@@ -224,6 +224,7 @@ float ScreenAspectRatio(float param_1)
 }
 
 // ---------------------------------------------------------------- cRenderer
+extern const unsigned int kTimeoutNone;   // @ 0x140dca0 (EA::Thread::kTimeoutNone, 0xffffffff)
 namespace EA { namespace Thread { struct Mutex { void Lock(const void*); void Unlock(); char pad[0x28]; }; } }
 struct cRenderer {
     char pad00[0x10];       // +0x00
@@ -244,7 +245,7 @@ struct cRenderer {
 // @ 0x0075daa0
 void cRenderer::SetViewer(int idx, void* viewer)
 {
-    mMutex.Lock((const void*)0x140dca0);
+    mMutex.Lock(&kTimeoutNone);
     mViewers[idx] = viewer;
     mMutex.Unlock();
 }
@@ -252,7 +253,7 @@ void cRenderer::SetViewer(int idx, void* viewer)
 // @ 0x0075dad0
 void* cRenderer::GetRenderStats(int idx)
 {
-    mMutex.Lock((const void*)(int*)0x140dca0);
+    mMutex.Lock(&kTimeoutNone);
     void* r = mViewers[idx];
     mMutex.Unlock();
     return r;
@@ -269,7 +270,7 @@ void __stdcall GetDisplayName(int param_1)
 void cRenderer::NumLayers(int* out)
 {
     cRenderer* self = this;
-    self->mMutex.Lock((const void*)0x140dca0);
+    self->mMutex.Lock(&kTimeoutNone);
     __movsd((unsigned long*)out, (const unsigned long*)self->mStats, 0xb);
     self->mMutex.Unlock();
 }

@@ -1,10 +1,11 @@
-// src/game/SPEngine/SPGraphicsShadowWorld.cpp -- migrated from slice(s) s00782860, s007819d0, s00780b70, s0077ff30, s0077f020 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsShadowWorld.cpp -- migrated from slice(s) s0077d800, s00782860, s007819d0, s00780b70, s0077ff30, s0077f020 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsShadowWorld.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include <intrin.h>
 #include <math.h>
+#include "sse_helpers.h"
 #include "cSPMatrix4.h"
 #include "SP/cPropertyList.h"
 #include "SP/cRenderConvolutionShadow.h"
@@ -780,6 +781,24 @@ void  __fastcall FUN_00782270(Vec12_s0078_2860* self, int dummy, const Vec12_s00
 void  __fastcall FUN_00782A60(int p, int dummy, const E36_s0078_2860* src);
 void  __fastcall FUN_00782860(int p, int dummy, const E36_s0078_2860* pos, const E36_s0078_2860* value);
 // ---- items of slice s00782860 end
+
+// ---- items of slice s0077d800 begin
+#pragma warning(disable:4035)
+// ---- items of slice s0077d800 end
+
+// @ 0x0077eef0
+float __cdecl FUN_0077eef0(int n, float* arr, float t)
+{
+    if (n == 1)
+        return arr[0];
+    t = (float)(n - 1) * t;
+    int i = SseFloorToInt(t);
+    double r = arr[i];
+    t = t - (float)i;
+    if (t > 0.0f)
+        r = (arr[i + 1] - r) * t + r;
+    return (float)r;
+}
 
 // @ 0x0077f040
 ShadowWorldEditor* __fastcall FUN_0077f040(ShadowWorldEditor* self, void* world, int arg2, unsigned char arg3, int count)

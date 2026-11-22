@@ -16,3 +16,4 @@
 ../src/game/SPEditors/SPEditorVerbIcon.cpp  ?SetLevel@cSPEditorVerbIcon_s005e_2470@SP@@UAEXM@Z  005e2ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorVerbIcon.cpp  ?EndFlashing@cSPEditorVerbIcon_s005e_2470@SP@@QAEXXZ  005e3180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorVerbIcon.cpp  ?Init@cSPEditorVerbIcon_s005e_2470@SP@@QAEXPAVIWindow_s005e_2470@UTFWin@EA@@UKey_s005e_2470@ResourceMan@5@II_NH22@Z  005e31e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?HandleMessage@cSPEditorVerbIcon_s005e_4190@SP@@UAE_NPAVIWindow_s005e_4190@UTFWin@EA@@PAX@Z  005e49c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

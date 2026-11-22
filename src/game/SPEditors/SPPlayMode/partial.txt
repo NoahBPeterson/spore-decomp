@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00629c50  308  FUN_00629c50: skeleton; the creature-structure / FUN_00629bd0 / FUN_009b3c10 tail-distance pass is omitted; Earlier, fuller draft: match/slices/s00629c50/s00629c50.cpp (left behind by the migration); start from it.
 00629de0  948  FUN_00629de0: skeleton; the per-baby animated-creature setup loop is omitted; Earlier, fuller draft: match/slices/s00629c50/s00629c50.cpp (left behind by the migration); start from it.
 0062a230  291  SetBabyPath: partial; the path-target construction (FUN_0062cb20/AddPathTarget) is only sketched

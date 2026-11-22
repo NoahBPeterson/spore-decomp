@@ -113,7 +113,54 @@ void* CreateModelInstance(uint32_t nType, uint32_t nGroup, uint32_t nFlags);
 void LoadModelFile(void* pModel);
 void SetCreatureAttachments(cAnimatingCreature* pCreature, void* pModel);
 void* CreateObject(size_t nSize, const char* pName);
+extern void* gVtableGamePlant;
 // ---- items of slice s00e8d0e0 end
+
+// @ 0x00e8d0e0
+cGamePlantView::cGamePlantView()
+{
+    mpVftable = &gVtableGamePlant;
+    mpAnimated = nullptr;
+
+    mColor.mX = 0.0f;
+    mColor.mY = 1.0f;
+    mColor.mZ = 0.0f;
+
+    mKey.mType = 0xc602cd31;
+    mKey.mInstance = 0;
+    mKey.mGroup = 0x5c4fce4c;
+
+    if (mpAnimated != nullptr) {
+        mpAnimated = nullptr;
+        ReleaseEffect(mpAnimated);
+    }
+    mpObject = nullptr;
+}
+
+// @ 0x00e8d160
+cGamePlantView::~cGamePlantView()
+{
+    mpVftable = &gVtableGamePlant;
+
+    if (mpObject != nullptr) {
+        void* pModel = mpObject->GetComponent(0xaeb336b4);
+        if (pModel != nullptr)
+            SetCreatureAttachments((cAnimatingCreature*)0, nullptr);
+    }
+
+    if (mpAnimated != nullptr) {
+        SetCreatureAttachments(mpAnimated, nullptr);
+        void* pManager = GetEffectManager();
+        ((cDispatchObject*)pManager)->Call(0x3c, (void*)mpAnimated);
+        if (mpAnimated != nullptr) {
+            mpAnimated = nullptr;
+            ReleaseEffect(mpAnimated);
+        }
+    }
+    if (mpAnimated != nullptr)
+        ReleaseEffect(mpAnimated);
+    mpVftable = &gVtableGamePlant;
+}
 
 // @ 0x00e8d1e0
 void cGamePlantView::UpdateEffectScale(cPlant_e8d1e0* pPlant)

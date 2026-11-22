@@ -1,1 +1,3 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGonzagoSimulator.cpp  _FUN_00b5b690  00b5b690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSimulator.cpp  ??0cGonzagoSimulator_s00b5_b540@SP@@QAE@XZ  00b5b6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

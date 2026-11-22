@@ -1,4 +1,4 @@
-// src/game/Spui/SPHints.cpp -- migrated from slice(s) s0067c450, s0067b4c0, s0067a590 by tools/migrate/rewrite.py
+// src/game/Spui/SPHints.cpp -- migrated from slice(s) s0067afd0, s0067c450, s0067b4c0, s0067a590 by tools/migrate/rewrite.py
 // Object file: Spui/SPHints.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -471,6 +471,31 @@ struct cUIHintsThunkTarget {
 };
 // ---- items of slice s0067c450 end
 
+// ---- items of slice s0067afd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct HintConditionVector {
+    unsigned int* mpBegin;
+    unsigned int* mpEnd;
+    unsigned int* mpCapacity;
+    unsigned int mAllocator[2];
+
+    unsigned int size() const { return mpEnd - mpBegin; }
+};
+struct cHint_s0067_afd0 {
+    void* mpVtable;
+    int mRefCount;
+    unsigned int mTriggerID;
+    HintConditionVector mPresentList;
+    HintConditionVector mAbsentList;
+    HintConditionVector mCancelList;
+};
+class cUIHints_s0067_afd0 {
+public:
+    bool TestAllConditions(const HintConditionVector& conditions);
+    bool TestNoConditions(const HintConditionVector& conditions);
+    bool CheckConditions(cHint_s0067_afd0* pHint);
+};
+// ---- items of slice s0067afd0 end
+
 // @ 0x0067aee0
 E_aee0* C_aee0::find(int id)
 {
@@ -496,6 +521,16 @@ bool C_af::All(VecU* v)
             return false;
     }
     return true;
+}
+
+// @ 0x0067afd0
+bool cUIHints_s0067_afd0::CheckConditions(cHint_s0067_afd0* pHint)
+{
+    if (TestAllConditions(pHint->mPresentList) &&
+        (pHint->mAbsentList.size() == 0 || TestNoConditions(pHint->mAbsentList)) &&
+        (pHint->mCancelList.size() == 0 || !TestAllConditions(pHint->mCancelList)))
+        return true;
+    return false;
 }
 
 // @ 0x0067b030

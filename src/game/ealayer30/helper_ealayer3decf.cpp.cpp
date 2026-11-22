@@ -385,3 +385,50 @@ int HELPER_CEALayer3DecF_s0114_8fd0::DecodeGranules(int a2, int a3, int a4, int 
     }
 }
 }}}  // namespace rw::audio::core
+
+// @ 0x01149490
+namespace rw { namespace audio { namespace core {
+int HELPER_CEALayer3DecF_s0114_8fd0::Decode(int a2, int* a3)
+{
+    int total = 0;
+    *a3 = 0;
+    unsigned char* puVar1 = mInputData;
+    int local_14 = 0;
+    bool bVar2 = false;
+    int local_10 = 0;
+    unsigned char local_15 = 0;
+    int iVar5 = 0;
+    if (0 < mResidueArrayInstances) {
+        do {
+            if (bVar2) {
+                mInputData = mInputData + 1;
+            } else {
+                local_15 = *mInputData;
+                mInputData = mInputData + 1;
+                bVar2 = true;
+            }
+            int iVar3 = DecodeGranules((int)mppResidueArrays[iVar5],
+                                       (int)mppResidueArrays[iVar5 + 1],
+                                       local_10, local_15, a3);
+            int iVar4 = 2;
+            if (iVar5 == mNumChannels - 1)
+                iVar4 = 1;
+            for (int iVar6 = iVar5; iVar6 < iVar4 + iVar5; ++iVar6)
+                memcpy((void*)(*(int*)(a2 + 4) + (unsigned int)*(unsigned short*)(a2 + 0xe) * iVar6 * 4),
+                       mppResidueArrays[iVar6], *a3 * 4);
+            if (iVar3 < 0) {
+                mInputData = puVar1;
+                return -1;
+            }
+            local_14 = local_14 + 1 + iVar3;
+            local_10 = local_10 + 1;
+            iVar5 = iVar5 + 2;
+        } while (iVar5 < mResidueArrayInstances);
+    }
+    if (mMaxSamples < *a3)
+        *a3 = mMaxSamples;
+    if (-1 < mMaxSamples)
+        mMaxSamples = mMaxSamples - *a3;
+    return local_14;
+}
+}}}  // namespace rw::audio::core

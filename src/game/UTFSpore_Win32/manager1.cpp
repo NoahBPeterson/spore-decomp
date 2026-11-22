@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/manager1.cpp -- migrated from slice(s) s0094bb50 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/manager1.cpp -- migrated from slice(s) s0094cac0, s0094bb50 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/manager1.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,10 @@ extern "C" __declspec(dllimport) long long __cdecl _time64(long long* timer);   
 #include <string.h>
 #include <stdlib.h>
 #include <new>
+#include "EA/Sockets/Address.h"
+#include "EA/Sockets/Error.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/Sockets/Socket.h"
 
 // ---- items of slice s0094bb50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) void* __stdcall LoadLibraryA(const char* name);             // kernel32
@@ -129,6 +133,17 @@ extern "C" __declspec(dllimport) long __stdcall RegCloseKey(void* hKey);        
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 unsigned int __declspec(noinline) Sockets_LookupName(const char* name, unsigned int timeout);  // 0x0094c1b0 (stays in the slice: not this object's)
+
+// ---- items of slice s0094cac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) void* __stdcall GlobalAlloc(unsigned int flags, unsigned int bytes);   // kernel32
+extern "C" __declspec(dllimport) void* __stdcall GlobalFree(void* hMem);              // kernel32
+extern "C" __declspec(dllimport) unsigned long __stdcall FreeLibrary(void* mod);      // kernel32
+extern "C" __declspec(dllimport) char* __cdecl strncpy(char* d, const char* s, unsigned int n);  // msvcr90
+typedef unsigned int (__stdcall* RasEnumConnections_t)(void*, unsigned int*, unsigned int*);
+typedef unsigned int (__stdcall* RasGetProjectionInfo_t)(void*, unsigned int, void*, unsigned int*);
+typedef unsigned int (__stdcall* RasHangUp_t_s0094_cac0)(void*);
+typedef unsigned int (__stdcall* RasEnumEntries_t)(const char*, const char*, void*, unsigned int*, unsigned int*);
+// ---- items of slice s0094cac0 end
 
 // @ 0x0094c260
 Manager::Manager()
@@ -420,4 +435,98 @@ bool Manager::SetManualDialupResult(int r)
         return true;
     }
     return false;
+}
+
+// @ 0x0094cac0
+bool EA::Sockets::Manager::CloseManualDialup()
+{
+    // 0x387c bytes of RASCONN[] scratch (0x3840) plus the RASPROJECTION and
+    // HRASCONN result slots.
+    char connBuf[0x387c];
+
+    if (mRASData.mpRasEnumConnections == 0 || mRASData.mpRasHangUp == 0)
+        return false;
+
+    unsigned int nBuf = 0x3840;       // byte size handed in
+    unsigned int nConn = 0x14;        // capacity in entries
+    if (((RasEnumConnections_t)mRASData.mpRasEnumConnections)(connBuf, &nBuf, &nConn) != 0)
+        return false;
+
+    for (unsigned int i = 0; i < nConn; ++i) {
+        char* entry = connBuf + i * 0x2d0;
+        unsigned int sz = 0x30;       // sizeof(RASPROJECTION)
+        unsigned int info = 0x8021;   // RASPROJECTION type -> overwritten below
+        (void)info;
+        unsigned int r = ((RasGetProjectionInfo_t)mRASData.mpRasGetProjectionInfo)(
+            *(void**)entry, 0x8021, &nBuf, &sz);
+        if (r != 0 || nBuf != 0 || *(void**)entry == 0)
+            continue;
+        if (((RasHangUp_t_s0094_cac0)mRASData.mpRasHangUp)(*(void**)entry) != 0)
+            continue;
+        long long t = _time64(0) + 3;
+        long long now;
+        do { now = _time64(0); } while (now < t);
+        if (*(void**)(connBuf + i * 0x2d0) == mRASData.mhRASConn)
+            mRASData.mhRASConn = 0;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x0094cc00
+bool EA::Sockets::Manager::GetDialupEntries(char (*const entries)[32], unsigned int& count)
+{
+    unsigned int n = count;
+    for (unsigned int i = 0; i < n; ++i)
+        entries[i][0] = 0;
+
+    unsigned int numEntries = 0;
+    if (mRASData.mpRasEnumEntries == 0) {
+        count = 0;
+        return false;
+    }
+
+    unsigned int cb = 0x214;
+    void* buf = GlobalAlloc(0x40, 0x214);
+    if (buf == 0) {
+        count = numEntries;
+        return false;
+    }
+    *(unsigned int*)buf = 0x214;
+    unsigned int r = ((RasEnumEntries_t)mRASData.mpRasEnumEntries)(0, 0, buf, &cb, &numEntries);
+    if (r == 0x25b) {
+        GlobalFree(buf);
+        buf = GlobalAlloc(0x40, cb);
+        *(unsigned int*)buf = 0x214;
+    }
+    r = ((RasEnumEntries_t)mRASData.mpRasEnumEntries)(0, 0, buf, &cb, &numEntries);
+    bool ok;
+    if (r == 0) {
+        char* src = (char*)buf + 4;
+        for (unsigned int i = 0; i < cb; ++i, src += 0x214) {
+            if (i >= count)
+                break;
+            strncpy(entries[i], src, 0x20);
+            numEntries++;
+            entries[i][31] = 0;
+        }
+        ok = true;
+    } else {
+        ok = false;
+    }
+    GlobalFree(buf);
+    count = numEntries;
+    return ok;
+}
+
+// @ 0x0094cd60
+EA::Sockets::Manager::~Manager()
+{
+    if (mRASData.mhRASAPI32 != 0)
+        FreeLibrary((void*)mRASData.mhRASAPI32);
+    if (mbInitialized) {
+        mbInitialized = false;
+        if (WSACleanup() != 0)
+            mnLastError = WSAGetLastError();
+    }
 }

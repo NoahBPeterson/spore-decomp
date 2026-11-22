@@ -67,7 +67,7 @@ struct cPaintVarEvalList_s0053_4cf0 {
     sp_vector<Modifier> mModifiers;     // +0x00
     sp_vector<Entry> mEntries;          // +0x14
     sp_vector<float> mCurveData;        // +0x28
-    cPaintVarEvalList_s0053_4cf0() { uint32_t unused; }
+    cPaintVarEvalList_s0053_4cf0() { uint32_t unused; }   // 0x005355e0
     cPaintVarEvalList_s0053_4cf0(const cPaintVarEvalList_s0053_4cf0& x);
 };
 }

@@ -17,14 +17,6 @@ extern void* DAT_016079a4;
 #include <xmmintrin.h>
 
 // ---- items of slice s006dd250 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void* g_d3d9Device;            // _m_d3d9Device_ActiveState...
-extern void* g_shader;               // _m_shader_ActiveState...
-extern int   g_softStateUpdated;     // _m_softStateUpdated...
-extern int   g_activeVertexDesc;     // _m_vertexDescriptor_ActiveState...
-extern int   DAT_016f9138, DAT_016f913c, DAT_016f9140, DAT_016f8afc;
-extern int   DAT_016f9144[];         // table up to 0x016f9168
-extern void* DAT_016079a0;
-extern void* DAT_016079a4;
 int  __cdecl FUN_011f3620(int a, int b, int c);
 struct VBi {
     uint32_t FUN_011f3620(uint32_t a, uint32_t b, uint32_t c);  // 0x011F3620
@@ -39,6 +31,7 @@ int  __cdecl VertexDescriptor_AreEqual(void* a, void* b);
 void __cdecl VertexBuffer_Unlock(void* vb);
 void __cdecl VecBool_DoInsertValue(void* a, void* b, uint32_t n);   // eastl::vector<bool> helper
 void __fastcall FUN_006dd8b0(void* self);
+int* __cdecl FUN_006dd250(void* self, int a, int* b, int c, int d, int e);
 struct VertexDesc { void Refresh(); };   // out-of-line 0x011f2bc0
 struct CBufferDraw { void IssueDraw(int param_2); int Lock(int count, void* out, uint32_t* stride, int flag); bool FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7); };
 // ---- items of slice s006dd250 end
@@ -82,6 +75,21 @@ Rec13& Rec13::operator=(const Rec13& src)   // @ 0x006de7f0
     return *this;
 }
 // ---- items of slice s006de020 end
+
+// @ 0x006dd250
+int* __cdecl FUN_006dd250(void* self, int param_2, int* param_3, int param_4, int param_5, int param_6) // @ 0x006dd250
+{
+    int* p = (int*)self;
+    if (param_6 == 0)
+        param_6 = p[3];
+    int iVar1 = FUN_011f3620(param_2, (p[2] + param_5) * (uint32_t)*(uint8_t*)(*p + 0xf),
+                             (uint32_t)*(uint8_t*)(*p + 0xf) * param_6);
+    if (iVar1 == 0)
+        return 0;
+    *param_3 = iVar1;
+    param_3[1] = (int)p;
+    return p;
+}
 
 // @ 0x006dd2a0
 void FUN_006dd2a0(void* param_1) // @ 0x006dd2a0

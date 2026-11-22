@@ -1,2 +1,2 @@
 # va  reason
-00713e40 `anonymous namespace'::InvalidMaterialDispatchCallback: x87/sin shader-constant callback; skeleton only
+00713e40  -  stub: placeholder body (ours 6 bytes, retail 222 bytes); needs real source. Was noted as complete: InvalidMaterialDispatchCallback: complete; VS/PS shader-constant callback (shader set through g_spRenderDevice vt[0x170]/[0x1AC], D3DXMatrixMultiplyTranspose, GameTime, x87 fsin fill of the 4-float consts block, two 0x11f... tails). Body instructions match; the remaining diff is an MSVC list-schedul flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

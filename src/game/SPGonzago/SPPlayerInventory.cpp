@@ -30,13 +30,22 @@ extern "C" void  __cdecl FUN_0093aa70(void* stream, const void* src, int count, 
 #pragma warning(disable : 4100)
 
 // ---- items of slice s00ff3190 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_16dae04[];
+extern "C" char g_16dae10[];
+extern "C" char g_16dae1c[];
+extern "C" char g_16dae28[];
+extern "C" char g_16dae34[];
+extern "C" char g_16dae40[];
+extern "C" char g_16dae4c[];
+extern "C" char g_16dae58[];
+extern "C" char g_16dae64[];
+extern "C" char g_16dae70[];
+extern "C" char g_16dae7c[];
+extern char g_16daddc;                      // 0x016daddc
+extern "C" void* __cdecl FUN_00ac0d80(void* begin, void* end, const void* key); // eastl::find<Key_*,Key>
+extern "C" char g_15b5ed8_s00ff_3190[];
 typedef unsigned int  u32;
 typedef unsigned char u8;
-extern "C" void  __cdecl FUN_00f47380(void* p);        // operator delete[]
-extern "C" void* __cdecl FUN_00b3d390();               // global tool manager (0x0167eb08)
-extern "C" void* __cdecl FUN_0102f810();               // SP::GetSpaceEconomyTuning()
-extern "C" void* __cdecl FUN_0067dcc0();               // MessageServer() -> global singleton
-extern "C" void  __cdecl FUN_0093aa70(void* stream, const void* src, int count, int a); // EA::IO::WriteUint32
 struct cVarListSerializer
 {
     u32  mData[0xa14 / 4];                          // +0x000
@@ -88,8 +97,14 @@ struct Inv
     void BaseAddCargoSlots(int n);    // 0xc88310 (ret 4)
     void BaseFunc54h();               // 0xc86fe0 (ret 0)
 };
+struct ToolSet { void* mpVtbl; };     // receiver with vtable slots 0x68 / 0x74
 struct Tuning  { int GetMaxCargo(); };// 0x102ff00
 struct ToolMgr { void Remove(void* obj); };   // 0x104fc10 (ret 4)
+struct CbObj                                        // object with a scene hook at +0x20
+{
+    u8    pad00[0x20];
+    void* mpFn;                       // +0x20
+};
 struct MsgServer { void* mpVtbl; };                 // MessageServer instance
 struct GameData  { int GetFieldValues(void* host); };// 0xb18420 (ret 4)
 // ---- items of slice s00ff3190 end
@@ -446,6 +461,32 @@ void FUN_00c87c00();
 void FUN_00c87f80();
 void FUN_00c95780();
 void FUN_00ff3cf0();
+struct Key_s00ff3d40 {
+    u32 a, b, c;
+    bool operator==(const Key_s00ff3d40& o) const { return a == o.a && b == o.b && c == o.c; }
+};
+struct ItemBase_s00ff3d40 {
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14();
+    virtual const Key_s00ff3d40& GetID();          // +0x18
+    u32 pad04[2];
+};
+struct IObj_s00ff3d40 {
+    virtual void f00(); virtual void f04(); virtual void f08();
+    virtual void* Cast(u32 type);                  // +0x0c
+};
+struct Item_s00ff3d40 : ItemBase_s00ff3d40, IObj_s00ff3d40 {};
+static inline void* ObjCast_s00ff3d40(Item_s00ff3d40* p, u32 type) { return p ? ((IObj_s00ff3d40*)p)->Cast(type) : 0; }
+struct InvStreamCh_ff3f20 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void* GetStream();  // slot 6 (+0x18)
+};
+struct InvHost_ff3f20 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7();
+    virtual InvStreamCh_ff3f20* GetChannel();  // slot 8 (+0x20)
+};
+static __forceinline void InvWriteUint32_ff3f20(void* stream, u32 value) { FUN_0093aa70(stream, &value, 1, 0); }
 // ---- items of slice s01399700 end
 
 // @ 0x00ff3b30
@@ -468,22 +509,47 @@ void __fastcall FUN_00ff3b70(Inv* ecx_this)
     ((void(__thiscall*)(void*, int))pVtbl[0x58 / 4])(ecx_this, max);
 }
 
-struct Key_s00ff3d40 {
-    u32 a, b, c;
-    bool operator==(const Key_s00ff3d40& o) const { return a == o.a && b == o.b && c == o.c; }
-};
-struct ItemBase_s00ff3d40 {
-    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
-    virtual void f10(); virtual void f14();
-    virtual const Key_s00ff3d40& GetID();          // +0x18
-    u32 pad04[2];
-};
-struct IObj_s00ff3d40 {
-    virtual void f00(); virtual void f04(); virtual void f08();
-    virtual void* Cast(u32 type);                  // +0x0c
-};
-struct Item_s00ff3d40 : ItemBase_s00ff3d40, IObj_s00ff3d40 {};
-static inline void* ObjCast_s00ff3d40(Item_s00ff3d40* p, u32 type) { return p ? ((IObj_s00ff3d40*)p)->Cast(type) : 0; }
+// @ 0x00ff3bb0
+int __fastcall FUN_00ff3bb0(ToolSet* ecx_this, void* edx, void* pId)
+{
+    ToolObj* r = (ToolObj*)((void*(__thiscall*)(void*, void*))(*(void***)ecx_this)[0x68 / 4])(ecx_this, pId);
+    if (r != 0 && r->mb28 != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+// @ 0x00ff3bf0
+bool __fastcall FUN_00ff3bf0(ToolSet* ecx_this)
+{
+    return ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae04)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae10)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae1c)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae28)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae34)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae40)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae4c)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae58)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae64)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae70)
+        || ((char(__thiscall*)(void*, const void*))(*(void***)ecx_this)[0x74 / 4])(ecx_this, (const void*)g_16dae7c);
+}
+
+// @ 0x00ff3cf0
+void __cdecl FUN_00ff3cf0(CbObj* pObj)
+{
+    char* p = ((char*(__cdecl*)(CbObj*))pObj->mpFn)(pObj);
+    *p = g_16daddc;
+}
+
+// @ 0x00ff3d10
+bool __fastcall FUN_00ff3d10(Inv* ecx_this, void* edx, const void* pKey)
+{
+    void* end   = ecx_this->m78;
+    void* found = FUN_00ac0d80(ecx_this->m74, end, pKey);
+    return found != end;
+}
+
 // @ 0x00ff3d40
 void* __fastcall FUN_00ff3d40(Inv* ecx_this, void* edx, const Key_s00ff3d40* pId)
 {
@@ -548,17 +614,6 @@ void __fastcall FUN_00ff3e80(Inv* ecx_this)
         q->mb28 = 0;
     }
 }
-
-struct InvStreamCh_ff3f20 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
-    virtual void* GetStream();  // slot 6 (+0x18)
-};
-struct InvHost_ff3f20 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
-    virtual void v6(); virtual void v7();
-    virtual InvStreamCh_ff3f20* GetChannel();  // slot 8 (+0x20)
-};
-static __forceinline void InvWriteUint32_ff3f20(void* stream, u32 value) { FUN_0093aa70(stream, &value, 1, 0); }
 
 // @ 0x00ff3f20
 bool __fastcall FUN_00ff3f20(Inv* ecx_this, void* edx, void* host)
@@ -627,7 +682,7 @@ int __fastcall FUN_00ff4090(GameData* ecx_this, void* edx, void* host)
     int ab = a + b;
 
     cVarListSerializer s2;
-    s2.Ctor(ecx_this, (void*)&g_15b5ed8, 0x1a80d26);
+    s2.Ctor(ecx_this, (void*)g_15b5ed8_s00ff_3190, 0x1a80d26);
     int c = s2.GetFields(host);
 
     return c + ab;
@@ -1185,7 +1240,7 @@ void PropTableInit_99700()
     g_props_99700[5] = d;
 
     d.name = "mbHasAddedItem"; d.hash = 0x68398c2u;
-    d.f18 = 0; d.f1c = (void*)&FUN_00ff3cf0;
+    d.f18 = 0; d.f1c = (void*)(void (*)())&FUN_00ff3cf0;
     d.f20 = (void*)&FUN_00692ca0; d.f24 = (void*)&FUN_00ac8750;
     d.f28 = (void*)&FUN_00ac8780; d.f2c = (void*)&FUN_00693090;
     d.f30 = (void*)&FUN_00694fa0; d.f34 = (void*)&FUN_00b1fbf0;

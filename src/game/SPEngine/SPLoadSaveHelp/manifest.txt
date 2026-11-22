@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_Fwd_A@@YAXPAX00@Z  00692720  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_ReadInt32@@YAXPAX00@Z  00692740  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_Fwd_B@@YAXPAX00@Z  00692760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_WriteValue@@YAXPAXH@Z  00692780  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_WriteUint16@@YAXPAXG0@Z  006927a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -8,6 +10,10 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Info_AddOffset@@YAHPAX@Z  00692ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?SortRecords_A@@YAXPAX0@Z  00692cb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?SortRecords_C@@YAXPAUSortRec@@HHU1@@Z  00692d90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob32@@YAEPAXPAUBlobRange@@@Z  00692e00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob16@@YAEPAXPAUBlobRange@@@Z  00692e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Resolve@@YAXXZ  00692ee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Release@@YAXXZ  00692f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Construct@cRegNode@@QAEPAU1@PAX@Z  00692f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?cVarListSerializer_Construct@VarListCtorHost@@QAEPAVcVarListSerializer@@PAXPAUcDataSerializerGeneric@@I@Z  00692f90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ClearBuffer@@YAXPAPAC@Z  00692fb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -18,6 +24,7 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseChar@@YAXPAPBDPAC@Z  00693050  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseUChar@@YAXPAPBDPAE@Z  00693070  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseULong@@YAXPAPBDPAK@Z  00693090  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseFloat@@YAXABV?$basic_string@DVallocator@eastl@@@eastl@@PAX@Z  006930b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector2@@YAXPAPBDPAM@Z  006930d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector3@@YAXPAPBDPAM@Z  006930f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector4@@YAXPAPBDPAM@Z  00693120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -27,6 +34,8 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693b90  00693b90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693c10  00693c10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693c70  00693c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ??0C3ObjA@@QAE@PAX000@Z  00693cd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ??0C3ObjB@@QAE@PAX000@Z  00693d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  @FUN_00693dd0@4  00693dd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?copyAssign@Obj@@QAEPAU1@ABU1@@Z  006941c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694270  00694270  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -46,10 +55,3 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695040  00695040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695080  00695080  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Execute@cVarListSerializer_s0069_5140@SP@@QAEHPAUFieldReport@@@Z  00695770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob32@@YAEPAXPAUBlobRange@@@Z  00692e00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob16@@YAEPAXPAUBlobRange@@@Z  00692e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Resolve@@YAXXZ  00692ee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Release@@YAXXZ  00692f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseFloat@@YAXABV?$basic_string@DVallocator@eastl@@@eastl@@PAX@Z  006930b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ??0C3ObjA@@QAE@PAX000@Z  00693cd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ??0C3ObjB@@QAE@PAX000@Z  00693d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

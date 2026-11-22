@@ -41,3 +41,4 @@
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??9@YA_NABUVector3@@0@Z  0041dd30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?NotEqual@@YA_NPBX0@Z  0041dd90  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Matrix3_Transposed@@YAPAUMat3Target@@PAU1@PBUMatrix3@@@Z  0041ded0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPBlobShadow.cpp  ?IsUsable@Host_00537ea0@@QAE_NXZ  00537ea0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include

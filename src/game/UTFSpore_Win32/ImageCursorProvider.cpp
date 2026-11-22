@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/ImageCursorProvider.cpp -- migrated from slice(s) s0097cea0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/ImageCursorProvider.cpp -- migrated from slice(s) s0097e1f0, s0097cea0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/ImageCursorProvider.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,6 +9,7 @@
 #include "EA/UTFWin/cDropShadowDescriptor.h"
 #include <math.h>
 #include <new>
+#include "EA/UTFWinControls/WinGrid.h"
 
 // ---- items of slice s0097cea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ImageCursorProvider {
@@ -252,6 +253,67 @@ namespace Cur {
 bool CursorListMarshaller_Read(ReadOwner* self, ReadList* list);   // 0x97e140, cdecl
 }
 // ---- items of slice s0097cea0 end
+
+// ---- items of slice s0097e1f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int    __cdecl FUN_009512c0();                                                 // 0x009512c0
+extern "C" void*  __cdecl FUN_009512d0(int size, int align, const char* type, int grp);   // 0x009512d0
+extern "C" void   __cdecl Del_00f47380(void* p);                                          // 0x00f47380  ??3@YAXPAX@Z
+extern "C" void*  __cdecl Alloc_00921340(unsigned n);                                     // 0x00921340
+void __fastcall CursorWindow_ctor(void* self);      // 0x0097dad0  ?CursorWindow_ctor@@YAXPAX@Z
+#define VT_s0097_e1f0(o, i) ((*(void***)(o))[i])
+#define VCALL0_s0097_e1f0(R, o, i)        (((R(__thiscall*)(void*))VT_s0097_e1f0(o, i))(o))
+struct HNode_s0097_e1f0;
+struct CursorWindow;
+struct WinRef {                                 // EA::AutoRefCount<CursorWindow>
+    CursorWindow* mpObject;                     // +0
+    WinRef() throw() : mpObject(0) {}
+};
+struct FixedPoolDesc {                          // fixed_pool_base + params, 5 dwords
+    void*     mpHead;      // +0
+    uintptr_t mpData;      // +4
+    uintptr_t mpEnd;       // +8
+    unsigned  mnNodeSize;  // +0xc
+    uintptr_t mpBuckets;   // +0x10
+    void init(void* p, unsigned size, unsigned nodeSize, unsigned align, int flag);  // 0x00921260
+};
+struct PolicyCalc { unsigned NextCount(unsigned n); };   // 0x009213c0
+struct FixedHashTable {                         // eastl::hashtable<...ImageCursor...>
+    int       pad0;                             // +0
+    HNode_s0097_e1f0**   mpBucketArray;                    // +4
+    unsigned  mnBucketCount;                    // +8
+    unsigned  mnElementCount;                   // +0xc
+    unsigned  mPolicy[3];                       // +0x10 prime_rehash_policy (two floats + mask)
+    HNode_s0097_e1f0*    mpFreeList;                       // +0x1c
+    int       pad20;                            // +0x20
+    void*     mpPoolBegin;                      // +0x24
+    void*     mpPoolEnd;                        // +0x28
+    unsigned  mnNodeSize;                       // +0x2c
+    void**    mpInlineBuckets;                  // +0x30
+    void*     mInlineBuckets[65];               // +0x34
+    char      mNodeBuffer[0x500];               // +0x138
+
+    void DoFreeNodes(HNode_s0097_e1f0** buckets, unsigned n);  // 0x0097e030
+    void DoRehash(unsigned n);                      // 0x0097dc30
+};
+struct FixedMap : FixedHashTable {              // eastl::fixed_hash_map<unsigned,ImageCursor,64,64,1,...>
+    struct HashT {};
+    struct PredT {};
+    FixedMap(const HashT& a, const PredT& b);   // 0x0097e2b0
+    void HashtableInit(void* buckets, HashT h0, PredT* pb,
+                       HashT* pa0, HashT h1, HashT* pa1, FixedPoolDesc* pool);
+                                                 // 0x0097dcd0 (thiscall, 7 args)
+};
+struct ImageCursorProvider_s0097_e1f0 {                    // EA::UTFWinControls::ImageCursorProvider
+    void*    mVptr;                             // +0
+    void*    mSerVptr;                          // +4
+    int      mRefCount;                         // +8
+    FixedMap mCursorMap;                        // +0xc .. +0x644
+    char     mMapPad[0x118];                    // +0x644 .. +0x75c
+    WinRef   mpCursorWindow;                    // +0x75c
+    ~ImageCursorProvider_s0097_e1f0();                     // 0x0097e1f0
+    ImageCursorProvider_s0097_e1f0();                      // 0x0097e380
+};
+// ---- items of slice s0097e1f0 end
 
 // @ 0x0097da60
 void* ImageCursorProvider::AsInterface(unsigned int id)
@@ -509,3 +571,90 @@ bool CursorListMarshaller_Read(ReadOwner* self, ReadList* list)
     return true;
 }
 }  // namespace Cur
+
+// @ 0x0097e1f0
+ImageCursorProvider_s0097_e1f0::~ImageCursorProvider_s0097_e1f0()
+{
+    CursorWindow* p;
+
+    *(void**)this = (void*)0x014433b8;
+    *(void**)((char*)this + 4) = (void*)0x014433a0;
+    p = mpCursorWindow.mpObject;
+    if (p != 0) {
+        mpCursorWindow.mpObject = 0;
+        VCALL0_s0097_e1f0(void, p, 1);
+    }
+    p = mpCursorWindow.mpObject;
+    if (p != 0) {
+        VCALL0_s0097_e1f0(void, p, 1);
+    }
+    mCursorMap.DoFreeNodes(mCursorMap.mpBucketArray, mCursorMap.mnBucketCount);
+    mCursorMap.mnElementCount = 0;
+    if (mCursorMap.mnBucketCount > 1 && mCursorMap.mpBucketArray != (HNode_s0097_e1f0**)mCursorMap.mpInlineBuckets) {
+        HNode_s0097_e1f0** buckets = mCursorMap.mpBucketArray;
+        if (buckets >= (HNode_s0097_e1f0**)mCursorMap.mpPoolBegin && buckets < (HNode_s0097_e1f0**)mCursorMap.mpPoolEnd) {
+            *(HNode_s0097_e1f0**)buckets = mCursorMap.mpFreeList;
+            mCursorMap.mpFreeList = (HNode_s0097_e1f0*)buckets;
+        } else {
+            Del_00f47380(buckets);
+        }
+    }
+    *(void**)this = (void*)0x013eb938;
+    *(void**)((char*)this + 4) = (void*)0x013eb938;
+}
+
+// @ 0x0097e2b0
+FixedMap::FixedMap(const HashT& a, const PredT& b)
+{
+    FixedPoolDesc pool;
+    void* end;
+    void* buckets;
+    unsigned need;
+
+    pool.mpHead = 0;
+    pool.init(&mNodeBuffer[0], 0x500, 0x14, 4, 0);
+    end = &mNodeBuffer[0x500];
+    pool.mpData = (uintptr_t)&mNodeBuffer[0];
+    pool.mpEnd = (uintptr_t)end;
+    pool.mnNodeSize = 0x14;
+    pool.mpBuckets = (uintptr_t)&mInlineBuckets[0];
+    buckets = Alloc_00921340(0x40);
+    HashtableInit(buckets, a, (PredT*)&b, (HashT*)&a, a, (HashT*)&a, &pool);
+    mPolicy[0] = 0x461c4000;
+    mPolicy[1] = 0x40000000;
+    mPolicy[2] = 0;
+    mnElementCount = 0;
+    need = ((PolicyCalc*)(void*)&mPolicy[0])->NextCount(0);
+    if (mnBucketCount < need)
+        DoRehash(need);
+}
+
+// @ 0x0097e380
+ImageCursorProvider_s0097_e1f0::ImageCursorProvider_s0097_e1f0()
+: mCursorMap(FixedMap::HashT(), FixedMap::PredT())
+{
+    CursorWindow* p;
+    CursorWindow* old;
+    int grp;
+
+    *(void**)((char*)this + 4) = (void*)0x013fa72c;
+    *(void**)this = (void*)0x014433b8;
+    *(void**)((char*)this + 4) = (void*)0x014433a0;
+    mRefCount = 0;
+    mpCursorWindow.mpObject = 0;
+    grp = FUN_009512c0();
+    p = (CursorWindow*)FUN_009512d0(0x218, 4, (const char*)0x014433d4, grp);
+    if (p != 0) {
+        CursorWindow_ctor(p);
+    } else {
+        p = 0;
+    }
+    old = mpCursorWindow.mpObject;
+    if (p != old) {
+        if (p != 0)
+            VCALL0_s0097_e1f0(void, p, 0);
+        mpCursorWindow.mpObject = p;
+        if (old != 0)
+            VCALL0_s0097_e1f0(void, old, 1);
+    }
+}

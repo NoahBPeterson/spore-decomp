@@ -1,13 +1,18 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Destroy@cScenarioEditModeInputStrategy@Simulator@@QAEPAXE@Z  00cd1750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15100@@YGXHH@Z  00d15100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15550@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  00d15550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15600@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  00d15600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15980@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX0@Z  00d15980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15a10@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX@Z  00d15a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?StartSelection@cGameEditInputStrategy@SP@@QAEHPAVcGameData@2@HABUcSPVector3@@@Z  00d15ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15af0@cGameEditInputStrategy_s00d1_5440@SP@@QAEIPAXEI@Z  00d15af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?cStrCmp_Destroy@@YIXPAUcStrCmp@@@Z  00d167e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SetPlanet@cGameEditInputStrategy@@QAEXPBUcVec3i@@@Z  00d16b90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SortInsertBounded@@YAXPAI0UcStrCmp@@@Z  00d16c30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SortInsert@@YAXPAI0UcStrCmp@@@Z  00d16cc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Median3@@YAPAIPAI00UcStrCmp@@@Z  00d16d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Partition@@YAPAIPAI0IUcStrCmp@@@Z  00d16e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SiftUp@@YAXPAIHHIUcStrCmp@@@Z  00d16eb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Activate@cGameEditInputStrategy_s00d1_6f40@@QAEXXZ  00d17250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?AdjustHeapHole@@YAXPAIHHHIUcPropertyListNameSort_s00d1_78a0@@@Z  00d180c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -15,8 +20,3 @@
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Copy@cGameEditInputStrategy_s00d1_8df0__b@SP@@QAEXXZ  00d19460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?PopulateLoadPlanetDialogGrid@cGameEditInputStrategy_s00d1_8df0__b@SP@@QAEXXZ  00d194c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?partial_sort@eastl@@YAXPAI00UcPropertyListNameSort_s00d1_8df0__b@SP@@@Z  00d19610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Median3@@YAPAIPAI00UcStrCmp@@@Z  00d16d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Partition@@YAPAIPAI0IUcStrCmp@@@Z  00d16e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15a10@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX@Z  00d15a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15550@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  00d15550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?FUN_00d15980@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX0@Z  00d15980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

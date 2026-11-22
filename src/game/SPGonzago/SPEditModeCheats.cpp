@@ -2,12 +2,6 @@
 // Object file: SPGonzago/SPEditModeCheats.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
-// addresses retail relocates here, named so the build relocates them too
-extern "C" char g_13fc890[];
-extern "C" char g_14799b0[];
-extern "C" char g_1479a6c[];
-extern "C" char g_1479aac[];
-
 #include "game/types.h"
 #include "EA/ArgScript/cArgumentSpec.h"
 #include "EA/ArgScript/cArguments.h"
@@ -15,12 +9,20 @@ extern "C" char g_1479aac[];
 #include "SP/cPlanetModel.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" char g_13fc890[];
+extern "C" char g_14799b0[];
+extern "C" char g_1479a6c[];
+extern "C" char g_1479aac[];
 extern "C" __declspec(dllimport) int __cdecl ascii_stricmp(const char* pA, const char* pB);  // msvcr90!_stricmp
 extern "C" __declspec(dllimport) float __cdecl sqrtf(float fValue);   // msvcr90!sqrtf
 extern const char* kCommandName;                            // 0x015825e0
 #include <stddef.h>
 
 // ---- items of slice s00d14460 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13fc890[];
+extern "C" char g_14799b0[];
+extern "C" char g_1479a6c[];
+extern "C" char g_1479aac[];
 struct cVec3 {
     float x;                                                // +0x00
     float y;                                                // +0x04
@@ -215,9 +217,11 @@ struct cTypeEntry {
     const char* mpName;                                     // +0x00
     void*       mpValue;                                    // +0x04
 };
+void  __cdecl operator_delete_array(void* pBlock);          // 0x00f47380
 void* __cdecl FNVHash(const char* pText, uint32_t nHash, int32_t nSome);   // 0x00932e80
 extern "C" __declspec(dllimport) int __cdecl ascii_stricmp(const char* pA, const char* pB);  // msvcr90!_stricmp
 extern "C" __declspec(dllimport) float __cdecl sqrtf(float fValue);   // msvcr90!sqrtf
+cGameNounManager* __stdcall SP_NounManager(cNoun* pNoun);   // 0x00b3d300 (noun-taking form)
 cGameNounManager* __cdecl SP_GetNounManager();              // 0x00b3d300 (global form)
 cCameraCtl* __cdecl GetCameraCtl();                         // 0x00b3d280
 extern cTypeEntry gTypeTable[];                             // 0x015825e8
@@ -303,6 +307,66 @@ void* cCommandGameplayMarker::ParseTypeEnum(const char* pName)
         ++pEntry;
     }
     return FNVHash(pName, 0x811c9dc5, 1);
+}
+
+// @ 0x00d14650
+void cCommandGameplayMarker::OnEndParse(bool bCommit)
+{
+    if (bCommit)
+        SP_NounManager(mpGameplayMarker)->RemoveNoun();
+
+    if (cNoun* pOld = mpGameplayMarker) {
+        mpGameplayMarker = 0;
+        pOld->v004();
+    }
+}
+
+// @ 0x00d14690
+bool cCommandGameplayMarkerTemplate::Parse(const wchar_t** ppArguments)
+{
+    if ((uint32_t)mpGameplayMarker->mValueCount >= 0x20)
+        return false;
+
+    mArguments.SplitIntoArguments(*ppArguments);
+    void* pUnused = 0;
+    const wchar_t** pArgs = (const wchar_t**)mArguments.MainArguments(&pUnused, 2, 2);
+
+    if (ascii_stricmp((const char*)pArgs[0], "triggerSourceFromDefinition") == 0) {
+        mpParser->v094(pArgs[1]);
+        return true;
+    }
+    if (ascii_stricmp((const char*)pArgs[0], "trigger") == 0) {
+        mpParser->v09c(pArgs[1]);
+        return true;
+    }
+
+    uint32_t nType = (uint32_t)ParseTypeEnum((const char*)pArgs[0]);
+    cNoun* pMarker = mpGameplayMarker;
+    switch (nType) {
+    case 1: {
+        bool bValue = mpParser->v094(pArgs[1]);
+        pMarker->mValues[pMarker->mValueCount] = bValue ? 1 : 0;
+        ++pMarker->mValueCount;
+        return true;
+    }
+    case 9: {
+        int32_t nValue = (int32_t)mpParser->v09c(pArgs[1]);
+        pMarker->mValues[pMarker->mValueCount] = nValue;
+        ++pMarker->mValueCount;
+        return true;
+    }
+    case 13: {
+        float fValue = mpParser->v098(pArgs[1]);
+        *(float*)&pMarker->mValues[pMarker->mValueCount] = fValue;
+        ++pMarker->mValueCount;
+        return true;
+    }
+    default: {
+        pMarker->mValues[pMarker->mValueCount] = (int32_t)mpParser->v09c(pArgs[1]);
+        ++pMarker->mValueCount;
+        return true;
+    }
+    }
 }
 
 // @ 0x00d14830
@@ -446,6 +510,20 @@ void* cCommandGameplayMarker::Init()
                             "[position:vector3]", &mPosition, "position",
                             "[orientation:vector4]", &mOrientation, "orientation",
                             0);
+    return this;
+}
+
+// @ 0x00d14f00
+void* cCommandGameplayMarker::Destroy(uint8_t nFlags)
+{
+    mpVTable = (void*)0x014799b0;
+    if (cNoun* pMarker = mpGameplayMarker)
+        pMarker->v004();
+    mArguments.Done();
+    mArgSpec.Done();
+    ((cMetaCommandBase*)this)->Done();
+    if (nFlags & 1)
+        operator_delete_array(this);
     return this;
 }
 

@@ -1,4 +1,4 @@
-// src/game/SPEngine/_at_007a0000.cpp -- migrated from slice(s) s007a7d50, s007a41c0, s007a3260, s007a1740, s007a07b0, s0079f8d0 by tools/migrate/rewrite.py
+// src/game/SPEngine/_at_007a0000.cpp -- migrated from slice(s) s007a8a50, s007a7d50, s007a41c0, s007a3260, s007a1740, s007a07b0, s0079f8d0 by tools/migrate/rewrite.py
 // Object file: SPEngine/_at_007a0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -548,6 +548,37 @@ struct GlyphVec {
 };
 // ---- items of slice s007a7d50 end
 
+// ---- items of slice s007a8a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* FUN_0067dd60();
+struct TextureItemVector {
+    int** mpBegin;               // +0x00
+    int** mpEnd;                 // +0x04
+    int size() const { return (int)(mpEnd - mpBegin); }
+    void erase(int** pos);       // 0x00760c40
+};
+struct TextureManagerV {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+    virtual void v12();
+    virtual void Load(int* texture);   // +0x34
+};
+struct TextureListOwner {
+    uint32_t pad000[0x190 / 4];   // +0x000
+    TextureItemVector mItems;     // +0x190
+    bool FindAndErase(int* obj);  // 007a9130
+};
+// ---- items of slice s007a8a50 end
+
 // @ 0x007a0460
 void* Tc::m_007a0460(void* other_)
 {
@@ -1009,4 +1040,23 @@ extern "C" void* FUN_007a8910(GlyphVec* self, void* position, void* value)
     self->end = r;
     self->cap = (char*)newBegin + newCap * 0x14;
     return self->begin;
+}
+
+// @ 0x007a9130
+bool TextureListOwner::FindAndErase(int* obj)
+{
+    int key = *(int*)((char*)obj + 0x34);
+    if (key != 0) {
+        int count = mItems.size();
+        for (int i = 0; i < count; ++i) {
+            int* p = mItems.mpBegin[i];
+            if ((*(unsigned char*)((char*)p + 4) & 1) == 0)
+                ((TextureManagerV*)FUN_0067dd60())->Load(p);
+            if (*p == key) {
+                mItems.erase(&mItems.mpBegin[i]);
+                return true;
+            }
+        }
+    }
+    return false;
 }

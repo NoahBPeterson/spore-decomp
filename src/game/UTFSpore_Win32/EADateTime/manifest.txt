@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/EADateTime.cpp  ?FUN_0092df40@@YAHI@Z  0092df40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/EADateTime.cpp  ?Set@DateTime_s0092_e3d0@@QAEXH@Z  0092e3d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EADateTime.cpp  ?Set@DateTime@1EA@@QAEXW4TimeFrame@12@@Z  0092e3d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EADateTime.cpp  ?SetDateFromTm@@YAXPBUtm@@PAUDateTime_s0092_e3d0@@@Z  0092e440  /O2 /MD /Gy /TP /GS- /Isrc/game/include

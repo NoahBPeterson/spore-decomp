@@ -1,3 +1,8 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?SetData@FixedMemoryStream@IO@EA@@QAE_NPBXI@Z  0093b8e0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z  0093b900  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?GetPosition@FixedMemoryStream@IO@EA@@UBEHH@Z  0093b920  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?SetPosition@FixedMemoryStream@IO@EA@@UAE_NHH@Z  0093b950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?WriteBuffer@memorystream@@QAE_NPBXI@Z  0093b9e0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?Init@memorystream@@QAEPAV1@PADI@Z  0093ba40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?FUN_0093ba90@@YIHPAD@Z  0093ba90  /O2 /MD /Gy /TP /Isrc/game/include

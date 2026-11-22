@@ -104,7 +104,7 @@ struct DateTime_s0092_e3d0 {
     int  GetParameter(int which);   // 0x0092df80
     void SetDate(int year, int month, int day, int hour, int minute, int second);   // 0x0092e200
     void Set(int utc);  // 0x0092e3d0 (DateTime::Set)
-    void Add(int unit, int amount);
+    void Add(int unit, int amount);  // 0x0092e470 (DateTime::Add)
 };
 // ---- items of slice s0092e3d0 end
 
@@ -164,7 +164,7 @@ unsigned DateTime::SetDate(unsigned int year, unsigned int month, int day, int h
 }
 
 // @ 0x0092e3d0
-void DateTime_s0092_e3d0::Set(int utc)
+void EA::DateTime::DateTime::Set(EA::DateTime::TimeFrame utc)
 {
     time_t t = _time64(0);
     tm* p;
@@ -173,5 +173,71 @@ void DateTime_s0092_e3d0::Set(int utc)
     else
         p = _localtime64(&t);
     if (p)
-        SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+        this->Set(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+}
+
+// @ 0x0092e440
+void SetDateFromTm(const tm* p, DateTime_s0092_e3d0* d)
+{
+    d->SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+}
+
+// @ 0x0092e470
+void DateTime_s0092_e3d0::Add(int unit, int amount)
+{
+    switch (unit) {
+    case 1: {
+        int y = GetParameter(1) + amount;
+        SetDate(y, -1, -1, -1, -1, -1);
+        break;
+    }
+    case 2: {
+        int years = amount / 12;
+        int y = GetParameter(1) + years;
+        int m = amount + GetParameter(2) - years * 12;
+        if (m < 1) {
+            y--;
+            m += 12;
+        } else if (m > 12) {
+            y++;
+            m -= 12;
+        }
+        SetDate(y, m, -1, -1, -1, -1);
+        break;
+    }
+    case 5:
+    case 6:
+    case 7:
+        mnSeconds += (int64_t)(amount * 86400);
+        break;
+    case 8:
+        mnSeconds += (int64_t)(amount * 3600);
+        break;
+    case 9:
+        mnSeconds += (int64_t)(amount * 60);
+        break;
+    case 10:
+        mnSeconds += (int64_t)amount;
+        break;
+    case 3:
+    case 4:
+        mnSeconds += (int64_t)(amount * 604800);
+        break;
+    }
+}
+
+// @ 0x0092e5a0
+int64_t GetLocalTimeBias()
+{
+    time_t t = _time64(0);
+    tm* p = _localtime64(&t);
+    if (p)
+        ((DateTime_s0092_e3d0*)(p->tm_mon + 1))->SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+    int64_t localHours = _alldiv((int)t, (int)(t >> 32), 3600, 0);
+    t = _time64(0);
+    p = _gmtime64(&t);
+    if (p)
+        ((DateTime_s0092_e3d0*)(p->tm_mon + 1))->SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+    int64_t gmHours = _alldiv((int)t, (int)(t >> 32), 3600, 0);
+    return _allmul((int)(localHours - gmHours), (int)((localHours - gmHours) >> 32), 3600, 0);
 }

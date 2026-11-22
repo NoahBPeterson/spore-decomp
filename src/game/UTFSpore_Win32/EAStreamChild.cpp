@@ -27,7 +27,7 @@ public:
     virtual int         GetAvailable() const;        // +2c
     virtual int         Read(void* pData, size_t nSize);     // +30
     virtual bool        Flush();                     // +34
-    virtual int         Write(const void* pData, size_t nSize); // +38
+    virtual bool        Write(const void* pData, size_t nSize); // +38
 };
 }
 }
@@ -53,7 +53,7 @@ public:
     virtual int       GetAvailable() const;
     virtual int       Read(void* pData, size_t nSize);
     virtual bool      Flush();
-    virtual int       Write(const void* pData, size_t nSize);
+    virtual bool      Write(const void* pData, size_t nSize);
 
     int       mnRefCount;        // +04
     int       mnAccessFlags;     // +08
@@ -65,6 +65,29 @@ public:
 }
 }
 // ---- items of slice s0093a9d0 end
+
+// @ 0x0093b630
+namespace EA { namespace IO {
+bool StreamChild::Open(IStream_s0093_a9d0* pParent, size_type nPosition, size_type nSize)
+{
+    if (mnAccessFlags == 0 && pParent != 0) {
+        int flags = pParent->GetAccessFlags();
+        if ((flags & 1) != 0) {
+            size_type size = pParent->GetSize();
+            size_type end = nPosition + nSize;
+            if (nPosition < size && end <= size && end >= nPosition) {
+                mpStreamParent = pParent;
+                mnAccessFlags = 1;
+                mnPositionParent = nPosition;
+                mnPosition = 0;
+                mnSize = nSize;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+}}  // namespace EA::IO
 
 // @ 0x0093b6a0
 namespace EA { namespace IO {
@@ -128,16 +151,30 @@ int StreamChild::Read(void* pData, size_t nSize)
     if (mnAccessFlags != 0) {
         if (!mpStreamParent->SetPosition(mnPositionParent + mnPosition, 0))
             return -1;
-        int avail = GetAvailable();
-        int take = (int)nSize;
-        if (avail < take)
-            take = avail;
+        size_type avail = (size_type)GetAvailable();
+        size_type take = nSize;
+        take = (avail < take) ? avail : take;
         int n = mpStreamParent->Read(pData, take);
-        if (n == take) {
+        if (n == (int)take) {
             mnPosition += take;
-            return take;
+            return (int)take;
         }
     }
     return -1;
+}
+}}  // namespace EA::IO
+
+// @ 0x0093b7d0
+namespace EA { namespace IO {
+StreamChild::StreamChild(IStream_s0093_a9d0* pParent, size_type nPosition, size_type nSize)
+{
+    mnRefCount = 0;
+    mnAccessFlags = 0;
+    mpStreamParent = 0;
+    mnPositionParent = 0;
+    mnPosition = 0;
+    mnSize = 0;
+    if (pParent != 0)
+        Open(pParent, nPosition, nSize);
 }
 }}  // namespace EA::IO

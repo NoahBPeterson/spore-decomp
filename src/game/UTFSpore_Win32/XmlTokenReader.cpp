@@ -22,13 +22,9 @@ extern "C" __declspec(dllimport) int __cdecl iswctype(unsigned int c, int type);
 #pragma intrinsic(wcslen)
 
 // ---- items of slice s009013e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl FUN_011e073e(void* p, int nVal, unsigned int nSize);  // 0x11e073e
 typedef unsigned int   uint32;
 extern "C" size_t wcslen(const wchar_t*);
-extern "C" void* __cdecl EA_operator_new(unsigned int nSize, const char* pName, int a,
-                                         int b, const char* pFile, int nLine); // 0xf473a0
-extern "C" unsigned int __cdecl FNV1_String16(const wchar_t* pStr, unsigned int a,
-                                              unsigned int b);                 // 0x932f30
-extern "C" __declspec(dllimport) int __cdecl iswctype(unsigned int c, int type);
 bool __cdecl FUN_00901e60(const wchar_t* s);   // 0x901e60
 struct RehashPolicy {
     float mfMaxLoadFactor;   // +0x00
@@ -65,7 +61,7 @@ struct HashB : Hashtable {
 };
 namespace EA {
 namespace Allocator {
-struct StackAllocator_s0090_13e0 {
+class StackAllocator_s0090_13e0 { public:
     unsigned int mnDefaultBlockSize;   // +0x00
     void*        mpCurrentBlock;       // +0x04
     char*        mpCurrentBlockEnd;    // +0x08
@@ -91,7 +87,7 @@ struct StackAllocator_s0090_13e0 {
 }
 namespace EA {
 namespace XML {
-struct TokenIOContext_s0090_13e0 {
+class TokenIOContext_s0090_13e0 { public:
     char _allocCtx[0x8];
     EA::Allocator::StackAllocator_s0090_13e0 mAllocator;  // +0x08
     HashA* mStringsA;    // +0x2c
@@ -125,15 +121,15 @@ static int cmp16(const wchar_t* p1, const wchar_t* p2)
 // ---- items of slice s009013e0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" size_t wcslen(const wchar_t*);
 
 // ---- items of slice s00902460 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_ReadWriteBarrier)
 namespace EA {
 namespace XML {
- struct TokenNode; struct TokenIOContext_s0090_2460; 
+ struct TokenNode; class TokenIOContext_s0090_2460; 
 }
 }
-struct IStream {
+struct IStream_s0090_2460 {
     virtual void v00() {}
     virtual void v01() {}
     virtual void v02() {}
@@ -157,7 +153,7 @@ struct ICoreAllocator_s0090_2460;
 }
 namespace EA {
 namespace Allocator {
-struct ContextCoreAllocator_s0090_2460 {
+class ContextCoreAllocator_s0090_2460 { public:
     const char* mpName;          // +0x0
     ICoreAllocator_s0090_2460* mpAllocator; // +0x4
     ContextCoreAllocator_s0090_2460() {}
@@ -167,7 +163,7 @@ struct ContextCoreAllocator_s0090_2460 {
 }
 namespace EA {
 namespace Allocator {
-struct StackAllocator_s0090_2460 {
+class StackAllocator_s0090_2460 { public:
     unsigned   mnDefaultBlockSize;    // +0x0
     void*      mpCurrentBlock;        // +0x4
     char*      mpCurrentBlockEnd;     // +0x8
@@ -197,15 +193,15 @@ struct StackAllocator_s0090_2460 {
 };
 }
 }
-extern "C" int   io_ReadInt32 (IStream* s, void* dst, int count, int flags);   // 0x93a780
-extern "C" int   io_ReadUint16(IStream* s, void* dst, int count, int flags);   // 0x93a700
-extern "C" bool  io_ReadUInt64(IStream* s, void* dst, int count, int flags);   // 0x93a800
-extern "C" int   io_ReadBool  (IStream* s, void* dst);                          // 0x93ac80
-extern "C" int   io_ReadBytes (IStream* s, void* dst, int count);               // 0x93a6c0
-extern "C" int   io_WriteUint32(IStream* s, const void* src, int count, int flags); // 0x93aa70
-extern "C" int   io_WriteUint16(IStream* s, const void* src, int count, int flags); // 0x93a9d0
-extern "C" int   io_WriteUInt64(IStream* s, const void* src, int count, int flags); // 0x93ab10
-extern "C" int   io_WriteBytes(IStream* s, const void* src, int count);         // 0x93a9a0
+extern "C" int   io_ReadInt32 (IStream_s0090_2460* s, void* dst, int count, int flags);   // 0x93a780
+extern "C" int   io_ReadUint16(IStream_s0090_2460* s, void* dst, int count, int flags);   // 0x93a700
+extern "C" bool  io_ReadUInt64(IStream_s0090_2460* s, void* dst, int count, int flags);   // 0x93a800
+extern "C" int   io_ReadBool  (IStream_s0090_2460* s, void* dst);                          // 0x93ac80
+extern "C" int   io_ReadBytes (IStream_s0090_2460* s, void* dst, int count);               // 0x93a6c0
+extern "C" int   io_WriteUint32(IStream_s0090_2460* s, const void* src, int count, int flags); // 0x93aa70
+extern "C" int   io_WriteUint16(IStream_s0090_2460* s, const void* src, int count, int flags); // 0x93a9d0
+extern "C" int   io_WriteUInt64(IStream_s0090_2460* s, const void* src, int count, int flags); // 0x93ab10
+extern "C" int   io_WriteBytes(IStream_s0090_2460* s, const void* src, int count);         // 0x93a9a0
 void  EA_operator_delete(void* p);                                   // 0xf47380
 void* EA_GetDefaultAllocator();                                      // 0x925cb0
 void  FUN_00925bf0();   // StackAllocator core alloc callback
@@ -224,7 +220,7 @@ wchar_t* sStrDup(const wchar_t* s, void* allocCtx);                  // 0x902380
 }
 namespace EA {
 namespace XML {
-bool     WriteString(IStream* s, const wchar_t* str, TokenIOContext_s0090_2460* ctx); // 0x902640
+bool     WriteString(IStream_s0090_2460* s, const wchar_t* str, TokenIOContext_s0090_2460* ctx); // 0x902640
 }
 }
 struct FixedWStr256 {
@@ -316,7 +312,7 @@ struct HashB_s0090_2460 : Hashtable_s0090_2460 {
 };
 namespace EA {
 namespace XML {
-struct TokenIOContext_s0090_2460 {
+class TokenIOContext_s0090_2460 { public:
     EA::Allocator::ContextCoreAllocator_s0090_2460 mAllocatorContext; // +0x0
     EA::Allocator::StackAllocator_s0090_2460       mAllocator;        // +0x8
     HashA_s0090_2460*     mStringsA;                                  // +0x2c
@@ -335,7 +331,7 @@ struct TokenIOContext_s0090_2460 {
 }
 namespace EA {
 namespace XML {
-struct MemoryStream : IStream {
+struct MemoryStream : IStream_s0090_2460 {
     unsigned mData[8];
     MemoryStream(void* data, unsigned size, int a, int b, int c, const char* name);   // 0x93c2c0
     ~MemoryStream();                                                                  // 0x93bde0
@@ -350,7 +346,7 @@ class XmlTextReader { public:
     unsigned mData[0x22];
     XmlTextReader(EA::Allocator::ICoreAllocator_s0090_2460* alloc);                              // 0x900b30
     ~XmlTextReader();                                                                 // 0x900b70
-    bool Begin(IStream* s, int flags);                                                // 0x901440
+    bool Begin(IStream_s0090_2460* s, int flags);                                                // 0x901440
     bool Next();                                                                      // 0x9013e0
     TokenNode* GetToken();                                                            // 0xa1ad60
 };
@@ -364,6 +360,19 @@ bool IsBlank(const wchar_t* s);                                                 
 namespace EA {
 namespace XML {
 extern const unsigned short g_tokenListVersion;                                       // 0x143a2bc (== 1)
+}
+}
+namespace EA {
+namespace XML {
+inline void ClearHashtable(Hashtable_s0090_2460* h)
+{
+    if (h != 0) {
+        h->DoAllocateBuckets(h->mpBucket, h->mnBucketCount);
+        h->mnElementCount = 0;
+        if (h->mnBucketCount > 1)
+            EA_operator_delete(h->mpBucket);
+    }
+}
 }
 }
 namespace EA {
@@ -407,6 +416,32 @@ bool __cdecl FUN_00901e60(const wchar_t* s)
         ++s;
     } while (c != 0);
     return *s == 0;
+}
+
+// @ 0x00901ec0
+void HashA::FUN_00901ec0(unsigned int nBucketCount)
+{
+    size_t size = nBucketCount * 4;
+    void* pDst = EA_operator_new(size + 4, "EASTL", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    FUN_011e073e(pDst, 0, size);
+    *(unsigned int*)((char*)pDst + size) = 0xffffffffu;
+    for (unsigned int i = 0; i < mnBucketCount; ++i) {
+        HashNode* n = (HashNode*)mpBucket[i];
+        while (n != 0) {
+            unsigned int h = (n->first != 0) ? FNV1_String16(n->first, 0x811c9dc5u, 0) : 0;
+            unsigned int idx2 = h % nBucketCount;
+            mpBucket[i] = (void*)n->mpNext;
+            n->mpNext = *(HashNode**)((char*)pDst + idx2 * 4);
+            *(HashNode**)((char*)pDst + idx2 * 4) = n;
+            n = (HashNode*)mpBucket[i];
+        }
+    }
+    if (mnBucketCount > 1)
+        EA_operator_delete(mpBucket);
+    mnBucketCount = nBucketCount;
+    mpBucket = (void**)pDst;
 }
 
 // @ 0x00901f90
@@ -582,7 +617,7 @@ unsigned TokenIOContext_s0090_2460::AddString(const wchar_t* str, unsigned id)
 
 // @ 0x00902640
 namespace EA { namespace XML {
-bool WriteString(IStream* pStream, const wchar_t* s, TokenIOContext_s0090_2460* ctx)
+bool WriteString(IStream_s0090_2460* pStream, const wchar_t* s, TokenIOContext_s0090_2460* ctx)
 {
     int len;
     unsigned found;
@@ -639,7 +674,7 @@ done:
 
 // @ 0x009027b0
 namespace EA { namespace XML {
-bool ReadString(IStream* pStream, FixedWStr256* out, TokenIOContext_s0090_2460* ctx)
+bool ReadString(IStream_s0090_2460* pStream, FixedWStr256* out, TokenIOContext_s0090_2460* ctx)
 {
     out->Reset(0);
     unsigned remaining = 0;
@@ -700,7 +735,7 @@ bool ReadString(IStream* pStream, FixedWStr256* out, TokenIOContext_s0090_2460* 
 
 // @ 0x00902950
 namespace EA { namespace XML {
-bool ReadToken(IStream* pStream, TokenNode** ppOut, TokenIOContext_s0090_2460* ctx)
+bool ReadToken(IStream_s0090_2460* pStream, TokenNode** ppOut, TokenIOContext_s0090_2460* ctx)
 {
     EA::Allocator::StackAllocator_s0090_2460* A = &ctx->mAllocator;
     unsigned char type = 0;
@@ -770,7 +805,7 @@ bool ReadToken(IStream* pStream, TokenNode** ppOut, TokenIOContext_s0090_2460* c
 
 // @ 0x00902c20
 namespace EA { namespace XML {
-int WriteToken(IStream* pStream, TokenNode* p, TokenIOContext_s0090_2460* ctx)
+int WriteToken(IStream_s0090_2460* pStream, TokenNode* p, TokenIOContext_s0090_2460* ctx)
 {
     unsigned char type = (unsigned char)p->mToken;
     io_WriteBytes(pStream, &type, 1);
@@ -802,7 +837,7 @@ int WriteToken(IStream* pStream, TokenNode* p, TokenIOContext_s0090_2460* ctx)
 
 // @ 0x00902d40
 namespace EA { namespace XML {
-bool ReadTokenList(IStream* pStream, TokenNode** ppOut, unsigned flags, TokenIOContext_s0090_2460* ctx)
+bool ReadTokenList(IStream_s0090_2460* pStream, TokenNode** ppOut, unsigned flags, TokenIOContext_s0090_2460* ctx)
 {
     int pos = pStream->v09(0);
     unsigned hdr1 = 0xffff;
@@ -877,7 +912,7 @@ out:
 
 // @ 0x00902fc0
 namespace EA { namespace XML {
-bool WriteTokenList(IStream* pStream, TokenNode* p, unsigned flags, TokenIOContext_s0090_2460* ctx)
+bool WriteTokenList(IStream_s0090_2460* pStream, TokenNode* p, unsigned flags, TokenIOContext_s0090_2460* ctx)
 {
     unsigned zero = 0;
     unsigned marker = 0x5444;
@@ -916,10 +951,31 @@ TokenIOContext_s0090_2460::TokenIOContext_s0090_2460(EA::Allocator::ICoreAllocat
 }
 }}  // namespace EA::XML
 
+// @ 0x00903120
+namespace EA { namespace XML {
+TokenIOContext_s0090_2460::~TokenIOContext_s0090_2460()
+{
+    ClearHashtable(mStringsA);
+    mStringsA = 0;
+    _ReadWriteBarrier();
+    ClearHashtable(mStringsB);
+    mStringsB = 0;
+    mAllocator.Reset();
+    mAllocator.Reset();
+}
+}}  // namespace EA::XML
+
 // @ 0x009031a0
 namespace EA { namespace XML {
 XmlTokenReader::XmlTokenReader(EA::Allocator::ICoreAllocator_s0090_2460* alloc)
 : XmlReader(alloc), mCtx(alloc)
+{
+}
+}}  // namespace EA::XML
+
+// @ 0x009031d0
+namespace EA { namespace XML {
+XmlTokenReader::~XmlTokenReader()
 {
 }
 }}  // namespace EA::XML
@@ -929,7 +985,7 @@ namespace EA { namespace XML {
 bool XmlTokenReader::Read(const wchar_t* a, const wchar_t* b)
 {
     if (BeginRead(a, b)) {
-        IStream* stream = *(IStream**)((char*)this + 0x34);
+        IStream_s0090_2460* stream = *(IStream_s0090_2460**)((char*)this + 0x34);
         *(int*)((char*)this + 0x40) = 0;
         *(int*)((char*)this + 0x3c) = 0;
         return ReadTokenList(stream, (TokenNode**)((char*)this + 0x38), 0, &mCtx);
@@ -943,7 +999,7 @@ namespace EA { namespace XML {
 bool XmlTokenReader::Read2(const wchar_t* a, const wchar_t* b, const wchar_t* c)
 {
     if (BeginRead2(a, b, c)) {
-        IStream* stream = *(IStream**)((char*)this + 0x34);
+        IStream_s0090_2460* stream = *(IStream_s0090_2460**)((char*)this + 0x34);
         *(int*)((char*)this + 0x40) = 0;
         *(int*)((char*)this + 0x3c) = 0;
         return ReadTokenList(stream, (TokenNode**)((char*)this + 0x38), 0, &mCtx);

@@ -697,7 +697,21 @@ virtual void v5();
 // ---- items of slice s00612270 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-__declspec(noinline) PropPair* DestructRange(PropPair* first, PropPair* last, PropPair* dest);  // 0x00612a90 (stays in the slice: not this object's)
+struct GenIter {
+    PropPair* mIterator;
+    GenIter() {}
+    GenIter(PropPair* p) : mIterator(p) {}
+    GenIter(const GenIter& x) : mIterator(x.mIterator) {}
+};
+struct CGenIter {
+    const PropPair* mIterator;
+    CGenIter() {}
+    CGenIter(const PropPair* p) : mIterator(p) {}
+    CGenIter(const CGenIter& x) : mIterator(x.mIterator) {}
+};
+__declspec(noinline) PropPair* DestructRange(PropPair* first, PropPair* last, PropPair* dest);  // 0x00612a90
+PropPair* __cdecl CopyPairs(const PropPair* first, const PropPair* last, PropPair* dest);        // 0x00612b20
+GenIter UninitializedCopyIter(CGenIter first, CGenIter last, GenIter dest);                      // 0x00612e00
 
 // ---- items of slice s00613240 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl memcpy(void*, const void*, size_t);
@@ -1250,6 +1264,13 @@ void cAssetCache::AddAsset(u64 id, const void* data)
 }
 // ---- items of slice s00614050 end
 
+// @ 0x00612a90
+__declspec(noinline) PropPair* DestructRange(PropPair* first, PropPair* last, PropPair* dest)
+{
+    for (; first != last; ++first, ++dest) first->~PropPair();
+    return dest;
+}
+
 // @ 0x00612ba0
 bool cPropertyListWriter::Write(EA::IO::IStream_s0061_2270* pStream, const cPropertyBag* pBag)
 {
@@ -1322,6 +1343,28 @@ void eastl::PropVector::reserve(size_t n)
         mpEnd = pNewData + (mpEnd - mpBegin);
         mpBegin = pNewData;
         mpCapacity = pNewData + n;
+    }
+}
+
+// @ 0x00613140
+void eastl::PropVector::assign(const PropPair* first, const PropPair* last, int tag)
+{
+    const size_t n = (size_t)(last - first);
+    PropPair* const pBegin = mpBegin;
+    if (n > (size_t)(mpCapacity - pBegin)) {
+        PropPair* const pNewData = DoRealloc(n, first, tag);
+        DestructRangeV(mpBegin, mpEnd);
+        if (mpBegin) mAllocator.deallocate(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = mpCapacity = pNewData + n;
+    } else if (n <= (size_t)(mpEnd - pBegin)) {
+        PropPair* const pNewEnd = CopyPairs(first, last, pBegin);
+        DestructRangeV(pNewEnd, mpEnd);
+        mpEnd = pNewEnd;
+    } else {
+        const PropPair* pMid = first + (mpEnd - pBegin);
+        CopyPairs(first, pMid, pBegin);
+        mpEnd = UninitializedCopyIter(pMid, last, mpEnd).mIterator;
     }
 }
 

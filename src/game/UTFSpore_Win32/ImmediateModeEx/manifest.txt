@@ -1,2 +1,3 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/ImmediateModeEx.cpp  ?FUN_00962ff0@@YAHHHHH@Z  00962ff0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ImmediateModeEx.cpp  ?FUN_00963060@@YAHHHHHHH@Z  00963060  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

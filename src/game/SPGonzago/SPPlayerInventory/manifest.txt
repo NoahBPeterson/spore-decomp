@@ -1,12 +1,16 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3b30@@YIXPAUInv@@PAXH@Z  00ff3b30  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3b70@@YIXPAUInv@@@Z  00ff3b70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3bb0@@YIHPAUToolSet@@PAX1@Z  00ff3bb0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3bf0@@YI_NPAUToolSet@@@Z  00ff3bf0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3cf0@@YAXPAUCbObj@@@Z  00ff3cf0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3d10@@YI_NPAUInv@@PAXPBX@Z  00ff3d10  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3d40@@YIPAXPAUInv@@PAXPBUKey_s00ff3d40@@@Z  00ff3d40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3df0@@YIXPAUInv@@@Z  00ff3df0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3f20@@YI_NPAUInv@@PAX1@Z  00ff3f20  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3fb0@@YIIPAUInv@@PAX1@Z  00ff3fb0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3ff0@@YIXPAUInv@@@Z  00ff3ff0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff4090@@YIHPAUGameData@@PAX1@Z  00ff4090  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/SPPlayerInventory.cpp  ?Read@cPlayerInventory_s00ff_4d50@@QAE_NPAUIStream@@@Z  00ff50f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff4540@cSPPlayerInventory@@QAEXPAUcInvItem@@@Z  00ff4540  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff4470@cSPPlayerInventory@@QAEXPAUcInvItem@@@Z  00ff4470  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3df0@@YIXPAUInv@@@Z  00ff3df0  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3f20@@YI_NPAUInv@@PAX1@Z  00ff3f20  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3d40@@YIPAXPAUInv@@PAXPBUKey_s00ff3d40@@@Z  00ff3d40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff4540@cSPPlayerInventory@@QAEXPAUcInvItem@@@Z  00ff4540  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?Read@cPlayerInventory_s00ff_4d50@@QAE_NPAUIStream@@@Z  00ff50f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

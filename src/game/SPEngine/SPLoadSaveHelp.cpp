@@ -564,6 +564,14 @@ struct NodeTable {
 extern NodeTable gNodeTable;                        // 0x0152d69c
 // ---- items of slice s00695140 end
 
+// @ 0x00692720
+void IO_Fwd_A(void* a, void* b, void* c)
+{ FUN_0093a700((VStream*)a, b, 1, (int)c); }
+
+// @ 0x00692740
+void IO_ReadInt32(void* a, void* b, void* c)
+{ EA_IO_ReadInt32(a, b, 1, (int)c); }
+
 // @ 0x00692760
 void IO_Fwd_B(void* a, void* b, void* c)
 { FUN_0093a800(a, b, (void*)1, c); }

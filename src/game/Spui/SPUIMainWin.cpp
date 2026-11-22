@@ -13,6 +13,9 @@ extern "C" char g_15451ec[];
 #include "EA/Text/FontServer.h"
 #include "cSPUILayout.h"
 #include <intrin.h>
+#include "EA/ArgScript/cArguments.h"
+#include "EA/ArgScript/cCommandBase.h"
+#include "cSPUILayoutObjectCollection.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void sOnEnterEscKeys(int a, int b, int c);
@@ -29,7 +32,7 @@ extern "C" void sOnEnterEscKeys(int a, int b, int c);
 // ---- items of slice s00809700 end
 
 // ---- items of slice s008124a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void*   SP_MessageServer();
+extern "C" void*   SP_MessageServer(); // 0x0067dcc0
 struct Mouse;
 struct Rect4f { float x0, y0, x1, y1; };
 struct Rect4i { int x0, y0, x1, y1; };
@@ -50,40 +53,89 @@ struct Sub {
     virtual Rect4f* s0d();
 };
 struct Y {
-    virtual void y00(); virtual void y01(); virtual void y02(); virtual void y03();
-    virtual void y04(); virtual void y05(); virtual void y06(); virtual void y07();
+virtual void y00();
+virtual void y01();
+virtual void y02();
+virtual void y03();
+virtual void y04();
+virtual void y05();
+virtual void y06();
+virtual void y07();
     virtual void y08(int);          // 0x20
     virtual void y09(int);          // 0x24
     virtual bool y10(int, int);     // 0x28
     virtual bool y11(int, int);     // 0x2c
 };
 struct X {
-    virtual void x00(); virtual void x01(); virtual void x02(); virtual void x03();
-    virtual void x04(); virtual void x05(); virtual void x06(); virtual void x07();
-    virtual void x08(); virtual void x09(); virtual void x0a();
+virtual void x00();
+virtual void x01();
+virtual void x02();
+virtual void x03();
+virtual void x04();
+virtual void x05();
+virtual void x06();
+virtual void x07();
+virtual void x08();
+virtual void x09();
+virtual void x0a();
     virtual Y*   x0b();
-    virtual void x0c(); virtual void x0d();
+virtual void x0c();
+virtual void x0d();
     virtual Y*   x0e();
-    virtual void x0f(); virtual void x10(); virtual void x11(); virtual void x12();
+virtual void x0f();
+virtual void x10();
+virtual void x11();
+virtual void x12();
     virtual void x13();
     virtual X*   x14();
 };
 struct W9 {
-    virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3();
-    virtual void w4(); virtual void w5(); virtual void w6(); virtual void w7();
-    virtual void w8(); virtual void w9();
+virtual void w0();
+virtual void w1();
+virtual void w2();
+virtual void w3();
+virtual void w4();
+virtual void w5();
+virtual void w6();
+virtual void w7();
+virtual void w8();
+virtual void w9();
 };
 struct Canvas {
-    virtual void  c00(); virtual void  c01(); virtual void  c02(); virtual void  c03();
-    virtual void  c04(); virtual void  c05(); virtual void  c06(); virtual void  c07();
-    virtual void  c08(); virtual void  c09(); virtual void  c10(); virtual void  c11();
-    virtual void  c12(); virtual void  c13(); virtual void  c14(); virtual void* c15(void*);
-    virtual void  c16(); virtual void  c17(); virtual void  c18(); virtual void  c19();
-    virtual void  c20(); virtual void  c21(); virtual void  c22(); virtual void  c23();
-    virtual void  c24(); virtual void  c25(); virtual void  c26(); virtual void  c27();
-    virtual void  c28(); virtual void  c29(); virtual void  c30(); virtual void  c31(int, int);
+virtual void  c00();
+virtual void  c01();
+virtual void  c02();
+virtual void  c03();
+virtual void  c04();
+virtual void  c05();
+virtual void  c06();
+virtual void  c07();
+virtual void  c08();
+virtual void  c09();
+virtual void  c10();
+virtual void  c11();
+virtual void  c12();
+virtual void  c13();
+virtual void  c14();
+virtual void* c15(void*);
+virtual void  c16();
+virtual void  c17();
+virtual void  c18();
+virtual void  c19();
+virtual void  c20();
+virtual void  c21();
+virtual void  c22();
+virtual void  c23();
+virtual void  c24();
+virtual void  c25();
+virtual void  c26();
+virtual void  c27();
+virtual void  c28();
+virtual void  c29();
+virtual void  c30();
+virtual void  c31(int, int);
 };
-extern "C" Canvas* SP_Canvas();
+extern "C" Canvas* SP_Canvas();        // 0x0067dcf0
 #define sMouseXScale (*(float*)g_15451e8)
 #define sMouseYScale (*(float*)g_15451ec)
 struct MainWin {
@@ -120,9 +172,15 @@ struct Property {
     int* GetInt();
 };
 struct cDirectPropertyList {
-    virtual bool p0(void*); virtual bool p1(void*); virtual bool p2(void*);
-    virtual bool p3(void*); virtual bool p4(void*); virtual bool p5(void*);
-    virtual bool p6(void*); virtual bool p7(void*); virtual bool p8(void*);
+virtual bool p0(void*);
+virtual bool p1(void*);
+virtual bool p2(void*);
+virtual bool p3(void*);
+virtual bool p4(void*);
+virtual bool p5(void*);
+virtual bool p6(void*);
+virtual bool p7(void*);
+virtual bool p8(void*);
     virtual bool GetProp(uint32_t id, Property** out);
 };
 extern cDirectPropertyList* g_AppProperties;             // 0x15fd918
@@ -516,11 +574,6 @@ static __forceinline void AssignRef(void** slot, void* nv, int addIdx, int relId
 void sOnEnterEscKeys()
 { /* not reconstructed */ }
 
-
-
-
-
-
 // @ 0x0080a320
 bool __stdcall FUN_0080a320(void* a, Msg* m)
 {
@@ -543,9 +596,80 @@ bool __stdcall FUN_0080a320(void* a, Msg* m)
     }
 }
 
+// @ 0x00812c30
+__declspec(noinline) unsigned MainWin::GetFlags()
+{
+    unsigned r = 0;
+    if (b284) r = 8;
+    if (b285) r |= 0x10;
+    if (b286) r |= 0x20;
+    return r;
+}
 
+// @ 0x00812c60
+__declspec(noinline) unsigned MapFlags(unsigned char f)
+{
+    unsigned r = 0;
+    if (f & 1) r = 1;
+    if (f & 2) r |= 2;
+    if (f & 0x1c) r |= 4;
+    return r;
+}
 
-
+// @ 0x00812db0
+bool MainWin::BuildMouseMsg(const void* pin, void* pout)
+{
+    const char* in = (const char*)pin;
+    char* out = (char*)pout;
+    uint32_t type = *(uint32_t*)(in + 8);
+    switch (type) {
+    case 1:
+        *(int*)(out + 8) = (*(uint8_t*)(in + 0x11) == 0) + 1;
+        *(int*)(out + 0xc) = 0;
+        *(int*)(out + 0x10) = *(int*)(in + 0xc);
+        *(unsigned*)(out + 0x14) = MapFlags(*(uint8_t*)(in + 0x10));
+        if (*(uint16_t*)(in + 0x12) > 1) *(unsigned*)(out + 0x14) |= 0x40;
+        return true;
+    case 2:
+        *(int*)(out + 8) = 5;
+        *(int*)(out + 0xc) = 0;
+        *(int*)(out + 0x10) = *(int*)(in + 0xc);
+        *(unsigned*)(out + 0x14) = MapFlags(*(uint8_t*)(in + 0x10));
+        return true;
+    case 3: {
+        int v = 1;
+        if (*(float*)(in + 0x10) <= 0.5f) v = 2;
+        *(int*)(out + 8) = v;
+        *(int*)(out + 0xc) = *(int*)(in + 4) + 2;
+        *(int*)(out + 0x10) = *(int*)(in + 0xc);
+        *(int*)(out + 0x14) = 0;
+        return true;
+    }
+    case 5:
+        *(int*)(out + 8) = (*(uint8_t*)(in + 0x10) == 0) + 6;
+        *(float*)(out + 0xc) = (float)*(int*)(in + 0x14) * sMouseXScale;
+        *(float*)(out + 0x10) = (float)*(int*)(in + 0x18) * sMouseYScale;
+        *(int*)(out + 0x18) = *(int*)(in + 0xc);
+        break;
+    case 6:
+        *(int*)(out + 8) = 9;
+        *(float*)(out + 0xc) = (float)*(int*)(in + 0x14) * sMouseXScale;
+        *(float*)(out + 0x10) = (float)*(int*)(in + 0x18) * sMouseYScale;
+        *(int*)(out + 0x18) = *(int*)(in + 0xc);
+        break;
+    case 7:
+        *(int*)(out + 8) = 8;
+        *(float*)(out + 0xc) = (float)*(int*)(in + 0xc) * sMouseXScale;
+        *(float*)(out + 0x10) = (float)*(int*)(in + 0x10) * sMouseYScale;
+        break;
+    default:
+        return false;
+    }
+    unsigned flags = MapFlags(*(uint8_t*)(in + 0x1c));
+    flags |= GetFlags();
+    *(unsigned*)(out + 0x14) = flags;
+    return true;
+}
 
 // @ 0x008130c0
 void MainWin::OnMouse(bool active)
@@ -564,10 +688,6 @@ void MainWin::OnMouse(bool active)
     }
 }
 
-
-
-
-
 // @ 0x00813120
 void sInitDropShadowQuality()
 {
@@ -581,10 +701,6 @@ void sInitDropShadowQuality()
         q = *p->GetInt();
     SetDropShadowQuality(q, 1);
 }
-
-
-
-
 
 // @ 0x008131b0
 void MainWin::UpdateMouseScale()
@@ -605,10 +721,6 @@ void MainWin::UpdateMouseScale()
         sMouseYScale = (s->y1 - s->y0) / sMouseYScale;
     }
 }
-
-
-
-
 
 // @ 0x00813260
 void MainWin::SetFocusObj(X* p)
@@ -633,10 +745,6 @@ void MainWin::SetFocusObj(X* p)
     }
 }
 
-
-
-
-
 // @ 0x00813300
 void MainWin::ApplyToFocus(int arg)
 {
@@ -649,10 +757,6 @@ void MainWin::ApplyToFocus(int arg)
         o->x0e()->y09(arg);
     }
 }
-
-
-
-
 
 // @ 0x00813370
 bool MainWin::RouteKey(int, int key, int mod)
@@ -668,9 +772,6 @@ bool MainWin::RouteKey(int, int key, int mod)
     return false;
 }
 
-
-
-
 // @ 0x00813630
 bool MainWin_s0081_33f0::FocusKey2(float a, float b, int c)
 {
@@ -680,9 +781,6 @@ bool MainWin_s0081_33f0::FocusKey2(float a, float b, int c)
     if (q && q->b0e()->a0e(a, b, c)) return true;
     return false;
 }
-
-
-
 
 // @ 0x008136b0
 bool MainWin_s0081_33f0::FocusKey4(float a, float b, int c, int d)
@@ -694,18 +792,12 @@ bool MainWin_s0081_33f0::FocusKey4(float a, float b, int c, int d)
     return false;
 }
 
-
-
-
 // @ 0x00813740
 void WinSub::SetAreaNotify(int a)
 {
     SetArea(a);
     ((MainWin_s0081_33f0*)((char*)this - 4))->UpdateMouseScale();
 }
-
-
-
 
 // @ 0x00813760
 bool MainWin_s0081_33f0::InitHitMaskFactory()
@@ -728,9 +820,6 @@ bool MainWin_s0081_33f0::InitHitMaskFactory()
     }
     return true;
 }
-
-
-
 
 // @ 0x008137f0
 bool MainWin_s0081_33f0::InitStringFactories()
@@ -761,9 +850,6 @@ bool MainWin_s0081_33f0::InitStringFactories()
     return true;
 }
 
-
-
-
 // @ 0x008138e0
 bool MainWin_s0081_33f0::ShutdownStringFactories()
 {
@@ -790,9 +876,6 @@ bool MainWin_s0081_33f0::ShutdownStringFactories()
     }
     return true;
 }
-
-
-
 
 // @ 0x00813980
 bool MainWin_s0081_33f0::InitTitleScreen()
@@ -824,9 +907,6 @@ bool MainWin_s0081_33f0::InitTitleScreen()
     return true;
 }
 
-
-
-
 // @ 0x00813c20
 int LowerBoundUShort(int a, int b, unsigned short* key)
 {
@@ -845,9 +925,6 @@ int LowerBoundUShort(int a, int b, unsigned short* key)
     }
     return a;
 }
-
-
-
 
 // @ 0x00813ca0
 void MainWin_s0081_33f0::Dtor()
@@ -887,9 +964,6 @@ void MainWin_s0081_33f0::Dtor()
     FUN_00962740(t);
 }
 
-
-
-
 // @ 0x008141b0
 void* MainWin_Ctor(MainWin_s0081_33f0* self)
 {
@@ -919,8 +993,6 @@ void* MainWin_Ctor(MainWin_s0081_33f0* self)
     return self;
 }
 
-
-
 // @ 0x008143a0
 void MainWin_s0081_43a0::OnKeyDown()
 {
@@ -929,8 +1001,6 @@ void MainWin_s0081_43a0::OnKeyDown()
     FUN_0067dd50();
     // heavy Date/time + sprintf naming flow summarised
 }
-
-
 
 // @ 0x008145d0
 void MainWin_s0081_43a0::MovieToggle()
@@ -944,8 +1014,6 @@ void MainWin_s0081_43a0::MovieToggle()
     // movie-area property flow summarised
 }
 
-
-
 // @ 0x008148b0
 bool MainWin_s0081_43a0::SaveReadme(int mode)
 {
@@ -955,23 +1023,17 @@ bool MainWin_s0081_43a0::SaveReadme(int mode)
     return true;
 }
 
-
-
 // @ 0x008149c0
 void* StringConstruct(void* self, void* str, unsigned idx)
 {
     return self;
 }
 
-
-
 // @ 0x00814b80
 void sTextStyleCallback(int n, void* args, void* p)
 {
     if (n < 2) return;
 }
-
-
 
 struct AppSystem_814d50 {
     virtual void v00();
@@ -997,6 +1059,7 @@ struct AppSystem_814d50 {
     virtual void v14();
     virtual bool IsDebugEnabled();                                   // +0x54
 };
+
 // @ 0x00814d50
 bool MainWin_s0081_43a0::KeyHandler2(int a, int key, int mod)
 {
@@ -1021,15 +1084,11 @@ bool MainWin_s0081_43a0::KeyHandler2(int a, int key, int mod)
     return false;
 }
 
-
-
 // @ 0x00814e40
 void MainWin_s0081_43a0::HandleMessage(unsigned id, int* msg)
 {
     (void)id; (void)msg;
 }
-
-
 
 // @ 0x00815310
 void MainWin_s0081_43a0::RemoveElem(int val)
@@ -1048,8 +1107,6 @@ void MainWin_s0081_43a0::RemoveElem(int val)
         }
     }
 }
-
-
 
 // @ 0x00815370
 void MainWin_s0081_43a0::AddElem(Elem* p)
@@ -1070,8 +1127,6 @@ void MainWin_s0081_43a0::AddElem(Elem* p)
     if (tmp) tmp->e01();
 }
 
-
-
 // @ 0x008153e0
 void MainWin_s0081_43a0::CloseAll()
 {
@@ -1082,12 +1137,10 @@ void MainWin_s0081_43a0::CloseAll()
     v->erase(v->mBegin, v->mEnd);
 }
 
-
 // @ 0x00815420
 void __cdecl FUN_00815420_partial()
 {
 }
-
 
 // @ 0x00815990
 void Cheat::Execute(Args* args)
@@ -1107,7 +1160,6 @@ void Cheat::Execute(Args* args)
     ArgScript_Output(mParser, "capture UI is on (captures at game resolution)\n");
 }
 
-
 // @ 0x00815a50
 void Outer::ExecuteColor(int arg)
 {
@@ -1118,7 +1170,6 @@ void Outer::ExecuteColor(int arg)
         cString_SetColorLocalized(bD8);
     }
 }
-
 
 // @ 0x00815aa0
 void HashtableStub::DoFreeNodes(void** buckets, unsigned n)
@@ -1143,13 +1194,11 @@ void HashtableStub::DoFreeNodes(void** buckets, unsigned n)
     }
 }
 
-
 // @ 0x00815b30
 void Outer::Wrap(int arg)
 {
     inner.Method(arg, f4);
 }
-
 
 // @ 0x00815b50
 void TextStyleReaderStub::Dtor()
@@ -1166,7 +1215,6 @@ void TextStyleReaderStub::Dtor()
     if (*(int*)(t + 0x18) - (int)m > 1 && m) EastlDealloc(m);
 }
 
-
 // @ 0x00815bd0
 __declspec(noinline) bool LoadTextStyles(int resId, int mode)
 {
@@ -1175,7 +1223,6 @@ __declspec(noinline) bool LoadTextStyles(int resId, int mode)
     (void)sm; (void)resId; (void)mode;
     return true;
 }
-
 
 // @ 0x00815ce0
 bool cSPUIMainWin_InitFonts()

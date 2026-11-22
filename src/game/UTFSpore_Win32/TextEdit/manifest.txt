@@ -16,16 +16,16 @@
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?SetScrollbarEnabled@IWinTextEdit_s0098_a820@UTFWinControls@EA@@QAEXHH@Z  0098ad10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?FindParagraphByTextIndex@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEPBUParagraph_s0098_b910@23@I@Z  0098b910  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?scalar_deleting_destructor@UndoAction@UTFWinControls@EA@@QAEPAU123@I@Z  0098bc20  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?ApplyUndoRedo@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z  0098bc80  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?ApplyRedoUndo@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z  0098bd00  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?Shutdown@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXXZ  0098c520  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?SetUndoHistorySize@IWinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXI@Z  0098c860  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?push_back@ParagraphVector_s0098_c880@UTFWinControls@EA@@QAEXABUParagraph_s0098_c880@23@@Z  0098cb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?Init@WinTextEdit_s0098_c880@UTFWinControls@EA@@QAE_NXZ  0098cc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?OnMouseMove@WinTextEdit_s0098_c880@UTFWinControls@EA@@QAE_NMMI@Z  0098d540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?OnAutoSize@WinTextEdit_s0098_c880@UTFWinControls@EA@@QAE_NIPAM@Z  0098d5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphCount@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEHXZ  0098e7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphTextIndex@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEII@Z  0098e7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphYPos@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEMI@Z  0098e830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphLength@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEII@Z  0098e880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetTextExtent@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEXPAUPoint2@23@@Z  0098e9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/TextEdit.cpp  ?OnMouseMove@WinTextEdit_s0098_c880@UTFWinControls@EA@@QAE_NMMI@Z  0098d540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/TextEdit.cpp  ?ApplyUndoRedo@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z  0098bc80  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
-../src/game/UTFSpore_Win32/TextEdit.cpp  ?ApplyRedoUndo@WinTextEdit_s0098_b910@UTFWinControls@EA@@QAEXPAUUndoAction@23@@Z  0098bd00  /O2 /MD /Gy /TP /EHsc /Isrc/game/include

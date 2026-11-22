@@ -14,6 +14,8 @@ extern uint32_t     gListBase1440aec; // 0x01440aec
 #include "SP/cGameNounManager.h"
 
 // ---- items of slice s00e9fca0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float  gConst13ec478;    // 0x013ec478
+extern const double gConst140ebb0;    // 0x0140ebb0
 typedef unsigned int uintptr_t;
 typedef unsigned int uint;
 #define PVCAT2(a, b) a##b
@@ -131,10 +133,6 @@ struct cAmbienceLayerManager {
 void*       EA_GetSystemAT(void);                       // 0x00a206f0
 void        __cdecl SetGlobalProperty(uint key, float value);      // 0x005ca880
 void        __cdecl RecordEvent4(uint id, uint hash, float value, uint extra); // 0x00435f40
-extern const float  gRealOne;         // 0x01485720 (_HK_REAL_ONE)
-extern const float  gConst1486110;    // 0x01486110
-extern uint32_t     gEditorSoundHandles[6];   // 0x01487198
-extern uint32_t     gListBase1440aec; // 0x01440aec
 bool __fastcall FUN_00e9fca0(cAmbienceLayerManager* self, void* edx);  // 0x00e9fca0 (defined below; used by a stub's inline body)
 struct Thiscall {
     void  FUN_00e9e220();                        // 0x00e9e220
@@ -435,6 +433,11 @@ struct Message {
     int      mSelected;  // +0x14
     int      mField18;   // +0x18
 };
+struct cCityMusicHandler {
+    cCityMusicEditor_s00ea_0910*     Editor() { return (cCityMusicEditor_s00ea_0910*)((char*)this - 4); }
+    cPlayerCityMusicConfig* Config() { return (cPlayerCityMusicConfig*)((char*)this + 0x0c); }
+    char HandleMessage(int id, Message* msg);                        // 0x00ea1710 (ret 8)
+};
 struct cPlayerCivilization {
     char      mPad[0x274];
     IObject*  mpMusic;   // +0x274
@@ -492,6 +495,28 @@ void __fastcall FUN_00e9fe90(cWindowPulse* self, void* edx, IWnd* wnd)
         IWnd* r = cur->Slot10();
         r->SlotE8(cur);
     }
+}
+
+// @ 0x00e9ff20
+float __cdecl FUN_00e9ff20(int param_1, int param_2, int param_3)
+{
+    if (param_2 < 0 && param_3 == 0) {
+        if (param_1 == param_2)
+            return 0.0f;
+        return (float)pow((double)param_1 * (double)gConst13ec478, gConst140ebb0);
+    }
+    float v = (float)(param_1 - param_2) / (float)(param_3 - param_2);
+    float r = 1.0f;
+    unsigned n = 2;
+    for (;;) {
+        if (n & 1)
+            r *= v;
+        n >>= 1;
+        if (n == 0)
+            break;
+        v *= v;
+    }
+    return r;
 }
 
 // @ 0x00e9ffb0
@@ -1163,6 +1188,29 @@ void __fastcall FUN_00ea1570(cCityMusicEditor_s00ea_0910* self)
         }
     }
     FUN_00ea1060(self);
+}
+
+// @ 0x00ea1710
+char cCityMusicHandler::HandleMessage(int id, Message* msg)
+{
+    if (id == 0xf62def) {
+        ReloadArgs v;
+        v.a = msg->mField18;
+        v.b = msg->mType;
+        v.c = msg->mField10;
+        char ok = Config()->Reload(v) ? 1 : 0;
+        if (ok)
+            FUN_00ea1570(Editor());
+        return ok;
+    }
+    if (id == 0x510b72f) {
+        if ((void*)Editor()->mpPlayer != (void*)msg) {
+            return 0;
+        }
+        Editor()->Redraw();
+        return 1;
+    }
+    return 0;
 }
 
 // @ 0x00ea17b0

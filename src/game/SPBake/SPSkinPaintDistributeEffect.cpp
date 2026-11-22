@@ -376,7 +376,6 @@ struct cSPSkinPaintDistributeEffect_s0053_1510 {
 // ---- items of slice s00532f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef int ptrdiff_t;
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
-
 inline void VectorAutoRef::clear()
 {
     ScratchSlots<7>(); // Reserved inline frame before the vector receiver.

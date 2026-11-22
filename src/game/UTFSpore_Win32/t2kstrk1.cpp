@@ -1021,6 +1021,80 @@ GlyphClass* ff_glyph_StrokeGlyph(GlyphClass* g, int32 a, int b, int c, int d)
     return ng;
 }
 
+// @ 0x008cb1b0
+void ff_Read2Numbers(InputStream* in, uint16* out)
+{
+    uint8 buf[8];
+    int count = 0;
+    int idx = 0;
+    uint8 b;
+    out[0] = 0;
+    out[1] = 0;
+    do {
+        b = ReadUnsignedByteMacro(in);
+        buf[idx] = b >> 1;
+        count++;
+        if ((b & 1) == 0)
+            break;
+        idx++;
+    } while (idx < 8);
+    if (count - 1 >= 0) {
+        uint16 u0 = out[0];
+        uint16 u1 = out[1];
+        int i = count - 1;
+        do {
+            uint8 c = buf[i];
+            u1 = (uint16)(u1 * 8 | (c & 7));
+            u0 = (uint16)((c >> 3 & 0xf) | (u0 << 4));
+            buf[i] = c >> 7;
+            i--;
+        } while (i >= 0);
+        out[0] = u0;
+        out[1] = u1;
+    }
+}
+
+// @ 0x008cb2e0
+void ff_Read4Numbers(InputStream* in, uint16* out)
+{
+    uint8 buf[8];
+    int count = 0;
+    int idx = 0;
+    uint8 b;
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    do {
+        b = ReadUnsignedByteMacro(in);
+        buf[idx] = b >> 1;
+        count++;
+        if ((b & 1) == 0)
+            break;
+        idx++;
+    } while (idx < 8);
+    if (count - 1 >= 0) {
+        uint16 u0 = out[0];
+        uint16 u1 = out[1];
+        uint16 u2 = out[2];
+        uint16 u3 = out[3];
+        int i = count - 1;
+        do {
+            uint8 c = buf[i];
+            u3 = (uint16)(u3 * 8 | (c & 7));
+            u2 = (uint16)(u2 * 4 | (c >> 3 & 3));
+            u1 = (uint16)(u1 * 2 | (c >> 5 & 1));
+            u0 = (uint16)((c >> 6 & 1) | (u0 * 2));
+            buf[i] = c >> 7;
+            i--;
+        } while (i >= 0);
+        out[0] = u0;
+        out[1] = u1;
+        out[2] = u2;
+        out[3] = u3;
+    }
+}
+
 // @ 0x008cb450
 uint32 ReadLowUnsignedNumber(InputStream* in)
 {

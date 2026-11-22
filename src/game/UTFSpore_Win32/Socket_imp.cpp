@@ -381,6 +381,22 @@ unsigned Socket::QueryInterface(int iid)
     return 0;
 }
 
+// @ 0x0094d3c0
+bool Socket::Create()
+{
+    if ((*(unsigned char(__thiscall**)(void*))((char*)*(void**)this + 0x20))(this) == 0) {
+        unsigned h = socket(*(int*)((char*)this + 0x40), *(int*)((char*)this + 0x44),
+                            *(int*)((char*)this + 0x48));
+        *(unsigned*)((char*)this + 4) = h;
+        if (h == 0xffffffffu) {
+            REPORT_ERROR(this);
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 // @ 0x0094d410
 bool Socket::Bind(const void* addr)
 {
@@ -913,6 +929,13 @@ bool ISocket::StartListen(int backlog)
     return true;
 }
 
+// @ 0x0094e4a0
+bool ISocket::Close()
+{
+    ((ISocket*)((char*)this - 0x78))->v13();
+    return true;
+}
+
 // @ 0x0094e4b0
 bool ISocket::Connect(bool* ok, void* stream)
 {
@@ -1112,6 +1135,22 @@ StreamSocketBase::StreamSocketBase()
     mnProtocol = 0;
     mnAddressFamily = 2;
     mnType = 1;
+}
+
+// @ 0x0094ea10
+bool ISocket::Shutdown(int mode)
+{
+    char* self = (char*)this;
+    int* pStatus = (int*)(self + 0x7c);
+    *pStatus = 4;
+    int s = *(int*)(self + 4);
+    if (s != -1) {
+        if (shutdown(s, mode) != 0) {
+            ((Primary*)(self - 8))->DoError(WSAGetLastError(), 0);
+            return false;
+        }
+    }
+    return true;
 }
 
 // @ 0x0094ea80

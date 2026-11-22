@@ -1,5 +1,8 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?reserve@?$vector_s004e_01d0@V?$AutoRefCount_s004e_01d0@VcTextureInstance_s004e_01d0@SP@@@EA@@@eastl@@QAEXI@Z  004e0880  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007ace40@@YAXPAEH0HHH@Z  007ace40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007aceb0@@YAXPAEH0HH@Z  007aceb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007acfa0@@YAXPAIH0HH@Z  007acfa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?IsSet@FlagHolder@@QAEEXZ  007ae960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1DxtSurface@@UAE@XZ  007ae980  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0DxtSurface@@QAE@XZ  007ae9f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -7,7 +10,12 @@
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007af620@@YAXPAUEndpoint@@0PBU1@@Z  007af620  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007af670@@YAXPAUEndpoint@@IPBU1@@Z  007af670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  007afae0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?RefUninitCopy_7b0040@@YA?AURefIt_7b0040@@U1@00@Z  007b0040  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0C00d0@@QAE@XZ  007b00d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0BakeSprites@@QAE@XZ  007b00f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1C0130@@UAE@XZ  007b0130  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1C0160@@UAE@XZ  007b0160  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?ScalarDelete@ImageVector@@QAEPAV1@I@Z  007b03e0  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007b06c0@@YA_NPAVcImageDataRaw@@PAPAV1@HHIPAUIUnknown32@@@Z  007b06c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?push_back@C20@@QAEXABUT20@@@Z  007b0f40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?AddNode@C20@@QAEXHH@Z  007b0fa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -18,8 +26,3 @@
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAX@Z  007b1de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?f@W1e70@@QAEXPAX0@Z  007b1e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAUPropKey@@@Z  007b1e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1C0130@@UAE@XZ  007b0130  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?ScalarDelete@ImageVector@@QAEPAV1@I@Z  007b03e0  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?RefUninitCopy_7b0040@@YA?AURefIt_7b0040@@U1@00@Z  007b0040  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0BakeSprites@@QAE@XZ  007b00f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1C0160@@UAE@XZ  007b0160  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

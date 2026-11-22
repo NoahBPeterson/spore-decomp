@@ -1,2 +1,5 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPTribeGameBehaviorBabyPlay.cpp  ?FUN_00d71f80@@YA_NPAVcTribeMember@SP@@HHHHPAI@Z  00d71f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorBabyPlay.cpp  ?FUN_00d70fe0@@YAXPAVcSPCreatureBase@@HHHHPAUDeactivateCtx@@@Z  00d70fe0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorBabyPlay.cpp  ?TRIBE_BABY_FEAR_Activate@@YA_NPAVcSPCreatureCitizen@@@Z  00d71eb0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorBabyPlay.cpp  ?FUN_00d71f50@@YAXPAVcSPCreatureBase@@@Z  00d71f50  /O2 /MD /Gy /TP /GS- /Isrc/game/include

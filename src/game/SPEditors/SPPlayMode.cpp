@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPPlayMode.cpp -- migrated from slice(s) s0062da00, s0062e7e0, s0062bb40, s0062abd0, s00629c50, s00628d50, s00627d50 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPPlayMode.cpp -- migrated from slice(s) s0062ca80, s0062da00, s0062e7e0, s0062bb40, s0062abd0, s00629c50, s00628d50, s00627d50 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPPlayMode.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -30,6 +30,8 @@
 #include "SP/cSPPlayModeAnimLoadInfo.h"
 #include "SP/cSPPlayModeAnimPanelInfo.h"
 #include "SP/cString.h"
+#include "SP/cSPEditorAnimatedCreatureData.h"
+#include "SP/cSPPlayMode_Creature.h"
 
 // ---- items of slice s00627d50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PVCAT2(a, b) a##b
@@ -587,12 +589,6 @@ class cSPPlayModeAnimation_s0062_da00__ui {
 };
 // ---- items of slice s0062da00_ui end
 
-
-
-
-
-
-
 // ---- items of slice s0062e7e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ResourceKey;
 class cString {
@@ -695,7 +691,68 @@ class cSPPlayModeAnimLoadInfo : public RefCountVTemplate {
   virtual ~cSPPlayModeAnimLoadInfo();
   cSPPlayModeAnimLoadInfo() {}
 };
+// cSPPlayModeBGMgr (retail layout: mUI moved to +0x34)
+struct BGInfoVector { void** mpBegin; void** mpEnd; void** mpCapacity; uint32_t mAllocator; };
+struct BGInfo { uint32_t pad[2]; uint32_t mEffectID; uint32_t pad2; uint32_t mType; uint32_t mLightID; };   // +8, +0x10, +0x14
+struct FxObj {
+  int FUN_0045b210();
+  void FUN_0045b150();
+  void FUN_0045ae10(int v);
+};
+FxObj* __stdcall FUN_00401050(uint32_t id);
+struct ILightingWorld {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+  virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+  virtual void v10(); virtual void v11();
+  virtual void SetLighting(uint32_t id);      // +0x30
+};
+class cSPPlayModeBGMgr {
+ public:
+  void* vftable;                   // +0x00
+  BGInfoVector mBackGroundInfo;    // +0x04
+  uint32_t pad14;                  // +0x14
+  uint32_t mCurrThumbnailNum;      // +0x18
+  uint32_t mCurrBkgEffectID;       // +0x1c
+  uint32_t mLastBkgEffectID;       // +0x20
+  uint32_t mCrossFadeEffectID;     // +0x24
+  uint32_t mEntryEffectID;         // +0x28
+  uint32_t pad2c;                  // +0x2c
+  bool mChangingEnvironment;       // +0x30
+  uint8_t pad31[3];
+  cSPPlayModeUI_s0062_e7e0* mUI;   // +0x34
+  uint32_t mPageCount;             // +0x38
+  uint32_t mCurrentPage;           // +0x3c
+  ILightingWorld* mLightingWorld;  // +0x40
+  bool mbChangeInitiated;          // +0x44
+
+  void SetBGHilite(uint32_t id);
+  void UpdateBGHilite();
+  void UpdateBGCountText();
+  void FUN_0062f2f0();
+  void FUN_0062f5c0();
+  void FUN_0062f610();
+  bool FUN_0062f6c0();
+};
 // ---- items of slice s0062e7e0 end
+
+// ---- items of slice s0062ca80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* gThemeMusicVt; // 0x14774b0
+struct Vec3 { float x, y, z; };
+struct RefCountObj {
+  virtual void slot0();
+  virtual int AddRef();
+  virtual int Release();
+  int mnRefCount;
+};
+struct PathT : RefCountObj {
+  Vec3 mTarget;
+  Vec3 mTeleport;
+  float mSpeed;
+  float mReached;
+  unsigned char mType, mCount, mPriority, mRoom;
+  PathT() { mnRefCount = 0; }
+};
+// ---- items of slice s0062ca80 end
 
 // @ 0x00628610
 namespace SP {
@@ -717,12 +774,6 @@ bool __stdcall cSPPlayMode_s0062_7d50::IsWalkTypeAnim(unsigned id)
     return false;
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x006286a0
 namespace SP {
@@ -756,12 +807,6 @@ unsigned cSPPlayMode_s0062_7d50::GetRandomEnvironmentReactionAnim()
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x00628720
 namespace SP {
 int cSPPlayMode_s0062_7d50::FindBabyAnimSlot(int id)
@@ -777,12 +822,6 @@ int cSPPlayMode_s0062_7d50::FindBabyAnimSlot(int id)
     return -1;
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x00628750
 namespace SP {
@@ -800,12 +839,6 @@ unsigned char cSPPlayMode_s0062_7d50::GetBabyPhotoMode(int id)
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x00628810
 namespace SP {
 void cResetable::Reset()
@@ -817,12 +850,6 @@ void cResetable::Reset()
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x00628860
 namespace SP {
 float cSPPlayMode_s0062_7d50::SetBabyCrouchAnimation(unsigned creatureId)
@@ -830,12 +857,6 @@ float cSPPlayMode_s0062_7d50::SetBabyCrouchAnimation(unsigned creatureId)
     return mAnimation.PlayAnim(creatureId, 0x43736cd, 0, 1, 0);
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x006288d0
 namespace SP {
@@ -849,12 +870,6 @@ void cSPPlayMode_s0062_7d50::W6288d0(bool b)
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x006288f0
 namespace SP {
 void cSPPlayMode_s0062_7d50::ResetExpansionAnimWindow()
@@ -864,12 +879,6 @@ void cSPPlayMode_s0062_7d50::ResetExpansionAnimWindow()
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x00628910
 namespace SP {
 void __cdecl W628910()
@@ -877,12 +886,6 @@ void __cdecl W628910()
     FUN_00809db0(0, &gUnknown1522480);
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x00628940
 namespace SP {
@@ -892,23 +895,11 @@ bool cSPPlayMode_s0062_7d50::W628940()
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x00628970
 namespace SP {
 Quat4* ForceQuat(void* p, float a, float b, float c, float d)
 { return new (p) Quat4(a, b, c, d); }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x006289a0
 namespace SP {
@@ -929,12 +920,6 @@ void cPreloadOwner::EnsurePreload()
     }
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x00628ca0
 namespace SP {
@@ -959,12 +944,6 @@ void cAppModeEditorBaseT::SendButtonEventToBabies(int arg)
     }
 }
 }  // namespace SP
-
-
-
-
-
-
 
 // @ 0x00628d50
 bool cSPPlayMode::HandleButton(int id)
@@ -998,11 +977,6 @@ bool cSPPlayMode::HandleButton(int id)
   return result;
 }
 
-
-
-
-
-
 // @ 0x00628f10
 void cSPPlayMode::SetMomToFaceBaby(uint32_t baby)
 {
@@ -1023,11 +997,6 @@ void cSPPlayMode::SetMomToFaceBaby(uint32_t baby)
   mMomCrouchChangeTime = -ang;
 }
 
-
-
-
-
-
 // @ 0x00629110
 uint32_t cSPPlayMode::GetLatestBabyID()
 {
@@ -1039,22 +1008,12 @@ uint32_t cSPPlayMode::GetLatestBabyID()
   return b[n - 1].id;
 }
 
-
-
-
-
-
 // @ 0x00629150
 int cSPPlayMode::GetLatestBabyIndex()
 {
   Editor* e = mEditor;
   return e->babies.ssize() - 1;
 }
-
-
-
-
-
 
 // @ 0x00629180
 uint32_t cSPPlayMode::GetAnimatedBabyIndex(uint32_t id)
@@ -1069,11 +1028,6 @@ uint32_t cSPPlayMode::GetAnimatedBabyIndex(uint32_t id)
   return 0xffffffff;
 }
 
-
-
-
-
-
 // @ 0x006291d0
 uint32_t cSPPlayMode::FUN_006291d0(uint32_t index)
 {
@@ -1085,11 +1039,6 @@ uint32_t cSPPlayMode::FUN_006291d0(uint32_t index)
   if (index < n) return b[index].id;
   return b[0].id;
 }
-
-
-
-
-
 
 // @ 0x00629220
 void cSPPlayMode::SetAllBabySitUp()
@@ -1104,11 +1053,6 @@ void cSPPlayMode::SetAllBabySitUp()
     v[i].timer = 0.0f;
   }
 }
-
-
-
-
-
 
 // @ 0x006292b0
 void cSPPlayMode::SetAllOtherBabiesToIdle(uint32_t id, uint32_t anim, float f)
@@ -1128,22 +1072,12 @@ void cSPPlayMode::SetAllOtherBabiesToIdle(uint32_t id, uint32_t anim, float f)
   }
 }
 
-
-
-
-
-
 // @ 0x00629380
 void cSPPlayMode::SetBabySpawned(uint32_t index, uint8_t value)
 {
   BabyVec& v = mEditor->babies;
   if (index < v.size()) v[index].spawned = value;
 }
-
-
-
-
-
 
 // @ 0x006293d0
 void cSPPlayMode::SetBabySocialCallState(uint32_t id, uint32_t anim, float f)
@@ -1167,11 +1101,6 @@ void cSPPlayMode::SetBabySocialCallState(uint32_t id, uint32_t anim, float f)
   }
 }
 
-
-
-
-
-
 // @ 0x006294e0
 float cSPPlayMode::SetBabyCelebrationAnim()
 {
@@ -1189,11 +1118,6 @@ float cSPPlayMode::SetBabyCelebrationAnim()
   }
   return result;
 }
-
-
-
-
-
 
 // @ 0x00629590
 bool cSPPlayMode::FUN_00629590()
@@ -1234,11 +1158,6 @@ bool cSPPlayMode::FUN_00629590()
   }
   return result;
 }
-
-
-
-
-
 
 // @ 0x006296e0
 void cSPPlayMode::ForceBabiesToIdle(int param)
@@ -1282,11 +1201,6 @@ void cSPPlayMode::ForceBabiesToIdle(int param)
   }
 }
 
-
-
-
-
-
 // @ 0x006298b0
 void cSPPlayMode::FUN_006298b0(uint32_t exceptId)
 {
@@ -1301,11 +1215,6 @@ void cSPPlayMode::FUN_006298b0(uint32_t exceptId)
     }
   }
 }
-
-
-
-
-
 
 // @ 0x00629960
 void cSPPlayMode::FUN_00629960(int dt)
@@ -1332,11 +1241,6 @@ void cSPPlayMode::FUN_00629960(int dt)
   }
 }
 
-
-
-
-
-
 // @ 0x00629a90
 bool cSPPlayMode::BabiesReachedTargetAngle()
 {
@@ -1346,11 +1250,6 @@ bool cSPPlayMode::BabiesReachedTargetAngle()
   }
   return true;
 }
-
-
-
-
-
 
 // @ 0x00629b30
 void cSPPlayMode::SetAllBabyRotateSpeeds(float speed)
@@ -1363,11 +1262,6 @@ void cSPPlayMode::SetAllBabyRotateSpeeds(float speed)
     cs->f50 = speed;
   }
 }
-
-
-
-
-
 
 // @ 0x00629bd0
 float cSPPlayMode::FUN_00629bd0(CreatureStruct* s)
@@ -1382,18 +1276,9 @@ float cSPPlayMode::FUN_00629bd0(CreatureStruct* s)
   return gOne;
 }
 
-
-
-
-
-
 // @ 0x00629c50
 void FUN_00629c50(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
-
-
-
-
 
 // @ 0x00629d90
 void __stdcall FUN_00629d90(int arg1, int arg2)
@@ -1408,25 +1293,13 @@ void __stdcall FUN_00629d90(int arg1, int arg2)
   (*(Mgr029**)(arg1 + 0x17c))->Remove(v);
 }
 
-
-
-
-
 // @ 0x00629de0
 void FUN_00629de0(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
 
-
-
-
-
 // @ 0x0062a1a0
 void StopWalk(cSPPlayMode_s0062_9c50* m, void* a, int b)
 { (void)m; (void)a; (void)b; }
-
-
-
-
 
 // @ 0x0062a230
 void SetBabyPath(cSPPlayMode_s0062_9c50* m, uint32_t id, float x, float y, float z)
@@ -1449,10 +1322,6 @@ void SetBabyPath(cSPPlayMode_s0062_9c50* m, uint32_t id, float x, float y, float
   }
 }
 
-
-
-
-
 // @ 0x0062a360
 bool cSPPlayMode_s0062_9c50::HasActivePath(int creatureID)
 {
@@ -1474,10 +1343,6 @@ bool cSPPlayMode_s0062_9c50::HasActivePath(int creatureID)
   return false;
 }
 
-
-
-
-
 // @ 0x0062a3d0
 void PlayMode_Init(cSPPlayMode_s0062_9c50* m, void* a, uint8_t b)
 {
@@ -1485,17 +1350,9 @@ void PlayMode_Init(cSPPlayMode_s0062_9c50* m, void* a, uint8_t b)
   *(uint8_t*)((char*)m + 0x3628) = b;
 }
 
-
-
-
-
 // @ 0x0062a550
 void FUN_0062a550(cSPPlayMode_s0062_9c50* m)
 { (void)m; }
-
-
-
-
 
 // @ 0x0062a760
 void WakeupCreature(cSPPlayMode_s0062_9c50* m)
@@ -1523,10 +1380,6 @@ void WakeupCreature(cSPPlayMode_s0062_9c50* m)
   }
 }
 
-
-
-
-
 // @ 0x0062a7f0
 uint8_t cSPPlayMode_s0062_9c50::OnMouseDown(void* a, void* b, void* c, void* d)
 {
@@ -1548,10 +1401,6 @@ uint8_t cSPPlayMode_s0062_9c50::OnMouseDown(void* a, void* b, void* c, void* d)
   return r;
 }
 
-
-
-
-
 // @ 0x0062a860
 void SetupFromConfigFile(cSPPlayMode_s0062_9c50* m)
 {
@@ -1561,20 +1410,12 @@ void SetupFromConfigFile(cSPPlayMode_s0062_9c50* m)
   (void)ModelManager();
 }
 
-
-
-
-
 // @ 0x0062a990
 void BabyStartSocialCallEffect(cSPPlayMode_s0062_9c50* m)
 {
   uint32_t idx = GetMouthPartIdx(m);
   if (idx == 0xffffffffu) return;
 }
-
-
-
-
 
 // @ 0x0062aa90
 void SetBabySitState(cSPPlayMode_s0062_9c50* m, uint32_t index)
@@ -1605,10 +1446,6 @@ void SetBabySitState(cSPPlayMode_s0062_9c50* m, uint32_t index)
   *(uint8_t*)(vec + off + 0x1c) = 0;
 }
 
-
-
-
-
 // @ 0x0062ab80
 void cSPPlayMode_s0062_9c50::SetAllBabySitState()
 {
@@ -1617,10 +1454,6 @@ void cSPPlayMode_s0062_9c50::SetAllBabySitState()
   int n = (*(int*)(ed + 0x370) - *(int*)(ed + 0x36c)) / 0x30;    // babies
   for (int i = 0; i < n; ++i) SetBabySitState(m, (uint32_t)i);
 }
-
-
-
-
 
 // @ 0x0062abd0
 void __fastcall cSPPlayMode_MakeCreaturesFaceCamera(void* self)
@@ -1637,9 +1470,6 @@ void __fastcall cSPPlayMode_MakeCreaturesFaceCamera(void* self)
   (void)pos; (void)tmp;
 }
 
-
-
-
 // @ 0x0062ace0
 float __stdcall FUN_0062ace0(void* p, char b)
 {
@@ -1653,17 +1483,11 @@ float __stdcall FUN_0062ace0(void* p, char b)
   return d * gHalf;
 }
 
-
-
-
 // @ 0x0062ad70
 void __fastcall cSPPlayMode_ad70(void* self, void*, int, int, float, float, float, float)
 {
   (void)self;
 }
-
-
-
 
 // @ 0x0062b000
 void __fastcall FUN_0062b000(void* self)
@@ -1706,18 +1530,12 @@ void __fastcall FUN_0062b000(void* self)
   }
 }
 
-
-
-
 // @ 0x0062b0f0
 cSPPlayModeAnimation::cSPPlayModeAnimation()
 {
   mF20 = 0;
   for (int i = 0; i < 24; ++i) pTooltip[i] = 0;
 }
-
-
-
 
 // @ 0x0062b160
 cSPPlayModeAnimation::~cSPPlayModeAnimation()
@@ -1730,17 +1548,11 @@ cSPPlayModeAnimation::~cSPPlayModeAnimation()
   } while (--n >= 0);
 }
 
-
-
-
 // @ 0x0062b1c0
 void __fastcall cSPPlayMode_ctor(void* self)
 {
   (void)self;
 }
-
-
-
 
 // @ 0x0062b3a0
 void __fastcall cSPPlayMode_dtor(void* self)
@@ -1748,18 +1560,12 @@ void __fastcall cSPPlayMode_dtor(void* self)
   (void)self;
 }
 
-
-
-
 // @ 0x0062b5c0
 unsigned __fastcall cSPPlayMode_HandleMessage(void* self, unsigned, int)
 {
   (void)self;
   return 0;
 }
-
-
-
 
 // The retail function at 0x0062b980 is __thiscall (ecx = the SPPlayMode owner, one stack argument,
 // ret 4).  The slice-era free `__fastcall(void*, int)` decorated the same name but cleaned no stack
@@ -1803,23 +1609,15 @@ void SPPlayMode_Lib::FUN_0062b980(int id)
   }
 }
 
-
-
-
 // @ 0x0062ba10
 void __fastcall cSPPlayMode_IsEventForBaby(void* self, int)
 {
   (void)self;
 }
 
-
-
-
 // @ 0x0062bb40
 __declspec(noinline) void PM::FUN_0062bb40(int, int)
 {}
-
-
 
 // @ 0x0062bdb0
 void PM::FUN_0062bdb0()
@@ -1855,8 +1653,6 @@ void PM::FUN_0062bdb0()
   }
 }
 
-
-
 // @ 0x0062bec0
 struct IRel_0062bec0 {
   virtual void v0();
@@ -1881,25 +1677,37 @@ void PM::FUN_0062bec0()
   vec->erase(*(void**)vec, *(void**)((char*)vec + 4));
 }
 
-
-
 // @ 0x0062bf10
 __declspec(noinline) void PM::FUN_0062bf10(int)
 {}
-
-
 
 // @ 0x0062c340
 void SP::cSPPlayMode::Stop()
 {}
 
-
-
 // @ 0x0062c550
 void SP::cSPPlayMode::Update(unsigned int a0)
 {}
 
-
+// @ 0x0062cb20
+PathT* __stdcall FUN_0062cb20(const Vec3* pos, float speed, char type, float reached)
+{
+  PathT* o = (PathT*)operator new(0x2c, "Casual", 0, 0, 0, 0);
+  if (o != 0) {
+    o->mnRefCount = 0;
+    *(void**)o = (void*)&gThemeMusicVt;
+  } else {
+    o = 0;
+  }
+  o->mTarget = *pos;
+  o->mSpeed = speed;
+  o->mType = type;
+  o->mReached = reached;
+  o->mPriority = 0;
+  o->mCount = 0;
+  o->mRoom = 0;
+  return o;
+}
 
 // @ 0x0062e2e0
 float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId, uint32_t anim, bool flag, uint32_t param, uint32_t* outHandle)
@@ -1957,4 +1765,19 @@ void cSPPlayModeAnimation_s0062_e7e0::Init(void* editorBase, cSPPlayModeUI_s0062
   mNumPages = mAnimPanelInfo.size() / 4 + 1;
   if (mAnimPanelInfo.size() % 4 != 0)
     mNumPages++;
+}
+
+// @ 0x0062f2f0
+void cSPPlayModeBGMgr::FUN_0062f2f0()
+{
+  if (mChangingEnvironment) {
+    if (FUN_00401050(mLastBkgEffectID)->FUN_0045b210()) {
+      mChangingEnvironment = false;
+      if (FUN_00401050(mCrossFadeEffectID)->FUN_0045b210()) {
+        FUN_00401050(mCrossFadeEffectID)->FUN_0045b150();
+        _ReadWriteBarrier();
+        return;
+      }
+    }
+  }
 }

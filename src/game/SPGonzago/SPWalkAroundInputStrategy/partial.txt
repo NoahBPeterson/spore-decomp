@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0107bf40  324  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cWalkAroundInputStrategy::HandleMessage: 358-byte handler; only the IsAvailable guard, id filtering and hover-text clear are reconstructed (125 bytes), the card/tooltip distance logic is omitted. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

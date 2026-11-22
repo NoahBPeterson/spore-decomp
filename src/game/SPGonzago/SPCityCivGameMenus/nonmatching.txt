@@ -1,3 +1,6 @@
 # va diff flags difftest
-00ce8160 373 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults)
-00ce8370 858 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (ours faults at 0x00ad92d4; helper ABI/loop reconstruction)
+00b7d2e0  94   cCityInputStrategy::PrepareCommodityNodeMenu. `this` in ecx with name/a3/a4 on the stack (ret 0xc), the local SSO string is the assign receiver, and the vector lives at self+4/self+8 (the insert position is its end). The remaining diff is the name-scan and local-init register layout. | difftest: PASS - 221 valid inputs, 100% coverage (55/55), 0 mismatches flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00ce8160 373 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ce8370 858 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (ours faults at 0x00ad92d4; helper ABI/loop reconstruction) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ce87c0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED 0/400 inputs valid (unresolved-import faults) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ce8ab0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 18.1% coverage, equivalence-only flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

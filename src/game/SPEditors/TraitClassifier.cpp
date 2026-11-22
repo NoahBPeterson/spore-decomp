@@ -1,4 +1,4 @@
-// src/game/SPEditors/TraitClassifier.cpp -- migrated from slice(s) s0056d2b0, s0056c570, s0056fb90, s0056df80, s0056b680, s0056a7b0 by tools/migrate/rewrite.py
+// src/game/SPEditors/TraitClassifier.cpp -- migrated from slice(s) s00570140, s0056d2b0, s0056c570, s0056fb90, s0056df80, s0056b680, s0056a7b0 by tools/migrate/rewrite.py
 // Object file: SPEditors/TraitClassifier.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1354,6 +1354,42 @@ struct cClassifierRegistry {
 };
 // ---- items of slice s0056d2b0 end
 
+// ---- items of slice s00570140 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Inner0_00570140 {
+    int a;
+    int b;
+};
+struct Inner2_00570140 {
+    int a;
+    int b;
+
+    void Assign_00423650(int a, int b);
+
+    Inner2_00570140& operator=(const Inner2_00570140& rhs) {
+        if (&rhs != this) {
+            Assign_00423650(rhs.a, rhs.b);
+        }
+        return *this;
+    }
+};
+struct Inner1_00570140 {
+    float f;
+    Inner2_00570140 y;
+
+    Inner1_00570140& operator=(const Inner1_00570140& rhs) {
+        f = rhs.f;
+        y = rhs.y;
+        return *this;
+    }
+};
+struct Obj_00570140 {
+    Inner0_00570140 m0;
+    Inner1_00570140 m8;
+
+    Obj_00570140& Match_00570140(const Obj_00570140& rhs);
+};
+// ---- items of slice s00570140 end
+
 // @ 0x0056a7b0
 bool cTallnessClassifier::ExtractTraits(Creature* c, float** weights, cFeatureVector_s0056_a7b0* fv)
 {
@@ -2084,6 +2120,7 @@ bool cTextureClassifier::ExtractTraits(Creature_s0056_c570* creature, float** we
 struct cSwatchColorLookupD : cSwatchColorLookupB {
     cSwatchColorLookupD() : cSwatchColorLookupB(Alloc_s0056_d2b0()) {}
 };
+
 // @ 0x0056d2b0
 bool cRegionColorClassifier::DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out)
 {
@@ -2448,6 +2485,14 @@ void Vec12Vector::DoAssign(const Vec12* first, const Vec12* last, const FalseTag
         mpEnd = UninitCopy12(pMid, last, mpEnd);
         ScratchSlots<12>();
     }
+}
+
+// @ 0x00570140
+Obj_00570140& Obj_00570140::Match_00570140(const Obj_00570140& rhs)
+{
+    m0 = rhs.m0;
+    m8 = rhs.m8;
+    return *this;
 }
 
 // @ 0x005701b0

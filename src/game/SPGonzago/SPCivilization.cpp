@@ -1,8 +1,11 @@
-// src/game/SPGonzago/SPCivilization.cpp -- migrated from slice(s) s01330060 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCivilization.cpp -- migrated from slice(s) s0132ea70, s00bfb020, s01330060 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCivilization.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "SP/cPlanetModel.h"
+#include <math.h>
+#include <string.h>
 
 // ---- items of slice s01330060 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
@@ -10,6 +13,75 @@ namespace eastl {
 }
 typedef eastl::string8_s0133_0060 string8_s0133_0060;
 // ---- items of slice s01330060 end
+
+// ---- items of slice s00bfb020 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const int g_modelTypeToKeyMap[13];    // 0x0146946c
+struct Key { uint32_t a, b, c; };
+struct CivHelper
+{
+    uint32_t m_pad[7];                       // +0x00 (size 0x1c)
+    void BuildConstraints(int key);          // 0x00bf9300
+    Key* GetOrCreatePosition(int key);       // 0x00bf9700 (ret 4)
+};
+extern CivHelper g_civHelpers[2];            // 0x0168cb0c
+// ---- items of slice s00bfb020 end
+
+// ---- items of slice s0132ea70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void FUN_00692ca0();
+extern "C" void FUN_00692fb0();
+extern "C" void FUN_00bf1bc0();
+extern "C" void FUN_00bf34f0();
+extern "C" void FUN_00bf3d40();
+extern "C" void FUN_00c2e4e0();
+extern "C" void FUN_00d011e0();
+extern "C" char g_14694a0[];
+typedef unsigned char      u8;
+struct cSerializerInit {
+    void* mField00;                     // 0x00 = "mModelTypeToKeyMap"
+    void* mField04;                     // 0x04
+    void* mField08;                     // 0x08
+    u8    mPad0c[0x18 - 0x0c];          // 0x0c
+    void* mField18;                     // 0x18
+    void* mField1c;                     // 0x1c
+    void* mField20;                     // 0x20
+    void* mField24;                     // 0x24
+    void* mField28;                     // 0x28
+    void* mField2c;                     // 0x2c
+    void* mField30;                     // 0x30
+    void* mField34;                     // 0x34
+    void* mField38;                     // 0x38
+};
+extern "C" cSerializerInit g_serializerList;   // 0x156fa30
+// ---- items of slice s0132ea70 end
+
+// @ 0x00bfb8f0
+void FUN_00bfb8f0()
+{
+    for (CivHelper* h = g_civHelpers; (int)h < (int)(g_civHelpers + 2); ++h)
+    {
+        for (const int* k = g_modelTypeToKeyMap; (int)k < (int)(g_modelTypeToKeyMap + 13); ++k)
+            h->BuildConstraints(*k);
+    }
+}
+
+// @ 0x0132ffd0
+void __cdecl InitSerializerList()
+{
+    cSerializerInit local;
+    local.mField00 = (void*)g_14694a0;
+    local.mField04 = (void*)0x03acc32f;
+    local.mField18 = 0;
+    local.mField1c = 0;
+    local.mField20 = (void*)FUN_00692ca0;
+    local.mField24 = (void*)FUN_00bf34f0;
+    local.mField28 = (void*)FUN_00bf1bc0;
+    local.mField2c = (void*)FUN_00c2e4e0;
+    local.mField30 = (void*)FUN_00692fb0;
+    local.mField34 = (void*)FUN_00d011e0;
+    local.mField38 = (void*)FUN_00bf3d40;
+    local.mField08 = 0;
+    g_serializerList = local;
+}
 
 // @ 0x01330060
 namespace Simulator

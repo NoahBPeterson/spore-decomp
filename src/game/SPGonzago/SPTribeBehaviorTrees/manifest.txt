@@ -15,6 +15,7 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6fe0@@YAMPAUcSPCreatureCitizen@@IIEPAUbehavior_stimuli@@PAE@Z  00da6fe0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da7060@@YAMPAUcSPCreatureCitizen@@IIEPAUbehavior_stimuli@@PAE@Z  00da7060  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da70c0@@YAMPAX@Z  00da70c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da70e0@@YAMPAUcSPCreatureCitizen@@@Z  00da70e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da7140@@YAEPAUcSPCreatureCitizen@@0@Z  00da7140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da7270@@YAEPAUcSPCreatureCitizen@@@Z  00da7270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da72c0@@YAEPAUcSPCreatureCitizen@@@Z  00da72c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -47,16 +48,23 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FinishTribeSpot@@YAXPAUCreature@@IIIIPAUTribeSpotState@@@Z  00da7c50  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?ReleaseTribeReservation@@YAXPAUCreature@@IIIIPAUTribeReservationState@@@Z  00da7dc0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da82a0@@YAPAUElem250@@PAU1@00@Z  00da82a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da82f0@@YAMPAUCreature@@H@Z  00da82f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da8370@@YA_NPAUCreature@@HPAX@Z  00da8370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?TribeMemberStateFraction@@YAMPAUCreature@@H@Z  00da83b0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da8960@@YAOHHHHPAXPAD@Z  00da8960  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?f00da9330@@YAOHHHHHH@Z  00da9330  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?f00da9360@@YAOHHHHHH@Z  00da9360  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daad10@@YIIPAUSelObj@@@Z  00daad10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dac5d0@@YA_NPAUC5d0Obj@@@Z  00dac5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dac730@@YAXPAUCitizen_s00da_bdf0@@HHHHPAUSt730@@@Z  00dac730  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?SpawnPlacementTest@@YA_NPAUSpawnHost@@HHHHPAUSpawnOut@@PAUSpawnIn@@@Z  00dadfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae630@SP@@YA_NPAVcSPCreatureBase_s00da_dce0@1@HHHHPAUDomesticationBlock@1@H@Z  00dae630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae680@SP@@YAXPAVcSPCreatureBase_s00da_dce0@1@HHHHPAUDomesticationBlock@1@H@Z  00dae680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae730@SP@@YAXPAUSlotList@1@@Z  00dae730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae760@SP@@YAMPAVcSPCreatureBase_s00da_dce0@1@@Z  00dae760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae7d0@SP@@YAMPAVcSPCreatureBase_s00da_dce0@1@@Z  00dae7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae840@SP@@YA_NPAVcSPCreatureBase_s00da_dce0@1@HHHHPAUOrderValueBlock@1@H@Z  00dae840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daeca0@@YAEPAUCC@@HHHHPAUOut@@@Z  00daeca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daf270@@YAXPAUCC@@HHHHPAUState270@@@Z  00daf270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?TRIBE_COWER_Activate@@YA_NPAUCC@@HHHHPAUActState@@PAUA6@@@Z  00daf620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daf6b0@@YAXPAUCC@@HHHHPAPAX@Z  00daf6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -66,29 +74,25 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dafc00@@YAXPAVcCreature@@PAX111PAUGetState@@@Z  00dafc00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dafc80@@YADPAVcCreature@@PAX111PAUCharState@@PAUA7Obj@@@Z  00dafc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dafd90@@YAXPAVcCreature@@PAX111PAUDeactState@@@Z  00dafd90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db09c0@@YAXPAUCitizen_s00db_09c0@@HHHHPAUEatState@@@Z  00db09c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db1fb0@@YAXPAUCitizen_s00db_10d0@@HHHHPAUStDom@@@Z  00db1fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db2fa0@@YAXPAUTaskCtx@@IIII0@Z  00db2fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db3390@@YAXPAVcSPCreatureBase@@PAX111PAUSimuState@@@Z  00db3390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?GetObject@cResizableObjectPoolT@@QAEPAVcGroupMovement_s00db_2fd0@@I@Z  00db3c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?AllocNode@cResizableObjectPoolT@@QAEXPAUcPoolNode@@@Z  00db3e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?ReleaseSocialTargetState@@YAXPAX0000PAUcActionState@@@Z  00db40f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?CancelSocialAction@@YAEPAX@Z  00db4a20  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db6db0@@YIXPAX@Z  00db6db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db6e60@cGroupMovement_s00db_6e60@@QAEX_N@Z  00db6e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db7b60@@YAXPAUPlayer@@HHHHPAUMessage@@@Z  00db7b60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db7d60@IdleBlock_s00db7d60@@QAEPAUVec3_s00db7d60@@PAU2@PBU2@@Z  00db7d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?EnterWalk@IdleBlock@@QAEXXZ  00db9130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db9280@@YA_NPAUCreature_s00db_86a0__b@@HHIHPAUIdleBlock@@HM@Z  00db9280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ??0cHealOtherData@SP@@QAE@ABV01@@Z  00db97f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db99a0@SP@@YAPAUcHealOtherEntry@1@PAU21@00@Z  00db99a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dba000@SP@@YA_NPAVcSPCreatureCitizen_s00db_9380@1@HHHHPAUcHealActionState@1@@Z  00dba000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ??4cHealOtherData@SP@@QAEAAV01@ABV01@@Z  00dba120  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?CreateObject@GroupMovementPool@@QAEIXZ  00dbe4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae760@SP@@YAMPAVcSPCreatureBase_s00da_dce0@1@@Z  00dae760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae7d0@SP@@YAMPAVcSPCreatureBase_s00da_dce0@1@@Z  00dae7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dae840@SP@@YA_NPAVcSPCreatureBase_s00da_dce0@1@HHHHPAUOrderValueBlock@1@H@Z  00dae840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da82f0@@YAMPAUCreature@@H@Z  00da82f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?SpawnPlacementTest@@YA_NPAUSpawnHost@@HHHHPAUSpawnOut@@PAUSpawnIn@@@Z  00dadfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db2fa0@@YAXPAUTaskCtx@@IIII0@Z  00db2fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?ReleaseSocialTargetState@@YAXPAX0000PAUcActionState@@@Z  00db40f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dba2f0@@YAMPAX0000PAE@Z  00dba2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?PickAction@@YAPAUAction@@PAUPickContext@@@Z  00dbaa40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?PushDefault@SlotVector@@QAEXXZ  00dbe380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daeca0@@YAEPAUCC@@HHHHPAUOut@@@Z  00daeca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da70e0@@YAMPAUcSPCreatureCitizen@@@Z  00da70e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da8960@@YAOHHHHPAXPAD@Z  00da8960  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?CreateObject@GroupMovementPool@@QAEIXZ  00dbe4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

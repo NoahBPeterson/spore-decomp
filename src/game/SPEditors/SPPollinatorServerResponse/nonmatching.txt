@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 00614dc0 6 StrMap::DoInsertValueImpl: complete; only the load order of key pointers in the inlined compare differs
-00615330 22 cServerResponse::EndElementHandler: complete; cl keeps one shared epilogue instead of the original tail jump
-006155f0 144 cServerResponse::SetupDict: complete; handler pair construction/store order and clear() load order differ
+00615330 22 cServerResponse::EndElementHandler: complete; cl keeps one shared epilogue instead of the original tail jump flags: /O2 /MD /Gy /TP
+006155f0 161 cServerResponse::SetupDict: complete; equivalent (equiv PASS 997/997 valid, 100% coverage) but not byte-identical (177 bytes, 394 vs 410): cl keeps the map/capacity loads in ebx/esi instead of eax/esi and uses a different insertion setup order. The FAIL cause was the handler keys: as L"..." relocations they land at the test object's literal pool, and with a misaligned vector buffer the retail's absolute key pointers straddle a compared dword (low16<<16), defeating the const-pointer tolerance; spelling the keys as the retail image addresses (0x13fc0e4/0x13fc0ec/0x13fc104/0x13fc114) makes the stores the same immediates and the pair values compare exactly. flags: /O2 /MD /Gy /TP

@@ -2910,6 +2910,101 @@ struct EntryB8 {
 };
 // ---- items of slice s01355f90 end
 
+// ---- items of slice s00ca4320 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cObjectInstanceInventoryItem;
+struct cInventory
+{
+virtual void vpad0();
+virtual void vpad1();
+virtual void vpad2();
+virtual void vpad3();
+virtual void vpad4();
+virtual void vpad5();
+virtual void vpad6();
+virtual void vpad7();
+virtual void vpad8();
+virtual void vpad9();
+virtual void vpad10();
+virtual void vpad11();
+virtual void vpad12();
+virtual void vpad13();
+virtual void vpad14();
+virtual void vpad15();
+virtual void vpad16();
+virtual void vpad17();
+virtual void vpad18();
+virtual void vpad19();
+virtual void vpad20();
+virtual void vpad21();
+virtual void vpad22();
+virtual void vpad23();
+virtual void vpad24();
+virtual void vpad25();
+virtual void vpad26();
+virtual void vpad27();
+virtual void vpad28();
+virtual void vpad29();
+virtual void vpad30();
+virtual void vpad31();
+    virtual void AddItem(cObjectInstanceInventoryItem* item, int a, int b);   // +0x80
+};
+struct cObjectInstanceInventoryItem
+{
+    virtual void vpad0();                              // +0x00
+    virtual void AddRef();                             // +0x04
+    virtual void Func8();                              // +0x08
+    cObjectInstanceInventoryItem* Construct();         // 0x00c6f3d0
+    void SetOwner(void* owner);                        // 0x00c6f5e0
+};
+struct Stimuli
+{
+    void ClearAll(int mask, int flags);                // 0x00bc98f0
+};
+struct GameGlobalAt78
+{
+    void Func(void* owner, void* param);               // 0x00f1aff0
+};
+struct GameGlobal
+{
+    uint8_t m_pad0[0x78];                              // +0x00
+    GameGlobalAt78* m_at78;                            // +0x78
+};
+extern GameGlobal* gpGameGlobal;                       // 0x016c7aa4
+void* __cdecl operator_new(uint32_t size, const char* name,
+                           int a, int b, int c, int d);   // 0x00f473a0
+int GetCurrentGameMode_s00ca_4320();                              // 0x00b5b800
+struct cVehicle_s00ca4320
+{
+    uint8_t m_pad0[0xaf0];                             // +0x0000
+    void* mpAF0;                                       // +0x0af0
+    uint8_t m_padAf4[0xd94 - 0xaf4];                   // +0x0af4
+    cInventory* mpInventoryD94;                        // +0x0d94
+
+    void ProcessEA();                                  // 0x00ca04a0
+    bool FUN_00ca4320(void* param);
+};
+// ---- items of slice s00ca4320 end
+
+// ---- items of slice s00ca4600 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV8_s00ca_4600 PV PV PV PV PV PV PV PV
+struct RefCounted_s00ca_4600 {
+    PV8_s00ca_4600 PV8_s00ca_4600 PV8_s00ca_4600
+    virtual void AddRef();    // +0x60
+    virtual void Release();   // +0x64
+};
+struct Vec4_s00ca_4600 {
+    float x, y, z, w;
+    Vec4_s00ca_4600(const Vec4_s00ca_4600& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+};
+struct RefHolder {
+    RefCounted_s00ca_4600* p;
+    RefHolder(RefCounted_s00ca_4600* q) : p(q) { if (p) p->AddRef(); }
+    RefHolder(const RefHolder& o) : p(o.p) {}
+    ~RefHolder() { if (p) p->Release(); }
+};
+void InsertClosest(RefCounted_s00ca_4600** slot, int a, int count, int b, RefHolder item, Vec4_s00ca_4600 p); // 0x00ca44f0
+// ---- items of slice s00ca4600 end
+
 // @ 0x00c9e5d0
 void TryCivModeTutorial()
 {
@@ -3700,6 +3795,7 @@ float* CStub::FUN_00c9fdc0(float* out)
 // a `? 1 : 0` ternary: that one result temporary is what rotates the
 // allocator onto retail's registers (this in ebx, continent index in edi,
 // two vcall copies with swapped scratch pairs).
+
 // @ 0x00c9fe40
 u8 CStub::FUN_00c9fe40(void* p)
 {
@@ -3766,6 +3862,7 @@ void CStub::FUN_00c9ff40(int a, float* out1, float* out2)
     }
     *out2 = *out1 - f;
 }
+
 // @ 0x00c9ffd0
 float __fastcall FUN_00c9ffd0(float param_1)
 {
@@ -4878,6 +4975,57 @@ void cOwner::Clear()
     }
 }
 
+// @ 0x00ca4320
+bool cVehicle_s00ca4320::FUN_00ca4320(void* param)
+{
+    if (mpInventoryD94 != 0) {
+        ProcessEA();
+
+        cObjectInstanceInventoryItem* item = (cObjectInstanceInventoryItem*)
+            operator_new(0x80, "Simulator/cObjectInstanceInventoryItem", 0, 0, 0, 0);
+        if (item != 0) {
+            item = item->Construct();
+            if (item != 0) {
+                item->AddRef();
+                item->SetOwner(param);
+                mpInventoryD94->AddItem(item, 0, 1);
+
+                if (GetCurrentGameMode_s00ca_4320() == 0x1654c10)
+                    gpGameGlobal->m_at78->Func(this, param);
+                item->Func8();
+                return true;
+            }
+        }
+    }
+
+    ((Stimuli*)((char*)mpAF0 + 8))->ClearAll(0x8000, 0);
+    return false;
+}
+
+// @ 0x00ca4600
+void ShiftClosest(RefCounted_s00ca_4600** slot, int pos, Vec4_s00ca_4600 p)
+{
+    RefCounted_s00ca_4600** it = (RefCounted_s00ca_4600**)pos;
+
+    RefCounted_s00ca_4600* item = it[-1];
+    if (item)
+        item->AddRef();
+
+    RefCounted_s00ca_4600* current = *slot;
+    RefCounted_s00ca_4600* old = it[-1];
+    if (current != old) {
+        if (current)
+            current->AddRef();
+        it[-1] = current;
+        if (old)
+            old->Release();
+    }
+
+    InsertClosest(slot, 0, (int)(it - slot) - 1, 0, RefHolder(item), p);
+    if (item)
+        item->Release();
+}
+
 // @ 0x00ca46c0
 bool cCameraFollow::Step(const Vector3_s00ca_46c0* pTarget, float dt)
 {
@@ -5396,6 +5544,7 @@ struct Vec4c_ca77 {
     __forceinline Vec4c_ca77(const cSPVector4_s00ca_75e0& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
 };
 extern "C" void  __cdecl FUN_00ca44f0(void* begin, int i, int n, int i2, RefPtr_ca77 val, Vec4c_ca77 v);   // 0x00ca44f0 heap sift-down
+
 // @ 0x00ca77b0
 void __cdecl FUN_00ca77b0(char* begin, char* end, cSPVector4_s00ca_75e0 v)
 {
@@ -5410,6 +5559,7 @@ void __cdecl FUN_00ca77b0(char* begin, char* end, cSPVector4_s00ca_75e0 v)
 }
 
 extern "C" void  __cdecl FUN_00ca4600(void* begin, void* end, Vec4c_ca77 v);                           // 0x00ca4600 heap pop
+
 // @ 0x00ca7830
 void __cdecl FUN_00ca7830(char* begin, char* end, cSPVector4_s00ca_75e0 v)
 {

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCastingManager.cpp -- migrated from slice(s) s00622f20, s004c10e0, s004c0410, s00472b80, s005f6df0, s0056df80, s004e12c0, s004c2100, s00448fa0, s00432830, s0040ccb0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCastingManager.cpp -- migrated from slice(s) s01313370, s00622f20, s004c10e0, s004c0410, s00472b80, s005f6df0, s0056df80, s004e12c0, s004c2100, s00448fa0, s00432830, s0040ccb0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCastingManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -31,6 +31,7 @@
 #include "cSPUILayout.h"
 #include "SP/cString.h"
 #include "SP/cStringTokenTranslator.h"
+#include <new>
 
 // ---- items of slice s0040ccb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 class Property {
@@ -522,6 +523,246 @@ struct WideFixedStr_s004c_10e0 {
 }
 // ---- items of slice s004c10e0 end
 
+// ---- items of slice s01313370_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0131_3370__g7; 
+}
+typedef eastl::string8_s0131_3370__g7 string8_s0131_3370__g7;
+namespace Simulator {
+class ISerializerReadStream;
+}
+namespace Simulator {
+class ISerializerWriteStream;
+}
+namespace Simulator {
+struct Attribute;
+}
+namespace Simulator {
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t)(const string8_s0131_3370__g7&, void*);
+}
+namespace Simulator {
+typedef void  (*WriteTextFunction_t)(char*, void*);
+}
+namespace Simulator {
+typedef bool  (*ValidateFunction_t)();
+}
+namespace Simulator {
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t)(Attribute*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+struct Attribute
+{
+    // Member attribute: offset is relative to the current object.
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+struct AttrSlot { uint32_t d[15]; };
+}
+namespace Simulator {
+bool Read_00ac8750(ISerializerReadStream* pStream, void* pData);   // 0x00ac8750
+}
+namespace Simulator {
+bool Write_00ac8780(ISerializerWriteStream* pStream, void* pData); // 0x00ac8780
+}
+namespace Simulator {
+bool Read_00ac87c0(ISerializerReadStream* pStream, void* pData);   // 0x00ac87c0
+}
+namespace Simulator {
+bool Write_00ac87f0(ISerializerWriteStream* pStream, void* pData); // 0x00ac87f0
+}
+namespace Simulator {
+bool Read_00ad0710(ISerializerReadStream* pStream, void* pData);   // 0x00ad0710
+}
+namespace Simulator {
+bool Write_00ac8820(ISerializerWriteStream* pStream, void* pData); // 0x00ac8820
+}
+namespace Simulator {
+bool Read_00acda30(ISerializerReadStream* pStream, void* pData);   // 0x00acda30
+}
+namespace Simulator {
+bool Write_00ac9df0(ISerializerWriteStream* pStream, void* pData); // 0x00ac9df0
+}
+namespace Simulator {
+bool Read_00ad0d90(ISerializerReadStream* pStream, void* pData);   // 0x00ad0d90
+}
+namespace Simulator {
+bool Write_00ac9040(ISerializerWriteStream* pStream, void* pData); // 0x00ac9040
+}
+namespace Simulator {
+bool Read_00aca620(ISerializerReadStream* pStream, void* pData);   // 0x00aca620
+}
+namespace Simulator {
+bool Write_00ac9f70(ISerializerWriteStream* pStream, void* pData); // 0x00ac9f70
+}
+namespace Simulator {
+bool Read_00aca090(ISerializerReadStream* pStream, void* pData);   // 0x00aca090
+}
+namespace Simulator {
+bool Write_00bca960(ISerializerWriteStream* pStream, void* pData); // 0x00bca960
+}
+namespace Simulator {
+bool Read_00ce26c0(ISerializerReadStream* pStream, void* pData);   // 0x00ce26c0
+}
+namespace Simulator {
+bool Write_00aca730(ISerializerWriteStream* pStream, void* pData); // 0x00aca730
+}
+namespace Simulator {
+bool Read_00572810(ISerializerReadStream* pStream, void* pData);   // 0x00572810
+}
+namespace Simulator {
+bool Write_00572840(ISerializerWriteStream* pStream, void* pData); // 0x00572840
+}
+namespace Simulator {
+void ReadText_00693090(const string8_s0131_3370__g7& text, void* pData);   // 0x00693090
+}
+namespace Simulator {
+void ReadText_00694c80(const string8_s0131_3370__g7& text, void* pData);   // 0x00694c80
+}
+namespace Simulator {
+void ReadText_00692ff0(const string8_s0131_3370__g7& text, void* pData);   // 0x00692ff0
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0131_3370__g7& text, void* pData);   // 0x00c2e4e0
+}
+namespace Simulator {
+void WriteText_00694fa0(char* pBuffer, void* pData);        // 0x00694fa0
+}
+namespace Simulator {
+void WriteText_00694c10(char* pBuffer, void* pData);        // 0x00694c10
+}
+namespace Simulator {
+void WriteText_00692fb0(char* pBuffer, void* pData);        // 0x00692fb0
+}
+namespace Simulator {
+void WriteText_00694ee0(char* pBuffer, void* pData);        // 0x00694ee0
+}
+namespace Simulator {
+bool Validate_00b1fbf0();   // 0x00b1fbf0
+}
+namespace Simulator {
+bool Validate2_00b1fbf0();  // 0x00b1fbf0 (a second template instance folded by the linker)
+}
+namespace Simulator {
+bool Validate_00ac9000();   // 0x00ac9000
+}
+namespace Simulator {
+bool Validate_00ac9ef0();   // 0x00ac9ef0
+}
+namespace Simulator {
+bool Validate_00ac9110();   // 0x00ac9110
+}
+namespace Simulator {
+bool Validate_00cd6630();   // 0x00cd6630
+}
+namespace Simulator {
+bool Validate_00b6f550();   // 0x00b6f550
+}
+namespace Simulator {
+bool Validate_00b6f860();   // 0x00b6f860
+}
+namespace Simulator {
+bool ToXml_0057ce00(void* pData, const char* pName, int depth);   // 0x0057ce00
+}
+namespace Simulator {
+bool ToXml_00acbbc0(void* pData, const char* pName, int depth);   // 0x00acbbc0
+}
+namespace Simulator {
+bool ToXml_00ca85c0(void* pData, const char* pName, int depth);   // 0x00ca85c0
+}
+namespace Simulator {
+bool ToXml_00acb1b0(void* pData, const char* pName, int depth);   // 0x00acb1b0
+}
+namespace Simulator {
+bool ToXml_00acb340(void* pData, const char* pName, int depth);   // 0x00acb340
+}
+namespace Simulator {
+bool ToXml_00acbc10(void* pData, const char* pName, int depth);   // 0x00acbc10
+}
+namespace Simulator {
+bool ToXml_00ac8050(void* pData, const char* pName, int depth);   // 0x00ac8050
+}
+namespace Simulator {
+bool ToXml_00c6c390(void* pData, const char* pName, int depth);   // 0x00c6c390
+}
+namespace Simulator {
+bool ToXml_0057cde0(void* pData, const char* pName, int depth);   // 0x0057cde0
+}
+namespace Simulator {
+#define BOOL_ATTR   Read_00ac8750, Write_00ac8780, ReadText_00693090, WriteText_00694fa0, Validate_00b1fbf0, ToXml_0057ce00
+}
+namespace Simulator {
+#define BOOL2_ATTR  Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10, Validate2_00b1fbf0, ToXml_00acbbc0
+}
+namespace Simulator {
+#define PTR_ATTR(R, W, V, X) R, W, ReadText_00c2e4e0, WriteText_00692fb0, V, X
+}
+namespace Simulator {
+#define INT_ATTR    Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0, Validate_00b1fbf0, ToXml_0057cde0
+}
+namespace Simulator {
+#define ADD_MAIN(IDX, ...)  { Attribute a(__VA_ARGS__); *(Attribute*)&s_MainAttributes[IDX] = a; }
+}
+namespace Simulator {
+#define ADD_TRIBE(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&s_TribeAttributes[IDX] = a; }
+}
+namespace Simulator {
+extern AttrSlot s_MainAttributes[7];     // 0x01565d68  ($E245)
+}
+namespace Simulator {
+extern AttrSlot s_TribeAttributes[2];    // 0x015660f0  ($E257)
+}
+// ---- items of slice s01313370_g7 end
+
 // @ 0x0040cf10
 bool GetFloatProperty(PropertyList* list, uint32_t propertyID, float& result)
 {
@@ -793,3 +1034,30 @@ unsigned int SP::cPropertyList::GetModificationCount() const
   uint32_t parentCount = mParent.mpObject ? mParent.mpObject->GetModificationCount() : 0;
   return mModificationCount + parentCount;
 }
+
+// @ 0x01313370
+namespace Simulator {
+void InitMainAttributes()
+{
+    ADD_MAIN(0, "mbInitialized",           0x03acc831, 0x100, Read_00ac8750, Write_00ac8780, ReadText_00693090, WriteText_00694fa0, Validate_00b1fbf0, ToXml_0057ce00)
+    ADD_MAIN(1, "mbUseCastedHerds",        0x03acc832, 0x101, Read_00ac8750, Write_00ac8780, ReadText_00693090, WriteText_00694fa0, Validate_00b1fbf0, ToXml_0057ce00)
+    ADD_MAIN(2, "mAnimalStagingDiagnostic",0x03acc833, 0x104, Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10, Validate2_00b1fbf0, ToXml_00acbbc0)
+    ADD_MAIN(3, "mVisualizedTribes",       0x03acc836, 0x0a8,
+             Read_00ad0710, Write_00ac8820, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00ac9000, ToXml_00ca85c0)
+    ADD_MAIN(4, "mAnimalStageMap",         0x05008fd9, 0x0c0,
+             Read_00acda30, Write_00ac9df0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00ac9ef0, ToXml_00acb1b0)
+    ADD_MAIN(5, "mCastMap",                0x04206671, 0x088,
+             Read_00ad0d90, Write_00ac9040, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00ac9110, ToXml_00acb340)
+    ADD_MAIN(6, "mInUseAnimals",           0x0656812e, 0x0e0,
+             Read_00aca620, Write_00ac9f70, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00cd6630, ToXml_00acbc10)
+}
+}  // namespace Simulator
+
+// @ 0x01313880
+namespace Simulator {
+void InitTribeAttributes()
+{
+    ADD_TRIBE(0, "mpTribe",      0x03acc4c7, 0x00, PTR_ATTR(Read_00aca090, Write_00bca960, Validate_00b6f550, ToXml_00ac8050))
+    ADD_TRIBE(1, "mInUseMembers", 0x0510dd18, 0x04, PTR_ATTR(Read_00ce26c0, Write_00aca730, Validate_00b6f860, ToXml_00c6c390))
+}
+}  // namespace Simulator

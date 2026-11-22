@@ -1,18 +1,28 @@
-// SPGonzago/SPSpaceGameBehaviorSlowDeath.obj: space-game behaviour start/stop of the slow-death sequence.
-// Each function keeps its '// @ 0xVA' marker.
+// src/game/SPGonzago/SPSpaceGameBehaviorSlowDeath.cpp -- migrated from slice(s) s01033de0 by tools/migrate/rewrite.py
+// Object file: SPGonzago/SPSpaceGameBehaviorSlowDeath.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
+// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
-// addresses retail relocates here, named so the build relocates them too
+#include "game/types.h"
+#include "SP/cSPCreatureBase.h"
+#include "SP/cPlanetModel.h"
+#include "SP/cSPTimer.h"
+#include "EA/Variant.h"
+#include "SP/cSolarSystem.h"
+
+// unnamed retail callees and globals (address in the comment)
 extern "C" char g_13f09b4[];
 extern "C" char g_1499800[];
 extern "C" char g_1499810[];
 extern "C" char g_16df2f8[];
+#include <math.h>
 
-#include "game/types.h"
-
+// ---- items of slice s01033de0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13f09b4[];
+extern "C" char g_1499800[];
+extern "C" char g_1499810[];
+extern "C" char g_16df2f8[];
 #define PV(n) virtual void pv##n();
 struct Vec3 { float x, y, z; };
-static const uint32_t kSlowDeathCoreSize = 0xa0;   // bytes of the cSpaceGameBehaviorSlowDeath object
-static const uint32_t kAgentQueryTag      = 0xce9f6639;  // identifier of the behaviour's agent query
 #define G_STR_16DF2F8    ((void*)g_16df2f8)
 #define G_STR_SIMULATOR  ((void*)g_13f09b4)
 #define G_VT_BEHAVIOUR_A ((uint32_t)g_1499810)
@@ -69,6 +79,7 @@ struct SlowDeathTimer {                         // SP::cGonzagoTimer (0x20 bytes
     uint8_t mPad00[0x20];
     void ctor();                                // 0x00b63890
     void dtor();                                // 0x00b638b0
+    void Restart();                             // 0x00bc3130  (this == &mTimer, cSPTimer::Restart)
 };
 struct SlowDeathCore {                          // 0xa0-byte cInteraction-derived behaviour object
     uint32_t mVt0;                              // +0x00
@@ -104,6 +115,50 @@ struct RemoveArgs {                             // 0x18-byte argument block of c
     int32_t  mC;                                // +0x10
     int32_t  mD;                                // +0x14
 };
+struct DeathLoco {                              // locomotion sub-object embedded at creature+0xc0
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+    virtual Vec3* pv11(int arg);                // +0x2c  GetPosition (the argument is unused)
+    PV(12) PV(13)
+    virtual Vec3* pv14(float a, float b);       // +0x38  surface position (used by SetDeathType)
+};
+struct AnimTimer {                              // creature->mNoAttackTimer (+0x5a8)
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5)
+    virtual void  pv6(float value);             // +0x18  apply the queried animation time
+    PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17)
+    PV(18) PV(19) PV(20) PV(21)
+    virtual float pv22(uint32_t tag, int anim, void* pos);   // +0x58
+};
+struct Creature {                               // SP::cSPCreatureBase (partial view)
+    uint8_t    mPad00[0xc0];
+    DeathLoco  mLoco;                           // +0x0c0
+    uint8_t    mPadC4[0x2b0 - 0xc4];
+    int32_t    m2B0;                            // +0x2b0  animation-driver mode
+    uint8_t    mPad2B4[0x5a8 - 0x2b4];
+    AnimTimer* mNoAttackTimer;                  // +0x5a8
+    uint8_t    mPad5AC[0xb54 - 0x5ac];
+    void*      mB54;                            // +0xb54
+
+    char     CCM_Check();                       // 0x00c0e420
+    int      GetCurrentAnimationGUID();
+    uint32_t InterruptAnim(uint32_t anim, int32_t a, int32_t b);   // 0x00c12310
+    uint32_t PlayAnim(uint32_t anim, int32_t a, int32_t b);
+};
+struct B54 {                                    // object stored at creature+0xb54
+    float FUN_a049f0(int32_t value);            // 0x00a049f0
+};
+struct DeathView {                              // SP::cSpaceGameBehaviorSlowDeath (behaviour side)
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
+    PV(20) PV(21)
+    virtual Queryable* pv22();                  // +0x58
+    uint8_t  mPad5C[0x74 - 0x5c];
+    int32_t  m74;                               // +0x74  death type / armed mode
+    SlowDeathTimer mTimer;                      // +0x78  cGonzago/cSP timer pair
+    int32_t  m98;                               // +0x98  current animation id
+    uint8_t  mPad9C[0xa0 - 0x9c];
+    ObjA0*   mObjA0;                            // +0xa0
+};
+Vec3* Vector3_Normalize(Vec3* out, const Vec3* in);   // 0x00436ce0
 struct Behavior {                               // large behaviour/editor subject
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
     PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
@@ -131,14 +186,25 @@ struct Behavior {                               // large behaviour/editor subjec
     bool FUN_00abf640(int value);               // 0x00abf640
     void baseRemoveAgent(RemoveArgs args);      // 0x00abedb0
 
+    int  FUN_01033f50();
+    void FUN_01034260(int deathType);
+    void FUN_01034950(int mode, int unused);
+    void FUN_01034b90(void* star);
+
     bool   FUN_01033ea0(int value);
     void   RemoveAgent(AgentRef* ref, uint32_t index, int a2, int a3, int a4, int a5);
+    void   FUN_010346e0();
+    void   FUN_010347e0();
+    void   FUN_01034810();
+    void   FUN_01034840();
+    void   FUN_01034880();
 };
+// ---- items of slice s01033de0 end
 
 // @ 0x01033de0
 void* FUN_01033de0()
 {
-    SlowDeathCore* p = (SlowDeathCore*)operator_new(kSlowDeathCoreSize, G_STR_SIMULATOR, 0, 0, 0, 0);
+    SlowDeathCore* p = (SlowDeathCore*)operator_new(0xa0, G_STR_SIMULATOR, 0, 0, 0, 0);
     if (p != 0) {
         p->baseCtor();
         p->mVt0 = G_VT_BEHAVIOUR_A;
@@ -170,7 +236,7 @@ bool Behavior::FUN_01033ea0(int value)
     bool result = FUN_00abf640(value);
     Queryable* owner = pv22();
     if (owner != 0) {
-        Queryable* agent = owner->pv2(kAgentQueryTag);
+        Queryable* agent = owner->pv2(0xce9f6639);
         if (agent != 0) {
             agent->pv21();
             Loco* loco = &agent->mLoco;
@@ -182,6 +248,120 @@ bool Behavior::FUN_01033ea0(int value)
         }
     }
     return result;
+}
+
+// @ 0x01033f50
+int Behavior::FUN_01033f50()
+{
+    DeathView* self = (DeathView*)this;
+    Queryable* q = self->pv22();
+    if (q == 0) {
+        return 0;
+    }
+    Creature* c = (Creature*)q->pv2(0xce9f6639);
+    if (c == 0) {
+        return 0;
+    }
+    if (c->GetCurrentAnimationGUID() == 0x3cc7f55) {
+        return 1;
+    }
+    if (!c->CCM_Check() && ((B54*)c->mB54)->FUN_a049f0(self->m98) < 1.0f) {
+        return 1;
+    }
+    Vec3 buf;
+    switch (self->m74) {
+    case 1:
+        c->mNoAttackTimer->pv6(c->mNoAttackTimer->pv22(0xffffffff, 6, Vector3_Normalize(&buf, c->mLoco.pv11(0))));
+        return 0;
+    case 2:
+        c->mNoAttackTimer->pv6(c->mNoAttackTimer->pv22(0xffffffff, 7, Vector3_Normalize(&buf, c->mLoco.pv11(0))));
+        return 0;
+    case 3:
+        // partial: retail normalises into the 0x4c frame slot and breaks out to the code after the
+        // switch (shared with mode 6's alternate path); the exact animation index is not recovered.
+        c->mNoAttackTimer->pv6(c->mNoAttackTimer->pv22(0xffffffff, 0, Vector3_Normalize(&buf, c->mLoco.pv11(0))));
+        return 0;
+    case 4:
+        c->mNoAttackTimer->pv6(c->mNoAttackTimer->pv22(0xffffffff, 0, Vector3_Normalize(&buf, c->mLoco.pv11(0))));
+        return 0;
+    case 5:
+        c->mNoAttackTimer->pv6(c->mNoAttackTimer->pv22(0xffffffff, 7, Vector3_Normalize(&buf, c->mLoco.pv11(0))));
+        return 0;
+    case 6:
+        if (c->GetCurrentAnimationGUID() != 0x3cc80e8) {
+            c->mNoAttackTimer->pv6(c->mNoAttackTimer->pv22(0xffffffff, 5, Vector3_Normalize(&buf, c->mLoco.pv11(0))));
+            return 0;
+        }
+        // partial: retail compares the cSPTimer elapsed time against 0x2711 and, while it is below,
+        // plays animation 0x3cc838c (1, 0xffffffff) and stores the returned id into the behaviour's
+        // animation-id slot (+0x98).
+        self->m98 = c->PlayAnim(0x3cc838c, 1, 0xffffffff);
+        return 0;
+    default:
+        // partial: modes 7 and 8 (the two "interrupt 0x4286319 / 0x428631a" paths) are not recovered.
+        return 0;
+    }
+}
+
+// @ 0x01034260
+void Behavior::FUN_01034260(int deathType)
+{
+    DeathView* self = (DeathView*)this;
+    self->m74 = deathType;
+    self->mTimer.Restart();
+    Queryable* q = self->pv22();
+    if (q == 0) {
+        return;
+    }
+    Creature* c = (Creature*)q->pv2(0xce9f6639);
+    if (c == 0) {
+        return;
+    }
+    bool retry = false;
+    self->m98 = 0;
+    switch (self->m74) {
+    case 1:
+        self->m98 = c->InterruptAnim(0x3cc7f35, 0xffffffff, 0);
+        break;
+    case 2:
+        c->InterruptAnim(0x3cc7f55, 0xffffffff, 0);
+        self->m98 = c->PlayAnim(0x3cc83ce, 1, 0xffffffff);
+        break;
+    case 3:
+        c->InterruptAnim(0x3cc7f55, 0xffffffff, 0);
+        self->m98 = c->PlayAnim(0x5c01ade, 1, 0xffffffff);
+        retry = true;
+        break;
+    case 4:
+        c->InterruptAnim(0x3cc7f55, 0xffffffff, 0);
+        self->m98 = c->PlayAnim(0x3cc7fd0, 1, 0xffffffff);
+        break;
+    case 5:
+        c->InterruptAnim(0x3cc7f55, 0xffffffff, 0);
+        self->m98 = c->PlayAnim(0x3cc8401, 1, 0xffffffff);
+        break;
+    case 6:
+        c->InterruptAnim(0x3cc7f55, 0xffffffff, 0);
+        self->m98 = c->PlayAnim(0x3cc80e8, 1, 0xffffffff);
+        retry = true;
+        break;
+    case 7:
+        self->m98 = c->InterruptAnim(0x4286319, 0xffffffff, 0);
+        c->m2B0 = 6;
+        break;
+    case 8:
+        self->m98 = c->InterruptAnim(0x428631a, 0xffffffff, 0);
+        c->m2B0 = 6;
+        break;
+    default:
+        break;
+    }
+    // partial: the trailing block re-arms the graphics state (globals 0x016df2f8/0x016df2fc/
+    // 0x016df300 plus the locomotion surface position through the loco slot 0xdc call), releases the
+    // temporary, calls FUN_00c0cff0(0) and - when the script above set `retry` - loops on
+    // cPlanetModel::MakeRandomWorldPosition until FUN_00b7e3e0 accepts the point before calling
+    // FUN_00c0cff0(2).  It is not reconstructed here.
+    (void)retry;
 }
 
 // @ 0x010345b0

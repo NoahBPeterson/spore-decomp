@@ -707,6 +707,19 @@ struct SpatialPrefix {
     uint8_t  pad75[0xa0 - 0x75];         // +0x75..+0x9f
     void     Teardown() const;           // 0x00c8b2e0 (thiscall, ret 0)
 };
+struct Spatial {
+    void**   vt;                         // +0x00
+    Vec3_s00c8_db30     mPosition;                  // +0x04
+    uint32_t pad10[0x28 / 4];            // +0x10
+    Vec3_s00c8_db30     mExtentsMin;                // +0x38
+    Vec3_s00c8_db30     mExtentsMax;                // +0x44
+    uint32_t pad50[3];                   // +0x50
+    float    mBoundingRadius;            // +0x5c
+    uint32_t pad60[5];                   // +0x60
+    uint8_t  mbFlag_74;                  // +0x74
+    uint8_t  pad75[0xa0 - 0x75];         // +0x75..+0x9f
+    void*    mpModelWorld_a0;            // +0xa0
+};
 struct ModelList {
     MWModel** mBegin;                    // +0x00/+0x108
     MWModel** mEnd;                      // +0x04/+0x10c
@@ -779,6 +792,7 @@ virtual void v39();
 };
 void*   Sub_478db0(void* pSlot, void* pModel);      // 0x00478db0
 void*   CopyRefs(void* pFirst, void* pLast, void* pOut); // 0x005f4e10 (eastl copy_impl::do_copy)
+void*   Sub_c8a550(void* pSelf, void* pWorld);        // 0x00c8a550
 extern const Vec3_s00c8_db30  kSPColorRed;   // 0x0157a9d0
 // ---- items of slice s00c8db30 end
 
@@ -993,6 +1007,17 @@ cMovableDestructibleOrnament::cMovableDestructibleOrnament()
     mCombatant.mVt = (void*)g_1471458;
 }
 
+// @ 0x00c68ed0
+cMovableDestructibleOrnament::~cMovableDestructibleOrnament()
+{
+    mVt0 = (void*)g_1471540;
+    mVt4 = (void*)g_1471530;
+    mLoco.mVt = (void*)g_1471598;
+    mLoco.mVtD4 = (void*)g_1471528;
+    mCombatant.mVt = (void*)g_1471458;
+    mSub.mVt = (void*)g_14714c0;
+}
+
 // @ 0x00c68f30
 int COrn::Ef30(int id)
 {
@@ -1010,6 +1035,7 @@ int COrn::Ef30(int id)
     return r;
 }
 
+// @ 0x00c8d330
 // Closest attempt, same size. The tag store now sits inside the second
 // virtual call, one instruction early: before `mov ecx, eax` instead of
 // after `mov eax, [edx+0x18]`.
@@ -1019,7 +1045,6 @@ struct tVarListBlock_c8d330 {
     uint32_t            mPad14[0x280];      // +0x014
 };
 
-// @ 0x00c8d330
 bool cTotemPole::Write(cOutStream* pStream)
 {
     TotemWriteUint32_c8d330(pStream->v20()->v18(), 0x055cf8e3);
@@ -1314,4 +1339,54 @@ void __fastcall TP_ResetModels(SpatialBody* pSelf)
         pList->mEnd = (MWModel**)((char*)pList->mEnd + ((char*)pB - (char*)pE));
     }
     pSelf->Release();
+}
+
+// @ 0x00c8e000
+unsigned int __fastcall Spatial_LoadModel(Spatial* pSelf, int, void* pWorld)
+{
+    uint8_t bRet = (uint8_t)Sub_c8a550(pSelf, pWorld);
+    {
+        void* pOld = pSelf->mpModelWorld_a0;
+        if (pWorld != pOld) {
+            if (pWorld != 0) {
+                (*(void(__thiscall**)(void*))*(void***)pWorld)(pWorld);
+            }
+            pSelf->mpModelWorld_a0 = pWorld;
+            if (pOld != 0) {
+                ((void(__thiscall*)(void*))(*(void***)pOld)[1])(pOld);
+            }
+        }
+    }
+    {
+        TotemPole* pOwner = (TotemPole*)((char*)pSelf - 0x34);
+        uint32_t nFlags = *(uint32_t*)((char*)pSelf - 0x30);
+        if ((nFlags >> 0xe & 1) == 0 && (nFlags >> 0x10 & 1) == 0) {
+            return bRet;
+        }
+    }
+    {
+        // iterate the segment table, creating a model per segment
+        TotemPole* pOwner = (TotemPole*)((char*)pSelf - 0x34);
+        uint32_t* pSegBegin = *(uint32_t**)((char*)pSelf + 0xb4);
+        uint32_t* pSegEnd = *(uint32_t**)((char*)pSelf + 0xb8);
+        uint32_t* pColorBegin = *(uint32_t**)((char*)pSelf + 0xcc);
+        (void)pOwner; (void)pSegBegin; (void)pSegEnd; (void)pColorBegin;
+    }
+    {
+        Vec3_s00c8_db30 vMid;
+        vMid.x = (pSelf->mExtentsMin.x + pSelf->mExtentsMax.x) * kOneHalf;
+        vMid.y = (pSelf->mExtentsMin.y + pSelf->mExtentsMax.y) * kOneHalf;
+        vMid.z = (pSelf->mExtentsMin.z + pSelf->mExtentsMax.z) * kOneHalf;
+        float fMax = (pSelf->mExtentsMax.z - vMid.z) * (pSelf->mExtentsMax.z - vMid.z)
+                   + (pSelf->mExtentsMax.y - vMid.y) * (pSelf->mExtentsMax.y - vMid.y)
+                   + (pSelf->mExtentsMax.x - vMid.x) * (pSelf->mExtentsMax.x - vMid.x);
+        float fMin = (pSelf->mExtentsMin.z - vMid.z) * (pSelf->mExtentsMin.z - vMid.z)
+                   + (pSelf->mExtentsMin.y - vMid.y) * (pSelf->mExtentsMin.y - vMid.y)
+                   + (pSelf->mExtentsMin.x - vMid.x) * (pSelf->mExtentsMin.x - vMid.x);
+        float fR = (float)sqrt((double)fMax);
+        float fL = (float)sqrt((double)fMin);
+        pSelf->mBoundingRadius = (fL <= fR) ? fR : fL;
+        pSelf->mbFlag_74 = 1;
+    }
+    return 1;
 }

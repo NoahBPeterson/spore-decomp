@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+005cdb30  109 FIXED MakeVertKey: GetKey (0x005efd70) is a __cdecl free function (`ret`, its `int` arg stays on the calling stack), not a cSpine member; declaring it as a member made cl put `this` in ecx and assume the callee popped the arg, so our esp was 4 low and GetExactSkinRadiusFromVertebra got stack garbage instead of `a`. Declared it free (annotation `// 0x005efd70`) and the call/stack shape matches; equiv PASS 400/400 valid, 100% coverage. Remaining diff 109 B (size 126 vs 117): the scaling math is still x87 (fld/fmul/fdivrp/fistp) where the binary uses SSE mulss/divss/cvttss2si flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005ce060 50 AddVertebraBody: cl schedules `push 1` before loading mpWorld into ecx; original loads ecx first
 005ce2a0 61 NormalizeVector2: original splits sqrt (x87) from reciprocal (SSE divss); cl fuses 1/sqrt into fdivrp
 005ce680 243 CalcVertebraPhysicsBoundingBox: original has an aligned frame (and esp,-16) and differs in SSE scheduling of the center/offset terms

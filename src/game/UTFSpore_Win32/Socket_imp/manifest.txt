@@ -53,3 +53,6 @@
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetLingerOpt@Socket@@QAE_NEG@Z  0094daf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetNonBlockingOption@Socket@Sockets@EA@@UAE_N_N@Z  0094db60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?GetLingerOption@Socket@Sockets@EA@@UAE_NAA_NAAI@Z  0094da70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Create@Socket@@QAE_NXZ  0094d3c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Close@ISocket@@QAE_NXZ  0094e4a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Shutdown@ISocket@@QAE_NH@Z  0094ea10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

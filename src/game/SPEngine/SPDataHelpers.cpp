@@ -308,11 +308,13 @@ inline RefGuard::~RefGuard() { p->sub.Release(); }
 extern "C" char __cdecl FUN_00685710(const wchar_t*, void*);       // 0x0685710
 extern "C" int  g_count;                    // 0x0152b348
 extern "C" char* g_array;                   // 0x015fea00
+extern "C" char* g_arrayEnd;                // 0x015fea04
 extern "C" void* GetDefaultAllocatorX();                           // 0x00925cb0
 extern "C" void* ZoneObject_new(int, const char*, int, int, int, int); // 0x00926020
 extern "C" void  FUN_00685770(void*, const wchar_t*, int);         // 0x00685770
 extern "C" const wchar_t* GetDirFromID(uint32_t);                  // 0x006886b0
 extern "C" bool  Directory_Exists(const wchar_t*);                 // 0x009322b0
+extern "C" wchar_t g_emptyW[];   // 0x01667bac (shared 1-wchar empty buffer)
 typedef char (__cdecl *PkgFilter)(const wchar_t*, void*);
 extern "C" int  __cdecl RegisterPackages(void*, const void*, PkgFilter, void*, int); // 0x06872f0
 struct Elem28 {
@@ -466,6 +468,25 @@ struct DatabaseDirectoryFiles : DDFBase, IRefCounted {
 };
 typedef void (__thiscall *MgrSlot50)(void*, int, void*, int);
 typedef void (__thiscall *MgrSlot90)(void*, int, const wchar_t*);
+struct WStrRes {
+    wchar_t* mBegin;
+    wchar_t* mEnd;
+    wchar_t* mCap;
+    uint32_t mAlloc;
+    WStrRes() { mBegin = g_emptyW; mEnd = g_emptyW; mCap = g_emptyW + 1; }
+    ~WStrRes() {
+        if ((int)(((unsigned)mCap - (unsigned)mBegin) & ~1u) > 2 && mBegin)
+            EASTL_dealloc(mBegin);
+    }
+};
+struct ElemRes {
+    uint8_t flag;
+    uint8_t pad[3];
+    uint32_t f4;
+    WStrRes a;
+    WStrRes b;
+    ElemRes() : flag(0), f4(0) {}
+};
 // ---- items of slice s006870a0 end
 
 // @ 0x00686380
@@ -781,4 +802,29 @@ extern "C" int SetupResources(const wchar_t* base, void* p2, void* p3, char flag
         return 0;
     }
     return 1;
+}
+
+// @ 0x00687ab0
+void Vec28::Reserve(uint32_t n)
+{
+    if (n > (uint32_t)((int)((char*)e - (char*)b) / 0x28)) {
+        ElemRes tmp;
+        ResizeLoop(e, n - (uint32_t)((int)((char*)e - (char*)b) / 0x28), *(Elem28*)&tmp);
+    } else {
+        DestroyRangeChunk((char*)b + n * 0x28, (char*)e);
+    }
+}
+
+// @ 0x00687bc0
+extern "C" int SetCount(int n)
+{
+    if (n > g_count) {
+        ((Vec28*)(void*)&g_array)->Reserve((uint32_t)(n + 1));
+        g_count = n;
+    }
+    if (n == 2) return -1;
+    int r = -1;
+    int count = (int)(g_arrayEnd - g_array) / 0x28;
+    if (n < count) r = n;
+    return r;
 }

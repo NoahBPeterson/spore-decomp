@@ -78,11 +78,14 @@ void* __cdecl MemCopyRange(void* dst, const void* src, unsigned n);             
 void* __cdecl FUN_00a3d810(void** out, void* first, void* last, void* dst, void* src);  // 0x00a3d810
 u32*  __cdecl FUN_00a3f4d0(u32* first, u32* last, u32* dst);                            // 0x00a3f4d0
 int   __cdecl FUN_00a3d920(int* str, int* out);                                         // 0x00a3d920
+void* __cdecl EAAllocate(u32 n, const char* tag, int a, int b, int file, int line);  // 0x00f473a0
+void* __cdecl FUN_00a3e040(void* first, void* last, void* dst);                       // 0x00a3e040
+extern char kEastlTag[];                                                              // 0x013f2150 "EASTL"
 struct VecTItem;
 namespace EA {
 namespace Audio {
 namespace Eapd {
-void* __cdecl gensym(void* out, const void* name);                             // 0x00a675f0
+int*  __cdecl gensym(void* out, const void* name);                             // 0x00a675f0
 }
 }
 }
@@ -261,9 +264,15 @@ void* __cdecl ConvertToString8(void* out, const void* s);                     //
 
 // ---- items of slice s00a3ec00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char DAT_01453a98[];               // 0x01453a98 "EAPd/Pixie"
+extern char DAT_01409070[];               // 0x01409070 "list"
+extern char DAT_01453ab4[];               // 0x01453ab4 "pixie"
+extern char DAT_01453aac[];               // 0x01453aac "read"
+extern char DAT_01453a40[];               // 0x01453a40 "use"
+extern char DAT_01453aa4[];               // 0x01453aa4 "bang"
 extern int  spPixieClass;                 // 0x0166eeb8
 extern int  DAT_0166eebc, DAT_0166eec0, DAT_0166eec4, DAT_0166eec8;
 extern int  DAT_0166eecc, DAT_0166eed0, DAT_0166eed4, DAT_0166eed8;
+extern int  DAT_0166eedc, DAT_0166eee0, DAT_0166eee4, DAT_0166eee8;
 namespace EA {
 namespace Audio {
 namespace Eapd {
@@ -271,6 +280,23 @@ int   __cdecl pd_new(void* cls);                                                
 }
 }
 }
+namespace EA {
+namespace Audio {
+namespace Eapd {
+int   __cdecl class_new(void* a, void* b, void* newfn, void* dtor,
+                        int size, int a6, int a7, int a8);                           // 0x00a48ea0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void  __cdecl class_addmethod(int cls, void* fn, int a, int b, int c, int d);        // 0x00a48a80
+}
+}
+}
+void  __cdecl FUN_00a3dbd0(void* self);   // 0x00a3dbd0 pixie "read" method
+void  __cdecl FUN_00a3e0d0(void* self);   // 0x00a3e0d0 pixie class dtor
 namespace EA {
 namespace Audio {
 namespace Eapd {
@@ -615,6 +641,41 @@ PixieSlot* FUN_00a3e220(PixieSlot* first, PixieSlot* last, PixieSlot* dst)
     return dst;
 }
 
+// @ 0x00a3e280
+void VecPixieSlot::DoInsertValue(PixieSlot* pos, const PixieSlot& value) {
+    PixieSlot* end = mpEnd;
+    if (end != mpCapacity) {
+        const PixieSlot* v = &value;
+        if (pos <= v && v < end) v += 1;
+        if (end) new ((void*)end) PixieSlot(*(PixieSlot*)((char*)end - 0x28));
+        FUN_00a3e220(pos, end - 1, end);
+        pos->mItems.AssignItems(&v->mItems);
+        pos->mNumber = v->mNumber;
+        if (&pos->mName != &v->mName)
+            pos->mName.Assign(v->mName.mpBegin, v->mName.mpEnd);
+        mpEnd = end + 1;
+        return;
+    }
+    int cnt = (int)(end - mpBegin);
+    int newSize = cnt == 0 ? 1 : cnt * 2;
+    PixieSlot* nd;
+    if (newSize == 0) {
+        nd = 0;
+    } else {
+        nd = (PixieSlot*)EAAllocate(newSize * 0x28, kEastlTag, 0, 0, (int)kEastlFile, 0xd1);
+    }
+    PixieSlot* pe = (PixieSlot*)FUN_00a3e040(mpBegin, pos, nd);
+    FUN_00a3d8a0((u32*)mpBegin, (u32*)pos, (int)nd);
+    if (pe) new ((void*)pe) PixieSlot(value);
+    PixieSlot* ne = (PixieSlot*)FUN_00a3e040(pos, mpEnd, pe + 1);
+    FUN_00a3d8a0((u32*)pos, (u32*)mpEnd, (int)(pe + 1));
+    PixieSlot* ob = mpBegin;
+    if (ob != 0 && ((int*)ob)[-1] != 0) operator delete(ob);
+    mpEnd = ne;
+    mpBegin = nd;
+    mpCapacity = (PixieSlot*)((char*)nd + newSize * 0x28);
+}
+
 // @ 0x00a3e4c0
 bool Pixie::ReadSlot(XmlReader* r)
 {
@@ -801,4 +862,37 @@ int pixie_new(void* a, void* b, int argc, void* argv)
         pixie_use(r, *(void**)((char*)av + 4), *(const char**)((char*)av + 8));
     }
     return r;
+}
+
+// @ 0x00a3edb0
+bool Pixie_Register(void) {
+    int buf[2];
+    int* p;
+    p = EA::Audio::Eapd::gensym(buf, DAT_01409070);   // "list"
+    DAT_0166eedc = p[0];
+    DAT_0166eee0 = p[1];
+    p = EA::Audio::Eapd::gensym(buf, DAT_01453ab4);   // "pixie"
+    DAT_0166eec4 = p[0];
+    DAT_0166eec8 = p[1];
+    p = EA::Audio::Eapd::gensym(buf, DAT_01453aac);   // "read"
+    DAT_0166eecc = p[0];
+    DAT_0166eed0 = p[1];
+    p = EA::Audio::Eapd::gensym(buf, DAT_01453a40);   // "use"
+    DAT_0166eee4 = p[0];
+    DAT_0166eee8 = p[1];
+    p = EA::Audio::Eapd::gensym(buf, DAT_01409070);   // "list"
+    DAT_0166eed4 = p[0];
+    DAT_0166eed8 = p[1];
+    p = EA::Audio::Eapd::gensym(buf, DAT_01453aa4);   // "bang"
+    DAT_0166eebc = p[0];
+    DAT_0166eec0 = p[1];
+    int cls = EA::Audio::Eapd::class_new((void*)DAT_0166eec4, (void*)DAT_0166eec8,
+                                         (void*)pixie_new, (void*)(void (*)(void*))FUN_00a3e0d0,
+                                         0x38, 0, 9, 0);
+    spPixieClass = cls;
+    EA::Audio::Eapd::class_addmethod(cls, (void*)FUN_00a3dbd0,
+                                     DAT_0166eecc, DAT_0166eed0, 9, 0);
+    EA::Audio::Eapd::class_addmethod(cls, (void*)pixie_use,
+                                     DAT_0166eee4, DAT_0166eee8, 2, 0);
+    return true;
 }

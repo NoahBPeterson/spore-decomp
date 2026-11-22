@@ -1,32 +1,50 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUIHelpers.cpp  ?UpdateMouseFocus@@YAXH@Z  00804f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?GetAlpha@@YAMPAH@Z  00805040  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?WalkAll@@YA_NPAH@Z  008050b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?WalkFind@@YAPAHPAH@Z  008050f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?Contains@@YA_NPAH0@Z  00805150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?WinB0@@YAXXZ  00805180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?AttrF14@@YAMPAH@Z  00805200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?AttrF18@@YAMPAH@Z  00805230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?AttrP1c@@YAPAXPAH@Z  00805260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?AttrF0c@@YAMPAH@Z  00805290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?AttrF10@@YAMPAH@Z  008052c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?IsSomething@@YAHXZ  008053b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?AllocCoreBlock@@YAPAXH@Z  008053e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CallVt8@VThunk8@@QAEXHHHHH@Z  00805490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FixedFree@FixedAlloc@@QAEXPAXH@Z  008054b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?InitAlloc@@YAXXZ  008054f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?ChooseAlloc@@YAPAXD@Z  00805510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?Bounds@F4@@QAEXPAU1@0@Z  00805530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?Feq@@YAHPAUF4@@0@Z  008055c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_GetMainWindowArea@@YAPAUVec4@@PAU1@@Z  00805ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?GetImageFromLayout@@YAPAXPAXH@Z  008061c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CreateImageFromResourceA@@YAXHHHHHHH@Z  00806320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806780@@YAPAXHHHHHH@Z  00806780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_008067f0@@YAPAXPAUW2@@H@Z  008067f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806880@@YAPAXPAUW2@@H@Z  00806880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806a60@@YADPAUW_s0080_68d0@@PAXHH@Z  00806a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806c60@@YA?AUVec2_806c60@@PAX@Z  00806c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?Pollinator@@YAXPAUW_s0080_68d0@@PAM@Z  00806d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806db0@@YAEPAUW_s0080_68d0@@PAX@Z  00806db0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806f50@@YIHPAX@Z  00806f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806fc0@@YAXPAUW_s0080_68d0@@@Z  00806fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807040@@YAXPAUW_s0080_68d0@@@Z  00807040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807430@@YAXPAUW_s0080_68d0@@M@Z  00807430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?DoErase@@YIXPAX@Z  008077f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807840@@YAXHHHHHHH@Z  00807840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?SetWindowImage@@YAEPAUW_s0080_7840@@PAXH@Z  00807bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807c70@@YADPAUW_s0080_7840@@PAXHH@Z  00807c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?SetWindowSPShader@@YAPAXPAUW_s0080_7840@@EPAX@Z  00807dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?WindowTransform_ctor@@YIPAXPAUXform@@@Z  00807e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807ed0@@YGDPAUW_s0080_7840@@@Z  00807ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808190@@YAXPAUW_s0080_7840@@MM@Z  00808190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SetWindowScale@@YAXPAUW_s0080_7840@@M@Z  00808210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808230@@YAXPAUW_s0080_7840@@PAM@Z  00808230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_008082f0@@YAXPAUW_s0080_7840@@MM@Z  008082f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?Invoke@CbProc@@QAEDPAX0@Z  00808590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?OpenRecordAsStream@@YAHPAXPAH0@Z  00808660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808780@@YAXXZ  00808780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_SetButtonImages@@YAPAUIWin@@PAUButtonImages@@HHUPt@@PAX@Z  00808930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_SetWindowSPMaterial@@YAXPAUIWin@@HH@Z  00808ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
@@ -41,23 +59,5 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00809970@@YAHXZ  00809970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?EndModal@SPUIHelpers@@YA_NPAVIWindow@UTFWin@EA@@H_N@Z  00809c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?GetScrollOffset@SFV@@QAEMXZ  0082a4e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FUN_00965670@ButtonDrawableRadio@@QAEXXZ  00965670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?AttrF14@@YAMPAH@Z  00805200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?AttrF18@@YAMPAH@Z  00805230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_GetMainWindowArea@@YAPAUVec4@@PAU1@@Z  00805ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?GetAlpha@@YAMPAH@Z  00805040  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?WalkFind@@YAPAHPAH@Z  008050f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?WalkAll@@YA_NPAH@Z  008050b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?Contains@@YA_NPAH0@Z  00805150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FixedFree@FixedAlloc@@QAEXPAXH@Z  008054b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807430@@YAXPAUW_s0080_68d0@@M@Z  00807430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?InitAlloc@@YAXXZ  008054f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808190@@YAXPAUW_s0080_7840@@MM@Z  00808190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FUN_008082f0@@YAXPAUW_s0080_7840@@MM@Z  008082f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CreateFromName@SFV@@QAE_NPBG_N1@Z  0082aa20  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?Pollinator@@YAXPAUW_s0080_68d0@@PAM@Z  00806d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806c60@@YA?AUVec2_806c60@@PAX@Z  00806c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808230@@YAXPAUW_s0080_7840@@PAM@Z  00808230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?SetWindowSPShader@@YAPAXPAUW_s0080_7840@@EPAX@Z  00807dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?SetWindowImage@@YAEPAUW_s0080_7840@@PAXH@Z  00807bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIHelpers.cpp  ?OpenRecordAsStream@@YAHPAXPAH0@Z  00808660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00965670@ButtonDrawableRadio@@QAEXXZ  00965670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

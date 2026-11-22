@@ -1,6 +1,9 @@
 #include "game/types.h"
+#include <math.h>
 
 namespace SP {
+struct cMassArg;
+
 struct cTribeTokenTranslator {
     uint8_t mPad00[0x0c];                                    // +0x00 .. +0x0b
     float   mValue0c;                                        // +0x0c
@@ -10,8 +13,33 @@ struct cTribeTokenTranslator {
 
     double GetValue188(int index);
     double GetValue19c(int index);
+    double ComputeMass(struct cMassArg* arg);
 };
+
+struct cTokenTranslatorFields {
+    void*     mpVtable0;                                     // +0x00
+    uint32_t  mPad04;                                        // +0x04
+    uint32_t  mPad08;                                        // +0x08
+    uint32_t  mValue0c;                                      // +0x0c
+    uint32_t  mValue10;                                      // +0x10
+    uint32_t  mValue14;                                      // +0x14
+    uint32_t  mValue18;                                      // +0x18
+};
+
+struct cMassArg {
+    uint8_t mPad00[0x554];                                   // +0x00 .. +0x553
+    float   mValue554;                                       // +0x554
+    float   mValue558;                                       // +0x558
+};
+
+extern "C" void BaseCivTokenTranslatorCtor();                // 0x00b32470
+extern "C" double __cdecl ComputeDensity(SP::cMassArg* arg); // 0x00ce6960
+extern "C" float gMassScale;                                 // 0x0150c8f8
+extern "C" float gMassHalf;                                  // 0x01471064
+extern "C" float gMassThreshold;                             // 0x015d9930
 }
+
+extern "C" char g_1477a60[];
 
 typedef unsigned int   u32;
 typedef unsigned char  u8;
@@ -136,6 +164,40 @@ public:
 };
 }
 
+// ---- items of slice s00ce6a90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IFace {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct Sub {
+    char mPad[0xc];
+    int mCount;          // +0x0c, object +0xa8
+    void DoNuke(int n);  // 0x009a9600
+};
+struct Obj {
+    char mPad00[0x80];
+    IFace* mp80;         // +0x80
+    IFace* mp84;         // +0x84
+    IFace* mp88;         // +0x88
+    IFace* mp8c;         // +0x8c
+    char mPad90[0x9c - 0x90];
+    Sub mSub;            // +0x9c
+    void FUN_00ce6a90();
+};
+// ---- items of slice s00ce6a90 end
+
+// @ 0x00ce6610
+void* __fastcall TribeTokenTranslatorCtor(SP::cTokenTranslatorFields* self)
+{
+    ((void (__thiscall*)(void*))SP::BaseCivTokenTranslatorCtor)(self);
+    self->mValue0c = 0;
+    self->mValue10 = 0;
+    self->mValue14 = 0;
+    self->mValue18 = 0;
+    self->mpVtable0 = (void*)g_1477a60;
+    return self;
+}
+
 // @ 0x00ce68f0
 double SP::cTribeTokenTranslator::GetValue188(int index)
 {
@@ -146,6 +208,43 @@ double SP::cTribeTokenTranslator::GetValue188(int index)
 double SP::cTribeTokenTranslator::GetValue19c(int index)
 {
     return mValues19c[index];
+}
+
+// @ 0x00ce6a40
+// The original was built as one /GL module with its cdecl callee ComputeDensity and linked with /LTCG, which
+// lets it keep `this` in ecx and `arg` in edx across that call (the callee provably leaves both alone). A
+// single-object compile must preserve both across a cdecl call, so it spills them to esi/edi and cannot be
+// byte-exact here; the logic below is the original's.
+double __fastcall ComputeMass(SP::cTribeTokenTranslator* self, int, SP::cMassArg* arg)
+{
+    double density = SP::ComputeDensity(arg);
+    const float* pValue = &self->mValue0c;
+    if (SP::gMassThreshold > self->mValue0c)
+        pValue = &SP::gMassThreshold;
+    float a = arg->mValue554;
+    float b = arg->mValue558;
+    double radial = sqrt(a * a + b * b);
+    return ((density * SP::gMassScale) * *pValue) * radial * SP::gMassHalf;
+}
+
+// @ 0x00ce6a90
+void Obj::FUN_00ce6a90()
+{
+    Sub* sub = &mSub;
+    int count = sub->mCount;
+    sub->DoNuke(count);
+    IFace* p8c = mp8c;
+    if (p8c)
+        p8c->Release();
+    IFace* p88 = mp88;
+    if (p88)
+        p88->Release();
+    IFace* p84 = mp84;
+    if (p84)
+        p84->Release();
+    IFace* p80 = mp80;
+    if (p80)
+        p80->Release();
 }
 
 // @ 0x00ce8d80

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPMissionRaid.cpp -- migrated from slice(s) s00c5d640, s00c5c860, s00c5b9c0, s00c5a580 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPMissionRaid.cpp -- migrated from slice(s) s01347830, s00c5d640, s00c5c860, s00c5b9c0, s00c5a580 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPMissionRaid.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,8 @@ extern "C" char g_146f688[];
 #include "SP/cVarListSerializer.h"
 #include "SP/cPlanet.h"
 #include "SP/cGameNounManager.h"
+#include "SP/cPlanetModel.h"
+#include "SP/cSPGameDataUFO.h"
 
 // ---- items of slice s00c5a580 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint;
@@ -941,6 +943,429 @@ struct RaidPlunderEvent {
 };
 }
 // ---- items of slice s00c5d640 end
+
+// ---- items of slice s00c5c860_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_MissionElemVtable[4];   // 0x0146f688  {0xc5ae30, 0xc5aea0, 0xc5bcf0, 0xc5df50}
+extern float g_elemPosX;               // 0x01691fc8
+extern float g_elemPosY;               // 0x01691fcc
+extern float g_elemPosZ;               // 0x01691fd0
+extern float g_elemNegOne;             // 0x013eb1bc
+float sinf(float fValue);
+float cosf(float fValue);
+struct Vec3_s00c5_c860__g7 {
+    float x, y, z;
+    Vec3_s00c5_c860__g7& operator=(const Vec3_s00c5_c860__g7& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+struct MissionElem_s00c5_c860__g7 {
+    void** vtbl;    // 0x00
+    int    id;      // 0x04
+    Vec3_s00c5_c860__g7   pos;     // 0x08
+    float  f14;     // 0x14
+    float  f18;     // 0x18
+    int    i1c;     // 0x1c
+};
+struct ElemVec_s00c5_c860__g7 {
+    MissionElem_s00c5_c860__g7* begin;   // 0x00
+    MissionElem_s00c5_c860__g7* end;     // 0x04
+    MissionElem_s00c5_c860__g7* cap;     // 0x08
+    void Insert(MissionElem_s00c5_c860__g7* pos, MissionElem_s00c5_c860__g7* val);   // 0x00c5bf80
+};
+MissionElem_s00c5_c860__g7* __cdecl CopyMissionElementsForward_s00c5_c860__g7(MissionElem_s00c5_c860__g7* first, MissionElem_s00c5_c860__g7* last,
+                                                MissionElem_s00c5_c860__g7* dst);      // 0x00c5b450
+namespace EA {
+namespace IO {
+    void ReadInt32(void* pStream, void* pDest, int nCount, int bFlag);   // 0x0093a780
+}
+}
+void FUN_00c5bef0(ElemVec_s00c5_c860__g7* vec, int n);                                 // 0x00c5bef0
+namespace SP {
+struct Vec3_s00c5_c860__g7 { float x, y, z; };
+}
+namespace SP {
+struct Quat { float x, y, z, w; };
+}
+namespace SP {
+struct AutoRefCount_s00c5_c860__g7 {
+    void* mpObject;                            // 0x00
+    void AddRef()  { if (mpObject) (*(void(**)(void*))(*(void***)mpObject))  (mpObject); }
+    void Release() { if (mpObject) (*(void(**)(void*))(*(void***)mpObject + 1))(mpObject); }
+};
+}
+namespace SP {
+struct ObjPtrVec {
+    AutoRefCount_s00c5_c860__g7* begin;                       // 0x00
+    AutoRefCount_s00c5_c860__g7* end;                         // 0x04
+    AutoRefCount_s00c5_c860__g7* cap;                         // 0x08
+    void DoInsertPtr(AutoRefCount_s00c5_c860__g7* pos, const AutoRefCount_s00c5_c860__g7& v);   // 0x00aea5d0
+};
+}
+namespace SP {
+struct MissionElem_s00c5_c860__g7 {
+    void** vtbl;                               // 0x00
+    int    mId;                                // 0x04
+    Vec3_s00c5_c860__g7   mPos;                               // 0x08
+    float  mF14;                               // 0x14
+    float  mF18;                               // 0x18
+    int    mTargetIndex;                       // 0x1c
+};
+}
+namespace SP {
+struct ElemVec_s00c5_c860__g7 {                               // {begin,end}; read-only list here
+    MissionElem_s00c5_c860__g7* begin;                        // 0x00
+    MissionElem_s00c5_c860__g7* end;                          // 0x04
+};
+}
+namespace SP {
+class cUFO {
+public:
+    uint8_t  mPad000[0x508];
+    /* 0x508 */ float    mScaleTarget;          // 0x508  (FUN_00f924e0 target)
+    uint8_t  mPad50c[0x188];
+    /* 0x694 */ Vec3_s00c5_c860__g7     mPosition;             // 0x694
+    uint8_t  mPad6a0[0x10];
+    /* 0x6b0 */ int      mSpawnIndex;           // 0x6b0
+    uint8_t  mPad6b4[0x14];
+    /* 0x6c8 */ uint8_t* mEventOwnerBase;       // 0x6c8  (owner of the +8 event list)
+    uint8_t  mPad6cc[0x4c];
+    /* 0x718 */ Vec3_s00c5_c860__g7     mLocalExtentsMin;      // 0x718
+    /* 0x724 */ Vec3_s00c5_c860__g7     mLocalExtentsMax;      // 0x724
+    /* 0x730 */ Quat     mSurfaceOrientation;   // 0x730
+
+    void AddRef()  { (*(void(**)(void*))(*(void***)this))    (this); }   // vtable +0x00
+    void Release() { (*(void(**)(void*))(*(void***)this + 1))(this); }   // vtable +0x04
+    void ClearAttackBehaviorTarget(void* pTarget);   // 0x00c3b630
+    void FUN_00c376d0(void* pArg);                   // 0x00c376d0
+    void FUN_00c3dae0(const Vec3_s00c5_c860__g7* pPos);             // 0x00c3dae0
+    void FUN_00c3aa40(const Vec3_s00c5_c860__g7* pVel, const Quat* pOrient);   // 0x00c3aa40
+    void FUN_00c37130(int a);                        // 0x00c37130
+};
+}
+namespace SP {
+cUFO* __cdecl CreateUFO(int defId, Vec3_s00c5_c860__g7* pPos, void* pDef);        // 0x0102acb0
+}
+namespace SP {
+struct ModelHolder {
+    Quat* BuildSurfaceOrientation(Quat* out, const Vec3_s00c5_c860__g7* pos);     // 0x00b7f190 ret 8
+};
+}
+namespace SP {
+ModelHolder* __cdecl PlanetModel();                                // 0x00b3d350
+}
+namespace SP {
+Quat* __cdecl RotateByQuat(Quat* out, const Quat* q, const Quat* v);   // 0x0059aed0
+}
+namespace SP {
+void  __cdecl FUN_00bc97f0(int a, int b, float f, int c);          // 0x00bc97f0
+}
+namespace SP {
+void  __cdecl FUN_00f924e0(float* pTarget, float fValue);          // 0x00f924e0
+}
+namespace SP {
+void  __cdecl operator_delete(void* p);                            // 0x00f47380
+}
+namespace SP {
+extern const float gAngleScale;        // 0x01692594
+}
+namespace SP {
+extern const float gAxisX;             // 0x01692598
+}
+namespace SP {
+extern const float gAxisY;             // 0x0169259c
+}
+namespace SP {
+extern const float gAxisZ;             // 0x016925a0
+}
+namespace SP {
+extern const Quat  gAttackRotation;    // 0x016925a4
+}
+namespace SP {
+extern const float gFifteen;           // 0x014007f4 (15.0f)
+}
+namespace SP {
+extern const float gNegOne;            // 0x013eb1bc (-1.0f)
+}
+namespace SP {
+extern const float gTwoTenths;         // 0x013ec480 (0.2f)
+}
+namespace SP {
+extern const float gHalf;              // 0x01471064 (0.5f)
+}
+namespace SP {
+extern const float gFloatMax;          // 0x0146f65c (FLT_MAX)
+}
+namespace SP {
+extern const Vec3_s00c5_c860__g7  gDefaultPos;        // 0x01691fc8 (usually all-zero)
+}
+namespace SP {
+static inline Quat* BuildOrientation(Quat* out, const Vec3_s00c5_c860__g7* pos)
+{
+    return PlanetModel()->BuildSurfaceOrientation(out, pos);
+}
+}
+// ---- items of slice s00c5c860_g7 end
+
+// ---- items of slice s01347830 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0134_7830; 
+}
+typedef eastl::string8_s0134_7830 string8_s0134_7830;
+namespace Simulator {
+class ISerializerReadStream;
+}
+namespace Simulator {
+class ISerializerWriteStream;
+}
+namespace Simulator {
+struct Attribute;
+}
+namespace Simulator {
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t)(const string8_s0134_7830&, void*);
+}
+namespace Simulator {
+typedef void  (*WriteTextFunction_t)(char*, void*);
+}
+namespace Simulator {
+typedef bool  (*ValidateFunction_t)();
+}
+namespace Simulator {
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t)(Attribute*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+void* StaticOffset(Attribute* pAttr);    // 0x011874d0: (void*)pAttr->offset (class statics)
+}
+namespace Simulator {
+struct Attribute
+{
+    // Member attribute: offset is relative to the current object.
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Static attribute: the offset field holds the static's address; no ToXml callback.
+    Attribute(const char* pName, uint32_t nID, void* pStatic,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = 0;
+        offsetFunction = StaticOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = 0;
+        offset = (uint32_t)pStatic;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+struct ResourceKey;
+}
+namespace Simulator {
+template<typename T> bool Read4(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+template<typename T> bool Write4(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+template<typename T> void ReadTextInt(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+template<typename T> bool AlwaysValid();
+}
+namespace Simulator {
+bool Read_00ac8750(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00ae3430(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac8780(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac88f0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ae3450(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00bca960(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+void ReadText_00692ff0(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void ReadText_006930b0(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void ReadText_00693150(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void WriteText_00692fb0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694ee0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694f00(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694fa0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694fc0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00695080(char* pBuffer, void* pData);
+}
+namespace Simulator {
+bool Validate_00b6f550();
+}
+namespace Simulator {
+bool ToXml_0057cde0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_0057ce00(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00ac8050(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00acbb80(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00ae5720(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+struct AttrSlot { uint32_t d[15]; };
+}
+namespace Simulator {
+extern AttrSlot cUFO_sAttributes[17];   // 0x01576bc8
+}
+namespace Simulator {
+template<typename T> bool ToXmlUInt(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+#define UINT_ATTR(T) Read4<T>, Write4<uint32_t>, ReadTextInt<T>, WriteText_00694f00, AlwaysValid<T>, ToXmlUInt<T>
+}
+namespace Simulator {
+#define INT_ATTR   Read4<int>, Write4<int>, ReadText_00692ff0, WriteText_00694ee0, AlwaysValid<int>, ToXml_0057cde0
+}
+namespace Simulator {
+#define FLOAT_ATTR Read4<float>, Write_00ac88f0, ReadText_006930b0, WriteText_00694fc0, AlwaysValid<float>, ToXml_00acbb80
+}
+namespace Simulator {
+#define BOOL_ATTR  Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00
+}
+namespace Simulator {
+#define KEY_ATTR   Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<ResourceKey>, ToXml_00ae5720
+}
+namespace Simulator {
+#define PTR_ATTR(T, R, W, V)  R, W, ReadText_00c2e4e0, WriteText_00692fb0, V, ToXml_00ac8050
+}
+namespace Simulator {
+#define ADD(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cUFO_sAttributes[IDX] = a; }
+}
+namespace Simulator {
+struct Vec3Tag;
+}
+namespace Simulator {
+struct UInt_mOriginStarRecordID;
+}
+namespace Simulator {
+struct UInt_mAttackerEmpire;
+}
+namespace Simulator {
+struct UInt_mTimeOfArrivalMS;
+}
+namespace Simulator {
+class cSPGameDataUFO;
+}
+namespace Simulator {
+bool Read_00c3b970(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00b6e3a0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac88c0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+void ReadText_006930f0(const string8_s0134_7830& text, void* pData);
+}
+namespace Simulator {
+void WriteText_00695010(char* pBuffer, void* pData);
+}
+namespace Simulator {
+bool ToXml_00acbba0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool Read_00c5cff0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00c5b3d0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Validate_00c5bb80();
+}
+namespace Simulator {
+bool ToXml_00f29650(void* pData, const char* pName, int depth);
+}
+// ---- items of slice s01347830 end
 
 // @ 0x00c5b210
 bool cPlanetMission::Read(void* pData)
@@ -1873,6 +2298,168 @@ done_cities:
 }
 }  // namespace SP
 
+// @ 0x00c5cff0
+bool Read_00c5cff0(int unused0, ElemVec_s00c5_c860__g7* vec, int unused2, void* pStream, int unused4, int nLast)
+{
+    CopyMissionElementsForward_s00c5_c860__g7(vec->end, vec->end, vec->begin);
+    vec->end += (vec->begin - vec->end);
+
+    int count = 0;
+    {
+        void** sv = (void**)((void*(*)(void*))((void**)pStream)[0x20 / 4])(pStream);
+        void*  rd = (void*)((void*(*)(void*))sv[0x18 / 4])(sv);
+        EA::IO::ReadInt32(rd, &count, 1, 0);
+    }
+    FUN_00c5bef0(vec, nLast);
+    (void)unused0; (void)unused2; (void)unused4;
+
+    for (int i = 0; i < count; ++i) {
+        MissionElem_s00c5_c860__g7 elem;
+        elem.vtbl = g_MissionElemVtable;
+        elem.id   = -1;
+        elem.pos.x = g_elemPosX;
+        elem.pos.y = g_elemPosY;
+        elem.pos.z = g_elemPosZ;
+        elem.f14 = g_elemNegOne;
+        elem.f18 = g_elemNegOne;
+        elem.i1c = -1;
+        ((void(*)(MissionElem_s00c5_c860__g7*, void*))g_MissionElemVtable[1])(&elem, pStream);
+
+        MissionElem_s00c5_c860__g7* p = vec->end;
+        if (p < vec->cap) {
+            vec->end = p + 1;
+            if (p != 0)
+                *p = elem;
+        }
+        else {
+            vec->Insert(p, &elem);
+        }
+    }
+    return ((bool(*)(void*))((void**)pStream)[0x1c / 4])(pStream);
+}
+
+// @ 0x00c5d140
+namespace SP {
+void __cdecl FUN_00c5d140(void* pGame, ElemVec_s00c5_c860__g7* pList, int nAttackSet, void* pDef, Vec3_s00c5_c860__g7 pos, int bPostEvents, int bFlag)
+{
+    ObjPtrVec spawnVec = { 0, 0, 0 };
+    int   nSpawnCount = 0;         // esp+0x1c
+    int   nPrevTarget = -1;        // esp+0x20
+    char  bPostedDrift = 0;        // esp+0x13
+
+    (void)pGame; (void)nAttackSet;
+
+    const int nCount = (int)((char*)pList->end - (char*)pList->begin) >> 5;
+
+    for (int i = 0; i < nCount; ++i) {
+        MissionElem_s00c5_c860__g7* e = (MissionElem_s00c5_c860__g7*)((char*)pList->begin + (i << 5));
+        cUFO* ufo = CreateUFO(e->mId, &pos, pDef);
+        ufo->FUN_00c376d0(pDef);
+
+        if (e->mId == 2) {                     // strafe-attack element
+            int tgt = e->mTargetIndex;
+            if (tgt == -1)
+                goto orientation;
+            if (nPrevTarget != tgt)
+                nSpawnCount = 0;
+            if (tgt >= (int)(spawnVec.end - spawnVec.begin))
+                goto orientation;
+            nPrevTarget = tgt;
+            ufo->ClearAttackBehaviorTarget(spawnVec.begin[tgt].mpObject);
+            ufo->mSpawnIndex = nSpawnCount;
+
+            float ang = ((float)nSpawnCount * gAngleScale) * gTwoTenths * gHalf;
+            float s = sinf(ang);
+            float c = cosf(ang);
+            Vec3_s00c5_c860__g7 axis;
+            axis.x = s * gAxisX;
+            axis.y = s * gAxisY;
+            axis.z = s * gAxisZ;
+            Quat vq;
+            vq.x = axis.x; vq.y = axis.y; vq.z = axis.z; vq.w = c;
+            Quat rotated;
+            RotateByQuat(&rotated, &gAttackRotation, &vq);
+            ufo->mPosition.x = rotated.x * gFifteen;
+            ufo->mPosition.y = rotated.y * gFifteen;
+            ufo->mPosition.z = rotated.z * gFifteen;
+            ++nSpawnCount;
+
+            cUFO* pTarget = (cUFO*)spawnVec.begin[e->mTargetIndex].mpObject;
+            ufo->FUN_00c3dae0(&pTarget->mLocalExtentsMin);
+            ufo->mSurfaceOrientation =
+                *BuildOrientation(&ufo->mSurfaceOrientation, &pTarget->mLocalExtentsMin);
+        }
+        else if (e->mId == 4) {                // spawn-a-UFO element
+            AutoRefCount_s00c5_c860__g7 ref;
+            ref.mpObject = ufo;
+            if (ufo)
+                ufo->AddRef();
+            if (spawnVec.end < spawnVec.cap) {
+                AutoRefCount_s00c5_c860__g7* slot = spawnVec.end;
+                spawnVec.end = slot + 1;
+                if (slot) {
+                    *slot = ref;
+                    if (ufo)
+                        ufo->AddRef();
+                }
+            }
+            else {
+                spawnVec.DoInsertPtr(spawnVec.end, ref);
+            }
+            if (ref.mpObject)
+                ref.Release();
+        }
+
+    orientation:
+        if (pos.x == gDefaultPos.x && pos.y == gDefaultPos.y && pos.z == gDefaultPos.z) {
+            if (e->mPos.x == gDefaultPos.x && e->mPos.y == gDefaultPos.y &&
+                e->mPos.z == gDefaultPos.z) {
+                if (!bFlag) {
+                    float ex = ufo->mLocalExtentsMin.x;
+                    float ey = ufo->mLocalExtentsMin.y;
+                    float ez = ufo->mLocalExtentsMin.z;
+                    float inv = 1.0f / sqrtf((ex * ex + ez * ez) + ey * ey + 1e-8f);
+                    Vec3_s00c5_c860__g7 v;
+                    v.x = (ey * inv) * 1000.0f;
+                    v.y = (ez * inv) * 1000.0f;
+                    v.z = (ex * inv) * 1000.0f;
+                    ufo->FUN_00c3aa40(&v, &ufo->mSurfaceOrientation);
+                }
+            }
+            else {
+                ufo->FUN_00c3dae0(&e->mPos);
+                ufo->mSurfaceOrientation = *BuildOrientation(&ufo->mSurfaceOrientation, &e->mPos);
+            }
+        }
+        else {
+            ufo->FUN_00c3dae0(&pos);
+            ufo->mSurfaceOrientation = *BuildOrientation(&ufo->mSurfaceOrientation, &pos);
+        }
+
+        if (bPostEvents) {
+            FUN_00bc97f0(8, 0, gFloatMax, 0);
+            FUN_00bc97f0(0x10, 0, gFloatMax, 0);
+            ufo->FUN_00c37130(0);
+            if (!bPostedDrift) {
+                FUN_00bc97f0(0x20, 0, gFloatMax, 0);
+                bPostedDrift = 1;
+            }
+        }
+
+        if (e->mF14 != gNegOne)
+            FUN_00f924e0(&ufo->mScaleTarget, e->mF14);
+    }
+
+    // release the local object vector
+    for (AutoRefCount_s00c5_c860__g7* it = spawnVec.begin; it < spawnVec.end; ++it) {
+        if (it->mpObject)
+            it->Release();
+    }
+    if (spawnVec.begin && spawnVec.begin[-1].mpObject == 0)
+        operator_delete(spawnVec.begin);
+}
+}  // namespace SP
+
 // @ 0x00c5d640
 namespace SP {
 void FUN_00c5d640(void* mission, RecVec* vec, int* outA, int* outB, int* outC)
@@ -2177,3 +2764,27 @@ bool RaidHandler::HandleMessage_020(uint32_t msg, void* m)
     return true;
 }
 }  // namespace SP
+
+// @ 0x01347b70
+namespace Simulator {
+void InitUFOAttributes()
+{
+    ADD(0,  "mDamageRemainder", 0x038521e8, 0x20c, Read4<float>, Write_00ac88f0, ReadText_006930b0, WriteText_00694fc0, AlwaysValid<float>, ToXml_00acbb80)
+    ADD(1,  "mDamageRemainderUFO", 0x056bc0f6, 0x210, Read4<float>, Write_00ac88f0, ReadText_006930b0, WriteText_00694fc0, AlwaysValid<float>, ToXml_00acbb80)
+    ADD(2,  "mInitialized", 0x0552a11e, 0x21d, Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00)
+    ADD(3,  "mShowDefaultEventLog", 0x0552a11f, 0x21e, Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00)
+    ADD(4,  "mNumBombers", 0x056b7886, 0x1f8, Read4<int>, Write4<int>, ReadText_00692ff0, WriteText_00694ee0, AlwaysValid<int>, ToXml_0057cde0)
+    ADD(5,  "mNumFighters", 0x06450510, 0x1fc, Read4<int>, Write4<int>, ReadText_00692ff0, WriteText_00694ee0, AlwaysValid<int>, ToXml_0057cde0)
+    ADD(6,  "mShouldDestroyColonyObject", 0x05c4156b, 0x214, Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00)
+    ADD(7,  "mOriginStarRecordID", 0x05e8ff22, 0x1f4, UINT_ATTR(UInt_mOriginStarRecordID))
+    ADD(8,  "mGalaxyBomber", 0x05ed03d6, 0x1f0, PTR_ATTR(cSPGameDataUFO, Read_00c3b970, Write_00bca960, Validate_00b6f550))
+    ADD(9,  "mPendingUFOKey", 0x05ed0f0f, 0x200, Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<ResourceKey>, ToXml_00ae5720)
+    ADD(10, "mUFOsLeaveOnArrival", 0x05ed0f10, 0x21c, Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00)
+    ADD(11, "mUFOSpawnLocation", 0x060de151, 0x224, Read_00b6e3a0, Write_00ac88c0, ReadText_006930f0, WriteText_00695010, AlwaysValid<Vec3Tag>, ToXml_00acbba0)
+    ADD(12, "mIsPlayerSummoned", 0x06367659, 0x234, Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00)
+    ADD(13, "mAttackerEmpire", 0x0636765a, 0x230, UINT_ATTR(UInt_mAttackerEmpire))
+    ADD(14, "mBackgroundShipsList", 0x0648d0a9, 0x238, Read_00c5cff0, Write_00c5b3d0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00c5bb80, ToXml_00f29650)
+    ADD(15, "mWaitingForRaid", 0x064925c9, 0x215, Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00)
+    ADD(16, "mTimeOfArrivalMS", 0x0684a115, 0x220, UINT_ATTR(UInt_mTimeOfArrivalMS))
+}
+}  // namespace Simulator

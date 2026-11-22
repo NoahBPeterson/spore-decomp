@@ -2305,6 +2305,7 @@ struct CPropList { CPropList* init(); };      // 0x6a1c40
 // ---- items of slice s00f05110 end
 
 // ---- items of slice s00f05ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_15ad4a4[];
 #pragma warning(disable: 4100)
 typedef unsigned int   u32;
 typedef unsigned char  u8;
@@ -2312,13 +2313,42 @@ struct MovieHandler { void* mVtbl; u32 mSrv;                   // IHandler subob
     void HandleMessage(u32 unused, u32 msgId);                 // 0x00f063c0
 };
 struct VtblPart { void* mVtbl0; };                            // primary vtable at +0x00
+int   __cdecl sprintfA(void* str, const char* fmt, ...);      // 0x00472fe0
+int   __cdecl sprintfW(void* str, const wchar_t* fmt, ...);   // 0x0041e050
+void* __cdecl GetSaveArea_s00f0_5ee0(u32 id);                            // 0x006b1f90
+void* __cdecl ConvertToString8(void* out, void* in, int a3);  // 0x0093c570
+void* __cdecl ConvertToString8Impl(void* out, const wchar_t* s, u32 n); // 0x0093c440
+void* __cdecl StrAssign(void* str, void* a, void* b);         // 0x00454cb0
+char  __cdecl FindParentDir2(int, int, int);                  // 0x006375e0
+void* __cdecl EStringCopyCtor(void* dst, void* src);          // 0x0057cb10
+void  __cdecl FUN_00637570(void* p);                          // 0x00637570
+void* __cdecl FUN_0067dd60();                                 // 0x0067dd60
+void* __cdecl FUN_0067dcc0();                                 // 0x0067dcc0 MessageServer
+void* __cdecl FUN_0067de40();                                 // 0x0067de40
 void  __cdecl FUN_00809db0(MovieHandler* obj, u32 msg);       // 0x00809db0 UI::CalloutMessageBox
+void  __cdecl FUN_00ed4f00(int);                              // 0x00ed4f00
 void* __cdecl FUN_00607a60();                                 // 0x00607a60 AuthManager
 void  __cdecl FUN_0063bc70();                                 // 0x0063bc70 CreateConnectingDialog
+void  __cdecl FUN_0063c750(void* p);                          // 0x0063c750 ~cEditorYouTubeVideoUploadMessage
 u8    __cdecl OpenBrowser_s00f0_5ee0(const wchar_t* url, int flag);      // 0x00935fb0
 static inline void* VT(void* o, int off) { return ((void**) (*(void**) o))[off / 4]; }
+typedef void* (__thiscall *FnWin2)(void*, int, int);
 typedef void  (__thiscall *FnU0)(void*);
+typedef void* (__thiscall *FnR0)(void*);
 typedef char  (__thiscall *FnC0)(void*);
+typedef void* (__thiscall *FnR2)(void*, void*, void*);
+typedef void* (__thiscall *FnR3)(void*, void*, void*, void*);
+typedef void* (__thiscall *FnRU2)(void*, u32, void*);
+namespace SP {
+struct cSPUILayout { void* FindWindowByID(u32 id, int flag); };   // 0x008105b0
+}
+namespace SP {
+class cString_s00f0_5ee0 {  // 0x006b5060 / 0x006b5240
+    public: char m[0x14];
+    cString_s00f0_5ee0();
+    ~cString_s00f0_5ee0();
+};
+}
 namespace SP {
 struct RefVec {
     void** mpBegin;   // +0
@@ -4359,6 +4389,148 @@ void __stdcall BuildYtFeed(EaStr* out)
     out->append_sprintf((const char*)g_13f5b98, (const char*)g_13ff0dc);
 }
 
+// @ 0x00f05ee0
+void SP::cSPPlayModeSubModeMovie_s00f0_5ee0::PostRecordingDone()
+{
+    mc3 = true;
+    mc4 = false;
+    mc2 = false;
+
+    // build the cEditorYouTubeVideoUploadMessage on the stack
+    char msg[0x98];
+    memset(msg, 0, sizeof(msg));
+    *((void**) (msg + 0x00)) = (void*) 0x1667bac;   // empty string16 x3 (username)
+    *((void**) (msg + 0x04)) = (void*) 0x1667bac;
+    *((void**) (msg + 0x08)) = (void*) 0x1667bae;
+    FUN_00f05dc0(msg);
+
+    wchar_t wbuf[0x104];
+    void* p54 = m54;
+    *((void**) (wbuf + 0x00)) = (void*) 0x1667bac;
+    *((void**) (wbuf + 0x02)) = (void*) 0x1667bac;
+    *((void**) (wbuf + 0x04)) = (void*) 0x1667bae;
+    sprintfW(wbuf, L"%s.avi", p54);
+
+    void* area = GetSaveArea_s00f0_5ee0(0x11ac197);
+    void* obj;
+    if (area == 0)
+        obj = 0;
+    else
+        obj = ((FnRU2) VT((void*) ((char*) area + 4), 0xc))((char*) area + 4, 0x226a1de, 0);
+    char* xmlName = 0;
+    ((FnR2) VT(obj, 0x68))(obj, wbuf, (void*) &xmlName);
+
+    sprintfA(msg + 0x10, "%s", m8c);
+    sprintfA(msg + 0x20, "%s", (void*) 0x13ff3d8);
+    sprintfA(msg + 0x30, "%s", m7c);
+    sprintfA(msg + 0x40, "%s",
+             "AI39si7ypzxvEPSQoJdcrjAiy54bV93uKhoZcQt-96m9eEIFHZYgJwxiKefFgGSYX7r9jFanihf0DUEuKLlOKK3lrW8UF4bC5g");
+
+    char* s8 = (char*) ConvertToString8(msg + 0x88, xmlName, 0);
+    sprintfA(msg + 0x50, "%s.avi", *((void**) s8));
+
+    {
+        void* b = *((void**) (msg + 0x68));
+        void* e = *((void**) (msg + 0x6c));
+        if ((int) ((char*) e - (char*) b) > 1 && b)
+            operator_delete(b);
+    }
+    sprintfA(msg + 0x60, "%s", *((void**) (msg + 0x68)));
+
+    void* msvr = FUN_0067dcc0();
+    ((FnR3) VT(msvr, 0x14))(msvr, (void*) 0x55e8bc8, msg + 0x10, (void*) 0);
+
+    FUN_0063c750(msg);
+
+    {
+        void* b = *((void**) (msg + 0x28));
+        void* e = *((void**) (msg + 0x2c));
+        if ((int) ((char*) e - (char*) b) > 1 && b)
+            operator_delete(b);
+    }
+    {
+        void* b = *((void**) (wbuf + 0x0a));
+        void* e = *((void**) (wbuf + 0x0c));
+        if ((int) ((char*) e - (char*) b) > 1 && (char*) b != 0)
+            operator_delete(b);
+    }
+}
+
+// @ 0x00f06150
+bool SP::cSPPlayModeSubModeMovie_s00f0_5ee0::CheckRecordingPreconditions()
+{
+    char s1[0x10], s2[0x10];
+
+    void* wnd = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x4581d50, 1);
+    void* text = ((FnWin2) VT(wnd, 0x3c))(wnd, (int) -1, 0);
+    char tmpA[0x10];
+    ConvertToString8Impl(tmpA, (const wchar_t*) text, 0xffffffff);
+    sprintfA(s1, "%s", *((void**) (tmpA + 4)));
+
+    wnd = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x4581d78, 1);
+    text = ((FnWin2) VT(wnd, 0x3c))(wnd, (int) -1, 0);
+    char tmpB[0x10];
+    char* r = (char*) ConvertToString8Impl(tmpB, (const wchar_t*) text, 0xffffffff);
+    if (r != tmpA)
+        StrAssign(r, *((void**) r), *((void**) (r + 4)));
+    {
+        void* b = *((void**) (tmpB + 4));
+        void* e = *((void**) (tmpB + 8));
+        if ((int) ((char*) e - (char*) b) > 1 && b)
+            operator_delete(b);
+    }
+
+    bool failed = false;
+    if (*((void**) (tmpA + 4)) != *((void**) tmpA)) {
+        EStringCopyCtor(s2, tmpA);
+        char d = FindParentDir2(0, 0, 0);
+        if (d != 0)
+            goto after;
+    }
+    {
+        wnd = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x3f67620, 1);
+        ((FnWin2) VT(wnd, 0x7c))(wnd, 1, 0);
+        FUN_00809db0(GetHandlerSub(), 0x15ad4d4);
+        mDialog = 0xe;
+        failed = true;
+    }
+after:
+    sprintfA(s2, "%s", *((void**) (tmpA + 4)));
+
+    wnd = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x4581d90, 1);
+    text = ((FnWin2) VT(wnd, 0x3c))(wnd, (int) -1, 0);
+    r = (char*) ConvertToString8Impl(tmpB, (const wchar_t*) text, 0xffffffff);
+    if (r != tmpA)
+        StrAssign(r, *((void**) r), *((void**) (r + 4)));
+    {
+        void* b = *((void**) (tmpB + 4));
+        void* e = *((void**) (tmpB + 8));
+        if ((int) ((char*) e - (char*) b) > 1 && b)
+            operator_delete(b);
+    }
+    sprintfA(s2, "%s", *((void**) (tmpA + 4)));
+
+    {
+        void* ms = FUN_0067de40();
+        void* v = ((FnR0) VT(ms, 0x14))(ms);
+        char tmpC[0x10];
+        char* s = (char*) ConvertToString8Impl(tmpC, *((const wchar_t**) v), 0xffffffff);
+        sprintfA(s2, "%s", *((void**) s));
+    }
+    if (!failed) {
+        void* msvr = FUN_0067dcc0();
+        ((FnR3) VT(msvr, 0x14))(msvr, (void*) 0x56cd8c4, s1, (void*) 0);
+    }
+    {
+        void* b = *((void**) (s1 + 4));
+        void* e = *((void**) (s1 + 8));
+        if ((int) ((char*) e - (char*) b) > 1 && b)
+            operator_delete(b);
+    }
+    FUN_00637570(s2);
+    return failed;
+}
+
 // @ 0x00f063c0
 void MovieHandler::HandleMessage(u32 unused, u32 msgId)
 {
@@ -4453,6 +4625,63 @@ void MovieHandler::HandleMessage(u32 unused, u32 msgId)
             o->FUN_00f03fc0(1);
         break;
     }
+}
+
+// @ 0x00f065d0
+void SP::cSPPlayModeSubModeMovie_s00f0_5ee0::ShowUploadProgressDialog()
+{
+    void* w = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x5650568, 1);
+    ((FnWin2) VT(w, 0x7c))(w, 1, 0);
+    mDialog = 0;
+    w = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x5650498, 1);
+    void* s = (*(FnR0*) ((char*) (*(void**) w) + 0x3c))(w);
+    sprintfA((char*) this + 0x8c, "%ls", s);
+    w = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x5650500, 1);
+    s = (*(FnR0*) ((char*) (*(void**) w) + 0x3c))(w);
+    sprintfA((char*) this + 0x9c, "%ls", s);
+    FUN_0063bc70();
+    FUN_00f05c40();
+}
+
+// @ 0x00f06660
+void SP::cSPPlayModeSubModeMovie_s00f0_5ee0::ShowSendVideoURLDialog()
+{
+    SP::cString_s00f0_5ee0 tmp;
+    if (!CheckRecordingPreconditions()) {
+        void* w = ((SP::cSPUILayout*) mUI)->FindWindowByID(0x3f67620, 1);
+        ((FnWin2) VT(w, 0x7c))(w, 1, 0);
+        FUN_00809db0(GetHandlerSub(), (int)g_15ad4a4);
+        mDialog = 10;
+    }
+}
+
+// @ 0x00f066c0
+bool SP::cSPPlayModeSubModeMovie_s00f0_5ee0::SelectRecording(int* pIndex, void* pOut)
+{
+    mVecA.Release(&mVecA.mpBegin[*pIndex]);
+    mVecB.Release(&mVecB.mpBegin[*pIndex]);
+
+    int n = (int) (mVecA.mpEnd - mVecA.mpBegin);
+    if (*pIndex == n && *pIndex != 0)
+        --*pIndex;
+    bool sel = (*pIndex < (int) (mVecA.mpEnd - mVecA.mpBegin));
+    if (sel) {
+        void* mgr = FUN_0067dd60();
+        char loc[12];
+        void* res = ((FnR2) VT(mgr, 0x2c))(mgr, loc, (void*) (size_t) mVecA.mpBegin[*pIndex]);
+        *((u32*) pOut + 0) = *((u32*) res + 0);
+        *((u32*) pOut + 1) = *((u32*) res + 1);
+        *((u32*) pOut + 2) = *((u32*) res + 2);
+    }
+    bool bVar6 = ((u32) (mVecA.mpEnd - mVecA.mpBegin) < 0x32);
+    if (m38 != 0) {
+        void* w = ((FnR2) VT(m38, 0xf0))(m38, (void*) 0x78d57d8, (void*) 1);
+        if (w != 0)
+            ((FnWin2) VT(w, 0x7c))(w, 2, (int) bVar6);
+    }
+    if (*(u32*) 0x16c7aa4 != 0 && *(u32*) (0x16c7aa4 + 0x14) != 0)
+        FUN_00ed4f00((int) bVar6);
+    return sel;
 }
 
 // @ 0x00f06d40

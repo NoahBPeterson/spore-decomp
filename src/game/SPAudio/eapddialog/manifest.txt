@@ -1,4 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapddialog.cpp  ?stub_get_ext_d2i@Eapd@Audio@EA@@YAXPAX@Z  00a4c1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapddialog.cpp  ?stub_gfxstub@Eapd@Audio@EA@@YAXPAX@Z  00a4c230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapddialog.cpp  ?openpanel_bang@Eapd@Audio@EA@@YAXPAX@Z  00a4c2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapddialog.cpp  ?stub_vgui@Eapd@Audio@EA@@YAXPAX@Z  00a4c2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapddialog.cpp  ?openpanel_setup@Eapd@Audio@EA@@YA_NXZ  00a4c300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapddialog.cpp  ?savepanel_new@Eapd@Audio@EA@@YAPAXXZ  00a4c370  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapddialog.cpp  ?savepanel_bang@Eapd@Audio@EA@@YAXPAUt_savepanel@123@@Z  00a4c3e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

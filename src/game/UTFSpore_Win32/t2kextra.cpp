@@ -5,7 +5,6 @@
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
-extern "C" void* tsi_AllocMem(void* mem, unsigned size);   // 0x008d1260
 extern "C" void tsi_DeAllocMem(void* mem, void* p);        // 0x008d1440
 extern "C" int util_EuclidianDistance(int x, int y);   // 0x008d17d0
 extern "C" int util_FixDiv(int a, int b);              // 0x008d16d0
@@ -27,7 +26,6 @@ struct TVEffect {
     int g2;        // +0x1c
     int b2;        // +0x20
 };
-extern "C" void* tsi_AllocMem(void* mem, unsigned size);   // 0x008d1260
 extern "C" void tsi_DeAllocMem(void* mem, void* p);        // 0x008d1440
 static inline u32 BitVal(const u8* row, int x, u32 on)
 {
@@ -73,10 +71,185 @@ extern "C" int util_FixMul(int a, int b);              // 0x008d1590
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void FUN_008c3120(int self);
 
-// @ 0x008c3570
-void FUN_008c3570(int self)
+typedef unsigned char  byte;
+typedef unsigned int   uint;
+typedef byte* (__cdecl *AllocFn)(int, int);
+void* __cdecl tsi_AllocMem(int heap, int size);   // 0x008d1260
+void  __cdecl FF_GetColorTable(void);                               // 0x008c20c0
+
+
+// @ 0x008c21c0
+extern "C" void T2K_CastRaysOfLightAndDarkness(unsigned* buf, int a2, int a3, int a4, int a5,
+                                               unsigned* sel)
 {
-	FUN_008c3120(self);
+    unsigned colLo = (((*(unsigned*)((char*)(sel) + 0x18)) << 8 | (*(unsigned*)((char*)(sel) + 0x1c))) << 8) | (*(unsigned*)((char*)(sel) + 0x20));
+    unsigned colHi = (((*(unsigned*)((char*)(sel) + 0x24)) << 8 | (*(unsigned*)((char*)(sel) + 0x28))) << 8) | (*(unsigned*)((char*)(sel) + 0x2c));
+    int subFalse = 0;               // subtracted in the "both false" branch (orig [esp+0x38])
+    int subTrue = 0;                // subtracted in the "both true" branch  (orig [esp+0x3c])
+    unsigned colB = 0;              // colour mask held in [esp+0x14]
+    unsigned colA = 0;              // colour mask held in [esp+0x18]
+    if ((*(char*)((char*)(sel) + 1)) == 1) {
+        subTrue = 0;
+        subFalse = 1;
+        colB = colLo;
+        colA = colHi;
+    } else if ((*(char*)((char*)(sel) + 1)) == 2) {
+        subTrue = 1;
+        subFalse = 0;
+        colB = colHi;
+        colA = colLo;
+    }
+
+    int i = 0;
+    if (0 < a5) {
+        do {
+            unsigned v = buf[i];
+            if (v != 0) {
+                unsigned u = v << 0x18;
+                if (u < 0x7f000000u)
+                    u = u - 0x80000000u;
+                buf[i] = u;
+            }
+            i++;
+        } while (i < a5);
+    }
+
+    int span = a3;                  // local_28 = max(a2, a3)
+    if (a3 < a2)
+        span = a2;
+
+    int pass = 0;                   // local_8
+    do {
+        int limit = a3;             // local_c: a3 on pass 0, a2 on pass 1
+        int r = pass;
+        if (pass != 0)
+            limit = a2;
+        for (; r < limit; r++) {
+            int off;                    // orig [esp+0x1c]
+            int col;                    // orig [esp+0x24]
+            if (pass == 0) {
+                off = 0;
+                col = r;
+            } else {
+                col = 0;
+                off = r;
+            }
+            int count = 0;              // orig [esp+0x10] (number of row pixels to walk)
+            if (0 < span) {
+                int n = 0;
+                int c = col;
+                do {
+                    if (a2 <= (off - col) + c || a3 <= c)
+                        break;
+                    count++;
+                    n++;
+                    c++;
+                } while (n < span);
+            }
+            int idx = 0;
+            if (0 < count) {
+                int base = 0;           // row offset at the start of the current run (orig [esp+0x44])
+                int idxOff = 0;         // idx * a4 (orig [esp+0x30])
+                int rowOff = col * a4;  // (col + idx) * a4 (orig [esp+0x48])
+                bool prevIn = false;    // run currently open?
+                int prevN = 0;          // first index of the current run
+                bool prevVal = false;   // value at the run's previous sample
+                int lastIdx = 0;        // last index seen in the current run
+                do {
+                    unsigned v = buf[rowOff + idx + off];
+                    bool val = false;
+                    int end;            // split point between the two colour spans
+                    unsigned mask1 = 0; // colour mask for the first span  (orig [esp+0x20])
+                    unsigned mask2 = 0; // colour mask for the second span (orig [esp+0x40])
+                    if (prevIn) {
+                        if (v < 0x80000000u) {
+                            val = v != 0;
+                        } else {
+                            lastIdx = idx;
+                            if (idx < count - 1)
+                                goto next;
+                            val = false;
+                        }
+                    } else if (v < 0x80000000u) {
+                        prevVal = v != 0;
+                        goto next;
+                    } else {
+                        prevIn = true;
+                        base = idxOff;
+                        prevN = idx;
+                        lastIdx = idx;
+                        if (idx < count - 1)
+                            goto next;
+                        val = false;
+                    }
+                    /* merge the run [prevN, lastIdx] using the two colours */
+                    if ((int)prevVal < (int)val) {
+                        mask1 = colA;
+                    } else if ((int)val < (int)prevVal) {
+                        mask1 = colB;
+                    } else if (prevVal || val) {
+                        mask1 = colB;
+                        mask2 = colA;
+                        end = (lastIdx + prevN) / 2 - subTrue;
+                    } else {
+                        mask1 = colA;
+                        mask2 = colB;
+                        end = (lastIdx + prevN) / 2 - subFalse;
+                    }
+                    if (prevN <= end) {
+                        int p = prevN + off;
+                        int q = col * a4 + base;  // base is the run's start row, not the current one
+                        int k = (end - prevN) + 1;
+                        do {
+                            unsigned* slot = &buf[q + p];
+                            q += a4;
+                            p++;
+                            k--;
+                            *slot = (*slot - 0x80000000u) | mask1;
+                        } while (k != 0);
+                    }
+                    end++;
+                    if (end <= lastIdx) {
+                        int p = end + off;
+                        int q = (col + end) * a4;
+                        int k = (lastIdx - end) + 1;
+                        do {
+                            unsigned* slot = &buf[q + p];
+                            q += a4;
+                            p++;
+                            k--;
+                            *slot = (*slot - 0x80000000u) | mask2;
+                        } while (k != 0);
+                    }
+                    prevIn = false;
+                    base = idxOff;
+                    prevN = idx;
+                    prevVal = val;
+                next:
+                    idxOff += a4;
+                    rowOff += a4;
+                    idx++;
+                } while (idx < count);
+            }
+        }
+        pass++;
+        if (1 < pass) {
+            i = 0;
+            if (0 < a5) {
+                do {
+                    unsigned v = buf[i];
+                    if (v != 0) {
+                        unsigned hi = v >> 0x18;
+                        if (0x7e < hi)
+                            hi = 0x7e;
+                        buf[i] = (hi * 0x40 + (hi & 0xffffffe0)) * 0x80000 | (v & 0xffffff);
+                    }
+                    i++;
+                } while (i < a5);
+            }
+            return;
+        }
+    } while (1);
 }
 
 // @ 0x008c2c80
@@ -128,7 +301,7 @@ void T2K_CreateBorderedCharacter(T2KObj* t, TVEffect* fx)
     u32* out;
     if (t->m_allocFn == 0 ||
         (out = (u32*)((AllocCallback)t->m_allocFn)(t->m_allocUser, total * 4)) == 0) {
-        out = (u32*)tsi_AllocMem(t->m_mem, total * 4);
+        out = (u32*)tsi_AllocMem((int)t->m_mem, total * 4);
         t->m_allocated = 1;
     }
     t->m_out = out;
@@ -216,3 +389,155 @@ void T2K_CreateBorderedCharacter(T2KObj* t, TVEffect* fx)
     }
 }
 
+// @ 0x008c3120
+struct T2KWriter {
+    char pad00[4];
+    int  m_mem;         // +0x4
+    char pad08[0x18];
+    int  m_allocUser;   // +0x20
+    AllocFn m_allocFn;  // +0x24
+    char pad28[0xa8];
+    int  m_f0;          // +0xd0
+    int  m_f1;          // +0xd4
+    int  m_f2;          // +0xd8
+    int  m_f3;          // +0xdc
+    char padE0[4];
+    int  m_f4;          // +0xe4
+    char padE8[4];
+    int  m_f5;          // +0xec
+    char padF0[4];
+    int  m_f6;          // +0xf4
+    char padF8[8];
+    int  m_f7;          // +0x100
+    char pad104[8];
+    int  m_f8;          // +0x10c
+    int  m_f9;          // +0x110
+    int  m_f10;         // +0x114
+    void* m_src;        // +0x118
+};
+
+// @ 0x008c3120
+void FUN_008c3120(int self_)
+{
+	T2KWriter* self = (T2KWriter*)self_;
+	int   colorTable = self->m_f9;
+	int   rowPitch   = self->m_f10;
+	int   width      = self->m_f8;
+	int   nTriples   = (width + 6) / 3;
+	int   tripleLen  = nTriples * 3;
+	int   padOffset  = (tripleLen - width - 4) * 0x20;
+	int   height;
+
+	self->m_f4 -= 0x80;
+
+	height = (self->m_f4 + 1 + padOffset) / 3;
+	self->m_f7 = (padOffset - 0x7f + self->m_f7) / 3;
+	self->m_f2 = (self->m_f2 + 1) / 3;
+	self->m_f5 = (self->m_f5 + 1) / 3;
+	self->m_f6 = (self->m_f6 + 1) / 3;
+
+	uint base = (self->m_f0 + 1) / 3 + 0x8000;
+
+	byte* tmp = 0;
+	self->m_f4 = height;
+	*(uint*)&self->m_f0 = base & 0xffff0000;
+
+	if (height >> 6 >= 0 && (int)(base >> 16) <= (height >> 6) + nTriples)
+		self->m_f4 = height - 0x40;
+
+	self->m_f10 = nTriples;
+	self->m_f8 = nTriples;
+	(void)rowPitch;
+
+	int allocSize;
+	if ((int)self->m_src == 0)
+		allocSize = 0;
+	else
+		allocSize = nTriples * colorTable;
+
+	int owned = 0;
+	byte* pixels  = 0;
+	AllocFn allocator = self->m_allocFn;
+	if (allocator != 0)
+		pixels = allocator(self->m_allocUser, allocSize);
+	if (pixels == 0)
+	{
+		pixels = (byte*)tsi_AllocMem(self->m_mem, allocSize);
+		owned = 1;
+	}
+
+	if (allocSize != 0)
+	{
+		byte localTmp[128];
+		if (tripleLen < 0x81)
+			tmp = localTmp;
+		else
+			tmp = (byte*)tsi_AllocMem(self->m_mem, tripleLen);
+
+		byte* src = (byte*)(int)self->m_src;
+		FF_GetColorTable();
+
+		if (colorTable > 0)
+		{
+			int   srcDelta = (int)src - (int)tmp;
+			byte* rowSrc   = src + 1;
+			byte* rowDst   = pixels;
+			int   rows     = colorTable;
+			do
+			{
+				int x = 0;
+				tmp[0] = 0;
+				tmp[1] = 0;
+				tmp[2] = 0;
+				if (width - 2 > 1)
+				{
+					int i = 1;
+					do
+					{
+						uint lo = rowSrc[i - 1];
+						if ((uint)rowSrc[i] < lo)
+							lo = rowSrc[i];
+						uint hi = rowSrc[i + 1];
+						if (hi < lo)
+							lo = hi;
+
+						if (lo < 0xb)
+						{
+							tmp[i + 2] = 0;
+							tmp[i + 3] = 0;
+							tmp[i + 4] = 0;
+						}
+						else
+						{
+							int  v = lo * 0x186 + 0xc;
+							char c = (char)(v >> 0xc);
+							tmp[i + 2] = c;
+							tmp[i + 3] = c;
+							tmp[i + 4] = c;
+							c = (char)(v >> 0xd) + c * '\n';
+							rowSrc[i - 1] -= c;
+							rowSrc[i]     -= c;
+							rowSrc[i + 1] -= c;
+						}
+						i += 3;
+						x = i;
+					} while (i < width - 2);
+					x = i;
+				}
+				else
+				{
+					x = 1;
+				}
+				(void)x;
+				(void)srcDelta;
+			} while (--rows != 0);
+		}
+	}
+	(void)owned;
+}
+
+// @ 0x008c3570
+void FUN_008c3570(int self)
+{
+	FUN_008c3120(self);
+}

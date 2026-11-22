@@ -20,6 +20,8 @@
 #include "cSPUIPropertyLayout.h"
 #include <string.h>
 #include <intrin.h>
+#include "SP/cSPUIFeedListCategory.h"
+#include "SP/cSPUIFeedList.h"
 
 // ---- items of slice s005ca070 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned int n); // 0x011e0744
@@ -140,6 +142,7 @@ class sp_vector {
   int mAllocator[2];
   sp_vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
   ~sp_vector();
+  int size() const { return (int)(mpEnd - mpBegin); }
 };  // namespace eastl
 }
 class cSPUILayout_s005c_a070 {
@@ -611,6 +614,7 @@ class cSPPaletteCategoryUI_s005c_b060 {
   virtual int AddRef();   // +0x8
   virtual int Release();  // +0xc
   bool IsExpanded();                                                              // 0x005c2940
+  void Update(int deltaTime);                                                     // 0x005c28b0
   void SetActive(bool active);                                                    // 0x005c2960
   cCategoryInfo* GetCategoryInfo(cCategoryInfo* result);                          // 0x005c2d30
   void Init(cSPPaletteCategory_s005c_b060* category, IWindow_s005c_b060* parent, cSPPaletteInfo_s005c_b060* info);  // 0x005c53c0
@@ -632,6 +636,7 @@ class cSPPaletteUI_s005c_b060 : public IWinProc_s005c_b060, public EA::RefCountV
   void Shutdown();  // 0x005cba90 (SP::cSPPaletteUI::Shutdown)
   void SetCurrentCategoryIndex(int index);  // 0x005cb240 (SP::cSPPaletteUI::SetCurrentCategoryIndex)
   int GetCurrentCategoryIndex();     // 0x005ca9c0
+  void UpdateCategories(int deltaTime);  // 0x005ca980
   void SetVisibleChunk(int chunk);   // 0x005cadb0
   void LayoutCategoryButtons();      // 0x005cae60
   void SetExpanded(bool expanded);
@@ -664,11 +669,75 @@ class cSPPaletteUI_s005c_b060 : public IWinProc_s005c_b060, public EA::RefCountV
 extern "C" void* CopyImpl(void* first, void* last, void* dest);
 typedef void(__thiscall* FnP)(void*);
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
+struct ThCategory {                                  // SP::cSPUIFeedListCategory
+    void* Ctor();                                    // 0x00664c90
+    char  Init(void* a, void* b, void* c, void* d);  // 0x006661d0
+    void  SetFlag(char v);                           // 0x006644e0
+    void  Shutdown();                                // 0x00663e50
+};
+struct cSPUIFeedList {
+    void FUN_00663350(int param);
+    char  vt[0xc];                     // 0x00
+    bool  mIsVisible;                  // 0x10
+    bool  mWheel;                      // 0x11
+    bool  m12;                         // 0x12
+    bool  m13;                         // 0x13
+    float mTarget;                     // 0x14
+    float mActual;                     // 0x18
+    float mMax;                        // 0x1c
+    void* mpLayout;                    // 0x20
+    void* mpWinParent;                 // 0x24
+    void* mpWinRoot;                   // 0x28
+    void* mpWinList;                   // 0x2c
+    void* mpWinScrollRoot;             // 0x30
+    void* mpWinScrollClientArea;       // 0x34
+    void* mCatBegin;                   // 0x38
+    void* mCatEnd;                     // 0x3c
+    void* mCatCap;                     // 0x40
+    void* m44;                         // 0x44
+    char  pad48[4];                    // 0x48
+    void* mpSelectedFeed;              // 0x4c
+    void* mpServer;                    // 0x50
+    void* mpHandler;                   // 0x54
+    void* mpIdArray;                   // 0x58
+    int   mnIdArrayCount;              // 0x5c
+    int   mnPriority;                  // 0x60
+    void* mpConfig;                    // 0x64
+
+    void* Ctor();
+    void  Dtor();
+    void  ShutdownCategories();
+    void  FUN_006634d0();                                          // 0x006634d0
+    void  ReloadCallback(void* parent, int a, int b, void* cfg);   // 0x00663860
+};
 struct VecAutoRef {
     void* begin; void* end; void* cap;
     void erase(void* first, void* last);
 };
 // ---- items of slice s00662d70 end
+
+// Inline members of the slice's cSPPaletteUI view, inlined at 0x005ca980 (UpdateCategories) and
+// 0x005ca9f0 (ShowChunkButtons, whose body calls FindCategoryIndexInline); the slice declared
+// them __forceinline, so they come from the class header and are emitted inline here.
+
+// @ 0x005ca980
+void SP::cSPPaletteUI_s005c_b060::UpdateCategories(int deltaTime)
+{
+  int count = (int)(mCategoryUIs.mpEnd - mCategoryUIs.mpBegin);
+  for (int i = 0; i < count; i++)
+    mCategoryUIs.mpBegin[i]->Update(deltaTime);
+}
+
+// @ 0x005ca9c0
+int cSPPaletteUI::FindCategoryIndex()
+{
+  int count = mCategories.size();
+  for (int i = 0; i < count; i++) {
+    if (mCategories.mpBegin[i] == mSelectedCategory)
+      return i;
+  }
+  return -1;
+}
 
 // @ 0x005ca9f0
 void cSPPaletteUI::UpdateNavigationVisiblity()
@@ -1033,4 +1102,14 @@ void VecAutoRef::erase(void* first, void* last)
         r += 4;
     }
     *(int*)&end += -((((int)((char*)last - (char*)first)) >> 2) * 4);
+}
+
+// @ 0x00663490
+void cSPUIFeedList::ShutdownCategories()
+{
+    VecAutoRef* categories = (VecAutoRef*)((char*)this + 0x38);
+    int count = ((char*)categories->end - (char*)categories->begin) >> 2;
+    for (int i = 0; i < count; ++i)
+        ((ThCategory**)categories->begin)[i]->Shutdown();
+    categories->erase(categories->begin, categories->end);
 }

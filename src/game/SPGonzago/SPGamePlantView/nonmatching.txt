@@ -1,3 +1,5 @@
 # va  diff-bytes  reason
+00e8d0e0 99 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant view constructor; retail resets the effect slot through the smart pointer release helper and writes the key triple after the colour, which the plain member model folds away; equiv UNSUPPORTED (unresolved vtable global)
+00e8d160 103 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant view destructor; the model detach, effect manager release and creature release services are unresolved so the guards collapse; equiv UNSUPPORTED (unresolved effect services)
 00e8d260 384 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant simulation update; the game mode, plant stage, effect manager and creature services are unresolved so both effect binding arms reduce to calls; equiv UNSUPPORTED (unresolved plant services)
 00e8d4f0 243 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant view factory; the allocation, construction, world lookup and stage services are unresolved so the selection between the model binding calls can not be reproduced; equiv UNSUPPORTED (unresolved factory services)

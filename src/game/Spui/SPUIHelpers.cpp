@@ -560,9 +560,10 @@ extern uint8_t g_896;                // 0x0164c896
 extern uint32_t g_898;               // 0x0164c898
 extern uint32_t g_89c;               // 0x0164c89c
 extern uint32_t g_8a0;               // 0x0164c8a0
-extern "C" void efree(void* p); // 0x00a222c0
+extern "C" void efree(void* p); // 0x00f47380
 extern "C" void* dbgnew(unsigned size, const void* data, int a, int b, const char* file, int line); // 0x00f473a0
 extern char g_data_13f6b3c;
+extern "C" void*  GetUTFManager();                         // 0x00957f30
 extern int         gWindowNodeOffset;// 0x01440aec
 extern char        g_allocFile_13ebb38[]; // 0x013ebb38
 struct AppInner { char pad[0x118]; int flag; };
@@ -606,9 +607,12 @@ virtual void w31();
 };
 extern "C" WM* WindowManager();     // 0x0067caa0
 #define VSLOT(o, off) (*(void***)(o))[(off) / 4]
+static inline void  vcall0(void* o, int off) { ((void (__thiscall*)(void*))VSLOT(o, off))(o); }
 static inline void* vp0(void* o, int off) { return ((void* (__thiscall*)(void*))VSLOT(o, off))(o); }
+static inline int   vi0(void* o, int off) { return ((int (__thiscall*)(void*))VSLOT(o, off))(o); }
 static inline void  vcall1(void* o, int off, void* a) { ((void (__thiscall*)(void*, void*))VSLOT(o, off))(o, a); }
 static inline void* vp1(void* o, int off, void* a) { return ((void* (__thiscall*)(void*, void*))VSLOT(o, off))(o, a); }
+static inline char  vb1(void* o, int off, void* a) { return ((char (__thiscall*)(void*, void*))VSLOT(o, off))(o, a); }
 static inline void  vcall2(void* o, int off, void* a, void* b) { ((void (__thiscall*)(void*, void*, void*))VSLOT(o, off))(o, a, b); }
 struct AutoRefIWin {
     IWin* p;
@@ -663,6 +667,22 @@ static __forceinline void listPop008097(FixedList008097* l)
         l->mPool.mpHead = n;
     }
 }
+struct IWinObj {
+    virtual void Fn0(IWin* w);              // +0
+    virtual void Fn4(IWin* w, void* arg);   // +4
+};
+struct HelperObj {
+    void** vt;          // +0
+    IWinObj* m4;        // +4
+    AutoRefIWin m8;     // +8
+    AutoRefIWin mC;     // +0xc
+    void Fn(IWin* w, void* arg);
+};
+struct IdRange {
+    unsigned* ids;
+    unsigned count;
+};
+__declspec(noinline) void __cdecl FUN_00809ff0(void* self);
 extern AutoRefIWin g_msgBoxObj;      // 0x0164c8f8
 extern void*       g_modalWin;       // 0x0164c890
 // ---- items of slice s00809700 end
@@ -2005,6 +2025,7 @@ struct Vec2_806c60 {
     float x, y;
     Vec2_806c60(float ax, float ay) : x(ax), y(ay) {}
 };
+
 // @ 0x00806c60
 Vec2_806c60 FUN_00806c60(void* wp)
 {
@@ -3193,6 +3214,71 @@ bool EndModal(EA::UTFWin::IWindow * w, int result, bool flag)
     return true;
 }
 }  // namespace SPUIHelpers
+
+// @ 0x00809e40
+void __fastcall FUN_00809e40(HelperObj* self)
+{
+    void* mgr = GetUTFManager();
+    if (!mgr) return;
+    if (self->m8.p) {
+        if (!vp0(self->m8.p, 0x10) || !WalkAll((int*)self->m8.p)) {
+            IWin* old = self->m8.p;
+            if (old) {
+                self->m8.p = 0;
+                vcall0(old, 4);
+            }
+        }
+    }
+    IWin* front = (IWin*)vp0(mgr, 0x84);
+    if (front) {
+        vcall0(front, 0);
+        if (!self->m8.p || !vb1(front, 0xf8, self->m8.p)) {
+            IWin* old = self->m8.p;
+            if (front != old) {
+                vcall0(front, 0);
+                self->m8.p = front;
+                if (old) vcall0(old, 4);
+            }
+        }
+    }
+    if (!self->m8.p) {
+        if (vp0(mgr, 4))
+            self->m8 = (IWin*)vp0(mgr, 4);
+    }
+    if (self->m8.p) {
+        vcall2(mgr, 0x4c, 0, self->m8.p);
+        IWin* old = self->m8.p;
+        if (old) {
+            self->m8.p = 0;
+            vcall0(old, 4);
+        }
+    }
+    if (front) vcall0(front, 4);
+}
+
+// @ 0x0080a0f0
+bool __cdecl FUN_0080a0f0(IWin* w, IdRange* range)
+{
+    if (w) {
+        IWin* c = (IWin*)vp1(w, 0x0c, (void*)0x8ed27e7a);
+        if (c) {
+            vcall0(c, 0);
+            unsigned* ids = range->ids;
+            unsigned count = range->count;
+            for (unsigned i = 0; i < count; ++i) {
+                if ((unsigned)vi0(w, 0x1c) == ids[i] || (unsigned)vi0(w, 0x20) == ids[i]) {
+                    if (WalkAll((int*)vp0(c, 0x10))) {
+                        FUN_00809ff0(c);
+                        vcall0(c, 4);
+                        return false;
+                    }
+                }
+            }
+            vcall0(c, 4);
+        }
+    }
+    return true;
+}
 
 // @ 0x00828f40
 float cPropLayout::MeasureOverflow()

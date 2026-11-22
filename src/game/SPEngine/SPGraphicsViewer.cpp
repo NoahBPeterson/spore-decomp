@@ -583,6 +583,7 @@ void FUN_007c3de0(void* a, void* b)
 
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x007c3f70
 cViewer* cViewer::FUN_007c3f70()
 {

@@ -1,4 +1,4 @@
-// src/game/SPEditors/_at_005b0000.cpp -- migrated from slice(s) s005bdca0, s005bc0f0, s005b7460, s005b0f80 by tools/migrate/rewrite.py
+// src/game/SPEditors/_at_005b0000.cpp -- migrated from slice(s) s005ba320, s005bdca0, s005bc0f0, s005b7460, s005b0f80 by tools/migrate/rewrite.py
 // Object file: SPEditors/_at_005b0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,21 @@
 #include "SP/cSPEditorPhysicsWorld.h"
 #include "SP/cViewer.h"
 #include <string.h>
+#include "cSPBoundingBox.h"
+#include "cSPVector3.h"
+#include "hkAabb.h"
+#include "hkAllCdPointCollector.h"
+#include "hkCdBody.h"
+#include "hkCdPointCollector.h"
+#include "hkCollidable.h"
+#include "hkContactPoint.h"
+#include "hkLinearCastInput.h"
+#include "hkMotion.h"
+#include "hkRigidBody.h"
+#include "hkRootCdPoint.h"
+#include "hkShape.h"
+#include "hkTransform.h"
+#include "hkVector4.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_1477fbc;                                  // 0x1477fbc (~200.0f)
@@ -671,6 +686,366 @@ struct CSpEditorManip {
 };
 // ---- items of slice s005bdca0 end
 
+// ---- items of slice s005ba320 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
+extern "C" double __cdecl fabs(double);
+extern "C" double __cdecl sqrt(double);
+extern float gStackingHeightTolerance;  // 0x015134dc (0.05)
+#pragma intrinsic(fabs, sqrt)
+typedef unsigned int size_type;
+void __cdecl operator delete[](void* p);  // 0x00f47380
+struct cSPVector3_s005b_a320 {
+    float x, y, z;
+    cSPVector3_s005b_a320() {}
+    cSPVector3_s005b_a320(float fx, float fy, float fz) : x(fx), y(fy), z(fz) {}
+    cSPVector3_s005b_a320(const cSPVector3_s005b_a320& v) : x(v.x), y(v.y), z(v.z) {}
+    void Set(float fx, float fy, float fz) { x = fx; y = fy; z = fz; }
+    cSPVector3_s005b_a320 operator+(const cSPVector3_s005b_a320& v) const { return cSPVector3_s005b_a320(x + v.x, y + v.y, z + v.z); }
+    cSPVector3_s005b_a320 operator*(float f) const { return cSPVector3_s005b_a320(x * f, y * f, z * f); }
+    cSPVector3_s005b_a320 operator-() const { return cSPVector3_s005b_a320(-x, -y, -z); }
+    float Dot(const cSPVector3_s005b_a320& v) const { return x * v.x + y * v.y + z * v.z; }
+};
+extern cSPVector3_s005b_a320 kSPUpAxis;   // 0x015ea68c
+#define FLT_MAX_VALUE 3.402823466e+38F
+#define FLT_MIN_VALUE 1.175494351e-38F
+#define HK_ALIGN16 __declspec(align(16))
+#define HK_REAL_MAX 3.40282e+38f
+#define HK_REAL_EPSILON 1.192092896e-07F
+struct HK_ALIGN16 hkVector4_s005b_a320 {
+    float x, y, z, w;
+    hkVector4_s005b_a320() {}
+    hkVector4_s005b_a320(float a, float b, float c, float d = 0.0f) : x(a), y(b), z(c), w(d) {}
+    hkVector4_s005b_a320(const hkVector4_s005b_a320& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+    float& operator()(int i) { return (&x)[i]; }
+    const float& operator()(int i) const { return (&x)[i]; }
+    void setTransformedInversePos(const class hkTransform_s005b_a320& t, const hkVector4_s005b_a320& v);  // 0x010813d0
+};
+class hkTransform_s005b_a320 { public:
+    hkVector4_s005b_a320 m_rotation[3];
+    hkVector4_s005b_a320 m_translation;
+    static const hkTransform_s005b_a320& getIdentity() { return s_identity; }
+    static const hkTransform_s005b_a320 s_identity;   // 0x015b9b20
+};
+class hkAabb_s005b_a320 { public:
+    hkVector4_s005b_a320 m_min;
+    hkVector4_s005b_a320 m_max;
+};
+class hkThreadMemory { public:
+    void deallocateChunk(void* p, int nbytes, int cls);  // 0x0107db10
+    static unsigned long s_threadMemoryInstance;          // 0x016e4174 (TLS index)
+    static hkThreadMemory& getInstance() { return *static_cast<hkThreadMemory*>(TlsGetValue(s_threadMemoryInstance)); }
+};
+enum { HK_MEMORY_CLASS_COLLIDE = 0x14 };
+template <typename T>
+class hkArray { public:
+    enum { CAPACITY_MASK = 0x3fffffff, DONT_DEALLOCATE_FLAG = 0x80000000 };
+    T* m_data;
+    int m_size;
+    int m_capacityAndFlags;
+    int getSize() const { return m_size; }
+    int getCapacity() const { return m_capacityAndFlags & CAPACITY_MASK; }
+    T& operator[](int i) { return m_data[i]; }
+    ~hkArray()
+    {
+        if ((m_capacityAndFlags & DONT_DEALLOCATE_FLAG) == 0)
+            hkThreadMemory::getInstance().deallocateChunk(m_data, getCapacity() * sizeof(T), HK_MEMORY_CLASS_COLLIDE);
+    }
+};
+template <typename T, int N>
+class hkInplaceArray : public hkArray<T> { public:
+    T m_storage[N];
+    hkInplaceArray()
+    {
+        this->m_data = m_storage;
+        this->m_size = 0;
+        this->m_capacityAndFlags = N | hkArray<T>::DONT_DEALLOCATE_FLAG;
+    }
+};
+class hkShape_s005b_a320 { public:
+    virtual ~hkShape_s005b_a320();
+    virtual void calcStatistics(void* collector) const;
+    virtual int getType() const;
+    virtual void getAabb(const hkTransform_s005b_a320& localToWorld, float tolerance, hkAabb_s005b_a320& out) const;  // +0xc
+    virtual float getMaximumProjection(const hkVector4_s005b_a320& direction) const;                     // +0x10
+};
+class hkCdBody_s005b_a320 { public:
+    const hkShape_s005b_a320* m_shape;
+    unsigned int m_shapeKey;
+    const void* m_motion;
+    const hkCdBody_s005b_a320* m_parent;
+    const hkShape_s005b_a320* getShape() const { return m_shape; }
+};
+class hkCollidable_s005b_a320 : public hkCdBody_s005b_a320 { public:
+    int m_ownerOffset;               // +0x10
+    unsigned int m_broadPhaseHandle[3];
+    float m_allowedPenetrationDepth;
+    void* getOwner() const { return (void*)((char*)this + m_ownerOffset); }
+};
+class hkMotionState { public:
+    hkTransform_s005b_a320 m_transform;
+};
+class hkMotion_s005b_a320 { public:
+    void* vtbl_;
+    unsigned int m_memSizeAndRefCount;
+    int m_solverData;
+    unsigned int pad_;
+    hkMotionState m_motionState;     // +0x10
+};
+class hkRigidBody_s005b_a320 { public:
+    void* vtbl_;                     // +0x0
+    unsigned int m_memSizeAndRefCount;
+    unsigned int m_world;
+    unsigned int m_userData;
+    char* m_name;
+    unsigned int m_multithreadLock[2];
+    hkCollidable_s005b_a320 m_collidable;       // +0x1c
+    unsigned int m_collisionEntries[3];  // +0x40 hkArray
+    unsigned int m_properties[3];
+    hkMotion_s005b_a320* m_motion;              // +0x58
+
+    const hkCollidable_s005b_a320* getCollidable() const { return &m_collidable; }
+    const hkTransform_s005b_a320& getTransform() const { return m_motion->m_motionState.m_transform; }
+    const hkVector4_s005b_a320& getPosition() const { return getTransform().m_translation; }
+    void setPosition(const hkVector4_s005b_a320& position);  // 0x01087820
+};
+class hkContactPoint_s005b_a320 { public:
+    hkVector4_s005b_a320 m_position;
+    hkVector4_s005b_a320 m_separatingNormal;
+    const hkVector4_s005b_a320& getPosition() const { return m_position; }
+    float getDistance() const { return m_separatingNormal.w; }
+};
+struct hkRootCdPoint_s005b_a320 {
+    hkContactPoint_s005b_a320 m_contact;
+    const hkCollidable_s005b_a320* m_rootCollidableA;
+    unsigned int m_shapeKeyA;
+    const hkCollidable_s005b_a320* m_rootCollidableB;
+    unsigned int m_shapeKeyB;
+};
+class hkCdPointCollector_s005b_a320 { public:
+    hkCdPointCollector_s005b_a320() { m_earlyOutDistance = HK_REAL_MAX; }
+    virtual ~hkCdPointCollector_s005b_a320() {}
+    virtual void addCdPoint(const void* point) = 0;
+    float m_earlyOutDistance;
+};
+class hkAllCdPointCollector_s005b_a320 : public hkCdPointCollector_s005b_a320 { public:
+    hkAllCdPointCollector_s005b_a320() {}
+    virtual ~hkAllCdPointCollector_s005b_a320() {}
+    virtual void addCdPoint(const void* point);
+    hkInplaceArray<hkRootCdPoint_s005b_a320, 8> m_hits;     // +0x10
+    hkArray<hkRootCdPoint_s005b_a320>& getHits() { return m_hits; }
+    void sortPoints();                            // 0x010c2570
+};
+struct hkLinearCastInput_s005b_a320 {
+    hkVector4_s005b_a320 m_to;
+    float m_maxExtraPenetration;
+    float m_startPointTolerance;
+    hkLinearCastInput_s005b_a320() : m_maxExtraPenetration(HK_REAL_EPSILON), m_startPointTolerance(HK_REAL_EPSILON) {}
+};
+class hkWorld_s005b_a320 { public:
+    void linearCast(const hkCollidable_s005b_a320* collA, const hkLinearCastInput_s005b_a320& input,
+                    hkCdPointCollector_s005b_a320& castCollector, hkCdPointCollector_s005b_a320* startCollector = 0);  // 0x01082b90
+};
+namespace eastl {
+struct sp_vector_allocator_s005b_a320 {
+    const char* mpName;
+    unsigned int mFlags;
+    sp_vector_allocator_s005b_a320() {}
+    void deallocate(void* p, size_type)
+    {
+        if (((unsigned int*)p)[-1])
+            delete[] (char*)p;
+    }
+};
+}
+namespace eastl {
+template <typename T, typename Allocator = sp_vector_allocator_s005b_a320>
+struct VectorBase_s005b_a320 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    Allocator mAllocator;
+    VectorBase_s005b_a320() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~VectorBase_s005b_a320()
+    {
+        if (mpBegin)
+            DoFree(mpBegin, (size_type)(mpCapacity - mpBegin));
+    }
+    void DoFree(T* p, size_type n) { mAllocator.deallocate(p, n * sizeof(T)); }
+};
+}
+namespace eastl {
+template <typename T, typename Allocator = sp_vector_allocator_s005b_a320>
+class vector_s005b_a320 : public VectorBase_s005b_a320<T, Allocator> { public:
+    using VectorBase_s005b_a320<T, Allocator>::mpBegin;
+    using VectorBase_s005b_a320<T, Allocator>::mpEnd;
+    using VectorBase_s005b_a320<T, Allocator>::mpCapacity;
+
+    vector_s005b_a320() {}
+    ~vector_s005b_a320() { DoDestroyValues(mpBegin, mpEnd); }
+    void DoDestroyValues(T* first, T* last)
+    {
+        for (; first < last; ++first)
+            first->~T();
+    }
+    bool empty() const { return mpBegin == mpEnd; }
+    size_type size() const { return (size_type)(mpEnd - mpBegin); }
+    T& operator[](size_type n) { return mpBegin[n]; }
+    void resize(size_type n);                              // 0x00473810 (vector<cSPVector3>)
+    void DoInsertValue(T* position, const T& value);       // 0x00630b30 (pointer vectors)
+    void push_back(const T& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) T(value);
+        else
+            DoInsertValue(mpEnd, value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
+    }
+};
+}
+namespace EA {
+template <typename T>
+class AutoRefCount_s005b_a320 { public:
+    T* mpObject;
+    ~AutoRefCount_s005b_a320()
+    {
+        if (mpObject)
+            mpObject->Release();
+    }
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+};  // namespace EA
+}
+namespace SP {
+struct cSPPlane {
+    cSPVector3_s005b_a320 mNormal;
+    float mD;
+    cSPPlane(const cSPVector3_s005b_a320& normal, const cSPVector3_s005b_a320& point) : mNormal(normal), mD(-normal.Dot(point)) {}
+};
+}
+namespace SP {
+struct cSPBoundingBox {
+    cSPVector3_s005b_a320 mMin;
+    cSPVector3_s005b_a320 mMax;
+};
+}
+namespace SP {
+class cSPEditorPhysicsWorld_s005b_a320 { public:
+    void SetFloorFilter(bool enable);   // 0x004b9440
+    hkWorld_s005b_a320* World();                   // 0x004b91c0
+};
+}
+namespace SP {
+class cSPEditorModel_s005b_a320 { public:
+    cSPEditorPhysicsWorld_s005b_a320* GetPhysicsWorld();   // 0x004ad450
+    void NumberBlocks();                        // 0x004ad4e0
+    float GetGridSize();                        // 0x004adaa0 (returns +0x38)
+};
+}
+namespace SP {
+class cSPEditorBlock_s005b_a320 { public:
+    virtual void Dispose();
+    virtual int AddRef();
+    virtual int Release();
+    uint32_t pad04[9];
+    cSPEditorModel_s005b_a320* mEditorModel;   // +0x28
+    uint32_t pad2c[7];
+    cSPVector3_s005b_a320 mPosition;           // +0x48
+    uint32_t pad54[78];
+    hkRigidBody_s005b_a320* mpRigidBody;       // +0x18c
+
+    void GetBBox(cSPBoundingBox* box, int a, int b, int c);  // 0x0044ae00
+};
+}
+namespace SP {
+struct cSPCamera {
+    cSPVector3_s005b_a320 WorldToProjection(const cSPVector3_s005b_a320& p);  // 0x007c4180
+};
+}
+namespace SP {
+struct cSPApp_s005b_a320 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    virtual cSPCamera* GetCamera();   // +0x58
+};
+}
+namespace SP {
+cSPApp_s005b_a320* App_s005b_a320();   // 0x0067dd10
+}
+namespace SP {
+typedef eastl::vector_s005b_a320<EA::AutoRefCount_s005b_a320<cSPEditorBlock_s005b_a320> > BlockList;
+}
+namespace SP {
+void GetStackCandidates(cSPEditorBlock_s005b_a320* block, int mode, BlockList* out);              // 0x004905d0
+}
+namespace SP {
+void PrepareBlockForStacking(cSPEditorBlock_s005b_a320* block, int mode, int a, int b, int c);   // 0x004a6690
+}
+namespace SP {
+class cSPEditorManipulationStacking_s005b_a320 { public:
+    uint32_t pad00[8];
+    EA::AutoRefCount_s005b_a320<cSPEditorBlock_s005b_a320> mBlock;   // +0x20
+    uint32_t pad24[9];
+    cSPVector3_s005b_a320 mTargetPosition;                // +0x48
+
+    hkRigidBody_s005b_a320* FindStackingTarget(cSPEditorBlock_s005b_a320* block, int mode, cSPVector3_s005b_a320 rayOrigin,
+                                    cSPVector3_s005b_a320 rayDirection, cSPVector3_s005b_a320* outPosition);
+};
+}
+namespace SP {
+inline void cSPBoundingBox_GetCorners(const cSPBoundingBox& box, cSPVector3_s005b_a320* c)
+{
+    const cSPVector3_s005b_a320& mn = box.mMin;
+    const cSPVector3_s005b_a320& mx = box.mMax;
+    c[0].Set(mn.x, mn.y, mn.z);
+    c[1].Set(mx.x, mn.y, mn.z);
+    c[2].Set(mn.x, mx.y, mn.z);
+    c[3].Set(mx.x, mx.y, mn.z);
+    c[4].Set(mn.x, mn.y, mx.z);
+    c[5].Set(mx.x, mn.y, mx.z);
+    c[6].Set(mn.x, mx.y, mx.z);
+    c[7].Set(mx.x, mx.y, mx.z);
+}
+}
+namespace SP {
+__forceinline void GetAabbCorners(const hkAabb_s005b_a320& aabb, cSPVector3_s005b_a320* c)
+{
+    c[0] = cSPVector3_s005b_a320(aabb.m_min(0), aabb.m_min(1), aabb.m_min(2));
+    c[1] = cSPVector3_s005b_a320(aabb.m_max(0), aabb.m_min(1), aabb.m_min(2));
+    c[2] = cSPVector3_s005b_a320(aabb.m_min(0), aabb.m_max(1), aabb.m_min(2));
+    c[3] = cSPVector3_s005b_a320(aabb.m_max(0), aabb.m_max(1), aabb.m_min(2));
+    c[4] = cSPVector3_s005b_a320(aabb.m_min(0), aabb.m_min(1), aabb.m_max(2));
+    c[5] = cSPVector3_s005b_a320(aabb.m_max(0), aabb.m_min(1), aabb.m_max(2));
+    c[6] = cSPVector3_s005b_a320(aabb.m_min(0), aabb.m_max(1), aabb.m_max(2));
+    c[7] = cSPVector3_s005b_a320(aabb.m_max(0), aabb.m_max(1), aabb.m_max(2));
+}
+}
+namespace SP {
+template <typename T> inline const T& max_alt(const T& a, const T& b) { return (a < b) ? b : a; }
+}
+namespace SP {
+template <typename T> inline const T& min_alt(const T& a, const T& b) { return (b < a) ? b : a; }
+}
+// ---- items of slice s005ba320 end
+
 // @ 0x005b1080
 S80::S80(float a, float b, float c, float d, float e, float f)
 : m0(a), m1(b), m2(c), m3(d), m4(e), m5(f), m18(false) {}
@@ -951,6 +1326,177 @@ bool cSPEditorManipulationSpine::DoOnMouseMove(float x, float y, int modifiers)
     return true;
   }
   return false;
+}
+}  // namespace SP
+
+// @ 0x005ba320
+namespace SP {
+hkRigidBody_s005b_a320* cSPEditorManipulationStacking_s005b_a320::FindStackingTarget(cSPEditorBlock_s005b_a320* block, int mode, cSPVector3_s005b_a320 rayOrigin, cSPVector3_s005b_a320 rayDirection, cSPVector3_s005b_a320* outPosition)
+{
+    cSPEditorModel_s005b_a320* pModel = block->mEditorModel;
+    hkRigidBody_s005b_a320* pBody = block->mpRigidBody;
+    if (pBody == 0)
+        return 0;
+
+    // Screen-space x extent of the dragged block.
+    hkAabb_s005b_a320 aabb;
+    pBody->getCollidable()->getShape()->getAabb(pBody->getTransform(), 0.0f, aabb);
+    cSPVector3_s005b_a320 corners[8];
+    GetAabbCorners(aabb, corners);
+    float blockTop = aabb.m_max(2);
+    float blockMinX = FLT_MAX_VALUE;
+    float blockMaxX = FLT_MIN_VALUE;
+    for (int i = 0; i < 8; ++i) {
+        cSPVector3_s005b_a320 p = App_s005b_a320()->GetCamera()->WorldToProjection(corners[i]);
+        if (blockMinX > p.x) blockMinX = p.x;
+        if (p.x > blockMaxX) blockMaxX = p.x;
+    }
+    cSPVector3_s005b_a320 blockScreenPos = App_s005b_a320()->GetCamera()->WorldToProjection(block->mPosition);
+
+    BlockList candidates;
+    GetStackCandidates(block, mode, &candidates);
+    int bestIndex = -1;
+    if (!candidates.empty()) {
+        int count = (int)candidates.size();
+        cSPVector3_s005b_a320 horizontal(rayDirection.x, rayDirection.y, 0.0f);
+        eastl::vector_s005b_a320<cSPVector3_s005b_a320> hits;
+        hits.resize(count);
+        float bestScore = FLT_MAX_VALUE;
+        for (int i = 0; i < count; ++i) {
+            cSPEditorBlock_s005b_a320* candidate = candidates[i];
+            cSPVector3_s005b_a320 position(candidate->mPosition);
+            if (candidate == mBlock)
+                position = mTargetPosition;
+
+            // vertical plane through the candidate, facing the camera
+            cSPPlane plane(-horizontal, position);
+            float denom = plane.mNormal.Dot(rayDirection);
+            if (denom == 0.0f)
+                continue;
+            float t = -((plane.mNormal.Dot(rayOrigin) + plane.mD) / denom);
+            if (t >= 0.0f) {
+                hits[i] = rayOrigin + rayDirection * t;
+                cSPVector3_s005b_a320& hit = hits[i];
+                float dx = hit.x - block->mPosition.x;
+                float dy = hit.y - block->mPosition.y;
+                float distToBlock = (float)sqrt(dx * dx + dy * dy);
+
+                cSPVector3_s005b_a320 candCorners[8];
+                float candTop;
+                if (candidates[i]->mpRigidBody) {
+                    hkRigidBody_s005b_a320* body = candidates[i]->mpRigidBody;
+                    hkAabb_s005b_a320 candAabb;
+                    body->getCollidable()->getShape()->getAabb(body->getTransform(), 0.0f, candAabb);
+                    GetAabbCorners(candAabb, candCorners);
+                    candTop = candAabb.m_max(2);
+                } else {
+                    cSPBoundingBox box;
+                    candidates[i]->GetBBox(&box, 0, 0, 0);
+                    cSPBoundingBox_GetCorners(box, candCorners);
+                    candTop = box.mMax.z;
+                }
+                float ex = hit.x - position.x;
+                float ey = hit.y - position.y;
+                float distToCandidate = (float)sqrt(ex * ex + ey * ey);
+                float heightDiff = (float)fabs(candTop - blockTop);
+
+                float minX = FLT_MAX_VALUE;
+                float maxX = FLT_MIN_VALUE;
+                for (int k = 0; k < 8; ++k) {
+                    cSPVector3_s005b_a320 p = App_s005b_a320()->GetCamera()->WorldToProjection(candCorners[k]);
+                    if (minX > p.x) minX = p.x;
+                    if (p.x > maxX) maxX = p.x;
+                }
+                float overlap = maxX - minX + blockMaxX - blockMinX
+                              - (max_alt(maxX, blockMaxX) - min_alt(minX, blockMinX));
+                if (overlap > 0.0f) {
+                    float score = (heightDiff + distToCandidate + distToBlock) / overlap;
+                    if (bestScore > score) {
+                        bestScore = score;
+                        bestIndex = i;
+                    }
+                }
+            }
+        }
+
+        if (bestIndex != -1) {
+            cSPVector3_s005b_a320* bestHit = &hits[bestIndex];
+            cSPVector3_s005b_a320 start(*bestHit);
+            start.z = pModel->GetGridSize() * 0.05f + start.z;
+            cSPVector3_s005b_a320 down = -kSPUpAxis;
+            cSPEditorModel_s005b_a320* model = block->mEditorModel;
+            model->NumberBlocks();
+            hkRigidBody_s005b_a320* rb = block->mpRigidBody;
+            if (rb == 0)
+                return 0;
+            hkVector4_s005b_a320 savedPosition(rb->getPosition());
+            PrepareBlockForStacking(block, mode, 0, 1, 1);
+            model->GetPhysicsWorld()->SetFloorFilter(true);
+
+            hkLinearCastInput_s005b_a320 input;
+            cSPVector3_s005b_a320 to = start + down * 20.0f;
+            input.m_to = hkVector4_s005b_a320(to.x, to.y, to.z, 0.0f);
+            rb->setPosition(hkVector4_s005b_a320(start.x, start.y, start.z, 0.0f));
+            rb->getCollidable()->getShape()->getMaximumProjection(hkVector4_s005b_a320(0.0f, 0.0f, -1.0f, 0.0f));
+
+            hkAllCdPointCollector_s005b_a320 collector;
+            model->GetPhysicsWorld()->World()->linearCast(block->mpRigidBody->getCollidable(), input, collector);
+
+            bool found = false;
+            if (collector.getHits().getSize() > 0) {
+                collector.sortPoints();
+                hkRigidBody_s005b_a320* foundBody = 0;
+                cSPVector3_s005b_a320 foundPosition;
+                eastl::vector_s005b_a320<hkRigidBody_s005b_a320*> visited;
+                int numHits = collector.getHits().getSize();
+                hkAabb_s005b_a320 rbAabb;
+                rb->getCollidable()->getShape()->getAabb(hkTransform_s005b_a320::getIdentity(), 0.0f, rbAabb);
+                hkTransform_s005b_a320 rbTransform(rb->getTransform());
+                for (int i = 0; i < numHits; ++i) {
+                    hkRootCdPoint_s005b_a320& pt = collector.getHits()[i];
+                    hkRigidBody_s005b_a320* hitBody = (hkRigidBody_s005b_a320*)pt.m_rootCollidableB->getOwner();
+                    hkContactPoint_s005b_a320 contact(pt.m_contact);
+                    int n = (int)visited.size();
+                    int j;
+                    for (j = 0; j < n; ++j)
+                        if (visited[j] == hitBody)
+                            break;
+                    if (j < n)
+                        continue;
+                    visited.push_back(hitBody);
+
+                    hkVector4_s005b_a320 contactPos(contact.getPosition());
+                    hkVector4_s005b_a320 localPos;
+                    localPos.setTransformedInversePos(rbTransform, contactPos);
+
+                    float fraction = contact.getDistance();
+                    cSPVector3_s005b_a320 castTo(input.m_to(0), input.m_to(1), input.m_to(2));
+                    cSPVector3_s005b_a320 p = castTo * fraction + start * (1.0f - fraction);
+
+                    hkAabb_s005b_a320 hitAabb;
+                    hitBody->getCollidable()->getShape()->getAabb(hkTransform_s005b_a320::getIdentity(), 0.0f, hitAabb);
+                    if (fabs((rbAabb.m_min(2) + p.z) - (hitBody->getPosition()(2) + hitAabb.m_max(2)))
+                        < gStackingHeightTolerance) {
+                        float drop = bestHit->z - p.z;
+                        float stackOffset = pModel->GetGridSize() * 0.05f;
+                        if (drop < stackOffset * 3.0f) {
+                            foundPosition = p;
+                            foundBody = hitBody;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                model->NumberBlocks();
+                rb->setPosition(savedPosition);
+                if (found && foundBody && foundBody != rb) {
+                    *outPosition = foundPosition;
+                    return foundBody;
+                }
+            }
+        }
+    }
+    return 0;
 }
 }  // namespace SP
 

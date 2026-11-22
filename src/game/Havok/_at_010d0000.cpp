@@ -504,6 +504,10 @@ public:
     virtual void addCdPoint(const void* point) = 0;   // slot 1
     float m_earlyOutDistance;       // +4
 };
+struct hkCapsTriangleManifold_s010d_37d0
+{
+    hkContactPoint_s010d_37d0 m_contact[3];    // +0, +0x20, +0x40
+};
 extern "C" void __cdecl hkCollideCapsuleUtilManifoldCapsVsCapsule(
     const hkVector4_s010d_37d0* capA, float radiusA, const hkVector4_s010d_37d0* capB, float radiusB,
     void* out);                                              // 0x01106490
@@ -519,6 +523,7 @@ class hkContactMgr_s010d_37d0
     virtual void v3();                                                                   // +0x0c
     virtual void removePoint(unsigned short key);                                        // +0x10
 };
+extern "C" void __cdecl hkCapsuleTriangleUtilSetUpCache(const hkVector4_s010d_37d0* triangle, void* cache);  // 0x01105e90
 class hkCapsuleTriangleAgent_s010d_37d0;
 class hkCollisionAgent
 {
@@ -588,6 +593,14 @@ class hkCapsuleShape_s010d_37d0
     float     m_radius;             // +0xc
     hkVector4_s010d_37d0 m_vertexA;            // +0x10
     hkVector4_s010d_37d0 m_vertexB;            // +0x20
+};
+class hkTriangleShape_s010d_37d0
+{ public:
+    char      m_pad[0xc];
+    float     m_radius;             // +0xc
+    hkVector4_s010d_37d0 m_vertexA;            // +0x10
+    hkVector4_s010d_37d0 m_vertexB;            // +0x20
+    hkVector4_s010d_37d0 m_vertexC;            // +0x30
 };
 #define HK_XFORM_ONE_s010d_37d0(O, I, T) { \
         const float x = (I).x, y = (I).y, z = (I).z; \
@@ -915,10 +928,9 @@ class hkContactPoint_s010d_6420
 { public:
     hkVector4_s010d_6420 m_position;           // +0
     hkVector4_s010d_6420 m_separatingNormal;   // +0x10 (w = distance)
-    hkVector4_s010d_6420 m_pad;                // +0x20
     void setFlipped(const hkContactPoint_s010d_6420& other);    // 0x010cecf0
 };
-struct hkProcessCdPoint_s010d_6420 { hkContactPoint_s010d_6420 m_contact; };  // 0x30 bytes (contact is 0x30)
+struct hkProcessCdPoint_s010d_6420 { hkContactPoint_s010d_6420 m_contact; uint32_t m_extra[4]; };  // 0x30 bytes
 typedef float hkTime;
 struct hkProcessCollisionInput_s010d_6420
 {
@@ -928,9 +940,10 @@ struct hkProcessCollisionInput_s010d_6420
 struct hkProcessCollisionOutput_s010d_6420
 {
     hkProcessCdPoint_s010d_6420* m_firstFreeContactPoint;  // +0
-    char              m_pad0[0x10 - 4];
+    uint32_t          m_pad0[3];                // +4
     hkContactPoint_s010d_6420    m_toiContact;             // +0x10
     hkProcessCdPoint_s010d_6420  m_contactPoints[256];     // +0x30
+    uint32_t          m_toiProperties;          // +0x3030
     hkTime            m_toiTime;                // +0x3034
 };
 class hkContactMgr_s010d_6420
@@ -1008,6 +1021,20 @@ public:
     static void staticGetPenetrations(const hkCdBody_s010d_6420& bodyA, const hkCdBody_s010d_6420& bodyB,
                                       const hkCollisionInput_s010d_6420& input,
                                       hkCdBodyPairCollector_s010d_6420& collector);           // 0x010d7300
+};
+class hkSphereBoxAgent_s010d_6420 : public hkCollisionAgent
+{
+public:
+    virtual void processCollision(const hkCdBody_s010d_6420& bodyA, const hkCdBody_s010d_6420& bodyB,
+                                  const hkProcessCollisionInput_s010d_6420& input,
+                                  hkProcessCollisionOutput_s010d_6420& output);      // 0x010d53d0
+};
+class hkSymmetricSphereBoxAgent_s010d_6420 : public hkSphereBoxAgent_s010d_6420
+{
+public:
+    void processCollision(const hkCdBody_s010d_6420& bodyA, const hkCdBody_s010d_6420& bodyB,
+                          const hkProcessCollisionInput_s010d_6420& input,
+                          hkProcessCollisionOutput_s010d_6420& output);   // 0x010d6420
 };
 static __forceinline void hkTriXformVertex(hkVector4_s010d_6420& out, const hkVector4_s010d_6420& v,
                                            const hkTransform_s010d_6420& m)
@@ -3566,6 +3593,76 @@ void hkCapsuleTriangleAgent::staticGetClosestPoints(const hkCdBody_s010d_28c0& b
     hkTimerCommand(hkTtrcEnd);
 }
 
+// @ 0x010d37d0
+void hkCapsuleTriangleAgent_s010d_37d0::getPenetrations(const hkCdBody_s010d_37d0& bodyA, const hkCdBody_s010d_37d0& bodyB, const hkCollisionInput_s010d_37d0& input, hkCdBodyPairCollector_s010d_37d0& collector)
+{
+    hkTimerCommand(hkTtrcCapsTriangle);
+
+    const hkTransform_s010d_37d0& capXf = *(const hkTransform_s010d_37d0*)bodyA.m_motion;
+    const hkTransform_s010d_37d0& triXf = *(const hkTransform_s010d_37d0*)bodyB.m_motion;
+    const hkCapsuleShape_s010d_37d0*  cap = (const hkCapsuleShape_s010d_37d0*)bodyA.m_shape;
+    const hkTriangleShape_s010d_37d0* tri = (const hkTriangleShape_s010d_37d0*)bodyB.m_shape;
+
+    hkVector4_s010d_28c0 capSeg[2];
+    HK_XFORM_ONE_s010d_37d0(capSeg[0], cap->m_vertexA, capXf)
+    HK_XFORM_ONE_s010d_37d0(capSeg[1], cap->m_vertexB, capXf)
+
+    hkVector4_s010d_28c0 triVerts[3];
+    HK_XFORM_ONE_s010d_37d0(triVerts[0], tri->m_vertexA, triXf)
+    HK_XFORM_ONE_s010d_37d0(triVerts[1], tri->m_vertexB, triXf)
+    HK_XFORM_ONE_s010d_37d0(triVerts[2], tri->m_vertexC, triXf)
+
+    hkCapsTriangleManifold_s010d_37d0 manifold;
+    hkCollideCapsuleUtilManifoldCapsVsTriangle(capSeg, cap->m_radius, triVerts, tri->m_radius,
+                                               (const char*)this + 0x14, input.m_tolerance, 0,
+                                               &manifold);
+    if (manifold.m_contact[0].m_separatingNormal.w < 0.0f ||
+        manifold.m_contact[1].m_separatingNormal.w < 0.0f)
+    {
+        collector.addCdBodyPair(bodyA, bodyB);
+    }
+    hkTimerCommand(hkTtrcEnd);
+}
+
+// @ 0x010d3c10
+void hkCapsuleTriangleAgent_s010d_37d0::staticGetPenetrations(const hkCdBody_s010d_37d0& bodyA, const hkCdBody_s010d_37d0& bodyB, const hkCollisionInput_s010d_37d0& input, hkCdBodyPairCollector_s010d_37d0& collector)
+{
+    hkTimerCommand(hkTtrcCapsTriangle);
+
+    const hkTransform_s010d_37d0& capXf = *(const hkTransform_s010d_37d0*)bodyA.m_motion;
+    const hkTransform_s010d_37d0& triXf = *(const hkTransform_s010d_37d0*)bodyB.m_motion;
+    const hkCapsuleShape_s010d_37d0*  cap = (const hkCapsuleShape_s010d_37d0*)bodyA.m_shape;
+    const hkTriangleShape_s010d_37d0* tri = (const hkTriangleShape_s010d_37d0*)bodyB.m_shape;
+
+    hkVector4_s010d_37d0 triLocal[3];
+    triLocal[0] = tri->m_vertexA;
+    triLocal[1] = tri->m_vertexB;
+    triLocal[2] = tri->m_vertexC;
+
+    char cache[0x40];
+    hkCapsuleTriangleUtilSetUpCache(triLocal, cache);   // 0x01105e90
+
+    hkVector4_s010d_28c0 capSeg[2];
+    HK_XFORM_ONE_s010d_37d0(capSeg[0], cap->m_vertexA, capXf)
+    HK_XFORM_ONE_s010d_37d0(capSeg[1], cap->m_vertexB, capXf)
+
+    hkVector4_s010d_28c0 triVerts[3];
+    HK_XFORM_ONE_s010d_37d0(triVerts[0], tri->m_vertexA, triXf)
+    HK_XFORM_ONE_s010d_37d0(triVerts[1], tri->m_vertexB, triXf)
+    HK_XFORM_ONE_s010d_37d0(triVerts[2], tri->m_vertexC, triXf)
+
+    hkCapsTriangleManifold_s010d_37d0 manifold;
+    hkCollideCapsuleUtilManifoldCapsVsTriangle(capSeg, cap->m_radius, triVerts, tri->m_radius,
+                                               cache, input.m_tolerance, 0, &manifold);
+
+    if (manifold.m_contact[0].m_separatingNormal.w < 0.0f ||
+        manifold.m_contact[1].m_separatingNormal.w < 0.0f)
+    {
+        collector.addCdBodyPair(bodyA, bodyB);
+    }
+    hkTimerCommand(hkTtrcEnd);
+}
+
 // @ 0x010d4070
 void hkCapsuleTriangleAgent_s010d_37d0::getPenetrationsWrapper(const void* bodyA, const void* bodyB, const void* input, void* collector)
 {
@@ -4158,6 +4255,27 @@ void hkSymmetricSphereBoxAgent::getClosestPoints(const hkCdBody_s010d_53d0& body
 
     hkSphereBoxAgent::getClosestPoints(bodyB, bodyA, input,
                                        *(hkCdPointCollector_s010d_53d0*)&sym);
+}
+
+// @ 0x010d6420
+void hkSymmetricSphereBoxAgent_s010d_6420::processCollision(const hkCdBody_s010d_6420& bodyA, const hkCdBody_s010d_6420& bodyB, const hkProcessCollisionInput_s010d_6420& input, hkProcessCollisionOutput_s010d_6420& output)
+{
+    hkProcessCdPoint_s010d_6420* pp = output.m_firstFreeContactPoint;
+    hkTime oldToi = output.m_toiTime;
+
+    hkSphereBoxAgent_s010d_6420::processCollision(bodyB, bodyA, input, output);
+
+    for (; pp < output.m_firstFreeContactPoint; pp++)
+    {
+        pp->m_contact.setFlipped(pp->m_contact);
+    }
+
+    if (oldToi != output.m_toiTime)
+    {
+        output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
+        output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
+        output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
+    }
 }
 
 // @ 0x010d6530

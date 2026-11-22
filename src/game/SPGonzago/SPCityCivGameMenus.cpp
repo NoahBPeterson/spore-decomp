@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCityCivGameMenus.cpp -- migrated from slice(s) s00ce8160 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCityCivGameMenus.cpp -- migrated from slice(s) s00b7cc60, s00ce8160 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCityCivGameMenus.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,11 +11,18 @@ typedef          int   s32;
 void* __cdecl SP_NounManager();                      // 0x00b3d300 SP::NounManager
 void* __cdecl SP_GetGameTerrainCursor();             // 0x00b30d70
 s32   __cdecl FUN_00458a40(void* rgb);               // 0x00458a40 SP::ColorRGBToU32
+void  __cdecl FUN_00b7d390(void* self);              // 0x00b7d390
 void  __cdecl FUN_00b7d2e0(void* self, void* str);   // 0x00b7d2e0
 void  __cdecl FUN_00b7c890(u32 id, u32 color);       // 0x00b7c890
+void  __cdecl FUN_00b7cc60(void* self, void* a, int b);// 0x00b7cc60
+void* __cdecl FUN_00b3d230();                        // 0x00b3d230
+u8    __cdecl FUN_00b5c980(void* self);              // 0x00b5c980
 void* __cdecl FUN_00bd9bf0(void* self);              // 0x00bd9bf0 SP::cCity::GetCivilization
+float __cdecl FUN_00bf06d0(void* self);              // 0x00bf06d0 city_music_index
+float __cdecl FUN_00bef6d0(void* self);              // 0x00bef6d0 SP::cCivilization::GetMoney
 s32   __cdecl FUN_00b1f9d0(void* self);              // 0x00b1f9d0 GetPlayerEmpireOrMinus1
 void* __cdecl FUN_00b25fb0(void* self);              // 0x00b25fb0 GetPlayerCivilization
+void* __cdecl FUN_00b25f40(void* self, u32 id);      // 0x00b25f40 FindNounByID
 u8    __cdecl FUN_00bf19c0(void* self, void* a);     // 0x00bf19c0
 u8    __cdecl FUN_00bdb200(void* self, s32 a);       // 0x00bdb200
 u8    __cdecl FUN_00bd7fc0(void* self, s32 a);       // 0x00bd7fc0
@@ -24,13 +31,73 @@ u8    __cdecl FUN_00bd7e20(void* self);              // 0x00bd7e20
 s32   __cdecl FUN_00bdb280(void* self, s32 a);       // 0x00bdb280
 u8    __cdecl FUN_00ca8340(void* self, void* a);     // 0x00ca8340
 void* __cdecl FUN_00fa0e00(void* self);              // 0x00fa0e00 cCity::GetPositionPtr
+u8    __cdecl FUN_00c9fe40(void* self, void* a);     // 0x00c9fe40
+u8    __cdecl FUN_00c74550(void* self, void* a);     // 0x00c74550
+u8    __cdecl FUN_00c73f10(void* self, void* a);     // 0x00c73f10 cPlanet::IsSpeciesScanned
+void* __cdecl FUN_01021260();                        // 0x01021260 GetActivePlanet
+void* __cdecl FUN_00ce6950(void* self);              // 0x00ce6950 cStarRecordRef::GetCommContext
+void* __cdecl FUN_00b3d4f0(void* self);              // 0x00b3d4f0
+void* __cdecl FUN_00e30d20(void* self);              // 0x00e30d20
+void* __cdecl FUN_00ba4e60(void* self, void* a);     // 0x00ba4e60
+void* __cdecl FUN_00ba4520(void* self, void* a);     // 0x00ba4520
+void* __cdecl FUN_00ba57a0(void* self, s32 a);       // 0x00ba57a0
+void* __cdecl FUN_00a206f0();                        // 0x00a206f0 EA::Audio::GetSystemAT
 void  __cdecl FUN_00ad92d0(void* self);              // 0x00ad92d0 vector dtor
 void* __cdecl FUN_006b5770(void* self, u32 a, u32 b, const void* wstr); // cString::cString
 void* __cdecl FUN_006b55c0(void* self, u32 a, u32 b); // cString::GetText / IsMaxValue
 void* __cdecl FUN_006b5240(void* self);               // cString::~cString / c_str
+void* __cdecl FUN_00f67d90(void* self);              // 0x00f67d90 cTerrainEditor::GetCurrentTerrainSphere
+u8    __cdecl WStrAppend(void* self, const void* a, const void* b); // 0x00429580
+void  __cdecl WStrSprintf(void* self, const void* fmt, void* a);    // 0x0041e050
+void  __cdecl FUN_00435ed0(void* a, void* b, u32 c); // 0x00435ed0 KillSetiEffects
 void  __fastcall FUN_00ce8160(void* self, void* edx);
 u8    __fastcall FUN_00ce8370(void* self, void* edx, void* arg);
+u8    __fastcall FUN_00ce87c0(void* self, void* edx, void* arg);
 // ---- items of slice s00ce8160 end
+
+// ---- items of slice s00b7cc60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#undef VS
+struct WStr {
+    void* mpBegin;   // +0x00
+    void* mpEnd;     // +0x04
+    void* mpCap;     // +0x08
+    int   f0c;       // +0x0c
+    int   f10;       // +0x10
+    int   f14;       // +0x14
+    void  AllocateSelf(int n);                                  // 0x00429760
+    void  assign(const void* begin, const void* end);           // 0x00423650
+    WStr* copy(const WStr* src);                                // 0x00b7cfa0
+};
+void  operator_delete__(void* p);                               // 0x00f47380
+void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value);
+// ---- items of slice s00b7cc60 end
+
+// @ 0x00b7d2e0
+void __fastcall FUN_00b7d2e0(void* self, int /*edx unused*/, short* name, int a3, int a4)
+{
+    WStr local;
+    local.mpBegin = (void*)0x1667bac;
+    local.mpEnd   = (void*)0x1667bac;
+    local.mpCap   = (void*)0x1667bae;
+    short* p = name;
+    while (*p != 0)
+        p++;
+    local.assign(name, p);
+    local.f10 = a3;
+    local.f14 = a4;
+    int* endp = (int*)*(void**)((char*)self + 4);
+    int* cap  = (int*)*(void**)((char*)self + 8);
+    if (endp < cap) {
+        *(void**)((char*)self + 4) = (char*)endp + 0x18;
+        if (endp)
+            ((WStr*)endp)->copy(&local);
+    } else {
+        FUN_00b7d180((int*)self, 0, endp, (int*)&local);
+    }
+    int d = ((int)local.mpCap - (int)local.mpBegin) & 0xfffffffe;
+    if (d > 2 && local.mpBegin)
+        operator_delete__(local.mpBegin);
+}
 
 // @ 0x00ce8160
 void __fastcall FUN_00ce8160(void* self, void* /*edx*/)
@@ -258,4 +325,161 @@ u8 __fastcall FUN_00ce8370(void* self, void* /*edx*/, void* arg)
   }
   FUN_00ad92d0(vec);
   return (u8)(anySet ? 0 : 1);
+}
+
+// @ 0x00ce87c0
+u8 __fastcall FUN_00ce87c0(void* self, void* /*edx*/, void* arg)
+{
+  char* p = (char*)self;
+  char* param2 = (char*)arg;
+  ((void(__thiscall*)(void*))FUN_00b7d390)(*(void**)(p + 0x68));
+
+  u32 vec[3];
+  vec[0] = 0; vec[1] = 0; vec[2] = 0;
+  char* tc = (char*)SP_GetGameTerrainCursor();
+  ((void(__thiscall*)(void*, void*, u32))(*(void***)tc)[0x60 / 4])(tc, vec, 0x137e8e0);
+  char* beg = (char*)vec[0];
+  char* end = (char*)vec[1];
+  if (beg == end) {
+    FUN_00ad92d0(vec);
+    return 0;
+  }
+  p[0x11c] = (char)param2;
+  s32 counts[6];
+  for (int k = 0; k < 6; k++) counts[k] = 0;
+  s32 last = 0;
+  for (char* it = beg; it != end; it += 4) {
+    char* sp = *(char**)it;
+    char* noun = 0;
+    if (sp != 0) {
+      noun = (char*)((void*(__thiscall*)(void*, u32))(*(void***)sp)[0xb8 / 4])(sp, 0x137e8e0);
+    }
+    u8 c = FUN_00c9fe40(noun, *(void**)(p + 0x11c));
+    if (c != 0) {
+      counts[*(s32*)(noun + 0xb20)]++;
+    }
+    last = ((s32(__thiscall*)(void*))(*(void***)noun)[0x4c / 4])(noun);
+  }
+  void* nm = SP_NounManager();
+  char* city = (char*)FUN_00b25f40(nm, (u32)last);
+  u8 anySet = 1;
+
+  if (counts[2] != 0) {
+    s32 id = ((s32(__thiscall*)(void*))(*(void***)param2)[0x4c / 4])(param2);
+    if (id != -1 && last != id) {
+      u32 strbuf[3];
+      strbuf[0] = 0x01667bac;
+      strbuf[1] = 0x01667bac;
+      strbuf[2] = 0x01667bae;
+      float price = (float)FUN_00bf06d0(param2);
+      char cs[20];
+      ((void(__thiscall*)(void*, u32, u32, const void*))FUN_006b5770)(
+          cs, 0xbeb528cb, 0x6a56b8f, (const void*)0x01477de0);
+      const void* txt = (const void*)((void*(__thiscall*)(void*, u32, u32))FUN_006b55c0)(cs, 0x37e95bb, 0);
+      WStrAppend(strbuf, txt, txt);
+      char out[40];
+      out[0] = 0;
+      out[1] = 0;
+      WStrSprintf(out, (const void*)0x01477dd0, (void*)0);
+      WStrAppend(strbuf, out, out);
+
+      FUN_00b7d2e0(*(void**)(p + 0x68), (void*)strbuf[0]);
+      void* nm2 = SP_NounManager();
+      void* civ = FUN_00b25fb0(nm2);
+      float money = (float)FUN_00bef6d0(civ);
+      if (money < price) {
+        u32 rgb[3]; rgb[0] = *(u32*)0x01485720; rgb[1] = 0; rgb[2] = 0;
+        FUN_00b7c890(0x51b40a4, (u32)FUN_00458a40(rgb));
+      }
+      anySet = 0;
+      ((void(__thiscall*)(void*))FUN_006b5240)(cs);
+    }
+  }
+
+  for (char* it = beg; it != end; it += 4) {
+    char* sp = *(char**)it;
+    if (sp != 0) {
+      ((void(__thiscall*)(void*))(*(void***)sp)[0xc0 / 4])(sp);
+    }
+  }
+  FUN_00ad92d0(vec);
+  return (u8)(anySet ? 0 : 1);
+}
+
+// @ 0x00ce8ab0
+s32 __fastcall FUN_00ce8ab0(void* self, void* /*edx*/, void* a, s32 b)
+{
+  char* p = (char*)self;
+  char* param2 = (char*)a;
+
+  if (p[0x135] != 0) return 0;
+
+  if (param2 != 0) {
+    ((void(__thiscall*)(void*, u32))(*(void***)param2)[0xc / 4])(param2, 0x01186577);
+  }
+
+  if (b == 6) {
+    char* veh = 0;
+    if (param2 != 0) {
+      veh = (char*)((void*(__thiscall*)(void*, u32))(*(void***)param2)[0xc / 4])(param2, 0x1007ae63);
+    }
+    void* planet = FUN_01021260();
+    if (veh != 0) {
+      void* v = (void*)((void*(__thiscall*)(void*))(*(void***)(veh + 0x34))[0x98 / 4])(veh + 0x34);
+      u8 scanned = FUN_00c73f10(planet, v);
+      if (scanned == 0) {
+        void* ctx = FUN_00ce6950((char*)planet + 0x13c);
+        void* nm = SP_NounManager();
+        void* ts = FUN_00f67d90(nm);
+        void* r = FUN_00ba4e60((char*)ts + 0x11c0, ctx);
+        void* v2 = (void*)((void*(__thiscall*)(void*))(*(void***)(veh + 0x34))[0x98 / 4])(veh + 0x34);
+        u8* slot = (u8*)FUN_00ba4520((char*)r + 0x20, v2);
+        *slot = 1;
+        void* x = FUN_00ba57a0(veh, 1);
+        FUN_00e30d20(FUN_00b3d4f0(x));
+      }
+      s32 id = ((s32(__thiscall*)(void*))(*(void***)veh)[0x4c / 4])(veh);
+      void* planet2 = FUN_01021260();
+      FUN_00c74550(planet2, &id);
+    }
+    u32 vec[3];
+    vec[0] = 0; vec[1] = 0; vec[2] = 0;
+    char* tc = (char*)SP_GetGameTerrainCursor();
+    ((void(__thiscall*)(void*, void*))(*(void***)tc)[0x5c / 4])(tc, vec);
+    ((void(__thiscall*)(void*))FUN_00b7d390)(*(void**)(p + 0x5c));
+    p[0x110] = (char)veh;
+    p[0x10c] = (char)veh;
+    if (vec[0] != vec[1]) {
+      FUN_00ce8370(p, 0, param2);
+    }
+    FUN_00ce8160(p, 0);
+    void* gui = FUN_00b3d230();
+    u8 c = FUN_00b5c980(gui);
+    if (c != 0) {
+      ((void(__thiscall*)(void*, u32, u32, const void*))FUN_006b5770)(
+          vec, 0, 0, 0);
+      FUN_00b7d2e0(*(void**)(p + 0x5c), (void*)0x01477ad0);
+    }
+    void* veh2 = *(void**)(p + 0x10c);
+    s32 r2 = veh2 ? ((s32(__thiscall*)(void*))(*(void***)veh2)[0x84 / 4])(veh2) : 0;
+    if (r2 != 0) r2 += 0x120;
+    FUN_00b7cc60(*(void**)(p + 0x5c), (void*)r2, 1);
+    FUN_00ad92d0(vec);
+  } else if (b == 0xb) {
+    if (param2 != 0) {
+      char* obj = (char*)((void*(__thiscall*)(void*, u32))(*(void***)param2)[0xc / 4])(param2, 0x403df5f);
+      if (obj != 0 && FUN_00ce87c0(p, 0, obj) != 0) {
+        FUN_00b7cc60(*(void**)(p + 0x68), obj + 0x34, 1);
+        return 0;
+      }
+    }
+    void* audio = FUN_00a206f0();
+    void* s = 0;
+    if (audio != 0) {
+      s = (void*)((void*(__thiscall*)(void*))(*(void***)audio)[0x20 / 4])(audio);
+    }
+    FUN_00435ed0(audio, s, 0x594303b7);
+    return 1;
+  }
+  return 0;
 }

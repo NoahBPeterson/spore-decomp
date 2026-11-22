@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+0080a700  -  cSPUIImageAtlasMap::Init (707 bytes): not reconstructed; the atlas map load walks the DDS/page table and the entry array with several virtual calls, so it needs its own pass over the 0x34-byte entry helpers flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

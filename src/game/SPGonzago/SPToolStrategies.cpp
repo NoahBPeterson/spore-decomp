@@ -1821,6 +1821,7 @@ void* __fastcall AppSystem();
 
 // ---- items of slice s010593e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" double __cdecl fabs(double);
+extern float gMaxRelationshipToolRadius;                            // 0x014853bc (30.0)
 extern "C" long __cdecl _InterlockedExchange(volatile long* target, long value);
 #pragma intrinsic(fabs)
 #pragma intrinsic(_InterlockedExchange)
@@ -1837,13 +1838,56 @@ inline Vector3_s0105_93e0 operator-(const Vector3_s0105_93e0& a, const Vector3_s
     r.z = a.z - b.z;
     return r;
 }
+inline float fabsf_(float x) { return (float)fabs(x); }
 struct ResourceKey_s0105_93e0 {
     uint32_t mInstanceID;
     uint32_t mTypeID;
     uint32_t mGroupID;
     ResourceKey_s0105_93e0() : mInstanceID(0), mTypeID(0), mGroupID(0) {}
 };
+inline bool KeyMatches(const ResourceKey_s0105_93e0& a, const ResourceKey_s0105_93e0& b) {
+    return a.mInstanceID == b.mInstanceID && a.mTypeID == b.mTypeID && a.mGroupID == b.mGroupID;
+}
+bool operator==(const ResourceKey_s0105_93e0& a, const ResourceKey_s0105_93e0& b);       // 0x004eb930 (out of line, /Od module)
+extern ResourceKey_s0105_93e0 kToolCashInfusion;                               // 0x016e1f64
+extern ResourceKey_s0105_93e0 kToolPlanetConversion;                           // 0x016e1fd0
+extern ResourceKey_s0105_93e0 kToolCallForBackup;                              // 0x016e1fa0
+extern ResourceKey_s0105_93e0 kToolRaiderRally;                                // 0x016e1fc4
+template<typename T> inline const T& min_alt(const T& a, const T& b) { return (b < a) ? b : a; }
+struct AtomicInt {
+    volatile long mValue;
+    AtomicInt() { _InterlockedExchange(&mValue, 0); }
+};
+class BehaviorMessage {
+public:
+    BehaviorMessage() {}
+    virtual void v0();
+    AtomicInt mRefCount;                                            // +0x04
+};
+class ToolHitMessage_s0105_93e0 : public BehaviorMessage {
+public:
+    ToolHitMessage_s0105_93e0() : mMessageID(0), mFlags(0) {}
+    ~ToolHitMessage_s0105_93e0();                                              // 0x00421cf0
+    virtual void v0();
+    struct Slot { const void* mpData; uint32_t mType; };
+    Slot mData[5];                                                  // +0x08
+    uint32_t mMessageID;                                            // +0x30
+    uint32_t pad34;
+    uint32_t mFlags;                                                // +0x38
+    uint32_t pad3c;
+};
+class IMessageServer {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+    virtual void MessageSend(uint32_t messageID, void* pMessage, int flags);   // +0x14
+};
 class cPlanet_s0105_93e0;
+class cPlanetRecord_s0105_93e0;
+class cStarRecord_s0105_93e0;
 class cBeamProjectile;
 class cSpaceToolData_s0105_93e0 {
 public:
@@ -1977,6 +2021,61 @@ virtual void v2c();
 virtual void v2d();
     virtual cSpaceShip* Cast(uint32_t typeID);                      // +0xb8
 };
+class cLocatable_s0105_93e0 {                                                  // embedded at +0x120
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+    virtual const Vector3_s0105_93e0& GetPosition();                           // +0x2c
+};
+class cCity_s0105_93e0 {                                                       // the city/colony hit by the tool
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual uint32_t GetPoliticalID();                              // +0x4c
+    uint32_t pad04[(0x120 - 0x04) / 4];
+    cLocatable_s0105_93e0 mLocation;                                           // +0x120
+    bool IsPointInside(const Vector3_s0105_93e0& position);                    // 0x00bd9c00
+    void OnAttacked();                                              // 0x00bdbf10
+};
+class cTribe_s0105_93e0 {
+public:
+    uint32_t pad00[0x120 / 4];
+    cLocatable_s0105_93e0 mLocation;                                           // +0x120
+};
+class cNounManager {
+public:
+    void* GetCityList();                                            // 0x00ace2c0
+    void* GetTribeList();                                           // 0x00acd9d0
+};
+cNounManager* NounManager_s0105_93e0();                                        // 0x00b3d300
+cCity_s0105_93e0* FindCityAt(void* cities, const Vector3_s0105_93e0& position);           // 0x00ac9dd0
+cTribe_s0105_93e0* FindTribeAt(void* tribes, const Vector3_s0105_93e0& position);         // 0x00c52f80
 class cTerraformingManager {
 public:
     void AddAtmosphere(cPlanet_s0105_93e0* planet, float amount);              // 0x00bbc340
@@ -1985,6 +2084,205 @@ public:
     void ApplyAt(Vector3_s0105_93e0* position, float radius);                  // 0x00bbec40
 };
 cTerraformingManager* TerraformingManager();                        // 0x00b3d430
+class cPlanetPainter {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
+    virtual void v1c();
+    virtual void SetColorIndices(int terrain, int atmosphere, int water);       // +0x74
+    virtual void GetColorIndices(int* terrain, int* atmosphere, int* water);    // +0x78
+};
+cPlanetPainter* PlanetPainter();                                    // 0x00f48aa0
+class cRelationshipManager_s0105_93e0 {
+public:
+    float RecordEvent(uint32_t empireA, uint32_t empireB, uint32_t eventID, float scale);  // 0x00d06240
+};
+cRelationshipManager_s0105_93e0* RelationshipManager();                        // 0x00b3d2c0
+void DoCommunityReaction(cCity_s0105_93e0* city, float delta, const Vector3_s0105_93e0& position);   // 0x00ff5270
+void DoCommunityReaction(cTribe_s0105_93e0* tribe, float delta, const Vector3_s0105_93e0& position);  // 0x00ff5270
+class cMissionManager {
+public:
+    bool DoMissionsPreventHostility(cPlanet_s0105_93e0* planet, const ResourceKey_s0105_93e0& toolID);   // 0x00fedea0
+    void* CreateMissionFromID(uint32_t missionID, cPlanetRecord_s0105_93e0* planet, int a, int b);   // 0x00fec590
+};
+cMissionManager* GetMissionManager();                               // 0x00feb9f0
+class cEmpire_s0105_93e0;
+class cPlayerEmpireHolder {
+public:
+    uint32_t pad00[0x70 / 4];
+    uint32_t mHomeStarID;                                           // +0x70
+    uint32_t GetEmpireID();                                         // 0x00b1fdb0
+    cStarRecord_s0105_93e0* GetHomeStar();                                     // 0x005c65e0
+};
+cPlayerEmpireHolder* GetPlayerEmpire_s0105_93e0();                             // 0x01021240
+cPlanetRecord_s0105_93e0* GetActivePlanetRecord();                             // 0x010212a0
+int GetUniverseContext_s0105_93e0();                                           // 0x01021080
+IMessageServer* MessageServer_s0105_93e0();                                    // 0x0067dcc0
+class cEmpireOwner {
+public:
+    uint32_t GetEmpireID();                                         // 0x00b1fdb0
+};
+class cPlanetRecord_s0105_93e0 {
+public:
+    cEmpireOwner* GetOwner();                                       // 0x00b8de30
+    void* GetTradeRouteStar();                                      // 0x00b8d8f0
+};
+class cTradeRouteManager {
+public:
+    bool HasTradeRoute(void* star, uint32_t empireID);              // 0x01037d30
+    void ResetPlayerProgressOnTradeRoute(void* star, uint32_t empireID, float amount);   // 0x01037eb0
+};
+namespace eastl {
+struct rbtree_node_base_s0105_93e0 {
+    rbtree_node_base_s0105_93e0* mpNodeRight;
+    rbtree_node_base_s0105_93e0* mpNodeLeft;
+    rbtree_node_base_s0105_93e0* mpNodeParent;
+    char mColor;
+};
+}
+namespace eastl {
+rbtree_node_base_s0105_93e0* RBTreeIncrement(const rbtree_node_base_s0105_93e0* pNode);  // 0x00921580
+}
+namespace eastl {
+struct rbtree_node_s0105_93e0 : public rbtree_node_base_s0105_93e0 { uint32_t mValue; };
+}
+namespace eastl {
+struct insert_result { rbtree_node_base_s0105_93e0* mpNode; bool mbInserted; };
+}
+namespace eastl {
+struct uint_set {
+    uint32_t mCompare;
+    rbtree_node_base_s0105_93e0 mAnchor;
+    size_t mnSize;
+    uint32_t mAllocator;
+    __forceinline uint_set() : mAnchor(), mnSize(0) {
+        mAnchor.mpNodeRight = &mAnchor;
+        mAnchor.mpNodeLeft = &mAnchor;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
+    }
+    ~uint_set() { DoNuke((rbtree_node_s0105_93e0*)mAnchor.mpNodeParent); }
+    insert_result insert(const uint32_t& value);                    // 0x00a18440
+    void DoNuke(rbtree_node_s0105_93e0* pNode);                                // 0x009a9600
+};
+}
+namespace eastl {
+struct star_vector {
+    cStarRecord_s0105_93e0** mpBegin;
+    cStarRecord_s0105_93e0** mpEnd;
+    cStarRecord_s0105_93e0** mpCapacity;
+    uint32_t mAllocator[2];
+    star_vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~star_vector();                                                 // 0x00ae6970
+};
+}
+class cStarRecord_s0105_93e0 {
+public:
+    uint32_t GetEmpireID();                                         // 0x00b1fdb0
+};
+struct tStarSearchCriteria_s0105_93e0 {
+    uint32_t mStarTypes;
+    uint32_t mTechLevels;                                           // +0x04
+    uint32_t mFlags;
+    float mMinDistance;                                             // +0x0c
+    float mMaxDistance;                                             // +0x10
+    float field_14;
+    uint32_t field_18;
+    tStarSearchCriteria_s0105_93e0();                                          // 0x00ba6880
+};
+class cStarManager_s0105_93e0 {
+public:
+    void UpdateStarRecords();                                       // 0x00885c90
+    cTradeRouteManager* GetTradeRouteManager();                     // 0x00ba6490
+    void GetStarRecords(cStarRecord_s0105_93e0* center, const tStarSearchCriteria_s0105_93e0& criteria, eastl::star_vector& results);  // 0x00bb1080
+    cEmpire_s0105_93e0* GetEmpireByID(uint32_t empireID);                      // 0x00ba9370
+};
+cStarManager_s0105_93e0* StarManager();                                        // 0x00b3d2a0
+struct CommEventSource { uint32_t pad[1]; };
+extern CommEventSource gPlanetConversionComm;                       // 0x016f8fdb4
+void CreateCommEvent(CommEventSource* source, cEmpire_s0105_93e0* empire, const ResourceKey_s0105_93e0& a, const ResourceKey_s0105_93e0& b,
+                     uint32_t starID, int flags, const ResourceKey_s0105_93e0& c, const ResourceKey_s0105_93e0& d);   // 0x00e39ab0
+void ConvertPlanetToEmpire(cPlayerEmpireHolder* holder, uint32_t empireID);        // 0x00c35240
+class cTerrainSphere_s0105_93e0 {
+public:
+    uint32_t pad00[0x124c / 4];
+    uint32_t mnMaxPosseSize;                                        // +0x124c
+    void DismissPosseMember(int index);                             // 0x00c755c0
+};
+class cNounManager2 {
+public:
+    cTerrainSphere_s0105_93e0* GetPosseHolder();                               // 0x00f67d90
+};
+cNounManager2* NounManager2();                                      // 0x00b3d300 (same accessor)
+struct PosseList { PosseList* mpNext; PosseList* mpPrev; };
+class cPosseMember {
+public:
+    void SetTargetPosition(const Vector3_s0105_93e0& position);                // 0x00c3be70
+    void SetTargetDistance(float distance);                         // 0x00c3daa0
+    void MoveTo(const Vector3_s0105_93e0& position);                           // 0x00c3dae0
+};
+class cUFOSimulator {
+public:
+    PosseList* GetPosse();                                          // 0x0108db30
+    cPosseMember* AddPosseMember(uint32_t empireID, int count);     // 0x010027b0
+};
+cUFOSimulator* GetUFOSimulator_s0105_93e0();                                   // 0x00ffbe50
+class cRaidEvent {
+public:
+    uint32_t pad00[0x21c / 4];
+    uint8_t pad21c[2];
+    bool mbPlayerOwned;                                             // +0x21e
+    void SetIsPlanetOwned(int flag);                                // 0x00c5b370
+    void SetIsRallied(int flag);                                    // 0x00c5b360
+    void SetTargetPlanet(cPlanetRecord_s0105_93e0* planet);                    // 0x00c47180
+    int GenerateBomberCount();                                      // 0x00c5b530
+    void SetBomberCount(int count);                                 // 0x00c5b390
+    void SetRallyPoint(Vector3_s0105_93e0 position);                           // 0x00c5b3a0
+    void Accept();                                                  // 0x00c485b0
+};
+cRaidEvent* CastToRaidEvent(void* mission);                         // 0x00b67700
+void PreparePlanetForRaid(cPlanet_s0105_93e0* planet);                         // 0x0102c0c0
+class cGameDataOwner {
+public:
+    void Notify(int what, int flag);                                // 0x00fe5430
+};
+class cSpaceGame_s0105_93e0 {
+public:
+    cGameDataOwner* GetDataOwner();                                 // 0x00bfc5f0
+    class cPlayer_s0105_93e0* GetPlayer();                                     // 0x00b1fdb0
+};
+class cPlayer_s0105_93e0 {
+public:
+    void ShowHint(const Vector3_s0105_93e0& position, uint32_t hintID);        // 0x00ff8e00
+};
+cSpaceGame_s0105_93e0* SpaceGameGet_s0105_93e0();                                         // 0x01002bd0
 namespace SP {
 class cBeamTarget {
 public:
@@ -2135,6 +2433,13 @@ public:
 }
 namespace SP {
 bool __stdcall OnHitTool(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0& position, int hitType, int);  // 0x010593e0
+}
+namespace SP {
+__forceinline bool IsWithinToolRadius(cSpaceToolData_s0105_93e0* pTool, cLocatable_s0105_93e0& target, const Vector3_s0105_93e0& position) {
+    Vector3_s0105_93e0 diff = target.GetPosition() - position;
+    float radius = pTool->GetDamageRadius();
+    return diff.SquaredLength() < radius * radius;
+}
 }
 // ---- items of slice s010593e0 end
 
@@ -2462,6 +2767,7 @@ struct cModelManagerView {
     virtual Vec3* GetMousePosition(Vec3* pOut, int flags);   // +0x3c
 };
 cModelManagerView* __cdecl GetModelManager();                // 0x00b3d240
+
 // @ 0x01052f90
 void __stdcall GetMouseRay(Vec3* pOut)
 {
@@ -4168,6 +4474,186 @@ void CreatePanicBubbleForTool(uint32_t nTool, float fX, float fY, float fZ)
         }
     }
 }
+
+// @ 0x010593e0
+namespace SP {
+bool cSPToolStrategy_s0105_93e0::OnHit(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0& position, int hitType, int)
+{
+    if (!pTool || !pTool->mbEnabled)
+        return true;
+
+    cPlanet_s0105_93e0* planet = (cPlanet_s0105_93e0*)GetActivePlanet();
+    float atmosphere = 0.0f;
+    float water = 0.0f;
+    float temperature = 0.0f;
+    switch (hitType) {
+    case 1:
+        atmosphere = pTool->GetHitGroundAtmosphereVelocity();
+        water = pTool->GetHitGroundWaterVelocity();
+        temperature = pTool->GetHitGroundTemperatureVelocity();
+        break;
+    case 2:
+        atmosphere = pTool->GetHitWaterAtmosphereVelocity();
+        water = pTool->GetHitWaterWaterVelocity();
+        temperature = pTool->GetHitWaterTemperatureVelocity();
+        break;
+    case 0:
+        atmosphere = pTool->GetHitCombatantAtmosphereVelocity();
+        water = pTool->GetHitCombatantWaterVelocity();
+        temperature = pTool->GetHitCombatantTemperatureVelocity();
+        break;
+    case 3:
+        atmosphere = pTool->GetHitAirAtmosphereVelocity();
+        water = pTool->GetHitAirWaterVelocity();
+        temperature = pTool->GetHitAirTemperatureVelocity();
+        break;
+    }
+
+    if (pTool->GetStrategyKey().mInstanceID == 0xdcf656ba || pTool->GetStrategyKey().mInstanceID == 0xd9e70264) {
+        SpaceGameGet_s0105_93e0()->GetDataOwner()->Notify(0x17, 1);
+        MessageServer_s0105_93e0()->MessageSend(0xf46092db, 0, 0);
+    }
+
+    if (GetUniverseContext_s0105_93e0() != 0)
+        return true;
+
+    ToolHitMessage_s0105_93e0 msg;
+    ResourceKey_s0105_93e0 toolID = pTool->GetToolID();
+    msg.mData[0].mpData = &toolID;
+    MessageServer_s0105_93e0()->MessageSend(0x56690bb, &msg, 0);
+
+    cPlanetPainter* pPainter = PlanetPainter();
+    cTerraformingManager* pTerraforming;
+    if (pPainter && (pTerraforming = TerraformingManager()) != 0) {
+        pTerraforming->AddAtmosphere(planet, atmosphere);
+        pTerraforming->AddWater(planet, water);
+        pTerraforming->AddTemperature(planet, temperature);
+        if (pTool->GetWaterColorIndex() > -1 || pTool->GetAtmosphereColorIndex() > -1 || pTool->GetTerrainColorIndex() > -1) {
+            int curTerrain, curAtmosphere, curWater;
+            pPainter->GetColorIndices(&curTerrain, &curAtmosphere, &curWater);
+            int newTerrain = -1;
+            int newWater = -1;
+            int newAtmosphere = -1;
+            if ((uint32_t)pTool->GetTerrainColorIndex() <= 64 && pTool->GetTerrainColorIndex() != curTerrain)
+                newTerrain = pTool->GetTerrainColorIndex();
+            if (pTool->GetWaterColorIndex() > -1 && (uint32_t)pTool->GetWaterColorIndex() < 16 && pTool->GetWaterColorIndex() != curWater)
+                newWater = pTool->GetWaterColorIndex();
+            if (pTool->GetAtmosphereColorIndex() > -1 && (uint32_t)pTool->GetAtmosphereColorIndex() < 16 && pTool->GetAtmosphereColorIndex() != curAtmosphere)
+                newAtmosphere = pTool->GetAtmosphereColorIndex();
+            pPainter->SetColorIndices(newTerrain, newAtmosphere, newWater);
+        }
+    }
+
+    cGameObject_s0105_93e0* pOwner = pTool->mpToolOwner;
+    cSpaceShip* pShip;
+    if (pOwner && (pShip = pOwner->Cast(0xb033b403)) != 0 && pShip->mnDisabled == 0) {
+        if (!GetMissionManager()->DoMissionsPreventHostility((cPlanet_s0105_93e0*)GetActivePlanet(), pTool->GetToolID())) {
+            cNounManager* pNouns = NounManager_s0105_93e0();
+            void* pCities = pNouns->GetCityList();
+            cCity_s0105_93e0* pCity = FindCityAt(pCities, position);
+            if (pCity) {
+                uint32_t shipEmpire = pShip->GetPoliticalID();
+                if (pCity->GetPoliticalID() != shipEmpire &&
+                    (pCity->IsPointInside(position) || IsWithinToolRadius(pTool, pCity->mLocation, position))) {
+                    if (pTool->GetDamage() > 0.0f && !pCity->IsPointInside(position) &&
+                        IsWithinToolRadius(pTool, pCity->mLocation, position))
+                        pCity->OnAttacked();
+
+                    float delta = pTool->GetRelationshipDelta();
+                    float reaction = 0.0f;
+                    if (delta > 0.0f)
+                        reaction = RelationshipManager()->RecordEvent(pCity->GetPoliticalID(), GetPlayerEmpireID(), 0x526e56a, delta);
+                    if (delta < 0.0f)
+                        reaction = RelationshipManager()->RecordEvent(pCity->GetPoliticalID(), GetPlayerEmpireID(), 0x526e545, fabsf_(delta));
+                    DoCommunityReaction(pCity, reaction, pCity->mLocation.GetPosition());
+                }
+            }
+            void* pTribes = pNouns->GetTribeList();
+            cTribe_s0105_93e0* pTribe = FindTribeAt(pTribes, position);
+            if (pTribe && IsWithinToolRadius(pTool, pTribe->mLocation, position))
+                DoCommunityReaction(pTribe, pTool->GetRelationshipDelta(), pTribe->mLocation.GetPosition());
+        }
+
+        if (pTool->GetGalacticRelationshipDelta() != 0.0f && pTool->GetGalacticRelationshipRadius() > 0.0f) {
+            uint32_t playerEmpire = GetPlayerEmpireID();
+            StarManager()->UpdateStarRecords();
+            float delta = pTool->GetGalacticRelationshipDelta();
+            float radius = pTool->GetGalacticRelationshipRadius();
+            uint32_t eventID;
+            if (delta > 0.0f)
+                eventID = 0x526e56a;
+            if (delta < 0.0f) {
+                delta = fabsf_(delta);
+                eventID = 0x68b2971;
+            }
+            float maxRadius = gMaxRelationshipToolRadius;
+            radius = min_alt(radius, maxRadius);
+
+            tStarSearchCriteria_s0105_93e0 criteria;
+            criteria.mMinDistance = -1.0f;
+            criteria.mMaxDistance = radius;
+            criteria.mTechLevels = 0x20;
+            eastl::star_vector stars;
+            StarManager()->GetStarRecords(GetPlayerEmpire_s0105_93e0()->GetHomeStar(), criteria, stars);
+
+            eastl::uint_set empires;
+            for (cStarRecord_s0105_93e0** it = stars.mpBegin; it != stars.mpEnd; ++it) {
+                uint32_t empireID = (*it)->GetEmpireID();
+                empires.insert(empireID);
+            }
+            for (eastl::rbtree_node_base_s0105_93e0* pNode = empires.mAnchor.mpNodeLeft; pNode != &empires.mAnchor;
+                 pNode = eastl::RBTreeIncrement(pNode)) {
+                uint32_t empireID = ((eastl::rbtree_node_s0105_93e0*)pNode)->mValue;
+                if (empireID != playerEmpire)
+                    RelationshipManager()->RecordEvent(empireID, playerEmpire, eventID, delta);
+            }
+        }
+    }
+
+    if (KeyMatches(pTool->GetToolID(), kToolCashInfusion)) {
+        cPlanetRecord_s0105_93e0* pRecord = GetActivePlanetRecord();
+        if (pRecord) {
+            uint32_t ownerID = pRecord->GetOwner()->GetEmpireID();
+            if (ownerID != (uint32_t)-1 && ownerID != GetPlayerEmpireID()) {
+                cTradeRouteManager* pTradeRoutes = StarManager()->GetTradeRouteManager();
+                if (pTradeRoutes->HasTradeRoute(pRecord->GetTradeRouteStar(), ownerID))
+                    pTradeRoutes->ResetPlayerProgressOnTradeRoute(pRecord->GetTradeRouteStar(), ownerID, 100.0f);
+            }
+        }
+    } else if (KeyMatches(pTool->GetToolID(), kToolPlanetConversion)) {
+        CreateCommEvent(&gPlanetConversionComm,
+                        StarManager()->GetEmpireByID(GetPlayerEmpire_s0105_93e0()->GetEmpireID()),
+                        ResourceKey_s0105_93e0(), ResourceKey_s0105_93e0(), GetPlayerEmpire_s0105_93e0()->mHomeStarID, 0, ResourceKey_s0105_93e0(), ResourceKey_s0105_93e0());
+        ConvertPlanetToEmpire(GetPlayerEmpire_s0105_93e0(), GetPlayerEmpireID());
+    } else if (pTool->GetToolID() == kToolCallForBackup) {
+        PosseList* pPosse = GetUFOSimulator_s0105_93e0()->GetPosse();
+        uint32_t count = 0;
+        for (PosseList* p = pPosse->mpNext; p != pPosse; p = p->mpNext)
+            ++count;
+        if (count == NounManager2()->GetPosseHolder()->mnMaxPosseSize)
+            NounManager2()->GetPosseHolder()->DismissPosseMember(1);
+        cPosseMember* pMember = GetUFOSimulator_s0105_93e0()->AddPosseMember(GetPlayerEmpireID(), 1);
+        pMember->SetTargetPosition(position);
+        pMember->SetTargetDistance((float)sqrt(position.x * position.x + (position.y * position.y + position.z * position.z)));
+        pMember->MoveTo(position);
+    } else if (pTool->GetToolID() == kToolRaiderRally) {
+        cRaidEvent* pRaid = CastToRaidEvent(GetMissionManager()->CreateMissionFromID(0xbe436935, GetActivePlanetRecord(), 0, 0));
+        if (pRaid) {
+            PreparePlanetForRaid((cPlanet_s0105_93e0*)GetActivePlanet());
+            pRaid->SetIsPlanetOwned(0);
+            pRaid->SetIsRallied(1);
+            pRaid->SetTargetPlanet(GetActivePlanetRecord());
+            pRaid->SetBomberCount(pRaid->GenerateBomberCount());
+            pRaid->SetRallyPoint(position);
+            pRaid->mbPlayerOwned = false;
+            pRaid->Accept();
+            cPlayer_s0105_93e0* pPlayer = SpaceGameGet_s0105_93e0()->GetPlayer();
+            pPlayer->ShowHint(position, 0x638207a);
+        }
+    }
+    return true;
+}
+}  // namespace SP
 
 // @ 0x01059f20
 namespace SP {

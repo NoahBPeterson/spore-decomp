@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPAudio/AudioVoiceContainer.cpp  ?CommitBoundProperties@VoiceContainer_s00a3_2f20@Audio@EA@@QAEXXZ  00a33dc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?SetProperty@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIM@Z  00a33ee0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?GetProperty@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIPAM@Z  00a33fd0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?FindPluginIndex@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEHI@Z  00a341e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
@@ -6,6 +7,7 @@
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?Create@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NE@Z  00a342c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?Destroy@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXXZ  00a343e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?DtorTail@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXXZ  00a34620  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioVoiceContainer.cpp  ?Disconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  00a34890  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?ConnectToSubmix@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  00a34b50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?Reconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  00a34c90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPAudio/AudioVoiceContainer.cpp  ?Disconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  00a34890  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioVoiceContainer.cpp  ?AddPropertyBinding@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIIIHPBM@Z  00a34cb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

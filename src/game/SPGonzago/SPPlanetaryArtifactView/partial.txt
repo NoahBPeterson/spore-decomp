@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00e90e00  462  under-built; view update (distance-scaled colour) reconstructed only structurally, 516 vs 604 bytes; equiv UNSUPPORTED (fake-arity / read faults) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00e911f0  457  under-built; MakeView factory reconstructed only structurally, 421 vs 523 bytes; equiv FAIL memory pool @45e80018 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -776,6 +776,16 @@ virtual void v11();
 // ---- items of slice s007db1b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void __cdecl SporeAutomateAtExit();
 extern "C" int  __cdecl atexit(void (__cdecl*)(void));
+struct SPCStringDtor { void Dtor(); };       // 0x006b5240  (~SP::cString)
+void  __cdecl SP_VecDoInsert(void*, void*, int);  // 0x011e0744
+void  __cdecl EFree(void*);                  // 0x00f47380
+struct cPackInfoVec {
+    void** mpBegin;     // +0
+    void** mpEnd;       // +4
+    void** mpCapacity;  // +8
+    void* mAlloc;       // +0xc
+    bool Clear();
+};
 struct IConfigManager2 {
 virtual void v00();
 virtual void v01();
@@ -1873,6 +1883,25 @@ void SP_AutomateEntry(int a, int b)
         atexit(SporeAutomateAtExit);
     }
     ((CommandRunner*)&SP_PluginManagerGlobal)->Run((const char*)a, (char*)b);
+}
+
+// @ 0x007db8b0
+bool cPackInfoVec::Clear()
+{
+    for (unsigned i = 0; i < (unsigned)(mpEnd - mpBegin); ++i) {
+        char* p = (char*)mpBegin[i];
+        if (p) {
+            ((SPCStringDtor*)(p + 0x24))->Dtor();
+            EFree(p);
+        }
+    }
+    void* end = mpEnd;
+    void* begin = mpBegin;
+    // Third argument is 0 (end == mpEnd); spelled as a difference so cl keeps the mov/sub rather
+    // than folding it to `push 0` (retail does the same).
+    SP_VecDoInsert(begin, end, (int)((char*)end - (char*)mpEnd));
+    mpEnd = (void**)((char*)mpEnd + ((int)((char*)end - (char*)begin) >> 2) * -4);
+    return true;
 }
 
 // @ 0x007df780

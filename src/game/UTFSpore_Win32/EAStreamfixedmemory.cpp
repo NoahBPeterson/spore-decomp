@@ -11,11 +11,11 @@ extern "C" void* MemCpyThunk(void* dst, const void* src, size_t n);   // 0x011e0
 #include "EA/IO/MemoryStream.h"
 #include "EA/IO/SharedPointer.h"
 #include <new>
+#include "EA/Allocator/ICoreAllocator.h"
 
 // ---- items of slice s0093a9d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint32;
 typedef unsigned int size_type;
-extern "C" void* MemCpyThunk(void* dst, const void* src, size_t n);   // 0x011e0744 (memcpy thunk)
 namespace EA {
 namespace IO {
 class IStream_s0093_a9d0 {
@@ -34,7 +34,7 @@ public:
     virtual int         GetAvailable() const;        // +2c
     virtual int         Read(void* pData, size_t nSize);     // +30
     virtual bool        Flush();                     // +34
-    virtual int         Write(const void* pData, size_t nSize); // +38
+    virtual bool        Write(const void* pData, size_t nSize); // +38
 };
 }
 }
@@ -55,7 +55,7 @@ public:
     virtual int       GetAvailable() const;
     virtual int       Read(void* pData, size_t nSize);
     virtual bool      Flush();
-    virtual int       Write(const void* pData, size_t nSize);
+    virtual bool      Write(const void* pData, size_t nSize);
 
     bool SetData(const void* pData, size_type nSize);
 
@@ -70,6 +70,11 @@ public:
 // ---- items of slice s0093a9d0 end
 
 // ---- items of slice s0093b9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned __cdecl strlen(const char*);
+extern "C" unsigned __cdecl wcslen(const wchar_t*);
+extern void* g_vtbl_memorystream;
+#pragma intrinsic(strlen)
+#pragma intrinsic(wcslen)
 class memorystream {
 public:
     bool  WriteBuffer(const void* pData, size_type nSize);
@@ -82,6 +87,18 @@ public:
     size_type mnPosition; // +14
 };
 // ---- items of slice s0093b9e0 end
+
+// @ 0x0093b8e0
+namespace EA { namespace IO {
+bool FixedMemoryStream::SetData(const void* pData, size_type nSize)
+{
+    mpData = (void*)pData;
+    mnCapacity = nSize;
+    mnSize = nSize;
+    mnPosition = 0;
+    return true;
+}
+}}  // namespace EA::IO
 
 // @ 0x0093b900
 namespace EA { namespace IO {
@@ -113,14 +130,18 @@ int FixedMemoryStream::GetPosition(int type) const
 namespace EA { namespace IO {
 bool FixedMemoryStream::SetPosition(int distance, int type)
 {
-    if (type == 0) {
+    switch (type) {
+    case 0:
         mnPosition = distance;
-    } else if (type == 1) {
+        break;
+    case 1:
         mnPosition += distance;
-    } else if (type == 2) {
+        break;
+    case 2:
         mnPosition = distance + mnSize;
+        break;
     }
-    if ((int)mnPosition > (int)mnSize) {
+    if (mnPosition > mnSize) {
         mnPosition = mnSize;
         return false;
     }
@@ -163,4 +184,23 @@ bool __thiscall memorystream::WriteBuffer(const void* pData, size_type nSize)
         return take == nSize;
     }
     return true;
+}
+
+// @ 0x0093ba40
+memorystream* memorystream::Init(char* pData, size_type nSize)
+{
+    memorystream* self = this;
+    self->mpData = pData;
+    self->mpVtbl = (void*)&g_vtbl_memorystream;
+    self->mnField08 = 0;
+    self->mnSize = nSize;
+    self->mnCapacity = nSize;
+    self->mnPosition = 0;
+    return self;
+}
+
+// @ 0x0093ba90
+int __fastcall FUN_0093ba90(char* self)
+{
+    return (*(char*)(self + 0x19) == 0) * 2 + 1;
 }

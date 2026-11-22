@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00880000.cpp  ?HashWordBreakString@RT2@@YAIPB_WII@Z  008881e0  /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00880000.cpp  ?GetNextParagraphBreak@ParagraphBreakIterator@Text@EA@@QAEIXZ  008883a0  /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00880000.cpp  ?InitWordBreakDictionary@Text@EA@@YAXXZ  00888480  /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc /Isrc/game/include

@@ -68,6 +68,12 @@ class cSPPaletteItem_s005c_0c00 {
 };
 }
 namespace SP {
+template <typename InputIterator, typename T>
+InputIterator find(InputIterator first, InputIterator last, const T& value) {
+  while ((first != last) && !(*first == value))
+    ++first;
+  return first;
+}
 class cSPPaletteCategory_s005c_0c00 { public:
   char pad[0xc];
   struct Page { char pad[0x5c]; uint32_t mCategory; }** mPagesBegin;  // +0xc
@@ -772,6 +778,11 @@ void cSPPaletteCategoryUI_Update(cSPPaletteCategoryUI* self, unsigned int dt);  
 void cSPPaletteCategoryUI_SetVisibility(cSPPaletteCategoryUI* self, bool visible); // 0x005c2960
 // ---- items of slice s005c9230 end
 
+// @ 0x005c1cc0  eastl::find<T**, T*>
+namespace SP {
+template cSPPaletteItem_s005c_0c00** find<cSPPaletteItem_s005c_0c00**, cSPPaletteItem_s005c_0c00*>(cSPPaletteItem_s005c_0c00**, cSPPaletteItem_s005c_0c00**, cSPPaletteItem_s005c_0c00* const&);
+}  // namespace SP
+
 // @ 0x005c1d10
 namespace SP {
 int cSPPaletteCategory_s005c_0c00::CountPagesInCategory(uint32_t category)
@@ -784,6 +795,16 @@ int cSPPaletteCategory_s005c_0c00::CountPagesInCategory(uint32_t category)
       count++;
   }
   return count;
+}
+}  // namespace SP
+
+// @ 0x005c1d40
+namespace SP {
+bool cSPPaletteCategory_s005c_0c00::HasItem(cSPPaletteItem_s005c_0c00* item)
+{
+  cSPPaletteItem_s005c_0c00** first = mItemsBegin;
+  cSPPaletteItem_s005c_0c00** last  = mItemsEnd;
+  return find(first, last, item) != last;
 }
 }  // namespace SP
 

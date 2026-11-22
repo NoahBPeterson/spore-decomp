@@ -1,4 +1,4 @@
-// src/game/SPAudio/_at_00a60000.cpp -- migrated from slice(s) s00a65f90, s00a63dd0, s00a62ec0, s00a60ef0, s00a5fff0 by tools/migrate/rewrite.py
+// src/game/SPAudio/_at_00a60000.cpp -- migrated from slice(s) s00a61f50, s00a65f90, s00a63dd0, s00a62ec0, s00a60ef0, s00a5fff0 by tools/migrate/rewrite.py
 // Object file: SPAudio/_at_00a60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -874,6 +874,38 @@ void  PdPatchInsert(void* out, void* a, void* b);                 // 0xa65bb0
 void  HashtableDtor90(void* self);                                // 0xa538e0
 // ---- items of slice s00a65f90 end
 
+// ---- items of slice s00a61f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int g_refDepth_167545c;        // 0x0167545c  (recursion guard, limit 1000)
+#pragma intrinsic(_ReadWriteBarrier)
+typedef unsigned char      uint8;
+typedef unsigned int       uint32;
+void  __cdecl FUN_00a49e40(uint32 a, uint32 b, uint32 c, int n, void* arr); // 0x00a49e40
+void  __cdecl FUN_00a49570(void* it, float v);                                // 0x00a49570
+void  __cdecl FUN_011e0744(void* dst, const void* src, uint32 n);            // 0x011e0744
+float __cdecl FUN_00a68fe0(void* self, float total);
+float __cdecl FUN_00a68fe0(double x);                         // 0x00a68fe0
+extern uint32 g_eapdA_16758ac;           // 0x016758ac
+extern uint32 g_eapdB_16758b0;           // 0x016758b0
+struct FxAccum {                       // wrapper for the 0x00936090 thiscall setter
+    void Set(float v);                  // 0x00936090 (seed/time path)
+    void SetBits(int bits);             // 0x00936090 (stores the raw dword)
+};
+struct FXElem {                         // 0x0c
+    int   state;                        // +0x00
+    float value;                        // +0x04
+    float pad;                          // +0x08
+};
+struct FXTableBase {                    // reflected component base
+    uint8  pad00[0x28];
+    uint32 nameA;                       // +0x28
+    uint32 nameB;                       // +0x2c
+    int    count;                       // +0x30
+    int    capacity;                    // +0x34
+    FXElem* elems;                      // +0x38
+    float  accum;                       // +0x3c
+};
+// ---- items of slice s00a61f50 end
+
 // @ 0x00a604a0
 namespace EA { namespace Audio { namespace Eapd {
 void function_inrange(char* x, float a, float b)
@@ -1211,6 +1243,122 @@ void table_float(TX* x, float f)
     gOutletCount--;
 }
 }  // namespace Eapd
+
+// @ 0x00a61f50
+void __cdecl fx_array_set_range(FXTableBase* self, int start, int end, const void* src)
+{
+    int count = end - start;
+    if (start < 0)
+        return;
+    if (self->count < end)
+        return;
+    FUN_011e0744((char*)self->elems + start * 0xc, src, count * 0xc);
+    if (start >= end)
+        return;
+    for (int i = start; i < end; ++i) {
+        FXElem* e = (FXElem*)((char*)self->elems + i * 0xc);
+        if (e->state != 1) {
+            e->state = 1;
+            e->value = 0.0f;
+        }
+    }
+}
+
+// @ 0x00a62080
+void __cdecl fx_array_resize_and_set(FXTableBase* self, uint32 a, uint32 b, int nf, const void* src)
+{
+    int n = (int)(float)nf;
+    if (n >= 1 && self->capacity >= n)
+        self->count = n;
+    fx_array_set_range(self, 0, nf, src);
+}
+
+// @ 0x00a620b0
+void __cdecl fx_array_dump(FXTableBase* self)
+{
+    FUN_00a49e40(*(uint32*)((char*)self + 0xc), g_eapdB_16758b0, g_eapdA_16758ac,
+                  self->count, self->elems);
+}
+
+// @ 0x00a620e0
+void __cdecl fx_array_fill(FXTableBase* self, float v)
+{
+    int i = 0;
+    if (self->count > i) {
+        do {
+            self->elems[i].state = 1;
+            self->elems[i].value = v;
+            ++i;
+        } while (i < self->count);
+    }
+}
+
+// @ 0x00a62120
+float __cdecl fx_array_max_abs(FXTableBase* self)
+{
+    float best = 0.0f;
+    int i = 0;
+    int n = self->count;
+    for (; i + 4 <= n; i += 4) {
+        float a0 = (float)FUN_00a68fe0((double)*(float*)((char*)self->elems + (i + 0) * 0xc + 4));
+        float a1 = (float)FUN_00a68fe0((double)*(float*)((char*)self->elems + (i + 1) * 0xc + 4));
+        float a2 = (float)FUN_00a68fe0((double)*(float*)((char*)self->elems + (i + 2) * 0xc + 4));
+        float a3 = (float)FUN_00a68fe0((double)*(float*)((char*)self->elems + (i + 3) * 0xc + 4));
+        if (best <= a0) best = a0;
+        if (best <= a1) best = a1;
+        if (best <= a2) best = a2;
+        if (best <= a3) best = a3;
+    }
+    for (; i < n; ++i) {
+        float a = (float)FUN_00a68fe0((double)*(float*)((char*)self->elems + i * 0xc + 4));
+        if (best <= a) best = a;
+    }
+    self->accum = best;
+    return best;
+}
+
+// @ 0x00a62270
+float __cdecl fx_array_sum_pos(FXTableBase* self)
+{
+    float total = 0.0f;
+    int i = 0;
+    int n = self->count;
+    for (; i + 4 <= n; i += 4) {
+        float v0 = *(float*)((char*)self->elems + (i + 0) * 0xc + 4);
+        float v1 = *(float*)((char*)self->elems + (i + 1) * 0xc + 4);
+        float v2 = *(float*)((char*)self->elems + (i + 2) * 0xc + 4);
+        float v3 = *(float*)((char*)self->elems + (i + 3) * 0xc + 4);
+        if (v0 > 0.0f) total += v0;
+        if (v1 > 0.0f) total += v1;
+        if (v2 > 0.0f) total += v2;
+        if (v3 > 0.0f) total += v3;
+    }
+    for (; i < n; ++i) {
+        float v = *(float*)((char*)self->elems + i * 0xc + 4);
+        if (v > 0.0f) total += v;
+    }
+    if (total > 0.0f) {
+        total = FUN_00a68fe0(self, total);
+        total = total * *(float*)&self;  // scaled by the component's rate
+        if (total >= 0.0f) {
+            ++g_refDepth_167545c;
+            if (g_refDepth_167545c < 1000) {
+                for (void* it = *(void**)((char*)self + 8); it != 0; it = *(void**)it)
+                    FUN_00a49570(it, total);
+            }
+            --g_refDepth_167545c;
+        }
+    }
+    return total;
+}
+
+// @ 0x00a623f0
+void __cdecl fx_set_accum(FXTableBase* self, float v)
+{
+    // The setter's own argument is the raw float bits (retail passes the float dword through
+    // without any fp conversion).
+    ((FxAccum*)&self->accum)->SetBits(*(const int*)&v);   // 0x00936090, thiscall
+}
 
 // @ 0x00a63310
 namespace EA { namespace Audio { namespace Eapd {

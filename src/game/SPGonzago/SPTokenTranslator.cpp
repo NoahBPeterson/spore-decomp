@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTokenTranslator.cpp -- migrated from slice(s) s0104a320 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTokenTranslator.cpp -- migrated from slice(s) s01049040, s0104a320 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTokenTranslator.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,6 +9,7 @@
 extern int   g_attackRequestPlanetCount;
 extern int   g_targetPlanetIndex;
 #include <wchar.h>
+#include <math.h>
 
 // ---- items of slice s0104a320 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cString {
@@ -167,6 +168,158 @@ static cString* nameString(uint32_t id, const wchar_t* text)
     return &g_nameString;
 }
 // ---- items of slice s0104a320 end
+
+// ---- items of slice s01049040 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const wchar_t kEmptyString16[];                          // 0x013ec468 (L"")
+struct WString
+{
+	wchar_t* mpBegin;
+	wchar_t* mpEnd;
+	wchar_t* mpCapacity;
+	WString& Assign(const wchar_t* first, const wchar_t* last);   // 0x00423650
+	WString& operator=(const WString& other);                     // 0x0057cb60
+};
+struct cString_s0104_9040
+{
+	uint32_t data[5];
+	cString_s0104_9040();                                                  // 0x006b5060
+	~cString_s0104_9040();                                                 // 0x006b5240
+	bool Load(uint32_t tableID, uint32_t instanceID, int flags);// 0x006b54b0
+	const wchar_t* GetText();                                   // 0x006b55c0
+};
+void operator delete(void* p);                                  // 0x00f47380
+struct cStringVector_s0104_9040
+{
+	cString_s0104_9040* mpBegin;                                           // +0x00
+	cString_s0104_9040* mpEnd;                                             // +0x04
+	cString_s0104_9040* mpCapacity;                                        // +0x08
+	uint32_t mField0C;                                          // +0x0c
+	uint32_t mField10;                                          // +0x10
+
+	cStringVector_s0104_9040() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+	~cStringVector_s0104_9040()
+	{
+		cString_s0104_9040* end = mpEnd;
+		for (cString_s0104_9040* p = mpBegin; p < end; ++p)
+			p->~cString_s0104_9040();
+		if (mpBegin && ((int*)mpBegin)[-1] != 0)
+			operator delete(mpBegin);
+	}
+	int Size() const { return (int)(mpEnd - mpBegin); }
+	void Index(uint32_t count);                                 // 0x00e2ca70
+};
+struct cKey3
+{
+	uint32_t m0, m4, m8;
+};
+struct cGameNounManager
+{
+	void* GetAvatar();                                          // 0x00b1fdb0
+};
+struct cPlanetRecord_s0104_9040
+{
+	int GetCategory();                                          // 0x00b8dab0
+	cGameNounManager* GetNounManager();                         // 0x00b8de30
+	cKey3* GetBannerKey();                                      // 0x00b8e090
+};
+struct cStarManager
+{
+	void* GetEmpireByID(int id);                                // 0x00ba9370
+};
+cStarManager* StarManager();                                    // 0x00b3d2a0
+struct cCivData_s0104_9040
+{
+	WString* GetCities();                                       // 0x005c65e0 (returns &this->mCities)
+};
+struct cSpeciesProfile_s0104_9040
+{
+	void GetUiName(WString* out);                               // 0x004da330
+};
+struct cSPEditorSpeciesManager
+{
+	cSpeciesProfile_s0104_9040* GetProfile(cKey3* key);                    // 0x004df550
+};
+cSPEditorSpeciesManager* GetEditorSpeciesManager();             // 0x00401090
+namespace Simulator {
+class cCivTokenTranslator
+{
+public:
+	cCivTokenTranslator();                                      // 0x00b32470
+	virtual ~cCivTokenTranslator();                             // 0x00b32490
+	virtual void v04();                                         // slot 1
+	virtual void v08();                                         // slot 2
+	virtual void v0c();                                         // slot 3
+	virtual bool TranslateToken(const wchar_t* token, WString* out);   // slot 4
+	uint32_t mField04;                                          // +0x04
+	uint32_t mField08;                                          // +0x08
+};  // namespace Simulator
+}
+class cSpaceTokenTranslator_s0104_9040 : public Simulator::cCivTokenTranslator
+{
+public:
+	virtual void v14();                                         // slot 5 (0x010829f0)
+
+	void* mpPlanet;                                             // +0x0c
+	void* mpStar;                                               // +0x10
+	void* mpItem;                                               // +0x14
+	void* mpMission;                                            // +0x18
+	void* mpEmpire;                                             // +0x1c
+	void* mpEmpire2;                                            // +0x20
+	void* mpSpeciesProfile;                                     // +0x24
+	void* mpBuilding;                                           // +0x28
+	void* mpVehicle;                                            // +0x2c
+	void* mpUFO;                                                // +0x30
+	void* mpGenericName;                                        // +0x34
+	int mCount;                                                 // +0x38
+	int mField3C;                                               // +0x3c
+	float mField40;                                             // +0x40
+	uint32_t mField44;                                          // +0x44
+	int mField48;                                               // +0x48
+	cStringVector_s0104_9040 mTechLevelString;                             // +0x4c
+	cStringVector_s0104_9040 mTerraformingLevelString;                     // +0x60
+	cStringVector_s0104_9040 mAnimalTypeString;                            // +0x74
+	cStringVector_s0104_9040 mPlantTypeString;                             // +0x88
+	cString_s0104_9040 mMoneyFormatString;                                 // +0x9c
+	cString_s0104_9040 mUiSpaceName;                                       // +0xb0
+
+	cSpaceTokenTranslator_s0104_9040();                                    // 0x0104a020
+	virtual ~cSpaceTokenTranslator_s0104_9040();                           // 0x0104a210
+
+	const wchar_t* FUN_01049f50(int index);                     // 0x01049f50
+	void FUN_01049f90(WString* out);                            // 0x01049f90
+};
+// ---- items of slice s01049040 end
+
+// @ 0x01049f90
+void cSpaceTokenTranslator_s0104_9040::FUN_01049f90(WString* out)
+{
+	out->Assign(kEmptyString16, kEmptyString16);
+	if (mpPlanet)
+	{
+		if (((cPlanetRecord_s0104_9040*)mpPlanet)->GetCategory() > 1)
+		{
+			if (((cPlanetRecord_s0104_9040*)mpPlanet)->GetCategory() == 5)
+			{
+				cCivData_s0104_9040* civ = (cCivData_s0104_9040*)StarManager()->GetEmpireByID(
+				                    (int)((cPlanetRecord_s0104_9040*)mpPlanet)->GetNounManager()->GetAvatar());
+				if (civ)
+					*out = *civ->GetCities();
+			}
+			else
+			{
+				cSpeciesProfile_s0104_9040* profile =
+				    GetEditorSpeciesManager()->GetProfile(((cPlanetRecord_s0104_9040*)mpPlanet)->GetBannerKey());
+				if (profile)
+					profile->GetUiName(out);
+			}
+		}
+	}
+}
+
+// @ 0x0104a210
+cSpaceTokenTranslator_s0104_9040::~cSpaceTokenTranslator_s0104_9040()
+{
+}
 
 // @ 0x0104a320
 bool cSpaceTokenTranslator::TranslateToken(const wchar_t* token, cString* out)

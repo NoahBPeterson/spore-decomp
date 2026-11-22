@@ -1,6 +1,7 @@
 # source  symbol  va  flags
-../src/game/SPAudio/eapdgroup.cpp  ?FUN_00a52bb0@@YIHPAX@Z  00a52bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdgroup.cpp  ?Call4@AnyObj@@QAEPAXI@Z  00a52b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgroup.cpp  ?groupsize_new@@YAPAXXZ  00a52ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdgroup.cpp  ??1EapdBuffer_a52af0@@QAE@XZ  00a52af0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdgroup.cpp  ?CallC@AnyObj@@QAEXH@Z  00a52b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdgroup.cpp  ?Call6@AnyObj@@QAEHHH@Z  00a52b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgroup.cpp  ?Call4@AnyObj@@QAEPAXI@Z  00a52b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgroup.cpp  ?CallC@AnyObj@@QAEXH@Z  00a52b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgroup.cpp  ?FUN_00a52bb0@@YIHPAX@Z  00a52bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

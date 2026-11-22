@@ -1,14 +1,14 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPStar.cpp  ?c8b520@@YA_NH@Z  00c8b520  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ??0cStar_s00c8_aa60@@QAE@XZ  00c8b640  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?sub_b700@Owner40@@QAEXXZ  00c8b700  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?RemoveOwner@cGameData_s00c8_aa60@@QAEXXZ  00c8b790  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?sub_b7d0@Obj48@@QAEXXZ  00c8b7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?IsBinary@Obj48@@QBE_NXZ  00c8b7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?CanHavePlanets@Obj48@@QBE_NXZ  00c8b800  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?c8b820@@YAXPAXH@Z  00c8b820  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?c8b920@@YA_NPAXH@Z  00c8b920  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?c8ba00@@YA_NPAX@Z  00c8ba00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?FUN_00c8bb00@@YA_NPAUcSim@@@Z  00c8bb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?Destroy@cStar@@QAEXXZ  00c8be70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?FUN_00c8bee0@@YAMPAUFloatMap@@HPAH@Z  00c8bee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPStar.cpp  ?sub_b700@Owner40@@QAEXXZ  00c8b700  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPStar.cpp  ?IsBinary@Obj48@@QBE_NXZ  00c8b7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPStar.cpp  ?CanHavePlanets@Obj48@@QBE_NXZ  00c8b800  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPStar.cpp  ?c8b520@@YA_NH@Z  00c8b520  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPStar.cpp  ??0cStar_s00c8_aa60@@QAE@XZ  00c8b640  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

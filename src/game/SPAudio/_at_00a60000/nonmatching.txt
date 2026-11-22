@@ -3,6 +3,9 @@
 00a619e0 153 size 219 vs 230, 164 diff. Equivalence FAIL (first mismatch eax). The original leaves only al set on its "return 1" paths (stale upper bits, same pattern as slice 32's AdvanceCounter) and shares one epilogue; ours zero-extends. Not byte-exact.
 00a61c20 383 size 575 vs 549, 409 diff. Equivalence WEAK (330 valid inputs, 31.5% coverage vs the 60% bar). Large init routine; control flow differs.
 00a61e50 41 size 100 vs 101, 42 diff. Equivalence UNSUPPORTED (pd globals unpopulated). Diff is entirely register choice / global-load order for sys_vgui and EapdBindRemove plus a 1-byte branch displacement.
+00a61f50 295 fx_array_set_range: SSE 4-wide fill loop, memcpy thunk and capacity guard schedule diverge (orig 303 bytes vs 278 emitted) ; equiv FAIL 5/10 valid inputs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a62120 364 fx_array_max_abs: x87 fabs 4-way unroll and max-select raise/keep scheduling diverges (orig 323 bytes vs 361 emitted) ; equiv FAIL 5/5 valid inputs (x87 depth) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a62270 353 fx_array_sum_pos: SSE positive-sum unroll plus fx_normalize()/rate scaling and recursion-guard tail diverge ; equiv FAIL 5/5 valid inputs (x87 depth) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a634a0 242 InputParseSymbols: large multi-branch parser; register allocation + local buffer scheduling differ [equiv UNSUPPORTED 2 unresolved references: _memcpy_f, _strchr_f]
 00a63860 84 EraseEvent: original keeps `this` in edi / bool in bl; register allocation artifact [equiv PASS 376 valid, 100.0% cov]
 00a63900 162 FindEventSample: multimap_equal_range walk; register allocation differs [equiv FAIL 5/11 valid, harness stack window too small for the extra locals (fault read at find entry)]

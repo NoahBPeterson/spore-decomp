@@ -1,6 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_01029950@@YA_NPAUPlanet_s0102_97e0_fp@@@Z  01029950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_010299c0@@YAHXZ  010299c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_01029a10@@YA_NHH@Z  01029a10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_01029a60@@YA_NPAUPlanet@@_N@Z  01029a60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetAirRaidSirenTimeMS@cSPSpaceCombatTuning_s0102_97e0@@QAEHXZ  01029af0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetBackgroundFighterDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029cc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetBackgroundBomberDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029d50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetBackgroundTurretDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029de0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -17,5 +20,4 @@
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102adf0@@YA_NPAUObj4c@@@Z  0102adf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102ae60@@YA_NPAUObj4c@@@Z  0102ae60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102b140@Owner01402@@QAEPAXE@Z  0102b140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetAirRaidSirenTimeMS@cSPSpaceCombatTuning_s0102_97e0@@QAEHXZ  01029af0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?Init@cSPSpaceCombatTuning@SP@@QAEXXZ  0102b190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

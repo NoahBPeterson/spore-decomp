@@ -3,9 +3,11 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?Find@cVehicle@@QAEPAU1@I@Z  00c9e610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?IsLocalPlayer@cLoco@@QAE_NXZ  00c9e690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?RadiusTableValue@@YAIHH@Z  00c9e6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?UpdateDamageState@cVehicle@@QAEXXZ  00c9e700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?WriteAsText@cVehicle@@QAEXPAX@Z  00c9e760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?RemoveOwner@cVehicle@@QAE_NH@Z  00c9e790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?GetC3C@cVehicle@@QAEXPAUFloat3@@PAM1@Z  00c9e8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?TerrainFlagForType@@YA_NHH@Z  00c9e8e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?CanOccupyTerrain@cVehicle@@QAE_NH@Z  00c9e960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?ModeRadiusScale@@YAMXZ  00c9eb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?GetModeRadius@cVehicle@@QAEMXZ  00c9eb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -17,6 +19,7 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?SetTimer@cVehicle@@QAEXH@Z  00c9ee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?ConsumeTimer@cVehicle@@QAEXXZ  00c9ee50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?PlaySomething@cVehicle@@QAEXXZ  00c9eea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?HasBit2000@cVehicle@@QAE_NXZ  00c9eed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?IsFlying@cVehicle@@QAE_NXZ  00c9eef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9ef20@CStub@@QAEHXZ  00c9ef20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9ef60@CStub@@QAEXI@Z  00c9ef60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -44,20 +47,29 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?CopyCtor@RefOps@@QAEPAXPAX@Z  00ca0900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?AssignA@RefOps@@QAEPAXPAX@Z  00ca0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?AssignB@RefOps@@QAEPAXPAX@Z  00ca09a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0da0@@YAPAUE18@@PAU1@00@Z  00ca0da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0e10@@YAPAUE18@@PAU1@00@Z  00ca0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0e80@@YAPAUE16@@PAU1@00@Z  00ca0e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0ef0@@YAPAUE16@@PAU1@00@Z  00ca0ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca1010@@YAXPAPAX0@Z  00ca1010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca10a0@@YAPAMXZ  00ca10a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca1130@@YAPAMXZ  00ca1130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?WrapAngle@PathSolver@@QAEMM@Z  00ca11c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca3350@cGameData_s00ca_3030@@QAEXD@Z  00ca3350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?Clear@cOwner@@QAEXXZ  00ca42c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca4320@cVehicle_s00ca4320@@QAE_NPAX@Z  00ca4320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca6f20@@YIPAHPAD@Z  00ca6f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca7250@StringOwner@@QAEXPAD@Z  00ca7250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca7520@SpatialObject@@QAEXPAUModelKey@@@Z  00ca7520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca77b0@@YAXPAD0UcSPVector4_s00ca_75e0@@@Z  00ca77b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca7830@@YAXPAD0UcSPVector4_s00ca_75e0@@@Z  00ca7830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca80e0@cVehicle_s00ca_75e0@Simulator@@QAEXI@Z  00ca80e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?ContinueAngryCrowdAttack@cVehicle_s00ca_75e0@Simulator@@QAEX_N@Z  00ca8120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?EndAngryCrowdAttack@cVehicle_s00ca_75e0@Simulator@@QAEXXZ  00ca8180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?GetDebugToolTip@cVehicle_s00ca_8710@@QAEXPAUEastlString_s00ca_8710@@@Z  00ca95c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?UpdateCrowdTimers@cVehicle_s00ca_8710@@QAEXXZ  00ca96b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?Forward@ILocomotion_s00ca_8710@@QAE_NHMM@Z  00ca9770  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?Shutdown@SimPanel@@QAEXXZ  00cadb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?SimPanelReset@@YAXPAUSimPanel@@@Z  00cadb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?ScaleNormalizedVec@@YAXPAUVec3_s00ca_cf40@@PBU1@PAUNormCtx@@@Z  00cadb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ??0cFlyingLocomotion_s00ca_ded0@Simulator@@QAE@XZ  00caded0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -65,14 +77,3 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_01352460@@YAXXZ  01352460  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_01357d00@@YAXXZ  01357d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_01357eb0@@YAXXZ  01357eb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca7250@StringOwner@@QAEXPAD@Z  00ca7250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0e80@@YAPAUE16@@PAU1@00@Z  00ca0e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0ef0@@YAPAUE16@@PAU1@00@Z  00ca0ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?UpdateDamageState@cVehicle@@QAEXXZ  00c9e700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?HasBit2000@cVehicle@@QAE_NXZ  00c9eed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?TerrainFlagForType@@YA_NHH@Z  00c9e8e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?Shutdown@SimPanel@@QAEXXZ  00cadb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca77b0@@YAXPAD0UcSPVector4_s00ca_75e0@@@Z  00ca77b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca7830@@YAXPAD0UcSPVector4_s00ca_75e0@@@Z  00ca7830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0da0@@YAPAUE18@@PAU1@00@Z  00ca0da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0e10@@YAPAUE18@@PAU1@00@Z  00ca0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

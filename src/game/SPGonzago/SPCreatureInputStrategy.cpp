@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureInputStrategy.cpp -- migrated from slice(s) s00d377f0, s00d32fd0, s00d32330, s00d366c0, s00d35190, s00d34f90, s00d31a70, s00d311b0, s00d30830, s00d2f940, s00d2ec50, s00d2dd20, s00b1a7b0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureInputStrategy.cpp -- migrated from slice(s) s00d30fb0, s00d30990, s00d377f0, s00d32fd0, s00d32330, s00d366c0, s00d35190, s00d34f90, s00d31a70, s00d311b0, s00d30830, s00d2f940, s00d2ec50, s00d2dd20, s00b1a7b0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -26,6 +26,9 @@
 #include "cSPTransform.h"
 #include "cSPVector3.h"
 #include "SP/cGonzagoTimer.h"
+#include "SP/cPropertyList.h"
+#include "SP/cConfigManager.h"
+#include "SP/cPlanet.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
@@ -1458,6 +1461,36 @@ struct Vector3_s00d3_2330 {
 };
 }
 namespace SP {
+inline float Dot(const Vector3_s00d3_2330& a, const Vector3_s00d3_2330& b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+}
+namespace SP {
+struct Quaternion_s00d3_2330 {
+  float x, y, z, w;
+  Quaternion_s00d3_2330() {}
+  Quaternion_s00d3_2330(const Quaternion_s00d3_2330& q) : x(q.x), y(q.y), z(q.z), w(q.w) {}
+};
+}
+namespace SP {
+Vector3_s00d3_2330 Normalize(const Vector3_s00d3_2330& v);                           // 0x00436ce0
+}
+namespace SP {
+Vector3_s00d3_2330 normalized_safe(const Vector3_s00d3_2330& v);                     // 0x00449c20
+}
+namespace SP {
+Quaternion_s00d3_2330 AxisAngle(const Vector3_s00d3_2330& axis, float angle);        // 0x0059b060
+}
+namespace SP {
+Quaternion_s00d3_2330 Normalize(const Quaternion_s00d3_2330& q);                     // 0x00799320
+}
+namespace SP {
+Vector3_s00d3_2330 Rotate(const Vector3_s00d3_2330& v, const Quaternion_s00d3_2330& q);         // 0x0059aed0
+}
+namespace SP {
+struct tNavigationGoal_s00d3_2330 : cLocomotionRequest {
+  tNavigationGoal_s00d3_2330(const Vector3_s00d3_2330& target, const Vector3_s00d3_2330& dir, float minDist, float maxDist);   // 0x00ad2a50
+};
+}
+namespace SP {
 class cSpatialObject_s00d3_2330;
 }
 namespace SP {
@@ -1585,10 +1618,59 @@ public:
 };
 }
 namespace SP {
+class cConfigManager_s00d3_2330 { public:
+  void* GetProperty(uint32_t id) { return ((void*(__thiscall*)(void*, uint32_t))VFUNC(this, 0x30))(this, id); }
+};
+}
+namespace SP {
+struct cWindowInfo {
+  int mWidth;        // +0x00
+  int mHeight;       // +0x04
+  int mMouseX;       // +0x08
+  int mMouseY;       // +0x0c
+  bool mbActive;     // +0x10
+};
+}
+namespace SP {
+struct cRenderWindow {
+  const cWindowInfo* GetInfo() { return ((const cWindowInfo*(__thiscall*)(void*))VFUNC(this, 0x1c))(this); }
+};
+}
+namespace SP {
+class cCreatureModeStrategy_s00d3_2330 {
+public:
+  static cCreatureModeStrategy_s00d3_2330* Instance();   // 0x00d38840
+};
+}
+namespace SP {
 cGameNounManager_s00d3_2330* NounManager_s00d3_2330();              // 0x00b3d300
 }
 namespace SP {
 cGameInputManager_s00d3_2330* GameInputManager_s00d3_2330();        // 0x00b3d250
+}
+namespace SP {
+cConfigManager_s00d3_2330* ConfigManager();              // 0x0067dd30
+}
+namespace SP {
+cRenderWindow* RenderWindow();                // 0x0067dd50
+}
+namespace SP {
+enum { kGameSpace = 0x01654c05, kScenarioMode = 0x01654c10 };   // game mode ids (relocated in the original)
+}
+namespace SP {
+bool IsWindowFocused();                       // 0x00805180
+}
+namespace SP {
+bool IsModifierKeyDown(int key);              // 0x008d2fb0
+}
+namespace SP {
+void GetCameraMoveVectors(Vector3_s00d3_2330* forward, Vector3_s00d3_2330* right);   // 0x00d2ee70
+}
+namespace SP {
+void SetAvatarMoveTarget(cCreatureAnimal_s00d3_2330* avatar, const Vector3_s00d3_2330& target);   // 0x00d2ec50
+}
+namespace SP {
+extern bool g_bMouseCaptured;            // 0x0169e22c
 }
 namespace SP {
 extern bool g_bLastAutoRun;              // 0x0169e37d
@@ -1601,6 +1683,47 @@ extern bool g_bKeyboardMoving;           // 0x0169e380
 }
 namespace SP {
 extern char g_KeyboardGoalActive;        // 0x0169e381
+}
+namespace SP {
+extern Vector3_s00d3_2330 g_KeyboardGoalDir;        // 0x0169e388
+}
+namespace SP {
+extern float g_TurnSpeed;                // 0x01582bb4
+}
+namespace SP {
+extern float g_TurnSpeedSpace;           // 0x01582bb8
+}
+namespace SP {
+extern float g_TurnSpeedAtRest;          // 0x01582bc4
+}
+namespace SP {
+extern float g_TurnSlowdownFactor;       // 0x01582bc0
+}
+namespace SP {
+extern float g_StopLookAhead;            // 0x01582bbc
+}
+namespace SP {
+const float kDegToRad = 0.017453292f;
+}
+namespace SP {
+const float kGoalBlend = 0.6f;
+}
+namespace SP {
+static float GetScenarioTurnSpeed(cCreatureAnimal_s00d3_2330* avatar)
+{
+  cLocomotiveObject_s00d3_2330* loco = &avatar->mLoco;
+  const Vector3_s00d3_2330& v = loco->GetVelocity();
+  float speed = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+  float standard = loco->GetStandardSpeed();
+  float desired = loco->GetDesiredSpeed();
+  const float& top = standard > desired ? standard : desired;
+  float threshold = fabsf(top) * g_TurnSlowdownFactor;
+  if (speed > threshold)
+    return g_TurnSpeed;
+  float ratio = g_TurnSpeedAtRest / g_TurnSpeed;
+  float k = (1.0f - ratio) / (expf(threshold) - 1.0f);
+  return g_TurnSpeed * ((ratio - k) + k * expf(speed));
+}
 }
 namespace SP {
 struct cSPTimer_s00d3_2330 {
@@ -1935,6 +2058,242 @@ public:
     void  Destroy();                                    // 0x00d37b60
 };
 // ---- items of slice s00d377f0 end
+
+// ---- items of slice s00d30990 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s00d3_0990 virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2_s00d3_0990 PV_s00d3_0990 PV_s00d3_0990
+#define PV4_s00d3_0990 PV2_s00d3_0990 PV2_s00d3_0990
+namespace SP {
+struct Variant_s00d3_0990 {
+  enum {
+    kTypeBool = 1,
+    kTypeUint32 = 10,
+    kTypeFloat = 13,
+  };
+
+  unsigned char mStorage[0x10];
+  unsigned short mFlags;    // 0x010
+  unsigned short mTypeId;   // 0x012
+
+  float* GetFloat();            // 0x0041ea70
+  bool* GetBool();              // 0x0041e920
+  unsigned int* GetUInt();      // 0x0041ea00
+};
+}
+namespace SP {
+class cPropertyList_s00d3_0990 {
+ public:
+  virtual int AddRef();                                            // 0x00
+  virtual int Release();                                           // 0x04
+  PV4_s00d3_0990 PV2_s00d3_0990 PV_s00d3_0990                                                       // 0x08-0x20
+  virtual bool GetProperty(unsigned int, Variant_s00d3_0990** out);           // 0x24
+};
+}
+namespace SP {
+extern float sTunable1582ba0;              // 0x01582ba0
+}
+namespace SP {
+extern float sTunable1582ba4;              // 0x01582ba4
+}
+namespace SP {
+extern float sTunable1582bb4;              // 0x01582bb4
+}
+namespace SP {
+extern float sTunable1582bb8;              // 0x01582bb8
+}
+namespace SP {
+extern float sTunable1582bc0;              // 0x01582bc0
+}
+namespace SP {
+extern float sTunable1582bc4;              // 0x01582bc4
+}
+namespace SP {
+extern float sTunable1582bbc;              // 0x01582bbc
+}
+namespace SP {
+extern unsigned int g_ClickMoveTimeMs_s00d3_0990;     // 0x01582bc8
+}
+namespace SP {
+extern unsigned int sTunable1582bcc;       // 0x01582bcc
+}
+namespace SP {
+extern float sTunable1582bd4;              // 0x01582bd4
+}
+namespace SP {
+extern float sPickBoxMaxScale;             // 0x01582bd8
+}
+namespace SP {
+extern float sPickBoxMinCameraDist;        // 0x01582bdc
+}
+namespace SP {
+extern float sPickBoxMaxCameraDist;        // 0x01582be0
+}
+namespace SP {
+extern float sPickBoxMinSpeed;             // 0x01582be4
+}
+namespace SP {
+extern float sPickBoxMaxSpeed;             // 0x01582be8
+}
+namespace SP {
+extern float sPickBoxMaxSize;              // 0x01582bf0
+}
+namespace SP {
+extern float sPickBoxConeCos;              // 0x01582bec
+}
+namespace SP {
+#define READ_FLOAT(id, dst)                                                    \
+  if (!props) return;                                                          \
+  {                                                                            \
+    Variant_s00d3_0990* pv;                                                               \
+    if (props->GetProperty(id, &pv) && pv->mTypeId == Variant_s00d3_0990::kTypeFloat)     \
+      dst = *pv->GetFloat();                                                   \
+  }
+}
+namespace SP {
+#define READ_UINT(id, dst)                                                     \
+  if (!props) return;                                                          \
+  {                                                                            \
+    Variant_s00d3_0990* pv;                                                               \
+    if (props->GetProperty(id, &pv) && pv->mTypeId == Variant_s00d3_0990::kTypeUint32)    \
+      dst = *pv->GetUInt();                                                    \
+  }
+}
+namespace SP {
+#define READ_BOOL(id, dst)                                                     \
+  if (!props) return;                                                          \
+  {                                                                            \
+    Variant_s00d3_0990* pv;                                                               \
+    if (props->GetProperty(id, &pv) && pv->mTypeId == Variant_s00d3_0990::kTypeBool)      \
+      dst = *pv->GetBool();                                                    \
+  }
+}
+namespace SP {
+class cCreatureInputConfig {
+ public:
+  PV4_s00d3_0990 PV2_s00d3_0990
+  virtual bool GetPropertyList(cPropertyList_s00d3_0990** out);   // 0x18
+
+  void LoadInputTunables();                            // 0x00d30990
+};
+}
+// ---- items of slice s00d30990 end
+
+// ---- items of slice s00d30fb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float   g_147a5f4;               // 0x0147a5f4 (height threshold)
+typedef unsigned short u16;
+typedef short i16;
+struct Vec3_s00d3_0fb0 {
+    float x, y, z;
+    Vec3_s00d3_0fb0() {}
+    Vec3_s00d3_0fb0(const Vec3_s00d3_0fb0& o) : x(o.x), y(o.y), z(o.z) {}
+};
+struct Quat {
+    float x, y, z, w;
+};
+struct Matrix3_s00d3_0fb0 {
+    float m[9];
+    Matrix3_s00d3_0fb0() {}
+    Matrix3_s00d3_0fb0(const Matrix3_s00d3_0fb0& o);          // 0x0041cb40 (out-of-line copy ctor)
+};
+struct GoalTemps {
+    Vec3_s00d3_0fb0 up;                            // +0x00
+    union {
+        float q[4];                     // +0x0c (Quat)
+        float ortho[3];                 // +0x0c
+        float projected[3];             // +0x0c
+    };
+};
+extern Vec3_s00d3_0fb0    gZeroVector3_0169e214;   // 0x0169e214 (constant vector)
+extern Matrix3_s00d3_0fb0 gIdentityMatrix3_0169e1f0; // 0x0169e1f0 (identity matrix)
+void Matrix3FromQuaternion(Matrix3_s00d3_0fb0* out, const Quat* q);          // 0x0059c190
+void Matrix3FromFacingAndUp(Matrix3_s00d3_0fb0* out, const Vec3_s00d3_0fb0* facing,
+                            const Vec3_s00d3_0fb0* up);                      // 0x0069b440
+void OrthogonalVector(Vec3_s00d3_0fb0* out, const Vec3_s00d3_0fb0* in);                 // 0x006985b0
+struct cPlanetModel_s00d3_0fb0 {
+    float GetWaterDepth(const Vec3_s00d3_0fb0&, bool) const;       // 0x00b7e430
+    Quat* BuildSurfaceOrientation(Quat* out, const Vec3_s00d3_0fb0&) const; // 0x00b7f190
+    Vec3_s00d3_0fb0* ProjectToSurface(Vec3_s00d3_0fb0* out, const Vec3_s00d3_0fb0&) const; // 0x00b81630
+    Vec3_s00d3_0fb0* GetUp(Vec3_s00d3_0fb0* out, const Vec3_s00d3_0fb0&) const;          // 0x00b7e3b0
+};
+cPlanetModel_s00d3_0fb0* PlanetModel_s00d3_0fb0();                            // 0x00b3d350
+struct XformMsg_s00d3_0fb0 {
+    u16     flags;      // +0x00
+    i16     count;      // +0x02
+    Vec3_s00d3_0fb0    pos;        // +0x04
+    float   f10;        // +0x10
+    Matrix3_s00d3_0fb0 mat;        // +0x14
+
+    XformMsg_s00d3_0fb0()
+        : flags(0), count(0), pos(gZeroVector3_0169e214),
+          f10(1.0f), mat(gIdentityMatrix3_0169e1f0) {}
+
+    void SetPos(const Vec3_s00d3_0fb0& p)
+    {
+        pos = p;
+        flags |= 4;
+        ++count;
+    }
+};
+struct cIVisualEffect {
+    virtual int  AddRef();                                  // +0x00
+    virtual int  Release();                                 // +0x04
+    virtual void Start(int transition);                     // +0x08
+    virtual void Stop(int transition);                      // +0x0c
+    virtual bool IsRunning() const;                         // +0x10
+    virtual void SetRigidTransform(const XformMsg_s00d3_0fb0&);        // +0x14
+    virtual void SetSourceTransform(const XformMsg_s00d3_0fb0&);       // +0x18
+};
+struct cEffectsManager {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool CreateVisualEffect(u32 id, int unused,
+                                    cIVisualEffect** out);  // +0x2c
+};
+cEffectsManager* EffectsManager_s00d3_0fb0();                          // 0x0067ddd0
+template <class T>
+struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount& operator=(T* p)
+    {
+        if (p != mpObject) {
+            T* old = mpObject;
+            mpObject = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
+    operator bool() const { return mpObject != 0; }
+    T* operator->() const { return mpObject; }
+    // Out-parameter accessor used by the effects-manager create calls: the
+    // existing effect is stopped/released before its slot is handed out.
+    T** AsPPTypeParam()
+    {
+        T* old = mpObject;
+        if (old) {
+            mpObject = 0;
+            old->Release();
+        }
+        return &mpObject;
+    }
+};
+struct cCreatureModeInputStrategy_s00d3_0fb0 {
+    char pad0[0xe0];
+    AutoRefCount<cIVisualEffect> mpMovementGoalEffect;  // +0xe0
+    Vec3_s00d3_0fb0 mAvatarGoal;                                   // +0xe4
+
+    void SpawnMovementGoalEffect(const Vec3_s00d3_0fb0* goal);  // 0x00d30fb0 (cCreatureModeInputStrategy::SpawnMovementGoalEffect)
+};
+// ---- items of slice s00d30fb0 end
 
 // @ 0x00b1b410
 void cStateMachineHost::LoadStateMachine(const char* name)
@@ -2393,6 +2752,40 @@ notHandled:
     return 0;
 }
 
+// @ 0x00d30990
+namespace SP {
+void cCreatureInputConfig::LoadInputTunables()
+{
+  cPropertyList_s00d3_0990* props = 0;
+  if (GetPropertyList(&props)) {
+    READ_FLOAT(0x175ae53u, sTunable1582ba0);
+    READ_FLOAT(0x175ae5du, sTunable1582ba4);
+    READ_BOOL(0x1a28c84u, g_bAcceptKeyboardInput);
+    READ_FLOAT(0x24ca4c9u, g_StopMaxDistance);
+    READ_FLOAT(0x2648458u, sTunable1582bb4);
+    READ_FLOAT(0x3d03d69u, sTunable1582bb8);
+    READ_FLOAT(0x48657b6u, sTunable1582bc0);
+    READ_FLOAT(0x368ba8f2u, sTunable1582bc4);
+    READ_FLOAT(0x275b79au, g_MoveGoalMinDist);
+    READ_FLOAT(0x275b79fu, g_MoveGoalMaxDist);
+    READ_FLOAT(0x35ebc26u, sTunable1582bbc);
+    READ_UINT(0xb895359eu, g_ClickMoveTimeMs_s00d3_0990);
+    READ_UINT(0x8a6f491u, sTunable1582bcc);
+    READ_FLOAT(0xca16addau, g_StopRadiusCap);
+    READ_FLOAT(0x38623218u, sTunable1582bd4);
+    READ_FLOAT(0x7a7e1c91u, sPickBoxMaxScale);
+    READ_FLOAT(0xc661855eu, sPickBoxMinCameraDist);
+    READ_FLOAT(0x5c40bbb4u, sPickBoxMaxCameraDist);
+    READ_FLOAT(0xa117ef5bu, sPickBoxMinSpeed);
+    READ_FLOAT(0xce9f3f71u, sPickBoxMaxSpeed);
+    READ_FLOAT(0x90bd714cu, sPickBoxMaxSize);
+    READ_FLOAT(0xcd1e526du, sPickBoxConeCos);
+  }
+  if (!props) return;
+  props->Release();
+}
+}  // namespace SP
+
 // @ 0x00d30ee0
 bool cCreatureModeInputStrategy_s00d3_0830::DidDoubleClick(uint32_t nKey)
 {
@@ -2430,6 +2823,46 @@ bool FUN_00d30f60(CNoun* pNoun)
             return true;
     }
     return false;
+}
+
+// @ 0x00d30fb0
+void cCreatureModeInputStrategy_s00d3_0fb0::SpawnMovementGoalEffect(const Vec3_s00d3_0fb0* goal)
+{
+    mAvatarGoal = *goal;
+
+    if (mpMovementGoalEffect) {
+        mpMovementGoalEffect->Stop(1);
+        mpMovementGoalEffect = 0;
+    }
+
+    if (EffectsManager_s00d3_0fb0()->CreateVisualEffect(0x384e54a4, 0,
+                                             mpMovementGoalEffect.AsPPTypeParam())) {
+        cPlanetModel_s00d3_0fb0* planet = PlanetModel_s00d3_0fb0();
+        XformMsg_s00d3_0fb0 xform;
+        xform.SetPos(*goal);
+
+        if (planet->GetWaterDepth(*goal, true) > g_147a5f4) {
+            GoalTemps tmp;
+            Matrix3_s00d3_0fb0 m;
+            Matrix3FromQuaternion(&m, planet->BuildSurfaceOrientation((Quat*)tmp.q, *goal));
+            xform.mat = m;
+            xform.flags |= 2;
+            ++xform.count;
+            xform.SetPos(*planet->ProjectToSurface((Vec3_s00d3_0fb0*)tmp.projected, *goal));
+        } else {
+            GoalTemps tmp;
+            planet->GetUp(&tmp.up, *goal);
+            OrthogonalVector((Vec3_s00d3_0fb0*)tmp.ortho, &tmp.up);
+            Matrix3_s00d3_0fb0 m;
+            Matrix3FromFacingAndUp(&m, (Vec3_s00d3_0fb0*)tmp.ortho, &tmp.up);
+            xform.mat = m;
+            xform.flags |= 2;
+            ++xform.count;
+        }
+
+        mpMovementGoalEffect->SetSourceTransform(xform);
+        mpMovementGoalEffect->Start(0);
+    }
 }
 
 // @ 0x00d317e0
@@ -2641,6 +3074,151 @@ bool cCreatureModeInputStrategy_s00d3_1a70::UpdateAvatarGoal(bool mouseMode, boo
   if (mouseMode && issued && spawnEffect)
     SpawnMovementGoalEffect(&goal);
   return issued;
+}
+}  // namespace SP
+
+// @ 0x00d32330
+namespace SP {
+void cCreatureModeInputStrategy_s00d3_2330::UpdateAvatarGoalKeyboard()
+{
+  cCreatureAnimal_s00d3_2330* avatar = NounManager_s00d3_2330()->GetAvatar();
+  cCreatureModeStrategy_s00d3_2330::Instance();
+  cGameInputManager_s00d3_2330* input = GameInputManager_s00d3_2330();
+  if (!avatar || avatar->mbDead || !mbUpdateAvatarGoals)
+    return;
+
+  // Turning when the mouse touches the left or right screen edge.
+  const cWindowInfo* window = RenderWindow()->GetInfo();
+  int mouseX = window->mMouseX;
+  int halfWidth = window->mWidth / 2;
+  float edge = (float)(mouseX > halfWidth ? window->mWidth - mouseX : mouseX) * 0.5f;
+  bool active = g_bMouseCaptured || window->mbActive;
+  bool edgeTurn;
+  if (ConfigManager()->GetProperty(0x636ec26) && active && edge <= 1.0f && edge >= 0.0f &&
+      !input->IsKeyDown(0x16) && !input->IsKeyDown(0x20))
+    edgeTurn = true;
+  else
+    edgeTurn = false;
+
+  Vector3_s00d3_2330 forward, right;
+  GetCameraMoveVectors(&forward, &right);
+
+  if (IsWindowFocused() && mbAllowWASDGoals &&
+      (input->IsKeyDown(1) || input->IsKeyDown(2) || input->IsKeyDown(3) || input->IsKeyDown(4) ||
+       input->IsKeyDown(5) || input->IsKeyDown(6) || edgeTurn || g_bAutoRun)) {
+    avatar->mbB5C = false;
+    if (avatar->GetTargetAsCreature())
+      avatar->GetTargetAsCreature();
+    g_bKeyboardTurning = false;
+    g_bKeyboardMoving = false;
+
+    Vector3_s00d3_2330 move(0.0f, 0.0f, 0.0f);
+    if (input->IsKeyDown(1)) {
+      move.Set(forward);
+      g_bKeyboardMoving = true;
+      g_bAutoRun = false;
+    }
+    if (input->IsKeyDown(2)) {
+      move += -forward;
+      g_bKeyboardMoving = true;
+      g_bAutoRun = false;
+    }
+    if (IsStrafeLeftDown()) {
+      move += -right;
+      g_bKeyboardMoving = true;
+    }
+    if (IsStrafeRightDown()) {
+      move += right;
+      g_bKeyboardMoving = true;
+    }
+    if (g_bAutoRun) {
+      move += forward;
+      g_bKeyboardMoving = true;
+    }
+    if (g_bKeyboardMoving && move.x * move.x + move.y * move.y + move.z * move.z > 1e-6) {
+      move.Set(g_KeyboardGoalDir * kGoalBlend + Normalize(move) * (1.0f - kGoalBlend));
+      g_KeyboardGoalDir = Normalize(move);
+    } else {
+      g_bKeyboardMoving = false;
+      g_KeyboardGoalDir = forward;
+    }
+
+    float angle = 0.0f;
+    float turnSpeed = g_TurnSpeed;
+    uint32_t mode = GetCurrentGameMode();
+    switch (mode) {
+    case kGameSpace:
+      turnSpeed = g_TurnSpeedSpace;
+      break;
+    case kScenarioMode:
+      turnSpeed = GetScenarioTurnSpeed(avatar);
+      break;
+    }
+
+    if (!IsModifierKeyDown(0x3ea) && GameInputManager_s00d3_2330()->IsKeyDown(3)) {
+      angle = turnSpeed * kDegToRad;
+      g_bKeyboardTurning = true;
+    }
+    if (!IsModifierKeyDown(0x3ea) && GameInputManager_s00d3_2330()->IsKeyDown(4)) {
+      angle -= turnSpeed * kDegToRad;
+      g_bKeyboardTurning = true;
+    }
+    if (edgeTurn) {
+      float turn = turnSpeed * (mouseX > halfWidth ? -1.0f : 1.0f);
+      if (turn != 0.0f) {
+        angle += turn * kDegToRad;
+        g_bKeyboardTurning = true;
+      }
+    }
+
+    bool strafing = IsStrafeLeftDown() || IsStrafeRightDown();
+    if (g_bKeyboardTurning && !strafing) {
+      Vector3_s00d3_2330 up = Normalize(avatar->mLoco.GetPosition());
+      g_KeyboardGoalDir = Normalize(g_KeyboardGoalDir - up * Dot(up, g_KeyboardGoalDir));
+      Quaternion_s00d3_2330 q = Normalize(AxisAngle(up, angle));
+      g_KeyboardGoalDir.Set(Rotate(g_KeyboardGoalDir, q));
+    } else {
+      Vector3_s00d3_2330 up = Normalize(avatar->mLoco.GetPosition());
+      g_KeyboardGoalDir = Normalize(g_KeyboardGoalDir - up * Dot(up, g_KeyboardGoalDir));
+      g_bKeyboardTurning = false;
+    }
+    g_KeyboardGoalDir = Normalize(g_KeyboardGoalDir);
+    g_KeyboardGoalActive = 1;
+    UpdateAvatarGoal(false, true);
+
+    if (avatar->GetTargetAsCreature() && avatar->GetTargetAsCreature()->mbDead)
+      avatar->SetCreatureTarget(0, false, 0);
+  } else {
+    if (g_KeyboardGoalActive == 1 && !g_bLastAutoRun) {
+      // Keys released: one last short move along the current velocity.
+      cLocomotiveObject_s00d3_2330* loco = &avatar->mLoco;
+      Vector3_s00d3_2330 target = loco->GetPosition();
+      target += g_StopLookAhead * normalized_safe(loco->GetVelocity());
+      SetAvatarMoveTarget(avatar, target);
+
+      const Vector3_s00d3_2330& pos = loco->GetPosition();
+      Vector3_s00d3_2330 delta = target - pos;
+      float dist = sqrtf(Dot(delta, delta));
+      if (dist > g_StopMaxDistance) {
+        target = delta * (g_StopMaxDistance / dist) + pos;
+        SetAvatarMoveTarget(avatar, target);
+      }
+
+      tNavigationGoal_s00d3_2330 goal(target, loco->GetDirection(), g_MoveGoalMinDist, g_MoveGoalMaxDist);
+      bool autoRun = g_bAutoRun;
+      loco->RequestMove(goal);
+      if ((avatar->mpBehavior->mFlags & 0x10801) == 0) {
+        avatar->PlayAnimation(0x100000, kFloatMax, 1, 0, 0, 0);
+        SpawnAcknowledgementEffect(0x100000, 0, 0);
+      }
+      g_bAutoRun = autoRun;
+      if (!avatar->mb137 && !(avatar->mf110 & 0x1000))
+        loco->RequestMove(cLocomotionRequest());
+    }
+    g_KeyboardGoalDir.Set(g_KeyboardGoalDir * 0.4f);
+    g_KeyboardGoalActive = 0;
+  }
+  g_bLastAutoRun = g_bAutoRun;
 }
 }  // namespace SP
 

@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIProgressBarGradientWin.cpp  ?CopyObjectList@@YA_NPAUCopyDst@@PAUCopySrc@@PAUCopySpec@@@Z  0081cf50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIProgressBarGradientWin.cpp  ??0cSPUIProgressBarGradientWin@UTFWin@@QAE@XZ  0081d020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIProgressBarGradientWin.cpp  ?SetValue@ProgressValueIface@@QAE_NM@Z  0081d480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

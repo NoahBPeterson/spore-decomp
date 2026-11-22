@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIHealthBar.cpp -- migrated from slice(s) s00e07bb0, s00e06d90, s00e06220 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIHealthBar.cpp -- migrated from slice(s) s00e07850, s00e079e0, s00e077d0, s00e07750, s00e07540, s00e07bb0, s00e06d90, s00e06220 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIHealthBar.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -405,6 +405,161 @@ public:
 }
 // ---- items of slice s00e07bb0 end
 
+// ---- items of slice s00e07540 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vec2 { float x, y; };
+struct Vec3 { float x, y, z; };
+#define VT(obj, slot) (*(void***)(obj))[(slot) / 4]
+struct UILayout {
+    void* FindWindowByID(unsigned int nID, int nFlag);
+};
+void* App();                                              // 0x0067dd10
+void  GetMainWindowArea(float* pOut);                     // 0x00805ea0
+struct Viewer {
+    void ProjectToScreen(Vec3* pOut, const Vec3* pIn) const;  // 0x007c4180
+};
+struct SpatialObj {
+    Vec3* GetPosition();                                  // 0x005c65e0
+};
+struct SimObj {
+    char* GetAvatar();                                    // 0x00b1fdb0
+};
+void*         FUN_00b3d240();                             // simulator
+unsigned int  FUN_00b5b800();                             // current game mode
+int           FUN_01021080();                             // universe context
+void*         FUN_01002bd0();                             // simulator
+void*         FUN_00e06770(void* pElem);                   // 0x00e06770
+void*         FUN_00c9f020(void* pElem);                   // 0x00c9f020
+struct Meter {
+    void*         mpVt;        // 0x00
+    char          pad04[8];    // 0x04
+    unsigned char mb0c;        // 0x0c
+    char          pad0d[3];
+    UILayout*     mpLayout;    // 0x10
+    void*         mpElem;      // 0x14
+    unsigned int  mWindowId;   // 0x18
+    char          pad1c[0x10]; // 0x1c
+    void*         mp2c;        // 0x2c
+    char          pad30[0x0c]; // 0x30
+    int           mMode;       // 0x3c
+    bool          mb40;        // 0x40
+    char          pad41[3];
+    float         mf44;        // 0x44
+    float         mf48;        // 0x48
+    void Draw();
+};
+// ---- items of slice s00e07540 end
+
+// ---- items of slice s00e077d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IGameObject {
+    virtual void AddRef();             // vtable +0x00
+    virtual void Release();            // vtable +0x04
+    virtual void Unused08();           // vtable +0x08
+    virtual void* Cast(unsigned int);  // vtable +0x0C
+};
+struct ISpatialObject {
+    void** mpVtable;
+
+    __forceinline void AddRef()
+    {
+        ((void (__thiscall*)(ISpatialObject*))
+            mpVtable[0xBC / 4])(this);
+    }
+
+    __forceinline void Release()
+    {
+        ((void (__thiscall*)(ISpatialObject*))
+            mpVtable[0xC0 / 4])(this);
+    }
+};
+struct Meter_s00e0_77d0 {
+    unsigned char mPad00[0x14];
+    ISpatialObject* mpSpatial;          // +0x14
+    unsigned char mPad18[0x10];
+    IGameObject* mpObject;              // +0x28
+
+    void SetObject(IGameObject* object);
+};
+// ---- items of slice s00e077d0 end
+
+// ---- items of slice s00e079e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned char g_0147f51c[];
+extern "C" unsigned char g_0147f548[];
+struct IFace {
+    virtual void AddRef();                              // +0x00
+    virtual void Release();                             // +0x04
+};
+struct IWindow_s00e0_79e0 {
+    virtual void AddRef();                              // +0x00
+    virtual void Release();                             // +0x04
+    virtual void V08();                                 // +0x08
+    virtual void V0c();                                 // +0x0c
+    virtual IWindow_s00e0_79e0* GetDecorator();                    // +0x10
+    PV16 PV4                                            // 0x14 .. 0x60
+    virtual void SetPosition(float fX, float fY);       // +0x64
+    PV16 PV8 PV4                                        // 0x68 .. 0xd4
+    virtual void AttachOwner(IWindow_s00e0_79e0* pOwner);          // +0xd8
+    virtual void AttachChild(IWindow_s00e0_79e0* pChild);          // +0xdc
+};
+struct cSPUILayout_s00e0_79e0 {
+    IWindow_s00e0_79e0* FindWindowByID(uint32_t nID, bool bRecursive);   // 0x008105b0
+};
+class cSPUIMeter_s00e0_79e0 : public cSPUIMeterBaseA, public cSPUIMeterBaseB {
+public:
+    cSPUIMeter_s00e0_79e0(int32_t nRootID, uint32_t nFlags, const wchar_t* pName,
+               uint32_t nLayoutFlags);                  // 0x00e06790
+    virtual void OnValueChanged();                      // +0x24
+    virtual void OnLayoutChanged();                     // +0x28
+
+    uint32_t     m_nFlags08;                            // +0x08
+    bool         m_bRangeType;                          // +0x0c
+    uint8_t      m_pad00d[3];                           // +0x0d
+    cSPUILayout_s00e0_79e0* mLayout;                               // +0x10
+    void*        m_pSource;                             // +0x14
+    uint32_t     m_nRootID;                             // +0x18
+    uint32_t     m_nLayoutFlags;                        // +0x1c
+    uint32_t     m_nStart;                              // +0x20
+    uint32_t     m_nNext;                               // +0x24
+};
+extern IFace* CreateMeterWidget(const void* pType, float fX, float fY,
+                                float fWidth, float fHeight, IWindow_s00e0_79e0** ppOut,
+                                int32_t nFlagA, int32_t nFlagB, float fValue,
+                                uint32_t nTypeId);      // 0x008093b0
+class cSPUILoyaltyMeter_s00e0_79e0 : public cSPUIMeter_s00e0_79e0 {
+public:
+    cSPUILoyaltyMeter_s00e0_79e0();
+    virtual void Update(int32_t nDelta, void* pMessage);  // 0x00e06b20 (cSPUILoyaltyMeter::Update)
+
+    IWindow_s00e0_79e0* mpMeterWindow;                             // +0x28
+    IFace*   mpOwnerWindow;                             // +0x2c
+    IWindow_s00e0_79e0* mpCreated;                                 // +0x30
+};
+// ---- items of slice s00e079e0 end
+
+// ---- items of slice s00e07850 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IWin;
+extern "C" bool UpdateRolloverFrameB(IWin* w, float a, float b, float c, float d, int e, float f); // 0x00808d40
+namespace SP {
+struct cSPUILayout_s00e0_7850 {
+    void* mpVtable;                                             // +0x00
+    void* FindWindowByID(uint32_t id, int flag);                // 0x008105b0
+};
+}
+namespace SP {
+struct cSPUILoyaltyMeter_s00e0_7850 {
+    void*        mpVtable;                                      // +0x00
+    uint32_t     mPad04[3];                                     // +0x04 .. +0x0f
+    cSPUILayout_s00e0_7850* mpLayout;                                      // +0x10
+    uint32_t     mPad14;                                        // +0x14
+    uint32_t     mRolloverId;                                   // +0x18
+    uint32_t     mPad1c[3];                                     // +0x1c .. +0x27
+    void*        mpMeterWindow;                                 // +0x28
+    IWin*        mpOwnerWindow;                                 // +0x2c
+
+    void UpdateRollover();
+};
+}
+// ---- items of slice s00e07850 end
+
 // @ 0x00e066a0
 cSPUILoyaltyMeter* cSPUILoyaltyMeter::AsInterface(uint32_t nIID)
 {
@@ -678,6 +833,133 @@ void cSPUILoyaltyMeter::PullToFront()
     pDecorator->BringToFront(pWindow);
 }
 
+// @ 0x00e07540
+void Meter::Draw()
+{
+    void* window = mpLayout->FindWindowByID(mWindowId, 1);
+    Vec2 p;
+
+    if (mp2c) {
+        if (mb40) {
+            ((void (__thiscall*)(void*, float, float))VT(window, 0x64))(window, mf44, mf48);
+            return;
+        }
+
+        void* app = App();
+        void* viewer = ((void* (__thiscall*)(void*))VT(app, 0x58))(app);
+        Vec3 v;
+        ((Viewer*)viewer)->ProjectToScreen(&v, ((SpatialObj*)mp2c)->GetPosition());
+
+        float area[4];
+        GetMainWindowArea(area);
+
+        p.y = ((1.0f - v.y) * area[3]) * 0.5f;
+        p.x = ((v.x + 1.0f) * area[2]) * 0.5f;
+        ((void (__thiscall*)(void*, float, float))VT(window, 0x64))(window, p.x, p.y - 60.0f);
+        return;
+    }
+
+    if (mpLayout && mpElem) {
+        void* elem = mpElem;
+        if (((bool (__thiscall*)(void*, int, Vec2*))VT(elem, 0x7c))(elem, mb0c, &p)) {
+            if (window) {
+                float off = 0.0f;
+                switch (mMode) {
+                case 0: off = 60.0f; break;
+                case 1: off = 40.0f; break;
+                case 2:
+                case 3: off = 20.0f; break;
+                }
+
+                void* sim = FUN_00b3d240();
+                void* owner = ((void* (__thiscall*)(void*))VT(sim, 0x30))(sim);
+                if (owner) {
+                    void* a = FUN_00e06770(&mpElem);
+                    void* b = FUN_00c9f020(&mpElem);
+                    if ((a != 0 && a == owner) || (b != 0 && b == owner)) {
+                        int special = FUN_00b5b800() == 0x1654c05u && a != 0 && a == owner &&
+                                      FUN_01021080() == 0 &&
+                                      ((SimObj*)FUN_01002bd0())->GetAvatar()[0x14] != 0;
+                        if (!special)
+                            off += 145.0f;
+                        else
+                            off += 25.0f;
+                    }
+                }
+
+                ((void (__thiscall*)(void*, float, float))VT(window, 0x64))(window, p.x, p.y - off);
+            }
+        }
+    }
+}
+
+// @ 0x00e077d0
+void Meter_s00e0_77d0::SetObject(IGameObject* object)
+{
+    IGameObject* previousObject = mpObject;
+
+    if (object != previousObject) {
+        if (object)
+            object->AddRef();
+
+        mpObject = object;
+
+        if (previousObject)
+            previousObject->Release();
+    }
+
+    ISpatialObject* spatial = object
+        ? (ISpatialObject*)object->Cast(0x01186577)
+        : 0;
+
+    ISpatialObject* previousSpatial = mpSpatial;
+
+    if (spatial != previousSpatial) {
+        if (spatial)
+            spatial->AddRef();
+
+        mpSpatial = spatial;
+
+        if (previousSpatial)
+            previousSpatial->Release();
+    }
+}
+
+// @ 0x00e07850
+namespace SP {
+void cSPUILoyaltyMeter_s00e0_7850::UpdateRollover()
+{
+    if (!mpLayout)
+        return;
+    if (!mpMeterWindow)
+        return;
+
+    IWin* target = (IWin*)mpLayout->FindWindowByID(mRolloverId, 1);
+    if (!target)
+        return;
+
+    float rect[4];
+    float* pr = ((float* (__thiscall*)(IWin*))((void**)*(void**)target)[0x38 / 4])(target);
+    rect[0] = pr[0];
+    rect[1] = pr[1];
+    rect[2] = pr[2];
+    rect[3] = pr[3];
+
+    float out[2];
+    if (!((bool (__thiscall*)(void*, int, float*))((void**)*(void**)((char*)mpMeterWindow + 0x34))[0x7c / 4])
+            ((char*)mpMeterWindow + 0x34, 1, out))
+        return;
+
+    // both window pointers are read before the meter field query: retail loads them back to back
+    // (mpMeterWindow to a scratch register, mpOwnerWindow into the saved `this` register)
+    void* pMeter = mpMeterWindow;
+    IWin* pOwner = mpOwnerWindow;
+    float value = ((float (__thiscall*)(void*))((void**)*(void**)((char*)pMeter + 0x34))[0x70 / 4])
+        ((char*)pMeter + 0x34);
+    UpdateRolloverFrameB(pOwner, out[0], out[1], rect[2] - rect[0], rect[3] - rect[1], 1, value);
+}
+}  // namespace SP
+
 // @ 0x00e07950
 namespace SP {
 void cSPUILoyaltyMeter_s00e0_6d90::Show()
@@ -701,6 +983,48 @@ void cSPUILoyaltyMeter_s00e0_6d90::Hide()
     }
 }
 }  // namespace SP
+
+// @ 0x00e079e0
+cSPUILoyaltyMeter_s00e0_79e0::cSPUILoyaltyMeter_s00e0_79e0()
+: cSPUIMeter_s00e0_79e0(0x26f1f20, 0x26e0df0, (const wchar_t*)g_0147f548, 0xe9f70df9)
+    , mpMeterWindow(0)
+    , mpOwnerWindow(0)
+{
+    // the original stores the three window slots first and only then reads
+    // mLayout; the +0x30 slot keeps its address in a register across the read
+    _ReadWriteBarrier();
+    mpCreated = 0;
+    _ReadWriteBarrier();
+
+    if (mLayout != 0) {
+        IWindow_s00e0_79e0* pWindow = mLayout->FindWindowByID(m_nRootID, true);
+        if (pWindow != 0) {
+            if (mpCreated != 0) {
+                IWindow_s00e0_79e0* pOld = mpCreated;
+                mpCreated = 0;
+                pOld->Release();
+            }
+
+            IFace* pNew = CreateMeterWidget((const void*)g_0147f51c, 0.0f, 0.0f, 1.0f,
+                                            1.0f, &mpCreated, 1, 1, 0.0f,
+                                            (uint32_t)0xe9f70df9);
+            IFace* pOldOwner = mpOwnerWindow;
+            if (pNew != pOldOwner) {
+                if (pNew != 0)
+                    pNew->AddRef();
+                mpOwnerWindow = pNew;
+                if (pOldOwner != 0)
+                    pOldOwner->Release();
+            }
+
+            if (pWindow->GetDecorator() != 0)
+                pWindow->GetDecorator()->AttachChild(pWindow);
+
+            mpCreated->AttachOwner(pWindow);
+            pWindow->SetPosition(0.0f, 0.0f);
+        }
+    }
+}
 
 // @ 0x00e07b20
 namespace SP {

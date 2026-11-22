@@ -125,6 +125,34 @@ struct cModelDeformationHandle {
     float mFloat58;              // +0x58
     cModelDeformationHandle* Copy(const cModelDeformationHandle* src);  // 0x47fda0
 };
+struct cSPEditorHandleDeform_s0047_f520 : cSPEditorHandle {
+    cModelDeformationHandle mData;             // +0x50 (0x5c bytes)
+    u32  mPinningType;                         // +0xac
+    u32  mAxisToIgnore;                        // +0xb0
+    cSPEditorHandleDeform_s0047_f520* mSymmetricHandle;   // +0xb4
+    char padb8[0x118 - 0xb8];
+    u8   mSetPickData;                         // +0x118
+    char pad119[3];
+    char* mpSoundBegin;                        // +0x11c
+    char* mpSoundEnd;                          // +0x120
+    char* mpSoundCap;                          // +0x124
+    char pad128[4];                            // +0x128
+    Vec3 mVec12c;                              // +0x12c
+    Vec3 mVec138;                              // +0x138
+    Vec3 mVec144;                              // +0x144
+    char pad150[0x184 - 0x150];
+    float mPreviewDelta;                       // +0x184
+    cSPEditorTrianglePinningInfo mTriangleInfo; // +0x188
+    char pad190[0x1d4 - 0x190];
+    u8 mIsHiddenHandle;                        // +0x1d4
+    u8 mDoNotPlaceHandle;                      // +0x1d5
+
+    void SetFade(float f);                                        // 0x4809a0
+    void SetData(const cModelDeformationHandle* data, bool flag); // 0x47fd30
+    void UpdateDirection(bool flag);                              // 0x47fe20
+    void Init(cSPModelManager* mgr, cSPEditorBlock* block,
+              const cModelDeformationHandle* data, bool flag);    // 0x480030
+};
 struct cSPEditorHandleDeform : cSPEditorHandle {
     cModelDeformationHandle mData;             // +0x50 (0x5c bytes)
     u32  mPinningType;                         // +0xac
@@ -157,6 +185,16 @@ struct cSPEditorHandleDeform : cSPEditorHandle {
 extern void __fastcall cSPEditorHandleDeform_Shutdown(cSPEditorHandle* self);   // 0x47fcb0
 struct DeformIface { void* QueryInterface(u32 id); };
 extern float Vec3_Dot(Vec3* a, void* b);                                  // FUN_00455cc0
+// helpers used by cSPEditorHandleDeform::SetData / UpdateDirection / Init (slice s0047f520)
+static __forceinline void SetGroupBit(cMWModel* m, u32 bit)
+{
+    if (bit < 0x40)
+        m->mGroups[bit >> 5] |= 1u << (bit % 32);
+}
+extern Vec3* Vec3_Sub(Vec3* out, void* a, void* b);                       // FUN_0041db10
+extern Mat3* Mat3_FromXform(void* out, void* xf);                         // FUN_0041ded0
+extern Vec3* Mat3_TransformDir(Vec3* out, Mat3* m, Vec3* v);              // FUN_0047ff90
+extern Vec3* Vec3_Normalize(Vec3* out, Vec3* v);                          // FUN_00436ce0
 // ---- items of slice s0047f520 end
 
 // ---- items of slice s00480320 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -295,7 +333,7 @@ void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
     *(void**)self = (void*)0x13ef270;
     self->mRefCountVft = (void*)0x13ef25c;
     Transform_Ctor((char*)self + 0x54);
-    cSPEditorHandleDeform* d = (cSPEditorHandleDeform*)self;
+    cSPEditorHandleDeform_s0047_f520* d = (cSPEditorHandleDeform_s0047_f520*)self;
     d->mPinningType = 0x95f07f3d;
     d->mAxisToIgnore = 0;
     d->mSymmetricHandle = 0;
@@ -323,7 +361,7 @@ void __fastcall cSPEditorHandleDeform_Dtor(cSPEditorHandle* self)
 {
     *(void**)self = (void*)0x13ef270;
     self->mRefCountVft = (void*)0x13ef25c;
-    cSPEditorHandleDeform* d = (cSPEditorHandleDeform*)self;
+    cSPEditorHandleDeform_s0047_f520* d = (cSPEditorHandleDeform_s0047_f520*)self;
     cSPEditorHandleDeform_Shutdown(self);
     void* held = d->mTriangleInfo.mpRef4;
     if (held)
@@ -339,8 +377,8 @@ void __fastcall cSPEditorHandleDeform_Dtor(cSPEditorHandle* self)
 void __fastcall cSPEditorHandleDeform_Shutdown(cSPEditorHandle* self)
 {
     cSPEditorHandle_Shutdown(self);
-    ((cSPEditorHandleDeform*)self)->mSymmetricHandle = 0;
-    ((cSPEditorHandleDeform*)self)->mTriangleInfo.Update();
+    ((cSPEditorHandleDeform_s0047_f520*)self)->mSymmetricHandle = 0;
+    ((cSPEditorHandleDeform_s0047_f520*)self)->mTriangleInfo.Update();
 }
 
 // @ 0x0047fce0
@@ -352,6 +390,19 @@ void* DeformIface::QueryInterface(u32 id)
     case (int)0xee3f516e: return this;
     }
     return 0;
+}
+
+// @ 0x0047fd30
+void cSPEditorHandleDeform::SetData(const cModelDeformationHandle* data, bool flag)
+{
+    mData.Copy(data);
+    if (mBlock) {
+        cSPTransformOps xf;
+        mBlock->GetTransform(&xf);
+        xf.Apply(&mData.mVec40);
+        xf.Apply(&mData.mVec4c);
+    }
+    UpdateDirection(flag);
 }
 
 // @ 0x0047fda0
@@ -366,6 +417,27 @@ cModelDeformationHandle* cModelDeformationHandle::Copy(const cModelDeformationHa
     return this;
 }
 
+// @ 0x0047fe20
+void cSPEditorHandleDeform::UpdateDirection(bool flag)
+{
+    if (!flag) {
+        float d = mData.mFloat58;
+        if (d < 0.0f || 1.0f < d)
+            SetFade(0.0f);
+        else
+            SetFade(d);
+    }
+    Vec3 dir;
+    Vec3 tmp = *Vec3_Sub(&dir, &mData.mVec4c, &mData.mVec40);
+    char xf[0x24];
+    Mat3 m = *Mat3_FromXform(xf, (char*)mBlock->mp10 + 0x1c);
+    tmp = *Mat3_TransformDir(&dir, &m, &tmp);
+    Vec3 nrm;
+    Vec3* n = Vec3_Normalize(&nrm, &tmp);
+    mVec12c = *n;
+    PlaceHandle();
+}
+
 // @ 0x0047ff90
 Vec3* Mat3_TransformDir_(Vec3* out, char* mat, void* v)
 {
@@ -374,6 +446,22 @@ Vec3* Mat3_TransformDir_(Vec3* out, char* mat, void* v)
     float c = Vec3_Dot((Vec3*)v, mat + 0x18);
     out->x = a; out->y = b; out->z = c;
     return out;
+}
+
+// @ 0x00480030  SP::cSPEditorHandleDeform::Init
+void cSPEditorHandleDeform::Init(cSPModelManager* mgr, cSPEditorBlock* block,
+                                 const cModelDeformationHandle* data, bool flag)
+{
+    mData.Copy(data);
+    cSPEditorHandle::Init(block, flag, 0, 0);
+    if (mModel)
+        SetGroupBit(mModel, mgr->GetGroupID(0x1ba53ea, 0));
+    if (mOverdrawModel) {
+        SetGroupBit(mOverdrawModel, mgr->GetGroupID(0x1ba53eb, 0));
+        SetGroupBit(mOverdrawModel, mgr->GetGroupID(0x22fff11, 0));
+    }
+    mIsHiddenHandle = 0;
+    SetData(data, false);
 }
 
 // @ 0x00480280

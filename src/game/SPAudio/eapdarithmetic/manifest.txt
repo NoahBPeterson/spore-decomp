@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdarithmetic.cpp  ?x_arithmetic_setup@Eapd@Audio@EA@@YA_NXZ  00a569c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

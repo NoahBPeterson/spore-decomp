@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPPlanetSim.cpp -- migrated from slice(s) s01397890, s01396a80, s00ff21d0, s00ff11c0, s00feff80, s00f28680, s00f27670, s00f25a40 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPPlanetSim.cpp -- migrated from slice(s) s00ff18a0, s00ff1840, s00ff1650, s00ff1530, s00ff1450, s00ff13c0, s00ff1290, s01397890, s01396a80, s00ff21d0, s00ff11c0, s00feff80, s00f28680, s00f27670, s00f25a40 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPPlanetSim.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,8 @@ extern "C" char g_13f09b4[];
 #include "SP/cVehicleData.h"
 #include "cSPVector3.h"
 #include "EA/ResourceMan/Key.h"
+#include <stddef.h>
+#include <new>
 
 // unnamed retail callees and globals (address in the comment)
 extern char DAT_015aeb58;
@@ -1542,6 +1544,208 @@ bool F_01398420_4_4();
 bool F_01398420_4_5(void*, const char*, int);
 // ---- items of slice s01397890 end
 
+// ---- items of slice s00ff1290 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cOrnamentTail {
+    float mF0c;                    // 0x0c
+    float mF10;                    // 0x10
+    float mF14;                    // 0x14
+    float mF18;                    // 0x18
+    float mF1c;                    // 0x1c
+    int   mField20;                // 0x20
+    bool  mFlag24;                 // 0x24
+    bool  mFlag25;                 // 0x25
+    int   mField28;                // 0x28
+    int   mField2c;                // 0x2c
+    int   mField30;                // 0x30
+    int   mField34;                // 0x34
+
+    // Plain member-wise copy assignment (out of line at 0x00ff11c0); inlined here.
+    cOrnamentTail& operator=(const cOrnamentTail& o)
+    {
+        mF0c = o.mF0c;
+        mF10 = o.mF10;
+        mF14 = o.mF14;
+        mF18 = o.mF18;
+        mF1c = o.mF1c;
+        mField20 = o.mField20;
+        mFlag24 = o.mFlag24;
+        mFlag25 = o.mFlag25;
+        mField28 = o.mField28;
+        mField2c = o.mField2c;
+        mField30 = o.mField30;
+        mField34 = o.mField34;
+        return *this;
+    }
+};
+struct cOrnamentDataA_s00ff_1290 {
+    float mF00;                    // 0x00
+    float mF04;                    // 0x04
+    float mF08;                    // 0x08
+    cOrnamentTail mTail;           // 0x0c
+
+    // Member-wise copy assignment, same order as cOrnamentDataA::operator= at 0x00ff11c0.
+    cOrnamentDataA_s00ff_1290& operator=(const cOrnamentDataA_s00ff_1290& o)
+    {
+        mF00 = o.mF00;
+        mF04 = o.mF04;
+        mF08 = o.mF08;
+        mTail = o.mTail;
+        return *this;
+    }
+};
+// ---- items of slice s00ff1290 end
+
+// ---- items of slice s00ff13c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl operator_delete_arr(void* p);
+struct Sim_s00ff_13c0 {                    // size 0xa8
+    char  pad00[0x40];                     // +0x00
+    void* mpData40;                        // +0x40  range A, start
+    char  pad44[0x4];                      // +0x44
+    void* mpData48;                        // +0x48  range A, end
+    char  pad4c[0x4];                      // +0x4c
+    void* mpData50;                        // +0x50  range B, start
+    char  pad54[0x4];                      // +0x54
+    void* mpData58;                        // +0x58  range B, end
+    char  pad5c[0x20];                     // +0x5c
+    void* mpBlock7c;                       // +0x7c
+    char  pad80[0x10];                     // +0x80
+    void* mpBlock90;                       // +0x90
+    char  pad94[0x10];                     // +0x94
+    void* mpBlockA4;                       // +0xa4
+
+    void __thiscall Release();
+};
+// ---- items of slice s00ff13c0 end
+
+// ---- items of slice s00ff1450 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl EAAllocate(uint size, const char* name, int, int, const char* file, int line); // 0x00f473a0
+void  __cdecl operator_delete__(void* p);                            // 0x00f47380
+struct HandleVec {                                                   // 3 pointers, 4-byte elements
+    int* mpBegin_00;                                                 // +0x00
+    int* mpEnd_04;                                                   // +0x04
+    int* mpCap_08;                                                   // +0x08
+    void reserve(unsigned newCap);
+};
+// ---- items of slice s00ff1450 end
+
+// ---- items of slice s00ff1530 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int uint32;
+struct cOrnamentTail_s00ff_1530 {
+    float mF0c;                    // 0x0c
+    float mF10;                    // 0x10
+    float mF14;                    // 0x14
+    float mF18;                    // 0x18
+    float mF1c;                    // 0x1c
+    int   mField20;                // 0x20
+    bool  mFlag24;                 // 0x24
+    bool  mFlag25;                 // 0x25
+    int   mField28;                // 0x28
+    int   mField2c;                // 0x2c
+    int   mField30;                // 0x30
+    int   mField34;                // 0x34
+};
+struct cOrnamentDataA_s00ff_1530 {
+    float mF00;                    // 0x00
+    float mF04;                    // 0x04
+    float mF08;                    // 0x08
+    cOrnamentTail_s00ff_1530 mTail;           // 0x0c
+};
+void* AllocateBlocks(uint32_t size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
+void FreeArray(void* p);                                                                          // 0x00f47380
+cOrnamentDataA_s00ff_1530* CopyOrnamentRange(cOrnamentDataA_s00ff_1530* first, cOrnamentDataA_s00ff_1530* last, cOrnamentDataA_s00ff_1530* dest); // 0x00ff1290
+static const char* const kAllocName = "cOrnamentDataA";
+static const char* const kAllocFile =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
+struct OrnamentVector {
+    cOrnamentDataA_s00ff_1530* mpBegin;       // +0x00
+    cOrnamentDataA_s00ff_1530* mpEnd;         // +0x04
+    cOrnamentDataA_s00ff_1530* mpCapacity;    // +0x08
+
+    void reserve(uint32_t n);
+};
+// ---- items of slice s00ff1530 end
+
+// ---- items of slice s00ff1650 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl EAAllocate(uint size, const char* name, int a, int b, int file, int line); // 0x00f473a0
+void  __cdecl EASTL_allocator_deallocate(void* p);                                        // 0x00f47380
+struct TElement {
+    float mf00, mf04, mf08, mf0c;   // +0x00
+    float mf10, mf14, mf18, mf1c;   // +0x10
+    int   mn20;                     // +0x20
+    char  mb24;                     // +0x24
+    char  mb25;                     // +0x25
+    short mn26;                     // +0x26
+    int   mn28, mn2c, mn30, mn34;   // +0x28
+    TElement(const TElement& other);            // 0x00ff11c0
+};
+TElement* __cdecl CopyRange(const TElement* first, const TElement* last, TElement* dest); // 0x00ff1290
+struct ElemVec {
+    TElement* mpBegin;      // +0x00
+    TElement* mpEnd;        // +0x04
+    TElement* mpCapacity;   // +0x08
+
+    uint GetNewCapacity(uint currentCapacity)
+    {
+        return (currentCapacity > 0) ? (2 * currentCapacity) : 1;
+    }
+    TElement* DoAllocate(uint n)
+    {
+        return n ? (TElement*)EAAllocate(n * 0x38, "EASTL", 0, 0, (int)g_13ebb38, 0xd1) : 0;
+    }
+    void DoFree(TElement* p)
+    {
+        if (p && ((int*)p)[-1])
+            EASTL_allocator_deallocate(p);
+    }
+    void insert(TElement* position, const TElement& value);
+};
+// ---- items of slice s00ff1650 end
+
+// ---- items of slice s00ff1840 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+template <class T>
+inline T* CopyRemainingOrnaments(T* first, T* last, T* destination) {
+    for (; first != last; ++destination, ++first)
+        *destination = *first;
+    return destination;
+}
+}
+// ---- items of slice s00ff1840 end
+
+// ---- items of slice s00ff18a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned char g_013ebb38[];
+struct TElement_s00ff_18a0 {
+    float mf00, mf04, mf08, mf0c;   // +0x00
+    float mf10, mf14, mf18, mf1c;   // +0x10
+    uint  mu20, mu24, mu28, mu2c;   // +0x20
+    uint  mu30;                     // +0x30
+
+    TElement_s00ff_18a0(const TElement_s00ff_18a0& other);            // 0x00ff1230
+};
+TElement_s00ff_18a0* __cdecl CopyRange_s00ff_18a0(const TElement_s00ff_18a0* first, const TElement_s00ff_18a0* last, TElement_s00ff_18a0* dest); // 0x00ff1330
+struct OrnamentVec {
+    TElement_s00ff_18a0* mpBegin;      // +0x00
+    TElement_s00ff_18a0* mpEnd;        // +0x04
+    TElement_s00ff_18a0* mpCapacity;   // +0x08
+
+    TElement_s00ff_18a0* end() const { return mpEnd; }
+    uint GetNewCapacity(uint currentCapacity)
+    {
+        return (currentCapacity > 0) ? (2 * currentCapacity) : 1;
+    }
+    TElement_s00ff_18a0* DoAllocate(uint n)
+    {
+        return n ? (TElement_s00ff_18a0*)EAAllocate(n * 0x34, "EASTL", 0, 0, (int)g_013ebb38, 0xd1) : 0;
+    }
+    void DoFree(TElement_s00ff_18a0* p)
+    {
+        if (p && ((int*)p)[-1])
+            EASTL_allocator_deallocate(p);
+    }
+    void insert(TElement_s00ff_18a0* position, const TElement_s00ff_18a0& value);
+};
+// ---- items of slice s00ff18a0 end
+
 // @ 0x00f26ef0
 void fn26ef0(void* a, void* b)
 { (void)a; (void)b; }
@@ -2235,6 +2439,56 @@ cOrnamentDataB& cOrnamentDataB::operator=(const cOrnamentDataB& o)
     return *this;
 }
 
+// @ 0x00ff1290
+cOrnamentDataA_s00ff_1290* CopyOrnamentRange(cOrnamentDataA_s00ff_1290* first, cOrnamentDataA_s00ff_1290* last, cOrnamentDataA_s00ff_1290* dest)
+{
+    while (first != last) {
+        if (dest)
+            *dest = *first;
+        ++first;
+        ++dest;
+    }
+    return dest;
+}
+
+// @ 0x00ff13c0
+void __thiscall Sim_s00ff_13c0::Release()
+{
+    if (mpBlockA4 && ((int*)mpBlockA4)[-1] != 0)
+        operator_delete_arr(mpBlockA4);
+    if (mpBlock90 && ((int*)mpBlock90)[-1] != 0)
+        operator_delete_arr(mpBlock90);
+    if (mpBlock7c && ((int*)mpBlock7c)[-1] != 0)
+        operator_delete_arr(mpBlock7c);
+
+    int bytesB = (int)((char*)mpData58 - (char*)mpData50);
+    if ((bytesB & ~1) > 2 && mpData50)
+        operator_delete_arr(mpData50);
+
+    int bytesA = (int)((char*)mpData48 - (char*)mpData40);
+    if ((bytesA & ~1) > 2 && mpData40)
+        operator_delete_arr(mpData40);
+}
+
+// @ 0x00ff1450
+void HandleVec::reserve(unsigned newCap)
+{
+    if (newCap <= (unsigned)(mpCap_08 - mpBegin_00)) return;
+    int* p = newCap ? (int*)EAAllocate(newCap * 4, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+                     : 0;
+    int* d = p;
+    int* end = mpEnd_04;
+    for (int* q = mpBegin_00; q != end; ++q, ++d)
+        if (d) *d = *q;
+    if (mpBegin_00 && mpBegin_00[-1] != 0)
+        operator_delete__(mpBegin_00);
+    int n = mpEnd_04 - mpBegin_00;
+    mpBegin_00 = p;
+    mpEnd_04 = p + n;
+    mpCap_08 = p + newCap;
+}
+
 // @ 0x00ff14f0
 void cTextHolder::SetText40(const cWString* src)
 {
@@ -2247,6 +2501,129 @@ void cTextHolder::SetText50(const cWString* src)
 {
     if (src != &mText50)
         mText50.assign(src->mpBegin, src->mpEnd);
+}
+
+// @ 0x00ff1530
+void OrnamentVector::reserve(uint32_t n)
+{
+    if (n <= (uint32_t)(mpCapacity - mpBegin))
+        return;
+
+    cOrnamentDataA_s00ff_1530* p = n ? (cOrnamentDataA_s00ff_1530*)AllocateBlocks(n * sizeof(cOrnamentDataA_s00ff_1530),
+                                                            kAllocName,
+                                                            0, 0,
+                                                            kAllocFile,
+                                                            209)
+                          : 0;
+
+    CopyOrnamentRange(mpBegin, mpEnd, p);
+
+    if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+        FreeArray(mpBegin);
+
+    uint32 oldSize = (uint32)(mpEnd - mpBegin);
+    mpBegin = p;
+    mpEnd = p + oldSize;
+    mpCapacity = p + n;
+}
+
+// @ 0x00ff1650
+void ElemVec::insert(TElement* position, const TElement& value)
+{
+    if (mpEnd != mpCapacity)
+    {
+        // The value may live inside the range that is about to shift up by one element.
+        const TElement* pValue = &value;
+        if (pValue >= position && pValue < mpEnd)
+            pValue = pValue + 1;
+
+        if (mpEnd)
+            ::new ((void*)mpEnd) TElement(mpEnd[-1]);
+
+        TElement* pDst = mpEnd;
+        TElement* pSrc = mpEnd - 1;
+        while (pSrc != position)
+        {
+            --pSrc;
+            --pDst;
+            *pDst = *pSrc;
+        }
+        *position = *pValue;
+        ++mpEnd;
+        return;
+    }
+
+    // Grow: double the element count (one for an empty vector) and rebuild the sequence.
+    const uint nPrevSize = (uint)(mpEnd - mpBegin);
+    const uint nNewSize = GetNewCapacity(nPrevSize);
+    TElement* const pNewData = DoAllocate(nNewSize);
+
+    const TElement* pFirst = mpBegin;
+    TElement* pNewEnd = CopyRange(pFirst, position, pNewData);
+    ::new ((void*)pNewEnd) TElement(value);
+    pNewEnd = CopyRange(position, mpEnd, pNewEnd + 1);
+
+    DoFree(mpBegin);
+    mpBegin = pNewData;
+    mpEnd = pNewEnd;
+    mpCapacity = pNewData + nNewSize;
+}
+
+// @ 0x00ff1840
+namespace eastl {
+template <> vector<SP::cOrnamentData, sp_vector_allocator>::iterator vector<SP::cOrnamentData, sp_vector_allocator>::erase(iterator first, iterator last)
+{
+    // Reference implementation of vector::erase: move the tail down over the
+    // erased range, destroy the moved-from values, then shrink the vector.
+    iterator const position = CopyRemainingOrnaments(last, mpEnd, first);
+    for (iterator p = position; p < mpEnd; ++p)
+        p->~cOrnamentData();
+    mpEnd -= last - first;
+    return first;
+}
+}  // namespace eastl
+
+// @ 0x00ff18a0
+void OrnamentVec::insert(TElement_s00ff_18a0* position, const TElement_s00ff_18a0& value)
+{
+    if (mpEnd != mpCapacity)
+    {
+        // The value may live inside the range that is about to shift up by one element.
+        const TElement_s00ff_18a0* pValue = &value;
+        if (pValue >= position && pValue < mpEnd)
+            pValue = pValue + 1;
+
+        if (mpEnd)
+            ::new ((void*)mpEnd) TElement_s00ff_18a0(mpEnd[-1]);
+
+        TElement_s00ff_18a0* pDst = mpEnd;
+        TElement_s00ff_18a0* pSrc = mpEnd - 1;
+        while (pSrc != position)
+        {
+            --pSrc;
+            --pDst;
+            *pDst = *pSrc;
+        }
+        *position = *pValue;
+        ++mpEnd;
+        return;
+    }
+
+    // Grow: double the element count (one for an empty vector) and rebuild the sequence.
+    const uint nPrevSize = (uint)(mpEnd - mpBegin);
+    const uint nNewSize = GetNewCapacity(nPrevSize);
+    TElement_s00ff_18a0* const pNewData = DoAllocate(nNewSize);
+
+    const TElement_s00ff_18a0* pFirst = mpBegin;
+    TElement_s00ff_18a0* pNewEnd = CopyRange_s00ff_18a0(pFirst, position, pNewData);
+    if (pNewEnd)
+        ::new ((void*)pNewEnd) TElement_s00ff_18a0(value);
+
+    pNewEnd = CopyRange_s00ff_18a0(position, end(), pNewEnd + 1);
+    DoFree(mpBegin);
+    mpCapacity = pNewData + nNewSize;
+    mpEnd = pNewEnd;
+    mpBegin = pNewData;
 }
 
 // @ 0x00ff1fb0

@@ -1312,44 +1312,87 @@ struct bitset_s0044_0110 {
 };
 }
 namespace SP {
-// Clamp_s0044_0110: the vetted SseClamp in sse_helpers.h
-
-}
-namespace SP {
 inline float InverseLerp(float value, float lo, float hi) { return (value - lo) / (hi - lo); }
 }
 namespace SP {
-class cMWModel_s0044_0110;
+struct cMWModel_s0044_0110;
 }
 namespace SP {
 class IModelWorld_s0044_0110 {
 public:
-    virtual int AddRef(); virtual int Release();
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
-    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
-    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
-    virtual void v38(); virtual void v3c(); virtual void v40(); virtual void v44();
-    virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
-    virtual void v58(); virtual void v5c(); virtual void v60(); virtual void v64();
-    virtual void v68(); virtual void v6c(); virtual void v70();
+virtual int AddRef();
+virtual int Release();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
     virtual void MoveToTime(cMWModel_s0044_0110* model, uint32_t animID, float time, int animationGroup);   // 0x74
-    virtual void v78(); virtual void v7c();
+virtual void v78();
+virtual void v7c();
     virtual void GetAnimationRange(cMWModel_s0044_0110* model, uint32_t animID, float* start, float* end, int animationGroup);  // 0x80
-    virtual void v84(); virtual void v88(); virtual void v8c();
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
-    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
-    virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
-    virtual void vc0(); virtual void vc4(); virtual void vc8(); virtual void vcc();
-    virtual void vd0(); virtual void vd4(); virtual void vd8(); virtual void vdc();
-    virtual void ve0(); virtual void ve4(); virtual void ve8(); virtual void vec();
-    virtual void vf0(); virtual void vf4(); virtual void vf8(); virtual void vfc();
-    virtual void v100(); virtual void v104(); virtual void v108();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+virtual void vc0();
+virtual void vc4();
+virtual void vc8();
+virtual void vcc();
+virtual void vd0();
+virtual void vd4();
+virtual void vd8();
+virtual void vdc();
+virtual void ve0();
+virtual void ve4();
+virtual void ve8();
+virtual void vec();
+virtual void vf0();
+virtual void vf4();
+virtual void vf8();
+virtual void vfc();
+virtual void v100();
+virtual void v104();
+virtual void v108();
     virtual void UpdateModel(cMWModel_s0044_0110* model, int arg);                   // 0x10C
     virtual void ApplyModel(cMWModel_s0044_0110* model, int arg);                    // 0x110
 };
 }
 namespace SP {
-class cMWModel_s0044_0110 {
+struct cMWModel_s0044_0110 { private:
 public:
     IModelWorld_s0044_0110* mpWorld;   // +0x00
     uint32_t mFlags;        // +0x04
@@ -1359,8 +1402,13 @@ public:
 namespace SP {
 class IPropList {
 public:
-    virtual int AddRef(); virtual int Release();
-    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14(); virtual void v18();
+virtual int AddRef();
+virtual int Release();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
     virtual bool HasKey(uint32_t key);                                    // 0x1C
 };
 }
@@ -1369,7 +1417,9 @@ class cSPEditorHandle_s0044_0110 {
 public:
     virtual int AddRef();          // 0x00
     virtual int Release();         // 0x04 0x0051e380
-    virtual void v08(); virtual void v0c(); virtual void v10();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
     virtual void Update();         // 0x14
     bool IsFlagSet();              // 0x0047F290
 };
@@ -1382,7 +1432,45 @@ public:
 };
 }
 namespace SP {
-struct cSPEditorBlock_s0044_0110 {
+struct IScale {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+    virtual void SetScale(float f);   // 0x20
+};
+}
+namespace SP {
+struct V3_s0044_0110 { uint32_t x, y, z; };
+}
+namespace SP {
+struct TransB { uint32_t flag; V3_s0044_0110 a; V3_s0044_0110 b; };
+}
+namespace SP {
+struct Range { void* a; void* b; };
+}
+namespace SP {
+struct Vec4Ptr {
+    void** mpBegin; void** mpEnd; void** mpCap;
+    void** At(int i) { return mpBegin + i; }
+    int Size() { return (int)(mpEnd - mpBegin); }
+    void Free();                                   // 0x00425990
+};
+}
+namespace SP {
+struct TransMap {
+    void* mpBegin; void* mpEnd;
+    char* end() const { char* e = (char*)mpEnd; return e; }
+    void   Find(Range* out, const uint32_t* key);  // 0x004553B0 (ret 8)
+    TransB* Index(const int* key);                 // 0x00454420 (ret 4)
+};
+}
+namespace SP {
+class cSPEditorBlock_s0044_0110 { public:
     char        pad00[0xC];
     AutoRefCount<IPropList> mPropList;  // +0x0C
     union {
@@ -1413,10 +1501,13 @@ struct cSPEditorBlock_s0044_0110 {
     char        pad1dc[4];
     float       mMinUniformScale; // +0x1E0
     float       mMaxUniformScale; // +0x1E4
-    char        pad1e8[0x33C - 0x1E8];
-    cSPEditorBlock_s0044_0110* link33c; // +0x33C
+    char        pad1e8[0x218 - 0x1E8];
+    float       mMinScale218;    // +0x218
+    float       mMaxScale21c;    // +0x21C
+    char        pad220[0x33C - 0x220];
+    AutoRefCount<cSPEditorBlock_s0044_0110> link33c; // +0x33C
     char        pad340[0x3EC - 0x340];
-    void*       p3ec;        // +0x3EC
+    AutoRefCount<IScale> p3ec;        // +0x3EC
     AutoRefCount<cMWModel_s0044_0110> mpSocketConnectorModel; // +0x3F0
     char        pad3f4[0x40C - 0x3F4];
     char        pad40c[0x4C8 - 0x40C];
@@ -1432,16 +1523,29 @@ struct cSPEditorBlock_s0044_0110 {
     void  F40bc0(const Vec3* v);                // 00440BC0
     void  F40c00(float f);                      // 00440C00
     void  F40c40(void* item, int flag);         // 00440C40
-    bool  F40d80(void* out);                    // 00440D80
+    bool  F40d80(void* out, uint32_t key);      // 00440D80
     void  F40e00(cSPEditorBlock_s0044_0110* o);            // 00440E00
-    void  F40e60(void* key);                    // 00440E60
+    void  F40e60(uint32_t key);                 // 00440E60
+    bool  F43ebc0();                            // 0043EBC0
+    bool  F43ecb0();                            // 0043ECB0
+    void  F4a070();                             // 0044A070
+    TransMap* Map() { return (TransMap*)&list4c8; }
     void  F40390(float f);                      // 00440390
     void  F40420(float f, char b);              // 00440420
-    void  SetUserOrientationHelper(Matrix3_s0044_0110 m);                    // 004404F0
+    void  SetUserOrientationHelper(Matrix3_s0044_0110 m);   // 004404F0
     void  F40110(float f);                      // 00440110
     void  SetUniformScale(float scale, bool b, bool force);   // 00440520
     void  SetFlag(int a, int b);                // 00435A10
 };
+}
+namespace SP {
+void  Sub_4B8750(cMWModel_s0044_0110* a, IModelWorld_s0044_0110* b, Vec4Ptr* out, int flag);     // 0x004B8750 (cdecl)
+}
+namespace SP {
+void  Sub_4B8180(Trans t, void* world, void* model, uint32_t key);   // 0x004B8180 (cdecl)
+}
+namespace SP {
+void  Sub_698650(void* m);
 }
 namespace SP {
 void __cdecl OrthonormalizeMatrix(Matrix3_s0044_0110* m); // 0x00698650
@@ -6048,6 +6152,34 @@ void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
 }
 }  // namespace SP
 
+// @ 0x00440110
+namespace SP {
+void cSPEditorBlock_s0044_0110::F40110(float f)
+{
+    if (mMinScale218 > f)
+        f = mMinScale218;
+    else if (f > mMaxScale21c)
+        f = mMaxScale21c;
+    if (f != mDefaultMouseOffset) {
+        mDefaultMouseOffset = f;
+        if (mBooleanAttributes.test(10))
+            SetFlag(9, 1);
+        if (link33c && link33c->mBooleanAttributes.test(11) && link33c->mBooleanAttributes.test(10))
+            link33c->SetFlag(9, 1);
+        if (p3ec)
+            p3ec->SetScale(mDefaultMouseOffset);
+        bool a = F43ebc0();
+        if (a)
+            F4a070();
+        if (link33c && link33c->p3ec) {
+            bool b = link33c->F43ecb0();
+            if (b)
+                link33c->F4a070();
+        }
+    }
+}
+}  // namespace SP
+
 // @ 0x00440390
 namespace SP {
 void cSPEditorBlock_s0044_0110::F40390(float f)
@@ -6171,6 +6303,54 @@ void cSPEditorBlock_s0044_0110::F40c00(float f)
 }
 }  // namespace SP
 
+// @ 0x00440c40
+namespace SP {
+void cSPEditorBlock_s0044_0110::F40c40(void* item, int flag)
+{
+    Vec4Ptr found = { 0, 0, 0 };
+    Sub_4B8750(mpModel, mpModelWorld, &found, flag);
+    int n = found.Size();
+    for (int i = 0; i < n; i++) {
+        int* key = (int*)found.At(i);
+        TransB* dst = Map()->Index(key);
+        dst->flag = ((TransB*)item)->flag;
+        dst->a = ((TransB*)item)->a;
+        dst->b = ((TransB*)item)->b;
+        F40e60((uint32_t)found.mpBegin[i]);
+    }
+    for (void** p = found.mpBegin; p < found.mpEnd; p++) {
+    }
+    found.Free();
+}
+}  // namespace SP
+
+// @ 0x00440d80
+namespace SP {
+bool cSPEditorBlock_s0044_0110::F40d80(void* out, uint32_t key)
+{
+    Range r;
+    char* it;
+    {
+        uint32_t scratch[5];
+        TransMap* m = Map();
+        char* e;
+        m->Find(&r, &key);
+        if (r.a != r.b)
+            it = (char*)r.a;
+        else {
+            e = (char*)m->mpEnd;
+            it = e;
+        }
+    }
+    if (it != Map()->end()) {
+        if (out)
+            *(Trans*)out = *(Trans*)(it + 4);
+        return true;
+    }
+    return false;
+}
+}  // namespace SP
+
 // @ 0x00440e00
 namespace SP {
 void cSPEditorBlock_s0044_0110::F40e00(cSPEditorBlock_s0044_0110* o)
@@ -6179,6 +6359,29 @@ void cSPEditorBlock_s0044_0110::F40e00(cSPEditorBlock_s0044_0110* o)
     char* end = (char*)o->list4cc;
     for (; it != end; it += 0x20) {
         F40c40(it + 4, *(int*)it);
+    }
+}
+}  // namespace SP
+
+// @ 0x00440e60
+namespace SP {
+void cSPEditorBlock_s0044_0110::F40e60(uint32_t key)
+{
+    static Trans sDefault;
+    TransMap* m = Map();
+    Range r;
+    m->Find(&r, &key);
+    char* it;
+    if (r.a != r.b)
+        it = (char*)r.a;
+    else
+        it = m->end();
+    Trans* t = (it == Map()->end()) ? &sDefault : (Trans*)(it + 4);
+    Trans* t2 = t;
+    if (mpModel && mpModelWorld) {
+        void* model = mpModel;
+        void* world = mpModelWorld;
+        Sub_4B8180(*t2, world, model, key);
     }
 }
 }  // namespace SP

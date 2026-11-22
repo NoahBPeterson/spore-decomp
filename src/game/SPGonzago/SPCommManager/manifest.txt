@@ -1,2 +1,4 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCommManager.cpp  ?push_back@?$vector@U?$basic_string@_W@eastl@@Usp_vector_allocator@2@@eastl@@QAEXABU?$basic_string@_W@2@@Z  00553f10  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommManager.cpp  ?InitCommEventAttributes@Simulator@@YAXXZ  01315a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommManager.cpp  ?InitCommAttributes@Simulator@@YAXXZ  01315960  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

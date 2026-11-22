@@ -7,5 +7,5 @@
 ../src/game/SPGonzago/_at_00ea0000.cpp  ?Shutdown@cPlaceableSound@@QAEXXZ  00eabe10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00ea0000.cpp  ?LoadModel@cSpatialObject@@QAE_NH@Z  00eabe90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00ea0000.cpp  ?SetPosition@cPlaceableSound@@QAEXPBUVec3@@@Z  00eac310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/_at_00ea0000.cpp  ?Destroy@cPlaceableSound@@QAEPAU1@E@Z  00eac4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00ea0000.cpp  ?Write@cPlaceableSound@@QAE_NPAX@Z  00eac360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?Destroy@cPlaceableSound@@QAEPAU1@E@Z  00eac4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

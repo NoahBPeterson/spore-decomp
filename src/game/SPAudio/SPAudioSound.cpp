@@ -1,4 +1,4 @@
-// src/game/SPAudio/SPAudioSound.cpp -- migrated from slice(s) s00a40cd0 by tools/migrate/rewrite.py
+// src/game/SPAudio/SPAudioSound.cpp -- migrated from slice(s) s00a41c40, s00a40cd0 by tools/migrate/rewrite.py
 // Object file: SPAudio/SPAudioSound.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,6 +7,7 @@
 #include "EA/Audio/Sound.h"
 #include "EA/Variant.h"
 #include "SP/Audio/cAudioPreferences.h"
+#include <math.h>
 
 // ---- items of slice s00a40cd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define CAT2(a, b) a##b
@@ -79,6 +80,126 @@ struct cPropertySet {
 }
 }
 // ---- items of slice s00a40cd0 end
+
+// ---- items of slice s00a41c40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kOne;        // 0x01485720
+extern const float kZero;       // 0x01485378
+extern char gEmptyString16[];   // 0x01667bac
+void* operator new(unsigned int, const char*, int, int, const char*, int);
+void* operator new(unsigned int);
+void operator delete(void*);
+void operator delete[](void*);
+namespace EA {
+namespace Audio {
+class ResponseCurve_s00a4_1c40
+{
+public:
+    ResponseCurve_s00a4_1c40();                                        // 0x00a1aa50
+    ~ResponseCurve_s00a4_1c40() throw();
+    float GetOutputValue(float value) const;                // 0x00a1a110
+
+    void* mpData;               // +0x00
+    char mPad_04[0x0c];         // +0x04
+    void* mpAllocation;         // +0x10
+    char mPad_14[0x350];        // +0x14  (sizeof == 0x364)
+};
+}
+}
+namespace EA {
+namespace Audio {
+ResponseCurve_s00a4_1c40::~ResponseCurve_s00a4_1c40() throw()
+{
+    if (mpData && mpData != mpAllocation)
+        operator delete(mpData);
+}
+}
+}
+namespace EA {
+namespace Audio {
+class Sound_s00a4_1c40
+{
+public:
+    Sound_s00a4_1c40();                                                // 0x00a1fbb0
+    virtual ~Sound_s00a4_1c40();                                       // 0x00a1f4d0
+    void CommitAllProperties();                             // 0x00a1d080
+};
+}
+}
+struct TeString
+{
+    const void* mpBegin;        // +0x00
+    const void* mpEnd;          // +0x04
+    const void* mpCapacity;     // +0x08
+
+    TeString()
+        : mpBegin(gEmptyString16),
+          mpEnd(gEmptyString16),
+          mpCapacity((char*)gEmptyString16 + 1)
+    {
+    }
+    ~TeString() throw();
+};
+TeString::~TeString() throw()
+{
+    if ((const char*)mpCapacity - (const char*)mpBegin > 1 && mpBegin)
+        operator delete((void*)mpBegin);
+}
+namespace SP {
+namespace Audio {
+struct __declspec(novtable) CurveSource
+{
+    VP VP VP
+    virtual void Slot0c(unsigned int id, float value, int flag);   // +0x0c
+    virtual bool Slot10(unsigned int id, float* pOut);             // +0x10
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct __declspec(novtable) ThirdBase
+{
+    VP VP
+};
+}
+}
+namespace SP {
+namespace Audio {
+class cSound_s00a4_1c40 : public EA::Audio::Sound_s00a4_1c40, public CurveSource, public ThirdBase
+{
+public:
+    static void* operator new(unsigned int size);           // 0x00a41cc0
+
+    cSound_s00a4_1c40();
+    ~cSound_s00a4_1c40();
+
+    float ComputeGainAttenuation(float a, float b, float c, float d, float e);  // 0x00a41c40
+    void CommitAllProperties();                             // 0x00a41d30
+
+    char mPad_0c[0x44 - 0x0c];      // +0x0c
+    void* mpObj44;                  // +0x44
+    char mPad_48[0xce4 - 0x48];     // +0x48
+    unsigned int mFlags;            // +0xce4
+    char mPad_ce8[0x1e10 - 0xce8];  // +0xce8
+    EA::Audio::ResponseCurve_s00a4_1c40 mCurve1e10;    // +0x1e10
+    EA::Audio::ResponseCurve_s00a4_1c40 mCurve2174;    // +0x2174
+    EA::Audio::ResponseCurve_s00a4_1c40 mCurve24d8;    // +0x24d8
+    EA::Audio::ResponseCurve_s00a4_1c40 mCurve283c;    // +0x283c
+    int mStartContext;              // +0x2ba0
+    bool mb2ba4;                    // +0x2ba4
+    bool mb2ba5;                    // +0x2ba5
+    TeString mName;                 // +0x2ba8
+    int mPad_2bb4;                  // +0x2bb4  (sizeof == 0x2bb8)
+};
+}
+}
+using SP::Audio::cSound_s00a4_1c40;
+class Obj44
+{
+public:
+    VP8 VP VP VP
+    virtual void Slot2c(unsigned int id, float value, int flag);   // +0x2c
+};
+// ---- items of slice s00a41c40 end
 
 // @ 0x00a419a0
 bool SP::Audio::cSound::Init()
@@ -163,4 +284,43 @@ unsigned char SP::Audio::cSound::ConfigureSound()
     }
     ((EA::Audio::ResponseCurve_s00a4_0cd0*)((char*)this + 0x2174))->InitFromConfiguration(ps, 0x1e4db1eb);
     return 1;
+}
+
+// @ 0x00a41c40
+float SP::Audio::cSound_s00a4_1c40::ComputeGainAttenuation(float a, float b, float c, float d, float e)
+{
+    float t;
+    if (e != kOne)
+        t = (kOne / e) * a;
+    else
+        t = a;
+    if (c > t || b == kZero)
+        return 1.0f;
+    if (t > d)
+        return 0.0f;
+    return mCurve2174.GetOutputValue((t - c) / (d - c));
+}
+
+// @ 0x00a41d30
+void SP::Audio::cSound_s00a4_1c40::CommitAllProperties()
+{
+    ((EA::Audio::Sound_s00a4_1c40*)this)->CommitAllProperties();
+    if (mFlags & 0x80000) {
+        float v;
+        if (((CurveSource*)this)->Slot10(0x39f9e0f, &v)) {
+            float out = mCurve1e10.GetOutputValue(v);
+            ((Obj44*)mpObj44)->Slot2c(0x82beafe0, out, 1);
+        }
+    }
+    float v2;
+    if (((CurveSource*)this)->Slot10(0x39fb000, &v2)) {
+        if (mFlags & 0x100000) {
+            float out = mCurve24d8.GetOutputValue(v2);
+            ((CurveSource*)this)->Slot0c(0x71bc3009, out, 1);
+        }
+        if (mFlags & 0x200000) {
+            float out = mCurve283c.GetOutputValue(v2);
+            ((CurveSource*)this)->Slot0c(0x25df0108, out, 1);
+        }
+    }
 }

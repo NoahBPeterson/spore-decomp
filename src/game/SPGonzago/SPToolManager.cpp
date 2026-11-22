@@ -142,6 +142,23 @@ void* __cdecl GetUniverseContext();                           // 0x01021080
 void* __cdecl EA_Messaging_GetServer();                       // 0x00883860
 void  __cdecl RegisterStaticRegistrations();                  // 0x01055890
 void  __cdecl WriteUint32(void* s, const u32* v, int n, int flag); // 0x0093aa70
+u32   __cdecl GetPlayerEmpireID();                            // 0x01021090
+bool  __cdecl IsHostileToAll(void* p);                        // 0x0102c600
+void* __cdecl FUN_00b67740(void* p);                          // 0x00b67740
+bool  __cdecl cSPSpaceCommCanTarget(void* a, void* b);        // 0x0102aa50
+bool  __fastcall FUN_00bfc480(void* self);                    // 0x00bfc480
+struct cTerrainSphere;
+struct cTerrainEditor {
+    cTerrainSphere* GetCurrentTerrainSphere();                // 0x00f67d90
+};
+extern cItemID gShieldItemID;                                 // 0x016e14d0
+extern cItemID gCloakItemID;                                  // 0x016e15e4
+extern cItemID gRallyCallItemID;                              // 0x016e17a0
+extern cItemID gSoothingSongItemID;                           // 0x016e174c
+extern u8      gChargePropertyId_013f94d4;                    // 0x013f94d4
+extern u32 gToolGlobalD8;                                     // 0x016e12d8
+extern u32 gToolGlobalDC;                                     // 0x016e12dc
+extern u32 gToolGlobalE0;                                     // 0x016e12e0
 extern u8      gGameMode01654c05;                             // 0x01654c05
 extern u32     gVerbEventIDs[0xe];                            // 0x0149acd4
 extern u8 vtbl_cSpaceToolData;                                // 0x0149ad40
@@ -1314,6 +1331,7 @@ struct cTerrainObjectMap {
 struct cTerrainSphere {
     uint32_t pad[0x11c0 / 4];
     cTerrainObjectMap mObjects;                             // +0x11c0
+    bool Check();                                           // 0x00c75650
 };
 struct cCreatureAnimal {
     uint32_t pad[0xc0 / 4];
@@ -1606,6 +1624,122 @@ void* SP::cSPEditorVerbIconTray_s0104_bcc0::Dispatch(u32 a, u32 b, void** ppOut,
     return old;
 }
 
+// @ 0x0104c570
+SP::cSPSpaceToolData_s0104_bcc0::cSPSpaceToolData_s0104_bcc0()
+{
+    baseCtorRaw();
+    mpVftable0 = &vtbl_cSpaceToolData;
+    mpVftable8 = &vtbl_cSpaceToolData8;
+    mpVftableC = &vtbl_cSpaceToolDataC;
+    mFlag80 = 0;
+    mIsInUse.ctorRaw();
+    mRechargeTimer.ctorRaw();
+    mAutoFireTimer.ctorRaw();
+    mChargeTimer.ctorRaw();
+    mEffect108 = 0;
+    mEffect10c = 0;
+    mEffect110 = 0;
+    mEffect114 = 0;
+    mEffect118 = 0;
+    mField11c = -1;
+    mField120 = 0;
+    mField124 = 0;
+    mField128 = 0;
+    mField12c = 0;
+    mField140 = 0;
+    mField144 = 1.0f;
+    mField148 = 1.0f;
+    mField14c = 0.0f;
+    mField150 = 0;
+    mField154 = 0.0f;
+    mField158 = 0.0f;
+    mField15c = 0.0f;
+    mField160 = 0.0f;
+    mField164 = 0.0f;
+    mField168 = 0.0f;
+    mField16c = 0;
+    mField170 = 0;
+    mFlags174 = 0;
+    mField178 = 0;
+    mField17c = 0x8da5ffb9;
+    mField180 = -1;
+    mField184 = -1;
+    mField188 = 0x82ce6992;
+    mUpgradeInstance = 0;
+    mField190 = gToolGlobalD8;
+    mField194 = gToolGlobalDC;
+    mField198 = gToolGlobalE0;
+    mField19c = 0;
+    mLimit1a0 = 0;
+    mField1a4 = 0;
+    mField1a8 = 0.0f;
+    mField1ac = 0.0f;
+    mField1b0 = 0.0f;
+    mField1b4 = 0.0f;
+    mField1b8 = 0.0f;
+    mField1bc = 1.0f;
+    mField1c0 = 0.0f;
+    mField1c4 = 0.0f;
+    mField1c8 = 0.0f;
+    mField1cc = 1.0f;
+    mField1d0 = 1.0f;
+    mField1d4 = 0.0f;
+    mField1d8 = 0.0f;
+    mField1dc = 0.0f;
+    mField1e0 = 0.0f;
+    mField1e4 = 0.0f;
+    mField1e8 = 0.0f;
+    mField1ec = 0.0f;
+    mField1f0 = 0.0f;
+    mField1f4 = 0.0f;
+    mField1f8 = 0.0f;
+    mField1fc = 0.0f;
+    mField200 = 0.0f;
+    mField204 = 0;
+    mField208 = 0;
+    mField20c = 0;
+    mField210 = 0;
+    mField214 = 0.0f;
+    mField218 = 0;
+    mField21c = 0;
+    mField220 = 0;
+    mField224 = 0;
+    mField228 = 0;
+    mField22c = 0;
+    mField230 = 0;
+    mField234 = 0;
+    mField238 = 0.0f;
+    mField23c = 0;
+    mField244 = 0;
+    mField248 = -1;
+    mField24c = -1;
+    mField250 = -1;
+    mStrategyClassID = 0;
+    mWaterColorID.ctorRaw();
+    mField26c = 0.0f;
+    mField270 = 0.0f;
+    mField274 = 0.0f;
+    mField278 = 0.0f;
+    mField27c = 0.0f;
+    mField280 = 0.0f;
+    mField284 = 0.0f;
+    mField288 = 0.0f;
+    mField28c = 0.0f;
+    mField290 = 0.0f;
+    mField294 = 0.0f;
+    mField298 = 0.0f;
+    cToolRef** p = &mEffect108;
+    for (u32 i = 3; i != 0; i--) {
+        cToolRef* r = *p;
+        if (r != 0) {
+            *p = 0;
+            r->RefCountRelease();
+        }
+        p++;
+    }
+    mAmmo7c = 0;
+}
+
 // @ 0x0104c910
 SP::cSPSpaceToolData_s0104_bcc0::~cSPSpaceToolData_s0104_bcc0()
 {
@@ -1632,6 +1766,45 @@ SP::cSPSpaceToolData_s0104_bcc0::~cSPSpaceToolData_s0104_bcc0()
     mRechargeTimer.dtorRaw();
     mIsInUse.dtorRaw();
     baseDtorRaw();
+}
+
+// @ 0x0104ca20
+bool SP::cSPSpaceToolData_s0104_bcc0::func48h()
+{
+    bool result = false;
+    if (gShieldItemID.instanceID == mItemID.instanceID &&
+        gShieldItemID.typeID == mItemID.typeID &&
+        gShieldItemID.groupID == mItemID.groupID) {
+        if (mEffect114 != 0)
+            return FUN_00bfc480(mEffect114->ActivateVfx(&gChargePropertyId_013f94d4));
+        return FUN_00bfc480(0);
+    }
+    if (gCloakItemID.instanceID == mItemID.instanceID &&
+        gCloakItemID.typeID == mItemID.typeID &&
+        gCloakItemID.groupID == mItemID.groupID) {
+        if (mEffect114 != 0)
+            return ((cToolRef*)mEffect114->ActivateVfx((void*)0xb033b403))->OnActivate(1);
+        return ((cToolRef*)0)->OnActivate(1);
+    }
+    if (gRallyCallItemID.instanceID == mItemID.instanceID &&
+        gRallyCallItemID.typeID == mItemID.typeID &&
+        gRallyCallItemID.groupID == mItemID.groupID) {
+        if (mIsInUse.IsRunning()) {
+            i32 t = (i32)(mField1c0 * 1000.0f);
+            if (t < 0) t = -1;
+            u64 e = mIsInUse.GetElapsedTime();
+            if (e < (u64)(long long)t) return true;
+        }
+        result = false;
+        return result;
+    }
+    if (gSoothingSongItemID.instanceID == mItemID.instanceID &&
+        gSoothingSongItemID.typeID == mItemID.typeID &&
+        gSoothingSongItemID.groupID == mItemID.groupID) {
+        cTerrainEditor* te = (cTerrainEditor*)NounManager();
+        return te->GetCurrentTerrainSphere()->Check();
+    }
+    return result;
 }
 
 // @ 0x0104cb70
@@ -1694,6 +1867,50 @@ u8 SP::cSPSpaceToolData_s0104_bcc0::FUN_0104cc90()
             result = *p->GetBool();
     }
     return (u8)result;
+}
+
+// @ 0x0104cdb0
+u8 SP::cSPSpaceToolData_s0104_bcc0::FUN_0104cdb0(cIface* target)
+{
+    if ((mFlagsBytes.mByte176 & 1) != 0) {
+        if ((u32)target->Call(0x4c) == GetPlayerEmpireID()) return 0;
+    }
+    if (mStrategyClassID == 0) return 1;
+    bool tookCase = false;
+    u8 result;
+    if (target != 0) {
+        tookCase = true;
+        switch ((i32)target->Call(0x38)) {
+        case 0x137e8e0:  result = (u8)(mStrategyClassID >> 3);  break;
+        case 0xb033b403: result = (u8)(mStrategyClassID >> 2);  break;
+        case 0xd0036e08: result = (u8)(mStrategyClassID);       break;
+        case 0xee9b2232: result = (u8)(mStrategyClassID >> 5);  break;
+        case 0x436f315:  result = (u8)(mStrategyClassID >> 4);  break;
+        case 0x4e3faaf:  result = (u8)(mStrategyClassID >> 10); break;
+        case 0x4f176642: result = (u8)(mStrategyClassID >> 1);  break;
+        default:
+            tookCase = false;
+            if (target->Call1(0xc, 0xe9cb8ba) != 0) {
+                result = (u8)(mStrategyClassID >> 6);
+                tookCase = true;
+            }
+            break;
+        }
+    }
+    if (!tookCase) result = (u8)(mStrategyClassID >> 7);
+
+    result &= 1;
+    u8 b = result;
+    if (GetUniverseContext() == 0 && tookCase && result != 0 &&
+        (mStrategyClassID & 0x200) != 0) {
+        b = (u8)IsHostileToAll(FUN_01021260());
+        void* s = FUN_00b67740(target);
+        cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
+        result = b;
+        if (s != 0)
+            result = (u8)cSPSpaceCommCanTarget(s, sim->GetPlayerInventory());
+    }
+    return result;
 }
 
 // @ 0x0104cf20

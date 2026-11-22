@@ -12,13 +12,21 @@
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetPending@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEX_K_N@Z  0054e7b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?IsPending2@cAssetDirectory_s0054_dd30@Pollen@SP@@QBE_N_K@Z  0054e800  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?AddPending2@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEX_K@Z  0054e870  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetAuthorA@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  0054e8c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?GetAuthorA@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_KI@Z  0054e8f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetAuthorB@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  0054e970  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?GetAuthorB@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_KI@Z  0054e9a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetAuthorFlag@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_NI_N@Z  0054ea20  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?GetAuthorFlag@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_NI@Z  0054eac0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_005508a0@Meta@@QAE_JXZ  005508a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550910@Meta@@QAEPAXI@Z  00550910  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_005509e0@Meta@@QAEII@Z  005509e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550a60@Meta@@QAEII@Z  00550a60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550aa0@Meta@@QAE_NI@Z  00550aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550b00@Meta@@QAEXH@Z  00550b00  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550b30@Meta@@QAEXH@Z  00550b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?ParseSporeAssetIDInternal@cAssetMetadata@Pollen@SP@@QAE_NPBD@Z  00550b60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetID@cAssetMetadataAuthView@Pollen@SP@@QAEX_K@Z  00551af0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetParentAssetID@cAssetMetadata_s0055_1b60@Pollen@SP@@QAEX_K@Z  00551b60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetOriginalParentAssetID@cAssetMetadata_s0055_1b60@Pollen@SP@@QAEX_K@Z  00551b80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?UpdateFromEntry@cAssetMetadata_s0055_1b60@Pollen@SP@@QAE_NPBUAtomEntry_s0055_1b60@Feed@3@ABU?$basic_string_s0055_1b60@D@eastl@@@Z  00551ba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
@@ -35,14 +43,6 @@
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?Find@Tbl64F@@QAE?AUIter@@AB_K@Z  00553510  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?DoInsertValue@Tbl2I@@QAE?AUInsertResult_s0055_2af0@@AB_KUTrueType@@@Z  00553750  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?Find@Tbl32F@@QAE?AUIterR@@ABI@Z  005538f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  0084ab40  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetAuthorA@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  0054e8c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550910@Meta@@QAEPAXI@Z  00550910  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetAuthorB@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  0054e970  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550b00@Meta@@QAEXH@Z  00550b00  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550b30@Meta@@QAEXH@Z  00550b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00550aa0@Meta@@QAE_NI@Z  00550aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?ParseSporeAssetIDInternal@cAssetMetadata@Pollen@SP@@QAE_NPBD@Z  00550b60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetID@cAssetMetadataAuthView@Pollen@SP@@QAEX_K@Z  00551af0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00553b90@Vec16@@QAEXXZ  00553b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?DoFreeNodes@HashFreeStub@@QAEXPAPAXI@Z  005687d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  0084ab40  /O2 /MD /Gy /TP /Isrc/game/include

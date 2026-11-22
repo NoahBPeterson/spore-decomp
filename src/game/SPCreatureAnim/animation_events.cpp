@@ -1,4 +1,4 @@
-// src/game/SPCreatureAnim/animation_events.cpp -- migrated from slice(s) s009a59e0, s009a4c70, s009a3c80 by tools/migrate/rewrite.py
+// src/game/SPCreatureAnim/animation_events.cpp -- migrated from slice(s) s009a69d0, s009a59e0, s009a4c70, s009a3c80 by tools/migrate/rewrite.py
 // Object file: SPCreatureAnim/animation_events.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,13 @@
 #include "nSPCreatureAnim/creature_instance_data.h"
 #include <math.h>
 #include "EA/RectT.h"
+#include "nSPCreatureAnim/creature_body_instance_data.h"
+#include "nSPCreatureAnim/creature_body_static_data.h"
+#include "nSPCreatureAnim/creature_effect.h"
+#include "nSPCreatureAnim/dynamics_foot.h"
+#include "checkerlib/vector_3.h"
+#include "checkerlib/vector_4.h"
+#include <intrin.h>
 
 // ---- items of slice s009a4c70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define AT(T, p, off) (*(T*)((char*)(p) + (off)))
@@ -141,6 +148,226 @@ namespace nSPCreatureAnim {
 static inline void Unit(float* d) { d[0] = 0.0f; d[1] = 0.0f; d[2] = 1.0f; }
 }
 // ---- items of slice s009a59e0 end
+
+// ---- items of slice s009a69d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl sqrt(double);
+extern "C" double __cdecl fabs(double);
+extern float g_zero;                                                                // 0x013eb1bc
+#pragma intrinsic(sqrt)
+#pragma intrinsic(fabs)
+typedef unsigned int uint32;
+namespace checkerlib {
+class vector_3_s009a_69d0 {
+public:
+    float x;   // +0x0
+    float y;   // +0x4
+    float z;   // +0x8
+};
+}
+namespace checkerlib {
+class vector_4_s009a_69d0 {
+public:
+    float x;   // +0x0
+    float y;   // +0x4
+    float z;   // +0x8
+    float w;   // +0xc
+};
+}
+namespace eastl {
+struct hash_node_s009a_69d0 {
+    uint32 mKey;                               // +0x00
+    void* mpValue;                             // +0x04
+    hash_node_s009a_69d0* mpNext;                         // +0x08
+};
+}
+namespace eastl {
+struct hashtable_iterator {
+    hash_node_s009a_69d0* mpNode;                         // +0x00
+    hash_node_s009a_69d0** mpBucket;                      // +0x04
+    void Advance();                            // 0x009a69d0
+};
+}
+namespace eastl {
+struct hashtable_range {
+    hashtable_iterator first;                  // +0x00
+    hashtable_iterator second;                 // +0x08
+};
+}
+typedef eastl::hashtable_range EapdRange;
+typedef eastl::hash_node_s009a_69d0 EapdHashNode;
+typedef eastl::hashtable_iterator EapdIterator;
+class EapdHashTable {
+public:
+    unsigned char mUnknown0[4];                // +0x00
+    EapdHashNode** mpBucketArray;              // +0x04
+    uint32 mnBucketCount;                      // +0x08
+    EapdRange equal_range(const uint32& key);
+    EapdIterator begin();                      // 0x00594410
+};
+struct XformMsg {
+    unsigned short mFlags;                     // +0x00
+    unsigned short mCount;                     // +0x02
+    checkerlib::vector_3_s009a_69d0 mPos;                 // +0x04
+    float mScale;                              // +0x10
+    float mRot[9];                             // +0x14
+    XformMsg();                                // 0x00434040
+};
+struct IVisualEffect {
+    virtual int Unknown0();                    // +0x00
+    virtual void Release();                    // +0x04
+    virtual void Unknown08();                  // +0x08
+    virtual void Unknown0c();                  // +0x0c
+    virtual bool IsPlaying();                  // +0x10
+    virtual void Unknown14();                  // +0x14
+    virtual void SetXform(XformMsg* msg);      // +0x18
+    virtual void Unknown1c();                  // +0x1c
+    virtual void GetXform(XformMsg* msg);      // +0x20
+};
+struct effect_ref {
+    void* mpObject;                            // +0x00
+    effect_ref* assign(void* object);          // 0x0099cab0
+};
+namespace nSPCreatureAnim {
+struct creature_effect_s009a_69d0;
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009a_69d0 {
+    unsigned char mUnknown0[0x138];
+    checkerlib::vector_3_s009a_69d0 mFootstepExtent;      // +0x138
+    unsigned char mUnknown144[0x150 - 0x144];
+    unsigned char mFlags;                      // +0x150
+    unsigned char mUnknown151[0x1f8 - 0x151];
+    int mFootSoundId;                          // +0x1f8
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009a_69d0 {
+    creature_body_static_data_s009a_69d0* mpStaticData;   // +0x00
+    unsigned char mUnknown4[0x10 - 0x04];
+    checkerlib::vector_3_s009a_69d0 mCenter;              // +0x10
+    unsigned char mUnknown1c[0x4c - 0x1c];
+    float mAnimWeight;                         // +0x4c
+    unsigned char mUnknown50[0x2bc - 0x50];
+};
+}
+namespace nSPCreatureAnim {
+class dynamics_foot_s009a_69d0 {
+public:
+    unsigned char mUnknown0[0x58];
+    int mBodyIdx;                              // +0x58
+    bool mFootDown;                            // +0x5c
+    bool mEdgeTrigger;                         // +0x5d
+    unsigned char mUnknown5e[0x108 - 0x5e];
+};
+}
+namespace nSPCreatureAnim {
+struct footstep_event_list {
+    dynamics_foot_s009a_69d0* mpBegin;                    // +0x00
+    dynamics_foot_s009a_69d0* mpEnd;                      // +0x04
+};
+}
+namespace nSPCreatureAnim {
+struct anim_data_15b8 {
+    unsigned char mUnknown0[0x24];
+    footstep_event_list mEvents;               // +0x24
+    footstep_event_list* get_events();         // 0x00a09f50
+    unsigned char mUnknown2c[0xa8 - 0x2c];
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009a_69d0 {
+    void* mpStaticData;                        // +0x00
+    void* mpRoot;                              // +0x04
+    unsigned char mUnknown08[0x18 - 0x08];
+    checkerlib::vector_3_s009a_69d0 mPosition;            // +0x18
+    unsigned char mUnknown24[0x3c - 0x24];
+    float mQuatW;                              // +0x3c
+    float mQuatX;                              // +0x40
+    float mQuatY;                              // +0x44
+    float mQuatZ;                              // +0x48
+    unsigned char mUnknown4c[0x70 - 0x4c];
+    float mScale;                              // +0x70
+    unsigned char mUnknown74[0x260 - 0x74];
+    bool mbField260;                           // +0x260
+    bool mbFootstepsEnabled;                   // +0x261
+    unsigned char mUnknown262[0x270 - 0x262];
+    bool mbField270;                           // +0x270
+    unsigned char mUnknown271[0x2ac - 0x271];
+    uint32 mField2ac;                          // +0x2ac
+    unsigned char* mpEventData;                // +0x2b0
+    int mEventDataStride;                      // +0x2b4
+    uint32* mpEventDataCount;                  // +0x2b8
+    uint32 mEventDataCapacity;                 // +0x2bc
+    unsigned char mUnknown2c0[0x2c4 - 0x2c0];
+    unsigned char mSoundName[0x2d5 - 0x2c4];   // +0x2c4
+    bool mbSecondFootstep;                     // +0x2d5
+    unsigned char mUnknown2d6[0x2e4 - 0x2d6];
+    creature_body_instance_data_s009a_69d0* mpBodies;     // +0x2e4
+    creature_body_instance_data_s009a_69d0* mpBodiesEnd;  // +0x2e8
+    unsigned char mUnknown2ec[0x15b8 - 0x2ec];
+    anim_data_15b8 mAnimData;                  // +0x15b8
+    checkerlib::vector_4_s009a_69d0 mFootstepBasis;       // +0x1660
+    unsigned char mUnknown1670[0x17a0 - 0x1670];
+    EapdHashTable mEffects;                    // +0x17a0
+    void HitBody(uint32 bodyId, const checkerlib::vector_3_s009a_69d0& vec, uint32 a, bool b, float c); // 0x009bb680
+    void SetStyleWeightForAllGroups(const char* group, int value, float weight);             // 0x009b7b70
+    creature_effect_s009a_69d0* AddEffect(uint32 id, int a, int b);                                     // 0x009cb300
+    int Release();                                                                            // 0x009c4cc0
+};
+}
+namespace nSPCreatureAnim {
+struct creature_effect_s009a_69d0 {
+    uint32 key;                                        // +0x00
+    uint32 id;                                         // +0x04
+    uint32 bidx;                                       // +0x08
+    checkerlib::vector_3_s009a_69d0 local_pos;                    // +0x0c
+    // Retail's prelude before allow_dupes is 0xc shorter than the dev header's
+    // matrix_3x3, so the retail record starts its flags at +0x30. This function
+    // never touches the prelude.
+    unsigned char mUnknown18[0x30 - 0x18];             // +0x18
+    bool allow_dupes;                                  // +0x30
+    bool event_info_valid;                             // +0x31
+    unsigned char mPad32[2];                           // +0x32
+    uint32 EventTypeAndFlags;                          // +0x34
+    uint32 EventSourcePosFlags;                        // +0x38
+    uint32 EventSourceRotFlags;                        // +0x3c
+    uint32 EventSourceScaleFlags;                      // +0x40
+    uint32 EventDestinationFlags;                      // +0x44
+    uint32 EventData0I;                                // +0x48
+    effect_ref source_pos_creature;                    // +0x4c
+    effect_ref source_rot_creature;                    // +0x50
+    effect_ref source_scale_creature;                  // +0x54
+    uint32 source_pos_bidx;                            // +0x58
+    uint32 source_rot_bidx;                            // +0x5c
+    uint32 source_scale_bidx;                          // +0x60
+    checkerlib::vector_3_s009a_69d0 source_pos_random_offset;     // +0x64
+    int rot_relation;                                  // +0x70
+    int scale_relation;                                // +0x74
+    effect_ref destination_creature;                   // +0x78
+    uint32 destination_bidx;                           // +0x7c
+    checkerlib::vector_3_s009a_69d0 destination_pos_random_offset;// +0x80
+    effect_ref effect;                                 // +0x8c
+    effect_ref model;                                  // +0x90
+    uint32 sound_id;                                   // +0x94
+    checkerlib::vector_3_s009a_69d0 last_sound_pos;               // +0x98
+    effect_ref unknown;                                // +0xa4
+    void (*set_unknown_posrot)();                      // +0xa8
+    void Init(IVisualEffect* effect, uint32 a, uint32 b);  // 0x009caa40
+    void Init(uint32 soundId, uint32 a, uint32 b);         // 0x009caa90
+    void RefreshWorldState();                              // 0x009c8900
+};
+}
+float* QuaternionVectorTransform(float* out, const float* quat, const float* vec);  // 0x0099c1a0
+bool EffectsSpawnThunk(void* manager, uint32 id, const float* pos, const float* mat,
+                       IVisualEffect** outEffect);                                  // 0x009fc050
+void AudioSetEvent1(IVisualEffect* event, float maxDistance);                        // 0x009fbd50
+unsigned int PlaySound(const char* name, void* creature, int soundId, const float* pos,
+                       char a, char b, float volume);                               // 0x009a5090
+using nSPCreatureAnim::creature_body_instance_data_s009a_69d0;
+using nSPCreatureAnim::creature_instance_data_s009a_69d0;
+using nSPCreatureAnim::creature_effect_s009a_69d0;
+using nSPCreatureAnim::dynamics_foot_s009a_69d0;
+// ---- items of slice s009a69d0 end
 
 // @ 0x009a47e0
 namespace nSPCreatureAnim {
@@ -913,3 +1140,81 @@ bool ComputeEventLocationState(char randomize, int evData, uint32_t flags, int p
     return true;
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009a6a00
+void PlayFootstep(void* manager, creature_instance_data_s009a_69d0* creature, creature_body_instance_data_s009a_69d0* body, float volume)
+{
+    float transformed[3];
+    float* p = QuaternionVectorTransform(transformed, &creature->mQuatW, &body->mCenter.x);
+
+    float pos[3];
+    pos[0] = p[0] + creature->mPosition.x;
+    pos[1] = p[1] + creature->mPosition.y;
+    pos[2] = p[2] + creature->mPosition.z;
+
+    const float w = creature->mQuatW;
+    const float x = creature->mQuatX;
+    const float y = creature->mQuatY;
+    const float z = creature->mQuatZ;
+
+    float mat[9];
+    mat[0] = 1.0f - (x * x + y * y) * 2.0f;
+    mat[1] = (x * w - z * y) * 2.0f;
+    mat[2] = (z * x + y * w) * 2.0f;
+    mat[3] = (z * y + x * w) * 2.0f;
+    mat[4] = 1.0f - (w * w + y * y) * 2.0f;
+    mat[5] = (x * y - z * w) * 2.0f;
+    mat[6] = (y * w - z * x) * 2.0f;
+    mat[7] = (z * w + x * y) * 2.0f;
+    mat[8] = 1.0f - (w * w + x * x) * 2.0f;
+
+    const float scale = creature->mScale;
+    const float rx = body->mpStaticData->mFootstepExtent.x * scale;
+    const float ry = body->mpStaticData->mFootstepExtent.y * scale;
+    const float rz = body->mpStaticData->mFootstepExtent.z * scale;
+    const float maxDistance = 2.0f * (float)sqrt((double)(rx * rx + ry * ry + rz * rz));
+
+    IVisualEffect* effect = 0;
+    EffectsSpawnThunk(manager, 0x2d4adb36, pos, mat, &effect);
+    if (effect != 0)
+        AudioSetEvent1(effect, maxDistance);
+
+    if (creature->mbSecondFootstep) {
+        if (effect != 0) {
+            IVisualEffect* old = effect;
+            effect = 0;
+            old->Release();
+        }
+        EffectsSpawnThunk(manager, 0xdcae75d5, pos, mat, &effect);
+        if (effect != 0)
+            AudioSetEvent1(effect, maxDistance);
+    }
+
+    PlaySound("foot_step", creature, body->mpStaticData->mFootSoundId, pos, 0, 0, volume);
+
+    if (effect != 0)
+        effect->Release();
+}
+
+// @ 0x009a6cc0
+void UpdateFootsteps(void* manager, creature_instance_data_s009a_69d0* creature)
+{
+    if (!creature->mbFootstepsEnabled || !creature->mbField270)
+        return;
+
+    nSPCreatureAnim::footstep_event_list* events = creature->mAnimData.get_events();
+    unsigned count = (unsigned)(events->mpEnd - events->mpBegin);
+    for (unsigned i = 0; i < count; ++i) {
+        dynamics_foot_s009a_69d0* foot = &events->mpBegin[i];
+        creature_body_instance_data_s009a_69d0* body = &creature->mpBodies[foot->mBodyIdx];
+        if (foot->mEdgeTrigger && foot->mFootDown &&
+            (body->mpStaticData->mFlags & 0x10) == 0 &&
+            body->mAnimWeight == 1.0f &&
+            (creature->mFootstepBasis.x * creature->mFootstepBasis.x +
+             creature->mFootstepBasis.y * creature->mFootstepBasis.y +
+             creature->mFootstepBasis.z * creature->mFootstepBasis.z > 0.1 ||
+             fabs((double)creature->mFootstepBasis.w) > 0.2)) {
+            PlayFootstep(manager, creature, body, g_zero);
+        }
+    }
+}

@@ -3,3 +3,4 @@
 00c4ccd0 624 FailCurrentPhase: complete; residual is call/stack scheduling and register allocation.  equiv WEAK (352 valid, 7.9% coverage, no mismatch).
 00c4d050 159 OnPlanetDeactivate: complete; residual is one extra stack slot plus the inner-loop register roles (the original assigns ebx=&members / ebp=j, ours the reverse) and branch layout.  equiv WEAK (240 valid, 45.8% coverage, no mismatch).
 00c4d150 737 UpdateStateMachine: complete; residual is call/stack scheduling across the large switch and register allocation.  equiv WEAK (252 valid, 8.3% coverage, no mismatch).
+00c4d590 348 DispatchMessage: complete; residual is call/stack scheduling and register allocation.  equiv WEAK (398 valid, 28.8% coverage, no mismatch).

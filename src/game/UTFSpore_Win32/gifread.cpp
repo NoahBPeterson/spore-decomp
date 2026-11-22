@@ -14,13 +14,6 @@ extern "C" char* __cdecl   strcpy(char* dst, const char* src);
 extern "C" int   __cdecl   strncmp(const char* a, const char* b, size_t n);
 
 // ---- items of slice s0084be00 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* __stdcall galloc(size_t size);                       // 0x0087d4a0
-extern "C" void  __stdcall gfree(void* p);                            // 0x0087d4c0
-extern "C" int   __stdcall gread(void* f, void* buf, unsigned n);     // 0x0087d4e0
-extern "C" int   __stdcall gseek(void* f, long off, int whence);      // 0x0087d540
-extern "C" void* __cdecl   memset(void* dst, int val, size_t n);
-extern "C" char* __cdecl   strcpy(char* dst, const char* src);
-extern "C" int   __cdecl   strncmp(const char* a, const char* b, size_t n);
 struct GifFilePrivate;
 struct GifFileType {
     int  SWidth;                 // 0x00
@@ -54,16 +47,32 @@ struct GifFilePrivate {
     unsigned char Stack[0x1000];                                    // 0x1170..0x216f
     int Prefix[0x1000];                                             // 0x2170..0x616f
 };
+struct GIFInfo {
+    int f00, f04, f08, f0c, f10, f14;    // 0x00..0x17
+};
 int  DGifSetupDecompress(GifFileType* f);                     // 0x0084bd20
+int  DGifCloseFile(GifFileType* f);                           // 0x0084bce0
+int  SkipImage(GifFileType* f);                               // 0x0084bdb0
+int  ReadExtBlock(GifFileType* f, char** out);                // 0x0084bc80
 int  DGifGetPrefixChar(GifFileType* f);                       // 0x0084bd90
 GifFileType* DGifOpenFileHandle(void* fh);                    // 0x0084c2b0
 int  DGifDecompressInput(GifFileType* f, unsigned int* out);  // 0x0084c1f0
-// LTCG view of 0x0084c1f0: the callee takes the private object in ESI (0x84c475 `mov esi,ebp`)
-// and only the out-pointer on the stack (0x84c470 `lea edx,[esp+0x18]; push edx`).
 int  DGifDecompressInputPriv(unsigned int* out);             // 0x0084c1f0
 int  DGifDecompressLine(GifFileType* f, int line, int len);   // 0x0084c400
 int  DGifGetLine(GifFileType* f, unsigned char* line, int len); // 0x0084c680
 int  LoadImage(GifFileType* f, int dest, int stride);         // 0x0084c710
+void* GIFgetinfo(void* name, int want, void* out, int stride);// 0x0084c7d0
+static int DGifGetPrefixCharLocal(const int* prefix, int code, int clear)
+{
+    int i = 0;
+    while (code > clear) {
+        if (i > 0xfff)
+            break;
+        code = prefix[code];
+        i++;
+    }
+    return code;
+}
 // ---- items of slice s0084be00 end
 
 // ---- items of slice s0084af40 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -436,21 +445,6 @@ fail:
     return 0;
 }
 
-// 0x0084bd90 DGifGetPrefixChar(Prefix, Code, ClearCode): LTCG passes Prefix in ESI, Code in
-// EAX and ClearCode in EDX, so the call cannot be spelled in C++.  The walk is pure (it only
-// reads Prefix), so reproduce it locally; callers get the same value.
-static int DGifGetPrefixCharLocal(const int* prefix, int code, int clear)
-{
-    int i = 0;
-    while (code > clear) {
-        if (i > 0xfff)
-            break;
-        code = prefix[code];
-        i++;
-    }
-    return code;
-}
-
 // @ 0x0084c400
 int DGifDecompressLine(GifFileType* f, int line, int len)
 {
@@ -625,6 +619,251 @@ int LoadImage(GifFileType* f, int dest, int stride)
         } while (local_8 < f->ImageHeight);
     }
     return 1;
+}
+
+// @ 0x0084c7d0
+void* GIFgetinfo(void* name, int want, void* out, int stride)
+{
+    int local_c = 1;
+    int local_10 = -1;
+    int local_8 = 0;
+    unsigned char local_15 = 0, local_17 = 0;
+    char local_16 = 0;
+    unsigned int local_4 = 0;
+    char* local_14 = 0;
+
+    gseek(name, 0, 0);
+    GifFileType* g = DGifOpenFileHandle(name);
+    if (!g)
+        return g;
+    g->ImageTransparent = -1;
+    g->ImageReserved34 = 0;
+    do {
+        GifFilePrivate* p = g->Private;
+        if (gread(p->fd, &local_16, 1) == 0) {
+            local_c = 0;
+        } else if (local_16 == '!') {
+            local_8 = 3;
+        } else if (local_16 == ',') {
+            local_8 = 2;
+        } else if (local_16 == ';') {
+            local_8 = 4;
+        } else {
+            local_8 = 0;
+            local_c = 0;
+        }
+
+        if (local_8 == 2) {
+            int r;
+            if (DGifGetImageDesc(g) == 0)
+                local_c = 0;
+            local_10++;
+            if (out == 0) {
+                r = SkipImage(g);
+            } else {
+                if (local_10 == 0) {
+                    int fill = g->ImageTransparent;
+                    if (fill < 0)
+                        fill = g->AspectByte;
+                    int y = 0;
+                    if (g->SHeight > 0) {
+                        void* d = out;
+                        do {
+                            memset(d, fill, g->SWidth);
+                            d = (char*)d + stride;
+                            y++;
+                        } while (y < g->SHeight);
+                    }
+                }
+                if ((local_10 < want) && (g->ImageReserved34 != 4)) {
+                    if (g->ImageReserved34 == 8 &&
+                        g->ImageTop < g->ImageTop + g->ImageHeight) {
+                        int y = g->ImageTop;
+                        do {
+                            int x = g->ImageLeft;
+                            if (x < 0) {
+                                x = 0;
+                            }
+                            if (g->SWidth < x + g->ImageWidth)
+                                x = g->SWidth - x;
+                            int fill = g->ImageTransparent;
+                            if (fill < 0)
+                                fill = g->AspectByte;
+                            memset((char*)out + x + y * stride, fill, g->ImageWidth);
+                            y++;
+                        } while (y < g->ImageTop + g->ImageHeight);
+                    }
+                    r = SkipImage(g);
+                } else {
+                    r = LoadImage(g, (int)out, stride);
+                }
+            }
+            if (r == 0)
+                goto cleanup;
+        } else if (local_8 == 3) {
+            int r = gread(g->Private->fd, &local_15, 1);
+            if (r != 0) {
+                local_4 = local_15;
+                r = ReadExtBlock(g, &local_14);
+                if (r != 0) {
+                    /* fallthrough to interpret */
+                } else {
+                    local_c = 0;
+                }
+            } else {
+                local_c = 0;
+            }
+            if (local_4 == 0xf9 && local_14) {
+                g->ImageReserved34 = local_14[1] & 0x1c;
+                g->ImageReserved30 = *(unsigned short*)(local_14 + 2);
+                if ((local_14[1] & 1) != 0)
+                    g->ImageTransparent = (unsigned char)local_14[4];
+            }
+            while (local_14 != 0) {
+                char* blk;
+                unsigned char sub;
+                if (gread(g->Private->fd, &sub, 1) == 0) {
+                    local_c = 0;
+                    break;
+                }
+                if (sub == 0) {
+                    local_14 = 0;
+                    break;
+                }
+                blk = (char*)(g->Private->Buf);
+                blk[0] = (char)sub;
+                if (gread(g->Private->fd, g->Private->Buf + 1, sub) == 0) {
+                    local_c = 0;
+                    break;
+                }
+                if (sub == 0)
+                    break;
+            }
+        }
+
+        if (local_c == 0)
+            goto cleanup;
+    } while (local_8 != 4 && (out == 0 || local_10 < want));
+
+    if (out == 0)
+        g->ImageCount = local_10 + 1;
+    return g;
+
+cleanup:
+    {
+        GifFilePrivate* p = g->Private;
+        if (g->SavedImageColorMap)
+            gfree(g->SavedImageColorMap);
+        if (g->ImageColorMap)
+            gfree(g->ImageColorMap);
+        if (p)
+            gfree(p);
+        gfree(g);
+    }
+    return 0;
+}
+
+// @ 0x0084cad0
+int __stdcall GIF_open(GIFInfo** ppInfo, int param2, int param3, int param4)
+{
+    (void)param3;
+    (void)param4;
+    GIFInfo* info = (GIFInfo*)galloc(0x18);
+    if (!info)
+        return 0;
+    info->f14 = 0;
+    info->f08 = 0;
+    info->f0c = -1;
+    info->f00 = 0x2e474946;
+    info->f04 = 0x18;
+    info->f10 = param2;
+    *ppInfo = info;
+    GifFileType* g = (GifFileType*)GIFgetinfo((void*)param2, 0, 0, 0);
+    if (g) {
+        info->f08 = g->ImageCount;
+        if (DGifCloseFile(g) != 0)
+            return info->f08;
+        return 0;
+    }
+    return 0;
+}
+
+// @ 0x0084cb50
+void* __stdcall GIF_info(GIFInfo* info, int index)
+{
+    char* ds = 0;
+    GifFileType* g = (GifFileType*)GIFgetinfo((void*)info->f10, index, 0, 0);
+    if (g) {
+        int sw = g->SWidth;
+        int sh = g->SHeight;
+        int transp = g->ImageTransparent;
+        int bpp = g->SBackGroundColor;
+        float fs = 15.0f;
+        if (g->ImageReserved30 != 0)
+            fs = 100.0f / (float)g->ImageReserved30;
+        if (bpp == 0)
+            bpp = 8;
+        int ncolors = 1 << (bpp & 0x1f);
+        if (ncolors > 0x100)
+            ncolors = 0x100;
+        if (index < info->f08) {
+            ds = (char*)galloc(0x2a70);
+            if (ds) {
+                memset(ds, 0, 0x2a70);
+                *(int*)(ds + 0x0c) = index;
+                *(int*)(ds + 0x10) = sw;
+                *(int*)(ds + 0x14) = sh;
+                *(int*)(ds + 0x00) = 0x2e474946;
+                *(int*)(ds + 0x04) = 0x2a70;
+                *(int*)(ds + 0x08) = 0x159;
+                *(int*)(ds + 0x42c) = 1;
+                *(int*)(ds + 0x430) = 100;
+                *(int*)(ds + 0x448) = 0;
+                *(int*)(ds + 0x44c) = 0;
+                *(int*)(ds + 0x450) = 0;
+                *(int*)(ds + 0x454) = 0;
+                *(int*)(ds + 0x428) = (g->ImageInterlace != 0);
+                *(int*)(ds + 0x458) = 0;
+                *(char*)(ds + 0x45c) = 0;
+                *(int*)(ds + 0x1c) = bpp;
+                *(int*)(ds + 0x24) = ncolors;
+                *(float*)(ds + 0x2a60) = fs;
+                *(int*)(ds + 0x438) = (transp >= 0);
+                *(int*)(ds + 0x43c) = 8;
+                *(int*)(ds + 0x440) = 8;
+                *(int*)(ds + 0x444) = 8;
+                *(int*)(ds + 0x18) = 8;
+                if (g->ImageColorMap == 0) {
+                    for (int i = 0; i < 0x100; i++) {
+                        char* q = ds + 0x2a + i * 4;
+                        q[0] = (char)i;
+                        q[-1] = (char)i;
+                        q[-2] = (char)i;
+                        q[1] = (i == transp) - 1;
+                    }
+                } else {
+                    int n = ncolors;
+                    unsigned char* cm = (unsigned char*)g->ImageColorMap;
+                    for (int i = 0; i < n; i++) {
+                        char* q = ds + 0x2a + i * 4;
+                        q[1] = (i == transp) - 1;
+                        q[0] = cm[i * 3 + 0];
+                        q[-1] = cm[i * 3 + 1];
+                        q[-2] = cm[i * 3 + 2];
+                    }
+                }
+            }
+        }
+        GifFilePrivate* p = g->Private;
+        if (g->SavedImageColorMap)
+            gfree(g->SavedImageColorMap);
+        if (g->ImageColorMap)
+            gfree(g->ImageColorMap);
+        if (p)
+            gfree(p);
+        gfree(g);
+    }
+    return ds;
 }
 
 // @ 0x0084cd70

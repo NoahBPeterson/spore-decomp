@@ -746,6 +746,16 @@ extern float   g_fBoundsInit;         // (0x1565198) bound-initialisation magnit
 extern float   g_fTeleportThreshold;  // (0x15651a8) squared-distance teleport threshold
 extern char vtable_SwarmDesc[];       // (0x1458750)
 extern char vtable_IEvent[];          // (0x13ef094) SP::Audio::IEventModifier
+extern void* g_1676030;
+extern void* g_1676038;
+extern void* g_167603c;
+extern void* g_1676044;
+extern int   g_1676048;
+extern int   g_167604c;
+extern void FUN_00a96bb0();
+extern void FUN_00a96b70();
+extern void FUN_00a97ec0();
+extern void FUN_00a940e0();
 extern void* g_1676018;
 extern void* g_167601c;
 extern int   g_1676028;
@@ -1118,6 +1128,7 @@ void ClearVec::Clear()
 // ---- items of slice s00a99640 end
 
 // ---- items of slice s00a9a630 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl operator_delete__(void* p);                         // 0xf47380
 extern "C" void __cdecl FUN_007cdbe0(void* out, const void* in);             // 0x7cdbe0
 extern "C" float DAT_01565424;      // angle scale constant
 extern "C" float DAT_01678ffc;      // angle divisor constant
@@ -1135,6 +1146,16 @@ struct cElem {
     float m[3];     // +0x04
     float v[3];     // +0x10
 };
+struct cElemVec {
+    cElem* m_begin;     // +0x00
+    cElem* m_end;       // +0x04
+    cElem* m_cap;       // +0x08
+
+    void Insert(cElem* pos, const cElem* v);
+    void push_back(const cElem* v);
+};
+extern "C" cElem* __cdecl FUN_00a99190(const cElem* first, const cElem* last,
+                                       cElem* dst);                          // 0xa99190
 struct cStream;
 extern "C" void __cdecl ReadInt32(cStream* s, void* out, int n, int a4);     // 0x93a780
 extern "C" void __cdecl FUN_0093a800(cStream* s, void* out, int n, int a4);  // 0x93a800
@@ -3022,6 +3043,17 @@ LAB_ae9:
 	}
 }
 
+// @ 0x00a97f10
+void FUN_00a97f10()
+{
+	g_1676030 = (void*)(void (*)())FUN_00a96bb0;
+	g_1676038 = (void*)(void (*)())FUN_00a96b70;
+	g_167603c = (void*)(void (*)())FUN_00a97ec0;
+	g_1676044 = (void*)(void (*)())FUN_00a940e0;
+	g_1676048 = 1;
+	g_167604c = 1;
+}
+
 // @ 0x00a97f50
 void* EffectObjA::Destroy(char freeSelf)
 {
@@ -3422,6 +3454,56 @@ cEffectParams::cEffectParams()
     v9c.push_back(0.0f);
     vb0.push_back(0.0f);
     vc4.push_back(0.0f);
+}
+
+// @ 0x00a9a630
+void cElemVec::Insert(cElem* pos, const cElem* v)
+{
+    cElem* end = m_end;
+
+    if (end != m_cap) {
+        if (pos >= (cElem*)this && pos < end)
+            pos = (cElem*)((char*)pos + 0x1c);
+
+        if (end != 0)
+            *end = end[-1];
+
+        cElem* dst = end;
+        cElem* src = (cElem*)((char*)end - 0x1c);
+        while (src != pos) {
+            src = (cElem*)((char*)src - 0x1c);
+            dst = (cElem*)((char*)dst - 0x1c);
+            *dst = *src;
+        }
+        *pos = *v;
+        m_end = (cElem*)((char*)m_end + 0x1c);
+        return;
+    }
+
+    int n = (int)((end - m_begin)) / 0x1c;
+    cElem* buf;
+    if (n == 0) {
+        n = 1;
+    }
+    else {
+        n = n * 2;
+        if (n == 0) {
+            buf = 0;
+            goto have;
+        }
+    }
+    buf = (cElem*)EAAllocate((unsigned)(n * 0x1c), "EASTL", 0xd1, 0, 0,
+                             (int)"c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h");
+have:
+    cElem* p = FUN_00a99190(m_begin, pos, buf);
+    if (p != 0)
+        *p = *v;
+    cElem* ne = FUN_00a99190(pos, m_end, (cElem*)((char*)p + 0x1c));
+    if (m_begin != 0 && *(int*)((char*)m_begin - 4) != 0)
+        operator_delete__((char*)m_begin - 4);
+    m_end = ne;
+    m_begin = buf;
+    m_cap = (cElem*)((char*)buf + n * 0x1c);
 }
 
 // @ 0x00a9a930

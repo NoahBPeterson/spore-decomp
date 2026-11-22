@@ -1,6 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPAudio/SPAudioEmitterSndPlayer.cpp  ?ComputeGainAttenuation@cEmitterSndPlayer@Audio@SP@@QAEOMMMM@Z  00a38e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterSndPlayer.cpp  ?CreateVoice@cEmitterSndPlayer@Audio@SP@@QAE_NXZ  00a38ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterSndPlayer.cpp  ?Reset@cEmitterSndPlayer@Audio@SP@@QAEXXZ  00a38ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterSndPlayer.cpp  ?SetCommandComplete@cEmitterSndPlayer@Audio@SP@@QAEXM@Z  00a38ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterSndPlayer.cpp  ?GetProperty@cEmitterSndPlayer@Audio@SP@@QAE_NIPAM@Z  00a38fe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/SPAudioEmitterSndPlayer.cpp  ?ComputeGainAttenuation@cEmitterSndPlayer@Audio@SP@@QAEOMMMM@Z  00a38e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

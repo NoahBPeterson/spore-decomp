@@ -30,12 +30,35 @@ extern "C" void* __cdecl Fn00ff0420(void* p);                              // 0x
 #pragma intrinsic(_InterlockedIncrement, _InterlockedExchangeAdd)
 
 // ---- items of slice s0094fb80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl SSL_get1_session(void* ssl);                      // 0x01181620
+extern "C" void  __cdecl SSL_SESSION_free(void* s);                        // 0x01181750
+extern "C" void  __cdecl Fn01181810(void* ssl, void* session);             // 0x01181810 SSL_set_session
 #define B(p)         ((char*)(p))
 #define I8(p,o)      (*(char*)((char*)(p)+(o)))
 #define U16(p,o)     (*(unsigned short*)((char*)(p)+(o)))
 #define I32(p,o)     (*(int*)((char*)(p)+(o)))
 #define PTR(p,o)     (*(void**)((char*)(p)+(o)))
 void  __cdecl operator_delete__(void*) throw();                                     // 0x00F47380
+struct ICoreAllocator {
+    virtual void v00();
+    virtual void* AllocA(unsigned size, const char* name, int flags, unsigned align, int off); // +4
+    virtual void* AllocB(unsigned size, const char* name, int flags);                           // +8
+    virtual void  Free(void* p, int flags);                                                     // +0xc
+};
+struct Ext_s0094_fb80 {
+    void* ctor(int a, int b);               // 0x009222A0 Mutex::Mutex
+    int   Lock(const void* nm);             // 0x009221B0 Mutex::Lock
+    void  fixedvec_resize(unsigned n);      // 0x0089CB60 fixed_vector::resize
+    void* faf0(void* out, void* value, void* b);   // 0x0094FAF0 map::insert(pair<iterator,bool>* out, const value_type* v, bool)
+    int*  resize(unsigned n);               // 0x00837310 RawFixed::Resize
+    void  d470(int a);                      // 0x0094D470
+    int   e3a0(int a, int b, int c);        // 0x0094E3A0
+    int   e3f0(int a, int b, int c);        // 0x0094E3F0
+    int   e650(int a, int b, int c);        // 0x0094E650
+    int   e4b0(int a, int b);               // 0x0094E4B0
+    void* e340(unsigned iface);             // 0x0094E340 StreamSocket::AsInterface
+    void  nuke(void* node);                 // 0x00D3B370 DoNukeSubtree
+};
 struct Ext {
     void* ctor(int a, int b);               // 0x009222A0 Mutex::Mutex
     int   Lock(const void* nm);             // 0x009221B0 Mutex::Lock
@@ -58,31 +81,40 @@ int   __cdecl NetSSLVerifyConnection(void* ssl, const char* name); // 0x0094EC00
 int   __fastcall RefCount_Release_M8(int* p);                  // 0x0094EA90
 int   __cdecl Vsnprintf8(char* buf, unsigned size, const char* fmt, void* ap); // 0x00938400
 int   __cdecl FStr_sprintf(char* dst, const char* fmt, const char* a, unsigned b); // 0x00950850
-extern "C" void* __cdecl BIO_new(void* method);                            // 0x01177470
-extern "C" void  __cdecl BIO_clear_flags(void* bio, int flags);            // 0x01176F90
-extern "C" void* __cdecl Fn0117c560(void* a);                              // 0x0117C560
-extern "C" int   __cdecl Fn0117c940(void* ssl, int cmd, long larg, void* parg);  // 0x0117C940
-extern "C" int   __cdecl SSL_accept(void* ssl);                            // 0x0117CDF0
-extern "C" int   __cdecl SSL_connect(void* ssl);                           // 0x0117CE30
-extern "C" void  __cdecl SSL_free(void* ssl);                              // 0x0117C790
-extern "C" int   __cdecl SSL_set_bio(void* ssl, void* rbio, void* wbio);   // 0x0117B350
-extern "C" int   __cdecl Fn0117c8f0(void* ssl);                            // 0x0117C8F0
-extern "C" void* __cdecl Fn0117c440(void* ctx);                            // 0x0117C440
-extern "C" int   __cdecl Fn0117b410(void* ssl, void* buf, int n);          // 0x0117B410
-extern "C" int   __cdecl Fn0117b4a0(void* ssl, void* buf, int n);          // 0x0117B4A0
-extern "C" int   __cdecl Fn0117ccd0(void* ssl, int n);                     // 0x0117CCD0
-extern "C" int   __cdecl EC_GROUP_get_curve_name(void* g);                 // 0x011B1E50
-extern "C" void* __cdecl Fn00ff0420(void* p);                              // 0x00FF0420
 struct ISub {
-    virtual void a00(); virtual void a04(); virtual void a08(); virtual void a0c();
-    virtual void a10(); virtual void a14(); virtual void a18(); virtual void a1c();
-    virtual void a20(); virtual void* a24();
+virtual void a00();
+virtual void a04();
+virtual void a08();
+virtual void a0c();
+virtual void a10();
+virtual void a14();
+virtual void a18();
+virtual void a1c();
+virtual void a20();
+virtual void* a24();
 };
 struct Obj8 {
-    virtual void b00(); virtual void b04(); virtual void b08(); virtual void b0c();
-    virtual void b10(); virtual void b14(); virtual void b18(); virtual void b1c();
-    virtual void b20(); virtual void b24(); virtual void b28(); virtual void b2c();
+virtual void b00();
+virtual void b04();
+virtual void b08();
+virtual void b0c();
+virtual void b10();
+virtual void b14();
+virtual void b18();
+virtual void b1c();
+virtual void b20();
+virtual void b24();
+virtual void b28();
+virtual void b2c();
     virtual void b30(int a);
+};
+struct SSLManager {
+    char _b[0x190];
+    SSLManager* Ctor(ICoreAllocator* alloc);                  // 0x0094FC40
+    char RestoreClientSession(void* ssl, unsigned char* name); // 0x0094FD20
+    void* DeletingDtor(char flags);                           // 0x0094FE70
+    unsigned GetSession(const char* name);                    // 0x0094F910
+    void* FindAndRelease(const char* name, char remove);      // 0x0094F870
 };
 struct FixedStr {
     char* begin;   // +0
@@ -168,7 +200,7 @@ void* Sock::QueryInterface(unsigned iface)
             return B(self) + 0x80;
         return 0;
     }
-    return ((Ext*)self)->e340(iface);
+    return ((Ext_s0094_fb80*)self)->e340(iface);
 }
 
 // @ 0x00950280
@@ -237,7 +269,7 @@ void __fastcall Fn00950350(void* self)
 unsigned Sock::Accept(int a, int b, int c)
 {
     void* self = this;
-    unsigned r = (unsigned)((Ext*)self)->e650(a, b, c);
+    unsigned r = (unsigned)((Ext_s0094_fb80*)self)->e650(a, b, c);
     if ((char)r != 0) {
         int acc = SSL_accept(PTR(self, 0x10));
         if (acc > 0) {
@@ -249,7 +281,7 @@ unsigned Sock::Accept(int a, int b, int c)
         }
         Fn0117c8f0(PTR(self, 0x10));
         I32(self, 4) = 4;
-        ((Ext*)(B(self) - 0x78))->d470(2);
+        ((Ext_s0094_fb80*)(B(self) - 0x78))->d470(2);
         I32(self, 4) = 0;
         r = (unsigned)Fn0094d4b0(B(self) - 0x78);
     }
@@ -302,7 +334,7 @@ int __cdecl Fn00950540(void* bio, int b, int c)
     int r = 0;
     if (b != 0) {
         void* t = (void*)(B(I32(bio, 0x20)) + 0x80);
-        r = ((Ext*)t)->e3a0(b, c, 0);
+        r = ((Ext_s0094_fb80*)t)->e3a0(b, c, 0);
         BIO_clear_flags(bio, 0xf);
     }
     return r;
@@ -314,7 +346,7 @@ int __cdecl Fn00950580(void* bio, int b, int c)
     int r = 0;
     if (b != 0) {
         void* t = (void*)(B(I32(bio, 0x20)) + 0x80);
-        r = ((Ext*)t)->e3f0(b, c, 0);
+        r = ((Ext_s0094_fb80*)t)->e3f0(b, c, 0);
         BIO_clear_flags(bio, 0xf);
     }
     return r;
@@ -364,13 +396,13 @@ int* Sock::Sprintf(const char* fmt, void* ap)
             do {
                 if ((unsigned)cap >= 0xf4240)
                     break;
-                ((Ext*)self)->resize((unsigned)cap);
+                ((Ext_s0094_fb80*)self)->resize((unsigned)cap);
                 n = Vsnprintf8((char*)(self[0] + used), (unsigned)(cap - used) + 1, fmt, ap);
                 cap *= 2;
             } while (n < 0);
         }
     } else {
-        ((Ext*)self)->resize((unsigned)(n + used));
+        ((Ext_s0094_fb80*)self)->resize((unsigned)(n + used));
         n = Vsnprintf8((char*)(self[0] + used), (unsigned)(n + 1), fmt, ap);
     }
     if (n >= 0)
@@ -431,6 +463,49 @@ char Sock::GetSessionName(void* out)
     return 0;
 }
 
+// @ 0x00950970
+char __fastcall StreamSSLSocket_Connect(void* self)
+{
+    void* ctx = PTR(self, 0x90);
+    if (ctx == 0)
+        return 0;
+    if (I32(self, 0x9c) == 0)
+        return 0;
+    void* sess = SSL_get1_session(ctx);
+    if (sess != 0) {
+        char buf[0x20];
+        buf[0] = 0;
+        ((Sock*)self)->GetSessionName(buf);
+        ((SSLManager*)PTR(self, 0x9c))->RestoreClientSession(sess, (unsigned char*)buf);
+        SSL_SESSION_free(sess);
+        int len = (int)(B(buf + 0x20) - buf);
+        if (len > 1 && buf != 0 && buf != buf + 0x20)
+            operator_delete__(buf);
+    }
+    return 0;
+}
+
+// @ 0x00950a20
+char __fastcall StreamSSLSocket_SaveClientSession(void* self)
+{
+    if (PTR(self, 0x90) == 0)
+        return 0;
+    if (I32(self, 0x9c) == 0)
+        return 0;
+    char buf[0x20];
+    buf[0] = 0;
+    ((Sock*)self)->GetSessionName(buf);
+    void* sess = ((SSLManager*)PTR(self, 0x9c))->FindAndRelease(buf, 1);
+    if (sess != 0) {
+        Fn01181810(PTR(self, 0x90), sess);
+        SSL_SESSION_free(sess);
+    }
+    int len = (int)(B(buf + 0x20) - buf);
+    if (len > 1 && buf != 0 && buf != buf + 0x20)
+        operator_delete__(buf);
+    return 0;
+}
+
 // @ 0x00950ad0
 void Sock::SetStr(char* str)
 {
@@ -451,7 +526,7 @@ char Sock::DoPostConnectionCheck(char* out, int a)
 {
     void* self = this;
     char r = 0;
-    if (!((Ext*)self)->e4b0((int)out, a))
+    if (!((Ext_s0094_fb80*)self)->e4b0((int)out, a))
         return 0;
     char* base = B(self) - 0x80;
     StreamSSLSocket_SaveClientSession(base);
@@ -466,7 +541,7 @@ char Sock::DoPostConnectionCheck(char* out, int a)
     Fn0117c8f0(PTR(self, 0x10));
     char* b2 = B(self) - 0x78;
     I32(b2, 4) = 4;
-    ((Ext*)b2)->d470(2);
+    ((Ext_s0094_fb80*)b2)->d470(2);
     I32(b2, 4) = 0;
     Fn0094d4b0(b2);
     *out = 0;

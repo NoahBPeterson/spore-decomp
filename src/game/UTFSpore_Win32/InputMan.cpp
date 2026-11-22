@@ -20,13 +20,6 @@ extern "C" __declspec(dllimport) int __stdcall GetSystemMetrics(int nIndex);
 #include <intrin.h>
 
 // ---- items of slice s008d2590 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) unsigned long __stdcall GetTickCount(void);
-extern "C" __declspec(dllimport) short __stdcall GetAsyncKeyState(int vKey);
-extern "C" __declspec(dllimport) short __stdcall GetKeyState(int nVirtKey);
-extern "C" __declspec(dllimport) int __stdcall GetKeyboardState(unsigned char* lpKeyState);
-extern "C" __declspec(dllimport) int __stdcall GetCursorPos(void* lpPoint);
-extern "C" __declspec(dllimport) int __stdcall SetCursorPos(int x, int y);
-extern "C" __declspec(dllimport) int __stdcall GetSystemMetrics(int nIndex);
 struct POINT_ { int x, y; };
 struct DeviceInfo {
     int type;
@@ -440,6 +433,163 @@ struct WM {
 };
 // ---- items of slice s00958a70 end
 
+// ---- items of slice s008d1b30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" wchar_t* StrIStrW(wchar_t* hay, wchar_t* needle);
+extern "C" void* MemsetT(void*, int, uint32_t);                   // 0x011e073e
+struct IDirectInput8W__s008d_1b30 {
+    virtual long __stdcall QueryInterface(void*, void**);
+    virtual long __stdcall AddRef();
+    virtual unsigned long __stdcall Release();                                            // +0x08
+    virtual long __stdcall CreateDevice(const void* guid, void** dev, void* outer);        // +0x0c
+    virtual long __stdcall s4();
+    virtual long __stdcall EnumDevices(unsigned type, void* cb, void* ctx, unsigned flags); // +0x14
+    virtual long __stdcall s6();
+    virtual long __stdcall s7();
+    virtual long __stdcall s8();
+    virtual long __stdcall s9();
+    virtual long __stdcall s10();
+    virtual long __stdcall s11();
+    virtual long __stdcall s12();
+    virtual long __stdcall s13();
+    virtual long __stdcall s14();
+    virtual long __stdcall s15();
+};
+struct IDirectInputDevice8W__s008d_1b30 {
+    virtual long __stdcall QueryInterface(void*, void**);
+    virtual unsigned long __stdcall AddRef();
+    virtual unsigned long __stdcall Release();
+    virtual long __stdcall GetCapabilities(void* caps);                   // +0x0c
+    virtual long __stdcall s4();
+    virtual long __stdcall s5();
+    virtual long __stdcall s6();
+    virtual long __stdcall Acquire();                                     // +0x1c
+    virtual long __stdcall Unacquire();
+    virtual long __stdcall GetDeviceState(unsigned long cb, void* data);  // +0x24
+    virtual long __stdcall s10();
+    virtual long __stdcall s11();
+    virtual long __stdcall s12();
+    virtual long __stdcall s13();
+    virtual long __stdcall SetDataFormat(const void* fmt);                // +0x38
+    virtual long __stdcall s15();
+    virtual long __stdcall s16();
+    virtual long __stdcall s17();
+    virtual long __stdcall SetProperty(const void* guid, const void* hdr); // +0x2c
+    virtual long __stdcall s19();
+    virtual long __stdcall s20();
+    virtual long __stdcall s21();
+    virtual long __stdcall s22();
+    virtual long __stdcall s23();
+    virtual long __stdcall s24();
+    virtual long __stdcall Poll();                                        // +0x64
+};
+namespace EA {
+namespace Input {
+class InputMan_s008d_1b30;
+}
+}
+namespace EA {
+namespace Input {
+class Device_s008d_1b30 { public:
+    virtual ~Device_s008d_1b30() {}
+    virtual bool GetDeviceState(unsigned long cb, void* data) { return false; }
+    virtual void Unacquire() {}
+    virtual void Acquire() {}
+    virtual bool Poll() { return false; }
+};
+}
+}
+namespace EA {
+namespace Input {
+class Controller_s008d_1b30 : public Device_s008d_1b30 { public:
+    InputMan_s008d_1b30* mpInputMan;               // +0x04
+    unsigned mnIndex;                   // +0x08
+    unsigned short mRepeatCount[24];    // +0x0c
+    float mState[24];                   // +0x3c
+    bool mbAvailable;                   // +0x9c
+    unsigned mnLastEventTime;           // +0xa0
+    bool mbXInputDevice;                // +0xa4
+    unsigned mnXInputIndex;             // +0xa8
+    IDirectInputDevice8W__s008d_1b30* mpDIController; // +0xac
+    int mAxisMapping[4];                // +0xb0
+
+    void GetDeviceInfo(DeviceInfo* info);  // 0x008d2b50 (EA::Input::Controller::GetDeviceInfo)
+    float GetControlValue(unsigned id, bool bBinary);  // 0x008d2b80 (EA::Input::Controller::GetControlValue)
+    bool GetControlButton(unsigned id, bool bPressed);  // 0x008d2c20 (EA::Input::Controller::GetControlButton)
+    bool GetControlStates(float* out, bool bBinary);  // 0x008d2c60 (EA::Input::Controller::GetControlStates)
+};
+}
+}
+namespace EA {
+namespace Input {
+class Keyboard_s008d_1b30 : public Device_s008d_1b30 { public:
+    InputMan_s008d_1b30* mpInputMan;               // +0x04
+    unsigned mnIndex;                   // +0x08
+    bool mbAvailable;                   // +0x0c
+};
+}
+}
+namespace EA {
+namespace Input {
+class Mouse_s008d_1b30 : public Device_s008d_1b30 { public:
+    InputMan_s008d_1b30* mpInputMan;               // +0x04
+    unsigned mnIndex;                   // +0x08
+    bool mbAvailable;                   // +0x0c
+    int mXMin, mYMin, mXMax, mYMax;     // +0x10
+};
+}
+}
+namespace EA {
+namespace Input {
+class InputMan_s008d_1b30 { public:
+    virtual ~InputMan_s008d_1b30();                                                  // +0x00
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void OnControllerAvailability(Controller_s008d_1b30* c, bool bAvailable); // +0x20
+
+    void* mpDeviceChangeCallback;          // +0x04
+    void* mpDeviceChangeCallbackContext;   // +0x08
+    void* mpPollCompletionCallback;        // +0x0c
+    void* mpPollCompletionCallbackContext; // +0x10
+    void* mpEventCallback;                 // +0x14
+    void* mpEventCallbackContext;          // +0x18
+    unsigned mnEventCallbackDeviceTypeMask;// +0x1c
+    bool mbInitialized;                    // +0x20
+    float mfNoiseThreshold;                // +0x24
+    float mfBinaryThreshold;               // +0x28
+    float mfAutomaticPollingRateMS;        // +0x2c
+    int mnLogLevel;                        // +0x30
+    Controller_s008d_1b30 mController[4];             // +0x34
+    Keyboard_s008d_1b30 mKeyboard;                    // +0x334
+    Mouse_s008d_1b30 mMouse;                          // +0x344
+    IDirectInput8W__s008d_1b30* mpDI;                 // +0x364
+    unsigned mnDIEnumCount;                // +0x368
+    IDirectInputDevice8W__s008d_1b30* mpDIEnumControllers[4]; // +0x36c
+
+    InputMan_s008d_1b30();
+    void GetControllerDeviceInfo(unsigned idx, DeviceInfo* info);          // 0x8d2330
+    bool UpdateControl(Controller_s008d_1b30* c, int idx, float v, char bNormalized, unsigned dt); // 0x8d24e0
+    void UpdateController(unsigned idx);  // 0x008d2590 (EA::Input::InputMan::UpdateController)
+    void PollAll();  // 0x008d31b0 (EA::Input::InputMan::PollAll)
+    bool Init();                                                           // 0x8d1df0
+    bool Shutdown();                                                       // 0x8d20c0
+    void SetConfig(int id, float v);                                       // 0x8d2110
+    unsigned EnumDevices(void* out, unsigned count);                       // 0x8d21a0
+    void* GetDeviceByType(int type, unsigned idx);                         // 0x8d2250
+    void* SetDeviceChangeCallback(void* cb, int unused, void* ctx);        // 0x8d2290
+    void FireDeviceChangeCallback(int a, int b);                           // 0x8d22b0
+    void* SetPollCompletionCallback(void* cb, int unused, void* ctx);      // 0x8d22d0
+    void* SetEventCallback(unsigned mask, void* cb, void* ctx);            // 0x8d22f0
+    void FireEventCallback(void* p);                                       // 0x8d2310
+};
+}
+}
+// ---- items of slice s008d1b30 end
+
 // @ 0x008d1cf0
 bool ApplyThresholds(float v, float noise, float bin, float* out, unsigned short* count, unsigned dt)
 {
@@ -464,6 +614,68 @@ bool ApplyThresholds(float v, float noise, float bin, float* out, unsigned short
         found = true;
     }
     return found;
+}
+
+// @ 0x008d2330
+void EA::Input::InputMan_s008d_1b30::GetControllerDeviceInfo(unsigned idx, DeviceInfo* info)
+{
+    info->type = 1;
+    info->unused = 6;
+    info->index = idx;
+    wcscpy(info->name, L"Controller");
+    EA::Input::Controller_s008d_1b30* c = &mController[idx];
+    if (c->mbXInputDevice) {
+        wcscpy(info->name, L"XInput Controller");
+        info->unused = 3;
+        return;
+    }
+    if (!c->mpDIController)
+        return;
+
+    unsigned char caps[0x448];
+    MemsetT(caps, 0, 0x448);
+    *(unsigned*)(caps + 4) = 0x44c;
+    if (c->mpDIController->GetCapabilities(caps) < 0)
+        return;
+    wcsncpy(info->name, *(wchar_t**)(caps + 0x40), 0x40);
+    info->name[0x40 - 1] = 0;
+    if (StrIStrW(info->name, L"xbox") && StrIStrW(info->name, L"360")) {
+        wcscpy(info->name, L"XInput Controller");
+        info->unused = 3;
+        return;
+    }
+    unsigned char fmt[0x23c];
+    MemsetT(fmt, 0, 0x23c);
+    *(unsigned*)(fmt + 4) = 0x240;
+    if (c->mpDIController->SetDataFormat(fmt) < 0 ||
+        c->mpDIController->SetProperty((void*)0x0, (void*)0x10) < 0) {
+        if (c->mpDIController->SetProperty((void*)0x0, (void*)0x8) < 0 ||
+            c->mpDIController->SetProperty((void*)0x0, (void*)0x14) < 0)
+            return;
+    }
+    info->unused = 1;
+}
+
+// @ 0x008d24e0
+bool EA::Input::InputMan_s008d_1b30::UpdateControl(EA::Input::Controller_s008d_1b30* c, int idx, float v, char bNormalized, unsigned dt)
+{
+    if (!bNormalized)
+        v = v * 3.0518e-05f - 1.0f;
+    float av = fabsf(v);
+    if (av < mfNoiseThreshold)
+        v = 0.0f;
+    c->mState[idx] = v;
+    if (mfBinaryThreshold > av) {
+        unsigned short cnt = c->mRepeatCount[idx];
+        if (cnt != 0)
+            cnt = (cnt == 0xffff) ? 0 : 0xffff;
+        c->mRepeatCount[idx] = cnt;
+        return false;
+    }    if (dt > 200 && c->mRepeatCount[idx] < 0xfffd) {
+        c->mRepeatCount[idx] = c->mRepeatCount[idx] + 1;
+        return true;
+    }
+    return false;
 }
 
 // @ 0x008d2590
@@ -754,6 +966,21 @@ bool EA::Input::Mouse::GetButtons(unsigned char* out)
     return true;
 }
 
+// @ 0x008d3130
+EA::Input::InputMan::~InputMan()
+{
+    if (mbInitialized) {
+        mbInitialized = false;
+        for (int i = 0; i < 4; ++i)
+            mController[i].mpDIController = 0;
+        mnDIEnumCount = 0;
+        if (mpDI) {
+            mpDI->Release();
+            mpDI = 0;
+        }
+    }
+}
+
 // @ 0x008d31b0
 void EA::Input::InputMan::PollAll()
 {
@@ -761,6 +988,21 @@ void EA::Input::InputMan::PollAll()
         UpdateController(i);
     if (mpPollCompletionCallback)
         mpPollCompletionCallback(this, mpPollCompletionCallbackContext);
+}
+
+// @ 0x008d3200
+bool IsKeyDown(unsigned vk, unsigned modifiers)
+{
+    if (vk - 1000 <= 4)
+        return IsMouseButtonDown(vk);
+    switch (vk - 1) {
+    case 0: case 1: case 3: case 4: case 5:
+        break;
+    default:
+        if (modifiers == 0x3ff || (modifiers & 0x17) == GetModifierState())
+            return ((unsigned)GetAsyncKeyState(vk) >> 15) & 1;
+    }
+    return false;
 }
 
 // @ 0x008d3270
@@ -787,6 +1029,29 @@ bool EA::Input::Mouse::GetPosition(int* x, int* y)
 bool EA::Input::Mouse::IsButtonDown(unsigned code)
 {
     return IsMouseButtonDown(code);
+}
+
+// @ 0x008d32f0
+EA::Input::InputMan::InputMan()
+: mpDeviceChangeCallback(0)
+    , mpDeviceChangeCallbackContext(0)
+    , mpPollCompletionCallback(0)
+    , mpPollCompletionCallbackContext(0)
+    , mpEventCallback(0)
+    , mpEventCallbackContext(0)
+    , mnEventCallbackDeviceTypeMask(0)
+    , mbInitialized(false)
+    , mfNoiseThreshold(0.02f)
+    , mfBinaryThreshold(0.5f)
+    , mfAutomaticPollingRateMS(0.0f)
+    , mnLogLevel(0)
+    , mpDI(0)
+    , mnDIEnumCount(0)
+{
+    mpDIEnumControllers[0] = 0;
+    mpDIEnumControllers[1] = 0;
+    mpDIEnumControllers[2] = 0;
+    mpDIEnumControllers[3] = 0;
 }
 
 // @ 0x008d3450

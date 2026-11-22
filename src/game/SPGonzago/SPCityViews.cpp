@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCityViews.cpp -- migrated from slice(s) s00e87cf0, s00e8a510, s00e899b0, s00e88c30, s00e86d40 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCityViews.cpp -- migrated from slice(s) s00e8b7a0, s00e897a0, s00e893a0, s00e87cf0, s00e8a510, s00e899b0, s00e88c30, s00e86d40 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCityViews.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1264,6 +1264,342 @@ cCitySoundLoopView_s00e8_7cf0::cCitySoundLoopView_s00e8_7cf0()
 }
 // ---- items of slice s00e87cf0 end
 
+// ---- items of slice s00e893a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vec3_00e893a0 {
+    float x, y, z;
+};
+struct Mat33_00e893a0 {
+    float m[9];
+};
+struct cEffectPlacement_00e893a0 {
+    u16 mFlags;                        // +0x00
+    u16 mRevision;                     // +0x02
+    Vec3_00e893a0 mPosition;           // +0x04
+    float mScale;                      // +0x10
+    Mat33_00e893a0 mOrientation;       // +0x14
+    cEffectPlacement_00e893a0();       // 0x00434040
+};
+struct cUFOSimulator_00e893a0 {
+    void* GetPlayerShip();             // 0x00ffc320
+};
+void* GetUFOSimulator();                                        // 0x00ffbe50
+Mat33_00e893a0* QuatToMatrix(Mat33_00e893a0* out, const float* quat);  // 0x0059c190
+struct cEffectView_00e893a0 {
+    char  pad00[0x0c];
+    void* mpObject;                    // +0x0c
+    char  pad10[0x74];
+    void* mpEffect;                    // +0x84  refcounted effect
+    void Update();
+};
+// ---- items of slice s00e893a0 end
+
+// ---- items of slice s00e897a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Float3_s00e8_97a0 {
+    float x, y, z;
+};
+extern Float3_s00e8_97a0 g_16c45d8;              // 0x016c45d8
+bool __cdecl Vector3Equal(const Float3_s00e8_97a0* a, const Float3_s00e8_97a0* b);     // 0x004232c0
+bool __cdecl Vector3_NotEqual(const Float3_s00e8_97a0* a, const Float3_s00e8_97a0* b);  // 0x0041dd30
+u32  __cdecl GetUniverseContext();                                // 0x01021080
+#define PAD_VIRT_s00e8_97a0(n) virtual void pad##n()
+struct IObjectBounds_s00e8_97a0 {
+PAD_VIRT_s00e8_97a0(0);
+PAD_VIRT_s00e8_97a0(1);
+PAD_VIRT_s00e8_97a0(2);
+PAD_VIRT_s00e8_97a0(3);
+PAD_VIRT_s00e8_97a0(4);
+PAD_VIRT_s00e8_97a0(5);
+PAD_VIRT_s00e8_97a0(6);
+PAD_VIRT_s00e8_97a0(7);
+PAD_VIRT_s00e8_97a0(8);
+PAD_VIRT_s00e8_97a0(9);
+PAD_VIRT_s00e8_97a0(10);
+    virtual const Float3_s00e8_97a0* GetPosition();          // +0x2c
+PAD_VIRT_s00e8_97a0(12);
+PAD_VIRT_s00e8_97a0(13);
+PAD_VIRT_s00e8_97a0(14);
+PAD_VIRT_s00e8_97a0(15);
+PAD_VIRT_s00e8_97a0(16);
+PAD_VIRT_s00e8_97a0(17);
+PAD_VIRT_s00e8_97a0(18);
+PAD_VIRT_s00e8_97a0(19);
+PAD_VIRT_s00e8_97a0(20);
+PAD_VIRT_s00e8_97a0(21);
+PAD_VIRT_s00e8_97a0(22);
+PAD_VIRT_s00e8_97a0(23);
+PAD_VIRT_s00e8_97a0(24);
+PAD_VIRT_s00e8_97a0(25);
+PAD_VIRT_s00e8_97a0(26);
+PAD_VIRT_s00e8_97a0(27);
+    virtual float GetRadius();                    // +0x70
+};
+struct cTerritoryObject_s00e8_97a0 {
+PAD_VIRT_s00e8_97a0(0);
+PAD_VIRT_s00e8_97a0(1);
+PAD_VIRT_s00e8_97a0(2);
+PAD_VIRT_s00e8_97a0(3);
+PAD_VIRT_s00e8_97a0(4);
+PAD_VIRT_s00e8_97a0(5);
+PAD_VIRT_s00e8_97a0(6);
+PAD_VIRT_s00e8_97a0(7);
+PAD_VIRT_s00e8_97a0(8);
+PAD_VIRT_s00e8_97a0(9);
+PAD_VIRT_s00e8_97a0(10);
+PAD_VIRT_s00e8_97a0(11);
+PAD_VIRT_s00e8_97a0(12);
+PAD_VIRT_s00e8_97a0(13);
+PAD_VIRT_s00e8_97a0(14);
+PAD_VIRT_s00e8_97a0(15);
+PAD_VIRT_s00e8_97a0(16);
+PAD_VIRT_s00e8_97a0(17);
+PAD_VIRT_s00e8_97a0(18);
+PAD_VIRT_s00e8_97a0(19);
+PAD_VIRT_s00e8_97a0(20);
+PAD_VIRT_s00e8_97a0(21);
+    virtual bool IsAlternate();                   // +0x58
+    virtual void SetSelected(bool b);             // +0x5c
+    u8 pad04[0x34 - 4];
+    IObjectBounds_s00e8_97a0 mBounds;                        // +0x34
+
+    bool IsCombatant();                           // 0x00bebb20
+};
+struct cCityObject {
+PAD_VIRT_s00e8_97a0(0);
+PAD_VIRT_s00e8_97a0(1);
+PAD_VIRT_s00e8_97a0(2);
+PAD_VIRT_s00e8_97a0(3);
+PAD_VIRT_s00e8_97a0(4);
+PAD_VIRT_s00e8_97a0(5);
+PAD_VIRT_s00e8_97a0(6);
+PAD_VIRT_s00e8_97a0(7);
+PAD_VIRT_s00e8_97a0(8);
+PAD_VIRT_s00e8_97a0(9);
+PAD_VIRT_s00e8_97a0(10);
+    virtual const Float3_s00e8_97a0* GetPosition();          // +0x2c
+PAD_VIRT_s00e8_97a0(12);
+PAD_VIRT_s00e8_97a0(13);
+PAD_VIRT_s00e8_97a0(14);
+PAD_VIRT_s00e8_97a0(15);
+PAD_VIRT_s00e8_97a0(16);
+PAD_VIRT_s00e8_97a0(17);
+PAD_VIRT_s00e8_97a0(18);
+PAD_VIRT_s00e8_97a0(19);
+    virtual bool IsActive();                      // +0x50
+PAD_VIRT_s00e8_97a0(21);
+PAD_VIRT_s00e8_97a0(22);
+    virtual void SetSelected(bool b);             // +0x5c
+    u8 pad04[0x72 - 4];
+    bool mbFlag72;                                // +0x72
+};
+struct cSpatialObjectView_s00e8_97a0 {
+PAD_VIRT_s00e8_97a0(0);
+PAD_VIRT_s00e8_97a0(1);
+PAD_VIRT_s00e8_97a0(2);
+PAD_VIRT_s00e8_97a0(3);
+PAD_VIRT_s00e8_97a0(4);
+PAD_VIRT_s00e8_97a0(5);
+PAD_VIRT_s00e8_97a0(6);
+PAD_VIRT_s00e8_97a0(7);
+PAD_VIRT_s00e8_97a0(8);
+PAD_VIRT_s00e8_97a0(9);
+PAD_VIRT_s00e8_97a0(10);
+PAD_VIRT_s00e8_97a0(11);
+PAD_VIRT_s00e8_97a0(12);
+PAD_VIRT_s00e8_97a0(13);
+PAD_VIRT_s00e8_97a0(14);
+PAD_VIRT_s00e8_97a0(15);
+PAD_VIRT_s00e8_97a0(16);
+PAD_VIRT_s00e8_97a0(17);
+PAD_VIRT_s00e8_97a0(18);
+PAD_VIRT_s00e8_97a0(19);
+PAD_VIRT_s00e8_97a0(20);
+PAD_VIRT_s00e8_97a0(21);
+PAD_VIRT_s00e8_97a0(22);
+PAD_VIRT_s00e8_97a0(23);
+PAD_VIRT_s00e8_97a0(24);
+PAD_VIRT_s00e8_97a0(25);
+PAD_VIRT_s00e8_97a0(26);
+PAD_VIRT_s00e8_97a0(27);
+PAD_VIRT_s00e8_97a0(28);
+PAD_VIRT_s00e8_97a0(29);
+PAD_VIRT_s00e8_97a0(30);
+PAD_VIRT_s00e8_97a0(31);
+PAD_VIRT_s00e8_97a0(32);
+PAD_VIRT_s00e8_97a0(33);
+PAD_VIRT_s00e8_97a0(34);
+PAD_VIRT_s00e8_97a0(35);
+PAD_VIRT_s00e8_97a0(36);
+PAD_VIRT_s00e8_97a0(37);
+PAD_VIRT_s00e8_97a0(38);
+PAD_VIRT_s00e8_97a0(39);
+PAD_VIRT_s00e8_97a0(40);
+PAD_VIRT_s00e8_97a0(41);
+PAD_VIRT_s00e8_97a0(42);
+PAD_VIRT_s00e8_97a0(43);
+PAD_VIRT_s00e8_97a0(44);
+PAD_VIRT_s00e8_97a0(45);
+    virtual cTerritoryObject_s00e8_97a0* Cast(u32 typeId);   // +0xb8
+
+    void HandleSimulationUpdate(int a, int b);    // 0x00e92ca0
+    void StopEffect(u32 id, bool immediate);      // 0x00c8ad30
+    bool HasEffect(u32 id);                       // 0x00c88910
+    bool CheckEffectMode(u32 a, u32 b, bool c, int d); // 0x00c8b220
+};
+struct cCityTerritoryView_s00e8_97a0 {
+    void** mpVtbl;                                // +0x00
+    u32 pad04[2];
+    cSpatialObjectView_s00e8_97a0* mpObject;                 // +0x0c
+    u32 pad10[(0x34 - 0x10) / 4];
+    int mPlacementState;                          // +0x34
+    Float3_s00e8_97a0 mCenter;                               // +0x38
+    float mRadius;                                // +0x44
+
+    void HandleSimulationUpdate(int a, int b);    // 0x00e897a0
+    void UpdateSelection();                       // 0x00e87db0
+};
+// ---- items of slice s00e897a0 end
+
+// ---- items of slice s00e8b7a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1486370;           // 0x01486370
+typedef int            i32;
+u32  GetCurrentGameMode_s00e8_b7a0();                                             // 0x00b5b800
+void FUN_00572020(u32 handle, u32 b);                                  // 0x00572020
+void* FUN_00b3d300();                                                  // 0x00b3d300 SP::NounManager
+void* FUN_00a206f0();                                                  // 0x00a206f0 GetSystemAT
+void FUN_01043860(void* p, void* pRef, bool b);                        // 0x01043860
+void FUN_01043a50(void* p, void* pRef, bool b);                        // 0x01043a50
+u32  FUN_00932e80(const char* p, u32 seed, u32 len);                    // 0x00932e80 FNVHash
+void FUN_00e87600(void* pView);                                        // 0x00e87600 UpdateCloudTendril
+void* FUN_00cf74c0();                                                  // 0x00cf74c0 cCivModeStrategy::Get
+void FUN_00cd7d10();                                                   // 0x00cd7d10
+void FUN_00d3d420();                                                   // 0x00d3d420
+void FUN_00ae72d0();                                                   // 0x00ae72d0
+void FUN_00b1e500();                                                   // 0x00b1e500
+__forceinline void* vcall0(void* p, u32 off)
+{ return ((void*(__thiscall*)(void*))(*(void***)p)[off >> 2])(p); }
+__forceinline void* vcall1(void* p, u32 off, void* a)
+{ return ((void*(__thiscall*)(void*, void*))(*(void***)p)[off >> 2])(p, a); }
+__forceinline u8 vbool0(void* p, u32 off)
+{ return ((u8(__thiscall*)(void*))(*(void***)p)[off >> 2])(p); }
+__forceinline u32 vint0(void* p, u32 off)
+{ return ((u32(__thiscall*)(void*))(*(void***)p)[off >> 2])(p); }
+__forceinline float vfloat0(void* p, u32 off)
+{ return ((float(__thiscall*)(void*))(*(void***)p)[off >> 2])(p); }
+class tViewInfo {
+public:
+    char pad00[0x04];
+    u32  mFlags04;              // +0x04  status bits (8 = "engaging")
+    char pad08[0x5c - 0x08];
+    u8   mState5c;              // +0x5c  0/1/2 engagement state
+};
+class cCombatSub {
+public:
+    void** mpVtbl;              // +0x00
+    u32  FUN_008e7f80();        // 0x008e7f80
+    bool FUN_00bfc600();        // 0x00bfc600
+};
+class cCreature {
+public:
+    void** mpVtbl;              // +0x00
+    char pad04[0x34 - 0x04];
+    void** mpVtbl34;            // +0x34  polymorphic sub-object (slot 0x74 = a float)
+    char pad38[0x6e - 0x38];
+    u8   m6e;                   // +0x6e
+    char pad6f[0x84 - 0x6f];
+    u32  m84;                   // +0x84
+    char pad88[0xc0 - 0x88];
+    void** mpVtblC0;            // +0xc0  animation sub-object (slot 0x8c)
+    char padC4[0x330 - 0xc4];
+    u32  m330;                  // +0x330
+    char pad334[0x588 - 0x334];
+    cCombatSub mCombat;         // +0x588
+    char pad58c[0x684 - 0x58c];
+    i32  m684;                  // +0x684
+    char pad688[0xb58 - 0x688];
+    u32  mFlagsB58;             // +0xb58
+    char padB5c[0xb5e - 0xb5c];
+    u8   mB5e;                  // +0xb5e
+    char padB5f[0xb61 - 0xb5f];
+    u8   mB61;                  // +0xb61
+    u8   mB62;                  // +0xb62
+    char padB63[0xf90 - 0xb63];
+    u8   mF90;                  // +0xf90
+
+    // direct (non-virtual) members -------------------------------------------
+    bool FUN_00c8b220(u32 a, u32 b, u32 c, u32 d);   // 0x00c8b220
+    void FUN_00c88a00(u32 a, float f);               // 0x00c88a00
+    void FUN_00c8a020(u32 a, float f);               // 0x00c8a020
+    void FUN_00c88a30(u32 a, void* b);               // 0x00c88a30
+    void* FUN_00c14e70(u32 id);                      // 0x00c14e70
+    void FUN_00c17350(u32 id, u32 b);                // 0x00c17350
+    void FUN_00c1d400(u32 a, u32 b);                 // 0x00c1d400
+    void FUN_00c1d460(u32 a, u32 b);                 // 0x00c1d460
+    bool FUN_00c0b780();                             // 0x00c0b780
+    bool FUN_00c0b7a0();                             // 0x00c0b7a0
+    bool FUN_00c0c0e0();                             // 0x00c0c0e0
+    void FUN_00c201a0(bool v, u32 a, u32 b);         // 0x00c201a0
+};
+class cCivState {
+public:
+    char pad00[0x80];
+    void* mp80;                 // +0x80
+};
+class cCivSub {
+public:
+    void* mpVtbl;
+    bool FUN_00d09660();        // 0x00d09660
+    bool FUN_00d096e0(void* p); // 0x00d096e0
+};
+class cCivStrategy {
+public:
+    void* mpVtbl;
+    cCivState* FUN_00cf74f0();  // 0x00cf74f0 GetState
+};
+class cNounMgr {
+public:
+    void* FUN_00b21340(void* a, void* b, void* c, void* d, void* e);  // 0x00b21340
+    void* FUN_00b25f40(u32 id);                                       // 0x00b25f40
+};
+class cNoun {
+public:
+    char pad00[0xc4];
+};
+struct cPtrVec {                // returned by cNounMgr::FUN_00b21340
+    char   pad00[4];
+    void** mpBegin;             // +0x04
+    void** mpEnd;               // +0x08
+};
+struct cItemInfo {              // returned by FUN_00ca71d0
+    void* m00;                  // +0x00
+    char  pad04[0x10 - 0x04];
+    i32   m10;                  // +0x10
+};
+void* FUN_00ca71d0(void* pItem);   // 0x00ca71d0
+class cSpatialObjectView_s00e8_b7a0 {
+public:
+    void** mpVtbl;              // +0x00
+    u32  m04;                   // +0x04
+    u32  m08;                   // +0x08
+    cCreature* mpObject;        // +0x0c
+    char pad10[0x34 - 0x10];
+    void HandleSimulationUpdate(int a, int b);   // 0x00e92ca0
+};
+namespace SP {
+class cTurretView_s00e8_b7a0 : public cSpatialObjectView_s00e8_b7a0 {
+public:
+    float m34;                  // +0x34  cached orientation
+    float m38;                  // +0x38
+    float m3c;                  // +0x3c
+    float m40;                  // +0x40
+    u32   m44;                  // +0x44  sound handle
+    void* m48;                  // +0x48
+    void* m4c;                  // +0x4c
+
+    void HandleSimulationUpdate(int param_2, int param_3);   // 0x00e8b7a0
+};
+}
+// ---- items of slice s00e8b7a0 end
+
 // @ 0x00e87560
 void cBuildingView::ViewInit1(void* gameData)
 {
@@ -1910,6 +2246,63 @@ void cBuildingView_s00e8_8c30::ConfigureBuildingView(cBuildingData* p2)
         VC0(void, prop, 4);
 }
 
+// @ 0x00e893a0
+void cEffectView_00e893a0::Update()
+{
+    void* obj = 0;
+    if (this->mpObject != 0)
+        obj = VC1(void*, this->mpObject, 0xb8, u32, 0x1007ae63u);
+
+    if (obj != 0) {
+        void* ship = ((cUFOSimulator_00e893a0*)GetUFOSimulator())->GetPlayerShip();
+        void* owner = VC0(void*, obj, 0x84);
+        if (ship == owner) {
+        if (this->mpEffect == 0) {
+            void* mgr = EffectsManager();
+            if (this->mpEffect != 0) {
+                void* old = this->mpEffect;
+                this->mpEffect = 0;
+                VC0(void, old, 4);
+            }
+            if (VC3(char, mgr, 0x2c, u32, 0x7d2bf7a3u, int, 0, void**, &this->mpEffect) != 0)
+                VC1(void, this->mpEffect, 8, int, 0);
+        }
+
+        if (this->mpEffect != 0) {
+            void* effectOwner = VC0(void*, obj, 0x84);
+            cEffectPlacement_00e893a0 placement;
+            void* spatial = (char*)effectOwner + 0x120;
+
+            const Vec3_00e893a0* pos = VC0(const Vec3_00e893a0*, spatial, 0x2c);
+            placement.mPosition = *pos;
+            placement.mFlags |= 4;
+            placement.mRevision = (u16)(placement.mRevision + 1);
+
+            const float* quat = VC0(const float*, spatial, 0x30);
+            Mat33_00e893a0 basis;
+            placement.mOrientation = *QuatToMatrix(&basis, quat);
+
+            placement.mRevision = (u16)(placement.mRevision + 1);
+            placement.mFlags |= 2;
+            placement.mScale = *(float*)(*(char**)((char*)effectOwner + 0x324) + 0x25c);
+            placement.mRevision = (u16)(placement.mRevision + 1);
+
+            VC1(void, this->mpEffect, 0x18, void*, &placement);
+        }
+        return;
+        }
+    }
+
+    if (this->mpEffect != 0) {
+        VC1(void, this->mpEffect, 0xc, int, 0);
+        if (this->mpEffect != 0) {
+            void* old = this->mpEffect;
+            this->mpEffect = 0;
+            VC0(void, old, 4);
+        }
+    }
+}
+
 // @ 0x00e89770
 void* cCityTerritory::deleting_dtor(char flag)
 {
@@ -1919,6 +2312,68 @@ void* cCityTerritory::deleting_dtor(char flag)
     if (flag & 1)
         operator_delete_array(this);
     return this;
+}
+
+// @ 0x00e897a0
+void cCityTerritoryView_s00e8_97a0::HandleSimulationUpdate(int a, int b)
+{
+    ((cSpatialObjectView_s00e8_97a0*)this)->HandleSimulationUpdate(a, b);
+
+    cSpatialObjectView_s00e8_97a0* view = mpObject;
+    cTerritoryObject_s00e8_97a0* territory = view ? view->Cast(0x2450023) : 0;
+
+    const u32 mode = GetUniverseContext();          // 0x00e92ca0 fan-out: space vs. planet view
+    bool inSimulation = mode == 0;
+    bool activeCombatant = inSimulation && territory != 0 && territory->IsCombatant();
+    mpObject->CheckEffectMode(0xb1e858ed, 0x6577c69, activeCombatant, 0);
+
+    if (!inSimulation) {
+        mpObject->StopEffect(0x243a1dc, true);
+        mpObject->StopEffect(0x243a1dd, true);
+        return;
+    }
+
+    cSpatialObjectView_s00e8_97a0* obj = mpObject;
+    if (obj == 0)
+        return;
+
+    cCityObject* city = (cCityObject*)obj->Cast(0x1186577);
+    if (city == 0)
+        return;
+
+    const Float3_s00e8_97a0* cityPos = city->GetPosition();
+    Float3_s00e8_97a0 pos;
+    pos.x = cityPos->x;
+    pos.y = cityPos->y;
+    pos.z = cityPos->z;
+
+    if (territory == 0)
+        return;
+
+    if (!city->mbFlag72)
+        territory->SetSelected(true);
+
+    if (!city->IsActive() || Vector3Equal(&pos, &g_16c45d8)) {
+        mpObject->StopEffect(0x243a1dc, true);
+        mpObject->StopEffect(0x243a1dd, true);
+        return;
+    }
+
+    if (!city->IsActive())
+        return;
+
+    if (!mpObject->HasEffect(0x243a1dc)) {
+        UpdateSelection();
+        return;
+    }
+
+    if (Vector3_NotEqual(&pos, &mCenter)) {
+        UpdateSelection();
+        return;
+    }
+
+    if (territory->mBounds.GetRadius() != mRadius)
+        UpdateSelection();
 }
 
 // @ 0x00e89950
@@ -2583,4 +3038,135 @@ void SP::cBuildingView_s00e8_a510::HandleSimulationUpdate(int a, int b)
             }
         }
     }
+}
+
+// @ 0x00e8b7a0
+void SP::cTurretView_s00e8_b7a0::HandleSimulationUpdate(int param_2, int param_3)
+{
+    cSpatialObjectView_s00e8_b7a0::HandleSimulationUpdate(param_2, param_3);
+
+    u32 gameMode = GetCurrentGameMode_s00e8_b7a0();
+    bool isCivMode = (gameMode == 0x1654c05);
+    tViewInfo* pInfo = (tViewInfo*)vcall0(this, 0x2c);
+    if (mpObject == 0)
+        return;
+
+    cCreature* pCtx = mpObject
+        ? (cCreature*)vcall1(mpObject, 0xb8, (void*)0x436f315)
+        : 0;
+
+    if (pInfo != 0) {
+        if (mpObject->m6e != 0) {
+            pInfo->mFlags04 |= 8u;
+            pInfo->mState5c = 1;
+        } else if (!vbool0(mpObject, 0x24) ||
+                   (isCivMode &&
+                    (pCtx == 0 || !vbool0((char*)pCtx + 0x34, 0x58)))) {
+            // ---- civ-mode strategy block ----
+            if (FUN_00cf74c0() != 0
+                && ((cCivStrategy*)FUN_00cf74c0())->FUN_00cf74f0() != 0
+                && ((cCivStrategy*)FUN_00cf74c0())->FUN_00cf74f0()->mp80 != 0
+                && ((cCivSub*)((cCivStrategy*)FUN_00cf74c0())->FUN_00cf74f0()->mp80)
+                       ->FUN_00d09660() != 0
+                && !((cCivSub*)((cCivStrategy*)FUN_00cf74c0())->FUN_00cf74f0()->mp80)
+                       ->FUN_00d096e0(pCtx)) {
+                pInfo->mFlags04 |= 8u;
+                pInfo->mState5c = 2;
+            } else {
+                pInfo->mFlags04 &= ~8u;
+            }
+        } else {
+            pInfo->mFlags04 |= 8u;
+            pInfo->mState5c = 2;
+        }
+    }
+
+    if (isCivMode) {
+        FUN_01043860(mpObject, &m48, false);
+        FUN_01043a50(mpObject, &m4c, false);
+    }
+
+    // ---- distance to the reference point (player/system position) ----
+    float* pPos = (float*)vcall0(mpObject, 0x2c);
+    bool bNear = false;
+    if (FUN_00a206f0() != 0) {
+        float px = pPos[0];
+        float py = pPos[1];
+        float pz = pPos[2];
+        float* pRef = (float*)vcall1(FUN_00a206f0(), 0x10, (void*)1);
+        float dx = pRef[0] - px;
+        float dy = pRef[1] - py;
+        float dz = pRef[2] - pz;
+        bNear = (float)sqrt((double)dx * (double)dx + (double)dy * (double)dy
+                            + (double)dz * (double)dz) < 200.0f;
+    }
+
+    // ---- cached orientation / 3d sound loop ----
+    {
+        float* pO = (float*)vcall0(mpObject, 0x30);
+        if (m34 == pO[0] && m38 == pO[1] && m3c == pO[2] && m40 == pO[3]) {
+            if (m44 != 0) {
+                FUN_00572020(m44, (u8)0);
+                m44 = 0;
+            }
+        } else if (isCivMode) {
+            float* pO2 = (float*)vcall0(mpObject, 0x30);
+            m34 = pO2[0];
+            m38 = pO2[1];
+            m3c = pO2[2];
+            m40 = pO2[3];
+            if (m44 == 0) {
+                void* pSys = FUN_00a206f0();
+                m44 = pSys != 0 ? vint0(pSys, 0x20) : 0;
+                Start3dSoundByName(0x556b8c45, m44, pPos[0], pPos[1], pPos[2]);
+            }
+        } else {
+            if (m44 != 0) {
+                FUN_00572020(m44, (u8)0);
+                m44 = 0;
+            }
+        }
+    }
+
+    if (pCtx == 0)
+        return;
+
+    // ---- combat / effect parameter push ----
+    cCombatSub* pCombat = &pCtx->mCombat;
+    bool bFile2 = (pCombat->FUN_008e7f80() == 2);
+    mpObject->FUN_00c8b220(0x23e2af64, 0x4c9bd57, bFile2, 0);
+    u32 v1 = (pCtx->m684 > 0 || pCombat->FUN_00bfc600()) ? 1 : 0;
+    if (mpObject->FUN_00c8b220(0x39ff8e9e, 0x4acb33c, v1, 0)) {
+        cPtrVec* pVec = (cPtrVec*)((cNounMgr*)FUN_00b3d300())->FUN_00b21340(
+            (void*)&FUN_00cd7d10, (void*)&FUN_00d3d420, (void*)&FUN_00ae72d0,
+            (void*)&FUN_00b1e500, (void*)0x018c6de8u);
+        int n = (int)(pVec->mpEnd - pVec->mpBegin);
+        for (int i = 0; i < n; ++i) {
+            void* pItem = pVec->mpBegin[i];
+            cItemInfo* pItemInfo = (cItemInfo*)FUN_00ca71d0(pItem);
+            if (pItemInfo->m10 == 1 && pItemInfo->m00 == (void*)pCtx) {
+                u32 id = vint0(pItem, 0x4c);
+                cNoun* pNoun = (cNoun*)((cNounMgr*)FUN_00b3d300())->FUN_00b25f40(id);
+                if (pNoun != 0)
+                    mpObject->FUN_00c88a30(0x4acb33c, (char*)pNoun + 0xc4);
+            }
+        }
+    }
+
+    FUN_00e87600(this);
+
+    bool bFlag800 = ((pCtx->m84 & 0x800) == 0x800);
+    if (mpObject->FUN_00c8b220(0x56192017, 0x30e8811, bFlag800, 0)) {
+        mpObject->FUN_00c88a00(0x30e8811, g_1486370);
+        float f74 = vfloat0((char*)pCtx + 0x34, 0x74);
+        mpObject->FUN_00c8a020(0x30e8811, f74);
+    }
+    pCtx->m84 &= ~0x800u;
+
+    u32 hash = FUN_00932e80("SG_ufo_static_cling_stunned_vehicle", 0x811c9dc5, 1);
+    bool bCombat = pCombat->FUN_00bfc600();
+    mpObject->FUN_00c8b220(hash, 0x5f8d750, bCombat, 0);
+    u32 v2 = (pCtx->m684 > 0 || pCombat->FUN_00bfc600()) ? 1 : 0;
+    if (mpObject->FUN_00c8b220(0x6dcfc3d2, 0x13bdd20b, v2, 0))
+        mpObject->FUN_00c88a00(0x13bdd20b, g_1486370);
 }

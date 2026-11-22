@@ -1,4 +1,4 @@
-// src/game/SPEngine/_at_00790000.cpp -- migrated from slice(s) s0079dce0, s0079d190, s0079c960, s0079bfa0, s0079b020, s00798d30, s00797a20, s00796ed0, s00796910, s00795ec0 by tools/migrate/rewrite.py
+// src/game/SPEngine/_at_00790000.cpp -- migrated from slice(s) s0079e950, s0079dce0, s0079d190, s0079c960, s0079bfa0, s0079b020, s00798d30, s00797a20, s00796ed0, s00796910, s00795ec0 by tools/migrate/rewrite.py
 // Object file: SPEngine/_at_00790000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,7 @@ extern void *operator_new__(void *, int, unsigned int);
 #include <intrin.h>
 #define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
 #include <new>
+#include "_at_00790000/refvec_fwd.h"
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s00795ec0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -635,6 +636,93 @@ struct CylinderSlicer {
     void Run(Mesh* mesh, Job_s0079_dce0* job, UShortVec_s0079_dce0* vecAllOut, UShortVec_s0079_dce0* vecAllIn, Out_s0079_dce0* out6, Out_s0079_dce0* out7);
 };
 // ---- items of slice s0079dce0 end
+
+// ---- items of slice s0079e950 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void operator_delete__(void* p);
+struct UShortVec_s0079_e950 {
+    ushort* mpBegin; ushort* mpEnd; ushort* mpCap;
+    void DoInsert(ushort* pos, const ushort* val);      // 0x6f5bc0
+    void PushBackOOL(const ushort* val);                // 0x6f66a0 (cVecU16::push_back)
+    void push_back(ushort v) {
+        ushort tmp = v;
+        if (mpEnd < mpCap) {
+            ushort* p = mpEnd++;
+            if (p)
+                *p = v;
+        } else {
+            DoInsert(mpEnd, &tmp);
+        }
+    }
+};
+struct Out_s0079_e950 {                                            // clip output builder
+    char pad0[4];
+    int  f4, f8;                                        // +4 / +8 : 16-byte records begin / end
+    char pad1[0x18 - 0xc];
+    char* vecs;                                         // +0x18: 0x14-byte ushort vectors
+    char pad2[0x30 - 0x1c];
+    int  cur;                                           // +0x30
+    void AddVert(void* src, int idx);                   // 0x79b4b0
+    void AddLerp(void* src, int i, int j, float t);     // 0x79b520
+    void AddTri(int idx);                               // 0x79b590
+    UShortVec_s0079_e950* IdxVec() { return (UShortVec_s0079_e950*)(vecs + cur * 0x14); }
+};
+struct Job_s0079_e950 {
+    char pad0[4];
+    void* src;                                          // +4
+    int  start;                                         // +8
+    int  end;                                           // +0xc
+};
+struct Vec3C {
+    float x, y, z;
+    float Intersect(const float* a, const float* b);    // 0x799b50 (x87 return)
+};
+struct Slicer {
+    char pad0[8];
+    int   mode;                                         // +8
+    Vec3C center;                                       // +0xc
+    float radiusSq;                                     // +0x18
+    void Run(Mesh* mesh, Job_s0079_e950* job, UShortVec_s0079_e950* vecAllOut, UShortVec_s0079_e950* vecAllIn, Out_s0079_e950* out6, Out_s0079_e950* out7);
+};
+static inline float distSq(const float* p, const Vec3C& c)
+{
+    float dy = p[1] - c.y;
+    float dx = p[0] - c.x;
+    float dz = p[2] - c.z;
+    return (dy * dy + dx * dx) + dz * dz;
+}
+struct RefCounted { int vtbl; int refCount; };
+struct RefElem {                                        // 8 bytes
+    RefCounted* p;
+    int x;
+    void CopyFrom(const RefElem& o) {                   // copy-construct with addref
+        p = o.p;
+        if (p)
+            _InterlockedExchangeAdd((long*)&p->refCount, 1);
+        x = o.x;
+    }
+    RefElem& Assign(const RefElem& o);                  // 0x8dee30
+};
+void ReleaseAndClear(RefVec* v);  // 0x0079f7b0 (defined below; used by a stub's inline body)
+struct RefVec {
+    RefElem* mpBegin; RefElem* mpEnd; RefElem* mpCap;
+    void DoInsertValue(RefElem* pos, const RefElem& val);   // 0x79f4e0
+    RefVec& Assign(const RefVec& rhs);                      // 0x79f640
+    void ReleaseAndClear();                                 // 0x79f7b0 (free function form below)
+    RefElem* DoAllocateCopy(uint n, RefElem* first, RefElem* last);   // 0x799d60
+    void DestroyRange(RefElem* first, RefElem* last);       // 0x8dede0
+};
+void FUN_00762d70(int n, void** items);
+struct PtrFixedVec64 {
+    void** mpBegin; void** mpEnd; void** mpCap; void** fixed;
+    void* buf[64];
+    PtrFixedVec64() { mpBegin = buf; mpEnd = buf; mpCap = buf + 64; fixed = buf; }
+    ~PtrFixedVec64() {
+        if (mpBegin && mpBegin != fixed)
+            operator_delete__(mpBegin);
+    }
+    void DoInsert(void** pos, void* const* val);        // 0x6c1570
+};
+// ---- items of slice s0079e950 end
 
 // @ 0x007965c0
 int *__fastcall FUN_007965c0(int *param_1)
@@ -3514,4 +3602,187 @@ void CylinderSlicer::Run(Mesh* mesh, Job_s0079_dce0* job, UShortVec_s0079_dce0* 
             }
         }
     }
+}
+
+// @ 0x0079e950
+void Slicer::Run(Mesh* mesh, Job_s0079_e950* job, UShortVec_s0079_e950* vecAllOut, UShortVec_s0079_e950* vecAllIn, Out_s0079_e950* out6, Out_s0079_e950* out7)
+{
+    int sidx = FUN_0071ddc0(mesh, 1, 0, 3, 0xe);
+    IndexStream* ib = (IndexStream*)(mesh->indexStreams + *(int*)((char*)job + 4) * 0x8c);
+    Stream* vs = (Stream*)(mesh->streams + sidx * 0x20 + 0x10);
+
+    for (int a = job->start; a < job->end; a += 3) {
+        int b = a + 1;
+        int c = a + 2;
+        uint ia, ib_, ic;
+        if (ib->remapBegin == ib->remapEnd) {
+            ia = ib->Read(a);
+            ib_ = ib->Read(b);
+            ic = ib->Read(c);
+        } else {
+            Stream* rm = (Stream*)((char*)ib->remapBegin + *(short*)(ib->table + sidx * 4 + 2) * 0x10);
+            ia = rm->Read(ib->Read(a));
+            ib_ = rm->Read(ib->Read(b));
+            ic = rm->Read(ib->Read(c));
+        }
+        const float* pA = (const float*)(vs->data + vs->stride * ia);
+        const float* pB = (const float*)(vs->data + vs->stride * ib_);
+        const float* pC = (const float*)(vs->data + vs->stride * ic);
+        int fA = distSq(pA, center) > radiusSq ? 1 : 0;
+        int fB = distSq(pB, center) > radiusSq ? 1 : 0;
+        int fC = distSq(pC, center) > radiusSq ? 1 : 0;
+        int sum = fC + fB + fA;
+
+        if (sum == (sum / 3) * 3) {
+            // all inside (0) or all outside (3): copy the triangle's indices
+            UShortVec_s0079_e950* v = (fA == sum % 3) ? vecAllIn : vecAllOut;
+            v->push_back(ib->ReadU16(a));
+            v->push_back(ib->ReadU16(b));
+            v->push_back(ib->ReadU16(c));
+        } else {
+            switch (mode) {
+            case 0:
+                vecAllOut->push_back(ib->ReadU16(a));
+                vecAllOut->push_back(ib->ReadU16(b));
+                vecAllOut->push_back(ib->ReadU16(c));
+                break;
+            case 1:
+                vecAllIn->push_back(ib->ReadU16(a));
+                vecAllIn->push_back(ib->ReadU16(b));
+                vecAllIn->push_back(ib->ReadU16(c));
+                break;
+            case 2: {
+                ushort va = ib->ReadU16(a);
+                UShortVec_s0079_e950* v;
+                if (sum > 1) {
+                    vecAllOut->PushBackOOL(&va);
+                    v = vecAllOut;
+                } else {
+                    vecAllIn->PushBackOOL(&va);
+                    v = vecAllIn;
+                }
+                ushort vb = ib->ReadU16(b);
+                v->PushBackOOL(&vb);
+                ushort vc = ib->ReadU16(c);
+                v->PushBackOOL(&vc);
+                break;
+            }
+            case 3: {
+                uint n6 = (uint)(out6->f8 - out6->f4) >> 4;
+                uint n7 = (uint)(out7->f8 - out7->f4) >> 4;
+                void* src = job->src;
+                Out_s0079_e950* tail7 = out7;
+                if (fA == 0) {
+                    out7->AddVert(src, a);
+                    if (fB == 0) {
+                        float p = center.Intersect(pC, pA);
+                        float q = center.Intersect(pC, pB);
+                        out6->AddLerp(src, c, a, p);
+                        out6->AddLerp(src, c, b, q);
+                        out6->AddVert(src, c);
+                        out7->AddVert(src, b);
+                        out7->AddLerp(src, b, c, 1.0f - q);
+                        out7->AddLerp(src, a, c, 1.0f - p);
+                    } else {
+                        float u = center.Intersect(pB, pA);
+                        out6->AddLerp(src, b, a, u);
+                        out6->AddVert(src, b);
+                        out7->AddLerp(src, a, b, 1.0f - u);
+                        if (fC == 0) {
+                            float z = center.Intersect(pB, pC);
+                            out6->AddLerp(src, b, c, z);
+                            out7->AddLerp(src, c, b, 1.0f - z);
+                            out7->AddVert(src, c);
+                        } else {
+                            float w = center.Intersect(pC, pA);
+                            out6->AddVert(src, c);
+                            out6->AddLerp(src, c, a, w);
+                            out7->AddLerp(src, a, c, 1.0f - w);
+                        }
+                    }
+                } else {
+                    out6->AddVert(src, a);
+                    if (fB == 0) {
+                        float t = center.Intersect(pA, pB);
+                        out6->AddLerp(src, a, b, t);
+                        out7->AddLerp(src, b, a, 1.0f - t);
+                        out7->AddVert(src, b);
+                        if (fC == 0) {
+                            float tt = center.Intersect(pA, pC);
+                            out6->AddLerp(src, a, c, tt);
+                            out7->AddVert(src, c);
+                            out7->AddLerp(src, c, a, 1.0f - tt);
+                        } else {
+                            float tt = center.Intersect(pC, pB);
+                            out6->AddLerp(src, c, b, tt);
+                            out6->AddVert(src, c);
+                            out7->AddLerp(src, b, c, 1.0f - tt);
+                        }
+                    } else {
+                        float t1 = center.Intersect(pB, pC);
+                        float t2 = center.Intersect(pA, pC);
+                        out6->AddVert(src, b);
+                        out6->AddLerp(src, b, c, t1);
+                        out6->AddLerp(src, a, c, t2);
+                        out7->AddLerp(src, c, a, 1.0f - t2);
+                        out7->AddLerp(src, c, b, 1.0f - t1);
+                        out7->AddVert(src, c);
+                    }
+                }
+                (void)tail7;
+                UShortVec_s0079_e950* i6 = out6->IdxVec();
+                i6->push_back((ushort)n6);
+                i6 = out6->IdxVec();
+                i6->push_back((ushort)(n6 + 1));
+                i6 = out6->IdxVec();
+                i6->push_back((ushort)(n6 + 2));
+                UShortVec_s0079_e950* i7 = out7->IdxVec();
+                i7->push_back((ushort)n7);
+                i7 = out7->IdxVec();
+                i7->push_back((ushort)(n7 + 1));
+                i7 = out7->IdxVec();
+                i7->push_back((ushort)(n7 + 2));
+                Out_s0079_e950* t = out7;
+                uint base = n7;
+                if (sum > 1) {
+                    base = n6;
+                    t = out6;
+                }
+                t->AddTri(base);
+                t->AddTri(base + 2);
+                t->AddTri(base + 3);
+                break;
+            }
+            }
+        }
+    }
+}
+
+// @ 0x0079f7b0
+void ReleaseAndClear(RefVec* v)
+{
+    PtrFixedVec64 held;
+    int n = (int)(v->mpEnd - v->mpBegin);
+    for (int i = 0; i < n; i++) {
+        if (v->mpBegin[i].p != 0) {
+            if (held.mpEnd < held.mpCap) {
+                void** s = held.mpEnd++;
+                if (s)
+                    *s = (void*)v->mpBegin[i].p;
+            } else {
+                held.DoInsert(held.mpEnd, (void* const*)&v->mpBegin[i].p);
+            }
+            v->mpBegin[i].p = 0;
+        }
+    }
+    FUN_00762d70((int)(held.mpEnd - held.mpBegin), held.mpBegin);
+    // inlined vector::erase(begin(), end()): copy [end, end) down, then end -= count
+    RefElem* first = v->mpBegin;
+    RefElem* last = v->mpEnd;
+    RefElem* d = first;
+    for (RefElem* s = last; s != last; ++s, ++d) {
+        d->p = s->p;
+        d->x = s->x;
+    }
+    v->mpEnd -= (last - first);
 }

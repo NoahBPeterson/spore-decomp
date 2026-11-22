@@ -25,3 +25,4 @@
 006a2cb0 62 eastl::vector_map::erase(key) - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2f60 194 SP::cPropertyList::Read - complete; IO/PropertyManager/vtable+0x2c/resize path reproduced [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a3180 271 SP::cDirectPropertyList::GetPropertyIDs - complete; vector argument is an eastl::vector<unsigned int> (empty-copy shrink, per-property appends, grow/trim to oldN+mapN, map keys at the tail) [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00613140 200 regalloc: assign - complete; the slice's UninitializedCopyIter (0x00612e00, another object) is called through the GenIter/CGenIter stubs; first/last/mpBegin land in ebx/ebp/ecx instead of ebp/ecx/ebx, and the mpBegin/mpEnd/mpCapacity store order differs; equiv WEAK (same as the slice) flags: /O2 /MD /Gy /TP /arch:SSE /GS-

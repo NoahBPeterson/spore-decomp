@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# slice s00d26790 -- approximate reconstructions (behaviour modelled, several
 00d20700  372  dual-band clamped interpolation: stub only; 1 vs 372 B - two-band x87/SSE blend with the same endpoint globals not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; match/slices/s00d20620/s00d20620.cpp mentions this address and may hold an earlier draft.
 00d209b0  691  camera blend against a target point: stub only; 1 vs 691 B - large float vector blend not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; match/slices/s00d20620/s00d20620.cpp mentions this address and may hold an earlier draft.
 00d20c70  505  orbit damping tick: stub only; 1 vs 505 B - large float damping update not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; match/slices/s00d20620/s00d20620.cpp mentions this address and may hold an earlier draft.

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureMissions.cpp -- migrated from slice(s) s00c2e420, s01335f70, s00c2f830 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureMissions.cpp -- migrated from slice(s) s00c2f1f0, s00c2ecd0, s00c2ec80, s00c2ec30, s00c2e420, s01335f70, s00c2f830 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureMissions.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -24,6 +24,7 @@ extern "C" char g_1572a18[];
 
 #include "game/types.h"
 #include "SP/cString.h"
+#include "EA/Variant.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void __fastcall FUN_00c45140(void*);  // base dtor
@@ -324,6 +325,102 @@ public:
 struct ImageKey { unsigned int mA; unsigned int mB; unsigned int mC; };
 // ---- items of slice s00c2e420 end
 
+// ---- items of slice s00c2ec30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+unsigned int* __fastcall FUN_0041ea00(const EA::Variant*);
+class MissionProgressLayout {
+public:
+    unsigned int GetProgressLayoutID();
+};
+// ---- items of slice s00c2ec30 end
+
+// ---- items of slice s00c2ec80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class MissionPropertyReader {
+public:
+    unsigned int FUN_00c2ec80();
+};
+// ---- items of slice s00c2ec80 end
+
+// ---- items of slice s00c2ecd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Property_s00c2_ecd0 {
+    char pad00[0x12];
+    unsigned short mType;  // +0x12
+
+    unsigned int* GetValueUInt32();  // 0x0041ea00
+};
+struct PropertyList_s00c2_ecd0 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(unsigned int id, Property_s00c2_ecd0*& out);  // slot 0x24
+};
+struct Owner_s00c2_ecd0 {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void v7c();
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void v90();
+    virtual void v94();
+    virtual void v98();
+    virtual void v9c();
+    virtual void va0();
+    virtual void va4();
+    virtual void va8();
+    virtual void vac();
+    virtual void vb0();
+    virtual void vb4();
+    virtual void vb8();
+    virtual void vbc();
+    virtual PropertyList_s00c2_ecd0* GetLink();  // slot 0xc0
+
+    unsigned int GetFlagsProperty();
+};
+// ---- items of slice s00c2ecd0 end
+
+// ---- items of slice s00c2f1f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class MissionSelectionAccessor {
+public:
+    unsigned int FUN_00c2f1f0();
+};
+// ---- items of slice s00c2f1f0 end
+
 // @ 0x00c2e420
 unsigned char MissionStub::FUN_00c2e420(int param_2)
 {
@@ -369,6 +466,7 @@ struct MissionListener {
     virtual void f0b();
     virtual void OnMission(void* stub);         // +0x30
 };
+
 // @ 0x00c2e520
 void MissionStub::FUN_00c2e520()
 {
@@ -558,6 +656,53 @@ void MissionStub::FUN_00c2ebc0()
         *(int*)(self + 0x7c) = 4;
 }
 
+// @ 0x00c2ec30
+unsigned int MissionProgressLayout::GetProgressLayoutID()
+{
+    unsigned int result = 0;
+    void* properties = ((void* (__thiscall*)(void*))(*(void***)this)[0xc0 / 4])(this);
+    if (properties) {
+        const EA::Variant* property;
+        if (((bool (__thiscall*)(void*, unsigned int, const EA::Variant**))
+                (*(void***)properties)[0x24 / 4])(properties, 0x63ff8cc5, &property)
+            && property->mTypeId == EA::Variant::kTypeUint32) {
+            result = *FUN_0041ea00(property);
+        }
+    }
+    return result;
+}
+
+// @ 0x00c2ec80
+unsigned int MissionPropertyReader::FUN_00c2ec80()
+{
+    void* properties = ((void* (__thiscall*)(void*))
+        (*(void***)this)[0xc0 / 4])(this);
+    if (properties) {
+        unsigned int result = 0;
+        const EA::Variant* property;
+        if (((bool (__thiscall*)(void*, unsigned int, const EA::Variant**))
+                (*(void***)properties)[0x24 / 4])(properties, 0x5d6796fd, &property)
+            && property->mTypeId == EA::Variant::kTypeUint32) {
+            result = *FUN_0041ea00(property);
+        }
+        return result;
+    }
+    return 0;
+}
+
+// @ 0x00c2ecd0
+unsigned int Owner_s00c2_ecd0::GetFlagsProperty()
+{
+    if (PropertyList_s00c2_ecd0* list = GetLink()) {
+        Property_s00c2_ecd0* prop;
+        unsigned int value = 0;
+        if (list->GetProperty(0xe2da314e, prop) && prop->mType == 10)
+            value = *prop->GetValueUInt32();
+        return value;
+    }
+    return 0;
+}
+
 // @ 0x00c2ed20
 void MissionStub::FUN_00c2ed20(int* out1, int* out2)
 {
@@ -736,6 +881,29 @@ int MissionStub::FUN_00c2f190()
     return r;
 }
 
+// @ 0x00c2f1f0
+unsigned int MissionSelectionAccessor::FUN_00c2f1f0()
+{
+    char* self = (char*)this;
+    int* properties = (int*)((void* (__thiscall*)(void*))
+        (*(void***)self)[0xc0 / 4])(self);
+    if (properties != 0)
+        ((void (__thiscall*)(void*))(*(void***)properties)[0 / 4])(properties);
+
+    if (properties == *(int**)(self + 0xa4))
+    {
+        unsigned int result = *(unsigned int*)(self + 0xbc);
+        if (properties != 0)
+            ((void (__thiscall*)(void*))(*(void***)properties)[4 / 4])(properties);
+        return result;
+    }
+
+    unsigned int result = *(unsigned int*)(self + 0xb0);
+    if (properties != 0)
+        ((void (__thiscall*)(void*))(*(void***)properties)[4 / 4])(properties);
+    return result;
+}
+
 // @ 0x00c2f240
 int MissionStub::FUN_00c2f240()
 {
@@ -900,6 +1068,7 @@ void MissionStub::FUN_00c2f590()
 struct PoliticalIdSource {
     void* GetPlayerPoliticalID();                         // 0x00b1f9d0
 };
+
 // @ 0x00c2f5f0
 void MissionStub::FUN_00c2f5f0()
 {

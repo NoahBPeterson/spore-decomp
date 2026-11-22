@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
+008dd820 99 complete: FUN_008dd820; body/register allocation differs
 008ddc10 68 complete: GetNameFromDatabaseKey; single-vs-early epilogue layout + buffer offset differ

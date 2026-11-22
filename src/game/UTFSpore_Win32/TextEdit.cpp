@@ -322,6 +322,7 @@ struct DequeBase_s0098_a820 {
 // ---- items of slice s0098a820 end
 
 // ---- items of slice s0098e3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(uint64_t* p);
 extern "C" unsigned __int64 __rdtsc();
 #pragma pack(4)
 #pragma intrinsic(__rdtsc)
@@ -343,7 +344,7 @@ class StyleManager { public:
 }
 namespace EA {
 namespace Text {
-struct LineLayout_s0098_e3a0 {
+class LineLayout_s0098_e3a0 { public:
     uint32_t pad0;
     const wchar_t* mBegin;
     const wchar_t* mEnd;
@@ -354,7 +355,7 @@ struct LineLayout_s0098_e3a0 {
 }
 namespace EA {
 namespace Text {
-struct Typesetter_s0098_e3a0 {
+class Typesetter_s0098_e3a0 { public:
     void Reset(bool b);                                      // 0x89cdf0
     void AddTextRun(const wchar_t* p, uint32_t n);           // 0x89b1e0
     LineLayout_s0098_e3a0* GetLineLayout();                             // 0x8976a0
@@ -368,8 +369,13 @@ struct Typesetter_s0098_e3a0 {
 }
 namespace EA {
 namespace Text {
-struct FontServer_s0098_e3a0 {
-    virtual void fs0(); virtual void fs1(); virtual void fs2(); virtual void fs3(); virtual void fs4(); virtual void fs5();
+class FontServer_s0098_e3a0 { public:
+virtual void fs0();
+virtual void fs1();
+virtual void fs2();
+virtual void fs3();
+virtual void fs4();
+virtual void fs5();
     virtual int GetFonts(const TextStyle_s0098_e3a0* s, void* out, uint32_t a, uint32_t b, uint32_t c, int d); // slot 6 (+0x18)
 };
 }
@@ -431,6 +437,16 @@ const Paragraph* UpperBoundIndex(const Paragraph* first, const Paragraph* last, 
 }
 namespace EA {
 namespace UTFWinControls {
+const uint32_t* UpperBoundLine(const uint32_t* first, const uint32_t* last, const uint32_t& v);  // 0x9212c0
+}
+}
+namespace EA {
+namespace UTFWinControls {
+template <class T> inline const T& Min(const T& a, const T& b) { return (b < a) ? b : a; }
+}
+}
+namespace EA {
+namespace UTFWinControls {
 template <class T> inline const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
 }
 }
@@ -451,18 +467,67 @@ using EA::Text::LineLayout_s0098_e3a0;
 }
 namespace EA {
 namespace UTFWinControls {
-struct WinTextEdit_s0098_e3a0;
+class WinTextEdit_s0098_e3a0;
 }
 }
 namespace EA {
 namespace UTFWinControls {
-struct IWinTextEdit_s0098_e3a0 {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+class IWinTextEdit_s0098_e3a0 { public:
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
     virtual int GetTextLength();                              // slot 20 (+0x50)
-    virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33(); virtual void s34();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
     virtual void SetCursorIndex(uint32_t index, uint32_t extend);   // slot 35 (+0x8c)
-    virtual void s36(); virtual void s37(); virtual void s38(); virtual void s39(); virtual void s40(); virtual void s41(); virtual void s42(); virtual void s43(); virtual void s44(); virtual void s45(); virtual void s46(); virtual void s47(); virtual void s48(); virtual void s49(); virtual void s50(); virtual void s51(); virtual void s52(); virtual void s53();
-    virtual void SetScrollPosition(const Point2* p);          // slot 54 (+0xd8)
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+    virtual void SetScrollPosition(const Point2* p);          // slot 54 (+0xd8) 0x00989c60
     virtual void Update();                                    // slot 55 (+0xdc)
 
     uint32_t mFlags;           // +0x04 (object +0x210)
@@ -521,8 +586,43 @@ struct IWinTextEdit_s0098_e3a0 {
 }
 namespace EA {
 namespace UTFWinControls {
-struct WinTextEdit_s0098_e3a0 {
-    virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3(); virtual void w4(); virtual void w5(); virtual void w6(); virtual void w7(); virtual void w8(); virtual void w9(); virtual void w10(); virtual void w11(); virtual void w12(); virtual void w13(); virtual void w14(); virtual void w15(); virtual void w16(); virtual void w17(); virtual void w18(); virtual void w19(); virtual void w20(); virtual void w21(); virtual void w22(); virtual void w23(); virtual void w24(); virtual void w25(); virtual void w26(); virtual void w27(); virtual void w28(); virtual void w29(); virtual void w30(); virtual void w31(); virtual void w32(); virtual void w33(); virtual void w34(); virtual void w35();
+class WinTextEdit_s0098_e3a0 { public:
+virtual void w0();
+virtual void w1();
+virtual void w2();
+virtual void w3();
+virtual void w4();
+virtual void w5();
+virtual void w6();
+virtual void w7();
+virtual void w8();
+virtual void w9();
+virtual void w10();
+virtual void w11();
+virtual void w12();
+virtual void w13();
+virtual void w14();
+virtual void w15();
+virtual void w16();
+virtual void w17();
+virtual void w18();
+virtual void w19();
+virtual void w20();
+virtual void w21();
+virtual void w22();
+virtual void w23();
+virtual void w24();
+virtual void w25();
+virtual void w26();
+virtual void w27();
+virtual void w28();
+virtual void w29();
+virtual void w30();
+virtual void w31();
+virtual void w32();
+virtual void w33();
+virtual void w34();
+virtual void w35();
     virtual void OnStyleChanged();                            // slot 36 (+0x90)
     uint32_t pad04[(0xb0 - 4) / 4];
     const wchar_t* mTextBegin; // +0xb0
@@ -4062,5 +4162,101 @@ void IWinTextEdit_s0098_e3a0::GetTextExtent(Point2* out)
         Owner()->RefreshParagraphs();
     out->x = mExtentX;
     out->y = mExtentY;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0098e9d0
+namespace EA { namespace UTFWinControls {
+void WinTextEdit_s0098_e3a0::RecalculateCursorPosition()
+{
+    if (mIWin.mDirtyFlags & 4)
+        RefreshParagraphs();
+    uint32_t cursor = mIWin.mCursorIndex;
+    mIWin.mDirtyFlags &= ~1u;
+    const Paragraph* para = UpperBoundIndex(mIWin.mParaBegin, mIWin.mParaEnd, cursor, TextIndexComparator()) - 1;
+    SetParagraphCache(para);
+    uint32_t rel = mIWin.mCursorIndex - para->mTextIndex;
+    const uint32_t* lb = mIWin.mLineBreaksBegin;
+    uint32_t line = (uint32_t)((UpperBoundLine(lb, mIWin.mLineBreaksEnd, rel) - 1) - lb);
+    mIWin.mCursorParaLine = line;
+    uint32_t lineOffset, found;
+    EA::Text::LineLayout_s0098_e3a0* layout = LayoutLine(para, line, &lineOffset, &found);
+    mIWin.mCursorColumn = mIWin.mCursorIndex - para->mTextIndex - lineOffset;
+    if (found == 0) {
+        mIWin.mCaretLeft = 0.0f;
+    } else {
+        float x = layout->GetXForIndex((int)mIWin.mCursorColumn, 0, 0) - mIWin.mBorderLeft;
+        float zero = 0.0f;
+        mIWin.mCaretLeft = Max(zero, x);
+    }
+    float size = *(float*)&mIWin.mActualStyle.d[0x81];
+    float width;
+    if (size < 20.0f)
+        width = 1.0f;
+    else if (size < 40.0f)
+        width = 2.0f;
+    else
+        width = size * 0.05f;
+    uint32_t lh = mIWin.mLineHeight;
+    float top = (float)(mIWin.mCursorParaLine * lh) + para->mYPos;
+    mIWin.mCaretTop = top;
+    mIWin.mCaretRight = mIWin.mCaretLeft + width;
+    mIWin.mCaretBottom = top + (float)(int)lh;
+    if (mIWin.mDirtyFlags & 2) {
+        mIWin.mCursorSeekX = mIWin.mCaretLeft;
+        mIWin.mDirtyFlags &= ~2u;
+    }
+    ShowCaret(true);
+    if (mIWin.mCaretTimer.mUnits == 1) {
+        mIWin.mCaretTimer.mStart = __rdtsc();
+    } else {
+        uint64_t t;
+        QueryPerformanceCounter(&t);
+        mIWin.mCaretTimer.mStart = t;
+    }
+    mIWin.mCaretTimer.mElapsed = 0;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0098ebd0
+namespace EA { namespace UTFWinControls {
+bool WinTextEdit_s0098_e3a0::OnTick()
+{
+    if ((mIWin.mDirtyFlags & 5) && mIWin.mEditColor == 0) {
+        mIWin.Update();
+        UpdateLayout();
+    }
+    if (mIWin.mTextEditFlags & 0x21) {
+        mIWin.mCaretVisible = 0;
+        return false;
+    }
+    Stopwatch_s0098_e3a0& t = mIWin.mCaretTimer;
+    if (mIWin.mCaretPeriod < (float)t.GetElapsedTimeFloat() * t.mScale) {
+        ShowCaret(mIWin.mCaretVisible == 0);
+        t.Restart();
+    }
+    return false;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0098f120
+namespace EA { namespace UTFWinControls {
+void IWinTextEdit_s0098_e3a0::ScrollToCursor()
+{
+    if (mDirtyFlags & 5)
+        Owner()->RecalculateCursorPosition();
+    Point2 pt;
+    pt.x = mScrollX;
+    pt.y = mScrollY;
+    pt.x = Min(pt.x, mExtentX - (mVisRight - mVisLeft));
+    pt.x = Max(pt.x, mCaretRight - (mVisRight - mVisLeft));
+    pt.x = Min(pt.x, mCaretLeft);
+    pt.x = Max(pt.x, 0.0f);
+    pt.y = Min(pt.y, mExtentY - (mVisBottom - mVisTop));
+    pt.y = Max(pt.y, mCaretBottom - (mVisBottom - mVisTop));
+    pt.y = Min(pt.y, mCaretTop);
+    pt.y = Max(pt.y, 0.0f);
+    if (pt.x != mScrollX || pt.y != mScrollY)
+        SetScrollPosition(&pt);
 }
 }}  // namespace EA::UTFWinControls

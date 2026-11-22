@@ -12,7 +12,6 @@ extern "C" long _InterlockedExchange(volatile long* pTarget, long nValue);
 
 // ---- items of slice s00eb0ea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
-extern "C" long _InterlockedExchange(volatile long* pTarget, long nValue);
 inline void* operator new(uint32_t, void* pPlace) { return pPlace; }
 void* operator_new(uint32_t nSize, const char* pName, int32_t nA, int32_t nB,
                    const char* pFile, int32_t nLine);           // 0x00f473a0
@@ -96,6 +95,8 @@ virtual void f1c();
 extern "C" void  __fastcall FUN_00eb0230(void* self, int dummy, int n);             // 0x00eb0230
 extern "C" void  __fastcall FUN_00478930(void* self, int dummy, int n);             // 0x00478930 string grow
 extern "C" void  __fastcall FUN_00530670(void* self, int dummy);                    // 0x00530670 ~string
+extern "C" __declspec(dllimport) void* __cdecl memmove(void* d, const void* s, unsigned n);
+extern "C" void* __cdecl memcpy(void* d, const void* s, unsigned n);
 int  FUN_0093a780(void* s, void* d, int n, int z);   // 0x0093a780 EA::IO::ReadInt32
 int  FUN_0093a6c0(void* s, void* b, int n);          // 0x0093a6c0 read raw bytes
 void FUN_0093a800(void* s, void* b, int n, int z);   // 0x0093a800
@@ -115,12 +116,19 @@ class cGameCinematicsAppMode { public:
     bool ReadResource(void* a1, void* a2, int a3, int a4); // 0x00eb20d0
 };
 }
+int   FUN_00f473a0(int sz, const char* name, int a, int b, int c, int d);
+void  FUN_00f47380(void* p);
 struct VectorI {
     float* begin;
     float* end;
     float* cap;
     void insert(float* pos, unsigned n, const float* val);   // 0x00eb1e80
     void resize(unsigned n);                                 // 0x00eb2070
+    float* erase(float* first, float* last) {
+        memcpy(first, last, (size_t)((char*)end - (char*)last));
+        end -= (last - first);
+        return first;
+    }
 };
 struct String8 { char* mpBegin; char* mpEnd; char* mpCap; };
 typedef void*  (__thiscall *FP0)(void*);
@@ -167,6 +175,25 @@ bool cFactoryCityMusic::WriteResource(cResourceCityMusic* pResource, cWriter* pW
     return bOk;
 }
 
+// @ 0x00eb1d70
+cResourceCityMusic::cResourceCityMusic()
+{
+    mnField14 = 0;
+    mnField18 = 0;
+    mpData1CBegin = nullptr;
+    mpData1CEnd = nullptr;
+    mpData1CCap = nullptr;
+    mpData30Begin = nullptr;
+    mpData30End = nullptr;
+    mpData30Cap = nullptr;
+    mpData44Begin = nullptr;
+    mpData44End = nullptr;
+    mpData44Cap = nullptr;
+    mpData58Begin = nullptr;
+    mpData58End = nullptr;
+    mpData58Cap = nullptr;
+}
+
 // @ 0x00eb1dc0
 bool cFactoryCityMusic::CreateResource(void* pArg1, void** ppOut, uint32_t nArg3, uint32_t nArg4)
 {
@@ -186,6 +213,66 @@ bool cFactoryCityMusic::CreateResource(void* pArg1, void** ppOut, uint32_t nArg3
 
     *ppOut = pResource;
     return true;
+}
+
+// @ 0x00eb1e80
+void VectorI::insert(float* pos, unsigned n, const float* val)
+{
+    float* e = end;
+    unsigned freeSlots = (unsigned)(cap - e);
+    if (n > freeSlots) {
+        // grow: new buffer, copy [begin,pos), fill n, copy [pos,end), free old
+        unsigned size = (unsigned)(e - begin);
+        unsigned newCap = size * 2;
+        if (size == 0) newCap = 1;
+        if (newCap <= size + n) newCap = size + n;
+        float* buf = 0;
+        if (newCap != 0)
+            buf = (float*)FUN_00f473a0((int)(newCap * 4), (const char*)0x13f09b4, 0, 0, 0x13ebb38, 0xd1);
+        unsigned off = (unsigned)((char*)pos - (char*)begin);
+        memcpy(buf, begin, off);
+        float v = *val;
+        float* mid = (float*)((char*)buf + off);
+        for (unsigned i = 0; i < n; ++i) mid[i] = v;
+        memcpy(mid + n, pos, (unsigned)((char*)e - (char*)pos));
+        float* newEnd = (float*)((char*)mid + n * 4 + ((char*)e - (char*)pos));
+        if (begin) FUN_00f47380(begin);
+        begin = buf;
+        end = newEnd;
+        cap = buf + newCap;
+        return;
+    }
+    if (n == 0) return;
+    float v = *val;
+    float* oldEnd = e;
+    unsigned tail = (unsigned)(e - pos);
+    if (n < tail) {
+        memcpy(e, e - n, n * 4);            // make room at the end
+        end = oldEnd + n;
+        memmove(pos + n, pos, (tail - n) * 4);
+        for (float* p = pos; p != pos + n; ++p) *p = v;
+        return;
+    }
+    unsigned extra = n - tail;
+    float* q = e;
+    for (unsigned i = 0; i < extra; ++i) *q++ = v;
+    end = oldEnd + extra;
+    memcpy(oldEnd + extra, pos, tail * 4);
+    end = oldEnd + extra + tail;
+    for (float* p = pos; p != oldEnd; ++p) *p = v;
+}
+
+// @ 0x00eb2070
+void VectorI::resize(unsigned n)
+{
+    float* e = end;
+    unsigned cur = (unsigned)(e - begin);
+    if (n > cur) {
+        float z = 0.0f;
+        insert(e, n - cur, &z);
+        return;
+    }
+    erase(begin + n, e);
 }
 
 // @ 0x00eb20d0

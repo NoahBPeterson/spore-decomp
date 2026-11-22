@@ -388,6 +388,14 @@ struct SerItem {
 struct ResKey { uint32_t a, b, c; };
 struct HandlerItem : SerItem { uint32_t extra; };
 struct INode { INode* next; INode* prev; };              // eastl::intrusive_list_node
+struct IList_s0099_afe0 {
+  INode anchor;
+  IList_s0099_afe0() { anchor.next = &anchor; anchor.prev = &anchor; }
+  ~IList_s0099_afe0() {
+    INode* n = anchor.next;
+    while (n != &anchor) { INode* nx = n->next; n->prev = 0; n->next = 0; n = nx; }
+  }
+};
 struct IList {
   INode anchor;
   IList() { anchor.next = &anchor; anchor.prev = &anchor; }
@@ -426,14 +434,18 @@ struct IUnknown32_s0099_afe0 {
 struct ClassInfo { char pad[0x1c]; void (__cdecl* onLoaded)(void*); };
 struct InfoOut { ClassInfo* info; void* ctx; uint32_t x2; uint32_t x3; };
 struct IDataBinder {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
   virtual bool BindKey(SerItem* out, int typeCode, ResKey* key);   // +0x10
   virtual void Done();                                             // +0x14
   virtual bool GetHandler(uint32_t handler, SerItem* out);         // +0x18
 };
 struct BinderVec { IDataBinder** begin; IDataBinder** end; };
 struct IReader {
-  virtual void v0(); virtual void v1();
+virtual void v0();
+virtual void v1();
   virtual bool Open(void* stream, void* arg);            // +8
   virtual bool Next();                                   // +0xc
   virtual const void* GetPos(void* ctx);                 // +0x10
@@ -450,6 +462,9 @@ struct HFind {
   void find(HNode** out, const uint32_t* key);   // 0x00645ed0 (hashtable<uint,pair<uint,int>>::find)
 };
 struct HMap { char pad[4]; HNode** buckets; uint32_t nbuckets; uint32_t count; };   // +4 buckets, +8 bucket count, +0xc count
+struct ObjectMapAlloc {
+  void f(void*, unsigned);   // 0x00693230 hashtable::DoFreeBuckets
+};
 struct SerCollection_s0099_afe0 {
   char pad[0x1c];
   HMap idMap;                                            // +0x1c
@@ -459,7 +474,10 @@ struct SerCollection_s0099_afe0 {
   void Add(IUnknown32_s0099_afe0* obj);                             // 0x00998fc0
 };
 struct FactoryMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
   virtual IUnknown32_s0099_afe0* Create(uint32_t clsid, uint32_t iid, int a, int b); };            // +0x20
 FactoryMgr* GetFactoryMgr();                                                            // 0x00920090
 struct HMapOps {
@@ -476,7 +494,7 @@ struct XmlReaderState_s0099_afe0 {
   void* mpCallbackContext;                               // +0x50
   uint32_t mNextTempID;                                  // +0x54
   uint32_t mResult;                                      // +0x58
-  IList mLazyReferences;                                 // +0x5c
+  IList_s0099_afe0 mLazyReferences;                                 // +0x5c
   HMap mObjectMap;                                       // +0x64 (+0x68 buckets, +0x6c bucket count, +0x70 count)
   char pad2[0x84 - 0x64 - sizeof(HMap)];
   SerCollection_s0099_afe0* mCollection;                            // +0x84
@@ -491,15 +509,15 @@ struct XmlReaderState_s0099_afe0 {
   void Report(uint32_t code);                                       // 0x0099a470
   bool CheckType(int typeCode, unsigned propBits);                  // 0x0099a3f0
   bool ReadObjectArray(LazyReference* ref);                         // 0x0099a4c0
-  bool ReadStructArray(SerItem* val, IList* out);                   // 0x0099a7c0
+  bool ReadStructArray(SerItem* val, IList_s0099_afe0* out);                   // 0x0099a7c0
   bool ReadPropertyValueArray(SerItem* val);                        // 0x0099ac80
   bool ParsePropertyValue(uint32_t v, int typeCode, const wchar_t* s); // 0x0099aa20
-  void MoveChildren(IList* from, INode* to);                        // 0x0099a9d0 (thiscall on the list)
+  void MoveChildren(IList_s0099_afe0* from, INode* to);                        // 0x0099a9d0 (thiscall on the list)
 
-  bool Fixup(IList* list);                                          // 0x0099afe0
+  bool Fixup(IList_s0099_afe0* list);                                          // 0x0099afe0
   LazyReference* CreateLazyReference(SerItem* base, PropInfo* prop, SerItem* value, int count); // 0x0099b110
   bool ReadProperty(SerItem* base, LazyReference** outRef);         // 0x0099b1f0
-  bool ReadPropertyList(SerItem* base, IList* list);                // 0x0099b730
+  bool ReadPropertyList(SerItem* base, IList_s0099_afe0* list);                // 0x0099b730
   IUnknown32_s0099_afe0* ReadObject(uint32_t* outId);                          // 0x0099b8a0
   bool ReadBindings();                                              // 0x0099b9e0
   bool ReadGraph();                                                 // 0x0099bac0
@@ -511,8 +529,15 @@ static inline void ReleaseTemp(StackAlloc* a, char* p)
   else a->Free(p);
 }
 struct IStreamX {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-  virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
   virtual int  GetPosition(int mode);              // +0x24
   virtual bool SetPosition(int pos, int mode);     // +0x28
   virtual void v11();
@@ -991,13 +1016,13 @@ reportTail:
 }}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
 
 // @ 0x0099afe0
-bool XmlReaderState_s0099_afe0::Fixup(IList* list)
+bool XmlReaderState_s0099_afe0::Fixup(IList_s0099_afe0* list)
 {
   INode* anchor = &list->anchor;
   for (INode* n = anchor->next; n != anchor; n = n->next) {
     LazyReference* lr = (LazyReference*)n;
     if (lr->children.prev != &lr->children)
-      Fixup((IList*)&lr->children);
+      Fixup((IList_s0099_afe0*)&lr->children);
     if (lr->prop != 0) {
       uint32_t count = lr->count;
       if (count != 0) {
@@ -1113,7 +1138,7 @@ bool XmlReaderState_s0099_afe0::ReadProperty(SerItem* base, LazyReference** outR
           goto done;
         }
         if (typeCode == 0x14) {
-          IList list;
+          IList_s0099_afe0 list;
           if (!ReadStructArray(&val, &list))
             return false;
           if (list.anchor.prev == &list.anchor) {
@@ -1215,7 +1240,7 @@ S99b660* S99b660::f(int a, int b, int c, int d, int e)
 }
 
 // @ 0x0099b730
-bool XmlReaderState_s0099_afe0::ReadPropertyList(SerItem* base, IList* list)
+bool XmlReaderState_s0099_afe0::ReadPropertyList(SerItem* base, IList_s0099_afe0* list)
 {
   INode* head = &list->anchor;
   if (!mReader->Next()) {
@@ -1348,6 +1373,82 @@ bool XmlReaderState_s0099_afe0::ReadGraph()
   }
   Report(mReader->GetErrorCode());
   return false;
+}
+
+// @ 0x0099bc00
+uint32_t XmlReaderState_s0099_afe0::Read()
+{
+  bool ok = true;
+  mCollection->RemoveAll();
+  bool more = mReader->Next();
+  while (more) {
+    if (mReader->GetNodeType() == 1)
+      goto found;
+    more = mReader->Next();
+  }
+  Report(mReader->GetErrorCode());
+  ok = false;
+  goto cleanup;
+found:
+  if (wcscmp(mReader->GetName(), L"graph") == 0) {
+    if (!ReadGraph()) {
+      ok = false;
+      goto cleanup;
+    }
+  } else {
+    if (wcscmp(mReader->GetName(), L"object") != 0) {
+      Report(0x2fc50001);
+      return 0;
+    }
+    uint32_t id = 0;
+    IUnknown32_s0099_afe0* obj = ReadObject(&id);
+    if (!obj) {
+      ok = false;
+      goto cleanup;
+    }
+    mCollection->Add(obj);
+  }
+  Fixup(&mLazyReferences);
+cleanup:
+  {
+    INode* anchor = &mLazyReferences.anchor;
+    INode* n = anchor->next;
+    while (n != anchor) { INode* nx = n->next; n->prev = 0; n->next = 0; n = nx; }
+    anchor->prev = anchor;
+    anchor->next = anchor;
+  }
+  for (IDataBinder** it = mBinders->begin; it != mBinders->end; ++it)
+    (*it)->Done();
+  {
+    HNode* end = mObjectMap.buckets[mObjectMap.nbuckets];
+    HNode** b = mObjectMap.buckets;
+    HNode* n = *b;
+    if (!n) {
+      ++b;
+      while (!(n = *b)) ++b;
+    }
+    HNode** bucket = b;
+    while (n != end) {
+      IUnknown32_s0099_afe0* u = (IUnknown32_s0099_afe0*)n->value;
+      if (u) {
+        IUnknown32_s0099_afe0* iface = u->QueryInterface(0xeec58382);
+        if (iface) {
+          InfoOut io;
+          iface->GetInfo(&io);
+          if (io.info->onLoaded)
+            io.info->onLoaded(io.ctx);
+        }
+      }
+      ((IUnknown32_s0099_afe0*)n->value)->Release();
+      n = n->next;
+      while (!n) { ++bucket; n = *bucket; }
+    }
+  }
+  ((ObjectMapAlloc*)&mObjectMap)->f(mObjectMap.buckets, mObjectMap.nbuckets);
+  mObjectMap.count = 0;
+  Pool()->Reset();
+  Temp()->Reset();
+  return ok ? 0 : mResult;
 }
 
 // @ 0x0099be60

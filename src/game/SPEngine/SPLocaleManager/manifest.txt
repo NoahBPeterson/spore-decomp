@@ -1,13 +1,14 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPLocaleManager.cpp  _FUN_00695c70  00695c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  @FUN_00695cd0@4  00695cd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  _FUN_00695cf0  00695cf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  ?addThing@Ctl@@QAEXPAX0@Z  00695d10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ?check@Ctl@@QAE_NPAX@Z  00695d70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  ??1LocaleManagerDtorView@@UAE@XZ  00695e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ??0FixedString16@eastl@@QAE@ABU01@@Z  00696230  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ??0FixedString16@eastl@@QAE@PB_W@Z  006962a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ??4FixedString16@eastl@@QAEAAU01@ABU01@@Z  00696320  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ??0cLocaleChangeMessage@App@@QAE@ABUFixedString16@eastl@@@Z  00696350  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLocaleManager.cpp  ?FindMatchingLocale@cLocaleManager@SP@@UAEPB_WXZ  006969b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLocaleManager.cpp  _FUN_00695cf0  00695cf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLocaleManager.cpp  ?addThing@Ctl@@QAEXPAX0@Z  00695d10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLocaleManager.cpp  ??1LocaleManagerDtorView@@UAE@XZ  00695e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ??0LocaleManagerDtorView@@QAE@XZ  00696420  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  ?FindMatchingLocale@cLocaleManager@SP@@UAEPB_WXZ  006969b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  ?BroadcastLocaleChange@cLocaleManager_s0069_6c80@SP@@QAEXI@Z  00697650  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

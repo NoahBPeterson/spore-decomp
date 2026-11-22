@@ -537,6 +537,38 @@ __forceinline void ResetRenderPassState(void* dbgData)
 }
 // ---- items of slice s0075ff50 end
 
+// @ 0x0075d8d0
+void ListUnlink(int* a, int* b)
+{
+    int v0 = a[0];
+    int v1 = a[1];
+    a[0] = b[0];
+    a[1] = b[1];
+    b[1] = v1;
+    b[0] = v0;
+    if ((int*)a[0] == b) {
+        a[1] = (int)a;
+        a[0] = (int)a;
+    } else {
+        *(int**)a[1] = a;
+        *(int**)(a[0] + 4) = a;
+    }
+    if ((int*)b[0] == a) {
+        b[1] = (int)b;
+        b[0] = (int)b;
+        return;
+    }
+    *(int**)b[1] = b;
+    *(int**)(b[0] + 4) = b;
+}
+
+// @ 0x0075d930
+void DeviceLost()
+{
+    int* p = (int*)SP_MessageServer();
+    ((void (__thiscall*)(void*, int, int, int))*(void**)(*p + 0x14))(p, 0x44edd9a, 0, 0);
+}
+
 // @ 0x0075d950
 void DeviceRelease()
 {

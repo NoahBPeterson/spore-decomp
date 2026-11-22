@@ -1,13 +1,14 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPMissionRaid.cpp  ?GetTargetStarRecord@cRaidEvent@@QAEPAVcStarRecord@SP@@XZ  00c5b340  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?SetTargetEmpire@cRaidEvent@@QAEXPAVcEmpire@SP@@@Z  00c5b370  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?SetPlanetPosition@cPlanetMission@@QAEXHHH@Z  00c5b3a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?GeneratePirateCount@cSPRaidPlunderEvent@@QAEHXZ  00c5b510  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?GenerateBomberCount@cSPRaidEvent@@QAEHXZ  00c5b530  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?BackgroundUpdate@cSPRaidPlunderEvent@@QAEXH@Z  00c5b550  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5bbc0@@YAPAUMissionElem@@PAU1@00@Z  00c5bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5bea0@@YIPAXPAUcRaidEvent@@PAXI@Z  00c5bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c240@@YIXPAUElemVec@@PAX@Z  00c5c240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c410@@YIEPAUcRaidEvent@@PAXI1@Z  00c5c410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c310@@YAXPAUElemVec@@PAH11HH@Z  00c5c310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPMissionRaid.cpp  ?GeneratePirateCount@cSPRaidPlunderEvent@@QAEHXZ  00c5b510  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionRaid.cpp  ?GenerateBomberCount@cSPRaidEvent@@QAEHXZ  00c5b530  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionRaid.cpp  ?GetTargetStarRecord@cRaidEvent@@QAEPAVcStarRecord@SP@@XZ  00c5b340  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionRaid.cpp  ?SetTargetEmpire@cRaidEvent@@QAEXPAVcEmpire@SP@@@Z  00c5b370  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionRaid.cpp  ?BackgroundUpdate@cSPRaidPlunderEvent@@QAEXH@Z  00c5b550  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c410@@YIEPAUcRaidEvent@@PAXI1@Z  00c5c410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?HandleMessage_F50@RaidHandler@SP@@QAE_NIPAX@Z  00c5df50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?InitUFOAttributes@Simulator@@YAXXZ  01347b70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

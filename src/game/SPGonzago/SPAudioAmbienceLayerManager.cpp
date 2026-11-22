@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAudioAmbienceLayerManager.cpp -- migrated from slice(s) s00e9ed80, s00543590, s00e9fca0, s00e9e290 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAudioAmbienceLayerManager.cpp -- migrated from slice(s) s00e9e750, s00e9e4f0, s00e9ed80, s00543590, s00e9fca0, s00e9e290 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAudioAmbienceLayerManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,8 @@
 #include "SP/cPlanetModel.h"
 #include "SP/cViewer.h"
 #include <new.h>
+#include <new>
+#include "EA/Audio/ResponseCurve.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern uint32_t gAmbCheatArg;    // 0x01487138  (arg to CheatManager::s1c)
@@ -362,6 +364,7 @@ struct Vector3Vec {
         }
     }
 };
+Vector3* FUN_007ec550(Vector3* first, Vector3* last, Vector3* dest);  // 0x007ec550 copy-construct [first, last) at dest
 extern const Vector3 kZeroVector;                                // 0x016c6964
 template <class T> struct SPVec4
 {
@@ -617,6 +620,174 @@ struct PtrVec100
 };
 // ---- items of slice s00e9ed80 end
 
+// ---- items of slice s00e9e4f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Element12 {
+    int a, b, c;
+};
+template <typename T>
+__forceinline T* copy_backward(T* first, T* last, T* result)
+{
+    while (last != first)
+        *--result = *--last;
+    return result;
+}
+struct Vector12 {
+    Element12* mBegin;
+    Element12* mFinish;
+    Element12* mEnd;
+
+    void insert(Element12* pos, const Element12& value);
+};
+Element12* __cdecl CopyInto(Element12* first, Element12* last, Element12* dest);
+void* __cdecl AllocateDebug(unsigned size, const char* file, int a, int b,
+                            const char* name, int line);
+void __cdecl FreeDebug(void* p);
+__forceinline Element12* DoAllocate(int n)
+{
+    return n ? (Element12*)AllocateDebug(n * sizeof(Element12), "vector.cpp", 0,
+                                         0, "Vector12", 209)
+             : 0;
+}
+// ---- items of slice s00e9e4f0 end
+
+// ---- items of slice s00e9e750 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char eastl_gEmptyString16[];     // 0x01667bac
+extern const float g_ambCurveConst;     // 0x01473c70
+extern float g_ambOriginX;              // 0x016c6964
+extern float g_ambOriginY;              // 0x016c6968
+extern float g_ambOriginZ;              // 0x016c696c
+extern float g_ambFreqConst;            // 0x01470f1c
+typedef unsigned char u8;
+struct __declspec(novtable) AmbPrimaryBase {
+    virtual void p0();
+    virtual void p1();
+};
+struct AmbListenerBase {
+    virtual void l0();
+    virtual void l1();
+};
+struct AmbEventModifier {
+    virtual void e0();
+    int  mZero;                         // +0x0c in the complete object
+    AmbEventModifier() : mZero(0) {}
+};
+struct RespCurve_s00e9_e750 {
+    void* mBegin;                       // +0x00  inline buffer / heap block
+    void* pad04[3];
+    void* mCap;                         // +0x10
+    u8    pad14[0x364 - 0x14];
+    RespCurve_s00e9_e750();                        // 0x00a1aa50 (declared only)
+};
+struct RBNodeBase {
+    RBNodeBase* mpNodeRight;            // +0x00
+    RBNodeBase* mpNodeLeft;             // +0x04
+    RBNodeBase* mpNodeParent;           // +0x08
+    char        mColor;                 // +0x0c (kRBTreeColorRed == 0)
+};
+struct EmptyAlloc {};
+class TagMap_s00e9_e750 {
+public:
+    uint32_t   mUnk00;                  // +0x00 (part of the map, untouched)
+    RBNodeBase mAnchor;                 // +0x04
+    uint32_t   mnSize;                  // +0x14
+    EmptyAlloc mAllocator;              // +0x18 (empty, no store)
+
+    TagMap_s00e9_e750();
+    void reset();
+};
+inline TagMap_s00e9_e750::TagMap_s00e9_e750() : mAnchor(), mnSize(0) {
+    reset();
+}
+inline void TagMap_s00e9_e750::reset() {
+    mAnchor.mpNodeRight  = &mAnchor;
+    mAnchor.mpNodeLeft   = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor       = 0;           // kRBTreeColorRed
+    mnSize               = 0;
+}
+struct FixedStr_s00e9_e750 {
+    char* mBegin;                       // +0x00
+    char* mEnd;                         // +0x04
+    char* mCap;                         // +0x08
+
+    FixedStr_s00e9_e750() {
+        mBegin = eastl_gEmptyString16;
+        mEnd = eastl_gEmptyString16;
+        mCap = eastl_gEmptyString16 + 1;
+    }
+};
+struct AmbCurveParams {
+    float    mD8;                       // +0x00 (0xd8)
+    uint32_t mDC;                       // +0x04 (0xdc)
+    float    mE0;                       // +0x08 (0xe0)
+    float    mE4;                       // +0x0c (0xe4)
+    uint32_t mE8;                       // +0x10 (0xe8)
+
+    AmbCurveParams();
+};
+inline AmbCurveParams::AmbCurveParams() {
+    mD8 = 0.0f;
+    float c = g_ambCurveConst;
+    mDC = 0;
+    mE0 = c;
+    mE4 = c;
+    mE8 = 0;
+}
+class cAmbienceLayerManager_s00e9_e750 : public AmbPrimaryBase, public AmbListenerBase, public AmbEventModifier {
+public:
+    uint32_t  m10;                      // +0x10
+    uint32_t  m14;                      // +0x14
+    uint32_t  m18;                      // +0x18
+    uint32_t  m1c;                      // +0x1c
+    uint32_t  m20;                      // +0x20
+    uint32_t  m24;                      // +0x24
+    uint32_t  m28;                      // +0x28
+    uint32_t  m2c;                      // +0x2c
+    uint32_t  m30;                      // +0x30
+    uint32_t  m34;                      // +0x34
+    u8        pad38[8];                 // +0x38..+0x3f (not touched here)
+    void*     mViewIdxBegin;            // +0x40
+    int32_t   mViewIdxEnd;              // +0x44
+    int32_t   mViewIdxCap;              // +0x48
+    u8        pad4c[8];                 // +0x4c..+0x53
+    void*     mViewTagsBegin;           // +0x54
+    int32_t   mViewTagsEnd;             // +0x58
+    int32_t   mViewTagsCap;             // +0x5c
+    u8        pad60[8];                 // +0x60..+0x67
+    void*     mDynTagsBegin;            // +0x68
+    int32_t   mDynTagsEnd;              // +0x6c
+    int32_t   mDynTagsCap;              // +0x70
+    u8        pad74[0xc];               // +0x74..+0x7f
+    TagMap_s00e9_e750    mIdToTagMap;              // +0x80..+0x9b
+    float     mOriginX;                 // +0x9c
+    float     mOriginY;                 // +0xa0
+    float     mOriginZ;                 // +0xa4
+    float     mRadius;                  // +0xa8
+    u8        mbSphereChanged;          // +0xac
+    u8        padad[3];
+    void*     mpB0;                     // +0xb0
+    void*     mpB4;                     // +0xb4
+    void*     mpB8;                     // +0xb8
+    u8        padbc[8];                 // +0xbc..+0xc3 (initialised by a sub-object)
+    void*     mpC4;                     // +0xc4
+    uint32_t  mC8;                      // +0xc8
+    uint32_t  mCC;                      // +0xcc
+    u8        padd0[8];                 // +0xd0..+0xd7
+    AmbCurveParams mCurveParams;        // +0xd8..+0xeb
+    RespCurve_s00e9_e750 mCurveA;                  // +0xec
+    RespCurve_s00e9_e750 mCurveB;                  // +0x450
+    float     mFreq;                    // +0x7b4
+    u8        mb7b8;                    // +0x7b8
+    u8        pad7b9[3];
+    FixedStr_s00e9_e750  mStr;                     // +0x7bc
+    uint32_t  mPad7c8;                  // +0x7c8 (not touched here)
+    uint32_t  mFlags;                   // +0x7cc
+    uint32_t  m7d0;                     // +0x7d0
+
+    cAmbienceLayerManager_s00e9_e750();            // 0x00e9e750
+};
+// ---- items of slice s00e9e750 end
+
 // @ 0x005439d0
 void Ctx40::FUN_005439d0(int* attrs)
 {
@@ -736,6 +907,142 @@ void cAmbLayer::Destroy()
     _ReadWriteBarrier();
     mpVtbl8 = &g_vtbl_013ef094;
 }
+
+// @ 0x00e9e4f0
+void Vector12::insert(Element12* pos, const Element12& value)
+{
+    if (mFinish != mEnd) {
+        // If the value already lives at or after the insertion point, the shift
+        // below carries it one element further along.
+        Element12* src = (Element12*)&value;
+        if (!(src < pos) && src < mFinish)
+            src += 1;
+
+        if (mFinish)
+            *mFinish = mFinish[-1];
+
+        copy_backward(pos, mFinish - 1, mFinish);
+
+        *pos = *src;
+        mFinish += 1;
+        return;
+    }
+
+    // No spare element: reallocate, copying both halves around the new value.
+    // The two source pointers are read once into locals, so they stay put in
+    // the old buffer while the finished vector is rewritten.
+    const int count = (int)(mFinish - mBegin);
+    const int newcap = count ? (2 * count) : 1;
+    Element12* const newvec = DoAllocate(newcap);
+
+    Element12* const oldbegin = mBegin;
+    Element12* newend = CopyInto(oldbegin, pos, newvec);
+    if (newend)
+        ::new (newend) Element12(value);
+
+    Element12* const oldfinish = mFinish;
+    newend = CopyInto(pos, oldfinish, ++newend);
+
+    if (mBegin != 0)
+        FreeDebug(mBegin);
+
+    mBegin = newvec;
+    mFinish = newend;
+    mEnd = newvec + newcap;
+}
+
+// @ 0x00e9e620
+void Vector3Vec::DoInsertValue(Vector3* position, const Vector3& value)
+{
+    if (mpEnd != mpCapacity) {
+        // Spare slot: shift the tail up by one element and write the value.
+        // The value may be one of the elements being shifted up, in which case
+        // the reference has to move with it.
+        const Vector3* pValue = &value;
+        if (pValue >= position && pValue < mpEnd)
+            pValue = pValue + 1;
+
+        // Duplicate of the last element in the spare slot.
+        ::new ((void*)mpEnd) Vector3(*(mpEnd - 1));
+
+        // Shift [position, mpEnd - 1) up by one slot.
+        Vector3* pDst = mpEnd;
+        Vector3* pSrc = mpEnd - 1;
+        while (pSrc != position) {
+            --pSrc;
+            --pDst;
+            *pDst = *pSrc;
+        }
+
+        *position = *pValue;
+
+        mpEnd = mpEnd + 1;
+        return;
+    }
+
+    // No spare element: reallocate, copy both halves around the new one.
+    const int nPrevSize = (int)(mpEnd - mpBegin);
+    const int nNewSize = nPrevSize ? (2 * nPrevSize) : 1;
+    Vector3* const pNewData = nNewSize
+        ? (Vector3*)operator new(nNewSize * sizeof(Vector3), "Simulator", 0, 0,
+                                 &g_eastlAllocator, 0xd1)
+        : 0;
+
+    Vector3* const pBegin = mpBegin;
+    Vector3* pNewEnd = FUN_007ec550(pBegin, position, pNewData);
+    ::new ((void*)pNewEnd) Vector3(value);
+    Vector3* const pEnd = mpEnd;
+    pNewEnd = FUN_007ec550(position, pEnd, ++pNewEnd);
+
+    if (mpBegin != 0)
+        operator delete[]((void*)mpBegin);
+
+    mpBegin = pNewData;
+    mpEnd = pNewEnd;
+    mpCapacity = pNewData + nNewSize;
+}
+
+// @ 0x00e9e750
+cAmbienceLayerManager_s00e9_e750::cAmbienceLayerManager_s00e9_e750()
+: m10(0),
+      m14(0),
+      m18(0),
+      m1c(0),
+      m20(0),
+      m24(0),
+      m28(0),
+      m2c(0),
+      m30(0),
+      m34(0),
+      mViewIdxBegin(0),
+      mViewIdxEnd(0),
+      mViewIdxCap(0),
+      mViewTagsBegin(0),
+      mViewTagsEnd(0),
+      mViewTagsCap(0),
+      mDynTagsBegin(0),
+      mDynTagsEnd(0),
+      mDynTagsCap(0),
+      mIdToTagMap(),
+      mOriginX(g_ambOriginX),
+      mOriginY(g_ambOriginY),
+      mOriginZ(g_ambOriginZ),
+      mRadius(0.0f),
+      mbSphereChanged(0),
+      mpB0(0),
+      mpB4(0),
+      mpB8(0),
+      mpC4(0),
+      mC8(0),
+      mCC(0),
+      mCurveParams(),
+      mCurveA(),
+      mCurveB(),
+      mFreq(g_ambFreqConst),
+      mb7b8(0),
+      mStr(),
+      mFlags(0),
+      m7d0(0) {}
 
 // @ 0x00e9ed00
 bool cAmbLayer::FUN_00e9ed00(cAmbienceTag* p)

@@ -796,3 +796,52 @@ void __stdcall FUN_00f6eb40(AABox* box)
     box->mMax = r.mMax;
     box->mMin = r.mMin;
 }
+// ---- items of slice s00f6edc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cTerrainMapShort {                             // 8-bit/16-bit height map
+    char  mPad00[0x0c];
+    int   m0c;                                        // +0x0c
+    float GetFloat(const void* uv);                   // 0x00f8d620
+};
+
+struct cCubeImage {                                   // cube-map normal source
+    char  mPad00[0x0c];
+    int   m0c;                                        // +0x0c
+    float SampleBilinear(const void* uv);             // 0x00f8de70
+};
+
+// the map set a cTerrainEffectMapNormal points at (*(this+0xc))
+struct cTerrainEffectMapSet {
+    char              mPad00[0x08];
+    cTerrainMapShort* mp08;     // +0x08
+    char              mPad0c[4];
+    cCubeImage*       mp10;     // +0x10
+};
+
+// the map itself
+struct cTerrainEffectMapNormal {
+    char                  mPad00[0x0c];
+    cTerrainEffectMapSet* mp0c;    // +0x0c  the loaded map set
+
+    int   GetCountShort();                            // 0x00f6efa0
+    int   GetCountSum();                              // 0x00f6f190
+};
+// ---- items of slice s00f6edc0 end
+
+// @ 0x00f6efa0
+int cTerrainEffectMapNormal::GetCountShort()
+{
+    cTerrainMapShort* map = mp0c->mp08;
+    if (map)
+        return map->m0c;
+    return 0;
+}
+
+// @ 0x00f6f190
+int cTerrainEffectMapNormal::GetCountSum()
+{
+    cTerrainMapShort* a = mp0c->mp08;
+    cCubeImage*       b = mp0c->mp10;
+    if (b != 0 && a != 0)
+        return b->m0c + a->m0c;
+    return 0;
+}

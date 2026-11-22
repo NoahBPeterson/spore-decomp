@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?FUN_0087cd10@@YAPAXPBD@Z  0087cd10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?FUN_0087cd80@@YAPAXPBD@Z  0087cd80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?galloc@@YGPAXH@Z  0087d4a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gfree@@YG_NPAX@Z  0087d4c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gread@@YGHPAX0H@Z  0087d4e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

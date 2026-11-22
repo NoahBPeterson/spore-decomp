@@ -11,11 +11,13 @@
 ../src/game/SPGonzago/_at_00c80000.cpp  ?func60h@cCommunity@@QAEXII@Z  00c88740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?RemoveOwner@GameData@@QAEX_N@Z  00c88790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?GetValue@GameData@@QAEMXZ  00c887c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c80000.cpp  ?Fn@SpatialPos@@QAEXXZ  00c88870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?StopEffect@Effects@@QAEXHH@Z  00c889c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?F00@Effects@@QAEXHM@Z  00c88a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?F30@Effects@@QAEXHPAH@Z  00c88a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?func78h@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  00c89020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?GetCommunityName@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  00c890c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c80000.cpp  ?sub_b1a0@cSpatialObjectView@@QAEXPAX@Z  00c8b1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00c80000.cpp  ?sub_b210@cSpatialObjectView@@QAEXPAX@Z  00c8b210  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?FUN_00c8c9d0@@YAXPAVcPlanet@@@Z  00c8c9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?FUN_00c8d000@@YAXPAVcPlanet@@H@Z  00c8d000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c80000.cpp  ?Fn@SpatialPos@@QAEXXZ  00c88870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -21,6 +21,9 @@
 ../src/game/SPGonzago/_at_00af0000.cpp  ?FindFreeSlot@cActionCircle_s00af_9aa0@SP@@QAEPAVtSlot@12@XZ  00af9f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?Reserve@tSlot@cActionCircle_s00af_9aa0@SP@@QAEXPAVcGameData_s00af_9aa0@3@@Z  00afa030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?CopyConstruct@tSlot@cActionCircle_s00af_9aa0@SP@@QAEPAV123@PBV123@@Z  00afa110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00af0000.cpp  ?Assign@tSlot@cActionCircle_s00af_9aa0@SP@@QAEPAV123@PBV123@@Z  00afa230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00af0000.cpp  ?FUN_00afa430@@YAPAVtSlot@cActionCircle_s00af_9aa0@SP@@PAV123@00@Z  00afa430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00af0000.cpp  ?FUN_00afa4a0@@YAPAVtSlot@cActionCircle_s00af_9aa0@SP@@PAV123@00@Z  00afa4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?FindSlotByAgent@cActionCircle_s00af_ab70@SP@@QAEHPAVcGameData_s00af_ab70@2@@Z  00afad30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?FindClosestFreeSlotPtr@cActionCircle_s00af_ab70@SP@@QAEPAVtSlot@12@PBUcSPVector3_s00af_ab70@2@@Z  00afad70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?PushBack@cPtrVec@@QAEXPAPAX@Z  00afc470  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

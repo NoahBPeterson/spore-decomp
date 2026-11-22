@@ -28,6 +28,10 @@ extern "C" void  FUN_009035d0(void*, void*);               // 0x009035d0  get pa
 extern "C" void* FUN_00903400(void*, int);                 // 0x00903400  get buffer
 extern "C" int   FUN_00904580(void*, int, int);            // 0x00904580  parse buffer
 extern "C" void  FUN_0090a870(void*, int);                 // 0x0090a870
+void* __cdecl Fn11e0744(void* dst, const void* src, unsigned n);  // 0x011e0744 (memcpy thunk)
+extern "C" int   FUN_009035f0(void*);                      // 0x009035f0
+extern "C" int   FUN_00903610(void*);                      // 0x00903610
+extern "C" int   FUN_00903660(void*);                      // 0x00903660
 #include <stddef.h>
 #include <string.h>
 #include <wchar.h>
@@ -64,18 +68,24 @@ struct Doc {
 };
 void* __cdecl FUN_0090ac10(void*, void*, int);  // 0x0090ac10
 struct XmlParser {
-    // +0    vftable
-    // +4    mpDocument
-    // +8/+0xc/+0x10  string begin/end/capacity
-    // +0x18 pool begin
-    // +0x21c mpParserNode
-    // +0x220 mpXmlParser
-    // +0x224 mbSpace
-    // +0x228 mOffset
-    // +0x22c..+0x42b  wchar buffer[256]
-    // +0x430 counter
-    // +0x434 index
-    // +0x438 flag
+    void*    mpVtbl_0;                 // +0x000
+    void*    mpDocument_4;             // +0x004
+    wchar16* mpTextBegin_8;            // +0x008  shared string begin
+    wchar16* mpTextEnd_c;              // +0x00c
+    wchar16* mpTextCapacity_10;        // +0x010  == mpInlinePool (aliased)
+    unsigned int pad_14;               // +0x014
+    wchar16* mpInlinePool_18;          // +0x018
+    wchar16  mInlinePool_1c[0x100];    // +0x01c .. +0x21b (inline buffer)
+    void*    mpParserNode_21c;         // +0x21c
+    void*    mpXmlParser_220;          // +0x220
+    unsigned char mbSpace_224;         // +0x224
+    unsigned char pad_225[3];          // +0x225
+    int      mOffset_228;              // +0x228
+    wchar16  mBuffer_22c[0x100];       // +0x22c .. +0x42b
+    unsigned int pad_42c;              // +0x42c
+    int      mCount_430;               // +0x430
+    int      mIndex_434;               // +0x434
+    unsigned char mbFlag_438;          // +0x438
 
     void  Fn8e5600(short* p, int n);                 // 0x008e5600
     int   Fn8e5a20(const char* s, int len, unsigned char fin); // 0x008e5a20
@@ -98,6 +108,77 @@ extern "C" void* Fn8e26e0(wchar16* s, int n, int flag);   // 0x008e26e0 (thiscal
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 __declspec(noinline) unsigned short Fn8e5580(int entity);  // 0x008e5580 (stays in the slice: not this object's)
 void Fn8e5980(void* self, short* p, int n);  // 0x008e5980 (stays in the slice: not this object's)
+
+// @ 0x008e5670
+__declspec(noinline) wchar16* XmlParser::Fn8e5670()
+{
+    if (mbFlag_438 != 0) {
+        int idx = mIndex_434 - 0x40;
+        if (idx >= 0) {
+            Fn11e0744(mBuffer_22c, mBuffer_22c + idx, 0x80);
+        } else {
+            Fn11e0744(mBuffer_22c - idx, mBuffer_22c, idx * 2 + 0x80);
+            Fn11e0744(mBuffer_22c, (wchar16*)((char*)mBuffer_22c + idx * 2 + 0x200), idx * -2);
+        }
+        mIndex_434 = 0x40;
+    } else if ((unsigned int)mIndex_434 > 0x40) {
+        Fn11e0744(mBuffer_22c, (wchar16*)((char*)mBuffer_22c + mIndex_434 * 2 - 0x80), 0x80);
+        mIndex_434 = 0x40;
+    }
+    mBuffer_22c[mIndex_434] = 0;
+    return mBuffer_22c;
+}
+
+// @ 0x008e5730
+int XmlParser::Fn8e5730(void* parser, void* uri)
+{
+    char* c = (char*)this;
+    int tag;
+    switch (FUN_00903b40(parser)) {
+    case 1:  tag = 0x2320000; break;
+    case 3:  tag = 0x2320002; break;
+    case 4:  tag = 0x2320003; break;
+    case 5:  tag = 0x2320004; break;
+    case 6:  tag = 0x2320005; break;
+    case 7:  tag = 0x2320006; break;
+    case 8:  tag = 0x2320007; break;
+    case 9:  tag = 0x2320008; break;
+    case 10: tag = 0x2320009; break;
+    case 11: tag = 0x232000a; break;
+    case 12: tag = 0x232000b; break;
+    case 13: tag = 0x232000c; break;
+    case 14: tag = 0x232000d; break;
+    case 15: tag = 0x232000e; break;
+    case 16: tag = 0x232000f; break;
+    case 17: tag = 0x2320010; break;
+    case 18: tag = 0x2320011; break;
+    case 19: tag = 0x2320012; break;
+    case 20: tag = 0x2320013; break;
+    case 22: tag = 0x2320014; break;
+    case 24: tag = 0x2320015; break;
+    case 27: tag = 0x2320016; break;
+    case 28: tag = 0x2320016; break;
+    case 29: tag = 0x2320017; break;
+    case 30: tag = 0x2320018; break;
+    case 31: tag = 0x2320019; break;
+    case 32: tag = 0x232001a; break;
+    default: tag = 0x2320001; break;
+    }
+    int* sink = *(int**)(*(int*)(c + 4) + 0x44);
+    if (sink != 0) {
+        int n = FUN_009035f0(*(void**)(c + 0x220));
+        if (n > 0) {
+            int a = FUN_00903610(parser);
+            int b = FUN_00903660(parser);
+            int edx = *sink;
+            wchar16* nm = Fn8e5670();
+            (*(void (__thiscall**)(int*, int, void*, int, int, wchar16*))(edx + 4))(sink, tag, uri, a, b, nm);
+            return tag;
+        }
+        (*(void (__thiscall**)(int*, int, void*, int, int, int))(*sink + 4))(sink, tag, uri, 0, 0, 0);
+    }
+    return tag;
+}
 
 // @ 0x008e59a0
 __declspec(noinline) void XmlParser::Fn8e59a0(char param2)

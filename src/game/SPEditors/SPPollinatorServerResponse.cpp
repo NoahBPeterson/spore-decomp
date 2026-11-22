@@ -522,7 +522,7 @@ public:
     virtual bool Write(const void* pData, size_type nSize);  // 0x00614840 (SP::Pollen::cServerResponse::Write)
 
     bool Open();                                                         // 0x00615450
-    void GetStatus();  // 0x00614ab0 (SP::Pollen::cServerResponse::GetStatus)
+    void GetStatus();                     // 0x00614ab0
     void StartPollinatorResponse();   // 0x00614930
     void EndPollinatorResponse();     // 0x00614940
     void Noop();                      // 0x00c2e4e0
@@ -604,6 +604,18 @@ long SP::Pollen::cServerResponse::GetPosition(EA::IO::PositionType positionType)
     case 2: return -1;
     }
     return -1;
+}
+
+// @ 0x00614950
+int string16::compare_out(const wchar_t* p) const
+{
+    const wchar_t* e = p + CharStrlen(p);
+    return StringCompare(mpBegin, mpEnd, p, e);
+}
+
+// @ 0x00614990
+__declspec(noinline) StrPair::StrPair(const StrPair& x) : first(x.first), second(x.second)
+{
 }
 
 // @ 0x00614a30
@@ -878,6 +890,14 @@ void SP::Pollen::cServerResponse_s0061_4f20::SetupDict()
     gXMLMemorySuite.realloc_fcn = (void* (*)(void*, size_t))0x900b10;
     gXMLMemorySuite.free_fcn = (void (*)(void*))0xf47410;
     gbDictInit = true;
+}
+
+// @ 0x00615790
+SP::Pollen::cServerResponse_s0061_4f20::cServerResponse_s0061_4f20()
+: mnReturnCode(2), mAssetList(), mpXMLParser(0), mbInResponse(false), mbOpen(false), mParseStatus(1), mnBytesRead(0)
+{
+    if (!gbDictInit)
+        SetupDict();
 }
 
 // @ 0x00676370

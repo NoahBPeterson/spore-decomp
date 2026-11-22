@@ -77,7 +77,7 @@ struct SubMissionV {
     virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48(); virtual void v49();
     virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
     virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59(); virtual void v60(); virtual void v61();
-    virtual i32 IsDone();  // slot 62 (+0xf8)
+    virtual u8 IsDone();  // slot 62 (+0xf8)
     virtual void v63(); virtual void v64(); virtual void v65(); virtual void v66(); virtual void v67(); virtual void v68();
     virtual void Step114();  // slot 69 (+0x114)
     virtual void Step118();  // slot 70 (+0x118)
@@ -144,6 +144,7 @@ public:
     virtual void* Query(const void* pType);   // 0x0c
     virtual void v10();
 };
+void operator_delete__(void* pMemory);
 class cSpatialObject : public IRefCounted {
 public:
     virtual void v14();
@@ -220,14 +221,12 @@ cSPMissionManager* GetMissionManager();
 void GetPropertyAsKeyArray(void* pDefinition, int key, void* pOut);
 void* GetMissionManagerForMission(uint32_t id);
 void MissionManagerRelease(void* pMission);
+void AppendMissionString(void* pString, const wchar_t* pFormat, ...);
 void CreateMissionSteps(void* pOwner);
 void AddStepToSchedule(uint32_t id);
-void ResetStepSchedule();
-void ReleaseMissionList(void* pMission);
 void ResizeMissionList(void* pList, int nCount);
 void MissionVectorErase(void* pBegin, void* pEnd);
 void ReleaseStepListContents();
-void ReleaseRewardList();
 void ShutdownMissionStepState();
 extern u32 g_vtbl_0146f400;      // 0x0146f400  cMissionMultiStep vtable (+0x00)
 extern u32 g_vtbl_0146f3f0;      // 0x0146f3f0  cMissionMultiStep interface vtable (+0x04)
@@ -235,8 +234,6 @@ extern u32 g_vtbl_0146f3e0;      // 0x0146f3e0  cMissionMultiStep interface vtab
 struct VectorDtorStub { void Destroy(); };   // 0x00ae6970  vector<T*>::~vector
 struct MissionDtorStub { void Destroy(); };  // 0x00c47680  cSPMission::~cSPMission
 void __cdecl operator_delete(void* p);   // 0x00f47380
-// non-deleting destructor of the full multiple-inheritance object layout: three vptrs (0x00/0x04/0x34),
-// the three list members at 0x1f0/0x208/0x21c.
 struct cMissionMultiStep_dtor {
     u32   mVtbl00;              // +0x00
     u32   mVtbl04;              // +0x04
@@ -408,6 +405,35 @@ u8 cMissionMultiStep::FUN_00c5a130()
         }
     }
     return complete;
+}
+
+// @ 0x00c5a180
+void cMissionMultiStep::FUN_00c5a180(u32 idx, void* out)
+{
+    u32 tbl[10];
+    tbl[0] = 0x6d227611; tbl[1] = 0x6d227612; tbl[2] = 0x6d227613;
+    tbl[3] = 0x6d227614; tbl[4] = 0x6d227615;
+    tbl[5] = 0x1e7c3f9e; tbl[6] = 0x1e7c3f9d; tbl[7] = 0x1e7c3f9c;
+    tbl[8] = 0x1e7c3f9b; tbl[9] = 0x1e7c3f9a;
+    if (idx < 5) {
+        void* m = ((void**)mSubBegin)[idx];
+        if (m != 0) {
+            i32 s = SUBV(m)->GetStateId();
+            if (s >= 2) {
+                if (s > 3) {
+                    if (s == 9) {
+                        MOPS(m)->FUN_00c487d0(tbl[idx], out);
+                    }
+                } else {
+                    if (!SUBV(m)->IsDone()) {
+                        MOPS(m)->FUN_00c487d0(tbl[idx], out);
+                    } else {
+                        MOPS(m)->FUN_00c487d0(tbl[idx + 5], out);
+                    }
+                }
+            }
+        }
+    }
 }
 
 // @ 0x00c5a260
@@ -633,4 +659,31 @@ void cMissionMultiStep_s00c5_a580::Shutdown()
     mCurrentStepIndex = -1;
     ShutdownMissionStepState();
     (void)nRewards;
+}
+
+// @ 0x00c5ac60
+void cMissionMultiStep_s00c5_a580::GetUILongDescriptionSoFar(void* pString)
+{
+    if (!IsActive())
+        return;
+
+    void** pStr = (void**)pString;
+    if (pStr[0] != pStr[1]) {
+        *(uint16_t*)pStr[0] = 0;
+        pStr[1] = pStr[0];
+    }
+
+    if (mCurrentStepIndex >= 0) {
+        for (int i = 0; i <= mCurrentStepIndex; ++i) {
+            cMissionStep* pStep = mpStepsBegin[i];
+            int nState = pStep->GetStepState();
+            if (nState == 3 || nState == 9) {
+                wchar_t* pBuffer = nullptr;
+                wchar_t* pBufferEnd = nullptr;
+                AppendMissionString(pString, L"%s\n\n", pBuffer);
+                if (pBufferEnd - pBuffer > 2 && pBuffer != nullptr)
+                    operator_delete__(pBuffer);
+            }
+        }
+    }
 }

@@ -1,4 +1,5 @@
-# va  reason
+# va  diff-bytes  reason
+00e22b50  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00e25c30  438  vector<T>::insert: reallocation branch written, in-place insert branch not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e25df0  240  partition over 4-byte AutoRefCount elements: predicate callback + release sketched, compaction tail approximated flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e25fa0  203  cSPUIPosseItem::update_control_value: control map lookup / value application approximated, blink vcall path partial flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

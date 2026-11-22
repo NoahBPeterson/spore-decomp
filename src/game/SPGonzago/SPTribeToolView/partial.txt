@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 00d0c170  -  stub: placeholder body (ours 3 bytes, retail 1079 bytes); needs real source; match/slices/s00d0c010/s00d0c010.cpp mentions this address and may hold an earlier draft. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1079 bytes - cTribeToolView::UpdateRotationSound (tribe animation/sound dispatch), body not reconstructed.
+00e93380  313  SP::cTribeToolView::MakeView: mostly structured (359 vs 363 B) but the vtable+0x28 (0x00e92740) call passes the model world as its first argument where the original passes gameData (world is the second); equiv FAIL (fake-arity at the virtual call) flags: /O2 /MD /Gy /TP /arch:SSE
+00e934f0  1227  SP::cTribeToolView::UpdateDamageState: large reconstruction (1408 vs 1220 B, helpers left out-of-line) with approximately-resolved helper/annotation call sites; equiv UNSUPPORTED (3 unresolved cGonzagoTimer references) flags: /O2 /MD /Gy /TP /arch:SSE

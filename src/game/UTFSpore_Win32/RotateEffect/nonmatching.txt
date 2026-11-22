@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00980e30 21 RotateEffect ctor: complete; original keeps the dead base-vptr store to +0x60 and schedules the vtable stores before the float stores; difftest PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00980ea0  37  BasicFactory_RotateEffect::CreateInstance: complete; inlined ctor's dead base-vptr store + float/vtable store order differ; difftest PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2059,6 +2059,37 @@ void RandomDirection3(Vector3_s00b8_4270__g8* out);                       // 0x0
 extern Vector3_s00b8_4270__g8 gNoSurfacePosition;                          // 0x016881f0
 // ---- items of slice s00b84270_g8 end
 
+// ---- items of slice s00b815a0_match begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kVectorEpsilon;
+namespace SP {
+struct Quat_s00b8_15a0__match {
+  float x, y, z, w;
+};
+}
+namespace SP {
+struct cTerrainSphere_s00b8_15a0__match {
+  // retail returns cSPQuaternion by value; the hidden return pointer is spelled
+  // out here so the call site keeps that shape.
+  void BuildSurfaceOrientation(Quat_s00b8_15a0__match * out, cSPVector3 const & dir,
+                               Quat_s00b8_15a0__match const & ref) const;  // 0x00f9c960
+};
+}
+namespace SP {
+class cPlanetModel_s00b8_15a0__match {
+ public:
+  char pad0[0x20];
+  cTerrainSphere_s00b8_15a0__match * mpSphere;  // +0x20
+  int mpISphere;              // +0x24
+
+  float GetRadiusAt(cSPVector3 const &) const;  // 0x00b7ef70 (SP::cPlanetModel::GetRadiusAt)
+  float GetRadiusAt(cSPVector3 const * dir) const;  // 0x00b7ef70 (SP::cPlanetModel::GetRadiusAt)
+  cSPVector3 * DirectionToSurfacePosition(cSPVector3 *, cSPVector3 const *) const;  // 0x00b815a0 (SP::cPlanetModel::DirectionToSurfacePosition)
+  int IsPositionBelowSurface(cSPVector3 const * dir) const;  // 0x00b81f90 (SP::cPlanetModel::IsPositionBelowSurface)
+  void FUN_00b81a40(cSPVector3 * out, cSPVector3 const * dir, float a, float b);
+};
+}
+// ---- items of slice s00b815a0_match end
+
 // @ 0x00473500
 template vector_s0047_2b80<Pod12, 4>& vector_s0047_2b80<Pod12, 4>::operator=(const vector_s0047_2b80<Pod12, 4>&)
 ;
@@ -2856,6 +2887,24 @@ float SP::cPlanetModel::DistanceBetweenPoints(cSPVector3 const & a, cSPVector3 c
     float angle = acosf(dot);
     return angle * ((r1 + r2) * kHalf);
 }
+
+// @ 0x00b815a0
+namespace SP {
+cSPVector3 * cPlanetModel_s00b8_15a0__match::DirectionToSurfacePosition(cSPVector3 * out, cSPVector3 const * dir) const
+{
+  float radius = GetRadiusAt(*dir);
+  float inv = 1.0f / sqrtf(dir->x * dir->x + dir->y * dir->y + dir->z * dir->z +
+                            kVectorEpsilon);
+  float v[3];
+  v[0] = dir->x * inv;
+  v[1] = dir->y * inv;
+  v[2] = dir->z * inv;
+  out->x = v[0] * radius;
+  out->y = v[1] * radius;
+  out->z = v[2] * radius;
+  return out;
+}
+}  // namespace SP
 
 // @ 0x00b81c80
 void cPlanetModel_s00b8_15a0::FUN_00b81c80(Vec3* out, const Vec3* pa, const Vec3* pb, float s)

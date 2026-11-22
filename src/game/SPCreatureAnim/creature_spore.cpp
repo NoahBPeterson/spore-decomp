@@ -17,6 +17,9 @@
 #include "EA/ArgScript/cIParser.h"
 #include "nSPCreatureAnim/creature_effect.h"
 #include <string.h>
+#include "EA/ArgScript/cCommandBase.h"
+#include "EA/ArgScript/cIBlockCommand.h"
+#include "EA/ArgScript/cICommand.h"
 
 // ---- items of slice s009c8a90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #undef SPPV8
@@ -2335,6 +2338,28 @@ void cBlockBlockCommand_s009c_a4b0::OnRegister(cIParser_s009c_a4b0* parser, cSta
 
 #undef REGISTER
 }
+
+// @ 0x009caa40
+namespace nSPCreatureAnim {
+void creature_effect_s009c_a4b0::Init(cIVisualEffect* p, unsigned long bidx_, unsigned long id_)
+{
+    Clear(false);
+    id = id_;
+    bidx = bidx_;
+    effect = p;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009caa90
+namespace nSPCreatureAnim {
+void creature_effect_s009c_a4b0::Init(unsigned long soundId, unsigned long bidx_, unsigned long id_)
+{
+    Clear(false);
+    id = id_;
+    bidx = bidx_;
+    sound_id = soundId;
+}
+}  // namespace nSPCreatureAnim
 
 // @ 0x009caac0
 namespace nSPCreatureAnim {

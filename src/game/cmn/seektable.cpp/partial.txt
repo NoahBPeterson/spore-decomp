@@ -1,0 +1,2 @@
+# Functions whose port is not byte-exact and that the equivalence harness could not clear.
+# Format: <va>  <differing-bytes>  <reason>
