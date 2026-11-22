@@ -884,11 +884,8 @@ int rw::movie::MoviePlayer::ConfigureVideo(const char* path, unsigned int a, uns
     const char* e = path;
     while (*e != 0)
         ++e;
-    if (e - path > 3 && e[-4] == '.' && e[-3] == 'a' && e[-2] == 'v' && e[-1] == 'i') {
-        mIsAVIFile = 1;
-        return 0;
-    }
-    mIsAVIFile = 0;
+    int isAVI = e - path >= 4 && e[-4] == '.' && e[-3] == 'a' && e[-2] == 'v' && e[-1] == 'i';
+    mIsAVIFile = isAVI;
     return 0;
     }
     mVideoFilePath = 0;

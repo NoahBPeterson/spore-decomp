@@ -28,3 +28,4 @@
 ../src/game/SPMovie/movieplayer.cpp  ?Shutdown@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?Decode@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?Prepare@MovieRenderer_s00fc_b210@movie@rw@@QAEXPAX000@Z  00fcbd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?ConfigureVideo@MoviePlayer@movie@rw@@QAEHPBDIIII@Z  00fcaa70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
