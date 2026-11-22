@@ -674,38 +674,34 @@ u32 ReadCachedBit(BitCache* s)
 }
 
 // @ 0x00fcf130
-bool FUN_00fcf130(BitReaderA* s, int n)
+int FUN_00fcf130(BitState* s, int prob)
 {
-    unsigned range = s->m_04;
-    unsigned value = s->m_08;
-    int      bits  = s->m_0c;
-    unsigned inc   = (((range - 1) * (unsigned)n) >> 8) + 1;
-    bool     ok;
-
-    if ((inc << 24) <= value) {
-        range -= inc;
-        value -= inc << 24;
-        ok = true;
+    int bits = s->bits;
+    u32 value = s->value;
+    u32 range = s->range;
+    u32 split = ((range - 1) * (u32)prob >> 8) + 1;
+    u32 cmp = split << 24;
+    int high = 0;
+    if (value >= cmp) {
+        range -= split;
+        value -= cmp;
+        high = 1;
+    } else {
+        range = split;
     }
-    else {
-        range = inc;
-        ok = false;
-    }
-
     while (range < 0x80) {
         range += range;
         value += value;
         if (--bits == 0) {
-            value |= s->m_14[s->m_10];
-            s->m_10 = s->m_10 + 1;
+            value |= s->buf[s->pos];
             bits = 8;
+            s->pos++;
         }
     }
-
-    s->m_04 = range;
-    s->m_08 = value;
-    s->m_0c = bits;
-    return ok;
+    s->range = range;
+    s->value = value;
+    s->bits = bits;
+    return high;
 }
 
 // @ 0x00fcf1b0
