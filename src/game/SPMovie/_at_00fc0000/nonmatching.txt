@@ -8,7 +8,6 @@
 00fcf1b0 107 flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00fcf230 244 flags: /O2 /MD /Gy /TP
 00fcf330 650 flags: /O2 /MD /Gy /TP
-00fcf600 45 flags: /O2 /MD /Gy /TP
 00fcf660 197 flags: /O2 /MD /Gy /TP
 00fcf770 459 flags: /O2 /MD /Gy /TP
 00fcf9a0 223 flags: /O2 /MD /Gy /TP

@@ -912,10 +912,12 @@ next:
 // @ 0x00fcf600
 int FUN_00fcf600(int p)
 {
-    int a = FUN_00fcef80(p + 0x10c);
-    int b = FUN_00fcef80(p + 0x10c);
+    int r = p + 0x10c;
+    int v = FUN_00fcef80(r) * 2;
+    v += FUN_00fcef80(r);
 
-    switch (b + a * 2) {
+    switch (v) {
+    case 0:  return 0;
     case 1:  return 2;
     case 2:  return 3;
     case 3:  return 4;

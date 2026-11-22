@@ -10,3 +10,4 @@
 ../src/game/SPMovie/_at_00fc0000.cpp  ?Ctor3c0@Vp6Ext@@QAEPAU1@XZ  00fcd3c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/_at_00fc0000.cpp  ?Ctor940@Vp6Ext@@QAEPAU1@H@Z  00fcd940  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/_at_00fc0000.cpp  ??0VideoEncoder_Jpeg@movie@rw@@QAE@XZ  00fcde80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  ?FUN_00fcf600@@YAHH@Z  00fcf600  /O2 /MD /Gy /TP /Isrc/game/include
