@@ -94,6 +94,20 @@ struct cSPEditorBlock {
     char pad[0x48];
     float mPosX, mPosY, mPosZ;    // +0x48
 };
+struct ModelRef {
+    cMWModel* p;
+    ModelRef(const ModelRef& r)
+    {
+        p = r.p;
+        if (p)
+            p->AddRef();
+    }
+};
+void* GetAnimMgr();   // @ 0x00401060, returns the global at 0x015d0c18
+bool Vector3_NotEqual(const Vector3* a, const Vector3* b);   // @ 0x0041dd30, cdecl
+typedef void (__thiscall *AnimFn)(void*, ModelRef, int, float, float, int);
+#define ANIM(pAnimator, model, prop, value, time) \
+    ((AnimFn)(*(void***)(pAnimator))[6])((pAnimator), *(ModelRef*)&(model), (prop), (value), (time), 1)
 // ---- items of slice s0047e4b0 end
 
 // ---- items of slice s004834d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -577,6 +591,95 @@ uint32_t cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)
     if (this->mModel || this->mOverdrawModel)
         eax = (eax & 0xFFFFFF00u) | highlight;
     return eax;
+}
+
+// @ 0x0047ebe0
+void* cSPEditorHandle::GetZeroVector(void* out)
+{
+    int v[3] = { 0, 0, 0 };
+    ((int*)out)[0] = v[0];
+    ((int*)out)[1] = v[1];
+    ((int*)out)[2] = v[2];
+    return out;
+}
+
+// @ 0x0047ec40
+void cSPEditorHandle::SetState(int state, bool animate)
+{
+    if (state != this->mCurrentState && this->mCurrentState == 1) {
+        if (GetModel())
+            GetModel()->SetFlag(true);
+        if (GetOverdrawModel())
+            GetOverdrawModel()->SetFlag(true);
+    }
+
+    float time;
+    void* pAnimator = 0;
+    if (animate)
+        pAnimator = GetAnimMgr();
+    time = (state == 1) ? this->mFadeOutTime : this->mFadeInTime;
+
+    if (GetModel()) {
+        float oldAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xe])(this, this->mCurrentState);
+        float newAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xe])(this, state);
+        if (oldAlpha != newAlpha) {
+            if (animate)
+                ANIM(pAnimator, this->mModel, 4, newAlpha, time);
+            else
+                GetModel()->mAlpha = newAlpha;
+        }
+        Vector3 oldColor, newColor;
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x10])(this, &oldColor, this->mCurrentState);
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x10])(this, &newColor, state);
+        if (Vector3_NotEqual(&oldColor, &newColor)) {
+            if (animate) {
+                ANIM(pAnimator, this->mModel, 1, newColor.x, time);
+                ANIM(pAnimator, this->mModel, 2, newColor.y, time);
+                ANIM(pAnimator, this->mModel, 3, newColor.z, time);
+            } else {
+                Vector3& dst = GetModel()->mColor;
+                dst = newColor;
+            }
+        }
+    }
+
+    if (GetOverdrawModel()) {
+        float oldAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xf])(this, this->mCurrentState);
+        float newAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xf])(this, state);
+        if (oldAlpha != newAlpha) {
+            if (animate)
+                ANIM(pAnimator, this->mOverdrawModel, 4, newAlpha, time);
+            else
+                GetOverdrawModel()->mAlpha = newAlpha;
+        }
+        Vector3 oldColor, newColor;
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x11])(this, &oldColor, this->mCurrentState);
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x11])(this, &newColor, state);
+        if (Vector3_NotEqual(&oldColor, &newColor)) {
+            if (animate) {
+                ANIM(pAnimator, this->mOverdrawModel, 1, newColor.x, time);
+                ANIM(pAnimator, this->mOverdrawModel, 2, newColor.y, time);
+                ANIM(pAnimator, this->mOverdrawModel, 3, newColor.z, time);
+            } else {
+                Vector3& dst = GetOverdrawModel()->mColor;
+                dst = newColor;
+            }
+        }
+    }
+    this->mCurrentState = state;
+}
+
+// @ 0x0047f290
+bool cSPEditorHandle::IsFlagSet()
+{
+    if (this->mModel == 0)
+        return false;
+    if (this->mOverdrawModel == 0)
+        return this->mModel->mFlags.test(0);
+    bool m = this->mModel->mFlags.test(0);
+    if (!m && !this->mOverdrawModel->mFlags.test(0))
+        return false;
+    return true;
 }
 
 // @ 0x00483e90

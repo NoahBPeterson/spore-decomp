@@ -1,6 +1,7 @@
 # va  diff-bytes  reason
-00813300 99 complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
-00813370 94 complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs
+00812db0  335 complete: cSPUIMainWin::BuildMouseMsg; same-TU GetFlags/MapFlags bodies let cl assume register clobbers (original kept result in ebx) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00813300 99 complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00813370 94 complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 008137f0 182 complete: MainWin::InitStringFactories; thiscall StringMan/refcount call shapes differ
 008138e0 113 complete: MainWin::ShutdownStringFactories; thiscall release + refcount store schedule differ
 00813ca0 305 complete: cSPUIMainWin destructor; field-release order/registers differ [equiv: UNSUPPORTED, 0/1012 valid inputs (read faults)]

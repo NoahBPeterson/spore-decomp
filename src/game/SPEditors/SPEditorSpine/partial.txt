@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-005cd670  500   editor-spine helper: body not reconstructed (stub)
-005cd9a0  317   cSPEditorSpine::CreateVertebraShape: Havok shape construction not reconstructed (stub)
-005cdbf0  258   cSPEditorSpine::CreateWallBoxAndAddToWorld: Havok construction not reconstructed (stub)
+005cd670  -  stub: placeholder body (ours 1 bytes, retail 500 bytes); needs real source. Was noted as complete: editor-spine helper (basis rebuild): hkVector4-aligned local matches the original exactly under equivalence; x87 sqrt + fdivrp reciprocal and the cross-product register schedule still differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005cd9a0  -  stub: placeholder body (ours 1 bytes, retail 317 bytes); needs real source. Was noted as complete: cSPEditorSpine::CreateVertebraShape: hkCapsuleShape(vertexA,vertexB,radius) + hkConvexTranslateShape(capsule,offset) built via hkMemory::allocate(0x30,0x24); retail endpoint/offset vectors and the shape release sequence differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005cdbf0  -  stub: placeholder body (ours 1 bytes, retail 258 bytes); needs real source. Was noted as complete: cSPEditorSpine::CreateWallBoxAndAddToWorld: hkRigidBodyCinfo filled by offset (shape +4, position +0x10, +0xb0=0.0f, +0xc0=7), hkBoxShape halfExt/0.04, rigid body +0x64 solverTau/+0x38=1, world addEntity; cinfo/box/body construction order differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005cdd00  861  CreateVertebraBody: large Havok rigid-body construction not reconstructed (skeleton)
 005ce300  894  LoadDynamicTuning: property-system tuning load not reconstructed (skeleton)
 005ce7b0  498  FUN_005ce7b0: list-vs-direction search with x87 distances not reconstructed (skeleton)

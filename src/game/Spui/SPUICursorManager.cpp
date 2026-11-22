@@ -42,6 +42,7 @@ struct C_801980 { char pad[0x44]; uint8_t m44; char pad45[0xb]; void* m50; void 
 // ---- items of slice s007ffc70 end
 
 // ---- items of slice s008019f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int   __stdcall GetIconInfo(void* icon, void* iconInfo);
 extern char fac_a[], fac_b[];
 void* __cdecl operator_new(unsigned size, const char* name, int a, int b, const char* f, int l);
 struct C_801ac0 { bool f(void* p2, void* p3, int p4, int p5); };
@@ -58,8 +59,15 @@ unsigned __cdecl RBTreeIncrement(void* node);
 void  __cdecl RBTreeErase(void* node, void* anchor); // 0x00921880
 void*  __cdecl SP_PropertyManager();
 float* __cdecl SP_GetPropertyAsFloat();
+void*  __cdecl SP_Canvas();
+void*  __cdecl Eapd_ObjectError();
 bool __stdcall Sub_8026b0(const wchar_t* name, void* info);
 bool __stdcall Sub_8026e0(void* info);
+struct MapBase_s0080_19f0 {
+  void Find(void** outIter, const uint32_t* key);   // 0x00E5C780
+  void Erase(void** outIter, void* node);     // 0x00801E90
+  void NukeSubtree(void* node);               // 0x00801EF0
+};
 struct MapIter {
   void* mpNode;
   MapIter() {}
@@ -76,6 +84,13 @@ struct WStr {
 void __cdecl DoInsertValue(void* dst, const void* src, unsigned n);  // 0x011E0744
 struct RbtreeNode { void* DoCreateNode(void* value); };  // 0x00801C80
 struct RCObj { virtual void r0(); virtual void Release(); };
+struct CursorHandle {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+  virtual bool Destroy(void* a);                        // +0x10 (slot 4)
+};
 struct Slice11 {
   void SetWindow(void* p);
   bool SetEnabled(bool v);
@@ -94,12 +109,8 @@ struct CurMgr {
   __declspec(noinline) bool DestroyEntry(void* it);     // 0x008027a0
   bool CheckEntry(void* it);       // 0x00802850
 };
-struct C_802870 { unsigned f(unsigned arg); };
-unsigned C_802870::f(unsigned arg) {
-  if (arg != 0x2f009dd0)
-    return 0;
-  return ((char*)this - 4) ? (unsigned)(unsigned)this : 0u;
-}
+struct CurMgrStub { bool chk_008026e0(void* info); };
+struct IconInfo { int f0; int f1; void* hbmColor; void* hbmMask; };
 void Sub_8019f0();
 struct FileStream {
   uint32_t mData[0x22c / 4];
@@ -369,7 +380,7 @@ bool CurMgr::FindGlobal(uint32_t k)
 {
   uint32_t key = k;
   void* it;
-  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  ((MapBase_s0080_19f0*)((char*)this + 0xc))->Find(&it, &key);
   void* found = (it != (void*)((char*)this + 0x10)) ? (void*)((char*)it + 0x14) : 0;
   if (found != *(void**)((char*)this + 0x30)) {
     *(void**)((char*)this + 0x30) = found;
@@ -383,7 +394,7 @@ bool CurMgr::FindLocal(uint32_t k)
 {
   uint32_t key = k;
   void* it;
-  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  ((MapBase_s0080_19f0*)((char*)this + 0xc))->Find(&it, &key);
   void* found = (it != (void*)((char*)this + 0x10)) ? (void*)((char*)it + 0x14) : 0;
   if (found && found != *(void**)((char*)this + 0x2c)) {
     *(void**)((char*)this + 0x2c) = found;
@@ -397,7 +408,7 @@ bool CurMgr::FindCanvas(uint32_t k)
 {
   uint32_t key = k;
   void* it;
-  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  ((MapBase_s0080_19f0*)((char*)this + 0xc))->Find(&it, &key);
   void* found = (it != (void*)((char*)this + 0x10)) ? (void*)((char*)it + 0x14) : 0;
   if (found && found != *(void**)((char*)this + 0x34)) {
     *(void**)((char*)this + 0x34) = found;
@@ -517,7 +528,7 @@ uint32_t CursorTable::AddCursor(void* self, uint32_t id, const wchar_t* name, ch
 {
   void* it = 0;
   uint32_t key = id;
-  ((MapBase*)((char*)self + 0xc))->Find(&it, &key);
+  ((MapBase_s0080_19f0*)((char*)self + 0xc))->Find(&it, &key);
   if (it != (char*)self + 0x10)
     return 0;
   (void)name; (void)load; (void)a; (void)b;
@@ -571,7 +582,7 @@ bool CurMgr::Remove(uint32_t k)
 {
   uint32_t key = k;
   void* it;
-  ((MapBase*)((char*)this + 0xc))->Find(&it, &key);
+  ((MapBase_s0080_19f0*)((char*)this + 0xc))->Find(&it, &key);
   bool r = false;
   if (it != (void*)((char*)this + 0x10)) {
     void* info = (char*)it + 0x14;
@@ -580,7 +591,8 @@ bool CurMgr::Remove(uint32_t k)
     if (info == *(void**)((char*)this + 0x38)) *(void**)((char*)this + 0x38) = 0;
     if (info == *(void**)((char*)this + 0x34)) *(void**)((char*)this + 0x34) = 0;
     r = this->DestroyEntry(it);
-    ((MapBase*)((char*)this + 0xc))->Erase(it);
+    void* out = 0;
+    ((MapBase_s0080_19f0*)((char*)this + 0xc))->Erase(&out, it);
     if (*(uint8_t*)((char*)this + 0x40) && *(void**)((char*)this + 0x38) != 0)
       this->Refresh();
   }
@@ -608,11 +620,11 @@ bool CurMgr::Clear()
 // @ 0x008025e0
 void* __fastcall Sub_8025e0(void* self)
 {
-  *(void* volatile*)self = (void*)cc_a;
-  _InterlockedExchange((long*)((char*)self + 4), 0);
-  *(void* volatile*)((char*)self + 8) = (void*)cc_b;
-  *(void* volatile*)self = (void*)cc_c;
-  *(void* volatile*)((char*)self + 8) = (void*)0x1416fd4;
+  *(void**)self = (void*)cc_a;
+  *(void**)((char*)self + 4) = 0;
+  *(void**)((char*)self + 8) = (void*)cc_b;
+  *(void**)self = (void*)cc_c;
+  *(void**)((char*)self + 8) = (void*)0x1416fd4;
   *(void**)((char*)self + 0x14) = 0;
   *(void**)((char*)self + 0x18) = 0;
   *(void**)((char*)self + 0x1c) = 0;
@@ -665,8 +677,80 @@ bool __stdcall Sub_8026b0(const wchar_t* name, void* info)
   return h != 0;
 }
 
-// @ 0x00802850  ecx carries the cursor manager into 0x008026e0 (thiscall form)
-struct CurMgrStub { bool chk_008026e0(void* info); };
+// @ 0x008026e0
+bool __stdcall Sub_8026e0(void* info)
+{
+  *(void**)((char*)info + 0x18) = 0;
+  IconInfo ii;
+  ii.f0 = 0; ii.f1 = 0; ii.hbmColor = 0; ii.hbmMask = 0;
+  void* obj = Eapd_ObjectError();
+  void* a = *(void**)info;
+  ((void(__thiscall*)(void*, int, int, void*, void*))((*(void***)obj)[0x78 / 4]))(
+      obj, 0x2393756, 0x2393c07, &ii, 0);
+  void* obj2 = Eapd_ObjectError();
+  void* tmp = *(void**)((char*)info + 0x1c);
+  if (tmp) {
+    *(void**)((char*)info + 0x1c) = 0;
+    ((RCObj*)tmp)->Release();
+  }
+  if (((uint8_t (__thiscall*)(void*, void*, int, int, int, int))((*(void***)obj2)[0xc / 4]))(
+          obj2, a, 0, 0, 0, 0)) {
+    void* hIcon = *(void**)((char*)a + 0x14);
+    if (GetIconInfo(hIcon, &ii)) {
+      *(int*)((char*)info + 0x10) = ii.f0;
+      *(int*)((char*)info + 0x14) = ii.f1;
+    }
+    *(void**)((char*)info + 0x18) = hIcon;
+  }
+  bool r = *(void**)((char*)info + 0x18) != 0;
+  void* q = *(void**)((char*)info + 0x1c);
+  if (q)
+    ((RCObj*)q)->Release();
+  return r;
+}
+
+// @ 0x008027a0
+bool CurMgr::DestroyEntry(void* it)
+{
+  if (it == (char*)this + 0x10)
+    return false;
+  void* h = *(void**)((char*)it + 0x2c);
+  bool r = true;
+  if (h)
+    r = ((CursorHandle*)h)->Destroy(h);
+  *(void**)((char*)it + 0x2c) = 0;
+  return r;
+}
+
+// @ 0x008027e0
+void CurMgr::Refresh()
+{
+  if (!*(uint8_t*)((char*)this + 0x40))
+    return;
+  void* info;
+  if (*(int*)((char*)this + 0x58) < 1) {
+    info = *(void**)((char*)this + 0x30);
+    if (!info) {
+      if (*(uint8_t*)((char*)this + 0x42)) info = *(void**)((char*)this + 0x2c);
+      else info = *(void**)((char*)this + 0x34);
+      if (!info) goto set;
+    }
+  } else {
+    info = *(void**)((char*)this + 0x3c);
+  }
+  *(void**)((char*)this + 0x38) = info;
+set:
+  info = *(void**)((char*)this + 0x38);
+  void* h = 0;
+  if (info && (*(void**)((char*)info + 0x18) != 0 ||
+               (*(void**)info != *(void**)((char*)info + 4) && Sub_8026e0(info)))) {
+    h = *(void**)((char*)(*(void**)((char*)this + 0x38)) + 0x18);
+  }
+  void* c = SP_Canvas();
+  ((void(__thiscall*)(void*, void*))((*(void***)c)[0x80 / 4]))(c, h);
+}
+
+// @ 0x00802850
 bool CurMgr::CheckEntry(void* it)
 {
   if (it == (void*)((char*)this + 0x10))

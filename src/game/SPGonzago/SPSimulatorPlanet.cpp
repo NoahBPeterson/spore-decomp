@@ -690,6 +690,12 @@ struct PbObj {                          // *(noun+0x518)
 };
 }
 namespace SP {
+struct PbHolder {                       // returned by noun vtable slot 1
+    uint8_t pad00[0x518];
+    PbObj*  m518;                       // +0x518
+};
+}
+namespace SP {
 struct Entity {
     PV                                  // +0x00
     virtual void* Slot04(int);          // +0x04
@@ -786,6 +792,14 @@ struct AudioSystem {
 };
 }
 namespace SP {
+struct BehaviorManager_s00ff_a2c0 {
+    PV8 PV4
+    virtual void Slot30();                                          // +0x30
+    PV4
+    virtual void Slot44();                                          // +0x44
+};
+}
+namespace SP {
 struct BehaviorManager {
     PV8 PV4
     virtual void Slot30();                                          // +0x30
@@ -797,6 +811,12 @@ namespace SP {
 struct CheatManager {
     PV4 PV2 PV
     virtual void Slot1c(void*);                                     // +0x1c
+};
+}
+namespace SP {
+struct MessageServer_s00ff_a2c0 {
+    PV4 PV
+    virtual void Slot14(int, int, int);                             // +0x14
 };
 }
 namespace SP {
@@ -815,6 +835,18 @@ namespace SP {
 struct SimSingleton {
     SimSingleton* ctor();               // 0x00dc7d70
     void FUN_00dcc2c0();                // 0x00dcc2c0
+};
+}
+namespace SP {
+struct EffectsManager {
+    PV8 PV2 PV
+    virtual bool Slot2C(int, int, void*);                           // +0x2c
+};
+}
+namespace SP {
+struct TerrainSphere {
+    PV16 PV16 PV8 PV2 PV
+    virtual void SlotAC();                                          // +0xac
 };
 }
 namespace SP {
@@ -885,6 +917,9 @@ namespace SP {
 struct cSPSpaceCombatTuning { float GetLootCityMoneyChance(); };    // 0x0102a310
 }
 namespace SP {
+struct RelMgr { bool FUN_00d01f50(); };                             // 0x00d01f50
+}
+namespace SP {
 struct AeObj { void FUN_00ae49d0(int, int, void*, int, int, int, int, int); };  // 0x00ae49d0
 }
 namespace SP {
@@ -912,16 +947,43 @@ namespace SP {
 extern char gFn_00b1e500[];    // 0x00b1e500
 }
 namespace SP {
+extern char gFn_00b1e520[];    // 0x00b1e520
+}
+namespace SP {
+extern char gFn_00ae7060[];    // 0x00ae7060
+}
+namespace SP {
+extern char gFn_00ae7080[];    // 0x00ae7080
+}
+namespace SP {
 extern char gStr_spgspg[];     // 0x01495078 "spg_war_music_level"
 }
 namespace SP {
 extern char gStr_SimSingleton[]; // 0x0145f924 "Simulator/SimSingleton"
 }
 namespace SP {
+extern const float gF_1485378;  // 0x01485378 0.0
+}
+namespace SP {
+extern const float gF_13ec4d0;  // 0x013ec4d0 100.0
+}
+namespace SP {
+extern const float gF_15b60d8;  // 0x015b60d8
+}
+namespace SP {
 extern uint32_t gU_15b8690;     // 0x015b8690
 }
 namespace SP {
 extern void* gSim_1699ab8;      // 0x01699ab8
+}
+namespace SP {
+extern uint32_t gKey_016db5c4;  // 0x016db5c4
+}
+namespace SP {
+extern uint32_t gKey_016db5c8;  // 0x016db5c8
+}
+namespace SP {
+extern uint32_t gKey_016db5cc;  // 0x016db5cc
 }
 namespace SP {
 extern RandomLCG gRand_1601760; // 0x01601760
@@ -942,16 +1004,22 @@ namespace SP {
 SimTicker* SimTicker_();                  // 0x00b3d330
 }
 namespace SP {
-BehaviorManager* BehaviorManager_();      // 0x00b3d260
+BehaviorManager_s00ff_a2c0* BehaviorManager_();      // 0x00b3d260
 }
 namespace SP {
 CheatManager* CheatManager_();            // 0x0067de20
 }
 namespace SP {
-MessageServer* MessageServer_();          // 0x0067dcc0
+MessageServer_s00ff_a2c0* MessageServer_();          // 0x0067dcc0
+}
+namespace SP {
+EffectsManager* EffectsManagerPtr_s00ff_a2c0();      // 0x0067ddd0
 }
 namespace SP {
 AudioSystem* GetSystemAT();               // 0x00a206f0
+}
+namespace SP {
+TerrainSphere* GetActiveTerrainSphere();  // 0x00f48aa0
 }
 namespace SP {
 UFOsim* GetUFOSimulator();                // 0x00ffbe50
@@ -984,6 +1052,9 @@ namespace SP {
 void DropLoot(Vec3_s00ff_a2c0);                      // 0x0102ba30
 }
 namespace SP {
+bool IsMissionActiveAtPlanet(PlanetObj*);// 0x0102adf0
+}
+namespace SP {
 void* operator_new(uint32_t, const void*, int, int, int, int);  // 0x00f473a0
 }
 namespace SP {
@@ -994,6 +1065,9 @@ void* RBTreeIncrement(void*);             // 0x00921580
 }
 namespace SP {
 void  FUN_00ba5270(void*, int);           // 0x00ba5270
+}
+namespace SP {
+void  FUN_00bd7d10(int, float);           // 0x00bd7d10
 }
 namespace SP {
 void  FUN_00bd7f70(Vec3_s00ff_a2c0*, float*);        // 0x00bd7f70
@@ -1012,6 +1086,9 @@ void* FUN_00b26930(int, int, void*, int, int, int, int, int);   // 0x00b26930
 }
 namespace SP {
 int   FUN_0102b690(int, int, int);        // 0x0102b690
+}
+namespace SP {
+RelMgr* FUN_00b3d2c0(int, int);           // 0x00b3d2c0
 }
 namespace SP {
 struct ListNode { ListNode* mNext; uint32_t m04; RefObj_s00ff_a2c0* m08; };
@@ -1073,9 +1150,13 @@ public:
 
 // ---- items of slice s00ffb180 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl operator_delete_array(void* pBlock);                                                          // 0x00f47380
+extern char g_szSimulator[];        // 0x013f09b4 "Simulator"
+extern char g_szEastlFile[];        // 0x013ebb38 ".../EASTL/allocator.h"
 extern char g_nounListPlanet[];        // 0x018c43e8
+extern char g_nounListUFO[];           // 0x018ebadc
 extern char g_nounListHarvest[];       // 0x0142db2a
 extern uint32_t g_planetBusterKey[3];  // 0x016db5c4 planet-buster bomb key
+extern uint32_t g_missionPreventKey;   // 0x016db434
 extern float    g_defaultVector[3];    // 0x016db418
 extern char     g_szUFOString[];       // 0x015b60ec
 extern void*    g_slotMessageVtable[]; // 0x013eb844
@@ -1086,6 +1167,7 @@ extern float g_kRealZero;           // 0x01485378
 void __cdecl FUN_00cd7d10();           // 0x00cd7d10
 void __cdecl FUN_00d3d420();           // 0x00d3d420
 void __cdecl FUN_00acdff0();           // 0x00acdff0
+void __cdecl FUN_00ad48b0();           // 0x00ad48b0
 void __cdecl FUN_00b1e500();           // 0x00b1e500
 void __cdecl FUN_00ae7060();           // 0x00ae7060 VecT_clear_cb
 void __cdecl FUN_00ae7080();           // 0x00ae7080 CollectSubsystemA
@@ -1093,6 +1175,7 @@ void __cdecl FUN_00b1e520();           // 0x00b1e520
 class cSimGameData;
 class cCityHall_s00ff_b180;
 class tEffectHandle;
+class tUFOObject;
 class tUFOData;
 struct tPtrVector {
     void** mpBegin;                 // +0x00
@@ -1145,6 +1228,8 @@ public:
 };
 cPlanetRecord* __cdecl GetActivePlanet_s00ff_b180();   // 0x01021260
 void*          __cdecl GetPlayerEmpire_s00ff_b180();   // 0x01021300
+bool           __cdecl IsHostileToAll(cPlanetRecord* pPlanet);        // 0x0102c600
+bool           __cdecl IsMissionActiveAtPlanet(cPlanetRecord* pPlanet); // 0x0102adf0
 class tCityObj {                    // a polymorphic sub-object embedded in a noun
 public:
     virtual void  v00();            // +0x00
@@ -1214,11 +1299,66 @@ public:
     void       FUN_00c38740(float fA, double fB);           // 0x00c38740
     void       FUN_00bdbf10();                              // 0x00bdbf10
 };
+void* __cdecl FUN_00829110(void** ppOut, void** pBegin, void** pEnd, void** pDst, int32_t nHint); // 0x00829110
+class cStarManager_s00ff_b180 {
+public:
+    void* GetEmpireByID(void* pAvatar);     // 0x00ba9370
+};
+cStarManager_s00ff_b180* __cdecl StarManager_s00ff_b180();        // 0x00b3d2a0
+class cEmpire {
+public:
+    uint8_t mPad00[0x54];                   // +0x000
+    void*   mp54;                           // +0x054 avatar
+
+    bool IsHostileToPlayer();               // 0x00c309e0
+};
 class cRelationshipManager {
 public:
     void RecordEvent(uint32_t nKey, void* pFrom, void* pTo, float fValue);   // 0x00d06240
 };
 cRelationshipManager* __cdecl RelationshipManager();    // 0x00b3d2c0
+class cSPMissionManager_s00ff_b180 {
+public:
+    bool DoMissionsPreventHostility(cPlanetRecord* pPlanet, void* pKey);   // 0x00fedea0
+};
+cSPMissionManager_s00ff_b180* __cdecl GetMissionManager();         // 0x00feb9f0
+class tGameTimeManager {
+public:
+    uint64_t FUN_00b316c0();                // 0x00b316c0
+};
+tGameTimeManager* __cdecl GameTimeManager();   // 0x00b3d380
+class tRandom {
+public:
+    uint32_t RandomUint32Uniform(uint32_t nMax);   // 0x00a68fb0
+};
+extern tRandom g_mathRandom;                // 0x01601760
+class tProperty {
+public:
+    uint8_t  mPad00[0x12];          // +0x00
+    uint16_t mnType;                // +0x12
+
+    float*   GetFloat();            // 0x0041ea70
+    int32_t* GetInt();              // 0x0041e990
+};
+class tPropertyMap {
+public:
+    virtual void v00();             // +0x00
+    virtual void v04();             // +0x04
+    virtual void v08();             // +0x08
+    virtual void v0c();             // +0x0c
+    virtual void v10();             // +0x10
+    virtual void v14();             // +0x14
+    virtual void v18();             // +0x18
+    virtual void v1c();             // +0x1c
+    virtual void v20();             // +0x20
+    virtual bool v24(uint32_t nKey, tProperty** ppProperty);   // +0x24
+};
+class cSPSpaceCombatTuning_s00ff_b180 {
+public:
+    uint8_t       mPad00[0x08];     // +0x00
+    tPropertyMap* mp08;             // +0x08
+};
+cSPSpaceCombatTuning_s00ff_b180* __cdecl GetSpaceCombatTuning_s00ff_b180();   // 0x01029940
 class tEffectHandle {
 public:
     virtual void v00();             // +0x00
@@ -1305,6 +1445,19 @@ public:
     virtual tSimThing* v04(uint32_t nKey);      // +0x04
     uint8_t   mPad04[0x0c];         // +0x004
     bool      mb10;                 // +0x010
+};
+class tUFOObject : public tRefObject {      // vptr +0x00
+public:
+    virtual void  v08();            // +0x08
+    virtual void  v0c();            // +0x0c
+    virtual void  v10();            // +0x10
+    virtual void  v14();            // +0x14
+    virtual void  v18();            // +0x18
+    virtual void  v1c();            // +0x1c
+    virtual void  v20();            // +0x20
+    virtual void  v24();            // +0x24
+    virtual void  v28();            // +0x28
+    virtual bool  v2c();            // +0x2c
 };
 class tUFOData : public tRefObject {        // vptr +0x00
 public:
@@ -1396,6 +1549,16 @@ struct tSlotMessage {
     uint32_t   mn38;                // +0x38
 
     void Destruct();                // 0x00421cf0
+};
+class tMessageThing {
+public:
+    void* FUN_01067e60();           // 0x01067e60
+    void  FUN_01065d20();           // 0x01065d20
+};
+tMessageThing* __cdecl FUN_010666a0_s00ff_b180();  // 0x010666a0
+class tTickHook {
+public:
+    void FUN_00e0df70(cSimGameData* pNoun, void* pValue);   // 0x00e0df70
 };
 class cTerrainSphere {
 public:
@@ -3218,6 +3381,143 @@ void FUN_00ffab60()
 }
 }  // namespace SP
 
+// @ 0x00ffabc0
+namespace SP {
+void cSPSimPlanetHighLOD_s00ff_a2c0::FUN_00ffabc0()
+{
+    int local_24 = 1;
+    PlanetObj* planet = GetActivePlanet();
+    int iVar7 = planet->FUN_00c71e30();
+    int iVar8 = (int)GetPlayerEmpire();
+
+    bool bVar1;
+    if (iVar7 == 0 || iVar7 == iVar8) {
+        bVar1 = false;
+    } else {
+        RelMgr* rel = FUN_00b3d2c0(iVar7, iVar8);
+        bVar1 = true;
+        if (!rel->FUN_00d01f50()) bVar1 = false;
+    }
+    bool bVar2 = false, bVar3 = false, bVar4 = false, bVar5 = false;
+
+    Inventory* inv = GetUFOSimulator()->GetPlayerInventory();
+    GdVector* gv = NounManager()->GetGameDataVector(gFn_00cd7d10, gFn_00d3d420, gFn_00ad48b0, gFn_00b1e500, (void*)0x18ebadc);
+    int cnt = (int)(((char*)gv->m08 - (char*)gv->m04) >> 2);
+    for (int i = 0; i < cnt; i++) {
+        Entity* e = ((Entity**)gv->m04)[i];
+        int iVar16 = e->m714;
+        int iVar13 = e->Slot4C();
+        cEmpire_s00ff_a2c0* empire = StarManager()->GetEmpireByID(iVar13);
+        if (e->Slot2C()) continue;
+        if (e->FUN_00c372b0()) continue;
+        if (e->m508.FUN_008e7f80() == 2) continue;
+        if (!bVar2 && (iVar16 == 4 || iVar16 == 2)) {
+            if (iVar13 == -1) bVar2 = true;
+            else if (empire && empire->IsHostileToPlayer()) bVar2 = true;
+        } else if (!bVar3 && iVar16 == 8) {
+            if (empire && empire->IsHostileToPlayer()) bVar3 = true;
+        } else if (!bVar4 && iVar16 == 6) {
+            if (e->m68c == (int)inv) bVar4 = true;
+        } else if (!bVar5 && iVar16 == 0xb) {
+            bVar5 = true;
+        }
+    }
+
+    int iVar12 = 0;
+    GdVector* gv2 = NounManager()->GetGameDataVector(gFn_00cd7d10, gFn_00d3d420, gFn_00acdff0, gFn_00b1e500, (void*)0x18c43e8);
+    int cnt2 = (int)(((char*)gv2->m08 - (char*)gv2->m04) >> 2);
+    if (planet->FUN_00c70e00() == 5 && iVar7 != iVar8) {
+        for (int i = 0; i < cnt2; i++) {
+            Entity* e = ((Entity**)gv2->m04)[i];
+            if (e->m748 <= gF_13ec4d0 &&
+                (bVar1 || e->m220 > gF_1485378 || e->FUN_00c004c0(0)) &&
+                e->FUN_00bd9b60() > 0)
+                iVar12++;
+        }
+    }
+    if (bVar1 && iVar12 == 0) {
+        local_24 = 2;
+    } else if (iVar12 == 1 || bVar2 || bVar5 || bVar4 || bVar3) {
+        local_24 = 3;
+    }
+    if (iVar12 > 1) local_24 = 4;
+    if (inv && inv->FUN_00c38500()) local_24 = 1;
+    if (this->m10 != local_24) {
+        uint32_t u = FNVHash(gStr_spgspg, 0x811c9dc5, 1);
+        AudioSystem* as = GetSystemAT();
+        if (as) {
+            as->Slot38(0x3cdd1a9);
+            as->Slot40(0x34753a7, u);
+            as->Slot3c(0x34753aa, (float)local_24);
+            as->Slot58();
+        }
+        this->m10 = local_24;
+    }
+    this->m14 = (this->m10 != 1) ? 1 : 0;
+}
+}  // namespace SP
+
+// @ 0x00ffaf20
+namespace SP {
+void __stdcall FUN_00ffaf20(int param_1)
+{
+    PlanetRecord* pr = GetActivePlanetRecord();
+    if (pr->FUN_00b8dab0() != 5) return;
+
+    bool bVar2 = false;
+    void* avatar = FUN_01021240()->GetAvatar();
+    int pid = GetPlayerEmpireID();
+    if ((int)avatar == pid) {
+        if (!IsMissionActiveAtPlanet(GetActivePlanet())) bVar2 = true;
+    }
+    cGameNounManager_s00ff_a2c0* nm = NounManager();
+    GdVector* gv = nm->GetGameDataVector(gFn_00cd7d10, gFn_00d3d420, gFn_00acdff0, gFn_00b1e500, (void*)0x18c43e8);
+    int cnt = (int)(((char*)gv->m08 - (char*)gv->m04) >> 2);
+    for (int i = 0; i < cnt; i++) {
+        Entity* e = ((Entity**)gv->m04)[i];
+        int id = e->m74c;
+        if (!bVar2 || id == -1) continue;
+        float f = (float)(uint32_t)param_1;
+        float a = e->m748 - f * gF_15b60d8;
+        float r;
+        if (0.0f <= a) r = a; else r = 0.0f;
+        if (r == 0.0f) id = -1;
+        FUN_00bd7d10(id, r);
+    }
+}
+}  // namespace SP
+
+// @ 0x00ffb030
+namespace SP {
+void cSPSimPlanetHighLOD_s00ff_a2c0::FUN_00ffb030()
+{
+    this->m1e0 = 1;
+    this->FUN_00ffaa90(GetPlayerEmpireID());
+    if (this->m1dc) {
+        this->m1dc->SetFlag(0);
+        if (this->m1dc) { RefObjI* q = this->m1dc; this->m1dc = 0; q->Release(); }
+    }
+    cGameNounManager_s00ff_a2c0* nm = NounManager();
+    GdVector* gv = nm->GetGameDataVector(gFn_00cd7d10, gFn_00ae7060, gFn_00ae7080, gFn_00b1e520, (void*)0x142db2a);
+    for (Entity** pp = (Entity**)gv->m04; pp != (Entity**)gv->m08; pp++) {
+        Entity* e = *pp;
+        if (!e) continue;
+        PbHolder* h = (PbHolder*)e->Slot04(0x24270c4);
+        if (!h || !h->m518) continue;
+        void* k = h->m518->Slot18();
+        if (((int*)k)[0] == (int)gKey_016db5c4 && ((int*)k)[1] == (int)gKey_016db5c8 && ((int*)k)[2] == (int)gKey_016db5cc)
+            e->m10 = 1;
+    }
+    NounManager()->FUN_00b25fe0();
+    PlanetModel()->FUN_00b87bb0();
+    GetActiveTerrainSphere()->SlotAC();
+    EffectsManager* em = EffectsManagerPtr_s00ff_a2c0();
+    if (this->m1dc) { RefObjI* q = this->m1dc; this->m1dc = 0; q->Release(); }
+    if (em->Slot2C(0x556ed9bc, 0, &this->m1dc))
+        this->m1dc->Slot2(0);
+}
+}  // namespace SP
+
 // @ 0x00ffb180
 void cSPSimPlanetHighLOD_s00ff_b180::FUN_00ffb180()
 {
@@ -3266,6 +3566,201 @@ void cSPSimPlanetHighLOD_s00ff_b180::FUN_00ffb180()
             pOld->Release();
         }
     }
+}
+
+// @ 0x00ffb270
+void cSPSimPlanetHighLOD_s00ff_b180::SolarSystemUpdateNPC_UFOs(uint32_t nElapsedMS)
+{
+    cGameNounManager_s00ff_b180* pManager = NounManager_s00ff_b180();
+    float fElapsed = (float)nElapsedMS * 0.001f;
+
+    bool bHostileToAll = IsHostileToAll(GetActivePlanet_s00ff_b180());
+    bool bMissionsPrevent = GetMissionManager()->DoMissionsPreventHostility(GetActivePlanet_s00ff_b180(), &g_missionPreventKey);
+    bool bMissionActive = IsMissionActiveAtPlanet(GetActivePlanet_s00ff_b180());
+
+    int32_t nFleets = 0;
+    int32_t nVisitors = 0;
+    bool bHostile = false;
+
+    tGameDataList* pList = NounManager_s00ff_b180()->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                           (void*)FUN_00ad48b0, (void*)FUN_00b1e500,
+                                                           g_nounListUFO);
+    void** pCur = pList->mData.mpBegin;
+    void** pEnd = pList->mData.mpEnd;
+    while (pCur != pEnd)
+    {
+        cSimGameData* pNoun = (cSimGameData*)*pCur;
+        int32_t nType = pNoun->mn714;
+        if (nType == 6)
+        {
+            ++nFleets;
+        }
+        else if (nType == 8)
+        {
+            ++nVisitors;
+            if (bHostile == false)
+            {
+                cEmpire* pEmpire = (cEmpire*)StarManager_s00ff_b180()->GetEmpireByID((void*)pNoun->v4c());
+                if (pEmpire != 0 && pEmpire->IsHostileToPlayer())
+                    bHostile = true;
+            }
+        }
+        ++pCur;
+    }
+
+    tTickHook* pTickHook = (tTickHook*)FUN_010666a0_s00ff_b180()->FUN_01067e60();
+
+    if (mp2c == 0)
+    {
+        tGameDataList* pUFOs = NounManager_s00ff_b180()->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                               (void*)FUN_00acdff0, (void*)FUN_00b1e500,
+                                                               g_nounListPlanet);
+        void** pBegin = pUFOs->mData.mpBegin;
+        void** pLast = pUFOs->mData.mpEnd;
+        if (pBegin != pLast)
+        {
+            uint32_t nPick = g_mathRandom.RandomUint32Uniform((uint32_t)(pLast - pBegin));
+            tUFOObject* pNew = (tUFOObject*)pBegin[nPick];
+            tUFOObject* pOld = (tUFOObject*)mp2c;
+            if (pNew != pOld)
+            {
+                if (pNew != 0)
+                    pNew->AddRef();
+                mp2c = pNew;
+                if (pOld != 0)
+                    pOld->Release();
+            }
+        }
+    }
+
+    if (mp2c != 0 && ((tUFOObject*)mp2c)->v2c())
+    {
+        tUFOObject* pOld = (tUFOObject*)mp2c;
+        if (pOld != 0)
+        {
+            mp2c = 0;
+            pOld->Release();
+        }
+    }
+
+    cPlanetRecord* pOwner = GetActivePlanet_s00ff_b180()->mp13c;
+    if (pOwner->GetNounType() == 5 && NounManager_s00ff_b180()->GetAvatar() != (void*)GetPlayerEmpireID())
+    {
+        uint64_t nNow = GameTimeManager()->FUN_00b316c0();
+        float fNow = (float)nNow * 0.001f;
+
+        if (nFleets < mn1b8)
+        {
+            float fReplaceDist = 30.0f;
+            tPropertyMap* pMap = GetSpaceCombatTuning_s00ff_b180()->mp08;
+            if (pMap != 0)
+            {
+                tProperty* pProperty = 0;
+                if (pMap->v24(0x05c2cbc5, &pProperty) && pProperty->mnType == 13)
+                    fReplaceDist = *pProperty->GetFloat();
+            }
+            if (fNow - pOwner->mf128 > fReplaceDist)
+            {
+                pOwner->mf128 = fNow;
+                CreateReplacement();
+            }
+        }
+        else
+        {
+            pOwner->mf128 = fNow;
+        }
+
+        if (pOwner->mf12c > g_kRealZero)
+        {
+            float fPingDist = 30.0f;
+            tPropertyMap* pMap = GetSpaceCombatTuning_s00ff_b180()->mp08;
+            if (pMap != 0)
+            {
+                tProperty* pProperty = 0;
+                if (pMap->v24(0x05c2cbd6, &pProperty) && pProperty->mnType == 13)
+                    fPingDist = *pProperty->GetFloat();
+            }
+            int32_t nExtra = 3;
+            tPropertyMap* pMap2 = GetSpaceCombatTuning_s00ff_b180()->mp08;
+            if (pMap2 != 0)
+            {
+                tProperty* pProperty = 0;
+                if (pMap2->v24(0x05c2cc0e, &pProperty) && pProperty->mnType == 9)
+                    nExtra = *pProperty->GetInt();
+            }
+            if (fNow - pOwner->mf12c > fPingDist)
+            {
+                if (nVisitors + nFleets < mn1b8 + nExtra)
+                {
+                    pOwner->mf12c = -pOwner->mf12c;
+                    FUN_00ff8ad0();
+                }
+                else
+                {
+                    pOwner->mf12c = 0.0f;
+                }
+            }
+        }
+    }
+
+    tGameDataList* pUFOList = pManager->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                          (void*)FUN_00ad48b0, (void*)FUN_00b1e500,
+                                                          g_nounListUFO);
+    int32_t nCount = (int32_t)(pUFOList->mData.mpEnd - pUFOList->mData.mpBegin);
+    void** pNew = 0;
+    if (nCount != 0)
+        pNew = (void**)operator_new((uint32_t)nCount * 4, g_szSimulator, 0, 0, (int)g_szEastlFile, 0xd1);
+    void* pNewEnd = 0;
+    FUN_00829110(&pNewEnd, pUFOList->mData.mpBegin, pUFOList->mData.mpEnd, pNew, bHostile ? 1 : 0);
+    int32_t nCopied = (int32_t)((void**)pNewEnd - pNew);
+    int32_t i = 0;
+    int32_t nIndex = 0;
+    if (nCopied > 0)
+    {
+        do
+        {
+            cSimGameData* pNoun = (cSimGameData*)pNew[i];
+            if (pTickHook != 0)
+                pTickHook->FUN_00e0df70(pNoun, pNoun->mObj34.v2c());
+            if (pNoun->mn714 != 0 && !pNoun->FUN_00c38990(0))
+            {
+                if (bHostileToAll)
+                    pNoun->mp6c8->mn5fc |= 0x1000;
+                else
+                    pNoun->mp6c8->mn5fc &= ~0x1000u;
+                if (bMissionsPrevent)
+                    pNoun->mp6c8->mn5fc |= 0x2000;
+                else
+                    pNoun->mp6c8->mn5fc &= ~0x2000u;
+                if (bMissionActive)
+                    pNoun->mp6c8->mn5fc |= 0x4000;
+                else
+                    pNoun->mp6c8->mn5fc &= ~0x4000u;
+                if (bHostile)
+                    pNoun->mp6c8->mn5fc |= 0x8000;
+                else
+                    pNoun->mp6c8->mn5fc &= ~0x8000u;
+                if (pNoun->mn714 == 3)
+                {
+                    pNoun->mn6b0 = nIndex;
+                    ++nIndex;
+                }
+                uint64_t nNow = GameTimeManager()->FUN_00b316c0();
+                pNoun->FUN_00c38740(fElapsed, (double)nNow * 0.001);
+            }
+            ++i;
+        } while (i < nCopied);
+    }
+
+    void** pSlot = pNew;
+    while (pSlot < (void**)pNewEnd)
+    {
+        if (*pSlot != 0)
+            ((tRefObject*)*pSlot)->Release();
+        ++pSlot;
+    }
+    if (pNew != 0 && ((int32_t*)pNew)[-1] != 0)
+        operator_delete_array(pNew);
 }
 
 // @ 0x00ffb830

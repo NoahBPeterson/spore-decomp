@@ -15,6 +15,9 @@
 #include "EA/ResourceMan/PFRecordRead.h"
 #include "EA/ResourceMan/PFRecordWrite.h"
 #include <intrin.h>
+#include "EA/IO/IStream.h"
+#include "EA/ResourceMan/PFRecordBase.h"
+#include "EA/Allocator/ZoneObject.h"
 
 // ---- items of slice s006bde30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int  uint32;
@@ -62,9 +65,21 @@ void FUN_006bf8f0(void* a, void* b, void* c, void* d); // 0x6bf8f0
 // ---- items of slice s006bede0 end
 
 // ---- items of slice s006bfda0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* sub_9215c0(void*);                     // RBTreeDecrement  (cdecl)
+extern void* sub_921580(void*);                     // RBTreeIncrement  (cdecl)
+extern void  sub_921880(void*, void*);              // RBTreeErase      (cdecl)
+extern void  sub_f47380(void*);                     // allocator deallocate (cdecl)
+extern void  sub_9a9600(void*);                     // rbtree nuke subtree
+extern void  __fastcall sub_6be890(void*, int, void*, const void*); // lowerBound (set, out, key)
+extern void  __fastcall sub_8dae70(void*, int, void*, void*);       // Erase (set, out next, node)
 typedef unsigned int   u32;
-typedef int            intptr_t;
+typedef unsigned char  u8;
+struct RBSet {
+    void  Find(void* out, const void* key);                      // 0xa057f0 ret 8
+    void  DoInsertValue(void* a, void* node, void* b, u32 tag);  // 0x6bf8f0 ret 0x10
+};
 struct HoleRec { u32 startLo, startHi, sizeLo, sizeHi; };
+struct HoleRange { u32 lo, hi; };
 struct HoleNode {
     HoleNode* parent;   // +0x00
     HoleNode* left;     // +0x04
@@ -72,6 +87,7 @@ struct HoleNode {
     void*     color;    // +0x0c
     HoleRec   rec;      // +0x10
 };
+extern void __fastcall FUN_006bfc20(void* set, int edx, void* out, HoleNode* pos, const HoleRec* rec); // 0x6bfc20 insert hole
 struct HoleTable {
     char data[0x20];
     void FUN_006bfda0(u32 startLo, u32 startHi, u32 sizeLo, u32 sizeHi); // 0x6bfda0
@@ -84,6 +100,15 @@ struct PFIndexModifiable {
     void** mpBucketArray;      // +0x2c
     u32    mnBucketCount;      // +0x30
     bool func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d);
+};
+struct HashNode {
+    u32      pad00[4];         // +0x00
+    u32      startLo;          // +0x10
+    u32      startHi;          // +0x14
+    u32      sizeLo;           // +0x18
+    u32      sizeHi;           // +0x1c
+    u32      pad20[2];         // +0x20
+    HashNode* next;            // +0x28
 };
 // ---- items of slice s006bfda0 end
 
@@ -101,8 +126,6 @@ void HT::DoFreeNodes(uint32* buckets, uint32 count)
         buckets[i] = 0;
     }
 }
-
-
 
 // @ 0x006be690
 void FUN_006be690(uint32* first, uint32* last)
@@ -126,8 +149,6 @@ void FUN_006be690(uint32* first, uint32* last)
     }
 }
 
-
-
 // @ 0x006be6e0
 void FUN_006be6e0(uint32* first, uint32* last)
 {
@@ -145,8 +166,6 @@ void FUN_006be6e0(uint32* first, uint32* last)
         *q = v;
     }
 }
-
-
 
 // @ 0x006be730
 void* FUN_006be730(uint32** a, uint32** b, uint32** c)
@@ -177,8 +196,6 @@ void* FUN_006be730(uint32** a, uint32** b, uint32** c)
     return a;
 }
 
-
-
 // @ 0x006be7c0
 void FUN_006be7c0(uint32* a, int first, int last, uint32 value)
 {
@@ -192,16 +209,12 @@ void FUN_006be7c0(uint32* a, int first, int last, uint32 value)
     a[last] = value;
 }
 
-
-
 // @ 0x006be820
 uint32* HT::eraseNode(uint32* out, uint32 node, uint32* buckets)
 {
     // TODO(partial).
     return out;
 }
-
-
 
 // @ 0x006be890
 uint32* HT::lowerBound(uint32* out, uint32* key)
@@ -230,23 +243,17 @@ uint32* HT::lowerBound(uint32* out, uint32* key)
     return out;
 }
 
-
-
 // @ 0x006be8d0
 void HT::rehash(uint32 newBucketCount)
 {
     // TODO(partial).
 }
 
-
-
 // @ 0x006be980
 void HT::heapSiftDown(int, int, int, int)
 {
     // TODO(partial).
 }
-
-
 
 // @ 0x006bea90
 unsigned __int64 EA::ResourceMan::PFIndexModifiable::GetFarthestFileExtent() const
@@ -275,8 +282,6 @@ unsigned __int64 EA::ResourceMan::PFIndexModifiable::GetFarthestFileExtent() con
     return best;
 }
 
-
-
 // @ 0x006beb00
 unsigned __int64 EA::ResourceMan::PFIndexModifiable::GetAllocatedBytes() const
 {
@@ -302,16 +307,12 @@ unsigned __int64 EA::ResourceMan::PFIndexModifiable::GetAllocatedBytes() const
     return sum;
 }
 
-
-
 // @ 0x006beb60
 bool EA::ResourceMan::PFIndexModifiable::WriteToMemory(void *& a1, unsigned int & a2, unsigned int a3, bool a4)
 {
     // TODO(partial): index serialization (hashtable walk + DBPF record formatting).
     return false;
 }
-
-
 
 // @ 0x006bed90
 void EA::ResourceMan::PFIndexModifiable::SetIsSaved()
@@ -337,15 +338,12 @@ void EA::ResourceMan::PFIndexModifiable::SetIsSaved()
     }
 }
 
-
-
 // @ 0x006bede0
 bool EA::ResourceMan::PFIndexModifiable::Validate(unsigned int begin, unsigned int end) const
 {
     // TODO(partial): iterate the record map testing each chunk range.
     return false;
 }
-
 
 // @ 0x006beeb0
 bool EA::ResourceMan::PFIndexModifiable::ValidateFreeSpace(unsigned int begin, unsigned int size) const
@@ -354,38 +352,31 @@ bool EA::ResourceMan::PFIndexModifiable::ValidateFreeSpace(unsigned int begin, u
     return false;
 }
 
-
 // @ 0x006bef70
 void PFHoleTable::FUN_006bef70(uint32 a, uint32 b)
 {
     // TODO(partial): rbtree insert/erase of a hole record.
 }
 
-
 // @ 0x006bf030
 void FUN_006bf030(void*, void*)
 {}
-
 
 // @ 0x006bf140
 void FUN_006bf140(void*, void*)
 {}
 
-
 // @ 0x006bf1e0
 void FUN_006bf1e0(void*)
 {}
-
 
 // @ 0x006bf240
 void FUN_006bf240(void*, void*)
 {}
 
-
 // @ 0x006bf2c0
 void FUN_006bf2c0(void*, void*, void*)
 {}
-
 
 // @ 0x006bf370
 EA::ResourceMan::PFIndexModifiable::PFIndexModifiable(EA::Allocator::ICoreAllocator * allocator)
@@ -394,11 +385,9 @@ EA::ResourceMan::PFIndexModifiable::PFIndexModifiable(EA::Allocator::ICoreAlloca
     return;
 }
 
-
 // @ 0x006bf430
 void FUN_006bf430(void*)
 {}
-
 
 // The v2 index stores the 64-bit-position record layout. The shared
 // PFRecordInfo header describes the older 16-byte record; this one is 24 bytes.
@@ -435,7 +424,6 @@ EA::ResourceMan::PFRecordInfo * EA::ResourceMan::PFIndexModifiable::FindRecord(E
     return 0;
 }
 
-
 // @ 0x006bf520
 bool EA::ResourceMan::PFIndexModifiable::DeleteRecord(EA::ResourceMan::Key const & key, EA::ResourceMan::PFRecordInfo & out)
 {
@@ -449,7 +437,6 @@ bool EA::ResourceMan::PFIndexModifiable::DeleteRecord(EA::ResourceMan::Key const
     }
     return false;
 }
-
 
 // The retail initialiser returns the object pointer in eax (mov eax, ecx at
 // 0x006bf5a0).  A plain C++ body leaves ecx holding it; route the initial
@@ -474,11 +461,9 @@ void PFHoleTable::FUN_006bf5a0()
     a[7] = 0;
 }
 
-
 // @ 0x006bf5d0
 void FUN_006bf5d0(void*, void*, void*, void*)
 {}
-
 
 // @ 0x006bf660
 bool EA::ResourceMan::PFIndexModifiable::ReadFromMemory(void const * data, unsigned int size, unsigned int count, bool flag)
@@ -487,16 +472,13 @@ bool EA::ResourceMan::PFIndexModifiable::ReadFromMemory(void const * data, unsig
     return false;
 }
 
-
 // @ 0x006bf7d0
 void* FUN_006bf7d0(void*, void*)
 { return 0; }
 
-
 // @ 0x006bf8f0
 void FUN_006bf8f0(void*, void*, void*, void*)
 {}
-
 
 // @ 0x006bfa00
 unsigned int EA::ResourceMan::PFIndexModifiable::GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * dst, EA::ResourceMan::KeyFilter * filter) const
@@ -505,14 +487,12 @@ unsigned int EA::ResourceMan::PFIndexModifiable::GetKeyList(eastl::vector<EA::Re
     return 0;
 }
 
-
 // @ 0x006bfac0
 unsigned int EA::ResourceMan::PFIndexModifiable::GetKeysSortedByPosition(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * dst) const
 {
     // TODO(partial): append every key to the destination vector.
     return 0;
 }
-
 
 // @ 0x006bfbc0
 void EA::ResourceMan::PFIndexModifiable::AddRecord(EA::ResourceMan::Key const & key, EA::ResourceMan::PFRecordInfo const & info)
@@ -521,7 +501,6 @@ void EA::ResourceMan::PFIndexModifiable::AddRecord(EA::ResourceMan::Key const & 
     PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
     *map->FindOrInsert(key) = value;
 }
-
 
 // Empty dispatch tag passed by value to the unique-key insertion overload.
 struct HoleInsertUniqueTag {};
@@ -537,60 +516,192 @@ HoleNode** HoleTree::Insert(HoleNode** result, HoleNode* hint, const HoleRec* va
     return result;
 }
 
-
-// @ 0x006c0120
-// hash-bucket node walked by func24h (bucket chain link at +0x28)
-struct PFHashNode {
-    u32 pad00[4];       // +0x00
-    u32 startLo;        // +0x10
-    u32 startHi;        // +0x14
-    u32 sizeLo;         // +0x18
-    u32 sizeHi;         // +0x1c
-    u32 pad20[2];       // +0x20
-    PFHashNode* next;   // +0x28
-};
-
-bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
+// @ 0x006bfda0
+void HoleTable::FUN_006bfda0(u32 a, u32 b, u32 c, u32 d)
 {
-    void** bucket = mpBucketArray;
-    intptr_t node = (intptr_t)*bucket;
-    void** bucketPtr = bucket;
-    if (node == 0) {
-        bucketPtr = bucket + 1;
-        node = (intptr_t)*bucketPtr;
-        while (node == 0) {
-            bucketPtr = bucketPtr + 1;
-            node = (intptr_t)*bucketPtr;
+    char* base = data;
+    char* set = base + 8;
+    HoleRange start = { a, b };
+    HoleRange size  = { c, d };
+    HoleNode* root;
+    ((RBSet*)set)->Find(&root, &start);
+    if (root != *(HoleNode**)(set + 4)) {
+        HoleNode* prev = (HoleNode*)sub_9215c0(root);
+        u32 endLo = prev->rec.startLo + prev->rec.sizeLo;
+        u32 endHi = prev->rec.startHi + prev->rec.sizeHi
+                  + (endLo < prev->rec.startLo ? 1 : 0);
+        if (endLo == start.lo && endHi == start.hi) {
+            u32 nLo = prev->rec.sizeLo + size.lo;
+            u32 nHi = prev->rec.sizeHi + size.hi + (nLo < prev->rec.sizeLo ? 1 : 0);
+            start.lo = prev->rec.startLo;
+            start.hi = prev->rec.startHi;
+            size.lo = nLo;
+            size.hi = nHi;
+            (*(int*)(set + 0x0c))--;
+            sub_921580(prev);
+            sub_921880(prev, set + 4);
+            sub_f47380(prev);
         }
     }
-    void** itPtr = bucketPtr;
-    if (node != (intptr_t)mpBucketArray[mnBucketCount]) {
-        for (;;) {
-            PFHashNode* n = (PFHashNode*)node;
-            u32 size = n->sizeLo;                 // +0x18
-            if (size != 0) {
-                u32 sLo = n->startLo;             // +0x10
-                u32 sHi = n->startHi;             // +0x14
-                if (!(sHi >= b && (sHi > b || sLo >= a)))
-                    return false;
-                if (!(sHi <= d && (sHi < d || sLo < c)))
-                    return false;
-                u32 lenLo = c - sLo;
-                u32 lenHi = d - sHi - (c < sLo ? 1u : 0u);
-                if (lenHi == 0 && size > lenLo)
-                    return false;
-                if (!holes->FUN_006bff90(sLo, sHi, size, 0))
-                    return false;
-            }
-            node = (intptr_t)n->next;             // +0x28 successor
-            while (node == 0) {
-                bucketPtr = bucketPtr + 1;
-                itPtr = bucketPtr;
-                node = (intptr_t)*bucketPtr;
-            }
-            if (node == (intptr_t)mpBucketArray[mnBucketCount])
-                break;
+    if (root == *(HoleNode**)(set + 4)) {
+        u32 extLo = *(u32*)(base + 0);
+        if (start.lo + size.lo == extLo &&
+            start.hi + size.hi + (start.lo + size.lo < start.lo ? 1 : 0) == *(u32*)(base + 4)) {
+            *(u32*)(base + 0) = extLo - size.lo;
+            *(u32*)(base + 4) -= size.hi + (extLo < size.lo ? 1 : 0);
+            return;
         }
+    } else {
+        u32 eLo = root->rec.startLo + root->rec.sizeLo;
+        u32 eHi = root->rec.startHi + root->rec.sizeHi + (eLo < root->rec.startLo ? 1 : 0);
+        if (start.lo + size.lo == eLo &&
+            start.hi + size.hi + (start.lo + size.lo < start.lo ? 1 : 0) == eHi) {
+            u32 carry = (start.lo + root->rec.startLo < start.lo) ? 1 : 0;
+            start.lo = start.lo + root->rec.startLo;
+            start.hi = start.hi + root->rec.startHi + carry;
+            size.lo = root->rec.sizeLo;
+            size.hi = root->rec.sizeHi;
+            HoleNode* nxt = (HoleNode*)sub_921580(root);
+            (*(int*)(set + 0x0c))--;
+            sub_921580(root);
+            sub_921880(root, set + 4);
+            sub_f47380(root);
+            root = nxt;
+        }
+    }
+    ((RBSet*)set)->DoInsertValue(&size, root, &start, size.lo & 0xffffff00u);
+}
+
+// @ 0x006bff10
+void HoleTable::FUN_006bff10(HoleTable* other)
+{
+    char* o = other->data;
+    char* set = o + 8;
+    HoleNode* it  = *(HoleNode**)(set + 8);
+    HoleNode* end = *(HoleNode**)(set + 4);
+    while (it != end) {
+        FUN_006bfda0(it->rec.startLo, it->rec.startHi, it->rec.sizeLo, it->rec.sizeHi);
+        it = (HoleNode*)sub_921580(it);
+    }
+    HoleNode* n = *(HoleNode**)(o + 0x14);
+    char* p = o + 8;
+    while (n) {
+        sub_9a9600(*(void**)n);
+        HoleNode* nxt = *(HoleNode**)((char*)n + 4);
+        sub_f47380(n);
+        n = nxt;
+    }
+    *(void**)(p + 0x0c) = 0;
+    *(u8*)(p + 0x10)    = 0;
+    *(void**)(p + 0x14) = 0;
+    void* self = p + 4;
+    *(void**)(p + 8) = self;
+    *(void**)(self)  = self;
+}
+
+// @ 0x006bff90
+bool HoleTable::FUN_006bff90(u32 startLo, u32 startHi, u32 sizeLo, u32 sizeHi)
+{
+    u32* base = (u32*)data;
+    if ((sizeLo | sizeHi) == 0)
+        return true;
+
+    u32 endLo = startLo + sizeLo;
+    u32 endHi = startHi + sizeHi + (endLo < startLo ? 1 : 0);
+    u32 extLo = base[0];
+    u32 extHi = base[1];
+    if (endHi < extHi || (endHi == extHi && endLo <= extLo)) {
+        // The range ends inside the current extent: split the hole that
+        // contains `start` and re-insert the two remainder ranges around it.
+        HoleRec key;
+        key.startLo = startLo; key.startHi = startHi;
+        key.sizeLo  = sizeLo;  key.sizeHi  = sizeHi;
+
+        HoleNode* node;
+        sub_6be890(data + 8, 0, &node, &key);               // 0x6be890 lowerBound
+        if (node == *(HoleNode**)(data + 0x10))             // set.end()
+            return false;
+
+        HoleNode* prev = (HoleNode*)sub_9215c0(node);       // RBTreeDecrement
+        u32 plo   = prev->rec.startLo;
+        u32 phi   = prev->rec.startHi;
+        u32 pEndLo = plo + prev->rec.sizeLo;
+        u32 pEndHi = phi + prev->rec.sizeHi + (pEndLo < plo ? 1 : 0);
+
+        HoleNode* erased;
+        sub_8dae70(data + 8, 0, &erased, prev);             // erase prev -> next
+
+        if (phi < startHi || (phi == startHi && plo < startLo)) {
+            // [prevStart, start) stays free.
+            HoleRec gap;
+            gap.startLo = plo;
+            gap.startHi = phi;
+            gap.sizeLo  = startLo - plo;
+            gap.sizeHi  = (startHi - phi) - (startLo < plo ? 1 : 0);
+            FUN_006bfc20(data + 8, 0, &erased, node, &gap); // 0x6bfc20 insert
+        }
+        if (endHi < pEndHi || (endHi == pEndHi && endLo < pEndLo)) {
+            // [end, prevEnd) stays free.
+            HoleRec gap;
+            gap.startLo = endLo;
+            gap.startHi = endHi;
+            gap.sizeLo  = pEndLo - endLo;
+            gap.sizeHi  = (pEndHi - endHi) - (pEndLo < endLo ? 1 : 0);
+            FUN_006bfc20(data + 8, 0, &node, node, &gap);   // 0x6bfc20 insert
+        }
+    } else {
+        // The range extends past the current extent.
+        if (startHi < extHi || (startHi == extHi && startLo < extLo))
+            return false;
+        base[0] = endLo;
+        base[1] = endHi;
+        if (startHi > extHi || (startHi == extHi && startLo > extLo))
+            FUN_006bfda0(extLo, extHi, startLo - extLo,
+                         (startHi - extHi) - (startLo < extLo ? 1 : 0));
+    }
+    return true;
+}
+
+// @ 0x006c0120
+bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
+{
+    HashNode* node = (HashNode*)*mpBucketArray;
+    void** bucketPtr = mpBucketArray;
+    if (node == 0) {
+        bucketPtr = mpBucketArray + 1;
+        node = (HashNode*)*bucketPtr;
+        while (node == 0) {
+            bucketPtr = bucketPtr + 1;
+            node = (HashNode*)*bucketPtr;
+        }
+    }
+    if (node == (HashNode*)mpBucketArray[mnBucketCount])
+        return true;
+    for (;;) {
+        u32 size = node->sizeLo;
+        if (size != 0) {
+            u32 sLo = node->startLo;
+            u32 sHi = node->startHi;
+            if (!(sHi >= b && (sHi > b || sLo >= a)))
+                return false;
+            if (!(sHi <= d && (sHi < d || sLo < c)))
+                return false;
+            u32 lenLo = c - sLo;
+            u32 lenHi = d - sHi - (c < sLo ? 1u : 0u);
+            if (lenHi == 0 && size > lenLo)
+                return false;
+            if (!holes->FUN_006bff90(sLo, sHi, size, 0))
+                return false;
+        }
+        node = node->next;
+        if (node == 0) {
+            do {
+                bucketPtr = bucketPtr + 1;
+                node = (HashNode*)*bucketPtr;
+            } while (node == 0);
+        }
+        if (node == (HashNode*)mpBucketArray[mnBucketCount])
+            break;
     }
     return true;
 }

@@ -1,14 +1,19 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPUITimeline.cpp  ?GetGameModeHash@@YAIXZ  00e36c80  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?GetGameModeIndex@@YAII@Z  00e36f50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?GetSlot@cUITimedTooltip@@QAEPAUcTooltipSlot@@H@Z  00e36fb0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?SetEditorState@@YAXXZ  00e36fd0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37750@cSPUITimeline@@QAE_NXZ  00e37750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37780@cSPUITimeline@@QAEHPAX@Z  00e37780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37910@cSPUITimeline@@QAEXXZ  00e37910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?BeginCloseTimeline@cSPUITimeline@@QAEXXZ  00e37970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37b40@cSPUITimeline@@QAENPAUTimelineNode@@MH@Z  00e37b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37f30@cSPUITimeline@@QAENH@Z  00e37f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?GetKeyPair@Timeline_s00e3_7f90@@QAE?AUVector2_s00e3_7f90@@IH@Z  00e37f90  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?Step@Timeline_s00e3_7f90@@QAE_NXZ  00e38c90  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e39300@@YIXPAUTimeline_s00e3_8ce0@@PAXH@Z  00e39300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e39350@@YIXPAUTimeline_s00e3_8ce0@@PAXH@Z  00e39350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e393b0@@YIHPAUTimeline_s00e3_8ce0@@PAX@Z  00e393b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e393e0@@YAXPAXHPAUVec3@@@Z  00e393e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e39420@@YAXPAXHPAUVec3@@@Z  00e39420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e39450@@YAXPAX00@Z  00e39450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -20,16 +25,11 @@
 ../src/game/SPGonzago/SPUITimeline.cpp  ?UpdateState@cSPUITimeline_s00e3_a990@@QAEXXZ  00e3afb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?ShowNextPlayItem@cSPUITimeline_s00e3_a990@@QAE_NXZ  00e3b0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?RestorePlayback@cSPUITimeline_s00e3_a990@@QAEXXZ  00e3b180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?IsPaletteIdPresent@@YA_NI@Z  00e3b630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e3c6f0@@YAXDI@Z  00e3c6f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e3c760@@YAXXZ  00e3c760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?RemapCursorKeys@CursorProvider@ImageCursorProvider@@QAEXIUCursorKeys@2@@Z  00e3d9e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?Dtor@cBigEditorObject_s00e3_dca0@@QAEXXZ  00e3dca0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?ForwardTriples@@YAXPAUTriple@@0@Z  00e3ea00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e3ede0@@YAXPAUKeyVector@@@Z  00e3ede0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?Update@cTimelinePageHost@@QAEXII@Z  00e43270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?ForwardTriples@@YAXPAUTriple@@0@Z  00e3ea00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37780@cSPUITimeline@@QAEHPAX@Z  00e37780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?IsPaletteIdPresent@@YA_NI@Z  00e3b630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37910@cSPUITimeline@@QAEXXZ  00e37910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e393b0@@YIHPAUTimeline_s00e3_8ce0@@PAX@Z  00e393b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?GetGameModeIndex@@YAII@Z  00e36f50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37b40@cSPUITimeline@@QAENPAUTimelineNode@@MH@Z  00e37b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e3c6f0@@YAXDI@Z  00e3c6f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

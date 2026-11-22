@@ -61,6 +61,12 @@ extern const float g_Milli;   // 0x013f9428  0.001f (ticks -> seconds)
 extern const float g_Sixty;   // 0x013ebc4c  60.0f
 extern const float g_One;     // 0x01485720  1.0f
 
+// The slot message's and the marker's vtables, and the vtable FUN_00ae0930 hands on as a message id
+// (retail links absolute addresses at all three, so they must be names; cf. s004215f0's vtbl_UI_BehaviorMessage).
+extern "C" char g_13eb90c[];  // 0x013eb90c  vtbl_UI::BehaviorMessage (symbols/vtable_names.txt)
+extern "C" char g_13eb844[];  // 0x013eb844
+extern "C" char g_1469ca8[];  // 0x01469ca8  (s00c011c0's constructor installs g_1469cc0/g_1469cd8 next to it)
+
 #define VTABLE(obj)         (*(void***)(obj))
 #define VSLOT(obj, off)     (VTABLE(obj)[(off) / 4])
 
@@ -140,9 +146,9 @@ void cCommunity::NotifyAttack(eAttackTrackingType type, unsigned int attackerId)
     if (isCivilizationMode ||
         !((bool (__thiscall*)(void*, int))FUN_00c004c0)(self, (int)type)) {
         scratch.msg.mKind = 0;
-        scratch.msg.vtbl = (void**)0x13eb90c;
+        scratch.msg.vtbl = (void**)g_13eb90c;
         _InterlockedExchange((long*)&scratch.msg.mRefCount, 0);
-        scratch.msg.vtbl = (void**)0x13eb844;
+        scratch.msg.vtbl = (void**)g_13eb844;
         scratch.msg.m38 = 0;
         scratch.msg.mKind = kUnderAttack;
         scratch.msg.mpObject = self;
@@ -210,7 +216,7 @@ void cCommunity::NotifyAttack(eAttackTrackingType type, unsigned int attackerId)
 
                         ((void (__thiscall*)(void*, u32, int, int, int, int, int))
                          FUN_00ae0930)
-                            (FUN_00b3d4d0(), 0x1469ca8u, 1, 0, 0, 0, 0);
+                            (FUN_00b3d4d0(), (u32)g_1469ca8, 1, 0, 0, 0, 0);
 
                         ((void (__thiscall*)(void*))FUN_00ad7ad0)(&scratch.marker);
                     }

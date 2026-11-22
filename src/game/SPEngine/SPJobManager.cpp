@@ -181,6 +181,7 @@ struct cJob {
     int Release();
     int ContinueJob();
     bool Continuation(void* a, void* b);
+    void Wait();
 };
 struct cJobDataNode_s0068_f670 {
     void* mpNext; void* mpPrev;
@@ -271,6 +272,12 @@ public:
     void FailJobDependents(cJobData* job, bool weakOnly);
     void PreShutdown();
     void FailJob(cJobData* job);                                    // 0x00690f60
+    void WaitForJob(void* job);                                     // 0x00692640
+};
+struct MutexScopedLock_s0068_f670 {
+    EA::Thread::Mutex_s0068_f670* mpMutex;
+    MutexScopedLock_s0068_f670(EA::Thread::Mutex_s0068_f670* m) : mpMutex(m) { m->Lock((unsigned int)&g_MutexFlags); }
+    ~MutexScopedLock_s0068_f670() { mpMutex->Unlock(); }
 };
 struct ProfHashNode {
     const void* mKey;               // +0
@@ -722,6 +729,7 @@ struct MutexScopedLock_s0069_25c0 {
 };
 class cJobManager_s0069_25c0;
 __declspec(noinline) int  FUN_00691f60(void* lock, void* a, void* b, void* c);
+__declspec(noinline) void FUN_00692150(void* lock, void* job);
 class cJobManager_s0069_25c0 {
 public:
     char mPad00[8];
@@ -2051,4 +2059,19 @@ bool cJobManager_s0069_25c0::Run(void* a, void* b, void* c)
 {
     MutexScopedLock_s0069_25c0 lock(&mMutex);
     return FUN_00691f60(&lock, a, b, c) != 0;
+}
+
+// @ 0x00692640
+void cJobManager::WaitForJob(void* job)
+{
+    MutexScopedLock_s0068_f670 lock(&mMutex);
+    FUN_00692150(&lock, job);
+}
+
+// @ 0x006926b0
+void cJob::Wait()
+{
+    cJobData* p = static_cast<cJobData*>(this);
+    p->mpManager->WaitForJob(p);
+    return;
 }

@@ -2,24 +2,25 @@
 // Object file: UTFSpore_Win32/INetDateTime.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
-// addresses retail relocates here, named so the build relocates them too
-extern "C" char g_143f54c[];
-
 #include "game/types.h"
 #include "EA/Internet/HTTPMultipartFormDataPostBodyStream.h"
 #include "tm.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" char g_143f54c[];
 extern "C" __declspec(dllimport) int __cdecl sscanf(const char*, const char*, ...);
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
+extern "C" __declspec(dllimport) int __cdecl atoi(const char*);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 #ifndef S00946DC0_H
 #endif
 #include <intrin.h>
 
 // ---- items of slice s00946dc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_143f54c[];
 extern "C" __declspec(dllimport) int __cdecl sscanf(const char*, const char*, ...);
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
+extern "C" __declspec(dllimport) int __cdecl atoi(const char*);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
 namespace eastl {
@@ -60,9 +61,21 @@ namespace eastl {
 struct StrDtor {
     void Destroy();                              // 0x00530670
 };
+inline void StrStubRelease(StrStub* s) {
+    if (s->mpCapacity - s->mpBegin > 1 && s->mpBegin)
+        operator delete(s->mpBegin);
 }
+}
+void  __cdecl operator delete(void*) throw();
+extern const int kMonthDayOffset[13];            // 0x0143f578
 int  GetDateTypeFromString(const eastl::StrStub* s);            // 0x00947540
+int  WeekdayStringToInteger(const char* str, bool longNames);   // 0x00947480
 int  MonthStringToInteger(const char* str);                     // 0x00947500
+__int64 TimeToSeconds(int weekday, int day, int month, int year, int yday,
+                      int hour, int minute, int second);        // 0x00947410
+bool ParseDateTimeString(const eastl::StrStub* s, int* weekday, int* day, int* month,
+                         int* year, int* yday, int* hour, int* min, int* sec);  // 0x00947700
+int  TimeStringToSeconds(const eastl::StrStub* s);              // 0x00947cd0
 #define S_(a) ((const char*)(a))
 static const char* const kLongWeekdays = S_(0x143f4e8);   // "Monday"...
 static const char* const kShortWeekdays = S_(0x143f530);  // "Mon"...
@@ -181,5 +194,183 @@ int GetDateTypeFromString(const eastl::StrStub* s)
                 return 4;
         }
     }
+    return 0;
+}
+
+// @ 0x00947700
+bool ParseDateTimeString(const eastl::StrStub* s, int* weekday, int* day, int* month,
+                         int* year, int* yday, int* hour, int* min, int* sec)
+{
+    eastl::StrStub tmp(s->mpBegin, s->mpEnd);
+    char b[8][44];
+    int type = GetDateTypeFromString(s);
+    if ((unsigned)(s->mpEnd - s->mpBegin) >= 0x30)
+        goto fail;
+    if (type == 1) {
+        tmp.mpBegin[3] = ' ';
+        tmp.mpBegin[7] = ' ';
+        tmp.mpBegin[0xb] = ' ';
+        tmp.mpBegin[0x13] = ' ';
+        tmp.mpBegin[0x16] = ' ';
+        if (sscanf(tmp.mpBegin, S_(0x143f5e4), b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]) != 8)
+            goto fail;
+        {
+            int wd = 0;
+            unsigned i = 0;
+            const char* p = kShortWeekdays;
+            do {
+                if (_stricmp(b[0], p) == 0) {
+                    wd = i + 1;
+                    break;
+                }
+                i++;
+                p += 4;
+            } while (i < 7);
+            *weekday = wd;
+        }
+        *day = atoi(b[1]);
+        *month = MonthStringToInteger(b[2]);
+        {
+            int y = atoi(b[3]);
+            if ((unsigned)y < 0x32)
+                y += 0x7d0;
+            else if ((unsigned)y < 0x64)
+                y += 0x76c;
+            *year = y;
+        }
+        {
+            int leap = 0;
+            unsigned y = (unsigned)*year;
+            if ((y & 3) == 0) {
+                if (y % 100 != 0)
+                    leap = 1;
+                else if (y % 400 == 0)
+                    leap = 1;
+            }
+            *yday = kMonthDayOffset[*month] + leap + 1 + *day;
+        }
+        *hour = atoi(b[4]);
+        *min = atoi(b[5]);
+        *sec = atoi(b[6]);
+        eastl::StrStubRelease(&tmp);
+        return true;
+    }
+    if (type == 2 || type == 3) {
+        unsigned pos = tmp.find(',', 0);
+        unsigned len = (unsigned)(tmp.mpEnd - tmp.mpBegin);
+        if (pos >= len)
+            goto fail;
+        if (pos + 0x11 >= len)
+            goto fail;
+        tmp.mpBegin[pos] = ' ';
+        tmp.mpBegin[pos + 4] = ' ';
+        tmp.mpBegin[pos + 8] = ' ';
+        if (type == 2) {
+            tmp.mpBegin[pos + 0xe] = ' ';
+            tmp.mpBegin[pos + 0x11] = ' ';
+        } else {
+            tmp.mpBegin[pos + 0x10] = ' ';
+            tmp.mpBegin[pos + 0x13] = ' ';
+        }
+        if (sscanf(tmp.mpBegin, S_(0x143f5e4), b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]) != 8)
+            goto fail;
+        *weekday = WeekdayStringToInteger(b[0], true);
+        *day = atoi(b[1]);
+        *month = MonthStringToInteger(b[2]);
+        {
+            int y = atoi(b[3]);
+            if ((unsigned)y < 0x32)
+                y += 0x7d0;
+            else if ((unsigned)y < 0x64)
+                y += 0x76c;
+            *year = y;
+        }
+        {
+            int leap = 0;
+            unsigned y = (unsigned)*year;
+            if ((y & 3) == 0) {
+                if (y % 100 != 0)
+                    leap = 1;
+                else if (y % 400 == 0)
+                    leap = 1;
+            }
+            *yday = kMonthDayOffset[*month] + leap + 1 + *day;
+        }
+        *hour = atoi(b[4]);
+        *min = atoi(b[5]);
+        *sec = atoi(b[6]);
+        ((eastl::StrDtor*)&tmp)->Destroy();
+        return true;
+    }
+    if (type == 4) {
+        unsigned pos = tmp.find(':', 0);
+        unsigned len = (unsigned)(tmp.mpEnd - tmp.mpBegin);
+        tmp.mpBegin[pos] = ' ';
+        tmp.mpBegin[pos + 2] = ' ';
+        if (pos >= len)
+            goto fail;
+        if (pos + 2 >= len)
+            goto fail;
+        if (sscanf(tmp.mpBegin, S_(0x143f5d4), b[0], b[1], b[2], b[3], b[4], b[5], b[6]) != 7)
+            goto fail;
+        {
+            int wd = 0;
+            unsigned i = 0;
+            const char* p = kShortWeekdays;
+            do {
+                if (_stricmp(b[0], p) == 0) {
+                    wd = i + 1;
+                    break;
+                }
+                i++;
+                p += 4;
+            } while (i < 7);
+            *weekday = wd;
+        }
+        *month = MonthStringToInteger(b[1]);
+        *day = atoi(b[2]);
+        *hour = atoi(b[3]);
+        *min = atoi(b[4]);
+        *sec = atoi(b[5]);
+        {
+            int y = atoi(b[6]);
+            if ((unsigned)y < 0x32)
+                y += 0x7d0;
+            else if ((unsigned)y < 0x64)
+                y += 0x76c;
+            *year = y;
+        }
+        {
+            int leap = 0;
+            unsigned y = (unsigned)*year;
+            if ((y & 3) == 0) {
+                if (y % 100 != 0)
+                    leap = 1;
+                else if (y % 400 == 0)
+                    leap = 1;
+            }
+            *yday = kMonthDayOffset[*month] + leap + 1 + *day;
+        }
+        ((eastl::StrDtor*)&tmp)->Destroy();
+        return true;
+    }
+fail:
+    eastl::StrStubRelease(&tmp);
+    return false;
+}
+
+// @ 0x00947cd0
+int TimeStringToSeconds(const eastl::StrStub* s)
+{
+    int weekday;
+    int day;
+    int month;
+    int year;
+    int yday;
+    int hour;
+    int min;
+    int sec;
+    if (ParseDateTimeString(s, &weekday, &day, &month, &year, &yday, &hour, &min, &sec))
+        return (int)TimeToSeconds(weekday, day, month, year, yday, hour, min, sec);
     return 0;
 }

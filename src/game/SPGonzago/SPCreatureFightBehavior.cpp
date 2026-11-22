@@ -443,6 +443,8 @@ static void CopySlotBody(SlotBody* dst, const SlotBody* src)
 // ---- items of slice s00d661a0 end
 
 // ---- items of slice s00d67140 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* FUN_00d661a0(void* first, void* last, void* dest);
+extern "C" void* FUN_00d66210(void* first, void* last, void* destEnd);
 extern "C" void  FUN_00d66250(void* out, void* obj, float value);
 extern "C" void* FUN_00bc9b00();
 extern "C" void* FUN_00bca620(void* self, int key, void* fn, void* pair);
@@ -452,6 +454,7 @@ extern "C" int   FUN_008e7f80(void* self);
 extern "C" void* SP_GetAnimalFromStimulus(void* s);
 extern "C" void* SP_GetCreatureFromStimulus(void* s);
 extern "C" void* SP_GetSpeciesProfile(void* creature);
+extern "C" void* SP_cTribeModeStrategy_Instance();
 extern "C" void* SP_cCreatureModeStrategy_Instance(int key, void* out);
 extern "C" int   FUN_00d995c0();
 typedef unsigned char  U8;
@@ -644,6 +647,10 @@ struct Creature : VT {
 
     void  ResetFightAction();   // helper used by several callees
 };
+struct TribeModeStrategy {
+    U8    mPad00[0x1c8];
+    void* mpManager;        // +0x1c8
+};
 struct HasB4C {
     U8       mPad00[0xb4c];
     B4CObj*  mpB4C;         // +0xb4c
@@ -660,12 +667,20 @@ struct FieldHolder {        // object owning a dword at +0x3f8
     U8  mPad00[0x3f8];
     U32 mField3F8;
 };
+void* operator_new(U32 size, const char* category, int a, int b, const char* file, int line);
+void  operator_delete_array(void* p);
+void* __cdecl memcpy(void* dst, const void* src, U32 n);
 extern "C" void* FUN_00bcb0b0(void* self, int key, U32 b, U32 c, const char* name);
 extern "C" U32   FUN_00b5b800();
+struct FnNukeTree { void __thiscall f(void* node); };
+struct FnClearSlot { void __thiscall f(const void* src); };
+struct FnMoveSlot  { void __thiscall f(const void* src); };
 struct FnD66E70    { void* __thiscall f(Creature* creature); };
 struct FnD670E0    { void __thiscall f(); };
 struct FnC14750    { void __thiscall f(int a); };
 struct FnC0EE60    { void* __thiscall f(); };
+struct FnC0BA10    { void __thiscall f(); };
+struct FnACA360    { void __thiscall f(); };
 struct FnC19940    { void __thiscall f(int a); };
 struct FnC232B0    { char __thiscall f(); };
 struct FnC0C0E0    { char __thiscall f(); };
@@ -673,19 +688,25 @@ struct FnGetTarget { void* __thiscall f(); };
 struct FnB41A40    { void __thiscall f(void* collection, void* ctx); };
 struct FnIsValid   { char __thiscall f(void* entry); };
 struct FnD39360    { void __thiscall f(); };
+struct FnBC2180    { void __thiscall f(void* a); };
 struct FnBC9B50    { char __thiscall f(); };
 struct FnBCB480    { void __thiscall f(void* a, void* b, int c, int d); };
 struct FnBC97F0    { void __thiscall f(int a, int b, float c, void* d); };
 struct FnSpotPlay   { void* __thiscall f(int a, int b); };
+struct FnSprint     { void __thiscall f(int a); };
 struct FnInterrupt  { int __thiscall f(int id, int a, int b); };
 struct FnPlay2      { void* __thiscall f(int a, int b); };
+struct FnSetStealth2{ void __thiscall f(int a, int b); };
 SlotPayload* FUN_00d66320(U32 slot);
 SlotPayload* FUN_00d67660();
 int FUN_00d678d0(FightAction* self, U8 param);
+void __cdecl FUN_00d67300(Creature* c, int a2, int a3, int a4, int a5, FightAction* fa);
+void __cdecl FUN_00d67410(Creature* c, int a2, int a3, int a4, int a5, FightAction* fa);
 struct FindKey {
     void* mpObject;
     void* mpCreature;
 };
+extern "C" void  FUN_00b3d480(void* p);
 // ---- items of slice s00d67140 end
 
 // ---- items of slice s00d67d30 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2134,6 +2155,217 @@ void FightMem::Release()
     mNoActivityTimer = 0.0f;
 }
 }  // namespace SP
+
+// @ 0x00d67140
+void SlotPool::reserve(U32 newCapacity)
+{
+    U32 current = (U32)(mpCapacity - mpBegin);
+    if (newCapacity > current) {
+        Slot* newBuffer = (newCapacity != 0)
+            ? (Slot*)operator_new(
+                  newCapacity * 0x18, "Simulator", 0, 0,
+                  "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                  0xd1)
+            : 0;
+        FUN_00d661a0(mpBegin, mpEnd, newBuffer);
+        if (mpBegin != 0) {
+            operator_delete_array(mpBegin);
+        }
+        U32 moved = (U32)(mpEnd - mpBegin);
+        mpBegin    = newBuffer;
+        mpEnd      = newBuffer + moved;
+        mpCapacity = newBuffer + newCapacity;
+    }
+}
+
+// @ 0x00d671f0
+void SlotPool::insert_impl(Slot* position, Slot* value)
+{
+    if (mpEnd != mpCapacity) {
+        if (position <= value && value < mpEnd) {
+            value = value + 1;
+        }
+        if (mpEnd != 0) {
+            ((FnClearSlot*)mpEnd)->f(mpEnd - 1);
+        }
+        FUN_00d66210(position, mpEnd - 1, mpEnd);
+        ((FnMoveSlot*)position)->f(value);
+        mpEnd = mpEnd + 1;
+        return;
+    }
+
+    U32 newCapacity = (U32)(mpEnd - mpBegin);
+    if (newCapacity == 0) {
+        newCapacity = 1;
+    } else {
+        newCapacity = newCapacity * 2;
+        if (newCapacity == 0) {
+            goto skip_alloc;
+        }
+    }
+    {
+        Slot* newBuffer = (Slot*)operator_new(
+            newCapacity * 0x18, "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+        void* newEnd = FUN_00d661a0(mpBegin, position, newBuffer);
+        if (newEnd != 0) {
+            ((FnClearSlot*)newEnd)->f(value);
+        }
+        newEnd = FUN_00d661a0(position, mpEnd, (char*)newEnd + 0x18);
+        if (mpBegin != 0) {
+            operator_delete_array(mpBegin);
+        }
+        mpEnd      = (Slot*)newEnd;
+        mpBegin    = newBuffer;
+        mpCapacity = newBuffer + newCapacity;
+        return;
+    }
+skip_alloc:
+    {
+        void* newEnd = FUN_00d661a0(mpBegin, position, 0);
+        if (newEnd != 0) {
+            ((FnClearSlot*)newEnd)->f(value);
+        }
+        newEnd = FUN_00d661a0(position, mpEnd, (char*)newEnd + 0x18);
+        if (mpBegin != 0) {
+            operator_delete_array(mpBegin);
+        }
+        mpEnd      = (Slot*)newEnd;
+        mpBegin    = 0;
+        mpCapacity = (Slot*)0 + newCapacity;
+    }
+}
+
+// @ 0x00d67300
+void __cdecl FUN_00d67300(Creature* c, int a2, int a3, int a4, int a5, FightAction* fa)
+{
+    (void)a2; (void)a3; (void)a4; (void)a5;
+
+    if (c->mFlagB5E == 0) {
+        c->mpB4C->mStimuli.ClearAll(0x10, 0);
+        c->mSubSys.q59();
+        if (((c->mFlagsB58 >> 9) & 1) == 0) {
+            c->q33(0, 0, 0);
+        }
+    }
+
+    ((FnD670E0*)fa)->f();
+
+    c->mFieldE8C = 0xffffffff;
+    c->mFieldE90 = 0xffffffff;
+    c->mFieldE94 = 0.0f;
+
+    {
+        void* src = c->mpFieldE9C;
+        void* dst = c->mpFieldE98;
+        memcpy(dst, src, (U32)((int)src - (int)src));
+        c->mpFieldE9C = (void*)((int)c->mpFieldE9C + (((int)src - (int)dst) >> 2) * -4);
+    }
+
+    ((FnC14750*)c)->f(0);
+    c->mFlagsB58 &= 0xffffdfff;
+
+    ((FnNukeTree*)&c->mTree)->f(c->mTree.mRoot);
+    c->mTree.mLeft   = (void*)&c->mTree.mLeft;
+    c->mTree.mRight  = (void*)&c->mTree.mLeft;
+    c->mTree.mRoot   = 0;
+    c->mTree.mByte10 = 0;
+    c->mTree.mCount  = 0;
+
+    if (fa != 0) {
+        ((FnNukeTree*)&fa->mTree64)->f(fa->mTree64.mRoot);
+        void* p = fa->mpField20;
+        if (p != 0) {
+            ((VT*)p)->q48();
+        }
+    }
+}
+
+// @ 0x00d67410
+void __cdecl FUN_00d67410(Creature* c, int a2, int a3, int a4, int a5, FightAction* fa)
+{
+    (void)a2; (void)a3; (void)a4; (void)a5;
+
+    ((FnSetStealth2*)c)->f(0, 0);
+    if (c->mSubSys.q22()) {
+        void* o = ((FnC0EE60*)c)->f();
+        if (o != 0) {
+            void* r = ((VT*)o)->q03(0);
+            SP::FUN_00b3d480((int)r);
+            ((FnACA360*)r)->f();
+        }
+    }
+    c->q33(0, 0, 0);
+    c->mFlagsB58 &= 0xffffdfff;
+    ((FnSprint*)c)->f(0);
+    ((FnC0BA10*)c)->f();
+
+    c->mFieldE8C = 0xffffffff;
+    c->mFieldE90 = 0xffffffff;
+    c->mFieldE94 = 0.0f;
+
+    {
+        void* src = c->mpFieldE9C;
+        void* dst = c->mpFieldE98;
+        memcpy(dst, src, (U32)((int)src - (int)src));
+        c->mpFieldE9C = (void*)((int)c->mpFieldE9C + (((int)src - (int)dst) >> 2) * -4);
+    }
+
+    SP::FUN_00d66e10((SP::cSPCreatureBase_s00d6_61a0*)c, (U32)*(int*)&fa->mF08);
+
+    TribeModeStrategy* strat = (TribeModeStrategy*)SP_cTribeModeStrategy_Instance();
+    ((FnBC2180*)strat->mpManager)->f((void*)(int)fa->mF0C);
+    fa->mF0C = 0.0f;
+
+    if (fa->mpField34 != 0) {
+        ((VT*)fa->mpField34)->q25();
+    }
+    if (fa->mpField30 != 0) {
+        ((VT*)fa->mpField30)->q01();
+    }
+}
+
+// @ 0x00d67520
+U32 SlotPool::alloc(const SlotPayload* value)
+{
+    // The low 30 bits of the slot header either index the free list head or, when the header is
+    // the sentinel 0x3fffffff, mark that the pool must grow instead of recycling a freed slot.
+    U32 index = mFreeListHead;
+    Slot* result;
+
+    if (index != 0x3fffffff) {
+        result = &mpBegin[index];
+        mFreeListHead = result->mFlags & 0x3fffffff;
+        result->mFlags &= 0x7fffffff;
+        result->mPayload = *value;
+    } else {
+        index = (U32)(mpEnd - mpBegin);
+        if (mpEnd < mpCapacity) {
+            if (mpEnd != 0) {
+                mpEnd->mFlags = 0x80000000;
+            }
+            mpEnd = mpEnd + 1;
+        } else {
+            Slot tmp;
+            tmp.mFlags = 0x80000000;
+            insert_impl(mpEnd, &tmp);
+        }
+        if (index != 0) {
+            Slot* prev = &mpBegin[index - 1];
+            prev->mFlags &= 0xbfffffff;
+        }
+        result = &mpBegin[index];
+        result->mFlags |= 0x40000000;
+        result->mFlags &= 0x7fffffff;
+        result->mPayload = *value;
+    }
+
+    if (mMinFreeIndex > index) {
+        mMinFreeIndex = index;
+    }
+    return index;
+}
 
 // @ 0x00d67660
 SlotPayload* FUN_00d67660()

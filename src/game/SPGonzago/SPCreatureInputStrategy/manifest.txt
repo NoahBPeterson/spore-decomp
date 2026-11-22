@@ -7,6 +7,7 @@
 ../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?ToggleBuildMode@@YAXXZ  00d2ebc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?FUN_00d2ede0@@YAEPAX@Z  00d2ede0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?FUN_00d2ee20@@YGEPAPAX@Z  00d2ee20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?LoadInputTunables@cCreatureInputConfig@SP@@QAEXXZ  00d30990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?DidDoubleClick@cCreatureModeInputStrategy_s00d3_0830@@QAE_NI@Z  00d30ee0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?FUN_00d30f60@@YA_NPAUCNoun@@@Z  00d30f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?FUN_00d317e0@@YA_NH@Z  00d317e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

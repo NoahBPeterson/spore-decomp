@@ -6,12 +6,15 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern uint8_t  g_vtbl_014bb50c[];          // 0x14bb50c  PacketPlayer vtable
+extern void*    g_tbl_014bb508[];           // 0x14bb508  [channel] -> decoder-name table
 #include <string.h>
 #include <math.h>
 #include <xmmintrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s0113baf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint8_t  g_vtbl_014bb50c[];          // 0x14bb50c  PacketPlayer vtable
+extern void*    g_tbl_014bb508[];           // 0x14bb508  [channel] -> decoder-name table
 static inline uint8_t&  B(void* p, unsigned o) { return *(uint8_t*)((char*)p + o); }
 static inline uint16_t& W16(void* p, unsigned o) { return *(uint16_t*)((char*)p + o); }
 static inline uint32_t& W(void* p, unsigned o) { return *(uint32_t*)((char*)p + o); }
@@ -20,7 +23,7 @@ static inline void*&    P(void* p, unsigned o) { return *(void**)((char*)p + o);
 struct Ctx {
     uint8_t b[0x800];
 
-    // callees (other TUs) — declared, mapped by address
+    // callees (other TUs) - declared, mapped by address
     void     PlugInInit16();                 // 0x114f4f0  PlugIn::Initialize<Pan3D>
     void     InitSndPlayer1();               // 0x112dbb0  PlugIn::Initialize<SndPlayer1>
     void*    SysAlloc(uint32_t, const char*, int, int); // 0x112c820 System::Alloc
@@ -40,6 +43,7 @@ struct Ctx {
     bool     DelayLineInit(int, int, uint32_t); // 0x114d7b0
     void     D840(int);                      // 0x114d840
     void     C1154ee0();                     // 0x1154ee0
+    void     C00c2e4e0();                    // 0x00c2e4e0
     void     C1154ca0(void*);                // 0x1154ca0
     uint64_t Get64();                        // 0x68c140
 
@@ -125,6 +129,45 @@ bool Ctx::FUN_0113bb90(int param_2)
         if (W(this, 0x140) == 0)
             return result;
     }
+}
+
+// @ 0x0113bc60
+bool Ctx::FUN_0113bc60()
+{
+    uint8_t* sys = (uint8_t*)P(this, 4);
+    uint8_t* feed = (uint8_t*)P(this, 0x48);
+    bool ok = false;
+    ((Ctx*)sys)->SysLock();
+    uint32_t reg = ((Ctx*)P(this, 4))->SysGetDec();
+    void* name = g_tbl_014bb508[B(feed, 4)];
+    void* d = ((Ctx*)reg)->RegGet(name);
+    void* dec = ((Ctx*)reg)->DecoderFactory(d, B(this, 0x153), 0x14, P(this, 4));
+    W(this, 0x148) = (uint32_t)dec;
+    if (dec != 0) {
+        W16(this, 0x150) = W16(dec, 0x20);
+        ((Ctx*)this)->FUN_0113bb90(1);
+        ok = true;
+    }
+    ((Ctx*)sys)->SysUnlock();
+    return ok;
+}
+
+// @ 0x0113bcf0
+uint32_t FUN_0113bcf0(uint32_t* rec)
+{
+    uint8_t* self = (uint8_t*)rec[1];
+    W(self, 0x148) = 0;
+    B(self, 0x154) = (uint8_t)(int)F(rec, 8);
+    F(self, 0x14c) = F(rec, 0xc);
+    B(self, 0x153) = (uint8_t)(int)F(rec, 0x10);
+    uint8_t* q = (uint8_t*)P(self, 0x48);
+    B(self, 0x152) = 1;
+    W(q, 0) = 0;
+    B(q, 4) = B(self, 0x154);
+    uint8_t st = B(self, 0x152);
+    if (st == 4 || st == 0)
+        ((Ctx*)self)->FUN_0113bc60();
+    return 0x14;
 }
 
 // @ 0x0113bd60

@@ -342,19 +342,19 @@ class cSPVerbTrayCollection_s0060_5870 : public EA::COM::IUnknown32_s0060_5870, 
   typedef eastl::vector_s0060_5870<AutoRefCount_s0060_5870<cSPEditorVerbIconTray_s0060_5870> > TrayVector;
   typedef eastl::map_s0060_5870<AutoRefCount_s0060_5870<IWindow_s0060_5870>, TrayVector> TrayMap;
 
-  cSPVerbTrayCollection_s0060_5870();
-  ~cSPVerbTrayCollection_s0060_5870();
+  cSPVerbTrayCollection_s0060_5870();  // 0x00605e60 (SP::cSPVerbTrayCollection::cSPVerbTrayCollection_s0060_5870)
+  ~cSPVerbTrayCollection_s0060_5870();  // 0x00605e60 (SP::cSPVerbTrayCollection::cSPVerbTrayCollection_s0060_5870)
   PV(4) PV(5) PV(6) PV(7)
   virtual IWindow_s0060_5870* GetTrayWindow(uint32_t controlID);                          // +0x20
   virtual void InitTrays(ResourceKey propList, const ResourceKey* trayKeys, int trayCount);  // +0x24 0x00605f90
   virtual void Layout();                                                         // +0x28
 
-  void SetValue(void* value);
-  float GetTotalLevel();
-  IWindow_s0060_5870* FindWindow(uint32_t controlID);
-  void SetVerbIconList(void* list);
+  void SetValue(void* value);  // 0x00605870 (SP::cSPVerbTrayCollection::SetValue)
+  float GetTotalLevel();  // 0x006058b0 (SP::cSPVerbTrayCollection::GetTotalLevel)
+  IWindow_s0060_5870* FindWindow(uint32_t controlID);  // 0x00605900 (SP::cSPVerbTrayCollection::FindWindow)
+  void SetVerbIconList(void* list);  // 0x00605940 (SP::cSPVerbTrayCollection::SetVerbIconList)
   void Init(IWindow_s0060_5870* parent, ResourceKey propList, const ResourceKey* trayKeys, int trayCount, bool ignoreKeyPress);  // 0x00605980 (SP::cSPVerbTrayCollection::Init)
-  void ShutdownTrays();
+  void ShutdownTrays();  // 0x00605d10 (SP::cSPVerbTrayCollection::ShutdownTrays)
 
   TrayVector mVerbTrays;                  // +0xc
   AutoRefCount_s0060_5870<IWindow_s0060_5870> mWinParent;       // +0x20

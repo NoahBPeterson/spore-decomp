@@ -19,6 +19,7 @@ extern "C" char g_1453948[];
 #include "SP/Audio/cListener.h"
 #include "EA/Audio/System.h"
 #include "SP/cViewer.h"
+#include "EA/ArgScript/cArguments.h"
 
 // ---- items of slice s00a33ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace rw {
@@ -456,6 +457,7 @@ struct cMapDescription {
 
 // ---- items of slice s00a3cbb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float kMapGain;                      // 0x01485720 (default gain written by the MapDescription ctor)
+extern int DAT_01676458, DAT_0167645c, DAT_01676468, DAT_0167646c;
 extern char  PTR_FUN_01453998[];            // cCreatureAbility-derived vtable
 extern char  PTR_FUN_014599e8[];            // override vtable
 extern char  vtbl_GmeRefCount[];            // 0x013ef094  ??_7GmeRefCount@@6B@
@@ -482,7 +484,9 @@ struct TrackCopy {
     void Reserve(int count, void* p);   // 0x00a3d4c0 (thiscall: this in ECX)
     int* CopyCtor(int* src);            // 0x00a3db50
 };
+void FUN_00a3cb20(void);
 bool eastl_hashtable_find(void* map, void* key);                    // 0x00645ed0
+bool __cdecl eastl_string_equals(const void* str, const void* chars);   // 0x00555020 (eastl::operator==(basic_string, const char*))
 struct EObj;   // entry object destroyed by Mixer::Release (defined below)
 namespace EA {
 namespace ArgScript {
@@ -1117,6 +1121,15 @@ int* FUN_00a3ce40(int self)
     return 0;
 }
 
+// @ 0x00a3cea0
+void FUN_00a3cea0(void)
+{
+    DAT_01676458 = (int)(void*)FUN_00a3ce40;
+    DAT_0167645c = (int)(void*)(cMapDescription* (*)(EA::IO::IReader*, int32_t))FUN_00a3cb20;
+    DAT_01676468 = 1;
+    DAT_0167646c = 2;
+}
+
 // @ 0x00a3ced0
 void FUN_00a3ced0(int self, int a, int b)
 {
@@ -1252,7 +1265,7 @@ int EA::Audio::Mixer::FindByName(int key)
     int b = (int)mpEnd;
     for (;;) {
         if (a == b) return 0;
-        if (KeyEq((void*)(a + 0x18), (void*)key)) break;
+        if (eastl_string_equals((void*)(a + 0x18), (void*)key)) break;
         a += 0x28;
     }
     return a;

@@ -319,6 +319,25 @@ static inline uint8* SkipItems(uint8* cur, uint32 n)
 // ---- items of slice s008b0560 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef int8_t   int8;
 typedef int32_t  int32;
+struct InputStream_s008b_0560;
+extern "C" void   tsi_Error(tsiMemObject* mem, int32 code);                   // 0x008d10c0
+extern "C" void   PrimeT2KInputStream(InputStream_s008b_0560* in);                       // 0x008cc0b0
+typedef int (*PF_READ_TO_RAM)(void* id, uint8* dst, uint32 pos, uint32 n);
+struct InputStream_s008b_0560 {
+    uint8*         privateBase;   // 0x000
+    PF_READ_TO_RAM readToRam;     // 0x004
+    void*          nonRamID;      // 0x008
+    uint8          tmp_ch;        // 0x00c  one-byte staging area for readToRam
+    uint8          pad00d[0x210 - 0x00d];
+    uint32         bytesLeft;     // 0x210
+    uint32         cacheCount;    // 0x214
+    uint32         posZero;       // 0x218
+    uint32         pos;           // 0x21c
+    uint32         maxPos;        // 0x220
+    uint32         posZero2;      // 0x224
+    int            ctorType;      // 0x228
+    tsiMemObject*  mem;           // 0x22c
+};
 struct T2KPointSet {
     uint16  nx;                   // 0x00
     int16   xs[0x40];             // 0x02
@@ -543,6 +562,27 @@ uint8 NibSrcTC::ReadHi()
     return v;
 }
 
+// @ 0x008b1070
+static int8 ReadNibbleLo(int dummy, NibSrcTC* s)
+{
+    (void)dummy;
+    if (s->half == 0) {
+        uint8* p = s->cur;
+        uint8 v = *p;
+        s->cur = p + 1;
+        return (int8)v;
+    }
+    // Retail keeps the low byte in CL: it loads it without extending (`mov cl,[eax]`), shifts it
+    // there and only then widens CL; the high nibble stays in EAX (`shr eax,4`).
+    uint8* p = s->cur;
+    uint8 b0 = *p;
+    uint8 b1;
+    s->cur = ++p;
+    b1 = *p;
+    b0 <<= 4;
+    return (int8)((b1 >> 4) + b0);
+}
+
 // @ 0x008b10a0
 static int FindCoordIndex(T2KPointSet* pts, int dirHint, int16 useY)
 {
@@ -593,6 +633,30 @@ static int FindCoordIndex(T2KPointSet* pts, int dirHint, int16 useY)
         }
     }
     return acc;
+}
+
+// @ 0x008b1160
+static __forceinline uint8 ReadByteRaw(InputStream_s008b_0560* in)
+{
+    if (in->privateBase == 0) {
+        uint32 pos = in->pos;
+        in->pos = pos + 1;
+        if (in->readToRam(in->nonRamID, &in->tmp_ch, pos, 1) < 0) {
+            tsi_Error(in->mem, 0x2728);
+            return 0;
+        }
+        return in->tmp_ch;
+    }
+    if (in->readToRam == 0) {
+        uint8 b = in->privateBase[in->pos];
+        in->pos = in->pos + 1;
+        return b;
+    }
+    if (in->cacheCount < (in->pos - in->posZero) + 1)
+        PrimeT2KInputStream(in);
+    uint8 b = in->privateBase[in->pos - in->posZero];
+    in->pos = in->pos + 1;
+    return b;
 }
 
 // @ 0x008b12e0

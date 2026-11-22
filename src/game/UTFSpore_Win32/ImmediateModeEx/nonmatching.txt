@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+009630e0 710 complete; ImmediateModeEx::Init reconstructed: allocate/finalize vertex descriptor, set element fields, create vertex buffer via 0x962ff0, index buffer via 0x963060, fill 0x1000-vertex index pattern, create sampler state, build BuildState, set sampler/render/raster/soft state, D3D9SetVertexDescriptor, optional shader data, get compiled state and free BuildState; /LTCG expansion means 952 vs 944 bytes and different scheduling. [equiv: UNSUPPORTED 0/400 valid, fault(write)/VirtualAlloc] flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00c80000.cpp -- migrated from slice(s) s00c8c9d0, s00c8bb00, s00c88e30, s00c87be0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00c80000.cpp -- migrated from slice(s) s00c8aa60, s00c8c9d0, s00c8bb00, s00c88e30, s00c87be0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00c80000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -31,6 +31,8 @@ extern "C" void* memcpy(void*, const void*, unsigned int);
 #include "SP/cStarManager.h"
 #include "SP/cTerrainSphere.h"
 #include "SP/cTotemPole.h"
+#include "EA/Text/Font.h"
+#include "SP/cSolarSystem.h"
 
 // ---- items of slice s00c87be0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Ser {
@@ -860,6 +862,123 @@ public:
 };
 // ---- items of slice s00c8c9d0 end
 
+// ---- items of slice s00c8aa60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned short u16;
+struct Effect;
+struct EffectInfo {
+    int   mId;                   // +0x00
+    int   mOwner;                // +0x04
+    u8    mFlag8;                // +0x08
+    u8    mFlag9;                // +0x09
+    u8    mFlagA;                // +0x0a
+    u8    mPad0b;                // +0x0b
+    float mF0c;                  // +0x0c
+    u8    mFlag10;               // +0x10
+    u8    mPad11;                // +0x11
+    u8    mPad12;                // +0x12
+    u8    mPad13;                // +0x13
+    float mF14;                  // +0x14
+    float mF18;                  // +0x18
+    int   mI1c, mI20, mI24;      // +0x1c
+    u8    mFlag28;               // +0x28
+    u8    mPad29;                // +0x29
+    u8    mPad2a;                // +0x2a
+    u8    mPad2b;                // +0x2b
+    int   mPad2c;                // +0x2c
+    int   mPad30;                // +0x30
+    int   mPad34;                // +0x34
+    Effect* mpEffect;            // +0x38
+
+    EffectInfo& operator=(const EffectInfo& other);  // 0x00c88c30 (retail copy-assign: field copies + mpEffect refcount swap)
+};
+inline void EffectVecMove(EffectInfo* first, EffectInfo* last, EffectInfo* dest) {
+    while (first != last) {
+        *dest = *first;
+        ++first;
+        ++dest;
+    }
+}
+struct XformMsg;
+struct Effect {
+    virtual void e00();
+    virtual void e04();             // +0x04  release
+    virtual void e08(int);          // +0x08
+    virtual void e0c(int);          // +0x0c
+    virtual char e10();             // +0x10  is active
+    virtual void e14();
+    virtual void e18(XformMsg*);    // +0x18
+    virtual void e1c();
+    virtual void e20();
+    virtual void e24();
+    virtual void e28();
+    virtual void e2c();
+    virtual void e30();
+    virtual void e34();
+    virtual void e38();
+    virtual void e3c();
+    virtual void e40();
+    virtual void e44(int, void*, int);  // +0x44
+};
+struct Matrix33 {
+    float m0, m1, m2, m3, m4, m5, m6, m7, m8;
+    void Assign(const float* src);   // 0x0041cb40
+    void CopyFrom(const Matrix33& o) {
+        m0 = o.m0; m1 = o.m1; m2 = o.m2;
+        m3 = o.m3; m4 = o.m4; m5 = o.m5;
+        m6 = o.m6; m7 = o.m7; m8 = o.m8;
+    }
+};
+struct EffectVec {
+    EffectInfo* pBegin;      // +0x00
+    EffectInfo* pEnd;        // +0x04
+    EffectInfo* pCap;        // +0x08
+    void DoInsertValue(EffectInfo* pPos, const EffectInfo& value);  // 0x00c8a910
+    void push_back_default();                                       // 0x00c8add0
+
+    // eastl::vector::erase(position): shift the tail down one element, drop the
+    // end, and destroy the stale last element (releases its mpEffect). Inlined
+    // into 0x00c8ad30; the move loop comes from EffectVecMove above.
+    EffectInfo* erase(EffectInfo* position) {
+        EffectInfo* destPosition = position;
+        if ((position + 1) < pEnd)
+            EffectVecMove(destPosition + 1, pEnd, destPosition);
+        --pEnd;
+        Effect* de = pEnd->mpEffect;
+        if (de) de->e04();
+        return destPosition;
+    }
+};
+struct XformMsg {
+    u16      mFlags;      // +0x00
+    u16      mCount;      // +0x02
+    float    mPosX;       // +0x04
+    float    mPosY;       // +0x08
+    float    mPosZ;       // +0x0c
+    float    mScale;      // +0x10
+    Matrix33 mMatrix;     // +0x14
+    void Init();          // 0x00434040
+};
+struct cSpatialObjectView {
+    void**  mpVtbl;              // +0x000
+    char    pad_04[0xbc];        // +0x004
+    EffectVec mEffects;          // +0x0c0
+
+    __declspec(noinline) Effect* CreateEffectInternal(void* p2, int p3, void* p4, int p5);
+    void  UpdateEffects();                                     // 0x00c8aa60
+    void  CreateEffect4(void* a, void* b, void* c, void* d);   // 0x00c8b040
+    void  CreateEffect3(void* a, void* b, void* c);            // 0x00c8b060
+    void  CreateEffect1(void* a);                              // 0x00c8b080
+    Effect* sub_b130(void* p2, int p3, void* p4);                // 0x00c8b130
+    void  sub_b1a0(void* p);                                   // 0x00c8b1a0
+    Effect* sub_b1b0(void* p2, int p3, void* p4);                // 0x00c8b1b0
+    void  sub_b210(void* p);                                   // 0x00c8b210
+    bool  sub_b220(int param2, int id, char create, void** out);// 0x00c8b220
+    void  sub_ad30(int param2, int id);                        // 0x00c8ad30
+    void  DestroyAllEffects(int param);                        // 0x00c8b0a0
+    void  sub_b2e0();                                          // 0x00c8b2e0
+};
+// ---- items of slice s00c8aa60 end
+
 // @ 0x00c88480
 void Ser::Inc(int a)
 { (void)a; mBC++; }
@@ -1067,6 +1186,14 @@ void cSO::GetCommunityName(cSPVector3_s00c8_8e30* out)
     else
         *out = g_vec16952a0;
 }
+
+// @ 0x00c8b1a0
+void cSpatialObjectView::sub_b1a0(void* p)
+{ sub_b130(p, 0, p); }
+
+// @ 0x00c8b210
+void cSpatialObjectView::sub_b210(void* p)
+{ sub_b1b0(p, 0, p); }
 
 // @ 0x00c8c0f0
 void FUN_00c8c0f0(cTribe* tribe, float frac, s32 minKeep)

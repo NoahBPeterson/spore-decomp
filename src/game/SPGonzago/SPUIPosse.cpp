@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIPosse.cpp -- migrated from slice(s) s00e25710, s00fc7430, s00e27310, s00e26680, s00e24700, s00e23710, s00e22860, s00e21880, s00e20860 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIPosse.cpp -- migrated from slice(s) s00e255c0, s00e25460, s00e253c0, s00e25240, s00e24f10, s00e24d10, s00e24a50, s00e25710, s00fc7430, s00e27310, s00e26680, s00e24700, s00e23710, s00e22860, s00e21880, s00e20860 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIPosse.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -34,6 +34,8 @@ extern "C" char g_16ac2c8[];
 #include <math.h>
 #include "cSPUIAnimator.h"
 #include <intrin.h>
+#include "EA/Variant.h"
+#include "EA/UTFWin/RenderContext.h"
 
 // ---- items of slice s00e20860 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float DAT_013ec4d0;                               // 1.0f clamp
@@ -486,6 +488,13 @@ struct cVec3 {
     float y;                       // 0x04
     float z;                       // 0x08
 };
+struct cVec2 {
+    cVec2() {}
+    cVec2(float ax, float ay) : x(ax), y(ay) {}
+    cVec2(const cVec2& other) : x(other.x), y(other.y) {}
+    float x;                       // 0x00
+    float y;                       // 0x04
+};
 struct cVec4 {
     float x;                       // 0x00
     float y;                       // 0x04
@@ -516,14 +525,6 @@ struct cPossePart {
 cVec4* __cdecl GetMainWindowArea(cVec4* out);                // 0x00805ea0
 char   __cdecl SetWindowImage(void* window, const void* rect, int mode);   // 0x00807bb0
 void   __cdecl BuildAnimatorRect(void* a, void* b);          // 0x00804ed0
-static inline const float& max_f(const float& a, const float& b)
-{
-    return (a < b) ? b : a;
-}
-static inline const float& min_f(const float& a, const float& b)
-{
-    return (a > b) ? b : a;
-}
 static inline int VT_1C_0(void* p)
 {
     return ((int (__thiscall*)(void*))(*(void***)p)[0x07])(p);
@@ -544,6 +545,14 @@ static inline void* VT_F0_2(void* p, int a, int b)
 {
     return ((void* (__thiscall*)(void*, int, int))(*(void***)p)[0x3c])(p, a, b);
 }
+static inline float VT_C0_0(void* p)
+{
+    return ((float (__thiscall*)(void*))(*(void***)p)[0x30])(p);
+}
+static inline void VT_6C_1(void* p, const cVec4* v)
+{
+    ((void (__thiscall*)(void*, const cVec4*))(*(void***)p)[0x1b])(p, v);
+}
 static inline void VT_70_2F(void* p, float a, float b)
 {
     ((void (__thiscall*)(void*, float, float))(*(void***)p)[0x1c])(p, a, b);
@@ -552,8 +561,33 @@ static inline void VT_7C_2(void* p, int a, int b)
 {
     ((void (__thiscall*)(void*, int, int))(*(void***)p)[0x1f])(p, a, b);
 }
+static inline const int& max_i(const int& a, const int& b)
+{
+    return (a < b) ? b : a;
+}
+static inline const int& min_i(const int& a, const int& b)
+{
+    return (a > b) ? b : a;
+}
+static inline float fmax_v(float a, float b)
+{
+    return (a > b) ? a : b;
+}
+static inline float fmin_v(float a, float b)
+{
+    return (a < b) ? a : b;
+}
+static inline char VT_28_0(void* p)
+{
+    return ((char (__thiscall*)(void*))(*(void***)p)[0x0a])(p);
+}
+#define VT_C0_2(p, out, v) \
+    ((void (__thiscall*)(void*, cVec2*, cVec2))(*(void***)(p))[0x30])((p), (out), (v))
 struct cSPUIPosse_s00e2_2860 {
-    u8            mPad0000[0x50];
+    u8            mPad0000[0xc];
+    void**        mpItemBegin0c;           // 0xc  (item pointer array)
+    void**        mpItemEnd10;             // 0x10
+    u8            mPad0014[0x50 - 0x14];
     void*         mpField50;               // 0x50
     u8            mPad0054[0x60 - 0x54];
     int           mField60;                // 0x60
@@ -572,18 +606,20 @@ struct cSPUIPosse_s00e2_2860 {
     u8            mPad01d5[0x1d8 - 0x1d5];
     float         mField1d8;               // 0x1d8
     float         mField1dc;               // 0x1dc
-    u8            mPad01e0[0x1e4 - 0x1e0];
+    int           mField1e0;               // 0x1e0
     u8            mFlag1e4;                // 0x1e4
-    u8            mPad01e5[0x1e8 - 0x1e5];
+    u8            mFlag1e5;                // 0x1e5
+    u8            mPad01e6[0x1e8 - 0x1e6];
     float         mField1e8;               // 0x1e8
     u8            mFlag1ec;                // 0x1ec
     u8            mPad01ed[0x208 - 0x1ed];
     cSPUIAnimator_s00e2_2860* mpAnimator208;          // 0x208
 
-    void  UpdateLayout(int mode);          // 0x00e22b50
+    void  UpdateLayout(bool bSnap);        // 0x00e22b50
     void  SetToolWindowState(int a, int b);// 0x00e21bd0
     void  RefreshToolWindow(int a);        // 0x00e21ca0
 
+    cVec4 GetWindowBounds();               // 0x00e22860
     void  SnapToPosition();                // 0x00e22a60
     void  SetScaleF(float scale);          // 0x00e23130
     bool  SetVisibility(void* window);     // 0x00e231a0
@@ -1076,6 +1112,251 @@ struct cPosseItem15 {
 };
 // ---- items of slice s00e25710 end
 
+// ---- items of slice s00e24a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Owned_s00e2_4a50 {
+    virtual ~Owned_s00e2_4a50();
+};
+struct WString_s00e2_4a50 {
+    wchar_t* mpBegin;     // +0x0
+    wchar_t* mpEnd;       // +0x4
+    wchar_t* mpCapacity;  // +0x8
+
+    ~WString_s00e2_4a50()
+    {
+        if ((mpCapacity - mpBegin) > 1) {
+            if (mpBegin)
+                operator delete(mpBegin);
+        }
+    }
+};
+struct Element_s00e2_4a50 {
+    char pad00[0x10];
+};
+struct FixedVector_s00e2_4a50 {
+    Element_s00e2_4a50* mpBegin;      // +0x00
+    Element_s00e2_4a50* mpEnd;        // +0x04
+    Element_s00e2_4a50* mpCapacity;   // +0x08
+    int mOverflowAllocator;           // +0x0c
+    Element_s00e2_4a50* mpPoolBegin;  // +0x10
+    char mBuffer[0x1bc - 0xa4 - 0x14];
+
+    ~FixedVector_s00e2_4a50()
+    {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin && mpBegin != mpPoolBegin)
+            operator delete(mpBegin);
+    }
+    void DoDestroyValues(Element_s00e2_4a50* first, Element_s00e2_4a50* last);  // 0x00e23870
+};
+struct Member0c_s00e2_4a50 {
+    char pad00[0xa4 - 0xc];
+    ~Member0c_s00e2_4a50();  // 0x008e2b20
+};
+struct Member1bc_s00e2_4a50 {
+    char pad00[0x1f8 - 0x1bc];
+    ~Member1bc_s00e2_4a50();  // 0x00811fe0
+};
+struct BaseA_s00e2_4a50 {
+    virtual ~BaseA_s00e2_4a50() {}
+};
+struct BaseB_s00e2_4a50 {
+    virtual ~BaseB_s00e2_4a50() {}
+};
+struct Object_s00e2_4a50 : BaseA_s00e2_4a50, BaseB_s00e2_4a50 {
+    char pad08[4];
+    Member0c_s00e2_4a50 m0c;           // +0x00c
+    FixedVector_s00e2_4a50 mItems;     // +0x0a4
+    Member1bc_s00e2_4a50 m1bc;         // +0x1bc
+    WString_s00e2_4a50 mName;          // +0x1f8
+    char pad204[4];
+    Owned_s00e2_4a50* mpOwned;         // +0x208
+
+    virtual ~Object_s00e2_4a50();
+};
+// ---- items of slice s00e24a50 end
+
+// ---- items of slice s00e24d10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Variant;
+struct cRefCounted {
+    virtual void slot00();
+    virtual void Release();                                    // +0x04
+};
+struct cPropertyList : cRefCounted {
+virtual void slot08();
+virtual void slot0c();
+virtual void slot10();
+virtual void slot14();
+virtual void slot18();
+virtual void slot1c();
+    virtual void SetValue(int nIndex, const Variant& value);   // +0x20
+};
+struct cPropListFactory {
+virtual void slot00();
+virtual void slot04();
+virtual void slot08();
+virtual void slot0c();
+virtual void slot10();
+virtual void slot14();
+    virtual void Create(cPropertyList** ppOut);                // +0x18
+virtual void slot1c();
+virtual void slot20();
+virtual void slot24();
+virtual void slot28();
+virtual void slot2c();
+virtual void slot30();
+virtual void slot34();
+virtual void slot38();
+virtual void slot3c();
+virtual void slot40();
+virtual void slot44();
+virtual void slot48();
+virtual void slot4c();
+virtual void slot50();
+    virtual void Submit(uint32_t nID, cPropertyList* pFirst,
+                        cPropertyList* pSecond);               // +0x54
+};
+struct Variant {
+    uint32_t mData[4];                                         // +0x00 .. +0x0f
+    uint16_t mFlags;                                           // +0x10
+    uint16_t mType;                                            // +0x12
+
+    void     SetPointer(const void* p);                        // 0x00e21b30
+    Variant& SetU32(const uint32_t* pValue);                   // 0x00422eb0
+    Variant& SetVec3(const float* pValue);                     // 0x006a3570
+    void     Destruct(int bReset);                             // 0x0093db80
+};
+cPropListFactory* PropListFactory();                           // 0x006895b0
+template <class T>
+struct RefPtr {
+    T* mpObject;                                               // +0x00
+
+    RefPtr() : mpObject(0) {}
+    void release() {
+        if (mpObject) mpObject->Release();
+    }
+    void reset() {
+        if (mpObject) {
+            T* const p = mpObject;
+            mpObject = 0;
+            p->Release();
+        }
+    }
+};
+// ---- items of slice s00e24d10 end
+
+// ---- items of slice s00e24f10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_015a547c;
+extern float g_016ac2cc;
+struct cSPUIVtbl_s00e2_4f10 { void (*slot[128])(); };
+#define VT_s00e2_4f10(p) (*(cSPUIVtbl_s00e2_4f10**)(p))
+typedef void     (__thiscall* FnVoid0_s00e2_4f10)(void*);
+typedef uint32_t (__thiscall* FnU32_0_s00e2_4f10)(void*);
+struct RectF_s00e2_4f10 {
+  float mLeft;    // +0x00
+  float mTop;     // +0x04
+  float mRight;   // +0x08
+  float mBottom;  // +0x0c
+};
+struct Point2_s00e2_4f10 {
+  float mX;       // +0x00
+  float mY;       // +0x04
+  Point2_s00e2_4f10(float x, float y) : mX(x), mY(y) {}
+};
+struct MsgIn_s00e2_4f10 {
+  uint8_t mPad00[8];   // +0x00
+  int32_t mField08;    // +0x08
+  uint8_t mPad0c[0x0c];// +0x0c
+  void*   mField18;    // +0x18
+};
+class cSPUIPosseItem_s00e2_4f10 {
+public:
+  void*   mpVtable;         // +0x00
+  uint8_t mPad04[0x148];    // +0x04 .. +0x14b
+  float   mControlValue01;  // +0x14c
+
+  char DoMessage(void* win, MsgIn_s00e2_4f10* msg);   // 0x00e247f0, base handler
+};
+class cSPUIPosseItemTribeBaby_s00e2_4f10 : public cSPUIPosseItem_s00e2_4f10 {
+public:
+  char DoMessage(void* win, MsgIn_s00e2_4f10* msg);   // 0x00e24f10
+};
+void* __cdecl sGetWindowImage(void* win);
+struct RenderContext_s00e2_4f10 {
+  void* Begin2D(int flags);   // 0x0095bc10
+  void  End2D();              // 0x0095bb20
+};
+void __cdecl FUN_00e23340(void* batch, float halfWidth, float halfHeight, float width,
+                          float height, int32_t a, int32_t b, float angleFrom,
+                          float angleTo, void* image, float alpha);
+// ---- items of slice s00e24f10 end
+
+// ---- items of slice s00e25240 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef u8    (__cdecl   *TPred)(void*, void*);
+struct IPtr {
+  void* p;
+  IPtr(const IPtr& o) : p(o.p) { if (p) ((TFv)(*(void***)p)[0])(p); }
+  ~IPtr() { if (p) ((TFv)(*(void***)p)[1])(p); }
+  IPtr& operator=(const IPtr& o) {
+    void* n = o.p;
+    void* t = p;
+    if (n != t) {
+      if (n) ((TFv)(*(void***)n)[0])(n);
+      p = n;
+      if (t) ((TFv)(*(void***)t)[1])(t);
+    }
+    return *this;
+  }
+};
+struct Pair {
+  IPtr a;
+  IPtr b;
+  __forceinline Pair& operator=(const Pair& o) {
+    a = o.a;
+    b = o.b;
+    return *this;
+  }
+};
+void __cdecl FUN_00e243f0(void* base, s32 top, s32 hole, Pair value, TPred pred);
+// ---- items of slice s00e25240 end
+
+// ---- items of slice s00e253c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef bool   (__cdecl   *TPred_s00e2_53c0)(void*, void*);
+void* __cdecl FUN_00e23e80(void* self, void** src);   // 0x00e23e80 pair assign
+struct IPtr_s00e2_53c0 {
+  void* p;
+  IPtr_s00e2_53c0(const IPtr_s00e2_53c0& o) : p(o.p) { if (p) ((TFv)(*(void***)p)[0])(p); }
+  ~IPtr_s00e2_53c0() { if (p) ((TFv)(*(void***)p)[1])(p); }
+};
+struct Pair_s00e2_53c0 {
+  IPtr_s00e2_53c0 a;
+  IPtr_s00e2_53c0 b;
+};
+void  __cdecl FUN_00e25240(Pair_s00e2_53c0* first, s32 holeIndex, s32 len, s32 topIndex,
+                           Pair_s00e2_53c0 value, TPred_s00e2_53c0 compare);
+// ---- items of slice s00e253c0 end
+
+// ---- items of slice s00e25460 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13eb384[];
+extern "C" char g_13fa72c[];
+extern "C" char g_148058c[];
+extern "C" char g_148059c[];
+extern "C" char g_14805b8[];
+extern "C" char g_16ac238[];
+typedef void (__thiscall* TFv_s00e2_5460)(void*);
+struct LayoutCtorC { void ctor(); };                    // 0x00810000  embedded layout constructor
+struct cSPUIPosse_s00e25460 {
+  void* ctor(void* pOwner, const u32* pKey);
+};
+// ---- items of slice s00e25460 end
+
+// ---- items of slice s00e255c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef void (__thiscall* TFv_s00e2_55c0)(void*);
+u32 __cdecl FNV1_String16(const void* pName, u32 basis, int lower);   // 0x00932f30
+struct cSPUIPosseItem_s00e255c0 {
+  void* ctor(void* pOwner, const void* pName, u32 typeId);
+};
+// ---- items of slice s00e255c0 end
+
 // @ 0x00e213f0
 bool __cdecl FUN_00e213f0(void* obj, float value, char flag)
 {
@@ -1398,6 +1679,7 @@ void cSPUIPosseItem_s00e2_1880::SetItemKeyIcon(const ResourceKey* pKey, int32_t 
 struct ResourceKeyZero_e21ea0 : ResourceKey {
     ResourceKeyZero_e21ea0() { mInstanceID = 0; mGroupID = 0; mTypeID = 0; }
 };
+
 // @ 0x00e21ea0
 void cSPUIPosseItem_s00e2_1880::SetItemIcon(void* pImage, int32_t nUnused)
 {
@@ -1711,6 +1993,49 @@ void cSPUIPosse::SetPlacement(float fX, float fY, int32_t nUnused, bool bVisible
     mField1d4 = 1;
 }
 
+// @ 0x00e22860
+cVec4 cSPUIPosse_s00e2_2860::GetWindowBounds()
+{
+    cVec4 result = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+    cSPUIWindow* window = mLayout1bc.FindWindowByID(0x3d98298, 0);
+    if (window != 0) {
+        cVec4* rect = VT_38_0(window);
+        result.x = rect->x;
+        result.y = rect->y;
+        result.z = rect->z;
+        result.w = rect->w;
+        cVec2 topLeft;
+        VT_C0_2(window, &topLeft, cVec2(0.0f, 0.0f));
+        cVec2 bottomRight;
+        VT_C0_2(window, &bottomRight, cVec2(result.z - result.x, result.w - result.y));
+        result.x = topLeft.x;
+        result.y = topLeft.y;
+        result.z = bottomRight.x;
+        result.w = bottomRight.y;
+    }
+
+    cSPUIWindow* handle = mLayout1bc.FindWindowByID(0x3dae412, 1);
+    if (handle != 0 && (VT_28_0(handle) & 1) != 0) {
+        cVec4* rect = VT_38_0(handle);
+        cVec4 area;
+        area.x = rect->x;
+        area.y = rect->y;
+        area.z = rect->z;
+        area.w = rect->w;
+        cVec2 topLeft;
+        VT_C0_2(handle, &topLeft, cVec2(0.0f, 0.0f));
+        cVec2 bottomRight;
+        VT_C0_2(handle, &bottomRight, cVec2(area.z - area.x, area.w - area.y));
+        result.x = fmin_v(result.x, topLeft.x);
+        result.y = fmin_v(result.y, topLeft.y);
+        result.z = fmax_v(result.z, bottomRight.x);
+        result.w = fmax_v(result.w, bottomRight.y);
+    }
+
+    return result;
+}
+
 // @ 0x00e22a60
 void cSPUIPosse_s00e2_2860::SnapToPosition()
 {
@@ -1728,6 +2053,147 @@ void cSPUIPosse_s00e2_2860::SnapToPosition()
     }
     cVec4* m2 = GetMainWindowArea(&mainArea);
     VT_70_2F(window, offset, ((m2->w - m2->y) - mField1dc) - (w - y));
+}
+
+// @ 0x00e22b50
+void cSPUIPosse_s00e2_2860::UpdateLayout(bool bSnap)
+{
+    if (mFlag1d4 == 0)
+        return;
+    mFlag1d4 = 0;
+
+    cSPUIWindow* pSel = mLayout1bc.FindWindowByID(0x3d98298, 1);
+    cSPUIWindow* pOther = mLayout1bc.FindWindowByID(0x3d982ff, 1);
+
+    if (mpAudioBeginA4 != mpAudioEndA8 || mFlag1e5 != 0) {
+        int nMax = mField1e0;
+        if (nMax < 1)
+            nMax = 10000;
+
+        float fItemHeight = 0.0f;
+        float fItemWidth = 0.0f;
+        float fHeight = 0.0f;
+        if (mpAudioBeginA4 != mpAudioEndA8) {
+            void* pItem = *mpItemBegin0c;
+            cSPUIWindow* pItemWin = ((cSPUILayout_s00e2_2860*)((char*)pItem + 0x7c))->FindWindowByID(0x3d98299, 1);
+            fItemHeight = VT_C0_0(pItem);
+            cVec4* pRect = VT_38_0(pItemWin);
+            fItemWidth = pRect->z - pRect->x;
+            pRect = VT_38_0(pItemWin);
+            fHeight = pRect->w - pRect->y;
+        }
+
+        float fScale = mField1e8;
+        float fDelta = fScale - 1.0f;
+        float fOffsetX = fDelta * fHeight * 0.5f;
+        float fOffsetY = fDelta * fItemWidth * 0.5f;
+        float fScaledWidth = fScale * fItemWidth;
+        float fScaledHeight = fScale * fHeight;
+
+        cSPUIWindow* pWinA = (cSPUIWindow*)VT_F0_2(pSel, 0x3dae410, 1);
+        cVec4* pRectA = VT_38_0(pWinA);
+        float fHeightA = pRectA->w - pRectA->y;
+
+        cSPUIWindow* pWinB = (cSPUIWindow*)VT_F0_2(pSel, 0x3dae411, 1);
+        cVec4* pRectB = VT_38_0(pWinB);
+        float fHeightB = pRectB->w - pRectB->y;
+
+        int nCount = (int)(mpAudioEndA8 - mpAudioBeginA4);
+        const int& nMin = min_i(nMax, nCount);
+        int nRows = max_i(nMin, 1);
+        float fRows = (float)(u32)nRows;
+        float fBaseY = fRows * fScaledHeight + fHeightB + fHeightA;
+
+        cSPUIWindow* pHandle = mLayout1bc.FindWindowByID(0x3dae412, 1);
+        cVec4* pRectH = VT_38_0(pHandle);
+        float fHandleX = pRectH->x;
+        float fHandleY = pRectH->y;
+        float fHandleZ = pRectH->z;
+        float fHandleW = pRectH->w;
+
+        cVec4 mainArea;
+        cVec4* pMain = GetMainWindowArea(&mainArea);
+        float fHandleHeight = fHandleW - fHandleY;
+        float fAvailable = ((pMain->w - pMain->y) - mField1dc) - fHandleHeight;
+
+        if (fBaseY > fAvailable) {
+            while (fRows > 1.0f) {
+                fRows = fRows - 1.0f;
+                fBaseY = fRows * fScaledHeight + fHeightB + fHeightA;
+                if (!(fBaseY > fAvailable))
+                    break;
+            }
+        }
+
+        nCount = (int)(mpAudioEndA8 - mpAudioBeginA4);
+        float fColumnCount = (float)floor(((double)(u32)nCount + fRows - 1.0f) / fRows);
+        float fRowExtent = fColumnCount * fScaledWidth + fItemHeight;
+
+        cVec4 v;
+        v.z = fRowExtent;
+        v.x = 0.0f;
+        v.y = 0.0f;
+        v.w = fBaseY;
+        VT_6C_1(pOther, &v);
+        v.x = 0.0f;
+        v.y = 0.0f;
+        v.w = fBaseY;
+        VT_6C_1(pSel, &v);
+        v.x = 0.0f;
+        v.y = 0.0f;
+        v.w = fHeightA;
+        VT_6C_1(pWinA, &v);
+        v.x = 0.0f;
+        v.y = fBaseY - fHeightB;
+        v.w = fBaseY;
+        VT_6C_1(pWinB, &v);
+
+        float fClipX;
+        if (mFlag1ec != 0)
+            fClipX = 0.0f;
+        else
+            fClipX = fRowExtent - (fHandleZ - fHandleX);
+        VT_70_2F(pSel, fClipX, -fHandleHeight);
+
+        float fY = fColumnCount - 1.0f;
+        if (fY >= 0.0f) {
+            int nItem = 0;
+            bool bAlive = true;
+            do {
+                float fX;
+                if (mFlag1ec != 0)
+                    fX = (fColumnCount - 1.0f) - fY;
+                else
+                    fX = fY;
+                float fAcc = 0.0f;
+                if (fRows > 0.0f) {
+                    do {
+                        if (nItem >= (int)(mpItemEnd10 - mpItemBegin0c)) {
+                            bAlive = false;
+                            break;
+                        }
+                        void* pItem = mpItemBegin0c[nItem];
+                        cSPUIWindow* pItemWin = ((cSPUILayout_s00e2_2860*)((char*)pItem + 0x7c))->FindWindowByID(0x3d98299, 1);
+                        VT_70_2F(pItemWin, fX * fScaledWidth + fOffsetY, fAcc * fScaledHeight + fHeightA + fOffsetX);
+                        fAcc += 1.0f;
+                        ++nItem;
+                    } while (fAcc < fRows);
+                }
+                fY -= 1.0f;
+            } while (bAlive && fY >= 0.0f);
+        }
+    }
+
+    if (bSnap)
+        return;
+
+    SnapToPosition();
+    bool bVisible = false;
+    if (mFlag1e4 != 0) {
+        if (mFlag1e5 != 0 || mpAudioBeginA4 != mpAudioEndA8)
+            bVisible = true;
+    }
+    VT_7C_2(pSel, 1, bVisible);
 }
 
 // @ 0x00e23130
@@ -1883,6 +2349,7 @@ void __stdcall FUN_00e23870(void* begin, void* end)
 }
 
 struct IRef_e238b0 { virtual int AddRef(); };
+
 // @ 0x00e238b0
 void __cdecl FUN_00e238b0(void* dst, u32 n, void* src)
 {
@@ -2269,6 +2736,7 @@ struct RefPairIter_e24310 {
   bool operator!=(const RefPairIter_e24310& o) const { return p != o.p; }
   RefPairIter_e24310& operator++() { p += 2; return *this; }
 };
+
 // @ 0x00e24310
 void* __cdecl FUN_00e24310(void** out, RefPairIter_e24310 first, RefPairIter_e24310 last, void* val)
 {
@@ -2486,6 +2954,13 @@ char cSPUIPosse_s00e2_4700::FUN_00e248b0(int param_2, float param_3, float param
   return 0;
 }
 
+// @ 0x00e24a50
+Object_s00e2_4a50::~Object_s00e2_4a50()
+{
+    delete mpOwned;
+    mpOwned = 0;
+}
+
 // @ 0x00e24b10
 char cSPUIPosse_s00e2_4700::FUN_00e24b10()
 {
@@ -2530,6 +3005,59 @@ char cSPUIPosse_s00e2_4700::FUN_00e24cc0(void* p2, void* p3, void* p4, void* p5,
   return 0;
 }
 
+// @ 0x00e24d10
+void FUN_00e24d10(uint32_t nID, void* pValue)
+{
+    RefPtr<cPropertyList> pList;
+    RefPtr<cPropertyList> pOwner;
+    uint32_t nZero;
+    float    vecZero[3];
+    Variant  value;
+
+    cPropListFactory* pFactory = PropListFactory();
+
+    // Lists are re-created from scratch: the slot is cleared first.
+    pList.reset();
+    pFactory->Create(&pList.mpObject);
+    pOwner.reset();
+    pFactory->Create(&pOwner.mpObject);
+
+    {
+        cPropertyList* pTarget = pList.mpObject;
+        value.mFlags = 0;
+        value.mType = 0;
+        value.SetPointer(pValue);
+        pTarget->SetValue(0, value);
+        if (value.mFlags & 4) value.Destruct(0);
+    }
+    {
+        cPropertyList* pTarget = pList.mpObject;
+        nZero = 0;
+        value.mFlags = 0;
+        value.mType = 0;
+        value.SetU32(&nZero);
+        pTarget->SetValue(1, value);
+        if (value.mFlags & 4) value.Destruct(0);
+    }
+    {
+        cPropertyList* pTarget = pList.mpObject;
+        vecZero[0] = 0.0f;
+        vecZero[1] = 0.0f;
+        vecZero[2] = 0.0f;
+        value.mFlags = 0;
+        value.mType = 0;
+        value.SetVec3(vecZero);
+        pTarget->SetValue(3, value);
+        if (value.mFlags & 4) value.Destruct(0);
+    }
+
+    pFactory->Submit(nID, pList.mpObject, pOwner.mpObject);
+
+    // Slots are released in reverse declaration order, as destructors would.
+    pOwner.release();
+    pList.release();
+}
+
 // @ 0x00e24eb0
 char cSPUIPosse_s00e2_4700::FUN_00e24eb0(int p2, float p3, float p4, int p5, int p6)
 {
@@ -2537,6 +3065,36 @@ char cSPUIPosse_s00e2_4700::FUN_00e24eb0(int p2, float p3, float p4, int p5, int
   if (mField140 != 0 && p5 == 1000)
     FUN_00e24d10(0x6204441, mField50);
   return r;
+}
+
+// @ 0x00e24f10
+char cSPUIPosseItemTribeBaby_s00e2_4f10::DoMessage(void* win, MsgIn_s00e2_4f10* msg)
+{
+  if (((FnU32_0_s00e2_4f10)VT_s00e2_4f10(win)->slot[0x1c / 4])(win) == 0x3dea7f0u &&
+      msg->mField08 == 13) {
+    void* ctx = msg->mField18;
+    void* image = sGetWindowImage(win);
+    if (image) {
+      ((FnVoid0_s00e2_4f10)VT_s00e2_4f10(image)->slot[0])(image);
+
+      void* batch = ((RenderContext_s00e2_4f10*)ctx)->Begin2D(0);
+
+      RectF_s00e2_4f10* rc =
+          ((RectF_s00e2_4f10* (__thiscall*)(void*))VT_s00e2_4f10(win)->slot[0x38 / 4])(win);
+      Point2_s00e2_4f10 topLeft(rc->mLeft, rc->mTop);
+      Point2_s00e2_4f10 bottomRight(rc->mRight, rc->mBottom);
+      float w = bottomRight.mX - topLeft.mX;
+      float h = bottomRight.mY - topLeft.mY;
+
+      FUN_00e23340(batch, w * 0.5f, h * 0.5f, w, h, -1, -1, g_015a547c,
+                   (1.0f - mControlValue01) * g_016ac2cc + g_015a547c, image, 0.05f);
+
+      ((RenderContext_s00e2_4f10*)ctx)->End2D();
+      ((FnVoid0_s00e2_4f10)VT_s00e2_4f10(image)->slot[1])(image);
+      return 1;
+    }
+  }
+  return cSPUIPosseItem_s00e2_4f10::DoMessage(win, msg);
 }
 
 // @ 0x00e250a0
@@ -2565,6 +3123,197 @@ char __stdcall FUN_00e251c0(void* p2, void* p3, void* p4, void* p5, void* p6)
   MessageServer()->MessageSend(msg->mId, msg, 0, 0);
   msg->Release();
   return 1;
+}
+
+// @ 0x00e25240
+void __cdecl FUN_00e25240(Pair* first, s32 topIndex, s32 len, s32 holeIndex, Pair value, TPred compare)
+{
+  s32 child = 2 * holeIndex + 2;
+  while (child < len) {
+    if (compare(&first[child], &first[child - 1])) --child;
+    first[holeIndex] = first[child];
+    holeIndex = child;
+    child = 2 * child + 2;
+  }
+  if (child == len) {
+    first[holeIndex] = first[child - 1];
+    holeIndex = child - 1;
+  }
+  FUN_00e243f0(first, topIndex, holeIndex, value, compare);
+}
+
+// @ 0x00e253c0
+void __cdecl FUN_00e253c0(Pair_s00e2_53c0* first, Pair_s00e2_53c0* last, TPred_s00e2_53c0 compare)
+{
+  Pair_s00e2_53c0* tail = last - 1;
+  Pair_s00e2_53c0 value = *tail;
+  ((TFpp)FUN_00e23e80)(tail, (void**)first);
+  FUN_00e25240(first, 0, (s32)(last - first) - 1, 0, value, compare);
+}
+
+// @ 0x00e25460
+void* cSPUIPosse_s00e25460::ctor(void* pOwner, const u32* pKey)
+{
+  // inlined base constructors, then the derived vptrs
+  *(void* volatile*)((char*)this + 4) = (void*)g_13fa72c;
+  *(u32* volatile*)((char*)this + 8) = 0;
+  *(void* volatile*)((char*)this + 0xc) = (void*)g_13eb384;
+  *(void**)((char*)this)      = (void*)g_14805b8;
+  *(void**)((char*)this + 4)  = (void*)g_148059c;
+  *(void**)((char*)this + 0xc) = (void*)g_148058c;
+
+  // owner reference
+  *(void**)((char*)this + 0x50) = pOwner;
+  if (pOwner)
+    ((TFv_s00e2_5460)(*(void***)pOwner)[0])(pOwner);
+
+  // resource key (three dwords)
+  *(u32*)((char*)this + 0x54) = pKey[0];
+  *(u32*)((char*)this + 0x58) = pKey[1];
+  *(u32*)((char*)this + 0x5c) = pKey[2];
+
+  // zeroed slots around the embedded layout object
+  *(u32*)((char*)this + 0x60) = 0;
+  *(u32*)((char*)this + 0x64) = 0;
+  *(u32*)((char*)this + 0x68) = 0;
+  *(u32*)((char*)this + 0x6c) = 0;
+
+  _ReadWriteBarrier();
+
+  *(u32*)((char*)this + 0x70) = 0;
+  *(u32*)((char*)this + 0x74) = 0;
+  *(u32*)((char*)this + 0x78) = 0;
+
+  ((LayoutCtorC*)((char*)this + 0x7c))->ctor();
+
+  *(u32*)((char*)this + 0x94) = 0;
+  *(u32*)((char*)this + 0x98) = ++*(u32*)g_16ac238;    // global monotonic id
+  *(u32*)((char*)this + 0x9c) = 0;
+  *(u8*) ((char*)this + 0xa1) = 0;
+  *(u8*) ((char*)this + 0xa2) = 0;
+  *(u8*) ((char*)this + 0xa3) = 0;
+  *(u32*)((char*)this + 0xb4) = 0;
+  *(u8*) ((char*)this + 0xa0) = 1;
+  *(float*)((char*)this + 0xb0) = 0.0f;
+  *(float*)((char*)this + 0xd0) = 0.0f;
+
+  _ReadWriteBarrier();
+
+  // inline-buffer vector A: buffer at +0xec, 0x14 bytes
+  {
+    void* pBufA = (char*)this + 0xec;
+    *(void**)((char*)this + 0xe4) = pBufA;
+    *(void**)((char*)this + 0xd8) = pBufA;
+    *(void**)((char*)this + 0xd4) = pBufA;
+    *(void**)((char*)this + 0xdc) = (char*)pBufA + 0x14;
+  }
+
+  // inline-buffer vector B: buffer at +0x118, 0xc bytes
+  {
+    void* pBufB = (char*)this + 0x118;
+    *(void**)((char*)this + 0x110) = pBufB;
+    *(void**)((char*)this + 0x104) = pBufB;
+    *(void**)((char*)this + 0x100) = pBufB;
+    *(void**)((char*)this + 0x108) = (char*)pBufB + 0xc;
+  }
+
+  *(u32*)((char*)this + 0x124) = 0;
+  *(u32*)((char*)this + 0x128) = 0;
+  *(u32*)((char*)this + 0x12c) = 0;
+  *(u32*)((char*)this + 0x13c) = 0;
+  *(u8*) ((char*)this + 0x140) = 0;
+  *(u32*)((char*)this + 0x144) = 0;
+  *(float*)((char*)this + 0x148) = 0.0f;
+
+  _ReadWriteBarrier();
+
+  *(u32*)((char*)this + 0xa8) = 0;
+  *(u32*)((char*)this + 0xac) = 0;
+
+  return this;
+}
+
+// @ 0x00e255c0
+void* cSPUIPosseItem_s00e255c0::ctor(void* pOwner, const void* pName, u32 typeId)
+{
+  // inlined base constructors, then the derived vptrs
+  *(void* volatile*)((char*)this + 4) = (void*)g_13fa72c;
+  *(u32* volatile*)((char*)this + 8) = 0;
+  *(void* volatile*)((char*)this + 0xc) = (void*)g_13eb384;
+  *(void**)((char*)this)      = (void*)g_14805b8;
+  *(void**)((char*)this + 4)  = (void*)g_148059c;
+  *(void**)((char*)this + 0xc) = (void*)g_148058c;
+
+  // owner reference
+  *(void**)((char*)this + 0x50) = pOwner;
+  if (pOwner)
+    ((TFv_s00e2_55c0)(*(void***)pOwner)[0])(pOwner);
+
+  // hashed name key, caller type id, class type constant
+  u32 nameKey = FNV1_String16(pName, 0x811c9dc5, 1);
+  *(u32 volatile*)((char*)this + 0x5c) = typeId;
+  *(u32 volatile*)((char*)this + 0x54) = nameKey;
+  *(u32 volatile*)((char*)this + 0x58) = 0x510a95b;
+
+  // zeroed slots around the embedded layout object
+  *(u32 volatile*)((char*)this + 0x60) = 0;
+  *(u32 volatile*)((char*)this + 0x64) = 0;
+  *(u32 volatile*)((char*)this + 0x68) = 0;
+  *(u32 volatile*)((char*)this + 0x6c) = 0;
+
+  _ReadWriteBarrier();
+
+  *(u32 volatile*)((char*)this + 0x70) = 0;
+  *(u32*)((char*)this + 0x74) = 0;
+  *(u32*)((char*)this + 0x78) = 0;
+
+  ((LayoutCtorC*)((char*)this + 0x7c))->ctor();
+
+  *(u32*)((char*)this + 0x94) = 0;
+  *(u32*)((char*)this + 0x98) = ++*(u32*)g_16ac238;    // global monotonic id
+  *(u32*)((char*)this + 0x9c) = 0;
+  *(u8*) ((char*)this + 0xa1) = 0;
+  *(u8*) ((char*)this + 0xa2) = 0;
+  *(u8*) ((char*)this + 0xa3) = 0;
+  *(u32*)((char*)this + 0xb4) = 0;
+  *(u8*) ((char*)this + 0xa0) = 1;
+  *(float*)((char*)this + 0xb0) = 0.0f;
+  *(float*)((char*)this + 0xd0) = 0.0f;
+
+  _ReadWriteBarrier();
+
+  // inline-buffer vector A: buffer at +0xec, 0x14 bytes
+  {
+    void* pBufA = (char*)this + 0xec;
+    *(void**)((char*)this + 0xe4) = pBufA;
+    *(void**)((char*)this + 0xd8) = pBufA;
+    *(void**)((char*)this + 0xd4) = pBufA;
+    *(void**)((char*)this + 0xdc) = (char*)pBufA + 0x14;
+  }
+
+  // inline-buffer vector B: buffer at +0x118, 0xc bytes
+  {
+    void* pBufB = (char*)this + 0x118;
+    *(void**)((char*)this + 0x110) = pBufB;
+    *(void**)((char*)this + 0x104) = pBufB;
+    *(void**)((char*)this + 0x100) = pBufB;
+    *(void**)((char*)this + 0x108) = (char*)pBufB + 0xc;
+  }
+
+  *(u32*)((char*)this + 0x124) = 0;
+  *(u32*)((char*)this + 0x128) = 0;
+  *(u32*)((char*)this + 0x12c) = 0;
+  *(u32*)((char*)this + 0x13c) = 0;
+  *(u8*) ((char*)this + 0x140) = 0;
+  *(u32*)((char*)this + 0x144) = 0;
+  *(float*)((char*)this + 0x148) = 0.0f;
+
+  _ReadWriteBarrier();
+
+  *(u32*)((char*)this + 0xa8) = 0;
+  *(u32*)((char*)this + 0xac) = 0;
+
+  return this;
 }
 
 // @ 0x00e25710
@@ -3440,6 +4189,7 @@ u8 cSPUIPosseItem_s00e2_7310::init(cSPUIPosse_s00e2_7310* posse)
 extern "C" const char g_13f6b3c[];
 struct PosseCtrl { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5(); virtual void f6(); virtual u32 GetId(); };
 struct PosseMsgServer { virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5(); virtual void Post(u32 id, void* msg, int a, int b); };
+
 // @ 0x00e27b20
 u8 cSPUIPosse_s00e2_7310::OnCtrlActivated(void* ctrl, u32 a2, u32 id, u32 a4)
 {

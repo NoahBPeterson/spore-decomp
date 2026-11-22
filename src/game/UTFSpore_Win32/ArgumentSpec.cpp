@@ -23,6 +23,8 @@ void  __cdecl FUN_0092dc50(int, void*);
 // ---- items of slice s00837820 end
 
 // ---- items of slice s008387c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char gEmptyString[];   // 0x1667bac
+extern char gStrG[];                                                  // 0x13ec47c
 extern char gDocSep[];   // 0x1401b70 (1-char separator)
 void  __cdecl operator_delete__(void*);                          // 0x00f47380
 void  __cdecl DoInsertValue(char*, const char*, uint32_t);   // 0x11e0744
@@ -93,6 +95,74 @@ struct ArgumentSpec {        // EA::ArgScript::cArgumentSpec (retail layout, 0xb
     void NameFromArgType(unsigned int type, RawStr* out);   // 0x8397a0
     void FindNameAndTypeFromOption(RawStr* option, unsigned int* typeOut, RawStr* nameOut);   // 0x839540
 };
+void* __cdecl AllocArgScript(uint32_t, const char*, int, int, const char*, int); // 0xf473a0
+struct StrPOD { char* mpBegin; char* mpEnd; char* mpCapacity; uint32_t mAllocator; };
+struct Ent2C {               // Ent2 with copy-ctor / dtor (0x18 bytes)
+    StrPOD name;
+    int    field10;
+    int    field14;
+    __forceinline Ent2C(const Ent2C& o) {
+        name.mpBegin = 0; name.mpEnd = 0; name.mpCapacity = 0;
+        char* last = o.name.mpEnd;
+        char* first = o.name.mpBegin;
+        uint32_t n = (uint32_t)(last - first);
+        uint32_t cap = n + 1;
+        if (cap > 1) {
+            char* p = (char*)AllocArgScript(cap, "ArgScript", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+            name.mpBegin = p; name.mpEnd = p; name.mpCapacity = p + cap;
+        } else {
+            name.mpBegin = gEmptyString; name.mpEnd = gEmptyString; name.mpCapacity = gEmptyString + 1;
+        }
+        char* dst = name.mpBegin;
+        DoInsertValue(dst, first, n);
+        name.mpEnd = dst + (last - first);
+        *name.mpEnd = 0;
+        field10 = o.field10;
+        field14 = o.field14;
+    }
+    ~Ent2C() {
+        char* b = name.mpBegin;
+        if ((name.mpCapacity - b) > 1 && b) operator_delete__(b);
+    }
+};
+char* __cdecl FindFirstOf(char*, char*, const char*, const char*);   // 0x609d50
+struct LocalStr : RawStr {
+    __forceinline void AllocateSelf(uint32_t n) {
+        mpBegin = 0; mpEnd = 0; mpCapacity = 0;
+        char* d;
+        if (n > 1) {
+            d = (char*)AllocArgScript(n, "ArgScript", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+            mpCapacity = d + n;
+        } else {
+            d = gEmptyString;
+            mpCapacity = gEmptyString + 1;
+        }
+        mpBegin = d;
+        mpEnd = d;
+    }
+    __forceinline LocalStr(const RawStr* src) {
+        char* last = src->mpEnd;
+        char* first = src->mpBegin;
+        uint32_t n = (uint32_t)(last - first);
+        AllocateSelf(n + 1);
+        char* d = mpBegin;
+        DoInsertValue(d, first, n);
+        mpEnd = d + (last - first);
+        *mpEnd = 0;
+    }
+    ~LocalStr() {
+        char* b = mpBegin;
+        if ((mpCapacity - b) > 1 && b) operator_delete__(b);
+    }
+    LocalStr substr(uint32_t pos, uint32_t n) const;   // 0x6082a0
+    LocalStr() {}
+    LocalStr& operator=(const RawStr& x) {
+        if (&x != this) Assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+};
 void __cdecl SprintfAppend(RawStr* dst, const char* fmt, ...);       // 0x840c70
 struct EnumVal1 { const char* name; int x; };                       // stride 8
 struct EnumVal2 { const char* name; int x; const char* desc; };     // stride 0xc
@@ -103,6 +173,13 @@ struct EnumSpec {            // EA::ArgScript::cEnumSpec (0x18)
     EnumVal2*   descVals;    // +0x14
 };
 struct EnumVec { EnumSpec* mpBegin; EnumSpec* mpEnd; };
+struct TmpStr : RawStr {
+    TmpStr(const RawStr& s, uint32_t pos, uint32_t n) : RawStr(s, pos, n) {}
+    ~TmpStr() {
+        char* b = mpBegin;
+        if ((mpCapacity - b) > 1 && b) operator_delete__(b);
+    }
+};
 // ---- items of slice s008387c0 end
 
 // ---- items of slice s00839950 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -264,7 +341,7 @@ void      __cdecl UninitDestroyArg(cArgInfo* first, cArgInfo* last, cArgInfo* de
 // ---- items of slice s0083a9f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long  __cdecl atol(const char*);
 extern "C" __declspec(dllimport) int   __cdecl isalpha(int);
-extern char gEmptyString[];
+
 typedef unsigned int   uint32;
 namespace eastl {
 struct allocator_s0083_a9f0 { unsigned char pad[4]; };
@@ -687,6 +764,14 @@ Vec2* CopyVec2(Vec2* first, Vec2* last, Vec2* dst)
     return dst;
 }
 
+// @ 0x00838cd0
+Ent2C* UninitCopyEnts2(Ent2C* first, Ent2C* last, Ent2C* dest)
+{
+    for (; first != last; ++first, ++dest)
+        ::new (dest) Ent2C(*first);
+    return dest;
+}
+
 // @ 0x00838de0
 void RawStr::AssignSub(const RawStr& s, uint32_t pos, uint32_t n)
 {
@@ -774,6 +859,84 @@ Ent2* CopyEnts2Bwd(Ent2* first, Ent2* last, Ent2* dst)
     return dst;
 }
 
+// @ 0x00839090
+RawStr* AddFilePath(RawStr* out, RawStr* path, const char* delims)
+{
+    uint32_t one = 0;
+    LocalStr L(path);
+
+    path->Assign(gStrG, gStrG);
+    if (delims) {
+        if (strlen(delims) != 0) {
+            int pos = L.Find(delims, 0);
+            if (pos == 0) {
+                one = 1;
+                do {
+                    char* b = L.mpBegin;
+                    char* en = L.mpEnd;
+                    uint32_t sz = (uint32_t)(en - b);
+                    const uint32_t& cnt = (sz < one) ? sz : one;
+                    char* p = b + cnt;
+                    if (b != p) {
+                        memmove(b, p, en - p + 1);
+                        L.mpEnd += b - p;
+                    }
+                    b = L.mpBegin;
+                    en = L.mpEnd;
+                    const char* dl = delims + strlen(delims);
+                    if (en - b == 0) {
+                        pos = -1;
+                    } else {
+                        char* r = FindFirstOf(b, en, delims, dl);
+                        pos = (r == en) ? -1 : (int)(r - b);
+                    }
+                } while (pos == 0);
+            }
+            if (pos != -1) {
+                path->AssignSub(L, pos + 1, (uint32_t)-1);
+                L.AssignSub(L, 0, pos);
+            }
+            out->CopyCtor(L);
+            goto done;
+        }
+    }
+    out->mpBegin = 0; out->mpEnd = 0; out->mpCapacity = 0;
+    char* lb = L.mpBegin;
+    char* le = L.mpEnd;
+    out->RangeInitialize((uint32_t)(le - lb) + 1);
+    char* od = out->mpBegin;
+    DoInsertValue(od, lb, (uint32_t)(le - lb));
+    out->mpEnd = od + (le - lb);
+    *out->mpEnd = 0;
+done:
+    return out;
+}
+
+// @ 0x008392b0
+void AddDocString(RawStr* out, const char* prefix, LocalStr s)
+{
+    uint32_t pos = 0;
+    for (;;) {
+        int idx;
+        if (pos < (uint32_t)(s.mpEnd - s.mpBegin)) {
+            for (char* p = s.mpBegin + pos; p != s.mpEnd; ++p) {
+                if (*p == '\n') {
+                    if (p != s.mpEnd) {
+                        idx = (int)(p - s.mpBegin);
+                        goto found;
+                    }
+                    break;
+                }
+            }
+        }
+        idx = -1;
+    found:
+        SprintfAppend(out, "%s%s\n", prefix, s.substr(pos, idx - pos).mpBegin);
+        pos = idx + 1;
+        if (idx == -1) return;
+    }
+}
+
 // @ 0x008393a0
 void AddEnumDocs(RawStr* out, const char* prefix, EnumVec* v, int mode)
 {
@@ -796,6 +959,49 @@ void AddEnumDocs(RawStr* out, const char* prefix, EnumVec* v, int mode)
         }
         if (mode == 2) SprintfAppend(out, "</i></blockquote>");
     }
+}
+
+// @ 0x00839540
+void ArgumentSpec::FindNameAndTypeFromOption(RawStr* option, unsigned int* typeOut, RawStr* nameOut)
+{
+    nameOut->Assign(gStrG, gStrG);
+    char* b = option->mpBegin;
+    if (b != option->mpEnd) {
+        if ((uint32_t)(option->mpEnd - b) <= 1 || *b != '%') {
+            LocalStr L;
+            L.CopyCtor(*option);
+            if (*L.mpBegin == '<' && L.mpEnd[-1] == '>') {
+                L.Erase((uint32_t)(L.mpEnd - L.mpBegin) - 1, 1);
+                L.Erase(0, 1);
+            }
+            char* begin = L.mpBegin;
+            char* end = L.mpEnd;
+            if (end - begin != 0) {
+                for (char* p = begin; p != end; ++p) {
+                    if (*p == ':') {
+                        if (p != end) {
+                            uint32_t pos = (uint32_t)(p - begin);
+                            if (pos != (uint32_t)-1) {
+                                nameOut->Assign(begin, begin + min_alt(pos, (uint32_t)(end - begin)));
+                                L = TmpStr(L, pos + 1, (uint32_t)-1);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            *typeOut = ArgTypeFromName(L.mpBegin);
+            return;
+        }
+        switch (b[1]) {
+        case 'f':
+        case 'g': *typeOut = 3; return;
+        case 'd': *typeOut = 2; return;
+        case 'b': *typeOut = 1; return;
+        case 's': *typeOut = 5; return;
+        }
+    }
+    *typeOut = 0;
 }
 
 // @ 0x008397a0

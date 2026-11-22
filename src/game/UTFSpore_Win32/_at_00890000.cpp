@@ -75,6 +75,51 @@ int __cdecl CompareFontCallback(EA::Text::IFontCompareTarget* pTarget, int32_t a
     return -1;
 }
 
+// A value with a paired "dirty" flag: storing a value clears the flag.
+struct ValueFlagPair
+{
+    void* mpValue;      // 0x00
+    void* mpFlag;       // 0x04
+
+    ValueFlagPair* Store(void* pValue);
+    void Assign(void* pValue);
+};
+
+// Three floats at the end of a larger object.
+struct TripleFloat
+{
+    uint8_t mPad[0x3c0];
+    float   mfA;        // 0x3c0
+    float   mfB;        // 0x3c4
+    float   mfC;        // 0x3c8
+
+    void Set(float a, float b, float c);
+};
+
+// @ 0x00897600  store a value and clear the paired flag (returns *this)
+ValueFlagPair* ValueFlagPair::Store(void* pValue)
+{
+    mpValue = pValue;
+    mpFlag  = 0;
+    return this;
+}
+
+// @ 0x00897620  clear the paired flag, then store a non-null value
+void ValueFlagPair::Assign(void* pValue)
+{
+    mpFlag = 0;
+    if (pValue != 0)
+        mpValue = pValue;
+}
+
+// @ 0x00897640  store three floats
+void TripleFloat::Set(float a, float b, float c)
+{
+    mfA = a;
+    mfB = b;
+    mfC = c;
+}
+
 // @ 0x0089e5e0
 namespace EA { namespace Text {
 CharCategory GetCharCategory(Char nChar)

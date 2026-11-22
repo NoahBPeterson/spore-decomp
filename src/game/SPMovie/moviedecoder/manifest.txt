@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPMovie/moviedecoder.cpp  ??0MovieDecoder@movie@rw@@QAE@PAUICoreAllocator@@@Z  00fc90e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/moviedecoder.cpp  ?SetStreamTaps@MovieDecoder@movie@rw@@QAEXPAX0@Z  00fc91f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

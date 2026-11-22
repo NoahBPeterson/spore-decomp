@@ -209,6 +209,7 @@ struct cTribeToolView_s00d0_c010 {
 #define VC4(R, o, off, T1, a1, T2, a2, T3, a3, T4, a4) \
     ((R (__thiscall*)(void*, T1, T2, T3, T4))VS(o, off))((void*)(o), (a1), (a2), (a3), (a4))
 #define FU8(p, off)   (*(uint8_t*)((char*)(p) + (off)))
+#define FI32(p, off)  (*(int32_t*)((char*)(p) + (off)))
 #define FU32(p, off)  (*(uint32_t*)((char*)(p) + (off)))
 #define FF32(p, off)  (*(float*)((char*)(p) + (off)))
 class Key {                                  // EA::ResourceMan::Key  (0xc)
@@ -385,10 +386,32 @@ public:
     void HandleSimulationUpdate(int a, int b);           // 0x00e939c0
 };
 int      GetCurrentGameMode_s00e9_2ca0();                        // 0x00b5b800
+void*    GonzagoModelWorld(void* key);                // 0x00b3d520
 void*    GetGameTerrainCursor();                      // 0x00b30d70
 void*    GameTimeManager();                           // 0x00b3d380
 float    GameTimeManager_GetDelta(void* self);        // 0x00b31730
+float*   Matrix3FromQuaternion(float* out, void* q);  // 0x0059c190
+float    bfc490(void* p);                             // 0x00bfc490
+float    c104bdb0();                                  // 0x0104bdb0
+float    ce6920();                                    // 0x00ce6920
 void*    sub_c9d9e0(void* p);                         // 0x00c9d9e0
+bool     sub_c9cfc0(void* p);                         // 0x00c9cfc0
+void*    sub_c9cec0(void* p);                         // 0x00c9cec0
+bool     ae3d40(void* self, void* a);                 // 0x00ae3d40
+class SimSingleton {
+public:
+    SimSingleton();                                   // 0x00ae5c30
+};
+void* operator new(unsigned int size, const char* name, int flags, unsigned int align,
+                   const char* file, int line);         // 0x00f473a0
+void     Matrix3Assign(void* dst, const void* src);   // 0x0041cb40
+float*   b6f0c0(void* p);                             // 0x00b6f0c0
+uint8_t* GetPropertyBool(void* p);                    // 0x0041e920
+void*    g_pSimSingleton;                             // 0x0167a60c
+float    g_16c5b94;                                   // 0x016c5b94  (0.95 threshold)
+float    g_16c5b98;                                   // 0x016c5b98  (0.90 threshold)
+uint32_t g_16c5b9c;                                   // 0x016c5b9c  (init guards)
+float    g_1486cd8;                                   // 0x01486cd8  (0.80 threshold)
 cSpatialObjectView::~cSpatialObjectView()
 {
 }
@@ -438,6 +461,209 @@ bool __thiscall cTribeToolView_s00d0_c010::UpdateRotationSound()
     return false;
 }
 }  // namespace SP
+
+// @ 0x00e93380
+cSpatialObjectView* cTribeToolView_s00e9_2ca0::MakeView(void* gameData)
+{
+    cTribeToolView_s00e9_2ca0* view = new("Simulator/cTribeToolView", 0, 0, 0, 0) cTribeToolView_s00e9_2ca0();
+
+    cSpatialObject* obj = 0;
+    if (gameData)
+        obj = (cSpatialObject*)VC1(void*, gameData, 0x0c, uint32_t, 0x1186577);
+
+    cSpatialObject* old = view->mpObject;
+    if (obj != old) {
+        if (obj)
+            VC0(void, obj, 0xbc);
+        view->mpObject = obj;
+        if (old)
+            VC0(void, old, 0xc0);
+    }
+
+    if (gameData) {
+        void* g = (void*)VC1(void*, gameData, 0x0c, uint32_t, 0x116d858);
+        void* h = g ? sub_c9d9e0(g) : 0;
+        if (h) {
+            float* v = b6f0c0(*(void**)((char*)h + 0x234));
+            view->mColor.x = v[0];
+            view->mColor.y = v[1];
+            view->mColor.z = v[2];
+        }
+    }
+
+    void* model;
+    if (VC0(bool, view->mpObject, 0x90))
+        model = (void*)VC1(void*, view->mpObject, 0x98, void*, &view->mColor);
+    else
+        model = (char*)view + 0x24;
+    view->v28(GonzagoModelWorld(model));
+
+    if (view->GetModel() != 0) {
+        void* o = view->GetModel();
+        uint8_t b = 0;
+        void* p = *(void**)((char*)o + 0x90);
+        if (p) {
+            int16_t* out = 0;
+            if (VC2(bool, p, 0x24, uint32_t, 0x4245bb4, int16_t**, &out) && *(int16_t*)((char*)out + 0x12) == 1)
+                b = *GetPropertyBool(out);
+        }
+        view->mbDrawPerimeter = b;
+    }
+    return view;
+}
+
+// @ 0x00e934f0
+void cTribeToolView_s00e9_2ca0::UpdateDamageState()
+{
+    void* obj = 0;
+    if (mpObject)
+        obj = (void*)VC1(void*, mpObject, 0xb8, uint32_t, 0x116d858);
+
+    if (sub_c9cfc0(obj)) {
+        if (!mpObject->GetEffect(0x4a6b8058)) {
+            mpObject->sub_b1a0(0x4a6b8058);
+            cIVisualEffect* e = (cIVisualEffect*)mpObject->FindEffectRaw(0x4a6b8058);
+            XformMsg msg;
+            msg.mFlags = 0;
+            msg.mModCount = 0;
+            msg.mTranslation.x = *(float*)0x016c5c00;
+            msg.mTranslation.y = *(float*)0x016c5c04;
+            msg.mTranslation.z = *(float*)0x016c5c08;
+            msg.mScale = 1.0f;
+            Matrix3Assign(&msg.mRotation, (void*)0x016c5bdc);
+            float* pos = (float*)((void*(__thiscall*)(void*))VS((char*)obj + 0x34, 0x2c))((char*)obj + 0x34);
+            float inv = 1.0f / sqrtf(pos[0]*pos[0] + pos[1]*pos[1] + pos[2]*pos[2] + 1e-08f);
+            Vec3 dir;
+            dir.x = pos[0] * inv;
+            dir.y = inv * pos[1];
+            dir.z = inv * pos[2];
+            float s = FF32(VC0(void*, mpObject, 0x68), 0x14);
+            Vec3 p2;
+            p2.x = s * dir.x;
+            p2.y = s * dir.y;
+            p2.z = s * dir.z;
+            float* o2 = (float*)((void*(__thiscall*)(void*))VS((char*)obj + 0x34, 0x2c))((char*)obj + 0x34);
+            p2.x = p2.x + o2[0];
+            p2.z = o2[2] + p2.z;
+            p2.y = o2[1] + p2.y;
+            msg.mFlags |= 4;
+            msg.mModCount++;
+            msg.mTranslation = p2;
+            void* q = VC0(void*, mpObject, 0x30);
+            float rot[9];
+            Matrix3FromQuaternion(rot, q);
+            for (int i = 0; i < 9; ++i) msg.mRotation.m[i] = rot[i];
+            msg.mFlags |= 2;
+            msg.mModCount++;
+            VC1(void, e, 0x18, void*, &msg);
+        }
+    } else if (!sub_c9cfc0(obj)) {
+        if (mpObject->GetEffect(0x4a6b8058))
+            mpObject->KillEffect(0x4a6b8058, 1);
+    }
+
+    if ((g_16c5b9c & 1) == 0) {
+        g_16c5b9c |= 1;
+        g_16c5b98 = c104bdb0();
+    }
+    if ((g_16c5b9c & 2) == 0) {
+        g_16c5b9c |= 2;
+        g_16c5b94 = ce6920();
+    }
+
+    float health = bfc490((char*)obj + 0x120);
+    int state;
+    if (health <= 0.0f)
+        state = 5;
+    else if (health >= g_16c5b94)
+        state = 4;
+    else if (health >= g_16c5b98)
+        state = 3;
+    else if (health < g_1486cd8)
+        state = 2;
+    else
+        state = 1;
+
+    bool changed = false;
+    if (state != mDamageState) {
+        if (mDamageState == 0) {
+            changed = true;
+        } else if (state == 1) {
+            mbTransition = 1;
+            mTransitionTimer.Restart();
+            mTransitionEnd = 500;
+            mTransitionTime = 0;
+        } else if (state == 5) {
+            mbTransition = 1;
+            mTransitionTimer.Restart();
+            mTransitionEnd = 300;
+            mTransitionTime = 0;
+            mpObject->sub_b210(0xc3fef02b);
+        } else {
+            mbTransition = 0;
+            changed = true;
+        }
+    }
+
+    if (mbTransition) {
+        uint64_t el = mTransitionTimer.GetElapsedTime();
+        if ((uint32_t)(el >> 32) > mTransitionTime ||
+            ((uint32_t)(el >> 32) == mTransitionTime && (uint32_t)el > mTransitionEnd)) {
+            mTransitionTimer.Cancel();
+            mbTransition = 0;
+            changed = true;
+            // implicit member dtor handles mTransitionTimer
+        }
+    }
+
+    if (GetCurrentGameMode_s00e9_2ca0() == 0x1654c04) {
+        if (g_pSimSingleton == 0)
+            g_pSimSingleton = new("Simulator/SimSingleton", 0, 0, 0, 0) SimSingleton();
+        if (ae3d40(g_pSimSingleton, sub_c9d9e0(obj)))
+            changed = false;
+    }
+
+    mDamageState = state;
+    if (!changed)
+        return;
+
+    int v = VC0(int, obj, 0x58);
+    int tmp[3];
+    switch (mDamageState) {
+    case 1:
+        if (v == 10) return;
+        tmp[0] = FI32(sub_c9cec0((void*)v), 0x14);
+        tmp[1] = FI32(sub_c9cec0((void*)v), 0x18);
+        tmp[2] = FI32(sub_c9cec0((void*)v), 0x1c);
+        break;
+    case 2:
+        tmp[0] = FI32(sub_c9cec0((void*)v), 0x5c);
+        tmp[1] = FI32(sub_c9cec0((void*)v), 0x60);
+        tmp[2] = FI32(sub_c9cec0((void*)v), 0x64);
+        break;
+    case 3:
+        tmp[0] = FI32(sub_c9cec0((void*)v), 0x50);
+        tmp[1] = FI32(sub_c9cec0((void*)v), 0x54);
+        tmp[2] = FI32(sub_c9cec0((void*)v), 0x58);
+        break;
+    case 4:
+        tmp[0] = FI32(sub_c9cec0((void*)v), 0x44);
+        tmp[1] = FI32(sub_c9cec0((void*)v), 0x48);
+        tmp[2] = FI32(sub_c9cec0((void*)v), 0x4c);
+        break;
+    case 5: {
+        void* c = sub_c9cec0((void*)v);
+        tmp[0] = 0x790cb2;
+        tmp[1] = FI32(c, 0x18);
+        tmp[2] = FI32(c, 0x1c);
+        break;
+    }
+    default:
+        return;
+    }
+    if (tmp[0] != 0)
+        VC1(void, obj, 0x94, void*, tmp);
+}
 
 // @ 0x00e939c0
 void cBabySackView::HandleSimulationUpdate(int a, int b)

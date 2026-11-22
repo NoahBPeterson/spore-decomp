@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPlayModeTokenTranslator.cpp  ?TranslateToken@cPlayModeTokenTranslator@@QAE_NPB_WPAUwstring16@@@Z  006346e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

@@ -4,6 +4,8 @@
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?GetAccessFlags@cServerResponse@Pollen@SP@@UBEHXZ  006148c0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?GetState@cServerResponse_s0061_4050@Pollen@SP@@UBEHXZ  006148d0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?GetPosition@cServerResponse@Pollen@SP@@UBEJW4PositionType@IO@EA@@@Z  00614900  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?compare_out@string16@@QBEHPB_W@Z  00614950  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorServerResponse.cpp  ??0StrPair@@QAE@ABU0@@Z  00614990  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?lower_bound@@YAPAUHandlerPair@@PAU1@0ABQB_WUchar16less@@@Z  00614a30  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?GetStatus@cServerResponse_s0061_4050@Pollen@SP@@QAEXXZ  00614ab0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ??1StrPair@@QAE@XZ  00614c00  /O2 /MD /Gy /TP /Isrc/game/include
@@ -21,3 +23,4 @@
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?Open@cServerResponse_s0061_4f20@Pollen@SP@@QAE_NXZ  00615450  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?SetPosition@cServerResponse@Pollen@SP@@UAE_NJW4PositionType@IO@EA@@@Z  006154c0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?IDListElement@cServerResponse_s0061_4f20@Pollen@SP@@QAEXXZ  00615520  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorServerResponse.cpp  ??0cServerResponse_s0061_4f20@Pollen@SP@@QAE@XZ  00615790  /O2 /MD /Gy /TP /Isrc/game/include

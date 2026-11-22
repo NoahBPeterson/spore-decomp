@@ -22,9 +22,10 @@
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 #include <new>
+#include "EA/Messaging/AutoHandler.h"
+#include "EA/ResourceMan/Key.h"
 
 // ---- items of slice s005f07e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                    const char* file, int line);  // 0x00f473a0
 #define EASTL_ALLOCATOR_FILE \
@@ -471,8 +472,6 @@ inline const T& min_alt(const T& a, const T& b) { return (b < a) ? b : a; }
 // ---- items of slice s005f07e0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C++" void RBTreeInsert(eastl::rbtree_node_base_s005f_07e0* pNode, eastl::rbtree_node_base_s005f_07e0* pNodeParent,
-                               eastl::rbtree_node_base_s005f_07e0* pNodeAnchor, int insertionSide);  // 0x009216a0
 
 // @ 0x005f07e0
 namespace SP {
@@ -555,3 +554,26 @@ cSPSwatchManager::cSPSwatchManager()
 // @ 0x005f0b40
 template AutoRefCount_s005f_07e0<SP::cSPSwatch_s005f_07e0>& SwatchIDMap::operator[](const unsigned int&)
 ;
+
+// @ 0x005f0c60
+namespace SP {
+void cSPSwatchManager::SetSwatchTimeout(cSPSwatch_s005f_07e0* swatch, float timeout)
+{
+  if (swatch)
+    mSwatchTimeouts[swatch] = timeout;
+}
+}  // namespace SP
+
+// @ 0x005f0ca0
+namespace SP {
+cSPSwatch_s005f_07e0* cSPSwatchManager::CreateSwatch(cSPSwatch_s005f_07e0* swatch)
+{
+  if (!swatch)
+    swatch = new ("Editor", 0, 0, 0, 0) cSPSwatch_s005f_07e0();
+  mIDToSwatchMap[mCurrentID] = swatch;
+  swatch->mID = mCurrentID;
+  mCurrentID++;
+  mSwatchTimeouts[swatch] = 1.0e12f;
+  return swatch;
+}
+}  // namespace SP

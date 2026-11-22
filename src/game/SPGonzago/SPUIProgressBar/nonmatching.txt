@@ -1,2 +1,3 @@
-# <va> <diff-bytes> <reason>
+# va  diff-bytes  reason
 00e28f40 2339 SP::cSPUINewProgressBar::UpdateLevelWindows (/O2 /MD /Gy /TP /arch:SSE /fp:fast, 64-byte aligned frame): complete reconstruction (screen-space boundary clamps, 5 level windows, ui_material_split fallback string, RemoveAnimation, 5 material parameters with instant set vs sequence/ramp animations); same 77 calls in the same order; not exact: the GetBoundingScreenRect result is copied out of its return slot and block layout/register allocation differ
+00e29da0  662  cSPUINewProgressBar::Update: complete (caption/currency animation sequences, marker/fill/level windows, sound); same 62-call ordered sequence incl. 5 vcalls, size 1.006x; only stack-slot layout (frame 0x17c vs 0x174) and scheduling differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

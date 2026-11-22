@@ -21,6 +21,7 @@ extern "C" char g_14431f8[];
 #include <wchar.h>
 #include "cSPUILayout.h"
 #include <intrin.h>
+#include "EA/DateTime/DateTime.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void SPUIHelpers_UpdateMouseFocus(int);
@@ -38,6 +39,9 @@ static inline void Vv1(void* p, int off, int a) {
 }
 static inline void Vv2(void* p, int off, int a, int b) {
     ((void(__thiscall*)(void*, int, int))(*(void***)p)[off / 4])(p, a, b);
+}
+static inline void Vv2b(void* p, int off, int a, bool b) {
+    ((void(__thiscall*)(void*, int, bool))(*(void***)p)[off / 4])(p, a, b);
 }
 static inline int Vi0(void* p, int off) {
     return ((int(__thiscall*)(void*))(*(void***)p)[off / 4])(p);
@@ -195,11 +199,32 @@ struct PieItemFull {
     PieItemFull(const PieItemFull& o);
     PieItemFull& assign(const PieItemFull& o);
 };
-extern "C" void SPKeyFromName(void* out, void* name, u32, void*);
+struct PieEventArg {
+    char pad_00[8];
+    u32  mCode;                     // +0x8
+    int  mSubCode;                  // +0xc
+};
+struct PieDispatch {
+    char  pad_00[0x10];
+    int   m10;                      // +0x10
+    u8    m14;                      // +0x14
+    char  pad_15[3];
+    void (__cdecl* mCallback)(int, int, bool);  // +0x18
+    int   m1c;                      // +0x1c
+    char  Dispatch(int* param_2, PieEventArg* param_3);
+};
+struct PieEventMsg {
+    int   m0;                       // +0
+    int   m4;                       // +4
+    int   mType;                    // +8
+    int   mValue;                   // +0xc
+    int   m10;                      // +0x10
+    int   m14;                      // +0x14
+    int   m18;                      // +0x18
+};
 // ---- items of slice s00817cb0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" void SPKeyFromName(void* out, void* name, u32, void*);
 
 // ---- items of slice s008189a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void AnchorWindowToWindow(void* target, void* anchor, int flags, int zero);  // 0x00807340
@@ -601,6 +626,35 @@ struct cSPUIPieMenu_s0081_a790 {
 };
 // ---- items of slice s0081a790 end
 
+// @ 0x00817d70
+char PieDispatch::Dispatch(int* param_2, PieEventArg* param_3)
+{
+    u32 code = param_3->mCode;
+    switch (code) {
+    case 0x1b:
+    case 0x1c: {
+        if (param_3->mSubCode != 1) return 0;
+        bool is27 = (code == 0x1b);
+        if (mCallback) mCallback(m10, m1c, is27);
+        void* obj = Vcp2(param_2, 0xf0, (int)0x122d76c, 1);
+        if (obj) Vv2b(obj, 0x7c, 1, is27);
+        return 0;
+    }
+    case 0x287259f6: {
+        PieEventMsg msg;
+        int value = m10;
+        m14 = 1;
+        msg.mValue = value;
+        msg.mType = 0x2ccb7e3;
+        Vv1(param_2, 0x114, (int)&msg);
+        return 1;
+    }
+    default:
+        return 0;
+    }
+}
+#pragma float_control(pop)
+
 // @ 0x00817e20
 void PieMenuInit::Init(void* n1, void* n2, void* p4, void* p5, void* p6, void* p7)
 {
@@ -609,6 +663,14 @@ void PieMenuInit::Init(void* n1, void* n2, void* p4, void* p5, void* p6, void* p
     if (n1) SPKeyFromName(key1, n1, 0x510a95b, p4);
     if (n2) SPKeyFromName(key2, n2, 0x510a95b, p4);
     Vv5(this, 0x20, (int)key1, (int)key2, (int)p4, (int)p5, (int)p6);
+}
+
+// @ 0x00817eb0
+bool cSPUIPieMenuItem::SetPos(int a, int b)
+{
+    *(int*)((char*)this + 0x64) = a;
+    *(int*)((char*)this + 0x68) = b;
+    return true;
 }
 
 // @ 0x00817ee0

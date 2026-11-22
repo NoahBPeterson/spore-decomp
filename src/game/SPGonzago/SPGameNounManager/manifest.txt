@@ -31,8 +31,10 @@
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b26600@cGameNounManager_s00b2_5c30@@QAEXXZ  00b26600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ??0cMilitaryAttackCityOrder@@QAE@XZ  00b231b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ??0cVehicleGroupOrder@@QAE@XZ  00b22100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?DtorBody@cVGOImpl@@QAEXXZ  00b22180  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b26710@cTimelineModeStarter@@QAEXXZ  00b26710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ??0cListenerBase@@QAE@XZ  00b232b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?GetPlayerCivilization@cGameNounManager_s00b2_5c30@@QAEPAVcCivilization@@XZ  00b25fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?Flush@FlushMgr@@QAEXXZ  00b206d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?resize@ByteString@@QAEXI@Z  00b20610  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?InitGameNounManagerExAttributes@Simulator@@YAXXZ  0131ad80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

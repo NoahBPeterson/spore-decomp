@@ -1,4 +1,4 @@
-// src/game/SPAudio/eapddialog.cpp -- migrated from slice(s) s00a4c300 by tools/migrate/rewrite.py
+// src/game/SPAudio/eapddialog.cpp -- migrated from slice(s) s00a4b3a0, s00a4c300 by tools/migrate/rewrite.py
 // Object file: SPAudio/eapddialog.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,8 @@
 
 namespace EA { namespace Audio { namespace Eapd { class _class; } } }
 #include <stdio.h>
+#include <intrin.h>
+#include <stdlib.h>
 
 // ---- items of slice s00a4c300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -257,7 +259,7 @@ void* openpanel_new();            // 0xa4c250
 namespace EA {
 namespace Audio {
 namespace Eapd {
-void openpanel_free(void* x);     // 0xa4c2e0
+void stub_vgui(void* x);          // 0xa4c2e0 (installed as the panel free method; the slice's name for it)
 }
 }
 }
@@ -285,7 +287,7 @@ void gfxstub_anything(void* x);   // 0xa4c200
 namespace EA {
 namespace Audio {
 namespace Eapd {
-void gfxstub_free(void* x);       // 0xa4c230
+void stub_gfxstub(void* x);       // 0xa4c230 (installed as the gfxstub free method; the slice's name for it)
 }
 }
 }
@@ -299,7 +301,7 @@ void gfxstub_signoff(void* x);    // 0xa4c1f0
 namespace EA {
 namespace Audio {
 namespace Eapd {
-void gfxstub_cancel(void* x);     // 0xa4c1e0
+void stub_get_ext_d2i(void* obj); // 0xa4c1e0 (installed as the gfxstub "cancel" method; the slice's name for it)
 }
 }
 }
@@ -361,13 +363,117 @@ void savepanel_bang(t_savepanel* x);
 }
 // ---- items of slice s00a4c300 end
 
+// ---- items of slice s00a4b3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_gfxstub_s00a4_b3a0 {
+    uint32_t      pad00[2];     // +0x00
+    void*         gs_owner;     // +0x08
+    uint32_t      pad0c;        // +0x0c
+    uint32_t      pad10;        // +0x10
+    t_gfxstub_s00a4_b3a0*    gs_next;      // +0x14
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void  sys_vgui(unsigned int a, unsigned int b, unsigned int c);  // 0x00A671B0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+extern t_gfxstub_s00a4_b3a0* gGfxstubList;             // 0x01675494  (head of the gfxstub list)
+}
+}
+}
+// ---- items of slice s00a4b3a0 end
+
+// @ 0x00a4c170
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void gfxstub_deleteforkey(void * key)
+{
+    for (;;) {
+        t_gfxstub_s00a4_b3a0* head = gGfxstubList;
+        if (head == 0)
+            return;
+        while (*(void**)((char*)head + 8) != key) {
+            head = head->gs_next;
+            if (head == 0)
+                return;
+        }
+        sys_gui("pdtk_gfxstub_delete .gfxstub%lx\n", (unsigned int)(uint32_t)(size_t)head);
+        *(uint32_t*)((char*)head + 4) = 0;
+        if (gGfxstubList == head) {
+            gGfxstubList = head->gs_next;
+        } else {
+            t_gfxstub_s00a4_b3a0* q = gGfxstubList;
+            t_gfxstub_s00a4_b3a0* n = q->gs_next;
+            while (n != 0) {
+                if (n == head) {
+                    q->gs_next = n->gs_next;
+                    break;
+                }
+                q = n;
+                n = n->gs_next;
+            }
+        }
+    }
+}
+}
+}
+}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4c1e0
+namespace EA { namespace Audio { namespace Eapd {
+void stub_get_ext_d2i(void* obj)
+{
+    gfxstub_deleteforkey(*(void**)((char*)obj + 8));
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4c230
+namespace EA { namespace Audio { namespace Eapd {
+void stub_gfxstub(void* x)
+{
+    void* ce = *(void**)((char*)x + 0x10);
+    void* arg = *(void**)((char*)x + 0x0c);
+    sys_vgui((unsigned int)(uint32_t)(size_t)x, (unsigned int)(uint32_t)(size_t)arg, (unsigned int)(uint32_t)(size_t)ce);
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4c2c0
+namespace EA { namespace Audio { namespace Eapd {
+void openpanel_bang(void* x)
+{
+    unsigned int name = *(unsigned int*)((char*)x + 0x2c);
+    sys_gui("pdtk_openpanel %s\n", name);
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4c2e0
+namespace EA { namespace Audio { namespace Eapd {
+void stub_vgui(void* x)
+{
+    unsigned int a = *(unsigned int*)((char*)x + 0x2c);
+    unsigned int b = *(unsigned int*)((char*)x + 0x28);
+    sys_vgui((unsigned int)(uint32_t)(size_t)x, b, a);
+}
+}}}  // namespace EA::Audio::Eapd
+
 // @ 0x00a4c300
 namespace EA { namespace Audio { namespace Eapd {
 bool openpanel_setup()
 {
     t_symbol tmp;
     t_symbol* s = gensym(&tmp, "openpanel");
-    spOpenpanelClass = class_new(*s, (void*)openpanel_new, (void*)openpanel_free, 0x30, 0, 5, 0);
+    spOpenpanelClass = class_new(*s, (void*)openpanel_new, (void*)stub_vgui, 0x30, 0, 5, 0);
     bool ok = true;
     ok &= spOpenpanelClass != 0;
     ok &= class_addbang(spOpenpanelClass, (void*)openpanel_bang);
@@ -409,7 +515,7 @@ bool savepanel_setup()
 {
     t_symbol tmp;
     t_symbol* s = gensym(&tmp, "savepanel");
-    spSavepanelClass = class_new(*s, (void*)savepanel_new, (void*)openpanel_free, 0x30, 0, 5, 0);
+    spSavepanelClass = class_new(*s, (void*)savepanel_new, (void*)stub_vgui, 0x30, 0, 5, 0);
     bool ok = true;
     ok &= spSavepanelClass != 0;
     ok &= class_addbang(spSavepanelClass, (void*)savepanel_bang);
@@ -461,14 +567,14 @@ bool gfxstub_setup()
 {
     t_symbol tmp;
     t_symbol* s = gensym(&tmp, "gfxstub");
-    spGfxstubClass = class_new(*s, (void*)gfxstub_new, (void*)gfxstub_free, 0x18, 1, 0);
+    spGfxstubClass = class_new(*s, (void*)gfxstub_new, (void*)stub_gfxstub, 0x18, 1, 0);
     bool ok = true;
     ok &= spGfxstubClass != 0;
     ok &= class_addanything(spGfxstubClass, (void*)gfxstub_anything);
     s = gensym(&tmp, "signoff");
     ok &= class_addmethod(spGfxstubClass, (void*)gfxstub_signoff, *s, 0);
     s = gensym(&tmp, "cancel");
-    ok &= class_addmethod(spGfxstubClass, (void*)gfxstub_cancel, *s, 0);
+    ok &= class_addmethod(spGfxstubClass, (void*)stub_get_ext_d2i, *s, 0);
     return ok;
 }
 }}}  // namespace EA::Audio::Eapd

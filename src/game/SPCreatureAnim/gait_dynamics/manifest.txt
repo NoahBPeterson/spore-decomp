@@ -13,7 +13,9 @@
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ??0cSPEditorManipulationLimb@SP@@QAE@XZ  005ae610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?RefreshJointLists@cSPEditorManipulationLimb@SP@@QAEXXZ  005ae750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ??4cSPEditortLimbTry@SP@@QAEAAU01@ABU01@@Z  005ae840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?Clear@HighlightVec@@QAEXXZ  005af1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ??0MObj@@QAE@XZ  005b0f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?FUN_009cda70@@YAPAMPAMPBM@Z  009cda70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?FUN_009cdfb0@SA@@QAEMM@Z  009cdfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?FUN_009ce100@SA@@QAEMD@Z  009ce100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?FUN_009ce700@@YGMM@Z  009ce700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -23,5 +25,3 @@
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?pop_heap@@YAXPAUSA_s009d_3950@@0USAGreater@@@Z  009d4230  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?AddElem@TOwner@@QAEHPAXPBUV3@@PBUV4@@@Z  009d7d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_dynamics.cpp  ?A1d0@Anim@@QAEXXZ  009db1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPCreatureAnim/gait_dynamics.cpp  ?Clear@HighlightVec@@QAEXXZ  005af1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPCreatureAnim/gait_dynamics.cpp  ?FUN_009cda70@@YAPAMPAMPBM@Z  009cda70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,8 +1,9 @@
-// src/game/SPEditors/_at_005e0000.cpp -- migrated from slice(s) s005ef440, s005ee480, s005ed750, s005ecf80, s005e5d40, s005e4db0, s005e16c0, s005e0930, s005dfbb0 by tools/migrate/rewrite.py
+// src/game/SPEditors/_at_005e0000.cpp -- migrated from slice(s) s005e4190, s005ef440, s005ee480, s005ed750, s005ecf80, s005e5d40, s005e4db0, s005e16c0, s005e0930, s005dfbb0 by tools/migrate/rewrite.py
 // Object file: SPEditors/_at_005e0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "SP/cAppModeEditorBase.h"
 #include "SP/cPropertyList.h"
 #include "SP/cSPEditorUI.h"
@@ -37,6 +38,12 @@
 #include "hkBaseObject.h"
 #include "hkBool.h"
 #include "hkReferencedObject.h"
+#include "EA/UTFWin/IWinProc.h"
+#include "EA/ResourceMan/Key.h"
+#include "EA/UTFWin/RenderContext.h"
+#include "SP/cSPEditorVerbIcon.h"
+#include "cSPVerbIconRollover.h"
+#include <xmmintrin.h>
 
 // ---- items of slice s005dfbb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -1573,6 +1580,21 @@ class SPSpineCollisionFilter : public hkCollisionFilter_s005e_f440 {
 }
 // ---- items of slice s005ef440 end
 
+// ---- items of slice s005e4190 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cIconVerbHelper {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6)
+  virtual void Slot7(int v);  // +0x1c
+  uint32_t pad04[4];          // +0x04..0x13
+  int mUnknown14;             // +0x14
+  uint32_t pad18[0x19];       // +0x18..0x7b
+  int mUnknown7c;             // +0x7c
+  void SetIndex(int v);
+};
+}
+// ---- items of slice s005e4190 end
+
 // @ 0x005e0370
 SP::cSPRolloverModelData::cSPRolloverModelData(const Key& modelKey, const Key& itemKey, uint32_t layoutID, uint32_t layoutGroup, uint32_t textID)
 : mModelKey(), mItemKey(), mLayoutKey(), mGroupKey(), mItems(), mTextID(0)
@@ -1899,6 +1921,23 @@ void SP::cSPEditorVerbIcon_s005e_16c0::SetIcon(EA::UTFWin::IWindow_s005e_16c0* p
     mCharge.mTargetValue = 0.0f;
     LayoutInit(key, a, b);
     Slot10();
+}
+}  // namespace SP
+
+// @ 0x005e4d30
+namespace SP {
+int FloatToInt(float value) {
+  return SseRoundToInt(value);
+}
+}  // namespace SP
+
+// @ 0x005e4d60
+namespace SP {
+void cIconVerbHelper::SetIndex(int v)
+{
+  mUnknown7c = v;
+  if (mUnknown14 == -1)
+    return Slot7(v + 0x31);
 }
 }  // namespace SP
 

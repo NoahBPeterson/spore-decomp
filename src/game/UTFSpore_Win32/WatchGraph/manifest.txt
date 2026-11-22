@@ -1,1 +1,4 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/WatchGraph.cpp  ?Clear@WatchGraph@UTFWinControls@EA@@QAEXXZ  00991f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/WatchGraph.cpp  ??0WatchGraph@UTFWinControls@EA@@QAE@XZ  00991ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/WatchGraph.cpp  ?OnAreaChanged@WatchGraph@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  00992140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

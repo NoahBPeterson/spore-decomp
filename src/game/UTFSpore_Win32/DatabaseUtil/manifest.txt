@@ -1,3 +1,5 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/DatabaseUtil.cpp  _FUN_008dd7d0  008dd7d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabaseUtil.cpp  _FUN_008dd8d0  008dd8d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabaseUtil.cpp  _FUN_008ddb90  008ddb90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabaseUtil.cpp  _FUN_008ddb00  008ddb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

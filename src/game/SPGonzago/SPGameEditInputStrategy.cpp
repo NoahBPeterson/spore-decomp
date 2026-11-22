@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPGameEditInputStrategy.cpp -- migrated from slice(s) s00d1afe0, s00d197a0, s00d18df0, s00d178a0, s00d1a2b0, s00d16f40, s00d160c0, s00d15440, s00d14460, s00cd16a0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPGameEditInputStrategy.cpp -- migrated from slice(s) s00d16960, s00d1afe0, s00d197a0, s00d18df0, s00d178a0, s00d1a2b0, s00d16f40, s00d160c0, s00d15440, s00d14460, s00cd16a0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPGameEditInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -31,6 +31,7 @@ extern "C" char g_1667bae[];
 #include "EA/UTFWinControls/IWinTextEdit.h"
 #include <intrin.h>
 #include "EA/DateTime/DateTime.h"
+#include "EA/ResourceMan/KeyFilter.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void operator_delete(void* p);                    // 0x00f47380
@@ -2934,6 +2935,7 @@ u32 SP::cGameEditInputStrategy_s00d1_5440::GetGameplayMarkerTypeFromUI()
 
 // Closest attempt. `p += 0x18` is retail's `add esi, 0x18`. The two stack
 // stores `mov [esp+0x10], eax` and `mov [esp+0x14], edx` are still swapped.
+
 // @ 0x00d16760
 bool cStrCmp::operator()(u32 a, u32 b)
 {
@@ -3794,15 +3796,10 @@ bool cGameEditInputStrategy_s00d1_97a0::HandleUIMessage(IWindow* pWindow, const 
 namespace eastl {
 inline int Log2(int n)
 {
-    int m = n;
-    n = 0;
-    _ReadWriteBarrier();
     int i = 0;
-    if (m != 0) {
-        do {
-            m >>= 1;
-            ++i;
-        } while (m != 0);
+    while (n != 0) {
+        n >>= 1;
+        i++;
     }
     return i;
 }

@@ -8,3 +8,5 @@
 008a8880 1009 ApplyHints_FFT1HintClass: complete; interpolation loops factored into one helper, original has both inline
 008a8ff0 60 FFT1HintClass_releaseMem: complete; reg assignment (h in eax, zero in ecx) differs in the prebuilt toolset
 008a90f0 168 Delete_FFT1HintClass: complete; free order matches, register allocation differs
+008a9220  n/a  SetupInput (FontFusion T1 hinting, prebuilt module): complete incl. 3 verified realloc-size quirks; register ABI (h in EAX, callees take EAX/ECX/EDX args) modelled as C params, cl merges duplicated grow/init tails so the body is 9176 B vs 10800 B (chk finds no size-similar symbol) flags: /O2 /MD /Gy /EHsc /TP
+008abc50  799  complete; difftest UNSUPPORTED (no valid inputs: pool-limit). SetupGlobalHints with 12 real args + 2 phantom LTCG leading params (uninitialised eax). Body reconstructed from the dev source layout (blue-zone bubble sorts, TCB snap, StdHW/VW + SetupStemWeights/SetupInput tail calls); /O2 codegen differs throughout the sort loops.

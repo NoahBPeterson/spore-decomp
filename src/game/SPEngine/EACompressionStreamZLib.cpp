@@ -32,6 +32,12 @@ enum eCompressedFormat { kCompressedFormatZLib = 0, kCompressedFormatGZip = 1 };
 }
 namespace EA {
 namespace IO {
+extern "C" void* __cdecl eaAlloc(unsigned int size, const char* pGroup, int flags,
+                                 unsigned debug, const char* pFile, int line);
+}
+}
+namespace EA {
+namespace IO {
 extern "C" void __cdecl eaFree(void* p);
 }
 }
@@ -144,6 +150,8 @@ extern "C" int __cdecl deflateInit2_(z_stream_s*, int level, int method, int win
 extern "C" int __cdecl inflate(z_stream_s*, int);
 extern "C" int __cdecl inflateInit_(z_stream_s*, const char* version, int streamSize);
 extern "C" int __cdecl inflateReset(z_stream_s*);
+extern "C" int __cdecl deflateEnd(z_stream_s*);
+extern "C" int __cdecl inflateEnd(z_stream_s*);
 namespace EA {
 namespace IO {
 struct AtomicIntT {
@@ -220,7 +228,12 @@ class RCAtomicBlock {
 };
 }
 }
+extern "C" void __cdecl eaFree(void* p);
 // ---- items of slice s0067d550 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+extern "C" void* __cdecl FUN_0067d230(void* opaque, unsigned int items, unsigned int size);  // 0x0067d230 (stays in the slice: not this object's)
+extern "C" void __cdecl FUN_0067d260(void* opaque, void* p);  // 0x0067d260 (stays in the slice: not this object's)
 
 // @ 0x0067d280
 namespace EA { namespace IO {
@@ -277,6 +290,41 @@ int StreamCompressionZLib::GetState() const
 }
 }}  // namespace EA::IO
 
+// @ 0x0067d330
+namespace EA { namespace IO {
+bool StreamCompressionZLib::InitPointers()
+{
+  bool result = true;
+  if (mpOutputBuffer == 0 && mnOutputBufferSize > 0) {
+    unsigned char* p = (unsigned char*)eaAlloc(
+        mnOutputBufferSize, "StreamCompressionZLib/OutputBuffer", 0, 0, 0, 0);
+    result = (p != 0);
+    mpOutputBuffer = p;
+    if (!result) goto done;
+  }
+  if (mpZLibStream == 0) {
+    result = false;
+    if (!mbInited) {
+      mpZLibStream = (z_stream_s*)eaAlloc(
+          0x38, "StreamCompressionZLib/z_stream_s", 0, 0, 0, 0);
+      if (mpZLibStream != 0) {
+        mpZLibStream->zalloc = (void*)&FUN_0067d230;
+        mpZLibStream->zfree = (void*)&FUN_0067d260;
+        mpZLibStream->next_in = 0;
+        mpZLibStream->avail_in = 0;
+        mpZLibStream->next_out = mpOutputBuffer;
+        mpZLibStream->avail_out = mnOutputBufferSize;
+        mpZLibStream->total_in = 0;
+        result = true;
+      }
+    }
+  }
+done:
+  mbInited = result;
+  return result;
+}
+}}  // namespace EA::IO
+
 // @ 0x0067d3f0
 namespace EA { namespace IO {
 unsigned int StreamCompressionZLib::GetPosition(int positionType) const
@@ -324,6 +372,41 @@ int StreamDecompressionZLib::GetState() const
 {
   if (mbOpen && mpZLibStream != 0) return mpZLibStream->msg ? -1 : 0;
   return -2;
+}
+}}  // namespace EA::IO
+
+// @ 0x0067d490
+namespace EA { namespace IO {
+bool StreamDecompressionZLib::InitPointers()
+{
+  bool result = true;
+  if (mpInputBuffer == 0 && mnInputBufferSize > 0) {
+    unsigned char* p = (unsigned char*)eaAlloc(
+        mnInputBufferSize, "StreamCompressionZLib/InputBuffer", 0, 0, 0, 0);
+    result = (p != 0);
+    mpInputBuffer = p;
+    if (!result) goto done;
+  }
+  if (mpZLibStream == 0) {
+    result = false;
+    if (!mbInited) {
+      mpZLibStream = (z_stream_s*)eaAlloc(
+          0x38, "StreamCompressionZLib/z_stream_s", 0, 0, 0, 0);
+      if (mpZLibStream != 0) {
+        mpZLibStream->zalloc = (void*)&FUN_0067d230;
+        mpZLibStream->zfree = (void*)&FUN_0067d260;
+        mpZLibStream->next_in = mpInputBuffer;
+        mpZLibStream->avail_in = 0;
+        mpZLibStream->next_out = 0;
+        mpZLibStream->avail_out = 0;
+        mpZLibStream->total_out = 0;
+        result = true;
+      }
+    }
+  }
+done:
+  mbInited = result;
+  return result;
 }
 }}  // namespace EA::IO
 
@@ -537,4 +620,45 @@ EA::IO::StreamCompressionZLib_s0067_d550::StreamCompressionZLib_s0067_d550(IStre
   mpOutputBuffer = 0;
   mnOutputBufferSize = 0x2000;
   if (pOutputStream) Open(pOutputStream, nHint);
+}
+
+// @ 0x0067db10
+EA::IO::StreamCompressionZLib_s0067_d550::~StreamCompressionZLib_s0067_d550()
+{
+  if (mbInited) {
+    if (mbOpen) Close();
+    if (mpZLibStream) {
+      deflateEnd(mpZLibStream);
+      EA::IO::eaFree(mpZLibStream);
+      mpZLibStream = 0;
+    }
+    if (mpOutputBuffer) {
+      EA::IO::eaFree(mpOutputBuffer);
+      mpOutputBuffer = 0;
+    }
+  }
+}
+
+// @ 0x0067dbc0
+EA::IO::StreamDecompressionZLib_s0067_d550::~StreamDecompressionZLib_s0067_d550()
+{
+  if (mbInited) {
+    if (mbOpen) {
+      mbOpen = false;
+      if (mInputStream.mpObject) {
+        IStream_s0067_d550* p = mInputStream.mpObject;
+        mInputStream.mpObject = 0;
+        p->Release();
+      }
+    }
+    if (mpZLibStream) {
+      inflateEnd(mpZLibStream);
+      EA::IO::eaFree(mpZLibStream);
+      mpZLibStream = 0;
+    }
+    if (mpInputBuffer) {
+      EA::IO::eaFree(mpInputBuffer);
+      mpInputBuffer = 0;
+    }
+  }
 }

@@ -1312,22 +1312,7 @@ struct cLightingManager {
 
 // ---- items of slice s0070de90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl PropertyManager(void);        // 0x0067de30
-struct LConfig { unsigned char _d[0x144]; LConfig(); LConfig(const LConfig&); LConfig& operator=(const LConfig&); ~LConfig(); };
-struct LConfigVec {
-    LConfig* mpBegin; LConfig* mpEnd; LConfig* mpCap;
-    void DoInsertValues(LConfig* pos, unsigned n, const LConfig& v); // 0x70d080
-    LConfig* Erase(LConfig* first, LConfig* last);                   // 0x70ce80
-};
-LConfig* __cdecl LConfig_Default(LConfig* out);                      // 0x70dd50
-void __cdecl FillLightingStateFromConfig(void* a, void* b);   // 0x0070aed0
-void __cdecl RBTreeInc(void* n);                              // 0x00921580
-namespace __equiv_ann1 {
 struct LConfig {
-    ~LConfig();   // 0x00f47380 (equiv t3)
-};
-}
-void* __cdecl MessageServer_s0070_de90(void);          // 0x0067dcc0
-struct LConfig_s0070_de90 {
     void* mpProperty;               // +0x000
     int mPad04, mPad08, mPad0c, mPad10, mPad14, mPad18, mPad1c, mPad20;
     int mPad24, mPad28, mPad2c, mPad30, mPad34, mPad38, mPad3c, mPad40;
@@ -1339,18 +1324,55 @@ struct LConfig_s0070_de90 {
     int mPadE4, mPadE8, mPadEc, mPadF0, mPadF4, mPadF8, mPadFc, mPad100;
     int mPad104, mPad108, mPad10c, mPad110, mPad114, mPad118, mPad11c, mPad120;
     int mPad124, mPad128, mPad12c, mPad130, mPad134, mPad138, mPad13c, mPad140;
-    LConfig_s0070_de90();                      // 0x00706dd0
-    LConfig_s0070_de90(const LConfig_s0070_de90&);
-    LConfig_s0070_de90& operator=(const LConfig_s0070_de90&);
-    ~LConfig_s0070_de90();                     // 0x007067f0
+    LConfig();                      // 0x00706dd0
+    LConfig(const LConfig&);
+    LConfig& operator=(const LConfig&);
+    ~LConfig();                     // 0x007067f0
 };
 struct LConfigVec_s0070_de90 {
-    LConfig_s0070_de90* mpBegin; LConfig_s0070_de90* mpEnd; LConfig_s0070_de90* mpCap;
-    void DoInsertValues(LConfig_s0070_de90* pos, unsigned n, const LConfig_s0070_de90& v); // 0x70d080
-    LConfig_s0070_de90* Erase(LConfig_s0070_de90* first, LConfig_s0070_de90* last);                   // 0x70ce80
-    void push_back(const LConfig_s0070_de90& v);                                // 0x70dd50
+    LConfig* mpBegin; LConfig* mpEnd; LConfig* mpCap;
+    void DoInsertValues(LConfig* pos, unsigned n, const LConfig& v); // 0x70d080
+    LConfig* Erase(LConfig* first, LConfig* last);                   // 0x70ce80
+    void push_back(const LConfig& v);                                // 0x70dd50
     void Resize(unsigned n);                                         // 0x70e060
 };
+struct LConfigVec {
+    LConfig* mpBegin; LConfig* mpEnd; LConfig* mpCap;
+    void DoInsertValues(LConfig* pos, unsigned n, const LConfig& v); // 0x70d080
+    LConfig* Erase(LConfig* first, LConfig* last);                   // 0x70ce80
+};
+LConfig* __cdecl LConfig_Default(LConfig* out);                      // 0x70dd50
+struct PropRef {
+    void* mpProp;
+    PropRef() : mpProp(0) {}
+    ~PropRef()
+    {
+        void* p = mpProp;
+        if (p != 0)
+        {
+            mpProp = 0;
+            ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
+        }
+    }
+    PropRef& operator=(void* p)
+    {
+        if (mpProp != 0)
+        {
+            void* old = mpProp;
+            mpProp = 0;
+            ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
+        }
+        mpProp = p;
+        return *this;
+    }
+};
+void __cdecl FillLightingStateFromConfig(void* a, void* b);   // 0x0070aed0
+namespace __equiv_ann1 {
+struct LConfig {
+    ~LConfig();   // 0x00f47380 (equiv t3)
+};
+}
+void* __cdecl MessageServer_s0070_de90(void);          // 0x0067dcc0
 struct WorldNode {
     WorldNode* mpNext;      // +0x00  tree linkage
     void* mpParent;         // +0x04
@@ -1358,16 +1380,64 @@ struct WorldNode {
     char _pad0c[8];         // +0x0c
     void* mpWorld;          // +0x14
 };
+struct WorldObj {
+    char _pad[0x10];
+    void* mpConfig;         // +0x10  selected cLightingConfig
+    void ApplyConfig();     // 0x007094c0
+};
 struct WorldTree {
     WorldNode* mpRoot;      // +0x00  anchor node; its address is the end sentinel
+};
+WorldNode* __cdecl RBTreeIncrement(WorldNode* node);   // 0x00921580
+struct PropValue {
+    char _pad[0x12];
+    short mType;            // +0x12
+    char* GetBool();        // 0x0041e920
+    int*  GetInt();         // 0x0041e990
+};
+struct PropertyList_s0070_de90 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void v08();                                                         // +0x20
+    virtual char GetProperty(unsigned id, PropValue** out);                     // +0x24
+    virtual void v0a();                                                         // +0x28
+    virtual char GetPropertyByKey(unsigned key, unsigned id, PropValue** out);  // +0x2c
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+    virtual void EnumKeys(unsigned id, void* span);                             // +0x48
+};
+void __cdecl EFree2(void* p);   // 0x00f47380
+struct PropSpan {
+    void* mpBegin; void* mpEnd; void* mpCap;
+    ~PropSpan()
+    {
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            EFree2(mpBegin);
+    }
 };
 struct LightingMgr {
     char mPad00[0x18];              // +0x00
     LConfigVec_s0070_de90 mConfigs;            // +0x18
     char mPad2c[4];                 // +0x2c
     WorldTree mWorlds;              // +0x30
-    void FillLightingStateFromConfig(void* prop, LConfig_s0070_de90* cfg);   // 0x0070aed0
+    void FillLightingStateFromConfig(void* prop, LConfig* cfg);   // 0x0070aed0
     void Reload();                  // 0x0070e160
+};
+struct LightingMsgTarget {
+    char mPad00[0x14];              // +0x00
+    LConfigVec_s0070_de90 mConfigs;            // +0x14
+    char mPad28[4];                 // +0x28
+    WorldTree mWorlds;              // +0x2c
 };
 struct MsgReg { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
 virtual void a4();
@@ -1376,11 +1446,6 @@ virtual void a6();
 virtual void a7();
                 virtual void a8(void*, int); virtual void a9(); virtual void a10(); virtual void a11(); };
 struct MsgRegOwner { char MsgRegister(); };
-namespace __equiv_ann1 {
-struct LConfig_s0070_de90 {
-    ~LConfig_s0070_de90();   // 0x00f47380 (equiv t3)
-};
-}
 // ---- items of slice s0070de90 end
 
 // ---- items of slice s00782860 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -4055,7 +4120,6 @@ typedef char LWOffset_mLocalLightingCache[offsetof(LWDtorView, mLocalLightingCac
 typedef char LWOffset_mLocalLightGrid[offsetof(LWDtorView, mLocalLightGrid) == 0x628 ? 1 : -1];
 typedef char LWOffset_mLocalLightCells[offsetof(LWDtorView, mLocalLightCells) == 0x63c ? 1 : -1];
 
-
 // @ 0x0070d6d0
 LWDtorView::~LWDtorView()
 {
@@ -4158,60 +4222,94 @@ bool SP::cLightingManager::Shutdown()
 }
 
 // @ 0x0070de90
-int cLightingManager_HandleMessage(void* self, int msg, void* data)
+char __fastcall cLightingManager_HandleMessage(LightingMsgTarget* self, int, int msg, void* data)
 {
     if (msg != 0xf62def)
         return 0;
-    int id = *(int*)((char*)data + 0x10);
-    if (id == *(int*)0x01535b38)
+    int key = *(int*)((char*)data + 0x10);
+    if (key == *(int*)0x01535b38)
     {
         int state = *(int*)((char*)data + 0x18);
-        int count = (*(int*)((char*)self + 0x18) - *(int*)((char*)self + 0x14)) / 0x144;
-        void* found = 0;
-        int i = 0;
-        for (; i < count; i++)
+        LightingMgr* mgr = (LightingMgr*)((char*)self - 4);
+        LConfig* found = 0;
+        int count = (int)(self->mConfigs.mpEnd - self->mConfigs.mpBegin);
+        for (int i = 0; i < count; i++)
         {
-            void* cfg = (void*)(*(int*)((char*)self + 0x14) + i * 0x144);
-            if (*(void**)cfg != 0 && *(int*)(*(int*)cfg + 8) == state)
+            LConfig* cfg = self->mConfigs.mpBegin + i;
+            if (cfg->mpProperty != 0 && *(int*)(*(int*)cfg->mpProperty + 8) == state)
+            {
+                mgr->FillLightingStateFromConfig(cfg->mpProperty, cfg);
+                found = cfg;
                 break;
+            }
         }
-        if (i < count)
-        {
-            void* cfg = (void*)(*(int*)((char*)self + 0x14) + i * 0x144);
-            FillLightingStateFromConfig(cfg, cfg);
-            found = cfg;
-        }
-        else
+        if (found == 0)
         {
             void* pm = PropertyManager();
-            void** vt = *(void***)pm;
-            void* prop = 0;
-            if (((char(__thiscall*)(void*, int, int, void**))vt[0x2c / 4])(pm, state, id, &prop))
+            PropRef prop;
+            prop = 0;
+            if (((PropertyList_s0070_de90*)pm)->GetPropertyByKey(key, state, (PropValue**)&prop.mpProp))
             {
-                LConfig tmp;
-                LConfig_Default(&tmp);
-                LConfigVec_Resize((LConfigVec*)((char*)self + 0x14), count + 1);
-                LConfig* last = *(LConfig**)((char*)self + 0x18) - 1;
-                FillLightingStateFromConfig((void*)prop, last);
-                tmp.~LConfig();
-                found = last;
+                {
+                    LConfig tmp;
+                    self->mConfigs.push_back(tmp);
+                }
+                found = self->mConfigs.mpEnd - 1;
+                mgr->FillLightingStateFromConfig(prop.mpProp, found);
             }
         }
         if (found != 0)
         {
-            void* node = (void*)*(int*)((char*)self + 0x30);
-            void* head = (char*)self + 0x2c;
-            while (node != head)
+            WorldNode* head = (WorldNode*)&self->mWorlds;
+            for (WorldNode* node = self->mWorlds.mpRoot; node != head; node = RBTreeIncrement(node))
             {
-                void* w = *(void**)((char*)node + 0x14);
-                if (*(void**)((char*)w + 0x10) == found)
-                    RBTreeInc(node);
-                node = (void*)*(int*)node; // advance placeholder
-                break;
+                WorldObj* world = (WorldObj*)node->mpWorld;
+                if (world->mpConfig != 0 && world->mpConfig == (void*)found)
+                    world->ApplyConfig();
             }
         }
     }
     return 1;
+}
+
+// @ 0x0070e060
+void LConfigVec_Resize(LConfigVec_s0070_de90* self, unsigned n)
+{
+    unsigned sz = (unsigned)((self->mpEnd - self->mpBegin) / 0x144);
+    if (n > sz)
+    {
+        LConfig tmp;
+        LConfig_Default(&tmp);
+        self->DoInsertValues(self->mpEnd, n - sz, tmp);
+        tmp.~LConfig();
+    }
+    else
+    {
+        self->Erase(self->mpBegin + n, self->mpEnd);
+    }
+}
+
+// @ 0x0070e160
+void LightingMgr::Reload()
+{
+    PropSpan span;
+    span.mpBegin = 0; span.mpEnd = 0; span.mpCap = 0;
+    void* pm = PropertyManager();
+    ((PropertyList_s0070_de90*)pm)->EnumKeys(*(unsigned*)0x01535b38, (void*)&span);
+    unsigned n = (unsigned)(((char*)span.mpEnd - (char*)span.mpBegin) >> 2);
+    mConfigs.Resize(n);
+    PropRef prop;
+    prop = 0;
+    LConfig* dst = mConfigs.mpBegin;
+    for (unsigned i = 0; i < n; i++)
+    {
+        prop = 0;
+        unsigned key = ((unsigned*)span.mpBegin)[i];
+        if (((PropertyList_s0070_de90*)pm)->GetPropertyByKey(key, *(unsigned*)0x01535b38, (PropValue**)&prop.mpProp))
+            FillLightingStateFromConfig(prop.mpProp, dst);
+        ++dst;
+    }
+    prop = 0;
 }
 
 // @ 0x0070e280

@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPCollectableItems.cpp -- migrated from slice(s) s00597230, s00599040, s00598340 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPCollectableItems.cpp -- migrated from slice(s) s00593840, s00597230, s00599040, s00598340 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPCollectableItems.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,7 @@
 #include "SP/cSPPaletteItem.h"
 #include "cSPUILayoutManager.h"
 #include "SP/cString.h"
+#include "SP/cVarListSerializer.h"
 
 // ---- items of slice s00598340 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t gEditorUnlockGroup;                                                         // 0x0150d514
@@ -1163,6 +1164,396 @@ struct FoundItemsMap {
     void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
     void operator delete[](void*); // 0x00f47380
 // ---- items of slice s00597230 end
+
+// The s00593840 items below name the global EA::IO::IStream stub from inside `namespace SP`, where the
+// earlier slice's `SP::EA` stub (AutoRefCount) shadows the global `EA`: declare the stub in SP::EA::IO
+// too, so the lookup finds a type (it is only the return type of an unused virtual).
+namespace SP { namespace EA { namespace IO { class IStream_s0059_3840; } } }
+// ---- items of slice s00593840 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace IO {
+class IStream_s0059_3840;
+}
+}
+inline uint32_t HashOf_s0059_3840(const ItemId& k) { return k.lo; }
+inline uint32_t HashOf_s0059_3840(uint32_t k) { return k; }
+inline uint32_t HashOf_s0059_3840(uint64_t k) { return (uint32_t)k; }
+namespace eastl {
+class allocator_s0059_3840 { public:
+    void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
+    void deallocate(void* p) { operator delete[](p); }
+};
+}
+namespace eastl {
+struct ListNodeBase_s0059_3840 {
+    ListNodeBase_s0059_3840* mpNext;
+    ListNodeBase_s0059_3840* mpPrev;
+    void insert(ListNodeBase_s0059_3840* pNext)
+    {
+        mpNext = pNext;
+        mpPrev = pNext->mpPrev;
+        pNext->mpPrev->mpNext = this;
+        pNext->mpPrev = this;
+    }
+    void remove()
+    {
+        mpPrev->mpNext = mpNext;
+        mpNext->mpPrev = mpPrev;
+    }
+};
+}
+namespace eastl {
+template <typename T>
+struct ListNode_s0059_3840 : public ListNodeBase_s0059_3840 {
+    T mValue;
+};
+}
+namespace eastl {
+template <typename T>
+class list_s0059_3840 {
+public:
+    typedef ListNode_s0059_3840<T> node_type;
+    ListNodeBase_s0059_3840 mNode;
+    allocator_s0059_3840 mAllocator;
+
+    void push_back(const T& value);
+    void remove(const T& value);
+    void clear()
+    {
+        node_type* p = (node_type*)mNode.mpNext;
+        while (p != (node_type*)&mNode) {
+            node_type* const pTemp = p;
+            p = (node_type*)p->mpNext;
+            mAllocator.deallocate(pTemp);
+        }
+        mNode.mpNext = &mNode;
+        mNode.mpPrev = &mNode;
+    }
+    node_type* DoCreateNode(const T& value)
+    {
+        node_type* const pNode = (node_type*)mAllocator.allocate(sizeof(node_type));
+        ::new (&pNode->mValue) T(value);
+        return pNode;
+    }
+    void DoInsertValue(ListNodeBase_s0059_3840* pNode, const T& value)
+    {
+        node_type* const pNodeNew = DoCreateNode(value);
+        pNodeNew->insert(pNode);
+    }
+    void DoErase(ListNodeBase_s0059_3840* pNode)
+    {
+        pNode->remove();
+        mAllocator.deallocate(pNode);
+    }
+};
+}
+namespace eastl {
+struct prime_rehash_policy_s0059_3840 {
+    float mfMaxLoadFactor;
+    float mfGrowthFactor;
+    uint32_t mnNextResize;
+    struct RehashResult { bool first; uint32_t second; };
+    RehashResult GetRehashRequired(uint32_t nBucketCount, uint32_t nElementCount, uint32_t nElementAdd);  // 0x00921440
+};
+}
+namespace eastl {
+class fixed_hashtable_allocator_s0059_3840 { public:
+    struct Link { Link* mpNext; };
+    Link* mpHead;              // +0x00
+    Link* mpNext;              // +0x04
+    void* mpPoolBegin;         // +0x08
+    void* mpCapacity;          // +0x0c
+    size_t mnNodeSize;         // +0x10
+    void* mpBucketBuffer;      // +0x14
+    void* allocate(size_t)
+    {
+        Link* pLink = mpHead;
+        if (pLink)
+            mpHead = pLink->mpNext;
+        else {
+            size_t nSize = mnNodeSize;
+            pLink = (Link*)operator new[](nSize, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+        }
+        return pLink;
+    }
+    void deallocate(void* p)
+    {
+        if (p != mpBucketBuffer) {
+            if ((p >= mpPoolBegin) && (p < mpCapacity)) {
+                ((Link*)p)->mpNext = mpHead;
+                mpHead = (Link*)p;
+            } else
+                operator delete[](p);
+        }
+    }
+};
+}
+namespace eastl {
+template <typename Value>
+struct hash_node_s0059_3840 {
+    Value mValue;
+    hash_node_s0059_3840* mpNext;
+};
+}
+namespace eastl {
+template <typename Value, typename Allocator, typename HashCode = uint32_t>
+class hashtable_s0059_3840 {
+public:
+    typedef hash_node_s0059_3840<Value> node_type;
+    typedef hashtable_iterator<Value, node_type> iterator;
+    struct insert_return_type { iterator first; bool second; insert_return_type() {} insert_return_type(const iterator& i, bool b) : first(i), second(b) {} };
+
+    uint32_t            mHashCodeBase;     // +0x00 (empty functor bases)
+    node_type**         mpBucketArray;     // +0x04
+    uint32_t            mnBucketCount;     // +0x08
+    uint32_t            mnElementCount;    // +0x0c
+    prime_rehash_policy_s0059_3840 mRehashPolicy;     // +0x10
+    Allocator           mAllocator;        // +0x1c
+
+    static uint32_t hash_of(const Value& v) { return HashOf_s0059_3840(v.first); }
+
+    iterator begin()
+    {
+        iterator i(mpBucketArray);
+        if (!i.mpNode)
+            i.increment_bucket();
+        return i;
+    }
+    iterator end() { return iterator(mpBucketArray + mnBucketCount); }
+
+    template <typename Key>
+    __declspec(noinline) iterator find(const Key& k)
+    {
+        const uint32_t n = HashOf_s0059_3840(k) % mnBucketCount;
+        node_type* const pNode = DoFindNode(mpBucketArray[n], k);
+        return pNode ? iterator(pNode, mpBucketArray + n) : iterator(mpBucketArray + mnBucketCount);
+    }
+    template <typename Key>
+    node_type* DoFindNode(node_type* pNode, const Key& k)
+    {
+        for (; pNode; pNode = pNode->mpNext) {
+            if (k == pNode->mValue.first)
+                return pNode;
+        }
+        return 0;
+    }
+
+    node_type** DoAllocateBuckets(uint32_t n);
+    void DoFreeBuckets(node_type** pBucketArray, uint32_t n)
+    {
+        if (n > 1)
+            mAllocator.deallocate(pBucketArray);
+    }
+    void DoRehash(uint32_t nNewBucketCount);
+    node_type* DoAllocateNode(const Value& value);
+    insert_return_type DoInsertValue(const Value& value, true_type);
+};
+}
+namespace eastl {
+template <typename Value, typename Allocator, typename HashCode>
+void hashtable_s0059_3840<Value, Allocator, HashCode>::DoRehash(uint32_t nNewBucketCount)
+{
+    node_type** const pBucketArray = DoAllocateBuckets(nNewBucketCount);
+    for (uint32_t i = 0; i < mnBucketCount; ++i) {
+        node_type* pNode;
+        while ((pNode = mpBucketArray[i]) != 0) {
+            const uint32_t nNewBucketIndex = hash_of(pNode->mValue) % nNewBucketCount;
+            mpBucketArray[i] = pNode->mpNext;
+            pNode->mpNext = pBucketArray[nNewBucketIndex];
+            pBucketArray[nNewBucketIndex] = pNode;
+        }
+    }
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
+    mnBucketCount = nNewBucketCount;
+    mpBucketArray = pBucketArray;
+}
+}
+namespace eastl {
+template <typename Value, typename Allocator, typename HashCode>
+typename hashtable_s0059_3840<Value, Allocator, HashCode>::node_type*
+hashtable_s0059_3840<Value, Allocator, HashCode>::DoAllocateNode(const Value& value)
+{
+    node_type* const pNode = (node_type*)mAllocator.allocate(sizeof(node_type));
+    ::new (&pNode->mValue) Value(value);
+    pNode->mpNext = 0;
+    return pNode;
+}
+}
+namespace eastl {
+template <typename Value, typename Allocator, typename HashCode>
+typename hashtable_s0059_3840<Value, Allocator, HashCode>::insert_return_type
+hashtable_s0059_3840<Value, Allocator, HashCode>::DoInsertValue(const Value& value, true_type)
+{
+    const uint32_t c = hash_of(value);
+    uint32_t n = c % mnBucketCount;
+    node_type* const pNode = DoFindNode(mpBucketArray[n], value.first);
+    insert_return_type result;
+    if (pNode == 0) {
+        const prime_rehash_policy_s0059_3840::RehashResult bRehash = mRehashPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        node_type* const pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = c % bRehash.second;
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->mpNext = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        result.first = iterator(pNodeNew, mpBucketArray + n);
+        result.second = true;
+        return result;
+    }
+    result.first = iterator(pNode, mpBucketArray + n);
+    result.second = false;
+    return result;
+}
+}
+namespace eastl {
+template <typename T>
+class generic_iterator { public:
+    T* mpNode;
+    generic_iterator() {}
+    explicit generic_iterator(T* p) : mpNode(p) {}
+    generic_iterator& operator++() { ++mpNode; return *this; }
+    T& operator*() const { return *mpNode; }
+};
+}
+struct cStaticItemInfo_s0059_3840 { uint64_t first; uint32_t mData[8]; };           // 0x28 value
+struct cItemSetRow     { ItemId first; uint32_t mData[2]; };           // 0x10 value
+typedef eastl::hashtable_s0059_3840<cStaticItemInfo_s0059_3840, eastl::fixed_hashtable_allocator_s0059_3840> StaticInfoMap_s0059_3840;
+typedef eastl::hashtable_s0059_3840<cItemSetRow, eastl::fixed_hashtable_allocator_s0059_3840> ItemSetRowMap;
+template void eastl::list_s0059_3840<ItemId>::push_back(const ItemId&);
+template void eastl::list_s0059_3840<ItemId>::remove(const ItemId&);
+namespace SP {
+class ISerializerStream {
+public:
+virtual void _v0();
+virtual void _v1();
+virtual void _v2();
+virtual void _v3();
+virtual void _v4();
+virtual void _v5();
+    virtual EA::IO::IStream_s0059_3840* GetStream();
+};
+}
+namespace SP {
+class ISerializer {
+public:
+virtual void _v0();
+virtual void _v1();
+virtual void _v2();
+virtual void _v3();
+virtual void _v4();
+virtual void _v5();
+virtual void _v6();
+    virtual void EndItem();                        // slot 7
+    virtual ISerializerStream* GetStreamHolder();  // slot 8
+};
+}
+namespace SP {
+struct cItemStatus {
+    uint64_t first;
+    bool mbUnlocked : 1;   // bit 0
+    bool mbNew      : 1;   // bit 1
+    bool mbHidden   : 1;   // bit 2
+    uint8_t pad[7];
+};
+}
+namespace SP {
+struct cItemLevel { uint64_t first; int mLevel; uint32_t pad; };
+}
+namespace SP {
+typedef eastl::hashtable_s0059_3840<cItemStatus, eastl::fixed_hashtable_allocator_s0059_3840> ItemStatusMap_s0059_3840;
+}
+namespace SP {
+typedef eastl::hashtable_s0059_3840<cItemLevel, eastl::fixed_hashtable_allocator_s0059_3840> ItemLevelMap_s0059_3840;
+}
+namespace SP {
+struct ItemVector { uint64_t* mpBegin; uint64_t* mpEnd; uint64_t* mpCapacity; uint32_t mAlloc[2]; };
+}
+namespace SP {
+struct cItemSetNode {      // rbtree node of map<ItemId, vector<ItemId>>
+    cItemSetNode* mpNodeRight;
+    cItemSetNode* mpNodeLeft;
+    cItemSetNode* mpNodeParent;
+    char mColor;
+    uint64_t mKey;         // +0x10
+    ItemVector mValue;     // +0x18
+};
+}
+namespace SP {
+class cCollectableItems_s0059_3840 {
+public:
+    void* vtbl0;
+    void* vtbl4;
+    uint32_t mRefCount;
+    bool mbUnknownItemsAreUnlocked;     // +0x0c
+    char pad_d[0x14 - 0xd];
+    struct { cItemSetNode* mpNodeRight; cItemSetNode* mpNodeLeft; cItemSetNode* mpNodeParent; char mColor; } mItemSetAnchor;  // +0x14
+    char pad_24[0x148c - 0x24];
+    StaticInfoMap_s0059_3840 mStaticItemInfos;     // +0x148c
+    char pad_14c4[0x4d00 - 0x148c - sizeof(StaticInfoMap_s0059_3840)];
+    ItemStatusMap_s0059_3840 mItemStatusInfos;     // +0x4d00
+    char pad_4d38[0x6d70 - 0x4d00 - sizeof(ItemStatusMap_s0059_3840)];
+    int mUnlockPoints;                  // +0x6d70
+    uint32_t mDefaultItemGroupId;       // +0x6d74
+    char pad_6d78[0x6d8c - 0x6d78];
+    ItemLevelMap_s0059_3840 mItemLevels;           // +0x6d8c
+
+    bool Write(ISerializer* s);
+    void AddUnlockPoints(int n);
+    uint64_t GetDefaultItemGroupId();
+    void ClearNewFlags();
+    bool AreAllUnlockedHidden();
+    int CountUnlocked();
+    uint64_t GetItemCategory(uint64_t id);
+    bool IsItemVisible(uint64_t id);
+    bool IsItemUnlocked(uint64_t id);
+    bool IsItemNew(uint64_t id);
+    bool IsKnownItem(uint64_t id);
+    bool FindBestItem(uint64_t* out);
+};
+}
+// ---- items of slice s00593840 end
+
+// @ 0x00594410
+template ItemSetRowMap::iterator ItemSetRowMap::begin()
+;
+
+// @ 0x00594b10
+namespace eastl {
+template <typename T> void list_s0059_3840<T>::push_back(const T& value)
+{
+    DoInsertValue(&mNode, value);
+}
+}  // namespace eastl
+
+// @ 0x00595040
+namespace SP {
+uint64_t cCollectableItems_s0059_3840::GetItemCategory(uint64_t id)
+{
+    uint64_t category = (uint64_t)-1;
+    const StaticInfoMap_s0059_3840::iterator& it = mStaticItemInfos.find(id);
+    if (it != mStaticItemInfos.end()) {
+        const cStaticItemInfo_s0059_3840& info = *it.operator->();
+        category = ((((uint64_t)info.mData[2] << 16) | (int64_t)(int32_t)info.mData[5]) << 16) | (int64_t)(int32_t)info.mData[4];
+    }
+    return category;
+}
+}  // namespace SP
+
+// @ 0x00595110
+namespace SP {
+bool cCollectableItems_s0059_3840::IsItemUnlocked(uint64_t id)
+{
+    ItemStatusMap_s0059_3840::iterator it = mItemStatusInfos.find(id);
+    if (it != mItemStatusInfos.end())
+        return it->mbUnlocked != 0;
+    StaticInfoMap_s0059_3840::iterator itStatic = mStaticItemInfos.find(id);
+    if (itStatic != mStaticItemInfos.end())
+        return false;
+    return mbUnknownItemsAreUnlocked;
+}
+}  // namespace SP
 
 // @ 0x00597530
 namespace SP {

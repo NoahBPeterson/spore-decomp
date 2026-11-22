@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/INetDateTime.cpp  ?TimeToSeconds@Internet@EA@@YAIIIIIIIII@Z  00947410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/INetDateTime.cpp  ?MonthStringToInteger@@YAHPBD@Z  00947500  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/INetDateTime.cpp  ?TimeStringToSeconds@@YAHPBUStrStub@eastl@@@Z  00947cd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

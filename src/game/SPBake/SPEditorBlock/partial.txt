@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
+0043bc70  0  byte-exact only with inline assembly in the body (symbol ?F_43bc70@cSPEditorBlock_s0043_bbc0@SP@@QAE_NMM@Z, flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
 0043cad0  429  F3cad0 - state refresh approximated (inline accessor + model-flag details omitted)
 0043cfc0  332  F3cfc0 - clear-others pass approximated
 0043d240  233  F3d240 - model-transform branch approximated (transform compose omitted)
@@ -14,4 +15,3 @@
 0044c450  -  incomplete skeleton (48-byte /Od method) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 0044c4d0  -  incomplete skeleton (208-byte /Od method)
 0044c5a0  -  incomplete skeleton (230-byte /Od method)
-0043bc70  0  byte-exact only with inline assembly in the body (symbol ?F_43bc70@cSPEditorBlock_s0043_bbc0@SP@@QAE_NMM@Z, flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

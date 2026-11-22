@@ -1,8 +1,8 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?DoFreeNodes@HT@@QAEXPAII@Z  006be640  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?Insert@HoleTree@@QAEPAPAUHoleNode@@PAPAU2@PAU2@PBUHoleRec@@@Z  006bfc20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?FUN_006be7c0@@YAXPAIHHI@Z  006be7c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?lowerBound@HT@@QAEPAIPAI0@Z  006be890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?FindRecord@PFIndexModifiable@ResourceMan@EA@@UAEPAUPFRecordInfo@23@ABVKey@23@@Z  006bf4e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?AddRecord@PFIndexModifiable@ResourceMan@EA@@UAEXABVKey@23@ABUPFRecordInfo@23@@Z  006bfbc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?DeleteRecord@PFIndexModifiable@ResourceMan@EA@@UAE_NABVKey@23@AAUPFRecordInfo@23@@Z  006bf520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?FUN_006be7c0@@YAXPAIHHI@Z  006be7c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?AddRecord@PFIndexModifiable@ResourceMan@EA@@UAEXABVKey@23@ABUPFRecordInfo@23@@Z  006bfbc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?Insert@HoleTree@@QAEPAPAUHoleNode@@PAPAU2@PAU2@PBUHoleRec@@@Z  006bfc20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

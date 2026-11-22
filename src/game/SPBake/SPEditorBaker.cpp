@@ -4995,7 +4995,7 @@ public:
 struct ResourceKey_s0040_63d0 { unsigned int instanceID, typeID, groupID; };
 class DefaultRefCounted_s0040_63d0 {
     public: int AddRef();
-    int Release();
+    int Release();  // 0x00453540 (DefaultRefCounted::Release)
     int mnRefCount;
 };
 struct Property_s0040_63d0 {
@@ -5494,7 +5494,7 @@ struct ColorKey_s0040_ccb0 {
     float b2;           // +8
     float c;            // +0xc
     float d;            // +0x10
-    ColorKey_s0040_ccb0();
+    ColorKey_s0040_ccb0();  // 0x0040cf60 (ColorKey::ColorKey_s0040_ccb0)
 };
 struct AtomicRefCounted_s0040_ccb0 { void Release(); };   // 0x00402420
 struct RefPtr_s0040_ccb0 {
@@ -5523,7 +5523,7 @@ public:
 };
 class SlotAbility_s0040_ccb0 : public CreatureAbility_s0040_ccb0 {
 public:
-    SlotAbility_s0040_ccb0();
+    SlotAbility_s0040_ccb0();  // 0x0040d010 (SlotAbility::SlotAbility_s0040_ccb0)
     static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
     SlotTable mSlots;   // +0x0c
 };
@@ -5575,7 +5575,7 @@ public:
 };
 class ListAbility_s0040_ccb0 : public RefCountedAbility {
 public:
-    ListAbility_s0040_ccb0();
+    ListAbility_s0040_ccb0();  // 0x0040d160 (ListAbility::ListAbility_s0040_ccb0)
     static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
     OpaqueVectorA mA;          // +0x08
     OpaqueVectorB mB;          // +0x1C
@@ -11214,7 +11214,6 @@ bool __cdecl BakeSpritesCreate(RefVector* vecA, uint32_t f24, uint32_t f28, uint
     secondary.p->Fn6909b0();
     return true;
 }
-
 
 // @ 0x004301E0
 BakeSpritesResource::BakeSpritesResource()

@@ -1136,6 +1136,7 @@ typedef basic_string_s0055_1b60<wchar_t> string16_s0055_1b60;
 }
 namespace eastl {
 template <class T> inline bool operator==(const basic_string_s0055_1b60<T>& a, const basic_string_s0055_1b60<T>& b)   // 0x00554FB0
+
 {
     return ((a.size() == b.size()) && (memcmp(a.data(), b.data(), (unsigned int)a.size()) == 0));
 }

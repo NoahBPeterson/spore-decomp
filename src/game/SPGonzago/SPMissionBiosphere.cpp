@@ -309,6 +309,8 @@ extern "C" void  __cdecl FUN_00aca360(void* p);            // (reached through c
 extern "C" void  __cdecl FUN_00f47380(void* p);            // operator delete
 extern "C" void  __cdecl FUN_006a1250(void* prop, int key, void* out);   // SP::GetPropertyAsKey
 extern "C" void  __cdecl FUN_00feff80(void* species, int n, int a, int b, int c, int eff, void* herds);
+extern "C" void* __cdecl FUN_00ae33b0(void* p);            // OnAbduction helper
+extern "C" void  __cdecl FUN_00fefbb0(void* species, void* herd, int one, int political, int eff);
 extern "C" void  FUN_00fe5430(void* tribe, int a, int b);  // (reached through cTribe::FUN_00fe5430)
 extern "C" void* __cdecl FUN_00bbcb10(void* a, void* planet);  // (reached through cTerraformingManager)
 extern "C" void* __cdecl FUN_00bbf2b0(void* planet);
@@ -545,6 +547,12 @@ class cSPMissionBiosphere_s00c4_cb90 : public cSPMission_s00c4_cb90 {
     void FUN_00c5ed90(int state);                                  // 0x00c5ed90
     void FUN_00c48e90();                                           // 0x00c48e90 (base constructor)
     void FUN_00c47680();                                           // 0x00c47680 (base destructor)
+};
+
+// the message-handler sub-object embedded at mission+0x34
+struct cBiosphereHandler_s00c4_cb90 {
+    void HandleMessage(u32 message, void* data);             // 0x00c4a6b0
+    void DispatchMessage(u32 message, void* data);           // 0x00c4d590 (ret 8)
 };
 // ---- items of slice s00c4cb90 end
 
@@ -1141,4 +1149,48 @@ int cSPMissionBiosphere_s00c4_cb90::UpdateStateMachine(int delta)
         }
     }
     return state;
+}
+
+// @ 0x00c4d590
+void cBiosphereHandler_s00c4_cb90::DispatchMessage(u32 msg, void* arg)
+{
+    // the handler sub-object is embedded in its owner at +0x34; recover the mission
+    cSPMissionBiosphere_s00c4_cb90* self = (cSPMissionBiosphere_s00c4_cb90*)((char*)this - 0x34);
+    if (msg <= 0x3029f11u) {
+        if (msg == 0x3029f11u) {
+            if (self->GetTargetPlanet() == FUN_01021260()) {
+                void* p = *(void**)((char*)arg + 8);
+                if (!p)
+                    self->UnkC790(0);
+                else
+                    self->UnkC790((*(void* (__thiscall**)(void*, u32))((char*)*(void**)p + 8))(p, 0xce9f6639u));
+            }
+        } else if (msg == 0x1622184u) {
+            if (self->GetTargetPlanet() == FUN_01021260()) {
+                cCreatureBase* a1 = (cCreatureBase*)*(void**)((char*)arg + 8);
+                void* a2 = *(void**)((char*)arg + 0x10);
+                if (a1->GetDamageState() == 2) {
+                    if (!a2 || !(*(char (__thiscall**)(void*, u32))((char*)*(void**)a2 + 0x5c))(a2, 0xd0036e08u))
+                        self->UnkC690(a1);
+                    else {
+                        cCreatureBase* ani = (cCreatureBase*)FUN_00ae33b0(a1);
+                        if (ani && ani->mbFlag_b62 && ani->GetEmpireID() == (int)self->mPoliticalID_24) {
+                            void* herd = ani->GetHerd();
+                            if (herd)
+                                FUN_00fefbb0(self->mpTargetSpecies_16c, herd, 1,
+                                             self->mPoliticalID_24, self->GetDiseaseEffectID());
+                        }
+                    }
+                }
+            }
+        } else if (msg == 0x2489760u) {
+            if (*(void**)((char*)arg + 8) == (void*)self->GetTargetPlanet())
+                self->OnPlanetDeactivate();
+        }
+    } else if (msg == 0x5e37a53u) {
+        void* active = FUN_01021260();
+        if (active == (void*)self->GetTargetPlanet())
+            self->UnkC610(1);
+    }
+    HandleMessage(msg, arg);
 }

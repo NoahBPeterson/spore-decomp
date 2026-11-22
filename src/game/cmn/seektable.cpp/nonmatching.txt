@@ -1,0 +1,5 @@
+# Complete ports whose machine code differs (equivalence-checked with tools/difftest/equiv.py).
+# Format: <va>  <differing-bytes>  <reason>
+0114c2e0  121  Unpack0::UnpackInt32: the same prefix ladder, sign/magnitude split and -1-magnitude tail, but cl orders the 2/3/4/5-byte branch bodies differently (byte-load rotation, where the 0x1860/0x61860 add lands, 251 bytes vs 250); equiv PASS 400/400, 100% coverage. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0114c3e0  119  BitStreamReader::Next: same three UnpackInt32 call sites and count/sign bookkeeping; cl keeps mppData in edi across the calls and picks other scratch registers for the length store (139 bytes vs 143); equiv PASS 397/400, 100% coverage. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0114c470  387  SampleRegions::ScanPacked: the same four 0x10-byte BitStreamReader locals and four Next() calls per block, but the scanner state and published region values live in a different stack-slot order, so the whole body's offsets differ (419 bytes vs 388); equiv PASS 396/400, 100% coverage, inline-call trace tolerated. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

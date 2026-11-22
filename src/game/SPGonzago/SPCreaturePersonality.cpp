@@ -1,10 +1,13 @@
-// src/game/SPGonzago/SPCreaturePersonality.cpp -- migrated from slice(s) s00d6f1c0, s00d6e3a0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreaturePersonality.cpp -- migrated from slice(s) s00d6e2e0, s00d6dea0, s00d6de50, s00d6de00, s00d6ddd0, s00d6f1c0, s00d6e3a0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreaturePersonality.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "nSPBehaviorTree/behavior_stimuli.h"
 #include "SP/cGameNounManager.h"
+#include "SP/cBehaviorTreeData.h"
+#include "SP/cSPCreatureBase.h"
+#include "SP/cLocomotiveObject.h"
 #pragma pack(push, 1)
 #pragma pack(pop)
 
@@ -190,6 +193,184 @@ namespace SP {
 bool __cdecl PATROL_TOOFAR_Decide(cBehaviorActor* pActor, int param, int32_t* pResult); // 0x00d6f430
 }
 // ---- items of slice s00d6f1c0 end
+
+// ---- items of slice s00d6ddd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+struct cBehaviorStimuliOwner {
+    void ClearSelection();
+};
+class ICombatant {
+public:
+    PV2                                       // 0x00
+    virtual void* ToSpatialObject();          // 0x08
+    virtual void* ToGameData();               // 0x0c
+    PV8 PV8 PV8 PV4 PV                         // 0x10..0x80
+    virtual void SetCreatureTarget(void* a, void* b, void* c); // 0x84
+
+    char mPad04[0xb4c - 0x04];
+    cBehaviorStimuliOwner* mpBehavior;        // +0xb4c
+};
+// ---- items of slice s00d6ddd0 end
+
+// ---- items of slice s00d6de00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cNearNoun {
+    const Vec3* GetPosition(); // 0x00c6acc0
+};
+struct behavior_stimuli {
+    void ClearAll(unsigned int lo, unsigned int hi); // 0x00bc98f0
+};
+struct cBehaviorTreeData {
+    char mPad00[8];
+    behavior_stimuli mStimuli; // +0x08
+};
+class cSPCreatureBase {
+public:
+    cNearNoun* Get(); // 0x00c04590
+    void MoveToPointAtSpeed(int speed, const Vec3* pPos, float radius, float arrival); // 0x00c1c1d0
+
+    char mPad00[0xb4c];
+    cBehaviorTreeData* mpBTree; // +0xb4c
+};
+extern const float g_1470f1c_s00d6_de00; // 0x01470f1c, 2.0f
+// ---- items of slice s00d6de00 end
+
+// ---- items of slice s00d6de50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class cLocomotiveObject {
+public:
+    bool IsNearGoal() const; // 0x00c42e20
+};
+struct cStimulusContext;
+struct behavior_stimuli_s00d6_de50 {
+    cStimulusContext* Play(unsigned int lo, unsigned int hi); // 0x00bc96a0
+};
+struct cBehaviorTreeData_s00d6_de50 {
+    char mPad00[8];
+    behavior_stimuli_s00d6_de50 mStimuli; // +0x08
+};
+class cSPCreatureBase;
+struct Creature_s00d6_de50 {
+    char mPad00[0xc0];
+    cLocomotiveObject mLoco;              // +0xc0
+    char mPadC1[0xb4c - 0xc1];
+    cBehaviorTreeData_s00d6_de50* mpBTree;           // +0xb4c
+};
+cSPCreatureBase* GetStimulusCreature(cStimulusContext* context); // 0x00d99a10
+// ---- items of slice s00d6de50 end
+
+// ---- items of slice s00d6dea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class ICombatant_s00d6_dea0 {
+public:
+    PV2                                       // 0x00
+    virtual void* ToSpatialObject();          // 0x08
+    virtual void* ToGameData();               // 0x0c
+    PV8 PV8 PV8 PV4 PV                         // 0x10..0x80
+    virtual void SetCreatureTarget(void* a, void* b, void* c); // 0x84
+    bool Hover(bool enable);                  // 0x00c13a30
+};
+// ---- items of slice s00d6dea0 end
+
+// ---- items of slice s00d6e2e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1470f1c;                         // 0x01470f1c 2.0f
+void* FUN_004d47d0(void*, int);                 // 0x004d47d0 thiscall, one stack arg
+void* FUN_00bc9b00(uint32_t, void*, void*);     // 0x00bc9b00 stdcall (callee pops 3 dwords)
+void* FUN_00bca620(void*);                      // 0x00bca620 thiscall
+char  FUN_00c0b770(void*);                      // 0x00c0b770 thiscall
+char  FUN_00d6dcf0();                           // 0x00d6dcf0 SP::PLAY_FIGHT_Activate
+struct Species {
+    char  _p000[0x58c];
+    float mf58c;                                // +0x58c
+};
+struct BehaviorTree {
+    char     _p000[0x1d0];
+    uint32_t mTypeId;                           // +0x1d0
+};
+struct Creature_s00d6_e2e0 {
+    char  _p000[0xb20];
+    void* mpSpecies;                            // +0xb20
+};
+struct Neighbor {
+    char          _p000[0x135];
+    uint8_t       mFlag135;                     // +0x135
+    char          _p136[0xb4c - 0x136];
+    BehaviorTree* mpTree;                       // +0xb4c
+    char          _p0b50[0xb5e - 0xb50];
+    uint8_t       mDead;                        // +0xb5e
+};
+struct NeighborList {
+    char   _p000[0x40];
+    void** mpBegin;                             // +0x40
+    void** mpEnd;                               // +0x44
+};
+// ---- items of slice s00d6e2e0 end
+
+// @ 0x00d6ddd0
+void __cdecl FUN_00d6ddd0(ICombatant* creature)
+{
+    creature->SetCreatureTarget(0, 0, 0);
+    creature->mpBehavior->ClearSelection();
+}
+
+// @ 0x00d6de00
+bool __cdecl FUN_00d6de00(cSPCreatureBase* creature)
+{
+    creature->MoveToPointAtSpeed(2, creature->Get()->GetPosition(), 1.0f, g_1470f1c_s00d6_de00);
+    creature->mpBTree->mStimuli.ClearAll(0x400, 0);
+    return true;
+}
+
+// @ 0x00d6de50
+bool __cdecl FUN_00d6de50(Creature_s00d6_de50* creature)
+{
+    if (creature->mLoco.IsNearGoal())
+        return false;
+    cStimulusContext* block = creature->mpBTree->mStimuli.Play(0x400, 0);
+    if (block && GetStimulusCreature(block))
+        return false;
+    return true;
+}
+
+// @ 0x00d6dea0
+void __cdecl FUN_00d6dea0(ICombatant_s00d6_dea0* creature)
+{
+    creature->SetCreatureTarget(0, 0, 0);
+    creature->Hover(false);
+}
+
+// @ 0x00d6e2e0
+float __cdecl PLAY_FIGHT_Decide(Creature_s00d6_e2e0* self, int a1, int a2, int a3, void* stimuli, char* out, int a6, void* p7)
+{
+    (void)a1; (void)a2; (void)a3; (void)stimuli; (void)out; (void)a6; (void)p7;
+
+    if (TCS(void*, (void*, int), FUN_004d47d0)(self->mpSpecies, 0x1f)
+        && !(g_1470f1c > ((Species*)self->mpSpecies)->mf58c)) {
+        void* it = ((void*(__stdcall*)(uint32_t, void*, void*)) FUN_00bc9b00)(
+                        (uint32_t)0x53031f1, (void*)FUN_00d6dcf0, (void*)self);
+        void* node = TCS(void*, (void*), FUN_00bca620)(it);
+        if (node == 0) {
+            NeighborList* list = TCS(NeighborList*, (void*), FUN_00c04590)(self);
+            void** p = list->mpBegin;
+            void** end = list->mpEnd;
+            for (; p != end; ++p) {
+                Neighbor* c = (Neighbor*)*p;
+                if (TCS(char, (void*), FUN_00c0b770)(c)
+                    && c->mFlag135 != 0
+                    && c->mDead == 0
+                    && c->mpTree->mTypeId == 0x2d876b9u)
+                    return 1.0f;
+            }
+        } else {
+            if (!TCS(char, (void*), FUN_00bc9b50)(node))
+                return 1.0f;
+        }
+        return 0.0f;
+    }
+    return 0.0f;
+}
 
 // @ 0x00d6e3a0
 uint8_t __cdecl PLAY_FIGHT_Tick(Creature* self, int a1, int a2, int a3, int a4, int a5, int a6, float dt)

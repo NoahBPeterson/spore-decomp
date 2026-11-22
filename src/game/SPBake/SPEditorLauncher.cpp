@@ -622,6 +622,25 @@ static uint32_t GetEditorConfigForModel(const ResourceKey* key)
     return config;
 }
 
+// @ 0x005a9080
+SP::Editor::cEditorLaunchData_s005a_8d20::cEditorLaunchData_s005a_8d20()
+: mConfig((uint32_t)-1), mCallingAppModeID(SP::Editor::App()->GetModeID()), mIsFirstTimeInEditor(false),
+      mCanSwitchEditor(false), mUseAlternateName(false), mShowLoadButton(false), mShowSaveButton(false),
+      mShowNewButton(false), mConfirmOnExit(true), mPublishOnExit(false), mb3b(true), mb3c(false), mb3d(true),
+      mf60(0.0f), mb64(false), mb65(false), mb66(false), m68(0), mb6c(false), mb6d(true), mb6e(true), mb6f(false),
+      m84(0), m88(0), m8c(0), mCallerID(0)
+{
+}
+
+// @ 0x005a9170
+// cEditorLaunchData destructor (implicit): the forcing function below makes the compiler emit it out of line
+#pragma auto_inline(off)
+void rwForceEmit_cEditorLaunchData_s005a_8d20_dtor(SP::Editor::cEditorLaunchData_s005a_8d20* p)
+{
+    p->~cEditorLaunchData_s005a_8d20();
+}
+#pragma auto_inline(on)
+
 // @ 0x005a9200
 bool SP::Editor::Launch(SP::Editor::cEditorLaunchData_s005a_8d20* pData)
 {

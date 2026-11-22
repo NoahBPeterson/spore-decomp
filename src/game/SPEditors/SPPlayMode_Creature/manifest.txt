@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPPlayMode_Creature.cpp  ?SetPositionOffset@cSPCasual_Path@@QAEXMM@Z  0062da00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

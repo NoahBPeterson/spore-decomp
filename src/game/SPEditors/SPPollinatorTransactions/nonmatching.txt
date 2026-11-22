@@ -38,3 +38,7 @@
 0061c760 62 complete: vector<FeedDescription> assign from forward range; eastl helpers are externs; fixed: third (tag) arg (ret 0xc) and uninitialized_copy(mid,last,end) argument order flags: /O2 /MD /Gy /TP /arch:SSE
 0061c880 1434 complete: RequestAssetsFromFeed full port (sort, local/remote branches, variant map, notifications); register/scheduling not exact; difftest WEAK (no difference; 13% coverage) flags: /O2 /MD /Gy /TP /arch:SSE
 0061cf60 269 complete: cGetAssetFeedTransaction::HandleResult; original keeps the bool result in ebx and a 8-byte-larger frame flags: /O2 /MD /Gy /TP /arch:SSE
+0061bc50  152  FixedString8::swap: complete/non-exact; equiv WEAK 132 valid, 61.7% coverage; flags /O2 /MD /Gy /TP /arch:SSE
+0061be80  185  cContentValidationTransaction::cContentValidationTransaction: complete/non-exact; equiv PASS 286 valid, 100% coverage; flags /O2 /MD /Gy /TP /arch:SSE
+0061c070  208  VectorAssign: complete/non-exact; equiv UNSUPPORTED (custom register ABI); flags /O2 /MD /Gy /TP /arch:SSE
+0061c280  206  FixedString8::set_capacity: complete/non-exact; equiv WEAK 125 valid, 82.9% coverage; flags /O2 /MD /Gy /TP /arch:SSE

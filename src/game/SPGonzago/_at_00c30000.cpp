@@ -221,6 +221,16 @@ struct GroundBase {                                     // embedded at ground +0
     void   SetDir(const float* v);                      // slot 14 (+0x38)
     float  GetScalar();                                 // slot 13 (+0x34)
 };
+struct StreamWrite {                                    // vtable slot 6 (0x18)
+    virtual void s0(); virtual void s1(); virtual void s2();
+    virtual void s3(); virtual void s4(); virtual void s5();
+    virtual uint32_t Slot18();
+};
+struct CastTarget {                                     // vtable slot 8 (0x20)
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+    virtual StreamWrite* GetStream();
+};
 struct CallTarget0320 { void* Func(uint32_t key); };  // 0x00ac0320
 struct CallTargetB18460 { void* Func(uint32_t key); }; // 0x00b18460
 struct CallTargetC884f0 { void* Func(uint32_t key); }; // 0x00c884f0
@@ -266,9 +276,11 @@ struct FF360F0 {
 struct FF359A0 {
     void Setup(void* star, uint8_t flag);   // 0x00c359a0
 };
+struct GDVec;
 struct NounMgr {
     uint32_t ClassifyById(uint32_t id);   // 0x00b20790
     void*    GetFeedback(uint32_t id);    // 0x00b20750
+    GDVec*   GetGameDataVector(void* a, void* b, void* c, void* d, void* e);
 };
 struct StarMgr {
     void* GetPlayerStar();                // 0x00885c90
@@ -331,6 +343,7 @@ virtual void v5();
 // ---- items of slice s00c368c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
 typedef unsigned char  u8;
+typedef          int   s32;
 extern u32*        g_pBucketArr;   // 0x0152d6a0
 extern u32         g_nBuckets;     // 0x0152d6a4
 void*  __cdecl FUN_00f473a0(u32 size, const char* name, u32 a, u32 b, u32 c, u32 d);
@@ -431,6 +444,45 @@ struct EAHash {
 };
 void __stdcall WaitingList1_Insert(void* pos, void* value);   // 0x00690b80
 void __stdcall FUN_00695b40(void* a, void* b, const wchar_t* c); // 0x00695b40
+// ---- declarations for 0x00c36ae0 (attractor scan) ----
+typedef void*  (__thiscall *TFp0)(void*);
+typedef float* (__thiscall *TFfp0)(void*);
+typedef void   (__thiscall *TFv0)(void*);
+typedef void   (__thiscall *TFv1)(void*, u32);
+typedef void*  (__thiscall *TFmix)(void*, float, void*, void*, void*, void*);
+extern u8          g_b168df34;     // 0x0168df34
+extern void*       g_p158128c;     // 0x0158128c
+float  __cdecl GetPropFloat(void* src, u32 key, float def);
+u32    __cdecl FUN_00ac8fa0(void* src, u32 key, u32 def);
+u32    __cdecl FUN_00cee370();                 // 0x00cee370
+u8     __cdecl FUN_00c0c0e0();                 // 0x00c0c0e0
+u8     __cdecl FUN_00c0b7c0(u32 obj);          // 0x00c0b7c0
+void*  __cdecl FUN_00bc97f0(u32 a, u32 b, u32 c, u32 d);   // 0x00bc97f0
+void*  __cdecl FUN_00b3d240();                 // 0x00b3d240
+void   __cdecl FUN_00cd7d10();
+void   __cdecl FUN_00d3d420();
+void   __cdecl FUN_00ace0f0();
+void   __cdecl FUN_00b1e500();
+struct GDVec {
+  u32  pad00;
+  u32* mBegin;                 // +0x004
+  u32* mEnd;                   // +0x008
+};
+struct Cand {
+  u8    pad000[0xc0];          // +0x000
+  void* vtbl;                  // +0x0c0
+  u8    pad0c4[0x135 - 0xc4];  // +0x0c4
+  u8    b135;                  // +0x135
+  u8    pad136[0xb1c - 0x136]; // +0x136
+  s32   b1c;                   // +0xb1c
+  u8    padB20[0xb5e - 0xb20]; // +0xb20
+  u8    b5e;                   // +0xb5e
+};
+struct EffectC {
+  u8    pad00[0x0c];
+  float f0c;                                 // +0x00c
+  float f10;                                 // +0x010
+};
 // ---- items of slice s00c368c0 end
 
 // ---- items of slice s00c3daa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1260,6 +1312,36 @@ void cGameBundleGroundContainer::Dtor2c()
     }
 }
 
+// @ 0x00c366c0
+bool cGameBundleGroundContainer::Write(void* stream)
+{
+    uint32_t key = 0xeef202b7;
+    StreamWrite* w = ((CastTarget*)stream)->GetStream();
+    uint32_t sink = w->Slot18();
+    FUN_0093aa70((void*)sink, &key, 1, 0);
+    bool r = ((GroundBase*)mSpatial)->WriteObj((uint32_t)stream);
+    uint32_t zero = 0;
+    StreamWrite* w2 = ((CastTarget*)stream)->GetStream();
+    uint32_t sink2 = w2->Slot18();
+    FUN_0093aa70((void*)sink2, &zero, 1, 0);
+    return r;
+}
+
+// @ 0x00c36740
+bool cGameBundleGroundContainer::Read(void* stream)
+{
+    uint32_t key;
+    StreamWrite* w = ((CastTarget*)stream)->GetStream();
+    uint32_t sink = w->Slot18();
+    FUN_0093a780((void*)sink, &key, 1, 0);
+    bool r = ((GroundBase*)mSpatial)->ReadObj((uint32_t)stream);
+    StreamWrite* w2 = ((CastTarget*)stream)->GetStream();
+    uint32_t sink2 = w2->Slot18();
+    uint32_t end;
+    FUN_0093a780((void*)sink2, &end, 1, 0);
+    return r;
+}
+
 struct FFDirObj_c367e0 {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
     virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
@@ -1383,6 +1465,75 @@ u8 __fastcall FUN_00c368c0(Ufo* self, void* dummy, ParamObj* param)
   FUN_00695b40(self, (void*)0x01567e48, L"cGameData");
   FUN_00695b40(&self->loco, (void*)0x015816b8, L"cGameBundleContainer");
   return 1;
+}
+
+// @ 0x00c36ae0
+void __fastcall FUN_00c36ae0(Ufo* self, void* dummy, float dt)
+{
+  (void)dummy;
+  self->f58 -= dt;
+  if (self->f58 > 0.0f) return;
+  self->f58 = GetPropFloat(g_p158128c, 0x5aac320eu, 1.0f);
+
+  u32 count = FUN_00cee370();
+  if (count == 0) return;
+
+  u32 a = FUN_00ac8fa0(g_p158128c, 0xfccc22aeu, 5);
+  float radius = GetPropFloat(g_p158128c, 0x1d3a528u, 50.0f);
+  u32 b = FUN_00ac8fa0(g_p158128c, 0xfd23371du, 5);
+  u32 limit = (b < 0x11) ? b : 16u;
+
+  if (count <= self->idx5c) self->idx5c = 0;
+  u32 n = (count <= a) ? count : a;
+
+  for (u32 k = n; k != 0; --k) {
+    u32 obj = self->p38[self->idx5c];
+    bool slow = (g_b168df34 == 0);
+    self->idx5c = (self->idx5c + 1) % count;
+    if (slow) {
+      float r2 = radius * radius;
+      u32 found = 0;
+      NounMgr* nm = (NounMgr*)FUN_00b3d300();
+      GDVec* vec = nm->GetGameDataVector((void*)&FUN_00cd7d10, (void*)&FUN_00d3d420,
+                                         (void*)&FUN_00ace0f0, (void*)&FUN_00b1e500,
+                                         (void*)&g_b168df34);
+      for (u32* it = vec->mBegin; it != vec->mEnd; ++it) {
+        if (found >= limit) break;
+        Cand* cand = (Cand*)*it;
+        if (cand->b135 != 0 && cand->b5e == 0 && FUN_00c0c0e0() == 0 && FUN_00c0b7c0(obj) != 0) {
+          float* pa = ((TFfp0)((void**)self->loco.vtbl)[0x2c / 4])(&self->loco);
+          float* pb = ((TFfp0)((void**)cand->vtbl)[0x2c / 4])(cand);
+          float dx = pb[0] - pa[0];
+          float dy = pb[1] - pa[1];
+          float dz = pb[2] - pa[2];
+          if (dx * dx + dy * dy + dz * dz < r2) {
+            EffectC* e = (EffectC*)FUN_00bc97f0(0, 0x100, 0x7f7fffff, obj);
+            if (e != 0) { e->f0c = 10.0f; e->f10 = 60.0f; }
+            ++found;
+          }
+        }
+      }
+    } else {
+      u32 buf[16];
+      PtrVec vec;
+      vec.mBegin = buf;
+      vec.mEnd = buf;
+      void** mgr = (void**)FUN_00b3d240();
+      void* h = ((TFmix)((void**)self->loco.vtbl)[0x2c / 4])(&self->loco, radius, &vec,
+                                                             0, (void*)&FUN_00c36870, (void*)obj);
+      ((TFv1)((void**)*mgr)[0x48 / 4])(mgr, (u32)h);
+      u32 c = 0;
+      for (u32* it = vec.mBegin; it != vec.mEnd && c < limit; ++it, ++c) {
+        EffectC* e = (EffectC*)FUN_00bc97f0(0, 0x100, 0x7f7fffff, obj);
+        if (e != 0) { e->f0c = 10.0f; e->f10 = 60.0f; }
+      }
+      for (u32* it = vec.mBegin; it != vec.mEnd; ++it) {
+        void* p = (void*)*it;
+        if (p != 0) ((TFv0)(*(void***)p)[0x0c0 / 4])(p);
+      }
+      if (vec.mBegin != 0 && buf[-1] != 0) FUN_00f47380(vec.mBegin);
+    }
+  }
 }
 
 // @ 0x00c3e2c0

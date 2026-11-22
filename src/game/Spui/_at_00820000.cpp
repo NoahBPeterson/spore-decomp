@@ -1047,6 +1047,9 @@ void C25b::Do(int arg)
   }
 }
 
+// @ 0x00828ea0
+// cWrap scalar deleting destructor (implicit): emitted with the vtable by cWrap::cWrap above
+
 // @ 0x00828e30
 cRender2D* __cdecl BeginRender(RenderContext* ctx, IProv* prov, cWrap** out)
 {
@@ -1169,6 +1172,9 @@ Rect* cPropLayout::GetRectLocal(Rect* out)
 // @ 0x00829770
 cPropLayout::cPropLayout()
 : mBusy(false), mMoved(false), mPending(false), mOffset(0.0f), m10(0) {}
+
+// @ 0x00829a70
+// cPropLayout scalar deleting destructor (implicit): emitted with the vtable by cPropLayout::cPropLayout above
 
 // @ 0x00829ad0
 RefVec& RefVec::operator=(const RefVec& x)

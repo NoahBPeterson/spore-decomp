@@ -11,6 +11,7 @@
 #include "cSPTransform.h"
 #include "EA/Swarm/cTransform.h"
 #include <string.h>
+#include <intrin.h>
 
 // ---- items of slice s00a81110 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
@@ -37,6 +38,8 @@ extern const float DAT_016779fc, DAT_01677a00;
 extern char  DAT_01677ad8[];                           // identity Matrix3
 
 // ---- items of slice s00a820e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_16779fc[];
+extern "C" char g_1677a00[];
 extern "C" void* FUN_00883860();                     // EA::Messaging::GetServer, 0x00883860
 typedef unsigned char  u8;
 typedef signed   int   i32;
@@ -115,9 +118,27 @@ struct cVisualEffect {
     void ApplyCursorControl(float* p);
     bool SetUnknownParam(u32 idx, void* val);
 };
+static inline void setTimeFlag(u32& flags, cVisualEffect* self, bool on)
+{
+    if (on) {
+        flags |= 0x2000;
+        _ReadWriteBarrier();
+        self->m180 = *(i32*)(self->m28 + 0x40);
+        return;
+    }
+    flags &= ~0x2000;
+    _ReadWriteBarrier();
+    self->m180 = *(i32*)(self->m28 + 0x40);
+}
 // ---- items of slice s00a820e0 end
 
 // ---- items of slice s00a83c00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Matrix3_s00a8_3c00;
+extern const Matrix3_s00a8_3c00 DAT_01677ad8_s00a8_3c00;                             // identity 3x3
+struct Matrix3_s00a8_3c00 {
+    float m[9];
+    Matrix3_s00a8_3c00& operator=(const Matrix3_s00a8_3c00& o);                      // 0x0041cb40
+};
 template <class T> struct SpVector {
     T*       mpBegin;
     T*       mpEnd;
@@ -194,6 +215,12 @@ static inline void CallVtbl1(void* obj) { ((VtblFn*)(*(void***)obj))[1](obj); }
 static inline void CallVtbl2(void* obj) { ((VtblFn*)(*(void***)obj))[2](obj); }
 typedef void (__thiscall *VtblFnI)(void*, int);
 static inline void CallVtbl3(void* obj, int a) { ((VtblFnI*)(*(void***)obj))[3](obj, a); }
+extern char g_vtbl_0x1457e50[];
+extern char g_vtbl_0x1457e14[];
+extern char g_vtbl_0x1457e10[];
+extern char g_vtbl_0x13ef094[];
+extern char g_vtbl_0x13f21d4[];
+extern char g_vtbl_0x13f2194[];
 // ---- items of slice s00a83c00 end
 
 // @ 0x00a81d80
@@ -429,6 +456,35 @@ void cVisualEffect::SetIsVisible(int visible)
         void* c = comp(e);
         ((Fn1)(*(void***)c)[0x28 / 4])(c, visible);
     }
+}
+
+// @ 0x00a82370
+void cVisualEffect::SetDescription(int desc)
+{
+    m28 = desc;
+    m5c = *(i32*)(desc + 8);
+    if (*(i32*)(desc + 0x1c) != *(i32*)(desc + 0x20))
+        m2c |= 0x800;
+    else
+        m2c &= ~0x800;
+    _ReadWriteBarrier();
+    setTimeFlag(m2c, this, *(float*)(m28 + 0x14) != 0.0f);
+}
+
+// @ 0x00a823e0
+void cVisualEffect::UpdateDescription(int desc)
+{
+    int* d = (int*)desc;
+    m28 = desc;
+    m5c = d[2];
+    if (d[7] != d[8])
+        m2c |= 0x800;
+    else
+        m2c &= ~0x800;
+    m50 = *(u32*)g_16779fc;
+    _ReadWriteBarrier();
+    m54 = *(u32*)g_1677a00;
+    m180 = *(i32*)(m28 + 0x40);
 }
 
 // @ 0x00a82430
@@ -749,6 +805,85 @@ bool cVisualEffect::SetUnknownParam(u32 idx, void* val)
             any = true;
     }
     return any;
+}
+
+// @ 0x00a83c00
+cVisualEffect_s00a8_3c00* cVisualEffect_s00a8_3c00::Construct()
+{
+    char* p = (char*)this;
+    *(void**)(p + 0x08) = g_vtbl_0x13ef094;
+    *(void**)(p + 0x0c) = 0;
+    *(void**)(p + 0x04) = g_vtbl_0x13f21d4;
+    *(void**)(p + 0x08) = g_vtbl_0x13f2194;
+    *(void**)(p + 0x00) = g_vtbl_0x1457e50;
+    *(void**)(p + 0x04) = g_vtbl_0x1457e14;
+    *(void**)(p + 0x08) = g_vtbl_0x1457e10;
+    *(int*)(p + 0x10) = 0;
+    *(float*)(p + 0x24) = 0.0f;
+    *(void**)(p + 0x28) = 0;
+    *(uint32_t*)(p + 0x18) = 0xffffffffu;
+    *(uint32_t*)(p + 0x1c) = 0xffffffffu;
+    *(uint32_t*)(p + 0x20) = 0xffffffffu;
+    *(uint32_t*)(p + 0x2c) = 0;
+    *(float*)(p + 0x30) = DAT_01677a2c;
+    *(float*)(p + 0x34) = DAT_01677a30;
+    *(float*)(p + 0x38) = DAT_01677a34;
+    *(float*)(p + 0x3c) = DAT_01677a04;
+    *(float*)(p + 0x40) = DAT_01677a08;
+    *(float*)(p + 0x44) = DAT_01677a0c;
+    *(float*)(p + 0x4c) = 0.0f;
+    *(uint32_t*)(p + 0x48) = 0;
+    *(float*)(p + 0x50) = DAT_016779fc;
+    *(float*)(p + 0x54) = DAT_01677a00;
+    *(float*)(p + 0x58) = DAT_01485720;
+    *(uint32_t*)(p + 0x5c) = 0;
+    *(uint32_t*)(p + 0x60) = 0;
+
+    *(uint16_t*)(p + 0x66) = 0;
+    *(uint16_t*)(p + 0x64) = 0;
+    *(float*)(p + 0x68) = DAT_01677a2c;
+    *(float*)(p + 0x6c) = DAT_01677a30;
+    *(float*)(p + 0x70) = DAT_01677a34;
+    *(float*)(p + 0x74) = DAT_01485720;
+    ((Matrix3_s00a8_3c00*)(p + 0x78))->operator=(DAT_01677ad8_s00a8_3c00);
+
+    *(uint32_t*)(p + 0x9c) = 0;
+    *(float*)(p + 0xa0) = DAT_01677a2c;
+    *(float*)(p + 0xa4) = DAT_01677a30;
+    *(float*)(p + 0xa8) = DAT_01677a34;
+    *(float*)(p + 0xac) = DAT_01485720;
+    ((Matrix3_s00a8_3c00*)(p + 0xb0))->operator=(DAT_01677ad8_s00a8_3c00);
+
+    *(uint32_t*)(p + 0xd4) = 0;
+    *(float*)(p + 0xd8) = DAT_01677a2c;
+    *(float*)(p + 0xdc) = DAT_01677a30;
+    *(float*)(p + 0xe0) = DAT_01677a34;
+    *(float*)(p + 0xe4) = DAT_01485720;
+    ((Matrix3_s00a8_3c00*)(p + 0xe8))->operator=(DAT_01677ad8_s00a8_3c00);
+
+    *(uint32_t*)(p + 0x10c) = 0;
+    *(float*)(p + 0x110) = DAT_01677a2c;
+    *(float*)(p + 0x114) = DAT_01677a30;
+    *(float*)(p + 0x118) = DAT_01677a34;
+    *(float*)(p + 0x11c) = DAT_01485720;
+    ((Matrix3_s00a8_3c00*)(p + 0x120))->operator=(DAT_01677ad8_s00a8_3c00);
+
+    float s = DAT_013eb1bc;
+    *(uint32_t*)(p + 0x144) = 0;
+    *(uint32_t*)(p + 0x148) = 0;
+    *(uint32_t*)(p + 0x14c) = 0;
+    *(uint32_t*)(p + 0x158) = 0;
+    *(uint32_t*)(p + 0x15c) = 0;
+    *(uint32_t*)(p + 0x160) = 0;
+    *(uint32_t*)(p + 0x164) = 0;
+    *(float*)(p + 0x168) = s;
+    *(float*)(p + 0x16c) = s;
+    *(uint32_t*)(p + 0x174) = 0;
+    *(uint32_t*)(p + 0x178) = 0;
+    *(uint32_t*)(p + 0x17c) = 0;
+    *(uint32_t*)(p + 0x180) = 0;
+    *(float*)(p + 0x170) = s;
+    return this;
 }
 
 // @ 0x00a83ee0

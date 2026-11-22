@@ -1,6 +1,8 @@
 # va  diff-bytes  reason
-0082ab00 11 complete translation; parameter register allocation differs (a in ecx vs eax)
-0082ab40 123 complete translation; wide-string compare not identical to the inlined form
+0082aac0 23  complete translation; original keeps a dead store to +0x10 that cl eliminates flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082ab00 11 complete translation; parameter register allocation differs (a in ecx vs eax) flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082ab40 134 complete translation; retail's TableLookup is __stdcall (callee pops both args, ret 8), so the source now declares it __stdcall: saved replay identical, fresh gate PASS 397/400 valid, 100%. The inlined wide-string compare schedule still differs (chk diff 134; 131 orig vs 136 ours). flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082abd0 190 complete translation; allocator register allocation differs (retail spills `this` via push ecx and restores it on every return, so entry ecx survives; cl keeps `this` in esi, so equiv reports a benign ecx-clobber FAIL under the standard ABI) flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082afe0 189 complete translation; inlined wide-string compare not identical
 0082b060 58 complete translation; EASTL array zero-fill schedule differs
 0082b7f0 68 complete translation; allocator fast-path register allocation differs

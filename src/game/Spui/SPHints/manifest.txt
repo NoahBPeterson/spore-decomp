@@ -1,12 +1,12 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPHints.cpp  ?find@C_aee0@@QAEPAUE_aee0@@H@Z  0067aee0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?dtor@cHint@@QAEXXZ  0067b1f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?init@cHintManager@@QAEPAU1@XZ  0067b270  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?InitHints@cUIHints@@QAEXXZ  0067ba10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?Destroy2@cUIHints@@QAEXXZ  0067bb80  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?Insert@WStr@@QAEHHH@Z  0067bbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?UpdateHints@cUIHints@@QAEXDD@Z  0067c350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?SetFlag@cUIHints@@QAEHDH@Z  0067c420  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?Update@cUIHints_s0067_c450@@QAEXXZ  0067c960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?FUN_0067ca40@@YIXPAUcUIHintsThunkTarget@@@Z  0067ca40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?AddCondition@cUIHints_s0067_c450@@QAEXPAX@Z  0067ca50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/Spui/SPHints.cpp  ?Update@cUIHints_s0067_c450@@QAEXXZ  0067c960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPHints.cpp  ?init@cHintManager@@QAEPAU1@XZ  0067b270  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/Spui/SPHints.cpp  ?Destroy2@cUIHints@@QAEXXZ  0067bb80  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
-../src/game/Spui/SPHints.cpp  ?InitHints@cUIHints@@QAEXXZ  0067ba10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

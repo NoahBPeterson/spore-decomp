@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00e916a0  610  under-built; model fade update reduced to the flag/store prologue, 278 vs 744 bytes; equiv FAIL execution flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00e91990  453  under-built; cViewA factory reduced to alloc + ref-assignments, 208 vs 486 bytes; equiv FAIL call #0 (depth 1) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

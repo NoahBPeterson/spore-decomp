@@ -1093,10 +1093,10 @@ static __forceinline void AccWeighted(uint8_t& dest, int srcByte, int weight)
     uint8_t add = (uint8_t)(((unsigned)(v >> 8) + (unsigned)v) >> 8);
     dest = (uint8_t)(dest + add);
 }
-static uint32_t MapPixelLocal(uint32_t* colors, uint32_t pixel, int* outIndex); // 0x007ad2e0
+uint32_t mappixel(uint32_t* colors, uint32_t pixel, uint32_t* outIndex);            // 0x007ad2e0
 uint32_t mappixeltransparent(uint32_t pixel, uint32_t* outIndex, uint32_t* colors); // 0x007ad400
 uint32_t trymappixel(uint32_t pixel, uint32_t* colors);                             // 0x007ad610
-static uint32_t RBMapPixelLocal(uint32_t pixel, uint32_t* colors);                  // 0x007ad760
+uint32_t rbmappixel(uint32_t pixel, uint32_t* colors);                              // 0x007ad760
 // ---- items of slice s007acbb0 end
 
 // @ 0x004e0880
@@ -1114,6 +1114,119 @@ template <class T> void eastl::vector_s004e_01d0<T>::reserve(uint32_t n)
     }
 }
 template void eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<SP::cTextureInstance_s004e_01d0> >::reserve(uint32_t);
+
+// @ 0x007ace40
+void FUN_007ace40(uint8_t* dest, int destStride, uint8_t* src, int srcStride, int width, int height)
+{
+    uint8_t* s2 = src + srcStride;
+    uint8_t* d = dest;
+    int step = (srcStride - width) * 2;
+    destStride -= width;
+    do {
+        int n = width;
+        do {
+            *d = (uint8_t)((src[1] + s2[1] + s2[0] + src[0] + 2) >> 2);
+            d++;
+            src += 2;
+            s2 += 2;
+        } while (--n);
+        d += destStride;
+        src += step;
+        s2 += step;
+    } while (--height);
+}
+
+// @ 0x007aceb0
+void FUN_007aceb0(uint8_t* dest, int destStride, uint8_t* src, int srcStride, int rows)
+{
+    int n = rows;
+    uint8_t* d = dest;
+    uint8_t* s2 = src + srcStride;
+    int step = srcStride * 2;
+    do {
+        *d = (uint8_t)((src[0] + s2[0] + 1) >> 1);
+        d += destStride;
+        src += step;
+        s2 += step;
+    } while (--n);
+}
+
+// @ 0x007acef0
+void FUN_007acef0(uint32_t* dest, int destStride, uint32_t* src, int srcStride, int width, int height)
+{
+    uint32_t* d = dest;
+    uint32_t* s2 = (uint32_t*)((char*)src + srcStride);
+    int step = (srcStride - width * 4) * 2;
+    int pad = destStride - width * 4;
+    do {
+        int n = width;
+        do {
+            uint32_t a = (src[1] | src[0]) - (((src[1] ^ src[0]) >> 1) & 0x7f7f7f7f);
+            uint32_t b = (s2[1] | s2[0]) - (((s2[1] ^ s2[0]) >> 1) & 0x7f7f7f7f);
+            *d = (a | b) - (((a ^ b) >> 1) & 0x7f7f7f7f);
+            d++;
+            src += 2;
+            s2 += 2;
+        } while (--n);
+        d = (uint32_t*)((char*)d + pad);
+        src = (uint32_t*)((char*)src + step);
+        s2 = (uint32_t*)((char*)s2 + step);
+    } while (--height);
+}
+
+// @ 0x007acfa0
+void FUN_007acfa0(uint32_t* dest, int destStride, uint32_t* src, int srcStride, int rows)
+{
+    uint32_t* d = dest;
+    uint32_t* s2 = (uint32_t*)((char*)src + srcStride);
+    int step = srcStride * 2;
+    do {
+        uint32_t a = *src;
+        uint32_t b = *s2;
+        *d = (b | a) - (((b ^ a) >> 1) & 0x7f7f7f7f);
+        d = (uint32_t*)((char*)d + destStride);
+        src = (uint32_t*)((char*)src + step);
+        s2 = (uint32_t*)((char*)s2 + step);
+    } while (--rows);
+}
+
+// @ 0x007acfe0
+bool FUN_007acfe0(DXTDesc* dst, DXTDesc* src)
+{
+    int s1c = src->mField1c;
+    int d1c = dst->mField1c;
+    if ((d1c == s1c * 2) || ((d1c == 1) && (s1c == 1))) {
+        int s20 = src->mField20;
+        if (((dst->mField20 == s20 * 2) || ((dst->mField20 == 1) && (s20 == 1))) &&
+            (dst->mFormat == src->mFormat)) {
+            int n1c = d1c;
+            int n1c2 = s1c;
+            if (dst->mFormat == 2) {
+                n1c = d1c * 4;
+                n1c2 = s1c * 4;
+            }
+            if (dst->mField20 == 1)
+                n1c = 0;
+            if (dst->mFormat == 1) {
+                if (d1c > 1) {
+                    FUN_007ace40((uint8_t*)src->mpData, n1c2, (uint8_t*)dst->mpData, n1c, s1c, s20);
+                    return true;
+                }
+                FUN_007aceb0((uint8_t*)src->mpData, n1c2, (uint8_t*)dst->mpData, n1c, s20);
+                return true;
+            }
+            if (dst->mFormat == 2) {
+                if (d1c > 1) {
+                    FUN_007acef0((uint32_t*)src->mpData, n1c2, (uint32_t*)dst->mpData, n1c, s1c, s20);
+                    return true;
+                }
+                FUN_007acfa0((uint32_t*)src->mpData, n1c2, (uint32_t*)dst->mpData, n1c, s20);
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 // @ 0x007ad0c0
 bool FUN_007ad0c0(DXTDesc* params, DXTDesc* image)
@@ -1155,7 +1268,8 @@ bool FUN_007ad0c0(DXTDesc* params, DXTDesc* image)
 }
 
 // @ 0x007ad2e0
-static uint32_t MapPixelLocal(uint32_t* colors, uint32_t pixel, int* outIndex)
+#define mappixel static mappixel
+uint32_t mappixel(uint32_t* colors, uint32_t pixel, uint32_t* outIndex)
 {
     int d0 = (int)(colors[0] & 0xff) - (int)(colors[1] & 0xff);
     int d1 = (int)((colors[0] >> 8) & 0xff) - (int)((colors[1] >> 8) & 0xff);
@@ -1183,6 +1297,7 @@ static uint32_t MapPixelLocal(uint32_t* colors, uint32_t pixel, int* outIndex)
     *outIndex = index;
     return best / 9;
 }
+#undef mappixel
 
 // @ 0x007ad400
 uint32_t mappixeltransparent(uint32_t pixel, uint32_t* outIndex, uint32_t* colors)
@@ -1223,7 +1338,8 @@ uint32_t trymappixel(uint32_t pixel, uint32_t* colors)
 }
 
 // @ 0x007ad760
-static uint32_t RBMapPixelLocal(uint32_t pixel, uint32_t* colors)
+#define rbmappixel static rbmappixel
+uint32_t rbmappixel(uint32_t pixel, uint32_t* colors)
 {
     uint32_t pr = pixel & 0xff, pb = (pixel >> 16) & 0xff;
     uint32_t best = 0x7fffffff;
@@ -1237,6 +1353,7 @@ static uint32_t RBMapPixelLocal(uint32_t pixel, uint32_t* colors)
     }
     return best;
 }
+#undef rbmappixel
 
 // @ 0x007ad950
 extern "C" uint32_t trymapblockfast(uint32_t c0, uint32_t c1, uint32_t cand2, uint32_t cand3, uint32_t* pixels, uint32_t threshold)
@@ -1308,7 +1425,7 @@ void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int m
             int bits = 0;
             for (int k = 0; k < 8; k += 2) {
                 int idx = 0;
-                MapPixelLocal(pal, *src, &idx);
+                mappixel(pal, *src, (uint32_t*)&idx);
                 bits |= idx << k;
                 src++;
             }
@@ -1395,7 +1512,7 @@ uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
     BuildPalette(pal, pal[0], pal[1], raw0, raw1);
     uint32_t total = 0;
     for (int i = 0; i < 16; i++)
-        total += RBMapPixelLocal(src[i], pal);
+        total += rbmappixel(src[i], pal);
     return total;
 }
 

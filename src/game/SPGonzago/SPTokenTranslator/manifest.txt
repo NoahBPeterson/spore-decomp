@@ -1,1 +1,3 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPTokenTranslator.cpp  ?FUN_01049f90@cSpaceTokenTranslator_s0104_9040@@QAEXPAUWString@@@Z  01049f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTokenTranslator.cpp  ??1cSpaceTokenTranslator_s0104_9040@@UAE@XZ  0104a210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

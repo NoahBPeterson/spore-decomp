@@ -15,9 +15,58 @@ extern "C" long _InterlockedExchange(volatile long*, long);
 extern "C" long _InterlockedIncrement(volatile long*);
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedIncrement)
 
+extern "C" __declspec(dllimport) int __cdecl towlower(int c);
+extern "C" int __cdecl iswctype(unsigned c, unsigned t);
+
+// name-from-key hooks (address in the name)
+extern void* g_pfn_154c464;
+extern void* g_pfn_154c468;
+
 // ---- items of slice s008dd0d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Str { void append(const wchar_t* s); };
 // ---- items of slice s008dd0d0 end
+
+// @ 0x008dd7d0
+extern "C" unsigned FUN_008dd7d0(const unsigned short* s, int count)
+{
+    unsigned h = 0x811c9dc5;
+    while (count-- != 0) {
+        h = h * 0x1000193 ^ (unsigned short)towlower(*s++);
+    }
+    return h;
+}
+
+// @ 0x008dd820
+extern "C" unsigned short* FUN_008dd820(unsigned short* p, unsigned short* end, char a3, char a4)
+{
+    unsigned short* start = p;
+    if (a3 != 0) {
+        for (; p != end; ++p)
+            if (*p == 0x5f)
+                start = p + 1;
+    }
+    if ((int)((end - start) & 0xfffffffe) < 0x10)
+        return 0;
+    if (*start == 0x30 && (start[1] == 0x78 || start[1] == 0x58))
+        start += 2;
+    else if (!iswctype(*start, 4))
+        return 0;
+    int n = 0;
+    unsigned short* q = start;
+    if (start != end) {
+        do { if (!iswctype(*q, 0x80)) return 0; ++q; ++n; } while (q != end);
+        if (n == 8 || (n == 0x10 && a4))
+            return start;
+    }
+    return 0;
+}
+
+// @ 0x008dd8d0
+extern "C" void FUN_008dd8d0(void* a, void* b)
+{
+    g_pfn_154c464 = a;
+    g_pfn_154c468 = b;
+}
 
 // @ 0x008dd8f0
 extern "C" int FUN_008dd8f0(int* self, void* out)

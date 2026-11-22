@@ -7,8 +7,27 @@
 #include <math.h>
 #include <string.h>
 #include "EA/Allocator/StackAllocator.h"
+#include <intrin.h>
 
 // ---- items of slice s00829bc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern unsigned short g_abWord;   // 0x141a154
+struct Node { Node* pNext; uint32_t e; uint32_t f; };
+struct Cursor {
+  char pad0[4];
+  uint32_t mLo;    // +4
+  uint32_t mHi;    // +8
+  uint32_t mA;     // +0xc
+  uint32_t mB;     // +0x10
+  char pad14[0xc];
+  Node* mpNode;    // +0x20
+  void Other(uint32_t v);
+  void Set(uint32_t v);
+  void Next();
+};
+struct CursorRef {
+  Cursor* mpCursor;   // +0
+  void Next();
+};
 struct TableEntry { const unsigned short* mpName; uint32_t mValue; };
 struct Table {
   char pad0[4];
@@ -21,6 +40,26 @@ static int CmpStr16(const unsigned short* a, const unsigned short* b) {
   while (*a == *b) { if (!*a) return 0; ++a; ++b; }
   return *a < *b ? -1 : 1;
 }
+struct Blk {
+  Blk* pNext;         // +0x00
+  uint32_t mTag;      // +0x04
+  uint32_t mPad8;     // +0x08
+  const void* mData;  // +0x0c
+  uint32_t mPad10;    // +0x10
+  uint32_t mCount;    // +0x14
+};
+struct StackAllocator_s0082_9bc0 {
+  char pad0[0x08];
+  uint32_t mCap;    // +0x08
+  uint32_t mBase;   // +0x0c
+  uint32_t mCur;    // +0x10
+  bool AllocateNewBlock(unsigned size);   // 0x928ba0
+};
+struct Alloc {
+  char pad0[0x10];
+  StackAllocator_s0082_9bc0 mAlloc;   // +0x10
+  uint32_t AddBlock(Blk* b);
+};
 // ---- items of slice s00829bc0 end
 
 // ---- items of slice s0082acb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -348,6 +387,19 @@ struct DeserializeHelper {
 };
 // ---- items of slice s0082cd30 end
 
+// @ 0x0082aac0
+void CursorRef::Next()
+{
+  Cursor* s = mpCursor;
+  Node* p = s->mpNode;
+  if (!p) return;
+  uint32_t e = p->e, f = p->f;
+  s->mpNode = p->pNext;
+  if (e > s->mLo && e < s->mHi) { s->mB = e; s->mB = f; s->mA = e; return; }
+  s->Other(e);
+  s->mB = f;
+}
+
 // @ 0x0082ab00
 int RangeCheck(int a, int b)
 {
@@ -355,9 +407,6 @@ int RangeCheck(int a, int b)
   if ((unsigned)(a - 3) <= 3 && b - a == 4) return 1;
   return 0;
 }
-
-
-
 
 // @ 0x0082ab40
 uint32_t __stdcall TableLookup(Table* t, const unsigned short* key)
@@ -369,15 +418,41 @@ uint32_t __stdcall TableLookup(Table* t, const unsigned short* key)
   return 0;
 }
 
-
+// @ 0x0082abd0
+uint32_t Alloc::AddBlock(Blk* b)
+{
+  if (!b->pNext || b->pNext->mTag != 4) return (uint32_t)b->mData;
+  // Access mAlloc through `this` (retail rebuilds &mAlloc after the loop and spills the
+  // incoming ecx to a home slot; cl keeps `this` in esi instead).
+  while (b) {
+    if (b->mTag != 4) break;
+    unsigned n = b->mCount * 2;
+    if (mAlloc.mCur + n <= mAlloc.mCap || mAlloc.AllocateNewBlock(n)) {
+      memcpy((void*)mAlloc.mCur, b->mData, n);
+      mAlloc.mCur += n;
+    }
+    b = b->pNext;
+  }
+  if (mAlloc.mCur != mAlloc.mBase) {
+    uint32_t old = mAlloc.mBase;
+    if (mAlloc.mCur + 2 <= mAlloc.mCap || mAlloc.AllocateNewBlock(2)) {
+      *(unsigned short*)mAlloc.mCur = g_abWord;
+      mAlloc.mCur += 2;
+    }
+    unsigned aligned = (mAlloc.mCur + 7) & ~7u;
+    mAlloc.mCur = aligned;
+    if (aligned > mAlloc.mCap) mAlloc.mCur = mAlloc.mCap;
+    mAlloc.mBase = mAlloc.mCur;
+    return old;
+  }
+  return 0;
+}
 
 // @ 0x0082acb0
 void SerializeHelper::ParseValue()
 {
   // Full recursive-descent serializer not reconstructed.
 }
-
-
 
 // @ 0x0082afe0
 int __stdcall LookupCode(const unsigned short* key)
@@ -391,8 +466,6 @@ int __stdcall LookupCode(const unsigned short* key)
   }
   return 0;
 }
-
-
 
 // @ 0x0082b060
 Value20* SerializeHelper::NewArrayValue(int count)
@@ -413,8 +486,6 @@ Value20* SerializeHelper::NewArrayValue(int count)
   memset(p, 0, size);
   return p;
 }
-
-
 
 // @ 0x0082b0d0
 void StackAlloc::AllocateNewBlock(Bookmark* b)
@@ -447,21 +518,15 @@ void StackAlloc::AllocateNewBlock(Bookmark* b)
   mpTop = (void*)p;
 }
 
-
-
 // @ 0x0082b160
 void SerializeHelper::SkipProperty()
 {
 }
 
-
-
 // @ 0x0082b310
 void SerializeHelper::ReadProperty()
 {
 }
-
-
 
 // @ 0x0082b7f0
 void* SerAlloc::Allocate(uint32_t align, uint32_t size)
@@ -480,31 +545,21 @@ void* SerAlloc::Allocate(uint32_t align, uint32_t size)
   return (void*)p;
 }
 
-
-
 // @ 0x0082b880
 void RefSlot::Write8(unsigned a)
 { mp->m14(&a, 1); }
-
-
 
 // @ 0x0082b8a0
 void RefSlot::Write16(unsigned a)
 { mp->m14(&a, 2); }
 
-
-
 // @ 0x0082b8c0
 void RefSlot::Write32(unsigned a)
 { mp->m14(&a, 4); }
 
-
-
 // @ 0x0082b8e0
 void RefSlot::Write64(unsigned a, unsigned b)
 { mp->m14(&a, 8); (void)b; }
-
-
 
 // @ 0x0082b920
 Pair16* Pool16::NewPair()
@@ -524,8 +579,6 @@ Pair16* Pool16::NewPair()
   return p;
 }
 
-
-
 // @ 0x0082b970
 Tri12* Pool12::NewTri()
 {
@@ -544,12 +597,10 @@ Tri12* Pool12::NewTri()
   return p;
 }
 
-
 // @ 0x0082b9c0
 void SerializeHelperProcessTokens2()
 {
 }
-
 
 // @ 0x0082bfa0
 U16Vec* U16Vec::Setup(unsigned n, const void* alloc)
@@ -567,13 +618,11 @@ U16Vec* U16Vec::Setup(unsigned n, const void* alloc)
   return this;
 }
 
-
 // @ 0x0082c000
 void RBTree::Insert(void* node, void* parent, void* where, int flag)
 {
   (void)node; (void)parent; (void)where; (void)flag;
 }
-
 
 // @ 0x0082c190
 RLEHitMask::RLEHitMask()
@@ -588,47 +637,39 @@ RLEHitMask::RLEHitMask()
   m1c = 0;
 }
 
-
 // @ 0x0082c1d0
 void RLEHitMaskDestroy(RLEHitMask* p)
 { (void)p; }
-
 
 // @ 0x0082c210
 void WriteHitmaskInline()
 {
 }
 
-
 // @ 0x0082c420
 void SerializeHelperWrite2()
 {
 }
-
 
 // @ 0x0082c550
 void SerializeHelperNuke()
 {
 }
 
-
 // @ 0x0082c5a0
 void SerializeHelperNuke2()
 {
 }
-
 
 // @ 0x0082c770
 void SerializeHelperWrite3()
 {
 }
 
-
 // @ 0x0082c810
 void SerializeHelperWrite4()
 {
 }
-
 
 // @ 0x0082cc60
 U16Vec* U16Vec::Init(unsigned n, const void* alloc)
@@ -642,7 +683,6 @@ U16Vec* U16Vec::Init(unsigned n, const void* alloc)
   mpEnd = mpBegin + n;
   return this;
 }
-
 
 // @ 0x0082ccb0
 void U16Vec::AddZero()

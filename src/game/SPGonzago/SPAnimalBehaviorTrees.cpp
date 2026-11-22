@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAnimalBehaviorTrees.cpp -- migrated from slice(s) s00d8f7a0, s00d8dcc0, s00d8bd30, s00d8b220, s00d89430, s00d83230, s00d80a50, s00d7eab0, s00aed700, s00d79470, s00d9bee0, s00d8e8d0, s00d8d820, s00d8cbb0, s00d8a2a0, s00d885a0, s00d87620, s00d86a30, s00d85ad0, s00d84c50, s00d83a60, s00d824a0, s00d81940, s00d7ff20, s00d7f790, s00d7e290, s00d7d370, s00d7c3e0, s00d7b550, s00d7a5c0, s00aee680 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAnimalBehaviorTrees.cpp -- migrated from slice(s) s00d896f0, s00d8f7a0, s00d8dcc0, s00d8bd30, s00d8b220, s00d89430, s00d83230, s00d80a50, s00d7eab0, s00aed700, s00d79470, s00d9bee0, s00d8e8d0, s00d8d820, s00d8cbb0, s00d8a2a0, s00d885a0, s00d87620, s00d86a30, s00d85ad0, s00d84c50, s00d83a60, s00d824a0, s00d81940, s00d7ff20, s00d7f790, s00d7e290, s00d7d370, s00d7c3e0, s00d7b550, s00d7a5c0, s00aee680 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAnimalBehaviorTrees.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -38,6 +38,7 @@
 #include "SP/cTerrainSphere.h"
 #include <intrin.h>
 #include "SP/cModifiers.h"
+#include <float.h>    // FLT_MAX
 
 // unnamed retail callees and globals (address in the comment)
 extern void* gBehaviorResourceBlock;
@@ -6453,6 +6454,128 @@ struct GrowlInput {
 }
 // ---- items of slice s00d8f7a0 end
 
+// ---- items of slice s00d896f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef uint32_t uint32;
+struct Vec3 {
+    float x, y, z;
+};
+extern Vec3 g_defaultFacing;
+struct cLocoRequest_s00d8_96f0 {
+    void*  mpBegin;                 // +0x00 (callee fills; buffer freed by the caller)
+    void*  mpEnd;                   // +0x04
+    void*  mpCapacity;              // +0x08
+    uint32 pad0c[(0x14 - 0x0c) / 4];
+    float  mfVec0;                  // +0x14
+    float  mfVec1;                  // +0x18
+    float  mfVec2;                  // +0x1c
+    float  mfScalar;                // +0x20
+    uint32 pad24;                   // +0x24
+    uint32 pad28[(0x4c - 0x28) / 4];
+    uint8_t mbFlag;                 // +0x4c
+    uint8_t pad4d[3];
+    float  mfZero50;                // +0x50
+    float  mfZero54;                // +0x54
+    float  mfZero58;                // +0x58
+    uint32 mZero5c;                 // +0x5c
+    float  mf60;                    // +0x60
+    float  mf64;                    // +0x64
+    float  mf68;                    // +0x68
+    float  mfZero6c;                // +0x6c
+    uint32 mZero70;                 // +0x70
+
+    cLocoRequest_s00d8_96f0(float x, float y, float z);
+};
+inline cLocoRequest_s00d8_96f0::cLocoRequest_s00d8_96f0(float x, float y, float z)
+{
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCapacity = 0;
+    mfVec0 = x;
+    mfVec1 = y;
+    mfVec2 = z;
+    mfScalar = 1.0f;
+    pad24 = 0;
+    mbFlag = 0;
+    mfZero50 = 0.0f;
+    mfZero54 = 0.0f;
+    mfZero58 = 0.0f;
+    mf60 = 2.0f;
+    mf64 = 0.9f;
+    mZero5c = 0;
+    mf68 = FLT_MAX;
+    mfZero6c = 0.0f;
+    mZero70 = 0;
+}
+class cLocoBody {
+ public:
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+    virtual void Submit(cLocoRequest_s00d8_96f0 const& req);   // +0xdc (slot 55)
+};
+struct cSPCreatureBase_s00d8_96f0 {
+    char pad00[0xc0];
+    cLocoBody mBody;                    // +0xc0 (embedded; its vptr is at +0xc0)
+    char padC4[0xb4c - 0xc4];
+    cBehaviorTreeObj* mpBehavior;       // +0xb4c
+
+    void SetStealthed(bool a, bool b);  // 0x00c1aed0 (thiscall, ret 8)
+    void Hover(bool b);                 // 0x00c13a30 (thiscall, ret 4)
+};
+// ---- items of slice s00d896f0 end
+
 // @ 0x00aed700
 uint* __stdcall BuildPlanetFlags(uint* out, cEmpire* a, cEmpire* b, cPlanetRef* planet, cSPMission* mission)
 {
@@ -7347,19 +7470,17 @@ float CanStartEditorAction(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_
 }
 }  // namespace SP
 
-// Legacy copy; byte-exact definition is in match/slices/s00d79470/s00d79470.cpp.
+// @ 0x00d7a470
 namespace SP {
 float IsD51660BitClear()
 {
     cD51660Result* result = LookupD51660();
-    if (result == 0)
-        goto return_zero;
-    uint32_t shifted = result->mFlags6c >> 1;
-    shifted &= 1;
-    if (shifted != 0)
-        goto return_zero;
-    return 1.0f;
-return_zero:
+    if (result) {
+        uint32_t shifted = result->mFlags6c >> 1;
+        _ReadWriteBarrier();
+        bool isSet = (shifted & 1) != 0;
+        if (!isSet) return 1.0f;
+    }
     return 0.0f;
 }
 }  // namespace SP
@@ -12989,6 +13110,25 @@ bool FIND_STUFF_Activate(cSPCreatureBase_s00d8_9430* c, int, int, int, uint32_t 
     return true;
 }
 }  // namespace SP
+
+// @ 0x00d896f0
+void FUN_00d896f0(cSPCreatureBase_s00d8_96f0* self)
+{
+    self->SetStealthed(false, false);
+
+    // Defaults from the request's constructor, facing lanes from the creature's default vector.
+    cLocoRequest_s00d8_96f0 req(g_defaultFacing.x, g_defaultFacing.y, g_defaultFacing.z);
+
+    // Locomotion body's vtable slot +0xdc, submitted with the filled record.
+    self->mBody.Submit(req);
+
+    void* buf = req.mpBegin;
+    if (buf != 0 && ((int*)buf)[-1] != 0)
+        operator_delete__(buf);
+
+    self->mpBehavior->FUN_00bcb430();
+    self->Hover(false);
+}
 
 // @ 0x00d897f0
 namespace SP {

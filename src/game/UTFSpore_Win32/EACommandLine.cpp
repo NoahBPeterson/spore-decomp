@@ -1,9 +1,11 @@
-// src/game/UTFSpore_Win32/EACommandLine.cpp -- migrated from slice(s) s0092abb0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/EACommandLine.cpp -- migrated from slice(s) s0092b840, s0092abb0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/EACommandLine.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/CommandLine.h"
+#include <intrin.h>
+#include <ctype.h>
 
 // ---- items of slice s0092abb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void* HMODULE;
@@ -73,19 +75,54 @@ struct CommandLineBVtbl {
 // The vtable the construction stores at +0.
 static CommandLineBVtbl g_CommandLineBVtbl = { 0 };
 
-// @ 0x0092b690
-CommandLineB::CommandLineB()
-{
-    const CommandLineBVtbl* const* pv = (const CommandLineBVtbl* const*)&g_CommandLineBVtbl;
-    *(const CommandLineBVtbl* const**)this = pv;
-    msCommandLine.Reset();
-    msOther.Reset();
-}
-// ---- items of slice s0092abb0 end
-
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" __declspec(dllimport) HMODULE __stdcall GetModuleHandleW(LPCWSTR);
-extern "C" __declspec(dllimport) FARPROC __stdcall GetProcAddress(HMODULE, LPCSTR);
+// ---- items of slice s0092b840 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern wchar_t gEmptyString[];          // 0x01667BAC empty string buffer
+extern wchar_t gEmptyStringCapacity[];  // 0x01667BAE empty string + 2
+struct WString_s0092_b840 {
+    wchar_t* mpBegin;       // +0x00
+    wchar_t* mpEnd;         // +0x04
+    wchar_t* mpCapacity;    // +0x08
+    char mAllocator;        // +0x0c (empty allocator, padding)
+    WString_s0092_b840() : mpBegin(gEmptyString), mpEnd(gEmptyString),
+                mpCapacity(gEmptyStringCapacity) {}
+    void Construct(const WString_s0092_b840& other);                     // 0x0056E2D0 copy ctor (placement)
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x00423650 do_assign
+    void resize(unsigned count);                              // 0x00429520 resize
+    void erase(unsigned pos, unsigned count);                 // 0x004228E0 erase(pos,count)
+    void make_lower();                                        // 0x005E8E80 make_lower
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    void clear() { if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; } }
+    wchar_t& operator[](unsigned i) { return mpBegin[i]; }
+};
+struct WStringVec {
+    WString_s0092_b840* mpBegin;       // +0x00
+    WString_s0092_b840* mpEnd;         // +0x04
+    WString_s0092_b840* mpCapacity;    // +0x08
+    int mAllocator;         // +0x0c
+    WStringVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    WString_s0092_b840* erase(WString_s0092_b840* pos);                          // 0x0092B700
+    void DoInsertValue(WString_s0092_b840* pos, const WString_s0092_b840& value); // 0x00554C30
+};
+struct SplitBase {
+    WStringVec mArgs;       // +0x04
+    int mUnknown14;         // +0x14
+    WString_s0092_b840 mText;          // +0x18
+    WString_s0092_b840 mEmpty;         // +0x28
+    virtual ~SplitBase();
+    void Set(const short* s);
+    void Set(const char* s);
+    void InsertArgument(const wchar_t* arg, int index);    // 0x0092B7B0
+    __forceinline SplitBase(const char* s) { Set(s); }
+    __forceinline SplitBase(const short* s) { Set(s); }
+};
+__declspec(noinline, nothrow) void FixCommandLine(SplitBase* cmdline, const wchar_t* arg);
+struct Splitable3 : SplitBase {
+    Splitable3(const char* s);
+};
+struct Splitable4 : SplitBase {
+    Splitable4(const short* s);
+};
+// ---- items of slice s0092b840 end
 
 // @ 0x0092b4d0
 void FUN_0092b4d0(WString* cmdline, WString* args)
@@ -136,6 +173,20 @@ int GetCurrentAppPath(WString* out)
     return (int)((char*)out->mpEnd - (char*)out->mpBegin) >> 1;
 }
 
+// @ 0x0092b690
+CommandLineB::CommandLineB()
+{
+    const CommandLineBVtbl* const* pv = (const CommandLineBVtbl* const*)&g_CommandLineBVtbl;
+    *(const CommandLineBVtbl* const**)this = pv;
+    msCommandLine.Reset();
+    msOther.Reset();
+}
+// ---- items of slice s0092abb0 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern "C" __declspec(dllimport) HMODULE __stdcall GetModuleHandleW(LPCWSTR);
+extern "C" __declspec(dllimport) FARPROC __stdcall GetProcAddress(HMODULE, LPCSTR);
+
 // @ 0x0092b700
 WString* WStringVector::Erase(WString* pos)
 {
@@ -171,4 +222,116 @@ void EA::CommandLine::InsertArgument(wchar_t const * arg, int index)
     }
     if ((((char*)tmp.mpCapacity - (char*)tmp.mpBegin) & 0xfffffffe) > 2 && tmp.mpBegin)
         operator_delete__(tmp.mpBegin);
+}
+
+// helpers FixCommandLine (0x0092bbe0) uses; the slice keeps them in an anonymous namespace
+const wchar_t* FindLastOf(const wchar_t* end, const wchar_t* begin,
+                          const wchar_t* patBegin, const wchar_t* patEnd); // 0x005728F0
+int MakeLocaleAvailable(const void* a, const void* b);               // 0x0087D9A0
+int GetCurrentAppPath(WString_s0092_b840* out);                      // 0x0092B5F0
+
+static unsigned WStrLen(const wchar_t* s) {
+    const wchar_t* p = s;
+    while (*p) ++p;
+    return (unsigned)(p - s);
+}
+
+// Index of the last occurrence of any character of `pat` in `s`, or -1.
+static int LastIndexOf(const WString_s0092_b840& s, const wchar_t* pat) {
+    const wchar_t* end = s.mpBegin + s.size();
+    const wchar_t* p = FindLastOf(end, s.mpBegin, pat, pat + 1);
+    return (int)(p - s.mpBegin) - 1;
+}
+
+// @ 0x0092bbe0
+void FixCommandLine(SplitBase* cmdline, const wchar_t* arg) {
+    const bool hasArgs = (cmdline->mArgs.mpEnd != cmdline->mArgs.mpBegin);
+
+    WString_s0092_b840 firstArg;
+    if (hasArgs) {
+        WString_s0092_b840* src = (cmdline->mArgs.mpEnd == cmdline->mArgs.mpBegin)
+                           ? &cmdline->mEmpty
+                           : cmdline->mArgs.mpBegin;
+        if (src != &firstArg)
+            firstArg.assign(src->mpBegin, src->mpEnd);
+    }
+
+    wchar_t buffer[512];
+    buffer[0] = 0;
+    for (int k = 1; k < 512; ++k)
+        buffer[k] = 0;
+
+    WString_s0092_b840 appPath;
+    if (arg != 0) {
+        wchar_t* d = buffer;
+        const wchar_t* s = arg;
+        wchar_t c;
+        do { c = *s++; *d++ = c; } while (c);
+    } else {
+        GetCurrentAppPath(&appPath);
+        wchar_t* d = buffer;
+        const wchar_t* s = appPath.mpBegin;
+        wchar_t c;
+        do { c = *s++; *d++ = c; } while (c);
+    }
+
+    if (hasArgs) {
+        if (appPath.size() == 0)
+            appPath.assign(buffer, buffer + WStrLen(buffer));
+
+        // Directory portion of the application path, made lower case.
+        WString_s0092_b840 exeDir;
+        exeDir.assign(appPath.mpBegin, appPath.mpEnd);
+        int slash = LastIndexOf(exeDir, L"/");
+        if (slash >= 0)
+            exeDir.erase(0, (unsigned)slash + 1);
+        slash = LastIndexOf(exeDir, L"\\");
+        if (slash >= 0)
+            exeDir.erase((unsigned)slash, (unsigned)-1);
+        exeDir.make_lower();
+
+        // Directory portion of the first argument, made lower case.
+        WString_s0092_b840 argDir;
+        argDir.assign(firstArg.mpBegin, firstArg.mpEnd);
+        slash = LastIndexOf(argDir, L"/");
+        if (slash >= 0 &&
+            ((isalpha((unsigned char)argDir[0]) && argDir[1] == L':') ||
+             argDir[0] == L'\\' || argDir[0] == L'/'))
+            argDir.erase(0, (unsigned)slash + 1);
+        slash = LastIndexOf(argDir, L"\\");
+        if (slash >= 0)
+            argDir.erase((unsigned)slash, (unsigned)-1);
+        argDir.make_lower();
+
+        if (MakeLocaleAvailable(&exeDir, &argDir)) {
+            if (cmdline->mArgs.mpEnd != cmdline->mArgs.mpBegin) {
+                cmdline->mArgs.erase(cmdline->mArgs.mpBegin);
+                if (cmdline->mText.mpBegin != cmdline->mText.mpEnd) {
+                    *cmdline->mText.mpBegin = 0;
+                    cmdline->mText.mpEnd = cmdline->mText.mpBegin;
+                }
+            }
+            cmdline->InsertArgument(appPath.mpBegin, 0);
+        } else {
+            appPath.assign(buffer, buffer + WStrLen(buffer));
+            if (appPath.size() != 0)
+                cmdline->InsertArgument(appPath.mpBegin, 0);
+        }
+    } else {
+        appPath.assign(buffer, buffer + WStrLen(buffer));
+        if (appPath.size() != 0)
+            cmdline->InsertArgument(appPath.mpBegin, 0);
+    }
+}
+
+// @ 0x0092c1b0
+__declspec(noinline) Splitable3::Splitable3(const char* s)
+: SplitBase(s) {
+    FixCommandLine(this, 0);
+}
+
+// @ 0x0092c210
+__declspec(noinline) Splitable4::Splitable4(const short* s)
+: SplitBase(s) {
+    FixCommandLine(this, 0);
 }

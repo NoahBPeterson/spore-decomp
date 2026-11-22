@@ -48,3 +48,4 @@
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cFeedStateTransaction@Pollen@SP@@QAE@XZ  0061d1c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?PollenWrapper@Pollen@SP@@YAHHH@Z  0061dea0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0RefObject@Pollen@SP@@QAE@PAUIRefObject@12@@Z  0061df40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Destroy@cContentValidationTransaction@Pollen@SP@@QAEXXZ  0061bf50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

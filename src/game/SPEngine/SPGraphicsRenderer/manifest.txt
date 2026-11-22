@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?ListUnlink@@  0075d8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?DeviceLost@@  0075d930  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?DeviceRelease@@YAXXZ  0075d950  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?SetViewer@cRenderer@@QAEXHPAX@Z  0075daa0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?GetRenderStats@cRenderer@@QAEPAXH@Z  0075dad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

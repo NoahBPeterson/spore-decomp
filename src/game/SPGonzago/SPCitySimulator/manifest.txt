@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCitySimulator.cpp  ?InitCityAttributes@Simulator@@YAXXZ  01313ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCitySimulator.cpp  ?InitGlobalAttributes@Simulator@@YAXXZ  01314630  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

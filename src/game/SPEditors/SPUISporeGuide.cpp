@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUISporeGuide.cpp -- migrated from slice(s) s00674640, s00673c50, s00671840 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUISporeGuide.cpp -- migrated from slice(s) s00672f00, s00672cf0, s00672c30, s00674640, s00673c50, s00671840 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUISporeGuide.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -236,6 +236,136 @@ struct Detok2 {
 };
 // ---- items of slice s00674640 end
 
+// ---- items of slice s00672c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+inline void* operator new(unsigned int, void* storage) { return storage; }
+namespace eastl {
+template <class T, int N, bool Overflow> class fixed_string {
+public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    struct Allocator {
+        int mPadding;
+        T* mpBegin;
+        T mBuffer[N];
+    } mAllocator;
+
+    void assign(const T* first, const T* last); // 0x00672750
+
+    __forceinline fixed_string(const fixed_string& source)
+    {
+        T* buffer = mAllocator.mBuffer;
+        mAllocator.mpBegin = buffer;
+        _ReadWriteBarrier();
+        mpCapacity = buffer + N;
+        mpEnd = buffer;
+        mpBegin = buffer;
+        *buffer = 0;
+        assign(source.mpBegin, source.mpEnd);
+    }
+};
+}
+namespace eastl {
+template <class T> struct iterator_traits;
+}
+namespace eastl {
+template <class T> struct iterator_traits<T*> {
+    typedef T value_type;
+    typedef T* pointer;
+    typedef T& reference;
+};
+}
+namespace eastl {
+template <class Iterator, class = void> class generic_iterator {
+public:
+    Iterator mIterator;
+
+    generic_iterator(const Iterator& x) : mIterator(x) {}
+    generic_iterator(const generic_iterator& x) : mIterator(x.mIterator) {}
+
+    Iterator base() const { return mIterator; }
+    typename iterator_traits<Iterator>::reference operator*() const { return *mIterator; }
+    generic_iterator& operator++() { ++mIterator; return *this; }
+    bool operator==(const generic_iterator& x) const { return mIterator == x.mIterator; }
+    bool operator!=(const generic_iterator& x) const { return mIterator != x.mIterator; }
+};
+}
+namespace eastl {
+template <class I, class V> struct iterator_traits<generic_iterator<I, V> > {
+    typedef typename iterator_traits<I>::value_type value_type;
+};
+}
+typedef eastl::fixed_string<wchar_t, 32, true> DetokenizerString;
+typedef eastl::generic_iterator<DetokenizerString*> DetokenizerStringIterator;
+// ---- items of slice s00672c30 end
+
+// ---- items of slice s00672cf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct FixedPoolAllocator_s0067_2cf0 {
+    int      mOverflow;    // +0x0c in the string
+    wchar_t* mpPoolBegin;  // +0x10 in the string
+
+    FixedPoolAllocator_s0067_2cf0(wchar_t* pool) : mpPoolBegin(pool) {}
+};
+struct FixedWString_s0067_2cf0 {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    FixedPoolAllocator_s0067_2cf0 mAllocator;  // +0x0c
+    wchar_t  mBuffer[32];  // +0x14
+
+    FixedWString_s0067_2cf0() : mAllocator(mBuffer)
+    {
+        mpCapacity = mAllocator.mpPoolBegin + 32;
+        mpEnd = mAllocator.mpPoolBegin;
+        mpBegin = mAllocator.mpPoolBegin;
+        *mpBegin = 0;
+    }
+
+    void assign(const wchar_t* first, const wchar_t* last);  // 0x00672750
+};
+struct Record_s0067_2cf0 {
+    FixedWString_s0067_2cf0 mName;  // +0x00
+    int mValue;                     // +0x54
+
+    Record_s0067_2cf0(const Record_s0067_2cf0& other);
+};
+// ---- items of slice s00672cf0 end
+
+// ---- items of slice s00672f00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace {
+class cBuildXHTMLDetokenizer {
+public:
+    class cVar {
+    public:
+        struct cAction {
+            eastl::fixed_string<wchar_t, 32, true> mString;
+            int mX;
+
+            __forceinline cAction(const cAction& source)
+                : mString(source.mString), mX(source.mX) {}
+        };
+    };
+};
+}
+typedef cBuildXHTMLDetokenizer::cVar::cAction DetokenizerAction;
+struct DetokenizerActionIterator {
+    DetokenizerAction* mIterator;
+
+    DetokenizerActionIterator(DetokenizerAction* position) : mIterator(position) {}
+
+    bool operator!=(const DetokenizerActionIterator& other) const
+    {
+        return mIterator != other.mIterator;
+    }
+
+    DetokenizerActionIterator& operator++()
+    {
+        ++mIterator;
+        return *this;
+    }
+};
+// ---- items of slice s00672f00 end
+
 // @ 0x00672480
 bool GuidePage::Init(void* a)
 {
@@ -357,6 +487,32 @@ void Detokenizer::token_action_copy(void* a, unsigned short* b)
   ((EString*)*(void**)((char*)this + 0x94))->Assign((unsigned short*)local[0], e);
   if ((((unsigned)((char*)local[2] - (char*)local[0]) & 0xfffffffe) > 2) && local[0])
     operator_delete_(local[0]);
+}
+
+// @ 0x00672c30
+DetokenizerStringIterator CopyUninitializedDetokenizerStrings( DetokenizerStringIterator first, DetokenizerStringIterator last, DetokenizerStringIterator destination)
+{
+    typedef eastl::iterator_traits<DetokenizerStringIterator>::value_type value_type;
+    DetokenizerStringIterator currentDest(destination);
+    for (; first != last; ++first, ++currentDest)
+        ::new ((void*)&*currentDest) value_type(*first);
+    return currentDest;
+}
+
+// @ 0x00672cf0
+Record_s0067_2cf0::Record_s0067_2cf0(const Record_s0067_2cf0& other)
+{
+    mName.assign(other.mName.mpBegin, other.mName.mpEnd);
+    mValue = other.mValue;
+}
+
+// @ 0x00672f00
+DetokenizerAction** CopyUninitializedDetokenizerActions( DetokenizerAction** result, DetokenizerActionIterator first, DetokenizerActionIterator last, DetokenizerAction* destination)
+{
+    *result = destination;
+    for (; first != last; ++first, ++*result)
+        new (static_cast<void*>(*result)) DetokenizerAction(*first.mIterator);
+    return result;
 }
 
 // @ 0x00673c50

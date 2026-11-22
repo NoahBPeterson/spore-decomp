@@ -2,3 +2,6 @@
 006ae060 39 4-IID test: cl 15 emits a linear compare chain instead of the original median tree
 006ae2a0 56 AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced; equiv: FAIL (esp)
 006ae4c0 30 getter: duplicated tail / xor eax scheduling differs; equiv: PASS
+006aee60 434  build memory stream for a finished async request: EH prologue + long vtable-slot sequence; equiv UNSUPPORTED (0/400 valid: fault(read)=307, fault(write)=92)
+006af080 172  fixed_map find-or-emplace: EH prologue + register alloc differ; equiv PASS (286 valid, 100% cov)
+006af150 218  cAsyncResourceManager::AllocateRequest: EH prologue + vtable dispatch differ; equiv PASS (206 valid, 98.9% cov)

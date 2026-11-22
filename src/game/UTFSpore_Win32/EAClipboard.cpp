@@ -157,8 +157,11 @@ extern "C" void* memcpy(void*, const void*, size_t);
 extern "C" void* memset(void*, int, size_t);
 
 // ---- items of slice s0092abb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_143e3a0[];
 extern "C" __declspec(dllimport) unsigned short __stdcall RegisterClassA(const void*);
+extern wchar_t g_empty1600[1]; // 0x01667bac
 extern void* g_ClipboardAutoPtr;   // 0x1668f00
+extern void* g_SPMemPool;          // 0x16c8b44  process mem-pool object (this of LockedAlloc)
 typedef void* HWND;
 typedef void* HANDLE;
 typedef void* HMODULE;
@@ -183,46 +186,47 @@ extern "C" __declspec(dllimport) HWND __stdcall CreateWindowExA(DWORD, LPCSTR, L
 extern "C" __declspec(dllimport) HMODULE __stdcall GetModuleHandleA(LPCSTR);
 extern "C" __declspec(dllimport) DWORD __stdcall GetVersion();
 void* operator_new(uint32_t n, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void  operator_delete__(void* p);
+void  operator_delete__(void* p);            // 0x00f47380
 void* FUN_006abeb0(unsigned n);              // 0x6abeb0
-void  WString_Assign(void* s, const void* first, const void* last); // 0x423650
-void  WStr_Append(void* s, const wchar_t* first, const wchar_t* last); // 0x429580
-void  WStr_PushBack(void* s, wchar_t c);     // 0x4f6510
-void* WStr_Find(const void* s, const wchar_t* sub, int start); // 0x608340
-void  Mutex_Lock(void* m, void* name);       // 0x9221b0
-void  Mutex_Unlock(void* m);                 // 0x922270
-void  Win32Clipboard_WriteText(void* w, const wchar_t* t, int n); // 0x92aa20
-void* FUN_009289f0(int size, int a, int b, int c, int d, int e); // 0x9289f0
-void* FUN_0092aae0(void* text, int n);       // 0x92aae0
-// EA::Clipboard::DataText16(const wchar_t*, int) built in place: thiscall on the raw storage
-struct DataTextCtorStub {
-    void* ctor(const wchar_t* text, int n);  // 0x92aae0
+struct PoolStub {
+    void* LockedAlloc(int size, int a, int b, int c, int d, int e);   // 0x9289f0
+};
+struct DataTextStub {
+    void* ctor(const wchar_t* text, int n);                           // 0x92aae0
 };
 struct WString {
     wchar_t* mpBegin;    // +0
     wchar_t* mpEnd;      // +4
     wchar_t* mpCapacity; // +8
     void* mAlloc;        // +0xc
-    WString() { mpBegin = mpEnd = (wchar_t*)0x1667bac; mpCapacity = (wchar_t*)0x1667bae; }
-    void assign(const wchar_t* first, const wchar_t* last) { WString_Assign(this, first, last); }
-    void append(const wchar_t* first, const wchar_t* last) { WStr_Append(this, first, last); }
-    void push_back(wchar_t c) { WStr_PushBack(this, c); }
-    long find(const wchar_t* s, int start) { return (long)WStr_Find(this, s, start); }
+    WString() : mpBegin(g_empty1600), mpEnd(g_empty1600), mpCapacity(g_empty1600 + 1) {}
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x423650
+    void append(const wchar_t* first, const wchar_t* last);   // 0x429580
+    void push_back(wchar_t c);                                // 0x4f6510
+    unsigned find(const wchar_t* s, unsigned start);          // 0x608340
+    void reserve(unsigned n);                                 // 0x42e610
+    void erase(unsigned start, unsigned end);                 // 0x4228e0
 };
-struct Mutex { char pad[0x14]; void Lock(void* name) { Mutex_Lock(this, name); } void Unlock() { Mutex_Unlock(this); } };
+struct MutexStub {
+    void Lock(void* name);       // 0x9221b0
+    void Unlock();               // 0x922270
+};
+struct Mutex : MutexStub { char pad[0x14]; };
 struct DataInfo_s0092_abb0 { unsigned mnType; void* mpData; };
 struct IData_s0092_abb0 {
     virtual void i0();
     virtual void i1();                 // +0x04
     virtual void i2();
     virtual unsigned i3();             // +0x0c
-    virtual const wchar_t* i4(int n);  // +0x10
+    virtual const wchar_t* i4();       // +0x10
     virtual unsigned i5();             // +0x14
 };
+struct Win32Clipboard_s0092_abb0;
 struct Clipboard_s0092_abb0 {
-    void** vftable;                 // +0
+    bool mbInitialized;             // +0
+    char pad01[3];
     int mnId;                       // +4
-    void* mpOSData;                 // +8
+    Win32Clipboard_s0092_abb0* mpOSData;       // +8
     DataInfo_s0092_abb0 mDataInfoArray[0x20];  // +0xc
     char pad10c[0xc];               // +0x10c .. 0x117
     Mutex mMutex;                   // +0x118
@@ -231,8 +235,8 @@ struct Clipboard_s0092_abb0 {
     char pad14d[3];
     void Clear(unsigned type);                    // 0x92a940 (other slice)
     bool SetClipboardData(IData_s0092_abb0* pData, bool b);  // @ 0092abb0 0x0092abb0
-    bool DestroyPlatform();                       // @ 0092ad10
-    bool Clipboard_EnablePlatform();              // @ 0092b0b0
+    bool DestroyPlatform();                       // @ 0092ad10 0x0092ad10
+    bool Clipboard_EnablePlatform();              // @ 0092b0b0 0x0092b0b0
     void FUN_0092b0f0(int v);                     // @ 0092b0f0
     bool FUN_0092b140();                          // @ 0092b140
 };
@@ -245,9 +249,11 @@ struct Win32Clipboard_s0092_abb0 {
     HWND mHWND;          // +0x10
     HWND mNextHWND;      // +0x14
     DWORD mnLocale;      // +0x18
-    Win32Clipboard_s0092_abb0(Clipboard_s0092_abb0* owner);   // @ 0092afb0
+    Win32Clipboard_s0092_abb0(Clipboard_s0092_abb0* owner);   // @ 0092afb0 0x0092afb0
     bool WindowProcedure(WString* text); // @ 0092adb0 0x0092adb0
+    bool WriteText(const wchar_t* t, int n);   // 0x92aa20
 };
+bool SetClipboardText(Clipboard_s0092_abb0* clipboard, const wchar_t* s, int len);
 // ---- items of slice s0092abb0 end
 
 // @ 0x0092a880
@@ -397,7 +403,7 @@ DataText16* CreateTextData(const wchar_t* s, int len)
 // @ 0x0092abb0
 bool Clipboard_s0092_abb0::SetClipboardData(IData_s0092_abb0* pData, bool b)
 {
-    mMutex.Lock((void*)0x143e3a0);
+    mMutex.Lock((void*)g_143e3a0);
     if (b)
         Clear(0xffffffff);
     if (pData != 0) {
@@ -419,11 +425,10 @@ bool Clipboard_s0092_abb0::SetClipboardData(IData_s0092_abb0* pData, bool b)
         }
         if (mnId == 1 && type == 3 && mpOSData != 0) {
             mMutex.Unlock();
-            unsigned n = pData->i5();
-            int len = (int)(n >> 1) - 1;
-            const wchar_t* t = pData->i4(len);
-            Win32Clipboard_WriteText(mpOSData, t, len);
-            mMutex.Lock((void*)0x143e3a0);
+            Win32Clipboard_s0092_abb0* os = mpOSData;
+            int len = (int)(pData->i5() >> 1) - 1;
+            os->WriteText(pData->i4(), len);
+            mMutex.Lock((void*)g_143e3a0);
         }
     }
     mMutex.Unlock();
@@ -443,9 +448,9 @@ void* FUN_0092ac90(void* v)
 bool SetClipboardText(Clipboard_s0092_abb0* clipboard, const wchar_t* s, int len)
 {
     bool result = false;
-    void* mem = EA::Clipboard::g_pMemPool->LockedAlloc(len * 2 + 0x1a, 0, 0, 0, 0, 0);
+    void* mem = ((PoolStub*)g_SPMemPool)->LockedAlloc(len * 2 + 0x1a, 0, 0, 0, 0, 0);
     if (mem != 0) {
-        IData_s0092_abb0* obj = (IData_s0092_abb0*)((DataTextCtorStub*)mem)->ctor(s, len);
+        IData_s0092_abb0* obj = (IData_s0092_abb0*)((DataTextStub*)mem)->ctor(s, len);
         if (obj != 0) {
             obj->i1();
             result = clipboard->SetClipboardData(obj, true);
@@ -458,15 +463,14 @@ bool SetClipboardText(Clipboard_s0092_abb0* clipboard, const wchar_t* s, int len
 // @ 0x0092ad10
 bool Clipboard_s0092_abb0::DestroyPlatform()
 {
-    char* o = (char*)this;
-    char* p = *(char**)(o + 8);
-    if (p != 0) {
-        if (*(void**)(p + 0x10) != 0) {
-            ChangeClipboardChain(*(HWND*)(p + 0x10), *(HWND*)(p + 0x14));
-            DestroyWindow(*(HWND*)(p + 0x10));
+    Win32Clipboard_s0092_abb0* os = mpOSData;
+    if (os != 0) {
+        if (os->mHWND != 0) {
+            ChangeClipboardChain(os->mHWND, os->mNextHWND);
+            DestroyWindow(os->mHWND);
         }
-        operator_delete__(p);
-        *(void**)(o + 8) = 0;
+        operator_delete__(os);
+        mpOSData = 0;
     }
     return true;
 }
@@ -485,7 +489,6 @@ void* FUN_0092ad50(bool create)
 // @ 0x0092adb0
 bool Win32Clipboard_s0092_abb0::WindowProcedure(WString* text)
 {
-    bool result = false;
     bool got = false;
     if (text->mpBegin != text->mpEnd) {
         *text->mpBegin = 0;
@@ -500,7 +503,7 @@ bool Win32Clipboard_s0092_abb0::WindowProcedure(WString* text)
                     wchar_t* p = (wchar_t*)GlobalLock_s0092_abb0(h);
                     if (p != 0) {
                         size_t n = GlobalSize(h) >> 1;
-                        WString_Assign(text, text->mpBegin, text->mpEnd);
+                        text->reserve((unsigned)n);
                         wchar_t* end = p + n;
                         while (p < end && *p != 0) {
                             text->push_back(*p);
@@ -515,7 +518,7 @@ bool Win32Clipboard_s0092_abb0::WindowProcedure(WString* text)
         }
         --mnGettingText;
     }
-    return result || got;
+    return got;
 }
 
 // @ 0x0092afb0
@@ -555,16 +558,38 @@ Win32Clipboard_s0092_abb0::Win32Clipboard_s0092_abb0(Clipboard_s0092_abb0* owner
 // @ 0x0092b0b0
 bool Clipboard_s0092_abb0::Clipboard_EnablePlatform()
 {
-    void* self = this;
-    char* s = (char*)self;
-    if (s[0x14c] != 0 && *(void**)(s + 8) == 0 && *(int*)(s + 4) == 1) {
-        void* mem = FUN_006abeb0(0x1c);
-        void* p;
-        if (mem != 0)
-            p = new (mem) Win32Clipboard_s0092_abb0((Clipboard_s0092_abb0*)self);
-        else
-            p = 0;
-        *(void**)(s + 8) = p;
+    if (mbFlag && mpOSData == 0 && mnId == 1) {
+        void* mem = FUN_006abeb0(sizeof(Win32Clipboard_s0092_abb0));
+        mpOSData = mem ? new (mem) Win32Clipboard_s0092_abb0(this) : 0;
     }
+    return true;
+}
+
+// @ 0x0092b0f0
+void Clipboard_s0092_abb0::FUN_0092b0f0(int v)
+{
+    mMutex.Lock((void*)g_143e3a0);
+    mnId = v;
+    if (mbInitialized) {
+        if (v == 1)
+            Clipboard_EnablePlatform();
+        else
+            DestroyPlatform();
+    }
+    mMutex.Unlock();
+}
+
+// @ 0x0092b140
+bool Clipboard_s0092_abb0::FUN_0092b140()
+{
+    mMutex.Lock((void*)g_143e3a0);
+    if (!mbInitialized) {
+        mbInitialized = true;
+        if (mbFlag && mpOSData == 0 && mnId == 1) {
+            void* mem = FUN_006abeb0(sizeof(Win32Clipboard_s0092_abb0));
+            mpOSData = mem ? new (mem) Win32Clipboard_s0092_abb0(this) : 0;
+        }
+    }
+    mMutex.Unlock();
     return true;
 }

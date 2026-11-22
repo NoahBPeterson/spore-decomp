@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeBehaviorTrees.cpp -- migrated from slice(s) s00dbe140, s00dba2f0, s00db86a0, s00db7b60, s00db6e60, s00db5e80, s00db10d0, s00db0130, s00dadce0, s00da5900, s00e11ab0, s00db9380, s00db3e90, s00db2fd0, s00db2060, s00daf820, s00dae980, s00dacd40, s00dabdf0, s00dab1f0, s00daa530, s00da9600, s00da8630, s00da7780, s00da6880, s00d9dce0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeBehaviorTrees.cpp -- migrated from slice(s) s00dbaa40, s00db7fc0, s00db7d60, s00db09c0, s00dbe140, s00dba2f0, s00db86a0, s00db7b60, s00db6e60, s00db5e80, s00db10d0, s00db0130, s00dadce0, s00da5900, s00e11ab0, s00db9380, s00db3e90, s00db2fd0, s00db2060, s00daf820, s00dae980, s00dacd40, s00dabdf0, s00dab1f0, s00daa530, s00da9600, s00da8630, s00da7780, s00da6880, s00d9dce0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeBehaviorTrees.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -27,6 +27,8 @@ extern "C" char g_147c2c4[];
 #include "SP/cSPPlanetaryArtifact.h"
 #include "SP/cSPTimer.h"
 #include <string.h>
+#include <stddef.h>
+#include "SP/cReservationGrid.h"
 
 // ---- items of slice s00d9dce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
@@ -5304,6 +5306,32 @@ struct cGroupFollower {
 // ---- items of slice s00db86a0 end
 
 // ---- items of slice s00dba2f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned char g_00ae72d0[];
+extern "C" unsigned char g_00b1e500[];
+extern "C" unsigned char g_00cd7d10[];
+extern "C" unsigned char g_00d3d420[];
+extern "C" void* FUN_00b21340(void*, void*, void*, void*, void*, void*);
+extern "C" void* FUN_00d997e0();
+struct PointerList {
+    void** mpBegin;     // +0
+    void** mpEnd;       // +4
+    void** mpCapacity;  // +8
+};
+struct GameObjectRef {
+    int         mTag;      // +0
+    PointerList mObjects;  // +4
+};
+struct cVehiclePartA {
+    char mPad[0x508];
+};
+struct cVehiclePartB {
+    void* mpRecorded;
+};
+struct cVehicleLayout : cVehiclePartA, cVehiclePartB {
+};
+typedef bool  (__thiscall* FnBoolVoid)(void*);
+typedef void* (__thiscall* FnPtrInt)(void*, int);
+#define TCS(ret, params, name) ((ret(__thiscall*)params) name)
 struct cHealOtherData_s00db_a2f0 {
     void* mpVtable;                                          // +0x00
     uint32_t mPad04;                                         // +0x04
@@ -5311,6 +5339,7 @@ struct cHealOtherData_s00db_a2f0 {
     void Copy(const cHealOtherData_s00db_a2f0* src);                    // 0x00db97f0
     cHealOtherData_s00db_a2f0& operator=(const cHealOtherData_s00db_a2f0& rhs);    // 0x00dba120
 };
+
 struct cHealOther {
     int32_t        mTag;                                     // +0x00
     cHealOtherData_s00db_a2f0 mData;                                    // +0x04
@@ -5645,6 +5674,363 @@ struct S_s00d9_cd90 {
   void  FUN_00d9cf70();                              // 0x00d9cf70 AddAgent
 };
 // ---- items of slice s00d9cd90 end
+
+// ---- items of slice s00db09c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRef_s00db_09c0 {
+    virtual void v00();          // +0x00
+    virtual void Release();      // +0x04
+};
+struct IRef1c {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void Release();      // +0x1c
+};
+struct Spatial_s00db_09c0 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+    virtual bool IsBundle();     // +0x58
+};
+struct Tribe_s00db_09c0 {
+    void __thiscall FUN_00c97d40(int a, IRef_s00db_09c0* b);   // 0x00c97d40
+    void __thiscall FindSpot(int type, int spot);   // 0x00c98750
+};
+struct AnimNode {
+    char  pad00[8];
+    float mf08;                  // +0x08 duration
+    char  pad0c[0x2c - 0x0c];
+    int   mWho;                  // +0x2c
+};
+struct AnimCtlSub {
+    AnimNode* __thiscall Play(int a, int flags);                         // 0x00bc96a0
+    void __thiscall Stim(int a, int flags, float f, int who);            // 0x00bc97f0
+};
+struct AnimPool;
+struct AnimCtl_s00db_09c0 {
+    char       pad00[0x600];     // +0x08 is the behaviour object AnimCtlSub
+    AnimPool*  mpPool;           // +0x600
+    void __thiscall FUN_00bcb430();                                       // 0x00bcb430
+};
+struct PoolEntry {
+    unsigned char mbActive;      // +0x00
+    char   pad04[3];
+    IRef_s00db_09c0*  mpObj;                // +0x04
+    char   pad08[4];             // stride 0xc
+};
+struct PoolNode {
+    char   pad00[0x18];
+    int    miCount;              // +0x18
+    char   pad1c[0x28 - 0x1c];
+    void*  mp28;                 // +0x28
+    IRef_s00db_09c0*  mp2c;                 // +0x2c
+    IRef_s00db_09c0*  mp30;                 // +0x30
+};
+struct AnimPool {
+    char       pad00[0x10];
+    int        mi10;             // +0x10
+    char       pad14[0x18 - 0x14];
+    uint32_t   mi18;             // +0x18
+    char       pad1c[0x20 - 0x1c];
+    PoolEntry  mEntries;         // +0x20, inline array of mi18 entries
+    char       pad2c[0x1a4 - 0x20 - sizeof(PoolEntry)];
+    PoolNode   mNode;            // +0x1a4
+    PoolNode* GetNode() { return &mNode; }
+    void* __thiscall FUN_00bc9b10();                                      // 0x00bc9b10
+};
+struct Manager {
+    void __thiscall FUN_00bc2180(void* a);                                // 0x00bc2180
+};
+struct Strategy_s00db_09c0 {
+    char  pad00[0x1c8];
+    Manager* mpMgr;              // +0x1c8
+};
+Strategy_s00db_09c0* __cdecl TribeModeStrategy_Instance();    // 0x00cd40b0
+struct EatState {
+    int     mPhase;              // +0x00
+    IRef_s00db_09c0*   mpOwner;             // +0x04
+    IRef_s00db_09c0*   mpTarget;            // +0x08
+    IRef_s00db_09c0*   mp0c;                // +0x0c
+    IRef_s00db_09c0*   mp10;                // +0x10
+    IRef1c* mp14;                // +0x14
+    char    pad18[0x24 - 0x18];
+    int     mSpot;               // +0x24
+};
+struct Citizen_s00db_09c0 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+    virtual void v80();
+    virtual void vf84(int a, int b, int c);       // +0x84
+
+    void __thiscall UpdateLocomotion(int a);      // 0x00c14750
+    bool __thiscall FUN_00c0c120();               // 0x00c0c120
+    void __thiscall SetSprinting(int a);          // 0x00c1ad10
+    Tribe_s00db_09c0* __thiscall GetTribe();                 // 0x00c22f50
+
+    char      pad04[0xc0 - 0x04];
+    Spatial_s00db_09c0   mLoco;              // +0xc0
+    char      padc4[0xb4c - 0xc0 - sizeof(Spatial_s00db_09c0)];
+    AnimCtl_s00db_09c0*  mpAnim;             // +0xb4c
+};
+// ---- items of slice s00db09c0 end
+
+// ---- items of slice s00db7d60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vec3_s00db7d60 {
+    float x;
+    float y;
+    float z;
+
+    // Retail copies a whole position one float at a time through the x87
+    // (fld/fstp), so the type has a user copy assignment; plain copies of it
+    // (the initialisation of a local) stay in dword/SSE form.
+    Vec3_s00db7d60& operator=(const Vec3_s00db7d60& o) {
+        x = o.x;
+        y = o.y;
+        z = o.z;
+        return *this;
+    }
+};
+struct ReservedSpot_s00db7d60 {
+    unsigned mX;
+    unsigned mY;
+    unsigned mZ;
+    unsigned mID;
+    bool     mbReserved;
+    bool     mbHasCitizen;
+    unsigned char mPad12[2];
+};
+struct ReservedPair_s00db7d60 {
+    unsigned mKey;
+    ReservedSpot_s00db7d60 mSpot;
+};
+struct ClusterMap_s00db7d60 {
+    ReservedPair_s00db7d60* mpBegin;         // +0x00
+    ReservedPair_s00db7d60* mpEnd;           // +0x04
+    ReservedPair_s00db7d60* mpCapacityEnd;   // +0x08
+    void*                   mpUnk0c;         // +0x0c
+    ReservedPair_s00db7d60* mpBuffer;        // +0x10
+    void*                   mpUnk14;         // +0x14
+    ReservedPair_s00db7d60  mData[121];      // +0x18 (size 0xb58)
+    unsigned char mbCompare;                 // +0xb70
+    unsigned char mPad[3];
+
+    // Written in the order the retail constructor's inlined stores appear.
+    ClusterMap_s00db7d60() {
+        mpBuffer = mData;
+        mpEnd = mData;
+        mpBegin = mData;
+        mpCapacityEnd = mData + 121;
+    }
+    // Teardown is written out rather than left to a destructor: retail has no
+    // unwind frame, only the two inlined copies of this check.
+    void Destroy() {
+        if (mpBegin != 0 && mpBegin != mpBuffer)
+            FUN_00f47380(mpBegin);
+    }
+};
+struct ReservationGrid_s00db7d60 {
+    unsigned mGridRes;                       // +0x0000
+    float    mSquareSize;                    // +0x0004
+    unsigned char mReservedSpots[0x97c];     // +0x0008
+    unsigned char mKeepClearSpots[0x97c];    // +0x0984
+    float mGridMax;                          // +0x1300
+    float mGridMin;                          // +0x1304
+    float mGridAvg;                          // +0x1308
+
+    void* GetReservedSpots();                                        // 0x0098f5a0
+    void* GetKeepClearSpots();                                       // 0x00cc7070
+    void  GetRCluster(const Vec3_s00db7d60* pos, ClusterMap_s00db7d60* cluster,
+                      unsigned face);                                // 0x00cc8670
+    void  FilterRCluster(ClusterMap_s00db7d60* dst, void* src);      // 0x00cc7fa0
+    unsigned GetClosestInRVector(ClusterMap_s00db7d60* cluster,
+                                 const Vec3_s00db7d60* pos);         // 0x00cc79d0
+    bool  ReserveRCoord(unsigned rcoord);                            // 0x00cc8140
+    Vec3_s00db7d60* PosFromRCoord(Vec3_s00db7d60* out, unsigned rcoord); // 0x00cc78f0
+    void  FreeRCoord(unsigned rcoord);                               // 0x00cc7f90
+};
+struct Tribe_s00db7d60 {
+    void* mpVtbl;                            // +0x0000
+    unsigned char mPad004[0x558 - 0x004];
+    ReservationGrid_s00db7d60 mGrid;         // +0x0558
+
+    void* V_AC() {
+        return (*(void* (__thiscall**)(void*))(*(char**)this + 0xac))(this);
+    }
+    Vec3_s00db7d60* GetToolPosition(Vec3_s00db7d60* out, int kind);  // 0x00c91190
+};
+struct Tool_s00db7d60 {
+    void* mpVtbl;                            // +0x0000
+
+    int V_74() {
+        return (*(int (__thiscall**)(void*))(*(char**)this + 0x74))(this);
+    }
+};
+struct Creature_s00db7d60 {
+    void* mpVtbl;                            // +0x0000
+
+    void* GetActiveTool();                                           // 0x00c23290
+    Tribe_s00db7d60* GetTribe();                                     // 0x00c22f50
+};
+struct PlanetModel_s00db7d60 {
+    void* mpVtbl;                            // +0x0000
+
+    Vec3_s00db7d60* MakeRandomWorldPosition(Vec3_s00db7d60* out,
+                                            const Vec3_s00db7d60* toolPos,
+                                            float minOffset,
+                                            float maxOffset);        // 0x00b81780
+    Vec3_s00db7d60* DirectionToSurfacePosition(Vec3_s00db7d60* out,
+                                               const Vec3_s00db7d60* dir); // 0x00b815a0
+};
+PlanetModel_s00db7d60* PlanetModel_s00db_7d60();        // 0x00b3d350
+struct IdleBlock_s00db7d60 {
+    unsigned mState;                         // +0x00
+    unsigned mReservedSpot;                  // +0x04
+    unsigned mAnimationID;                   // +0x08
+    int      mLoopCount;                     // +0x0c
+    float    mTimer;                         // +0x10
+    Creature_s00db7d60* mpTribeMember;       // +0x14
+
+    Vec3_s00db7d60* FUN_00db7d60(Vec3_s00db7d60* out,
+                                 const Vec3_s00db7d60* in);
+};
+// ---- items of slice s00db7d60 end
+
+// ---- items of slice s00db7fc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned FUN_00921340(unsigned n);    // 0x00921340
+struct FixedPoolBase_00db7fc0 {
+    void* mpHead;                               // +0x00
+    void  init(void* pMemory, unsigned int memorySize, unsigned int nodeSize,
+               unsigned int alignment, unsigned int alignmentOffset);   // 0x00921260
+};
+struct TempAlloc_00db7fc0 {                     // temporary allocator on the stack
+    FixedPoolBase_00db7fc0 mPool;               // +0x00
+    void*   mUnk04;                             // +0x04
+    void*   mBegin;                             // +0x08
+    void*   mEnd;                               // +0x0c
+    unsigned mCount;                            // +0x10
+    void*   mExtra;                             // +0x14
+};
+struct RehashPolicy_00db7fc0 {
+    float    mLoadFactor;                       // +0x00
+    float    mGrowthFactor;                     // +0x04
+    unsigned mnNextResize;                      // +0x08
+    unsigned get_next_bucket_count(unsigned n); // 0x009213c0 (inlined)
+};
+struct Table_00db7fc0 {
+    void*  mpUnk00;                             // +0x00
+    void*  mpBucketArray;                       // +0x04
+    unsigned mnBucketCount;                     // +0x08
+    unsigned mnElementCount;                    // +0x0c
+    RehashPolicy_00db7fc0 mRehashPolicy;        // +0x10
+    int    mF14;                                // +0x14
+    int    mF18;                                // +0x18
+    char   mPoolPad[0x1c];                      // +0x1c .. +0x33
+    void*  mPoolControl;                        // +0x34
+    char   mPad38[0x24];                        // +0x38 .. +0x5b
+    char   mTempArena[0xa0];                    // +0x5c .. +0xfb
+
+    void   Parse(unsigned int n);               // 0x00921340
+    void*  SetBuckets(unsigned int n, void* p2, void* r3, void* r4, void* v5,
+                      void* r6, void* temp);    // 0x00db3cf0
+    void   Sub_00db5d70(void* a, void* b, void* c, void* d);   // 0x00db5d70
+    void   Sub_00daee00(unsigned int n);                       // 0x00daee00
+
+    Table_00db7fc0* Init(void* p2, void* p3);
+};
+// ---- items of slice s00db7fc0 end
+
+// ---- items of slice s00dbaa40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct PickContext;
+struct Node;
+struct Action;
+struct NodeVtable {
+    void* unused[0x58 / 4];                            // 0x00 .. 0x54
+    int (__thiscall* GetKind)(Node* self);             // 0x58
+};
+struct Action {
+    int GetState();                                    // 0x008e7f80, 2 means unusable
+};
+struct Node {
+    NodeVtable* vtable;                                // 0x000
+    unsigned char reserved[0x120 - 4];                 // 0x004 .. 0x11f
+    Action action;                                     // 0x120
+    int Classify();                                    // 0x00c9d110, 1 for the preferred node
+};
+struct NodeList {
+    Node** begin;                                      // 0x00
+    Node** end;                                        // 0x04
+};
+struct TableIterator {
+    int IsValid();                                     // 0x00af9f30, nonzero when the entry is usable
+};
+struct SelectionTable {
+    TableIterator* Find(const int& kind);              // 0x00c27d20
+};
+struct ContextVtable {
+    void* unused0[0xac / 4];                           // 0x00 .. 0xa8
+    Node* (__thiscall* GetCurrent)(PickContext* self); // 0xac
+    void* unused1[3];                                  // 0xb0 .. 0xb8
+    NodeList* (__thiscall* GetNodes)(PickContext* self); // 0xbc
+};
+struct PickContext {
+    ContextVtable* vtable;                             // 0x000
+    unsigned char reserved[0x394 - 4];                 // 0x004 .. 0x393
+    SelectionTable table;                              // 0x394
+};
+// ---- items of slice s00dbaa40 end
 
 // @ 0x00d9cf70
 void S_s00d9_cd90::FUN_00d9cf70()
@@ -6229,6 +6615,7 @@ void __cdecl FUN_00da7330(cSPCreatureCitizen* c)
 }
 
 void* __cdecl FUN_00b3d350_s00da_6880(void* out, u32 v);   // 0x00b3d350 PlanetModel
+
 // @ 0x00da7340
 u8 __cdecl FUN_00da7340(cSPCreatureCitizen* c)
 {
@@ -6601,6 +6988,7 @@ float TribeMemberStateFraction(Creature* pCreature, int state)
 struct AnimalHead_da8960 { char pad[0x5a8]; };
 struct AnimalLink_da8960 { int m0; };
 struct AnimalObj_da8960 : AnimalHead_da8960, AnimalLink_da8960 {};
+
 // @ 0x00da8960
 float10 FUN_00da8960(int self, int a2, int a3, int a4, void* stimuli, char* out)
 {
@@ -6633,7 +7021,6 @@ float10 FUN_00da8960(int self, int a2, int a3, int a4, void* stimuli, char* out)
 // @ 0x00da9160
 static float g_1581224;   // squared search radius
 static float g_1581220;   // result timer
-
 
 float10 InitNearHutForReaction(Citizen_s00da_bdf0* self, Stimuli* stimuli, char* out)
 {
@@ -9346,6 +9733,7 @@ void __cdecl FUN_00daf7f0(CC* self, int a1, int a2, int a3, int a4, S5* a5)
 }
 
 extern "C" char FUN_00da6270_s00da_f820(void* a, int b);          // 0x00da6270 (cdecl)
+
 // @ 0x00daf820
 char SP_TRIBE_HEAL_SELF_Tick(cCreature* a1, void* a2, void* a3, void* a4, void* a5, HealState* a6)
 {
@@ -9637,6 +10025,86 @@ bool __cdecl SP::TRIBE_NPC_GIFT_Activate(Citizen_s00db_0130* c, int, int, int, i
     if (task->mGift.mpOther)
         c->vf84((char*)task->mGift.mpOther + 0x5a8, 0, 2);
     return true;
+}
+
+// @ 0x00db09c0
+void __cdecl FUN_00db09c0(Citizen_s00db_09c0* c, int, int, int, int, EatState* st)
+{
+    c->UpdateLocomotion(0);
+    c->vf84(0, 0, 0);
+
+    if (st->mPhase == 4) {
+        c->GetTribe()->FUN_00c97d40(0xd, (IRef_s00db_09c0*)c);
+    } else if (st->mPhase == 5) {
+        c->GetTribe()->FindSpot(0xd, st->mSpot);
+    } else {
+        if (((Spatial_s00db_09c0*)((char*)c + 0xc0))->IsBundle())
+            ((Tribe_s00db_09c0*)st->mpTarget)->FindSpot(0xd, st->mSpot);
+    }
+
+    AnimPool* pool = c->mpAnim->mpPool;
+    if (pool != 0) {
+        AnimNode* anim = ((AnimCtlSub*)((char*)c->mpAnim + 8))->Play(0, 0x80);
+        if (anim != 0) {
+            // The pool keeps its entries in the inline array at +0x20 (stride 0xc),
+            // and every entry but this citizen's own is retargeted at the new clip.
+            for (uint32_t i = 0; i < pool->mi18; i++) {
+                PoolEntry* e = (PoolEntry*)((char*)&pool->mEntries + i * 0xc);
+                if (e->mbActive) {
+                    IRef_s00db_09c0* obj = e->mpObj;
+                    if (obj != (IRef_s00db_09c0*)c) {
+                        AnimCtl_s00db_09c0* other = *(AnimCtl_s00db_09c0**)((char*)obj + 0xb4c);
+                        ((AnimCtlSub*)((char*)other + 8))->Stim(
+                            0, 0x80, anim->mf08, anim->mWho);
+                    }
+                }
+            }
+        }
+
+        PoolNode* node = pool->GetNode();
+        if ((void*)c == pool->FUN_00bc9b10()) {
+            // The manager is reached through a reference to the strategy's
+            // pointer member: that keeps the original's "form the member
+            // address, then load the manager" sequence.
+            Manager*& mgr = TribeModeStrategy_Instance()->mpMgr;
+            mgr->FUN_00bc2180(node->mp28);
+            node->mp28 = 0;
+        }
+
+        if (st->mPhase == 0x12)
+            node->miCount--;
+
+        if (pool->mi10 == 1) {
+            if (node != 0) {
+                IRef_s00db_09c0* a = node->mp30;
+                if (a != 0)
+                    a->Release();
+                IRef_s00db_09c0* b = node->mp2c;
+                if (b != 0)
+                    b->Release();
+            }
+        }
+        c->mpAnim->FUN_00bcb430();
+    }
+
+    if (c->FUN_00c0c120())
+        c->SetSprinting(0);
+
+    IRef1c* p14 = st->mp14;
+    if (p14 != 0)
+        p14->Release();
+    IRef_s00db_09c0* p10 = st->mp10;
+    if (p10 != 0)
+        p10->Release();
+    IRef_s00db_09c0* p0c = st->mp0c;
+    if (p0c != 0)
+        p0c->Release();
+    IRef_s00db_09c0* pTarget = st->mpTarget;
+    if (pTarget != 0)
+        pTarget->Release();
+    IRef_s00db_09c0* pOwner = st->mpOwner;
+    if (pOwner != 0)
+        pOwner->Release();
 }
 
 // @ 0x00db10d0
@@ -11041,6 +11509,7 @@ struct SocialTargetRef {             // refcounted target: slot 0 is the deletin
     virtual void Destroy(uint32_t flags);
     int mnRefCount;                   // +0x04
 };
+
 // @ 0x00db40f0
 void ReleaseSocialTargetState(void* pArg1, void* pArg2, void* pArg3, void* pArg4, void* pArg5, cActionState* pState)
 {
@@ -11405,6 +11874,7 @@ void cSocialActionHost::PlaceTargets(cSocialData* pData, bool bSnap)
 }
 
 void* __cdecl FUN_00cd40b0_s00db_5e80(void*);                       // 0x00cd40b0  cTribeModeStrategy::Instance
+
 // @ 0x00db5e80
 char __cdecl FUN_00db5e80(void* creature_, void* tribe_)
 {
@@ -12163,6 +12633,101 @@ void FUN_00db7b60(Player* self, int a2, int a3, int a4, int a5, Message* msg)
   { RefCounted* p = msg->ref4; if (p) p->Release(); }
 }
 
+// @ 0x00db7d60
+Vec3_s00db7d60* IdleBlock_s00db7d60::FUN_00db7d60(Vec3_s00db7d60* out, const Vec3_s00db7d60* in)
+{
+    PlanetModel_s00db7d60* pm;
+    float radius;
+    Vec3_s00db7d60 pos;
+    Vec3_s00db7d60 scratch;
+    Vec3_s00db7d60 surf;
+
+    Tool_s00db7d60* tool = (Tool_s00db7d60*)mpTribeMember->GetActiveTool();
+    radius = (float)tool->V_74() * 0.3f;
+    Tribe_s00db7d60* tribe = mpTribeMember->GetTribe();
+    if (tribe->V_AC() != 0) {
+        pm = PlanetModel_s00db_7d60();
+
+        // The caller's hint wins; otherwise a random spot around the tool.
+        // The tool position only exists on that path, in its own scope.
+        const Vec3_s00db7d60* src;
+        if (in != 0) {
+            src = in;
+        } else {
+            Vec3_s00db7d60 toolPos;
+            src = pm->MakeRandomWorldPosition(&scratch,
+                                              tribe->GetToolPosition(&toolPos, 0),
+                                              0.0f, radius + 2.0f);
+        }
+        pos.x = src->x;
+        pos.y = src->y;
+        pos.z = src->z;
+
+        if (mReservedSpot != 0xffffffffu) {
+            Tribe_s00db7d60* t = mpTribeMember->GetTribe();
+            t->mGrid.FreeRCoord(mReservedSpot);
+            mReservedSpot = 0xffffffffu;
+        }
+
+        {
+            ClusterMap_s00db7d60 cluster;
+            ReservationGrid_s00db7d60* grid = &tribe->mGrid;
+            grid->GetRCluster(&pos, &cluster, 4);
+            grid->FilterRCluster(&cluster, grid->GetReservedSpots());
+            grid->FilterRCluster(&cluster, grid->GetKeepClearSpots());
+
+            if (cluster.mpBegin == cluster.mpEnd) {
+                if (in != 0) {
+                    *out = *in;
+                    cluster.Destroy();
+                    return out;
+                }
+            } else {
+                unsigned index = grid->GetClosestInRVector(&cluster, &pos);
+                if (index != 0xffffffffu && grid->ReserveRCoord(index)) {
+                    Vec3_s00db7d60* cell = grid->PosFromRCoord(&scratch, index);
+                    Vec3_s00db7d60* s = pm->DirectionToSurfacePosition(&surf, cell);
+                    Vec3_s00db7d60 spot = *s;
+                    mReservedSpot = index;
+                    out->x = spot.x;
+                    out->y = spot.y;
+                    out->z = spot.z;
+                    cluster.Destroy();
+                    return out;
+                }
+            }
+            cluster.Destroy();
+        }
+    }
+
+    tribe->GetToolPosition(out, 0);
+    return out;
+}
+
+// @ 0x00db7fc0
+Table_00db7fc0* Table_00db7fc0::Init(void* p2, void* p3)
+{
+    TempAlloc_00db7fc0 temp;
+    temp.mPool.mpHead = 0;
+    temp.mPool.init(mTempArena, 0xa0, 0x14, 4, 0);
+    temp.mBegin = mTempArena;
+    temp.mEnd = (char*)temp.mBegin + 0xa0;
+    temp.mCount = 0x14;
+    temp.mExtra = &mPoolControl;
+    unsigned buckets = FUN_00921340(9);
+    SetBuckets(buckets, p2, (void*)&p3, (void*)&p3, p3, (void*)&p3, &temp);
+    RehashPolicy_00db7fc0* policy = (RehashPolicy_00db7fc0*)&temp;
+    policy->mLoadFactor = 10000.0f;
+    policy->mGrowthFactor = 2.0f;
+    policy->mnNextResize = 0;
+    mRehashPolicy = *policy;
+    unsigned n = policy->get_next_bucket_count(mnElementCount);
+    if (n > mnBucketCount)
+        Sub_00daee00(n);
+    Sub_00db5d70(p2, (void*)p3, p2, (void*)p3);
+    return this;
+}
+
 // @ 0x00db86a0
 void cGroupFollower::Update(float dt)
 {
@@ -12852,6 +13417,43 @@ cHealOtherData& cHealOtherData::operator=(const cHealOtherData& src)
 }
 }  // namespace SP
 
+// @ 0x00dba2f0
+float FUN_00dba2f0(void* owner, void* unused2, void* unused3, void* unused4, void* stimuli, unsigned char* found)
+{
+    char* self = (char*)owner + 0xc0;
+    if (!((FnBoolVoid)((void**)*(void***)self)[0x48 / 4])(self))
+        return 0.0f;
+
+    void* nouns = FUN_00b3d300();
+    GameObjectRef* data = (GameObjectRef*)TCS(void*, (void*, void*, void*, void*, void*, void*),
+                                            FUN_00b21340)(
+        nouns, (void*)g_00cd7d10, (void*)g_00d3d420, (void*)g_00ae72d0,
+        (void*)g_00b1e500, (void*)0x18c6de8);
+    PointerList* objects = &data->mObjects;
+    if (objects->mpBegin == objects->mpEnd)
+        return 0.0f;
+
+    PointerList* list = (PointerList*)TCS(void*, (void*), FUN_00c420d0)(self);
+    void** it = list->mpBegin;
+    void** end = list->mpEnd;
+    while (it != end) {
+        void* obj = *it;
+        void* vehicle = 0;
+        if (obj)
+            vehicle = ((FnPtrInt)((void**)*(void***)obj)[0xb8 / 4])(obj, 0x137e8e0);
+        if (vehicle) {
+            if (stimuli)
+                TCS(void*, (void*), FUN_00d997e0)(stimuli);
+            cVehiclePartB* part = (cVehiclePartB*)(cVehicleLayout*)vehicle;
+            *(void**)((char*)stimuli + 4) = part;
+            *found = 1;
+            return 1.0f;
+        }
+        ++it;
+    }
+    return 0.0f;
+}
+
 // @ 0x00dba580
 cHealOther* cHealOther::Assign(const cHealOther* other)
 {
@@ -12890,6 +13492,44 @@ extern uint32_t FUN_00bc2240(uint32_t id, void* a, void* b, void* c);
 extern void     FUN_00bc23d0(void* p, void* a, void* b, void* c);
 extern uint32_t FUN_00da6270_s00db_ab60(void* a, int b);                  // 0x00da6270 anim helper
 // ---- items of slice s00dbab60 end
+
+// @ 0x00dbaa40
+Action* PickAction(PickContext* ctx)
+{
+    Node* primary = 0;
+    Node* secondary = 0;
+
+    NodeList* nodes = ctx->vtable->GetNodes(ctx);
+    Node** it = nodes->begin;
+    Node** end = nodes->end;
+    for (; it != end; ++it) {
+        Node* node = *it;
+        if ((1 << node->vtable->GetKind(node)) & 0x3fe) {
+            if (node->action.GetState() != 2) {
+                if (ctx->table.Find(node->vtable->GetKind(node))->IsValid()) {
+                    if (node->Classify() == 1)
+                        primary = node;
+                    else
+                        secondary = node;
+                }
+            }
+        }
+    }
+
+    if (primary == 0)
+        primary = secondary;
+
+    Action* result = primary != 0 ? &primary->action : 0;
+    if (primary == 0) {
+        if (ctx->vtable->GetCurrent(ctx)->action.GetState() != 2) {
+            Node* current = ctx->vtable->GetCurrent(ctx);
+            if (current != 0)
+                return &current->action;
+            return 0;
+        }
+    }
+    return result;
+}
 
 // @ 0x00dbab60
 uint32_t FUN_00dbab60(void* param_1, void* arg0, void* arg1, void* arg2, void* arg3, void* arg4, int arg5, int arg6, void* arg7)

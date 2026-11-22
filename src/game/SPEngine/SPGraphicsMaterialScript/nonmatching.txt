@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01041220  84  cl15 folds the two induction pointers into one plus a constant offset (lea edi,[eax+ebp], 94 vs 96 B) while retail keeps p and q separate; equiv WEAK (50 valid inputs, 67.5% coverage) flags: /O2 /MD /Gy /TP /arch:SSE

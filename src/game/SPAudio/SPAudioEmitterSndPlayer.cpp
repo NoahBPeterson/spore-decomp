@@ -1,5 +1,7 @@
 #include "game/types.h"
 #include <intrin.h>
+#include "EA/Audio/ResponseCurve.h"
+#include <math.h>
 
 namespace EA {
 namespace Audio {
@@ -74,6 +76,53 @@ static const int kCommandIdSetCommandComplete = 0x12;
 static const uint32_t kLevelMeterPluginId = 0x56754d31;
 
 namespace SP { namespace Audio {
+
+// ---- items of slice s00a37dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int   u32;
+namespace EA {
+namespace Audio {
+class EmitterSndPlayer_s00a3_7dd0 { public:
+    EmitterSndPlayer_s00a3_7dd0();                                    // 0xa12d80
+    char  Create();                                        // 0xa113c0
+    bool  SetProperty(int id, float v, u32 b);             // 0xa116f0
+    void  UpdateParameters(float a, u32 b);                 // 0xa11f50
+};
+}
+}
+namespace SP {
+namespace Audio {
+class cEmitterSndPlayer_s00a3_7dd0 : public EA::Audio::EmitterSndPlayer_s00a3_7dd0 { public:
+    cEmitterSndPlayer_s00a3_7dd0();                                   // 0xa38d90
+    bool Create();                                         // 0xa38dd0
+    bool SetProperty(int id, float v, u32 b);              // 0xa38de0
+    void UpdateParameters(float a, u32 b);                 // 0xa38e20
+};
+}
+}
+// ---- items of slice s00a37dd0 end
+
+// @ 0x00a38dd0
+bool SP::Audio::cEmitterSndPlayer_s00a3_7dd0::Create()
+{
+    return ((EA::Audio::EmitterSndPlayer_s00a3_7dd0*)this)->Create();
+}
+
+// @ 0x00a38de0
+bool SP::Audio::cEmitterSndPlayer_s00a3_7dd0::SetProperty(int id, float v, u32 b)
+{
+    char* self = (char*)this;
+    if (id != 0x913e6b64)
+        return ((EA::Audio::EmitterSndPlayer_s00a3_7dd0*)self)->SetProperty(id, v, b);
+    *(float*)(self + 0xe04) = v;
+    return true;
+}
+
+// @ 0x00a38e20
+void SP::Audio::cEmitterSndPlayer_s00a3_7dd0::UpdateParameters(float a, u32 b)
+{
+    ((EA::Audio::EmitterSndPlayer_s00a3_7dd0*)this)->UpdateParameters(a, b);
+}
+
 // @ 0x00a38e40
 long double cEmitterSndPlayer::ComputeGainAttenuation(float a, float b, float c, float d)
 {

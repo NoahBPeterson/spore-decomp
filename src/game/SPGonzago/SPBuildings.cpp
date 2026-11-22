@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPBuildings.cpp -- migrated from slice(s) s00bd5ea0, s00bd2840, s00bd1820, s00bcf6f0, s00bcd2a0, s0132abc0, s00bce1e0, s00bcc010 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPBuildings.cpp -- migrated from slice(s) s00bce740, s00bd5ea0, s00bd2840, s00bd1820, s00bcf6f0, s00bcd2a0, s0132abc0, s00bce1e0, s00bcc010 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPBuildings.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -38,6 +38,7 @@ extern "C" char g_157a1f8[];
 #include "SP/cGonzagoSubsystem.h"
 #include "SP/cInteractionTarget.h"
 #include "EA/Random/RandomLinearCongruential.h"
+#include "SP/cTurret.h"
 
 // Retail stream interfaces used by the building serializers.
 struct BuildingArchiveStreamHolder {
@@ -1469,6 +1470,84 @@ using SP::FunctionalMatch::Constraint_s00bd_5ea0;
 void FUN_00bd40a0(void* p);   // 0x00bd40a0
 // ---- items of slice s00bd5ea0 end
 
+// ---- items of slice s00bce740 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef signed int     i32;
+typedef float          f32;
+extern "C" u8  g_156dc20;    // 0x0156dc20  serializer descriptor
+extern "C" u8  g_1466ee4;    // 0x01466ee4  allocation tag
+extern "C" u8  g_13ec458;    // 0x013ec458  base vtable stored by the ctor
+extern "C" u8  g_1466c50;    // 0x01466c50  primary vtable of the new object
+extern "C" u8  g_1475114;    // 0x01475114  second vtable of the new object
+extern "C" f32 g_168b66c;    // 0x0168b66c
+extern "C" f32 g_168b670;    // 0x0168b670
+extern "C" f32 g_168b674;    // 0x0168b674
+bool __cdecl EA_IO_ReadInt32(void* io, void* p, u32 count, i32 flags); // 0x0093a780
+void* __cdecl EAAllocate(u32 size, const char* name, i32 a, i32 b,
+                         const char* file, i32 line);                  // 0x00f473a0
+struct GameDataPart {
+    void Read(void* stream);                                   // 0x00b18600
+};
+struct StreamSub {
+    void* GetIO()
+    {
+        return (**(void* (__thiscall**)(void*))(*(void***)this + 6))(this);
+    }
+};
+struct StreamObj {
+    StreamSub* GetSub()
+    {
+        return (**(StreamSub* (__thiscall**)(void*))(*(void***)this + 8))(this);
+    }
+    u32 GetVersion()
+    {
+        return (**(u32 (__thiscall**)(void*))(*(void***)this + 15))(this);
+    }
+};
+struct cVarListSerializer_s00bc_e740 {
+    u32 mData[0xa14 / 4];
+    void Ctor(void* owner, void* desc, u32 tag);   // 0x00692f90
+    bool Read(void* stream);                       // 0x00693e10
+};
+struct LocoPart {
+    void* mVtbl;              // +0x00
+    u8    pad[0x60];
+    bool Read(void* stream);  // 0x00c43c10 (cLocomotiveObject::Read)
+    void Slot94(void* p);     // vtable +0x94
+    void SetLocomotion(void* loco); // 0x00c421b0
+};
+struct OldSpatialPart {
+    void* mVtbl;
+    u8    pad[0x60];
+    bool Read(void* stream);  // 0x00c88b00 (cSpatialObject::Read)
+};
+struct CombatantPart {
+    u8   pad[0x18];
+    bool Read(void* stream);  // 0x00bfc540 (cCombatant::Read)
+};
+struct cTurret_s00bc_e740 {
+    u8             m00[0x34];
+    LocoPart       mLoco;                 // +0x34
+    u8             pad98[0xc4 - 0x98];
+    u8             mC4[0x224 - 0xc4];     // +0xc4 .. +0x223
+    u32            m224;                  // +0x224
+    u8             pad228[0x588 - 0x228];
+    CombatantPart  mCombat;               // +0x588
+
+    bool Read(void* stream);  // 0x00bce740 (cTurret::Read)
+};
+struct NewLoco {
+    void* mVtbl;   // +0x00
+    void* m04;     // +0x04
+    void* m08;     // +0x08
+    u32   m0c;     // +0x0c
+    u32   m10;     // +0x10
+    u32   m14;     // +0x14
+    f32   x;       // +0x18
+    f32   y;       // +0x1c
+    f32   z;       // +0x20
+};
+// ---- items of slice s00bce740 end
+
 // @ 0x00bcc350
 char __thiscall cSerializableNoun::WriteBase(void* s)
 {
@@ -1525,6 +1604,7 @@ struct SpatialSetter_bcc400 {
     virtual void v24();
     virtual void SetValue(void* v);                                  // +0x94
 };
+
 // @ 0x00bcc400
 char __thiscall cSerializableNoun::ReadBase(void* s)
 {
@@ -2544,6 +2624,50 @@ void cBuilding::FUN_00bce660(void* param_2)
     cCiv* civ = mp100->GetCivilization(uVar5, *pv);
     civ->FUN_00bf02b0();
     mp100->FUN_00c00b00(0, uVar5);
+}
+
+// @ 0x00bce740
+bool cTurret_s00bc_e740::Read(void* stream)
+{
+    StreamSub* sub = ((StreamObj*)stream)->GetSub();
+    u32 tag;
+    void* io = sub->GetIO();
+    EA_IO_ReadInt32(io, &tag, 1, 0);
+
+    ((GameDataPart*)this)->Read(stream);
+
+    bool ok = ((((StreamObj*)stream)->GetVersion() < 0x1c0008)
+                   ? ((OldSpatialPart*)&mLoco)->Read(stream)
+                   : mLoco.Read(stream))
+              && mCombat.Read(stream);
+
+    cVarListSerializer_s00bc_e740 ser;
+    ser.Ctor(this, &g_156dc20, 0x1a80d26);
+
+    ok = ok && ser.Read(stream);
+    if (ok)
+        ((void (__thiscall*)(LocoPart*, void*))\
+            (*(void***)&mLoco)[0x94 / 4])(&mLoco, mC4);
+
+    m224 = 5;
+    NewLoco* loco = (NewLoco*)EAAllocate(0x24, (const char*)&g_1466ee4,
+                                         0, 0, 0, 0);
+    if (loco) {
+        *(void* volatile*)&loco->m08 = &g_13ec458;
+        loco->m0c = 0;
+        loco->mVtbl = &g_1466c50;
+        loco->m08 = &g_1475114;
+        loco->m10 = 1;
+        loco->m14 = 0;
+        loco->x = g_168b66c;
+        loco->y = g_168b670;
+        loco->z = g_168b674;
+    } else {
+        loco = 0;
+    }
+    mLoco.SetLocomotion(loco);
+
+    return ok;
 }
 
 // @ 0x00bce8b0

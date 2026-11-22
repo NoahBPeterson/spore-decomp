@@ -104,7 +104,8 @@ struct ExtCallees {
     void* __thiscall assign(const void* src);          // 0x00537dc0  (ret 4)
     void* __thiscall insert(void* pos, void** val);    // 0x00a80dd0  (ret 8)
 };
-extern "C" void* EAAllocate(u32 size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+extern void* EAAllocate(size_t size, const char* name, int flags, int align,
+                        const char* file, int line);  // 0x00f473a0
 namespace EA {
 namespace Swarm {
 class cSurfaceDecalManager {                           // size 0xa8 (dev layout)
@@ -272,6 +273,11 @@ static inline void FreeArray(void* p) {
   if (p != 0 && ((int*)p)[-1] != 0)
     FreeMem(p);
 }
+// The list links each node through its +4 field; a link maps back to its node (or null).
+static inline DecalNode* DecalFromLink(IntrusiveList* link)
+{
+  return link ? (DecalNode*)((char*)link - 4) : 0;
+}
 // ---- items of slice s00a80240_g7 end
 
 // @ 0x00a7fe20
@@ -424,12 +430,6 @@ Particle* Particle::Ctor()
   return this;
 }
 
-// The list links each node through its +4 field; a link maps back to its node (or null).
-static inline DecalNode* DecalFromLink(IntrusiveList* link)
-{
-  return link ? (DecalNode*)((char*)link - 4) : 0;
-}
-
 // @ 0x00a809d0
 void SurfaceDecals::VisitParticles()
 {
@@ -525,6 +525,49 @@ bool SurfaceDecals::Reset()
   return true;
 }
 
+// @ 0x00a80c00
+InsertResult* HashTable::Insert(InsertResult* out, const uint32_t* key,
+                                uint32_t /*unused*/)
+{
+  uint32_t h = key[0] % mBucketCount;
+  HashNode** bucket = mBuckets + h;
+  HashNode* node = *bucket;
+  while (node != 0) {
+    if (node->mKey[0] == key[0] && node->mKey[1] == key[1]) {
+      out->mNode = node;
+      out->mFlag = 0;
+      out->mBucket = bucket;
+      return out;
+    }
+    node = node->mNext;
+  }
+
+  RehashResult res;
+  mPolicy.NeedRehash(&res, mBucketCount, mElementCount, true);
+  HashNode* n = (HashNode*)EAAllocate(
+      0x18, "EASTL", 0, 0,
+      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+      0xd1);
+  if (n != 0) {
+    n->mKey[0] = key[0];
+    n->mKey[1] = key[1];
+    n->mKey[2] = key[2];
+    n->mKey[3] = key[3];
+  }
+  n->mNext = 0;
+  if (res.mFlag != 0) {
+    h = key[0] % res.mCount;
+    Rehash(res.mCount);
+  }
+  n->mNext = mBuckets[h];
+  mBuckets[h] = n;
+  ++mElementCount;
+  out->mNode = n;
+  out->mFlag = 1;
+  out->mBucket = mBuckets + h;
+  return out;
+}
+
 // @ 0x00a80d10
 void SurfaceDecals::Destroy()
 {
@@ -552,6 +595,53 @@ void SurfaceDecals::Destroy()
     fn(owner);
   }
   mVtbl4 = &g_vtblIEventModifier;
+}
+
+// @ 0x00a80dd0
+void SimpleVector::DoInsertValue(CellDataNode** pos, CellDataNode** value)
+{
+  if (mEnd != mCap) {
+    CellDataNode** v = value;
+    if (v >= pos && v < mEnd)
+      ++v;
+    if (mEnd != 0)
+      *mEnd = mEnd[-1];
+    int bytes = (int)((char*)(mEnd - 1) - (char*)pos);
+    int rounded = (bytes >> 2) << 2;
+    memmove((char*)mEnd - rounded, pos, (size_t)bytes);
+    *pos = *v;
+    ++mEnd;
+    return;
+  }
+
+  int n = (int)(mEnd - mBegin);
+  CellDataNode** newBuf;
+  if (n == 0) {
+    n = 1;
+    newBuf = 0;
+  } else {
+    n *= 2;
+    if (n == 0) {
+      newBuf = 0;
+    } else {
+      newBuf = (CellDataNode**)EAAllocate(
+          n * 4, "EASTL", 0, 0,
+          "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+          0xd1);
+    }
+  }
+  int off = (int)((char*)pos - (char*)mBegin);
+  char* base = (char*)memcpy(newBuf, mBegin, (size_t)off);
+  char* p = base + ((off >> 2) << 2);
+  if (p != 0)
+    *(CellDataNode**)p = *value;
+  int tail = (int)((char*)mEnd - (char*)pos);
+  char* base2 = (char*)memcpy(p + 4, pos, (size_t)tail);
+  char* newEnd = base2 + ((tail >> 2) << 2);
+  FreeArray(mBegin);
+  mBegin = newBuf;
+  mEnd = (CellDataNode**)newEnd;
+  mCap = (CellDataNode**)((char*)newBuf + n * 4);
 }
 
 // @ 0x00a80ee0

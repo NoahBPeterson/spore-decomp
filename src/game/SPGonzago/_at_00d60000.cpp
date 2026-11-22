@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00d60000.cpp -- migrated from slice(s) s00d6f1c0, s00d65250, s00d61c20, s00d60ce0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00d60000.cpp -- migrated from slice(s) s00d6dcd0, s00d6dcc0, s00d6f1c0, s00d65250, s00d61c20, s00d60ce0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00d60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -257,6 +257,22 @@ virtual void v07c();
 }
 // ---- items of slice s00d6f1c0 end
 
+// ---- items of slice s00d6dcc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cSPCreatureBase_s00d6_dcc0 {
+public:
+    bool Hover(bool enable); // 0x00c13a30
+};
+}
+// ---- items of slice s00d6dcc0 end
+
+// ---- items of slice s00d6dcd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class Simulator_cCreatureBase {
+public:
+    int CountValid(); // 0x00c0f570
+};
+// ---- items of slice s00d6dcd0 end
+
 // @ 0x00d61b20
 void FUN_00d61b20(Creature* c)
 {
@@ -499,6 +515,22 @@ bool __fastcall FUN_00d65850(int* self)
   if (p != 0)
     result = p[2] == 0x060995fc;
   return result;
+}
+
+// @ 0x00d6dcc0
+namespace SP {
+void __cdecl FUN_00d6dcc0(cSPCreatureBase_s00d6_dcc0* creature)
+{
+    creature->Hover(false);
+}
+}  // namespace SP
+
+// @ 0x00d6dcd0
+float __cdecl FUN_00d6dcd0(Simulator_cCreatureBase* creature)
+{
+    if (creature->CountValid() > 0)
+        return 0.0f;
+    return 1.0f;
 }
 
 // @ 0x00d6f590

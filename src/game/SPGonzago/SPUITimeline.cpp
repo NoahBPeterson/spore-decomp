@@ -3534,6 +3534,7 @@ struct RectSrc_e37b40 {
     virtual void v0d();
     virtual const Rect* GetRect();                                   // +0x38
 };
+
 // @ 0x00e37b40
 double cSPUITimeline::FUN_00e37b40(TimelineNode* n, float a, int b)
 {
@@ -5109,6 +5110,7 @@ struct MsgServer_e3c6f0 {
     virtual void v04();
     virtual void PostMessage(unsigned int id, MessageRC5_e3c6f0* msg, void* target);  // +0x14
 };
+
 // @ 0x00e3c6f0
 void FUN_00e3c6f0(char param_1, unsigned int param_2)
 {

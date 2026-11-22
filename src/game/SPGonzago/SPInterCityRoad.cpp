@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPInterCityRoad.cpp -- migrated from slice(s) s00c404c0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPInterCityRoad.cpp -- migrated from slice(s) s00c41360, s00c404c0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPInterCityRoad.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,7 @@
 extern "C" wchar_t g_146cd68[];      // 0x0146cd68  L"IntercityRoadMesh"
 extern "C" unsigned int wcslen(const wchar_t* p);
 #include <new>
+#include <math.h>
 
 // ---- items of slice s00c404c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int     u32;
@@ -211,6 +212,157 @@ extern "C" f32 g_1485720;            // 0x01485720  (_HK_REAL_ONE)
 extern "C" u8  g_15740d8;            // 0x015740d8
 extern "C" u8  g_1667bac;            // 0x01667bac  eastl gEmptyString16
 
+// ---- items of slice s00c41360 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_RoadDefaultScale;             // 0x0169cb58
+void __cdecl operator_delete__(void* p);   // 0xf47380 (operator delete[])
+struct Vector3_s00c4_1360 {
+    float x, y, z;
+    Vector3_s00c4_1360() {}
+    Vector3_s00c4_1360(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    Vector3_s00c4_1360(const Vector3_s00c4_1360& o) : x(o.x), y(o.y), z(o.z) {}
+};
+inline Vector3_s00c4_1360 operator-(const Vector3_s00c4_1360& a, const Vector3_s00c4_1360& b) { return Vector3_s00c4_1360(a.x - b.x, a.y - b.y, a.z - b.z); }
+inline Vector3_s00c4_1360 operator+(const Vector3_s00c4_1360& a, const Vector3_s00c4_1360& b) { return Vector3_s00c4_1360(a.x + b.x, a.y + b.y, a.z + b.z); }
+inline Vector3_s00c4_1360 operator*(const Vector3_s00c4_1360& a, float s) { return Vector3_s00c4_1360(a.x * s, a.y * s, a.z * s); }
+struct PodVec3 {    // trivially copyable (integer-register copies)
+    float x, y, z;
+};
+bool __cdecl Vector3Equal(const PodVec3* a, const PodVec3* b);   // 0x004232c0
+extern PodVec3 g_DefaultPosition;                                 // 0x0168e690 (also the "no position" marker)
+struct sp_vector_allocator {
+    const char* mpName;
+    uint32_t mFlags;
+    sp_vector_allocator() {}
+    void deallocate(void* p) {
+        if (((uint32_t*)p)[-1])
+            operator_delete__(p);
+    }
+};
+template <class T> struct SpVector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator mAllocator;
+
+    SpVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~SpVector() { if (mpBegin) mAllocator.deallocate(mpBegin); }
+    int size() const { return (int)(mpEnd - mpBegin); }
+    bool empty() const { return mpBegin == mpEnd; }
+    T& operator[](int i) { return mpBegin[i]; }
+    T* begin() { return mpBegin; }
+    T* end() { return mpEnd; }
+    T* erase(T* first, T* last);
+    T* insert(T* pos, const T& v);
+    void DoInsertValue(T* pos, const T& v);
+    void push_back_default();
+    void push_back(const T& v)
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) T(v);
+        else
+            DoInsertValue(mpEnd, v);
+    }
+};
+struct cCurvePoint {          // 0x3c bytes
+    Vector3_s00c4_1360 mPos;             // +0x00
+    float mF0c;               // +0x0c
+    int mF10;                 // +0x10
+    uint32_t pad14[(0x38 - 0x14) / 4];
+    bool mF38;                // +0x38
+    cCurvePoint(const Vector3_s00c4_1360& p) : mPos(p), mF0c(1.0f), mF10(0), mF38(false) {}
+};
+typedef SpVector<Vector3_s00c4_1360> Vec3Vector;
+typedef SpVector<cCurvePoint> CurveVector;
+template <> cCurvePoint* CurveVector::erase(cCurvePoint* first, cCurvePoint* last);          // 0xac4570
+template <> cCurvePoint* CurveVector::insert(cCurvePoint* pos, const cCurvePoint& v);        // 0xc41190
+template <> void CurveVector::push_back_default();                                           // 0xc410e0
+template <> Vector3_s00c4_1360* Vec3Vector::erase(Vector3_s00c4_1360* first, Vector3_s00c4_1360* last);                       // 0x50f740
+template <> void Vec3Vector::DoInsertValue(Vector3_s00c4_1360* pos, const Vector3_s00c4_1360& v);                  // 0x4b5ad0
+struct cCurveParams {         // 20 bytes
+    const char* mpName;
+    void* mpA;
+    void* mpFunc;
+    void* mpB;
+    void* mpC;
+};
+extern cCurveParams g_LandAvoidCitiesParams;          // 0x1565b54 ("landAvoidCities")
+struct cCurveBuilder {
+    void Build(const cCurveParams& params, const PodVec3& a, const PodVec3& b,
+               CurveVector& out, float t0, float t1);  // 0xac6960
+};
+cCurveBuilder* __cdecl GetCurveBuilder();             // 0xb3d290
+struct cCityWalls {
+    char pad[0x25c];
+    float mOuterRadius;                               // +0x25c
+    const PodVec3& GetWallPosition(Vector3_s00c4_1360& out, const Vector3_s00c4_1360& towards, int flag);   // 0xbec660 (sret)
+    const PodVec3& RequestPosition(Vector3_s00c4_1360& out, int mode);                           // 0xbec2d0 (sret)
+};
+struct cSpatialObject_s00c4_1360 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const Vector3_s00c4_1360& GetPosition();             // +0x2c
+};
+struct cCity {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+    virtual cCityWalls* GetCityWalls();               // +0x6c
+    char pad04[0x120 - 4 - 4 * 0];
+    cSpatialObject_s00c4_1360 mSpatial;                          // +0x120 (secondary base)
+};
+class cInterCityRoad_s00c4_1360 {
+public:
+    char pad[0x118];
+    bool mbFlag118;               // +0x118
+    cCity* mpCity1;               // +0x11c
+    cCity* mpCity2;               // +0x120
+    int mRoadType;                // +0x124
+    Vec3Vector mPathData;         // +0x128
+    float mWidth;                 // +0x13c
+    void BuildPath();             // 0x00c41360
+    void RegisterCity(void* city);                             // 0x00b18550
+    void SetupCities(void* city1, void* city2, int roadType);  // 0x00c41c60
+};
+struct RefCounted
+{
+    virtual void AddRef();                             // +0x00
+    virtual void Release();                            // +0x04
+};
+// ---- items of slice s00c41360 end
+
 // @ 0x00c40cd0
 void* cInteractiveOrnament::Cast_00c40cd0(i32 typeID)
 {
@@ -345,4 +497,118 @@ void cInterCityRoad::RemoveOwner_00c412f0()
         r3->Release();
     }
     mSpatial.Dtor_00c8b2e0();
+}
+
+// @ 0x00c41360
+void cInterCityRoad_s00c4_1360::BuildPath()
+{
+    mPathData.erase(mPathData.begin(), mPathData.end());
+
+    if (mpCity1 && mpCity1->GetCityWalls() && mpCity2 && mpCity2->GetCityWalls()) {
+        CurveVector curve;
+
+        Vector3_s00c4_1360 tmp;
+        PodVec3 posA = mpCity1->GetCityWalls()->GetWallPosition(tmp, mpCity2->mSpatial.GetPosition(), 0);
+        PodVec3 posB = mpCity2->GetCityWalls()->GetWallPosition(tmp, mpCity1->mSpatial.GetPosition(), 0);
+        if (Vector3Equal(&posA, &g_DefaultPosition))
+            posA = mpCity1->GetCityWalls()->RequestPosition(tmp, 5);
+        if (Vector3Equal(&posB, &g_DefaultPosition))
+            posB = mpCity2->GetCityWalls()->RequestPosition(tmp, 5);
+
+        GetCurveBuilder()->Build(g_LandAvoidCitiesParams, posA, posB, curve, 0.0f, 1.0f);
+
+        // drop the tail of the curve starting at the first point inside city 2's wall radius
+        for (unsigned i = 0; i < (unsigned)curve.size(); ++i) {
+            Vector3_s00c4_1360 d = curve[i].mPos - mpCity2->mSpatial.GetPosition();
+            cCityWalls* w = mpCity2->GetCityWalls();
+            float len = sqrtf(d.x * d.x + d.z * d.z + d.y * d.y);
+            if (len < w->mOuterRadius + 1.0f) {
+                curve.erase(&curve[i], curve.end());
+                break;
+            }
+        }
+        // drop the head of the curve up to the last point inside city 1's wall radius
+        for (int i = curve.size(); i != 0; --i) {
+            Vector3_s00c4_1360 d = curve[i - 1].mPos - mpCity1->mSpatial.GetPosition();
+            cCityWalls* w = mpCity1->GetCityWalls();
+            float len = sqrtf(d.x * d.x + d.z * d.z + d.y * d.y);
+            if (len < w->mOuterRadius + 1.0f) {
+                curve.erase(curve.begin(), &curve[i]);
+                break;
+            }
+        }
+
+        if (curve.begin() != curve.end()) {
+            // first point too far from city 1: add a start point on the wall circle
+            {
+                const Vector3_s00c4_1360* p = &curve.begin()->mPos;
+                Vector3_s00c4_1360 d = *p - mpCity1->mSpatial.GetPosition();
+                cCityWalls* w = mpCity1->GetCityWalls();
+                float len = sqrtf(d.x * d.x + d.z * d.z + d.y * d.y);
+                if (len > w->mOuterRadius + 3.0f) {
+                    float r = mpCity1->GetCityWalls()->mOuterRadius + 1.0f;
+                    cCurvePoint* first = curve.begin();
+                    Vector3_s00c4_1360 d2 = first->mPos - mpCity1->mSpatial.GetPosition();
+                    float inv = 1.0f / sqrtf(d2.x * d2.x + d2.z * d2.z + d2.y * d2.y);
+                    Vector3_s00c4_1360 off = d2 * inv * r;
+                    Vector3_s00c4_1360 np = mpCity1->mSpatial.GetPosition() + off;
+                    curve.insert(curve.begin(), cCurvePoint(Vector3_s00c4_1360(g_DefaultPosition.x, g_DefaultPosition.y, g_DefaultPosition.z)));
+                    curve.begin()->mPos = np;
+                }
+            }
+            // last point too far from city 2: add an end point on the wall circle
+            {
+                cCurvePoint* last = curve.end() - 1;
+                Vector3_s00c4_1360 d = last->mPos - mpCity2->mSpatial.GetPosition();
+                cCityWalls* w = mpCity2->GetCityWalls();
+                float len = sqrtf(d.x * d.x + d.z * d.z + d.y * d.y);
+                if (len > w->mOuterRadius + 3.0f) {
+                    float r = mpCity2->GetCityWalls()->mOuterRadius + 1.0f;
+                    cCurvePoint* last2 = curve.end() - 1;
+                    Vector3_s00c4_1360 d2 = last2->mPos - mpCity2->mSpatial.GetPosition();
+                    float inv = 1.0f / sqrtf(d2.x * d2.x + d2.z * d2.z + d2.y * d2.y);
+                    Vector3_s00c4_1360 off = d2 * inv * r;
+                    Vector3_s00c4_1360 np = off + mpCity2->mSpatial.GetPosition();
+                    curve.push_back_default();
+                    (curve.end() - 1)->mPos = np;
+                }
+            }
+        }
+
+        int n = curve.size();
+        for (int i = 0; i < n; ++i)
+            mPathData.push_back(curve[i].mPos);
+    }
+}
+
+// @ 0x00c41c60
+void cInterCityRoad_s00c4_1360::SetupCities(void* city1, void* city2, int roadType)
+{
+    RegisterCity(city1);
+
+    cCity* old1 = mpCity1;
+    if ((cCity*)city1 != old1)
+    {
+        if (city1 != 0)
+            ((RefCounted*)city1)->AddRef();
+        mpCity1 = (cCity*)city1;
+        if (old1 != 0)
+            ((RefCounted*)old1)->Release();
+    }
+
+    cCity* old2 = mpCity2;
+    if ((cCity*)city2 != old2)
+    {
+        if (city2 != 0)
+            ((RefCounted*)city2)->AddRef();
+        mpCity2 = (cCity*)city2;
+        if (old2 != 0)
+            ((RefCounted*)old2)->Release();
+    }
+
+    mRoadType = roadType;
+    const float scale = g_RoadDefaultScale;
+    mbFlag118 = true;
+    mWidth = scale;
+    BuildPath();
 }

@@ -23,3 +23,5 @@
 00692330 116 complete CancelJob; mutex pointer kept in ebp in original, reloaded from the lock object here
 00692430 272 complete DestroyJobThread; register allocation (ebx/ebp) and zeroing order differ
 006925c0 62 complete; Run scoped-lock/helper near-miss
+00692640 61 regalloc: R49 (2026-11-17): retail keeps this+8 in edi and unlocks from it; ours reloads lock.mpMutex; tried member helper, const/ref member, noalias | Earlier note: complete; WaitForJob scoped-lock/helper near-miss
+006926b0 18 complete cJob::Wait (29 vs 33): retail's null path re-loads ecx as an *int* (`xor eax,eax; xor ecx,ecx; mov ecx,[ecx+0x30]`) before pushing eax, i.e. the manager field looks up through a null `cJobData*`; ours leaves eax/ecx as cl folds it (`lea eax,[ecx-8]; mov ecx,[eax+0x30]`). Tried a trailing `return;` (identical) and `_ReadWriteBarrier()` after the call (collapses both paths into one call/jmp, 21 bytes).

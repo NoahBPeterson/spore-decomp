@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a56950  15  complete; identical code, only the bool-normalize/scheduling of "test eax,eax; setne bl; and bl,1" around the class_doaddfloat call differs (size 79 vs 82); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, fault(read))

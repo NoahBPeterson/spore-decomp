@@ -46,32 +46,14 @@ extern "C" float RandomSigned(float);                        // 0x00572a60
 #include "SP/cLocomotiveObject.h"
 
 // ---- items of slice s00dc0040 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_x444;     // 0x0169f444
+extern float g_xF448;    // 0x0169f448
+extern float g_xF44c;    // 0x0169f44c
+extern float g_9d578;    // 0x0159d578
+extern float g_9d5e8;    // 0x0159d5e8
+extern "C" bool  CommCanTarget(void*, void*, unsigned);      // 0x0102aa50
 typedef unsigned char byte;
 struct Vec3 { float x, y, z; };
-extern "C" float __cdecl sqrtf(float);
-extern float g_one;      // 0x01485720  (1.0f)
-extern float g_9d5f8;    // 0x0159d5f8
-extern float g_9d604;    // 0x0159d604
-extern float g_9d608;    // 0x0159d608
-extern float g_9d60c;    // 0x0159d60c
-extern float g_9d610;    // 0x0159d610
-extern float g_9d614;    // 0x0159d614
-extern float g_9d628;    // 0x0159d628
-extern float g_9d630;    // 0x0159d630
-extern float g_9d634;    // 0x0159d634
-extern float g_9d638;    // 0x0159d638
-extern float g_9d63c;    // 0x0159d63c
-extern float g_473c70;   // 0x01473c70
-extern float g_47c308;   // 0x0147c308
-extern float g_3ec4d0;   // 0x013ec4d0
-extern float g_3eb1bc;   // 0x013eb1bc
-extern float g_3eecd8;   // 0x013eecd8
-extern float g_fA18;     // 0x0169fa18
-extern float g_fA1c;     // 0x0169fa1c
-extern float g_fA20;     // 0x0169fa20
-extern float g_fA24;     // 0x0169fa24
-extern float g_fA28;     // 0x0169fa28
-extern float g_fA2c;     // 0x0169fa2c
 extern struct RRngObj g_rng;   // 0x01601760 (the RNG object itself)
 struct Sub {                             // view on the outer object (this in ecx)
     void  Be70(void* p);                 // 0x00c3be70
@@ -91,14 +73,9 @@ struct RRngObj {                         // 0x01601760 (RNG instance, direct obj
     double   RandomDoubleUniform();            // 0x009360d0
 };
 struct Sim { void* GetPlayerInventory(); };    // 0x00a1ad60 (this = UFO simulator)
-extern "C" void* SPGetUFOSimulator();                        // 0x00ffbe50
-extern "C" void* GetBestUFOTarget(void*, unsigned, int);     // 0x0102bc90
-extern "C" void* PlanetModel(void*, void*, float, float);    // 0x00b3d350
-extern "C" float RandomSigned(float);                        // 0x00572a60
 // ---- items of slice s00dc0040 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern struct RRngObj g_rng;   // 0x01601760 (the RNG object itself)
 
 // ---- items of slice s00dc18e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -662,6 +639,8 @@ extern void* SP_GetCivModeStrategy();            // 0xcf74c0
 extern void* GetTriggerMgr();                    // 0xb3d4d0
 extern void* SP_GetCurrentGameMode();            // 0xb5b800
 extern void  SP_GridHasValidIndex(void* p);      // 0xbc8fa0
+extern void* FUN_00d99420(void* a, int b);       // 0xd99420
+extern void  FUN_00d996e0(void* a, void* b);     // 0xd996e0
 #pragma pack(push,1)
 #pragma pack(pop)
 struct Obj;
@@ -704,6 +683,7 @@ struct TriggerMgr {
 };
 struct StateObj  { uint8_t mPad00[0x4b8]; int mState; };   // +0x4b8
 struct OrderInfo { uint8_t mPad00[0x10];  int mKind;  };   // +0x10
+struct OrderInfo2{ uint8_t mPad00[0x2d];  int mValue; };   // +0x2d
 struct Obj {
     Vtbl*  mpVtbl;                          // +0x000
     uint8_t mPad004[0x34 - 0x04];           // +0x004
@@ -764,6 +744,35 @@ void FUN_00dc0040(char* self)
         (*(void (__thiscall**)(void*))((char*)*(void**)p + 4))(p);
     }
     ((Sub*)self)->Be70(self + 0x718);
+}
+
+// @ 0x00dc00a0
+Vec3* FUN_00dc00a0(Vec3* out, unsigned flags, void* arg)
+{
+    out->x = g_x444;
+    out->y = g_xF448;
+    out->z = g_xF44c;
+    char* inv = (char*)((Sim*)SPGetUFOSimulator())->GetPlayerInventory();
+    unsigned b = (flags >> 0xc) & 1;
+    void* best = GetBestUFOTarget(inv, b, 0);
+    if (best != 0) {
+        char* v8 = (char*)(*(void* (__thiscall**)(void*))((char*)*(void**)best + 8))(best);
+        float* ph = (float*)(*(void* (__thiscall**)(char*))((char*)*(void**)(inv + 0x34) + 0x2c))(inv + 0x34);
+        float* pf = (float*)(*(void* (__thiscall**)(void*))((char*)*(void**)v8 + 0x2c))(v8);
+        float dx = pf[0] - ph[0];
+        float dy = pf[1] - ph[1];
+        float dz = pf[2] - ph[2];
+        if (sqrtf(dx*dx + dy*dy + dz*dz) < g_9d578) return out;
+    }
+    void* q = *(void**)(inv + 0x710);
+    if (q != 0 && CommCanTarget(q, arg, b)) return out;
+    if (!b) {
+        int zz = 0;
+        out->x = *(float*)&zz;
+        out->y = g_9d5e8;
+        out->z = *(float*)&zz;
+    }
+    return out;
 }
 
 // @ 0x00dc01c0
@@ -1986,6 +1995,20 @@ void FUN_00dc4a30(Obj* self)
     BehaviorTree* bt = (BehaviorTree*)self->mpBehaviorTree;
     bt->mStimA.ClearAll(0x10000, 0);
     ((Vfn0)self->mSub34.mpVtbl->mSlots[kVtEC])(&self->mSub34);
+}
+
+// @ 0x00dc4a60
+#pragma pack(push,1)
+struct OrderInfo2Packed { uint8_t mPad00[0x2d]; int mValue; };
+#pragma pack(pop)
+float FUN_00dc4a60(Obj* self, void* a1, void* a2, void* a3, BehaviorTreeStim* a4, uint8_t* a5, void* a6, OrderInfo2* a7)
+{
+    if (a4)
+        a4->GetAny();
+    *a5 = 1;
+    void* r = FUN_00d99420(&((BehaviorTree*)self->mpBehaviorTree)->mStimB, ((OrderInfo2Packed*)a7)->mValue);
+    FUN_00d996e0(r, a4);
+    return 1.0f;
 }
 
 // @ 0x00dc4ab0

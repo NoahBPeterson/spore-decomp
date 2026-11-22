@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPUIBadges.cpp  ?FUN_01063f70@@YIXPAX0@Z  01063f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

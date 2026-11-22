@@ -16,6 +16,7 @@
 extern wchar_t gSlashStr[];  // 0x013fa030
 typedef unsigned int uint32;
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void operator delete[](void* p);
 #define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 namespace eastl {
@@ -138,6 +139,21 @@ struct DequeBase_s005f_8fe0 { private:
   void DoInit(size_t n);  // 0x005f8840
 };
 }
+namespace eastl {
+struct StringProps {
+  uint32 mPad[0x104 / 4];  // +0x000 .. +0x103
+  WStr_s005f_8fe0 m104;               // +0x104
+  WStr_s005f_8fe0 m114;               // +0x114
+  WStr_s005f_8fe0 m124;               // +0x124
+  WStr_s005f_8fe0 m134;               // +0x134
+  WStr_s005f_8fe0 m144;               // +0x144
+  WStr_s005f_8fe0 m154;               // +0x154
+  WStr_s005f_8fe0 m164;               // +0x164
+  WStr_s005f_8fe0 m174;               // +0x174
+  bool Prop(uint32 code, WStr_s005f_8fe0& out);
+  bool FUN_005f97c0(const wchar_t* name, uint32 code, WStr_s005f_8fe0* out, int flag, const wchar_t* suffix);
+};  // namespace eastl
+}
 namespace SP {
 class cString_s005f_8fe0 {
  public:
@@ -152,6 +168,22 @@ static const wchar_t* WEnd(const wchar_t* p) {
   while (*p) ++p;
   return p;
 }
+namespace eastl {
+template <typename T>
+const T& min(const T& a, const T& b) {
+  return (a < b) ? a : b;
+}  // namespace eastl
+}
+namespace EA {
+namespace IO {
+namespace File {
+bool Exists(const wchar_t* path);  // 0x00931fa0
+}  // namespace EA
+}
+}
+void __cdecl WStr_Format(WStr_s005f_8fe0* out, const wchar_t* fmt, ...);          // 0x0041e050
+bool __cdecl FUN_005f8da0(WStr_s005f_8fe0* out, const wchar_t* suffix);           // 0x005f8da0
+int __cdecl CompareI16(const wchar_t* a, const wchar_t* b, unsigned n);  // 0x00572930
 // ---- items of slice s005f8fe0 end
 
 // ---- items of slice s005f9920 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -433,7 +465,6 @@ struct StrTable {
 // ---- items of slice s005fa8d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
 
-void  operator delete[](void* p);
 void  operator delete(void* p); // 0x00f47380
 inline void* operator new(size_t, void* p) throw() { return p; }
 namespace EA {
@@ -2486,8 +2517,35 @@ void FUN_005f9760()
 {}
 
 // @ 0x005f97c0
-void FUN_005f97c0()
-{}
+bool eastl::StringProps::FUN_005f97c0(const wchar_t* name, uint32 code, WStr_s005f_8fe0* out, int flag, const wchar_t* suffix)
+{
+  WStr_s005f_8fe0 prop;
+  bool result = true;
+  Prop(code, prop);
+  EnsureDirectoryExists(prop.mpBegin);
+  WStr_Format(out, L"%s%s.png", prop.mpBegin, name);
+  if (flag == 0 && !FUN_005f8da0(out, suffix)) {
+    uint32 n = 1;
+    do {
+      WStr_Format(out, L"%s%s (%d).png", prop.mpBegin, name, n);
+      if (suffix) {
+        const wchar_t* pEnd = suffix;
+        while (*pEnd) ++pEnd;
+        const uint32 olen = (uint32)(out->mpEnd - out->mpBegin);
+        const uint32 slen = (uint32)(pEnd - suffix);
+        if (CompareI16(out->mpBegin, suffix, eastl::min(slen, olen)) == 0 && slen <= olen && olen <= slen)
+          break;
+      }
+      const bool bMissing = !EA::IO::File::Exists(out->mpBegin);
+      if (bMissing) {
+        break;
+      }
+      ++n;
+    } while (n < 1000);
+    result = (n != 1000);
+  }
+  return result;
+}
 
 // @ 0x005f9920
 bool SP::Thumbnail::cImportExport_s005f_9920::WriteAssetDataToImage(cAssetMetadata_s005f_9920* meta, void* a, int b)

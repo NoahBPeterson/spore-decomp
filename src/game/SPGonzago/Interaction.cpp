@@ -9,6 +9,9 @@
 #include <math.h>
 
 // ---- items of slice s00abe110 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+#pragma pack(push, 4)
 typedef unsigned int u32;
 typedef unsigned char u8;
 #define NOINLINE __declspec(noinline)
@@ -19,6 +22,12 @@ struct SlotEntry {
 struct SlotBlock {
   SlotEntry mEntries[128];
 };
+struct SlotVector_s00ab_e110;
+struct SlotIter_s00ab_e110 {
+  SlotVector_s00ab_e110* mpOwner;
+  u32 mIndex;
+  void increment();  // 0x00abe9b0 (SlotIter::increment)
+};
 struct SlotVector;
 struct SlotIter {
   SlotVector* mpOwner;
@@ -26,7 +35,35 @@ struct SlotIter {
   SlotIter& increment();
 };
 static const u32 kSlotEmpty = 0x3fffffff;
-int __cdecl SlotDistance(SlotIter first, SlotIter last);
+int __cdecl SlotDistance(SlotIter_s00ab_e110 first, SlotIter_s00ab_e110 last);
+struct SlotVector_s00ab_e110 {
+  SlotBlock** mpBegin;   // +0x00
+  SlotBlock** mpEnd;     // +0x04
+  void* mpField08;       // +0x08
+  void* mpField0c;       // +0x0c
+  void* mpField10;       // +0x10
+  u32 mEndSlot;          // +0x14
+  u32 mBeginIndex;       // +0x18
+  u32 mFreeHead;         // +0x1c
+
+  SlotEntry* entry(u32 i) { return &mpBegin[i >> 7]->mEntries[i & 0x7f]; }
+  u32 endIndex() {
+    return (u32)((mpEnd - mpBegin) * 128) + mEndSlot - 0x7f;
+  }
+  u32 nextAllocated(u32 i);
+  void freeTarget(u32 i);  // 0x00abe8f0 (SlotVector::freeTarget)
+  void freeAgent(u32 i);  // 0x00abe950 (SlotVector::freeAgent)
+  SlotIter_s00ab_e110 begin();  // 0x00abeaf0 (SlotVector::begin)
+  SlotIter_s00ab_e110 end() {
+    SlotIter_s00ab_e110 it;
+    it.mpOwner = this;
+    it.mIndex = endIndex();
+    return it;
+  }
+  void destroyTargets(int freeMem);  // 0x00abec00 (SlotVector::destroyTargets)
+  void destroyAgents(int freeMem);  // 0x00abec70 (SlotVector::destroyAgents)
+  int size();  // 0x00abefd0 (SlotVector::size)
+};
 struct SlotVector {
   SlotBlock** mpBegin;   // +0x00
   SlotBlock** mpEnd;     // +0x04
@@ -58,7 +95,6 @@ struct SlotVector {
 struct BlockAllocator {
   void release(SlotBlock* block);
 };
-extern BlockAllocator* g_pAllocator_16c8b44;
 struct cInteractionTarget {
   virtual void t00();
   virtual void t04();
@@ -94,6 +130,7 @@ struct cInteractionAgent {
   virtual void a58();
   virtual void a5c();
 };
+struct cInteraction_s00ab_e110;
 struct cInteraction;
 struct cInteractionAgent;
 struct cAgentData {
@@ -134,24 +171,49 @@ struct AgentMap {
   AgentNode** find(AgentNode** out, cInteractionAgent* const& key);
   void erase(cInteractionAgent** key);
 };
+struct IsAgentActive_s00ab_e110 {
+  cInteraction_s00ab_e110* mpOwner;  // +0x00
+  u8 mCheckMap;           // +0x04
+  u8 mPad05[3];
+  bool evaluate(cInteractionAgent* agent);  // 0x00abea90 (IsAgentActive::evaluate)
+};
+struct AgentFilterRange {
+  SlotIter_s00ab_e110 mBegin;        // +0x00
+  SlotIter_s00ab_e110 mEnd;          // +0x08
+  IsAgentActive_s00ab_e110 mPred;    // +0x10
+  AgentFilterRange(SlotVector_s00ab_e110* v, IsAgentActive_s00ab_e110* pred);
+  void advance();
+};
 struct IsAgentActive {
   cInteraction* mpOwner;  // +0x00
   u8 mCheckMap;           // +0x04
   u8 mPad05[3];
   int evaluate(cInteractionAgent* agent);
 };
-struct AgentFilterRange {
-  SlotIter mBegin;        // +0x00
-  SlotIter mEnd;          // +0x08
-  IsAgentActive mPred;    // +0x10
-  AgentFilterRange(SlotVector* v, IsAgentActive* pred);
-  void advance();
-};
 struct cInteractionVtbl {
   void* mSlots[24];
 };
-typedef bool (__thiscall* AddTargetFn)(cInteraction*, cInteractionTarget*);
-typedef cInteractionTarget* (__thiscall* RemoveTargetFn)(cInteraction*, SlotIter*, SlotVector*, u32);
+typedef bool (__thiscall* AddTargetFn)(cInteraction_s00ab_e110*, cInteractionTarget*);
+typedef cInteractionTarget* (__thiscall* RemoveTargetFn)(cInteraction_s00ab_e110*, SlotIter_s00ab_e110*, SlotVector_s00ab_e110*, u32);
+struct cInteraction_s00ab_e110 {
+  cInteractionVtbl* mpVtbl;   // +0x00
+  void* mpRefCount;           // +0x04
+  u32 mPad08;                 // +0x08
+  SlotVector_s00ab_e110 mTargetList;     // +0x0c
+  SlotVector_s00ab_e110 mAgentList;      // +0x2c
+  AgentMap mAgentData;        // +0x4c
+  u32 mPad64;                 // +0x64
+  int mInteractionType;       // +0x68
+  int mInteractionDependency; // +0x6c
+  int mInteractionState;      // +0x70
+
+  bool IsAgentDefault(cInteractionAgent* agent);  // 0x00abea40 (cInteraction::IsAgentDefault)
+  void SetTarget(cInteractionTarget* target);  // 0x00abed40 (cInteraction::SetTarget)
+  void RemoveAgent(AgentFilterRange range);  // 0x00abedb0 (cInteraction::RemoveAgent)
+  bool HasAgent(cInteractionAgent* agent);  // 0x00abee20 (cInteraction::HasAgent)
+  bool HasTarget(cInteractionTarget* target);  // 0x00abeeb0 (cInteraction::HasTarget)
+  SlotIter_s00ab_e110* RemoveTarget(SlotIter_s00ab_e110* out, SlotVector_s00ab_e110* vec, u32 index);  // 0x00abef40 (cInteraction::RemoveTarget)
+};
 struct cInteraction {
   cInteractionVtbl* mpVtbl;   // +0x00
   void* mpRefCount;           // +0x04
@@ -172,8 +234,7 @@ struct cInteraction {
   SlotIter* RemoveTarget(SlotIter* out, SlotVector* vec, u32 index);
 };
 struct cInteractionTarget;
-struct cInteractionAgent;
-SlotIter* __cdecl FUN_00ac03f0(SlotIter* out, SlotVector* a, u32 ai, SlotVector* b, u32 bi, void* value);
+SlotIter_s00ab_e110* __cdecl FUN_00ac03f0(SlotIter_s00ab_e110* out, SlotVector_s00ab_e110* a, u32 ai, SlotVector_s00ab_e110* b, u32 bi, void* value);
 // ---- items of slice s00abe110 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -331,7 +392,129 @@ struct cInteractionTarget_s00ab_f0b0 {
     virtual void Release();                                     // 0x14
     virtual void AddRef();                                      // 0x18
 };
+struct tWideStringSlot {                // 16-byte element of the stack name list
+    wchar_t* mpBegin;                   // +0x00
+    wchar_t* mpEnd;                     // +0x04
+    wchar_t* mpCapacity;                // +0x08
+    uint32_t mPad0c;                    // +0x0c
+};
 class cInteraction_s00ab_f0b0;
+class tBlockVector16 {
+public:
+    tWideStringSlot** mpDir;            // +0x00
+    uint32_t          mnBlockCount;     // +0x04
+    tWideStringSlot*  mpBegin;          // +0x08
+    tWideStringSlot*  mpFirstBlock;     // +0x0c
+    tWideStringSlot*  mpFirstBlockEnd;  // +0x10
+    tWideStringSlot** mpFirstBlockSlot; // +0x14
+    tWideStringSlot*  mpEnd;            // +0x18
+    tWideStringSlot*  mpLastBlock;      // +0x1c
+    tWideStringSlot*  mpLastBlockEnd;   // +0x20
+    tWideStringSlot** mpLastBlockSlot;  // +0x24
+
+    tBlockVector16(uint32_t nCount)
+        : mpDir(0), mnBlockCount(0), mpBegin(0), mpFirstBlock(0), mpFirstBlockEnd(0),
+          mpFirstBlockSlot(0), mpEnd(0), mpLastBlock(0), mpLastBlockEnd(0), mpLastBlockSlot(0)
+    {
+        init(nCount);
+    }
+    void init(uint32_t nCount);         // 0x00abf9e0
+    void clear();                       // 0x00abfd40
+    void destroy();                     // 0x00abfcb0
+};
+class tBlockVector4 {
+public:
+    cInteraction_s00ab_f0b0*** mpDir;              // +0x00
+    uint32_t        mnBlockCount;       // +0x04
+    cInteraction_s00ab_f0b0**  mpBegin;            // +0x08
+    cInteraction_s00ab_f0b0**  mpFirstBlock;       // +0x0c
+    cInteraction_s00ab_f0b0**  mpFirstBlockEnd;    // +0x10
+    cInteraction_s00ab_f0b0*** mpFirstBlockSlot;   // +0x14
+    cInteraction_s00ab_f0b0**  mpEnd;              // +0x18
+    cInteraction_s00ab_f0b0**  mpLastBlock;        // +0x1c
+    cInteraction_s00ab_f0b0**  mpLastBlockEnd;     // +0x20
+    cInteraction_s00ab_f0b0*** mpLastBlockSlot;    // +0x24
+
+    tBlockVector4(uint32_t nCount)
+        : mpDir(0), mnBlockCount(0), mpBegin(0), mpFirstBlock(0), mpFirstBlockEnd(0),
+          mpFirstBlockSlot(0), mpEnd(0), mpLastBlock(0), mpLastBlockEnd(0), mpLastBlockSlot(0)
+    {
+        init(nCount);
+    }
+    void init(uint32_t nCount);         // 0x00ca09f0
+    void destroy();                     // 0x00abf900
+    void pop_back();                    // 0x00abf980
+    int32_t size() const
+    {
+        return ((int32_t)(mpLastBlockSlot - mpFirstBlockSlot) - 1) * 64
+             + (int32_t)(mpEnd - mpLastBlock)
+             + (int32_t)(mpFirstBlockEnd - mpBegin);
+    }
+    cInteraction_s00ab_f0b0* back() const
+    {
+        cInteraction_s00ab_f0b0** ppSlot = mpEnd;
+        cInteraction_s00ab_f0b0** ppLastBlock = mpLastBlock;
+        cInteraction_s00ab_f0b0*** ppLastSlot = mpLastBlockSlot;
+        if (ppSlot == ppLastBlock)
+            ppSlot = ppLastSlot[-1] + 64;
+        return ppSlot[-1];
+    }
+};
+class cInteractionStack {
+public:
+    virtual ~cInteractionStack();                               // 0x00
+    virtual void v04();                                         // 0x04
+    virtual void v08();                                         // 0x08
+    virtual void v0c();                                         // 0x0c
+    virtual void v10();                                         // 0x10
+    virtual void v14();                                         // 0x14
+    virtual void v18();                                         // 0x18
+    virtual void v1c();                                         // 0x1c
+    virtual cInteraction_s00ab_f0b0* v20();                                // 0x20
+    virtual void v24();                                         // 0x24
+    virtual cInteraction_s00ab_f0b0* v28();                                // 0x28
+    virtual void v2c();                                         // 0x2c
+    virtual void v30();                                         // 0x30
+    virtual void v34();                                         // 0x34
+    virtual int32_t v38();                                      // 0x38
+    virtual void v3c();                                         // 0x3c
+    virtual void v40(void* pOwner);                             // 0x40
+    virtual void v44(AgentFilterRange_s00ab_f0b0 range);                   // 0x44
+    virtual void v48();                                         // 0x48
+    virtual void v4c(bool bFlag);                               // 0x4c
+    virtual void v50();                                         // 0x50
+    virtual void v54();                                         // 0x54
+    virtual void v58();                                         // 0x58
+    virtual void v5c();                                         // 0x5c
+    virtual void v60();                                         // 0x60
+
+    bool  mb04;                     // +0x04
+    tBlockVector16 mNames;          // +0x08
+    uint32_t mPad30;                // +0x30
+    tBlockVector4 mObjects;         // +0x34
+    uint32_t mPad5c;                // +0x5c
+    uint32_t mPad60;                // +0x60
+    bool  mb64;                     // +0x64
+    bool  mb65;                     // +0x65
+
+    cInteractionStack();
+    void SetFlag(bool bFlag);               // 0x00abfee0
+    void SetUnknownFlag();                  // 0x00abf6f0
+    void NotifyBehaviorManager();           // 0x00abf710
+    void v20Call(void* pA1, void* pA2, void* pA3);  // 0x00abf760
+    void v24Call(void* pA1, void* pA2, void* pA3);  // 0x00abf790
+    void Forward(void* pObject);            // 0x00abf7c0
+    void* GetInner1c();                     // 0x00abf7e0
+    void* GetInner1cFrom28();               // 0x00abf800
+    bool  HasPositive38();                  // 0x00abf820
+    bool  SwapFlag(bool bFlag);             // 0x00abf850
+    cInteraction_s00ab_f0b0* FindActive();             // 0x00abf890
+    cInteraction_s00ab_f0b0* GetTop();                 // 0x00abfbb0
+    void  AppendTrace(void* pString);       // 0x00abfbe0
+    void  NotifyAll();                      // 0x00abfac0
+    void  Remove(cInteraction_s00ab_f0b0* pInteraction); // 0x00ac00a0
+    int32_t Count();                        // 0x00abf860
+};
 struct tRBNode {
     tRBNode* mpNodeRight;   // +0x00
     tRBNode* mpNodeLeft;    // +0x04
@@ -405,8 +588,8 @@ public:
     int32_t        mn6c;                        // +0x6c
     int32_t        mn70;                        // +0x70
 
-    cInteraction_s00ab_f0b0();
-    virtual ~cInteraction_s00ab_f0b0();
+    cInteraction_s00ab_f0b0();  // 0x00abf320 (cInteraction::cInteraction_s00ab_f0b0)
+    virtual ~cInteraction_s00ab_f0b0();  // 0x00abf320 (cInteraction::cInteraction_s00ab_f0b0)
     void* GetFirstAgent();                                          // 0x00abf0b0
     AgentFilterRange_s00ab_f0b0* FindAgent(AgentFilterRange_s00ab_f0b0* pRange, cInteractionAgent_s00ab_f0b0* pAgent); // 0x00abf110
     cInteractionAgent_s00ab_f0b0* GetAgent();                                  // 0x00abf210
@@ -416,8 +599,20 @@ public:
 };
 // ---- items of slice s00abf0b0 end
 
+// @ 0x00abe8a0
+u32 SlotVector_s00ab_e110::nextAllocated(u32 i)
+{
+  u32 m = entry(i)->mMeta;
+  do {
+    if ((m >> 30) & 1) return kSlotEmpty;
+    ++i;
+    m = entry(i)->mMeta;
+  } while ((int)m < 0);
+  return i;
+}
+
 // @ 0x00abe8f0
-void SlotVector::freeTarget(u32 i)
+void SlotVector_s00ab_e110::freeTarget(u32 i)
 {
   SlotEntry* e = entry(i);
   cInteractionTarget* p = (cInteractionTarget*)e->mpData;
@@ -428,7 +623,7 @@ void SlotVector::freeTarget(u32 i)
 }
 
 // @ 0x00abe950
-void SlotVector::freeAgent(u32 i)
+void SlotVector_s00ab_e110::freeAgent(u32 i)
 {
   SlotEntry* e = entry(i);
   cInteractionAgent* p = (cInteractionAgent*)e->mpData;
@@ -452,7 +647,7 @@ NOINLINE SlotIter& SlotIter::increment()
 }
 
 // @ 0x00abea00
-NOINLINE int __cdecl SlotDistance(SlotIter first, SlotIter last)
+NOINLINE int __cdecl SlotDistance(SlotIter_s00ab_e110 first, SlotIter_s00ab_e110 last)
 {
   int n = 0;
   while ((u32)first.mpOwner + first.mIndex != (u32)last.mpOwner + last.mIndex) {
@@ -507,7 +702,7 @@ void AgentFilterRange::advance()
     mBegin.increment();
     if ((u32)mEnd.mpOwner + mEnd.mIndex == (u32)mBegin.mpOwner + mBegin.mIndex) return;
     cInteractionAgent* agent = (cInteractionAgent*)mBegin.mpOwner->entry(mBegin.mIndex)->mpData;
-    cInteraction* owner = mPred.mpOwner;
+    cInteraction_s00ab_e110* owner = mPred.mpOwner;
     if (!owner) return;
     if (mPred.mCheckMap) {
       AgentNode* node = owner->mAgentData.lower_bound(agent);
@@ -567,24 +762,24 @@ void SlotVector::destroyAgents(int freeMem)
 }
 
 // @ 0x00abece0
-bool __cdecl SlotVectorInsert(SlotVector* v, void* value)
+bool __cdecl SlotVectorInsert(SlotVector_s00ab_e110* v, void* value)
 {
   u32 end = v->endIndex();
   u32 begin = v->mBeginIndex;
   if (begin >= kSlotEmpty) begin = end;
-  SlotIter buf;
-  SlotIter* it = FUN_00ac03f0(&buf, v, begin, v, end, value);
+  SlotIter_s00ab_e110 buf;
+  SlotIter_s00ab_e110* it = FUN_00ac03f0(&buf, v, begin, v, end, value);
   return (u32)v + end != (u32)it->mpOwner + it->mIndex;
 }
 
 // @ 0x00abed40
-void cInteraction::SetTarget(cInteractionTarget* target)
+void cInteraction_s00ab_e110::SetTarget(cInteractionTarget* target)
 {
   if (mTargetList.mBeginIndex != kSlotEmpty) {
     do {
       u32 i = mTargetList.mBeginIndex;
       if (i >= kSlotEmpty) i = mTargetList.endIndex();
-      SlotIter out;
+      SlotIter_s00ab_e110 out;
       ((RemoveTargetFn)mpVtbl->mSlots[20])(this, &out, &mTargetList, i);
     } while (mTargetList.mBeginIndex != kSlotEmpty);
   }
@@ -592,11 +787,11 @@ void cInteraction::SetTarget(cInteractionTarget* target)
 }
 
 // @ 0x00abedb0
-void cInteraction::RemoveAgent(AgentFilterRange range)
+void cInteraction_s00ab_e110::RemoveAgent(AgentFilterRange range)
 {
   cInteractionAgent* p = (cInteractionAgent*)range.mBegin.mpOwner->entry(range.mBegin.mIndex)->mpData;
   if (p) {
-    if ((cInteraction*)p->a20() == this) {
+    if ((cInteraction_s00ab_e110*)p->a20() == this) {
       mAgentList.freeAgent(range.mBegin.mIndex);
       mAgentData.erase(&p);
       p->a30(this);
@@ -605,11 +800,11 @@ void cInteraction::RemoveAgent(AgentFilterRange range)
 }
 
 // @ 0x00abee20
-bool cInteraction::HasAgent(cInteractionAgent* agent)
+bool cInteraction_s00ab_e110::HasAgent(cInteractionAgent* agent)
 {
-  SlotVector* v = &mAgentList;
-  SlotIter it = v->begin();
-  SlotIter last = v->end();
+  SlotVector_s00ab_e110* v = &mAgentList;
+  SlotIter_s00ab_e110 it = v->begin();
+  SlotIter_s00ab_e110 last = v->end();
   if ((u32)v + it.mIndex != (u32)v + last.mIndex) {
     do {
       if (v->entry(it.mIndex)->mpData == agent) return true;
@@ -620,11 +815,11 @@ bool cInteraction::HasAgent(cInteractionAgent* agent)
 }
 
 // @ 0x00abeeb0
-bool cInteraction::HasTarget(cInteractionTarget* target)
+bool cInteraction_s00ab_e110::HasTarget(cInteractionTarget* target)
 {
-  SlotVector* v = &mTargetList;
-  SlotIter it = v->begin();
-  SlotIter last = v->end();
+  SlotVector_s00ab_e110* v = &mTargetList;
+  SlotIter_s00ab_e110 it = v->begin();
+  SlotIter_s00ab_e110 last = v->end();
   if ((u32)v + it.mIndex != (u32)v + last.mIndex) {
     do {
       if (v->entry(it.mIndex)->mpData == target) return true;
@@ -635,13 +830,13 @@ bool cInteraction::HasTarget(cInteractionTarget* target)
 }
 
 // @ 0x00abef40
-SlotIter* cInteraction::RemoveTarget(SlotIter* out, SlotVector* vec, u32 index)
+SlotIter_s00ab_e110* cInteraction_s00ab_e110::RemoveTarget(SlotIter_s00ab_e110* out, SlotVector_s00ab_e110* vec, u32 index)
 {
   cInteractionTarget* p = (cInteractionTarget*)vec->entry(index)->mpData;
   if (p) {
     p->t18();
     mTargetList.freeTarget(index);
-    SlotIter it;
+    SlotIter_s00ab_e110 it;
     it.mpOwner = vec;
     it.mIndex = index;
     it.increment();
@@ -657,17 +852,17 @@ SlotIter* cInteraction::RemoveTarget(SlotIter* out, SlotVector* vec, u32 index)
 }
 
 // @ 0x00abefd0
-int SlotVector::size()
+int SlotVector_s00ab_e110::size()
 {
   u32 end = endIndex();
   u32 begin = mBeginIndex;
   if (begin >= kSlotEmpty) begin = end;
-  typedef int(__cdecl * Distance5)(SlotVector*, u32, SlotVector*, u32, SlotVector*);
+  typedef int(__cdecl * Distance5)(SlotVector_s00ab_e110*, u32, SlotVector_s00ab_e110*, u32, SlotVector_s00ab_e110*);
   return ((Distance5)SlotDistance)(this, begin, this, end, this);
 }
 
 // @ 0x00abf010
-AgentFilterRange::AgentFilterRange(SlotVector* v, IsAgentActive* pred)
+AgentFilterRange::AgentFilterRange(SlotVector_s00ab_e110* v, IsAgentActive_s00ab_e110* pred)
 {
   mBegin.mIndex = v->mBeginIndex;
   if (mBegin.mIndex >= kSlotEmpty) mBegin.mIndex = v->endIndex();
@@ -847,4 +1042,29 @@ bool cInteraction_s00ab_f0b0::AddTarget(cInteractionTarget_s00ab_f0b0* pTarget)
         return true;
     }
     return false;
+}
+
+// @ 0x00abfac0
+void cInteractionStack::NotifyAll()
+{
+    cInteraction_s00ab_f0b0* pCurrent = 0;
+    while (mObjects.size() != 0)
+    {
+        cInteraction_s00ab_f0b0* pObject = v20();
+        if (pObject != pCurrent)
+        {
+            if (pObject != 0)
+                pObject->v04();
+            cInteraction_s00ab_f0b0* pOld = pCurrent;
+            pCurrent = pObject;
+            if (pOld != 0)
+                pOld->v04();
+        }
+        AgentFilterRange_s00ab_f0b0 range;
+        pCurrent->FindAgent(&range, (cInteractionAgent_s00ab_f0b0*)this);
+        if (range.mBegin != range.mEnd)
+            pCurrent->v44(range);
+    }
+    if (pCurrent != 0)
+        pCurrent->v04();
 }

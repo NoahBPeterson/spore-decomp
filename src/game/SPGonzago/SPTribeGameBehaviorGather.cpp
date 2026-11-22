@@ -31,25 +31,11 @@ extern "C" double __cdecl sqrt(double x);
 // ---- items of slice s00d75400 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
 class IWin;
-extern const float kZeroX;          // 0x0169ef40
-extern const float kZeroY;          // 0x0169ef44
-extern const float kZeroZ;          // 0x0169ef48
-extern const float kZeroF;          // 0x01485378
-extern const float kFloatMax;       // 0x0147bef4
-extern const float kTwo;            // 0x01470f1c
-extern const float kTwoB;           // 0x0146a308
-extern const float kTen;            // 0x01473c70
-extern const float kThirty;         // 0x014853bc
-extern const float kFive;           // 0x01486110
-extern const float kSqrtEps;        // 0x013ec4b8  (1e-08)
-extern const float kGroundSearch;   // 0x015d9c6c
 extern IWin*      g_pPropertyMgr;   // 0x0158128c
-extern void*      g_pTreeQueryCtx;  // 0x0158427c
 struct Vector3 { float x, y, z; };
 class cGameObject;
 class cObject;
 void operator delete[](void* p);    // 0x00f47380
-extern "C" double __cdecl sqrt(double x);
 class IWin {
  public:
     virtual void AddRef();                                   // +0x00
@@ -171,6 +157,7 @@ class cPlanetModel {
     void* DirectionToSurfacePosition(float* out, float* in); // 0x00b815a0
 };
 void*        FUN_00b3d420(void* p);                          // 0x00b3d420
+cObject*     FUN_00b3d2b0(void* a, void* b);                 // 0x00b3d2b0
 cTreeQuery*  FUN_00b3d440(float* pos, float radius,
                           void** a, void** b);               // 0x00b3d440
 cTreeQuery*  FUN_00b3d440_8(void* a, void* b, void* c, void* d,
@@ -251,10 +238,6 @@ struct FruitState {
 // ---- items of slice s00d75400 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern IWin*      g_pPropertyMgr;   // 0x0158128c
-
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-void SP_BindFruitNode(cGameObject* a1, FruitState* a2, cGameObject* a3);  // 0x00d754b0 (stays in the slice: not this object's)
 
 // ---- items of slice s00d76000 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_pProps;        // 0x158128C
@@ -428,6 +411,138 @@ static inline Spatial* BundleOf(SP::cSPCreatureCitizen_s00d7_6000* c) { return (
 static inline Spatial* LocoOf(SP::cSPCreatureCitizen_s00d7_6000* c)   { return (Spatial*)((char*)c + 0xc0); }
 static inline void ReleaseRef(IRefObj*& r) { IRefObj* p = r; if (p) { r = 0; p->Release(); } }
 // ---- items of slice s00d76000 end
+
+// @ 0x00d754b0
+void SP_BindFruitNode(cGameObject* a1, FruitState* a2, cGameObject* a3)
+{
+    if (a3 != 0 && a2->m08.mpRef == a3)
+    {
+        // the node is already bound: only fill in its vacant +0x68 slot
+        cGameObject* t = (cGameObject*)a2->m08.mpRef;
+        if (t->m68.mpRef == 0)
+            t->m68 = a1;
+    }
+    else
+    {
+        cGameObject* t = (cGameObject*)a2->m08.mpRef;
+        if (t != 0)
+        {
+            if (t->m68.mpRef == a1)
+            {
+                IWin* p = t->m68.mpRef;
+                if (p != 0)
+                {
+                    t->m68.mpRef = 0;
+                    p->Release();
+                }
+            }
+            IWin* q = a2->m08.mpRef;
+            if (q != 0)
+            {
+                a2->m08.mpRef = 0;
+                q->Release();
+            }
+        }
+
+        IWin* old = a2->m08.mpRef;
+        if (a3 != old)
+        {
+            if (a3 != 0)
+                a3->AddRef();
+            a2->m08.mpRef = a3;
+            if (old != 0)
+                old->Release();
+        }
+
+        cGameObject* u = (cGameObject*)a2->m08.mpRef;
+        if (u != 0)
+            RefAssign(&u->m68.mpRef, a1);
+    }
+
+    // drop the tree held by the +0x04 slot, then the slot itself
+    cGameObject* o = (cGameObject*)a2->m04.mpRef;
+    if (o != 0)
+    {
+        IWin* r = o->m108.mpRef;
+        if (r != 0)
+        {
+            o->m108.mpRef = 0;
+            r->Release();
+        }
+    }
+    IWin* s = a2->m04.mpRef;
+    if (s != 0)
+    {
+        a2->m04.mpRef = 0;
+        s->Release();
+    }
+}
+
+// @ 0x00d755b0
+void SP_PickFruitAndMove(cGameObject* a1, void* a2, void* a3, void* a4, void* a5, FruitState* a6)
+{
+    // drop the previously bound fruit on the +0x24 slot
+    cGameObject* p = (cGameObject*)a6->m24.mpRef;
+    if (p != 0)
+    {
+        IWin* r = p->m120.mpRef;
+        if (r != 0)
+        {
+            p->m120.mpRef = 0;
+            r->Release();
+        }
+    }
+    IWin* q = a6->m24.mpRef;
+    if (q != 0)
+    {
+        a6->m24.mpRef = 0;
+        q->Release();
+    }
+
+    a1->FUN_00c25f80();
+    char b = a1->FUN_00c22850();
+    a1->FUN_00c22860(1);
+
+    Vector3 zero;
+    zero.x = kZeroX;
+    zero.y = kZeroY;
+    zero.z = kZeroZ;
+    a1->FUN_00c227f0(zero);
+
+    a1->FUN_00c15150(0x2735294, 1);
+
+    void* v = a1->mSpatial34.FUN_00cee330();
+    if (v != 0)
+    {
+        double f = a1->mSpatial34.FUN_00cee380();
+        if (f == 0.0)
+        {
+            cObject* o = FUN_00b3d2b0(v, a1 != 0 ? (void*)&a1->mSpatial34 : 0);
+            o->FUN_00ac79e0(0);
+        }
+        else if (b == 0)
+        {
+            a1->PerformSocialAction((uint32_t)v, -1);
+        }
+    }
+
+    cGameObject* t = (cGameObject*)a6->m04.mpRef;
+    if (t != 0)
+    {
+        IWin* r2 = t->m108.mpRef;
+        if (r2 != 0)
+        {
+            t->m108.mpRef = 0;
+            r2->Release();
+        }
+    }
+
+    SP_BindFruitNode(a1, a6, 0);
+    a1->GetTribe(0xd, (void*)a6->m20)->FindSpot();
+    a1->GetTribe(0xd, (void*)a1)->FUN_00c97d40();
+
+    a6->~FruitState();
+}
 
 // @ 0x00d75700
 void SP_DropFruitTarget(void* a1, FruitState* a2)

@@ -1,0 +1,2 @@
+// Unused draft scratch file: created by the mig41 entry-1019 agent by mistake inside the bookkeeping directory.
+// It is never compiled (no '.cpp' extension, no manifest row). Safe to delete.

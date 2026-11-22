@@ -1,3 +1,5 @@
 # va  diff-bytes  reason
-01016630 105 cSPSimulatorWalkAround::ClearOldestPlant: complete behaviour; front-erase of both the plant and obstacle vectors reconstructed; differs in block layout and register allocation
-010166c0 386 cSPSimulatorWalkAround::SetHighLODPlant: complete behaviour (8-plant cap, desc copy, species lookup, obstacle relink); stack/register layout and inlined helper boundaries differ
+01016630 105 cSPSimulatorWalkAround::ClearOldestPlant: complete behaviour; front-erase of both the plant and obstacle vectors reconstructed; differs in block layout and register allocation flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+010166c0 386 cSPSimulatorWalkAround::SetHighLODPlant: complete behaviour (8-plant cap, desc copy, species lookup, obstacle relink); stack/register layout and inlined helper boundaries differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+01016950  376  SP::cSPSimulatorWalkAround teardown FUN_01016950: complete call sequence reconstructed; differs in stack-slot layout and vcall scheduling flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+01016ad0  885  SP::cSPSimulatorWalkAround beaming tick FUN_01016ad0: complete behaviour; state machine and inlined blocks reconstructed, differ in switch codegen, layout and register allocation flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

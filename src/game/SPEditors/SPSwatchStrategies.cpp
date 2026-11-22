@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPSwatchStrategies.cpp -- migrated from slice(s) s00f0cad0, s00ed1880, s00ed0b70, s00eceab0, s00ecda80, s005f4310, s005f5f20, s005f5080, s005f36d0, s005f2780, s005f16d0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPSwatchStrategies.cpp -- migrated from slice(s) s00ecfb40, s00f0cad0, s00ed1880, s00ed0b70, s00eceab0, s00ecda80, s005f4310, s005f5f20, s005f5080, s005f36d0, s005f2780, s005f16d0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPSwatchStrategies.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -49,6 +49,7 @@
 #include "SP/cSPEditorEconomy.h"
 #include "EA/Stopwatch.h"
 #include <intrin.h>
+#include "cSPVerbIconRollover.h"
 
 // ---- items of slice s005f16d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
@@ -3640,6 +3641,76 @@ struct Container {
 };
 // ---- items of slice s00ed1880 end
 
+// ---- items of slice s00ecfb40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef void* (__thiscall *Fn1P)(void*, void*);
+typedef int   (__thiscall *Fn2I)(void*, void*, int);
+typedef unsigned char (__thiscall *Fn0B)(void*);
+struct DualStr {
+    unsigned int m0, m4, m8, mc, m10;       // 0x14
+    void Destroy();                         // 0x006b5240
+};
+struct cDualString {
+    DualStr first;                          // 0x00
+    DualStr second;                         // 0x14
+    unsigned int m28;                       // 0x28
+    void* m2c;                              // 0x2c
+    unsigned char m30;                      // 0x30
+    void Construct();                       // 0x005a7810
+};
+struct cPageRefCountInterface {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~cPageRefCountInterface() throw() {}
+};
+struct cPageMessageHandler {
+    cPageMessageHandler() {}
+    virtual ~cPageMessageHandler() throw() {}
+    virtual unsigned char HandleMessage(int, void**) = 0;
+};
+struct cPageRefCount {
+    cPageRefCount() : mUnk0c(0) {}
+    virtual ~cPageRefCount() throw() {}
+    virtual int AddRef() { int count=mUnk0c+1; mUnk0c=count; return count; }
+    virtual int Release() {
+        int count = mUnk0c - 1; mUnk0c = count;
+        if (count == 0) { mUnk0c = 1; delete this; return 0; }
+        return count;
+    }
+    virtual int GetRefCount() const { return mUnk0c; }
+    int mUnk0c;
+};
+struct cEditorPage : public cPageRefCountInterface, public cPageMessageHandler, public cPageRefCount {
+    virtual int AddRef() { return cPageRefCount::AddRef(); }
+    virtual int Release() { return cPageRefCount::Release(); }
+    virtual ~cEditorPage() throw();
+    void* mpLayout;                         // 0x10
+    void* mpWinMeter;                       // 0x14
+    void* mpWinFrame;                       // 0x18
+    void* mpWinSlider;                      // 0x1c
+    void* mpData;                           // 0x20
+    float mRect[4];                         // 0x24
+    float mPercent;                         // 0x34
+    int mTimeCounter;                       // 0x38
+    unsigned char mFlag3c;                  // 0x3c
+    unsigned char mFlag3d;                  // 0x3d
+    unsigned char mFlag3e;                  // 0x3e
+    char pad3f;                             // 0x3f
+    void* mpRollover;                       // 0x40
+    void* mpServer;                         // 0x44
+    void* mpHandler;                        // 0x48
+    void* mpMsgIds;                         // 0x4c
+    int mMsgCount;                          // 0x50
+    int mMsgUser;                           // 0x54
+    cEditorPage();                          // 0x00ed02c0
+    void Update(int delta);                 // 0x00ed0030
+    virtual unsigned char HandleMessage(int msg, void** data); // 0x00ed01a0
+    void* AsInterface(int id);              // 0x00ed0260
+    void Init(void* parent, void* source);  // 0x00ed0400
+    void Shutdown();                        // 0x00ed0660
+    unsigned char HandleEvent(int id, void* ev); // 0x00ed0750
+};
+// ---- items of slice s00ecfb40 end
+
 // @ 0x005f2180
 namespace SP {
 int cSPSwatchPlanner::Check()
@@ -5606,6 +5677,45 @@ struct SwatchWinFinder_ed10b0 {
     virtual void v0(); virtual void v1(); virtual void v2();
     virtual void* FindWindow(int id);  // slot 3 (+0xc)
 };
+
+// @ 0x00ed01a0
+unsigned char cEditorPage::HandleMessage(int msg, void** data)
+{
+    if (((Fn0B)(*(void***)mpWinSlider)[0x28 / 4])(mpWinSlider) & 1) {
+        switch (msg) {
+        case 0x522f9cd: {
+            if (*data) {
+                void* res = ((Fn1P)(*(void***)(*data))[0xc / 4])(*data, (void*)0x31e56741);
+                if (res && mpData) {
+                    cDualString text;
+                    text.Construct();
+                    int r = ((Fn2I)(*(void***)mpData)[0x10 / 4])(mpData, (char*)res + 0x4c, 0);
+                    unsigned char* flags = (unsigned char*)((char*)this + 0x3c);
+                    if (r == 3) {
+                        flags[0] = 1;
+                        flags[2] = 0;
+                    } else {
+                        flags[0] = 0;
+                    }
+                    text.second.Destroy();
+                    text.first.Destroy();
+                }
+            }
+            return 1;
+        }
+        case 0x522f9ce:
+            *(unsigned char*)((char*)this + 0x3c) = 0;
+            return 1;
+        case 0x78c406b: {
+            unsigned char* flags = (unsigned char*)((char*)this + 0x3c);
+            flags[1] = 1;
+            flags[2] = 1;
+            break;
+        }
+        }
+    }
+    return 0;
+}
 
 // @ 0x00ed10b0
 void Obj10B0::f(int a1, int a2, int a3, int a4)

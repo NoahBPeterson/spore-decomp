@@ -1,5 +1,9 @@
 # va  diff-bytes  reason
+01139920  71 complete frequency/table converter (__stdcall, ret 0xc); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (361 valid, 100% coverage)
+011399e0  592 complete ReverbModel1 EQ-table configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (276 valid, 94.8% coverage; replay first difference None after return-value fix)
+01139d60  145 complete ReverbModel1 damping-vector; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
+01139e10  83 complete ReverbModel1 ctor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% coverage)
 01139f20 271 complete ReverbModel1 gain update (x87 log2 math); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference _log2)
-01139fe0 986 complete ReverbModel1 timer configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (231 valid, 89.4% coverage)
+01139fe0 976 complete ReverbModel1 timer configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (236 valid, 89.4% coverage) on the default profile; --nan FAIL-KEPT (3/232; original F_9e0 scans past its 17-float tab when a gain exceeds the table and the result depends on the caller's stack frame; see work/match/scratch_s011399e0_fixlog.txt)
 0113a4c0 215 complete ReverbModel1 timer callback; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (294 valid, 78.9% coverage)
 0113a5c0 250 complete ReverbModel1::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (181 valid, 97% coverage, no mismatch; original faults on ~half the random inputs)

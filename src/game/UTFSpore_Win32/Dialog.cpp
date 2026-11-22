@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/Dialog.cpp -- migrated from slice(s) s0096bdd0, s01300280, s0096c6f0, s0096ad00 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Dialog.cpp -- migrated from slice(s) s0096d2f0, s0096bdd0, s01300280, s0096c6f0, s0096ad00 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Dialog.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -28,6 +28,7 @@ extern "C" char g_154f50c[];
 #include "EA/Text/TextStyle.h"
 #include "EA/Text/Typesetter.h"
 #include "EA/UTFWin/Window.h"
+#include "EA/UTFWin/Image.h"
 
 // ---- items of slice s0096ad00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n()
@@ -47,6 +48,24 @@ struct Vec2 {
     Vec2() {}
     Vec2(float a, float b) : x(a), y(b) {}
     Vec2& operator=(const Vec2& v) { x = v.x; y = v.y; return *this; }
+};
+}
+// The slice s0096d2f0 stubs of EA::RectF / EA::Vec2 (the tool renames their uses to these
+// names but dedups the identical definitions against the two above; see the report).
+namespace EA {
+struct RectF_s0096_d2f0 {
+    float x1, y1, x2, y2;
+    RectF_s0096_d2f0() {}
+    RectF_s0096_d2f0(float l, float t, float r, float b) : x1(l), y1(t), x2(r), y2(b) {}
+    RectF_s0096_d2f0(const RectF_s0096_d2f0& r) : x1(r.x1), y1(r.y1), x2(r.x2), y2(r.y2) {}
+    float Width() const  { return x2 - x1; }
+    float Height() const { return y2 - y1; }
+};
+struct Vec2_s0096_d2f0 {
+    float x, y;
+    Vec2_s0096_d2f0() {}
+    Vec2_s0096_d2f0(float a, float b) : x(a), y(b) {}
+    Vec2_s0096_d2f0& operator=(const Vec2_s0096_d2f0& v) { x = v.x; y = v.y; return *this; }
 };
 }
 namespace EA {
@@ -692,6 +711,399 @@ struct MsgArg {
   int          mPad18;
 };
 // ---- items of slice s0096bdd0 end
+
+// ---- items of slice s0096d2f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
+namespace EA {
+namespace UTFWin {
+class Image_s0096_d2f0 { public:
+    char pad00[0x1c];
+    int  mSizeX;                   // +0x1c
+    int  mSizeY;                   // +0x20
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s0096_d2f0;
+}
+}
+namespace EA {
+namespace UTFWin {
+class WindowIterator { public:
+    void* mpNode;                  // +0x00
+    void* mpNode2;                 // +0x04
+    void* mpNode3;                 // +0x08
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s0096_d2f0 { public:
+PV(0);
+PV(1);
+PV(2);
+PV(3);
+PV(4);
+PV(5);
+PV(6);
+    virtual uint32_t GetId();                              // +0x1c  slot 7
+PV(8);
+PV(9);
+PV(10);
+PV(11);
+PV(12);
+PV(13);
+    virtual const RectF_s0096_d2f0& GetRealArea();                    // +0x38  slot 14
+PV(15);
+PV(16);
+PV(17);
+PV(18);
+PV(19);
+PV(20);
+PV(21);
+PV(22);
+PV(23);
+    virtual void SetArea(const RectF_s0096_d2f0& area);               // +0x60  slot 24
+    PV(25);
+    virtual void SetSize(float w, float h);                // +0x68  slot 26
+PV(27);
+PV(28);
+PV(29);
+PV(30);
+    virtual void SetFlag(uint32_t flag, bool value);       // +0x7c  slot 31
+PV(32);
+PV(33);
+PV(34);
+PV(35);
+PV(36);
+PV(37);
+PV(38);
+PV(39);
+PV(40);
+PV(41);
+PV(42);
+PV(43);
+PV(44);
+PV(45);
+PV(46);
+PV(47);
+PV(48);
+PV(49);
+PV(50);
+    virtual WindowIterator ChildBegin();                   // +0xcc  slot 51
+    virtual WindowIterator ChildEnd();                     // +0xd0  slot 52
+
+    void WinSetFlag(uint32_t flag, int value);             // 0x00961760
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+struct Batch2D {
+    PV(0);
+    virtual void SetColor(uint32_t color);                 // +0x04  slot 1
+PV(2);
+PV(3);
+PV(4);
+PV(5);
+PV(6);
+PV(7);
+PV(8);
+PV(9);
+PV(10);
+PV(11);
+PV(12);
+PV(13);
+    virtual void DrawRect(float x1, float y1, float x2, float y2);              // +0x38 slot 14
+    virtual void DrawQuad(const Vec2_s0096_d2f0* tl, const Vec2_s0096_d2f0* tr, const Vec2_s0096_d2f0* br, const Vec2_s0096_d2f0* bl); // +0x3c slot 15
+PV(16);
+PV(17);
+PV(18);
+PV(19);
+PV(20);
+PV(21);
+    virtual void DrawImage(const RectF_s0096_d2f0* area, Image_s0096_d2f0* img, const RectF_s0096_d2f0* uv);     // +0x58 slot 22
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class RenderContext_s0096_d2f0 { public:
+    Batch2D* Begin2D(int mode);                            // 0x0095bc10
+};
+}
+}
+void FUN_0095c5f0(EA::UTFWin::Batch2D*, const EA::RectF_s0096_d2f0*, const EA::RectF_s0096_d2f0*, EA::UTFWin::Image_s0096_d2f0*,
+                  float, float, float, float);
+void BltEdgeStretch(EA::UTFWin::Batch2D*, const EA::RectF_s0096_d2f0*, const EA::RectF_s0096_d2f0*, EA::UTFWin::Image_s0096_d2f0*,
+                    const float*, float, float);
+void FUN_0095ca40(EA::UTFWin::Batch2D*, const EA::RectF_s0096_d2f0*, const EA::RectF_s0096_d2f0*, EA::UTFWin::Image_s0096_d2f0*,
+                  const float*, float, float);
+namespace EA {
+namespace UTFWinControls {
+using EA::RectF_s0096_d2f0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+using EA::Vec2_s0096_d2f0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+using EA::UTFWin::IWindow_s0096_d2f0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+using EA::UTFWin::WindowIterator;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+using EA::UTFWin::Batch2D;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+using EA::UTFWin::RenderContext_s0096_d2f0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+using EA::UTFWin::Image_s0096_d2f0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WinDialogBase_s0096_d2f0 {
+PV(0);
+PV(1);
+PV(2);
+PV(3);
+PV(4);
+PV(5);
+PV(6);
+PV(7);
+PV(8);
+PV(9);
+PV(10);
+PV(11);
+PV(12);
+PV(13);
+PV(14);
+PV(15);
+PV(16);
+PV(17);
+PV(18);
+PV(19);
+PV(20);
+PV(21);
+PV(22);
+PV(23);
+PV(24);
+PV(25);
+PV(26);
+PV(27);
+PV(28);
+PV(29);
+PV(30);
+PV(31);
+PV(32);
+PV(33);
+PV(34);
+    virtual bool Refresh();                                // +0x8c  slot 35 (0x0096c6f0)
+    PV(36);                                                // +0x90  slot 36
+    virtual void SetSize(float w, float h);                // +0x94  slot 37 (0x0096d2f0)
+    virtual void GetMinSize(float& w, float& h);           // +0x98  slot 38 (0x0096d3f0)
+    virtual void GetMaxSize(float& w, float& h);           // +0x9c  slot 39 (0x0096d500)
+    virtual void SetRefreshFlag(unsigned v);               // +0xa0  slot 40 (0x0096b6a0)
+
+    void WindowCtor();                                     // 0x00962a10
+    void WindowDtor();                                     // 0x00962740
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinDialog_s0096_d2f0 : public WinDialogBase_s0096_d2f0, public IWindow_s0096_d2f0 {
+public:
+    uint32_t pad08[(0x210 - 0x08) / 4];   // +0x08
+    bool     mbRefresh;                   // +0x210
+    char     pad211[3];
+    uint32_t mnDialogFlags;               // +0x214
+    uint32_t mnSelectedComponent;         // +0x218
+    float    mnCursorOffsetX;             // +0x21c
+    float    mnCursorOffsetY;             // +0x220
+    EA::IRefCounted* mpCloseButtonDrawable; // +0x224
+    EA::IRefCounted* mpCloseButton;       // +0x228
+    EA::IRefCounted* mpTitleText;         // +0x22c
+    RectF_s0096_d2f0    mrComponentArea[10];         // +0x230
+    RectF_s0096_d2f0    mrClientArea;                // +0x2d0
+    RectF_s0096_d2f0    mfClientAreaBorder;          // +0x2e0
+    RectF_s0096_d2f0    mfTitleTextBorder;           // +0x2f0
+    RectF_s0096_d2f0    mfCloseButtonBorder;         // +0x300
+    float    mfMaxW;                      // +0x310
+    float    mfMaxH;                      // +0x314
+    float    mfMinW;                      // +0x318
+    float    mfMinH;                      // +0x31c
+    uint32_t mnTitleTextColor;            // +0x320
+    uint32_t mnTitleTextStyle;            // +0x324
+
+    WinDialog_s0096_d2f0* Init();                    // 0x0096e0c0
+    void       Destroy();                 // 0x0096e260
+
+    // Override the same-named virtuals in both bases.
+    void SetSize(float w, float h);       // 0x0096d2f0
+    void GetMinSize(float& w, float& h);  // 0x0096d3f0
+    void GetMaxSize(float& w, float& h);  // 0x0096d500
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WString {
+    const wchar_t* mpBegin;               // +0x00
+    const wchar_t* mpEnd;                 // +0x04
+    const wchar_t* mpCapacity;            // +0x08
+    void assign(const wchar_t* first, const wchar_t* last);
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWinDialogSub {
+PV(0);
+PV(1);
+PV(2);
+PV(3);
+PV(4);
+PV(5);
+PV(6);
+PV(7);
+    virtual void AutoSize();                              // +0x20  slot 8  (0x0096dc70)
+PV(9);
+PV(10);
+PV(11);
+PV(12);
+PV(13);
+PV(14);
+PV(15);
+PV(16);
+    virtual void SetTitleText(const wchar_t* p);          // +0x44  slot 17 (0x0096e350)
+PV(18);
+PV(19);
+PV(20);
+PV(21);
+PV(22);
+PV(23);
+PV(24);
+PV(25);
+PV(26);
+PV(27);
+
+    char     pad04[4];                    // +0x04
+    uint32_t mnDialogFlags;               // +0x08
+    uint32_t mnSelectedComponent;         // +0x0c
+    float    mnCursorOffsetX;             // +0x10
+    float    mnCursorOffsetY;             // +0x14
+    void*    mpCloseButtonDrawable;       // +0x18
+    void*    mpCloseButton;               // +0x1c
+    void*    mpTitleText;                 // +0x20
+    RectF_s0096_d2f0    mrComponentArea[10];         // +0x24
+    RectF_s0096_d2f0    mrClientArea;                // +0xc4
+    RectF_s0096_d2f0    mfClientAreaBorder;          // +0xd4
+    RectF_s0096_d2f0    mfTitleTextBorder;           // +0xe4
+    RectF_s0096_d2f0    mfCloseButtonBorder;         // +0xf4
+    float    mfMaxW;                      // +0x104
+    float    mfMaxH;                      // +0x108
+    float    mfMinW;                      // +0x10c
+    float    mfMinH;                      // +0x110
+    uint32_t mnTitleTextColor;            // +0x114
+    uint32_t mnTitleTextStyle;            // +0x118
+    WString  msTitleText;                 // +0x11c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_async;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_lru;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_dd0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_dd1;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_dd2;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_sub20c_b;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_wd0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_wd1;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_sub20c;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* g_vt_editorRes;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern wchar_t gEmptyString16[];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct DrawParam {
+    int field0;
+    int index;                            // +0x04
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class DialogDrawable_s0096_d2f0 { public:
+    uint32_t pad00[4];                    // +0x00 (vptrs / refcount)
+    uint32_t mnBackgroundFillColor;       // +0x10
+    uint32_t mnBackImageBlitMode;         // +0x14
+    Image_s0096_d2f0*   mComponentImage[10];         // +0x18
+
+    void Init();                                                          // 0x0096e000
+    void CreateRenderables(RenderContext_s0096_d2f0*, const RectF_s0096_d2f0*, const DrawParam*); // 0x0096d6d0
+};
+}
+}
+// ---- items of slice s0096d2f0 end
 
 // @ 0x0096b380
 void __fastcall Sub_b380(WinDialog* this_)
@@ -1478,6 +1890,331 @@ bool WinDialog_s0096_c6f0::Refresh()
     pWindow->SetSize(w, h);
     pWindow->Invalidate();
     return true;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096d2f0
+namespace EA { namespace UTFWinControls {
+void WinDialog_s0096_d2f0::SetSize(float w, float h)
+{
+    Refresh();
+
+    const uint32_t flags = mnDialogFlags;
+    const RectF_s0096_d2f0* const r = mrComponentArea;
+    if (flags & kDialogComponents) {
+        w = w + (r[kComponentRight].x2 - r[kComponentRight].x1)
+              + (r[kComponentLeft].x2 - r[kComponentLeft].x1);
+        if (flags & kDialogTitleBar)
+            h = ((r[kComponentBottom].y2 - r[kComponentBottom].y1)
+               + (r[kComponentTop].y2 - r[kComponentTop].y1)
+               + (r[kComponentTitle].y2 - r[kComponentTitle].y1)) + h;
+        else
+            h = ((r[kComponentBottom].y2 - r[kComponentBottom].y1)
+               + (r[kComponentTop].y2 - r[kComponentTop].y1)) + h;
+    } else {
+        if (flags & kDialogTitleBar)
+            h = (r[kComponentTitle].y2 - r[kComponentTitle].y1) + h;
+    }
+
+    static_cast<IWindow_s0096_d2f0*>(this)->SetSize(
+        (mfClientAreaBorder.x2 + mfClientAreaBorder.x1) + w,
+        (mfClientAreaBorder.y2 + mfClientAreaBorder.y1) + h);
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096d3f0
+namespace EA { namespace UTFWinControls {
+void WinDialog_s0096_d2f0::GetMinSize(float& w, float& h)
+{
+    Refresh();
+    w = mfMinW;
+    h = mfMinH;
+
+    const uint32_t flags = mnDialogFlags;
+    const RectF_s0096_d2f0* const r = mrComponentArea;
+    if (flags & kDialogComponents) {
+        w -= (r[kComponentRight].x2 - r[kComponentRight].x1)
+           + (r[kComponentLeft].x2 - r[kComponentLeft].x1);
+        if (flags & kDialogTitleBar)
+            h -= ((r[kComponentBottom].y2 - r[kComponentBottom].y1)
+                + (r[kComponentTop].y2 - r[kComponentTop].y1))
+                + (r[kComponentTitle].y2 - r[kComponentTitle].y1);
+        else
+            h -= (r[kComponentBottom].y2 - r[kComponentBottom].y1)
+               + (r[kComponentTop].y2 - r[kComponentTop].y1);
+    } else if (flags & kDialogTitleBar) {
+        h = h - (r[kComponentTitle].y2 - r[kComponentTitle].y1);
+    }
+    w -= mfClientAreaBorder.x2 + mfClientAreaBorder.x1;
+    h -= mfClientAreaBorder.y2 + mfClientAreaBorder.y1;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096d500
+namespace EA { namespace UTFWinControls {
+void WinDialog_s0096_d2f0::GetMaxSize(float& w, float& h)
+{
+    Refresh();
+    w = mfMaxW;
+    h = mfMaxH;
+
+    const uint32_t flags = mnDialogFlags;
+    const RectF_s0096_d2f0* const r = mrComponentArea;
+    if (flags & kDialogComponents) {
+        w -= (r[kComponentRight].x2 - r[kComponentRight].x1)
+           + (r[kComponentLeft].x2 - r[kComponentLeft].x1);
+        if (flags & kDialogTitleBar)
+            h -= ((r[kComponentBottom].y2 - r[kComponentBottom].y1)
+                + (r[kComponentTop].y2 - r[kComponentTop].y1))
+                + (r[kComponentTitle].y2 - r[kComponentTitle].y1);
+        else
+            h -= (r[kComponentBottom].y2 - r[kComponentBottom].y1)
+               + (r[kComponentTop].y2 - r[kComponentTop].y1);
+    } else if (flags & kDialogTitleBar) {
+        h = h - (r[kComponentTitle].y2 - r[kComponentTitle].y1);
+    }
+    w -= mfClientAreaBorder.x2 + mfClientAreaBorder.x1;
+    h -= mfClientAreaBorder.y2 + mfClientAreaBorder.y1;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096d6d0
+namespace EA { namespace UTFWinControls {
+void DialogDrawable_s0096_d2f0::CreateRenderables(RenderContext_s0096_d2f0* rc, const RectF_s0096_d2f0* area, const DrawParam* p)
+{
+    Batch2D* b = rc->Begin2D(0);
+    b->SetColor(0xffffffffu);
+
+    Image_s0096_d2f0* img = mComponentImage[p->index];
+    switch (p->index) {
+    case kComponentClient:
+        if (img) {
+            switch (mnBackImageBlitMode) {
+            case 0: {
+                RectF_s0096_d2f0 uv(0.0f, 0.0f, 1.0f, 1.0f);
+                b->DrawImage(area, img, &uv);
+                return;
+            }
+            case 1: {
+                RectF_s0096_d2f0 rect(1.0f, 1.0f, 0.0f, 0.0f);
+                FUN_0095c5f0(b, area, &rect, img, 1.0f, 1.0f, 0.0f, 0.0f);
+                return;
+            }
+            case 2: {
+                RectF_s0096_d2f0 rect(0.0f, 0.0f, 1.0f, 1.0f);
+                float uv[4] = { 0.33333334f, 0.33333334f, 0.66666669f, 0.66666669f };
+                BltEdgeStretch(b, area, &rect, img, uv, 1.0f, 1.0f);
+                return;
+            }
+            case 3: {
+                RectF_s0096_d2f0 rect(0.0f, 0.0f, 1.0f, 1.0f);
+                float uv[4] = { 0.33333334f, 0.33333334f, 0.66666669f, 0.66666669f };
+                FUN_0095ca40(b, area, &rect, img, uv, 1.0f, 1.0f);
+                return;
+            }
+            }
+        } else {
+            b->SetColor(mnBackgroundFillColor);
+            b->DrawRect(area->x1, area->y1, area->x2, area->y2);
+            return;
+        }
+        break;
+
+    case kComponentTitle:
+        if (!img) {
+            b->SetColor(0xffefebd6u);
+            Vec2_s0096_d2f0 p0(area->x1, area->y1), p1(area->x2, area->y1);
+            Vec2_s0096_d2f0 p2(area->x1, area->y2), p3(area->x2, area->y2);
+            b->DrawQuad(&p0, &p1, &p2, &p3);
+            return;
+        } else {
+            const int halfW = img->mSizeX / 4;
+            const float w = (float)halfW;
+
+            RectF_s0096_d2f0 uv(0.0f, 0.0f, 0.25f, 1.0f);
+            RectF_s0096_d2f0 r0(area->x1, area->y1, area->x1 + w, area->y2);
+            b->DrawImage(&r0, img, &uv);
+
+            uv = RectF_s0096_d2f0(0.75f, 0.0f, 1.0f, 1.0f);
+            r0 = RectF_s0096_d2f0(area->x2 - w, area->y1, area->x2, area->y2);
+            b->DrawImage(&r0, img, &uv);
+
+            uv = RectF_s0096_d2f0(0.25f, 0.0f, 0.75f, 1.0f);
+            r0 = RectF_s0096_d2f0(area->x1 + w, area->y1, area->x2 - w, area->y2);
+            b->DrawImage(&r0, img, &uv);
+            return;
+        }
+
+    case kComponentLeft:
+    case kComponentRight:
+    case kComponentTop:
+    case kComponentBottom:
+        b->SetColor(0xffaca899u);
+        {
+            Vec2_s0096_d2f0 p0(area->x1, area->y1), p1(area->x2, area->y1);
+            Vec2_s0096_d2f0 p2(area->x2, area->y2), p3(area->x1, area->y2);
+            b->DrawQuad(&p0, &p1, &p2, &p3);
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096dc70
+namespace EA { namespace UTFWinControls {
+void IWinDialogSub::AutoSize()
+{
+    WinDialog_s0096_d2f0* const self = (WinDialog_s0096_d2f0*)((char*)this - 0x20c);
+    IWindow_s0096_d2f0* const win = (IWindow_s0096_d2f0*)((char*)self + 4);
+
+    self->Refresh();
+
+    RectF_s0096_d2f0 box(0.0f, 0.0f, 0.0f, 0.0f);
+    WindowIterator it = win->ChildBegin();
+    WindowIterator end = win->ChildEnd();
+    for (; it.mpNode != end.mpNode; it.mpNode = *(void**)it.mpNode) {
+        IWindow_s0096_d2f0* const child = (IWindow_s0096_d2f0*)((char*)it.mpNode - 4);
+        if (child->GetId() == 0x4f0dd487u)
+            continue;
+        if (child->GetId() == 0xef3d61c5u)
+            continue;
+        const RectF_s0096_d2f0& a = child->GetRealArea();
+        if (box.x2 - box.x1 == 0.0f && box.y2 - box.y1 == 0.0f) {
+            box = a;
+        } else {
+            if (a.x1 < box.x1) box.x1 = a.x1;
+            if (a.y1 < box.y1) box.y1 = a.y1;
+            if (box.x2 < a.x2) box.x2 = a.x2;
+            if (box.y2 < a.y2) box.y2 = a.y2;
+        }
+        end = win->ChildEnd();
+    }
+
+    float w = box.Width()  + self->mfClientAreaBorder.x2 + self->mfClientAreaBorder.x1;
+    float h = box.Height() + self->mfClientAreaBorder.y2 + self->mfClientAreaBorder.y1;
+    const uint32_t flags = self->mnDialogFlags;
+    if (flags & kDialogComponents) {
+        w += (self->mrComponentArea[kComponentLeft].x2 - self->mrComponentArea[kComponentLeft].x1)
+           + (self->mrComponentArea[kComponentRight].x2 - self->mrComponentArea[kComponentRight].x1);
+        h += (self->mrComponentArea[kComponentTop].y2 - self->mrComponentArea[kComponentTop].y1)
+           + (self->mrComponentArea[kComponentBottom].y2 - self->mrComponentArea[kComponentBottom].y1);
+    }
+    if (flags & kDialogTitleBar)
+        h += self->mrComponentArea[kComponentTitle].y2 - self->mrComponentArea[kComponentTitle].y1;
+
+    const float cx = w - box.x1;
+    const float cy = h - box.y1;
+
+    for (it = win->ChildBegin(), end = win->ChildEnd(); it.mpNode != end.mpNode;
+         it.mpNode = *(void**)it.mpNode) {
+        IWindow_s0096_d2f0* const child = (IWindow_s0096_d2f0*)((char*)it.mpNode - 4);
+        if (child->GetId() == 0x4f0dd487u)
+            continue;
+        const RectF_s0096_d2f0& a = child->GetRealArea();
+        RectF_s0096_d2f0 dst(a.Width() + cx, a.Height() + cy,
+                  (a.x2 - a.x1) + (a.Width() + cx), (a.y2 - a.y1) + (a.Height() + cy));
+        child->SetArea(dst);
+        end = win->ChildEnd();
+    }
+
+    win->SetSize(w, h);
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096e000
+namespace EA { namespace UTFWinControls {
+void DialogDrawable_s0096_d2f0::Init()
+{
+    uint32_t* const p = (uint32_t*)this;
+    *(uint32_t volatile*)(p + 1) = (uint32_t)(void*)&g_vt_async;
+    *(uint32_t volatile*)(p + 2) = 0;
+    *(uint32_t volatile*)(p + 3) = (uint32_t)(void*)&g_vt_lru;
+    p[0] = (uint32_t)(void*)&g_vt_dd0;
+    p[1] = (uint32_t)(void*)&g_vt_dd1;
+    p[3] = (uint32_t)(void*)&g_vt_dd2;
+    p[4] = 0xff7f7f7fu;
+    p[5] = 0;
+    for (int i = 6; i < 16; ++i)
+        p[i] = 0;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096e0c0
+namespace EA { namespace UTFWinControls {
+WinDialog_s0096_d2f0* WinDialog_s0096_d2f0::Init()
+{
+    WindowCtor();
+
+    *(void**)((char*)this + 0x20c) = (void*)&g_vt_sub20c_b;
+    *(void**)((char*)this + 0x00) = (void*)&g_vt_wd0;
+    *(void**)((char*)this + 0x04) = (void*)&g_vt_wd1;
+    *(void**)((char*)this + 0x20c) = (void*)&g_vt_sub20c;
+    mnDialogFlags = 0x3f;
+    mnCursorOffsetX = 0.0f;
+    mnCursorOffsetY = 0.0f;
+    mbRefresh = false;
+    mnSelectedComponent = 0xffffffffu;
+    mpCloseButtonDrawable = 0;
+    mpCloseButton = 0;
+    mpTitleText = 0;
+    mfClientAreaBorder.x1 = 3.0f;
+    mfClientAreaBorder.y1 = 3.0f;
+    mfClientAreaBorder.x2 = 3.0f;
+    mfClientAreaBorder.y2 = 3.0f;
+    mfTitleTextBorder.x1 = 3.0f;
+    mfTitleTextBorder.y1 = 0.0f;
+    mfTitleTextBorder.x2 = 0.0f;
+    mfTitleTextBorder.y2 = 0.0f;
+    mfCloseButtonBorder.x1 = 3.0f;
+    mfCloseButtonBorder.y1 = 3.0f;
+    mfCloseButtonBorder.x2 = 3.0f;
+    mfCloseButtonBorder.y2 = 3.0f;
+    mnTitleTextStyle = 0;
+    mfMaxW = 10000.0f;
+    mfMaxH = 10000.0f;
+    mfMinW = 0.0f;
+    mfMinH = 0.0f;
+    mnTitleTextColor = 0xffffffffu;
+    {
+        WString* const s = (WString*)((char*)this + 0x328);
+        s->mpBegin = (const wchar_t*)gEmptyString16;
+        s->mpEnd = (const wchar_t*)gEmptyString16;
+        s->mpCapacity = (const wchar_t*)(gEmptyString16 + 1);
+    }
+    if (mbRefresh != true) {
+        mbRefresh = true;
+        static_cast<IWindow_s0096_d2f0*>(this)->SetFlag(8, true);
+    }
+    static_cast<IWindow_s0096_d2f0*>(this)->WinSetFlag(4, 1);
+    return this;
+}
+}}  // namespace EA::UTFWinControls
+
+// @ 0x0096e260
+namespace EA { namespace UTFWinControls {
+void WinDialog_s0096_d2f0::Destroy()
+{
+    *(void**)((char*)this + 0x000) = (void*)&g_vt_wd0;
+    *(void**)((char*)this + 0x004) = (void*)&g_vt_wd1;
+    *(void**)((char*)this + 0x20c) = (void*)&g_vt_sub20c;
+
+    const WString* const s = (const WString*)((char*)this + 0x328);
+    const char* const b = (const char*)s->mpBegin;
+    const char* const c = (const char*)s->mpCapacity;
+    if (((int)(c - b) & -2) > 2 && b)
+        operator delete((void*)b);
+    if (mpTitleText)
+        mpTitleText->Release();
+    if (mpCloseButton)
+        mpCloseButton->Release();
+    if (mpCloseButtonDrawable)
+        mpCloseButtonDrawable->Release();
+
+    *(void**)((char*)this + 0x20c) = (void*)&g_vt_editorRes;
+    WindowDtor();
 }
 }}  // namespace EA::UTFWinControls
 

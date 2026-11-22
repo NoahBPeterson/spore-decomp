@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSolarSystem.cpp -- migrated from slice(s) s00c86aa0, s00c85a30, s00c84d60, s00c830f0, s01351ae0, s00c84120, s00423960, s00423110 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSolarSystem.cpp -- migrated from slice(s) s00c84950, s00c84420, s00c842a0, s00c841a0, s00c86aa0, s00c85a30, s00c84d60, s00c830f0, s01351ae0, s00c84120, s00423960, s00423110 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSolarSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -119,6 +119,9 @@ struct Record56Vector
 // ---- items of slice s00423960 end
 
 // ---- items of slice s00c84120 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gDefault;                 // 0x014853bc
+extern float gCase1;                   // 0x01477fc0
+extern float gCase23;                  // 0x013ec4d0
 namespace Simulator {
 struct cPtrVector {
     void* mpBegin;                                           // +0x00
@@ -145,6 +148,9 @@ struct cSolarSystem {
     cSolarSystem();
 };
 }
+struct PropertyList;
+extern PropertyList** gStarProperties; // 0x01694c54
+void __cdecl ReadFloat(PropertyList* pl, unsigned int id, float* out); // 0x0040cf10
 // ---- items of slice s00c84120 end
 
 // ---- items of slice s01351ae0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -679,7 +685,7 @@ virtual void v7();
 virtual void v8();
     virtual bool GetProperty(uint32_t id, Property** out);       // slot 9 (+0x24)
 };
-extern PropertyList** gStarProperties;                           // 0x01694c54
+
 bool  __cdecl IsGasType(int t);                                  // 0x00c8b450
 float __cdecl GetGasValue(int t);                                // 0x00c84420
 float __cdecl GetStarTemperature(int t);                         // 0x00c84310
@@ -1200,6 +1206,127 @@ VObj174*     GetUniverseContext();                      // 0x01021080
 cPlanet_s00c8_6aa0*     GetActivePlanet();                         // 0x01021260
 // ---- items of slice s00c86aa0 end
 
+// ---- items of slice s00c841a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct PropertyList_s00c8_41a0 {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual bool GetProperty(unsigned int id, Property** out); // slot +0x24
+};
+extern PropertyList_s00c8_41a0** gStarProperties_s00c8_41a0; // 0x01694c54
+bool GetFloatProperty(PropertyList_s00c8_41a0* list, unsigned int id, float* out);
+// ---- items of slice s00c841a0 end
+
+// ---- items of slice s00c842a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gScale;                   // 0x01473464
+struct PropertyList_s00c8_42a0 {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual bool GetProperty(unsigned int id, Property** out); // slot +0x24
+};
+extern PropertyList_s00c8_42a0** gStarProperties_s00c8_42a0; // 0x01694c54
+// ---- items of slice s00c842a0 end
+
+// ---- items of slice s00c84420 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gHeight;     // 0x13ec4d8  90.0f
+void  __cdecl c8b470(int type, int* a, int* b);  // 0x00c8b470
+float __cdecl GetStarTuning(int type);           // 0x00c841a0
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(float a, float b, float c) : x(a), y(b), z(c) {}
+};
+extern Vec3  gAxis;       // 0x1579d58
+struct Brush {
+    unsigned char b00, pad01, pad02, pad03;
+    Vec3  pos;                 // +0x04
+    float f10;                 // +0x10
+    Vec3  dir;                 // +0x14
+    float f20;                 // +0x20
+    float f24, f28, f2c, f30, f34, f38, f3c;
+    float f40, f44, f48, f4c, f50, f54, f58, f5c, f60, f64;
+
+    // Filled in by the caller: starts at the world up axis, extends `dir`
+    // with radius knob `f10` and height `f20`.
+    void f8450();              // 0x00fe8450
+};
+// ---- items of slice s00c84420 end
+
+// ---- items of slice s00c84950 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* __cdecl FUN_0067dd10();                // 0x0067dd10 (universe view provider)
+extern float __cdecl FUN_01034630(void* pSizeSource, float fDistance,
+                                  bool bGalaxyView);            // 0x01034630 (on-screen size)
+extern float gBodyColorR;                                       // 0x01694c94
+extern float gBodyColorG;                                       // 0x01694c98
+extern float gBodyColorB;                                       // 0x01694c9c
+extern float g_f01485720;                                       // 0x01485720 (default body radius)
+struct cSPMatrix3_s00c8_4950 {                                 // 36-byte 3x3 matrix
+    float m[9];
+    void Assign(const void* pSource);               // 0x0041cb40
+};
+struct cPlanet_s00c8_4950;
+namespace SP {
+class cSPLivingUniverse_s00c8_4950 {
+public:
+    static int      GetUniverseContext();           // 0x01021080 (1 = galaxy view)
+    static cPlanet_s00c8_4950* GetActivePlanet();              // 0x01021260
+};
+}
+struct ICameraPoint {                               // object reached through the view
+    PAD4 PAD1 PAD1 PAD1                             // slots 0..6 (0x00..0x18)
+    virtual ICameraPoint* GetFocus();               // vtable +0x1c
+    void GetWorldOrigin(Vector3* pOut, int, int, int);   // 0x007c3d30
+};
+struct IUniverseView {                              // object behind 0x0067dd10()
+    PAD16 PAD4                                      // slots 0..19 (0x00..0x4c)
+    virtual ICameraPoint* GetCamera();              // vtable +0x50
+};
+struct IRenderer;
+struct cPlanet_s00c8_4950 {
+    PAD8 PAD1 PAD1 PAD1                             // slots 0..10 (0x00..0x28)
+    virtual const Vector3& GetPosition();           // vtable +0x2c
+    virtual void*          GetTransform();          // vtable +0x30
+    int GetPlanetType();                            // 0x00c70880
+    uint8_t   pad04[0x16c];                         // +0x04 .. +0x16f
+    IRenderer** mpBodies170;                        // +0x170
+    IRenderer** mpBodies174;                        // +0x174
+    uint8_t   pad178[0x0c];                         // +0x178 .. +0x183
+    float     mRadius184;                           // +0x184
+};
+struct RenderItem {                                 // 0x38 bytes, filled in below
+    uint16_t mFlags;                                // +0x00
+    uint16_t mCount;                                // +0x02
+    union {
+        Vector3 mColor;                             // +0x04 default body colour (0x01694c94/98/9c)
+        Vector3 mAnchor;                            // +0x04 reference position, written just after
+    };
+    float      mRadius;                             // +0x10
+    cSPMatrix3_s00c8_4950 mMatrix;                             // +0x14 body orientation
+};
+struct IRenderer {
+    PAD4                                            // slots 0..3
+    virtual bool IsActive();                        // vtable +0x10
+    PAD1                                            // slot 5
+    virtual void SetItem(RenderItem* pItem);        // vtable +0x18
+};
+extern void* __cdecl FUN_01034680(cPlanet_s00c8_4950* planet);             // 0x01034680 (body size source)
+extern void  __cdecl FUN_0059c190(cSPMatrix3_s00c8_4950* pOut, void* pTransform);   // 0x0059c190
+extern cSPMatrix3_s00c8_4950 g_mtx01694c70;                                // 0x01694c70 (identity basis)
+// ---- items of slice s00c84950 end
+
 // @ 0x004238c0
 Elem38* Elem38Vector::erase(Elem38* first, Elem38* last)
 {
@@ -1420,6 +1547,175 @@ void cSolarSystem_s00c8_30f0::ActivateHitSpheres(bool activate)
                 body->mHitSphere = 0;
             }
         }
+    }
+}
+
+// @ 0x00c84120
+float __cdecl GetStarRadius(int type)
+{
+    float result = gDefault;
+    switch (type) {
+    case 2:
+    case 3:
+        result = gCase23;
+        break;
+    case 4:
+    case 5:
+    case 6:
+        ReadFloat(gStarProperties[type], 0x383cd6f, &result);
+        break;
+    case 1:
+        result = gCase1;
+        break;
+    }
+    return result;
+}
+
+// @ 0x00c841a0
+float __cdecl GetStarTuning(int type)
+{
+    float result = 1.0f;
+    switch (type) {
+    case 1:
+    case 2:
+        result = 100.0f;
+        break;
+    case 3:
+        result = 1.0f;
+        break;
+    case 4:
+    case 5:
+    case 6:
+        GetFloatProperty(gStarProperties_s00c8_41a0[type], 0x383cd7c, &result);
+        break;
+    case 7:
+        return GetStarTuning(5) * 2.0f;
+    case 8:
+        return GetStarTuning(5) + GetStarTuning(4);
+    case 9:
+        return GetStarTuning(6) + GetStarTuning(5);
+    case 10:
+        return GetStarTuning(4) * 2.0f;
+    case 11:
+        return GetStarTuning(6) + GetStarTuning(4);
+    case 12:
+        return GetStarTuning(6) * 2.0f;
+    }
+    return result;
+}
+
+// @ 0x00c842a0
+float __cdecl GetStarRotationRate(int type)
+{
+    float result = gDefault;
+    switch (type) {
+    case 4:
+    case 5:
+    case 6: {
+        PropertyList_s00c8_42a0* pl = gStarProperties_s00c8_42a0[type];
+        if (pl && pl->GetProperty(0x383cd8d, (Property**)&type) && ((Property*)type)->type == 0xd) {
+            float* p = ((Property*)type)->GetFloat();
+            result = *p * gScale;
+        }
+        break;
+    }
+    }
+    return result;
+}
+
+// @ 0x00c84420
+float __cdecl StarSpanRadius(int type)
+{
+    int a, b;
+    c8b470(type, &a, &b);
+
+    float ta = GetStarTuning(a);
+    float tb = GetStarTuning(b);
+    float ra = GetStarRadius(a);
+    float t  = tb / ta;
+    float f  = (ra + GetStarRadius(b)) * 1.5f / (t + 1.0f) + 10.0f;
+    float ft = f * t;
+
+    float v10 = (a == b) ? 0.2f : 0.0f;
+
+    Brush along;
+    along.b00 = 0;
+    along.pos = gAxis;
+    along.f10 = v10;
+    along.dir = Vec3(ft, 0.0f, 0.0f);
+    along.f20 = gHeight;
+    along.f8450();
+
+    Brush against;
+    against.b00 = 0;
+    against.pos = gAxis;
+    against.f10 = v10;
+    against.dir = Vec3(-f, 0.0f, 0.0f);
+    against.f20 = gHeight;
+    against.f8450();
+
+    float up   = against.f24 + f;
+    float side = along.f24 + ft;
+    const float& best = up > side ? up : side;
+    return best;
+}
+
+// @ 0x00c84950
+void __stdcall FUN_00c84950(cPlanet_s00c8_4950* planet)
+{
+    // Reference point the body is positioned against: in the galaxy view the camera focus,
+    // otherwise the planet the player is currently on.
+    Vector3 target;
+    if (SP::cSPLivingUniverse_s00c8_4950::GetUniverseContext() == 1) {
+        ICameraPoint* view = ((IUniverseView*)FUN_0067dd10())->GetCamera();
+        ICameraPoint* focus = view->GetFocus();
+        focus->GetWorldOrigin(&target, 0, 0, 0);
+    } else {
+        target = SP::cSPLivingUniverse_s00c8_4950::GetActivePlanet()->GetPosition();
+    }
+
+    const Vector3& pos = planet->GetPosition();
+    Vector3 delta;
+    delta.x = target.x - pos.x;
+    delta.y = target.y - pos.y;
+    delta.z = target.z - pos.z;
+
+    void* sizeSource = FUN_01034680(planet);
+    float scale = FUN_01034630(sizeSource,
+                               sqrtf(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z),
+                               SP::cSPLivingUniverse_s00c8_4950::GetUniverseContext() == 0);
+
+    const Vector3& anchor = planet->GetPosition();
+    cSPMatrix3_s00c8_4950 bodyMatrix;
+    FUN_0059c190(&bodyMatrix, planet->GetTransform());
+
+    scale = planet->mRadius184 * scale;
+
+    RenderItem item;
+    item.mFlags = 0;
+    item.mCount = 0;
+    item.mColor.x = gBodyColorR;
+    item.mColor.y = gBodyColorG;
+    item.mColor.z = gBodyColorB;
+    item.mRadius = g_f01485720;
+    item.mMatrix.Assign(&g_mtx01694c70);
+
+    item.mAnchor = anchor;
+    item.mFlags |= 4;
+    item.mCount += 1;
+
+    if (planet->GetPlanetType() != 0) {             // sun: take the body matrix and the size
+        item.mMatrix = bodyMatrix;
+        item.mCount++;
+        item.mFlags |= 2;
+        item.mRadius = scale;
+        item.mCount++;
+    }
+
+    for (IRenderer** it = planet->mpBodies170; it != planet->mpBodies174; ++it) {
+        IRenderer* renderer = *it;
+        if (renderer->IsActive())
+            renderer->SetItem(&item);
     }
 }
 

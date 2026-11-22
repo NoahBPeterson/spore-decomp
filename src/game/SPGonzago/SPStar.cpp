@@ -238,10 +238,7 @@ extern RandomLCG gMathRandom;                    // 0x01601760
 // ---- items of slice s00c8aa60 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 extern "C" int __cdecl FUN_00801920(void* a, void* b);
-extern "C" void* __cdecl cSolarSystem_ctor(void* p);
-extern "C" void  __cdecl sub_c86760(void* p);
 extern float g_13ec4d0;   // 0x013ec4d0 = 100.0f
-#pragma optimize("", off)
 struct Sub48 {
     void sub_bb9af0(int v);   // 0x00bb9af0
     void sub_bb9b90(int v);   // 0x00bb9b90
@@ -252,7 +249,24 @@ struct Sub48 {
 struct Font {
     void SetUserData(void* p); // 0x00fd9450
 };
-// Retail cStar query view: mpStarRecord is at +0x48 in this build.
+struct Obj48_s00c8_aa60 {
+    char pad_00[0x34];
+    int  mField34;           // +0x34
+    int  mField38;           // +0x38
+    char pad_3c[4];
+    Font* mpFont;            // +0x40
+    char pad_44[4];
+    Sub48* mp48;             // +0x48
+    int   mField4c;          // +0x4c
+
+    void sub_b560();               // 0x00c8b560
+    void sub_b570(int param);      // 0x00c8b570
+    void sub_b5c0(void* p);        // 0x00c8b5c0
+    void sub_b7d0();               // 0x00c8b7d0
+    bool sub_b7e0();               // 0x00c8b7e0
+    bool sub_b800();               // 0x00c8b800
+    void sub_b6d0(void* param);    // 0x00c8b6d0
+};
 struct Obj48 {
     char pad_00[0x34];
     int  mField34;           // +0x34
@@ -304,7 +318,7 @@ struct cGameData_s00c8_aa60 {
     void* mpOwner2c;             // +0x2c
     char pad_30[0x10];
     OwnerObj* mpOwner40;         // +0x40
-    void RemoveOwner();  // 0x00cbb790 (cGameData::RemoveOwner)
+    void RemoveOwner();
 };
 struct Vec2 { void** pBegin; void** pEnd; };
 struct ItemObj {
@@ -433,7 +447,6 @@ bool __cdecl c8b450(int k)
     return true;
 }
 
-#pragma optimize("", on)
 // @ 0x00c8b520
 bool __cdecl c8b520(int k)
 {
@@ -465,7 +478,7 @@ cStar_s00c8_aa60::cStar_s00c8_aa60()
 
 // @ 0x00c8b6d0
 #pragma optimize("", off)
-void Obj48::sub_b6d0(void* param)
+void Obj48_s00c8_aa60::sub_b6d0(void* param)
 {
     mp48 = (Sub48*)param;
     mField4c = *(int*)((char*)param + 0x70);

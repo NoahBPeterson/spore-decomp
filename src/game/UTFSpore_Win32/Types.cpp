@@ -1,8 +1,9 @@
-// src/game/UTFSpore_Win32/Types.cpp -- migrated from slice(s) s0095eeb0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Types.cpp -- migrated from slice(s) s0095df60, s0095eeb0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Types.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <math.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) double __cdecl sin(double);
@@ -38,6 +39,83 @@ struct CM {
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern "C" CM* __cdecl Inv3(CM* out, const float* in, float* det);       // 0x0095F490
+
+// ---- items of slice s0095df60 begin
+#pragma intrinsic(sin, cos)
+// ---- items of slice s0095df60 end
+
+// @ 0x0095e040
+float FUN_0095e040(const float* m)
+{
+    return (((((m[2] * m[4]) * m[9] +
+              ((m[1] * m[6]) * m[8] + (m[0] * m[5]) * m[10])) -
+             (m[0] * m[6]) * m[9]) -
+            (m[1] * m[10]) * m[4]) -
+           m[2] * (m[5] * m[8]));
+}
+
+// @ 0x0095e0b0
+bool FUN_0095e0b0(const float* p, float* o)
+{
+    float fVar1 = p[10];
+    float fVar2 = p[0xb];
+    float fVar3 = p[0xe];
+    float fVar4 = p[9];
+    float fVar5 = p[5];
+    float fVar6 = p[4];
+    float fVar7 = p[6];
+    float fVar8 = p[7];
+    float fVar9 = p[8];
+    float fVar10 = p[0xc];
+    float fVar29 = p[0xd];
+    float fVar11 = p[0xf];
+    float fVar21 = fVar11 * fVar1 - fVar3 * fVar2;
+    float fVar17 = fVar29 * fVar2 - fVar11 * fVar4;
+    float fVar12 = fVar11 * fVar4 - fVar29 * fVar2;
+    float fVar27 = fVar3 * fVar4 - fVar29 * fVar1;
+    float fVar28 = (fVar27 * fVar8 + fVar17 * fVar7) + fVar21 * fVar5;
+    float fVar24 = fVar10 * fVar2 - fVar11 * fVar9;
+    float fVar18 = fVar3 * fVar9 - fVar10 * fVar1;
+    float fVar19 = -((fVar18 * fVar8 + fVar24 * fVar7) + fVar21 * fVar6);
+    float fVar13 = fVar10 * fVar1 - fVar3 * fVar9;
+    float fVar22 = fVar29 * fVar9 - fVar10 * fVar4;
+    float fVar25 = (fVar22 * fVar8 + fVar12 * fVar6) + fVar24 * fVar5;
+    float fVar14 = -((fVar13 * fVar5 + fVar22 * fVar7) + fVar27 * fVar6);
+    float fVar15 = ((fVar14 * p[3] + fVar25 * p[2]) + fVar19 * p[1]) + fVar28 * p[0];
+    if (fabsf(fVar15) < 1e-06f) {
+        return false;
+    }
+    fVar15 = 1.0f / fVar15;
+    float fVar16 = fVar15 * p[0];
+    float fVar20 = fVar15 * p[1];
+    float fVar23 = fVar15 * p[2];
+    float fVar26 = fVar15 * p[3];
+    o[0] = fVar15 * fVar28;
+    o[1] = -((fVar27 * fVar26 + fVar17 * fVar23) + fVar21 * fVar20);
+    fVar28 = fVar11 * fVar7 - fVar3 * fVar8;
+    float fVar30 = fVar3 * fVar5 - fVar29 * fVar7;
+    o[2] = ((fVar29 * fVar8 - fVar11 * fVar5) * fVar23 + fVar30 * fVar26) + fVar28 * fVar20;
+    float fVar31 = fVar2 * fVar7 - fVar1 * fVar8;
+    fVar17 = fVar1 * fVar5 - fVar4 * fVar7;
+    o[3] = -(((fVar4 * fVar8 - fVar2 * fVar5) * fVar23 + fVar17 * fVar26) + fVar31 * fVar20);
+    o[4] = fVar15 * fVar19;
+    o[5] = (fVar18 * fVar26 + fVar24 * fVar23) + fVar21 * fVar16;
+    fVar18 = fVar10 * fVar8 - fVar11 * fVar6;
+    o[6] = -(((fVar3 * fVar6 - fVar10 * fVar7) * fVar26 + fVar18 * fVar23) + fVar28 * fVar16);
+    fVar19 = fVar9 * fVar8 - fVar2 * fVar6;
+    o[7] = ((fVar1 * fVar6 - fVar9 * fVar7) * fVar26 + fVar19 * fVar23) + fVar31 * fVar16;
+    o[8] = fVar15 * fVar25;
+    o[9] = -((fVar22 * fVar26 + fVar12 * fVar16) + fVar24 * fVar20);
+    fVar12 = fVar29 * fVar6 - fVar10 * fVar5;
+    o[10] = ((fVar11 * fVar5 - fVar29 * fVar8) * fVar16 + fVar12 * fVar26) + fVar18 * fVar20;
+    fVar29 = fVar4 * fVar6 - fVar9 * fVar5;
+    o[0xb] = -(((fVar2 * fVar5 - fVar4 * fVar8) * fVar16 + fVar29 * fVar26) + fVar19 * fVar20);
+    o[0xc] = fVar15 * fVar14;
+    o[0xd] = (fVar13 * fVar20 + fVar22 * fVar23) + fVar27 * fVar16;
+    o[0xe] = -(((fVar10 * fVar7 - fVar3 * fVar6) * fVar20 + fVar12 * fVar23) + fVar30 * fVar16);
+    o[0xf] = ((fVar9 * fVar7 - fVar1 * fVar6) * fVar20 + fVar29 * fVar23) + fVar17 * fVar16;
+    return true;
+}
 
 // @ 0x0095f090
 CM* CM::SetAxes(float* a, float* b, float* c)

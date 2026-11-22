@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/EASprintf.cpp -- migrated from slice(s) s00939a60, s00938bc0, s00937da0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/EASprintf.cpp -- migrated from slice(s) s009370d0, s00939a60, s00938bc0, s00937da0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/EASprintf.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -571,6 +571,201 @@ __declspec(dllimport) wchar_t* __cdecl wcschr(const wchar_t* s, wchar_t c);
 typedef int (__cdecl* ScanfFn)(const wchar_t*, const wchar_t*, ...);
 extern "C" ScanfFn gpScanfFn;                                // 0x166994c
 // ---- items of slice s00939a60 end
+
+// ---- items of slice s009370d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char* __cdecl EcvtCopy(double dValue, int nDigitCount, int* pnDecimalPoint, int* pnSign,
+                                  char* pBuffer);   // 0x0092ce00
+extern "C" char* __cdecl FcvtCopy(double dValue, int nDigitCount, int* pnDecimalPoint, int* pnSign,
+                                  char* pBuffer);   // 0x0092ce40
+static int Strlen8(const char* s) {
+    const char* p = s;
+    while (*p) ++p;
+    return (int)(p - s);
+}
+#define IsNeg_s0093_70d0(x) ((*((const uint32_t*)&(x) + 1) & 0x80000000u) != 0)
+// ---- items of slice s009370d0 end
+
+// @ 0x00937720
+static char* WriteInteger64_8(FormatData8* fd, long long lValue, char* pBufferEnd)
+{
+    unsigned long long ulValue = (unsigned long long)lValue;
+    unsigned int nBase;
+    unsigned int nShift = 0;
+    unsigned int nAnd = 0;
+    int nSign = 0;
+    char* pCurrent = pBufferEnd;
+    int nDigitCount = 0;
+    int nDigitCountSum = fd->mnPrecision;
+    bool bNegative = false;
+
+    *--pCurrent = 0;
+
+    if ((lValue > 0) || (fd->mnPrecision > 0) || fd->mbAlternativeForm) {
+        switch (fd->mnType) {
+            case 'b': nBase = 2;  nShift = 1; nAnd = 1;   break;
+            case 'o': nBase = 8;  nShift = 3; nAnd = 7;   break;
+            case 'd': case 'i': default:
+                nBase = 10;
+                nSign = fd->mSign;
+                if (lValue < 0) { ulValue = (unsigned long long)-lValue; bNegative = true; }
+                break;
+            case 'u': nBase = 10; break;
+            case 'x': case 'X': nBase = 16; nShift = 4; nAnd = 0x0f; break;
+        }
+
+        do {
+            int nDigit;
+            if (nBase == 10) { nDigit = (int)(ulValue % nBase); ulValue /= nBase; }
+            else { nDigit = (int)(ulValue & nAnd); ulValue >>= nShift; }
+            if (nDigit < 10) nDigit = '0' + nDigit;
+            else { nDigit -= 10; if (fd->mnType == 'x') nDigit = 'a' + nDigit; else nDigit = 'A' + nDigit; }
+            *--pCurrent = (char)nDigit;
+            ++nDigitCount;
+        } while (ulValue > 0);
+
+        if ((nBase == 8) && fd->mbAlternativeForm && (*pCurrent != '0')) { *--pCurrent = '0'; ++nDigitCount; }
+
+        if (fd->mAlignment == 2) {
+            if (bNegative || (nSign != 0)) nDigitCountSum = fd->mnWidth - 1;
+            else if (fd->mbAlternativeForm && ((nBase == 2) || (nBase == 16))) nDigitCountSum = fd->mnWidth - 2;
+            else nDigitCountSum = fd->mnWidth;
+        }
+        while (nDigitCount < nDigitCountSum) { *--pCurrent = '0'; ++nDigitCount; }
+
+        if (nBase == 10) {
+            if ((fd->mnType == 'd') || (fd->mnType == 'i')) {
+                if (bNegative) *--pCurrent = '-';
+                else if (fd->mSign == 2) *--pCurrent = '+';
+                else if (fd->mSign == 3) *--pCurrent = ' ';
+            }
+        } else if (fd->mbAlternativeForm && ((nBase == 2) || (nBase == 16))) {
+            *--pCurrent = (char)fd->mnType;
+            *--pCurrent = '0';
+        }
+    }
+    return pCurrent;
+}
+
+// @ 0x00937970
+static char* WriteDouble8(FormatData8* fd, double dValue, char* pBufferEnd)
+{
+    if (_isnan(dValue)) {
+        *--pBufferEnd = 0;
+        if (fd->mnType >= 'a') { *--pBufferEnd = 'n'; *--pBufferEnd = 'a'; *--pBufferEnd = 'n'; }
+        else { *--pBufferEnd = 'N'; *--pBufferEnd = 'A'; *--pBufferEnd = 'N'; }
+        if (IsNeg_s0093_70d0(dValue)) *--pBufferEnd = '-';
+        return pBufferEnd;
+    }
+    if (!_finite(dValue)) {
+        *--pBufferEnd = 0;
+        if (fd->mnType >= 'a') { *--pBufferEnd = 'f'; *--pBufferEnd = 'n'; *--pBufferEnd = 'i'; }
+        else { *--pBufferEnd = 'F'; *--pBufferEnd = 'N'; *--pBufferEnd = 'I'; }
+        if (IsNeg_s0093_70d0(dValue)) *--pBufferEnd = '-';
+        return pBufferEnd;
+    }
+
+    int nType = fd->mnType;
+    int nPrecision = fd->mnPrecision;
+    bool bStripTrailingZeroes = false;
+    bool bStripPointlessDecimal = false;
+    char* pResult = 0;
+
+    *--pBufferEnd = 0;
+
+    if (nPrecision <= 0x408) {
+        int nDecimalPoint, nSign, nExponent;
+        char pBufferCvt[0x160];
+        pBufferCvt[0] = 0;
+        int nBufferLength;
+        char* pCurrent = pBufferEnd;
+
+        switch (nType) {
+            default:
+            case 'g':
+            case 'G': {
+                EcvtCopy(dValue, nPrecision, &nDecimalPoint, &nSign, pBufferCvt);
+                nExponent = nDecimalPoint - 1;
+                if (!fd->mbAlternativeForm) bStripTrailingZeroes = true;
+                bStripPointlessDecimal = true;
+                if (!((nExponent < -4) || (nExponent >= nPrecision))) {
+                    goto FType;
+                }
+                if (nType == 'g') nType = 'e';
+                else nType = 'E';
+                goto EContinuation;
+            }
+            case 'e':
+            case 'E': {
+                EcvtCopy(dValue, nPrecision + 1, &nDecimalPoint, &nSign, pBufferCvt);
+                nExponent = nDecimalPoint - 1;
+                if (dValue == 0) nExponent = 0;
+            EContinuation:
+                nBufferLength = Strlen8(pBufferCvt);
+                {
+                    int nExponentAbs = nExponent < 0 ? -nExponent : nExponent;
+                    while (nExponentAbs > 0) { *--pCurrent = (char)('0' + (nExponentAbs % 10)); nExponentAbs /= 10; }
+                }
+                if (pCurrent >= (pBufferEnd - 1)) *--pCurrent = '0';
+                if (pCurrent >= (pBufferEnd - 1)) *--pCurrent = '0';
+                if (nExponent >= 0) *--pCurrent = '+';
+                else *--pCurrent = '-';
+                *--pCurrent = (char)nType;
+                for (char* pTemp = pBufferCvt + nBufferLength; pTemp > pBufferCvt + 1; ) {
+                    const char c = *--pTemp;
+                    if (c != '0') bStripTrailingZeroes = false;
+                    if ((c != '0') || !bStripTrailingZeroes) *--pCurrent = c;
+                }
+                if ((*pCurrent != (char)nType) || !bStripPointlessDecimal) {
+                    if ((nBufferLength > 1) || fd->mbAlternativeForm) *--pCurrent = '.';
+                }
+                *--pCurrent = pBufferCvt[0];
+                break;
+            }
+            case 'f':
+            case 'F':
+            FType: {
+                FcvtCopy(dValue, nPrecision, &nDecimalPoint, &nSign, pBufferCvt);
+                nBufferLength = Strlen8(pBufferCvt);
+                if (fd->mbAlternativeForm && (nDecimalPoint >= nBufferLength) && !bStripPointlessDecimal)
+                    *--pCurrent = '.';
+                const char* pDecimalPoint = pBufferCvt + nDecimalPoint - 1;
+                const char* pCurrentSource = pBufferCvt + nBufferLength - 1;
+                if ((pCurrentSource - pDecimalPoint) > nPrecision) pCurrentSource = pDecimalPoint + nPrecision;
+                while (pCurrentSource > pDecimalPoint) {
+                    char c;
+                    if ((pCurrentSource >= pBufferCvt) && (pCurrentSource <= (pBufferCvt + nBufferLength)))
+                        c = *pCurrentSource;
+                    else
+                        c = '0';
+                    if (c != '0') bStripTrailingZeroes = false;
+                    if ((c != '0') || !bStripTrailingZeroes) *--pCurrent = c;
+                    --pCurrentSource;
+                }
+                if (*pCurrent || !bStripPointlessDecimal) {
+                    if (nDecimalPoint < nBufferLength) *--pCurrent = '.';
+                }
+                if (nDecimalPoint > 0) {
+                    pCurrentSource = pBufferCvt + nDecimalPoint;
+                    while (pCurrentSource > pBufferCvt) *--pCurrent = *--pCurrentSource;
+                } else {
+                    *--pCurrent = '0';
+                }
+                break;
+            }
+        }
+
+        if (nSign) *--pCurrent = '-';
+        else if (fd->mSign == 2) *--pCurrent = '+';
+        else if (fd->mSign == 3) *--pCurrent = ' ';
+
+        if (fd->mAlignment == 1) {
+            int nWidth = (int)(pBufferEnd - pCurrent);
+            while (nWidth < fd->mnWidth) { *--pCurrent = ' '; ++nWidth; }
+        }
+        pResult = pCurrent;
+    }
+    return pResult;
+}
 
 // @ 0x00937da0
 __declspec(noinline) static int VprintfCore8(const char* pFormat, WriteFunction8 pWriteFunction, void* pContext, va_list arguments)

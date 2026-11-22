@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinnerPaintSystem.cpp -- migrated from slice(s) s00525360, s00524a50, s005241e0, s00523690, s00522800, s005218e0, s0051fb90 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinnerPaintSystem.cpp -- migrated from slice(s) s0051f0b0, s0051e3d0, s00525360, s00524a50, s005241e0, s00523690, s00522800, s005218e0, s0051fb90 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinnerPaintSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,15 @@
 #include "SP/cPropertyList.h"
 #include "SP/cSkinObject.h"
 #include "SP/cJob.h"
+#include "EA/Allocator/FixedAllocatorBase.h"
+#include "cSPMatrix3.h"
+#include "cSPVector2.h"
+#include "cSPVector3.h"
+#include "nSPSkinner/cMeshPosition.h"
+#include "nSPSkinner/cPaintBrushDescription.h"
+#include "nSPSkinner/cPaintParticle.h"
+#include "SP/cRuntimeCreatureBlock.h"
+#include "SP/cRuntimeCreatureResource.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_1485720;   // 1.0f
@@ -1002,6 +1011,493 @@ struct CommandDesc {
 };
 extern CommandDesc gSkinPaintCmdA, gSkinPaintCmdB, gSkinPaintCmdC, gSkinPaintCmdD;
 // ---- items of slice s00525360 end
+
+// ---- items of slice s0051e3d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtblF1c74;                // 0x013f1c74
+extern void* g_vtblF1c70;                // 0x013f1c70
+extern void* g_vtblSimCreatureAbility;   // 0x013ef094
+extern void* g_vtblSkinnerPaintSystem;   // 0x013eb394
+extern char g_015de470;                     // 0x015de470
+void __fastcall DefaultRefCounted_Release(void* self);   // 0x00453540 (thiscall)
+void __fastcall FUN_00402420(void* self);                // 0x00402420 (thiscall)
+void __fastcall SP_cJob_GetStatus(void* self);           // 0x00690120 (thiscall)
+void __fastcall FUN_00526a40(void* self);                // 0x00526a40 (thiscall)
+void __fastcall FUN_004e1bf0(void* self);                // 0x004e1bf0 (thiscall)
+void __fastcall FUN_00525e10(void* self);                // 0x00525e10 (thiscall)
+inline void VCall1(void* p)
+{
+    void** vt = *(void***)p;
+    ((void(__fastcall*)(void*))vt[1])(p);
+}
+struct PaintSystem2 {
+    void dtor();
+};
+struct RCObj {                      // refcount at +4, Release = 0x00453540 (thiscall)
+    void* vt; int mRef;
+    int AddRef() { return mRef++ + 1; }
+    void __thiscall Release();  // 0x00453540
+};
+struct AtomicObj {                  // refcount at +8, atomic AddRef, Release = 0x00402420
+    void* vt; unsigned pad; long mRef;
+    void AddRef() { _InterlockedIncrement(&mRef); }
+    void Rel() { FUN_00402420(this); }
+};
+struct VObj {                       // slot0 AddRef, slot1 Release
+    virtual void AddRef();
+    virtual void Rel();
+    virtual void S2();
+    virtual void S3(int);
+};
+struct Job_s0051_e3d0 {
+    int __thiscall Continue();  // 0x0068f970
+    void __thiscall Cancel(bool);  // 0x00692400
+    int __thiscall AddRef();  // 0x0068f950
+    void __thiscall Done();  // 0x00690120
+    bool IsStopped() { return ((1 << Continue()) & 0x3c) != 0; }
+};
+struct AllocT {
+    void __thiscall Init(unsigned, unsigned, unsigned, unsigned, unsigned, void*, void*, unsigned);  // 0x009266b0
+};
+struct MsgServer_s0051_e3d0 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+    virtual void Subscribe(void* who, unsigned id);   // +0x20
+virtual void v8();
+virtual void v9();
+    virtual void Unsubscribe(void* who, unsigned id, int mask);  // +0x2c
+};
+struct FxMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+    virtual VObj* CreateEffect(unsigned id, int flag);  // +0x4c
+    virtual void Func50(unsigned id);                   // +0x50
+};
+struct Vec8 {
+    uint32_t first, last;
+    void __thiscall erase(uint32_t f, uint32_t l);  // 0x00530c80
+};
+struct JobSlot { void* fn; void* owner; uint32_t pad[4]; uint32_t flag; };
+struct JobHandle {
+    union { Job_s0051_e3d0* p; JobSlot* slot; };
+    JobHandle* __thiscall Reset();  // 0x0041d940 (returns this)
+    JobHandle& operator=(Job_s0051_e3d0* n)
+    {
+        if (n != p) {
+            Job_s0051_e3d0* old = p;
+            if (n) n->AddRef();
+            p = n;
+            if (old) old->Done();
+        }
+        return *this;
+    }
+};
+extern AllocT g_FixedAlloc;                 // 0x015de2a0
+MsgServer_s0051_e3d0* GetMessageServer_s0051_e3d0();              // 0x0067dcc0
+FxMgr* GetEffectsManager();                 // 0x0067ddd0
+void __fastcall FUN_00516d30(void* self);   // 0x00516d30 (AOR::Unload)
+struct FixedCfg { void __thiscall ShutdownCfg(int arg); };  // 0x005264d0
+inline void SetRC(RCObj** slot, RCObj* p)
+{
+    if (p != *slot) {
+        RCObj* old = *slot;
+        if (p) p->AddRef();
+        *slot = p;
+        if (old) old->Release();
+    }
+}
+inline void SetRCA(AtomicObj** slot, AtomicObj* p)
+{
+    if (p != *slot) {
+        AtomicObj* old = *slot;
+        if (p) p->AddRef();
+        *slot = p;
+        if (old) old->Rel();
+    }
+}
+template<class T> struct Ref { T* mp; T* operator->() const { return mp; } };
+inline void SetV(Ref<VObj>* slotr, VObj* p)
+{
+    VObj** slot = &slotr->mp;
+    if (p != *slot) {
+        VObj* old = *slot;
+        if (p) p->AddRef();
+        *slot = p;
+        if (old) old->Rel();
+    }
+}
+struct PS {
+    void* vt0; void* vt1; uint32_t p8;
+    RCObj* m0c; RCObj* m10; Ref<VObj> m14; RCObj* m18;
+    uint32_t p1c, m20, p24[10], m4c;
+    uint32_t m50, m54, m58, m5c;
+    uint8_t m60, m61, m62, m63;
+    uint32_t m64, m68, m6c, m70, m74;
+    uint8_t m78, m79, m7a, m7b, m7c, m7d, m7e, m7f;
+    uint32_t p80[5];
+    Vec8 m94;
+    uint32_t p9c[0x14];
+    uint32_t mec;
+    Ref<VObj> mf0; Ref<VObj> mf4;
+    JobHandle mf8; JobHandle mfc;
+    AtomicObj* m100;
+    RCObj* m104;
+    void DeviceRestore();
+    void SetCreatureSkin(void* skin, int flag);  // 0x00522b40
+    void Shutdown();
+};
+// ---- items of slice s0051e3d0 end
+
+// ---- items of slice s0051f0b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma warning(disable : 4035)   // result returned in eax
+struct Vector2_s0051_f0b0 {
+    float x;
+    float y;
+    Vector2_s0051_f0b0() {}
+    Vector2_s0051_f0b0(const Vector2_s0051_f0b0& v) { x = v.x; y = v.y; }
+    Vector2_s0051_f0b0& operator=(const Vector2_s0051_f0b0& other);   // 0x0051fb60 (defined below)
+};
+struct Vector3T {
+    float x, y, z;
+    Vector3T() {}
+    Vector3T(const Vector3T& v) : x(v.x), y(v.y), z(v.z) {}
+};
+struct Vector3_s0051_f0b0 : Vector3T {
+    Vector3_s0051_f0b0() {}
+    Vector3_s0051_f0b0(const Vector3T& v) { x = v.x; y = v.y; z = v.z; }
+    Vector3_s0051_f0b0& operator=(const Vector3T& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+struct Matrix3_s0051_f0b0 {
+    Vector3T m[3];
+};
+Vector3T operator*(const Vector3T& v, const Matrix3_s0051_f0b0& m);   // 0x0041daf0 (row vector * M)
+struct Vector3A : Vector3T {
+    Vector3A(const Vector3T& v) { x = v.x; y = v.y; z = v.z; }
+    Vector3A& operator=(const Vector3T& v);                 // 0x004098a0
+    Vector3A& operator*=(const Matrix3_s0051_f0b0& m) { *this = *this * m; return *this; }
+};
+Vector3T operator+(const Vector3T& a, const Vector3T& b);   // 0x0041dc10
+Vector3T operator-(const Vector3T& a, const Vector3T& b);   // 0x0041db10
+Vector3T operator*(const Vector3T& v, const float& f);     // 0x0041dca0
+Vector3T operator-(const Vector3T& v);                     // 0x00422020
+Vector3T& operator*=(Vector3T& v, const float& f);         // 0x0041dba0
+Vector3T& operator+=(Vector3T& v, const Vector3T& w);      // 0x0041ddb0
+Vector3_s0051_f0b0 Cross(const Vector3T& a, const Vector3T& b);       // 0x0044e460
+Vector3_s0051_f0b0 Normalize(const Vector3T& v);                      // 0x00436ce0
+template <int N> inline void ScratchSlots_s0051_f0b0() { uint32_t slots[N]; }
+struct cMeshPosition_s0051_f0b0 {          // 0xc
+    uint32_t mTriIndex;
+    Vector2_s0051_f0b0 mUV;
+    cMeshPosition_s0051_f0b0(const cMeshPosition_s0051_f0b0& o) : mTriIndex(o.mTriIndex) { mUV = o.mUV; }
+};
+struct cMeshPositionArg {
+    uint32_t mTriIndex;
+    Vector2_s0051_f0b0 mUV;
+    cMeshPositionArg(const cMeshPosition_s0051_f0b0& o) : mTriIndex(o.mTriIndex), mUV(o.mUV) {}
+};
+template <class T> struct SimpleVector {   // eastl::vector<T, sp_vector_allocator> (0x14)
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator[2];
+    T& operator[](uint32_t i) { return mpBegin[i]; }
+};
+struct cRuntimeCreatureBlock {  // 0x8c in retail
+    uint32_t pad0[5];
+    Vector3T mBoundsMin;        // +0x14
+    Vector3T mBoundsMax;        // +0x20
+    float mScale;               // +0x2c
+    Matrix3_s0051_f0b0 mRotation;          // +0x30
+    Vector3T mTranslation;      // +0x54
+    uint32_t pad60[11];
+};
+struct cRuntimeCreatureResource {
+    uint32_t pad0[0x26];
+    SimpleVector<cRuntimeCreatureBlock> mBlocks;    // +0x98
+};
+template <class T> struct AutoRefCount_s0051_f0b0 {
+    T* mpObject;
+    T* operator->() const { return mpObject; }
+};
+struct cSkinObject_s0051_f0b0 {
+    uint32_t pad0[2];
+    AutoRefCount_s0051_f0b0<cRuntimeCreatureResource> mResource;   // +0x08
+    uint32_t padc[5];
+    SimpleVector<uint8_t> mNodeBlockMap;                // +0x20
+
+    // Node index -> block index (high bit set: look up the node->block map).
+    uint32_t GetBlockIndex(uint32_t node)
+    {
+        if (node & 0x80000000)
+            return mNodeBlockMap[node & 0x7fffffff];
+        else
+            return node;
+    }
+    const Matrix3_s0051_f0b0& GetBlockRotation(uint32_t node)
+    {
+        return mResource->mBlocks[GetBlockIndex(node)].mRotation;
+    }
+};
+struct cMesh_s0051_f0b0 {
+    uint32_t pad0[0x64];
+    SimpleVector<uint32_t> mTriBlockCodes;  // +0x190
+    Vector3_s0051_f0b0 GetPosition(cMeshPosition_s0051_f0b0 pos);      // 0x0050c490
+    Vector3_s0051_f0b0 GetPosition(cMeshPositionArg pos);   // 0x0050c490
+    Vector3_s0051_f0b0 GetNormal(cMeshPositionArg pos);     // 0x0050c5a0
+};
+struct cPaintParams {           // 0xa8 bytes of per-hit paint parameters
+    uint32_t mData[42];
+    cPaintParams(int mode);     // 0x004fe2a0
+};
+struct cPaintParticle_s0051_f0b0;
+struct cBrushHashes {           // eastl::vector at cPaintBrushDescription+4
+    bool empty() const;         // 0x00526430
+};
+struct cPaintBrushDescription_s0051_f0b0 {
+    uint32_t vtbl;
+    cBrushHashes mBrushHashes;  // +0x04
+    uint32_t pad04[5];
+    uint32_t mFlags;            // +0x1c (0x40 = reverse the stroke direction)
+    uint32_t pad20[3];
+    uint8_t mUserColorIndex;    // +0x2c
+    uint8_t mAlignment;         // +0x2d
+    uint8_t mInitialDirection;  // +0x2e
+    uint8_t mAttraction;        // +0x2f
+    Vector3_s0051_f0b0 mAlignTarget;       // +0x30
+    Vector3_s0051_f0b0 mInitialDirTarget;  // +0x3c
+    Vector3_s0051_f0b0 mAttractTarget;     // +0x48
+
+    void Sample(float t, cPaintParticle_s0051_f0b0* p, Vector3_s0051_f0b0& pos, Vector3_s0051_f0b0& normal, float* vars,
+                cPaintParams& out);  // 0x0051d720
+};
+struct cPaintParticle_s0051_f0b0 {         // 0x38
+    cMeshPosition_s0051_f0b0 mPos;         // +0x00
+    Vector3_s0051_f0b0 mDirection;         // +0x0c
+    float mDistToHit;           // +0x18
+    int mHits;                  // +0x1c
+    int mTicksSpent;            // +0x20
+    int mTicksTotal;            // +0x24
+    uint32_t mSeed;             // +0x28
+    AutoRefCount_s0051_f0b0<cPaintBrushDescription_s0051_f0b0> mpDescription;   // +0x2c
+    int mKillSwitch;            // +0x30
+    uint32_t mpInheritance;     // +0x34
+};
+struct cPaintMaterial_s0051_f0b0 {
+    void Paint(cPaintParams& params, Vector3_s0051_f0b0& pos, Vector3_s0051_f0b0& normal, Vector3_s0051_f0b0& tangent,
+               Vector3_s0051_f0b0& side, uint32_t tri);   // 0x00506760
+};
+void ComputeAttraction(uint8_t attraction, const Vector3_s0051_f0b0& target, cMeshPositionArg pos,
+                       cPaintBrushDescription_s0051_f0b0* desc, cSkinObject_s0051_f0b0* skin, cMesh_s0051_f0b0* mesh,
+                       Vector3_s0051_f0b0& outDir);       // 0x0051fb90
+void ProjectToTangentPlane(const Vector3_s0051_f0b0& normal, const Vector3_s0051_f0b0& dir, Vector3_s0051_f0b0& outDir,
+                           Vector3_s0051_f0b0& outSide);  // 0x00520140
+namespace nSPSkinner {
+class cPaintSystem_s0051_f0b0 { public:
+    uint32_t pad0[3];
+    AutoRefCount_s0051_f0b0<cPaintMaterial_s0051_f0b0> mpMaterial;    // +0x0c
+    AutoRefCount_s0051_f0b0<cMesh_s0051_f0b0> mpBakedMesh;            // +0x10
+    uint32_t pad14[3];
+    cSkinObject_s0051_f0b0* mpEditorSkinPart;              // +0x20
+    uint32_t pad24[12];
+    uint32_t mSwarmSeed;                        // +0x54
+
+    uint32_t GetBlockIndex(uint32_t node)
+    {
+        if (node & 0x80000000)
+            return mpEditorSkinPart->mNodeBlockMap[node & 0x7fffffff];
+        else
+            return node;
+    }
+
+    void ProcessHit(cPaintParticle_s0051_f0b0* p, float* const vars);  // 0x0051f0b0 (nSPSkinner::cPaintSystem::ProcessHit)
+};  // namespace nSPSkinner
+}
+// ---- items of slice s0051f0b0 end
+
+// @ 0x0051e3d0
+void PaintSystem2::dtor()
+{
+    *(void**)this = &g_vtblF1c74;
+    *(void**)((char*)this + 4) = &g_vtblF1c70;
+    if (*(void**)((char*)this + 0x104) != 0)
+        DefaultRefCounted_Release(*(void**)((char*)this + 0x104));
+    if (*(void**)((char*)this + 0x100) != 0)
+        FUN_00402420(*(void**)((char*)this + 0x100));
+    if (*(void**)((char*)this + 0xfc) != 0)
+        SP_cJob_GetStatus(*(void**)((char*)this + 0xfc));
+    if (*(void**)((char*)this + 0xf8) != 0)
+        SP_cJob_GetStatus(*(void**)((char*)this + 0xf8));
+    if (*(void**)((char*)this + 0xf4) != 0)
+        VCall1(*(void**)((char*)this + 0xf4));
+    if (*(void**)((char*)this + 0xf0) != 0)
+        VCall1(*(void**)((char*)this + 0xf0));
+    for (uint32_t i = *(uint32_t*)((char*)this + 0x94); i < *(uint32_t*)((char*)this + 0x98); i += 8) {
+    }
+    FUN_00526a40((char*)this + 0x94);
+    FUN_004e1bf0((char*)this + 0x80);
+    FUN_00525e10((char*)this + 0x3c);
+    if (*(void**)((char*)this + 0x1c) != 0)
+        DefaultRefCounted_Release(*(void**)((char*)this + 0x1c));
+    if (*(void**)((char*)this + 0x18) != 0)
+        DefaultRefCounted_Release(*(void**)((char*)this + 0x18));
+    if (*(void**)((char*)this + 0x14) != 0)
+        VCall1(*(void**)((char*)this + 0x14));
+    if (*(void**)((char*)this + 0x10) != 0)
+        DefaultRefCounted_Release(*(void**)((char*)this + 0x10));
+    if (*(void**)((char*)this + 0x0c) != 0)
+        DefaultRefCounted_Release(*(void**)((char*)this + 0x0c));
+    *(void**)((char*)this + 4) = &g_vtblSimCreatureAbility;
+    *(void**)this = &g_vtblSkinnerPaintSystem;
+}
+
+// @ 0x0051ec70
+void PS::Shutdown()
+{
+    {
+        Job_s0051_e3d0* pJob = mf8.p;
+        if (pJob) {
+            Job_s0051_e3d0* job = mf8.p;
+            if (job->IsStopped()) {
+                Job_s0051_e3d0* stop = mf8.p;
+                stop->Cancel(true);
+            }
+            mf8 = (Job_s0051_e3d0*)0;
+        }
+    }
+    {
+        Job_s0051_e3d0* pJob = mfc.p;
+        if (pJob) {
+            Job_s0051_e3d0* job = mfc.p;
+            if (job->IsStopped()) {
+                Job_s0051_e3d0* stop = mfc.p;
+                stop->Cancel(true);
+            }
+            mfc = (Job_s0051_e3d0*)0;
+        }
+    }
+    SetRC(&m104, 0);
+    SetCreatureSkin(0, 0);
+    {
+        VObj* pAor = m14.mp;
+        if (pAor) {
+            VObj* p = m14.mp;
+            FUN_00516d30(p);
+            VCall1(p);
+        }
+    }
+    SetV(&m14, 0);
+    SetRCA(&m100, 0);
+    SetRC(&m18, 0);
+    SetRC(&m0c, 0);
+    SetV(&mf4, 0);
+    GetEffectsManager()->Func50(0x37f23d0);
+    FUN_009265b0(&g_FixedAlloc);
+    ((FixedCfg*)(void*)&g_015de470)->ShutdownCfg(0);
+    GetMessageServer_s0051_e3d0()->Unsubscribe(this, 0x44edd9c, 0xffffd8f1);
+    GetMessageServer_s0051_e3d0()->Unsubscribe(this, 0x247ca7b, 0xffffd8f1);
+}
+
+// @ 0x0051f0b0
+#include "sse_helpers.h"
+namespace nSPSkinner {
+void cPaintSystem_s0051_f0b0::ProcessHit(cPaintParticle_s0051_f0b0* p, float* const vars)
+{
+    cPaintBrushDescription_s0051_f0b0* pDescription = p->mpDescription.mpObject;
+    mSwarmSeed = p->mSeed ^ 0x5a81f049;
+    Vector3_s0051_f0b0 hitPoint = mpBakedMesh->GetPosition(p->mPos);
+    Vector3_s0051_f0b0 norm = mpBakedMesh->GetNormal(p->mPos);
+    float frac = SseClamp01((float)p->mTicksSpent / (float)p->mTicksTotal);
+    cPaintParams values(0);
+    pDescription->Sample(frac, p, hitPoint, norm, vars, values);
+    p->mDistToHit = SseMax(vars[3], 1e-4f);
+    p->mKillSwitch = SseRoundToInt(vars[4]);
+    if (p->mKillSwitch > 0)
+        return;
+
+    if (!pDescription->mBrushHashes.empty()) {
+        Vector3_s0051_f0b0 dir;
+        Vector3_s0051_f0b0 tangent;
+        Vector3_s0051_f0b0 side;
+        switch (pDescription->mAlignment) {
+        case 0:
+            ;
+        case 1:
+            ;
+        default:
+            dir = p->mDirection;
+            break;
+        case 3:
+            dir = pDescription->mAlignTarget;
+            break;
+        case 4:
+            dir = pDescription->mAlignTarget *
+                  mpEditorSkinPart->GetBlockRotation(mpBakedMesh->mTriBlockCodes[p->mPos.mTriIndex] >> 16);
+            break;
+        case 5:
+            dir = Normalize(Cross(norm, Vector3_s0051_f0b0(mpEditorSkinPart->GetBlockRotation(
+                      mpBakedMesh->mTriBlockCodes[p->mPos.mTriIndex] >> 16).m[1])));
+            ScratchSlots_s0051_f0b0<5>();
+            break;
+        case 6:
+            dir = pDescription->mAlignTarget *
+                  mpEditorSkinPart->GetBlockRotation((mpBakedMesh->mTriBlockCodes[p->mPos.mTriIndex] >> 8) & 0xff);
+            break;
+        case 7: {
+            uint32_t blockIndex = GetBlockIndex((mpBakedMesh->mTriBlockCodes[p->mPos.mTriIndex] >> 8) & 0xff);
+            cRuntimeCreatureBlock* block = &mpEditorSkinPart->mResource->mBlocks.mpBegin[blockIndex];
+            Vector3A center = (block->mBoundsMin + block->mBoundsMax) * 0.5f;
+            center *= block->mScale;
+            center *= block->mRotation;
+            center += block->mTranslation;
+            Vector3_s0051_f0b0 offset = mpBakedMesh->GetPosition(cMeshPositionArg(p->mPos)) - center;
+            dir = Normalize(Cross(offset, Vector3_s0051_f0b0(block->mRotation.m[1])));
+            break;
+        }
+        case 2:
+            ScratchSlots_s0051_f0b0<5>();
+            ComputeAttraction(pDescription->mAttraction, pDescription->mAttractTarget, p->mPos, pDescription,
+                              mpEditorSkinPart, mpBakedMesh.operator->(), dir);
+            break;
+        }
+        if (pDescription->mFlags & 0x40)
+            dir = -dir;
+        ScratchSlots_s0051_f0b0<11>();
+        ProjectToTangentPlane(norm, dir, tangent, side);
+        mpMaterial->Paint(values, hitPoint, norm, tangent, side, p->mPos.mTriIndex);
+    }
+    p->mHits++;
+}
+}  // namespace nSPSkinner
+
+// @ 0x0051fb60
+Vector2_s0051_f0b0& Vector2_s0051_f0b0::operator=(const Vector2_s0051_f0b0& other)
+{
+    x = other.x;
+    y = other.y;
+    return *this;
+}
 
 // @ 0x0051fb90
 void FUN_0051fb90(void* self)

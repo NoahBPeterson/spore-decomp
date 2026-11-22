@@ -43,8 +43,8 @@ static void destroy30(char* p, char* end)
 namespace SP {
 class cLocaleManager;
 }
-extern wchar_t gEmptyString16[2];   // 0x1667bac — eastl empty wide-string sentinel
-extern wchar_t gPathSep[];          // 0x13fa488 — L"\\"
+extern wchar_t gEmptyString16[2];   // 0x1667bac � eastl empty wide-string sentinel
+extern wchar_t gPathSep[];          // 0x13fa488 � L"\\"
 void* operator new(size_t n, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete(void* p);
 namespace eastl {
@@ -174,6 +174,7 @@ class cLocaleChangeMessage : public EA::Messaging::IMessageRC_s0069_60f0, public
  public:
   FixedString16 mLocaleId;  // +0xc
   cLocaleChangeMessage(const FixedString16& id);
+  ~cLocaleChangeMessage() throw();   // implicitly virtual; ??_G at 0x006963d0 inlines it
 };
 }
 namespace SP {
@@ -615,6 +616,12 @@ cLocaleChangeMessage::cLocaleChangeMessage(const FixedString16& id)
 : mLocaleId(id) {}
 }  // namespace App
 
+// @ 0x006963d0
+namespace App {
+cLocaleChangeMessage::~cLocaleChangeMessage()
+{}
+}  // namespace App
+
 // @ 0x00696420
 LocaleManagerDtorView::LocaleManagerDtorView()
 : mbInit(false), field9(false), fieldA(false), fieldC(0), field10(2), field14(2),
@@ -707,5 +714,387 @@ bool cLocaleManagerSetLocale(void* self, void* arg)
   (void)self;
   (void)arg;
   return true;
+}
+}  // namespace SP
+
+// ---- items of slice s00696c80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
+void __cdecl operator delete(void*, const char*, int, int, int, int);
+namespace SP {
+void* MessageServer();                          // 0x67dcc0
+}
+namespace SP {
+namespace LocaleLoad {
+struct Node { Node* next; Node* prev; void* value; };   // 0xc-byte list node
+}
+}
+namespace SP {
+namespace LocaleLoad {
+struct Head { Node* next; Node* prev; };                 // list sentinel
+}
+}
+namespace SP {
+namespace LocaleLoad {
+struct WStr_s0069_6c80 { wchar_t* mBegin; wchar_t* mEnd; wchar_t* mCap; void* mAlloc; };
+}
+}
+namespace SP {
+namespace LocaleLoad {
+struct KeyList { Node* next; Node* prev; void* alloc; unsigned size; };
+}
+}
+namespace SP {
+namespace LocaleLoad {
+void* GetDefaultAllocator();                             // 0x00925cb0
+}
+}
+namespace SP {
+namespace LocaleLoad {
+int GetLocaleInfoString(int, int, wchar_t*, int, const WStr_s0069_6c80*);   // 0x00880910
+}
+}
+namespace SP {
+namespace LocaleLoad {
+unsigned FNV1_String16(const wchar_t*, unsigned, bool);  // 0x00932f30
+}
+}
+namespace SP {
+struct KeyItem {
+virtual void* k00();
+virtual void* k04();
+virtual void* k08();
+virtual void* k0c();
+virtual void* k10();
+virtual void* k14();
+virtual void* k18();
+virtual void* k1c();
+virtual void* k20();
+virtual void* k24();
+virtual void* k28();
+virtual void* k2c();
+    virtual void* k30();                                  // +0x30 record count
+virtual void* k34();
+virtual void* k38();
+virtual void* k3c();
+virtual void* k40();
+virtual void* k44();
+virtual void* k48();
+virtual void* k4c();
+    virtual void* k50();
+    virtual void* k54(void* out);                          // +0x54
+};
+}
+namespace SP {
+struct ILocaleMgr {
+virtual void* m00();
+virtual void* m04();
+virtual void* m08();
+virtual void* m0c();
+virtual void* m10();
+virtual void* m14();
+virtual void* m18();
+virtual void* m1c();
+virtual void* m20();
+virtual void* m24();
+virtual void* m28();
+virtual void* m2c();
+virtual void* m30();
+virtual void* m34();
+virtual void* m38();
+virtual void* m3c();
+virtual void* m40();
+virtual void* m44();
+virtual void* m48();
+virtual void* m4c();
+virtual void* m50();
+virtual void* m54(KeyItem* item, void* ctx);
+virtual void* m58();
+virtual void* m5c(void* list, int flag);
+};
+}
+namespace SP {
+struct DatabasePackedFile {
+virtual void* d00();
+virtual void* d04();
+virtual void* d08();
+virtual void* d0c();
+virtual void* d10();
+virtual void* d14();
+virtual void* d18(int a, int b, int c);
+virtual void* d1c();
+virtual void* d20();
+virtual void* d24();
+virtual void* d28();
+    virtual void* d2c(void* path);                          // +0x2c
+    void* Ctor(int, int);                                   // 0x696230-like; ctor at 0x696150
+};
+}
+namespace SP {
+struct CObj0c { virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); };
+}
+namespace SP {
+struct CObj14 { virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+                virtual void s10(); virtual void s14(unsigned v); };
+}
+namespace SP {
+struct CMsgSrv { virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+                 virtual void s10(); virtual void s14(); virtual void s18(unsigned m, void* p, int a, int b); };
+}
+namespace SP {
+struct CLocaleChangeMessage {
+  char pad[0x40];
+  CLocaleChangeMessage(void* src);  // 0x696350
+};
+}
+namespace SP {
+namespace eastl_s6c {
+struct WStr16 {
+  wchar_t* mBegin;       // +0x00
+  wchar_t* mEnd;         // +0x04
+  wchar_t* mCap;         // +0x08
+  wchar_t* mAlloc;       // +0x0c
+  wchar_t* mInline;      // +0x10
+  wchar_t  mBuffer[16];  // +0x14
+  void __thiscall Ctor(const WStr16& src);      // 0x696230
+  WStr16* __thiscall Assign(const void* src);   // 0x696320
+};  // namespace eastl
+}
+}
+namespace SP {
+namespace SP_EA {
+namespace Locale {
+bool IsLocaleAvailable(int* locale);          // 0x87f5e0
+}
+}
+}
+namespace SP {
+namespace SP_EA {
+namespace Locale {
+bool SetLocale(void* locale, int a, int b);   // 0x882b30
+}
+}
+}
+namespace SP {
+namespace SP_EA {
+namespace ResourceMan {
+bool GetRecordName(const void* key, wchar_t* out);   // 0x8d68c0
+}
+}
+}
+namespace SP {
+unsigned __cdecl FUN_0087fd10_s0069_6c80(int* a, int* b, char c);   // 0x87fd10
+}
+namespace SP {
+void* __cdecl FUN_008d5f40();                            // 0x8d5f40
+}
+namespace SP {
+void __cdecl opdel(void* p);                             // 0xf47380
+}
+namespace SP {
+bool OpenPackageRecord(int idx, void* item, void** out, int ctx, bool flag);  // 0x00686d90
+}
+namespace SP {
+void* BuildPackageNode(void* value);                     // 0x00695e00 (list-node alloc)
+}
+namespace SP {
+void OpenPackageDB(void);                                // 0x00695fa0
+}
+namespace SP {
+void ReadPackageDir(const wchar_t* pattern, void* out, int a, int b, int c);  // 0x0092ef40
+}
+namespace SP {
+void WideStrAppend(void* dst, const wchar_t* s);         // 0x0042f9d0 (WideFixedBuf::append)
+}
+namespace SP {
+void DequeDestroy();                                     // 0x005f96c0
+}
+namespace SP {
+void DequeInit(int n);                                   // 0x005f8840
+}
+namespace SP {
+DatabasePackedFile* NewDatabasePackedFile(const wchar_t* path, void* alloc);  // 0x008d9f80
+}
+namespace SP {
+struct IMgr {
+virtual void* s00();
+virtual void* s04();
+virtual void* s08();
+  virtual bool  s0c(void* rec, void** out, int, int, int, int);   // +0x0c
+virtual void* s10();
+virtual void* s14();
+  virtual void* s18(void* rec, void* out, int, int, int);         // +0x18
+virtual void* s1c();
+virtual void* s20();
+virtual void* s24();
+virtual void* s28();
+virtual void* s2c();
+virtual void* s30();
+virtual void* s34();
+virtual void* s38();
+virtual void* s3c();
+virtual void* s40();
+virtual void* s44();
+virtual void* s48();
+  virtual void* s4c();
+  virtual void* s50(int, void* item, void* ctx);                  // +0x50
+};
+}
+namespace SP {
+struct IAlloc {
+virtual void* s00();
+virtual void* s04();
+virtual void* s08();
+  virtual void* s0c(void* node, unsigned sz);                     // +0x0c
+};
+}
+namespace SP {
+struct IItem {
+virtual void* s00();
+virtual void* s04();
+virtual void* s08();
+virtual void* s0c();
+  virtual void* s10();                                            // +0x10
+};
+}
+namespace SP {
+struct ISub {
+  virtual void* s00();
+  virtual void* s04();                                            // +0x04
+  virtual void* s08();
+  virtual void* s0c(void* arg);                                   // +0x0c
+};
+}
+namespace SP {
+class cLocaleManager_s0069_6c80 {
+ public:
+virtual void* v00();
+virtual void* v04();
+virtual void* v08();
+virtual void* v0c();
+virtual void* v10();
+virtual void* v14();
+virtual void* v18();
+virtual void* v1c();
+  virtual void* v20();                          // +0x20
+  char pad_04[8];                               // +0x04..+0x0c
+  void* mField0c;                               // +0x0c
+  char pad10[4];
+  void* mField14;                               // +0x14
+  eastl_s6c::WStr16 mField18;                       // +0x18 (0x34 bytes)
+  void* mField4c;                               // +0x4c
+  LocaleLoad::Head mHeadA;                      // +0x50 (flag clear)
+  void* mAlloc;                                 // +0x58
+  char pad5c[4];                                // +0x5c..+0x60
+  LocaleLoad::Head mHeadB;                      // +0x60 (flag set)
+  void* GetDefaultLanguage();                   // 0x696a60
+  void BuildRecordList(void* list, void* head); // 0x6960f0
+  bool Load(const LocaleLoad::WStr_s0069_6c80* locale, bool bFlag);
+  void BroadcastLocaleChange(unsigned int arg); // 0x697650
+};
+}
+// ---- items of slice s00696c80 end
+
+// @ 0x00695c70
+
+
+// @ 0x00696c80
+namespace SP {
+bool cLocaleManager_s0069_6c80::Load(const LocaleLoad::WStr_s0069_6c80* locale, bool bFlag)
+{
+  using namespace LocaleLoad;
+  bool result = false;
+  wchar_t buf[0x80];
+  Head* head = bFlag ? &mHeadB : &mHeadA;
+  WStr_s0069_6c80 path = {0, 0, 0, 0};
+  (void)GetDirString(0x045962cc, &path, 0);
+
+  void* mgr = GetManager();
+  int n = GetLocaleInfoString(2, 0, buf, 0x80, locale);
+  if (n > 0) {
+    unsigned hash = FNV1_String16(locale->mBegin, 0x811c9dc5, true);
+    (void)hash;
+
+    // Key list: manager vtable +0x5c fills it; then for every key node, the manager's vtable
+    // +0x54 builds the record set (returning a count), and per record we open the package
+    // record and splice a fresh node into the target head (flag ? mHeadB : mHeadA).
+    KeyList keys = {0, 0, GetDefaultAllocator(), 0};
+    keys.next = keys.prev = reinterpret_cast<Node*>(&keys);
+    ((ILocaleMgr*)mgr)->m5c(&keys, 0);
+    for (Node* k = keys.next; k != reinterpret_cast<Node*>(&keys); k = k->next) {
+      KeyItem* item = (KeyItem*)k->value;
+      int ctx = 0;
+      void* ctxIn = 0;
+      ((ILocaleMgr*)mgr)->m54(item, &ctxIn);
+      int count = (int)(uintptr_t)item->k30();
+      (void)ctx;
+      for (int i = 0; i < count; ++i) {
+        void* value = 0;
+        bool ok = OpenPackageRecord(i, item, &value, (int)(uintptr_t)&ctxIn, !bFlag);
+        if (ok) {
+          void* node = BuildPackageNode(&value);
+          // node->next = head->next; node->prev = head; splice before head
+          *(void**)node = head->next;
+          *(void**)((char*)node + 4) = *(void**)((char*)head + 4);
+          *(void**)head->next = node;
+          *(void**)((char*)head + 4) = node;
+        }
+        // value's owning sub-object is released by OpenPackageRecord on failure.
+      }
+      if (item) (*(void(__thiscall**)(void*))((char*)*(void**)item + 0x04))(item);
+    }
+    (void)head;
+  }
+
+  // Second pass: the locale directory ("*.package"). When the directory property exists, scan,
+  // build/open a DatabasePackedFile per entry and hook its records into the manager.
+  if (GetDirString(0x06cbed3a, &path, 0)) {
+    void* alloc = GetDefaultAllocator();
+    (void)OpenPackageDB();
+    // The eastl fixed-deque of directory entries (0x30 bytes each) is initialised then filled
+    // by the *.package scan; each entry name is appended to `path`, a DatabasePackedFile is
+    // constructed and opened, and its records are attached to the manager.
+    DequeInit(4);
+    struct DirEntry { void* name0; void* name1; char pad[0x28]; };
+    DirEntry* begin = 0; DirEntry* end = 0; (void)begin; (void)end;
+    ReadPackageDir(L"*.package", &begin, 2, 0x100000, 0);
+    for (DirEntry* e = begin; e != end; e = (DirEntry*)((char*)e + 0x30)) {
+      (void)WideStrAppend(&path, (const wchar_t*)/*e->name*/ 0);
+      DatabasePackedFile* db = NewDatabasePackedFile((const wchar_t*)&path, alloc);
+      if (db) {
+        db->d2c(&path);                       // set the package path
+        if (db->d18(1, 6, 0)) {               // open
+          void* node = BuildPackageNode(db);  // node->value = db
+          (void)node;
+        }
+      }
+    }
+    DequeDestroy();
+    (void)head;
+    result = true;
+  }
+  if (!result) {
+    // No directory: recurse once with the default flag to refresh the lists.
+    (void)GetDirString(0x045962cc, &path, 0);
+    (void)FUN_0087fd10_s0069_6c80((int*)&path, (int*)locale, 1);
+    WStr_s0069_6c80 def = {0, 0, 0, 0};
+    this->Load(&def, true);
+  }
+  return result;
+}
+}  // namespace SP
+
+// @ 0x00697650
+namespace SP {
+void cLocaleManager_s0069_6c80::BroadcastLocaleChange(unsigned int arg)
+{
+  if (v20() != 0) {
+    ((CObj14*)v20())->s14(arg);
+  }
+  if (mField4c != 0) ((CObj0c*)mField4c)->s0c();
+  void* server = MessageServer();
+  if (server != 0) {
+    void* msg = new ("App/cLocaleChangeMessage", 0, 0, 0, 0) CLocaleChangeMessage((void*)&mField18);
+    ((CMsgSrv*)server)->s18(0x2800a7f, msg, 0, 0);
+  }
 }
 }  // namespace SP

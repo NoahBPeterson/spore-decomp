@@ -3,10 +3,11 @@
 ../src/game/UTFSpore_Win32/manager1.cpp  ?Init@Manager@Sockets@EA@@UAE_NXZ  0094c3c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?Shutdown@Manager@Sockets@EA@@UAE_NXZ  0094c420  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?IsNetworkConnected@Manager@Sockets@EA@@UAE_NPBD_N@Z  0094c450  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?CreateSocket@Manager@@QAEPAXH@Z  0094c490  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?GetAutoDialEnabled@Manager@Sockets@EA@@UAE_NXZ  0094c510  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?SetAutoDialEnabled@Manager@Sockets@EA@@UAE_N_N@Z  0094c580  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?GetManualDialupNameAndPassword@Manager@@QAE_NPAD00I@Z  0094c620  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/manager1.cpp  ?SetManualDialupResult@Manager@@QAE_NH@Z  0094ca60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?Sockets_RasDialFunc@@YGXIHI@Z  0094c730  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager1.cpp  ?DoManualDialup@Manager@@QAE_NP6AXIPAXH@ZPAD22I@Z  0094c7a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/manager1.cpp  ?CreateSocket@Manager@@QAEPAXH@Z  0094c490  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ?SetManualDialupResult@Manager@@QAE_NH@Z  0094ca60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/manager1.cpp  ??_GManager@Sockets@EA@@UAEPAXI@Z  0094cd60  /O2 /MD /Gy /TP /GS- /Isrc/game/include

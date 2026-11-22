@@ -1,4 +1,5 @@
-# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+# va  diff-bytes  reason
 00d70b10 148 complete SP::FUN_00d70b10; size 223 vs 210; same calls/slots, float codegen scheduling and stack frame differ; equiv PASS
 00d70c70 410 complete SP::WAIT_FOR_CARCASS_BABY_Tick; size 609 vs 606; same calls/slots, switch layout and float/Vec3 temp slots differ; equiv WEAK (no mismatch)
 00d70ed0 114 complete SP::FUN_00d70ed0; size 269 vs 267; same calls/slots, stack frame and AssignInteractor/vtable scheduling differ; equiv PASS
+00d71060  231  complete; EAT_CARCASS_Tick state machine (target re-acquisition + AutoRef release, state 0 see/planet/approach/facing, state 1 animation + achievement notification, states 2/3/4/5 transitions, stimulus create/clear, posse notify); 1580 vs 1811 bytes because the achievement auto-test sub-block and the two-argument angle normalisation are simplified; flags /O2 /MD /Gy /TP /GS-; difftest UNSUPPORTED (1 unresolved reference: member MoveToPointAndFacingAtSpeed 0x00c1c5c0)

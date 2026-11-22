@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/RotateEffect.cpp  ?SetRotation@RotateEffect@UTFWinControls@EA@@QAEXPAXPAUXCM@@M@Z  00980cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

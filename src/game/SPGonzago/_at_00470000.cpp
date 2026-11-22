@@ -410,6 +410,10 @@ template void vector_s0047_3e40<PairIF, 4>::reserve(uint32_t)
 template void vector_s0047_3e40<PairFF, 4>::push_back(const PairFF&)
 ;
 
+// @ 0x00474050
+template uint32_t vector_s0047_3e40<PairIF, 4>::size() const
+;
+
 // @ 0x00474170
 template void vector_s0047_3e40<Elem8, 2>::reserve(uint32_t)
 ;
@@ -418,8 +422,16 @@ template void vector_s0047_3e40<Elem8, 2>::reserve(uint32_t)
 template void vector_s0047_3e40<Elem8, 4>::push_back(const Elem8&)
 ;
 
+// @ 0x004743b0
+template uint32_t vector_s0047_3e40<Elem16, 4>::size() const
+;
+
 // @ 0x00474600
 template void vector_s0047_3e40<Elem16, 4>::push_back(const Elem16&)
+;
+
+// @ 0x004746a0
+template uint32_t vector_s0047_3e40<uint32_t, 4>::size() const
 ;
 
 // @ 0x004746c0
@@ -432,6 +444,10 @@ template void vector_s0047_3e40<Matrix44, 4>::push_back(const Matrix44&)
 
 // @ 0x00474840
 template void vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>::resize(uint32_t, const AutoRefCount_s0047_3e40&)
+;
+
+// @ 0x00474900
+template vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>& vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>::operator=(const vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>&)
 ;
 
 // @ 0x00474bd0

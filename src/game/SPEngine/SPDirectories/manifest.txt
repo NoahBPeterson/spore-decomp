@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPDirectories.cpp  ?GetDirFromID@SP@@YAPB_WI@Z  006886b0  /O2 /MD /Gy /TP /EHsc /GS- /Isrc/game/include
+../src/game/SPEngine/SPDirectories.cpp  ?GetDataDir@SP@@YAPB_WXZ  00688cb0  /O2 /MD /Gy /TP /EHsc /GS- /Isrc/game/include

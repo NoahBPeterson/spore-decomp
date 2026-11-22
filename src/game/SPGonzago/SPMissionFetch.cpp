@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPMissionFetch.cpp -- migrated from slice(s) s00c54f90, s00c54110, s0133ed00, s00c53180, s00c52080 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPMissionFetch.cpp -- migrated from slice(s) s00c52fa0, s00c54f90, s00c54110, s0133ed00, s00c53180, s00c52080 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPMissionFetch.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,13 @@
 #include "SP/cVarListSerializer.h"
 #include "EA/ResourceMan/Key.h"
 #include "SP/cGameNounManager.h"
+
+struct cKeyVector {                    // eastl::vector<EA::ResourceMan::Key>-like, 0x14 bytes
+    EA::ResourceMan::Key* mpBegin;     // +0x00
+    EA::ResourceMan::Key* mpEnd;       // +0x04
+    unsigned char mPad0008[0xc];       // capacity + allocator
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
 
 // ---- items of slice s00c52080 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char u8;
@@ -70,12 +77,6 @@ struct cCommManager {
     void RemoveMatching();         // 0x00aea720
 };
 cCommManager* __stdcall GetCommManager(int a, int b, void* owner);   // 0x00b3d4a0
-struct cKeyVector {                    // eastl::vector<EA::ResourceMan::Key>-like, 0x14 bytes
-    EA::ResourceMan::Key* mpBegin;     // +0x00
-    EA::ResourceMan::Key* mpEnd;       // +0x04
-    u8  mPad0008[0xc];                 // capacity + allocator
-    int size() const { return (int)(mpEnd - mpBegin); }
-};
 struct cPlanetCounts {
     u8  mPad00bc[0xbc];
     cKeyVector mVecBc;                 // 0xbc (mpBegin 0xbc, mpEnd 0xc0)
@@ -95,12 +96,36 @@ struct cSPSimulatorSpaceGame {
 cSPSimulatorSpaceGame* __cdecl GetUFOSimulator();    // 0x00ffbe50
 cVec3* __cdecl FindInventoryItem(cVec3* out, cVec3Vector* list,
                                  cVec3Vector* inventory);  // 0x00c4bdc0
+struct SimCivObject_c7;
+struct cWorldObj_c7 {
+    void* GetAvatar();                          // 0x00b1fdb0
+};
+struct cTerraformMgr_c7 {
+    int GetTerraformLevel();                    // 0x00bbc670
+};
+float __stdcall GetFactor_c44d00(SimCivObject_c7* pObject, bool const* pFlag); // 0x00c44d00
+cTerraformMgr_c7* __stdcall GetTerraformingMgr_c7(SimCivObject_c7* pObject);   // 0x00b3d430
+bool SimCivObject_AnyCityHasBuildings(SimCivObject_c7* pObject);               // 0x00c70260
+struct SimCivObject_c7 {
+    u8               mPad0000[0x2c];
+    u32              mFlags2c;                  // 0x2c 0x800 = creature already sampled
+    u8               mPad0030[0xbc - 0x30];
+    void*            mpPlantKeysBegin;          // 0xbc
+    void*            mpPlantKeysEnd;            // 0xc0
+    u8               mPad00c4[0xd0 - 0xc4];
+    void*            mpAnimalKeysBegin;         // 0xd0
+    void*            mpAnimalKeysEnd;           // 0xd4
+    int              GetRecordType();           // 0x00b8dab0
+    cWorldObj_c7*    GetWorldObj();             // 0x00b8de30
+};
 struct cSPMissionFetch {
     u8              mPad0000[0x78];
     u32             mField78;               // 0x78
     u8              mPad007c[0x80 - 0x7c];
     int             mField80;               // 0x80
-    u8              mPad0084[0x130 - 0x84];
+    u8              mPad0084[0x8c - 0x84];
+    void*           mpField8c;              // 0x8c
+    u8              mPad0090[0x130 - 0x90];
     u32             mFlags130;              // 0x130
     u8              mPad0134[0x17c - 0x134];
     void*           mpField17c;             // 0x17c
@@ -116,6 +141,7 @@ struct cSPMissionFetch {
     void*           mpData250;              // 0x250
 
     bool  IsActive();                       // 0x00c44c80
+    float GetRewardFactor(SimCivObject_c7* pObject, bool const* pFlag); // 0x00c52280
     void  GetText(int key, void* out);      // 0x00c487d0
     bool  GetTagString(int tag, void* out); // 0x00c491c0
     void  ProcessTagOut(int out);           // 0x00c49140
@@ -695,6 +721,49 @@ void* ProcessToolSubMission(void* pTool, void* pOut);
 void AssignRefCount(void* pDst, void* pValue);
 // ---- items of slice s00c54f90 end
 
+// ---- items of slice s00c52fa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector3_s00c5_2fa0 {
+    float x, y, z;
+};
+struct ColorRGB_s00c5_2fa0 {
+    float r, g, b;
+
+    ColorRGB_s00c5_2fa0(const ColorRGB_s00c5_2fa0& o) : r(o.r), g(o.g), b(o.b) {}
+};
+extern const ColorRGB_s00c5_2fa0 g_DefaultColor_s00c5_2fa0;      // 0x016907c8
+extern const Vector3_s00c5_2fa0 g_DefaultPosition_s00c5_2fa0;    // 0x016907d4
+struct Vector_s00c5_2fa0 {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    int mAllocator[2];
+
+    Vector_s00c5_2fa0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+};
+struct Base0_s00c5_2fa0 { virtual void v00(); };
+struct Base4_s00c5_2fa0 { virtual void v00(); char pad04[0x34 - 8]; };
+struct Base34_s00c5_2fa0 { virtual void v00(); char pad04[0x1f0 - 0x38]; };
+struct Base_s00c5_2fa0 : Base0_s00c5_2fa0, Base4_s00c5_2fa0, Base34_s00c5_2fa0 {
+    Base_s00c5_2fa0();  // 0x00c48e90
+};
+struct Object_s00c5_2fa0 : Base_s00c5_2fa0 {
+    int mIndex;                               // +0x1f0
+    int mId;                                  // +0x1f4
+    Vector3_s00c5_2fa0 mPosition;             // +0x1f8
+    ColorRGB_s00c5_2fa0 mColor;               // +0x204
+    Vector3_s00c5_2fa0 mTarget;               // +0x210
+    Vector3_s00c5_2fa0 mStart;                // +0x21c
+    Vector3_s00c5_2fa0 mEnd;                  // +0x228
+    Vector_s00c5_2fa0 mItems;                 // +0x234
+    bool mbDirty;                             // +0x248
+    char pad249[0x250 - 0x249];
+    Vector_s00c5_2fa0 mPending;               // +0x250
+
+    Object_s00c5_2fa0();
+    virtual void v00();
+};
+// ---- items of slice s00c52fa0 end
+
 // @ 0x00c52080
 bool cSPMissionFetch::GetTagValue(int tag, void* out)
 {
@@ -755,6 +824,54 @@ void cSPMissionFetch::GetUILongDescription(void* out)
         case 2: GetText(0xba93258e, out); break;
         case 3: GetText(0x1ec90679, out); break;
         }
+    }
+}
+
+// @ 0x00c52280
+float cSPMissionFetch::GetRewardFactor(SimCivObject_c7* pObject, bool const* pFlag)
+{
+    float factor = GetFactor_c44d00(pObject, pFlag);
+    if (factor <= 0.0f)
+        return factor;
+
+    if (pObject->GetWorldObj()->GetAvatar() == mpField8c)
+        return -1.0f;
+
+    switch ((int)mTag1f4) {
+    case 0xfb3b1635:
+        return pObject->GetRecordType() == 2 ? 1.0f : -1.0f;
+    case 0xbfb44ccc:
+        return SimCivObject_AnyCityHasBuildings(pObject) ? 1.0f : -1.0f;
+    case 0x6d5c48c:
+        if (pObject->mpPlantKeysBegin == pObject->mpPlantKeysEnd)
+            return -1.0f;
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    case 0x23da98ff:
+    case 0x736c417f: {
+        int nTerraformLevel = GetTerraformingMgr_c7(pObject)->GetTerraformLevel();
+        if (pObject->mpAnimalKeysBegin == pObject->mpAnimalKeysEnd)
+            return -1.0f;
+        if (pObject->mFlags2c & 0x800)
+            return -1.0f;
+        if (nTerraformLevel != 1)
+            return -1.0f;
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    }
+    case 0x2dc69129:
+        if (pObject->mpAnimalKeysBegin == pObject->mpAnimalKeysEnd)
+            return -1.0f;
+        if (pObject->mFlags2c & 0x800)
+            return -1.0f;
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    case 0x3e994b2b:
+        return pObject->GetRecordType() == 4 ? 1.0f : -1.0f;
+    case 0x69412983:
+        return pObject->GetRecordType() == 5 ? 1.0f : -1.0f;
+    case 0x19ec2c8b:
+    case 0x7ecbe6f5:
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    default:
+        return -1.0f;
     }
 }
 
@@ -882,6 +999,15 @@ void SP_SetMissionFlagDefault(void* a, void* b)
     cFlagState state;
     state.mEnabled = false;
     SP_SetMissionFlag(a, b, state);
+}
+
+// @ 0x00c52fa0
+Object_s00c5_2fa0::Object_s00c5_2fa0()
+: mIndex(0), mId(-1),
+      mPosition(g_DefaultPosition_s00c5_2fa0), mColor(g_DefaultColor_s00c5_2fa0),
+      mTarget(g_DefaultPosition_s00c5_2fa0), mStart(g_DefaultPosition_s00c5_2fa0),
+      mEnd(g_DefaultPosition_s00c5_2fa0), mbDirty(false)
+{
 }
 
 // @ 0x00c53120

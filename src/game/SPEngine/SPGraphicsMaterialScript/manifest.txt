@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsMaterialScript.cpp  ?Insert@cTuningEntryVector@SP@@QAEXPAUcTuningEntry@2@ABU32@@Z  01041280  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialScript.cpp  ?PushDefault@cTuningEntryVector@SP@@QAEXXZ  010413b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialScript.cpp  ?Release@cTuningEntrySet@SP@@QAEXXZ  01041480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

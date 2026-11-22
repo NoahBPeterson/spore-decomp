@@ -6,4 +6,7 @@
 006beb00 70 complete; hashtable walk summing on-disk size (64-bit)
 006bed90 70 complete; hashtable walk setting isSaved flag
 006bf5a0 39 complete; PFHoleTable field init; register copy (eax=this) differs
-006c0120 159 PFIndexModifiable::func24h hash-map hole scan; control flow differs
+006bfda0  570  PFHoleTable hole coalescing rbtree; equiv PASS (1158 valid inputs, 0 mismatches, 61.3% coverage). Fixes: pass the two contiguous 8-byte hole halves ({startLo,startHi} and {sizeLo,sizeHi}) to the insert, not the addresses of loose locals; insert tag = sizeLo & 0xffffff00 (byte store into the param slot). Schedule differs. flags: /O2 /MD /Gy /EHsc /TP
+006bff10  32  hole-table clear + merge (eastl set + free list); schedule differs flags: /O2 /MD /Gy /EHsc /TP
+006bff90  398  PFHoleTable hole-range add (lowerBound 0x6be890 -> RBTreeDecrement -> erase 0x8dae70 -> up to two 0x6bfc20 split inserts; else grow extent + 0x6bfda0 gap); 64-bit add/sbb-neg carry materialization + register allocation differ (445 vs 398); equiv PASS (305 valid inputs, 0 mismatches, 96.0% coverage) flags: /O2 /MD /Gy /EHsc /TP
+006c0120 202 PFIndexModifiable::func24h hash-map hole scan; equiv PASS (349 valid inputs, 0 mismatches, 95.3% coverage; --src copy also PASS). Fixes: window is [b,a]..[d,c] (c/d were swapped) and the 64-bit remaining length is (d:c)-(sHi:sLo); size is only checked when the high half is zero. Schedule differs. flags: /O2 /MD /Gy /EHsc /TP

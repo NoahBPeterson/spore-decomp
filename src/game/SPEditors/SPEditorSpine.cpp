@@ -14,8 +14,23 @@
 #include <intrin.h>
 #include "SP/cEditorsTokenTranslator.h"
 #include "SP/cStringTokenTranslator.h"
+#include "EA/DateTime/DateTime.h"
+#include "SP/cSPEditorShoppingTokenTranslator.h"
+#include "SP/cString.h"
+#include "hkRigidBody.h"
 
 // ---- items of slice s005ccc90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
+                   const char* file, int line);
+class hkMemory_s005c_cc90 {
+ public:
+  virtual void v0();
+  virtual void v1();
+  virtual void v2();
+  virtual void v3();
+  virtual void* allocate(int size, int memClass);  // vtable +0x10
+};
+extern hkMemory_s005c_cc90* g_hkMemory_s005c_cc90;
 #define PV(n) virtual void pv##n();
 class cRefCounted {
  public:
@@ -34,6 +49,99 @@ class cTimeObj {
   float mFloat0c;         // +0xc
   cTimeObj* mChild;       // +0x10
 };
+class cSpine {
+ public:
+  char pad0[0x34];
+  int mInt34;       // +0x34
+  char pad38[0x74 - 0x38];
+  int mInt74;       // +0x74
+  char pad78[0x11c - 0x78];
+  float mFloat11c;  // +0x11c
+  unsigned int MakeVertKey(float a, int b);  // 0x005cdb30
+};
+unsigned int GetKey(int index);                // 0x005efd70 (cdecl free function, arg stays on the stack)
+float GetExactSkinRadiusFromVertebra(float a);  // 0x004a5b70
+struct __declspec(align(16)) hkVector4_s005c_cc90 {
+  float x, y, z, w;
+  hkVector4_s005c_cc90() {}
+  hkVector4_s005c_cc90(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {}
+};
+class hkReferencedObject_s005c_cc90 {  // vtable[0] deleting dtor, +0x4 memSize, +0x6 refCount
+ public:
+  virtual void* Delete(int flags);
+  unsigned short memSize;   // +0x04
+  unsigned short refCount;  // +0x06
+  void removeReference();   // 0x0109ae60 hkWorldObject::removeReference
+  void release() {
+    if (memSize != 0 && --refCount == 0)
+      Delete(1);
+  }
+};
+class hkShape_s005c_cc90 : public hkReferencedObject_s005c_cc90 {
+ public:
+  int m_userData;  // +0x0c
+};
+class hkConvexShape : public hkShape_s005c_cc90 {
+ public:
+  float m_radius;  // +0x10
+};
+class hkCapsuleShape : public hkConvexShape {
+ public:
+  hkCapsuleShape(const hkVector4_s005c_cc90& vertexA, const hkVector4_s005c_cc90& vertexB, float radius);  // 0x010c2730
+};
+class hkConvexTranslateShape : public hkConvexShape {
+ public:
+  hkConvexTranslateShape(const hkConvexShape* shape, const hkVector4_s005c_cc90& offset);  // 0x010bfeb0
+};
+class hkBoxShape : public hkConvexShape {
+ public:
+  hkBoxShape(const hkVector4_s005c_cc90& halfExtents, float radius);  // 0x010c05d0
+};
+class hkRigidBodyCinfo {  // opaque 0xd0-byte cinfo, filled by offsets
+ public:
+  hkRigidBodyCinfo();  // 0x01087ed0
+  char mData[0xd0];
+};
+class hkEntity_s005c_cc90 : public hkReferencedObject_s005c_cc90 {
+ public:
+  void removeReference();  // 0x0109ae60
+};
+class hkRigidBody_s005c_cc90 : public hkEntity_s005c_cc90 {
+ public:
+  hkRigidBody_s005c_cc90(const hkRigidBodyCinfo& cinfo);  // 0x010878b0
+};
+class hkWorld_s005c_cc90 {
+ public:
+  hkRigidBody_s005c_cc90* addEntity(hkRigidBody_s005c_cc90* body, int activation);   // 0x01082ee0
+  void removeConstraint(char* tmp, void* constraint);          // 0x01086e90
+  void removeEntity(char* tmp, void* body);                    // 0x01083110
+};
+struct hkTransform_s005c_cc90 {
+  float rot[3][4];
+  float pos[4];
+};
+namespace SP {
+namespace EditorUtils {
+float GetExactSkinRadiusFromVertebra(float scale);  // 0x004a5b70
+}
+}
+namespace SP {
+class cSPEditorSpine_s005c_cc90 {
+ public:
+  char pad00[0x14];
+  hkWorld_s005c_cc90* mpHavokWorld;                          // +0x14
+  char pad18[0x60 - 0x18];
+  float mSpineHavokWorldSolverTau;                // +0x60
+  char pad64[0x70 - 0x64];
+  float mSpineVertebraMaxMassProportion;          // +0x70
+  char pad74[0x11c - 0x74];
+  float mVertebraHalfWidth;                       // +0x11c
+
+  hkConvexShape* CreateVertebraShape(float scale);                              // 0x005cd9a0
+  void RemoveVertebraFromWorld(int* info);                                      // 0x005cdae0
+  void CreateWallBoxAndAddToWorld(const hkVector4_s005c_cc90& halfExt, const hkVector4_s005c_cc90& pos, hkWorld_s005c_cc90* world);  // 0x005cdbf0
+};
+}
 inline float Clamp(float x, float lo, float hi)
 {
   __asm {
@@ -109,11 +217,7 @@ class hkConstraintConstructionKit {
   void constrainToAngularDof(int dof);
   void end();
 };
-namespace SP {
-namespace EditorUtils {
-float GetExactSkinRadiusFromVertebra(float scale);  // 0x004a5b70
-}
-}
+
 namespace SP {
 class cSPEditorSpine_s005c_dd00 {
  public:
@@ -1336,11 +1440,43 @@ class cPathSegmentList {
 // ---- items of slice s005d53e0 end
 
 // @ 0x005cd670
-void SpineBigStub(void* a, void* b, void* c)
+void FUN_005cd670(hkTransform_s005c_cc90* xf, int axis)
 {
-  (void)a;
-  (void)b;
-  (void)c;
+  float* m = &xf->rot[0][0];
+  hkVector4_s005c_cc90 local(0.0f, 0.0f, 0.0f, 0.0f);
+  float* lp = &local.x;
+  lp[axis] = 1.0f;
+  float a0 = m[axis * 4 + 0];
+  float a1 = m[axis * 4 + 1];
+  float a2 = m[axis * 4 + 2];
+  if (a2 * lp[2] + a1 * lp[1] + a0 * lp[0] < 1e-6f) {
+    for (int i = 0; i < 12; ++i)
+      m[i] = 0.0f;
+    m[0] = 1.0f;
+    m[5] = 1.0f;
+    m[10] = 1.0f;
+    return;
+  }
+  int next = (axis + 1) % 3;
+  m[axis * 4 + 0] = lp[0];
+  m[axis * 4 + 1] = lp[1];
+  m[axis * 4 + 2] = lp[2];
+  m[axis * 4 + 3] = lp[3];
+
+  float* rn = m + next * 4;
+  rn[axis] = 0.0f;
+  float len2 = rn[0] * rn[0] + rn[1] * rn[1] + rn[2] * rn[2];
+  float s = (len2 == 0.0f) ? 0.0f : 1.0f / sqrtf(len2);
+  rn[0] *= s;
+  rn[1] *= s;
+  rn[2] *= s;
+  rn[3] *= s;
+
+  float* rp = m + ((axis + 2) % 3) * 4;
+  rp[0] = m[axis * 4 + 1] * rn[2] - rn[1] * m[axis * 4 + 2];
+  rp[1] = rn[0] * m[axis * 4 + 2] - m[axis * 4 + 0] * rn[2];
+  rp[2] = rn[1] * m[axis * 4 + 0] - m[axis * 4 + 1] * rn[0];
+  rp[3] = 0.0f;
 }
 
 // @ 0x005cd870
@@ -1365,9 +1501,53 @@ float TimeObjValue(cTimeObj* obj)
 }
 
 // @ 0x005cd9a0
-void CreateVertebraShapeStub(float r)
+namespace SP {
+hkConvexShape* cSPEditorSpine_s005c_cc90::CreateVertebraShape(float scale)
 {
-  (void)r;
+  float skinRadius = SP::EditorUtils::GetExactSkinRadiusFromVertebra(scale);
+  float radius = mVertebraHalfWidth * 2.0f * mSpineVertebraMaxMassProportion * 0.25f + skinRadius;
+  float d = scale * -0.15993178f;
+
+  hkVector4_s005c_cc90 vA(-d, 0.0f, 0.0f, 0.0f);
+  hkVector4_s005c_cc90 vB(d, 0.0f, 0.0f, 0.0f);
+  hkVector4_s005c_cc90 offset(0.0f, 0.0f, d, 0.0f);
+
+  void* capMem = g_hkMemory_s005c_cc90->allocate(0x30, 0x24);
+  *(unsigned short*)((char*)capMem + 4) = 0x30;
+  hkCapsuleShape* capsule = new (capMem) hkCapsuleShape(vA, vB, radius);
+
+  void* xMem = g_hkMemory_s005c_cc90->allocate(0x30, 0x24);
+  *(unsigned short*)((char*)xMem + 4) = 0x30;
+  hkConvexTranslateShape* xlat = new (xMem) hkConvexTranslateShape(capsule, offset);
+
+  capsule->release();
+  return xlat;
+}
+}  // namespace SP
+
+// @ 0x005cdae0
+namespace SP {
+void cSPEditorSpine_s005c_cc90::RemoveVertebraFromWorld(int* info)
+{
+  char tmp;
+  if (info[2] != 0) {
+    mpHavokWorld->removeConstraint(&tmp, (void*)info[2]);
+    info[2] = 0;
+  }
+  if (info[0] != 0)
+    mpHavokWorld->removeEntity(&tmp, (void*)info[0]);
+  info[0] = 0;
+  info[3] = 0;
+}
+}  // namespace SP
+
+// @ 0x005cdb30
+unsigned int cSpine::MakeVertKey(float a, int b)
+{
+  unsigned int key = GetKey(b);
+  float radius = GetExactSkinRadiusFromVertebra(a);
+  int scaled = (int)((radius * -0.5f) / ((mFloat11c * 2.0f) * 0.25f + mFloat11c));
+  return (mInt74 - scaled) * 0x400 | ((mInt34 << 0xb) | key) << 5 | 2;
 }
 
 // @ 0x005cdbb0
@@ -1385,11 +1565,30 @@ void cRefCounted::DecRef(int unused)
 }
 
 // @ 0x005cdbf0
-void CreateWallBoxStub(void* a, void* b)
+namespace SP {
+void cSPEditorSpine_s005c_cc90::CreateWallBoxAndAddToWorld(const hkVector4_s005c_cc90& halfExt, const hkVector4_s005c_cc90& pos, hkWorld_s005c_cc90* world)
 {
-  (void)a;
-  (void)b;
+  hkRigidBodyCinfo cinfo;
+  *(float*)((char*)&cinfo + 0xb0) = 0.0f;
+  *(unsigned char*)((char*)&cinfo + 0xc0) = 7;
+
+  void* boxMem = g_hkMemory_s005c_cc90->allocate(0x20, 0x24);
+  *(unsigned short*)((char*)boxMem + 4) = 0x20;
+  hkBoxShape* box = new (boxMem) hkBoxShape(halfExt, 0.04f);
+  *(void**)((char*)&cinfo + 4) = box;
+  *(hkVector4_s005c_cc90*)((char*)&cinfo + 0x10) = pos;
+
+  void* rbMem = g_hkMemory_s005c_cc90->allocate(0xd0, 0x2a);
+  *(unsigned short*)((char*)rbMem + 4) = 0xd0;
+  hkRigidBody_s005c_cc90* body = new (rbMem) hkRigidBody_s005c_cc90(cinfo);
+  box->release();
+
+  *(float*)((char*)body + 0x64) = mSpineHavokWorldSolverTau;
+  *(unsigned int*)((char*)body + 0x38) = 1;
+  world->addEntity(body, 1);
+  body->removeReference();
 }
+}  // namespace SP
 
 // @ 0x005cdd00
 hkRigidBody_s005c_dd00* SP::cSPEditorSpine_s005c_dd00::CreateVertebraBody(float scale, hkTransform_s005c_dd00* transform)

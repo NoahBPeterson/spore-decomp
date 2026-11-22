@@ -1,3 +1,3 @@
 # source  symbol  va  flags
-../src/game/Swarm/SurfaceDecalManager.cpp  ?ClearParticles@SurfaceDecals@@QAEXXZ  00a80a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/SurfaceDecalManager.cpp  ?VisitParticles@SurfaceDecals@@QAEXXZ  00a809d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/SurfaceDecalManager.cpp  ?ClearParticles@SurfaceDecals@@QAEXXZ  00a80a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

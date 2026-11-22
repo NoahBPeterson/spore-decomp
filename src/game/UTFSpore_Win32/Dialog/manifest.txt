@@ -2,6 +2,7 @@
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?Sub_b380@@YIXPAUWinDialog@@@Z  0096b380  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?WinDialog_Init@@YI_NPAUWinDialog@@@Z  0096b3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?SetFlags@DlgSub20c@@QAEXH@Z  0096b400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?OnMouseUp@WinDialog@@QAE_NHHHI@Z  0096b600  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?WinDialog_OnTick@@YI_NPAUWinDialog@@@Z  0096b660  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?InvalidateAndLayout@DlgSub4@@QAEXXZ  0096b680  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?SetRefreshFlag@WinDialog@@QAEXI@Z  0096b6a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -22,5 +23,7 @@
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?SetValue@DialogState@@QAEXPAX@Z  0096bd60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?GetValue@DialogState@@QAEPAXXZ  0096bdb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?Refresh@WinDialog_s0096_c6f0@UTFWinControls@EA@@QAE_NXZ  0096c6f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?GetMinSize@WinDialog_s0096_d2f0@UTFWinControls@EA@@UAEXAAM0@Z  0096d3f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?GetMaxSize@WinDialog_s0096_d2f0@UTFWinControls@EA@@UAEXAAM0@Z  0096d500  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Dialog.cpp  ?Destroy@WinDialog_s0096_d2f0@UTFWinControls@EA@@QAEXXZ  0096e260  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Dialog.cpp  ?init_154f4dc@@YAXXZ  01300950  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/UTFSpore_Win32/Dialog.cpp  ?OnMouseUp@WinDialog@@QAE_NHHHI@Z  0096b600  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

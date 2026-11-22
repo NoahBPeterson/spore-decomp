@@ -402,8 +402,118 @@ using nSPBehaviorTree::behavior_memory_block_s00d6_3fd0;
 struct MB1 : behavior_memory_block_s00d6_3fd0 { int f04; int f08; int anim; };                       // 0x00d63fd0
 // ---- items of slice s00d63fd0 end
 
+// The slice's own stub definitions (the item section of match/slices/s00d626d0/s00d626d0.cpp, under its names).
+// rewrite.py emits an item section only for a slice with a converted function, and this slice has none, so the verbatim
+// bodies of 0x00d626d0 / 0x00d62d90 / 0x00d62f60 / 0x00d630c0 found none of their types.  Vec3_s00d626d0 / Loco_s00d626d0 / HomeInfo_s00d626d0 /
+// cSPCreatureBase_s00d626d0 already have this file's own definitions (the other slices' items) and their names must stay free for
+// those, so the slice's layouts sit in namespace s00d626d0_sp and the bodies take that scope with
+// `using namespace s00d626d0_sp;`.  The layouts are the slice's; its comments below are its own.
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+
+namespace s00d626d0_sp {
+
+struct Vec3_s00d626d0 { float x, y, z; Vec3_s00d626d0() {} Vec3_s00d626d0(float a, float b, float c) : x(a), y(b), z(c) {} };
+
+struct Loco_s00d626d0 {                                          // sub-object at creature+0xc0 (own vtable)
+    PV8 PV2 PV                                         // 0x00 .. 0x28
+    virtual Vec3_s00d626d0* GetPosition();                       // +0x2c
+    PV8 PV2 PV                                         // 0x30 .. 0x58
+    virtual Vec3_s00d626d0* GetDirection(Vec3_s00d626d0* out);             // +0x5c
+    PV4 PV                                             // 0x60 .. 0x70
+    virtual float GetFootprintRadius();                // +0x74
+    uint32_t* FUN_00c41ec0();                          // 0x00c41ec0, pointer to a state word (+0x70 used)
+    bool IsNearGoal();                                 // 0x00c42e20
+};
+
+struct HomeInfo_s00d626d0 {                                      // FUN_00c04590() result
+    uint32_t pad[0x104 / 4];
+    int m104;                                          // +0x104
+    uint32_t pad108[(0x164 - 0x108) / 4];
+    void* m164;                                        // +0x164
+    void** M164() { return &m164; }
+};
+
+class cSPCreatureBase_s00d626d0 {
+public:
+    PV8 PV8 PV8 PV8 PV                                 // 0x00 .. 0x80
+    virtual void SetFocusObject(void* p, int a, int b);   // +0x84
+    uint32_t padc4[(0xc0 - 4) / 4];
+    Loco_s00d626d0 mLoco;                                        // +0xc0
+    uint8_t padc4_5a8[0x5a8 - 0xc4];                   // +0xc4
+    uint32_t mFocus5a8;                                // +0x5a8, sub-object handed to SetFocusObject
+    uint8_t pad5ac_b58[0xb58 - 0x5ac];                 // +0x5ac
+    uint32_t mB58;                                     // +0xb58
+
+    cSPCreatureBase_s00d626d0* GetTargetAsCreature();            // 0x00c0ee70
+    bool FUN_00c0e0c0(int id);                         // ret 4
+    int PlayAnimation(int id, int a, int b);           // 0x00c12190 (ret 12)
+    void MoveToPointAtSpeed(int a, const Vec3_s00d626d0* p, float s0, float s1);   // 0x00c1c1d0 (ret 16)
+    void MoveToPointAndFacingAtSpeed(int a, const Vec3_s00d626d0* p, const Vec3_s00d626d0* facing,
+                                     float s0, float s1);                // 0x00c1c5c0 (ret 20)
+    void FUN_00c0b370(uint32_t state);                 // 0x00c0b370, 1 stack arg
+    void FUN_00c0b970(float v);                        // 0x00c0b970, 1 float stack arg
+    HomeInfo_s00d626d0* FUN_00c04590();                          // helper object
+};
+
+}  // namespace s00d626d0_sp
+
+// (Vec3_s00d626d0 to cSPCreatureBase_s00d626d0 are above; these two sit apart so their names stay free in this file)
+namespace s00d626d0_sp {
+
+struct BehaviourState_s00d626d0                                 // 0x1c bytes, passed as the last tick argument
+{
+    int   mState;                                      // +0x00
+    int   mValue04;                                    // +0x04
+    int   mValue08;                                    // +0x08
+    int   mAnimationId;                                // +0x0c
+    int   mValue10;                                    // +0x10
+    float mTimer;                                      // +0x14
+    bool  mFlag;                                       // +0x18
+};
+
+struct cGameNounManager_s00d626d0 {
+    cSPCreatureBase_s00d626d0* GetAvatar();                      // 0x00b1fdb0
+};
+cGameNounManager_s00d626d0* NounManager();                       // 0x00b3d300
+
+class cUIHints_s00d626d0 {
+public:
+    void UpdateHints(bool a, bool b);                  // 0x0067c350 (ret 8)
+};
+cUIHints_s00d626d0* FUN_0067cac0();                              // 0x0067cac0
+
+// The learnables context the action reads its focus creature from.
+class cSPLearnContext_s00d626d0 {
+public:
+    cSPCreatureBase_s00d626d0* GetFocusCreature();               // 0x00ff0420
+};
+cSPLearnContext_s00d626d0* FUN_00d51660();                       // 0x00d51660
+struct Node_s00d626d0 { unsigned int flags; Node_s00d626d0* GetOwner(); };  // its result, as 0x00d63fd0 reads it
+Node_s00d626d0* FUN_00d51660(void* any);                           // 0x00d51660, the one-argument form of the call
+
+class cPlanetModel_s00d626d0 {
+public:
+    void DirectionToSurfacePosition(Vec3_s00d626d0* out, const Vec3_s00d626d0* in);          // 0x00b815a0, ret 8
+    Vec3_s00d626d0* MakeRandomWorldPosition(Vec3_s00d626d0* out, const Vec3_s00d626d0* center, float minR, float maxR);   // 0x00b81780, ret 16
+};
+
+cSPCreatureBase_s00d626d0* FUN_00d99500(void* p);                         // parent lookup
+int FUN_00d99470(cSPCreatureBase_s00d626d0* c);
+float FUN_00d99a60(Vec3_s00d626d0* a, float ra, Vec3_s00d626d0* b, float rb, bool clamp);   // DistanceBetweenBodies
+cPlanetModel_s00d626d0* PlanetModel();                                    // 0x00b3d350
+Vec3_s00d626d0* normalized_safe(Vec3_s00d626d0* out, const Vec3_s00d626d0* in);               // 0x00449c20
+
+}  // namespace s00d626d0_sp
+
 struct Iter_s00d61ce0 { void* node; Iter_s00d61ce0(const Iter_s00d61ce0& x) : node(x.node) {} 
   Iter_s00d61ce0& operator++() { node = *(void**)node; return *this; } };
+
+#pragma warning(disable: 4700)   // "uninitialized local": the verbatim bodies model retail's fixed offsets
 
 // @ 0x00d61ce0
 Iter_s00d61ce0 __cdecl FUN_00d61ce0(Iter_s00d61ce0 begin, Iter_s00d61ce0 end, const u32& key)
@@ -594,6 +704,242 @@ bool __cdecl FUN_00d624f0(cSPCreatureBase* c, int, int, int, int, int* st)
     PlanetModel()->MakeRandomWorldPosition(&rnd, &surf, g_f1488874, g_f1486110);
 
     c->MoveToPointAtSpeed(2, &rnd, 1.0f, g_f1470f1c);
+    return true;
+}
+
+// ---- slice s00d626d0 (SPGonzago/SPCreatureBabyBehaviour.obj): behaviour functions ----
+// The bodies are the slice's text.  Names adjusted: its stub types carry the suffix _s00d626d0 (this file already
+// has the global Vec3 / Loco / HomeInfo / cSPCreatureBase of other slices); the slice's three file-local helpers
+// SubTo / RunAway / Normalize (from its preamble) are repeated ahead of their first use; and the functions are
+// ISliceSP::NAME, a namespace of the slice's own, because `bool SP::NAME(..)` at file scope after the preamble's
+// `namespace SP { .. }` block is C2039 here.
+namespace using_t_sp { using namespace SP; using namespace s00d626d0_sp; }
+
+namespace ISliceSP {
+using namespace SP;
+using namespace s00d626d0_sp;
+using s00d626d0_sp::PlanetModel;
+using s00d626d0_sp::FUN_00d99500;
+using ::FUN_00d51660;
+
+namespace {
+__forceinline void SubTo(Vec3_s00d626d0& d, const Vec3_s00d626d0* a, const Vec3_s00d626d0* b)
+{
+    d.x = a->x - b->x; d.y = a->y - b->y; d.z = a->z - b->z;
+}
+
+__forceinline void RunAway(cSPCreatureBase_s00d626d0* self, cSPCreatureBase_s00d626d0* parent, cSPCreatureBase_s00d626d0* threat)
+{
+    Vec3_s00d626d0 n1, n2;
+    Vec3_s00d626d0* a = self->mLoco.GetPosition();
+    Vec3_s00d626d0* b = parent->mLoco.GetPosition();
+    Vec3_s00d626d0 d1; SubTo(d1, b, a);
+    normalized_safe(&n1, &d1);
+    Vec3_s00d626d0* c = threat->mLoco.GetPosition();
+    Vec3_s00d626d0* e = self->mLoco.GetPosition();
+    Vec3_s00d626d0 d2; SubTo(d2, e, c);
+    normalized_safe(&n2, &d2);
+    Vec3_s00d626d0 sum(n1.x + n2.x, n1.y + n2.y, n1.z + n2.z);
+    Vec3_s00d626d0 n3;
+    Vec3_s00d626d0* dp = normalized_safe(&n3, &sum);
+    Vec3_s00d626d0 step(dp->x * 15.0f, dp->y * 15.0f, dp->z * 15.0f);
+    Vec3_s00d626d0* p = self->mLoco.GetPosition();
+    Vec3_s00d626d0 want(step.x + p->x, p->y + step.y, p->z + step.z);
+    Vec3_s00d626d0 surf, rnd;
+    s00d626d0_sp::PlanetModel()->DirectionToSurfacePosition(&surf, &want);
+    s00d626d0_sp::PlanetModel()->MakeRandomWorldPosition(&rnd, &surf, 0.1f, 3.0f);
+    self->MoveToPointAtSpeed(2, &surf, 1.0f, 2.0f);
+}
+
+__forceinline void Normalize(Vec3_s00d626d0& out, const Vec3_s00d626d0& d)
+{
+    // component order and the +1e-8 guard as in the engine's inline vector helper
+    float inv = 1.0f / sqrtf(d.y * d.y + d.x * d.x + d.z * d.z + 1e-8f);
+    out.x = d.x * inv;
+    out.y = d.y * inv;
+    out.z = d.z * inv;
+}
+}  // anonymous namespace
+
+namespace {
+// d / |d| with the +1e-8 guard of the engine's vector helpers (x87, as in the original).
+__forceinline void Normalize(Vec3& out, const Vec3& d)
+{
+    // component order and the +1e-8 guard as in the engine's inline vector helper
+    float inv = 1.0f / sqrtf(d.y * d.y + d.x * d.x + d.z * d.z + 1e-8f);
+    out.x = d.x * inv;
+    out.y = d.y * inv;
+    out.z = d.z * inv;
+}
+// @ 0x00d626d0
+bool BABY_FLEE_Tick(cSPCreatureBase_s00d626d0* self, int, int, int, int, int* st)
+{
+    cSPCreatureBase_s00d626d0* parent = s00d626d0_sp::FUN_00d99500(*self->FUN_00c04590()->M164());
+    if (!parent)
+        return false;
+    if (*st == 2 && self->mLoco.IsNearGoal())
+        return false;
+
+    cSPCreatureBase_s00d626d0* threat = self->GetTargetAsCreature();
+    if (!FUN_00d99470(threat))
+        *st = 2;
+    if (!self->FUN_00c0e0c0(0x566b36b))
+        self->PlayAnimation(0x566b36b, 1, -1);
+
+    switch (*st) {
+    case 0:
+        if (self->mLoco.IsNearGoal()) {
+            RunAway(self, parent, threat);
+            *st = 1;
+        }
+        break;
+    case 1: {
+        float dThreat = FUN_00d99a60(self->mLoco.GetPosition(), self->mLoco.GetFootprintRadius(),
+                                     threat->mLoco.GetPosition(), threat->mLoco.GetFootprintRadius(), true);
+        float dParent = FUN_00d99a60(self->mLoco.GetPosition(), self->mLoco.GetFootprintRadius(),
+                                     parent->mLoco.GetPosition(), parent->mLoco.GetFootprintRadius(), true);
+        RunAway(self, parent, threat);
+        if (dThreat > dParent) {
+            *st = 2;
+            return true;
+        }
+        break;
+    }
+    case 2: {
+        float r = self->mLoco.GetFootprintRadius() * 1.25f;
+        float len = sqrtf(r * ((float)self->FUN_00c04590()->m104 * r));
+        float r2 = parent->mLoco.GetFootprintRadius() + len;
+        Vec3_s00d626d0 dirTmp, nd;
+        Vec3_s00d626d0* dir = normalized_safe(&nd, parent->mLoco.GetDirection(&dirTmp));
+        Vec3_s00d626d0 off(r2 * dir->x, r2 * dir->y, r2 * dir->z);
+        Vec3_s00d626d0 want; SubTo(want, parent->mLoco.GetPosition(), &off);
+        Vec3_s00d626d0 surf, rnd;
+        s00d626d0_sp::PlanetModel()->DirectionToSurfacePosition(&surf, &want);
+        s00d626d0_sp::PlanetModel()->MakeRandomWorldPosition(&rnd, &surf, 0.0f, len);
+        self->MoveToPointAtSpeed(2, &rnd, 1.0f, 2.0f);
+        return true;
+    }
+    }
+    return true;
+}
+
+}
+
+// Learns-by-watching behaviour: walk to a point `reach` in front of the avatar, facing the avatar,
+// flag the locomotive object, then reset the behaviour state and refresh the UI hints.
+
+// @ 0x00d62d90
+bool FUN_00d62d90(cSPCreatureBase_s00d626d0* self, int, int, int, int, BehaviourState_s00d626d0* st)
+{
+    cSPCreatureBase_s00d626d0* avatar = NounManager()->GetAvatar();
+
+    Vec3_s00d626d0* pSelf = self->mLoco.GetPosition();
+    Vec3_s00d626d0* pAvatar = avatar->mLoco.GetPosition();
+    Vec3_s00d626d0 d; SubTo(d, pAvatar, pSelf);
+    Vec3_s00d626d0 dir;
+    Normalize(dir, d);
+
+    float reach = self->mLoco.GetFootprintRadius() * 2.0f + 0.5f;
+    Vec3_s00d626d0 off(dir.x * reach, dir.y * reach, dir.z * reach);
+
+    Vec3_s00d626d0* pa = avatar->mLoco.GetPosition();
+    Vec3_s00d626d0 target(pa->x - off.x, pa->y - off.y, pa->z - off.z);
+    Vec3_s00d626d0 surf;
+    s00d626d0_sp::PlanetModel()->DirectionToSurfacePosition(&surf, &target);
+    self->MoveToPointAndFacingAtSpeed(2, &surf, &dir, 1.0f, 2.0f);
+
+    uint32_t* pFlags = self->mLoco.FUN_00c41ec0();
+    *pFlags |= 2;
+
+    self->FUN_00c0b370(0x341b7b33);
+
+    st->mState = 0;
+    st->mValue04 = 0;
+    st->mValue08 = -1;
+    st->mValue10 = 0;
+    st->mAnimationId = 0;
+    st->mTimer = 0.0f;
+    st->mFlag = false;
+
+    FUN_0067cac0()->UpdateHints(false, true);
+    return true;
+}
+
+// Learn-abilities activation: turn towards the focused creature and start the "listening" animation
+// when the ability-learned flag of the creature is set.
+
+// @ 0x00d62f60
+bool LEARN_ABILITIES_Activate(cSPCreatureBase_s00d626d0* self, int, int, int, BehaviourState_s00d626d0* st)
+{
+    cSPCreatureBase_s00d626d0* focus = s00d626d0_sp::FUN_00d51660()->GetFocusCreature();
+    if (focus == 0)
+        return false;
+
+    st->mAnimationId = 0;
+    st->mValue04 = 0;
+    self->FUN_00c0b370(0xf4165aa3);
+
+    Vec3_s00d626d0* pSelf = self->mLoco.GetPosition();
+    Vec3_s00d626d0* pFocus = focus->mLoco.GetPosition();
+    Vec3_s00d626d0 d; SubTo(d, pFocus, pSelf);
+    Vec3_s00d626d0 dir;
+    Normalize(dir, d);
+    self->MoveToPointAndFacingAtSpeed(2, self->mLoco.GetPosition(), &dir, 1.0f, 2.0f);
+
+    if (((self->mB58 >> 8) & 1) != 0)
+    {
+        st->mAnimationId = self->PlayAnimation(0xf41bb04c, 1, -1);
+        st->mState = 1;
+    }
+    else
+        st->mState = 2;
+
+    self->FUN_00c0b970(0.0f);
+    return true;
+}
+
+// Baby idle tick: the avatar is handed to the creature as its focus object, then it either wanders to a
+// random point around the avatar (far away) or stands a little in front of it (near), and the state is reset.
+
+// @ 0x00d630c0
+bool BABY_IDLE_Tick(cSPCreatureBase_s00d626d0* self, int, int, int, int, BehaviourState_s00d626d0* st)
+{
+    cSPCreatureBase_s00d626d0* avatar = NounManager()->GetAvatar();
+    self->SetFocusObject(avatar != 0 ? &avatar->mFocus5a8 : 0, 1, 0);
+    self->FUN_00c0b370(0x341b7b33);
+
+    Vec3_s00d626d0* pSelf = self->mLoco.GetPosition();
+    Vec3_s00d626d0* pAvatar = avatar->mLoco.GetPosition();
+    Vec3_s00d626d0 d; SubTo(d, pAvatar, pSelf);
+    float dist2 = d.y * d.y + d.x * d.x + d.z * d.z;
+    float reach = self->mLoco.GetFootprintRadius() * 2.0f + 5.0f;
+
+    if (dist2 > 100.0f)
+    {
+        // far: pick a point 2*radius+5..2*radius+5 around the avatar and face away from it
+        Vec3_s00d626d0 rand;
+        s00d626d0_sp::PlanetModel()->MakeRandomWorldPosition(&rand, pAvatar, reach, reach);
+        Vec3_s00d626d0* pa = avatar->mLoco.GetPosition();
+        Vec3_s00d626d0 dr; SubTo(dr, pa, &rand);
+        Vec3_s00d626d0 dir;
+        Normalize(dir, dr);
+        self->MoveToPointAndFacingAtSpeed(2, &rand, &dir, 1.0f, 2.0f);
+    }
+    else
+    {
+        // near: stand `reach` in front of the avatar on the surface, facing the avatar
+        float inv = 1.0f / dist2;
+        Vec3_s00d626d0 off(d.x * inv * reach, d.y * inv * reach, d.z * inv * reach);
+        Vec3_s00d626d0* pa = avatar->mLoco.GetPosition();
+        Vec3_s00d626d0 target(pa->x - off.x, pa->y - off.y, pa->z - off.z);
+        Vec3_s00d626d0 surf;
+        s00d626d0_sp::PlanetModel()->DirectionToSurfacePosition(&surf, &target);
+        Vec3_s00d626d0 dir;
+        Normalize(dir, d);
+        self->MoveToPointAndFacingAtSpeed(2, &surf, &dir, 1.0f, 2.0f);
+    }
+
+    st->mState = 0;
     return true;
 }
 
@@ -891,3 +1237,4 @@ bool BehaviorTick_00d63fd0(cSPCreatureBase_s00d6_3fd0* c, double d, unsigned a, 
     }
     return true;
 }
+}  // namespace ISliceSP

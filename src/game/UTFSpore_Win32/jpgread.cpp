@@ -76,6 +76,37 @@ enum JpgAboutField
     kAboutSaveName     = 0xbc,
 };
 
+// ---- items of slice s00864330 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned char __stdcall gfree(void* p);                           // 0x0087d4c0
+extern "C" unsigned int __cdecl strlen(const char* s);
+# pragma function(memset)
+namespace lib_jpeg {
+    void  jpeg_stdio_dest(void* cinfo, void* io);              // 0x00857fb0
+}
+namespace lib_jpeg {
+    void  jpeg_create_compress(void* cinfo);                   // 0x008502a0
+}
+namespace lib_jpeg {
+    void  jpeg_set_defaults(void* cinfo);                      // 0x00855a30
+}
+namespace lib_jpeg {
+    void  jpeg_set_quality(void* cinfo, int q, int force);     // 0x008550e0
+}
+namespace lib_jpeg {
+    void  jpeg_start_compress(void* cinfo, int write_all);     // 0x00850570
+}
+namespace lib_jpeg {
+    void  jpeg_write_marker(void* cinfo, int marker, const void* data, unsigned len); // 0x00850510
+}
+namespace lib_jpeg {
+    int   jpeg_write_scanlines(void* cinfo, void** rows, int count);   // 0x008505f0
+}
+namespace lib_jpeg {
+    void  jpeg_finish_compress(void* cinfo);                   // 0x008503f0
+}
+extern "C" u8* FUN_008644f0(u8* src, u8* dst, int count, int mode, int fmt);
+// ---- items of slice s00864330 end
+
 // @ 0x00863e60
 u8* JPG_about(void)
 {
@@ -300,13 +331,186 @@ int __stdcall FUN_00864330(int handle, int desc, u8* dst, int stride)
     (void)h;
 }
 
+// @ 0x008644f0
+u8* FUN_008644f0(u8* param_1, u8* param_2, int param_3, int param_4, int param_5)
+{
+    int iVar1;
+    u8* pbVar2;
+    u8* pbVar3;
+
+    if (param_4 == 0) {
+        if (*(int*)(param_5 + 0x18) == 0x20) {
+            if (0 < param_3) {
+                pbVar3 = param_2 + 3;
+                pbVar2 = param_1 + 2;
+                do {
+                    pbVar3[-3] = pbVar2[1];
+                    pbVar3[-2] = *pbVar2;
+                    pbVar2[(int)param_2 - (int)param_1] = pbVar2[-1];
+                    *pbVar3 = pbVar2[-2];
+                    pbVar2 = pbVar2 + 4;
+                    pbVar3 = pbVar3 + 4;
+                    param_3 = param_3 + -1;
+                } while (param_3 != 0);
+                return param_1;
+            }
+        }
+        else if (0 < param_3) {
+            param_2 = param_2 + 2;
+            do {
+                param_2[-2] = *(u8*)(param_5 + 0x2b + (u32)*param_1 * 4);
+                param_2[-1] = *(u8*)(param_5 + 0x2a + (u32)*param_1 * 4);
+                *param_2 = *(u8*)(param_5 + 0x29 + (u32)*param_1 * 4);
+                param_2[1] = *(u8*)(param_5 + 0x28 + (u32)*param_1 * 4);
+                param_2 = param_2 + 4;
+                param_1 = param_1 + 1;
+                param_3 = param_3 + -1;
+            } while (param_3 != 0);
+        }
+    }
+    else if (param_4 == 1) {
+        if (*(int*)(param_5 + 0x18) == 0x20) {
+            if (0 < param_3) {
+                param_1 = param_1 + 1;
+                do {
+                    *param_2 = *param_1;
+                    param_2 = param_2 + 1;
+                    param_1 = param_1 + 4;
+                    param_3 = param_3 + -1;
+                } while (param_3 != 0);
+                return param_1;
+            }
+        }
+        else {
+            iVar1 = 0;
+            if (0 < param_3) {
+                do {
+                    param_2[iVar1] = *(u8*)(param_5 + 0x29 + (u32)param_1[iVar1] * 4);
+                    iVar1 = iVar1 + 1;
+                } while (iVar1 < param_3);
+                return param_1;
+            }
+        }
+    }
+    else if (param_4 == 2) {
+        if (*(int*)(param_5 + 0x18) == 0x20) {
+            if (0 < param_3) {
+                param_2 = param_2 + 2;
+                param_1 = param_1 + 1;
+                do {
+                    param_2[-2] = param_1[1];
+                    param_2[-1] = *param_1;
+                    *param_2 = param_1[-1];
+                    param_2 = param_2 + 3;
+                    param_1 = param_1 + 4;
+                    param_3 = param_3 + -1;
+                } while (param_3 != 0);
+                return param_1;
+            }
+        }
+        else if (0 < param_3) {
+            param_2 = param_2 + 2;
+            do {
+                param_2[-2] = *(u8*)(param_5 + 0x2a + (u32)*param_1 * 4);
+                param_2[-1] = *(u8*)(param_5 + 0x29 + (u32)*param_1 * 4);
+                *param_2   = *(u8*)(param_5 + 0x28 + (u32)*param_1 * 4);
+                param_2 = param_2 + 3;
+                param_1 = param_1 + 1;
+                param_3 = param_3 + -1;
+            } while (param_3 != 0);
+            return param_1;
+        }
+    }
+    return param_1;
+}
+
+// @ 0x00864680
+int __stdcall FUN_00864680(int handle, int* desc, u8* src, int stride)
+{
+    u8    cinfo[0x170];
+    u8    errmgr[0xc4];
+    u8    jmpbuf[0x40];
+    int   quality;
+    int   width, height;
+    int   in_color, jpeg_color;
+    int   ok = 0;
+    u8*   buf = NULL;
+    int   y;
+
+    if (desc[0x10b] != 0) quality = desc[0x10c];
+    else                  quality = 100;
+    width  = desc[4];
+    height = desc[5];
+    in_color = 3; jpeg_color = 2;
+    if (desc[0x10a] & 1) {
+        in_color = 4; jpeg_color = 0;
+    }
+    else if (desc[6] == 8) {
+        int n = desc[9];
+        int i;
+        u8* p = (u8*)desc + 0x2a;
+        for (i = 0; i < n; i++) {
+            if (p[0] != p[-1] || p[0] != p[-2]) break;
+            p += 4;
+        }
+        if (i >= n) { in_color = 1; jpeg_color = 1; }
+    }
+
+    *(void**)errmgr = (void*)&FUN_00864680;
+    *(void**)cinfo  = lib_jpeg::jpeg_std_error(errmgr);
+    if (setjmp3(jmpbuf, 0) == 0) {
+        lib_jpeg::jpeg_create_compress(cinfo);
+        lib_jpeg::jpeg_stdio_dest(cinfo, *(void**)((char*)handle + 0x10));
+        *(int*)(cinfo + 0x18) = width;
+        *(int*)(cinfo + 0x1c) = height;
+        *(int*)(cinfo + 0x20) = in_color;
+        *(int*)(cinfo + 0x24) = jpeg_color;
+        lib_jpeg::jpeg_set_defaults(cinfo);
+        lib_jpeg::jpeg_set_quality(cinfo, quality, 1);
+        {
+            float q = *(float*)((char*)desc + 0x2a5c);
+            if (q != 0.0f) {
+                *(u8*)(cinfo + 0xcc) = 1;
+                *(u16*)(cinfo + 0xce) = (u16)(int)q;
+                *(u16*)(cinfo + 0xd0) = (u16)(int)q;
+            }
+            else {
+                *(u8*)(cinfo + 0xcc) = 0;
+                *(u16*)(cinfo + 0xce) = 1;
+                *(u16*)(cinfo + 0xd0) = 1;
+            }
+        }
+        lib_jpeg::jpeg_start_compress(cinfo, 1);
+        if (desc[0x10a] & 1)
+            lib_jpeg::jpeg_write_marker(cinfo, 0xed, "GIMEXARGB", 9);
+        {
+            char* c = (char*)desc + 0x65c;
+            unsigned n = (unsigned)strlen(c);
+            if (n != 0)
+                lib_jpeg::jpeg_write_marker(cinfo, 0xfe, c, n);
+        }
+        buf = (u8*)galloc((u32)(in_color * width));
+        if (buf != NULL) {
+            for (y = 0; y < height; y++) {
+                u8* rowp = buf;
+                FUN_008644f0(src, rowp, width, jpeg_color, (int)desc);
+                lib_jpeg::jpeg_write_scanlines(cinfo, (void**)&rowp, 1);
+                src += stride;
+            }
+            lib_jpeg::jpeg_finish_compress(cinfo);
+            ok = 1;
+        }
+    }
+    if (buf != NULL) gfree(buf);
+    lib_jpeg::jpeg_destroy(cinfo);
+    return ok;
+}
+
 // @ 0x00864910
-// Free a decoder buffer: a null pointer frees nothing and returns 0, otherwise
-// the result of the free is passed straight through.
 extern "C" unsigned int __stdcall FUN_00864910(void* p)
 {
-    unsigned int freed = 0;
+    unsigned int r = 0;
     if (p != NULL)
-        freed = gfree_i(p);
-    return freed;
+        r = gfree_i(p);
+    return r;
 }

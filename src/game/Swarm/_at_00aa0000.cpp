@@ -13,6 +13,8 @@ extern "C" char g_1565550[];
 #include <math.h>
 #include <intrin.h>
 
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);  // 0x011e0744
+
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl op_new(int a, int b, int size);   // 0x11e073e
 extern "C" void __cdecl operator_delete(void* p);          // ??3@YAXPAX@Z
@@ -116,15 +118,44 @@ extern char g_vtbl_GmeIComponent[];                                             
 extern char g_vtbl_GmeRefCount[];                                                 // 0x013ef094
 extern char g_vtbl_cModelEffect[];                                                // 0x01458ce8
 extern char g_vtbl_cModelEffectRefCount[];                                        // 0x01458ce4
-struct Vector2 { float x, y; };
+struct Vector2 {
+    float x, y;
+    Vector2() {}
+    Vector2(const Vector2& v) : x(v.x), y(v.y) {}
+};
 struct Vector3 { float x, y, z; };
 void* __cdecl EAAllocate(uint32_t size, const char* name, int flags, int align,
                          const char* file, int line);                            // 0x00f473a0
 extern Vector3 g_defaultTranslation;                                             // 0x016791a4
 struct cAnimationCurve;
+template<class P>
+struct CurveIterator {
+    P mCurrent;
+    explicit CurveIterator(P p) : mCurrent(p) {}
+    P base() const { return mCurrent; }
+};
+
+template<class T>
+__forceinline CurveIterator<T*> CopyCurveSamples(CurveIterator<const T*> first,
+                                                 CurveIterator<const T*> last,
+                                                 CurveIterator<T*> result)
+{
+    const int byteCount = (int)((const char*)last.base() - (const char*)first.base());
+    return CurveIterator<T*>((T*)memcpy(result.base(), first.base(), (unsigned)byteCount)
+                             + (byteCount >> 2));
+}
+
 struct sp_float_vector {
     float* mpBegin; float* mpEnd; float* mpCapacity; int mAllocator[2];
+    sp_float_vector() {}
     void Allocate(int n, const int* alloc);                        // 0x004aa350
+    __forceinline sp_float_vector(const sp_float_vector& src)      // copy ctor (see 0x00aa1cc0)
+    {
+        Allocate((int)(src.mpEnd - src.mpBegin), src.mAllocator);
+        mpEnd = CopyCurveSamples<float>(CurveIterator<const float*>(src.mpBegin),
+                                        CurveIterator<const float*>(src.mpEnd),
+                                        CurveIterator<float*>(mpBegin)).base();
+    }
     sp_float_vector& operator=(const sp_float_vector& src);        // 0x0050d4e0
 };
 struct cAnimationCurveVector {
@@ -146,8 +177,17 @@ struct cAnimationCurve {                                   // size 0x28
     cAnimationCurve() { mLengthRange.x = 0.0f; mLengthRange.y = 0.0f;
                         mCurve.mpBegin = 0; mCurve.mpEnd = 0; mCurve.mpCapacity = 0;
                         mCurveVary = 0.0f; mSpeedScale = 0.0f; mChannel = 0; mMode = 0; }
-    cAnimationCurve(const cAnimationCurve& src) { CopyFrom(src); }
-    cAnimationCurve* CopyFrom(const cAnimationCurve& src);     // 0x00aa1cc0
+    cAnimationCurve(const cAnimationCurve& src);
+    cAnimationCurve& operator=(const cAnimationCurve& src)
+    {
+        mLengthRange = src.mLengthRange;
+        mCurve = src.mCurve;
+        mCurveVary = src.mCurveVary;
+        mSpeedScale = src.mSpeedScale;
+        mChannel = src.mChannel;
+        mMode = src.mMode;
+        return *this;
+    }
 };
 cAnimationCurve* __cdecl uninit_copy_curves(cAnimationCurve* first, cAnimationCurve* last, cAnimationCurve* dest);  // 0x00aa1d70
 cAnimationCurve* __cdecl destroy_curves(cAnimationCurve* first, cAnimationCurve* last, cAnimationCurve* dest);      // 0x00aa1bf0
@@ -781,6 +821,14 @@ void GObj::bind_cfg(void* mgr)
         at<uchar>(this, 0x1d0) = 0;
         ((BoolVec*)op(this, 0x1d4))->resize(*(int*)&n);
     }
+}
+
+// @ 0x00aa1cc0
+cAnimationCurve::cAnimationCurve(const cAnimationCurve& src)
+    : mLengthRange(src.mLengthRange), mCurve(src.mCurve),
+      mCurveVary(src.mCurveVary), mSpeedScale(src.mSpeedScale),
+      mChannel(src.mChannel), mMode(src.mMode)
+{
 }
 
 // @ 0x00aa1f40

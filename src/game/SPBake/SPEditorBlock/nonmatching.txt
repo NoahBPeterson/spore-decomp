@@ -25,11 +25,13 @@
 0043ffa0 81 FFa0 - Matrix3 by-value copy + /Od slots differ
 00440020 81 F4020 - mirror-to-link - /Od accessor slots differ
 00440090 83 F4090 - mirror-to-link - /Od accessor slots differ
-00440390 101 F40390 - clamp+SetFlag; clamp shape and /Od slots differ
-00440420 62 F40420 - min/max clamp + F40110; /Od slots differ
-00440c00 34 F40c00 - model scale store; /Od double-read slots differ
-00440f60 47 Trans::Trans() - constant pool copy flavour differs
-00440ff0 79 Trans::Trans(copy) - x87 field copy shape differs
+00440390 135 F40390 - clamp+SetFlag; equivalence PASS (386 valid, 100.0% coverage); the clamp is now v = v > lo ? v : lo; v = v < hi ? v : hi so -0.0 clamps to +0.0 like the original maxss/minss; /Od clamp shape is still branchy (186 vs 130 bytes) flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00440420 1 F40420 - min/max clamp + F40110; /Od slots differ flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00440c00 34 F40c00 - model scale store; /Od double-read slots differ flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00440c40  263  F40c40 - complete (map store + F40e60 per key); /Od frame holes (vec at -0x14 under 2-dword hole, 0xa0 frame) not reproduced [equiv: PASS] flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00440e60  32  F40e60 - complete; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; /Od frame holes (0x60 frame) differ [equiv: FAIL only on static-init guard word 015d2170 (harness maps our local static guard elsewhere); no other difference]
+00440f60 47 Trans::Trans() - constant pool copy flavour differs flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00440ff0 79 Trans::Trans(copy) - x87 field copy shape differs flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00441440 20408 (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc) complete source (all 23 KB of paths, calls and stores; call/vcall/property-hash sequence matches the original); not byte-exact: /Od frame layout (0x2d5c vs 0x3314) and slot order differ, a few inline-vs-call choices (fabs, AutoRefCount<cPropertyList>::operator=)
 00447030 183 complete behaviour; /Od name-hash frame layout, scratch-ctor loop and obj temp differ
 00448380 180 GetEffectsMaskScale - /Od frame/slot layout differs (retail declares the float result first, a/b after it, and keeps the mField33c test in a pointer slot); equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-

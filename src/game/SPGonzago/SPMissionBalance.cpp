@@ -42,6 +42,12 @@ struct cVec {
 
     void     DoInsertValue(T* pPos, const T& rValue);       // 0x00aea5d0
 };
+struct cGameData {
+    virtual void       AddRef();                            // +0x00
+    virtual void       Release();                           // +0x04
+    virtual void       v08();                               // +0x08
+    virtual cGameData* Cast(uint32_t nType);                // +0x0c
+};
 struct cPlanet {
     char     mPad000[0x13c];                                // +0x000
     void*    mpData13C;                                     // +0x13c
@@ -221,14 +227,63 @@ struct cPlanetSearch {                                      // pick request buil
     cPlanetSearch();                                        // 0x00ba7bd0
     ~cPlanetSearch();                                       // 0x00ba8220
 };
+struct cMissionBalance : cSPMission {
+    bool Init();                                            // 0x00c4b7f0
+};
+namespace Simulator {
+struct cMissionBalance {
+    void**  mpVtbl;                                         // +0x000
+    void**  mpVtbl04;                                       // +0x004
+    char    mPad008[0x2c];                                  // +0x008 .. +0x033
+    void**  mpVtbl34;                                       // +0x034
+    char    mPad038[0x1b8];                                 // +0x038 .. +0x1ef
+    int32_t mField1f0;                                      // +0x1f0
+    int32_t mThreshold;                                     // +0x1f4
+
+    cMissionBalance();                                      // 0x00c4b570
+    long double GetBalanceFactor(void* pA, void* pB);       // 0x00c4b6c0
+};
+}
+struct cStarManager {
+    bool PickRandomAsset();                                 // 0x00bb7940
+    cGameData* GetBannerByID(uint32_t nID);                 // 0x00ba6d80
+    void* GetEmpireByID();                                  // 0x00ba9370
+};
 struct cTerraformingManager {
     ResourceKey* GetKey(ResourceKey* pOut, int32_t nLevel, int32_t nIndex, void* pPlanet);   // 0x00bbc950
     ResourceKey* GetKeyC(ResourceKey* pOut, int32_t nLevel, void* pPlanet);                  // 0x00bbca30
     int32_t      GetLevel();                                // 0x00bbce40
 };
+cStarManager*          __stdcall StarManager(uint32_t nID);             // 0x00b3d2a0
+cStarManager*          __stdcall StarManager(void* pObject);            // 0x00b3d2a0
+cStarManager*          __stdcall StarManager(void* pOut, int32_t nKind);   // 0x00b3d2a0
+cStarManager*          __stdcall StarManager(void* pA, void* pB);       // 0x00b3d2a0
 cTerraformingManager*  __stdcall TerraformingManager();                 // 0x00b3d430
 cTerraformingManager*  __stdcall TerraformingManager(void* pPlanet);    // 0x00b3d430
+long double __stdcall FUN_00c44d00(void* pA, void* pB);                 // 0x00c44d00
+void*  __fastcall FUN_00b8de30(void* pThis);                            // 0x00b8de30
+void*  __fastcall FUN_00b1fdb0(void* pThis);                            // 0x00b1fdb0
+int32_t __fastcall FUN_00b8dab0(void* pThis);                           // 0x00b8dab0
 // ---- items of slice s00c4a850 end
+
+// @ 0x00c4b6c0
+long double Simulator::cMissionBalance::GetBalanceFactor(void* pA, void* pB)
+{
+    long double fResult = FUN_00c44d00(pA, pB);
+    if (fResult <= 0.0)
+        return fResult;
+    void* pObject = FUN_00b8de30(pA);
+    void* pAvatar = FUN_00b1fdb0(pObject);
+    if (StarManager(pAvatar)->GetEmpireByID())
+        return -1.0f;
+    if (FUN_00b8dab0(pA) != 1)
+        return -1.0f;
+    float fFactor = 1.0f;
+    if (mThreshold > TerraformingManager(pA)->GetLevel())
+        return fFactor;
+    fFactor = -1.0f;
+    return fFactor;
+}
 
 // @ 0x00c4b7a0
 int32_t cSPMissionMultiDelivery::Update(void* pArg)
@@ -241,4 +296,47 @@ int32_t cSPMissionMultiDelivery::Update(void* pArg)
             ReturnForRewards();
     }
     return nResult;
+}
+
+// @ 0x00c4b7f0
+bool cMissionBalance::Init()
+{
+    if (!cSPMission::Init())
+        return false;
+
+    if (mpPropertyList) {
+        cProperty* pProperty;
+        if (mpPropertyList->Find(0xf924ebf8, &pProperty) && pProperty->mType == 9)
+            mpData1f4 = (void*)*pProperty->GetInt();
+    }
+
+    if (GetTargetPlanet() == 0) {
+        if ((mFlags >> 3) & 1) {
+            cPlanetRecord* pRecord = GetPlanetRecordFromTargetType(ReadTargetPlanetType());
+            if (pRecord) {
+                SetTargetPlanet(pRecord);
+                goto havePlanet;
+            }
+            {
+                cPlanetSearch search;
+                search.mKind = 0x20;
+                void* pPlanet = PickPlanet(&search);
+                if (!pPlanet)
+                    return false;
+                SetTargetPlanet(pPlanet);
+            }
+        } else {
+            cPlanetSearch search;
+            search.mKind = 0x38;
+            void* pPlanet = PickPlanet(&search);
+            if (!pPlanet)
+                return false;
+            SetTargetPlanet(pPlanet);
+        }
+    }
+havePlanet:
+    if (!CheckTargetValid())
+        return false;
+    SetInitialized();
+    return true;
 }

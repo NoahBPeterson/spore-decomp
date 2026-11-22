@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPPlanetModel.cpp  ?GetRadiusAt@cPlanetModel_s00b7_ea80@@QAEMI@Z  00b7ef70  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b7f630@@YAPAUS18@@PBU1@0PAU1@@Z  00b7f630  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?DrawMaterial@Mode@@QAEXPAX0@Z  00b80a50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?SetMaterialA@Mode@@QAEXPAX@Z  00b80a80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?SetMaterialB@Mode@@QAEXPAX@Z  00b80ac0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -10,6 +12,7 @@
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?UninitCopy1C@@YAPAUElem1C@@PBU1@0PAU1@@Z  00b850c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?Dtor@ScalarList@@QAEXXZ  00b85110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?AllocAndCopy@@YGPAXIPBX0@Z  00b85930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?LookupAssign@TileMapLookup@@QAEDIPAUVec20B@@@Z  00b859c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?insert@SpVector3@@QAEPAUVec3f@@PAU2@PBU2@@Z  00b85d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?push_back@Vertex3DVec@@QAEXPBUVertex3D@@@Z  00b85db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?AssignN@SpVector20B@@QAEPAXII@Z  00b85e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -21,6 +24,3 @@
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?AddBoundary@cNatlBounds@@QAEXPBUVec3@@0II@Z  00b899b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?FindClosestWater@cPlanetModel_s00b8_bb70@@QAE_NPBUSVector3@@MPAU2@@Z  00b8bb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b8d2f0@cPlanetModel_s00b8_d190@@QAEXXZ  00b8d2f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPPlanetModel.cpp  ?LookupAssign@TileMapLookup@@QAEDIPAUVec20B@@@Z  00b859c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPPlanetModel.cpp  ?GetRadiusAt@cPlanetModel_s00b7_ea80@@QAEMI@Z  00b7ef70  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b7f630@@YAPAUS18@@PBU1@0PAU1@@Z  00b7f630  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

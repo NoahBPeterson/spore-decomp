@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00c60000.cpp -- migrated from slice(s) s00c6f6e0, s00c6e710, s00c69300, s00c68280, s00c67560, s00c66760, s00c65940, s00c649b0, s00c63a60, s00c62880, s00c61390, s00c602b0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00c60000.cpp -- migrated from slice(s) s00c697a0, s00c64bf0, s00c6f6e0, s00c6e710, s00c69300, s00c68280, s00c67560, s00c66760, s00c65940, s00c649b0, s00c63a60, s00c62880, s00c61390, s00c602b0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00c60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1187,6 +1187,7 @@ extern "C" V3 g1693d74;      // 0x01693d74: anchor position
 // ---- items of slice s00c67560_g7 end
 
 // ---- items of slice s00c68280 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_byte1693d70;       // 0x1693d70
 #define VTSLOT(o, off) (*(void**)((char*)(*(void**)o) + (off)))
 typedef void   (__thiscall *TFv_v)(void*);
 typedef void   (__thiscall *TFv_i)(void*, int);
@@ -1194,7 +1195,9 @@ typedef void   (__thiscall *TFv_p)(void*, void*);
 typedef char   (__thiscall *TFc_v)(void*);
 typedef int    (__thiscall *TFi_v)(void*);
 typedef void*  (__thiscall *TFp_i)(void*, int);
+typedef int    (__thiscall *TFi_ip)(void*, int, void*);
 typedef char   (__thiscall *TFc_iii)(void*, int, int, void*);
+typedef void   (__thiscall *TFv_ipii)(void*, int, void*, int);
 struct Vector3_s00c6_8280 { float x, y, z; };
 struct Vec {
     int** begin;
@@ -1256,6 +1259,13 @@ struct COrnList {
     void Collect(Vector3Vec* dst, char* out);     // 0x00c688a0
 };
 struct CModelHead { char pad[4]; unsigned mFlags; };
+struct cGameData_s00c6_8280 {
+    void* mVt0;                                   // +0x00
+    void* mVt4;                                   // +0x04
+    char  pad08[0x34 - 0x08];
+    cGameData_s00c6_8280();                                  // 0x00b18660
+    ~cGameData_s00c6_8280();                                 // 0x00b184c0
+};
 struct cGameData {
     void* mVt0;                                   // +0x00
     void* mVt4;                                   // +0x04
@@ -1275,7 +1285,7 @@ struct cSpatialObjectBase {
     cSpatialObjectBase();                         // 0x00c89630
     ~cSpatialObjectBase();                        // 0x00c8a420
 };
-struct cNanoDrone : cGameData {
+struct cNanoDrone : cGameData_s00c6_8280 {
     cSpatialObjectBase mSpatial;                  // +0x34
     cCombatant         mCombatant;                // +0x108
     void* mp1d0;                                  // +0x1d0
@@ -1326,6 +1336,27 @@ struct COrn {
     int  Ef30(int id);                 // 0xc68f30
     int  F1e0(int id);                 // 0xc691e0
     cSpatial* Spatial() { return (cSpatial*)((char*)this + 0x34); }
+};
+struct FixedVec3 {
+    Vector3_s00c6_8280* mpBegin;                  // +0x00
+    Vector3_s00c6_8280* mpEnd;                    // +0x04
+    Vector3_s00c6_8280* mpCapacity;               // +0x08
+    Vector3_s00c6_8280* mpHeapBase;               // +0x0c (block to free if moved off-stack)
+    Vector3_s00c6_8280* mpInline;                 // +0x10
+    int      mPad14;                   // +0x14
+    Vector3_s00c6_8280  mBuf[128];                // +0x18
+    void F_00c67560(Vector3_s00c6_8280* pos, int n, Vector3_s00c6_8280* last); // 0x00c67560
+    void DoAssignValues(Vector3_s00c6_8280* pos, Vector3_s00c6_8280* val);     // 0x00ac4720
+    void push_back(Vector3_s00c6_8280* v) {
+        Vector3_s00c6_8280* e = mpEnd;
+        if (e < mpCapacity) {
+            mpEnd = e + 1;
+            if (e != 0) { e->x = v->x; e->y = v->y; e->z = v->z; }
+        } else {
+            DoAssignValues(e, v);
+        }
+    }
+    int size() const { return (int)(mpEnd - mpBegin); }
 };
 void __cdecl ClearVector(Vec* v);                 // 0xc687e0
 char __cdecl FUN_00c649b0(Vec* dst, Vector3Vec* v);  // 0xc649b0
@@ -1532,6 +1563,87 @@ struct SpatialBase_s00c6_f6e0  { void ctor(); };              // 0xc89630
 struct CombatantBase{ void ctor(); };              // 0xbfd4e0
 struct IntTargetBase{ void ctor(); };              // 0xac03d0
 // ---- items of slice s00c6f6e0 end
+
+// ---- items of slice s00c64bf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char g_TypeName_s00c6_4bf0[];                    // 0x015777f0
+struct ColorRGB_s00c6_4bf0 {
+    float r, g, b;
+
+    ColorRGB_s00c6_4bf0(const ColorRGB_s00c6_4bf0& o) : r(o.r), g(o.g), b(o.b) {}
+};
+struct Vector3_s00c6_4bf0 {
+    float x, y, z;
+
+    Vector3_s00c6_4bf0(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+};
+struct Flags_s00c6_4bf0 {
+    unsigned short mFlags;  // +0x0
+    unsigned short mState;  // +0x2
+
+    Flags_s00c6_4bf0()
+    {
+        mFlags = 0;
+        mState = 0;
+    }
+};
+struct Name_s00c6_4bf0 {
+    char pad00[0x24];
+
+    Name_s00c6_4bf0(const Name_s00c6_4bf0& o);  // 0x0041cb40
+};
+extern const ColorRGB_s00c6_4bf0 g_DefaultTint_s00c6_4bf0;    // 0x01693d74
+extern const Name_s00c6_4bf0 g_DefaultName_s00c6_4bf0;        // 0x01693da4
+extern const ColorRGB_s00c6_4bf0 g_DefaultColorA_s00c6_4bf0;  // 0x01693dc8
+extern const ColorRGB_s00c6_4bf0 g_DefaultColorB_s00c6_4bf0;  // 0x01693dd4
+struct Base0_s00c6_4bf0 { virtual void v00(); };
+struct Base4_s00c6_4bf0 { virtual void v00(); char pad04[0x34 - 8]; };
+struct Base34_s00c6_4bf0 {
+    virtual void v00();
+    char pad04[0x118 - 0x38];
+
+    void SetTypeName(const char* name);  // 0x00c88810
+};
+struct Base_s00c6_4bf0 : Base0_s00c6_4bf0, Base4_s00c6_4bf0, Base34_s00c6_4bf0 {
+    Base_s00c6_4bf0();  // 0x00c63be0
+};
+struct Object_s00c6_4bf0 : Base_s00c6_4bf0 {
+    Flags_s00c6_4bf0 mFlags;              // +0x118
+    ColorRGB_s00c6_4bf0 mTint;            // +0x11c
+    float mScale;                         // +0x128
+    Name_s00c6_4bf0 mName;                // +0x12c
+    Vector3_s00c6_4bf0 mOffset;           // +0x150
+    ColorRGB_s00c6_4bf0 mColorA;          // +0x15c
+    ColorRGB_s00c6_4bf0 mColorB;          // +0x168
+    Vector3_s00c6_4bf0 mUp;               // +0x174
+
+    Object_s00c6_4bf0();
+    virtual void v00();
+};
+// ---- items of slice s00c64bf0 end
+
+// ---- items of slice s00c697a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRefObj_s00c6_97a0 {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct Member34_s00c6_97a0 {
+    void Shutdown();  // 0x00c8b2e0
+};
+struct Member108_s00c6_97a0 {
+    void Shutdown();  // 0x00bfc720
+};
+struct Owner_s00c6_97a0 {
+    char pad00[0x2c];
+    IRefObj_s00c6_97a0* mpRef;  // +0x2c
+    char pad30[4];
+    Member34_s00c6_97a0 m34;    // +0x34
+    char pad35[0x108 - 0x35];
+    Member108_s00c6_97a0 m108;  // +0x108
+
+    void Teardown();
+    void BaseTeardown();  // 0x00c69540
+};
+// ---- items of slice s00c697a0 end
 
 // @ 0x00c60850
 void cSPMissionTerraform::OnTerraformSphereChange(int param)
@@ -2808,6 +2920,15 @@ void __thiscall A::EnableFlag(char b)
   }
 }
 
+// @ 0x00c64bf0
+Object_s00c6_4bf0::Object_s00c6_4bf0()
+: mTint(g_DefaultTint_s00c6_4bf0), mScale(1.0f), mName(g_DefaultName_s00c6_4bf0),
+      mOffset(0.0f, 0.0f, 0.0f), mColorA(g_DefaultColorA_s00c6_4bf0), mColorB(g_DefaultColorB_s00c6_4bf0),
+      mUp(0.0f, 1.0f, 0.0f)
+{
+    SetTypeName(g_TypeName_s00c6_4bf0);
+}
+
 // @ 0x00c653e0
 void __fastcall FUN_00c653e0(void* self)
 {
@@ -3723,6 +3844,94 @@ bool PathObj_s00c6_7560__g7::Fn68250(void* h)
     return true;
 }
 
+// @ 0x00c68280
+void COrn::Update()
+{
+    if (mVec134 == 0)
+        return;
+    unsigned cnt = (unsigned)mCount130;
+    if (cnt >= 0x80)
+        cnt = 0x80;
+    if (cnt < 4)
+        cnt = 3;
+    float scale = mF12c;
+    float* p = Spatial()->GetPosition();
+    float dx = p[0] - mPosX;
+    float dy = p[1] - mPosY;
+    float dz = p[2] - mPosZ;
+    float dist = sqrtf(dz * dz + dy * dy + dx * dx);
+    if (0.0f < scale) {
+        if (scale * 3.0f <= dist) {
+            if (dist <= scale * 128.0f) {
+                double t = (double)dist / (double)scale;
+                cnt = (unsigned)(float)(__int64)(t + 0.5) + 1;
+            } else {
+                scale = dist * 0.0078125f;
+                cnt = 0x80;
+            }
+        } else {
+            scale = dist * 0.33333334f;
+            cnt = 3;
+        }
+    } else {
+        scale = dist / (float)cnt;
+    }
+    float* q = Spatial()->GetPosition();
+    float ddx = q[0] - mPosX;
+    float ddy = q[1] - mPosY;
+    float ddz = q[2] - mPosZ;
+    float inv = 1.0f / sqrtf(ddy * ddy + (ddz * ddz + ddx * ddx) + 1e-8f);
+    float vx = (ddx * inv) * scale;
+    float vy = (ddy * inv) * scale;
+    float vz = (ddz * inv) * scale;
+    FixedVec3 seg;
+    seg.mpHeapBase = 0;
+    seg.mpEnd = seg.mpBegin = seg.mBuf;
+    seg.mpInline = seg.mBuf;
+    seg.mpCapacity = seg.mBuf + 128;
+    for (unsigned i = 0; i < cnt; ++i) {
+        float fi = (float)(int)i;
+        Vector3_s00c6_8280 pt;
+        pt.x = mPosX + vx * fi;
+        pt.y = mPosY + vy * fi;
+        pt.z = mPosZ + vz * fi;
+        seg.push_back(&pt);
+    }
+    Vector3_s00c6_8280* last = seg.mpEnd - 1;
+    float* r = Spatial()->GetPosition();
+    if (last->x != r[0] || last->y != r[1] || last->z != r[2]) {
+        float* s = Spatial()->GetPosition();
+        Vector3_s00c6_8280 tail;
+        tail.x = s[0];
+        tail.y = s[1];
+        tail.z = s[2];
+        seg.push_back(&tail);
+    }
+    if (g_byte1693d70 == 0) {
+        Vector3_s00c6_8280 box;
+        int ok = ((TFi_ip)VTSLOT(mVec134, 0x50))(mVec134, 0xd, &box);
+        if (ok != 0 && box.x != (float)seg.size()) {
+            char c = ((TFc_v)VTSLOT(mVec134, 0x10))(mVec134);
+            if (c != 0)
+                ((TFv_i)VTSLOT(mVec134, 0x0c))(mVec134, 1);
+            void* eff = FUN_0067ddd0();
+            int* old = mVec134;
+            if (old != 0) {
+                mVec134 = 0;
+                ((TFv_v)VTSLOT(old, 4))(old);
+            }
+            ((TFc_iii)VTSLOT(eff, 0x2c))(eff, mKey128, 0, &mVec134);
+            if (c != 0)
+                ((TFv_i)VTSLOT(mVec134, 8))(mVec134, 1);
+        }
+    } else {
+        seg.F_00c67560(seg.mpEnd, 0x80 - seg.size(), seg.mpEnd - 1);
+    }
+    ((TFv_ipii)VTSLOT(mVec134, 0x40))(mVec134, 0xd, seg.mpBegin, seg.size());
+    if (seg.mpHeapBase != 0 && seg.mpHeapBase != seg.mpEnd)
+        FUN_00f47380(seg.mpHeapBase);
+}
+
 // @ 0x00c686d0
 void CTexRun::Build(unsigned count, float* pts, float* angles)
 {
@@ -4060,6 +4269,18 @@ cNanoDrone::~cNanoDrone()
     }
 }
 
+// @ 0x00c697a0
+void Owner_s00c6_97a0::Teardown()
+{
+    if (IRefObj_s00c6_97a0* p = mpRef) {
+        mpRef = 0;
+        p->Release();
+    }
+    m34.Shutdown();
+    m108.Shutdown();
+    BaseTeardown();
+}
+
 // @ 0x00c697e0
 char cGameData_s00c6_9300::Activate(int param)
 {
@@ -4345,6 +4566,7 @@ struct ISetModel_c6f770 {
     virtual void v40(); virtual void v44();
     virtual void SetModel(void* a);   // +0x48
 };
+
 // @ 0x00c6f770
 void SimOrnament::SetStyleModel(int style, void* a, int model)
 {
@@ -4400,6 +4622,7 @@ static __forceinline void WriteClassId_c6f990(void* handle, unsigned id)
 {
     FUN_0093aa70(handle, &id, (void*)1, 0);
 }
+
 // @ 0x00c6f990
 bool SimOrnament::Write(void* pArchive)
 {

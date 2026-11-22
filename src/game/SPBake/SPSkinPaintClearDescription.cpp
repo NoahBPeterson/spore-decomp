@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinPaintClearDescription.cpp -- migrated from slice(s) s0052e1f0, s0052c230 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinPaintClearDescription.cpp -- migrated from slice(s) s0052d460, s0052e1f0, s0052c230 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinPaintClearDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,11 +6,17 @@
 #include "EA/ArgScript/cCommandBase.h"
 #include "EA/ArgScript/cIBlockCommand.h"
 #include "EA/ArgScript/cICommand.h"
+#include <stdarg.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float kDefaultHairAngle;     // 0x015e0574
 
 // ---- items of slice s0052c230 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char* kSPSkinPaintClearName;       // "spSkinPaintClear"
+extern const char* kSPSkinPaintSettingsName;    // "spSkinPaintSettings"
+inline void* operator new(unsigned int, void* p) { return p; }
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
+                   const char* file, int line);                            // 0x00f473a0
 struct Vector3 {    // rw::math::fpu::Vector3Template<float,0>
     float x, y, z;
     Vector3(float x_, float y_, float z_)
@@ -20,7 +26,6 @@ struct Vector3 {    // rw::math::fpu::Vector3Template<float,0>
         z = z_;
     }
 };
-extern float kDefaultHairAngle;     // 0x015e0574
 namespace EA {
 struct RefCountTemplateInt {        // EA::RefCountTemplate<int>
     virtual ~RefCountTemplateInt();
@@ -61,7 +66,49 @@ struct cSPSkinPaintClearDescription : EA::Swarm::cDescription_s0052_c230 {   // 
     virtual ~cSPSkinPaintClearDescription();
 };
 struct IStream;
+void ReadClearDescription(IStream* stream, int version, cSPSkinPaintClearDescription* params);    // 0x0052e030
 void WriteClearDescription(IStream* stream, cSPSkinPaintClearDescription* params);                 // 0x0052e1f0
+namespace ArgScript {
+struct cIParser;
+}
+namespace ArgScript {
+struct cICommand {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void Cast();
+};
+}
+namespace ArgScript {
+struct cCommandBase : cICommand {
+    cIParser* mParser;
+    int mRefCount;
+    cCommandBase();                 // 0x0083c800
+};
+}
+namespace ArgScript {
+struct cFormatParser {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+    virtual void AddParser(const char* name, cICommand* command);   // +0x18
+};
+}
+struct cCommandStateT_cEffectsParser : ArgScript::cCommandBase {
+    cCommandStateT_cEffectsParser() {}
+    virtual void AddRef();
+};
+struct cCommandT_cEffectsParser : cCommandStateT_cEffectsParser {
+    cCommandT_cEffectsParser() {}
+    virtual void AddRef();
+};
+struct cSPSkinPaintClearCommand : cCommandT_cEffectsParser {
+    uint32_t pad0c;
+    cSPSkinPaintClearCommand() {}
+    virtual void ParseLine();
+};
 // ---- items of slice s0052c230 end
 
 // ---- items of slice s0052e1f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -164,6 +211,33 @@ struct cSPSkinPaintClearDescription_s0052_e1f0 : EA::Swarm::cDescription_s0052_e
 };
 // ---- items of slice s0052e1f0 end
 
+// ---- items of slice s0052d460 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint8_t DAT_015dfa30[0x800];
+extern void*   DAT_01667bac;
+int  Vsnprintf8(char* buf, uint32_t n, const char* fmt, ...);          // 0x00938400
+struct EastlString {
+    void Assign(const char* first, const char* last);                  // 0x00454cb0
+};
+int  ReadInt32(void* self, void* dst, int count, int flags);   // EA::IO::ReadInt32
+void FUN_0093ac80(void* self, void* dst);                      // 0x0093ac80
+void FUN_0093a800(void* self, void* dst, int count, int flags); // 0x0093a800
+struct IStream_s0052_d460 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+    virtual void v12(int*, int);   // +0x30
+};
+// ---- items of slice s0052d460 end
+
 // @ 0x0052d160
 inline cSPSkinPaintClearDescription::cSPSkinPaintClearDescription()
 : mDiffuseUserColor(-1), mDiffuse(1.0f, 1.0f, 1.0f), mSpecBump(0.0f, 1.0f, 0.5f), mGlossFactor(0.5f),
@@ -178,6 +252,52 @@ inline cSPSkinPaintClearDescription::cSPSkinPaintClearDescription()
 void WriteClearDescriptionCommand(cSPSkinPaintClearDescription* params, IStream* stream)
 {
     WriteClearDescription(stream, params);
+}
+
+// @ 0x0052df30
+int* ErrorStringCtor(int* out, const char* fmt, ...)
+{
+    out[0] = 0;
+    out[1] = 0;
+    out[2] = 0;
+    out[0] = (int)&DAT_01667bac;
+    out[1] = out[0];
+    out[2] = out[0] + 1;
+    va_list ap;
+    va_start(ap, fmt);
+    Vsnprintf8((char*)DAT_015dfa30, 0x800, fmt, ap);
+    va_end(ap);
+    char* p = (char*)DAT_015dfa30;
+    while (*p)
+        p++;
+    ((EastlString*)out)->Assign((const char*)DAT_015dfa30, p);
+    return out;
+}
+
+// @ 0x0052e030
+void ReadSkinPaintData(IStream_s0052_d460* self, int version, int data)
+{
+    ReadInt32(self, (void*)(data + 8), 1, 0);
+    self->v12((int*)(data + 0xc), 0xc);
+    self->v12((int*)(data + 0x18), 0xc);
+    if (version >= 2)
+        ReadInt32(self, (void*)(data + 0x24), 1, 0);
+    if (version >= 3)
+        ReadInt32(self, (void*)(data + 0x28), 1, 0);
+    ReadInt32(self, (void*)(data + 0x2c), 1, 0);
+    ReadInt32(self, (void*)(data + 0x30), 1, 0);
+    ReadInt32(self, (void*)(data + 0x34), 1, 0);
+    ReadInt32(self, (void*)(data + 0x38), 1, 0);
+    ReadInt32(self, (void*)(data + 0x3c), 1, 0);
+    ReadInt32(self, (void*)(data + 0x40), 1, 0);
+    ReadInt32(self, (void*)(data + 0x44), 1, 0);
+    ReadInt32(self, (void*)(data + 0x48), 1, 0);
+    ReadInt32(self, (void*)(data + 0x4c), 1, 0);
+    ReadInt32(self, (void*)(data + 0x50), 1, 0);
+    FUN_0093ac80(self, (void*)(data + 0x54));
+    FUN_0093a800(self, (void*)(data + 0x58), 1, 0);
+    FUN_0093a800(self, (void*)(data + 0x60), 1, 0);
+    ReadInt32(self, (void*)(data + 0x68), 1, 0);
 }
 
 // @ 0x0052e1f0

@@ -1,4 +1,4 @@
-// src/game/SPAudio/AudioVoiceContainer.cpp -- migrated from slice(s) s00a33ee0 by tools/migrate/rewrite.py
+// src/game/SPAudio/AudioVoiceContainer.cpp -- migrated from slice(s) s00a32f20, s00a33ee0 by tools/migrate/rewrite.py
 // Object file: SPAudio/AudioVoiceContainer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -8,6 +8,17 @@
 #include "EA/Audio/Submix.h"
 #include "EA/Audio/System.h"
 #include "rw/audio/core/System.h"
+#include "EA/Messaging/AutoHandler.h"
+#include "rw/core/debug/Channel.h"
+#include "EA/Audio/Allocator.h"
+#include "EA/Messaging/IHandler.h"
+#include "EA/Messaging/IHandlerRC.h"
+#include "EA/Audio/ISystem.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/Audio/ResourceDeviceDriver.h"
+#include "EA/Audio/Allocator2.h"
+#include "EA/Thread/Thread.h"
+#include <stddef.h>
 
 // ---- items of slice s00a33ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace rw {
@@ -31,7 +42,7 @@ struct PlugInConfig_s00a3_3ee0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct Voice_s00a3_3ee0 { void Release(); };                               // 0x0112e950
+class Voice_s00a3_3ee0 { public: void Release(); };                               // 0x0112e950
 }
 }
 }
@@ -51,7 +62,7 @@ struct PlugIn_s00a3_3ee0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s00a3_3ee0 {
+class System_s00a3_3ee0 { public:
     void Enter();                                               // 0x0112c600
     void Leave();                                               // 0x0112c620
     PlugIn_s00a3_3ee0* GetMasteringVoice();                                // 0x00ff35d0
@@ -88,7 +99,7 @@ struct tBinding_s00a3_3ee0 {
 }
 namespace EA {
 namespace Audio {
-struct Submix_s00a3_3ee0;
+class Submix_s00a3_3ee0;
 }
 }
 namespace EA {
@@ -248,10 +259,10 @@ struct VoiceContainer_s00a3_3ee0 {
     bool DisconnectFromSubmix(uint32_t submixId, rw::audio::core::PlugIn_s00a3_3ee0* plugin);
     bool Disconnect();  // 0x00a34890 (EA::Audio::VoiceContainer::Disconnect)
     bool ConnectToSubmix(uint32_t submixId, rw::audio::core::PlugIn_s00a3_3ee0* plugin);  // 0x00a34b50 (EA::Audio::VoiceContainer::ConnectToSubmix)
-    bool Connect();
+    bool Connect();  // 0x00a21410 (EA::Audio::VoiceContainer::Connect)
     bool Reconnect();  // 0x00a34c90 (EA::Audio::VoiceContainer::Reconnect)
     bool AddPropertyBinding(uint32_t prop, uint32_t pluginId, uint32_t guid, int attr, const float* pDefault);
-    void SetSendId(uint32_t id);
+    void SetSendId(uint32_t id);  // 0x00a34d70 (EA::Audio::VoiceContainer::SetSendId)
     bool HasPropertyBinding(uint32_t prop);  // 0x00a33e90 (EA::Audio::VoiceContainer::HasPropertyBinding)
 };
 }
@@ -271,7 +282,7 @@ struct HashSetRaw {                          // eastl hash set of PlugIn*, reach
 }
 namespace EA {
 namespace Audio {
-struct Submix_s00a3_3ee0 {
+class Submix_s00a3_3ee0 { public:
     void**          vtbl;
     char            pad4[0xc];
     VoiceContainer_s00a3_3ee0  mVoiceContainer;         // +0x10
@@ -319,6 +330,114 @@ tBinding_s00a3_3ee0* __cdecl do_move_start(tBinding_s00a3_3ee0* first, tBinding_
 }
 }
 // ---- items of slice s00a33ee0 end
+
+// ---- items of slice s00a32f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Audio {
+struct Binding
+{
+    uint32_t mProperty;      // +0x00  property id the binding answers
+    uint32_t mPad04;         // +0x04
+    uint32_t mPad08;         // +0x08
+    uint32_t mCommand;       // +0x0c  audio-object command id
+    float    mValueB;        // +0x10  second candidate value (flag +0x20 bit 1)
+    uint32_t mpVoice;        // +0x14  non-null when the binding is live
+    uint8_t  mbAltPath;      // +0x18  selects the +0x1c value when set
+    uint8_t  mPad19[3];
+    float    mValueA;        // +0x1c  default value
+    uint8_t  mFlags20;       // +0x20  bit 0 = use mValueB, bit 1 = keep mValueA
+    uint8_t  mPad21[3];
+};
+}
+}
+namespace EA {
+namespace Audio {
+struct CoreSystem
+{
+    void Lock();             // 0x0112c600
+    void Unlock();           // 0x0112c620
+};
+}
+}
+namespace EA {
+namespace Audio {
+extern CoreSystem* gpCoreSystem;    // 0x016e61a8
+}
+}
+namespace EA {
+namespace Audio {
+struct Voice
+{
+    void SetCommandComplete(uint32_t command, float value);   // 0x0112ccf0
+};
+}
+}
+namespace EA {
+namespace Audio {
+struct VoiceContainer_s00a3_2f20
+{
+    uint8_t  mPad0000[0x184];
+    Binding* mpBindingsBegin;    // +0x184
+    Binding* mpBindingsEnd;      // +0x188
+
+    void CommitBoundProperties();               // 0x00a33dc0
+    bool HasPropertyBinding(uint32_t property); // 0x00a33e90
+};
+}
+}
+namespace EA {
+namespace Audio {
+struct CoreSystemLock {
+    CoreSystemLock() { if (gpCoreSystem) gpCoreSystem->Lock(); }
+    ~CoreSystemLock() { if (gpCoreSystem) gpCoreSystem->Unlock(); }
+};
+}
+}
+// ---- items of slice s00a32f20 end
+
+// @ 0x00a33dc0
+namespace EA { namespace Audio {
+void VoiceContainer_s00a3_2f20::CommitBoundProperties()
+{
+    int count = (int)((char*)mpBindingsEnd - (char*)mpBindingsBegin) / 36;
+    if (count == 0)
+        return;
+    CoreSystemLock lock;
+    int offset = 0;
+    int n = count;
+    if (n > 0) {
+        do {
+            Binding* pBinding = (Binding*)((char*)mpBindingsBegin + offset);
+            if (pBinding->mpVoice) {
+                if (!pBinding->mbAltPath && !(pBinding->mFlags20 & 2))
+                    ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueA);
+                else if (pBinding->mFlags20 & 1)
+                    ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueB);
+            }
+            offset += 36;
+        } while (--n != 0);
+    }
+}
+}}  // namespace EA::Audio
+
+// @ 0x00a33e90
+namespace EA { namespace Audio {
+bool VoiceContainer_s00a3_2f20::HasPropertyBinding(uint32_t property)
+{
+    int count = (int)(mpBindingsEnd - mpBindingsBegin);
+    int i = 0;
+    if (count > 0) {
+        Binding* pBinding = mpBindingsBegin;
+        do {
+            if (pBinding->mProperty == property)
+                return true;
+            ++i;
+            ++pBinding;
+        } while (i < count);
+    }
+    return false;
+}
+}}  // namespace EA::Audio
 
 // @ 0x00a33ee0
 namespace EA { namespace Audio {
@@ -799,5 +918,43 @@ bool VoiceContainer_s00a3_3ee0::Reconnect()
         r = Connect();
     }
     return r;
+}
+}}  // namespace EA::Audio
+
+// @ 0x00a34cb0
+namespace EA { namespace Audio {
+bool VoiceContainer_s00a3_3ee0::AddPropertyBinding(uint32_t prop, uint32_t pluginId, uint32_t guid, int attr, const float* pDefault)
+{
+    if (HasPropertyBinding(prop))
+        return false;
+    tBinding_s00a3_3ee0 tmp;
+    tmp.mProperty = 0;
+    tmp.mPluginId = 0;
+    tmp.mPluginGUID = 0;
+    tmp.mAttribute = 0;
+    tmp.mDefault = 0.0f;
+    tmp.mpPlugin = 0;
+    tmp.mbFirst = true;
+    tmp.mLast = 0.0f;
+    tmp.mFlags = 0;
+    BindingVector* v = (BindingVector*)&mBindings.mpBegin;
+    if (v->mpEnd < v->mpCapacity) {
+        tBinding_s00a3_3ee0* p = v->mpEnd;
+        v->mpEnd = p + 1;
+        if (p)
+            *p = tmp;
+    } else {
+        v->DoInsertValue(v->mpEnd, tmp);
+    }
+    tBinding_s00a3_3ee0* b = &mBindings.mpEnd[-1];
+    b->mProperty = prop;
+    b->mPluginId = pluginId;
+    b->mPluginGUID = guid;
+    b->mAttribute = attr;
+    if (pDefault) {
+        b->mDefault = *pDefault;
+        b->mFlags |= 1;
+    }
+    return true;
 }
 }}  // namespace EA::Audio

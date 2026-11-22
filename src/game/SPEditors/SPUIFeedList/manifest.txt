@@ -7,3 +7,4 @@
 ../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662a90@FeedList@@QAEXPAX@Z  00662a90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662ad0@FeedList@@QAEXXZ  00662ad0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00662c10@FeedList@@QAEXPAX@Z  00662c10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedList.cpp  ?FUN_00663680@@YAXPADHD@Z  00663680  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

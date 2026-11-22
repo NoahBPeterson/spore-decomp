@@ -14,7 +14,10 @@
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?SetPosition@Mouse@Input@EA@@QAE_NHH_N@Z  008d2f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?IsMouseButtonDown@@YA_NI@Z  008d2fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?GetButtons@Mouse@Input@EA@@QAE_NPAE@Z  008d3050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/InputMan.cpp  ??1InputMan@Input@EA@@UAE@XZ  008d3130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?PollAll@InputMan@Input@EA@@QAEXXZ  008d31b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/InputMan.cpp  ?IsKeyDown@@YA_NII@Z  008d3200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?IsToggleKeyOn@Keyboard@Input@EA@@QAE_NI@Z  008d3270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?GetPosition@Mouse@Input@EA@@QAE_NPAH0@Z  008d32b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/InputMan.cpp  ?IsButtonDown@Mouse@Input@EA@@QAE_NI@Z  008d32e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/InputMan.cpp  ??0InputMan@Input@EA@@QAE@XZ  008d32f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

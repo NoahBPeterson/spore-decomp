@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
+00a4c170 83 complete EA::Audio::Eapd::gfxstub_deleteforkey; walks the gfxstub list (head 0x01675494, next +0x14), finds the node whose +0x08 owner equals the key, issues the Tk ".gfxstub%lx" delete, clears the node's +0x04, unlinks it (head or predecessor) and restarts; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (400/400 valid, 26.8% coverage; the registry-linked-list path is not exercised by fabricated inputs); not byte-exact (120 vs 111 bytes; the original keeps the list head in ecx across the loop and uses a rotated do-while, cl instead caches the head in esi and pushes it)
 00a4c470 30 complete (EA gfxstub_new); same calls, strlen+0x32<=4000 guard and sym copy; only the store/sprintf-arg scheduling differs

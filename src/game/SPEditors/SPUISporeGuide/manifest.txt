@@ -1,11 +1,13 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?OnRelease@GuidePage@@QAE_NXZ  006725a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?AssignFrom@EString@@QAEPAU1@PAU1@@Z  00672880  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISporeGuide.cpp  ?FUN_00672910@@YAPAXPAX00@Z  00672910  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISporeGuide.cpp  ?CopyUninitializedDetokenizerStrings@@YA?AV?$generic_iterator@PAV?$fixed_string@_W$0CA@$00@eastl@@X@eastl@@V12@00@Z  00672c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUISporeGuide.cpp  ??0Record_s0067_2cf0@@QAE@ABU0@@Z  00672cf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?FillN@@YAPAXPAGIG@Z  00674170  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISporeGuide.cpp  ?MoveAssignBackward@@YAPAUEStr@@PAU1@00@Z  006742f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?UninitCopy@@YAPAUEStr@@PAU1@00@Z  00674340  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?DestroyValues@@YAPAUEStr@@PAU1@00@Z  006743a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?Construct@EStr@@QAEPAU1@PBG@Z  006743f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?push_back@EStrVec@@QAEXABUEStr@@@Z  006745d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISporeGuide.cpp  ?Detokenize@Detok2@@QAEXPBGPAX@Z  00674d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPEditors/SPUISporeGuide.cpp  ?FUN_00672910@@YAPAXPAX00@Z  00672910  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPEditors/SPUISporeGuide.cpp  ?MoveAssignBackward@@YAPAUEStr@@PAU1@00@Z  006742f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

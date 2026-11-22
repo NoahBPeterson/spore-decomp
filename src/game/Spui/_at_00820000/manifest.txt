@@ -2,10 +2,13 @@
 ../src/game/Spui/_at_00820000.cpp  ?SetKey@CPL@@QAEXPB_WH@Z  00827fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?SetFlag@CPL@@QAEX_N@Z  00828020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ??0cWrap@@QAE@PAVIProv@@PAVIRef@@@Z  00828d40  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00820000.cpp  ?Do@C25b@@QAEXH@Z  00828df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00820000.cpp  ??_GcWrap@@UAEPAXI@Z  00828ea0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?EndRender@@YAXPAVRenderContext@@PAVcWrap@@@Z  00828ef0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?GetRect@cPropLayout@@QAEPAURect@@PAU2@@Z  00829080  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?Do@C25c@@QAEXH@Z  008290e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ??0cPropLayout@@QAE@XZ  00829770  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00820000.cpp  ??_GcPropLayout@@UAEPAXI@Z  00829a70  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?Func1@Handler@@QAEXPAUObjT1@@I0I@Z  00829bc0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?Reset@Handler@@QAEXXZ  00829d30  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ??0cSPUIRotateEffect_@@QAE@XZ  00829dd0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
@@ -15,4 +18,3 @@
 ../src/game/Spui/_at_00820000.cpp  ?SetFloat@LayerWinProc@@QAEXMI@Z  0082e340  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?GetFloat@LayerWinProc@@QAEMI@Z  0082e360  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00820000.cpp  ?FloatAt@LayerWinProc@@QAEPAMH@Z  0082e3f0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
-../src/game/Spui/_at_00820000.cpp  ?Do@C25b@@QAEXH@Z  00828df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

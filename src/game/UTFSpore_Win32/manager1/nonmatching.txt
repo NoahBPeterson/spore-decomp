@@ -1,3 +1,5 @@
 # va  diff-bytes  reason
 0094c260 157 Manager::Manager ctor: complete; zero-fill register roles (eax vs ebx) and memset-thunk-vs-direct call differ; difftest UNSUPPORTED (0/400 valid inputs, all discard import:LoadLibraryA) [flags /O2 /MD /Gy /TP /GS-]
 0094c9d0 55 Manager::CancelManualDialup: complete; this kept in edi vs esi and the zero constant in esi vs edi differ (drives the 64-bit loop reg pair); difftest WEAK (360 valid inputs, 56.2% coverage) [flags /O2 /MD /Gy /TP /GS-]
+0094cac0 249 EA::Sockets::Manager::CloseManualDialup: complete implementation; equivalent to retail (equiv WEAK: 376 valid inputs, coverage 26.7% < 60%). Byte diff is frame size (0x387c vs 0x388c) and RASCONN arg-store order. flags /O2 /MD /Gy /TP /GS- /Isrc/game/include
+0094cc00 261 EA::Sockets::Manager::GetDialupEntries: complete implementation; equivalent to retail (equiv WEAK: 234 valid inputs, coverage 26.5% < 60%). Byte diff is cl block/register allocation around the GlobalAlloc/strncpy loop. flags /O2 /MD /Gy /TP /GS- /Isrc/game/include

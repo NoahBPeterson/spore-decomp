@@ -1,6 +1,8 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?fn26fd0@@YA_NPAUMgr695b40@@PAH@Z  00f26fd0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?fn278b0@StrObj@@QAE_NXZ  00f278b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?fn27fc0@@YAHHHPAI@Z  00f27fc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?fn280b0@Zeroed@@QAEPAU1@XZ  00f280b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ??1CStr@@QAE@XZ  00f280f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?reserve@Vec18@@QAEXI@Z  00f28140  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?reserve@Vec38@@QAEXI@Z  00f28280  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -8,21 +10,29 @@
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?sGetIndexFromModelType@SP@@YA_NIPAI@Z  00ff03d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?GetPercent@cCityData_s00fe_ff80@SP@@QBEHXZ  00ff0400  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?SetKey@cCityData_s00fe_ff80@SP@@QAEXPBUcInt3@2@@Z  00ff0430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?Write@cCityData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  00ff0450  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?WriteRaw@cCityData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  00ff04d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?sWriteUint16@SP@@YA_NPAVcOutStream@1@PBG@Z  00ff05d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ??0cTribeData_s00fe_ff80@SP@@QAE@PAVcTribe_s00fe_ff80@1@@Z  00ff0610  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ??0cTribeData_s00fe_ff80@SP@@QAE@HH@Z  00ff06a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ??0cTribeData_s00fe_ff80@SP@@QAE@XZ  00ff0700  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?GetNumTurrets@cCityData_s00fe_ff80@SP@@QBEHXZ  00ff0760  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?GetBuilding@cCityData_s00fe_ff80@SP@@QAEPAVcBuildingData_s00fe_ff80@2@H@Z  00ff07a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?RemoveTurret@cCityData_s00fe_ff80@SP@@QAEXXZ  00ff07e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?GetNumBuildings@cCityData_s00fe_ff80@SP@@QBEHXZ  00ff0870  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?Init@cSpatialSnapshot@SP@@QAEPAV12@PAVcNoun@2@@Z  00ff0db0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?Set@cSpatialSnapshot@SP@@QAEAAV12@PBUcVector3@2@HH@Z  00ff0df0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ??4cOrnamentDataA@@QAEAAU0@ABU0@@Z  00ff11c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ??4cOrnamentDataB@@QAEAAU0@ABU0@@Z  00ff1230  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?Release@Sim_s00ff_13c0@@QAEXXZ  00ff13c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?reserve@HandleVec@@QAEXI@Z  00ff1450  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?SetText40@cTextHolder@@QAEXPBUcWString@@@Z  00ff14f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?SetText50@cTextHolder@@QAEXPBUcWString@@@Z  00ff1510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?reserve@OrnamentVector@@QAEXI@Z  00ff1530  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?insert@ElemVec@@QAEXPAUTElement@@ABU2@@Z  00ff1650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?erase@?$vector@VcOrnamentData@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEPAVcOrnamentData@SP@@PAV34@0@Z  00ff1840  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?EraseCity@cCivData@@QAEXH@Z  00ff1fb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?EraseValue@cCivData@@QAEXH@Z  00ff1ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_00ff2d50@@YIXPAUcCitySummary@@PAXH0@Z  00ff2d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?ResetForward@cCitySummary@@QAEXXZ  00ff2d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?InitE231@Simulator@@YAXXZ  01397130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -31,8 +41,3 @@
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01397ff0@@YAXXZ  01397ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01398270@@YAXXZ  01398270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01398420@@YAXXZ  01398420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPPlanetSim.cpp  ?EraseValue@cCivData@@QAEXH@Z  00ff1ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPPlanetSim.cpp  ?fn280b0@Zeroed@@QAEPAU1@XZ  00f280b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPPlanetSim.cpp  ?Write@cCityData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  00ff0450  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPPlanetSim.cpp  ?fn278b0@StrObj@@QAE_NXZ  00f278b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPPlanetSim.cpp  ?GetBuilding@cCityData_s00fe_ff80@SP@@QAEPAVcBuildingData_s00fe_ff80@2@H@Z  00ff07a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

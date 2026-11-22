@@ -1,9 +1,9 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ?replace@?$basic_string_s005f_7da0@_W@eastl@@QAEAAV12@IIPB_W@Z  005f8f80  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ?append_sprintf@?$basic_string_s005f_8fe0@D@eastl@@QAAPAV12@PBDZZ  005f9450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPThumbnailImportExport.cpp  ?Shutdown@cImportExport_s005f_a8d0@Thumbnail@SP@@QAE_NXZ  005fae40  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPEditors/SPThumbnailImportExport.cpp  ??4cImportInfo@@QAEAAU0@ABU0@@Z  005fb350  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPEditors/SPThumbnailImportExport.cpp  ??1cImportExportRetail@@UAE@XZ  005fb900  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ?erase@StrTable@@QAEIPBUWStr@@@Z  005fa100  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ?ClearBucketsA@@YGXPAPAHI@Z  005fa1d0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPThumbnailImportExport.cpp  ?ClearBucketsB@@YGXPAPAHI@Z  005fa230  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPThumbnailImportExport.cpp  ?Shutdown@cImportExport_s005f_a8d0@Thumbnail@SP@@QAE_NXZ  005fae40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPThumbnailImportExport.cpp  ??4cImportInfo@@QAEAAU0@ABU0@@Z  005fb350  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPThumbnailImportExport.cpp  ??1cImportExportRetail@@UAE@XZ  005fb900  /O2 /MD /Gy /TP /Isrc/game/include

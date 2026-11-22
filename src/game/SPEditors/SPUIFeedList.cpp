@@ -9,6 +9,7 @@
 #include "EA/Messaging/IHandler.h"
 #include "SP/cSPUIFeedList.h"
 #include <intrin.h>
+#include "SP/cSPUIFeedListCategory.h"
 
 // ---- items of slice s00661d10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct IWindow {
@@ -131,11 +132,14 @@ struct FeedList {
 // ---- items of slice s00661d10 end
 
 // ---- items of slice s00662d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
 extern "C" void* SP_AssetBrowser(); // 0x00401030
 extern "C" float GetPropertyT_f(int obj, int key, float def);   // 0x00401030 (equiv t3)
 extern "C" void  SPUIHelpers_UpdateScrollFrameVertical(void* w);
 extern "C" int   cTribeTool_GetTutorialToolPrice(int obj, int key, int def); // 0x004e1c30
 extern "C" void* SP_PropertyManager();
+extern "C" void* SP_MessageServer();
+extern "C" void  SPUIHelpers_SetWindowAreaToParent(void* w);
 extern int gVtA;   // 0x013eb384 (equiv t3)
 extern int gVtB;   // 0x013ec458 (equiv t2)
 extern int gVtC;   // 0x0140016c (equiv t2)
@@ -143,12 +147,52 @@ extern int gVtD;   // 0x0140015c (equiv t2)
 extern int gVtE;   // 0x0140014c (equiv t2)
 extern "C" void  FUN_00662b40(void* p);
 extern "C" void  FUN_00662c70(void* p);
+extern "C" int   GetSetting4();                          // 0x00401040
+extern "C" void* FUN_009512c0();                         // 0x009512c0 (UI heap)
+extern "C" void* FUN_009512d0(unsigned size, int align, const char* name, void* heap); // 0x009512d0
+extern "C" void  FUN_00663ef0(int v);
+extern "C" void  FUN_00664390(float a, float b, float c, float d);
 extern "C" void* FUN_00662c10(void* v);
 extern "C" void* FUN_006629a0(int v);
 extern "C" void* FUN_00662960(int v);
 extern "C" void  FUN_006629e0(void* p);
 typedef void(__thiscall* FnP)(void*);
+typedef void(__thiscall* FnThV)(void*);
+typedef void(__thiscall* FnThVii)(void*, int, int);
+typedef void(__thiscall* FnThVff)(void*, float, float);
+typedef void*(__thiscall* FnThVp)(void*, void*);
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
+static inline void AssignRef(void** slot, void* v) {
+    void* old = *slot;
+    if (v != old) {
+        if (v) (*(FnThV)Vslot(v, 0))(v);
+        *slot = v;
+        if (old) (*(FnThV)Vslot(old, 4))(old);
+    }
+}
+struct ThLayout {                                    // cSPUILayout
+    void* FindWindowByID(unsigned id, char recurse); // 0x008105b0
+    char  Init(const void* key, char a, int id);     // 0x008120d0
+    char  SetParentWin(void* parent, char a, int id);// 0x008121b0
+    void  SetReloadCallback(void* fn, void* ctx);    // 0x00810090
+};
+struct ThSFV {                                       // UI::ScrollFrameVertical
+    void* Ctor();                                    // 0x0082a040
+    char  Create(unsigned id, int a, int b);         // 0x0082a140
+    void  Shutdown();                                // 0x0082a450
+};
+struct ThWin {                                       // EA::UTFWin::Window
+    void* Ctor();                                    // 0x00962a10
+};
+struct ThDialog {                                    // cConnectionDialog
+    void* Ctor();                                    // 0x00810000
+};
+struct ThFeedHlp {                                   // cSPUIFeedList, as seen by its helpers
+    void D();                                        // 0x006629e0
+    int  A(int v);                                   // 0x006629a0
+    int  B(int v);                                   // 0x00662960
+    void C(int v);                                   // 0x00662c10
+};
 struct cSPUIFeedList {
     void FUN_00663350(int param);
     char  vt[0xc];                     // 0x00
@@ -181,6 +225,43 @@ struct cSPUIFeedList {
     void* Ctor();
     void  Dtor();
     void  ShutdownCategories();
+    void  FUN_006634d0();                                          // 0x006634d0
+    void  ReloadCallback(void* parent, int a, int b, void* cfg);   // 0x00663860
+};
+struct cSPUIFeedListHandler {
+    uint8_t mPad00[0xc];
+    uint8_t bC;                       // +0x0c  (FeedList +0x10, "is visible")
+    uint8_t bD;                       // +0x0d
+    uint8_t bE;                       // +0x0e  (FeedList +0x12)
+    uint8_t bF;                       // +0x0f
+    char Msg(unsigned msg, int* data);                             // 0x00663a90
+};
+struct RLWin {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void* v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void* v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+    virtual void v60(void* rc);
 };
 // ---- items of slice s00662d70 end
 
@@ -491,52 +572,151 @@ void cSPUIFeedList_UpdateScrolling(cSPUIFeedList* s, unsigned dt)
     if (*(char*)(p + 0x13)) { FUN_00662c70(*(void**)(p + 0x50)); *(char*)(p + 0x13) = 0; }
 }
 
-// @ 0x00663860
-void FUN_00663860(char* p, void* parent, int a, int b, void* cfg)
+// @ 0x00663350
+void cSPUIFeedList::FUN_00663350(int param)
 {
-    void* old = *(void**)(p + 0x24);
-    if (parent != old) {
-        if (parent) (*(FnP)Vslot(parent, 0))(parent);
-        *(void**)(p + 0x24) = parent;
-        if (old) (*(FnP)Vslot(old, 4))(old);
+    char* p = (char*)this;
+    if (!*(void**)(p + 0x30)) return;
+    float* r = (*(float*(__thiscall*)(void*))Vslot(*(void**)(p + 0x30), 0x38))(*(void**)(p + 0x30));
+    float w = r[2] - r[0];
+    int n = (int)((*(char**)(p + 0x3c) - *(char**)(p + 0x38)) >> 2);
+    float y = 0.0f;
+    for (int i = 0; i < n; ++i) {
+        void* obj = *(void**)(*(int*)(p + 0x38) + i * 4);
+        FUN_00663ef0(param);
+        float rad = ((float(__thiscall*)(void*))0xad2810)(obj);
+        float y2 = rad + y;
+        FUN_00664390(0.0f, y, w, y2);
+        y = y2;
     }
+    (*(void(__thiscall*)(void*, float, float))Vslot(*(void**)(p + 0x30), 0x74))(*(void**)(p + 0x30), w, y);
+    cSPUIFeedList_UpdateScrolling((cSPUIFeedList*)p, param);
+}
+
+// @ 0x00663680
+void FUN_00663680(char* p, int layout, char reload)
+{
+    if (!reload) {
+        ((cSPUIFeedList*)p)->ShutdownCategories();
+        if (*(void**)(p + 0x34)) {
+            (*(FnThVp)Vslot(*(void**)((char*)*(void**)(p + 0x34) + 0x10), 0x108))(
+                *(void**)((char*)*(void**)(p + 0x34) + 0x10), p);
+            ((ThSFV*)*(void**)(p + 0x34))->Shutdown();
+            void* q = *(void**)(p + 0x34);
+            if (q) { *(void**)(p + 0x34) = 0; (*(FnThV)Vslot(q, 4))(q); }
+        }
+        if (*(void**)(p + 0x30))
+            (*(FnThVp)Vslot(*(void**)(p + 0x30), 0x108))(*(void**)(p + 0x30), p);
+        return;
+    }
+    (void)layout;
+
+    AssignRef((void**)(p + 0x2c),
+              ((ThLayout*)*(void**)(p + 0x20))->FindWindowByID(0xf3c6dc19, 1));
+    AssignRef((void**)(p + 0x30),
+              ((ThLayout*)*(void**)(p + 0x20))->FindWindowByID(0xf3c6d819, 1));
+    if (*(void**)(p + 0x2c)) SPUIHelpers_SetWindowAreaToParent(*(void**)(p + 0x2c));
+    if (*(void**)(p + 0x30))
+        (*(FnThVp)Vslot(*(void**)(p + 0x30), 0x104))(*(void**)(p + 0x30), p);
+
+    {
+        void* mem = EASTL_allocator_allocate(0x48, "UI/ScrollFrameVertical", 0, 0, 0, 0);
+        AssignRef((void**)(p + 0x34), mem ? ((ThSFV*)mem)->Ctor() : 0);
+    }
+    if (((ThSFV*)*(void**)(p + 0x34))->Create(0xaef7d6ba, 0, 0)) {
+        void* inner = *(void**)((char*)*(void**)(p + 0x34) + 0x10);
+        void* outer = *(void**)((char*)*(void**)(p + 0x34) + 0x18);
+        (*(FnThVp)Vslot(*(void**)(p + 0x2c), 0xd8))(*(void**)(p + 0x2c), inner);
+        ((RLWin*)inner)->v60(((RLWin*)*(void**)(p + 0x30))->v38());
+        void* t = ((RLWin*)*(void**)(p + 0x30))->v10();
+        (*(FnThVp)Vslot(t, 0xdc))(t, *(void**)(p + 0x30));
+        (*(FnThVp)Vslot(outer, 0xd8))(outer, *(void**)(p + 0x30));
+        (*(FnThVff)Vslot(*(void**)(p + 0x30), 0x64))(*(void**)(p + 0x30), 0.0f, 0.0f);
+        (*(FnThVp)Vslot(inner, 0x104))(inner, p);
+        (*(FnThVii)Vslot(*(void**)((char*)*(void**)(p + 0x34) + 0x20), 0x1c))(
+            *(void**)((char*)*(void**)(p + 0x34) + 0x20), 1, 1);
+    }
+    ((cSPUIFeedList*)p)->FUN_006634d0();
+}
+
+// @ 0x00663860
+void cSPUIFeedList::ReloadCallback(void* parent, int a, int b, void* cfg)
+{
+    char* p = (char*)this;
+    AssignRef((void**)(p + 0x24), parent);
     if (cfg) {
-        void* o2 = *(void**)(p + 0x28);
-        if (cfg != o2) { (*(FnP)Vslot(cfg, 0))(cfg); *(void**)(p + 0x28) = cfg; if (o2) (*(FnP)Vslot(o2, 4))(o2); }
+        AssignRef((void**)(p + 0x28), cfg);
+    } else {
+        void* mem = FUN_009512d0(0x20c, 4, "UI/EA::UTFWin::Window", FUN_009512c0());
+        void* w = 0;
+        if (mem) {
+            void* o = ((ThWin*)mem)->Ctor();
+            if (o) w = (char*)o + 4;
+        }
+        AssignRef((void**)(p + 0x28), w);
+        (*(FnThVii)Vslot(*(void**)(p + 0x28), 0x7c))(*(void**)(p + 0x28), 0x40, 1);
+        (*(FnThVii)Vslot(*(void**)(p + 0x28), 0x7c))(*(void**)(p + 0x28), 0x10, 1);
+        (*(FnThVp)Vslot(*(void**)(p + 0x24), 0xd8))(*(void**)(p + 0x24), *(void**)(p + 0x28));
     }
-    else {
-        void* w = (void*)0;
-        (void)w;
-    }
-    (void)a; (void)b;
-    // full property/layout init
+
     void* pm = SP_PropertyManager();
-    void* o2 = *(void**)(p + 0x68);
-    if (o2) { *(void**)(p + 0x68) = 0; (*(FnP)Vslot(o2, 4))(o2); }
-    (*(void(__thiscall*)(void*, int, void**))Vslot(pm, 0x2c))(pm, 0x6edc12d4, (void**)(p + 0x68));
+    void* old = *(void**)(p + 0x68);
+    if (old) { *(void**)(p + 0x68) = 0; (*(FnThV)Vslot(old, 4))(old); }
+    (*(void(__thiscall*)(void*, void*, unsigned, void**))Vslot(pm, 0x2c))(
+        pm, *(void**)(p + 0x24), 0x6edc12d4, (void**)(p + 0x68));
+
+    {
+        void* mem = EASTL_allocator_allocate(0x18, "Sporepedia", 0, 0, 0, 0);
+        AssignRef((void**)(p + 0x20), mem ? ((ThDialog*)mem)->Ctor() : 0);
+    }
+    *(char*)(p + 0x12) = (char)b;
     *(char*)(p + 0x10) = 1;
+
+    int key[3];
+    key[0] = (int)0x84f7a71d;
+    key[1] = (int)0x0510a95b;
+    key[2] = *(int*)0x1527284;
+    ((ThLayout*)*(void**)(p + 0x20))->Init(key, 1, 0x5b598fa);
+    ((ThLayout*)*(void**)(p + 0x20))->SetParentWin(*(void**)(p + 0x24), 1, 0x5b598fa);
+    ((ThLayout*)*(void**)(p + 0x20))->SetReloadCallback((void*)&FUN_00663680, p);
+    FUN_00663680(p, (int)*(void**)(p + 0x20), 1);
+
+    {
+        char* h = p + 4;
+        void* srv = SP_MessageServer();
+        *(void**)(p + 0x54) = srv;
+        *(char**)(p + 0x58) = h;
+        *(void**)(p + 0x5c) = (void*)0x1400188;
+        *(int*)(p + 0x60) = 3;
+        *(int*)(p + 0x64) = 0;
+        if (srv && h) {
+            for (int i = 0; i < 0xc; i += 4)
+                (*(FnThVp)Vslot(srv, 0x24))(srv, *(void**)(0x1400188 + i));
+        }
+    }
 }
 
 // @ 0x00663a90
-char FUN_00663a90(char* p, unsigned msg, int* data)
+char cSPUIFeedListHandler::Msg(unsigned msg, int* data)
 {
-    if (msg == 0x44db12e) { FUN_006634d0(p); return 0; }
+    char* p = (char*)this;
+    if (msg == 0x44db12e) { ((cSPUIFeedList*)(p - 4))->FUN_006634d0(); return 0; }
     if (msg == 0x53dd093) {
-        if (*(char*)(p + 0xc)) FUN_006629e0(p - 4);
+        if (p[0xc]) ((ThFeedHlp*)(p - 4))->D();
         return 0;
     }
-    if (msg == 0xb3d53f95 && *(char*)(p + 0xc)) {
-        if (data) {
-            if (!*(char*)(p + 0xe)) {
-                void* g = (void*)0; (void)g;
-            }
-            void* arg = (void*)(unsigned)data[4];
-            if (data[4] == 0) {
-                if (*(char*)((char*)data + 0x14)) arg = FUN_006629a0(data[3]);
-                else arg = FUN_00662960(data[3]);
-            }
-            FUN_00662c10(arg);
-        }
+    if (msg != 0xb3d53f95) return 0;
+    if (!p[0xc]) return 0;
+    if (!data) return 0;
+    if (!p[0xe]) {
+        int g = GetSetting4();                      // 0x00401040
+        if (*(char*)((char*)g + 0x1c)) return 0;
     }
+    int arg = data[4];
+    if (arg == 0) {
+        ThFeedHlp* fl = (ThFeedHlp*)(p - 4);
+        arg = *(char*)((char*)data + 0x14) ? fl->A(data[3]) : fl->B(data[3]);
+    }
+    ((ThFeedHlp*)(p - 4))->C(arg);
     return 0;
 }

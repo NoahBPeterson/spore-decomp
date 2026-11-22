@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppSplitModelDescription.cpp -- migrated from slice(s) s007e06b0, s007df780 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppSplitModelDescription.cpp -- migrated from slice(s) s007e0950, s007e06b0, s007df780 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppSplitModelDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -314,6 +314,33 @@ struct cSplitModelKernelEffectCommand : EA::ArgScript::cBlockCommandBase {
     void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
 // ---- items of slice s007e06b0 end
 
+// ---- items of slice s007e0950 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Swarm {
+extern void* cDescription_vtable[]; // 0x013ef094
+}
+}
+namespace EA {
+namespace ArgScript {
+struct cBlockCommandBase_s007e_0950 {
+    char mCommandStorage[0x38];
+    void DestroyBase(); // 0x0083cd90
+};
+}
+}
+struct cSplitControllerEffectCommand_s007e_0950 : EA::ArgScript::cBlockCommandBase_s007e_0950 {
+    void** mDescriptionVtable;
+    int mDescriptionRefCount;
+    struct String {
+        char* mpBegin;
+        char* mpEnd;
+        char* mpCapacity;
+        void* mAllocator;
+    } mName;
+    void* ScalarDeletingDestructor(unsigned int flags);
+};
+// ---- items of slice s007e0950 end
+
 // @ 0x007dfed0
 void FUN_007dfed0()
 { /* 564B */ }
@@ -475,6 +502,18 @@ void SplitControllerAddCommands(void* self, void* server)
         group = new ("ArgScript/GroupSplitController", 0, 0, 0, 0) cSplitControllerEffectCommand();
     }
     ((void(__thiscall*)(void*, void*, void*))cmdVtbl[0x18 / 4])(server, gCmdKeySplitSlider, group);
+}
+
+// @ 0x007e0950
+void* cSplitControllerEffectCommand_s007e_0950::ScalarDeletingDestructor(unsigned int flags)
+{
+    if (mName.mpCapacity - mName.mpBegin > 1 && mName.mpBegin)
+        EFree(mName.mpBegin);
+    mDescriptionVtable = EA::Swarm::cDescription_vtable;
+    DestroyBase();
+    if (flags & 1)
+        EFree(this);
+    return this;
 }
 
 // @ 0x007e09a0

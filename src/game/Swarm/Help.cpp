@@ -9,16 +9,17 @@
 #include "EA/ArgScript/cArguments.h"
 #include "EA/Swarm/cIVisualEffect.h"
 #include "EA/Swarm/cVisualEffect.h"
+#include "EA/ArgScript/cCommandBase.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memmove(void* dst, const void* src, unsigned int n);   // E8 call (0x011e0744)
 extern char gEmptyString[];                     // 0x01667bac
 
 // ---- items of slice s00a73110 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* __cdecl memmove(void* dst, const void* src, unsigned int n);   // E8 call (0x011e0744)
+extern const char* gActive;          // 0x01554938 -> 0x01456170 "active"
+extern const int gZeroValue;         // 0x013ec47c (first dword of a default table)
 void __cdecl operator_delete__(void* p);                                        // 0x00f47380
 struct sp_vector_allocator { sp_vector_allocator() {} };
-extern char gEmptyString[];                     // 0x01667bac
 struct string {
     char* mpBegin;
     char* mpEnd;
@@ -134,7 +135,7 @@ struct BoundingBox {
     BoundingBox();                                             // 0x006e9530
 };
 struct EffectKey { unsigned int instanceID; unsigned int groupID; };
-struct cIVisualEffect {
+struct cIVisualEffect_s00a7_3110 {
     virtual int AddRef();
     virtual int Release();
     virtual void Start(int hardStart);
@@ -156,13 +157,13 @@ struct cIVisualEffect {
     virtual bool SetIntParams(int param, const int* data, int count);
 };
 struct EffectPtr {
-    cIVisualEffect* mpObject;
-    operator cIVisualEffect*() const { return mpObject; }
-    cIVisualEffect* operator->() const { return mpObject; }
+    cIVisualEffect_s00a7_3110* mpObject;
+    operator cIVisualEffect_s00a7_3110*() const { return mpObject; }
+    cIVisualEffect_s00a7_3110* operator->() const { return mpObject; }
     void reset()
     {
         if (mpObject) {
-            cIVisualEffect* const pTemp = mpObject;
+            cIVisualEffect_s00a7_3110* const pTemp = mpObject;
             mpObject = 0;
             pTemp->Release();
         }
@@ -200,20 +201,52 @@ struct EffectFileInfo {            // description record filled in by the manage
     ~EffectFileInfo();                                         // 0x007e1a80
 };
 struct cEffectsManagerVT {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
-    virtual void v20(); virtual void v24();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
     virtual bool HasEffect(EffectKey key);                     // +0x28
-    virtual void v2c(); virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
-    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
-    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
-    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
-    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
-    virtual void v80(); virtual void v84(); virtual void v88();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
     virtual cITerrainQuery* GetTerrainQuery(int a, int b);     // +0x8c
-    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
-    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
-    virtual void vb0(); virtual void vb4();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
     virtual bool GetEffectFileInfo(EffectFileInfo* info, const char* name);   // +0xb8
 };
 struct cEffectsManager : cEffectsManagerVT {
@@ -222,17 +255,20 @@ struct cEffectsManager : cEffectsManagerVT {
     cIEffectWorld* GetWorld(const char* name);                 // 0x00a6d840
 };
 bool __cdecl OpenEffectsFile(const char* file, const char* subName);   // 0x00a72cd0 EA::Swarm::OpenEffectsFile
+struct RandomLinearCongruential_s00a7_3110 {
+    void SetSeed(unsigned int seed);                           // 0x00936090
+};
+extern RandomLinearCongruential_s00a7_3110 sRandom_s00a7_3110;                       // 0x016778dc
 struct RandomLinearCongruential {
     void SetSeed(unsigned int seed);                           // 0x00936090
 };
-extern RandomLinearCongruential sRandom;                       // 0x016778dc
 struct cFormatParser;
 void __cdecl Output(cFormatParser* p, const char* fmt, ...);   // 0x00841000 EA::ArgScript::Output
-struct cArguments {
+struct cArguments_s00a7_3110 {
     int NumArguments() const;                                  // 0x00837f30
 };
-struct cArgumentSpec {
-    void Parse(const cArguments& args, cFormatParser* parser); // 0x0083b9d0
+struct cArgumentSpec_s00a7_3110 {
+    void Parse(const cArguments_s00a7_3110& args, cFormatParser* parser); // 0x0083b9d0
     unsigned int pad[(0x70) / 4];
     unsigned int mFlags;                                       // +0x70 (cheat +0x98)
 };
@@ -249,7 +285,7 @@ struct cEffectCheat {
     cEffectsManager* mManager;                     // +0x10
     EffectVector mTestEffects;                     // +0x14
     unsigned int pad24;
-    cArgumentSpec mArgSpec;                        // +0x28 (flags at +0x98)
+    cArgumentSpec_s00a7_3110 mArgSpec;                        // +0x28 (flags at +0x98)
     unsigned int padspec[(0xf0 - 0x9c) / 4];
     const char* mWorldName;                        // +0xf0
     const char* mEffectName;                       // +0xf4
@@ -278,14 +314,89 @@ struct cEffectCheat {
     vector<int> mIntParams;                        // +0x190
 
     bool Flag(int bit) const { return ((mArgSpec.mFlags >> bit) & 1) != 0; }
-    void ParseLine(const cArguments& args);
+    void ParseLine(const cArguments_s00a7_3110& args);
 };
 static const char kDebug[] = "debug";              // 0x0140b5d4
+namespace EA {
+namespace ArgScript {
+struct cArguments_s00a7_3110;
+}
+}
+namespace EA {
+namespace ArgScript {
+class cCommandBase_s00a7_3110 {
+ public:
+    cCommandBase_s00a7_3110();                                            // 0x0083c800
+    virtual void Execute(cArguments_s00a7_3110*);
+    virtual const char* Description(int) const;
+    virtual void OnRegister(void*, void*);
+    virtual int AddRef();
+    virtual int Release();  // 0x0083c760 (EA::ArgScript::cCommandBase::Release)
+    virtual ~cCommandBase_s00a7_3110();
+    void* mParser;                                             // +0x04
+    int mRefCount;                                             // +0x08
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+class cArgumentSpec_s00a7_3110 {
+ public:
+    cArgumentSpec_s00a7_3110(bool respectHelp);                           // 0x0083a9f0
+    int ConstructSpec(const char* name, const char* spec, ...);  // 0x0083bcd0
+    char mData[0xc8];                                          // real spec object
+};
+}
+}
+namespace EA {
+namespace Swarm {
+class cEffectsManager;
+}
+}
+namespace EA {
+namespace Swarm {
+class cEffectsManagerCheat_s00a7_3110 : public EA::ArgScript::cCommandBase_s00a7_3110 {
+ public:
+    cEffectsManagerCheat_s00a7_3110(cEffectsManager* manager);            // 0x00a73c70
+    virtual void Execute(EA::ArgScript::cArguments_s00a7_3110*);  // 0x00a74260 (EA::Swarm::cEffectsManagerCheat::Execute)
+    virtual const char* Description();
+
+    unsigned int mPad0c;                                       // +0x0c
+    cEffectsManager* mManager;                                 // +0x10
+    EA::ArgScript::cArgumentSpec_s00a7_3110 mArgSpec;                     // +0x14 (0xc8)
+    unsigned int mWorldID;                                     // +0xdc
+    bool mShowBounds;                                          // +0xe0
+    bool mShowSurfaces;                                        // +0xe1
+    bool mShowEffects;                                         // +0xe2
+    bool mNoAlpha;                                             // +0xe3
+    int mAppFlag;                                              // +0xe4
+    bool mAppFlagSetting;                                      // +0xe8
+    unsigned char mPadE9[3];                                   // +0xe9
+    float mCurrentLOD;                                         // +0xec
+    int mState;                                                // +0xf0
+    int mWorldID2;                                             // +0xf4
+    const char* mWorldName;                                    // +0xf8
+    const char* mResourceName;                                 // +0xfc
+};
+}
+}
+namespace EA {
+namespace Swarm {
+class cEffectsManager {
+ public:
+    unsigned int mPad000[0x18c / 4];                            // +0x000 .. +0x18b
+    Vector3 mLODPosition;                                      // +0x18c
+    unsigned int mPad198[(0x1c4 - 0x198) / 4];                 // +0x198 .. +0x1c3
+    Vector3 mSunDirection;                                     // +0x1c4
+    unsigned int mPad1d0[(0x1e4 - 0x1d0) / 4];                 // +0x1d0 .. +0x1e3
+    float mGravityPointStrength;                               // +0x1e4
+};
+}
+}
 // ---- items of slice s00a73110 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern const Vector3 kVector3Zero;                             // 0x01676c5c
-extern const Matrix3 kMatrix3Identity;                         // 0x01676d08
+
 extern RandomLinearCongruential sRandom;                       // 0x016778dc
 
 // ---- items of slice s00a74260 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -566,7 +677,7 @@ public:
 // ---- items of slice s00a74260 end
 
 // @ 0x00a73110
-void cEffectCheat::ParseLine(const cArguments& args)
+void cEffectCheat::ParseLine(const cArguments_s00a7_3110& args)
 {
     mEffectName = 0;
     mModel = kDebug;
@@ -650,7 +761,7 @@ void cEffectCheat::ParseLine(const cArguments& args)
 
     if (mID >= mTestEffects.size())
         return;
-    cIVisualEffect* effect = mTestEffects[mID];
+    cIVisualEffect_s00a7_3110* effect = mTestEffects[mID];
     if (!effect)
         return;
 
@@ -728,7 +839,7 @@ void cEffectCheat::ParseLine(const cArguments& args)
 
     if (mEffectName || Flag(kStart)) {
         if (Flag(kSetSeed))
-            sRandom.SetSeed(mSeed);
+            sRandom_s00a7_3110.SetSeed(mSeed);
         if (Flag(kHard))
             mTestEffects[mID]->Start(1);
         else if (Flag(kSoft))
@@ -748,6 +859,78 @@ void cEffectCheat::ParseLine(const cArguments& args)
 
     if (Flag(kClear))
         mTestEffects[mID].reset();
+}
+
+// @ 0x00a73c70
+EA::Swarm::cEffectsManagerCheat_s00a7_3110::cEffectsManagerCheat_s00a7_3110(EA::Swarm::cEffectsManager* manager)
+: mManager(manager), mArgSpec(true)
+{
+    mArgSpec.ConstructSpec(
+        "Used to control the effect manager and global effect settings.",
+        ":worldState", &gActive, &gZeroValue,
+        "Used for querying and controlling the effects manager.",
+        "-stats^", 0,
+        "Lists various effect system statistics",
+        "-listActive^ [<pattern:cstring>]", 3, &mWorldID,
+        "Lists all active worlds and their effects",
+        "-list^ [<pattern:cstring>]", 4, &mWorldID,
+        "Lists all worlds and their effects",
+        "  -internal^", 5,
+        "  in addition, shows internally-spawned effects",
+        "  -all^", 6,
+        "  shows all effects: user, internal, and children of either of those",
+        "-listEffects^ [<pattern:cstring>]", 7, &mWorldID,
+        "Lists all or specified effects",
+        "-where^ [<pattern:cstring>]", 8, &mWorldID,
+        "Lists specified effects and shows where in the script files they come from",
+        "-edit^ [<name:cstring>]", 9, &mWorldID,
+        "Opens the given effect for editing",
+        "-resources^ [<name:cstring>]", 10, &mWorldID,
+        "Lists the resources potentially used by the given effect",
+        "-kill^ [<pattern:cstring>]", 1, &mWorldID,
+        "Kill any orphaned effects, or, with pattern, the named effects",
+        "-killAllBut^ [<pattern:cstring>]", 2, &mWorldID,
+        "Kill any orphaned effects, and, all effects except the one specified as pattern",
+        "-showBounds^ <on:bool>", 0x19, &mShowBounds,
+        "Show particle system bounds",
+        "-showSurfaces^ <on:bool>", 0x1a, &mShowSurfaces,
+        "Show collision surfaces",
+        "-showEffects^ <on:bool> [<size:float>]", 0x1b, &mShowEffects,
+        &mManager->mGravityPointStrength,
+        "Show effect locations",
+        "-windDir <vector3>", &mManager->mLODPosition,
+        "Set global wind direction",
+        "-sunDir <vector3>", &mManager->mSunDirection,
+        "Set global sun direction",
+        "-noAlpha^ <on:bool>", 0x18, &mNoAlpha,
+        "Force no alpha in particles -- makes amount of overdraw clearer",
+        "-appFlag^ <flag:int> <setting:bool>", 0xc, &mAppFlag, &mAppFlagSetting,
+        "Set the given application flag",
+        "-lod^ <float>", 0xd, &mCurrentLOD,
+        "Set current LOD.",
+        "-worlds^", 0xf,
+        "List current worlds",
+        "-createWorld^ <id:int> [<debugName:cstring>]", 0x10, &mWorldID2, &mWorldName,
+        "Create new effects world with given ID and optional debug name",
+        "-removeWorld^ <id:int>", 0x11, &mWorldID2,
+        "Remove effects world with given ID",
+        "-memStats^", 0x12,
+        "Lists various memory statistics",
+        "-version^", 0x13,
+        "Print current effects script version",
+        "-v^", 0x13,
+        "Shorthand for -version",
+        "-save^", 0x14,
+        "Save any resource sections",
+        "-load^ <name:cstring>", 0x15, &mResourceName,
+        "Load effects from given resource.",
+        "-unload^ <name:cstring>", 0x16, &mResourceName,
+        "Remove effects from given resource",
+        "-collections^", 0x17,
+        "List currently loaded collections",
+        "-state^ <worldState> [<world:cstring>]", 0xb, &mState, &mWorldName,
+        "Set state of default world, or given world if specified",
+        0);
 }
 
 // @ 0x00a74260

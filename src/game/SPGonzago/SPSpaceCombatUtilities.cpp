@@ -21,7 +21,7 @@ extern "C" char g_1499570[];
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl FUN_01002bd0(void);          // SP::SpaceGameGet()
 extern "C" void* __cdecl FUN_00ffbe50(void);          // SP::GetUFOSimulator()
-extern "C" bool  __cdecl FUN_010299c0(void);          // SP::PlayerHasAnyAutoblaster
+int FUN_010299c0();                                   // SP::PlayerHasAnyAutoblaster
 extern "C" void* __cdecl FUN_00b3d350(void);          // SP::PlanetModel()
 extern "C" void* __cdecl FUN_00b3d300(void);          // SP::NounManager()
 extern "C" void* __cdecl FUN_00b3d2a0(int);          // SP::StarManager()
@@ -39,6 +39,10 @@ extern "C" void  __cdecl FUN_00f47380(void*);
 extern "C" void _ReadWriteBarrier(void);
 extern float DAT_016de6d4, DAT_016de6d8, DAT_016de6dc, DAT_016de6e0;
 extern float DAT_016de6e4, DAT_016de6e8, DAT_016de6ec, DAT_016de6f0, DAT_016de6f4, DAT_016de6f8;
+// property ids kept as extern storage (dynamic keys)
+extern unsigned k_autoblaster;       // 0x016de624
+extern unsigned k_autoblaster2;      // 0x016de630
+extern unsigned k_autoblaster3;      // 0x016de63c
 extern float DAT_016dc060[];
 extern float DAT_0147c308, DAT_0147c310;
 extern float DAT_01465544, DAT_01477fc0, DAT_01465160;
@@ -68,7 +72,7 @@ extern "C" float sqrtf(float);
 #define VF(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
 extern "C" void* __cdecl FUN_01002bd0(void);          // SP::SpaceGameGet()
 extern "C" void* __cdecl FUN_00ffbe50(void);          // SP::GetUFOSimulator()
-extern "C" bool  __cdecl FUN_010299c0(void);          // SP::PlayerHasAnyAutoblaster
+int FUN_010299c0();                                   // SP::PlayerHasAnyAutoblaster
 extern "C" void* __cdecl FUN_00b3d350(void);          // SP::PlanetModel()
 extern "C" void* __cdecl FUN_00b3d300(void);          // SP::NounManager()
 extern "C" void* __cdecl FUN_00b3d2a0(int);          // SP::StarManager()
@@ -90,6 +94,10 @@ extern "C" uint32_t __cdecl FUN_011e0970(uint32_t lo, uint32_t hi, uint32_t b, u
 extern "C" void _ReadWriteBarrier(void);
 extern float DAT_016de6d4, DAT_016de6d8, DAT_016de6dc, DAT_016de6e0;
 extern float DAT_016de6e4, DAT_016de6e8, DAT_016de6ec, DAT_016de6f0, DAT_016de6f4, DAT_016de6f8;
+// property ids kept as extern storage (dynamic keys)
+extern unsigned k_autoblaster;       // 0x016de624
+extern unsigned k_autoblaster2;      // 0x016de630
+extern unsigned k_autoblaster3;      // 0x016de63c
 extern float DAT_016dc060[];
 extern float DAT_0147c308, DAT_0147c310;
 extern float DAT_01465544, DAT_01477fc0, DAT_01465160;
@@ -337,7 +345,7 @@ struct cSPSpaceCombatTuning_s0102_97e0 {
     float GetLootMaxMoneyDrop(int index);  // 0x01029fd0 (cSPSpaceCombatTuning::GetLootMaxMoneyDrop)
     float GetLootCityMinMoneyDrop(int index);  // 0x0102a230 (cSPSpaceCombatTuning::GetLootCityMinMoneyDrop)
     float GetLootCityMaxMoneyDrop(int index);  // 0x0102a2a0 (cSPSpaceCombatTuning::GetLootCityMaxMoneyDrop)
-    float GetLootUFOMoneyChance(int type);
+    float GetLootUFOMoneyChance(int type);  // 0x0102a1d0 (cSPSpaceCombatTuning::GetLootUFOMoneyChance)
     float GetLootRaiderMoneyChance();        // 0x0102a090
     float GetLootBomberMoneyChance();        // 0x0102a040
     float GetLootThiefMoneyChance();         // 0x0102a180
@@ -346,8 +354,8 @@ struct cSPSpaceCombatTuning_s0102_97e0 {
     int   GetWeaponLevel(float x, float y, float z);  // 0x0102a360 (cSPSpaceCombatTuning::GetWeaponLevel)
     float GetUFOHealth(int type, int index);  // 0x0102a630 (cSPSpaceCombatTuning::GetUFOHealth)
     float GetTurretHealth(int index);  // 0x0102a780 (cSPSpaceCombatTuning::GetTurretHealth)
-    float LootChanceA(int type);
-    float LootChanceB(int type);
+    float LootChanceA(int type);  // 0x0102a840 (cSPSpaceCombatTuning::LootChanceA)
+    float LootChanceB(int type);  // 0x0102a8f0 (cSPSpaceCombatTuning::LootChanceB)
 };
 struct cSPGameDataUFO {
     void Init(int a, int b);                                 // 0x00c3e0b0 (ret 8)
@@ -531,6 +539,45 @@ void RemoveCreatureFromGroup(void* pCreature);
 void RemoveNounFromManager(void* pManager, void* pNoun);
 void operator_delete__(void* pMemory);
 // ---- items of slice s0102be20 end
+
+// ---- items of slice s010297e0fp begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Obj4c;
+struct cStarManager_s0102_97e0_fp {
+    Obj4c* GetEmpireByID(int id);            // 0x00ba9370
+};
+struct cRelationshipManager {
+    bool RecordEvent(Obj4c* a, Obj4c* b);    // 0x00d01f50
+};
+void* GetPlayerEmpire();                     // 0x01021300
+void* RelationshipManager();                 // 0x00b3d2c0
+struct Planet_s0102_97e0_fp {
+    Obj4c base;                              // vptr @0
+    char pad0[0x220 - 4];
+    float f220;                              // +0x220
+    char pad1[0x748 - 0x224];
+    float f748;                              // +0x748
+};
+// ---- items of slice s010297e0fp end
+
+// @ 0x01029950
+bool FUN_01029950(Planet_s0102_97e0_fp* p)
+{
+    Obj4c* emp = ((cStarManager_s0102_97e0_fp*)StarManager())->GetEmpireByID(p->base.v4c());
+    Obj4c* player = (Obj4c*)GetPlayerEmpire();
+    if (emp == player) return false;
+    if (p->f748 >= 100.0f) return false;
+    if (p->f220 > 0.0f) return true;
+    if (emp) return ((cRelationshipManager*)RelationshipManager())->RecordEvent(emp, player);
+    return false;
+}
+
+// @ 0x010299c0
+int FUN_010299c0()
+{
+    Inventory* inv = ((SpaceGame*)SpaceGameGet())->GetPlayerInventory();
+    return inv->HasItem(&k_autoblaster) || inv->HasItem(&k_autoblaster2) ||
+           inv->HasItem(&k_autoblaster3);
+}
 
 // @ 0x01029a10
 bool FUN_01029a10(int empireId, int planetId)

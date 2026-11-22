@@ -1,4 +1,4 @@
-// src/game/SPGonzago/InteractionAgent.cpp -- migrated from slice(s) s0047c400, s0047b480, s0047a5a0, s00479830, s00478930, s00477930, s00475d00, s00474bd0, s00473e40, s00472b80, s004553b0, s00454330, s00401200 by tools/migrate/rewrite.py
+// src/game/SPGonzago/InteractionAgent.cpp -- migrated from slice(s) s005300d0, s0047c400, s0047b480, s0047a5a0, s00479830, s00478930, s00477930, s00475d00, s00474bd0, s00473e40, s00472b80, s004553b0, s00454330, s00401200 by tools/migrate/rewrite.py
 // Object file: SPGonzago/InteractionAgent.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -695,6 +695,29 @@ struct string {
     }
 };
 // ---- items of slice s0047c400 end
+
+// ---- items of slice s005300d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <class T> inline const T& Max(const T& a, const T& b) { return a < b ? b : a; }
+struct StrAllocator {
+    void* allocate(uint32_t n) { return EASTL_allocator_allocate(n, "Editor", 0, 0, __FILE__, 0xd1); }
+};
+struct string_s0053_00d0 {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    StrAllocator mAllocator;
+    ~string_s0053_00d0();                                                    // @ 0x00530670
+    void push_back(char c);                                       // @ 0x005306c0
+    void reserve(uint32_t n);                                     // @ 0x0047c600
+    void DeallocateSelf()
+    {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+    }
+    void DoFree(char* p, uint32_t n) { if (p) Deallocate(p, n); }
+    void Deallocate(char* p, uint32_t) { char* q = p; EASTL_allocator_deallocate(q); }
+};
+// ---- items of slice s005300d0 end
 
 // @ 0x00401930
 void __stdcall VectorConstructorIterator(void* p, unsigned int size, int count, ElementCtorDtor ctor)
@@ -1545,5 +1568,19 @@ void string::RangeInitialize(const char* pBegin, const char* pEnd)
     char* const ptr = mpBegin;
     EASTL_memmove(ptr, pBegin, (uint32_t)(pEnd - pBegin));
     mpEnd = ptr + (pEnd - pBegin);
+    *mpEnd = 0;
+}
+
+// @ 0x005306c0
+void string_s0053_00d0::push_back(char c)
+{
+    if (mpEnd + 1 == mpCapacity) {
+        uint32_t nNeeded = (uint32_t)(mpEnd - mpBegin) + 1;
+        uint32_t nCapacity = (uint32_t)(mpCapacity - mpBegin) - 1;
+        uint32_t nNewCapacity = (nCapacity > 8) ? nCapacity * 2 : 8;
+        reserve(Max(nNewCapacity, nNeeded));
+    }
+    *mpEnd = c;
+    mpEnd = mpEnd + 1;
     *mpEnd = 0;
 }

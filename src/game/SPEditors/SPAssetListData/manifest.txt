@@ -1,2 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPAssetListData.cpp  ?IsBakeableType@@YA_NIE@Z  004bbe20  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPAssetListData.cpp  ?DoNuke@KTree@@QAEXPAUKNode@@@Z  00642d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAssetListData.cpp  ?clearList@PoolList@@QAEXXZ  00642da0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

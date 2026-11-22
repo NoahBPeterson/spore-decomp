@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPBlobShadow.cpp -- migrated from slice(s) s0041cb40, s00536d40, s0041dd90, s0041d490 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPBlobShadow.cpp -- migrated from slice(s) s00537ea0, s00537d90, s0041cb40, s00536d40, s0041dd90, s0041d490 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPBlobShadow.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -140,7 +140,7 @@ struct Vector3_s0041_cb40 {
 };
 struct Matrix3_s0041_cb40 {
     Vector3_s0041_cb40 row0, row1, row2;
-    Matrix3_s0041_cb40& Assign(const Matrix3_s0041_cb40& m);
+    Matrix3_s0041_cb40& Assign(const Matrix3_s0041_cb40& m);  // 0x0041cb40 (Matrix3::Assign)
 };
 struct VirtualRefObject {
     virtual int AddRef() = 0;
@@ -157,7 +157,7 @@ struct DefaultRefCounted_s0041_cb40 {
     int mVtbl;
     int mnRefCount;
     int AddRef() { return mnRefCount++ + 1; }
-    int Release();
+    int Release();  // 0x00453540 (DefaultRefCounted::Release)
 };
 struct TargetPtr {
     DefaultRefCounted_s0041_cb40* mp;
@@ -263,6 +263,7 @@ M& HashMap<K, M>::operator[](const K& key)
 struct Key8 { uint32_t a, b; };
 template struct HashMap<Key8, VirtualRefPtr>;
 template struct HashMap<Key8, int>;
+template struct HashMap<uint32_t, float>;
 template <int Bytes>
 struct FixedBuffer {
     char*    mpBegin;
@@ -283,7 +284,6 @@ struct FixedBuffer {
         mpCapacity = mpBegin + Bytes;
     }
 };
-template struct HashMap<uint32_t, float>;
 struct ConstructTag {};
 struct RangeOwner {
     void* mpFirst;
@@ -299,6 +299,45 @@ struct FlagObject {
     FlagObject(void* arg);
 };
 // ---- items of slice s0041cb40 end
+
+// ---- items of slice s00537d90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPTransform_s0053_7d90 {
+    uint16_t mFlags;        // +0x00
+    uint16_t mModCount;     // +0x02
+    float mTranslation[3];  // +0x04
+    float mScale;           // +0x10
+    float mRotation[9];     // +0x14
+    cSPTransform_s0053_7d90();                             // 0x00434040
+    cSPTransform_s0053_7d90(const cSPTransform_s0053_7d90& x);        // 0x00538000
+    void Compound(const cSPTransform_s0053_7d90& x);       // 0x00537f40
+
+    cSPTransform_s0053_7d90& Assign(const void* x);        // 0x00537dc0
+};
+struct cSPSkinPaintParticleEffect {
+    void* mpVtA;               // +0x00
+    void* mpVtB;               // +0x04
+    void* mpVtC;               // +0x08
+    cSPTransform_s0053_7d90 mTransform;   // +0x0c
+    bool mFlag;                // +0x44
+
+    void InitParticles(void* a, void* b, void* c);
+};
+// ---- items of slice s00537d90 end
+
+// ---- items of slice s00537ea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Mgr_00537ea0 {
+    bool Check_00525a40(); // 0x00525a40
+};
+extern Mgr_00537ea0* __cdecl GetMgr_00401080();
+inline Mgr_00537ea0* GetMgrInline() { return GetMgr_00401080(); }
+struct Host_00537ea0 {
+    uint8_t pad00[0x44];
+    bool mFlag44; // +0x44
+
+    // @ 0x00537ea0
+    bool IsUsable();
+};
+// ---- items of slice s00537ea0 end
 
 // @ 0x0041cb40
 Matrix3_s0041_cb40& Matrix3_s0041_cb40::Assign(const Matrix3_s0041_cb40& m)
@@ -718,6 +757,17 @@ Mat3Target* __cdecl Matrix3_Transposed(Mat3Target* out, const Matrix3* src)
     return out;
 }
 
+// @ 0x00537d90
+void cSPSkinPaintParticleEffect::InitParticles(void* a, void* b, void* c)
+{
+    (void)a;
+    (void)b;
+    (void)c;
+    cSPTransform_s0053_7d90 t;
+    mTransform.Assign(&t);
+    mFlag = false;
+}
+
 // @ 0x00537dc0
 cSPTransformOps* cSPTransformOps::Assign(const void* xv)
 {
@@ -742,4 +792,10 @@ cSPTransformOps* cSPTransformOps::Assign(const void* xv)
             mRotation[i] = x->mRotation[i];
     }
     return this;
+}
+
+// @ 0x00537ea0
+bool Host_00537ea0::IsUsable()
+{
+    return !mFlag44 || GetMgrInline()->Check_00525a40();
 }

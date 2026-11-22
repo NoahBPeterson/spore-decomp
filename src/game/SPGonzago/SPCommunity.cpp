@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCommunity.cpp -- migrated from slice(s) s00c015e0, s00bffad0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCommunity.cpp -- migrated from slice(s) s013329c0, s00c01310, s00c011c0, s00c00b00, s00c015e0, s00bffad0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCommunity.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,12 @@ extern "C" char g_1571000[];
 #include <math.h>
 #include <stdlib.h>
 #include <new>
+#include "SP/cSPTimer.h"
+#include <intrin.h>
+#include "SP/cGameData.h"
+#include "SP/cISPEditorNameProvider.h"
+#include <intrin.h>   // _ReadWriteBarrier (scheduling barrier, emits no code)
+#include <float.h>
 
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
@@ -30,10 +36,7 @@ extern char DAT_015710b8;               // 0x015710b8  cVarList descriptor passe
 #define VT(obj, off) ((*(void***)(obj))[(off) / 4])
 typedef bool     (__thiscall *FnBool)(void*);
 typedef void     (__thiscall *FnVoid_Rel)(void*);
-extern uint32_t g_168d228[8];           // 0x0168d228  cached four-byte ids, seven entries used
 void* SP_PropertyManager();             // 0x0067de30
-extern "C" void EA_IO_WriteUint32(void* stream, const uint32_t& value, int count, int flags); // 0x0093aa70
-extern char DAT_015710b8;               // 0x015710b8  cVarList descriptor passed to the serializer
 typedef void* (__thiscall *FnVp)(void*);
 typedef bool  (__thiscall *FnBool2)(void*, uint32_t, void**);
 typedef bool  (__thiscall *FnGetProps)(void*, uint32_t, int, void**);
@@ -54,14 +57,23 @@ struct AutoRef {
     ~AutoRef() { if (mp) mp->Release(); }
 };
 struct CommunityStreamHolder {
-    virtual void slot0(); virtual void slot1(); virtual void slot2();
-    virtual void slot3(); virtual void slot4(); virtual void slot5();
+virtual void slot0();
+virtual void slot1();
+virtual void slot2();
+virtual void slot3();
+virtual void slot4();
+virtual void slot5();
     virtual void* GetStream(); // +0x18
 };
 struct CommunityOutputStream {
-    virtual void slot0(); virtual void slot1(); virtual void slot2();
-    virtual void slot3(); virtual void slot4(); virtual void slot5();
-    virtual void slot6(); virtual void slot7();
+virtual void slot0();
+virtual void slot1();
+virtual void slot2();
+virtual void slot3();
+virtual void slot4();
+virtual void slot5();
+virtual void slot6();
+virtual void slot7();
     virtual CommunityStreamHolder* GetStreamHolder(); // +0x20
 };
 struct Elem20 {
@@ -335,6 +347,379 @@ virtual void v25();
 };
 // ---- items of slice s00c015e0 end
 
+// ---- items of slice s00c00b00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_Milli;   // 0x013f9428  0.001f (ticks -> seconds)
+extern const float g_Sixty;   // 0x013ebc4c  60.0f
+extern const float g_One;     // 0x01485720  1.0f
+extern "C" char g_13eb90c[];  // 0x013eb90c  vtbl_UI::BehaviorMessage (symbols/vtable_names.txt)
+extern "C" char g_13eb844[];  // 0x013eb844
+extern "C" char g_1469ca8[];  // 0x01469ca8  (s00c011c0's constructor installs g_1469cc0/g_1469cd8 next to it)
+typedef unsigned int u32;
+typedef unsigned __int64 u64;
+u32  SP_GetCurrentGameMode();                        // 0x00b5b800
+void* SP_GetServer();                                // 0x00883860 EA::Messaging::GetServer
+void* SP_NounManager();                              // 0x00b3d300
+void* SP_GameTimeManager();                          // 0x00b3d380
+void* SP_GetActivePlanetRecord();                    // 0x010212a0
+void* SP_GetSpaceCombatTuning();                     // 0x01029940
+void* SP_ConfigManager();                            // 0x0067dd30
+void* SP_GetAudioSystem();                           // 0x00a206f0
+u32   FNV1_String16(const wchar_t*, u32, int);       // 0x00932f30
+void  FUN_00435ed0(u32, u32);                        // 0x00435ed0 (audio event post)
+u32   FUN_00435e90();                                // 0x00435e90
+void  FUN_0040cf10(void* mgr, u32 id, float* out);   // 0x0040cf10 GetPropertyT
+void* FUN_00ac86d0(void*);                           // 0x00ac86d0
+void* FUN_00b3d4d0();                                // 0x00b3d4d0 (message manager)
+struct Vec4 {
+    float x, y, z, w;
+    Vec4(float fx, float fy, float fz, float fw) { x = fx; y = fy; z = fz; w = fw; }
+};
+void* FUN_00cf74c0();                                // 0x00cf74c0 cCivModeStrategy::Get()
+void  FUN_00cf9040();                                // 0x00cf9040, thiscall warning on the strategy
+void  FUN_00ae09b0();                                // 0x00ae09b0, thiscall send
+void  FUN_00ae0930();                                // 0x00ae0930, thiscall send
+void  FUN_00ad7a30();                                // 0x00ad7a30, thiscall ctor
+void  FUN_00ad7ad0();                                // 0x00ad7ad0, thiscall dtor
+void FUN_00b316c0();   // GameTimeManager::Ticks -> u64
+void FUN_00b1f9d0();   // noun manager -> player civilization
+void FUN_00b25f40();   // noun manager -> noun for an id
+void FUN_00b25fb0();   // noun manager -> player civilization noun
+void FUN_00b8dab0();   // active planet record -> type
+void FUN_00f67d90();   // noun manager -> terrain object
+void FUN_00bd9b40();   // cCity::GetCityHall
+void FUN_00c772c0();   // bool (terrain object, id)
+void FUN_00c77bf0();   // void (terrain object, id)
+bool FUN_00c004c0();                                               // 0x00c004c0
+#define VTABLE(obj)         (*(void***)(obj))
+#define VSLOT(obj, off)     (VTABLE(obj)[(off) / 4])
+struct SlotMessage {
+    void** vtbl;                    // +0x00
+    u32    mRefCount;               // +0x04
+    void*  mpObject;                // +0x08
+    u32    m0c;                     // +0x0c
+    u32    m10;                     // +0x10
+    u32    m14;                     // +0x14
+    u32    m18;                     // +0x18
+    u32    m1c;                     // +0x1c
+    u32    m20;                     // +0x20
+    u32    m24;                     // +0x24
+    u32    m28;                     // +0x28
+    u32    m2c;                     // +0x2c
+    u32    mKind;                   // +0x30
+    u32    m34;                     // +0x34
+    u32    m38;                     // +0x38
+    u32    m3c;                     // +0x3c
+    void Destruct();                // 0x00421cf0
+};
+namespace SP {
+struct cSPTimer_s00c0_0b00 {
+    unsigned char mData[0x20];
+    void Restart();                          // 0x00bc3130
+    u64  GetElapsedTime() const;             // 0x00bc3190
+};
+}
+namespace SP {
+struct Marker {
+    float v[3];
+};
+}
+namespace SP {
+class cCommunity_s00c0_0b00 {
+ public:
+    enum eAttackTrackingType {
+        kMilitaryAttack = 0,
+        kCulturalAttack = 1,
+        kDiplomaticAttack = 2,
+        kAttackTypeCount = 3,
+    };
+    enum eCommunityMessages {
+        kUnderAttack = 51027995,             // 0x030aa01b
+    };
+
+    void NotifyAttack(eAttackTrackingType, unsigned int);  // 0x00c00b00 (SP::cCommunity::NotifyAttack)
+
+    unsigned char mPad0[0x98];
+    u64   mLastAttack[3];                    // 0x98
+    cSPTimer_s00c0_0b00 mPlayerWarningTimer;            // 0xb0
+};
+}
+using SP::cCommunity_s00c0_0b00;
+// ---- items of slice s00c00b00 end
+
+// ---- items of slice s00c011c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13ef63c[];
+extern "C" char g_1469cc0[];
+extern "C" char g_1469cd8[];
+extern "C" char g_1469ce8[];
+extern "C" char g_1667bac[];
+extern "C" char g_1667bae[];
+#pragma pack(push, 4)
+#pragma pack(pop)
+struct cGameData {
+    void* mpVtbl0;                                           // +0x000
+    void* mpVtbl1;                                           // +0x004
+    unsigned char mRaw008[0x34 - 0x08];                      // +0x008..+0x033
+    cGameData();                                             // 0x00b18660
+};
+struct cISPEditorNameProvider {
+    void* mpVtbl;                                            // +0x034
+};
+struct cVector {
+    void*          mpBegin;                                  // +0x00
+    void*          mpEnd;                                    // +0x04
+    void*          mpCapacity;                               // +0x08
+    unsigned char  mAllocator[8];                            // +0x0c
+};
+struct cStr16 {
+    void*          mpBegin;                                  // +0x00
+    void*          mpEnd;                                    // +0x04
+    void*          mpCapacity;                               // +0x08
+    unsigned char  mAllocator[4];                            // +0x0c
+};
+struct cTimer {
+    unsigned char mRaw[0x20];
+    void Construct();
+    void Restart();
+};
+struct cCommunity_s00c0_11c0 : cGameData, cISPEditorNameProvider {
+    int            mCommunitySize;                           // +0x038
+    cVector        mStructureLines;                          // +0x03c
+    float          mInnerWallRadius;                         // +0x050
+    float          mOuterWallRadius;                         // +0x054
+    cVector        mGateInfo;                                // +0x058
+    bool           mbNeedsNavigationUpdate;                  // +0x06c
+    unsigned char  mPad06d[3];                               // +0x06d
+    cVector        mAssemblyBubbles;                         // +0x070
+    cVector        mLanes;                                   // +0x084
+    unsigned __int64 mLastAttack[3];                         // +0x098
+    cTimer         mPlayerWarningTimer;                      // +0x0b0
+    cVector        mStructures;                              // +0x0d0
+    cVector        mInhabitants;                             // +0x0e4
+    cStr16         mName;                                    // +0x0f8
+    cStr16         mDescription;                             // +0x108
+    unsigned int   mGODPoliticalID;                          // +0x118
+    void*          mpLeader;                                 // +0x11c
+
+    cCommunity_s00c0_11c0();
+};
+// ---- items of slice s00c011c0 end
+
+// ---- items of slice s00c01310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Elem20_s00c0_1310 { char mBytes[20]; };
+void MoveRange(Elem20_s00c0_1310* first, Elem20_s00c0_1310* last, Elem20_s00c0_1310* dest); // 0x00951bf0
+struct Vec20 {
+    char mPad00[0x70];
+    Elem20_s00c0_1310* mpBegin; // +0x70
+    Elem20_s00c0_1310* mpEnd;   // +0x74
+    void FUN_00c01310();
+};
+// ---- items of slice s00c01310 end
+
+// ---- items of slice s013329c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0133_29c0; 
+}
+typedef eastl::string8_s0133_29c0 string8_s0133_29c0;
+namespace Simulator {
+class ISerializerReadStream;
+}
+namespace Simulator {
+class ISerializerWriteStream;
+}
+namespace Simulator {
+struct Attribute;
+}
+namespace Simulator {
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t)(const string8_s0133_29c0&, void*);
+}
+namespace Simulator {
+typedef void  (*WriteTextFunction_t)(char*, void*);
+}
+namespace Simulator {
+typedef bool  (*ValidateFunction_t)();
+}
+namespace Simulator {
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t)(Attribute*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+void* StaticOffset(Attribute* pAttr);    // 0x011874d0: (void*)pAttr->offset (class statics)
+}
+namespace Simulator {
+struct Attribute
+{
+    // Member attribute: offset is relative to the current object.
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Static attribute: the offset field holds the static's address; no ToXml callback.
+    Attribute(const char* pName, uint32_t nID, void* pStatic,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = 0;
+        offsetFunction = StaticOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = 0;
+        offset = (uint32_t)pStatic;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+#define DECL_FAMILY(S) \
+    void WriteText_00694fc0_##S(char* pBuffer, void* pData);                 /* 0x00694fc0 */ \
+    bool Write_00572840_##S(ISerializerWriteStream* pStream, void* pData);   /* 0x00572840 */ \
+    void ReadText_006930b0_##S(const string8_s0133_29c0& text, void* pData);            /* 0x006930b0 */ \
+    void ReadText_00693090_##S(const string8_s0133_29c0& text, void* pData);            /* 0x00693090 */ \
+    bool Write_00ac88f0_##S(ISerializerWriteStream* pStream, void* pData);   /* 0x00ac88f0 */ \
+    void ReadText_00692ff0_##S(const string8_s0133_29c0& text, void* pData);            /* 0x00692ff0 */ \
+    bool Read_00572810_##S(ISerializerReadStream* pStream, void* pData);     /* 0x00572810 */ \
+    void WriteText_00694f00_##S(char* pBuffer, void* pData);                 /* 0x00694f00 */ \
+    bool Validate_00b1fbf0_##S();                                            /* 0x00b1fbf0 */ \
+    bool ToXml_00675ca0_##S(void* pData, const char* pName, int depth);      /* 0x00675ca0 */ \
+    bool ToXml_00acbb80_##S(void* pData, const char* pName, int depth);      /* 0x00acbb80 */
+}
+namespace Simulator {
+DECL_FAMILY(s)
+}
+namespace Simulator {
+DECL_FAMILY(r0) DECL_FAMILY(r1) DECL_FAMILY(r2) DECL_FAMILY(r3) DECL_FAMILY(r4)
+}
+namespace Simulator {
+DECL_FAMILY(r5) DECL_FAMILY(r6) DECL_FAMILY(r7) DECL_FAMILY(r8) DECL_FAMILY(r9)
+}
+namespace Simulator {
+DECL_FAMILY(r10) DECL_FAMILY(r11) DECL_FAMILY(r12) DECL_FAMILY(r13) DECL_FAMILY(r14)
+}
+namespace Simulator {
+bool Write_00bca960(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0133_29c0& text, void* pData);
+}
+namespace Simulator {
+void WriteText_00692fb0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694ee0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+bool Validate_00b6f550();
+}
+namespace Simulator {
+bool ToXml_0057cde0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00ac8050(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool Read_00c01ce0(ISerializerReadStream* pStream, void* pData);      // 0x00c01ce0
+}
+namespace Simulator {
+bool Write_00c006a0(ISerializerWriteStream* pStream, void* pData);    // 0x00c006a0
+}
+namespace Simulator {
+bool Validate_00c00740();                                             // 0x00c00740
+}
+namespace Simulator {
+bool ToXml_00c51440(void* pData, const char* pName, int depth);       // 0x00c51440
+}
+namespace Simulator {
+bool Read_00c024f0(ISerializerReadStream* pStream, void* pData);      // 0x00c024f0
+}
+namespace Simulator {
+bool Write_00c00780(ISerializerWriteStream* pStream, void* pData);    // 0x00c00780
+}
+namespace Simulator {
+bool Validate_00c00810();                                             // 0x00c00810
+}
+namespace Simulator {
+bool ToXml_00f29650(void* pData, const char* pName, int depth);       // 0x00f29650
+}
+namespace Simulator {
+bool Read_00ac87c0(ISerializerReadStream* pStream, void* pData);      // 0x00ac87c0
+}
+namespace Simulator {
+bool Write_00ac87f0(ISerializerWriteStream* pStream, void* pData);    // 0x00ac87f0
+}
+namespace Simulator {
+void ReadText_00694c80(const string8_s0133_29c0& text, void* pData);             // 0x00694c80
+}
+namespace Simulator {
+void WriteText_00694c10(char* pBuffer, void* pData);                  // 0x00694c10
+}
+namespace Simulator {
+bool ToXml_00acbbc0(void* pData, const char* pName, int depth);       // 0x00acbbc0
+}
+namespace Simulator {
+bool Read_00b02540(ISerializerReadStream* pStream, void* pData);      // 0x00b02540
+}
+namespace Simulator {
+struct AttrSlot { uint32_t d[15]; };
+}
+namespace Simulator {
+extern AttrSlot cCommunity_sAttributes[6];        // 0x015710b8
+}
+namespace Simulator {
+#define ADD_TO(TABLE, IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&TABLE[IDX] = a; }
+}
+// ---- items of slice s013329c0 end
+
 // @ 0x00c00590
 int __fastcall FUN_00c00590(void* ecx_this, void* edx)
 {
@@ -367,7 +752,7 @@ void __fastcall FUN_00c005b0(void* ecx_this, void* edx, void* stream)
 }
 
 // @ 0x00c00850
-Elem20* FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
+void FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
 {
     for (; first != last; ++first, ++dst) {
         if (dst) {
@@ -381,7 +766,6 @@ Elem20* FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
             dst->u = first->u;
         }
     }
-    return dst;
 }
 
 // @ 0x00c008c0
@@ -447,6 +831,131 @@ uint32_t FUN_00c00ad0(int index)
     return 0;
 }
 
+// @ 0x00c00b00
+void SP::cCommunity_s00c0_0b00::NotifyAttack(eAttackTrackingType type, unsigned int attackerId)
+{
+    unsigned char* const self = (unsigned char*)this;
+
+    // The slot message and the later city-hall marker share one stack slot in retail.
+    union Scratch {
+        SlotMessage msg;
+        SP::Marker marker;
+    };
+    Scratch scratch;
+
+    bool isCivilizationMode = SP_GetCurrentGameMode() == 0x1654c02;
+    bool isSpaceMode        = SP_GetCurrentGameMode() == 0x1654c04;
+
+    if (isCivilizationMode ||
+        !((bool (__thiscall*)(void*, int))FUN_00c004c0)(self, (int)type)) {
+        scratch.msg.mKind = 0;
+        scratch.msg.vtbl = (void**)g_13eb90c;
+        _InterlockedExchange((long*)&scratch.msg.mRefCount, 0);
+        scratch.msg.vtbl = (void**)g_13eb844;
+        scratch.msg.m38 = 0;
+        scratch.msg.mKind = kUnderAttack;
+        scratch.msg.mpObject = self;
+        scratch.msg.m10 = 0xffff0000;
+        scratch.msg.m18 = (u32)type;
+        scratch.msg.m20 = attackerId;
+
+        void* server = SP_GetServer();
+        ((void (__thiscall*)(void*, u32, void*, int))VSLOT(server, 0x14))
+            (server, scratch.msg.mKind, &scratch.msg, 0);
+        scratch.msg.Destruct();
+    }
+
+    mLastAttack[type] = ((u64 (__thiscall*)(void*))FUN_00b316c0)(SP_GameTimeManager());
+
+    if (type != kDiplomaticAttack && isSpaceMode) {
+        int playerCiv = ((int (__thiscall*)(void*))FUN_00b1f9d0)(SP_NounManager());
+        if (((int (__thiscall*)(void*))VSLOT(self, 0x4c))(self) == playerCiv) {
+            if (mPlayerWarningTimer.GetElapsedTime() > 15000) {
+                void* attacker = ((void* (__thiscall*)(void*, u32))FUN_00b25f40)
+                    (SP_NounManager(), attackerId);
+                if (attacker == 0) {
+                    attacker = ((void* (__thiscall*)(void*))FUN_00b25fb0)(SP_NounManager());
+                }
+
+                float communityPos[3];
+                ((void (__thiscall*)(void*, float*))VSLOT(self, 0x5c))(self, communityPos);
+
+                void* nameProvider = self + 0x34;
+                const wchar_t* name = ((const wchar_t* (__thiscall*)(void*))
+                                       VSLOT(nameProvider, 0x04))(nameProvider);
+                u32 nameHash = FNV1_String16(name, 0x811c9dc5u, 1);
+
+                void* iface = ((void* (__thiscall*)(void*, u32))VSLOT(self, 0x0c))
+                    (self, 0xee9b2232u);
+
+                ((void (__thiscall*)(void*, void*, u32, u32, const float*,
+                                     const Vec4&, int, u32))FUN_00cf9040)
+                    (FUN_00cf74c0(), iface, 0x38320b95u, 0xaa9a8ed7u, communityPos,
+                     Vec4(*(float*)((unsigned char*)attacker + 0xc4),
+                          *(float*)((unsigned char*)attacker + 0xc8),
+                          *(float*)((unsigned char*)attacker + 0xcc),
+                          g_One),
+                     0, nameHash);
+                FUN_00435ed0(0xb3f166fdu, 0x387cfa0u);
+
+                void* cfg = SP_ConfigManager();
+                if (((int (__thiscall*)(void*, u32))VSLOT(cfg, 0x30))(cfg, 0x4ea96cbu) != 0) {
+                    void* terrain = ((void* (__thiscall*)(void*))FUN_00f67d90)
+                        (SP_NounManager());
+                    if (!((bool (__thiscall*)(void*, u32))FUN_00c772c0)
+                            (terrain, 0x5b86eb6u)) {
+                        ((void (__thiscall*)(void*, u32))FUN_00c77bf0)(terrain, 0x5b86eb6u);
+
+                        void* cityHall = ((void* (__thiscall*)(void*))FUN_00bd9b40)
+                            (FUN_00ac86d0(self));
+                        unsigned char* markerPos = cityHall
+                            ? (unsigned char*)cityHall + 0x34 : 0;
+
+                        ((void (__thiscall*)(void*, void*))FUN_00ad7a30)
+                            (&scratch.marker, markerPos);
+
+                        ((void (__thiscall*)(void*, u32, void*, int))FUN_00ae09b0)
+                            (FUN_00b3d4d0(), 0x48ecbb8au, &scratch.marker, 0);
+
+                        ((void (__thiscall*)(void*, u32, int, int, int, int, int))
+                         FUN_00ae0930)
+                            (FUN_00b3d4d0(), (u32)g_1469ca8, 1, 0, 0, 0, 0);
+
+                        ((void (__thiscall*)(void*))FUN_00ad7ad0)(&scratch.marker);
+                    }
+                }
+            }
+            mPlayerWarningTimer.Restart();
+        }
+    }
+
+    if (SP_GetCurrentGameMode() == 0x1654c05) {
+        void* record = SP_GetActivePlanetRecord();
+        if (((int (__thiscall*)(void*))FUN_00b8dab0)(record) == 5) {
+            float now = (float)(((u64 (__thiscall*)(void*))FUN_00b316c0)
+                               (SP_GameTimeManager())) * g_Milli;
+            float* field = (float*)((unsigned char*)record + 0x12c);
+
+            if (*field == 0.0f) {
+                *field = now;
+                void* audio = SP_GetAudioSystem();
+                u32 value = audio
+                    ? ((u32 (__thiscall*)(void*))VSLOT(audio, 0x20))(audio) : 0;
+                FUN_00435ed0(0xe00c599au, value);
+            } else if (*field < 0.0f) {
+                float limit = g_Sixty;
+                void* tuning = SP_GetSpaceCombatTuning();
+                void** sub = (void**)((unsigned char*)tuning + 8);
+                FUN_0040cf10(*sub, 0x5c2cbea, &limit);
+                if (*field + now > limit) {
+                    *field = now;
+                    FUN_00435ed0(0xe00c599au, FUN_00435e90());
+                }
+            }
+        }
+    }
+}
+
 // @ 0x00c01060
 void LaneRecVec::DoInsertPoint(LaneRec* pos, const LaneRec* value)
 {
@@ -510,6 +1019,78 @@ void LaneRecVec::DoInsertPoint(LaneRec* pos, const LaneRec* value)
         mpCap = newBegin + newCount;
         mpEnd = newEnd;
     }
+}
+
+// @ 0x00c011c0
+cCommunity_s00c0_11c0::cCommunity_s00c0_11c0()
+{
+    // The interface sub-object's base vftable is installed first, then the two
+    // primary vftables, then the community's own interface vftable.
+    mpVtbl   = (void*)g_13ef63c;                             // +0x034
+    _ReadWriteBarrier();   // retail keeps this base vftable store, dead as it is
+    mpVtbl0  = (void*)g_1469ce8;                             // +0x000
+    mpVtbl1  = (void*)g_1469cd8;                             // +0x004
+    mpVtbl   = (void*)g_1469cc0;                             // +0x034
+
+    mCommunitySize = 0;                                      // +0x038
+    mStructureLines.mpBegin = 0;                             // +0x03c
+    mStructureLines.mpEnd = 0;                               // +0x040
+    mStructureLines.mpCapacity = 0;                          // +0x044
+
+    mGateInfo.mpBegin = 0;                                   // +0x058
+    mGateInfo.mpEnd = 0;                                     // +0x05c
+    mGateInfo.mpCapacity = 0;                                // +0x060
+
+    mbNeedsNavigationUpdate = false;                         // +0x06c
+
+    mAssemblyBubbles.mpBegin = 0;                            // +0x070
+    mAssemblyBubbles.mpEnd = 0;                              // +0x074
+    mAssemblyBubbles.mpCapacity = 0;                         // +0x078
+
+    _ReadWriteBarrier();   // pins the timer's `lea edi,[esi+0xb0]` below these stores
+    mLanes.mpBegin = 0;                                      // +0x084
+    mLanes.mpEnd = 0;                                        // +0x088
+    mLanes.mpCapacity = 0;                                   // +0x08c
+
+    mPlayerWarningTimer.Construct();                         // +0x0b0
+
+    mStructures.mpBegin = 0;                                 // +0x0d0
+    mStructures.mpEnd = 0;                                   // +0x0d4
+    mStructures.mpCapacity = 0;                              // +0x0d8
+
+    mInhabitants.mpBegin = 0;                                // +0x0e4
+    mInhabitants.mpEnd = 0;                                  // +0x0e8
+    mInhabitants.mpCapacity = 0;                             // +0x0ec
+
+    // Empty strings: begin == end == the shared empty buffer at 0x01667bac and
+    // capacity == one past it, 0x01667bae.
+    _ReadWriteBarrier();
+    mName.mpBegin = (void*)g_1667bac;                            // +0x0f8
+    mName.mpEnd = (void*)g_1667bac;                              // +0x0fc
+    _ReadWriteBarrier();   // the two capacities are materialised below 0x1667bac's stores
+    mName.mpCapacity = (void*)g_1667bae;                         // +0x100
+    mDescription.mpCapacity = (void*)g_1667bae;                  // +0x110
+    mDescription.mpBegin = (void*)g_1667bac;                     // +0x108
+    mDescription.mpEnd = (void*)g_1667bac;                       // +0x10c
+
+    mGODPoliticalID = 0xffffffff;                            // +0x118
+    mpLeader = 0;                                            // +0x11c
+
+    _ReadWriteBarrier();   // pins the second `mov ecx,edi` after +0x11c
+    mLastAttack[0] = 0;                                      // +0x098
+    mLastAttack[1] = 0;                                      // +0x0a0
+    mLastAttack[2] = 0;                                      // +0x0a8
+
+    mPlayerWarningTimer.Restart();                           // +0x0b0
+}
+
+// @ 0x00c01310
+void Vec20::FUN_00c01310()
+{
+    Elem20_s00c0_1310* begin = mpBegin;
+    Elem20_s00c0_1310* end = mpEnd;
+    MoveRange(end, end, begin);
+    mpEnd -= end - begin;
 }
 
 // @ 0x00c01ce0
@@ -779,3 +1360,29 @@ void FUN_00c024f0(ISerializableObject* object, LaneRecVec* vec)
     }
     object->Close();
 }
+
+// @ 0x013342f0
+namespace Simulator {
+void InitCommunityAttributes()
+{
+#undef DECL_FAMILY  // the callback names below come from the slice's macro block
+    ADD_TO(cCommunity_sAttributes, 0, "mCommunitySize", 0x03223734, 0x38,
+           Read_00572810_s, Write_00572840_s, ReadText_00692ff0_s, WriteText_00694ee0,
+           Validate_00b1fbf0_s, ToXml_0057cde0)
+    ADD_TO(cCommunity_sAttributes, 1, "mAssemblyBubbles", 0x03223735, 0x70,
+           Read_00c01ce0, Write_00c006a0, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00c00740, ToXml_00c51440)
+    ADD_TO(cCommunity_sAttributes, 2, "mLanes", 0x03223736, 0x84,
+           Read_00c024f0, Write_00c00780, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00c00810, ToXml_00f29650)
+    ADD_TO(cCommunity_sAttributes, 3, "mName", 0x042c8cee, 0xf8,
+           Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10,
+           Validate_00b1fbf0_s, ToXml_00acbbc0)
+    ADD_TO(cCommunity_sAttributes, 4, "mDescription", 0x042e213c, 0x108,
+           Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10,
+           Validate_00b1fbf0_s, ToXml_00acbbc0)
+    ADD_TO(cCommunity_sAttributes, 5, "mpLeader", 0x04bd34fb, 0x11c,
+           Read_00b02540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0,
+           Validate_00b6f550, ToXml_00ac8050)
+}
+}  // namespace Simulator

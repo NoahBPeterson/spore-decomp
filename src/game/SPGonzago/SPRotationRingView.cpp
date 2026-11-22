@@ -17,7 +17,17 @@ extern "C" char g_1486b1c[];
 #include <string.h>
 
 // ---- items of slice s00e90e00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_defR;            // 0x016c5a60
+extern float g_defG;            // 0x016c5a64
+extern float g_defB;            // 0x016c5a68
+extern float g_k13ebc68;        // 0x013ebc68  (1.0f)
 struct V3 { float x, y, z; };
+uint32_t __cdecl FNVHash(const char* s, uint32_t seed, int lowercase);   // 0x00932e80
+static inline uint32_t id(const char* s) { return FNVHash(s, 0x811c9dc5, 1); }
+float __cdecl GetPropertyF(uint32_t group, int a, uint32_t prop, float def);  // 0x00bcea30
+void* __cdecl operator_new_sp(unsigned int size, const char* pName,
+                              int a, int b, int c, int d);              // 0x00f473a0
+void* __cdecl FUN_00b3d520();                                       // 0x00b3d520
 void* __cdecl FUN_0067de30();                                       // 0x0067de30
 void  __cdecl FUN_006bb5e0();                                       // 0x006bb5e0
 void  __cdecl FUN_006bb600();                                       // 0x006bb600
@@ -90,19 +100,68 @@ public:
     uint32_t mAnimID;                           // +0x18
     int      mLifeTimer;                        // +0x1c
 };
+class cSpatialObjectView {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void* v28(void*, void*);            // +0x28
+    virtual cModel* GetModel();                 // +0x2c
+    virtual void* GetTransform();               // +0x30
+
+    __declspec(noinline) void BaseInit();       // mirrors ctor 0x00e92af0
+
+    void  HandleSimulationUpdate(int a, int b); // 0x00e92ca0
+    void  OnDamageStateChanged(int a, int b);   // 0x00e93160
+
+    void  Update_90e00(int a, int b);           // 0x00e90e00
+    cSpatialObjectView* MakeView_91060(void* gamedata);  // 0x00e91060
+    cSpatialObjectView* MakeView_911f0(void* gamedata);  // 0x00e911f0
+    cViewA* MakeView_91990(void* gamedata);              // 0x00e91990
+
+    cSpatialObject* mpObject;                   // +0x0c
+    void*    mpObjectCombatant;                 // +0x10
+    uint8_t  mField14;                          // +0x14
+    char     pad_15[3];
+    V3       mColor;                            // +0x18
+};
+void cSpatialObjectView::BaseInit()
+{
+    uint32_t z = 0;
+    *(uint32_t*)((char*)this + 8) = z;
+    *(uint32_t*)((char*)this + 4) = z;
+    *(void**)this = (void*)0x1486c00;
+    mpObject = 0;
+    mpObjectCombatant = 0;
+    mField14 = 0;
+    mColor.x = g_defR;
+    mColor.y = g_defG;
+    mColor.z = g_defB;
+    *(uint32_t*)((char*)this + 0x24) = z;
+    *(uint32_t*)((char*)this + 0x28) = z;
+    *(uint32_t*)((char*)this + 0x2c) = z;
+    *(uint8_t*)((char*)this + 0x30) = 0;
+    *(uint8_t*)((char*)this + 0x31) = 0;
+    *(uint8_t*)((char*)this + 0x32) = 0;
+}
 // ---- items of slice s00e90e00 end
 
 // ---- items of slice s00e91ce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Matrix33 { float m[9]; };
-uint32_t __cdecl FNVHash(const char* s, uint32_t seed, int lowercase);   // 0x00932e80
+
 uint32_t __cdecl SPIDFromName(const char* name);                        // 0x00571cf0
-static inline uint32_t id(const char* s) { return FNVHash(s, 0x811c9dc5, 1); }
-float __cdecl GetPropertyF(uint32_t group, int a, uint32_t prop, float def);  // 0x00bcea30
+
 V3* __cdecl GetPropertyV3a(V3* out, uint32_t group, int a, uint32_t prop, V3 def); // 0x00e91410
 V3* __cdecl GetPropertyV3b(V3* out, uint32_t group, int a, uint32_t prop, V3 def); // 0x00e914f0
 int __cdecl GetPropertyI(uint32_t group, int a, uint32_t prop, int def);      // 0x00bda3b0
-void* __cdecl operator_new_sp(unsigned int size, const char* pName,
-                              int a, int b, int c, int d);               // 0x00f473a0
+
 void* __cdecl GonzagoModelWorld();                                       // 0x00b3d520
 void* __cdecl GetCurrentGameMode();                                      // 0x00b5b800
 void  Matrix3Assign(void* dst, const void* src);                         // 0x0041cb40
@@ -305,6 +364,102 @@ cViewA::~cViewA()
     if (o != 0)
         ((void(__thiscall*)(void*))VF(o, 4))(o);
     *(void**)this = (void*)g_1455648;
+}
+
+// @ 0x00e916a0
+void cViewA::Update_916a0(int a, int b)
+{
+    cSpatialObject* o = mpObject;
+    if (o == 0)
+        return;
+    if (((uint8_t(__thiscall*)(void*))VF(o, 0x58))(o) == 0) {
+        mModel->mFlags &= 0xfffffffeu;
+        mField18 = 0;
+        (void)a;
+        (void)b;
+        return;
+    }
+    mModel->mFlags |= 1;
+
+    uint32_t p1 = id((const char*)0x1486ae4);
+    uint32_t p0 = id((const char*)0x146868c);
+    float fv = GetPropertyF(p0, 0, p1, g_k13ebc68);
+    (void)fv;
+
+    float colr = g_defR;
+    float colg = g_defG;
+    float colb = g_defB;
+    uint32_t p2 = id((const char*)0x1486acc);
+    V3 c;
+    c.x = colr;
+    c.y = colg;
+    c.z = colb;
+    GetPropertyV3a(&c, p2, 0, p0, c);
+    (void)c;
+
+    void* o2 = mpObject;
+    void* sub = (char*)o2 + 0x34;
+    void* pos = ((void*(__thiscall*)(void*))VF(sub, 0x2c))(sub);
+    float x = ((float*)pos)[0];
+    float y = ((float*)pos)[1];
+    float z = ((float*)pos)[2];
+    (void)x; (void)y; (void)z;
+    (void)a; (void)b;
+}
+
+// @ 0x00e91990
+cViewA* cSpatialObjectView::MakeView_91990(void* gamedata)
+{
+    cViewA* v = (cViewA*)operator_new_sp(0x1c, "Simulator/cViewA", 0, 0, 0, 0);
+    if (v != 0) {
+        v->mField08 = 0;
+        v->mField04 = 0;
+        *(void**)v = (void*)0x1486a80;
+        v->mpObject = 0;
+        v->mpField10 = 0;
+        v->mModel = 0;
+        v->mField18 = 0;
+    } else {
+        v = 0;
+    }
+
+    void* old = v->mpField10;
+    if (gamedata != old) {
+        if (gamedata != 0)
+            ((void(__thiscall*)(void*))VF(gamedata, 0))(gamedata);
+        v->mpField10 = gamedata;
+        if (old != 0)
+            ((void(__thiscall*)(void*))VF(old, 4))(old);
+    }
+    if (gamedata == 0)
+        return v;
+
+    void* o = ((void*(__thiscall*)(void*, uint32_t))VF(gamedata, 0xc))(gamedata, 0x7292112);
+    if (o == 0)
+        return v;
+
+    cSpatialObject* old2 = v->mpObject;
+    if (o != old2) {
+        ((void(__thiscall*)(void*))VF(o, 0))(o);
+        v->mpObject = (cSpatialObject*)o;
+        if (old2 != 0)
+            ((void(__thiscall*)(void*))VF(old2, 4))(old2);
+    }
+
+    void* world = FUN_00b3d520();
+    void* wf = ((void*(__thiscall*)(void*, const char*))VF(world, 0x58))(world, "$");
+    (void)wf;
+
+    // update transform + flags
+    cSpatialObject* ob = v->mpObject;
+    o = ((void*(__thiscall*)(void*))VF(o, 0x68))(o);
+    uint32_t bb = *(uint32_t*)o;
+    void* sub = (char*)ob + 0x34;
+    ((void(__thiscall*)(void*, void*, uint32_t))VF(sub, 0x58))(sub, ob, bb);
+    uint32_t* mfl = (uint32_t*)((char*)v->mpObject);
+    (void)mfl;
+
+    return v;
 }
 
 // @ 0x00e91ba0

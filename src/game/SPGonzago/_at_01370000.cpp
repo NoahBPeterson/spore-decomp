@@ -117,6 +117,32 @@ extern float gAngleScale;   // 0x016b3c3c
 
 #pragma warning(disable: 4100)
 
+// ---- items of slice s0137e810 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_016b0c3cVtable[];            // 0x1482dfc
+extern "C" void Func013c7d70();             // 0x13c7d70
+struct InitObj {
+    void** m_vtable;            // 0x00
+    void* m_field04;            // 0x04
+    void* m_field08;            // 0x08
+
+    void Init();
+};
+extern InitObj g_016b0c3c;                  // 0x16b0c3c
+// ---- items of slice s0137e810 end
+
+// ---- items of slice s0137ea70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_f_015a7b98;   // 0x015a7b98
+extern float g_f_016b39cc;   // 0x016b39cc
+// ---- items of slice s0137ea70 end
+
+// ---- items of slice s0137ea90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_16b39cc;   // 0x016b39cc
+extern const float g_15a7b88;   // 0x015a7b88
+extern const float g_140f334;   // 0x0140f334
+extern const float g_140f32c;   // 0x0140f32c
+extern float g_16b39d0;         // 0x016b39d0
+// ---- items of slice s0137ea90 end
+
 // @ 0x01370490
 void init_15a51bc()
 {
@@ -259,6 +285,27 @@ void __declspec(noinline) InitLineColorBorder()
     gLineColorBorder.mA = fA;
 
     atexit((void (__cdecl*)(void))FUN_013c7ac0);
+}
+
+// @ 0x0137e810
+void InitObject()
+{
+    g_016b0c3c.Init();
+    g_016b0c3c.m_vtable = g_016b0c3cVtable;
+    atexit(Func013c7d70);
+}
+
+// @ 0x0137ea70
+void FUN_0137ea70()
+{
+    float v = g_f_015a7b98;
+    g_f_016b39cc = v * v * v;
+}
+
+// @ 0x0137ea90
+void FUN_0137ea90()
+{
+    g_16b39d0 = g_140f32c / (g_16b39cc * g_15a7b88 * g_140f334);
 }
 
 // @ 0x0137ec20

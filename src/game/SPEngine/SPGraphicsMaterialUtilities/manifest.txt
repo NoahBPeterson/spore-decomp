@@ -1,2 +1,5 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPGraphicsMaterialUtilities.cpp  ?ForwardToMaterialManager@@YAXIII@Z  00713e20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialUtilities.cpp  ?RegisterInvalidShader@SP@@YAXXZ  00713f20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialUtilities.cpp  ?Init@Adapter20@@QAEPAXXZ  00713f90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialUtilities.cpp  ??1AdapterBaseView_713fd0@@QAE@XZ  00713fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

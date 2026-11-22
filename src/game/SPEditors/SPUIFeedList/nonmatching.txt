@@ -2,7 +2,10 @@
 00662a40 56 indexed element search; cl CSEs the recomputed vector size, original reloads mEnd each step
 00662b40 180 mouse-focus clamp; x87/SSE float schedule differs (behavior and calls match)
 00662c70 191 object-based clamp; float schedule and temp slots differ (behavior and calls match)
-00662d70 220 cSPUIFeedList::Update - complete, scroll frame/asset-browser path not byte-exact
-00662ea0 320 cSPUIFeedList::DoMessage - complete, message branches not byte-exact
-00663040 83 cSPUIFeedList ctor - complete, only xor ecx hoisted before two volatile vtable stores
-006631c0 306 cSPUIFeedList::UpdateScrolling - complete, float scroll clamp schedule differs
+00662d70 257 cSPUIFeedList::Update - complete, scroll frame/asset-browser path not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE2
+00662ea0 365 cSPUIFeedList::DoMessage - complete, message branches not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE2
+00663040 4 cSPUIFeedList ctor - complete, only xor ecx hoisted before two volatile vtable stores flags: /O2 /MD /Gy /TP /arch:SSE2
+006631c0 318 cSPUIFeedList::UpdateScrolling - complete, float scroll clamp schedule differs flags: /O2 /MD /Gy /TP /arch:SSE2
+00663350 180 FUN_00663350 - complete, layout/scroll layout passes not byte-exact; equiv: WEAK (21.4% coverage, 796 valid) after member-function ecx fix flags: /O2 /MD /Gy /TP /arch:SSE2
+00663860 361 cSPUIFeedList::ReloadCallback - complete: parent/root AutoRefCount assignments, root-window and scroll-frame creation (UTFWin::Window alloc + ctor + cConnectionDialog + layout Init/SetParentWin/SetReloadCallback), property-config query, message-handler registration loop; /O2 regalloc/ordering differ. flags /O2 /MD /Gy /TP /arch:SSE2 [equiv: UNSUPPORTED 0/400 valid (harness cannot synthesize a valid cSPUILayout)]
+00663a90 127 cSPUIFeedListHandler::Msg (message handler) - complete; branches 0x044DB12E->FUN_006634d0, 0x053DD093->FUN_006629e0, 0xB3D53F95->GetSetting4 gate + FUN_006629a0/FUN_00662960 -> FUN_00662c10; ecx/ABI correct, but MSVC picks a callee-saved frame for `this` where the original kept it in the unallocated ecx (32 extra bytes). flags /O2 /MD /Gy /TP /arch:SSE2 [equiv: PASS 398/400 valid, 88.1% coverage]

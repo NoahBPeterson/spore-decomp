@@ -4432,6 +4432,16 @@ SP::cActionCircle_s00af_9aa0::tSlot* SP::cActionCircle_s00af_9aa0::tSlot::CopyCo
   return this;
 }
 
+// @ 0x00afa230
+SP::cActionCircle_s00af_9aa0::tSlot* SP::cActionCircle_s00af_9aa0::tSlot::Assign(const tSlot* src)
+{
+  mOccupied = src->mOccupied;
+  mpReservingNoun = src->mpReservingNoun.mpObject;
+  mReservingId = src->mReservingId;
+  mPos = src->mPos;
+  return this;
+}
+
 // @ 0x00afa290
 void FUN_00afa290(EA::AutoRefCount_s00af_9aa0<SP::cInteractionAgent_s00af_9aa0>* first, EA::AutoRefCount_s00af_9aa0<SP::cInteractionAgent_s00af_9aa0>* last, eastl::AgentDistanceCompare cmp)
 {
@@ -4457,6 +4467,28 @@ SP::cActionCircle_s00af_9aa0::tSlot* FUN_00afa380(SP::cActionCircle_s00af_9aa0::
     dst->CopyConstruct(first);
     first++;
     dst++;
+  }
+  return dst;
+}
+
+// @ 0x00afa430
+SP::cActionCircle_s00af_9aa0::tSlot* FUN_00afa430(SP::cActionCircle_s00af_9aa0::tSlot* first, SP::cActionCircle_s00af_9aa0::tSlot* last, SP::cActionCircle_s00af_9aa0::tSlot* dst)
+{
+  while (first != last) {
+    dst->Assign(first);
+    first++;
+    dst++;
+  }
+  return dst;
+}
+
+// @ 0x00afa4a0
+SP::cActionCircle_s00af_9aa0::tSlot* FUN_00afa4a0(SP::cActionCircle_s00af_9aa0::tSlot* first, SP::cActionCircle_s00af_9aa0::tSlot* last, SP::cActionCircle_s00af_9aa0::tSlot* dst)
+{
+  while (last != first) {
+    last--;
+    dst--;
+    dst->Assign(last);
   }
   return dst;
 }

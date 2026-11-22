@@ -1111,6 +1111,7 @@ extern float g_m1e6;   // 0x013ef654 = -1000000.0f
 extern float g_08;     // 0x015514a0 = 0.8f
 extern float g_h05;    // 0x015514a4 = 0.5f
 extern float g_09;     // 0x015514a8 = 0.9f
+#pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int uint;
 struct Inner70 { char pad[0x70]; float c; };
 struct SA_s009c_fd40 {

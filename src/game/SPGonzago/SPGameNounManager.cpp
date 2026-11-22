@@ -591,6 +591,8 @@ struct StaticNounVec : NounVec {
     ~StaticNounVec();   // 0x00ae6970
 };
 struct IMapFn { char d[0x1c]; void __thiscall Fn(void* other); };   // Fn: 0x00b21da0
+// The slice's template argument type follows from the class header: mapB (0xb4) is a second
+// eastl::map<unsigned,tGameDataVector*>; mapA (0x98) is the helper with Fn (0xb21da0).
 struct cGameNounManager {
     char pad0[0x58];
     ARC<cNoun> mAvatarHerd;          // +0x58
@@ -599,7 +601,7 @@ struct cGameNounManager {
     NounVec mTempNouns;              // +0x80
     char pad8c[0xc];
     IMapFn mapA;                     // +0x98
-    char mapB[0x10];                 // +0xb4
+    eastl::map<unsigned, void*> mapB;  // +0xb4
     char padc4[0x48];
     ListNode mPending;               // +0x10c
 
@@ -2782,6 +2784,48 @@ cVehicleGroupOrder::cVehicleGroupOrder()
     f7c = 0; f80 = 0; f84 = 0;
 }
 
+// ---- stubs for 0xb22180 cVGOImpl::DtorBody (slice s00b21e60, no canonical class) ----
+struct Elem178 { char d[0x178]; void __thiscall Dtor(); };
+struct StarVec { int a, b, c; ~StarVec(); };
+struct TreeNuke {
+    int pad; RBNode anchor; uint size;
+    void __thiscall Nuke(RBNode* root);
+    ~TreeNuke() { Nuke(anchor.mpNodeParent); }
+};
+// The slice's own cGameData view (two polymorphic bases, 0x34 bytes); the module's cGameData has a
+// different vtable, and DtorBody's base-destructor call and member offsets follow this one.
+struct GDBase0 { virtual void g0(); };
+struct GDBase1 { virtual void g1(); };
+struct cVGOData : GDBase0, GDBase1 {
+    char pad[0x2c];
+    virtual ~cVGOData();
+};
+struct cVGOImpl : cVGOData {
+    TreeNuke tree;             // +0x34
+    char pad4c[4];
+    StarVec stars;             // +0x50
+    char pad5c[8];
+    IRefCount* arc64;          // +0x64
+    char pad68[0x14];
+    Elem178* begin7c;
+    Elem178* end80;
+    void __thiscall DtorBody();
+};
+
+// @ 0x00b22180
+void __thiscall cVGOImpl::DtorBody()
+{
+    Elem178* last = end80;
+    Elem178* e = begin7c;
+    for (; e < last; e++) e->Dtor();
+    if (begin7c && ((int*)begin7c)[-1]) operator_delete__(begin7c);
+    IRefCount* a = arc64;
+    if (a) a->Release();
+    stars.~StarVec();
+    tree.~TreeNuke();
+    this->cVGOData::~cVGOData();
+}
+
 // @ 0x00b222a0
 void ValidateClassSets()
 {
@@ -2827,7 +2871,7 @@ void __fastcall PaintSystem_DtorBody(void* self)
 void __thiscall cGameNounManager::Dummy225b0()
 {
     FlushTemp();
-    mapA.Fn(mapB);
+    mapA.Fn(&mapB);
 }
 
 // @ 0x00b225d0
@@ -2952,7 +2996,7 @@ void __thiscall cGNM2::ProcessPending()
 void __thiscall cGameNounManager::Cleanup()
 {
     FlushTemp();
-    mapA.Fn(mapB);
+    mapA.Fn(&mapB);
     cNoun* it = cNoun::FromNode(mNouns.next);
     cNoun* last = cNoun::FromNode(&mNouns);
     RawVec v = { 0, 0, 0 };
@@ -3963,3 +4007,261 @@ void cTimelineModeStarter::FUN_00b26710()
     SetModeArgument(&g_modeArg);
     g_uiModeToken = 6;
 }
+
+// ---- 0x0131ad80 InitGameNounManagerExAttributes (slice s01318c70; the module preamble lacks its Attribute/macro block) ----
+typedef eastl::string8 str8_s0131_8c70;
+namespace Simulator {
+
+class ISerializerReadStream;
+class ISerializerWriteStream;
+struct Attribute;
+
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+typedef void  (*ReadTextFunction_t)(const str8_s0131_8c70&, void*);
+typedef void  (*WriteTextFunction_t)(char*, void*);
+typedef bool  (*ValidateFunction_t)();
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+typedef void* (*OffsetFunction_t)(Attribute*);
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+void* StaticOffset(Attribute* pAttr);    // 0x011874d0: (void*)pAttr->offset (class statics)
+
+struct Attribute
+{
+    Attribute() {}
+
+    // Member attribute: offset is relative to the current object.
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Static attribute: the offset field holds the static's address; no ToXml callback.
+    Attribute(const char* pName, uint32_t nID, void* pStatic,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = 0;
+        offsetFunction = StaticOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = 0;
+        offset = (uint32_t)pStatic;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+
+// Per-type template instances (folded by the linker to one address each).
+template<typename T> bool Read4(ISerializerReadStream* pStream, void* pData);     // 0x00572810
+template<typename T> bool Write4(ISerializerWriteStream* pStream, void* pData);   // 0x00572840
+template<typename T> void ReadTextInt(const str8_s0131_8c70& text, void* pData);          // 0x00693090
+template<typename T> bool AlwaysValid();                                          // 0x00b1fbf0
+
+// Per-record callback instances used only by the game-data snapshot table (0x0131b210).
+// The original compiler materialises every one of these callbacks as an immediate on each
+// record instead of caching it in a callee-saved register, so each occurrence is given its
+// own symbol (the addresses are identical in the original and are masked on both sides).
+template<int N> bool Read4i(ISerializerReadStream* pStream, void* pData);
+template<int N> bool Write4i(ISerializerWriteStream* pStream, void* pData);
+template<int N> void ReadTexti(const str8_s0131_8c70& text, void* pData);
+template<int N> void WriteTexti(char* pBuffer, void* pData);
+template<int N> bool AlwaysValidi();
+template<int N> bool ToXmli(void* pData, const char* pName, int depth);
+
+// Read callbacks.
+bool Read_00b00430(ISerializerReadStream* pStream, void* pData);
+bool Read_00b05de0(ISerializerReadStream* pStream, void* pData);
+bool Read_00b05ec0(ISerializerReadStream* pStream, void* pData);
+bool Read_00b05fa0(ISerializerReadStream* pStream, void* pData);
+bool Read_00b0c730(ISerializerReadStream* pStream, void* pData);
+bool Read_00b20510(ISerializerReadStream* pStream, void* pData);
+bool Read_00b20540(ISerializerReadStream* pStream, void* pData);
+bool Read_00b20570(ISerializerReadStream* pStream, void* pData);
+bool Read_00b21e60(ISerializerReadStream* pStream, void* pData);
+bool Read_00b26970(ISerializerReadStream* pStream, void* pData);
+bool Read_00b1fbf0(ISerializerReadStream* pStream, void* pData);
+bool Read_00aca060(ISerializerReadStream* pStream, void* pData);
+bool Read_00aca090(ISerializerReadStream* pStream, void* pData);
+bool Read_00acdf10(ISerializerReadStream* pStream, void* pData);
+bool Read_00ac8750(ISerializerReadStream* pStream, void* pData);
+bool Read_00ae3430(ISerializerReadStream* pStream, void* pData);
+bool Read_00bab620(ISerializerReadStream* pStream, void* pData);
+
+// Write callbacks.
+bool Write_00b02570(ISerializerWriteStream* pStream, void* pData);
+bool Write_00b02630(ISerializerWriteStream* pStream, void* pData);
+bool Write_00b035b0(ISerializerWriteStream* pStream, void* pData);
+bool Write_00b26990(ISerializerWriteStream* pStream, void* pData);
+bool Write_00b1fbf0(ISerializerWriteStream* pStream, void* pData);
+bool Write_00aca730(ISerializerWriteStream* pStream, void* pData);
+bool Write_00ba7590(ISerializerWriteStream* pStream, void* pData);
+bool Write_00ba94e0(ISerializerWriteStream* pStream, void* pData);
+bool Write_00bca960(ISerializerWriteStream* pStream, void* pData);
+bool Write_00ac8780(ISerializerWriteStream* pStream, void* pData);
+bool Write_00ae3450(ISerializerWriteStream* pStream, void* pData);
+
+// ReadText callbacks.
+void ReadText_00692ff0(const str8_s0131_8c70& text, void* pData);
+void ReadText_00693150(const str8_s0131_8c70& text, void* pData);
+void ReadText_00c2e4e0(const str8_s0131_8c70& text, void* pData);
+
+// WriteText callbacks.
+void WriteText_00692fb0(char* pBuffer, void* pData);
+void WriteText_00694ee0(char* pBuffer, void* pData);
+void WriteText_00694f00(char* pBuffer, void* pData);
+void WriteText_00694fa0(char* pBuffer, void* pData);
+void WriteText_00695080(char* pBuffer, void* pData);
+
+// Validate callbacks.
+bool Validate_00b6f550();
+bool Validate_00b6f860();
+bool Validate_00b004e0();
+bool Validate_00b00520();
+bool Validate_00b20230();
+bool Validate_00ba7450();
+bool Validate_00d011e0();
+
+// ToXml callbacks.
+bool ToXml_0057cde0(void* pData, const char* pName, int depth);
+bool ToXml_0057ce00(void* pData, const char* pName, int depth);
+bool ToXml_00675ca0(void* pData, const char* pName, int depth);
+bool ToXml_00ac8050(void* pData, const char* pName, int depth);
+bool ToXml_00ae5720(void* pData, const char* pName, int depth);
+bool ToXml_00c6c390(void* pData, const char* pName, int depth);
+bool ToXml_00d022e0(void* pData, const char* pName, int depth);
+bool ToXml_00b04120(void* pData, const char* pName, int depth);
+bool ToXml_00baa2b0(void* pData, const char* pName, int depth);
+bool ToXml_00fe4be0(void* pData, const char* pName, int depth);
+
+// SetDefault callbacks.
+void SetDefault_00b269b0(Attribute* pAttr);
+void SetDefault_00b269d0(Attribute* pAttr);
+
+struct AttrSlot { uint32_t d[15]; };
+
+extern AttrSlot FruitMgr_sAttributes[10];              // 0x01567a80
+extern AttrSlot GameData_sAttributes[5];               // 0x01567e48
+extern AttrSlot GameNounManager_sAttributes[7];        // 0x015685a8
+extern AttrSlot GameNounManagerEx_sAttributes[8];      // 0x01568788
+extern AttrSlot GameSnapshot_sAttributes[7];           // 0x01568b08
+
+// Class static registered by the cGameNounManager table.
+extern int GameData_sInstanceIDGenerator;              // 0x0167be28
+
+#define INT_ATTR      Read4<int>, Write4<int>, ReadText_00692ff0, WriteText_00694ee0, AlwaysValid<int>, ToXml_0057cde0
+#define SHORT_ATTR    Read4<short>, Write4<short>, ReadTextInt<short>, WriteText_00694f00, AlwaysValid<short>, ToXml_00675ca0
+#define BOOL_ATTR     Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00
+#define STATIC_INT_ATTR  Read4<int>, Write4<int>, ReadTextInt<int>, WriteText_00694f00, AlwaysValid<int>
+
+#define FLAGS_ATTR    Read_00b00430, Write_00b02570, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_00ac8050
+#define TREE_OBJ_ATTR Read_00b05de0, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f860, ToXml_00c6c390
+#define TREE_OBJ2_ATTR Read_00b05ec0, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f860, ToXml_00c6c390
+#define MULTIMAP_ATTR Read_00b05fa0, Write_00b035b0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b004e0, ToXml_00d022e0
+#define CLUMP_ATTR    Read_00b0c730, Write_00b02630, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b00520, ToXml_00b04120
+#define OWNER_ATTR    Read_00aca060, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050
+#define AVATAR_ATTR   Read_00b20510, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050
+#define AVATARHERD_ATTR Read_00b20540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050
+#define PTRIBE_ATTR   Read_00aca090, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050
+#define PPLAYER_ATTR  Read_00b20570, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050
+#define POSSE_ATTR    Read_00acdf10, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f860, ToXml_00c6c390
+#define POLMAP_ATTR   Read_00b21e60, Write_00ba94e0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00ba7450, ToXml_00baa2b0
+#define NOUNS_ATTR    Read_00b1fbf0, Write_00b1fbf0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b20230, ToXml_00ac8050
+#define OBJCOUNT_ATTR Read_00bab620, Write_00ba7590, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00d011e0, ToXml_00fe4be0
+#define TIMESTAMP_ATTR Read_00b26970, Write_00b26990, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_00ac8050
+#define PLANETKEY_ATTR Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<int>, ToXml_00ae5720
+
+#define ADD_FRUIT(IDX, ...)    { Attribute a(__VA_ARGS__); *(Attribute*)&FruitMgr_sAttributes[IDX] = a; }
+#define ADD_GAMEDATA(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&GameData_sAttributes[IDX] = a; }
+#define ADD_GNM(IDX, ...)      { Attribute a(__VA_ARGS__); *(Attribute*)&GameNounManager_sAttributes[IDX] = a; }
+#define ADD_GNMX(IDX, ...)     { Attribute a(__VA_ARGS__); *(Attribute*)&GameNounManagerEx_sAttributes[IDX] = a; }
+#define ADD_SNAP(IDX, ...)     { Attribute a(__VA_ARGS__); *(Attribute*)&GameSnapshot_sAttributes[IDX] = a; }
+
+// @ 0x01318c70
+void InitFruitManagerAttributes()
+{
+    ADD_FRUIT(0, "mFlags", 0x3fe80a6, 0x1ba18c, FLAGS_ATTR)
+    ADD_FRUIT(1, "mFruitPickMethod", 0x3fe820a, 0x1b8e10, INT_ATTR)
+    ADD_FRUIT(2, "mPickableTreeFruit", 0x3fe823c, 0x1b8e14, TREE_OBJ_ATTR)
+    ADD_FRUIT(3, "mFruitPool", 0x3fe8263, 0x1b8f44, TREE_OBJ_ATTR)
+    ADD_FRUIT(4, "mFruitGroupPool", 0x5879e4a, 0x1b9174, TREE_OBJ2_ATTR)
+    ADD_FRUIT(5, "mActiveOnGroundFruit", 0x42b920f, 0x1b905c, TREE_OBJ_ATTR)
+    ADD_FRUIT(6, "mFruitGroupMultiMap", 0x4bda148, 0x34, MULTIMAP_ATTR)
+    ADD_FRUIT(7, "mRemovedFruitGroupMultiMap", 0x4bda14a, 0x165a0, MULTIMAP_ATTR)
+    ADD_FRUIT(8, "mTreePickTypes", 0x5ac78a8, 0x1659c, SHORT_ATTR)
+    ADD_FRUIT(9, "mTreeClumpDataMap", 0x626e1fc, 0x1e5f0, CLUMP_ATTR)
+}
+
+// @ 0x013194a0
+void InitGameDataAttributes()
+{
+    ADD_GAMEDATA(0, "mpGameDataOwner", 0x240e421, 0x2c, OWNER_ATTR)
+    ADD_GAMEDATA(1, "mIsDestroyed", 0x240e422, 0x21, BOOL_ATTR)
+    ADD_GAMEDATA(2, "mPoliticalID", 0x240e423, 0x30, SHORT_ATTR)
+    ADD_GAMEDATA(3, "mDefinitionID", 0x2e9efd3, 0x28, SHORT_ATTR)
+    ADD_GAMEDATA(4, "mID", 0x3cdd54b, 0x24, SHORT_ATTR)
+}
+
+// @ 0x0131aac0
+void InitGameNounManagerAttributes()
+{
+    ADD_GNM(0, "mAvatar", 0x222ceb7, 0x54, AVATAR_ATTR)
+    ADD_GNM(1, "mAvatarHerd", 0x52aea77b, 0x58, AVATARHERD_ATTR)
+    ADD_GNM(2, "mPosseMembers", 0xd26a1d6f, 0x5c, POSSE_ATTR)
+    ADD_GNM(3, "mpPlayerTribe", 0x222ceb9, 0x70, PTRIBE_ATTR)
+    ADD_GNM(4, "mpPlayer", 0x2c215c5, 0x74, PPLAYER_ATTR)
+    ADD_GNM(5, "mPoliticalMap", 0x2cb7255, 0xd0, POLMAP_ATTR)
+    ADD_GNM(6, "cGameData::sInstanceIDGenerator", 0x3cdd5c7, &GameData_sInstanceIDGenerator, STATIC_INT_ATTR)
+}
+
+// @ 0x0131ad80
+void InitGameNounManagerExAttributes()
+{
+    ADD_GNMX(0, "mNouns", 0x222cbfa, 0x78, NOUNS_ATTR)
+    ADD_GNMX(1, "mAvatar", 0x222ceb7, 0x54, AVATAR_ATTR)
+    ADD_GNMX(2, "mAvatarHerd", 0x52aea77b, 0x58, AVATARHERD_ATTR)
+    ADD_GNMX(3, "mPosseMembers", 0xd26a1d6f, 0x5c, POSSE_ATTR)
+    ADD_GNMX(4, "mpPlayerTribe", 0x222ceb9, 0x70, PTRIBE_ATTR)
+    ADD_GNMX(5, "mpPlayer", 0x2c215c5, 0x74, PPLAYER_ATTR)
+    ADD_GNMX(6, "mPoliticalMap", 0x2cb7255, 0xd0, POLMAP_ATTR)
+    ADD_GNMX(7, "cGameData::sInstanceIDGenerator", 0x3cdd5c7, &GameData_sInstanceIDGenerator, STATIC_INT_ATTR)
+}
+}  // namespace Simulator

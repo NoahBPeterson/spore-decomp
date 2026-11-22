@@ -4,3 +4,6 @@
 ../src/game/SPAudio/SPAudioMixModeManager.cpp  ?IsModeActive@cMixModeManager_s00ea_8f90@Audio@SP@@QAE_NI@Z  00ea9ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioMixModeManager.cpp  ?find@MessageModeMap_s00ea_8f90@Audio@SP@@QBEPAUKeyModePair_s00ea_8f90@23@ABI@Z  00ea9bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
   ../src/game/SPAudio/SPAudioMixModeManager.cpp  ?scalar_deleting_destructor@cFactoryMixMode_s00ea_8f90@Audio@SP@@QAEPAXE@Z  00ea9c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixModeManager.cpp  ??0cSummaryHandler@SP@@QAE@XZ  00eaa7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixModeManager.cpp  ?Destroy@cSummaryHandler@SP@@QAEXXZ  00eaa850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixModeManager.cpp  ??AKeyModeMap@SP@@QAEPAIABI@Z  00eaa910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

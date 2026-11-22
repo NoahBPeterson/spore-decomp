@@ -4,3 +4,5 @@
 ../src/game/SPAudio/SPAudioSound.cpp  ?StopThunk@cSound@Audio@SP@@QAEXHD@Z  00a41a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSound.cpp  ?SetPropertyInternal@cSound@Audio@SP@@QAEXHMH@Z  00a41a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSound.cpp  ?ConfigureSound@cSound@Audio@SP@@QAEEXZ  00a41b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSound.cpp  ?ComputeGainAttenuation@cSound_s00a4_1c40@Audio@SP@@QAEMMMMMM@Z  00a41c40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSound.cpp  ?CommitAllProperties@cSound_s00a4_1c40@Audio@SP@@QAEXXZ  00a41d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

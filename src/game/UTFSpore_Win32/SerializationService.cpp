@@ -1,20 +1,32 @@
-// EA::UTFWinTools::SerializationService (Spui/SPUILayout.obj).
-//
-// The layout (mPlugins, mBinders, mErrorCallback, mpCallbackContext) comes from the generated header;
-// the retail class carries an 8-byte allocator word in each vector, so this file declares the class
-// with the raw eastl::vector members the compiler sees.
+// src/game/UTFSpore_Win32/SerializationService.cpp -- migrated from slice(s) s00999110 by tools/migrate/rewrite.py
+// Object file: UTFSpore_Win32/SerializationService.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
+// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/UTFWinTools/ISerAutoUpdate.h"
+#include "EA/ResourceMan/Key.h"
+#include "EA/ResourceMan/KeyFilter.h"
+#include "EA/UTFWinTools/SerCollection.h"
+#include "EA/UTFWinTools/SerScope.h"
 #include "EA/UTFWinTools/SerializationService.h"
-#include <string.h>
+#include "EA/Allocator/StackAllocator.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  operator_delete(void*) throw();   // 0x00f47380
-extern void** FUN_00b6f4f0(void*, void*, void*, void*);   // eastl::vector<T>::erase(first, last)
+extern void** FUN_00b6f4f0(void*, void*, void*, void*);
 extern "C" void* FUN_011e0744(void* dst, const void* src, unsigned n);   // memcpy thunk, returns dst
+#include <intrin.h>
+#include <string.h>
+#include <new>
+#pragma intrinsic(_InterlockedExchange)
 
+// ---- items of slice s00999110 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint;
-
+extern "C" void  operator_delete(void*) throw();   // 0x00f47380
+extern void** FUN_00b6f4f0(void*, void*, void*, void*);
+struct PluginVecRaw { void FUN_004b5440(); };   // eastl::vector<T*> dtor body, thiscall
+#define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
+extern "C" void* FUN_011e0744(void* dst, const void* src, unsigned n);   // memcpy thunk, returns dst
 struct IUnknown32 {
   virtual void AddRef();
   virtual void Release();
@@ -29,17 +41,7 @@ struct IUnknown32 {
   virtual void v28();
   virtual void v2c();
 };
-
-#define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
-
-// Interfaces SerializationService asks plugins for (EA::COM::InterfaceId values).
-#define IID_READER       0xafc46457u    // the reader Read() looks up on each plugin
-#define IID_DATA_BINDER  0x4fc56322u    // the binder AddPlugin/RemovePlugin collect
-#define kErrorNoPluginFound 0x4fc40001u // SerializationService::kErrorNoPluginFound
-
-// eastl::vector<IUnknown32*> (refcounted plugins): begin/end/cap + 8-byte allocator word.
-struct PluginVecRaw { void __thiscall FUN_004b5440(); };   // eastl::vector<IUnknown32*>::~vector
-struct SSPluginVec {
+struct SSPluginVec {        // eastl::vector<IUnknown32*> (refcounted plugins)
   void** mpBegin;
   void** mpEnd;
   void** mpCap;
@@ -47,9 +49,7 @@ struct SSPluginVec {
   SSPluginVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
   ~SSPluginVec() { ((PluginVecRaw*)this)->FUN_004b5440(); }
 };
-
-// Vector of binders: the buffer is freed only when its header word is set.
-struct SSBinderVec {
+struct SSBinderVec {        // vector of binders; buffer freed only when its header word is set
   void** mpBegin;
   void** mpEnd;
   void** mpCap;
@@ -59,7 +59,6 @@ struct SSBinderVec {
     if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0) operator_delete(mpBegin);
   }
 };
-
 struct SerializationService {
   virtual ~SerializationService();
   SSPluginVec mPlugins;     // +0x04 (begin/end/cap + 8-byte allocator)
@@ -67,13 +66,17 @@ struct SerializationService {
   void*  mErrorCallback;    // +0x2c
   void*  mpCallbackContext; // +0x30
   SerializationService();
-  uint   Read(uint a, uint b, uint c, uint d);
+  __declspec(noinline) void Callback(uint code) {
+    if (mErrorCallback)
+      ((void (__cdecl*)(uint, int, int, int, void*))mErrorCallback)
+        (code, 0, 0, 0, mpCallbackContext);
+  }
   void*  GetReader(void* arg);
+  uint   Read(uint a, uint b, uint c, uint d);
   void   AddPlugin(IUnknown32* obj);
   void   RemovePlugin(IUnknown32* obj);
   void   ClearAll();
 };
-
 struct RcVec {                       // eastl::vector<AutoRefCount<..>, sp_vector_allocator>
   void** b; void** e; void** c; char alloc[4];
   void __thiscall erase(void** first, void** last);   // 0xe25bd0
@@ -81,6 +84,8 @@ struct RcVec {                       // eastl::vector<AutoRefCount<..>, sp_vecto
 struct SpVec {                       // eastl::vector<T*, sp_vector_allocator>
   void** b; void** e; void** c; char alloc[4];
   void __thiscall DoInsertValue(void** pos, void** v);   // 0xa80dd0
+  void __thiscall swap(SpVec* o);                        // 0x811a20
+  void __thiscall insert_n(void** pos, uint n, void** value);   // 0x999dd0
   void push_back(void* v) {
     void** p = e;
     if (p < c) { e = p + 1; if (p) *p = v; }
@@ -95,19 +100,20 @@ struct SpVec {                       // eastl::vector<T*, sp_vector_allocator>
 struct RcVecIns {                    // eastl::vector<AutoRefCount<T>, sp_vector_allocator>
   void __thiscall DoInsertValue(void** pos, IUnknown32** v);   // 0x004b6000
 };
+// ---- items of slice s00999110 end
 
-// @ 0x009994a0  Read(IStream*, wchar_t const*, SerCollection&, uint)
+// @ 0x009994a0
 uint SerializationService::Read(uint a, uint b, uint c, uint d)
 {
   (void)d;
-  void* p = VF(this, 0x10, void*(__thiscall*)(void*, uint))(this, IID_READER);
+  void* p = VF(this, 0x10, void*(__thiscall*)(void*, uint))(this, 0xafc46457);
   if (p != 0)
     return VF(p, 0x10, uint(__thiscall*)(void*, uint, uint, uint, void*, void*, void*))
       (p, a, b, c, &mBinders.mpBegin, mErrorCallback, mpCallbackContext);
-  return kErrorNoPluginFound;
+  return 0x4fc40001;
 }
 
-// @ 0x009994f0  FindPluginImplementing(InterfaceId): the plugin that implements the interface
+// @ 0x009994f0
 void* SerializationService::GetReader(void* arg)
 {
   void* result = 0;
@@ -122,6 +128,10 @@ void* SerializationService::GetReader(void* arg)
   }
   return result;
 }
+
+// @ 0x00999520
+SerializationService::SerializationService()
+: mErrorCallback(0), mpCallbackContext(0) {}
 
 // @ 0x00999550
 SerializationService::~SerializationService()

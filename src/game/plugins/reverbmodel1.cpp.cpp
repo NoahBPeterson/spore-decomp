@@ -1,4 +1,4 @@
-// src/game/plugins/reverbmodel1.cpp.cpp -- migrated from slice(s) s011399e0 by tools/migrate/rewrite.py
+// src/game/plugins/reverbmodel1.cpp.cpp -- migrated from slice(s) s011388f0, s011399e0 by tools/migrate/rewrite.py
 // Object file: plugins/reverbmodel1.cpp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,8 +10,17 @@ extern "C" int  FUN_0114dca0(void*);                 // 0x0114dca0  cdecl, ret
 extern "C" double log2(double);
 #include <xmmintrin.h>
 #include <math.h>
+#include "rw/audio/core/DecoderRegistry.h"
+#include "rw/audio/core/PlugIn.h"
+#include "rw/audio/core/StreamPool.h"
+#include "rw/audio/core/SubMix.h"
+#include "rw/audio/core/System.h"
+#include "rw/audio/core/TimerHandle.h"
 
 // ---- items of slice s011399e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_revA[];              // 0x014b2374
+extern const float g_revB[];              // 0x014b232c
+extern "C" void* memset(void*, int, unsigned);       // 0x011e073e  msvcr90!memset
 typedef unsigned char u8;
 template <class T> static inline T& A(void* p, int off) { return *(T*)((char*)p + off); }
 namespace rw {
@@ -60,7 +69,7 @@ namespace rw {
 namespace audio {
 namespace core {
 struct RevObj {
-    void   F_9e0(int, float);        // 0x011399e0
+    int    F_9e0(int, float);        // 0x011399e0
     bool   F_d60(float*);            // 0x01139d60
     RevObj* F_e10();                 // 0x01139e10
     void   F_eb0();                  // 0x01139eb0
@@ -72,9 +81,124 @@ struct RevObj {
 }
 }
 }
-extern "C" int  FUN_0114dca0(void*);                 // 0x0114dca0  cdecl, ret
-extern "C" double log2(double);
 // ---- items of slice s011399e0 end
+
+// ---- items of slice s011388f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_tab014b23e0[];                // 0x014b23e0
+// ---- items of slice s011388f0 end
+
+// @ 0x01139920
+namespace rw { namespace audio { namespace core {
+int __stdcall FUN_01139920(float* src, int* out, float f)
+{
+    int i = 0;
+    out[5] = 0;
+    float* p = src;
+    int n = 6;
+    do {
+        float a, b;
+        if (f <= 48000.0f) { a = 1.0f; b = f; }
+        else { a = f * 2.0833333e-05f; b = 48000.0f; }
+        float lim = b * (*p * 0.002900232f);
+        for (; i < 0x674; i++) {
+            if (g_tab014b23e0[i] > lim) { *out = (int)g_tab014b23e0[i]; i++; break; }
+        }
+        if (a > 1.0f) *out = (int)((float)*out * a);
+        out++; p++;
+    } while (--n != 0);
+    return n + 1;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x011399e0
+namespace rw { namespace audio { namespace core {
+int RevObj::F_9e0(int out, float sr)
+{
+    void* p = this;
+    float blend;
+    int idx;
+    if (sr < 50000.0f) {
+        if (sr > 10000.0f) {
+            if (sr > 25000.0f) { blend = (50000.0f - sr) * 4e-05f; idx = 1; }
+            else { blend = (25000.0f - sr) * 6.666667e-05f; idx = 0; }
+        } else { sr = 10000.0f; blend = (25000.0f - sr) * 6.666667e-05f; idx = 0; }
+    } else { sr = 50000.0f; blend = (50000.0f - sr) * 4e-05f; idx = 1; }
+    float inv = 1.0f - blend;
+    float tab[17];
+    // keep the external memset call the original makes (an intrinsic would inline it)
+    void* (__cdecl *volatile clearTab)(void*, int, unsigned) = memset;
+    clearTab(tab, 0, 0x44);
+    tab[0] = 12.5f; tab[1] = 25.0f; tab[2] = 37.5f; tab[3] = 50.0f;
+    tab[4] = 62.5f; tab[5] = 75.0f; tab[6] = 87.5f; tab[7] = 100.0f;
+    tab[8]  = g_revA[idx * 0x12] * inv + g_revB[idx * 0x12] * blend;
+    tab[9]  = g_revA[idx * 0x12 + 1] * inv + g_revB[idx * 0x12 + 1] * blend;
+    tab[10] = g_revA[idx * 0x12 + 2] * inv + g_revB[idx * 0x12 + 2] * blend;
+    tab[11] = g_revA[idx * 0x12 + 3] * inv + g_revB[idx * 0x12 + 3] * blend;
+    tab[12] = g_revA[idx * 0x12 + 4] * inv + g_revB[idx * 0x12 + 4] * blend;
+    tab[13] = g_revA[idx * 0x12 + 5] * inv + g_revB[idx * 0x12 + 5] * blend;
+    tab[14] = g_revA[idx * 0x12 + 6] * inv + g_revB[idx * 0x12 + 6] * blend;
+    tab[15] = g_revA[idx * 0x12 + 7] * inv + g_revB[idx * 0x12 + 7] * blend;
+    tab[16] = g_revA[idx * 0x12 + 8] * inv + g_revB[idx * 0x12 + 8] * blend;
+
+    float* pf = (float*)((char*)p + 0x164);
+    for (int i = 0; i < 6; i++, pf++) {
+        int k = 0;
+        while (!(tab[k] >= *pf)) k++;   // comiss/jb: continues on unordered (NaN)
+        float f = (tab[k] - *pf) * 0.08f;
+        *(float*)(out + i * 4) = (1.0f - f) * tab[k + 9] + tab[k + 8] * f;
+    }
+    if (A<float>(p, 0x38) != A<float>(p, 0x160)) {
+        float f = *(float*)(out + 0x14) + 0.001f;
+        if (A<float>(p, 0x38) < f) A<float>(p, 0x38) = f;
+        int* pi = (int*)((char*)p + 0x17c);
+        for (int i = 0; i < 6; i++, pi++) {
+            FUN_0114dca0((char*)p + 0x1dc + i * 0x24);
+            DelayLine* dl = (DelayLine*)((char*)p + 0x2b4 + i * 0x3c);
+            dl->FUN_0114d840(*pi + 3);
+            dl->FUN_0114d9d0(*pi + 1);
+            *(float*)(out + i * 4) = *(float*)(out + i * 4) / A<float>(p, 0x38);
+        }
+    }
+    return 1;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x01139d60
+namespace rw { namespace audio { namespace core {
+bool RevObj::F_d60(float* out)
+{
+    void* p = this;
+    if (A<float>(p, 0x28) <= 0.366f && A<float>(p, 0x28) != 0.366f)
+        A<float>(p, 0x28) = 0.366f;
+    float f = 1.0f - 0.366f / A<float>(p, 0x28);
+    out[0] = (1.0f - A<float>(p, 0x1ac)) * f;
+    out[1] = (1.0f - A<float>(p, 0x1b0)) * f;
+    out[2] = (1.0f - A<float>(p, 0x1b4)) * f;
+    out[3] = (1.0f - A<float>(p, 0x1b8)) * f;
+    out[4] = (1.0f - A<float>(p, 0x1bc)) * f;
+    out[5] = (1.0f - A<float>(p, 0x1c0)) * f;
+    return true;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x01139e10
+namespace rw { namespace audio { namespace core {
+RevObj* RevObj::F_e10()
+{
+    void* p = this;
+    *(void**)p = (void*)0x14b3dd4;
+    for (int i = 0; i < 3; i++) ((AllPassFilter*)((char*)p + 0x40 + i * 0x18))->FUN_0114e230();
+    for (int i = 0; i < 3; i++) ((DelayLine*)((char*)p + 0x88 + i * 0x3c))->FUN_0114d730();
+    /* PlugIn::Initialize<...>(p+0x13c) */
+    A<int>(p, 0x13c) = 0;
+    A<int>(p, 0x148) = 0x13f9034;
+    A<int>(p, 0x14c) = 0;
+    A<u8>(p, 0x150) = 3;
+    for (int i = 0; i < 6; i++) ((CombFilter*)((char*)p + 0x1dc + i * 0x24))->FUN_0114dce0();
+    for (int i = 0; i < 6; i++) ((DelayLine*)((char*)p + 0x2b4 + i * 0x3c))->FUN_0114d730();
+    return this;
+}
+}}}  // namespace rw::audio::core
 
 // @ 0x01139f20
 namespace rw { namespace audio { namespace core {
@@ -103,8 +227,11 @@ int RevObj::F_fe0(void* sys)
     void* p = this;
     float sr = A<float>(sys, 0xc0);
     float g = A<float>(p, 0x30);
-    bool b3 = false;
-    bool b4 = false;
+    int* pi;
+    int* q;
+    int b3 = 0;
+    int b4 = 0;
+    float fVar1 = sr;
     if (g == A<float>(p, 0x15c)) {
         if (sr == A<float>(p, 0x154)) {
             if (A<float>(p, 0x38) != A<float>(p, 0x160))
@@ -136,7 +263,7 @@ int RevObj::F_fe0(void* sys)
         F_d60((float*)((char*)p + 0x1c4));
         b4 = true;
     }
-    int* pi = (int*)((char*)p + 0x17c);
+    pi = (int*)((char*)p + 0x17c);
     for (int i = 0; i < 6; i++, pi++) {
         // pi[0xc] loaded as float bits and negated with a sign flip (x87 fchs), so a NaN keeps
         // its payload and only the sign changes -- unlike an SSE 0.0-x.
@@ -150,7 +277,7 @@ int RevObj::F_fe0(void* sys)
             dl->FUN_0114d9d0(*pi + 1);
         }
     }
-    float fVar1 = sr;
+    fVar1 = sr;
     if (A<char>(p, 0x438) == 0 || b3) {
         char c = A<char>(p, 0x21);
         if (c == 1) {
@@ -176,7 +303,7 @@ int RevObj::F_fe0(void* sys)
             fVar1 = sr * 0.0053999997f;
             A<int>(p, 0x430) = _mm_cvtss_si32(_mm_load_ss(&fVar1));
         }
-        int* q = (int*)((char*)p + 0x428);
+        q = (int*)((char*)p + 0x428);
         for (int i = 0; i < (int)A<u8>(p, 0x439); i++, q++) {
             ((AllPassFilter*)((char*)p + 0x40 + i * 0x18))->FUN_0114e210(
                 A<float>(p, 0x41c + i * 4), A<float>(p, 0x434));
@@ -186,7 +313,7 @@ int RevObj::F_fe0(void* sys)
         }
         A<char>(p, 0x438) = 1;
     } else if (b4) {
-        int* q = (int*)((char*)p + 0x428);
+        q = (int*)((char*)p + 0x428);
         for (int i = 0; i < (int)A<u8>(p, 0x439); i++, q++)
             ((DelayLine*)((char*)p + 0x88 + i * 0x3c))->FUN_0114d9d0(*q);
     }

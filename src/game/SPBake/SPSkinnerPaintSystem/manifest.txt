@@ -1,7 +1,10 @@
 # source  symbol  va  flags
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Assign@TickState@@QAEAAU1@ABU1@@Z  005218e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?ShouldTick@TickState@@QAE_NXZ  00522720  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?ClearPtr100@TickState@@QAEXXZ  005227a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?FUN_005229c0@@YAXHPBUVector3@nSPSkinner@@@Z  005229c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Set@PaintReq@@QAEXHHHHDDD@Z  00522ad0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Make@Factory@@QAEPAXXZ  00523570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Get@Model@@QAEHH@Z  005247b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?AddPair@Y@@QAEXHH@Z  00524870  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?BuildMeshes@cSkinnerBuilder@@QAEXPAUcSkinnerSource_s0052_5360@@PAPAUcSkinnerResult_s0052_5360@@@Z  00525360  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -15,6 +18,3 @@
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?push_back@VectorElem38@@QAEXXZ  00525f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?push_back@VectorVec2_s0052_5360@@QAEXABUcSPVector2_s0052_5360@@@Z  00525ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?pop_front@DequeElem48@@QAEXXZ  005263f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Make@Factory@@QAEPAXXZ  00523570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Assign@TickState@@QAEAAU1@ABU1@@Z  005218e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?FUN_005229c0@@YAXHPBUVector3@nSPSkinner@@@Z  005229c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
