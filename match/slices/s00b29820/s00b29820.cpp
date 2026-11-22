@@ -668,19 +668,19 @@ SgElement24& SgElement24::operator=(const SgElement24& o)
 
 // @ 0x00b2a540
 int SgVec3::IsCloser(const SgTarget& a, const SgTarget& b) const
-{
-    const SgVec3* pa = a.m34.GetPoint();
+{    const SgVec3* pa = a.m34.GetPoint();
     SgVec3 da;
     da.x = x - pa->x;
     da.y = y - pa->y;
     da.z = z - pa->z;
     const SgVec3* pb = b.m34.GetPoint();
     SgVec3 db;
-    db.z = z - pb->z;
-    db.y = y - pb->y;
     db.x = x - pb->x;
-    return da.y * da.y + da.x * da.x + da.z * da.z
-        < db.z * db.z + db.y * db.y + db.x * db.x;
+    db.y = y - pb->y;
+    db.z = z - pb->z;
+    float ay = da.y * da.y + da.x * da.x;
+    return ay + da.z * da.z
+        < db.x * db.x + db.y * db.y + db.z * db.z;
 }
 
 // @ 0x00b2a620

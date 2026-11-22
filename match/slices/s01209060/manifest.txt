@@ -13,3 +13,4 @@ slices/s01209060/s01209060.cpp  ??1hkStringMapBase@@QAE@XZ  01209ab0  /vc71 /O2 
 slices/s01209060/s01209060.cpp  ?setTimeInformation@hkSweptTransformUtil@@SAXMMAAVhkMotionState@@@Z  01209b70  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s01209060/s01209060.cpp  ?isValid@hkStringMapBase@@QBE?AVhkBool@@H@Z  012098f0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s01209060/s01209060.cpp  ?resizeTable@hkStringMapBase@@IAEXH@Z  01209ad0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01209060/s01209060.cpp  ?setCentreOfRotationLocal@hkSweptTransformUtil@@SAXABUhkVector4@@AAVhkMotionState@@@Z  01209b90  /vc71 /O2 /MD /Gy /EHsc /TP

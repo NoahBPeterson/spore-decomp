@@ -270,36 +270,34 @@ void __cdecl SP_DoCommunityReaction(int* param_1, float param_2, const Vector3& 
 // ---------------------------------------------------------------- 0x00ff5330
 // @ 0x00ff5330
 void __cdecl FUN_00ff5330(int param_1, int* param_2, int* param_3,
-                          int* param_4, int* param_5, int* param_6) {
-    *param_6 = 0;
+                          int* param_4, int* param_5, int* param_6) {    *param_6 = 0;
     *param_5 = 0;
     *param_4 = 0;
     *param_3 = 0;
     *param_2 = 0;
     while (param_1 > 0) {
-        param_1--;
-        switch (param_1) {
-        case 0:  (*param_2)++; break;
-        case 1:  (*param_6)++; break;
-        case 2:  (*param_3)++; break;
-        case 3:  (*param_5)++; break;
-        case 4:  (*param_6)++; break;
-        case 5:  (*param_3)++; break;
-        case 6:  (*param_6)++; break;
-        case 7:  (*param_3)++; break;
-        case 8:  (*param_6)++; break;
-        case 9:  (*param_4)++; break;
-        case 10: (*param_6)++; break;
-        case 11: (*param_3)++; break;
-        case 12: (*param_5)++; break;
-        case 13: (*param_6)++; break;
-        case 14: (*param_4)++; break;
-        case 15: (*param_6)++; break;
-        case 16: (*param_3)++; break;
-        case 17: (*param_6)++; break;
-        case 18: (*param_5)++; break;
-        case 19: (*param_3)++; break;
+        switch (param_1--) {
+        case 1: (*param_2)++; break;
+        case 2: (*param_6)++; break;
+        case 3: (*param_3)++; break;
+        case 4: (*param_5)++; break;
+        case 5: (*param_6)++; break;
+        case 6: (*param_3)++; break;
+        case 7: (*param_6)++; break;
+        case 8: (*param_3)++; break;
+        case 9: (*param_6)++; break;
+        case 10: (*param_4)++; break;
+        case 11: (*param_6)++; break;
+        case 12: (*param_3)++; break;
+        case 13: (*param_5)++; break;
+        case 14: (*param_6)++; break;
+        case 15: (*param_4)++; break;
+        case 16: (*param_6)++; break;
+        case 17: (*param_3)++; break;
+        case 18: (*param_6)++; break;
+        case 19: (*param_5)++; break;
         case 20: (*param_3)++; break;
+        case 21: (*param_3)++; break;
         }
     }
 }

@@ -575,13 +575,16 @@ void hkSweptTransformUtil::setTimeInformation(float time0, float time1, hkMotion
 // @ 0x01209b90
 // hkSweptTransformUtil::setCentreOfRotationLocal
 void hkSweptTransformUtil::setCentreOfRotationLocal(const hkVector4& v, hkMotionState& ms)
-{
+{    struct Sub4 {
+        static inline void go(hkVector4& d, const hkVector4& a, const float* b) {
+            d.x = a.x - b[0];
+            d.y = a.y - b[1];
+            d.z = a.z - b[2];
+            d.w = a.w - b[3];
+        }
+    };
     hkVector4 delta;
-    delta.x = v.x - ms.m[0x80 / 4];
-    delta.y = v.y - ms.m[0x84 / 4];
-    delta.z = v.z - ms.m[0x88 / 4];
-    delta.w = v.w - ms.m[0x8c / 4];
-
+    Sub4::go(delta, v, &ms.m[0x80 / 4]);
     ms.m[0x80 / 4] = v.x;
     ms.m[0x84 / 4] = v.y;
     ms.m[0x88 / 4] = v.z;

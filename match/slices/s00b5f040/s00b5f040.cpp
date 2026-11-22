@@ -737,25 +737,23 @@ int cCommandTeardown::FUN_00b5f1d0()
 
 // @ 0x00b600a0
 void __fastcall FUN_00b600a0(int* self)
-{
-    int a = self[6];
+{    int a = self[6];
     int b = self[8];
     if (b - a > 1 && a != 0)
         EASTL_deallocate((void*)a);
 
     int* ref = (int*)self[5];
     if (ref != 0) {
-        volatile long* cnt = (volatile long*)(ref + 2);
-        long n;
-        _InterlockedExchangeAdd(cnt, -1);
-        if ((n = _InterlockedExchangeAdd(cnt, 0)) < 1)
-            _InterlockedExchangeAdd(cnt, 1);
+        _InterlockedDecrement((volatile long*)(ref + 2));
+        if (_InterlockedExchangeAdd((volatile long*)(ref + 2), 0) < 1)
+            _InterlockedExchangeAdd((volatile long*)(ref + 2), 1);
         else
-            _InterlockedExchangeAdd(cnt, 0);
+            _InterlockedExchangeAdd((volatile long*)(ref + 2), 0);
     }
 
     int* obj = (int*)self[4];
     if (obj != 0)
         ((Thunk0)VTSLOT(obj, 4))(obj);
-    self[0] = 0x13ef094;
+    extern char g_13ef094[];
+    self[0] = (int)g_13ef094;
 }
