@@ -1,4 +1,4 @@
-// src/game/SPCreatureAnim/ik_solver.cpp -- migrated from slice(s) s009f2970, s009f1990, s009f09a0, s009eddc0, s009ec360 by tools/migrate/rewrite.py
+// src/game/SPCreatureAnim/ik_solver.cpp -- migrated from slice(s) s009f16a0, s009ecac0, s009e5f50, s009f2970, s009f1990, s009f09a0, s009eddc0, s009ec360 by tools/migrate/rewrite.py
 // Object file: SPCreatureAnim/ik_solver.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -309,10 +309,14 @@ struct IKBody_s009f_2970 {
     float    offset[3];           // +0x344
     float    velocity[3];         // +0x350
 };
+struct SplineCtx_s009f_2970;                 // 0x10c bytes, solved by 0x009eddc0
 struct IKWorld_s009f_2970 {
     uint32_t pad000[0x70 / 4];
     float    dt;                  // +0x70
-    uint32_t pad074[(0x2e4 - 0x74) / 4];
+    uint32_t pad074[(0x24c - 0x74) / 4];
+    SplineCtx_s009f_2970* splineCtxBegin;    // +0x24c (array of 0x10c-byte spline contexts)
+    SplineCtx_s009f_2970* splineCtxEnd;      // +0x250
+    uint32_t pad254[(0x2e4 - 0x254) / 4];
     char*    particlesBegin;      // +0x2e4 (700-byte IKParticle array)
     char*    particlesEnd;        // +0x2e8
     uint32_t pad2ec[(0x1794 - 0x2ec) / 4];
@@ -338,8 +342,451 @@ struct IKParticle_s009f_2970 {
 struct IKContext_s009f_2970 {
     IKWorld_s009f_2970* world;               // +0x00
     void __thiscall Update(IKParticle_s009f_2970* p);   // 0x009f1990
+    void __thiscall UpdateBone(IKParticle_s009f_2970* p);               // 0x009ecac0
+    void __thiscall WriteParticles(IKBody_s009f_2970** ppBody);         // 0x009f2970 (defined below as a
+                                                             // TU-local static: the context arrives in EDI)
 };
+struct SplineCtx_s009f_2970 {                 // one chain spline, 0x10c bytes
+    uint32_t pad000[0x94 / 4];
+    uint8_t  rescale;              // +0x94 (bit 0: the chain has to be re-fitted)
+    uint8_t  pad095[0x10c - 0x95];
+};
+void __stdcall FUN_009eddc0(IKContext_s009f_2970* owner, SplineCtx_s009f_2970* ctx);   // 0x009eddc0
 // ---- items of slice s009f2970 end
+
+// ---- items of slice s009e5f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_negOne;                            // 0x013eb1bc (-1.0f)
+extern const float HK_REAL_ONE;                         // 0x01485720
+extern const float g_IKConst70;                         // 0x01470f1c
+extern const float g_IKConst84;                         // 0x014853e0
+extern const float g_IKConst1c;                         // 0x013ef61c
+#pragma intrinsic(fabs)
+#pragma intrinsic(sin, cos)
+struct GoalState {
+    unsigned char mFlags;                               // +0x00
+    unsigned char mPad01;                               // +0x01
+    unsigned char mIndex;                               // +0x02
+    unsigned char mCount;                               // +0x03
+
+    void Reset();                                       // 0x009e6740
+    void MergeThisBIdx(unsigned childIdx);              // 0x009e6750
+    void MergeChild(unsigned childState, unsigned childIdx); // 0x009e67c0
+};
+struct IkBone {
+    unsigned char pad00[0x210];
+    float mBoneRadius;                                  // +0x210
+    unsigned char pad214[0x234 - 0x214];
+    unsigned char mDirty;                               // +0x234
+};
+struct IkBonePair {
+    IkBone*       mAim;                                 // +0x000
+    IkBone*       mTarget;                              // +0x004
+    IkBone*       mAimSub;                              // +0x008  = mAim + 0x1b0
+    IkBone*       mTargetSub;                           // +0x00c  = mTarget + 0x1b0 (Construct)
+                                                        //           or arg5 (ConstructEx)
+    float         mWeight;                              // +0x010
+    float         mBoneALength;                         // +0x014  = mAim->mBoneRadius
+    float         mBoneBLength;                         // +0x018  = mTarget->mBoneRadius
+    float         mPosA[3];                             // +0x01c
+    float         mPosB[3];                             // +0x028
+    float         mPosC[3];                             // +0x034
+    float         mPosD[3];                             // +0x040
+    float         mPosE[3];                             // +0x04c
+    float         mPosF[3];                             // +0x058
+    float         mPosG[3];                             // +0x064
+    float         mPosH[3];                             // +0x070
+    float         mPosI[3];                             // +0x07c
+    float         mRadiiCacheA;                         // +0x088
+    float         mCachedALength;                       // +0x08c  = mAim->mBoneRadius
+    float         mCachedBLength;                       // +0x090  = mTarget->mBoneRadius
+    unsigned      mMode;                                // +0x094
+    float         mCoef98;                              // +0x098
+    float         mCoef9c;                              // +0x09c
+    float         mCoefA0;                              // +0x0a0
+    float         mCoefA4;                              // +0x0a4
+    float         mCoefA8;                              // +0x0a8
+    float         mCoefAc;                              // +0x0ac
+    float         mCoefB0;                              // +0x0b0
+    float         mCoefB4;                              // +0x0b4
+    float         mCoefB8;                              // +0x0b8
+    float         mCoefBc;                              // +0x0bc
+    float         mCoefC0;                              // +0x0c0
+    float         mCoefC4;                              // +0x0c4
+    unsigned char pad0c8[(0x0cc - 0x0c8)];
+    unsigned      mCC;                                  // +0x0cc
+    unsigned      mD0;                                  // +0x0d0
+    unsigned      mD4;                                  // +0x0d4
+    unsigned char padD8[(0x108 - 0x0d8)];
+    unsigned      m108;                                 // +0x108
+
+    void Construct(IkBone* aim, IkBone* target, float weight, unsigned mode);      // 0x009e68f0
+    void ConstructEx(IkBone* aim, IkBone* aimSub, float aLen, IkBone* target,
+                     IkBone* targetSub, float bLen, float weight, unsigned mode); // 0x009e6a20
+    void BuildCoefficients(float a, float b, float c, float d);                    // 0x009e6b40
+};
+struct IkTiltMatrix {
+    float         el[9];                                // +0x000 .. +0x020
+
+    void BuildOuterProduct(const float* v, float a, float b);                      // 0x009e6cf0
+};
+struct IkCreature {
+    unsigned char pad00[0x18c];
+    unsigned      m18c;                                 // +0x18c
+    unsigned char pad190[0x1c8 - 0x190];
+    float         m1c8;                                 // +0x1c8
+    float         m1cc;                                 // +0x1cc
+    float         m1d0;                                 // +0x1d0
+    unsigned char pad1d4[0x1fc - 0x1d4];
+    unsigned char m1fc;                                 // +0x1fc
+    unsigned char m1fd;                                 // +0x1fd
+    unsigned char pad1fe[0x224 - 0x1fe];
+    unsigned      m224;                                 // +0x224
+    unsigned      m228;                                 // +0x228
+    unsigned      m22c;                                 // +0x22c
+    unsigned      m230;                                 // +0x230
+    unsigned char m234;                                 // +0x234
+    unsigned char m235;                                 // +0x235
+    unsigned      m238;                                 // +0x238
+    float         m23c;                                 // +0x23c
+    unsigned      m240;                                 // +0x240
+    unsigned      m244;                                 // +0x244
+    unsigned char pad248[0x264 - 0x248];
+    float         m264;                                 // +0x264
+    float         m268;                                 // +0x268
+    float         m26c;                                 // +0x26c
+
+    void ClearIkCache();                                // 0x009e6c60
+};
+// ---- items of slice s009e5f50 end
+
+// ---- items of slice s009ecac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Quat_s009e_cac0 {
+    float x, y, z, w;
+    Quat_s009e_cac0& operator=(const Quat_s009e_cac0& o) { x = o.x; y = o.y; z = o.z; w = o.w; return *this; }
+};
+static __forceinline Vec3 operator-(const Vec3& a, const Vec3& b)
+{
+    Vec3 r;
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    r.z = a.z - b.z;
+    return r;
+}
+struct IkBodyDef {
+    u8   pad000[0x150];
+    u32  flags;                       // +0x150 (bit 2 = "heavy" weight)
+};
+struct IkBody {
+    IkBodyDef* def;                   // +0x000
+    u8   pad004[0x1b0 - 4];
+    Vec3 pos;                         // +0x1b0 current particle position
+    Vec3 rest;                        // +0x1bc rest particle position
+    Vec3 goal;                        // +0x1c8 goal particle position
+    u8   pad1d4[0x1fc - 0x1d4];
+    u8   valid;                       // +0x1fc particle has a valid current position
+};
+struct IkWorldInfo {
+    u8   pad000[0x18];
+    Vec3 offset;                      // +0x18
+    u8   pad024[0x3c - 0x24];
+    Quat_s009e_cac0 orientation;                 // +0x3c (world -> local rotation, applied inverted)
+    u8   pad04c[0xe8 - 0x4c];
+    Vec3 position;                    // +0xe8
+    Vec3 up;                          // +0xf4 (world-space plane normal)
+};
+struct IkContext {
+    IkWorldInfo* world;               // +0x00
+    Quat_s009e_cac0*        rootQuat;            // +0x04
+    Vec3         planeNormal;         // +0x08
+    Vec3         planePoint;          // +0x14
+    float        d;                   // +0x20 (planeNormal . planePoint)
+};
+static __forceinline Vec3 RotateByInverse(const Quat_s009e_cac0& q, const Vec3& v)
+{
+    float x = q.x, y = q.y, z = q.z, w = q.w;
+    Vec3 r;
+    r.x = 2.0f * (-(y * y + z * z) * v.x + (x * y + z * w) * v.y + (x * z - y * w) * v.z) + v.x;
+    r.y = 2.0f * ((x * y - z * w) * v.x - (x * x + z * z) * v.y + (y * z + x * w) * v.z) + v.y;
+    r.z = 2.0f * ((x * z + y * w) * v.x + (y * z - x * w) * v.y - (x * x + y * y) * v.z) + v.z;
+    return r;
+}
+// ---- items of slice s009ecac0 end
+
+// ---- items of slice s009f16a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int   uint32;
+typedef unsigned char  uint8;
+struct BodyStatic_s009f_16a0 {
+    uint8  pad000[0x150];
+    uint32 flags;                 // +0x150
+    uint8  pad154[0x204 - 0x154];
+    uint32 first_child_bidx;      // +0x204
+    uint32 num_children;          // +0x208
+    uint8  pad20c[0x350 - 0x20c];
+    Vec3   local_pos;             // +0x350
+};
+struct Body_s009f_16a0 {                     // 700 bytes
+    BodyStatic_s009f_16a0* static_data;      // +0x000
+    uint8  pad004[0x190 - 4];
+    Vec3   pos;                   // +0x190
+    float  qx, qy, qz, qw;        // +0x19c
+    uint8  goal_mode;             // +0x1ac (low 3 bits)
+    uint8  pad1ad[0x1b0 - 0x1ad];
+    Vec3   particle;              // +0x1b0
+    Vec3   particle_rest;         // +0x1bc
+    Vec3   particle_goal;         // +0x1c8
+    uint8  pad1d4[700 - 0x1d4];
+};
+struct Creature_s009f_16a0 {
+    uint8  pad000[0x70];
+    float  scale;                 // +0x070
+    uint8  pad074[0x2e4 - 0x74];
+    Body_s009f_16a0*  bodies;                // +0x2e4
+};
+struct IKCtx_s009f_16a0 {
+    Creature_s009f_16a0* creature;           // +0x000
+    void ComputeBodyParticles(Body_s009f_16a0* node);   // 0x009f1730
+    void FollowBodyRig(Body_s009f_16a0* node);          // 0x009f16a0
+};
+void __stdcall IKRigidFollow(IKCtx_s009f_16a0* ctx, Body_s009f_16a0* body);   // 0x009f09a0
+// ---- items of slice s009f16a0 end
+
+// @ 0x009e6740
+void GoalState::Reset()
+{
+    mFlags = 4;
+    mPad01 = 0;
+    mIndex = 0xff;
+    mCount = 0xff;
+}
+
+// @ 0x009e6750
+void GoalState::MergeThisBIdx(unsigned childIdx)
+{
+    switch ((mFlags & 7) - 1)
+    {
+    case 2:
+        mFlags = (unsigned char)((mFlags & 0xf9) | 0x11);
+        ++mCount;
+        mIndex = 0xff;
+        break;
+    case 0:
+        mFlags |= 0x10;
+        ++mCount;
+        break;
+    case 1:
+        mFlags = (unsigned char)((mFlags & 0xf9) | 0x11);
+        mCount = 2;
+        mIndex = 0xff;
+        break;
+    case 3:
+        mFlags = 0x10;
+        mCount = (unsigned char)childIdx;
+        mIndex = 0xff;
+        break;
+    }
+}
+
+// @ 0x009e67c0
+void GoalState::MergeChild(unsigned childState, unsigned childIdx)
+{
+    if (((unsigned char)childState & 7) == 4)
+        return;
+
+    switch (mFlags & 7)
+    {
+    case 3:
+        if (childIdx != mIndex)
+        {
+            mFlags = (unsigned char)((mFlags & 0xf9) | 1);
+            mIndex = 0xff;
+        }
+        // fall through to the shared tail
+    case 1:
+        switch ((unsigned char)childState & 7)
+        {
+        case 1:
+        case 3:
+            mCount = (unsigned char)(mCount + (childState >> 24));
+            return;
+        case 0:
+        case 2:
+            ++mCount;
+            return;
+        }
+        return;
+    case 0:
+        mFlags = (unsigned char)((mFlags & 0xf9) | 1);
+        mIndex = 0xff;
+        mCount = 1;
+        switch ((unsigned char)childState & 7)
+        {
+        case 1:
+        case 3:
+            mCount = (unsigned char)((childState >> 24) + 1);
+            return;
+        case 0:
+        case 2:
+            mCount = 2;
+            return;
+        }
+        return;
+    case 2:
+        mCount = 1;
+        if (childIdx == mIndex)
+            mFlags = (unsigned char)((mFlags & 0xfb) | 3);
+        else
+        {
+            mFlags = (unsigned char)((mFlags & 0xf9) | 1);
+            mIndex = 0xff;
+        }
+        switch ((unsigned char)childState & 7)
+        {
+        case 1:
+        case 3:
+            mCount = (unsigned char)((childState >> 24) + 1);
+            return;
+        case 0:
+        case 2:
+            mCount = 2;
+            return;
+        }
+        return;
+    case 4:
+        mCount = (unsigned char)(childState >> 24);
+        mFlags = (unsigned char)((childState & 1) | 2);
+        mIndex = (unsigned char)childIdx;
+        return;
+    default:
+        return;
+    }
+}
+
+// @ 0x009e68f0
+void IkBonePair::Construct(IkBone* aim, IkBone* target, float weight, unsigned mode)
+{
+    mTarget = target;
+    mAim = aim;
+    mWeight = weight;
+    mTargetSub = (IkBone*)((char*)target + 0x1b0);
+    mAimSub = (IkBone*)((char*)aim + 0x1b0);
+    mPosA[2] = 0.0f; mPosA[1] = 0.0f; mPosA[0] = 0.0f;
+    mPosB[2] = 0.0f; mPosB[1] = 0.0f; mPosB[0] = 0.0f;
+    mPosC[2] = 0.0f; mPosC[1] = 0.0f; mPosC[0] = 0.0f;
+    mPosD[2] = 0.0f; mPosD[1] = 0.0f; mPosD[0] = 0.0f;
+    mPosE[2] = 0.0f; mPosE[1] = 0.0f; mPosE[0] = 0.0f;
+    mPosF[2] = 0.0f; mPosF[1] = 0.0f; mPosF[0] = 0.0f;
+    mPosG[2] = 0.0f; mPosG[1] = 0.0f; mPosG[0] = 0.0f;
+    mPosH[2] = 0.0f; mPosH[1] = 0.0f; mPosH[0] = 0.0f;
+    mPosI[2] = 0.0f; mPosI[1] = 0.0f; mPosI[0] = 0.0f;
+
+    mCachedALength = aim->mBoneRadius;
+    mCachedBLength = target->mBoneRadius;
+    mMode = mode;
+    mBoneALength = mCachedALength;
+    mCC = 0;
+    mBoneBLength = mCachedBLength;
+    mD0 = 0;
+    mD4 = 0;
+    m108 = 0;
+    aim->mDirty = 1;
+    target->mDirty = 1;
+}
+
+// @ 0x009e6a20
+void IkBonePair::ConstructEx(IkBone* aim, IkBone* aimSub, float aLen, IkBone* target, IkBone* targetSub, float bLen, float weight, unsigned mode)
+{
+    mAim = aim;
+    mTarget = target;
+    mAimSub = aimSub;
+    mWeight = weight;
+    mTargetSub = targetSub;
+    mPosA[2] = 0.0f; mPosA[1] = 0.0f; mPosA[0] = 0.0f;
+    mPosB[2] = 0.0f; mPosB[1] = 0.0f; mPosB[0] = 0.0f;
+    mPosC[2] = 0.0f; mPosC[1] = 0.0f; mPosC[0] = 0.0f;
+    mPosD[2] = 0.0f; mPosD[1] = 0.0f; mPosD[0] = 0.0f;
+    mPosE[2] = 0.0f; mPosE[1] = 0.0f; mPosE[0] = 0.0f;
+    mPosF[2] = 0.0f; mPosF[1] = 0.0f; mPosF[0] = 0.0f;
+    mPosG[2] = 0.0f; mPosG[1] = 0.0f; mPosG[0] = 0.0f;
+    mPosH[2] = 0.0f; mPosH[1] = 0.0f; mPosH[0] = 0.0f;
+    mPosI[2] = 0.0f; mPosI[1] = 0.0f; mPosI[0] = 0.0f;
+
+    mMode = mode;
+    mCC = 0;
+    mD0 = 0;
+    mD4 = 0;
+    m108 = 0;
+    mCachedALength = aLen;
+    mCachedBLength = bLen;
+    mBoneALength = mCachedALength;
+    mBoneBLength = mCachedBLength;
+    aim->mDirty = 1;
+    target->mDirty = 1;
+}
+
+// @ 0x009e6b40
+void IkBonePair::BuildCoefficients(float a, float b, float c, float d)
+{
+    mCoef98 = a - c;
+    mCoef9c = HK_REAL_ONE / a;
+    float f1 = g_negOne / ((a * c) * g_IKConst84);
+    mCoefA4 = f1;
+    mCoefAc = (f1 * (c - a)) * (c - a);
+    mCoefA0 = a + c;
+    mCoefB0 = b - d;
+    float f2 = HK_REAL_ONE / ((b * d) * g_IKConst84);
+    mCoefB8 = ((d - b) * f2) * g_IKConst70;
+    mCoefB4 = f2;
+    mCoefA8 = (f1 * (a + c)) * g_IKConst1c;
+    mCoefBc = (f2 * (b + d)) * (b + d);
+    mCoefC0 = b + d;
+    mCoefC4 = HK_REAL_ONE / b;
+}
+
+// @ 0x009e6c60
+void IkCreatureClear(IkCreature* obj)
+{
+    obj->m18c = 0;
+    obj->m22c = 0xffffffff;
+    obj->m230 = 0;
+    obj->m224 = 0;
+    obj->m228 = 0;
+    obj->m234 = 0;
+    obj->m240 = 0;
+    obj->m244 = 0;
+    obj->m235 = 0;
+    obj->m23c = 0.0f;
+    obj->m238 = 0;
+    obj->m1fc = 0;
+    obj->m1fd = 0;
+    obj->m1c8 = 0.0f;
+    obj->m1cc = 0.0f;
+    obj->m1d0 = 0.0f;
+    obj->m264 = 0.0f;
+    obj->m268 = 0.0f;
+    obj->m26c = 0.0f;
+}
+
+// @ 0x009e6cf0
+void IkTiltMatrix::BuildOuterProduct(const float* v, float a, float b)
+{
+    float fVar1 = v[1];
+    float fVar2 = v[2];
+    float fVar3 = v[0];
+
+    el[0] = (HK_REAL_ONE - fVar3 * fVar3) * a + fVar3 * fVar3;
+    float fVar4 = (HK_REAL_ONE - a) * fVar2;
+    float fVar6 = ((HK_REAL_ONE - a) * fVar1) * fVar3;
+    el[1] = fVar6 - fVar2 * b;
+    float fVar5 = fVar4 * fVar3;
+    el[2] = fVar1 * b + fVar5;
+    el[3] = fVar2 * b + fVar6;
+    fVar4 = fVar4 * fVar1;
+    el[7] = fVar3 * b + fVar4;
+    el[4] = (HK_REAL_ONE - fVar1 * fVar1) * a + fVar1 * fVar1;
+    el[5] = fVar4 - fVar3 * b;
+    el[6] = fVar5 - fVar1 * b;
+    el[8] = (HK_REAL_ONE - fVar2 * fVar2) * a + fVar2 * fVar2;
+}
 
 // @ 0x009ec360
 void __cdecl ApplyConstraintRotation(Bone* bone, const Quat* target, const Vec3* tangent, const Vec3* up)
@@ -455,6 +902,68 @@ void __cdecl ApplyConstraintRotation(Bone* bone, const Quat* target, const Vec3*
     cur->y = target->y;
     cur->z = target->z;
     cur->w = target->w;
+}
+
+// @ 0x009ed370
+void AccumulateReference(IkBody* other, IkBody* self, float* ratio, Vec3* sumGoal, Vec3* sumCur, float* weight)
+{
+    Vec3 g;
+    g.x = other->goal.x - self->goal.x;
+    g.y = other->goal.y - self->goal.y;
+    g.z = other->goal.z - self->goal.z;
+    Vec3 c;
+    if (other->valid == 0) {
+        c.x = other->rest.x - self->rest.x;
+        c.y = other->rest.y - self->rest.y;
+        c.z = other->rest.z - self->rest.z;
+    } else {
+        c.x = other->pos.x - self->pos.x;
+        c.y = other->pos.y - self->pos.y;
+        c.z = other->pos.z - self->pos.z;
+    }
+    float invC = 1.0f / (float)(sqrt(c.x * c.x + (c.y * c.y + c.z * c.z)) + 1e-08);
+    float lenG = sqrtf(g.x * g.x + (g.z * g.z + g.y * g.y));
+    float invG = 1.0f / (float)(lenG + 1e-08);
+    float w = (other->def->flags & 4) ? g_ikHeavyWeight : 1.0f;
+    float k = w * invG;
+    sumGoal->x += g.x * k;
+    sumGoal->y += g.y * k;
+    sumGoal->z += g.z * k;
+    k = w * invC;
+    sumCur->z = c.z * k + sumCur->z;
+    sumCur->x += c.x * k;
+    sumCur->y += c.y * k;
+    *ratio = (w * lenG) * invC + *ratio;
+    *weight += w;
+}
+
+// @ 0x009ed560
+IkContext* BuildIKContext(IkContext* ctx, IkWorldInfo* world, Quat_s009e_cac0* rootQuat)
+{
+    ctx->world = world;
+    ctx->rootQuat = rootQuat;
+
+    ctx->planeNormal.x = 0.0f;
+    ctx->planeNormal.y = 0.0f;
+    ctx->planeNormal.z = 0.0f;
+    ctx->planePoint.x = 0.0f;
+    ctx->planePoint.y = 0.0f;
+    ctx->planePoint.z = 0.0f;
+
+    // Plane normal: the world up direction in the creature's frame.
+    ctx->planeNormal = RotateByInverse(world->orientation, world->up);
+
+    // Plane point: where the creature's frame sits, in the same frame.
+    Vec3 delta;
+    delta.x = world->position.x - world->offset.x;
+    delta.y = world->position.y - world->offset.y;
+    delta.z = world->position.z - world->offset.z;
+    ctx->planePoint = RotateByInverse(world->orientation, delta);
+
+    ctx->d = (ctx->planeNormal.z * ctx->planePoint.z
+              + ctx->planeNormal.y * ctx->planePoint.y)
+             + ctx->planeNormal.x * ctx->planePoint.x;
+    return ctx;
 }
 
 // @ 0x009eddc0
@@ -974,6 +1483,77 @@ void __stdcall IKRigidFollow(IKCtx* ctx, Body* self)
     }
 }
 
+// @ 0x009f16a0
+void IKCtx_s009f_16a0::FollowBodyRig(Body_s009f_16a0* node)
+{
+    uint32 count = node->static_data->num_children;
+    if (count == 0)
+        return;
+    uint32 start = node->static_data->first_child_bidx;
+    Body_s009f_16a0* bodies = creature->bodies;
+    for (uint32 i = 0; i < count; ++i) {
+        Body_s009f_16a0* body = &bodies[start + i];
+        if ((body->goal_mode & 7) == 4)
+            continue;
+        if ((node->goal_mode & 7) == 1)
+            IKRigidFollow(this, body);
+        if (body->goal_mode & 1)
+            FollowBodyRig(body);
+    }
+}
+
+// @ 0x009f1730
+void IKCtx_s009f_16a0::ComputeBodyParticles(Body_s009f_16a0* node)
+{
+    uint32 count = node->static_data->num_children;
+    if (count == 0)
+        return;
+    uint32 start = node->static_data->first_child_bidx;
+    Body_s009f_16a0* bodies = creature->bodies;
+    float scale = creature->scale;
+    for (uint32 i = 0; i < count; ++i) {
+        Body_s009f_16a0* body = &bodies[start + i];
+        if ((body->goal_mode & 7) == 4)
+            continue;
+        BodyStatic_s009f_16a0* sd = body->static_data;
+        if (sd->flags & 8) {
+            ComputeBodyParticles(body);
+            continue;
+        }
+
+        float qx = node->qx, qy = node->qy, qz = node->qz, qw = node->qw;
+        float axs = sd->local_pos.x * scale;
+        float ays = sd->local_pos.y * scale;
+        float azs = sd->local_pos.z * scale;
+
+        float nBx2 = -(qx * qx);
+        float nBy2 = -(qy * qy);
+        float nBz2 = -(qz * qz);
+
+        // v' = C + 2*(qw*(qv x v) + qv x (qv x v)) + v,  v = local_pos*scale
+        float rx = ((qz * qx + qy * qw) * azs + (qy * qx - qz * qw) * ays) +
+                   (nBz2 + nBy2) * axs;
+        float ry = ((nBz2 + nBx2) * ays + (qz * qy - qx * qw) * azs) +
+                   (qy * qx + qz * qw) * axs;
+        float rz = ((nBy2 + nBx2) * azs + (qz * qy + qx * qw) * ays) +
+                   (qz * qx - qy * qw) * axs;
+
+        float px = (2.0f * rx + axs) + node->pos.x;
+        float py = node->pos.y + (2.0f * ry + ays);
+        float pz = node->pos.z + (2.0f * rz + azs);
+
+        body->particle_goal.x = px;
+        body->particle_goal.y = py;
+        body->particle_goal.z = pz;
+        body->particle.x = px;
+        body->particle.y = py;
+        body->particle.z = pz;
+
+        IKRigidFollow(this, body);
+        FollowBodyRig(body);
+    }
+}
+
 // @ 0x009f1990
 void __thiscall IKContext::Update(IKParticle* p)
 {
@@ -1240,6 +1820,26 @@ children:
         p->pivot.y = p->pos.y - ry;
         p->pivot.z = p->pos.z - rz;
         p->dirty = 1;
+    }
+}
+
+// @ 0x009f2970
+static void __stdcall WriteParticlesImpl(IKContext_s009f_2970* self, IKBody_s009f_2970** ppBody)
+{
+    // the child count is latched, but the handle itself is re-read every iteration
+    uint32_t const count = (*ppBody)->childCount;
+    for (uint32_t i = 0; i < count; ++i)
+        self->UpdateBone((IKParticle_s009f_2970*)(self->world->particlesBegin + ((*ppBody)->childStart + i) * 700));
+
+    int n = (int)(self->world->splineCtxEnd - self->world->splineCtxBegin);
+    if (n != 0) {
+        int idx = 0;
+        do {
+            SplineCtx_s009f_2970* ctx = self->world->splineCtxBegin + idx;   // re-read: the callee may grow the array
+            if (ctx->rescale & 1)
+                FUN_009eddc0(self, ctx);
+            ++idx;
+        } while (--n != 0);
     }
 }
 

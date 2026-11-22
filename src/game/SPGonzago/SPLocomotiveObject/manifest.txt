@@ -1,8 +1,20 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?ChoosePair@@YAXPBUVec3@@U1@PAU1@2@Z  00c41dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c41ed0@@YIHPAUcRoad@@MM@Z  00c41ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c420f0@@YAMPAUcRandomGlobal@@MM@Z  00c420f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?RemoveInt@cRoad@@QAEXH@Z  00c42140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c421f0@@YIPAHPAUcRoad@@@Z  00c421f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c42310@@YAHPAUIdLookupSource@@@Z  00c42310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c423c0@@YIPAHPAUcRoadTail@@@Z  00c423c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c421f0@@YIPAHPAUcRoad@@@Z  00c421f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c41ed0@@YIHPAUcRoad@@MM@Z  00c41ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?ClearGoalAndStop@cLocomotiveObject@SP@@UAEXXZ  00c436a0  /O2 /MD /Gy /TP /EHs- /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?WriteSTLSequenceT@@YAXPAUIStreamWrite@@PAUSpatialObjectVector@@@Z  00c43790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c43810@@YAPAPAXPAPAX0P6A_NPAX@Z@Z  00c43810  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?Read@cLocomotiveObject_s00c4_3c10@SP@@QAE_NAAUcIObjectDatabaseIStream_s00c4_3c10@2@@Z  00c43c10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?Insert@Vec16_s00c4_3cc0@@QAEIPAUElem16_s00c4_3cc0@@PBU2@@Z  00c43cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ??4LocoCopy@@QAEAAU0@ABU0@@Z  00c43de0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?SetGoal@cLocomotiveObject@@QAEXPAUcGoalData@@@Z  00c43e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c43f20@Vec16@@QAEPAUElem16@@PAU2@PBU2@@Z  00c43f20  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?Shutdown@cLocomotiveObject_s00c4_32e0@SP@@QAEXXZ  00c43f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPLocomotiveObject.cpp  ?RemoveInt@cRoad@@QAEXH@Z  00c42140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c44040@Vec@@QAEXXZ  00c44040  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?UpdateSteeringForMovementStyle@cLocomotiveObject_s00c4_4610@@QAEXXZ  00c44610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?AddMarker@cMarkerOwner@@QAEXPBM_N@Z  00c446d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

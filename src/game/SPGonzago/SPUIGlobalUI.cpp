@@ -527,12 +527,26 @@ public:
 void FUN_00e02c40();  // 0x00e02c40 (stays in the slice: not this object's)
 
 // ---- items of slice s00e033d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13f01bc[];
+extern "C" char g_13f5b90[];
+extern "C" char g_147f264[];
+extern "C" char g_147f27c[];
+extern "C" char g_147f288[];
+extern "C" char g_15a4854[];
+extern "C" char g_15a4860[];
+extern "C" char g_1667bac[];     // empty wide string (eastl gEmptyString)
+extern "C" void  __cdecl cof_delete(void*);                 // 0xf47380 operator_delete_array
 extern "C" void* __cdecl cof_new(unsigned, const char*, int, int, const char*, int); // 0xf473a0
+extern "C" void* __cdecl memcpy_(void*, const void*, unsigned); // 0x11e0744
 extern "C" int   __cdecl FUN_00685520(int);                     // 0x00685520 IsWorldLayoutFlagSet
 extern "C" void* __cdecl FUN_0067de40();                        // 0x0067de40
+extern "C" void* __cdecl FUN_0067de20();                        // 0x0067de20
 extern "C" void* __cdecl FUN_008105b0(int, int, int);           // 0x008105b0
+extern "C" void* __cdecl FUN_0067dd20();                        // 0x0067dd20
 extern "C" void* __cdecl FUN_0067dcc0();                        // 0x0067dcc0 MessageServer
+extern "C" void* __cdecl FUN_00b3d340(int, int);                // 0x00b3d340
 extern "C" void* __cdecl FUN_00b5b820();                        // 0x00b5b820 GetCurrentGameModeAlt
+extern "C" void* __cdecl FUN_01021370();                        // 0x01021370 home planet
 extern "C" void* __cdecl FUN_00e01620(int, int);                // 0x00e01620
 extern "C" char  __cdecl FUN_00e00ac0();                        // 0x00e00ac0
 extern "C" char  __cdecl FUN_00e09540();                        // 0x00e09540
@@ -542,10 +556,14 @@ extern "C" void  __cdecl FUN_00e09600();                        // 0x00e09600
 extern "C" void  __cdecl FUN_00e097c0();                        // 0x00e097c0
 extern "C" void  __cdecl FUN_00dd14b0();                        // 0x00dd14b0
 extern "C" void  __cdecl FUN_00dd12f0();                        // 0x00dd12f0
+extern "C" void* __cdecl FUN_00e038e0(void*, void*, void*);     // 0x00e038e0
 extern "C" void  __cdecl FUN_00e02e10(void*);                   // 0x00e02e10
+extern "C" int   __cdecl WStr_Format(wchar_t*, unsigned, ...);  // 0x0041e050
+extern "C" unsigned __cdecl FNV1_String16(const wchar_t*, unsigned, int); // 0x00932f30
 typedef void  (__thiscall* TFnV)(void*);
 typedef void  (__thiscall* TFnVI)(void*, int);
 typedef void  (__thiscall* TFnVII)(void*, int, int);
+typedef void  (__thiscall* TFnVIIII)(void*, int, int, int, int);
 typedef void  (__thiscall* TC_VIIII)(void*, int, int, int, int);
 typedef void  (__thiscall* TFnVP)(void*, void*);
 typedef void* (__thiscall* TFnP)(void*);
@@ -555,6 +573,8 @@ typedef void  (__thiscall* TC_V)(void*);
 typedef void  (__thiscall* TC_VI)(void*, int);
 typedef void  (__thiscall* TC_VII)(void*, int, int);
 typedef void  (__thiscall* TC_VP)(void*, void*);
+typedef int   (__thiscall* TC_I)(void*);
+typedef long long (__thiscall* TC_LL)(void*);
 typedef void* (__thiscall* TC_P)(void*);
 typedef void* (__thiscall* TC_PII)(void*, int, int);
 #define VT(o, off) (*(void***)(o))[(off) / 4]
@@ -585,6 +605,7 @@ struct BanVec {
 
     BanEntry* __thiscall EraseLast(BanEntry* pos);                    // 0x00e03c30
     BanEntry* __thiscall Insert(BanEntry* pos, const BanEntry& val);  // 0x00e03ca0
+    void      __thiscall DestroyRange(BanEntry* first, BanEntry* last); // 0x00e02c60
 };
 struct BanTranslator {
     void*    mpVtbl;     // +0x00
@@ -600,6 +621,8 @@ struct BanTranslator {
     BanVec   mList;      // +0x30
 
     bool __thiscall Format(const wchar_t* key, wchar_t* out);      // 0x00e03b80
+    void __thiscall DestroyTokens();                               // 0x005725a0
+    void __thiscall InitTokens();                                  // 0x006b5870 cStringTokenTranslator ctor
 };
 struct BanContent {
     void*         mpVtbl;    // +0x00
@@ -644,7 +667,7 @@ struct cSPUIGlobalOptions_s00e0_33d0 {
     int   miSub;        // +0x14
 
     void __thiscall Reactivate();                        // 0x00e02e80
-    void __thiscall Enable(char on);                      // 0x00e018c0
+    void __thiscall Enable(int on);                      // 0x00e018c0
     bool __thiscall HandleMessage(int arg, UIMessage* msg); // 0x00e039d0
 };
 struct cSPUILayout_s00e0_33d0;
@@ -671,6 +694,8 @@ struct cSPUIGlobalUI_s00e0_33d0 {
     bool __thiscall AnyCivSlotUsed();                               // 0x00e042b0
     void* __thiscall AsInterface(unsigned id);                      // 0x00e04270
 };
+extern "C" void* __cdecl FUN_0067cab0_s00e0_33d0(int);                     // 0x0067cab0
+extern "C" void  __cdecl FUN_00571db0_s00e0_33d0(void*, void*, int, int, int); // 0x00571db0 RemoveHandler
 static unsigned char& g_bPaused_s00e0_33d0        = *(unsigned char*)0x016a1890;
 static void*&         g_pTranslator_s00e0_33d0    = *(void**)0x0169e3e8;
 static const unsigned kGameModeBase    = 0x01654c00;
@@ -2213,6 +2238,87 @@ char UIThing::FUN_00e02f00(int a, void* msg)
     return 0;
 }
 
+// @ 0x00e033d0
+void CivPauseUI::Pause()
+{
+    if (this->mStop1.mTicks != 0) {
+        long long t = ((TC_LL)0x0093a3a0)(&this->mStop1);
+        if (1500.0f < (float)t * this->mStop1.mfScale) {
+            if (g_bPaused_s00e0_33d0 != 0)
+                GameTime_Dec(0x4bf38a7);
+            g_bPaused_s00e0_33d0 = 0;
+            ((TC_V)0x0093a2e0)(&this->mStop1);
+
+            void* cur = FUN_0067cab0_s00e0_33d0(this->miHandler);
+            ((TC_I)0x00801b60)(cur);
+
+            void* gd = (void*)((TC_I)0x00b294c0)(FUN_00b3d340(0, 1));
+            if (gd != 0) {
+                void* home = FUN_01021370();
+                const wchar_t* name = (const wchar_t*)((TC_P)0x00ecdba0)(home);
+                wstring tmp;
+                tmp.RangeInit(name);
+                void* a = FUN_0067de40();
+                void* b = ((TFnP)VT(a, 0x20))(a);
+                ((TFnVII)VT(b, 0x34))(b, 0, 0);
+                FUN_00809db0((void*)0x015a4878, (void*)0x015a4818);
+                if ((((unsigned)((char*)tmp.mpCap - (char*)tmp.mpBegin)) & 0xfffffffe) > 2 &&
+                    tmp.mpBegin != 0)
+                    cof_delete(tmp.mpBegin);
+            } else {
+                this->miState = 5;
+                FUN_00809db0((void*)0x015a4878, (void*)0x015a4824);
+            }
+        }
+    }
+
+    if (this->mStop2.mTicks != 0) {
+        long long t = ((TC_LL)0x0093a3a0)(&this->mStop2);
+        if (1500.0f < (float)t * this->mStop2.mfScale) {
+            if (g_bPaused_s00e0_33d0 != 0)
+                GameTime_Dec(0x4bf38a7);
+            g_bPaused_s00e0_33d0 = 0;
+            ((TC_V)0x0093a2e0)(&this->mStop2);
+
+            void* a = FUN_0067dd20();
+            ((TFnV)VT(a, 0x40))(a);
+
+            if (this->miState == 9) {
+                void* cheat = FUN_0067de20();
+                ((TFnVI)VT(cheat, 0x20))(cheat, (int)0x014137f8);   // "quit"
+            }
+            this->miState = 0;
+        }
+    }
+
+    if (this->mStop1.mTicks != 0 || this->mStop2.mTicks != 0) {
+        void* ms = FUN_0067dcc0();
+        ((TFnVIIII)VT(ms, 0x18))(ms, 0x685d440, 0, 0, 0);
+    }
+}
+
+// @ 0x00e03590
+void BanContent::SetText(int id, const wchar_t* text, const void* extras)
+{
+    this->mTokens.miId = id;
+    this->mTokens.mbActive = 1;
+
+    const wchar_t* e = text;
+    while (*e != 0)
+        ++e;
+    unsigned n = (unsigned)(e - text);
+    this->mTokens.mText.Assign(text, text + n);
+
+    if (extras != 0) {
+        void* a = FUN_0067de40();
+        void* b = ((TFnP)VT(a, 0x20))(a);
+        ((TFnVII)VT(b, 0x2c))(b, (int)extras, (int)&this->mTokens.mExtra);
+        FUN_00809db0(this, (void*)g_15a4860);
+    } else {
+        FUN_00809db0(this, (void*)g_15a4854);
+    }
+}
+
 // @ 0x00e03620
 bool cSPUIGlobalUI_s00e0_33d0::Init(int param)
 {
@@ -2316,6 +2422,55 @@ bool cSPUIGlobalUI_s00e0_33d0::Shutdown()
     return true;
 }
 
+// @ 0x00e03830
+BanEntry* BanEntry::CopyFrom(const BanEntry& src)
+{
+    this->miId = src.miId;
+    this->mName.mpBegin = 0;
+    this->mName.mpEnd   = 0;
+    this->mName.mpCap   = 0;
+    unsigned n = (unsigned)(src.mName.mpEnd - src.mName.mpBegin);
+    this->mName.AllocateSelf((int)n + 1);
+    wchar_t* dst = this->mName.mpBegin;
+    memcpy_(dst, src.mName.mpBegin, n * 2);
+    this->mName.mpEnd = dst + n;
+    *this->mName.mpEnd = 0;
+
+    this->mText.mpBegin = 0;
+    this->mText.mpEnd   = 0;
+    this->mText.mpCap   = 0;
+    n = (unsigned)(src.mText.mpEnd - src.mText.mpBegin);
+    this->mText.AllocateSelf((int)n + 1);
+    dst = this->mText.mpBegin;
+    memcpy_(dst, src.mText.mpBegin, n * 2);
+    this->mText.mpEnd = dst + n;
+    *this->mText.mpEnd = 0;
+    return this;
+}
+
+// @ 0x00e03930
+void BanContent::Dtor()
+{
+    this->mpVtbl = (void*)g_147f27c;
+    BanVec* list = &this->mTokens.mList;
+    this->mTokens.mpVtbl = (void*)g_147f264;
+
+    list->DestroyRange(list->mpBegin, list->mpEnd);
+    BanEntry* p = this->mTokens.mList.mpBegin;
+    if (p != 0 && *(int*)((char*)p - 4) != 0)
+        cof_delete(p);
+
+    if ((((int)((char*)this->mTokens.mExtra.mpCap - (char*)this->mTokens.mExtra.mpBegin)) & ~1) > 2 &&
+        this->mTokens.mExtra.mpBegin != 0)
+        cof_delete(this->mTokens.mExtra.mpBegin);
+
+    if ((((int)((char*)this->mTokens.mText.mpCap - (char*)this->mTokens.mText.mpBegin)) & ~1) > 2 &&
+        this->mTokens.mText.mpBegin != 0)
+        cof_delete(this->mTokens.mText.mpBegin);
+
+    this->mTokens.DestroyTokens();
+}
+
 // @ 0x00e039d0
 bool cSPUIGlobalOptions_s00e0_33d0::HandleMessage(int arg, UIMessage* msg)
 {
@@ -2358,6 +2513,213 @@ bool CivPauseUI::OnMessage(int id, int arg)
     if (id == 0x685d440)
         ((CivPauseUI*)((char*)this - 4))->Pause();
     return false;
+}
+
+// @ 0x00e03ab0
+void* cSPUIGlobalUI_s00e0_33d0::Construct()
+{
+    this->mpVtbl = g_147f288;
+    _ReadWriteBarrier();
+    this->mpOptions = 0;
+    *(void* volatile*)&this->mpLayout = 0;
+
+    this->mBan.mTokens.InitTokens();              // cStringTokenTranslator ctor
+    this->mBan.mTokens.mbActive = 0;
+    this->mBan.mTokens.mbHold = 0;
+    _ReadWriteBarrier();
+
+    this->mBan.mpVtbl = g_147f27c;
+    this->mBan.mTokens.mpVtbl = g_147f264;
+    _ReadWriteBarrier();
+
+    this->mBan.mTokens.mText.mpBegin = (wchar_t*)g_1667bac;
+    _ReadWriteBarrier();
+    this->mBan.mTokens.mText.mpEnd = (wchar_t*)g_1667bac;
+    _ReadWriteBarrier();
+    this->mBan.mTokens.mText.mpCap = (wchar_t*)(g_1667bac + 2);
+    _ReadWriteBarrier();
+    this->mBan.mTokens.mExtra.mpBegin = (wchar_t*)g_1667bac;
+    _ReadWriteBarrier();
+    this->mBan.mTokens.mExtra.mpEnd = (wchar_t*)g_1667bac;
+    _ReadWriteBarrier();
+    this->mBan.mTokens.mExtra.mpCap = (wchar_t*)(g_1667bac + 2);
+    _ReadWriteBarrier();
+
+    this->mBan.mTokens.mList.mpBegin = 0;
+    this->mBan.mTokens.mList.mpEnd = 0;
+    this->mBan.mTokens.mList.mpCap = 0;
+    _ReadWriteBarrier();
+
+    this->mpHandler = 0;
+    this->mpHandlerThis = 0;
+    this->miHandlerTag = 0;
+    this->miHandlerCount = 0;
+    this->miHandlerExtra = 0;
+    return this;
+}
+
+// @ 0x00e03b20
+void cSPUIGlobalUI_s00e0_33d0::Destroy()
+{
+    this->mpVtbl = (void*)g_147f288;
+    // Install the teardown interface before reading the registered handler.
+    _ReadWriteBarrier();
+
+    void* h = this->mpHandler;
+    if (h != 0) {
+        this->mpHandler = 0;
+        FUN_00571db0_s00e0_33d0(h, this->mpHandlerThis, this->miHandlerTag,
+                     this->miHandlerCount, this->miHandlerExtra);
+    }
+
+    this->mBan.Dtor();
+
+    if (this->mpLayout != 0)
+        ((TFnV)VT(this->mpLayout, 8))(this->mpLayout);
+    if (this->mpOptions != 0)
+        ((TFnV)VT(this->mpOptions, 4))(this->mpOptions);
+
+    this->mpVtbl = (void*)g_13eb394;   // PaintSystem vtable
+}
+
+// @ 0x00e03b80
+bool BanTranslator::Format(const wchar_t* key, wchar_t* out)
+{
+    unsigned h = FNV1_String16(key, 0x811c9dc5, 1);
+    switch (h) {
+    case 0x2f009dd8:
+        WStr_Format(out, (int)g_13f01bc, this->miId);
+        return true;
+    case 0x989407d5:
+        WStr_Format(out, (int)g_13f5b90, this->mExtra.mpBegin);
+        return true;
+    case 0xd5c6de59:
+        WStr_Format(out, (int)g_13f5b90, this->mText.mpBegin);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00e03c30
+BanEntry* BanVec::EraseLast(BanEntry* pos)
+{
+    if ((char*)(pos + 1) < (char*)this->mpEnd)
+        FUN_00e02d30((Elem24*)(pos + 1), (Elem24*)this->mpEnd, (Elem24*)pos);
+
+    this->mpEnd = (BanEntry*)((char*)this->mpEnd - 0x24);
+    BanEntry* last = this->mpEnd;
+
+    if ((int)((unsigned)((char*)last->mText.mpCap - (char*)last->mText.mpBegin) & 0xfffffffe) > 2 &&
+        last->mText.mpBegin != 0)
+        cof_delete(last->mText.mpBegin);
+    if ((int)((unsigned)((char*)last->mName.mpCap - (char*)last->mName.mpBegin) & 0xfffffffe) > 2 &&
+        last->mName.mpBegin != 0)
+        cof_delete(last->mName.mpBegin);
+
+    return pos;
+}
+
+// @ 0x00e03ca0
+BanEntry* BanVec::Insert(BanEntry* pos, const BanEntry& val)
+{
+    const BanEntry* src = &val;
+    if (this->mpEnd != this->mpCap) {
+        if (pos <= src && src < this->mpEnd)
+            src = (const BanEntry*)((char*)src + 0x24);
+
+        BanEntry* end = this->mpEnd;
+        if (end != 0)
+            end->CopyFrom(*(BanEntry*)((char*)end - 0x24));
+        FUN_00e02da0((Elem24*)pos, (Elem24*)((char*)end - 0x24), (Elem24*)end);
+
+        pos->miId = src->miId;
+        if (&src->mName != &pos->mName)
+            pos->mName.Assign(src->mName.mpBegin, src->mName.mpEnd);
+        if (&src->mText != &pos->mText)
+            pos->mText.Assign(src->mText.mpBegin, src->mText.mpEnd);
+
+        this->mpEnd = (BanEntry*)((char*)end + 0x24);
+        return pos;
+    }
+
+    unsigned count = (unsigned)(this->mpEnd - this->mpBegin);
+    unsigned cap = count;
+    BanEntry* buf = 0;
+    if (cap == 0) {
+        cap = 1;
+    } else {
+        cap *= 2;
+    }
+    if (cap != 0)
+        buf = (BanEntry*)cof_new(cap * 0x24, "Simulator", 0, 0,
+                                 (const char*)0x013ebb38, 0xd1);
+
+    BanEntry* begin = this->mpBegin;
+    BanEntry* mid = (BanEntry*)FUN_00e038e0(begin, pos, buf);
+    FUN_00e02cc0((Elem24*)begin, (Elem24*)pos, (Elem24*)buf);
+    if (mid != 0)
+        mid->CopyFrom(val);
+
+    BanEntry* oldEnd = this->mpEnd;
+    BanEntry* newEnd = (BanEntry*)FUN_00e038e0(pos, oldEnd, mid + 1);
+    FUN_00e02cc0((Elem24*)pos, (Elem24*)oldEnd, (Elem24*)(mid + 1));
+
+    if (this->mpBegin != 0 && *(int*)((char*)this->mpBegin - 4) != 0)
+        cof_delete(this->mpBegin);
+
+    this->mpEnd = newEnd;
+    this->mpBegin = buf;
+    this->mpCap = (BanEntry*)((char*)buf + cap * 0x24);
+    return pos;
+}
+
+// @ 0x00e03e10
+void BanContent::OnDeactivate(int a, int b)
+{
+    (void)a;
+    (void)b;
+    this->mTokens.mbActive = 0;
+    if (this->mTokens.mbHold != 0) {
+        BanVec& list = this->mTokens.mList;
+        BanEntry* p = list.mpBegin;
+        if (p != list.mpEnd) {
+            this->SetText(p->miId, p->mName.mpBegin, p->mText.mpBegin);
+            list.EraseLast(list.mpBegin);
+        }
+    }
+}
+
+// @ 0x00e03e50
+void BanContent::AddRow(int id, const wchar_t* name, const wchar_t* text)
+{
+    if (this->mTokens.mbActive == 0 && this->mTokens.mbHold != 0) {
+        this->SetText(id, name, text);
+        return;
+    }
+
+    BanEntry tmp;
+    tmp.miId = id;
+    tmp.mName.mpBegin = 0; tmp.mName.mpEnd = 0; tmp.mName.mpCap = 0;
+    tmp.mName.RangeInit(name);
+    tmp.mText.mpBegin = 0; tmp.mText.mpEnd = 0; tmp.mText.mpCap = 0;
+    tmp.mText.RangeInit(text);
+
+    BanEntry* end = this->mTokens.mList.mpEnd;
+    BanVec* list = &this->mTokens.mList;
+    if (end < list->mpCap) {
+        list->mpEnd = end + 1;
+        if (end != 0)
+            end->CopyFrom(tmp);
+    } else {
+        list->Insert(end, tmp);
+    }
+
+    if ((int)((unsigned)((char*)tmp.mText.mpCap - (char*)tmp.mText.mpBegin) & 0xfffffffe) > 2 &&
+        tmp.mText.mpBegin != 0)
+        cof_delete(tmp.mText.mpBegin);
+    if ((int)((unsigned)((char*)tmp.mName.mpCap - (char*)tmp.mName.mpBegin) & 0xfffffffe) > 2 &&
+        tmp.mName.mpBegin != 0)
+        cof_delete(tmp.mName.mpBegin);
 }
 
 // @ 0x00e03f40

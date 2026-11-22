@@ -710,13 +710,49 @@ struct Sound_s00a1_b480 {
     bool CalculateDistanceToListener();              // 0x00a1c290
     bool CreateEmitter();                            // 0x00a1c2f0
 };
+struct Emitter {
+    void SetCurveGain(float v);                 // 0x00a16fd0
+};
+struct RCurve_s00a1_b480 {
+    u8 mData[0x364];
+    float GetOutputValue(float in) const;       // 0x00a1a110
+};
+struct ISoundGain_a1c1 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+    virtual float GetGain();   // +0x68
+};
 // ---- items of slice s00a1b480 end
 
 // ---- items of slice s00a1d400 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* AllocObject(u32 size);                           // 0x00a17090
 void* CtorHelper(void* obj, void* owner);              // 0x00a17100
 struct Vec3_s00a1_d400 { float x, y, z; };
-extern const u32 g_propKey14527fc;   // 0x014527fc
+extern const u32 g_14527fc;        // 0x014527fc EA::Audio::Sound compare key
 struct HTIter { void* node; void* bucket; };
 struct Hashtable {
     u32    pad0;         // +0x00
@@ -1267,6 +1303,47 @@ int Sound_s00a1_b480::Pause(bool pause, u32 index, float fade, bool force)
     return mPauseCount;
 }
 
+// @ 0x00a1c120
+void Sound_s00a1_b480::UpdateGainAndDistance(float param)
+{
+    float gain;
+    if (mMode == 0xf) {
+        if (mbDirect) {
+            void* sys = GetSystemAT_s00a1_b480();
+            Vec3_s00a1_b480* p = (Vec3_s00a1_b480*)((void*(__thiscall*)(void*, u32))VTSLOT(sys, 0x7c))(sys, mPosHandle);
+            ((void(__thiscall*)(Sound_s00a1_b480*, float, Vec3_s00a1_b480*))VTSLOT(this, 0xd8))(this, param, p);
+            gain = mDirGain1;
+            float dx = mDirectPos.x - p->x;
+            float dy = mDirectPos.y - p->y;
+            float dz = mDirectPos.z - p->z;
+            mEffectiveGain = mDirGain0 * gain;
+            mDistanceToListener = (float)fabs((float)sqrt(dx * dx + dy * dy + dz * dz));
+        } else {
+            void* sys = GetSystemAT_s00a1_b480();
+            Vec3_s00a1_b480* p = (Vec3_s00a1_b480*)((void*(__thiscall*)(void*, u32))VTSLOT(sys, 0x7c))(sys, mPosHandle);
+            float dx = mPos.x - p->x;
+            float dy = mPos.y - p->y;
+            float dz = mPos.z - p->z;
+            mDistanceToListener = (float)fabs((float)sqrt(dx * dx + dy * dy + dz * dz));
+            gain = ((ISoundGain_a1c1*)this)->GetGain();
+            mEffectiveGain = gain * mMaxGainChange;
+        }
+        if (mDistanceToListener != mLastDistance)
+            mb9e = 1;
+        mLastDistance = mDistanceToListener;
+    } else {
+        gain = ((ISoundGain_a1c1*)this)->GetGain();
+        mEffectiveGain = gain * mMaxGainChange;
+    }
+
+    if (mC38 != 0) {
+        float fade = mPauseFader.mCurrent;
+        float g = ((LerpF_s00a1_b480*)((char*)this + 0xc94))->Get() * fade * gain;
+        float out = ((RCurve_s00a1_b480*)((char*)this + 0x1a7c))->GetOutputValue(g);
+        ((Emitter*)mC38)->SetCurveGain(out);
+    }
+}
+
 // @ 0x00a1c290
 bool Sound_s00a1_b480::CalculateDistanceToListener()
 {
@@ -1622,6 +1699,7 @@ bool Sound_s00a1_d400::CompareProperties(void* other)
         return false;
 
     void* sys = GetSystemAT();
+    void* w = (void*)this;
     if (((int(__thiscall*)(void*, u32))VTSLOT(sys, 0xf8))(sys, 0x71bc3009) == 0) {
         if (fabs(o->mAverageSpeed - mAverageSpeed) > 0.2f)
             return false;
@@ -1629,7 +1707,7 @@ bool Sound_s00a1_d400::CompareProperties(void* other)
         void* p1;
         {
             Hashtable* h1 = (Hashtable*)((char*)this + 0x338);
-            HTIter it = h1->find(g_propKey14527fc);
+            HTIter it = h1->find(g_14527fc);
             if (it.node == (void*)h1->mpBuckets[h1->mnBuckets])
                 return true;
             p1 = *(void**)((char*)it.node + 4);
@@ -1637,7 +1715,7 @@ bool Sound_s00a1_d400::CompareProperties(void* other)
         void* p2;
         {
             Hashtable* h2 = (Hashtable*)((char*)o + 0x338);
-            HTIter it2 = h2->find(g_propKey14527fc);
+            HTIter it2 = h2->find(g_14527fc);
             if (it2.node == (void*)h2->mpBuckets[h2->mnBuckets])
                 return true;
             p2 = *(void**)((char*)it2.node + 4);
@@ -1671,7 +1749,7 @@ void EA::Audio::Sound::SetProperty(unsigned int key, float value, bool arg)
         return;
     }
 
-    Hashtable* ht = (Hashtable*)((char*)static_cast<EA::Audio::IMixable *>(this) + 0x514);
+    Hashtable* ht = (Hashtable*)((char*)this + 0x518);
     HTIter it = ht->find(key);
     if (it.node != (void*)ht->mpBuckets[ht->mnBuckets]) {
         void* obj = *(void**)((char*)it.node + 4);
@@ -1692,8 +1770,9 @@ void EA::Audio::Sound::SetProperty(unsigned int key, float value, bool arg)
         if (obj != 0)
             ((void(__thiscall*)(void*))VTSLOT(obj, 0))(obj);
         ((void(__thiscall*)(void*, void*))0x00a16a90)(e, obj);
-        ((void(__thiscall*)(void*, void*))VTSLOT(*(void**)((char*)obj + 4), 0x10))(*(void**)((char*)obj + 4), e);
-        ((void(__thiscall*)(void*, void*))VTSLOT(*(void**)((char*)obj + 4), 0x10))(*(void**)((char*)obj + 4), obj);
+        void* sub = *(void**)((char*)obj + 4);
+        ((void(__thiscall*)(void*, void*))VTSLOT(sub, 0x10))(sub, e);
+        ((void(__thiscall*)(void*, void*))VTSLOT(sub, 0x10))(sub, obj);
         ((void(__thiscall*)(void*))VTSLOT(obj, 0x10))(obj);
         ((void(__thiscall*)(void*, int))VTSLOT(obj, 0x2c))(obj, 1);
         void* old = *(void**)((char*)it.node + 4);
@@ -1868,6 +1947,26 @@ bool EA::Audio::Sound::ConnectPrimitive(unsigned int key, EA::Audio::IPrimitive 
         ((void(__thiscall*)(void*))VTSLOT(obj, 4))(obj);
     }
     return true;
+}
+
+// @ 0x00a1e140
+void EA::Audio::Sound::DisconnectPrimitive(unsigned int key, EA::Audio::IPrimitive * prim)
+{
+    Hashtable* ht = (Hashtable*)((char*)this + 0x334);
+    HTIter it = ht->find(key);
+    if (it.node == (void*)ht->mpBuckets[ht->mnBuckets])
+        return;
+    void* e = *(void**)((char*)it.node + 4);
+    if (e != 0) {
+        void* p = ((void*(__thiscall*)(void*, u32))VTSLOT(e, 0xc))(e, 0x4e73a43a);
+        if (p != 0) {
+            ((void(__thiscall*)(void*, void*))VTSLOT(p, 0x14))(p, prim);
+            return;
+        }
+    }
+    if (e == prim) {
+        it = ht->erase(it);
+    }
 }
 
 // @ 0x00a1e1d0
@@ -2243,6 +2342,31 @@ void Sound74::SubscribeToGroupsFromSymbol(const char* symbol)
             if (c == 0) return;
         }
         c = *symbol;
+    }
+}
+
+// @ 0x00a1f2b0
+void Sound_s00a1_f2b0::UnsubscribeFromGroupsFromSymbol(const char* str)
+{
+    if (str == 0 || *str == 0)
+        return;
+
+    const char* p = str;
+    while (!isalnum(*p))
+        ++p;
+    while (*p != 0) {
+        const char* q = p;
+        while (isalnum(*q))
+            ++q;
+        u32 hash = 0x811c9dc5;
+        for (; p < q; ++p)
+            hash = hash * 0x1000193 ^ (u32)tolower((unsigned char)*p);
+        mGroups.push_back(hash);
+        void* mix = this ? (char*)this + 4 : 0;
+        void* sys = GetSystemAT_s00a1_f2b0();
+        ((void(__thiscall*)(void*, u32, void*))VTSLOT(sys, 0x110))(sys, hash, mix);
+        while (*p != 0 && !isalnum(*p))
+            ++p;
     }
 }
 

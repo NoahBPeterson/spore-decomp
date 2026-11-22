@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppStateManager.cpp -- migrated from slice(s) s006a32a0, s007e5220, s007e4260, s007e32c0, s007e20a0, s007e17a0, s007e06b0, s006a7e40 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppStateManager.cpp -- migrated from slice(s) s007e2960, s007e27a0, s007e2700, s007e2680, s007e2600, s007e2520, s007e2450, s006a32a0, s007e5220, s007e4260, s007e32c0, s007e20a0, s007e17a0, s007e06b0, s006a7e40 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppStateManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -774,6 +774,7 @@ public:
 }
 // ---- items of slice s006a32a0 end
 
+
 // @ 0x006a32a0
 bool EA::ArgScript::cExprFunction_s006a_32a0::EvalBool(int a, int b)
 {
@@ -1019,6 +1020,35 @@ class cDescriptionCommand : public EA::ArgScript::cCommandBase {
   SP::cAppStateManager* mpManager;                             // 0x00c
 };
 }  // namespace
+
+// @ 0x007e2450
+char const * SP::cAppStateManager::CurrentStateName() const
+{
+    eastl::hash_node<eastl::pair<eastl::basic_string<char,eastl::allocator> const,unsigned int> >** b = mStateNameMap.mpBucketArray;
+    const eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0>& mapRef = mStateNameMap;
+    eastl::hash_node<eastl::pair<eastl::basic_string<char,eastl::allocator> const,unsigned int> >* node = *b;
+    if (!node) {
+        ++b;
+        while (!*b)
+            ++b;
+        node = *b;
+    }
+    // the end marker is the node stored one past the last bucket
+    eastl::hash_node<eastl::pair<eastl::basic_string<char,eastl::allocator> const,unsigned int> >* end = mapRef.mpBucketArray[mapRef.mnBucketCount];
+    while (node != end) {
+        if (node->mValue.second == mCurrentState)
+            return node->mValue.first.mpBegin;
+        node = node->mpNext;
+        if (!node) {
+            // end of a collision chain: continue with the next non-empty bucket (do-first)
+            do {
+                ++b;
+                node = *b;
+            } while (!node);
+        }
+    }
+    return "";
+}
 
 // @ 0x007e2640
 void cDescriptionCommand::Execute(EA::ArgScript::cArguments* args)

@@ -1,12 +1,17 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCinematicManager.cpp  ??0WStr@@QAE@PB_WH@Z  0041df50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?WStr_Format@@YAPAUWStr@@PAU1@PB_WZZ  0041e050  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?Construct@SlotMessage@@QAEPAU1@I@Z  00421c80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?Set@Holder@@QAEXII@Z  00421e80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?Assign@WString@@QAEAAU1@PB_W0@Z  00423650  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCinematicManager.cpp  ?ReleaseHeap@ByteFixedBuf@@QAEXXZ  00429300  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?Resize@WStr_s0042_92a0@@QAEXI@Z  00429520  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?Append@WStr_s0042_92a0@@QAEPAU1@PBG0@Z  00429580  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?AllocateSelf@WStr_s0042_92a0@@QAEXI@Z  00429760  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCinematicManager.cpp  ?WSearch@@YAPAGPAG000@Z  004297f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?SetCapacity@WString_s0042_f160@@QAEXI@Z  0042f360  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCinematicManager.cpp  ?SprintfCore@Str@@QAEPAU1@PBDPAX@Z  0045de10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPCinematicManager.cpp  ?FUN_0045ec30@@YAMPBM@Z  0045ec30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?SetKey@DirtyState@@QAEXABUKey12@@@Z  00571d40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ??4VecPair@@QAEAAU0@ABU0@@Z  00571d60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicManager.cpp  ?Notify@OwnerHandle@@QAEXXZ  00571d90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

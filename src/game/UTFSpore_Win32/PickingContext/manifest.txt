@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/PickingContext.cpp  ?RefreshMargins@PickingContext@Layout@XHTML@EA@@QAEXXZ  008eddb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/PickingContext.cpp  ?SetContextRect@PickingContext@Layout@XHTML@EA@@QAEXPBM@Z  008ede40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/PickingContext.cpp  ?PlaceFloat@PickingContext@Layout@XHTML@EA@@QAEXPAUFloatEntry@234@@Z  008edf60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/PickingContext.cpp  ?lower_bound@PickingContext@Layout@XHTML@EA@@SAPAUTranslationEntry@234@PAU5234@0PBH@Z  008edfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

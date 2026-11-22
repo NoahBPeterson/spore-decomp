@@ -22,6 +22,7 @@
 ../src/game/SPCreatureAnim/gait_record.cpp  ?resize@Vec0C@@QAEXIABUElem0C@@@Z  009e0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ?Copy40@@YAPAUElem40@@PAU1@00@Z  009e0cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ?CopyBack40@@YAPAUElem40@@PAU1@00@Z  009e0d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?AddItem@Outer@@QAEXPAX@Z  009e0f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ?PushFlag@Outer@@QAEX_N@Z  009e0ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ??0Gait_s009e_0d90@@QAE@ABU0@@Z  009e1100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ??1RecBlob@@QAE@XZ  009e1710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -31,7 +32,6 @@
 ../src/game/SPCreatureAnim/gait_record.cpp  ?Create@gcmddHost@@QAEXH@Z  009e3740  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ??0gcmddTable@@QAE@XZ  009e3ec0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ?Reset@gcmddTable@@QAEXHH@Z  009e3f70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?EntryCopyBackward@@YAPAUEntry_s009e_3580@@PAU1@00@Z  009e42d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ?Reset@EntryArr_s009e_4450@@QAEXXZ  009e4940  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/gait_record.cpp  ?insert@VecEntry@@QAEPAUEntry_s009e_4450@@PAU2@ABU2@@Z  009e4990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPCreatureAnim/gait_record.cpp  ?AddItem@Outer@@QAEXPAX@Z  009e0f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPCreatureAnim/gait_record.cpp  ?EntryCopyBackward@@YAPAUEntry_s009e_3580@@PAU1@00@Z  009e42d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -6,6 +6,7 @@
 extern "C" char g_1437dc4[];
 extern "C" char g_1437e18[];
 extern "C" char g_1437e58[];
+extern "C" char g_1437e8c[];
 
 #include "game/types.h"
 #include "EA/XHTML/Layout/Page.h"
@@ -15,8 +16,10 @@ extern "C" char g_1437e58[];
 #include "EA/XHTML/Style/Stylesheet.h"
 #include "EA/Text/Typesetter.h"
 #include <new>
+#include <stddef.h>
 
 // ---- items of slice s008eb250 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_1437c00[];
 namespace eastl {
 struct intrusive_list_node_s008e_b250 {
     intrusive_list_node_s008e_b250* mpNext;
@@ -38,7 +41,7 @@ public:
     void* mpCoreFunctionContext;      // +0x1c
     void* mpTopBookmark;              // +0x20
 };  // namespace Allocator
-}  // namespace EA
+}
 }
 namespace EA {
 namespace XHTML {
@@ -154,7 +157,7 @@ public:
     virtual void vf08();
     virtual void vf0c();
     virtual void vf10();
-    virtual void vf14();
+    virtual void vf14(void* pCtx);
     virtual void vf18();
 
     Page_s008e_b250* mpPage;                   // +0x0c
@@ -313,10 +316,16 @@ void CreateAttributeStyleFn(unsigned int a, unsigned int b, void* pPage, const v
 unsigned int StyleAttr_GetKind(void* pAttr);
 void RenderingContext_Ctor(void* pCtx, void* pTS, const float* pRect, const void* pState);  // 0x008EE810
 void Typesetter_Dtor(void* pCtx);          // 0x0089C540
+// both are __thiscall in retail (ecx = the context): member declarations give cl that calling shape
+struct RenderingContextRaw_s008e_b250 {
+    void __thiscall Ctor(void* pTS, const float* pRect, const void* pState) const;
+    void __thiscall TypesetterDtor() const;
+};
 void* Page_GetSelectionInterface(void* pPage);  // 0x008E2810
 unsigned int ComputeStyleHash(const void* pStyle);  // 0x00894440
 bool TextStyle_Equals(const void* a, const void* b);  // 0x008942A0
 void* TextStyle_CopyCtor(void* pDst, const void* pSrc);  // 0x008945A0
+struct IntrusiveListReceiver { void* next; void* prev; void Destroy(); }; // 0x00620230
 void* EAAllocate(unsigned int nSize, const char* pName, int a, int b, const char* pFile, int line);
 using EA::XHTML::Style::StyleState;
 struct SizeNode {
@@ -354,8 +363,10 @@ public:
     unsigned int mnSize;         // +0x0c
     uint32_t mAllocator0;        // +0x10
     uint32_t mAllocator1;        // +0x14
-    void* mListNext;             // +0x18
-    void* mpFreeList;            // +0x1c
+    union {
+        struct { void* mListNext; void* mpFreeList; };
+        IntrusiveListReceiver mList18; // +0x18
+    };
     uint32_t pad20;              // +0x20
     uint32_t pad24;              // +0x24
     void* mpPoolEnd;             // +0x28
@@ -364,9 +375,16 @@ public:
     void* mpPoolBegin2;          // +0x34
     uint32_t pad38[(0x5c - 0x38) / 4];
     void* mpSecondary;           // +0x5c
-};  // namespace Layout
-}  // namespace XHTML
-}  // namespace EA
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+typedef char TextStyleHashtable_prefix_size_check[(sizeof(TextStyleHashtable) == 0x60) ? 1 : -1];
+}
+}
 }
 using EA::XHTML::Layout::TextStyleHashtable;
 int Hashtable_GetNextBucketCount(unsigned int nSize)
@@ -857,6 +875,17 @@ class PickingContext { public:
 }
 namespace EA {
 namespace XHTML {
+namespace Layout {
+struct WString {
+    wchar_t* mpBegin;     // +0x00
+    wchar_t* mpEnd;       // +0x04
+    wchar_t* mpCapacity;  // +0x08
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
 namespace DOM {
 class Element {
 public:
@@ -873,6 +902,34 @@ public:
     Element* AsElement();  // 0x008E52F0
     Node* Parent();        // 0x00FF0420
 };
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace DOM {
+void ResolveRelativeURL(Layout::WString* pOut, const void* pBase, const wchar_t* pURL);  // 0x008E3FA0
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void* GetResourceProvider();                      // 0x008FE480
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+int IntRange_Equals(void* a, void* b);            // 0x008EBA70
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+void ImageRequestCallback_8ec010();               // 0x008EC010
 }
 }
 }
@@ -955,49 +1012,21 @@ void EA::XHTML::Layout::Page_s008e_b250::SetImageRequester(void* pNew, int flag)
     }
 }
 
-struct PageTypesetterMember {
-    char mData[0x574];
-    ~PageTypesetterMember();                     // 0x0089C540 (~Typesetter)
-};
-struct PageRenderingContext {
-    int mHeader;                                 // +0x00
-    PageTypesetterMember mTypesetter;            // +0x04
-    PageRenderingContext(EA::XHTML::Text::Typesetter* pTS, const float* pRect, const void* pState);  // 0x008EE810
-};
-struct PageRenderItem {
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
-    virtual void Render(PageRenderingContext* ctx);   // +0x14
-};
-struct PageTypesetterV {
-    virtual void v00();
-    virtual void SetLayoutLimit(int limit);      // +0x04
-    virtual void v02();
-    virtual void v03();
-    virtual void v04();
-    virtual void v05();
-    virtual void v06();
-    virtual void v07();
-    virtual void v08();
-    virtual void v09();
-    virtual void v0a();
-    virtual void v0b();
-    virtual void v0c();
-    virtual void v0d();
-    virtual void SetLayoutRect(float l, float t, float r, float b);   // +0x38
-};
-
 // @ 0x008eb870
 void EA::XHTML::Layout::Page_s008e_b250::Render(Text::Typesetter* pTS, const float* pRect, const void* pState)
 {
+    char ctx[0x578];
+    char* const pRaw = ctx;
     if (mpRootItem) {
-        PageRenderingContext ctx(pTS, pRect, pState);
-        ((PageRenderItem*)mpRootItem)->Render(&ctx);
+        ((const RenderingContextRaw_s008e_b250*)pRaw)->Ctor(pTS, pRect, pState);
+        mpRootItem->vf14(pRaw);
+        ((const RenderingContextRaw_s008e_b250*)(pRaw + 4))->TypesetterDtor();
         return;
     }
-    PageTypesetterV* ts = (PageTypesetterV*)pTS;
-    ts->SetLayoutLimit(0x7fffffff);
-    const float* r = (const float*)pState;
-    ts->SetLayoutRect(r[0], r[1], r[2], r[3]);
+    ((void (__thiscall*)(void*, int))*(int*)(*(int*)pTS + 4))(pTS, 0x7fffffff);
+    const float* pFloats = (const float*)pState;
+    ((void (__thiscall*)(void*, float, float, float, float))*(int*)(*(int*)pTS + 0x38))(pTS, pFloats[0], pFloats[1],
+                                                                        pFloats[2], pFloats[3]);
 }
 
 // @ 0x008eb910
@@ -1099,9 +1128,9 @@ void EA::XHTML::Layout::TextStyleHashtable::DoRehash(unsigned int nNewBucketCoun
 EA::XHTML::Layout::InlineItem::InlineItem(EA::XHTML::Layout::Page_s008e_b250* pPage, void* pElement, int type)
 : EA::XHTML::Layout::ContainerItem(pPage, type)
 {
-    eastl::intrusive_list_node_s008e_b250* pAnchor = &mChildItems;
-    pAnchor->mpPrev = pAnchor;
-    pAnchor->mpNext = pAnchor;
+    eastl::intrusive_list_node_s008e_b250& node = mChildItems;
+    node.mpPrev = &node;
+    node.mpNext = &node;
     mStyleRules = 0;
     mnRuleCount = 0;
     mPlacement = 0;
@@ -1130,9 +1159,9 @@ EA::XHTML::Layout::TableCell::TableCell(EA::XHTML::Layout::Page_s008e_b250* pPag
 EA::XHTML::Layout::TableGroup::TableGroup(EA::XHTML::Layout::Page_s008e_b250* pPage, void* pElement, int type)
 : EA::XHTML::Layout::ContainerItem(pPage, 9)
 {
-    eastl::intrusive_list_node_s008e_b250* pAnchor = &mChildItems;
-    pAnchor->mpPrev = pAnchor;
-    pAnchor->mpNext = pAnchor;
+    eastl::intrusive_list_node_s008e_b250& node = mChildItems;
+    node.mpPrev = &node;
+    node.mpNext = &node;
     mStyleRules = 0;
     mnRuleCount = 0;
     mPlacement = 0;
@@ -1274,17 +1303,13 @@ void* EA::XHTML::Layout::TextStyleHashtable::FindNodeInBucket(void* pNode, const
     return pNode;
 }
 
-extern "C" char g_1437e8c[];   // TableRow vtable
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
-
 // @ 0x008ec170
 EA::XHTML::Layout::TableRow::TableRow(EA::XHTML::Layout::Page_s008e_b250* pPage, void* pElement)
 : EA::XHTML::Layout::ContainerItem(pPage, 8)
 {
-    eastl::intrusive_list_node_s008e_b250* pAnchor = &mChildItems;
-    pAnchor->mpPrev = pAnchor;
-    pAnchor->mpNext = pAnchor;
+    eastl::intrusive_list_node_s008e_b250& node = mChildItems;
+    node.mpPrev = &node;
+    node.mpNext = &node;
     mStyleRules = 0;
     mnRuleCount = 0;
     mPlacement = 0;
@@ -1294,10 +1319,22 @@ EA::XHTML::Layout::TableRow::TableRow(EA::XHTML::Layout::Page_s008e_b250* pPage,
     mpBackground = 0;
     mpElement = pElement;
     *(void**)this = (void*)g_1437e8c;
-    _ReadWriteBarrier();
-    mpCellsBegin = 0;
-    mpCellsEnd = 0;
-    mpCellsCapacity = 0;
+    void** pCells = &mpCellsBegin;
+    pCells[0] = 0;
+    pCells[1] = 0;
+    pCells[2] = 0;
+}
+
+// @ 0x008ec1c0
+void* EA::XHTML::Layout::TextStyleHashtable::Destroy(unsigned char flags)
+{
+    if (mpSecondary && *(int*)((char*)mpSecondary - 4) != 0)
+        operator delete[]((char*)mpSecondary);
+    mList18.Destroy();
+    mVptr = (void*)g_1437c00; // Block base vtable
+    if (flags & 1)
+        operator delete[](this);
+    return this;
 }
 
 // @ 0x008ec200
@@ -1343,6 +1380,106 @@ void EA::XHTML::Layout::TextStyleHashtable::DoInsertValue(void* pOut, const void
     *(char*)((char*)pOut + 8) = 1;
 }
 
+// @ 0x008ec360
+void EA::XHTML::Layout::Page_s008e_c360::Layout()
+{
+    if (!mpRootItem)
+        return;
+    if (mViewportW <= 0)
+        return;
+    if (mViewportH <= 0)
+        return;
+
+    EA::XHTML::Layout::StackingContext ctx((u32)mpRootItem);
+    EA::XHTML::Layout::RectF rect;
+    rect.l = 0.0f;
+    rect.t = 0.0f;
+    rect.r = (float)mViewportW;
+    rect.b = (float)mViewportH;
+    mPageH = 0;
+    mPageW = 0;
+    ctx.SetContextRect(rect);
+
+    StyleState_s008e_c360 state(this);
+    mpRootItem->vf0c(&ctx, &state);
+
+    rect.l = 0.0f;
+    rect.t = 0.0f;
+    rect.r = (float)mViewportW;
+    rect.b = (float)mViewportH;
+    mpRootItem->vf10(&rect);
+
+    if (mpRootItem->mItemType == 3) {
+        rect = ctx.mBoundsRect;
+        float w = *(float*)((char*)mpRootItem + 0x7c) - *(float*)((char*)mpRootItem + 0x74);
+        float h = *(float*)((char*)mpRootItem + 0x70) - *(float*)((char*)mpRootItem + 0x68);
+        mPageW = (int)(w > rect.r ? w : rect.r);
+        mPageH = (int)(h > rect.b ? h : rect.b);
+    }
+}
+
+// @ 0x008ec4f0
+char EA::XHTML::Layout::Page_s008e_c360::Pick(const void* screenRect, u32* out)
+{
+    out[0] = 0;
+    out[1] = 0;
+    out[4] = 0;
+    out[5] = 0;
+    out[6] = 0;
+    if (!mpRootItem)
+        return 0;
+    EA::XHTML::Layout::PickingContext ctx(screenRect);
+    char r = mpRootItem->vf18(&ctx, out);
+    if (ctx.mVecBegin564 && ctx.mVecBegin564 != ctx.mpInline574)
+        operator delete(ctx.mVecBegin564);
+    return r;
+}
+
+// @ 0x008ec580
+void* EA::XHTML::Layout::Page_s008e_c360::GetTextStyle(const StyleState_s008e_c360* s)
+{
+    void* local[3];
+    EA::XHTML::Layout::TextStyleHashtable_s008e_c360* pCache = &mStyleCache;
+    const void* key = (const char*)s + 0xc;
+    pCache->Find(local, key);
+    if (local[0] == ((void**)pCache->mpBuckets)[pCache->mnBucketCount]) {
+        ((unsigned char*)&s)[0] = 0;                 // s = (StyleState*)((u32)s & 0xffffff00)
+        pCache->DoInsertValue(local, key, (const void*)s);
+    }
+    return local[0];
+}
+
+// @ 0x008ec5e0
+void EA::XHTML::Layout::Page_s008e_c360::LoadImage(EA::XHTML::Layout::ImageRequester_s008e_c360* pRequester, const wchar_t* pURL)
+{
+    if (!mpImageRequester)
+        return;
+
+    wchar_t buf[96];
+    EA::XHTML::Layout::WString url;
+    url.mpBegin = buf;
+    url.mpEnd = buf;
+    url.mpCapacity = buf + 96;
+    buf[0] = 0;
+    const wchar_t* pBuf = buf;
+
+    const wchar_t* pBase = (const wchar_t*)mpDocument->mField4c;
+    if (!pBase)
+        pBase = (const wchar_t*)mpDocument->mField48;
+    DOM::ResolveRelativeURL(&url, pBase, pURL);
+
+    pRequester->mpNextLoading = mpResources;
+    mpResources = pRequester;
+
+    mpImageRequester->Request((char*)pRequester + 8, url.mpBegin,
+                              (void*)&EA::XHTML::Layout::ImageRequestCallback_8ec010, this,
+                              mpDocument->mField44, 0);
+
+    if (url.mpBegin && url.mpBegin != pBuf &&
+        (int)(((char*)url.mpCapacity - (char*)url.mpBegin) & 0xfffffffe) > 2)
+        operator delete(url.mpBegin);
+}
+
 // @ 0x008ec6b0
 EA::XHTML::Layout::TextStyleHashtable_s008e_c360::TextStyleHashtable_s008e_c360(const HashTag& h, const EqTag& e)
 {
@@ -1374,6 +1511,59 @@ EA::XHTML::Layout::TextStyleHashtable_s008e_c360::TextStyleHashtable_s008e_c360(
         DoRehash(n);
 }
 
+// @ 0x008ec790
+EA::XHTML::Layout::Page_s008e_c360::Page_s008e_c360()
+: EA::Allocator::StackAllocator_s008e_c360(0, 0xffffffffu, 0, 0, 0),
+      mpDocument(0),
+      mpBuiltInStyles(0),
+      mpRootItem(0),
+      mResourceTable(),
+      mpResources(0),
+      mpImageRequester((EA::XHTML::Layout::ImageRequester_s008e_c360*)EA::XHTML::Layout::GetResourceProvider()),
+      mpFocusItem(0),
+      mSelectableCount(0),
+      mSelStart(0),
+      mSelEnd(0),
+      mSelMin(0),
+      mSelMax(0),
+      mStyleCache(EA::XHTML::Layout::TextStyleHashtable_s008e_c360::HashTag(), EA::XHTML::Layout::TextStyleHashtable_s008e_c360::EqTag())
+{
+}
+
+// @ 0x008ec810
+EA::XHTML::Layout::Page_s008e_c360::~Page_s008e_c360()
+{
+    NotifyImagesAbandoned();
+    DestroyItem(mpRootItem);
+
+    eastl::fixed_vector_s008e_c360<void*, 127>& table = mResourceTable;
+    EA::XHTML::Layout::TextStyleHashtable_s008e_c360& c = mStyleCache;
+
+    table.erase(table.mpBegin, table.mpEnd);
+
+    EA::Allocator::StackAllocator_s008e_c360::Reset(0);
+
+    c.DoFreeNodes(c.mpBuckets, c.mnBucketCount);
+
+    void* pBuckets = c.mpBuckets;
+    c.mnSize = 0;
+    if (c.mnBucketCount > 1 && pBuckets != c.mpInlineBuckets) {
+        if (pBuckets >= c.mpPoolBegin && pBuckets < c.mpPoolEnd) {
+            *(void**)pBuckets = c.mpFreeList;
+            c.mpFreeList = pBuckets;
+        } else {
+            operator delete(pBuckets);
+        }
+    }
+
+    table.Free();
+
+    if (mpBuiltInStyles)
+        mpBuiltInStyles->vf04();
+    if (mpDocument)
+        mpDocument->vf04();
+}
+
 // @ 0x008ec8c0
 void EA::XHTML::Layout::Page_s008e_c360::SetViewportSize(float w, float h)
 {
@@ -1383,4 +1573,98 @@ void EA::XHTML::Layout::Page_s008e_c360::SetViewportSize(float w, float h)
         if (mpRootItem)
             Layout();
     }
+}
+
+// @ 0x008ec910
+int EA::XHTML::Layout::Page_s008e_c360::AddResourceSlot()
+{
+    void** pEnd = mResourceTable.mpEnd;
+    eastl::fixed_vector_s008e_c360<void*, 127>* pv = &mResourceTable;
+    EA::XHTML::Layout::IRefCounted* pObj = 0;
+    int n = (int)(pv->mpEnd - pv->mpBegin);
+    if (pEnd < pv->mpCapacity) {
+        pv->mpEnd = pEnd + 1;
+        if (pEnd)
+            *pEnd = 0;
+    } else {
+        pv->Grow(pEnd, (void**)&pObj);
+        if (pObj)
+            pObj->vf04();
+    }
+    return n;
+}
+
+// @ 0x008ecc90
+char EA::XHTML::Layout::Page_s008e_c360::SetCurrentNode(DOM::Node* pNew)
+{
+    if (pNew == mSelectableCount)
+        return 0;
+
+    char bChanged = 0;
+
+    for (DOM::Node* n = mSelectableCount; n; n = n->Parent()) {
+        DOM::Element* e = n->AsElement();
+        if (!e)
+            continue;
+
+        EA::XHTML::Layout::RuleVec rules, a, b;
+
+        CreateLayoutItems(e, &rules);
+        FilterRuleList(e, &rules, &a);
+        *(int*)((char*)e + 0x30) = 0;
+        FilterRuleList(e, &rules, &b);
+        if (EA::XHTML::Layout::IntRange_Equals(&a, &b))
+            bChanged = 1;
+
+        if (a.mpBegin && a.mpBegin != a.mpPoolBegin)
+            operator delete(a.mpBegin);
+        if (b.mpBegin && b.mpBegin != b.mpPoolBegin)
+            operator delete(b.mpBegin);
+        if (rules.mpBegin && rules.mpBegin != rules.mpPoolBegin)
+            operator delete(rules.mpBegin);
+    }
+
+    mSelectableCount = pNew;
+    if (!pNew)
+        return bChanged;
+
+    for (DOM::Node* n = pNew; n; n = n->Parent()) {
+        DOM::Element* e = n->AsElement();
+        if (!e)
+            continue;
+
+        EA::XHTML::Layout::RuleVec rules, a, b;
+
+        CreateLayoutItems(e, &rules);
+        FilterRuleList(e, &rules, &a);
+        *(int*)((char*)e + 0x30) = 1;
+        FilterRuleList(e, &rules, &b);
+
+        int nA = (int)((char*)a.mpEnd - (char*)a.mpBegin);
+        int nB = (int)((char*)b.mpEnd - (char*)b.mpBegin);
+        if (((nA ^ nB) & 0xfffffffc) != 0) {
+            bChanged = 1;
+        } else {
+            int* p = (int*)b.mpBegin;
+            int* pEnd = (int*)b.mpEnd;
+            int* q = (int*)((char*)p + ((char*)a.mpBegin - (char*)b.mpBegin));
+            while (p != pEnd) {
+                if (*p != *q) {
+                    bChanged = 1;
+                    break;
+                }
+                ++p;
+                ++q;
+            }
+        }
+
+        if (b.mpBegin && b.mpBegin != b.mpPoolBegin)
+            operator delete(b.mpBegin);
+        if (a.mpBegin && a.mpBegin != a.mpPoolBegin)
+            operator delete(a.mpBegin);
+        if (rules.mpBegin && rules.mpBegin != rules.mpPoolBegin)
+            operator delete(rules.mpBegin);
+    }
+
+    return bChanged;
 }

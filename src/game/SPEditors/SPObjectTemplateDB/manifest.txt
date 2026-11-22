@@ -31,6 +31,12 @@
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?WriteExtraParameters@@YA_NPAUIStream_s0055_beb0@IO@EA@@PBU?$ParamVec@UExtraParam@@@@@Z  0055c9e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?LoadAssetParameters@@YA_NPAUIStream_s0055_beb0@IO@EA@@PAU?$ParamVec@UAssetParam@@@@PAU?$ParamVec@UExtraParam@@@@@Z  0055cb50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?LoadAssetParametersFromKey@@YA_NPBUResKey@@PAU?$ParamVec@UAssetParam@@@@PAU?$ParamVec@UExtraParam@@@@@Z  0055cd90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055f9e0@EcxStub70@SP@@QAEXXZ  0055f9e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055fb30@EcxStub70@SP@@QAE_NPAX@Z  0055fb30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055fbb0@EcxStub70@SP@@QAE_NPAX@Z  0055fbb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?UpdatePopulation@PopulationDB@SP@@QAEXII@Z  0055fe60  /Od /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?slot_26@cSPObjectTemplateDB@SP@@UAEXXZ  0055fed0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_00560880@EcxStubFc@SP@@QAE_NPAXPAI@Z  00560880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?DecreasePopulation@cSPObjectTemplateDB_s0056_1970@SP@@QAEXH@Z  00561970  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CheckForMinPopulations@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  00561bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?RebuildFreeList@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  00561cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -57,9 +63,3 @@
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?push_back@?$vector_s0056_46b0@URecord50@@Vallocator_s0056_46b0@eastl@@@eastl@@QAEXXZ  00564820  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?insert@?$vector_set_s0056_46b0@IU?$less_s0056_46b0@I@eastl@@Vallocator_s0056_46b0@2@V?$vector_s0056_46b0@IVallocator_s0056_46b0@eastl@@@2@@eastl@@QAE?AU?$pair_s0056_46b0@PAI_N@2@ABI@Z  00564960  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetPartVolumePercentages@@YAXPBUCreature@@PAUFloatVector@@@Z  0056a5f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055f9e0@EcxStub70@SP@@QAEXXZ  0055f9e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?slot_26@cSPObjectTemplateDB@SP@@UAEXXZ  0055fed0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_00560880@EcxStubFc@SP@@QAE_NPAXPAI@Z  00560880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055fbb0@EcxStub70@SP@@QAE_NPAX@Z  0055fbb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055fb30@EcxStub70@SP@@QAE_NPAX@Z  0055fb30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ?UpdatePopulation@PopulationDB@SP@@QAEXII@Z  0055fe60  /Od /MD /Gy /EHsc /TP /Isrc/game/include

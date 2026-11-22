@@ -1,4 +1,4 @@
-// src/game/Havok/_at_01100000.cpp -- migrated from slice(s) s0110fe20, s0110fa20, s0110dd70, s0110b3a0, s0110ad70, s0110a0d0, s011090b0, s01108460, s01107270, s01106490, s01102fc0, s01102010, s01101c00, s01100cf0 by tools/migrate/rewrite.py
+// src/game/Havok/_at_01100000.cpp -- migrated from slice(s) s0110e510, s0110cec0, s01105630, s0110fe20, s0110fa20, s0110dd70, s0110b3a0, s0110ad70, s0110a0d0, s011090b0, s01108460, s01107270, s01106490, s01102fc0, s01102010, s01101c00, s01100cf0 by tools/migrate/rewrite.py
 // Object file: Havok/_at_01100000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1237,6 +1237,276 @@ static inline void memCpy4(void* dst, const void* src, int numWords)
 }
 // ---- items of slice s0110fe20 end
 
+// ---- items of slice s01105630 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const signed char g_triRegionVertex[];    // 0x014a5e60 (index 0..13 -> vertex id, -1 = edge case)
+extern const signed char g_triEdgeStart[];       // 0x014a5e70
+extern const signed char g_triEdgeOther[];       // 0x014a5e72
+extern const signed char g_triVertexEdgeStart[]; // 0x014a5e78
+extern const signed char g_triVertexEdgeEnd[];   // 0x014a5e7a
+#define HK_ALIGN16 __declspec(align(16))
+#define HK_CALL __cdecl
+struct HK_ALIGN16 hkVector4_s0110_5630
+{
+	float x, y, z, w;
+	void setSub4(const hkVector4_s0110_5630& a, const hkVector4_s0110_5630& b)
+	{ x = a.x - b.x; y = a.y - b.y; z = a.z - b.z; w = a.w - b.w; }
+	void setAdd4(const hkVector4_s0110_5630& a, const hkVector4_s0110_5630& b)
+	{ x = a.x + b.x; y = a.y + b.y; z = a.z + b.z; w = a.w + b.w; }
+	void setCross(const hkVector4_s0110_5630& a, const hkVector4_s0110_5630& b)
+	{ x = a.y*b.z - a.z*b.y; y = a.z*b.x - a.x*b.z; z = a.x*b.y - a.y*b.x; }
+	hkReal dot3(const hkVector4_s0110_5630& v) const { return x*v.x + (y*v.y + z*v.z); }
+	hkReal lengthSquared3() const { return x*x + (y*y + z*z); }
+	hkReal length3() const { return sqrtf(lengthSquared3()); }
+	void addMul4(hkReal r, const hkVector4_s0110_5630& v)
+	{ x += v.x*r; y += v.y*r; z += v.z*r; w += v.w*r; }
+};
+inline hkVector4_s0110_5630 operator-(const hkVector4_s0110_5630& a, const hkVector4_s0110_5630& b)
+{ hkVector4_s0110_5630 r; r.setSub4(a, b); return r; }
+class hkCollideTriangleUtil_s0110_5630
+{
+public:
+	// ClosestPointLineSegResult: the closest point on the segment (+ reserved fields).
+	struct ClosestPointLineSegResult
+	{
+		hkVector4_s0110_5630 m_point;      // +0
+		uint32_t m_reserved[4]; // +0x10
+	};
+	// ClosestLineSegLineSegResult: closest point on the first segment, the vector between the two
+	// closest points (first - second) and its squared length.
+	struct ClosestLineSegLineSegResult
+	{
+		hkVector4_s0110_5630 m_closestPoint;    // +0
+		hkVector4_s0110_5630 m_direction;       // +0x10
+		hkReal    m_distanceSquared; // +0x20
+	};
+	struct ClosestPointTriangleCache
+	{
+		hkReal m_QQ;             // +0
+		hkReal m_RR;             // +4
+		hkReal m_QR;             // +8
+		hkReal m_invTriNormal;   // +0xc
+	};
+	struct PointTriangleDistanceCache
+	{
+		hkReal m_invLen0;        // +0
+		hkReal m_invLen1;        // +4
+		hkReal m_invLen2;        // +8
+		hkReal m_invTriNormal;   // +0xc
+		hkReal m_triNormalLen;   // +0x10
+	};
+	struct ClosestPointTriangleResult
+	{
+		hkVector4_s0110_5630 m_hitDirection;   // +0 (w = 0)
+		hkReal    m_distance;       // +0x10
+	};
+	enum ClosestPointTriangleStatus
+	{
+		CLOSEST_POINT_TRIANGLE_FACE = 0,
+		CLOSEST_POINT_TRIANGLE_EDGE = 1
+	};
+
+	static void HK_CALL calcBarycentricCoordinates(const hkVector4_s0110_5630& A, const hkVector4_s0110_5630& B, const hkVector4_s0110_5630& C,
+	                                              const hkVector4_s0110_5630& P, hkReal* barycentric);              // 0x01105630
+	static int HK_CALL closestLineSegLineSeg(const hkVector4_s0110_5630& p1, const hkVector4_s0110_5630& q1, const hkVector4_s0110_5630& p2,
+	                                         const hkVector4_s0110_5630& q2, ClosestLineSegLineSegResult& result);      // 0x01105940
+	static int HK_CALL closestPointLineSeg(const hkVector4_s0110_5630& point, const hkVector4_s0110_5630& lineStart, const hkVector4_s0110_5630& lineEnd,
+	                                       ClosestPointLineSegResult& result);                               // 0x01105c30
+	static void HK_CALL setupClosestPointTriangleCache(const hkVector4_s0110_5630* triangle, ClosestPointTriangleCache& cache); // 0x01105d80
+	static void HK_CALL setupPointTriangleDistanceCache(const hkVector4_s0110_5630* triangle, PointTriangleDistanceCache& cache); // 0x01105e90
+	static ClosestPointTriangleStatus HK_CALL closestPointTriangle(const hkVector4_s0110_5630& position, const hkVector4_s0110_5630* tri,
+	                                                              const ClosestPointTriangleCache& cache,
+	                                                              ClosestPointTriangleResult& result);           // 0x01106010
+};
+extern hkReal g_triBaryLimit0;             // 0x016e42d0
+extern hkReal g_triBaryLimit1;             // 0x016e42d4
+extern hkReal g_triBaryLimit2;             // 0x016e42d8
+extern hkReal g_triBaryLimit3;             // 0x016e42dc
+// ---- items of slice s01105630 end
+
+// ---- items of slice s0110cec0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(sqrt)
+class __declspec(align(16)) hkVector4_s0110_cec0 {
+public:
+    hkReal x, y, z, w;
+};
+class hkCollideTriangleUtil_s0110_cec0 {
+public:
+    struct ClosestLineSegLineSegResult {
+        hkVector4_s0110_cec0 m_closestPointA;
+        hkVector4_s0110_cec0 m_closestPointB;
+        hkVector4_s0110_cec0 m_closestAB;
+        hkReal m_distanceSquared;
+        hkReal m_t;
+        hkReal m_u;
+        hkReal m_pad;
+    };
+    static int closestLineSegLineSeg(const hkVector4_s0110_cec0& A, const hkVector4_s0110_cec0& dA, const hkVector4_s0110_cec0& B,
+                                     const hkVector4_s0110_cec0& dB, ClosestLineSegLineSegResult& result);  // 0x01105940
+};
+static __forceinline void hkCopy4(hkVector4_s0110_cec0& d, const hkVector4_s0110_cec0& s) { d.x = s.x; d.y = s.y; d.z = s.z; d.w = s.w; }
+// ---- items of slice s0110cec0 end
+
+// ---- items of slice s0110e510 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class __declspec(align(16)) hkVector4_s0110_e510 {
+public:
+    hkReal x, y, z, w;
+
+    inline void setSub4(const hkVector4_s0110_e510& a, const hkVector4_s0110_e510& b) {
+        x = a.x - b.x; y = a.y - b.y; z = a.z - b.z; w = a.w - b.w;
+    }
+    inline void setNeg4(const hkVector4_s0110_e510& a) { x = -a.x; y = -a.y; z = -a.z; w = -a.w; }
+    inline hkReal dot3(const hkVector4_s0110_e510& a) const { return z * a.z + y * a.y + x * a.x; }
+    inline hkReal lengthSquared3() const { return x * x + y * y + z * z; }
+    inline void mul4(hkReal r) { x *= r; y *= r; z *= r; w *= r; }
+};
+class hkTransform_s0110_e510 {
+public:
+    hkVector4_s0110_e510 m_col0, m_col1, m_col2;   // rotation columns
+    hkVector4_s0110_e510 m_translation;
+};
+static __forceinline void setTransformedPos_s0110_e510(hkVector4_s0110_e510& out, const hkTransform_s0110_e510& t, const hkVector4_s0110_e510& v) {
+    const hkReal vx = v.x, vy = v.y, vz = v.z;
+    out.x = t.m_col2.x * vz + t.m_col1.x * vy + t.m_col0.x * vx + t.m_translation.x;
+    out.y = t.m_col2.y * vz + t.m_col1.y * vy + t.m_col0.y * vx + t.m_translation.y;
+    out.z = t.m_col2.z * vz + t.m_col1.z * vy + t.m_col0.z * vx + t.m_translation.z;
+    out.w = 0.0f;
+}
+static inline hkReal signedSquare(hkReal d) { return (hkReal)fabs(d) * d; }
+class hkConvexShape_s0110_e510 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+    virtual void v20();
+    virtual void getSupportingVertex(const hkVector4_s0110_e510& direction, hkVector4_s0110_e510& supportingVertexOut) const;  // 0x24
+};
+class hkCollideTriangleUtil_s0110_e510 {
+public:
+    struct ClosestLineSegLineSegResult {
+        hkVector4_s0110_e510 m_closestPointA;
+        hkVector4_s0110_e510 m_closestPointB;
+        hkVector4_s0110_e510 m_closestAB;
+        hkReal m_distanceSquared;
+        hkReal m_t;
+        hkReal m_u;
+        hkReal m_pad;
+    };
+    // returns a bit mask: 1/2 = A collapses to its end/start point, 4/8 = B likewise; 0 = interior
+    static int closestLineSegLineSeg(const hkVector4_s0110_e510& A, const hkVector4_s0110_e510& dA, const hkVector4_s0110_e510& B,
+                                     const hkVector4_s0110_e510& dB, ClosestLineSegLineSegResult& result);  // 0x01105940
+};
+int hkGsk_checkTetrahedron(const hkVector4_s0110_e510* point, const hkVector4_s0110_e510* tetra, hkReal sign);  // 0x0110d990
+static const signed char s_triangleFeatureToIndex[16] = {
+    -1, -1, 2, -1, 1, -1, -8, -1, 0, -1, -7, -1, -6, -1, -1, -1 };
+static const signed char s_triNext[5] = { 2, 0, 1, 2, 0 };
+class hkGsk_s0110_e510 {
+public:
+    enum SupportTypes {
+        SUPPORT_A = -8,     // the last reduction came from a triangle of A
+        SUPPORT_NONE = 0,
+        SUPPORT_B = 8       // the last reduction came from a triangle of B
+    };
+    enum { TRIANGLE_INSIDE = 14 };
+
+    int getClosestFeature(const hkConvexShape_s0110_e510* shapeA, const hkConvexShape_s0110_e510* shapeB,
+                          const hkTransform_s0110_e510& aTb, hkVector4_s0110_e510& separatingNormalOut);
+
+protected:
+    int checkTriangleBoundaries(const hkVector4_s0110_e510& point, hkVector4_s0110_e510* triangle, SupportTypes type);  // 0x0110c330
+    int checkTriangleEdge(hkVector4_s0110_e510* triangleVerts, hkVector4_s0110_e510* edgeVerts, int* triangleDim,
+                          int* edgeDim, bool wasEdge, int type);                                // 0x0110c720
+    void handlePenetration(const hkConvexShape_s0110_e510* shapeA, const hkConvexShape_s0110_e510* shapeB,
+                           const hkTransform_s0110_e510& aTb);                                            // 0x0110dd70
+    bool addSupportVertexA(const hkConvexShape_s0110_e510* shapeA, hkReal threshold);
+    bool addSupportVertexB(const hkConvexShape_s0110_e510* shapeB, const hkTransform_s0110_e510& aTb, hkReal threshold);
+
+public:
+    int m_dimA;                                     // +0x000
+    int m_dimB;                                     // +0x004
+    int m_maxDimA;                                  // +0x008
+    int m_maxDimB;                                  // +0x00c
+    bool m_doNotHandlePenetration;                  // +0x010
+    int m_featureChange;                            // +0x014
+    int m_pad18[2];
+    hkVector4_s0110_e510 m_verticesA[4];                       // +0x020
+    hkVector4_s0110_e510 m_verticesAinA[4];                    // +0x060
+    hkVector4_s0110_e510 m_verticesBinA[4];                    // +0x0a0
+    hkVector4_s0110_e510 m_verticesB[4];                       // +0x0e0
+    hkVector4_s0110_e510 m_closestPointDir;                    // +0x120 (separating direction, A - B)
+    hkCollideTriangleUtil_s0110_e510::ClosestLineSegLineSegResult m_lineResult;   // +0x130
+    int m_lastSupportType;                          // +0x170
+    int m_lastDimB;                                 // +0x174
+};
+__forceinline bool hkGsk_s0110_e510::addSupportVertexA(const hkConvexShape_s0110_e510* shapeA, hkReal threshold) {
+    if (m_dimA == m_maxDimA || m_lastSupportType == SUPPORT_B) return false;
+    hkVector4_s0110_e510 dirA;
+    dirA.setNeg4(m_closestPointDir);
+    shapeA->getSupportingVertex(dirA, m_verticesA[m_dimA]);
+    const int n = m_dimA;
+    const hkVector4_s0110_e510& v = m_verticesA[n];
+    hkReal s = (v.x - m_verticesA[0].x) * dirA.x + (v.z - m_verticesA[0].z) * dirA.z +
+               (v.y - m_verticesA[0].y) * dirA.y;
+    if (signedSquare(s) <= threshold) return false;
+    switch (n) {
+    case 3:
+        s = (v.x - m_verticesA[2].x) * dirA.x + (v.z - m_verticesA[2].z) * dirA.z +
+            (v.y - m_verticesA[2].y) * dirA.y;
+        if (signedSquare(s) < threshold) return false;
+        // fall through
+    case 2:
+        s = (v.x - m_verticesA[1].x) * dirA.x + (v.z - m_verticesA[1].z) * dirA.z +
+            (v.y - m_verticesA[1].y) * dirA.y;
+        if (signedSquare(s) < threshold) return false;
+        break;
+    }
+    m_dimA = n + 1;
+    m_featureChange = 1;
+    return true;
+}
+__forceinline bool hkGsk_s0110_e510::addSupportVertexB(const hkConvexShape_s0110_e510* shapeB, const hkTransform_s0110_e510& aTb,
+                                            hkReal threshold) {
+    if (m_dimB == m_maxDimB || m_lastSupportType == SUPPORT_A) return false;
+    hkVector4_s0110_e510 dirB;
+    const hkReal nx = m_closestPointDir.x, ny = m_closestPointDir.y, nz = m_closestPointDir.z;
+    dirB.x = nz * aTb.m_col0.z + ny * aTb.m_col0.y + nx * aTb.m_col0.x;
+    dirB.y = nz * aTb.m_col1.z + ny * aTb.m_col1.y + nx * aTb.m_col1.x;
+    dirB.z = nx * aTb.m_col2.x + nz * aTb.m_col2.z + ny * aTb.m_col2.y;
+    dirB.w = 0.0f;
+    shapeB->getSupportingVertex(dirB, m_verticesB[m_dimB]);
+    const int n = m_dimB;
+    const hkVector4_s0110_e510& v = m_verticesB[n];
+    hkReal s = (v.x - m_verticesB[0].x) * dirB.x + (v.z - m_verticesB[0].z) * dirB.z +
+               (v.y - m_verticesB[0].y) * dirB.y;
+    if (signedSquare(s) <= threshold) return false;
+    switch (n) {
+    case 3:
+        s = (v.x - m_verticesB[2].x) * dirB.x + (v.z - m_verticesB[2].z) * dirB.z +
+            (v.y - m_verticesB[2].y) * dirB.y;
+        if (signedSquare(s) < threshold) return false;
+        // fall through
+    case 2:
+        s = (v.x - m_verticesB[1].x) * dirB.x + (v.z - m_verticesB[1].z) * dirB.z +
+            (v.y - m_verticesB[1].y) * dirB.y;
+        if (signedSquare(s) < threshold) return false;
+        break;
+    }
+    const hkReal bx = v.x, by = v.y, bz = v.z;
+    hkVector4_s0110_e510& out = m_verticesBinA[n];
+    out.x = by * aTb.m_col1.x + bz * aTb.m_col2.x + bx * aTb.m_col0.x + aTb.m_translation.x;
+    out.y = by * aTb.m_col1.y + bz * aTb.m_col2.y + bx * aTb.m_col0.y + aTb.m_translation.y;
+    out.z = by * aTb.m_col1.z + bz * aTb.m_col2.z + bx * aTb.m_col0.z + aTb.m_translation.z;
+    out.w = 0.0f;
+    m_dimB++;
+    m_featureChange = 1;
+    return true;
+}
+// ---- items of slice s0110e510 end
+
 // @ 0x01100cf0
 int __cdecl FUN_01100cf0(hkCollisionDispatcher_s0110_0cf0* dispatcher, int typeA, int typeB)
 {
@@ -1314,6 +1584,36 @@ void hkMoppObbVirtualMachine::queryObb(const hkMoppCode_s0110_1c00* code, const 
     m_hi[1] = ToInt(((ty + ey) - code->m_offsetY) * code->m_scale) + 1;
     m_lo[2] = ToInt(((tz - ez) - code->m_offsetZ) * code->m_scale) - 1;
     m_hi[2] = ToInt(((tz + ez) - code->m_offsetZ) * code->m_scale) + 1;
+
+    hkMoppObbState state;
+    state.m_hi[0] = (m_hi[0] >> 16) + 1;
+    state.m_hi[1] = (m_hi[1] >> 16) + 1;
+    state.m_hi[2] = (m_hi[2] >> 16) + 1;
+    state.m_lo[0] = m_lo[0] >> 16;
+    state.m_lo[1] = m_lo[1] >> 16;
+    state.m_lo[2] = m_lo[2] >> 16;
+    state.m_org[0] = 0;
+    state.m_org[1] = 0;
+    state.m_org[2] = 0;
+    state.m_primOffset = 0;
+    state.m_shift = 0;
+    state.m_reg[0] = 0;
+
+    queryObbRecurse(&state, code->m_data);
+}
+
+// @ 0x01101e90
+void hkMoppObbVirtualMachine::queryAabb(const hkMoppCode_s0110_1c00* code, const hkAabb_s0110_1c00& aabb, hkArray<hkMoppPrimitiveInfo>* primitives)
+{
+    m_primitives = primitives;
+    m_code = code;
+
+    m_lo[0] = ToInt((aabb.m_min.x - code->m_offsetX) * code->m_scale) - 1;
+    m_hi[0] = ToInt((aabb.m_max.x - code->m_offsetX) * code->m_scale) + 1;
+    m_lo[1] = ToInt((aabb.m_min.y - code->m_offsetY) * code->m_scale) - 1;
+    m_hi[1] = ToInt((aabb.m_max.y - code->m_offsetY) * code->m_scale) + 1;
+    m_lo[2] = ToInt((aabb.m_min.z - code->m_offsetZ) * code->m_scale) - 1;
+    m_hi[2] = ToInt((aabb.m_max.z - code->m_offsetZ) * code->m_scale) + 1;
 
     hkMoppObbState state;
     state.m_hi[0] = (m_hi[0] >> 16) + 1;
@@ -1859,6 +2159,300 @@ void* __cdecl hkAgent1nMachine_UpdateShapeCollectionFilterVisitor(hkAgent1nMachi
         return entry;
     }
     return (uint8_t*)entry + entry->m_size;
+}
+
+// @ 0x01105630
+void hkCollideTriangleUtil_s0110_5630::calcBarycentricCoordinates(const hkVector4_s0110_5630& A, const hkVector4_s0110_5630& B, const hkVector4_s0110_5630& C, const hkVector4_s0110_5630& P, hkReal* barycentric)
+{
+	const hkReal ux = B.x - C.x, uy = B.y - C.y, uz = B.z - C.z;
+	const hkReal vx = P.x - C.x, vy = P.y - C.y, vz = P.z - C.z;
+	const hkReal d00 = uz*uz + (ux*ux + uy*uy);
+	const hkReal d11 = vz*vz + (vx*vx + vy*vy);
+	const hkReal d01 = vz*uz + (vy*uy + vx*ux);
+	const hkReal denom = d11*d00 - d01*d01;
+
+	if (denom > 0.0f) {
+		const hkReal inv = 1.0f / denom;
+		const hkReal wx = C.x - A.x, wy = C.y - A.y, wz = C.z - A.z;
+		const hkReal d20 = wz*uz + (wy*uy + wx*ux);
+		const hkReal d21 = wz*vz + (wy*vy + wx*vx);
+		hkReal v = d01*d21 - d11*d20;
+		hkReal w = d20*d01 - d21*d00;
+		barycentric[0] = v*inv;
+		barycentric[1] = ((denom - v) - w)*inv;
+		barycentric[2] = w*inv;
+		return;
+	}
+
+	// Degenerate triangle: the point projects outside, so clamp to the closest edge or vertex.
+	const hkReal abx = B.x - P.x, aby = B.y - P.y, abz = B.z - P.z;
+	const hkReal sqAB = abz*abz + (aby*aby + abx*abx);
+	if (d00 < d11) {
+		if (d11 <= sqAB) {
+			const hkReal apx = A.x - P.x, apy = A.y - P.y, apz = A.z - P.z;
+			barycentric[1] = 0.0f;
+			const hkReal t = (apz*abz + (apy*aby + apx*abx)) / sqAB;
+			barycentric[0] = t;
+			barycentric[2] = 1.0f - t;
+			return;
+		}
+		barycentric[0] = 0.0f;
+		{
+			const hkReal A0 = A.x - C.x, A1 = A.y - C.y, A2 = A.z - C.z;
+			const hkReal t = (A2*vz + (A1*vy + A0*vx)) / d11;
+			barycentric[2] = t;
+			barycentric[1] = 1.0f - t;
+		}
+		return;
+	}
+	if (sqAB < d00) {
+		barycentric[2] = 0.0f;
+		{
+			const hkReal A0 = A.x - B.x, A1 = A.y - B.y, A2 = A.z - B.z;
+			const hkReal t = (A2*uz + (A1*uy + A0*ux)) / d00;
+			barycentric[0] = t;
+			barycentric[1] = 1.0f - t;
+		}
+		return;
+	}
+	barycentric[1] = 0.0f;
+	if (sqAB > 0.0f) {
+		const hkReal t = (abz*(A.z - P.z) + (aby*(A.y - P.y) + abx*(A.x - P.x))) / sqAB;
+		barycentric[0] = t;
+		barycentric[2] = 1.0f - t;
+		return;
+	}
+	barycentric[0] = 0.0f;
+	barycentric[2] = 0.0f;
+}
+
+// @ 0x01105940
+int hkCollideTriangleUtil_s0110_5630::closestLineSegLineSeg(const hkVector4_s0110_5630& p1, const hkVector4_s0110_5630& d1, const hkVector4_s0110_5630& p2, const hkVector4_s0110_5630& d2, ClosestLineSegLineSegResult& result)
+{
+	const hkReal d1DotD2 = d1.x*d2.x + (d1.y*d2.y + d1.z*d2.z);
+	const hkReal vx = p2.x - p1.x, vy = p2.y - p1.y, vz = p2.z - p1.z;
+	const hkReal vDotD1 = vx*d1.x + (vy*d1.y + vz*d1.z);
+	const hkReal vDotD2 = vx*d2.x + (vy*d2.y + vz*d2.z);
+	const hkReal d1Sq = d1.x*d1.x + (d1.y*d1.y + d1.z*d1.z);
+	const hkReal d2Sq = d2.x*d2.x + (d2.y*d2.y + d2.z*d2.z);
+
+	const hkReal absDet = fabsf(d2Sq*d1Sq - d1DotD2*d1DotD2);
+	const hkReal num = d2Sq*vDotD1 - vDotD2*d1DotD2;
+
+	hkReal s;
+	int status;
+	if (absDet*absDet == num*absDet) {
+		if (num == 0.0f) {
+			s = 0.0f;
+			status = 2;
+		}
+		else if ((d1Sq + d2Sq)*1.0e-06f >= absDet) {
+			s = 1.0f;
+			status = 1;
+		}
+		else {
+			s = num / absDet;
+			status = 0;
+		}
+	}
+	else {
+		s = 1.0f;
+		status = 1;
+	}
+
+	hkReal t = d1DotD2*s - vDotD2;
+	if (t < d2Sq) {
+		if (t > 0.0f) {
+			t = t / d2Sq;
+		}
+		else {
+			t = 0.0f;
+			status = 8;
+		}
+		// t was clamped: re-solve for the closest point on the first segment.
+		const hkReal u = t*d1DotD2 + vDotD1;
+		if (u <= 0.0f) {
+			s = 0.0f;
+			status |= 2;
+		}
+		else if (u < d1Sq) {
+			s = u / d1Sq;
+		}
+		else {
+			s = 1.0f;
+			status |= 1;
+		}
+	}
+	else {
+		t = 1.0f;
+		status = 4;
+	}
+
+	result.m_closestPoint = p1;
+	result.m_closestPoint.addMul4(s, d1);
+	result.m_direction = p2;
+	result.m_direction.addMul4(t, d2);
+	result.m_direction.setSub4(result.m_closestPoint, result.m_direction);
+	result.m_distanceSquared = result.m_direction.lengthSquared3();
+	return status;
+}
+
+// @ 0x01105c30
+int hkCollideTriangleUtil_s0110_5630::closestPointLineSeg(const hkVector4_s0110_5630& point, const hkVector4_s0110_5630& lineStart, const hkVector4_s0110_5630& lineEnd, ClosestPointLineSegResult& result)
+{
+	hkVector4_s0110_5630 diff, dir;
+	diff.setSub4(point, lineStart);
+	dir.setSub4(lineEnd, lineStart);
+	hkReal u = dir.dot3(diff);
+	hkReal v = dir.lengthSquared3();
+	if (u <= 0.0f) {
+		result.m_point = lineStart;
+		return 8;
+	}
+	if (u >= v) {
+		result.m_point.setAdd4(dir, lineStart);
+		return 4;
+	}
+	u = u / v;
+	result.m_point = lineStart;
+	result.m_point.addMul4(u, dir);
+	return 0;
+}
+
+// @ 0x01105d80
+void hkCollideTriangleUtil_s0110_5630::setupClosestPointTriangleCache(const hkVector4_s0110_5630* triangle, ClosestPointTriangleCache& cache)
+{
+	hkVector4_s0110_5630 e, f;
+	e.setSub4(triangle[0], triangle[1]);
+	f.setSub4(triangle[2], triangle[1]);
+	hkReal EE = e.lengthSquared3();
+	hkReal FF = f.lengthSquared3();
+	hkReal FE = f.dot3(e);
+	hkReal inv = 1.0f / (FF*EE - FE*FE);
+	cache.m_QQ = inv * EE;
+	cache.m_RR = inv * FF;
+	cache.m_QR = inv * FE;
+	hkVector4_s0110_5630 cross;
+	cross.setCross(e, f);
+	cache.m_invTriNormal = 1.0f / cross.length3();
+}
+
+// @ 0x01105e90
+void hkCollideTriangleUtil_s0110_5630::setupPointTriangleDistanceCache(const hkVector4_s0110_5630* triangle, PointTriangleDistanceCache& cache)
+{
+	hkVector4_s0110_5630 f, g, h;
+	f.setSub4(triangle[2], triangle[1]);
+	g.setSub4(triangle[0], triangle[2]);
+	h.setSub4(triangle[1], triangle[0]);
+
+	hkReal ff = f.lengthSquared3();
+	if (ff == 0.0f) cache.m_invLen0 = 0.0f; else cache.m_invLen0 = 1.0f / sqrtf(ff);
+	hkReal gg = g.lengthSquared3();
+	if (gg == 0.0f) cache.m_invLen1 = 0.0f; else cache.m_invLen1 = 1.0f / sqrtf(gg);
+	hkReal hh = h.lengthSquared3();
+	if (hh == 0.0f) cache.m_invLen2 = 0.0f; else cache.m_invLen2 = 1.0f / sqrtf(hh);
+
+	hkVector4_s0110_5630 cross;
+	cross.setCross(f, g);
+	hkReal len = cross.length3();
+	cache.m_invTriNormal = 1.0f / len;
+	cache.m_triNormalLen = len;
+}
+
+// @ 0x01106010
+hkCollideTriangleUtil_s0110_5630::ClosestPointTriangleStatus HK_CALL hkCollideTriangleUtil_s0110_5630::closestPointTriangle(const hkVector4_s0110_5630& position, const hkVector4_s0110_5630* tri, const ClosestPointTriangleCache& cache, ClosestPointTriangleResult& result)
+{
+	// Edge 1 (v1->v2), edge 2 (v2->v0) and the point relative to v1.
+	hkVector4_s0110_5630 toV1;
+	toV1.setSub4(tri[1], position);
+	hkVector4_s0110_5630 u, v;
+	u.setSub4(tri[0], tri[1]);
+	v.setSub4(tri[2], tri[1]);
+
+	const hkReal u2 = u.x*toV1.x + (u.y*toV1.y + u.z*toV1.z);
+	const hkReal v2 = v.x*toV1.x + (v.y*toV1.y + v.z*toV1.z);
+
+	hkReal b0 = v2*cache.m_QR - u2*cache.m_RR;
+	hkReal b2 = u2*cache.m_QR - v2*cache.m_QQ;
+	hkReal b1 = (1.001f - b0) - b2;
+	b0 = b0 + 0.001f;
+
+	unsigned int region = ((g_triBaryLimit2 < b0) << 1) |
+	                      ((g_triBaryLimit1 < b1) << 2) |
+	                      (((g_triBaryLimit0 < b2 + 0.001f) ? 8u : 0u) & 0xe) |
+	                      (g_triBaryLimit3 < 0.001f ? 1u : 0u);
+	region &= 0xe;
+
+	if (region == 0xe) {
+		// Point is closest to the face plane: return the plane normal scaled by the distance.
+		const hkReal nx = v.y*u.z - v.z*u.y;
+		const hkReal ny = v.z*u.x - v.x*u.z;
+		const hkReal nz = v.x*u.y - v.y*u.x;
+		hkVector4_s0110_5630 n;
+		n.x = nx * cache.m_invTriNormal;
+		n.y = ny * cache.m_invTriNormal;
+		n.z = nz * cache.m_invTriNormal;
+		n.w = 0.0f;
+		result.m_hitDirection = n;
+		const hkReal dist = n.x*(tri[1].x - position.x) + (n.y*(tri[1].y - position.y) +
+		                                                   n.z*(tri[1].z - position.z));
+		result.m_distance = dist;
+		if (dist > 0.0f) {
+			result.m_hitDirection.x = -n.x;
+			result.m_hitDirection.y = -n.y;
+			result.m_hitDirection.z = -n.z;
+			result.m_hitDirection.w = -n.w;
+			return CLOSEST_POINT_TRIANGLE_FACE;
+		}
+		result.m_distance = -dist;
+		return CLOSEST_POINT_TRIANGLE_FACE;
+	}
+
+	const int idx = (int)g_triRegionVertex[region];
+	if (idx >= 0) {
+		// The point is closest to one of the three vertices: the result is one of the two edges at it.
+		ClosestPointLineSegResult r0, r1;
+		const hkVector4_s0110_5630& va = tri[idx];
+		const hkVector4_s0110_5630& vb = tri[(int)g_triEdgeOther[idx]];
+		const hkVector4_s0110_5630& vc = tri[(int)g_triEdgeStart[idx]];
+		closestPointLineSeg(position, va, vb, r0);
+		closestPointLineSeg(position, vc, va, r1);
+
+		hkVector4_s0110_5630 d0, d1;
+		d0.setSub4(position, r0.m_point);
+		d1.setSub4(position, r1.m_point);
+		const hkReal l0 = d0.lengthSquared3();
+		const hkReal l1 = d1.lengthSquared3();
+		if (l0 < l1) {
+			const hkReal inv = 1.0f / sqrtf(l0);
+			result.m_hitDirection.x = d0.x * inv;
+			result.m_hitDirection.y = d0.y * inv;
+			result.m_hitDirection.z = d0.z * inv;
+			result.m_hitDirection.w = (position.w - r0.m_point.w) * inv;
+			result.m_distance = l0 * inv;
+		}
+		else {
+			const hkReal inv = 1.0f / sqrtf(l1);
+			result.m_hitDirection.x = d1.x * inv;
+			result.m_hitDirection.y = d1.y * inv;
+			result.m_hitDirection.z = d1.z * inv;
+			result.m_hitDirection.w = (position.w - r1.m_point.w) * inv;
+			result.m_distance = l1 * inv;
+		}
+		return CLOSEST_POINT_TRIANGLE_EDGE;
+	}
+
+	// Closest to one of the three edges.
+	ClosestPointLineSegResult r;
+	closestPointLineSeg(position, tri[(int)g_triVertexEdgeStart[idx]], tri[(int)g_triVertexEdgeEnd[idx]], r);
+	result.m_hitDirection.setSub4(position, r.m_point);
+	result.m_distance = result.m_hitDirection.length3();
+	const hkReal inv = 1.0f / result.m_distance;
+	result.m_hitDirection.x = result.m_hitDirection.x * inv;
+	result.m_hitDirection.y = result.m_hitDirection.y * inv;
+	result.m_hitDirection.z = result.m_hitDirection.z * inv;
+	result.m_hitDirection.w = result.m_hitDirection.w * inv;
+	return CLOSEST_POINT_TRIANGLE_EDGE;
 }
 
 // @ 0x01106490
@@ -3737,6 +4331,142 @@ void hkBoxBoxCollisionDetection_s0110_b3a0::calcManifold(hkBoxBoxManifold_s0110_
     checkCompleteness(manifold, maskA, maskB);
 }
 
+// @ 0x0110d1d0
+void __cdecl hkGsk_getClosestPointFromSimplex(const hkVector4_s0110_cec0* verticesA, const hkVector4_s0110_cec0* verticesBinA, int dimA, int dimB, const hkVector4_s0110_cec0& direction, hkVector4_s0110_cec0& pointOut, hkVector4_s0110_cec0& normalOut)
+{
+    const hkVector4_s0110_cec0* A = verticesA;
+    const hkVector4_s0110_cec0* B = verticesBinA;
+    const hkVector4_s0110_cec0& dir = direction;
+    hkVector4_s0110_cec0& n = normalOut;
+
+    switch (dimA << 3 | dimB) {
+    case 9: {   // vertex / vertex
+        n.x = A[0].x - B[0].x;
+        n.y = A[0].y - B[0].y;
+        n.z = A[0].z - B[0].z;
+        n.w = A[0].w - B[0].w;
+        const hkReal dx = dir.x * n.x;
+        const hkReal lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+        if (lenSq <= (dx + (dir.y * n.y + dir.z * n.z)) * 1000.0f) {
+            const hkReal len = (hkReal)sqrt(lenSq);
+            const hkReal inv = 1.0f / len;
+            n.x *= inv; n.y *= inv; n.z *= inv; n.w *= inv;
+            n.w = len;
+        } else {
+            const hkReal d = dx + (dir.y * n.y + dir.z * n.z);
+            hkCopy4(n, dir);
+            n.w = d;
+        }
+        hkCopy4(pointOut, A[0]);
+        break;
+    }
+    case 10: {  // vertex / edge
+        const hkReal dx = A[0].x - B[0].x, dy = A[0].y - B[0].y, dz = A[0].z - B[0].z;
+        hkCopy4(n, dir);
+        n.w = dy * n.y + dz * n.z + dx * n.x;
+        hkCopy4(pointOut, A[0]);
+        break;
+    }
+    case 17: {  // edge / vertex
+        const hkReal dx = B[0].x - A[0].x, dy = B[0].y - A[0].y, dz = B[0].z - A[0].z;
+        hkCopy4(n, dir);
+        hkCopy4(pointOut, B[0]);
+        const hkReal d = dy * n.y + dz * n.z + dx * n.x;
+        pointOut.x = pointOut.x - d * n.x;
+        pointOut.y = pointOut.y - d * n.y;
+        pointOut.z = pointOut.z - d * n.z;
+        pointOut.w = pointOut.w - d * n.w;
+        n.w = -d;
+        break;
+    }
+    case 11: {  // vertex / triangle
+        n.w = 0.0f;
+        const hkReal e1x = B[2].x - B[1].x, e1y = B[2].y - B[1].y, e1z = B[2].z - B[1].z;
+        const hkReal e0x = B[0].x - B[2].x, e0y = B[0].y - B[2].y, e0z = B[0].z - B[2].z;
+        const hkReal nx = e0z * e1y - e0y * e1z;
+        const hkReal ny = e1z * e0x - e0z * e1x;
+        const hkReal nz = e0y * e1x - e1y * e0x;
+        n.x = nx; n.y = ny; n.z = nz;
+        const hkReal lenSq = nz * nz + ny * ny + nx * nx;
+        hkReal inv;
+        if (lenSq == 0.0f) inv = 0.0f; else inv = 1.0f / (hkReal)sqrt(lenSq);
+        if (nz * dir.z + ny * dir.y + nx * dir.x < 0.0f) {
+            n.w = 0.0f;
+            n.x = -nx; n.y = -ny; n.z = -nz;
+        }
+        n.x = inv * n.x; n.y = inv * n.y; n.z = inv * n.z;
+        n.w = inv * 0.0f;
+        hkCopy4(pointOut, A[0]);
+        {
+            const hkReal dz = A[0].z - B[0].z;
+            const hkReal dy = A[0].y - B[0].y;
+            const hkReal dx = A[0].x - B[0].x;
+            const hkReal nz = n.z, ny = n.y, nx = n.x;
+            n.w = (nz * dz + ny * dy) + nx * dx;
+        }
+        break;
+    }
+    case 25: {  // triangle / vertex
+        n.w = 0.0f;
+        const hkReal e1x = A[2].x - A[1].x, e1y = A[2].y - A[1].y, e1z = A[2].z - A[1].z;
+        const hkReal e0x = A[0].x - A[2].x, e0y = A[0].y - A[2].y, e0z = A[0].z - A[2].z;
+        const hkReal nx = e0z * e1y - e0y * e1z;
+        const hkReal ny = e1z * e0x - e0z * e1x;
+        const hkReal nz = e0y * e1x - e1y * e0x;
+        n.x = nx; n.y = ny; n.z = nz;
+        const hkReal lenSq = nz * nz + ny * ny + nx * nx;
+        hkReal inv;
+        if (lenSq == 0.0f) inv = 0.0f; else inv = 1.0f / (hkReal)sqrt(lenSq);
+        if (nz * dir.z + ny * dir.y + nx * dir.x < 0.0f) {
+            n.w = 0.0f;
+            n.x = -nx; n.y = -ny; n.z = -nz;
+        }
+        const hkReal x2 = inv * n.x, y2 = inv * n.y, z2 = inv * n.z;
+        n.x = x2; n.y = y2; n.z = z2;
+        n.w = inv * 0.0f;
+        hkCopy4(pointOut, B[0]);
+        const hkReal d = z2 * (B[0].z - A[0].z) + y2 * (B[0].y - A[0].y) + x2 * (B[0].x - A[0].x);
+        pointOut.x = pointOut.x - d * n.x;
+        pointOut.y = pointOut.y - d * n.y;
+        pointOut.z = pointOut.z - d * n.z;
+        pointOut.w = pointOut.w - d * n.w;
+        n.w = -d;
+        break;
+    }
+    case 18: {  // edge / edge
+        hkVector4_s0110_cec0 dA, dB;
+        dA.x = A[1].x - A[0].x; dA.y = A[1].y - A[0].y; dA.z = A[1].z - A[0].z; dA.w = A[1].w - A[0].w;
+        dB.x = B[1].x - B[0].x; dB.y = B[1].y - B[0].y; dB.z = B[1].z - B[0].z; dB.w = B[1].w - B[0].w;
+        hkCollideTriangleUtil_s0110_cec0::ClosestLineSegLineSegResult res;
+        hkCollideTriangleUtil_s0110_cec0::closestLineSegLineSeg(A[0], dA, B[0], dB, res);
+        n.w = 0.0f;
+        const hkReal nx = dB.z * dA.y - dB.y * dA.z;
+        const hkReal ny = dA.z * dB.x - dB.z * dA.x;
+        const hkReal nz = dB.y * dA.x - dA.y * dB.x;
+        n.x = nx; n.y = ny; n.z = nz;
+        const hkReal edgeSq = (dB.z * dB.z + dA.z * dA.z) + (dB.y * dB.y + dA.y * dA.y) + (dB.x * dB.x + dA.x * dA.x);
+        if ((nz * nz + ny * ny + nx * nx) * 0.001f <= edgeSq * edgeSq) {
+            hkCopy4(n, dir);
+        } else {
+            if (nz * dir.z + ny * dir.y + nx * dir.x < 0.0f) {
+                n.w = 0.0f;
+                n.x = -nx; n.y = -ny; n.z = -nz;
+            }
+            const hkReal lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+            hkReal inv;
+            if (lenSq == 0.0f) inv = 0.0f; else inv = 1.0f / (hkReal)sqrt(lenSq);
+            n.x = inv * n.x; n.y = inv * n.y; n.z = inv * n.z;
+            n.w = inv * 0.0f;
+        }
+        hkCopy4(pointOut, res.m_closestPointA);
+        n.w = (A[0].x - B[0].x) * n.x + (A[0].z - B[0].z) * n.z + (A[0].y - B[0].y) * n.y;
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 // @ 0x0110dd70
 void hkGsk::handlePenetration(const hkConvexShape* shapeA, const hkConvexShape* shapeB, const hkTransform_s0110_dd70& aTb)
 {
@@ -3835,6 +4565,270 @@ void hkGsk::handlePenetration(const hkConvexShape* shapeA, const hkConvexShape* 
     }
     hkCopy(m_closestPointDir, out.m_normal);
     m_featureChange = 1;
+}
+
+// @ 0x0110e510
+int hkGsk_s0110_e510::getClosestFeature(const hkConvexShape_s0110_e510* shapeA, const hkConvexShape_s0110_e510* shapeB, const hkTransform_s0110_e510& aTb, hkVector4_s0110_e510& separatingNormalOut)
+{
+    // bring B's simplex vertices into A space
+    {
+        const hkTransform_s0110_e510 t = aTb;
+        for (int i = 0; i < m_dimB; i++) {
+            setTransformedPos_s0110_e510(m_verticesBinA[i], t, m_verticesB[i]);
+        }
+    }
+
+    int iteration = 0;
+    hkReal eps = 1e-10f;
+    hkVector4_s0110_e510* const vA = m_verticesA;
+    hkVector4_s0110_e510* const vB = m_verticesBinA;
+    int oldDimSum;
+    bool penetrating;
+    hkReal threshold;
+    int r, idx, next, next2;
+    hkVector4_s0110_e510 lenA, lenB;
+
+next_iteration:
+    eps += eps;
+    iteration++;
+    oldDimSum = m_dimA + m_dimB;
+    m_lastSupportType = SUPPORT_NONE;
+
+dispatch:
+    switch ((m_dimA << 3) | m_dimB) {
+    case 0x0c:  // point A - tetrahedron B
+        r = hkGsk_checkTetrahedron(vA, vB, 1.0f);
+        if (r < 0) goto penetration;
+        m_dimB--;
+        vB[r] = vB[3];
+        m_verticesB[r] = m_verticesB[3];
+        // fall through
+    case 0x0b:  // point A - triangle B
+        r = checkTriangleBoundaries(vA[0], vB, SUPPORT_B);
+        if (r == TRIANGLE_INSIDE) goto feature_found;
+        idx = s_triangleFeatureToIndex[r];
+        if (idx >= 0) {
+            next = s_triNext[idx];
+            next2 = s_triNext[idx + 2];
+            const hkVector4_s0110_e510& vI = vB[idx];
+            const hkReal dx = vA[0].x - vI.x, dy = vA[0].y - vI.y, dz = vA[0].z - vI.z;
+            const hkReal e1x = vB[next].x - vI.x, e1y = vB[next].y - vI.y, e1z = vB[next].z - vI.z;
+            const hkReal e2x = vB[next2].x - vI.x, e2y = vB[next2].y - vI.y, e2z = vB[next2].z - vI.z;
+            m_dimB = 2;
+            if (e1z * dz + e1y * dy + e1x * dx < 0.0f) {
+                vB[next] = vB[2];
+                m_verticesB[next] = m_verticesB[2];
+                if (e2z * dz + e2y * dy + e2x * dx < 0.0f) {
+                    if (next2 == m_dimB) next2 = next;
+                    m_dimB--;
+                    vB[next2] = vB[m_dimB];
+                    m_verticesB[next2] = m_verticesB[m_dimB];
+                }
+            } else {
+                vB[next2] = vB[2];
+                m_verticesB[next2] = m_verticesB[2];
+            }
+            goto dispatch;
+        }
+        idx += 8;
+        if (idx > 3) idx = 1;
+        m_dimB--;
+        vB[idx] = vB[2];
+        m_verticesB[idx] = m_verticesB[2];
+        // fall through
+    case 0x0a: {  // point A - edge B
+        const hkReal ex = vB[1].x - vB[0].x, ey = vB[1].y - vB[0].y, ez = vB[1].z - vB[0].z;
+        hkVector4_s0110_e510 v1, v0;
+        v1.x = vB[1].x - vA[0].x; v1.y = vB[1].y - vA[0].y; v1.z = vB[1].z - vA[0].z;
+        v0.x = vB[0].x - vA[0].x; v0.y = vB[0].y - vA[0].y; v0.z = vB[0].z - vA[0].z;
+        const int side0 = (v0.z * ez + v0.y * ey + v0.x * ex < 0.0f) ? 8 : 0;
+        const int side1 = (v1.z * ez + v1.y * ey + v1.x * ex < 0.0f) ? 8 : 0;
+        if (side1 != side0) {
+            // the origin projects onto the edge interior
+            m_closestPointDir.w = 0.0f;
+            const hkReal cx = v0.z * v1.y - v0.y * v1.z;
+            const hkReal cy = v0.x * v1.z - v1.x * v0.z;
+            const hkReal cz = v1.x * v0.y - v0.x * v1.y;
+            m_closestPointDir.x = cz * ey - cy * ez;
+            m_closestPointDir.y = cx * ez - ex * cz;
+            m_closestPointDir.z = ex * cy - cx * ey;
+            goto feature_found;
+        }
+        if (side1) {
+            vB[0] = vB[1];
+            m_verticesB[0] = m_verticesB[1];
+        }
+        m_dimB--;
+    }
+        // fall through
+    case 0x09:  // point - point
+    point_point:
+        m_closestPointDir.setSub4(vA[0], vB[0]);
+        goto feature_found;
+
+    case 0x21:  // tetrahedron A - point B
+        r = hkGsk_checkTetrahedron(vB, vA, -1.0f);
+        if (r < 0) goto penetration;
+        m_dimA--;
+        vA[r] = vA[3];
+        // fall through
+    case 0x19:  // triangle A - point B
+        r = checkTriangleBoundaries(vB[0], vA, SUPPORT_A);
+        if (r == TRIANGLE_INSIDE) goto feature_found;
+        idx = s_triangleFeatureToIndex[r];
+        if (idx >= 0) {
+            next = s_triNext[idx];
+            next2 = s_triNext[idx + 2];
+            const hkVector4_s0110_e510& vI = vA[idx];
+            const hkReal dx = vB[0].x - vI.x, dy = vB[0].y - vI.y, dz = vB[0].z - vI.z;
+            const hkReal e1x = vA[next].x - vI.x, e1y = vA[next].y - vI.y, e1z = vA[next].z - vI.z;
+            const hkReal e2x = vA[next2].x - vI.x, e2y = vA[next2].y - vI.y, e2z = vA[next2].z - vI.z;
+            m_dimA = 2;
+            if (e1z * dz + e1y * dy + e1x * dx < 0.0f) {
+                vA[next] = vA[2];
+                if (e2z * dz + e2y * dy + e2x * dx < 0.0f) {
+                    if (next2 == m_dimA) next2 = next;
+                    m_dimA--;
+                    vA[next2] = vA[m_dimA];
+                }
+            } else {
+                vA[next2] = vA[2];
+            }
+            goto dispatch;
+        }
+        idx += 8;
+        if (idx > 3) idx = 1;
+        m_dimA--;
+        vA[idx] = vA[2];
+        // fall through
+    case 0x11: {  // edge A - point B
+        const hkReal ex = vA[1].x - vA[0].x, ey = vA[1].y - vA[0].y, ez = vA[1].z - vA[0].z;
+        hkVector4_s0110_e510 v1, v0;
+        v1.x = vA[1].x - vB[0].x; v1.y = vA[1].y - vB[0].y; v1.z = vA[1].z - vB[0].z;
+        v0.x = vA[0].x - vB[0].x; v0.y = vA[0].y - vB[0].y; v0.z = vA[0].z - vB[0].z;
+        const int side0 = (v0.z * ez + v0.y * ey + v0.x * ex < 0.0f) ? 8 : 0;
+        const int side1 = (v1.z * ez + v1.y * ey + v1.x * ex < 0.0f) ? 8 : 0;
+        if (side1 != side0) {
+            m_closestPointDir.w = 0.0f;
+            const hkReal cx = v0.z * v1.y - v0.y * v1.z;
+            const hkReal cy = v0.x * v1.z - v1.x * v0.z;
+            const hkReal cz = v1.x * v0.y - v0.x * v1.y;
+            m_closestPointDir.x = cy * ez - cz * ey;
+            m_closestPointDir.y = ex * cz - cx * ez;
+            m_closestPointDir.z = cx * ey - ex * cy;
+            goto feature_found;
+        }
+        if (side1) {
+            vA[0] = vA[1];
+            m_verticesAinA[0] = m_verticesAinA[1];
+        }
+        m_dimA--;
+        goto point_point;
+    }
+
+    case 0x12:  // edge A - edge B
+    edge_edge: {
+        lenA.setSub4(vA[1], vA[0]);
+        lenB.setSub4(vB[1], vB[0]);
+        const int res = hkCollideTriangleUtil_s0110_e510::closestLineSegLineSeg(vA[0], lenA, vB[0], lenB, m_lineResult);
+        if (res) {
+            if (res & 1) {
+                vA[0] = vA[1];
+                m_dimA = 1;
+            } else if (res & 2) {
+                m_dimA = 1;
+            }
+            if (res & 4) {
+                vB[0] = vB[1];
+                m_verticesB[0] = m_verticesB[1];
+                m_dimB = 1;
+            } else if (res & 8) {
+                m_dimB = 1;
+            }
+            goto dispatch;
+        }
+        m_closestPointDir.w = 0.0f;
+        m_closestPointDir.x = lenB.z * lenA.y - lenB.y * lenA.z;
+        m_closestPointDir.y = lenB.x * lenA.z - lenA.x * lenB.z;
+        m_closestPointDir.z = lenA.x * lenB.y - lenB.x * lenA.y;
+        const hkReal dist = (vA[0].z - vB[0].z) * m_closestPointDir.z +
+                            (vA[0].y - vB[0].y) * m_closestPointDir.y +
+                            (vA[0].x - vB[0].x) * m_closestPointDir.x;
+        if (dist < 0.0f) {
+            m_closestPointDir.setNeg4(m_closestPointDir);
+        }
+        goto feature_found;
+    }
+
+    case 0x13:  // edge A - triangle B
+        r = checkTriangleEdge(vA, vB, &m_dimA, &m_dimB, m_lastDimB == 2, SUPPORT_B);
+        goto triangle_edge_result;
+    case 0x1a:  // triangle A - edge B
+        r = checkTriangleEdge(vB, vA, &m_dimB, &m_dimA, m_lastDimB == 2, SUPPORT_A);
+    triangle_edge_result:
+        if (r == 1) goto penetration;
+        if (r == 2) goto edge_edge;
+        goto feature_found;
+
+    default:
+        goto penetration;
+    }
+
+feature_found:
+    m_lastDimB = m_dimB;
+    penetrating = false;
+    goto check;
+
+penetration:
+    penetrating = true;
+
+check: {
+    const hkReal len2 = m_closestPointDir.x * m_closestPointDir.x +
+                        m_closestPointDir.y * m_closestPointDir.y +
+                        m_closestPointDir.z * m_closestPointDir.z;
+    m_featureChange |= m_dimA - oldDimSum + m_dimB;
+    const hkReal dist = (vA[0].z - vB[0].z) * m_closestPointDir.z +
+                        (vA[0].y - vB[0].y) * m_closestPointDir.y +
+                        (vA[0].x - vB[0].x) * m_closestPointDir.x;
+    if (penetrating || signedSquare(dist) <= len2 * eps || len2 < eps) {
+        if (m_doNotHandlePenetration) {
+            if (m_dimA + m_dimB > 4) {
+                if (m_dimA > m_dimB) {
+                    m_dimA = 3;
+                    m_dimB = 1;
+                    return 4;
+                }
+                m_dimA = 1;
+                m_dimB = 3;
+            }
+            return 4;
+        }
+        handlePenetration(shapeA, shapeB, aTb);
+        goto finish;
+    }
+    threshold = len2 * eps;
+}
+    {
+        // odd iterations try A's support first, even ones B's
+        const int oddIteration = iteration & 1;
+        if (oddIteration && addSupportVertexA(shapeA, threshold)) goto next_iteration;
+        if (addSupportVertexB(shapeB, aTb, threshold)) goto next_iteration;
+        if (!oddIteration && addSupportVertexA(shapeA, threshold)) goto next_iteration;
+    }
+
+finish: {
+    const hkReal dx = vA[0].x - vB[0].x;
+    const hkReal dy = vA[0].y - vB[0].y;
+    const hkReal dz = vA[0].z - vB[0].z;
+    const hkReal len2 = m_closestPointDir.lengthSquared3();
+    const hkReal inv = (len2 == 0.0f) ? 0.0f : 1.0f / (hkReal)sqrt((double)len2);
+    m_closestPointDir.mul4(inv);
+    separatingNormalOut = m_closestPointDir;
+    const hkReal dist = dz * m_closestPointDir.z + dy * m_closestPointDir.y + dx * m_closestPointDir.x;
+    separatingNormalOut.w = dist;
+    m_closestPointDir.w = dist;
+    return 0;
+}
 }
 
 // @ 0x0110fa20

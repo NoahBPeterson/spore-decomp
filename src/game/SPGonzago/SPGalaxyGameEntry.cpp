@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPGalaxyGameEntry.cpp -- migrated from slice(s) s00dfa5c0, s00df8730, s00df47b0, s00de8ad0, s00e00760, s00dfe460, s00dfd5b0, s00dfc5b0, s00dfb5b0, s00df6db0, s00df3be0, s00df10d0, s00de6170, s00de41b0, s00de23a0, s00de1710, s00ddcdc0, s006775f0, s01364b20, s00dff790, s00df9650, s00df7ce0, s00df6700, s00df5670, s00df2d80, s00df1e70, s00df0280, s00def400, s00dee450, s00ded5a0, s00dec7c0, s00deb840, s00dea870, s00de9a00, s00de5040, s00de3300, s00de0910, s00ddf990 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPGalaxyGameEntry.cpp -- migrated from slice(s) s00dddd20, s00dfa5c0, s00df8730, s00df47b0, s00de8ad0, s00e00760, s00dfe460, s00dfd5b0, s00dfc5b0, s00dfb5b0, s00df6db0, s00df3be0, s00df10d0, s00de6170, s00de41b0, s00de23a0, s00de1710, s00ddcdc0, s006775f0, s01364b20, s00dff790, s00df9650, s00df7ce0, s00df6700, s00df5670, s00df2d80, s00df1e70, s00df0280, s00def400, s00dee450, s00ded5a0, s00dec7c0, s00deb840, s00dea870, s00de9a00, s00de5040, s00de3300, s00de0910, s00ddf990 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPGalaxyGameEntry.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -47,6 +47,7 @@ extern "C" char g_1667bae[];
 #include "SP/cSPEditorUI.h"
 #include "SP/cSPUIAssetBrowserCallback.h"
 #include "EA/LimitStopwatch.h"
+#include "EA/ArgScript/cArgumentSpec.h"
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s00ddf990 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -229,6 +230,8 @@ public:
 class cGalaxyGameEntryImpl {
 public:
     uint8_t  mPad00[0x20];   // +0x000
+    // 0x00dddd20 UpdateCameraFromProperty: self +0x004 (property list id), +0x00c/+0x010/+0x014 (the Vector3)
+    // 0x00ddddf0 PropFetch:                    self +0x004 (the -1 test)
     uint8_t  m20;            // +0x020
     uint8_t  mPad21[3];      // +0x021
     uint32_t m24;            // +0x024
@@ -267,6 +270,8 @@ public:
     void     __thiscall FUN_00de1330(uint32_t param_1);
     void     __thiscall FUN_00de13d0(uint32_t param_1, uint32_t param_2);
     void     __thiscall FUN_00de1600(uint32_t* param_1);
+    char UpdateCameraFromProperty(void* prop);      // 0x00dddd20
+    char PropFetch(uint32_t a, uint32_t b);         // 0x00ddddf0
 };
 static void AssignRef(void** ppTarget, void* pNew, int nAddSlot, int nRelSlot)
 {
@@ -8786,6 +8791,105 @@ EaString16* __cdecl FUN_00de40e0(EaString16* out, void* tm);   // defined at 0x0
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 TypeD* CopyAssignD(TypeD* first, TypeD* last, TypeD* dest);   // defined at 0x00dfb930, called earlier in the TU
 
+// ---- items of slice s00dddd20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13ec458[];
+extern "C" char g_147d34c[];
+extern "C" char g_147d360[];
+extern "C" char g_147da94[];
+extern "C" char g_15a30b4[];
+extern "C" void* __cdecl SP_CheatManager();                      // 0x67de20
+extern "C" char  __cdecl FUN_006bb5e0();
+extern "C" void  __cdecl FUN_0083c800();
+extern "C" void  __cdecl FUN_00f2dde0_();
+extern "C" char  __cdecl FUN_006237d0();
+extern const char kSimulatorAllocName[];    // 0x013f09b4 "Simulator"
+extern "C" void* __cdecl SP_App_s00dd_dd20();                               // 0x67dd10
+struct ArgSub { void Parse(void* arg, void* x); };   // 0x0083b9d0 thiscall
+void* g_16a10c8;
+int   g_15a30bc, g_15a30c4;
+uint8_t g_15a3068;
+void* g_16a1344_s00dd_dd20;
+int   g_15a2df8_s00dd_dd20;
+float g_cc0, g_cc4, g_cc8;            // 0x15a3048/4c/50
+float g_cct0, g_cct4, g_cct8;         // 0x15a3054/58/5c
+uint8_t g_16a0c80;
+struct PropVal { int pad_00; uint16_t type12; uint8_t flags10; };
+struct PropMgr2 {
+    int pad_00;
+    char getProp(uint32_t a, void* b, void** out);   // vtable slot 0x2c
+};
+struct Obj2 {
+    int pad_00;
+    char getProp(uint32_t a, void* b, void** out);   // vtable slot 0x24
+};
+struct SmallReg { void* vt0; void* volatile vt1; int a; int b; };
+struct ArgScript { void* vt; int pad[3]; int arg10; int arg14; };
+struct ArgSpec {
+    ArgSpec(int);   // 0x0083a9f0 (equiv t3)
+    void ConstructSpec(const char*, const char*, int, const char*,
+                       const char*, int, const char*, int);
+};
+struct ArgCmd { void* vt; int f04; char pad[0x7c]; uint32_t flags84;
+    void Parse(void* arg); };
+struct SimObject {                                  // galaxy-entry simulator (0x274 bytes)
+    uint8_t  mPad00[0xf0];
+    void*    mpField0f0;                            // +0x0f0
+    uint8_t  mPad0f4[0x100 - 0xf4];
+    uint8_t  mByte100;                              // +0x100
+    uint8_t  mPad101[0x1ec - 0x101];
+    uint32_t mField1ec;                             // +0x1ec
+    SimObject* ctor();                              // 0x00de6be0 (returns this)
+    void setup();                                   // 0x00de76b0
+};
+struct PropTarget {                                 // property target object at 0x15a2ff8
+    char Fetch(int id, int value);                  // 0x00ddddf0
+};
+struct WStringBuf {                                 // eastl string: begin / end / capacity
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpEndCap;
+    void assign(wchar_t* first, wchar_t* last);     // 0x00423650
+};
+struct SimRef { void update(); };                   // 0x00c2e4e0
+struct LevelCheats { void Construct(void* owner); };// 0x00dddf30
+class cGalaxyGameEntryAppMode {
+public:
+    uint8_t mPad00[0x0c];
+    void*   mpField0c;                              // +0x0c
+    char Init(void* mode);
+};
+static inline void** VtableOf(void* p) { return *(void***)p; }
+bool __cdecl GetPropertyAsString16(void* list, uint32_t id, WStringBuf* out);  // 0x006a1400
+WStringBuf g_galaxyProp0;    // 0x16a0cf8
+WStringBuf g_galaxyProp1;    // 0x16a0d08
+WStringBuf g_galaxyProp2;    // 0x16a0d24
+WStringBuf g_galaxyProp3;    // 0x16a0d44
+WStringBuf g_galaxyProp4;    // 0x16a109c
+WStringBuf g_galaxyProp5;    // 0x16a10ac
+struct CamCtl {
+    int pad00;
+    int f04, f08;
+    float f0c;
+    float f10, f14, f18, f1c;
+    union { float f20; uint8_t mFlag20; };   // +0x20: float payload / low-byte flag
+    float f24, f28, f2c;
+    float f30, f34, f38, f3c;
+    float f40, f44, f48, f4c;
+    float f50, f54, f58, f5c, f60, f64, f68;
+    void init(void* arg2, const Vec3* v);
+    void Integrate(float dt);
+    void Update(int dt, int unused);
+    char Set2(int a, float v1, float v2, int unused);
+    char Reset2(int a, int b, int c, int d);
+    char Zoom(int n, int b, int c, int d);
+    char Key(uint32_t key, int unused);
+};
+struct CamCtlObserver {   // the object behind camctl.listener (0x16a10c8)
+    virtual void  vt0();
+    virtual void vt1(void* arg);
+};
+// ---- items of slice s00dddd20 end
+
 // @ 0x00677e80
 int RectF::Contains(float x, float y)
 {
@@ -8916,6 +9020,231 @@ char __fastcall FUN_00dddca0(cGUIHandler* self)
         gFlag0c80 = 0;
     }
     return 1;
+}
+
+// @ 0x00dddd20
+char VecUpdate(void* self, void* prop)
+{
+    void* out = 0;
+    if (!((Obj2*)prop)->getProp(*(uint32_t*)((char*)self + 4), 0, &out)) {
+        return 0;
+    }
+    PropVal* pv = (PropVal*)out;
+    Vec3 v;
+    uint16_t t = pv->type12;
+    if (t == 0x31 || t == 0x10) {
+        if ((pv->flags10 & 0x30) != 0) {
+            v.x = *(float*)pv;
+            v.y = *(float*)((char*)pv + 4);
+            v.z = *(float*)((char*)pv + 8);
+        } else {
+            return 0;
+        }
+    } else {
+        FUN_006bb5e0();
+    }
+    if (*(float*)((char*)self + 0xc) != v.x ||
+        *(float*)((char*)self + 0x10) != v.y ||
+        *(float*)((char*)self + 0x14) != v.z) {
+        *(float*)((char*)self + 0xc) = v.x;
+        *(float*)((char*)self + 0x10) = v.y;
+        *(float*)((char*)self + 0x14) = v.z;
+        return 1;
+    }
+    return 0;
+}
+
+// @ 0x00ddddf0
+char PropFetch(void* self, uint32_t a, uint32_t b)
+{
+    if (*(int*)((char*)self + 4) != -1) {
+        return 0;
+    }
+    void* prop = 0;
+    char r = 0;
+    if (SP_PropertyManager() != 0) {
+        PropMgr2* pm = *(PropMgr2**)SP_PropertyManager();
+        if (prop) {
+            prop = 0;
+        }
+        pm->getProp(a, (void*)b, &prop);
+    }
+    if (prop) {
+        r = FUN_006237d0();
+    }
+    return r;
+}
+
+// @ 0x00ddde80
+void RegisterSmall(void* param)
+{
+    SmallReg* o = (SmallReg*)EA_Allocate(0x10, "App", 0, 0, 0, 0);
+    if (o != 0) {
+        o->vt1 = (void*)g_13ec458;
+        o->a = 0;
+        o->vt0 = (void*)g_147d360;
+        o->vt1 = (void*)g_147d34c;
+        o->b = 0;
+    } else {
+        o = 0;
+    }
+    ((void (__thiscall*)(void*, SmallReg*, uint32_t, const char*))(
+        *(void***)param)[0x20 / 4])(param, o, 0x2ccd1d2, "GalaxyGameEntry");
+}
+
+// @ 0x00dddf30
+ArgScript* MakeLevelCheats(ArgScript* self, int arg)
+{
+    FUN_0083c800();
+    self->vt = (void*)0x147d41c;
+    self->arg10 = arg;
+    new ((ArgSpec*)((char*)self + 0x14)) ArgSpec(1);
+    ((ArgSpec*)((char*)self + 0x14))->ConstructSpec(
+        "Level Cheats", "-unlock^", 0, "Unlocks all game levels",
+        "-unlockAdventures^", 1, "Unlocks all Maxis adventures", 0);
+    return self;
+}
+
+// @ 0x00dddf90
+void ArgCmd::Parse(void* arg)
+{
+    ArgCmd* self = this;
+    ((ArgSub*)((char*)self + 0x14))->Parse(arg, *(void**)((char*)self + 4));
+    if (*(uint8_t*)((char*)self + 0x84) & 1) {
+        *(uint8_t*)((char*)g_16a1344_s00dd_dd20 + 0x1f5) = 1;
+    }
+    if ((*(uint32_t*)((char*)self + 0x84) >> 1) & 1) {
+        FUN_00f2dde0_();
+    }
+}
+
+// @ 0x00dddfd0
+char cGalaxyGameEntryAppMode::Init(void* mode)
+{
+    (void)mode;
+    SimObject* sim = (SimObject*)EA_Allocate(0x274, kSimulatorAllocName, 0, 0, 0, 0);
+    if (sim != 0)
+        sim = sim->ctor();
+    else
+        sim = 0;
+    g_16a1344_s00dd_dd20 = sim;
+    sim->mByte100 = 0;
+    ((SimObject*)g_16a1344_s00dd_dd20)->mpField0f0 = mpField0c;
+
+    // 0x00685520: game-mode/property-list availability probe.
+    if (FUN_00685520(2) != 0)
+        g_15a2df8_s00dd_dd20 = 0x48f7da6b;
+
+    // Register the galaxy-entry message handler with the app message server.
+    void* app = SP_App_s00dd_dd20();
+    void* msgReg = ((void* (__thiscall*)(void*))VtableOf(app)[0x50 / 4])(app);
+    ((void (__thiscall*)(void*, uint32_t, void*))VtableOf(msgReg)[0x20 / 4])(
+        msgReg, 0x43c6e06, (void*)0xddfec0);
+
+    // Attach the current property target to the galaxy entry mode.
+    ((PropTarget*)0x15a2ff8)->Fetch(g_15a2df8_s00dd_dd20, 0);
+
+    // Read the six localised galaxy-entry strings from the property list.
+    void* out = 0;
+    void* pm = SP_PropertyManager();
+    char found = ((char (__thiscall*)(void*, int, void*, void**))VtableOf(pm)[0x2c / 4])(
+        pm, g_15a2df8_s00dd_dd20, 0, &out);
+    if (found) {
+        WStringBuf str;
+        str.mpBegin = (wchar_t*)0x1667bac;
+        str.mpEnd = (wchar_t*)0x1667bac;
+        str.mpEndCap = (wchar_t*)0x1667bae;
+        if (GetPropertyAsString16(out, 0x21d994c5, &str))
+            g_galaxyProp0.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0x90be803e, &str))
+            g_galaxyProp1.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0xaf963138, &str))
+            g_galaxyProp2.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0xd6f8f4a4, &str))
+            g_galaxyProp3.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0x9e64a562, &str))
+            g_galaxyProp4.assign(str.mpBegin, str.mpEnd);
+        if (GetPropertyAsString16(out, 0xab444460, &str))
+            g_galaxyProp5.assign(str.mpBegin, str.mpEnd);
+        if ((int)(((uint32_t)str.mpEndCap - (uint32_t)str.mpBegin) & ~1u) > 2 && str.mpBegin != 0)
+            EA_Free(str.mpBegin);
+    }
+
+    ((SimObject*)g_16a1344_s00dd_dd20)->setup();
+    ((SimObject*)g_16a1344_s00dd_dd20)->mField1ec = 1;
+
+    // 0x006895b0: register the galaxy entry state with its manager.
+    void* mgr = FUN_006895b0();
+    ((void (__thiscall*)(void*, uint32_t, uint32_t, int))VtableOf(mgr)[0x1c / 4])(
+        mgr, 0x4530082, 0x147d434, 0);
+
+    ((SimRef*)mpField0c)->update();
+
+    // Register the level-cheat console command once per process.
+    void* cheat = SP_CheatManager();
+    if (cheat != 0 && g_16a0c80 == 0) {
+        LevelCheats* cheats = (LevelCheats*)EA_Allocate(0xdc, kSimulatorAllocName, 0, 0, 0, 0);
+        if (cheats != 0)
+            cheats->Construct(this);
+        else
+            cheats = 0;
+        ((void (__thiscall*)(void*, uint32_t, void*, int))VtableOf(cheat)[0x18 / 4])(
+            cheat, 0x147d2e4, cheats, 1);
+        g_16a0c80 = 1;
+    }
+
+    if (out != 0)
+        ((void (__thiscall*)(void*))VtableOf(out)[1])(out);
+    return 1;
+}
+
+// @ 0x00dde350
+void CamCtl::Update(int dt, int unused)
+{
+    CamCtl* self = this; (void)unused;
+    *(int*)&self->f08 += dt;
+    float q = (float)(unsigned int)self->f08 / (float)(unsigned int)self->f04;
+    if (1.0 < q) {
+        void* ms = SP_MessageServer();
+        ((void(__thiscall*)(void*, uint32_t, void*, void*))(
+            (*(void***)ms)[0x14 / 4]))(ms, 0x4360e14, 0, 0);
+        self->f08 = 0;
+        g_16a10c8 = (void*)g_15a30b4;
+    }
+    self->f10 = (self->f0c - self->f14) * (1.0f - q) + self->f14;
+}
+
+// @ 0x00dde570
+void CamCtl_ResetGlobals()
+{
+    g_15a30bc = 0;
+    g_15a30c4 = 2;
+}
+
+// @ 0x00dde590
+void __stdcall CamCtl_Release(void* arg)
+{
+    CamCtlObserver* listener = (CamCtlObserver*)g_16a10c8;
+    if (listener != 0)
+        listener->vt1(arg);
+}
+
+// @ 0x00dde5b0
+void __stdcall CamCtl_SetFlag(uint8_t v)
+{
+    g_15a3068 = v;
+}
+
+// @ 0x00dde9e0
+void CamCtl_PresetReset()
+{
+    Vec3 v;
+    v.x = 0.0f;
+    v.y = 0.0f;
+    v.z = *(float*)g_147da94;
+    *(Vec3*)&g_cct0 = v;
+    *(Vec3*)&g_cc0 = v;
+    g_16a10c8 = (void*)g_15a30b4;
 }
 
 // @ 0x00de0670
@@ -11092,6 +11421,7 @@ OutKey3* cGalaxyGameEntryImpl_s00de_5040::FUN_00de56f0(OutKey3& pOut, KeyNode* k
 
 extern char g_13f09b4[];   // 0x013f09b4 "Simulator"
 extern char g_13ebb38[];   // 0x013ebb38 allocator name
+
 // @ 0x00de57b0
 RbIter57 cGalaxyGameEntryImpl_s00de_5040::FUN_00de57b0(RbNode57* parent, Key2* key, char flag)
 {
@@ -13788,6 +14118,7 @@ struct ImageRef_s00dee800 {
     ImageRef_s00dee800() : mpImage(0) {}
     ~ImageRef_s00dee800() { if (mpImage) ((VF0)(*(void***)mpImage)[1])(mpImage); }
 };
+
 // @ 0x00dee800
 void SP::GalaxyUI::FUN_00dee800(uint32_t id, uint32_t imageId)
 {

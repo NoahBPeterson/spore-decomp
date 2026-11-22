@@ -3,6 +3,7 @@
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d07420@cCountedSlot2@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d07420  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d07720@cCountedSlot3@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d07720  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?Init@C103@@QAEPAXPAX@Z  00d07a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?PickEventId@C103@@QAEEH@Z  00d07ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d08930@@YAXXZ  00d08930  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?Do@Obj8A70@@QAEIII@Z  00d08a70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d08aa0@@YGXIIII@Z  00d08aa0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -15,20 +16,19 @@
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d096e0@cCommunityEditor_s00d0_91c0@@QAE_NPAX@Z  00d096e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d09710@cCommunityEditor_s00d0_91c0@@QAE_NPAX@Z  00d09710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d09740@cCommunityEditor_s00d0_91c0@@QAE_NPAX@Z  00d09740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?HidePlacementCursor@cCommunityEditor_s00d0_a160@@QAEXXZ  00d0a5b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?AssignFrom@CopyValue@@QAEPAU1@PBU1@@Z  00d0a670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0c8e0@cListOwner@SP@@QAEXPAUtListChild@2@@Z  00d0c8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?HandleSwatchRolloverOn@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSwatch_s00d0_def0@2@@Z  00d0e0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?GetCommunityCenter@cCommunityEditor_s00d0_91c0@@QAEPBUVector3@@XZ  00d09960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SnapPointToPlanetIfNecessary@cCommunityEditor_s00d0_91c0@@QAEPAUVector3@@PAU2@MMMPAVcSpatialObject@@@Z  00d09f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetManipulatedObject@cCommunityEditor_s00d0_91c0@@QAEXPAVcSpatialObject@@@Z  00d09f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?RefreshTooltip@cCommunityEditor_s00d0_a160@@QAEXXZ  00d0a390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?HidePlacementCursor@cCommunityEditor_s00d0_a160@@QAEXXZ  00d0a5b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?InsertPos@PosTree@@QAEPAPAUPosNode@@PAPAU2@PBH@Z  00d0a630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?AssignFrom@CopyValue@@QAEPAU1@PBU1@@Z  00d0a670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetRotationRingVisibility@cCommunityEditor_s00d0_a160@@QAEXE@Z  00d0b010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?IsPositionInsideCommunityBounds@cCommunityEditor_s00d0_b090@@QAE_NUV3@@@Z  00d0b4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetSelectedObject@cCommunityEditor_s00d0_b090@@QAEXPAVcSpatialObject_s00d0_b090@@@Z  00d0bcf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?PostEditorBehaviorMessage1@@YGXII@Z  00d0bdd0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?PostEditorBehaviorMessage2@@YGXII@Z  00d0be60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?PostEditorBehaviorMessage3@@YGXII@Z  00d0bef0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?InsertPos@PosTree@@QAEPAPAUPosNode@@PAPAU2@PBH@Z  00d0a630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetManipulatedObject@cCommunityEditor_s00d0_91c0@@QAEXPAVcSpatialObject@@@Z  00d09f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?SnapPointToPlanetIfNecessary@cCommunityEditor_s00d0_91c0@@QAEPAUVector3@@PAU2@MMMPAVcSpatialObject@@@Z  00d09f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetSelectedObject@cCommunityEditor_s00d0_b090@@QAEXPAVcSpatialObject_s00d0_b090@@@Z  00d0bcf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?IsPositionInsideCommunityBounds@cCommunityEditor_s00d0_b090@@QAE_NUV3@@@Z  00d0b4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?GetCommunityCenter@cCommunityEditor_s00d0_91c0@@QAEPBUVector3@@XZ  00d09960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0c8e0@cListOwner@SP@@QAEXPAUtListChild@2@@Z  00d0c8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0ca00@SP@@YIPAPAUtTreeNode@1@PAUcMapInsert@1@HPAPAU21@PAU21@PAUtMapValue@1@_N@Z  00d0ca00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetRotationRingVisibility@cCommunityEditor_s00d0_a160@@QAEXE@Z  00d0b010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCommunityEditor.cpp  ?PickEventId@C103@@QAEEH@Z  00d07ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?HandleSwatchRolloverOn@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSwatch_s00d0_def0@2@@Z  00d0e0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

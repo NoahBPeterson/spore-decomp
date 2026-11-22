@@ -3,12 +3,13 @@
 ../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c004c0@@YI_NPAX0H@Z  00c004c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c00510@@YIXPAX0H@Z  00c00510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?SetHerd@CreatureBase_s00c0_45a0@@QAEXPAX@Z  00c045a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?Flag04710@CreatureBase_s00c0_45a0@@QAE_NXZ  00c04710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4750@CreatureBase_s00c0_45a0@@QAEPAXXZ  00c04750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4790@CreatureBase_s00c0_45a0@@QAEHXZ  00c04790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c04820@@YAPAXPAPAX0P6A_NPAX@Z@Z  00c04820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c04870@@YIXPAPAX@Z  00c04870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4dd0@CreatureBase_s00c0_45a0@@QAEXH@Z  00c04dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?func5d40@CB@@QAEDH@Z  00c05d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?Pop@NodePool@@QAEXXZ  00c05ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?GetBundleCapacity@cGameBundleContainer@SP@@UBEMI@Z  00c06340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?de30@CCM@@QAEHXZ  00c0de30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c04820@@YAPAXPAPAX0P6A_NPAX@Z@Z  00c04820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4750@CreatureBase_s00c0_45a0@@QAEPAXXZ  00c04750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?Flag04710@CreatureBase_s00c0_45a0@@QAE_NXZ  00c04710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4790@CreatureBase_s00c0_45a0@@QAEHXZ  00c04790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?Pop@NodePool@@QAEXXZ  00c05ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c04870@@YIXPAPAX@Z  00c04870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c00000.cpp  ?func5d40@CB@@QAEDH@Z  00c05d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

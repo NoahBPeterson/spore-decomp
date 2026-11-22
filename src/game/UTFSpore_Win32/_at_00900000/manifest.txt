@@ -8,6 +8,7 @@
 ../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903340@@YAXPADH@Z  00903340  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903350@@YAXPADH@Z  00903350  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903370@@YAXPADHH@Z  00903370  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903390@@YAXPAUObj_s0090_3390@@HH@Z  00903390  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_009033d0@@YAHPADH@Z  009033d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00900000.cpp  ?XmlGetParsingStatus@@YAXPADPAH@Z  009035d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00900000.cpp  ?XmlGetByteIndex@@YAHPAD@Z  009035f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

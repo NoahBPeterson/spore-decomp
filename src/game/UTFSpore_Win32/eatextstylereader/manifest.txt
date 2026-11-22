@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/eatextstylereader.cpp  ?Match_008952f0@Lexer_008952f0@@QAE_NXZ  008952f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

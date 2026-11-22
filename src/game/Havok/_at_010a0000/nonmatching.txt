@@ -1,4 +1,8 @@
-# va  diff-bytes  status VERDICT flags: reason
+# va  diff-bytes  reason
+010a0020 0 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010a0130 0 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010a0190 0 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010a03c0 0 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010a22b0 363 size 485 vs 501; statistics-collector block layout/regalloc; equiv UNSUPPORTED (unresolved ?hkNullName@@3QBDB) flags: /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 010a2ac0 183 logic: the monitor-stream helpers each re-read TlsGetValue(g_hkMonitorStreamCurrentTls) after the current<end test before storing the timer entry (the original makes 3 TlsGetValue calls per block, ours made 2), which fixed the call count (18 vs 14 -> 129/130 instructions); m_startTime >= m_worldTimeResetDelay and the splitSimulationIslands/resetWorldTime/checkDeactivation targets were already right. Still differs: register schedule and the endTimer tail call (cl folds the TlsSetValue slot into a register and keeps ecx), so the emulator still reports a memory misc at the stream buffer. flags: /vc71 /O2 /MD /Gy /TP /GS- /fp:fast. fix1: quick check DIFFERS (emulator: 5/6 memory misc), closeness SAME SHAPE
 010a2db0 35 size 875 vs 941; original keeps a frame pointer for the aabb local; equiv UNSUPPORTED (0/400 valid inputs) flags: /vc71 /O2 /MD /Gy /TP /GS- /fp:fast

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeModeStrategy.cpp -- migrated from slice(s) s00cdc8b0, s00cdbb10, s00cd9da0, s00cd3480, s00ccefb0, s00ccece0, s00ccdd70, s0135d100, s00cdef00, s00cde2f0, s00cdd500, s00cdab10, s00cd8e70, s00cd75f0, s00cd6680, s00cd5550, s00cd45c0, s00ccfc20 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeModeStrategy.cpp -- migrated from slice(s) s00cd7d90, s00cd7530, s00cd7100, s00cd6f60, s00cd6ef0, s00cd6e40, s00cd6980, s00cd68d0, s00cd6800, s00cdc8b0, s00cdbb10, s00cd9da0, s00cd3480, s00ccefb0, s00ccece0, s00ccdd70, s0135d100, s00cdef00, s00cde2f0, s00cdd500, s00cdab10, s00cd8e70, s00cd75f0, s00cd6680, s00cd5550, s00cd45c0, s00ccfc20 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -37,6 +37,7 @@ extern "C" char g_1667bae[];
 #include "SP/cTerrainSphere.h"
 #include "SP/cTribePlanner.h"
 #include "SP/cITerrainSphere.h"
+#include <intrin.h>
 
 // ---- items of slice s00ccfc20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void*  GetGameTerrainCursor();                 // 0x00b30d70
@@ -333,15 +334,32 @@ struct cTribe {
 struct cGameNounManager {
     void* GetPlayerTribe();          // 0x00bfc5f0  thiscall, no args
 };
+struct cHintMgr;
+struct cRefObj_s00cd_68d0;
+namespace SP { struct TribeObjectTable; }
+struct cLocalInputState_s00cd_7530 {
+    char mPad00[0x40];
+
+    void OnMouseWheel(int delta, float x, float y, int flags);   // 0x00697b40
+};
+struct cSPTimer {
+    uint32_t data[8];
+    bool IsRunning_00feba90();
+    uint64_t GetElapsedTime_00bc3190();
+    void Stop_00bc3170();
+    void Reset();                       // 0x00bc3170 (s00cd68d0's Teardown)
+};
 class cTribeModeStrategy {
 public:
-    uint32_t pad00[8];             // +0x00..+0x1f
+    uint32_t pad00[1];             // +0x00
+    int      mState4;              // +0x04  (read by FUN_00cd6800's switch, s00cd6800)
+    uint32_t pad08[6];             // +0x08..+0x1f
     unsigned char* mTribePathsBegin; // +0x20  (vector<path> begin)
     unsigned char* mTribePathsEnd;   // +0x24
     uint32_t pad28[6];             // +0x28..+0x3f
     unsigned char* mPtr_40;        // +0x40
     unsigned char* mPtr_44;        // +0x44
-    uint32_t pad48[0x60];          // +0x48..+0x1c7
+    uint32_t pad48[0x60];          // +0x48..+0x1c7 (the cSPTimer at +0x1a8 is reached by Timer_Reset())
     void* mp_1c8;                  // +0x1c8
     void* mp_1cc;                  // +0x1cc  (first RemoveHandler arg)
     void* mp_1d0;                  // +0x1d0
@@ -350,17 +368,18 @@ public:
     void* mp_1dc;                  // +0x1dc
     uint32_t pad1e0[0x12];         // +0x1e0..+0x227
     unsigned char mb_228;          // +0x228
-    unsigned char pad229[0x13];    // +0x229..+0x23b
+    unsigned char pad229[0x12];    // +0x229..+0x23a
     void* mp_23c;                  // +0x23c
     void* mp_240;                  // +0x240
-    uint32_t pad244[4];            // +0x244..+0x253
+    uint32_t pad244[4];            // +0x244..+0x253 (mb_24a at +0x24a, mp_250 at +0x250: see Flag24a()/Obj250())
     void* mp_254;                  // +0x254
     uint32_t pad258[0x4f];         // +0x258..+0x393
     void* mp_394;                  // +0x394  mission manager / next strategy
-    void* mp_398;                  // +0x398  effect object
+    void* mp_398;                  // +0x398  effect object (s00cd68d0's Teardown)
     uint32_t pad39c[1];            // +0x39c..+0x39f
     unsigned char pad3a0[3];       // +0x3a0..+0x3a2
-    unsigned char mb_3a3;          // +0x3a3
+    unsigned char mb_3a3;          // +0x3a3  (read by F_cd5e40's GetTribeCursorID path)
+    unsigned char pad3a4[4];       // +0x3a4..+0x3a7 (the earlier landing's trailing pad)
 
     unsigned char F_cd5550();
     bool          Write(Stream* s);
@@ -370,6 +389,22 @@ public:
     bool          F_cd5e40();
     void          F_cd6390(unsigned char enable);
     void          F_cd6130(uint32_t id);
+    void          FUN_00cd6800();   // 0x00cd6800
+    void          Teardown();       // 0x00cd68d0
+    cHintMgr*     GetHintMgr();     // 0x0067caf0
+    bool          HasObject(unsigned int id);   // 0x00cd6e40
+    bool          IsObjectAllowed(unsigned int id);   // 0x00cd6ef0
+    void          OnMouseWheel(int delta, float x, float y, int flags);   // 0x00cd7530
+    void          RaiseEvent(uint32_t eventHash);     // 0x00cd6980 (the slice's SignalTribeEvent)
+
+    // the embedded cSPTimer at +0x1a8 (s00cd68d0's Teardown calls Reset); cSPTimer is defined later in this file
+    void Timer_Reset() { ((cSPTimer*)((char*)this + 0x1a8))->Reset(); }
+    // the ID->object hashtable at +0xa8 (s00cd6e40's HasObject); SP::TribeObjectTable is its slice-defined view
+    SP::TribeObjectTable& Objects() { return *(SP::TribeObjectTable*)((char*)this + 0xa8); }
+    unsigned char& Flag24a() { return *(unsigned char*)((char*)this + 0x24a); }   // s00cd68d0's Teardown clears it
+    void*& Obj250() { return *(void**)((char*)this + 0x250); }                      // s00cd68d0: released and cleared
+    bool AllowAllObjects() { return *(bool*)((char*)this + 0x198) != 0; }           // s00cd6ef0's gate at +0x198
+    cLocalInputState_s00cd_7530* mInput7530() { return (cLocalInputState_s00cd_7530*)((char*)this + 0x1e0); }  // s00cd7530's input state
 };
 struct TribePath {
     unsigned char* mpBegin;  // +0x00
@@ -488,7 +523,9 @@ struct HashElem {
 // ---- items of slice s00cd5550 end
 
 // ---- items of slice s00cd6680 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void ReadInt32Stream(void* stream, void* out, int count, int flag);
 typedef unsigned char u8;
+typedef unsigned int  u32;
 void __cdecl operator_delete_array(void* p);   // 0x00f47380
 struct cWString {
     void* mpBegin;                 // 0x00
@@ -504,6 +541,39 @@ struct cPosseInfo {
     int      mField14;             // 0x14
     int      mField18;             // 0x18
 };
+struct cStream;
+struct cEntry {
+    virtual void Destroy();      // 0x00
+    virtual void Release();      // 0x04
+};
+struct cInner {
+    virtual void v00();          // 0x00
+    virtual void v01();          // 0x04
+    virtual void v02();          // 0x08
+    virtual void v03();          // 0x0c
+    virtual void v04();          // 0x10
+    virtual void v05();          // 0x14
+    virtual cStream* GetStream();// 0x18
+    virtual void v07();          // 0x1c
+    virtual void v08();          // 0x20
+};
+struct cOwner {
+    virtual void v00();                     // 0x00
+    virtual void v01();                     // 0x04
+    virtual void v02();                     // 0x08
+    virtual void v03();                     // 0x0c
+    virtual void v04();                     // 0x10
+    virtual void v05();                     // 0x14
+    virtual void v06();                     // 0x18
+    virtual void v07();                     // 0x1c
+    virtual cInner* GetInner();             // 0x20
+    virtual void v09();                     // 0x24
+    virtual void SetProperty(u32 id, void* value, int flags);  // 0x28
+};
+static inline const int& MinInt(const int& a, const int& b)
+{
+    return (b < a) ? b : a;
+}
 // ---- items of slice s00cd6680 end
 
 // ---- items of slice s00cd75f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -517,6 +587,47 @@ struct tGameDataVectorT {
     uint32_t mValue0c;                                       // +0x0c
 };  // namespace Simulator
 }
+struct cGameInputManager_s00cd75f0;
+struct cTerrainSphere_s00cd75f0 {
+    bool __thiscall Contains(uint32_t key);                  // 0x00c772c0
+};
+struct cNounManager_s00cd75f0 {
+    cTerrainSphere_s00cd75f0* __thiscall GetCurrentTerrainSphere(); // 0x00f67d90
+};
+struct cGameTimeManager_s00cd75f0 {
+    int __thiscall GetTimerState(uint32_t timer);            // 0x00b320d0
+};
+cGameInputManager_s00cd75f0* __cdecl GameInputManager_s00cd_75f0();      // 0x00b3d250
+cGameTimeManager_s00cd75f0*  __cdecl GameTimeManager_s00cd_75f0();       // 0x00b3d380
+cNounManager_s00cd75f0*      __cdecl NounManager_s00cd_75f0();           // 0x00b3d300
+bool __cdecl IsInputConsumed(int key);                        // 0x00d4a4a0
+struct cGameInputManager_s00cd75f0 {
+    virtual void v00();                                     // +0x00
+    virtual void v01();                                     // +0x04
+    virtual void v02();                                     // +0x08
+    virtual void v03();                                     // +0x0c
+    virtual void v04();                                     // +0x10
+    virtual void v05();                                     // +0x14
+    virtual bool v06(uint32_t key);                         // +0x18
+    virtual void v07();                                     // +0x1c
+    virtual void v08();                                     // +0x20
+    virtual void v09();                                     // +0x24
+    virtual void v10();                                     // +0x28
+    virtual void v11();                                     // +0x2c
+    virtual void v12();                                     // +0x30
+    virtual void v13();                                     // +0x34
+    virtual void v14();                                     // +0x38
+    virtual void v15();                                     // +0x3c
+    virtual void v16();                                     // +0x40
+    virtual bool v17(int key, int modifiers);               // +0x44
+    virtual void v18();                                     // +0x48
+    virtual bool v19(int key, int modifiers);               // +0x4c
+};
+struct cTribeModeStrategy_s00cd75f0 {
+    bool __thiscall HasEvent(uint32_t eventHash);            // 0x00cd4460
+    void __thiscall RaiseEvent(uint32_t eventHash);          // 0x00cd6980
+    bool __thiscall OnInput(int key, int modifiers);          // 0x00cd75f0
+};
 // ---- items of slice s00cd75f0 end
 
 // ---- items of slice s00cd8e70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -881,7 +992,7 @@ struct Vec16 {
 // ---- items of slice s00cd8e70 end
 
 // ---- items of slice s00cdab10 begin (TODO(rewrite): local stubs, replace by canonical classes)
-typedef unsigned int   u32;
+
 typedef int            s32;
 typedef float          f32;
 #define VT(p)   (*(void***)(p))
@@ -1838,12 +1949,6 @@ inline bool GetDebugBool(uint32_t id, Property*& prop)
     return gDebugProps_01581288 && gDebugProps_01581288->GetProperty(id, prop) &&
            prop->mType == 1 && *prop->GetValueBool();
 }
-struct cSPTimer {
-    uint32_t data[8];
-    bool IsRunning_00feba90();
-    uint64_t GetElapsedTime_00bc3190();
-    void Stop_00bc3170();
-};
 struct cCitizen {
 virtual int AddRef();
 virtual int Release();
@@ -2901,6 +3006,24 @@ unsigned char GetPropertyAsUint32Array(void* a, int b, void* c, void* d); // 0x0
 void          WriteUint32(void* s, void* p, int a, int b);   // 0x0093aa70
 void*         GetCursorTable();                              // 0x0067cab0
 void*         AchievementsController();                      // 0x00675250
+struct CActTarget_s00cd_3480 {
+    int mA, mB, mC, mD, mE, mF, mG, mH, mI, mJ, mK, mL;  // 0x30 bytes
+    void Ctor(void* t);                                            // 0xad7a30 (ret 4)
+    void Dtor();                                                   // 0xad7ad0
+};
+struct CTerrain_s00cd_3480 {
+    char pad[0x1150];
+    int mCityHallPos[3];                                         // +0x1150
+    unsigned char F772c0(int key);       // 0x00c772c0
+    void F77300(int a);                  // 0x00c77300
+    void F77380(int key, int* out);      // 0x00c77380
+    void F77bf0(int a);                  // 0x00c77bf0
+    void F79f00(int key, int v);         // 0x00c79f00
+};
+struct CMgr_s00cd_3480 {
+    CTerrain_s00cd_3480* GetCurrentTerrainSphere(); // 0x00f67d90
+    void* GetPlayerTribe();              // 0x00bfc5f0
+};
 struct CActTarget {
     int mA, mB, mC, mD, mE, mF, mG, mH, mI, mJ, mK, mL;  // 0x30 bytes
     CActTarget* Ctor(void* t);                                     // 0xad7a30 (ret 4)
@@ -2977,7 +3100,7 @@ struct TM {
     void M_b6f760();
     void M_b70070();
     void M_b6f820(void* a);
-    void M_b6f4e0(void* a);
+    void M_b6f4e0(void* a, ...);
     void M_b705a0();
     void M_b70820();
 
@@ -2992,7 +3115,7 @@ struct TM {
     void F_cd4180(int a, float f1, float f2, int b);
     void F_cd41d0(float f1, float f2, int a);
     void F_cd4220(int a, float f1, float f2, int b);
-    void F_cd43c0(void* a);
+    void F_cd43c0(void* a);   // 0x00cd43c0 (TM::F_cd43c0)
     bool F_cd4490();
     unsigned int F_cd4460(int a);
     bool F_cd44a0();
@@ -3466,6 +3589,344 @@ static void cvg_swap(CvgRec* r, CvgObj* o)
     o->mB40 = t2;
 }
 // ---- items of slice s00cdc8b0 end
+
+// ---- items of slice s00cd6800 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPTimer_s00cd_6800 {
+    void Restart();                         // 0x00bc3130
+};
+struct cGameTimeManager_s00cd_6800 {
+    void DecPauseGate(u32 id);              // 0x00b32250
+};
+struct cGameInputManager_s00cd_6800 {
+    u8  mPad000[0x110];
+    int mField110;                          // 0x110
+};
+struct cCameraCtl {
+    u8   mPad000[0x390];
+    bool mFlag390;                          // 0x390
+};
+struct cConfigManager_s00cd_6800 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+    virtual void SetConfigU32(u32 id, char value);  // +0x2c
+    virtual u32  GetConfigU32(u32 id);              // +0x30
+};
+struct cUIHints_s00cd_6800 {
+    void UpdateHints(u32 id);               // 0x0067c830
+};
+struct cUIWindow {
+    void FUN_00e2f270();                    // 0x00e2f270
+};
+struct cModeObject {
+    u8       mPad000[4];                    // 0x00 vtable
+    void F_cd6390(unsigned char enable);    // 0x00cd6390
+    u8       mPad004[0x1a8 - 4];
+    cSPTimer_s00cd_6800 mTimer;                        // 0x1a8
+};
+extern "C" cGameTimeManager_s00cd_6800*   GameTimeManager_s00cd_6800();          // 0x00b3d380
+extern "C" cGameInputManager_s00cd_6800*  GameInputManager_s00cd_6800();         // 0x00b3d250
+extern "C" cCameraCtl*         GetCameraCtl_s00cd_6800();             // 0x00b3d280
+extern "C" cConfigManager_s00cd_6800*     ConfigManager();            // 0x0067dd30
+extern "C" cUIHints_s00cd_6800*           FUN_0067cac0_s00cd_6800();             // 0x0067cac0
+extern "C" cUIWindow* __stdcall FUN_00b3d4f0_s00cd_6800(int flag);    // 0x00b3d4f0
+extern "C" cModeObject*        DAT_0169b2c8;               // 0x0169b2c8
+// ---- items of slice s00cd6800 end
+
+// ---- items of slice s00cd68d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cRefObj_s00cd_68d0 {           // the slice's view of the +0x250/+0x398 object (slot +0xc = ReleaseWith)
+    virtual void v00();                 // 0x00
+    virtual void Release();             // 0x04
+    virtual void v02();                 // 0x08
+    virtual void ReleaseWith(int flags); // 0x0c
+};
+struct cHintMgr {
+    void Shutdown();                    // 0x0067a120
+};
+struct cAimSource {
+    void Stop(int);                     // 0x00b33ce0
+    void Clear(int);                    // 0x00b33cf0
+};
+extern "C" cCameraCtl*  GetCameraCtl_s00cd_68d0();     // 0x00b3d280
+extern "C" cAimSource*  GetAimSource();     // 0x00b3d240
+// ---- items of slice s00cd68d0 end
+
+// ---- items of slice s00cd6980 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned char g_0157f174[];
+extern "C" unsigned char g_0157f184[];
+namespace Simulator {
+struct ResourceKey_s00cd_6980 {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+}
+namespace Simulator {
+extern ResourceKey_s00cd_6980 g_hintKeys[3];                            // 0x0157f138 (12 bytes each)
+}
+namespace Simulator {
+extern const float g_hintOffset;                             // 0x013eb1bc
+}
+namespace Simulator {
+struct cTerrainSphere_s00cd6980 {
+    bool __thiscall Contains(uint32_t key);                  // 0x00c772c0
+    void __thiscall Remove(uint32_t key);                    // 0x00c77300
+    bool __thiscall HasFlagOrInsert(uint32_t key);           // 0x00c77bf0
+};
+}
+namespace Simulator {
+struct cNounManager_s00cd6980 {
+    cTerrainSphere_s00cd6980* __thiscall GetCurrentTerrainSphere(); // 0x00f67d90
+};
+}
+namespace Simulator {
+struct cGameTimeManager_s00cd6980 {
+    void __thiscall IncPauseGate(uint32_t timer);            // 0x00b32220
+    void __thiscall DecPauseGate(uint32_t timer);            // 0x00b32250
+    bool __thiscall IsPaused();                              // 0x00cce590 (ecx = manager)
+};
+}
+namespace Simulator {
+struct cGameInputManager_s00cd6980 {
+    uint8_t pad000[0x110];                                   // +0x000
+    int32_t m110;                                            // +0x110
+};
+}
+namespace Simulator {
+struct cRelationsStrip_s00cd6980 {
+    void __thiscall Reset();                                 // 0x00e2f270
+};
+}
+namespace Simulator {
+struct cCameraCtl_s00cd6980 {
+    uint8_t pad000[0x390];                                   // +0x000
+    uint8_t m390;                                            // +0x390
+};
+}
+namespace Simulator {
+struct cMissionMgr_s00cd6980 {
+    uint32_t __thiscall HintClear(uint32_t hint);            // 0x00b707a0
+};
+}
+namespace Simulator {
+struct cHintManager_s00cd6980 {
+    void __thiscall ShowHint(ResourceKey_s00cd_6980 key, void* handler, int a,
+                             float x, float y, float z, int b, int c); // 0x0067aaf0
+};
+}
+namespace Simulator {
+struct cResourceFinder_s00cd6980 {
+    virtual void v00();                                      // +0x00
+    virtual void v01();                                      // +0x04
+    virtual void v02();                                      // +0x08
+    virtual void v03();                                      // +0x0c
+    virtual void v04();                                      // +0x10
+    virtual void v05();                                      // +0x14
+    virtual void v06();                                      // +0x18
+    virtual void v07();                                      // +0x1c
+    virtual void v08();                                      // +0x20
+    virtual void v09();                                      // +0x24
+    virtual void v10();                                      // +0x28
+    virtual void v11();                                      // +0x2c
+    virtual void* Find(uint32_t id);                         // +0x30
+};
+}
+Simulator::cNounManager_s00cd6980*      __cdecl NounManager_s00cd_6980();      // 0x00b3d300
+Simulator::cGameTimeManager_s00cd6980*  __cdecl GameTimeManager_s00cd_6980();  // 0x00b3d380
+Simulator::cGameInputManager_s00cd6980* __cdecl GameInputManager_s00cd_6980(); // 0x00b3d250
+Simulator::cCameraCtl_s00cd6980* __cdecl GetCameraCtl_s00cd_6980();     // 0x00b3d280
+Simulator::cResourceFinder_s00cd6980* __cdecl Function_0067dd30(); // 0x0067dd30
+Simulator::cRelationsStrip_s00cd6980* __stdcall Function_00b3d4f0(int); // 0x00b3d4f0
+Simulator::cHintManager_s00cd6980* __cdecl GetHintManager();  // 0x0067caf0
+void __cdecl Function_00cd3fb0(int eventHash);               // 0x00cd3fb0
+void __cdecl Function_00cd3fd0(int eventHash);               // 0x00cd3fd0
+struct cTribeModeStrategy_s00cd6980 {
+    uint8_t pad000[0x1a4];                                   // +0x000
+    uint8_t m1a4;                                            // +0x1a4
+    uint8_t pad1a5[0x394 - 0x1a5];                           // +0x1a5
+    Simulator::cMissionMgr_s00cd6980* mp394;                 // +0x394
+
+    bool __thiscall HasEvent(uint32_t eventHash);            // 0x00cd4460
+    void __thiscall RaiseEvent(uint32_t eventHash);          // 0x00cd6980
+    void __thiscall Notify(uint32_t eventHash);              // 0x00cd6130
+};
+// ---- items of slice s00cd6980 end
+
+// ---- items of slice s00cd6e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct TribeObjectNode {
+    unsigned int mKey;
+    void* mValue;
+    TribeObjectNode* mpNext;
+};
+}
+namespace SP {
+struct TribeObjectIterator {
+    TribeObjectNode* mpNode;
+    TribeObjectNode** mpBucket;
+};
+}
+namespace SP {
+struct TribeObjectTable {
+    void* mpPolicy;
+    TribeObjectNode** mpBuckets;
+    unsigned int mnBucketCount;
+    unsigned int mnElementCount;
+    TribeObjectIterator* find(TribeObjectIterator* result, const unsigned int* key); // 0x00645ed0 (returns its argument)
+    TribeObjectNode* End() { return mpBuckets[mnBucketCount]; }      // s00cd6ef0: the end sentinel
+};
+}
+// ---- items of slice s00cd6e40 end
+
+// ---- items of slice s00cd6ef0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* gTribeStrategyProperties; // 0x01581288
+unsigned char __cdecl GetTribeProperty(void* object, int property, unsigned char defaultValue); // 0x0064f350
+namespace SP {
+struct TribeObjectTable_s00cd_6ef0 {
+    void* mpPolicy;
+    TribeObjectNode** mpBuckets;
+    unsigned int mnBucketCount;
+    unsigned int mnElementCount;
+    TribeObjectIterator* find(TribeObjectIterator* result, const unsigned int* key); // 0x00645ed0
+    TribeObjectNode* End() { return mpBuckets[mnBucketCount]; }
+};
+}
+
+// ---- items of slice s00cd6ef0 end
+
+// ---- items of slice s00cd6f60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace IO {
+class IStream_s00cd_6f60;
+}
+}
+namespace EA {
+namespace IO {
+bool __cdecl WriteUint32(IStream_s00cd_6f60*, const unsigned int*, int, int); // 0x0093aa70
+}
+}
+// ---- items of slice s00cd6f60 end
+
+// ---- items of slice s00cd7100 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cTribeModeStrategy_s00cd_7100 {
+    bool Has(int id);                       // 0x00cd6ef0
+};
+struct cEventLog_s00cd_7100 {
+    void PostFeedbackEvent(u32 event, u32 category, int a, int b, int c, int d);  // 0x00dd8640
+};
+extern cTribeModeStrategy_s00cd_7100* gTribeModeStrategy_0169b2c8;   // 0x0169b2c8
+cEventLog_s00cd_7100* EventLog_00b3d3e0_s00cd_7100();                           // 0x00b3d3e0
+// ---- items of slice s00cd7100 end
+
+// ---- items of slice s00cd7530 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cTerrainSphere_s00cd_7530 {
+    bool Contains(uint32_t key);                                 // 0x00c772c0
+};
+struct cGameNounManager_s00cd_7530 {
+    cTerrainSphere_s00cd_7530* GetCurrentTerrainSphere();                   // 0x00f67d90
+};
+cGameNounManager_s00cd_7530* NounManager_s00cd_7530();                                 // 0x00b3d300
+struct cGameInputManager_s00cd_7530 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void v15();
+    virtual void v16();
+    virtual void v17();
+    virtual void v18();
+    virtual void v19();
+    virtual void v20();
+    virtual void v21();
+    virtual void v22();
+    virtual void v23();
+    virtual void OnMouseWheel(int delta, float x, float y, int flags);   // +0x60
+};
+cGameInputManager_s00cd_7530* GameInputManager_s00cd_7530();                           // 0x00b3d250
+// ---- items of slice s00cd7530 end
+
+// ---- items of slice s00cd7d90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char VT_1477668[];
+extern char VT_1477648[];
+extern char VT_1477640[];
+extern char VT_14775f0[];
+extern char VT_14775e8[];
+extern char VT_13eb938[];
+extern char VT_13eb394[];
+void __cdecl operator_delete_00f47380(void* p);
+void __cdecl FUN_00571db0(void* a, void* b, void* c, void* d, void* e);
+inline void Release1(void* p)
+{
+    ((void (__thiscall*)(void*))(*(void***)p)[1])(p);
+}
+inline void Release2(void* p)
+{
+    ((void (__thiscall*)(void*))(*(void***)p)[2])(p);
+}
+struct cGonzagoTimer {
+    uint32_t m[8];                      // 0x20 bytes
+    void dtor_00b638b0();
+};
+struct Obj40 {
+    uint32_t m[6];
+    void dtor_00cd57d0();
+};
+struct Obj94 {
+    uint32_t m[5];
+    void dtor_00ae6970();
+};
+struct Obj0c {
+    uint32_t m[0x34 / 4];
+    void dtor_00b5b9a0();
+};
+struct PoolContainer {
+    uint32_t m00;                       // +0x00
+    void*    mpBegin;                   // +0x04
+    uint32_t mCapacity;                 // +0x08
+    uint32_t mSize;                     // +0x0c
+    uint32_t mPad10[3];                 // +0x10..+0x1b
+    void*    mpFreeList;                // +0x1c
+    uint32_t mPad20;                    // +0x20
+    void*    mpPoolBegin;               // +0x24
+    void*    mpPoolEnd;                 // +0x28
+    uint32_t mPad2c;                    // +0x2c
+    void*    mpInline;                  // +0x30
+    uint32_t mPad34[0xbc / 4];          // +0x34..+0xef
+
+    void DestroyRange_00a1b6c0(void* first, uint32_t capacity);
+};
+struct Vector2c {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    void DestroyRange_01023030(void* first, void* last);
+};
+struct Vector304 {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    void DestroyRange_00cd6fd0(void* first, void* last);
+};
+// ---- items of slice s00cd7d90 end
 
 // @ 0x00cceae0
 u32 cSPUITCCCursorStrategy::FUN_00cceae0(void* obj, u32 mode, void* arg3)
@@ -4124,7 +4585,7 @@ void F_cd3f20(uint32_t idx)
     int local_8 = 0;
     if (GetPropertyAsUint32Array(g_1581288, 0xf5bf4d8e, &local_c, &local_8)
         && local_c > 0 && (uint32_t)local_c > idx) {
-        CTerrain* te = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+        CTerrain_s00cd_3480* te = ((CMgr_s00cd_3480*)NounManager())->GetCurrentTerrainSphere();
         int v = *(int*)(local_8 + (int)idx * 4);
         int local_4 = 0;
         te->F77380(0x055d6335, &local_4);
@@ -4135,7 +4596,7 @@ void F_cd3f20(uint32_t idx)
 // @ 0x00cd3fb0
 void F_cd3fb0(int a)
 {
-    CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    CTerrain_s00cd_3480* s = ((CMgr_s00cd_3480*)NounManager())->GetCurrentTerrainSphere();
     if (s != 0) {
         s->F77bf0(a);
         return;
@@ -4145,7 +4606,7 @@ void F_cd3fb0(int a)
 // @ 0x00cd3fd0
 void F_cd3fd0(int a)
 {
-    CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    CTerrain_s00cd_3480* s = ((CMgr_s00cd_3480*)NounManager())->GetCurrentTerrainSphere();
     if (s != 0) {
         s->F77300(a);
         return;
@@ -4241,24 +4702,24 @@ void TM::F_cd4220(int a, float f1, float f2, int b)
 void TM::StartTribe()
 {
     ((CTrig*)GetTriggerMgr())->SetEnabled(1);
-    void* tribe = ((CMgr*)NounManager())->GetPlayerTribe();
+    void* tribe = ((CMgr_s00cd_3480*)NounManager())->GetPlayerTribe();
     void* obj = ((void*(__thiscall*)(void*))(*(void***)tribe)[0xac / 4])(tribe);
     void* tool = ((CTribe*)tribe)->GetToolOfType(10);
     void* trig = ((CTrig*)GetTriggerMgr())->PostTrigger(g_StrTRGBegin, 1, 1, 0, 0, 0);
     {
-        CActTarget t;
+        CActTarget_s00cd_3480 t;
         t.Ctor((char*)tribe + 0x120);
         ((CTrig*)GetTriggerMgr())->PostAction(0x3d7f90a, &t, trig);
         t.Dtor();
     }
     {
-        CActTarget t;
+        CActTarget_s00cd_3480 t;
         t.Ctor(obj != 0 ? (char*)obj + 0x34 : 0);
         ((CTrig*)GetTriggerMgr())->PostAction(0xaa227986, &t, trig);
         t.Dtor();
     }
     {
-        CActTarget t;
+        CActTarget_s00cd_3480 t;
         t.Ctor(tool != 0 ? (char*)tool + 0x34 : 0);
         ((CTrig*)GetTriggerMgr())->PostAction(0x60ed02ef, &t, trig);
         t.Dtor();
@@ -4271,10 +4732,11 @@ void TM::StartTribe()
     ((CAch*)AchievementsController())->F(0xd082675a, 4, 1);
 }
 
-// Legacy copy; byte-exact definition is in match/slices/s00cd3480/s00cd3480.cpp.
+// @ 0x00cd43c0
 void TM::F_cd43c0(void* a)
 {
-    C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, a);
+    void* argument = *(void* volatile*)&a;
+    C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, argument);
     o->M();
 }
 
@@ -4332,6 +4794,7 @@ static __forceinline void WriteUint32Value_cd44e0(void* s, uint32_t value)
 {
     WriteUint32(s, &value, 1, 0);
 }
+
 // @ 0x00cd44e0
 bool TM::F_cd44e0(void* a, void* b)
 {
@@ -4913,7 +5376,7 @@ bool cTribeModeStrategy::Write(Stream* s)
 // @ 0x00cd56e0
 void cTribeModeStrategy::F_cd56e0()
 {
-    RefMgr* p = new (g_StrSimulator, 0, 0, 0, 0) RefMgr;
+    RefMgr* p = new ("Simulator", 0, 0, 0, 0) RefMgr;   // the tag is a string literal (0x013f09b4)
     RefMgr* old = (RefMgr*)mp_394;
     if (p != old) {
         if (p) p->AddRef();
@@ -5397,6 +5860,33 @@ void HashElem::Clear()
     m0c = 0;
 }
 
+// @ 0x00cd6680
+bool ClearEntryBlock(cOwner* owner, cEntry** entries)
+{
+    cInner*  inner  = owner->GetInner();
+    cStream* stream = inner->GetStream();
+
+    int count;
+    ReadInt32Stream(stream, &count, 1, 0);
+
+    const int maxEntries = 20;
+    int n = MinInt(count, maxEntries);
+
+    cEntry** p = entries;
+    for (int i = 0; i < n; ++i, ++p)
+    {
+        if (*p)
+        {
+            cEntry* entry = *p;
+            *p = 0;
+            entry->Release();
+        }
+        owner->SetProperty(0x03A25119u, p, 0);
+    }
+
+    return true;
+}
+
 // @ 0x00cd6710
 cPosseInfo* DestroyRange(cPosseInfo* first, cPosseInfo* last, cPosseInfo* dst)
 {
@@ -5441,6 +5931,255 @@ cPosseInfo* CopyRangeBackward(cPosseInfo* first, cPosseInfo* last, cPosseInfo* d
     return dst;
 }
 
+// @ 0x00cd6800
+void cTribeModeStrategy::FUN_00cd6800()
+{
+    cGameTimeManager_s00cd_6800* time = GameTimeManager_s00cd_6800();
+    time->DecPauseGate(0x4bf38a7u);
+
+    switch (mState4) {
+    case 1:
+        if (ConfigManager()->GetConfigU32(0x4ea96cbu) != 0) {
+            if (ConfigManager()->GetConfigU32(0x5b5bb5eu) != 0) {
+                DAT_0169b2c8->F_cd6390(1);
+                FUN_00b3d4f0_s00cd_6800(1)->FUN_00e2f270();
+                cGameInputManager_s00cd_6800* input = GameInputManager_s00cd_6800();
+                input->mField110++;
+                if (GetCameraCtl_s00cd_6800() != 0)
+                    GetCameraCtl_s00cd_6800()->mFlag390 = true;
+                DAT_0169b2c8->mTimer.Restart();
+            }
+        }
+        break;
+    case 2:
+        if (ConfigManager()->GetConfigU32(0x5b5bb5eu) != 0)
+            FUN_0067cac0_s00cd_6800()->UpdateHints(0x508fccb5u);
+        break;
+    }
+}
+
+// @ 0x00cd68d0
+void cTribeModeStrategy::Teardown()
+{
+    GetHintMgr()->Shutdown();
+    Timer_Reset();
+
+    if (GetCameraCtl_s00cd_68d0())
+        GetCameraCtl_s00cd_68d0()->mFlag390 = false;
+
+    if (mp_398 != 0) {
+        ((cRefObj_s00cd_68d0*)mp_398)->ReleaseWith(1);
+
+        if (mp_398 != 0) {
+            cRefObj_s00cd_68d0* p = (cRefObj_s00cd_68d0*)mp_398;
+            mp_398 = 0;
+            p->Release();
+        }
+    }
+
+    GetAimSource()->Stop(0);
+    GetAimSource()->Clear(0);
+
+    if (GetCameraCtl_s00cd_68d0())
+        GetCameraCtl_s00cd_68d0();
+
+    Flag24a() = 0;
+    _ReadWriteBarrier();            // keep the flag store ahead of the +0x250 object load
+
+    // the refcounted object at +0x250 (inside the earlier landing's pad244[4]) released and cleared, as s00cd68d0 did
+    if (Obj250()) {
+        cRefObj_s00cd_68d0* q = (cRefObj_s00cd_68d0*)Obj250();
+        Obj250() = 0;
+        q->Release();
+    }
+}
+
+// @ 0x00cd6980
+void cTribeModeStrategy_s00cd6980::RaiseEvent(uint32_t eventHash)
+{
+    Simulator::cTerrainSphere_s00cd6980* sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+
+    if (sphere != 0 && sphere->Contains(eventHash))
+        return;
+
+    sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+    if (sphere != 0)
+        sphere->HasFlagOrInsert(eventHash);
+
+    switch (eventHash)
+    {
+    case 0x064c010f:
+        Function_00cd3fd0(0x53203528);
+        // fall through
+    case 0x53203528:
+        sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+        if (sphere != 0)
+            sphere->Remove(0x83861976);
+        // fall through
+    case 0x83861976:
+        sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+        if (sphere != 0)
+            sphere->Remove(0x064d44f9);
+        // fall through
+    case 0x064d44f9:
+        sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+        if (sphere != 0)
+            sphere->Remove(0x064e70b3);
+        // fall through
+    case 0x064e70b3:
+        sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+        if (sphere != 0)
+            sphere->Remove(0x5ac72d7c);
+        // fall through
+    case 0x5ac72d7c:
+        sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+        if (sphere != 0)
+            sphere->Remove(0x14363974);
+
+        sphere = NounManager_s00cd_6980()->GetCurrentTerrainSphere();
+        if (sphere != 0 && sphere->Contains(0x056d1871))
+            break;
+        if (!HasEvent(0x064c010f))
+            break;
+        if (!HasEvent(0x83861976))
+            break;
+        if (!HasEvent(0x53203528))
+            break;
+        if (!HasEvent(0x064d44f9))
+            break;
+        if (!HasEvent(0x064e70b3))
+            break;
+        if (!HasEvent(0x5ac72d7c))
+            break;
+
+        Function_00cd3fb0(0x056d1871);
+        m1a4 = 0;
+
+        if (GameTimeManager_s00cd_6980()->IsPaused())
+        {
+            Simulator::cGameTimeManager_s00cd6980* time = GameTimeManager_s00cd_6980();
+            time->DecPauseGate(0x064beb65);
+            Simulator::cGameInputManager_s00cd6980* input = GameInputManager_s00cd_6980();
+            input->m110--;
+        }
+
+        Function_00b3d4f0(0)->Reset();
+
+        if (GetCameraCtl_s00cd_6980() != 0)
+            GetCameraCtl_s00cd_6980()->m390 = 0;
+
+        if (Function_0067dd30()->Find(0x04ea96cb) != 0 &&
+            Function_0067dd30()->Find(0x05b5bb5e) != 0)
+        {
+            Simulator::cGameTimeManager_s00cd6980* time = GameTimeManager_s00cd_6980();
+            time->IncPauseGate(0x04bf38a7);
+
+            GetHintManager()->ShowHint(Simulator::g_hintKeys[1], (void*)g_0157f174, 0,
+                                       Simulator::g_hintOffset, Simulator::g_hintOffset,
+                                       0.0f, 0, 0);
+        }
+        break;
+
+    case 0x064be5ff:
+    {
+        if (HasEvent(0x056d1871))
+            break;
+        if (Function_0067dd30()->Find(0x04ea96cb) == 0)
+            break;
+        if (Function_0067dd30()->Find(0x05b5bb5e) == 0)
+            break;
+
+        if (GetCameraCtl_s00cd_6980() != 0)
+            GetCameraCtl_s00cd_6980()->m390 = 0;
+
+        Simulator::cGameTimeManager_s00cd6980* pauseTime = GameTimeManager_s00cd_6980();
+        pauseTime->IncPauseGate(0x04bf38a7);
+
+        GetHintManager()->ShowHint(Simulator::g_hintKeys[0], 0, 0,
+                                   Simulator::g_hintOffset, Simulator::g_hintOffset,
+                                   0.0f, 0, 0);
+
+        GetHintManager()->ShowHint(Simulator::g_hintKeys[2], (void*)g_0157f184, 0,
+                                   Simulator::g_hintOffset, Simulator::g_hintOffset,
+                                   0.0f, 0, 0);
+
+        if (GameTimeManager_s00cd_6980()->IsPaused())
+            break;
+        Simulator::cGameTimeManager_s00cd6980* resumeTime = GameTimeManager_s00cd_6980();
+        resumeTime->IncPauseGate(0x064beb65);
+        break;
+    }
+
+    case 0x14363974:
+        mp394->HintClear(0x0391c432);
+        mp394->HintClear(0x69ba7f0d);
+        mp394->HintClear(0x02d99d0b);
+        break;
+
+    case 0x11ade9ce:
+    case 0x5312da01:
+    case 0x84f037b0:
+    case 0x7d7315c8:
+    case 0x9a44d4ab:
+    case 0xdcdf2f2f:
+        mp394->HintClear(eventHash);
+        break;
+    }
+
+    if (Function_0067dd30()->Find(0x04ea96cb) != 0 &&
+        Function_0067dd30()->Find(0x05b5bb5e) != 0)
+        Notify(eventHash);
+}
+
+// @ 0x00cd6e40
+bool cTribeModeStrategy::HasObject(unsigned int id)
+{
+    SP::TribeObjectTable& table = Objects();
+    SP::TribeObjectIterator it;
+    unsigned int key = id;
+    table.find(&it, &key);
+    if (it.mpNode != table.mpBuckets[table.mnBucketCount])
+        return it.mpNode->mValue != 0;
+    return false;
+}
+
+// @ 0x00cd6ef0
+bool cTribeModeStrategy::IsObjectAllowed(unsigned int id)
+{
+    if (!AllowAllObjects() && GetTribeProperty(gTribeStrategyProperties, 0x1ccfdbe6, 0)) {
+        unsigned int key = id;
+        SP::TribeObjectIterator it;
+        SP::TribeObjectNode* end = Objects().End();
+        unsigned char found = Objects().find(&it, &key)->mpNode != end;
+        return found != 0;
+    }
+    return true;
+}
+
+// @ 0x00cd6f60
+bool __cdecl WriteTribeObjectArray(SP::cIObjectDatabaseOStream* stream, void* const* objects)
+{
+    void* record = ((void* (__thiscall*)(void*))(*(void***)stream)[8])(stream);
+    void** recordVtable = *(void***)record;
+    EA::IO::IStream_s00cd_6f60* output;
+    {
+        unsigned int count = 20;
+        output = ((EA::IO::IStream_s00cd_6f60* (__thiscall*)(void*))recordVtable[6])(record);
+        EA::IO::WriteUint32(output, &count, 1, 0);
+    }
+    unsigned int remaining = 20;
+    do {
+        void* object = *objects;
+        void* serializable = 0;
+        if (object)
+            serializable = ((void* (__thiscall*)(void*, unsigned int))
+                (*(void***)object)[3])(object, 0x0179c807);
+        ((bool (__thiscall*)(void*, void*))(*(void***)stream)[11])(stream, serializable);
+        ++objects;
+    } while (--remaining);
+    return true;
+}
+
 // @ 0x00cd6fd0
 void __stdcall DoDestroyValues(cPosseInfo* first, cPosseInfo* last)
 {
@@ -5450,6 +6189,90 @@ void __stdcall DoDestroyValues(cPosseInfo* first, cPosseInfo* last)
         if (((cap - (int)p) & -2) > 2 && p != 0)
             operator_delete_array(p);
     }
+}
+
+// @ 0x00cd7100
+void FUN_00cd7100(int relationship)
+{
+    u32 event;
+    switch (relationship) {
+    case 1: event = 0x1f530f73u; break;
+    case 2: event = 0x87257c01u; break;
+    case 3: event = 0xcbaf7ee2u; break;
+    case 4: event = 0xd3a34498u; break;
+    case 5: event = 0xbd7ce41eu; break;
+    case 6: event = 0xeb39fbd9u; break;
+    case 7: event = 0xa0d49e3au; break;
+    case 8: event = 0x666686efu; break;
+    case 9: event = 0x97ada627u; break;
+    default:
+        return;
+    }
+
+    if (!gTribeModeStrategy_0169b2c8->Has(relationship))
+        EventLog_00b3d3e0_s00cd_7100()->PostFeedbackEvent(event, 0x182cd6ceu, 0, 0, 1, 0);
+}
+
+// 0x00cd6980: the event entry point the slice calls SignalTribeEvent; its body is the next function (slice text)
+void cTribeModeStrategy::RaiseEvent(uint32_t eventHash)
+{
+    ((cTribeModeStrategy_s00cd6980*)this)->RaiseEvent(eventHash);
+}
+
+// @ 0x00cd7530
+void cTribeModeStrategy::OnMouseWheel(int delta, float x, float y, int flags)
+{
+    mInput7530()->OnMouseWheel(delta, x, y, flags);
+
+    // Camera-rotate trigger: not while key 0x56d1871 is set, only with 0x64be5ff,
+    // and only when 0x64c010f is not already active.
+    cTerrainSphere_s00cd_7530* sphere = NounManager_s00cd_7530()->GetCurrentTerrainSphere();
+    if (sphere == 0 || !sphere->Contains(0x56d1871u)) {
+        cTerrainSphere_s00cd_7530* sphere2 = NounManager_s00cd_7530()->GetCurrentTerrainSphere();
+        if (sphere2 != 0 && sphere2->Contains(0x64be5ffu)) {
+            cTerrainSphere_s00cd_7530* sphere3 = NounManager_s00cd_7530()->GetCurrentTerrainSphere();
+            if (sphere3 == 0 || !sphere3->Contains(0x64c010fu))
+                RaiseEvent(0x64c010fu);   // the slice's SignalTribeEvent (0x00cd6980)
+        }
+    }
+
+    GameInputManager_s00cd_7530()->OnMouseWheel(delta, x, y, flags);
+}
+
+// @ 0x00cd75f0
+bool cTribeModeStrategy_s00cd75f0::OnInput(int key, int modifiers)
+{
+    if (GameInputManager_s00cd_75f0()->v17(key, modifiers))
+        return true;
+
+    cGameTimeManager_s00cd75f0* timeManager = GameTimeManager_s00cd_75f0();
+    if (timeManager->GetTimerState(0x04bf38a9) > 0)
+        return true;
+
+    if (modifiers == 0 && IsInputConsumed(key))
+        return true;
+
+    bool result = GameInputManager_s00cd_75f0()->v19(key, modifiers);
+
+    cTerrainSphere_s00cd75f0* sphere = NounManager_s00cd_75f0()->GetCurrentTerrainSphere();
+    if (sphere != 0 && sphere->Contains(0x056d1871))
+        return result;
+
+    if (!HasEvent(0x064be5ff))
+        return result;
+
+    cGameInputManager_s00cd75f0* input = GameInputManager_s00cd_75f0();
+    if (!HasEvent(0x53203528) && (input->v06(0x12) || input->v06(0x11)))
+        RaiseEvent(0x53203528);
+
+    if (!HasEvent(0x83861976) && (input->v06(1) || input->v06(2) ||
+                                  input->v06(3) || input->v06(4)))
+        RaiseEvent(0x83861976);
+
+    if (!HasEvent(0x064c010f) && (input->v06(9) || input->v06(0x10)))
+        RaiseEvent(0x064c010f);
+
+    return result;
 }
 
 // @ 0x00cd7d10
@@ -5465,6 +6288,166 @@ Simulator::tGameDataVectorT* __cdecl CreateGameDataVector()
         return p;
     }
     return 0;
+}
+
+struct cTribeModeStrategy_s00cd_7d90 {
+    void*    mpVtbl0;                   // +0x00
+    void*    mpVtbl1;                   // +0x04
+    void*    mpVtbl2;                   // +0x08
+    void*    mpVtbl3;                   // +0x0c
+    void*    mpVtbl4;                   // +0x10
+    uint32_t m14[6];                    // +0x14..+0x2b
+    Vector2c mVec2c;                    // +0x2c
+    uint32_t m38[2];                    // +0x38..+0x3f
+    Obj40    mObj40;                    // +0x40..+0x57
+    cGonzagoTimer mTimer;               // +0x58..+0x77
+    uint32_t m78;                       // +0x78
+    void*    mp7c;                      // +0x7c
+    uint32_t m80[5];                    // +0x80..+0x93
+    Obj94    mObj94;                    // +0x94..+0xa7
+    PoolContainer mContA8;              // +0xa8..+0x197
+    uint8_t  mb198;                     // +0x198
+    uint8_t  m199[3];                   // +0x199..+0x19b
+    void*    mp19c;                     // +0x19c
+    float    m1a0;                      // +0x1a0
+    uint8_t  mb1a4;                     // +0x1a4
+    uint8_t  m1a5[3];                   // +0x1a5..+0x1a7
+    cGonzagoTimer mTimer2;              // +0x1a8..+0x1c7
+    void*    mp1c8;                     // +0x1c8
+    void*    mp1cc;                     // +0x1cc
+    void*    mp1d0;                     // +0x1d0
+    void*    mp1d4;                     // +0x1d4
+    void*    mp1d8;                     // +0x1d8
+    void*    mp1dc;                     // +0x1dc
+    uint32_t m1e0[0x48 / 4];            // +0x1e0..+0x227
+    uint8_t  mb228;                     // +0x228
+    uint8_t  m229[3];                   // +0x229..+0x22b
+    uint32_t m22c;                      // +0x22c
+    uint32_t m230;                      // +0x230
+    uint32_t m234;                      // +0x234
+    uint32_t m238;                      // +0x238
+    uint32_t m23c;                      // +0x23c
+    void*    mp240;                     // +0x240
+    uint32_t m244;                      // +0x244
+    uint32_t m248;                      // +0x248
+    uint32_t m24c;                      // +0x24c
+    void*    mp250;                     // +0x250
+    void*    mp254;                     // +0x254
+    void*    ma258[20];                 // +0x258..+0x2a7
+    void*    ma2a8[20];                 // +0x2a8..+0x2f7
+    void*    mp2f8;                     // +0x2f8
+    uint32_t m2fc;                      // +0x2fc
+    uint32_t m300;                      // +0x300 (untouched by the destructor)
+    Vector304 mVec304;                  // +0x304..+0x30f
+    uint32_t m310[0x21];                // +0x310..+0x393
+    void*    mp394;                     // +0x394
+    void*    mp398;                     // +0x398
+    void* volatile mp39c;               // +0x39c
+    uint8_t  mb3a0;                     // +0x3a0
+    uint8_t  m3a1;                      // +0x3a1
+    uint8_t  m3a2;                      // +0x3a2
+    uint8_t  mb3a3;                     // +0x3a3
+
+    ~cTribeModeStrategy_s00cd_7d90();
+};
+
+// @ 0x00cd7d90
+cTribeModeStrategy_s00cd_7d90::~cTribeModeStrategy_s00cd_7d90()
+{
+    // volatile prologue stores: the retail destructor writes all five vtables
+    // before it starts loading members (a plain store pair lets cl sink the
+    // later base-vtable stores below them)
+    *(void* volatile*)&mpVtbl0 = (void*)VT_1477668;
+    *(void* volatile*)&mpVtbl1 = (void*)VT_1477648;
+    *(void* volatile*)&mpVtbl2 = (void*)VT_1477640;
+    *(void* volatile*)&mpVtbl3 = (void*)VT_14775f0;
+    *(void* volatile*)&mpVtbl4 = (void*)VT_14775e8;
+
+    void* first = mp39c;
+    if (first) Release1(first);
+    if (mp398) Release1(mp398);
+    if (mp394) Release2(mp394);
+
+    // record vector at +0x304: destroy the elements, then release its storage
+    mVec304.DestroyRange_00cd6fd0(mVec304.mpBegin, mVec304.mpEnd);
+    {
+        void* p = mVec304.mpBegin;
+        if (p && ((uint32_t*)p)[-1] != 0)
+            operator_delete_00f47380(p);
+    }
+
+    // the two twenty-slot arrays of refcounted pointers; the second one starts
+    // exactly where the first ends (+0x2a8), so both walks begin one past their
+    // array and pre-decrement
+    void** pEnd = ma2a8 + 20;
+    if (mp2f8) Release2(mp2f8);
+    for (int i = 19; i >= 0; --i) {
+        --pEnd;
+        if (*pEnd) Release1(*pEnd);
+    }
+    void** qEnd = ma258 + 20;
+    for (int i = 19; i >= 0; --i) {
+        --qEnd;
+        if (*qEnd) Release1(*qEnd);
+    }
+
+    if (mp254) Release1(mp254);
+    if (mp250) Release1(mp250);
+
+    if (mp240) {
+        void* sub = (char*)mp240 + 0x3c;
+        Release1(sub);
+    }
+
+    if (mp1cc) {
+        void* h = mp1cc;
+        mp1cc = 0;
+        FUN_00571db0(h, mp1d0, mp1d4, mp1d8, mp1dc);
+    }
+
+    if (mp1c8) Release2(mp1c8);
+
+    mTimer2.dtor_00b638b0();
+
+    if (mp19c) Release1(mp19c);
+
+    // allocator-backed container at +0xa8
+    PoolContainer* container = &mContA8;
+    container->DestroyRange_00a1b6c0(container->mpBegin, container->mCapacity);
+    {
+        void* p = container->mpBegin;
+        container->mSize = 0;
+        if (container->mCapacity > 1 && p != container->mpInline) {
+            if ((uint32_t)p < (uint32_t)container->mpPoolBegin || (uint32_t)p >= (uint32_t)container->mpPoolEnd) {
+                operator_delete_00f47380(p);
+            } else {
+                *(void**)p = container->mpFreeList;
+                container->mpFreeList = p;
+            }
+        }
+    }
+
+    mObj94.dtor_00ae6970();
+
+    if (mp7c) operator_delete_00f47380(mp7c);
+
+    mTimer.dtor_00b638b0();
+
+    mObj40.dtor_00cd57d0();
+
+    // vector at +0x2c
+    mVec2c.DestroyRange_01023030(mVec2c.mpBegin, mVec2c.mpEnd);
+    {
+        void* p = mVec2c.mpBegin;
+        if (p && ((uint32_t*)p)[-1] != 0)
+            operator_delete_00f47380(p);
+    }
+
+    ((Obj0c*)((char*)this + 0x0c))->dtor_00b5b9a0();
+
+    mpVtbl2 = VT_13eb394;
+    mpVtbl1 = VT_13eb938;
+    mpVtbl0 = VT_13eb938;
 }
 
 // @ 0x00cd8e70

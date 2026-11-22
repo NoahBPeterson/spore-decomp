@@ -106,6 +106,7 @@ extern const char CB24Base_vtbl2;   // 0x013ef094
 #pragma intrinsic(_InterlockedExchangeAdd)
 #pragma intrinsic(_InterlockedExchange)
 void* operator new(unsigned int, const char*, int, unsigned int, unsigned int, int);   // 0x00f473a0
+void operator delete(void*, const char*, int, unsigned int, unsigned int, int);   // 0x00f47410
 int   FUN_0071ddc0(void* self, int a, int b, int c, int d);
 void* FUN_0067dd70();                          // SP::MaterialManager
 void  FUN_0067dcd0();                          // EA::ResourceMan::GetManager
@@ -113,6 +114,9 @@ void  FUN_007387f0(void* p);
 void  FUN_007389c0(void* p, int a);
 void  FUN_00738900(void* p);
 void  FUN_00728020(void* ctx, float f, int flag, void* p);
+char  FUN_00732360(void* p);
+void  FUN_00733f20(void* p);
+void  FUN_007345c0(void* p);
 void  FUN_00755d20();
 void  FUN_00755d30();
 void  FUN_00753fb0();
@@ -544,4 +548,141 @@ bool CModelRegion::FUN_00756b50(cJob* job)
   FUN_00728020(cur, *(float*)((char*)this + 0x24 + slot * 4), flags & 1,
                (char*)this + 0x54);
   return true;
+}
+
+// @ 0x00756fc0
+void FUN_00756fc0(RefVector* a, RefVector* b) {
+  if (a != b) {
+    ((Ext*)b)->FUN_0041ee90((unsigned int)(((int)a->mEnd - (int)a->mBegin) >> 2));
+  }
+  void** base = (void**)a->mBegin;
+  unsigned int i = 0;
+  if ((((int)a->mEnd - (int)a->mBegin) >> 2) != 0) {
+    do {
+      void* e = base[i];
+      if (!FUN_00732360(e)) {
+        void** dst = (void**)b->mBegin;
+        void* old = dst[i];
+        if (e != old) {
+          PartAddRef((PartHolder*)e);
+          dst[i] = e;
+          PartRelease((PartHolder*)old);
+        }
+      } else {
+        PartHolder* ph = new ("Graphics", 0, 0, 0, 0) PartHolder((PartHolder const*)e);
+        PartAddRef(ph);
+        FUN_00733f20(ph);
+        FUN_007345c0(ph);
+        void** dst = (void**)b->mBegin;
+        void* old = dst[i];
+        if (ph != (PartHolder*)old) {
+          PartAddRef(ph);
+          dst[i] = ph;
+          PartRelease((PartHolder*)old);
+        }
+        PartRelease(ph);
+      }
+      base = (void**)a->mBegin;
+      i++;
+    } while (i < (unsigned int)(((int)a->mEnd - (int)a->mBegin) >> 2));
+  }
+}
+
+// ---- items of slice s0075a550 (verbatim; no canonical class) ----
+struct B4 { unsigned char b[4]; };
+
+struct Controller {
+    void*    mpFrameList;       // +0x00
+    void*    mpVtbl;            // +0x04
+    char*    mpData;            // +0x08
+    B4       mFlags;            // +0x0c
+    int      mFrameStride;      // +0x10  bytes per frame
+    int      mNumFrames;        // +0x14
+    int      mDirty;            // +0x18
+    void* Alloc(unsigned size, int nAdd, int numFrames, B4 flags, int hasFrames);  // 0x011fda60
+};
+
+// rw::BaseResourceDescriptor: {size, alignment}; its ctor/dtor are out of line so that arrays of
+// it go through __ehvec_ctor / __ehvec_dtor as in the original.
+struct BaseResourceDescriptor {
+    unsigned mSize;
+    unsigned mAlign;
+    BaseResourceDescriptor();            // 0x006c0fa0
+    ~BaseResourceDescriptor();           // 0x00c2e4e0
+};
+struct ResourceDescriptor { BaseResourceDescriptor d[4]; };
+
+// an interpolator element (stride mInterpolatorStride).  A 4-byte non-polymorphic
+// base puts the vfptr at +4, matching the original's `mov edx,[ecx+4]` virtual calls.
+struct InterpBase { int dummy; };
+struct Interp : InterpBase {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual float Virt16();
+    virtual void  Virt14(float);
+    char* mpFrameData;   // +0x08
+    B4    mFlags;        // +0x0c
+    int   mFrameStride;  // +0x10
+    int   mNumFrames;    // +0x14
+    int   mDirty;        // +0x18
+    void* mp1c;      // +0x1c
+    float mf20;      // +0x20
+    void Fb220();
+    void Fb600(float);
+    void* FrameAt(int frame);   // 0x011fda50
+    static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int x);   // 0x011fe550
+};
+
+
+
+struct cMultiBlender : Controller {
+    unsigned m_maxNumQuats;         // +0x1c
+    void*    m_BlendCallBack;       // +0x20
+    float*   mWeights;              // +0x24
+    bool*    mAnimating;            // +0x28
+    bool*    mBlending;             // +0x2c
+    char*    mInterpolators;        // +0x30
+    char*    mPoseKeys;             // +0x34
+    int      mMaxAnims;             // +0x38
+    unsigned mInterpolatorStride;   // +0x3c
+    int      mNumAnims;             // +0x40
+    float    mTotalWeight;          // +0x44
+    int      mFirstBlend;           // +0x48
+    int      mFirstAdd;             // +0x4c
+    bool     mLooping;              // +0x50
+
+    Interp* At(int i) { return (Interp*)(mInterpolators + i * (int)mInterpolatorStride); }
+
+    bool  AnyAnimating();           // 0075a6e0
+    int   AddWeight();              // 0075a710
+    void  F690(float arg);          // 0075a690
+    int   F780(float arg);          // 0075a780
+    int   F7d0(float arg);          // 0075a7d0
+    float SumWeight();              // 0075a820
+    void  F880(float arg);          // 0075a880
+    void  F8c0(B4 arg);             // 0075a8c0
+    int   F900(void* arg);          // 0075a900
+    void  Fb410();                  // 0075b410
+    int   Fb440(float arg);         // 0075b440
+    static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int count, int addA, int addB);  // 0075b190
+};
+
+// @ 0x0075a6e0
+bool cMultiBlender::AnyAnimating() {
+    int n = mNumAnims;
+    for (int i = 0; i < n; ++i) {
+        if (mAnimating[i] != 0) return true;
+    }
+    return false;
+}
+
+// @ 0x0075a690
+void cMultiBlender::F690(float arg) {
+    int n = mNumAnims;
+    if (n > 0) {
+        for (int i = 0; i < n; ++i) At(i)->Fb600(arg);
+    }
+    *(int*)((char*)this + 0x18) = 0;
 }

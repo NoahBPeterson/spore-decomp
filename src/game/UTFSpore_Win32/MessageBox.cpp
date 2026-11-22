@@ -25,119 +25,6 @@ extern const wchar_t g_Cancel[];    // 0x0144399c
 #include "EA/UTFWinControls/WinGrid.h"
 #include <math.h>
 
-// ---- items of slice s0097f390 begin (TODO(rewrite): local stubs, replace by canonical classes)
-typedef unsigned int uint;
-struct Rect {
-    float x1, y1, x2, y2;
-    Rect(float a, float b, float c, float d) : x1(a), y1(b), x2(c), y2(d) {}
-};
-struct IWindowManager;
-struct IWindow;
-struct Msg {                    // UTFWin::Message
-    IWindow* source;            // +0
-    int      type;              // +4
-    int      eventType;         // +8
-    int      pad0c, pad10;
-    float*   out;               // +0x14
-};
-struct IWindowManager {
-    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
-    virtual bool SendMsg(IWindow* src, IWindow* dst, const Msg* msg, bool inheritable);   // +0x10
-};
-struct IWindow {
-    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
-    virtual void s10();
-    virtual IWindowManager* GetWindowManager();            // +0x14
-    virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
-    virtual uint GetFlags();                               // +0x28
-    virtual void s2c(); virtual void s30(); virtual void s34();
-    virtual const float* GetRealArea();                    // +0x38
-    virtual void s3c(); virtual void s40(); virtual void s44(); virtual void s48(); virtual void s4c();
-    virtual void s50(); virtual void s54(); virtual void s58(); virtual void s5c();
-    virtual void SetArea(const Rect* r);                   // +0x60
-    virtual void s64(); virtual void s68(); virtual void s6c(); virtual void s70(); virtual void s74();
-    virtual void s78();
-    virtual void SetFlag(uint flag, bool value);           // +0x7c
-    virtual void SetCaption(const wchar_t* text);          // +0x80
-    virtual void SetTextFontID(uint style);                // +0x84
-    virtual void s88(); virtual void s8c(); virtual void s90(); virtual void s94(); virtual void s98();
-    virtual void s9c(); virtual void sa0(); virtual void sa4(); virtual void sa8(); virtual void sac();
-    virtual void sb0(); virtual void sb4(); virtual void sb8(); virtual void sbc(); virtual void sc0();
-    virtual void sc4(); virtual void sc8(); virtual void scc(); virtual void sd0(); virtual void sd4();
-    virtual void AddWindow(IWindow* w);                    // +0xd8
-};
-struct IWinButton {
-    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
-    virtual IWindow* GetWindow();                          // +0x10
-    virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
-    virtual void s28(); virtual void s2c(); virtual void s30(); virtual void s34(); virtual void s38();
-    virtual void s3c(); virtual void s40(); virtual void s44(); virtual void s48(); virtual void s4c();
-    virtual void s50();
-    virtual void SetBorder(float l, float t, float r, float b);   // +0x54
-    virtual void s58(); virtual void s5c();
-    virtual void SetDrawable(void* d);                     // +0x60
-};
-struct IWinText {
-    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
-    virtual IWindow* GetWindow();                          // +0x10
-    virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
-    virtual void SetTextColor(uint c);                     // +0x28
-    virtual void s2c(); virtual void s30(); virtual void s34();
-    virtual void SetBorder(float l, float t, float r, float b);   // +0x38
-};
-struct IMsgBoxSub {                                        // IWinMessageBox sub-object at +0x338
-    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); virtual void s10();
-    virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
-    virtual void s28(); virtual void s2c(); virtual void s30(); virtual void s34(); virtual void s38();
-    virtual void s3c(); virtual void s40(); virtual void s44(); virtual void s48(); virtual void s4c();
-    virtual void s50(); virtual void s54(); virtual void s58(); virtual void s5c(); virtual void s60();
-    virtual void s64(); virtual void s68(); virtual void s6c(); virtual void s70(); virtual void s74();
-    virtual void s78();
-    virtual void AddButton(const wchar_t* text, int id, int a, int b);   // +0x7c
-};
-struct AutoRefCountText {                                  // EA::AutoRefCount<IWinText>
-    IWinText* mpObject;
-    void Assign(IWinText* p);                              // @ 0x00b5f950 (operator=)
-};
-IWinText* WinText_CreateDefault(int a, uint b);            // @ 0x00989130 (cdecl)
-extern const wchar_t g_OK[];        // 0x014439bc
-extern const wchar_t g_Yes[];       // 0x014439b4
-extern const wchar_t g_No[];        // 0x014439ac
-extern const wchar_t g_Cancel[];    // 0x0144399c
-struct WinMessageBox {
-    char     pad0[4];
-    char     pad4[0x2d0 - 4];
-    float    mClient[4];            // +0x2d0: client-area rectangle (l, t, r, b)
-    char     pad2e0[0x338 - 0x2e0];
-    IMsgBoxSub mSub;                // +0x338 (vptr only)
-    uint     mnType;                // +0x33c
-    float    mfGutter;              // +0x340
-    float    mfTextBorder[4];       // +0x344
-    float    mfButtonBorder[4];     // +0x354
-    float    mfButtonMinW;          // +0x364
-    float    mfButtonMinH;          // +0x368
-    float    mfButtonSpacing;       // +0x36c
-    float    mfButtonW;             // +0x370
-    float    mfButtonH;             // +0x374
-    uint     mnButtonTextStyle;     // +0x378
-    uint     mnButtonAlignment;     // +0x37c
-    IWinButton** mpButtonsBegin;    // +0x380
-    IWinButton** mpButtonsEnd;      // +0x384
-    char     pad388[0x3b4 - 0x388];
-    wchar_t* mpTextBegin;           // +0x3b4 (msMessageText begin)
-    wchar_t* mpTextEnd;             // +0x3b8
-    char     pad3bc[0x3c4 - 0x3bc];
-    uint     mnMessageTextStyle;    // +0x3c4
-    uint     mnMessageTextColor;    // +0x3c8
-    AutoRefCountText mpMessageText; // +0x3cc
-    void*    mpButtonDrawable;      // +0x3d0
-
-    __forceinline uint ButtonCount() const { return (uint)(mpButtonsEnd - mpButtonsBegin); }
-    bool WinDialogRefresh();        // @ 0x0096c6f0
-    bool Refresh();                 // @ 0x0097f390
-};
-// ---- items of slice s0097f390 end
-
 // ---- items of slice s0096d2f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" unsigned __cdecl wcslen(const wchar_t*);
 #pragma intrinsic(wcslen)
@@ -570,6 +457,231 @@ struct WinGrid {                                 // the WinGrid main object (thi
 };
 // ---- items of slice s0097e1f0 end
 
+// ---- items of slice s0097f390 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define CAT2(a, b) a##b
+#define CAT(a, b) CAT2(a, b)
+#define VP virtual void CAT(_p, __COUNTER__)();
+#define VP4 VP VP VP VP
+void* WinButton_CreateDefault(int a, int b, int c);              // 0x009671c0
+namespace EA {
+namespace UTFWinControls {
+struct IWindow;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWinButton_s0097_f390 {
+    virtual void      AddRef();          // +0x00
+    virtual void      Release();         // +0x04
+    VP VP                                // +0x08, +0x0c
+    virtual IWindow*  GetWindow();       // +0x10
+    VP4 VP4 VP4 VP4                     // 0x14..0x50
+    virtual void SetBorder(float l, float t, float r, float b);   // +0x54
+    VP VP                                // 0x58, +0x5c
+    virtual void SetDrawable(void* d);   // +0x60
+};
+struct IWinText_s0097_f390 {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual IWindow* GetWindow();        // +0x10
+    virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
+    virtual void SetTextColor(uint32_t c);   // +0x28
+    virtual void s2c(); virtual void s30(); virtual void s34();
+    virtual void SetBorder(float l, float t, float r, float b);   // +0x38
+};
+struct AutoRefCountText {                // EA::AutoRefCount<IWinText>
+    IWinText_s0097_f390* mpObject;
+    void Assign(IWinText_s0097_f390* p); // @ 0x00b5f950 (operator=)
+};
+IWinText_s0097_f390* WinText_CreateDefault(int a, uint32_t b);   // @ 0x00989130 (cdecl)
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct Msg;                                     // UTFWin::Message
+struct IWindowManager_s0097_f390 {
+    virtual void s_m00(); virtual void s_m04(); virtual void s_m08(); virtual void s_m0c();
+    virtual bool SendMsg(IWindow* src, IWindow* dst, const Msg* msg, bool inheritable);   // +0x10
+};
+struct Msg {                                     // UTFWin::Message
+    IWindow* source; int type; int eventType; int pad0c, pad10; float* out;
+};
+struct Rect { float x1, y1, x2, y2; Rect(float a, float b, float c, float d) : x1(a), y1(b), x2(c), y2(d) {} };
+struct IWindow {
+    VP4                                       // 0x00..0x0c
+    VP                                        // 0x10
+    virtual IWindowManager_s0097_f390* GetWindowManager();  // 0x14
+    virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
+    virtual uint32_t GetFlags();                       // 0x28
+    virtual void s2c(); virtual void s30(); virtual void s34();
+    virtual const float* GetRealArea();                // 0x38
+    virtual void s3c(); virtual void s40(); virtual void s44();
+    virtual void SetCaption(const wchar_t* text);      // 0x48 (slice s0097f390's spelling of the caption slot)
+    virtual void s4c();
+    virtual void SetFlag(int a, int b);                // 0x4c
+    virtual void SetParent(void* p);                   // 0x50
+    virtual void SetTextFontID(int style);             // 0x54
+    VP4 VP4 VP4 VP4 VP4                        // 0x58..0xa8
+    virtual bool AddChild(void* p);                    // 0xac
+    virtual void sB0();                                // 0xb0
+    virtual void RemoveChild(void* p);                 // 0xb4
+    VP4 VP4 VP4 VP4 VP4 VP4 VP4 VP4 VP4        // 0xb8..0x13c
+    VP4 VP4                                    // 0x140..0x14c
+    virtual void AddWindow(IWindow* w);                // 0x150
+    virtual void SetArea(const void* r);               // 0x154
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IRefCounted_s0097_f390 {
+    virtual void AddRef();                             // +0x00
+    virtual void Release();                            // +0x04
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct AutoRef {
+    IWinButton_s0097_f390* mpObject;
+    AutoRef() : mpObject(0) {}
+    AutoRef(IWinButton_s0097_f390* p) : mpObject(p) {}
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ButtonVec {
+    AutoRef* mpBegin;        // +0x00
+    AutoRef* mpEnd;          // +0x04
+    AutoRef* mpCapacity;     // +0x08
+    void Insert(AutoRef* pos, const AutoRef* value);   // 0x006650c0
+    void erase(AutoRef* first, AutoRef* last);         // 0x00e25bd0
+    void DestroyVector();                              // 0x00ae6970
+    void push_back(const AutoRef& v) {
+        if (mpEnd < mpCapacity) {
+            AutoRef* p = mpEnd++;
+            if (p) {
+                IWinButton_s0097_f390* o = v.mpObject;
+                p->mpObject = o;
+                if (o) o->AddRef();
+            }
+        } else {
+            Insert(mpEnd, &v);
+        }
+    }
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct EaHashtable {
+    char  pad0[4];           // +0x00
+    void* mpBucketArray;     // +0x04
+    uint32_t mnBucketCount;  // +0x08
+    int   mnElementCount;    // +0x0c
+    void DoFreeBuckets(void* p, int n);   // 0x00693230
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WString_s0097_f390 {
+    wchar_t* mpBegin;        // +0x00
+    wchar_t* mpEnd;          // +0x04
+    wchar_t* mpCapacity;     // +0x08
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x00423650
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WinMessageBox;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WinMessageBoxTail {
+    void*  mpVtbl;           // +0x00  (0x338)
+    int    m004;             // +0x04
+    float  m008;             // +0x08
+    float  m00c, m010, m014, m018, m01c, m020, m024, m028;  // +0x0c..0x28
+    float  m02c, m030, m034, m038, m03c;                    // +0x2c..0x3c
+    int    m040;             // +0x40
+    int    m044;             // +0x44
+    ButtonVec mButtons;      // +0x48
+    char   pad54[8];         // +0x54..0x5b
+    EaHashtable mKeyList;    // +0x5c
+    float  m06c;             // +0x6c
+    float  m070;             // +0x70
+    int    m074;             // +0x74
+    int    m078;             // +0x78
+    WString_s0097_f390 msMessageText;   // +0x7c
+    int    mUninit;          // +0x88
+    int    m08c;             // +0x8c
+    int    m090;             // +0x90
+    IRefCounted_s0097_f390* mpMessageText;     // +0x94
+    IRefCounted_s0097_f390* mpButtonDrawable;  // +0x98
+
+    WinMessageBox* Owner();
+    void SetMessageText(const wchar_t* text);
+    bool InitButton(int parent, int param, int a3, int a4);
+    void RemoveAll();
+    void AddButton(const wchar_t* text, int id, int a, int b);   // IWinMessageBox +0x7c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WinMessageBox {
+    void* mpVtbl0;                 // +0x000
+    void* mpVtbl4;                 // +0x004
+    char  pad008[0x2d0 - 0x008];   // +0x008..0x2cf
+    float mClient[4];              // +0x2d0
+    char  pad2e0[0x338 - 0x2e0];
+    WinMessageBoxTail mTail;       // +0x338
+    int   mnType;                  // +0x33c
+    float mfGutter;                // +0x340
+    float mfTextBorder[4];         // +0x344
+    float mfButtonBorder[4];       // +0x354
+    float mfButtonMinW;            // +0x364
+    float mfButtonMinH;            // +0x368
+    float mfButtonSpacing;         // +0x36c
+    float mfButtonW;               // +0x370
+    float mfButtonH;               // +0x374
+    int   mnButtonTextStyle;       // +0x378
+    int   mnButtonAlignment;       // +0x37c
+    IWinButton_s0097_f390** mpButtonsBegin;   // +0x380
+    IWinButton_s0097_f390** mpButtonsEnd;     // +0x384
+    char  pad388[0x3b4 - 0x388];
+    wchar_t* mpTextBegin;          // +0x3b4
+    wchar_t* mpTextEnd;            // +0x3b8
+    char  pad3bc[0x3c4 - 0x3bc];
+    int   mnMessageTextStyle;      // +0x3c4
+    int   mnMessageTextColor;      // +0x3c8
+    AutoRefCountText mpMessageText; // +0x3cc
+    void* mpButtonDrawable;        // +0x3d0
+
+    void Init();                   // 0x0096e0c0
+    void Destroy();                // 0x0096e260
+    WinMessageBox();
+    ~WinMessageBox();
+    void Shutdown();
+    __forceinline uint32_t ButtonCount() const { return (uint32_t)(mpButtonsEnd - mpButtonsBegin); }
+    bool WinDialogRefresh();       // @ 0x0096c6f0
+    bool Refresh();                // @ 0x0097f390
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+inline WinMessageBox* WinMessageBoxTail::Owner()
+{
+    return (WinMessageBox*)((char*)this - 0x338);
+}
+}
+}
+// ---- items of slice s0097f390 end
+
 // @ 0x0096e350
 namespace EA { namespace UTFWinControls {
 void IWinDialogSub::SetTitleText(const wchar_t* p)
@@ -698,26 +810,27 @@ void WinGrid::UpdateArea()
 }
 
 // @ 0x0097f390
+namespace EA { namespace UTFWinControls {
 bool WinMessageBox::Refresh()
 {
     if (WinDialogRefresh()) {
     if (mpButtonsBegin == mpButtonsEnd) {
         switch (mnType) {
         case 1:
-            mSub.AddButton(g_OK, 0, 0, 1);
+            mTail.AddButton(g_OK, 0, 0, 1);
             break;
         case 2:
-            mSub.AddButton(g_OK, 0, 0, 1);
-            mSub.AddButton(g_Cancel, 3, 0, 0);
+            mTail.AddButton(g_OK, 0, 0, 1);
+            mTail.AddButton(g_Cancel, 3, 0, 0);
             break;
         case 3:
-            mSub.AddButton(g_Yes, 1, 0, 1);
-            mSub.AddButton(g_No, 2, 0, 0);
+            mTail.AddButton(g_Yes, 1, 0, 1);
+            mTail.AddButton(g_No, 2, 0, 0);
             break;
         case 4:
-            mSub.AddButton(g_Yes, 1, 0, 1);
-            mSub.AddButton(g_No, 2, 0, 0);
-            mSub.AddButton(g_Cancel, 3, 0, 0);
+            mTail.AddButton(g_Yes, 1, 0, 1);
+            mTail.AddButton(g_No, 2, 0, 0);
+            mTail.AddButton(g_Cancel, 3, 0, 0);
             break;
         }
     }
@@ -748,11 +861,11 @@ bool WinMessageBox::Refresh()
 
     if (mpButtonsBegin != mpButtonsEnd) {
         _ReadWriteBarrier();
-        IWinButton** it = mpButtonsBegin;
+        IWinButton_s0097_f390** it = mpButtonsBegin;
         mfButtonH = mfButtonMinH;
         mfButtonW = mfButtonMinW;
         for (; it != mpButtonsEnd; ++it) {
-            IWinButton* btn = *it;
+            IWinButton_s0097_f390* btn = *it;
             if (btn) {
                 btn->SetBorder(mfButtonBorder[0], mfButtonBorder[1], mfButtonBorder[2], mfButtonBorder[3]);
                 btn->GetWindow()->SetTextFontID(mnButtonTextStyle);
@@ -783,7 +896,7 @@ bool WinMessageBox::Refresh()
                 bw->SetArea(&rc);
             }
         }
-        for (IWinButton** it = mpButtonsBegin; it != mpButtonsEnd; ++it) {
+        for (IWinButton_s0097_f390** it = mpButtonsBegin; it != mpButtonsEnd; ++it) {
             if (*it) {
                 IWindow* w = (*it)->GetWindow();
                 Rect rc(0.0f, 0.0f, mfButtonW, mfButtonH);
@@ -823,7 +936,7 @@ bool WinMessageBox::Refresh()
             x = ((((mClient[2] - x) - mfButtonW) - g * 2.0f) * 0.5f + x) + g;
             break;
         }
-        for (IWinButton** it = mpButtonsBegin; it != mpButtonsEnd; ++it) {
+        for (IWinButton_s0097_f390** it = mpButtonsBegin; it != mpButtonsEnd; ++it) {
             IWindow* win = (*it)->GetWindow();
             if (win) {
                 const float* r = win->GetRealArea();
@@ -840,6 +953,7 @@ bool WinMessageBox::Refresh()
     }
     return false;
 }
+}}  // namespace EA::UTFWinControls
 
 // @ 0x01300b20
 void init_154f94c()

@@ -5,5 +5,8 @@
 ../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getcurrent@Eapd@Audio@EA@@YAPAUt_glist@123@XZ  00a4a430  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getcurrentinstance@Eapd@Audio@EA@@YAPAXXZ  00a4a450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getenv@Eapd@Audio@EA@@YAPAUt_canvasenv@123@PAUt_glist@123@@Z  00a4a490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  00a4b3a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getdollarzero@Eapd@Audio@EA@@YAPAXXZ  00a4a4b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getargs@Eapd@Audio@EA@@YAXPAH0@Z  00a4a500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_realizedollar@Eapd@Audio@EA@@YAPAXPAPAXPAX1PBD@Z  00a4a550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_findtext@Eapd@Audio@EA@@YAPAXPIAHPAX@Z  00a4a5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  00a4b3a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

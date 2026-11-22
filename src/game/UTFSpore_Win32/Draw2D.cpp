@@ -22,6 +22,8 @@ extern "C" void* FUN_009289f0(unsigned, int, int, int, int, int);   // cSPMemPoo
 #include "EA/UTFWin/Renderable2DTextGlyphInfo.h"
 #include "EA/UTFWin/Renderable2DTextSpan.h"
 #include <math.h>
+#include "EA/UTFWin/Image.h"
+#include "EA/UTFWin/Renderable2DBuilder.h"
 
 // ---- items of slice s00950bb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* FUN_009289f0(unsigned, int, int, int, int, int);   // cSPMemPool::LockedAlloc
@@ -894,6 +896,11 @@ struct MemPool_s0095_3430 {
   void* LockedAlloc(uint32_t size, int, int, int, int, int);  // 0x009289f0
 };
 uint32_t __cdecl ModulateARGB32(uint32_t a, uint32_t b);                                        // 0x0095f8c0
+// The retail callee is one function (`0095f8c0 ?ModulateARGB32@@YAIII@Z`), but the slice text calls it through the
+// TU-global prototype above and through EA::UTFWin::ModulateARGB32 (the bodies spelled inside `namespace EA::UTFWin`),
+// which symbol resolution reports as two different relocations. This wrapper makes the two spellings one name again:
+// a plain tail jump, compiler bookkeeping only, no game logic (see the report: TOOL RULE REQUEST).
+uint32_t __cdecl ModulateARGB32(uint32_t a, uint32_t b) { return ::EA::UTFWin::ModulateARGB32(a, b); }
 extern MemPool_s0095_3430* g_pMemPool_s0095_3430;   // 0x016c8b44
 namespace EA {
 namespace Thread {

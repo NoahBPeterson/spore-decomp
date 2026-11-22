@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00b70000.cpp -- migrated from slice(s) s00b7cc60, s00b7bd50, s00b7b070, s00b7a4a0, s00b794e0, s00b77db0, s00b76f10, s00b75f70, s00b73e70, s00b72b60, s00b71a60, s00b70820, s00b6f4f0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00b70000.cpp -- migrated from slice(s) s00b78880, s00b74f80, s00b7cc60, s00b7bd50, s00b7b070, s00b7a4a0, s00b794e0, s00b77db0, s00b76f10, s00b75f70, s00b73e70, s00b72b60, s00b71a60, s00b70820, s00b6f4f0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00b70000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -551,11 +551,6 @@ struct cOwner : cGonzagoBase {
     void ReadFeedback(IStream* pStream);      // 0x00b71a60
     void RemoveFeedback(IStream* pStream);    // 0x00b71af0
 };
-struct cVarListSerializer_s00b7_1a60 {
-    char mData[0xa14];
-    cVarListSerializer_s00b7_1a60(void const*, void*, unsigned);
-    bool Serialize(IStream&);
-};
 struct cGameNounManager {
     void RemoveNoun(void* pNoun);    // 0x00b225d0
     void* CreateNoun(uint32_t id);   // 0x00b20c60
@@ -852,7 +847,7 @@ extern float g_1687ad4, g_1687ad8, g_1687adc;
 extern char g_1687ad0;
 extern float g_1485720;
 extern char g_matrix_src[];      // 0x16880f0
-void FUN_00a887b0();                              // 0xa887b0  (thiscall: this, int, float)
+void __stdcall FUN_00a887b0(int a, float f);      // 0xa887b0  (thiscall: this, int, float)
 void* SP_NounManager(int id);                      // 0xb3d300
 void* SP_cGameNounManager_CreateNoun(void* m, int id);  // 0xb20c60
 void* __cdecl EAAllocate(int a, const char* b, int c, int d, int e, int f); // 0xf473a0
@@ -1316,7 +1311,7 @@ struct Grid {
     void Remove(int slot);                 // 0x00702da0
 };
 struct RecA { u32 pad[3]; u32* arr; };    // value of the rbtree (array at +0xc)
-struct PlanetModel {
+struct PlanetModel_b3d350 {
     void Mark(Vec3* v, float r, u32 mask, int zero);   // 0x00b83c40 (4 args)
 };
 struct PropList { bool Has(u32 id); };                 // 0x006a25a0 thiscall ret 4
@@ -1327,7 +1322,7 @@ SpeciesMgr* GetSpeciesMgr();  // 0x00b3d420
 TableMgr*   GetTableMgr();    // 0x00b3d3b0 (same global)
 struct Global2 { u32 pad[0x55a4 / 4]; Grid* pGrid; };
 Global2*    GetGlobal2();     // 0x00b3d3c0
-PlanetModel* GetPlanet();     // 0x00b3d350
+PlanetModel_b3d350* GetPlanet();     // 0x00b3d350
 struct AutoRef;      // AutoRefCount<Obj>: 4-byte handle that AddRefs on construction
 struct RefModel;     // refcounted cMWModel held by Spawner::mModels
 struct ObjPtrVec {                   // SPVector<AutoRefCount<cMWModel>> at Spawner +0x40f0
@@ -2531,6 +2526,305 @@ int* __cdecl FUN_00b7d120(int* first, int* last, int* outLast);
 void __fastcall FUN_00b7d180(int* vec, int /*edx unused*/, int* pos, int* value);
 void __fastcall FUN_00b7d7b0(ListNode** p);
 // ---- items of slice s00b7cc60 end
+
+// ---- items of slice s00b74f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1687ad4;                // 0x1687ad4
+extern float g_1687ad8;                // 0x1687ad8
+extern float g_1687adc;                // 0x1687adc
+extern float g_13eb960;                // 0x13eb960 (0.01f)
+extern char g_16880f0;                 // 0x16880f0 matrix literal
+typedef char (__cdecl *CmpV3)(V3*, V3*);
+struct Stream { void** vptr; };
+typedef void* (__thiscall *Fn20)(void* self);
+typedef void* (__thiscall *Fn18)(void* self);
+typedef void (__thiscall *Fn1c)(void* self);
+typedef void (__thiscall *FnSub4)(void* self);
+extern char g_13ebb38_s00b7_4f80;                 // 0x13ebb38 allocator file string
+struct Mat3_s00b7_4f80 { void Assign(const void* m); };                               // 0x41cb40
+void* __stdcall FUN_00b3d3b0(unsigned key, int a, int b);                  // 0xb3d3b0
+int __fastcall FUN_00b2a690(void* p);                                      // 0xb2a690
+unsigned __cdecl FUN_005939d0(unsigned a0, unsigned a1, unsigned b0,
+                              unsigned b1, char flag);                     // 0x5939d0
+void __cdecl FUN_00ae2ed0(void* stream, void* rec);                        // 0xae2ed0
+void __cdecl ReadInt32(void* obj, void* out, int n, int flag);             // 0x93a780
+void __cdecl FUN_00b74c50(V3* a, V3* b, CmpV3 cmp);                        // 0xb74c50
+void __cdecl FUN_00b74cc0(V3* a, V3* b, CmpV3 cmp);                        // 0xb74cc0
+void __cdecl FUN_00b737d0(V3* first, int top, int len, int pos, V3 value,
+                          CmpV3 cmp);                                      // 0xb737d0
+void __cdecl FUN_00b74d60(int* base, int i, int n, int idx, int value,
+                          V3 pos);                                          // 0xb74d60
+struct PosV3 {
+    float x, y, z;
+    PosV3(const PosV3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+void __cdecl FUN_00b74d60(int* base, int i, int n, int idx, int value,
+                          PosV3 pos);                                       // 0xb74d60
+char* __cdecl FUN_00b73780(char* first, char* last, char* dst);            // 0xb73780
+char* __cdecl FUN_00b739f0(char* first, char* last, char* dst);            // 0xb739f0
+void __cdecl FUN_00b73890(void** out, char* first, char* last, char* dst,
+                          char* at);                                       // 0xb73890
+void __cdecl FUN_00b738e0(char* dst, unsigned n, const void* src);         // 0xb738e0
+void __cdecl FUN_00cc8b50(void* first, void* last, void* dst);             // 0xcc8b50
+void __cdecl FUN_00edba80(void* first, void* last, void* dst);             // 0xedba80
+void __cdecl FUN_00898580(void* first, void* last, const void* value);     // 0x898580
+void __cdecl FUN_00921440(int* out, int a, int b, int c);                  // 0x921440
+struct Hashtable2_s00b7_4f80 {
+    int* Find(int* out, unsigned* key);                                    // 0xb746a0
+};
+struct Tbl {
+    void Reset(int a, int b);                                              // 0xb73070
+    int Insert3(int* out, const void* in, int flag);                        // 0xb748e0
+};
+struct Rec {
+    void FUN_00b73f30(float f, int iv);                                    // 0xb73f30
+};
+struct Mgr_s00b7_4f80 {
+    void Notify(int rec, float dt, int unused);  // 0x007990e0 (Mgr::Notify)
+    void FUN_00b74590(int rec);                                            // 0xb74590
+    unsigned char FUN_00b74400(int rec);                                   // 0xb74400
+};
+struct T51b0 {
+    bool Query(int* out, unsigned key0, unsigned key1, unsigned cmp, char flag);
+};
+struct Pool {
+    void FUN_00921440(int* out, int a, int b, int c);                      // 0x921440
+};
+struct T5240 {
+    unsigned* Insert(unsigned* out, unsigned* key, int flag);
+    int* AllocNode3(unsigned* key);                                        // 0xb74b60
+    void DoFreeNodes(int p);                                               // 0xc76610
+};
+struct T5820 {
+    T5820* Init();
+};
+struct ResourceKey5890 { unsigned instance, type, group; };
+struct MappedValue5890 {
+    unsigned first, second, third;
+    MappedValue5890() : first(0), second(0), third(0) {}
+};
+struct ResourcePair5890 {
+    ResourceKey5890 key;
+    MappedValue5890 value;
+    ResourcePair5890(const ResourceKey5890& k, const MappedValue5890& v) : key(k), value(v) {}
+};
+struct InsertTag5890 {};
+struct T5890 {
+    int* GetOrInsert(unsigned* key);
+    int* FindKey(int* out, int* key);                                      // 0xb74860
+    int* Insert3(int* out, const void* in, InsertTag5890 tag);                        // 0xb748e0
+};
+struct T5910 {
+    int* Unlink(int* out, int* node, int* bucket);
+};
+struct T59b0 {
+    void FreeTable(int* buckets, unsigned n);
+};
+struct E18_s00b7_4f80 { float f0, f1, f2, f3; char c; int i; };
+struct T5a30 {
+    void Insert(E18_s00b7_4f80* pos, E18_s00b7_4f80* value);
+};
+struct E16 { float x, y, z; char c; char pad[3]; };
+struct T5dc0 {
+    void Insert(char* at, unsigned n, const void* value);
+};
+// ---- items of slice s00b74f80 end
+
+// ---- items of slice s00b78880 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector2 { float x, y; };
+struct Vector3 {
+    float x, y, z;
+    Vector3() {}
+    Vector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    Vector3& operator+=(const Vector3& b) { x = b.x + x; y = b.y + y; z = b.z + z; return *this; }
+    Vector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
+    Vector3& operator*=(const struct Matrix3& r);
+};
+inline Vector3 operator-(const Vector3& a, const Vector3& b)
+{
+    Vector3 r;
+    r.x = a.x - b.x; r.y = a.y - b.y; r.z = a.z - b.z;
+    return r;
+}
+inline Vector3 operator*(float s, const Vector3& v)
+{
+    Vector3 r;
+    r.x = s * v.x; r.y = s * v.y; r.z = s * v.z;
+    return r;
+}
+inline float Dot(const Vector3& a, const Vector3& b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+struct Matrix3 { float m[3][3]; };
+inline Vector3& Vector3::operator*=(const Matrix3& r)
+{
+    float rx = r.m[0][0] * x + r.m[1][0] * y + r.m[2][0] * z;
+    float ry = r.m[0][1] * x + r.m[1][1] * y + r.m[2][1] * z;
+    float rz = r.m[0][2] * x + r.m[1][2] * y + r.m[2][2] * z;
+    x = rx;
+    y = ry;
+    z = rz;
+    return *this;
+}
+struct cSPTransform_s00b7_8880 {                         // 0x38
+    uint16_t mFlags;                          // +0x00 (2 = has rotation)
+    uint16_t mModificationCount;              // +0x02
+    Vector3  mTranslation;                    // +0x04
+    float    mScale;                          // +0x10
+    Matrix3  mRotation;                       // +0x14
+
+    cSPTransform_s00b7_8880(const cSPTransform_s00b7_8880& t);                  // 0x0040ce80
+    cSPTransform_s00b7_8880& operator=(const cSPTransform_s00b7_8880& t);       // 0x00537dc0
+    void SetIdentity();                                   // 0x005aa530
+    void SetScale(float s) { mScale = s; mModificationCount++; }
+};
+struct Property_s00b7_8880 { float* GetValueFloat(); };              // 0x0041ea70
+class cPropertyList_s00b7_8880 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(uint32_t id, Property_s00b7_8880*& result);           // 0x24
+};
+bool GetPropertyAsVector2Array(cPropertyList_s00b7_8880* list, uint32_t id, int* count, Vector2** out);  // 0x006a0920
+namespace eastl {
+struct sp_vector_allocator_s00b7_8880 { uint32_t mData[2]; };
+}
+namespace eastl {
+template <typename T>
+class vector_s00b7_8880 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s00b7_8880 mAllocator;
+
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    T& operator[](unsigned n) { return mpBegin[n]; }
+    void resize(unsigned n);              // 0x00473810 (Vector3), 0x00b77850 (HullVertex)
+};
+}
+template <typename T, int N>
+struct sp_fixed_vector : eastl::vector_s00b7_8880<T> {
+    uint32_t mPadding;
+    T mBuffer[N];
+
+    sp_fixed_vector()
+    {
+        this->mpBegin = this->mpEnd = mBuffer;
+        this->mpCapacity = mBuffer + N;
+        mPadding = 0;
+    }
+    ~sp_fixed_vector()
+    {
+        if (this->mpBegin && ((int*)this->mpBegin)[-1] != 0)
+            operator delete[](this->mpBegin);
+    }
+};
+struct HullVertex {          // 0x10
+    Vector3 pos;
+    bool    bOutside;        // beyond the planet surface
+};
+struct cMWTransformedHull {
+    int mVertStride;         // +0x00
+    int mTriStride;          // +0x04
+    int mVertCount;          // +0x08
+    int mTriCount;           // +0x0c
+    Vector3*  mVertArray;    // +0x10
+    uint32_t* mTriArray;     // +0x14 (4 words per triangle)
+};
+struct cModel {
+    uint32_t pad00[2];
+    cSPTransform_s00b7_8880 mTransform;              // +0x08
+    uint32_t pad40[20];
+    cPropertyList_s00b7_8880* mpPropList;            // +0x90
+};
+class cModelWorld {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+virtual void vc0();
+virtual void vc4();
+virtual void vc8();
+virtual void vcc();
+virtual void vd0();
+virtual void vd4();
+virtual void vd8();
+    virtual void GetTransformedHull(cModel* model, cMWTransformedHull*& hull);    // 0xdc
+    virtual void ReleaseTransformedHull(cMWTransformedHull*& hull);               // 0xe0
+};
+class cPlanetModel_s00b7_8880 { public: float GetRadiusAt(const Vector3& pos); };    // 0x00b7ef70
+cPlanetModel_s00b7_8880* PlanetModel();                                              // 0x00b3d350
+struct cFootprint {
+    uint32_t pad00[14];
+    float   mScale;                       // +0x38
+    float   mRadius;                      // +0x3c
+    Vector3 mCenter;                      // +0x40
+    eastl::vector_s00b7_8880<Vector3> mHull;         // +0x4c
+};
+extern const Vector3 kZeroVector;         // 0x01687ad4
+extern const Vector3 kFootprintAxis;      // 0x016880e0
+void AddPlanetEdgePoint(HullVertex* outside, HullVertex* inside, eastl::vector_s00b7_8880<Vector3>* points,
+                        cSPTransform_s00b7_8880* transform);
+void BuildHull(eastl::vector_s00b7_8880<Vector3>* points, eastl::vector_s00b7_8880<Vector3>* hull);
+inline void ClipEdge(HullVertex* a, HullVertex* b, eastl::vector_s00b7_8880<Vector3>* points, cSPTransform_s00b7_8880* transform)
+{
+    if (a->bOutside != b->bOutside) {
+        if (a->bOutside == true && b->bOutside == false)
+            AddPlanetEdgePoint(a, b, points, transform);
+        else
+            AddPlanetEdgePoint(b, a, points, transform);
+    }
+}
+// ---- items of slice s00b78880 end
 
 // @ 0x00b707a0
 bool __thiscall MissionMgr::HintClear(unsigned id)
@@ -4218,6 +4512,565 @@ int ObstacleMgr::Lookup(unsigned int* key)
     return 0;
 }
 
+// @ 0x00b74f80
+void Mgr_s00b7_4f80::Notify(int rec_, float dt, int unused)
+{
+    char* rec = (char*)rec_;
+    if (rec == 0)
+        return;
+
+    char bl = (dt != g_1485720) ? 1 : 0;
+
+    unsigned key;
+    switch (*(int*)(rec + 0x88)) {
+    case 0:  key = 0x3a8be428; break;
+    case 1:  key = 0x29c388a;  break;
+    case 2:  key = 0x6d60a1cc; break;
+    default: key = 0;          break;
+    }
+
+    int iv = FUN_00b2a690(FUN_00b3d3b0(key, *(int*)(rec + 0x50),
+                                       *(int*)(rec + 0x5c)));
+    char dl = g_1687ad0;
+
+    if (*(int*)(rec + 0x78) != 0) {
+        if (*(float*)(rec + 0x68) == g_1485720 || (dl == 0 && iv != 0)) {
+            FUN_00b74590(rec_);
+            float saved = *(float*)(rec + 0x68);
+            if (iv == 0) {
+                *(unsigned*)(rec + 0x34) &= ~1u;
+                if (*(int*)(rec + 0x54) != 0) {
+                    FUN_00a887b0(*(int*)(rec + 0x5c), 1.0f);
+                } else {
+                    Wrapper* pw = *(Wrapper**)(rec + 0x70);
+                    if (pw != 0) {
+                        *(unsigned*)((char*)pw + 4) |= 1u;
+                        ((Fn16c)((Inner*)pw->impl)->vptr[0x16c / 4])
+                            (pw->impl, pw, 1);
+                    }
+                }
+            }
+            ((Rec*)rec)->FUN_00b73f30(saved, iv);
+        }
+    } else if (bl) {
+        if (dl != 0 || iv == 0) {
+            int type = *(int*)(rec + 0x88);
+            if (type == 4 || type == 3) {
+                *(unsigned*)(rec + 0x34) |= 1u;
+                if (*(int*)(rec + 0x54) != 0) {
+                    FUN_00a887b0(*(int*)(rec + 0x5c), 0.0f);
+                } else {
+                    Wrapper* pw = *(Wrapper**)(rec + 0x70);
+                    if (pw != 0) {
+                        *(unsigned*)((char*)pw + 4) &= ~1u;
+                        ((Fn16c)((Inner*)pw->impl)->vptr[0x16c / 4])
+                            (pw->impl, pw, 0);
+                    }
+                }
+            } else if (FUN_00b74400(rec_) == 0) {
+                *(unsigned*)(rec + 0x34) &= ~1u;
+                if (*(int*)(rec + 0x54) != 0) {
+                    FUN_00a887b0(*(int*)(rec + 0x5c), 1.0f);
+                } else {
+                    Wrapper* pw = *(Wrapper**)(rec + 0x70);
+                    if (pw != 0) {
+                        *(unsigned*)((char*)pw + 4) |= 1u;
+                        ((Fn16c)((Inner*)pw->impl)->vptr[0x16c / 4])
+                            (pw->impl, pw, 1);
+                    }
+                }
+            }
+            ((Rec*)rec)->FUN_00b73f30(*(float*)(rec + 0x68), iv);
+        }
+    }
+
+    if (g_1687ad0 == 0) {
+        dt = (dt - *(float*)(rec + 0x68))
+             * *(float*)((char*)this + 0x5488)
+             + *(float*)(rec + 0x68);
+        if (fabsf(dt - g_1485720) < g_13eb960)
+            dt = g_1485720;
+    }
+
+    if (*(float*)(rec + 0x68) != dt)
+        ((Rec*)rec)->FUN_00b73f30(dt, iv);
+}
+
+// @ 0x00b751b0
+bool T51b0::Query(int* out, unsigned key0, unsigned key1, unsigned cmp, char flag)
+{
+    Hashtable2_s00b7_4f80* ht = flag != 0
+        ? (Hashtable2_s00b7_4f80*)((char*)this + 0x38)
+        : (Hashtable2_s00b7_4f80*)((char*)this + 0x2094);
+
+    int local[4];
+    int* p = ht->Find(local, &key0);
+    out[0] = p[0];
+    out[1] = p[1];
+    out[2] = p[2];
+    out[3] = p[3];
+
+    unsigned r = FUN_005939d0((unsigned)out[0], (unsigned)out[1],
+                              (unsigned)out[2], (unsigned)out[3], flag);
+    return r != 0 && r == cmp;
+}
+
+// @ 0x00b75240
+unsigned* T5240::Insert(unsigned* out, unsigned* key, int flag)
+{
+    int res[2];
+    ((Pool*)((char*)this + 0x10))->FUN_00921440(res, *(int*)((char*)this + 8),
+                                                *(int*)((char*)this + 0xc), 1);
+    if (*(char*)res != 0)
+        ((T5240*)this)->DoFreeNodes(res[1]);
+
+    unsigned idx = key[0] % *(unsigned*)((char*)this + 8);
+    int* node = ((T5240*)this)->AllocNode3(key);
+    int** mBegin = *(int***)((char*)this + 4);
+    int* head = mBegin[idx];
+
+    if (head != 0) {
+        unsigned k0 = key[0];
+        unsigned k1 = key[1];
+        int* cur = head;
+        do {
+            if ((unsigned)cur[0] == k0 && (unsigned)cur[1] == k1) {
+                node[4] = cur[4];
+                cur[4] = (int)node;
+                goto done;
+            }
+            cur = (int*)cur[4];
+        } while (cur != 0);
+    }
+
+    node[4] = (int)head;
+    mBegin[idx] = node;
+
+done:
+    ++*(unsigned*)((char*)this + 0xc);
+    out[0] = (unsigned)node;
+    out[1] = (unsigned)((char*)mBegin + idx * 4);
+    return out;
+}
+
+// @ 0x00b753b0
+void f_00b753b0(void* stream, Tbl* table)
+{
+    table->Reset(*(int*)((char*)table + 4), *(int*)((char*)table + 8));
+    *(int*)((char*)table + 0xc) = 0;
+
+    void* obj = ((Fn20)((Stream*)stream)->vptr[0x20 / 4])(stream);
+    void* ser = ((Fn18)(*(void***)obj)[0x18 / 4])(obj);
+
+    int count = 0;
+    ReadInt32(ser, &count, 1, 0);
+
+    for (unsigned i = 0; i < (unsigned)count; ++i) {
+        V3 b; b.x = 0; b.y = 0; b.z = 0;
+        V3 a; a.x = 0; a.y = 0; a.z = 0;
+        FUN_00ae2ed0(stream, &b);
+        ((Fn1c)((Stream*)stream)->vptr[0x1c / 4])(stream);
+        FUN_00ae2ed0(stream, &a);
+        ((Fn1c)((Stream*)stream)->vptr[0x1c / 4])(stream);
+
+        V3 in[2];
+        in[0] = b;
+        in[1] = a;
+
+        int out[3];
+        table->Insert3(out, in, 0);
+        if (*(char*)(out + 2) == 0) {
+            int* node = (int*)out[0];
+            *(float*)((char*)node + 0xc) = a.x;
+            *(float*)((char*)node + 0x10) = a.y;
+            *(float*)((char*)node + 0x14) = a.z;
+        }
+    }
+
+    ((Fn1c)((Stream*)stream)->vptr[0x1c / 4])(stream);
+}
+
+// @ 0x00b754d0
+void f_00b754d0(V3* begin, V3* last, V3* end, CmpV3 cmp)
+{
+    FUN_00b74c50(begin, last, cmp);
+    for (V3* p = last; p < end; ++p) {
+        if (cmp(p, begin)) {
+            V3 v = *p;
+            *p = *begin;
+            FUN_00b737d0(begin, 0, (int)(last - begin), 0, v, cmp);
+        }
+    }
+    FUN_00b74cc0(begin, last, cmp);
+}
+
+// @ 0x00b75570
+void f_00b75570(V3* p1, V3* end1, V3* p2, V3* end2, V3* dst, CmpV3 cmp)
+{
+    while (p1 != end1 && p2 != end2) {
+        if (cmp(p2, p1)) {
+            *dst = *p2;
+            ++p2;
+        } else {
+            *dst = *p1;
+            ++p1;
+        }
+        ++dst;
+    }
+    while (p1 != end1) {
+        *dst = *p1;
+        ++p1;
+        ++dst;
+    }
+    while (p2 != end2) {
+        *dst = *p2;
+        ++p2;
+        ++dst;
+    }
+}
+
+// @ 0x00b75620
+void f_00b75620(int** first, int** last, int* pivot, float x, float y, float z)
+{
+    for (;;) {
+        int* v;
+        for (;;) {
+            v = *first;
+            float dv = (y - *(float*)((char*)v + 0x3c))
+                     * (y - *(float*)((char*)v + 0x3c))
+                     + (z - *(float*)((char*)v + 0x40))
+                     * (z - *(float*)((char*)v + 0x40))
+                     + (x - *(float*)((char*)v + 0x38))
+                     * (x - *(float*)((char*)v + 0x38));
+            float dp = (y - *(float*)((char*)pivot + 0x3c))
+                     * (y - *(float*)((char*)pivot + 0x3c))
+                     + (z - *(float*)((char*)pivot + 0x40))
+                     * (z - *(float*)((char*)pivot + 0x40))
+                     + (x - *(float*)((char*)pivot + 0x38))
+                     * (x - *(float*)((char*)pivot + 0x38));
+            if (dp <= dv)
+                break;
+            ++first;
+        }
+
+        float dp = (y - *(float*)((char*)pivot + 0x3c))
+                 * (y - *(float*)((char*)pivot + 0x3c))
+                 + (z - *(float*)((char*)pivot + 0x40))
+                 * (z - *(float*)((char*)pivot + 0x40))
+                 + (x - *(float*)((char*)pivot + 0x38))
+                 * (x - *(float*)((char*)pivot + 0x38));
+        int* w;
+        float dw;
+        do {
+            w = *--last;
+            dw = (y - *(float*)((char*)w + 0x3c))
+               * (y - *(float*)((char*)w + 0x3c))
+               + (z - *(float*)((char*)w + 0x40))
+               * (z - *(float*)((char*)w + 0x40))
+               + (x - *(float*)((char*)w + 0x38))
+               * (x - *(float*)((char*)w + 0x38));
+        } while (dw > dp);
+
+        if (first >= last)
+            break;
+        *first = *last;
+        *last = v;
+        ++first;
+    }
+}
+
+// @ 0x00b75750
+void f_00b75750(int* begin, int* end, PosV3 pos)
+{
+    int n = (int)(end - begin);
+    if (n < 2)
+        return;
+    int i = ((n - 2) >> 1) + 1;
+    do {
+        --i;
+        FUN_00b74d60(begin, i, n, i, begin[i], pos);
+    } while (i != 0);
+}
+
+// @ 0x00b757b0
+void f_00b757b0(int* begin, int* end, V3 pos)
+{
+    int n = (int)(end - begin);
+    if (n <= 1)
+        return;
+    int* p = end - 1;
+    do {
+        int v = *p;
+        *p = *begin;
+        FUN_00b74d60(begin, 0, n - 1, 0, v, pos);
+        --p;
+        n = (int)((char*)p - (char*)begin) / 4 + 1;
+    } while (n > 1);
+}
+
+// @ 0x00b75820
+T5820* T5820::Init()
+{
+    *(short*)((char*)this + 0) = 0;
+    *(short*)((char*)this + 2) = 0;
+    *(float*)((char*)this + 4) = g_1687ad4;
+    *(float*)((char*)this + 8) = g_1687ad8;
+    *(float*)((char*)this + 0xc) = g_1687adc;
+    *(float*)((char*)this + 0x10) = g_1485720;
+    ((Mat3_s00b7_4f80*)((char*)this + 0x14))->Assign(&g_16880f0);
+
+    char* p = (char*)this + 0x64;
+    *(char**)((char*)this + 0x4c) = p;
+    *(char**)((char*)this + 0x50) = p;
+    *(char**)((char*)this + 0x54) = p + 0xc00;
+    *(int*)((char*)this + 0x60) = 0;
+    return this;
+}
+
+// @ 0x00b75890
+int* T5890::GetOrInsert(unsigned* key)
+{
+    int local[3];
+    ((T5890*)this)->FindKey(local, (int*)key);
+    if (local[0] == *(int*)(*(int*)((char*)this + 4)
+                            + *(int*)((char*)this + 8) * 4)) {
+        ResourcePair5890 value(*(ResourceKey5890*)key, MappedValue5890());
+        Insert3(local, &value, InsertTag5890());
+    }
+    return (int*)(local[0] + 0xc);
+}
+
+// @ 0x00b75910
+int* T5910::Unlink(int* out, int* node, int* bucket)
+{
+    out[1] = (int)bucket;
+    out[0] = node[4];
+    while (out[0] == 0) {
+        out[1] += 4;
+        out[0] = *(int*)out[1];
+    }
+
+    int* cur = *(int**)bucket;
+    if (cur == node) {
+        *(int**)bucket = (int*)cur[4];
+    } else {
+        int* a = (int*)cur[4];
+        while (a != node) {
+            cur = a;
+            a = (int*)a[4];
+        }
+        cur[4] = a[4];
+    }
+
+    if (node[2] != 0) {
+        void** vt = *(void***)node[2];
+        ((FnSub4)vt[1])((void*)node[2]);
+    }
+
+    if (node != *(int**)((char*)this + 0x30)) {
+        int* lo = *(int**)((char*)this + 0x24);
+        int* hi = *(int**)((char*)this + 0x28);
+        if (node >= lo && node < hi) {
+            *node = *(int*)((char*)this + 0x1c);
+            *(int**)((char*)this + 0x1c) = node;
+            --*(int*)((char*)this + 0xc);
+            return out;
+        }
+        operator delete(node);
+    }
+    --*(int*)((char*)this + 0xc);
+    return out;
+}
+
+// @ 0x00b759b0
+void T59b0::FreeTable(int* buckets, unsigned n)
+{
+    for (unsigned i = 0; i < n; ++i) {
+        int* p = *(int**)((char*)buckets + i * 4);
+        while (p != 0) {
+            int* node = p;
+            p = (int*)node[4];
+            int* sub = (int*)node[2];
+            if (sub != 0) {
+                void** vt = *(void***)sub;
+                ((FnSub4)vt[1])(sub);
+            }
+            if (node != *(int**)((char*)this + 0x30)) {
+                int* lo = *(int**)((char*)this + 0x24);
+                int* hi = *(int**)((char*)this + 0x28);
+                if (node >= lo && node < hi) {
+                    *node = *(int*)((char*)this + 0x1c);
+                    *(int**)((char*)this + 0x1c) = node;
+                } else {
+                    operator delete(node);
+                }
+            }
+        }
+        *(int**)((char*)buckets + i * 4) = 0;
+    }
+}
+
+// @ 0x00b75a30
+void T5a30::Insert(E18_s00b7_4f80* pos, E18_s00b7_4f80* value)
+{
+    E18_s00b7_4f80* mEnd = *(E18_s00b7_4f80**)((char*)this + 4);
+    E18_s00b7_4f80* mCapEnd = *(E18_s00b7_4f80**)((char*)this + 8);
+    E18_s00b7_4f80* mBegin = *(E18_s00b7_4f80**)((char*)this + 0);
+
+    if (mEnd != mCapEnd) {
+        if (value >= pos && value < mEnd)
+            ++value;
+        if (mEnd != 0)
+            *mEnd = mEnd[-1];
+        FUN_00cc8b50(pos, mEnd - 1, mEnd);
+        *pos = *value;
+        *(E18_s00b7_4f80**)((char*)this + 4) = mEnd + 1;
+        return;
+    }
+
+    unsigned n = (unsigned)((char*)mEnd - (char*)mBegin) / 0x18;
+    unsigned cap2 = n != 0 ? n * 2 : 1;
+    if (n == 0)
+        cap2 = 1;
+    unsigned size = cap2 != 0 ? cap2 : 0;
+
+    E18_s00b7_4f80* nb = size != 0
+        ? (E18_s00b7_4f80*)EAAllocate(size * 0x18, "Simulator", 0, 0, &g_13ebb38_s00b7_4f80, 0xd1)
+        : 0;
+
+    E18_s00b7_4f80* mid = (E18_s00b7_4f80*)FUN_00b73780((char*)mBegin, (char*)pos, (char*)nb);
+    if (mid != 0)
+        *mid = *value;
+    E18_s00b7_4f80* dst = (E18_s00b7_4f80*)FUN_00b73780((char*)pos, (char*)mEnd,
+                                  (char*)(mid != 0 ? mid + 1 : mid));
+    if (mBegin != 0 && *(int*)((char*)mBegin - 4) != 0)
+        operator delete(mBegin);
+
+    *(E18_s00b7_4f80**)((char*)this + 4) = dst;
+    *(E18_s00b7_4f80**)((char*)this + 0) = nb;
+    *(E18_s00b7_4f80**)((char*)this + 8) = (E18_s00b7_4f80*)((char*)nb + size * 0x18);
+}
+
+// @ 0x00b75b80
+void __stdcall f_00b75b80(int** buckets, unsigned n)
+{
+    for (unsigned i = 0; i < n; ++i) {
+        int* p = buckets[i];
+        while (p != 0) {
+            int* node = p;
+            p = *(int**)((char*)node + 0xc70);
+            int* sub = *(int**)((char*)node + 0x58);
+            if (sub != 0 && *(int*)((char*)sub - 4) != 0)
+                operator delete(sub);
+            operator delete(node);
+        }
+        buckets[i] = 0;
+    }
+}
+
+// @ 0x00b75bf0
+void __stdcall f_00b75bf0(int** buckets, unsigned n)
+{
+    for (unsigned i = 0; i < n; ++i) {
+        int* p = buckets[i];
+        while (p != 0) {
+            int* node = p;
+            p = *(int**)((char*)node + 0xc68);
+            int* sub = *(int**)((char*)node + 0x50);
+            if (sub != 0 && *(int*)((char*)sub - 4) != 0)
+                operator delete(sub);
+            operator delete(node);
+        }
+        buckets[i] = 0;
+    }
+}
+
+// @ 0x00b75c60
+void f_00b75c60(V3* a, V3* b, V3* buf, CmpV3 cmp)
+{
+    int n = (int)(b - a);
+    if (n <= 1)
+        return;
+
+    int mid = n / 2;
+    V3* p1 = a + mid;
+
+    if (mid > 1) {
+        V3* q = a + mid / 2;
+        f_00b75c60(a, q, buf, cmp);
+        f_00b75c60(q, p1, buf + mid / 2, cmp);
+        f_00b75570(a, q, q, a + mid, buf, cmp);
+    } else {
+        *buf = *a;
+    }
+
+    if (n - mid > 1) {
+        V3* r = a + (mid + n) / 2;
+        f_00b75c60(p1, r, buf + mid, cmp);
+        f_00b75c60(r, b, buf + (mid + n) / 2, cmp);
+        f_00b75570(p1, r, r, b, buf + mid, cmp);
+    } else {
+        buf[mid] = *p1;
+    }
+
+    f_00b75570(buf, buf + mid, buf + mid, buf + n, a, cmp);
+}
+
+// @ 0x00b75dc0
+void T5dc0::Insert(char* at, unsigned n, const void* value)
+{
+    char* mEnd = *(char**)((char*)this + 4);
+    char* mCapEnd = *(char**)((char*)this + 8);
+    char* mBegin = *(char**)((char*)this + 0);
+
+    unsigned avail = (unsigned)(mCapEnd - mEnd) >> 4;
+    if (n > avail) {
+        unsigned n0 = (unsigned)(mEnd - mBegin) >> 4;
+        unsigned cap2 = n0 != 0 ? n0 * 2 : 1;
+        unsigned size = (n0 + n < cap2) ? cap2 : (n0 + n);
+        char* nb = size != 0
+            ? (char*)EAAllocate(size * 0x10, "Simulator", 0, 0, &g_13ebb38_s00b7_4f80, 0xd1)
+            : 0;
+        char* mid = FUN_00b739f0(mBegin, at, nb);
+        FUN_00b738e0(mid, n, value);
+        char* dst = FUN_00b739f0(at, mEnd, mid + n * 0x10);
+        if (mBegin != 0 && *(int*)(mBegin - 4) != 0)
+            operator delete(mBegin);
+        *(char**)((char*)this + 4) = dst;
+        *(char**)((char*)this + 0) = nb;
+        *(char**)((char*)this + 8) = nb + size * 0x10;
+        return;
+    }
+
+    if (n == 0)
+        return;
+
+    E16 local;
+    local.x = *(float*)value;
+    local.y = *(float*)((char*)value + 4);
+    local.z = *(float*)((char*)value + 8);
+    local.c = *(char*)((char*)value + 0xc);
+
+    unsigned elemsAfter = (unsigned)(mEnd - at) >> 4;
+
+    if (n < elemsAfter) {
+        char* dst = mEnd - n * 0x10;
+        FUN_00b73890((void**)&value, dst, mEnd, mEnd, at);
+        *(char**)((char*)this + 4) = mEnd + n * 0x10;
+        FUN_00edba80(at, dst, mEnd + n * 0x10);
+        FUN_00898580(at, at + n * 0x10, &local);
+    } else {
+        char* oldEnd = mEnd;
+        FUN_00b738e0(mEnd, n - elemsAfter, &local);
+        *(char**)((char*)this + 4) = mEnd + (n - elemsAfter) * 0x10;
+        FUN_00b73890((void**)&at, at, oldEnd, mEnd + (n - elemsAfter) * 0x10,
+                      at);
+        *(char**)((char*)this + 4) = mEnd
+            + (n - elemsAfter) * 0x10 + elemsAfter * 0x10;
+        FUN_00898580(at, oldEnd, &local);
+    }
+}
+
 // @ 0x00b75f70
 Vec3_s00b7_5f70* __cdecl FUN_00b75f70(Vec3_s00b7_5f70* first, Vec3_s00b7_5f70* last, Vec3_s00b7_5f70 pivot, bool (__cdecl* comp)(const Vec3_s00b7_5f70*, const Vec3_s00b7_5f70*))
 {
@@ -4746,7 +5599,7 @@ foundEntry:
             tm->mTree.Find(&it, &k);
             if (it != (void*)&tm->mTree.mAnchor) rec = *(RecA**)((char*)it + 0x14);
         }
-        PlanetModel* planet = GetPlanet();
+        PlanetModel_b3d350* planet = GetPlanet();
         for (u32 i = 0; i < count; i++) {
             Vec3C pos = *(Vec3C*)&arr[i].pos;
             float scale = arr[i].scale;
@@ -5396,6 +6249,102 @@ void __fastcall FUN_00b78860(void* param_1)
   PU(param_1, 0x20) = PU(param_1, 0x20) & 0xfffffffb;
   PU(param_1, 0x55a0) = 0;
   FUN_00b77aa0();
+}
+
+// @ 0x00b78880
+bool BuildFootprint(cFootprint* footprint, cModel* model, cModelWorld* world, bool bClipToPlanet)
+{
+    bool result = false;
+    if (footprint && model && world) {
+        cSPTransform_s00b7_8880* pTransform = &model->mTransform;
+        cSPTransform_s00b7_8880 savedTransform(*pTransform);
+        pTransform->SetIdentity();
+        pTransform->SetScale(footprint->mScale);
+
+        sp_fixed_vector<Vector3, 256> points;
+        int count = 0;
+        Vector2* pPoints;
+        if (GetPropertyAsVector2Array(model->mpPropList, 0x0637d439, &count, &pPoints) && count > 2) {
+            float scale = footprint->mScale;
+            Property_s00b7_8880* prop = 0;
+            if (model->mpPropList->GetProperty(0x00fba611, prop))
+                scale *= *prop->GetValueFloat();
+            points.resize(count);
+            for (int i = 0; i < count; i++) {
+                const Vector2& src = pPoints[i];
+                Vector3& p = points[i];
+                p.x = src.x * scale;
+                p.y = src.y * scale;
+                p.z = 0.0f;
+            }
+        } else {
+            cMWTransformedHull* hull = 0;
+            world->GetTransformedHull(model, hull);
+            if (hull) {
+                if (bClipToPlanet) {
+                    cPlanetModel_s00b7_8880* planet = PlanetModel();
+                    cSPTransform_s00b7_8880 transform(savedTransform);
+                    sp_fixed_vector<HullVertex, 128> verts;
+                    verts.resize(hull->mVertCount);
+                    int numVerts = hull->mVertCount;
+                    uint16_t hasRotation = transform.mFlags & 2;
+                    for (int i = 0; i < numVerts; i++) {
+                        HullVertex& v = verts[i];
+                        v.pos = hull->mVertArray[i];
+                        if (hasRotation)
+                            v.pos *= transform.mRotation;
+                        v.pos += transform.mTranslation;
+                        float radius = planet->GetRadiusAt(v.pos);
+                        v.bOutside = radius * radius < Dot(v.pos, v.pos);
+                    }
+                    int numTris = hull->mTriCount;
+                    for (int i = 0; i < numTris; i++) {
+                        uint32_t* tri = &hull->mTriArray[i * 4];
+                        HullVertex* a = &verts[tri[0]];
+                        HullVertex* b = &verts[tri[1]];
+                        HullVertex* c = &verts[tri[2]];
+                        ClipEdge(a, b, &points, &savedTransform);
+                        ClipEdge(b, c, &points, &savedTransform);
+                        ClipEdge(a, c, &points, &savedTransform);
+                    }
+                    if (points.size() == 0)
+                        bClipToPlanet = false;
+                }
+                if (!bClipToPlanet) {
+                    points.resize(hull->mVertCount);
+                    int numVerts = hull->mVertCount;
+                    for (int i = 0; i < numVerts; i++) {
+                        const Vector3& v = hull->mVertArray[i];
+                        // (x, z, y operand order: matches the original's /fp:fast schedule)
+                        float d = v.x * kFootprintAxis.x + v.z * kFootprintAxis.z + v.y * kFootprintAxis.y;
+                        points[i] = v - d * kFootprintAxis;
+                    }
+                }
+                if (hull)
+                    world->ReleaseTransformedHull(hull);
+            }
+        }
+
+        BuildHull(&points, &footprint->mHull);
+        result = footprint->mHull.size() >= 3;
+        if (result) {
+            footprint->mCenter = kZeroVector;
+            int n = footprint->mHull.size();
+            for (int i = 0; i < n; i++)
+                footprint->mCenter += footprint->mHull[i];
+            footprint->mCenter *= 1.0f / n;
+            float maxDistSq = 0.0f;
+            for (int i = 0; i < n; i++) {
+                Vector3 d = footprint->mHull[i] - footprint->mCenter;
+                float distSq = Dot(d, d);
+                if (distSq > maxDistSq)
+                    maxDistSq = distSq;
+            }
+            footprint->mRadius = sqrtf(maxDistSq);
+        }
+        *pTransform = savedTransform;
+    }
+    return result;
 }
 
 // @ 0x00b794e0

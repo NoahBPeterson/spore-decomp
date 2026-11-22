@@ -12,6 +12,6 @@
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_011685b0@Snd@@YAXPAUResampler@1@PAH@Z  011685b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_011685f0@Snd@@YAHPAUResampler@1@HPAM1@Z  011685f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168640@Snd@@YAHPAUResampler@1@@Z  01168640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168670@Snd@@YAXPAUSndPitchState@1@PAH@Z  01168670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168730@Snd@@YAXPAUResampler@1@H@Z  01168730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168960@Snd@@YAXPAUResampler@1@EH@Z  01168960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168670@Snd@@YAXPAUSndPitchState@1@PAH@Z  01168670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

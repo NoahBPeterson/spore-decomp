@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00e93160  302  SP::cSpatialObjectView::OnDamageStateChanged: the original builds a 0xa4-frame SBO collection via FUN_00767760(out,elem) and walks it per element/entry; our 204 B version stubs the element/collection handling (one-argument helper call, fixed [4] scratch) and invokes the wrong call flags: /O2 /MD /Gy /TP /arch:SSE

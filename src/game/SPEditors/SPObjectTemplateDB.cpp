@@ -982,7 +982,7 @@ namespace eastl {
 }
 template<> struct EraseFrame<eastl::pair_s0055_ce80<uint32_t, float> > { enum { kSlots = 4 }; };
 namespace eastl {
-struct allocator_s0055_ce80 { allocator_s0055_ce80() {} };
+class allocator_s0055_ce80 { public: allocator_s0055_ce80() {} };
 }
 namespace eastl {
 struct sp_vector_allocator_s0055_ce80;
@@ -1013,6 +1013,14 @@ struct random_access_iterator_tag { random_access_iterator_tag() {} };
 }
 namespace eastl {
 struct false_type { false_type() {} };
+}
+namespace eastl {
+template<typename I, typename T>
+inline I find_s0055_ce80(I first, I last, const T& value) {
+    while ((first != last) && !(*first == value))
+        ++first;
+    return first;
+}
 }
 namespace eastl {
 template<typename I, typename T>
@@ -1052,8 +1060,8 @@ public:
     size_t size() const { return mpEnd - mpBegin; }
     T& operator[](size_t n) { return *(mpBegin + n); }
     const T& operator[](size_t n) const { return *(mpBegin + n); }
-    iterator erase(iterator first, iterator last);
-    iterator erase(iterator position);
+    iterator erase(iterator first, iterator last);  // 0x00621f50 (eastl::vector::erase)
+    iterator erase(iterator position);  // 0x00621f50 (eastl::vector::erase)
     void clear() { ScratchSlots<EraseFrame<T>::kSlots>(); erase(mpBegin, mpEnd); }
     void clear_noframe() { erase(mpBegin, mpEnd); }
     bool empty() const;
@@ -1128,7 +1136,7 @@ public:
     vector_set_s0055_ce80(const vector_set_s0055_ce80& x);
     ~vector_set_s0055_ce80();
     pair_s0055_ce80<iterator, iterator> equal_range(const K& k);
-    iterator find(const K& k) {
+    iterator find_s0055_ce80(const K& k) {
         const pair_s0055_ce80<iterator, iterator> pairIts(equal_range(k));
         ScratchSlots<5>();
         if (pairIts.first != pairIts.second)
@@ -1146,7 +1154,7 @@ public:
     typedef pair_s0055_ce80<K, V>* iterator;
     C mCompare;
     pair_s0055_ce80<iterator, iterator> equal_range(const K& k);
-    iterator find(const K& k) {
+    iterator find_s0055_ce80(const K& k) {
         const pair_s0055_ce80<iterator, iterator> pairIts(equal_range(k));
         ScratchSlots<5>();
         if (pairIts.first != pairIts.second)
@@ -1211,7 +1219,7 @@ public:
     iterator begin() { return iterator(mAnchor.mpNodeLeft); }
     iterator end() { return iterator(&mAnchor); }
     size_t size() const { return mnSize; }
-    iterator find(const K& k);
+    iterator find_s0055_ce80(const K& k);
     pair_s0055_ce80<iterator, iterator> equal_range(const K& k);
 
     struct const_iterator {
@@ -1379,7 +1387,10 @@ namespace SP {
 namespace Traits {
 class cIClassifier_s0055_ce80 {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
     virtual uint32_t GetID();
     virtual uint32_t GetGroup();
     virtual void v06();
@@ -1390,7 +1401,10 @@ namespace SP {
 namespace FunctionalMatch {
 class cISummarizer_s0055_ce80 {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
     virtual uint32_t GetID();
     virtual uint32_t GetGroup();
     virtual void* GetSummary();
@@ -1402,13 +1416,34 @@ public:
 namespace SP {
 class cISPObjectTemplateDB_s0055_ce80 {
 public:
-    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
-    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
-    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
-    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
     virtual void v1c();
     virtual void OnAssetBanned(const ResourceKey_s0055_ce80& key, bool permanent);
 };
@@ -1491,6 +1526,96 @@ struct DBSub {
     void AddIter(void* outIt, void* it);
 };
 }
+template<typename T>
+struct SmallVec {
+    T* mpBegin; T* mpEnd; T* mpCapacity;
+    SmallVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    T* begin() { return mpBegin; }
+    T* end() { return mpEnd; }
+    bool Empty() const;                                  // 0x00526430
+};
+struct ParamEntry {
+    uint32_t mValue;    // +0x00  parameter id
+    uint32_t mType;     // +0x04  entry kind
+    union { uint32_t mKey; float mWeight; };  // +0x08
+};
+struct RBAnchor {
+    void* mpNodeRight;    // +0x00
+    void* mpNodeLeft;     // +0x04
+    void* mpNodeParent;   // +0x08  root
+    uint32_t mColor;      // +0x0c
+};
+struct TreeIter {
+    void* mpNode;                                        // +0x00
+    void* Deref();                                       // 0x00564f50
+    void Set(void* pNode);                               // 0x00566c50
+    void Copy(const TreeIter* pSrc);                     // 0x005673e0
+};
+struct IterBoolResult { TreeIter mIter; uint8_t mbInserted; uint8_t mPad[3]; };
+struct IterRange { TreeIter mFirst; TreeIter mSecond; };
+struct ParamTree {
+    uint32_t mCompare;    // +0x00  empty eastl::less
+    RBAnchor mAnchor;     // +0x04
+    uint32_t mnSize;      // +0x14
+    uint32_t mAllocator;  // +0x18  empty eastl::allocator
+
+    void TreeCtor(const void* pAllocator);                                   // 0x00564cb0
+    void TreeDestroy(void* pRoot);                                           // 0x00566900
+    void FindU32(TreeIter* pOut, const void* pKey);                          // 0x00564b50
+    void FindInnerU32(TreeIter* pOut, const void* pKey);                     // 0x00564ab0
+    void FindInnerFloat(TreeIter* pOut, const void* pKey);                   // 0x00564bf0
+    void InsertGroupParam(IterBoolResult* pOut, const void* pValue, char flag);    // 0x00566740
+    void InsertWeightedParam(IterBoolResult* pOut, const void* pValue, char flag); // 0x00566b10
+    void InsertIndexU32(IterBoolResult* pOut, const void* pValue, char flag);      // 0x00566600
+    void InsertIndexFloat(IterBoolResult* pOut, const void* pValue, char flag);    // 0x00566970
+    void EraseIter(TreeIter* pOut, TreeIter iter);                           // 0x00566570
+};
+struct U32Set_s0055_ce80 {
+    uint32_t* mpBegin;       // +0x00
+    uint32_t* mpEnd;         // +0x04
+    uint32_t* mpCapacity;    // +0x08
+    const char* mpName;      // +0x0c  sp_vector_allocator
+    uint32_t mFlags;         // +0x10
+    uint8_t mCompare;        // +0x14
+    uint8_t mComparePad[3];
+
+    void SetCtor(const void* pAllocator);                // 0x00540470
+    void DoDestroyValues();                              // 0x00553fb0
+    void SetCopy(const U32Set_s0055_ce80* pSrc);                    // 0x00564690
+    void FreeBuffer();                                   // 0x00548400
+    bool Empty() const;                                  // 0x00526430
+    void Insert(IterBoolResult* pOut, const void* pKey); // 0x00554020
+    void EqualRange(IterRange* pOut, const void* pKey);  // 0x00555980
+    bool Erase(const void* pKey);                        // 0x005540d0
+};
+struct PairU32Tree {
+    uint32_t mKey;                                       // +0x00
+    ParamTree mValue;                                    // +0x04
+    void PairCtor(const void* pKey, const void* pValue); // 0x005670d0
+    void ValueCopy(const void* pSrcValue);               // 0x005659a0
+};
+struct PairU32Tree2 {
+    uint32_t mKey;                                       // +0x00
+    ParamTree mValue;                                    // +0x04
+    void PairCtor(const void* pKey, const void* pValue); // 0x00567150
+    void ValueCopy(const void* pSrcValue);               // 0x005659c0
+};
+struct PairU32Set {
+    uint32_t mKey;                                       // +0x00
+    U32Set_s0055_ce80 mValue;                                       // +0x04
+    void PairCtor(const void* pKey, const void* pValue); // 0x00567110
+};
+struct PairF32Set {
+    float mKey;                                          // +0x00
+    U32Set_s0055_ce80 mValue;                                       // +0x04
+};
+struct ParamTables {
+    char pad00[0x94];
+    U32Set_s0055_ce80 mKnownGroupIDs;       // +0x94  ids already present in the asset list
+    char padAc[0xf4 - 0xac];
+    ParamTree mGroupParams;      // +0xf4  map<id, map<key, vector_set<index> > >
+    ParamTree mWeightedParams;   // +0x110 map<id, map<float, vector_set<index> > >
+};
 struct IRefObj_s0055_ce80 {
     virtual void v0();
     virtual int AddRef();
@@ -4443,6 +4568,7 @@ typedef unsigned size_type;
     rbtree_s0056_46b0(const allocator_s0056_46b0& a);                                         // 0x4b5980
     iterator end() { return iterator((node_type*)&mAnchor); }
     iterator find(const key_type& key);
+    iterator FUN_00422b00(const key_type& key);   // 0x00422b00: the find retail's erase(key) calls
     const_iterator lower_bound(const key_type& key);
     const_iterator upper_bound(const key_type& key);
     size_type erase(const key_type& key);
@@ -5580,6 +5706,183 @@ bool LoadAssetParametersFromKey(const ResKey* key, ParamVec<AssetParam>* params,
     }
     return ok;
 }
+
+// @ 0x0055d230
+namespace SP {
+char cSPObjectTemplateDB_s0055_ce80::FUN_0055d230(int index, void* pList)
+{
+    char result = 0;
+    ParamTables* tables = reinterpret_cast<ParamTables*>(this);
+    SmallVec<ParamEntry>* list = reinterpret_cast<SmallVec<ParamEntry>*>(pList);
+    eastl::allocator_s0055_ce80 allocator_s0055_ce80;
+
+    ParamEntry* it = list->mpBegin;
+    ParamEntry* last = list->mpEnd;
+    for (; it != last; ++it) {
+        ParamEntry* entry = it;
+        if (entry->mType == 0x2e1a75d) {
+            // tables->mGroupParams[entry->mValue][entry->mKey].insert(index)
+            ParamTree emptyInner;
+            emptyInner.TreeCtor(&allocator_s0055_ce80);
+            PairU32Tree tmpPair;
+            tmpPair.PairCtor(&entry->mValue, &emptyInner);
+            emptyInner.TreeDestroy(emptyInner.mAnchor.mpNodeParent);
+
+            PairU32Tree pairCopy;
+            pairCopy.mKey = tmpPair.mKey;
+            pairCopy.ValueCopy(&tmpPair.mValue);
+            IterBoolResult inserted;
+            tables->mGroupParams.InsertGroupParam(&inserted, &pairCopy, 0);
+            ParamTree* inner = &reinterpret_cast<PairU32Tree*>(inserted.mIter.Deref())->mValue;
+            pairCopy.mValue.TreeDestroy(pairCopy.mValue.mAnchor.mpNodeParent);
+            tmpPair.mValue.TreeDestroy(tmpPair.mValue.mAnchor.mpNodeParent);
+
+            U32Set_s0055_ce80 emptySet;
+            emptySet.SetCtor(&allocator_s0055_ce80);
+            PairU32Set tmpSetPair;
+            tmpSetPair.PairCtor(&entry->mKey, &emptySet);
+            emptySet.DoDestroyValues();
+
+            PairU32Set setPairCopy;
+            setPairCopy.mKey = tmpSetPair.mKey;
+            setPairCopy.mValue.SetCopy(&tmpSetPair.mValue);
+            IterBoolResult insertedSet;
+            inner->InsertIndexU32(&insertedSet, &setPairCopy, 0);
+            U32Set_s0055_ce80* set = &reinterpret_cast<PairU32Set*>(insertedSet.mIter.Deref())->mValue;
+            setPairCopy.mValue.DoDestroyValues();
+            tmpSetPair.mValue.DoDestroyValues();
+
+            IterBoolResult insertedIndex;
+            set->Insert(&insertedIndex, &index);
+
+            // Subtype 0x2dc9d1e records the entry key as the asset's model subtype.
+            if (entry->mValue == 0x2dc9d1e)
+                this->mAssetList[index].mnModelSubtype = entry->mKey;
+
+            // Groups already known to the DB also copy the key into the asset's group set.
+            IterRange known;
+            tables->mKnownGroupIDs.EqualRange(&known, &entry->mValue);
+            if (known.mFirst.mpNode != known.mSecond.mpNode) {
+                IterBoolResult addedGroup;
+                U32Set_s0055_ce80* groupIDs = reinterpret_cast<U32Set_s0055_ce80*>(&this->mAssetList[index].mGroupIDs);
+                groupIDs->Insert(&addedGroup, &entry->mKey);
+            }
+            result = 1;
+        } else if (entry->mType == 0x2e1a7ff) {
+            // tables->mWeightedParams[entry->mValue][entry->mWeight].insert(index)
+            ParamTree emptyInner;
+            emptyInner.TreeCtor(&allocator_s0055_ce80);
+            PairU32Tree2 tmpPair;
+            tmpPair.PairCtor(&entry->mValue, &emptyInner);
+            emptyInner.TreeDestroy(emptyInner.mAnchor.mpNodeParent);
+
+            PairU32Tree2 pairCopy;
+            pairCopy.mKey = tmpPair.mKey;
+            pairCopy.ValueCopy(&tmpPair.mValue);
+            IterBoolResult inserted;
+            tables->mWeightedParams.InsertWeightedParam(&inserted, &pairCopy, 0);
+            ParamTree* inner = &reinterpret_cast<PairU32Tree2*>(inserted.mIter.Deref())->mValue;
+            pairCopy.mValue.TreeDestroy(pairCopy.mValue.mAnchor.mpNodeParent);
+            tmpPair.mValue.TreeDestroy(tmpPair.mValue.mAnchor.mpNodeParent);
+
+            U32Set_s0055_ce80 emptySet;
+            emptySet.SetCtor(&allocator_s0055_ce80);
+            PairF32Set tmpWeightPair;
+            tmpWeightPair.mKey = entry->mWeight;
+            tmpWeightPair.mValue.SetCopy(&emptySet);
+            emptySet.DoDestroyValues();
+
+            PairF32Set weightPairCopy;
+            weightPairCopy.mKey = tmpWeightPair.mKey;
+            weightPairCopy.mValue.SetCopy(&tmpWeightPair.mValue);
+            IterBoolResult insertedSet;
+            inner->InsertIndexFloat(&insertedSet, &weightPairCopy, 0);
+            U32Set_s0055_ce80* set = &reinterpret_cast<PairF32Set*>(insertedSet.mIter.Deref())->mValue;
+            weightPairCopy.mValue.DoDestroyValues();
+            for (uint32_t* p = tmpWeightPair.mValue.mpBegin; p < tmpWeightPair.mValue.mpEnd; ++p) {
+            }
+            tmpWeightPair.mValue.FreeBuffer();
+
+            IterBoolResult insertedIndex;
+            set->Insert(&insertedIndex, &index);
+            result = 1;
+        }
+    }
+    return result;
+}
+}  // namespace SP
+
+// @ 0x0055d790
+namespace SP {
+bool cSPObjectTemplateDB_s0055_ce80::FUN_0055d790(void* pKey, void* pList)
+{
+    ParamTables* tables = reinterpret_cast<ParamTables*>(this);
+    SmallVec<ParamEntry>* list = reinterpret_cast<SmallVec<ParamEntry>*>(pList);
+    bool result = !list->Empty();
+
+    ParamEntry* it = list->mpBegin;
+    ParamEntry* last = list->mpEnd;
+    for (; it != last; ++it) {
+        ParamEntry* entry = it;
+        if (entry->mType == 0x2e1a75d) {
+            TreeIter found;
+            tables->mGroupParams.FindU32(&found, &entry->mValue);
+            TreeIter outerEnd;
+            outerEnd.Set(&tables->mGroupParams.mAnchor);
+            if (found.mpNode == outerEnd.mpNode) {
+                result = false;
+            } else {
+                ParamTree* inner = &reinterpret_cast<PairU32Tree*>(found.Deref())->mValue;
+                TreeIter foundSet;
+                inner->FindInnerU32(&foundSet, &entry->mKey);
+                TreeIter innerEnd;
+                innerEnd.Set(&inner->mAnchor);
+                if (foundSet.mpNode != innerEnd.mpNode) {
+                    U32Set_s0055_ce80* set = &reinterpret_cast<PairU32Set*>(foundSet.Deref())->mValue;
+                    set->Erase(pKey);
+                    if (set->Empty()) {
+                        TreeIter setCopy;
+                        setCopy.Copy(&foundSet);
+                        TreeIter eraseArg;
+                        eraseArg.Copy(&setCopy);
+                        TreeIter erased;
+                        inner->EraseIter(&erased, eraseArg);
+                    }
+                }
+            }
+        } else if (entry->mType == 0x2e1a7ff) {
+            TreeIter found;
+            tables->mWeightedParams.FindU32(&found, &entry->mValue);
+            TreeIter outerEnd;
+            outerEnd.Set(&tables->mWeightedParams.mAnchor);
+            if (found.mpNode == outerEnd.mpNode) {
+                result = false;
+            } else {
+                ParamTree* inner = &reinterpret_cast<PairU32Tree2*>(found.Deref())->mValue;
+                TreeIter foundSet;
+                inner->FindInnerFloat(&foundSet, &entry->mWeight);
+                TreeIter innerEnd;
+                innerEnd.Set(&inner->mAnchor);
+                if (foundSet.mpNode != innerEnd.mpNode) {
+                    U32Set_s0055_ce80* set = &reinterpret_cast<PairF32Set*>(foundSet.Deref())->mValue;
+                    set->Erase(pKey);
+                    if (set->Empty()) {
+                        TreeIter setCopy;
+                        setCopy.Copy(&foundSet);
+                        TreeIter eraseArg;
+                        eraseArg.Copy(&setCopy);
+                        TreeIter erased;
+                        inner->EraseIter(&erased, eraseArg);
+                    }
+                }
+            }
+        } else {
+            result = false;
+        }
+    }
+    return result;
+}
+}  // namespace SP
 
 // @ 0x0055d9e0
 namespace SP {

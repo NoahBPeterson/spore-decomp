@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00b50000.cpp -- migrated from slice(s) s00b5b540, s00b5a750, s00b5a260, s00b56fe0, s00b55680, s00b547b0, s00b537f0, s00b51b00, s00b509b0, s00b4fd80 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00b50000.cpp -- migrated from slice(s) s00b52690, s00b5b540, s00b5a750, s00b5a260, s00b56fe0, s00b55680, s00b547b0, s00b537f0, s00b51b00, s00b509b0, s00b4fd80 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00b50000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -25,6 +25,21 @@ extern const float kFloatMax;  // 0x014612d8 = FLT_MAX
 #include "SP/cITerrainSphere.h"
 #include "SP/cModelManager.h"
 #include <stddef.h>
+#include "cSPVector3.h"
+#include "SP/cSpatialObject.h"
+#include "hkAabb.h"
+#include "hkCdPointCollector.h"
+#include "hkClosestCdPointCollector.h"
+#include "hkLinearCastInput.h"
+#include "hkMotion.h"
+#include "hkQuaternion.h"
+#include "hkReferencedObject.h"
+#include "hkRigidBody.h"
+#include "hkRootCdPoint.h"
+#include "hkShape.h"
+#include "hkWorld.h"
+#include "hkWorldObject.h"
+#include <xmmintrin.h>
 
 // ---- items of slice s00b4fd80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char uchar;
@@ -368,7 +383,7 @@ struct ShapeHolder {
     char dst[1];                                                // 0x20
     void Prepare(ShapeInit* s);                                 // 0xb4f610
 };
-__declspec(align(16)) struct hkVector4 { float x, y, z, w; };
+__declspec(align(16)) struct hkVector4_s00b5_09b0 { float x, y, z, w; };
 struct hkShape2 : hkReferencedObject_s00b5_09b0 {
     u32 pad[(0x60 - 8) / 4];
     hkShape2(void* planetModel);                                // 0xb4ffb0
@@ -391,7 +406,7 @@ class hkRigidBodyCinfo { public:
     hkRigidBodyCinfo();                                         // 0x1087ed0
 };
 class hkRigidBody_s00b5_09b0 { public:
-    void setPosition(const hkVector4& p);                       // 0x1087820
+    void setPosition(const hkVector4_s00b5_09b0& p);                       // 0x1087820
     void addProperty(u32 key, unsigned __int64 value);          // 0x10825a0
 };
 class hkWorld_s00b5_09b0 { public:
@@ -567,6 +582,7 @@ extern "C" int  FUN_00b53940(void*);
 extern "C" void FUN_00b4d8e0(void*, int);
 extern "C" void FUN_00b4e1d0(void*, int);
 extern "C" void FUN_00b658c0(void*, void*);
+extern "C" void   FUN_00b55680(void*, void*, int);
 extern "C" void operator_delete(void*);
 extern "C" int  gEmptyString16;
 extern "C" int  eastl_sprintf(void* s, const char* fmt, ...);
@@ -588,6 +604,7 @@ extern "C" float  DAT_01461294;                         // 0x01461294
 extern "C" void*  HKMEM_S_INSTANCE;                     // 0x016e4178  hkMemory::s_instance
 extern "C" void* HKWORLD_S_INSTANCE;    // (declared above)
 extern "C" int*  FUN_00496140(int* out, int which);   // 0x00496140  D961::Find
+extern "C" float sqrtf(float);
 extern "C" void* FUN_00921340(int a);                 // 0x00921340
 extern "C" const float F_013f0620;                    // 0x013f0620
 extern "C" const float F_01470f1c;                    // 0x01470f1c
@@ -725,6 +742,42 @@ struct HkCdPoint {
     char  _pad0c[0x28 - 0x0c];
     void* mBody;         // +0x28
     char  _pad2c[0x30 - 0x2c];
+};
+struct HkPhantom {
+    void*          mVtable;        // +0x00
+    unsigned short mMemSize;       // +0x04
+    HkPhantom* construct(void* shape, uint filterInfo);  // 0x108dfe0 hkAabbPhantom::hkAabbPhantom
+    void       removeReference();                        // 0x109ae60
+};
+struct HkArray { int* mData; int mSize; int mCapacity; };   // +0x00
+struct HkAabbPhantom {
+    void*          mVtable;        // +0x00
+    unsigned short mMemSize;       // +0x04
+    char           _pad06[0x90 - 0x06];
+    HkArray        mOverlaps;      // +0x90
+};
+struct HkWorld_s00b5_37f0 {
+    void* addPhantom(void* phantom);        // 0x1083320
+    void  removePhantom(void* phantom);     // 0x1083400
+};
+struct HkCdBody {
+virtual void*  v00();
+virtual void* v01();
+virtual void* v02();
+    virtual void*  lookup(const void* key);      // +0x0c
+virtual void*  v04();
+virtual void* v05();
+virtual void* v06();
+virtual void* v07();
+virtual void*  v08();
+virtual void* v09();
+virtual void* v10();
+    virtual float* v11();                        // +0x2c
+virtual void*  v12();
+virtual void* v13();
+    virtual void   v14(float* v);                // +0x38
+    char           _pad[0x77 - 4];
+    char           mFlag77;                      // +0x77
 };
 struct FixedPool {
     void* mpHead;                                             // +0x00
@@ -1562,6 +1615,296 @@ static inline int eastl_block_owner(void* p)
 }
 // ---- items of slice s00b5b540 end
 
+// ---- items of slice s00b52690 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_167ed58[];
+extern float g_convexRadius;                                             // 0x015ba104
+#pragma intrinsic(_ReadWriteBarrier)
+typedef float hkReal;
+#define VFN(p, off) ((*(void***)(p))[(off) / 4])
+struct BoundingBox { Vector3 lower, upper; };
+struct __declspec(align(16)) hkVector4_s00b5_2690 {
+    float x, y, z, w;
+    hkVector4_s00b5_2690() {}
+    hkVector4_s00b5_2690(const hkVector4_s00b5_2690& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+    hkVector4_s00b5_2690(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {}
+    void operator=(const hkVector4_s00b5_2690& v) { x = v.x; y = v.y; z = v.z; w = v.w; }
+};
+class hkQuaternion_s00b5_2690 { public: float x, y, z, w; };
+struct __declspec(align(16)) hkRotation_s00b5_2690 {
+    hkVector4_s00b5_2690 m_col0, m_col1, m_col2;
+    hkRotation_s00b5_2690() {}
+    void set(const hkQuaternion_s00b5_2690& q);                                         // 0x010824a0
+};
+struct __declspec(align(16)) hkTransform_s00b5_2690 {
+    hkRotation_s00b5_2690 m_rotation;
+    hkVector4_s00b5_2690 m_translation;
+    hkTransform_s00b5_2690() {}
+};
+class hkAabb_s00b5_2690 { public: hkVector4_s00b5_2690 m_min, m_max; };
+class hkMemory_s00b5_2690 {
+public:
+    PV4
+    virtual void* allocateChunk(int nbytes, int cl);                         // 0x10
+    virtual void freeChunk(void* p, int align, int nbytes);                  // 0x14
+    static hkMemory_s00b5_2690* s_instance;                                             // 0x016e4178
+    static hkMemory_s00b5_2690& getInstance() { return *s_instance; }
+};
+class hkReferencedObject_s00b5_2690 {
+public:
+    virtual ~hkReferencedObject_s00b5_2690();                                           // 0x00
+    u16 m_memSizeAndFlags;                                                   // 0x04
+    u16 m_referenceCount;                                                    // 0x06
+    void removeReference()
+    {
+        if (m_memSizeAndFlags != 0 && --m_referenceCount == 0)
+            ((void (__thiscall*)(hkReferencedObject_s00b5_2690*, int))VFN(this, 0))(this, 1);
+    }
+};
+class hkShape_s00b5_2690 : public hkReferencedObject_s00b5_2690 {
+public:
+    PV2
+    virtual void getAabb(const hkTransform_s00b5_2690& localToWorld, hkReal tolerance, hkAabb_s00b5_2690& out) const;   // 0x0c
+};
+class hkWorldObject_s00b5_2690 : public hkReferencedObject_s00b5_2690 {
+public:
+    void* m_world;                                                           // 0x08
+    void* m_userData;                                                        // 0x0c
+    void removeReference();                                                  // 0x0109ae60 (out of line here)
+};
+class hkMotion_s00b5_2690 {
+public:
+    PV8 PV8 PV4 PV2                                                          // slots 0..21
+    virtual void setAngularVelocity(const hkVector4_s00b5_2690& v);                     // 0x58
+    virtual void setLinearVelocity(const hkVector4_s00b5_2690& v);                      // 0x5c
+    u8 pad[0x80 - 4];                                                        // motion state: transform at +0x10 (position +0x40)
+    hkQuaternion_s00b5_2690 m_rotation;                                                 // 0x80
+};
+extern const hkVector4_s00b5_2690 hkVector4_zero;                                       // 0x016e42d0
+extern const hkVector4_s00b5_2690 kHalf_s00b5_2690;                                                // 0x0149d620 (-0.5 x4)
+class hkRigidBody_s00b5_2690 : public hkWorldObject_s00b5_2690 {
+public:
+    u8 pad10[0x1c - 0x10];
+    hkShape_s00b5_2690* m_shape;                                                        // 0x1c (collidable's shape)
+    u8 pad20[0x58 - 0x20];
+    hkMotion_s00b5_2690* m_motion;                                                      // 0x58
+    void setPosition(const hkVector4_s00b5_2690& p);                                    // 0x01087820
+    void activate();                                                         // 0x01088ae0
+    __forceinline void setLinearVelocity(const hkVector4_s00b5_2690& v)
+    {
+        activate();
+        m_motion->setLinearVelocity(v);
+    }
+    __forceinline void setAngularVelocity(const hkVector4_s00b5_2690& v)
+    {
+        activate();
+        m_motion->setAngularVelocity(v);
+    }
+};
+struct hkLinearCastInput_s00b5_2690 {
+    hkVector4_s00b5_2690 m_to;
+    hkReal m_maxExtraPenetration;
+    hkReal m_startPointTolerance;
+    hkLinearCastInput_s00b5_2690() {}
+};
+struct hkRootCdPoint_s00b5_2690 {
+    hkVector4_s00b5_2690 m_position;
+    hkVector4_s00b5_2690 m_separatingNormal;   // w = distance
+    const void* m_rootCollidableA;
+    unsigned m_shapeKeyA;
+    const void* m_rootCollidableB;
+    unsigned m_shapeKeyB;
+};
+class hkCdPointCollector_s00b5_2690 {
+public:
+    hkReal m_earlyOutDistance;
+    virtual ~hkCdPointCollector_s00b5_2690() {}
+    virtual void addCdPoint(const void* event) = 0;
+    virtual void reset();
+};
+class hkClosestCdPointCollector_s00b5_2690 : public hkCdPointCollector_s00b5_2690 {   // vtable 0x013ef52c
+public:
+    hkRootCdPoint_s00b5_2690 m_hitPoint;                                    // +0x10
+    __forceinline hkClosestCdPointCollector_s00b5_2690()
+    {
+        m_hitPoint.m_rootCollidableA = 0;
+        m_hitPoint.m_separatingNormal.w = 3.40282e+038f;
+        m_earlyOutDistance = 3.40282e+038f;
+    }
+    virtual ~hkClosestCdPointCollector_s00b5_2690() {}
+    virtual void addCdPoint(const void* event);
+    virtual void reset();
+    bool hasHit() const { return m_hitPoint.m_rootCollidableA != 0; }
+};
+class hkPhantom_s00b5_2690 : public hkWorldObject_s00b5_2690 {};
+class hkSimpleShapePhantom_s00b5_2690 : public hkPhantom_s00b5_2690 {
+public:
+    void* operator new(size_t nbytes)
+    {
+        hkReferencedObject_s00b5_2690* b = (hkReferencedObject_s00b5_2690*)hkMemory_s00b5_2690::getInstance().allocateChunk((int)nbytes, 0x2e);
+        b->m_memSizeAndFlags = (u16)nbytes;
+        return b;
+    }
+    void operator delete(void*) {}
+    hkSimpleShapePhantom_s00b5_2690(const hkShape_s00b5_2690* shape, const hkTransform_s00b5_2690& transform, u32 collisionFilterInfo);   // 0x0108c750
+    PV8 PV2 PV                                                               // slots 1..11 (own)
+    virtual void setPositionAndLinearCast(const hkVector4_s00b5_2690& position, const hkLinearCastInput_s00b5_2690& input,
+                                          hkCdPointCollector_s00b5_2690& castCollector,
+                                          hkCdPointCollector_s00b5_2690* startCollector);   // 0x30
+    PV                                                                       // slot 13 (0x34)
+    virtual void collect(void* out);                                         // slot 14 (0x38)
+    void setPosition(const hkVector4_s00b5_2690* position, float tolerance);            // 0x0108dbb0
+    void* construct(const hkShape_s00b5_2690* shape, const hkTransform_s00b5_2690& transform, u32 collisionFilterInfo);
+    u8 pad[0x130 - 0x10];
+};
+class hkWorld_s00b5_2690 {
+public:
+    hkPhantom_s00b5_2690* addPhantom(hkPhantom_s00b5_2690* phantom);                               // 0x01083320
+    void removePhantom(hkPhantom_s00b5_2690* phantom);                                  // 0x01083400
+};
+extern hkWorld_s00b5_2690* g_hkWorld_s00b5_2690;                                                   // 0x0167ecd0
+class cSpatialObject {
+public:
+    PV8 PV2 PV
+    virtual const Vector3& GetPosition();                                    // 0x2c
+    virtual const Quaternion& GetOrientation();                              // 0x30
+    virtual float GetScale();                                                // 0x34
+    virtual void SetPosition(const Vector3& v);                              // 0x38
+    virtual void SetOrientation(const Quaternion& q);                        // 0x3c
+    PV8 PV2
+    virtual const BoundingBox& GetLocalExtents();                            // 0x68
+    virtual int slot6C(int);                                                 // 0x6c
+    virtual float GetBoundingRadius();                                       // 0x70
+};
+class cPlanetModel {
+public:
+    u8 pad[0x20];
+    Quaternion* BuildSurfaceOrientation(Quaternion* out, const Vector3* pos);                      // 0x00b7f190
+    Quaternion* BuildSurfaceOrientation(Quaternion* out, const Vector3* pos, const Quaternion* orient);   // 0x00b7f1f0
+    Quaternion* BuildPitchedSurfaceOrientation(Quaternion* out, const Vector3* pos,
+                                               const Quaternion* orient, float pitch);             // 0x00b7f2b0
+    Quaternion* BuildSurfaceNormalOrientation(Quaternion* out, const Vector3* pos,
+                                              const Quaternion* orient, float pitch);              // 0x00b7f320
+    // options are bool-like dwords tested as bytes by the callee
+    Vector3* ProjectToSurface(Vector3* out, const Vector3* pos, int a, int b, int c, int d);       // 0x00b82df0
+};
+cPlanetModel* PlanetModel_s00b5_2690();                                                 // 0x00b3d350
+void SyncBodyBefore(cSpatialObject* obj, hkRigidBody_s00b5_2690* body);                 // 0x00b523e0
+void SyncBodyAfter(cSpatialObject* obj, hkRigidBody_s00b5_2690* body);                  // 0x00b52230
+struct HNode {
+    u32    mKey;            // +0x00
+    u32    mValue;          // +0x04
+    HNode* mpNext;          // +0x08
+};
+struct HIter {              // 8-byte iterator used by the u32 -> T tables
+    HNode* mpNode;          // +0x00
+    void*  mpBucket;        // +0x04
+};
+struct KeyNode {
+    u32      mKeyA;          // +0x00
+    u32      mKeyB;          // +0x04
+    u32      mKeyC;          // +0x08
+    u32      mValue;         // +0x0c
+    KeyNode* mpNext;         // +0x10
+};
+struct KeyIter {            // 12-byte iterator used by the Key -> T table
+    KeyNode* mpNode;          // +0x00
+    void*  mpBucket;        // +0x04
+    u8     mbInserted;      // +0x08
+    u8     mPad[3];
+};
+struct HashTable {
+    u32     mf0;            // +0x00
+    HNode** mpBuckets;      // +0x04
+    u32     mnBucket;       // +0x08
+    HIter* find(HIter* out, const u32* key);              // 0x00645ed0 (explicit hidden result)
+    HIter* find2(HIter* out, const u32* key);             // 0x00b41b30
+    void   erase(HIter* out, HIter it);                   // 0x00b51640
+    int    GetValue14c8(u32 key);                         // 0x00b532f0
+};
+struct Key4 { u32 a, b, c, d; };
+struct InsertTag {};
+struct KeyTable {
+    u32     mf0;            // +0x00
+    KeyNode** mpBuckets;      // +0x04
+    u32     mnBucket;       // +0x08
+    void find(KeyIter* out, const void* key);             // 0x00833840
+    void insert(KeyIter* out, const void* key, InsertTag tag);  // 0x00b51930
+    int  GetTextureInstance(const Key4* key);             // 0x00b533a0
+};
+struct RBTree {
+    void** InsertNode(void** out, void* parent, const u32* key, u8 flag);   // 0x00b53700
+};
+struct CollectorOps {
+    void*  mpVtable;        // +0x00
+    void*  mf4;             // +0x04
+    void*  mpBegin;         // +0x08
+    u32    mnSize;          // +0x0c
+    int    mnCapacity;      // +0x10
+    u32 capacity() const { return (u32)mnCapacity & 0x3fffffffu; }
+    void* Destroy(u8 flags);                                             // 0x00b53790
+};
+struct ObjLike {
+    void dtorA();           // 0x00aef2f0
+    void dtorB();           // 0x00aefae0
+};
+void __cdecl FreeMem(void* p);                                           // 0x00f47380
+void* __cdecl AllocMem(int size, const char* name, int a, int b, const char* file, int line);
+void __cdecl PairCleanup(void* key, void* value);                        // 0x00b4f6d0
+void __cdecl RBTreeInsert(void* node, void* parent, void* header, int right);   // 0x009216a0
+struct HKThreadMemory {
+    void deallocateBlock(void* p, int nbytes, int align);                // 0x0107db10
+};
+extern u32 g_tlsIndex;                                                   // 0x016e4174
+extern void* (__stdcall* g_TlsGetValue)(u32);                            // 0x013cc2bc
+struct Item12 { u32 a, b, c; };
+struct Vec12 {
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCap;            // +0x08
+    void Insert(Item12* pos, const Item12* value);                        // 0x00b535d0
+};
+Item12* __cdecl Copy12(Item12* first, Item12* last, Item12* dest);       // 0x00a11310
+class HkContactCollector {
+public:
+    void* mpVtable;         // +0x00
+    u8    mbFlag;           // +0x04
+    u8    mPad[3];
+    u8*   mpBegin;          // +0x08
+    u32   mnSize;           // +0x0c
+    u32   mnCapacity;       // +0x10
+    u8    mInline[0x100];   // +0x14
+
+    HkContactCollector()
+    {
+        mpBegin = mInline;
+        mpVtable = (void*)0x0146144c;
+        mnCapacity = 0x80000010;
+        mnSize = 0;
+        mbFlag = 0;
+    }
+    ~HkContactCollector()
+    {
+        int c = (int)mnCapacity;
+        mpVtable = (void*)0x0146144c;
+        if (c >= 0) {
+            void* tls = g_TlsGetValue(g_tlsIndex);
+            ((HKThreadMemory*)tls)->deallocateBlock(mpBegin, (c & 0x3fffffff) << 4, 0x14);
+        }
+    }
+    void reset()
+    {
+        mnSize = 0;
+        mbFlag = 0;
+    }
+};
+struct HkShapeObj : public hkReferencedObject_s00b5_2690 {
+    u32   mf8;              // +0x08
+    float mConvexRadius;    // +0x0c
+    hkVector4_s00b5_2690 mHalfExtents; // +0x10
+    void* construct(const hkVector4_s00b5_2690* half, float radius);                // 0x010c05d0
+};
+// ---- items of slice s00b52690 end
+
 // @ 0x00b500e0
 void __thiscall Obj500E0::F(const void* a, unsigned param2, HkObj* b)
 {
@@ -1921,7 +2264,7 @@ void CreatePlanetBody()
         hkRigidBody_s00b5_09b0* body = CreateRigidBody(&info);
         info.shape->removeReference();
         g_planetBody = body;
-        hkVector4 zero;
+        hkVector4_s00b5_09b0 zero;
         zero.x = 0.0f; zero.y = 0.0f; zero.z = 0.0f; zero.w = 0.0f;
         body->setPosition(zero);
         g_planetBody->addProperty(0, 1);
@@ -2628,6 +2971,345 @@ void __cdecl FUN_00b523e0(void* a1, void* a2)
     }
 }
 
+// @ 0x00b52690
+void PlaceObjectOnSurface(cSpatialObject* obj, hkRigidBody_s00b5_2690* body, bool useCenterDistance, int orientMode, int optA, int optB, int optC)
+{
+    cPlanetModel* planet = PlanetModel_s00b5_2690();
+
+    Quaternion tmp1, tmp2, tmp3;
+    const Quaternion* r;
+    switch (orientMode) {
+    case 3:
+        r = planet->BuildSurfaceNormalOrientation(&tmp3, &obj->GetPosition(), &obj->GetOrientation(),
+                                                  obj->GetBoundingRadius());
+        break;
+    case 2:
+        r = planet->BuildPitchedSurfaceOrientation(&tmp2, &obj->GetPosition(), &obj->GetOrientation(),
+                                                   obj->GetBoundingRadius());
+        break;
+    case 1:
+        r = planet->BuildSurfaceOrientation(&tmp1, &obj->GetPosition(), &obj->GetOrientation());
+        break;
+    default:
+        goto sync;
+    }
+    {
+        Quaternion q = *r;
+        obj->SetOrientation(q);
+    }
+sync:
+    SyncBodyBefore(obj, body);
+
+    hkMotion_s00b5_2690* motion = body->m_motion;
+
+    // rotation of the body relative to the surface orientation at its position
+    Quaternion surfTmp;
+    Quaternion* sq = planet->BuildSurfaceOrientation(&surfTmp, (const Vector3*)((char*)motion + 0x40));
+    float ax = sq->x, ay = sq->y, az = sq->z, aw = sq->w;
+    motion = body->m_motion;
+    hkQuaternion_s00b5_2690 rel;
+    rel.w = ((aw * motion->m_rotation.w + motion->m_rotation.y * ay) + motion->m_rotation.x * ax) +
+            az * motion->m_rotation.z;
+    rel.x = (motion->m_rotation.x * aw + (az * motion->m_rotation.y - ay * motion->m_rotation.z)) -
+            motion->m_rotation.w * ax;
+    rel.y = (aw * motion->m_rotation.y + (motion->m_rotation.z * ax - az * motion->m_rotation.x)) -
+            ay * motion->m_rotation.w;
+    rel.z = (aw * motion->m_rotation.z + (ay * motion->m_rotation.x - motion->m_rotation.y * ax)) -
+            az * motion->m_rotation.w;
+
+    hkTransform_s00b5_2690 tx;
+    tx.m_rotation.m_col0 = hkVector4_s00b5_2690(1.0f, 0.0f, 0.0f, 0.0f);
+    tx.m_rotation.m_col1 = hkVector4_s00b5_2690(0.0f, 1.0f, 0.0f, 0.0f);
+    tx.m_rotation.m_col2 = hkVector4_s00b5_2690(0.0f, 0.0f, 1.0f, 0.0f);
+    tx.m_translation = hkVector4_s00b5_2690(0.0f, 0.0f, 0.0f, 0.0f);
+    tx.m_rotation.set(rel);
+
+    hkAabb_s00b5_2690 aabb;
+    body->m_shape->getAabb(tx, 0.0f, aabb);
+
+    // lowest point of the shape: AABB minimum plus the rotated center of the local extents
+    const BoundingBox* ext = &obj->GetLocalExtents();
+    float cx = (ext->upper.x + ext->lower.x) * 0.5f;
+    float cy = (ext->upper.y + ext->lower.y) * 0.5f;
+    float cz = (ext->upper.z + ext->lower.z) * 0.5f;
+    hkVector4_s00b5_2690 k = kHalf_s00b5_2690;
+    float dot = (cz * rel.z + cy * rel.y) + cx * rel.x;
+    float rotatedZ = ((dot * rel.z + (rel.w * rel.w + k.z) * cz) + (cy * rel.x - rel.y * cx) * rel.w) * 2.0f;
+    float heightOffset = aabb.m_min.z + rotatedZ;
+
+    Vector3 up;
+    planet->ProjectToSurface(&up, (const Vector3*)((char*)body->m_motion + 0x40), optA, optB, optC, 0);
+    float dist = (float)sqrt((double)up.y * up.y + (double)up.z * up.z + (double)up.x * up.x);
+    obj->GetBoundingRadius();
+    float inv = 1.0f / dist;
+    float nx = inv * up.x;
+    float ny = up.y * inv;
+    float nz = up.z * inv;
+    float nw = inv * 0.0f;
+    if (useCenterDistance) {
+        hkMotion_s00b5_2690* m = body->m_motion;
+        const float* p = (const float*)((char*)m + 0x40);
+        dist = (float)sqrt((double)p[0] * p[0] + (double)p[1] * p[1] + (double)p[2] * p[2]);
+    }
+    float d1 = dist - heightOffset;
+    float d2 = dist - 0.05f;
+    hkVector4_s00b5_2690 from(nx * d1, ny * d1, nz * d1, nw * d1);
+    hkVector4_s00b5_2690 to(nx * d2, ny * d2, nz * d2, nw * d2);
+
+    hkSimpleShapePhantom_s00b5_2690* phantom =
+        new hkSimpleShapePhantom_s00b5_2690(body->m_shape, *(const hkTransform_s00b5_2690*)((char*)body->m_motion + 0x10), 0xc);
+    g_hkWorld_s00b5_2690->addPhantom(phantom);
+    phantom->removeReference();
+
+    hkLinearCastInput_s00b5_2690 input;
+    input.m_to = to;
+    input.m_maxExtraPenetration = 0.05f;
+    input.m_startPointTolerance = 0.05f;
+    hkClosestCdPointCollector_s00b5_2690 collector;
+    phantom->setPositionAndLinearCast(from, input, collector, 0);
+    if (collector.hasHit()) {
+        float t = collector.m_hitPoint.m_separatingNormal.w;
+        float s = 1.0f - t;
+        hkVector4_s00b5_2690 hit;
+        hit.x = t * to.x + s * from.x;
+        hit.y = t * to.y + s * from.y;
+        hit.z = t * to.z + s * from.z;
+        hit.w = t * to.w + s * from.w;
+        body->setPosition(hit);
+        SyncBodyAfter(obj, body);
+        body->setLinearVelocity(hkVector4_zero);
+        body->setAngularVelocity(hkVector4_zero);
+    }
+    ((hkWorld_s00b5_2690*)phantom->m_world)->removePhantom(phantom);
+}
+
+// @ 0x00b52e00
+void SweepShapeOnSurface(const Vector3* extents, const hkQuaternion_s00b5_2690* orientation, void* physObj, const Vector3* positions, u32* results, int count)
+{
+    hkVector4_s00b5_2690 half(extents->x * 0.5f, extents->y * 0.5f, extents->z * 0.5f, 0.0f);
+
+    HkShapeObj* shape = (HkShapeObj*)hkMemory_s00b5_2690::getInstance().allocateChunk(0x20, 0x24);
+    shape->m_memSizeAndFlags = 0x20;
+    float convexRadius = g_convexRadius;
+    shape->construct(&half, convexRadius);
+
+    hkTransform_s00b5_2690 transform;
+    transform.m_translation = hkVector4_s00b5_2690(positions[0].x, positions[0].y, positions[0].z, 0.0f);
+    hkQuaternion_s00b5_2690 q = *orientation;
+    transform.m_rotation.set(q);
+
+    hkSimpleShapePhantom_s00b5_2690* phantom =
+        (hkSimpleShapePhantom_s00b5_2690*)hkMemory_s00b5_2690::getInstance().allocateChunk(0x130, 0x2e);
+    phantom->m_memSizeAndFlags = 0x130;
+    phantom->construct((hkShape_s00b5_2690*)shape, transform, 6);
+    shape->removeReference();
+    g_hkWorld_s00b5_2690->addPhantom(phantom);
+    phantom->removeReference();
+
+    ((void (__thiscall*)(void*))VFN(physObj, 0xac))(physObj);
+    int id = ((int (__thiscall*)(void*, int))VFN(physObj, 0xb8))(physObj, 0x17f243b);
+
+    HkContactCollector collector;
+    if (count > 0) {
+        for (int i = 0; i < count; ++i) {
+            hkVector4_s00b5_2690 v(positions[i].x, positions[i].y, positions[i].z, 0.0f);
+            phantom->setPosition(&v, 0.0f);
+            results[i] = 0;
+            collector.reset();
+            phantom->collect(&collector);
+            u8* e = collector.mpBegin;
+            u8* eEnd = collector.mpBegin + collector.mnSize * 0x10;
+            for (; e != eEnd; e += 0x10) {
+                int* o = *(int**)(e + 8);
+                if (*(char*)((char*)o + 0x18) == 1) {
+                    int* t = (int*)((char*)o + *(int*)((char*)o + 0x10));
+                    if (t != 0) {
+                        int v2 = *(int*)((char*)t + 0xc);
+                        if (v2 != 0 && v2 == id) {
+                            results[i] = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (phantom)
+        ((hkWorld_s00b5_2690*)*(void**)((char*)phantom + 8))->removePhantom(phantom);
+}
+
+// @ 0x00b530e0
+void UnregisterCell(void* key, int kind)
+{
+    HIter it;
+
+    ((HashTable*)0x01682a48)->find(&it, (const u32*)&key);
+    if (it.mpNode != ((HashTable*)0x01682a48)->mpBuckets[((HashTable*)0x01682a48)->mnBucket]) {
+        void* v = (void*)it.mpNode->mValue;
+        ((u8*)v)[0x130] = 1;
+        ((HashTable*)0x01682a48)->erase(&it, it);
+        ((hkWorld_s00b5_2690*)*(void**)((char*)v + 8))->removePhantom((hkPhantom_s00b5_2690*)v);
+    }
+
+    ((HashTable*)0x016852e8)->find(&it, (const u32*)&key);
+    if (it.mpNode != ((HashTable*)0x016852e8)->mpBuckets[((HashTable*)0x016852e8)->mnBucket]) {
+        void* v = (void*)it.mpNode->mValue;
+        ((HashTable*)0x016852e8)->erase(&it, it);
+        if (v)
+            ((hkWorld_s00b5_2690*)*(void**)((char*)v + 8))->removePhantom((hkPhantom_s00b5_2690*)v);
+    }
+
+    if (kind == 0) {
+        ((HashTable*)0x016801a8)->find(&it, (const u32*)&key);
+        if (it.mpNode != ((HashTable*)0x016801a8)->mpBuckets[((HashTable*)0x016801a8)->mnBucket]) {
+            void* v = (void*)it.mpNode->mValue;
+            ((HashTable*)0x016801a8)->erase(&it, it);
+            PairCleanup(key, v);
+        }
+    }
+    else {
+        ((HashTable*)0x0167ed58)->find(&it, (const u32*)&key);
+        if (it.mpNode != ((HashTable*)0x0167ed58)->mpBuckets[((HashTable*)0x0167ed58)->mnBucket]) {
+            void* v = (void*)it.mpNode->mValue;
+            ((HashTable*)0x0167ed58)->erase(&it, it);
+            if (v) {
+                ((ObjLike*)v)->dtorA();
+                ((ObjLike*)v)->dtorB();
+                FreeMem(v);
+            }
+        }
+    }
+
+    ((HashTable*)0x016815f8)->find(&it, (const u32*)&key);
+    if (it.mpNode != ((HashTable*)0x016815f8)->mpBuckets[((HashTable*)0x016815f8)->mnBucket]) {
+        void* v = (void*)it.mpNode->mValue;
+        ((HashTable*)0x016815f8)->erase(&it, it);
+        if (v)
+            ((hkWorld_s00b5_2690*)*(void**)((char*)v + 8))->removePhantom((hkPhantom_s00b5_2690*)v);
+    }
+}
+
+// @ 0x00b532b0
+void* GetTableValue(void* key)
+{
+    HashTable* t = (HashTable*)g_167ed58;
+    HIter it;
+    u32 k = (u32)key;
+    t->find(&it, &k);
+    HNode* node = it.mpNode;
+    _ReadWriteBarrier();
+    HNode* end = t->mpBuckets[t->mnBucket];
+    if (node != end)
+        return (void*)node->mValue;
+    return 0;
+}
+
+// @ 0x00b532f0
+int HashTable::GetValue14c8(u32 key)
+{
+    HashTable* t = (HashTable*)((char*)this + 0x14c8);
+    HIter it;
+    u32 k = key;
+    HIter* p = t->find2(&it, &k);
+    if (p->mpNode != t->mpBuckets[t->mnBucket])
+        return (int)((char*)p->mpNode + 4);
+    return 0;
+}
+
+// @ 0x00b533a0
+int KeyTable::GetTextureInstance(const Key4* key)
+{
+    KeyIter it;
+    find(&it, key);
+    if (it.mpNode == mpBuckets[mnBucket]) {
+        Key4 pair = { key->a, key->b, key->c, 0 };
+        insert(&it, &pair, InsertTag());
+    }
+    return (int)&it.mpNode->mValue;
+}
+
+// @ 0x00b535d0
+void Vec12::Insert(Item12* pos, const Item12* value)
+{
+    Item12* end = (Item12*)mpEnd;
+    if (end != (Item12*)mpCap) {
+        const Item12* val = value;
+        if (pos <= value && value < end)
+            val = value + 1;
+        end->a = end[-1].a;
+        end->b = end[-1].b;
+        end->c = end[-1].c;
+        Item12* dst = (Item12*)mpEnd;
+        Item12* last = dst - 1;
+        while (last != pos)
+            *--dst = *--last;
+        *pos = *val;
+        mpEnd = (char*)mpEnd + 0xc;
+        return;
+    }
+
+    int n = (int)((char*)end - (char*)mpBegin) / 0xc;
+    n = (n == 0) ? 1 : n * 2;
+    Item12* mem;
+    if (n != 0)
+        mem = (Item12*)AllocMem(n * 0xc, "Simulator", 0, 0,
+                                 "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                                 0xd1);
+    else
+        mem = 0;
+    Item12* at = Copy12((Item12*)mpBegin, pos, mem);
+    if (at != 0) {
+        at->a = value->a;
+        at->b = value->b;
+        at->c = value->c;
+    }
+    Item12* newEnd = Copy12(pos, (Item12*)mpEnd, at + 1);
+    void* old = mpBegin;
+    if (old != 0 && *(int*)((char*)old - 4) != 0)
+        FreeMem(old);
+    mpBegin = mem;
+    mpEnd = newEnd;
+    mpCap = (char*)mem + n * 0xc;
+}
+
+// @ 0x00b53700
+void** RBTree::InsertNode(void** __restrict out, void* parent, const u32* key, u8 flag)
+{
+    int right = (flag == 0 && parent != (char*)this + 4 &&
+                 *(const int*)key >= *(int*)((char*)parent + 0x10)) ? 1 : 0;
+    void* node = *(void**)((char*)this + 0x18);
+    if (node != 0)
+        *(void**)((char*)this + 0x18) = *(void**)node;
+    else {
+        int size = *(int*)((char*)this + 0x28);
+        node = AllocMem(size, "Simulator", 0, 0,
+                        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                        0xd1);
+    }
+    if ((char*)node + 0x10 != 0)
+        *(u32*)((char*)node + 0x10) = *key;
+    RBTreeInsert(node, parent, (char*)this + 4, right);
+    *out = node;
+    ++*(u32*)((char*)this + 0x14);
+    return out;
+}
+
+// @ 0x00b53790
+void* CollectorOps::Destroy(u8 flags)
+{
+    *(void**)this = (void*)0x0146144c;
+    if (mnCapacity >= 0) {
+        void* tls = g_TlsGetValue(g_tlsIndex);
+        ((HKThreadMemory*)tls)->deallocateBlock(mpBegin, capacity() << 4, 0x14);
+    }
+    *(void**)this = (void*)0x013ef534;
+    if (flags & 1) {
+        hkMemory_s00b5_2690* mem = hkMemory_s00b5_2690::s_instance;
+        mem->freeChunk(this, 8, 0x1c);
+    }
+    return this;
+}
+
 // @ 0x00b53940
 extern "C" int FUN_00b53940(void* p)
 {
@@ -2825,6 +3507,62 @@ extern "C" char FUN_00b53bc0(CObj* p, float* a2, float* a3, float* a4, char a5)
         }
     }
     return hit;
+}
+
+// @ 0x00b54000
+extern "C" void FUN_00b54000(CObj* p, int a2)
+{
+    if (a2 == 0) {
+        uint k = (uint)p;
+        EIt it = HT_16852e8.find(k);
+        if (it.node == HT_16852e8.buckets[HT_16852e8.bucketCount])
+            return;
+        a2 = *(int*)((char*)it.node + 4);
+        if (a2 == 0)
+            return;
+    }
+
+    HkPhantom* mem = (HkPhantom*)((HkMemory*)HKMEM_S_INSTANCE)->alloc(0xa0, 0x2e);
+    mem->mMemSize = 0xa0;
+    HkAabbPhantom* ph = (HkAabbPhantom*)mem->construct((void*)(a2 + 0x70), 8);
+    ((HkWorld_s00b5_37f0*)HKWORLD_S_INSTANCE)->addPhantom(ph);
+    mem->removeReference();
+
+    int buf[6];
+    int key = 0;
+    for (int i = 0; i < ph->mOverlaps.mSize; ++i) {
+        int child = ph->mOverlaps.mData[i];
+        child = *(int*)((char*)child + 0x10) + child;
+        if (child == 0)
+            continue;
+        int* f = FUN_00496140(buf, 0);
+        if (*f != 3)
+            continue;
+        int* o = FUN_00496140(buf + 2, 1);
+        HkCdBody* body = (HkCdBody*)*o;
+        if (body == 0)
+            continue;
+        HkCdBody* res = (HkCdBody*)body->lookup(&key);
+        if (res == 0 || res->mFlag77 == 0)
+            continue;
+
+        float* bb = (float*)p->m11();                    // body bounding box
+        float x = bb[0], y = bb[1], z = bb[2];
+        float extra = p->m28();                          // +0x70
+        float* rb = (float*)res->v11();
+        float s = (float)(double)(extra + sqrtf(x * x + y * y + z * z))
+                  / sqrtf(rb[0] * rb[0] + rb[1] * rb[1] + rb[2] * rb[2]);
+        float* rb2 = (float*)res->v11();
+        float v[3];
+        v[0] = rb2[0] * s;
+        v[1] = rb2[1] * s;
+        v[2] = rb2[2] * s;
+        res->v14(v);
+        FUN_00b539e0(res);
+        FUN_00b55680(res, (void*)child, 1);
+    }
+    if (ph != 0)
+        ((HkWorld_s00b5_37f0*)HKWORLD_S_INSTANCE)->removePhantom(ph);
 }
 
 // @ 0x00b54200
@@ -3104,6 +3842,7 @@ void FUN_00b54b80(void)
 }
 
 extern "C" char g_1569c98[];
+
 // @ 0x00b54be0
 int* __cdecl FUN_00b54be0(int* param_1, int param_2)
 {

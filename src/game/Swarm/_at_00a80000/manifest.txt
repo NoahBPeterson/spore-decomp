@@ -9,11 +9,17 @@
 ../src/game/Swarm/_at_00a80000.cpp  ?Ctor@Cfg@@QAIPAU1@XZ  00a84f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  _FUN_00a84fb0  00a84fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?SetCfg@Sim@@QAEXPAX00@Z  00a85070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Deactivate@Sim@@QAEX_N@Z  00a85790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?Apply@Sim@@QAEXPAX0@Z  00a85840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  _FUN_00a85b00  00a85b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?Release@Heap5@@QAIXXZ  00a85b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?OnMessage@cDistributeSimulator@@QAE_NHPAHH@Z  00a85ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?ReleaseEmitter@cDistributeSimulator@@QAEXXZ  00a85fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Deactivate@cDistributeSimulator@@QAEXH@Z  00a86010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?SetEmitterFlags@cDistributeSimulator@@QAEX_N@Z  00a860e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ??0cDistributeSimulator@@QAE@I@Z  00a86120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Destroy@cDistributeSimulator@@QAEPAXI@Z  00a86210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?SerializeElems@@YAPAXPAXPAUElemVec@@@Z  00a871e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?CopyFrom@Elem@@QAEPAU1@PBU1@@Z  00a87280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?AssignFrom@Elem@@QAEPAU1@PBU1@@Z  00a873c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a80000.cpp  ?Sim_Dtor@@YIXPAUSim_s00a8_6b30@@@Z  00a87720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Swarm/_at_00a80000.cpp  ?Deactivate@Sim@@QAEX_N@Z  00a85790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

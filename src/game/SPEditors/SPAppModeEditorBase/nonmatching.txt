@@ -1,4 +1,4 @@
-# <va> <diff-bytes> <reason>
+# va  diff-bytes  reason
 00572cf0 416 EditorGroundSampler: normalize done fully in x87 (orig x87 sqrt + SSE scale), creature-path layout differs
 00573070 9 CanUseModel: mpModel lands in eax instead of reusing ebp (this); one extra jmp in group-pair test
 00573520 16 ShowBlockAbilities: one bbox-center add has swapped operands (max.x+min.x)
@@ -26,8 +26,11 @@
 0057a9e0 102 complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores  ; difftest PASS (mapped g_d4*/g_mf* globals)
 0057ac00 365 complete BuildPartMask (masks | defaults + ability/property bits); schedule differs
 0057af00 3825 complete; same calls/vslots/constants in the same order, size 0.98x; stack-slot layout, register allocation and block order differ
-0057c4b0 34 atomic ops reuse one pointer register (original copies eax per op); extra epilogue
-0057c590 231 skin->mpMesh is reloaded instead of kept in eax; model pointer lands in ecx instead of edi
+0057c4b0 34 atomic ops reuse one pointer register (original copies eax per op); extra epilogue flags: /O2 /MD /Gy /TP /GS-
+0057c590 231 skin->mpMesh is reloaded instead of kept in eax; model pointer lands in ecx instead of edi flags: /O2 /MD /Gy /TP /GS-
+0057ce80 1256 complete (all 317 stores, same size 2149); store order of a few members (0x19c/0x198, 0x2dc..0x2e4, rbtree zero stores) and float-constant hoisting differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0057d710 2112 complete, not byte-exact (register allocation/stack layout of the camera-plane math and ray hit; needs /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0057e340 202 complete but not byte-exact (loop shape / register scheduling of the two effect-mask update loops); F3cfc0 is a thiscall member of cSPEditorBlock (ecx=mD4), not a free cdecl call; equiv replay PASS + fuzz PASS 227/227 (seed 3) + 236/236 (seed 7), 69.3% coverage flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0057e480 591 complete UpdateIdleAnimations; register/ordering differences (queued kept in edi, event ref in memory), no-EHsc /arch:SSE
 0057e8a0 86 complete UpdateBaker; only one register differs (esi vs edi for the last baker pointer)
 0057ea30 386 complete SaveMetadata; else-arm of the meta ternary laid out inline instead of after the ret

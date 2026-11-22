@@ -1,1 +1,1 @@
-# va  diff-bytes  reason   (incomplete / approximate)
+# va  diff-bytes  reason

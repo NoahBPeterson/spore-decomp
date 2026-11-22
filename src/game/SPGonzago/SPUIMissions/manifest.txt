@@ -4,7 +4,9 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e12fc0@@YAXPAXH@Z  00e12fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Toggle@cUICard_s00e1_2f80@@QAEXXZ  00e12fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e13000@@YIXPAX@Z  00e13000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e13160@@YG_NPAX0@Z  00e13160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Release2@cUICard_s00e1_2f80@@QAEXXZ  00e13210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Teardown@cUICard_s00e1_2f80@@QAEXXZ  00e132c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?SetVisible@cUICard_s00e1_2f80@@QAEXH@Z  00e13360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?DoVcallF0@cUICard_s00e1_2f80@@QAEPAUIWindow_s00e1_2f80@@H@Z  00e13390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Expand@cUIMissionCard_s00e1_2f80@@QAEX_N@Z  00e13b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -13,19 +15,29 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?GetContentWinID@CardLayout@@QAEIXZ  00e14590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateButtonStateA@CardLayout@@QAEXPAUIWindow_s00e1_3b50@@@Z  00e145b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateButtonStateB@CardLayout@@QAEXPAUISelectable@@@Z  00e14690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?InitB@CardLayout@@QAEPAU1@XZ  00e147a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?ShowCard@CardLayout@@QAEXXZ  00e148d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateScrollButtons@CardLayout@@QAEXXZ  00e14900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?HideButtons@CardLayout@@QAEXXZ  00e149e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?ShowAllCards@cUIMissionCardPanel@@QAEXXZ  00e15b70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e173b0@cMissionPanel@@QAEXXZ  00e173b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e173c0@cMissionPanel@@QAEXXZ  00e173c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e17470@PaintSystem@@QAEXH@Z  00e17470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?DoCollapse@cUIMissionCard@@QAEXXZ  00e17d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Update@cUIMissionCard@@QAEXXZ  00e17d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Refresh@cUIMissionCardPanel_s00e1_7c10@@QAEXXZ  00e17df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateCardDetails@cUIMissionCardPanel_s00e1_7c10@@QAEXPAX@Z  00e17e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Setup@cUIMissionCard@@QAEXPAXDD@Z  00e17f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?RemoveMissionCard@cUIMissionCardPanel_s00e1_7c10@@QAE_NPAX@Z  00e17fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?RemoveHandlerAndRelease@cUIMissionCardList@@QAEXXZ  00e18340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e19c70@cMissionLog_s00e1_8d40@@QAEIH@Z  00e19c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e19d10@cMissionLog_s00e1_8d40@@QAEXH@Z  00e19d10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ??RcSortMissions@@QAE_NPAH0@Z  00e19d30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  _cSortMissionsByMode@8  00e19dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?CompareWString@@YG_NPAX0@Z  00e19f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?CompareMissionsByDistanceToReference@@YG_NPAUcIObject@@0@Z  00e1a040  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Construct@cMissionPanelDerived@@QAEPAU1@XZ  00e1b2d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Shutdown@cUIMissionButton@SP@@QAEXXZ  00e1ca30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e1cb80@SP@@YAXPAX00@Z  00e1cb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?Destroy@cUIMissionButton@SP@@QAEXXZ  00e1cba0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?CreateMissionButton@cUIMissionButton@SP@@QAEXPAX000@Z  00e1cc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -35,12 +47,3 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e2e8d0@@YAXMMMPAUtRectEdge@@PAM1PAI@Z  00e2e8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e2eba0@@YAPADPAVcSimNoun@@@Z  00e2eba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ??0cSPUIRelationshipStrip@@QAE@XZ  00e2ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?InitB@CardLayout@@QAEPAU1@XZ  00e147a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  _cSortMissionsByMode@8  00e19dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?Shutdown@cUIMissionButton@SP@@QAEXXZ  00e1ca30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?Teardown@cUICard_s00e1_2f80@@QAEXXZ  00e132c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e17470@PaintSystem@@QAEXH@Z  00e17470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?Setup@cUIMissionCard@@QAEXPAXDD@Z  00e17f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e13160@@YG_NPAX0@Z  00e13160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?Refresh@cUIMissionCardPanel_s00e1_7c10@@QAEXXZ  00e17df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateCardDetails@cUIMissionCardPanel_s00e1_7c10@@QAEXPAX@Z  00e17e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

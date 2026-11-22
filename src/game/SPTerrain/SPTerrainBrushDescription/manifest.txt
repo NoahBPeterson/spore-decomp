@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?WriteTerrainBrushDesc@@YAXPAUStream@@PAUcTerrainBrushDescription@@@Z  00f48b80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?OnRegister@cBrushCommandBase@@QAEXPAX0@Z  00f49250  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Ribbon@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49260  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Life@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49350  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Rate@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49390  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Texture@cBrushCommand@@QAEXPAUcArguments@@@Z  00f493d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Filter@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49660  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Cond@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49780  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Cond2@cBrushCommand@@QAEXPAUcArguments@@@Z  00f499a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ??4BrushState@@QAEAAU0@ABU0@@Z  00f4a5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

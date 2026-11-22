@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSimulatorSpaceGame.cpp -- migrated from slice(s) s0100b430, s0100a7c0, s00bf1ba0, s01399700, s01009820, s010077e0, s01006880, s01005800, s01004bb0, s01003230, s00bb9950 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSimulatorSpaceGame.cpp -- migrated from slice(s) s0100a640, s0100a080, s01009df0, s01009c60, s01009af0, s010021a0, s0100b430, s0100a7c0, s00bf1ba0, s01399700, s01009820, s010077e0, s01006880, s01005800, s01004bb0, s01003230, s00bb9950 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSimulatorSpaceGame.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -18,6 +18,13 @@
 #include <string.h>
 #include "SP/cSPMission.h"
 #include "SP/cGameNounManager.h"
+#include "SP/cEmpire.h"
+#include "SP/cPlanetModel.h"
+#include "SP/cSPSpaceEconomyTuning.h"
+#include "SP/cViewer.h"
+#include "SP/cPlayer.h"
+#include "SP/cPropertyManager.h"
+#include <intrin.h>
 #pragma warning(disable: 4100)
 
 // ---- items of slice s00bb9950 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1201,6 +1208,626 @@ void UpdatePosseUFO(cSPSimulatorSpaceGame_s0100_b430* pGame, cSPSimPlanetUFO* pU
 inline uint32_t* VTableOf(void* pObject) { return *(uint32_t**)pObject; }
 // ---- items of slice s0100b430 end
 
+// ---- items of slice s010021a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_13eb428[];
+extern "C" char g_15b6618[];
+extern "C" uint32_t FNV1_String8(const char* s, uint32_t seed, int n);   // 0x00932e80
+extern "C" void FUN_00c8bc10(uint32_t p);                                          // 0x00c8bc10
+extern "C" void EA_IO_WriteUint32(void* dst, const void* src, int n, int flag);    // 0x0093aa70
+extern "C" void FUN_00ff9390();                                                   // 0x00ff9390
+extern "C" void EA_IO_ReadInt32(void* dst, void* src, int n, int flag);           // 0x0093a780
+extern "C" void FUN_00f924e0(float v);              // 0x00f924e0
+struct Vector3_s0100_21a0 {
+    float x, y, z;
+    Vector3_s0100_21a0() {}
+    Vector3_s0100_21a0(const Vector3_s0100_21a0& o) : x(o.x), y(o.y), z(o.z) {}
+};
+struct Star {
+    char pad[0x28];
+    int kind;
+    bool FUN_00b8d970();               // 0x00b8d970
+};
+struct StarVec {
+    Star** begin;
+    Star** end;
+    int size() const { return end - begin; }
+};
+struct Civ {
+    Vector3_s0100_21a0* GetPos();                 // 0x005c65e0
+    int GetAvatar();                   // 0x00b1fdb0
+    int FUN_00bb9ae0();                // 0x00bb9ae0
+    StarVec* FUN_00bba790();           // 0x00bba790
+};
+struct TerrainSphere_s0100_21a0 {
+    bool FUN_00c772c0(uint32_t id);             // 0x00c772c0
+    void FUN_00c77bf0(uint32_t id);             // 0x00c77bf0
+    void FUN_00c7ba90(Civ* c);                  // 0x00c7ba90
+};
+struct NounMgr_s0100_21a0 {
+    TerrainSphere_s0100_21a0* GetCurrentTerrainSphere();   // 0x00f67d90
+};
+struct IObj3 { virtual void s0(); virtual void s1(); virtual void s2(); virtual void Do(int v); };
+struct B3d470 {
+    char pad[0x34];
+    IObj3* f34;
+    void FUN_01036940(Vector3_s0100_21a0 v);               // 0x01036940
+};
+extern "C" NounMgr_s0100_21a0* FUN_00b3d300_s0100_21a0();
+extern "C" B3d470* FUN_00b3d470_s0100_21a0();
+struct IOConnect {                                                                 // reached from a serializable's +0x20
+virtual void a0();
+virtual void a1();
+virtual void a2();
+virtual void a3();
+virtual void a4();
+virtual void a5();
+    virtual void* GetWriter();                                                     // vtable +0x18
+};
+struct SerContainer {                                                              // the object handed to Write/Read
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+virtual void c4();
+virtual void c5();
+virtual void c6();
+    virtual void Finish();                                                         // vtable +0x1c
+    virtual IOConnect* GetConnect();                                               // vtable +0x20
+};
+struct PRec5 {                                                                     // 0x14-byte record with a vtable
+virtual void p0();
+virtual void p1();
+    virtual void Slot8(int v);                                                     // vtable +0x08
+    virtual void p3();
+    virtual void Slot10(SerContainer* c);                                          // vtable +0x10
+    uint32_t pad14[4];                                                             // +0x04..+0x14
+};
+struct UISpace {                                                                   // SP::cSPUISpace
+    virtual void Ifc0();                                                           // vtable +0x00
+    virtual void Release4();                                                       // vtable +0x04
+    UISpace* Construct();                                                          // 0x01070ba0 (constructor)
+    void FUN_01071570();                                                           // 0x01071570
+    void Init();                                                                   // 0x01073700
+};
+struct SimGame_s0100_21a0 {                                                                   // owner of the UI space at +0x14
+    char pad00[0x14];
+    UISpace* mUISpace14;                                                           // +0x14
+    char pad18[0x54 - 0x18];
+    void* mField54;                                                                // +0x54
+    char pad58[0x70 - 0x58];
+    void* mField70;                                                                // +0x70
+    char pad74[0xb4 - 0x74];
+    void* mFieldb4; void* mFieldb8; void* mFieldbc; void* mFieldc0;                // +0xb4..+0xc0
+};
+struct SimTicker_s0100_21a0 {                                                                 // SP::SimTicker
+virtual void k0();
+virtual void k1();
+virtual void k2();
+virtual void k3();
+virtual void k4();
+virtual void k5();
+virtual void k6();
+virtual void k7();
+virtual void k8();
+virtual void k9();
+virtual void k10();
+virtual void k11();
+virtual void k12();
+virtual void k13();
+virtual void k14();
+virtual void k15();
+virtual void k16();
+virtual void k17();
+virtual void k18();
+virtual void k19();
+    virtual void k20();
+    virtual void Slot54(void* v);                                                  // vtable +0x54
+};
+struct MgdObj {                                                                    // object returned by FUN_0067ddc0
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+    virtual void Slot24();                                                         // vtable +0x24
+    virtual void Slot28(void* v);                                                  // vtable +0x28
+};
+struct ResMan {                                                                    // EA::ResourceMan
+virtual void r0();
+virtual void r1();
+virtual void r2();
+virtual void r3();
+virtual void r4();
+virtual void r5();
+virtual void r6();
+virtual void r7();
+virtual void r8();
+virtual void r9();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+virtual void r14();
+virtual void r15();
+virtual void r16();
+virtual void r17();
+virtual void r18();
+virtual void r19();
+virtual void r20();
+virtual void r21();
+virtual void r22();
+virtual void r23();
+virtual void r24();
+virtual void r25();
+virtual void r26();
+virtual void r27();
+    virtual void Slot70(void* a, void* b);                                         // vtable +0x70
+};
+struct RefMgr {                                                                    // manager at 0x0167ea54
+virtual void f0();
+virtual void f1();
+virtual void f2();
+virtual void f3();
+virtual void f4();
+virtual void f5();
+virtual void f6();
+virtual void f7();
+virtual void f8();
+virtual void f9();
+virtual void f10();
+virtual void f11();
+    virtual void Slot30(void* id);                                                 // vtable +0x30
+};
+struct CardPanel { void SetCardsVisibility(bool v); };                             // 0x00e14c10
+extern "C" SimTicker_s0100_21a0* FUN_00b3d330_s0100_21a0();                                             // SP::SimTicker
+extern "C" MgdObj*    FUN_0067ddc0_s0100_21a0();                                             // 0x0067ddc0
+extern "C" ResMan*    FUN_0067dcd0_s0100_21a0();                                             // EA::ResourceMan::GetManager
+extern "C" CardPanel* FUN_00b3d400_s0100_21a0();                                             // 0x00b3d400
+extern RefMgr* g_0167ea54;                                                        // 0x0167ea54
+struct SimSpace {                                                                  // ecx receiver of the serializer wrappers
+    void OnSolarRollover(uint32_t p);
+    bool Write(void* param_2);
+    bool Read(void* param_2);
+    char GonzagoWrite(void* io);                                                   // 0x00b5b610 cGonzagoSimulator::Write
+    char GonzagoRead(void* io);                                                    // 0x00b5b650 cGonzagoSimulator::Read
+};
+struct Serializer {                                                                // cVarListSerializer
+    Serializer(void* obj, uint32_t a, uint32_t b);                                 // 0x00692f90
+    bool Serialize(void* io);                                                      // 0x00692900
+    bool Read(void* io);                                                           // 0x00693e10
+    uint32_t m[0x285];
+};
+struct InvSub {                                     // sub-object embedded at inventory+0x508
+virtual void i0();
+virtual void i1();
+virtual void i2();
+virtual void i3();
+virtual void i4();
+virtual void i5();
+virtual void i6();
+virtual void i7();
+virtual void i8();
+virtual void i9();
+virtual void i10();
+virtual void i11();
+virtual void i12();
+virtual void i13();
+virtual void i14();
+virtual void i15();
+virtual void i16();
+virtual void i17();
+virtual void i18();
+virtual void i19();
+virtual void i20();
+virtual void i21();
+    virtual float Slot58();                         // vtable +0x58
+};
+struct InvView {                                    // SP::cSPSimulatorPlayerInventory (view)
+    char pad0[0x508];
+    InvSub sub508;                                  // +0x508
+    char pad1[0x7f8 - 0x50c];
+    float f7f8;                                     // +0x7f8
+    float FUN_00c389f0(float v);                    // 0x00c389f0
+};
+struct UFOSimGame {                                 // cSPSimulatorSpaceGame
+    InvView* GetPlayerInventory();                  // 0x00a1ad60
+};
+extern "C" UFOSimGame* FUN_00ffbe50_s0100_21a0();              // SP::GetUFOSimulator
+struct SubC4 {                                      // object at GetUFOThing(...)+0xc4
+virtual void s0();
+virtual void Release4();
+virtual void s2();
+virtual void Slot0c(int v);
+};
+struct B3d470b { char pad[0xc4]; SubC4* fC4; };     // view of FUN_00b3d470() result
+struct TriggerMgr_s0100_21a0 {                                 // SP::cTriggerMgr
+    void PostTrigger(const char* name, int a, int b, int c, int d, int e);   // 0x00ae0930
+};
+extern "C" TriggerMgr_s0100_21a0* FUN_00b3d4d0_s0100_21a0();              // SP::GetTriggerMgr
+// ---- items of slice s010021a0 end
+
+// ---- items of slice s01009af0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* EAAlloc(u32 size, const char* name, int a, int b, const char* file, int line);   // 0x00f473a0
+void  operator_delete_array(void* p);                                                  // 0x00f47380
+struct EStringX {
+    char* mpBegin;      // +0x00
+    char* mpEnd;        // +0x04
+    char* mpCapacity;   // +0x08
+    int   mAllocator;   // +0x0c
+    void assign(const char* first, const char* last);   // 0x00454cb0
+
+    EStringX& operator=(const EStringX& src)
+    {
+        if (&src != this)
+            assign(src.mpBegin, src.mpEnd);
+        return *this;
+    }
+};
+struct cControlDrawable {
+    EStringX mName;     // +0x00
+    int      m10;       // +0x10
+    float    m14;       // +0x14
+    int      m18;       // +0x18
+
+    cControlDrawable(const cControlDrawable& src);                    // 0x01006630
+    cControlDrawable& operator=(const cControlDrawable& src);
+};
+cControlDrawable& cControlDrawable::operator=(const cControlDrawable& src)
+{
+    mName = src.mName;
+    m10   = src.m10;
+    m14   = src.m14;
+    m18   = src.m18;
+    return *this;
+}
+cControlDrawable* uninitialized_copy_ptr(const cControlDrawable* first, const cControlDrawable* last,
+                                        cControlDrawable* dest);   // 0x010066a0
+cControlDrawable* uninitialized_relocate_commit(cControlDrawable* first, cControlDrawable* last,
+                                                cControlDrawable* dest);  // 0x006fa9e0
+template <class T>
+inline T* uninitialized_relocate_ptr(T* first, T* last, T* dest)
+{
+    T* result = uninitialized_copy_ptr(first, last, dest);
+    uninitialized_relocate_commit(first, last, dest);
+    return result;
+}
+cControlDrawable* copy_backward(cControlDrawable* first, cControlDrawable* last,
+                               cControlDrawable* destEnd);          // 0x01006320
+struct ControlDrawableVector {
+    cControlDrawable* mpBegin;      // +0x00
+    cControlDrawable* mpEnd;        // +0x04
+    cControlDrawable* mpCapacity;   // +0x08
+    u32               mAllocator;   // +0x0c  eastl::sp_vector_allocator (stateless)
+
+    static u32 GetNewCapacity(u32 currentCapacity)
+    {
+        return currentCapacity ? (2 * currentCapacity) : 1;
+    }
+
+    cControlDrawable* DoAllocate(u32 n)
+    {
+        return n ? (cControlDrawable*)EAAlloc(n * sizeof(cControlDrawable), "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+                 : 0;
+    }
+
+    void DoFree(cControlDrawable* p)
+    {
+        if (p && ((int*)p)[-1] != 0)
+            operator_delete_array(p);
+    }
+
+    void DoInsertValue(cControlDrawable* position, const cControlDrawable& value);
+};
+// ---- items of slice s01009af0 end
+
+// ---- items of slice s01009c60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned char g_013ec458[];
+extern "C" unsigned char g_01495400[];
+extern "C" unsigned char g_0149bad8[];
+struct Element {
+    u32 mVftable0;  // +0x00
+    u32 mVftable4;  // +0x04
+    u32 m08;        // +0x08
+    u32 m0C;        // +0x0c
+    u32 m10;        // +0x10
+
+    // Inlined copy construction (the class' own constructor is not visible here): the base
+    // sub-object vftable, the zeroed dword and the two complete-object vftables, then the
+    // copied payload.  Written through character pointers, as the original inlined code is;
+    // the base vftable write is volatile so it is not merged into the complete-object one.
+    Element(const Element& src)
+    {
+        char* d = (char*)this;
+        const char* s = (const char*)&src;
+
+        *(u32 volatile*)(d + 0x04) = (u32)g_013ec458;
+        *(u32*)(d + 0x08) = 0;
+        *(u32*)(d + 0x00) = (u32)g_01495400;
+        *(u32*)(d + 0x04) = (u32)g_0149bad8;
+        *(u32*)(d + 0x0c) = *(const u32*)(s + 0x0c);
+        *(u32*)(d + 0x10) = *(const u32*)(s + 0x10);
+    }
+
+    Element& operator=(const Element& src)
+    {
+        m0C = src.m0C;
+        m10 = src.m10;
+        return *this;
+    }
+};
+Element* uninitialized_copy(Element* first, Element* last, Element* dest);   // 0x010062d0
+void     uninitialized_relocate_commit(Element* first, Element* last, Element* dest); // 0x01002ea0
+void     copy_backward(Element* first, Element* last, Element* destEnd);       // 0x010088e0
+template <class T>
+inline T* uninitialized_relocate_ptr_s0100_9c60(T* first, T* last, T* dest)
+{
+    T* result = uninitialized_copy(first, last, dest);
+    uninitialized_relocate_commit(first, last, dest);
+    return result;
+}
+struct ElementVector {
+    Element* mpBegin;       // +0x00
+    Element* mpEnd;         // +0x04
+    Element* mpCapacity;    // +0x08
+    u32      mAllocator;    // +0x0c  eastl::sp_vector_allocator (stateless)
+
+    static u32 GetNewCapacity(u32 currentCapacity)
+    {
+        return currentCapacity ? (2 * currentCapacity) : 1;
+    }
+
+    Element* DoAllocate(u32 n)
+    {
+        return n ? (Element*)EAAlloc(n * sizeof(Element), "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+                 : 0;
+    }
+
+    void DoFree(Element* p)
+    {
+        if (p && ((int*)p)[-1] != 0)
+            operator_delete_array(p);
+    }
+
+    void DoInsertValue(Element* position, const Element& value);
+};
+// ---- items of slice s01009c60 end
+
+// ---- items of slice s01009df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" float gfTimeBias;                     // 0x01495390
+extern "C" float gfSpawnScale;                   // 0x013f9428
+typedef int i32;
+struct cApp {
+    u8 mPad00[0x48];
+    u8 mFlags48;                        // +0x48, bit 0 = update disabled
+};
+struct cModeObject;
+struct cModeHolder {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual cModeObject* GetCurrentMode();  // +0x50
+};
+struct cModeObject {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void* Query(u32 id);        // +0x0c
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual cModeObject* GetSelf();     // +0x38 (the object looked up below)
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual float GetTime();            // +0x5c
+};
+struct cModeTag {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void* Query(u32 id);        // +0x0c
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual float GetTime();            // +0x5c
+
+    u8 mPad04[0xd5 - 0x04];
+    u8 mFlagD5;                         // +0xd5
+    u8 mFlagD6;                         // +0xd6
+};
+struct cPendingHandle {
+    virtual void v00();
+    virtual void Release();             // +0x04
+    virtual void v08();
+    virtual void v0c();
+    virtual bool IsPending();           // +0x10
+};
+struct cPendingRef {
+    cPendingHandle* mpObject;           // +0x00
+};
+struct cHandleManager {
+    u8 mPad00[0x8c];
+    cPendingRef mHandle8c;              // +0x8c
+};
+struct cSimState {
+    u8 mPad00[0x28];
+    i32 mKind28;                        // +0x28
+    i32 GetKind();                      // 0x00801920
+    void Notify();                      // 0x01002f30
+};
+struct cPlayerInventory_s0100_9df0 {
+    u8 mPad00[0x540];
+    float mValue540;                    // +0x540
+    bool IsLocalPlayer();               // 0x00c38270
+};
+struct cPlayer_s0100_9df0 {
+    cPlayerInventory_s0100_9df0* GetPlayerInventory();  // 0x00a1ad60
+};
+struct cGameUI {
+    void ShowNotifyA();                 // 0x00fdf5b0
+    void ShowNotifyB();                 // 0x00fdd4f0
+    void ShowNotifyC();                 // 0x00fda5e0
+};
+struct cPropertyEntry {
+    u8 mPad00[0x08];
+    u32 mId08;                          // +0x08
+};
+struct cPropertyManager_s0100_9df0 {
+    void* GetOrCreate(u32 id);          // 0x0067c830
+    u8 mPad00[0x4c];
+    cPropertyEntry* mpEntry4c;          // +0x4c
+};
+struct cMessageServer {
+    void* Find(u32 id, void* unused);   // 0x00dd5d80
+    void Post(u32 id, u32 text, void* a, void* b, int flag, void* c);  // 0x00dd8640
+};
+cApp*             __cdecl GetApp();              // 0x00b3d380
+cHandleManager*   __cdecl GetHandleManager();    // 0x00b3d470
+cModeHolder*      __cdecl GetModeHolder();       // 0x0067dd10
+cSimState*        __cdecl GetSimStateA();        // 0x010212a0
+cPlayer_s0100_9df0*          __cdecl GetPlayerContext();    // 0x00ffbe50
+cSimState*        __cdecl GetSimStateB();        // 0x01021240
+cGameUI*          __cdecl GetGameUI();           // 0x00fd9c60
+cPropertyManager_s0100_9df0* __cdecl GetPropertyManager();  // 0x0067cac0
+cMessageServer*   __cdecl GetMessageServer();    // 0x00b3d3e0
+bool  __cdecl GateA();                           // 0x010422e0
+bool  __cdecl GateB();                           // 0x010053a0
+bool  __cdecl GateC();                           // 0x010423d0
+void  __cdecl NotifySpace();                     // 0x01002f30
+float __cdecl GetThresholdA(int one);            // 0x01017030
+float __cdecl GetThresholdB(int one);            // 0x01017070
+template <class T>
+static const T& SelectMin(const T& left, const T& right)
+{
+    return left < right ? left : right;
+}
+namespace SP {
+class cSPSimulatorSpaceGame_s0100_9df0 {
+public:
+    void UpdateUFOEvents(u32 nDeltaTime);              // 0x01009df0
+    void SolarSystemSpawnNPC_UFOs(float fChance);      // 0x010091d0
+    void UpdateChasingUFOs(u32 nDeltaTime);            // 0x01008270
+
+private:
+    u8 mPad00[0x50];                    // +0x000
+    union {
+        u8 mFlags50;                    // +0x050, byte tests
+        u32 mFlags50d;                  // +0x050, word clear
+    };
+};  // namespace SP
+}
+// ---- items of slice s01009df0 end
+
+// ---- items of slice s0100a080 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void FUN_00ad48b0();
+extern "C" void FUN_00b1e500();
+extern "C" void FUN_00cd7d10();
+extern "C" void FUN_00d3d420();
+typedef unsigned __int64 u64;
+struct cSimEffectTimer {
+    u8   mBytes[0x20];
+    bool IsValid();                    // 0x00feba90
+    u64  Elapsed();                    // 0x00bc3190
+    void Reset();                      // 0x00bc3110
+};
+struct cSpaceEffectState {
+    u8   mBytes[0x1c8];
+    bool Get();                        // 0x00bfc480
+    void Set(int value);               // 0x00bfc470
+};
+struct cSpaceNoun {
+    u8                 mPad0000[0x508];
+    cSpaceEffectState  mState508;      // 0x508
+    cSimEffectTimer    mTimer6d0;      // 0x6d0
+    cSimEffectTimer    mTimer6f0;      // 0x6f0
+
+    bool FUN_00c38990(int enabled);            // 0x00c38990
+    void FUN_00c389c0(int enabled, int arg);   // 0x00c389c0
+};
+struct cSpaceNounVector {
+    cSpaceNoun** mpBegin;              // 0x00
+    cSpaceNoun** mpEnd;                // 0x04
+};
+struct cGameDataVectorOut {
+    u32               mType;           // 0x00
+    cSpaceNounVector  mVec;            // 0x04
+};
+struct cSpaceNounManager {
+    cGameDataVectorOut* GetGameDataVector(void* a, void* b, void* c, void* d, int e);  // 0x00b21340
+};
+cSpaceNounManager* __cdecl NounManager();   // 0x00b3d300
+// ---- items of slice s0100a080 end
+
+// ---- items of slice s0100a640 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_1495414[];
+extern "C" char g_13ec458[];
+extern "C" char g_1495400[];
+extern "C" char g_149bad8[];
+struct EmbVec_s0100_a640 {
+    EmbElem* mpBegin;
+    EmbElem* mpEnd;
+    EmbElem* mpCapacity;
+
+    void Clear(EmbElem* first, EmbElem* last);                  // 0x01008850
+    void Reserve(uint32_t count);                               // 0x01008760
+    void PushSlow(EmbElem* end, const EmbElem* value);           // 0x01009c60
+};
+bool __cdecl ReadInt32(void* stream, int32_t* value, unsigned count, int endian);   // 0x0093a780
+typedef void (__thiscall* EmbElemInitFn)(EmbElem*, void*);
+static EmbElemInitFn g_embElemInit = (EmbElemInitFn)(unsigned)g_1495414;
+// ---- items of slice s0100a640 end
+
 // @ 0x00bb9c40
 void cStarRecord::SetBlownUp(bool on)
 {
@@ -1328,6 +1955,169 @@ int cSPSimulatorSpaceGame_s00bf_1ba0::SpaceTelemetry_Add(uint species)
     if (want < 1)
         return 0;
     return want;
+}
+
+// @ 0x01002bf0
+void SimSpace::OnSolarRollover(uint32_t param_1)
+{
+    FUN_00c8bc10(param_1);
+}
+
+// @ 0x01002c30
+bool SimSpace::Write(void* param_2)
+{
+    SerContainer* ctx = (SerContainer*)param_2;
+    IOConnect* __restrict pl = ctx->GetConnect();
+    uint32_t tag = 0xb03517bc;
+    void* writer = pl->GetWriter();
+    EA_IO_WriteUint32(writer, &tag, 1, 0);
+    char ok = GonzagoWrite(param_2);
+    Serializer ser((char*)this - 8, (int)g_15b6618, 0x1a80d26);
+    if (ok != 0) {
+        if (ser.Serialize(param_2) != 0)
+            return true;
+    }
+    return false;
+}
+
+// @ 0x01002cc0
+bool SimSpace::Read(void* param_2)
+{
+    SerContainer* ctx = (SerContainer*)param_2;
+    IOConnect* pl = ctx->GetConnect();
+    void* reader = pl->GetWriter();
+    char tag[4];
+    EA_IO_ReadInt32(reader, tag, 1, 0);
+    char ok = GonzagoRead(param_2);
+    Serializer ser((char*)this - 8, (int)g_15b6618, 0x1a80d26);
+    if (ok != 0) {
+        if (ser.Read(param_2) != 0)
+            return true;
+    }
+    return false;
+}
+
+// @ 0x01002ea0
+PRec5* FUN_01002ea0(PRec5* first, PRec5* last, PRec5* out)
+{
+    if (first != last) {
+        do {
+            first->Slot8(0);
+            ++first;
+            ++out;
+        } while (first != last);
+    }
+    return out;
+}
+
+// @ 0x01002ee0
+void FUN_01002ee0()
+{
+    struct Local { void* vftable; uint32_t tag; };
+    ResMan* m = FUN_0067dcd0_s0100_21a0();
+    Local a; a.vftable = (void*)g_13eb428; a.tag = 0x1c135da;
+    m->Slot70(0, &a);
+    Local b; b.vftable = (void*)g_13eb428; b.tag = 0xe6bce5;
+    m->Slot70(0, &b);
+}
+
+// @ 0x01002f30
+void FUN_01002f30(void)
+{
+    TerrainSphere_s0100_21a0* sp = FUN_00b3d300_s0100_21a0()->GetCurrentTerrainSphere();
+    if (!sp->FUN_00c772c0(0x681c28e)) {
+        TerrainSphere_s0100_21a0* sp2 = FUN_00b3d300_s0100_21a0()->GetCurrentTerrainSphere();
+        sp2->FUN_00c77bf0(0x681c28e);
+
+        InvView* inv = FUN_00ffbe50_s0100_21a0()->GetPlayerInventory();
+        if (inv != 0) {
+            FUN_00f924e0(inv->sub508.Slot58());
+            inv->FUN_00c389f0(inv->f7f8);
+        }
+
+        uint32_t loc[12] = {0};
+        FUN_00e39ab0(0x57baffd3, 0, &loc[9], &loc[6], 0, 0, &loc[3], &loc[0]);
+
+        B3d470b* b = (B3d470b*)FUN_00b3d470_s0100_21a0();
+        if (b->fC4 != 0) {
+            b->fC4->Slot0c(1);
+            B3d470b* b2 = (B3d470b*)FUN_00b3d470_s0100_21a0();
+            SubC4* p = b2->fC4;
+            if (p != 0) {
+                b2->fC4 = 0;
+                p->Release4();
+            }
+        }
+        FUN_00b3d4d0_s0100_21a0()->PostTrigger("SPG_CenterOfGalaxy", 1, 0, 0, 0, 0);
+    }
+}
+
+// @ 0x01003070
+void __fastcall FUN_01003070(SimGame_s0100_21a0* self)
+{
+    UISpace* u = self->mUISpace14;
+    if (u != 0) {
+        u->FUN_01071570();
+        UISpace* u2 = self->mUISpace14;
+        if (u2 != 0) {
+            self->mUISpace14 = 0;
+            u2->Release4();
+        }
+    }
+    MgdObj* m = FUN_0067ddc0_s0100_21a0();
+    if (m != 0) {
+        m->Slot28(0);
+        m->Slot24();
+    }
+}
+
+// @ 0x010030c0
+void __fastcall FUN_010030c0(SimGame_s0100_21a0* self)
+{
+    if (self->mUISpace14 == 0) {
+        UISpace* nw = (UISpace*)operator_new(0x6ac, "Simulator", 0, 0, 0, 0);
+        UISpace* u = (nw != 0) ? nw->Construct() : 0;
+        UISpace* old = self->mUISpace14;
+        if (u != old) {
+            if (u != 0)
+                u->Ifc0();
+            self->mUISpace14 = u;
+            if (old != 0)
+                old->Release4();
+        }
+        self->mUISpace14->Init();
+        if (self->mField54 != 0)
+            FUN_00ff9390();
+    }
+    MgdObj* m = FUN_0067ddc0_s0100_21a0();
+    if (m != 0 && FUN_01021080() == 0) {
+        m->Slot28((void*)1);
+        m->Slot24();
+    }
+}
+
+// @ 0x01003160
+void __fastcall FUN_01003160(SimGame_s0100_21a0* self)
+{
+    SimTicker_s0100_21a0* t = FUN_00b3d330_s0100_21a0();
+    t->Slot54(self);
+    t->Slot54(self->mField70);
+    t->Slot54(self->mFieldb8);
+    t->Slot54(self->mFieldc0);
+    t->Slot54(self->mFieldb4);
+    t->Slot54(self->mFieldbc);
+    UISpace* u = self->mUISpace14;
+    if (u != 0) {
+        u->FUN_01071570();
+        UISpace* u2 = self->mUISpace14;
+        if (u2 != 0) {
+            self->mUISpace14 = 0;
+            u2->Release4();
+        }
+    }
+    if (FUN_00b3d400_s0100_21a0() != 0)
+        FUN_00b3d400_s0100_21a0()->SetCardsVisibility(false);
+    g_0167ea54->Slot30((void*)FNV1_String8("Planet_Space", 0x811c9dc5, 1));
 }
 
 // @ 0x01003230
@@ -3471,6 +4261,254 @@ void* cObjectList::EraseFront(u8* p)
     mpEnd = mpEnd - 0x14;
     reinterpret_cast<UFOElem*>(mpEnd)->Destroy(0);
     return p;
+}
+
+// @ 0x01009af0
+void ControlDrawableVector::DoInsertValue(cControlDrawable* position, const cControlDrawable& value)
+{
+    if (mpEnd != mpCapacity) {
+        // Room for one more: value may itself come from the range that is about to move.
+        const cControlDrawable* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        if (mpEnd)
+            ::new(mpEnd) cControlDrawable(*(mpEnd - 1));
+        copy_backward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const u32 nPrevSize = (u32)(mpEnd - mpBegin);
+        const u32 nNewSize  = GetNewCapacity(nPrevSize);
+        cControlDrawable* const pNewData = nNewSize
+            ? (cControlDrawable*)EAAlloc(nNewSize * sizeof(cControlDrawable), "Simulator", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+            : 0;
+        cControlDrawable* pNewEnd = uninitialized_relocate_ptr(mpBegin, position, pNewData);
+        if (pNewEnd)
+            ::new(pNewEnd) cControlDrawable(value);
+        pNewEnd = uninitialized_relocate_ptr(position, mpEnd, ++pNewEnd);
+
+        DoFree(mpBegin);
+
+        mpBegin    = pNewData;
+        mpEnd      = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x01009c60
+void ElementVector::DoInsertValue(Element* position, const Element& value)
+{
+    if (mpEnd != mpCapacity) {
+        // Room for one more: the value may itself come from the range about to move.
+        const Element* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        if (mpEnd)
+            ::new ((void*)mpEnd) Element(mpEnd[-1]);
+        copy_backward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const u32 nPrevSize = (u32)(mpEnd - mpBegin);
+        const u32 nNewSize  = GetNewCapacity(nPrevSize);
+        Element* const pNewData = DoAllocate(nNewSize);
+
+        Element* pNewEnd = uninitialized_relocate_ptr_s0100_9c60(mpBegin, position, pNewData);
+        if (pNewEnd)
+            ::new ((void*)pNewEnd) Element(value);
+        pNewEnd = uninitialized_relocate_ptr_s0100_9c60(position, mpEnd, ++pNewEnd);
+
+        DoFree(mpBegin);
+
+        mpBegin    = pNewData;
+        mpEnd      = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x01009df0
+void SP::cSPSimulatorSpaceGame_s0100_9df0::UpdateUFOEvents(u32 nDeltaTime)
+{
+    if (GetApp()->mFlags48 & 1)
+        return;
+
+    if (mFlags50 & 2)
+        return;
+
+    _ReadWriteBarrier();
+
+    if (mFlags50 & 4)
+        return;
+
+    cPendingRef* pRef = &GetHandleManager()->mHandle8c;
+    cPendingHandle* pPending = pRef->mpObject;
+    if (pPending != 0) {
+        if (pPending->IsPending())
+            return;
+
+        mFlags50d &= ~0x20u;
+
+        cPendingRef* pOwners = &GetHandleManager()->mHandle8c;
+        cPendingHandle* pOld = pOwners->mpObject;
+        if (pOld != 0) {
+            pOwners->mpObject = 0;
+            pOld->Release();
+        }
+    }
+
+    cModeObject* pMode = GetModeHolder()->GetCurrentMode()->GetSelf();
+    if (pMode != 0) {
+        cModeTag* pTag = (cModeTag*)pMode->Query(0x303154cc);
+        if (pTag != 0) {
+            cSimState* pState = GetSimStateA();
+            cPlayerInventory_s0100_9df0* pInventory = GetPlayerContext()->GetPlayerInventory();
+
+            float fNow = pTag->GetTime();
+
+            // The first window either notifies (and returns) or leaves the
+            // encounter-start work to the else branch below; the flag makes
+            // that one shared branch instead of a second copy.
+            bool bNotify = false;
+            if (pTag->mFlagD5) {
+                float fStart = fNow - gfTimeBias;
+
+                if (GetThresholdA(1) >= fStart)
+                    bNotify = GateA();
+            }
+
+            if (bNotify) {
+                pState = GetSimStateB();
+
+                if (pInventory->IsLocalPlayer()) {
+                    GetGameUI()->ShowNotifyA();
+                    return;
+                }
+
+                if (pState->GetKind() == 2 && GateB()) {
+                    GetGameUI()->ShowNotifyB();
+                    return;
+                }
+
+                if (pState->GetKind() == 1) {
+                    NotifySpace();
+                    return;
+                }
+            } else if (pState != 0 && pTag->mFlagD6 && !pInventory->IsLocalPlayer()) {
+                if (pState->mKind28 == 1) {
+                    cPropertyManager_s0100_9df0* pProperties = GetPropertyManager();
+                    cPropertyEntry* pEntry = pProperties->mpEntry4c;
+
+                    if (pEntry == 0 || pEntry->mId08 != 0x9a16d07e)
+                        pProperties->GetOrCreate(0x9a16d07e);
+                } else if (0.0f >= pInventory->mValue540) {
+                    cMessageServer* pMessages = GetMessageServer();
+
+                    if (pMessages->Find(0x9d507ccb, 0) == 0)
+                        pMessages->Post(0x9d507ccb, 0x131a9f54u, 0, 0, 1, 0);
+                }
+            }
+
+            if (pTag->mFlagD5) {
+                // Retail reloads the stored "now" instead of reusing it from
+                // an x87 register (fld [slot]; fadd [bias]); a volatile read is
+                // the shape MSVC 2008 /O2 compiles that way.
+                float fEnd = *(volatile float*)&fNow + gfTimeBias;
+
+                if (fEnd >= GetThresholdB(1)) {
+                    if (GateC()) {
+                        GetGameUI()->ShowNotifyC();
+                        return;
+                    }
+                }
+            }
+
+            const u32& nChance = SelectMin(nDeltaTime, 100u);
+            SolarSystemSpawnNPC_UFOs((float)nChance * gfSpawnScale);
+        }
+    }
+
+    UpdateChasingUFOs(nDeltaTime);
+}
+
+// @ 0x0100a080
+void UpdateUFOStatusEffects()
+{
+    cSpaceNounManager* manager = NounManager();
+    cGameDataVectorOut* out = manager->GetGameDataVector(
+        (void*)FUN_00cd7d10, (void*)FUN_00d3d420, (void*)FUN_00ad48b0, (void*)FUN_00b1e500, 0x18ebadc);
+
+    cSpaceNounVector& nouns = out->mVec;
+    cSpaceNoun** it = nouns.mpBegin;
+    cSpaceNoun** end = nouns.mpEnd;
+
+    for (; it != end; ++it) {
+        cSpaceNoun* noun = *it;
+
+        if (noun->FUN_00c38990(1)) {
+            if (noun->mTimer6f0.IsValid() && noun->mTimer6f0.Elapsed() > 0x15f90) {
+                noun->FUN_00c389c0(1, 0);
+                noun->mTimer6f0.Reset();
+            }
+        }
+
+        if (noun->mState508.Get()) {
+            if (noun->mTimer6d0.IsValid() && noun->mTimer6d0.Elapsed() > 0xea60) {
+                noun->mState508.Set(0);
+                noun->mTimer6d0.Reset();
+            }
+        }
+    }
+}
+
+// @ 0x0100a640
+void LoadEmbassyList(void* owner, EmbVec_s0100_a640* list)
+{
+    list->Clear(list->mpBegin, list->mpEnd);
+
+    // owner vtable slot 8: the object's stream accessor
+    typedef void* (__thiscall* OwnerStreamFn)(void*);
+    OwnerStreamFn getStream = (OwnerStreamFn)(*(void***)owner)[8];
+
+    int32_t count = 0;
+
+    void* stream = getStream(owner);
+    void* io     = ((void* (__thiscall*)(void*))(*(void***)stream)[6])(stream);
+
+    ReadInt32(io, &count, 1, 0);
+
+    list->Reserve((uint32_t)count);
+
+    uint32_t i = 0;
+    while (i < (uint32_t)count) {
+        EmbElem elem;
+        elem.m08 = 0;
+        elem.m00 = (void*)g_1495400;
+        elem.m04 = (void*)g_149bad8;
+        elem.m0C = -1;
+        elem.m10 = 1000;
+
+        g_embElemInit(&elem, owner);
+
+        if (list->mpEnd < list->mpCapacity) {
+            EmbElem* slot = list->mpEnd++;
+            if (slot != 0) {
+                // the inlined copy stamps the intermediate vtable first (it is
+                // observable in retail, so keep it a volatile store)
+                *(void* volatile*)&slot->m04 = (void*)g_13ec458;
+                slot->m08 = 0;
+                slot->m00 = (void*)g_1495400;
+                slot->m04 = (void*)g_149bad8;
+                slot->m0C = elem.m0C;
+                slot->m10 = elem.m10;
+            }
+        } else {
+            list->PushSlow(list->mpEnd, &elem);
+        }
+        ++i;
+    }
+
+    return ((void (__thiscall*)(void*))(*(void***)owner)[7])(owner);
 }
 
 // @ 0x0100a7c0

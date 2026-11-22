@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_00798e40@@YAXHMPAM00@Z  00798e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_00798fb0@@YAXHMPAH00@Z  00798fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_00799050@@YAXHMPAH00@Z  00799050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_00799090@@YAXHMPAH00@Z  00799090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_007992e0@@YAPAHPAH00@Z  007992e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_0079fef0@@YIXPAX@Z  0079fef0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_007a0410@@YAXPAX@Z  007a0410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?Process@IModelSplitter@@QAEXHPAUV12@@@Z  007a0ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

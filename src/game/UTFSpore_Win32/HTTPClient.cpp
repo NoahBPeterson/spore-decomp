@@ -22,6 +22,7 @@ extern "C" char g_1667bad[];
 #include "EA/Internet/HTTPMultipartRelatedPostBodyStream.h"
 #include "EA/Internet/HTTPRequest.h"
 #include "EA/Internet/URL.h"
+#include "EA/Internet/HTTPHeaders.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
@@ -1015,7 +1016,8 @@ typedef int  (__thiscall *VFI0)(void*);
 #define VCALLI0(p, off)   ((VFI0)VSLOT_s0094_3f60(p, off))(p)
 namespace EA {
 namespace Thread {
-struct Mutex_s0094_3f60 {
+class Mutex_s0094_3f60 { public:
+    void Init(const void* params, bool lock);   // 0x009222a0
     void Lock(const void* timeout);   // 0x009221b0
     void Unlock();                    // 0x00922270
 };
@@ -1067,6 +1069,11 @@ public:
     void Pump(void* socket);          // 0x009421b0
     bool Shutdown();
 };
+}
+}
+namespace EA {
+namespace Internet {
+class HTTPClient_s0094_3f60;
 }
 }
 // ---- items of slice s00943f60 end

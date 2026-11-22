@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppTelemetry.cpp -- migrated from slice(s) s007ec220, s007eb430, s007ea440 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppTelemetry.cpp -- migrated from slice(s) s01190840, s011869d0, s01183b20, s0117c560, s007ec220, s007eb430, s007ea440 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppTelemetry.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -623,6 +623,290 @@ SP::TItemListNode_s007e_c220* ItemListAdd(SP::TItemList_s007e_c220* list, SP::cT
 void IntVecInsert(int* pos, uint32_t n, int* value);  // 0x007EB430
 // ---- items of slice s007ec220 end
 
+// ---- items of slice s0117c560 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ssl_st_s0117_c560;
+struct ssl_ctx_st_s0117_c560;
+struct ssl_method_st_s0117_c560;
+struct X509_NAME_ENTRY;
+struct ASN1_OBJECT;
+struct ASN1_STRING;
+struct ssl_method_st_s0117_c560
+{
+	void* v00;                                        // 0x000
+	int (*ssl_new)(ssl_st_s0117_c560*);                          // 0x004
+	void* v08;                                        // 0x008
+	void* v0c;                                        // 0x00c
+	void* func_10;                                    // 0x010
+	void* v14[4];                                     // 0x014
+	int (*ssl_accept)(ssl_st_s0117_c560*);                       // 0x024
+	void* v28[6];                                     // 0x028
+	long (*ctrl)(ssl_st_s0117_c560*, int, long, void*);          // 0x040
+	void* v44[7];                                     // 0x044
+	int (*get_timeout)(void);                         // 0x060
+};
+struct ssl_ctx_st_s0117_c560
+{
+	ssl_method_st_s0117_c560* method;                            // 0x000
+	void* cipher_list;                                // 0x004
+	void* cipher_list_by_id;                          // 0x008
+	void* cert_store;                                 // 0x00c
+	void* sessions;                                   // 0x010
+	int session_cache_size;                           // 0x014
+	void* session_cache_head;                         // 0x018
+	void* session_cache_tail;                         // 0x01c
+	int session_cache_mode;                           // 0x020
+	int session_timeout;                              // 0x024
+	void* new_session_cb;                             // 0x028
+	void* remove_session_cb;                          // 0x02c
+	void* get_session_cb;                             // 0x030
+	char pad34[0x2c];                                 // 0x034
+	int references;                                   // 0x060
+	int pad64;                                        // 0x064
+	int pad68;                                        // 0x068
+	int pad6c[5];                                     // 0x06c
+	void* ex_data;                                    // 0x080
+	int ex_data_dummy;                                // 0x084
+	void* md5;                                        // 0x088
+	void* sha1;                                       // 0x08c
+	void* sha256;                                     // 0x090
+	int z94;                                          // 0x094
+	int z98;                                          // 0x098
+	int z9c;                                          // 0x09c
+	int za0;                                          // 0x0a0
+	int a4;                                           // 0x0a4
+	int a8;                                           // 0x0a8
+	int ac;                                           // 0x0ac
+	void* cache;                                      // 0x0b0
+	int b4, b8, bc, c0, c4;                           // 0x0b4
+	int c8, cc, d0, d4, d8, dc, e0, e4, e8, ec;       // 0x0c8
+	void* verify_param;                               // 0x0f0
+	int f4;                                           // 0x0f4
+};
+struct ssl_st_s0117_c560
+{
+	int version;                                      // 0x000
+	int type;                                         // 0x004
+	ssl_method_st_s0117_c560* method;                            // 0x008
+	void* rbio;                                       // 0x00c
+	void* wbio;                                       // 0x010
+	int in_handshake;                                 // 0x014
+	int rwstate;                                      // 0x018
+	int pad1c;                                        // 0x01c
+	void* handshake_func;                             // 0x020
+	int server;                                       // 0x024
+	void* new_session;                                // 0x028
+	int quiet_shutdown;                               // 0x02c
+	int flags30;                                      // 0x030
+	int state;                                        // 0x034
+	int rstate;                                       // 0x038
+	void* init_buf;                                   // 0x03c
+	int pad40[6];                                     // 0x040
+	void* s3;                                         // 0x058
+	void* p5c;                                        // 0x05c
+	int f60;                                          // 0x060
+	int f64;                                          // 0x064
+	int f68;                                          // 0x068
+	int pad6c;                                        // 0x06c
+	void* verify_param;                               // 0x070
+	int pad74[8];                                     // 0x074
+	void* cert;                                       // 0x094
+	unsigned int sid_ctx_length;                      // 0x098
+	unsigned char sid_ctx[32];                        // 0x09c
+	int fbc;                                          // 0x0bc
+	int fc0;                                          // 0x0c0
+	int fc4;                                          // 0x0c4
+	int fc8;                                          // 0x0c8
+	int padcc[3];                                     // 0x0cc
+	ssl_ctx_st_s0117_c560* ctx;                                  // 0x0d8
+	int pad_dc;                                       // 0x0dc
+	int fe0;                                          // 0x0e0
+	void* ex_data;                                    // 0x0e4
+	int ex_data_dummy;                                // 0x0e8
+	int pad_ec;                                       // 0x0ec
+	int ff0;                                          // 0x0f0
+	unsigned long options;                            // 0x0f4
+	unsigned long f_f8;                               // 0x0f8
+	unsigned long f_fc;                               // 0x0fc
+};
+struct ASN1_OBJECT { int dummy; };
+struct ASN1_STRING { int length; int type; unsigned char* data; };
+struct X509_NAME_ENTRY
+{
+	ASN1_OBJECT* object;                              // 0x000
+	ASN1_STRING* value;                               // 0x004
+	int set;                                          // 0x008
+};
+extern "C"
+{
+	void ERR_put_error(int lib, int func, int reason, const char* file, int line);   // 0x01180d50
+	void ERR_add_error_data(int num, ...);                          // 0x01180a70
+	unsigned long ERR_peek_error(void);                             // 0x01181100
+	void* CRYPTO_malloc(int num, const char* file, int line);       // 0x01183410
+	void CRYPTO_free(void* addr);                                   // 0x011835c0
+	int CRYPTO_add_lock(int* pointer, int amount, int type, const char* file, int line); // 0x011815d0
+	int CRYPTO_new_ex_data(int class_id, void* obj, void* ad);      // 0x01184260
+	void OpenSSLDie(const char* file, int line, const char* msg);   // 0x01181510
+	void operator_new_arr(void* dst, int val, int size);            // 0x011e073e
+
+	int SSL_get_ex_data_X509_STORE_CTX_idx(void);                   // 0x01194840
+	void SSL_CTX_free(ssl_ctx_st_s0117_c560*);                                 // 0x0117ba10
+	void ssl_cert_free(void*);                                      // 0x01194b70
+	void* ssl_cert_dup(void*);                                      // 0x01194940
+	void* X509_VERIFY_PARAM_new(void);                              // 0x01194290
+	void X509_VERIFY_PARAM_inherit(void* param, void* src);         // 0x011944b0
+	void* X509_STORE_new(void);                                     // 0x01195420
+	void* lh_new(unsigned long (*hash)(void*), int (*cmp)(void*, void*)); // 0x01194090
+	unsigned long SSL_SESSION_hash(void*);                          // 0x0117b9d0
+	int SSL_SESSION_cmp(void*, void*);                              // 0x0117ba00
+	void* EVP_get_digestbyname(const char* name);                   // 0x011973b0
+	void* FUN_011948f0(void);                                       // 0x011948f0
+	void FUN_01193a90(void*, void**, void**, const char*);          // 0x01193a90
+	void* FUN_01193d20(void);                                       // 0x01193d20
+	void FUN_0117c200(void);                                        // 0x0117c200
+	void FUN_0117c440(ssl_st_s0117_c560*);                                     // 0x0117c440
+
+	int sk_num(const void* sk);                                     // 0x0117dde0
+	void* sk_value(const void* sk, int i);                          // 0x0117ddf0
+	int sk_insert(void* sk, void* p, int where);                    // 0x0117dc00
+	typedef int (*sk_cmp_fn)(void*, void*);
+	void* sk_new(sk_cmp_fn cmp);                                    // 0x0117db90
+
+	void* FUN_01194ee0(void);                                       // 0x01194ee0
+	void FUN_01194ef0(void*);                                       // 0x01194ef0
+	void* FUN_01194f10(void*);                                      // 0x01194f10
+	void ASN1_OBJECT_free(void*);                                   // 0x011998c0
+	void* FUN_011991b0(void*);                                      // 0x011991b0
+	int X509_NAME_ENTRY_set_data(X509_NAME_ENTRY*, int, const unsigned char*, int); // 0x0117d2a0
+	void* OBJ_txt2obj(const char* txt, int no_name);                // 0x0117ffe0
+
+	void* FUN_011918c0(void*);                                      // 0x011918c0
+	int EVP_PKEY_cmp(void*, void*);                                 // 0x011913a0
+	void EVP_PKEY_free(void*);                                      // 0x01191780
+
+	int BIO_test_flags(void* b, int flags);                         // 0x01176fa0
+	int BIO_get_retry_reason(void* b);                              // 0x011cac20
+
+	int FUN_01199e70(const unsigned char** pp, long* plength, int* ptag, int* pclass, long omax); // 0x01199e70
+	void* FUN_011974f0(void);                                       // 0x011974f0
+	void FUN_01197500(void*);                                       // 0x01197500
+	void ASN1_TYPE_set(void*, int, void*);                          // 0x01189610
+	void* FUN_01199d70(int type);                                   // 0x01199d70
+	int FUN_01199cb0(void*, const unsigned char*, int);             // 0x01199cb0
+	void ASN1_STRING_free(void*);                                   // 0x01199db0
+	int FUN_01199930(void*, const unsigned char**, int);            // 0x01199930
+	int FUN_0119acf0(void*, const unsigned char**, int);            // 0x0119acf0
+	int FUN_0119a850(void*, const unsigned char**, int);            // 0x0119a850
+	int FUN_0117f2a0(void*, const unsigned char**, int);            // 0x0117f2a0
+	void FUN_01198850(void*);                                       // 0x01198850
+	int asn1_check_eoc(const unsigned char**);                      // 0x0117e310
+}
+// ---- items of slice s0117c560 end
+
+// ---- items of slice s01183b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int u32;
+void* __cdecl CRYPTO_malloc(int num, const char* file, int line);
+void* __cdecl CRYPTO_realloc(void* p, int num, const char* file, int line);
+void* __cdecl CRYPTO_realloc_clean(void* p, int old, int num, const char* file, int line);
+void  __cdecl FUN_011835c0(void* p);                                   // OPENSSL_free
+void  __cdecl ERR_put_error(int lib, int func, int reason, const char* file, int line);
+void  __cdecl CRYPTO_lock(int mode, int type, const char* file, int line);
+void* __cdecl operator_new__(void* p, int c, int n);                   // memset-ish
+int   __cdecl FUN_0117df20(void);                                      // sk_new_null
+int   __cdecl FUN_0117dde0(void* sk);                                  // sk_num
+int   __cdecl sk_push(void* sk, void* p);
+void  __cdecl sk_set(void* sk, int i, void* p);
+void* __cdecl sk_value(void* sk, int i);
+void  __cdecl sk_free(void* sk);
+char* __cdecl BUF_strlcpy(char* dst, char* src, u32 n);
+// ---- items of slice s01183b20 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+u32* __cdecl FUN_01183f70(void);  // 0x01183f70 (stays in the slice: not this object's)
+
+// ---- items of slice s011869d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int   __cdecl BN_copy(int dst, int src);                                        // 0x117ab40
+extern "C" int   __cdecl BN_mod_mul(int r, int a, int b, int m, int ctx);                  // 0x11ad640
+extern "C" int   __cdecl FUN_011875c0(int, int, int, int, int, int);                       // 0x11875c0
+extern "C" int   __cdecl BN_POOL_get(void);                                                // 0x1187990
+extern "C" int   __cdecl BN_set_word(int a, int w);                                        // 0x117ac20
+static const char kBnCtxFile[] = ".\\crypto\\bn\\bn_ctx.c";
+struct BnStack { int* data; int count; int cap; };
+static __declspec(noinline) int BnStackPushInline(BnStack* st, int value)
+{
+    int count = st->count;
+    int cap = st->cap;
+    if (count == cap) {
+        int* data = (int*)CRYPTO_malloc((cap ? ((cap * 3) >> 1) : 0x20) * 4,
+                                        (const char*)0x14e4c7c, 0x152);
+        if (data == 0)
+            return 0;
+        if (count != 0) {
+            for (int i = 0; i < count; ++i)
+                data[i] = st->data[i];
+        }
+        if (cap != 0)
+            FUN_011835c0(st->data);
+        st->data = data;
+        st->cap = cap ? ((cap * 3) >> 1) : 0x20;
+    }
+    st->data[st->count++] = value;
+    return 1;
+}
+// ---- items of slice s011869d0 end
+
+// ---- items of slice s01190840 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int uint;
+void* __cdecl CRYPTO_malloc(uint size, const char* file, int line);                      // 0x01183410
+uint* __cdecl FUN_01191b20(int param_1);                                                 // 0x01191b20 (defined below)
+uint* __cdecl FUN_0117b100(uint* bn);                                                    // 0x0117b100 (BN_dup-ish)
+void  __cdecl BN_free(void* bn);                                                         // 0x0117a970
+int   __cdecl ASN1_STRING_type(void* s);                                                 // 0x011922c0
+void* __cdecl EC_GROUP_dup(void* g);                                                     // 0x011b2d20
+int   __cdecl EC_KEY_set_group(void* key, void* g);                                      // 0x011922d0
+void  __cdecl EC_GROUP_free(void* g);                                                    // 0x011b2a60
+void  __cdecl EC_POINT_free(void* p);                                                    // EC_POINT_free
+void  __cdecl EC_EX_DATA_free_all_data(void* ex);                                        // EC_EX_DATA_free_all_data
+int*  __cdecl FUN_0117a9d0(void);                                                        // 0x0117a9d0 BN_new
+int*  __cdecl FUN_011838a0(int* p);                                                      // 0x011838a0
+int*  __cdecl FUN_01187a80(void);                                                        // 0x01187a80 BN_CTX_new
+int*  __cdecl FUN_011b1d20(int* p);                                                      // 0x011b1d20 EC_GROUP_new
+int   __cdecl FUN_011b2b70(int* g, int* src);                                            // 0x011b2b70 EC_GROUP_copy
+int*  __cdecl FUN_011b2140(int* g);                                                      // 0x011b2140 EC_POINT_new
+int   __cdecl FUN_011b2240(int* pt, int* src);                                           // 0x011b2240 EC_POINT_copy
+int   __cdecl FUN_011b1f80(int* ex, int* data, int* dup, int* free_, int* clear);        // 0x011b1f80
+int   __cdecl EC_GROUP_get_order(int* g, int* order, int* ctx);                          // EC_GROUP_get_order
+int   __cdecl BN_rand_range(int* r, int* range);                                         // BN_rand_range
+int   __cdecl EC_POINT_mul(int* g, int* r, int* n, int* q, int* m, int* ctx);            // EC_POINT_mul
+void  __cdecl BN_CTX_free(void* ctx);                                                    // BN_CTX_free
+uint* __cdecl FUN_011b38e0(void);                                                        // 0x011b38e0 (default DSA method)
+uint* __cdecl FUN_011b4020(void);                                                        // 0x011b4020 (default engine)
+int   __cdecl FUN_011836c0(uint* engine);                                                // 0x011836c0 engine_init
+int   __cdecl FUN_01192300(uint* engine);                                                // 0x01192300 engine get-method
+void  __cdecl FUN_01183740(void* engine);                                                // 0x01183740 engine_finish
+void  __cdecl FUN_01184260(int type, void* p, void* ex);                                 // 0x01184260 CRYPTO_new_ex_data
+void  __cdecl FUN_011842c0(int type, void* p, void* ex);                                 // 0x011842c0 CRYPTO_free_ex_data
+extern uint* DAT_016f20f0;                                                               // 0x016f20f0 default DSA method slot
+__declspec(dllimport) int __cdecl strncmp(const char*, const char*, unsigned);           // msvcr90!strncmp (IAT)
+int   __cdecl OBJ_sn2nid(const char* s);                                                 // OBJ_sn2nid
+int   __cdecl FUN_011973a0(const char* s);                                               // 0x011973a0 EVP_get_cipherbyname
+int   __cdecl FUN_01190790(char** p, int* out);                                          // 0x01190790
+int*  __cdecl EVP_PKEY_type(int nid);                                                    // 0x011914c0 (EVP_PKEY_type)
+int   __cdecl OBJ_obj2nid(const void* o);                                                // 0x0117fa60 OBJ_obj2nid
+int   __cdecl CRYPTO_add_lock(int* addr, int amount, int type, const char* file, int line); // 0x011815d0
+int   __cdecl FUN_01191ed0(int** dst, unsigned char** p, uint len);                      // 0x01191ed0 d2i_DSAPublicKey
+int   __cdecl FUN_01192cb0(int** dst, unsigned char** p, uint len);                      // 0x01192cb0 d2i_EC_PUBKEY
+int*  __cdecl FUN_011b3870(int nid);                                                     // 0x011b3870 EC_GROUP_new_by_curve_name
+void  __cdecl FUN_011b1e60(int* g, int flag);                                            // 0x011b1e60 EC_GROUP_set_asn1_flag
+int   __cdecl FUN_011b34f0(int nid, int** pkey, unsigned char** p, uint len);            // 0x011b34f0
+void  __cdecl EVP_PKEY_free(void* pkey);                                                 // 0x01191780 EVP_PKEY_free
+// ---- items of slice s01190840 end
+
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+uint* FUN_01191f10(void);   // defined at 0x01191f10, called earlier in the TU
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+uint* FUN_01191da0(void);  // 0x01191da0 (stays in the slice: not this object's)
+
 // @ 0x007eaf30
 void* ObjAF::Cast(int id)
 {
@@ -1187,3 +1471,873 @@ extern "C" int TelemetryRead(SP::cTelemetryReader* self, void* iface)
   return 1;
 }
 
+// @ 0x0117c8f0
+int SSL_accept(ssl_st_s0117_c560* s)
+{
+	if (s->handshake_func == 0)
+	{
+		ERR_put_error(0x14, 0xe0, 0x114, 0, 0);
+		return -1;
+	}
+	if ((s->state & 0x3000) == 0)
+		return s->method->ssl_accept(s);
+	return 1;
+}
+
+// @ 0x0117ca60
+ssl_ctx_st_s0117_c560* SSL_CTX_new(ssl_method_st_s0117_c560* meth)
+{
+	ssl_ctx_st_s0117_c560* ret = 0;
+
+	if (meth == 0)
+	{
+		ERR_put_error(0x14, 0xa9, 0xc4, 0, 0);
+		return 0;
+	}
+	if (SSL_get_ex_data_X509_STORE_CTX_idx() < 0)
+	{
+		ERR_put_error(0x14, 0xa9, 0x10d, 0, 0);
+		goto err41;
+	}
+	ret = (ssl_ctx_st_s0117_c560*)CRYPTO_malloc(0xf8, ".\\ssl\\ssl_lib.c", 0x56b);
+	if (ret == 0)
+		goto err41;
+	operator_new_arr(ret, 0, 0xf8);
+	ret->method = meth;
+	ret->cert_store = 0;
+	ret->session_cache_mode = 2;
+	ret->session_cache_size = 0x5000;
+	ret->session_cache_head = 0;
+	ret->session_cache_tail = 0;
+	ret->session_timeout = meth->get_timeout();
+	ret->new_session_cb = 0;
+	ret->remove_session_cb = 0;
+	ret->get_session_cb = 0;
+	ret->ec = 0;
+	operator_new_arr(&ret->pad34, 0, 0x2c);
+	ret->references = 1;
+	ret->f4 = 0;
+	ret->z9c = 0;
+	ret->pad64 = 0;
+	ret->pad68 = 0;
+	ret->ac = 0x19000;
+	ret->b4 = 0;
+	ret->b8 = 0;
+	ret->bc = 0;
+	ret->c0 = 0;
+	ret->c4 = 0;
+	ret->e8 = 0;
+	ret->cache = FUN_011948f0();
+	if (ret->cache == 0)
+		goto err41;
+	ret->pad6c[0] = 0;
+	ret->pad6c[1] = 0;
+	ret->pad6c[2] = 0;
+	ret->pad6c[3] = 0;
+	ret->pad6c[4] = 0;
+	ret->sessions = lh_new(SSL_SESSION_hash, SSL_SESSION_cmp);
+	if (ret->sessions == 0)
+		goto err41;
+	ret->cert_store = X509_STORE_new();
+	if (ret->cert_store == 0)
+		goto err41;
+	FUN_01193a90(ret->method, &ret->cipher_list, &ret->cipher_list_by_id,
+		"AES:ALL:!aNULL:!eNULL:+RC4:@STRENGTH");
+	if (ret->cipher_list == 0)
+		goto erra1;
+	if (sk_num(ret->cipher_list) <= 0)
+		goto erra1;
+	ret->verify_param = X509_VERIFY_PARAM_new();
+	if (ret->verify_param == 0)
+		goto err41;
+	ret->md5 = EVP_get_digestbyname("ssl2-md5");
+	if (ret->md5 == 0)
+		goto errf1;
+	ret->sha1 = EVP_get_digestbyname("ssl3-md5");
+	if (ret->sha1 == 0)
+		goto errf2;
+	ret->sha256 = EVP_get_digestbyname("ssl3-sha1");
+	if (ret->sha256 == 0)
+		goto errf3;
+	ret->za0 = (int)sk_new(0);
+	if (ret->za0 == 0)
+		goto err41;
+	CRYPTO_new_ex_data(2, ret, &ret->ex_data);
+	ret->z94 = 0;
+	ret->z98 = (int)FUN_01193d20();
+	return ret;
+
+err41:
+	ERR_put_error(0x14, 0xa9, 0x41, 0, 0);
+	goto err;
+erra1:
+	ERR_put_error(0x14, 0xa9, 0xa1, 0, 0);
+	goto err;
+errf1:
+	ERR_put_error(0x14, 0xa9, 0xf1, 0, 0);
+	goto err;
+errf2:
+	ERR_put_error(0x14, 0xa9, 0xf2, 0, 0);
+	goto err;
+errf3:
+	ERR_put_error(0x14, 0xa9, 0xf3, 0, 0);
+	goto err;
+err:
+	if (ret != 0)
+		SSL_CTX_free(ret);
+	return 0;
+}
+
+// @ 0x0117df20
+__declspec(noinline) void* sk_new_null(void)
+{
+	return sk_new(0);
+}
+
+// @ 0x01184320
+int __cdecl FUN_01184320(int* param_1, int param_2, int param_3)
+{
+    if (*param_1 == 0) {
+        int iVar1 = FUN_0117df20();
+        *param_1 = iVar1;
+        if (iVar1 == 0) {
+            ERR_put_error(0xf, 0x66, 0x41, 0, 0);
+            return 0;
+        }
+    }
+    int iVar1 = FUN_0117dde0((void*)*param_1);
+    while (1) {
+        if (iVar1 > param_2) {
+            sk_set((void*)*param_1, param_2, (void*)param_3);
+            return 1;
+        }
+        int iVar2 = sk_push((void*)*param_1, 0);
+        if (iVar2 == 0) break;
+        iVar1 = iVar1 + 1;
+    }
+    ERR_put_error(0xf, 0x66, 0x41, 0, 0);
+    return 0;
+}
+
+// @ 0x011843b0
+int __cdecl FUN_011843b0(int param_1, int param_2, int* param_3)
+{
+    int iVar6 = 0;
+    int iVar2 = (int)FUN_01183f70();
+    if (iVar2 == 0)
+        return 0;
+    *param_3 = 0;
+    CRYPTO_lock(5, 2, ".\\crypto\\ex_data.c", 0x199);
+    int iVar3 = FUN_0117dde0(*(void**)(iVar2 + 4));
+    if (0 < iVar3) {
+        iVar6 = (int)CRYPTO_malloc(iVar3 * 4, ".\\crypto\\ex_data.c", 0x19d);
+        if (iVar6 != 0) {
+            for (int iVar5 = 0; iVar5 < iVar3; iVar5 = iVar5 + 1) {
+                int uVar4 = (int)sk_value(*(void**)(iVar2 + 4), iVar5);
+                *(int*)(iVar6 + iVar5 * 4) = uVar4;
+            }
+        }
+    }
+    CRYPTO_lock(6, 2, ".\\crypto\\ex_data.c", 0x1a4);
+    if ((0 < iVar3) && (iVar6 == 0)) {
+        ERR_put_error(0xf, 0x6c, 0x41, 0, 0);
+        return 0;
+    }
+    for (int iVar2b = 0; iVar2b < iVar3; iVar2b = iVar2b + 1) {
+        int iVar5 = *(int*)(iVar6 + iVar2b * 4);
+        if ((iVar5 != 0) && (*(int*)(iVar5 + 8) != 0)) {
+            int uVar4 = 0;
+            if (*param_3 != 0) {
+                iVar5 = FUN_0117dde0((void*)*param_3);
+                if (iVar2b < iVar5)
+                    uVar4 = (int)sk_value((void*)*param_3, iVar2b);
+                else
+                    uVar4 = 0;
+            }
+            u32* puVar1 = *(u32**)(iVar6 + iVar2b * 4);
+            (*(void(**)(int, int, int*, int, u32, u32))(puVar1[2]))
+                (param_2, uVar4, param_3, iVar2b, puVar1[0], puVar1[1]);
+        }
+    }
+    if (iVar6 != 0)
+        FUN_011835c0((void*)iVar6);
+    return 1;
+}
+
+// @ 0x011844e0
+int __cdecl FUN_011844e0(int param_1, int param_2, int* param_3)
+{
+    int iVar6 = 0;
+    if (*param_3 == 0)
+        return 1;
+    int iVar2 = (int)FUN_01183f70();
+    if (iVar2 == 0)
+        return 0;
+    CRYPTO_lock(5, 2, ".\\crypto\\ex_data.c", 0x1c5);
+    int iVar3 = FUN_0117dde0(*(void**)(iVar2 + 4));
+    int iVar4 = FUN_0117dde0((void*)*param_3);
+    if (iVar4 < iVar3)
+        iVar3 = iVar4;
+    if (0 < iVar3) {
+        iVar6 = (int)CRYPTO_malloc(iVar3 * 4, ".\\crypto\\ex_data.c", 0x1cc);
+        if (iVar6 != 0) {
+            for (iVar4 = 0; iVar4 < iVar3; iVar4 = iVar4 + 1) {
+                int uVar5 = (int)sk_value(*(void**)(iVar2 + 4), iVar4);
+                *(int*)(iVar6 + iVar4 * 4) = uVar5;
+            }
+        }
+    }
+    CRYPTO_lock(6, 2, ".\\crypto\\ex_data.c", 0x1d3);
+    if ((0 < iVar3) && (iVar6 == 0)) {
+        ERR_put_error(0xf, 0x6a, 0x41, 0, 0);
+        return 0;
+    }
+    for (int iVar2b = 0; iVar2b < iVar3; iVar2b = iVar2b + 1) {
+        int uVar5 = 0;
+        if (*param_3 != 0) {
+            iVar4 = FUN_0117dde0((void*)*param_3);
+            if (iVar2b < iVar4)
+                uVar5 = (int)sk_value((void*)*param_3, iVar2b);
+            else
+                uVar5 = 0;
+        }
+        u32* puVar1 = *(u32**)(iVar6 + iVar2b * 4);
+        int uStack_4 = uVar5;
+        if ((puVar1 != 0) && (puVar1[4] != 0)) {
+            (*(void(**)(int, int*, int*, int, u32, u32))(puVar1[4]))
+                (param_2, param_3, &uStack_4, iVar2b, puVar1[0], puVar1[1]);
+        }
+        FUN_01184320((int*)param_2, iVar2b, uStack_4);
+    }
+    if (iVar6 != 0)
+        FUN_011835c0((void*)iVar6);
+    return 1;
+}
+
+// @ 0x01184640
+void __cdecl FUN_01184640(int param_1, int param_2, int* param_3)
+{
+    int iVar6 = 0;
+    int iVar2 = (int)FUN_01183f70();
+    if (iVar2 != 0) {
+        CRYPTO_lock(5, 2, ".\\crypto\\ex_data.c", 0x1f0);
+        int iVar3 = FUN_0117dde0(*(void**)(iVar2 + 4));
+        if (0 < iVar3) {
+            iVar6 = (int)CRYPTO_malloc(iVar3 * 4, ".\\crypto\\ex_data.c", 500);
+            if (iVar6 != 0) {
+                for (int iVar5 = 0; iVar5 < iVar3; iVar5 = iVar5 + 1) {
+                    int uVar4 = (int)sk_value(*(void**)(iVar2 + 4), iVar5);
+                    *(int*)(iVar6 + iVar5 * 4) = uVar4;
+                }
+            }
+        }
+        CRYPTO_lock(6, 2, ".\\crypto\\ex_data.c", 0x1fb);
+        if ((0 < iVar3) && (iVar6 == 0)) {
+            ERR_put_error(0xf, 0x6b, 0x41, 0, 0);
+            return;
+        }
+        for (int iVar2b = 0; iVar2b < iVar3; iVar2b = iVar2b + 1) {
+            int iVar5 = *(int*)(iVar6 + iVar2b * 4);
+            if ((iVar5 != 0) && (*(int*)(iVar5 + 0xc) != 0)) {
+                int uVar4 = 0;
+                if (*param_3 != 0) {
+                    iVar5 = FUN_0117dde0((void*)*param_3);
+                    if (iVar2b < iVar5)
+                        uVar4 = (int)sk_value((void*)*param_3, iVar2b);
+                    else
+                        uVar4 = 0;
+                }
+                u32* puVar1 = *(u32**)(iVar6 + iVar2b * 4);
+                (*(void(**)(int, int, int*, int, u32, u32))(puVar1[3]))
+                    (param_2, uVar4, param_3, iVar2b, puVar1[0], puVar1[1]);
+            }
+        }
+        if (iVar6 != 0)
+            FUN_011835c0((void*)iVar6);
+        if (*param_3 != 0) {
+            sk_free((void*)*param_3);
+            *param_3 = 0;
+        }
+    }
+}
+
+// @ 0x01184770
+u32* __cdecl FUN_01184770(void)
+{
+    u32* puVar1 = (u32*)CRYPTO_malloc(0xc, ".\\crypto\\buffer\\buffer.c", 0x43);
+    if (puVar1 == 0) {
+        ERR_put_error(7, 0x65, 0x41, 0, 0);
+        return 0;
+    }
+    *puVar1 = 0;
+    puVar1[2] = 0;
+    puVar1[1] = 0;
+    return puVar1;
+}
+
+// @ 0x011847f0
+int __cdecl FUN_011847f0(int* param_1, int param_2)
+{
+    int iVar1 = *param_1;
+    if (iVar1 < param_2) {
+        if (param_1[2] < param_2) {
+            iVar1 = ((param_2 + 3) / 3) * 4;
+            int iVar2;
+            if (param_1[1] == 0)
+                iVar2 = (int)CRYPTO_malloc(iVar1, ".\\crypto\\buffer\\buffer.c", 0x6e);
+            else
+                iVar2 = (int)CRYPTO_realloc((void*)param_1[1], iVar1, ".\\crypto\\buffer\\buffer.c", 0x70);
+            if (iVar2 == 0) {
+                ERR_put_error(7, 100, 0x41, 0, 0);
+                return 0;
+            }
+            param_1[1] = iVar2;
+            param_1[2] = iVar1;
+            operator_new__((void*)(*param_1 + iVar2), 0, param_2 - *param_1);
+            *param_1 = param_2;
+            return param_2;
+        }
+        operator_new__((void*)(param_1[1] + iVar1), 0, param_2 - iVar1);
+    }
+    *param_1 = param_2;
+    return param_2;
+}
+
+// @ 0x011848a0
+int __cdecl FUN_011848a0(int* param_1, int param_2)
+{
+    int iVar1 = *param_1;
+    if (iVar1 >= param_2) {
+        operator_new__((void*)(param_1[1] + param_2), 0, iVar1 - param_2);
+        *param_1 = param_2;
+        return param_2;
+    }
+    if (param_1[2] >= param_2) {
+        operator_new__((void*)(param_1[1] + iVar1), 0, param_2 - iVar1);
+        *param_1 = param_2;
+        return param_2;
+    }
+    iVar1 = ((param_2 + 3) / 3) * 4;
+    int iVar2;
+    if (param_1[1] == 0)
+        iVar2 = (int)CRYPTO_malloc(iVar1, ".\\crypto\\buffer\\buffer.c", 0x93);
+    else
+        iVar2 = (int)CRYPTO_realloc_clean((void*)param_1[1], param_1[2], iVar1,
+                                          ".\\crypto\\buffer\\buffer.c", 0x95);
+    if (iVar2 == 0) {
+        ERR_put_error(7, 0x69, 0x41, 0, 0);
+        return 0;
+    }
+    param_1[1] = iVar2;
+    param_1[2] = iVar1;
+    operator_new__((void*)(*param_1 + iVar2), 0, param_2 - *param_1);
+    *param_1 = param_2;
+    return param_2;
+}
+
+// @ 0x01184a20
+int __cdecl FUN_01184a20(int param_1, int param_2)
+{
+    if (param_1 == 0)
+        return 0;
+    int iVar1 = (int)CRYPTO_malloc(param_2 + 1, ".\\crypto\\buffer\\buffer.c", 0xb1);
+    if (iVar1 == 0) {
+        ERR_put_error(7, 0x68, 0x41, 0, 0);
+        return 0;
+    }
+    BUF_strlcpy((char*)iVar1, (char*)param_1, param_2 + 1);
+    return iVar1;
+}
+
+// @ 0x011869d0
+void lib_cblock_FUN_011869d0(void)
+{}
+
+// @ 0x01186d30
+void lib_cblock_FUN_01186d30(void)
+{}
+
+// @ 0x01187540
+int lib_cblock_BN_mod_mul_wrap(int param_1, int param_2, int* param_3, int param_4)
+{
+    int r = 1;
+    if (*param_3 != 0 && param_3[1] != 0) {
+        if (param_2 != 0) {
+            if (BN_copy(param_2, param_3[1]) == 0) {
+                r = 0;
+            }
+        }
+        if (BN_mod_mul(param_1, param_1, *param_3, param_3[3], param_4) == 0) {
+            r = 0;
+        }
+        return r;
+    }
+    ERR_put_error(3, 0x64, 0x6b, 0, 0);
+    return 0;
+}
+
+// @ 0x011875c0
+void lib_cblock_FUN_011875c0(void)
+{}
+
+// @ 0x011877a0
+int lib_cblock_BN_mod_mul_wrap2(int* param_1, int param_2)
+{
+    int v = *param_1;
+    int r = 0;
+    if (v == 0 || param_1[1] == 0) {
+        ERR_put_error(3, 0x67, 0x6b, 0, 0);
+        goto END;
+    }
+    param_1[5] = param_1[5] - 1;
+    if ((param_1[5] == 0) && (param_1[2] != 0) && ((*(char*)((char*)param_1 + 0x18) & 2) == 0)) {
+        v = FUN_011875c0((int)param_1, 0, 0, param_2, 0, 0);
+        if (v == 0) {
+            goto END;
+        }
+    } else if ((*(char*)((char*)param_1 + 0x18) & 1) == 0) {
+        v = BN_mod_mul(v, v, v, param_1[3], param_2);
+        if (v == 0) {
+            goto END;
+        }
+        v = param_1[1];
+        v = BN_mod_mul(v, v, v, param_1[3], param_2);
+        if (v == 0) {
+            goto END;
+        }
+    }
+    r = 1;
+END:
+    if (param_1[5] == 0) {
+        param_1[5] = 0x20;
+    }
+    return r;
+}
+
+// @ 0x01187840
+int lib_cblock_BN_mod_mul_wrap3(int param_1, int param_2, int* param_3, int param_4)
+{
+    if (*param_3 != 0 && param_3[1] != 0) {
+        int v = param_3[1];
+        if (param_2 != 0) {
+            v = param_2;
+        }
+        v = BN_mod_mul(param_1, param_1, v, param_3[3], param_4);
+        if (v >= 0) {
+            if (lib_cblock_BN_mod_mul_wrap2(param_3, param_4) == 0) {
+                return 0;
+            }
+        }
+        return v;
+    }
+    ERR_put_error(3, 0x65, 0x6b, 0, 0);
+    return 0;
+}
+
+// @ 0x01187a80
+int* lib_cblock_BN_CTX_new(void)
+{
+    int* p = (int*)CRYPTO_malloc(0x2c, kBnCtxFile, 0xd8);
+    if (p == 0) {
+        ERR_put_error(3, 0x6a, 0x41, 0, 0);
+        return 0;
+    }
+    p[2] = 0;
+    p[1] = 0;
+    p[0] = 0;
+    p[4] = 0;
+    p[3] = 0;
+    p[5] = 0;
+    p[7] = 0;
+    p[6] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[10] = 0;
+    return p;
+}
+
+// @ 0x01187b00
+void lib_cblock_BN_STACK_push(int param_1)
+{
+    if (*(int*)(param_1 + 0x24) == 0 && *(int*)(param_1 + 0x28) == 0) {
+        if (BnStackPushInline((BnStack*)((char*)param_1 + 0x14), *(int*)(param_1 + 0x20)) == 0) {
+            ERR_put_error(3, 0x81, 0x6d, 0, 0);
+            ++*(int*)(param_1 + 0x24);
+        }
+    } else {
+        ++*(int*)(param_1 + 0x24);
+    }
+}
+
+// @ 0x01187b90
+int lib_cblock_BN_POOL_get(int param_1)
+{
+    if (*(int*)(param_1 + 0x24) == 0 && *(int*)(param_1 + 0x28) == 0) {
+        int r = BN_POOL_get();
+        if (r == 0) {
+            *(int*)(param_1 + 0x28) = 1;
+            ERR_put_error(3, 0x74, 0x6d, 0, 0);
+            return 0;
+        }
+        BN_set_word(r, 0);
+        ++*(int*)(param_1 + 0x20);
+        return r;
+    }
+    return 0;
+}
+
+// @ 0x01187be0
+void lib_cblock_FUN_01187be0(void)
+{}
+
+// @ 0x01190db0
+bool FUN_01190db0(char* param_1, int* param_2)
+{
+    *param_2 = 0;
+    char* p = param_1;
+    if (p == 0 || *p == '\0' || *p == '\n') return true;
+    if (strncmp(p, "Proc-Type: ", 0xb) == 0) {
+        if (p[0xb] == '4' && p[0xc] == ',') {
+            p += 0xd;
+            if (strncmp(p, "ENCRYPTED", 9) != 0) {
+                ERR_put_error(9, 0x6b, 0x6a, 0, 0);
+                return false;
+            }
+            char c = *p;
+            while (c != '\n') {
+                if (c == '\0') goto err_70;
+                p += 1;
+                c = *p;
+            }
+            if (*p != '\0') {
+                if (strncmp(p + 1, "DEK-Info: ", 10) != 0) {
+                    ERR_put_error(9, 0x6b, 0x69, 0, 0);
+                    return false;
+                }
+                p += 0xb;
+                char* q = p;
+                while ((c = *q, c > '@' && c < '[') ||
+                       (c == '-' || (unsigned char)(c - 0x30) < 10)) {
+                    q += 1;
+                }
+                *q = '\0';
+                OBJ_sn2nid(p);
+                int nid = FUN_011973a0(p);
+                *param_2 = nid;
+                *q = c;
+                p = q + 1;
+                if (nid == 0) {
+                    ERR_put_error(9, 0x6b, 0x72, 0, 0);
+                    return false;
+                }
+                return FUN_01190790(&p, param_2 + 1) != 0;
+            }
+err_70:
+            ERR_put_error(9, 0x6b, 0x70, 0, 0);
+            return false;
+        }
+    } else {
+        ERR_put_error(9, 0x6b, 0x6b, 0, 0);
+    }
+    return false;
+}
+
+// @ 0x01191470
+uint* FUN_01191470(void)
+{
+    uint* p = (uint*)CRYPTO_malloc(0x18, ".\\crypto\\evp\\p_lib.c", 0x13d);
+    if (!p) {
+        ERR_put_error(6, 0x6a, 0x41, 0, 0);
+        return 0;
+    }
+    p[0] = 0;
+    p[2] = 1;
+    p[3] = 0;
+    p[5] = 0;
+    p[4] = 1;
+    return p;
+}
+
+// @ 0x01191620
+int FUN_01191620(int* param_1, int* param_2)
+{
+    int v, old;
+    int kind = *param_2;
+    if (*param_1 != kind) {
+        ERR_put_error(6, 0x67, 0x65, 0, 0);
+        return 0;
+    }
+    if (kind == 0x74) {
+        if (((int*)param_2[3])[3] == 0 || ((int*)param_2[3])[4] == 0 ||
+            ((int*)param_2[3])[5] == 0) {
+            ERR_put_error(6, 0x67, 0x67, 0, 0);
+            return 0;
+        }
+    }
+    if (kind == 0x198) {
+        if (ASN1_STRING_type((void*)param_2[3]) == 0) {
+            ERR_put_error(6, 0x67, 0x67, 0, 0);
+            return 0;
+        }
+    }
+    if (*param_1 == 0x74) {
+        v = (int)FUN_0117b100((uint*)((int*)param_2[3])[3]);
+        if (!v) return 0;
+        old = ((int*)param_1[3])[3];
+        if (old) BN_free((void*)old);
+        ((int*)param_1[3])[3] = v;
+        v = (int)FUN_0117b100((uint*)((int*)param_2[3])[4]);
+        if (!v) return 0;
+        old = ((int*)param_1[3])[4];
+        if (old) BN_free((void*)old);
+        ((int*)param_1[3])[4] = v;
+        v = (int)FUN_0117b100((uint*)((int*)param_2[3])[5]);
+        if (!v) return 0;
+        old = ((int*)param_1[3])[5];
+        if (old) BN_free((void*)old);
+        ((int*)param_1[3])[5] = v;
+    }
+    if (*param_1 == 0x198) {
+        void* g = EC_GROUP_dup((void*)ASN1_STRING_type((void*)param_2[3]));
+        if (!g) return 0;
+        if (!EC_KEY_set_group((void*)param_1[3], g)) return 0;
+        EC_GROUP_free(g);
+    }
+    return 1;
+}
+
+// @ 0x011918c0
+int* FUN_011918c0(int* param_1)
+{
+    int* ret = 0;
+    unsigned char* p;
+    if (param_1 == 0) return 0;
+    if (param_1[2] != 0) {
+        CRYPTO_add_lock((int*)(param_1[2] + 8), 1, 10, ".\\crypto\\asn1\\x_pubkey.c", 0x111);
+        return (int*)param_1[2];
+    }
+    if (param_1[1] == 0) return 0;
+    int nid = OBJ_obj2nid((void*)*param_1);
+    ret = (int*)FUN_01191470();
+    if (ret == 0) goto err_41;
+    *ret = (int)EVP_PKEY_type(nid);
+    {
+        int* param = (int*)((int*)*param_1)[1];
+        if (*ret == 0x74) {
+            if (param != 0 && *param == 0x10) {
+                ret[3] = (int)FUN_01191da0();
+                if (ret[3] == 0) goto err_41;
+                *(int*)(ret[3] + 8) = 0;
+                p = (unsigned char*)((int*)param[1])[2];
+                if (!FUN_01191ed0((int**)(ret + 3), &p, (uint)((int*)param[1])[0]))
+                    goto cleanup;
+            }
+            ret[4] = 1;
+            goto lab_aa0;
+        }
+        if (*ret != 0x198) goto lab_aa0;
+        if (param != 0 && *param == 0x10) {
+            ret[3] = (int)FUN_01191f10();
+            if (ret[3] == 0) goto err_41;
+            p = (unsigned char*)((int*)param[1])[2];
+            if (!FUN_01192cb0((int**)(ret + 3), &p, (uint)((int*)param[1])[0])) {
+                ERR_put_error(0xb, 0x77, 0x10, 0, 0);
+                goto cleanup;
+            }
+            goto lab_a95;
+        }
+        if (param != 0 && *param == 6) {
+            if (ret[3] == 0) ret[3] = (int)FUN_01191f10();
+            int ec = ret[3];
+            if (ec == 0) goto cleanup;
+            int* g = FUN_011b3870(OBJ_obj2nid((void*)param[1]));
+            if (g == 0) goto cleanup;
+            FUN_011b1e60(g, 1);
+            if (!EC_KEY_set_group((void*)ec, g)) goto cleanup;
+            EC_GROUP_free(g);
+        }
+lab_a95:
+        ret[4] = 1;
+    }
+lab_aa0:
+    p = (unsigned char*)((int*)param_1[1])[2];
+    if (!FUN_011b34f0(nid, &ret, &p, (uint)*(int*)param_1[1])) {
+        ERR_put_error(0xb, 0x77, 0x66, 0, 0);
+        goto cleanup;
+    }
+    param_1[2] = (int)ret;
+    CRYPTO_add_lock((int*)((char*)ret + 8), 1, 10, ".\\crypto\\asn1\\x_pubkey.c", 0x173);
+    return ret;
+err_41:
+    ERR_put_error(0xb, 0x77, 0x41, 0, 0);
+cleanup:
+    if (ret != 0) EVP_PKEY_free(ret);
+    return 0;
+}
+
+// @ 0x01191b20
+uint* FUN_01191b20(int param_1)
+{
+    uint* p = (uint*)CRYPTO_malloc(0x44, ".\\crypto\\dsa\\dsa_lib.c", 0x75);
+    if (!p) {
+        ERR_put_error(0xa, 0x67, 0x41, 0, 0);
+        return 0;
+    }
+    uint* meth = DAT_016f20f0;
+    if (!meth) {
+        meth = FUN_011b38e0();
+        DAT_016f20f0 = meth;
+    }
+    p[0xf] = (uint)meth;
+    if (param_1 != 0) {
+        if (!FUN_011836c0((uint*)param_1)) {
+            ERR_put_error(0xa, 0x67, 0x26, 0, 0);
+            FUN_011835c0(p);
+            return 0;
+        }
+        p[0x10] = (uint)param_1;
+    } else {
+        p[0x10] = (uint)FUN_011b4020();
+    }
+    if (p[0x10] != 0) {
+        uint* m = (uint*)FUN_01192300((uint*)p[0x10]);
+        p[0xf] = (uint)m;
+        if (!m) {
+            ERR_put_error(0xa, 0x67, 0x26, 0, 0);
+            FUN_01183740((void*)p[0x10]);
+            FUN_011835c0(p);
+            return 0;
+        }
+    }
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 1;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[0xb] = 0;
+    p[0xc] = 1;
+    p[0xa] = *(uint*)(p[0xf] + 0x20);
+    FUN_01184260(7, p, p + 0xd);
+    int (*init)(void*) = (int (*)(void*))*(uint*)(p[0xf] + 0x18);
+    if (init != 0) {
+        if (!init(p)) {
+            if (p[0x10]) FUN_01183740((void*)p[0x10]);
+            FUN_011842c0(7, p, p + 0xd);
+            FUN_011835c0(p);
+            p = 0;
+        }
+    }
+    return p;
+}
+
+// @ 0x01191f10
+uint* FUN_01191f10(void)
+{
+    uint* p = (uint*)CRYPTO_malloc(0x20, ".\\crypto\\ec\\ec_key.c", 0x49);
+    if (!p) {
+        ERR_put_error(0x10, 0xb6, 0x41, 0, 0);
+        return 0;
+    }
+    p[0] = 1;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 4;
+    p[6] = 1;
+    p[7] = 0;
+    return p;
+}
+
+// @ 0x01191fe0
+uint* FUN_01191fe0(uint* param_1, uint* param_2)
+{
+    if (!param_1 || !param_2) {
+        ERR_put_error(0x10, 0xb2, 0x43, 0, 0);
+        return 0;
+    }
+    if (param_2[1]) {
+        int* a = FUN_011838a0((int*)param_2[1]);
+        if (param_1[1]) EC_GROUP_free((void*)param_1[1]);
+        int g = (int)FUN_011b1d20(a);
+        param_1[1] = (uint)g;
+        if (!g) return 0;
+        if (!FUN_011b2b70((int*)g, (int*)param_2[1])) return 0;
+    }
+    if (param_2[2] && param_2[1]) {
+        if (param_1[2]) EC_POINT_free((void*)param_1[2]);
+        int pt = (int)FUN_011b2140((int*)param_2[1]);
+        param_1[2] = (uint)pt;
+        if (!pt) return 0;
+        if (!FUN_011b2240((int*)pt, (int*)param_2[2])) return 0;
+    }
+    if (param_2[3]) {
+        if (!param_1[3]) {
+            int b = (int)FUN_0117a9d0();
+            param_1[3] = (uint)b;
+            if (!b) return 0;
+        }
+        if (!BN_copy((int)param_1[3], (int)param_2[3])) return 0;
+    }
+    EC_EX_DATA_free_all_data(param_1 + 7);
+    uint* p = (uint*)param_2[7];
+    for (;;) {
+        if (!p) {
+            param_1[4] = param_2[4];
+            param_1[5] = param_2[5];
+            *param_1 = *param_2;
+            return param_1;
+        }
+        int d = ((int(__cdecl*)(uint))p[2])(p[1]);
+        if (!d) return 0;
+        if (!FUN_011b1f80((int*)(param_1 + 7), (int*)d, (int*)p[2], (int*)p[3], (int*)p[4]))
+            return 0;
+        p = (uint*)*p;
+    }
+}
+
+// @ 0x01192190
+uint FUN_01192190(int param_1)
+{
+    int iv5 = 0;
+    int iv4 = 0;
+    uint local_4 = 0;
+    if (param_1 == 0 || *(int*)(param_1 + 4) == 0) {
+        ERR_put_error(0x10, 0xb3, 0x43, 0, 0);
+        return 0;
+    }
+    int iv1 = (int)FUN_0117a9d0();
+    if (iv1 != 0) {
+        int iv2 = (int)FUN_01187a80();
+        if (iv2 != 0) {
+            iv5 = *(int*)(param_1 + 0xc);
+            if (iv5 == 0) iv5 = (int)FUN_0117a9d0();
+            if (iv5 != 0 &&
+                EC_GROUP_get_order((int*)*(int*)(param_1 + 4), (int*)iv1, (int*)iv2)) {
+                do {
+                    if (!BN_rand_range((int*)iv5, (int*)iv1)) goto cleanup;
+                } while (*(int*)(iv5 + 4) == 0);
+                iv4 = *(int*)(param_1 + 8);
+                if (iv4 == 0) iv4 = (int)FUN_011b2140((int*)*(int*)(param_1 + 4));
+                if (iv4 != 0 &&
+                    EC_POINT_mul((int*)*(int*)(param_1 + 4), (int*)iv4, (int*)iv5, 0, 0,
+                                 (int*)iv2)) {
+                    *(int*)(param_1 + 0xc) = iv5;
+                    *(int*)(param_1 + 8) = iv4;
+                    local_4 = 1;
+                }
+            }
+        }
+cleanup:
+        BN_free((void*)iv1);
+        if (iv4 != 0 && *(int*)(param_1 + 8) == 0) EC_POINT_free((void*)iv4);
+        if (iv5 != 0 && *(int*)(param_1 + 0xc) == 0) BN_free((void*)iv5);
+        if (iv2 != 0) BN_CTX_free((void*)iv2);
+    }
+    return local_4;
+}

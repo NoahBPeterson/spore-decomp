@@ -1,4 +1,4 @@
-// src/game/SPEngine/_at_00680000.cpp -- migrated from slice(s) s0068e670, s0068d840, s0068c330, s0068b150, s00687c20, s006870a0, s00683f80, s00681f10, s00680c30 by tools/migrate/rewrite.py
+// src/game/SPEngine/_at_00680000.cpp -- migrated from slice(s) s00682f40, s0068e670, s0068d840, s0068c330, s0068b150, s00687c20, s006870a0, s00683f80, s00681f10, s00680c30 by tools/migrate/rewrite.py
 // Object file: SPEngine/_at_00680000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1055,7 +1055,6 @@ extern "C" int  AddRef_68F950(void* job);          // 0x068f950  cJob::AddRef
 extern "C" int  Release_690120(void* job);         // 0x0690120  cJob::Release
 extern "C" void AddWeakDependency_6913C0(void* self, void* other); // 0x06913c0
 extern "C" bool Continuation_68F9F0(void* job, void* fn, void* arg);  // 0x068f9f0
-extern "C" int  LockDec_68F9B0(void* lock);        // 0x068f9b0
 typedef unsigned long long u64;
 extern "C" u32 __cdecl CRC32(const void* data, u32 n, u32 seed, int flag);      // 0x0932da0
 extern "C" u64 __cdecl CRC64(const void* data, u32 n, u32 lo, u32 hi, u32 x);   // 0x0932df0
@@ -1147,13 +1146,13 @@ struct Coder_s0068_e670 {
     void Flush();                                                            // 0x068df00
     int  Read(void* dst, u32 n);                                             // 0x068e3b0
 
-    char ReadHeader(int* out);
-    int  InitBitmap(int width, int height, int bits, u8 flag);
+    char ReadHeader(int* out);  // 0x0068e670 (Coder::ReadHeader)
+    int  InitBitmap(int width, int height, int bits, u8 flag);  // 0x0068e8f0 (Coder::InitBitmap)
     char ReadData(void* io);
-    char OpenData(const char* path);
-    char WriteData(const u8* data, u32 n);
-    char Finalize(char flag);
-    char Begin(char external);
+    char OpenData(const char* path);  // 0x0068eb50 (Coder::OpenData)
+    char WriteData(const u8* data, u32 n);  // 0x0068eca0 (Coder::WriteData)
+    char Finalize(char flag);  // 0x0068ed70 (Coder::Finalize)
+    char Begin(char external);  // 0x0068eef0 (Coder::Begin)
 };
 struct ThreadMutex {
     u32 mRaw[12];                                                            // 0x30 bytes
@@ -1190,17 +1189,139 @@ struct CJobHolder2 {
     void* mArg;             // +0x10
     bool Attach(void* job);
 };
-typedef int (__thiscall *FnLockDec)(void*);
-struct JobLock {
-    void* vtbl0;            // +0x00
-    void* vtbl1;            // +0x04
-    volatile long mRef;     // +0x08 refcount (lock xchg/xadd)
-    void* mRefObj;          // +0x0c intrusive refcounted object
-    void* mJob;             // +0x10
-    JobLock(void* out, void* job, void* refObj);
-    ~JobLock();
-};
 // ---- items of slice s0068e670 end
+
+// ---- items of slice s00682f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char  g_allocTag_13ebb38[];
+extern "C" char  g_fileEASTL_13ebc58[];
+extern "C" void  __cdecl CopyBackward1800(void*, void*, void*);   // 0x0681e40
+extern "C" void* __cdecl MoveBackN1800(void*, void*, void*);      // 0x0681d20
+extern "C" void  __cdecl Destroy1800(void*, void*, void*);        // 0x0680bf0
+extern "C" void  __cdecl Elem1800TailDtor(void*);             // 0x0680730
+struct Obj1800CtorT { void ctor(const void* src); };               // 0x0681800
+struct ObjB50AssignT { void assign(const void* src); };            // 0x0681b50
+struct ObjACtorT { void ctor(const void* src); };                  // 0x0681a10 (thiscall)
+struct LoadEntriesT { void load(void* out, IRd* r); };             // 0x06812c0
+struct ReadStrKeyT  { void read(void* out, IRd* r); };             // 0x0680560
+struct S8_s0068_2f40 {
+    char* mpBegin; char* mpEnd; char* mpCap;
+    S8_s0068_2f40() {}
+    void Init(int n);                           // 0x0475ab0
+    __forceinline S8_s0068_2f40(const S8_s0068_2f40& x) {
+        mpBegin = 0; mpEnd = 0; mpCap = 0;
+        char* xEnd = x.mpEnd; char* xBegin = x.mpBegin;
+        int n = xEnd - xBegin;
+        Init(n + 1);
+        MemcpyT(mpBegin, xBegin, (uint32_t)n);
+        mpEnd = mpBegin - xBegin + xEnd;
+        *mpEnd = 0;
+    }
+    ~S8_s0068_2f40() { if ((int)(mpCap - mpBegin) > 1 && mpBegin) EASTL_dealloc(mpBegin); }
+};
+struct MapC2_s0068_2f40 {
+    uint32_t pad0; void* mpAnchor; void* mpBegin; void* mpRoot;
+    ~MapC2_s0068_2f40() { FreeNodes(mpRoot); }
+    void FreeNodes(void* p);            // 0x0681480 (out-of-slice)
+};
+struct NodeF {
+    NodeF* mpRight;     // +0x00
+    NodeF* mpNext;      // +0x04
+    uint32_t pad[3];    // +0x08
+    struct Inner { Buf mBuf; MapC2_s0068_2f40 mMap; };
+    Inner mInner;       // +0x14
+};
+struct ClsF { void FreeChain(NodeF* p); };
+struct MY { char* b; char* e; char* c; void* a[2]; MY(const MY&); ~MY(); };
+struct ObjY_s0068_2f40 {
+    S8_s0068_2f40 mStr;
+    uint32_t padC;
+    MY m;               // +0x10
+    ObjY_s0068_2f40(const ObjY_s0068_2f40& o);
+};
+struct NodeY { NodeY* r; NodeY* l; NodeY* p; uint32_t col; int key; ObjY_s0068_2f40 val; };
+struct MapY {
+    uint32_t pad0; NodeY* anchor; NodeY* begin; NodeY* root; uint32_t col;
+    uint32_t size; uint32_t alloc;
+    NodeY* CreateNode(const int* key);          // 0x0683480 (out-of-slice)
+    NodeY** InsertPair(NodeY** out, NodeY* pos, int* key, char b);
+    void InsertUnique(void* pair, const int* key, int flag);
+};
+struct ObjA_s0068_2f40 {
+    Pod16 m0; V20 mF0; V20 mF1; V20 mF2; V20 mF3;
+    ObjA_s0068_2f40(const ObjA_s0068_2f40&); ~ObjA_s0068_2f40() {}
+};
+struct Obj1800_s0068_2f40 {
+    uint32_t w0[24]; uint32_t flag; uint8_t pad64[0x10];
+    V20 mF0; V20 mF1; V20 mF2; V20 mF3;
+    Obj1800_s0068_2f40(const Obj1800_s0068_2f40&); ~Obj1800_s0068_2f40() {}
+};
+struct Vec1800 {
+    Obj1800_s0068_2f40* begin; Obj1800_s0068_2f40* end; Obj1800_s0068_2f40* cap;
+    void insert(Obj1800_s0068_2f40* pos, const Obj1800_s0068_2f40& x);
+};
+struct VecA {
+    ObjA_s0068_2f40* begin; ObjA_s0068_2f40* end; ObjA_s0068_2f40* cap;
+    void insert(ObjA_s0068_2f40* pos, const ObjA_s0068_2f40& x);
+};
+struct Elem1800 {
+    uint32_t          head;      // +0x00
+    S8_s0068_2f40                str0;      // +0x04
+    S8_s0068_2f40                str1;      // +0x18
+    S8_s0068_2f40                str2;      // +0x2c
+    S8_s0068_2f40                str3;      // +0x40
+    uint32_t          u54;      // +0x54
+    uint32_t          i58;      // +0x58
+    uint32_t          i5c;      // +0x5c
+    uint32_t          i60;      // +0x60
+    V20               entries;   // +0x64
+    V20               vU32_0;    // +0x78
+    V20               vU32_1;    // +0x8c
+    V20               vU32_2;    // +0xa0
+    V20               vU32_3;    // +0xb4
+};
+struct Elem1800CtorT { void ctor(); };                         // 0x0680890 (thiscall)
+struct ObjLoaderT {
+    void load1800(void* vec, IRd* r);      // 0x0683700
+    void loadA(void* vec, IRd* r);         // 0x0683AB0
+};
+struct ListHead { ListHead* mpNext; ListHead* mpPrev; };
+struct cPropertyList {
+    void*     mpVtbl;        // +0x00  (0x13ebcdc, then the real vtable 0x1402ce8)
+    int       mRef;          // +0x04  (interlocked store of 0)
+    uint32_t  f08;           // +0x08
+    uint32_t  f0c;           // +0x0c
+    uint32_t  f10;           // +0x10
+    uint32_t  f14;           // +0x14
+    uint32_t  f18;           // +0x18
+    ListHead  mHead1c;       // +0x1c  self-linked
+    uint32_t  f24;           // +0x24
+    uint8_t   f28;           // +0x28
+    uint32_t  f2c;           // +0x2c
+    uint32_t  f30;           // +0x30
+    uint32_t  f34;           // +0x34
+    ListHead  mHead38;       // +0x38  self-linked
+    uint32_t  f40;           // +0x40
+    uint8_t   f44;           // +0x44
+    uint32_t  f48;           // +0x48
+    uint32_t  f4c;           // +0x4c
+    uint32_t  f50;           // +0x50
+    ListHead  mHead54;       // +0x54  self-linked
+    uint32_t  f5c;           // +0x5c
+    uint8_t   f60;           // +0x60
+    uint32_t  f64;           // +0x64
+    uint32_t  f68;           // +0x68
+    uint32_t  f6c;           // +0x6c
+    uint32_t  f70;           // +0x70
+    uint32_t  f74;           // +0x74
+    cPropertyList();
+};
+struct RefCounted {
+    void* vtbl;                         // +0x00
+    volatile int mRef;                  // +0x04
+    int AddRef();
+    int Release();
+};
+// ---- items of slice s00682f40 end
 
 // @ 0x00680c30
 __declspec(noinline) ObjC30::ObjC30(const ObjC30& other)
@@ -1782,6 +1903,283 @@ struct __declspec(novtable) FactoryView_683f80 : FactBase_683f80 {
     FactBuf_683f80 m6c;                             // +0x6c
     ~FactoryView_683f80();
 };
+
+// @ 0x00682f40
+void Vec1800::insert(Obj1800_s0068_2f40* pos, const Obj1800_s0068_2f40& x)
+{
+    Obj1800_s0068_2f40* end = this->end;
+    if (end != this->cap) {
+        // If the source element lives inside the vector it will move: skip past it.
+        const Obj1800_s0068_2f40* src = &x;
+        if (src >= pos && src < end)
+            src = (const Obj1800_s0068_2f40*)((const char*)src + 0xc4);
+        if (end)
+            ((Obj1800CtorT*)end)->ctor((const char*)end - 0xc4);
+        CopyBackward1800(pos, (char*)this->end - 0xc4, this->end);
+        ((ObjB50AssignT*)pos)->assign(src);
+        this->end = (Obj1800_s0068_2f40*)((char*)this->end + 0xc4);
+        return;
+    }
+
+    // Grow: double the old capacity (or 1 when empty).
+    int count = (int)((char*)end - (char*)this->begin) / 0xc4;
+    int cap = (count == 0) ? 1 : count * 2;
+    char* buf = cap ? (char*)EASTL_alloc6((uint32_t)cap * 0xc4, g_allocTag_13ebb38, 0, 0, g_fileEASTL_13ebc58, 0xd1)
+                    : (char*)0;
+
+    Obj1800_s0068_2f40* oldBegin = this->begin;
+    char* mid = (char*)MoveBackN1800(oldBegin, pos, buf);
+    Destroy1800(oldBegin, pos, buf);
+    if (mid)
+        ((Obj1800CtorT*)mid)->ctor((const char*)&x);
+    Obj1800_s0068_2f40* oldEnd = this->end;
+    char* newEnd = (char*)MoveBackN1800(pos, oldEnd, mid + 0xc4);
+    Destroy1800(pos, oldEnd, mid + 0xc4);
+    if (oldBegin && ((int*)oldBegin)[-1])
+        EASTL_dealloc(oldBegin);
+    this->begin = (Obj1800_s0068_2f40*)buf;
+    this->end = (Obj1800_s0068_2f40*)newEnd;
+    this->cap = (Obj1800_s0068_2f40*)(buf + cap * 0xc4);
+}
+
+// @ 0x00683160
+void ClsF::FreeChain(NodeF* p)
+{
+    while (p) {
+        FreeChain(p->mpRight);
+        NodeF* next = p->mpNext;
+        p->mInner.~Inner();
+        EASTL_dealloc(p);
+        p = next;
+    }
+}
+
+// @ 0x00683500
+NodeY** MapY::InsertPair(NodeY** out, NodeY* pos, int* key, char flag)
+{
+    int bIns;
+    if (flag == 0 && pos != (NodeY*)&anchor && *key >= pos->key) bIns = 1;
+    else bIns = 0;
+    NodeY* n = CreateNode(key);
+    RBTreeInsert(n, pos, (NodeY*)&anchor, bIns);
+    NodeY** o = *(NodeY** volatile*)&out;
+    ++size;
+    *o = n;
+    return out;
+}
+
+// @ 0x00683560
+void MapY::InsertUnique(void* pairOut, const int* key, int)
+{
+    struct PairOutY { NodeY* first; bool second; };
+    PairOutY* pOut = (PairOutY*)pairOut;
+    NodeY* pos = (NodeY*)&anchor;
+    bool bLess = true;
+    NodeY* n = root;
+    if (n) {
+        do {
+            pos = n;
+            bLess = (*key < n->key);
+            n = bLess ? n->l : n->r;
+        } while (n);
+    }
+    NodeY* found = pos;
+    if (bLess) {
+        if (pos != begin) {
+            pos = (NodeY*)RBTreeDecrement(pos);
+        } else {
+            int bIns = (pos != (NodeY*)&anchor && *key >= pos->key);
+            NodeY* nNew = CreateNode(key);
+            RBTreeInsert(nNew, pos, &anchor, bIns);
+            ++size;
+            pOut->first = nNew;
+            pOut->second = true;
+            return;
+        }
+    }
+    if (pos->key < *key) {
+        int bIns = (found != (NodeY*)&anchor && *key >= found->key);
+        NodeY* nNew = CreateNode(key);
+        RBTreeInsert(nNew, found, &anchor, bIns);
+        ++size;
+        pOut->first = nNew;
+        pOut->second = true;
+    } else {
+        pOut->first = pos;
+        pOut->second = false;
+    }
+}
+
+// @ 0x00683670
+ObjY_s0068_2f40::ObjY_s0068_2f40(const ObjY_s0068_2f40& o)
+: mStr(o.mStr), m(o.m) {}
+
+// @ 0x00683700
+void ObjLoaderT::load1800(void* vec, IRd* r)
+{
+    void* self = this;
+    int count;
+    r->Read(&count, 4);
+    for (int i = 0; i < count; ++i) {
+        Elem1800 elem;
+        ((Elem1800CtorT*)&elem)->ctor();
+        ((ReadStrKeyT*)self)->read(&elem.str0, r);
+        ((ReadStrKeyT*)self)->read(&elem.str1, r);
+        ((ReadStrKeyT*)self)->read(&elem.str2, r);
+        ((ReadStrKeyT*)self)->read(&elem.str3, r);
+        r->Read(&elem.u54, 4);
+        ReadInt32(r, &elem.i58, 1, 0);
+        ReadInt32(r, &elem.i5c, 1, 0);
+        ReadInt32(r, &elem.i60, 1, 0);
+        ((LoadEntriesT*)self)->load(&elem.entries, r);
+        int n;
+        r->Read(&n, 4);
+        for (int j = 0; j < n; ++j) {
+            uint32_t v;
+            r->Read(&v, 4);
+            *(uint32_t*)elem.vU32_0.mpEnd = v;
+            elem.vU32_0.mpEnd = (char*)elem.vU32_0.mpEnd + 4;
+        }
+        r->Read(&n, 4);
+        for (int j = 0; j < n; ++j) {
+            uint32_t v;
+            r->Read(&v, 4);
+            *(uint32_t*)elem.vU32_1.mpEnd = v;
+            elem.vU32_1.mpEnd = (char*)elem.vU32_1.mpEnd + 4;
+        }
+        r->Read(&n, 4);
+        for (int j = 0; j < n; ++j) {
+            uint32_t v;
+            r->Read(&v, 4);
+            *(uint32_t*)elem.vU32_2.mpEnd = v;
+            elem.vU32_2.mpEnd = (char*)elem.vU32_2.mpEnd + 4;
+        }
+        r->Read(&n, 4);
+        for (int j = 0; j < n; ++j) {
+            uint32_t v;
+            r->Read(&v, 4);
+            *(uint32_t*)elem.vU32_3.mpEnd = v;
+            elem.vU32_3.mpEnd = (char*)elem.vU32_3.mpEnd + 4;
+        }
+
+        // push_back into the destination vector<Obj1800>
+        {
+            Obj1800_s0068_2f40** v = (Obj1800_s0068_2f40**)vec;
+            Obj1800_s0068_2f40* end = v[1];
+            if (end < v[2]) {
+                v[1] = (Obj1800_s0068_2f40*)((char*)end + 0xc4);
+                if (end)
+                    ((Obj1800CtorT*)end)->ctor(&elem);
+            } else {
+                ((Vec1800*)vec)->insert(end, *(Obj1800_s0068_2f40*)&elem);
+            }
+        }
+        Elem1800TailDtor(&elem);
+    }
+}
+
+// @ 0x00683ab0
+void ObjLoaderT::loadA(void* vec, IRd* r)
+{
+    int count;
+    r->Read(&count, 4);
+    for (int i = 0; i < count; ++i) {
+        __declspec(align(4)) unsigned char elemBuf[0x60];
+        ObjA_s0068_2f40& elem = *(ObjA_s0068_2f40*)elemBuf;
+        // Zero the four 0x14-byte vector headers (begin/end/cap) before filling them.
+        elem.mF0.mpBegin = 0; elem.mF0.mpEnd = 0; elem.mF0.mpCap = 0;
+        elem.mF1.mpBegin = 0; elem.mF1.mpEnd = 0; elem.mF1.mpCap = 0;
+        elem.mF2.mpBegin = 0; elem.mF2.mpEnd = 0; elem.mF2.mpCap = 0;
+        elem.mF3.mpBegin = 0; elem.mF3.mpEnd = 0; elem.mF3.mpCap = 0;
+
+        uint32_t scratch = 0;
+        r->Read(&elem.m0.w[1], 4);
+        r->Read(&elem.m0.w[3], 4);
+        r->Read(&elem.mF0.mpBegin, 4);
+        r->Read(&scratch, 4);
+        (void)scratch;
+
+        int n;
+        r->Read(&n, 4);
+        for (int j = 0; j < n; ++j) {
+            uint32_t v;
+            r->Read(&v, 4);
+            *(uint32_t*)elem.mF1.mpEnd = v;
+            elem.mF1.mpEnd = (char*)elem.mF1.mpEnd + 4;
+        }
+        r->Read(&n, 4);
+        for (int j = 0; j < n; ++j) {
+            uint32_t v;
+            r->Read(&v, 4);
+            *(uint32_t*)elem.mF2.mpEnd = v;
+            elem.mF2.mpEnd = (char*)elem.mF2.mpEnd + 4;
+        }
+
+        // push_back into the destination vector<ObjA>
+        {
+            ObjA_s0068_2f40** v = (ObjA_s0068_2f40**)vec;
+            ObjA_s0068_2f40* end = v[1];
+            if (end < v[2]) {
+                v[1] = (ObjA_s0068_2f40*)((char*)end + 0x60);
+                if (end)
+                    ((ObjACtorT*)end)->ctor(&elem);
+            } else {
+                ((VecA*)vec)->insert(end, elem);
+            }
+        }
+    }
+}
+
+// @ 0x00683e90
+cPropertyList::cPropertyList()
+{
+    mpVtbl = (void*)0x13ebcdc;          // PropBaseA22 vtable (provisional)
+    _InterlockedExchange((volatile long*)&mRef, 0);
+    f08 = 0; f0c = 0; f10 = 0; f14 = 0;
+    mpVtbl = (void*)0x1402ce8;          // cPropertyList vtable
+    *(uint32_t*)&mHead1c.mpPrev = 0;    // +0x20
+    f24 = 0;
+    *(uint32_t*)&f28 = 0;               // +0x28 (dword)
+    f24 = 0;
+    f28 = 0;                            // +0x28 (byte)
+    f2c = 0;
+    mHead1c.mpNext = (ListHead*)((char*)this + 0x1c);
+    mHead1c.mpPrev = (ListHead*)((char*)this + 0x1c);
+    mHead38.mpPrev = 0;                 // +0x3c
+    f40 = 0;
+    *(uint32_t*)&f44 = 0;               // +0x44 (dword)
+    mHead38.mpNext = (ListHead*)((char*)this + 0x38);
+    mHead38.mpPrev = (ListHead*)((char*)this + 0x38);
+    f40 = 0;
+    f44 = 0;                            // +0x44 (byte)
+    f48 = 0;
+    mHead54.mpPrev = 0;                 // +0x58
+    f5c = 0;
+    *(uint32_t*)&f60 = 0;               // +0x60 (dword, via head+0xc)
+    mHead54.mpNext = (ListHead*)((char*)this + 0x54);
+    mHead54.mpPrev = (ListHead*)((char*)this + 0x54);
+    f5c = 0;
+    f60 = 0;                            // +0x60 (byte)
+    f64 = 0;
+    f6c = 0; f70 = 0; f74 = 0;
+}
+
+// @ 0x00683f30
+int RefCounted::Release()
+{
+    int n = _InterlockedExchangeAdd((volatile long*)&mRef, -2) - 2;
+    if (n == 0) {
+        _InterlockedExchange((volatile long*)&mRef, 2);
+        if (this != 0) {
+            ((void (__thiscall*)(void*, int))VT(this)[2])(this, 1);
+            return n;
+        }
+    } else if (n == 3 && *(void**)((char*)this + 0x14) != 0) {
+        void* p = *(void**)((char*)this + 0x14);
+        ((void (__thiscall*)(void*, void*))VT(p)[0])(p, this);
+    }
+    return n;
+}
 
 // @ 0x00683f80
 FactoryView_683f80::~FactoryView_683f80()
@@ -3127,7 +3525,7 @@ bool CJobHolder::SetJob(void* target, void* job)
     void* old = mJob;
     JobPtr held(old);                                   // strong ref to the old job
     if (job != mJob) {
-        if (job) ((FnAddRef)AddRef_68F950)(job);        // acquire the new job's reference
+        JobPtr add(job);                                // (acquire, freed below)
         mJob = job;
         if (old) ((FnRelease)Release_690120)(old);
     }

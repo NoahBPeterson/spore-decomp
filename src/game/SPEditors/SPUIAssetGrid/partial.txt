@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (incomplete/approximate)
+# va  diff-bytes  reason
 0064fa20  544   outline only: cSPUIAssetGrid::UpdateScrolling (stubbed); Earlier, fuller draft: match/slices/s0064fa20/s0064fa20.cpp (left behind by the migration); start from it.
 0064fc40  188   outline only: grid helper (stubbed); Earlier, fuller draft: match/slices/s0064fa20/s0064fa20.cpp (left behind by the migration); start from it.
 0064fd00  224   outline only: grid helper (stubbed); Earlier, fuller draft: match/slices/s0064fa20/s0064fa20.cpp (left behind by the migration); start from it.

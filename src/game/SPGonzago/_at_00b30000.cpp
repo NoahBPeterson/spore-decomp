@@ -2258,6 +2258,7 @@ struct C101Listener { virtual void UnregisterMessages(); };   // second base at 
 struct C101Obj : C101Base0, C101Listener {
     void UnregisterMessages();
 };
+
 // @ 0x00b3d730
 void C101Obj::UnregisterMessages()
 {

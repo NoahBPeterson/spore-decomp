@@ -6,6 +6,7 @@
 ../src/game/SPGonzago/_at_00b30000.cpp  ?FillN@@YAXPAUElem@@IPBU1@@Z  00b36250  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?RefPair_DestroyRange@@YAPAURefPair@@PAU1@00@Z  00b362c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?Lookup@MapHolder@@QAE_NH@Z  00b36320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b30000.cpp  ?Erase@MapErase@@QAEHPAX@Z  00b36360  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?RefPair_CopyAssign@@YAXPAURefPair@@0PBU1@@Z  00b364c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?RefPair_CopyConstruct@@YAPAURefPair@@PAU1@00@Z  00b36530  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?RefPair_CopyConstructBackward@@YAPAURefPair@@PAU1@00@Z  00b365a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
@@ -14,11 +15,10 @@
 ../src/game/SPGonzago/_at_00b30000.cpp  ?FUN_00b3ab70@@YAXPAUHandle_s00b3_aaf0@@0H@Z  00b3ab70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?M_cf00@C101@@QAEMXZ  00b3cf00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?FUN_00b3d700@@YA?AUS16@@II@Z  00b3d700  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b30000.cpp  ?UnregisterMessages@C101Obj@@UAEXXZ  00b3d730  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?M_d7a0@C101@@QAEXXZ  00b3d7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?FUN_00b3d850@@YIPAPAXPAPAX@Z  00b3d850  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?FUN_00b3d870@@YIPAPAXPAPAX@Z  00b3d870  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?M_d8c0@C101@@QAEPAXXZ  00b3d8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?GetMatrix@cSpatialProxy@@QAEPAUMatrix33@@PAU2@@Z  00b3f3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?GetTransform@cSpatialProxy@@QAEXPAUcSPTransform_s00b3_ef30@@@Z  00b3f6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00b30000.cpp  ?Erase@MapErase@@QAEHPAX@Z  00b36360  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/_at_00b30000.cpp  ?UnregisterMessages@C101Obj@@UAEXXZ  00b3d730  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

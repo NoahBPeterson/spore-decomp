@@ -1,19 +1,29 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?SetBlownUp@cStarRecord@@QAEX_N@Z  00bb9c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?OnSolarRollover@SimSpace@@QAEXI@Z  01002bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?Write@SimSpace@@QAE_NPAX@Z  01002c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?Read@SimSpace@@QAE_NPAX@Z  01002cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01002ea0@@YAPAUPRec5@@PAU1@00@Z  01002ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01002ee0@@YAXXZ  01002ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003230@cSPSimulatorSpaceGame@@QAEXXZ  01003230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?GalaxyContextActivate@cSPSimulatorSpaceGame@@QAEXXZ  01003490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003620@cSPSimulatorSpaceGame@@QAEXXZ  01003620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_010039c0@cSPSimulatorSpaceGame@@QAEXPAUcStar@@@Z  010039c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003a50@@YAXXZ  01003a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4c00@SimGame@@QAEHXZ  01004c00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f50d0@@YGXH@Z  010050d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f5320@SimGame@@QAEXXZ  01005320  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01006280@@YAPAXPAD00@Z  01006280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01006600@@YA_NPAXPAPAX@Z  01006600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?PropTableInit_d420@@YAXXZ  0139d420  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4bb0@SimGame@@QAEPAXH@Z  01004bb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4c00@SimGame@@QAEHXZ  01004c00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4c30@SimGame@@QAEDXZ  01004c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f53a0@@YA_NXZ  010053a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?EraseFront@cObjectList@@QAEPAXPAE@Z  01009ab0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f50d0@@YGXH@Z  010050d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f5130@SimGame@@QAEXXZ  01005130  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f5320@SimGame@@QAEXXZ  01005320  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f53a0@@YA_NXZ  010053a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01006280@@YAPAXPAD00@Z  01006280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_010062d0@@YAPADPAD00@Z  010062d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01006600@@YA_NPAXPAPAX@Z  01006600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?EraseFront@cObjectList@@QAEPAXPAE@Z  01009ab0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?DoInsertValue@ControlDrawableVector@@QAEXPAUcControlDrawable@@ABU2@@Z  01009af0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?DoInsertValue@ElementVector@@QAEXPAUElement@@ABU2@@Z  01009c60  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?UpdateUFOEvents@cSPSimulatorSpaceGame_s0100_9df0@SP@@QAEXI@Z  01009df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?UpdateUFOStatusEffects@@YAXXZ  0100a080  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?LoadEmbassyList@@YAXPAXPAUEmbVec_s0100_a640@@@Z  0100a640  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?PropTableInit_d420@@YAXXZ  0139d420  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
