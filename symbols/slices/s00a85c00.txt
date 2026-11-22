@@ -1,1 +1,7 @@
+00a85ed0 ?OnMessage@cDistributeSimulator@@QAE_NHPAHH@Z  # cDistributeSimulator::OnMessage migrated from s00a85c00 (verbatim, slice spelling)
+00a85fb0 ?ReleaseEmitter@cDistributeSimulator@@QAEXXZ  # cDistributeSimulator::ReleaseEmitter migrated from s00a85c00 (verbatim, slice spelling)
+00a86010 ?Deactivate@cDistributeSimulator@@QAEXH@Z  # cDistributeSimulator::Deactivate migrated from s00a85c00 (verbatim, slice spelling)
+00a860e0 ?SetEmitterFlags@cDistributeSimulator@@QAEX_N@Z  # cDistributeSimulator::SetEmitterFlags migrated from s00a85c00 (verbatim, slice spelling)
+00a86120 ??0cDistributeSimulator@@QAE@I@Z  # cDistributeSimulator::cDistributeSimulator migrated from s00a85c00 (verbatim, slice spelling)
+00a86210 ?Destroy@cDistributeSimulator@@QAEPAXI@Z  # cDistributeSimulator::Destroy migrated from s00a85c00 (verbatim, slice spelling)
 00a86590 ?Update@cDistributeSimulator@@QAEXM@Z  # cDistributeSimulator::Update migrated from s00a85c00 (verbatim, slice spelling)

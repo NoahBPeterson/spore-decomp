@@ -1,0 +1,1 @@
+00c699a0 ?CanTarget_s00c6_99a0@@YAHPAUObject_s00c6_99a0@@PAUTarget_s00c6_99a0@@@Z  # CanTarget_s00c6_99a0 migrated from s00c699a0 (verbatim, slice spelling)

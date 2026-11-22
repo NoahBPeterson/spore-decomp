@@ -5,6 +5,6 @@
 00a1bba0 ?Stop@Sound@@QAE_NH_N@Z  # Sound::Stop (vtable slot 0x18)
 00a1be10 ?ShutdownImpl@Sound@@QAE_NXZ  # Sound::ShutdownImpl (vtable slot 0x8c)
 00a1bf50 ?Pause@Sound_s00a1_b480@@QAEH_NIM0@Z  # Sound_s00a1_b480::Pause migrated from s00a1b480 (verbatim, slice spelling)
-00a1c120 ?UpdateGainAndDistance@Sound@@QAEXM@Z  # Sound::UpdateGainAndDistance (vtable slot 0x5c)
+00a1c120 ?UpdateGainAndDistance@Sound@Audio@EA@@QAEXM@Z  # EA::Audio::Sound::UpdateGainAndDistance (vtable slot 0x5c); the canonical class is EA::Audio::Sound (EA/Audio/Sound.h declares it, retail address 0x00a1c120); the old bare `Sound::` spelling demangled to a different class, so the module TS never got the row
 00a1c290 ?CalculateDistanceToListener@Sound_s00a1_b480@@QAE_NXZ  # Sound_s00a1_b480::CalculateDistanceToListener migrated from s00a1b480 (verbatim, slice spelling)
 00a1c2f0 ?CreateEmitter@Sound@@QAE_NXZ  # Sound::CreateEmitter (vtable slot 0x6c)

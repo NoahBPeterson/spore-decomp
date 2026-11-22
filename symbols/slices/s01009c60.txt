@@ -1,0 +1,1 @@
+01009c60 ?DoInsertValue@ElementVector@@QAEXPAUElement@@ABU2@@Z  # ElementVector::DoInsertValue migrated from s01009c60 (verbatim, slice spelling)

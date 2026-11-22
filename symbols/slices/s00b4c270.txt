@@ -1,0 +1,2 @@
+00b4c6d0 ?FUN_00b4c6d0@@YGPAXPAX@Z  # FUN_00b4c6d0 migrated from s00b4c270 (verbatim, slice spelling)
+00b4ca60 ?FUN_00b4ca60@@YIXPAXHPAPAXI@Z  # FUN_00b4ca60 migrated from s00b4c270 (verbatim, slice spelling)

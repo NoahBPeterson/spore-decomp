@@ -1,0 +1,1 @@
+00c43f20 ?FUN_00c43f20@Vec16@@QAEPAUElem16@@PAU2@PBU2@@Z  # Vec16::FUN_00c43f20 migrated from s00c43f20 (verbatim, slice spelling)

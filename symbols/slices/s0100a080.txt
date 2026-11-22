@@ -1,0 +1,1 @@
+0100a080 ?UpdateUFOStatusEffects@@YAXXZ  # UpdateUFOStatusEffects migrated from s0100a080 (verbatim, slice spelling)

@@ -24,7 +24,7 @@
 009e4a00 ?Insert@EntryArr@@QAEXPBUEntry@@@Z  # thiscall sorted-key insert
 009e4aa0 ?ResetDefault@Gcmdst@@QAEXXZ  # thiscall
 009e4e30 gait_record_static_data::ReadFromText  # (buf, n)
-009e5070 ?Load@Table@@QAEXPBUSrc@@@Z  # called by the GAIT branch
+009e5070 ?Load@Table@@QAEXPBUSrc@@@Z  # Table::Load migrated from s009e5070 (verbatim, slice spelling)
 009e56a0 ??0Gcmdst@@QAE@XZ  # Gcmdst ctor: zero count/v/arr.count, VecEntry::Construct, ResetDefault
 009e56d0 ?GcmdstBuild@@YAPAXPAXPBX@Z  # sample the walk table into a fresh Gcmdst (RNG + iat_floor)
 009e59b0 ?ReadGaitRecordStaticDataFromStreamWrapper@@YAPAXPAH@Z  # register-ABI stream wrapper (GAIT/vers)

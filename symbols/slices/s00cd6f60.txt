@@ -1,0 +1,1 @@
+00cd6f60 ?WriteTribeObjectArray@@YA_NPAVcIObjectDatabaseOStream@SP@@PBQAX@Z  # WriteTribeObjectArray migrated from s00cd6f60 (verbatim, slice spelling)

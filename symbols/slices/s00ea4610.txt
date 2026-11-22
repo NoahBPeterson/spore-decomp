@@ -1,0 +1,1 @@
+00ea4610 ?UpdatePulseWindows@cCityMusicEditor@@QAEXXZ  # cCityMusicEditor::UpdatePulseWindows migrated from s00ea4610 (verbatim, slice spelling)

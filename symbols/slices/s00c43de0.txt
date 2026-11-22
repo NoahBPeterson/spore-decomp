@@ -1,0 +1,1 @@
+00c43de0 ??4LocoCopy@@QAEAAU0@ABU0@@Z  # LocoCopy::operator= migrated from s00c43de0 (verbatim, slice spelling)

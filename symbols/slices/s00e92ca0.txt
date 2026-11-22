@@ -1,4 +1,6 @@
+00e93160 ?OnDamageStateChanged@cSpatialObjectView_s00e9_2ca0@@QAEXHPAVKey_s00e9_2ca0@@@Z  # cSpatialObjectView_s00e9_2ca0::OnDamageStateChanged migrated from s00e92ca0 (verbatim, slice spelling)
 00e932a0 ??0cTribeToolView@@QAE@XZ  # cTribeToolView::cTribeToolView migrated from s00e92ca0 (verbatim, slice spelling)
+00e932d0 ??1cTribeToolView@@QAE@XZ  # cTribeToolView::~cTribeToolView migrated from s00e92ca0 (verbatim, slice spelling)
 00e939c0 ?HandleSimulationUpdate@cBabySackView@@QAEXHH@Z  # cBabySackView::HandleSimulationUpdate migrated from s00e92ca0 (verbatim, slice spelling)
 00e93b80 ??0cTribeView_s00e9_2ca0@@QAE@XZ  # cTribeView_s00e9_2ca0::cTribeView migrated from s00e92ca0 (verbatim, slice spelling)
 00e93c00 ??1cTribeView_s00e9_2ca0@@QAE@XZ  # cTribeView_s00e9_2ca0::~cTribeView migrated from s00e92ca0 (verbatim, slice spelling)

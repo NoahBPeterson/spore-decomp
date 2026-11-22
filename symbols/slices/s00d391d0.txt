@@ -1,0 +1,1 @@
+00d391d0 ?InitCreatureDisplay@@YAX_N@Z  # InitCreatureDisplay migrated from s00d391d0 (verbatim, slice spelling)

@@ -1,6 +1,6 @@
-00a4a500 ?canvas_getargs@Eapd@Audio@EA@@YAXPAH0@Z  # Eapd canvas_getargs (card name)
-00a4a550 ?canvas_realizedollar@Eapd@Audio@EA@@YAPAXPAPAXPAX1PBD@Z  # Eapd canvas_realizedollar
-00a4a5d0 ?canvas_findtext@Eapd@Audio@EA@@YAPAXPAHPAX@Z  # Eapd canvas_findtext
+00a4a500 ?canvas_getargs@Eapd@Audio@EA@@YAXPAH0@Z  # canvas_getargs migrated from s00a4a500 (verbatim, slice spelling)
+00a4a550 ?canvas_realizedollar@Eapd@Audio@EA@@YAPAXPAPAXPAX1PBD@Z  # canvas_realizedollar migrated from s00a4a500 (verbatim, slice spelling)
+00a4a5d0 ?canvas_findtext@Eapd@Audio@EA@@YAPAXPIAHPAX@Z  # canvas_findtext migrated from s00a4a500 (verbatim, slice spelling)
 00a4a600 ?glist_getname@Eapd@Audio@EA@@YAXPAUt_symbol@123@PAUt_glist@123@@Z  # Eapd glist_getname
 00a4a620 ?glist_getindex@Eapd@Audio@EA@@YAHPAUt_glist@123@PAX@Z  # Eapd glist_getindex
 00a4a640 ?linetraverser_start@Eapd@Audio@EA@@YAXPAUt_linetraverser@123@PAUt_glist@123@@Z  # Eapd linetraverser_start

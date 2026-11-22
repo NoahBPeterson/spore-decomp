@@ -11,10 +11,13 @@
 00ac9680 ?FUN_00ac9680@@YAXPAXHPBX@Z  # 4-stride uninitialized_fill_n
 00ac96b0 ?FUN_00ac96b0@@YAPAXPAX00@Z  # 0x2c-stride uninitialized_copy
 00ac97f0 ?FUN_00ac97f0@@YAPAXPAX00@Z  # 0xc-stride move_backward
+00acb1b0 ?FUN_00acb1b0@@YADPAHHH@Z  # FUN_00acb1b0 migrated from s00acb1b0 (verbatim, slice spelling)
+00acb340 ?FUN_00acb340@@YADPAHH0@Z  # FUN_00acb340 migrated from s00acb1b0 (verbatim, slice spelling)
 00acb490 ?FUN_00acb490@VO@@QAEPAXPAH@Z  # VO::FUN_00acb490 migrated from s00acb1b0 (verbatim, slice spelling)
 00acb7c0 ?FUN_00acb7c0@VO@@QAEXPAX0@Z  # VO::FUN_00acb7c0 migrated from s00acb1b0 (verbatim, slice spelling)
 00acbaf0 ?FUN_00acbaf0@VO@@QAEPAXPAH@Z  # VO::FUN_00acbaf0 migrated from s00acb1b0 (verbatim, slice spelling)
 00acbb20 ?FUN_00acbb20@@YAPAXPAE00@Z  # FUN_00acbb20 migrated from s00acb1b0 (verbatim, slice spelling)
+00acbc10 ?FUN_00acbc10@@YADPAHHH@Z  # FUN_00acbc10 migrated from s00acb1b0 (verbatim, slice spelling)
 00acbd90 ?FUN_00acbd90@VO@@QAEPAHPAH@Z  # VO::FUN_00acbd90 migrated from s00acb1b0 (verbatim, slice spelling)
 00acbed0 ?FUN_00acbed0@VO@@QAEHHH@Z  # VO::FUN_00acbed0 migrated from s00acb1b0 (verbatim, slice spelling)
 00f47380 ?operator_delete@@YAXPAX@Z  # heap free guarded by the array cookie

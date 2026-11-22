@@ -11,7 +11,7 @@
 00c884a0 ?func5Ch@cCommunity@@QAEXM@Z  # cCommunity::func5Ch migrated from s00c87be0 (verbatim, slice spelling)
 00c88510 ?MaybeCall@SpatialA@@QAEXXZ  # SpatialA::MaybeCall migrated from s00c87be0 (verbatim, slice spelling)
 00c88530 ?SetValue@SpatialA@@QAEXM@Z  # SpatialA::SetValue migrated from s00c87be0 (verbatim, slice spelling)
-00c88550 FUN_00c88550  # syncs +0x64 from +0x7c
+00c88550 ?Sync@SpatialA@@QAEXH@Z  # SpatialA::Sync migrated from s00c87be0 (verbatim, slice spelling)
 00c885b0 ?FUN_00c885b0@@YAPAUVObj174@@PAU1@PAI@Z  # FUN_00c885b0 migrated from s00c87be0 (verbatim, slice spelling)
 00c88610 ?FUN_00c88610@@YAPAUVObj174@@PAU1@PAI@Z  # FUN_00c88610 migrated from s00c87be0 (verbatim, slice spelling)
 00c88670 ?Set3@VecThing@@QAEXPAM@Z  # VecThing::Set3 migrated from s00c87be0 (verbatim, slice spelling)
@@ -22,14 +22,14 @@
 00c887e0 ?HasFlag@GameData@@QAEHXZ  # GameData::HasFlag migrated from s00c87be0 (verbatim, slice spelling)
 00c88810 ?SetModelKey3@SpatialModel@@QAEXPAI@Z  # SpatialModel::SetModelKey3 migrated from s00c87be0 (verbatim, slice spelling)
 00c88870 ?Fn@SpatialPos@@QAEXXZ  # SpatialPos::Fn migrated from s00c87be0 (verbatim, slice spelling)
-00c888e0 FUN_00c888e0  # effect-entry lookup by id (stride 0x3c)
-00c88910 SP::cSpatialObjectView::GetEffect  # PDB name
-00c88940 FUN_00c88940  # effect-entry flag query
-00c88980 SP::cSpatialObjectView::StartEffect  # PDB name
+00c888e0 ?FindEntry@GameData@@QAEHH@Z  # GameData::FindEntry migrated from s00c87be0 (verbatim, slice spelling)
+00c88910 ?HasEffect@GameData@@QAE_NH@Z  # GameData::HasEffect migrated from s00c87be0 (verbatim, slice spelling)
+00c88940 ?F40@Effects@@QAEHH@Z  # Effects::F40 migrated from s00c87be0 (verbatim, slice spelling)
+00c88980 ?StartEffect@Effects@@QAEXHH@Z  # Effects::StartEffect migrated from s00c87be0 (verbatim, slice spelling)
 00c889c0 ?StopEffect@Effects@@QAEXHH@Z  # Effects::StopEffect migrated from s00c87be0 (verbatim, slice spelling)
 00c88a00 ?F00@Effects@@QAEXHM@Z  # Effects::F00 migrated from s00c87be0 (verbatim, slice spelling)
 00c88a30 ?F30@Effects@@QAEXHPAH@Z  # Effects::F30 migrated from s00c87be0 (verbatim, slice spelling)
 00c88a90 ?Write@cSpatialObject@@QAEXPAX@Z  # cSpatialObject::Write migrated from s00c87be0 (verbatim, slice spelling)
-00c88ba0 FUN_00c88ba0  # helper
-00c88c30 FUN_00c88c30  # helper
-00c88d90 FUN_00c88d90  # helper
+00c88ba0 ??0ToolData@@QAE@ABU0@@Z  # ToolData::ToolData migrated from s00c87be0 (verbatim, slice spelling)
+00c88c30 ??4ToolData@@QAEAAU0@ABU0@@Z  # ToolData::operator= migrated from s00c87be0 (verbatim, slice spelling)
+00c88d90 ?FUN_00c88d90@@YAOPAUVObj174@@@Z  # FUN_00c88d90 migrated from s00c87be0 (verbatim, slice spelling)

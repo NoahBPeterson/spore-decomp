@@ -1,17 +1,17 @@
 00d2dd20 ?DrawLayer@cCreatureDisplayStrategy_s00d2_dd20@@QAEXIH@Z  # cCreatureDisplayStrategy_s00d2_dd20::DrawLayer migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e2e0 ?Update@cCreatureModeEventSink@@QAEXM@Z  # cCreatureModeEventSink::Update migrated from s00d2dd20 (verbatim, slice spelling)
-00d2e360  GetTerrainHeight() -> double  # current terrain sphere height promoted to double (st0 result)
-00d2e380  GetTierHeight(int) -> double  # -1 asks the avatar's combat target chain (vtable +0xd8) for the tier, else the shell level; 0..3 selects the tier height
+00d2e360 ?GetTerrainHeight@@YANXZ  # GetTerrainHeight migrated from s00d2dd20 (verbatim, slice spelling)
+00d2e380 ?GetTierHeight@@YANH@Z  # GetTierHeight migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e410 ?GetTierBaseHeight@@YANH@Z  # GetTierBaseHeight migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e480 ?SetClampedValue@@YAXM@Z  # SetClampedValue migrated from s00d2dd20 (verbatim, slice spelling)
-00d2e4a0  SetCreatureDisplayMode(int,bool) -> void  # re-entrancy guarded mode switch: calls the mode helper on the sub-object at ((char*)mpOwnerB4c + 8), then the per-creature id/guid helpers and the +0xd8 mode query
-00d2e580  RefreshViewScale() -> void  # tier height composition, clamped span, and dz*dz + (dy*dy + dx*dx) support radius (double via fsqrt) -> view scale
-00d2e720  RecomputeZoom() -> void  # avatar-profile zoom span, vector2-array property fetch (0xb561b9eb), clamp mZoom to the selected element's x, else y / span
-00d2e800  GetRecomputedZoom(cAvatar*) -> double  # recompute when the avatar's +0xb58 bit 9 is set, then read mZoom
-00d2e830  GetTierForTerrain() -> int  # walk tiers 0..3, add each tier height to the terrain height and stop at the first that exceeds the sphere's max height (4 when none do)
+00d2e4a0 ?SetCreatureDisplayMode@@YAXHD@Z  # SetCreatureDisplayMode migrated from s00d2dd20 (verbatim, slice spelling)
+00d2e580 ?RefreshViewScale@@YAXXZ  # RefreshViewScale migrated from s00d2dd20 (verbatim, slice spelling)
+00d2e720 ?RecomputeZoom@@YAXXZ  # RecomputeZoom migrated from s00d2dd20 (verbatim, slice spelling)
+00d2e800 ?GetRecomputedZoom@@YANPAVcAvatar@@@Z  # GetRecomputedZoom migrated from s00d2dd20 (verbatim, slice spelling)
+00d2e830 ?GetTierForTerrain@@YAHXZ  # GetTierForTerrain migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e8a0 ?NotifyEvent@cCreatureModeStrategy@@SAXM@Z  # cCreatureModeStrategy::NotifyEvent migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e980 ?ResetCreatureModeState@@YAXXZ  # ResetCreatureModeState migrated from s00d2dd20 (verbatim, slice spelling)
-00d2e9b0  cVarListSerializer::Load(unsigned int) -> bool  # version/sub-version header check, then the item loop over the 0xa14-byte serializer body
+00d2e9b0 ?Load@cVarListSerializer_s00d2_dd20@@QAE_NI@Z  # cVarListSerializer_s00d2_dd20::Load migrated from s00d2dd20 (verbatim, slice spelling)
 00d2ea80 ?AsInterface@cCreatureModeInputStrategy@@QAEPAXI@Z  # cCreatureModeInputStrategy::AsInterface migrated from s00d2dd20 (verbatim, slice spelling)
 00d2eab0 ?IsStrafeLeftDown@cCreatureModeInputStrategy@@QAE_NXZ  # cCreatureModeInputStrategy::IsStrafeLeftDown migrated from s00d2dd20 (verbatim, slice spelling)
 00d2eaf0 ?IsStrafeRightDown@cCreatureModeInputStrategy@@QAE_NXZ  # cCreatureModeInputStrategy::IsStrafeRightDown migrated from s00d2dd20 (verbatim, slice spelling)

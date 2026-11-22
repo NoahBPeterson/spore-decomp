@@ -1,1 +1,1 @@
-0110e510 hkGsk::getClosestFeature  # GSK simplex loop between hkGsk::checkTriangleBoundaries/handlePenetration (havok_names.txt); calls closestLineSegLineSeg, getSupportingVertex (vtbl+0x24), ret 0x10
+0110e510 ?getClosestFeature@hkGsk_s0110_e510@@QAEHPBVhkConvexShape_s0110_e510@@0ABVhkTransform_s0110_e510@@AAVhkVector4_s0110_e510@@@Z  # hkGsk_s0110_e510::getClosestFeature migrated from s0110e510 (verbatim, slice spelling)

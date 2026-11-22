@@ -1,0 +1,1 @@
+00c41dc0 ?ChoosePair@@YAXPBUVec3@@U1@PAU1@2@Z  # ChoosePair migrated from s00c41dc0 (verbatim, slice spelling)
