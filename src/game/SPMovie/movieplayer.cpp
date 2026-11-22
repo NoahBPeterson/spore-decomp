@@ -422,7 +422,7 @@ class MovieRenderer_s00fc_b210
     float GetVideoDelay();                               // 0x00fcbe60
     void  PlayVideo();                                   // 0x00fcbe90
     __declspec(noinline) void PauseVideo();             // 0x00fcbec0
-    void  ResumeVideo();                                 // 0x00fcbef0
+    __declspec(noinline) void ResumeVideo();                               // 0x00fcbef0
     void  SetVideoPositionX(float v);                    // 0x00fcbf10
     void  SetVideoPositionY(float v);                    // 0x00fcbf50
     void  SetVideoScaleX(float v);                       // 0x00fcbf90
@@ -1258,10 +1258,14 @@ void rw::movie::MoviePlayer_s00fc_b210::Tick()
 // @ 0x00fcb710
 void rw::movie::MoviePlayer_s00fc_b210::TickReverse()
 {
-    if (mState - 2 <= 2u)
+    switch (mState)
     {
+    case 2:
+    case 3:
+    case 4:
         mMovieRenderer->ResumeVideo();
         mMovieTimer->Update();
+        break;
     }
 }
 

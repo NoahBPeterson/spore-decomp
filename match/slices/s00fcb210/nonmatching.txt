@@ -3,7 +3,6 @@
 00fcb210	?ParseAVIHeaders@MoviePlayer@movie@rw@@QAE_NH@Z	868	WEAK (21.8% cov; imports: WaitForSingleObject/SleepEx dominate)
 00fcb490	?Decode@MoviePlayer@movie@rw@@QAEXXZ	351	WEAK (10.5% cov; tail unreached)
 00fcb5e0	?Render@MoviePlayer@movie@rw@@QAEXXZ	219	WEAK (16.7% cov)
-00fcb710	?TickReverse@MoviePlayer@movie@rw@@QAEXXZ	120	FAIL (mismatch: mMovieTimer::Update side effects)
 00fcb740	?Shutdown@MoviePlayer@movie@rw@@QAEXXZ	239	FAIL (ours faults at 0x011e8a26; stream-release path)
 00fcb860	?Destroy@MoviePlayer@movie@rw@@QAEXXZ	242	FAIL (call #0 arg differs; 0x00c2e4e0 teardown offset)
 00fcb920	?PreparePlayer@MoviePlayer@movie@rw@@QAE_NH@Z	661	FAIL (ecx clobber on entry)
