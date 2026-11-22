@@ -33,28 +33,8 @@ void* FUN_0067e0c0(int);
 void* FUN_00692f20();
 void* FUN_009200a0(int);
 void* FUN_00808780();
-void  FUN_00812d30(void*, int);
-void* FUN_0068f4d0();
-int   Timer_Elapsed(void*);
-void  ThreadSleep(void*);
-void  D3D9WindowResize(int);
-int   GetDescription(void*, unsigned int);
 unsigned int FNV1_String16(void*, unsigned int, int);
-void* WrapperAlloc(unsigned int);
-void* cStringCtor(void*);
-void* cStringDtor(void*);
-void* cStringTokenTranslatorCtor(void*);
-void* cStringDetokenizerCtor(void*);
-int   cStringLoad(void*, unsigned int, unsigned int, int);
-void* CommandLineFindSwitch(void*, unsigned int, int, int, int);
-unsigned int WStr_Format(void*, unsigned int, unsigned int);
-void* GetDataDir(int);
-void* FUN_009309b0(void*, void*, void*);
-void* RangeInitialize(void*);
-void* FUN_006884f0(int, int, int, void*, void*);
-void  operator_delete__(void*);
 void* g_sAppProperties;
-void* g_CommandLine;
 void* g_15fd928;
 struct WString { int assign(unsigned int b, unsigned int e); };
 #define VC0(p, off)        (*(void (__thiscall**)(void*))((*(char**)(p)) + (off)))(p)
@@ -158,6 +138,7 @@ struct WString_s00f4_7ed0 {                                                    /
     }
     ~WString_s00f4_7ed0() { DeallocateSelf(); }
     void RangeInitialize(const wchar_t* p);                         // 0x00579a90
+    int sprintf(const wchar_t* format, ...);                        // 0x0041e050
     void operator+=(const wchar_t* p);                              // 0x00599bb0
     void DeallocateSelf()
     {
@@ -1003,29 +984,26 @@ void BuildStringTokenTranslator(bool demo, eastl::basic_string<wchar_t, eastl::a
     delete detokenizer;
 }
 
+namespace EA { namespace IO {
+wchar_t* FUN_009309b0(wchar_t* out, const wchar_t* path, const wchar_t* base, int flags);   // 0x009309b0
+} }
+namespace SP { const wchar_t* GetDataDir(); }                                                   // 0x00688cb0
+void __cdecl EntrySet(int index, unsigned char enable, int id, const WString_s00f4_7ed0* dir,
+                      const WString_s00f4_7ed0* alt);                                          // 0x006884f0
+
 // @ 0x00f47d80
-void f47d80()
+void cSporeApp_s00f4_7ed0::SetupShipDirsFromCommandLine()
 {
-    void* cl = g_CommandLine;
-    int r = (int)CommandLineFindSwitch(cl, 0x13f8d84, 0, 0, 0);
-    if (r == -1) {
-        r = (int)CommandLineFindSwitch(cl, 0x148d850, 0, 0, 0);
-        if (r != -1) {
-            char buf[0x40];
-            WStr_Format(buf, 0x13f3da0, 0x148d844);
-            char path[0x200];
-            FUN_009309b0(path, buf, GetDataDir(4));
-            char s2[0x10];
-            *(char**)(s2 + 0) = (char*)0x1667bac;
-            *(char**)(s2 + 4) = (char*)0x1667bac;
-            *(char**)(s2 + 8) = (char*)0x1667bae;
-            RangeInitialize(s2);
-            int out[4];
-            out[0] = 0; out[1] = 0; out[2] = 0;
-            FUN_006884f0(1, 1, 0x6f4b5d1, out, s2);
-            operator_delete__((void*)out[0]);
-            operator_delete__((void*)out[2]);
-        }
+    CommandLine* cmdLine = gCommandLine;
+    if (cmdLine->FindSwitch(L"shipDirs", 0, 0, 0) == -1 && cmdLine->FindSwitch(L"bp1", 0, 0, 0) != -1) {
+        WString_s00f4_7ed0 relative;
+        relative.sprintf(L"%hs", "../BP1Data/");
+        const wchar_t* rel = relative.mpBegin;
+        wchar_t path[0x104];
+        EA::IO::FUN_009309b0(path, rel, SP::GetDataDir(), 4);
+        WString_s00f4_7ed0 dir(path);
+        WString_s00f4_7ed0 none;
+        EntrySet(1, 1, 0x6f4b5d1, &dir, &none);
     }
 }
 
