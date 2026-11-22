@@ -177,18 +177,15 @@ void RVRenderable::SetFrame1(int p2)
 // @ 0x00fce150
 int RVRenderable::GetFrame1(int p2)
 {
-    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
-    mtx->Lock(*(const unsigned int*)g_mutexName);
-    unsigned int n = ((unsigned int (*)(void))((void**)*(void**)((char*)this + 0x08))[0x3c / 4])();
-    if (n <= (unsigned int)p2) {
-        mtx->Unlock();
-        return 0;
+    VideoRenderableManager* self = (VideoRenderableManager*)this;
+    self->mListMutex.Lock(g_listLockToken);
+    if (self->mFilledList->Count() > (u32)p2) {
+        int r = ((VideoRenderable*)self->mFilledList->At(p2))->GetFrame()[0];
+        self->mListMutex.Unlock();
+        return r;
     }
-    void* p = (void*)((void* (*)(unsigned int))((void**)*(void**)((char*)this + 0x08))[0x30 / 4])(n = (unsigned int)p2);
-    int* q = (int*)((int (*)(void*))((void**)p)[0])(p);
-    int r = *q;
-    mtx->Unlock();
-    return r;
+    self->mListMutex.Unlock();
+    return 0;
 }
 
 // @ 0x00fce1b0
