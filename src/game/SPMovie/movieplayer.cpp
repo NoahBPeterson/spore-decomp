@@ -429,6 +429,7 @@ class MovieRenderer_s00fc_b210
     void  SetVideoScaleY(float v);                       // 0x00fcbfd0
     void  SetRenderCallback(void* a, void* b);           // 0x00fcc010
     void  Stop();                                        // 0x00fcc060
+    void  Teardown();                                    // 0x00c2e4e0 (folded empty teardown)
 };
 }
 }
@@ -606,6 +607,21 @@ extern uint32_t g_fcc_auds;   // 0x015b17d0
 }
 namespace rw {
 namespace movie {
+// The streamer context block at MoviePlayer+0xbc.
+struct MovieStreamerContext
+{
+    uint8_t data[0x34];
+    void Teardown();   // 0x00c2e4e0 (folded with other empty teardowns)
+};
+class EventLogger
+{ public:
+    void Dump();       // 0x00fc8660
+    void Destroy();    // 0x00fc9050
+};
+}
+}
+namespace rw {
+namespace movie {
 class MoviePlayer_s00fc_b210
 { public:
     ICoreAllocator_s00fc_b210* mAllocator;                 // +0x00
@@ -633,7 +649,7 @@ class MoviePlayer_s00fc_b210
     uint32_t mHeight;                           // +0xb0
     uint32_t mTotalFrames;                      // +0xb4
     void* mCurrentVideoRenderable;              // +0xb8
-    uint8_t pad_bc[0xf0 - 0xbc];                // +0xbc
+    MovieStreamerContext mStreamingContext;     // +0xbc
     float mPlaybackFps;                         // +0xf0
     float mVideoRenderingDelay;                 // +0xf4
     int32_t mLastRenderedFrame;                 // +0xf8
@@ -661,7 +677,7 @@ class MoviePlayer_s00fc_b210
     uint32_t mState;                            // +0x150
     uint8_t mField154;                          // +0x154
     uint8_t pad_155[3];                         // +0x155
-    uint32_t mEventLogger;                      // +0x158
+    EventLogger* mEventLogger;                  // +0x158
     uint8_t mIsAVIFile;                         // +0x15c
     uint8_t pad_15d[3];                         // +0x15d
     AVIHeader mAVIHeader;                       // +0x160
@@ -684,22 +700,7 @@ class MoviePlayer_s00fc_b210
 }
 namespace rw {
 namespace movie {
-void FUN_00fc9050(void* eventLogger);
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00fc8650(void* eventLogger);
-}
-}
-namespace rw {
-namespace movie {
 void FUN_00fc94f0(int index, void* outA, void* outB);
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00c2e4e0(void* p);            // UTFWin element teardown
 }
 }
 namespace rw {
@@ -1324,9 +1325,9 @@ void rw::movie::MoviePlayer_s00fc_b210::Destroy()
 {
     if (mEventLogger != 0)
     {
-        rw::movie::FUN_00fc8650((void*)mEventLogger);
-        rw::movie::FUN_00fc9050((void*)mEventLogger);
-        mAllocator->Free((void*)mEventLogger, 0);
+        mEventLogger->Dump();
+        mEventLogger->Destroy();
+        mAllocator->Free(mEventLogger, 0);
         mEventLogger = 0;
     }
     if (mMovieTimer != 0)
@@ -1337,7 +1338,7 @@ void rw::movie::MoviePlayer_s00fc_b210::Destroy()
     }
     if (mMovieRenderer != 0)
     {
-        rw::movie::FUN_00c2e4e0(mMovieRenderer);
+        mMovieRenderer->Teardown();
         mAllocator->Free(mMovieRenderer, 0);
         mMovieRenderer = 0;
     }
@@ -1347,7 +1348,7 @@ void rw::movie::MoviePlayer_s00fc_b210::Destroy()
         mAllocator->Free(mMovieDecoder, 0);
         mMovieDecoder = 0;
     }
-    rw::movie::FUN_00c2e4e0((char*)this + 0xbc);
+    mStreamingContext.Teardown();
 }
 
 // @ 0x00fcb920
