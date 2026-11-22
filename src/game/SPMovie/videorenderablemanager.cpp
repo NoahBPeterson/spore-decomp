@@ -99,6 +99,7 @@ struct VideoRenderable {
 };
 struct Comparator {
     void* vftable;                                           // +0x00
+    Comparator() { vftable = (void*)g_videoRenderableComparatorVtbl; }
 };
 struct VideoRenderableManager {
     ICoreAllocator* mAllocator;        // +0x00
@@ -372,28 +373,23 @@ done:
 // @ 0x00fce560
 VideoRenderableManager::VideoRenderableManager(ICoreAllocator* alloc)
 {
-    mComparator.vftable = (void*)g_videoRenderableComparatorVtbl;
     mAllocator = alloc;
     mEmptyList = (rw::SList*)mAllocator->Alloc(0x1c, "Empty List", 0, 4, 0);
-    if (mEmptyList != 0)
-        mEmptyList = new (mEmptyList) rw::SList;
+    mEmptyList = new (mEmptyList) rw::SList;
     mEmptyList->Init(4);
     mEmptyList->SetAllocator(mAllocator);
     mFilledList = (rw::SList*)mAllocator->Alloc(0x1c, "Filled List", 0, 4, 0);
-    if (mFilledList != 0)
-        mFilledList = new (mFilledList) rw::SList;
+    mFilledList = new (mFilledList) rw::SList;
     mFilledList->Init(4);
     mFilledList->SetAllocator(mAllocator);
     mSentToRendererList =
         (rw::SList*)mAllocator->Alloc(0x1c, "Sent To Renderer List", 0, 4, 0);
-    if (mSentToRendererList != 0)
-        mSentToRendererList = new (mSentToRendererList) rw::SList;
+    mSentToRendererList = new (mSentToRendererList) rw::SList;
     mSentToRendererList->Init(4);
     mSentToRendererList->SetAllocator(mAllocator);
     mSentToDecoderList =
         (rw::SList*)mAllocator->Alloc(0x1c, "Sent To Decoder List", 0, 4, 0);
-    if (mSentToDecoderList != 0)
-        mSentToDecoderList = new (mSentToDecoderList) rw::SList;
+    mSentToDecoderList = new (mSentToDecoderList) rw::SList;
     mSentToDecoderList->Init(4);
     mSentToDecoderList->SetAllocator(mAllocator);
 }
