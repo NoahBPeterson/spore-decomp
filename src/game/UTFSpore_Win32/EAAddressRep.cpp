@@ -28,7 +28,7 @@ extern "C" void* __cdecl operator_new(size_t nSize, const char* pName, int nFlag
 extern "C" void  operator_delete_array(void* pBlock);                   // 0x00f47380
 extern "C" void* __cdecl memset(void* pDst, int nValue, size_t nLen);
 extern "C" wchar_t* __cdecl wcscpy(wchar_t* pDst, const wchar_t* pSrc);
-extern const char gEastlAllocatorFile[];    // 0x013ebb38 "…/EASTL/allocator.h"
+extern const char gEastlAllocatorFile[];    // 0x013ebb38 ".../EASTL/allocator.h"
 extern const wchar_t gEmptyString16[];      // 0x01667bac
 extern const void* gWideTokenTable;         // 0x01667b34
 extern "C" void FUN_00406540(void* pDst, void* pSrc, int nElemSize, int nCount, void* pCtor); // 0x00406540
