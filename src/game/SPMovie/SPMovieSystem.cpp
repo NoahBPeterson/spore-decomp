@@ -7,6 +7,12 @@ extern "C" char g_13ec458[];
 extern "C" char g_1491730[];
 extern "C" char g_14939e4[];
 extern "C" char g_14939f4[];
+extern "C" char g_1493a28[];   // cMovieSystem vtables (cIMovieSystem, +0x04, +0x08 bases)
+extern "C" char g_1493a18[];
+extern "C" char g_1493a10[];
+extern "C" char g_13eb394[];   // IHandler vtable
+extern "C" char g_13eb938[];   // +0x04 base vtable
+extern "C" char g_1403758[];   // cIJobManager vtable
 
 #include "game/types.h"
 
@@ -16,17 +22,23 @@ extern float kFloat_1486374;
 extern float kFloat_1485720;
 extern void* g_pMutexTag;                            // 0x01493900
 #include <intrin.h>
+#include "sse_helpers.h"
 #include "EA/ArgScript/cArgumentSpec.h"
 #include "EA/ArgScript/cCommandBase.h"
 
 // ---- items of slice s00fd71e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// cMovieSystem's three bases (vtables at +0x00/+0x04/+0x08); the third is the message handler.
+struct MovieSystemBase0 { void* mpVtbl; };
+struct MovieSystemBase1 { void* mpVtbl; };
+struct IMovieMessageHandler { void* mpVtbl; };
+struct MovieSystemBases : MovieSystemBase0, MovieSystemBase1, IMovieMessageHandler {};
 struct IMessageServer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0;
     virtual void PostMsg(int a, int b, int c) = 0;   // +0x14
     virtual void v18() = 0; virtual void v1c() = 0; virtual void v20() = 0;
     virtual void v24() = 0; virtual void v28() = 0;
-    virtual void PostMsg2(int a, int b, int c) = 0;  // +0x2c
+    virtual void RemoveHandler(IMovieMessageHandler* h, int msg, int pri) = 0;  // +0x2c
 };
 struct ICheatManager {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
@@ -132,15 +144,27 @@ struct EAMutex {
     void Lock(void* tag);                              // 0x009221b0 (thiscall)
     void Unlock();                                     // 0x00922270 (thiscall)
     void Construct(void* params, bool b);              // 0x009222a0 (thiscall)
+    void Destruct();                                   // 0x00922130 (thiscall)
 };
 struct EAFileStream {
     uint8_t mData[0x228];
     void Construct(const char* path);                  // 0x00931da0 (thiscall)
+    void Destruct();                                   // 0x00931e70 (thiscall)
+};
+// Node of the intrusive packet list whose head is embedded at cMovieSystem+0x31c.
+struct PacketNode {
+    PacketNode* mpNext;          // +0x00
+    PacketNode* mpPrev;          // +0x04
 };
 void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
 void EAMutex_Lock(void* p, void* tag);             // 0x009221b0
 void EAMutex_Unlock(void* p);                      // 0x00922270
+// The movie stream header the player keeps at +0xb8.
+struct MovieStreamInfo {
+    char mPad00[0x34];
+    int  mFrameCount;            // +0x34
+};
 struct MoviePlayer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0; virtual void v14() = 0;
@@ -156,6 +180,11 @@ struct MoviePlayer {
     void Stop();                                       // 0x00fcb710
     void Kill();                                       // 0x00fcb740
     void Shutdown();                                   // 0x00fcb860
+
+    char             mPad04[0xb4];
+    MovieStreamInfo* mpStreamInfo;                      // +0xb8
+    char             mPadBc[0x34];
+    float            mFrameRate;                        // +0xf0
 };
 class cMovieSystem {
 public:
@@ -292,6 +321,32 @@ void* EA_Audio_GetSystemAT_s00fd_8190();                               // 0x00a2
 void* LockedAlloc(int,int,int,int,int,int);                 // 0x009289f0
 void  MemPool_Free(void* thisp, void* p);                   // 0x009276c0
 void* FUN_00fca2c0(void* p, int a);                         // 0x00fca2c0
+// Pool the recorder hands unused audio buffers back to (BindPool, thiscall Free).
+struct BindPool {
+    void Free(void* p);                                     // 0x009276c0
+};
+extern BindPool* g_spBindPool;                              // 0x016c8b44
+extern "C" char g_13ebb38[];                                // EASTL allocator name
+// eastl::list<int> node and sentinel.
+struct PacketListNode {
+    PacketListNode* mpNext;     // +0x00
+    PacketListNode* mpPrev;     // +0x04
+    int             mValue;     // +0x08
+};
+struct PacketList {
+    PacketListNode* mpNext;     // +0x00
+    PacketListNode* mpPrev;     // +0x04
+};
+// The audio encoder the recorder submits sample descriptions to (slot +0x38).
+struct AudioPacketDesc { int mType, mSampleRate, mChannels, mBlockSize, mData; };
+struct IAudioEncoderSink {
+    virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
+    virtual void v0c() = 0; virtual void v10() = 0; virtual void v14() = 0;
+    virtual void v18() = 0; virtual void v1c() = 0; virtual void v20() = 0;
+    virtual void v24() = 0; virtual void v28() = 0; virtual void v2c() = 0;
+    virtual void v30() = 0; virtual void v34() = 0;
+    virtual void Submit(AudioPacketDesc* desc) = 0;   // +0x38
+};
 class cMovieSystem_s00fd_8190 {
 public:
     char  mHead[0x64];          // +0x00
@@ -313,6 +368,7 @@ public:
     bool  mExcludeUI;           // +0xcd
     char  mPadCe[2];
     char  mRecordStream[0x228]; // +0xd0
+    int   mField2f8;            // +0x2f8
     int   mField2fc;            // +0x2fc
     int   mCapturedFrames;      // +0x300
     int   mField304;            // +0x304
@@ -321,7 +377,8 @@ public:
     float mField310;            // +0x310
     float mField314;            // +0x314
     void* mLetterbox;           // +0x318
-    void* mPacketList;          // +0x31c
+    PacketList mPackets;        // +0x31c (eastl::list<int> sentinel)
+    char  mPad324[4];
     int   mAudioSampleRate;     // +0x328
 
     bool RecordMovie(int unused, int* pInfo);       // 0x00fd8190
@@ -588,20 +645,19 @@ char cMovieSystem::OnMovieMsg(int msg, int)
 // @ 0x00fd75a0
 bool cMovieSystem::MovieIsPlaying()
 {
-    char* p = (char*)this;
-    if (!((IMovieSystemMethods*)this)->IsPlaying())
-        return false;
-    float t = *(float*)(p + 0x48);
-    if (!(t >= 0.0f))
-        return false;
-    void* d = *(void**)(p + 0x34);
-    int e = *(int*)((char*)d + 0xb8);
-    int n = (e != 0) ? *(int*)((char*)e + 0x34) : 0;
-    if (t < (float)n / *(float*)((char*)d + 0xf0))
-        return true;
-    SP_MessageServer()->PostMsg(0x61d72de, 0, 0);
-    ((IMovieSystemMethods*)this)->PauseMovie();
-    return true;
+    if (((IMovieSystemMethods*)this)->IsPlaying()) {
+        float t = mField48;
+        if (!(0.0f > t)) {
+            MovieStreamInfo* info = mPlayer->mpStreamInfo;
+            int n = (info != 0) ? info->mFrameCount : 0;
+            if ((float)n / mPlayer->mFrameRate >= t) {
+                SP_MessageServer()->PostMsg(0x61d72de, 0, 0);
+                ((IMovieSystemMethods*)this)->PauseMovie();
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 // @ 0x00fd7610
@@ -618,29 +674,29 @@ char cMovieSystem::PauseMovie2()
 int cMovieSystem::RecordFrames(int nFrames)
 {
     EAMutex* mx = &mRecordMutex;
-    mx->Lock((void*)0x1493900);
-    if (mField2fc == 0) {
+    mx->Lock(&g_pMutexTag);
+    if (mField2fc != 0) {
+        BlitArgs args;
+        args.a = 3;
+        args.b = mHeight;
+        args.c = *(int*)&mFPS;
+        args.d = (int)(intptr_t)mField30c;
+        int count = nFrames;
+        if ((float)count > mFieldC0)
+            count = SseRoundToInt(mFieldC0);
+        if (count > 0) {
+            int n = count;
+            do {
+                ((IVideoOps*)mWidth)->Blit2(args);
+                ++mCapturedFrames;
+            } while (--n != 0);
+        }
+        mField2fc = 0;
         mx->Unlock();
-        return 0;
+        return count;
     }
-    BlitArgs args;
-    args.a = 3;
-    args.b = mHeight;
-    args.c = *(int*)&mFPS;
-    args.d = (int)(intptr_t)mField30c;
-    float quality = mFieldC0;
-    if (quality < (float)nFrames)
-        nFrames = _mm_cvtss_si32(_mm_set_ss(quality));
-    int count = nFrames;
-    if (nFrames > 0) {
-        do {
-            ((IVideoOps*)mWidth)->Blit2(args);
-            ++mCapturedFrames;
-        } while (--nFrames != 0);
-    }
-    mField2fc = 0;
     mx->Unlock();
-    return count;
+    return 0;
 }
 
 // @ 0x00fd7730
@@ -677,21 +733,22 @@ void cMovieLetterbox::Init()
 // @ 0x00fd7800
 bool cMovieSystem::Shutdown()
 {
-    void* self2 = (void*)((char*)this + 8);
-    SP_MessageServer()->PostMsg2((int)self2, 0x1ee1008, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x1ee100e, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x1ee100f, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x44edd9a, -0x270f);
-    SP_MessageServer()->PostMsg2((int)self2, 0x44edd9c, -0x270f);
+    MovieSystemBases* self = (MovieSystemBases*)this;
+    SP_MessageServer()->RemoveHandler(self, 0x1ee1008, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x1ee100e, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x1ee100f, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x44edd9a, -0x270f);
+    SP_MessageServer()->RemoveHandler(self, 0x44edd9c, -0x270f);
     UILayoutBox* lb = (UILayoutBox*)mLetterbox;
     if (lb != 0) {
         UILayoutChild* child = (UILayoutChild*)lb->mChild;
-        if (child != 0)
+        if (child != 0) {
             child->Shutdown(1);
-        IMovieResource* child2 = (IMovieResource*)lb->mChild;
-        if (child2 != 0) {
-            lb->mChild = 0;
-            child2->Stop();
+            IMovieResource* child2 = (IMovieResource*)lb->mChild;
+            if (child2 != 0) {
+                lb->mChild = 0;
+                child2->Stop();
+            }
         }
         IMovieResource* lb2 = (IMovieResource*)mLetterbox;
         if (lb2 != 0) {
@@ -825,33 +882,29 @@ cMovieSystem::cMovieSystem()
 // @ 0x00fd7cd0
 cMovieSystem::~cMovieSystem()
 {
-    char* p = (char*)this;
-    char* head = p + 0x31c;
-    *(void**)(p + 0x00) = (void*)0x1493a28;
-    *(void**)(p + 0x04) = (void*)0x1493a18;
-    *(void**)(p + 0x08) = (void*)0x1493a10;
-    void* n = *(void**)head;
+    mpVtbl0 = g_1493a28;
+    mpVtbl1 = g_1493a18;
+    mpVtbl2 = g_1493a10;
+    PacketNode* head = (PacketNode*)&mPacketList;
+    PacketNode* n = head->mpNext;
     while (n != head) {
-        void* next = *(void**)n;
-        operator_delete(n);
-        n = next;
+        PacketNode* cur = n;
+        n = n->mpNext;
+        operator_delete(cur);
     }
-    void* lb = *(void**)(p + 0x318);
-    if (lb != 0)
-        ((IUILayoutObj*)lb)->v04_Release();
-    FileStream_dtor(p + 0xd0);
-    int e = *(int*)(p + 0xa4);
-    int b = *(int*)(p + 0xac);
-    if (((b - e) & 0xfffffffe) > 2 && e != 0)
-        operator_delete((void*)e);
-    EAMutex_dtor(p + 0x70);
-    int s = *(int*)(p + 0x50);
-    int ed = *(int*)(p + 0x58);
-    if ((ed - s) > 1 && s != 0)
-        operator_delete((void*)s);
-    *(void**)(p + 0x08) = (void*)0x13eb394;
-    *(void**)(p + 0x04) = (void*)0x13eb938;
-    *(void**)(p + 0x00) = (void*)0x1403758;
+    if (mLetterbox != 0)
+        ((IUILayoutObj*)mLetterbox)->v04_Release();
+    mRecordStream.Destruct();
+    int begin = (int)mFieldA4;
+    if ((((int)mFieldAc - begin) & ~1) > 2 && begin != 0)
+        operator_delete((void*)begin);
+    mRecordMutex.Destruct();
+    int sbegin = (int)mField50;
+    if (((int)mField58 - sbegin) > 1 && sbegin != 0)
+        operator_delete((void*)sbegin);
+    mpVtbl2 = g_13eb394;
+    mpVtbl1 = g_13eb938;
+    mpVtbl0 = g_1403758;
 }
 
 // @ 0x00fd7f80
@@ -1046,33 +1099,31 @@ bool cMovieSystem_s00fd_8190::RecordMovie(int /*unused*/, int* pInfo)
 // @ 0x00fd86f0
 void cMovieSystem_s00fd_8190::SubmitFrame(int param)
 {
-    char* p = (char*)this;
-    void* mx = p + 0x70;
-    ((EAMutex_s00fd_8190*)mx)->Lock((void*)0x01493900);
-    if (*(bool*)(p + 0xa0)) {
-        int vals[5];
-        vals[0] = 1;
-        vals[1] = *(int*)(p + 0x328);
-        vals[2] = 2;
-        vals[3] = 0x200;
-        vals[4] = param;
+    EAMutex_s00fd_8190* mx = (EAMutex_s00fd_8190*)mRecordMutex;
+    mx->Lock(&g_pMutexTag);
+    if (mRecording) {
+        AudioPacketDesc desc;
+        desc.mType = 1;
+        desc.mSampleRate = mAudioSampleRate;
+        desc.mChannels = 2;
+        desc.mBlockSize = 0x200;
+        desc.mData = param;
+        ((IAudioEncoderSink*)mWidth)->Submit(&desc);
 
-        void* rec = *(void**)(p + 0xb4);
-        ((Fv)Vt(rec)[0x38 / 4])(rec, (void*)vals);
-
-        int* node = (int*)operator_new(0xc, "EASTL", 0, 0,
-                                       (int)0x013ebb38, 0xd1);
-        if (node + 2 != 0)
-            node[2] = param;
-        node[0] = (int)(p + 0x31c);
-        node[1] = *(int*)(p + 0x320);
-        *(int**)(*(void**)(p + 0x320)) = node;
-        *(int**)(p + 0x320) = node;
-        ((EAMutex_s00fd_8190*)mx)->Unlock();
-        return;
+        PacketList* list = &mPackets;
+        PacketListNode* node = (PacketListNode*)operator_new(sizeof(PacketListNode), "EASTL", 0, 0,
+                                                             (int)g_13ebb38, 0xd1);
+        int* value = &node->mValue;
+        if (value != 0)
+            *value = param;
+        node->mpNext = (PacketListNode*)list;
+        node->mpPrev = list->mpPrev;
+        list->mpPrev->mpNext = node;
+        list->mpPrev = node;
+    } else {
+        g_spBindPool->Free((void*)param);
     }
-    MemPool_Free(*(void**)&g_spMemPool, (void*)param);
-    ((EAMutex_s00fd_8190*)mx)->Unlock();
+    mx->Unlock();
 }
 
 // @ 0x00fd87c0

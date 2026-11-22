@@ -20,8 +20,8 @@ extern unsigned char DAT_014936d0[];
 // ---------------------------------------------------------------- JPEG bit-stream helpers
 extern int  FUN_00fcf130(int, int);                     // 0x00fcf130  look-ahead one bit
 extern int  FUN_00fcef80(int);                          // 0x00fcef80  consume one bit
-extern void FUN_00fd4cb0(int, int, int);                // 0x00fd4cb0
-extern void FUN_00fd4e50(int, int);                     // 0x00fd4e50
+extern void FUN_00fd4cb0(void*, int*, int);             // 0x00fd4cb0  build a Huffman tree
+extern void FUN_00fd4e50(const unsigned int*, unsigned short*); // 0x00fd4e50  expand a tree to a lookup table
 extern void FUN_00fd6880(int);                          // 0x00fd6880
 
 // ==================================================================== 0x00fd2a30
@@ -138,30 +138,40 @@ void FUN_00fd2a30(unsigned char *param_1, void *param_2)
 }
 
 // ==================================================================== 0x00fd2d00
-// @ 0x00fd2d00
-void __fastcall FUN_00fd2d00(int param_1)
-{
-    unsigned int uVar2;
-    unsigned int uVar1;
-    int iVar3;
+// Boolean entropy decoder state.
+struct Vp6BoolDecoder {
+    int                  mPad0;     // +0x00
+    unsigned int         mRange;    // +0x04
+    unsigned int         mValue;    // +0x08
+    int                  mCount;    // +0x0c  bits left before the next byte
+    int                  mPos;      // +0x10
+    const unsigned char* mBuffer;   // +0x14
+};
 
-    uVar2 = *(unsigned int *)(param_1 + 8);
-    uVar1 = (*(int *)(param_1 + 4) + 1U) >> 1;
-    if (uVar1 * 0x1000000 <= uVar2) {
-        uVar2 = uVar2 + uVar1 * -0x1000000;
-        uVar1 = *(int *)(param_1 + 4) - uVar1;
+// @ 0x00fd2d00
+// Decodes one even-probability bit and returns it.
+int __fastcall FUN_00fd2d00(Vp6BoolDecoder* br)
+{
+    unsigned int value = br->mValue;
+    int count = br->mCount;
+    unsigned int range = br->mRange;
+    unsigned int split = (range + 1) >> 1;
+    unsigned int bigsplit = split << 24;
+    int bit = value >= bigsplit;
+    range = bit ? range - split : split;
+    if (bit)
+        value -= bigsplit;
+    range += range;
+    value += value;
+    if (--count == 0) {
+        value |= br->mBuffer[br->mPos];
+        count = 8;
+        br->mPos++;
     }
-    iVar3 = *(int *)(param_1 + 0xc) + -1;
-    uVar2 = uVar2 * 2;
-    if (iVar3 == 0) {
-        uVar2 = uVar2 | *(unsigned char *)(*(int *)(param_1 + 0x14) + *(int *)(param_1 + 0x10));
-        iVar3 = 8;
-        *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-    }
-    *(unsigned int *)(param_1 + 4) = uVar1 * 2;
-    *(int *)(param_1 + 0xc) = iVar3;
-    *(unsigned int *)(param_1 + 8) = uVar2;
-    return;
+    br->mRange = range;
+    br->mCount = count;
+    br->mValue = value;
+    return bit;
 }
 
 // ==================================================================== 0x00fd2d60
@@ -281,76 +291,52 @@ void FUN_00fd2f80(unsigned char *param_1, unsigned int *param_2)
 }
 
 // ==================================================================== 0x00fd30a0
-// @ 0x00fd30a0
-void FUN_00fd30a0(int param_1)
-{
-    int iVar1;
-    int iVar2;
-    int iVar3;
-    int local_14;
-    int local_10;
-    int local_c;
-    int local_8;
-    int local_4;
+// Huffman tables of the VP6 decoder context rebuilt by FUN_00fd30a0.
+struct Vp6HuffState {
+    unsigned char  mPad0[0x334];
+    unsigned char  mZrlProbs[2][14];           // +0x334
+    unsigned char  mPad350[0x368 - 0x350];
+    unsigned int   mDcTree[2][36];             // +0x368
+    unsigned int   mDcCounts[2][12];           // +0x488
+    unsigned char  mPad4e8[0x500 - 0x4e8];
+    unsigned int   mAcTree[3][2][6][36];       // +0x500
+    unsigned int   mAcCounts[3][2][6][12];     // +0x1940
+    unsigned char  mPad2000[0x21b0 - 0x2000];
+    unsigned int   mZrlTree[2][42];            // +0x21b0
+    unsigned int   mZrlCounts[2][14];          // +0x2300
+    unsigned char  mPad2370[0x2390 - 0x2370];
+    unsigned short mDcLookup[2][64];           // +0x2390
+    unsigned short mAcLookup[3][2][6][64];     // +0x2490
+    unsigned short mZrlLookup[2][64];          // +0x3690
+    unsigned char  mPad3790[0x39a2 - 0x3790];
+    unsigned char  mDcProbs[2][11];            // +0x39a2
+    unsigned char  mAcProbs[2][3][6][11];      // +0x39b8
+};
 
-    local_14 = param_1 + 0x2390;
-    iVar3 = param_1 + 0x368;
-    iVar2 = param_1 + 0x488;
-    iVar1 = param_1 + 0x39a2;
-    local_10 = 2;
-    do {
-        FUN_00fd2e30((unsigned char *)iVar1, (unsigned int *)iVar2);
-        FUN_00fd4cb0(iVar3, iVar2, 0xc);
-        FUN_00fd4e50(iVar3, local_14);
-        local_14 = local_14 + 0x80;
-        iVar1 = iVar1 + 0xb;
-        iVar2 = iVar2 + 0x30;
-        iVar3 = iVar3 + 0x90;
-        local_10 = local_10 + -1;
-    } while (local_10 != 0);
-    local_14 = param_1 + 0x3690;
-    iVar3 = param_1 + 0x21b0;
-    iVar2 = param_1 + 0x2300;
-    iVar1 = param_1 + 0x334;
-    local_10 = 2;
-    do {
-        FUN_00fd2f80((unsigned char *)iVar1, (unsigned int *)iVar2);
-        FUN_00fd4cb0(iVar3, iVar2, 9);
-        FUN_00fd4e50(iVar3, local_14);
-        local_14 = local_14 + 0x80;
-        iVar2 = iVar2 + 0x38;
-        iVar1 = iVar1 + 0xe;
-        iVar3 = iVar3 + 0xa8;
-        local_10 = local_10 + -1;
-    } while (local_10 != 0);
-    local_10 = param_1 + 0x39b8;
-    iVar3 = param_1 + 0x500;
-    iVar2 = param_1 + 0x2490;
-    param_1 = param_1 + 0x1940;
-    local_4 = 3;
-    do {
-        local_14 = local_10;
-        local_8 = 2;
-        do {
-            local_c = 6;
-            iVar1 = local_14;
-            do {
-                FUN_00fd2e30((unsigned char *)iVar1, (unsigned int *)param_1);
-                FUN_00fd4cb0(iVar3, param_1, 0xc);
-                FUN_00fd4e50(iVar3, iVar2);
-                iVar1 = iVar1 + 0xb;
-                param_1 = param_1 + 0x30;
-                iVar2 = iVar2 + 0x80;
-                iVar3 = iVar3 + 0x90;
-                local_c = local_c + -1;
-            } while (local_c != 0);
-            local_14 = local_14 + 0xc6;
-            local_8 = local_8 + -1;
-        } while (local_8 != 0);
-        local_10 = local_10 + 0x42;
-        local_4 = local_4 + -1;
-    } while (local_4 != 0);
-    return;
+// @ 0x00fd30a0
+void FUN_00fd30a0(Vp6HuffState* st)
+{
+    int i, j, k;
+
+    for (i = 0; i < 2; i++) {
+        FUN_00fd2e30(st->mDcProbs[i], st->mDcCounts[i]);
+        FUN_00fd4cb0(st->mDcTree[i], (int*)st->mDcCounts[i], 12);
+        FUN_00fd4e50(st->mDcTree[i], st->mDcLookup[i]);
+    }
+    for (i = 0; i < 2; i++) {
+        FUN_00fd2f80(st->mZrlProbs[i], st->mZrlCounts[i]);
+        FUN_00fd4cb0(st->mZrlTree[i], (int*)st->mZrlCounts[i], 9);
+        FUN_00fd4e50(st->mZrlTree[i], st->mZrlLookup[i]);
+    }
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 2; j++) {
+            for (k = 0; k < 6; k++) {
+                FUN_00fd2e30(st->mAcProbs[j][i][k], st->mAcCounts[i][j][k]);
+                FUN_00fd4cb0(st->mAcTree[i][j][k], (int*)st->mAcCounts[i][j][k], 12);
+                FUN_00fd4e50(st->mAcTree[i][j][k], st->mAcLookup[i][j][k]);
+            }
+        }
+    }
 }
 
 // ==================================================================== 0x00fd3210
@@ -523,58 +509,73 @@ void FUN_00fd34c0(int param_1)
 }
 
 // ==================================================================== 0x00fd3550
+// Above/left predictor context entry (16 bytes).
+struct Vp6PredEntry {
+    unsigned char  mRefFrame;     // +0x0
+    unsigned char  mPad1[3];
+    unsigned int   mMv;           // +0x4
+    unsigned short mMode;         // +0x8
+    unsigned short mDc;           // +0xa
+    unsigned char  mPadC[4];
+};
+
+// Decoder fields FUN_00fd3550 resets.
+struct Vp6PredState {
+    unsigned char  mPad0[0xc4];
+    Vp6PredEntry*  mAboveY;       // +0xc4
+    Vp6PredEntry*  mAboveU;       // +0xc8
+    Vp6PredEntry*  mAboveV;       // +0xcc
+    unsigned char  mPadD0[0xdc - 0xd0];
+    unsigned short mLeftY[4];     // +0xdc
+    unsigned short mLeftU[4];     // +0xe4
+    unsigned short mLeftV[4];     // +0xec
+    unsigned char  mPadF4[0x14c - 0xf4];
+    unsigned char  mFrameMode;    // +0x14c
+    unsigned char  mPad14d[0x17c - 0x14d];
+    unsigned int   mMbCols;       // +0x17c
+};
+
 // @ 0x00fd3550
 void FUN_00fd3550(int param_1)
 {
-    unsigned short *puVar1;
-    int iVar2;
-    unsigned int uVar3;
+    Vp6PredState* st = (Vp6PredState*)param_1;
+    unsigned int i;
 
-    uVar3 = 0;
-    if (*(int *)(param_1 + 0x17c) + 8 != 0) {
-        iVar2 = 0;
+    for (i = 0; i < st->mMbCols + 8; i++) {
+        st->mAboveY[i].mMv = 0xffffffff;
+        st->mAboveY[i].mMode = 4;
+        st->mAboveY[i].mDc = 0;
+        st->mAboveY[i].mRefFrame = 0;
+    }
+    i = 0;
+    if ((st->mMbCols >> 1) + 8 != 0) {
         do {
-            *(unsigned int *)(*(int *)(param_1 + 0xc4) + 4 + iVar2) = 0xffffffff;
-            *(unsigned short *)(*(int *)(param_1 + 0xc4) + 8 + iVar2) = 4;
-            *(unsigned short *)(*(int *)(param_1 + 0xc4) + 10 + iVar2) = 0;
-            *(unsigned char *)(*(int *)(param_1 + 0xc4) + iVar2) = 0;
-            uVar3 = uVar3 + 1;
-            iVar2 = iVar2 + 0x10;
-        } while (uVar3 < *(int *)(param_1 + 0x17c) + 8U);
+            st->mAboveU[i].mMv = 0xffffffff;
+            st->mAboveU[i].mMode = 4;
+            st->mAboveU[i].mRefFrame = 0;
+            st->mAboveU[i].mDc = 0;
+            st->mAboveV[i].mMv = 0xffffffff;
+            st->mAboveV[i].mMode = 4;
+            st->mAboveV[i].mRefFrame = 0;
+            st->mAboveV[i].mDc = 0;
+            i++;
+        } while (i < (st->mMbCols >> 1) + 8);
     }
-    uVar3 = 0;
-    if ((*(unsigned int *)(param_1 + 0x17c) >> 1) + 8 != 0) {
-        iVar2 = 0;
-        do {
-            *(unsigned int *)(*(int *)(param_1 + 200) + 4 + iVar2) = 0xffffffff;
-            *(unsigned short *)(*(int *)(param_1 + 200) + 8 + iVar2) = 4;
-            *(unsigned char *)(*(int *)(param_1 + 200) + iVar2) = 0;
-            *(unsigned short *)(*(int *)(param_1 + 200) + 10 + iVar2) = 0;
-            *(unsigned int *)(*(int *)(param_1 + 0xcc) + 4 + iVar2) = 0xffffffff;
-            *(unsigned short *)(*(int *)(param_1 + 0xcc) + 8 + iVar2) = 4;
-            *(unsigned char *)(*(int *)(param_1 + 0xcc) + iVar2) = 0;
-            *(unsigned short *)(*(int *)(param_1 + 0xcc) + 10 + iVar2) = 0;
-            uVar3 = uVar3 + 1;
-            iVar2 = iVar2 + 0x10;
-        } while (uVar3 < (*(unsigned int *)(param_1 + 0x17c) >> 1) + 8);
+    if (st->mFrameMode < 6) {
+        st->mAboveU[1].mMv = 0;
+        st->mAboveU[1].mMode = 0;
+        st->mAboveV[1].mMv = 0;
+        st->mAboveV[1].mMode = 0;
     }
-    if (*(unsigned char *)(param_1 + 0x14c) < 6) {
-        *(unsigned int *)(*(int *)(param_1 + 200) + 0x14) = 0;
-        *(unsigned short *)(*(int *)(param_1 + 200) + 0x18) = 0;
-        *(unsigned int *)(*(int *)(param_1 + 0xcc) + 0x14) = 0;
-        *(unsigned short *)(*(int *)(param_1 + 0xcc) + 0x18) = 0;
-    }
-    *(unsigned short *)(param_1 + 0xdc) = 0;
-    *(unsigned short *)(param_1 + 0xe4) = 0x80;
-    *(unsigned short *)(param_1 + 0xec) = 0x80;
-    puVar1 = (unsigned short *)(param_1 + 0xe6);
-    iVar2 = 2;
+    st->mLeftY[0] = 0;
+    st->mLeftU[0] = 0x80;
+    st->mLeftV[0] = 0x80;
+    unsigned short* q = &st->mLeftU[1];
+    int n = 2;
     do {
-        puVar1[-4] = 0;
-        *puVar1 = 0;
-        puVar1[4] = 0;
-        puVar1 = puVar1 + 1;
-        iVar2 = iVar2 + -1;
-    } while (iVar2 != 0);
-    return;
+        q[-4] = 0;
+        q[0] = 0;
+        q[4] = 0;
+        q++;
+    } while (--n != 0);
 }

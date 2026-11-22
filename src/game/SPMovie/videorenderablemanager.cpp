@@ -9,6 +9,7 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EA_Thread_Mutex_dtor(void*);   // 0x922130
+extern "C" char g_14613b8[];                   // comparator base vtable
 extern const char g_mutexName[];                        // 0x149219c
 
 // ---- items of slice s00fcd210 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -46,9 +47,11 @@ public:
 }
 }
 struct ICoreAllocator {
-    virtual void* s00();                                           // +0x00
-    virtual void* Alloc(u32 size, const char* name, int a, int b, int c);  // +0x04 (ret 0x14)
-    virtual void  Free(void* p, int a);                            // +0x08
+    virtual ~ICoreAllocator();                                     // +0x00
+    // cl places overloaded virtuals in reverse order: the 5-argument Alloc is +0x04.
+    virtual void* Alloc(u32 size, const char* name, int flags);   // +0x08
+    virtual void* Alloc(u32 size, const char* name, int flags, int align, int alignOffset);  // +0x04 (ret 0x14)
+    virtual void  Free(void* p, int size);                         // +0x0c
 };
 namespace rw {
  class SList {
@@ -83,6 +86,11 @@ public:
     virtual void  s6c();                                     // +0x6c
     virtual void  s70();                                     // +0x70
     virtual void  Remove(void* node, int a);                 // +0x74
+    virtual void  s78();                                     // +0x78
+    virtual void  s7c();                                     // +0x7c
+    virtual void  s80();                                     // +0x80
+    virtual void  s84();                                     // +0x84
+    virtual void  Clear(int a);                              // +0x88
     SList();                                                 // 0x00FCCE10
 }; 
 }
@@ -91,6 +99,7 @@ struct VideoRenderable {
 };
 struct Comparator {
     void* vftable;                                           // +0x00
+    Comparator() { vftable = (void*)g_videoRenderableComparatorVtbl; }
 };
 struct VideoRenderableManager {
     ICoreAllocator* mAllocator;        // +0x00
@@ -129,19 +138,20 @@ extern "C" int __stdcall FUN_00fcdfe0(int* a, int* b)
 }
 
 // @ 0x00fce010
+// Releases the four frame lists and tears down the comparator and the list mutex.
 void RVRenderable::ShutdownAll()
 {
-    char* self = (char*)this;
-    ((void (*)(void*))((void**)*(void**)(self + 0x0c))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x0c), 0);
-    ((void (*)(void*))((void**)*(void**)(self + 0x10))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x10), 0);
-    ((void (*)(void*))((void**)*(void**)(self + 0x08))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x08), 0);
-    ((void (*)(void*))((void**)*(void**)(self + 0x04))[0x88 / 4])(0);
-    ((void (*)(int, int))((void**)*(void**)(self + 0x00))[3])(*(int*)(self + 0x04), 0);
-    *(int*)(self + 0x48) = 0x14613b8;
-    EA_Thread_Mutex_dtor((void*)(self + 0x18));
+    VideoRenderableManager* self = (VideoRenderableManager*)this;
+    self->mSentToDecoderList->Clear(0);
+    self->mAllocator->Free(self->mSentToDecoderList, 0);
+    self->mSentToRendererList->Clear(0);
+    self->mAllocator->Free(self->mSentToRendererList, 0);
+    self->mFilledList->Clear(0);
+    self->mAllocator->Free(self->mFilledList, 0);
+    self->mEmptyList->Clear(0);
+    self->mAllocator->Free(self->mEmptyList, 0);
+    self->mComparator.vftable = g_14613b8;
+    self->mListMutex.~Mutex_s00fc_e1e0();
 }
 
 // @ 0x00fce0a0
@@ -177,18 +187,15 @@ void RVRenderable::SetFrame1(int p2)
 // @ 0x00fce150
 int RVRenderable::GetFrame1(int p2)
 {
-    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
-    mtx->Lock(*(const unsigned int*)g_mutexName);
-    unsigned int n = ((unsigned int (*)(void))((void**)*(void**)((char*)this + 0x08))[0x3c / 4])();
-    if (n <= (unsigned int)p2) {
-        mtx->Unlock();
-        return 0;
+    VideoRenderableManager* self = (VideoRenderableManager*)this;
+    self->mListMutex.Lock(g_listLockToken);
+    if (self->mFilledList->Count() > (u32)p2) {
+        int r = ((VideoRenderable*)self->mFilledList->At(p2))->GetFrame()[0];
+        self->mListMutex.Unlock();
+        return r;
     }
-    void* p = (void*)((void* (*)(unsigned int))((void**)*(void**)((char*)this + 0x08))[0x30 / 4])(n = (unsigned int)p2);
-    int* q = (int*)((int (*)(void*))((void**)p)[0])(p);
-    int r = *q;
-    mtx->Unlock();
-    return r;
+    self->mListMutex.Unlock();
+    return 0;
 }
 
 // @ 0x00fce1b0
@@ -366,28 +373,23 @@ done:
 // @ 0x00fce560
 VideoRenderableManager::VideoRenderableManager(ICoreAllocator* alloc)
 {
-    mComparator.vftable = (void*)g_videoRenderableComparatorVtbl;
     mAllocator = alloc;
     mEmptyList = (rw::SList*)mAllocator->Alloc(0x1c, "Empty List", 0, 4, 0);
-    if (mEmptyList != 0)
-        mEmptyList = new (mEmptyList) rw::SList;
+    mEmptyList = new (mEmptyList) rw::SList;
     mEmptyList->Init(4);
     mEmptyList->SetAllocator(mAllocator);
     mFilledList = (rw::SList*)mAllocator->Alloc(0x1c, "Filled List", 0, 4, 0);
-    if (mFilledList != 0)
-        mFilledList = new (mFilledList) rw::SList;
+    mFilledList = new (mFilledList) rw::SList;
     mFilledList->Init(4);
     mFilledList->SetAllocator(mAllocator);
     mSentToRendererList =
         (rw::SList*)mAllocator->Alloc(0x1c, "Sent To Renderer List", 0, 4, 0);
-    if (mSentToRendererList != 0)
-        mSentToRendererList = new (mSentToRendererList) rw::SList;
+    mSentToRendererList = new (mSentToRendererList) rw::SList;
     mSentToRendererList->Init(4);
     mSentToRendererList->SetAllocator(mAllocator);
     mSentToDecoderList =
         (rw::SList*)mAllocator->Alloc(0x1c, "Sent To Decoder List", 0, 4, 0);
-    if (mSentToDecoderList != 0)
-        mSentToDecoderList = new (mSentToDecoderList) rw::SList;
+    mSentToDecoderList = new (mSentToDecoderList) rw::SList;
     mSentToDecoderList->Init(4);
     mSentToDecoderList->SetAllocator(mAllocator);
 }

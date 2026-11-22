@@ -24,14 +24,9 @@ public:
     float   mScale;      // +0x20
 
     virtual void Destroy(int a);        // +0x00 (deleting-ish dtor)
+
+    Stopwatch* Ctor(int units, int a);  // 0x011e82d0 (the constructor; returns this)
 };
-}
-}
-}
-namespace rw {
-namespace core {
-namespace timer {
-Stopwatch* Stopwatch_Ctor(Stopwatch* mem, int units, int a);   // 0x011e82d0 __thiscall
 }
 }
 }
@@ -77,15 +72,8 @@ class MovieTimer
 rw::movie::MovieTimer* rw::movie::MovieTimer::Ctor(ICoreAllocator* allocator)
 {
     mAllocator = allocator;
-    Stopwatch* sw = (Stopwatch*)allocator->Alloc(0x28, "Stopwatch object", 1, 4, 0);
-    if (sw != 0)
-    {
-        Stopwatch* c = rw::core::timer::Stopwatch_Ctor(sw, 4, 0);
-        mStopwatch = c;
-        mCallback = (IMovieTimerCallback*)c;
-        return this;
-    }
-    this->mStopwatch = sw;
-    this->mCallback = (IMovieTimerCallback*)sw;
+    mStopwatch = (Stopwatch*)allocator->Alloc(0x28, "Stopwatch object", 1, 4, 0);
+    mStopwatch = mStopwatch != 0 ? mStopwatch->Ctor(4, 0) : 0;
+    mCallback = 0;
     return this;
 }

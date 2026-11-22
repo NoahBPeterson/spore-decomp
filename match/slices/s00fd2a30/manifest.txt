@@ -4,3 +4,6 @@ slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2d60@@YAXHH@Z        00fd2d60  /O2 /MD 
 slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2e30@@YAXPAEPAI@Z   00fd2e30  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2f80@@YAXPAEPAI@Z   00fd2f80  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd34c0@@YAXH@Z        00fd34c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd3550@@YAXH@Z  00fd3550  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd30a0@@YAXPAUVp6HuffState@@@Z  00fd30a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00fd2a30/s00fd2a30.cpp  ?FUN_00fd2d00@@YIHPAUVp6BoolDecoder@@@Z  00fd2d00  /O2 /MD /Gy /EHsc /TP /arch:SSE
