@@ -1,6 +1,6 @@
-00962ff0 FUN_00962ff0 # unnamed GetResourceDescriptor + index-buffer factory helper
+00962ff0 ?FUN_00962ff0@@YAHHHHH@Z  # FUN_00962ff0 migrated from s00962ff0 (verbatim, slice spelling)
 00963060 ?FUN_00963060@@YAHHHHHHH@Z  # FUN_00963060 migrated from s00962ff0 (verbatim, slice spelling)
-009630e0 FUN_009630e0 # unnamed index-buffer append/copy path
+009630e0 ?FUN_009630e0@@YIHPAXHIH@Z  # FUN_009630e0 migrated from s00962ff0 (verbatim, slice spelling)
 009634c0 ?GetEventMask@Btn@@QAEHXZ  # Btn::GetEventMask migrated from s00962ff0 (verbatim, slice spelling)
 009634f0 ?Ease@EaseFx@@QAEOM@Z  # EaseFx::Ease migrated from s00962ff0 (verbatim, slice spelling)
 009635e0 ?SetFade@Btn@@QAEX_N@Z  # Btn::SetFade migrated from s00962ff0 (verbatim, slice spelling)

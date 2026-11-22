@@ -23,15 +23,15 @@
 0093b530 ??0StreamBuffer@IO@EA@@QAE@IIPAVIStream_s0093_a9d0@12@@Z  # StreamBuffer::StreamBuffer migrated from s0093a9d0 (verbatim, slice spelling)
 0093b5a0 ??1StreamBuffer@IO@EA@@UAE@XZ  # StreamBuffer::~StreamBuffer migrated from s0093a9d0 (verbatim, slice spelling)
 0093b630 StreamChild::Open  # ModAPI Addresses(StreamChild)
-0093b6a0 StreamChild::Close  # IStream slot 0x18
-0093b6d0 StreamChild::GetState  # IStream slot 0x14
-0093b6f0 StreamChild::GetPosition  # IStream slot 0x24
-0093b700 StreamChild::SetPosition  # IStream slot 0x28 (dispatch uncertain)
-0093b770 StreamChild::Read  # IStream slot 0x30
+0093b6a0 ?Close@StreamChild@IO@EA@@UAE_NXZ  # StreamChild::Close migrated from s0093a9d0 (verbatim, slice spelling)
+0093b6d0 ?GetState@StreamChild@IO@EA@@UBEHXZ  # StreamChild::GetState migrated from s0093a9d0 (verbatim, slice spelling)
+0093b6f0 ?GetPosition@StreamChild@IO@EA@@UBEHH@Z  # StreamChild::GetPosition migrated from s0093a9d0 (verbatim, slice spelling)
+0093b700 ?SetPosition@StreamChild@IO@EA@@UAE_NHH@Z  # StreamChild::SetPosition migrated from s0093a9d0 (verbatim, slice spelling)
+0093b770 ?Read@StreamChild@IO@EA@@UAEHPAXI@Z  # StreamChild::Read migrated from s0093a9d0 (verbatim, slice spelling)
 0093b7d0 StreamChild::StreamChild  # ctor
 0093b820 ?WriteEncoded@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PB_WIH@Z  # WriteEncoded migrated from s0093a9d0 (verbatim, slice spelling)
 0093b8b0 ?Release@FixedMemoryStream@IO@EA@@UAEHXZ  # FixedMemoryStream::Release migrated from s0093a9d0 (verbatim, slice spelling)
-0093b8e0 FixedMemoryStream::SetData  # member
+0093b8e0 ?SetData@FixedMemoryStream@IO@EA@@QAE_NPBXI@Z  # FixedMemoryStream::SetData migrated from s0093a9d0 (verbatim, slice spelling)
 0093b900 ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z  # FixedMemoryStream::SetSize migrated from s0093a9d0 (verbatim, slice spelling)
 0093b920 ?GetPosition@FixedMemoryStream@IO@EA@@UBEHH@Z  # FixedMemoryStream::GetPosition migrated from s0093a9d0 (verbatim, slice spelling)
 0093b950 ?SetPosition@FixedMemoryStream@IO@EA@@UAE_NHH@Z  # FixedMemoryStream::SetPosition migrated from s0093a9d0 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00c75d70 ?TryGet@cPersonalityUnlockTable@SP@@QAE_NPAUcEmpire@2@PAH@Z  # cPersonalityUnlockTable::TryGet migrated verbatim from s00c75d70; its local stub structs are spelled *_s00c7_5d70 (clash renames), so the slice's mangled name binds

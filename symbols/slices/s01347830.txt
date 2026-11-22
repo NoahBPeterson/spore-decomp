@@ -23,6 +23,6 @@
 00b6f550 Validate_00b6f550  # object-pointer validate callback
 00bca960 Write_00bca960  # object-pointer write
 00c2e4e0 ReadText_00c2e4e0  # read-text for object-pointer rows
-01347b70 Simulator::InitUFOAttributes  # dynamic initializer of the 17-record UFO attribute table at 0x01576bc8
+01347b70 ?InitUFOAttributes@Simulator@@YAXXZ  # InitUFOAttributes migrated from s01347830 (verbatim, slice spelling)
 0134b6b0 ?InitTradeOfferAttributes@Simulator@@YAXXZ  # InitTradeOfferAttributes migrated from s01347830 (verbatim, slice spelling)
 0134cf40 Simulator::InitEggAttributes  # $E211: dynamic initializer of the 6-record egg attribute table at 0x015778f0 (mState/mpHerd/mTimeToHatch/mBrokenTimer/mpToHatch/mEffectScale)

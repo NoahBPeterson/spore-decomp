@@ -1,1 +1,2 @@
+00c84120 ?GetStarRadius@@YAMH@Z  # GetStarRadius migrated from s00c84120 (verbatim, slice spelling)
 00c84b50 ??0cSolarSystem@Simulator@@QAE@XZ  # cSolarSystem::cSolarSystem migrated from s00c84120 (verbatim, slice spelling)

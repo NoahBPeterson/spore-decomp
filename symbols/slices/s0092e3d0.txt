@@ -1,7 +1,7 @@
-0092e3d0 ?Set@DateTime_s0092_e3d0@@QAEXH@Z  # DateTime_s0092_e3d0::Set migrated from s0092e3d0 (verbatim, slice spelling)
-0092e440 SetDateFromTm  # forwards tm fields to DateTime::SetDate
-0092e470 EA::DateTime::DateTime::Add  # switch on unit (year/month/week/day/hour/min/sec)
-0092e5a0 GetLocalTimeBias  # localtime vs gmtime hour difference * 3600
+0092e3d0 ?Set@DateTime@1EA@@QAEXW4TimeFrame@12@@Z  # EA::DateTime::DateTime::Set migrated from s0092e3d0 (canonical)
+0092e440 ?SetDateFromTm@@YAXPBUtm@@PAUDateTime_s0092_e3d0@@@Z  # forwards tm fields to DateTime::SetDate
+0092e470 ?Add@DateTime_s0092_e3d0@@QAEXHH@Z  # switch on unit (year/month/week/day/hour/min/sec)
+0092e5a0 ?GetLocalTimeBias@@YA_JXZ  # localtime vs gmtime hour difference * 3600
 0092e680 GetFileTimeEpoch  # SystemTimeToFileTime(1970-01-01)/1e7
 0092e6e0 FileTimeToUnix  # FILETIME/1e7 minus lazily-initialised 1970 epoch
 0092e8e0 EA::IO::EntryFindNext  # FindNextFileW

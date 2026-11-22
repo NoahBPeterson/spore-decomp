@@ -1,1 +1,2 @@
 00dba580 ?Assign@cHealOther@@QAEPAU1@PBU1@@Z  # cHealOther::Assign migrated from s00dba2f0 (verbatim, slice spelling)
+00dba2f0 ?FUN_00dba2f0@@YAMPAX0000PAE@Z  # FUN_00dba2f0 migrated from s00dba2f0 (verbatim, slice spelling; row written by hand: no demangler on this machine)

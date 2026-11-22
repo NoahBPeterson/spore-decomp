@@ -7,7 +7,9 @@
 0081cdb0 ?OnMouseWheel@PMW@@QAEXMMHH@Z  # PMW::OnMouseWheel migrated from s0081c9c0 (verbatim, slice spelling)
 0081ce60 ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  # ScrollBtn2::OnButtonClicked2 migrated from s0081c9c0 (verbatim, slice spelling)
 0081ce80 ?OnTick@PSB@@QAEEXZ  # PSB::OnTick migrated from s0081c9c0 (verbatim, slice spelling)
-0081d020 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin  # PDB name
+0081cf50 ?CopyObjectList@@YA_NPAUCopyDst@@PAUCopySrc@@PAUCopySpec@@@Z  # CopyObjectList migrated from s0081c9c0 (verbatim, slice spelling)
+0081d020 ??0cSPUIProgressBarGradientWin@UTFWin@@QAE@XZ  # cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin migrated from s0081c9c0 (verbatim, slice spelling)
+0081d480 ?SetValue@ProgressValueIface@@QAE_NM@Z  # ProgressValueIface::SetValue migrated from s0081c9c0 (verbatim, slice spelling)
 0081d510 ??0cSPUIProgressBarWin@UTFWin@@QAE@XZ  # cSPUIProgressBarWin::cSPUIProgressBarWin migrated from s0081c9c0 (verbatim, slice spelling)
 0081d5e0 ?Draw@cSPUIProgressBarWin@UTFWin@@QAE_NPAURenderCtx@@@Z  # cSPUIProgressBarWin::Draw migrated from s0081c9c0 (verbatim, slice spelling)
 0081d7a0 ?Reset@Variant@@QAEPAU1@H@Z  # Variant::Reset migrated from s0081c9c0 (verbatim, slice spelling)

@@ -3,6 +3,7 @@
 00c52130 ?GetProgressTextID@cSPMissionFetch@@QAEHXZ  # cSPMissionFetch::GetProgressTextID migrated from s00c52080 (verbatim, slice spelling)
 00c52160 ?GetUIMediumDescription@cSPMissionFetch@@QAEXPAX@Z  # cSPMissionFetch::GetUIMediumDescription migrated from s00c52080 (verbatim, slice spelling)
 00c521c0 ?GetUILongDescription@cSPMissionFetch@@QAEXPAX@Z  # cSPMissionFetch::GetUILongDescription migrated from s00c52080 (verbatim, slice spelling)
+00c52280 ?GetRewardFactor@cSPMissionFetch@@QAEMPAUSimCivObject_c7@@PB_N@Z  # cSPMissionFetch::GetRewardFactor migrated from s00c52080 (verbatim, slice spelling)
 00c52580 ?ReadDropOffFields@cSPMissionFetch@@QAEXXZ  # cSPMissionFetch::ReadDropOffFields migrated from s00c52080 (verbatim, slice spelling)
 00c52600 ?IsHighlighted@cSPMissionFetch@@QAE_NXZ  # cSPMissionFetch::IsHighlighted migrated from s00c52080 (verbatim, slice spelling)
 00c528a0 ?UpdateDuration@cSPMissionFetch@@QAEHXZ  # cSPMissionFetch::UpdateDuration migrated from s00c52080 (verbatim, slice spelling)

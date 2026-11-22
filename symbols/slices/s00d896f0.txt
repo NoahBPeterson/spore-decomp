@@ -1,0 +1,1 @@
+00d896f0 ?FUN_00d896f0@@YAXPAUcSPCreatureBase_s00d8_96f0@@@Z  # FUN_00d896f0 migrated from s00d896f0 (verbatim, slice spelling; the slice's cSPCreatureBase stub is renamed in the module TU)

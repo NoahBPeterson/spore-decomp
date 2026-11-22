@@ -2,6 +2,8 @@
 0087c470 ?lib_zlib_gen_codes@@YAXPAUct_data@@HPAG@Z  # lib_zlib_gen_codes migrated from s0087bdc0 (verbatim, slice spelling)
 0087c6f0 ?lib_zlib_build_bl_tree@@YAXPAUdeflate_state@@@Z  # lib_zlib_build_bl_tree migrated from s0087bdc0 (verbatim, slice spelling)
 0087cc80 ?FUN_0087cc80@@YA_NPAXPADH@Z  # FUN_0087cc80 migrated from s0087bdc0 (verbatim, slice spelling)
+0087cd10 ?FUN_0087cd10@@YAPAXPBD@Z  # FUN_0087cd10 migrated from s0087bdc0 (verbatim, slice spelling)
+0087cd80 ?FUN_0087cd80@@YAPAXPBD@Z  # FUN_0087cd80 migrated from s0087bdc0 (verbatim, slice spelling)
 0087cde0 ?Stream_CtorA@@YIPAUStream@@PAU1@@Z  # Stream_CtorA migrated from s0087bdc0 (verbatim, slice spelling)
 0087ce00 ?AttachA@Stream@@QAEDPAX@Z  # Stream::AttachA migrated from s0087bdc0 (verbatim, slice spelling)
 0087ce60 ?OpenA@Stream@@QAEDPAH@Z  # Stream::OpenA migrated from s0087bdc0 (verbatim, slice spelling)

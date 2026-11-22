@@ -1,4 +1,6 @@
 005d5120 ??$uninitialized_copy_ptr@UPathIntersection@@@eastl@@YAPAUPathIntersection@@PAU1@00@Z  # eastl::uninitialized_copy_ptr<PathIntersection> callee of DoInsertValue
+005d5830 ?DoInsertValue@?$sp_vector@UPathIntersection@@@eastl@@QAEXPAUPathIntersection@@ABU3@@Z  # sp_vector<PathIntersection>::DoInsertValue migrated from s005d53e0_nosse (verbatim, slice spelling)
+005d5970 ?push_back@?$sp_vector@UPathIntersection@@@eastl@@QAEXABUPathIntersection@@@Z  # sp_vector<PathIntersection>::push_back migrated from s005d53e0_nosse (verbatim, slice spelling)
 005d53e0 ?FindNextIntersection@cPathShape@@QAEMABUVector2@@_NPAPAUPathIntersection@@@Z  # cPathShape::FindNextIntersection migrated from s005d53e0 (verbatim, slice spelling)
 005d5630 ?CircleLineIntersection@@YAHUVector2@@00MPAM@Z  # CircleLineIntersection migrated from s005d53e0 (verbatim, slice spelling)
 005d57b0 ??0cPathSegmentList@@QAE@XZ  # cPathSegmentList::cPathSegmentList migrated from s005d53e0 (verbatim, slice spelling)

@@ -5,5 +5,5 @@
 00687610 SP::SetupResources  # resource-system setup
 00687a00 Thunk_687a00  # append [base,base+n) to global u32 vector at 0x152b5a0 (0x6ad970)
 00687a20 Iterate2  # iterate array, push wstring (0x553f10) and id (0x4558a0) into two vectors
-00687ab0 Vec28::Reserve  # ensure capacity n in the global 0x28-stride vector
+00687ab0 ?Reserve@Vec28@@QAEXI@Z  # Vec28::Reserve migrated from s006870a0 (verbatim, slice spelling)
 00687bc0 SetCount  # clamp/trim global element count; returns index or -1

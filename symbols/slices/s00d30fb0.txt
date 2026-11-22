@@ -1,0 +1,1 @@
+00b7e430 ?GetWaterDepth@cPlanetModel@SP@@QBEMABUcSPVector3@@_N@Z  # SP::cPlanetModel::GetWaterDepth (callee of s00d30fb0, named from the dev publics; slice address comment)

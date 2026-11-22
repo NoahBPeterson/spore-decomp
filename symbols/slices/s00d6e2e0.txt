@@ -1,0 +1,1 @@
+00d6e2e0 ?PLAY_FIGHT_Decide@@YAMPAUCreature_s00d6_e2e0@@HHHPAXPADH1@Z  # PLAY_FIGHT_Decide migrated from s00d6e2e0 (verbatim, stub Creature renamed for this TU)

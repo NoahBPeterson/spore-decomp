@@ -1,1 +1,4 @@
+004ad450 ?GetPhysicsWorld@cSPEditorModel@SP@@QAEPAVcSPEditorPhysicsWorld@2@XZ  # SP::cSPEditorModel::GetPhysicsWorld (callee of s005ba320, named from the dev publics; slice address comment)
+004b91c0 ?World@cSPEditorPhysicsWorld@SP@@QAEPAVhkWorld@@XZ  # SP::cSPEditorPhysicsWorld::World (callee of s005ba320, named from the dev publics; slice address comment)
+004b9440 ?SetFloorFilter@cSPEditorPhysicsWorld@SP@@QAEXI@Z  # SP::cSPEditorPhysicsWorld::SetFloorFilter (callee of s005ba320, named from the dev publics; slice address comment)
 005ba320 SP::cSPEditorManipulationStacking::FindStackingTarget  # class from layout (mBlock +0x20 per dev PDB; caller 0x5bbe79 writes +0x20/+0x48); method name descriptive, not from PDB

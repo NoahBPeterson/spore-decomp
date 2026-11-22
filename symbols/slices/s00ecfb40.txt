@@ -1,3 +1,5 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00ecfb40, named from the dev publics; slice address comment)
+00ed01a0 ?HandleMessage@cEditorPage@@UAEEHPAPAX@Z  # cEditorPage::HandleMessage migrated from s00ecfb40 (verbatim, slice spelling)
 0x00ecfb40  cVerbTrayPage::Refresh  # per-frame verb-tray refresh; visibility/render-target state and three layout windows
 0x00ecfc40  cPageControls::RefreshFromSelection  # pulls selection pairs/strings and rebinds the page base
 0x00ecfd50  cEditorResource2::Destroy  # deleting destructor, ret 4

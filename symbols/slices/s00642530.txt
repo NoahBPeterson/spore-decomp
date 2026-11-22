@@ -1,1 +1,3 @@
+00642d00 ?DoNuke@KTree@@QAEXPAUKNode@@@Z  # KTree::DoNuke migrated from s00642530 (verbatim, slice spelling)
+00642da0 ?clearList@PoolList@@QAEXXZ  # PoolList::clearList migrated from s00642530 (verbatim, slice spelling)
 00643a40 ?operator_idx@MapUU@@QAEPAIPBI@Z  # operator_idx migrated from s00642530 (verbatim, slice spelling)

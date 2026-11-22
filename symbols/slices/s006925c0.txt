@@ -2,6 +2,8 @@
 00692640  SP::cJobManager::WaitForJob  # PDB (dev 00e929f0)
 006926b0  SP::cJob::Wait  # PDB (dev 00e92a60)
 00692700 ?ReadDouble@@YANPBD@Z  # ReadDouble migrated from s006925c0 (verbatim, slice spelling)
+00692720 ?IO_Fwd_A@@YAXPAX00@Z  # IO_Fwd_A migrated from s006925c0 (verbatim, slice spelling)
+00692740 ?IO_ReadInt32@@YAXPAX00@Z  # IO_ReadInt32 migrated from s006925c0 (verbatim, slice spelling)
 00692760 ?IO_Fwd_B@@YAXPAX00@Z  # IO_Fwd_B migrated from s006925c0 (verbatim, slice spelling)
 00692780 ?IO_WriteValue@@YAXPAXH@Z  # IO_WriteValue migrated from s006925c0 (verbatim, slice spelling)
 006927a0 ?IO_WriteUint16@@YAXPAXG0@Z  # IO_WriteUint16 migrated from s006925c0 (verbatim, slice spelling)

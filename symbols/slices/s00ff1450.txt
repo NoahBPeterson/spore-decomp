@@ -1,0 +1,1 @@
+00ff1450 ?reserve@HandleVec@@QAEXI@Z  # HandleVec::reserve migrated from s00ff1450 (verbatim, slice spelling)

@@ -1,7 +1,7 @@
 00817cb0 ?UpdateTimeText@PieMenuTimeText@@QAEXXZ  # PieMenuTimeText::UpdateTimeText migrated from s00817cb0 (verbatim, slice spelling)
 00817d70 ?Dispatch@PieDispatch@@QAEDPAHPAUPieEventArg@@@Z  # PieDispatch::Dispatch reconstructed (event dispatch)
 00817e20 ?Init@PieMenuInit@@QAEXPAX00000@Z  # PieMenuInit::Init migrated from s00817cb0 (verbatim, slice spelling)
-00817eb0 cSPUIPieMenuItem::SetPos  # stores +0x64/+0x68, returns true
+00817eb0 ?SetPos@cSPUIPieMenuItem@@QAE_NHH@Z  # cSPUIPieMenuItem::SetPos migrated from s00817cb0 (verbatim, slice spelling)
 00817ee0 ?SetTextColor@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::SetTextColor migrated from s00817cb0 (verbatim, slice spelling)
 00817fa0 ?sub817fa0@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::sub817fa0 migrated from s00817cb0 (verbatim, slice spelling)
 00818000 ?SetIcon@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::SetIcon migrated from s00817cb0 (verbatim, slice spelling)

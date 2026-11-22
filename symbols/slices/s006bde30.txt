@@ -1,5 +1,6 @@
-006bde30 ?OpenRecord@DatabasePackedFile@@QAE_NPAXPAPAXIHD0@Z  # DatabasePackedFile::OpenRecord (reconstructed; full open-record tree/decompress path)
-006be1d0 ?FUN_006be1d0@DatabasePackedFile@@QAE_NXZ  # DatabasePackedFile::FUN_006be1d0 (index image read/rebuild)
+006bde30 ?OpenRecord@DatabasePackedFile_s006b_de30@@QAE_NPAXPAPAXIHD0@Z  # DatabasePackedFile_s006b_de30::OpenRecord migrated from s006bde30 (verbatim, slice spelling)
+006be1d0 ?FUN_006be1d0@DatabasePackedFile_s006b_de30@@QAE_NXZ  # DatabasePackedFile_s006b_de30::FUN_006be1d0 migrated from s006bde30 (verbatim, slice spelling)
+006be350 ?WriteRecord@DBPWriteHelper@@QAE_NPAUDatabasePackedFile_s006b_de30@@IIIG@Z  # DBPWriteHelper::WriteRecord migrated from s006bde30 (verbatim, slice spelling)
 006be640 ?DoFreeNodes@HT@@QAEXPAII@Z  # HT::DoFreeNodes
 006be690 ?FUN_006be690@@YAXPAI0@Z  # FUN_006be690
 006be6e0 ?FUN_006be6e0@@YAXPAI0@Z  # FUN_006be6e0

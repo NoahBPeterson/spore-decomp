@@ -1,3 +1,6 @@
+0094cac0 ?CloseManualDialup@Manager@Sockets@EA@@UAE_NXZ  # CloseManualDialup migrated from s0094cac0 (verbatim, slice spelling)
+0094cc00 ?GetDialupEntries@Manager@Sockets@EA@@UAE_NQAY0CA@DAAI@Z  # GetDialupEntries migrated from s0094cac0 (verbatim, slice spelling)
+0094cd60 ??_GManager@Sockets@EA@@UAEPAXI@Z  # ~Manager migrated from s0094cac0 (verbatim, slice spelling)
 0094cf40 ?Dtor@LayoutCache@@QAEXXZ  # LayoutCache::Dtor migrated from s0094cac0 (verbatim, slice spelling)
 0094d270 ?Erase@LayoutCache@@QAEXPBD@Z  # LayoutCache::Erase migrated from s0094cac0 (verbatim, slice spelling)
 0094d2f0 ?Fn0094d2f0@@YIXPAPAX@Z  # Fn0094d2f0 migrated from s0094cac0 (verbatim, slice spelling)

@@ -15,3 +15,5 @@
 005c1570 SP::cSPEditorPaintLikeThis::SetModel  # dev PDB method
 005c1870 SP::cSPEditorPaintLikeThis::HandleMessage  # IHandlerRC override (this = +0x20)
 005c1d10 ?CountPagesInCategory@cSPPaletteCategory_s005c_0c00@SP@@QAEHI@Z  # CountPagesInCategory migrated from s005c0c00 (verbatim, slice spelling)
+005c1cc0 ??$find@PAPAVcSPPaletteItem_s005c_0c00@SP@@PAV12@@SP@@YAPAPAVcSPPaletteItem_s005c_0c00@0@PAPAV10@0ABQAV10@@Z  # eastl::find<cSPPaletteItem**, cSPPaletteItem*> migrated from s005c0c00 (by hand)
+005c1d40 ?HasItem@cSPPaletteCategory_s005c_0c00@SP@@QAE_NPAVcSPPaletteItem_s005c_0c00@2@@Z  # cSPPaletteCategory::HasItem migrated from s005c0c00 (by hand)

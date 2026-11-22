@@ -12,5 +12,5 @@
 00a6ebd0 ?MapFindC@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # MapFindC migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6ec40 ?LookupRes@cEffectsParser@Swarm@EA@@QAE_JHPBD@Z  # LookupRes migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6ed80 ?ParseDrawInfoOptions@cEffectsParser@Swarm@EA@@QAEXPAX0PAUDrawInfoTarget@23@@Z  # EA::Swarm::cEffectsParser::ParseDrawInfoOptions
-00a6f090 ?GetInheritedA@cEffectsParser@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant A (PDB: GetInheritedDescription)
-00a6f0d0 ?GetInheritedB@cEffectsParser@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant B (PDB: GetInheritedDescription)
+00a6f090 ?GetInheritedA@cEffectsParser_s00a6_dfc0@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant A (PDB: GetInheritedDescription); landed in the module TU under the renamed stub class
+00a6f0d0 ?GetInheritedB@cEffectsParser_s00a6_dfc0@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant B (PDB: GetInheritedDescription); landed in the module TU under the renamed stub class

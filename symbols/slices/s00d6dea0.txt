@@ -1,0 +1,1 @@
+00d6dea0 ?FUN_00d6dea0@@YAXPAVICombatant_s00d6_dea0@@@Z  # FUN_00d6dea0 migrated from s00d6dea0 (verbatim, stub ICombatant renamed for this TU)

@@ -8,4 +8,5 @@
 0099b8a0 ?ReadObject@XmlReaderState_s0099_afe0@@QAEPAUIUnknown32_s0099_afe0@@PAI@Z  # XmlReaderState_s0099_afe0::ReadObject migrated from s0099afe0 (verbatim, slice spelling)
 0099b9e0 ?ReadBindings@XmlReaderState_s0099_afe0@@QAE_NXZ  # XmlReaderState_s0099_afe0::ReadBindings migrated from s0099afe0 (verbatim, slice spelling)
 0099bac0 ?ReadGraph@XmlReaderState_s0099_afe0@@QAE_NXZ  # XmlReaderState_s0099_afe0::ReadGraph migrated from s0099afe0 (verbatim, slice spelling)
+0099bc00 ?Read@XmlReaderState_s0099_afe0@@QAEIXZ  # XmlReaderState_s0099_afe0::Read migrated from s0099afe0 (verbatim, slice spelling)
 0099be60 ?XmlDeserializerRead@@YGIPAUIStreamX@@PAXPAUSerCollection_s0099_afe0@@PAUBinderVec@@11@Z  # XmlDeserializerRead migrated from s0099afe0 (verbatim, slice spelling)

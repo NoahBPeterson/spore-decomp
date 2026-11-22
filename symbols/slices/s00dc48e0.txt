@@ -8,6 +8,7 @@
 00dc49f0 ?FUN_00dc49f0@@YADPAUObj@@@Z  # FUN_00dc49f0 migrated from s00dc48e0 (verbatim, slice spelling)
 00dc4a10 ?FUN_00dc4a10@@YADPAX0000PAM@Z  # FUN_00dc4a10 migrated from s00dc48e0 (verbatim, slice spelling)
 00dc4a30 ?FUN_00dc4a30@@YAXPAUObj@@@Z  # FUN_00dc4a30 migrated from s00dc48e0 (verbatim, slice spelling)
+00dc4a60 ?FUN_00dc4a60@@YAMPAUObj@@PAX11PAUBehaviorTreeStim@@PAE1PAUOrderInfo2@@@Z  # FUN_00dc4a60 migrated from s00dc48e0 (verbatim, slice spelling)
 00dc4ab0 ?FUN_00dc4ab0@@YAMPAX00I@Z  # FUN_00dc4ab0 migrated from s00dc48e0 (verbatim, slice spelling)
 00dc4ae0 ?FUN_00dc4ae0@@YADPAUObj@@@Z  # FUN_00dc4ae0 migrated from s00dc48e0 (verbatim, slice spelling)
 00dc4b00 ?FUN_00dc4b00@@YAMXZ  # FUN_00dc4b00 migrated from s00dc48e0 (verbatim, slice spelling)

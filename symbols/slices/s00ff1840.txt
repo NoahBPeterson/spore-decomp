@@ -1,0 +1,1 @@
+00ff1840 ?erase@?$vector@VcOrnamentData@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEPAVcOrnamentData@SP@@PAV34@0@Z  # erase migrated from s00ff1840 (verbatim, slice spelling)

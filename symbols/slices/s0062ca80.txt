@@ -3,13 +3,13 @@
 00628960 ?FUN_00628960@PlayMode@@QAEXPAUAnimCreature@@I@Z  # play-mode helper called by AddPathTarget (callee, thiscall with 2 stack args)
 0062a1a0 ?StopWalk@cSPPlayMode@SP@@QAEXPAUcAnimatingCreature@2@I@Z  # SP::cSPPlayMode::StopWalk (callee of s0062ca80, named from the dev publics; slice address comment)
 0062ca80 ?FUN_0062ca80@@YIXPAX@Z  # FUN_0062ca80 migrated from s0062ca80 (verbatim, slice spelling)
-0062cb20 cSPPlayMode theme-music entry factory  # allocs 0x2c bytes "Casual", vtbl 0x14774b0
+0062cb20 ?FUN_0062cb20@@YGPAUPathT@@PBUVec3@@MDM@Z  # FUN_0062cb20 migrated from s0062ca80 (verbatim, slice spelling)
 0062cb90 ?FUN_0062cb90@@YIXPAX@Z  # FUN_0062cb90 migrated from s0062ca80 (verbatim, slice spelling)
 0062cbc0 ?AtFirstTarget@PlayModeCreature@@QAE_NPBUVec3@@@Z  # PlayModeCreature::AtFirstTarget migrated from s0062ca80 (verbatim, slice spelling)
-0062cc20 SP::cSPPlayMode_Creature::SetPathTarget  # SetTargetPosition + angle
+0062cc20 ?FUN_0062cc20@@YIXPAXHPBUVec3@@H@Z  # FUN_0062cc20 migrated from s0062ca80 (verbatim, slice spelling)
 0062cd30 ?FUN_0062cd30@@YIPAXPAX@Z  # FUN_0062cd30 migrated from s0062ca80 (verbatim, slice spelling)
 0062cdb0 ?FUN_0062cdb0@@YIPAXPAXD@Z  # FUN_0062cdb0 migrated from s0062ca80 (verbatim, slice spelling)
-0062ce00 ?AddPathTarget@PlayModeCreature@@QAEXPAUPathT@@_N@Z  # SP::cSPPlayMode_Creature::AddPathTarget (AutoRefCount path push/replace)
-0062cef0 ?FUN_0062cef0@@YIXPAX@Z  # FUN_0062cef0 migrated from s0062ca80 (verbatim, slice spelling)
-0062d0f0 SP::cSPPlayMode_Creature movement helper  # 1956 bytes
+0062ce00 ?AddPathTarget@PlayModeCreature@@QAEXPAUPathT@@_N@Z  # PlayModeCreature::AddPathTarget migrated from s0062ca80 (verbatim, slice spelling)
+0062cef0 ?FUN_0062cef0@@YIXPAXHI@Z  # FUN_0062cef0 migrated from s0062ca80 (verbatim, slice spelling)
+0062d0f0 ?MoveTo@PlayModeCreature@@QAE_NHH_N0@Z  # PlayModeCreature::MoveTo migrated from s0062ca80 (verbatim, slice spelling)
 0062d8a0 ?Build@GridTable@@QAEXMM@Z  # GridTable::Build migrated from s0062ca80 (verbatim, slice spelling)

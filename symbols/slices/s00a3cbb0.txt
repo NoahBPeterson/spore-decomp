@@ -2,6 +2,7 @@
 00a3cdf0 ?Enable@MixEnableCtx@@QAEXH@Z  # MixEnableCtx::Enable migrated from s00a3cbb0 (verbatim, slice spelling)
 00a3ce10 ?Disable@MixEnableCtx@@QAEXH@Z  # MixEnableCtx::Disable migrated from s00a3cbb0 (verbatim, slice spelling)
 00a3ce40 ?FUN_00a3ce40@@YAPAHH@Z  # FUN_00a3ce40 migrated from s00a3cbb0 (verbatim, slice spelling)
+00a3cea0 ?FUN_00a3cea0@@YAXXZ  # FUN_00a3cea0 migrated from s00a3cbb0 (verbatim, slice spelling)
 00a3ced0 ?FUN_00a3ced0@@YAXHHH@Z  # FUN_00a3ced0 migrated from s00a3cbb0 (verbatim, slice spelling)
 00a3cef0 ?Command@Mixer@Audio@EA@@QAEXHHHPAH@Z  # Mixer::Command migrated from s00a3cbb0 (verbatim, slice spelling)
 00a3d120 ?FUN_00a3d120@@YAXHHHHH@Z  # FUN_00a3d120 migrated from s00a3cbb0 (verbatim, slice spelling)

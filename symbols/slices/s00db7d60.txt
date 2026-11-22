@@ -1,0 +1,3 @@
+00cc7f90 ?FreeRCoord@cReservationGrid@SP@@QAEXI@Z  # SP::cReservationGrid::FreeRCoord (callee of s00db7d60, named from the dev publics; slice address comment)
+00cc8140 ?ReserveRCoord@cReservationGrid@SP@@QAE_NI@Z  # SP::cReservationGrid::ReserveRCoord (callee of s00db7d60, named from the dev publics; slice address comment)
+00db7d60 ?FUN_00db7d60@IdleBlock_s00db7d60@@QAEPAUVec3_s00db7d60@@PAU2@PBU2@@Z  # IdleBlock_s00db7d60::FUN_00db7d60 migrated from s00db7d60 (verbatim, slice spelling)

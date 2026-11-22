@@ -10,3 +10,4 @@
 00698880 ?RayBoxIntersect@SP@@YA_NPBM00PAM@Z  # RayBoxIntersect migrated from s00697c40 (verbatim, slice spelling)
 006989d0 ?SegmentBoxIntersect@SP@@YA_NPBM00PAM@Z  # SegmentBoxIntersect migrated from s00697c40 (verbatim, slice spelling)
 00698b30 ?QuaternionSlerp@SP@@YAXPAUQuaternion@1@PBU21@1M@Z  # QuaternionSlerp migrated from s00697c40 (verbatim, slice spelling)
+009233e0 ?SetFlags@LogFormatterFancy@Trace@EA@@QAEXG@Z  # EA::Trace::LogFormatterFancy::SetFlags (callee of s00697c40, named from the dev publics; slice address comment)

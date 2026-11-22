@@ -1,4 +1,4 @@
-0047e4b0 ?SetModelFlags@cSPEditorHandle_s0047_e4b0@@QAEI_NE@Z  # cSPEditorHandle_s0047_e4b0::SetModelFlags migrated from s0047e4b0 (verbatim, slice spelling)
+0047e4b0 ?SetModelFlags@cSPEditorHandle@@QAEI_NE@Z  # cSPEditorHandle::SetModelFlags migrated from s0047e4b0 (verbatim, slice spelling)
 0047e600 ?GetPosition@cSPEditorHandle@@QAEPAXPAX@Z  # cSPEditorHandle::GetPosition migrated from s0047e4b0 (verbatim, slice spelling)
 0047e6e0 ?GetHandleAlphaForState@cSPEditorHandle_s0047_e4b0@@QAEMH@Z  # cSPEditorHandle_s0047_e4b0::GetHandleAlphaForState migrated from s0047e4b0 (verbatim, slice spelling)
 0047e830 ?GetOverdrawHandleAlphaForState@cSPEditorHandle_s0047_e4b0@@QAEMH@Z  # cSPEditorHandle_s0047_e4b0::GetOverdrawHandleAlphaForState migrated from s0047e4b0 (verbatim, slice spelling)

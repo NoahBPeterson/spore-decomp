@@ -19,8 +19,8 @@
 009919e0 ?CreateInstance@BasicFactory_TreeNode@UTFWinControls@EA@@QAEPAXPAX0@Z  # BasicFactory_TreeNode::CreateInstance (__stdcall ret 8)
 00991a70 ??0WinTreeView@UTFWinControls@EA@@QAE@XZ  # WinTreeView::WinTreeView
 00991df0 ??1WinTreeView@UTFWinControls@EA@@QAE@XZ  # WinTreeView::~WinTreeView
-00991f90 ?Clear@WatchGraph@UTFWinControls@EA@@QAEXXZ  # WatchGraph::Clear
-00991ff0 ??0WatchGraph@UTFWinControls@EA@@QAE@XZ  # WatchGraph::WatchGraph
+00991f90 ?Clear@WatchGraph@UTFWinControls@EA@@QAEXXZ  # WatchGraph::Clear migrated from s009913d0 (verbatim, slice spelling)
+00991ff0 ??0WatchGraph@UTFWinControls@EA@@QAE@XZ  # WatchGraph::WatchGraph migrated from s009913d0 (verbatim, slice spelling)
 00992080 ?SetHistorySize@WatchGraph@UTFWinControls@EA@@QAEXI@Z  # WatchGraph::SetHistorySize
-00992140 ?OnAreaChanged@WatchGraph@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  # WatchGraph::OnAreaChanged
+00992140 ?OnAreaChanged@WatchGraph@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  # WatchGraph::OnAreaChanged migrated from s009913d0 (verbatim, slice spelling)
 00992180 ?OnRebuild@WatchGraph@UTFWinControls@EA@@QAE_NPAX@Z  # WatchGraph::OnRebuild

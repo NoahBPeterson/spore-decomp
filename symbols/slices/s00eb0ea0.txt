@@ -6,5 +6,5 @@
 00eb14c0 ?Reload@cPlayerCityMusicConfig@@QAE_NIII@Z  # cPlayerCityMusicConfig::Reload migrated from s00eb0ea0 (verbatim, slice spelling)
 00eb19e0 ??0cPlayerCityMusicConfig@@QAE@XZ  # cPlayerCityMusicConfig::cPlayerCityMusicConfig migrated from s00eb0ea0 (verbatim, slice spelling)
 00eb1c10 ?WriteResource@cFactoryCityMusic@@QAE_NPAVcResourceCityMusic@@PAVcWriter@@PAX2@Z  # cFactoryCityMusic::WriteResource migrated from s00eb0ea0 (verbatim, slice spelling)
-00eb1d70 ??0cResourceCityMusic@@QAE@XZ  # cResourceCityMusic::cResourceCityMusic()
+00eb1d70 ??0cResourceCityMusic@@QAE@XZ  # cResourceCityMusic::cResourceCityMusic migrated from s00eb0ea0 (verbatim, slice spelling)
 00eb1dc0 ?CreateResource@cFactoryCityMusic@@QAE_NPAXPAPAXII@Z  # cFactoryCityMusic::CreateResource migrated from s00eb0ea0 (verbatim, slice spelling)

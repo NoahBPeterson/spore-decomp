@@ -1,0 +1,1 @@
+00c841a0 ?GetStarTuning@@YAMH@Z  # GetStarTuning migrated from s00c841a0 (verbatim, slice spelling)

@@ -1,7 +1,7 @@
-00fc2080 TerraDistClass  # descriptive: radial distance -> 0/1/2/3 class used by the terraform brush (no PDB name for this VA)
+00fc2080 ?TerraDistClass@@YAIMM@Z  # TerraDistClass migrated from s00fc2080 (verbatim, slice spelling)
 00fc20e0 TerraBlend  # descriptive: radial strength blend of two sample weights (no PDB name for this VA)
 00fc2300 TerraStrengthPick  # descriptive: TerraBlend + clamp + lava coverage term (no PDB name for this VA)
-00fc23b0 SP::UpdateTerrainTerraformTuning  # PDB name (symbols/pdb_names.json)
+00fc23b0 ?UpdateTerrainTerraformTuning@SP@@YAXXZ  # SP::UpdateTerrainTerraformTuning migrated from s00fc2080
 00fc27e0 ?Assign@RasterState@@QAEXPAVEmbeddedState_s00fc_2080@graphics@rw@@II@Z  # RasterState::Assign migrated from s00fc2080 (verbatim, slice spelling)
 00fc2830 ?Clear@RasterState@@QAEXXZ  # RasterState::Clear migrated from s00fc2080 (verbatim, slice spelling)
 00fc2870 ?TerraPaint@@YA_NPAM000@Z  # TerraPaint migrated from s00fc2080 (verbatim, slice spelling)

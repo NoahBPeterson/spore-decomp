@@ -1,3 +1,4 @@
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s008124a0, named from the dev publics; slice address comment)
 008124a0 ?Execute@cSPUILayoutCheat_s0081_24a0@@QAEXPAUcArguments_s0081_24a0@ArgScript@EA@@@Z  # cSPUILayoutCheat_s0081_24a0::Execute migrated from s008124a0 (verbatim, slice spelling)
 00812990 cSPUILayoutCheat::`scalar_deleting_destructor'  # card
 008129c0 ?RegisterLayoutCheat@@YAXXZ  # RegisterLayoutCheat migrated from s008124a0 (verbatim, slice spelling)
@@ -5,8 +6,8 @@
 00812a20 ?Transform@Zoom@@QAEXPBMPAM@Z  # Zoom::Transform migrated from s008124a0 (verbatim, slice spelling)
 00812aa0 ?Init@Zoom@@QAE_NPAUZoomWin@@@Z  # Zoom::Init migrated from s008124a0 (verbatim, slice spelling)
 00812b70 ??0Zoom@@QAE@XZ  # Zoom::Zoom migrated from s008124a0 (verbatim, slice spelling)
-00812c30 cSPUIMainWin::GetMouseFlags  # reads bytes at +0x284..+0x286
-00812c60 MapMouseFlags  # free helper (card shows FUN)
+00812c30 ?GetFlags@MainWin@@QAEIXZ  # MainWin::GetFlags migrated from s008124a0 (verbatim, slice spelling)
+00812c60 ?MapFlags@@YAIE@Z  # MapFlags migrated from s008124a0 (verbatim, slice spelling)
 00812c90 ?PostMouseEdgeMsg@@YAXPAX@Z  # PostMouseEdgeMsg migrated from s008124a0 (verbatim, slice spelling)
 00812d00 ?DispatchMouseMsg@@YA_NPAX0PAUQ12@@@Z  # DispatchMouseMsg migrated from s008124a0 (verbatim, slice spelling)
 00812d30 ?Teardown@MainWin@@QAEXH@Z  # MainWin::Teardown migrated from s008124a0 (verbatim, slice spelling)

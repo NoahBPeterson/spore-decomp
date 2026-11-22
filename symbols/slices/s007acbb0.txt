@@ -1,9 +1,9 @@
 007acbb0 SP::cTextureManager::GetTexture  # PDB candidate (caller-single)
 007acd90 SP::cTextureManager::StallUntilLoaded  # PDB card name
-007ace40 rw::graphics::dxt::AverageBlock2x2Bytes  # inferred (2x2 byte box filter)
-007aceb0 rw::graphics::dxt::AverageBlock2x1Bytes  # inferred
+007ace40 ?FUN_007ace40@@YAXPAEH0HHH@Z  # FUN_007ace40 migrated from s007acbb0 (verbatim, slice spelling)
+007aceb0 ?FUN_007aceb0@@YAXPAEH0HH@Z  # FUN_007aceb0 migrated from s007acbb0 (verbatim, slice spelling)
 007acef0 rw::graphics::dxt::AverageBlock2x2Dwords  # inferred
-007acfa0 rw::graphics::dxt::AverageBlock2x1Dwords  # inferred
+007acfa0 ?FUN_007acfa0@@YAXPAIH0HH@Z  # FUN_007acfa0 migrated from s007acbb0 (verbatim, slice spelling)
 007acfe0 rw::graphics::dxt::DownsampleSurface  # inferred dispatcher
 007ad0c0 ?FUN_007ad0c0@@YA_NPAUDXTDesc@@0@Z  # FUN_007ad0c0 migrated from s007acbb0 (verbatim, slice spelling)
 007ad2e0 ?mappixel@@YAIPAII0@Z  # mappixel migrated from s007acbb0 (verbatim, slice spelling)

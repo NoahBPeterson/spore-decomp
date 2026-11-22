@@ -1,6 +1,10 @@
 00fc8500 rw::movie::BufferedWriter::WriteFill  # memset-style fill of n bytes through the buffer
 00fc8550 rw::movie::BufferedWriter::Write16  # appends a word (flush when <2 bytes left)
 00fc8580 rw::movie::BufferedWriter::Write32  # appends a dword to the buffered writer (flush via 00fc83b0 when <4 bytes left)
+00fc94f0 ?UpdateRenderables@MovieDecoder@movie@rw@@QAEXHPAHPAX@Z  # MovieDecoder::UpdateRenderables migrated from s00fc9310 (verbatim, slice spelling)
+00fc9670 ?DecodeVideoFrame@@YAXPAVVideoRenderable@movie@rw@@PAVMovieDecoder@23@@Z  # DecodeVideoFrame (global) migrated from s00fc9310 (verbatim, slice spelling)
+00fc96d0 ?Teardown@MovieDecoder@movie@rw@@QAEXXZ  # MovieDecoder::Teardown migrated from s00fc9310 (verbatim, slice spelling)
+00fc97a0 ?Release@MovieDecoder@movie@rw@@QAEXXZ  # MovieDecoder::Release migrated from s00fc9310 (verbatim, slice spelling)
 00fc9950 ?NextDataExpected@MovieEncoder_Avi@movie@rw@@QAEIXZ  # MovieEncoder_Avi::NextDataExpected migrated from s00fc9310 (verbatim, slice spelling)
 00fc9970 ?AddAudioSamples@MovieEncoder_Avi@movie@rw@@QAEXPAUAudioSamples@23@@Z  # MovieEncoder_Avi::AddAudioSamples migrated from s00fc9310 (verbatim, slice spelling)
 00fc9a10 ?AddVideoFrame@MovieEncoder_Avi@movie@rw@@QAEXPAX@Z  # MovieEncoder_Avi::AddVideoFrame migrated from s00fc9310 (verbatim, slice spelling)

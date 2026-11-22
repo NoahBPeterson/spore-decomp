@@ -1,0 +1,1 @@
+00e07540 ?Draw@Meter@@QAEXXZ  # Meter::Draw migrated from s00e07540 (verbatim, slice spelling)

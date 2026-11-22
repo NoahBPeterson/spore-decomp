@@ -1,0 +1,1 @@
+00672c30 ?CopyUninitializedDetokenizerStrings@@YA?AV?$generic_iterator@PAV?$fixed_string@_W$0CA@$00@eastl@@X@eastl@@V12@00@Z  # CopyUninitializedDetokenizerStrings migrated from s00672c30 (verbatim, slice spelling)

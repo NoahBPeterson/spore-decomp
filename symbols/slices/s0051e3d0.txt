@@ -1,3 +1,6 @@
 0051e3d0 ??1PaintSystem@Skinner@@...  # full member teardown dtor (vtbl 0x13f1c74)
 0051e5b0 ?DeviceRestore@?A0x...@@  # anonymous namespace DeviceRestore
 0051ec70 ?Shutdown@cPaintSystem@nSPSkinner@@  # PDB name
+0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s0051e3d0, named from the dev publics; slice address comment)
+00692400 ?Cancel@cJob@SP@@QAE_N_N@Z  # SP::cJob::Cancel (callee of s0051e3d0, named from the dev publics; slice address comment)
+009266b0 ?Init@FixedAllocatorBase@Allocator@EA@@QAE_NIIIPAXIP6APAXI0@ZP6AX00@Z0@Z  # EA::Allocator::FixedAllocatorBase::Init (callee of s0051e3d0, named from the dev publics; slice address comment)

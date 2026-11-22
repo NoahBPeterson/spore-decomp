@@ -2,3 +2,6 @@
 01041090 ?Init@cSpaceRelationshipTuning_s0104_09b0@SP@@QAEXXZ  # cSpaceRelationshipTuning_s0104_09b0::Init migrated from s010409b0 (verbatim, slice spelling)
 010410e0 ?HandleMessage@cSpaceRelationshipTuning_s0104_09b0@SP@@QAE_NHPAVCMessage@@@Z  # cSpaceRelationshipTuning_s0104_09b0::HandleMessage migrated from s010409b0 (verbatim, slice spelling)
 01041110 ?ScalarDeletingDestructor@cTuningEntrySet@SP@@QAEPAXE@Z  # cTuningEntrySet::ScalarDeletingDestructor migrated from s010409b0 (verbatim, slice spelling)
+01041280 ?Insert@cTuningEntryVector@SP@@QAEXPAUcTuningEntry@2@ABU32@@Z  # cTuningEntryVector::Insert migrated from s010409b0 (verbatim, slice spelling)
+010413b0 ?PushDefault@cTuningEntryVector@SP@@QAEXXZ  # cTuningEntryVector::PushDefault migrated from s010409b0 (verbatim, slice spelling)
+01041480 ?Release@cTuningEntrySet@SP@@QAEXXZ  # cTuningEntrySet::Release migrated from s010409b0 (verbatim, slice spelling)

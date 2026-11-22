@@ -1,4 +1,4 @@
-0062da00 SP::cSPCasual_Path::SetPositionOffset  # clears grid flags, snaps (x,y) to nearest node; PDB layout match
+0062da00 ?SetPositionOffset@cSPCasual_Path@@QAEXMM@Z  # cSPCasual_Path::SetPositionOffset migrated from s0062da00 (verbatim, slice spelling)
 0062db30 ?FindPassableNeighbor@cSPCasual_Path@@QAEPAUPathNode@@PAU2@0@Z  # cSPCasual_Path::FindPassableNeighbor migrated from s0062da00 (verbatim, slice spelling)
 0062dbf0 ?StartPath@cSPCasual_Path@@QAE_NXZ  # cSPCasual_Path::StartPath migrated from s0062da00 (verbatim, slice spelling)
 0062dc10 ?RemoveFromOpenList@cSPCasual_Path@@QAEXPAUPathNode@@@Z  # cSPCasual_Path::RemoveFromOpenList migrated from s0062da00 (verbatim, slice spelling)

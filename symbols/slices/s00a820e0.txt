@@ -8,7 +8,7 @@
 00a82300 ?GetUnknownParam@cVisualEffect@@QAEII@Z  # cVisualEffect::GetUnknownParam migrated from s00a820e0 (verbatim, slice spelling)
 00a82330 ?SetIsVisible@cVisualEffect@@QAEXH@Z  # cVisualEffect::SetIsVisible migrated from s00a820e0 (verbatim, slice spelling)
 00a82370  cVisualEffect::SetDescription
-00a823e0  cVisualEffect::UpdateDescription
+00a823e0 ?UpdateDescription@cVisualEffect@@QAEXH@Z  # cVisualEffect::UpdateDescription migrated from s00a820e0 (verbatim, slice spelling)
 00a82430 ?CheckIfStopped@cVisualEffect@@QAE_NXZ  # cVisualEffect::CheckIfStopped migrated from s00a820e0 (verbatim, slice spelling)
 00a82500 ?SelectDescriptionState@cVisualEffect@@QAEXH@Z  # cVisualEffect::SelectDescriptionState migrated from s00a820e0 (verbatim, slice spelling)
 00a825c0 ?PrerollEffect@cVisualEffect@@QAEXHPAH@Z  # cVisualEffect::PrerollEffect migrated from s00a820e0 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00c2ecd0 ?GetFlagsProperty@Owner_s00c2_ecd0@@QAEIXZ  # Owner_s00c2_ecd0::GetFlagsProperty migrated from s00c2ecd0 (verbatim, slice spelling)

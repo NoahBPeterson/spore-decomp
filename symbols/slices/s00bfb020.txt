@@ -1,3 +1,4 @@
 00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00bfb020, named from the dev publics; slice address comment)
 00bfb020 ?Tick@Game@@QAEXXZ  # Game::Tick migrated from s00bfb020 (verbatim, slice spelling)
+00bfb8f0 ?FUN_00bfb8f0@@YAXXZ  # FUN_00bfb8f0 migrated from s00bfb020 (verbatim, slice spelling)
 00bfb930 ?SubTick1@Civ_s00bf_b020@@QAEXXZ  # Civ_s00bf_b020::SubTick1 migrated from s00bfb020 (verbatim, slice spelling)

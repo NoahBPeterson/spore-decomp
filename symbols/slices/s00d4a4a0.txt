@@ -1,0 +1,1 @@
+00d4a4a0 ?VerbTray_HandleKeyPress@@YA_NH@Z  # VerbTray_HandleKeyPress migrated from s00d4a4a0 (verbatim, slice spelling)

@@ -7,9 +7,10 @@
 00902d40 ?ReadTokenList@XML@EA@@YA_NPAUIStream@@PAPAUTokenNode@12@IPAUTokenIOContext_s0090_2460@12@@Z  # ReadTokenList migrated from s00902460 (verbatim, slice spelling)
 00902fc0 ?WriteTokenList@XML@EA@@YA_NPAUIStream@@PAUTokenNode@12@IPAUTokenIOContext_s0090_2460@12@@Z  # WriteTokenList migrated from s00902460 (verbatim, slice spelling)
 009030b0 ??0TokenIOContext_s0090_2460@XML@EA@@QAE@PAUICoreAllocator_s0090_2460@Allocator@2@@Z  # TokenIOContext_s0090_2460::TokenIOContext migrated from s00902460 (verbatim, slice spelling)
+00903120 ??1TokenIOContext_s0090_2460@XML@EA@@QAE@XZ  # TokenIOContext_s0090_2460::~TokenIOContext migrated from s00902460 (verbatim, slice spelling)
 00903120 EA::XML::TokenIOContext::~TokenIOContext  # clears both hashtables + StackAllocator::Reset x2
 009031a0 ??0XmlTokenReader@XML@EA@@QAE@PAUICoreAllocator_s0090_2460@Allocator@2@@Z  # XmlTokenReader::XmlTokenReader migrated from s00902460 (verbatim, slice spelling)
-009031d0 EA::XML::XmlTokenReader::~XmlTokenReader  # resets TokenIOContext, tail to XmlReader dtor
+009031d0 ??1XmlTokenReader@XML@EA@@QAE@XZ  # XmlTokenReader::~XmlTokenReader migrated from s00902460 (verbatim, slice spelling)
 009031f0 ?Read@XmlTokenReader@XML@EA@@QAE_NPB_W0@Z  # XmlTokenReader::Read migrated from s00902460 (verbatim, slice spelling)
 00903230 ?Read2@XmlTokenReader@XML@EA@@QAE_NPB_W00@Z  # XmlTokenReader::Read2 migrated from s00902460 (verbatim, slice spelling)
 009032b0 EA::XML::FreeTokenList  # static helper, eax=list head ebx=owner

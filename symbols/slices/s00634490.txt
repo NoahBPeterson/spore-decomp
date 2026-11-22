@@ -5,6 +5,7 @@
 00634570 ?PrevPhoto@PhotoBrowser@@QAEXXZ  # PhotoBrowser::PrevPhoto migrated from s00634490 (verbatim, slice spelling)
 006345b0 ??0cPlayModeTokenTranslator@@QAE@XZ  # cPlayModeTokenTranslator::cPlayModeTokenTranslator migrated from s00634490 (verbatim, slice spelling)
 00634640 FixSlashes  # static helper (edi = wstring*): normalizes \ and / to the property-selected separator and collapses runs
+006346e0 ?TranslateToken@cPlayModeTokenTranslator@@QAE_NPB_WPAUwstring16@@@Z  # cPlayModeTokenTranslator::TranslateToken migrated from s00634490 (verbatim, slice spelling)
 00634b10 ?AttachWinProc@cSPPlayModeUI_s0063_4490@@QAEXXZ  # cSPPlayModeUI_s0063_4490::AttachWinProc migrated from s00634490 (verbatim, slice spelling)
 00634b60 ?Intersect@RectF@@QAE_NABU1@0@Z  # RectF::Intersect migrated from s00634490 (verbatim, slice spelling)
 00634c10 ??0cSPPlayModeUI_s0063_4490@@QAE@XZ  # cSPPlayModeUI_s0063_4490::cSPPlayModeUI migrated from s00634490 (verbatim, slice spelling)
