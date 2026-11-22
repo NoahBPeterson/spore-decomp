@@ -11,6 +11,7 @@
 #include <xmmintrin.h>
 #include "sse_helpers.h"
 #include <intrin.h>
+#include <stdlib.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long*);
@@ -70,6 +71,12 @@ struct RefCountBase {
     virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3();
 };
 struct IAppSystem;
+struct IMainWin;
+struct IAudioSystem;
+struct IMovie;
+struct IEditorSystem;
+struct ITerrainSystem;
+struct IGonzago;
 struct cSporeApp : IHandlerBase, RefCountBase {
     char pad8[4];
     bool mAppRunning;                  // +0xc
@@ -80,12 +87,12 @@ struct cSporeApp : IHandlerBase, RefCountBase {
     float mCyclesPerMS;                // +0x1c
     IAppSystem* mAppSystem;            // +0x20
     void* mFactoryRegistry;            // +0x24
-    void* mUIMainWin;                  // +0x28
-    void* mAudioSystem;                // +0x2c
-    void* mMovieSystem;                // +0x30
-    void* mEditorSystem;               // +0x34
-    void* mTerrainSystem;              // +0x38
-    void* mGonzagoSystem;              // +0x3c
+    IMainWin* mUIMainWin;              // +0x28
+    IAudioSystem* mAudioSystem;        // +0x2c
+    IMovie* mMovieSystem;              // +0x30
+    IEditorSystem* mEditorSystem;      // +0x34
+    ITerrainSystem* mTerrainSystem;    // +0x38
+    IGonzago* mGonzagoSystem;          // +0x3c
     int   mExitCode;                   // +0x40
     void* mProfiler;                   // +0x44
 
@@ -94,7 +101,7 @@ struct cSporeApp : IHandlerBase, RefCountBase {
     virtual bool HandleMessage(uint32_t messageID, void* pMessage);
     int ElapsedMS();                   // 0x00f475b0 (matched as Timer::Elapsed)
     char UpdateCheck(void* s, void* out);
-    void f47930();
+    void Update();
 };
 // ---- items of slice s00f47680 end
 
@@ -239,7 +246,7 @@ struct IAppSystem {
     virtual void s38();
     virtual void s3c();
     virtual void s40();
-    virtual void s44();
+    virtual bool Fn44();  // +0x44
     virtual void s48();
     virtual void s4c();
     virtual void s50();
@@ -252,10 +259,10 @@ struct IAppSystem {
     virtual void s6c();
     virtual void s70();
     virtual void Fn74(const void* a, const void* b);  // +0x74
-    virtual void s78();
-    virtual void s7c();
+    virtual void Update(int ms);  // +0x78
+    virtual void PostUpdate();  // +0x7c
     virtual void Fn80();  // +0x80
-    virtual void s84();
+    virtual void Idle(int ms);  // +0x84
     virtual IProfiler* GetProfiler();  // +0x88
 };
 struct IAudioSystem {
@@ -265,6 +272,7 @@ struct IAudioSystem {
     virtual void s0c();
     virtual void AddRef();  // +0x10
     virtual void Release();  // +0x14
+    virtual void Update(float seconds);  // +0x18
 };
 struct IEditorSystem {
     virtual void s00();
@@ -273,6 +281,9 @@ struct IEditorSystem {
     virtual void Release();  // +0xc
     virtual bool Init10(CommandLine* cmd);  // +0x10
     virtual bool Init14(CommandLine* cmd);  // +0x14
+    virtual void s18();
+    virtual void s1c();
+    virtual void Update(int ms);  // +0x20
 };
 struct ITerrainSystem {
     virtual void s00();
@@ -280,6 +291,9 @@ struct ITerrainSystem {
     virtual void s08();
     virtual bool Init0c(CommandLine* cmd);  // +0xc
     virtual bool Init10(CommandLine* cmd);  // +0x10
+    virtual void s14();
+    virtual void s18();
+    virtual void Update(int ms);  // +0x1c
 };
 struct IGonzago {
     void Fn5d870(unsigned a);                          // 0x00b5d870
@@ -293,6 +307,7 @@ struct IGonzago {
     virtual void s1c();
     virtual void s20();
     virtual void Fn24();  // +0x24
+    virtual void Update(int ms);  // +0x28
 };
 struct IMessageServer {
     virtual void s00();
@@ -305,6 +320,11 @@ struct IMessageServer {
     virtual void s1c();
     virtual void s20();
     virtual void AddListener(void* handler, unsigned id);  // +0x24
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void Dispatch();  // +0x38
 };
 struct ICameraMgr {
     virtual void s00();
@@ -435,6 +455,7 @@ struct ICheatManager {
     virtual void RunScript(const char* text);  // +0x20
 };
 struct IMainWin {
+    void Update(int ms);                               // 0x00812d30
     void SetMode(int m);                               // 0x0077f010
     void SetFocusObj(IAppObj* a);                      // 0x00813260
     virtual void s00();
@@ -448,6 +469,8 @@ struct IMainWin {
 struct IMovie {
     virtual void s00();
     virtual void Fn04();
+    virtual void s08();
+    virtual void Update(int ms);  // +0xc
 };
 struct AudioRef {
     IAudioSystem* mpObject;
@@ -474,6 +497,8 @@ struct cDirectPropertyList {
     bool GetBool(unsigned id) const;                                // 0x006a25a0
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
     virtual void SetProperty(unsigned id, Variant* v);              // +0x14
+    char mPad4[0x38];
+    int* mDirectProps;                                              // +0x3c
 };
 struct FactoryRegistry {
     FactoryRegistry();                                              // 0x009206d0
@@ -748,60 +773,76 @@ bool cSporeApp::Shutdown()
     return 1;
 }
 
-// @ 0x00f47930
-void cSporeApp::f47930()
-{
-    if (!mAppRunning) return;
-    long long t;
-    QueryPerformanceCounter(&t);
-    long long d = t - *(long long*)&mReferenceCycle;
-    int cycles = (int)((float)d * mMSPerCycle);
-    int budget = *(int*)(*(int*)(*(int*)&g_sAppProperties + 0x3c) + 0xb0);
+struct IFrameLimiter {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); virtual void s10();
+    virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
+    virtual void s28(); virtual void s2c(); virtual void s30();
+    virtual bool CanIdle(int timeout);  // +0x34
+};
+IFrameLimiter* GetFrameLimiter();                                   // 0x0068f4d0
+struct ThreadTime { int mMS; };
+void __cdecl ThreadSleep(const ThreadTime& time);                   // 0x00921df0 EA::Thread::ThreadSleep
+IMessageServer* MessageServer_s00f4_7ed0();                         // 0x0067dcc0
 
-    bool ok = (*(bool (__thiscall**)(void*))(*(char**)mAppSystem + 0x44))(mAppSystem);
-    if (ok && budget < 0x2d) {
-        if (budget < 0) {
-            int v = budget + 1;
-            budget = v < 0 ? -v : v;
+// @ 0x00f47930
+void cSporeApp::Update()
+{
+    if (!mAppRunning)
+        return;
+    int elapsed;
+    {
+        long long t;
+        QueryPerformanceCounter(&t);
+        long long d = t - (long long)mReferenceCycle;
+        elapsed = SseTruncToInt((float)d * mMSPerCycle);
+    }
+    int frameMS = sAppProperties->mDirectProps[44];
+    if (mAppSystem->Fn44() && frameMS < 45) {
+        if (frameMS < 0) {
+            frameMS = abs(frameMS + 1);
         } else {
-            budget = 0x2d;
+            frameMS = 45;
         }
     }
-    if (budget > 0) {
-        void* o = FUN_0068f4d0();
-        if ((*(bool (__thiscall**)(void*, int))(*(char**)o + 0x34))(o, -1)) {
-            if (budget - cycles < 3) budget = cycles + 3;
-            if (cycles < budget - 1) {
-                VC1(mAppSystem, 0x84, budget - cycles - 1);
-                cycles = Timer_Elapsed(this);
+    if (frameMS > 0) {
+        if (GetFrameLimiter()->CanIdle(-1)) {
+            if (frameMS - elapsed < 3)
+                frameMS = elapsed + 3;
+            if (elapsed < frameMS - 1) {
+                mAppSystem->Idle(frameMS - elapsed - 1);
+                elapsed = ElapsedMS();
             }
         }
-        if (budget - cycles > 0) {
-            int wait = budget - cycles;
-            ThreadSleep(&wait);
-            cycles = Timer_Elapsed(this);
+        int sleepMS = frameMS - elapsed;
+        if (sleepMS > 0) {
+            ThreadTime wait;
+            wait.mMS = sleepMS;
+            ThreadSleep(wait);
+            elapsed = ElapsedMS();
         }
     }
 
-    float f = (float)cycles * mCyclesPerMS;
-    long long add = (long long)f;
-    *(long long*)&mReferenceCycle += add;
+    float elapsedF = (float)elapsed;
+    float cyclesPerMS = mCyclesPerMS;
+    float cycles = cyclesPerMS * elapsedF;
+    mReferenceCycle += X87RoundToInt64(cycles);
 
-    void* ms = MessageServer();
-    (*(void (__thiscall**)(void*))(*(char**)ms + 0x38))(ms);
+    MessageServer_s00f4_7ed0()->Dispatch();
 
-    if (mUIMainWin) FUN_00812d30(mUIMainWin, cycles);
-    if (mEditorSystem) VC1(mEditorSystem, 0x20, cycles);
-    if (mTerrainSystem) VC1(mTerrainSystem, 0x1c, cycles);
-    if (mGonzagoSystem) VC1(mGonzagoSystem, 0x28, cycles);
-    if (mMovieSystem) VC1(mMovieSystem, 0xc, cycles);
-    VC1(mAppSystem, 0x78, cycles);
-
-    if (mAudioSystem) {
-        float secs = f * 0.001f;
-        (*(void (__thiscall**)(void*, float))(*(char**)mAudioSystem + 0x18))(mAudioSystem, secs);
-    }
-    (*(void (__thiscall**)(void*))(*(char**)mAppSystem + 0x7c))(mAppSystem);
+    if (mUIMainWin)
+        mUIMainWin->Update(elapsed);
+    if (mEditorSystem)
+        mEditorSystem->Update(elapsed);
+    if (mTerrainSystem)
+        mTerrainSystem->Update(elapsed);
+    if (mGonzagoSystem)
+        mGonzagoSystem->Update(elapsed);
+    if (mMovieSystem)
+        mMovieSystem->Update(elapsed);
+    mAppSystem->Update(elapsed);
+    if (mAudioSystem)
+        mAudioSystem->Update(elapsedF * 0.001f);
+    mAppSystem->PostUpdate();
 }
 
 // a window of the main canvas: what it hands the renderer on a resize
@@ -888,7 +929,7 @@ bool cSporeApp::HandleMessage(uint32_t messageID, void* pMessage)
         return true;
     }
     case 0x1ee100a:
-        f47930();
+        Update();
         mAppSystem->Fn80();
         return true;
     case 0x44edd9c:
