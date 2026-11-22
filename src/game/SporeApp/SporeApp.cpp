@@ -580,6 +580,11 @@ int Timer::Elapsed()
     return SseTruncToInt(elapsed);
 }
 
+// The compiler emits cSporeApp's scalar deleting destructor (??_G) with the vtable, and the thunk the
+// RefCountBase vtable at +4 uses (this -= 4, then ??_G):
+//   @ 0x00f47af0 ??_GcSporeApp@@UAEPAXI@Z
+//   @ 0x00f47670 ??_EcSporeApp@@W3AEPAXI@Z
+
 // @ 0x00f47680
 cSporeApp::~cSporeApp()
 {
