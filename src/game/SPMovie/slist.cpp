@@ -6,6 +6,7 @@
 extern "C" char g_1491e4c[];
 extern "C" char g_1491e68[];
 extern "C" char g_1491ef8[];
+extern "C" char g_1491fa0[];
 
 #include "game/types.h"
 #include <intrin.h>
@@ -764,11 +765,15 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
 namespace rw {
 SNode* SList_s00fc_c260::LoadNewNode(int a, int b)
 {
-    SNode* node = (SNode*)mAllocator->Alloc(mElementSize + 8, "SNode", 0, 4, 0);
-    if (node == 0)
-        return 0;
-    *(void**)node = (void*)0x1491fa0;
-    node->pad4 = 0;
+    SNode* mem = (SNode*)mAllocator->Alloc(mElementSize + 8, "SNode", 0, 4, 0);
+    SNode* node;
+    if (mem != 0) {
+        *(void**)mem = (void*)g_1491fa0;   // SNode vtable
+        mem->pad4 = 0;
+        node = mem;
+    } else {
+        node = 0;
+    }
     if (node->SetData((void*)a, mElementSize, (void*)b) == -1) {
         mAllocator->Free(node, 0);
         return 0;

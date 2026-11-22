@@ -10,5 +10,4 @@
 00fccb80 151 RemoveIf(key,cmp,cb): head/prev unlink + optional callback; branch layout differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (272 valid, 15.1% coverage)
 00fcce30 36 InvokeKey(a,b): triple vtable dispatch through *b, *a and mHead; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
 00fcce70 127 Sort(sorter,cmp): temp node array + sorter slot0(temp,len,4,&adapter); regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (281 valid, 11.2% coverage)
-00fccf40 97 LoadNewNode(a,b): alloc + set vtable/pad + SetData(a,size,b); regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
 00fcd210 219 rw::SList::InsertSorted; template-instantiated list insert (LoadNewNode helper, vtbl-based splice). Not byte-exact: node-splice register allocation differs. flags /O2 /MD /Gy /EHsc /TP. difftest: UNSUPPORTED original reads ecx at entry (thiscall member); structural match.
