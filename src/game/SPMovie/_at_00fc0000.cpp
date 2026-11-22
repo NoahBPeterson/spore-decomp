@@ -153,13 +153,18 @@ extern "C" int  DAT_01492220[];      // sf-band group base table
 extern "C" int  DAT_014923a8[];      // sf-band type table (byte view in places)
 extern "C" int  DAT_01492cc8[];      // sample-format flags
 typedef unsigned char byte;
-struct BitReaderA {
+// A block being reconstructed: its coefficient rows and the mode that picks its reference type.
+struct DcBlock {
     int    m_00;
-    unsigned m_04;
-    unsigned m_08;
-    int    m_0c;
-    int    m_10;
-    byte*  m_14;
+    short* mCoeffs;          // +0x04, 0x40 coefficients per band
+    char   m_pad08[0x0c];
+    int    mMode;            // +0x14
+};
+// A neighbouring block's reference type and reconstructed DC value.
+struct DcNeighbour {
+    char           m_pad00[0x08];
+    unsigned short mType;    // +0x08
+    short          mDc;      // +0x0a
 };
 struct BitReader {
     int    m_00;
@@ -705,32 +710,30 @@ int FUN_00fcf130(BitState* s, int prob)
 }
 
 // @ 0x00fcf1b0
-void FUN_00fcf1b0(int p, int band, int coeffs, int reader, int prev)
+// Predicts a block's DC coefficient from the left/above neighbours of the same reference
+// type, falls back to the last coefficient of that type, and stores the reconstructed value.
+void FUN_00fcf1b0(DcBlock* blk, int band, short* lastDc, DcNeighbour* above, DcNeighbour* left)
 {
-    byte  b  = ((byte*)DAT_014923a8)[*(int*)(p + 0x14)];
-    int   acc = 0;
-    int   hits = 0;
+    byte type = (byte)DAT_014923a8[blk->mMode];
+    char hits = 0;
+    int acc = 0;
 
-    if ((unsigned short)b == *(unsigned short*)(prev + 8)) {
-        acc = *(short*)(prev + 0xa);
+    if (type == left->mType) {
+        acc = left->mDc;
         hits = 1;
     }
-    if ((unsigned short)b == *(unsigned short*)(reader + 8)) {
-        acc += *(short*)(reader + 0xa);
+    if (type == above->mType) {
+        acc += above->mDc;
         hits++;
     }
 
-    short v;
     if (hits == 0)
-        v = *(short*)(coeffs + b * 2);
+        acc = lastDc[type];
     else if (hits == 2)
-        v = (short)(((((unsigned)acc & 0xffff) >> 0xf) + (unsigned)acc) >> 1);
-    else
-        v = (short)acc;
+        acc = (((unsigned short)acc >> 15) + acc) >> 1;   // halve, rounding the 16-bit sum toward zero
 
-    short* dst = (short*)(*(int*)(p + 4) + band * 0x80);
-    *dst = (short)(*dst + v);
-    *(short*)(coeffs + b * 2) = *dst;
+    blk->mCoeffs[band * 0x40] += (short)acc;
+    lastDc[type] = blk->mCoeffs[band * 0x40];
 }
 
 // @ 0x00fcf230
@@ -1158,7 +1161,8 @@ void FUN_00fcfc70(int p, int gr, int ch)
         flags = FUN_00fcf330(p, (short*)(*(int*)(p + 4) + off),
                              *(int*)(p + 0x70) != 0);
 
-    FUN_00fcf1b0(p, gr, *(int*)(p + 0x10), *(int*)(p + 8), *(int*)(p + 0xc));
+    FUN_00fcf1b0((DcBlock*)p, gr, *(short**)(p + 0x10), *(DcNeighbour**)(p + 8),
+                 *(DcNeighbour**)(p + 0xc));
 
     *(int*)(*(int*)(p + 0xc) + 4) = *(int*)(p + 0x18 + gr * 4);
     *(int*)(*(int*)(p + 8) + 4) = *(int*)(*(int*)(p + 0xc) + 4);

@@ -13,3 +13,4 @@
 ../src/game/SPMovie/_at_00fc0000.cpp  ?FUN_00fcf600@@YAHH@Z  00fcf600  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPMovie/_at_00fc0000.cpp  ?ReadCachedBit@@YAIPAUBitCache@@@Z  00fcf0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/_at_00fc0000.cpp  ?FUN_00fcf130@@YAHPAUBitState@@H@Z  00fcf130  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  ?FUN_00fcf1b0@@YAXPAUDcBlock@@HPAFPAUDcNeighbour@@2@Z  00fcf1b0  /O2 /MD /Gy /TP /Isrc/game/include
