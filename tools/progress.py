@@ -170,6 +170,10 @@ rows = [
      mb(byte_exact | equiv_by["pass"]), pctb(byte_exact | equiv_by["pass"])),
     ("Game functions (denominator)",      G,                     "100.00%",                     GB_MB,                "100.00%"),
 ]
+# --treemap prints only its own two-line summary (as mountandblade-decomp's does), not the report tables
+_REPORT_OUT = sys.stdout
+if "--treemap" in sys.argv:
+    sys.stdout = open(os.devnull, "w")
 print("Spore decompilation progress")
 print()
 print(table(["Tier", "Functions", "% count", "MB", "% size"],
@@ -1290,4 +1294,5 @@ if "--plot" in sys.argv:
 if "--treemap" in sys.argv:
     i = sys.argv.index("--treemap")
     out = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else W("work", "treemap.png")
+    sys.stdout = _REPORT_OUT
     treemap(out)
