@@ -9,3 +9,4 @@
 ../src/game/SporeApp/SporeApp.cpp  ??_GcSporeAppTokenTranslator@@UAEPAXI@Z  00f47520  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ??4AudioRef@@QAEAAU0@PAUIAudioSystem@@@Z  00f475f0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ??4EditorRef@@QAEAAU0@PAUIEditorSystem@@@Z  00f47630  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SporeApp/SporeApp.cpp  ?HandleMessage@cSporeApp@@UAE_NIPAX@Z  00f47b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

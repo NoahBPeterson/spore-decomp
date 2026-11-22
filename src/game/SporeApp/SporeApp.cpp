@@ -62,21 +62,23 @@ struct WString { int assign(unsigned int b, unsigned int e); };
 #define RVC2i(p, off, a, b) (*(int (__thiscall**)(void*, int, int))((*(char**)(p)) + (off)))(p, (a), (b))
 struct IHandlerBase {
     virtual ~IHandlerBase() {}
-    virtual bool HandleMessage(unsigned int, unsigned int, int*);
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage);
     virtual void h1(); virtual void h2(); virtual void h3(); virtual void h4();
 };
 struct RefCountBase {
     virtual ~RefCountBase() {}
     virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3();
 };
+struct IAppSystem;
 struct cSporeApp : IHandlerBase, RefCountBase {
     char pad8[4];
     bool mAppRunning;                  // +0xc
-    char padD[3];
+    bool mbKeepRunning;                // +0xd (cleared by the quit message)
+    char padE[2];
     uint64_t mReferenceCycle;          // +0x10
     float mMSPerCycle;                 // +0x18
     float mCyclesPerMS;                // +0x1c
-    void* mAppSystem;                  // +0x20
+    IAppSystem* mAppSystem;            // +0x20
     void* mFactoryRegistry;            // +0x24
     void* mUIMainWin;                  // +0x28
     void* mAudioSystem;                // +0x2c
@@ -89,7 +91,8 @@ struct cSporeApp : IHandlerBase, RefCountBase {
 
     virtual ~cSporeApp();
     bool Shutdown();
-    char HandleMessage(unsigned int msg, int* data);
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage);
+    int ElapsedMS();                   // 0x00f475b0 (matched as Timer::Elapsed)
     char UpdateCheck(void* s, void* out);
     void f47930();
 };
@@ -251,7 +254,7 @@ struct IAppSystem {
     virtual void Fn74(const void* a, const void* b);  // +0x74
     virtual void s78();
     virtual void s7c();
-    virtual void s80();
+    virtual void Fn80();  // +0x80
     virtual void s84();
     virtual IProfiler* GetProfiler();  // +0x88
 };
@@ -468,6 +471,7 @@ struct MainWinRef {
 };
 struct cDirectPropertyList {
     void SetBoolProperty(unsigned id, bool value);                  // 0x006a17e0
+    bool GetBool(unsigned id) const;                                // 0x006a25a0
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
     virtual void SetProperty(unsigned id, Variant* v);              // +0x14
 };
@@ -800,41 +804,103 @@ void cSporeApp::f47930()
     (*(void (__thiscall**)(void*))(*(char**)mAppSystem + 0x7c))(mAppSystem);
 }
 
+// a window of the main canvas: what it hands the renderer on a resize
+struct IMainCanvasWindow {
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void s60();
+    virtual void s64();
+    virtual void s68();
+    virtual void s6c();
+    virtual void s70();
+    virtual void s74();
+    virtual void s78();
+    virtual void s7c();
+    virtual void s80();
+    virtual void s84();
+    virtual void s88();
+    virtual void s8c();
+    virtual void s90();
+    virtual void* GetRenderWindow();  // +0x94
+};
+struct WindowEvent {
+    int mType;          // 0x22: resized
+    int mLeft;
+    int mTop;
+    int mRight;
+    int mBottom;
+};
+struct WindowMessage {
+    uint32_t mID;
+    IMainCanvasWindow* mpWindow;   // +0x4
+    WindowEvent* mpEvent;          // +0x8
+};
+struct QuitMessage {
+    uint32_t mID;
+    uint32_t mPad4;
+    int mExitCode;                 // +0x8
+};
+void __cdecl D3D9WindowResize(void* window, int width, int height);     // 0x011f8070 rw::graphics::Device::D3D9WindowResize
+
 // @ 0x00f47b10
-char cSporeApp::HandleMessage(unsigned int msg, int* data)
+bool cSporeApp::HandleMessage(uint32_t messageID, void* pMessage)
 {
-    if (msg <= 0x1ee100a) {
-        if (msg == 0x1ee100a) {
-            f47930();
-            VC0(mAppSystem, 0x80);
-            return 1;
+    switch (messageID) {
+    case 0x1ee1003: {
+        WindowMessage* msg = (WindowMessage*)pMessage;
+        if (msg->mpEvent->mType == 0x22 && sAppProperties->GetBool(0x153c178)) {
+            WindowEvent* e = msg->mpEvent;
+            int height = e->mBottom - e->mTop;
+            int width = e->mRight - e->mLeft;
+            D3D9WindowResize(msg->mpWindow->GetRenderWindow(), width, height);
         }
-        if (msg == 0x153c326) {
-            int v = 0;
-            if (data) v = *(int*)((char*)data + 8);
-            mExitCode = v;
-            *(char*)((char*)this + 0xd) = 0;
-            return 1;
-        }
-        if (msg != 0x1ee1003) return 0;
-        int* p = *(int**)((char*)data + 8);
-        if (*p == 0x22 && GetDescription(&g_sAppProperties, 0x153c178)) {
-            int h = p[4] - p[2];
-            int w = p[3] - p[1];
-            void* obj = *(char**)((char*)data + 4);
-            int arg = RVC2i(obj, 0x94, w, h);
-            D3D9WindowResize(arg);
-        }
-        return 1;
+        return true;
     }
-    if (msg != 0x44edd9c) return 0;
+    case 0x153c326:
     {
-        int cycles = Timer_Elapsed(this);
-        float f = mMSPerCycle * (float)cycles;
-        long long add = (long long)f;
-        *(long long*)&mReferenceCycle += add;
+        int exitCode = 0;
+        if (pMessage)
+            exitCode = ((QuitMessage*)pMessage)->mExitCode;
+        mExitCode = exitCode;
+        mbKeepRunning = false;
+        return true;
     }
-    return 1;
+    case 0x1ee100a:
+        f47930();
+        mAppSystem->Fn80();
+        return true;
+    case 0x44edd9c:
+    {
+        float elapsed = (float)ElapsedMS();
+        float cyclesPerMS = mCyclesPerMS;
+        float cycles = cyclesPerMS * elapsed;
+        mReferenceCycle += X87RoundToInt64(cycles);
+    }
+        return true;
+    }
+    return false;
 }
 
 extern "C" const unsigned short g_148d824[];   // L" Demo"
