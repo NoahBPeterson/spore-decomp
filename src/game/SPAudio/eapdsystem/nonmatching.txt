@@ -12,3 +12,5 @@
 00a68890 140 Eapd System::Init; boolean and-chain and nested cleanup branch shape (size 245 vs 248) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(write)/pool-limit]
 00a68cb0 102 CreateSingleton ctor; EH state numbering off by one and member-init scheduling (size 268 vs 277) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]
 00a68e90  221  singleton create/teardown; no SEH frame and devirtualized vtable-slot allocator call (size 204 vs 284) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]
+00a53310  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py
+00a687f0  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

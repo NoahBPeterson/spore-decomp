@@ -6,3 +6,4 @@
 0062dce0 252 BlockCircle: complete; orig mixes SSE subtract with x87 sqrt via stack temps, schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0062de30 18 GetNextPathPoint: complete; load/add order of x,y differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0062f1e0 134 LoadAllAnimInfo: complete; key filter object / vector locals laid out differently flags: /O2 /MD /Gy /TP /arch:SSE
+0062fd60  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

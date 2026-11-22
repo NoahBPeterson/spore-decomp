@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0090b310  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

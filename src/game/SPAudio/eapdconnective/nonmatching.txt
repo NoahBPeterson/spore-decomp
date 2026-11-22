@@ -19,3 +19,4 @@
 00a5c0b0 33 complete makefilename_float (1000-byte buffer sprintf through the stored format, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a5c100 33 complete makefilename_symbol (sprintf with the symbol name, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a5c6a0 38 class pointer load scheduled after the two key loads (register pressure in the 3-arg tail call) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5ae10  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

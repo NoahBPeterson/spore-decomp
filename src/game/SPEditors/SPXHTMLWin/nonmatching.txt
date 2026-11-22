@@ -9,3 +9,4 @@
 00623c90 530 cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00624080 1600 cXHTMLWin::CreateFormControl; complete behaviour, structure/regalloc differ (jump-table switch, duplicated inlined tails)
 006248d0 130 cXHTMLWin::GetFormControlValue; complete; WString assign is a usercall (eax=begin) and list anchor null-test shape differs
+00623ef0  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

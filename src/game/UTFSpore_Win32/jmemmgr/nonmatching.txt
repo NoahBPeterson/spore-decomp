@@ -7,3 +7,4 @@
 00863b70 241 FUN_00863b70: complete; original uses EAX/ECX + stack args (non-C register ABI) [equiv UNSUPPORTED: unresolved _strncpy]
 00863c50 228 FUN_00863c50: complete; APP0/GIMEX marker reader, regalloc and frame differ [equiv FAIL: compares an uninitialised stack buffer exactly like the original; harness stack garbage differs]
 00863d50 208 FUN_00863d50: complete; COM marker reader, regalloc and frame differ [equiv FAIL: harness execution fault]
+00863260  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py
