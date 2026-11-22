@@ -11,3 +11,11 @@
 ../src/game/SPMovie/slist.cpp  ?IsMember@SList_s00fc_c260@rw@@QAEDPAVSNode@2@@Z  00fcc330  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/slist.cpp  ?InsertAtOne@SList_s00fc_c260@rw@@QAEHHIH@Z  00fcd170  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/slist.cpp  ?RemoveIf@SList_s00fc_c260@rw@@QAEHPAXPAVICompare@2@PAVICallback@2@@Z  00fccb80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Method320@Vp6Tramp@@QAEHHHPAH@Z  00fcd320  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Method370@Vp6Tramp@@QAEHHHPAH@Z  00fcd370  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Clear@SList_s00fc_c260@rw@@QAEXPAPAX@Z  00fccc40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Permute@SList_s00fc_c260@rw@@QAEHPAH@Z  00fccd00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?LoadNewNode@SList_s00fc_c260@rw@@QAEPAVSNode@2@HH@Z  00fccf40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?FindNode@SList_s00fc_c260@rw@@QAEPAVSNode@2@PBXPAVICompare@2@@Z  00fcc260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Remove@SList_s00fc_c260@rw@@QAEHPAVSNode@2@PAPAX@Z  00fccae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Sort@SList_s00fc_c260@rw@@QAEHPAX0@Z  00fcce70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

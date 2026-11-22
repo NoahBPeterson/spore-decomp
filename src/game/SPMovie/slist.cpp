@@ -6,6 +6,8 @@
 extern "C" char g_1491e4c[];
 extern "C" char g_1491e68[];
 extern "C" char g_1491ef8[];
+extern "C" char g_1491fa0[];
+extern "C" char g_1491fb8[];
 
 #include "game/types.h"
 #include <intrin.h>
@@ -179,10 +181,13 @@ struct SList_s00fc_d210 {
 };
 extern "C" void        util_Copy16(u8*, u8*, int);          // 0x11ea910
 extern "C" SNode_s00fc_d210* SList_LoadNewNode(SList_s00fc_d210* self, void* key, int a3);  // 0xfccf40
+struct Vp6Copier {
+    virtual int Copy(u8* dst, u8* src, int size);   // +0x00
+};
 struct Vp6Tramp {
+    virtual void* Get();                             // +0x00
     int  Method320(int p2, int p3, int* p4);
     int  Method370(int p2, int p3, int* p4);
-    void* Get();
 };
 // ---- items of slice s00fcd210 end
 
@@ -209,31 +214,26 @@ namespace rw {
 SNode* SList_s00fc_c260::FindNode(const void* key, ICompare* cmp)
 {
     SNode* node = mHead;
-    if (node == 0)
-        return 0;
-    for (;;) {
+    while (node != 0) {
         void* data = node->GetData();
         if (cmp != 0) {
-            if (cmp->Compare((void*)key, data) == 0)
-                return node;
+            if (cmp->Compare((void*)key, data) != 0) {
+                node = (SNode*)node->Next();
+                continue;
+            }
+            return node;
         } else {
-            unsigned n = mElementSize;
             bool same = true;
-            if (n == 0)
-                return node;
-            do {
-                if (!same)
-                    break;
+            for (unsigned n = mElementSize; n > 0 && same; ) {
                 --n;
                 same = *(const unsigned char*)data == *(const unsigned char*)key;
-            } while (n != 0);
+            }
             if (same)
                 return node;
         }
         node = (SNode*)node->Next();
-        if (node == 0)
-            return 0;
     }
+    return 0;
 }
 }  // namespace rw
 
@@ -550,10 +550,8 @@ int SList_s00fc_c260::Remove(SNode* node, void** cb)
             mTail = prev;
         prev->SetNext(node->Next());
     }
-    if (cb != 0) {
-        void (*fn)(void*) = (void (*)(void*))(*cb);
-        fn(node->GetData());
-    }
+    if (cb != 0)
+        ((ICallback*)cb)->Invoke(node->GetData());
     --mLength;
     mAllocator->Free(node, 0);
     return 0;
@@ -723,6 +721,7 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
     SNode* node;
     unsigned i;
     int rc;
+    SListSortAdapter adapter;
     if (mLength < 2)
         return 0;
     temp = (unsigned*)mAllocator->Alloc(mLength * 4, "SList::Sort temp", 0, 4, 0);
@@ -735,12 +734,7 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
             ++p;
         } while (node != 0);
     }
-    {
-        SListSortAdapter adapter;
-        adapter.vftable = (void*)0x1491fb8;
-        adapter.cmp = cmp;
-        rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
-    }
+    rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
     if (rc == 0) {
         node = (SNode*)temp[0];
         i = 1;
@@ -950,15 +944,14 @@ extern "C" int SList_InsertSorted(SList_s00fc_d210* self, void* key, SNode_s00fc
 // @ 0x00fcd320
 int Vp6Tramp::Method320(int p2, int p3, int* p4)
 {
-    int uVar1 = (int)Get();
+    u8* buf = (u8*)Get();
     if (p2 == 0 || p3 == 0)
         return -1;
-    if (p4 == 0) {
-        util_Copy16((u8*)uVar1, (u8*)p2, p3);
-    } else {
-        int iVar2 = ((int (*)(int, int, int))((void**)*p4)[0])(uVar1, p2, p3);
-        if (iVar2 == -1)
+    if (p4 != 0) {
+        if (((Vp6Copier*)p4)->Copy(buf, (u8*)p2, p3) == -1)
             return -1;
+    } else {
+        util_Copy16(buf, (u8*)p2, p3);
     }
     return 0;
 }
@@ -966,15 +959,14 @@ int Vp6Tramp::Method320(int p2, int p3, int* p4)
 // @ 0x00fcd370
 int Vp6Tramp::Method370(int p2, int p3, int* p4)
 {
-    int uVar1 = (int)Get();
+    u8* buf = (u8*)Get();
     if (p2 == 0 || p3 == 0)
         return -1;
-    if (p4 == 0) {
-        util_Copy16((u8*)p2, (u8*)uVar1, p3);
-    } else {
-        int iVar2 = ((int (*)(int, int, int))((void**)*p4)[0])(p2, uVar1, p3);
-        if (iVar2 == -1)
+    if (p4 != 0) {
+        if (((Vp6Copier*)p4)->Copy((u8*)p2, buf, p3) == -1)
             return -1;
+    } else {
+        util_Copy16((u8*)p2, buf, p3);
     }
     return 0;
 }

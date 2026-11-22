@@ -2,3 +2,5 @@
 slices/s00fd71e0/s00fd71e0.cpp  ?PauseMovie2@cMovieSystem@@QAEDXZ   00fd7610
 slices/s00fd71e0/s00fd71e0.cpp  ?FUN_00fd7730@@YAXHPAUIWindowCtl@@@Z  00fd7730
 slices/s00fd71e0/s00fd71e0.cpp  ?GetSomething@cMovieSystem@@QAEPAXXZ  00fd7a90
+slices/s00fd71e0/s00fd71e0.cpp  ?StopMovie@cMovieSystem@@QAE_NXZ  00fd79e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00fd71e0/s00fd71e0.cpp  ?StopRecordingMovie@cMovieSystem@@QAEXI@Z  00fd7d80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

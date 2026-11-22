@@ -2,6 +2,7 @@
 // SP::cMovieSystem methods; offsets are from the retail disassembly.
 #include "types.h"
 #include <intrin.h>
+#include "sse_helpers.h"
 
 struct IMessageServer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
@@ -190,6 +191,11 @@ struct MoviePlayer {
     void Shutdown();                                   // 0x00fcb860
 };
 
+class cSPUILayout {
+public:
+    bool SetVisibility(bool visible);                  // 0x00810590
+};
+
 struct MaterialSlot {
     void* mField0;                                     // +0x0
     void* mState;                                      // +0x4 (EmbeddedState*)
@@ -204,10 +210,19 @@ public:
     void* mVideoOps;             // +0x10
     void* mAudioDecoder;         // +0x14
     void* mAudioRenderer;        // +0x18
-    void* mMaterials[4];         // +0x1c
+    union {
+        void* mMaterials[4];     // +0x1c
+        struct {
+            void* mPad1c;        // +0x1c
+            bool  mAudioActive;  // +0x20 (movie audio started)
+        };
+    };
     void* mField2c;              // +0x2c
     MoviePlayer* mDrawPlayer;    // +0x30 (player rendered by DrawLayer)
-    int mPlayerIndex;            // +0x34 (index into mMaterials for the active player)
+    union {
+        int mPlayerIndex;        // +0x34 (index into mMaterials for the active player)
+        MoviePlayer* mPlayer;    // +0x34 (StopMovie's view: the playing movie)
+    };
     int mField38;                // +0x38
     float mFadeInTime;           // +0x3c
     float mFadeOutTime;          // +0x40
@@ -621,27 +636,24 @@ bool cMovieSystem::Shutdown()
 // @ 0x00fd79e0
 bool cMovieSystem::StopMovie()
 {
-    char* p = (char*)this;
-    MoviePlayer* pl = *(MoviePlayer**)(p + 0x34);
-    if (pl == 0)
-        return false;
-    if (!*(bool*)(p + 0xa0) || !*(bool*)(p + 0xcd))
-        FUN_0067dd50()->ShowHudMessage(0x1b);
-    if (*(bool*)(p + 0x20) && EA_Audio_GetSystemAT() != 0)
-        FUN_011330f0();
-    pl->Kill();
-    pl = *(MoviePlayer**)(p + 0x34);
-    if (pl != 0) {
-        pl->Shutdown();
-        operator_delete(pl);
+    if (mPlayer != 0) {
+        if (!mRecording || !mExcludeUI)
+            FUN_0067dd50()->ShowHudMessage(0x1b);
+        if (mAudioActive && EA_Audio_GetSystemAT() != 0)
+            FUN_011330f0();
+        mPlayer->Kill();
+        if (MoviePlayer* pl = mPlayer) {
+            pl->Shutdown();
+            operator_delete(pl);
+        }
+        mPlayer = 0;
+        mField60 = 0.0f;
+        if (UILayoutBox* lb = (UILayoutBox*)mLetterbox)
+            ((cSPUILayout*)lb->mChild)->SetVisibility(false);
+        SP_MessageServer()->PostMsg(0x49731ad, 0, 0);
+        return true;
     }
-    *(void**)(p + 0x34) = 0;
-    *(float*)(p + 0x60) = 0.0f;
-    void* lb = *(void**)(p + 0x318);
-    if (lb != 0)
-        ((IUILayoutObj*)*(void**)((char*)lb + 0xc))->v00_AddRef();
-    SP_MessageServer()->PostMsg(0x49731ad, 0, 0);
-    return true;
+    return false;
 }
 
 // @ 0x00fd7a90
@@ -767,23 +779,20 @@ cMovieSystem::~cMovieSystem()
 // @ 0x00fd7d80
 void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
 {
-    char* p = (char*)this;
     if (dtMs > 100)
         dtMs = 100;
-    MoviePlayer* pl = *(MoviePlayer**)(p + 0x34);
-    if (pl != 0) {
-        float dt = (float)dtMs;
-        *(float*)(p + 0x60) = dt * kFloat_13f9428 + *(float*)(p + 0x60);
+    if (MoviePlayer* pl = mPlayer) {
+        mField60 = (float)dtMs * kFloat_13f9428 + mField60;
         if (pl->CanPlay())
             ((IMovieSystemMethods*)this)->PauseMovie();
     }
-    if (!*(bool*)(p + 0xa0))
+    if (!mRecording)
         return;
-    EAMutex* mx = (EAMutex*)(p + 0x70);
+    EAMutex* mx = &mRecordMutex;
     mx->Lock(&g_MutexTagObj);
     IAudioSystem* au = EA_Audio_GetSystemAT();
-    while (*(void**)(p + 0x31c) != p + 0x31c && au != 0) {
-        PacketNode* n = *(PacketNode**)(p + 0x320);
+    while (mPacketList != &mPacketList && au != 0) {
+        PacketNode* n = (PacketNode*)mPacketList2;
         int payload = (int)n->payload;
         n->prev->next = n->next;
         n->next->prev = n->prev;
@@ -797,23 +806,16 @@ void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
     }
     mx->Unlock();
     float dt = (float)dtMs;
-    float frame = *(float*)(p + 0xc0) * kFloat_13f9428 * dt + *(float*)(p + 0x314);
-    *(float*)(p + 0x310) = dt * kFloat_13f9428 + *(float*)(p + 0x310);
-    *(float*)(p + 0x314) = frame;
+    float frame = mFieldC0 * kFloat_13f9428 * dt + mField314;
+    mField310 = dt * kFloat_13f9428 + mField310;
+    mField314 = frame;
     if (frame >= 1.0f) {
         float f = frame;
-        int r;
-        __asm {
-            movss xmm0, f
-            cvtss2si eax, xmm0
-            mov r, eax
-        }
-        int n = (f < (float)r) ? r - 1 : r;
-        n = RecordFrames(n);
-        *(float*)(p + 0x314) = *(float*)(p + 0x314) - (float)n;
+        int n = RecordFrames(SseFloorToInt(f));
+        mField314 = mField314 - (float)n;
     }
-    float t = *(float*)(p + 0xc4);
-    if (t > 0.0f && t < *(float*)(p + 0x310)) {
+    float t = mFieldC4;
+    if (t > 0.0f && t < mField310) {
         ((IMovieSystemMethods*)this)->ShutdownV();
         SP_MessageServer()->PostMsg(0x62ff415, 0, 0);
     }

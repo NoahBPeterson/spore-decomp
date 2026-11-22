@@ -1,0 +1,1 @@
+slices/s00fca0b0/s00fca0b0.cpp  ??_GMovieEncoder_Avi@movie@rw@@UAEPAXI@Z  00fca0b0  /O2 /MD /Gy /TP /arch:SSE
