@@ -30,3 +30,4 @@
 0113b910 71 complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); /LTCG register allocation
 0113b9d0 29 complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (351 valid, 100% cov); cl tests the bool via mov al/test instead of cmp [mem],0
 0113baf0 37 complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (207 valid, 100% cov); cl reloads the list head instead of cmp [mem],0
+0113ba30  -  data: was proven equivalent, but the proof was made against the fingerprint before the row was split to the function's real size, so it was removed 2026-11-22; re-prove with tools/contrib/prove.py

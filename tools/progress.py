@@ -1261,8 +1261,16 @@ def treemap(path):
              "(tools/difftest/verdicts.py)." % (human(len(gen)), gen_b / 2**20, 100.0 * gen_ok / max(1, gen_b),
                                                 VERDICT_WHEN or "- (none yet)"), fontsize=8.2, color=MUTED, va="top")
     fig.savefig(path, facecolor=SURFACE)
-    print("wrote %s (%s functions in %d objects, %d labels)" % (os.path.relpath(path, ROOT), human(tot_n), len(boxes),
-                                                               placed))
+    print("verdicts: the treemap uses the sweep at %s" % (VERDICT_WHEN or "- (none yet)"))
+    # functions by status over every row (both treemaps, cells too small to draw included), as mountandblade-decomp
+    # prints it; proved = proven equivalent (equivalent.txt, prove.py), counted apart from a sweep PASS
+    st = collections.Counter("proved" if r[4] != "byte-exact" and r[2] in proven else r[4] for r in every)
+    names = [("byte-exact", "byte-exact"), ("proved", "proved"), ("pass", "equivalent (test PASS)"), ("weak", "weak"),
+             ("inputs", "untestable (inputs)"), ("harness", "untestable (harness)"), ("untested", "untested"),
+             ("fail", "fail"), ("partial", "partial"), ("nosource", "no source")]
+    print("wrote %s (%s functions in %d objects, %d labels; %s)" % (
+        os.path.relpath(path, ROOT), human(tot_n), len(boxes), placed,
+        ", ".join("%s %s" % (l, human(st[k])) for k, l in names if st.get(k))))
 
 
 if "--groups" in sys.argv:
