@@ -1,0 +1,1 @@
+00d6de50 ?FUN_00d6de50@@YA_NPAUCreature_s00d6_de50@@@Z  # FUN_00d6de50 migrated from s00d6de50 (verbatim, stub Creature renamed for this TU)

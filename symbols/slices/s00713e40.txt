@@ -1,7 +1,7 @@
-00713e40 ?InvalidMaterialDispatchCallback@@YAHXZ  # invalid-material dispatch callback (VS/PS shader consts, x87 sin)
-00713f20 ?RegisterInvalidShader@@YAXXZ  # register the fallback shader, point dispatch cb at 0x713e40
-00713f90 ?Init@Adapter20@@QAEPAXXZ  # resource-adapter vtable/field init
-00713fd0 ?Destroy@AdapterBase@@QAEXXZ  # resource-adapter dtor: vtable reset + member dtor at +0xc
+00713e40 ?InvalidMaterialDispatchCallback@@YAHXZ  # InvalidMaterialDispatchCallback migrated from s00713e40 (verbatim, slice spelling)
+00713f20 ?RegisterInvalidShader@SP@@YAXXZ  # SP::RegisterInvalidShader migrated from s00713e40
+00713f90 ?Init@Adapter20@@QAEPAXXZ  # Adapter20::Init migrated from s00713e40 (verbatim, slice spelling)
+00713fd0 ??1AdapterBaseView_713fd0@@QAE@XZ  # AdapterBaseView_713fd0::~AdapterBaseView_713fd0 migrated from s00713e40 (verbatim, slice spelling)
 00714050 ?Remove@AdapterList@@QAEXPAX@Z  # AdapterList::Remove migrated from s00713e40 (verbatim, slice spelling)
 007140e0 ?CollectTextures@@YAXPAX0P6A_N0@Z@Z  # CollectTextures migrated from s00713e40 (verbatim, slice spelling)
 007141e0 ?DispatchAll@@YAXPAUDispatchTarget@@PAX1@Z  # DispatchAll migrated from s00713e40 (verbatim, slice spelling)

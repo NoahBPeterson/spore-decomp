@@ -1,0 +1,1 @@
+00d30990 ?LoadInputTunables@cCreatureInputConfig@SP@@QAEXXZ  # cCreatureInputConfig::LoadInputTunables migrated from s00d30990 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00d6de00 ?FUN_00d6de00@@YA_NPAVcSPCreatureBase@@@Z  # FUN_00d6de00 migrated from s00d6de00 (verbatim, slice spelling)

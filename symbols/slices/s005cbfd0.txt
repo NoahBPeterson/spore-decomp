@@ -7,3 +7,5 @@
 005cc690 ?HideWin@cSellBackRollover@@QAEXXZ  # cSellBackRollover::HideWin migrated from s005cbfd0 (verbatim, slice spelling)
 005cc6c0 ?IsWinVisible@cSellBackRollover@@QAE_NXZ  # cSellBackRollover::IsWinVisible migrated from s005cbfd0 (verbatim, slice spelling)
 005cc750 ?Show@cSPEditorSellBackRollover@SP@@QAEXPB_WH_N@Z  # SP::cSPEditorSellBackRollover::Show migrated from s005cbfd0
+005ccbb0 ??0cSPEditorShoppingTokenTranslator@@QAE@XZ  # cSPEditorShoppingTokenTranslator::cSPEditorShoppingTokenTranslator migrated from s005cbfd0 (verbatim, slice spelling)
+005ccc00 ??1cSPEditorShoppingTokenTranslator@@QAE@XZ  # cSPEditorShoppingTokenTranslator::~cSPEditorShoppingTokenTranslator migrated from s005cbfd0 (verbatim, slice spelling)

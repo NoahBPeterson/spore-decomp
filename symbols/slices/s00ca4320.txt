@@ -1,0 +1,1 @@
+00ca4320 ?FUN_00ca4320@cVehicle_s00ca4320@@QAE_NPAX@Z  # cVehicle_s00ca4320::FUN_00ca4320 migrated from s00ca4320 (verbatim, slice spelling)

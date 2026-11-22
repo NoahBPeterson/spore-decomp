@@ -1,1 +1,3 @@
 006c0120 ?func24h@PFIndexModifiable@@QAE_NPAUHoleTable@@IIII@Z  # PFIndexModifiable::func24h migrated from s006bfda0 (verbatim, slice spelling)
+00931da0 ??0FileStream@IO@EA@@QAE@PBD@Z  # EA::IO::FileStream::FileStream (callee of s006bfda0, named from the dev publics; slice address comment)
+0093bd50 ??0MemoryStream@IO@EA@@QAE@ABV012@@Z  # EA::IO::MemoryStream::MemoryStream (callee of s006bfda0, named from the dev publics; slice address comment)

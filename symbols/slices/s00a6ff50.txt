@@ -1,3 +1,4 @@
+00a6ff50 ?Apply@ParamUpdate@@QAEXXZ  # ParamUpdate::Apply migrated from s00a6ff50 (verbatim, slice spelling)
 00a70330 ?StopStopped@cEffectsWorld@@QAEXXZ  # cEffectsWorld::StopStopped migrated from s00a6ff50 (verbatim, slice spelling)
 00a70370 ?ForEachActive@cEffectsWorld@@QAEXP6AXPAUcVisualEffect@@PAX@Z1H@Z  # cEffectsWorld::ForEachActive migrated from s00a6ff50 (verbatim, slice spelling)
 00a70400 ?UpdateComponentLODs@cEffectsWorld@@SGXPAULODWorld@@PAXH@Z  # cEffectsWorld::UpdateComponentLODs migrated from s00a6ff50 (verbatim, slice spelling)

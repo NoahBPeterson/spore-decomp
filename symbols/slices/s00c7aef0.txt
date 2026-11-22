@@ -1,0 +1,1 @@
+00c7aef0 ?Read_00c7aef0@@YA_NPAVISerializerReadStream@@PAVcWarMap@@@Z  # Read_00c7aef0 (ReadSTLMapT<eastl::map<unsigned, SP::cSpacePlayerWarData>> reader) migrated verbatim from s00c7aef0; its local stubs are spelled *_s00c7_aef0 (clash renames), so the slice's mangled name binds

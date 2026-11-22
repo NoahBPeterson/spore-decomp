@@ -12,4 +12,5 @@
 00e4a8a0 ?FUN_00e4a8a0@@YAHH@Z  # FUN_00e4a8a0 migrated from s00e49a40 (verbatim, slice spelling)
 00e4a910 ?FUN_00e4a910@@YA_NH@Z  # FUN_00e4a910 migrated from s00e49a40 (verbatim, slice spelling)
 00e4a960 ?FUN_00e4a960@@YA_NH@Z  # FUN_00e4a960 migrated from s00e49a40 (verbatim, slice spelling)
+00e4a9d0 ?sHash@SP@@YAHPBD@Z  # SP::sHash migrated from s00e49a40
 00e4a9f0 ?FUN_00e4a9f0@@YAPAXPB_W@Z  # FUN_00e4a9f0 migrated from s00e49a40 (verbatim, slice spelling)

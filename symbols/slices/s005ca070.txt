@@ -6,7 +6,7 @@
 005ca880 ?SetGlobalProperty@@YAXHM@Z  # SetGlobalProperty migrated from s005ca070 (verbatim, slice spelling)
 005ca920 SP::cSPPaletteUI::IsPaintByNumber  # forwards to the selected category UI
 005ca980 SP::cSPPaletteUI::UpdateCategories  # calls Update(delta) on every category UI
-005ca9c0 SP::cSPPaletteUI::FindCategoryIndex  # index of mSelectedCategory in mCategories, else -1
+005ca9c0 ?FindCategoryIndex@cSPPaletteUI@@QAEHXZ  # cSPPaletteUI::FindCategoryIndex migrated from s005ca070 (verbatim, slice spelling)
 005ca9f0 ?UpdateNavigationVisiblity@cSPPaletteUI@@QAEXXZ  # cSPPaletteUI::UpdateNavigationVisiblity migrated from s005ca070 (verbatim, slice spelling)
 005cadb0 ?SetVisibleChunk@cSPPaletteUI@@QAEXH@Z  # cSPPaletteUI::SetVisibleChunk migrated from s005ca070 (verbatim, slice spelling)
 005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005ca070, named from the dev publics; slice address comment)

@@ -1,6 +1,6 @@
 007a8a50 EA::Text::Render_RenderWare::DrawGlyphs  # thiscall (GlyphDisplayEntry* [0x28 B], count, colors, bool perGlyphColor) ret 0x10; GlyphCache vslots 0x14 GetGlyphTextureInfo / 0x1c AddGlyphTexture / 0x28 GetTextureInfo / 0x40 BeginUpdate / 0x44 EndUpdate, Font vslots 0x50 RenderGlyphBitmap / 0x54 DoneGlyphBitmap (EAText headers + PDB layouts)
 007a9080 SP::cTextRenderer::AddGlyphRun  # emits a glyph run into the text buffers
-007a9130 SP::SomeManager::FindAndEraseByKey  # searches +0x190 vector, erases match
+007a9130 ?FindAndErase@TextureListOwner@@QAE_NPAH@Z  # TextureListOwner::FindAndErase migrated from s007a8a50 (verbatim, slice spelling)
 007a91b0 SP::cTextRenderer::DrawString  # global/shaped text dispatch
 007a9280 SP::cTextRenderer::CreateGlyphCacheTexture  # GlyphCache key + push_back
 007a93b0 ?FUN_007a93b0@@YAXXZ  # FUN_007a93b0 migrated from s007a8a50 (verbatim, slice spelling)

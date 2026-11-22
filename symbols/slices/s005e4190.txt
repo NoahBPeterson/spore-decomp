@@ -1,11 +1,12 @@
 0041e920 ?GetBool@cProperty@@QAEPA_NXZ  # Property::GetBool (thiscall, returns bool*)
-00f473a0 ??2@YAPAXIPBDHI0H@Z  # 6-arg operator new (size, name, flags, debugFlags, file, line)
-00605220 ??0cSPVerbIconRollover@SP@@QAE@I@Z  # cSPVerbIconRollover(uint32) ctor, called from InitData 0x5e4190
-006051d0 ??0cSPVerbIconRollover@SP@@QAE@XZ  # cSPVerbIconRollover() ctor, called from InitData 0x5e4190
-013eb430 ?kEditorAllocName@@3QBDB  # "Editor" allocation-name string
 005e4190 ?InitData@cSPEditorVerbIcon@SP@@UAEXPAVcSPEditorVerbIconData@2@@Z  # cSPEditorVerbIcon::InitData(cSPEditorVerbIconData*)
 005e4560 ?UpdateRollover@cSPEditorVerbIcon@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  # cSPEditorVerbIcon::UpdateRollover(EA::UTFWin::IWindow*)
+005e49c0 ?HandleMessage@cSPEditorVerbIcon@SP@@UAE_NPAVIWindow@UTFWin@EA@@PAX@Z  # cSPEditorVerbIcon::HandleMessage(EA::UTFWin::IWindow*, void*)
 005e4c90 ?UpdateLevelDisplay@cSPEditorVerbIcon@SP@@UAEXM@Z  # cSPEditorVerbIcon::UpdateLevelDisplay(float)
 005e4d30 ?FloatToInt@SP@@YAHM@Z  # SP::FloatToInt(float)
-005e4d60 ?SetIndex@cIconVerbHelper@SP@@QAEXH@Z  # SP::cIconVerbHelper::SetIndex(int)
-005e49c0 ?HandleMessage@cSPEditorVerbIcon@SP@@UAE_NPAVIWindow@UTFWin@EA@@PAX@Z  # cSPEditorVerbIcon::HandleMessage(EA::UTFWin::IWindow*, void*)
+005e4d60 ?SetIndex@cIconVerbHelper@SP@@QAEXH@Z  # cIconVerbHelper::SetIndex migrated from s005e4190 (verbatim, slice spelling)
+006051d0 ??0cSPVerbIconRollover@SP@@QAE@XZ  # cSPVerbIconRollover() ctor, called from InitData 0x5e4190
+00605220 ??0cSPVerbIconRollover@SP@@QAE@I@Z  # cSPVerbIconRollover(uint32) ctor, called from InitData 0x5e4190
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s005e4190, named from the dev publics; slice address comment)
+00f473a0 ??2@YAPAXIPBDHI0H@Z  # 6-arg operator new (size, name, flags, debugFlags, file, line)
+013eb430 ?kEditorAllocName@@3QBDB  # "Editor" allocation-name string

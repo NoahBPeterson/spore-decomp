@@ -4,7 +4,7 @@
 00c5a7d0 ?DestroyStepLists@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::DestroyStepLists migrated from s00c5a580 (verbatim, slice spelling)
 00c5a990 ?Init@cMissionMultiStep_s00c5_a580@@QAE_NXZ  # cMissionMultiStep_s00c5_a580::Init migrated from s00c5a580 (verbatim, slice spelling)
 00c5ab80 ?Shutdown@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::Shutdown migrated from s00c5a580 (verbatim, slice spelling)
-00c5ac60 ?GetUILongDescriptionSoFar@cMissionMultiStep@@QAEXPAX@Z  # void cMissionMultiStep::GetUILongDescriptionSoFar
+00c5ac60 ?GetUILongDescriptionSoFar@cMissionMultiStep_s00c5_a580@@QAEXPAX@Z  # cMissionMultiStep_s00c5_a580::GetUILongDescriptionSoFar migrated from s00c5a580 (verbatim, slice spelling)
 00c5ad40 ??0cMissionMultiStep@@QAE@XZ  # cMissionMultiStep::cMissionMultiStep migrated from s00c5a580 (verbatim, slice spelling)
 00c5ae30 ?Write@cMissionMultiStep@@QAE_NPAX@Z  # cMissionMultiStep::Write migrated from s00c5a580 (verbatim, slice spelling)
 00c5aea0 ?Read@cMissionMultiStep@@QAE_NPAX@Z  # cMissionMultiStep::Read migrated from s00c5a580 (verbatim, slice spelling)

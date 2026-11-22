@@ -1,0 +1,2 @@
+0079e950 ?Run@Slicer@@QAEXPAUMesh@@PAUJob_s0079_e950@@PAUUShortVec_s0079_e950@@2PAUOut_s0079_e950@@3@Z  # Slicer::Run migrated from s0079e950 (verbatim, slice spelling)
+0079f7b0 ?ReleaseAndClear@@YAXPAURefVec@@@Z  # ReleaseAndClear migrated from s0079e950 (verbatim, slice spelling)

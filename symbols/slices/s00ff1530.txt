@@ -1,0 +1,1 @@
+00ff1530 ?reserve@OrnamentVector@@QAEXI@Z  # OrnamentVector::reserve migrated from s00ff1530 (verbatim, slice spelling)

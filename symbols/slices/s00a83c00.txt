@@ -1,3 +1,4 @@
+00a83c00 ?Construct@cVisualEffect_s00a8_3c00@@QAEPAU1@XZ  # cVisualEffect_s00a8_3c00::Construct migrated from s00a83c00 (verbatim, slice spelling; retail ctor)
 00a83ee0 ?IsRunning@cVisualEffect@Swarm@EA@@UBE_NXZ  # EA::Swarm::cVisualEffect::IsRunning migrated from s00a83c00
 00a840c0 ?SetFloatParams@cVisualEffect_s00a8_3c00@@QAEDIPBMH@Z  # cVisualEffect_s00a8_3c00::SetFloatParams migrated from s00a83c00 (verbatim, slice spelling)
 00a84200 ?SetIntParams@cVisualEffect_s00a8_3c00@@QAEDIPBHH@Z  # cVisualEffect_s00a8_3c00::SetIntParams migrated from s00a83c00 (verbatim, slice spelling)

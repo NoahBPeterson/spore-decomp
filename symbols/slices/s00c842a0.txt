@@ -1,0 +1,1 @@
+00c842a0 ?GetStarRotationRate@@YAMH@Z  # GetStarRotationRate migrated from s00c842a0 (verbatim, slice spelling)

@@ -22,6 +22,8 @@
 00c365a0 ?Init@cGameBundleGroundContainer@@QAEXI@Z  # cGameBundleGroundContainer::Init migrated from s00c35810 (verbatim, slice spelling)
 00c365e0 ?FUN_00c365e0@@YGPAXPAX0@Z  # FUN_00c365e0 migrated from s00c35810 (verbatim, slice spelling)
 00c36690 ?Dtor2c@cGameBundleGroundContainer@@QAEXXZ  # cGameBundleGroundContainer::Dtor2c migrated from s00c35810 (verbatim, slice spelling)
+00c366c0 ?Write@cGameBundleGroundContainer@@QAE_NPAX@Z  # cGameBundleGroundContainer::Write migrated from s00c35810 (verbatim, slice spelling)
+00c36740 ?Read@cGameBundleGroundContainer@@QAE_NPAX@Z  # cGameBundleGroundContainer::Read migrated from s00c35810 (verbatim, slice spelling)
 00c367e0 ?Apply@FF367E0@@QAEXPAX@Z  # FF367E0::Apply migrated from s00c35810 (verbatim, slice spelling)
 00c36870 ?FUN_00c36870@@YA_NPAVcGameObj64@@PAX@Z  # FUN_00c36870 migrated from s00c35810 (verbatim, slice spelling)
 00c88b00 ?Read@cSpatialObject@SP@@UAE_NAAVcIObjectDatabaseIStream@2@@Z  # SP::cSpatialObject::Read (callee of s00c35810, named from the dev publics; slice address comment)

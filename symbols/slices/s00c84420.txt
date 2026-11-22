@@ -1,0 +1,1 @@
+00c84420 ?StarSpanRadius@@YAMH@Z  # StarSpanRadius migrated from s00c84420 (verbatim, slice spelling)

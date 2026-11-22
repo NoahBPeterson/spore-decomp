@@ -1,4 +1,4 @@
-00c68280  FUN_00c68280  # ornament segment/position rebuild (uses fixed_vector at +0x130)
+00c68280 ?Update@COrn@@QAEXXZ  # COrn::Update migrated from s00c68280 (verbatim, slice spelling)
 00c686d0 ?Build@CTexRun@@QAEXIPAM0@Z  # CTexRun::Build migrated from s00c68280 (verbatim, slice spelling)
 00c687e0 ?ClearVector@@YAXPAUVec@@@Z  # ClearVector migrated from s00c68280 (verbatim, slice spelling)
 00c68840 ?F68840@@YIXPAUCOrn@@@Z  # F68840 migrated from s00c68280 (verbatim, slice spelling)
@@ -14,7 +14,7 @@
 00c68d20 ?Ed20@COrn@@QAEDPAH@Z  # COrn::Ed20 migrated from s00c68280 (verbatim, slice spelling)
 00c68d70 ?Ed70@COrn@@QAEXPAUVector3_s00c6_8280@@PAUVector3Vec@@@Z  # COrn::Ed70 migrated from s00c68280 (verbatim, slice spelling)
 00c68e30 ??0cMovableDestructibleOrnament@@QAE@XZ  # cMovableDestructibleOrnament::cMovableDestructibleOrnament migrated from s00c68280 (verbatim, slice spelling)
-00c68ed0  SP::cMovableDestructibleOrnament::~cMovableDestructibleOrnament  # resets 6 vtables
+00c68ed0 ??1cMovableDestructibleOrnament@@QAE@XZ  # cMovableDestructibleOrnament::~cMovableDestructibleOrnament migrated from s00c68280 (verbatim, slice spelling)
 00c68f30 ?Ef30@COrn@@QAEHH@Z  # COrn::Ef30 migrated from s00c68280 (verbatim, slice spelling)
 00c69030 ?F030@COrn@@QAEXXZ  # COrn::F030 migrated from s00c68280 (verbatim, slice spelling)
 00c69090 ?F090@COrn@@QAEXXZ  # COrn::F090 migrated from s00c68280 (verbatim, slice spelling)

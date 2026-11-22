@@ -1,0 +1,1 @@
+00c70880 ?GetPlanetType@cPlanet@SP@@QBE?AW4ePlanetType@2@XZ  # SP::cPlanet::GetPlanetType (callee of s00c84950, named from the dev publics; slice address comment)

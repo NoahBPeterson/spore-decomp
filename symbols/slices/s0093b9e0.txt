@@ -1,6 +1,6 @@
-0093b9e0 ?WriteBuffer@memorystream@@QAE_NPBXI@Z  # memorystream::WriteBuffer (bool)
-0093ba40 App::memorystream::memorystream  # dev-PDB App::memorystream::memorystream
-0093ba90 FUN_0093ba90  # no PDB name
+0093b9e0 ?WriteBuffer@memorystream@@QAE_NPBXI@Z  # memorystream::WriteBuffer migrated from s0093b9e0 (verbatim, slice spelling)
+0093ba40 ?Init@memorystream@@QAEPAV1@PADI@Z  # memorystream::Init migrated from s0093b9e0 (verbatim, slice spelling)
+0093ba90 ?FUN_0093ba90@@YIHPAD@Z  # FUN_0093ba90 migrated from s0093b9e0 (verbatim, slice spelling)
 0093bab0 ?GetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEMH@Z  # GraphicsFactoryAsyncRequest::GetProperty migrated from s0093b9e0 (verbatim, slice spelling)
 0093bb40 ?SetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEXHM@Z  # GraphicsFactoryAsyncRequest::SetProperty migrated from s0093b9e0 (verbatim, slice spelling)
 0093bbf0 ?ReadBuffer@MemoryStream_s0093_b9e0@IO@EA@@QAEHPAXI@Z  # MemoryStream_s0093_b9e0::ReadBuffer migrated from s0093b9e0 (verbatim, slice spelling)

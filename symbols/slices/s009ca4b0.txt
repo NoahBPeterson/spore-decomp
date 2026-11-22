@@ -1,4 +1,6 @@
 009ca4b0 ?OnRegister@cBlockBlockCommand_s009c_a4b0@?A0xe9673dc5@@QAEXPAUcIParser_s009c_a4b0@ArgScript@EA@@PAUcState_s009c_a4b0@45@@Z  # OnRegister migrated from s009ca4b0 (verbatim, slice spelling)
+009caa40 ?Init@creature_effect_s009c_a4b0@nSPCreatureAnim@@QAEXPAUcIVisualEffect@2@KK@Z  # creature_effect_s009c_a4b0::Init migrated from s009ca4b0 (verbatim, slice spelling)
+009caa90 ?Init@creature_effect_s009c_a4b0@nSPCreatureAnim@@QAEXKKK@Z  # creature_effect_s009c_a4b0::Init migrated from s009ca4b0 (verbatim, slice spelling)
 009caac0 ??0creature_effect_s009c_a4b0@nSPCreatureAnim@@QAE@XZ  # creature_effect_s009c_a4b0::creature_effect migrated from s009ca4b0 (verbatim, slice spelling)
 009cab60 ?LookupEffect@creature_instance_data_full@nSPCreatureAnim@@QAEPAHK@Z  # creature_instance_data_full::LookupEffect migrated from s009ca4b0 (verbatim, slice spelling)
 009cabb0 ?FUN_009cabb0@@YAXPAUcreature_effect_s009c_a4b0@nSPCreatureAnim@@@Z  # FUN_009cabb0 migrated from s009ca4b0 (verbatim, slice spelling)

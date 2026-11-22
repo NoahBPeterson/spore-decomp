@@ -1,0 +1,1 @@
+00c2ec30 ?GetProgressLayoutID@MissionProgressLayout@@QAEIXZ  # MissionProgressLayout::GetProgressLayoutID migrated from s00c2ec30 (verbatim, slice spelling)

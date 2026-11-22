@@ -1,0 +1,1 @@
+00d4a570 ?VerbTray_HandleRebuild@@YA_NPAX0@Z  # VerbTray_HandleRebuild migrated from s00d4a570 (verbatim, slice spelling)

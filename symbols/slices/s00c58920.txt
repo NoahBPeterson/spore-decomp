@@ -1,1 +1,4 @@
+00bb4af0 ?ActivatePlanetRecordsForQuery@cStarManager@SP@@QAEXPAVcStarRecord@2@PAUtGenerationPreferences@12@@Z  # SP::cStarManager::ActivatePlanetRecordsForQuery (callee of s00c58920, named from the dev publics; slice address comment)
+00bb59b0 ?GetOrActivatePlanet@cStarManager@SP@@QAEXPAVcPlanetRecord@2@PAPAVcPlanet@2@@Z  # SP::cStarManager::GetOrActivatePlanet (callee of s00c58920, named from the dev publics; slice address comment)
+00bb9de0 ?GetName@cStarRecord@SP@@QBEABV?$basic_string@_WVallocator@eastl@@@eastl@@XZ  # SP::cStarRecord::GetName (callee of s00c58920, named from the dev publics; slice address comment)
 00c58ad0 ?GetTagString@cSPMissionMultiDelivery_s00c5_8920@@QAEEIPAUcWString@@@Z  # cSPMissionMultiDelivery_s00c5_8920::GetTagString migrated from s00c58920 (verbatim, slice spelling)

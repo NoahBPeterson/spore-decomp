@@ -1,4 +1,5 @@
 00dc0040 ?FUN_00dc0040@@YAXPAD@Z  # FUN_00dc0040 migrated from s00dc0040 (verbatim, slice spelling)
+00dc00a0 ?FUN_00dc00a0@@YAPAUVec3@@PAU1@IPAX@Z  # FUN_00dc00a0 migrated from s00dc0040 (verbatim, slice spelling)
 00dc01c0 ?FUN_00dc01c0@@YAXPAD@Z  # FUN_00dc01c0 migrated from s00dc0040 (verbatim, slice spelling)
 00dc0230 ?FUN_00dc0230@@YA_NPAD@Z  # FUN_00dc0230 migrated from s00dc0040 (verbatim, slice spelling)
 00dc0410 ?FUN_00dc0410@@YA_NPAD@Z  # FUN_00dc0410 migrated from s00dc0040 (verbatim, slice spelling)

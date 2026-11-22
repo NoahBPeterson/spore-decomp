@@ -1,0 +1,1 @@
+00e24f10 ?DoMessage@cSPUIPosseItemTribeBaby_s00e2_4f10@@QAEDPAXPAUMsgIn_s00e2_4f10@@@Z  # cSPUIPosseItemTribeBaby_s00e2_4f10::DoMessage migrated from s00e24f10 (verbatim, slice spelling)

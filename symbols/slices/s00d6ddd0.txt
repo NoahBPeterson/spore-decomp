@@ -1,0 +1,1 @@
+00d6ddd0 ?FUN_00d6ddd0@@YAXPAVICombatant@@@Z  # FUN_00d6ddd0 migrated from s00d6ddd0 (verbatim, slice spelling)

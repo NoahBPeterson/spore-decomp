@@ -2,7 +2,7 @@
 00828d40 ??0cWrap@@QAE@PAVIProv@@PAVIRef@@@Z  # cWrap::cWrap migrated from s00828c30 (verbatim, slice spelling)
 00828df0 ?Do@C25b@@QAEXH@Z  # C25b::Do migrated from s00828c30 (verbatim, slice spelling)
 00828e30 ?BeginRender@@YAPAVcRender2D@@PAVRenderContext@@PAVIProv@@PAPAVcWrap@@@Z  # BeginRender migrated from s00828c30 (verbatim, slice spelling)
-00828ea0 deleting destructor
+00828ea0 ??_GcWrap@@UAEPAXI@Z  # cWrap scalar deleting destructor migrated from s00828c30 (implicit, emitted with the vtable)
 00828ef0 ?EndRender@@YAXPAVRenderContext@@PAVcWrap@@@Z  # EndRender migrated from s00828c30 (verbatim, slice spelling)
 00828f40 ?MeasureOverflow@cPropLayout@@QAEMXZ  # cPropLayout::MeasureOverflow migrated from s00828c30 (verbatim, slice spelling)
 00829080 ?GetRect@cPropLayout@@QAEPAURect@@PAU2@@Z  # cPropLayout::GetRect migrated from s00828c30 (verbatim, slice spelling)
@@ -13,4 +13,5 @@
 00829690 ?GetRectLocal@cPropLayout@@QAEPAURect@@PAU2@@Z  # cPropLayout::GetRectLocal migrated from s00828c30 (verbatim, slice spelling)
 00829770 ??0cPropLayout@@QAE@XZ  # cPropLayout::cPropLayout migrated from s00828c30 (verbatim, slice spelling)
 008297b0 ?Tick@cPropLayout@@QAEXXZ  # cPropLayout::Tick migrated from s00828c30 (verbatim, slice spelling)
+00829a70 ??_GcPropLayout@@UAEPAXI@Z  # cPropLayout scalar deleting destructor migrated from s00828c30 (implicit, emitted with the vtable)
 00829ad0 ??4RefVec@@QAEAAV0@ABV0@@Z  # RefVec::operator= migrated from s00828c30 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00c01310 ?FUN_00c01310@Vec20@@QAEXXZ  # Vec20::FUN_00c01310 migrated from s00c01310 (verbatim, slice spelling)

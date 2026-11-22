@@ -3,7 +3,7 @@
 006962a0 ??0FixedString16@eastl@@QAE@PB_W@Z  # FixedString16::FixedString16 migrated from s006960f0 (verbatim, slice spelling)
 00696320 ??4FixedString16@eastl@@QAEAAU01@ABU01@@Z  # FixedString16::operator= migrated from s006960f0 (verbatim, slice spelling)
 00696350 ??0cLocaleChangeMessage@App@@QAE@ABUFixedString16@eastl@@@Z  # cLocaleChangeMessage::cLocaleChangeMessage migrated from s006960f0 (verbatim, slice spelling)
-006963d0 App::cLocaleChangeMessage::~cLocaleChangeMessage  # scalar deleting dtor (??_G), destroys mLocaleId at +0xc then restores base vtables +0/+4
+006963d0 ??1cLocaleChangeMessage@App@@UAE@XZ  # cLocaleChangeMessage::~cLocaleChangeMessage migrated from s006960f0 (verbatim, slice spelling)
 00696420 ??0cLocaleManager@SP@@QAE@XZ  # cLocaleManager::cLocaleManager migrated from s006960f0 (verbatim, slice spelling)
 006964c0 ?Init@cLocaleManager@SP@@QAE_NPAX0@Z  # cLocaleManager::Init: CommandLine / locale-info / registry bootstrap; nonmatching (EH frame shape)
 006968f0 ?SetFromMatch@cLocaleManager@SP@@UAE_NABUWStr@eastl@@@Z  # cLocaleManager::SetFromMatch migrated from s006960f0 (verbatim, slice spelling)

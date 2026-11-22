@@ -5,6 +5,8 @@
 00c8b060 SP::cSpatialObjectView::CreateEffect  # overload, 3 args + flag 1
 00c8b080 SP::cSpatialObjectView::CreateEffect  # overload, 1 arg
 00c8b0a0 SP::cSpatialObjectView::DestroyAllEffects  # Ghidra real name
+00c8b1a0 ?sub_b1a0@cSpatialObjectView@@QAEXPAX@Z  # cSpatialObjectView::sub_b1a0 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b210 ?sub_b210@cSpatialObjectView@@QAEXPAX@Z  # cSpatialObjectView::sub_b210 migrated from s00c8aa60 (verbatim, slice spelling)
 00c8b3e0 Simulator::ISimulatorSerializable::Read  # Ghidra real name
 00c8b450 ?c8b450@@YA_NH@Z  # c8b450 migrated from s00c8aa60 (verbatim, slice spelling)
 00c8b520 ?c8b520@@YA_NH@Z  # c8b520 migrated from s00c8aa60 (verbatim, slice spelling)

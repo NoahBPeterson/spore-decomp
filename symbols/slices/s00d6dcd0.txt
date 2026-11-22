@@ -1,0 +1,1 @@
+00d6dcd0 ?FUN_00d6dcd0@@YAMPAVSimulator_cCreatureBase@@@Z  # FUN_00d6dcd0 migrated from s00d6dcd0 (verbatim, slice spelling)

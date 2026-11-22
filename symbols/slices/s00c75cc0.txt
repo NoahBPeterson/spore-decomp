@@ -1,0 +1,1 @@
+00c75cc0 ?FUN_00c75cc0@cPropertyObject@@QAEXHH@Z  # cPropertyObject::FUN_00c75cc0 migrated verbatim from s00c75cc0; the module TU's local stub is spelled cPropertyObject_s00c7_5cc0 (an existing cPropertyObject stub in another slice's block), so the slice's mangled name still binds

@@ -1,4 +1,4 @@
 01146ca0 ??0CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAE@XZ  # CMpegLayer3Base_s0114_6ca0::CMpegLayer3Base migrated from s01146ca0 (verbatim, slice spelling)
 01146cf0 ??1CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAE@XZ  # CMpegLayer3Base_s0114_6ca0::~CMpegLayer3Base migrated from s01146ca0 (verbatim, slice spelling)
-01146d20 rw::audio::core::CMpegLayer3Base::AllocateHybrid  # PDB name (0x014c83cd); System::Alloc 0x112c820 then memset 0x11e073e; thiscall ret 4
+01146d20 ?AllocateHybrid@CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAEHH@Z  # CMpegLayer3Base_s0114_6ca0::AllocateHybrid migrated from s01146ca0 (verbatim, slice spelling) and byte-exact in the module TU
 01146d70 ?ScalarDeletingDtor@CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAEPAXI@Z  # CMpegLayer3Base_s0114_6ca0::ScalarDeletingDtor migrated from s01146ca0 (verbatim, slice spelling)
