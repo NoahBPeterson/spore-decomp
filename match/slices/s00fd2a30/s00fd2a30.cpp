@@ -138,30 +138,40 @@ void FUN_00fd2a30(unsigned char *param_1, void *param_2)
 }
 
 // ==================================================================== 0x00fd2d00
-// @ 0x00fd2d00
-void __fastcall FUN_00fd2d00(int param_1)
-{
-    unsigned int uVar2;
-    unsigned int uVar1;
-    int iVar3;
+// Boolean entropy decoder state.
+struct Vp6BoolDecoder {
+    int                  mPad0;     // +0x00
+    unsigned int         mRange;    // +0x04
+    unsigned int         mValue;    // +0x08
+    int                  mCount;    // +0x0c  bits left before the next byte
+    int                  mPos;      // +0x10
+    const unsigned char* mBuffer;   // +0x14
+};
 
-    uVar2 = *(unsigned int *)(param_1 + 8);
-    uVar1 = (*(int *)(param_1 + 4) + 1U) >> 1;
-    if (uVar1 * 0x1000000 <= uVar2) {
-        uVar2 = uVar2 + uVar1 * -0x1000000;
-        uVar1 = *(int *)(param_1 + 4) - uVar1;
+// @ 0x00fd2d00
+// Decodes one even-probability bit and returns it.
+int __fastcall FUN_00fd2d00(Vp6BoolDecoder* br)
+{
+    unsigned int value = br->mValue;
+    int count = br->mCount;
+    unsigned int range = br->mRange;
+    unsigned int split = (range + 1) >> 1;
+    unsigned int bigsplit = split << 24;
+    int bit = value >= bigsplit;
+    range = bit ? range - split : split;
+    if (bit)
+        value -= bigsplit;
+    range += range;
+    value += value;
+    if (--count == 0) {
+        value |= br->mBuffer[br->mPos];
+        count = 8;
+        br->mPos++;
     }
-    iVar3 = *(int *)(param_1 + 0xc) + -1;
-    uVar2 = uVar2 * 2;
-    if (iVar3 == 0) {
-        uVar2 = uVar2 | *(unsigned char *)(*(int *)(param_1 + 0x14) + *(int *)(param_1 + 0x10));
-        iVar3 = 8;
-        *(int *)(param_1 + 0x10) = *(int *)(param_1 + 0x10) + 1;
-    }
-    *(unsigned int *)(param_1 + 4) = uVar1 * 2;
-    *(int *)(param_1 + 0xc) = iVar3;
-    *(unsigned int *)(param_1 + 8) = uVar2;
-    return;
+    br->mRange = range;
+    br->mCount = count;
+    br->mValue = value;
+    return bit;
 }
 
 // ==================================================================== 0x00fd2d60
