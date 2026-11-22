@@ -190,6 +190,11 @@ struct MoviePlayer {
     void Shutdown();                                   // 0x00fcb860
 };
 
+class cSPUILayout {
+public:
+    bool SetVisibility(bool visible);                  // 0x00810590
+};
+
 struct MaterialSlot {
     void* mField0;                                     // +0x0
     void* mState;                                      // +0x4 (EmbeddedState*)
@@ -204,10 +209,19 @@ public:
     void* mVideoOps;             // +0x10
     void* mAudioDecoder;         // +0x14
     void* mAudioRenderer;        // +0x18
-    void* mMaterials[4];         // +0x1c
+    union {
+        void* mMaterials[4];     // +0x1c
+        struct {
+            void* mPad1c;        // +0x1c
+            bool  mAudioActive;  // +0x20 (movie audio started)
+        };
+    };
     void* mField2c;              // +0x2c
     MoviePlayer* mDrawPlayer;    // +0x30 (player rendered by DrawLayer)
-    int mPlayerIndex;            // +0x34 (index into mMaterials for the active player)
+    union {
+        int mPlayerIndex;        // +0x34 (index into mMaterials for the active player)
+        MoviePlayer* mPlayer;    // +0x34 (StopMovie's view: the playing movie)
+    };
     int mField38;                // +0x38
     float mFadeInTime;           // +0x3c
     float mFadeOutTime;          // +0x40
@@ -621,27 +635,24 @@ bool cMovieSystem::Shutdown()
 // @ 0x00fd79e0
 bool cMovieSystem::StopMovie()
 {
-    char* p = (char*)this;
-    MoviePlayer* pl = *(MoviePlayer**)(p + 0x34);
-    if (pl == 0)
-        return false;
-    if (!*(bool*)(p + 0xa0) || !*(bool*)(p + 0xcd))
-        FUN_0067dd50()->ShowHudMessage(0x1b);
-    if (*(bool*)(p + 0x20) && EA_Audio_GetSystemAT() != 0)
-        FUN_011330f0();
-    pl->Kill();
-    pl = *(MoviePlayer**)(p + 0x34);
-    if (pl != 0) {
-        pl->Shutdown();
-        operator_delete(pl);
+    if (mPlayer != 0) {
+        if (!mRecording || !mExcludeUI)
+            FUN_0067dd50()->ShowHudMessage(0x1b);
+        if (mAudioActive && EA_Audio_GetSystemAT() != 0)
+            FUN_011330f0();
+        mPlayer->Kill();
+        if (MoviePlayer* pl = mPlayer) {
+            pl->Shutdown();
+            operator_delete(pl);
+        }
+        mPlayer = 0;
+        mField60 = 0.0f;
+        if (UILayoutBox* lb = (UILayoutBox*)mLetterbox)
+            ((cSPUILayout*)lb->mChild)->SetVisibility(false);
+        SP_MessageServer()->PostMsg(0x49731ad, 0, 0);
+        return true;
     }
-    *(void**)(p + 0x34) = 0;
-    *(float*)(p + 0x60) = 0.0f;
-    void* lb = *(void**)(p + 0x318);
-    if (lb != 0)
-        ((IUILayoutObj*)*(void**)((char*)lb + 0xc))->v00_AddRef();
-    SP_MessageServer()->PostMsg(0x49731ad, 0, 0);
-    return true;
+    return false;
 }
 
 // @ 0x00fd7a90
