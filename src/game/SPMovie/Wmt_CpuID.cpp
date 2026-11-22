@@ -102,7 +102,20 @@ void __cdecl FUN_00fd1ba0(int* a, int* b, int* c)
     int level = 1;
     if (WillametteNewInstructionHWSupport())
         level = 12;
+    // Retail dispatches directly through a table covering levels 0 through 12.
+    __assume(level >= 0 && level <= 12);
     switch (level) {
+    case 0:
+    case 2:
+    case 4:
+    case 5:
+    case 8:
+    case 9:
+    case 10:
+        *a = 0;
+        *b = 0;
+        *c = 0;
+        break;
     case 1:
     case 3:
     case 6:
@@ -120,11 +133,6 @@ void __cdecl FUN_00fd1ba0(int* a, int* b, int* c)
         *a = 1;
         *b = 1;
         *c = 1;
-        break;
-    default:
-        *a = 0;
-        *b = 0;
-        *c = 0;
         break;
     }
 }
