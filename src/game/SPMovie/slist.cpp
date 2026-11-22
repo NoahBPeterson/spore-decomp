@@ -213,31 +213,26 @@ namespace rw {
 SNode* SList_s00fc_c260::FindNode(const void* key, ICompare* cmp)
 {
     SNode* node = mHead;
-    if (node == 0)
-        return 0;
-    for (;;) {
+    while (node != 0) {
         void* data = node->GetData();
         if (cmp != 0) {
-            if (cmp->Compare((void*)key, data) == 0)
-                return node;
+            if (cmp->Compare((void*)key, data) != 0) {
+                node = (SNode*)node->Next();
+                continue;
+            }
+            return node;
         } else {
-            unsigned n = mElementSize;
             bool same = true;
-            if (n == 0)
-                return node;
-            do {
-                if (!same)
-                    break;
+            for (unsigned n = mElementSize; n > 0 && same; ) {
                 --n;
                 same = *(const unsigned char*)data == *(const unsigned char*)key;
-            } while (n != 0);
+            }
             if (same)
                 return node;
         }
         node = (SNode*)node->Next();
-        if (node == 0)
-            return 0;
     }
+    return 0;
 }
 }  // namespace rw
 
