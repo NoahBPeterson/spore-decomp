@@ -6,9 +6,12 @@
 #include "EA/CommandLine.h"
 #include "EA/Variant.h"
 #include "SP/cDirectPropertyList.h"
+#include "SP/cStringTokenTranslator.h"
+#include "SP/cString.h"
 #include <xmmintrin.h>
 #include "sse_helpers.h"
 #include <intrin.h>
+#include <stdlib.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long*);
@@ -30,28 +33,8 @@ void* FUN_0067e0c0(int);
 void* FUN_00692f20();
 void* FUN_009200a0(int);
 void* FUN_00808780();
-void  FUN_00812d30(void*, int);
-void* FUN_0068f4d0();
-int   Timer_Elapsed(void*);
-void  ThreadSleep(void*);
-void  D3D9WindowResize(int);
-int   GetDescription(void*, unsigned int);
 unsigned int FNV1_String16(void*, unsigned int, int);
-void* WrapperAlloc(unsigned int);
-void* cStringCtor(void*);
-void* cStringDtor(void*);
-void* cStringTokenTranslatorCtor(void*);
-void* cStringDetokenizerCtor(void*);
-int   cStringLoad(void*, unsigned int, unsigned int, int);
-void* CommandLineFindSwitch(void*, unsigned int, int, int, int);
-unsigned int WStr_Format(void*, unsigned int, unsigned int);
-void* GetDataDir(int);
-void* FUN_009309b0(void*, void*, void*);
-void* RangeInitialize(void*);
-void* FUN_006884f0(int, int, int, void*, void*);
-void  operator_delete__(void*);
 void* g_sAppProperties;
-void* g_CommandLine;
 void* g_15fd928;
 struct WString { int assign(unsigned int b, unsigned int e); };
 #define VC0(p, off)        (*(void (__thiscall**)(void*))((*(char**)(p)) + (off)))(p)
@@ -60,38 +43,60 @@ struct WString { int assign(unsigned int b, unsigned int e); };
 #define RVC2i(p, off, a, b) (*(int (__thiscall**)(void*, int, int))((*(char**)(p)) + (off)))(p, (a), (b))
 struct IHandlerBase {
     virtual ~IHandlerBase() {}
-    virtual bool HandleMessage(unsigned int, unsigned int, int*);
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage);
     virtual void h1(); virtual void h2(); virtual void h3(); virtual void h4();
 };
 struct RefCountBase {
     virtual ~RefCountBase() {}
     virtual void r0(); virtual void r1(); virtual void r2(); virtual void r3();
 };
+struct IAppSystem;
+struct IMainWin;
+struct IAudioSystem;
+struct IMovie;
+struct IEditorSystem;
+struct ITerrainSystem;
+struct IGonzago;
 struct cSporeApp : IHandlerBase, RefCountBase {
     char pad8[4];
     bool mAppRunning;                  // +0xc
-    char padD[3];
+    bool mbKeepRunning;                // +0xd (cleared by the quit message)
+    char padE[2];
     uint64_t mReferenceCycle;          // +0x10
     float mMSPerCycle;                 // +0x18
     float mCyclesPerMS;                // +0x1c
-    void* mAppSystem;                  // +0x20
+    IAppSystem* mAppSystem;            // +0x20
     void* mFactoryRegistry;            // +0x24
-    void* mUIMainWin;                  // +0x28
-    void* mAudioSystem;                // +0x2c
-    void* mMovieSystem;                // +0x30
-    void* mEditorSystem;               // +0x34
-    void* mTerrainSystem;              // +0x38
-    void* mGonzagoSystem;              // +0x3c
+    IMainWin* mUIMainWin;              // +0x28
+    IAudioSystem* mAudioSystem;        // +0x2c
+    IMovie* mMovieSystem;              // +0x30
+    IEditorSystem* mEditorSystem;      // +0x34
+    ITerrainSystem* mTerrainSystem;    // +0x38
+    IGonzago* mGonzagoSystem;          // +0x3c
     int   mExitCode;                   // +0x40
     void* mProfiler;                   // +0x44
 
     virtual ~cSporeApp();
     bool Shutdown();
-    char HandleMessage(unsigned int msg, int* data);
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage);
+    int ElapsedMS();                   // 0x00f475b0 (matched as Timer::Elapsed)
     char UpdateCheck(void* s, void* out);
-    void f47930();
+    void Update();
 };
 // ---- items of slice s00f47680 end
+
+// The token translator the app hands the string detokenizer: "demo" expands to L" Demo" in the demo build
+// (vtable 0x0148d7f4; its destructor only resets the vptr and runs the base one, 0x005725a0).
+class cSporeAppTokenTranslator : public SP::cStringTokenTranslator {
+ public:
+  cSporeAppTokenTranslator(bool demo) : mbDemo(demo) {}
+  virtual ~cSporeAppTokenTranslator() {}
+  virtual bool TranslateToken(wchar_t const* token, eastl::basic_string<wchar_t, eastl::allocator>& result);  // 0x00f47c20
+  bool mbDemo;                                                          // +0x8
+};
+
+// The compiler emits its scalar deleting destructor with the vtable:
+//   @ 0x00f47520 ??_GcSporeAppTokenTranslator@@UAEPAXI@Z
 
 // ---- items of slice s00f47ed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char gSinclude[];                                            // 0x0148d858 "sinclude \""
@@ -133,6 +138,7 @@ struct WString_s00f4_7ed0 {                                                    /
     }
     ~WString_s00f4_7ed0() { DeallocateSelf(); }
     void RangeInitialize(const wchar_t* p);                         // 0x00579a90
+    int sprintf(const wchar_t* format, ...);                        // 0x0041e050
     void operator+=(const wchar_t* p);                              // 0x00599bb0
     void DeallocateSelf()
     {
@@ -221,7 +227,7 @@ struct IAppSystem {
     virtual void s38();
     virtual void s3c();
     virtual void s40();
-    virtual void s44();
+    virtual bool Fn44();  // +0x44
     virtual void s48();
     virtual void s4c();
     virtual void s50();
@@ -234,10 +240,10 @@ struct IAppSystem {
     virtual void s6c();
     virtual void s70();
     virtual void Fn74(const void* a, const void* b);  // +0x74
-    virtual void s78();
-    virtual void s7c();
-    virtual void s80();
-    virtual void s84();
+    virtual void Update(int ms);  // +0x78
+    virtual void PostUpdate();  // +0x7c
+    virtual void Fn80();  // +0x80
+    virtual void Idle(int ms);  // +0x84
     virtual IProfiler* GetProfiler();  // +0x88
 };
 struct IAudioSystem {
@@ -245,16 +251,20 @@ struct IAudioSystem {
     virtual bool Init4(CommandLine* cmd);  // +0x4
     virtual void s08();
     virtual void s0c();
-    virtual void s10();
+    virtual void AddRef();  // +0x10
     virtual void Release();  // +0x14
+    virtual void Update(float seconds);  // +0x18
 };
 struct IEditorSystem {
     virtual void s00();
     virtual void s04();
-    virtual void s08();
-    virtual void s0c();
+    virtual void AddRef();  // +0x8
+    virtual void Release();  // +0xc
     virtual bool Init10(CommandLine* cmd);  // +0x10
     virtual bool Init14(CommandLine* cmd);  // +0x14
+    virtual void s18();
+    virtual void s1c();
+    virtual void Update(int ms);  // +0x20
 };
 struct ITerrainSystem {
     virtual void s00();
@@ -262,6 +272,9 @@ struct ITerrainSystem {
     virtual void s08();
     virtual bool Init0c(CommandLine* cmd);  // +0xc
     virtual bool Init10(CommandLine* cmd);  // +0x10
+    virtual void s14();
+    virtual void s18();
+    virtual void Update(int ms);  // +0x1c
 };
 struct IGonzago {
     void Fn5d870(unsigned a);                          // 0x00b5d870
@@ -275,6 +288,7 @@ struct IGonzago {
     virtual void s1c();
     virtual void s20();
     virtual void Fn24();  // +0x24
+    virtual void Update(int ms);  // +0x28
 };
 struct IMessageServer {
     virtual void s00();
@@ -287,6 +301,11 @@ struct IMessageServer {
     virtual void s1c();
     virtual void s20();
     virtual void AddListener(void* handler, unsigned id);  // +0x24
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void Dispatch();  // +0x38
 };
 struct ICameraMgr {
     virtual void s00();
@@ -417,6 +436,7 @@ struct ICheatManager {
     virtual void RunScript(const char* text);  // +0x20
 };
 struct IMainWin {
+    void Update(int ms);                               // 0x00812d30
     void SetMode(int m);                               // 0x0077f010
     void SetFocusObj(IAppObj* a);                      // 0x00813260
     virtual void s00();
@@ -430,14 +450,16 @@ struct IMainWin {
 struct IMovie {
     virtual void s00();
     virtual void Fn04();
+    virtual void s08();
+    virtual void Update(int ms);  // +0xc
 };
 struct AudioRef {
     IAudioSystem* mpObject;
-    void operator=(IAudioSystem* p);                                // 0x00f475f0
+    AudioRef& operator=(IAudioSystem* p);                           // 0x00f475f0
 };
 struct EditorRef {
     IEditorSystem* mpObject;
-    void operator=(IEditorSystem* p);                               // 0x00f47630
+    EditorRef& operator=(IEditorSystem* p);                         // 0x00f47630
 };
 struct GonzagoRef {
     IGonzago* mpObject;
@@ -453,8 +475,11 @@ struct MainWinRef {
 };
 struct cDirectPropertyList {
     void SetBoolProperty(unsigned id, bool value);                  // 0x006a17e0
+    bool GetBool(unsigned id) const;                                // 0x006a25a0
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
     virtual void SetProperty(unsigned id, Variant* v);              // +0x14
+    char mPad4[0x38];
+    int* mDirectProps;                                              // +0x3c
 };
 struct FactoryRegistry {
     FactoryRegistry();                                              // 0x009206d0
@@ -567,6 +592,34 @@ void InitSearchPath();
 void InitModules(int a, int b);
 // ---- items of slice s00f47ed0 end
 
+// @ 0x00f475f0
+AudioRef& AudioRef::operator=(IAudioSystem* p)
+{
+    if (p != mpObject) {
+        IAudioSystem* const old = mpObject;
+        if (p)
+            p->AddRef();
+        mpObject = p;
+        if (old)
+            old->Release();
+    }
+    return *this;
+}
+
+// @ 0x00f47630
+EditorRef& EditorRef::operator=(IEditorSystem* p)
+{
+    if (p != mpObject) {
+        IEditorSystem* const old = mpObject;
+        if (p)
+            p->AddRef();
+        mpObject = p;
+        if (old)
+            old->Release();
+    }
+    return *this;
+}
+
 // @ 0x00f475b0
 int Timer::Elapsed()
 {
@@ -579,6 +632,11 @@ int Timer::Elapsed()
     }
     return SseTruncToInt(elapsed);
 }
+
+// The compiler emits cSporeApp's scalar deleting destructor (??_G) with the vtable, and the thunk the
+// RefCountBase vtable at +4 uses (this -= 4, then ??_G):
+//   @ 0x00f47af0 ??_GcSporeApp@@UAEPAXI@Z
+//   @ 0x00f47670 ??_EcSporeApp@@W3AEPAXI@Z
 
 // @ 0x00f47680
 cSporeApp::~cSporeApp()
@@ -696,97 +754,175 @@ bool cSporeApp::Shutdown()
     return 1;
 }
 
-// @ 0x00f47930
-void cSporeApp::f47930()
-{
-    if (!mAppRunning) return;
-    long long t;
-    QueryPerformanceCounter(&t);
-    long long d = t - *(long long*)&mReferenceCycle;
-    int cycles = (int)((float)d * mMSPerCycle);
-    int budget = *(int*)(*(int*)(*(int*)&g_sAppProperties + 0x3c) + 0xb0);
+struct IFrameLimiter {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); virtual void s10();
+    virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
+    virtual void s28(); virtual void s2c(); virtual void s30();
+    virtual bool CanIdle(int timeout);  // +0x34
+};
+IFrameLimiter* GetFrameLimiter();                                   // 0x0068f4d0
+struct ThreadTime { int mMS; };
+void __cdecl ThreadSleep(const ThreadTime& time);                   // 0x00921df0 EA::Thread::ThreadSleep
+IMessageServer* MessageServer_s00f4_7ed0();                         // 0x0067dcc0
 
-    bool ok = (*(bool (__thiscall**)(void*))(*(char**)mAppSystem + 0x44))(mAppSystem);
-    if (ok && budget < 0x2d) {
-        if (budget < 0) {
-            int v = budget + 1;
-            budget = v < 0 ? -v : v;
+// @ 0x00f47930
+void cSporeApp::Update()
+{
+    if (!mAppRunning)
+        return;
+    int elapsed;
+    {
+        long long t;
+        QueryPerformanceCounter(&t);
+        long long d = t - (long long)mReferenceCycle;
+        elapsed = SseTruncToInt((float)d * mMSPerCycle);
+    }
+    int frameMS = sAppProperties->mDirectProps[44];
+    if (mAppSystem->Fn44() && frameMS < 45) {
+        if (frameMS < 0) {
+            frameMS = abs(frameMS + 1);
         } else {
-            budget = 0x2d;
+            frameMS = 45;
         }
     }
-    if (budget > 0) {
-        void* o = FUN_0068f4d0();
-        if ((*(bool (__thiscall**)(void*, int))(*(char**)o + 0x34))(o, -1)) {
-            if (budget - cycles < 3) budget = cycles + 3;
-            if (cycles < budget - 1) {
-                VC1(mAppSystem, 0x84, budget - cycles - 1);
-                cycles = Timer_Elapsed(this);
+    if (frameMS > 0) {
+        if (GetFrameLimiter()->CanIdle(-1)) {
+            if (frameMS - elapsed < 3)
+                frameMS = elapsed + 3;
+            if (elapsed < frameMS - 1) {
+                mAppSystem->Idle(frameMS - elapsed - 1);
+                elapsed = ElapsedMS();
             }
         }
-        if (budget - cycles > 0) {
-            int wait = budget - cycles;
-            ThreadSleep(&wait);
-            cycles = Timer_Elapsed(this);
+        int sleepMS = frameMS - elapsed;
+        if (sleepMS > 0) {
+            ThreadTime wait;
+            wait.mMS = sleepMS;
+            ThreadSleep(wait);
+            elapsed = ElapsedMS();
         }
     }
 
-    float f = (float)cycles * mCyclesPerMS;
-    long long add = (long long)f;
-    *(long long*)&mReferenceCycle += add;
+    float elapsedF = (float)elapsed;
+    float cyclesPerMS = mCyclesPerMS;
+    float cycles = cyclesPerMS * elapsedF;
+    mReferenceCycle += X87RoundToInt64(cycles);
 
-    void* ms = MessageServer();
-    (*(void (__thiscall**)(void*))(*(char**)ms + 0x38))(ms);
+    MessageServer_s00f4_7ed0()->Dispatch();
 
-    if (mUIMainWin) FUN_00812d30(mUIMainWin, cycles);
-    if (mEditorSystem) VC1(mEditorSystem, 0x20, cycles);
-    if (mTerrainSystem) VC1(mTerrainSystem, 0x1c, cycles);
-    if (mGonzagoSystem) VC1(mGonzagoSystem, 0x28, cycles);
-    if (mMovieSystem) VC1(mMovieSystem, 0xc, cycles);
-    VC1(mAppSystem, 0x78, cycles);
-
-    if (mAudioSystem) {
-        float secs = f * 0.001f;
-        (*(void (__thiscall**)(void*, float))(*(char**)mAudioSystem + 0x18))(mAudioSystem, secs);
-    }
-    (*(void (__thiscall**)(void*))(*(char**)mAppSystem + 0x7c))(mAppSystem);
+    if (mUIMainWin)
+        mUIMainWin->Update(elapsed);
+    if (mEditorSystem)
+        mEditorSystem->Update(elapsed);
+    if (mTerrainSystem)
+        mTerrainSystem->Update(elapsed);
+    if (mGonzagoSystem)
+        mGonzagoSystem->Update(elapsed);
+    if (mMovieSystem)
+        mMovieSystem->Update(elapsed);
+    mAppSystem->Update(elapsed);
+    if (mAudioSystem)
+        mAudioSystem->Update(elapsedF * 0.001f);
+    mAppSystem->PostUpdate();
 }
 
+// a window of the main canvas: what it hands the renderer on a resize
+struct IMainCanvasWindow {
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void s60();
+    virtual void s64();
+    virtual void s68();
+    virtual void s6c();
+    virtual void s70();
+    virtual void s74();
+    virtual void s78();
+    virtual void s7c();
+    virtual void s80();
+    virtual void s84();
+    virtual void s88();
+    virtual void s8c();
+    virtual void s90();
+    virtual void* GetRenderWindow();  // +0x94
+};
+struct WindowEvent {
+    int mType;          // 0x22: resized
+    int mLeft;
+    int mTop;
+    int mRight;
+    int mBottom;
+};
+struct WindowMessage {
+    uint32_t mID;
+    IMainCanvasWindow* mpWindow;   // +0x4
+    WindowEvent* mpEvent;          // +0x8
+};
+struct QuitMessage {
+    uint32_t mID;
+    uint32_t mPad4;
+    int mExitCode;                 // +0x8
+};
+void __cdecl D3D9WindowResize(void* window, int width, int height);     // 0x011f8070 rw::graphics::Device::D3D9WindowResize
+
 // @ 0x00f47b10
-char cSporeApp::HandleMessage(unsigned int msg, int* data)
+bool cSporeApp::HandleMessage(uint32_t messageID, void* pMessage)
 {
-    if (msg <= 0x1ee100a) {
-        if (msg == 0x1ee100a) {
-            f47930();
-            VC0(mAppSystem, 0x80);
-            return 1;
+    switch (messageID) {
+    case 0x1ee1003: {
+        WindowMessage* msg = (WindowMessage*)pMessage;
+        if (msg->mpEvent->mType == 0x22 && sAppProperties->GetBool(0x153c178)) {
+            WindowEvent* e = msg->mpEvent;
+            int height = e->mBottom - e->mTop;
+            int width = e->mRight - e->mLeft;
+            D3D9WindowResize(msg->mpWindow->GetRenderWindow(), width, height);
         }
-        if (msg == 0x153c326) {
-            int v = 0;
-            if (data) v = *(int*)((char*)data + 8);
-            mExitCode = v;
-            *(char*)((char*)this + 0xd) = 0;
-            return 1;
-        }
-        if (msg != 0x1ee1003) return 0;
-        int* p = *(int**)((char*)data + 8);
-        if (*p == 0x22 && GetDescription(&g_sAppProperties, 0x153c178)) {
-            int h = p[4] - p[2];
-            int w = p[3] - p[1];
-            void* obj = *(char**)((char*)data + 4);
-            int arg = RVC2i(obj, 0x94, w, h);
-            D3D9WindowResize(arg);
-        }
-        return 1;
+        return true;
     }
-    if (msg != 0x44edd9c) return 0;
+    case 0x153c326:
     {
-        int cycles = Timer_Elapsed(this);
-        float f = mMSPerCycle * (float)cycles;
-        long long add = (long long)f;
-        *(long long*)&mReferenceCycle += add;
+        int exitCode = 0;
+        if (pMessage)
+            exitCode = ((QuitMessage*)pMessage)->mExitCode;
+        mExitCode = exitCode;
+        mbKeepRunning = false;
+        return true;
     }
-    return 1;
+    case 0x1ee100a:
+        Update();
+        mAppSystem->Fn80();
+        return true;
+    case 0x44edd9c:
+    {
+        float elapsed = (float)ElapsedMS();
+        float cyclesPerMS = mCyclesPerMS;
+        float cycles = cyclesPerMS * elapsed;
+        mReferenceCycle += X87RoundToInt64(cycles);
+    }
+        return true;
+    }
+    return false;
 }
 
 extern "C" const unsigned short g_148d824[];   // L" Demo"
@@ -813,55 +949,61 @@ char cSporeApp::UpdateCheck(void* s, void* out)
     return result;
 }
 
-// @ 0x00f47ca0
-void f47ca0(char flag, void* outString)
+// App::cStringDetokenizer (vtable 0x01400f40; this file's App() accessor hides the namespace), itself an
+// SP::cStringTokenTranslator
+class cStringDetokenizer : public SP::cStringTokenTranslator {
+ public:
+  cStringDetokenizer();                                                                   // 0x006b6490
+  virtual void func18h();                                                                 // +0x18
+  virtual void AddTranslator(SP::cStringTokenTranslator* translator);                     // +0x1c
+  virtual void RemoveTranslator(SP::cStringTokenTranslator* translator);                  // +0x20
+  virtual bool HasTokens(wchar_t const* text);                                            // +0x24
+  virtual bool Detokenize(SP::cString* text, eastl::basic_string<wchar_t, eastl::allocator>& result);  // +0x28
+  char mPad[0x5c - 8];
+};
+
+static inline const wchar_t* WStrEnd(const wchar_t* p)
 {
-    ((WString*)outString)->assign(0x148d830, 0x148d830 + 9 * 2); // L"SPORE(TM)"
-    char local[0x10];
-    cStringCtor(local);
-    void* t = WrapperAlloc(0xc);
-    char* trans = 0;
-    if (t) {
-        cStringTokenTranslatorCtor(t);
-        *(char**)t = (char*)0x148d7f4;
-        ((char*)t)[8] = flag;
-        trans = (char*)t;
-    }
-    void* d = WrapperAlloc(0x5c);
-    char* detok = 0;
-    if (d) detok = (char*)cStringDetokenizerCtor(d);
-    VC0(detok, 0x20);
-    VC1(detok, 0x1c, (int)trans);
-    if (cStringLoad(local, 0x40e05d38, 0x319ad21d, 0)) {
-        VC2i(detok, 0x28, (int)local, (int)outString);
-    }
-    (*(void (__thiscall**)(void*, int))(*(char**)detok + 0x0))(detok, 1);
-    cStringDtor(local);
+    while (*p)
+        ++p;
+    return p;
 }
 
-// @ 0x00f47d80
-void f47d80()
+// @ 0x00f47ca0
+void BuildStringTokenTranslator(bool demo, eastl::basic_string<wchar_t, eastl::allocator>& result)
 {
-    void* cl = g_CommandLine;
-    int r = (int)CommandLineFindSwitch(cl, 0x13f8d84, 0, 0, 0);
-    if (r == -1) {
-        r = (int)CommandLineFindSwitch(cl, 0x148d850, 0, 0, 0);
-        if (r != -1) {
-            char buf[0x40];
-            WStr_Format(buf, 0x13f3da0, 0x148d844);
-            char path[0x200];
-            FUN_009309b0(path, buf, GetDataDir(4));
-            char s2[0x10];
-            *(char**)(s2 + 0) = (char*)0x1667bac;
-            *(char**)(s2 + 4) = (char*)0x1667bac;
-            *(char**)(s2 + 8) = (char*)0x1667bae;
-            RangeInitialize(s2);
-            int out[4];
-            out[0] = 0; out[1] = 0; out[2] = 0;
-            FUN_006884f0(1, 1, 0x6f4b5d1, out, s2);
-            operator_delete__((void*)out[0]);
-            operator_delete__((void*)out[2]);
-        }
+    const wchar_t* name = L"SPORE(TM)";
+    result.assign(name, name + (WStrEnd(name) - name));
+    SP::cString text;
+    cSporeAppTokenTranslator* translator = new cSporeAppTokenTranslator(demo);
+    cStringDetokenizer* detokenizer = new cStringDetokenizer();
+    detokenizer->RemoveTranslator(detokenizer);
+    detokenizer->AddTranslator(translator);
+    if (text.Load(0x40e05d38, 0x319ad21d, 0))
+        detokenizer->Detokenize(&text, result);
+    delete detokenizer;
+}
+
+namespace EA { namespace IO {
+wchar_t* FUN_009309b0(wchar_t* out, const wchar_t* path, const wchar_t* base, int flags);   // 0x009309b0
+} }
+namespace SP { const wchar_t* GetDataDir(); }                                                   // 0x00688cb0
+void __cdecl EntrySet(int index, unsigned char enable, int id, const WString_s00f4_7ed0* dir,
+                      const WString_s00f4_7ed0* alt);                                          // 0x006884f0
+
+// @ 0x00f47d80
+void cSporeApp_s00f4_7ed0::SetupShipDirsFromCommandLine()
+{
+    CommandLine* cmdLine = gCommandLine;
+    if (cmdLine->FindSwitch(L"shipDirs", 0, 0, 0) == -1 && cmdLine->FindSwitch(L"bp1", 0, 0, 0) != -1) {
+        WString_s00f4_7ed0 relative;
+        relative.sprintf(L"%hs", "../BP1Data/");
+        const wchar_t* rel = relative.mpBegin;
+        wchar_t path[0x104];
+        EA::IO::FUN_009309b0(path, rel, SP::GetDataDir(), 4);
+        WString_s00f4_7ed0 dir(path);
+        WString_s00f4_7ed0 none;
+        EntrySet(1, 1, 0x6f4b5d1, &dir, &none);
     }
 }
 
