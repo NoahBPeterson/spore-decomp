@@ -291,13 +291,13 @@ class Stream_s00fc_b210
     void* GetChunk();     // 0x011e6b50
     int   Status();       // 0x011e6bf0  (reads [this+0xc])
     int   Poll();         // 0x011e6c40
+    void  ReleaseChunk(void* chunk);   // 0x011e7c70
+    void  Destroy();      // 0x011e7cf0
 };
 }  // namespace rw::core::filesys
 }
 }
 using rw::core::filesys::Stream_s00fc_b210;
-void FUN_011e7c70(Stream_s00fc_b210* self, void* chunk);   // release a chunk (ret 4)
-void FUN_011e7cf0(Stream_s00fc_b210* self);                // destroy/release stream
 struct ICoreAllocator_s00fc_b210
 {
     virtual void  v00();                                   // +0x00
@@ -428,7 +428,7 @@ class MovieRenderer_s00fc_b210
     void  SetVideoScaleX(float v);                       // 0x00fcbf90
     void  SetVideoScaleY(float v);                       // 0x00fcbfd0
     void  SetRenderCallback(void* a, void* b);           // 0x00fcc010
-    void  Stop();                                        // 0x00fcc060
+    __declspec(noinline) void Stop();                   // 0x00fcc060
     void  Teardown();                                    // 0x00c2e4e0 (folded empty teardown)
 };
 }
@@ -1151,7 +1151,7 @@ bool rw::movie::MoviePlayer_s00fc_b210::ParseAVIHeaders(int flag)
         } while (local_44 != (int)rw::movie::g_fcc_hdrl);
     }
 
-    FUN_011e7c70(mVideoStream, (void*)chunk);
+    mVideoStream->ReleaseChunk((void*)chunk);
 
     mWidth       = mAVIHeader.width;
     mHeight      = mAVIHeader.height;
@@ -1182,13 +1182,13 @@ void rw::movie::MoviePlayer_s00fc_b210::Decode()
     {
         int c = (int)mVideoStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mVideoStream, (void*)c);
+            mVideoStream->ReleaseChunk((void*)c);
     }
     if (mAudioFilterCtx == 0 && mAudioStream != 0)
     {
         int c = (int)mAudioStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mAudioStream, (void*)c);
+            mAudioStream->ReleaseChunk((void*)c);
     }
     if (mDataStream != 0)
     {
@@ -1197,25 +1197,25 @@ void rw::movie::MoviePlayer_s00fc_b210::Decode()
         {
             void (*cb)(int, int, int) = (void (*)(int, int, int))mStreamerSubtitleFilterFunc;
             cb(*(int*)(c + 8) + 8, *(int*)(c + 4) - 8, (int)mDataCallbackFuncContext);
-            FUN_011e7c70(mDataStream, (void*)c);
+            mDataStream->ReleaseChunk((void*)c);
         }
     }
     {
         int c = (int)mNullStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mNullStream, (void*)c);
+            mNullStream->ReleaseChunk((void*)c);
     }
     if (mAudioNullStream != 0)
     {
         int c = (int)mAudioNullStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mAudioNullStream, (void*)c);
+            mAudioNullStream->ReleaseChunk((void*)c);
     }
     if (mSubtitleNullStream != 0)
     {
         int c = (int)mSubtitleNullStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mSubtitleNullStream, (void*)c);
+            mSubtitleNullStream->ReleaseChunk((void*)c);
     }
 }
 
@@ -1278,44 +1278,49 @@ void rw::movie::MoviePlayer_s00fc_b210::Shutdown()
 
     if (mAudioFilePathPresent != 0 && mAudioStream != 0)
     {
-        FUN_011e7cf0(mAudioStream);
+        mAudioStream->Destroy();
         mAudioStream = 0;
         mAudioFilePathPresent = 0;
     }
-    if (mDataStream != 0)
+    if (mVideoStream != 0)
     {
-        FUN_011e7cf0(mDataStream);
-        mDataStream = 0;
+        mVideoStream->Destroy();
+        mVideoStream = 0;
     }
-    if (mAudioNullStream != 0)
+    if (mSubtitleStream != 0)
     {
-        FUN_011e7cf0(mAudioNullStream);
-        mAudioNullStream = 0;
+        mSubtitleStream->Destroy();
+        mSubtitleStream = 0;
     }
-    if (mVideoFilterCtx != 0)
+    if (mMovieStreamBuffer != 0)
     {
-        mAllocator->Free((void*)mVideoFilterCtx, 0);
-        mVideoFilterCtx = 0;
+        mAllocator->Free(mMovieStreamBuffer, 0);
+        mMovieStreamBuffer = 0;
     }
-    if (mSubtitleCallbackCtx != 0)
+    if (mSubtitleStreamBuffer != 0)
     {
-        mAllocator->Free((void*)mSubtitleCallbackCtx, 0);
-        mSubtitleCallbackCtx = 0;
+        mAllocator->Free(mSubtitleStreamBuffer, 0);
+        mSubtitleStreamBuffer = 0;
     }
-    if (mAudioFilterCtx != 0)
+    if (mAudioStreamBuffer != 0)
     {
-        mAllocator->Free((void*)mAudioFilterCtx, 0);
-        mAudioFilterCtx = 0;
+        mAllocator->Free(mAudioStreamBuffer, 0);
+        mAudioStreamBuffer = 0;
     }
-    if (mSubtitleFilterCtx != 0)
+    if (mSubtitlePreloadBuffer != 0)
     {
-        mAllocator->Free((void*)mSubtitleFilterCtx, 0);
-        mSubtitleFilterCtx = 0;
+        mAllocator->Free(mSubtitlePreloadBuffer, 0);
+        mSubtitlePreloadBuffer = 0;
     }
-    if (mRenderCallbackCtx != 0)
+    if (mVideoPreloadBuffer != 0)
     {
-        mAllocator->Free((void*)mRenderCallbackCtx, 0);
-        mRenderCallbackCtx = 0;
+        mAllocator->Free(mVideoPreloadBuffer, 0);
+        mVideoPreloadBuffer = 0;
+    }
+    if (mAudioPreloadBuffer != 0)
+    {
+        mAllocator->Free(mAudioPreloadBuffer, 0);
+        mAudioPreloadBuffer = 0;
     }
     mState = 6;
 }
@@ -1401,7 +1406,7 @@ bool rw::movie::MoviePlayer_s00fc_b210::PreparePlayer(int flag)
                             f += 4294967296.0f;
                         mPlaybackFps = f / (float)*(uint16_t*)((char*)p + 0x1c);
                     }
-                    FUN_011e7c70(mVideoStream, (void*)c);
+                    mVideoStream->ReleaseChunk((void*)c);
                 }
             }
         }

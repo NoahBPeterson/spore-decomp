@@ -25,3 +25,4 @@
 ../src/game/SPMovie/movieplayer.cpp  ?Tick@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?TickReverse@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?Destroy@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?Shutdown@MoviePlayer_s00fc_b210@movie@rw@@QAEXXZ  00fcb740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
