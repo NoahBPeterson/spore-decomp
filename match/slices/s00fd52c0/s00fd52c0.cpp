@@ -20,6 +20,7 @@
 //
 // Compile: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 #include <string.h>
+#include <new>
 
 extern "C" void* __cdecl memset(void*, int, unsigned int);   // IAT thunk 0x011e073e
 #pragma function(memset)
@@ -398,22 +399,20 @@ void FUN_00fd5fc0(int* out, const unsigned* dims)
     out[2] = r * b + (dims[1] + 2 * q) * a + r + ((dims[1] >> 1) + q) * b;
 }
 
+struct PlaneGeometry {
+    int words[8];
+};
+
 // @ 0x00fd6050
 void* FUN_00fd6050(const unsigned* dims)
 {
-    int* p = (int*)FUN_00fd47a0(0x20, 0);
-    if (p != 0) {
-        p[0] = 0;
-        p[1] = 0;
-        p[2] = 0;
-        p[3] = 0;
-        p[4] = 0;
-        p[5] = 0;
-        p[6] = 0;
-        p[7] = 0;
-        FUN_00fd5fc0(p, dims);
+    PlaneGeometry* geometry = static_cast<PlaneGeometry*>(FUN_00fd47a0(sizeof(PlaneGeometry), 0));
+    if (geometry != 0) {
+        new (geometry) PlaneGeometry();
+        FUN_00fd5fc0(geometry->words, dims);
+        return geometry;
     }
-    return p;
+    return 0;
 }
 
 // @ 0x00fd6090
