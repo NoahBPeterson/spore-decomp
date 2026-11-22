@@ -4,7 +4,6 @@
                pointer keeps switching registers and the +0x328 clamp schedule
                differs. difftest: UNSUPPORTED (0 valid inputs; object-heavy).
                flags /O2 /MD /Gy /TP /arch:SSE
-00fd9610   85  VideoRenderer part reset: complete and equivalence PASSes
                (257 valid, 100% coverage); the loop folds the combined
                (uStack_10/_c/_8/_4) stores differently. flags /O2 /MD /Gy /TP /arch:SSE
                (227 valid, 100% coverage); the MaterialManager vtable slot
