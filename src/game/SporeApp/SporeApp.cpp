@@ -99,13 +99,12 @@ class cSporeAppTokenTranslator : public SP::cStringTokenTranslator {
 //   @ 0x00f47520 ??_GcSporeAppTokenTranslator@@UAEPAXI@Z
 
 // ---- items of slice s00f47ed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern char gSinclude[];                                            // 0x0148d858 "sinclude \""
+extern const char gSinclude[];                                            // 0x0148d858 "sinclude \""
 extern wchar_t gEmptyWString[2];                                    // 0x01667bac
 extern "C" void* memcpy(void* d, const void* s, unsigned n);
 extern char gUnk148d7c8;                                            // 0x0148d7c8
 extern char gUnk148d7e0;                                            // 0x0148d7e0
 extern char gUnk15b0834;                                            // 0x015b0834
-extern char gUnk153c326;                                            // 0x0153c326
 extern float gF1000;                                                // 0x013ec5b4
 extern float gF0001;                                                // 0x013f9428
 #pragma intrinsic(memcpy)
@@ -152,16 +151,19 @@ struct NString {                                                    // eastl::ba
     char* mpCapacity;
     EASTLAllocator mAllocator;
     ~NString();                                                     // 0x00530670
-    __forceinline void RangeInitialize(char* b, char* e)
+    __forceinline void RangeInitialize(const char* b, const char* e)
     {
         unsigned n = (unsigned)(e - b);
         unsigned sz = n + 1;
         char* p = (char*)operator new[](sz, "EASTL", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
         mpBegin = p;
         mpCapacity = p + sz;
-        *(unsigned*)(mpBegin + 0) = *(unsigned*)(b + 0);
-        *(unsigned*)(mpBegin + 4) = *(unsigned*)(b + 4);
-        *(unsigned short*)(mpBegin + 8) = *(unsigned short*)(b + 8);
+        // The ten-byte literal is copied piecewise; sizes written as n - k keep cl from turning the pieces into plain
+        // int stores (which would load the destination before the source).
+        memcpy(mpBegin, b, 4);
+        memcpy(mpBegin + 4, b + 4, n - 6);
+        memcpy(mpBegin + 8, b + 8, n - 8);
+
         mpEnd = p + n;
         *mpEnd = 0;
     }
@@ -1132,7 +1134,7 @@ bool cSporeApp_s00f4_7ed0::Init(CommandLine* cmdLine)
         return false;
     if (!mTerrainSystem.mpObject->Init10(cmdLine))
         return false;
-    server->AddListener(this, (unsigned)(unsigned long)&gUnk153c326);
+    server->AddListener(this, 0x153c326);
     mGonzagoSystem.mpObject->Fn14();
     mGonzagoSystem.mpObject->Fn5d870(*cmdLine->GetArgs());
     SetProfilerGlobal(new("App", 0, 0, 0, 0) cProfilerStub());

@@ -12,3 +12,4 @@
 ../src/game/SporeApp/SporeApp.cpp  ?HandleMessage@cSporeApp@@UAE_NIPAX@Z  00f47b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ?Update@cSporeApp@@QAEXXZ  00f47930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SporeApp/SporeApp.cpp  ?SetupShipDirsFromCommandLine@cSporeApp_s00f4_7ed0@@QAEXXZ  00f47d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SporeApp/SporeApp.cpp  ?Init@cSporeApp_s00f4_7ed0@@QAE_NPAUCommandLine@@@Z  00f47ed0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
