@@ -17,3 +17,4 @@
 ../src/game/SPMovie/slist.cpp  ?LoadNewNode@SList_s00fc_c260@rw@@QAEPAVSNode@2@HH@Z  00fccf40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/slist.cpp  ?FindNode@SList_s00fc_c260@rw@@QAEPAVSNode@2@PBXPAVICompare@2@@Z  00fcc260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/slist.cpp  ?Remove@SList_s00fc_c260@rw@@QAEHPAVSNode@2@PAPAX@Z  00fccae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Sort@SList_s00fc_c260@rw@@QAEHPAX0@Z  00fcce70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

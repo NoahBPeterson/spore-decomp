@@ -7,6 +7,7 @@ extern "C" char g_1491e4c[];
 extern "C" char g_1491e68[];
 extern "C" char g_1491ef8[];
 extern "C" char g_1491fa0[];
+extern "C" char g_1491fb8[];
 
 #include "game/types.h"
 #include <intrin.h>
@@ -719,8 +720,11 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
     SNode* node;
     unsigned i;
     int rc;
+    SListSortAdapter adapter;
     if (mLength < 2)
         return 0;
+    adapter.cmp = cmp;
+    adapter.vftable = (void*)g_1491fb8;
     temp = (unsigned*)mAllocator->Alloc(mLength * 4, "SList::Sort temp", 0, 4, 0);
     node = mHead;
     if (node != 0) {
@@ -731,12 +735,7 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
             ++p;
         } while (node != 0);
     }
-    {
-        SListSortAdapter adapter;
-        adapter.vftable = (void*)0x1491fb8;
-        adapter.cmp = cmp;
-        rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
-    }
+    rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
     if (rc == 0) {
         node = (SNode*)temp[0];
         i = 1;
