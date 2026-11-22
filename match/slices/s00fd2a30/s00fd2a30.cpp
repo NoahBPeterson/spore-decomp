@@ -523,58 +523,73 @@ void FUN_00fd34c0(int param_1)
 }
 
 // ==================================================================== 0x00fd3550
+// Above/left predictor context entry (16 bytes).
+struct Vp6PredEntry {
+    unsigned char  mRefFrame;     // +0x0
+    unsigned char  mPad1[3];
+    unsigned int   mMv;           // +0x4
+    unsigned short mMode;         // +0x8
+    unsigned short mDc;           // +0xa
+    unsigned char  mPadC[4];
+};
+
+// Decoder fields FUN_00fd3550 resets.
+struct Vp6PredState {
+    unsigned char  mPad0[0xc4];
+    Vp6PredEntry*  mAboveY;       // +0xc4
+    Vp6PredEntry*  mAboveU;       // +0xc8
+    Vp6PredEntry*  mAboveV;       // +0xcc
+    unsigned char  mPadD0[0xdc - 0xd0];
+    unsigned short mLeftY[4];     // +0xdc
+    unsigned short mLeftU[4];     // +0xe4
+    unsigned short mLeftV[4];     // +0xec
+    unsigned char  mPadF4[0x14c - 0xf4];
+    unsigned char  mFrameMode;    // +0x14c
+    unsigned char  mPad14d[0x17c - 0x14d];
+    unsigned int   mMbCols;       // +0x17c
+};
+
 // @ 0x00fd3550
 void FUN_00fd3550(int param_1)
 {
-    unsigned short *puVar1;
-    int iVar2;
-    unsigned int uVar3;
+    Vp6PredState* st = (Vp6PredState*)param_1;
+    unsigned int i;
 
-    uVar3 = 0;
-    if (*(int *)(param_1 + 0x17c) + 8 != 0) {
-        iVar2 = 0;
+    for (i = 0; i < st->mMbCols + 8; i++) {
+        st->mAboveY[i].mMv = 0xffffffff;
+        st->mAboveY[i].mMode = 4;
+        st->mAboveY[i].mDc = 0;
+        st->mAboveY[i].mRefFrame = 0;
+    }
+    i = 0;
+    if ((st->mMbCols >> 1) + 8 != 0) {
         do {
-            *(unsigned int *)(*(int *)(param_1 + 0xc4) + 4 + iVar2) = 0xffffffff;
-            *(unsigned short *)(*(int *)(param_1 + 0xc4) + 8 + iVar2) = 4;
-            *(unsigned short *)(*(int *)(param_1 + 0xc4) + 10 + iVar2) = 0;
-            *(unsigned char *)(*(int *)(param_1 + 0xc4) + iVar2) = 0;
-            uVar3 = uVar3 + 1;
-            iVar2 = iVar2 + 0x10;
-        } while (uVar3 < *(int *)(param_1 + 0x17c) + 8U);
+            st->mAboveU[i].mMv = 0xffffffff;
+            st->mAboveU[i].mMode = 4;
+            st->mAboveU[i].mRefFrame = 0;
+            st->mAboveU[i].mDc = 0;
+            st->mAboveV[i].mMv = 0xffffffff;
+            st->mAboveV[i].mMode = 4;
+            st->mAboveV[i].mRefFrame = 0;
+            st->mAboveV[i].mDc = 0;
+            i++;
+        } while (i < (st->mMbCols >> 1) + 8);
     }
-    uVar3 = 0;
-    if ((*(unsigned int *)(param_1 + 0x17c) >> 1) + 8 != 0) {
-        iVar2 = 0;
-        do {
-            *(unsigned int *)(*(int *)(param_1 + 200) + 4 + iVar2) = 0xffffffff;
-            *(unsigned short *)(*(int *)(param_1 + 200) + 8 + iVar2) = 4;
-            *(unsigned char *)(*(int *)(param_1 + 200) + iVar2) = 0;
-            *(unsigned short *)(*(int *)(param_1 + 200) + 10 + iVar2) = 0;
-            *(unsigned int *)(*(int *)(param_1 + 0xcc) + 4 + iVar2) = 0xffffffff;
-            *(unsigned short *)(*(int *)(param_1 + 0xcc) + 8 + iVar2) = 4;
-            *(unsigned char *)(*(int *)(param_1 + 0xcc) + iVar2) = 0;
-            *(unsigned short *)(*(int *)(param_1 + 0xcc) + 10 + iVar2) = 0;
-            uVar3 = uVar3 + 1;
-            iVar2 = iVar2 + 0x10;
-        } while (uVar3 < (*(unsigned int *)(param_1 + 0x17c) >> 1) + 8);
+    if (st->mFrameMode < 6) {
+        st->mAboveU[1].mMv = 0;
+        st->mAboveU[1].mMode = 0;
+        st->mAboveV[1].mMv = 0;
+        st->mAboveV[1].mMode = 0;
     }
-    if (*(unsigned char *)(param_1 + 0x14c) < 6) {
-        *(unsigned int *)(*(int *)(param_1 + 200) + 0x14) = 0;
-        *(unsigned short *)(*(int *)(param_1 + 200) + 0x18) = 0;
-        *(unsigned int *)(*(int *)(param_1 + 0xcc) + 0x14) = 0;
-        *(unsigned short *)(*(int *)(param_1 + 0xcc) + 0x18) = 0;
-    }
-    *(unsigned short *)(param_1 + 0xdc) = 0;
-    *(unsigned short *)(param_1 + 0xe4) = 0x80;
-    *(unsigned short *)(param_1 + 0xec) = 0x80;
-    puVar1 = (unsigned short *)(param_1 + 0xe6);
-    iVar2 = 2;
+    st->mLeftY[0] = 0;
+    st->mLeftU[0] = 0x80;
+    st->mLeftV[0] = 0x80;
+    unsigned short* q = &st->mLeftU[1];
+    int n = 2;
     do {
-        puVar1[-4] = 0;
-        *puVar1 = 0;
-        puVar1[4] = 0;
-        puVar1 = puVar1 + 1;
-        iVar2 = iVar2 + -1;
-    } while (iVar2 != 0);
-    return;
+        q[-4] = 0;
+        q[0] = 0;
+        q[4] = 0;
+        q++;
+    } while (--n != 0);
 }
