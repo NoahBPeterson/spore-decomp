@@ -7,6 +7,12 @@ extern "C" char g_13ec458[];
 extern "C" char g_1491730[];
 extern "C" char g_14939e4[];
 extern "C" char g_14939f4[];
+extern "C" char g_1493a28[];   // cMovieSystem vtables (cIMovieSystem, +0x04, +0x08 bases)
+extern "C" char g_1493a18[];
+extern "C" char g_1493a10[];
+extern "C" char g_13eb394[];   // IHandler vtable
+extern "C" char g_13eb938[];   // +0x04 base vtable
+extern "C" char g_1403758[];   // cIJobManager vtable
 
 #include "game/types.h"
 
@@ -132,10 +138,17 @@ struct EAMutex {
     void Lock(void* tag);                              // 0x009221b0 (thiscall)
     void Unlock();                                     // 0x00922270 (thiscall)
     void Construct(void* params, bool b);              // 0x009222a0 (thiscall)
+    void Destruct();                                   // 0x00922130 (thiscall)
 };
 struct EAFileStream {
     uint8_t mData[0x228];
     void Construct(const char* path);                  // 0x00931da0 (thiscall)
+    void Destruct();                                   // 0x00931e70 (thiscall)
+};
+// Node of the intrusive packet list whose head is embedded at cMovieSystem+0x31c.
+struct PacketNode {
+    PacketNode* mpNext;          // +0x00
+    PacketNode* mpPrev;          // +0x04
 };
 void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
@@ -834,33 +847,29 @@ cMovieSystem::cMovieSystem()
 // @ 0x00fd7cd0
 cMovieSystem::~cMovieSystem()
 {
-    char* p = (char*)this;
-    char* head = p + 0x31c;
-    *(void**)(p + 0x00) = (void*)0x1493a28;
-    *(void**)(p + 0x04) = (void*)0x1493a18;
-    *(void**)(p + 0x08) = (void*)0x1493a10;
-    void* n = *(void**)head;
+    mpVtbl0 = g_1493a28;
+    mpVtbl1 = g_1493a18;
+    mpVtbl2 = g_1493a10;
+    PacketNode* head = (PacketNode*)&mPacketList;
+    PacketNode* n = head->mpNext;
     while (n != head) {
-        void* next = *(void**)n;
-        operator_delete(n);
-        n = next;
+        PacketNode* cur = n;
+        n = n->mpNext;
+        operator_delete(cur);
     }
-    void* lb = *(void**)(p + 0x318);
-    if (lb != 0)
-        ((IUILayoutObj*)lb)->v04_Release();
-    FileStream_dtor(p + 0xd0);
-    int e = *(int*)(p + 0xa4);
-    int b = *(int*)(p + 0xac);
-    if (((b - e) & 0xfffffffe) > 2 && e != 0)
-        operator_delete((void*)e);
-    EAMutex_dtor(p + 0x70);
-    int s = *(int*)(p + 0x50);
-    int ed = *(int*)(p + 0x58);
-    if ((ed - s) > 1 && s != 0)
-        operator_delete((void*)s);
-    *(void**)(p + 0x08) = (void*)0x13eb394;
-    *(void**)(p + 0x04) = (void*)0x13eb938;
-    *(void**)(p + 0x00) = (void*)0x1403758;
+    if (mLetterbox != 0)
+        ((IUILayoutObj*)mLetterbox)->v04_Release();
+    mRecordStream.Destruct();
+    int begin = (int)mFieldA4;
+    if ((((int)mFieldAc - begin) & ~1) > 2 && begin != 0)
+        operator_delete((void*)begin);
+    mRecordMutex.Destruct();
+    int sbegin = (int)mField50;
+    if (((int)mField58 - sbegin) > 1 && sbegin != 0)
+        operator_delete((void*)sbegin);
+    mpVtbl2 = g_13eb394;
+    mpVtbl1 = g_13eb938;
+    mpVtbl0 = g_1403758;
 }
 
 // @ 0x00fd7f80
