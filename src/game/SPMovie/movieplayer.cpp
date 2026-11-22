@@ -279,6 +279,13 @@ using rw::core::timer::Stopwatch;
 namespace rw {
 namespace core {
 namespace filesys {
+// A chunk handed out by Stream_s00fc_b210::GetChunk.
+struct StreamChunk
+{
+    uint32_t mField00;   // +0x00
+    int32_t  mSize;      // +0x04
+    char*    mData;      // +0x08
+};
 class Stream_s00fc_b210
 { public:
     int32_t field00;
@@ -291,13 +298,13 @@ class Stream_s00fc_b210
     void* GetChunk();     // 0x011e6b50
     int   Status();       // 0x011e6bf0  (reads [this+0xc])
     int   Poll();         // 0x011e6c40
+    void  ReleaseChunk(void* chunk);   // 0x011e7c70
+    void  Destroy();      // 0x011e7cf0
 };
 }  // namespace rw::core::filesys
 }
 }
 using rw::core::filesys::Stream_s00fc_b210;
-void FUN_011e7c70(Stream_s00fc_b210* self, void* chunk);   // release a chunk (ret 4)
-void FUN_011e7cf0(Stream_s00fc_b210* self);                // destroy/release stream
 struct ICoreAllocator_s00fc_b210
 {
     virtual void  v00();                                   // +0x00
@@ -311,9 +318,9 @@ namespace movie {
 class IVideoRenderer
 { public:
     virtual void v00();                       // +0x00
-    virtual void v04(void* a);                // +0x04
+    virtual void v04(void* allocator, void* a, void* b);   // +0x04
     virtual int  v08();                       // +0x08
-    virtual int  v0c();                       // +0x0c
+    virtual float v0c();                      // +0x0c (returns the video delay)
     virtual void v10(int a, int b);           // +0x10
     virtual void v14(float a);                // +0x14
     virtual void v18(float a);                // +0x18
@@ -335,10 +342,10 @@ class IAudioRenderer
 { public:
     virtual void v00();                       // +0x00
     virtual void v04(int a, int b, int c);    // +0x04
-    virtual int  v08();                       // +0x08
+    virtual float v08();                      // +0x08 (returns the audio delay)
     virtual void v0c();
     virtual void v10(int a, int b);           // +0x10
-    virtual void v14(void* a);                // +0x14
+    virtual void v14(int a, int b);           // +0x14
     virtual void v18(void* a);                // +0x18
     virtual void v1c(void* a);                // +0x1c
 virtual void v20();
@@ -360,6 +367,15 @@ virtual void v5c();
 virtual void v60();
     virtual void v64();
     virtual void v68(void* a);                // +0x68
+};
+}
+}
+namespace rw {
+namespace movie {
+class ISubtitleRenderer
+{ public:
+    virtual void v00();                       // +0x00
+    virtual void Init(void* allocator);       // +0x04
 };
 }
 }
@@ -387,6 +403,7 @@ class MovieDecoder_s00fc_b210
                         int g, int h, int i);      // 0x00fc9310
     void Shutdown();                               // 0x00fc96d0
     void Destroy();                                // 0x00fc97a0
+    void GetFrame(int index, void* outRenderable, void* outContext);   // 0x00fc94f0
 };
 }
 }
@@ -395,7 +412,7 @@ namespace movie {
 class MovieRenderer_s00fc_b210
 { public:
     ICoreAllocator_s00fc_b210* mAllocator;       // +0x00
-    void*           mVideoRenderer;   // +0x04
+    IVideoRenderer* mVideoRenderer;   // +0x04
     IAudioRenderer* mAudioRenderer;   // +0x08
     void*           mTimer;           // +0x0c
     int32_t         mAudioFormatA;    // +0x10
@@ -403,8 +420,8 @@ class MovieRenderer_s00fc_b210
     int32_t         mAudioChannels;   // +0x18
     int32_t         mSubtitleFormatA; // +0x1c
     int32_t         mSubtitleFormatB; // +0x20
-    float           mAudioDelay;      // +0x24
-    float           mVideoDelay;      // +0x28
+    float           mVideoDelay;      // +0x24
+    float           mAudioDelay;      // +0x28
     float           mDelay;           // +0x2c
     float           mVolume;          // +0x30
     float           mPosX;            // +0x34
@@ -422,13 +439,14 @@ class MovieRenderer_s00fc_b210
     float GetVideoDelay();                               // 0x00fcbe60
     void  PlayVideo();                                   // 0x00fcbe90
     __declspec(noinline) void PauseVideo();             // 0x00fcbec0
-    void  ResumeVideo();                                 // 0x00fcbef0
+    __declspec(noinline) void ResumeVideo();                               // 0x00fcbef0
     void  SetVideoPositionX(float v);                    // 0x00fcbf10
     void  SetVideoPositionY(float v);                    // 0x00fcbf50
     void  SetVideoScaleX(float v);                       // 0x00fcbf90
     void  SetVideoScaleY(float v);                       // 0x00fcbfd0
     void  SetRenderCallback(void* a, void* b);           // 0x00fcc010
-    void  Stop();                                        // 0x00fcc060
+    __declspec(noinline) void Stop();                   // 0x00fcc060
+    void  Teardown();                                    // 0x00c2e4e0 (folded empty teardown)
 };
 }
 }
@@ -606,6 +624,21 @@ extern uint32_t g_fcc_auds;   // 0x015b17d0
 }
 namespace rw {
 namespace movie {
+// The streamer context block at MoviePlayer+0xbc.
+struct MovieStreamerContext
+{
+    uint8_t data[0x34];
+    void Teardown();   // 0x00c2e4e0 (folded with other empty teardowns)
+};
+class EventLogger
+{ public:
+    void Dump();       // 0x00fc8660
+    void Destroy();    // 0x00fc9050
+};
+}
+}
+namespace rw {
+namespace movie {
 class MoviePlayer_s00fc_b210
 { public:
     ICoreAllocator_s00fc_b210* mAllocator;                 // +0x00
@@ -621,7 +654,8 @@ class MoviePlayer_s00fc_b210
     uint32_t mSubtitleFilterCtx;                // +0x48
     uint32_t mRenderCallbackCtx;                // +0x4c
     uint32_t mSubtitleCallbackCtx;              // +0x50
-    uint8_t pad_54[0x60 - 0x54];                // +0x54
+    uint8_t pad_54[0x5c - 0x54];                // +0x54
+    void* mDataCallbackFunc;                    // +0x5c
     uint32_t mDataCallbackFuncContext;          // +0x60
     uint8_t pad_64[0x78 - 0x64];                // +0x64
     uint32_t mAudioFilePathPresent;             // +0x78
@@ -633,7 +667,7 @@ class MoviePlayer_s00fc_b210
     uint32_t mHeight;                           // +0xb0
     uint32_t mTotalFrames;                      // +0xb4
     void* mCurrentVideoRenderable;              // +0xb8
-    uint8_t pad_bc[0xf0 - 0xbc];                // +0xbc
+    MovieStreamerContext mStreamingContext;     // +0xbc
     float mPlaybackFps;                         // +0xf0
     float mVideoRenderingDelay;                 // +0xf4
     int32_t mLastRenderedFrame;                 // +0xf8
@@ -661,7 +695,7 @@ class MoviePlayer_s00fc_b210
     uint32_t mState;                            // +0x150
     uint8_t mField154;                          // +0x154
     uint8_t pad_155[3];                         // +0x155
-    uint32_t mEventLogger;                      // +0x158
+    EventLogger* mEventLogger;                  // +0x158
     uint8_t mIsAVIFile;                         // +0x15c
     uint8_t pad_15d[3];                         // +0x15d
     AVIHeader mAVIHeader;                       // +0x160
@@ -680,26 +714,6 @@ class MoviePlayer_s00fc_b210
     void Destroy();                   // 0x00fcb860
     bool PreparePlayer(int flag);     // 0x00fcb920
 };
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00fc9050(void* eventLogger);
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00fc8650(void* eventLogger);
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00fc94f0(int index, void* outA, void* outB);
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00c2e4e0(void* p);            // UTFWin element teardown
 }
 }
 namespace rw {
@@ -870,11 +884,8 @@ int rw::movie::MoviePlayer::ConfigureVideo(const char* path, unsigned int a, uns
     const char* e = path;
     while (*e != 0)
         ++e;
-    if (e - path > 3 && e[-4] == '.' && e[-3] == 'a' && e[-2] == 'v' && e[-1] == 'i') {
-        mIsAVIFile = 1;
-        return 0;
-    }
-    mIsAVIFile = 0;
+    int isAVI = e - path >= 4 && e[-4] == '.' && e[-3] == 'a' && e[-2] == 'v' && e[-1] == 'i';
+    mIsAVIFile = isAVI;
     return 0;
     }
     mVideoFilePath = 0;
@@ -1150,7 +1161,7 @@ bool rw::movie::MoviePlayer_s00fc_b210::ParseAVIHeaders(int flag)
         } while (local_44 != (int)rw::movie::g_fcc_hdrl);
     }
 
-    FUN_011e7c70(mVideoStream, (void*)chunk);
+    mVideoStream->ReleaseChunk((void*)chunk);
 
     mWidth       = mAVIHeader.width;
     mHeight      = mAVIHeader.height;
@@ -1169,52 +1180,59 @@ bool rw::movie::MoviePlayer_s00fc_b210::ParseAVIHeaders(int flag)
 // @ 0x00fcb490
 void rw::movie::MoviePlayer_s00fc_b210::Decode()
 {
-    if (mState - 2 > 2u)
+    switch (mState)
+    {
+    case 2:
+    case 3:
+    case 4:
+        break;
+    default:
         return;
+    }
 
     float elapsed = mMovieTimer->Elapsed();
     int goal = (int)((mVideoRenderingDelay + elapsed) * (mPlaybackFps * 0.001f));
     mGoalFrame = (uint32_t)goal;
-    rw::movie::FUN_00fc94f0(goal, &mCurrentVideoRenderable, (char*)this + 0xbc);
+    mMovieDecoder->GetFrame(goal, &mCurrentVideoRenderable, &mStreamingContext);
 
     if (mVideoFilterCtx == 0)
     {
         int c = (int)mVideoStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mVideoStream, (void*)c);
+            mVideoStream->ReleaseChunk((void*)c);
     }
     if (mAudioFilterCtx == 0 && mAudioStream != 0)
     {
         int c = (int)mAudioStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mAudioStream, (void*)c);
+            mAudioStream->ReleaseChunk((void*)c);
     }
     if (mDataStream != 0)
     {
-        int c = (int)mDataStream->GetChunk();
+        rw::core::filesys::StreamChunk* c = (rw::core::filesys::StreamChunk*)mDataStream->GetChunk();
         if (c != 0)
         {
-            void (*cb)(int, int, int) = (void (*)(int, int, int))mStreamerSubtitleFilterFunc;
-            cb(*(int*)(c + 8) + 8, *(int*)(c + 4) - 8, (int)mDataCallbackFuncContext);
-            FUN_011e7c70(mDataStream, (void*)c);
+            void (*cb)(char*, int, int) = (void (*)(char*, int, int))mDataCallbackFunc;
+            cb(c->mData + 8, c->mSize - 8, (int)mDataCallbackFuncContext);
+            mDataStream->ReleaseChunk(c);
         }
     }
     {
         int c = (int)mNullStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mNullStream, (void*)c);
+            mNullStream->ReleaseChunk((void*)c);
     }
     if (mAudioNullStream != 0)
     {
         int c = (int)mAudioNullStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mAudioNullStream, (void*)c);
+            mAudioNullStream->ReleaseChunk((void*)c);
     }
     if (mSubtitleNullStream != 0)
     {
         int c = (int)mSubtitleNullStream->GetChunk();
         if (c != 0)
-            FUN_011e7c70(mSubtitleNullStream, (void*)c);
+            mSubtitleNullStream->ReleaseChunk((void*)c);
     }
 }
 
@@ -1258,10 +1276,14 @@ void rw::movie::MoviePlayer_s00fc_b210::Tick()
 // @ 0x00fcb710
 void rw::movie::MoviePlayer_s00fc_b210::TickReverse()
 {
-    if (mState - 2 <= 2u)
+    switch (mState)
     {
+    case 2:
+    case 3:
+    case 4:
         mMovieRenderer->ResumeVideo();
         mMovieTimer->Update();
+        break;
     }
 }
 
@@ -1273,44 +1295,49 @@ void rw::movie::MoviePlayer_s00fc_b210::Shutdown()
 
     if (mAudioFilePathPresent != 0 && mAudioStream != 0)
     {
-        FUN_011e7cf0(mAudioStream);
+        mAudioStream->Destroy();
         mAudioStream = 0;
         mAudioFilePathPresent = 0;
     }
-    if (mDataStream != 0)
+    if (mVideoStream != 0)
     {
-        FUN_011e7cf0(mDataStream);
-        mDataStream = 0;
+        mVideoStream->Destroy();
+        mVideoStream = 0;
     }
-    if (mAudioNullStream != 0)
+    if (mSubtitleStream != 0)
     {
-        FUN_011e7cf0(mAudioNullStream);
-        mAudioNullStream = 0;
+        mSubtitleStream->Destroy();
+        mSubtitleStream = 0;
     }
-    if (mVideoFilterCtx != 0)
+    if (mMovieStreamBuffer != 0)
     {
-        mAllocator->Free((void*)mVideoFilterCtx, 0);
-        mVideoFilterCtx = 0;
+        mAllocator->Free(mMovieStreamBuffer, 0);
+        mMovieStreamBuffer = 0;
     }
-    if (mSubtitleCallbackCtx != 0)
+    if (mSubtitleStreamBuffer != 0)
     {
-        mAllocator->Free((void*)mSubtitleCallbackCtx, 0);
-        mSubtitleCallbackCtx = 0;
+        mAllocator->Free(mSubtitleStreamBuffer, 0);
+        mSubtitleStreamBuffer = 0;
     }
-    if (mAudioFilterCtx != 0)
+    if (mAudioStreamBuffer != 0)
     {
-        mAllocator->Free((void*)mAudioFilterCtx, 0);
-        mAudioFilterCtx = 0;
+        mAllocator->Free(mAudioStreamBuffer, 0);
+        mAudioStreamBuffer = 0;
     }
-    if (mSubtitleFilterCtx != 0)
+    if (mSubtitlePreloadBuffer != 0)
     {
-        mAllocator->Free((void*)mSubtitleFilterCtx, 0);
-        mSubtitleFilterCtx = 0;
+        mAllocator->Free(mSubtitlePreloadBuffer, 0);
+        mSubtitlePreloadBuffer = 0;
     }
-    if (mRenderCallbackCtx != 0)
+    if (mVideoPreloadBuffer != 0)
     {
-        mAllocator->Free((void*)mRenderCallbackCtx, 0);
-        mRenderCallbackCtx = 0;
+        mAllocator->Free(mVideoPreloadBuffer, 0);
+        mVideoPreloadBuffer = 0;
+    }
+    if (mAudioPreloadBuffer != 0)
+    {
+        mAllocator->Free(mAudioPreloadBuffer, 0);
+        mAudioPreloadBuffer = 0;
     }
     mState = 6;
 }
@@ -1320,9 +1347,9 @@ void rw::movie::MoviePlayer_s00fc_b210::Destroy()
 {
     if (mEventLogger != 0)
     {
-        rw::movie::FUN_00fc8650((void*)mEventLogger);
-        rw::movie::FUN_00fc9050((void*)mEventLogger);
-        mAllocator->Free((void*)mEventLogger, 0);
+        mEventLogger->Dump();
+        mEventLogger->Destroy();
+        mAllocator->Free(mEventLogger, 0);
         mEventLogger = 0;
     }
     if (mMovieTimer != 0)
@@ -1333,7 +1360,7 @@ void rw::movie::MoviePlayer_s00fc_b210::Destroy()
     }
     if (mMovieRenderer != 0)
     {
-        rw::movie::FUN_00c2e4e0(mMovieRenderer);
+        mMovieRenderer->Teardown();
         mAllocator->Free(mMovieRenderer, 0);
         mMovieRenderer = 0;
     }
@@ -1343,7 +1370,7 @@ void rw::movie::MoviePlayer_s00fc_b210::Destroy()
         mAllocator->Free(mMovieDecoder, 0);
         mMovieDecoder = 0;
     }
-    rw::movie::FUN_00c2e4e0((char*)this + 0xbc);
+    mStreamingContext.Teardown();
 }
 
 // @ 0x00fcb920
@@ -1396,7 +1423,7 @@ bool rw::movie::MoviePlayer_s00fc_b210::PreparePlayer(int flag)
                             f += 4294967296.0f;
                         mPlaybackFps = f / (float)*(uint16_t*)((char*)p + 0x1c);
                     }
-                    FUN_011e7c70(mVideoStream, (void*)c);
+                    mVideoStream->ReleaseChunk((void*)c);
                 }
             }
         }
@@ -1457,8 +1484,8 @@ rw::movie::MovieRenderer_s00fc_b210* rw::movie::MovieRenderer_s00fc_b210::Ctor(I
     mAudioChannels   = 0;
     mSubtitleFormatA = 0;
     mSubtitleFormatB = 0;
-    mAudioDelay      = 0.0f;
     mVideoDelay      = 0.0f;
+    mAudioDelay      = 0.0f;
     mDelay           = 0.0f;
     mVolume          = 1.0f;
     mPosX            = 0.0f;
@@ -1499,9 +1526,9 @@ void rw::movie::MovieRenderer_s00fc_b210::Prepare(void* a, void* b, void* c, voi
         if (mAudioRenderer != 0)
         {
             mAudioRenderer->v04((int)mAllocator, (int)c, (int)d);
-            mVideoDelay = (float)mAudioRenderer->v08();
+            mAudioDelay = mAudioRenderer->v08();
             mAudioRenderer->v10(mAudioFormatA, mAudioFormatB);
-            mAudioRenderer->v14((void*)mAudioChannels);
+            mAudioRenderer->v14(mAudioChannels, 0);
         }
         mVideoState = 1;
     }
@@ -1509,18 +1536,17 @@ void rw::movie::MovieRenderer_s00fc_b210::Prepare(void* a, void* b, void* c, voi
     {
         if (mVideoRenderer != 0)
         {
-            rw::movie::IVideoRenderer* vr = (rw::movie::IVideoRenderer*)mVideoRenderer;
-            vr->v04((void*)mAllocator);
-            vr->v0c();
-            vr->v10(mSubtitleFormatA, mSubtitleFormatB);
-            vr->v14(mPosX);
-            vr->v18(mPosY);
-            vr->v1c(mPosZ);
-            vr->v2c(mScaleX);
-            vr->v30(mScaleY);
+            mVideoRenderer->v04(mAllocator, a, b);
+            mVideoDelay = mVideoRenderer->v0c();
+            mVideoRenderer->v10(mSubtitleFormatA, mSubtitleFormatB);
+            mVideoRenderer->v14(mPosX);
+            mVideoRenderer->v18(mPosY);
+            mVideoRenderer->v1c(mPosZ);
+            mVideoRenderer->v2c(mScaleX);
+            mVideoRenderer->v30(mScaleY);
         }
         if (mTimer != 0)
-            ((rw::movie::IVideoRenderer*)mTimer)->v04((void*)mAllocator);
+            ((rw::movie::ISubtitleRenderer*)mTimer)->Init(mAllocator);
         mDelay = mVideoDelay - mAudioDelay;
         mState = 1;
     }

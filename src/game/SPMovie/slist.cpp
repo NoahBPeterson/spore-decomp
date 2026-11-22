@@ -6,6 +6,8 @@
 extern "C" char g_1491e4c[];
 extern "C" char g_1491e68[];
 extern "C" char g_1491ef8[];
+extern "C" char g_1491fa0[];
+extern "C" char g_1491fb8[];
 
 #include "game/types.h"
 #include <intrin.h>
@@ -54,15 +56,12 @@ class SNode : public IListNode_s00fc_c260 { public:
 };
 }
 namespace rw {
-struct AllocVtbl {
-    void* (*v00)(void* self);
-    void* (*Alloc)(void* self, unsigned size, const char* tag, int a, int b, int c); // +0x04
-    void* (*v08)(void* self);
-    void  (*Free)(void* self, void* p, int flag);   // +0x0c
+class IRWAllocator { public:
+    virtual void* v00();                                                   // +0x00
+    virtual void* Alloc(unsigned size, const char* tag, int a, int b, int c); // +0x04
+    virtual void* v08();                                                   // +0x08
+    virtual void  Free(void* p, int flag);                                 // +0x0c
 };
-}
-namespace rw {
-struct IRWAllocator { AllocVtbl* vftable; };
 }
 namespace rw {
 class IListIterator { public:
@@ -182,10 +181,13 @@ struct SList_s00fc_d210 {
 };
 extern "C" void        util_Copy16(u8*, u8*, int);          // 0x11ea910
 extern "C" SNode_s00fc_d210* SList_LoadNewNode(SList_s00fc_d210* self, void* key, int a3);  // 0xfccf40
+struct Vp6Copier {
+    virtual int Copy(u8* dst, u8* src, int size);   // +0x00
+};
 struct Vp6Tramp {
+    virtual void* Get();                             // +0x00
     int  Method320(int p2, int p3, int* p4);
     int  Method370(int p2, int p3, int* p4);
-    void* Get();
 };
 // ---- items of slice s00fcd210 end
 
@@ -212,31 +214,26 @@ namespace rw {
 SNode* SList_s00fc_c260::FindNode(const void* key, ICompare* cmp)
 {
     SNode* node = mHead;
-    if (node == 0)
-        return 0;
-    for (;;) {
+    while (node != 0) {
         void* data = node->GetData();
         if (cmp != 0) {
-            if (cmp->Compare((void*)key, data) == 0)
-                return node;
+            if (cmp->Compare((void*)key, data) != 0) {
+                node = (SNode*)node->Next();
+                continue;
+            }
+            return node;
         } else {
-            unsigned n = mElementSize;
             bool same = true;
-            if (n == 0)
-                return node;
-            do {
-                if (!same)
-                    break;
+            for (unsigned n = mElementSize; n > 0 && same; ) {
                 --n;
                 same = *(const unsigned char*)data == *(const unsigned char*)key;
-            } while (n != 0);
+            }
             if (same)
                 return node;
         }
         node = (SNode*)node->Next();
-        if (node == 0)
-            return 0;
     }
+    return 0;
 }
 }  // namespace rw
 
@@ -290,11 +287,11 @@ int SList_s00fc_c260::Append(IListSource* src, void* ctx)
     if (it == 0)
         return 0;
     for (;;) {
-        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node = (SNode*)mAllocator->Alloc(size + 8, "SNode", 0, 4, 0);
         if (node == 0)
             return -1;
         if (node->SetData(it->GetValue(), size, ctx) == -1) {
-            mAllocator->vftable->Free(mAllocator, node, 0);
+            mAllocator->Free(node, 0);
             return -1;
         }
         if (mLength == 0)
@@ -334,11 +331,11 @@ int SList_s00fc_c260::Prepend(IListSource* src, void* ctx)
                 mTail = last;
             return 0;
         }
-        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node = (SNode*)mAllocator->Alloc(size + 8, "SNode", 0, 4, 0);
         if (node == 0)
             return -1;
         if (node->SetData(it->GetValue(), size, ctx) == -1) {
-            mAllocator->vftable->Free(mAllocator, node, 0);
+            mAllocator->Free(node, 0);
             return -1;
         }
         node->SetNext(prev);
@@ -375,7 +372,7 @@ int SList_s00fc_c260::InsertBefore(IListSource* src, SNode* at, void* ctx)
     first = 0;
     last = 0;
     while (it != 0) {
-        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node = (SNode*)mAllocator->Alloc(size + 8, "SNode", 0, 4, 0);
         node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
@@ -412,7 +409,7 @@ int SList_s00fc_c260::InsertAfter(IListSource* src, SNode* at, void* ctx)
     first = 0;
     last = 0;
     while (it != 0) {
-        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node = (SNode*)mAllocator->Alloc(size + 8, "SNode", 0, 4, 0);
         node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
@@ -448,7 +445,7 @@ int SList_s00fc_c260::InsertAt(IListSource* src, unsigned idx, void* ctx)
     first = 0;
     last = 0;
     while (it != 0) {
-        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node = (SNode*)mAllocator->Alloc(size + 8, "SNode", 0, 4, 0);
         node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
@@ -492,7 +489,7 @@ int SList_s00fc_c260::Merge(IListSource* src, ICompare* cmp, void* ctx)
     first = 0;
     last = 0;
     while (it != 0) {
-        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node = (SNode*)mAllocator->Alloc(size + 8, "SNode", 0, 4, 0);
         node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
@@ -553,12 +550,10 @@ int SList_s00fc_c260::Remove(SNode* node, void** cb)
             mTail = prev;
         prev->SetNext(node->Next());
     }
-    if (cb != 0) {
-        void (*fn)(void*) = (void (*)(void*))(*cb);
-        fn(node->GetData());
-    }
+    if (cb != 0)
+        ((ICallback*)cb)->Invoke(node->GetData());
     --mLength;
-    mAllocator->vftable->Free(mAllocator, node, 0);
+    mAllocator->Free(node, 0);
     return 0;
 }
 }  // namespace rw
@@ -586,14 +581,14 @@ int SList_s00fc_c260::RemoveIf(void* key, ICompare* cmp, ICallback* cb)
             mHead = nx;
             if (mTail == node)
                 mTail = nx;
-            mAllocator->vftable->Free(mAllocator, node, 0);
+            mAllocator->Free(node, 0);
             node = mHead;
             --mLength;
         } else {
             prev->SetNext(node->Next());
             if (mTail == node)
                 mTail = prev;
-            mAllocator->vftable->Free(mAllocator, node, 0);
+            mAllocator->Free(node, 0);
             node = (SNode*)prev->Next();
             --mLength;
         }
@@ -608,11 +603,9 @@ void SList_s00fc_c260::Clear(void** cb)
     SNode* node = mHead;
     while (node != 0) {
         SNode* nx = (SNode*)node->Next();
-        if (cb != 0) {
-            void (*fn)(void*) = (void (*)(void*))*cb;
-            fn(node->GetData());
-        }
-        mAllocator->vftable->Free(mAllocator, node, 0);
+        if (cb != 0)
+            ((ICallback*)cb)->Invoke(node->GetData());
+        mAllocator->Free(node, 0);
         node = nx;
     }
     mTail = 0;
@@ -655,7 +648,7 @@ int SList_s00fc_c260::Permute(int* idx)
     int rc = 0;
     if (mLength < 2)
         return -1;
-    temp = (unsigned*)mAllocator->vftable->Alloc(mAllocator, mLength * 4, "SList::Permute temp", 0, 4, 0);
+    temp = (unsigned*)mAllocator->Alloc(mLength * 4, "SList::Permute temp", 0, 4, 0);
     MemFill8(temp, 0, mLength * 4);
     node = mHead;
     while (node != 0) {
@@ -678,7 +671,7 @@ int SList_s00fc_c260::Permute(int* idx)
     }
     mTail = (SNode*)temp[mLength - 1];
     mTail->SetNext(0);
-    mAllocator->vftable->Free(mAllocator, temp, 0);
+    mAllocator->Free(temp, 0);
     return rc;
 }
 }  // namespace rw
@@ -727,9 +720,12 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
     SNode* node;
     unsigned i;
     int rc;
+    SListSortAdapter adapter;
     if (mLength < 2)
         return 0;
-    temp = (unsigned*)mAllocator->vftable->Alloc(mAllocator, mLength * 4, "SList::Sort temp", 0, 4, 0);
+    adapter.cmp = cmp;
+    adapter.vftable = (void*)g_1491fb8;
+    temp = (unsigned*)mAllocator->Alloc(mLength * 4, "SList::Sort temp", 0, 4, 0);
     node = mHead;
     if (node != 0) {
         unsigned* p = temp;
@@ -739,12 +735,7 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
             ++p;
         } while (node != 0);
     }
-    {
-        SListSortAdapter adapter;
-        adapter.vftable = (void*)0x1491fb8;
-        adapter.cmp = cmp;
-        rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
-    }
+    rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
     if (rc == 0) {
         node = (SNode*)temp[0];
         i = 1;
@@ -757,7 +748,7 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
         mTail = (SNode*)temp[mLength - 1];
         mTail->SetNext(0);
     }
-    mAllocator->vftable->Free(mAllocator, temp, 0);
+    mAllocator->Free(temp, 0);
     return rc;
 }
 }  // namespace rw
@@ -766,13 +757,17 @@ int SList_s00fc_c260::Sort(void* sorter, void* cmp)
 namespace rw {
 SNode* SList_s00fc_c260::LoadNewNode(int a, int b)
 {
-    SNode* node = (SNode*)mAllocator->vftable->Alloc(mAllocator, mElementSize + 8, "SNode", 0, 4, 0);
-    if (node == 0)
-        return 0;
-    *(void**)node = (void*)0x1491fa0;
-    node->pad4 = 0;
+    SNode* mem = (SNode*)mAllocator->Alloc(mElementSize + 8, "SNode", 0, 4, 0);
+    SNode* node;
+    if (mem != 0) {
+        *(void**)mem = (void*)g_1491fa0;   // SNode vtable
+        mem->pad4 = 0;
+        node = mem;
+    } else {
+        node = 0;
+    }
     if (node->SetData((void*)a, mElementSize, (void*)b) == -1) {
-        mAllocator->vftable->Free(mAllocator, node, 0);
+        mAllocator->Free(node, 0);
         return 0;
     }
     return node;
@@ -954,15 +949,14 @@ extern "C" int SList_InsertSorted(SList_s00fc_d210* self, void* key, SNode_s00fc
 // @ 0x00fcd320
 int Vp6Tramp::Method320(int p2, int p3, int* p4)
 {
-    int uVar1 = (int)Get();
+    u8* buf = (u8*)Get();
     if (p2 == 0 || p3 == 0)
         return -1;
-    if (p4 == 0) {
-        util_Copy16((u8*)uVar1, (u8*)p2, p3);
-    } else {
-        int iVar2 = ((int (*)(int, int, int))((void**)*p4)[0])(uVar1, p2, p3);
-        if (iVar2 == -1)
+    if (p4 != 0) {
+        if (((Vp6Copier*)p4)->Copy(buf, (u8*)p2, p3) == -1)
             return -1;
+    } else {
+        util_Copy16(buf, (u8*)p2, p3);
     }
     return 0;
 }
@@ -970,15 +964,14 @@ int Vp6Tramp::Method320(int p2, int p3, int* p4)
 // @ 0x00fcd370
 int Vp6Tramp::Method370(int p2, int p3, int* p4)
 {
-    int uVar1 = (int)Get();
+    u8* buf = (u8*)Get();
     if (p2 == 0 || p3 == 0)
         return -1;
-    if (p4 == 0) {
-        util_Copy16((u8*)p2, (u8*)uVar1, p3);
-    } else {
-        int iVar2 = ((int (*)(int, int, int))((void**)*p4)[0])(p2, uVar1, p3);
-        if (iVar2 == -1)
+    if (p4 != 0) {
+        if (((Vp6Copier*)p4)->Copy((u8*)p2, buf, p3) == -1)
             return -1;
+    } else {
+        util_Copy16((u8*)p2, buf, p3);
     }
     return 0;
 }

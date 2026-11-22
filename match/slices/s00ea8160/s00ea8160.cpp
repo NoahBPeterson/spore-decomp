@@ -322,11 +322,23 @@ struct AudioObj {
 
 // @ 0x00ea8ed0
 bool AudioObj::FUN_00ea8ed0()
-{
-    SetVolume(0.0f);
+{    SetVolume(0.0f);
     MsgServerIface* server = FUN_00883860();
-    if (server != 0)
-        server->Send20(&field04, 0x02b0c259);
+    if (server != 0) {
+        // EA::Messaging::IHandlerRC (retail vtable: dtor, HandleMessage, AddRef,
+        // Release) is a secondary base of the audio-listener receiver at +0x04;
+        // Send20 is Server::AddHandler(IHandlerRC*, id) at vtable slot 8 (+0x20).
+        struct IHandlerRC {
+            virtual ~IHandlerRC() = 0;
+            virtual bool HandleMessage(unsigned id, void* message) = 0;
+            virtual int AddRef() = 0;
+            virtual int Release() = 0;
+        };
+        struct PrimitiveBase { virtual void Reserved() = 0; };
+        struct AudioListenerReceiver : PrimitiveBase, IHandlerRC {};
+        AudioListenerReceiver& receiver = *reinterpret_cast<AudioListenerReceiver*>(this);
+        server->Send20(static_cast<IHandlerRC*>(&receiver), 0x02b0c259);
+    }
 
     void* local = 0;
     ManagerIface* mgr = FUN_0067dcd0();

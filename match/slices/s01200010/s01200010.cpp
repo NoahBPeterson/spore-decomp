@@ -350,9 +350,13 @@ int InitFixupTable(FixupTable* rec, ArenaCtx* ctx)
 // @ 0x01200f80
 int FixupCallback(int arg, Fixup4* rec)
 {
-	if (!arg)
-		arg = (int)rec->mpData8;
-	return FUN_012010e0((int*)rec->mpData10, (int*)rec->mpDataC, (int)rec->mpLink, (int*)arg);
+	int value = arg;
+	if (!value)
+		value = (int)rec->mpData8;
+	int link = (int)rec->mpLink;
+	int dataC = (int)rec->mpDataC;
+	int* data10 = (int*)rec->mpData10;
+	return FUN_012010e0(data10, (int*)dataC, link, (int*)value);
 }
 
 // @ 0x01200fd0

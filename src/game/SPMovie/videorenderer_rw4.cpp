@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float DAT_016077c4;
@@ -63,11 +64,35 @@ struct MatMgr_s00fd_9750 {
     virtual void v20(); virtual void v24();
     virtual void* Find(u32 id);               // slot 0x28
 };
+struct RenderPartReset {
+    u32 reserved;
+    u32 partData[6];
+    u32 reserved2[3];
+    u32 width;
+    u32 height;
+    u32 format;
+    u32 reserved3;
+    u32 partCount;
+};
+
+struct RenderPartRelease {
+    u32 handle;
+    u32 reserved[3];
+};
+
+struct RenderPartAllocator {
+    virtual void Reserved0();
+    virtual void Reserved1();
+    virtual void ReleasePart(RenderPartRelease*);
+};
+
 struct Vid {
     u32 x;
+    void* mManager;
+    RenderPartAllocator* mPartAllocator;
     void  f9460(void* p);
     u8    f9480(int param_2);
-    void  f9610(int param_2);
+    void  f9610(RenderPartReset* parts);
     Vid*  f9680();
 void  f96d0();
 void  f9750(int, int, int);
@@ -147,29 +172,25 @@ u8 Vid::f9480(int param_2)
 }
 
 // @ 0x00fd9610
-void Vid::f9610(int param_2)
+void Vid::f9610(RenderPartReset* parts)
 {
-    char* s = (char*)this;
-    int n = *(int*)(param_2 + 0x38);
-    if (n != 0) {
-        int* pu = (int*)(param_2 + 4);
+    u32 count = parts->partCount;
+    if (count > 0) {
+        u32* handle = parts->partData;
         do {
-            u32 stack[4];
-            stack[0] = pu[0];
-            stack[1] = 0;
-            stack[2] = 0;
-            stack[3] = 0;
-            void* p = *(void**)(s + 8);
-            ((void(__thiscall*)(void*, void*))VTP(p)[8 / 4])(p, stack);
-            pu[0] = 0;
-            pu[3] = 0;
-            pu++;
-            n--;
-        } while (n != 0);
+            const u32 savedHandle = *handle;
+            _ReadWriteBarrier();
+            RenderPartRelease release = {};
+            release.handle = savedHandle;
+            mPartAllocator->ReleasePart(&release);
+            handle[0] = 0;
+            handle[3] = 0;
+            ++handle;
+        } while (--count);
     }
-    *(int*)(param_2 + 0x28) = 0;
-    *(int*)(param_2 + 0x2c) = 0;
-    *(int*)(param_2 + 0x30) = 4;
+    parts->width = 0;
+    parts->height = 0;
+    parts->format = 4;
 }
 
 // @ 0x00fd9680

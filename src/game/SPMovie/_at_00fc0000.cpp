@@ -88,9 +88,33 @@ extern "C" char g_1491fd8[];
 struct Vp6Ext {
     Vp6Ext* Ctor3c0();
     Vp6Ext* Ctor940(int p2);
-    void CtorDE80();
     void Ctor3E0(int p2, int p3, int p4);
 };
+extern "C" char g_1492140[];   // rw::movie::VideoEncoder_Jpeg vtable
+// rw::movie::VideoEncoder_Jpeg (retail member offsets; see SPMovie/videoencoder_jpeg.cpp).
+namespace rw {
+namespace movie {
+struct VideoEncoder_Jpeg {
+    void*        m_vtbl;                                  // +0x00
+    void*        mAllocator;                              // +0x04
+    void*        mEncodedDataCallback;                    // +0x08
+    void*        mEncodingErrorCallback;                  // +0x0c
+    void*        mEncodedDataCallbackData;                // +0x10
+    void*        mEncodingErrorCallbackData;              // +0x14
+    u8*          mEncodeBuffer;                           // +0x18
+    unsigned int mEncodeBufferSize;                       // +0x1c
+    unsigned int mEncodeBufferPos;                        // +0x20
+    unsigned int mWidth;                                  // +0x24
+    unsigned int mHeight;                                 // +0x28
+    float        mFrameRate;                              // +0x2c
+    unsigned int mBitsPerSecond;                          // +0x30
+    unsigned int mQuality;                                // +0x34
+    unsigned int mFrameNumber;                            // +0x38
+
+    VideoEncoder_Jpeg();
+};
+}
+}
 void EmptyCleanup();                                       // 0x00c2e4e0, folded empty target
 struct Vp6DecoderHandle {
     void* mpDecoder;  // +0x00, passed by address to the VP6 decoder API
@@ -129,13 +153,18 @@ extern "C" int  DAT_01492220[];      // sf-band group base table
 extern "C" int  DAT_014923a8[];      // sf-band type table (byte view in places)
 extern "C" int  DAT_01492cc8[];      // sample-format flags
 typedef unsigned char byte;
-struct BitReaderA {
+// A block being reconstructed: its coefficient rows and the mode that picks its reference type.
+struct DcBlock {
     int    m_00;
-    unsigned m_04;
-    unsigned m_08;
-    int    m_0c;
-    int    m_10;
-    byte*  m_14;
+    short* mCoeffs;          // +0x04, 0x40 coefficients per band
+    char   m_pad08[0x0c];
+    int    mMode;            // +0x14
+};
+// A neighbouring block's reference type and reconstructed DC value.
+struct DcNeighbour {
+    char           m_pad00[0x08];
+    unsigned short mType;    // +0x08
+    short          mDc;      // +0x0a
 };
 extern "C" int  FUN_00fcf080(BitCache* r, int n);            // 0xfcf080  get n bits
 extern "C" byte FUN_00fd36c0(int p, short* dst, int flag,
@@ -497,22 +526,21 @@ extern "C" void FUN_00fcd9e0(int self)
 }
 
 // @ 0x00fcde80
-void Vp6Ext::CtorDE80()
+rw::movie::VideoEncoder_Jpeg::VideoEncoder_Jpeg()
 {
-    int self = (int)this;
-    *(int*)(self + 0x00) = 0x1492140;
-    *(int*)(self + 0x04) = 0;
-    *(int*)(self + 0x08) = 0;
-    *(int*)(self + 0x0c) = 0;
-    *(int*)(self + 0x18) = 0;
-    *(int*)(self + 0x1c) = 0;
-    *(int*)(self + 0x20) = 0;
-    *(int*)(self + 0x24) = 0;
-    *(int*)(self + 0x28) = 0;
-    *(int*)(self + 0x2c) = 0;
-    *(int*)(self + 0x30) = 0;
-    *(int*)(self + 0x34) = 0;
-    *(int*)(self + 0x38) = 0;
+    m_vtbl = g_1492140;
+    mAllocator = 0;
+    mEncodedDataCallback = 0;
+    mEncodingErrorCallback = 0;
+    mEncodeBuffer = 0;
+    mEncodeBufferSize = 0;
+    mEncodeBufferPos = 0;
+    mWidth = 0;
+    mHeight = 0;
+    mFrameRate = 0.0f;
+    mBitsPerSecond = 0;
+    mQuality = 0;
+    mFrameNumber = 0;
 }
 
 // @ 0x00fcef00
@@ -648,67 +676,61 @@ static __declspec(noinline) u32 ReadCachedBit(BitCache* s)
 }
 
 // @ 0x00fcf130
-bool FUN_00fcf130(BitReaderA* s, int n)
+int FUN_00fcf130(BitState* s, int prob)
 {
-    unsigned range = s->m_04;
-    unsigned value = s->m_08;
-    int      bits  = s->m_0c;
-    unsigned inc   = (((range - 1) * (unsigned)n) >> 8) + 1;
-    bool     ok;
-
-    if ((inc << 24) <= value) {
-        range -= inc;
-        value -= inc << 24;
-        ok = true;
+    int bits = s->bits;
+    u32 value = s->value;
+    u32 range = s->range;
+    u32 split = ((range - 1) * (u32)prob >> 8) + 1;
+    u32 cmp = split << 24;
+    int high = 0;
+    if (value >= cmp) {
+        range -= split;
+        value -= cmp;
+        high = 1;
+    } else {
+        range = split;
     }
-    else {
-        range = inc;
-        ok = false;
-    }
-
     while (range < 0x80) {
         range += range;
         value += value;
         if (--bits == 0) {
-            value |= s->m_14[s->m_10];
-            s->m_10 = s->m_10 + 1;
+            value |= s->buf[s->pos];
             bits = 8;
+            s->pos++;
         }
     }
-
-    s->m_04 = range;
-    s->m_08 = value;
-    s->m_0c = bits;
-    return ok;
+    s->range = range;
+    s->value = value;
+    s->bits = bits;
+    return high;
 }
 
 // @ 0x00fcf1b0
-void FUN_00fcf1b0(int p, int band, int coeffs, int reader, int prev)
+// Predicts a block's DC coefficient from the left/above neighbours of the same reference
+// type, falls back to the last coefficient of that type, and stores the reconstructed value.
+void FUN_00fcf1b0(DcBlock* blk, int band, short* lastDc, DcNeighbour* above, DcNeighbour* left)
 {
-    byte  b  = ((byte*)DAT_014923a8)[*(int*)(p + 0x14)];
-    int   acc = 0;
-    int   hits = 0;
+    byte type = (byte)DAT_014923a8[blk->mMode];
+    char hits = 0;
+    int acc = 0;
 
-    if ((unsigned short)b == *(unsigned short*)(prev + 8)) {
-        acc = *(short*)(prev + 0xa);
+    if (type == left->mType) {
+        acc = left->mDc;
         hits = 1;
     }
-    if ((unsigned short)b == *(unsigned short*)(reader + 8)) {
-        acc += *(short*)(reader + 0xa);
+    if (type == above->mType) {
+        acc += above->mDc;
         hits++;
     }
 
-    short v;
     if (hits == 0)
-        v = *(short*)(coeffs + b * 2);
+        acc = lastDc[type];
     else if (hits == 2)
-        v = (short)(((((unsigned)acc & 0xffff) >> 0xf) + (unsigned)acc) >> 1);
-    else
-        v = (short)acc;
+        acc = (((unsigned short)acc >> 15) + acc) >> 1;   // halve, rounding the 16-bit sum toward zero
 
-    short* dst = (short*)(*(int*)(p + 4) + band * 0x80);
-    *dst = (short)(*dst + v);
-    *(short*)(coeffs + b * 2) = *dst;
+    blk->mCoeffs[band * 0x40] += (short)acc;
+    lastDc[type] = blk->mCoeffs[band * 0x40];
 }
 
 // @ 0x00fcf230
@@ -886,10 +908,12 @@ next:
 // @ 0x00fcf600
 int FUN_00fcf600(int p)
 {
-    int a = FUN_00fcef80(p + 0x10c);
-    int b = FUN_00fcef80(p + 0x10c);
+    int r = p + 0x10c;
+    int v = FUN_00fcef80(r) * 2;
+    v += FUN_00fcef80(r);
 
-    switch (b + a * 2) {
+    switch (v) {
+    case 0:  return 0;
     case 1:  return 2;
     case 2:  return 3;
     case 3:  return 4;
@@ -1134,7 +1158,8 @@ void FUN_00fcfc70(int p, int gr, int ch)
         flags = FUN_00fcf330(p, (short*)(*(int*)(p + 4) + off),
                              *(int*)(p + 0x70) != 0);
 
-    FUN_00fcf1b0(p, gr, *(int*)(p + 0x10), *(int*)(p + 8), *(int*)(p + 0xc));
+    FUN_00fcf1b0((DcBlock*)p, gr, *(short**)(p + 0x10), *(DcNeighbour**)(p + 8),
+                 *(DcNeighbour**)(p + 0xc));
 
     *(int*)(*(int*)(p + 0xc) + 4) = *(int*)(p + 0x18 + gr * 4);
     *(int*)(*(int*)(p + 8) + 4) = *(int*)(*(int*)(p + 0xc) + 4);

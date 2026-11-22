@@ -2,3 +2,4 @@
 slices/s00cc6f50/s00cc6f50.cpp  ??1cReservationGrid@@QAE@XZ  00cc7c50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00cc6f50/s00cc6f50.cpp  ?insert@ReservedMap@@QAEPAUReservedPair@@PAU2@ABU2@@Z  00cc7c90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00cc6f50/s00cc6f50.cpp  ??0cReservationGrid@@QAE@XZ  00cc7e10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00cc6f50/s00cc6f50.cpp  ?GetStatString@cNpcTribeController@@QAEPB_WH@Z  00cc6f50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
