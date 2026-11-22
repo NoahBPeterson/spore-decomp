@@ -182,10 +182,13 @@ struct SList_s00fc_d210 {
 };
 extern "C" void        util_Copy16(u8*, u8*, int);          // 0x11ea910
 extern "C" SNode_s00fc_d210* SList_LoadNewNode(SList_s00fc_d210* self, void* key, int a3);  // 0xfccf40
+struct Vp6Copier {
+    virtual int Copy(u8* dst, u8* src, int size);   // +0x00
+};
 struct Vp6Tramp {
+    virtual void* Get();                             // +0x00
     int  Method320(int p2, int p3, int* p4);
     int  Method370(int p2, int p3, int* p4);
-    void* Get();
 };
 // ---- items of slice s00fcd210 end
 
@@ -954,15 +957,14 @@ extern "C" int SList_InsertSorted(SList_s00fc_d210* self, void* key, SNode_s00fc
 // @ 0x00fcd320
 int Vp6Tramp::Method320(int p2, int p3, int* p4)
 {
-    int uVar1 = (int)Get();
+    u8* buf = (u8*)Get();
     if (p2 == 0 || p3 == 0)
         return -1;
-    if (p4 == 0) {
-        util_Copy16((u8*)uVar1, (u8*)p2, p3);
-    } else {
-        int iVar2 = ((int (*)(int, int, int))((void**)*p4)[0])(uVar1, p2, p3);
-        if (iVar2 == -1)
+    if (p4 != 0) {
+        if (((Vp6Copier*)p4)->Copy(buf, (u8*)p2, p3) == -1)
             return -1;
+    } else {
+        util_Copy16(buf, (u8*)p2, p3);
     }
     return 0;
 }
@@ -970,15 +972,14 @@ int Vp6Tramp::Method320(int p2, int p3, int* p4)
 // @ 0x00fcd370
 int Vp6Tramp::Method370(int p2, int p3, int* p4)
 {
-    int uVar1 = (int)Get();
+    u8* buf = (u8*)Get();
     if (p2 == 0 || p3 == 0)
         return -1;
-    if (p4 == 0) {
-        util_Copy16((u8*)p2, (u8*)uVar1, p3);
-    } else {
-        int iVar2 = ((int (*)(int, int, int))((void**)*p4)[0])(p2, uVar1, p3);
-        if (iVar2 == -1)
+    if (p4 != 0) {
+        if (((Vp6Copier*)p4)->Copy((u8*)p2, buf, p3) == -1)
             return -1;
+    } else {
+        util_Copy16((u8*)p2, buf, p3);
     }
     return 0;
 }
