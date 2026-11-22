@@ -279,6 +279,13 @@ using rw::core::timer::Stopwatch;
 namespace rw {
 namespace core {
 namespace filesys {
+// A chunk handed out by Stream_s00fc_b210::GetChunk.
+struct StreamChunk
+{
+    uint32_t mField00;   // +0x00
+    int32_t  mSize;      // +0x04
+    char*    mData;      // +0x08
+};
 class Stream_s00fc_b210
 { public:
     int32_t field00;
@@ -387,6 +394,7 @@ class MovieDecoder_s00fc_b210
                         int g, int h, int i);      // 0x00fc9310
     void Shutdown();                               // 0x00fc96d0
     void Destroy();                                // 0x00fc97a0
+    void GetFrame(int index, void* outRenderable, void* outContext);   // 0x00fc94f0
 };
 }
 }
@@ -637,7 +645,8 @@ class MoviePlayer_s00fc_b210
     uint32_t mSubtitleFilterCtx;                // +0x48
     uint32_t mRenderCallbackCtx;                // +0x4c
     uint32_t mSubtitleCallbackCtx;              // +0x50
-    uint8_t pad_54[0x60 - 0x54];                // +0x54
+    uint8_t pad_54[0x5c - 0x54];                // +0x54
+    void* mDataCallbackFunc;                    // +0x5c
     uint32_t mDataCallbackFuncContext;          // +0x60
     uint8_t pad_64[0x78 - 0x64];                // +0x64
     uint32_t mAudioFilePathPresent;             // +0x78
@@ -696,11 +705,6 @@ class MoviePlayer_s00fc_b210
     void Destroy();                   // 0x00fcb860
     bool PreparePlayer(int flag);     // 0x00fcb920
 };
-}
-}
-namespace rw {
-namespace movie {
-void FUN_00fc94f0(int index, void* outA, void* outB);
 }
 }
 namespace rw {
@@ -1170,13 +1174,20 @@ bool rw::movie::MoviePlayer_s00fc_b210::ParseAVIHeaders(int flag)
 // @ 0x00fcb490
 void rw::movie::MoviePlayer_s00fc_b210::Decode()
 {
-    if (mState - 2 > 2u)
+    switch (mState)
+    {
+    case 2:
+    case 3:
+    case 4:
+        break;
+    default:
         return;
+    }
 
     float elapsed = mMovieTimer->Elapsed();
     int goal = (int)((mVideoRenderingDelay + elapsed) * (mPlaybackFps * 0.001f));
     mGoalFrame = (uint32_t)goal;
-    rw::movie::FUN_00fc94f0(goal, &mCurrentVideoRenderable, (char*)this + 0xbc);
+    mMovieDecoder->GetFrame(goal, &mCurrentVideoRenderable, &mStreamingContext);
 
     if (mVideoFilterCtx == 0)
     {
@@ -1192,12 +1203,12 @@ void rw::movie::MoviePlayer_s00fc_b210::Decode()
     }
     if (mDataStream != 0)
     {
-        int c = (int)mDataStream->GetChunk();
+        rw::core::filesys::StreamChunk* c = (rw::core::filesys::StreamChunk*)mDataStream->GetChunk();
         if (c != 0)
         {
-            void (*cb)(int, int, int) = (void (*)(int, int, int))mStreamerSubtitleFilterFunc;
-            cb(*(int*)(c + 8) + 8, *(int*)(c + 4) - 8, (int)mDataCallbackFuncContext);
-            mDataStream->ReleaseChunk((void*)c);
+            void (*cb)(char*, int, int) = (void (*)(char*, int, int))mDataCallbackFunc;
+            cb(c->mData + 8, c->mSize - 8, (int)mDataCallbackFuncContext);
+            mDataStream->ReleaseChunk(c);
         }
     }
     {
