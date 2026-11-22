@@ -549,10 +549,8 @@ int SList_s00fc_c260::Remove(SNode* node, void** cb)
             mTail = prev;
         prev->SetNext(node->Next());
     }
-    if (cb != 0) {
-        void (*fn)(void*) = (void (*)(void*))(*cb);
-        fn(node->GetData());
-    }
+    if (cb != 0)
+        ((ICallback*)cb)->Invoke(node->GetData());
     --mLength;
     mAllocator->Free(node, 0);
     return 0;
