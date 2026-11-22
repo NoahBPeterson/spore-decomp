@@ -20,8 +20,8 @@ extern unsigned char DAT_014936d0[];
 // ---------------------------------------------------------------- JPEG bit-stream helpers
 extern int  FUN_00fcf130(int, int);                     // 0x00fcf130  look-ahead one bit
 extern int  FUN_00fcef80(int);                          // 0x00fcef80  consume one bit
-extern void FUN_00fd4cb0(int, int, int);                // 0x00fd4cb0
-extern void FUN_00fd4e50(int, int);                     // 0x00fd4e50
+extern void FUN_00fd4cb0(void*, int*, int);             // 0x00fd4cb0  build a Huffman tree
+extern void FUN_00fd4e50(const unsigned int*, unsigned short*); // 0x00fd4e50  expand a tree to a lookup table
 extern void FUN_00fd6880(int);                          // 0x00fd6880
 
 // ==================================================================== 0x00fd2a30
@@ -281,76 +281,52 @@ void FUN_00fd2f80(unsigned char *param_1, unsigned int *param_2)
 }
 
 // ==================================================================== 0x00fd30a0
-// @ 0x00fd30a0
-void FUN_00fd30a0(int param_1)
-{
-    int iVar1;
-    int iVar2;
-    int iVar3;
-    int local_14;
-    int local_10;
-    int local_c;
-    int local_8;
-    int local_4;
+// Huffman tables of the VP6 decoder context rebuilt by FUN_00fd30a0.
+struct Vp6HuffState {
+    unsigned char  mPad0[0x334];
+    unsigned char  mZrlProbs[2][14];           // +0x334
+    unsigned char  mPad350[0x368 - 0x350];
+    unsigned int   mDcTree[2][36];             // +0x368
+    unsigned int   mDcCounts[2][12];           // +0x488
+    unsigned char  mPad4e8[0x500 - 0x4e8];
+    unsigned int   mAcTree[3][2][6][36];       // +0x500
+    unsigned int   mAcCounts[3][2][6][12];     // +0x1940
+    unsigned char  mPad2000[0x21b0 - 0x2000];
+    unsigned int   mZrlTree[2][42];            // +0x21b0
+    unsigned int   mZrlCounts[2][14];          // +0x2300
+    unsigned char  mPad2370[0x2390 - 0x2370];
+    unsigned short mDcLookup[2][64];           // +0x2390
+    unsigned short mAcLookup[3][2][6][64];     // +0x2490
+    unsigned short mZrlLookup[2][64];          // +0x3690
+    unsigned char  mPad3790[0x39a2 - 0x3790];
+    unsigned char  mDcProbs[2][11];            // +0x39a2
+    unsigned char  mAcProbs[2][3][6][11];      // +0x39b8
+};
 
-    local_14 = param_1 + 0x2390;
-    iVar3 = param_1 + 0x368;
-    iVar2 = param_1 + 0x488;
-    iVar1 = param_1 + 0x39a2;
-    local_10 = 2;
-    do {
-        FUN_00fd2e30((unsigned char *)iVar1, (unsigned int *)iVar2);
-        FUN_00fd4cb0(iVar3, iVar2, 0xc);
-        FUN_00fd4e50(iVar3, local_14);
-        local_14 = local_14 + 0x80;
-        iVar1 = iVar1 + 0xb;
-        iVar2 = iVar2 + 0x30;
-        iVar3 = iVar3 + 0x90;
-        local_10 = local_10 + -1;
-    } while (local_10 != 0);
-    local_14 = param_1 + 0x3690;
-    iVar3 = param_1 + 0x21b0;
-    iVar2 = param_1 + 0x2300;
-    iVar1 = param_1 + 0x334;
-    local_10 = 2;
-    do {
-        FUN_00fd2f80((unsigned char *)iVar1, (unsigned int *)iVar2);
-        FUN_00fd4cb0(iVar3, iVar2, 9);
-        FUN_00fd4e50(iVar3, local_14);
-        local_14 = local_14 + 0x80;
-        iVar2 = iVar2 + 0x38;
-        iVar1 = iVar1 + 0xe;
-        iVar3 = iVar3 + 0xa8;
-        local_10 = local_10 + -1;
-    } while (local_10 != 0);
-    local_10 = param_1 + 0x39b8;
-    iVar3 = param_1 + 0x500;
-    iVar2 = param_1 + 0x2490;
-    param_1 = param_1 + 0x1940;
-    local_4 = 3;
-    do {
-        local_14 = local_10;
-        local_8 = 2;
-        do {
-            local_c = 6;
-            iVar1 = local_14;
-            do {
-                FUN_00fd2e30((unsigned char *)iVar1, (unsigned int *)param_1);
-                FUN_00fd4cb0(iVar3, param_1, 0xc);
-                FUN_00fd4e50(iVar3, iVar2);
-                iVar1 = iVar1 + 0xb;
-                param_1 = param_1 + 0x30;
-                iVar2 = iVar2 + 0x80;
-                iVar3 = iVar3 + 0x90;
-                local_c = local_c + -1;
-            } while (local_c != 0);
-            local_14 = local_14 + 0xc6;
-            local_8 = local_8 + -1;
-        } while (local_8 != 0);
-        local_10 = local_10 + 0x42;
-        local_4 = local_4 + -1;
-    } while (local_4 != 0);
-    return;
+// @ 0x00fd30a0
+void FUN_00fd30a0(Vp6HuffState* st)
+{
+    int i, j, k;
+
+    for (i = 0; i < 2; i++) {
+        FUN_00fd2e30(st->mDcProbs[i], st->mDcCounts[i]);
+        FUN_00fd4cb0(st->mDcTree[i], (int*)st->mDcCounts[i], 12);
+        FUN_00fd4e50(st->mDcTree[i], st->mDcLookup[i]);
+    }
+    for (i = 0; i < 2; i++) {
+        FUN_00fd2f80(st->mZrlProbs[i], st->mZrlCounts[i]);
+        FUN_00fd4cb0(st->mZrlTree[i], (int*)st->mZrlCounts[i], 9);
+        FUN_00fd4e50(st->mZrlTree[i], st->mZrlLookup[i]);
+    }
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 2; j++) {
+            for (k = 0; k < 6; k++) {
+                FUN_00fd2e30(st->mAcProbs[j][i][k], st->mAcCounts[i][j][k]);
+                FUN_00fd4cb0(st->mAcTree[i][j][k], (int*)st->mAcCounts[i][j][k], 12);
+                FUN_00fd4e50(st->mAcTree[i][j][k], st->mAcLookup[i][j][k]);
+            }
+        }
+    }
 }
 
 // ==================================================================== 0x00fd3210
