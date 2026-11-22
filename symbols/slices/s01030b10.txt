@@ -22,7 +22,7 @@
 01021090 SP::cSPLivingUniverse::GetPlayerEmpireID
 01021300 SP::cSPLivingUniverse::GetPlayerEmpire
 0102f820 FUN_0102f820  # float argument, int result (index selector for the property array)
-01030b10 SP::cSPSpaceEconomyTuning::Init  # property manager fetch, property-block hand-off, SPVector<unsigned>::reserve(3), 0xd-element conversion
+01030b10 ?Init@EconomyTuning@@QAEXXZ  # EconomyTuning::Init migrated from s01030b10 (verbatim, slice spelling)
 01030b70 ?ComputeAmount@EconomyTuning@@QAEHMPAM@Z  # EconomyTuning::ComputeAmount migrated from s01030b10 (verbatim, slice spelling)
 01030d50 ?GetAbductionScale@@YAMI@Z  # GetAbductionScale migrated from s01030b10 (verbatim, slice spelling)
 01030dd0 ?SetState@Abducted@@QAEXH@Z  # Abducted::SetState migrated from s01030b10 (verbatim, slice spelling)

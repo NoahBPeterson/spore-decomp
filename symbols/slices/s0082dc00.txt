@@ -12,6 +12,7 @@
 0082e4f0 ?RectNotEqual@@YAHPAH0@Z  # RectNotEqual migrated from s0082dc00 (verbatim, slice spelling)
 0082e520 ?Pop5@Pool5@@QAEPAUChunk@@HHHHH@Z  # Pool5::Pop5 migrated from s0082dc00 (verbatim, slice spelling)
 0082e550 ?LayerFrameInit@@YIXPADH0@Z  # LayerFrameInit migrated from s0082dc00 (verbatim, slice spelling)
+0082e670 ?SetLayer@LayerWinProc@@QAE_NH@Z  # LayerWinProc::SetLayer migrated from s0082dc00 (verbatim, slice spelling)
 0082e6b0 ?LayerPoolTick@@YIXPAX@Z  # LayerPoolTick migrated from s0082dc00 (verbatim, slice spelling)
 0082e6c0 ?LayerProcRelease@@YA_NPAULayerWinProc@@@Z  # LayerProcRelease migrated from s0082dc00 (verbatim, slice spelling)
 0082e700 ?IsLayerUsed@@YA_NI@Z  # IsLayerUsed migrated from s0082dc00 (verbatim, slice spelling)

@@ -5,6 +5,7 @@
 009fef90 ?packGoalHandle@@YAHPAUQueuedBlender@@PAUAnimGoal@@@Z  # packGoalHandle migrated from s009feb30 (verbatim, slice spelling)
 009fefd0 ?Count@QueuedBlender@@QAEHXZ  # QueuedBlender::Count migrated from s009feb30 (verbatim, slice spelling)
 009ff020 ?IsActive@AnimGoal@@QAEHXZ  # AnimGoal::IsActive migrated from s009feb30 (verbatim, slice spelling)
+009ff380 ?FindFreeSlot@QueuedBlender@@QAEHXZ  # QueuedBlender::FindFreeSlot migrated from s009feb30 (verbatim, slice spelling)
 009ff440 ?TransitionToNextAnimation@QueuedBlender@@QAEXXZ  # QueuedBlender::TransitionToNextAnimation migrated from s009feb30 (verbatim, slice spelling)
 009ff4b0 ?UpdateGoals@QueuedBlender@@QAEXMD@Z  # QueuedBlender::UpdateGoals migrated from s009feb30 (verbatim, slice spelling)
 009ff6f0 ?FindGoalByHandle@@YAPAUAnimGoal@@PAUQueuedBlender@@I@Z  # FindGoalByHandle migrated from s009feb30 (verbatim, slice spelling)
