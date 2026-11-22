@@ -200,8 +200,8 @@ int Server::ShouldLog(unsigned int category) {
 }
 
 // @ 0x00697bb0
-void Server::AssertControl() {
-  SP::MutexLock lock(&mMutex);
+void Server::AssertControl() {  struct L1 { EA::Thread::Mutex* m_; L1(Server* s) : m_(&s->mMutex) { m_->Lock((unsigned int)&SP::g_mutexInfiniteWait); } ~L1() { m_->Unlock(); } };
+  L1 lock(this);
   if (g_15fd920 != 0) {
     if (g_15fd920->FindSwitch(L"noAsserts", 0, 0, 0) != -1)
       SetTraceDialogEnabled(false);

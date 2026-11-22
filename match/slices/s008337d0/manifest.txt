@@ -7,3 +7,4 @@ slices/s008337d0/s008337d0.cpp  ?M@VWrap@@QAEXH@Z  00834140  /O2 /MD /Gy /EHsc /
 slices/s008337d0/s008337d0.cpp  ?FUN_00834560@@YA_NPAX0H@Z  00834560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s008337d0/s008337d0.cpp  ?Tick@TextZoomName@@QAEXD@Z  00834930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s008337d0/s008337d0.cpp  ?HandleMessage@TextZoomMsg@@QAE_NHPAX@Z  00834990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008337d0/s008337d0.cpp  ?SetActive@TextZoomName@@QAEXD@Z  00834660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

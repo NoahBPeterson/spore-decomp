@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
 00834200  10  RefWrap::Release: add eax,-1 vs sub eax,1 + rc store order differ
 008345c0  32  UI::TextZoomName ctor: vtable/animator store scheduling differs
-00834660  32  UI::TextZoomName::SetActive: BehaviorMessage construction schedule differs

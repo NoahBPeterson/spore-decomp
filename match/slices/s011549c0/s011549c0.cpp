@@ -376,8 +376,7 @@ int Mixer::Execute(MixerExecuteParams* params)
 // ---------------------------------------------------------------------------------------
 // @ 0x01154e50
 Mixer::Mixer()
-{
-    mMixerCpuCycles = 0;
+{    mMixerCpuCycles = 0;
     mSrcNumChannels = 0;
     mSrcNumSamples = 0;
     mSrcSampleRate = 0.0f;
@@ -386,9 +385,11 @@ Mixer::Mixer()
     u32* node = *list;
     node[0] = (u32)list;
 
-    u32 upper = 0x80;
-    if (upper <= (u32)&g_profilerStorage)
-        upper = ((u32)&g_profilerStorage >> 7) << 7;
+    u32 upper = 0;
+    if (0x80 <= (u32)&g_profilerStorage)
+        upper = ((u32)&g_profilerStorage / 128) * 128;
+    else
+        upper = 0;
     u32 lower = (u32)&g_regionTop & 0xFFFFFF80u;
 
     node[2] = lower;

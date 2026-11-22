@@ -68,11 +68,9 @@ struct Host538380 {
 // @ 0x00538380
 int Host538380::AddRef()
 {
-    int* p = (int*)((char*)this - 4);
-    int n = *p;
-    *p = n + 1;
-    return n + 1;
-}
+    struct HostL { void* vtbl; int refCount; };
+    HostL* h = (HostL*)((char*)this - 8);
+    return h->refCount++ + 1;}
 
 struct Host5383c0 {
     int Release();
