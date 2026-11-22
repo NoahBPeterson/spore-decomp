@@ -141,7 +141,18 @@ WString& WString::AppendSprintfVa(const wchar_t* fmt, va_list args)
     if (mpBegin == gEmptyWString) {
         nReturnValue = VsnprintfW(end(), 0, fmt, args);
     } else {
-        nReturnValue = VsnprintfW(end(), (int)remaining(), fmt, args);
+        struct Formatter {
+            static __forceinline int Format(WString* str, const wchar_t* fmt, va_list args) {
+                struct {
+                    unsigned count;
+                    wchar_t* end;
+                } buffer;
+                buffer.count = (unsigned)(str->mpCapacity - str->mpEnd);
+                buffer.end = str->mpEnd;
+                return VsnprintfW(buffer.end, buffer.count, fmt, args);
+            }
+        };
+        nReturnValue = Formatter::Format(this, fmt, args);
     }
 
     if (nReturnValue >= (int)remaining()) {

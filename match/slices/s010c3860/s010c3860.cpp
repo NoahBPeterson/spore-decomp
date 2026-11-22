@@ -112,9 +112,8 @@ public:
 // ---------------------------------------------------------------------------
 hkSphere* hkSphereShape::getCollisionSpheres(hkSphere* spheres) const
 {
-    hkSphere tmp;
-    tmp.w = m_radius;
-    spheres->w = tmp.w;
+    __declspec(align(16)) double radius = m_radius;
+    spheres->w = (float)radius;
     spheres->x = 0.0f;
     spheres->y = 0.0f;
     spheres->z = 0.0f;

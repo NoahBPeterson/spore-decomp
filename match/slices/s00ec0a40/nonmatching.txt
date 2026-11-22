@@ -7,5 +7,4 @@
 00ec11c0 337 mount/stimulus match; loop body and vtable-chain ordering diverge
 00ec1320 246 rider/target match; key frames and predicate ladder reordered
 00ec1500 86 pickup stimulus; key frame correct, branch orientation and c7d090 arg order differ
-00ec1610 37 cooldown check; single shared fldz tail block not reproduced by MSVC
 00ec1670 453 multi-kind stimulus; loop plus 0x10000000 flag path reorders heavily

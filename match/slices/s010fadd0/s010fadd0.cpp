@@ -705,7 +705,8 @@ extern "C" void hkAgentNnMachine_InvalidateTimInAgent(hkAgentNnAgentEntry* agent
 	case 4:
 		{
 			agent->m_time = -1.0f;
-			agent->m_position.setZero4();
+			hkVector4& position = agent->m_position;
+			position.x = position.y = position.z = position.w = 0.0f;
 			hkAgentNnTimFn invalidate =
 				(hkAgentNnTimFn)context->m_world->m_agentTypes[agent->m_agentType].m_invalidateTim;
 			if (invalidate)

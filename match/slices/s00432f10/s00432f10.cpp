@@ -181,31 +181,31 @@ struct Owner {
 // @ 0x00433210
 void ApplyOwnerEntries(Owner* o, WeightVector* w)
 {
+    Factory* __cdecl FUN_00401010();
     if (o) {
-        Entry* e;
-        int j;
-        int num;
         IntVec used;
         InitSlotWeights(w, o->GetKey());
         used.mBegin = 0; used.mEnd = 0; used.mCap = 0;
         used.mAlloc.Init(AllocTag());
-        j = 0;
-        num = o->entries.size();
-        for (; j < num; ++j) {
-            if (Find(used.begin(), used.end(), j) != used.end())
-                continue;
-            {
-                e = &o->entries.mBegin[j];
-                RefPtr pRes(GetFactory()->Create(e->id1, e->id0));
-                pRes.AddRef();
-                Pad<4>();
-                ApplyEntry(pRes.mp, w);
-                used.push_back(j);
-                if (e->other != -1) {
-                    int temp = e->other;
-                    used.push_back(temp);
+        {
+            int j = 0;
+            int num = o->entries.size();
+            for (; j < num; ++j) {
+                Entry* e;
+                if (Find(used.begin(), used.end(), j) != used.end())
+                    continue;
+                {
+                    e = &o->entries.mBegin[j];
+                    RefPtr pRes(FUN_00401010()->Create(e->id1, e->id0));
+                    pRes.AddRef();
+                    Pad<4>();
+                    ApplyEntry(pRes.mp, w);
+                    used.push_back(j);
+                    if (e->other != -1) {
+                        used.push_back(+e->other);
+                    }
+                    pRes.Release();
                 }
-                pRes.Release();
             }
         }
         NormalizeSlotWeights(w, 0.0f, 20.0f);
@@ -233,29 +233,30 @@ struct Owner2 {
 // @ 0x004333c0
 void ApplyOwnerEntries2(Owner2* o, WeightVector* w)
 {
+    Factory* __cdecl FUN_0067de30();
     InitSlotWeights(w, o->GetKey());
     IntVec ids; ids.mBegin = 0; ids.mEnd = 0; ids.mCap = 0;
     ids.mAlloc.Init(AllocTag());
-    int iEntry = 0;
-    int entryCount = o->GetCount();
-    for (; iEntry < entryCount; ++iEntry) {
-        Entry2* pe = o->GetEntry(iEntry);
-        if (Find(ids.begin(), ids.end(), (int&)pe) != ids.end())
-            continue;
-        {
-            RefPtr pModel(0);
-            GetFactory()->CreateInto(pe->GetA(), pe->GetB(), &pModel);
-            ApplyEntry(pModel.mp, w);
-            ids.push_back((int&)pe);
-            Pad<2>();
-            if (pe->GetC() != 0) {
-                int linked = pe->GetC();
-                ids.push_back(linked);
-            } else if (Pad<2>(), pe->GetD() != 0) {
-                int tt2 = pe->GetD();
-                ids.push_back(tt2);
+    {
+        int iEntry = 0;
+        int entryCount = o->GetCount();
+        for (; iEntry < entryCount; ++iEntry) {
+            Entry2* pe = o->GetEntry(iEntry);
+            if (Find(ids.begin(), ids.end(), (int&)pe) != ids.end())
+                continue;
+            {
+                RefPtr pModel(0);
+                FUN_0067de30()->CreateInto(pe->GetA(), pe->GetB(), &pModel);
+                ApplyEntry(pModel.mp, w);
+                ids.push_back((int&)pe);
+                Pad<2>();
+                if (pe->GetC() != 0) {
+                    ids.push_back(pe->GetC());
+                } else if (Pad<2>(), pe->GetD() != 0) {
+                    ids.push_back(pe->GetD());
+                }
+                pModel.Release();
             }
-            pModel.Release();
         }
     }
     NormalizeSlotWeights(w, 0.0f, 20.0f);

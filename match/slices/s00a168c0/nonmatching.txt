@@ -1,7 +1,6 @@
 00a16da0  116  UpdatePrimitives: complete, clear() inlined loop vs DoInsertValue differs
 00a16e20  52  PushBack: complete, growth/call schedule differs
 00a16f60  98  PrimitiveBase::Init: complete, vtable/QueryInterface register schedule differs; difftest PASS (GetServer/GetSystemAT annotated)
-00a17030  7  PB::SetEnabled: complete, sys/vtable register assignment differs
 00a172e0  94  PResp::SetModificationSource: complete, vcall/float schedule differs; difftest PASS after fixing the signature (value is a float first arg, v28 takes (float value, int mod), as in PAgg::SetModificationSource)
 00a16920 160 VuMeter init: complete; zero register hoisted across call to 0xa161c0 in original (interprocedural xmm use)
 00a16d00 85 FIXED: volatile re-reads of mpEnd/mpBegin and moving the m68 store last keep edx untouched (the original never writes edx); default PASS (400 valid, 100% coverage), replay and hybrid AudioPrimitiveAggregate.cpp first-difference None; size 146 vs 145

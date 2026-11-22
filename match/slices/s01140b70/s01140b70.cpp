@@ -515,7 +515,7 @@ extern "C" void FUN_01141230(int* list, int* node)
 {
     int* head = (int*)list[0];
     if (node == head)
-        list[0] = node[0];
+        list[0] = head[0];
     int* tail = (int*)list[1];
     if (node == tail)
         list[1] = ((int*)list[1])[1];

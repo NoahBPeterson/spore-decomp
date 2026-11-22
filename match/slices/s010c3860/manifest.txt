@@ -3,3 +3,4 @@
 slices/s010c3860/s010c3860.cpp  ?enableCollisionsBetween@hkGroupFilter@@QAEXHH@Z  010c3c20  /vc71 /O2 /MD /Gy /TP
 slices/s010c3860/s010c3860.cpp  ?disableCollisionsBetween@hkGroupFilterBase@@QAEXII@Z  010c3c60  /vc71 /O2 /MD /Gy /TP
 slices/s010c3860/s010c3860.cpp  ?initShape@hkTriangleShape@@QAEXPAX@Z  010c3fc0  /vc71 /O2 /MD /Gy /TP
+slices/s010c3860/s010c3860.cpp  ?getCollisionSpheres@hkSphereShape@@UBEPAVhkSphere@@PAV2@@Z  010c3860  /vc71 /O2 /MD /Gy /TP

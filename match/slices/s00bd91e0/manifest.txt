@@ -19,3 +19,4 @@ slices/s00bd91e0/s00bd91e0.cpp  ?IsCultureActive@cCity@@QAEHXZ  00bd9fa0  /O2 /M
 slices/s00bd91e0/s00bd91e0.cpp  ?CanUseSuperweapon@cCity@@QAE_N_N@Z  00bda080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bd91e0/s00bd91e0.cpp  ?ClearCultureState@cCity@@QAEXXZ  00bda0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bd91e0/s00bd91e0.cpp  ?SetTarget810@cCity@@QAEXPAUcGameData@@@Z  00bda120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd91e0/s00bd91e0.cpp  ?HasLayoutFlag@cCity@@QAE_NH@Z  00bda000  /O2 /MD /Gy /TP /arch:SSE /fp:fast

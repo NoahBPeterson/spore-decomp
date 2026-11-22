@@ -400,15 +400,15 @@ extern "C" char* FUN_008d4b30(char* a, char* b, char** key)
 {
     int n = ((int)(b - a)) >> 3;
     if (n > 0) {
-        char* k = *key;
         do {
+            char* queryCursor = *key;
             int half = n >> 1;
-            char* s = *(char**)(a + half * 8);
-            char* t = k;
-            while (*s != 0 && *s == *t) {
-                ++s; ++t;
+            char* entryCursor = *(char**)(a + half * 8);
+            while (*queryCursor != 0 && *queryCursor == *entryCursor) {
+                ++queryCursor;
+                ++entryCursor;
             }
-            if (*s <= *t) {
+            if (*queryCursor >= *entryCursor) {
                 a += 8 + half * 8;
                 n = n + (-1 - half);
             } else {

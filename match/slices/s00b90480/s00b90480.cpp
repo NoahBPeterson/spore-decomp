@@ -388,23 +388,17 @@ void FUN_00b90b10(int param_1, int param_2, int param_3, int* param_4)
 // @ 0x00b90bd0
 int* FUN_00b90bd0(int* param_1, int* param_2, int* param_3, char (*param_4)(int, int))
 {
-    char cVar1 = (*param_4)(*param_1, *param_2);
-    if (cVar1 == '\0') {
-        cVar1 = (*param_4)(*param_1, *param_3);
-        if (cVar1 != '\0')
+    if ((*param_4)(*param_1, *param_2)) {
+        if ((*param_4)(*param_2, *param_3))
+            return param_2;
+        else if ((*param_4)(*param_1, *param_3))
+            return param_3;
+        else
             return param_1;
-        cVar1 = (*param_4)(*param_2, *param_3);
-        if (cVar1 != '\0')
-            return param_3;
-    } else {
-        cVar1 = (*param_4)(*param_2, *param_3);
-        if (cVar1 == '\0') {
-            cVar1 = (*param_4)(*param_1, *param_3);
-            if (cVar1 == '\0')
-                return param_1;
-            return param_3;
-        }
-    }
+    } else if ((*param_4)(*param_1, *param_3))
+        return param_1;
+    else if ((*param_4)(*param_2, *param_3))
+        return param_3;
     return param_2;
 }
 
@@ -430,9 +424,10 @@ bool FUN_00b90cb0(float* param_1, float param_2)
     if (0 < iVar1) {
         float* pfVar3 = (float*)(DAT_016888ec + 8);
         do {
-            if (sqrt((*param_1 - pfVar3[-2]) * (*param_1 - pfVar3[-2]) +
-                     ((param_1[1] - pfVar3[-1]) * (param_1[1] - pfVar3[-1]) +
-                      (param_1[2] - *pfVar3) * (param_1[2] - *pfVar3))) < pfVar3[1] + param_2)
+            float dx = param_1[0] - pfVar3[-2];
+            float dy = param_1[1] - pfVar3[-1];
+            float dz = param_1[2] - pfVar3[0];
+            if (sqrt(dz * dz + (dx * dx + dy * dy)) < pfVar3[1] + param_2)
                 return true;
             iVar2 = iVar2 + 1;
             pfVar3 = pfVar3 + 0xd;

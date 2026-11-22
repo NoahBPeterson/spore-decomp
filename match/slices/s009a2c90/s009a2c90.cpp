@@ -347,11 +347,8 @@ __declspec(noinline) int S9a2f80::f(int p2, int p3) {
   char* self = (char*)this;
   int r = FUN_009a1c20(p3, *(int*)(self + 4), p2);
   ((S9a1b00*)self)->f(r, *(int*)(self + 4));
-  int diff = p3 - p2;
-  int v = (int)(((long long)diff * 0x7bdef7bdLL) >> 32) - diff;
-  v >>= 8;
-  v = (int)((unsigned)v >> 31) + v;
-  *(int*)(self + 4) += v * 0x1f0;
+  int displacement = p3 - p2;
+  *(int*)(self + 4) += (displacement / -0x1f0) * 0x1f0;
   return p2;
 }
 
@@ -402,11 +399,12 @@ __declspec(noinline) int FUN_009a37a0(int key) {
 // @ 0x009a37e0
 // ---------------------------------------------------------------------------
 __declspec(noinline) int FUN_009a37e0(int key) {
-  if (!key) return 0;
   int count = 0;
+  if (!key) return 0;
   int* tree = g_166c05c;
+  char* node = *(char**)((char*)tree + 8);
   char* end = (char*)tree + 4;
-  for (char* node = *(char**)((char*)tree + 8); node != end; node = (char*)(size_t)FUN_921580((int)(size_t)node))
+  for (; node != end; node = (char*)(size_t)FUN_921580((int)(size_t)node))
     if (*(int*)(node + 0x10) == key) count++;
   return count;
 }

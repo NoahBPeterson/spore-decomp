@@ -375,13 +375,12 @@ bool CLocoObject::HasId(unsigned int id)
 // @ 0x00c42de0
 Vec3* CLocoObject::GetGoalPosition()
 {
+    extern void FUN_00b49a50();
     uint32_t* end = mpIdEnd;
     uint32_t* it = mpIdBegin;
-    for (; it != end; ++it) {
-        if (*it == 0x00b49a50)
-            break;
-    }
-    if (it != end && mbHasNavGoal)
+    while (it != end && *it != (uint32_t)FUN_00b49a50)
+        ++it;
+    if (it != mpIdEnd && mbHasNavGoal)
         return &mNavGoalPos;
     return &mDefaultZone.mPosition;
 }

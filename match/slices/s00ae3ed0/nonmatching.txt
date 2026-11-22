@@ -1,6 +1,5 @@
 00ae3ed0 645 HandleSimulationUpdate: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (fault: invalid read at eip=30000113, bad stack/control flow under emulation); size 360 vs 688
 00ae41b0 110 FindMarkerNear: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (130 valid, 97% cov); size 126 vs 123, SSE scheduling + end/node register allocation differ
-00ae42a0 50 ReleaseMarkerNode: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (241 valid, 88.5% cov); size 60 vs 66, IntrusiveRelease branch layout differs
 00ae4430 40 AssignMarkerNode: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (277 valid, 100% cov); one independent load hoisted and call-target rendering differ
 00ae4520 105 DestroyMarkerNodeRange: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid; fault(read)=398, import:memmove); size 111 vs 105
 00ae4610 195 RemoveMarker: flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (306 valid, 90.2% cov); size 169 vs 216, temp ImageRef path/codegen differs

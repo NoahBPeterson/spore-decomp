@@ -801,9 +801,9 @@ void __stdcall FreeBucketList2(BucketNode** table, unsigned int count)
         {
             BucketNode* cur = n;
             n = n->mpNext;
-            RefObjA* p = cur->mpRef;
-            if (p)
+            if (cur->mpRef)
             {
+                RefObjA* p = cur->mpRef;
                 long refs = _InterlockedDecrement(&p->mRefCount);
                 if (refs == 0)
                 {

@@ -150,10 +150,17 @@ static const char kEastlFile[] =
 // @ 0x00f0b0e0
 Rec* RecVec::erase(Rec* first, Rec* last)
 {
-    Rec* dst = FUN_00dfb930(last, mpEnd, first);
-    Rec* end = mpEnd;
-    for (; dst < end; ++dst)
-        dst->sub.Dtor();
+    struct Destroy {
+        static void Range(Rec* p, Rec* end)
+        {
+            for (; p < end; ++p)
+                p->sub.Dtor();
+        }
+    };
+    Rec* src = last;
+    Rec* e = mpEnd;
+    Rec* dst = FUN_00dfb930(src, e, first);
+    Destroy::Range(dst, mpEnd);
     mpEnd -= (last - first);
     return first;
 }
@@ -314,6 +321,7 @@ void ShowEntry(IWin* w)
 // @ 0x00f0b690
 void HideEntry(IWin* w)
 {
+    extern char g_13ec468[];  // 0x013ec468
     Entry* e = FindEntry(w);
     Rec* r = GetListRec(e->idx);
     e->savedA = r->kind;
@@ -325,17 +333,16 @@ void HideEntry(IWin* w)
         IWin* b = a->QueryInterface(0xcf428691);
         if (b) {
             b->SetFontStyle(0xc0);
-            b->SetText((const void*)0x13ec468, 0);
+            b->SetText(g_13ec468, 0);
         }
     }
-    uint id = 0xcefa1210;
     for (int i = 0; i < 4; i++) {
         IWin* t = w->FindChild(0x7da65e0 + i, 1);
         if (i == r->kind)
             t->SetVisible(1, 1);
         else
             t->SetVisible(1, 0);
-        IWin* c = w->FindChild(id, 0);
+        IWin* c = w->FindChild((uint)(i * 0x10 - 0x3105edf0), 0);
         if (c) {
             IWin* d = c->QueryInterface(0x8ed27e7a);
             if (d)
@@ -344,9 +351,9 @@ void HideEntry(IWin* w)
             if (d)
                 d->SetState(4, 0);
         }
-        id += 0x10;
     }
-    IWin* c = w->FindChild((uint)(r->kind * 0x10 - 0x3105edf0), 0);
+    int k = r->kind;
+    IWin* c = w->FindChild((uint)(k * 0x10 - 0x3105edf0), 0);
     if (c) {
         IWin* d = c->QueryInterface(0x8ed27e7a);
         if (d)
@@ -372,29 +379,26 @@ void HideEntry(IWin* w)
 // @ 0x00f0b8b0
 void RefreshEntries()
 {
+    struct Tree {
+        static bool Contains(IWin* p, IWin* w)
+        {
+            for (; p; p = p->GetParent()) {
+                if (p == w)
+                    return true;
+            }
+            return false;
+        }
+    };
     if (g_16c7d90 == 0)
         return;
     IWin* list = WindowManager()->GetWindowList(0);
-    for (int off = 0; off < 0x50; off += 0x10) {
-        Entry* e = (Entry*)((char*)g_16c7d90 + off + 0x10);
+    for (int i = 0; i < 5; i++) {
+        Entry* e = &g_16c7d90->entries[i];
         Rec* r = GetListRec(e->idx);
-        if (r->sub.Flags() > 0)
-            goto show;
-        {
-            IWin* w = e->win;
-            IWin* p = list;
-            if (p) {
-                do {
-                    if (p == w)
-                        goto show;
-                    p = p->GetParent();
-                } while (p);
-            }
+        if (r->sub.Flags() > 0 || Tree::Contains(list, e->win))
+            ShowEntry(e->win);
+        else
             HideEntry(e->win);
-            continue;
-        }
-    show:
-        ShowEntry(e->win);
     }
 }
 

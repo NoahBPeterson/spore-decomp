@@ -6,3 +6,4 @@ slices/s00ecbb10/s00ecbb10.cpp  ?FUN_00ecc780@TC_780@@QAEPAXPAX@Z  00ecc780  /O2
 slices/s00ecbb10/s00ecbb10.cpp  ?FUN_00ecc7d0@@YAPAXPAX@Z  00ecc7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ecbb10/s00ecbb10.cpp  ?FUN_00ecc100@@YAHH@Z  00ecc100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ecbb10/s00ecbb10.cpp  ?FUN_00ecc8b0@TC_8b0@@QAEPAXPAG@Z  00ecc8b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecbb10/s00ecbb10.cpp  ?FUN_00ecc920@@YIXPAUS920@@@Z  00ecc920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -8,9 +8,6 @@
 #                 0126dae0/0126db20/0126db60 (import _decode_pointer), 01277f40/012817b0/01281800
 #                 (harness could not bind the object symbol)
 01244f50  256  init_150c720: complete; table layout correct, but the 12-byte row offsets (index*12) are constant-folded by cl 15 at /Od whereas the original keeps the runtime `imul r,r,12` for indices 0..2
-0124aab0   14  init_15d9834: complete; /Od float global->global copy is x87 (fld/fstp), original is SSE (movss/movss). Tried /arch:SSE alone, a file-level `#pragma float_control(precise, off)` and the /fp:fast module flag: cl 15 at /Od always lowers a float->float assignment through x87; this only changes with flags (needs /fp:fast on this row)
-0124aae0   14  init_15d9764: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (needs /fp:fast on this row)
-0124ab10   14  init_15d9a68: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (needs /fp:fast on this row)
 0125bd80   16  init_15de138: complete; frame/local slot layout for the inlined operator-new forwarder differs ([ebp-0xc] vs [ebp-0x18])
 01261040   56  init_15df0f0: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (nine copies)
 01277f40  296  init_150d100: complete; 8 record copies into the descriptor table; per-record field/store schedule differs

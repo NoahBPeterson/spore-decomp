@@ -245,22 +245,31 @@ void init_15d98f0()
 // @ 0x0124aab0
 void init_15d9834()
 {
-    *(float*)0x15d9834 = *(float*)0x15d9bc4;
-    *(float*)0x15d9838 = *(float*)0x15d9bc8;
+    extern float g_15d9bc4[2];
+    extern float g_15d9834[2];
+
+    g_15d9834[0] = g_15d9bc4[0];
+    g_15d9834[1] = g_15d9bc4[1];
 }
 
 // @ 0x0124aae0
 void init_15d9764()
 {
-    *(float*)0x15d9764 = *(float*)0x15d9bc4;
-    *(float*)0x15d9768 = *(float*)0x15d9bc8;
+    extern float g_15d9bc4[2];
+    extern float g_15d9764[2];
+
+    g_15d9764[0] = g_15d9bc4[0];
+    g_15d9764[1] = g_15d9bc4[1];
 }
 
 // @ 0x0124ab10
 void init_15d9a68()
 {
-    *(float*)0x15d9a68 = *(float*)0x15d9bc4;
-    *(float*)0x15d9a6c = *(float*)0x15d9bc8;
+    extern float g_15d9bc4[2];
+    extern float g_15d9a68[2];
+
+    g_15d9a68[0] = g_15d9bc4[0];
+    g_15d9a68[1] = g_15d9bc4[1];
 }
 
 // @ 0x0124ab80

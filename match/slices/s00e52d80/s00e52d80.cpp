@@ -404,9 +404,9 @@ void FUN_00e53a20() {
 // @ 0x00e53a80
 void FUN_00e53a80() {
   cSPUILayout17* layout = CellGfx17()->mpAlloc_98->GetAllocator();
-  void* w = layout->FindWindowByID(0x43b72d0, 1);
-  w = SubWindow(w);
-  Vis(w, 0);
+  MissionWindow17* window = (MissionWindow17*)layout->FindWindowByID(0x43b72d0, 1);
+  window = window ? window->QueryInterface(0x8ed27e7a) : 0;
+  window->SetFlag(4, 0);
 }
 
 // @ 0x00e53ad0

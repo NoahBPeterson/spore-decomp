@@ -439,10 +439,19 @@ tMarkerNode* tMarkerNode::InitMarkerNode() {
 
 // @ 0x00ae42a0
 void tMarkerNode::ReleaseMarkerNode() {
-  IntrusiveRelease(mEffect.mpPtr);
-  void* model = mpModel;
+  void* effect = mEffect.mpPtr;
+  if (effect != 0) {
+    volatile long* count = (volatile long*)((char*)effect + 8);
+    _InterlockedDecrement(count);
+    if (_InterlockedExchangeAdd(count, 0) < 1)
+      _InterlockedIncrement(count);
+    else
+      _InterlockedExchangeAdd(count, 0);
+  }
+
+  IRefCounted* model = (IRefCounted*)mpModel;
   if (model != 0)
-    ((IRefCounted*)model)->Release();
+    model->Release();
 }
 
 // @ 0x00ae43a0

@@ -550,19 +550,21 @@ void cCinematicManager::SetEnabled(bool enabled)
 {
     mEnabled = enabled;
     if (!enabled) {
-        while (mCinematicQueue.mpBegin != mCinematicQueue.mpEnd) {
-            RemoveAction(mCinematicQueue.mpBegin->mID);
-            tQueueData* next = mCinematicQueue.mpBegin + 1;
-            if (next == mCinematicQueue.mpBlockEnd) {
-                if (mCinematicQueue.mpCurrentBlock)
-                    operator_delete_arr(mCinematicQueue.mpCurrentBlock);
-                tQueueData** map = mCinematicQueue.mppMap + 1;
-                mCinematicQueue.mppMap = map;
-                mCinematicQueue.mpCurrentBlock = *map;
-                mCinematicQueue.mpBlockEnd = mCinematicQueue.mpCurrentBlock + 32;
-                next = mCinematicQueue.mpCurrentBlock;
+        CinematicQueue& queue = mCinematicQueue;
+        while (queue.mpBegin != queue.mpEnd) {
+            RemoveAction(queue.mpBegin->mID);
+            tQueueData* next = queue.mpBegin + 1;
+            if (next != queue.mpBlockEnd) {
+                queue.mpBegin = next;
+            } else {
+                if (queue.mpCurrentBlock)
+                    operator_delete_arr(queue.mpCurrentBlock);
+                tQueueData** map = queue.mppMap + 1;
+                queue.mppMap = map;
+                queue.mpCurrentBlock = *map;
+                queue.mpBlockEnd = queue.mpCurrentBlock + 32;
+                queue.mpBegin = queue.mpCurrentBlock;
             }
-            mCinematicQueue.mpBegin = next;
         }
     }
 }

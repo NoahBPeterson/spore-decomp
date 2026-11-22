@@ -985,8 +985,8 @@ bool cCity::HasLayoutFlag(int32_t nOffset)
             continue;
         if (!pBuilding->mbFlag289)
             continue;
-        int32_t nState = mpVtbl->pGetState(this);
-        if (mFlagTable[nState + i * 14 + nOffset])
+        cCity* pState = (cCity*)mpVtbl->pGetState(this);
+        if (pState->mFlagTable[i * 14 + nOffset])
             return true;
     }
     return false;

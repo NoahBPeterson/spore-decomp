@@ -3,3 +3,4 @@
 slices/s0111f260/s0111f260.cpp  ?freeNode@MoppQuery@@QAEXPAUMoppChainNode@@@Z  0111fa60  /vc71 /O2 /MD /Gy /TP
 slices/s0111f260/s0111f260.cpp  ?nodeCount@MoppQuery@@QAEHXZ  0111fa90  /vc71 /O2 /MD /Gy /TP
 slices/s0111f260/s0111f260.cpp  ?ctor@MoppQuery@@QAEPAU1@XZ  0111fbd0  /vc71 /O2 /MD /Gy /TP
+slices/s0111f260/s0111f260.cpp  ?newNode@MoppQuery@@QAEPAUMoppChainNode@@PAU2@PAUMoppPrimArray@@@Z  0111f9e0  /vc71 /O2 /MD /Gy /TP

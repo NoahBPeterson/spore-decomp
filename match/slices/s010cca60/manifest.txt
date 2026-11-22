@@ -7,3 +7,5 @@ slices/s010cca60/s010cca60.cpp  ?registerAlternateShapeType@hkCollisionDispatche
 slices/s010cca60/s010cca60.cpp  ?calcAabb@hkAabbUtil@@SAXPBMHHAAUhkAabb@@@Z  010cd8e0  /vc71 /O2 /MD /Gy /TP
 slices/s010cca60/s010cca60.cpp  ?FUN_010cda20@@YGXPAX0000@Z  010cda20  /vc71 /O2 /MD /Gy /TP
 slices/s010cca60/s010cca60.cpp  ?cleanup@hkBvTreeStreamAgent@@QAEXXZ  010cda50  /vc71 /O2 /MD /Gy /TP
+slices/s010cca60/s010cca60.cpp  ?resetCreationFunctions@hkCollisionDispatcher@@QAEXXZ  010cca60  /vc71 /O2 /MD /Gy /TP
+slices/s010cca60/s010cca60.cpp  ??1hkCollisionDispatcher@@QAE@XZ  010cd810  /vc71 /O2 /MD /Gy /TP

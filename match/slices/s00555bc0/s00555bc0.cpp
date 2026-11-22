@@ -1015,23 +1015,26 @@ void SummarizeVehiclePart(Key* key, uint32_t partID) {
     if (id != 0 && (key->mType == 0x2b978c46 || key->mType == 0x3d97a8e4)) {
         AutoRef<Meta> res(GetModelMeta(key));
         void* resource;
-        ScratchSlots<1>();
+        uint32_t unused;
         if (res.get()) {
-            SimpleVectorU32 entries = { 0, 0, 0, VecAllocTag() };
+            SimpleVectorU32 matchingEntries = { 0, 0, 0, VecAllocTag() };
             for (int i = 0, num = res.get()->NumEntries(); i < num; ++i) {
                 uint32_t entry = res.get()->Entry(i);
                 if (GetPartPropertyId(entry) == id)
-                    entries.push_back(entry);
+                    matchingEntries.push_back(entry);
             }
             ScratchSlots<2>();
-            for (int j = 0, count = (int)(entries.mpEnd - entries.mpBegin); j < count; ++j)
-                res.get()->RemoveEntry(entries[j]);
+            {
+                int j = 0;
+                for (int count = (int)(matchingEntries.mpEnd - matchingEntries.mpBegin); j < count; ++j)
+                    res.get()->RemoveEntry(matchingEntries[j]);
+            }
             res.get()->AddEntry((int)partID);
-            ScratchSlots<3>();
             resource = GetResourceManager()->GetResourceKeyed(&res.get()->mResourceId);
             if (resource)
                 GetResourceManager()->v20(res.get(), 0, resource, 0, 0);
         }
+        ScratchSlots<3>();
     }
 }
 
@@ -1068,22 +1071,25 @@ void KeyResetAxis(Key* key, uint32_t partID) {
     if (key->mType == 0x2b978c46 || key->mType == 0x3d97a8e4) {
         AutoRef<Meta> res(GetModelMeta(key));
         void* resource;
-        ScratchSlots<1>();
+        uint32_t unused;
         if (res.get()) {
-            SimpleVectorU32 entries = { 0, 0, 0, VecAllocTag() };
+            SimpleVectorU32 matchingEntries = { 0, 0, 0, VecAllocTag() };
             for (int i = 0, num = res.get()->NumEntries(); i < num; ++i) {
                 uint32_t entry = res.get()->Entry(i);
                 if (GetPartPropertyId(entry) == partID)
-                    entries.push_back(entry);
+                    matchingEntries.push_back(entry);
             }
             ScratchSlots<2>();
-            for (int j = 0, count = (int)(entries.mpEnd - entries.mpBegin); j < count; ++j)
-                res.get()->RemoveEntry(entries[j]);
-            ScratchSlots<3>();
+            {
+                int j = 0;
+                for (int count = (int)(matchingEntries.mpEnd - matchingEntries.mpBegin); j < count; ++j)
+                    res.get()->RemoveEntry(matchingEntries[j]);
+            }
             resource = GetResourceManager()->GetResourceKeyed(&res.get()->mResourceId);
             if (resource)
                 GetResourceManager()->v20(res.get(), 0, resource, 0, 0);
         }
+        ScratchSlots<3>();
     }
 }
 

@@ -524,17 +524,16 @@ locaClass* New_locaClass(tsiMemObject* mem, InputStream* in, int16 format, int32
 // @ 0x008cde20
 slocClass* FF_New_slocClass(tsiMemObject* mem, InputStream* in)
 {
-    slocClass* s = (slocClass*)tsi_AllocMem(mem, 0x18);
+    slocClass* s = (slocClass*)tsi_AllocMem(mem, sizeof(slocClass));
     s->mem = mem;
     s->f04 = ReadInt32(in);
     s->count = ReadInt16(in);
-    s->records = (slocRecord*)tsi_AllocMem(mem, (uint32)s->count * 8);
-    slocRecord* r = s->records;
-    for (int32 i = 0; i < (int32)(uint32)s->count; i++) {
-        r->first = ReadInt16(in);
-        r->f2 = ReadInt16(in);
-        r->offset = ReadInt32(in);
-        r++;
+    slocRecord* records = (slocRecord*)tsi_AllocMem(mem, (uint32)s->count * sizeof(slocRecord));
+    s->records = records;
+    for (int32 i = 0; i < (int32)s->count; ++i) {
+        records[i].first = ReadInt16(in);
+        records[i].f2 = ReadInt16(in);
+        records[i].offset = ReadInt32(in);
     }
     s->f10 = ReadInt32(in);
     s->f14 = Tell_InputStream(in);

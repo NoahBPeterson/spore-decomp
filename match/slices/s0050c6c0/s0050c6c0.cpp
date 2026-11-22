@@ -7,16 +7,21 @@ typedef unsigned int uint32_t;
 // @ 0x0050cfb0  (2-component subtract: out = a - b)
 float* __cdecl Sub2(float* out, float* a, float* b)
 {
-    out[0] = a[0] - b[0];
-    out[1] = a[1] - b[1];
+    struct Components { float x, y; };
+    Components result = {a[0] - b[0], a[1] - b[1]};
+    Components difference = {result.x, result.y};
+    out[0] = difference.x;
+    out[1] = difference.y;
     return out;
 }
 
 // @ 0x0050d020  (2-component scale: out *= s)
 float* __cdecl Scale2(float* out, float* s)
 {
-    out[0] = out[0] * s[0];
-    out[1] = out[1] * s[0];
+    struct Components { float x, y; };
+    Components scaled = {out[0] * s[0], out[1] * s[0]};
+    out[0] = scaled.x;
+    out[1] = scaled.y;
     return out;
 }
 

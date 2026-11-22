@@ -672,8 +672,11 @@ void DequeBase<T, Allocator, kDequeSubarraySize>::DoInit(size_t n) {
   const size_t nNewPtrArraySize = (size_t)((n / kDequeSubarraySize) + 1);
   const size_t kMinPtrArraySize_ = 8;
 
-  mnPtrArraySize = max_alt(kMinPtrArraySize_, (nNewPtrArraySize + 2));
-  mpPtrArray = DoAllocatePtrArray(mnPtrArraySize);
+  const size_t bytes =
+      (static_cast<volatile size_t&>(mnPtrArraySize) = max_alt(kMinPtrArraySize_, nNewPtrArraySize + 2))
+      * sizeof(T*);
+  EA::Allocator::ICoreAllocator* const allocator = mAllocator.mpCoreAllocator;
+  mpPtrArray = static_cast<T**>(allocator->AllocFlags(bytes, 0, mAllocator.mnFlags));
 
   T** const pPtrArrayBegin = (mpPtrArray + ((mnPtrArraySize - nNewPtrArraySize) / 2));
   T** const pPtrArrayEnd = pPtrArrayBegin + nNewPtrArraySize;

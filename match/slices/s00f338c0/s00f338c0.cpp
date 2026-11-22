@@ -30,9 +30,47 @@ struct SmartPtr {
 struct E { SmartPtr sp; int a; int b; float c; };
 
 // @ 0x00F33A10
-E* CopyFwd(E* first, E* last, E* dest) { for (; first != last; ++first, ++dest) *dest = *first; return dest; }
+E* CopyFwd(E* first, E* last, E* dest) {
+    for (; first != last; ++first, ++dest)
+    {
+        RCObj* incoming = static_cast<RCObj*>(first->sp.p);
+        RCObj* previous = static_cast<RCObj*>(dest->sp.p);
+        if (incoming != previous)
+        {
+            if (incoming)
+                incoming->AddRef();
+            dest->sp.p = incoming;
+            if (previous)
+                previous->Release();
+        }
+        dest->a = first->a;
+        dest->b = first->b;
+        dest->c = first->c;
+    }
+    return dest;
+}
 // @ 0x00F33AC0
-E* CopyBwd(E* first, E* last, E* dest) { while (first != last) { --last; --dest; *dest = *last; } return dest; }
+E* CopyBwd(E* first, E* last, E* dest) {
+    while (last != first)
+    {
+        --last;
+        --dest;
+        RCObj* incoming = static_cast<RCObj*>(last->sp.p);
+        RCObj* previous = static_cast<RCObj*>(dest->sp.p);
+        if (incoming != previous)
+        {
+            if (incoming)
+                incoming->AddRef();
+            dest->sp.p = incoming;
+            if (previous)
+                previous->Release();
+        }
+        dest->a = last->a;
+        dest->b = last->b;
+        dest->c = last->c;
+    }
+    return dest;
+}
 
 // ---------------------------------------------------------------- EA allocation
 void* EAAllocate(uint32_t size, const char* name, int a, int b, int c, int d);   // 0x00f473a0

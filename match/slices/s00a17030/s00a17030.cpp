@@ -12,9 +12,12 @@ struct CAudioDispatch {
 
 // @ 0x00a17030
 void* __thiscall CAudioDispatch::Dispatch(bool flag) {
+    if (flag) {
+        void* sys = GetSystemAT();
+        VObj* obj = (VObj*)sys;
+        return ((FnVp1)obj->vt[0x19c / 4])(sys, this);
+    }
     void* sys = GetSystemAT();
     VObj* obj = (VObj*)sys;
-    if (flag)
-        return ((FnVp1)obj->vt[0x19c / 4])(sys, this);
     return ((FnVp1)obj->vt[0x1a0 / 4])(sys, this);
 }

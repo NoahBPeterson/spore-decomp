@@ -5,7 +5,5 @@
 00b909a0    64  FUN_00b909a0: complete; copy_if by hash-slot; vtable probe + store scheduling differs
 00b90a40   191  FUN_00b90a40: complete; insertion sort with refcounted elements; register/refcount scheduling differs
 00b90b10   170  FUN_00b90b10: complete; heap sift-up; vtable refcount slot calls scheduled differently
-00b90bd0    54  FUN_00b90bd0: complete; median-of-three comparator; branch layout differs
-00b90cb0    34  FUN_00b90cb0: complete; sphere-list distance test; SSE load order + x87 fsub order differ
 00b90d70   208  FUN_00b90d70: complete; cube-face cell angle test; early-out structured as ordered `param_3 < eps` so NaN returns 0; x87/sse mix scheduling differs; equiv: PASS (341 valid, 100% cov)
 00b90ea0   930  FUN_00b90ea0: complete; three-radius cube march marking flags 0x10/0x20/0x40; CellRange struct forces 3-int range, iterator starts at out+1, EA CeilToInt for count; equiv: PASS (233 valid, 100% cov)

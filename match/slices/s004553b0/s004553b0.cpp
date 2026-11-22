@@ -40,13 +40,14 @@ float ClampDot(const Vec3* a, const Vec3* b) {
     float d = Dot3(a, b);
     if (d < -1.0f) {
         d = -1.0f;
-    } else {
-        if (d > 1.0f) {
-            d = 1.0f;
-        } else {
-            d = d;
-        }
+        goto result;
     }
+    if (d > 1.0f) {
+        d = 1.0f;
+        goto result;
+    }
+    d = d;
+result:
     return d;
 }
 
