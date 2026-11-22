@@ -305,20 +305,20 @@ done:
 void hkConvexPenetrationUtil::init(hkConvexShape* shapeA, hkConvexShape* shapeB,
                                    const hkTransform& xf, float k,
                                    void* a, void* b, hkVector4* w, int* num)
-{
-	hkTransform_assign(&m_xf, 0, &xf);   // +0x00
+{	hkTransform_assign(&m_xf, 0, &xf);   // +0x00
 	m_shape0 = shapeA;                // +0x54
 	m_shape1 = shapeB;                // +0x58
-	m_bestDist = k;                   // +0x40
-	m_scale2   = k;                   // +0x4c
-	m_sphereR  = k;                   // +0x44
-	m_scale1   = k;                   // +0x48
+	float* f = (float*)(void*)&m_bestDist;
+	f[0] = k;                         // +0x40
+	f[1] = k;                         // +0x44
+	f[2] = k;                         // +0x48
+	f[3] = k;                         // +0x4c
+	m_eps      = k * k;               // +0x50
 	m_a  = (hkVector4*)a;             // +0x60
 	m_b  = (hkVector4*)b;             // +0x64
 	m_simplexCount = 0;               // +0x5c
 	m_w  = w;                         // +0x68
 	m_num = num;                      // +0x6c
-	m_eps      = k * k;               // +0x50
 }
 
 // ===========================================================================

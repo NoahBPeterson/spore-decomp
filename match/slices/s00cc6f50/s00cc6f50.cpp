@@ -131,11 +131,29 @@ const wchar* cNpcTribeController::GetStatString(int type)
         return L"NPCTribe Controller";
     if (type == 0)
     {
-        cGameDataVector* pVector = NounManager()->GetGameDataVector(
-            (void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00accbb0,
-            (void*)0x00b1e500, (const char*)0x018c6d19);
-        int nCount = (int)(pVector->mpEnd - pVector->mpBegin);
-        mStatusString.sprintf(L"Num Tribes: %d", nCount);
+        struct TribeRange
+        {
+            u32* mpBegin;
+            u32* mpEnd;
+
+            int size() const { return (int)(mpEnd - mpBegin); }
+
+            static const TribeRange& Get(cGameNounManager* pManager)
+            {
+                extern cGameDataVector* FUN_00cd7d10();
+                extern void FUN_00d3d420(cGameDataVector*);
+                extern void FUN_00accbb0(cGameDataVector*, void*);
+                extern bool FUN_00b1e500(void*, u32);
+
+                const cGameDataVector* pVector = pManager->GetGameDataVector(
+                    (void*)FUN_00cd7d10, (void*)FUN_00d3d420, (void*)FUN_00accbb0,
+                    (void*)FUN_00b1e500, (const char*)0x018c6d19);
+                return *reinterpret_cast<const TribeRange*>(&pVector->mpBegin);
+            }
+        };
+
+        const TribeRange& tribes = TribeRange::Get(NounManager());
+        mStatusString.sprintf(L"Num Tribes: %d", tribes.size());
     }
     return mStatusString.mpBegin;
 }

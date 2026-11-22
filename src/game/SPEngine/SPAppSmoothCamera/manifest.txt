@@ -11,3 +11,4 @@
 ../src/game/SPEngine/SPAppSmoothCamera.cpp  ?SetClipPlanes@Cam24@@QAEXABUFVec@@0@Z  007df6d0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppSmoothCamera.cpp  ??1cSmoothCameraController_s007d_c1b0@@UAE@XZ  007dc630  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppSmoothCamera.cpp  ?RestoreCameraPosition@cSmoothCameraController@@QAEXH@Z  007dbf20  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSmoothCamera.cpp  ?ZoomRange@cSmoothCameraController_s007d_c1b0@@QAE_NPAM0@Z  007dc230  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include

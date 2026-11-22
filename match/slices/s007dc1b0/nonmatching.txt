@@ -1,4 +1,3 @@
-007dc230  31   cSmoothCameraController::ZoomRange; comparison operand order and reload schedule differ
 007dc260  214  cSmoothCameraController::UpdateSubjectMotion; x87 sqrt/normalise schedule differs
 007dc340  433  cSmoothCameraController::HandleRequest; complete; equiv WEAK (0 mismatches, 400/400 valid, 33.5% coverage - the harness passes this as 0 so the vtable and vector paths fault in the original and those inputs are discarded)
 007dc1b0  153  cSmoothCameraController::Zoom; plain C++; equiv register-only (5/5 valid, ecx clobber: orig leaves ecx=40010000 untouched, ours leaves 4e9ce601); the retail body is an 80-bit x87 fucomip/lahf compare plus a def1/dee1 reciprocal chain MSVC will not emit from C

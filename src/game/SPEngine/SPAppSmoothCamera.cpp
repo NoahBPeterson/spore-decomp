@@ -1015,11 +1015,12 @@ float cSmoothCameraController_s007d_c1b0::Zoom()
 
 // @ 0x007dc230
 bool cSmoothCameraController_s007d_c1b0::ZoomRange(float* lo, float* hi)
-{
+{    void* volatile* pc = (void* volatile*)&mZoomLevels.mpCapacity;
+    void* volatile* pv = (void* volatile*)&mZoomLevels.mpEnd;
     if (mZoomLevels.mpEnd == mZoomLevels.mpCapacity)
         return false;
-    *lo = ((float*)mZoomLevels.mpCapacity)[-1];
-    *hi = ((float*)mZoomLevels.mpEnd)[0];
+    *lo = ((float*)*pc)[-1];
+    *hi = *(float*)*pv;
     return true;
 }
 
