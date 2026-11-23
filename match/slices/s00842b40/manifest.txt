@@ -1,0 +1,1 @@
+slices/s00842b40/s00842b40.cpp  ?FUN_00842b40@@YGPBDH@Z  00842b40  /O2 /MD /Gy /EHsc /TP

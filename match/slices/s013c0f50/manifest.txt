@@ -1,0 +1,1 @@
+slices/s013c0f50/s013c0f50.cpp  ?FUN_013c0f50@@YAXXZ  013c0f50  /O2 /MD /Gy /EHsc /TP
