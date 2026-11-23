@@ -1,0 +1,1 @@
+slices/s00d2e300/s00d2e300.cpp  ?Serialize_00d2e300@GO_00d2e300@@QAEXPAX@Z  00d2e300  /O2 /MD /Gy /EHsc /TP

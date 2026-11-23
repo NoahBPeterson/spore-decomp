@@ -1,0 +1,1 @@
+slices/s00472b00/s00472b00.cpp  ?Reset@ExtRef_00472b00@@QAEPAU1@XZ  00472b00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
