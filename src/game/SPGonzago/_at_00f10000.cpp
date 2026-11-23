@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00f10000.cpp -- migrated from slice(s) s00f1faa0, s00f1e020, s00f1bcf0, s00f1ae10, s00f18eb0, s00f17f70, s00f170c0, s00f16580, s00f15890, s00f145a0, s00f13330, s00f12340, s00f114a0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00f10000.cpp -- migrated from slice(s) s00f1ef90, s00f1c690, s00f19e70, s00f19530, s00f1faa0, s00f1e020, s00f1bcf0, s00f1ae10, s00f18eb0, s00f17f70, s00f170c0, s00f16580, s00f15890, s00f145a0, s00f13330, s00f12340, s00f114a0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00f10000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -28,6 +28,8 @@ extern "C" char g_148c114[];
 #include "SP/cCombatant.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "EA/Stopwatch.h"
+#include <math.h>
+#include <stdlib.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern const char g_148bfc8[];                // 0x0148bfc8 "TriggerConfigScenarioMode"
@@ -1372,7 +1374,40 @@ public:
 // ---- items of slice s00f170c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t g_slot15ad8a4;                               // 0x015ad8a4 global slot
 extern uint32_t g_handlerIds15ad8e4[2];                      // 0x015ad8e4 handler message ids
-extern char     g_16c7aa4[];                                 // 0x016c7aa4 globals struct
+struct PtrVec {
+    void** mpBegin;
+    void** mpEnd;
+    void** mpCap;
+};
+
+struct PB;
+
+struct SMgr {                       // scenario manager, *g_16c7aa4->+0x74
+    char  pad00[0x10];
+    void* f10;                      // +0x10
+    char  pad14[4];
+    char  f14;                      // +0x14
+
+    void* Find(int id);             // 0x00f3be60
+    void* Lookup(int id);           // 0x00f3e8a0
+    void* Sub(void* out);           // 0x00f3bcb0
+    char  Match(void* obj, void* key, int cookie, void* rec);   // 0x00f3e6d0
+    void  Collect(int q, PtrVec* out);                          // 0x00f40d00
+};
+
+struct GBlock {                     // *0x016c7aa4
+    char  pad00[0x6c];
+    void* f6c;                      // +0x6c
+    char  pad70[4];
+    SMgr* f74;                      // +0x74
+    char  pad78[4];
+    void* f7c;                      // +0x7c
+    char  pad80[0xcc - 0x80];
+    int   fcc;                      // +0xcc
+    int   fd0;                      // +0xd0
+};
+
+extern GBlock* g_16c7aa4;                                     // 0x016c7aa4 globals struct
 void* __cdecl operator new(unsigned int size, const char* tag, int a, int b, int c, int d);   // 0x00f473a0
 void  __cdecl operator delete(void* p);                                                       // 0x00f47380
 struct IWin_s00f1_70c0 {
@@ -1753,7 +1788,7 @@ struct SubA_s00f1_7f70 {
     void SetAnimWindow(IWin_s00f1_7f70* win);                   // 0x00f17b00
 };
 struct Rect4 { float x, y, z, w; };
-inline float fabsf(float x) { return x < 0.0f ? -x : x; }
+inline float fabsf_(float x) { return x < 0.0f ? -x : x; }
 inline const float& FMin(const float& a, const float& b) { return (b < a) ? b : a; }
 inline const float& FMax(const float& a, const float& b) { return (a < b) ? b : a; }
 struct IHandler_s00f1_7f70 { PV8 };
@@ -1974,9 +2009,17 @@ bool  __cdecl cScenarioPlayProgressBar_Pred(void* a);        // 0x00f19e00
 // ---- items of slice s00f18eb0 end
 
 // ---- items of slice s00f1ae10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_00e16a70(void*, int);                    // 0x00e16a70
+extern "C" void  FUN_00e133b0(void*, int, int);               // 0x00e133b0
+extern "C" void  FUN_00e13b50(void*, int, int);               // 0x00e13b50
+extern "C" void  FUN_00f0e6c0(void*);                         // 0x00f0e6c0
 extern "C" void  FUN_00f19530(void*);                         // 0x00f19530
+extern "C" void  FUN_00eeea50(void*);                         // 0x00eeea50
+extern "C" int   FUN_00efc520();                              // 0x00efc520
+extern "C" void* FUN_00b18e00(void*);                         // 0x00b18e00
 extern "C" void* EA_Audio_GetSystemAT();                      // 0x00a206f0
 typedef unsigned short wchar16;
+struct Vec3 { float x, y, z; };
 struct VP {
     float x, y, z, f;
     VP() {}
@@ -1997,13 +2040,24 @@ struct CString {
     const wchar16* GetText();                                 // 0x006b55c0
 };
 typedef void* (__thiscall* PFnQI)(void*, uint);
+typedef Vec3* (__thiscall* PFnPos)(void*);
+typedef float (__thiscall* PFnF)(void*);
+typedef void  (__thiscall* PFnSet)(void*, int);
+typedef void  (__thiscall* PFnVoid)(void*);
+typedef void  (__thiscall* PFnSpawn)(void*, uint, Vec3*, Vec3*, int, int, float);
 inline void*  QI_s00f1_ae10(void* p, uint id) { return ((PFnQI)((void**)*(void**)p)[3])(p, id); }   // +0x0c
+inline Vec3*  Pos(void* p)         { return ((PFnPos)((void**)*(void**)p)[0x0b])(p); }  // +0x2c
+inline float  Scalar(void* p)      { return ((PFnF)((void**)*(void**)p)[0x1d])(p); }     // +0x74
+inline void   SetX(void* p, int v) { ((PFnSet)((void**)*(void**)p)[0x12])(p, v); }       // +0x48
 struct Ctr {                       // avatar / mission / interactable object
     void** vtbl;                   // +0x00
     char   pad04[0x18];
     int    f1c;                    // +0x1c
     char   pad20[4];
     int    f24;                    // +0x24
+};
+struct Sub8_s00f1_ae10 {
+    void Set(const int& v);                            // 0x00b2b5b0
 };
 struct PBEl {
     char disabled;      // +0x00
@@ -2018,11 +2072,20 @@ struct PBEl {
     char flag34;        // +0x34
     char pad35[0x1ac - 0x35];
 };
-struct PB;
+struct PB_s00f1_ae10;
+extern Vec3    g_16c826c;
 struct AvMgr {
     Ctr* GetAvatar();               // 0x00b1fdb0
 };
 extern "C" AvMgr* SPNounManager();  // 0x00b3d300
+extern "C" uint  ResourceKeyToIcon(void*);                    // 0x00eece20
+extern "C" void  FUN_00c8ad30(void*, uint, int);              // 0x00c8ad30
+extern "C" void* AchievementsController(uint, int);           // 0x00675250
+struct Achievements_s00f1_ae10 { void AutoTest(); };                     // 0x00676e90
+struct ObjName {
+    const wchar16* Text();          // 0x00f26360
+    void Do(void*);                 // 0x00f28b80
+};
 typedef int  (__thiscall* PFnV20)(void*);
 typedef void (__thiscall* PFnV38)(void*, uint);
 typedef void (__thiscall* PFnV40)(void*, uint, int);
@@ -2049,6 +2112,52 @@ static void AssignStr(WString& w, const wchar16* p)
 {
     w.assign(p, p + Len16(p));
 }
+class PB_s00f1_ae10 {
+public:
+    void  Add(PBEl* e, void* a, void* b);            // 0x00f1ae10
+    void  Event(void* a, void* ev);                  // 0x00f1aff0
+    void  Release(void* a, void* ev);                // 0x00f1b180
+    void  Unlink(void* a, void* b, int c);           // 0x00f1b260
+    char  TryAdd(void* a);                           // 0x00f1b2f0
+    void  SetKind(int a);                            // 0x00f1b360
+    void  PlaySound(int a, int b);                   // 0x00f1b370
+    void  RefreshAll();                              // 0x00f1b450
+    void  RemoveByType(void* a);                     // 0x00f1b590
+    void  SetText(int kind);                         // 0x00f1b640
+    void  SetMode(int a, PBEl* ev, int kind);        // 0x00f1b730
+    Ctr*  FindNearest(void* a, int q, void* excl);   // 0x00f1b820
+    void  GetNameA(WString* out);                    // 0x00f1b9b0
+    void  GetNameB(WString* out);                    // 0x00f1ba00
+    void  GetInfo(int idx, WString* out);            // 0x00f1ba50
+    void  GetNameC(int i, WString* out);             // 0x00f1bcb0
+    void  GetNameD(int i, WString* out);             // 0x00f1bcd0
+    void  Setup(VP a, VP b, PBEl* e);                // 0x00f19940
+    void  Remove(PBEl* e, void* p);                  // 0x00f19ac0
+    void  Apply(int a, int b);                       // 0x00f198f0
+    int   ByIndex(void* p);                          // 0x00f19840
+    char  FUN_00f1a070(void* p);                     // 0x00f1a070
+    void  FUN_00f1a120(PBEl* e, void* p);            // 0x00f1a120
+    bool  FUN_00f1a7a0(int a, void* p);              // 0x00f1a7a0
+    void  FUN_00f1a7f0(void* p);                     // 0x00f1a7f0
+    void  FUN_00f1aae0(int a);                       // 0x00f1aae0
+    int   EachChild(int id, int b);                  // 0x00f19660
+
+    char    pad00[4];
+    int     f04;            // +0x04
+    char    pad08[0x54 - 0x08];
+    WString ws54;           // +0x54
+    char    pad60[4];
+    PBEl*   begin;          // +0x64
+    PBEl*   end;            // +0x68
+    char    pad6c[0x90 - 0x6c];
+    int     state;          // +0x90
+    char    pad94[0xb0 - 0x94];
+    int     f_b0;           // +0xb0
+    char    padb4[4];
+    int     f_b8;           // +0xb8
+    char    padbc[0xec - 0xbc];
+    char    f_ec;           // +0xec
+};
 class PB {
 public:
     void  Add(PBEl* e, void* a, void* b);            // 0x00f1ae10
@@ -2165,7 +2274,7 @@ struct CreatureBase {
     void* At(int i);                          // 0x00c0f8a0
     void* GetTargetAsCreature();              // 0x00c0ee70
 };
-struct NounManager {
+struct NounManager_s00f1_bcf0 {
     void* GetAvatar();                        // 0x00b1fdb0 thiscall 0
 };
 struct cSPEditorVerbTray {
@@ -2603,6 +2712,794 @@ struct Ctl {
     void Update(uint32_t dt);
 };
 // ---- items of slice s00f1faa0 end
+
+// ---- items of slice s00f19530 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ScenarioEffectTarget {
+    bool IsEffectActive(unsigned int id);                  // 0x00c88940
+    void* CreateEffect(unsigned int resource, int flags,
+                       unsigned int id);                   // 0x00c8b130
+    void SetEffectScaled(unsigned int id, char enabled);    // 0x00c8a110
+};
+// ---- items of slice s00f19530 end
+
+// ---- items of slice s00f19e70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1471064;      // 0.5f           0x01471064
+extern float g_15ad940;      // 0x015ad940
+extern float g_15ad93c;      // 0x015ad93c
+extern float g_15ad938;      // 0x015ad938
+extern float g_15ad934;      // 0x015ad934
+extern float g_15ad930;      // 0x015ad930
+extern float g_15ad92c;      // 0x015ad92c
+extern float g_15ad928;      // 0x015ad928
+extern float g_15ad924;      // 0x015ad924
+extern uint32_t g_15ada60;   // 0x015ada60
+extern uint32_t g_15ada6c;   // 0x015ada6c
+
+struct BBox { Vec3 mMin; Vec3 mMax; };
+struct Avatar_s00f1_9e70;
+struct IClassId { int* FUN_006c0200();                       // 0x006c0200
+                  void FUN_00c8ad30(uint32_t id, int a); };   // 0x00c8ad30
+struct ISpatial
+{
+    PV8 PV2 PV                                        // 0x00..0x28
+    virtual Vec3* GetPos();                           // 0x2c
+    PV8 PV4 PV2                                       // 0x30..0x64
+    virtual BBox* GetBBoxAt68();                      // 0x68
+    virtual BBox* GetBBox(BBox* out);                 // 0x6c
+    virtual void v70();                               // 0x70
+    virtual float GetRadius();                        // 0x74
+};
+struct ObjHdr
+{
+    PV PV PV
+    virtual void* Query(uint32_t id);                 // 0x0c
+    PV4
+    virtual uint32_t GetTypeID();                     // 0x20
+    PV2
+    virtual bool IsDestroyed();                       // 0x2c
+    PV8 PV8 PV8 PV8 PV2
+    virtual void* QueryClassId(uint32_t id);          // 0xb8
+    void FUN_00b18530();                              // 0x00b18530
+};
+struct cGameNounManager
+{
+    Avatar_s00f1_9e70* GetAvatar();                              // 0x00b1fdb0
+    void* GetItemID();                                // 0x00b1f9c0
+    void RemoveNoun(void* noun);                      // 0x00b225d0
+};
+struct Avatar_s00f1_9e70
+{
+    char pad0[0xc0];
+    ISpatial mSpatial;                                // 0xc0
+    char pad1[0x4e4];
+    int Count();                                      // 0x00c0f780
+    ObjHdr* At(int idx);                              // 0x00c0f8a0
+    int Next(int idx);                                // 0x00c0f810
+    void SetSprinting(int b);                         // 0x00c1ad10
+};
+cGameNounManager* __cdecl NounManager();              // 0x00b3d300
+struct cGameTimeManager_s00f1_9e70
+{
+    void IncPauseGate(uint32_t gate);                 // 0x00b32220
+};
+cGameTimeManager_s00f1_9e70* __cdecl GameTimeManager_s00f1_9e70();          // 0x00b3d380
+struct ICreatureAnim
+{
+    void PlayAnimation(int id, int a, int b);         // 0x00c12190
+    void FUN_00bfc470(int a);                         // 0x00bfc470
+};
+struct ICreatureData  { char pad[0x5fc]; uint32_t mFlags; };
+struct ICreatureFlags50 { char pad[0x50]; uint32_t mFlags; };
+struct ICreatureComp
+{
+    bool Flag388();                                    // 0x00c0c0e0
+};
+struct Stopwatch_s00f1_9e70
+{
+    uint32_t mnStartTimeLo;                           // +0x00
+    uint32_t mnStartTimeHi;                           // +0x04
+    uint32_t mnTotalElapsedTimeLo;                    // +0x08
+    uint32_t mnTotalElapsedTimeHi;                    // +0x0c
+    int      mnUnits;                                 // +0x10
+    float    mfCyclesToUnits;                         // +0x14
+    void Restart();                                   // 0x00571e80
+};
+struct cScenarioPlaySummary_s00f1_9e70
+{
+    int   mNumCreaturesKilled;                        // +0x00
+    int   mNumBuildingsDestroyed;                     // +0x04
+    int   mNumVehiclesDestroyed;                      // +0x08
+    int   mNumCastMembersDefended;                    // +0x0c
+    int   mNumCreaturesBefriended;                    // +0x10
+    int   mNumObjectsCollected;                       // +0x14
+    int   field_18;                                   // +0x18
+    int   mNumGoalsCompleted;                         // +0x1c
+    int   mNumDeaths;                                 // +0x20
+    int   mNumPosseMembersLost;                       // +0x24
+    uint32_t mAmountDamageDealt;                      // +0x28
+    int   mNumTimesUsedJetPack;                       // +0x2c
+    int   mNumTimesUsedSprint;                        // +0x30
+    int   mNumBarrelsDestroyed;                       // +0x34
+    int   mNumCastMembersTalkedTo;                    // +0x38
+    float mAmountHealthRegained;                      // +0x3c
+    float mAmountDamageReceived;                      // +0x40
+    float mAmountEnergyUsed;                          // +0x44
+};
+struct cScenarioGoal
+{
+    int mType;                                        // +0x24 in goal
+    uint32_t mTargetID;                               // +0x28 in goal
+};
+struct cScenarioPlayModeGoal                         // 0x1ac bytes
+{
+    bool mIsCompleted;                                // +0x00
+    bool field_1;
+    int  mCount;                                      // +0x04
+    char field_8[0x1c];                               // +0x08
+    cScenarioGoal mGoal;                              // +0x24
+    int  field_2c;                                    // +0x2c
+    char pad[0x1ac - 0x30];
+};
+struct cScenarioClassRef                              // field_CC
+{
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual void* Cast(uint32_t typeID);              // +0x0c
+    char pad[0x18];
+    int  mClassID;                                    // +0x1c
+};
+struct cScenarioActEntry                             // 0x188 bytes
+{
+    int mType;                                        // +0x00
+    int mTargetID;                                    // +0x04
+    char pad[0x188 - 8];
+};
+struct cScenarioAct
+{
+    char pad[0x84];
+    cScenarioActEntry* mEntriesBegin;                 // +0x84
+    cScenarioActEntry* mEntriesEnd;                   // +0x88
+};
+struct cScenarioResource_s00f1_9e70
+{
+    char pad0[0x23c];
+    cScenarioAct* mActsBegin;                         // +0x23c
+    cScenarioAct* mActsEnd;                           // +0x240
+    char pad1[0x2c10 - 0x244];
+    void* mGoalEntriesBegin;                          // +0x2c10
+    void* mGoalEntriesEnd;                            // +0x2c14
+    char pad2[0x2c24 - 0x2c18];
+    uint32_t mGoalEntryIndex;                         // +0x2c24
+};
+struct cScenarioData_s00f1_9e70
+{
+    char pad0[0x10];
+    cScenarioResource_s00f1_9e70* mpResource;                    // +0x10
+    int GetActCount();                                // 0x00f3be30
+    cScenarioAct* GetAct(int actIndex);               // 0x00f3be60
+    void* FUN_00f3e8a0(int id);                       // 0x00f3e8a0
+    void* FUN_00f3d780(void* key);                    // 0x00f3d780
+    void* FUN_00f3e900(void* obj);                    // 0x00f3e900
+};
+struct cScenarioPanel { void FUN_00e15620();                              // 0x00e15620
+                        void FUN_00e154d0(int); };                        // 0x00e154d0
+struct cScenarioPanel2 { void FUN_00f18660(void* playMode); };             // 0x00f18660
+struct cScenarioDisplay
+{
+    char pad0[0x12c];
+    cScenarioPanel2* mpPanel;                          // +0x12c
+    char pad1[0x148 - 0x130];
+    cScenarioPanel* mpPanel2;                          // +0x148
+};
+struct cScenarioMode
+{
+    char pad0[0x6c];
+    cScenarioDisplay* mpScenarioDisplayStrategy;       // +0x6c
+    char pad1[4];
+    cScenarioData_s00f1_9e70* mpData;                             // +0x74
+    char pad2[0x58];
+    int  mPlayType;                                    // +0xd0
+};
+extern cScenarioMode* sScenarioMode;                   // 0x016c7aa4
+struct cActionTarget
+{
+    int mValue;
+    cActionTarget(void* ref);                          // 0x00ad7a30
+    ~cActionTarget();                                  // 0x00ad7ad0
+};
+struct cTriggerMgr
+{
+    char pad[0x3c4];
+    int  mCurrentTriggerType;                          // +0x3c4
+    void PostAction(uint32_t id, cActionTarget* target, int a);   // 0x00ae09b0
+    int  PostTrigger(uint32_t id, int a, int b, int c, int d, int e);   // 0x00ae0930
+};
+cTriggerMgr* __cdecl GetTriggerMgr();                  // 0x00b3d4d0
+struct IAudio
+{
+    PV8 PV8 PV4                                        // 0x00..0x34
+    virtual void SetA(uint32_t id);                    // 0x38
+    virtual void SetB(uint32_t id);                    // 0x3c
+    virtual void SetC(uint32_t id, int b);             // 0x40
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+    virtual void SetD(uint32_t id, void* pos);         // 0x50
+    virtual void v54();
+    virtual void SetE();                               // 0x58
+};
+IAudio* __cdecl GetSystemAT();                         // 0x00a206f0
+struct ICreatureComp84
+{
+    PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV                         // 0x00..0x80
+    virtual void SetSomething(int a, void* b, int c);          // 0x84
+};
+struct IGoalObj
+{
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual void* Query(uint32_t id);                  // +0x0c
+    char pad[0x38 - 0x10];
+    int mState;                                        // +0x38
+};
+struct IControlObj
+{
+    virtual void v00();
+    char pad[0x70 - 4];
+    int mState74;                                      // +0x70
+};
+void* __cdecl FUN_00b3d240();                          // 0x00b3d240
+bool __cdecl cScenarioPlayProgressBar_Pred(void*);     // 0x00f19e00
+void __cdecl ScenarioTutorials_CloseWindow();          // 0x00efcae0
+void __cdecl FUN_00572020(void* p, int b);             // 0x00572020
+int  __cdecl GetRecorderState_s00f1_9e70();                       // 0x00435e90
+void __cdecl KillSetiEffects(uint32_t id, int state);  // 0x00435ed0
+void __cdecl CalloutMessageBox(void* a, void* b);      // 0x00809db0
+void* __cdecl ObjectTemplateDB();                      // 0x0067cb40
+void __cdecl FUN_00f24190(void* a, void* b);           // 0x00f24190
+void* __cdecl FUN_00f238e0(void* key);                 // 0x00f238e0
+void __cdecl FUN_00f1a910();                           // 0x00f1a910
+int  __cdecl FUN_00ebfdc0(void* obj);                  // 0x00ebfdc0
+void __cdecl cScenarioPlayProgressBar_SetAttr(ObjHdr* target);   // 0x00f19530
+struct IScenarioHolder
+{
+    bool FUN_00f27730();                               // 0x00f27730
+    bool FUN_00f25330();                               // 0x00f25330
+};
+struct IObjTemplateDB
+{
+    PV8 PV8 PV4 PV2
+    virtual void FUN_58(void* key, int b);             // 0x58
+};
+struct IDateTime { void Set(int v); };                 // 0x0092e3d0
+namespace Simulator {
+class cScenarioPlayMode_s00f1_9e70
+{
+public:
+    virtual ~cScenarioPlayMode_s00f1_9e70();
+    virtual bool HandleMessage(uint32_t messageID, void* msg);
+
+    void UpdateGoalStatus();                                         // 0x00f1c4b0
+    void StartAdventure();                                           // 0x00f198d0
+    void OnTimerMessage();                                           // 0x00f1c2f0
+    void CompleteGoal(cScenarioPlayModeGoal* goal, void* by);        // 0x00f1ae10
+    void SetState(int state);                                        // 0x00f1aae0
+
+    void FUN_00f1a120(void* refA, cScenarioClassRef* refB);  // 0x00f1a120 (cScenarioPlayMode::FUN_00f1a120)
+    int  FUN_00f1a320(Avatar_s00f1_9e70* who, ObjHdr* target, char* outFlag);  // 0x00f1a320 (cScenarioPlayMode::FUN_00f1a320)
+    bool FUN_00f1a440(int idx, ObjHdr* target);  // 0x00f1a440 (cScenarioPlayMode::FUN_00f1a440)
+    bool FUN_00f1a640(int idx);  // 0x00f1a640 (cScenarioPlayMode::FUN_00f1a640)
+    bool FUN_00f1a7a0(int type, ObjHdr* target);  // 0x00f1a7a0 (cScenarioPlayMode::FUN_00f1a7a0)
+    void FUN_00f1a7f0(ObjHdr* target);  // 0x00f1a7f0 (cScenarioPlayMode::FUN_00f1a7f0)
+    void FUN_00f1a890();  // 0x00f1a890 (cScenarioPlayMode::FUN_00f1a890)
+    void FUN_00f1a970(int b);  // 0x00f1a970 (cScenarioPlayMode::FUN_00f1a970)
+
+    /* 04h */ void* mpRefVtbl;
+    /* 08h */ int   mnRefCount;
+    /* 0Ch */ cScenarioPlaySummary_s00f1_9e70 mSummary;
+    /* 54h */ char  mFailReason[0x10];
+    /* 64h */ cScenarioPlayModeGoal* mCurrentGoalsBegin;
+    /* 68h */ cScenarioPlayModeGoal* mCurrentGoalsEnd;
+    /* 6Ch */ char  pad6c[0x24];
+    /* 90h */ int   mCurrentPlayModeState;
+    /* 94h */ int   mCurrentEndCinematicState;
+    /* 98h */ Stopwatch_s00f1_9e70 mStopwatch;
+    /* B0h */ int   field_B0;
+    /* B4h */ int   field_B4;
+    /* B8h */ int   mCurrentActIndex;
+    /* BCh */ char  padbc[0x0c];
+    /* C8h */ void* field_C8;
+    /* CCh */ cScenarioClassRef* field_CC;
+    /* D0h */ int   field_D0;
+    /* D4h */ int   mCurrentDialogBoxIndex;
+    /* D8h */ int   field_D8;
+    /* DCh */ char  paddc[0x14];
+    /* F0h */ void* field_F0;
+    /* F4h */ void* field_F4;
+    /* F8h */ float mIntroFadeinTimer;
+    /* FCh */ bool  mIsIntroFadeinActive;
+};  // namespace Simulator
+}
+using Simulator::cScenarioPlayMode_s00f1_9e70;
+struct cGoalEntry { uint32_t mFlags; void* mKey; char pad[0x238 - 8]; };
+// ---- items of slice s00f19e70 end
+
+// ---- items of slice s00f1c690 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kIntroFadeinTime;     // 0x015ad948
+extern const float kSmallSizeLimit;      // 0x015ad958
+extern const float kMediumSizeLimit;     // 0x015ad95c
+namespace eastl {
+class allocator_s00f1_c690 { public: allocator_s00f1_c690() {} };
+}
+namespace eastl {
+struct string16_s00f1_c690
+{
+    wchar_t*  mpBegin;
+    wchar_t*  mpEnd;
+    wchar_t*  mpCapacity;
+    allocator_s00f1_c690 mAllocator;
+
+    string16_s00f1_c690(const wchar_t* p, const allocator_s00f1_c690& a = allocator_s00f1_c690())
+    {
+        mpBegin = 0;
+        mpEnd = 0;
+        mpCapacity = 0;
+        RangeInitialize(p);
+    }
+    ~string16_s00f1_c690() { DeallocateSelf(); }
+
+    uint length() const { return (uint)(mpEnd - mpBegin); }
+
+    void RangeInitialize(const wchar_t* p);             // 0x00579a90
+    void DeallocateSelf()
+    {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            operator_delete_array(mpBegin);
+    }
+};
+}
+namespace eastl {
+struct hash_node_s00f1_c690 { uint key; void* mValue; hash_node_s00f1_c690* mpNext; };
+}
+namespace eastl {
+struct hashtable_iterator
+{
+    hash_node_s00f1_c690*  mpNode;
+    hash_node_s00f1_c690** mpBucket;
+
+    hashtable_iterator() {}
+    hashtable_iterator(const hashtable_iterator& x) : mpNode(x.mpNode), mpBucket(x.mpBucket) {}
+
+    void increment()
+    {
+        mpNode = mpNode->mpNext;
+        while (mpNode == 0)
+            mpNode = *++mpBucket;
+    }
+    hashtable_iterator& operator++() { increment(); return *this; }
+};
+}
+namespace eastl {
+class hashtable_s00f1_c690
+{ public:
+    uint        mUnused;
+    hash_node_s00f1_c690** mpBucketArray;        // +0x04
+    uint        mnBucketCount;        // +0x08
+
+    hashtable_iterator begin();       // 0x00594410
+    hash_node_s00f1_c690* end_node() const { return mpBucketArray[mnBucketCount]; }
+};
+}
+struct cEffectObject                     // effect instance found through the model's effect table
+{
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+    virtual bool IsRunning();            // +0x10
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual void SetHidden(bool b);      // +0x2c
+    virtual void SetPaused(bool b);      // +0x30
+};
+struct cModelEffect { char pad[0x8c]; cEffectObject* mpEffect; };
+struct cModelWorld { char pad[0x17a0]; eastl::hashtable_s00f1_c690 mEffects; };
+struct cModelData
+{
+    char  pad0[0x80];
+    float mAlpha;                        // +0x80
+    char  pad1[0xf8];
+    cModelWorld* mpWorld;                // +0x17c
+    uint* mpGroupBits;                   // +0x180 (bitset of 64 groups at +0x44)
+};
+struct cCreatureData { char pad0[0x5fc]; uint mFlags; };
+struct cCreatureBase
+{
+    char pad0[0xb4c];
+    cCreatureData* mpData;               // +0xb4c
+    char pad1[4];
+    cModelData* mpModel;                 // +0xb54
+    uint mFlags;                         // +0xb58
+
+    void Hide();                         // 0x00c0f280
+    int  GetPosseCount();                // 0x00c0f4f0
+    void* GetPosseMember(int i);         // 0x00c0f8a0
+    bool IsCaptain();                    // 0x00c0c0e0
+};
+struct cGameNounManager_s00f1_c690 { cCreatureBase* GetAvatar(); };   // 0x00b1fdb0
+cGameNounManager_s00f1_c690* NounManager_s00f1_c690();                           // 0x00b3d300
+struct IModelManager
+{
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+    virtual uint GetGroupIndex(uint id, int flags);          // +0x28
+};
+IModelManager* ModelManager();                             // 0x0067dd80
+struct IRenderer { virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+                   virtual void v30(); virtual void v34(); virtual void* GetView(); };   // +0x38
+struct IApp { virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+              virtual IRenderer* GetRenderer(); };                                  // +0x50
+IApp* App_s00f1_c690();                                               // 0x0067dd10
+struct cCameraController
+{
+    void SetMinDistance(float f);        // 0x00d25ca0
+    void SetMaxDistance(float f);        // 0x00d20910
+};
+cCameraController* GetCameraController(void* view);       // 0x00b60a50
+struct cAchievementsController { void Trigger(uint id, int count); };   // 0x00676e90
+cAchievementsController* AchievementsController_s00f1_c690();        // 0x00675250
+struct cGameModeManager { void SetActiveModeByID(uint id); };           // 0x00b1e410
+cGameModeManager* GameModeManager();                      // 0x00b3d320
+struct cGameTimeManager_s00f1_c690 { void Resume(uint gateID); };                  // 0x00b32250
+cGameTimeManager_s00f1_c690* GameTimeManager_s00f1_c690();                      // 0x00b3d380
+struct cScenarioCinematicState { char pad[0x3c4]; int mResult; };
+cScenarioCinematicState* GetCinematicState();             // 0x00b3d4d0
+uint GetCurrentGameMode();                                // 0x00b5b800
+enum { kGameSpace = 0x01654c05, kScenarioMode = 0x01654c10 };
+struct cScenarioDialog                   // 0x44 bytes
+{
+    int  mType;                          // +0x00
+    struct Text { const wchar_t* Get(); } mText;   // +0x04 (0x00f26360)
+    char pad[0x38];
+    int  mResult;                        // +0x40
+};
+struct DialogVector                     // eastl::vector<cScenarioDialog>
+{
+    cScenarioDialog* mpBegin;
+    cScenarioDialog* mpEnd;
+    cScenarioDialog* mpCapacity;
+    uint mAllocator;
+    uint size() const { return (uint)(mpEnd - mpBegin); }
+    cScenarioDialog& operator[](uint n) { return mpBegin[n]; }
+};
+struct cScenarioAct_s00f1_c690 { char pad[0x18]; DialogVector mDialogs; };
+cScenarioAct_s00f1_c690* GetScenarioAct(void* resource, int actIndex, uint classID);       // 0x00f264d0
+struct cScenarioData_s00f1_c690
+{
+    char pad[0x10];
+    void* mpResource;
+    uint GetActCount();                                                         // 0x00f3be30
+    cScenarioAct_s00f1_c690* GetAct(int actIndex, uint classID) { return GetScenarioAct(mpResource, actIndex, classID); }
+};
+struct ICastObject { virtual void v00(); virtual void v04(); virtual void v08(); char pad[0x18];
+                     uint mClassID; };   // +0x1c
+struct cScenarioClassRef_s00f1_c690                 // field_CC
+{
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual void* Cast(uint typeID);     // +0x0c
+    char pad[0x18];
+    uint mClassID;                       // +0x1c
+};
+struct cScenarioDisplay_s00f1_c690 { char pad[0x12c]; struct Panel { void Close(void* playMode); }* mpPanel;   // 0x00f18660
+                          void ShowUI(bool b); };                                                 // 0x00f0e4a0
+struct cScenarioMode_s00f1_c690
+{
+    char pad0[0x6c];
+    cScenarioDisplay_s00f1_c690* mpScenarioDisplayStrategy;   // +0x6c
+    char pad1[4];
+    cScenarioData_s00f1_c690* mpData;                         // +0x74
+    char pad2[0x58];
+    int  mPlayType;                                // +0xd0 (0 = editor test, 1 = ..., 2 = real play)
+
+    void OnEditorTestFinished();                   // 0x00ef1360
+    void OnFinished1();                            // 0x00ef00b0
+    void OnRestart();                              // 0x00ef1400
+};
+extern cScenarioMode_s00f1_c690* sScenarioMode_s00f1_c690;               // 0x016c7aa4
+struct cCombatant
+{
+virtual void v00();
+virtual void v04();
+    virtual cCreatureBase* GetOwner(int i);        // +0x08
+    virtual ICastObject* GetCastInfo();            // +0x0c
+    int GetDamageState();                          // 0x008e7f80
+};
+struct cGameObjectEffect { virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+                           virtual void Stop(int flags); };   // +0x10
+struct cPosseMemberB { char pad[0x14]; cGameObjectEffect* mpEffect; };
+struct IPosseHolder { virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+                      virtual void Dismiss(int flags); };   // +0x60
+IPosseHolder*  GetPosseHolder(void* member);       // 0x00d2ec10
+cPosseMemberB* GetPosseEffectHolder(void* member); // 0x00ae66d0
+struct cBarrel { char pad[0x38]; int mType; };
+cBarrel* AsBarrel(cCombatant* c);                  // 0x00ec0250
+cCreatureBase* AsCreature(void* c);                // 0x00ae33b0
+void* AsVehicle(cCombatant* c);                    // 0x00ae3350
+void* AsBuilding(cCombatant* c);                   // 0x00f191e0
+cCreatureBase* GetClassCreature(cScenarioClassRef_s00f1_c690* ref);   // 0x00f19200
+struct cBoundingBox { char pad[8]; float mMinZ; char pad1[8]; float mMaxZ; };
+struct cScenarioModel
+{
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+    virtual void v64();
+    virtual cBoundingBox* GetBoundingBox();        // +0x68
+};
+cScenarioModel* GetClassModel(cScenarioClassRef_s00f1_c690* ref);   // 0x00b18e00
+struct cScenarioGoal_s00f1_c690 { int mType; uint mTargetID; };
+struct cScenarioPlayModeGoal_s00f1_c690             // 0x1ac bytes
+{
+    bool mIsCompleted;                   // +0x00
+    bool field_1;
+    int  mCount;                         // +0x04
+    char field_8[0x1c];                  // +0x08 eastl::map<uint32_t, int>
+    cScenarioGoal_s00f1_c690 mGoal;                 // +0x24 (type at +0x24, target at +0x28)
+    char pad[0x1ac - 0x2c];
+};
+struct cScenarioPlaySummary_s00f1_c690
+{
+    int   mNumCreaturesKilled;           // +0x00
+    int   mNumBuildingsDestroyed;        // +0x04
+    int   mNumVehiclesDestroyed;         // +0x08
+    int   mNumCastMembersDefended;       // +0x0c
+    int   mNumCreaturesBefriended;       // +0x10
+    int   mNumObjectsCollected;          // +0x14
+    int   field_18;
+    int   mNumGoalsCompleted;            // +0x1c
+    int   mNumDeaths;                    // +0x20
+    int   mNumPosseMembersLost;          // +0x24
+    uint  mAmountDamageDealt;            // +0x28
+    int   mNumTimesUsedJetPack;          // +0x2c
+    int   mNumTimesUsedSprint;           // +0x30
+    int   mNumBarrelsDestroyed;          // +0x34
+    int   mNumCastMembersTalkedTo;       // +0x38
+    float mAmountHealthRegained;         // +0x3c
+    float mAmountDamageReceived;         // +0x40
+    float mAmountEnergyUsed;             // +0x44
+};
+struct Message { char pad[8]; union { int mValue; float mAmount; cCombatant* mpVictim; }; int pad1;
+                 cCombatant* mpAttacker; };
+namespace Simulator {
+class cScenarioPlayMode_s00f1_c690
+{
+public:
+    virtual ~cScenarioPlayMode_s00f1_c690();
+    virtual bool HandleMessage(uint messageID, void* msg);
+
+    void UpdateGoalStatus();                                         // 0x00f1c4b0
+    void StartAdventure();                                           // 0x00f198d0
+    void OnTimerMessage();                                           // 0x00f1c2f0
+    void CompleteGoal(cScenarioPlayModeGoal_s00f1_c690* goal, cCreatureBase* by);   // 0x00f1ae10
+    void SetState(int state);                                        // 0x00f1aae0
+
+    /* 04h */ void* mpRefVtbl;
+    /* 08h */ int   mnRefCount;
+    /* 0Ch */ cScenarioPlaySummary_s00f1_c690 mSummary;
+    /* 54h */ char  mFailReason[0x10];
+    /* 64h */ cScenarioPlayModeGoal_s00f1_c690* mCurrentGoalsBegin;
+    /* 68h */ cScenarioPlayModeGoal_s00f1_c690* mCurrentGoalsEnd;
+    /* 6Ch */ char  pad6c[0x24];
+    /* 90h */ int   mCurrentPlayModeState;
+    /* 94h */ int   mCurrentEndCinematicState;
+    /* 98h */ char  pad98[0x20];
+    /* B8h */ int   mCurrentActIndex;
+    /* BCh */ char  padbc[0x10];
+    /* CCh */ cScenarioClassRef_s00f1_c690* field_CC;
+    /* D0h */ int   field_D0;
+    /* D4h */ int   mCurrentDialogBoxIndex;
+    /* D8h */ int   field_D8;
+    /* DCh */ char  paddc[0x1c];
+    /* F8h */ float mIntroFadeinTimer;
+    /* FCh */ bool  mIsIntroFadeinActive;
+};
+}
+namespace Simulator {
+static inline bool Bit(uint v, uint n) { return (v >> n) & 1; }
+}
+namespace Simulator {
+static inline uint* GroupWord(cModelData* model, uint idx) { return &model->mpGroupBits[(idx >> 5) + 0x11]; }
+}
+namespace Simulator {
+static __forceinline DialogVector& CurrentDialogs(cScenarioPlayMode_s00f1_c690* p)
+{
+    return sScenarioMode_s00f1_c690->mpData->GetAct(p->mCurrentActIndex, p->field_CC->mClassID)->mDialogs;
+}
+}
+// ---- items of slice s00f1c690 end
+
+// ---- items of slice s00f1ef90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void*   DAT_016c7aa4;
+extern int     DAT_016c826c;
+extern int     DAT_016c8270;
+extern int     DAT_016c8274;
+extern int     DAT_016c82bc;
+extern int     DAT_016c82c0;
+extern float   DAT_0148c2b8;                    // FLT_MAX
+extern uint8_t DAT_01601760;                    // EA::Random RNG
+extern const char STR_0148c304[];               // "0 1 1 1"
+struct Vector3 { float x, y, z; };
+struct HashIt { void* node; void** bucket; };
+struct cScenarioPlayProgressBar_s00f1_ef90
+{
+    // ---- defined in this slice ----
+    void  FUN_00f1ef90(int index, char flag);
+    void  FUN_00f1f180();
+    void  FUN_00f1f3b0();
+    void  FUN_00f1f4e0(int index);
+    void  FUN_00f1f600();
+    float FUN_00f1aa10(int flag, void* p);
+
+    // ---- external collaborators (never defined here) ----
+    void  FUN_00f1ecf0();
+    void  FUN_00f1b450();
+    void  FUN_00f1e6a0();
+    void  FUN_00f1e020();
+    void  FUN_00f1c4b0();
+    void  FUN_00f1aae0(int);
+    bool  FUN_00f1c030(int, int, int);
+    void  FUN_00f1ae10(void*, void*, void*);
+    void  FUN_00f19ac0(void*, int);
+    void  FUN_00f1de30(int);
+    void  FUN_00676e90();
+    void* FUN_00f26360(int);
+    bool  FUN_00f278b0();
+    void  FUN_00f0e6c0();
+    void  FUN_00f114a0();
+    void  FUN_00f347e0();
+    void  FUN_00e148d0();
+    void  FUN_00f40d00(int, void*);
+    void  FUN_00f46410(int, int, int);
+    void  FUN_00f45fd0(int, int, int);
+    HashIt FUN_00594410();
+    void  FUN_00a18440(void*, void*);
+    void* FUN_00e5c780(void*, void*);
+    void* FUN_00f3be60(int);
+    int   FUN_00f3be30();
+    int   FUN_00f3e8a0(int);
+    bool  FUN_00f3c870(void*, void*, float, int);
+};
+struct cPlanetModel { void MaskContinentBits(); };
+struct cScreen
+{
+    void setX();                                    // 0x00ad7e90
+};
+struct cTriggerMgr_s00f1_ef90  { void PostTrigger(int, int, int, int, int); };
+struct cGameNounManager_s00f1_ef90
+{
+    void* GetAvatar();                              // 0x00b1fdb0
+};
+struct cRandomLCG
+{
+    unsigned RandomUint32Uniform(unsigned);         // 0x00a68fb0
+};
+struct PtrVec_s00f1_ef90
+{
+    void* begin;
+    void* end;
+    void* cap;
+    void  Destroy();                    // 0x00ae6970
+};
+struct WString_s00f1_ef90
+{
+    void assign(const wchar_t*, const wchar_t*);   // 0x00423650
+};
+struct cString_s00f1_ef90
+{
+    void  Construct();                  // 0x006b5060
+    bool  Load(unsigned, unsigned, int);// 0x006b54b0
+    const wchar_t* GetText();           // 0x006b55c0
+    void  Destroy();                    // 0x006b5240
+};
+void  FUN_00f1ad00(int);                        // 0x00f1ad00
+void* FUN_00572020_s00f1_ef90(void*, int);                 // 0x00572020
+void* FUN_00eed8c0(void*);                      // 0x00eed8c0
+void* SP_AudioSystem();                         // 0x0067cb00
+void  FUN_00657240(void*, void*, void*);        // 0x00657240
+void  FUN_006572b0(void*);                      // 0x006572b0
+void  FUN_00dd1c50(unsigned, void*);            // 0x00dd1c50
+void  RecordEvent4(unsigned, unsigned, float, unsigned);  // 0x00435f40
+void  SetSoundSymbol(unsigned, unsigned, const char*);    // 0x00572070
+void* FUN_0067de40_s00f1_ef90();                           // 0x0067de40
+void* __stdcall FUN_00675250_s00f1_ef90(unsigned, int);    // 0x00675250
+void* SP_ModelManager();                        // 0x0067dd80
+void* __stdcall SP_PlanetModel(int);            // 0x00b3d350
+void* __stdcall GetTriggerMgr(int);             // 0x00b3d4d0
+void  FUN_00f195a0(void*, void*);               // 0x00f195a0
+int   FUN_00f3b2f0(int, void*, void*);          // 0x00f3b2f0
+// ---- items of slice s00f1ef90 end
 
 // @ 0x00f11c30
 void cCreatureModeInputStrategy::FUN_00f11c30()
@@ -4699,7 +5596,7 @@ bool cSPUIProgress::DoMessage(uint32_t msg, int* data)
 			LayoutObj* layout = mpLayout;
 			int arg = mCountD0 + 0x7d10de0;
 			FUN_00806a60(layout->FindWindowByID(0x7c55300, 1), layout, arg, -1);
-			*(uint32_t*)(*(char**)(g_16c7aa4 + 0x7c) + 0x20) = mCountD0;
+			*(uint32_t*)(*(char**)((char*)g_16c7aa4 + 0x7c) + 0x20) = mCountD0;
 			cString_s00f1_70c0 a;
 			a.ctor(0x623d2fc0, 0x7ceb16a, 0);
 			FUN_00e12fc0(mpLayout->FindWindowByID(0x7c79b20, 1), (void*)a.GetText());
@@ -5118,7 +6015,7 @@ void UI::cScenarioPlayProgressBar::Clear()
 void UI::cScenarioPlayProgressBar::Update(uint deltaMS)
 {
     float d = mTarget - mCur;
-    if (1.5258789e-05f < fabsf(d)) {
+    if (1.5258789e-05f < fabsf_(d)) {
         float step = (float)deltaMS * 0.0005f;
         float zero = 0.0f;
         if (d > zero)
@@ -5391,6 +6288,26 @@ struct Noun_s00f1_95a0 {
     virtual void* Cast(uint32_t id);               // +0xb8
 };
 extern "C" char g_137e8e0[];                       // 0x0137e8e0
+
+// @ 0x00f19530
+namespace UI {
+void __cdecl cScenarioPlayProgressBar_SetAttr(void* object)
+{
+    if (object) {
+        ScenarioEffectTarget* target =
+            ((ScenarioEffectTarget* (__thiscall*)(void*, unsigned int))
+             (*(void***)object)[3])(object, 0x01186577);
+        if (target && !target->IsEffectActive(0x07b0f76d)) {
+            float radius = ((float (__thiscall*)(void*))
+                            (*(void***)target)[0x70 / 4])(target);
+            unsigned int resource = radius < 10.0f ? 0x389be214 : 0x6a18548c;
+            target->CreateEffect(resource, 0, 0x07b0f76d);
+            target->SetEffectScaled(0x07b0f76d, 1);
+        }
+    }
+}
+}  // namespace UI
+
 // @ 0x00f195a0
 namespace UI {
 void __cdecl cScenarioPlayProgressBar_Link(void* noun, void* a)
@@ -5550,8 +6467,738 @@ bool __cdecl cScenarioPlayProgressBar_Pred(void* a)
 }
 }  // namespace UI
 
+// @ 0x00f19e70
+void __cdecl FUN_00f19e70(void* target, bool* outA, bool* outB)
+{
+    cGameNounManager* nouns = NounManager();
+    Avatar_s00f1_9e70* avatar = nouns->GetAvatar();
+
+    ISpatial* targetSp = 0;
+    if (target)
+        targetSp = (ISpatial*)((ObjHdr*)target)->Query(0x1186577);
+
+    BBox boxA;
+    BBox* a = avatar->mSpatial.GetBBox(&boxA);
+    Vec3 centerA;
+    centerA.x = (a->mMax.x + a->mMin.x) * g_1471064;
+    centerA.y = (a->mMax.y + a->mMin.y) * g_1471064;
+    centerA.z = (a->mMax.z + a->mMin.z) * g_1471064;
+
+    BBox boxB;
+    BBox* b = targetSp->GetBBox(&boxB);
+    Vec3 centerB;
+    centerB.x = (b->mMax.x + b->mMin.x) * g_1471064;
+    centerB.y = (b->mMax.y + b->mMin.y) * g_1471064;
+    centerB.z = (b->mMax.z + b->mMin.z) * g_1471064;
+
+    float dx = centerA.x - centerB.x;
+    float dy = centerA.y - centerB.y;
+    float dz = centerA.z - centerB.z;
+    float dist = sqrtf(dx * dx + (dy * dy + dz * dz));
+    float d = dist - avatar->mSpatial.GetRadius();
+    d = d - targetSp->GetRadius();
+
+    if (g_15ad940 > d)
+    {
+        int selected = 0;
+        void* mgr = FUN_00b3d240();
+        void* vt = *(void**)mgr;
+        typedef bool (__thiscall* Fn)(void*, Vec3*, Vec3*, bool (__cdecl*)(void*), int*, BBox*, int);
+        Fn fn = (Fn)((void**)vt)[0x50 / 4];
+        if (fn(mgr, &centerA, &centerB, cScenarioPlayProgressBar_Pred, &selected, &boxA, 1)
+            && (void*)selected == target)
+        {
+            *outA = true;
+            *outB = d < g_15ad93c;
+            if (selected)
+            {
+                void* obj = (void*)selected;
+                void* ovt = *(void**)obj;
+                ((void (__thiscall*)(void*))((void**)ovt)[1])(obj);
+            }
+            return;
+        }
+        if (selected)
+        {
+            void* obj = (void*)selected;
+            void* ovt = *(void**)obj;
+            ((void (__thiscall*)(void*))((void**)ovt)[1])(obj);
+        }
+    }
+    *outA = false;
+    *outB = false;
+}
+
+// @ 0x00f1a070
+bool __stdcall FUN_00f1a070(ObjHdr* target)
+{
+    Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+    ISpatial* targetSp;
+    if (target)
+        targetSp = (ISpatial*)target->Query(0x1186577);
+    else
+        targetSp = 0;
+    Vec3* tp = targetSp->GetPos();
+    Vec3* ap = avatar->mSpatial.GetPos();
+
+    float dx = ap->x - tp->x;
+    float dy = ap->y - tp->y;
+    float dz = ap->z - tp->z;
+    return sqrtf((dz * dz + dx * dx) + dy * dy)
+           < avatar->mSpatial.GetRadius() + targetSp->GetRadius() + g_15ad93c;
+}
+
+// @ 0x00f1a120
+void Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a120(void* refA, cScenarioClassRef* refB)
+{
+    ObjHdr* target = (ObjHdr*)refB;
+    if (target)
+    {
+        ISpatial* sp = (ISpatial*)target->Query(0x1186577);
+        if (sp)
+        {
+            IAudio* audio = GetSystemAT();
+            if (audio)
+            {
+                audio->SetA(0x7f43dc0);
+                audio->SetD(0x39e41ea, sp->GetPos());
+                audio->SetC(0x39e3c9f, 1);
+                audio->SetE();
+            }
+        }
+    }
+    field_C8 = refA;
+    field_CC = refB;
+
+    void* classRef = 0;
+    if (target)
+        classRef = target->Query(0x1186577);
+
+    cActionTarget action(classRef);
+    GetTriggerMgr()->PostAction(0x57c38207, &action, 0);
+
+    Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+    ObjHdr* comp = 0;
+    if (avatar)
+        comp = (ObjHdr*)((ObjHdr*)avatar)->Query(0xce9f6639);
+
+    void* arg = 0;
+    if (target)
+        arg = target->Query(0x13f94d4);
+    ((ICreatureComp84*)comp)->SetSomething(1, arg, 0);
+
+    ICreatureComp84* other = 0;
+    if (target)
+        other = (ICreatureComp84*)target->Query(0xce9f6639);
+    if (other)
+        other->SetSomething(1, (char*)avatar + 0x5a8, 0);
+
+    mCurrentDialogBoxIndex = -1;
+    field_D8 = GetTriggerMgr()->PostTrigger(0x148c2c8, 1, 0, 0, 0, 0);
+
+    int mode = 0;
+    if (target)
+    {
+        if (target->Query(0x0e9cb8ba))
+            goto done;
+        if (target->Query(0x137e8e0))
+        {
+            mode = 1;
+            goto done;
+        }
+    }
+    if (other)
+    {
+        if (((ICreatureComp*)other)->Flag388())
+        {
+            mode = 2;
+            goto done;
+        }
+        ICreatureData* data = *(ICreatureData**)((char*)other + 0xb4c);
+        mode = (data->mFlags & 0x200) ? 3 : 4;
+    }
+done:
+    GetTriggerMgr()->mCurrentTriggerType = mode;
+    ++mSummary.mNumCastMembersTalkedTo;
+    field_D0 = mode;
+}
+
+// @ 0x00f1a320
+int Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a320(Avatar_s00f1_9e70* who, ObjHdr* target, char* outFlag)
+{
+    int found = -1;
+    int first = who->Count();
+    int i = first;
+    do
+    {
+        if (i == -1)
+            return first;
+        for (;;)
+        {
+            if (found != -1)
+                return found;
+            ObjHdr* obj = who->At(i);
+            void* classRef = 0;
+            if (obj)
+                classRef = obj->QueryClassId(0x17f243b);
+
+            unsigned count = (unsigned)(mCurrentGoalsEnd - mCurrentGoalsBegin);
+            unsigned n = 0;
+            if (count != 0)
+            {
+                for (;;)
+                {
+                    cScenarioPlayModeGoal* goal = mCurrentGoalsBegin + n;
+                    if (goal->mGoal.mType == 9 && !goal->mIsCompleted)
+                    {
+                        int* a = ((IClassId*)classRef)->FUN_006c0200();
+                        if (a)
+                        {
+                            if (goal->mGoal.mTargetID == *a)
+                            {
+                                int* b = ((IClassId*)target)->FUN_006c0200();
+                                if (b)
+                                {
+                                    if (goal->field_2c == *b)
+                                    {
+                                        found = i;
+                                        if (outFlag)
+                                            *outFlag = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ++n;
+                    if (n >= count)
+                        break;
+                }
+            }
+            if (found != -1)
+                continue;
+            i = who->Next(i);
+            if (i == -1)
+                return first;
+        }
+    } while (true);
+}
+
+// @ 0x00f1a440
+bool Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a440(int idx, ObjHdr* target)
+{
+    Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+    ObjHdr* obj = avatar->At(idx);
+    void* ref = 0;
+    if (obj)
+        ref = obj->QueryClassId(0x17f243b);
+    int* a = ((IClassId*)ref)->FUN_006c0200();
+    if (!a)
+        return false;
+    int id1 = *a;
+
+    int* b = ((IClassId*)target)->FUN_006c0200();
+    if (!b)
+        return false;
+    int id2 = *b;
+
+    cScenarioData_s00f1_9e70* data = sScenarioMode->mpData;
+    void* holder = data->FUN_00f3e8a0(id2);
+    if (holder && !((IScenarioHolder*)holder)->FUN_00f25330())
+        return false;
+
+    bool typeMatch = false;
+    uint32_t type = target->GetTypeID();
+    if (type != 0x70703b3)
+    {
+        type = target->GetTypeID();
+        typeMatch = type == 0x18c6de8;
+    }
+    else
+        typeMatch = true;
+
+    unsigned count = (unsigned)(mCurrentGoalsEnd - mCurrentGoalsBegin);
+    bool sawTarget = false;
+    bool sawPair = false;
+    cScenarioPlayModeGoal* goal = mCurrentGoalsBegin;
+    for (unsigned n = 0; n < count; ++n, ++goal)
+    {
+        if (((goal->mGoal.mType == 9 && !goal->mIsCompleted)
+             || (goal->mGoal.mType == 8 && goal->mIsCompleted))
+            && goal->mGoal.mTargetID == id1)
+        {
+            sawTarget = true;
+            if (goal->field_2c == id2)
+                sawPair = true;
+        }
+    }
+    if (sawTarget)
+    {
+        if (!sawPair)
+            return false;
+        return true;
+    }
+
+    bool result = false;
+    if (!typeMatch)
+    {
+        result = true;
+        int actIndex = mCurrentActIndex + 1;
+        int actCount = data->GetActCount();
+        while (actIndex < actCount)
+        {
+            cScenarioAct* act = data->GetAct(actIndex);
+            unsigned n = (unsigned)(act->mEntriesEnd - act->mEntriesBegin);
+            cScenarioActEntry* e = act->mEntriesBegin;
+            for (unsigned i = 0; i < n; ++i, ++e)
+            {
+                if ((e->mType == 9 || e->mType == 8) && e->mTargetID == id1)
+                {
+                    result = false;
+                    i = n;
+                    break;
+                }
+            }
+            ++actIndex;
+            actCount = data->GetActCount();
+        }
+    }
+    return result;
+}
+
+// @ 0x00f1a640
+bool Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a640(int idx)
+{
+    bool result = true;
+    Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+    ObjHdr* obj = avatar->At(idx);
+    void* ref = 0;
+    if (obj)
+        ref = obj->QueryClassId(0x17f243b);
+    int* a = ((IClassId*)ref)->FUN_006c0200();
+    if (!a)
+        return true;
+    int id = *a;
+
+    cScenarioData_s00f1_9e70* data = sScenarioMode->mpData;
+    void* holder = data->FUN_00f3e8a0(id);
+    if (holder && ((IScenarioHolder*)holder)->FUN_00f27730())
+        return false;
+
+    unsigned count = (unsigned)(mCurrentGoalsEnd - mCurrentGoalsBegin);
+    cScenarioPlayModeGoal* goal = mCurrentGoalsBegin;
+    for (unsigned n = 0; n < count; ++n, ++goal)
+    {
+        if (goal->mGoal.mTargetID != id)
+            continue;
+        if (goal->mGoal.mType == 9 && !goal->mIsCompleted)
+            return false;
+        if (goal->mGoal.mType == 8 && goal->mIsCompleted)
+            return false;
+    }
+
+    int actIndex = mCurrentActIndex + 1;
+    int actCount = data->GetActCount();
+    while (actIndex < actCount)
+    {
+        cScenarioAct* act = data->GetAct(actIndex);
+        unsigned n = (unsigned)(act->mEntriesEnd - act->mEntriesBegin);
+        cScenarioActEntry* e = act->mEntriesBegin;
+        for (unsigned i = 0; i < n; ++i, ++e)
+        {
+            if ((e->mType == 9 || e->mType == 8) && e->mTargetID == id)
+            {
+                result = false;
+                i = n;
+                break;
+            }
+        }
+        ++actIndex;
+        actCount = data->GetActCount();
+    }
+    return result;
+}
+
+// @ 0x00f1a7a0
+bool Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a7a0(int type, ObjHdr* target)
+{
+    if (target && ((cScenarioClassRef*)target)->mClassID >= 0)
+    {
+        for (cScenarioPlayModeGoal* g = mCurrentGoalsBegin; g != mCurrentGoalsEnd; ++g)
+        {
+            if (!g->mIsCompleted && g->mGoal.mType == type
+                && ((cScenarioClassRef*)target)->mClassID == g->mGoal.mTargetID)
+                return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00f1a7f0
+void Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a7f0(ObjHdr* target)
+{
+    if (target)
+    {
+        ObjHdr* comp = (ObjHdr*)target->Query(0x1186577);
+        if (comp)
+        {
+            target->FUN_00b18530();
+            int id = *((IClassId*)target)->FUN_006c0200();
+
+            bool matched = false;
+            cScenarioPlayModeGoal* g = mCurrentGoalsBegin;
+            if (g != mCurrentGoalsEnd)
+            {
+                do
+                {
+                    if (matched)
+                        break;
+                    if (g->mGoal.mTargetID == id)
+                    {
+                        if (g->mGoal.mType == 7)
+                            matched = true;
+                        else if (g->mGoal.mType == 8)
+                            matched = ((((ICreatureFlags50*)comp)->mFlags >> 8) & 1) == 0;
+                    }
+                    ++g;
+                } while (g != mCurrentGoalsEnd);
+            }
+            if (matched)
+                cScenarioPlayProgressBar_SetAttr(target);
+            else
+                ((IClassId*)comp)->FUN_00c8ad30(0x7b0f76d, 1);
+        }
+    }
+}
+
+// @ 0x00f1a890
+void Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a890()
+{
+    int* vec = (int*)NounManager()->GetItemID();
+    int count = (vec[1] - vec[0]) >> 2;
+    for (int i = 0; i < count; ++i)
+    {
+        ObjHdr* item = ((ObjHdr**)vec[0])[i];
+        int anim;
+        if (mCurrentPlayModeState == 5)
+            anim = 0x7ba46b7;
+        else if (mCurrentPlayModeState == 6)
+            anim = 0x7b66a9b + (field_B0 ? 0x3dc23 : 0);
+        else
+            anim = FUN_00ebfdc0(item);
+        ((ICreatureAnim*)item)->PlayAnimation(anim, 1, -1);
+    }
+}
+
+// @ 0x00f1a910
+void __cdecl FUN_00f1a910()
+{
+    Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+    if (avatar)
+        ((ICreatureAnim*)((char*)avatar + 0x5a8))->FUN_00bfc470(1);
+
+    void* vecP = NounManager()->GetItemID();
+    int* vec = (int*)vecP;
+    int count = (vec[1] - vec[0]) >> 2;
+    for (int i = 0; i < count; ++i)
+    {
+        ObjHdr* item = ((ObjHdr**)vec[0])[i];
+        if (item)
+            ((ICreatureAnim*)((char*)item + 0x5a8))->FUN_00bfc470(1);
+    }
+}
+
+// @ 0x00f1a970
+void Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a970(int b)
+{
+    (void)b;
+    if (sScenarioMode->mPlayType == 1 || sScenarioMode->mPlayType == 2)
+    {
+        void* dt = (char*)sScenarioMode->mpData->mpResource + 8;
+        int local[5];
+        local[2] = -1;
+        local[3] = 0x7fffffff;
+        local[4] = 0x7fffffff;
+        if (*(int*)dt)
+        {
+            FUN_00eed9c0(dt, &local[2]);
+            ((IDateTime*)&local[0])->Set(1);
+            int v = 0;
+            if (local[3] != 0x7fffffff)
+                v = local[3];
+            local[3] = v + 1;
+            local[2] = local[0];
+            FUN_00eeda20(dt, &local[2]);
+            ((IObjTemplateDB*)ObjectTemplateDB())->FUN_58(dt, 1);
+        }
+    }
+}
+
+// @ 0x00f1aa10
+float __stdcall FUN_00f1aa10(char flag, ObjHdr* obj)
+{
+    if (obj)
+    {
+        float a, b;
+        if (flag)
+        {
+            a = g_15ad92c;
+            b = g_15ad930;
+        }
+        else
+        {
+            a = g_15ad934;
+            b = g_15ad938;
+        }
+        BBox* box = ((ISpatial*)obj)->GetBBoxAt68();
+        float dx = box->mMax.x - box->mMin.x;
+        float dy = box->mMax.y - box->mMin.y;
+        float dz = box->mMax.z - box->mMin.z;
+        float dist = sqrtf(dz * dz + (dx * dx + dy * dy));
+        float t = __max(dist, g_15ad924);
+        t = __min(t, g_15ad928);
+        return (t - g_15ad924) / (g_15ad928 - g_15ad924) * (b - a) + a;
+    }
+    return 0.0f;
+}
+
+// @ 0x00f1aae0
+void Simulator::cScenarioPlayMode_s00f1_9e70::SetState(int state)
+{
+    int old = mCurrentPlayModeState;
+    if (old == state)
+        return;
+    if (state == 4 && (old == 6 || old == 5))
+        return;
+    mCurrentPlayModeState = state;
+
+    switch (state)
+    {
+    case 4:
+        {
+            cGameTimeManager_s00f1_9e70* timeManager = GameTimeManager_s00f1_9e70();
+            timeManager->IncPauseGate(0x4bf38a7);
+            CalloutMessageBox(&g_15ada60, &g_15ada6c);
+        }
+        return;
+    case 5:
+        FUN_00f1a910();
+        FUN_00f1a970(1);
+        {
+            Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+            if (avatar)
+                avatar->SetSprinting(0);
+        }
+        if (field_F0)
+        {
+            FUN_00572020(field_F0, 0);
+            field_F0 = 0;
+            field_F4 = 0;
+        }
+        if (old == 3)
+        {
+            cScenarioPanel* panel = sScenarioMode->mpScenarioDisplayStrategy->mpPanel2;
+            ScenarioTutorials_CloseWindow();
+            panel->FUN_00e154d0(1);
+            FUN_00f1a890();
+            mStopwatch.Restart();
+            mCurrentEndCinematicState = 0;
+            int recorderState = GetRecorderState_s00f1_9e70();
+            KillSetiEffects(0xd8329acc, recorderState);
+        }
+        return;
+    case 6:
+        {
+            bool b = (sScenarioMode->mPlayType == 1 || sScenarioMode->mPlayType == 2);
+            FUN_00f1a910();
+            FUN_00f1a970(0);
+            Avatar_s00f1_9e70* avatar = NounManager()->GetAvatar();
+            if (avatar)
+                avatar->SetSprinting(0);
+            if (field_F0)
+            {
+                FUN_00572020(field_F0, 0);
+                field_F0 = 0;
+                field_F4 = 0;
+            }
+            ScenarioTutorials_CloseWindow();
+            if (old == 3 || old == 1 || (!b && old == 0))
+            {
+                FUN_00f1a890();
+                mStopwatch.Restart();
+                mCurrentEndCinematicState = 0;
+                sScenarioMode->mpScenarioDisplayStrategy->mpPanel2->FUN_00e15620();
+                if (!field_B0)
+                {
+                    int recorderState = GetRecorderState_s00f1_9e70();
+                    KillSetiEffects(0x789b782e, recorderState);
+                }
+                else
+                {
+                    int recorderState = GetRecorderState_s00f1_9e70();
+                    KillSetiEffects(0xf7f59104, recorderState);
+                }
+            }
+            else if (old == 4)
+            {
+                sScenarioMode->mpScenarioDisplayStrategy->mpPanel->FUN_00f18660(this);
+                mCurrentEndCinematicState = 2;
+            }
+        }
+        return;
+    default:
+        return;
+    }
+}
+
+// @ 0x00f1ad00
+void __cdecl FUN_00f1ad00(int param)
+{
+    cScenarioResource_s00f1_9e70* res = sScenarioMode->mpData->mpResource;
+    cGoalEntry* cur;
+    if (res->mGoalEntryIndex < 0x3fffffffu)
+        cur = (cGoalEntry*)((char*)res->mGoalEntriesBegin + res->mGoalEntryIndex * 0x238);
+    else
+        cur = (cGoalEntry*)res->mGoalEntriesEnd;
+
+    if ((void*)cur == res->mGoalEntriesEnd)
+        return;
+
+    for (;;)
+    {
+        void* key = &cur->mKey;
+        void* obj = sScenarioMode->mpData->FUN_00f3d780(key);
+        if (obj)
+        {
+            void* holder = sScenarioMode->mpData->FUN_00f3e900(obj);
+            if (holder)
+            {
+                void* comp = ((IGoalObj*)obj)->Query(0x175cdc9);
+                bool b9 = comp && ((IGoalObj*)comp)->mState == 9;
+                IControlObj* ctl = (IControlObj*)holder;
+                bool b10 = *(int*)(param * 0x4e0 + 0x4a4 + ctl->mState74) < 0;
+                if (b9)
+                {
+                    if (b10)
+                        NounManager()->RemoveNoun(obj);
+                }
+                else if (!b10)
+                {
+                    void* e = FUN_00f238e0(key);
+                    *(void**)((char*)e + 0x18) = key;
+                    *(int*)((char*)e + 0x1c) = *(int*)key;
+                    FUN_00f24190(e, obj);
+                }
+            }
+        }
+        for (;;)
+        {
+            uint32_t flags = cur->mFlags;
+            cur = (cGoalEntry*)((char*)cur + 0x238);
+            if ((flags >> 30) & 1)
+                break;
+            if (*(int*)cur >= 0)
+                continue;
+            break;
+        }
+        if ((void*)cur == res->mGoalEntriesEnd)
+            break;
+    }
+}
+
+// @ 0x00f1ae10
+void PB_s00f1_ae10::Add(PBEl* e, void* a, void* b)
+{
+    if (state != 3) return;
+    if (e->disabled) return;
+    if (!a) {
+        Ctr* av = SPNounManager()->GetAvatar();
+        a = av ? (void*)((char*)av + 0xc0) : 0;
+    }
+    Vec3 pa = *Pos(a);
+    float ta = Scalar(a);
+    Vec3 pb;
+    float tb;
+    if (b) {
+        pb = *Pos(b);
+        tb = Scalar(b);
+    } else {
+        pb = g_16c826c;
+        tb = 0.0f;
+    }
+    ++e->count;
+    int th = e->threshold;
+    if (e->type == 7 && e->flag34) {
+        void* o = FUN_00b3d240();
+        ((PFnSpawn)((void**)*(void**)o)[0x17])(o, 0x7b11813, &pa, &g_16c826c, -1, -1, ta);
+    }
+    if (e->count >= th) {
+        Setup(VP(pb.x, pb.y, pb.z, tb), VP(pa.x, pa.y, pa.z, ta), e);
+        return;
+    }
+    if (f_ec) return;
+    char* c = (char*)g_16c7aa4->f6c;
+    void* card = *(void**)(c + 0x148);
+    if (card) {
+        FUN_00e16a70(card, 0);
+        if (*(char*)((char*)card + 0x10) == 0)
+            FUN_00e13b50(card, 0, 0);
+        else
+            FUN_00e133b0(card, 0, 0);
+    }
+    FUN_00f0e6c0(g_16c7aa4->f6c);
+}
+
+// @ 0x00f1aff0
+void PB_s00f1_ae10::Event(void* a, void* ev)
+{
+    if (state == 3) {
+        Ctr* av = SPNounManager()->GetAvatar();
+        if (a == (void*)av) {
+            int id = ((Ctr*)ev)->f1c;
+            if (id != -1) {
+                for (PBEl* e = begin; e != end; ++e) {
+                    if (e->type == 8 && e->id == id) {
+                        if (!e->disabled)
+                            Add(e, QI_s00f1_ae10(ev, 0x1186577), 0);
+                        else
+                            ++e->count;
+                    }
+                    if (e->type == 9 && e->id == id && !e->disabled) {
+                        void* card = *(void**)((char*)g_16c7aa4->f6c + 0x148);
+                        if (card) {
+                            FUN_00e16a70(card, 0);
+                            if (*(char*)((char*)card + 0x10) == 0)
+                                FUN_00e13b50(card, 0, 0);
+                            else
+                                FUN_00e133b0(card, 0, 0);
+                        }
+                    }
+                }
+            }
+        } else {
+            int ia = ((Ctr*)a)->f1c;
+            int ib = ((Ctr*)ev)->f1c;
+            if (ia != -1 && ib != -1) {
+                for (PBEl* e = begin; e != end; ++e) {
+                    if (e->type == 9 && e->id == ib && (e->aux == ia || e->aux == -1)) {
+                        if (!e->disabled)
+                            Add(e, FUN_00b18e00(ev), 0);
+                        else
+                            ++e->count;
+                    }
+                }
+            }
+        }
+    }
+    if (ev) {
+        void* p = QI_s00f1_ae10(ev, 0x1186577);
+        if (p) FUN_00c8ad30(p, 0x7b0f76d, 1);
+    }
+}
+
 // @ 0x00f1b180
-void PB::Release(void* a, void* ev)
+void PB_s00f1_ae10::Release(void* a, void* ev)
 {
     if (state == 3 && a) {
         void* ag = QI_s00f1_ae10(a, 0xd0036e08);
@@ -5579,7 +7226,7 @@ void PB::Release(void* a, void* ev)
 }
 
 // @ 0x00f1b260
-void PB::Unlink(void* a, void* b, int)
+void PB_s00f1_ae10::Unlink(void* a, void* b, int)
 {
     if (state != 3) return;
     int ia = ((Ctr*)a)->f1c;
@@ -5625,7 +7272,7 @@ void PB::SetKind(int a)
 }
 
 // @ 0x00f1b370
-void PB::PlaySound(int, int b)
+void PB_s00f1_ae10::PlaySound(int, int b)
 {
     void* au = EA_Audio_GetSystemAT();
     int v = 0;
@@ -5653,6 +7300,65 @@ void PB::PlaySound(int, int b)
     ((Msg*)m)->V08();
 }
 
+// @ 0x00f1b450
+void PB_s00f1_ae10::RefreshAll()
+{
+    SMgr* mgr = g_16c7aa4->f74;
+    char* coll = (char*)mgr->f10;
+    char* it = *(char**)(coll + 0x2bf4);
+    char* endIt = *(char**)(coll + 0x2bf8);
+    while (it != endIt) {
+        int obj = *(int*)it;
+        int v = ByIndex((void*)obj);
+        PtrVec vec;
+        vec.mpBegin = 0;
+        vec.mpEnd = 0;
+        vec.mpCap = 0;
+        mgr->Collect(obj, &vec);
+        int n = (int)(vec.mpEnd - vec.mpBegin);
+        for (int i = 0; i < n; ++i) {
+            void* x = 0;
+            if (vec.mpBegin[i] == 0 ||
+                (x = QI_s00f1_ae10(vec.mpBegin[i], 0xd0036e08)) == 0 ||
+                ((*(uint*)((char*)x + 0xb58) >> 8) & 1) == 0)
+                SetX(vec.mpBegin[i], v);
+            FUN_00f1a7f0(vec.mpBegin[i]);
+        }
+        for (void** p = vec.mpBegin; p < vec.mpEnd; ++p) {
+            if (*p) ((PFnVoid)((void**)*(void**)*p)[1])(*p);
+        }
+        if (vec.mpBegin && vec.mpBegin[-1] != 0)
+            ::operator delete(vec.mpBegin);
+        it += 0x27e8;
+    }
+    Ctr* av = SPNounManager()->GetAvatar();
+    SetX(av, 1);
+}
+
+// @ 0x00f1b590
+void PB_s00f1_ae10::RemoveByType(void* a)
+{
+    if (state == 3) {
+        int id = ((Ctr*)a)->f1c;
+        if (id != -1) {
+            for (PBEl* e = begin; e != end; ++e) {
+                if (e->id == id && e->type == 5) {
+                    Remove(e, QI_s00f1_ae10(a, 0x1186577));
+                    int t = ((Ctr*)a)->f24;
+                    ((Sub8_s00f1_ae10*)e->sub8)->Set(t);
+                }
+            }
+        }
+        if (*(char*)((char*)g_16c7aa4->f74 + 0x14) == 0) {
+            int st = g_16c7aa4->fd0;
+            if (st && st == 2) {
+                Achievements_s00f1_ae10* c = (Achievements_s00f1_ae10*)AchievementsController(0xb57b9d12, 1);
+                c->AutoTest();
+            }
+        }
+    }
+}
+
 // @ 0x00f1b640
 void PB::SetText(int kind)
 {
@@ -5672,6 +7378,152 @@ void PB::SetText(int kind)
         AssignStr(ws54, s.GetText());
         break;
     }
+}
+
+// @ 0x00f1b730
+void PB_s00f1_ae10::SetMode(int a, PBEl* ev, int kind)
+{
+    char* w = (char*)g_16c7aa4->f7c;
+    if (w) *(int*)(w + 0xc) = a;
+    CString s;
+    switch (kind) {
+    case 0:
+        s.Load(0x21851ebe, 0x796cee4, 0);
+        break;
+    case 1:
+        s.Load(0x21851ebe, 0x796cfdd, 0);
+        break;
+    case 2: {
+        int t = ev->type;
+        uint id;
+        if (t == 10)
+            id = 0x796cfe1;
+        else if (t == 11)
+            id = 0x796cfe5;
+        else
+            id = 0x796d59a;
+        s.Load(0x21851ebe, id, 0);
+        break;
+    }
+    case 3:
+        s.Load(0x21851ebe, 0x796d599, 0);
+        break;
+    }
+    AssignStr(ws54, s.GetText());
+    f_b0 = kind;
+    FUN_00f1aae0(6);
+}
+
+// @ 0x00f1b820
+Ctr* PB_s00f1_ae10::FindNearest(void* a, int q, void* excl)
+{
+    Ctr* best = 0;
+    Ctr* av = SPNounManager()->GetAvatar();
+    if (!av) return best;
+    SMgr* mgr = g_16c7aa4->f74;
+    PtrVec vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCap = 0;
+    mgr->Collect(q, &vec);
+    float bestd = 3.402823466e+38F;
+    for (int i = 0; i < (int)(vec.mpEnd - vec.mpBegin); ++i) {
+        void* p = vec.mpBegin[i];
+        if (mgr->Match(p, (char*)a + 0x24, f_b8, a) && p != excl) {
+            Vec3* p1 = Pos(p ? QI_s00f1_ae10(p, 0x1186577) : 0);
+            Vec3* p2 = Pos((char*)av + 0xc0);
+            float d = (p2->z - p1->z) * (p2->z - p1->z) +
+                      (p2->y - p1->y) * (p2->y - p1->y) +
+                      (p2->x - p1->x) * (p2->x - p1->x);
+            if (d < bestd) {
+                bestd = d;
+                best = (Ctr*)p;
+            }
+        }
+    }
+    for (void** pp = vec.mpBegin; pp < vec.mpEnd; ++pp)
+        if (*pp) ((PFnVoid)((void**)*(void**)*pp)[1])(*pp);
+    if (vec.mpBegin && vec.mpBegin[-1] != 0)
+        ::operator delete(vec.mpBegin);
+    return best;
+}
+
+// @ 0x00f1b9b0
+void PB_s00f1_ae10::GetNameA(WString* out)
+{
+    SMgr* mgr = g_16c7aa4->f74;
+    char* o = (char*)mgr->Find(f_b8);
+    if (o) AssignStr(*out, ((ObjName*)o)->Text());
+}
+
+// @ 0x00f1ba00
+void PB_s00f1_ae10::GetNameB(WString* out)
+{
+    SMgr* mgr = g_16c7aa4->f74;
+    char* o = (char*)mgr->Find(f_b8);
+    if (o) AssignStr(*out, ((ObjName*)(o + 0x3c))->Text());
+}
+
+// @ 0x00f1ba50
+void PB_s00f1_ae10::GetInfo(int idx, WString* out)
+{
+    char* w = (char*)g_16c7aa4->f7c;
+    if (!w) return;
+    *(int*)(w + 0xc) = idx;
+    PBEl* e = (PBEl*)((char*)begin + idx * 0x1ac);
+    int type = e->type;
+    CString s;
+    void* mission = g_16c7aa4->f74->Lookup(e->id);
+    if (e->id == -2 || !mission) goto defpath;
+    switch (ResourceKeyToIcon(mission)) {
+    case 0xb10e526f:
+    case 0xd37c1045:
+    case 0x5b3d1d0d:
+        s.Load(0x21851ebe, ((const uint*)0x148c204)[type], 0);
+        break;
+    case 0xcf56099a:
+    case 0x6031c03a:
+        s.Load(0x21851ebe, ((const uint*)0x148c234)[type], 0);
+        break;
+    default:
+    defpath:
+        s.Load(0x21851ebe, ((const uint*)0x148c1d4)[type], 0);
+        if (type == 2) {
+            if (mission) {
+                int t;
+                if (g_16c7aa4->fcc == 2) t = f_b8;
+                else t = FUN_00efc520();
+                t = t * 0x4e0 + *(int*)((char*)mission + 0x70);
+                if (t && *(char*)(t + 2))
+                    s.Load(0x21851ebe, 0x7b55060, 0);
+            }
+            goto done;
+        }
+        break;
+    }
+    if (type == 9 && !e->disabled && !EachChild(e->id, 0))
+        s.Load(0x21851ebe, 0x79e8291, 0);
+done:
+    AssignStr(*out, s.GetText());
+}
+
+// @ 0x00f1bc00
+void FreeName::Name(int id, WString* out)
+{
+    if (id == -2) {
+        void* x = ((SMgr*)g_16c7aa4->f74)->Sub(out);
+        FUN_00eeea50(x);
+        return;
+    }
+    if (id != -1) {
+        char* o = (char*)g_16c7aa4->f74->Lookup(id);
+        if (o) {
+            ((ObjName*)o)->Do(out);
+            return;
+        }
+    }
+    CString s(0x21851ebe, 0x7968de4, 0);
+    AssignStr(*out, s.GetText());
 }
 
 // @ 0x00f1bcb0
@@ -5880,7 +7732,7 @@ void cSPEditorVerbTray::Toggle()
         arg = 0;
     Sub1ae10(mFieldC8, arg, 0);
 
-    void* avatar = ((NounManager*)SP_NounManager())->GetAvatar();
+    void* avatar = ((NounManager_s00f1_bcf0*)SP_NounManager())->GetAvatar();
     void* cr;
     if (avatar != 0)
         cr = ((FnPI)(*(void***)avatar)[0xc / 4])(avatar, 0xce9f6639);
@@ -5996,6 +7848,376 @@ bool cSPEditorVerbTray::Step()
     }
     return found;
 }
+
+// @ 0x00f1c690
+namespace Simulator {
+bool cScenarioPlayMode_s00f1_c690::HandleMessage(uint messageID, void* pMsg)
+{
+    Message* msg = (Message*)pMsg;
+
+    switch (messageID)
+    {
+    case 0x044f1189:
+        if (GetCurrentGameMode() != kScenarioMode)
+            break;
+        if (mCurrentPlayModeState == 1)
+        {
+            cCreatureBase* avatar = NounManager_s00f1_c690()->GetAvatar();
+            if (avatar)
+            {
+                avatar->mpModel->mAlpha = 1.0f;
+                avatar->mFlags &= ~0x800;
+                IModelManager* mm = ModelManager();
+                cModelData* model = avatar->mpModel;
+                uint idx = mm->GetGroupIndex(0x06669387, 0);
+                if (idx < 0x40)
+                    *GroupWord(model, idx) &= ~(1 << (idx & 0x1f));
+                mIsIntroFadeinActive = false;
+                mIntroFadeinTimer = 0.0f;
+
+                eastl::hashtable_s00f1_c690& effects = avatar->mpModel->mpWorld->mEffects;
+                eastl::hashtable_iterator it = effects.begin();
+                eastl::hash_node_s00f1_c690* end = effects.end_node();
+                for (; it.mpNode != end; ++it)
+                {
+                    cEffectObject* effect = ((cModelEffect*)it.mpNode->mValue)->mpEffect;
+                    if (effect && effect->IsRunning())
+                    {
+                        effect->SetHidden(false);
+                        effect->SetPaused(false);
+                    }
+                }
+            }
+            UpdateGoalStatus();
+            if (mCurrentPlayModeState == 1)
+            {
+                mCurrentPlayModeState = 3;
+                StartAdventure();
+            }
+            cCameraController* camera = GetCameraController(App_s00f1_c690()->GetRenderer()->GetView());
+            if (camera)
+            {
+                camera->SetMinDistance(12.0f);
+                camera->SetMaxDistance(20.0f);
+            }
+        }
+        else if (mCurrentPlayModeState == 5 || mCurrentPlayModeState == 6)
+        {
+            sScenarioMode_s00f1_c690->mpScenarioDisplayStrategy->ShowUI(true);
+            ScenarioTutorials_CloseWindow();
+            sScenarioMode_s00f1_c690->mpScenarioDisplayStrategy->mpPanel->Close(this);
+            mCurrentEndCinematicState = 2;
+        }
+        else if (msg->mValue == field_D8)
+        {
+            OnTimerMessage();
+        }
+        break;
+
+    case 0x01622184:   // a combatant took damage
+    {
+        cCombatant* victim = msg->mpVictim;
+        cCombatant* attacker = msg->mpAttacker;
+        if (victim->GetDamageState() != 2)
+            break;
+        uint castID = victim->GetCastInfo()->mClassID;
+        if (castID != 0xffffffff)
+        {
+            cScenarioPlayModeGoal_s00f1_c690* goal = mCurrentGoalsBegin;
+            cScenarioPlayModeGoal_s00f1_c690* end = mCurrentGoalsEnd;
+            for (; goal != end; ++goal)
+            {
+                if (!goal->mIsCompleted && goal->mGoal.mType == 3 && goal->mGoal.mTargetID == castID)
+                    CompleteGoal(goal, victim->GetOwner(0));
+            }
+        }
+        if (mCurrentPlayModeState == 3)
+            UpdateGoalStatus();
+
+        cBarrel* barrel = AsBarrel(victim);
+        if (barrel && barrel->mType == 0xf)
+            mSummary.mNumBarrelsDestroyed += 1;
+        cCreatureBase* creature = AsCreature(victim);
+        if (creature)
+        {
+            if (Bit(creature->mFlags, 9))
+                mSummary.mNumDeaths += 1;
+            if (Bit(creature->mFlags, 8))
+                mSummary.mNumPosseMembersLost += 1;
+        }
+
+        cCreatureBase* by = AsCreature(attacker);
+        if (by == 0 || !Bit(by->mFlags, 9))
+            break;
+
+        cCreatureBase* killed = AsCreature(victim);
+        void* vehicle = AsVehicle(victim);
+        void* building = AsBuilding(victim);
+        if (killed)
+        {
+            if (sScenarioMode_s00f1_c690->mPlayType == 2)
+            {
+                AchievementsController_s00f1_c690()->Trigger(0x34c7c0af, 1);
+                if (killed->IsCaptain())
+                    AchievementsController_s00f1_c690()->Trigger(0xcba1a092, 1);
+            }
+            mSummary.mNumCreaturesKilled += 1;
+        }
+        else if (vehicle)
+        {
+            if (sScenarioMode_s00f1_c690->mPlayType == 2)
+                AchievementsController_s00f1_c690()->Trigger(0x452ef89c, 1);
+            mSummary.mNumVehiclesDestroyed += 1;
+        }
+        else if (building)
+        {
+            if (sScenarioMode_s00f1_c690->mPlayType == 2)
+                AchievementsController_s00f1_c690()->Trigger(0x2f8fab8f, 1);
+            mSummary.mNumBuildingsDestroyed += 1;
+        }
+        break;
+    }
+
+    case 0x070b18c7:
+        if (msg->mValue == 2)
+            sScenarioMode_s00f1_c690->OnRestart();
+        else if (msg->mValue == 1)
+        {
+            switch (sScenarioMode_s00f1_c690->mPlayType)
+            {
+            case 0:
+                sScenarioMode_s00f1_c690->OnEditorTestFinished();
+                break;
+            case 1:
+                sScenarioMode_s00f1_c690->OnFinished1();
+                break;
+            case 2:
+                GameModeManager()->SetActiveModeByID(kGameSpace);
+                break;
+            }
+        }
+        break;
+
+    case 0x0750d732:   // any dialog left after the current one?
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            DialogVector& dialogs = CurrentDialogs(this);
+            int idx = mCurrentDialogBoxIndex;
+            int count = (int)dialogs.size();
+            int result = idx >= count - 1;
+            if (!result)
+            {
+                for (++idx; idx < count; ++idx)
+                {
+                    eastl::string16_s00f1_c690 text(dialogs[idx].mText.Get());
+                    if (text.length() > 0)
+                        goto done750;
+                }
+                result = 1;
+            }
+        done750:
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0x0754ae8a:   // advance to the next dialog box
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            ++mCurrentDialogBoxIndex;
+            DialogVector& dialogs = CurrentDialogs(this);
+            int idx = mCurrentDialogBoxIndex;
+            int result;
+            if (idx < (int)dialogs.size())
+            {
+                eastl::string16_s00f1_c690 text(dialogs[idx].mText.Get());
+                if (text.length() == 0)
+                    result = 4;
+                else
+                {
+                    switch (dialogs[mCurrentDialogBoxIndex].mType)
+                    {
+                    case 0:  result = 0; break;
+                    case 1:  result = 1; break;
+                    case 2:  result = 2; break;
+                    default: result = 3; break;
+                    }
+                }
+            }
+            else
+                result = 4;
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0x078eab55:   // start the captain fade-in
+    {
+        cCreatureBase* avatar = NounManager_s00f1_c690()->GetAvatar();
+        if (avatar)
+        {
+            avatar->mpModel->mAlpha = 0.0f;
+            IModelManager* mm = ModelManager();
+            cModelData* model = avatar->mpModel;
+            uint idx = mm->GetGroupIndex(0x06669387, 0);
+            if (idx < 0x40)
+                *GroupWord(model, idx) |= 1 << (idx & 0x1f);
+            mIntroFadeinTimer = kIntroFadeinTime;
+            mIsIntroFadeinActive = true;
+        }
+        break;
+    }
+
+    case 0x07688cad:
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            int result = 0;
+            cCreatureBase* creature = GetClassCreature(field_CC);
+            if (creature)
+            {
+                if (creature->IsCaptain())
+                    result = 2;
+                else
+                    result = ~(creature->mpData->mFlags >> 9) & 1;
+            }
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0x07aaa58c:   // dialog finished?
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            int result = 0;
+            DialogVector& dialogs = CurrentDialogs(this);
+            if (mCurrentDialogBoxIndex >= (int)dialogs.size())
+                result = 1;
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0x07b509fe:   // hide the avatar and its posse
+    {
+        cCreatureBase* avatar = NounManager_s00f1_c690()->GetAvatar();
+        if (avatar == 0)
+            break;
+        avatar->Hide();
+        int i = 0;
+        int count = avatar->GetPosseCount();
+        for (; i < count; ++i)
+        {
+            void* member = avatar->GetPosseMember(i);
+            if (member == 0)
+                continue;
+            IPosseHolder* holder = GetPosseHolder(member);
+            if (holder)
+                holder->Dismiss(0);
+            else
+            {
+                cPosseMemberB* b = GetPosseEffectHolder(member);
+                if (b && b->mpEffect)
+                    b->mpEffect->Stop(0);
+            }
+        }
+        eastl::hashtable_s00f1_c690& effects = avatar->mpModel->mpWorld->mEffects;
+        eastl::hashtable_iterator it = effects.begin();
+        eastl::hash_node_s00f1_c690* end = effects.end_node();
+        for (; it.mpNode != end; it.increment())
+        {
+            cEffectObject* effect = ((cModelEffect*)it.mpNode->mValue)->mpEffect;
+            if (effect && effect->IsRunning())
+            {
+                effect->SetHidden(true);
+                effect->SetPaused(true);
+            }
+        }
+        break;
+    }
+
+    case 0x07c63e20:
+        mSummary.mAmountDamageDealt = (uint)((float)mSummary.mAmountDamageDealt + msg->mAmount);
+        break;
+
+    case 0x07c66a67:
+        mSummary.mNumTimesUsedJetPack += 1;
+        break;
+
+    case 0x07c6551e:
+        mSummary.mAmountDamageReceived += msg->mAmount;
+        break;
+
+    case 0x07c772b7:
+        mSummary.mNumTimesUsedSprint += 1;
+        break;
+
+    case 0x07c789f8:
+        mSummary.mAmountHealthRegained += msg->mAmount;
+        break;
+
+    case 0x07c7945f:
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            int result = 0;
+            if (field_CC && field_CC->Cast(0xce9f6639))
+                result = CurrentDialogs(this)[mCurrentDialogBoxIndex].mResult;
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0x07c7a52e:
+        mSummary.mAmountEnergyUsed += msg->mAmount;
+        break;
+
+    case 0x07d0c530:   // size class of the cast member
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            cBoundingBox* box = GetClassModel(field_CC)->GetBoundingBox();
+            float height = box->mMaxZ - box->mMinZ;
+            int result = 2;
+            if (kSmallSizeLimit > height)
+                result = 0;
+            else if (kMediumSizeLimit > height)
+                result = 1;
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0x07da0410:   // result of the first non-empty dialog box
+        if (GetCurrentGameMode() == kScenarioMode)
+        {
+            int result = 0;
+            DialogVector& dialogs = CurrentDialogs(this);
+            uint count = dialogs.size();
+            for (uint i = 0; i < count; ++i)
+            {
+                eastl::string16_s00f1_c690 text(dialogs[i].mText.Get());
+                if (text.length() > 0)
+                {
+                    result = dialogs[i].mResult;
+                    break;
+                }
+            }
+            GetCinematicState()->mResult = result;
+        }
+        break;
+
+    case 0xc2edd1e8:   // end-of-act cinematic finished
+        GameTimeManager_s00f1_c690()->Resume(0x04bf38a7);
+        if (msg->mValue == 0x05107b1a)
+        {
+            if (mCurrentActIndex == (int)sScenarioMode_s00f1_c690->mpData->GetActCount() - 1 &&
+                mCurrentGoalsBegin == mCurrentGoalsEnd)
+            {
+                mCurrentPlayModeState = 3;
+                SetState(5);
+            }
+            else
+                SetState(6);
+        }
+        else if (msg->mValue == 0x05107b17 && mCurrentPlayModeState != 3)
+            mCurrentPlayModeState = 3;
+        break;
+    }
+    return false;
+}
+}  // namespace Simulator
 
 // @ 0x00f1dfa0
 void GoalVec::destroyRange(Goal* first, Goal* last)
@@ -6443,6 +8665,385 @@ void Bar::Update()
             } while (ei != ee);
         }
     }
+}
+
+// @ 0x00f1ef90
+void cScenarioPlayProgressBar_s00f1_ef90::FUN_00f1ef90(int index, char flag)
+{
+    *(int*)((char*)this + 0xb8) = index;
+    FUN_00f1ad00(index);
+    FUN_00f1ecf0();
+    if (flag == 0)
+    {
+        FUN_00f1b450();
+        FUN_00f1e6a0();
+        if (*(int*)((char*)this + 0x90) == 3)
+        {
+            void* p = *(void**)((char*)*(void**)((char*)DAT_016c7aa4 + 0x6c) + 0x148);
+            if (p != 0)
+                ((cScenarioPlayProgressBar_s00f1_ef90*)p)->FUN_00e148d0();
+        }
+        void* res = ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x74))->FUN_00f3be60(index);
+        if (*(void**)((char*)this + 0xf0) != 0 &&
+            (res == 0 || *(int*)((char*)res + 0x80) != *(int*)((char*)this + 0xf4)))
+        {
+            FUN_00572020_s00f1_ef90(*(void**)((char*)this + 0xf0), 0);
+            *(void**)((char*)this + 0xf0) = 0;
+            *(void**)((char*)this + 0xf4) = 0;
+        }
+        if (*(void**)((char*)this + 0xf0) == 0 && res != 0 && *(int*)((char*)res + 0x80) != 0)
+        {
+            *(int*)((char*)this + 0xf4) = *(int*)((char*)res + 0x80);
+            void* sys = EA_Audio_GetSystemAT();
+            void* h;
+            if (sys != 0)
+                h = (*(void* (__thiscall**)(void*))(*(char**)sys + 0x20))(sys);
+            else
+                h = 0;
+            *(void**)((char*)this + 0xf0) = h;
+            if (SP_AudioSystem() != 0)
+            {
+                void* a = SP_AudioSystem();
+                void* b = (*(void* (__thiscall**)(void*))(*(char**)a + 0x1c))(a);
+                Vector3* pos = (Vector3*)(*(void* (__thiscall**)(void*, int))(*(char**)b + 0x10))(b, 0);
+                Vector3 v;
+                v.x = pos->x;
+                v.y = pos->y;
+                v.z = pos->z;
+                FUN_00657240(*(void**)((char*)res + 0x80), *(void**)((char*)this + 0xf0), &v);
+                RecordEvent4((unsigned)*(void**)((char*)this + 0xf0), 0x12d2a4d4, 0.0f, 0);
+                RecordEvent4((unsigned)*(void**)((char*)this + 0xf0), 0xba134192, 0.0f, 0);
+                SetSoundSymbol((unsigned)*(void**)((char*)this + 0xf0), 0x9b3918c4, STR_0148c304);
+                FUN_00dd1c50(0x8514d965, *(void**)((char*)this + 0xf0));
+                FUN_006572b0(*(void**)((char*)this + 0xf0));
+            }
+        }
+        ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x6c))->FUN_00f0e6c0();
+        ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x6c))->FUN_00f114a0();
+    }
+    void* g = *(void**)((char*)DAT_016c7aa4 + 0x18);
+    if (g != 0)
+        ((cScenarioPlayProgressBar_s00f1_ef90*)g)->FUN_00f347e0();
+}
+
+// @ 0x00f1f180
+void cScenarioPlayProgressBar_s00f1_ef90::FUN_00f1f180()
+{
+    FUN_00f1e020();
+    *(uint8_t*)((char*)this + 0xb4) = 0;
+    *(int*)((char*)this + 0xc4) = (int)FUN_00eed8c0((char*)*(void**)((char*)*(void**)((char*)DAT_016c7aa4 + 0x74) + 0x10) + 8);
+    if (*(int*)((char*)this + 0x90) != 2)
+        return;
+    *(int*)((char*)this + 0x90) = 0;
+    FUN_00f1ef90(0, 0);
+    int mode = *(int*)((char*)DAT_016c7aa4 + 0xd0);
+    if (mode == 1 || mode == 2)
+    {
+        void* mgr = *(void**)((char*)DAT_016c7aa4 + 0x74);
+        int* p = *(int**)((char*)mgr + 0x10);
+        void* a = FUN_0067de40_s00f1_ef90();
+        void* b = (*(void* (__thiscall**)(void*))(*(char**)a + 0x20))(a);
+        void** vt = (void**)(*(char**)b + 0x34);
+        void* r = ((cScenarioPlayProgressBar_s00f1_ef90*)((char*)p + 0x7c))->FUN_00f26360(0);
+        ((void (__thiscall*)(void*, void*))*vt)(b, r);
+        void* avatar = ((cGameNounManager_s00f1_ef90*)SP_NounManager())->GetAvatar();
+        if (avatar != 0)
+        {
+            *(int*)((char*)avatar + 0xb58) |= 0x800;
+            void* mm = SP_ModelManager();
+            int obj = *(int*)((char*)avatar + 0xb54);
+            unsigned bits = (*(unsigned (__thiscall**)(void*, unsigned, int))(*(char**)mm + 0x28))(mm, 0x6669387, 0);
+            if (bits < 0x40)
+            {
+                unsigned* w = (unsigned*)(*(int*)((char*)obj + 0x180) + 0x44 + (bits >> 5) * 4);
+                *w |= 1u << (bits & 0x1f);
+            }
+            *(float*)((char*)*(void**)((char*)avatar + 0xb54) + 0x80) = 0.0f;
+            void* hash = (char*)*(void**)((char*)*(void**)((char*)avatar + 0xb54) + 0x17c) + 0x17a0;
+            HashIt it = ((cScenarioPlayProgressBar_s00f1_ef90*)hash)->FUN_00594410();
+            void* end;
+            void* node = it.node;
+            void** bucket = it.bucket;
+            end = ((void**)*(void**)((char*)hash + 4))[*(int*)((char*)hash + 8)];
+            while (node != end)
+            {
+                void* e = *(void**)((char*)node + 4);
+                void* o = *(void**)((char*)e + 0x8c);
+                if (o != 0 &&
+                    (*(uint8_t (__thiscall**)(void*))(*(char**)o + 0x10))(o))
+                {
+                    (*(void (__thiscall**)(void*, int))(*(char**)o + 0x2c))(o, 1);
+                    (*(void (__thiscall**)(void*, int))(*(char**)o + 0x30))(o, 1);
+                }
+                node = *(void**)((char*)node + 8);
+                if (node == 0)
+                {
+                    do
+                    {
+                        bucket = (void**)((char*)bucket + 4);
+                        node = *bucket;
+                    } while (node == 0);
+                }
+            }
+        }
+        ((cScreen*)GetTriggerMgr(1))->setX();
+        unsigned idx = ((cRandomLCG*)&DAT_01601760)->RandomUint32Uniform((DAT_016c82c0 - DAT_016c82bc) >> 4);
+        ((cTriggerMgr_s00f1_ef90*)GetTriggerMgr(*(int*)(DAT_016c82bc + idx * 16)))->PostTrigger(1, 0, 0, 0, 1);
+        *(int*)((char*)this + 0x90) = 1;
+    }
+    else
+    {
+        FUN_00f1c4b0();
+        if (*(int*)((char*)this + 0x90) != 0)
+            return;
+        *(int*)((char*)this + 0x90) = 3;
+        void* q = *(void**)((char*)*(void**)((char*)DAT_016c7aa4 + 0x6c) + 0x148);
+        if (q != 0)
+            ((cScenarioPlayProgressBar_s00f1_ef90*)q)->FUN_00e148d0();
+    }
+}
+
+// @ 0x00f1f3b0
+void cScenarioPlayProgressBar_s00f1_ef90::FUN_00f1f3b0()
+{
+    int n = (*(int*)((char*)this + 0x68) - *(int*)((char*)this + 0x64)) / 0x1ac;
+    int i = 0;
+    if (n > 0)
+    {
+        int off = 0;
+        do
+        {
+            char* rec = (char*)(*(int*)((char*)this + 0x64) + off);
+            if (*rec == 0 &&
+                i < (*(int*)((char*)this + 0x68) - *(int*)((char*)this + 0x64)) / 0x1ac &&
+                (*(int*)(rec + 0x24) == 10 || *(int*)(rec + 0x24) == 0x0b))
+            {
+                *(uint8_t*)rec = 1;
+                *(int*)(rec + 4) = *(int*)(rec + 0x30);
+                if (*(int*)(rec + 0x24) == 0x0b)
+                {
+                    ++*(int*)((char*)this + 0x18);
+                    if (*(int*)((char*)DAT_016c7aa4 + 0xd0) == 2)
+                    {
+                        void* c = FUN_00675250_s00f1_ef90(0xfcace0d7, 1);
+                        ((cScenarioPlayProgressBar_s00f1_ef90*)c)->FUN_00676e90();
+                    }
+                }
+                ++*(int*)((char*)this + 0x28);
+            }
+            ++i;
+            off += 0x1ac;
+        } while (i < n);
+    }
+    if (*(int*)((char*)this + 0xb8) == ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x74))->FUN_00f3be30() - 1)
+    {
+        FUN_00f1aae0(5);
+        return;
+    }
+    ((cPlanetModel*)SP_PlanetModel(0x8000000))->MaskContinentBits();
+    ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x74))->FUN_00f46410(2, *(int*)((char*)this + 0xb8), *(int*)((char*)this + 0xb8) + 1);
+    if (*(int*)((char*)this + 0x90) != 3)
+        *(int*)((char*)this + 0x90) = 3;
+    FUN_00f1ef90(*(int*)((char*)this + 0xb8) + 1, 0);
+    FUN_00f1c4b0();
+}
+
+// @ 0x00f1f4e0
+void cScenarioPlayProgressBar_s00f1_ef90::FUN_00f1f4e0(int index)
+{
+    if (*(int*)((char*)this + 0x90) == 3 &&
+        index < ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x74))->FUN_00f3be30())
+    {
+        *(uint8_t*)((char*)this + 0xec) = 1;
+        ((cPlanetModel*)SP_PlanetModel(0x8000000))->MaskContinentBits();
+        void* mgr = *(void**)((char*)DAT_016c7aa4 + 0x74);
+        int i = 0;
+        ((cScenarioPlayProgressBar_s00f1_ef90*)mgr)->FUN_00f45fd0(2, 0, 0);
+        FUN_00f1ef90(0, index != 0);
+        if (*(int*)((char*)this + 0xb8) != index)
+        {
+            do
+            {
+                int n = (*(int*)((char*)this + 0x68) - *(int*)((char*)this + 0x64)) / 0x1ac;
+                for (int j = 0; j < n; ++j)
+                    FUN_00f1de30(j);
+                ((cPlanetModel*)SP_PlanetModel(0x8000000))->MaskContinentBits();
+                ++i;
+                ((cScenarioPlayProgressBar_s00f1_ef90*)mgr)->FUN_00f46410(2, *(int*)((char*)this + 0xb8), i);
+                FUN_00f1ef90(i, index != i);
+            } while (*(int*)((char*)this + 0xb8) != index);
+        }
+        FUN_00f1c4b0();
+        *(uint8_t*)((char*)this + 0xec) = 0;
+        ((cScenarioPlayProgressBar_s00f1_ef90*)*(void**)((char*)DAT_016c7aa4 + 0x6c))->FUN_00f0e6c0();
+    }
+}
+
+// @ 0x00f1f600
+void cScenarioPlayProgressBar_s00f1_ef90::FUN_00f1f600()
+{
+    if (*(int*)((char*)this + 0x90) != 3 ||
+        *(int*)((char*)this + 0x64) == *(int*)((char*)this + 0x68))
+        return;
+    *(float*)((char*)this + 0xdc) = DAT_0148c2b8;
+    *(int*)((char*)this + 0xe0) = DAT_016c826c;
+    *(int*)((char*)this + 0xe4) = DAT_016c8270;
+    *(int*)((char*)this + 0xe8) = DAT_016c8274;
+    int count = (*(int*)((char*)this + 0x68) - *(int*)((char*)this + 0x64)) / 0x1ac;
+    bool flag = false;
+    if (count != 0)
+    {
+        int off = 0;
+        int i = 0;
+        do
+        {
+            char* rec = (char*)(*(int*)((char*)this + 0x64) + off);
+            char used = *rec;
+            if (used == 0 || *(uint8_t*)(rec + 1) != 0)
+            {
+                int type = *(int*)(rec + 0x24);
+                switch (type)
+                {
+                case 1:
+                case 7:
+                    if (used == 0)
+                    {
+                        bool is7 = (type == 7);
+                        void* mgr = *(void**)((char*)DAT_016c7aa4 + 0x74);
+                        int r = ((cScenarioPlayProgressBar_s00f1_ef90*)mgr)->FUN_00f3e8a0(*(int*)(rec + 0x28));
+                        if (!is7 && r != 0 && ((cScenarioPlayProgressBar_s00f1_ef90*)r)->FUN_00f278b0())
+                        {
+                            if (*rec == 0)
+                                flag = true;
+                            break;
+                        }
+                        void* avatar = ((cGameNounManager_s00f1_ef90*)SP_NounManager())->GetAvatar();
+                        void* av;
+                        if (avatar != 0)
+                            av = (*(void* (__thiscall**)(void*, uint8_t*))(*(char**)avatar + 0xc))(avatar, (uint8_t*)0x01186577);
+                        else
+                            av = 0;
+                        PtrVec_s00f1_ef90 vec;
+                        vec.begin = 0;
+                        vec.end = 0;
+                        vec.cap = 0;
+                        ((cScenarioPlayProgressBar_s00f1_ef90*)mgr)->FUN_00f40d00(*(int*)(rec + 0x28), &vec);
+                        int n = (int)((int*)vec.end - (int*)vec.begin);
+                        for (int j = 0; j < n; ++j)
+                        {
+                            void* p = (void*)((int*)vec.begin)[j];
+                            int key = *(int*)((char*)p + 0x24);
+                            void* out;
+                            void* it = ((cScenarioPlayProgressBar_s00f1_ef90*)(rec + 8))->FUN_00e5c780(&out, &key);
+                            if (*(void**)it == (void*)(rec + 0xc))
+                            {
+                                void* q = (*(void* (__thiscall**)(void*, uint8_t*))(*(char**)p + 0xc))(p, (uint8_t*)0x01186577);
+                                if (q != 0)
+                                {
+                                    float dist = FUN_00f1aa10(is7, q);
+                                    float* pf = (*(float* (__thiscall**)(void*))(*(char**)((char*)avatar + 0xc0) + 0x2c))((char*)avatar + 0xc0);
+                                    float* qf = (*(float* (__thiscall**)(void*))(*(char**)q + 0x2c))(q);
+                                    float dx = qf[0] - pf[0];
+                                    float dy = qf[1] - pf[1];
+                                    float dz = qf[2] - pf[2];
+                                    float d = sqrtf(dx * dx + dy * dy + dz * dz);
+                                    if (d < *(float*)((char*)this + 0xdc))
+                                    {
+                                        *(float*)((char*)this + 0xdc) = d;
+                                        float* qq = (*(float* (__thiscall**)(void*))(*(char**)q + 0x2c))(q);
+                                        *(float*)((char*)this + 0xe0) = qq[0];
+                                        *(float*)((char*)this + 0xe4) = qq[1];
+                                        *(float*)((char*)this + 0xe8) = qq[2];
+                                    }
+                                    if (((cScenarioPlayProgressBar_s00f1_ef90*)mgr)->FUN_00f3c870(av, q, dist, 0))
+                                    {
+                                        int k2 = *(int*)((char*)p + 0x24);
+                                        ((cScenarioPlayProgressBar_s00f1_ef90*)(rec + 8))->FUN_00a18440(&k2, 0);
+                                        FUN_00f1ae10(rec, q, 0);
+                                        if (is7)
+                                        {
+                                            ++*(int*)((char*)this + 0x20);
+                                            FUN_00f195a0(p, q);
+                                            FUN_00f1c4b0();
+                                        }
+                                        if (*rec != 0)
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        vec.Destroy();
+                    }
+                    if (*rec == 0)
+                        flag = true;
+                    break;
+                case 6:
+                    {
+                        void* a = 0;
+                        void* b = 0;
+                        int r = FUN_00f3b2f0(type, &a, &b);
+                        if (FUN_00f1c030(*(int*)(rec + 0x28), *(int*)(rec + 0x2c), r))
+                        {
+                            if (*rec == 0)
+                                FUN_00f1ae10(rec, a, b);
+                        }
+                        else
+                        {
+                            flag = true;
+                            if (*rec != 0)
+                                FUN_00f19ac0(rec, 0);
+                        }
+                    }
+                    break;
+                case 10:
+                    if (*(uint8_t*)((char*)this + 0x79) != 0 && *(uint8_t*)((char*)this + 0x78) == 0)
+                        flag = true;
+                    {
+                        int r = FUN_00f3b2f0(type, 0, 0);
+                        if (FUN_00f1c030(*(int*)(rec + 0x28), *(int*)(rec + 0x2c), r))
+                        {
+                            void* g = *(void**)((char*)DAT_016c7aa4 + 0x7c);
+                            if (g != 0)
+                                *(int*)((char*)g + 0xc) = i;
+                            char buf[12];
+                            cString_s00f1_ef90* cs = (cString_s00f1_ef90*)buf;
+                            cs->Construct();
+                            unsigned id;
+                            if (*(int*)(rec + 0x24) == 10)
+                                id = 0x796cfe1;
+                            else if (*(int*)(rec + 0x24) == 0xb)
+                                id = 0x796cfe5;
+                            else
+                                id = 0x796d59a;
+                            cs->Load(0x21851ebe, id, 0);
+                            const wchar_t* t = cs->GetText();
+                            const wchar_t* e = t;
+                            while (*e != 0)
+                                ++e;
+                            ((WString_s00f1_ef90*)((char*)this + 0x54))->assign(t, e);
+                            *(int*)((char*)this + 0xb0) = 2;
+                            FUN_00f1aae0(6);
+                            cs->Destroy();
+                        }
+                    }
+                    break;
+                case 11:
+                    if (*(uint8_t*)((char*)this + 0x79) != 0 && *(uint8_t*)((char*)this + 0x78) == 0)
+                        flag = true;
+                    break;
+                default:
+                    if (used == 0)
+                        flag = true;
+                    break;
+                }
+            }
+            ++i;
+            off += 0x1ac;
+        } while (i < count);
+        if (flag)
+            return;
+    }
+    FUN_00f1f3b0();
 }
 
 // @ 0x00f1faa0

@@ -702,6 +702,8 @@ extern "C" const int gOutMap_141e880[];       // 0x0141e880  output index per de
 extern "C" void FUN_008599f0(int param_1, int table, void* out);  // 0x008599f0
 typedef unsigned int  uint;
 typedef unsigned short wchar16;
+typedef void* (__cdecl *ALLOC_FN)(int, int, int);
+#define ALLOCATOR(p) (*(ALLOC_FN*)(*(int*)((char*)(p) + 4)))
 void FUN_0085e2d0();
 struct StreamDesc {                  // Ctx.mpDesc
     char  _pad00[0x04];
@@ -3220,6 +3222,35 @@ void __cdecl FUN_0085e2d0(int param_1)
     desc->mField10  = 0;
     desc->mRepeat   = 0;
     desc->mPending  = ctx->mField114;
+}
+
+// @ 0x0085e5c0
+void __cdecl FUN_0085e5c0(int param_1)
+{
+    int* puVar1 = (int*)ALLOCATOR(param_1)(param_1, 1, 0x40);
+    *(int*)(param_1 + 0x5bc) = (int)puVar1;
+    puVar1[0] = (int)(void (__cdecl*)(int))FUN_0085e2d0;
+    _ReadWriteBarrier();
+    int zero = 0;
+    puVar1[0xb] = zero;
+    puVar1[0xc] = zero;
+    puVar1[0xd] = zero;
+    puVar1[0xe] = zero;
+    int iVar3 = 0;
+    int iVar6 = (int)ALLOCATOR(param_1)(param_1, 1, *(int*)(param_1 + 0x20) << 8);
+    *(int*)(param_1 + 0xa0) = iVar6;
+    int* puVar2 = (int*)iVar6;
+    if (0 < *(int*)(param_1 + 0x20)) {
+        do {
+            iVar3 = iVar3 + 1;
+            int* puVar4 = puVar2;
+            for (int iVar2 = 0x40; iVar2 != 0; iVar2 = iVar2 + -1) {
+                *puVar4 = 0xffffffff;
+                puVar4 = puVar4 + 1;
+            }
+            puVar2 = puVar2 + 0x40;
+        } while (iVar3 < *(int*)(param_1 + 0x20));
+    }
 }
 
 // @ 0x0085e630

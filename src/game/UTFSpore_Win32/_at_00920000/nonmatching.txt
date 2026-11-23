@@ -1,0 +1,14 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00920160 193 handle-table name lookup; member NTbl::FindByName (this=ecx) with (name, extra, tbl) stack args fixes the shifted parameters, and the n==0 path now returns 0; strcmp loop/schedule differ; equiv: WEAK (105 valid, 41.7% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00920490 106 EASTL hashtable insert; template instantiation not faithfully reconstructed; equiv PASS (659 valid, 100% cov) after making it HTable::Insert (thiscall) with HTable::EraseKey/HTPre::PreRehash callees as members flags: /O2 /MD /Gy /EHsc /TP /GS-
+00920560 90 EASTL string-keyed hashtable find; now member HTStr::Find(out, pkey) thiscall and returns out like the original; node layout/scheduling differ; equiv: PASS (209 valid, 93.6% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00920780  501  complete; EapdSymbolTable::LoadSymbols full port (symbol pass plus group pass with Find/erase iterators); local-slot/register scheduling differs (514 vs 562); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, lock imports WaitForSingleObject/GetCurrentThread)
+009209c0  139  hash-table lookup: equiv PASS at --inputs 900 (401 valid, 92.4% cov); remaining bytes are the find-iterator/bucket-chain loop layout (156 vs 169) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00920a70  152  hash-table find2: equiv WEAK at --inputs 900 (355 valid, 43.7% cov, no mismatch); node-selection loop is unreachable with generated inputs, so its shape is unverified (169 vs 182) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00920b30  187  complete; EapdSymbolTable::LoadGroups full port; our frame is 0x23c vs retail 0x244 (8 bytes of unused locals missing) and owner/i registers are swapped (207 vs 232); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, lock imports WaitForSingleObject/GetCurrentThread)
+00920c20   29  HasAltSeparator: register allocation differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00920c60  132  SkipComponent: path-component loop register/branch schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00920d00   99  SkipComponentBack: backward component loop schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00920e30  150  FindExtension: dot/extension scan schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00920f30  463  complete; FUN_00920f30 path canonicalizer full port (separator run, `:` branch, `.`/`..` collapse, epilogue memmove); control-flow shape and scheduling differ (517 vs 515); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (147 valid, 17.0% cov)
+00921150   93  FUN_00921150: equiv PASS 100% (368 valid at --inputs 900); original keeps a redundant second `first < last` test after HasAltSeparator that this compiler folds away (175 vs 179) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

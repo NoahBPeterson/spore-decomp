@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?CallRefCtor@@YGHPAUMgr@@@Z  009200b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?Create@Mgr@@QAEHHHPAU1@@Z  009200d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?Factory24@Mgr@@QAEHHHHH@Z  00920110  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?Factory1c@Mgr@@QAEHHHHH@Z  00920240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?HT_Destroy@@YIXPAPAUHTNode@@@Z  00920410  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?insert@HashTable@@QAE?AUHashIter@@ABUHashValue@@_N@Z  009205e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?ctor@EapdSymbolTable@@QAEPAU1@XZ  009206d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?ComponentAt@@YAPA_WPA_W0H@Z  00920da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?NormalizeSeparators@@YAPAURange@@PAU1@@Z  00920f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?FUN_00921210@@YAXPAXPAURange@@@Z  00921210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?DebugPrint@@YAXPBD@Z  00921250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?UpperBound@@YAPAIPAI0PBI@Z  009212c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?LowerBound@@YAPAIPAI0PBI@Z  00921300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00920000.cpp  ?FUN_00921340@@YAHI@Z  00921340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,6 +1,11 @@
 # source  symbol  va  flags
 ../src/game/Swarm/ParticlesDescription.cpp  ?push_back@cElemVec@@QAEXPBUcElem@@@Z  00a9a7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp  ?ParseVector2@@YAPAMPAMPAUcIArgEvaluator@ArgScript@EA@@PAPAPBDH@Z  00aa2fe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp  ?CreateParticlesEffectCommand@@YAPAXH@Z  00aa32b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleTextureCommand_s00aa_3a30@@UAEXAAVcArguments_s00aa_3a30@ArgScript@EA@@@Z  00aa44f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleModelCommand_s00aa_3a30@@UAEXAAVcArguments_s00aa_3a30@ArgScript@EA@@@Z  00aa46e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleRateCommand_s00aa_3a30@@UAEXAAVcArguments_s00aa_3a30@ArgScript@EA@@@Z  00aa47e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleModelCommand@?A0x4e6163f2@@UAEXAAUcArguments_s00aa_4a10@ArgScript@EA@@@Z  00aa4a10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/Swarm/ParticlesDescription.cpp	?OnRegister@cParticleEffectCommand@	00aa4e50	/O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleForceCommand@?A0xdf172e18@@UAEXAAUcArguments_s00aa_4a10@ArgScript@EA@@@Z  00aa4cc0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleWarpCommand@?A0xdf172e18@@UAEXAAUcArguments_s00aa_4a10@ArgScript@EA@@@Z  00aa4d70  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp	?OnRegister@cParticleEffectCommand@	00aa4e50	/O2 /MD /Gy /TP /GS- /Isrc/game/include
