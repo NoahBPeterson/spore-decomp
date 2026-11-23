@@ -1,0 +1,1 @@
+slices/s00564f90/s00564f90.cpp  ?RegisterX@CallbackRegistry_00564f90@@QAEXI@Z  00564f90  /Od /Ob1 /MD /Gy /TP /arch:SSE

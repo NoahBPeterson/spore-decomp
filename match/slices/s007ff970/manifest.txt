@@ -1,0 +1,1 @@
+slices/s007ff970/s007ff970.cpp  ?FUN_007ff970@@YAXPAUV_007ff970@@H@Z  007ff970  /O2 /MD /Gy /EHsc /TP
