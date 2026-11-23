@@ -1,3 +1,8 @@
+009d3950 ?FUN_009d3950@AnimDyn@@QAEMPAUObj2@@MH@Z  # AnimDyn::FUN_009d3950 migrated from s009d3950 (verbatim, slice spelling)
+009d3a20 ?FUN_009d3a20@AnimDyn@@QAEMPAUObj2@@MHM@Z  # AnimDyn::FUN_009d3a20 migrated from s009d3950 (verbatim, slice spelling)
+009d3b50 ?FUN_009d3b50@AnimDyn@@QAEXM@Z  # AnimDyn::FUN_009d3b50 migrated from s009d3950 (verbatim, slice spelling)
+009d3f70 ?FUN_009d3f70@GaitState@@QAEXPAUObj2@@@Z  # GaitState::FUN_009d3f70 migrated from s009d3950 (verbatim, slice spelling)
 009d40c0 ?adjust_heap@@YAXPAUSA_s009d_3950@@HHHU1@USAGreater@@@Z  # adjust_heap migrated from s009d3950 (verbatim, slice spelling)
+009d41b0 ?copy30@@YAPAUR30@@PAU1@00@Z  # copy30 migrated from s009d3950 (verbatim, slice spelling)
 009d4230 ?pop_heap@@YAXPAUSA_s009d_3950@@0USAGreater@@@Z  # pop_heap migrated from s009d3950 (verbatim, slice spelling)
 009d42b0 ?FUN_009d42b0@AnimDyn@@QAEXPAUObj2@@@Z  # AnimDyn::FUN_009d42b0 migrated from s009d3950 (verbatim, slice spelling)

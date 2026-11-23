@@ -1,1 +1,6 @@
+009d1b40 ?Apply@Layout@@QAEXPAUSrc@@@Z  # Layout::Apply migrated from s009d1b40 (verbatim, slice spelling)
+009d1c90 ?AlignLines@Layout@@QAEXXZ  # Layout::AlignLines migrated from s009d1b40 (verbatim, slice spelling)
+009d2160 ?SetupFrom@Layout@@QAEXPAUSrc@@@Z  # Layout::SetupFrom migrated from s009d1b40 (verbatim, slice spelling)
 009d24c0 ?BuildStops@Layout@@QAEXHPAX00PAH@Z  # Layout::BuildStops migrated from s009d1b40 (verbatim, slice spelling)
+009d25b0 ?MinThickness@Layout@@QAEMUVec3@@@Z  # Layout::MinThickness migrated from s009d1b40 (verbatim, slice spelling)
+009d2700 ?AngleScale@Layout@@QAEMM@Z  # Layout::AngleScale migrated from s009d1b40 (verbatim, slice spelling)

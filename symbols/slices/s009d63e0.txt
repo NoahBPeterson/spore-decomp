@@ -1,0 +1,8 @@
+009d63e0 ?m63e0@Anim@@QAEXPAX@Z  # Anim::m63e0 migrated from s009d63e0 (verbatim, slice spelling)
+009d65f0 ?m65f0@Anim@@QAEMMPAX@Z  # Anim::m65f0 migrated from s009d63e0 (verbatim, slice spelling)
+009d6a10 ?DoAllocate@Vec38@@QAEPAU1@IPAX@Z  # Vec38::DoAllocate migrated from s009d63e0 (verbatim, slice spelling)
+009d6a70 ?FUN_009d6a70@@YAXPAD0@Z  # FUN_009d6a70 migrated from s009d63e0 (verbatim, slice spelling)
+009d6bb0 ?FUN_009d6bb0@@YAPAPAUSA_s009d_63e0@@PAPAU1@0000@Z  # FUN_009d6bb0 migrated from s009d63e0 (verbatim, slice spelling)
+009d6c20 ?FUN_009d6c20@@YAPAPAUSA_s009d_63e0@@PAPAU1@0000@Z  # FUN_009d6c20 migrated from s009d63e0 (verbatim, slice spelling)
+009d6ca0 ?FUN_009d6ca0@@YAPAPAUSA_s009d_63e0@@PAPAU1@0000@Z  # FUN_009d6ca0 migrated from s009d63e0 (verbatim, slice spelling)
+009d6ef0 ?DoInsertValue@VecU32@@QAEXPAIABI@Z  # VecU32::DoInsertValue migrated from s009d63e0 (verbatim, slice spelling)

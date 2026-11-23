@@ -1,0 +1,1 @@
+00f19530 ?cScenarioPlayProgressBar_SetAttr@UI@@YAXPAX@Z  # cScenarioPlayProgressBar_SetAttr migrated from s00f19530 (verbatim, slice spelling)

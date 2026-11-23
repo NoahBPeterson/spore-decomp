@@ -1,3 +1,7 @@
+00762d70 ?TeardownLightArrays@@YAXHPAPAX@Z  # TeardownLightArrays migrated from s00762d70 (verbatim, slice spelling)
+00762f00 ?SetFlag1630180@@YAXE@Z  # SetFlag1630180 migrated from s00762d70 (verbatim, slice spelling)
+00762f10 ?ReleaseViaSlot8@@YAXPAUIObj@@@Z  # ReleaseViaSlot8 migrated from s00762d70 (verbatim, slice spelling)
+00762f30 ?MakeObj762f30@@YGPAXPBH@Z  # MakeObj762f30 migrated from s00762d70 (verbatim, slice spelling)
 00762fa0 ?Insert@Map762fa0@@QAEPAXPAXPBX@Z  # Map762fa0::Insert migrated from s00762d70 (verbatim, slice spelling)
 00763100 ??0CEditorRes@@QAE@XZ  # CEditorRes::CEditorRes migrated from s00762d70 (verbatim, slice spelling)
 00763130 ?Append@Map762fa0@@QAEXPBX@Z  # Map762fa0::Append migrated from s00762d70 (verbatim, slice spelling)

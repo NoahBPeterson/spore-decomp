@@ -1,3 +1,5 @@
+00ed4730 ?f@Obj4730@@QAEXPAUVec_ed4730@@@Z  # Obj4730::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed48a0 ?FUN_00ed48a0@@YADPAXPAH@Z  # FUN_00ed48a0 migrated from s00ed4730 (verbatim, slice spelling)
 00ed4930 ?FUN_00ed4930@@YAXXZ  # FUN_00ed4930 migrated from s00ed4730 (verbatim, slice spelling)
 00ed49a0 ?f@Obj49a0@@QAEXXZ  # Obj49a0::f migrated from s00ed4730 (verbatim, slice spelling)
 00ed4b70 ?f@Obj4b70@@QAEXXZ  # Obj4b70::f migrated from s00ed4730 (verbatim, slice spelling)

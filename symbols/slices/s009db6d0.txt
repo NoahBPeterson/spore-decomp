@@ -1,9 +1,9 @@
-009db6d0 Layout::Build  # splits the layout at the first part with Time()/firstPart > ratio, rescales the particle v0/v1 of the leading parts, then reindexes particles through each part's id list
-009dba20 Blend9::Pos  # in-place position lerp: this = a*(1-t) + b*t over the 3-float block at +0x08 (sub_99CC70 per pair)
+009db6d0 ?Build@Layout_s009d_b6d0@@QAEXMPAPAUWorld@@@Z  # Layout_s009d_b6d0::Build migrated from s009db6d0 (verbatim, slice spelling)
+009dba20 ?Pos@Blend9@@QAEXPBU1@M0@Z  # Blend9::Pos migrated from s009db6d0 (verbatim, slice spelling)
 009dba90 ?CopyMasked@Inner_s009d_b6d0@@QAEXPBU1@I@Z  # Inner_s009d_b6d0::CopyMasked migrated from s009db6d0 (verbatim, slice spelling)
 009dbc60 ?Assign@Inner_s009d_b6d0@@QAEXPBU1@@Z  # Inner_s009d_b6d0::Assign migrated from s009db6d0 (verbatim, slice spelling)
-009dbd50 Track::Total  # weighted sum of the track: pairs w[i]*Channel(i) with the 0xb4-strided channel block at +0x140, x87 tail sum
-009dbe10 Grid::Set  # m[row][col] = value, table base +0x1c
+009dbd50 ?Total@Track@@QAEMXZ  # Track::Total migrated from s009db6d0 (verbatim, slice spelling)
+009dbe10 ?Set@Grid@@QAEPAXPAXHH@Z  # Grid::Set migrated from s009db6d0 (verbatim, slice spelling)
 009dbe30 ?Ctor@Rec44@@QAEPAU1@PBU1@@Z  # Rec44::Ctor migrated from s009db6d0 (verbatim, slice spelling)
 009dbe80 ?Ctor@Rec58@@QAEPAU1@PBU1@@Z  # Rec58::Ctor migrated from s009db6d0 (verbatim, slice spelling)
 009dbed0 ?Ctor@Rec1C@@QAEPAU1@PBU1@@Z  # Rec1C::Ctor migrated from s009db6d0 (verbatim, slice spelling)
@@ -16,7 +16,7 @@
 009dc2b0 ?vcopyGaitC@@YAPAUGaitC_s009d_b6d0@@PBU1@0PAU1@@Z  # vcopyGaitC migrated from s009db6d0 (verbatim, slice spelling)
 009dc300 ?CopyVal3b@@YAPAUVal3b@@PBU1@0PAU1@@Z  # CopyVal3b migrated from s009db6d0 (verbatim, slice spelling)
 009dc3c0 ?vcopyGaitCBack@@YAPAUGaitC_s009d_b6d0@@PBU1@0PAU1@@Z  # vcopyGaitCBack migrated from s009db6d0 (verbatim, slice spelling)
-009dc410 Blend9::All  # full blend of the position block and the r[3][4] rows (first two floats per row)
-009dc4f0 BlendQ::All  # same blend for the quaternion record (q[4] + r[4][4])
+009dc410 ?All@Blend9@@QAEXPBU1@M0@Z  # Blend9::All migrated from s009db6d0 (verbatim, slice spelling)
+009dc4f0 ?All@BlendQ@@QAEXPBU1@M0@Z  # BlendQ::All migrated from s009db6d0 (verbatim, slice spelling)
 009dc5b0 ?SampleAt@@YGXPAUVal3@@IPBUValPath@@M1@Z  # SampleAt migrated from s009db6d0 (verbatim, slice spelling)
-009dc6a0 Track2::TotalItems  # number of items in the second track form (count field + per-item stride walk)
+009dc6a0 ?TotalItems@Track2@@QAEHXZ  # Track2::TotalItems migrated from s009db6d0 (verbatim, slice spelling)

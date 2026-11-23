@@ -1,10 +1,10 @@
 006f54a0 ?F54a0@cState_s006f_54a0@@QAEXHHHHHHHHF@Z  # cState_s006f_54a0::F54a0 migrated from s006f54a0 (verbatim, slice spelling)
 006f5bc0 vector_ushort_insert  # inserts a ushort into a growing vector (memmove front)
-006f5cd0 vector_operator_assign_c  # vector::operator= with 0xc-byte elements
-006f5e00 vector_operator_assign_8  # vector::operator= with 8-byte elements
+006f5cd0 ?Assign@Vec0C@@QAEAAU1@PBU1@@Z  # Vec0C::Assign migrated from s006f54a0 (verbatim, slice spelling)
+006f5e00 ?Assign@Vec8@@QAEAAU1@PBU1@@Z  # Vec8::Assign migrated from s006f54a0 (verbatim, slice spelling)
 006f5ed0 ?FUN_006f5ed0@@YIPAHPAH@Z  # FUN_006f5ed0 migrated from s006f54a0 (verbatim, slice spelling)
-006f5f80 cState::W5f80  # color wrapper, mode 0x32/0x33 -> FUN_006f54a0
-006f6060 cState::W6060  # color wrapper, mode 0x50
-006f60f0 cState::W60f0  # color wrapper, mode 0x5a
-006f6180 cState::W6180  # color wrapper, mode 100, 3 channels
-006f6270 cState::W6270  # color wrapper, modes 0x6e/0x6f, two quads
+006f5f80 ?W5f80@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  # cState::W5f80 migrated from s006f54a0 (verbatim, slice spelling)
+006f6060 ?W6060@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  # cState::W6060 migrated from s006f54a0 (verbatim, slice spelling)
+006f60f0 ?W60f0@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  # cState::W60f0 migrated from s006f54a0 (verbatim, slice spelling)
+006f6180 ?W6180@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  # cState::W6180 migrated from s006f54a0 (verbatim, slice spelling)
+006f6270 ?W6270@cState@@QAEXHPAUcColorCtx@@HHHHH@Z  # cState::W6270 migrated from s006f54a0 (verbatim, slice spelling)

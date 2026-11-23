@@ -6,3 +6,5 @@
 00f1b640 ?SetText@PB@@QAEXH@Z  # PB::SetText migrated from s00f1ae10 (verbatim, slice spelling)
 00f1bcb0 ?GetNameC@PB@@QAEXHPAUWString@@@Z  # PB::GetNameC migrated from s00f1ae10 (verbatim, slice spelling)
 00f1bcd0 ?GetNameD@PB@@QAEXHPAUWString@@@Z  # PB::GetNameD migrated from s00f1ae10 (verbatim, slice spelling)
+00f1b9b0 ?GetNameA@PB_s00f1_ae10@@QAEXPAUWString@@@Z  # verbatim method of the renamed stub PB_s00f1_ae10
+00f1ba00 ?GetNameB@PB_s00f1_ae10@@QAEXPAUWString@@@Z  # verbatim method of the renamed stub PB_s00f1_ae10

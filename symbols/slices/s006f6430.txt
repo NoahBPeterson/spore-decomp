@@ -1,9 +1,9 @@
-006f6430 color_wrapper_be  # mode 0xbe, colour from +0x3c table
-006f6500 color_wrapper_dc  # mode 0xdc, two colour channels
-006f65d0 Hashtable_FindOrInsert  # FUN_00892970 lookup + FUN_006f4ff0 insert
-006f66a0 cVecU16::push_back  # vector<unsigned short> push_back
-006f66d0 FilterChain_StateVector_Destroy  # frees vectors at +0x64/+0x50/+0x3c/+0x28/+0x14/+0x0
-006f6770 vector_bool_assign  # eastl::vector<bool,fixed_vector_allocator>
+006f6430 ?ColorBE@cState_s006f_6430@@QAEXPAUcTables@@PAUcDesc@@HHHHH@Z  # cState_s006f_6430::ColorBE migrated from s006f6430 (verbatim, slice spelling)
+006f6500 ?ColorDC@cState_s006f_6430@@QAEXPAUcTables@@PAUcDesc@@HHHHH@Z  # cState_s006f_6430::ColorDC migrated from s006f6430 (verbatim, slice spelling)
+006f65d0 ?Subscript@cHashMap16@@QAEAAHABG@Z  # cHashMap16::Subscript migrated from s006f6430 (verbatim, slice spelling)
+006f66a0 ?push_back@cVecU16@@QAEXABG@Z  # cVecU16::push_back migrated from s006f6430 (verbatim, slice spelling)
+006f66d0 ?FUN_006f66d0@@YIXPAH@Z  # FUN_006f66d0 migrated from s006f6430 (verbatim, slice spelling)
+006f6770 ?Assign@cByteVec@@QAEAAU1@ABU1@@Z  # cByteVec::Assign migrated from s006f6430 (verbatim, slice spelling)
 006f6830 ?AddCameraTexture@cFilterChain@@QAE_NGGPAH@Z  # cFilterChain::AddCameraTexture migrated from s006f6430 (verbatim, slice spelling)
 006f6910 ?RemoveCameraTextures@cFilterChain@@QAEXXZ  # cFilterChain::RemoveCameraTextures migrated from s006f6430 (verbatim, slice spelling)
 006f69c0 ?Init@cFilterChainInit@@QAE_NXZ  # cFilterChainInit::Init migrated from s006f6430 (verbatim, slice spelling)

@@ -1,2 +1,11 @@
+009205e0 ?insert@HashTable@@QAE?AUHashIter@@ABUHashValue@@_N@Z  # HashTable::insert migrated from s009205e0 (verbatim, slice spelling)
+009206d0 ?ctor@EapdSymbolTable@@QAEPAU1@XZ  # EapdSymbolTable::ctor migrated from s009205e0 (verbatim, slice spelling)
+00920da0 ?ComponentAt@@YAPA_WPA_W0H@Z  # ComponentAt migrated from s009205e0 (verbatim, slice spelling)
+00920f00 ?NormalizeSeparators@@YAPAURange@@PAU1@@Z  # NormalizeSeparators migrated from s009205e0 (verbatim, slice spelling)
+00921210 ?FUN_00921210@@YAXPAXPAURange@@@Z  # FUN_00921210 migrated from s009205e0 (verbatim, slice spelling)
+00921250 ?DebugPrint@@YAXPBD@Z  # DebugPrint migrated from s009205e0 (verbatim, slice spelling)
 00921260 eastl::fixed_pool_base::init  # pdb_names callee-single
+009212c0 ?UpperBound@@YAPAIPAI0PBI@Z  # UpperBound migrated from s009205e0 (verbatim, slice spelling)
+00921300 ?LowerBound@@YAPAIPAI0PBI@Z  # LowerBound migrated from s009205e0 (verbatim, slice spelling)
+00921340 ?FUN_00921340@@YAHI@Z  # FUN_00921340 migrated from s009205e0 (verbatim, slice spelling)
 00921580 ?RBTreeIncrement@@YAPAURBNode@@PAU1@@Z  # RBTreeIncrement migrated from s009205e0 (verbatim, slice spelling)
