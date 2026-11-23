@@ -1,0 +1,1 @@
+slices/s0045daa0/s0045daa0.cpp  ?FUN_0045daa0@@YAHHHH@Z  0045daa0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
