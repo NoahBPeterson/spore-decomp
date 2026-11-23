@@ -1652,7 +1652,7 @@ void Forwarder::Fwd4(uint32_t a, uint32_t b)
 
 // @ 0x00422fd0
 CopyTarget* CopyTarget::Assign(const CopyTarget* o)
-{
+{    char pad0[0x58];
     first.Assign(&o->first);
     second.Assign(&o->second);
     value = o->value;
@@ -1664,12 +1664,15 @@ CopyTarget* CopyTarget::Assign(const CopyTarget* o)
         }
     }
     {
-        RefObj** p = &refB;
-        *p = o->refB;
-        if (*p) {
-            RefObj* obj = *p;
-            int dead = obj->refCount + 1;
-            obj->refCount = obj->refCount + 1;
+        RefObj* obj;
+        {
+            struct Helper { static __forceinline int AddRef(RefObj*& r) { return r->refCount++ + 1; } };
+            RefObj** p = &refB;
+            *p = o->refB;
+            if (*p) {
+                obj = *p;
+                Helper::AddRef(obj);
+            }
         }
     }
     return this;

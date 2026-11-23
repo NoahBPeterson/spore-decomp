@@ -24,3 +24,4 @@
 ../src/game/SPAudio/SPAudioMixMode.cpp  ??1cMixMode_s00ea_8f90@Audio@SP@@QAE@XZ  00ea93c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioMixMode.cpp  ??0IEventModifier@Audio@SP@@QAE@XZ  00ea4fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioMixMode.cpp  ?Update2@Prim@@QAEXMI@Z  00ea58c0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Handle@HandlerSub@@QAE_NIPAM@Z  00ea57c0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include

@@ -37,3 +37,4 @@
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?push_back@VecSp@@QAEXXZ  00711170  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?CopyBackwardA@@YAPAPAXPAPAX00@Z  0070e3e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?CopyBackwardB@@YAPAPAXPAPAX00@Z  0070e430  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?FillNAtomic8@@YAXPAPAXI0@Z  0070eb30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -801,14 +801,14 @@ void Prim::Update1(float dt, u32 id)
 
 // @ 0x00ea57c0
 bool HandlerSub::Handle(u32 msg, float* pv)
-{
-    if (msg == 0x1959007) {
+{    if (msg == 0x1959007) {
         float v = *pv;
+        float w = this->f40;
         float d = v - this->f38;
         this->f34 = v;
         float f = (float)fabs(d);
-        if (this->f40 != 0.0f && !(f < 1e-6)) {
-            this->f3c = f / this->f40;
+        if (w != 0.0f && !(f < 1e-6)) {
+            this->f3c = f / w;
             return true;
         }
         this->f38 = *pv;

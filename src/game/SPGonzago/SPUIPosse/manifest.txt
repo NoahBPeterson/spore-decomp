@@ -97,3 +97,4 @@
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e28230@cSPUIPosseItem_s00e2_7310@@QAEXXZ  00e28230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?resize@cVec8@@QAEXI@Z  00e28250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?GetCost@cBuilding@Simulator@@QAEMXZ  00fc7f80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?SnapToPosition@cSPUIPosse_s00e2_2860@@QAEXXZ  00e22a60  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

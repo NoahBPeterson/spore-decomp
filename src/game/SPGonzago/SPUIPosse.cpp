@@ -2038,21 +2038,21 @@ cVec4 cSPUIPosse_s00e2_2860::GetWindowBounds()
 
 // @ 0x00e22a60
 void cSPUIPosse_s00e2_2860::SnapToPosition()
-{
-    cSPUIWindow* window = mLayout1bc.FindWindowByID(0x3d98298, 0);
+{    cSPUIWindow* window = mLayout1bc.FindWindowByID(0x3d98298, 0);
     cVec4* area = VT_38_0(window);
-    float x = area->x;
-    float y = area->y;
-    float z = area->z;
-    float w = area->w;
+    cVec4 v;
+    v.x = area->x;
+    v.y = area->y;
+    v.z = area->z;
+    v.w = area->w;
     float offset = mField1d8;
     cVec4 mainArea;
     if (mFlag1ec == 0) {
         cVec4* m = GetMainWindowArea(&mainArea);
-        offset = ((m->z - m->x) - mField1d8) - (z - x);
+        offset = ((m->z - m->x) - mField1d8) - (v.z - v.x);
     }
     cVec4* m2 = GetMainWindowArea(&mainArea);
-    VT_70_2F(window, offset, ((m2->w - m2->y) - mField1dc) - (w - y));
+    VT_70_2F(window, offset, ((m2->w - m2->y) - mField1dc) - (v.w - v.y));
 }
 
 // @ 0x00e22b50
