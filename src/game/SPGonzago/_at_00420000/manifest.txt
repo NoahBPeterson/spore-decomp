@@ -81,3 +81,4 @@
 ../src/game/SPGonzago/_at_00420000.cpp  ?Matrix3Equal@@YAEPBUMatrix3@@0@Z  00423250  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00420000.cpp  ?Vector3Equal@@YAEPBUVector3_s0042_3110@@0@Z  004232c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00420000.cpp  ??AIntMap@@QAEAAHABH@Z  004210f0  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Assign@CopyTarget@@QAEPAU1@PBU1@@Z  00422fd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

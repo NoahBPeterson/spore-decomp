@@ -8,7 +8,6 @@
 0070e6b0 41 other: R48 (2026-11-17): MakeHashNode; a node type with a constructor plus an EAlloc placement new and matching placement delete reproduces the EH frame and both unwind slots (149 vs 120 B), but cl splits the null path into a second epilogue, uses immediate zeros where retail uses xor edi,edi, and orders the slots differently. | Earlier note: hash-node constructor; EH frame missing
 0070ea70 47 uninitialized_copy with atomic refcount; spill/order differs
 0070eac0 39 fill with atomic refcount; deferred-release shape differs
-0070eb30 33 fill_n with atomic refcount; register allocation differs
 0070eb70 37 uninitialized_copy weak-refcount; parameter spills differ
 0070ebf0 30 assign weak-refcount; dst kept in memory not register
 0070ec30 33 copy_backward weak-refcount; register assignment differs

@@ -2580,15 +2580,13 @@ bool cUITimedTooltip::Init(const uint32_t& nKey, uint32_t nId, uint32_t nWidth, 
 
 // @ 0x00e36cd0
 bool cUITimedTooltip::UpdateA()
-{
-    EA::Stopwatch_s00e3_6150& sw = m_sw418;
-    if ((double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold430) {
-        if (m_pAnimator458->Empty()) {
-            sw.SetBoolProperty();
-            return true;
-        }
+{    EA::Stopwatch_s00e3_6150& sw = m_sw418;
+    bool result = (double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold430
+        && m_pAnimator458->Empty();
+    if (result) {
+        sw.SetBoolProperty();
     }
-    return false;
+    return result;
 }
 
 // @ 0x00e36d30
@@ -2604,13 +2602,12 @@ bool cUITimedTooltip::UpdateB()
 
 // @ 0x00e36d80
 bool cUITimedTooltip::UpdateC()
-{
-    EA::Stopwatch_s00e3_6150& sw = m_sw438;
-    if ((double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold450) {
+{    EA::Stopwatch_s00e3_6150& sw = m_sw438;
+    bool result = (double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold450;
+    if (result) {
         sw.SetBoolProperty();
-        return true;
     }
-    return false;
+    return result;
 }
 
 // @ 0x00e36de0

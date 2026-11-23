@@ -3089,13 +3089,12 @@ bool cUITimedTooltip::UpdateD()
 
 // @ 0x00e36e80
 bool cUITimedTooltip::UpdateE()
-{
-    EA::Stopwatch_s00e3_6150& sw = m_sw4a8;
-    if ((double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold4c0) {
+{    EA::Stopwatch_s00e3_6150& sw = m_sw4a8;
+    bool result = (double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold4c0;
+    if (result) {
         sw.SetBoolProperty();
-        return true;
     }
-    return false;
+    return result;
 }
 
 // @ 0x00e36ed0

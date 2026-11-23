@@ -1,4 +1,4 @@
-009ac300  33  complete; UnpackColor; cl SP1 pools the x87 float constants as double where the original (VC8-era) used dword
+009ac300  33  complete; UnpackColor; cl SP1 pools the x87 float constants as double where the original (VC8-era) used dword Bounded batch b9: anchor the three x87 literals as function-local static const float so vc9sp1 pools dword loads like the VC8-era retail instead of widening through the double pool.
 009ac390  100  complete; PackColor; SSE float divide/clamp schedule differs
 009ac460  100  complete; UnpackBytes; fixed the sqrt callee: retail inlines x87 fsqrt, so use (float)sqrt((double)q) with /arch:SSE (SSE2 lowers it to sqrtss); /fp:fast keeps the byte math single-precision (precise promoted it to double, 4 ulp off at out[2]); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; residual: clamp tail store schedule (retail movaps xmm0,xmm1 before the branch, ours stores q to [esp+4] early); fix1: quick check WEAK (emulator found no mismatch)
 009ab620  165  complete; baked_anim_manager::Clear; EASTL map teardown register/allocation schedule differs

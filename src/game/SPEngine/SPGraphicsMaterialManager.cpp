@@ -1667,17 +1667,16 @@ void FillAtomic8(void** first, void** last, void** value)
 
 // @ 0x0070eb30
 void FillNAtomic8(void** dst, unsigned n, void** value)
-{
-    for (; n != 0; --n)
+{    void** current = dst;
+    for (; n > 0; --n, ++current)
     {
-        if (dst != 0)
+        if (current != 0)
         {
             void* p = *value;
-            *dst = p;
+            *current = p;
             if (p != 0)
-                ++*(volatile long*)((char*)p + 8);
+                _InterlockedIncrement((volatile long*)((char*)p + 8));
         }
-        ++dst;
     }
 }
 
