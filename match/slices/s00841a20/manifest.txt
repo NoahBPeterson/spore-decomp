@@ -1,0 +1,1 @@
+slices/s00841a20/s00841a20.cpp  ?FUN_00841a20@@YGPBDH@Z  00841a20  /O2 /MD /Gy /EHsc /TP

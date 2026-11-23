@@ -1,0 +1,2 @@
+slices/s01335f10/s01335f10.cpp  ?FUN_01335f10@@YAXXZ  01335f10  /O2 /MD /Gy /EHsc /TP
+slices/s01335f10/s01335f10.cpp  ?FUN_01335f30@@YAXXZ  01335f30  /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0120be3a  0  other: retail is a 10-byte interposable loader, mov eax, <&data 0x014f92f0>; jmp 0x011e090c (the target is itself the jmp dword ptr [0x13cc4c4] import thunk). No C++ spelling found for the eax-preloaded tail jmp on cl 15: a tail call to an extern compiles to a bare 5-byte jmp (no eax load), a member call on a TU-local struct to push/lea/call (17 bytes), returning a named global's address folds the load away; needs a callee invisible until link time, like a delay-load helper. Levers tried: 3; the .cpp keeps the closest attempt.

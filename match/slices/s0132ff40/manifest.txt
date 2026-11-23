@@ -1,0 +1,2 @@
+slices/s0132ff40/s0132ff40.cpp  ?FUN_0132ff40@@YAXXZ  0132ff40  /O2 /MD /Gy /EHsc /TP
+slices/s0132ff40/s0132ff40.cpp  ?FUN_0132ff60@@YAXXZ  0132ff60  /O2 /MD /Gy /EHsc /TP
