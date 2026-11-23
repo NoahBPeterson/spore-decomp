@@ -1,0 +1,1 @@
+00c43790 ?WriteSTLSequenceT@@YAXPAUIStreamWrite@@PAUSpatialObjectVector@@@Z  # WriteSTLSequenceT migrated from s00c43790 (verbatim, slice spelling)

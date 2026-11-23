@@ -1,0 +1,1 @@
+00d38a30 ?FUN_00d38a30@@YAMHPAUcSPCreatureBase@@@Z  # FUN_00d38a30 migrated from s00d38a30 (verbatim, slice spelling)

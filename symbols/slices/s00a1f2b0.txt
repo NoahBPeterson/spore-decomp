@@ -1,4 +1,4 @@
-00a1f2b0 ?UnsubscribeFromGroupsFromSymbol@Sound@@QAEXPBD@Z  # Sound::UnsubscribeFromGroupsFromSymbol(const char*): FNV-1a hash of the space-separated group tokens, ::new push_back into the +0x2e0 fixed_vector and GetSystemAT()->vtbl[0x110](hash, this+4) dispatch (complete)
+00a1f2b0 ?UnsubscribeFromGroupsFromSymbol@Sound_s00a1_f2b0@@QAEXPBD@Z  # Sound_s00a1_f2b0::UnsubscribeFromGroupsFromSymbol migrated from s00a1f2b0 (verbatim, slice spelling)
 00a1f3e0 ?Sound_AssignC7C@@YAXPAUCOWVec@@0@Z  # Sound_AssignC7C migrated from s00a1f2b0 (verbatim, slice spelling)
 00a1f4d0 ??1Sound@Audio@EA@@UAE@XZ  # EA::Audio::Sound::~Sound migrated from s00a1f2b0
 00a1f840 ?CreatePrimitive@Sound_s00a1_f2b0@@QAEXI@Z  # Sound_s00a1_f2b0::CreatePrimitive migrated from s00a1f2b0 (verbatim, slice spelling)

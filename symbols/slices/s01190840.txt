@@ -6,5 +6,5 @@
 01191b20 ?FUN_01191b20@@YAPAIH@Z  # FUN_01191b20 migrated from s01190840 (verbatim, slice spelling)
 01191da0 FUN_01191da0  # DSA_new: one-line wrapper `return DSA_new_method(NULL)`
 01191f10 ?FUN_01191f10@@YAPAIXZ  # FUN_01191f10 migrated from s01190840 (verbatim, slice spelling)
-01191fe0 FUN_01191fe0  # EC_KEY_copy: group/point/BIGNUM + ex_data chain
+01191fe0 ?FUN_01191fe0@@YAPAIPAI0@Z  # FUN_01191fe0 migrated from s01190840 (verbatim, slice spelling)
 01192190 ?FUN_01192190@@YAIH@Z  # FUN_01192190 migrated from s01190840 (verbatim, slice spelling)

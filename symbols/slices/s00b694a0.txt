@@ -1,0 +1,4 @@
+00b69890 ?FUN_00b69890@@YAXXZ  # FUN_00b69890 migrated from s00b694a0 (verbatim, slice spelling)
+00b69930 ?FUN_00b69930@@YAXPAUIV_s00b6_94a0@@MD@Z  # FUN_00b69930 migrated from s00b694a0; symbol read from the compiled module TU (dumpbin), the stub IV is renamed IV_s00b6_94a0
+00b69990 ?FUN_00b69990@@YAXPAUIV_s00b6_94a0@@@Z  # FUN_00b69990 migrated from s00b694a0; symbol read from the compiled module TU (dumpbin)
+00b69aa0 ?FUN_00b69aa0@@YAXPAUIV_s00b6_94a0@@MMI@Z  # FUN_00b69aa0 migrated from s00b694a0; symbol read from the compiled module TU (dumpbin)

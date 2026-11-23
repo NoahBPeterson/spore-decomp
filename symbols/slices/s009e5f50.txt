@@ -1,1 +1,4 @@
 009e6040 checkerlib::LinearSolveInPlace  # 4x4 Gauss-Jordan solve in place, pivot threshold 1e-6, rhs = numRhs vector_4 columns
+009e6740 ?Reset@GoalState@@QAEXXZ  # GoalState::Reset migrated from s009e5f50 (verbatim, slice spelling)
+009e6750 ?MergeThisBIdx@GoalState@@QAEXI@Z  # GoalState::MergeThisBIdx migrated from s009e5f50 (verbatim, slice spelling)
+009e6c60 ?IkCreatureClear@@YAXPAUIkCreature@@@Z  # IkCreatureClear migrated from s009e5f50 (verbatim, slice spelling)

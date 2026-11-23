@@ -1,0 +1,1 @@
+00cd6980 ?RaiseEvent@cTribeModeStrategy_s00cd6980@@QAEXI@Z  # cTribeModeStrategy_s00cd6980::RaiseEvent migrated from s00cd6980 (verbatim, slice spelling)

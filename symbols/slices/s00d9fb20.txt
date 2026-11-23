@@ -1,0 +1,2 @@
+00da0680 ?FUN_00da0680@@YAXPAH@Z  # FUN_00da0680 migrated from s00d9fb20 (verbatim, slice spelling)
+00da06f0 ?FUN_00da06f0@@YAXPAH@Z  # FUN_00da06f0 migrated from s00d9fb20 (verbatim, slice spelling)

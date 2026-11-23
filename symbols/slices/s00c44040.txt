@@ -1,0 +1,1 @@
+00c44040 ?FUN_00c44040@Vec@@QAEXXZ  # Vec::FUN_00c44040 migrated from s00c44040 (verbatim, slice spelling)

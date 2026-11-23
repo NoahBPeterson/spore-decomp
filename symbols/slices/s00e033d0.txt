@@ -1,17 +1,17 @@
 00e033d0  CivPauseUI::Pause() -> void  # gate on the two stopwatch thresholds and the 1500 s timeout, then show the pause message box and drop the pause gate
-00e03590  BanContent::SetText(int id, const wchar_t* text, const void* extras) -> void  # set active+id, assign the text wstring, then format extras into mExtra and retarget the handler string
+00e03590 ?SetText@BanContent@@QAEXHPB_WPBX@Z  # BanContent::SetText migrated from s00e033d0 (verbatim, slice spelling)
 00e03620 ?Init@cSPUIGlobalUI_s00e0_33d0@@QAE_NH@Z  # cSPUIGlobalUI_s00e0_33d0::Init migrated from s00e033d0 (verbatim, slice spelling)
 00e03740 ?Shutdown@cSPUIGlobalUI_s00e0_33d0@@QAE_NXZ  # cSPUIGlobalUI_s00e0_33d0::Shutdown migrated from s00e033d0 (verbatim, slice spelling)
 00e03830  BanEntry::CopyFrom(const BanEntry& src) -> BanEntry*  # copy id and deep-copy both wstrings via AllocateSelf+memcpy
-00e03930  BanContent::Dtor() -> void  # write both vtables, free the entry vector and its entries' wstrings, then tail-call the refcount destructor
+00e03930 ?Dtor@BanContent@@QAEXXZ  # BanContent::Dtor migrated from s00e033d0 (verbatim, slice spelling)
 00e039d0 ?HandleMessage@cSPUIGlobalOptions_s00e0_33d0@@QAE_NHPAUUIMessage@@@Z  # cSPUIGlobalOptions_s00e0_33d0::HandleMessage migrated from s00e033d0 (verbatim, slice spelling)
 00e03a90 ?OnMessage@CivPauseUI@@QAE_NHH@Z  # CivPauseUI::OnMessage migrated from s00e033d0 (verbatim, slice spelling)
 00e03ab0  cSPUIGlobalUI::Construct() -> void*  # write both vtables, construct the embedded translator, seed empty wstrings and the entry vector, zero the handler fields
 00e03b20  cSPUIGlobalUI::Destroy() -> void  # remove the message handler, destroy the ban content, release layout/options, then write the base vtable
-00e03b80  BanTranslator::Format(const wchar_t* key, wchar_t* out) -> bool  # FNV1_String16 switch over 0x2f009dd8/0x989407d5/0xd5c6de59: id, extra text, text
-00e03c30  BanVec::EraseLast(BanEntry* pos) -> BanEntry*  # shift the tail left by one, then free the removed entry's text and name buffers
+00e03b80 ?Format@BanTranslator@@QAE_NPB_WPA_W@Z  # BanTranslator::Format migrated from s00e033d0 (verbatim, slice spelling)
+00e03c30 ?EraseLast@BanVec@@QAEPAUBanEntry@@PAU2@@Z  # BanVec::EraseLast migrated from s00e033d0 (verbatim, slice spelling)
 00e03ca0  BanVec::Insert(BanEntry* pos, const BanEntry& val) -> BanEntry*  # in-place shift/copy or grow to max(2*count,1) and rebuild
-00e03e10  BanContent::OnDeactivate(int a, int b) -> void  # clear active; when holding, format the first pending entry and drop it
+00e03e10 ?OnDeactivate@BanContent@@QAEXHH@Z  # BanContent::OnDeactivate migrated from s00e033d0 (verbatim, slice spelling)
 00e03e50  BanContent::AddRow(int id, const wchar_t* name, const wchar_t* text) -> void  # in hold mode format directly, else append a copy-constructed entry
 00e03f40 ?OnToggle@BanContent@@QAEXD@Z  # BanContent::OnToggle migrated from s00e033d0 (verbatim, slice spelling)
 00e03f80 ?HandleMessage@cSPUIGlobalUI_s00e0_33d0@@QAE_NIH@Z  # cSPUIGlobalUI_s00e0_33d0::HandleMessage migrated from s00e033d0 (verbatim, slice spelling)

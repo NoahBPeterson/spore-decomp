@@ -1,3 +1,4 @@
+00c446d0 ?AddMarker@cMarkerOwner@@QAEXPBM_N@Z  # cMarkerOwner::AddMarker migrated from s00c44080 (verbatim, slice spelling)
 00c45250 ?SetEmpire@cSPMission@@QAEXPAUcEmpire@@@Z  # cSPMission::SetEmpire migrated from s00c44080 (verbatim, slice spelling)
 00c452a0 ?GetEmpire@cSPMission@@QAEPAUcEmpire@@XZ  # cSPMission::GetEmpire migrated from s00c44080 (verbatim, slice spelling)
 00c45310 ?SetUITextValue@cSPMission@@QAEHH@Z  # cSPMission::SetUITextValue migrated from s00c44080 (verbatim, slice spelling)

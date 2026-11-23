@@ -1,7 +1,12 @@
 00dddd20 SP::cGalaxyGameEntryImpl::UpdateCameraFromProperty  # property->Vector3 update
+00ddde80 ?RegisterSmall@@YAXPAX@Z  # RegisterSmall migrated from s00dddd20 (verbatim, slice spelling)
 00dddf30 EA::ArgScript::cCommandBase constructor  # "Level Cheats" command
 00dddf90 EA::ArgScript::cCommandBase::Parse  # command parse
 00dddfd0 SP::cGalaxyGameEntryAppMode::Init  # PDB name
 00dde2b0 SP::cGalaxyCameraController::Init  # camera controller field init
-00dde350 SP::cGalaxyCameraController::OnDeactivate  # PDB candidate
+00dde350 ?Update@CamCtl@@QAEXHH@Z  # CamCtl::Update migrated from s00dddd20 (verbatim, slice spelling)
 00dde400 SP::cGalaxyCameraController::OnKey  # camera key input
+00dde570 ?CamCtl_ResetGlobals@@YAXXZ  # CamCtl_ResetGlobals migrated from s00dddd20 (verbatim, slice spelling)
+00dde590 ?CamCtl_Release@@YGXPAX@Z  # CamCtl_Release migrated from s00dddd20 (verbatim, slice spelling)
+00dde5b0 ?CamCtl_SetFlag@@YGXE@Z  # CamCtl_SetFlag migrated from s00dddd20 (verbatim, slice spelling)
+00dde9e0 ?CamCtl_PresetReset@@YAXXZ  # CamCtl_PresetReset migrated from s00dddd20 (verbatim, slice spelling)

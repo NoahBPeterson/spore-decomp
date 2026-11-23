@@ -1,0 +1,2 @@
+0083c780 ?OnRegister@cCommandBase@ArgScript@EA@@UAEXPAVcIParser@23@PAUcState@23@@Z  # EA::ArgScript::cCommandBase::OnRegister (callee of s00f49b30, named from the dev publics; slice address comment)
+00f4a5d0 ??4BrushState@@QAEAAU0@ABU0@@Z  # BrushState::operator= migrated from s00f49b30 (verbatim, slice spelling)

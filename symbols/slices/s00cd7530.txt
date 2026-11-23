@@ -1,0 +1,1 @@
+00697b40 ?OnMouseWheel@cLocalInputState@SP@@QAEXHMMI@Z  # SP::cLocalInputState::OnMouseWheel (callee of s00cd7530, named from the dev publics; slice address comment)

@@ -1,4 +1,5 @@
 00a88220 ?FUN_00a88220@cDistributeEffect_s00a8_7fb0@@QAE_JXZ  # cDistributeEffect_s00a8_7fb0::FUN_00a88220 migrated from s00a87fb0 (verbatim, slice spelling)
+00a88250 ?FUN_00a88250@@YAPAIPAI00@Z  # FUN_00a88250 migrated from s00a87fb0 (verbatim, slice spelling)
 00a88350 ?FUN_00a88350@cDistributeEffect_s00a8_7fb0@@QAE_NXZ  # cDistributeEffect_s00a8_7fb0::FUN_00a88350 migrated from s00a87fb0 (verbatim, slice spelling)
 00a88390 ?FUN_00a88390@cDistributeEffect_s00a8_7fb0@@QAEHHPAPAX0@Z  # cDistributeEffect_s00a8_7fb0::FUN_00a88390 migrated from s00a87fb0 (verbatim, slice spelling)
 00a88490 ?FUN_00a88490@@YAXPAMMMM@Z  # FUN_00a88490 migrated from s00a87fb0 (verbatim, slice spelling)

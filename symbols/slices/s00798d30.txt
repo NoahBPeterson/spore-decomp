@@ -1,5 +1,10 @@
 00798d30 ?FUN_00798d30@@YAXHPAH@Z  # FUN_00798d30 migrated from s00798d30 (verbatim, slice spelling)
+00798e40 ?FUN_00798e40@@YAXHMPAM00@Z  # FUN_00798e40 migrated from s00798d30 (verbatim, slice spelling)
+00798fb0 ?FUN_00798fb0@@YAXHMPAH00@Z  # FUN_00798fb0 migrated from s00798d30 (verbatim, slice spelling)
+00799050 ?FUN_00799050@@YAXHMPAH00@Z  # FUN_00799050 migrated from s00798d30 (verbatim, slice spelling)
+00799090 ?FUN_00799090@@YAXHMPAH00@Z  # FUN_00799090 migrated from s00798d30 (verbatim, slice spelling)
 007990e0 ?Notify@Mgr@@QAEXH@Z  # Mgr::Notify migrated from s00798d30 (verbatim, slice spelling)
+007992e0 ?FUN_007992e0@@YAPAHPAH00@Z  # FUN_007992e0 migrated from s00798d30 (verbatim, slice spelling)
 00799320 ?FUN_00799320@@YAXPAM0@Z  # FUN_00799320 migrated from s00798d30 (verbatim, slice spelling)
 007993a0 SP::cSplitManager::cSplitInstance::cSplitInstance  # dev PDB name in card header
 00799450 ?copy@CSplitCtor@@QAEPAHPAH@Z  # CSplitCtor::copy migrated from s00798d30 (verbatim, slice spelling)

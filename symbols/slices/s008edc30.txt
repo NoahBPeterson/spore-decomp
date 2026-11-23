@@ -1,3 +1,8 @@
 008edd30 ?StyleCtorForward@@YGPAXPAX0@Z  # StyleCtorForward migrated from s008edc30 (verbatim, slice spelling)
 008edd50 ?ScrollbarStyleSet@@YGXPBUVec2@Layout@XHTML@EA@@@Z  # ScrollbarStyleSet migrated from s008edc30 (verbatim, slice spelling)
 008edd80 ?ScrollbarStyleGet@@YGXPAUVec2@Layout@XHTML@EA@@@Z  # ScrollbarStyleGet migrated from s008edc30 (verbatim, slice spelling)
+008eddb0 ?RefreshMargins@PickingContext@Layout@XHTML@EA@@QAEXXZ  # PickingContext::RefreshMargins migrated from s008edc30 (verbatim, slice spelling)
+008ede40 ?SetContextRect@PickingContext@Layout@XHTML@EA@@QAEXPBM@Z  # PickingContext::SetContextRect migrated from s008edc30 (verbatim, slice spelling)
+008edf60 ?PlaceFloat@PickingContext@Layout@XHTML@EA@@QAEXPAUFloatEntry@234@@Z  # PickingContext::PlaceFloat migrated from s008edc30 (verbatim, slice spelling)
+008edfc0 ?lower_bound@PickingContext@Layout@XHTML@EA@@SAPAUTranslationEntry@234@PAU5234@0PBH@Z  # PickingContext::lower_bound migrated from s008edc30 (verbatim, slice spelling)
+008ee240 ??0PickingContext@Layout@XHTML@EA@@QAE@ABV0123@@Z  # PickingContext::PickingContext migrated from s008edc30 (verbatim, slice spelling)

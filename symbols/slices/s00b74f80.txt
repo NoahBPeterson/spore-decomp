@@ -1,0 +1,7 @@
+00b75750 ?f_00b75750@@YAXPAH0UPosV3@@@Z  # f_00b75750 migrated from s00b74f80 (verbatim, slice spelling)
+00b75820 ?Init@T5820@@QAEPAU1@XZ  # T5820::Init migrated from s00b74f80 (verbatim, slice spelling)
+00b75890 ?GetOrInsert@T5890@@QAEPAHPAI@Z  # T5890::GetOrInsert migrated from s00b74f80 (verbatim, slice spelling)
+00b759b0 ?FreeTable@T59b0@@QAEXPAHI@Z  # T59b0::FreeTable migrated from s00b74f80 (verbatim, slice spelling)
+00b75b80 ?f_00b75b80@@YGXPAPAHI@Z  # f_00b75b80 migrated from s00b74f80 (verbatim, slice spelling)
+00b75bf0 ?f_00b75bf0@@YGXPAPAHI@Z  # f_00b75bf0 migrated from s00b74f80 (verbatim, slice spelling)
+00b75c60 ?f_00b75c60@@YAXPAUV3@@00P6AD00@Z@Z  # f_00b75c60 migrated from s00b74f80 (verbatim, slice spelling)

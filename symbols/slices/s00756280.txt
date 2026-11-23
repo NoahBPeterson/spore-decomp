@@ -8,3 +8,4 @@
 00756b50 ?FUN_00756b50@CModelRegion@@QAE_NPAUcJob@@@Z  # CModelRegion::FUN_00756b50 migrated from s00756280 (verbatim, slice spelling)
 00756c70 ?FUN_00756c70@CModelRegion@@QAE_NPAUcJob_s0075_6280@@@Z  # CModelRegion::FUN_00756c70 migrated from s00756280 (verbatim, slice spelling)
 00756d80 ?FUN_00756d80@CModelRegion@@QAE_NPAUcJob_s0075_6280@@@Z  # CModelRegion::FUN_00756d80 migrated from s00756280 (verbatim, slice spelling)
+00756fc0 ?FUN_00756fc0@@YAXPAURefVector@@0@Z  # FUN_00756fc0 migrated from s00756280 (verbatim, slice spelling)

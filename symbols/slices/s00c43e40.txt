@@ -1,0 +1,1 @@
+00c43e40 ?SetGoal@cLocomotiveObject@@QAEXPAUcGoalData@@@Z  # cLocomotiveObject::SetGoal migrated from s00c43e40 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00c436a0 ?ClearGoalAndStop@cLocomotiveObject@SP@@UAEXXZ  # ClearGoalAndStop migrated from s00c436a0 (verbatim, slice spelling)

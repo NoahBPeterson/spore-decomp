@@ -3,6 +3,7 @@
 007a0b90 ?Swap@V12@@QAEXAAU1@@Z  # V12::Swap migrated from s007a07b0 (verbatim, slice spelling)
 007a0cd0 ?Reset@SplitState@@QAEXHH@Z  # SplitState::Reset migrated from s007a07b0 (verbatim, slice spelling)
 007a0de0 ?Reset@SplitState2@@QAEXHH@Z  # SplitState2::Reset migrated from s007a07b0 (verbatim, slice spelling)
+007a0ee0 ?Process@IModelSplitter@@QAEXHPAUV12@@@Z  # IModelSplitter::Process migrated from s007a07b0 (verbatim, slice spelling)
 007a0f90 ?Split@IModelSplitter@@QAEXHPAUV12@@@Z  # IModelSplitter::Split migrated from s007a07b0 (verbatim, slice spelling)
 007a1000 ?Apply@ApplyHost@@QAEXPAUV12@@@Z  # ApplyHost::Apply migrated from s007a07b0 (verbatim, slice spelling)
 007a1100 ?Resize@VecV20@@QAEXI@Z  # VecV20::Resize migrated from s007a07b0 (verbatim, slice spelling)

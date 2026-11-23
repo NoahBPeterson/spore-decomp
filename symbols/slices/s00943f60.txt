@@ -1,5 +1,6 @@
-009440e0 ?Shutdown@HTTPClient_s0094_3f60@Internet@EA@@QAE_NXZ  # HTTPClient_s0094_3f60::Shutdown migrated from s00943f60 (verbatim, slice spelling)
+009222a0 ??0Mutex@Thread@EA@@QAE@PBUMutexParameters@12@_N@Z  # EA::Thread::Mutex::Mutex (callee of s00943f60, named from the dev publics; slice address comment)
 00943f60 ?ctor@HTTPClientCtor@Internet@EA@@QAEXXZ  # EA::Internet::HTTPClient ctor (slice spelling HTTPClientCtor::ctor)
+009440e0 ?Shutdown@HTTPClient_s0094_3f60@Internet@EA@@QAE_NXZ  # HTTPClient_s0094_3f60::Shutdown migrated from s00943f60 (verbatim, slice spelling)
 00944250 ?push_back@?$basic_string@D@eastl@Internet@EA@@QAEXD@Z  # eastl::basic_string<char>::push_back(char)
 009442e0 ?Construct@UTFHTTPRequest@Internet@EA@@QAEXXZ  # UTFInternet::HTTPRequest ctor
 00944380 ?Destroy@UTFHTTPRequest@Internet@EA@@QAEXXZ  # UTFInternet::HTTPRequest dtor

@@ -1,1 +1,2 @@
+00cd75f0 ?OnInput@cTribeModeStrategy_s00cd75f0@@QAE_NHH@Z  # cTribeModeStrategy_s00cd75f0::OnInput migrated from s00cd75f0 (verbatim, slice spelling)
 00cd7d10 ?CreateGameDataVector@@YAPAUtGameDataVectorT@Simulator@@XZ  # CreateGameDataVector migrated from s00cd75f0 (verbatim, slice spelling)

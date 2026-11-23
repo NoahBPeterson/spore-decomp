@@ -13,4 +13,6 @@
 0057c940 WriteTypedValue@M::WriteTypedValue  # SP::WriteTypedValue<float> explicit instantiation (qualifier selects ??$WriteTypedValue@M)
 0057cb60 ??4?$basic_string_s0057_bfb0@_WVallocator_s0057_bfb0@eastl@@@eastl@@QAEAAV01@ABV01@@Z  # None migrated from s0057bfb0 (verbatim, slice spelling)
 0057cb80 ??1?$fixed_string@_W$0BA@$00@eastl@@QAE@XZ  # fixed_string migrated from s0057bfb0 (verbatim, slice spelling)
+0057cc60 ?reserve@?$sp_byte_vector@D@SP@@QAEXI@Z  # reserve migrated from s0057bfb0 (verbatim, slice spelling)
+0057cd40 ?SetResourceName@SP@@YAXPAUcResourceTable@1@HPB_W@Z  # SetResourceName migrated from s0057bfb0 (verbatim, slice spelling)
 005dd4a0 ?Show@cSPEditorUI@SP@@QAEXXZ  # SP::cSPEditorUI::Show (callee of s0057bfb0, named from the dev publics; slice address comment)

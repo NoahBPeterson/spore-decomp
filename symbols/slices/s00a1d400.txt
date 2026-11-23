@@ -4,5 +4,5 @@
 00a1d830 ?SetProperty@Sound@Audio@EA@@UAEXIM_N@Z  # EA::Audio::Sound::SetProperty migrated from s00a1d400
 00a1d9c0 ?SetPropertyInternal@Sound_s00a1_d400@@QAEXIM_N@Z  # Sound_s00a1_d400::SetPropertyInternal migrated from s00a1d400 (verbatim, slice spelling)
 00a1df20 ?ConnectPrimitive@Sound@Audio@EA@@UAE_NIPAVIPrimitive@23@@Z  # EA::Audio::Sound::ConnectPrimitive migrated from s00a1d400
-00a1e140 ?DisconnectPrimitive@Sound@@QAEXIPAX@Z  # Sound::DisconnectPrimitive
+00a1e140 ?DisconnectPrimitive@Sound@Audio@EA@@UAEXIPAVIPrimitive@23@@Z  # EA::Audio::Sound::DisconnectPrimitive migrated from s00a1d400
 00a1e1d0 ?Route@Sound@Audio@EA@@UAEXIIPAVPrimitiveTuning@23@@Z  # EA::Audio::Sound::Route migrated from s00a1d400
