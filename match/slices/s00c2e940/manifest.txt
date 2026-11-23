@@ -1,0 +1,1 @@
+slices/s00c2e940/s00c2e940.cpp  ?Serialize_00c2e940@GO_00c2e940@@QAEXPAX@Z  00c2e940  /O2 /MD /Gy /EHsc /TP

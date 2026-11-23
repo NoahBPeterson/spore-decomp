@@ -1,0 +1,1 @@
+slices/s00970cf0/s00970cf0.cpp  ?GetProperty@AnimCurve_00970cf0@@QAEXPAUPropertyRef_00970cf0@@@Z  00970cf0  /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,1 @@
+slices/s00ac7830/s00ac7830.cpp  ?Serialize_00ac7830@GO_00ac7830@@QAEXPAX@Z  00ac7830  /O2 /MD /Gy /EHsc /TP

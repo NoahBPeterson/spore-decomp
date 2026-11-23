@@ -1,0 +1,1 @@
+slices/s00ff0590/s00ff0590.cpp  ?Serialize_00ff0590@GO_00ff0590@@QAEXPAX@Z  00ff0590  /O2 /MD /Gy /EHsc /TP
