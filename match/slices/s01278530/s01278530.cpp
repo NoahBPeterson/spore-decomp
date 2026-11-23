@@ -2,9 +2,12 @@
 // Each one registers a named setting and stores the resulting id:
 //     g_<addr> = FUN_00932e80("<name>", 0x811c9dc5, 1);
 // 0x811c9dc5 is the FNV-1a offset basis, the last argument the register flag.
+// One exception: 0x0129dbe0 registers a wide name through FNV1_String16
+// (0x00932f30, movzx word ptr — the narrow FUN_00932e80 reads movzx byte ptr).
 // Built /O2 /MD /Gy /EHsc /TP.
 
 unsigned int FUN_00932e80(const char* s, unsigned int seed, int flag);
+unsigned int FNV1_String16(const wchar_t* s, unsigned int seed, int flag);   // 0x00932f30 EA::Hash::FNV1_String16
 
 extern unsigned int g_015e523c;
 extern unsigned int g_015e51d4;
@@ -685,7 +688,7 @@ void FUN_0129d820() { g_015f3658 = FUN_00932e80("editor_sym_snap", 0x811c9dc5, 1
 // @ 0x0129d840
 void FUN_0129d840() { g_015f35f0 = FUN_00932e80("editor_sym_unsnap", 0x811c9dc5, 1); }
 // @ 0x0129dbe0
-void FUN_0129dbe0() { g_015f35e8 = FUN_00932e80("l", 0x811c9dc5, 1); }
+void FUN_0129dbe0() { g_015f35e8 = FNV1_String16(L"login", 0x811c9dc5, 1); }
 // @ 0x0129df30
 void FUN_0129df30() { g_015f386c = FUN_00932e80("editor_sym_unsnap", 0x811c9dc5, 1); }
 // @ 0x0129e590
