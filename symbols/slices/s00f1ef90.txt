@@ -1,0 +1,2 @@
+00f1ef90 ?FUN_00f1ef90@cScenarioPlayProgressBar_s00f1_ef90@@QAEXHD@Z  # verbatim method of the renamed stub cScenarioPlayProgressBar_s00f1_ef90
+00f1f4e0 ?FUN_00f1f4e0@cScenarioPlayProgressBar_s00f1_ef90@@QAEXH@Z  # verbatim method of the renamed stub cScenarioPlayProgressBar_s00f1_ef90

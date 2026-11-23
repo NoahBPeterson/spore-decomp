@@ -9,3 +9,6 @@
 007618e0 ?ResetGlobalState@SP@@YAXXZ  # SP::ResetGlobalState migrated from s00760ea0
 00761b40 ?FUN_00761b40@@YAPAXXZ  # FUN_00761b40 migrated from s00760ea0 (verbatim, slice spelling)
 00761c00 ?FUN_00761c00@@YAPAXXZ  # FUN_00761c00 migrated from s00760ea0 (verbatim, slice spelling)
+00761c50 ?FUN_00761c50@@YGPAIPAIPAUPair2@@H@Z  # FUN_00761c50 migrated from s00760ea0 (verbatim, slice spelling)
+00761cc0 ?FUN_00761cc0@@YGXPAPAX@Z  # FUN_00761cc0 migrated from s00760ea0 (verbatim, slice spelling)
+00761cf0 ?FUN_00761cf0@@YAXH@Z  # FUN_00761cf0 migrated from s00760ea0 (verbatim, slice spelling)

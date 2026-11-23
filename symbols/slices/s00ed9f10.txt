@@ -1,15 +1,15 @@
 00ed9f10 SP::Simulator::cScenarioEditModeInputStrategy::ToggleTriggerConfig  # vtable slot, ECX=this
-00eda130 SP::Simulator::cScenarioEditModeInputStrategy::InstallCursorsAndHandlers  # ECX=this
-00eda2f0 SP::Simulator::cScenarioEditModeInputStrategy::HandleMessage  # primary IWindow message switch
-00eda6f0 SP::Simulator::cScenarioEditModeInputStrategy::HandleMessageSub  # +0x44 sub-object handler, this-0x44
+00eda130 ?FUN_00eda130@InputStrategy@@QAEXXZ  # InputStrategy::FUN_00eda130 migrated from s00ed9f10 (verbatim, slice spelling)
+00eda2f0 ?FUN_00eda2f0@InputStrategy@@QAEHIPAX@Z  # InputStrategy::FUN_00eda2f0 migrated from s00ed9f10 (verbatim, slice spelling)
+00eda6f0 ?FUN_00eda6f0@InputStrategy@@QAEHIPAX@Z  # InputStrategy::FUN_00eda6f0 migrated from s00ed9f10 (verbatim, slice spelling)
 00eda9a0 SP::Simulator::cScenarioEditModeInputStrategy::Shutdown  # close naming window, drop input capture
-00edaa80 SP::Simulator::cScenarioEditModeInputStrategy::cScenarioEditModeInputStrategy  # PDB name, ctor
+00edaa80 ?FUN_00edaa80@InputStrategy@@QAEPAU1@XZ  # InputStrategy::FUN_00edaa80 migrated from s00ed9f10 (verbatim, slice spelling)
 00edab50 SP::Simulator::cScenarioEditModeInputStrategy::~cScenarioEditModeInputStrategy  # dtor body
-00edabf0 FUN_00edabf0  # cdecl, load scenario-editor resource by index, returns byte bool
-00edac50 FUN_00edac50  # cdecl, menu-item availability predicate (vtable slot)
-00edac70 FUN_00edac70  # cdecl, current recorder-row count query (vtable slot)
-00edaca0 FUN_00edaca0  # void thiscall, dispatch highlighted menu item
-00edad00 FUN_00edad00  # thiscall, rebuild the four tutorial entries
-00edadd0 FUN_00edadd0  # thiscall, bind tutorial entries to recorder rows
-00edae50 FUN_00edae50  # cSPEditorNaming::HandleMessage override (ECX=this, ret 8)
+00edabf0 _FUN_00edabf0  # FUN_00edabf0 migrated from s00ed9f10 (verbatim, slice spelling)
+00edac50 _FUN_00edac50  # FUN_00edac50 migrated from s00ed9f10 (verbatim, slice spelling)
+00edac70 _FUN_00edac70  # FUN_00edac70 migrated from s00ed9f10 (verbatim, slice spelling)
+00edaca0 ?FUN_00edaca0@InputStrategy@@QAEXXZ  # InputStrategy::FUN_00edaca0 migrated from s00ed9f10 (verbatim, slice spelling)
+00edad00 ?FUN_00edad00@InputStrategy@@QAEXXZ  # InputStrategy::FUN_00edad00 migrated from s00ed9f10 (verbatim, slice spelling)
+00edadd0 ?FUN_00edadd0@InputStrategy@@QAEXXZ  # InputStrategy::FUN_00edadd0 migrated from s00ed9f10 (verbatim, slice spelling)
+00edae50 ?FUN_00edae50@InputStrategy@@QAEHIPAX@Z  # InputStrategy::FUN_00edae50 migrated from s00ed9f10 (verbatim, slice spelling)
 00edae80 FUN_00edae80  # thiscall, destructor for the cSPEditorNaming-derived naming widget

@@ -1,9 +1,9 @@
-0076cc00  (vector<0x28>::insert)  # 300-byte grow/shift insert over 0x28 elements
-0076cd30  SP::cRTTCapture-like update  # cJob continue + message release + scene-job append
-0076ce50  TileCapture::Capture  # tile-by-tile render-to-texture capture of a viewer into one RGBA image, optional "<path>.png" save job; Claude-coined name
-0076d5c0  vector<0x28>::push_back  # builds a 0x28 element from 12 args
-0076d6e0  three-call push wrapper  # calls 0076d5c0 with formats 5/7/6
-0076d7d0  RectThing::SetSize  # stores 4 uint16 sizes + 0.0/1.0 floats
+0076cc00 ?insert@E28Vec@@QAEXPAUE28_s0076_cc00@@PBU2@@Z  # E28Vec::insert migrated from s0076cc00 (verbatim, slice spelling)
+0076cd30 ?Update@SnapshotWrap@@QAEXH@Z  # SnapshotWrap::Update migrated from s0076cc00 (verbatim, slice spelling)
+0076ce50 ?Capture@TileCapture@@QAEXHHPAPAUCapViewer@@I@Z  # TileCapture::Capture migrated from s0076cc00 (verbatim, slice spelling)
+0076d5c0 ?push_back@SnapshotWrap@@QAEXHHMMMMHDDHH@Z  # SnapshotWrap::push_back migrated from s0076cc00 (verbatim, slice spelling)
+0076d6e0 ?PushThreeJobs@SnapshotWrap@@QAEXHHHHMMMMHDDHHH@Z  # SnapshotWrap::PushThreeJobs migrated from s0076cc00 (verbatim, slice spelling)
+0076d7d0 ?SetSize@RectThing@@QAEXGGGG@Z  # RectThing::SetSize migrated from s0076cc00 (verbatim, slice spelling)
 0076d820 ?RasterFormatSize@@YAHHHH@Z  # RasterFormatSize migrated from s0076cc00 (verbatim, slice spelling)
 0076d8e0  viewer creation  # new 0x174 viewer + rect stores
 0076d970 ?Teardown@SnapshotWrap@@QAEXHHHH@Z  # SnapshotWrap::Teardown migrated from s0076cc00 (verbatim, slice spelling)
