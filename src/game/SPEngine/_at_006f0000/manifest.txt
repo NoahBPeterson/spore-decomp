@@ -1,0 +1,33 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_006f0000.cpp  ?OnMessage@cRenderInstanceSet@@UAE_NHH@Z  006f3ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?CopyTo174@cRenderInstanceSet@@QAE_NPAX@Z  006f3ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Setup178@cRenderInstanceSet@@QAEPAUcViewer@@PAX@Z  006f3f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Setup180@cRenderInstanceSet@@QAEPAUcViewer@@PAX@Z  006f3fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?SetElement@cRenderInstanceSet@@QAEXHM@Z  006f40b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?ClearElements@cRenderInstanceSet@@QAEXXZ  006f40d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?SetColor@cRenderInstanceSet@@UAEXHPBMMH@Z  006f4100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?IsRangeEmpty@cRenderInstanceSet@@QBE_NXZ  006f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006f44c0@@YG_NPAX0PAUcImageHost@@@Z  006f44c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006f4500@@YG_NIPAXPAUcImageHost@@@Z  006f4500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006f51b0@@YIXPAD@Z  006f51b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?W6060@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  006f6060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?W60f0@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  006f60f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?W6180@cState@@QAEXPAUcColorCtx@@0HHHHH@Z  006f6180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?ColorBE@cState_s006f_6430@@QAEXPAUcTables@@PAUcDesc@@HHHHH@Z  006f6430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?ColorDC@cState_s006f_6430@@QAEXPAUcTables@@PAUcDesc@@HHHHH@Z  006f6500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?push_back@cVecU16@@QAEXABG@Z  006f66a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006f66d0@@YIXPAH@Z  006f66d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006f8140@@YAPADPAD00@Z  006f8140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ??1cFilterChain@@QAE@XZ  006f8f60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Notify@EvChain@@QAEXHHHH@Z  006f94b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ??4Elem78@@QAEAAU0@ABU0@@Z  006f9910  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  _copy79  006f9970  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  _copy_backward79  006f99e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Read@FragRec@@QAE_NPAUIO@@I@Z  006fcdc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Write@FragRec@@QAE_NPAUIO@@@Z  006fceb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ??1cFragmentShader@@QAE@XZ  006fd1b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ??0cFragmentShader@@QAE@XZ  006fd280  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Release@cFragmentShader@@QAEHXZ  006fd300  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?Resize@Vec1c@@QAEXI@Z  006fd520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006fd730@@YAXHHH@Z  006fd730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006fd990@@YAXPAX@Z  006fd990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

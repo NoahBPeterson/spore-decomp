@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00760000.cpp  ?FUN_00761cc0@@YGXPAPAX@Z  00761cc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?FUN_00761cf0@@YAXH@Z  00761cf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??0Obj62250@@QAE@PBHPAURefCountedAt8@SP@@@Z  00762250  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??1Obj62250@@QAE@XZ  007622e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?findInsert@Hash262b00@@QAEHPAI@Z  00762b00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?SetFlag1630180@@YAXE@Z  00762f00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?ReleaseViaSlot8@@YAXPAUIObj@@@Z  00762f10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??1C68370@@UAE@XZ  00768540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??0Daf@@QAE@XZ  0076af50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??4E28@@QAEAAU0@ABU0@@Z  0076b1f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??1D350Obj@@QAE@XZ  0076b3c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ??1D660Obj@@QAE@XZ  0076b6c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?ReleaseViewer76b8@@YIXPAX@Z  0076b840  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?RenderViewer76b8@@YIXPAXH0000@Z  0076b890  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00760000.cpp  ?SetSize@RectThing@@QAEXGGGG@Z  0076d7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

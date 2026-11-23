@@ -6,6 +6,10 @@
 extern "C" char g_149c85c[];
 
 #include "game/types.h"
+#include <malloc.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
@@ -543,4 +547,725 @@ void FUN_0107e640()
     unsigned char* p = (unsigned char*)hkAlloc(8, 0x15);
     *(unsigned int*)(p + 4) = 0x00010008u;
     *(void**)p = (void*)0x149c894;
+}
+
+// ---- items of slice s0107e670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C"
+{
+	__declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
+	__declspec(dllimport) int __stdcall TlsSetValue(unsigned long index, void* value);
+	__declspec(dllimport) int __stdcall TryEnterCriticalSection(void* cs);
+	__declspec(dllimport) void __stdcall EnterCriticalSection(void* cs);
+	__declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
+	__declspec(dllimport) void __stdcall DeleteCriticalSection(void* cs);
+	__declspec(dllimport) int __stdcall InitializeCriticalSectionAndSpinCount(void* cs, unsigned long spin);
+	__declspec(dllimport) unsigned long __stdcall GetCurrentThreadId(void);
+	__declspec(dllimport) void* __stdcall GetCurrentProcess(void);
+	__declspec(dllimport) void* __stdcall LoadLibraryA(const char* name);
+	__declspec(dllimport) int __stdcall FreeLibrary(void* module);
+	__declspec(dllimport) void* __stdcall GetProcAddress(void* module, const char* name);
+}
+extern void* SporeAlloc(size_t nbytes);                                                        // 0x006ABEB0
+extern bool g_hkBaseSystemInitialized;                                                         // 0x016E4180
+extern void* g_SymGetModuleBase64;                     // 0x016E418C
+extern void* g_SymFunctionTableAccess64;               // 0x016E4190
+extern void* g_StackWalk64;                            // 0x016E4194
+extern int g_dbghelpRefCount;                          // 0x016E41A8
+extern void* g_dbghelpModule;                          // 0x016E41AC
+extern bool g_stackTracerReportedMissingSymbols;       // 0x016E41B0
+extern const char* g_dbghelpName;                      // 0x015B9A48 -> "dbghelp.dll"
+#define HK_BREAKPOINT() __debugbreak()
+typedef int16_t hkInt16;
+typedef uint16_t hkUint16;
+typedef uint32_t hkUint32;
+typedef uint64_t hkUint64;
+class hkBool_s0107_e670
+{
+public:
+	hkBool_s0107_e670() {}
+	hkBool_s0107_e670(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+private:
+	char m_bool;
+};
+enum
+{
+	HK_MEMORY_CLASS_ARRAY = 0x14,
+	HK_MEMORY_CLASS_BASE = 0x15,
+	HK_MEMORY_CLASS_STREAM = 0x17
+};
+struct hkMemoryStatistics
+{
+	int m_numBigBlocks;       // 0x10 in hkMemory
+	int m_bigBlockBytes;      // 0x14
+	int m_peakBigBlockBytes;  // 0x18
+	int m_numPages;           // 0x1c
+	int m_pageSize;           // 0x20
+	int m_pageAlignment;      // 0x24
+	int m_inUseBytes;         // 0x28
+};
+class hkOstream_s0107_e670;
+class hkMemory_s0107_e670
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                          // 0
+	virtual void deallocate(void* p);                                    // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);    // 2
+	virtual void alignedDeallocate(void* p);                             // 3
+	virtual void* allocateChunk(int nbytes, int cl);                     // 4
+	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5
+	virtual void* allocateChunkByRow(int row, int cl);                   // 6 0x0107dd70
+	virtual void deallocateChunkByRow(void* p, int row, int cl);         // 7 0x0107dda0
+	virtual void slot8();                                                // 8 (0x00B1FBF0)
+	virtual void printStatistics(hkOstream_s0107_e670* o);                          // 9
+	virtual int getAllocatedSize(int nbytes);                            // 10 0x0107dcf0
+	virtual void getStatSynopsis(hkMemoryStatistics* s);                 // 11
+	virtual bool slot12();                                               // 12 (0x01091960, returns 0)
+	virtual ~hkMemory_s0107_e670() {}                                               // 13 (deleting dtor 0x0107FBC0 for the pool)
+
+	static hkMemory_s0107_e670* s_instance;
+	static void replaceInstance(hkMemory_s0107_e670* m);  // 0x0107dd30 (hkMemory::replaceInstance)
+
+	hkMemory_s0107_e670();                      // 0x0107DC90 (not in these slices)
+
+	int m_unk04;                     // 0x04
+	int m_unk08;                     // 0x08 (0x7FFFFFFF)
+	int m_unk0c;                     // 0x0c (1)
+	hkMemoryStatistics m_stats;      // 0x10..0x2b
+};
+class hkStatisticsCollector;
+class hkBaseObject_s0107_e670
+{
+public:
+	virtual ~hkBaseObject_s0107_e670() {} // one-slot primary base
+};
+class hkReferencedObject_s0107_e670 : public hkBaseObject_s0107_e670
+{
+public:
+	virtual ~hkReferencedObject_s0107_e670() {}                                     // 0
+	virtual void calcStatistics(hkStatisticsCollector*) const {}           // 1 (0x0052E650, empty, ret4)
+
+	// HK_DECLARE_CLASS_ALLOCATOR with the stream memory class, as the binary allocates these objects.
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s0107_e670::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_STREAM);
+		((hkReferencedObject_s0107_e670*)p)->m_memSizeAndFlags = (hkInt16)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s0107_e670::s_instance->deallocateChunk(p, ((hkReferencedObject_s0107_e670*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_STREAM);
+	}
+	static void* operator new(size_t, void* p) { return p; }
+	static void operator delete(void*, void*) {}
+
+	// memSize == 0 means the object is not heap-owned and is never reference counted.
+	void addReference() { if (m_memSizeAndFlags != 0) ++m_referenceCount; }
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			if (--m_referenceCount == 0)
+				delete this;
+		}
+	}
+
+	hkUint16 m_memSizeAndFlags; // 0x04
+	hkInt16 m_referenceCount;   // 0x06
+
+protected:
+	hkReferencedObject_s0107_e670() : m_referenceCount(1) {}
+};
+class hkStreamReader : public hkReferencedObject_s0107_e670
+{
+public:
+	enum SeekWhence { STREAM_SET = 0, STREAM_CUR = 1, STREAM_END = 2 };
+
+	virtual hkBool_s0107_e670 isOk() const = 0;                              // 2
+	virtual int read(void* buf, int nbytes) = 0;                  // 3
+	virtual int skip(int nbytes);                                 // 4  0x010808F0
+	virtual hkBool_s0107_e670 markSupported() const;                         // 5
+	virtual hkResult setMark(int markLimit);                      // 6
+	virtual hkResult rewindToMark();                              // 7
+	virtual hkBool_s0107_e670 seekTellSupported() const;                     // 8
+	virtual hkResult seek(int offset, SeekWhence whence);         // 9
+	virtual int tell() const;                                     // 10
+};
+class hkSeekableStreamReader : public hkStreamReader
+{
+public:
+	virtual hkResult setMark(int markLimit);                      // 0x0107E740
+	virtual hkResult rewindToMark();                              // 0x0107E760
+	int m_markPos;                                                // 0x08
+
+protected:
+	hkSeekableStreamReader() : m_markPos(-1) {}
+};
+class hkStreamWriter : public hkReferencedObject_s0107_e670
+{
+public:
+	enum SeekWhence { STREAM_SET = 0, STREAM_CUR = 1, STREAM_END = 2 };
+
+	virtual hkBool_s0107_e670 isOk() const = 0;                              // 2
+	virtual int write(const void* buf, int nbytes) = 0;           // 3
+	virtual void flush();                                         // 4
+	virtual hkBool_s0107_e670 seekTellSupported() const;                     // 5
+	virtual hkResult seek(int offset, SeekWhence whence);         // 6
+	virtual int tell() const;                                     // 7
+};
+typedef struct _iobuf FILE;
+class hkStdioStreamReader : public hkSeekableStreamReader
+{
+public:
+	hkStdioStreamReader(const char* name);                        // 0x0107E700
+	virtual ~hkStdioStreamReader();                               // 0x0107E7E0 (deleting)
+	virtual hkBool_s0107_e670 isOk() const;
+	virtual int read(void* buf, int nbytes);
+	virtual hkResult seek(int offset, SeekWhence whence);
+	virtual int tell() const;
+
+	FILE* m_file;                                                 // 0x0c
+	hkBool_s0107_e670 m_ok;                                                  // 0x10
+	void* scalar_deleting_dtor(unsigned char flags);              // 0x0107E7E0
+};
+class hkStdioStreamWriter : public hkStreamWriter
+{
+public:
+	hkStdioStreamWriter(const char* name);                        // 0x0107E890
+	virtual ~hkStdioStreamWriter();                               // 0x0107E9A0 (deleting)
+	virtual hkBool_s0107_e670 isOk() const;                                  // 0x0107E950
+	virtual int write(const void* buf, int nbytes);
+	virtual void flush();
+	virtual hkResult seek(int offset, SeekWhence whence);
+	virtual int tell() const;
+	void close();                                                 // 0x0107E910
+
+	FILE* m_file;                                                 // 0x08
+	hkBool_s0107_e670 m_ownsFile;                                            // 0x0c
+	void* scalar_deleting_dtor(unsigned char flags);              // 0x0107E9A0
+};
+class hkBufferedStreamReader : public hkStreamReader
+{
+public:
+	hkBufferedStreamReader(hkStreamReader* s, int bufSize);       // 0x01080830
+	virtual ~hkBufferedStreamReader();                            // 0x01080890 (deleting)
+	virtual hkBool_s0107_e670 isOk() const;
+	virtual int read(void* buf, int nbytes);
+	virtual int skip(int nbytes);
+	virtual hkBool_s0107_e670 markSupported() const;
+	virtual hkResult setMark(int markLimit);
+	virtual hkResult rewindToMark();
+	virtual hkBool_s0107_e670 seekTellSupported() const;
+	virtual hkResult seek(int offset, SeekWhence whence);
+	virtual int tell() const;
+	virtual hkResult refillBuffer();                              // 11
+	void prepareBufferForRefill();                                // 0x01080540
+
+	hkStreamReader* m_stream;                                     // 0x08
+	char* m_buf;                                                  // 0x0c
+	int m_current;                                                // 0x10
+	int m_end;                                                    // 0x14
+	int m_bufSize;                                                // 0x18
+	int m_markPos;                                                // 0x1c
+	int m_markLimit;                                              // 0x20
+};
+class hkBufferedStreamWriter : public hkStreamWriter
+{
+public:
+	hkBufferedStreamWriter(hkStreamWriter* s, int bufSize);       // 0x01080C30
+	hkBufferedStreamWriter(void* buf, int bufSize, hkBool_s0107_e670 nullTerminate); // 0x01080B70
+	virtual ~hkBufferedStreamWriter();                            // 0x01080BD0 (+ deleting 0x01080C90)
+	virtual hkBool_s0107_e670 isOk() const;
+	virtual int write(const void* buf, int nbytes);
+	virtual void flush();
+	virtual hkBool_s0107_e670 seekTellSupported() const;
+	virtual hkResult seek(int offset, SeekWhence whence);
+	virtual int tell() const;
+	int flushBuffer();                                            // 0x01080950
+
+	hkStreamWriter* m_stream;                                     // 0x08
+	char* m_buf;                                                  // 0x0c
+	int m_current;                                                // 0x10
+	int m_bufSize;                                                // 0x14
+	bool m_ownBuf;                                                // 0x18
+};
+class hkOstream_s0107_e670 : public hkReferencedObject_s0107_e670
+{
+public:
+	hkOstream_s0107_e670(void* buf, int bufSize, hkBool_s0107_e670 nullTerminate);      // 0x0107EF80
+	virtual ~hkOstream_s0107_e670();                                         // 0x0107EFD0 (deleting 0x0107F000)
+	hkOstream_s0107_e670& operator<<(char c);                                // 0x0107EE10
+	hkOstream_s0107_e670& operator<<(const char* s);                         // 0x0107EE30
+	hkOstream_s0107_e670& operator<<(int i);                                 // 0x0107EE80 ("%i")
+	hkOstream_s0107_e670& operator<<(unsigned int u);                        // 0x0107EED0 ("%u")
+	void printf(const char* fmt, ...);                            // 0x0107EF20
+
+	hkStreamWriter* m_writer;                                     // 0x08
+};
+class hkStreambufFactory_s0107_e670 : public hkReferencedObject_s0107_e670
+{
+public:
+	virtual hkStreamReader* openReader(const char* name) = 0;     // 2
+	virtual hkStreamWriter* openWriter(const char* name) = 0;     // 3
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s0107_e670::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_BASE);
+		((hkReferencedObject_s0107_e670*)p)->m_memSizeAndFlags = (hkInt16)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s0107_e670::s_instance->deallocateChunk(p, ((hkReferencedObject_s0107_e670*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_BASE);
+	}
+};
+class hkDefaultStreambufFactory : public hkStreambufFactory_s0107_e670
+{
+public:
+	virtual hkStreamReader* openReader(const char* name);         // 0x0107E670
+	virtual hkStreamWriter* openWriter(const char* name);         // 0x0107E820
+};
+struct hkArrayUtil
+{
+	static void _reserveMore(void* array, int elemSize);                               // 0x0107F530
+	static void _reserveExactly(void* array, int newCapacity, int elemSize);           // 0x0107F4A0
+	static void _reduce(void* array, int elemSize, void* inplaceStorage, int inplaceCapacity); // 0x0107F5D0
+};
+class hkThreadMemory_s0107_e670
+{
+public:
+	static void* operator new(size_t, void* p) { return p; }
+	void* allocateChunk(int nbytes, int cl);             // 0x0107DAA0
+	void deallocateChunk(void* p, int nbytes, int cl);   // 0x0107DB10
+	static hkThreadMemory_s0107_e670& getInstance();                // TlsGetValue(g_hkThreadMemoryTls), defined below
+	static void replaceInstance(hkThreadMemory_s0107_e670* t);      // 0x0107DBD0
+	hkThreadMemory_s0107_e670(hkMemory_s0107_e670* m, int n);                  // 0x0107D7E0
+	void removeReference();                              // 0x0107D790
+	virtual void releaseCachedMemory();                  // slot 1 (0x0107D740)
+};
+template <typename T>
+class hkArray
+{ public:
+	enum { CAPACITY_MASK = 0x3FFFFFFF, DONT_DEALLOCATE_FLAG = (int)0x80000000 };
+	T* m_data;
+	int m_size;
+	int m_capacityAndFlags;
+
+	hkArray() : m_data(0), m_size(0), m_capacityAndFlags(DONT_DEALLOCATE_FLAG) {}
+	~hkArray()
+	{
+		m_size = 0;
+		if (m_capacityAndFlags >= 0)
+			hkThreadMemory_s0107_e670::getInstance().deallocateChunk(m_data, m_capacityAndFlags * (int)sizeof(T), HK_MEMORY_CLASS_ARRAY);
+	}
+	void pushBack(const T& t)
+	{
+		if (m_size == (m_capacityAndFlags & CAPACITY_MASK))
+			hkArrayUtil::_reserveMore(this, (int)sizeof(T));
+		m_data[m_size++] = t;
+	}
+};
+class hkMonitorStream
+{ public:
+	static void init();   // 0x01080480
+	static void quit();   // 0x010804C0
+};
+class hkError : public hkReferencedObject_s0107_e670
+{
+public:
+	virtual void message(int severity, int id, const char* description, const char* file, int line) = 0; // 2
+	static hkError* s_instance;   // 0x016E4184
+};
+struct hkSingletonInitNode
+{
+	typedef hkReferencedObject_s0107_e670* (*SingletonCreationFunction)();
+	SingletonCreationFunction m_func;   // 0x00
+	hkSingletonInitNode* m_next;        // 0x04
+	void** m_value;                     // 0x08
+};
+extern hkUint32 g_hkThreadMemoryTls;     // 0x016E4174 hkThreadLocalData<hkThreadMemory_s0107_e670*>
+extern hkSingletonInitNode* g_hkSingletonInitList;  // 0x016E429C
+struct hkBaseSystem
+{
+	static hkResult init(hkMemory_s0107_e670* memoryManager, hkThreadMemory_s0107_e670* threadMemory,
+	                     void (*errorReportFunction)(const char*, void*), void* errorReportObject); // 0x0107EB20
+	static hkResult quit();               // 0x0107ED00
+	static void initSingletons();         // 0x0107EA10
+	static void quitSingletons();         // 0x0107EC20
+};
+class hkString
+{ public:
+	static int strCmp(const char* a, const char* b);   // 0x0107F3D0
+	static int strLen(const char* s);                  // 0x0107F420
+	static void memCpy(void* dst, const void* src, int n);   // 0x0107F440
+	static void memSet(void* dst, int c, int n);       // 0x0107F470
+	static void snprintf(char* buf, int n, const char* fmt, ...);  // 0x0107F390 (_vsnprintf)
+	static void sprintf(char* buf, const char* fmt, ...);          // 0x0107F3B0 (vsprintf)
+};
+namespace hkMath
+{
+	hkBool_s0107_e670 equal(float a, float b, float eps);   // 0x01080E40
+}
+inline hkThreadMemory_s0107_e670& hkThreadMemory_s0107_e670::getInstance()
+{
+	return *(hkThreadMemory_s0107_e670*)TlsGetValue(g_hkThreadMemoryTls);
+}
+struct hkSingletonStreambufFactory { static void replaceInstance(hkStreambufFactory_s0107_e670* f); };   // 0x0107E5F0
+class hkDefaultError : public hkError
+{
+public:
+	hkDefaultError(void (*reportFn)(const char*, void*), void* reportObj);                    // 0x005D6AE0
+	virtual void message(int severity, int id, const char* description, const char* file, int line);
+};
+struct hkErrorSingleton { static void replaceInstance(hkError* e); };                          // 0x005D6120
+struct hkUnknownBaseObject { virtual void v0(); virtual void v1(); virtual void v2(); };      // object at 0x016E417C
+extern hkUnknownBaseObject* g_hkBaseObject;
+extern hkReferencedObject_s0107_e670* g_hkStreambufFactoryInstance;                                       // 0x016E42B4
+hkStdioStreamReader::~hkStdioStreamReader()
+{
+	if (m_file)
+		fclose(m_file);
+}
+hkStdioStreamWriter::~hkStdioStreamWriter()
+{
+	close();
+}
+typedef int (__stdcall *SymInitializeFn)(void* process, const char* userSearchPath, int invade);
+typedef hkUint32 (__stdcall *SymGetOptionsFn)(void);
+typedef hkUint32 (__stdcall *SymSetOptionsFn)(hkUint32 options);
+struct HK_IMAGEHLP_SYMBOL
+{
+	hkUint32 SizeOfStruct, Address, Size, Flags, MaxNameLength;
+	char Name[2008];
+};
+struct HK_IMAGEHLP_LINE64
+{
+	hkUint32 SizeOfStruct;
+	void* Key;
+	hkUint32 LineNumber;
+	const char* FileName;
+	hkUint64 Address;
+};
+typedef int (__stdcall *SymGetSymFromAddrFn)(void* process, hkUint32 addr, hkUint32* displacement, HK_IMAGEHLP_SYMBOL* sym);
+typedef int (__stdcall *SymGetLineFromAddr64Fn)(void* process, hkUint64 addr, hkUint32* displacement, HK_IMAGEHLP_LINE64* line);
+extern SymGetLineFromAddr64Fn g_SymGetLineFromAddr64;  // 0x016E4188
+extern SymGetSymFromAddrFn g_SymGetSymFromAddr;        // 0x016E4198
+extern SymSetOptionsFn g_SymSetOptions;                // 0x016E419C
+extern SymGetOptionsFn g_SymGetOptions;                // 0x016E41A0
+extern SymInitializeFn g_SymInitialize;                // 0x016E41A4
+class hkStackTracer : public hkReferencedObject_s0107_e670
+{
+public:
+	typedef void (*printFunc)(const char*, void*);
+	hkStackTracer();
+	virtual ~hkStackTracer();
+	void dumpStackTrace(const hkUint32* addresses, int numAddresses, printFunc output, void* outputObject);
+};
+// ---- items of slice s0107e670 end
+
+// @ 0x0107e770
+int hkStdioStreamReader::read(void* buf, int nbytes)
+{
+	int r = (int)fread(buf, 1, nbytes, m_file);
+	if (r <= 0)
+		m_ok = false;
+	return r;
+}
+
+// @ 0x0107e7a0
+hkBool_s0107_e670 hkStdioStreamReader::isOk() const
+{
+	return m_ok;
+}
+
+// @ 0x0107e7b0
+hkResult hkStdioStreamReader::seek(int offset, SeekWhence whence)
+{
+	return fseek(m_file, offset, whence) != 0 ? HK_FAILURE : HK_SUCCESS;
+}
+
+// @ 0x0107e7d0
+int hkStdioStreamReader::tell() const
+{
+	return ftell(m_file);
+}
+
+// @ 0x0107e890
+hkStdioStreamWriter::hkStdioStreamWriter(const char* name)
+: m_ownsFile(true)
+{
+	// The original leaves m_file uninitialised when name is null (quirk kept).
+	if (name)
+		m_file = fopen(name, "wb");
+}
+
+// @ 0x0107e8d0
+int hkStdioStreamWriter::write(const void* buf, int nbytes)
+{
+	if (m_file)
+	{
+		int w = (int)fwrite(buf, 1, nbytes, m_file);
+		if (w <= 0)
+			close();
+		return w;
+	}
+	return 0;
+}
+
+// @ 0x0107e940
+void hkStdioStreamWriter::flush()
+{
+	if (m_file)
+		fflush(m_file);
+}
+
+// @ 0x0107e970
+hkResult hkStdioStreamWriter::seek(int offset, SeekWhence whence)
+{
+	return fseek(m_file, offset, whence) != 0 ? HK_FAILURE : HK_SUCCESS;
+}
+
+// @ 0x0107e990
+int hkStdioStreamWriter::tell() const
+{
+	return ftell(m_file);
+}
+
+// @ 0x0107f3b0
+void hkString::sprintf(char* buf, const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(buf, fmt, args);
+	va_end(args);
+}
+
+// @ 0x0107f420
+__declspec(noinline) int hkString::strLen(const char* s)
+{
+	const char* p = s + 1;
+	char c;
+	do
+	{
+		c = *s;
+		s = s + 1;
+	} while (c != 0);
+	return (int)(s - p);
+}
+
+// ---- items of slice s0107f4a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C"
+{
+	__declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
+	__declspec(dllimport) int __stdcall TlsSetValue(unsigned long index, void* value);
+	__declspec(dllimport) int __stdcall TryEnterCriticalSection(void* cs);
+	__declspec(dllimport) void __stdcall EnterCriticalSection(void* cs);
+	__declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
+	__declspec(dllimport) void __stdcall DeleteCriticalSection(void* cs);
+	__declspec(dllimport) int __stdcall InitializeCriticalSectionAndSpinCount(void* cs, unsigned long spin);
+	__declspec(dllimport) unsigned long __stdcall GetCurrentThreadId(void);
+	__declspec(dllimport) void* __stdcall GetCurrentProcess(void);
+	__declspec(dllimport) void* __stdcall LoadLibraryA(const char* name);
+	__declspec(dllimport) int __stdcall FreeLibrary(void* module);
+	__declspec(dllimport) void* __stdcall GetProcAddress(void* module, const char* name);
+}
+    extern unsigned int g_hkThreadMemoryTls; // 0x016e4174
+#define HK_BREAKPOINT() __debugbreak()
+typedef int16_t hkInt16;
+typedef uint16_t hkUint16;
+typedef uint8_t hkUint8;
+typedef uint32_t hkUint32;
+typedef uint64_t hkUint64;
+typedef size_t hkUlong;   // pointer-sized unsigned (address arithmetic)
+class hkOstream_s0107_e670;
+class hkStatisticsCollector;
+extern hkUint32 g_hkThreadMemoryTls;     // 0x016E4174 hkThreadLocalData<hkThreadMemory_s0107_e670*>
+extern hkUint32 g_hkMonitorTlsCurrent;   // 0x016E42A4
+extern hkUint32 g_hkMonitorTlsEnd;       // 0x016E42A8
+extern hkUint32 g_hkMonitorTlsEnabled;   // 0x016E42B8
+hkUint64 hkGetCurrentThreadId();   // 0x01080CC0 (GetCurrentThreadId zero-extended)
+class hkCriticalSection_s0107_e670
+{
+public:
+	void enter();     // 0x0107F820
+	void leave();     // inlined in the pool allocator
+	char m_cs[24];    // CRITICAL_SECTION, 0x00
+	hkUint64 m_owner; // 0x18 (thread id while locked, -1 otherwise)
+};
+class hkPoolMemory : public hkMemory_s0107_e670
+{
+public:
+	hkPoolMemory();                                                  // 0x0107F910
+	~hkPoolMemory();                                                 // 0x0107F6C0
+	virtual void* allocate(int nbytes, int cl);                      // 0x0107F720
+	virtual void deallocate(void* p);                                // 0x0107F750
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);// 0x0107F780
+	virtual void alignedDeallocate(void* p);                         // 0x0107F7D0
+	virtual void* allocateChunk(int nbytes, int cl);                 // 0x0107FBE0
+	virtual void deallocateChunk(void* p, int nbytes, int cl);       // 0x0107FF60
+	virtual void* allocateChunkByRow(int row, int cl);               // 0x0107FDD0
+	virtual void deallocateChunkByRow(void* p, int row, int cl);     // 0x0107FFF0
+	virtual void printStatistics(hkOstream_s0107_e670* o);                      // 0x0107F700
+	virtual int getAllocatedSize(int nbytes);                        // 0x0107F670
+	virtual void getStatSynopsis(hkMemoryStatistics* s);             // 0x0107F800
+
+	void* _allocateFromRow(int row);
+
+	hkUint8* m_pageList;            // 0x2c singly linked list of 0x2040-byte pages
+	hkUint8* m_pageStart;           // 0x30
+	hkUint8* m_pageEnd;             // 0x34
+	hkUint8* m_pageCur;             // 0x38
+	int m_pad3c;                    // 0x3c
+	hkCriticalSection_s0107_e670 m_lock;       // 0x40
+	void* m_freeLists[17];          // 0x60
+	int m_rowSizes[17];             // 0xa4
+	char m_sizeToRow[0x201];        // 0xe8
+	char m_pad2e9[3];
+	int m_bigSizeToRow[8];          // 0x2ec
+	int m_rowCounts[17];            // 0x30c
+};
+inline void hkCriticalSection_s0107_e670::leave()
+{
+	m_owner = (hkUint64)-1;   // two dword stores of -1 in the binary
+	LeaveCriticalSection(m_cs);
+}
+#define HK_RDTSC32() ((hkUint32)__rdtsc())
+extern void (__cdecl* g_alignedFree_15b9a38)(void*);
+#define _aligned_free(p) g_alignedFree_15b9a38(p)
+struct hkArrayRaw
+{
+	void* m_data;
+	int m_size;
+	int m_capacityAndFlags;
+};
+static inline int hkPoolRowForSize(int n)
+{
+	int row;
+	if (n < 9) row = 1;
+	else if (n < 0x11) row = 2;
+	else if (n < 0x21) row = 3;
+	else if (n < 0x31) row = 4;
+	else if (n < 0x41) row = 5;
+	else if (n < 0x61) row = 6;
+	else if (n < 0x81) row = 7;
+	else if (n < 0xa1) row = 8;
+	else if (n < 0xc1) row = 9;
+	else if (n < 0x101) row = 10;
+	else if (n < 0x141) row = 11;
+	else if (n < 0x201) row = 12;
+	else if (n < 0x401) row = 13;
+	else if (n < 0x801) row = 14;
+	else if (n < 0x1001) row = 15;
+	else
+	{
+		if (0x2000 < n)
+			HK_BREAKPOINT();
+		row = 16;
+	}
+	return row;
+}
+void* hkPoolMemory::_allocateFromRow(int row)
+{
+	m_rowCounts[row] = m_rowCounts[row] + 1;
+	m_stats.m_inUseBytes = m_stats.m_inUseBytes + m_rowSizes[row];
+	void** head = (void**)m_freeLists[row];
+	void* result;
+	if (head == 0)
+	{
+		int sz = m_rowSizes[row];
+		if (row < 0xd)
+		{
+			// Small rows are carved from the shared bump page.
+			if ((hkUlong)m_pageEnd < (hkUlong)(m_pageCur + sz))
+			{
+				hkUint8* page = (hkUint8*)_aligned_malloc(0x2040, 0x40);
+				*(hkUint8**)page = m_pageList;
+				m_pageList = page;
+				m_pageStart = page + 0x40;
+				m_pageCur = page + 0x40;
+				m_pageEnd = page + 0x2040;
+				m_stats.m_numPages = m_stats.m_numPages + 1;
+			}
+			result = m_pageCur;
+			hkUint8* p = m_pageCur + sz;
+			m_pageCur = p;
+			int saved = m_rowCounts[row];
+			int off = sz;
+			while (off < 0x100 && (hkUlong)(p + sz) < (hkUlong)m_pageEnd)
+			{
+				m_rowCounts[row] = m_rowCounts[row] - 1;
+				*(void**)p = m_freeLists[row];
+				m_freeLists[row] = p;
+				p = m_pageCur + sz;
+				off += sz;
+				m_pageCur = p;
+			}
+			m_rowCounts[row] = saved;
+		}
+		else
+		{
+			// Large rows get a page of their own.
+			hkUint8* page = (hkUint8*)_aligned_malloc(0x2040, 0x40);
+			if (m_pageList == 0)
+			{
+				*(hkUint8**)page = 0;
+				m_pageList = page;
+			}
+			else
+			{
+				*(hkUint8**)page = *(hkUint8**)m_pageList;
+				*(hkUint8**)m_pageList = page;
+			}
+			m_stats.m_numPages = m_stats.m_numPages + 1;
+			int saved = m_rowCounts[row];
+			result = page + 0x40;
+			hkUint8* p = (hkUint8*)result + sz;
+			if (sz < 0x2000)
+			{
+				int off = (int)(p - (hkUint8*)result);
+				do
+				{
+					m_rowCounts[row] = m_rowCounts[row] - 1;
+					*(void**)p = m_freeLists[row];
+					m_freeLists[row] = p;
+					off += sz;
+					p += sz;
+				} while (off < 0x2000);
+			}
+			m_rowCounts[row] = saved;
+		}
+	}
+	else
+	{
+		m_freeLists[row] = *head;
+		result = head;
+	}
+	return result;
+}
+// ---- items of slice s0107f4a0 end
+
+// @ 0x0107f670
+int hkPoolMemory::getAllocatedSize(int nbytes)
+{
+	int row;
+	if (nbytes <= 0x2000)
+	{
+		if (nbytes <= 0x200)
+			row = m_sizeToRow[nbytes];
+		else
+			row = m_bigSizeToRow[(nbytes - 1) >> 10];
+		return m_rowSizes[row];
+	}
+	return hkMemory_s0107_e670::getAllocatedSize(nbytes);
+}
+
+// @ 0x0107f700
+void hkPoolMemory::printStatistics(hkOstream_s0107_e670* o)
+{
+	o->printf("Statistics are disabled, please enable them in hkbase/config/hkConfigMemoryStats.h\n");
+}
+
+// @ 0x0107f800
+void hkPoolMemory::getStatSynopsis(hkMemoryStatistics* s)
+{
+	*s = m_stats;
 }

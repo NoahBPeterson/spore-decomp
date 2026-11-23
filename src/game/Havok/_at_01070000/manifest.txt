@@ -9,3 +9,17 @@
 ../src/game/Havok/_at_01070000.cpp  ?remove@?$hkPointerMapBase@K@@QAE?AW4hkResult@@K@Z  0107e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/Havok/_at_01070000.cpp  ?FUN_0107e5b0@?$hkPointerMapBase@K@@QAEXH@Z  0107e5b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_01070000.cpp  ?FUN_0107e5d0@?$hkPointerMapBase@_K@@QAEXH@Z  0107e5d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?read@hkStdioStreamReader@@UAEHPAXH@Z  0107e770  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?isOk@hkStdioStreamReader@@UBE?AVhkBool_s0107_e670@@XZ  0107e7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?seek@hkStdioStreamReader@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamReader@@@Z  0107e7b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?tell@hkStdioStreamReader@@UBEHXZ  0107e7d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ??0hkStdioStreamWriter@@QAE@PBD@Z  0107e890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?write@hkStdioStreamWriter@@UAEHPBXH@Z  0107e8d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?flush@hkStdioStreamWriter@@UAEXXZ  0107e940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?seek@hkStdioStreamWriter@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamWriter@@@Z  0107e970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?tell@hkStdioStreamWriter@@UBEHXZ  0107e990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?sprintf@hkString@@SAXPADPBDZZ  0107f3b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?strLen@hkString@@SAHPBD@Z  0107f420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?getAllocatedSize@hkPoolMemory@@UAEHH@Z  0107f670 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?printStatistics@hkPoolMemory@@UAEXPAVhkOstream_s0107_e670@@@Z  0107f700 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?getStatSynopsis@hkPoolMemory@@UAEXPAUhkMemoryStatistics@@@Z  0107f800 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

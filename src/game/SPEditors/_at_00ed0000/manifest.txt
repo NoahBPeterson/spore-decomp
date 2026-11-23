@@ -1,0 +1,38 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1cf0@@YAXPADHH@Z  00ed1cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1d70@@YGPAXHPAX@Z  00ed1d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1dc0@@YGPAXHPAX@Z  00ed1dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1e10@@YIHPAUContainer@@PAHH@Z  00ed1e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1e70@@YIHPAUContainer@@PAHHH@Z  00ed1e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1ec0@@YIXPAUContainer@@@Z  00ed1ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1f00@@YGPAXPAPAUEntry@@H@Z  00ed1f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1f40@@YGPAXPAPAUEntry@@@Z  00ed1f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed1f70@@YGPAXPAPAUEntry@@H@Z  00ed1f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed20c0@@YIHPAUContainer@@PAHH@Z  00ed20c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed2210@@YIPAXPAPAXPAX1@Z  00ed2210  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed2260@@YIPAXPAPAXPAX0@Z  00ed2260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed22e0@@YAPAXPAX00@Z  00ed22e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed2340@@YAPAXPAX00@Z  00ed2340  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?InsertUnique@RefMap@@QAEPAPAXPAPAXPAURBNode@@0D@Z  00ed2a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?Erase@RefMap@@QAEXPAPAXPAURBNode@@@Z  00ed2ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?InsertAt@BigVector@@QAEPAUBigElem@@PAU2@0@Z  00ed3740  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?RemoveIcon@ScnRecBody@@QAEXH@Z  00ed38a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?f@Obj4730@@QAEXPAUVec_ed4730@@@Z  00ed4730  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed48a0@@YADPAXPAH@Z  00ed48a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed82e0@@YAXPAUcPropStore@@PAX1DMD@Z  00ed82e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?f@Obj8610@@QAEXXZ  00ed8610  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed8950@@YAXHH@Z  00ed8950  /O2 /Oi /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00ed9560@@YAXPAHPAXH@Z  00ed9560  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  _FUN_00edabf0  00edabf0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  _FUN_00edac50  00edac50  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  _FUN_00edac70  00edac70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edae50@InputStrategy@@QAEHIPAX@Z  00edae50  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edb6c0@ActsBarUI@@QAEXXZ  00edb6c0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edb730@ActsBarUI@@QAEXXZ  00edb730  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edb9b0@ActsBarUI@@QAEXH@Z  00edb9b0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?do_copy@@YAPAURunInfo@@PAU1@00@Z  00edba80  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?dtor@cScenarioEditModeScriptActsBarUI@@QAEXXZ  00edbcb0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edbd30@cScenarioEditModeScriptActsBarUI@@QAEXH@Z  00edbd30  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edbdd0@cScenarioEditModeScriptActsBarUI@@QAEXH@Z  00edbdd0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?ctor@cScenarioEditModeScriptActsBarUI@@QAEPAU1@XZ  00edbe00  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ed0000.cpp  ?FUN_00edbe60@cScenarioEditModeScriptActsBarUI@@QAEXXZ  00edbe60  /O2 /MD /Gy /TP /Isrc/game/include
