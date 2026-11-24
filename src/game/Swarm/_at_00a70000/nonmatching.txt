@@ -27,7 +27,6 @@
 00a775a0 534 EvalVec4: same integer-copy/layout difference as EvalVec3. Semantics identical. [equiv FAIL 5/5 (xmm3 clobber)]
 00a77830 698 EvalVec4b: same integer-copy/layout difference as EvalVec3. Semantics identical. [equiv FAIL 5/5 (xmm4 clobber)]
 00a77bd0 39 MapInfo_DefaultRect44: same stack-temp-copy pattern as GetRect; MSVC coalesces ours. Semantically correct. [equiv PASS 400 valid, 100.0% cov]
-00a77c80 17 complete WaveSum (two sinf terms); x87 operand order (v1*K*0.5 hoisting) differs
 00a77cc0 72 complete InvLengthSqScale; declared float* and returns out (original leaves out in eax before ret 8, hidden eax); original SSE form needs xmm0-3 but cl 15.00 always squares the 2nd term into a 4th xmm (xmm4) not reproducible in C++; flags /O2 /MD /Gy /TP /arch:SSE /GS- evaluates it in x87 (x87 single round == SSE single at harness CW 0x007F, no xmm clobber); difftest PASS (400 valid, 100% cov)
 00a77d30 17 complete WaveVec4 (sin/cos pairs); x87 operand order differs
 00a787f0 407 complete vector<MaterialParam>::insert (EASTL DoInsertValues); register allocation/scheduling differs

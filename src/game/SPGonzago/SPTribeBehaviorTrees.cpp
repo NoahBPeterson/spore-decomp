@@ -9494,10 +9494,12 @@ int SlotTable::FUN_00daed20(int idx)
 
 // @ 0x00daeea0
 void __stdcall FUN_00daeea0(Slot250* a, Slot250* b)
-{
+{    typedef void (__thiscall *SlotFn0)(void*, u32);
     for (; a < b; a = (Slot250*)((char*)a + 0x250)) {
-        if ((((uint32_t)a->mFlags >> 31) & 1) == 0)
-            a->mObj.Slot0(0);
+        if (((u8)((uint32_t)a->mFlags >> 31) & 1) == 0) {
+            SlotFn0 fn = *(SlotFn0*)*(void**)&a->mObj;
+            fn(&a->mObj, 0);
+        }
     }
 }
 

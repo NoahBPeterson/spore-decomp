@@ -9,7 +9,6 @@
 #                 00989500, 00989660 (unresolved callee thunks), 009896d0 (0/400 valid),
 #                 009897d0 (0/192 valid)
 #
-00988710    15   codegen shape: original keeps the v10() result in whole eax and computes
                  (b ^ 0xff) & 1 in ebx; cl widens through bl/movzx (same value).
                  [ecx-0x208]; mov edx,[eax+0x90]; movss [ecx+8]; add ecx,-0x208; call edx`,
                  cl schedules the vtable-slot load after the store). Same size (48),

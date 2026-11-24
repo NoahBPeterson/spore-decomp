@@ -972,12 +972,11 @@ bool Sound_s00a1_a590::IsFlag2()
 
 // @ 0x00a1adc0
 bool Sound_s00a1_a590::PauseStateAllowed(uint32_t idx, char flag)
-{
-    if (flag != 0 && (mFlagsCE4 & 0x800) != 0)
+{    if (flag != 0 && (mFlagsCE4 & 0x800) != 0)
         return false;
     if (idx < *(uint32_t*)((char*)this + 0x1dec))
-        return *((uint8_t*)this + 0x1de4 + idx) > 0u;
-    return *(uint32_t*)((char*)this + 0x1de0) != 0;
+        return (bool)(*((uint8_t*)this + 0x1de4 + idx) > 0u);
+    return (bool)*(uint32_t*)((char*)this + 0x1de0);
 }
 
 // @ 0x00a1ae00

@@ -1656,10 +1656,9 @@ bool __stdcall MapInfo_TileContains(float* p)
 
 // @ 0x00a77c80
 float __stdcall WaveSum(const float* v)
-{
-    float a = sinf(v[0] * kRadScale);
-    float b = sinf(kRadScale * v[1] * 0.5f);
-    return (b + 1.0f) * 0.1f + (a + 1.0f) * 0.3f;
+{    float a = v[0] * kRadScale;
+    float b = kRadScale * v[1] * 0.5f;
+    return (sinf(a) + 1.0f) * 0.3f + (sinf(b) + 1.0f) * 0.1f;
 }
 
 // @ 0x00a77cc0

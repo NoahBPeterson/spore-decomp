@@ -3,7 +3,6 @@
 007633a0  61   complete: colour-key switch; jbe vs je and switch-case register allocation differ
 00763490  86   complete: arena fixup callback; original shares the false epilogue and reloads the arena ptr in the loop
 00763770  67   complete: raster-from-gimmmex create; original uses early-return branch layout, ours merges the two checks
-00763c60  24   complete: int-vector add-unique; original keeps the count in esi (ours edx)
 00762d70  303  complete: two-level light-array teardown (dedupe set + per-item add-ref/release + vector push) rewritten in full; original has an SEH/fs:[0] frame and inlines a std::vector, cl emits neither; equiv WEAK 23.1% coverage
 00762fa0  296  complete: lock-free map insert rewritten with AtomicRead64/AtomicExchange64 (__fastcall, 0x68c140/0x68c1b0) and a cmpxchg8b retry loop; the atomic node/value layout cannot be recovered exactly, so the 64-bit counter update differs; equiv FAIL
 00763130  162  complete: lock-free map append (Insert + cmpxchg8b counter bump on this+8) modelled on the disasm; same atomic-layout limitation; equiv FAIL (98.4% coverage)

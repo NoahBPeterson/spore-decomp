@@ -52,3 +52,4 @@
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Func69cf0@@YIDPAXH000@Z  00769cf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Func76a300@@YIDPAXHH@Z  0076a300  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?CreateResourceAsync@@YI_NPAXH00PAH00H@Z  0076ac30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?AddUnique@UniqVec@@QAEXH@Z  00763c60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

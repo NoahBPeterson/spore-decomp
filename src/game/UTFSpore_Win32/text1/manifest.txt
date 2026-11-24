@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/text1.cpp  ?m_9890d0@WinText@@QAEPAU1@E@Z  009890d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/text1.cpp  ?Factory@WinText@@SAPAU1@HI@Z  00989130  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/text1.cpp  ?m_9887b0@WinText@@QAEXM@Z  009887b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988710@WinText@@QAEXIE@Z  00988710  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

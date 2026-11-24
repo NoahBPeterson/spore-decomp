@@ -16,3 +16,4 @@
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ??1cSPUIAssetGrid_s0065_15a0@@UAE@XZ  00651c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ?erase@GridVec_s0065_25d0@@QAEPAUGridEntry_s0065_25d0@@PAU2@@Z  006534c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ?GridShutdown@cSPUIAssetGrid_s0065_35b0@@QAEXXZ  00654650  /O2 /MD /Gy /TP /arch=SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?IndexOfView@cSPUIAssetGrid_s0064_eb60@SP@@QAEHPAUcSPAssetView@2@@Z  0064f280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
