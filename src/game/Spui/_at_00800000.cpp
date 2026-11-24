@@ -1547,13 +1547,14 @@ cSPUIInfoLine* __thiscall cSPUIInfoLine::ctor2(const cSPUIInfoLine* o)
 // @ 0x0080cc10
 cSPUIInfoLine* __thiscall InfoVec::Erase(cSPUIInfoLine* first, cSPUIInfoLine* last)
 {
-    cSPUIInfoLine* p = (cSPUIInfoLine*)VecEraseMove(last, end, first);
+    cSPUIInfoLine* l = last;
+    cSPUIInfoLine* en = end;
+    cSPUIInfoLine* f = first;
+    cSPUIInfoLine* newEnd = (cSPUIInfoLine*)VecEraseMove(l, en, f);
     cSPUIInfoLine* e = end;
-    while (p < e) {
+    for (cSPUIInfoLine* p = newEnd; p < e; ++p)
         ((VF1v)VT(p)[0])(p, 0);
-        p = (cSPUIInfoLine*)((u8*)p + 0x42c);
-    }
-    end -= last - first;
+    end -= l - first;
     return first;
 }
 

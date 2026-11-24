@@ -12,7 +12,6 @@
 00c31a90 77 logic: fixed the wrap mask (was inverted; now (idx+1) & (((idx+1)>=n)-1)) and the random call ABI (sMathRandom.RandomUint32Uniform thiscall). Still differs: loop counter in edx vs edi, bit-test encoding, block layout. fix1: quick check PASS (emulator)
 00c31b10 65 359/359 valid inputs, 100.0% coverage; empire-id membership scan of mEnemies; begin-ptr hoist/si re-load scheduling and i/index register choice (edx vs ecx) (71 diff)
 00c31b50 79 logic: fixed the wrap mask (was inverted; now (idx+1) & (((idx+1)>=n)-1)) and the random call ABI (sMathRandom.RandomUint32Uniform thiscall, not __cdecl FUN_00a68fb0); removed the begin local so self->0x70 is re-read. Still differs: regalloc/arm layout (setge/dec vs setl/neg, n<=0 arm placement). fix1: quick check PASS (emulator)
-00c31bf0 30 310/310 valid inputs, 100.0% coverage; empire-id membership scan of mAllies; begin-ptr hoist/base+index register allocation tie (30 diff)
 00c31d50 327 157 valid inputs (need 200), 12.6% coverage; in-place vector insertion sort of enemy list; SSE/qsort-style compare and register scheduling differ (348 vs 375 bytes)
 00c31ed0 532 122 valid inputs (need 200), 8.9% coverage; insertion sort helper (mAllies/reachability); float compare + move-construct reconstruction (766 vs 349 bytes)
 00c32030 270 5/5 valid inputs mismatched (execution); sorted-insert returning pointer; sort/copy ABI + register tie (287 vs 299 bytes)

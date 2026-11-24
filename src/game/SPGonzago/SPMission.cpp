@@ -2357,11 +2357,7 @@ bool cSPMission::IsAtStar(int empireID, int commContext)
         if (VT_60_0(this) != 5)
             return false;
     }
-    if (mpOriginPlanet9c->mpStarRecord13c->GetCommContext() != commContext)
-        return 0;
-    if (empireID != mEmpireID8c)
-        return 0;
-    return 1;
+    return (mpOriginPlanet9c->mpStarRecord13c->GetCommContext() == commContext && empireID == mEmpireID8c) ? 1 : 0;
 }
 
 // @ 0x00c45740

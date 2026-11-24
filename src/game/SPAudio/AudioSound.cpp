@@ -948,10 +948,11 @@ float FUN_00a1ac70(int a, int b)
 
 // @ 0x00a1acd0
 bool Sound_s00a1_a590::ClearFlag1()
-{
-    if ((mFlagsCE4 & 1) == 0)
+{    if ((*(uint8_t*)&mFlagsCE4 & 1) == 0)
         return false;
+    _ReadWriteBarrier();
     mFlagsCE4 &= ~1u;
+    _ReadWriteBarrier();
     ((void(__thiscall*)(void*))VtOf(this)[0x94 / 4])(this);
     return true;
 }

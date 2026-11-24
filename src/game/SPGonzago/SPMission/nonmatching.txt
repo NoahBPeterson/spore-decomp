@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00b9c630 381 complete Clue::Read (487 bytes vs 510): Reset 0xb9a630, type clamp from g_pAppProperties GetIntProperty 0x6a2660 (0x4f421d6), Container14 Init 0xd01790 (0xc000), 0x120000-byte proc array via operator_new 0xf473a0 plus 0x401930 element ctor 0xb90720 and stride-0x18 byte clear, count clamp to 128, biased u16 from m3c*32767 rounded with cvtss2si (low word when >0, else 0), m44/m4c copies, refcounted record swaps at +0x1c/+0x20 with vtable[0](1) release, size/size^2/(size/(2n))*(size+1), and the n*n*6 Elem12 array (0,0,-1.0) with a checked *12 allocation size (overflow -> 0xffffffff); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (77 valid inputs, 86.4% coverage, no mismatch)
 00c452a0 91 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
-00c455b0 7 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00c45860 184 GetRewardRelation: byte-diff vs retail (equivalent) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00c45a10 137 CalculateDuration: byte-diff vs retail (equivalent) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00c45ca0 11 GetMessageVector: byte-diff vs retail; equiv UNSUPPORTED (original faults read on 400/400 generated inputs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
