@@ -320,6 +320,24 @@ s005300d0…`). This hash order is observed for the
 VS2008 backend; we have not observed it under `/vc71`, whose `/Od` slot order
 was independent of declaration order too but not name-hashed in the same way.
 
+The mechanism, read out of c2.dll 15.00.30729.1 (2026-11-23, papercut
+`s00508fd0…`): `StkStackAlloc` 0x51137060 clears the locals list, then walks
+every symbol of the module with `initSymbolForCleanStackAlloc` 0x5113b7a0,
+which **sorted-inserts each automatic into `_LocalSyms` 0x51255b00 ascending
+by `SYMBOL+0x28`**, and `AllocateAutomatics` 0x5113ba00 assigns offsets in
+that walk order. So the "hash" is not computed in the back end: the sort key
+is the **c1xx front end's per-scope symbol id carried in the 1xx stream**
+(`keyread` 0x511587c0 = `b0 | (b1&0x7f)<<8 | b2<<16 | b3<<24`; new back-end
+symbols instead get a decrementing global in `ModPutL2Ssr` 0x510f22e0). The
+id is assigned when c1xx interns the name, which is what makes the order look
+like a hash of names while depending on nothing but the name set.
+`ModHashName` 0x510f3c90 (`h = c ^ (((h>>14)&0x1ff)<<9) ^ (h<<9)`) is only
+the L2 merge dedup, and `HshGetKey`'s `% 101` (0x510ae5d0) is the /O2-side
+value-numbering hash — neither orders /Od slots. The one link still not read
+out of code is c1xx's `Id_t`-assignment rule for a scope's names (its
+`GenericHash` is an unnamed static contribution), so prediction without
+compiling stays with `od_names.py fit` for now.
+
 ### 6.5 cl 15.00 `static` + `/GL` and out-of-line bodies **[15]**
 
 - A same-TU function called before its definition is still inlined by `/O2`;
