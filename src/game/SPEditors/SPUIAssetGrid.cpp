@@ -2157,17 +2157,17 @@ AFTER:
 
 // @ 0x0064f280
 int SP::cSPUIAssetGrid_s0064_eb60::IndexOfView(cSPAssetView* v)
-{
-    int i = 0;
+{    int i = 0;
     if (v) {
         int n = (int)(mpEntriesEnd - mpEntries);
         if (n > 0) {
-            cSPAssetView** pv = (cSPAssetView**)((char*)mpEntries + 0x10);
-            for (; i < n; ++i) {
+            cSPAssetView** pv = (cSPAssetView**)((char*)*(cSPAssetGridEntry_s0064_eb60* volatile*)&mpEntries + 0x10);
+            do {
                 if (pv[0] == v)
                     return i;
+                ++i;
                 pv = (cSPAssetView**)((char*)pv + 0x20);
-            }
+            } while (i < n);
         }
         i = -1;
     }

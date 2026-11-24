@@ -1331,11 +1331,10 @@ void __fastcall FUN_00631b30(void* self)
 
 // @ 0x00631dc0
 void __fastcall FUN_00631dc0(void* self)
-{
-  int* s = (int*)self;
+{  int* s = (int*)self;
   void* end = (void*)s[1];
   void* beg = (void*)s[0];
-  CALLEE_memcpy_11e0744(beg, end, 0);
+  CALLEE_memcpy_11e0744(beg, end, (unsigned)((char*)end - (char*)s[1]));
   s[1] += (int)beg - (int)end;
 }
 

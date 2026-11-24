@@ -991,10 +991,11 @@ void fnt_FLIPRGOFF(TTExecCtx* c)
 
 // @ 0x008ae020
 void fnt_SCANCTRL(TTExecCtx* c)
-{
+{    unsigned* const sc58 = &GS(c)->mScanCtrl;
     c->mStack -= 1;
-    unsigned* const sc = (unsigned*)((char*)GS(c) + 0x64);
-    *sc = (*sc & 0xffff0000) | (unsigned)*c->mStack;
+    unsigned old = *(unsigned*)((char*)sc58 + 0xc);
+    unsigned v = (unsigned)*c->mStack;
+    *(unsigned*)((char*)sc58 + 0xc) = (old & 0xffff0000) | v;
 }
 
 // @ 0x008ae040

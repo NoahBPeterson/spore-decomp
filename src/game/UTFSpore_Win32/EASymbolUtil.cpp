@@ -75,8 +75,10 @@ uint32_t HtStrOwner::FUN_00b21140(uint64_t key)
 {
   StrHt& table = mTable;
   HtStrIter it = table.find(key);
-  if (it.mpNode != table.mpBuckets[table.mBucketCount])
-    return (*(HtStrProc*)&it.mpNode->mValue)();
+  if (it.mpNode != table.mpBuckets[table.mBucketCount]) {
+    HtStrProc p = *(HtStrProc*)&it.mpNode->mValue;
+    return p();
+  }
   return 0;
 }
 

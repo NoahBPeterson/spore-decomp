@@ -471,10 +471,11 @@ void __thiscall WinText::m_9886d0(int* p)
 
 // @ 0x00988710
 void __thiscall WinText::m_988710(uint32_t flag, uint8_t value)
-{
-    uint8_t old = (uint8_t)w.v10();
+{    int old = (int)w.v10();
+    int t = old ^ 0xff;
+    uint8_t cond = (uint8_t)(t & 1);
     ((C_961760*)this)->SetFlag(flag, value);
-    if (((old ^ 0xff) & 1) != 0) {
+    if (cond != 0) {
         if ((uint8_t)w.v10() & 1) {
             F(this, 0x804) = 0;
         }

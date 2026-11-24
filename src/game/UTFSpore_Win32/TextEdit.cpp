@@ -2477,11 +2477,11 @@ void EA::UTFWinControls::IWinTextEdit_s0098_9870::F98A370(const wchar_t* str, in
 
 // @ 0x0098a3f0
 void EA::UTFWinControls::IWinTextEdit_s0098_9870::F98A3F0(int a, int b, int c)
-{
-    unsigned lo = EA::UTFWinControls::emin(cursor, anchor);
+{    unsigned lo = EA::UTFWinControls::emin(cursor, anchor);
     unsigned hi = EA::UTFWinControls::emax(cursor, anchor);
+    const unsigned& hiref = hi;
     VSLOT(void (__thiscall*)(void*, unsigned, unsigned, int, int, int), this, 0x78)
-        (this, lo, hi - lo, a, b, c);
+        (this, lo, hiref - lo, a, b, c);
 }
 
 // @ 0x0098a430

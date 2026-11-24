@@ -5,7 +5,6 @@
 008aded0 115 ?fnt_SHP@@YAXPAUTTExecCtx@@@Z  shift-point handler; ref-point/zone selection and mov ordering differ. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=220 fake-arity=180)
 008adfa0 51 ?fnt_FLIPRGON@@YAXPAUTTExecCtx@@@Z  sets bit0 over [lo,hi] in zp0->mFlags; equivalent, hi/lo stack-pop ordering differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 354 valid 100.0% coverage
 008adfe0 45 ?fnt_FLIPRGOFF@@YAXPAUTTExecCtx@@@Z  clears bit0 over [lo,hi] in zp0->mFlags; equivalent, pop ordering differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 360 valid 100.0% coverage
-008ae020 15 ?fnt_SCANCTRL@@YAXPAUTTExecCtx@@@Z  dword RMW at gs+0x64: (*(u32*)(gs+0x64)&0xffff0000)|*stack; original folds mask via add eax,0x58 / mov [eax+0xc]. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage
 008ae0b0 49 ?fnt_SCFS@@YAXPAUTTExecCtx@@@Z  gs->mInstrCtrl ^= (gs->mInstrCtrl ^ val) & sel; mask-branch layout differs only. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (eax)
 008ae100 706 ?fnt_AA@@YAXPAUTTExecCtx@@@Z  hand-reconstructed anti-alias handler (axis vectors, mDist, mBackend); large unverified reconstruction. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (execution)
 008ae460 39 ?fnt_a0b0@@YAXPAUTTExecCtx@@@Z  PUSHB[n]: n=*ip; ip++; push n bytes as ints; loop/epilogue scheduling differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage

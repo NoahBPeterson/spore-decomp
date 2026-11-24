@@ -1613,16 +1613,16 @@ void FUN_00ac9510(char* d, char* end, char* s)
 
 // @ 0x00ac9560
 void FUN_00ac9560(char* d, int n, char* s)
-{
-    for (; n != 0; --n) {
-        if (d) {
-            *(void**)d = (void*)0x145a158;
-            d[4] = s[4];
+{    char* dst = d;
+    unsigned cnt = (unsigned)n;
+    for (; cnt > 0; --cnt, dst += 0xc) {
+        if (dst) {
+            *(void**)dst = (void*)g_145a158;
+            dst[4] = s[4];
             RCObj* p = *(RCObj**)(s + 8);
-            *(RCObj**)(d + 8) = p;
+            *(RCObj**)(dst + 8) = p;
             if (p) p->AddRef();
         }
-        d += 0xc;
     }
 }
 

@@ -20,13 +20,13 @@ extern void FUN_013c0f40(void);
 // @ 0x01300280
 void init_1668f1c()
 {
+    extern void* gFileNotificationLibrary;
+    extern void* gFileNotificationProc;
     void* h = LoadLibraryA("kernel32.dll");
-    *(void**)0x1668f1c = h;
-    if (h != 0) {
-        *(void**)0x1668f20 = GetProcAddress(h, "ReadDirectoryChangesW");
-        atexit(&FUN_013c0f40);
-    } else {
-        *(void**)0x1668f20 = 0;
-        atexit(&FUN_013c0f40);
-    }
+    gFileNotificationLibrary = h;
+    if (h != 0)
+        gFileNotificationProc = GetProcAddress(h, "ReadDirectoryChangesW");
+    else
+        gFileNotificationProc = 0;
+    atexit(&FUN_013c0f40);
 }

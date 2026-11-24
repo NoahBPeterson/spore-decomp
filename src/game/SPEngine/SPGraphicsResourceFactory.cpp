@@ -2088,15 +2088,13 @@ bool __cdecl DrawRaster(void* a, int b, int c, unsigned char d)
 
 // @ 0x00763c60
 void UniqVec::AddUnique(int v)
-{
-    int n = mCount;
-    if (n >= 16)
+{    if (mCount >= 16)
         return;
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < mCount; i++) {
         if (v == mArr[i])
             return;
     }
-    mArr[n] = v;
+    mArr[mCount] = v;
     mCount++;
 }
 

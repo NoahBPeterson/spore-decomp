@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAFileNotification.cpp  ?init_1668f1c@@YAXXZ  01300280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

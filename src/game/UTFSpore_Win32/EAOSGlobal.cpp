@@ -86,12 +86,11 @@ void* CreateOSGlobalManager()
 
 // @ 0x00935a70
 void ShutdownOSGlobalSystem()
-{
-    if (_InterlockedDecrement(&gOSGlobalRefs) == 0) {
+{    if (_InterlockedDecrement(&gOSGlobalRefs) == 0) {
         if (gpOSGlobalManager) {
             if (_InterlockedDecrement((long*)((char*)gpOSGlobalManager + 8)) == 0) {
                 OSGlobalManager* p = (OSGlobalManager*)gpOSGlobalManager;
-                DeleteCriticalSection(p->mCS);
+                DeleteCriticalSection((char*)gpOSGlobalManager + 0xc);
                 ((intrusive_list_base*)p)->~intrusive_list_base();
                 HeapFree(GetProcessHeap(), 0, *(void**)((char*)gpOSGlobalManager - 4));
             }
