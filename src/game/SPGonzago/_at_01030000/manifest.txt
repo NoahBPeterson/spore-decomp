@@ -7,3 +7,4 @@
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034840@Behavior@@QAEXXZ  01034840  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034880@Behavior@@QAEXXZ  01034880  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?SP_CaptureImposterModel@@YAXPAX@Z  01037a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034630@@YAMHMD@Z  01034630  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -7,3 +7,4 @@
 ../src/game/SPEngine/_at_00670000.cpp  _FUN_0067d230  0067d230  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/_at_00670000.cpp  _FUN_0067d260  0067d260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067d020@@YAXPAX0H@Z  0067d020  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067cc70@@YAXPAX0H@Z  0067cc70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

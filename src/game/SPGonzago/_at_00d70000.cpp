@@ -636,10 +636,7 @@ bool FUN_00d773c0(void* a1, void* a2)
 {
     void* p = ((Ctx*)a2)->m4;
     if (((PtrB770*)p)->Func_c0b770()) {
-        void* x = ((Arg1*)a1)->Func_bc9b10();
-        void* t1 = ((PtrB770*)x)->GetTribe();
-        void* t2 = ((PtrB770*)p)->GetTribe();
-        if (t1 == t2)
+        if (((PtrB770*)((Arg1*)a1)->Func_bc9b10())->GetTribe() == ((PtrB770*)p)->GetTribe())
             return true;
     }
     return false;

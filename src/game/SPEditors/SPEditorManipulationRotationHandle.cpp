@@ -786,12 +786,11 @@ bool IntersectRaySphere(const Vector3_s005a_8d20& origin, const Vector3_s005a_8d
 
 // @ 0x005b4f20
 float Stub_005b4f20(float angle)
-{
-  float r = (float)fmod(angle, *(volatile float*)0x15e9fd8);
-  if (r > 3.1415927410125732f)
-    return r - *(volatile float*)0x15e9fd8;
-  if (r < -3.1415927410125732f)
-    return r + *(volatile float*)0x15e9fd8;
+{  float r = (float)fmod(angle, *(volatile float*)&kTwoPi);
+  if (r > *(volatile float*)&kPi)
+    return r - *(volatile float*)&kTwoPi;
+  if (r < -kPi)
+    return r + *(volatile float*)&kTwoPi;
   return r;
 }
 

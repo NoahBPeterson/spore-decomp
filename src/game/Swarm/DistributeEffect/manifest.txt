@@ -12,3 +12,4 @@
 ../src/game/Swarm/DistributeEffect.cpp  ?FUN_00a8a0a0@@YAPAUcDistributeSample_s00a8_9de0@@PAU1@00@Z  00a8a0a0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE /Isrc/game/include
 ../src/game/Swarm/DistributeEffect.cpp  ?FUN_00a8a0f0@@YAPAUcDistributeSample_s00a8_9de0@@PAU1@00@Z  00a8a0f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE /Isrc/game/include
 ../src/game/Swarm/DistributeEffect.cpp  ??1cDistributeEffect_s00a8_c850@@QAE@XZ  00a8cb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?CopySamplesWithAddRef@@YAXPAPAXI0@Z  00a89940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

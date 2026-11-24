@@ -1678,15 +1678,15 @@ void FUN_00ac9630(NRef** p, NRef** end, NRef*** src)
 
 // @ 0x00ac9680
 void FUN_00ac9680(NRef** p, unsigned int n, NRef*** src)
-{
+{    NRef** out = p;
     while (n > 0) {
-        if (p) {
+        if (out) {
             NRef* s = (NRef*)*src;
-            *p = s;
+            *out = s;
             if (s) s->AddRef();
         }
         --n;
-        ++p;
+        ++out;
     }
 }
 

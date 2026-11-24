@@ -2920,18 +2920,18 @@ int CollectSamples(cSampleTarget* target, cSampleSource* info, cSampleOut* out, 
 
 // @ 0x00a89940
 void CopySamplesWithAddRef(void** dst, unsigned count, void** src)
-{
+{    void** d = dst;
     if (count <= 0)
         return;
     do {
-        if (dst) {
+        if (d) {
             void* p = *src;
-            *dst = p;
+            *d = p;
             if (p)
                 ((IRefCounted*)p)->AddRef();
         }
         --count;
-        ++dst;
+        ++d;
     } while (count > 0);
 }
 

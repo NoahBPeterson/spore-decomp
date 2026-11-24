@@ -2144,10 +2144,9 @@ void EapdAssetManager_s00a6_3dd0::MakeFloatHandler2(uint8_t v)
 
 // @ 0x00a65f90
 bool InstanceManager::Init(uint32_t size, uint32_t a2, uint32_t a3)
-{
-    ((FixedPool*)((char*)this + 8))->Init(0x78, size, (void*)a2, (void*)a3);
-    PdInletRelease((char*)this + 0x3c, (void*)size, (void*)a2, (void*)a3);
-    PdOutletInit((char*)this + 0x90, (void*)size, (void*)a2, (void*)a3);
+{    ((FixedPool*)((char*)this + 8))->Init(0x78, size, (void*)a2, (void*)a3);
+    ((void (__thiscall*)(void*, void*, void*, void*))PdInletRelease)((char*)this + 0x3c, (void*)size, (void*)a2, (void*)a3);
+    ((void (__thiscall*)(void*, void*, void*, void*))PdOutletInit)((char*)this + 0x90, (void*)size, (void*)a2, (void*)a3);
     return true;
 }
 

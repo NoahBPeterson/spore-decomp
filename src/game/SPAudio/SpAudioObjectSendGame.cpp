@@ -41,13 +41,14 @@ void sendgame_anything(int self, int sym, int b, int argc, int* argv);  // 0x00a
 
 // @ 0x00a3f000
 bool SendGame_Register(void)
-{
-    int buf[2];
+{    int buf[2];
     int* p = EA::Audio::Eapd::gensym(buf, DAT_01453b10);   // "sendgame"
     int cls = EA::Audio::Eapd::class_new((void*)p[0], (void*)p[1],
                                          (void*)sendgame_new, 0, 0x30, 0, 6, 0);
-    bool ok = cls != 0;
     spSendGameClass = cls;
+    bool ok = spSendGameClass != 0;
+    ok &= 1;
     bool r = EA::Audio::Eapd::class_addanything((void*)cls, (void*)sendgame_anything);
-    return r & ok;
+    r &= ok;
+    return r;
 }
