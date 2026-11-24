@@ -1,4 +1,3 @@
-00a65f90  32  InstanceManager::Init: pool/map init driver; call arguments re-evaluated early so the three `lea ecx` receivers are not adjacent to their calls ; difftest UNSUPPORTED (0/400 valid inputs; fake-arity faults)
 00a65fe0  105  InstanceManager::FlushAll: bucket-walk release loop; register/iterator caching differs, not selected as best-size symbol ; difftest WEAK (248 valid, 42% cov)
 00a66070  85  InstanceManager::InsertParam: EASTL find-then-insert; key/value locals and sret slot ordering differ ; difftest FAIL (execution)
 00a660e0  76  Hashtable::ClearBuckets: intrusive-list teardown loop; value-node layout is a different node type than the modelled HashNode ; difftest WEAK (166 valid, 44% cov)

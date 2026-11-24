@@ -1066,7 +1066,8 @@ void* Win::Find60(void* key)
             return 0;
         if (b)
             break;
-        b = (p->field8 == key);
+        if (p->field8 == key)
+            b = true;
         p = p->next;
     }
     return p->field8;

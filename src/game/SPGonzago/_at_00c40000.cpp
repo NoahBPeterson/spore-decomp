@@ -727,10 +727,16 @@ void cSPMissionBiosphere::TriggerHerbivoreBonus()
 
 // @ 0x00c4db00
 char cMissionKeys::ContainsKey(int key)
-{
-    for (int i = 0; i < (int)(mpKeysEnd_204 - mpKeys_200); i++)
-        if (mpKeys_200[i] == key)
-            return true;
+{    int n = (int)((char*)mpKeysEnd_204 - (char*)mpKeys_200);
+    int i = 0;
+    if (n >> 2 > 0) {
+        _ReadWriteBarrier();
+        while (i < n >> 2) {
+            if (mpKeys_200[i] == key)
+                return true;
+            i++;
+        }
+    }
     return false;
 }
 

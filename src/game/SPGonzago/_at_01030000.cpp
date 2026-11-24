@@ -375,14 +375,18 @@ int EconomyTuning::ComputeAmount(float amount, float* out)
 
 // @ 0x01034630
 float FUN_01034630(int index, float value, char reuse)
-{
-    if (reuse != 0) {
-        float cached = G_FACTOR_TABLE[index];
-        if (cached != *G_REAL_ZERO) {
-            return cached;
-        }
+{    extern float g_16df330[];
+    extern char g_16df3d8[];
+    extern float g_1485378;
+    float cached;
+    if (reuse == 0)
+        goto recompute;
+    cached = g_16df330[index];
+    if (cached == g_1485378) {
+recompute:
+        return FUN_01043150(g_16df3d8 + index * 0x14, value);
     }
-    return FUN_01043150((char*)G_TUNE_VARIANTS + index * 0x14, value);
+    return cached;
 }
 
 // @ 0x01034680

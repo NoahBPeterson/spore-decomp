@@ -38,11 +38,11 @@ extern Allocator* g_16c8b44;  // 0x016c8b44
 
 // @ 0x0067cc70
 void FUN_0067cc70(void* a, void* b, int c)
-{
+{  void* constants = g_016f6ed0;
   if (c)
-    g_016f89d0->vt[94](g_016f89d0, a, g_016f6ed0, 3);
+    g_016f89d0->vt[94](g_016f89d0, a, constants, 3);
   else
-    g_016f89d0->vt[109](g_016f89d0, a, g_016f6ed0, 3);
+    g_016f89d0->vt[109](g_016f89d0, a, constants, 3);
 }
 
 // @ 0x0067cca0

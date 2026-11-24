@@ -2318,12 +2318,11 @@ void FUN_00e45e90(int a1, IntVector* out, uint32_t key, int obj)
 
 // @ 0x00e45fe0
 bool VecContainer::IsMember(int id)
-{
-    int* self = (int*)this;
-    int n = (*(int*)((char*)self + 0xc4) - *(int*)((char*)self + 0xc0)) >> 2;
-    for (int i = 0; i < n; ++i) {
-        if (*(int*)(*(int*)((char*)self + 0xc0) + i * 4) == id)
+{    int count = (int)((eastl::vector<int>*)((char*)this + 0xc0))->size();
+    for (int i = 0; i < count; i++) {
+        if ((*(eastl::vector<int>*)((char*)this + 0xc0))[i] == id) {
             return true;
+        }
     }
     return false;
 }

@@ -12,7 +12,6 @@
 00ac93c0 171 complete; EASTL heap sift-up-by-key, control-flow/schedule differs (183 vs 192); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (164 valid, 39.5% cov)
 00ac94c0 72 complete; construct 0xc-pair range from template element; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
 00ac9560 26 complete; 0xc-pair fill loop, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
-00ac9680 18 complete; refcounted fill loop; schedule differs (48 vs 47); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (312 valid, 100% cov)
 00ac96b0 106 complete; 0x2c-struct forward copy, x87 float copies sched differs (107 vs 137); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (69 valid, 19.2% cov)
 00ac97a0 20 complete; reverse refcounted-pointer range assign; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
 00ac97f0 16 complete; reverse 0xc-pair range assign; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
