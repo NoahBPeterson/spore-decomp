@@ -1,2 +1,1 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-../src/game/UTFSpore_Win32/MapFile.cpp  ?StrStubInit@MapFile@@QAEPAXPBD0@Z  0091c2d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

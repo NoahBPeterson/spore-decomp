@@ -16,3 +16,4 @@
 ../src/game/SPEditors/SPUIFeedListItem.cpp  ?FUN_00669410@@YIXPAX@Z  00669410  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListItem.cpp  ?FUN_006693c0@FeedItem_s0066_8be0@@QAEHXZ  006693c0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListItem.cpp  ?FUN_00667b00@FeedItem@@QAEXXZ  00667b00  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListItem.cpp  ?Reserve@CFeed@@QAEXHH@Z  00666630  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
