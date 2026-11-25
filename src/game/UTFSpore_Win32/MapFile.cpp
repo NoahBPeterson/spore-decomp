@@ -418,14 +418,15 @@ u8* MapCtorBig(u8* self)
 void* MapFile::StrStubInit(const char* b, const char* e)
 {
     u8* p = (u8*)this;
-    u8* base = p + 0x14;
-    *(u8**)(p + 0x10) = base;
-    *(u8**)(p + 8) = base + 0x100;
-    *(u8**)(p + 4) = base;
-    *(u8**)p = base;
+    u8*& buf = p;
+    u8* base = buf + 0x14;
+    *(u8**)(buf + 0x10) = base;
+    *(u8**)(buf + 8) = base + 0x100;
+    *(u8**)(buf + 4) = base;
+    *(u8**)buf = base;
     *base = 0;
-    ((StrObj*)p)->AssignRange(b, b + (unsigned)e);   // retail passes (b, b + e): the second argument is a length
-    return p;
+    ((StrObj*)buf)->AssignRange(b, b + (unsigned)e);   // retail passes (b, b + e): the second argument is a length
+    return buf;
 }
 
 // @ 0x0091c310

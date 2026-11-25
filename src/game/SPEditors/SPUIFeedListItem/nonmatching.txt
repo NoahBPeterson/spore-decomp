@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-00666630 7 vector reserve: functionally complete; cl keeps vector ptr in eax+pushes before load, original loads ecx first (scheduling) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006666c0 423 cSPUIFeedListItem::Refresh: complete behaviour incl. area math; wcscmp/rect scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006668e0 157 SetImg: complete behaviour; frame size (0x24 vs 8) and repeated AssetBrowser() locals differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00666a60 8 WidA ctor: only diff is xor ebx,ebx scheduled after arg load instead of at entry flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -461,13 +461,14 @@ void __fastcall FUN_01133f40(int p)
 void* __cdecl FUN_01133f80(System* sys)
 {
 	void* p = sys->Alloc(0x10, 0, 0x10, 0);
-	if (p != 0)
+	void*& obj = p;
+	if (obj != 0)
 	{
-		*(int*)((char*)p + 0) = 0;
-		*(int*)((char*)p + 4) = 0;
-		*(int*)((char*)p + 8) = 0;
-		*(System**)((char*)p + 0xc) = sys;
-		return p;
+		*(int*)((char*)obj + 0) = 0;
+		*(int*)((char*)obj + 4) = 0;
+		*(int*)((char*)obj + 8) = 0;
+		*(System**)((char*)obj + 0xc) = sys;
+		return obj;
 	}
 	return 0;
 }

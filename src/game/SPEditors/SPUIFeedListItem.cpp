@@ -624,7 +624,8 @@ float* CFeed::GetIconKey(float* out)
 void CFeed::Reserve(int a, int b)
 {
   void* v = m180;
-  vec_reserve((int)v, 0x662081e, a, b);
+  void*& vec = v;
+  vec_reserve((int)vec, 0x662081e, a, b);
 }
 
 // @ 0x00666680

@@ -794,7 +794,8 @@ uint32_t GetEventDataAs32Bits(int a0, void* a1, int a2, int a3, void* creature, 
 namespace nSPCreatureAnim {
 float GetEventDataAsFloat(int p1, float* p2, int p3, void* p4, uint32_t p5, uint32_t p6, int p7)
 {
-    uint32_t bits = GetEventDataAs32Bits(p1, p2, p3, 0, p4, p5, p6, p7);
+    uint32_t arg6 = p6;
+    uint32_t bits = GetEventDataAs32Bits(p1, p2, p3, 0, p4, p5, arg6, p7);
     return *(float*)&bits;
 }
 }  // namespace nSPCreatureAnim

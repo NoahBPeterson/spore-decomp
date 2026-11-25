@@ -1676,7 +1676,8 @@ void S962530::f(int a, int b)
 void S962580::f(int a, int b)
 {
   int t = (int)(size_t)this;
-  int adj = (t - 4) ? t : 0;
+  int& tRef = t;
+  int adj = (tRef - 4) ? tRef : 0;
   ((S962360*)g_166b190)->f(adj, a, b);
 }
 
@@ -1684,7 +1685,8 @@ void S962580::f(int a, int b)
 int S9625b0::f(int a, int b, int c)
 {
   int t = (int)(size_t)this;
-  int adj = (t - 4) ? t : 0;
+  int& tRef = t;
+  int adj = (tRef - 4) ? tRef : 0;
   void* p = ((S962360*)g_166b190)->f(adj, a, c);
   if (p) return ((VObj4*)p)->v3(b);
   return 0;
