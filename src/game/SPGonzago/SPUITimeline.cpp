@@ -3076,15 +3076,13 @@ uint32_t __cdecl GetGameModeHash()
 
 // @ 0x00e36e20
 bool cUITimedTooltip::UpdateD()
-{
-    EA::Stopwatch_s00e3_6150& sw = m_sw4c8;
-    if ((double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold4e0) {
-        if (m_pAnimator458->Empty()) {
-            sw.SetBoolProperty();
-            return true;
-        }
+{    EA::Stopwatch_s00e3_6150& sw = m_sw4c8;
+    bool result = (double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold4e0
+        && m_pAnimator458->Empty();
+    if (result) {
+        sw.SetBoolProperty();
     }
-    return false;
+    return result;
 }
 
 // @ 0x00e36e80

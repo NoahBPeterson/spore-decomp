@@ -34,3 +34,4 @@
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e3ede0@@YAXPAUKeyVector@@@Z  00e3ede0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?Update@cTimelinePageHost@@QAEXII@Z  00e43270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?UpdateE@cUITimedTooltip@@QAE_NXZ  00e36e80  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?UpdateD@cUITimedTooltip@@QAE_NXZ  00e36e20  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

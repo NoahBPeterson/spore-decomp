@@ -1673,12 +1673,11 @@ float* __stdcall InvLengthSqScale(float* out, const float* v)
 
 // @ 0x00a77d30
 void __stdcall WaveVec4(float* out, const float* v)
-{
-    float a = v[0] * kRadScale;
+{    float a = v[0] * kRadScale;
     float b = kRadScale * v[1] * 0.5f;
     out[2] = 1.0f;
     float x = (sinf(a) + 1.0f) * 0.3f + (sinf(b) + 1.0f) * 0.1f;
-    float y = (cosf(b) + 1.0f) * 0.1f + (cosf(a) + 1.0f) * 0.3f;
+    float y = (cosf(a) + 1.0f) * 0.3f + (cosf(b) + 1.0f) * 0.1f;
     out[0] = x;
     out[1] = y;
     out[3] = y * x;

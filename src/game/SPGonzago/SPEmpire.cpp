@@ -1713,12 +1713,11 @@ bool __fastcall FUN_00c31bc0(void* self, void* dummy, void* target)
 
 // @ 0x00c31bf0
 bool __fastcall FUN_00c31bf0(void* self, void* dummy, s32 id)
-{
-  (void)dummy;
+{  (void)dummy;
   int n = (int)((*(int*)((char*)self + 0x74) - *(int*)((char*)self + 0x70)) >> 2);
   int i = 0;
   if (n > 0) {
-    int* p = (int*)*(int*)((char*)self + 0x70);
+    int* p = (int*)*(int* volatile*)((char*)self + 0x70);
     do {
       if (*(s32*)((char*)(void*)*p + 0x84) == id) return 1;
       i++;
