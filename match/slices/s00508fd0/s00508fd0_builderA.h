@@ -1,21 +1,49 @@
 // Slice s00508fd0, file B header: the types behind the 0x00508fd0 table
-// builder transcription in s00508fd0_builderA.cpp. Lives beside the slice
-// sources so the callee declarations' `// 0x...` annotations are in the
-// annotation scan (slice *.h files).
+// builder in s00508fd0_builderA.cpp. Lives beside the slice sources so the
+// callee declarations' `// 0x...` annotations are in the annotation scan
+// (slice *.h files).
+//
+// The retail body (`?Build@MPT@@QAEXXZ`, 1142 bytes) is reproduced exactly,
+// frame included. Its frame map, decoded from the disassembly and confirmed
+// slot-for-slot against this build:
+//
+//   -0x004  first            (int)
+//   -0x008..-0x020  id[0x18] (24 bytes of frame the body never touches;
+//                             declared so the name walk leaves the hole)
+//   -0x10c  res              (NWV, 240 bytes: 0xf0)
+//   -0x110..-0x134  10 named counters/frame locals
+//   -0x138  nodes            (&mNodes cache for the first Resize)
+//   -0x13c..-0x148  4 dead dwords
+//   -0x149  cur              (AL, 1 byte; the scratch ctor's allocator)
+//   -0x150  mParts recv
+//   -0x154  mNodes Resize recv
+//   -0x158..-0x160  3 dead dwords
+//   -0x164  Clear recv
+//   -0x168  baseEnd          (FillPairs end bound = mpEnd)
+//   -0x16c  base             (FillPairs start bound = mpBegin)
+//   -0x170  p                (FillPairs cursor)
+//   -0x174  elem recv        (&dst->mNodes, per-node loop)
+//   -0x178..-0x190  6 dead dwords
+//   -0x190  psd              (&mSlotData[ok])
+//   -0x194  ps8              (&mSlots80[ok])
+//   -0x198  mRecs recv
+//   -0x19c  mSlots6c recv
+//   -0x1a0  sweep iter
+//   -0x1a4  this
+//
+// The dead dwords come from the s004057b0 recipe: unused locals inside a
+// __forceinline helper body allot at the expansion's position, in body order.
 
 #pragma once
 
 #include "../../include/types.h"
 
-// ---------------------------------------------------------------------------
-// callees: out-of-line vector members (no bodies here — the retail body
-// calls them); the inline helpers carry their real bodies below
-// ---------------------------------------------------------------------------
-
 // the allocator blob handed to the scratch vector's constructor
 struct AL {
     char mState;
 };
+
+struct MPT;
 
 // the 12-byte node-weight record
 struct NW {
@@ -39,15 +67,21 @@ struct __declspec(align(4)) NWB {
     void Copy(const NWB& x);                      // 0x000050dea0
     void Dtor();                                  // 0x00005156b0
     unsigned Count() { return ((char*)mpEnd - (char*)mpBegin) / 12; }
-    __forceinline void Clear() { Erase(mpBegin, mpEnd); }
-    // the fill-path record write: the record id and the two per-corner
-    // table reads, whose addresses the call materialises as the spill
-    // temps retail shows at -0x190/-0x194
-    __forceinline void Set(int hdr, int* psd, int* ps8) {
-        mpEnd[-1].mId = hdr;
-        mpEnd[-1].mSlotData = *psd;
-        mpEnd[-1].mSlot = *ps8;
+
+    // the element's record-list clear; its expansion reserves the three dead
+    // dwords at -0x158..-0x160, which sit after the receiver home
+    __forceinline void Clear() {
+        unsigned v0, v1, v2;
+        Erase(mpBegin, mpEnd);
     }
+
+    // the fill-path record writes. One field per helper, so each element
+    // address is computed at its own use site: retail stores mId, then
+    // computes &mSlotData[ok] and stores, then &mSlots80[ok] and stores.
+    // Passing the address as a forceinlined argument is what keeps the two
+    // operator[] element-address temps (-0x190 psd, -0x194 ps8) in the frame.
+    __forceinline void SetSlotData(int* p) { mpEnd[-1].mSlotData = *p; }
+    __forceinline void SetSlot(int* p) { mpEnd[-1].mSlot = *p; }
 };
 
 // the header plus inline storage (the local scratch builder, 0xf0 bytes)
@@ -57,7 +91,28 @@ struct NWV : NWB {
     void Ctor(const AL& alloc);       // 0x0000540470
     void Init();                      // 0x000050cf70
     void Add();                       // 0x000041ffc0
-    __forceinline void Sweep() { for (NW* p = mpBegin; p < mpEnd; p += 1) {} }
+
+    // the ctor+init pair. The allocator local is `cur`: declaring it inside
+    // this forceinlined body is what puts its 1-byte slot at -0x149, inside
+    // the temp region rather than among Build's own locals.
+    __forceinline void Create() {
+        AL cur;
+        Ctor(cur);
+        Init();
+    }
+
+    // count-then-append. The six unused locals stand in for the six dead
+    // dwords at -0x178..-0x190 that retail's expansion of this count leaves
+    // between the elem-loop receiver and the Set argument homes.
+    __forceinline unsigned TakeSlot() {
+        unsigned d0, d1, d2, d3, d4, d5;
+        return Count();
+    }
+
+    // the scratch sweep before the dtor: an empty 12-byte stride walk
+    __forceinline void Sweep() {
+        for (NW* p = mpBegin; p < mpEnd; p += 1) {}
+    }
 };
 
 // int-record vector with an out-of-line resize (the element's per-node
@@ -74,8 +129,7 @@ struct IdVec {
 
 // int list with an inline subscript (the MPT's per-corner id tables at
 // +0x58/+0x6c/+0x80, 0x14 bytes each); the subscript materialises the
-// element address as the return temp, which is what spills in the retail
-// body's fill path
+// element address as the return temp, which is what spills in the fill path
 struct IdList {
     int*   mpBegin;                   // +0x00
     int*   mpEnd;                     // +0x04
@@ -135,15 +189,23 @@ struct MPT {
     PairTab mBaseTabTab;              // +0x1b8 (half-id -> pair) table
 
     void Build();
+
+    // the base-table fill. Two things are load-bearing:
+    //  * the locals are declared here (inside a forceinlined helper) rather
+    //    than in Build, which is what allots them in the temp region at
+    //    -0x168/-0x16c/-0x170 instead of among Build's own locals;
+    //  * `base` takes the higher slot (-0x16c) and `baseEnd` the one below
+    //    (-0x168) -- the /Od name walk, not the semantics, decides this, so
+    //    the loop's end bound lives in `base` and its start in `baseEnd`.
+    // The parameter is a const reference, not a value: retail copies the
+    // record as a block (both halves loaded, then the cursor, then both
+    // stores), which only the reference spelling produces here.
     __forceinline void FillPairs(const Pair& fill) {
-        // declared before use so the collision tie-break lands `end` on the
-        // higher slot (retail allots end, first, p downward); the initialiser
-        // order stays retail's (mpEnd read first)
-        Pair* first;
-        Pair* end;
-        end = mBaseTabTab.mpEnd;
-        first = mBaseTabTab.mpBegin;
-        for (Pair* p = first; p != end; p += 1)
+        Pair* baseEnd;
+        Pair* base;
+        base = mBaseTabTab.mpEnd;
+        baseEnd = mBaseTabTab.mpBegin;
+        for (Pair* p = baseEnd; p != base; p += 1)
             *p = fill;
     }
 };
