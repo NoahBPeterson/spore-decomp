@@ -210,9 +210,10 @@ clamp, max, and the x87 `fld; fistp qword` rounding `X87RoundToInt64`) are the e
 any other inline assembly, in its body or in a same-file helper, makes it not count (`asm_audit.py`; 43 functions were
 demoted for this on 2026-11-11 and 30 came back through the shared helpers). The older rule below still applies.
 
-**No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
-generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in
-partial.txt. Where the original used an asm helper (fnstcw/fldcw, cvtss2si, the maxss/minss clamp), call the
+**No assembly transcription.** A function written as `__declspec(naked)` + `__asm` or with `_emit` bytes is not
+decompiled and never counts as byte-exact; record it in partial.txt. C++ source counts however it was written: by
+hand, by a model, or lifted from the machine code by a tool (2026-11-25). Any plain C++ function that compiles to
+the original's bytes is a matching decompile. Where the original used an asm helper (fnstcw/fldcw, cvtss2si, the maxss/minss clamp), call the
 shared helper in `match/include/sse_helpers.h`; since 2026-11-11 no other `__asm` counts (above). The older limit
 was a block of at most 8 instructions. `run_all.py` enforces this (since
 2026-10-18): a naked, `_emit` or longer-block row prints `ASM` instead of MATCH and does not count.
