@@ -993,8 +993,7 @@ void __stdcall HashTable_ClearBuckets(CellNode** buckets, unsigned count)
 
 // @ 0x007026d0
 int __thiscall cHierGrid_s0070_1a00::FrustumQuery(void* frustum, int count, void** buffer)
-{
-    if (count <= 0)
+{    if (count <= 0)
         return 0;
     void* p1 = g_spApp;
     void* p2 = *(void**)((char*)p1 + 0x3c);
@@ -1002,20 +1001,16 @@ int __thiscall cHierGrid_s0070_1a00::FrustumQuery(void* frustum, int count, void
     mQueryListIt = buffer;
     mQueryListEnd = buffer + count;
     CullCellList(frustum, 0x100, 0, 0);
-    ObjListNode* node = mOutOfGrid.pNext;
-    if (mQueryListIt < mQueryListEnd) {
-        do {
-            if (node == &mOutOfGrid)
-                break;
-            *(void**)mQueryListIt = node->mObj;
-            mQueryListIt = (void**)((int)mQueryListIt + 4);
-            node = node->pNext;
-        } while ((unsigned)mQueryListIt < (unsigned)mQueryListEnd);
+    for (ObjListNode* node = mOutOfGrid.pNext; mQueryListIt < mQueryListEnd; node = node->pNext) {
+        if (node == &mOutOfGrid)
+            break;
+        *mQueryListIt = node->mObj;
+        mQueryListIt++;
     }
-    int result = (int)mQueryListIt - (int)buffer;
+    int result = mQueryListIt - buffer;
     mQueryListIt = 0;
     mQueryListEnd = 0;
-    return result >> 2;
+    return result;
 }
 
 // @ 0x00702760

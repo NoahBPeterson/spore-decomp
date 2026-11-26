@@ -92,8 +92,10 @@ struct VertexDescriptor
     u32  FindElement(u32 type);                                               // 0x011f2e40
 };
 
+#if _MSC_VER >= 1400
 typedef bool (__thiscall *PFN_VD_Create)(VertexDescriptor*);
 typedef void (__thiscall *PFN_VD_Delete)(VertexDescriptor*);
+#endif
 
 VertexDescriptor* g_vertexDescriptorHead;   // 0x016fa558 cache list
 void*             g_vertexDescriptorActive; // 0x016fa55c bound declaration
@@ -160,12 +162,101 @@ int GlobalState_D3D9Start(void)
 // ===========================================================================
 // @ 0x011f2bc0
 void __fastcall GlobalState_D3D9SetActiveVertexDescriptor(VertexDescriptor* pDesc)
-{
+{    struct LocalDevice {
+        virtual i32 __stdcall s00() { return 0; }
+        virtual i32 __stdcall s01() { return 0; }
+        virtual i32 __stdcall s02() { return 0; }
+        virtual i32 __stdcall s03() { return 0; }
+        virtual i32 __stdcall s04() { return 0; }
+        virtual i32 __stdcall s05() { return 0; }
+        virtual i32 __stdcall s06() { return 0; }
+        virtual i32 __stdcall s07() { return 0; }
+        virtual i32 __stdcall s08() { return 0; }
+        virtual i32 __stdcall s09() { return 0; }
+        virtual i32 __stdcall s10() { return 0; }
+        virtual i32 __stdcall s11() { return 0; }
+        virtual i32 __stdcall s12() { return 0; }
+        virtual i32 __stdcall s13() { return 0; }
+        virtual i32 __stdcall s14() { return 0; }
+        virtual i32 __stdcall s15() { return 0; }
+        virtual i32 __stdcall s16() { return 0; }
+        virtual i32 __stdcall s17() { return 0; }
+        virtual i32 __stdcall s18() { return 0; }
+        virtual i32 __stdcall s19() { return 0; }
+        virtual i32 __stdcall s20() { return 0; }
+        virtual i32 __stdcall s21() { return 0; }
+        virtual i32 __stdcall s22() { return 0; }
+        virtual i32 __stdcall s23() { return 0; }
+        virtual i32 __stdcall s24() { return 0; }
+        virtual i32 __stdcall s25() { return 0; }
+        virtual i32 __stdcall s26() { return 0; }
+        virtual i32 __stdcall s27() { return 0; }
+        virtual i32 __stdcall s28() { return 0; }
+        virtual i32 __stdcall s29() { return 0; }
+        virtual i32 __stdcall s30() { return 0; }
+        virtual i32 __stdcall s31() { return 0; }
+        virtual i32 __stdcall s32() { return 0; }
+        virtual i32 __stdcall s33() { return 0; }
+        virtual i32 __stdcall s34() { return 0; }
+        virtual i32 __stdcall s35() { return 0; }
+        virtual i32 __stdcall s36() { return 0; }
+        virtual i32 __stdcall s37() { return 0; }
+        virtual i32 __stdcall s38() { return 0; }
+        virtual i32 __stdcall s39() { return 0; }
+        virtual i32 __stdcall s40() { return 0; }
+        virtual i32 __stdcall s41() { return 0; }
+        virtual i32 __stdcall s42() { return 0; }
+        virtual i32 __stdcall s43() { return 0; }
+        virtual i32 __stdcall s44() { return 0; }
+        virtual i32 __stdcall s45() { return 0; }
+        virtual i32 __stdcall s46() { return 0; }
+        virtual i32 __stdcall s47() { return 0; }
+        virtual i32 __stdcall s48() { return 0; }
+        virtual i32 __stdcall s49() { return 0; }
+        virtual i32 __stdcall s50() { return 0; }
+        virtual i32 __stdcall s51() { return 0; }
+        virtual i32 __stdcall s52() { return 0; }
+        virtual i32 __stdcall s53() { return 0; }
+        virtual i32 __stdcall s54() { return 0; }
+        virtual i32 __stdcall s55() { return 0; }
+        virtual i32 __stdcall s56() { return 0; }
+        virtual i32 __stdcall s57() { return 0; }
+        virtual i32 __stdcall s58() { return 0; }
+        virtual i32 __stdcall s59() { return 0; }
+        virtual i32 __stdcall s60() { return 0; }
+        virtual i32 __stdcall s61() { return 0; }
+        virtual i32 __stdcall s62() { return 0; }
+        virtual i32 __stdcall s63() { return 0; }
+        virtual i32 __stdcall s64() { return 0; }
+        virtual i32 __stdcall s65() { return 0; }
+        virtual i32 __stdcall s66() { return 0; }
+        virtual i32 __stdcall s67() { return 0; }
+        virtual i32 __stdcall s68() { return 0; }
+        virtual i32 __stdcall s69() { return 0; }
+        virtual i32 __stdcall s70() { return 0; }
+        virtual i32 __stdcall s71() { return 0; }
+        virtual i32 __stdcall s72() { return 0; }
+        virtual i32 __stdcall s73() { return 0; }
+        virtual i32 __stdcall s74() { return 0; }
+        virtual i32 __stdcall s75() { return 0; }
+        virtual i32 __stdcall s76() { return 0; }
+        virtual i32 __stdcall s77() { return 0; }
+        virtual i32 __stdcall s78() { return 0; }
+        virtual i32 __stdcall s79() { return 0; }
+        virtual i32 __stdcall s80() { return 0; }
+        virtual i32 __stdcall s81() { return 0; }
+        virtual i32 __stdcall s82() { return 0; }
+        virtual i32 __stdcall s83() { return 0; }
+        virtual i32 __stdcall s84() { return 0; }
+        virtual i32 __stdcall s85() { return 0; }
+        virtual i32 __stdcall s86() { return 0; }
+        virtual i32 __stdcall SetVertexDeclaration(void* pDecl) { return 0; }
+    };
     void* pDecl = pDesc->mpD3DDecl;
     if (g_vertexDescriptorActive == pDecl)
         return;
-    void* pDevice = g_d3d9Device;
-    if ((*(i32(__stdcall**)(void*, void*))((char*)*(void**)pDevice + 0x15c))(pDevice, pDecl) >= 0)
+    LocalDevice* pDevice = (LocalDevice*)g_d3d9Device;
+    if (pDevice->SetVertexDeclaration(pDecl) >= 0)
         g_vertexDescriptorActive = pDecl;
 }
 

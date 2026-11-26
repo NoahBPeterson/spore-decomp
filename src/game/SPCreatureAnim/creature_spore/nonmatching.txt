@@ -5,7 +5,6 @@
 009c8630 160 MinClearance: original uses loop strength reduction + SSE mulss/addss with x87 fabs; not reproducible; difftest PASS (299 valid, 100% cov) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 009c86e0 170 MinClearanceIdx: same strength-reduction body; difftest FAIL (only eax leftover register differs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 009c87e0 137 BodyToWorld: cl codegen of the quaternion transform differs; difftest PASS (400 valid, 100% cov) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-009c8890 27 SetWorldState: cl scheduling of the world-state update differs; difftest WEAK (245 valid, 52.8% cov) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 009c89d0 76 Elem28 fill-n: copy loop register allocation differs; difftest PASS (315 valid, 100% cov) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 009c8a90 1281 cBlockBlockCommand::OnEndBlock complete (all paths/calls: 2 QVT calls, FUN_009fc220, inlined parent-frame quaternion rotations, FUN_009b53f0, hash/strtol); SSE scheduling and intermediate 0x330 store differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009c9910 2539 nSPCreatureAnim::creature_instance_data::UpdateEffect: complete (event-located and bone-attached modes, 4 ComputeEventLocationState calls, XformMsg updates, sound/callback/xform target; 27/27 calls in identical order, same store/compare/float-op multiset modulo fp:fast operand commutation); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame 0xd4 vs 0xcc (local slot packing) and xmm/register allocation differ

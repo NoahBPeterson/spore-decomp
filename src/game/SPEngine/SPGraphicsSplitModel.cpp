@@ -1289,24 +1289,17 @@ void Tc::m_007a0110(void* pos, int n, void* value)
 
 // @ 0x007a0360
 void FUN_007a0360(void* p1, void* p2)
-{
-  VecBase* v1 = (VecBase*)p1;
+{  VecBase* v1 = (VecBase*)p1;
   VecBase* v2 = (VecBase*)p2;
-  int local_4 = count14(v1->mpBegin, v1->mpEnd);
-  ((Tc*)v2)->m_007a0010(local_4);
-  local_4 = count14(v1->mpBegin, v1->mpEnd);
-  if (local_4 > 0) {
-    int local_8 = 0;
-    do {
-      char* trans = (char*)v2->mpBegin + local_8;
-      char* elem  = (char*)v1->mpBegin + local_8;
-      FUN_0079f7b0(trans);
-      int c = count8(*(void**)(elem + 0), *(void**)(elem + 4));
-      for (int j = 0; j < c; j++)
-        FUN_0079b6b0((int)trans, (int)(*(char**)(elem + 0) + j * 8));
-      local_8 += 0x14;
-      local_4--;
-    } while (local_4 != 0);
+  ((Tc*)v2)->m_007a0010(count14(v1->mpBegin, v1->mpEnd));
+  int n = count14(v1->mpBegin, v1->mpEnd);
+  for (int i = 0; i < n; i++) {
+    char* trans = (char*)v2->mpBegin + i * 0x14;
+    char* elem  = (char*)v1->mpBegin + i * 0x14;
+    FUN_0079f7b0(trans);
+    int c = count8(*(void**)(elem + 0), *(void**)(elem + 4));
+    for (int j = 0; j < c; j++)
+      FUN_0079b6b0((int)trans, (int)(*(char**)(elem + 0) + j * 8));
   }
 }
 

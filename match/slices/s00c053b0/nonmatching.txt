@@ -4,7 +4,6 @@
 00c05a80   384  Simulator::cSPCreatureBase::func5a8h: complete; equiv UNSUPPORTED (6 unresolved callees); XformMsg stack object / vtable arg-passing shape differs
 00c05bf0   253  Simulator::cSPCreatureBase::func5bf0: complete; equiv UNSUPPORTED (1 unresolved callee); branchy rounding (cvtss2si+cvtsi2ss) and global loads differ
 00c05df0    84  intrusive pool Free (0x14-byte elements): complete; equiv FAIL (5/207 mismatch, execution); loop/call schedule around ref-releases differs
-00c05e80    23  intrusive pool Cur: complete; equiv PASS (381 valid inputs, 100% coverage); cl loads the two tail fields lazily instead of up-front
 00c05ee0   293  intrusive pool Reset: complete; equiv FAIL (5/5 mismatch, memory pool @40010010); nested release loops reordered relative to original
 00c06070   197  intrusive pool AllocChunk: complete; equiv FAIL (5/5 mismatch, execution); allocate/append schedule and allocator args differ
 00c06000    44  cLocomotionStrategy_Template singleton accessor: complete; equiv PASS (343 valid inputs, 78.1% coverage); vtable store order and null-path scheduling differ

@@ -7454,16 +7454,17 @@ bool CountMap::AddRef(uint32_t key)
 
 // @ 0x00a27ed0
 bool Submix_s00a2_6e10::ConnectToSubmix(Submix_s00a2_6e10* other)
-{
-    if (!other) return false;
+{    if (!other) return false;
     AudioLockGuard lock;
     Plugin* plugin = (Plugin*)mVoiceContainer.FindPlugin(0x41695730);
     if (plugin) {
         EStr s;
-        s.sprintf("%s.aiff", mpName);
+        const char* name = mpName;
+        s.sprintf("%s.aiff", name);
         plugin->SetName(0, s.c_str());
     }
-    return mVoiceContainer.ConnectToSubmix(fld<void*>(other, 0x970), 0);
+    void* sub = fld<void*>(other, 0x970);
+    return mVoiceContainer.ConnectToSubmix(sub, 0);
 }
 
 // @ 0x00a27ff0

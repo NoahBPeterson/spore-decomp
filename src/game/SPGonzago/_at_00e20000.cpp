@@ -475,6 +475,11 @@ struct WBlob {
     void* mpCapacity;   // +0x04
     void* mpEnd;        // +0x08
     void  RangeInit(const void* src);  // 0x00579a90 eastl::wstring::range_initialize
+    ~WBlob() {
+        if ((int)((uint32)((char*)mpEnd - (char*)mpBegin) & 0xfffffffe) > 2 && mpBegin) {
+            FreeNode(mpBegin);
+        }
+    }
 };
 extern wchar_t gEmptyWString[];     // 0x013ec468
 typedef void* HMODULE;
@@ -504,15 +509,6 @@ struct ContentValidationSummarizer {
     virtual void b1c();
     // data
     void*    f04;        // +0x04
-    void*    hModule;    // +0x08 (HMODULE)
-    char     pad0c[0x20 - 0x0c];
-    void (__stdcall *fn20)(uint32, void*);  // +0x20 callback
-    char     pad24[0x38 - 0x24];
-    void (*fn38)();      // +0x38
-    uint32   f3c;        // +0x3c
-    char     pad40[0x44 - 0x40];
-    WBlob    str44;      // +0x44
-    uint32   f50;        // +0x50
     ~ContentValidationSummarizer();
 };
 struct PatchMgr : ContentValidationSummarizer {
@@ -524,6 +520,15 @@ struct PatchMgr : ContentValidationSummarizer {
     virtual void v14();
     virtual void v18();
     virtual void v1c();
+    void*    hModule;    // +0x08 (HMODULE)
+    char     pad0c[0x20 - 0x0c];
+    void (__stdcall *fn20)(uint32, void*);  // +0x20 callback
+    char     pad24[0x38 - 0x24];
+    void (*fn38)();      // +0x38
+    uint32   f3c;        // +0x3c
+    char     pad40[0x44 - 0x40];
+    WBlob    str44;      // +0x44
+    uint32   f50;        // +0x50
     PatchElem* elems;    // +0x54
     int      nElems;     // +0x58
     int      idx5c;      // +0x5c
@@ -538,10 +543,6 @@ struct PatchMgr : ContentValidationSummarizer {
 };
 ContentValidationSummarizer::~ContentValidationSummarizer()
 {
-    if ((int)((uint32)((char*)str44.mpEnd - (char*)str44.mpBegin) & 0xfffffffe) > 2 &&
-        str44.mpBegin) {
-        FreeNode(str44.mpBegin);
-    }
 }
 void ContentValidationSummarizer::b00() {}
 void ContentValidationSummarizer::b04() {}
@@ -1144,11 +1145,7 @@ void PatchMgr::Apply()
 
 // @ 0x00e20630
 PatchMgr::~PatchMgr()
-{
-    if ((int)((uint32)((char*)str2068.mpEnd - (char*)str2068.mpBegin) & 0xfffffffe) > 2 &&
-        str2068.mpBegin) {
-        FreeNode(str2068.mpBegin);
-    }
+{    // members str2068 and str44 destroyed automatically by ~WBlob()
 }
 
 // @ 0x00e206b0

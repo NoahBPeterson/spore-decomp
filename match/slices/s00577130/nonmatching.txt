@@ -1,2 +1,1 @@
-005772b0  28   complete: manual double-deref vtable slots 0x16c/0x170; register/const-folding differs
 00577650  709  complete SaveSomething (save model/thumbnail/metadata + vehicle part summaries); register allocation (this/mgr/model/key regs) and stack-slot layout differ from original, meta pointer spilled [equiv: WEAK]

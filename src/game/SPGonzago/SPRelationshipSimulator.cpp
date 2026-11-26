@@ -1093,23 +1093,19 @@ int __fastcall AddRef(RefCountHeader* p)
 
 // @ 0x00d051e0
 int Vec20::FUN_00d051e0(void* a1, void* a2)
-{
-  Elem20* e = FUN_00d04f90(a2, mpEnd, a1);
+{  Elem20* end = mpEnd;
+  Elem20* e = FUN_00d04f90(a2, end, a1);
   if (e < mpEnd) {
+    struct SubStep { Sub04 mSub; void* mField10; uint8_t mPad[0x10]; };
+    SubStep* p = (SubStep*)&e->mSub;
     unsigned n = (((unsigned)((char*)mpEnd - (char*)e)) - 1 >> 5) + 1;
-    Elem20* p = e;
     do {
       p->mSub.FUN_00d03b10(p->mField10);
       ++p;
     } while (--n);
   }
-  int d = (int)a2 - (int)a1;
-  d >>= 5;
-  d = -d;
-  d <<= 5;
-  mpEnd = (Elem20*)((char*)mpEnd + d);
-  return (int)a1;
-}
+  mpEnd -= (Elem20*)a2 - (Elem20*)a1;
+  return (int)a1;}
 
 // @ 0x00d05380
 Elem20* Vec20::FUN_00d05380(Elem20* pos, Pair* value)

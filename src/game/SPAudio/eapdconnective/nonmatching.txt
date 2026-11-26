@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00a59b50 67 ART    float handler; FAIL is a live-register/callee artifact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59cc0 26 ART    symbol/anything handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00a5a280 25 PASS   select-1 float handler flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a330 61 PASS   select-2 float handler (table scan + fan-out) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a410 286 UNSUP  select/select2 constructor; largest function in the slice flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a590 60 select_setup: class_new 6-arg + outlet_new/addmethod call-scheduling shape (and card size over-read) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

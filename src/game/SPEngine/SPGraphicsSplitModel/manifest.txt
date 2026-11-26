@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_007a0410@@YAXPAX@Z  007a0410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?Process@IModelSplitter@@QAEXHPAUV12@@@Z  007a0ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_00798ed0@@YAXHMPAI00@Z  00798ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsSplitModel.cpp  ?FUN_007a0360@@YAXPAX0@Z  007a0360  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

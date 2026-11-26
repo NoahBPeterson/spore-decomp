@@ -9,5 +9,4 @@
 004df830 308 complete; ~vector<Constraint> inline/out-of-line split (temp member dtor out-of-line, success-path dtor inline) and /Od frame holes not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 004dfd50 289 complete; temp Constraint member dtors are inlined in the original (out-of-line here) and frame holes not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 005bf120 93 SaveEditorPropertyList: esi/edi swapped (group vs db), branch layout of db fallback flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-005bf470 21 AddToIntProperty: return value read before Variant dtor instead of after flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005bf500 116 GetBoolParams: AutoRefCount out-param reset and push_back scheduling differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

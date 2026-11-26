@@ -1,3 +1,1 @@
 006373e0  95  Shutdown: complete; original allocates the window to EBX, the vtable+0xDC slot to EDI and &mLayout to EBP and pre-adds 0xDC before the call; mine picks a different register assignment. equiv: UNSUPPORTED (only 0/400 inputs valid; fault(read) 397)
-006374b0  23  SetYTUsername: complete; original keeps the string16 sret pointer in EDI across FindPlayModeUIWindow and loads mpBegin after the call; mine loads mpBegin before. equiv: UNSUPPORTED (only 0/400 inputs valid)
-00637510  23  SetYTPassword: same as SetYTUsername. equiv: WEAK (96/400 valid inputs, 100% instruction coverage)

@@ -7871,18 +7871,25 @@ uint32_t __cdecl FUN_00daadf0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32
 }
 
 // @ 0x00daaec0
-uint32_t __cdecl FUN_00daaec0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32_t, uint32_t, StateEC* out)
-{
-    if ((char)out->pObj->e2c() != 0) return 0;
-    if ((char)out->pObj->FUN_00c38990(1) != 0) return 0;
-    Vec3* pfVar2 = out->pObj->m34.v2c();
-    Vec3* pfVar3 = c->mC0.v2c();
-    float dy = pfVar3->y - pfVar2->y;
-    float dz = pfVar3->z - pfVar2->z;
-    float dx = pfVar3->x - pfVar2->x;
-    if ((dx * dx + dy * dy) + dz * dz < out->mRadius2) return 1;
-    return 0;
-}
+bool __cdecl FUN_00daaec0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32_t, uint32_t, StateEC* out)
+{    if ((char)out->pObj->e2c() == 0 && (char)out->pObj->FUN_00c38990(1) == 0) {
+        Vec3* pfVar2 = out->pObj->m34.v2c();
+        Vec3* pfVar3 = c->mC0.v2c();
+        struct V3 {
+            float x, y, z;
+            V3 operator-(const V3& o) const {
+                V3 r;
+                r.x = x - o.x;
+                r.y = y - o.y;
+                r.z = z - o.z;
+                return r;
+            }
+            float LenSq() const { return z * z + (x * x + y * y); }
+        };
+        V3 d = *(const V3*)pfVar3 - *(const V3*)pfVar2;
+        return d.LenSq() < out->mRadius2;
+    }
+    return false;}
 
 // @ 0x00daaf60
 uint8_t __cdecl FUN_00daaf60(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, State60* out)

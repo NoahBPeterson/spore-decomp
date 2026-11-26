@@ -26,7 +26,6 @@
 00dcbe00 61 wander timer callback partially reconstructed; 86 vs 174 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00dcbeb0 24 symbol extent (492 B) covers the following wander bodies; 88 bytes emitted flags: /O2 /MD /Gy /TP /arch:SSE
 00dcc0a0 216 vehicle movement/wander state machine abbreviated; 245 vs 543 bytes flags: /O2 /MD /Gy /TP /arch:SSE
-00dcc2c0 22 NounManager arg re-pushed (extra push + add esp) instead of reused by RemoveNoun; 68 vs 64 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00dcc300 56 vector base not hoisted into ecx (no add ecx,0x24); loop adds nop/jmp; 69 vs 71 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00dcc350 106 feedback-event set/vector logic abbreviated; 113 vs 225 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00dcc750 134 trade-order activation partially reconstructed; 211 vs 216 bytes flags: /O2 /MD /Gy /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]

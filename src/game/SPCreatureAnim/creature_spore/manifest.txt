@@ -28,3 +28,4 @@
 ../src/game/SPCreatureAnim/creature_spore.cpp  ?Execute@cParentIndexCommand@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  009ccfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_spore.cpp  ?Execute@cBlockBlockCommand_s009c_cfe0@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  009cd040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_spore.cpp  ?Elem28ConstructRange@@YAXPAUElem28@@0PBU1@@Z  009c8970  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?SetWorldState@creature_mesh_instance_data@@QAEXXZ  009c8890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

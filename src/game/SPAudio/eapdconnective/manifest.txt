@@ -76,3 +76,4 @@
 ../src/game/SPAudio/eapdconnective.cpp  ?value_bang@Eapd@Audio@EA@@YAXPAUt_value@123@@Z  00a5c620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?value_float@Eapd@Audio@EA@@YAXPAUt_value@123@M@Z  00a5c680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?value_setup@Eapd@Audio@EA@@YAEXZ  00a5c6f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a5a280@@YAXPAUPdObject@@M@Z  00a5a280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

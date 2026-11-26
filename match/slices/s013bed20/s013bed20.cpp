@@ -316,8 +316,7 @@ void f_013c0de0() {    if (cdecl_f935ad0((void*)g_1668ea4)) {
 void f_013c0e80() { cdecl_f9250c0(0); }
 
 // @ 0x013C0E90
-void f_013c0e90() {
-    *(void**)g_154df80 = vtbl_143e0e4;
+void f_013c0e90() {    *(void**)g_154df80 = vtbl_143e0e4;
     if (g_154df88) {
         if (g_154df8c) {
             ((void(__cdecl*)(void*, void*, void*))g_154df8c)(g_154df80, g_154df84,
@@ -325,9 +324,10 @@ void f_013c0e90() {
             *(void**)g_154df80 = vtbl_1403934;
             return;
         }
+        void* p = g_154df84;
         if (g_154df84) {
             ((Method*)g_154df84)->M();  // ~GeneralAllocatorDebug(this)
-            cdecl_free(g_154df84);
+            cdecl_free(p);
         }
     }
     *(void**)g_154df80 = vtbl_1403934;

@@ -1495,14 +1495,8 @@ void cCommandStateA::OnRegister(void* parser, int b)
 
 // @ 0x006a38f0
 void cCommandStateB::OnRegister(void* parser, int b)
-{
-    if (b) {
-        mCmd = (void*)(b - 0x10);
-        OnRegister2(parser, b);
-    } else {
-        mCmd = 0;
-        OnRegister2(parser, b);
-    }
+{    mCmd = b ? (void*)(b - 0x10) : 0;
+    OnRegister2(parser, b);
 }
 
 // @ 0x006a3920

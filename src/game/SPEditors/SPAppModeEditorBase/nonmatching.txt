@@ -14,7 +14,6 @@
 00576880 71 ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot
 00576a10 120 uninitialized_copy (snapshot): original strength-reduces with a +0x14 base pointer; element copy-ctor form not recovered
 00576c50 905 Shutdown: register allocation differs (ours keeps constant 1 in ebp; original spills ebx around owner-free calls); same calls/order
-005772b0 20 complete: manual double-deref vtable slots 0x16c/0x170; register/const-folding differs
 00577650 702 complete SaveSomething (save model/thumbnail/metadata + vehicle part summaries); register allocation (this/mgr/model/key regs) and stack-slot layout differ from original, meta pointer spilled [equiv: WEAK]
 00579a20 55 complete mask compare; cl schedules the 4 loads/stores differently (no esi temp)
 00579a90 63 regalloc: complete eastl wstring RangeInitialize; semantics match retail (len, nSize=len*2, AllocateSelf(len+1), memcpy, mpEnd=mpBegin+nSize, *mpEnd=0); only callee-saved assignment differs (retail s=esi/this=ebx/mpBegin=ebp, ours s=ebx/this=esi and reloads mpBegin after memcpy). Tried naming mpBegin a local (no change). fix1: quick check UNDECIDED

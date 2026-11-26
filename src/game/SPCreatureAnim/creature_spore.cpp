@@ -1830,10 +1830,9 @@ void creature_mesh_instance_data::BodyToWorld(float* out, uint* outIdx, body_sta
 
 // @ 0x009c8890
 void creature_mesh_instance_data::SetWorldState()
-{
-    void* sound = (void*)*(void**)((char*)this + 0x8c);
-    if (!(*(char*)((char*)this + 0x30) &&
+{    if (!(*(char*)((char*)this + 0x30) &&
           (*(ulong*)((char*)this + 0x34) & 0x800020) == 0x800000)) {
+        void* sound = (void*)*(void**)((char*)this + 0x8c);
         if (sound) {
             char flag = 1;
             if (*(char*)((char*)this + 0x30) &&

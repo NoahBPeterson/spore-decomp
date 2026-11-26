@@ -32,3 +32,4 @@ slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc70@@YAXXZ  013bcc70  /Od /Ob1 /MD /G
 slices/s013ac650/s013ac650b.cpp  ?FUN_013bca50@@YAXXZ  013bca50  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 slices/s013ac650/s013ac650b.cpp  ?FUN_013bcd30@@YAXXZ  013bcd30  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 slices/s013ac650/s013ac650.cpp  ?FUN_013b52d0@@YAXXZ  013b52d0  /O2 /Ob1 /MD /Gy /TP /Isrc/game/include /fp:fast
+slices/s013ac650/s013ac650.cpp  ?FUN_013b3650@@YAXXZ  013b3650  /vc71 /O2 /MD /Gy /EHsc /TP

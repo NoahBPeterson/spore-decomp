@@ -657,12 +657,11 @@ char PieDispatch::Dispatch(int* param_2, PieEventArg* param_3)
 
 // @ 0x00817e20
 void PieMenuInit::Init(void* n1, void* n2, void* p4, void* p5, void* p6, void* p7)
-{
-    u32 key1[3] = {0, 0, 0};
+{    u32 key1[3] = {0, 0, 0};
     u32 key2[3] = {0, 0, 0};
     if (n1) SPKeyFromName(key1, n1, 0x510a95b, p4);
     if (n2) SPKeyFromName(key2, n2, 0x510a95b, p4);
-    Vv5(this, 0x20, (int)key1, (int)key2, (int)p4, (int)p5, (int)p6);
+    Vv5(this, 0x20, (int)key1, (int)key2, (int)p5, (int)p6, (int)p7);
 }
 
 // @ 0x00817eb0

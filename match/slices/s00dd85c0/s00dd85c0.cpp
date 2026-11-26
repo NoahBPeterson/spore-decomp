@@ -297,9 +297,11 @@ union LargeInteger {                                                  // LARGE_I
     struct { uint32_t mLowPart; uint32_t mHighPart; };
 };
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(uint64_t* pCounter);
+extern "C" unsigned __int64 __rdtsc(void);
+#pragma intrinsic(__rdtsc)
 inline int64_t rdtsc64()
 {
-    __asm { rdtsc }
+    return (int64_t)__rdtsc();
 }
 
 struct EAStopwatch {
@@ -598,19 +600,19 @@ void cSPUIEventLog::SetVisibility(bool bVisible)
 // ---------------------------------------------------------------- stopwatch driven throbber
 // @ 0x00dd8e30
 void __stdcall FUN_00dd8e30(cSPUIThrobber* pTarget)
-{
-    uint64_t ticks;
+{    uint32_t high;
     EAStopwatch* pStopwatch = &pTarget->mStopwatch;
     if (pStopwatch->mnMode == 1) {
-        ticks = (uint64_t)rdtsc64();
+        uint64_t ticks = (uint64_t)rdtsc64();
+        high = (uint32_t)(ticks >> 32);
         pStopwatch->mLow = (uint32_t)ticks;
     } else {
         uint64_t counter;
         QueryPerformanceCounter(&counter);
-        ticks = counter;
-        pStopwatch->mLow = (uint32_t)ticks;
+        high = (uint32_t)(counter >> 32);
+        pStopwatch->mLow = (uint32_t)counter;
     }
-    pStopwatch->mHigh = (uint32_t)(ticks >> 32);
+    pStopwatch->mHigh = high;
     pStopwatch->mElapsedLow = 0;
     pStopwatch->mElapsedHigh = 0;
     uint32_t soundId = pTarget->mSoundId;

@@ -1764,21 +1764,18 @@ void VecFC::resize(unsigned n)
 
 // @ 0x0071f040
 void SetEntryKey(MeshEntries* m, int entry, int key, int arg)
-{
-    EntryFor70* e = &m->mpEntries[entry];
+{    EntryFor70* e = &m->mpEntries[entry];
     int idx = FindPairIndex(m, entry, key);
     V16& recs = e->mRecs;
     if (idx >= 0) {
         e->mPairs.mpBegin[idx].mVal = (short)recs.size();
-        recs.Notify(arg);
-        return;
+    } else {
+        KeyPair v;
+        v.mKey = (short)key;
+        v.mVal = (short)recs.size();
+        e->mPairs.push_back(v);
     }
-    KeyPair v;
-    v.mKey = (short)key;
-    v.mVal = (short)recs.size();
-    e->mPairs.push_back(v);
-    recs.Notify(arg);
-}
+    recs.Notify(arg);}
 
 // @ 0x0071f0f0
 int AddVertex(VertexMesh* mesh, unsigned a, unsigned b, unsigned c, unsigned d, unsigned e)

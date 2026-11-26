@@ -87,9 +87,13 @@ RLChunk* __cdecl AllocRenderableListChunk()
 
 // @ 0x00956f30
 void __cdecl FUN_00956f30()
-{
+{    struct Iter {
+        DLNode* mpNode;
+        __forceinline Iter(DLNode* p) : mpNode(p) {}
+    };
     DLNode* pAnchor = &g_freeDL;
     while (g_freeDL.mpPrev != pAnchor) {
+        Iter it(g_freeDL.mpNext);
         DLNode* p = g_freeDL.mpNext;
         p->mpNext->mpPrev = pAnchor;
         g_freeDL.mpNext = g_freeDL.mpNext->mpNext;
@@ -97,7 +101,7 @@ void __cdecl FUN_00956f30()
             p->mpPrev = 0;
             p->mpNext = 0;
         }
-        operator_delete__(p);
+        operator_delete__(it.mpNode);
     }
     RLChunk* pChunk = (RLChunk*)g_pFreeRLChunk;
     while (pChunk) {
@@ -105,8 +109,7 @@ void __cdecl FUN_00956f30()
         operator_delete__(pChunk);
         pChunk = pNext;
     }
-    g_pFreeRLChunk = 0;
-}
+    g_pFreeRLChunk = 0;}
 
 // @ 0x00956fa0
 void __cdecl FreeDisplayListEntries(DLNode* pList)

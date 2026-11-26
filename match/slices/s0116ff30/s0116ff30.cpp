@@ -230,21 +230,16 @@ int CMpegBase::ProcessHeader(u32 h)
 
 // @ 0x01170480
 int CMpegBase::FUN_01170480()
-{
-    int r;
+{    u32 h;
     if (this->mBufPtr == 0) {
-        int h = this->mHeader;
-        void** vt = *(void***)this;
-        r = ((int (__thiscall*)(CMpegBase*, int))vt[1])(this, h);
+        h = (u32)this->mHeader;
     } else {
-        u32 w = this->mBufPtr[1] + ((u32)this->mBufPtr[0] << 8);
-        w = (w << 8) + this->mBufPtr[2];
-        w = (w << 8) + this->mBufPtr[3];
-        void** vt = *(void***)this;
-        r = ((int (__thiscall*)(CMpegBase*, u32))vt[1])(this, w);
+        h = ((((((u32)this->mBufPtr[1] | ((u32)this->mBufPtr[0] << 8)) << 8)
+               | (u32)this->mBufPtr[2]) << 8)
+             | (u32)this->mBufPtr[3]);
     }
-    return (r + 1 != 0) - 1;
-}
+    int r = ((int (__thiscall*)(CMpegBase*, u32))(*(void***)this)[1])(this, h);
+    return (r + 1 != 0) - 1;}
 
 // @ 0x011704d0
 int CMpegBase::OpenLayer()

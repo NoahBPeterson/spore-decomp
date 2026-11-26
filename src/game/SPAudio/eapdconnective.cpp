@@ -1561,21 +1561,20 @@ bool receive_setup()
 
 // @ 0x00a5a280
 void FUN_00a5a280(PdObject* o, float v)
-{
-    if (*(int*)((char*)o + 0x28) == 1 && v == *(float*)((char*)o + 0x2c))
+{    if (*(int*)((char*)o + 0x28) == 1 && v == *(float*)((char*)o + 0x2c))
     {
         EA::Audio::Eapd::outlet_bang(*(void**)((char*)o + 0x34));
         return;
     }
-    int n = g_gOutletCount + 1;
-    g_gOutletCount = n;
-    if (n < 1000)
+    struct OutletNode { OutletNode* next; void* target; };
+    struct OutletList { void* pad[2]; OutletNode* head; };
+    OutletList* out = *(OutletList**)((char*)o + 0x38);
+    if (++g_gOutletCount < 1000)
     {
-        for (void* p = *(void**)((char*)*(void**)((char*)o + 0x38) + 8); p != 0; p = *(void**)p)
-            EA::Audio::Eapd::outlet_float(*(void**)((char*)p + 4), v);
+        for (OutletNode* p = out->head; p != 0; p = p->next)
+            EA::Audio::Eapd::outlet_float(p->target, v);
     }
-    --g_gOutletCount;
-}
+    --g_gOutletCount;}
 
 // @ 0x00a5a2f0
 void sel1_symbol(PdObject* o, int sym, void* b)
