@@ -1044,7 +1044,7 @@ cSPCreatureBase::cSPCreatureBase()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00c1fe80
+// 0x00c1fe80 (byte-exact lifted version: match/slices/s00c1fe80/s00c1fe80.cpp)
 // Teardown half of the constructor: every sub-object is released, both curve
 // vectors are emptied, the behaviour tree and the reference-counted members
 // are dropped, then the creature is handed back to the spawner.

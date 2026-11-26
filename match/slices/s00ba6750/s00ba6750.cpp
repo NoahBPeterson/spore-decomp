@@ -293,7 +293,7 @@ void FUN_00ba6cf0(BannerList* self) {
   }
 }
 
-// @ 0x00ba6d80
+// 0x00ba6d80 (byte-exact lifted version: match/slices/s00ba6d80/s00ba6d80.cpp)
 int FUN_00ba6d80(BannerList* self, unsigned id) {
   if (id == 0) return *(int*)&self->m14C;
   if (id == 0xffffffff) return 0;
@@ -466,7 +466,7 @@ void* FUN_00ba71b0(void* civ, int* vec) {
   return best;
 }
 
-// @ 0x00ba7220
+// 0x00ba7220 (byte-exact lifted version: match/slices/s00ba7220/s00ba7220.cpp)
 struct StarManagerCore {
   char pad000[0xc8];
   void* mC8;   // +0xc8

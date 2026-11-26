@@ -93,7 +93,7 @@ struct WE {
 };
 
 // ===========================================================================
-// @ 0x00bc74d0 — grow the 0x7b4-byte civ array if needed.
+// 0x00bc74d0 (byte-exact lifted version: match/slices/s00bc74d0/s00bc74d0_lifted.cpp) — grow the 0x7b4-byte civ array if needed.
 // ===========================================================================
 struct Rec7 { char b[0x7b4]; };
 void WE::FUN_00bc74d0(uint param_2)
@@ -250,7 +250,7 @@ int __cdecl FUN_00bc7780(Rec* param_1, Rec* param_2, int param_3)
 }
 
 // ===========================================================================
-// @ 0x00bc77e0 — release the record at index and mark it free.
+// 0x00bc77e0 (byte-exact lifted version: match/slices/s00bc77e0/s00bc77e0.cpp) — release the record at index and mark it free.
 // ===========================================================================
 void WE::FUN_00bc77e0(int param_2)
 {

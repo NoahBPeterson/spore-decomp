@@ -517,7 +517,7 @@ extern const float kCamPitch77c;             // 0x169cb7c
 extern const float kCamPitch780;             // 0x169cb80
 extern const float kCamPitch784;             // 0x169cb84
 
-// @ 0x00cf71d0
+// 0x00cf71d0 (byte-exact lifted version: match/slices/s00cf71d0/s00cf71d0.cpp)
 void __fastcall FUN_00cf71d0(void *self, void * /*edx*/, u32 arg)
 {
     u8 *s = (u8 *)self;

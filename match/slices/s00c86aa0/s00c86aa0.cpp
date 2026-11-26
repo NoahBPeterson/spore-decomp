@@ -389,7 +389,7 @@ void cSolarSystem::ActivateGraphics(bool activate)
     }
 }
 
-// @ 0x00c86e50
+// 0x00c86e50 (byte-exact lifted version: match/slices/s00c86e50/s00c86e50.cpp)
 void cSolarSystem::Destroy()
 {
     ActivateGraphics(false);

@@ -538,7 +538,7 @@ struct ResourceManager {
 };
 ResourceManager* GetManager();                     // 0x0067dcd0
 
-// @ 0x00aee0e0
+// 0x00aee0e0 (byte-exact lifted version: match/slices/s00aee0e0/s00aee0e0.cpp)
 void RegisterPFRecordRead()
 {
     PFRecordRead* rec = (PFRecordRead*)ZoneObject_new(0x2c, "App", 0, 0, 0, 0);

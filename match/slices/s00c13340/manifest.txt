@@ -1,2 +1,3 @@
 slices/s00c13340/s00c13340.cpp  ?FUN_00c135f0@@YIXPAUCCreature@@PAXH@Z  00c135f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c13340/s00c13340.cpp  ?FUN_00c141b0@@YAPAXPAUIStream@@PAH@Z  00c141b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c13340/s00c13340_lifted.cpp  @FUN_00c13340@8  00c13340  /O2 /MD /Gy /TP /arch:SSE /fp:fast

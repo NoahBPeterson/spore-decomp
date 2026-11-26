@@ -2026,7 +2026,7 @@ void CityWalls::FUN_00bede60(int style)
 }
 }  // namespace SP
 
-// @ 0x00bee150
+// 0x00bee150 (byte-exact lifted version: match/slices/s00bee150/s00bee150.cpp)
 namespace SP {
 void CityWalls::FUN_00bee150()
 {

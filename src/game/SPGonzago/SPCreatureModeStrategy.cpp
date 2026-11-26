@@ -5082,7 +5082,7 @@ void HeapMake(SortEntry* begin, SortEntry* end, int cmp)
     }
 }
 
-// @ 0x00d3b480
+// 0x00d3b480 (byte-exact lifted version: match/slices/s00d3b480/s00d3b480.cpp)
 void HeapSort(SortEntry* begin, SortEntry* end, int cmp)
 {
     int n = (int)(end - begin);

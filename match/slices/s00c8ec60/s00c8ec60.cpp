@@ -545,7 +545,7 @@ void cSpatialThing_FUN_00c8ef20(cSpatialThing* pThis, cSPVector3* pOut)
 // ---------------------------------------------------------------------------
 // 0x00c8efc0
 // ---------------------------------------------------------------------------
-// @ 0x00c8efc0
+// 0x00c8efc0 (byte-exact lifted version: match/slices/s00c8efc0/s00c8efc0.cpp)
 void cTribe_FUN_00c8efc0(cTribe* pThis)
 {
     if (pThis->mppToolBegin != nullptr) {

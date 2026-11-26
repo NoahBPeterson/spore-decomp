@@ -2,7 +2,6 @@
 00c6a7f0  132  Complete extents setter; residual is fabs/constant-fold ordering and register allocation.
 00c6aa50  64  Complete cNest::CanSpawn; residual is profile-value register allocation.
 00c6aab0  113  Complete cNest::MoveNest; residual is vector temp scheduling and register allocation.
-00c6ab90  63  Complete cNest::AddFootprint; residual is planet-model reload scheduling + call shapes.
 00c6ac40  15  Complete UnbrokenEggsInNest; residual is loop-index/pointer induction-variable allocation.
 00c6ac90  23  Complete ClearLocationStatus; residual is bounds-compare register allocation order.
 00c6adc0  60  Complete evolved-key vector serialiser; residual is loop/call scheduling.

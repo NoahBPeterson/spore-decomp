@@ -6207,7 +6207,7 @@ void KeySink::Store3(int a, int b, int c)
     *(int*)(s + 0x90) = g_dw168a490;
 }
 
-// @ 0x00bbc460
+// 0x00bbc460 (byte-exact lifted version: match/slices/s00bbc460/s00bbc460.cpp)
 void KeySink::Store3B(int a, int b, int c)
 {
     char* s = (char*)this;

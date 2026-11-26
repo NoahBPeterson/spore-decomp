@@ -779,7 +779,7 @@ char FUN_00e014a0_impl() {
 // ===========================================================================
 //  0x00e01570  small POD copy with refcounted members
 // ===========================================================================
-// @ 0x00e01570
+// 0x00e01570 (byte-exact lifted version: match/slices/s00e01570/s00e01570.cpp)
 void* PodObj::Copy(void* o) {
     void* s = this;
     *(uint32_t*)s = *(uint32_t*)o;
@@ -848,7 +848,7 @@ void* NetObj::Ctor() {
     return self;
 }
 
-// @ 0x00e016f0
+// 0x00e016f0 (byte-exact lifted version: match/slices/s00e016f0/s00e016f0.cpp)
 void* NetObj::DelDtor(unsigned int flags) {
     void* self = this;
     *(void**)self = (void*)0x147f0dc;

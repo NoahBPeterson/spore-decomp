@@ -399,7 +399,7 @@ bool Simulator_cCreatureBase::TraceTo(const Vec3* pFrom, const Vec3* pTo, Vec3* 
 // ---------------------------------------------------------------------------
 // 0x00c0f490  Simulator::cCreatureBase::ResetCombatants
 // ---------------------------------------------------------------------------
-// @ 0x00c0f490
+// 0x00c0f490 (byte-exact lifted version: match/slices/s00c0f490/s00c0f490.cpp)
 void Simulator_cCreatureBase::ResetCombatants()
 {
     mIntentionTowardsTarget = 0;

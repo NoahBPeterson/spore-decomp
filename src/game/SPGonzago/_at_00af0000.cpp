@@ -4301,7 +4301,7 @@ void SP::cEntityListener::Destroy()
   m_vtbl = &g_vftableB;
 }
 
-// @ 0x00af9cf0
+// 0x00af9cf0 (byte-exact lifted version: match/slices/s00af9cf0/s00af9cf0.cpp)
 void SP::cActionCircle_s00af_9aa0::SetAtCenter(const cSPVector3_s00af_9aa0* center, float radius, const cSPVector3_s00af_9aa0* facing, float altitude)
 {
   mbRelative = false;

@@ -1934,7 +1934,7 @@ cCitySoundLoopView_s00e8_7cf0* __stdcall MakeCitySoundLoopView(void* owner)
     return p;
 }
 
-// @ 0x00e88680
+// 0x00e88680 (byte-exact lifted version: match/slices/s00e88680/s00e88680.cpp)
 cCityWallsView_s00e8_7cf0::cCityWallsView_s00e8_7cf0()
 {
     mpCity = 0;

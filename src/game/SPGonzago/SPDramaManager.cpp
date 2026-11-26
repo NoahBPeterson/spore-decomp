@@ -2518,7 +2518,7 @@ bool cDramaEventInstanceData_s00d4_d5c0::WriteData(void* stream)
     return local.serialize_00692900(stream);
 }
 
-// @ 0x00d4dae0
+// 0x00d4dae0 (byte-exact lifted version: match/slices/s00d4dae0/s00d4dae0.cpp)
 void cDramaEventInstanceData_s00d4_d5c0::ClearData()
 {
     if (mpPropList) {

@@ -884,7 +884,7 @@ void cSPUIAssetDiscoveryManager::ReloadTuning()
     }
 }
 
-// @ 0x00e2fc40
+// 0x00e2fc40 (byte-exact lifted version: match/slices/s00e2fc40/s00e2fc40.cpp)
 int cSPUIAssetDiscoveryManager::HandleCardMessage(int nMessage, int nData, int nFlags)
 {
     if (nMessage == 0xf62def) {

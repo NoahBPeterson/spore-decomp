@@ -4,5 +4,4 @@
 00900db0  112  expat start-element callback (flags&8): complete; cdecl free fn with explicit reader; register/frame schedule differs; difftest PASS
 00900e60  250  expat start-element callback: complete; cdecl free fn with explicit reader; token/entry allocation and loop layout differ; difftest PASS
 00900ff0  155  expat character-data callback: complete; cdecl free fn with explicit reader; buffer-copy/allocation schedule differs; difftest WEAK
-009011e0  39   XmlTextReader deleting dtor: complete; EH frame/ordering differs
 00901340  26   XmlTextReader::Read: complete; only cold-block ordering (read-error block vs parse-error block) differs; difftest PASS

@@ -752,7 +752,7 @@ void FUN_01043a50(cTargetObject* pTarget, AutoRefCount<IEffect>* pEffect, bool b
         FUN_01043770(pTarget, pEffect);
 }
 
-// @ 0x01043c60
+// 0x01043c60 (byte-exact lifted version: match/slices/s01043c60/s01043c60.cpp)
 void FUN_01043c60(cZooMarkerMgr* pMgr, const ResourceKey* pKey)
 {
     ZooMarkerVector* pMarkers = &pMgr->mMarkers;

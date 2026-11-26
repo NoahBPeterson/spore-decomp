@@ -416,7 +416,7 @@ void** __fastcall FUN_00d58510(void* self, void* /*edx*/, void* out, void* obj,
 // 0x00d58610 - heap-sort-like sift for a pointer vector. thiscall.
 // ======================================================================
 
-// @ 0x00d58610
+// 0x00d58610 (byte-exact lifted version: match/slices/s00d58610/s00d58610.cpp)
 void __cdecl FUN_00d58610(void** lo, void** hi) {
   void** p = lo;
   if (lo == hi) return;

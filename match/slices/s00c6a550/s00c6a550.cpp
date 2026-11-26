@@ -514,7 +514,7 @@ void SP::cNest::MoveNest(const Vec3& pos)
 // ---------------------------------------------------------------------------------------------
 // 0x00c6ab90 -- SP::cNest::AddFootprint
 // ---------------------------------------------------------------------------------------------
-// @ 0x00c6ab90
+// 0x00c6ab90 (byte-exact lifted version: match/slices/s00c6ab90/s00c6ab90.cpp)
 void SP::cNest::AddFootprint()
 {
     if (mpFootprint12c != 0)

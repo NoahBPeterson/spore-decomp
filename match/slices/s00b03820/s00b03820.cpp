@@ -419,7 +419,7 @@ void __cdecl pool_owner_ctor(void* self)
 }
 
 // ------------------------------------------------------------------ node free walk
-// @ 0x00b04420
+// 0x00b04420 (byte-exact lifted version: match/slices/s00b04420/s00b04420.cpp)
 void __cdecl node_free_walk(void* self, void* node)
 {
     while (node != 0) {

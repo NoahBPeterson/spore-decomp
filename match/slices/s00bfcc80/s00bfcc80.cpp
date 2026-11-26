@@ -22,7 +22,7 @@ extern "C" char g_1465d54[];
 typedef char (*VCfn)(void*);
 typedef float (*VFfn)(void*);
 
-// @ 0x00bfcc80
+// 0x00bfcc80 (byte-exact lifted version: match/slices/s00bfcc80/s00bfcc80_lifted.cpp)
 void* __fastcall FUN_00bfcc80(Combatant* self, int, unsigned param_2)
 {
     unsigned i = 0;

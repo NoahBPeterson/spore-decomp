@@ -3048,7 +3048,7 @@ void __fastcall FUN_00eb0cb0(void* self_, int, void** out, void* dCont, char* dC
     out[1] = dCur;
 }
 
-// @ 0x00eb0d60
+// 0x00eb0d60 (byte-exact lifted version: match/slices/s00eb0d60/s00eb0d60.cpp)
 void __fastcall FUN_00eb0d60(void* vec_, int, u32 n)
 {
     u32** vec   = (u32**)vec_;

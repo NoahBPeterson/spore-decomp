@@ -524,7 +524,7 @@ static inline void ReleaseRc(void* p) {
     }
 }
 
-// @ 0x00b73a30 -- Simulator::cObstacle::cObstacle
+// 0x00b73a30 (byte-exact lifted version: match/slices/s00b73a30/s00b73a30.cpp) -- Simulator::cObstacle::cObstacle
 cObstacle::cObstacle() : cGameData() {
     m34 = 0;
     m38 = g_px; m3c = g_py; m40 = g_pz;

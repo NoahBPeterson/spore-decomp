@@ -620,7 +620,7 @@ void __fastcall FUN_00ce0f70(cTribePlanData* pData)
 // ===========================================================================
 // 0x00ce0ff0 -- restart a plan timer record
 // ===========================================================================
-// @ 0x00ce0ff0
+// 0x00ce0ff0 (byte-exact lifted version: match/slices/s00ce0ff0/s00ce0ff0.cpp)
 cPlanTimer* FUN_00ce0ff0(int iUnused, PlanTable* pTable, uint32_t uKey, uint32_t uIndex,
                          int iPlanId)
 {

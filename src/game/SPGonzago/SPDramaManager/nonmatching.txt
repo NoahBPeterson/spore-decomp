@@ -16,7 +16,6 @@
 00d4d6c0 156 ConsumeAllDramaEvents(): full walk that deactivates every event, recomputing the active
 00d4d7f0 301 Stream re-reader: clears the tree, re-initialises the anchor, reads (key,event) pairs via
 00d4da10 15 WriteData(void*): base stream writer (signature + prop-key + game-data record).  The
-00d4dae0 35 ClearData(): drops mpPropList, erases mData, removes every game-data noun, erases the
 00d4de20 15 cSeaMonsterEvent::Write(void*): signature 0x5599f7c / name 0x1583a4c.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00d4deb0 15 cTribeFoodRaidEvent::Write(void*): signature 0x5ed29d3 / name 0x1583a88.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00d4df40 15 cMeteorStrikeEvent::Write(void*): signature 0x609eedc / name 0x1583ac4.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]

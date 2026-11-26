@@ -296,7 +296,7 @@ void SP::cEntityListener::Destroy() {
 }
 
 // ===========================================================================
-// @ 0xaf9cf0
+// 0x00af9cf0 (byte-exact lifted version: match/slices/s00af9cf0/s00af9cf0.cpp)
 // ===========================================================================
 void SP::cActionCircle::SetAtCenter(const cSPVector3* center, float radius,
                                     const cSPVector3* facing, float altitude) {

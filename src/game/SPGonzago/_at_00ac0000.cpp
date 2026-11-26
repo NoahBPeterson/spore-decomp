@@ -2019,7 +2019,7 @@ void __cdecl FUN_00aca0c0(void** arr, void* arg2, int n, int holeIndex, void* ar
     if (arg5) ((void (__thiscall*)(void*))vc(arg5, 4))(arg5);
 }
 
-// @ 0x00aca1f0
+// 0x00aca1f0 (byte-exact lifted version: match/slices/s00aca1f0/s00aca1f0.cpp)
 int* FUN_00aca1f0(int* begin, int* end, int* key)
 {
     int n = (int)((char*)end - (char*)begin) >> 5;
@@ -3043,7 +3043,7 @@ void VO_s00ac_c140::FUN_00acc770()
     *(int*)(p + 0x11c) -= (e - b) >> 2 << 2;
 }
 
-// @ 0x00acc800
+// 0x00acc800 (byte-exact lifted version: match/slices/s00acc800/s00acc800.cpp)
 void __stdcall FUN_00acc800(KeyVec* v)
 {
     LivingUniverse* lu = (LivingUniverse*)FUN_01021260();
@@ -3081,7 +3081,7 @@ void VO_s00ac_c140::FUN_00acc9b0(uint n)
     ((XC_s00ac_c140*)v)->FUN_00acb7c0(b + n, e);
 }
 
-// @ 0x00accd70
+// 0x00accd70 (byte-exact lifted version: match/slices/s00accd70/s00accd70.cpp)
 void FUN_00accd70(int arr, uint n)
 {
     for (uint i = 0; i < n; i++) {

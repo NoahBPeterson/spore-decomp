@@ -1,1 +1,2 @@
 slices/s00bfcc80/s00bfcc80.cpp  ?FUN_00bfd3e0@@YIPAUHostileEntry@@PAU1@HPBU1@@Z  00bfd3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bfcc80/s00bfcc80_lifted.cpp  @FUN_00bfcc80@12  00bfcc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast

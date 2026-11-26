@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00e4ecc0 220 fluid particle buffer init; complete. difftest: UNSUPPORTED (0/400 valid)
 00e4efb0 58 frame: fixed the two post-create flag calls (0x00a04ce0/0x00a04d00 are __thiscall: model in ECX, value pushed, `ret 4`; they were declared cdecl so the model was pushed as an argument). What still differs is the frame: the callee must take its model in EDI (`mov eax,[edi]` with no save, the caller 0xe5ce90->0xe5d01d leaves `edi = [gfx+0x16214]` and its `lea ecx,[esp+0x50]` passes the scratch array), so every callee-saved push frame differs; also read `arg` for the first flag value (orig `mov eax,[esp+8]`, i.e. the caller's scratch cell) rather than the literal 1. fix1: quick check DIFFERS (emulator gave no result; L2 register check)
-00e4f6d0 69 quad-leaf index emit recursion; complete. difftest: WEAK (161 valid, 100% cov)
 00e51990 118 compact destroyed effect pointers from a vector: complete; loop/register schedule differs
 00e51ee0 202 construct an effect spawn descriptor: complete (all field stores + default vectors); parameter/register schedule differs
 00e52060 1325 register-convention (eax=count, esi=this reproduced), remaining diffs are register allocation and stack-slot order; body complete, size 2150 equals original

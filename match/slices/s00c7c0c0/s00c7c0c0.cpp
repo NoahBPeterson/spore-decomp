@@ -570,7 +570,7 @@ void __cdecl FUN_00c7c530(void* stream, cBanModeVec* vec)
 // =============================================================================================
 // 0x00c7c6d0  cPlayer::SetGameDataOwner(owner)
 // =============================================================================================
-// @ 0x00c7c6d0
+// 0x00c7c6d0 (byte-exact lifted version: match/slices/s00c7c6d0/s00c7c6d0.cpp)
 void cPlayer::SetGameDataOwner(int owner)
 {
     FUN_00b18550_base(owner);

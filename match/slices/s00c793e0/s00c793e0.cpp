@@ -473,7 +473,7 @@ void cPlayer::FUN_00c79fa0(cPlayerInner* pObj)
 // ---------------------------------------------------------------------------------------------
 // 0x00c79e20 - SP::cCityInputStrategy::SetBanModePickPriorities
 // ---------------------------------------------------------------------------------------------
-// @ 0x00c79e20 cPlayer::SetBanModePickPriorities
+// 0x00c79e20 (byte-exact lifted version: match/slices/s00c79e20/s00c79e20.cpp) cPlayer::SetBanModePickPriorities
 void cPlayer::SetBanModePickPriorities(uint32_t nMode, tUintVec* pVec)
 {
     if (nMode >= 10)

@@ -264,7 +264,7 @@ void cScenarioPlayProgressBar::Apply(bool a, bool flag)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f19e00  Pred
+// 0x00f19e00 (byte-exact lifted version: match/slices/s00f19e00/s00f19e00.cpp)  Pred
 // ---------------------------------------------------------------------------
 bool __cdecl cScenarioPlayProgressBar_Pred(void* a)
 {

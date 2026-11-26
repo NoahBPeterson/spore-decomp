@@ -440,7 +440,7 @@ PoolNode* Pool::NewNode(Obj** ppObj)
     return node;
 }
 
-// @ 0x00b41e20
+// 0x00b41e20 (byte-exact lifted version: match/slices/s00b41e20/s00b41e20.cpp)
 void Pool::FreeBuckets(PoolNode** buckets, uint32_t count)
 {
     for (uint32_t i = 0; i < count; i++) {

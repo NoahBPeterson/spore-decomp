@@ -9092,7 +9092,7 @@ void RegisterSmall(void* param)
         *(void***)param)[0x20 / 4])(param, o, 0x2ccd1d2, "GalaxyGameEntry");
 }
 
-// @ 0x00dddf30
+// 0x00dddf30 (byte-exact lifted version: match/slices/s00dddf30/s00dddf30.cpp)
 ArgScript* MakeLevelCheats(ArgScript* self, int arg)
 {
     FUN_0083c800();
@@ -10234,7 +10234,7 @@ cUIPropertyTableSet::cUIPropertyTableSet()
     mbD0 = 0;
 }
 
-// @ 0x00de2de0
+// 0x00de2de0 (byte-exact lifted version: match/slices/s00de2de0/s00de2de0.cpp)
 cUIPropertyTableSet::~cUIPropertyTableSet()
 {
     mTables.Destroy();
@@ -11945,7 +11945,7 @@ void cRecordMap::FUN_00de9dc0(const void* pKey)
     this->FUN_00de6f20((uint32_t)pKey, (uint8_t*)pNode + 0x1c);
 }
 
-// @ 0x00de9e20
+// 0x00de9e20 (byte-exact lifted version: match/slices/s00de9e20/s00de9e20.cpp)
 void cGameInfoVector::FUN_00de9e20(uint32_t nCount)
 {
     int32_t nHave = (int32_t)(mpEnd - mpBegin) / 0xbc;
@@ -17233,7 +17233,7 @@ void GGUI::FUN_00df9dc0(unsigned index, int v)
     }
 }
 
-// @ 0x00df9e60
+// 0x00df9e60 (byte-exact lifted version: match/slices/s00df9e60/s00df9e60.cpp)
 void GGUI::FUN_00df9e60()
 {
     if (mIndex == 0) {
@@ -17375,7 +17375,7 @@ void GGUI::FUN_00df9fc0()
     FUN_00df9b30(flag2);
 }
 
-// @ 0x00dfa370
+// 0x00dfa370 (byte-exact lifted version: match/slices/s00dfa370/s00dfa370.cpp)
 void FUN_00dfa370()
 {
     AGSwarm* o = (AGSwarm*)FUN_00dd9190_s00df_9650();
@@ -19475,7 +19475,7 @@ V4e0* V4e0::AssignWrap(V4e0* other)
     return this;
 }
 
-// @ 0x00dfedb0
+// 0x00dfedb0 (byte-exact lifted version: match/slices/s00dfedb0/s00dfedb0.cpp)
 void* ElemA::CopyAssign(void* o)
 {
     void* s = this;
@@ -19586,7 +19586,7 @@ void* ElemB::Init(void* o)
     return s;
 }
 
-// @ 0x00dff1a0
+// 0x00dff1a0 (byte-exact lifted version: match/slices/s00dff1a0/s00dff1a0.cpp)
 void* ElemA::CopyCtor(void* o)
 {
     void* s = this;

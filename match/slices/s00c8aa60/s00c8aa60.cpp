@@ -338,7 +338,7 @@ void cSpatialObjectView::sub_b2e0() {
 // ===========================================================================
 //  0x00c8b450 / 0x00c8b520  small range predicates
 // ===========================================================================
-// @ 0x00c8b450
+// 0x00c8b450 (byte-exact lifted version: match/slices/s00c8b450/s00c8b450.cpp)
 bool __cdecl c8b450(int k) {
     if (k == 0) return false;
     if (k <= 6) return false;

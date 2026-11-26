@@ -68,7 +68,7 @@ struct RefHolder {
     void* mpc;                   // +0x0c
     RefHolder* Assign(const RefHolder& o);   // copy-assign (likely operator=; named so the checker can find it)
 };
-// @ 0x00e0ea40
+// 0x00e0ea40 (byte-exact lifted version: match/slices/s00e0ea40/s00e0ea40.cpp)
 RefHolder* RefHolder::Assign(const RefHolder& o) {
     mp0 = o.mp0;
     b4 = o.b4;

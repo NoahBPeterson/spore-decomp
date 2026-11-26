@@ -455,7 +455,7 @@ void GetTurretAndBuildingCounts(SimCivObject* self, int* pBuildings, int* pTurre
     }
 }
 
-// @ 0x00c70420
+// 0x00c70420 (byte-exact lifted version: match/slices/s00c70420/s00c70420.cpp)
 int SimCivObject_CountCities(SimCivObject* self) {
     int total = 0;
     int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;

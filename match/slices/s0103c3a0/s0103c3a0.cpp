@@ -795,7 +795,7 @@ cNPCStore::cNPCStore()
 }
 
 // 0x0103d090: Simulator::cNPCStore::~cNPCStore.
-// @ 0x0103d090
+// 0x0103d090 (byte-exact lifted version: match/slices/s0103d090/s0103d090.cpp)
 cNPCStore::~cNPCStore()
 {
     if (mSpiceCost.mpBegin && mSpiceCost.mpBegin != mSpiceCost.mpPoolBegin)

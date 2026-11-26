@@ -487,7 +487,7 @@ CToolManager* __fastcall FUN_0104f960(CToolManager* pThis)
 // ---------------------------------------------------------------------------
 // 0x0104fa90: SP::cSPToolManager::UseToolStop.
 // ---------------------------------------------------------------------------
-// @ 0x0104fa90
+// 0x0104fa90 (byte-exact lifted version: match/slices/s0104fa90/s0104fa90.cpp)
 bool __fastcall FUN_0104fa90(CToolManager* pThis, int, CToolObject* pTool)
 {
     if (pTool == 0)

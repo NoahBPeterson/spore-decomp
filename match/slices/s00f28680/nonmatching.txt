@@ -5,7 +5,6 @@
 00f28880  278  complete; cString group writer (BeginGroup/SetValue/EndGroup); size 272 vs 327; equiv FAIL (eax upper bits)
 00f289d0  292  complete; cScenarioDialog wrapper around 00f28880; size 292 vs 338; equiv FAIL (eax upper bits)
 00f28b80  95  complete; BigObj::fn28b80 cString get-vs-assign; size 132 vs 137; equiv FAIL (eax upper bits)
-00f28c50  293  complete; cVarListSerializer Read + cString rebuild; size 241 vs 131; equiv UNSUPPORTED (0 valid inputs, fault(read))
 00f28ce0  209  complete; cVarListSerializer over 0x238-stride array; size 249 vs 226; equiv UNSUPPORTED (0 valid inputs)
 00f28dd0  89  complete; Vec38::erase (0x38-stride); size 112 vs 110; equiv WEAK (126 valid, no mismatch)
 00f28e40  477  complete; Vec38::insert (0x38-stride); size 522 vs 494; equiv WEAK (no mismatch)

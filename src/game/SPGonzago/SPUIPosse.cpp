@@ -1811,7 +1811,7 @@ void cSPUIPosseItem_s00e2_1880::MotiveBarsAndBackgroundCollectInitialMetrics()
     }
 }
 
-// @ 0x00e22370
+// 0x00e22370 (byte-exact lifted version: match/slices/s00e22370/s00e22370.cpp)
 char cSPUIPosseItem_s00e2_1880::Shutdown()
 {
     if (mpField13c && MessageServer_s00e2_1880())
@@ -3542,7 +3542,7 @@ void cPosseItem15::update_control_value(unsigned key)
   *(int*)(match + 0xc) = 0;
 }
 
-// @ 0x00e260a0
+// 0x00e260a0 (byte-exact lifted version: match/slices/s00e260a0/s00e260a0.cpp)
 void cPosseItem15::update_control_values(char force)
 {
   char* p = mControlValuesBegin;
@@ -3584,7 +3584,7 @@ void __cdecl FUN_00e26410(char* first, char* last, int depth, void* ctx)
   if (depth == 0) FUN_00e25df0(first, last, last, ctx);
 }
 
-// @ 0x00e264b0
+// 0x00e264b0 (byte-exact lifted version: match/slices/s00e264b0/s00e264b0.cpp)
 void* __cdecl FUN_00e264b0(char* first, char* last, char** out1, char** out2, void* pred)
 {
   unsigned char (*fn)(void*, void*) = (unsigned char (*)(void*, void*))pred;
@@ -4433,7 +4433,7 @@ void cVec8::push_back(cRefPair* src)
     }
 }
 
-// @ 0x00e281a0
+// 0x00e281a0 (byte-exact lifted version: match/slices/s00e281a0/s00e281a0.cpp)
 void cSPUIPosseItem_s00e2_7310::FUN_00e281a0(u8 flag)
 {
     if (flag != 0)

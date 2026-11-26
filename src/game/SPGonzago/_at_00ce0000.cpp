@@ -309,7 +309,7 @@ void __fastcall FUN_00ce90a0(void* self, void* /*edx*/, void* obj)
   }
 }
 
-// @ 0x00ce9380
+// 0x00ce9380 (byte-exact lifted version: match/slices/s00ce9380/s00ce9380.cpp)
 void CDS::AccumulatePosseArea(Vec4* out)
 {
     int i;

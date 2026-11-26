@@ -355,7 +355,7 @@ void cGameplayMarker::Shutdown()
     ShutdownMarkerExtras();
 }
 
-// @ 0x00c3efb0
+// 0x00c3efb0 (byte-exact lifted version: match/slices/s00c3efb0/s00c3efb0.cpp)
 cGameplayMarker::cGameplayMarker()
 {
     mType = 0;

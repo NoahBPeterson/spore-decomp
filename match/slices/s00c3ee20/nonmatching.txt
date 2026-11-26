@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00c3ef00  108  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker shutdown; the trigger releases are modelled on named members but the noun removal and extension teardown are unresolved; equiv UNSUPPORTED (only 0/40 inputs valid)
-00c3efb0  88  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker constructor; the vtable stores and the zero-fill order differ from retail; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3f040  190  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) gameplay marker definition init; the property queries are unresolved so the branch bodies are simplified; equiv UNSUPPORTED (unresolved property helpers)
 00c3f4a0  103  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hit sphere constructor; the default radius and distance floats plus vtable stores are ordered differently from retail; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3f6f0  69  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) solar hit sphere constructor; the nested hit-sphere constructor plus key zeroing order differ; equiv FAIL (first mismatch memory .data @0167be2c)
@@ -9,6 +8,5 @@
 00c3fc80  409  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable definition init; the key array, ornament list and scale property reads are unresolved so the branches collapse; equiv UNSUPPORTED (unresolved property helpers)
 00c3fe70  150  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) ornament shutdown; the count/step table walk and the member frees are modelled with unresolved helpers; equiv FAIL (first mismatch execution)
 00c3ff10  493  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) ornament attach effect; the effect id switch and the effects-manager instance creation are unresolved so most of the body collapses; equiv UNSUPPORTED (unresolved effect helpers)
-00c40150  58  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactive ornament cast; the hit-sphere fallback call is unresolved; equiv UNSUPPORTED (unresolved cast helper)
 00c40200  97  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) next destructed state; the schedule table stride and callback load differ from retail; equiv FAIL (first mismatch eax)
 00c40270  78  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) ornament write; the type dword and field serializer are unresolved; equiv UNSUPPORTED (unresolved field serializer)

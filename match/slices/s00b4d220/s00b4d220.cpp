@@ -420,7 +420,7 @@ void __fastcall FUN_00b4d930(char* self)
 // ==================================================================================================
 // 0x00b4d980  copy a 0x84-byte record (vec3 header, scalars, an 0x50 sub-block, trailing word)
 // ==================================================================================================
-// @ 0x00b4d980
+// 0x00b4d980 (byte-exact lifted version: match/slices/s00b4d980/s00b4d980.cpp)
 void* __fastcall FUN_00b4d980(char* self, int, char* src)
 {
     st32(self, 0x0, ld32(src, 0x0));

@@ -4412,7 +4412,7 @@ void cCommunityEditor::DetachCity(cCity_s00bf_4170* pCity, int bRemoving)
     Release();
 }
 
-// @ 0x00bf49e0
+// 0x00bf49e0 (byte-exact lifted version: match/slices/s00bf49e0/s00bf49e0.cpp)
 void cCommunityEditor::NotifySubEditor(cCommunityEditor* pSub)
 {
     if (pSub == 0)
@@ -4975,7 +4975,7 @@ float CityThing::GetDistance(void* key)
     return value;
 }
 
-// @ 0x00bf5be0
+// 0x00bf5be0 (byte-exact lifted version: match/slices/s00bf5be0/s00bf5be0.cpp)
 bool CityEventSub::OnEvent(int eventId, void* data)
 {
     if (eventId == 0x1a0219e) {

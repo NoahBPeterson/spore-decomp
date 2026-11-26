@@ -436,7 +436,7 @@ cUITimedTooltip::~cUITimedTooltip()
         m_pLayout->Release2();
 }
 
-// @ 0x00e36890
+// 0x00e36890 (byte-exact lifted version: match/slices/s00e36890/s00e36890.cpp)
 void* cUITimedTooltip::DestroyDeleting(bool bDelete)
 {
     if (m_pWindow != nullptr)

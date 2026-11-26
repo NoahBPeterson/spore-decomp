@@ -300,7 +300,7 @@ void __fastcall FUN_00c04870(void** p)
     (*(FnVoid)(*(char**)b + 4))(b);
 }
 
-// @ 0x00c048c0
+// 0x00c048c0 (byte-exact lifted version: match/slices/s00c048c0/s00c048c0.cpp)
 void* __fastcall FUN_00c048c0(void* dst, int, const void* src)
 {
   *(int*)  ((char*)dst + 0)  = *(int*)  ((char*)src + 0);

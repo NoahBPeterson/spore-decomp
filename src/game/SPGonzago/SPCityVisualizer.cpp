@@ -5851,7 +5851,7 @@ void** __fastcall FUN_00d58510(void* self, void* /*edx*/, void* out, void* obj, 
   return (void**)out;
 }
 
-// @ 0x00d58610
+// 0x00d58610 (byte-exact lifted version: match/slices/s00d58610/s00d58610.cpp)
 void __cdecl FUN_00d58610(void** lo, void** hi)
 {
   void** p = lo;
@@ -6428,7 +6428,7 @@ void* __fastcall FUN_00d59630(void* self, void* edx, void* src)
     return self;
 }
 
-// @ 0x00d596a0
+// 0x00d596a0 (byte-exact lifted version: match/slices/s00d596a0/s00d596a0.cpp)
 void* __fastcall FUN_00d596a0(CVec* self, void* edx, int count, Vector3_s00d5_8a80* src, void* alloc)
 {
     (void)edx;

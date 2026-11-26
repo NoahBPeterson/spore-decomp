@@ -2068,7 +2068,7 @@ ObjC* ObjC::fn28c10(short* p)
   return this;
 }
 
-// @ 0x00f28c50
+// 0x00f28c50 (byte-exact lifted version: match/slices/s00f28c50/s00f28c50.cpp)
 int TextObj::fn28c50(void* stream)
 {
   ListSer ser;

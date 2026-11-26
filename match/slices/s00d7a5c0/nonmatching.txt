@@ -8,5 +8,4 @@
 00d7b060 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the GetSpeciesProfile chain; equiv WEAK (35% coverage)
 00d7b110 88 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation; equiv WEAK (42% coverage)
 00d7b1a0 198 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl tail-merges both exit blocks (99 vs 226 bytes); equiv PASS
-00d7b290 65 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl reorders/renames the two Get() calls; equiv PASS
 00d7b350 42 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: vtable slot loads hoisted and regs renamed; equiv UNSUPPORTED (no valid inputs: fake-arity/fault)

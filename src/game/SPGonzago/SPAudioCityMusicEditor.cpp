@@ -472,7 +472,7 @@ bool __fastcall FUN_00e9fe40(void* self, void* edx, uint param_2, uint param_3)
     return ok;
 }
 
-// @ 0x00e9fe90
+// 0x00e9fe90 (byte-exact lifted version: match/slices/s00e9fe90/s00e9fe90.cpp)
 void __fastcall FUN_00e9fe90(cWindowPulse* self, void* edx, IWnd* wnd)
 {
     (void)edx;
