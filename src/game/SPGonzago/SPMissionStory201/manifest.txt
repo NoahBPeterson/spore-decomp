@@ -19,3 +19,4 @@
 ../src/game/SPGonzago/SPMissionStory201.cpp  ??0cMissionTerraform@Simulator@@QAE@XZ  00c606e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5edb0@Mission@@QAEXXZ  00c5edb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5ee40@Mission@@QAEXXZ  00c5ee40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?PickUFOWreckPlanet@cSPMissionStory201@@QAE_NXZ  00c5f530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 // addresses retail relocates here, named so the build relocates them too
+extern "C" char g_13f01bc[];
 extern "C" char g_146dfb4[];
 extern "C" char g_1470320[];
 extern "C" char g_1470330[];
@@ -1925,21 +1926,19 @@ void Mission::FUN_00c61e20(int msg, int arg)
 
 // @ 0x00c61e80
 char Mission::FUN_00c61e80(int msg, int out)
-{
-    void* gd = ((Mission*)FUN_01002bd0())->FUN_00bfc5f0();
+{    void* gd = ((Mission*)FUN_01002bd0())->FUN_00bfc5f0();
     if (msg == (int)0xe58ee16c) {
-        FUN_0041e050((void*)out, (const void*)0x013f01bc,
+        FUN_0041e050((void*)out, g_13f01bc,
                      *(int*)((char*)this + 0x1f8));
         return 1;
-    }
-    if (msg == (int)0xd4814edd) {
-        int a = ((Mission*)gd)->FUN_00fe6770(*(int*)((char*)this + 0x1f4));
-        int b = ((Mission*)gd)->FUN_00fe66f0(*(int*)((char*)this + 0x1f4));
-        FUN_0041e050((void*)out, (const void*)0x013f01bc, a - b);
+    } else if (msg == (int)0xd4814edd) {
+        FUN_0041e050((void*)out, g_13f01bc,
+                     ((Mission*)gd)->FUN_00fe6770(*(int*)((char*)this + 0x1f4)) -
+                     ((Mission*)gd)->FUN_00fe66f0(*(int*)((char*)this + 0x1f4)));
         return 1;
-    }
-    return this->FUN_00c491c0(msg, out);
-}
+    } else {
+        return this->FUN_00c491c0(msg, out);
+    }}
 
 // @ 0x00c61f20
 void* Mission::FUN_00c61f20()

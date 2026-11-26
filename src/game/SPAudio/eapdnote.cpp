@@ -374,8 +374,7 @@ byte stripnote_setup()
 
 // @ 0x00a5e010
 void* poly_new(float f1, float f2)
-{
-    int voices = (int)f1;
+{    int voices = (int)f1;
     void* x = pd_new(g_polyClass_16756ac);
     if (x != 0)
     {
@@ -384,12 +383,11 @@ void* poly_new(float f1, float f2)
         *(int*)((char*)x + 0x28) = voices;
         void** voice = (void**)getbytes(voices * 0xc, "EAPd/t_voice");
         *(void***)((char*)x + 0x2c) = voice;
-        for (int i = voices; i != 0; --i)
+        for (int i = voices; i--; voice += 3)
         {
             *(float*)voice = 0.0f;
             voice[1] = 0;
             voice[2] = 0;
-            voice += 3;
         }
         *(float*)((char*)x + 0x30) = 0.0f;
         *(int*)((char*)x + 0x40) = (f2 != 0.0f);
@@ -401,8 +399,7 @@ void* poly_new(float f1, float f2)
                                                 g_floatSymbol_16758c4.s_thing);
         *(int*)((char*)x + 0x3c) = 0;
     }
-    return x;
-}
+    return x;}
 
 // @ 0x00a5e0f0
 namespace EA { namespace Audio { namespace Eapd {

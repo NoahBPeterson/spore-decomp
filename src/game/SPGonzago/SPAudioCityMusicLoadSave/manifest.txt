@@ -4,3 +4,4 @@
 ../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?Load@cCityMusicLoadSave@RetailCityMusic@@QAEXXZ  00ea20a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?StartDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  00ea20d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?StopDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  00ea2120  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?SetMusic@cCityMusicLoadSave@@QAEXPAVcPlayerCityMusic@@@Z  00ea23a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

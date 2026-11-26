@@ -1493,29 +1493,35 @@ cCommandServerView_68bc50::~cCommandServerView_68bc50()
 
 // @ 0x0068bcf0
 bool cCommandServer_s0068_b150::Shutdown()
-{
-    mCommandInfoMap.DestroyNodes(mCommandInfoMap.mAnchor.mpParent);
+{    mCommandInfoMap.DestroyNodes(mCommandInfoMap.mAnchor.mpParent);
     mCommandInfoMap.reset();
     this->SetDispatcher(0);
-    if (mpMessageCommandDispatcher.mpObject)
-        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Deinit();
     if (mpMessageCommandDispatcher.mpObject) {
-        IRefCounted* old = (IRefCounted*)mpMessageCommandDispatcher.mpObject;
-        mpMessageCommandDispatcher.mpObject = 0;
-        old->Release();
+        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Deinit();
+        if (mpMessageCommandDispatcher.mpObject) {
+            IRefCounted* old = (IRefCounted*)mpMessageCommandDispatcher.mpObject;
+            mpMessageCommandDispatcher.mpObject = 0;
+            old->Release();
+        }
     }
-    if (mpStringCommandGenerator.mpObject)
-        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Deinit();
     if (mpStringCommandGenerator.mpObject) {
-        IRefCounted* old = (IRefCounted*)mpStringCommandGenerator.mpObject;
-        mpStringCommandGenerator.mpObject = 0;
-        old->Release();
+        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Deinit();
+        if (mpStringCommandGenerator.mpObject) {
+            IRefCounted* old = (IRefCounted*)mpStringCommandGenerator.mpObject;
+            mpStringCommandGenerator.mpObject = 0;
+            old->Release();
+        }
     }
     for (RbNode* it = mCommandGeneratorSet.mAnchor.mpLeft;
          it != &mCommandGeneratorSet.mAnchor; it = (RbNode*)RbTreeIncrement(it)) {
     }
-    mCommandGeneratorSet.DoNuke(mCommandGeneratorSet.mAnchor.mpParent);
-    mCommandGeneratorSet.reset();
+    struct GenClear {
+        static __forceinline void clear(RbTreeBase* p) {
+            p->DoNuke(p->mAnchor.mpParent);
+            p->reset();
+        }
+    };
+    GenClear::clear(&mCommandGeneratorSet);
     return true;
 }
 

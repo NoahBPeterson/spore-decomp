@@ -6,3 +6,4 @@
 ../src/game/SPAudio/eapdnote.cpp  ?bag_clear@Eapd@Audio@EA@@YAXPAD@Z  00a5ea40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdnote.cpp  ?x_note_setup@Eapd@Audio@EA@@YA_NXZ  00a5eb20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdnote.cpp  ?bag_float@Eapd@Audio@EA@@YAXPADM@Z  00a5e8f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdnote.cpp  ?poly_new@@YAPAXMM@Z  00a5e010  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

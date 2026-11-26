@@ -4,5 +4,4 @@
 00f02a10  143  message switch: jump-table layout and case block ordering differ (equiv PASS 375/400 valid, 83.3% cov)
 00f02b80  81   ctor: Stopwatch arg setup hoisted above the zero-store block by cl
 00f02e00  381  scene build: window path + VecBox temp schedule differs (equiv WEAK 400/400 valid, 5.4% cov)
-00f03010  16   list dtor: outer/inner callee-saved register swap (edi<->esi) only (equiv PASS 260/400 valid, 100% cov)
 00f030a0  212  scene commit: FUN_00f01140 vec copy + VecBox schedule differs (equiv WEAK 400/400 valid, 11.2% cov)

@@ -1206,8 +1206,8 @@ void RecVec::Assign(const VecRec* first, VecRec* last, const void* owner)
 
 // @ 0x0080bcf0
 RecC_s0080_b6b0* Vec::erase(RecC_s0080_b6b0* first, RecC_s0080_b6b0* last)
-{
-    RecC_s0080_b6b0* newEnd = copyFwd(last, end, first);
+{    RecC_s0080_b6b0* en = end;
+    RecC_s0080_b6b0* newEnd = copyFwd(last, en, first);
     RecC_s0080_b6b0* e = end;
     for (RecC_s0080_b6b0* p = newEnd; p < e; ++p)
         p->Fn(0);

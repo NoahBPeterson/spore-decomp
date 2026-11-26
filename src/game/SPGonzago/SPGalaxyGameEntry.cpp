@@ -15081,9 +15081,12 @@ void SP::cGalaxyGameEntryUIStateMachine_s00df_1e70::OnModeSelection(int32_t nMod
 
 // @ 0x00df2920
 void SP::cGalaxyGameEntryUIStateMachine_s00df_1e70::OnSummarySelection(int32_t nModeID)
-{
-    uint32_t nOffset = 0;
-    int32_t anModeIDs[6] = {0x6149007, 0x6149008, 0x6149009, 0, 1, 2};
+{    uint32_t nOffset = 0;
+    int32_t anValues[3];
+    int32_t anModeIDs[3] = {0x6149007, 0x6149008, 0x6149009};
+    anValues[0] = 0;
+    anValues[1] = 1;
+    anValues[2] = 2;
 
     for (; nOffset < 3 * sizeof(int32_t); nOffset += sizeof(int32_t)) {
         int32_t nID = *(const int32_t*)((const uint8_t*)anModeIDs + nOffset);
@@ -15096,8 +15099,7 @@ void SP::cGalaxyGameEntryUIStateMachine_s00df_1e70::OnSummarySelection(int32_t n
             continue;
 
         if (nID == nModeID) {
-            mpModel->mnFieldA0 =
-                *(const int32_t*)((const uint8_t*)anModeIDs + nOffset + 3 * sizeof(int32_t));
+            mpModel->mnFieldA0 = *(const int32_t*)((const uint8_t*)anValues + nOffset);
             pButton->SetFlag(4, 1);
         } else {
             pButton->SetFlag(4, 0);

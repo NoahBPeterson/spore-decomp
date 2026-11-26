@@ -372,13 +372,12 @@ bool Ctl::check(void* arg)
 
 // @ 0x00695dc0
 extern "C" void __fastcall FUN_00695dc0(void* self)
-{
-    void* n = *(void**)self;
+{    void* n = *(void**)self;
     while (n != self)
     {
         void* cur = n;
-        void* obj = *(void**)((char*)cur + 8);
         n = *(void**)n;
+        void* obj = *(void**)((char*)cur + 8);
         if (obj != 0)
         {
             void* t = *(void**)((char*)obj + 4);

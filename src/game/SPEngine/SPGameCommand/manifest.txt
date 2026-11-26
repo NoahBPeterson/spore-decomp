@@ -27,3 +27,4 @@
 ../src/game/SPEngine/SPGameCommand.cpp  ??1EditorResDerived@@UAE@XZ  00689810  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ??1cCommandServerView_68bc50@@QAE@XZ  0068bc50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ?erase@CmdMap@cCommandServer_s0068_b150@@QAE?AUiterator@12@U312@@Z  0068b950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?Shutdown@cCommandServer_s0068_b150@@QAE_NXZ  0068bcf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

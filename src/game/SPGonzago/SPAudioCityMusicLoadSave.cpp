@@ -419,16 +419,16 @@ void cCityMusicLoadSave::Init()
 
 // @ 0x00ea23a0
 void cCityMusicLoadSave::SetMusic(cPlayerCityMusic* pMusic)
-{
-    cPlayerCityMusic* pOldMusic = mpMusic;
+{    cPlayerCityMusic*& rpMusic = *(cPlayerCityMusic**)((char*)this + 0x14);
+    cPlayerCityMusic* pOldMusic = rpMusic;
     if (pMusic != pOldMusic) {
         if (pMusic != nullptr)
             pMusic->AddRef();
-        mpMusic = pMusic;
+        rpMusic = pMusic;
         if (pOldMusic != nullptr)
             pOldMusic->Release();
     }
-    SetViewerMusic(mpViewer, pMusic);
+    (*(cCityMusicViewer**)((char*)this + 0x18))->SetMusic(pMusic);
 }
 
 // @ 0x00ea23e0

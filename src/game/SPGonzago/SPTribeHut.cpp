@@ -370,7 +370,7 @@ virtual void v10();
     virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList** ppOut); // +0x2c
 };
 struct cVarListSerializer {
-    uint8_t pad00[0xa10];
+    uint8_t pad00[0xa14];
     cVarListSerializer(void* owner, const void* key, uint32_t group);          // 00692f90
     bool Serialize(void* pStream);                                              // 00692900
     bool Read(void* pStream);                                                   // 00693e10
@@ -1019,11 +1019,13 @@ bool cTribeTool::HasToolNoun()
 
 // @ 0x00c9c310
 bool cTribeTool::Serialize_Write(void* pStream)
-{
+{    struct LocalIO {
+        static __forceinline void WriteU32(void* pIO, uint32_t v) {
+            EA::IO::WriteUint32(pIO, &v, 1, 0);
+        }
+    };
     IStreamWriter* pWriter = ((ISerializerStream*)pStream)->GetWriterSerializer();
-    uint32_t version = 0xee02c7;
-    void* pIO = pWriter->GetWriter();
-    EA::IO::WriteUint32(pIO, &version, 1, 0);
+    LocalIO::WriteU32(pWriter->GetWriter(), 0xee02c7);
     bool ok = ((cGameDataBase*)this)->Write(pStream)
            && ((cSpatialObjectBase*)mSpatial)->Write(pStream)
            && ((cCombatantBase*)mCombatant)->Write(pStream);
@@ -1032,8 +1034,7 @@ bool cTribeTool::Serialize_Write(void* pStream)
         if (vs.Serialize(pStream))
             return true;
     }
-    return false;
-}
+    return false;}
 
 // @ 0x00c9c3c0
 bool cTribeTool::Serialize_Read(void* pStream)

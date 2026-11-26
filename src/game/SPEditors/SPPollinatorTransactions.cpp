@@ -339,8 +339,8 @@ struct cAssetMetadata_s0061_4f20 {                       // SP::Pollen::cAssetMe
 struct cAssetDirectory_s0061_4f20 {
     void AddMapping(uint32_t lo, uint32_t hi, ResourceKey* key);   // 0x0054e250
 };
-struct cImportExport { int UpdateExportThumb(); };                // 0x005fb430
-cImportExport* __stdcall GetImportExport(ResourceKey* key);        // 0x005f7930
+struct cImportExport { unsigned char UpdateExportThumb(ResourceKey* key); }; // 0x005fb430
+cImportExport* __cdecl GetImportExport();                          // 0x005f7930
 void* __cdecl Fn6ac0a0(int a, void* b);                            // 0x006ac0a0
 void* __cdecl Fn6ad010(void* a);                                   // 0x006ad010
 u64 StrtoU64(const wchar_t* s, wchar_t** end, int base);           // 0x0092d710
@@ -3357,18 +3357,14 @@ cAssetUploadTransaction::cAssetUploadTransaction(cAssetMetadata_s0061_4f20* m, c
 
 // @ 0x00615db0
 void cModelUploadTransaction_s0061_4f20::OnFailure()
-{
-    int a = mpAssetMetadata->Fn5507e0(0);
-    int b = mpAssetMetadata->Fn5508c0(0, a);
-    int c = mpAssetMetadata->Fn414e10(b);
-    mpAssetMetadata->Fn551240(&mKey, c);
+{    mpAssetMetadata->Fn551240(&mKey, mpAssetMetadata->Fn414e10(mpAssetMetadata->Fn5508c0(0, mpAssetMetadata->Fn5507e0(0))));
     cAssetMetadata_s0061_4f20* m = mpAssetMetadata;
     cAssetMetadata_s0061_4f20* x = m ? (cAssetMetadata_s0061_4f20*)m->Cast(0x2269ed1) : 0;
     void* db = GetManager2()->FindDatabase((ResourceKey*)((char*)x + 8));
     GetManager2()->WriteResource(x, 0, db, 0, 0);
     Fn6ac0a0(10, x);
     Fn6ad010(x);
-    GetImportExport(mpAssetMetadata->GetKey())->UpdateExportThumb();
+    GetImportExport()->UpdateExportThumb(mpAssetMetadata->GetKey());
 }
 
 // @ 0x00615e50
@@ -3412,7 +3408,7 @@ bool cModelUploadTransaction_s0061_4f20::HandleResult(int err, cHttpResult* r, c
                     mpAssetMetadata->SetServerID(mnNextLo, mnNextHi);
                     GetManager()->WriteResource(mpAssetMetadata, 0, 0, 0, 0);
                     GetManager()->CacheResource(mpAssetMetadata, result);
-                    GetImportExport(&mKey)->UpdateExportThumb();
+                    GetImportExport()->UpdateExportThumb(&mKey);
                     mnNextLo = 0xffffffffu;
                     mnNextHi = 0xffffffffu;
                     cAssetUploadTransaction* t = new cAssetUploadTransaction(mpAssetMetadata, mpAssetDir, mbA, mbB, mnRetries + 1);
@@ -3449,7 +3445,7 @@ fail:
         GetManager2()->WriteResource(x, 0, db, 0, 0);
         Fn6ac0a0(10, x);
         Fn6ad010(x);
-        GetImportExport(mpAssetMetadata->GetKey())->UpdateExportThumb();
+        GetImportExport()->UpdateExportThumb(mpAssetMetadata->GetKey());
         sUploadMsg m;
         m.ok = false;
         m.key = mKey;

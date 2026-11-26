@@ -1514,18 +1514,20 @@ void SporepediaVecClear()
 
 // @ 0x0065aed0
 void SporepediaVecSetSize(int n)
-{
-    int cur = (int)(((char*)g_sporeVec.end - (char*)g_sporeVec.begin) >> 2);
-    if (n != cur && g_sporeMax <= n) {
-        g_sporeVec.resize(n);
-        for (int i = cur; i < n; ++i) {
+{    int cur = (int)(((char*)g_sporeVec.end - (char*)g_sporeVec.begin) >> 2);
+    if (cur == n || g_sporeMax > n)
+        return;
+    g_sporeVec.resize(n);
+    if (cur < n) {
+        int i = cur;
+        do {
             void* p = EASTL_Alloc(0x18, "Sporepedia", 0, 0, 0, 0);
             void* obj = p ? cConnectionDialog_ctor(p) : 0;
             void** slot = (void**)((char*)g_sporeVec.begin + i * 4);
             AssignLayout(slot, obj);
             void* el = *(void**)((char*)g_sporeVec.begin + i * 4);
-            ((cSPUILayout_s0065_a070*)el)->Init((const void*)0x1526560, 0, 0x5b598fa);
-        }
+            ((cSPUILayout_s0065_a070*)el)->Init((const void*)&g_key_1526560, 0, 0x5b598fa);
+        } while (++i < n);
     }
 }
 

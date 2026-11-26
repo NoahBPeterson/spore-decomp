@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00695dc0  17  intrusive-list destroy: per-node vtbl+4 release and manager free present; this/cur register assignment swapped flags: /O2 /MD /Gy /EHsc /TP /GS-
 00695e00  112  data: R49 (2026-11-17): body matches; the fingerprint extent includes the next function's jmp stub at 0x00695e70 | Earlier note: list-node allocate/construct: allocator vcall and refcount hook present; EH prolog missing so frame differs flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, call#0 esp, call#1 esp, ret#2 esp]
 00695f00  139  intrusive-list destroy with object probe: full path present; EH frame and register allocation differ; equiv UNSUPPORTED: only 0/1200 inputs valid (faults on pointer-chasing list walk) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00695fa0  271  pooled sub-vector teardown: all walks/frees present; EH frame and register allocation differ; equiv WEAK: 796 valid inputs, 35.7% coverage flags: /O2 /MD /Gy /EHsc /TP /GS-

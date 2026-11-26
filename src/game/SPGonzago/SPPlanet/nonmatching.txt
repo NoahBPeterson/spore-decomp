@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 00b00560 42 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clump array free; the virtual clear call and operator_delete__ are unresolved; equiv UNSUPPORTED (unresolved operator_delete__)
-00b00820 13 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance insertion sort over positioned objects; only SSE register allocation and the compare polarity differ from retail; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b008f0 231 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) range distance insertion sort; retail walks the range from *pFirst with a single backward scan, the modelled nested loop is larger; equiv UNSUPPORTED (only 0/40 inputs valid)
-00b009b0 15 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance insertion sort over nodes; only SSE register allocation and the compare polarity differ from retail; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b00a80 233 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) range distance insertion sort over nodes; the range walk is modelled as a nested loop and grows past retail; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b00c10 231 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) vec3 pointer range sort; the range walk is modelled as a nested loop and grows past retail; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b00cd0 227 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) nearest of three positioned objects; retail expands the three distance tests with duplicated tails, the modelled comparison tree is much shorter; equiv WEAK (39 valid inputs, 100.0% coverage)

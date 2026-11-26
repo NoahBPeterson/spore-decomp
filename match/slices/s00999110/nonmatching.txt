@@ -1,5 +1,4 @@
 00999590 141 complete add-plugin/bind path (thiscall member; fast path AddRefs the stored copy); register allocation (this in edi vs ebx) and casted-temp slot differ; difftest PASS (fixed: was a cdecl free function with cdecl DoInsertValue calls and a missing AddRef on the fast path)
-0099a010 17 complete StringTableXml::SetString; this/vector register allocation differs
 00999250 352 complete SerCollection::Reload; schedule/register allocation differs; difftest WEAK (37% coverage: the ResourceMan singleton 0x1667aa0 is a fixed global, not an input)
 00999640 200 complete SerializationService::RemovePlugin; register allocation differs
 00999890 19 complete finder-compare helper; add ecx,4 placement differs

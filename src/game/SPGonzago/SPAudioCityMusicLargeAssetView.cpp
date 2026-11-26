@@ -246,10 +246,9 @@ cCityMusicLargeAssetView_s00ea_1900::~cCityMusicLargeAssetView_s00ea_1900()
 
 // @ 0x00ea1b00
 void cCityMusicLargeAssetView_s00ea_1900::Hide()
-{
-    cPlayerCityMusic* pMusic = mpMusic;
-    mIsVisible = 0;
-    pMusic->Play(false);
+{    cCityMusicViewer* pViewer = mpViewer;
+    mPad35[0] = 0;
+    ((void (__thiscall*)(cCityMusicViewer*))(*(void***)pViewer)[0x28 / 4])(pViewer);
 
     cSPUILayout_s00ea_1900* pLayout = mpLayout;
     if (pLayout != nullptr) {
@@ -257,7 +256,7 @@ void cCityMusicLargeAssetView_s00ea_1900::Hide()
         pLayout = mpLayout;
         if (pLayout != nullptr) {
             mpLayout = nullptr;
-            pLayout->FindWindowByID(0);
+            pLayout->v08();
         }
     }
 }
