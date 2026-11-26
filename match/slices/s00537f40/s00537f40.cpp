@@ -404,13 +404,13 @@ struct cSPSkinPaintParticleEffectBlockCommand : cBlockCommandStateT, EA::ArgScri
 
 struct cSPSkinPaintParticlechainCommand : PaintCompat { cSPSkinPaintParticlechainCommand() {}
     virtual void ParseLine(cArguments& args); };
-
-namespace {
-#define CMD(N) struct N : PaintCompat { N() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticlebrushCommand : PaintCompat {
     cSPSkinPaintParticlebrushCommand() {}
     virtual void ParseLine(cArguments& args);
 };
+
+namespace {
+#define CMD(N) struct N : PaintCompat { N() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticlecurveCommand : PaintCompat { cSPSkinPaintParticlecurveCommand() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticlealignCommand : PaintCompat { cSPSkinPaintParticlealignCommand() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticleinitDirCommand : PaintCompat { cSPSkinPaintParticleinitDirCommand() {} virtual void ParseLine(cArguments& args); };
@@ -485,17 +485,28 @@ void cSPSkinPaintParticleEffectBlockCommand::OnRegister(EA::ArgScript::cIParser*
 // @ 0x00538a00
 void cSPSkinPaintParticlebrushCommand::ParseLine(cArguments& args)
 {
-    BRUSH538(p);
-    size_t count = 0;
-    const char** argv = args.MainArguments(&count, 0, 100);
-    for (int i = 0; i < (int)count; ++i) {
-        uint32_t hash = FNV1_String8(argv[i], 0x811c9dc5, 1);
-        p->mChain.push_back(hash);
+    struct Locals {
+        uint32_t hash;
+        int i;
+        BrushDesc538* p;
+        const char** argv;
+        size_t count;
+    } L;
+    struct BaseA { void* v; int r; };
+    struct DerivedD : BaseA, BrushDesc538 {};
+    L.p = static_cast<BrushDesc538*>((DerivedD*)(Description538*)mState->mpDesc);
+    struct Pad { static __forceinline void N2() { uint32_t s[2]; } };
+    Pad::N2();
+    L.count = 0;
+    L.argv = args.MainArguments(&L.count, 0, 100);
+    for (L.i = 0; L.i < (int)L.count; ++L.i) {
+        L.hash = FNV1_String8(L.argv[L.i], 0x811c9dc5, 1);
+        L.p->mChain.push_back(L.hash);
     }
     if (args.HasFlag("random"))
-        p->mFlags |= 1;
+        L.p->mFlags |= 1;
     else if (args.HasFlag("randomStart"))
-        p->mFlags |= 2;
+        L.p->mFlags |= 2;
 }
 
 // @ 0x00538af0

@@ -9,3 +9,4 @@ slices/s00537f40/s00537f40.cpp  ??1Dtor538180@@QAE@XZ  00538180  /Od /Ob1 /MD /G
 slices/s00537f40/s00537f40.cpp  ??1PaintBlock538@@QAE@XZ  00538320  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00537f40/s00537f40.cpp  ?AddRef@Host538380@@QAEHXZ  00538380  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00537f40/s00537f40.cpp  ?ParseLine@cSPSkinPaintParticlechainCommand@@UAEXAAVcArguments@ArgScript@EA@@@Z  00538af0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00537f40/s00537f40.cpp  ?ParseLine@cSPSkinPaintParticlebrushCommand@@UAEXAAVcArguments@ArgScript@EA@@@Z  00538a00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

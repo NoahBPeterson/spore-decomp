@@ -5934,7 +5934,7 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
     EHNode** pb = &mpBuckets[bucket];
     EHNode* p = *pb;
     while (p) {
-        if (p->key == key) {
+        if (key == p->key) {
             out->node = p;
             out->bucket = pb;
             out->inserted = false;
@@ -5942,8 +5942,8 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
         }
         p = p->next;
     }
-    ERehashInfo ri;
-    mAllocator->RehashRequired(&ri, mnBucketCount, mnElementCount, 1);
+    struct LocalRehashInfo { bool bNeed; u8 pad[3]; u32 nNew; } ri;
+    ((AllocStub*)&mAllocator)->RehashRequired((ERehashInfo*)&ri, mnBucketCount, mnElementCount, 1);
     EHNode* n = (EHNode*)operator new(0x0c, "EASTL", 0, 0, EA_FILE, 0xd1);
     if (n) {
         n->key = *(int*)((char*)pkey);
@@ -5960,9 +5960,10 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
     n->next = mpBuckets[bucket];
     mpBuckets[bucket] = n;
     mnElementCount += 1;
-    out->node = n;
-    out->bucket = &mpBuckets[bucket];
-    out->inserted = true;
+    EInsertRes* __restrict r = out;
+    r->node = n;
+    r->bucket = &mpBuckets[bucket];
+    r->inserted = true;
     return out;
 }
 

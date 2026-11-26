@@ -1635,7 +1635,8 @@ void* Sorter::run(char* first)
         p += 0x3c;
         if (*(int*)(old + 0x24) == 0) break;
     } while (*(int*)(old + 0x28) != 0);
-    FUN_006950b0((Elem*)first, (Elem*)p, (int)((unsigned)first & 0xffffff00u));
+    bool cmp = false;
+    FUN_006950b0((Elem*)first, (Elem*)p, *(int*)&cmp);
     return this;
 }
 

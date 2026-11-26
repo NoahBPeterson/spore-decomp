@@ -106,3 +106,4 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?AddRef@cAppModeEditorBase@SP@@UAEHXZ  005b2490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?FUN_0057e220@cAppModeEditorBase_s0057_d710@@QAEXMMPAXH@Z  0057e220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?RemoveTorsoFromEffectsMask@cAppModeEditorBase@SP@@QAEXXZ  005772b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?AddTorsoToEffectsMask@cAppModeEditorBase_s0057_9e20@SP@@QAEXUcSPColorRGBA@@@Z  0057a610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

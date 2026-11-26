@@ -21,6 +21,5 @@
 00a59940  FUN_00a59940        PASS   bang handler: outlet count guard + outlet_float fan-out
 00a599a0  FUN_00a599a0        PASS   float handler: store + outlet count guard + fan-out
 00a59b50  FUN_00a59b50        ART    float handler; FAIL is a live-register/callee artifact
-00a59cc0  pdsymbol_anything   ART    symbol/anything handler; calls outlet_symbol
 00a5a330  sel2_float          PASS   select-2 float handler (table scan + fan-out)
 00a5a410  select_new          UNSUP  select/select2 constructor; largest function in the slice

@@ -21,6 +21,7 @@ static inline float InlineSqrt(float x) { return (float)sqrt((double)x); }
 #include "SP/cIModelWorld.h"
 #include "SP/cILightingWorld.h"
 #include "SP/cAppModeEditorBase.h"
+#include "cSPColorRGBA.h"
 #include "SP/cSPEditorBlock.h"
 #include "SP/cSPEditorAnimatedEventInfo.h"
 #include "SP/cSPEditorHandle.h"
@@ -2332,7 +2333,7 @@ public:
     char pad[0x600];
     ~cAppModeEditorBase_s0057_9e20();                       // 0x579e20
     void RemoveTorsoFromEffectsMask();           // 0x5772b0
-    void AddTorsoToEffectsMask(float x, float y, float z, int);   // 0x57a610
+    void AddTorsoToEffectsMask(cSPColorRGBA v);   // 0x57a610
     void SendBehaviorMessage(BMsg*);             // 0x57a710
     __declspec(noinline) Bits128 GetMask();   // 0x57a960
     Bits128 GetDefaultMask();                    // 0x57a9e0
@@ -10070,7 +10071,7 @@ SP::cAppModeEditorBase::~cAppModeEditorBase()
 }
 
 // @ 0x0057a610
-void SP::cAppModeEditorBase_s0057_9e20::AddTorsoToEffectsMask(float x, float y, float z, int)
+void SP::cAppModeEditorBase_s0057_9e20::AddTorsoToEffectsMask(cSPColorRGBA v)
 {
     if (*(int*)((char*)this + 0x150) != 0) {
         RemoveTorsoFromEffectsMask();
@@ -10082,10 +10083,14 @@ void SP::cAppModeEditorBase_s0057_9e20::AddTorsoToEffectsMask(float x, float y, 
             SceneObjA* so = *(SceneObjA**)((char*)this + 0x150);
             void* scene = so->GetSceneObject(0);
             ((XformStub*)((char*)h->p + 8))->Assign((char*)scene + 8);
-            float* dst = (float*)((char*)h->p + 0x4c);   // Vector3 position passed by value
-            dst[0] = x;
-            dst[1] = y;
-            dst[2] = z;
+            float* dst = (float*)((char*)h->p + 0x4c);
+            float vy = v.y;
+            float vz = v.z;
+            float vx = v.x;
+            _ReadWriteBarrier();
+            dst[0] = vx;
+            dst[1] = vy;
+            dst[2] = vz;
             ModelMgr* mm = ModelManager_s0057_9e20();
             char* obj = (char*)h->p;
             unsigned idx = mm->GetIndex(0x23008d4, 0);
