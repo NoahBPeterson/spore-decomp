@@ -168,7 +168,7 @@ template<class R> static inline R vcall0(void* p, int off)
 { return ((R(__thiscall*)(void*))g_vfn(p, off))(p); }
 // ---- items of slice s00b10200 end
 
-// @ 0x00b0f270
+// 0x00b0f270 (byte-exact lifted version: match/slices/s00b0f270/s00b0f270_lifted.cpp)
 void SP::cTerrainCameraController::RunCameraScript(int, int, int, int, int)
 {
   // incomplete skeleton: long straight-line sequence of VarMap::SetVar/GetVar.

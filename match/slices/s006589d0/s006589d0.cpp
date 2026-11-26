@@ -417,7 +417,7 @@ void cSPUIAssetViewS::ReleaseResources() {
     }
 }
 
-// @ 0x006593c0  SP::cSPUIAssetView shutdown/cleanup
+// 0x006593c0 (byte-exact lifted version: match/slices/s006593c0/s006593c0.cpp)  SP::cSPUIAssetView shutdown/cleanup
 void cSPUIAssetViewS::Cleanup() {
     char* s = (char*)this;
     if (s[0xf5] == 0)

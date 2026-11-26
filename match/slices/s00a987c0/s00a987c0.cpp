@@ -211,7 +211,7 @@ static void* MakeCommand(unsigned int sz, const char* name, void* vtbl)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00a987c0  ArgCommand::OnRegister
+// 0x00a987c0 (byte-exact lifted version: match/slices/s00a987c0/s00a987c0_lifted.cpp)  ArgCommand::OnRegister
 // ---------------------------------------------------------------------------
 void ArgCommand::OnRegister(void* parser, void* state)
 {

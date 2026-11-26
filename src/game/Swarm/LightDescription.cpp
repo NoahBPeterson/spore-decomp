@@ -474,7 +474,7 @@ void cCameraLifeCommand::Execute(void* args)
 	d->mw14 = (*(u16(__thiscall**)(void*, int))(*(char**)mpHost + 0xa0))(mpHost, *p);
 }
 
-// @ 0x00a987c0
+// 0x00a987c0 (byte-exact lifted version: match/slices/s00a987c0/s00a987c0_lifted.cpp)
 void ArgCommand::OnRegister(void* parser, void* state)
 {
     void* sub = (state != 0) ? (void*)((int)state - 0xc) : 0;

@@ -204,7 +204,7 @@ void CInput::F_ccfc20(void* arg)
         rt_del_array(vec.mpBegin);
 }
 
-// @ 0x00ccfcf0
+// 0x00ccfcf0 (byte-exact lifted version: match/slices/s00ccfcf0/s00ccfcf0.cpp)
 void CInput::F_ccfcf0(void* vec, int key, void* a, void* b)
 {
     if (((CMgr*)this)->M_e9b0(vec, key, a, b) != 0)

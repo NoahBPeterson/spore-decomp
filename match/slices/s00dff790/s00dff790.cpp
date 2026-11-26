@@ -385,7 +385,7 @@ struct PropBaseA22 {
     void sub_dfef70();                  // dtor
     PropBaseA22& sub_dffa30(const PropBaseA22& x);
 };
-// @ 0x00dffa30
+// 0x00dffa30 (byte-exact lifted version: match/slices/s00dffa30/s00dffa30.cpp)
 PropBaseA22& PropBaseA22::sub_dffa30(const PropBaseA22& x) {
     f08 = x.f08;
     f0c = x.f0c;

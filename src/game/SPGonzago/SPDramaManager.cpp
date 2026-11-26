@@ -3233,7 +3233,7 @@ bool SP::cMeteorStrikeEvent_s00d4_f2e0::Write(void* stream)
     return false;
 }
 
-// @ 0x00d50380
+// 0x00d50380 (byte-exact lifted version: match/slices/s00d50380/s00d50380_lifted.cpp)
 void SP::cMeteorStrikeEvent_s00d5_0380::LoadAndInitMeteorStrikeData(cPropertyList_s00d5_0380* pList)
 {
     Clear();

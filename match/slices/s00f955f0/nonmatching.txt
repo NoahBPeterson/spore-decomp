@@ -7,4 +7,3 @@
 00f962b0   74  cTerrainOverlay scalar deleting dtor: complete (equivalence PASS); cl orders the dtor/vtbl-store/vfree sequence differently
 00f96310   92  cTerrainOverlay::Start: complete (equivalence PASS); the flag/latch writes match, cl reorders the branch blocks
 00f96390  129  DrawTerrainGrid: complete; the grid-emit loop matches but cl reorders the vertex stores
-00f96520   95  cTerrainSphere::RemoveFromEffectsSystem: complete but the harness faults (read=400) on the fully-unrolled 5/22/3-call sequence (equivalence UNSUPPORTED)

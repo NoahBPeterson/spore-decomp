@@ -325,7 +325,7 @@ void SA::FUN_009ce740(float x)
 }
 
 // =====================================================================
-// @ 0x009ce790
+// 0x009ce790 (byte-exact lifted version: match/slices/s009ce790/s009ce790.cpp)
 //   member-wise copy of the whole 0x108-byte record (dst = this, src = arg).
 // =====================================================================
 void SA::FUN_009ce790(SA* src)

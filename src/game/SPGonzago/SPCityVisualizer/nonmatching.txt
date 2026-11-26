@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00ac4720 212 complete: Vec12::DoAssignValues for the 0xc-byte Vector3 (x87 element copy, grow via FUN_00ac2130); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid inputs: harness memory pool exhausted, pool-limit=304)
-00ac8130 452 approximate; CVis simulator distance-config builder (0x34/0x10 objects) (926 vs 917 bytes); difftest UNSUPPORTED 0/400 valid flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ac8a80 199 approximate; behavior-flag setup, cc/schedule differ (214 vs 210 bytes); difftest FAIL 5/5, fault at 300000c5 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ac8b60 203 approximate; tribe order roulette, float-compare schedule differs (361 vs 367 bytes); difftest FAIL 5/7, fault at 00c24563 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ac8d80 162 complete; SSE sphere-list point test, unrolled/hoist schedule differs (171 vs 111 bytes); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)

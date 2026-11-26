@@ -916,7 +916,7 @@ bool __stdcall RangeNotEmpty(void* p)
     return false;
 }
 
-// @ 0x00a6cdb0
+// 0x00a6cdb0 (byte-exact lifted version: match/slices/s00a6cdb0/s00a6cdb0.cpp)
 cGlobalParams::cGlobalParams()
 {
     mParticleDensity = 1.0f;

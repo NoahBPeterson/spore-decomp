@@ -4688,7 +4688,7 @@ void* cDynCast::Cast(unsigned id)
     return 0;
 }
 
-// @ 0x00f96520
+// 0x00f96520 (byte-exact lifted version: match/slices/s00f96520/s00f96520.cpp)
 void cTerrainSphere_s00f9_55f0::RemoveFromEffectsSystem()
 {
     int* mgr = SP::Sub_67ddd0();
