@@ -22,3 +22,4 @@
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FiniRing@cRotationRing@@QAEXXZ  00d1de10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?Write@cRotationBall@@QAEDPAX@Z  00d1d540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?Write@cRotationRing@@QAEDPAX@Z  00d1dba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?destroy@AbilitySet@@QAEXXZ  00d1f070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

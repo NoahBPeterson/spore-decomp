@@ -41,7 +41,6 @@
 #                pushes eax before the `lea ecx,[esi+0x74]`, ours emits them the other
 #                way round.  equiv UNSUPPORTED: 3 unresolved references (DoNukeSubtree
 #                and the two teardown stubs are external).
-00d793e0   22  AddAgent(void*): register one agent -- test the incoming pointer, resolve
 #                it to a citizen, look the pair up in the tree (inserting when absent),
 #                clear the slot's back pointer, hand the citizen to the two behaviour
 #                slots and always report "not added" (0).  Complete reconstruction

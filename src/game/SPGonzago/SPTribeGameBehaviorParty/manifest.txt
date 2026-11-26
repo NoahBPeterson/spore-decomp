@@ -4,3 +4,4 @@
 ../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?Destroy@cTribeGameBehaviorParty@@QAEPAU1@E@Z  00d791f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?Destroy@cEditorGameObject@SP@@QAEXXZ  00d79fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?Init@cTribeGameBehaviorParty@@QAEPAXXZ  00d791a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?AddAgent@cTribeGameBehaviorParty@@QAEDPAX@Z  00d793e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -2418,7 +2418,7 @@ void* TblA::DoInsertValue(void* outp, const void* vp, int tag)
 
 // @ 0x00b51930
 InsertOut* TblB::DoInsertKey(InsertOut* out, const u32* key, int tag)
-{
+{    InsertOut* __restrict pOut = out;
     u32 code = key[0] ^ key[2];
     u32 idx = code % bucketCount;
     NodeB** b = &buckets[idx];
@@ -2445,16 +2445,15 @@ InsertOut* TblB::DoInsertKey(InsertOut* out, const u32* key, int tag)
         nn->next = buckets[idx];
         buckets[idx] = nn;
         ++count;
-        out->node = nn;
-        out->inserted = 1;
-        out->bucket = &buckets[idx];
-        return out;
+        pOut->node = nn;
+        pOut->inserted = 1;
+        pOut->bucket = &buckets[idx];
+        return pOut;
     }
-    out->node = p;
-    out->inserted = 0;
-    out->bucket = b;
-    return out;
-}
+    pOut->node = p;
+    pOut->inserted = 0;
+    pOut->bucket = b;
+    return pOut;}
 
 // @ 0x00b51b00
 int Big::M_b51b00(unsigned a0, int a1, int a2, int a3, int a4, int a5, int* a6)

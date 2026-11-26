@@ -30,3 +30,4 @@
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00accec0@@YAPAXPAE00@Z  00accec0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00d58a80@@YIXPAUCityVis@@PAX@Z  00d58a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityVisualizer.cpp  ?FUN_00d57ef0@@YIXPAX00@Z  00d57ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?Insert16@VecHeader@@QAEPAXPAUElem16_s00d5_9b00@@PBU2@@Z  00d5a140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
