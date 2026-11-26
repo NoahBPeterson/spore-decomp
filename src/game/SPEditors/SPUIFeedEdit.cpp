@@ -3202,7 +3202,18 @@ void cSPUIFeedEdit_s0065_df30::ResetPanel()
 
 // @ 0x0065e8d0
 void cSPUIFeedEdit_s0065_df30::LoadLayout()
-{
+{    struct Base0 { void* v; int x; };
+    struct IWinProcLocal { void* v; };
+    struct FeedEditView : Base0, IWinProcLocal {};
+    struct IWinLocal {
+        static inline void AddWinProc(void* w, IWinProcLocal* proc) {
+            ((IWindow_s0065_df30*)w)->Slot104(proc);
+        }
+    };
+    struct AutoRefGet {
+        void* mpObject;
+        __forceinline void* get() const { void* r = mpObject; return r; }
+    };
     char* p = (char*)this;
     if (*(char*)(p + 0x90)) return;
 
@@ -3217,7 +3228,7 @@ void cSPUIFeedEdit_s0065_df30::LoadLayout()
     }
     void* win = *(void**)(p + 0x80);
     if (win) {
-        ((IWindow_s0065_df30*)win)->Slot104(p + 8);
+        IWinLocal::AddWinProc(win, (FeedEditView*)this);
         SPUIHelpers_SetWindowAreaToParent(*(void**)(p + 0x80));
 
         void* nw = mpLayout->FindWindowByID(0x58b6a40, 1);
@@ -3232,14 +3243,13 @@ void cSPUIFeedEdit_s0065_df30::LoadLayout()
         UpdateStrings();
         UpdateEnabledState();
 
-        if (((cXHTMLFrameSet_s0065_df30*)(p + 0x18))->FUN_009979f0(*(void**)(p + 0x80), 0x58b69d0)) {
+        if (((cXHTMLFrameSet_s0065_df30*)(p + 0x18))->FUN_009979f0(((AutoRefGet*)(p + 0x80))->get(), 0x58b69d0)) {
             void* fr = ((cXHTMLFrameSet_s0065_df30*)(p + 0x18))->GetFrame(g_kFrameName);
             fr = fr ? (char*)fr + 4 : 0;
             ((TextSlot*)(p + 0x84))->Assign(fr);
         }
         *(char*)(p + 0x90) = 1;
-    }
-}
+    }}
 
 // @ 0x0065ea00
 void cSPUIFeedEdit_s0065_ea00::DoMessage(int msg, void* data)

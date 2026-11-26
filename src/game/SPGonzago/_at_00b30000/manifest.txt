@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/_at_00b30000.cpp  ?GetMatrix@cSpatialProxy@@QAEPAUMatrix33@@PAU2@@Z  00b3f3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?GetTransform@cSpatialProxy@@QAEXPAUcSPTransform_s00b3_ef30@@@Z  00b3f6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b30000.cpp  ?ReleaseRange@@YGXPAUElem@@0@Z  00b36130  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b30000.cpp  ?CopyTo@@YAPAUElem@@PAU1@00@Z  00b36280  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

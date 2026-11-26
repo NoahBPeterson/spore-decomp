@@ -2325,37 +2325,57 @@ HIter HashMapBase::find(const HKey& k)
 
 // @ 0x00a7c100
 IRefT1** HashMap1::Subscript(const HKey& k)
-{
-    {
-        HIter it = find(k);
-        if (it.node != mBuckets[mBucketCount])
-            return &((HNode<IRefT1>*)it.node)->value;
-    }
-    HPair<IRefT1> p;
-    p.key = k;
-    p.value = 0;
-    HInsRes ins = insert(p, HTag());
-    IRefT1** r = &((HNode<IRefT1>*)ins.first.node)->value;
-    if (p.value) p.value->Release();
-    return r;
-}
+{    struct LocalRef1 {
+        IRefT1* ptr;
+        LocalRef1() : ptr(0) {}
+        LocalRef1(const LocalRef1& o) : ptr(o.ptr) { if (ptr) ptr->AddRef(); }
+        ~LocalRef1() { if (ptr) ptr->Release(); }
+    };
+    struct LocalPair1 {
+        union {
+            HKey key;
+            uint64_t align8;
+        };
+        LocalRef1 value;
+        LocalPair1(const HKey& k, const LocalRef1& v) : value(v) { key = k; }
+    };
+    struct Helper {
+        static __forceinline HInsRes DoInsert(HashMap1* self, const HPair<IRefT1>& v) {
+            return self->insert(v, HTag());
+        }
+    };
+    HIter it = find(k);
+    if (it.node != mBuckets[mBucketCount])
+        return &((HNode<IRefT1>*)it.node)->value;
+    LocalPair1 p(k, LocalRef1());
+    return &((HNode<IRefT1>*)Helper::DoInsert(this, *reinterpret_cast<const HPair<IRefT1>*>(&p)).first.node)->value;}
 
 // @ 0x00a7c180
 IRefT2** HashMap2::Subscript(const HKey& k)
-{
-    {
-        HIter it = find(k);
-        if (it.node != mBuckets[mBucketCount])
-            return &((HNode<IRefT2>*)it.node)->value;
-    }
-    HPair<IRefT2> p;
-    p.key = k;
-    p.value = 0;
-    HInsRes ins = insert(p, HTag());
-    IRefT2** r = &((HNode<IRefT2>*)ins.first.node)->value;
-    if (p.value) p.value->Release();
-    return r;
-}
+{    struct LocalRef2 {
+        IRefT2* ptr;
+        LocalRef2() : ptr(0) {}
+        LocalRef2(const LocalRef2& o) : ptr(o.ptr) { if (ptr) ptr->AddRef(); }
+        ~LocalRef2() { if (ptr) ptr->Release(); }
+    };
+    struct LocalPair2 {
+        union {
+            HKey key;
+            uint64_t align8;
+        };
+        LocalRef2 value;
+        LocalPair2(const HKey& k, const LocalRef2& v) : value(v) { key = k; }
+    };
+    struct Helper {
+        static __forceinline HInsRes DoInsert(HashMap2* self, const HPair<IRefT2>& v) {
+            return self->insert(v, HTag());
+        }
+    };
+    HIter it = find(k);
+    if (it.node != mBuckets[mBucketCount])
+        return &((HNode<IRefT2>*)it.node)->value;
+    LocalPair2 p(k, LocalRef2());
+    return &((HNode<IRefT2>*)Helper::DoInsert(this, *reinterpret_cast<const HPair<IRefT2>*>(&p)).first.node)->value;}
 
 // @ 0x00a7c200
 void Registry::Set1(HKey key, IRefT1* val)

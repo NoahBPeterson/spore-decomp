@@ -459,6 +459,7 @@ void* SP_PendingObject();
 class cCreatureBase : public cSpatialObject {
 public:
     Vec3* GetIdentityColor();
+    Vec3* FUN_00c0bbc0();                            // 0x00c0bbc0 (GetDefaultIdentityColor)
     Vec3* GetActiveToolColor();
     void* GetToolById(int nToolId);
     void* GetActiveTool();
@@ -562,7 +563,6 @@ void* GetCreatureChain(void* pCreature);
 void RunCreatureAttackEffect(void* pCreature);
 void PlayToolEffect(int a, void* pTarget, void* pOwner);
 extern uint8_t gDefaultIdentityColor[0x10];
-void* FUN_00c0bbc0();                            // 0x00c0bbc0 (GetDefaultIdentityColor)
 // ---- items of slice s00c22fc0 end
 
 // ---- items of slice s00c23f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2045,14 +2045,13 @@ Vec3* cSPCreatureCitizen::GetBundlePosition(Vec3* pOut)
 
 // @ 0x00c23200
 Vec3* cCreatureBase::GetIdentityColor()
-{
-    if (mpActiveTool != nullptr)
+{    if (mpActiveTool != nullptr)
         return mpActiveTool->GetColor();
     if (mpPendingTool != nullptr) {
         Vec3* pColor = (Vec3*)(intptr_t)GetCreatureToolByKey(*(uint32_t*)((uint8_t*)mpPendingTool + 0x234));
         return pColor;
     }
-    return (Vec3*)FUN_00c0bbc0();
+    return FUN_00c0bbc0();
 }
 
 // @ 0x00c23230

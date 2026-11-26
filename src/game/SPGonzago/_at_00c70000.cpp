@@ -684,15 +684,17 @@ bool __cdecl FUN_00c7d090(void* p1, int32_t* p2)
 
 // @ 0x00c7d120
 void __cdecl SortRefs(void** begin, void** end, Vec3_s00c7_d120 org)
-{
-    if (begin == end)
+{    if (begin == end)
         return;
     for (void** it = begin + 1; it != end; ++it) {
         void* value = *it;
         if (value)
             RefAddRef(value);
         void** j = it;
-        while (j != begin && ((DistLess*)&org)->Less(value, j[-1])) {
+        while (j != begin) {
+            void* cmpVal = j[-1];
+            if (!((DistLess*)&org)->Less(value, cmpVal))
+                break;
             void* prev = j[-1];
             void* old  = *j;
             if (prev != old) {
@@ -714,8 +716,7 @@ void __cdecl SortRefs(void** begin, void** end, Vec3_s00c7_d120 org)
         }
         if (value)
             RefRelease(value);
-    }
-}
+    }}
 
 // @ 0x00c7d200
 bool __cdecl IsTargetable(void* self)

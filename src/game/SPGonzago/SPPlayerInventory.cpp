@@ -1011,8 +1011,7 @@ u8 cSPPlayerInventory::AddToInventory(void* item_, u32 a, bool flag)
 
 // @ 0x00ff4b10
 void cSPPlayerInventory::FUN_00ff4b10(cInvItem* item)
-{
-    cInvItem** p = mToolSet.mBegin;
+{    cInvItem** p = mToolSet.mBegin;
     cInvItem** e = mToolSet.mEnd;
     if (p != e) {
         do {
@@ -1030,12 +1029,11 @@ void cSPPlayerInventory::FUN_00ff4b10(cInvItem* item)
             *slot = item;
             if (item != 0) item->v04();
         }
-        if (local != 0) local->v08();
     } else {
         v.FUN_00f14270(v.mEnd, &local);
-        if (local != 0) local->v08();
+        item = local;
     }
-}
+    if (item != 0) item->v08();}
 
 // @ 0x00ff4b90
 void cSPPlayerInventory::UseToolSet(u32 set)

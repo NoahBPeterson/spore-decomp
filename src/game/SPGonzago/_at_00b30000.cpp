@@ -1400,11 +1400,11 @@ void FillN(Elem* dest, unsigned n, const Elem* src)
 }
 
 // @ 0x00b36280
-void CopyTo(Elem* first, Elem* last, Elem* dest)
-{
-    Elem* d = dest;
+Elem* CopyTo(Elem* first, Elem* last, Elem* dest)
+{    Elem* d = dest;
     for (; first != last; ++first, ++d)
         new (d) Elem(*first);
+    return d;
 }
 
 // @ 0x00b362c0

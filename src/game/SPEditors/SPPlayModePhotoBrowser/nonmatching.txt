@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 0062fee0 39 GetHeaderInfo: complete; shared Get(...) call tail (push 4/2 then common call) not reproduced
-00630470 15 IsPhotosWriting: complete; this/job register swap (edi/esi)
 006307a0 110 rbtree insert helper: complete; operator-new line-info args and node field copy schedule [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 esp] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 006308d0 58 cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 006309e0 47 eastl::operator+<wchar_t>: complete; strlen/append call setup order flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

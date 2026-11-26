@@ -5630,22 +5630,23 @@ RefPair* FUN_00f9ae80(RefPair* first, RefPair* last, RefPair* dst)
 
 // @ 0x00f9aee0
 void FUN_00f9aee0(float* p, unsigned int n, const float* src)
-{
-    if (n <= 0)
-        return;
-    float* q = p + 1;
-    do {
-        float* base = q - 1;
-        if (base) {
-            base[0] = src[0];
-            base[1] = src[1];
-            base[2] = src[2];
-            base[3] = src[3];
-            base[4] = src[4];
-        }
-        n--;
-        q += 5;
-    } while (n > 0);
+{    struct Vec3 {
+        float x, y, z;
+        Vec3(const Vec3& o) { x = o.x; y = o.y; z = o.z; }
+    };
+    struct Vec2 {
+        float u, v;
+        Vec2(const Vec2& o) { u = o.u; v = o.v; }
+    };
+    struct S {
+        Vec3 pos;
+        Vec2 uv;
+        S(const S& o) : pos(o.pos), uv(o.uv) {}
+    };
+    S* d = (S*)p;
+    const S* s = (const S*)src;
+    for (; n > 0; --n, ++d)
+        ::new ((void*)d) S(*s);
 }
 
 // @ 0x00f9af30

@@ -1,7 +1,6 @@
 009237c0  91   Server::GetLogReporter: complete; vector walk/return schedule differs
 00923ac0  87   rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)
 00923bc0  -    LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
-00923c90  13   LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
 00924060  144  rbtree::DoInsertValue: complete; traversal/insert schedule differs
 00924170  34   LogReporter::LogReporter: complete; string/notify schedule differs

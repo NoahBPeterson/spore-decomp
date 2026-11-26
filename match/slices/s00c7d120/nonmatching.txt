@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   (all compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, no /EHsc)
-00c7d120  15  SortRefs: instruction-identical except the comparator vector is built with the lanes in a different order and the pivot Vec3 is staged through the stack one slot earlier; equiv UNSUPPORTED (0/400 valid, Less resolution conflict)
 00c7d240  870  UpdateTarget: control flow reconstructed around the model distance/visibility queries, but the call argument staging and the target-cache branch order differ, so the body is not instruction-identical; equiv UNSUPPORTED (0/400 valid)
 00c7d6d0  34  Has: instruction-identical around the key test, but the inline search is emitted with the key pointer in ebx (original edx) and the out slot staged differently; equiv FAIL (5/5 valid; callee args [STK, 5] vs [STK, STK], so the out/key call shape is still suspect)
 00c7d700  84  cTargetList ctor: same stores and subobject constructions, but the compiler hoists the side-table stores (m7c/m294) and places the xorps zero-init at a different point, so the store schedule differs; equiv PASS (400 valid, 100.0% cov)

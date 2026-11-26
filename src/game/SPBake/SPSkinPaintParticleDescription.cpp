@@ -156,11 +156,11 @@ struct cSPSkinPaintParticlespecularColorCommand : EA::ArgScript::cCommandBase_s0
     cSPSkinPaintParticleEffectBlockCommand* mState;
     void Execute(cArguments_s0053_8e90& args);
 };
+}  // namespace
 struct cSPSkinPaintParticlebumpColorCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
     cSPSkinPaintParticleEffectBlockCommand* mState;
-    void Execute(cArguments_s0053_8e90& args);
+    void Execute(EA::ArgScript::cArguments_s0053_8e90& args);
 };
-}  // namespace
 // ---- items of slice s00538e90 end
 
 // ---- items of slice s00539d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -769,10 +769,10 @@ void cSPSkinPaintParticlespecularColorCommand::Execute(cArguments_s0053_8e90& ar
 // @ 0x00539cf0
 void cSPSkinPaintParticlebumpColorCommand::Execute(cArguments_s0053_8e90& args)
 {
-    BRUSH();
+    BrushDesc* obj = mState->mpDesc;
     size_t count = 0;
-    const char** argv = args.MainArguments(&count, 1, 1);
-    p->mBlend2 = EA::Swarm::ParseEnum(argv[0], kAlphaNames);
+    const char** list = args.MainArguments(&count, 1, 1);
+    obj->mBlend2 = EA::Swarm::ParseEnum(list[0], kAlphaNames);
 }
 
 // @ 0x00539d70

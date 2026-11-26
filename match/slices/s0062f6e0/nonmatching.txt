@@ -4,4 +4,3 @@
 0062f920 29 Shutdown: complete; effect-id local load order / register assignment (esi/edi swap)
 0062f9f0 437 LoadBackground: complete; register allocation (ebx zero reg, this in esi) and slot order differ
 0062fee0 46 GetHeaderInfo: complete; shared Get(...) call tail (push 4/2 then common call) not reproduced
-00630470 15 IsPhotosWriting: complete; this/job register swap (edi/esi)

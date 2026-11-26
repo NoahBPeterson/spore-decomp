@@ -64,7 +64,6 @@
 00be06c0 91 complete; GameTimeManager->Now() 64-bit add placement vs the rep-movsd push_back and timestamp store differ flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 00be0790 96 complete; std::_Tree lower_bound reproduced; insert call (DoInsert 0xde6a60 4-arg thiscall) arg setup differs flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 00be0b90 165 complete; stream acquisition via vt[0x20]->vt[0x18], erase/resize and the per-element serializer temp layout differ flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
-00be0c80 15 complete; identical control flow and virtual release; only edx/ecx register assignment differs flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 00be0d70 61 complete; Vec3 copy + DoAllocate(0x4aa350) + memcpy; register/loop layout of the copy differs flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 00be0dd0 106 complete; per-element operator_new_simulator/memcpy path and register allocation differ flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 00be0f20 124 complete; memcpy/erase arithmetic, AutoRef vector erase and the tail-call chain register allocation differ flags: /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

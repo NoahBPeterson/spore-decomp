@@ -122,9 +122,9 @@ int FUN_00e823a0(int param_1, int* param_2)
 void FUN_00e824d0()
 {
     FUN_00e82280();
-    int iVar1 = (int)gListSentinel;
+    int* p = gListSentinel;
     if (gListSentinel != 0) {
-        FUN_00e823e0();
-        FUN_00f47380((void*)iVar1);
+        ((void(__thiscall*)(void*))FUN_00e823e0)(gListSentinel);
+        FUN_00f47380(p);
     }
 }

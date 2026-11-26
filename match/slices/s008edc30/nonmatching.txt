@@ -7,7 +7,6 @@
 008ee400  133  PickingContext::PickTextItem: complete; the vector append + style assigns match, cl reorders the push/assign sequence (156 vs 158)
 008ee4a0  534  PickingContext::FlushAll: complete; the multi-pass flush loop matches, cl lays out the two return paths differently (645 vs 626)
 008ee720   18  RenderingContext::SubStyleSet (this+4): Typesetter::AddLineBreak member call now gives the `mov eax,[esp+8]/mov edx,[esp+4]` pair, but cl still drops the dead leading arguments (0,0) and elides the trailing `ret 8` (21 vs 25); ret-immediate rewriting is not steerable from source
-008ee770   14  regalloc: RenderingContext::SubStyleGet (this+4): the `add ecx,4` + GetApp call now matches (GetApp is a Typesetter member called on this+4), so the seam/offsets are right; cl still folds the `+0xf8` seam into one `[eax+0x33c]` load instead of the original's `add eax,0xf8` followed by `[eax+0x244]` (32 vs 37 bytes); fix1: quick check PASS (emulator found no mismatch)
 008ee7b0    8  RenderingContext::ScrollViewport: complete and correct; cl just assigns the base-pair additions to the other xmm register
 008ee810  161  RenderingContext::RenderingContext (from rects): complete; base ctor + field inits match, cl orders the fills differently (177 vs 173)
 008ee8c0  176  RenderingContext::RenderingContext (copy): complete; field copy order differs (197 vs 195)

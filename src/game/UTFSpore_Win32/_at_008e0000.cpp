@@ -1953,13 +1953,9 @@ void EA::XHTML::Layout::RenderingContext_s008e_dc30::SubStyleSetValue(const EA::
 
 // @ 0x008ee770
 void EA::XHTML::Layout::RenderingContext_s008e_dc30::SubStyleGet(EA::XHTML::Layout::Vec2* out)
-{
-    char* p = (char*)((EA::XHTML::Layout::Typesetter_s008e_dc30*)((char*)this + 4))->GetApp();
-    int a = *(int*)(p + 0x348);
-    EA::XHTML::Layout::Vec2* q = (EA::XHTML::Layout::Vec2*)(p + 0xf8);
-    *(int*)&out->x = a;
-    *(int*)&out->y = *(int*)((char*)q + 0x244);
-}
+{    char* p = (char*)((EA::XHTML::Layout::Typesetter_s008e_dc30*)((char*)this + 4))->GetApp() + 0xf8;
+    *(int*)&out->x = *(int*)(p + 0x250);
+    *(int*)&out->y = *(int*)(p + 0x244);}
 
 // @ 0x008ee7a0
 void EA::XHTML::Layout::RenderingContext_s008e_dc30::ReleaseScroll()

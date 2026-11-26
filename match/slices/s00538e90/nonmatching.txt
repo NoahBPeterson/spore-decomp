@@ -5,4 +5,3 @@
 00539980  326  cSPSkinPaintParticlerestrictCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
 00539bf0  13  cSPSkinPaintParticlediffuseColorCommand::Execute complete; only `this` vs pDesc slot swap (this forced below all named locals) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 memory]
 00539c70  13  cSPSkinPaintParticlespecularColorCommand::Execute complete; only `this` vs pDesc slot swap [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 return target]
-00539cf0  13  cSPSkinPaintParticlebumpColorCommand::Execute complete; only `this` vs pDesc slot swap

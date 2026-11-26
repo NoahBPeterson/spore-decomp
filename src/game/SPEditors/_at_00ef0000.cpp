@@ -6829,16 +6829,18 @@ void CGadget::Toggle(int show)
 // @ 0x00ef8590
 void FUN_00ef8590()
 {
-    if ((g_16c7b60_s00ef_7d90 | g_16c7b64) == 0)
+    if ((g_16c7b64 | g_16c7b60_s00ef_7d90) == 0)
         return;
-    Qpc now;
-    QueryPerformanceCounter(&now);
-    if (g_deadline - now.q >= 0)
-        return;
+    {
+        Qpc now;
+        QueryPerformanceCounter(&now);
+        if (g_deadline - now.q >= 0)
+            return;
+    }
     ((Stub*)&g_16c7b60_s00ef_7d90)->SetBoolProperty();
     Stub* audio = ((SimManager*)*(void**)&g_simMgr)->mpAudio;
     Stub* r = (Stub*)audio->FUN_00ed4b50(g_15acef0);
-    return r->ReleaseAll();
+    r->ReleaseAll();
 }
 
 // @ 0x00ef8600

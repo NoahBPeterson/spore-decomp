@@ -1602,8 +1602,7 @@ void FUN_00cc9890()
 
 // @ 0x00cc98e0
 Ornament* __stdcall FUN_00cc98e0(TribeObj* obj)
-{
-    if (obj == 0) {
+{    if (obj == 0) {
         return 0;
     }
 
@@ -1636,24 +1635,21 @@ Ornament* __stdcall FUN_00cc98e0(TribeObj* obj)
             }
         }
     }
-    if (bestIndex < 0) {
-        return found;
-    }
-    found = arr[bestIndex];
-    if (found == 0) {
-        return found;
-    }
+    if (bestIndex >= 0) {
+        found = arr[bestIndex];
+        if (found != 0) {
 use_found:
-    if (found->mSub34.pv43() != 0) {
-        IconTarget* target = (IconTarget*)found->mSub34.pv43();
-        if (target != 0) {
-            target->mFlags |= 4;
-            Vector3* pos = FUN_00b6f0c0(obj->m234);
-            target->mPos = *pos;
+            if (found->mSub34.pv43() != 0) {
+                IconTarget* target = (IconTarget*)found->mSub34.pv43();
+                if (target != 0) {
+                    target->mFlags |= 4;
+                    Vector3* pos = FUN_00b6f0c0(obj->m234);
+                    target->mPos = *pos;
+                }
+            }
         }
     }
-    return found;
-}
+    return found;}
 
 // @ 0x00cc99b0
 void TribeStrategy_s00cc_8ed0::FUN_00cc99b0(uint32_t param_2)

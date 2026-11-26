@@ -97,3 +97,4 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efe4a0@@YAXH@Z  00efe4a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef0570@@YAXXZ  00ef0570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efde90@SelCtx@@QAE_NH@Z  00efde90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef8590@@YAXXZ  00ef8590  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -2,3 +2,4 @@
 ../src/game/SPGonzago/SPCellResourceCatalog.cpp  ?FUN_00e82280@@YAXXZ  00e82280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellResourceCatalog.cpp  ?FUN_00e823a0@@YAHHPAH@Z  00e823a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellResourceCatalog.cpp  ?LoadResource@SP@@YAXPAH@Z  00e822c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellResourceCatalog.cpp  ?FUN_00e824d0@@YAXXZ  00e824d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

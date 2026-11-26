@@ -1726,21 +1726,28 @@ Holder7fbd50::Holder7fbd50()
 // @ 0x007fbdb0
 Pair8* f_7fbdb0(Pair8* first, Pair8* last, Pair8* dest)
 {
+  struct Helper {
+    static __forceinline Pair8* Copy(Pair8* it, Pair8* last, Pair8* d) {
+      for (; it != last; ++it, ++d) {
+        new (d) Pair8(*it);
+      }
+      return d;
+    }
+    static __forceinline void DestroyLoop(Pair8* it2, Pair8* last, Pair8* d2) {
+      for (; it2 != last; ++it2, ++d2) {
+      }
+    }
+    static __forceinline void Destroy(Pair8* first, Pair8* last, Pair8* dest) {
+      bool b2 = false;
+      DestroyLoop(first, last, dest);
+    }
+  };
   Pair8* result;
   {
     bool bSuccess = false;
-    Pair8* d = dest;
-    for (Pair8* it = first; it != last; ++it, ++d) {
-      new (d) Pair8(*it);
-    }
-    result = d;
+    result = Helper::Copy(first, last, dest);
   }
-  {
-    bool b2 = false;
-    Pair8* d2 = dest;
-    for (Pair8* it2 = first; it2 != last; ++it2, ++d2) {
-    }
-  }
+  Helper::Destroy(first, last, dest);
   return result;
 }
 
