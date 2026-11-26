@@ -25,7 +25,7 @@
 007f7b30 141 complete forward copy of cAnimationInfo; register schedule differs
 007f7c00 162 complete copy_backward of cAnimationInfo; register schedule differs
 007f7ce0 143 complete fill/copy of cAnimInfo from one source; register schedule differs
-007f7db0 158 complete backward fill/copy of cAnimInfo; register schedule differs
+007f7db0 158 logic: this is copy_backward, not a fill: it walks `last` and the third argument (the destination) backwards together and copies *--last into *--dest, returning dest (the lifter's byte-exact reading, vs2005-cpp l2c_search 2026-11-26). Retail also keeps pointers to +0x10 of both elements (the timer member's assignment), so the timer/function members are probably class types with their own operator=.; was: complete backward fill/copy of cAnimInfo; register schedule differs
 007f80d0 79 complete Position wrapper; cl materializes Point2DT temp in frame (original builds it in the outgoing arg area)
 007f8140 78 complete Rotation wrapper; cl materializes vector temp in frame (original builds it in the outgoing arg area)
 007f8350 73 complete vector copy-ctor; allocator tag/calling-convention codegen differs; equiv: FAIL (5/239 mismatched, ecx fixed via Vec8c member)
