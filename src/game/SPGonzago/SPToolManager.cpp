@@ -614,6 +614,9 @@ struct cEffectNode {
     void* mpObject;                             // 0x10
     void* mpEffect;                             // 0x14
 };
+struct cEffectTree {                            // eastl::rbtree of effect nodes
+    void Erase(cEffectNode* pNode);             // 0x0104ef30 (DoNukeSubtree)
+};
 struct cEffectLists {
     void* mpList0[3];                           // 0x00
     void* mpList1[3];                           // 0x0c
@@ -2407,17 +2410,19 @@ void ClearEffectLists(cEffectLists* pLists)
 }
 
 // @ 0x0104ef30
-void EraseEffectTree(cEffectNode* pNode)
+void cEffectTree::Erase(cEffectNode* pNode)
 {
     while (pNode != nullptr) {
-        void* pNext = pNode->mpRight;
-        ReleaseEffectHandler(pNode);
-        if (pNode->mpEffect != nullptr)
-            ((cIVisualEffect*)pNode->mpEffect)->v08();
-        if (pNode->mpObject != nullptr)
-            ((cIVisualEffect*)pNode->mpObject)->Release();
-        operator_delete__(pNode);
-        pNode = (cEffectNode*)pNext;
+        Erase((cEffectNode*)pNode->mpLeft);
+        void* pEffect = pNode->mpEffect;
+        cEffectNode* pNext = (cEffectNode*)pNode->mpRight;
+        if (pEffect != nullptr)
+            ((void(__thiscall*)(void*))(*(void***)pEffect)[0xc0 / 4])(pEffect);   // slot 48
+        IRefCounted* pObject = (IRefCounted*)pNode->mpObject;
+        if (pObject != nullptr)
+            pObject->Release();
+        FUN_00f47380(pNode);
+        pNode = pNext;
     }
 }
 
@@ -2443,7 +2448,7 @@ void cSPToolManager::ClearToolEffects()
         pNode = (cEffectNode*)pNode->mpRight;
     }
 
-    EraseEffectTree((cEffectNode*)mpEffectTreeRoot);
+    ((cEffectTree*)((char*)this + 0x110))->Erase((cEffectNode*)mpEffectTreeRoot);   // the map at +0x110
     mpEffectTreeRoot = (void*)this;
     pNode = (cEffectNode*)mpEffectTreeRoot;
     pNode->mpRight = (void*)pNode;

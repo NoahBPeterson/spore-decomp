@@ -19502,26 +19502,36 @@ void* ElemA::CopyAssign(void* o)
     return s;
 }
 
+struct WStr0dfe {                          // eastl::basic_string<wchar_t>
+    const wchar_t* mpBegin;
+    const wchar_t* mpEnd;
+    WStr0dfe& Assign(const wchar_t* first, const wchar_t* last);   // 0x00423650 assign(first, last)
+};
 // @ 0x00dfee80
 void* ElemB::CopyCtor(void* o)
 {
+    struct Block32 { uint32_t d[8]; };      // 32 bytes copied as one struct (rep movsd)
     void* s = this;
-    for (int i = 0; i < 8; ++i) ((uint32_t*)s)[i] = ((uint32_t*)o)[i];
+    *(Block32*)s = *(Block32*)o;
     *(uint8_t*)((char*)s + 0x20) = *(uint8_t*)((char*)o + 0x20);
     *(uint32_t*)((char*)s + 0x24) = *(uint32_t*)((char*)o + 0x24);
-    for (int i = 0; i < 8; ++i) ((uint32_t*)((char*)s + 0x28))[i] = ((uint32_t*)((char*)o + 0x28))[i];
+    *(Block32*)((char*)s + 0x28) = *(Block32*)((char*)o + 0x28);
     *(uint32_t*)((char*)s + 0x48) = *(uint32_t*)((char*)o + 0x48);
-    for (int i = 0; i < 8; ++i) ((uint32_t*)((char*)s + 0x50))[i] = ((uint32_t*)((char*)o + 0x50))[i];
+    *(Block32*)((char*)s + 0x50) = *(Block32*)((char*)o + 0x50);
     ((V4e0*)((char*)s + 0x70))->Assign((V4e0*)((char*)o + 0x70));
-    ((CStr*)((char*)s + 0x2788))->Assign((char*)o + 0x2788);
-    if ((void*)((char*)o + 0x2788 + 0x14) != (void*)((char*)s + 0x2788 + 0x14)) {
-        WStr_Assign((char*)s + 0x2788 + 0x14, 0, *(void**)((char*)o + 0x2788 + 0x14), *(void**)((char*)o + 0x2788 + 0x18));
-    }
-    *(uint32_t*)((char*)s + 0x27ac) = *(uint32_t*)((char*)o + 0x27ac);
-    *(uint32_t*)((char*)s + 0x27b0) = *(uint32_t*)((char*)o + 0x27b0);
-    if ((void*)((char*)o + 0x2788 + 0x2c) != (void*)((char*)s + 0x2788 + 0x2c)) {
-        WStr_Assign((char*)s + 0x2788 + 0x2c, 0, *(void**)((char*)o + 0x2788 + 0x2c), *(void**)((char*)o + 0x2788 + 0x30));
-    }
+    char* src = (char*)o + 0x2788;           // the trailing string block
+    char* dst = (char*)s + 0x2788;
+    ((CStr*)dst)->Assign(src);
+    WStr0dfe* srcName = (WStr0dfe*)(src + 0x14);
+    WStr0dfe* dstName = (WStr0dfe*)(dst + 0x14);
+    if (srcName != dstName)
+        dstName->Assign(srcName->mpBegin, srcName->mpEnd);
+    *(uint32_t*)(dst + 0x24) = *(uint32_t*)(src + 0x24);
+    *(uint32_t*)(dst + 0x28) = *(uint32_t*)(src + 0x28);
+    WStr0dfe* srcText = (WStr0dfe*)(src + 0x2c);
+    WStr0dfe* dstText = (WStr0dfe*)(dst + 0x2c);
+    if (srcText != dstText)
+        dstText->Assign(srcText->mpBegin, srcText->mpEnd);
     *(uint32_t*)((char*)s + 0x27c4) = *(uint32_t*)((char*)o + 0x27c4);
     *(uint32_t*)((char*)s + 0x27c8) = *(uint32_t*)((char*)o + 0x27c8);
     *(uint32_t*)((char*)s + 0x27cc) = *(uint32_t*)((char*)o + 0x27cc);

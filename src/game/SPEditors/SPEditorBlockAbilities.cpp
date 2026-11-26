@@ -1259,10 +1259,11 @@ void cSPEditorBlockAbilities_s0059_f510::ShutdownLayouts()
     int n = (int)(((char*)v->mpEnd - (char*)v->mpBegin) / 0x18);
     if (n > 0) {
         int offset = 0;
+        int left = n;
         do {
             ((cSPUILayout_s0059_f510*)((char*)v->mpBegin + offset))->Shutdown(1);
             offset += 0x18;
-        } while (--n != 0);
+        } while (--left != 0);
     }
     v->erase(v->mpBegin, v->mpEnd);
 }

@@ -2981,7 +2981,8 @@ void __cdecl WriteElem20Vector(ISerializer* pWriter, cVector<CElem20>& items)
 // @ 0x00c76170
 bool __cdecl WriteObjectLists(ISerializer* pWriter, cVector<CObjectList>& items)
 {
-    for (CObjectList* pList = items.mpBegin; pList != items.mpEnd; ++pList) {
+    CObjectList* pEnd = items.mpEnd;
+    for (CObjectList* pList = items.mpBegin; pList != pEnd; ++pList) {
         for (U32 i = 0; i < (U32)(pList->mpEnd - pList->mpBegin); ++i)
             pList->mpBegin[i]->Write(pWriter);
     }
