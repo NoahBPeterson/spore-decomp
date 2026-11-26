@@ -6924,27 +6924,21 @@ int FUN_00e69e00(int param_1, int param_2, int param_3, float param_4, float par
 
 // @ 0x00e69f90
 int FUN_00e69f90(int param_1, int param_2)
-{
-    int iVar1 = FUN_00e4cce0(0x14);
-    if (*(int*)(param_1 + 0x108) == iVar1) {
+{    if (*(int*)(param_1 + 0x108) == FUN_00e4cce0(0x14)) {
         FUN_00e679e0_s00e6_95f0(*(ObjRef*)(param_1 + 0xfc));
         if (param_2 == 6) return param_1 + 0x390;
         if (param_2 == 7) return param_1 + 0x391;
-    } else {
-        iVar1 = FUN_00e4cce0(0x18);
-        if (*(int*)(param_1 + 0x108) == iVar1) {
-            switch (param_2) {
-                case 8:  return param_1 + 0x392;
-                case 10: return param_1 + 0x393;
-                case 12: return param_1 + 0x394;
-                case 9:  return param_1 + 0x395;
-                case 11: return param_1 + 0x396;
-                case 13: return param_1 + 0x397;
-            }
+    } else if (*(int*)(param_1 + 0x108) == FUN_00e4cce0(0x18)) {
+        switch (param_2) {
+            case 8:  return param_1 + 0x392;
+            case 10: return param_1 + 0x393;
+            case 12: return param_1 + 0x394;
+            case 9:  return param_1 + 0x395;
+            case 11: return param_1 + 0x396;
+            case 13: return param_1 + 0x397;
         }
     }
-    return 0;
-}
+    return 0;}
 
 // @ 0x00e6a060
 bool FUN_00e6a060(int param_1, int param_2)

@@ -899,14 +899,15 @@ void* FUN_00e4a9f0(const wchar_t* path)
 
 // @ 0x00e4aa60
 cEntryNode* FUN_00e4aa60(const wchar_t* pText)
-{
-    uint32_t hash = FNV1_String16(pText, 0x811c9dc5, 1);
+{    uint32_t hash = FNV1_String16(pText, 0x811c9dc5, 1);
     int32_t key = gspAppDataGlobals->mSearch.GetPriority();
-    cEntryNode* pFound = (cEntryNode*)gspAppDataGlobals->mSearch.Find(&key);
+    cSearchMap* pSearch = &gspAppDataGlobals->mSearch;
+    cEntryNode* pFound = (cEntryNode*)pSearch->Find(&key);
     while (pFound) {
         if (pFound->mHash == hash)
             return pFound;
-        pFound = (cEntryNode*)gspAppDataGlobals->mSearch.Find(&key);
+        pSearch = &gspAppDataGlobals->mSearch;
+        pFound = (cEntryNode*)pSearch->Find(&key);
     }
     return 0;
 }

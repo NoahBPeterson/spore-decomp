@@ -9305,11 +9305,39 @@ bool cInterfaceState::IsIdle()
 
 // @ 0x00de0ae0
 void __thiscall cGalaxyGameEntryImpl::FUN_00de0ae0(uint32_t arg)
-{
+{    struct Sw {
+        uint64_t mnStartTime;
+        uint64_t mnTotalElapsedTime;
+        int32_t  mnUnits;
+        float    mfCyclesToUnits;
+        void Restart() {
+            if (mnUnits == 1) {
+                mnStartTime = __rdtsc();
+            } else {
+                LARGE_INTEGER li;
+                QueryPerformanceCounter(&li);
+                mnStartTime = (uint64_t)li.QuadPart;
+            }
+            mnTotalElapsedTime = 0;
+        }
+    };
+    struct Sub {
+        void*    ma8;
+        void*    mac;
+        uint32_t mPad[2];
+        Sw       mSw;
+        void Update() {
+            ma8 = mac;
+            mSw.Restart();
+        }
+    };
+
     void* pAudio = FUN_00a206f0();
-    uint32_t v = 0;
+    uint32_t v;
     if (pAudio != 0)
         v = ((uint32_t(__thiscall*)(void*))VFN(pAudio, 0x20))(pAudio);
+    else
+        v = 0;
 
     pAudio = FUN_00a206f0();
     if (pAudio != 0) {
@@ -9323,22 +9351,7 @@ void __thiscall cGalaxyGameEntryImpl::FUN_00de0ae0(uint32_t arg)
     ((void(__thiscall*)(void*, int, int))VFN(pObj, 0x60))(pObj, 0, 1);
 
     m38 = arg;
-    ma8 = mac;
-
-    uint32_t nHi;
-    if (mc8 == 1) {
-        unsigned long long nTsc = __rdtsc();
-        mb8 = (uint32_t)nTsc;
-        nHi = (uint32_t)(nTsc >> 32);
-    } else {
-        LARGE_INTEGER li;
-        QueryPerformanceCounter(&li);
-        mb8 = li.u.LowPart;
-        nHi = li.u.HighPart;
-    }
-    mc4 = 0;
-    mc0 = 0;
-    mbc = nHi;
+    ((Sub*)&ma8)->Update();
 }
 
 // @ 0x00de0bc0
@@ -11949,14 +11962,16 @@ void cGameInfoVector::FUN_00de9e20(uint32_t nCount)
 
 // @ 0x00de9ec0
 void __cdecl FUN_00de9ec0()
-{
-    if (g_nSavedGameLimit == 0)
+{    if (g_nSavedGameLimit == 0)
         return;
 
     ((cSavedGameEntry*)FUN_00dd9190(2))->FUN_00ddc820();
     uint32_t nCount = ((cRecorderUI*)FUN_00df5f40())->FUN_00df66e0();
 
-    cGameInfoVector games;
+    struct Vec20 : public cGameInfoVector {
+        uint32_t mAlloc[2];
+    };
+    Vec20 games;
     games.mpBegin = 0;
     games.mpEnd = 0;
     games.mpCapacity = 0;
@@ -11967,15 +11982,14 @@ void __cdecl FUN_00de9ec0()
 
     uint32_t nLoaded = (uint32_t)((int32_t)(games.mpEnd - pBegin) / 0xbc);
     uint32_t nWalk = MinRef(nLoaded, g_nSavedGameLimit);
-    cGameInfoKey* pKey = &((cGameInfo_s00de_9a00*)pBegin)->mKey7c;
     for (uint32_t i = 0; i < nWalk; ++i)
     {
+        cGameInfoKey* pKey = &((cGameInfo_s00de_9a00*)pBegin)[i].mKey7c;
         if (pKey->mn2c != 0)
         {
             cStarManager* pStars = (cStarManager*)StarManager(pKey->mn00);
             ((cSavedGameEntry*)FUN_00dd9190(pStars->FUN_00ba6d80()))->FUN_00ddb9f0();
         }
-        pKey = (cGameInfoKey*)((uint8_t*)pKey + 0xbc);
     }
 
     games.FUN_00de5ee0(pBegin, games.mpEnd);

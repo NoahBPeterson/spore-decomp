@@ -739,8 +739,8 @@ void FUN_00798ed0(int param_1, float param_2, unsigned int *param_3, unsigned in
         *param_5 = local_8;
         return;
     case 3:
-        if (param_2 <= 0.5f) { *param_5 = *param_3; return; }
-        *param_5 = *param_4;
+        if (param_2 > 0.5f) { *param_5 = *param_4; return; }
+        *param_5 = *param_3;
         return;
     case 4:
         *param_5 = *param_3;
@@ -748,8 +748,7 @@ void FUN_00798ed0(int param_1, float param_2, unsigned int *param_3, unsigned in
     case 5:
         *param_5 = *param_4;
         return;
-    }
-}
+    }}
 
 // @ 0x00798fb0
 void FUN_00798fb0(int param_1, float param_2, int *param_3, int *param_4, int *param_5)

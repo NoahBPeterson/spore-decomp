@@ -9,4 +9,3 @@
 00a98c90 153 FloatVec push_back loop; original re-derives sub pointer per iteration, register allocation differs (mine 202 vs 202). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 00a98d60 171 FloatVec push_back loop + penumbra option; store scheduling/register allocation differ (mine 221 vs 214). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 00a98ea0 137 Copy-construct of LightEffectSub; sub-object vector copies and register allocation differ (mine 168 vs 186). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#2 ecx]
-00a98f60 7 Register tie only (ebx vs ebp, eax/edx swap); byte-equivalent logic, no source change resolves it. flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

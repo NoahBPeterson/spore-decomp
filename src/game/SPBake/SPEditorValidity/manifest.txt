@@ -22,3 +22,4 @@
 ../src/game/SPBake/SPEditorValidity.cpp  ??AUIntMap@@QAEAAUElem16Vector@@ABI@Z  004f6720  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?Flip@Bits@@QAEPAU1@XZ  004f65d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004f21e0@@YA_NHH@Z  004f21e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FindLowestPriority@@YAHPAUPriorityEntry@@0II@Z  004f68f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

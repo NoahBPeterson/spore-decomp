@@ -648,9 +648,9 @@ NOINLINE SlotIter& SlotIter::increment()
 
 // @ 0x00abea00
 NOINLINE int __cdecl SlotDistance(SlotIter_s00ab_e110 first, SlotIter_s00ab_e110 last)
-{
+{  u32 end = last.mIndex + (u32)last.mpOwner;
   int n = 0;
-  while ((u32)first.mpOwner + first.mIndex != (u32)last.mpOwner + last.mIndex) {
+  while (end != first.mIndex + (u32)first.mpOwner) {
     first.increment();
     ++n;
   }

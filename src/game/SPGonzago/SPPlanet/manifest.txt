@@ -99,3 +99,4 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?Write@VisiblePlanet@@QAE_NPAX@Z  00c6ff00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?Write2@VisiblePlanet@@QAE_NPAX@Z  00c70010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?Read@VisiblePlanet@@QAE_NPAX@Z  00c70090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?InsertionSortVec3Pointers@@YAXPAPAUVec3@@0MMM@Z  00b00b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

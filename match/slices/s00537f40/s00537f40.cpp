@@ -402,6 +402,9 @@ struct cSPSkinPaintParticleEffectBlockCommand : cBlockCommandStateT, EA::ArgScri
     void OnRegister(EA::ArgScript::cIParser* parser, EA::ArgScript::cState* state);
 };
 
+struct cSPSkinPaintParticlechainCommand : PaintCompat { cSPSkinPaintParticlechainCommand() {}
+    virtual void ParseLine(cArguments& args); };
+
 namespace {
 #define CMD(N) struct N : PaintCompat { N() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticlebrushCommand : PaintCompat {
@@ -409,8 +412,6 @@ struct cSPSkinPaintParticlebrushCommand : PaintCompat {
     virtual void ParseLine(cArguments& args);
 };
 struct cSPSkinPaintParticlecurveCommand : PaintCompat { cSPSkinPaintParticlecurveCommand() {} virtual void ParseLine(cArguments& args); };
-struct cSPSkinPaintParticlechainCommand : PaintCompat { cSPSkinPaintParticlechainCommand() {}
-    virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticlealignCommand : PaintCompat { cSPSkinPaintParticlealignCommand() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticleinitDirCommand : PaintCompat { cSPSkinPaintParticleinitDirCommand() {} virtual void ParseLine(cArguments& args); };
 struct cSPSkinPaintParticleattractCommand : PaintCompat { cSPSkinPaintParticleattractCommand() {} virtual void ParseLine(cArguments& args); };
@@ -499,22 +500,15 @@ void cSPSkinPaintParticlebrushCommand::ParseLine(cArguments& args)
 
 // @ 0x00538af0
 void cSPSkinPaintParticlechainCommand::ParseLine(cArguments& args)
-{
-    BrushDesc538* obj;
-    {
-    Description538* p;
-    Description538* brush;
-    brush = p;
-    brush = mState->mpDesc;
-    obj = brush ? &brush->mBrush : 0;
-    }
+{    struct Base0 { void* vptr; int mnRefCount; };
+    struct LocalDesc : Base0, BrushDesc538 {};
+    BrushDesc538* obj = static_cast<BrushDesc538*>((LocalDesc*)(Description538*)mState->mpDesc);
     size_t desc = 0;
     const char** other = args.MainArguments(&desc, 1, 1);
     EA::Swarm::cEffectsParser* src = mState->mState;
     obj->mComponent = src->FindComponent(other[0], 0x26);
     if (obj->mComponent < 0)
-        do { } while (0);
-}
+        do { } while (0);}
 
 // @ 0x00538b80
 void cSPSkinPaintParticlediffuseColorCommand::ParseLine(cArguments& args)

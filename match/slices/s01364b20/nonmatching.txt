@@ -4,6 +4,3 @@
 01365320 299 8-row attribute table: same repeated-constant hoisting and store placement around the rep movsd differ (same class as 01364f50); equiv PASS (400/400 inputs, 100% coverage)
 0136da30 299 6-row attribute table: same repeated-constant hoisting and store placement around the rep movsd differ (same class as 01364f50); equiv UNSUPPORTED (unresolved reference _FUN_00de70a0)
 0136dcb0 28 4-row attribute table: records identical, but cl caches a different pair of repeated constants in ebp/ebx (original fn20+fn2c, ours fn2c+fn30), so those two stores land one slot apart; equiv UNSUPPORTED (unresolved reference _FUN_00de70a0)
-01370950 11 "ProgressBarSuccessSound" node: values equal, but the original keeps the three zero value words in three separate callee-saved registers (esi/edi/ebx) live across the FNVHash call, ours reuses one zeroed eax; equiv UNSUPPORTED (0/400 inputs valid, every run discarded on import _decode_pointer)
-013709b0 11 "ProgressBarFailSound" node: same three-separate-zeroed-registers difference as 01370950; equiv UNSUPPORTED (0/400 inputs valid, every run discarded on import _decode_pointer)
-013717e0 11 "BackgroundEffectID" node: same three-separate-zeroed-registers difference as 01370950; equiv UNSUPPORTED (0/400 inputs valid, every run discarded on import _decode_pointer)

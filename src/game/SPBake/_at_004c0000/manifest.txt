@@ -12,3 +12,4 @@
 ../src/game/SPBake/_at_004c0000.cpp  ?FUN_004c6520@@YAPAUElem@@PAU1@00@Z  004c6520  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_004c0000.cpp  ?GetSkin@cSPEditorSkinManager_s004c_4650@SP@@QAEPAXI@Z  004c49e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_004c0000.cpp  ?SetDefaultMaterial@cSPEditorSkinManager_s004c_4650@SP@@QAEXI@Z  004c4f60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ?FUN_004c6a70@@YAPAUElem@@PAU1@00@Z  004c6a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

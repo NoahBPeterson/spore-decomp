@@ -1,5 +1,4 @@
 00798d30 168 complete equivalence PASS; SSE identity rebuild / call dispatch schedule differs
-00798ed0 5 complete equivalence PASS; x87 unsigned rounding (fild/fistp + FPU control word) not reproduced
 00799110 276 complete equivalence PASS; case-body register schedule differs
 00799290 69 UNSUPPORTED only 4/400 valid inputs (fault read/write); refcounted copy kept as written
 00799320 92 complete equivalence FAIL-KEPT dead eax residue (orig leaves dest ptr in eax, ours leaves source)

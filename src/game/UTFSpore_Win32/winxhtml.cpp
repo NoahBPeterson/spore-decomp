@@ -1415,25 +1415,23 @@ bool WinXHTML_s0099_4240::OnFocusChange(int param_2, void* param_3)
     if (param_3 == (self != 0 ? (void*)(self + 4) : 0))
         return true;
     if (*(char*)(self + 0xa8e4) != 0) {
-        void* w = (void*)(self + 4);
-        void (__thiscall* fn)(void*, void*) =
-            *(void(__thiscall**)(void*, void*))((char*)*(void**)w + 0x114);
         WinMsg m;
         m.code = 0x51a1a2e;
         m.f3 = 0;
         m.f4 = 0;
         m.f5 = 0;
         m.f6 = 0;
-        fn(w, &m);
+        ((Win_s009946b0*)(self + 4))->SendMsg(&m);
         *(char*)(self + 0xa8e4) = 0;
     }
     if (*(void**)(self + 0x478) != 0) {
-        ((XHTMLPage*)(self + 0x218))->SetImageRequester(0, 0);
-        ((XHTMLPage*)(self + 0x218))->FUN_008ecc90(0);
-        ((XHTMLPage*)(self + 0x218))->Layout();
+        XHTMLPage* page = (XHTMLPage*)(self + 0x218);
+        page->SetImageRequester(0, 0);
+        page->FUN_008ecc90(0);
+        page->Layout();
         FUN_00994240();
     }
-    VF(self + 4, 0x90, void(__thiscall*)(void*))(self + 4);
+    ((Win_s009946b0*)(self + 4))->Invalidate();
     return true;
 }
 

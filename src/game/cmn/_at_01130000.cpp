@@ -454,14 +454,9 @@ int __cdecl SNDSTRMI_parsedata(int* hdr, uint32_t size, uint32_t a3, void* a4, c
 // @ 0x01132b50
 int __cdecl SNDSTRMI_destroyall(void)
 {
-	int i = 0;
-	if ((*(uint8_t*)0x016e7bfe) != 0)
+	for (int i = 0; i < g_numStreams; i++)
 	{
-		do
-		{
-			SNDSTRMI_Destroy(i);
-			i++;
-		} while (i < (int)(uint32_t)(*(uint8_t*)0x016e7bfe));
+		SNDSTRMI_Destroy(i);
 	}
 	return 0;
 }

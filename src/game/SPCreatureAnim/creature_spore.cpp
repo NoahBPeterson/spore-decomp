@@ -1872,17 +1872,18 @@ void creature_mesh_instance_data::RefreshWorldState()
 
 // @ 0x009c8970
 void Elem28ConstructRange(Elem28* first, Elem28* last, const Elem28* src)
-{
-    while (first != last) {
-        first->key = src->key;
-        first->idx = src->idx;
-        const float* s = (const float*)((const char*)src + 0x8);
+{    if (first != last) {
         float* d = (float*)((char*)first + 0x14);
-        d[-3] = s[0]; d[-2] = s[1]; d[-1] = s[2];
-        d[0] = s[3]; d[1] = s[4]; d[2] = s[5]; d[3] = s[6]; d[4] = s[7];
-        ++first;
-    }
-}
+        do {
+            first->key = src->key;
+            ((uint*)d)[-4] = src->idx;
+            const float* s = src->f;
+            d[-3] = s[0]; d[-2] = s[1]; d[-1] = s[2];
+            d[0] = s[3]; d[1] = s[4]; d[2] = s[5]; d[3] = s[6]; d[4] = s[7];
+            ++first;
+            d += 10;
+        } while (first != last);
+    }}
 
 // @ 0x009c89d0
 void Elem28FillN(Elem28* dst, ulong n, const Elem28* src)
