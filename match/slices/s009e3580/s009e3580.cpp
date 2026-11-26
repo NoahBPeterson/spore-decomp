@@ -4,7 +4,7 @@
 //
 //   @ 0x009e3580  Anim::gcmdd::gcmdd()                    default ctor of the 0x1c8 record
 //   @ 0x009e3740  gcmddHost::Create(int)                  allocate a gcmdd into the host, refresh it
-//   @ 0x009e3790  Inner::operator=(const Inner&)          scalar/item/gait field copy
+// 0x009e3790 (byte-exact lifted version: match/slices/s009e3790/s009e3790.cpp)  Inner::operator=(const Inner&)          scalar/item/gait field copy
 //   @ 0x009e37c0  Inner::Blend(const Inner*, float, const Inner*)   masked per-field lerp
 //   @ 0x009e3cf0  Channel::Channel()                      one animation channel cell
 //   @ 0x009e3de0  Channel::Reset()                        put a channel cell back to defaults
@@ -242,7 +242,7 @@ void gcmddHost::Create(int /*unused*/)
 
 // ------------------------------------------------------------------ @ 0x009e3790
 
-// @ 0x009e3790
+// 0x009e3790 (byte-exact lifted version: match/slices/s009e3790/s009e3790.cpp)
 Inner& Inner::operator=(const Inner& o)
 {
     if (this != &o) {

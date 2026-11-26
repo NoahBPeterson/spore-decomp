@@ -1,0 +1,1 @@
+slices/s00fc2040/s00fc2040.cpp  _FUN_00fc2040  00fc2040  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

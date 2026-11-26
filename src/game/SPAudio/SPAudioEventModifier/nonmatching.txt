@@ -2,7 +2,6 @@
 00a39280 20 cEventModifier::AddPrimitive: complete; original places the `return false` epilogue before the success block after the Init test, ours after. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a392d0 39 cEventModifier::RemovePrimitive: complete; original materializes the slot with lea and keeps idx in edi, ours reloads mpBegin with different registers. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a39350 847 cEventModifier::ModifyEvent: complete; large recursive function, call scheduling and register allocation differ. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00a39620 202 cEventModifier::CommandResolve: complete; RbTree/map lookup register allocation differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a39770 69 cEventModifierPrimitiveFootTypeBase::~cEventModifierPrimitiveFootTypeBase: complete; original inlines all 10 ResponseCurve dtors, ours emits a compact helper-call form. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a39930 68 cEventModifierPrimitiveFootTypeBase::cEventModifierPrimitiveFootTypeBase: complete; 10 ResponseCurve ctor calls + EH-state scheduling differ; vtable store address not mappable. difftest UNSUPPORTED (own vtable copy). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00a39a40 346 PrimVector::DoInsertValue: complete; eastl grow/insert algorithm re-expressed in C++, register use and helper-call splitting differ. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

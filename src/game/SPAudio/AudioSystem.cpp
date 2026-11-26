@@ -8000,7 +8000,7 @@ bool Sys_s00a2_90b0::UnregisterKey(void* key)
     return true;
 }
 
-// @ 0x00a291b0
+// 0x00a291b0 (byte-exact lifted version: match/slices/s00a291b0/s00a291b0.cpp)
 void Sys_s00a2_90b0::ClearUnregTable()
 {
     HTable_s00a2_90b0* t = &mUnregTable;

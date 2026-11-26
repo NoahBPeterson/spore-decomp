@@ -1,0 +1,94 @@
+// 0x00fcb5e0: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
+// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: src/game/SPMovie/movieplayer.cpp, match/slices/s00fcb210/s00fcb210.cpp.
+
+extern "C" unsigned char g_01491d7c[];
+extern "C" void __cdecl FUN_00921df0(...);
+struct C_00fcbe90 { void FUN_00fcbe90(); };
+struct C_00fcc010 { void FUN_00fcc010(unsigned int, unsigned int); };
+struct C_00fcc150 { void FUN_00fcc150(); };
+struct C_011e6bf0 { int FUN_011e6bf0(); };
+
+// @ 0x00fcb5e0
+extern "C" int __fastcall FUN_00fcb5e0(char* self, int edx_unused)
+{
+    int t1002;
+    int t1003;
+    int t1005;
+    int t1009;
+    int t1013;
+    int t1014;
+    int t1015;
+    int t1016;
+    int t1023;
+    int t1026;
+    int t1027;
+    int t1028;
+    int t1029;
+    int t13;
+    int t1030;
+    int t1031;
+    int t1035;
+    int t1039;
+    int t1040;
+    int t1043;
+    int t1046;
+    int t1049;
+    t1002 = (int)((int)(self));
+    t1003 = (int)(*(int*)((char*)(t1002) + 336));
+    if (t1003 != (int)2) {
+        if (t1003 <= (int)2) goto Lfcb6de;
+        if (t1003 <= (int)4) goto Lfcb61b;
+        return (int)(t1003);
+    }
+    t1005 = (int)(*(int*)((char*)(t1002) + 276));
+    *(int*)((char*)(t1002) + 336) = (int)((int)3);
+    ((C_00fcc150*)(t1005))->FUN_00fcc150();
+    t1009 = (int)(*(int*)((char*)(t1002) + 272));
+    ((C_00fcbe90*)(t1009))->FUN_00fcbe90();
+    Lfcb61b:;
+    t1013 = (int)(*(int*)((char*)(t1002) + 184));
+    if (t1013 != (int)0) {
+        t1014 = (int)(*(int*)((char*)(t1013) + 52));
+        *(int*)((char*)(t1002) + 248) = (int)(t1014);
+    }
+    t1015 = (int)(*(int*)((char*)(t1002) + 272));
+    t1016 = (int)(t1002 + (int)188);
+    ((C_00fcc010*)(t1015))->FUN_00fcc010((unsigned int)(t1013), (unsigned int)(t1016));
+    FUN_00921df0((unsigned int)((int)g_01491d7c));
+    t1023 = (int)(*(int*)((char*)(t1002) + 304));
+    if (t1023 != (int)0) {
+        t1026 = (int)((C_011e6bf0*)(t1023))->FUN_011e6bf0();
+    } else {
+        t1026 = (int)((int)0);
+    }
+    t1027 = (int)(t1026);
+    t1028 = (int)(t1027 - (int)*(int*)((char*)(t1002) + 576));
+    *(int*)((char*)(t1002) + 576) = (int)(t1026);
+    t1029 = (int)(*(int*)((char*)(t1002) + 580));
+    t13 = (int)(t1029 << (int)3);
+    t1030 = (int)(t1028 + t13);
+    t1031 = (int)(t1030 + t1029);
+    t1003 = (int)(t1031 / (int)10);
+    t1035 = (int)(*(int*)((char*)(t1002) + 180));
+    t1039 = (int)(t1035 - (int)1);
+    *(int*)((char*)(t1002) + 580) = (int)(t1003);
+    if ((int)*(int*)((char*)(t1002) + 248) == t1039) {
+        if (t1003 != (int)0) {
+            t1040 = (int)(*(int*)((char*)(t1002) + 304));
+            if (t1040 != (int)0) {
+                t1043 = (int)((C_011e6bf0*)(t1040))->FUN_011e6bf0();
+                t1003 = (unsigned char)((int)(t1043) == (int)((int)0));
+                if (t1003 == (int)0) goto Lfcb6de;
+            }
+        }
+        t1046 = (int)(*(int*)((char*)(t1002) + 288));
+        if (t1046 != (int)0) {
+            t1049 = (int)((C_011e6bf0*)(t1046))->FUN_011e6bf0();
+            t1003 = (unsigned char)((int)(t1049) == (int)((int)0));
+            if (t1003 == (int)0) goto Lfcb6de;
+        }
+        *(int*)((char*)(t1002) + 336) = (int)((int)5);
+    }
+    Lfcb6de:;
+    return (int)(t1003);
+}

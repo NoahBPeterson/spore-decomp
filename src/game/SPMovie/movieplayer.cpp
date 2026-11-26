@@ -1236,7 +1236,7 @@ void rw::movie::MoviePlayer_s00fc_b210::Decode()
     }
 }
 
-// @ 0x00fcb5e0
+// 0x00fcb5e0 (byte-exact lifted version: match/slices/s00fcb5e0/s00fcb5e0.cpp)
 void rw::movie::MoviePlayer_s00fc_b210::Render()
 {
     if (mState == 2)

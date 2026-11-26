@@ -170,7 +170,7 @@ struct hkProcessCollisionOutputBackup {
     hkProcessCollisionOutputBackup(const hkProcessCollisionOutput& out);
     hkProcessCollisionOutputBackup* restore(hkProcessCollisionOutput& out);
 };
-// @ 0x010dd1d0  hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup
+// 0x010dd1d0 (byte-exact lifted version: match/slices/s010dd1d0/s010dd1d0.cpp)  hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup
 hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup(const hkProcessCollisionOutput& out)
 {
     m_firstFreeContactPoint = out.m_firstFreeContactPoint;
@@ -184,7 +184,7 @@ hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup(const hkProcessCo
         for (int i = 0; i < 0x402; i++) d[i] = s[i];
     }
 }
-// @ 0x010dd260  hkProcessCollisionOutputBackup::restore
+// 0x010dd260 (byte-exact lifted version: match/slices/s010dd260/s010dd260.cpp)  hkProcessCollisionOutputBackup::restore
 hkProcessCollisionOutputBackup* hkProcessCollisionOutputBackup::restore(hkProcessCollisionOutput& out)
 {
     out.m_firstFreeContactPoint = m_firstFreeContactPoint;

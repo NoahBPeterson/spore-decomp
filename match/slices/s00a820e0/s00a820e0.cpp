@@ -450,7 +450,7 @@ void cVisualEffect::GetSourceTransform(void* out)
     ((cSPTransformOps*)out)->FUN_00537dc0((char*)this + 0x9c);
 }
 
-// @ 0x00a828a0
+// 0x00a828a0 (byte-exact lifted version: match/slices/s00a828a0/s00a828a0.cpp)
 void cVisualEffect::ApplyParams()
 {
     cEffectParams* p = p17c;

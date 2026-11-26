@@ -3,7 +3,6 @@
 0112dc80 19 System::GetDecoderRegistry: complete; `cmp [m],0; jne; mov eax,[m]` reload shape vs our cached load (LTCG test-then-reload); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (369 valid, 100% cov)
 0112df80 29 StreamPool::GetInstance: complete; /LTCG registry-walk register scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (400 valid, 41.7% cov)
 0112dfa0 620 StreamPool::AcquireStream: complete; /LTCG-heavy unrolled eviction scan (identical behaviour, register/schedule only); flags /vc71 /O2 /MD /Gy /TP; equiv PASS at --inputs 1500 (1460 valid, 63.7% cov); default 400 -> WEAK (390 valid, 42.3% cov)
-0112e1e0 16 StreamPool::ReleaseStream: complete; 16-bit decrement test (movzx eax,word/test ax,ax vs reuse of dec flags); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (398 valid, 100% cov)
 01137aa0 183 complete FreeRequest; LTCG register allocation across System::Free/Lock calls; the decoder callback is called with the player in ecx in the original, modelled as a __fastcall(this, 0, dec) cast so the fake-call `this` matches; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (169 valid, 100% coverage, no mismatch)
 01137bc0 98 complete FreeFinishedRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 37.9% coverage, no mismatch)
 01137c30 67 complete FreeAllRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (293 valid, 100% coverage)

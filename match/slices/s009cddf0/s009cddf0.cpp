@@ -268,7 +268,7 @@ void __cdecl FUN_009ce560(float* e, int n)
 }
 
 // =====================================================================
-// @ 0x009ce5e0
+// 0x009ce5e0 (byte-exact lifted version: match/slices/s009ce5e0/s009ce5e0.cpp)
 //   reset the record's rotation/scale scratch fields.
 // =====================================================================
 void SA::FUN_009ce5e0()

@@ -358,7 +358,7 @@ public:
     void FUN_00f998f0();                                      // 0x00f998f0
 };
 
-// @ 0x00fa5cc0
+// 0x00fa5cc0 (byte-exact lifted version: match/slices/s00fa5cc0/s00fa5cc0.cpp)
 void cTerrainSphere::DrawLayerRTT(void** a1, void* a2, void*)
 {
     cDirectPropertyList* props = sAppProperties;

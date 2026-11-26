@@ -679,7 +679,7 @@ void Sound::Tick(uint32_t a, float dt) {
 // =====================================================================================
 // 0xa1b320
 // =====================================================================================
-// @ 0x00A1B320
+// 0x00a1b320 (byte-exact lifted version: match/slices/s00a1b320/s00a1b320.cpp)
 bool SoundGraph::Remove(void* target) {
     void** it = mListC7c;
     while (it != mListC80) {

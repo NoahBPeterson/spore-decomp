@@ -537,7 +537,7 @@ LAB_009a84c2:
 // ===========================================================================
 // 0x009a84f0  eastl::rbtree<...>::find
 // ===========================================================================
-// @ 0x009a84f0
+// 0x009a84f0 (byte-exact lifted version: match/slices/s009a84f0/s009a84f0.cpp)
 int* rbtree_find(int* param_1, uint32_t param_2, int param_3, uint32_t* param_4)
 {
     uint32_t uVar3 = 0;
