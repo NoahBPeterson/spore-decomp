@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/RelativeNavigator.cpp  ?CreateInstance@BasicFactory_RelativeNavigator@UTFWinControls@EA@@QAEPAVNavigator@23@HPAX@Z  00980b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

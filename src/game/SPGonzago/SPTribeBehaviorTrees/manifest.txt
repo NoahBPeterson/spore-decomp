@@ -97,3 +97,4 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?PushDefault@SlotVector@@QAEXXZ  00dbe380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?CreateObject@GroupMovementPool@@QAEIXZ  00dbe4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daeea0@@YGXPAUSlot250@@0@Z  00daeea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6e50@@YAMPAUcSPCreatureCitizen@@@Z  00da6e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

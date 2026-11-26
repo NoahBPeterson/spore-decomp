@@ -1,2 +1,1 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-../src/game/SPAudio/eapdtext.cpp  ?gatom_free@Eapd@Audio@EA@@YAXH@Z  00a509f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

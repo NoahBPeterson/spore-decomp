@@ -1130,16 +1130,17 @@ void* Big3::DeletingDtor(char flags)
 // @ 0x0080ba10
 ObjB* __fastcall ObjBCtor(ObjB* o)
 {
-    o->vtbl = (void*)ObjB_vtable;
-    o->f1 = 0;
-    o->f2 = 0;
-    void* p = (char*)o + 0x24;
-    o->f7 = (int)p;
-    o->f4 = (int)p;
-    o->f3 = (int)p;
+    ObjB*& oRef = o;
+    oRef->vtbl = (void*)ObjB_vtable;
+    oRef->f1 = 0;
+    oRef->f2 = 0;
+    void* p = (char*)oRef + 0x24;
+    oRef->f7 = (int)p;
+    oRef->f4 = (int)p;
+    oRef->f3 = (int)p;
     p = (char*)p + 0x5370;
-    o->f5 = (int)p;
-    return o;
+    oRef->f5 = (int)p;
+    return oRef;
 }
 
 // @ 0x0080baa0

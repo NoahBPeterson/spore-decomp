@@ -1,4 +1,3 @@
 0075de80  209  complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs; equiv: FAIL (ours faults at eip=3000008e) after making it cRenderer member [equiv: WEAK 95/400 valid inputs (need 200), 37.9% coverage (need 60%); no behavioural mismatch, residual is discarded import:GetMonitorInfoA in ScreenAspectRatio plus one fault(read)]
 0075dff0  127  complete; cRenderer::SubRender layer walk + virtual draw, argument/register layout differs [equiv: WEAK 213/400 valid inputs (need 200), 38.2% coverage (need 60%); no behavioural mismatch, residual is discarded fault/pool-limit cases]
 0075e330  48  complete; cRenderer::NumLayers (end-begin)/0x14 under mutex, scheduling differs
-0075e3b0  1  complete; cRenderer::LayerInfoAtIndex, cl keeps base+index across Unlock instead of the final pointer

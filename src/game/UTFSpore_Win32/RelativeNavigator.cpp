@@ -234,12 +234,13 @@ EA::UTFWinControls::Navigator* EA::UTFWinControls::BasicFactory_RelativeNavigato
     if (mem != 0) {
         Navigator_baseCtor(mem);
         ((void**)mem)[6] = EA::UTFWinControls::vt_async_13fa72c;
-        ((void**)mem)[0] = EA::UTFWinControls::vt_1444238;
-        ((void**)mem)[1] = EA::UTFWinControls::vt_1444220;
-        ((void**)mem)[3] = EA::UTFWinControls::vt_1442188;
-        ((void**)mem)[6] = EA::UTFWinControls::vt_1442170;
-        ((void**)mem)[7] = (void*)1;
-        return (EA::UTFWinControls::Navigator*)mem;
+        void*& memRef = mem;
+        ((void**)memRef)[0] = EA::UTFWinControls::vt_1444238;
+        ((void**)memRef)[1] = EA::UTFWinControls::vt_1444220;
+        ((void**)memRef)[3] = EA::UTFWinControls::vt_1442188;
+        ((void**)memRef)[6] = EA::UTFWinControls::vt_1442170;
+        ((void**)memRef)[7] = (void*)1;
+        return (EA::UTFWinControls::Navigator*)memRef;
     }
     return 0;
 }

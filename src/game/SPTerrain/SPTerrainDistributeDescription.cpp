@@ -460,13 +460,14 @@ unsigned __fastcall FUN_00f63190(cTerrainDistributeCommand* p)
 {
     ((cAppPropsFields*)p)->ctor();              // 0x0083cdd0 AppPropsFields ctor
     p->mVtbl = (int)&g_0148f28c;
-    p->mHash34 = 0x33109bb;
-    FUN_00f63000(&p->mDesc);
-    p->mInstaller = 0;
-    p->mpStrBegin = (int*)&g_01667bac;
-    p->mpStrEnd = (int*)&g_01667bac;
-    p->mStrCap = (int*)&g_01667bad;
-    return (unsigned)(size_t)p;
+    cTerrainDistributeCommand*& pRef = p;
+    pRef->mHash34 = 0x33109bb;
+    FUN_00f63000(&pRef->mDesc);
+    pRef->mInstaller = 0;
+    pRef->mpStrBegin = (int*)&g_01667bac;
+    pRef->mpStrEnd = (int*)&g_01667bac;
+    pRef->mStrCap = (int*)&g_01667bad;
+    return (unsigned)(size_t)pRef;
 }
 
 // @ 0x00f631e0

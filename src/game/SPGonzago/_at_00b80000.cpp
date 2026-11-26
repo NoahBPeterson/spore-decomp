@@ -1144,10 +1144,11 @@ cKey3* cPlanetModel_s00b8_d190::FUN_00b8dd60(cKey3* out)
 // @ 0x00b8dde0
 void cPlanetModel_s00b8_d190::FUN_00b8dde0(cKey3* key, int32_t unused)
 {
-    if (key->m0 != mField1A4 || key->m4 != mField1A8 || key->m8 != mField1AC) {
-        mField1A4 = key->m0;
-        mField1A8 = key->m4;
-        mField1AC = key->m8;
+    cKey3*& keyRef = key;
+    if (keyRef->m0 != mField1A4 || keyRef->m4 != mField1A8 || keyRef->m8 != mField1AC) {
+        mField1A4 = keyRef->m0;
+        mField1A8 = keyRef->m4;
+        mField1AC = keyRef->m8;
     }
 }
 

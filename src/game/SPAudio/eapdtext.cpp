@@ -2233,13 +2233,14 @@ void canvas_symbolatom(void* a1, void* a2, void* a3, void* a4, void* a5)
 namespace EA { namespace Audio { namespace Eapd {
 void gatom_free(int g)
 {
-    if (**(char**)((char*)g + 0x50) != '\0') {
+    int& gRef = g;
+    if (**(char**)((char*)gRef + 0x50) != '\0') {
         sympair out;
-        sympair* r = (sympair*)canvas_realizedollar((void**)&out, *(void**)((char*)g + 0x34),
-                             *(void**)((char*)g + 0x4c), *(const char**)((char*)g + 0x50));
-        sys_vgui_sym((unsigned)g, (unsigned)r->name, (unsigned)r->thing);
+        sympair* r = (sympair*)canvas_realizedollar((void**)&out, *(void**)((char*)gRef + 0x34),
+                             *(void**)((char*)gRef + 0x4c), *(const char**)((char*)gRef + 0x50));
+        sys_vgui_sym((unsigned)gRef, (unsigned)r->name, (unsigned)r->thing);
     }
-    gfxstub_deleteforkey((void*)g);
+    gfxstub_deleteforkey((void*)gRef);
 }
 }}}  // namespace EA::Audio::Eapd
 

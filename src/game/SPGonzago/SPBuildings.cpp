@@ -2078,18 +2078,19 @@ float __cdecl FUN_00bcd480_(int empireID, float fallback, float value)
 // @ 0x00bcd4e0
 void cOwnerT::SetModelKey2(void* pKey)
 {
-    u32* k = (u32*)pKey;
+    void*& pKeyRef = pKey;
+    u32* k = (u32*)pKeyRef;
     (void)k;
-    if (((u32*)pKey)[0] != *(u32*)((u8*)this + 0x90) ||
-        ((u32*)pKey)[1] != *(u32*)((u8*)this + 0x94) ||
-        ((u32*)pKey)[2] != *(u32*)((u8*)this + 0x98)) {
-        if ((((u32*)pKey)[2] & 0xff00) != 0x7e00) {
-            *(u32*)((u8*)this + 0x1f0) = ((u32*)pKey)[0];
-            *(u32*)((u8*)this + 0x1f4) = ((u32*)pKey)[1];
-            *(u32*)((u8*)this + 0x1f8) = ((u32*)pKey)[2];
+    if (((u32*)pKeyRef)[0] != *(u32*)((u8*)this + 0x90) ||
+        ((u32*)pKeyRef)[1] != *(u32*)((u8*)this + 0x94) ||
+        ((u32*)pKeyRef)[2] != *(u32*)((u8*)this + 0x98)) {
+        if ((((u32*)pKeyRef)[2] & 0xff00) != 0x7e00) {
+            *(u32*)((u8*)this + 0x1f0) = ((u32*)pKeyRef)[0];
+            *(u32*)((u8*)this + 0x1f4) = ((u32*)pKeyRef)[1];
+            *(u32*)((u8*)this + 0x1f8) = ((u32*)pKeyRef)[2];
         }
         if (*(u8*)((u8*)this + 0x1fc) == 0) {
-            return ((void (__thiscall*)(void*, void*))FUN_00c88810)(this, pKey);
+            return ((void (__thiscall*)(void*, void*))FUN_00c88810)(this, pKeyRef);
         }
     }
 }

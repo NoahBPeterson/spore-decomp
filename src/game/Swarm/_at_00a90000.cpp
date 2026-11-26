@@ -3091,20 +3091,21 @@ void* FUN_00a98480(void* stream, int version)
 {
 	SwarmDesc* obj = 0;
 	SwarmDesc* p = (SwarmDesc*)operator_new(0x34, "Swarm", 0, 0, 0, 0);
-	if (p != 0) {
-		p->mn04 = 0;
-		p->mpVtbl = (void*)vtable_SwarmDesc;
-		p->mn08 = 0;
-		p->mn0c = 0;
-		p->mn10 = 0;
-		p->mn14 = 0;
-		p->mn18 = 0;
-		p->mn1c = 0;
-		p->mStr.mpBegin = gEmptyString16;
-		p->mStr.mpEnd = gEmptyString16;
-		p->mStr.mCapacity = (u32_s00a9_78d0)gEmptyString16Cap;
-		p->mf30 = 0.0f;
-		obj = p;
+	SwarmDesc*& pRef = p;
+	if (pRef != 0) {
+		pRef->mn04 = 0;
+		pRef->mpVtbl = (void*)vtable_SwarmDesc;
+		pRef->mn08 = 0;
+		pRef->mn0c = 0;
+		pRef->mn10 = 0;
+		pRef->mn14 = 0;
+		pRef->mn18 = 0;
+		pRef->mn1c = 0;
+		pRef->mStr.mpBegin = gEmptyString16;
+		pRef->mStr.mpEnd = gEmptyString16;
+		pRef->mStr.mCapacity = (u32_s00a9_78d0)gEmptyString16Cap;
+		pRef->mf30 = 0.0f;
+		obj = pRef;
 	}
 	FUN_00a97f90(stream, version, obj);
 	return obj;
