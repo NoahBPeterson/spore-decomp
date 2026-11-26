@@ -383,7 +383,7 @@ void Host3::Method7270(void* boxState, void* arg)
     } while (it != end);
 }
 
-// @ 0x006e73d0
+// 0x006e73d0 (byte-exact lifted version: match/slices/s006e73d0/s006e73d0.cpp)
 void Host3::DispatchList(unsigned char* list, int arg)
 {
     if (*list != 0) {

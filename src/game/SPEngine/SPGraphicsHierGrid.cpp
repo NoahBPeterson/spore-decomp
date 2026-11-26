@@ -970,7 +970,7 @@ void __thiscall PtrVec::insert(void** pos, void** value)
     mpCap = (void**)((char*)pNew + cap * 4);
 }
 
-// @ 0x00702660
+// 0x00702660 (byte-exact lifted version: match/slices/s00702660/s00702660.cpp)
 void __stdcall HashTable_ClearBuckets(CellNode** buckets, unsigned count)
 {
     for (unsigned i = 0; i < count; i++) {
@@ -1274,7 +1274,7 @@ int __thiscall HierGridStub::Clear(unsigned index)
     return result;
 }
 
-// @ 0x00702da0
+// 0x00702da0 (byte-exact lifted version: match/slices/s00702da0/s00702da0.cpp)
 void __thiscall HierGridStub::Remove(unsigned index)
 {
     void* deb = *(void**)&mSlots;

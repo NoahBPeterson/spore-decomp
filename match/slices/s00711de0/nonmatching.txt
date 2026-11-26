@@ -1,8 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
-00712320 131 hashtable::DoFreeNodes variant (node +0x24/+0x28/+0x34/+0x4c); DestroyRange is thiscall VecBase::DestroyRange(ecx=node+0x24, pops 8) and the return eax is the incoming eax for n==0, pArray otherwise; remaining diff is register allocation [equiv: PASS 434 valid]
 00712760  89 fixed_vector copy ctor (inline buffer at +0x18, pool/base +0x10); layout now matches the original and the out-of-line assign(first,last,&src) thiscall call shape is reproduced; remaining diff is the store schedule [equiv: PASS 550 valid]
-007127d0 177 state object copy (9 dwords + fixed-vector ctor); the vector copy ctor is now a real out-of-line call; remaining diff is the field-copy/unroll schedule [equiv: PASS 281 valid]
-00712850 174 state object copy (a[0] + b[1..8] + fixed-vector ctor); the original hands the ctor &b.m0[8] (b+0x20); remaining diff is the field-copy/unroll schedule [equiv: PASS 407 valid]
 00712b20  41 hashtable<string>::DoFreeNodes wrapper (embedded hashtable at +4); register allocation differs
 00712cb0 124 cMaterialManager::GetMaterials; extra frame locals and loop register assignment differ [equiv: PASS 291 valid]
 007123a0  59  cMaterialManager::Shutdown (complete: remove materials, clear fixed table, release file parser and invalid texture, clear 255 PS fragments twice); atomic refcount release block takes different registers (rc kept in ecx not eax) [equiv: WEAK]

@@ -208,7 +208,7 @@ void FUN_00ef8590() {
 // ---------------------------------------------------------------------------
 extern "C" void* __cdecl EA_Audio_GetSystemAT();   // 0xa206f0
 
-// @ 0x00ef8600
+// 0x00ef8600 (byte-exact lifted version: match/slices/s00ef8600/s00ef8600.cpp)
 void CGadget::AudioToggle(int id) {
     releaseAll();
     VObj* c = (VObj*)((VObj*)((Stub*)mpWindow)->FindWindowByID(id + 1000, 1))->s4();

@@ -3,7 +3,6 @@
 007afe10  139  SP::cDXTCompressJobData::RunJob: full row loop + completion, scheduling differs
 007aff00  250  SP::WriteImageDataAsTexture: full texture upload + per-mip sizing, register/loop shape differs
 007b01d0  216  row-loop handler (premultiply path): the frozen replay's call trace is byte-identical (DownsampleSurface with the same args, then the Continuation call with the same args) and eax/edx/esp/x87 all match; the only reported difference is `fake call #0 this` (ecx at the generated-pointer Continuation call), an emulator artifact of the unresolved slot, not a behavioral mismatch. Source: downsample the (slot-1,slot) pair, advance the slot, and on the last slot either premultiply RGB by (0xff-a) with rounding or hand back via job->Continuation. Register allocation swaps the this/job callee-saved pair (retail ebp=this/edi=job, cl15 edi=this/ebp=job). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
-007b02f0   81  (equiv UNSUPPORTED: unresolved ref ??1AutoVec after marker fix) SP::cTexturePreload dtor: EH frame and member order differ
 007b07e0   99  SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
 007b0980  193  eastl vector assignment: helper call arg order/scheduling differs
 007af8b0  264  sprite alpha blit (by-value ImgRef params, /GS-): loop register allocation / dst base spill differs [equiv: WEAK 55.7% coverage]

@@ -1,4 +1,3 @@
-00694210  66  Hoare partition: full algorithm present; cl rotates the two scan loops differently
 006943b0  66  move_backward over 0x60-byte objects with two string assigns; addressing/register base differs
 00694c10  200  EA::ConvertToString8 wrapper: temp-string build, self-check and assign reproduced; target span also covers the adjacent 16-bit wrapper (0x694c80), so sizes differ
 00694d00  186  introsort: size/depth cutoff, median-of-three pivot and recursive partition all present; register/loop scheduling differ

@@ -239,7 +239,7 @@ SP::cVolumeDescription::cVolumeDescription() {
   }
 }
 
-// @ 0x007EE630  SP::VolumeRead
+// 0x007ee630 (byte-exact lifted version: match/slices/s007ee630/s007ee630.cpp)  SP::VolumeRead
 extern "C" void* VolumeRead(int* reader) {
   SP::cVolumeDescription* v = (SP::cVolumeDescription*)operator new(0xf0, "Swarm", 0, 0, 0, 0);
   if (v) new (v) SP::cVolumeDescription();
@@ -309,7 +309,7 @@ void VolumeCmd::SliceSpacing(EA::ArgScript::cArguments* args) {
   mParams->mSliceSpacing = ArgToFloat(mArgConverter, *p);
 }
 
-// @ 0x007EE7B0  "material" command (resource id)
+// 0x007ee7b0 (byte-exact lifted version: match/slices/s007ee7b0/s007ee7b0.cpp)  "material" command (resource id)
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments* args) {
   void** p = args->MainArguments(1);
   extern uint32_t HashName(const char*, uint32_t, int);   // 0x00932e80 (equiv t3)

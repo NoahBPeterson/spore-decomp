@@ -2179,7 +2179,7 @@ void cCloudSurfaceCommand::Execute(EA::ArgScript::cArguments_s00f5_7590& args)
     mState->mFlags |= 0x1000;
 }
 
-// @ 0x00f57ba0
+// 0x00f57ba0 (byte-exact lifted version: match/slices/s00f57ba0/s00f57ba0.cpp)
 void cCloudEffect_s00f5_7590::Execute(EA::ArgScript::cArguments_s00f5_7590& args)
 {
     int count;

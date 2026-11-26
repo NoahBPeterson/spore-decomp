@@ -338,7 +338,7 @@ ResNode_6ac3c0* ResNodeList_6ac3c0::DoCreateNode(const ResNodeRef_6ac3c0& value)
     return n;
 }
 
-// @ 0x006ac440
+// 0x006ac440 (byte-exact lifted version: match/slices/s006ac440/s006ac440.cpp)
 uint32_t* FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
 {
     uint32_t* p = dst;

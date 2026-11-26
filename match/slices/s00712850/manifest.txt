@@ -1,0 +1,1 @@
+slices/s00712850/s00712850.cpp  @FUN_00712850@16  00712850  /O2 /MD /Gy /EHsc /TP /arch:SSE

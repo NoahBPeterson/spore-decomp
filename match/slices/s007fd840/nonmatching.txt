@@ -1,7 +1,6 @@
 # va diff reason
 007fd840 57 complete; DampedPeriodic periodic-time (slot25); fcos/x87 schedule differs
 007fd890 149 complete; DampedPeriodic eval (slot24); now calls Ev::Eval (0x7f9550) / C_TF::IsValid (0x7facf0) thiscall; logf still inlined as x87 fyl2x, frame/schedule differs; equiv PASS
-007fde00 48 complete; SerItem vector load; loop/register schedule differs
 007fe7d0 176 complete; BoolStateEvent predicate switch; receiver is the embedded object at self+0x18 (not a pointer deref) and the jump table is [0]=7fe83f [1]=7fe810 [2]=7fe88e [3]=7fe86f; logic matches, register/local schedule differs; equiv PASS
 007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esi]
 007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs

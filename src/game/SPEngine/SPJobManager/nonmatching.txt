@@ -11,8 +11,6 @@
 00690630 378 complete, not byte-exact: FailJobDependents walks the dependent chain and splits into strong (FailJob) / weak-free (mFreeLinks + conditional ScheduleJob) / weak-kept, then moves kept nodes back and clears the local list; differs in register allocation and the possibly-null link idiom.
 006907e0 102 complete; QueueJobUnderLock EH/register near-miss
 006908a0 104 complete; PromoteJobPriorityUnderLock register near-miss
-00690930 83 complete; SetJobPriorityUnderLock register near-miss
-00690b50 62 complete; CheckDependentPriority near-miss
 00691260 149 complete; AddJobDependency (deps/dependents list splice) near-miss
 00691680 1337 complete CircularRef (bidirectional job-dependency search, fixed hash sets + stacks); frame slot offsets shifted 4, EH/dtor layout differs
 00691d30 417 complete RunJob; list-unlink/relink scheduling and edi/ebp register choice differ

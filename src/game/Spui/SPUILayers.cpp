@@ -1059,7 +1059,7 @@ void __thiscall LayerInfoVec::dtor()
     if (b && b != inline_) GameFree(b);
 }
 
-// @ 0x0080ead0
+// 0x0080ead0 (byte-exact lifted version: match/slices/s0080ead0/s0080ead0.cpp)
 void __thiscall cSPUILayeredObject_s0080_e6b0::dtor()
 {
     u8* self = (u8*)this;

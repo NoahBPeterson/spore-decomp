@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008310a0  191 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 377 valid inputs, 100.0% coverage (all insns)
 00831170  92  SetImageColor: factory/create + CopyFrom inlining schedule differs; equiv PASS: 381 valid inputs, 73.3% coverage
 008311f0  92  SetField18At: factory/create path force-inlined (as in original); equiv PASS: 348 valid inputs, 73.3% coverage
 00831270  92  SetField20At: same clone-of-template schedule differs; equiv PASS: 356 valid inputs, 73.3% coverage

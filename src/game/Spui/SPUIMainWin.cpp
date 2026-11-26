@@ -823,7 +823,7 @@ bool MainWin_s0081_33f0::InitHitMaskFactory()
     return true;
 }
 
-// @ 0x008137f0
+// 0x008137f0 (byte-exact lifted version: match/slices/s008137f0/s008137f0.cpp)
 bool MainWin_s0081_33f0::InitStringFactories()
 {
     Mgr* m = (Mgr*)GetManager();

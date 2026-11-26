@@ -3,7 +3,6 @@
 0068c820  149  GetExplicitIdStartA (narrow): isdigit/isxdigit must be called with the byte zero-extended (unsigned char), not sign-extended [equiv: PASS 367 valid, 73.0% cov]
 0068c460  36  FreeQueue::Drain: takes no stack argument (ret 0); the callback function pointer comes from TryPop's out[1], not from the caller [equiv: PASS 231 valid, 68.4% cov]
 0068c590  195  FreeQueue::Flush: inline vector DoInsertValue schedule
-0068cd40  47  PackStr::InsertCStr: inlined strlen codegen shape
 0068c330  451  FreeQueue::TryPop: thiscall ret 4; 64-bit tagged-head CAS (lock cmpxchg8b) loop, node next tagged ptr at node+0x08, ABA tag bumped on pop [equiv: FAIL 66/71 valid, 89.6% cov, 0 call-trace diff; residual mPush.hi (this+0x0c) 0 vs 1 from cmpxchg8b flag/return codegen]
 0068c9e0  392  PackStr::Insert: thiscall ret 4; eastl::string::insert(pos, first, last) with SSO/heap branches (memcpy/memmove) [equiv: UNSUPPORTED 0/400 valid (input generator cannot fabricate a valid PackStr)]
 0068d1c0  206  PackStr::Swap: thiscall ret 4; SSO test on +0xc then copy-construct tmp from this, Assign both ways, free tmp (memcpy grow copy) [equiv: WEAK 143 valid, 64.8% cov, 0 mismatch]

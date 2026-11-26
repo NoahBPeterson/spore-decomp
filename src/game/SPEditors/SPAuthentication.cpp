@@ -1762,7 +1762,7 @@ class RefCountTemplate_s0060_87b0 {
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 namespace SP { namespace Pollen { IAuthManager* AuthManager(); }}  // 0x00607a60 (stays in the slice: not this object's)
 
-// @ 0x00606d00
+// 0x00606d00 (byte-exact lifted version: match/slices/s00606d00/s00606d00.cpp)
 void * SP::Pollen::cAuthManager::AsInterface(EA::COM::InterfaceId typeID)
 {
   switch ((int)typeID) {

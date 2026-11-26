@@ -235,7 +235,7 @@ bool Obj::M53D0()
     return true;
 }
 
-// @ 0x007F5410
+// 0x007f5410 (byte-exact lifted version: match/slices/s007f5410/s007f5410.cpp)
 void* Obj::M5410(int type)
 {
     if (type == 0x105a93d) {
@@ -677,7 +677,7 @@ void* __cdecl CreateTimeSmooth(void* out, float a2, float a3, float a4, float a5
     return out;
 }
 
-// @ 0x007F6170
+// 0x007f6170 (byte-exact lifted version: match/slices/s007f6170/s007f6170.cpp)
 void* __cdecl CreateTimeDamped(void* out, float a2, float a3, float a4, float a5, float a6,
                                float a7, float a8)
 {

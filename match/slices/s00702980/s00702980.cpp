@@ -245,7 +245,7 @@ int __thiscall HierGridStub::Clear(unsigned index)
     return result;
 }
 
-// @ 0x00702da0
+// 0x00702da0 (byte-exact lifted version: match/slices/s00702da0/s00702da0.cpp)
 void __thiscall HierGridStub::Remove(unsigned index)
 {
     void* deb = *(void**)&mSlots;

@@ -464,7 +464,7 @@ cSplitController* SplitVec::Allocate(unsigned n, cSplitController* first, cSplit
     return buf;
 }
 
-// @ 0x007d35b0
+// 0x007d35b0 (byte-exact lifted version: match/slices/s007d35b0/s007d35b0.cpp)
 cGameModelDescription* cGameModelDescription::Assign(cGameModelDescription* src) {
     mStateID = src ? src->mStateID : 0;
     mFlags   = src->mFlags;

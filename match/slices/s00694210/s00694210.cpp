@@ -78,7 +78,7 @@ extern "C" void FUN_00694bf0(CString* dst, CString* src)
 }
 
 // =====================================================================
-// @ 0x00694210  Hoare partition of 0x3c-byte records by mId
+// 0x00694210 (byte-exact lifted version: match/slices/s00694210/s00694210_lifted.cpp)  Hoare partition of 0x3c-byte records by mId
 // =====================================================================
 Elem* FUN_00694210(Elem* first, Elem* last, Elem value)
 {

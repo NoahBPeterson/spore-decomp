@@ -567,7 +567,7 @@ void ChartFillN_6de8f0(ChartIt_6de850 first, unsigned n, const ChartElem_6de850&
         new (&*cur) ChartElem_6de850(value);
 }
 
-// @ 0x006de980
+// 0x006de980 (byte-exact lifted version: match/slices/s006de980/s006de980.cpp)
 void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;
@@ -591,7 +591,7 @@ void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_
     FUN_006de4e0(param_1, param_2, param_4, param_5);
 }
 
-// @ 0x006de9f0
+// 0x006de9f0 (byte-exact lifted version: match/slices/s006de9f0/s006de9f0.cpp)
 void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;

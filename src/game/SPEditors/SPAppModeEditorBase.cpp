@@ -9716,7 +9716,7 @@ void SP::cAppModeEditorBase_s0057_7130::SetSomeBlock(int param)
         DoSomeOther(0, -1);
 }
 
-// @ 0x00577520
+// 0x00577520 (byte-exact lifted version: match/slices/s00577520/s00577520.cpp)
 void SP::cAppModeEditorBase_s0057_7130::UpdateBlockState()
 {
     void* p = Ref<void*>(this, 0xcc);

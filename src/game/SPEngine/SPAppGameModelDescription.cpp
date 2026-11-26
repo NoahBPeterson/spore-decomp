@@ -1644,7 +1644,7 @@ void SplitVecInsert(Vec<cSplitController>* v, cSplitController* pos, cSplitContr
     v->mpBegin = buf; v->mpEnd = end; v->mpCapacity = buf + newCap;
 }
 
-// @ 0x007d35b0
+// 0x007d35b0 (byte-exact lifted version: match/slices/s007d35b0/s007d35b0.cpp)
 cGameModelDescription_s007d_2a30* cGameModelDescription_s007d_2a30::Assign(cGameModelDescription_s007d_2a30* src)
 {
     cGameModelDescription_s007d_2a30* self = this;

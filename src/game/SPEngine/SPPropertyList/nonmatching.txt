@@ -17,7 +17,6 @@
 006a25a0 129 SP::cDirectPropertyList::GetDescription - complete; inlined lower_bound + string-Variant accessor (hashtable find 0x6a19b0, Destruct 0x93db80); register allocation and block layout differ [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2660 121 SP::cDirectPropertyList::GetIntProperty - complete; inlined lower_bound + VariantT<int> conversion (0x60d990); register allocation differs [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2710 124 SP::cDirectPropertyList::GetFloatProperty - complete; inlined lower_bound + VariantT<float> conversion (0x6a1a10); register allocation differs [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
-006a27d0 30 SP::cDirectPropertyList::HasProperty - complete; 0<key<num returns true, otherwise the inherited lookup is called (no tail call) and its bool widened to a full-width 0/1 [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2940 100 eastl::vector<pair>::insert(iterator,value) - complete; append fast path inlined, DoInsertValue only when growing [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2a80 64 SP::cPropertyList::Clear - complete; same copy/destroy/shrink sequence plus the modification count [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2b20 34 SP::cDirectPropertyList::Clear - complete flags: /O2 /MD /Gy /EHsc /TP /GS-

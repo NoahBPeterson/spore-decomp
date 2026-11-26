@@ -825,7 +825,7 @@ void PackStr::Insert(char* pos, const char* first, const char* last)
     mpCapacity = dst + newCap;
 }
 
-// @ 0x0068cd40
+// 0x0068cd40 (byte-exact lifted version: match/slices/s0068cd40/s0068cd40.cpp)
 PackStr* PackStr::InsertCStr(uint32 id, const char* s)
 {
     const char* e = s;

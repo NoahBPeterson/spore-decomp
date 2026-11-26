@@ -6,4 +6,3 @@
 008103a0  70  complete; retail materialises the delta in a stack slot ([esp+0xc]=0, [esp+0x10]=count) and tests it with jg, ours folds the clamp into lea/test with the vcall bracket laid out differently; size 65 vs 86. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (387 valid, 100.0% coverage).
 00810020  20  complete; ctor register allocation (zero in eax, this in esi) differs
 008100d0  7   complete; derived-vtable store scheduling / pop edi placement differ
-00810310  90  complete; visibility compare/object re-load schedule differs; equiv PASS (250 valid, 100% cov)

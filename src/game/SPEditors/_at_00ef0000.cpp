@@ -3736,7 +3736,7 @@ void __thiscall Strategy::FUN_00ef0c80()
     *(u32*)((char*)gm + 0x110) -= 1;
 }
 
-// @ 0x00ef0cd0
+// 0x00ef0cd0 (byte-exact lifted version: match/slices/s00ef0cd0/s00ef0cd0.cpp)
 void __thiscall Strategy::FUN_00ef0cd0()
 {
     Strategy* this_ = this;
@@ -6843,7 +6843,7 @@ void FUN_00ef8590()
     r->ReleaseAll();
 }
 
-// @ 0x00ef8600
+// 0x00ef8600 (byte-exact lifted version: match/slices/s00ef8600/s00ef8600.cpp)
 void CGadget::AudioToggle(int id)
 {
     releaseAll();
@@ -8014,7 +8014,7 @@ bool __cdecl FUN_00efca60(char* a)
     return 1;
 }
 
-// @ 0x00efcae0
+// 0x00efcae0 (byte-exact lifted version: match/slices/s00efcae0/s00efcae0.cpp)
 void __cdecl FUN_00efcae0()
 {
     int app = SP_App();

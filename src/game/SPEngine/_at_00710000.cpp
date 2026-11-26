@@ -1620,7 +1620,7 @@ uint32_t* __cdecl MinOfThree(uint32_t* a, uint32_t* b, uint32_t* c, RecordCmp co
     return b;
 }
 
-// @ 0x00714910
+// 0x00714910 (byte-exact lifted version: match/slices/s00714910/s00714910.cpp)
 void* __cdecl Fill24(uint32_t* dst, uint32_t n, const uint32_t* src)
 {
     for (; n != 0; --n) {
@@ -1777,7 +1777,7 @@ AdapterCtor::AdapterCtor()
 {
 }
 
-// @ 0x00714ec0
+// 0x00714ec0 (byte-exact lifted version: match/slices/s00714ec0/s00714ec0.cpp)
 void __stdcall AllocAndCopy(uint32_t n, uint32_t* first, uint32_t* last)
 {
     uint32_t* dst = n ? (uint32_t*)EastlNew(n * 4, "Graphics", 0, 0,
@@ -2252,7 +2252,7 @@ void MeshBuilder::pushColor(const Vec4_s0071_6110& c, int index)
     v80[index].v.push_back(packed);
 }
 
-// @ 0x007168c0
+// 0x007168c0 (byte-exact lifted version: match/slices/s007168c0/s007168c0.cpp)
 void MeshBuilder::resizeV8(int n, const Vec3& v)
 {
     v8.v.reserve((int)(v8.v.mpEnd - v8.v.mpBegin) + n);
@@ -2260,7 +2260,7 @@ void MeshBuilder::resizeV8(int n, const Vec3& v)
         v8.v.push_back(v);
 }
 
-// @ 0x00716930
+// 0x00716930 (byte-exact lifted version: match/slices/s00716930/s00716930.cpp)
 void MeshBuilder::resizeV1c(int n, const Vec3& v)
 {
     v1c.v.reserve((int)(v1c.v.mpEnd - v1c.v.mpBegin) + n);

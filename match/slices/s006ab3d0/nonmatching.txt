@@ -2,7 +2,6 @@
 006abe50  60  FixedAllocatorBase::AllocateChunk: complete; register/frame differences; equiv PASS (881 valid, 100% cov) after making it a FixedAlloc member
 006ac0a0  38  cache-type setter via vtable+0xc; returns bool so SetCachingType tail-jumps; equiv PASS: 399 valid, 100.0% coverage
 006ac0d0  35  cache-type getter: complete; division/compare schedule differs
-006ac440  41  8-byte element copy loop; returns advanced dst pointer in eax; equiv PASS: 310 valid, 100.0% coverage
 006ab3d0  486  FixedAllocator size-class init ctor: complete (584 bytes vs 600); retail ctor SEH frame and different member init ordering; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 006ab950  266  regalloc: R49 (2026-11-17): size/idx register roles reversed, bool result in bl, shrink-wrapped ebx push; tried WString(path) ctor, unsigned idx | Earlier note: wstring hashtable rehash helper: complete (317 bytes vs 289); frame 0x24 vs retail 0x20 and ebx/ebp regalloc differ; equiv WEAK (323 valid, 45.2% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 006aba80  486  D3D9ShaderGeneric3DMorphingInitialize: complete (564 bytes vs 518); local FUN_006ab760 stub called 5x; equiv WEAK (320 valid, 37.3% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

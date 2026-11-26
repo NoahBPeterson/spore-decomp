@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
-005c7f50 52 schedule: moved the layout id and the six float members into an intermediate base so their stores precede the derived vptr stores (as retail); the g_one load is still emitted after the vptr stores instead of right after the six zero movss stores (2 instructions late), and the quick check's vtable-address comparison fails because our vtable slots are our own copies. flags /arch:SSE fix1: quick check DIFFERS
 005c7ff0 834 cSPPalettePage::ProcessPagePart: complete (all branches); frame/register allocation differ (orig frame 0x74, unconditional ebx/ebp/esi/edi saves, hoisted empty-wstring begin->ebp/cap->esi, 4 warn slots; ours shrink-wraps ebp, rematerialises empty-wstring constants, reuses warn slots)

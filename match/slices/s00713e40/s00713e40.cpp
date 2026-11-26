@@ -408,7 +408,7 @@ void __cdecl Copy24(uint32_t* dst, uint32_t* end, const uint32_t* src)
     }
 }
 
-// @ 0x00714910  fill n 6-dword elements (null dest tolerated)
+// 0x00714910 (byte-exact lifted version: match/slices/s00714910/s00714910.cpp)  fill n 6-dword elements (null dest tolerated)
 // ---------------------------------------------------------------------------------------------
 void* __cdecl Fill24(uint32_t* dst, uint32_t n, const uint32_t* src)
 {
@@ -440,7 +440,7 @@ void* __cdecl CopyPairs(uint32_t* out, uint32_t* first, uint32_t* last, uint32_t
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00714EC0  allocate n 4-byte elements and copy [first,last)
+// 0x00714ec0 (byte-exact lifted version: match/slices/s00714ec0/s00714ec0.cpp)  allocate n 4-byte elements and copy [first,last)
 // ---------------------------------------------------------------------------------------------
 void __stdcall AllocAndCopy(uint32_t n, uint32_t* first, uint32_t* last)
 {
