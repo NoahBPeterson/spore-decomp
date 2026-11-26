@@ -50,3 +50,4 @@
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d933d0@@YAEPAUcObj@@@Z  00d933d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00acca00@@YA_NPAH0@Z  00acca00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?OutsideCity_Decide@CitizenTree@SP@@YAMPAVCitizen@2@@Z  00d941e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d93df0@@YAMPAUcObj@@@Z  00d93df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

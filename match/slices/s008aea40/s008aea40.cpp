@@ -138,7 +138,7 @@ int32 fnt_Super45Round(fnt_Ctx* ctx, int32 d, int32 c);  // 0x008ac100
 int32 fnt_GetCVTScale(fnt_Ctx* ctx);                     // 0x008ac370
 void  fnt_ChangeCvt(fnt_Ctx* ctx);                       // 0x008ac460
 void  fnt_SetRoundValues();  // 0x008ad190 (ctx in eax, period in edx, flag on stack)
-fnt_FuncDef* fnt_Error(fnt_Ctx* ctx);                    // 0x008abf90
+__declspec(noreturn) fnt_FuncDef* fnt_Error(fnt_Ctx* ctx); // 0x008abf90
 }
 
 // Data blocks referenced by fnt_InitInterp.
@@ -534,6 +534,7 @@ void fnt_SHC(fnt_Ctx* ctx)
         count = count - 1;
         fd++;
     }
+    // fnt_Error is __declspec(noreturn)
     fd = fnt_Error(ctx);
 found:
     int32 start = state->codeBase[fd->zone] + fd->offset;

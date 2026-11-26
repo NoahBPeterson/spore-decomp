@@ -1621,12 +1621,8 @@ void __fastcall FUN_00c31a00(void* self, void* dummy, s32 amount)
     *(s32*)((char*)self + 0xd0) += amount;
   }
   s32 v = *(s32*)((char*)self + 0xd0);
-  if (v < 0) {
-    v = 0;
-    *(s32*)((char*)self + 0xd0) = v;
-    return;
-  }
-  if (v > 99999999) v = 99999999;
+  if (v < 0) v = 0;
+  else if (v > 99999999) v = 99999999;
   *(s32*)((char*)self + 0xd0) = v;
 }
 

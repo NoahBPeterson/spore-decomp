@@ -3,7 +3,6 @@
 00b35d30 387 complete; frame 0x20 vs 0x24, register allocation flags: /O2 /MD /Gy /TP /arch:SSE
 00b35ec0 78 complete; original keeps redundant comp null re-check flags: /O2 /MD /Gy /TP /arch:SSE
 00b360d0 71 complete; original uses add eax,0x64 member-address form for the comp load flags: /O2 /MD /Gy /TP /arch:SSE
-00b36130 27 complete; and bl,1/movzx for the bit-31 flag arg flags: /O2 /MD /Gy /TP /arch:SSE
 00b36200 53 complete; original keeps first in memory, loop register choice flags: /O2 /MD /Gy /TP /arch:SSE
 00b36280 13 complete; dest/first load order differs flags: /O2 /MD /Gy /TP /arch:SSE
 00b36440 72 Map insert helper; EASTL RBTreeInsert ArgError/alloc-slot handling and register allocation differ (mine 106 vs 121). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

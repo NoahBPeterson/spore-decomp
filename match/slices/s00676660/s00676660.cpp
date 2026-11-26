@@ -344,20 +344,24 @@ struct PropMgr {
 PropMgr* PropertyManager();                    // 0x0067DE30
 
 struct KeyVec { uint32_t* mBegin; uint32_t* mEnd; uint32_t* mCap; };
-struct KeyBase { virtual ~KeyBase() {} };
+struct KeyBase {
+    virtual ~KeyBase() {}
+    virtual bool IsKeyIncluded(const ResKey& key) = 0;
+};
 struct KeyList : KeyBase {
     uint32_t type, group;
     KeyVec   keys;
     uint32_t extra[2];
     KeyList() { keys.mBegin = 0; keys.mEnd = 0; keys.mCap = 0; type = 0xb1b104; group = 0x5befd27; }
     ~KeyList() { if (keys.mBegin && ((int*)keys.mBegin)[-1]) EAFree(keys.mBegin); }
+    virtual bool IsKeyIncluded(const ResKey& key) { return key.type == type && key.group == group; }
 };
 struct FileMgr {
     virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3();
     virtual void f4(); virtual void f5(); virtual void f6(); virtual void f7();
     virtual void f8(); virtual void f9(); virtual void fA(); virtual void fB();
     virtual void fC(); virtual void fD();
-    virtual int GetKeys(KeyVec* out, KeyList* filter, int a);   // +0x38
+    virtual int GetKeys(KeyVec* out, KeyBase* filter, int a);   // +0x38
 };
 FileMgr* GetFileMgr();                         // 0x008DE1A0
 
@@ -547,14 +551,26 @@ static __forceinline uint32_t GetUIntProp(PropList* pl, uint32_t id, Prop** pp)
 
 // @ 0x00676A20
 char Controller::ParsePropFiles()
-{
-    PropMgr* mgr = PropertyManager();
+{    PropMgr* mgr = PropertyManager();
     FileMgr* fm = GetFileMgr();
-    KeyList list;
+    struct TypeGroupFilter : KeyBase {
+        uint32_t type, group;
+        TypeGroupFilter() : type(0xb1b104), group(0x5befd27) {}
+        virtual bool IsKeyIncluded(const ResKey& key) {
+            return key.type == type && key.group == group;
+        }
+    };
+    struct FixedKeyVec : KeyVec {
+        uint32_t allocatorPad[2];
+        FixedKeyVec() { mBegin = 0; mEnd = 0; mCap = 0; }
+        ~FixedKeyVec() { if (mBegin && ((int*)mBegin)[-1]) EAFree(mBegin); }
+    };
+    FixedKeyVec keys;
+    TypeGroupFilter filter;
     Prop *pa, *pb, *pc, *pd;
-    if (fm && fm->GetKeys(&list.keys, &list, 0)) {
-        uint32_t* it = list.keys.mBegin;
-        uint32_t* end = list.keys.mEnd;
+    if (fm && fm->GetKeys(&keys, &filter, 0)) {
+        uint32_t* it = keys.mBegin;
+        uint32_t* end = keys.mEnd;
         if (it != end) {
             do {
                 uint32_t k = *it;
@@ -595,8 +611,7 @@ char Controller::ParsePropFiles()
             } while (it != end);
         }
     }
-    return 1;
-}
+    return 1;}
 
 struct CmdBase { CmdBase(); virtual void Execute(void* args) = 0; char pad[8]; };
 struct Args {

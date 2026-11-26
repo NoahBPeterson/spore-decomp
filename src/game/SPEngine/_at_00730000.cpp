@@ -859,9 +859,10 @@ void FUN_00733ed0(int param_1)
     int count = (*(int*)(param_1 + 0xc) - *(int*)(param_1 + 8)) >> 5;
     for (int i = 0; i < count; ++i)
     {
-        int v = *(int*)(*(int*)(param_1 + 8) + i * 0x20);
+        int* e = (int*)(*(int*)(param_1 + 8) + i * 0x20);
+        int v = *e;
         if (((v == 8) || (v == 2)) || (v == 3) || (v == 10))
-            FUN_00733a50_ext((void*)(*(int*)(param_1 + 8) + i * 0x20));
+            FUN_00733a50_ext((void*)e);
     }
 }
 

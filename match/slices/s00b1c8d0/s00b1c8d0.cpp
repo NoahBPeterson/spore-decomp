@@ -540,8 +540,7 @@ void cStateMachineHost::AddTransition(int fromState, int eventType, int keyMod, 
 }
 
 // @ 0x00b1caa0
-void cStateMachineHost::ResetAndLoad(const char* name) {
-  mTransitions = Transitions();
+void cStateMachineHost::ResetAndLoad(const char* name) {  mTransitions = Transitions();
 
   cLoadMachineCmd cmd(&mTransitions);
   if (name == 0) {
@@ -551,11 +550,11 @@ void cStateMachineHost::ResetAndLoad(const char* name) {
     cmd.LoadStateMachine(mName.mpBegin);
   }
 
-  while (mPendingBegin != mPendingEnd) --mPendingEnd;
+  while (static_cast<uint32_t* volatile&>(mPendingBegin) != mPendingEnd)
+    --mPendingEnd;
   m60 = 0;
   m64 = 0;
-  MessageServer()->v05(0x7561116, 0, 0);
-}
+  MessageServer()->v05(0x7561116, 0, 0);}
 
 // @ 0x00b1cc00
 void cStateMachineHost::SetTransitions(const Transitions* pTransitions, int a, int b) {

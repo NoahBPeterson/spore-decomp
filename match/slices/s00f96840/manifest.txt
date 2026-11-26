@@ -18,3 +18,4 @@ slices/s00f96840/s00f96840.cpp  ?m00f976c0@cTerrainSphere@SP@@QAEHPAH0@Z  00f976
 slices/s00f96840/s00f96840.cpp  ?m00f96840@cTerrainSphere@SP@@QAEXXZ  00f96840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f96840/s00f96840.cpp  ?InitializeStaticRTTTextures@cTerrainSphere@SP@@QAEXXZ  00f96b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f96840/s00f96840.cpp  ?m00f97750@cTerrainSphere@SP@@QAEXXZ  00f97750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f96840/s00f96840.cpp  ?FUN_00f96eb0@@YAXPAHHHHHIH@Z  00f96eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

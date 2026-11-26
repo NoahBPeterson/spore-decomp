@@ -5955,7 +5955,11 @@ Iter* SparseMatrix::FirstUsed(Iter* ret)
             return ret;
         }
     }
-    *ret = Iter(this, End(), 0);
+    ret->mat = this;
+    _ReadWriteBarrier();
+    ret->node = End();
+    _ReadWriteBarrier();
+    ret->cur = 0;
     return ret;
 }
 

@@ -29,3 +29,4 @@
 ../src/game/SPEditors/SPPlayMode.cpp  ?FUN_0062cb20@@YGPAUPathT@@PBUVec3@@MDM@Z  0062cb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?Init@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAXPAUcSPPlayModeUI_s0062_e7e0@@@Z  0062f2a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?FUN_0062f2f0@cSPPlayModeBGMgr@@QAEXXZ  0062f2f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?SetAllBabyRotateSpeeds@cSPPlayMode@@QAEXM@Z  00629b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

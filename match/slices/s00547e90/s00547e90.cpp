@@ -47,7 +47,10 @@ static int Cmp16(const unsigned short* a, const unsigned short* b)
 
 // ---------------------------------------------------------------- object
 struct Obj43 {
-    char mPad[0x200];
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    char  mPad[0x1f4];
 
     void  FUN_00547e90(int* pos, int* value);
     void  FUN_00548180();
@@ -110,9 +113,13 @@ void Obj43::FUN_00547e90(int* pos, int* value)
 // @ 0x00548180
 void Obj43::FUN_00548180()
 {
-    int* p = (int*)this;
-    if (*p != 0)
-        operator_delete__((void*)*p);
+    if (mpBegin != 0) {
+        unsigned int capacityBytes = static_cast<unsigned int>(static_cast<int>(mpCapacity - mpBegin) >> 4) << 4;
+        void* allocation = mpBegin;
+        void* begin = allocation;
+        (void)capacityBytes;
+        operator_delete__(begin);
+    }
 }
 
 // @ 0x005481d0  (vector<int>: insert/grow)
@@ -148,9 +155,13 @@ void Obj43::FUN_005481d0(int* pos, int* value)
 // @ 0x00548400
 void Obj43::FUN_00548400()
 {
-    int* p = (int*)this;
-    if (*p != 0)
-        operator_delete__((void*)*p);
+    if (mpBegin != 0) {
+        unsigned int capacityBytes = static_cast<unsigned int>(static_cast<int>(mpCapacity - mpBegin) >> 2) << 2;
+        void* allocation = mpBegin;
+        void* begin = allocation;
+        (void)capacityBytes;
+        operator_delete__(begin);
+    }
 }
 
 // @ 0x00548450  (vector of 0x118-byte entries: insert/grow)

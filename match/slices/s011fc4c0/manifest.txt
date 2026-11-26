@@ -1,0 +1,2 @@
+slices/s011fc4c0/s011fc4c0.cpp  ?FUN_011fcde0@@YAXPAXI@Z  011fcde0  /vc71 /O2 /MD /Gy /TP
+slices/s011fc4c0/s011fc4c0.cpp  ?FUN_011fcee0@@YAXPAEI@Z  011fcee0  /vc71 /O2 /MD /Gy /TP

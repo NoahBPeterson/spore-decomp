@@ -9,3 +9,4 @@ slices/s010ec0a0/s010ec0a0.cpp  ?removePoint@hkBoxBoxManifold@@QAEXH@Z  010ec4a0
 slices/s010ec0a0/s010ec0a0.cpp  ?init@hkBoxBoxManifold@@QAEPAV1@XZ  010ec500  /O2 /MD /Gy /TP /GS- /vc71
 slices/s010ec0a0/s010ec0a0.cpp  ?createZombie@hkGskfAgent@@UAEXG@Z  010ec630  /O2 /MD /Gy /TP /GS- /vc71
 slices/s010ec0a0/s010ec0a0.cpp  ?addPoint@hkBoxBoxManifold@@QAEHABVhkCdBody@@0AAVhkFeatureContactPoint@@@Z  010ec540  /O2 /MD /Gy /TP /GS- /vc71
+slices/s010ec0a0/s010ec0a0.cpp  ?createGskfAgent@hkGskfAgent@@SAPAU1@ABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010ec690  /O2 /MD /Gy /TP /GS- /vc71

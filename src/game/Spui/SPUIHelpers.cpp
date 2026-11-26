@@ -3266,7 +3266,8 @@ bool __cdecl FUN_0080a0f0(IWin* w, IdRange* range)
             unsigned* ids = range->ids;
             unsigned count = range->count;
             for (unsigned i = 0; i < count; ++i) {
-                if ((unsigned)vi0(w, 0x1c) == ids[i] || (unsigned)vi0(w, 0x20) == ids[i]) {
+                if (((unsigned (__thiscall*)(void*))VSLOT(w, 0x1c))(w) == ids[i] ||
+                    ((unsigned (__thiscall*)(void*))VSLOT(w, 0x20))(w) == ids[i]) {
                     if (WalkAll((int*)vp0(c, 0x10))) {
                         FUN_00809ff0(c);
                         vcall0(c, 4);

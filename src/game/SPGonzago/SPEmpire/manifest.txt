@@ -41,3 +41,4 @@
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c33820@@YAXPAXPAUListAnchor@@@Z  00c33820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c332a0@@YAXPAXPAUListAnchor@@@Z  00c332a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31bf0@@YI_NPAX0H@Z  00c31bf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31a00@@YIXPAX0H@Z  00c31a00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

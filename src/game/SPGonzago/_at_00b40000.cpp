@@ -7262,10 +7262,12 @@ int __cdecl FUN_00b4f660(void* obj, float value, int index, int kind)
             int i = index;
             float f = value;
             if (!skipped) {
-                if (kind == 3)
+                if (kind != 3) {
+                    if (kind == 6)
+                        r = FUN_00b65250(obj, gRenderCfg.mModeB, f, i);
+                } else {
                     r = FUN_00b653d0(obj, gRenderCfg.mModeA, f, i);
-                else if (kind == 6)
-                    r = FUN_00b65250(obj, gRenderCfg.mModeB, f, i);
+                }
             }
         }
     }

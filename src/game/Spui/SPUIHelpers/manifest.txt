@@ -61,3 +61,4 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?GetScrollOffset@SFV@@QAEMXZ  0082a4e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CreateFromName@SFV@@QAE_NPBG_N1@Z  0082aa20  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00965670@ButtonDrawableRadio@@QAEXXZ  00965670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_0080a0f0@@YA_NPAUIWin@@PAUIdRange@@@Z  0080a0f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

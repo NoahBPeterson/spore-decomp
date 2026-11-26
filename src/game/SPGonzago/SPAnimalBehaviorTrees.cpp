@@ -7813,11 +7813,15 @@ float __cdecl FUN_00d7adc0(CB* cb)
 // @ 0x00d7ae20
 float __cdecl FUN_00d7ae20(CB* cb, int, int, uint, void* st, char* out)
 {
-  CB* m = (CB*)FUN_00d999d0((void*)BS(cb)->Play(0x100, 0));
+  struct StimQuery {
+    static int Find(CB* c) { return BS(c)->Play(0x100, 0); }
+  };
+  CB* m = (CB*)FUN_00d999d0((void*)StimQuery::Find(cb));
   if (m != 0) {
-    if (st != 0) ((Stimuli*)st)->GetAny();
+    if (st != 0) ((cBehaviorStimuli_s00d8_cbb0*)st)->GetAny();
+    void* __restrict p = &m->mStim5a8;
     *out = 1;
-    *(void**)((char*)st + 4) = m->GetStim5a8();
+    ((cBehaviorStimuli_s00d8_cbb0*)st)->mpTargetEntry = p;
     return 1.0f;
   }
   return 0.0f;

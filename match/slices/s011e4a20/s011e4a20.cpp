@@ -238,7 +238,11 @@ uint32 __cdecl rw_ArenaSectionAtoms_Fixup(void* section, Arena* ar)
 {
     void* p = *(void**)((char*)section + 8);
     if (p != 0) {
-        p = (void*)(uint32)((Arena*)*(void**)((char*)ar + 0x78))->IdToObject(p);
+        Arena* owner = (Arena*)*(void**)((char*)ar + 0x78);
+        if ((int)section & 0x100)
+            p = (void*)(uint32)owner->IdToObject(p);
+        else
+            p = (void*)(uint32)owner->IdToObject(p);
         *(void**)((char*)section + 8) = p;
         ((AtomTable*)p)->Fixup(ar);
         *(void**)((char*)ar + 4) = *(void**)((char*)section + 8);

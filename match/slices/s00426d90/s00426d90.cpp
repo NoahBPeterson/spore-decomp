@@ -42,17 +42,18 @@ template<class T> inline bool operator!=(const generic_iterator<T>& a, const gen
 // ---------------------------------------------------------------------------
 // vector<8-byte> (begin, end, capacity, allocator): copy ctor 0x42AD20, operator= 0x42D990
 struct Vec8 {
-    void* mBegin; void* mEnd; void* mCapEnd; uint mAllocator;
+    void* mBegin; void* mEnd; void* mCapEnd; uint mAllocator[2];
     Vec8(const Vec8& o);
     Vec8& operator=(const Vec8& o);
 };
 
+struct ElemFlag { bool v; };
+
 struct Elem24 {
-    Vec8   vec;
-    uint   pad;
-    bool   flag;
+    Vec8     vec;
+    ElemFlag flag;
     Elem24(const Elem24& o) : vec(o.vec) { flag = o.flag; }
-    Elem24& operator=(const Elem24& o) { vec = o.vec; bool t = o.flag; flag = t; return *this; }
+    Elem24& operator=(const Elem24& o) { vec = o.vec; bool t = o.flag.v; flag.v = t; return *this; }
 };
 
 struct Elem16 { uint32_t a, b, c, d; };
@@ -75,7 +76,7 @@ inline GI24 uninitialized_copy_impl(GI24 first, GI24 last, GI24 result, const fa
 
 // @ 0x00427160
 Elem24* __cdecl UninitializedCopyElem24(Elem24* first, Elem24* last, Elem24* result)
-{
+{    // ElemFlag copy ctor matches retail order
     const GI24 i(uninitialized_copy_impl(GI24(first), GI24(last), GI24(result), false_type()));
     return i.base();
 }
@@ -178,7 +179,7 @@ inline void ScratchSlots() { unsigned unused[19]; }
 
 // @ 0x00426E30
 void __thiscall Elem24Vector::Insert(Elem24* position, const Elem24& value)
-{
+{    // ElemFlag copy ctor matches retail order
     if (mEnd != mCapEnd) {
         const Elem24* pValue = &value;
         if ((pValue >= position) && (pValue < mEnd))

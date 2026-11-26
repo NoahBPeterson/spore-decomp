@@ -359,13 +359,14 @@ void ReleaseEffectField(SP::tMarkerNode* n) {
     ((IEffect*)n->mpModel)->Release();
 }
 
-void __stdcall FreeMarkerNodeRange(SP::tMarkerNode* first, SP::tMarkerNode* last);  // 0x00ae4930
 void __stdcall StartEffect(float* position, float* quaternion);  // 0x00ae4810
 SP::tMarkerNode* DestroyMarkerNodeRange(SP::tMarkerNode* first,
                                         SP::tMarkerNode* last,
                                         SP::tMarkerNode* out);    // 0x00ae4520
 
 }  // namespace
+
+void __stdcall FreeMarkerNodeRange(SP::tMarkerNode* first, SP::tMarkerNode* last);  // 0x00ae4930
 
 // ---- SP::cGameplayMarkerView -------------------------------------------------
 
@@ -797,17 +798,27 @@ void __stdcall StartEffect(float* position, float* quaternion) {
     ((IEffect*)effect)->Release();
 }
 
+}  // namespace
+
 // @ 0x00ae4930
 void __stdcall FreeMarkerNodeRange(SP::tMarkerNode* first, SP::tMarkerNode* last) {
   while ((unsigned int)first < (unsigned int)last) {
-    IntrusiveRelease(first->mEffect.mpPtr);
-    if (first->mpModel != 0)
-      ((IEffect*)first->mpModel)->Release();
+    void* effect = first->mEffect.mpPtr;
+    if (effect != 0) {
+      volatile long* count = (volatile long*)((char*)effect + 8);
+      _InterlockedDecrement(count);
+      if (_InterlockedExchangeAdd(count, 0) < 1)
+        _InterlockedIncrement(count);
+      else
+        _InterlockedExchangeAdd(count, 0);
+    }
+
+    IRefCounted* model = (IRefCounted*)first->mpModel;
+    if (model != 0)
+      model->Release();
     first++;
   }
 }
-
-}  // namespace
 
 // ---- SP::cCityDisplayStrategy ------------------------------------------------
 

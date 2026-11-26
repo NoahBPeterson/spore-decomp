@@ -351,10 +351,17 @@ void ApplyLoopBox(cEffectObject* effect, cParticlesDescription* desc, Vector3* p
 // the factory has more to do than return `new X(flags)`; see nonmatching.txt.
 // @ 0x00f74480
 void GroundCoverAddCommands(void* unused, cCommandManager* mgr)
-{
-    mgr->AddDescription(L"groundCover", CreateParticlesDescriptionCommand((void*)0x2c));
-    mgr->AddEffect(L"groundCover", CreateParticlesEffectCommand(0x2c));
-}
+{    struct cNarrowCommandManager {
+        virtual void m00() {}
+        virtual void m04() {}
+        virtual void m08() {}
+        virtual void m0c() {}
+        virtual void m10() {}
+        virtual void AddDescription(const char* name, void* cmd) {}
+        virtual void AddEffect(const char* name, void* cmd) {}
+    };
+    ((cNarrowCommandManager*)mgr)->AddDescription("groundCover", CreateParticlesDescriptionCommand((void*)0x2c));
+    ((cNarrowCommandManager*)unused)->AddEffect("groundCover", CreateParticlesEffectCommand(0x2c));}
 
 // @ 0x00f747a0
 void cEffectObject::RenderStream(void* param)

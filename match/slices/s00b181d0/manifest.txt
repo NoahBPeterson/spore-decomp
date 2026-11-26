@@ -18,3 +18,4 @@ slices/s00b181d0/s00b181d0.cpp  ?HasBits@cNibbleHolder@@QAE_NXZ  00b18e40  /O2 /
 slices/s00b181d0/s00b181d0.cpp  ?PawnFlags@@YIIPAUIObj@@@Z  00b18e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ?CheckAppProperty@@YA_NXZ  00b18f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b181d0/s00b181d0.cpp  ?RegisterInputHandler@@YIXPAD@Z  00b19180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?BoundsQuery@@YA_NPAUcBounds@@PAX@Z  00b182f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

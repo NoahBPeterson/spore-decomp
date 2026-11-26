@@ -198,16 +198,17 @@ struct cListB { int count; void* base; };                // +0 count, +4 base, s
 // @ 0x00e7bfb0
 bool FUN_00e7bfb0(cSPCell* p, float dt)
 {
+    cSPCell* __restrict rp = p;
     float t = dt * 1000.0f;   // g_13ec5b4
-    float v = p->f58;
-    FUN_01042570(&v, (char*)p + 0xa8, p->fB4, p->fAC, g_14908cc, t);
-    if (g_14851ec > v && p->id != *(int*)(gspCellGame + 0x411c)) {
-        FUN_00e780a0(p->id, 0, dt, 0);
+    float v = rp->f58;
+    FUN_01042570(&v, (char*)rp + 0xa8, rp->fB4, rp->fAC, g_14908cc, t);
+    if (g_14851ec > v && rp->id != *(int*)(gspCellGame + 0x411c)) {
+        FUN_00e780a0(rp->id, 0, dt, 0);
         return false;
     }
-    p->count4a = (uint16)(p->count4a + 1);
-    p->f58 = v;
-    FUN_01042500((char*)p + 0xa0, p->fA4, g_13f9428, t);
+    rp->count4a = (uint16)(rp->count4a + 1);
+    rp->f58 = v;
+    FUN_01042500((char*)rp + 0xa0, rp->fA4, g_13f9428, t);
     return true;
 }
 
