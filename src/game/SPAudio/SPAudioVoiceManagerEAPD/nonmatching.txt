@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 00a46160 924 large EH StartVoice: stack-slot sharing of disjoint-scope locals and register choice differ (1128 vs 1095 bytes); all paths and callees present; equiv UNSUPPORTED (orig-abi-broken(fake): 399/400 inputs need valid vtables)
-00a46690 29 branch orientation and bool materialisation

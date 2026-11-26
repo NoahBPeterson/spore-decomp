@@ -303,7 +303,7 @@ struct ResList { ResKey3* begin; ResKey3* end; };
 extern ResList* g_resList;         // 0x0166c070
 // ---- items of slice s009feb30 end
 
-// @ 0x009a84f0
+// 0x009a84f0 (byte-exact lifted version: match/slices/s009a84f0/s009a84f0.cpp)
 int* rbtree_find(int* param_1, uint32_t param_2, int param_3, uint32_t* param_4)
 {
     uint32_t uVar3 = 0;

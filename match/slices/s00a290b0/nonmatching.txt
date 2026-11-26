@@ -3,7 +3,6 @@
 # hashtable find/insert/erase shapes, x87 selection under /fp:fast, and register colouring/block
 # ordering of the "single-object compile cannot match" class described in docs/matching.md.
 00a290b0  130  complete; inlined EASTL find/insert prologue and the twice-recomputed id register colouring differ; the 8-byte pair insert (0xa26ce0) shape is reproduced semantically only. difftest WEAK (92/400 valid, 24.5% coverage)
-00a291b0  121  complete; the bucket scan is one shared tail in the original but duplicated by cl here, plus register colouring; size 121 vs 113. difftest PASS (232/400 valid, 65.2% coverage)
 00a29230  141  complete; same shared-vs-duplicated bucket scan and value-detach ordering; size 169 vs 159. difftest WEAK (198/400 valid, 56.1% coverage)
 00a292d0   71  complete; ring wrap and Tag-by-value insert are semantically identical; canonicalises at this size across ~17 source variants (register colouring / block order). difftest PASS (253/400 valid, 93.1% coverage)
 00a29340  104  complete; two Tag-by-value inserts into tables C and A; register colouring and block order differ. difftest PASS (212/400 valid, 95.2% coverage)

@@ -370,7 +370,7 @@ StreamDesc* StreamPool::AcquireStream(float priority, void* streamLost, int cont
     return best;
 }
 
-// @ 0x0112e1e0 -- StreamPool::ReleaseStream (refcount is signed 16-bit).
+// 0x0112e1e0 (byte-exact lifted version: match/slices/s0112e1e0/s0112e1e0.cpp) -- StreamPool::ReleaseStream (refcount is signed 16-bit).
 void __stdcall StreamPool_ReleaseStream(StreamDesc* desc)
 {
     if (--desc->refCount == 0)

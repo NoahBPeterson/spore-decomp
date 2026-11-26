@@ -5819,7 +5819,7 @@ void anim_creature_s00a0_5c20::SetTargetRoot(anim_creature_s00a0_5c20* target)
     f160 = 0;
 }
 
-// @ 0x00a062a0
+// 0x00a062a0 (byte-exact lifted version: match/slices/s00a062a0/s00a062a0.cpp)
 void anim_creature_s00a0_5c20::SetTargetBody(anim_creature_s00a0_5c20* target, uint value)
 {
     f154 = 0;

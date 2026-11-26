@@ -40,8 +40,6 @@
 010d9ea0 40 complete UNSUPPORTED /vc71 /O2 /MD /Gy /EHsc /TP: createPredGskfAgent; callee-saved register allocation and the shared-vs-duplicated epilogue differ (esi pushed inside the first branch in the original), vtable slot and size stores reproduced; difftest 0/400 valid inputs (all discarded as faults), no verdict flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010dce40 217 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd180 33 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
-010dd1d0 41 havok-equivalent; default PASS 329/100%, replay PASS flags: /vc71 /O2 /MD /Gy /TP
-010dd260 42 havok-equivalent; default PASS 400/100%, replay PASS flags: /vc71 /O2 /MD /Gy /TP
 010dd300 79 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd380 6 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd580 168 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP

@@ -231,7 +231,7 @@ int AutoRefLike::Release()
     return v;
 }
 
-// @ 0x00fa0f10
+// 0x00fa0f10 (byte-exact lifted version: match/slices/s00fa0f10/s00fa0f10.cpp)
 int JobHolder::Release()
 {
     return (mObj).Release();

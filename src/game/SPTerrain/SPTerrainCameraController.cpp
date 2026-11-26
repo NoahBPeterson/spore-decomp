@@ -229,7 +229,7 @@ void __stdcall SetEdgeDistance(float* p)
   g_edgeY = p[1];
 }
 
-// @ 0x00b0f950
+// 0x00b0f950 (byte-exact lifted version: match/slices/s00b0f950/s00b0f950.cpp)
 void SP::cTerrainCameraController::SetToggle(int b)
 {
   if (mb11 != (u8)b) {
@@ -243,7 +243,7 @@ void SP::cTerrainCameraController::SetToggle(int b)
   mb11 = (u8)b;
 }
 
-// @ 0x00b0f9a0
+// 0x00b0f9a0 (byte-exact lifted version: match/slices/s00b0f9a0/s00b0f9a0.cpp)
 bool SP::cTerrainCameraController::KeysHeld()
 {
   void* im = SP_GameInputManager();

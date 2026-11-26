@@ -1,0 +1,1 @@
+slices/s0113ef00/s0113ef00.cpp  _FUN_0113ef00  0113ef00  /vc71 /O2 /MD /Gy /TP /arch:SSE

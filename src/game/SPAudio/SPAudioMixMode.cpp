@@ -722,7 +722,7 @@ void Prim::Update0(float dt, u32 id)
     *(float*)&this->m28 = FUN_00d00a10(SP_RelationshipManager(), avatar, owner, 0);
 }
 
-// @ 0x00ea55b0
+// 0x00ea55b0 (byte-exact lifted version: match/slices/s00ea55b0/s00ea55b0.cpp)
 Prim* Prim::Ctor0()
 {
     Prim* p = this;

@@ -613,7 +613,7 @@ char cTerrainOverlay::ClearSlot()
     mVal08 = 0;
     return 1;
 }
-// @ 0x00f964b0
+// 0x00f964b0 (byte-exact lifted version: match/slices/s00f964b0/s00f964b0.cpp)
 int __fastcall ReleaseRef(int* self)
 {
     int* p = (int*)((char*)self + 4);

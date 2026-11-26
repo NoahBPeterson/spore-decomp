@@ -3133,7 +3133,7 @@ TexVector::TexVector(const TexVector& o)
     mpCur = newCur;
 }
 
-// @ 0x00f6b670
+// 0x00f6b670 (byte-exact lifted version: match/slices/s00f6b670/s00f6b670.cpp)
 QuadSource& QuadSource::CopyFrom(const QuadSource& o)
 {
     memcpy(this, &o, 0x7c);

@@ -8,7 +8,6 @@
                the original zeroes mField18 with xorps/movss while ours uses x87 fldz/fstp, and the instruction order differs
 00fc1fd0   75  SP::GetTerraformPlanetType: complete; the comiss compare tree and the [equiv: UNSUPPORTED unresolved kLavaThreshold]
                kLavaThreshold tail differ
-00fc2040   94  radial falloff: complete; [equiv: PASS 400/400] cl only emits an inline fsqrt under /fp:fast, so the root is taken
                with x87 fld/fsqrt/fstp in a helper and the arithmetic is done in double; the original keeps everything in x87 and clamps with maxss
 00fc10d0 1376  cSetCloudTypeStep::Step: complete (the +0x04 early-out, __rdtsc timing, the 12-case state switch with its per-case sphere/command-request work, the per-state cycle accumulation, the +0x04 counter and the state advance); not byte-exact because the harness uses its default /GS (cl emits a security cookie the /GS- original lacks) and x87 float spills where the original used /arch:SSE2; [equiv: FAIL 5/5 - only leftover eax upper bits (orig 0x00fc4e01 vs ours 0x00003901 from the cookie xor eax,esp), call trace identical]
 00fc16b0  152  CCloudTypeStep constructor (12 cycle slots, vtable 0x1491270): complete (both Init calls, mField40, vtable, eastl resize insert_n 0x00a6aaa0, mField10, mDone/mState/mField0c/mField14, Clear); not byte-exact because the original TU was compiled with /arch:SSE2 (xorps/movss for the 0.0f store) while the harness emits x87 fldz/fstp, and ebp/edi allocation is swapped; [equiv: PASS 357 valid, 80.7% cov]

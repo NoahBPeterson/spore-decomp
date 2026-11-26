@@ -2820,7 +2820,7 @@ void __cdecl FUN_009ce560(float* e, int n)
     e[0] = s;
 }
 
-// @ 0x009ce5e0
+// 0x009ce5e0 (byte-exact lifted version: match/slices/s009ce5e0/s009ce5e0.cpp)
 void SA::FUN_009ce5e0()
 {
     f08 = 0.0f; f04 = 0.0f; f00 = 0.0f;

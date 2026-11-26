@@ -192,7 +192,7 @@ float cTerrainCameraController::InterpByAngle() {
   return (m378 - m374) * ang + m374;
 }
 
-// @ 0x00b0f950
+// 0x00b0f950 (byte-exact lifted version: match/slices/s00b0f950/s00b0f950.cpp)
 void cTerrainCameraController::SetToggle(int b) {
   if (mb11 != (u8)b) {
     if ((u8)b) {
@@ -205,7 +205,7 @@ void cTerrainCameraController::SetToggle(int b) {
   mb11 = (u8)b;
 }
 
-// @ 0x00b0f9a0
+// 0x00b0f9a0 (byte-exact lifted version: match/slices/s00b0f9a0/s00b0f9a0.cpp)
 bool cTerrainCameraController::KeysHeld() {
   void* im = SP_GameInputManager();
   if (mb11 == 0 && mb319 != 0) {

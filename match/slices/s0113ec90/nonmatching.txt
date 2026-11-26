@@ -2,7 +2,6 @@
 0113ec90  172  SNDMEMI_alloc (aligned zero-fill) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv FAIL on 5/5 valid inputs (eax): /LTCG-outlined memset whose ABI preserves the caller's eax:edx across the body via `push eax/ebx/edx ... pop edx/ebx/eax` and returns them unchanged, and zeroes with x87 `fst qword` stores. Not reproducible in C++ -- cl always clobbers the scratch registers and reguses the 0x20 unroll to integer stores, so no source shape leaves eax untouched. callerdeps 0113ec90 eax --result: DEPENDS (30 direct call sites, e.g. eax read at 0113274d after the call at 01132742 in 01132660). Per docs/codegen.md 11.4 / docs/matching.md:333 (equivalence-only custom/LTCG register ABI) this is recorded as a still-fail.
 0113eda0  62  SND global-state init/copy complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
 0113ee40  82  SND global-state apply complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (257 valid, 95.5% coverage)
-0113ef00  35  SNDSYS_restore complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 12.2% coverage)
 0113ef90  131  SNDSYSI_chanpubinit complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (398 valid, 56.6% coverage)
 0113f060  188  SNDSYSI_init complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
 0113f1d0  88  F_0113f1d0 (play-slot registration) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 11.1% coverage)
@@ -12,7 +11,6 @@
 0113f720  7  F_0113f720 (played-sample count) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 28.6% coverage). Only the final add folds a memory operand.
 0113f780  269  F_0113f780 (advance packet, emit callback) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (341 valid, 10.3% coverage)
 0113f8f0  65  F_0113f8f0 (update play cursor) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (350 valid, 40.9% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
-0113f940  68  F_0113f940 (drain deferred callbacks) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 17.9% coverage)
 0113f9b0  79  F_0113f9b0 (stop play, free voices) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 8.7% coverage)
 0113fa70  128  PktCursor::Decode3 complete, thiscall. flags /O1 /MD /Gy /TP /arch:SSE; equiv PASS (566 valid, 100% coverage). Equivalence-only flags: the /O2 build spills n into the saved-ECX scratch slot (`push ecx` ... `mov n,4(%esp)` ... `pop ecx`), so it returns ecx=n instead of the incoming this and fails the untouched-ECX check; /O1 keeps this in ecx through the epilogue (chk /O1: 126 vs 130 bytes).
 0113fb20  113  PktCursor2::Decode2 complete, thiscall. flags /O1 /MD /Gy /TP /arch:SSE; equiv PASS (556 valid, 100% coverage). Equivalence-only flags: the /O2 build reuses the saved-ECX slot for n and then `pop ecx` leaves ecx=n (fails the untouched-ECX check); /O1 keeps this in ecx (chk /O1: 99 vs 114 bytes).

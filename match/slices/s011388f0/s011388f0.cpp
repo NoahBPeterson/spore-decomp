@@ -434,7 +434,7 @@ int __cdecl FUN_01139230(void* rec)
     return 0xc;
 }
 
-// @ 0x01139260  SampleCapture-ish init
+// 0x01139260 (byte-exact lifted version: match/slices/s01139260/s01139260.cpp)  SampleCapture-ish init
 bool __cdecl FUN_01139260(void* p)
 {
     if (p) { *(void**)p = (void*)0x14b0e5c; A<int>(p, 0x38) = 0; A<int>(p, 0x3c) = 0; A<u8>(p, 0x40) = 0; }

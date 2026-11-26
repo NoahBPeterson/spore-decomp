@@ -116,7 +116,7 @@ int F_0113ee40(unsigned* p)
     return 0;
 }
 
-// @ 0x0113ef00
+// 0x0113ef00 (byte-exact lifted version: match/slices/s0113ef00/s0113ef00.cpp)
 namespace  {
 int SNDSYS_restore()
 {

@@ -336,7 +336,7 @@ void FUN_00a88490(float* out, float param_2, float param_3, float param_4)
     out[1] = ((c2 - (c1 * fVar4) * DAT_01471064) * fVar4 + c1) * a;
 }
 
-// @ 0x00a88640
+// 0x00a88640 (byte-exact lifted version: match/slices/s00a88640/s00a88640.cpp)
 void FUN_00a88640(int base, void* renderer)
 {
     short* p = (short*)(base + 2);

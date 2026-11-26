@@ -465,7 +465,7 @@ void anim_creature::SetTargetRoot(anim_creature* target)
 }
 
 // =========================================================================== 0x00a062a0
-// @ 0x00a062a0
+// 0x00a062a0 (byte-exact lifted version: match/slices/s00a062a0/s00a062a0.cpp)
 void anim_creature::SetTargetBody(anim_creature* target, uint value)
 {
     f154 = 0;

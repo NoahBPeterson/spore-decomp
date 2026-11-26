@@ -4663,7 +4663,7 @@ char cTerrainOverlay::ClearSlot()
     return 1;
 }
 
-// @ 0x00f964b0
+// 0x00f964b0 (byte-exact lifted version: match/slices/s00f964b0/s00f964b0.cpp)
 int __fastcall ReleaseRef_s00f9_55f0(int* self)
 {
     int* p = (int*)((char*)self + 4);
@@ -7327,7 +7327,7 @@ bool DirtyFlag::TestFlag(unsigned char bits)
     return (Flag0() & bits) != 0;
 }
 
-// @ 0x00fa0f10
+// 0x00fa0f10 (byte-exact lifted version: match/slices/s00fa0f10/s00fa0f10.cpp)
 int JobHolder::Release()
 {
     return (mObj).Release();
@@ -8929,7 +8929,7 @@ void cTerrainSphere_s00fa_5610::UpdateQuadsPostCamera(void* camera)
     }
 }
 
-// @ 0x00fa5cc0
+// 0x00fa5cc0 (byte-exact lifted version: match/slices/s00fa5cc0/s00fa5cc0.cpp)
 void cTerrainSphere_s00fa_5610::DrawLayerRTT(void** a1, void* a2, void*)
 {
     cDirectPropertyList_s00fa_5610* props = sAppProperties;

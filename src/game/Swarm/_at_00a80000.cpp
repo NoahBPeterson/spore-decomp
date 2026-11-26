@@ -1488,7 +1488,7 @@ void cDistributeSimulator::Deactivate(int unused)
     }
 }
 
-// @ 0x00a86050
+// 0x00a86050 (byte-exact lifted version: match/slices/s00a86050/s00a86050.cpp)
 bool cDistributeSimulator::SetParams(int msg, float* p, int a3)
 {
     switch (msg) {
@@ -1681,7 +1681,7 @@ void cDistributeSimulator::Initialize(int a, cSimulatorWorld* world, int c)
         (*(void(__thiscall**)(cIRefObj*))(*(uint32*)mpRef88 + 8))(mpRef88);
 }
 
-// @ 0x00a870b0
+// 0x00a870b0 (byte-exact lifted version: match/slices/s00a870b0/s00a870b0.cpp)
 void __thiscall SimOps::Apply(void* a2, void* a3)
 {
     if (Fld<unsigned char>(this, 0x7c) != 0)

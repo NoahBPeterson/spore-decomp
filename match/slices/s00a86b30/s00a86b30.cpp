@@ -285,7 +285,7 @@ struct SimOps {
     void __thiscall Apply(void* a2, void* a3);
 };
 
-// @ 0x00a870b0
+// 0x00a870b0 (byte-exact lifted version: match/slices/s00a870b0/s00a870b0.cpp)
 void __thiscall SimOps::Apply(void* a2, void* a3)
 {
     if (Fld<unsigned char>(this, 0x7c) != 0)

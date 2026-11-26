@@ -684,7 +684,7 @@ void* GObj::pool_alloc()
     return obj;
 }
 
-// @ 0x00aa0a90
+// 0x00aa0a90 (byte-exact lifted version: match/slices/s00aa0a90/s00aa0a90.cpp)
 void GObj::clear_list()
 {
     RefNode* head = (RefNode*)op(this, 0x24);

@@ -29,7 +29,6 @@
 00a82700  235  cVisualEffect::Start: complete; the local message struct is built with a smaller
                frame than the original's 0x28 and the server call is scheduled differently.
                Equiv PASS (290 valid inputs, 76.3% coverage).
-00a828a0  338  cVisualEffect::ApplyParams: complete; the original re-loads members after every
                uploader call (aliasing) and uses a larger frame.  Equiv WEAK (198 valid, 49.1%).
 00a82a10 1026  cVisualEffect::ApplyCursorControl: complete (688 original bytes vs our 885).
                Equiv FAIL 5/5 valid inputs: ecx clobber only (ours writes a register the

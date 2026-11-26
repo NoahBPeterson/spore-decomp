@@ -6,7 +6,6 @@
 010a4620 0 havok-equivalent
 010a4680 0 havok-equivalent
 010a46f0 0 havok-equivalent
-010a4850 0 havok-equivalent; equiv PASS (400 valid, 100% cov): declared hkBodyVelocity* and returns &velB (the original leaves velB's pointer in EAX: void_hides_eax), and the three s_toiVelocity globals are annotated with their 0x016e5090/0x016e50b0/0x016e50d0 addresses
 010a48f0 0 havok-equivalent
 010a49e0 0 havok-equivalent
 010a4a70 0 havok-equivalent flags /O2 /MD /Gy /EHsc /TP; equiv PASS (213 valid, 100% cov): void_hides_eax — the original leaves out->m_end in EAX and 0 in EDX; layoutBuffer now returns uint64_t so cl leaves m_end in EAX and zero-extends into EDX

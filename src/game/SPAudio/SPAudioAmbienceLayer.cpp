@@ -370,7 +370,7 @@ AmbRefPairVec::~AmbRefPairVec()
         p->~AmbRefPair();
 }
 
-// @ 0x00a355e0
+// 0x00a355e0 (byte-exact lifted version: match/slices/s00a355e0/s00a355e0.cpp)
 void F_a355e0::call(char* s)
 {
     char* p = s;

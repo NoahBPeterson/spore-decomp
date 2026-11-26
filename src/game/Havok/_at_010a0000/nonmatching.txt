@@ -22,7 +22,6 @@
 010a4620 82 havok-equivalent flags: /O2 /MD /Gy /EHsc /TP
 010a4680 96 havok-equivalent flags: /O2 /MD /Gy /EHsc /TP
 010a46f0 187 havok-equivalent flags: /O2 /MD /Gy /EHsc /TP
-010a4850 16 havok-equivalent; equiv PASS (400 valid, 100% cov): declared hkBodyVelocity* and returns &velB (the original leaves velB's pointer in EAX: void_hides_eax), and the three s_toiVelocity globals are annotated with their 0x016e5090/0x016e50b0/0x016e50d0 addresses flags: /O2 /MD /Gy /EHsc /TP
 010a48f0 243 havok-equivalent flags: /O2 /MD /Gy /EHsc /TP
 010a49e0 92 havok-equivalent flags: /O2 /MD /Gy /EHsc /TP
 010a4a70 90 inline: hkVelocityAccumulator_setFixed was not inlined here (retail zeroes the 0x80-byte accumulator straight-line and writes byte +0=1, +0xc=1, then the +0x40 dword); wrote that body inline in layoutBuffer itself (behaviour was already the same, the call was the only structural difference) and kept the uint64_t return so m_end stays in EAX with EDX zero-extended. Still differs: the original keeps a 16-byte-aligned frame (and esp, -16) that our source has no local to force. flags /O2 /MD /Gy /EHsc /TP; fix1: quick check UNSUPPORTED (emulator 10s limit), closeness SAME SHAPE

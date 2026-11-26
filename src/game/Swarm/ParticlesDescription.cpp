@@ -1214,7 +1214,7 @@ void* CreateParticlesEffectCommand(int flags)
     return 0;
 }
 
-// @ 0x00aa32f0
+// 0x00aa32f0 (byte-exact lifted version: match/slices/s00aa32f0/s00aa32f0.cpp)
 cParticlesDescription::~cParticlesDescription()
 {
 }

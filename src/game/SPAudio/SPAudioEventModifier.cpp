@@ -832,7 +832,7 @@ void cEventModifier_s00a3_8e40::ModifyEvent(Command_s00a3_8e40* cmd, uint32_t ma
 }
 }}  // namespace SP::Audio
 
-// @ 0x00a39620
+// 0x00a39620 (byte-exact lifted version: match/slices/s00a39620/s00a39620.cpp)
 namespace SP { namespace Audio {
 bool cEventModifier_s00a3_8e40::CommandResolve(Command_s00a3_8e40* cmd)
 {
