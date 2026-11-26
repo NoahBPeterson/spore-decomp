@@ -10,3 +10,4 @@
 ../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?FUN_00f62e60@@YIXPAUcTerrainDistributeDescription@@@Z  00f62e60  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?Execute@cEffectCommand@@QAEXPAUcArgScriptArgs@@@Z  00f63b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?FUN_00f63190@@YIIPAUcTerrainDistributeCommand@@@Z  00f63190  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?FUN_00f631f0@@YIXHHPAVcArguments@ArgScript@EA@@@Z  00f631f0  /O2 /MD /Gy /TP /Isrc/game/include
