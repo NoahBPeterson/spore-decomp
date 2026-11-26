@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00812b70  64  complete: cSPUILayoutZoom ctor; cl reorders the raw vtable stores vs member init (real base-ctor form needed) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00812db0  335 complete: cSPUIMainWin::BuildMouseMsg; same-TU GetFlags/MapFlags bodies let cl assume register clobbers (original kept result in ebx)
-00813300  76  complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
 00813370  74  complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs
 008124a0  966 complete: cSPUILayoutCheat::Execute; full list/load/unload/textures + optional id-attach paths restored, but the EASTL string/map plumbing (key-buffer alloc, pair build, map insert/erase) keeps a different frame/register/schedule - [equiv: WEAK, 157 valid inputs, no mismatch]
 00812c90  18  complete: PostMouseEdgeMsg; body byte-identical except the `env.payload = 0` store which cl schedules before the inlined memcpy instead of after it (source uses memset to keep the store alive) - [equiv: WEAK, 400 valid inputs, no mismatch]

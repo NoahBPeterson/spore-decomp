@@ -750,11 +750,13 @@ void MainWin::ApplyToFocus(int arg)
 {
     X* p = mp268;
     if (p && p->x0b()) {
-        p->x0b()->y08(arg);
+        mp268->x0b()->y08(arg);
     }
-    X* o = mp26c;
-    if (o && p && p->x14()) {
-        o->x0e()->y09(arg);
+    if (mp26c) {
+        X* q = mp268;
+        if (q && q->x14()) {
+            mp26c->x0e()->y09(arg);
+        }
     }
 }
 

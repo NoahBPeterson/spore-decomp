@@ -163,7 +163,6 @@
 00dfeb00 264 vector assign stride 0x188: growth path/scheduling differ difftest WEAK after ecx fix (467 valid, 44% cov). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dfec50 205 vector assign stride 0x4e0: growth path/scheduling differ difftest WEAK after ecx fix (296 valid, 53% cov). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dfedb0 127 0x2788-element copy-assign scheduling differs difftest UNSUPPORTED after ecx fix (0/1200 valid: memcpy/fault discards). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00dfee80 329 0x27e8-element copy-ctor member-by-member differs; default WEAK 68/100% no mismatch, replay PASS (fixed wstring assign thiscall and tail offsets). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff130 45 0x27e8-element init: SBO/vector init differs difftest UNSUPPORTED after ecx fix (0/1200 valid: faults). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff1a0 289 0x2788-element copy-ctor member-by-member differs difftest PASS after ecx fix (362 valid, 100% cov). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff330 93 vector assign stride 0x238: grow/medium branches match; initialised-copy call block keeps pre-pushed args (register/scheduling order only); complete, equiv WEAK (178 valid, 53.8% cov, no mismatch) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
