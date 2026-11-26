@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPAudioCityMusicLargeAssetView.cpp  ?Update@cCityMusicLargeAssetView_s00ea_1900@@QAEXH@Z  00ea1b40  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicLargeAssetView.cpp  ?Hide@cCityMusicLargeAssetView_s00ea_1900@@QAEXXZ  00ea1b00  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

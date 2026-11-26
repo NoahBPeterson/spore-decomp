@@ -816,8 +816,7 @@ int Mission::FUN_00c5f4e0(int id)
 
 // @ 0x00c5f530
 bool cSPMissionStory201::PickUFOWreckPlanet()
-{
-    FUN_01021260();
+{    FUN_01021260();
     cStar* star = (cStar*)FUN_01021230();
     if (star == 0)
         return false;
@@ -836,15 +835,15 @@ bool cSPMissionStory201::PickUFOWreckPlanet()
                             m1f4 = 0;
                             old->v0c0();
                         }
-                        ((cStarManager*)StarManager())->GetOrActivatePlanet(p->m13c, &m1f4);
+                        p = (cPlanet*)p->m13c;
+                        ((cStarManager*)StarManager())->GetOrActivatePlanet(p, &m1f4);
                         return true;
                     }
                 }
             }
         }
     }
-    return false;
-}
+    return false;}
 
 // @ 0x00c5f5f0
 void cSPMissionStory201::FUN_00c5f5f0()

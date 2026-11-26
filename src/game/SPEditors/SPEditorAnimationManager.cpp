@@ -270,15 +270,13 @@ extern RandomLinearCongruential sMathRandom;   // 0x1601760
 
 // @ 0x0059da80
 double RandomRange(float range)
-{
-    double dRange = range;
+{    double dRange = range;
     double result = sMathRandom.RandomDoubleUniform() * dRange;
-    if (result < dRange) {
-        if (result > 0.0)
-            return result;
+    if (result >= dRange)
+        return dRange;
+    if (result < 0.0)
         return 0.0;
-    }
-    return dRange;
+    return result;
 }
 
 // @ 0x0059dac0

@@ -4368,8 +4368,7 @@ void __stdcall SpatialEntryResetRange(cSpatialEntry* pFirst, cSpatialEntry* pLas
 
 // @ 0x00b00820
 void InsertionSortByDistance_Positioned(cPositionedObject** pFirst, cPositionedObject** pLast, const Vec3* pReference)
-{
-    if (pFirst == pLast)
+{    if (pFirst == pLast)
         return;
 
     for (cPositionedObject** pCur = pFirst + 1; pCur != pLast; ++pCur) {
@@ -4379,20 +4378,24 @@ void InsertionSortByDistance_Positioned(cPositionedObject** pFirst, cPositionedO
             float dx1 = pReference->mX - pValue->mX;
             float dy1 = pReference->mY - pValue->mY;
             float dz1 = pReference->mZ - pValue->mZ;
+            float dist1 = dx1 * dx1;
+            dist1 += dy1 * dy1;
+            dist1 += dz1 * dz1;
             do {
                 cPositionedObject* pPrev = pSlot[-1];
                 float dx2 = pReference->mX - pPrev->mX;
                 float dy2 = pReference->mY - pPrev->mY;
                 float dz2 = pReference->mZ - pPrev->mZ;
-                if (dx2 * dx2 + dy2 * dy2 + dz2 * dz2 <= dx1 * dx1 + dy1 * dy1 + dz1 * dz1)
+                if (dx2 * dx2 + dy2 * dy2 + dz2 * dz2 > dist1) {
+                    *pSlot = pPrev;
+                    --pSlot;
+                } else {
                     break;
-                *pSlot = pPrev;
-                --pSlot;
+                }
             } while (pSlot != pFirst);
         }
         *pSlot = pValue;
-    }
-}
+    }}
 
 // @ 0x00b008f0
 void InsertionSortByDistance_Positioned_FromRange(cPositionedObject** pFirst, cPositionedObject** pLast, const Vec3* pReference)
@@ -4428,8 +4431,7 @@ void InsertionSortByDistance_Positioned_FromRange(cPositionedObject** pFirst, cP
 
 // @ 0x00b009b0
 void InsertionSortByDistance_Node(cNode** pFirst, cNode** pLast, float refX, float refY, float refZ)
-{
-    if (pFirst == pLast)
+{    if (pFirst == pLast)
         return;
 
     for (cNode** pCur = pFirst + 1; pCur != pLast; ++pCur) {
@@ -4439,20 +4441,24 @@ void InsertionSortByDistance_Node(cNode** pFirst, cNode** pLast, float refX, flo
             float dx1 = refX - pValue->mX;
             float dy1 = refY - pValue->mY;
             float dz1 = refZ - pValue->mZ;
+            float dist1 = dy1 * dy1;
+            dist1 += dx1 * dx1;
+            dist1 += dz1 * dz1;
             do {
                 cNode* pPrev = pSlot[-1];
                 float dx2 = refX - pPrev->mX;
                 float dy2 = refY - pPrev->mY;
                 float dz2 = refZ - pPrev->mZ;
-                if (dx2 * dx2 + dy2 * dy2 + dz2 * dz2 <= dx1 * dx1 + dy1 * dy1 + dz1 * dz1)
+                if (dx2 * dx2 + dy2 * dy2 + dz2 * dz2 > dist1) {
+                    *pSlot = pPrev;
+                    --pSlot;
+                } else {
                     break;
-                *pSlot = pPrev;
-                --pSlot;
+                }
             } while (pSlot != pFirst);
         }
         *pSlot = pValue;
-    }
-}
+    }}
 
 // @ 0x00b00a80
 void InsertionSortByDistance_Node_FromRange(cNode** pFirst, cNode** pLast, float refX, float refY, float refZ)

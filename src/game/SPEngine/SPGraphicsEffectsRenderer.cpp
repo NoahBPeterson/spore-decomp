@@ -2843,25 +2843,36 @@ void Host3::Method8090(int index, int a, float b)
 
 // @ 0x006e80d0
 void CCreature::m80d0(int idx, int a, int b)
-{
-    char* self = (char*)this;
-    int off = idx * 0x68;
-    void* e = *(void**)(self + 0x1b8);
-    void* p = *(void**)((char*)e + off + 0x60);
+{    struct Elem68 {
+        uint8_t pad0[0x54];
+        uint m54;
+        uint m58;
+        uint8_t pad5c[4];
+        void* m60;
+        uint8_t pad64[4];
+    };
+    struct Self {
+        uint8_t pad0[0x40];
+        Ext* m40;
+        uint8_t pad44[0x1b8 - 0x44];
+        Elem68* m1b8;
+    };
+    void* p = ((Self*)this)->m1b8[idx].m60;
     if (p) {
         ((void(__thiscall*)(void*, int, int, int))VFN(p, 0x20))(p, idx, a, b);
         return;
     }
-    void* r = ((Ext*)(*(void**)(self + 0x40)))->r6f2050(a, b);
+    Ext* ext = ((Self*)this)->m40;
+    void* r = ext->r6f2050(a, b);
     if (r) {
-        *(uint*)((char*)*(void**)(self + 0x1b8) + off + 0x54) = *(uint*)r;
-        *(uint*)((char*)*(void**)(self + 0x1b8) + off + 0x58) = *(uint*)((char*)r + 4);
+        ((Self*)this)->m1b8[idx].m54 = *(uint*)r;
+        ((Self*)this)->m1b8[idx].m58 = *(uint*)((char*)r + 4);
         return;
     }
     void* mm = F_67dd70();
-    void* base = (char*)*(void**)(self + 0x1b8) + off;
+    Elem68* base = &((Self*)this)->m1b8[idx];
     int v = ((int(__thiscall*)(void*, int))VFN(mm, 0x28))(mm, a);
-    *(uint*)((char*)base + 0x54) = (uint)v;
+    base->m54 = (uint)v;
 }
 
 // @ 0x006e8160

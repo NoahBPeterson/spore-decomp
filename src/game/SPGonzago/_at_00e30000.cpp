@@ -2337,17 +2337,16 @@ void cUITimedTooltip::Shutdown()
 
 // @ 0x00e36540
 void cUITimedTooltip::UpdateTimeoutA()
-{
-    if (m_pLayout == nullptr)
+{    if (m_pLayout == nullptr)
         return;
     if (m_swA.m_nStart == 0)
         return;
-    if (m_swA.GetElapsedTime() > (int64_t)m_nTimeoutA) {
+    if ((uint64_t)m_swA.GetElapsedTime() > (uint64_t)m_nTimeoutA) {
         m_pLayout->SetVisibility(true);
-        m_swA.m_nStart = 0;
-        m_swA.m_nStop = 0;
-    }
-}
+        EA::Stopwatch_s00e3_6150* pSw = &m_swA;
+        pSw->m_nStart = 0;
+        pSw->m_nStop = 0;
+    }}
 
 // @ 0x00e365a0
 void cUITimedTooltip::UpdateTimeoutB(IWin* pWindow)

@@ -1740,20 +1740,16 @@ char* FUN_00ac9740(char* p, char* end, char* d)
 
 // @ 0x00ac97a0
 RCObj** FUN_00ac97a0(RCObj** last, RCObj** first, RCObj** d)
-{
-    while (first != last) {
-        RCObj* s = *(RCObj**)(first - 1);
-        RCObj* old = d[-1];
-        --first;
-        --d;
+{    while (first != last) {
+        RCObj* s = *--first;
+        RCObj* old = *--d;
         if (s != old) {
             if (s) s->AddRef();
             *d = s;
             if (old) old->Release();
         }
     }
-    return d;
-}
+    return d;}
 
 // @ 0x00ac97f0
 char* FUN_00ac97f0(char* first, char* last, char* d)

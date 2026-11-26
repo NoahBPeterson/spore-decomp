@@ -9655,8 +9655,7 @@ bool FUN_00d7e6e0(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint8
 
 // @ 0x00d7e910
 float FUN_00d7e910(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint8_t* a6, void* a7, cKeySrc* a8)
-{
-    void* slot = ((cSelf*)&a1->mpB4c->mStimuli)->FUN_00bc96a0(0, 0x8000);
+{    void* slot = ((cSelf*)&a1->mpB4c->mStimuli)->FUN_00bc96a0(0, 0x8000);
     if (slot != 0)
         return 1.0f;
 
@@ -9669,21 +9668,21 @@ float FUN_00d7e910(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint
             if (e != 0)
             {
                 void* r = ((cVtVb8*)e)->vb8(TAG_SOCIAL_ANIM);
-                if (r == 0)
+                if (r != 0)
                 {
-                    r = FUN_00d2ec30(e);
-                    if (r == 0)
-                        return 0.0f;
-                    if (o->mAction15c != 4)
-                        return 0.0f;
+                    ((cSelf*)&a1->mpB4c->mStimuli)->FUN_00bc97f0(0, 0x8000, DAT_01473c70, r);
+                    return 1.0f;
                 }
-                ((cSelf*)&a1->mpB4c->mStimuli)->FUN_00bc97f0(0, 0x8000, DAT_01473c70, r);
-                return 1.0f;
+                void* r2 = FUN_00d2ec30(e);
+                if (r2 != 0 && o->mAction15c == 4)
+                {
+                    ((cSelf*)&a1->mpB4c->mStimuli)->FUN_00bc97f0(0, 0x8000, DAT_01473c70, r2);
+                    return 1.0f;
+                }
             }
         }
     }
-    return 0.0f;
-}
+    return 0.0f;}
 
 // @ 0x00d7e9d0
 float FUN_00d7e9d0(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint8_t* a6, void* a7, cKeySrc* a8)

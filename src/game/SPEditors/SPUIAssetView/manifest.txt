@@ -20,3 +20,4 @@
 ../src/game/SPEditors/SPUIAssetView.cpp  ?SporepediaVecClear@@YAXXZ  0065aeb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?UpdateVerbIcon@AssetView@@QAEXXZ  00657e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?SelectAsset@cSPUIAssetView@@QAEXHDHDD@Z  00657a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?SporepediaVecSetSize@@YAXH@Z  0065aed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

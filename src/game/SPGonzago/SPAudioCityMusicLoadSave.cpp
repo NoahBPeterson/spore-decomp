@@ -158,11 +158,11 @@ public:
     bool LoadKey(int a, int b, int nKey);
     uint32_t QueryKey(uint32_t nValue, int nKey);
 
-    uint8_t mPad10[0x10];                   // 0x10
-    cSPUILayout_s00ea_1900* mpThumbnailLayout;         // 0x20
-    cPlayerCityMusic* mpMusic;              // 0x24
-    cSPUILayout_s00ea_1900* mpSaveDialogLayout;        // 0x28
-    cCityMusicViewer* mpViewer;             // 0x2c
+    uint8_t mPad10[0x10];                   // 0x04..0x13
+    cPlayerCityMusic* mpMusic;              // 0x14
+    cCityMusicViewer* mpViewer;             // 0x18
+    cSPUILayout_s00ea_1900* mpThumbnailLayout;         // 0x1c
+    cSPUILayout_s00ea_1900* mpSaveDialogLayout;        // 0x20
     uint8_t mbWaitingForSaveDialog;         // 0x31
     uint8_t mbWaitingForThumbnail;          // 0x32
     uint8_t mPad33[0x09];                   // 0x33
@@ -428,7 +428,7 @@ void cCityMusicLoadSave::SetMusic(cPlayerCityMusic* pMusic)
         if (pOldMusic != nullptr)
             pOldMusic->Release();
     }
-    SetViewerMusic(mpViewer, pMusic);
+    mpViewer->SetMusic(pMusic);
 }
 
 // @ 0x00ea23e0

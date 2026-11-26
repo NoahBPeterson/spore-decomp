@@ -1,4 +1,3 @@
 # <va>  <diff-bytes>  <reason>   (nonmatching: complete + behaviourally equivalent, but not byte-exact)
 00999d30 23 schedule: key-copy/count order now matches retail (mLastKey struct copy, then count) via _ReadWriteBarrier; remaining diff is only the placement of the out-pointer load and pop edi. fix1: quick check UNSUPPORTED (emulator: 0 valid inputs, operator new faults; angr unavailable) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#5 edi]
 00999dd0 370 complete SpVec::insert(pos,n,value); register allocation and this-reload differ
-0099a010 17 complete StringTableXml::SetString; this/vector register allocation differs

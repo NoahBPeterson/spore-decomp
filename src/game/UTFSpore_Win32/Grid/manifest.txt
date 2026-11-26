@@ -109,3 +109,5 @@
 ../src/game/UTFSpore_Win32/Grid.cpp  ??EColIterA@@QAEAAU0@XZ  00973640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Grid.cpp  ?MakeRoomForColumn@WinGrid_s0097_bfb0@Gr@@QAE_NHHH@Z  0097c580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Grid.cpp  ?FirstUsed@SparseMatrix@@QAEPAUIter@@PAU2@@Z  00973cc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?InvalidateLayout@Window@UTFWinControls@EA@@UAEXXZ  009719a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?MergeSortShell@@YAXPAH0PAXUSortPack@@@Z  00976310  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

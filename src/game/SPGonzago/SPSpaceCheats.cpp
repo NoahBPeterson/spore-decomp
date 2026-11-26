@@ -1838,8 +1838,13 @@ cStarVisualParams& cStarVisualParams::CopyFrom(const cStarVisualParams& rOther)
 }
 
 // @ 0x01022cb0
-void SortPlanetArray(cAutoRef* pBegin, cAutoRef* pEnd, void* pUnused, cPointerCompare pCompare)
-{
+void SortPlanetArray(cAutoRef* pBegin, cAutoRef* pEnd, cPointerCompare pCompare)
+{    struct LocalHelper {
+        static __forceinline bool Less(cPointerCompare fn, cRefCounted* a, cRefCounted* b) {
+            bool res = fn(a, b) != 0;
+            return res;
+        }
+    };
     if (pBegin == pEnd)
         return;
     for (cAutoRef* pSlot = pBegin + 1; pSlot != pEnd; ++pSlot) {
@@ -1847,7 +1852,7 @@ void SortPlanetArray(cAutoRef* pBegin, cAutoRef* pEnd, void* pUnused, cPointerCo
         if (pValue != nullptr)
             pValue->AddRef();
         cAutoRef* pScan = pSlot;
-        while (pScan != pBegin && pCompare(pValue, (pScan - 1)->mpObject) != 0) {
+        while (pScan != pBegin && LocalHelper::Less(pCompare, pValue, (pScan - 1)->mpObject)) {
             cRefCounted* pOld = (pScan - 1)->mpObject;
             cRefCounted* pMoved = pScan->mpObject;
             if (pOld != pMoved) {
@@ -1862,8 +1867,7 @@ void SortPlanetArray(cAutoRef* pBegin, cAutoRef* pEnd, void* pUnused, cPointerCo
         pScan->Assign(pValue);
         if (pValue != nullptr)
             pValue->Release();
-    }
-}
+    }}
 
 // @ 0x01022d80
 void InsertPlanetSorted(cAutoRef* pBegin, cAutoRef* pEnd, cPointerCompare pCompare)

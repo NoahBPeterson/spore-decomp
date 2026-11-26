@@ -26,3 +26,4 @@
 ../src/game/SPEditors/_at_00f00000.cpp  ?f02670@PL@@QAEXXZ  00f02670  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00f00000.cpp  ?f01030@UI@@QAEXPAXM@Z  00f01030  /O2 /MD /Gy /TP /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00f00000.cpp  ?f02b00@PL@@QAEXXZ  00f02b00  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?f03010@PL@@QAEXXZ  00f03010  /O2 /MD /Gy /TP /GS- /Isrc/game/include

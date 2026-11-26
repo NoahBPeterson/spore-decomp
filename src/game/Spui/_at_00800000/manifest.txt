@@ -21,3 +21,4 @@
 ../src/game/Spui/_at_00800000.cpp  ?ctor@cSPUILaunchScreenWinProc@@QAEPAV1@XZ  0080cf00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00800000.cpp  ?Erase@InfoVec@@QAEPAUcSPUIInfoLine@@PAU2@0@Z  0080cc10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00800000.cpp  ?ObjBCtor@@YIPAUObjB@@PAU1@@Z  0080ba10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?erase@Vec@@QAEPAURecC_s0080_b6b0@@PAU2@0@Z  0080bcf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

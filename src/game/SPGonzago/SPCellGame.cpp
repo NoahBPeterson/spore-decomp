@@ -3922,8 +3922,7 @@ void FUN_00e57a10(char* param_1, int param_2)
 
 // @ 0x00e57a60
 char FUN_00e57a60(unsigned int id, unsigned int id2, int a2, int state, float* vec)
-{
-  CellPool* pool = &gspCellGame->mCells;
+{  CellPool* pool = &gspCellGame->mCells;
   char* p = (char*)pool->Get(id);
   if (p == 0) return 0;
   CellPool* pool2 = &gspCellGame->mCells;
@@ -3934,21 +3933,22 @@ char FUN_00e57a60(unsigned int id, unsigned int id2, int a2, int state, float* v
     case 0: case 0x12: case 0x13: case 0x14: case 0x15: case 0x16:
     case 0x2f: case 0x30: case 0x32: case 0x33:
       *(int*)(p + 0x18c) = state;
-      float v0 = vec[0];
-      float v1 = vec[1];
-      float v2 = vec[2];
-      *(float*)(p + 0x1a0) = -v0;
-      *(float*)(p + 0x1a4) = -v1;
-      *(float*)(p + 0x1a8) = -v2;
+      struct Vec3Local {
+        float x, y, z;
+        Vec3Local() {}
+        Vec3Local(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+        Vec3Local(const Vec3Local& o) : x(o.x), y(o.y), z(o.z) {}
+        Vec3Local& operator=(const Vec3Local& o) { x = o.x; y = o.y; z = o.z; return *this; }
+        Vec3Local operator-() const { return Vec3Local(-x, -y, -z); }
+      };
+      *(Vec3Local*)(p + 0x1a0) = -*(Vec3Local*)vec;
       FUN_00e57a10(p, a2);
   }
-  return 1;
-}
+  return 1;}
 
 // @ 0x00e57b50
 char FUN_00e57b50(unsigned int id, unsigned int id2, int state, float* vec)
-{
-  CellPool* pool = &gspCellGame->mCells;
+{  CellPool* pool = &gspCellGame->mCells;
   char* p = (char*)pool->Get(id);
   if (p == 0) return 0;
   *(char*)(p + 0x178) = 1;
@@ -3957,16 +3957,18 @@ char FUN_00e57b50(unsigned int id, unsigned int id2, int state, float* vec)
     case 0: case 0x12: case 0x13: case 0x14: case 0x15: case 0x16:
     case 0x32: case 0x33:
       *(int*)(p + 0x18c) = state;
-      float v0 = vec[0];
-      float v1 = vec[1];
-      float v2 = vec[2];
-      *(float*)(p + 0x1a0) = -v0;
-      *(float*)(p + 0x1a4) = -v1;
-      *(float*)(p + 0x1a8) = -v2;
+      struct Vec3Local {
+        float x, y, z;
+        Vec3Local() {}
+        Vec3Local(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+        Vec3Local(const Vec3Local& o) : x(o.x), y(o.y), z(o.z) {}
+        Vec3Local& operator=(const Vec3Local& o) { x = o.x; y = o.y; z = o.z; return *this; }
+        Vec3Local operator-() const { return Vec3Local(-x, -y, -z); }
+      };
+      *(Vec3Local*)(p + 0x1a0) = -*(Vec3Local*)vec;
       FUN_00e57a10(p, id2);
   }
-  return 1;
-}
+  return 1;}
 
 // @ 0x00e57c30
 char FUN_00e57c30(unsigned int id, unsigned int id2, int state)

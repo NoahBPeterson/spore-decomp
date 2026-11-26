@@ -3309,8 +3309,8 @@ struct SortPack {
     int b;
     int c;
 };
-void MergeSortWork(SortPack ctx, int* first, int* last, int* buf);            // 0x00976160
-void MergeSortShell(int* first, int* last, int* cur0, int* cur1, int* cur2);// 0x00976310
+void MergeSortWork(int* first, int* last, int* buf, SortPack ctx);            // 0x00976160
+void MergeSortShell(int* first, int* last, void* alloc, SortPack ctx);// 0x00976310
 void MergeRuns(int* first, int* mid, int* mid2, int* last, int* buf, SortPack ctx); // 0x00975e00
 struct MatrixRowC {              // MatrixRow<CellFormatExtra>, 0x1c bytes
     char   alloc[4];
@@ -4901,22 +4901,28 @@ void EA::UTFWinControls::WinGrid_s0097_0f30::DrawCell(EA::UTFWinControls::OwnerD
 // @ 0x009719a0
 void EA::UTFWinControls::Window::InvalidateLayout()
 {
+    struct WindowGridView : EA::UTFWinControls::IWindow {
+        char _pad004[0x204];
+        EA::UTFWinControls::IWinGrid_s0097_0f30 mGrid;
+    };
+
     EA::UTFWinControls::IWindow::InvalidateLayout();
 
-    EA::UTFWinControls::IWinGrid_s0097_0f30* pGrid = (EA::UTFWinControls::IWinGrid_s0097_0f30*)((char*)this + 0x208);
+    WindowGridView* pSelf = (WindowGridView*)this;
+    EA::UTFWinControls::IWinGrid_s0097_0f30* pGrid = &pSelf->mGrid;
 
     EA::UTFWinControls::RectF gridArea;
     pGrid->GetGridArea(gridArea);
     EA::UTFWinControls::RectF cellArea;
     pGrid->GetCellArea(cellArea);
 
+    pSelf->mGrid.mVisibleGridAreaWidth = gridArea.right - gridArea.left;
+    pSelf->mGrid.mVisibleGridAreaHeight = gridArea.bottom - gridArea.top;
+    pSelf->mGrid.mVisibleCellAreaWidth = cellArea.right - cellArea.left;
+    pSelf->mGrid.mVisibleCellAreaHeight = cellArea.bottom - cellArea.top;
     EA::UTFWinControls::WinGrid_s0097_0f30* pWin = (EA::UTFWinControls::WinGrid_s0097_0f30*)((char*)this - 4);
-    pWin->mGrid.mVisibleGridAreaWidth = gridArea.right - gridArea.left;
-    pWin->mGrid.mVisibleGridAreaHeight = gridArea.bottom - gridArea.top;
-    pWin->mGrid.mVisibleCellAreaWidth = cellArea.right - cellArea.left;
-    pWin->mGrid.mVisibleCellAreaHeight = cellArea.bottom - cellArea.top;
-    ((EA::UTFWinControls::IWindow*)this)->SetFlag(8, 1);
     pWin->mGrid.mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow*)((char*)pWin + 4))->SetFlag(8, 1);
 }
 
 // @ 0x00971a40
@@ -6972,7 +6978,7 @@ bool WinGrid_s0097_5ea0::CopyCellData(int c1, int r1, EA::UTFWinControls::CellDa
 }
 
 // @ 0x00976160
-void MergeSortWork(SortPack ctx, int* first, int* last, int* buf)
+void MergeSortWork(int* first, int* last, int* buf, SortPack ctx)
 {
     int n = last - first;
     if (n <= 1)
@@ -6983,16 +6989,16 @@ void MergeSortWork(SortPack ctx, int* first, int* last, int* buf)
     if (half > 1) {
         int quarter = half / 2;
         int* q = first + quarter;
-        MergeSortWork(ctx, first, q, buf);
-        MergeSortWork(ctx, q, mid, buf + quarter);
+        MergeSortWork(first, q, buf, ctx);
+        MergeSortWork(q, mid, buf + quarter, ctx);
         MergeRuns(first, q, q, mid, buf, ctx);
     }
 
     if (n - half > 1) {
         int rest = (half + n) / 2;
         int* r = first + rest;
-        MergeSortWork(ctx, mid, r, buf + half);
-        MergeSortWork(ctx, r, last, buf + rest);
+        MergeSortWork(mid, r, buf + half, ctx);
+        MergeSortWork(r, last, buf + rest, ctx);
         MergeRuns(mid, r, r, last, buf + half, ctx);
     } else {
         buf[half] = *mid;
@@ -7002,8 +7008,9 @@ void MergeSortWork(SortPack ctx, int* first, int* last, int* buf)
 }
 
 // @ 0x00976310
-void MergeSortShell(int* first, int* last, int* cur0, int* cur1, int* cur2)
+void MergeSortShell(int* first, int* last, void* alloc, SortPack ctx)
 {
+    (void)alloc;
     int n = last - first;
     if (n <= 1)
         return;
@@ -7014,11 +7021,7 @@ void MergeSortShell(int* first, int* last, int* cur0, int* cur1, int* cur2)
     for (int* p = buf; p != buf + n; ++p)
         *p = 0;
 
-    SortPack ctx;
-    ctx.a = (int)cur0;
-    ctx.b = (int)cur1;
-    ctx.c = (int)cur2;
-    MergeSortWork(ctx, first, last, buf);
+    MergeSortWork(first, last, buf, ctx);
     EaFree(buf);
 }
 

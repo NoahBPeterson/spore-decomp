@@ -6247,8 +6247,8 @@ void __cdecl FUN_00ca9b70()
 
 // @ 0x00ca9cc0
 tSlot16* __thiscall cSlotVector16::Erase(tSlot16* pFirst, tSlot16* pLast)
-{
-    tSlot16* pNewEnd = FUN_00ca0e80(pLast, mpEnd, pFirst);
+{    tSlot16* pOldEnd = mpEnd;
+    tSlot16* pNewEnd = FUN_00ca0e80(pLast, pOldEnd, pFirst);
     tSlot16* pEnd = mpEnd;
     for (tSlot16* p = pNewEnd; p < pEnd; ++p) {
         if (p->mpObj)

@@ -12,3 +12,4 @@
 ../src/game/SPEngine/SPLocaleManager.cpp  ??0LocaleManagerDtorView@@QAE@XZ  00696420  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ?FindMatchingLocale@cLocaleManager@SP@@UAEPB_WXZ  006969b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ?BroadcastLocaleChange@cLocaleManager_s0069_6c80@SP@@QAEXI@Z  00697650  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  @FUN_00695dc0@4  00695dc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

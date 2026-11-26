@@ -2052,13 +2052,13 @@ void PL::f02e00()
 
 // @ 0x00f03010
 void PL::f03010()
-{
-    Big* b = (Big*)pC;
+{    Big* b = (Big*)pC;
     vtable = g_vtbl_148b788;
     if (b) {
         if (b->p20c && b->p20c[-1]) operator_delete_(b->p20c);
-        ((Vec*)&b->begin)->destroy(b->begin, b->end);
-        if (b->begin && ((int*)b->begin)[-1]) operator_delete_(b->begin);
+        char** v = &b->begin;
+        ((Vec*)v)->destroy(v[0], v[1]);
+        if (v[0] && ((int*)v[0])[-1]) operator_delete_(v[0]);
         operator_delete_(b);
     }
     pC = 0;

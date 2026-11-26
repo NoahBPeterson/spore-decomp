@@ -5,3 +5,4 @@
 ../src/game/UTFSpore_Win32/StringTableXml.cpp  ??_GStringTableXml@@UAEPAXI@Z  00999ce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/StringTableXml.cpp  ??0StringTableXml@@QAE@ABUKey@@PB_W@Z  00999c50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/StringTableXml.cpp  ?StrDup@StringTableXml@@QAEPA_WPB_W@Z  00999b20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/StringTableXml.cpp  ?SetString@StringTableXml@@QAEXIPB_W@Z  0099a010  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -456,9 +456,8 @@ void EmitterSndPlayer::q112c0()
 }
 
 // @ 0x00a11310
-void f_00a11310(const void* src, const void* end, void* dst)
-{
-    if (src == end) return;
+void* f_00a11310(const void* src, const void* end, void* dst)
+{    if (src == end) return dst;
     do {
         if (dst) {
             ((uint32_t*)dst)[0] = ((const uint32_t*)src)[0];
@@ -468,7 +467,7 @@ void f_00a11310(const void* src, const void* end, void* dst)
         src = (const char*)src + 12;
         dst = (char*)dst + 12;
     } while (src != end);
-}
+    return dst;}
 
 // @ 0x00a11350
 EmitterSndPlayer* EmitterSndPlayer::q11350()

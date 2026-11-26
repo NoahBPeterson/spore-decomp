@@ -307,9 +307,10 @@ void SpVec::insert_n(void** position, uint n, void** value)
 // @ 0x0099a010
 void StringTableXml::SetString(uint index, const wchar_t* str)
 {
-  if ((uint)(mStrings.mpStringEnd - mStrings.mpStringBegin) < index + 1)
-    ((PtrVector*)&mStrings.mpStringBegin)->resize(index + 1);
-  wchar_t** dst = (wchar_t**)(mStrings.mpStringBegin + index);
+  PtrVector* v = (PtrVector*)&mStrings.mpStringBegin;
+  if ((uint)(v->mpEnd - v->mpBegin) < index + 1)
+    v->resize(index + 1);
+  wchar_t** dst = (wchar_t**)(v->mpBegin + index);
   *dst = StrDup(str);
 }
 
