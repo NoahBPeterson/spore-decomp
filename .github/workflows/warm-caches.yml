@@ -18,6 +18,7 @@ on:
       - tools/ci/toolchain.sha256
       - tools/ci/is_unpack.py
       - tools/ci/setup_oss.sh
+      - tools/ci/wine_root.sh
 
 permissions:
   contents: read
@@ -37,6 +38,14 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Look up the installed-wine archive
+        id: wineroot
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/wine-root
+          key: wine-root-noble-v1
+          lookup-only: true
+
       - name: Restore the cached wine packages
         id: aptcache
         uses: actions/cache/restore@v4
@@ -44,20 +53,34 @@ jobs:
           path: ~/apt-archives
           key: apt-noble-winehq-v1
 
-      - name: Install wine (as byte-match.yml does)
+      # exactly byte-match.yml's install, recorded by wine_root.sh (made once: to pick up a new wine or new packages,
+      # bump wine-root-noble-vN here and in byte-match.yml); then the recommended packages are downloaded too, for
+      # install_cached_debs.sh when no Ubuntu mirror is reachable
+      - name: Install wine (as byte-match.yml does) and archive what apt wrote
         run: |
           mkdir -p ~/apt-archives/partial
+          sh tools/ci/wine_root.sh mark
           sudo dpkg --add-architecture i386
           sudo mkdir -pm755 /etc/apt/keyrings
           sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
           sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
           sh tools/ci/apt_update.sh
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends \
+          sudo NEEDRESTART_SUSPEND=1 DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+            -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
+          if [ "${{ steps.wineroot.outputs.cache-hit }}" != true ]; then sh tools/ci/wine_root.sh save ~/wine-root; fi
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --download-only --install-recommends \
             -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
           sudo rm -rf ~/apt-archives/partial ~/apt-archives/lock
           sudo chown -R "$(id -u):$(id -g)" ~/apt-archives
           echo "WINE_VERSION=$(wine --version)" >> "$GITHUB_ENV"
           du -sh ~/apt-archives
+
+      - name: Save the installed-wine archive
+        if: steps.wineroot.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/wine-root
+          key: wine-root-noble-v1
 
       - name: Save the wine packages
         if: steps.aptcache.outputs.cache-hit != 'true'
