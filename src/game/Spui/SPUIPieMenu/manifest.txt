@@ -22,3 +22,4 @@
 ../src/game/Spui/SPUIPieMenu.cpp  ?Init@cSPUIPieMenu_s0081_98f0@@QAE_NPBUKey@@0DPAXD@Z  0081a350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?DoInsertValue@ItemVec@@QAEXPADPBD@Z  0081a510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPieMenu.cpp  ?Shutdown@cSPUIPieMenu_s0081_98f0@@QAE_NXZ  0081a6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPieMenu.cpp  ?Init@PieMenuInit@@QAEXPAX00000@Z  00817e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -9,3 +9,4 @@ slices/s0116ff30/s0116ff30.cpp  ?FUN_01170510@CMpegBase@@QAEHXZ  01170510
 slices/s0116ff30/s0116ff30.cpp  ?FUN_01170540@CMpegBase@@QAEXXZ  01170540
 slices/s0116ff30/s0116ff30.cpp  ?ScalarDeletingDtor2@CMpegBase@@QAEPAXE@Z  01170570
 slices/s0116ff30/s0116ff30.cpp  ?Open@CMpegBase@@QAEHHH@Z  011705b0
+slices/s0116ff30/s0116ff30.cpp  ?FUN_01170480@CMpegBase@@QAEHXZ  01170480  /O2 /MD /Gy /EHsc /TP

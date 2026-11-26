@@ -24,3 +24,4 @@
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010ea0@@YAXPAUtGrobShockData@@HHU1@P6A_NABU1@2@Z@Z  01010ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?UniverseMakeShockHeap@@YAXPAUtGrobShockData@@0P6A_NABU1@1@Z@Z  01012330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?RemoveRaid@cSimulatorUniverse@@QAE_NHHH@Z  0100e780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?erase@ShockVec@@QAEPAUtGrobShockData_s0101_37b0@@PAU2@0@Z  01013ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

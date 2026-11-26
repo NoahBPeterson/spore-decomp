@@ -1207,14 +1207,26 @@ void NodePool::Free()
 
 // @ 0x00c05e80
 uint8_t* NodePool::Cur()
-{
-    uint8_t*   a = mpPoolBegin;
-    uint8_t*   b = mpBlockCur;
-    uint32_t** c = mppFreeListEnd;
-    if (a != b)
-        return a - 0x14;
-    return (uint8_t*)c[-1] + 0x8c;
-}
+{    struct Elem { uint8_t data[0x14]; };
+    struct Iter {
+        Elem* mpCurrent;
+        Elem* mpBegin;
+        Elem* mpEnd;
+        Elem** mpCurrentArrayPtr;
+    };
+    Iter temp;
+    temp.mpCurrent = (Elem*)mpPoolBegin;
+    temp.mpBegin = (Elem*)mpBlockCur;
+    temp.mpEnd = (Elem*)mpBlockEnd;
+    temp.mpCurrentArrayPtr = (Elem**)mppFreeListEnd;
+    if (temp.mpCurrent == temp.mpBegin) {
+        temp.mpCurrentArrayPtr--;
+        temp.mpBegin = *temp.mpCurrentArrayPtr;
+        temp.mpEnd = temp.mpBegin + 8;
+        temp.mpCurrent = temp.mpEnd;
+    }
+    --temp.mpCurrent;
+    return (uint8_t*)temp.mpCurrent;}
 
 // @ 0x00c05ea0
 void NodePool::Pop()

@@ -499,16 +499,14 @@ bool __cdecl SetCachingType(int type, void* desc);  // 0x006ac040
 // ---- items of slice s0072f830 end
 
 // @ 0x00720200
-void Obj15_20200(Vertex3D* first, Vertex3D* last, Vertex3D* dest)
-{
-    if (first == last)
-        return;
-    do {
+Vertex3D* Obj15_20200(Vertex3D* first, Vertex3D* last, Vertex3D* dest)
+{    while (first != last) {
         if (dest)
             *dest = *first;
         ++first;
         ++dest;
-    } while (first != last);
+    }
+    return dest;
 }
 
 // @ 0x0072c1e0

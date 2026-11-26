@@ -5643,8 +5643,7 @@ void cUIMissionCardPanel_s00e1_d020::Refresh()
 
 // @ 0x00e1d610
 void cUIMissionCardPanel_s00e1_d020::SetSlot(void* pMission)
-{
-    SetVisibleSlot(pMission);
+{    SetVisibleSlot(pMission);
 
     if (GetUIHints() != nullptr)
         GetUIHints()->SetFlag(0, 1);
@@ -5661,22 +5660,24 @@ void cUIMissionCardPanel_s00e1_d020::SetSlot(void* pMission)
         IWindow_s00e1_d020* pMissionWindow = (IWindow_s00e1_d020*)pMission;
         void* pObject = pMissionWindow->GetObject(0x34066a80);
         if (pObject != nullptr) {
-            int32_t nCount = (int32_t)(mSlots.mpEnd - mSlots.mpBegin);
+            SlotVector* pSlots = &mSlots;
+            int32_t nCount = (int32_t)(pSlots->mpEnd - pSlots->mpBegin);
             for (int32_t i = 0; i < nCount; ++i) {
                 if (pObject == mSlots.mpBegin[i])
                     mnSelected = i;
             }
 
             FeedItem* pItem = mpCategoryA->Find(mnSelected + 0x6146391);
-            if (pItem == nullptr)
-                pItem = mpCategoryB->Find(mnSelected + 0x6146391);
+            if (pItem == nullptr) {
+                FeedListCategory* pCatB = mpCategoryB;
+                pItem = pCatB->Find(mnSelected + 0x6146391);
+            }
             if (pItem != nullptr)
                 mpFeedList->Select(pItem);
 
             SetTracked();
         }
-    }
-}
+    }}
 
 // @ 0x00e1d710
 void cMissionSlot::OnNotify(void* pSender, uint32_t nMessage)

@@ -8,6 +8,7 @@
 extern "C" __declspec(dllimport) int   __cdecl _stricmp(const char* a, const char* b);
 extern "C" __declspec(dllimport) int   __cdecl tolower(int);
 extern "C" int   __cdecl Vsnprintf8(char* buf, unsigned n, const char* fmt, void* args);   // 0x00938400
+extern "C" unsigned int __cdecl strlen(const char*);
 extern char gEmptyString[];
 extern char gSprintfBuf[];      // 0x0164f780
 extern char gSprintfAppendBuf[];  // 0x0164fb80
@@ -67,22 +68,16 @@ int __cdecl ParseEnum(const char* name, int* table)
 
 // @ 0x00840c20
 void __cdecl Sprintf(eastl::string8_s0084_0250* out, const char* fmt, ...)
-{
-    char* args = (char*)&fmt + 4;
+{    char* args = (char*)&fmt + 4;
     Vsnprintf8(gSprintfBuf, 0x400, fmt, args);
-    char* p = gSprintfBuf;
-    while (*p) ++p;
-    out->assign(gSprintfBuf, p);
+    out->assign(gSprintfBuf, gSprintfBuf + strlen(gSprintfBuf));
 }
 
 // @ 0x00840c70
 void __cdecl SprintfAppend(eastl::string8_s0084_0250* out, const char* fmt, ...)
-{
-    char* args = (char*)&fmt + 4;
+{    char* args = (char*)&fmt + 4;
     Vsnprintf8(gSprintfAppendBuf, 0x400, fmt, args);
-    char* p = gSprintfAppendBuf;
-    while (*p) ++p;
-    out->append(gSprintfAppendBuf, p);
+    out->append(gSprintfAppendBuf, gSprintfAppendBuf + strlen(gSprintfAppendBuf));
 }
 
 // @ 0x00840cc0

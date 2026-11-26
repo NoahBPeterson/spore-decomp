@@ -1305,11 +1305,11 @@ float* cMapInfo_s00a7_5dd0::SampleVec3(float* out, uint32_t a)
 
 // @ 0x00a76df0
 void MapInfo::Update()
-{
-    if (m10 == 0) {
-        uint32_t a = m28, b = m2c;
-        if ((a & b) != 0xffffffff) {
-            IValue* pNew = mp7c->Fetch(a, b);
+{    if (m10 == 0) {
+        typedef IValue* (__thiscall* FetchFn)(IPxSource*, uint64_t);
+        uint64_t k = *(const uint64_t*)&m28;
+        if (k != ~0ULL) {
+            IValue* pNew = ((FetchFn)(*(void***)mp7c)[0x2c / 4])(mp7c, k);
             IValue* pOld = mp70;
             if (pNew != pOld) {
                 if (pNew) ((IRefObj*)pNew)->AddRef();
@@ -1317,9 +1317,9 @@ void MapInfo::Update()
                 if (pOld) ((IRefObj*)pOld)->Release();
             }
         }
-        a = m30; b = m34;
-        if ((a & b) != 0xffffffff) {
-            IValue* pNew = mp7c->Fetch(a, b);
+        k = *(const uint64_t*)&m30;
+        if (k != ~0ULL) {
+            IValue* pNew = ((FetchFn)(*(void***)mp7c)[0x2c / 4])(mp7c, k);
             IValue* pOld = mp74;
             if (pNew != pOld) {
                 if (pNew) ((IRefObj*)pNew)->AddRef();
@@ -1327,9 +1327,9 @@ void MapInfo::Update()
                 if (pOld) ((IRefObj*)pOld)->Release();
             }
         }
-        a = m38; b = m3c;
-        if ((a & b) != 0xffffffff) {
-            IValue* pNew = mp7c->Fetch(a, b);
+        k = *(const uint64_t*)&m38;
+        if (k != ~0ULL) {
+            IValue* pNew = ((FetchFn)(*(void***)mp7c)[0x2c / 4])(mp7c, k);
             IValue* pOld = mp78;
             if (pNew != pOld) {
                 if (pNew) ((IRefObj*)pNew)->AddRef();
@@ -1916,21 +1916,17 @@ __declspec(noinline) Rec7* CopyRec7(Rec7* first, Rec7* last, Rec7* dst)
 
 // @ 0x00a78e90
 void Xform::InverseTransformDir(Vec3* v) const
-{
-    if (scale != 1.0f) {
+{    if (scale != 1.0f) {
         float inv = 1.0f / scale;
         v->x = v->x * inv;
         v->y = inv * v->y;
         v->z = inv * v->z;
     }
     if (flags & 2) {
-        float z = v->z;
-        float y = v->y;
-        float x = v->x;
         Vec3 t;
-        t.x = (m[1] * y + m[2] * z) + m[0] * x;
-        t.y = (m[4] * y + m[5] * z) + m[3] * x;
-        t.z = (m[7] * y + m[8] * z) + m[6] * x;
+        t.x = (m[2] * v->z + m[1] * v->y) + m[0] * v->x;
+        t.y = (m[5] * v->z + m[4] * v->y) + m[3] * v->x;
+        t.z = (m[8] * v->z + m[7] * v->y) + m[6] * v->x;
         *v = t;
     }
 }

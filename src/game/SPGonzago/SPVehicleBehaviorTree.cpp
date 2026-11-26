@@ -3954,15 +3954,14 @@ uint8_t FUN_00dcc0a0(BehaviorObj* self, StateCtx* ctx, float dt)
 
 // @ 0x00dcc2c0
 void BehaviorObj::RemoveNouns()
-{
-  mVec38.erase(mVec38.mpBegin, mVec38.mpEnd);
+{  VectorErase* vec = &mVec38;
+  vec->erase(vec->mpBegin, vec->mpEnd);
 
   int count = (int)(mpNounsEnd - mpNouns);
   for (int i = 0; i < count; ++i) {
     uint32_t noun = mpNouns[i];
-    NounManager(noun)->RemoveNoun(noun);
-  }
-}
+    NounManager()->RemoveNoun((void*)noun);
+  }}
 
 // @ 0x00dcc300
 void Vector24::PushUnique(uint32_t value)

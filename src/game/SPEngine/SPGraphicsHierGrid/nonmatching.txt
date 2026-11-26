@@ -11,7 +11,6 @@
 00701e40 1720 complete cHierGrid::Query3 (z/y/x slab traversal of the segment p0->p1 per level, third arg unused as in the original); 0 calls, size 1853 vs 1724; the original keeps deltas in SSE and only fabs in x87 with an 8-aligned frame, mine computes the deltas in x87
 00702500 78 dtor with an /EHsc frame and a freed raw pointer; the local EH object shape (state word, unwind funclet) is not reproduced
 00702550 126 eastl vector<_Ty>::insert; the DoInsertValue/reallocation schedule is not reproduced
-007026d0 27 FrustumQuery wrapper; only the copy-out loop's register allocation differs (ebx+register step vs ecx+immediate)
 00702860 51 3-argument query wrapper; copy-out loop register allocation differs
 007028e0 88 eastl hashtable erase; structurally complete, register allocation differs
 00702a10 226 CellMap copy constructor; complete, allocation/copy schedule differs

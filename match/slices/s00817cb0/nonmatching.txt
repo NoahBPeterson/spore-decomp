@@ -1,4 +1,3 @@
-00817e20  31  cSPUIPieMenu::Init: resource-key build + 5-arg vtable dispatch shape differs
 008181e0  94  item loop colour set: register allocation / pointer increment differs
 00818250  96  item loop text-colour set: register allocation / pointer increment differs
 008182c0  96  item loop position assign: register allocation / pointer increment differs

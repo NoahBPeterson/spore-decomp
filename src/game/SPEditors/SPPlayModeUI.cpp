@@ -2002,21 +2002,21 @@ bool cSPPlayModeUI_s0063_73e0::Shutdown()
 
 // @ 0x006374b0
 void cSPPlayModeUI_s0063_73e0::SetYTUsername(const eastl::string_s0063_73e0& s)
-{
-    eastl::string16_s0063_73e0 w = EA::ConvertToString16(s);
-    const wchar_t* p = w.c_str();
-    IWindow_s0063_73e0* win = FindPlayModeUIWindow(0x5650498);
-    win->SetCaption(p);
-}
+{    struct Local {
+        static inline void Set(IWindow_s0063_73e0* win, const eastl::string16_s0063_73e0& text) {
+            win->SetCaption(text.c_str());
+        }
+    };
+    Local::Set(FindPlayModeUIWindow(0x5650498), EA::ConvertToString16(s));}
 
 // @ 0x00637510
 void cSPPlayModeUI_s0063_73e0::SetYTPassword(const eastl::string_s0063_73e0& s)
-{
-    eastl::string16_s0063_73e0 w = EA::ConvertToString16(s);
-    const wchar_t* p = w.c_str();
-    IWindow_s0063_73e0* win = FindPlayModeUIWindow(0x5650500);
-    win->SetCaption(p);
-}
+{    struct Local {
+        static inline void Set(IWindow_s0063_73e0* win, const eastl::string16_s0063_73e0& text) {
+            win->SetCaption(text.c_str());
+        }
+    };
+    Local::Set(FindPlayModeUIWindow(0x5650500), EA::ConvertToString16(s));}
 
 // @ 0x006375e0
 char FindParentDir2(int a, int b, int c)

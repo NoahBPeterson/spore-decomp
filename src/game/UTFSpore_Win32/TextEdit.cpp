@@ -2126,9 +2126,8 @@ extern "C" char __cdecl sub_9896d0(uint32_t* out, int p2, int p3, uint32_t* allo
 }
 
 // @ 0x00989740
-extern "C" void __cdecl sub_989740(uint32_t* first, uint32_t* last, uint32_t* dest)
-{
-    while (first != last) {
+extern "C" uint32_t* __cdecl sub_989740(uint32_t* first, uint32_t* last, uint32_t* dest)
+{    while (first != last) {
         if (dest != 0) {
             dest[0] = first[0];
             dest[1] = first[1];
@@ -2140,12 +2139,12 @@ extern "C" void __cdecl sub_989740(uint32_t* first, uint32_t* last, uint32_t* de
         first += 6;
         dest += 6;
     }
+    return dest;
 }
 
 // @ 0x00989790
-extern "C" void __cdecl sub_989790(uint32_t* first, uint32_t* last, uint32_t* dest)
-{
-    while (first != last) {
+extern "C" uint32_t* __cdecl sub_989790(uint32_t* first, uint32_t* last, uint32_t* dest)
+{    while (first != last) {
         dest[0] = first[0];
         dest[1] = first[1];
         dest[2] = first[2];
@@ -2155,12 +2154,12 @@ extern "C" void __cdecl sub_989790(uint32_t* first, uint32_t* last, uint32_t* de
         first += 6;
         dest += 6;
     }
+    return dest;
 }
 
 // @ 0x009897d0
-extern "C" void __cdecl sub_9897d0(uint32_t* first, uint32_t* last, uint32_t* destEnd)
-{
-    while (last != first) {
+extern "C" uint32_t* __cdecl sub_9897d0(uint32_t* first, uint32_t* last, uint32_t* destEnd)
+{    while (last != first) {
         last -= 6;
         destEnd -= 6;
         destEnd[0] = last[0];
@@ -2170,6 +2169,7 @@ extern "C" void __cdecl sub_9897d0(uint32_t* first, uint32_t* last, uint32_t* de
         *(float*)(destEnd + 4) = *(float*)(last + 4);
         *(float*)(destEnd + 5) = *(float*)(last + 5);
     }
+    return destEnd;
 }
 
 // @ 0x00989870

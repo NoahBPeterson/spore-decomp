@@ -322,23 +322,19 @@ int rwcVolumeInstanceInitialize(void* a, void* b)
 
 // @ 0x01207110
 void rwcVolumeRelocateFixupNoOp(void* a, void* b)
-{
-    int v = *(int*)a;
-    v += (int)a - (int)b;
-    *(int*)a = v;
-    rwcRelocateNoOp((char*)a + 0x10, b);
-}
+{    int* target = (int*)a;
+    int val = *target;
+    val += (int)a - (int)b;
+    *target = val;
+    rwcRelocateNoOp((char*)a + 0x10, b);}
 
 // @ 0x01207140
 int rwcVolumeRelocateFixupReturnOne(void* a, void* b)
-{
-    int* p = (int*)a;
-    int base = (int)a - *(int*)((char*)b + 0x7c);
-    int v = *p + base;
-    *p = v;
+{    int* target = (int*)a;
+    int offset = (int)a - *(int*)((char*)b + 0x7c);
+    *target += offset;
     rwcRelocateReturnOne((char*)a + 0x10, b);
-    return 1;
-}
+    return 1;}
 
 // =======================================================================================
 // AggregateVolume::GetBBox (0x01207180) -- aggregate AABB, optionally transformed.

@@ -1732,11 +1732,12 @@ u32 cSimulatorUniverse_s0101_37b0::FUN_01013d20(u32 id)
 // @ 0x01013ec0
 tGrobShockData_s0101_37b0* ShockVec::erase(tGrobShockData_s0101_37b0* first, tGrobShockData_s0101_37b0* last)
 {
-  tGrobShockData_s0101_37b0* newEnd = ShockCopy(last, mpEnd, first);
+  tGrobShockData_s0101_37b0* pEnd = mpEnd;
+  tGrobShockData_s0101_37b0* newEnd = ShockCopy(last, pEnd, first);
   tGrobShockData_s0101_37b0* end = mpEnd;
   for (tGrobShockData_s0101_37b0* p = newEnd; p < end; p++)
     p->mTimer_08.~cGonzagoTimer_s0101_37b0();
-  mpEnd += last - first;
+  mpEnd -= last - first;
   return first;
 }
 

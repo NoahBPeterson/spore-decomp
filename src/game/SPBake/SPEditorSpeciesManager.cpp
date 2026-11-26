@@ -6057,17 +6057,17 @@ bool CopyEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& dst, const EA
 
 // @ 0x005bf470
 int AddToIntProperty(App::PropertyList_s005b_eaf0* list, uint32_t id, int delta)
-{
-  int value = 0;
+{  int value = 0;
   Property_s005b_eaf0* prop;
   if (list && list->GetProperty(id, prop) && prop->mType == 9)
     value = *prop->GetInt();
   value += delta;
-  EA::Variant_s005b_eaf0 v;
-  v = value;
-  list->SetProperty(id, v);
-  return value;
-}
+  {
+    EA::Variant_s005b_eaf0 v;
+    v = value;
+    list->SetProperty(id, v);
+  }
+  return value;}
 
 // @ 0x005bf500
 bool __stdcall GetBoolParams(const EA::ResourceMan::Key_s005b_eaf0& key, eastl::sp_vector_s005b_eaf0<SP::FunctionalMatch::DeclareParam_s005b_eaf0>& params)

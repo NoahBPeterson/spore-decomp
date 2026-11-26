@@ -3824,21 +3824,20 @@ void cPairMap::Insert(uint32_t a, uint32_t b, float c)
 
 // @ 0x00b54b80
 void FUN_00b54b80(void)
-{
-    int n = ((int)(DAT_0167ed48 - DAT_0167ed44)) >> 3;
-    if (n > 0) {
+{    if ((((int)(DAT_0167ed48 - DAT_0167ed44)) >> 3) > 0) {
+        int n = ((int)(DAT_0167ed48 - DAT_0167ed44)) >> 3;
         SPListEntry* base = (SPListEntry*)DAT_0167ed44;
         for (int i = 0; i < n; i++) {
-            int t = base[i].mnType;
-            if (t - 1 == 0) {
+            switch (base[i].mnType) {
+            case 1:
                 base[i].mpObj->Destroy();
                 base = (SPListEntry*)DAT_0167ed44;
+                break;
             }
         }
         int m = ((int)(DAT_0167ed48 - (uint8_t*)base)) >> 3;
         DAT_0167ed48 = DAT_0167ed48 + (-m) * 8;
-    }
-}
+    }}
 
 extern "C" char g_1569c98[];
 
@@ -4552,18 +4551,15 @@ bool __stdcall FUN_00b5b540(int* a, int* b, int, int p4)
 
 // @ 0x00b5b6f0
 void FUN_00b5b6f0(int v)
-{
-    int* p = g_1686a1c;
-    if (p < g_1686a20)
+{    if (g_1686a1c < g_1686a20)
     {
-        g_1686a1c = p + 1;
+        int* p = g_1686a1c++;
         if (p) *p = v;
     }
     else
     {
-        ((SPVector_00b96600*)0x1686a18)->FUN_00b96600(g_1686a1c, &v);
-    }
-}
+        ((SPVector_00b96600*)&g_1686a18)->FUN_00b96600(g_1686a1c, &v);
+    }}
 
 // @ 0x00b5b730
 void FUN_00b5b730(void)

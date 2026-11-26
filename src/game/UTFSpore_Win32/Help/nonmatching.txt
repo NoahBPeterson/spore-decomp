@@ -1,4 +1,2 @@
 # va  diff-bytes  reason
 008409b0 47 complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
-00840c20 18 complete: Sprintf; buf scan loop shape differs
-00840c70 18 complete: SprintfAppend; buf scan loop shape differs

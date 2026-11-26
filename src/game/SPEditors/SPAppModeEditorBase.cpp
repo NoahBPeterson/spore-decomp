@@ -9644,24 +9644,11 @@ void SP::cAppModeEditorBase::SetSoundBlockRemoved(SP::cSPEditorBlock * param)
 
 // @ 0x005772b0
 void SP::cAppModeEditorBase::RemoveTorsoFromEffectsMask()
-{
-    void* p = Ref<void*>(this, 0xf0);
+{    cOwnedObject* p = Ref<cOwnedObject*>(this, 0xf0);
     if (p) {
-        void** vt = *(void***)(*(void**)p);
-        ((void(__stdcall*)(void*, int))vt[91])(p, 0);
-        p = Ref<void*>(this, 0xf0);
-        if (p) {
-            Ref<void*>(this, 0xf0) = 0;
-            int c = Ref<int>(p, 0x40);
-            if (c > 1) {
-                Ref<int>(p, 0x40) = c - 1;
-                return;
-            }
-            unsigned r = Ref<unsigned>(p, 4);
-            int b = (r >> 31) & 1;
-            void** vt2 = *(void***)(*(void**)p);
-            ((void(__stdcall*)(void*, int))vt2[92])(p, b);
-        }
+        typedef void(__thiscall* SetInWorldFn)(cObjectOwner*, cOwnedObject*, bool);
+        ((SetInWorldFn)(*(void***)p->mpOwner)[91])(p->mpOwner, p, false);
+        Ref<cOwnedObjectPtr>(this, 0xf0) = (cOwnedObject*)0;
     }
 }
 

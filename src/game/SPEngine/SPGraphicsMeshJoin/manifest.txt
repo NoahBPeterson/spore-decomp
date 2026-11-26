@@ -13,3 +13,4 @@
 ../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?FUN_00728020@@YAXPAUMeshCtx@@MHPAX@Z  00728020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?DestroyRange68@@YAPAUElement68@@PAU1@00@Z  00720c20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ??1UVGenJobInfoObj@@QAE@XZ  007281d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?SetEntryKey@@YAXPAUMeshEntries@@HHH@Z  0071f040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
-00956f30 27 free pool drain: complete; pop_front register choice (ecx copy of node) differs
 00956fa0 22 other: logic fixed - Lock stays before the empty-list test and Unlock after it (it gated both before, so the empty case was not a plain call/return), and Lock returns int like EA::Thread::Mutex::Lock so no `push eax` artifact; only the 22 prologue/push-order bytes differ: the original pushes esi/edi before Lock and keeps the list head in eax (offset 0xc([esp]) with the two pushes) + one node load across the (aliasing) Lock call, whereas this compiler keeps `this` in eax and hoists every load after the call. Tried: Lock inside the if (Unlock still outside), reversed/hoisted loads, list self-link first, long long pair stores, _ReadWriteBarrier - none move the saves. fix1: quick check DIFFERS
 00956ff0 58 AllocDisplayListEntry: complete; anchor held in ecx vs eax, node copy and DisplayList ctor store order differ

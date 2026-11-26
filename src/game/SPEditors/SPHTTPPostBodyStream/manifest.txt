@@ -8,3 +8,4 @@
 ../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?WriteEndBoundary@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE_NXZ  0060c360  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?Read@HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAEIPAXI@Z  0060c3f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ??1HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@UAE@XZ  0060c660  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ?append@?$basic_string_s0060_b730@DUallocator_s0060_b730@eastl@@@eastl@@QAEAAU12@PBD@Z  0060c4e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

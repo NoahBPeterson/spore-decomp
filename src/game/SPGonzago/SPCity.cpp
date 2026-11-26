@@ -5580,21 +5580,16 @@ int __fastcall FUN_00bd89c0(cCity* ecx_this, void* edx)
 
 // @ 0x00bd8a00
 int __fastcall FUN_00bd8a00(cCity* ecx_this, void* edx)
-{
-    IObj* p = ecx_this->mp324;
+{    IObj* p = ecx_this->mp324;
     int v = 0xc;
     if (p != 0) {
         u32 s = p->Slot6c();
         switch (s) {
         case 0:
-            v = 6;
-            break;
-        case 1:
-            v = 0xc;
-            break;
         case 2:
             v = 6;
             break;
+        case 1:
         case 3:
             v = 0xc;
             break;
@@ -7238,8 +7233,7 @@ void __thiscall SelfB::FUN_00bdc8a0(u64 delta)
 
 // @ 0x00bdd2f0
 void __fastcall FUN_00bdd2f0(Obj2f0* self)
-{
-    if (self->m320 == 0)
+{    if (self->m320 == 0)
         return;
 
     self->Notify();
@@ -7250,13 +7244,18 @@ void __fastcall FUN_00bdd2f0(Obj2f0* self)
         int mZ;                 // +0x58
         float mW;               // +0x5c
         int mE;                 // +0x60
-        Transform2f0(int x, int y, int z, float w, int e)
-            : mX(x), mY(y), mZ(z), mW(w), mE(e) {}
+        Transform2f0(int x, int y, int z, float w, int e) {
+            mE = e;
+            mX = x;
+            mY = y;
+            mZ = z;
+            mW = w;
+        }
     };
     int zero = 0;
     *(Transform2f0*)(self->mp70 + 0x50) =
         Transform2f0(self->m51c, self->m520, self->m524,
-                     *(float*)0x013eeda0, zero);
+                     kGrowStep, zero);
 }
 
 // @ 0x00bdd350

@@ -28,7 +28,4 @@
                  esi/edi choice for `this`.
 009896d0    35   output struct written via p1; allocator virtual on p4. Diff is the copy
                  loop only: cl folds the two pointers into one induction variable.
-00989740    25   parameter->register assignment: original params land in ecx,edx,eax;
                  cl picks eax,edx,ecx (identical body).
-00989790    24   backwards/forwards copy; same register-assignment difference as 00989740.
-009897d0    24   backwards copy; same register-assignment difference.

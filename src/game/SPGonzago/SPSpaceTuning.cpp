@@ -429,16 +429,24 @@ void cSpaceRelationshipTuning_s0104_09b0::ReloadTuning()
 
 // @ 0x01041090
 void cSpaceRelationshipTuning_s0104_09b0::Init()
-{
-  mpServer = MessageManager();
-  mpHandler = this;
-  mpIdArray = gSpaceRelationshipMessageIds;
-  mnIdCount = 1;
-  mnPriority = 0;
-  if (mpServer != 0 && mpHandler != 0)
-    mpServer->AddHandler(mpHandler, 0xf62def);
-  ReloadTuning();
-}
+{  struct LocalAutoHandler {
+    IMessageServer* mpServer;
+    void* mpHandler;
+    uint32_t* mpIdArray;
+    int mnIdCount;
+    int mnPriority;
+    void AddHandler(IMessageServer* server, void* handler, uint32_t* ids) {
+      mpServer = server;
+      mpHandler = handler;
+      mpIdArray = ids;
+      mnIdCount = 1;
+      mnPriority = 0;
+      if (mpServer != 0 && mpHandler != 0)
+        mpServer->AddHandler(mpHandler, 0xf62def);
+    }
+  };
+  ((LocalAutoHandler*)&mpServer)->AddHandler(MessageManager(), this, gSpaceRelationshipMessageIds);
+  ReloadTuning();}
 
 // @ 0x010410e0
 bool cSpaceRelationshipTuning_s0104_09b0::HandleMessage(int nMessageId, CMessage* pMessage)

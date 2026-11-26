@@ -632,13 +632,7 @@ uint32_t HTTPMultipartRelatedPostBodyStream_s0060_b730::Read(void* pData, uint32
 
 // @ 0x0060c4e0
 template <> string8& string8::append(const char* p)
-{
-  const char* const p1 = p + 1;
-  const char* q = p;
-  while (*q++) {
-  }
-  return append(p, p + (q - p1));
-}
+{  return append(p, p + strlen(p));}
 
 // @ 0x0060c510
 namespace EA { namespace Internet {

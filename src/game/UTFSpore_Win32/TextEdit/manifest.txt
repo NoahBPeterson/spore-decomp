@@ -30,3 +30,6 @@
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphLength@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEII@Z  0098e880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetTextExtent@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEXPAUPoint2@23@@Z  0098e9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  ?F98A3F0@IWinTextEdit_s0098_9870@UTFWinControls@EA@@QAEXHHH@Z  0098a3f0  /O2 /MD /Gy /TP /EHsc /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_989740  00989740  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_989790  00989790  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_9897d0  009897d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

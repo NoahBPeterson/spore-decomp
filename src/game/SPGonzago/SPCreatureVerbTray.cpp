@@ -328,14 +328,13 @@ bool FUN_00d48f20(CmpObj* param_1)
 
 // @ 0x00d48ff0
 int FUN_00d48ff0(CmpObj* param_1)
-{
-    switch ((int)SP_GetCurrentGameMode()) {
+{    switch ((int)SP_GetCurrentGameMode()) {
     case 0x1654c02:
         switch (param_1->mType) {
-        case 5: case 0x34: case 0x35: case 0x36: case 0x3b:
-            return 0;
         case 6: case 0x37: case 0x38: case 0x39: case 0x3a:
             return 1;
+        case 5: case 0x34: case 0x35: case 0x36: case 0x3b:
+            return 0;
         case 7: case 0x2b:
             return 2;
         default:
@@ -349,8 +348,6 @@ int FUN_00d48ff0(CmpObj* param_1)
         return -1;
     }
     switch (param_1->mType) {
-    case 0xd: case 0x20: case 0x23: case 0x42: case 0x48: case 0x4f: case 0x52: case 0x56:
-        return 3;
     case 0x10: case 0x1e: case 0x25: case 0x31: case 0x32: case 0x33: case 0x3e: case 0x4a:
     case 0x4d: case 0x54:
         return 0;
@@ -358,12 +355,13 @@ int FUN_00d48ff0(CmpObj* param_1)
         return 1;
     case 0x12: case 0x21: case 0x24: case 0x40: case 0x41: case 0x4b: case 0x4e: case 0x51:
         return 2;
+    case 0xd: case 0x20: case 0x23: case 0x42: case 0x48: case 0x4f: case 0x52: case 0x56:
+        return 3;
     case 0x27: case 0x50:
         return 4;
     default:
         return -1;
-    }
-}
+    }}
 
 // @ 0x00d49110
 bool FUN_00d49110(int a)

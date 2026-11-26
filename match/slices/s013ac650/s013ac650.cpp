@@ -13,12 +13,17 @@ extern "C" char g_14a40c4[];
 extern "C" char g_14a416c[];
 extern "C" char g_14a6254[];
 
+#if _MSC_VER >= 1400
 #include <intrin.h>
+#else
+extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
+#endif
 
 // ------------------------------------------------------------------ CRT / Win32 imports
 extern "C" __declspec(dllimport) unsigned long __stdcall TlsAlloc();
 extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(void*);
 extern "C" int __cdecl atexit(void (__cdecl*)());
+extern "C" void __cdecl dtor_013cb260();
 
 // ================================================================== 0x013AC650
 // Sixteen 60-byte property descriptors { name, hash, offset, <3 unused>, 0, 0, f[7] } copied into the
@@ -101,7 +106,12 @@ TlsData2 g_016e42b8;
 // @ 0x013B34F0
 void FUN_013b34f0() { (void)&g_016e4174; }
 // @ 0x013B3650
-void FUN_013b3650() { (void)&g_016e42a0; }
+void FUN_013b3650() {
+    unsigned long* p = g_016e42a0.idx;
+    unsigned n = 5;
+    do { *p++ = TlsAlloc(); } while (--n);
+    atexit(dtor_013cb260);
+}
 // @ 0x013B3680
 void FUN_013b3680() { (void)&g_016e42b8; }
 

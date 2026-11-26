@@ -15,3 +15,4 @@
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4bc0@cViewer@@QAEXM@Z  007c4bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?SetRaster@cViewer_s007c_4be0@@QAEXPAH_N@Z  007c4be0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?SetBasis@cViewer_s007c_4be0@@QAEXPAX@Z  007c4d00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c3da0@Matrix44@@QAEXPAM@Z  007c3da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
