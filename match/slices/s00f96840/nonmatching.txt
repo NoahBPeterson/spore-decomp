@@ -2,7 +2,6 @@
 00f96920  238  colour sample (9 args): inline-asm cvtss2si (correct rounding) but frame/reg-alloc differs from target's spill; equiv PASS
 00f96d80  85  insertion sort (guarded): 116 B vs 104 B, one register spill (v3); reg-alloc differs
 00f96df0  102  insertion sort (unguarded): 113 B vs 124 B, spills v1/v3 differently
-00f96eb0  14  heap sift-up: tail scheduling (pop edi placement, store order c[2]/c[1])
 00f97130  604  terrain-map bundle (922 B): vectorised/oversized vs target scalar EAAllocate chain
 00f974d0  69  ray-cast setup: first global->out copy via x87 fld/fstp vs target movss
 00f97530  136  bounds-mask loop: register allocation (this in ecx vs target ebp)

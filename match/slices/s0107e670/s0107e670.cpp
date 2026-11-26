@@ -112,6 +112,7 @@ void* hkStdioStreamReader::scalar_deleting_dtor(unsigned char flags)
 // @ 0x0107e820
 hkStreamWriter* hkDefaultStreambufFactory::openWriter(const char* name)
 {
+	// hkStdioStreamWriter ctor marked noinline in TU
 	hkStreamWriter* writer = new hkStdioStreamWriter(name);
 	hkStreamWriter* result = new hkBufferedStreamWriter(writer, 0x1000);
 	writer->removeReference();
@@ -119,7 +120,7 @@ hkStreamWriter* hkDefaultStreambufFactory::openWriter(const char* name)
 }
 
 // @ 0x0107e890
-hkStdioStreamWriter::hkStdioStreamWriter(const char* name) : m_ownsFile(true)
+__declspec(noinline) hkStdioStreamWriter::hkStdioStreamWriter(const char* name) : m_ownsFile(true)
 {
 	// The original leaves m_file uninitialised when name is null (quirk kept).
 	if (name)

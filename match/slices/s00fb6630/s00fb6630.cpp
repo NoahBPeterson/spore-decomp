@@ -193,10 +193,8 @@ __declspec(noinline) void SetPolysInRect(const PolyVector& src, float minX, floa
 // ---------------------------------------------------------------------------
 // globals
 // ---------------------------------------------------------------------------
-struct CachedQuadState { int mIndex; int mFace; };
-extern CachedQuadState sCachedQuad;       // 0x15b1538 (mIndex +0x00, mFace +0x04)
-#define sCachedIndex sCachedQuad.mIndex
-#define sCachedFace  sCachedQuad.mFace
+static int sCachedIndex = -1;             // 0x15b1538
+static int sCachedFace  = -1;             // 0x15b153c
 extern void* g_pIndexBuffer;              // 0x16c9e34
 extern cTextureInstance* g_pTextureInstance;   // 0x16c9f58
 extern uint32_t g_ribbonEps;              // 0x14910f4 (1.52587890625e-05f)
@@ -223,8 +221,7 @@ void cTerrainSphereQuad::RebuildVertices()
 // ===========================================================================
 // @ 0x00fb66d0
 int cTerrainSphereQuad::DispatchA(int viewer, DispatchStats* stats, int)
-{
-    if (mDirtyVertices)
+{    if (mDirtyVertices)
         RebuildVertices();
     if (mDirtyIndices)
         RebuildIndices();
@@ -260,8 +257,7 @@ int cTerrainSphereQuad::DispatchA(int viewer, DispatchStats* stats, int)
     stats->mField20 += *(int*)((char*)*(void**)mVertexBuffer + 0xc);
     stats->mField24 += mNumA;
     stats->mField28++;
-    return 0;
-}
+    return 0;}
 
 // ===========================================================================
 // @ 0x00fb6850
@@ -371,8 +367,7 @@ int cTerrainSphereQuad::DispatchB(int viewer, DispatchStats* stats, int idx, int
 // ===========================================================================
 // @ 0x00fb6cd0
 int cTerrainSphereQuad::DispatchC(int viewer, DispatchStats* stats, int)
-{
-    if (mDirtyVertices)
+{    if (mDirtyVertices)
         RebuildVertices();
     if (mDirtyIndices)
         RebuildIndices();
@@ -403,14 +398,12 @@ int cTerrainSphereQuad::DispatchC(int viewer, DispatchStats* stats, int)
     stats->mField20 += *(int*)((char*)*(void**)mVertexBuffer + 0xc);
     stats->mField24 += *(int*)((char*)g_pIndexBuffer + 8);
     stats->mField28++;
-    return 0;
-}
+    return 0;}
 
 // ===========================================================================
 // @ 0x00fb6e00
 int cTerrainSphereQuad::DispatchD(int viewer, DispatchStats* stats, int)
-{
-    if (mDirtyVertices)
+{    if (mDirtyVertices)
         RebuildVertices();
     if (mDirtyIndices)
         RebuildIndices();
@@ -442,8 +435,7 @@ int cTerrainSphereQuad::DispatchD(int viewer, DispatchStats* stats, int)
     stats->mField20 += *(int*)((char*)*(void**)mVertexBuffer + 0xc);
     stats->mField24 += mNumC;
     stats->mField28++;
-    return 0;
-}
+    return 0;}
 
 // ===========================================================================
 // @ 0x00fb6fb0

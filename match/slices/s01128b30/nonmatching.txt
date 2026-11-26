@@ -15,5 +15,4 @@
 01129720  254  hkMotorAction::applyAction; equiv FAIL (fake call #0: virtual dispatch); 242 vs 206 bytes
 011297f0  111  hkMotorAction::clone; equiv WEAK 396 valid / 36.8% coverage; 114 vs 94 bytes
 01129850  612  hkGroupCollisionFilter::isCollisionEnabled_core; equiv PASS 400/400 (loop form is semantics-preserving; original is fully unrolled); 106 vs 615 bytes
-01129af0  41   hkGroupCollisionFilter::isCollisionEnabled override; equiv UNSUPPORTED (fake-arity); 69 vs 66 bytes
 01129b40  49   hkGroupCollisionFilter::isCollisionEnabled override; equiv UNSUPPORTED (fake-arity); 52 vs 47 bytes

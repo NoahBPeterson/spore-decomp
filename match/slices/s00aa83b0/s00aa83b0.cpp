@@ -498,18 +498,23 @@ int __cdecl FUN_00aa8d30(int param_1, int param_2, uint32_t* param_3, int param_
     return iStack_4;
 }
 
+struct NodeIter10 {
+    int* p;
+    NodeIter10(int* q) : p(q) {}
+};
+
 // ---------------------------------------------------------------------------
 // @ 0x00aa8ea0
 // ---------------------------------------------------------------------------
-void __stdcall FUN_00aa8ea0(int* param_1, int* param_2)
+NodeIter10 __stdcall FUN_00aa8ea0(NodeIter10 param_2)
 {
-    int* piVar1 = (int*)param_2[1];
-    int iVar2 = *param_2;
-    *piVar1 = iVar2;
-    *(int**)(iVar2 + 4) = piVar1;
-    *param_2 = 0;
-    param_2[1] = 0;
-    *param_1 = iVar2;
+    int* prev = (int*)param_2.p[1];
+    int* next = (int*)*param_2.p;
+    *prev = (int)next;
+    next[1] = (int)prev;
+    *param_2.p = 0;
+    param_2.p[1] = 0;
+    return NodeIter10(next);
 }
 
 // ---------------------------------------------------------------------------

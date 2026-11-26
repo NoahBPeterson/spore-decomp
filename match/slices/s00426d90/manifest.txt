@@ -8,3 +8,5 @@ slices/s00426d90/s00426d90.cpp  ?DestroyVector32@@YIXPAU?$PodVector@UBlock32@@@@
 slices/s00426d90/s00426d90.cpp  ?DestroyVector56@@YIXPAU?$PodVector@UBlock56@@@@@Z 00427440    /Od /Ob1 /MD /Gy /TP
 slices/s00426d90/s00426d90.cpp  ?Sort@@YAXPAUItem12@@0Uless_uint@@@Z 004274a0    /Od /Ob1 /MD /Gy /TP
 slices/s00426d90/s00426d90.cpp  ?CallHandler@@YAXHPAVTarget@@@Z 00427600    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?Insert@Elem24Vector@@QAEXPAUElem24@@ABU2@@Z  00426e30  /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?UninitializedCopyElem24@@YAPAUElem24@@PAU1@00@Z  00427160  /Od /Ob1 /MD /Gy /TP

@@ -21,7 +21,6 @@ extern "C" {
   void     __cdecl FUN_00e82d10(int);
   int      __cdecl FUN_00e84490(int, int);
   void     __cdecl FUN_00e848c0(int);
-  int      __fastcall FUN_00e4ee60(int unusedEcx, int levelInEdx);   // 0x00e4ee60: level in EDX
   void     __cdecl FUN_00e7ce10(int, int);
   void*    __cdecl FUN_00b721d0(int);
   void*    __cdecl FUN_00b3d400(void*);
@@ -48,6 +47,20 @@ extern char g_16b3c0c[];
 extern char g_16b3c08[];
 extern int  g_16b3c28, g_16b3c2c, g_16b3c30;
 extern int  g_15a7c4c, g_15a7c50, g_15a7c54, g_15a7c58;
+extern int  g_1483c14[];
+extern float g_01485378;
+static __declspec(noinline) int __fastcall FUN_00e4ee60(int, int level) {
+  if (level == 1000) return g_1483c14[147];
+  int i = 0;
+  if (level >= 0) {
+    int* threshold = g_1483c14 + 8;
+    do {
+      threshold += 7;
+      ++i;
+    } while (level >= *threshold);
+  }
+  return g_1483c14[i * 7];
+}
 
 static inline void** Vt(void* p) { return *(void***)p; }
 
@@ -230,7 +243,7 @@ bool FUN_00e53280() {
   int lvl = FUN_00e4ee60(0, esi->mpSlotData_5190->mField_1c);
   if (lvl < 3) return false;
   if (esi->mField_51c0 != 0 && edi == 1) return false;
-  if (!(esi->mField_51bc <= 0.0f)) return false;
+  if (esi->mField_51bc > g_01485378) return false;
   return true;
 }
 

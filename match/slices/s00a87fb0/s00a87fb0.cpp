@@ -191,7 +191,7 @@ struct cDistributeEffect {
     uint32_t    mSeqID;                // +0x17c
     uint32_t    mSeqCount;             // +0x180
 
-    void FUN_00a87fb0(void* stream, int base);                        // 0x00a87fb0
+    static void FUN_00a87fb0(void* stream, int version, int base);    // 0x00a87fb0
     __int64 FUN_00a88220();                                       // 0x00a88220
     bool FUN_00a88350();                                              // 0x00a88350
     int  FUN_00a88390(int count, void** outBegin, void** outStride);  // 0x00a88390
@@ -201,9 +201,8 @@ struct cDistributeEffect {
 };
 
 // @ 0x00a87fb0
-void cDistributeEffect::FUN_00a87fb0(void* stream, int base)
-{
-    int tmp;
+void cDistributeEffect::FUN_00a87fb0(void* stream, int version, int base)
+{    int tmp;
     FUN_0093a780(stream, &tmp, 1, 0);
     *(uint32_t*)(base + 8) = (uint32_t)tmp & 0xffff;
     FUN_0093a780(stream, (void*)(base + 0xc), 1, 0);
@@ -240,7 +239,7 @@ void cDistributeEffect::FUN_00a87fb0(void* stream, int base)
     FUN_00a85b00(stream, (void*)(base + 0x138));
     FUN_0093a6c0(stream, (void*)(base + 0x158), 1);
     FUN_0093a780(stream, (void*)(base + 0x15c), 1, 0);
-    if (tmp > 3) {
+    if (version > 3) {
         FUN_0093a780(stream, (void*)(base + 0x160), 1, 0);
         FUN_0093a780(stream, (void*)(base + 0x164), 1, 0);
         FUN_0093a780(stream, (void*)(base + 0x168), 1, 0);

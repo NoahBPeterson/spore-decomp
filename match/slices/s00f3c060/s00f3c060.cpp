@@ -192,7 +192,7 @@ struct cSpatialObject {
     VP4(f, 0) VP4(g, 0) VP4(h, 0) VP1(i, 0) VP1(j, 0)          // slots 12..25
     virtual const float* GetBounds26() = 0;                    // slot 26 (+0x68)
     VP1(k, 0) VP1(l, 0)                                        // slots 27..28
-    virtual float Fn29(unsigned a, bool (*cb)(float*)) = 0;    // slot 29 (+0x74)
+    virtual float Fn29() = 0;                                  // slot 29 (+0x74)
     void LocalToWorldTransform(cSPTransform* t);               // 0x00C897E0
 };
 extern cSpatialObject* g_16c87ec;       // 0x016C87EC
@@ -208,7 +208,7 @@ int GetCurrentGameMode();                               // 0x00B5B800
 void GetPropertyT_40cf10(void* obj, unsigned id, float* out);   // 0x0040CF10
 struct cPlanetModel {
     cSPVector3* FUN_00b81630(cSPVector3* out, const cSPVector3* in);   // 0x00B81630
-    void FUN_00b83c40(const cSPVector3* v, float r);                   // 0x00B83C40
+    void FUN_00b83c40(const cSPVector3* v, float r, unsigned a, bool (*cb)(float*));  // 0x00B83C40
 };
 cPlanetModel* PlanetModel();                            // 0x00B3D350
 void* __cdecl FUN_00b18e00(void* p);                    // 0x00B18E00
@@ -370,8 +370,7 @@ bool __cdecl FUN_00f3c500(float* p)
 
 // @ 0x00F3C610
 void W::FUN_00f3c610(void* arg)
-{
-    if (!arg)
+{    if (!arg)
         return;
     void* a = ((ObjF3C610*)arg)->Cast(0x70704db);
     void* b = ((ObjF3C610*)arg)->Cast(0x3a25119);
@@ -388,12 +387,11 @@ void W::FUN_00f3c610(void* arg)
     float d = sqrtf(v1->x * v1->x + v1->y * v1->y + v1->z * v1->z)
             - sqrtf(v2p->x * v2p->x + v2p->y * v2p->y + v2p->z * v2p->z);
     if (d < fStack) {
-        g_16c87ec = edi;
-        float rr = edi->Fn29(0x8000000, FUN_00f3c500);
-        PlanetModel()->FUN_00b83c40(v1, rr);
+        cSpatialObject* __restrict receiver = edi;
+        g_16c87ec = receiver;
+        PlanetModel()->FUN_00b83c40(v1, receiver->Fn29(), 0x8000000, FUN_00f3c500);
         g_16c87ec = 0;
-    }
-}
+    }}
 
 // @ 0x00F3C750
 bool W::FUN_00f3c750(void* p1, unsigned p2)

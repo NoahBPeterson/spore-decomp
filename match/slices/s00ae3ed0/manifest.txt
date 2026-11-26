@@ -3,3 +3,4 @@ slices/s00ae3ed0/s00ae3ed0.cpp  ?HasMarker@cGameplayMarkerView@SP@@QAE_NI@Z  00a
 slices/s00ae3ed0/s00ae3ed0.cpp  ?InitMarkerNode@tMarkerNode@SP@@QAEPAU12@XZ  00ae4230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ae3ed0/s00ae3ed0.cpp  ?AllocMarkerNode@tMarkerList@SP@@QAEPAUtMarkerNode@2@XZ  00ae43a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ae3ed0/s00ae3ed0.cpp  ?ReleaseMarkerNode@tMarkerNode@SP@@QAEXXZ  00ae42a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ae3ed0/s00ae3ed0.cpp  ?FreeMarkerNodeRange@@YGXPAUtMarkerNode@SP@@0@Z  00ae4930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

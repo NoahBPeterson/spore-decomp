@@ -1,2 +1,3 @@
 # slice s00a87fb0 -- no byte-exact functions this slice (see nonmatching.txt / partial.txt)
 slices/s00a87fb0/s00a87fb0_x87.cpp  ?FUN_00a88250@@YAPAIPAI00@Z  00a88250  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast
+slices/s00a87fb0/s00a87fb0.cpp  ?FUN_00a87fb0@cDistributeEffect@@SAXPAXHH@Z  00a87fb0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast

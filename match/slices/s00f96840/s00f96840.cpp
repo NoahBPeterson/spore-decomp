@@ -423,9 +423,12 @@ void __cdecl FUN_00f96eb0(int* base, int top, int pos, int v0, int v1, unsigned 
     }
     int* c = base + pos * 4;
     c[0] = v0;
-    c[1] = v1;
-    c[2] = (int)key;
-    c[3] = v3;
+    const int second = static_cast<const volatile int&>(v1);
+    const int last = static_cast<const volatile int&>(v3);
+    volatile int* vc = c;
+    vc[1] = second;
+    vc[2] = (int)key;
+    vc[3] = last;
 }
 
 // @ 0x00f96f90

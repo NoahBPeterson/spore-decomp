@@ -50,3 +50,4 @@
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cBabyGameEvent@@QAE_NPAX@Z  00d4dd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cRainStormEvent_s00d4_d5c0@@QAE_NPAX@Z  00d4dd90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cMeteorStrikeEvent_s00d4_f2e0@SP@@QAE_NPAX@Z  00d50260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?equal_range@RBTree@@QAEXPAPAURBNode@@PAI@Z  00d4b450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
