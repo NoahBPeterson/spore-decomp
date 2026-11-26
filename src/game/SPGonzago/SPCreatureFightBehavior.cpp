@@ -1809,10 +1809,11 @@ SlotBody* GetFightSlotBody(uint32_t id)
 {
     uint32_t count = (uint32_t)(sTribeFightSlotsPool.mpEnd - sTribeFightSlotsPool.mpData);
     id &= 0xbfffffff;
-    if (id < count) {
-        bool used = sTribeFightSlotsPool.mpData[id].mUsed;
+    uint32_t idCopy = id;
+    if (idCopy < count) {
+        bool used = sTribeFightSlotsPool.mpData[idCopy].mUsed;
         if (!used)
-            return &sTribeFightSlotsPool.mpData[id].mBody;
+            return &sTribeFightSlotsPool.mpData[idCopy].mBody;
     }
     return 0;
 }

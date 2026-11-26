@@ -6717,33 +6717,34 @@ void __cdecl FUN_00b4d470(char* dst, char* src)
 // @ 0x00b4d540
 void* __fastcall FUN_00b4d540(char* self)
 {
-    stf(self, 0x10, g_oneF);
-    st32(self, 0x14, 2);
-    st32(self, 0x0, 0);
-    st32(self, 0x4, 0);
-    st32(self, 0x8, 0);
-    st32(self, 0xc, 0);
-    st32(self, 0x18, 0);
-    stf(self, 0x20, 0.0f);
-    stf(self, 0x24, 0.0f);
-    stf(self, 0x3c, 0.0f);
-    stf(self, 0x38, 0.0f);
-    stf(self, 0x34, 0.0f);
-    stf(self, 0x30, 0.0f);
-    stf(self, 0x40, 0.0f);
-    stf(self, 0x44, 0.0f);
-    stf(self, 0x48, 0.0f);
-    stf(self, 0x4c, 0.0f);
-    stf(self, 0x50, 0.0f);
-    stf(self, 0x54, 0.0f);
-    stf(self, 0x58, 0.0f);
-    stf(self, 0x5c, 0.0f);
-    stf(self, 0x60, 0.0f);
-    stf(self, 0x64, 0.0f);
-    stf(self, 0x68, 0.0f);
-    stf(self, 0x6c, 0.0f);
-    st32(self, 0x70, 0);
-    return self;
+    char*& selfRef = self;
+    stf(selfRef, 0x10, g_oneF);
+    st32(selfRef, 0x14, 2);
+    st32(selfRef, 0x0, 0);
+    st32(selfRef, 0x4, 0);
+    st32(selfRef, 0x8, 0);
+    st32(selfRef, 0xc, 0);
+    st32(selfRef, 0x18, 0);
+    stf(selfRef, 0x20, 0.0f);
+    stf(selfRef, 0x24, 0.0f);
+    stf(selfRef, 0x3c, 0.0f);
+    stf(selfRef, 0x38, 0.0f);
+    stf(selfRef, 0x34, 0.0f);
+    stf(selfRef, 0x30, 0.0f);
+    stf(selfRef, 0x40, 0.0f);
+    stf(selfRef, 0x44, 0.0f);
+    stf(selfRef, 0x48, 0.0f);
+    stf(selfRef, 0x4c, 0.0f);
+    stf(selfRef, 0x50, 0.0f);
+    stf(selfRef, 0x54, 0.0f);
+    stf(selfRef, 0x58, 0.0f);
+    stf(selfRef, 0x5c, 0.0f);
+    stf(selfRef, 0x60, 0.0f);
+    stf(selfRef, 0x64, 0.0f);
+    stf(selfRef, 0x68, 0.0f);
+    stf(selfRef, 0x6c, 0.0f);
+    st32(selfRef, 0x70, 0);
+    return selfRef;
 }
 
 // @ 0x00b4d670

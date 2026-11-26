@@ -168,25 +168,27 @@ void __fastcall FUN_00ada360(void* self, int /*edx*/, cArguments* args)
 void __fastcall FUN_00ada3f0(void* self, int /*edx*/, cArguments* args)
 {
     Msg* m = new ("Simulator", 0, 0, 0, 0) Msg();
-    if (m) m->AddRef();
-    m->tag = 0x06133baa;
+    Msg*& mRef = m;
+    if (mRef) mRef->AddRef();
+    mRef->tag = 0x06133baa;
     int z = 0;
     if (args->HasFlag("zoomToEnd")) z = 1;
     int h = 0;
     const char** a = args->OptionArguments("timelineEvent", 1);
     if (a) { const char* s = a[0]; h = (int)FNV1_String8(s, 0x811c9dc5, 1); }
-    m->f08 = z;
-    m->f10 = h;
-    STATE(self)->AddMessage(args, m, 0);
-    m->Release();
+    mRef->f08 = z;
+    mRef->f10 = h;
+    STATE(self)->AddMessage(args, mRef, 0);
+    mRef->Release();
 }
 
 // @ 0x00ada4b0
 void __fastcall FUN_00ada4b0(void* self, int /*edx*/, cArguments* args)
 {
     Msg* m = new ("Simulator", 0, 0, 0, 0) Msg();
-    if (m) m->AddRef();
-    m->tag = 0x046ac0ac;
+    Msg*& mRef = m;
+    if (mRef) mRef->AddRef();
+    mRef->tag = 0x046ac0ac;
     int pause = 0;
     if (args->HasFlag("pauseGraphics")) pause = 1;
     int se = 0;
@@ -194,27 +196,28 @@ void __fastcall FUN_00ada4b0(void* self, int /*edx*/, cArguments* args)
     if (args->HasFlag("screenEffect")) { se = code + 1; code = 0xdfe90cad; }
     const char** a = args->OptionArguments("effect", 1);
     if (a) { const char* s = a[0]; se = 1; code = (int)FNV1_String8(s, 0x811c9dc5, 1); }
-    m->f08 = pause;
-    m->f10 = se;
-    m->f18 = code;
-    STATE(self)->AddMessage(args, m, 0);
-    m->Release();
+    mRef->f08 = pause;
+    mRef->f10 = se;
+    mRef->f18 = code;
+    STATE(self)->AddMessage(args, mRef, 0);
+    mRef->Release();
 }
 
 // @ 0x00ada620
 void __fastcall FUN_00ada620(void* self, int /*edx*/, cArguments* args)
 {
     Msg* m = new ("Simulator", 0, 0, 0, 0) Msg();
-    if (m) m->AddRef();
-    m->tag = 0x046d28ea;
+    Msg*& mRef = m;
+    if (mRef) mRef->AddRef();
+    mRef->tag = 0x046d28ea;
     unsigned char stopped = 1;
     unsigned char avatar = 0;
     if (args->HasFlag("stop")) stopped = 0;
     if (args->HasFlag("avatarOnly")) avatar = 1;
-    m->f08 = stopped;
-    m->f10 = avatar;
-    STATE(self)->AddMessage(args, m, 0);
-    m->Release();
+    mRef->f08 = stopped;
+    mRef->f10 = avatar;
+    STATE(self)->AddMessage(args, mRef, 0);
+    mRef->Release();
 }
 
 // @ 0x00ada6d0

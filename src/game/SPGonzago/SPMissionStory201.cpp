@@ -554,7 +554,7 @@ void Mission::FUN_00c5ed90(int v)
 // @ 0x00c5edb0
 void Mission::FUN_00c5edb0()
 {
-  FUN_00c44b80();
+  this->FUN_00c44b80();
   ((FnV1)mpVtable->p[0x14c / 4])(this, 0x248975f);
   ((FnV1)mpVtable->p[0x14c / 4])(this, 0x2489766);
   ((FnV1)mpVtable->p[0x14c / 4])(this, 0x248976a);
@@ -563,14 +563,15 @@ void Mission::FUN_00c5edb0()
   ((FnV1)mpVtable->p[0x14c / 4])(this, 0x6441936);
 
   void* dst = (void*)&mpField34;
+  void*& dstRef = dst;
   void* ms = MessageServer();
-  ((FnV2)(*(Vtbl**)ms)->p[0x20 / 4])(ms, dst, 0x2489760);
+  ((FnV2)(*(Vtbl**)ms)->p[0x20 / 4])(ms, dstRef, 0x2489760);
 }
 
 // @ 0x00c5ee40
 void Mission::FUN_00c5ee40()
 {
-  FUN_00c44bd0();
+  this->FUN_00c44bd0();
   ((FnV1)mpVtable->p[0x150 / 4])(this, 0x248975f);
   ((FnV1)mpVtable->p[0x150 / 4])(this, 0x2489766);
   ((FnV1)mpVtable->p[0x150 / 4])(this, 0x248976a);
@@ -579,8 +580,9 @@ void Mission::FUN_00c5ee40()
   ((FnV1)mpVtable->p[0x150 / 4])(this, 0x6441936);
 
   void* dst = (void*)&mpField34;
+  void*& dstRef = dst;
   void* ms = MessageServer();
-  ((FnV3)(*(Vtbl**)ms)->p[0x2c / 4])(ms, dst, 0x2489760, 0xffffd8f1);
+  ((FnV3)(*(Vtbl**)ms)->p[0x2c / 4])(ms, dstRef, 0x2489760, 0xffffd8f1);
 }
 
 // @ 0x00c5eed0

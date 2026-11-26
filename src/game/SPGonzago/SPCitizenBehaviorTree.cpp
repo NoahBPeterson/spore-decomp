@@ -2533,12 +2533,13 @@ bool RepairBuilding_Tick(Citizen* c, int a2, int a3, int a4, int a5, RepairState
 namespace SP { namespace CitizenTree {
 float OutsideCity_Decide(Citizen* c)
 {
-    City_s00d9_3fd0* city = c->GetCity();
+    Citizen* cCopy = c;
+    City_s00d9_3fd0* city = cCopy->GetCity();
     if (city)
     {
         float wallR = city->GetWalls()->mRadius_25c;
         const Vec3* cp = city->mCityLoco_120.GetPosition();
-        const Vec3* mp = c->mLoco.GetPosition();
+        const Vec3* mp = cCopy->mLoco.GetPosition();
         float dx = mp->x - cp->x;
         float dy = mp->y - cp->y;
         float dz = mp->z - cp->z;

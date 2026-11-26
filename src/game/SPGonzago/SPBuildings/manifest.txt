@@ -61,3 +61,4 @@
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bd6180@@YIPAXPAD@Z  00bd6180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_0132abc0@@YAXXZ  0132abc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_0132b1f0@@YAXXZ  0132b1f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?SetModelKey2@cOwnerT@@QAEXPAX@Z  00bcd4e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

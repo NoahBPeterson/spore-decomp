@@ -7,3 +7,6 @@ slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada360@@YIXPAXHPAVcArguments@@@Z  00ada36
 slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada7e0@@YIXPAXHPAVcArguments@@@Z  00ada7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada880@@YIXPAXHPAVcArguments@@@Z  00ada880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada920@@YIXPAXHPAVcArguments@@@Z  00ada920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada620@@YIXPAXHPAVcArguments@@@Z  00ada620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada3f0@@YIXPAXHPAVcArguments@@@Z  00ada3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00ad9a30/s00ad9a30.cpp  ?FUN_00ada4b0@@YIXPAXHPAVcArguments@@@Z  00ada4b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

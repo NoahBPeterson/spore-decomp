@@ -361,15 +361,16 @@ void CW::ResetLayout()
 bool CW::DoMessageProc(int msg)
 {
     if (*(int*)(msg + 8) != (int)0x8ef0c8dd)
-        return BaseDoMessage(msg);
+        return this->BaseDoMessage(msg);
     if (*(char*)((char*)this + 0x868) != 0) {
         int* p = *(int**)((char*)this + 0x864);
         int iVar3 = (*(int(__thiscall**)(int*))((char*)*p + 0x28))(p);
         int iVar4 = (*(int(__thiscall**)(int*))((char*)*p + 0x38))(p);
-        iVar4 -= iVar3;
-        iVar4 -= (*(int(__thiscall**)(int*))((char*)*p + 0x40))(p);
-        *(int*)((char*)this + 0x224) = iVar4;
-        if (iVar4 < 0)
+        int& iVar4Ref = iVar4;
+        iVar4Ref -= iVar3;
+        iVar4Ref -= (*(int(__thiscall**)(int*))((char*)*p + 0x40))(p);
+        *(int*)((char*)this + 0x224) = iVar4Ref;
+        if (iVar4Ref < 0)
             *(int*)((char*)this + 0x224) = 0;
         void* p2 = (char*)this + 4;
         (*(void(__thiscall**)(void*))((char*)*(void**)p2 + 0x90))(p2);

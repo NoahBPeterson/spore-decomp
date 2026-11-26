@@ -895,12 +895,13 @@ float __cdecl FUN_00da64b0(cSPCreatureCitizen* c)
 // @ 0x00da6510
 float __cdecl FUN_00da6510(cSPCreatureCitizen* c)
 {
+    cSPCreatureCitizen* cCopy = c;
     if (FUN_00b5b800() != (void*)0x1654c02)
         return 0.0f;
-    cTribe* t = c->GetTribe();
+    cTribe* t = cCopy->GetTribe();
     if (t == 0)
         return 0.0f;
-    return (c->mF5e0 <= 1.5258789e-05f || t->mF2c8 > 0.0f) ? _HK_REAL_ONE : 0.0f;
+    return (cCopy->mF5e0 <= 1.5258789e-05f || t->mF2c8 > 0.0f) ? _HK_REAL_ONE : 0.0f;
 }
 
 // @ 0x00da6570

@@ -286,8 +286,7 @@ SegVolume *SegVolume::Setup(int a, int b, int c)
     *(int *)(base + 0xe0) = b;
     char *q = (char *)(a * 0x80) + (int)p;
     *(int *)(base + 0xd8) = (int)q;
-    q += b * 0x80;
-    *(int *)(base + 0x1c) = c;
+    *(int *)(base + 0x1c) = c; q += b * 0x80;
     *(int *)(base + 0xec) = c;
     *(int *)(base + 0xe4) = (int)q;
     q += c * 0x60;

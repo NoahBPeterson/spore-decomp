@@ -6430,10 +6430,11 @@ float __cdecl FUN_00da6de0(cSPCreatureCitizen* c)
 // @ 0x00da6e50
 float __cdecl FUN_00da6e50(cSPCreatureCitizen* c)
 {
+    cSPCreatureCitizen* cCopy = c;
     float r;
-    if (c->GetTribe()->mTimer20c.GetTimer() == 0.0f &&
-        c->mTimer34.GetTimer() == 0.0f &&
-        c->FUN_c0b9c0() < g_f1687a0c)
+    if (cCopy->GetTribe()->mTimer20c.GetTimer() == 0.0f &&
+        cCopy->mTimer34.GetTimer() == 0.0f &&
+        cCopy->FUN_c0b9c0() < g_f1687a0c)
         r = 1.0f;
     else
         r = 0.0f;

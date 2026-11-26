@@ -1077,8 +1077,9 @@ void* cRenderer_s0075_de80::LayerInfoAtIndex(int idx)
 {
     mMutex.Lock((const void*)g_140dca0);
     void* r = LayerBegin(this) + idx * 0x14;
+    void*& rRef = r;
     mMutex.Unlock();
-    return r;
+    return rRef;
 }
 
 // @ 0x0075e3f0
