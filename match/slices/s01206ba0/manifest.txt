@@ -1,2 +1,4 @@
 slices/s01206ba0/s01206ba0.cpp  ?rwcVolumeRelocateReturnSecond@@YAPAXPAX0@Z  012070a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s01206ba0/s01206ba0.cpp  ?GetInterval@SphereVolume@@QAEHPBX0@Z  012075f0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s01206ba0/s01206ba0.cpp  ?SphereVolumeInstance_GetBBox@@YAXPBX00PAX@Z  01206b20  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01206ba0/s01206ba0.cpp  ?GetMaximumFeature@SphereVolume@@QAEHPBX0PAX@Z  01207600  /vc71 /O2 /MD /Gy /TP /arch:SSE

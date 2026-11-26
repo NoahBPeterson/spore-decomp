@@ -260,10 +260,9 @@ void cSPUIAssetVerbs::UpdatePos(void* p) {
 // @ 0x00656830  cSPUIAssetVerbs::SetVerbButtonEnabled
 void cSPUIAssetVerbs::SetVerbButtonEnabled(unsigned int idx) {
     if (idx > 5) return;
-    int* ids1 = (int*)0x13ffc00;
-    int* ids2 = (int*)0x13ffc18;
-    void* w1 = ((cSPUILayout*)mLayout)->FindWindowByID(ids1[idx], 1);
-    void* w2 = ((cSPUILayout*)mLayout)->FindWindowByID(ids2[idx], 1);
+    void* w1 = ((cSPUILayout*)mLayout)->FindWindowByID(((int*)g_13ffc00)[idx], 1);
+    cSPUILayout* l2 = (cSPUILayout*)mLayout;
+    void* w2 = l2->FindWindowByID(((int*)g_13ffc00)[6 + idx], 1);
     if (w1) vc2(w1, 0x7c, 1, 1);
     if (w2) vc2(w2, 0x7c, 0x10, 1);
 }

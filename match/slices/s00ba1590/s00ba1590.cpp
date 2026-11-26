@@ -715,17 +715,22 @@ namespace G7
 
 // @ 0x00ba1fa0
     void Owner::NotifyAndPrune(VersionArg* arg)
-    {
-        for (Node* n = mActive.pNext; n != (Node*)&mActive; n = n->pNext)
+    {        for (Node* n = mActive.pNext; n != (Node*)&mActive; n = n->pNext)
             ((void (__thiscall*)(Obj*, VersionArg*))VSlot(n->pObj, 0x18))(n->pObj, arg);
 
         if ((u32)((arg->mVersion << 16) | arg->mBuild) >= 0x220000)
             return;
 
+        struct SubIface {
+            virtual void v00() {} virtual void v04() {} virtual void v08() {} virtual void v0c() {}
+            virtual void v10() {} virtual void v14() {} virtual void v18() {} virtual void v1c() {}
+            virtual u32 GetId() { return 0; }
+        };
+
         Node* end = (Node*)&mActive;
         Node* n = mActive.pNext;
         while (n != end) {
-            u32 id = ((u32 (__thiscall*)(void*))VSlot(ObjSub(n->pObj), 0x20))(ObjSub(n->pObj));
+            u32 id = ((SubIface*)ObjSub(n->pObj))->GetId();
             n = n->pNext;
             if (id == 0x12326f68) {
                 Node* node = n->pPrev;
@@ -736,8 +741,7 @@ namespace G7
                 operator delete[](node);
                 return;
             }
-        }
-    }
+        }}
 // @ 0x00ba2070
     void Owner::RemoveKey(Obj* key)
     {

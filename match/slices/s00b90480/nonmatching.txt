@@ -1,7 +1,6 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
 00b90480   143  FUN_00b90480 (GetRandomPlants): complete; editor species manager/EASTL vector glue scheduling differs; equiv: PASS (400 valid, 80% cov)
 00b90560   254  FUN_00b90560: complete; mission plant-profile list build; inlined stack-string and vector growth differ
-00b90960    51  FUN_00b90960: complete; find-by-hash-slot; vtable probe result handling differs; equiv: PASS (355 valid @800 inputs, 88% cov) med48-c2scope-20261126 lead: inspect c2scope regalloc/spill for param_3 stack reload in loop
 00b909a0    64  FUN_00b909a0: complete; copy_if by hash-slot; vtable probe + store scheduling differs
 00b90a40   191  FUN_00b90a40: complete; insertion sort with refcounted elements; register/refcount scheduling differs
 00b90b10   170  FUN_00b90b10: complete; heap sift-up; vtable refcount slot calls scheduled differently

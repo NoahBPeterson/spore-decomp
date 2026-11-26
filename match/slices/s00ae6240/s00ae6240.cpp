@@ -117,7 +117,7 @@ struct VecTB {
             Insert(p, &value);
         }
     }
-    void erase(IRefB** first, IRefB** last);
+    IRefB** erase(IRefB** first, IRefB** last);
     void Insert(IRefB** pos, IRefB* const* value);    // 0x00ae6ed0
 };
 
@@ -485,15 +485,23 @@ void VecT::erase(IRefA** first, IRefA** last)
 }
 
 // @ 0x00ae6e70
-void VecTB::erase(IRefB** first, IRefB** last)
-{
-    IRefB** p = vec_copy_assign_b(last, mpEnd, first);
+IRefB** VecTB::erase(IRefB** first, IRefB** last)
+{    IRefB** const pLast = last;
+    IRefB** const oldEnd = mpEnd;
+    IRefB** const copyEnd = vec_copy_assign_b(pLast, oldEnd, first);
     IRefB** const end = mpEnd;
-    for (; p < end; ++p)
-        if (*p != 0)
-            (*p)->Release();
-    mpEnd -= last - first;
-}
+    IRefB** p = copyEnd;
+    if (copyEnd < end) {
+        do {
+            if (*p != 0)
+                (*p)->Release();
+            ++p;
+        } while (p < end);
+    }
+    IRefB** const pFirst = first;
+    const int removed = pLast - pFirst;
+    mpEnd -= removed;
+    return pFirst;}
 
 // @ 0x00ae7020
 void VecT::push_back(IRefA* const& value)

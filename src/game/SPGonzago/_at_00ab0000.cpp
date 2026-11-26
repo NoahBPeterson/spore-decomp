@@ -525,11 +525,9 @@ cInteraction* cInteractionStack::FindActive()
 
 // @ 0x00abf900
 void tBlockVector4::destroy()
-{
-    cInteraction** ppSlot = mpBegin;
+{    cInteraction** ppSlot = mpBegin;
     cInteraction** ppBlockEnd = mpFirstBlockEnd;
-    cInteraction*** ppBlockSlot;
-    ppBlockSlot = mpFirstBlockSlot;
+    cInteraction*** ppBlockSlot = mpFirstBlockSlot;
     while (ppSlot != mpEnd)
     {
         if (*ppSlot != 0)
@@ -537,9 +535,8 @@ void tBlockVector4::destroy()
         ++ppSlot;
         if (ppSlot == ppBlockEnd)
         {
-            ++ppBlockSlot;
+            ppBlockEnd = *++ppBlockSlot + 64;
             ppSlot = *ppBlockSlot;
-            ppBlockEnd = ppSlot + 64;
         }
     }
     if (mpDir != 0)
@@ -554,8 +551,7 @@ void tBlockVector4::destroy()
         cInteraction*** ppDir = mpDir;
         if (ppDir != 0)
             operator_delete_array(ppDir);
-    }
-}
+    }}
 
 // @ 0x00abf980
 void tBlockVector4::pop_back()

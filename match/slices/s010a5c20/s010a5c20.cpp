@@ -563,10 +563,11 @@ void hkWorldConstraintUtil::removeConstraint(hkConstraintInstance* c)
 	if (dst)
 	{
 		negOff = -(int)internal->m_w14;
-		void* src = (char*)dst + internal->m_w14;
-		int size = b->m_unk8c + b->m_unk88 - (int)src;
-		memmove(dst, src, size);
-		b->m_unk8c -= internal->m_w14;
+		char* src = (char*)dst + internal->m_w14;
+		hkArray<unsigned char>& runtime = *(hkArray<unsigned char>*)&b->m_unk88;
+		char* runtimeEnd = (char*)runtime.m_data + runtime.m_size;
+		memmove(dst, src, runtimeEnd - src);
+		runtime.m_size -= internal->m_w14;
 		internal->m_p18 = 0;
 	}
 	c->m_internal = 0;
