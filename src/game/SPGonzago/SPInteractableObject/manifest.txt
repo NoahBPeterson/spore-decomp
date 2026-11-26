@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPInteractableObject.cpp  ?Read@cInteractableObject@RetailInteractableObject@@QAE_NPAX@Z  00c3fba0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPInteractableObject.cpp  ?GetFieldValues@cInteractableObject@RetailInteractableObject@@QAEHAAV?$vector@UcField@SP@@Usp_vector_allocator@eastl@@@eastl@@@Z  00c3f920  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPInteractableObject.cpp  ?SetModelState@cInteractableObject@RetailInteractableObject@@QAEXH_N@Z  00c3f8b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPInteractableObject.cpp  ?ClearEffectState@cInteractableObject@@QAEXPAX@Z  00c3fad0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

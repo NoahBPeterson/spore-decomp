@@ -10,5 +10,4 @@
 00bbc540 124 CargoSlotsUpdate: structure present, size 242 vs 225
 00bbc630 36 CityLessBuildings: thiscall helper schedule differs
 00bbc7c0 57 RecordMedian3: three-compare tree now correct polarity, register roles differ
-00bbc870 17 fn_bbc870: all instructions present, tail global-load/pop interleave differs
 00bbc950 162 fn_bbc950: structure present but size 204 vs 219 and schedule differs

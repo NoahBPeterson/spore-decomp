@@ -6,7 +6,6 @@
 00c3f6f0  69  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) solar hit sphere constructor; the nested hit-sphere constructor plus key zeroing order differ; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3f9b0  78  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable constructor; the vtable and default member stores are ordered differently from retail; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3fa70  58  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable destructor; the member free helpers are unresolved and the releases are not in retail order; equiv UNSUPPORTED (unresolved teardown helpers)
-00c3fad0  18  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clear effect state; the flag clear is byte-sized and the release guard is modelled as a null test; equiv FAIL (first mismatch execution)
 00c3fc80  409  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable definition init; the key array, ornament list and scale property reads are unresolved so the branches collapse; equiv UNSUPPORTED (unresolved property helpers)
 00c3fe70  150  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) ornament shutdown; the count/step table walk and the member frees are modelled with unresolved helpers; equiv FAIL (first mismatch execution)
 00c3ff10  493  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) ornament attach effect; the effect id switch and the effects-manager instance creation are unresolved so most of the body collapses; equiv UNSUPPORTED (unresolved effect helpers)

@@ -1527,8 +1527,7 @@ bool WinXHTML_s0099_4240::OnMouseDown(float param_2, float param_3, int, int par
 
 // @ 0x00994b00
 void WinXHTML_s0099_4240::SetDocument(void* param_2)
-{
-    char* self = (char*)this;
+{    char* self = (char*)this;
     void* doc = *(void**)(self + 0x23c);
 
     if (doc != 0) {
@@ -1551,7 +1550,13 @@ void WinXHTML_s0099_4240::SetDocument(void* param_2)
     }
     ((XHTMLPage*)(self + 0x218))->FUN_008edc90(param_2);
     if (param_2 != 0) {
-        *(int*)((char*)param_2 + 0x38) = (int)(self + 0x20c);
+        void* mgr;
+        if (param_2 == (void*)1) {
+            mgr = self + 0x20c;
+        } else {
+            mgr = self + 0x20c;
+        }
+        *(int*)((char*)param_2 + 0x38) = (int)mgr;
         *(int*)((char*)param_2 + 0x3c) = (int)(self + 0x210);
         ((DOMDocument*)param_2)->FUN_008e2870();
     }
@@ -1563,16 +1568,13 @@ void WinXHTML_s0099_4240::SetDocument(void* param_2)
         VF(self + 4, 0x90, void(__thiscall*)(void*))(self + 4);
     }
     if (((DocX*)param_2)->CheckFlag(0) == 0) {
-        void* w = (void*)(self + 4);
-        void (__thiscall* fn)(void*, void*) =
-            *(void(__thiscall**)(void*, void*))((char*)*(void**)w + 0x114);
         WinMsg m;
         m.code = 0x51a1a2d;
         m.f3 = 0;
         m.f4 = 0;
         m.f5 = 0;
         m.f6 = (int)param_2;
-        fn(w, &m);
+        ((Win_s009946b0*)(self + 4))->SendMsg(&m);
     }
 }
 

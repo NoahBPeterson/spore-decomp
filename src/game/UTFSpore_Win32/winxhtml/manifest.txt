@@ -16,3 +16,4 @@
 ../src/game/UTFSpore_Win32/winxhtml.cpp  ?FUN_00994c30@WinXHTML_s0099_4240@@QAEXH@Z  00994c30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/winxhtml.cpp  ?CreateFormControl@WinXHTML_s0099_4c80@@QAEXPAUFormControl@XHTML@@@Z  00994c80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/winxhtml.cpp  ?OnFocusChange@WinXHTML_s0099_4240@@QAE_NHPAX@Z  009947f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?SetDocument@WinXHTML_s0099_4240@@QAEXPAX@Z  00994b00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
