@@ -3230,13 +3230,17 @@ void FUN_00ba6800(void* base, int lo, int hi, int a4, int a5, int a6, char (__cd
 // @ 0x00ba6880
 StarSearchCriteria::StarSearchCriteria()
 {
-  m0 = 0x1fff;
-  m4 = 0x3f;
-  m8 = 0;
-  mC = g_13eb1bc;
-  m10 = g_13eb1bc;
-  m14 = g_13eb1bc;
-  m18 = 0;
+  float range = g_13eb1bc;
+  StarSearchCriteria* p = this;
+  StarSearchCriteria*& first = p;           // one use through a reference alias: matches retail's register choice
+  first->m0 = 0x1fff;
+  p->m4 = 0x3f;
+  int none = 0;
+  p->m8 = none;
+  p->mC = range;
+  p->m10 = range;
+  p->m14 = range;
+  p->m18 = none;
 }
 
 // @ 0x00ba6a40

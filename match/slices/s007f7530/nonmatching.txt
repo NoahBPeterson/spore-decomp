@@ -4,7 +4,7 @@
 007f7b30 141  complete forward copy of cAnimationInfo; register schedule differs
 007f7c00 162  complete copy_backward of cAnimationInfo; register schedule differs
 007f7ce0 143  complete fill/copy of cAnimInfo from one source; register schedule differs
-007f7db0 158  complete backward fill/copy of cAnimInfo; register schedule differs
+007f7db0 158 logic: this is copy_backward, not a fill: it walks `last` and the third argument (the destination) backwards together and copies *--last into *--dest, returning dest (the lifter's byte-exact reading, vs2005-cpp l2c_search 2026-11-26). Retail also keeps pointers to +0x10 of both elements (the timer member's assignment), so the timer/function members are probably class types with their own operator=.; was: complete backward fill/copy of cAnimInfo; register schedule differs
 007f7670 42  complete OscillatingFill wrapper; FUN_007f6170 is (out,total,type,-1.0f,1,1,ratio,0.0f) and the wrapper's floats are (type,duration,from); remaining diff is /O2 SSE scheduling [equiv: PASS 377 valid, 100% cov]
 007f80d0 79  complete Position wrapper; concrete callee is FUN_007f7050 (was mis-bound to this VA by an annotation, recursing); cl still materializes the Point2DT temp in frame [equiv: PASS 405 valid, 100% cov]
 007f8140 78  complete Rotation wrapper; concrete callee is FUN_007f7290 (was mis-bound to this VA by an annotation, recursing); cl still materializes the vector temp in frame [equiv: PASS 405 valid, 100% cov]
