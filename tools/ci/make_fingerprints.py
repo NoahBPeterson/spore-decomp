@@ -26,7 +26,22 @@ def starts():
         for row in csv.reader(open(f)):
             if len(row) >= 3 and row[2].isdigit():
                 s.add(int(row[0], 16))
-    s |= {int(v, 16) for v in json.load(open(os.path.join(ROOT, "work", "migrate", "modmap.json")))["functions"]}
+    mm = os.path.join(ROOT, "work", "migrate", "modmap.json")
+    if os.path.exists(mm):
+        s |= {int(v, 16) for v in json.load(open(mm))["functions"]}
+    # every start an earlier run knew: the fingerprints themselves (enough to re-size a few rows when the Ghidra index
+    # or the module map is not on this machine)
+    fps = os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl")
+    if os.path.exists(fps):
+        s |= {int(json.loads(l)["va"], 16) for l in open(fps) if l.strip()}
+    # starts that none of the lists above has, found by hand: a fingerprint otherwise runs into the next function
+    # (#588: 0x00fc9210 absorbed 0x00fc9220, 0x00fcdb20 absorbed 0x00fcdc10)
+    extra = os.path.join(ROOT, "tools", "ci", "extra_starts.txt")
+    if os.path.exists(extra):
+        for line in open(extra):
+            tok = line.split("#", 1)[0].strip()
+            if tok:
+                s.add(int(tok, 16))
     for f in [g for d in ("match", os.path.join("src", "game")) for n in ("manifest.txt", "nonmatching.txt", "partial.txt")
               for g in glob.glob(os.path.join(ROOT, d, "**", n), recursive=True)]:
         for line in open(f, errors="replace"):
