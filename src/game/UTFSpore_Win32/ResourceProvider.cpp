@@ -1457,8 +1457,7 @@ unsigned UMap_s008f_f610::erase(unsigned* key)
 
 // @ 0x008ffa20
 WIns* WMap::DoInsertValue(WIns* out, WKV* kv, TagT)
-{
-    uint32_t h = HashStr(kv->key);
+{    uint32_t h = HashStr(kv->key);
     unsigned n = mBucketCount;
     unsigned idx = h % n;
     WNode** slot = &mBuckets[idx];
@@ -1480,16 +1479,16 @@ WIns* WMap::DoInsertValue(WIns* out, WKV* kv, TagT)
         node->next = mBuckets[idx];
         mBuckets[idx] = node;
         mCount++;
-        out->node = node;
-        out->slot = &mBuckets[idx];
-        out->inserted = 1;
-        return out;
+        WIns* __restrict o = out;
+        o->node = node;
+        o->slot = &mBuckets[idx];
+        o->inserted = 1;
+        return o;
     }
     out->node = found;
     out->slot = slot;
     out->inserted = 0;
-    return out;
-}
+    return out;}
 
 // @ 0x008ffb40
 void ResourceProvider_s008f_f610::FinishRequest(ResourceRequest* r, int stage)

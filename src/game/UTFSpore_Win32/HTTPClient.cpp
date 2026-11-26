@@ -1978,15 +1978,17 @@ void HTTPRequest::SetMethod(int method)
 
 // @ 0x00943910
 bool ReportClient::CancelJob(unsigned id)
-{
-    mMutex.Lock(&kTimeoutForever);
+{    mMutex.Lock(&kTimeoutForever);
     for (CookieNode* n = mJobList.mpNext; n != (CookieNode*)&mJobList; n = n->mpNext) {
         Cookie40_s0094_2ff0* job = &n->mData;
         if ((unsigned)job->m00[0] == id) {
             job->m00[1] = 8;
-            if (mpNotify)
+            if (mpNotify) {
                 mpNotify(mpNotifyCtx, this, 0x700af301, job, 0);
-            n = n->mpNext;
+                n = n->mpNext;
+            } else {
+                n = n->mpNext;
+            }
             EraseBefore(n);
             mMutex.Unlock();
             return true;
@@ -1999,8 +2001,7 @@ bool ReportClient::CancelJob(unsigned id)
         return true;
     }
     mMutex.Unlock();
-    return false;
-}
+    return false;}
 
 // @ 0x00943a30
 bool ReportClient::CancelAllJobs(bool bWait, unsigned timeout)

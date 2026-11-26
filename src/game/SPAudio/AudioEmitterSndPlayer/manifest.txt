@@ -21,3 +21,4 @@
 ../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?q112c0@EmitterSndPlayer@@QAEXXZ  00a112c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?Create@EmitterSndPlayer@@QAE_NXZ  00a113c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?Shutdown@EmitterSndPlayer@@QAE_NXZ  00a11380  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?DestroyVoice@EmitterSndPlayer_s00a1_2260@@QAE_NXZ  00a124a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
