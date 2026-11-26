@@ -1407,7 +1407,8 @@ void WinXHTMLCmd::OnDOMEvent(void* param_2)
 
 // @ 0x009947f0
 bool WinXHTML_s0099_4240::OnFocusChange(int param_2, void* param_3)
-{    char* self = (char*)this;
+{
+    char* self = (char*)this;
 
     if (param_2 != 1)
         return true;
@@ -1424,13 +1425,15 @@ bool WinXHTML_s0099_4240::OnFocusChange(int param_2, void* param_3)
         *(char*)(self + 0xa8e4) = 0;
     }
     if (*(void**)(self + 0x478) != 0) {
-        ((XHTMLPage*)(self + 0x218))->SetImageRequester(0, 0);
-        ((XHTMLPage*)(self + 0x218))->FUN_008ecc90(0);
-        ((XHTMLPage*)(self + 0x218))->Layout();
+        XHTMLPage* page = (XHTMLPage*)(self + 0x218);
+        page->SetImageRequester(0, 0);
+        page->FUN_008ecc90(0);
+        page->Layout();
         FUN_00994240();
     }
     ((Win_s009946b0*)(self + 4))->Invalidate();
-    return true;}
+    return true;
+}
 
 // @ 0x009948a0
 bool WinXHTML_s0099_4240::FUN_009948a0(float param_2, float param_3, int)
