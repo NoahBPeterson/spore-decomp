@@ -404,7 +404,7 @@ void SpaceTool::RemoveByPtrAndUpdate(void* p) {
   terrain_sphere_update(ts);
 }
 
-// @ 0x00aeaa80
+// 0x00aeaa80 (byte-exact lifted version: match/slices/s00aeaa80/s00aeaa80.cpp)
 void SpaceTool::RemoveMatching2(int p2, int p3, int p4, int p5) {
   void** it = mVec.mpBegin;
   void** end = mVec.mpEnd;

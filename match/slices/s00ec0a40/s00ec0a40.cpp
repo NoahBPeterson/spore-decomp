@@ -183,7 +183,7 @@ double __cdecl FUN_00ec0c40(void* self) {
 }
 
 // ================================================================ 0x00ec0c90
-// @ 0x00ec0c90
+// 0x00ec0c90 (byte-exact lifted version: match/slices/s00ec0c90/s00ec0c90.cpp)
 u8 __cdecl FUN_00ec0c90(void* obj, void* key) {
     u8 res = 0;
     if (obj != 0) {

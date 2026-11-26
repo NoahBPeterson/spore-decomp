@@ -1,0 +1,1 @@
+slices/s0112b680/s0112b680.cpp  @FUN_0112b680@12  0112b680  /vc71 /O2 /MD /Gy /TP

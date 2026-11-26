@@ -21,7 +21,6 @@
 00f093a0  147  complete; size 151 vs 136; TaskRank inline expansion + pivot reg alloc differ; difftest UNSUPPORTED (0/400 valid inputs)
 00f09430   52  complete; same size; register allocation is swapped (base in edi vs our esi) and the two TaskRank evaluations are scheduled in the other order; difftest WEAK 145 valid, 37.5% coverage
 00f094d0   97  complete; size 164 vs 161; reg alloc + panel-slot walk differ; difftest UNSUPPORTED (2 unresolved refs: Animator::ClearAll / Layout::Shutdown)
-00f09580  196  complete; size 321 vs 306; 10-slot panel build loop and call sites differ; difftest UNSUPPORTED (4 unresolved refs)
 00f09770  107  complete; size 134 vs 138; quicksort recursion/depth layout differs; difftest WEAK 238 valid, 34.4% coverage
 00f09800    8  complete; same size; only three operand encodings ([eax+4] vs [edi+0x18], [eax+4] vs [edi+0x30]) and one lea pair order differ; difftest UNSUPPORTED (0/400 valid, import:memcpy)
 00f09960  504  complete; size 636 vs 652; 11-case jump table and the per-case AttachTaskRecord chains differ; difftest UNSUPPORTED (2 unresolved refs: Day78::slot / NounMgr::GetAvatar)

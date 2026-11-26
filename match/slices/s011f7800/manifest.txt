@@ -1,0 +1,1 @@
+slices/s011f7800/s011f7800.cpp  _FUN_011f7800  011f7800  /vc71 /O2 /MD /Gy /EHsc /TP

@@ -137,7 +137,7 @@ float FUN_00e503a0(int which) {
   return 10.0f;
 }
 
-// @ 0x00e507d0
+// 0x00e507d0 (byte-exact lifted version: match/slices/s00e507d0/s00e507d0.cpp)
 unsigned FUN_00e507d0(float a, float b) {
   float f = (a / b) * 2.0f;
   int i = _mm_cvt_ss2si(_mm_set_ss(f));
@@ -549,7 +549,7 @@ extern "C" void FUN_00e4f920_standin(int u, float* v, float a, float b, float c,
   FUN_00e4f920(u, v, a, b, c, p);
 }
 
-// @ 0x00e4fd30  fill 13 bytes from a fixed 1/0 pattern
+// 0x00e4fd30 (byte-exact lifted version: match/slices/s00e4fd30/s00e4fd30.cpp)  fill 13 bytes from a fixed 1/0 pattern
 int FUN_00e4fd30(unsigned char* p) {
   unsigned char* q = p;
   int key = -2;

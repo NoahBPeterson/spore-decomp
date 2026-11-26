@@ -375,7 +375,7 @@ void VecT::push_back()
 
 // ================================================================================================
 // 0x00ac7080 -- clear the point vector.
-// @ 0x00ac7080
+// 0x00ac7080 (byte-exact lifted version: match/slices/s00ac7080/s00ac7080.cpp)
 void cGroundLayer::clearVec()
 {
     cSPTransform* b = vec.mpBegin;
@@ -389,7 +389,7 @@ void cGroundLayer::clearVec()
 
 // ================================================================================================
 // 0x00ac70c0 -- reset: zero +0x24, clear vector, notify via 0x67dd50 virtual.
-// @ 0x00ac70c0
+// 0x00ac70c0 (byte-exact lifted version: match/slices/s00ac70c0/s00ac70c0.cpp)
 void cGroundLayer::reset()
 {
     ptr24 = 0;

@@ -173,7 +173,7 @@ u32 __fastcall Stream_QueueMem(void* self, int, u32 a, i32 b, u32 c, u32 d)
 // ===========================================================================
 // 0x011e6b50 -- Stream::GetChunk
 // ===========================================================================
-// @ 0x011e6b50
+// 0x011e6b50 (byte-exact lifted version: match/slices/s011e6b50/s011e6b50.cpp)
 void* __fastcall Stream_GetChunk(void* self, int)
 {
     void* impl = (void*)ld32(self, 4);

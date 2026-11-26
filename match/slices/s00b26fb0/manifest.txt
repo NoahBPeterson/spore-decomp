@@ -2,3 +2,4 @@ slices/s00b26fb0/s00b26fb0.cpp  ?ResetDefaultSavedGame@@YA_NXZ  00b27170  /O2 /M
 slices/s00b26fb0/s00b26fb0.cpp  ?Destroy@SavedGameCleanup@@QAEPAXI@Z  00b271b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00b26fb0/s00b26fb0.cpp  ?CreateSavedGameHeader@@YGPAXHH@Z  00b274e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00b26fb0/s00b26fb0.cpp  ?GetSavedGamePath@SavedGamePath@@QAEPAUSavedGameString@@PAU2@@Z  00b27540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00b26fb0/s00b26fb0_lifted.cpp  @FUN_00b26fb0@12  00b26fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

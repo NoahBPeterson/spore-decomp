@@ -373,7 +373,7 @@ int RebaseDeltaFromBase(int* p, ArenaCtx* ctx)
 	return 1;
 }
 
-// @ 0x01201050
+// 0x01201050 (byte-exact lifted version: match/slices/s01201050/s01201050.cpp)
 void RebaseToBase20(int* p, Base20Ctx* ctx)
 {
 	int d = (int)ctx->mpBase - (int)p;

@@ -331,7 +331,7 @@ EA::Thread::Semaphore* EA::Thread::Semaphore::Create(Semaphore* p)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00922900
+// 0x00922900 (byte-exact lifted version: match/slices/s00922900/s00922900.cpp)
 void __fastcall FUN_00922900(int* p)
 {
     p[0] = 0;

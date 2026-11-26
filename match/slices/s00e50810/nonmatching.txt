@@ -12,5 +12,4 @@
 00e51430  103  level->cube-root table selection: complete; loop/index schedule differs
 00e514c0  111  emit grid-line marker: complete; local struct offsets for FUN_00e394f0 approximated
 00e51580  128  emit source-level marker: complete; table lookup/local struct offsets approximated
-00e51650   40  emit one-field marker: complete; schedule differs
 00e51720  106  normalized level fraction: complete; x87 multiplication schedule differs; equiv PASS

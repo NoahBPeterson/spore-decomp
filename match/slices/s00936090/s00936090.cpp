@@ -483,7 +483,7 @@ bool EA::SharedLibraryRegistry::RemoveLibrary(SharedLibrary* lib, char flag) {
     return true;
 }
 
-// @ 0x00936820
+// 0x00936820 (byte-exact lifted version: match/slices/s00936820/s00936820.cpp)
 int EA::SharedLibraryRegistry::GetLibraries(void** out, unsigned int n) {
     if (out == 0) {
         mMutex.Lock(&gpRegistryMutexName);

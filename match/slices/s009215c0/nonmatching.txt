@@ -7,6 +7,5 @@
 00921f00  347  Condition ctor: member-init list reproduces the xchg/zero/Semaphore/Semaphore/Mutex order; equiv: WEAK (CreateSemaphoreA imports discarded); /GS+EH prologue retail lacks
 00922050  316  Condition::Signal: algorithm 8a broadcast/normal paths; equiv: PASS
 009221b0  122  Mutex::Lock: timeout/TryEnterCriticalSection loop shape differs
-00922330  122  RWMutex::Init: RWMutexParameters + out-of-line Mutex/Condition init; equiv: PASS; not byte-exact (inlined ThreadName::Set)
 009223a0  336  RWMutex::Lock: LockType/unsigned const& timeout signature, read/write paths; equiv: WEAK 43% coverage
 00922480  210  RWMutex::Unlock: writer/readers/waiters ordering; equiv: PASS

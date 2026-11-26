@@ -512,7 +512,7 @@ void hkRigidMotion::applyLinearImpulse(const hkVector4& imp)
     m_linearVelocity.w = (float)(mInv * imp.w + m_linearVelocity.w);
 }
 
-// @ 0x01088410
+// 0x01088410 (byte-exact lifted version: match/slices/s01088410/s01088410.cpp)
 // hkTransform::operator= compiled out of line: 16 dword copies.
 struct hkTransform_ { hkTransform* assign(const hkTransform& o); };   // stub receiver so `this` arrives in ECX
 hkTransform* hkTransform_::assign(const hkTransform& o)
@@ -673,7 +673,7 @@ void hkRigidMotion::step(const hkStepInfo& stepInfo)
     memcpy(&ms.m_transform.m[15], &st.m_centerOfMass1.w, sizeof(float));
 }
 
-// @ 0x010888c0
+// 0x010888c0 (byte-exact lifted version: match/slices/s010888c0/s010888c0.cpp)
 hkMotionState& hkMotionState::operator=(const hkMotionState& o)
 {
     reinterpret_cast<hkTransform_*>(&m_transform)->assign(o.m_transform);

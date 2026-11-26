@@ -121,7 +121,7 @@ double globalTime_00a21220() {
     return 0.0;
 }
 
-// @ 0x00A21230
+// 0x00a21230 (byte-exact lifted version: match/slices/s00a21230/s00a21230.cpp)
 bool isMsg00a21230(void* msg) {
     unsigned* m = (unsigned*)msg;
     if (m[2] != 0x21407ee) return false;

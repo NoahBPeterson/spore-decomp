@@ -1,0 +1,1 @@
+slices/s00922900/s00922900.cpp  @FUN_00922900@8  00922900  /O2 /MD /Gy /EHsc /TP /GS-

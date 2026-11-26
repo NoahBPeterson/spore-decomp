@@ -602,7 +602,7 @@ void cParticlesEffect::FUN_00f5f6a0(cParticle* particle)
     manager->mCount++;
 }
 
-// @ 0x00f5f770
+// 0x00f5f770 (byte-exact lifted version: match/slices/s00f5f770/s00f5f770.cpp)
 void cParticlesEffect::FUN_00f5f770(cParticle* particle)
 {
     if (mManager == 0 ||

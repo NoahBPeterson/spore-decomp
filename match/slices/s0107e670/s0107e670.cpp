@@ -28,7 +28,7 @@ extern hkReferencedObject* g_hkStreambufFactoryInstance;                        
 
 // ---- stdio readers ------------------------------------------------------------------------------------
 
-// @ 0x0107e670
+// 0x0107e670 (byte-exact lifted version: match/slices/s0107e670/s0107e670_lifted.cpp)
 hkStreamReader* hkDefaultStreambufFactory::openReader(const char* name)
 {
 	hkStreamReader* reader = new hkStdioStreamReader(name);

@@ -334,7 +334,7 @@ float hkMoppCompilerSettingsBlock::costSplitB(MoppChainLeaf* leaf)
     return (t1 + t2) + s2 + s1;
 }
 
-// @ 0x01120710  fills an 8-float record: [0]=t2, [1]=011204d0, [3]=01120570, [4]=01120470,
+// 0x01120710 (byte-exact lifted version: match/slices/s01120710/s01120710.cpp)  fills an 8-float record: [0]=t2, [1]=011204d0, [3]=01120570, [4]=01120470,
 // [5]=t1, [6]=leaf->m_f08, [7]=leaf->m_f0c.  (thiscall, ret 8)
 void hkMoppCompilerSettingsBlock::costSplitInto(MoppChainLeaf* leaf, float* out)
 {
@@ -348,7 +348,7 @@ void hkMoppCompilerSettingsBlock::costSplitInto(MoppChainLeaf* leaf, float* out)
     out[7] = leaf->m_f0c;
 }
 
-// @ 0x01120610  constructor: install the vtable, run 0x01103830, then copy six dwords from the source.
+// 0x01120610 (byte-exact lifted version: match/slices/s01120610/s01120610.cpp)  constructor: install the vtable, run 0x01103830, then copy six dwords from the source.
 hkMoppCompilerSettingsBlock* hkMoppCompilerSettingsBlock::construct(const float* src)
 {
     this->m_memSize = 1;                           // low half of the dword written as 0x00010001

@@ -528,7 +528,7 @@ void MoppChunk::computeShift()
 	CW(8) = (best > 0x18) ? 0x18 : best;
 }
 
-// @ 0x0111d3c0
+// 0x0111d3c0 (byte-exact lifted version: match/slices/s0111d3c0/s0111d3c0.cpp)
 MoppChunk* MoppChunk::initFromParent(const MoppChunk* parent, const void* box, const float* xform)
 {
 	for (int i = 0; i < 0x12; ++i)      // rep movsd, 0x48 bytes

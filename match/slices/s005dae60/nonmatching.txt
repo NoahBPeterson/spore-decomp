@@ -4,4 +4,3 @@
 005daff0  152  eastl::map<AutoRefCount<EA::UTFWin::IWindow>,ComponentList>::operator[]: complete; same newer-EASTL inline difference (size 186 vs 169). [equiv: UNSUPPORTED - template mangled name not matched to the operator[] marker]
 005db0a0  267  eastl::map<float*,ComponentList>::operator[]: complete; same newer-EASTL inline difference plus the raw pointer-key compare inlines to a larger body (size 244 vs 175). [equiv: UNSUPPORTED - template mangled name not matched to the operator[] marker]
 005db580  203  cSPEditorTactilityManager::LerpFloat: complete; same newer-EASTL inline DoInsertValue/DoCreateNodeFromKey difference (size 223 vs 193). [equiv: FAIL - 3/267 valid inputs mismatched, first "fault: Invalid memory write at eip=300000c5", 100% coverage; residual map-insert path difference]
-005dbc70  24  UTFInternet::HTTPRequest ctor: complete; cl loads the 0.2f constant late in the zero-fill where the original hoisted it after the +0x1c store

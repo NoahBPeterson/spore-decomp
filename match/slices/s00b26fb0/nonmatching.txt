@@ -1,4 +1,3 @@
-00b26fb0 343 SavedGameHeader_Assign: three-string assign chain, block/register schedule differs
 00b271f0 177 LoadSavedGame: switch jump table now emitted; call-arg shapes and tail differ
 00b27360 238 SimSavedGameHandler2: static-init/registration, vtable store schedule differs
 00b275a0 974 ValidateSavedGameFile: DatabasePackedFile/cObjectDatabase path ported; unresolved externals

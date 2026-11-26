@@ -1,4 +1,3 @@
-007db5e0  7    PtrVec::Find; loop index/pointer register assignment swapped (ecx/edx)
 007dbe50  68   cSmoothCameraController::StopMotion; x87/SSE field-copy schedule differs; fixed mSteps to float (raw fld/fstp bit copy, not float->int) [equiv: PASS]
 007dbea0  92   cSmoothCameraController::SaveCameraPosition; saved-camera field mapping/schedule differ; record starts at &mCameraPositions[i].mPitchParam and returns &mSubjectPosition, removed spurious floor/wall zero writes [equiv: PASS]
 007db650  458  cPackManager::Init complete (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast); stack-slot order (keys/filter/key temp) and local spill layout differ [equiv: WEAK 22.9% coverage]

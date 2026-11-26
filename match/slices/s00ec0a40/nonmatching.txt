@@ -1,7 +1,6 @@
 00bc96a0 55 complete (register allocation only: params land in edx/edi with ebx as loop scratch vs retail edi/ebx with eax/ecx scratch; identical instruction count, +2 bytes from the loop-exhaust xor eax,eax); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv: PASS 400 valid, 82.9% coverage, 0 mismatches
 00bc97f0 129 complete (epilogue emits load-modify-store for both mask updates where retail uses the and/or memory-dest form (+4 bytes) and schedules the slot-mask/old-object loads differently; /fp:fast is required for the comiss duration ladder); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast ; equiv: PASS 391 valid, 96.7% coverage, 0 mismatches
 00ec0ae0 136 scenario-goal callback (early-out variant, 8-arg); deep vtable chain reorders
-00ec0c90 86 nested object/key lookup; combined success/failure tail layout differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00ec0d00 370 9-way stimulus dispatch; jump-table body layout, inline vector walks and leftover-stack-arg c7d090 call diverge
 00ec0f70 732 target-acquire stimulus; 16-byte key frame, nested loops and vtable chain reorder heavily
 00ec11c0 337 mount/stimulus match; loop body and vtable-chain ordering diverge

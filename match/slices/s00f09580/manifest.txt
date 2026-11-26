@@ -1,0 +1,1 @@
+slices/s00f09580/s00f09580.cpp  _FUN_00f09580  00f09580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

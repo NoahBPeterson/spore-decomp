@@ -164,7 +164,7 @@ struct V238 {
     int  AssignAt(void* value);         // 0x00F2ED20
 };
 
-// @ 0x00F2ECD0
+// 0x00f2ecd0 (byte-exact lifted version: match/slices/s00f2ecd0/s00f2ecd0.cpp)
 void V238::Clear()
 {
     E238* b = mpBegin;

@@ -59,7 +59,7 @@ extern NounMgr* NounManager_();   // 0x00b3d300
 // ---------------------------------------------------------------------------
 // 0x00f09d70  copy n elements
 // ---------------------------------------------------------------------------
-// @ 0x00f09d70
+// 0x00f09d70 (byte-exact lifted version: match/slices/s00f09d70/s00f09d70_lifted.cpp)
 void FUN_00f09d70(Elem44* dst, unsigned n, Elem44* src)
 {
     if (n > 0) {
@@ -666,7 +666,7 @@ void FUN_00f0aa80()
 extern int  WindowManager();                        // 0x0067caa0
 extern void* cSPUILayout_FindWindowByID_(void*, int, int); // 0x008105b0
 
-// @ 0x00f0ab50
+// 0x00f0ab50 (byte-exact lifted version: match/slices/s00f0ab50/s00f0ab50.cpp)
 void FUN_00f0ab50(int* p)
 {
     int v = (*(int(__thiscall**)(int*))(*(int**)p + 0x1c))(p);

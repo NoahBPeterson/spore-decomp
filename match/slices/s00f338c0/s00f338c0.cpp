@@ -716,7 +716,7 @@ void cTerrainSphere::SetTerrainVectors(FloatVector* values, Vector3Vector* point
     mp194->ApplyVectors(valuesCopy, pointsCopy);
 }
 
-// @ 0x00f34560
+// 0x00f34560 (byte-exact lifted version: match/slices/s00f34560/s00f34560.cpp)
 void cTerrainSphere::PublishWorld()
 {
     if (!g_current)

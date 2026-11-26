@@ -536,7 +536,7 @@ extern "C" uint8 FUN_008d4d20(char* table, char* key, int* out)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x008d4d70
+// 0x008d4d70 (byte-exact lifted version: match/slices/s008d4d70/s008d4d70.cpp)
 // Walk the expression-function chain at +4 and return the value attached to
 // the named entry of each node's hashtable at +0x1c.
 // ---------------------------------------------------------------------------

@@ -440,7 +440,7 @@ void FUN_011f77d0(void)
 }
 
 // ===========================================================================
-// @ 0x011f7800  (vertex-shader restore)
+// 0x011f7800 (byte-exact lifted version: match/slices/s011f7800/s011f7800.cpp)  (vertex-shader restore)
 // ===========================================================================
 void FUN_011f7800(void)
 {

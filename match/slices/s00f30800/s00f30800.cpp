@@ -128,7 +128,7 @@ static inline void Release(void* p) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f30800
+// 0x00f30800 (byte-exact lifted version: match/slices/s00f30800/s00f30800_lifted.cpp)
 void __thiscall Payload::CopyFrom(const Payload* s)
 {
     u0 = s->u0;

@@ -5,3 +5,4 @@ slices/s00f30800/s00f30800.cpp  ?RangeDestroyTo@@YAPAUPairBlock@@PAU1@00@Z  00f3
 slices/s00f30800/s00f30800.cpp  ?RangeConstruct@@YAPAUPairBlock@@PAU1@00@Z  00f30b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00f30800/s00f30800.cpp  ?Assign@PairBlock@@QAEPAU1@PBU1@@Z  00f30910  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00f30800/s00f30800.cpp  ?SimSingleton_dtor@@YIXPAX@Z  00f30c40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00f30800/s00f30800_lifted.cpp  @FUN_00f30800@12  00f30800  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

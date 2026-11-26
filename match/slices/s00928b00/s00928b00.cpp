@@ -420,7 +420,7 @@ __int64 __thiscall BigFile::FUN_00928fc0()
     return (__int64)0xffffffffu;
 }
 
-// @ 0x00929000
+// 0x00929000 (byte-exact lifted version: match/slices/s00929000/s00929000.cpp)
 char __thiscall BigFile::FUN_00929000()
 {
     u32 n = (u32)(mpEnd - mpBegin);

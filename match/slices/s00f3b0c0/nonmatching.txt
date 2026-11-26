@@ -1,5 +1,4 @@
 00f3b710  188  complete reconstruction; list/destructor loop register allocation differs
-00f3b990  37  complete reconstruction; NounManager/RemoveNoun argument setup differs
 00f3bc20  86  complete reconstruction; 0x534/0x188 loops; equiv WEAK (215 valid, 33.3% cov)
 00f3bce0  190  complete reconstruction; uses FUN_00f3b710/FUN_00f3b5e0 with x87 arg, scheduling differs
 00f3bf00  81  complete reconstruction; register allocation of the nested call differs

@@ -460,7 +460,7 @@ bool FUN_0113c480(uint8_t* p)
     return true;
 }
 
-// @ 0x0113c550
+// 0x0113c550 (byte-exact lifted version: match/slices/s0113c550/s0113c550.cpp)
 bool FUN_0113c550(uint8_t* p)
 {
     if (p != 0) {
@@ -495,7 +495,7 @@ void FUN_0113c620(uint8_t* p, int param_2)
         W(p, 0xc) = (uint32_t)(p + param_2);
 }
 
-// @ 0x0113c710
+// 0x0113c710 (byte-exact lifted version: match/slices/s0113c710/s0113c710.cpp)
 bool FUN_0113c710(uint8_t* p)
 {
     FUN_0113c290(p, 0x28);

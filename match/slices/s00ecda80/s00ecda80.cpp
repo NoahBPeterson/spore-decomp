@@ -306,7 +306,7 @@ void __fastcall FUN_00ecdd70(int* p)
 // ============================================================ 0x00ecde00
 // Interface cast/adjustor for a sub-object that sits 8 bytes into the object.
 // `this` is the +8 sub-object; the ids pick one of the object's interfaces.
-// @ 0x00ecde00
+// 0x00ecde00 (byte-exact lifted version: match/slices/s00ecde00/s00ecde00.cpp)
 __declspec(noinline) int CastObj::Cast(int id)
 {
     int base = (int)this - 8;                  // enclosing object
@@ -582,7 +582,7 @@ void __fastcall FUN_00ece320(int param_1)
 }
 
 // ============================================================ 0x00ece370
-// @ 0x00ece370
+// 0x00ece370 (byte-exact lifted version: match/slices/s00ece370/s00ece370.cpp)
 int CastObj_ece370::Cast(int param_2)
 {
     int param_1 = (int)this;

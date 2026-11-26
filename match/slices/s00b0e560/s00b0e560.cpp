@@ -361,7 +361,7 @@ void cRenderQueue::FUN_00b0e810(int p_)
     ((SlotVectorStore*)v)->FUN_00b0d500(&p, slot);
 }
 
-// @ 0x00b0e890
+// 0x00b0e890 (byte-exact lifted version: match/slices/s00b0e890/s00b0e890.cpp)
 // Removes all dead jobs from the +0x38 list.
 void cRenderQueue::FUN_00b0e890()
 {
