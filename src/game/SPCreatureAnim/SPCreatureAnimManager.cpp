@@ -5330,8 +5330,7 @@ char WrappedAnim::SetFlagFromProperty(bool value)
 
 // @ 0x00a05510
 bool WrappedAnim::InitThing(void* attachments, uint8_t a, uint32_t b, uint8_t c, uint8_t d)
-{
-    void* old = mAttachments;
+{    void* old = mAttachments;
     if (attachments != old) {
         if (attachments != 0) ((void(__thiscall**)(void*))*(void***)attachments)[0](attachments);
         mAttachments = attachments;
@@ -5341,7 +5340,7 @@ bool WrappedAnim::InitThing(void* attachments, uint8_t a, uint32_t b, uint8_t c,
     mCount0 = 0;
     mCount1 = 0;
     mChosen = 0;
-    mFlag3039 = c;
+    *(volatile uint8_t*)&mFlag3039 = c;
     mFlag303a = d;
     return true;
 }

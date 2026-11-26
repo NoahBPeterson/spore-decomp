@@ -188,7 +188,7 @@ public:
     void Destroy(int bDelete);
     void Shutdown();
     void AttachEffect(void* pEffect);
-    void ClearEffectState();
+    void ClearEffectState(void* pArg);
 };
 class cInteractiveOrnament : public cInteractableObject {
 public:
@@ -336,11 +336,11 @@ void cInteractableObject::Destroy(int bDelete)
 }
 
 // @ 0x00c3fad0
-void cInteractableObject::ClearEffectState()
-{
-    mFlags &= ~0x100u;
-    if (*(IRefCounted**)((uint8_t*)this + 0x108) != nullptr) {
-        IRefCounted* pOld = *(IRefCounted**)((uint8_t*)this + 0x108);
+void cInteractableObject::ClearEffectState(void* pArg)
+{    (void)pArg;
+    *(volatile uint32_t*)((uint8_t*)this + 0x84) &= ~0x100u;
+    IRefCounted* pOld = *(IRefCounted* volatile*)((uint8_t*)this + 0x108);
+    if (pOld != nullptr) {
         *(IRefCounted**)((uint8_t*)this + 0x108) = nullptr;
         pOld->Release();
     }

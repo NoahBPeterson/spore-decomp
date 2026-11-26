@@ -1235,12 +1235,7 @@ namespace {
 
 struct cArguments;                                        // EA::ArgScript::cArguments
 struct Curve760 { void CopyInto(char* dst); };            // 0x009dc760
-struct Track2_s009d_d6a0;                                            // this type
-
 void  FUN_009dc760(Curve760* c, char* dst);               // 0x009dc760  CopyInto
-i32   Track2_TotalItems(Track2_s009d_d6a0* t);                       // 0x009dc6a0  Track2::TotalItems
-void  FUN_009dd780(Track2_s009d_d6a0* t, void* p);                   // 0x009dd780  (defined below)
-i32   FUN_009dd6a0(Track2_s009d_d6a0* t);                            // 0x009dd6a0  (defined below)
 
 // The ArgScript argument block.  MainArguments returns the raw 32-bit argument array.
 struct cArguments {
@@ -1290,6 +1285,22 @@ virtual void v37();
     virtual float Eval(i32 v);                // +0x98
 };
 
+// The evaluated-argument host: self+0xc is the track2/block owner chain, self+4 is the
+// float-evaluator object whose +0x98 vtable slot converts script tokens to float.
+struct Self {
+    u8  pad00[0x04];
+    FloatEval* mEval;        // +0x04
+    u8  pad08[0x04];
+    i32 mOwner;              // +0x0c
+
+    void Cmd3(cArguments* a);                         // 0x009ddca0
+    void Cmd4(cArguments* a);                         // 0x009ddcf0
+    void CmdTable8(cArguments* a);                    // 0x009ddd70
+    void CmdTable16(cArguments* a);                   // 0x009ddf80
+};
+
+}  // (anonymous)
+
 // A Track2 block descriptor (0xa4 bytes).  Only the touched members are named.
 struct Block {
     u8  pad00[0x0c];
@@ -1319,21 +1330,9 @@ struct Track2_s009d_d6a0 {
     i32  TotalItems();                                // 0x009dc6a0
 };
 
-// The evaluated-argument host: self+0xc is the track2/block owner chain, self+4 is the
-// float-evaluator object whose +0x98 vtable slot converts script tokens to float.
-struct Self {
-    u8  pad00[0x04];
-    FloatEval* mEval;        // +0x04
-    u8  pad08[0x04];
-    i32 mOwner;              // +0x0c
-
-    void Cmd3(cArguments* a);                         // 0x009ddca0
-    void Cmd4(cArguments* a);                         // 0x009ddcf0
-    void CmdTable8(cArguments* a);                    // 0x009ddd70
-    void CmdTable16(cArguments* a);                   // 0x009ddf80
-};
-
-}  // (anonymous)
+i32   Track2_TotalItems(Track2_s009d_d6a0* t);                       // 0x009dc6a0  Track2::TotalItems
+void  FUN_009dd780(Track2_s009d_d6a0* t, void* p);                   // 0x009dd780  (defined below)
+i32   FUN_009dd6a0(Track2_s009d_d6a0* t);                            // 0x009dd6a0  (defined below)
 // ---- items of slice s009dd6a0 end
 
 // @ 0x009d0280
@@ -4321,19 +4320,17 @@ int Track2::TotalItems()
 
 // @ 0x009dd6a0
 i32 Track2_s009d_d6a0::ItemCount()
-{
-    i32 total = 0;
+{    i32 total = 0;
     u32 nb = mCount;
-    if (nb != 0) {
-        Block* b = (Block*)((u8*)mBlocks + 0x24);
+    if (nb > 0) {
+        u8* b = (u8*)mBlocks + 0x24;
         u32 bn = nb;
-        for (;;) {
-            i32 n = (*(i32*)((u8*)b + 4) - *(i32*)b) >> 6;
-            if (n != 0) {
-                i32* it = (i32*)(*(i32*)b + 0x30);
-                u32 k = 0;
+        do {
+            i32 n = (*(i32*)(b + 4) - *(i32*)b) >> 6;
+            u32 k = 0;
+            if ((u32)n > 0) {
+                i32* it = (i32*)(*(volatile i32*)b + 0x30);
                 do {
-                    // sub-array counts at it-0x28/it-0x2c, it-0x14/it-0x18, it-0x0/it-0x4
                     total += ((*(it - 10) - *(it - 11)) / 0x44) * 0x44;
                     total += ((*(it - 5)  - *(it - 6))  / 0x58) * 0x58;
                     total += ((*(it)      - *(it - 1))  / 0x1c) * 0x1c;
@@ -4342,9 +4339,8 @@ i32 Track2_s009d_d6a0::ItemCount()
                     it += 0x10;
                 } while (k < (u32)n);
             }
-            b = (Block*)((u8*)b + 0xa4);
-            if (--bn == 0) break;
-        }
+            b += 0xa4;
+        } while (--bn != 0);
     }
     return total;
 }

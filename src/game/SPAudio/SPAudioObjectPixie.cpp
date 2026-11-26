@@ -833,36 +833,48 @@ void pixie_use(int self, void* sym, const char* name)
 
 // @ 0x00a3ed00
 int pixie_new(void* a, void* b, int argc, void* argv)
-{
+{    struct LocalStr {
+        char* mpBegin;
+        char* mpEnd;
+        char* mpCapacity;
+        int mAlloc;
+        LocalStr() : mpBegin((char*)gEmptyString16), mpEnd((char*)gEmptyString16), mpCapacity((char*)gEmptyString16 + 1) {}
+    };
+    struct LocalVec {
+        void* mpBegin;
+        void* mpEnd;
+        void* mpCapacity;
+        int mA1;
+        int mA2;
+        LocalVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    };
+    struct LocalPixie {
+        int mKey0;
+        int mKey1;
+        int mKey2;
+        void* mpObject;
+        LocalStr mResourceName;
+        LocalVec mSlots;
+        LocalPixie(void* obj) : mKey0(0), mKey1(0), mKey2(0), mpObject(obj) {}
+    };
+    struct LocalObj {
+        char pad[0x28];
+        LocalPixie* mpPixie;
+        void* mpOutlet1;
+        void* mpOutlet2;
+    };
     (void)a; (void)b;
-    int r = EA::Audio::Eapd::pd_new((void*)spPixieClass);
-    int* m = (int*)EA::Audio::Eapd::getbytes(0x34, DAT_01453a98);
-    *(int**)(r + 0x28) = m;
-    if (m) {
-        m[0] = 0;
-        m[1] = 0;
-        m[2] = 0;
-        m[3] = r;
-        m[4] = (int)gEmptyString16;
-        m[5] = (int)gEmptyString16;
-        m[6] = (int)(gEmptyString16 + 1);
-        m[8] = 0;
-        m[9] = 0;
-        m[10] = 0;
-    } else {
-        m = 0;
-    }
-    *(int**)(r + 0x28) = m;
-    int o1 = EA::Audio::Eapd::outlet_new((void*)r, DAT_0166eed4, DAT_0166eed8);
-    *(int*)(r + 0x2c) = o1;
-    int o2 = EA::Audio::Eapd::outlet_new((void*)r, DAT_0166eebc, DAT_0166eec0);
-    *(int*)(r + 0x30) = o2;
+    LocalObj* __restrict r = (LocalObj*)EA::Audio::Eapd::pd_new((void*)spPixieClass);
+    void* mem = EA::Audio::Eapd::getbytes(0x34, DAT_01453a98);
+    r->mpPixie = (LocalPixie*)mem;
+    r->mpPixie = new (mem) LocalPixie(r);
+    r->mpOutlet1 = (void*)EA::Audio::Eapd::outlet_new(r, DAT_0166eed4, DAT_0166eed8);
+    r->mpOutlet2 = (void*)EA::Audio::Eapd::outlet_new(r, DAT_0166eebc, DAT_0166eec0);
     if (argc == 1) {
         int* av = (int*)argv;
-        pixie_use(r, *(void**)((char*)av + 4), *(const char**)((char*)av + 8));
+        pixie_use((int)r, *(void**)((char*)av + 4), *(const char**)((char*)av + 8));
     }
-    return r;
-}
+    return (int)r;}
 
 // @ 0x00a3edb0
 bool Pixie_Register(void) {

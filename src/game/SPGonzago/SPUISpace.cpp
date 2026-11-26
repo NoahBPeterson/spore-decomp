@@ -6292,7 +6292,10 @@ bool __stdcall PlanetTerraformAtLeast(int value, void* rec)
 
 // @ 0x00bbc870
 void __stdcall fn_bbc870(int* out, int n, int code, void* rec)
-{
+{    struct Key3 {
+        int a, b, c;
+    };
+
     int found = 0;
     int idx = 0;
 
@@ -6313,9 +6316,8 @@ void __stdcall fn_bbc870(int* out, int n, int code, void* rec)
                 if (prof->EmblemType() == code) {
                     ++found;
                     if (found == n) {
-                        out[0] = entry[0];
-                        out[1] = entry[1];
-                        out[2] = entry[2];
+                        Key3* __restrict dst = (Key3*)out;
+                        *dst = *(const Key3*)entry;
                         return;
                     }
                 }
@@ -6325,12 +6327,8 @@ void __stdcall fn_bbc870(int* out, int n, int code, void* rec)
         } while (idx < count);
     }
 
-    int k0 = (int)g_dw168a488;
-    int k1 = (int)g_dw168a48c;
-    int k2 = (int)g_dw168a490;
-    out[0] = k0;
-    out[1] = k1;
-    out[2] = k2;
+    Key3* __restrict dst = (Key3*)out;
+    *dst = *(const Key3*)&g_dw168a488;
 }
 
 // @ 0x00bbc950
