@@ -189,14 +189,14 @@ def _stub(data, rel, retail_size):
 
 
 def note_files(va):
-    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va, and match/shape_only.txt (a
-    generated match borrowed another function's source for it; written source replaces that)."""
+    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va. match/shape_only.txt is left
+    alone: it is outside the contribution paths (the pull-request check refuses changes to it), tools/ci/shape_only.py
+    regenerates it, and the site already counts a function whose own source matches (tools/site/build.py)."""
     import glob
     out, key = [], "%08x" % va
     for path in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.txt")) +
-                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)) + \
-            [os.path.join(ROOT, "match", "shape_only.txt")]:
-        if not os.path.exists(path) or os.path.basename(path) not in ("nonmatching.txt", "partial.txt", "shape_only.txt"):
+                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)):
+        if not os.path.exists(path) or os.path.basename(path) not in ("nonmatching.txt", "partial.txt"):
             continue
         text = open(path, encoding="utf-8", errors="replace").read()
         if key in text.lower() and any(_is_row(l, va) for l in text.splitlines()):

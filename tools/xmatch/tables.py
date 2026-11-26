@@ -25,9 +25,27 @@ def image(path):
     return base, img, secs
 
 
+def dev_xcu():
+    """The dev build's dynamic-initializer table (___xc_a..___xc_z from the PDB publics), non-zero entries in link
+    order, cached in work/xmatch/dev_xcu.json (rebuilt when missing: the file is not generated anywhere else)."""
+    path = W("work/xmatch/dev_xcu.json")
+    if os.path.exists(path):
+        return json.load(open(path))
+    pub = {p["name"]: p["va"] for p in json.load(open(W("work/devbuild/symbols.json")))["publics"]
+           if p.get("name") in ("___xc_a", "___xc_z")}
+    base, img, _secs = image(W("work/devbuild/SporeBin/SporeApp.exe"))
+    xs = []
+    for a in range(pub["___xc_a"] + 4, pub["___xc_z"], 4):
+        v = struct.unpack_from("<I", img, a - base)[0]
+        if v:
+            xs.append("%08x" % v)
+    json.dump(xs, open(path, "w"))
+    return xs
+
+
 def main(devf, retf, outp):
     dev, ret = json.load(open(devf)), json.load(open(retf))
-    out = {"dev_xcu": json.load(open(W("work/xmatch/dev_xcu.json")))}
+    out = {"dev_xcu": dev_xcu()}
 
     # retail xcu
     base, img, secs = image(W("work/SporeApp.analysis.bin"))
