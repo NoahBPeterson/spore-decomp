@@ -848,7 +848,7 @@ void Vec2b::Free()
 D2b6::D2b6(void* a, void* b)
 : B2b6(a, 10, b) {}
 
-// @ 0x008e2b90
+// 0x008e2b90 (byte-exact lifted version: match/slices/s008e2b90/s008e2b90.cpp)
 void ManagerX::ResetAll()
 {
     // frees three intrusive sub-lists (+0x108, +0xa8, +0x50), destroys the
@@ -1233,7 +1233,7 @@ void __fastcall Fn8e3660(void* pThis, void* elem)
     }
 }
 
-// @ 0x008e37e0
+// 0x008e37e0 (byte-exact lifted version: match/slices/s008e37e0/s008e37e0.cpp)
 void* __fastcall Fn8e37e0(Document* pThis)
 {
     if (pThis->mbDocumentChanged != 0) {

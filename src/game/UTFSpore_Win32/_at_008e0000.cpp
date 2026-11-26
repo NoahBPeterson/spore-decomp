@@ -1668,7 +1668,7 @@ void StylesheetQueue::Fn8e42e0(void* arg)
     ((StylesheetQueue*)sub)->Fn8e28b0(id, arg);
 }
 
-// @ 0x008e49e0
+// 0x008e49e0 (byte-exact lifted version: match/slices/s008e49e0/s008e49e0.cpp)
 void Element::CollectText(void* wstr)
 {
     Element* self = this;
@@ -1899,7 +1899,7 @@ struct Typesetter_s008e_dd30 {
     void* StyleCtorForward(void* a, void* b);
 };
 
-// @ 0x008edc30
+// 0x008edc30 (byte-exact lifted version: match/slices/s008edc30/s008edc30_lifted.cpp)
 void EA::XHTML::Layout::Page_s008e_dc30::CreatePageLayout()
 {
     if (mpLayout3c)
@@ -1937,7 +1937,7 @@ void __stdcall ScrollbarStyleGet(EA::XHTML::Layout::Vec2* out)
     *(int*)&out->y = *(int*)(p + 0x244);
 }
 
-// @ 0x008ee720
+// 0x008ee720 (byte-exact lifted version: match/slices/s008ee720/s008ee720.cpp)
 void EA::XHTML::Layout::RenderingContext_s008e_dc30::SubStyleSet(void* a, void* b)
 {
     ((EA::XHTML::Layout::Typesetter_s008e_dc30*)((char*)this + 4))->AddLineBreak(b, a);

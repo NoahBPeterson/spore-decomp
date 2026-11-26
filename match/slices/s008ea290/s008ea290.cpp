@@ -805,7 +805,7 @@ bool __stdcall PickingContext_FlushAllThunk(PickingContext* pCtx, PickEntry* pEn
 // =====================================================================
 // 0x008eaa20  EA::XHTML::Layout::Block::SetUpBox (sizing)
 // =====================================================================
-// @ 0x008eaa20
+// 0x008eaa20 (byte-exact lifted version: match/slices/s008eaa20/s008eaa20.cpp)
 void Block::SetUpBox(SizingContext& sc, Style::StyleState& style)
 {
     if (mpBorder == 0 && style.HasBorder()) {

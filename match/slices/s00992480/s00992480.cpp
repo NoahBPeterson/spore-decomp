@@ -105,7 +105,7 @@ u8 __fastcall WatchGraph_OnTick(char* self, int)
 // ==================================================================================================
 // 0x00992550  EA::UTFWinControls::WatchGraph::`scalar deleting destructor'
 // ==================================================================================================
-// @ 0x00992550
+// 0x00992550 (byte-exact lifted version: match/slices/s00992550/s00992550.cpp)
 void* __fastcall WatchGraph_scalarDtor(char* self, int, u8 flags)
 {
     st32(self, 0, 0x1446078u);            // vtbl WatchGraph

@@ -641,7 +641,7 @@ bool EapdSymbolTable::LoadGroups(EapdStream* stream, void* owner)
     return true;
 }
 
-// @ 0x00920c20
+// 0x00920c20 (byte-exact lifted version: match/slices/s00920c20/s00920c20.cpp)
 bool HasAltSeparator(wchar_t* first, wchar_t* last)
 {
     for (; first < last; ++first) {
@@ -858,7 +858,7 @@ done:
     return r;
 }
 
-// @ 0x00921150
+// 0x00921150 (byte-exact lifted version: match/slices/s00921150/s00921150.cpp)
 Range* FUN_00921150(Range* out, wchar_t* first, wchar_t* last)
 {
     if (last == g_pNullStr) {

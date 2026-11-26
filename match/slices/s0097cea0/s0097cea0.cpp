@@ -590,7 +590,7 @@ void Provider::UpdateMousePosition(const int* pt) {
     static_cast<Sub4*>(w)->Slot38();
 }
 
-// @ 0x0097DD80  eastl hashtable node alloc+copy
+// 0x0097dd80 (byte-exact lifted version: match/slices/s0097dd80/s0097dd80.cpp)  eastl hashtable node alloc+copy
 HNode* Table::AllocNodeCopy(const CursorPair* src) {
     HNode* n = mpFreeList;
     if (n) {

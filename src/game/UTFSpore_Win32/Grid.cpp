@@ -5102,7 +5102,7 @@ bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetHeadingSizes(float colHeight, f
     return true;
 }
 
-// @ 0x00971eb0
+// 0x00971eb0 (byte-exact lifted version: match/slices/s00971eb0/s00971eb0_lifted.cpp)
 void EA::UTFWinControls::IWinGrid_s0097_1eb0::SetHeadingFormat(const void* pFormat)
 {
     unsigned long* pDst = (unsigned long*)&mVisibleColumnCount;

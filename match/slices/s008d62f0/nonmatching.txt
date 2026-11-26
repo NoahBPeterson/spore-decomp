@@ -9,7 +9,6 @@
 # DoNukeSubtree, erase).  difftest verdicts from tools/difftest/equiv.py (DEFAULT inputs).
 #
 008d62f0  208  reconstruction (DatabaseDirectoryFiles::RemoveRecord); flags /O2 /MD /GS- /GR- /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference: SetSource, defined in the sibling migrated slice s008d7220)
-008d6410   31  reconstruction (DatabaseDirectoryFiles::CloseUnreferencedRecords); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the record stream path blocks on import:WaitForSingleObject)
 008d6580   76  reconstruction (ExtPair::Construct); flags as above; difftest FAIL (5/5 valid inputs mismatched; ours faults at 009289f4 = retail WStr::AllocateSelf where the original returns)
 008d65e0   87  reconstruction (DDFRecordListDataConstruct); flags as above; difftest FAIL (5/5 valid inputs mismatched; first: esp)
 008d6650   35  reconstruction (DatabaseDirectoryFiles::SetLocation); flags as above; difftest WEAK (321 valid inputs, 31.0% coverage) -- equivalent on the covered paths

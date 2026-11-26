@@ -3,3 +3,4 @@ slices/s00971eb0/s00971eb0.cpp  ?ClearAllCells@IWinGrid@UTFWinControls@EA@@UAE_N
 slices/s00971eb0/s00971eb0.cpp  ?SetFirstVisibleCell@IWinGrid@UTFWinControls@EA@@UAE_NHH@Z  00972060  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00971eb0/s00971eb0.cpp  ?GetScrollBarDrawableVertical@IWinGrid@UTFWinControls@EA@@UAEPAVIScrollbarDrawable@23@XZ  009725a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00971eb0/s00971eb0.cpp  ?GetScrollBarDrawableHorizontal@IWinGrid@UTFWinControls@EA@@UAEPAVIScrollbarDrawable@23@XZ  009725d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00971eb0/s00971eb0_lifted.cpp  @FUN_00971eb0@12  00971eb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

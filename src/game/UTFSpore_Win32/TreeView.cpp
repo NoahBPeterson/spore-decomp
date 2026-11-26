@@ -2486,7 +2486,7 @@ bool EA::UTFWinControls::TreeNodeListMarshaller_s0099_13d0::Read(void* a, void* 
     return true;
 }
 
-// @ 0x009917b0
+// 0x009917b0 (byte-exact lifted version: match/slices/s009917b0/s009917b0.cpp)
 void EA::UTFWinControls::WinTreeView_s0099_13d0::InvalidateLayout()
 {
     ((TreeViewExtra_s0099_13d0*)this)->CalculateVisibleArea();
@@ -2506,7 +2506,7 @@ void EA::UTFWinControls::WinTreeView_s0099_13d0::SetBorders(EA::UTFWin::RectF* r
     mWindow.w36();
 }
 
-// @ 0x00991860
+// 0x00991860 (byte-exact lifted version: match/slices/s00991860/s00991860.cpp)
 void EA::UTFWinControls::WinTreeView_s0099_13d0::ClearSelection()
 {
     eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0>::iterator end = mNodes.mChildren.end();

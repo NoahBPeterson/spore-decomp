@@ -3,7 +3,6 @@
 00960100  -  Window::TransformPoint: flag traversal + mMat transform not reproduced
 00960180  -  Window::ScreenToLocal: vtable +0xc8 call not reconstructed
 009601e0  -  Window::GetChild: child index lookup partially reconstructed
-00960230  -  Window::RemoveChild: detach path partially reconstructed
 00960310  -  Window::OnPaint: paint traversal not reconstructed; Earlier, fuller draft: match/slices/s0095ff20/s0095ff20.cpp (left behind by the migration); start from it.
 00960410  -  Window::DoMessage: message dispatch not reconstructed; Earlier, fuller draft: match/slices/s0095ff20/s0095ff20.cpp (left behind by the migration); start from it.
 009605a0  -  HashTable::Rehash: bucket relink loop not reconstructed

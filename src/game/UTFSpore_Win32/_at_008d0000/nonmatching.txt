@@ -18,6 +18,5 @@
 008d4850 105 SortedTable::lookup400: behaviour-complete twin of 008d47b0 over the second table span (0x400-byte record stride), same lazy-sort + binary-search shape. Not byte-exact: 109 diff bytes (ours 116 vs 120) (same call-order/register differences as 008d47b0). Equivalence gate PASS.
 008d5fe0 181 SetLocation: complete; retail takes a third unused stack argument (ret 0xc) that the modelled signature omits, and cl15 duplicates the return-false epilogue per site where the original shares one block
 008d62f0 205 reconstruction (DatabaseDirectoryFiles::RemoveRecord); flags /O2 /MD /GS- /GR- /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference: SetSource, defined in the sibling migrated slice s008d7220)
-008d6410 31 reconstruction (DatabaseDirectoryFiles::CloseUnreferencedRecords); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the record stream path blocks on import:WaitForSingleObject)
 008dcea0 387 PFRecordWrite ctor; MemoryStream/FileStream Construct + temp-file open path codegen differs (equiv UNSUPPORTED: unresolved stub MemoryStream SetOption/SetData/GetData)
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs

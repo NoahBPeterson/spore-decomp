@@ -165,7 +165,7 @@ void Window::Set1E4(void* p) {
     }
 }
 
-// @ 0x009600A0
+// 0x009600a0 (byte-exact lifted version: match/slices/s009600a0/s009600a0.cpp)
 void Window::OnPaint2() {
     int f = m2c;
     if ((f & 4) == 0) {
@@ -239,7 +239,7 @@ void* Window::GetChild(void* out, void* node) {
     return out;
 }
 
-// @ 0x00960230
+// 0x00960230 (byte-exact lifted version: match/slices/s00960230/s00960230.cpp)
 void Window::RemoveChild(void* node) {
     char* e;
     char* v;

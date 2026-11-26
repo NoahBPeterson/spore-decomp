@@ -432,7 +432,7 @@ void Table::DoRehash(unsigned n)
 }
 }  // namespace Cur
 
-// @ 0x0097dd80
+// 0x0097dd80 (byte-exact lifted version: match/slices/s0097dd80/s0097dd80.cpp)
 namespace Cur {
 HNode* Table::AllocNodeCopy(const CursorPair* src)
 {

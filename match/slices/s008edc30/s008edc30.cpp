@@ -272,7 +272,7 @@ template <typename T> inline const T& tmin(const T& a, const T& b) { return (a <
 
 // ============================ function bodies ============================
 
-// @ 0x008edc30
+// 0x008edc30 (byte-exact lifted version: match/slices/s008edc30/s008edc30_lifted.cpp)
 void Page::CreatePageLayout()
 {
     if (mpLayout3c)
@@ -611,7 +611,7 @@ done:
     return 0;
 }
 
-// @ 0x008ee720  Typesetter::AddLineBreak (0x0089b250) on the sub-object at +4:
+// 0x008ee720 (byte-exact lifted version: match/slices/s008ee720/s008ee720.cpp)  Typesetter::AddLineBreak (0x0089b250) on the sub-object at +4:
 //               ret 8, (Item* a, const PickBox* b), and the item argument lands in edx, ahead of ecx's bump.
 void RenderingContext::SubStyleSet(void* a, void* b)
 {

@@ -5,4 +5,3 @@
 00763df0  12   complete: registered-object predicate; original keeps key in edi / list in esi (ours swapped)
 00764220  72  complete: rw::core::arena::Arena default ctor (two EH-vector-constructed ResourceDescriptors); original keeps 1 in eax after the vec-ctor call, ours stores imm 1 and hoists xor differently [equiv: PASS]
 00764ce0  13  complete: arena wrapper build/teardown; original keeps this in esi and first block in edi, ours swapped [equiv: UNSUPPORTED (0/400 valid inputs)]
-007646c0  ?  other: own source at its marker does not build to retail (bytes differ); it was listed by a row borrowing Wrap670 (0x00764670), which has the same shape but other targets (match/shape_only.txt, #458)

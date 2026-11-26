@@ -377,7 +377,7 @@ void ExprTable::Register(const char* name, int* ref) {
 // ===========================================================================
 // 0x0083e140  hashtable<...cExprFunction...> node/dtor reset
 // ===========================================================================
-// @ 0x0083e140
+// 0x0083e140 (byte-exact lifted version: match/slices/s0083e140/s0083e140.cpp)
 void __fastcall ExprTableClear(void* self) {
     DoFreeNodesExpr(*(void**)((char*)self + 4), *(int*)((char*)self + 8));
     *(int*)((char*)self + 0xc) = 0;

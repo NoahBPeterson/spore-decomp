@@ -232,7 +232,7 @@ uint32_t HtStrOwner::FUN_00b21140(uint64_t key)
   return 0;
 }
 
-// @ 0x00b210d0
+// 0x00b210d0 (byte-exact lifted version: match/slices/s00b210d0/s00b210d0.cpp)
 // Copies up to maxCount entry keys out of the table into dst, skipping empty
 // buckets and stopping at the end sentinel.
 void HtStrOwner::FUN_00b210d0(uint32_t* dst, uint32_t maxCount)

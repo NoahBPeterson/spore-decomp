@@ -1,0 +1,1 @@
+slices/s012fc210/s012fc210.cpp  _FUN_012fc210  012fc210  /O2 /MD /Gy /EHsc /TP

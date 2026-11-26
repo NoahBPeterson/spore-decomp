@@ -1282,7 +1282,7 @@ bool __stdcall HTTPClientAllocateSocket(int obj, void** out)
     return *out != 0;
 }
 
-// @ 0x00942010
+// 0x00942010 (byte-exact lifted version: match/slices/s00942010/s00942010.cpp)
 bool __stdcall HTTPClientCheckTimeout(int self, int* timeout)
 {
     if (*(int*)(self + 0xc) > 0) {

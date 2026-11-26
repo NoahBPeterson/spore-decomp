@@ -1,7 +1,6 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 0095e040  86   Mat3 determinant: original is x87 with float temp spills; compiled with SSE flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095e0b0  1519 Mat4 inverse: cofactor temp spill schedule differs (Ghidra expression order used) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-0095f090 58 CM::SetAxes: complete; thiscall member form still scheduled differently; equiv: PASS (1200 inputs, 100% coverage)
 0095f0f0 61 CM::BuildMat33: complete; aligned frame and movss copy order differ
 0095f1c0 230 CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
 0095f320 270 BuildRotation: complete; sin/cos x87 interleave with SSE differs

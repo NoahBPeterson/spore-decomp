@@ -712,7 +712,7 @@ void __fastcall DebugDumpDisplayList(void* self)
 }
 
 // ===========================================================================
-// @ 0x009587D0  Fn009587d0
+// 0x009587d0 (byte-exact lifted version: match/slices/s009587d0/s009587d0.cpp)  Fn009587d0
 // ===========================================================================
 void W::m7d0(char* node)
 {
