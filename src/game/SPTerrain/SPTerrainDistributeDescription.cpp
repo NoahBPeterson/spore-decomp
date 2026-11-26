@@ -478,19 +478,24 @@ void __fastcall FUN_00f631e0(int self, int, int parser, int state)
 }
 
 // @ 0x00f631f0
-void __fastcall FUN_00f631f0(int self, int dummy, cArguments* args)
+void __fastcall FUN_00f631f0(int self, int dummy, EA::ArgScript::cArguments* args)
 {
     (void)dummy;
     args->MainArguments(0);
     int tmp;
-    args->OptionArguments("showLevels", 2);
-    if (args->HasFlag("heights")) *(int*)(*(int*)(self + 0xc) + 0xc) |= 1;
-    else                       *(int*)(*(int*)(self + 0xc) + 0xc) &= 0xfffffffe;
-    if (args->HasFlag("types")) *(int*)(*(int*)(self + 0xc) + 0xc) |= 2;
-    else                        *(int*)(*(int*)(self + 0xc) + 0xc) &= 0xfffffffd;
-    (void)tmp;
-    if (args->HasFlag("active")) { *(int*)(*(int*)(self + 0xc) + 0xc) |= 4; return; }
-    *(int*)(*(int*)(self + 0xc) + 0xc) &= 0xfffffffb;
+    args->OptionArguments("showLevels", &tmp, 0, 2);
+    bool h = args->HasFlag("heights");
+    unsigned* f = (unsigned*)(*(int*)(self + 0xc) + 0xc);
+    if (h) *f |= 1;
+    else   *f &= 0xfffffffe;
+    h = args->HasFlag("types");
+    f = (unsigned*)(*(int*)(self + 0xc) + 0xc);
+    if (h) *f |= 2;
+    else   *f &= 0xfffffffd;
+    h = args->HasFlag("active");
+    f = (unsigned*)(*(int*)(self + 0xc) + 0xc);
+    if (h) { *f |= 4; return; }
+    *f &= 0xfffffffb;
 }
 
 struct TerrainArgumentParser {
