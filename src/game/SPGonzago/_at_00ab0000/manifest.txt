@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/_at_00ab0000.cpp  ?SetFlag@cInteractionStack@@QAEX_N@Z  00abfee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00ab0000.cpp  ?GetTop@cInteractionStack@@QAEPAVcInteraction@@XZ  00abfbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00ab0000.cpp  ?FindActive@cInteractionStack@@QAEPAVcInteraction@@XZ  00abf890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?destroy@tBlockVector4@@QAEXXZ  00abf900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

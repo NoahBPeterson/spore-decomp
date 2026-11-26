@@ -1,4 +1,3 @@
-00d65250 8 IntrusiveList::Remove: unlink register allocation differs (prev/next in eax/ecx vs ecx/edx); 77 bytes
 00d652a0 88 Pool::Alloc: allocator base hoisted differently; 81 vs 70 bytes
 00d652f0 52 FUN_00d652f0: object kept in ecx instead of esi; 60 vs 62 bytes
 00d65330 435 target selection: aim/world state opaque, loop abbreviated; 135 vs 459 bytes

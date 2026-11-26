@@ -270,17 +270,15 @@ void VtThing::CallAAA(int a)
     ((void (__thiscall*)(VtThing*, int, int, int))(*(void***)this)[0x10 / 4])(this, a, a, a);
 }
 
+struct ContinentId { int value; };
+
 // @ 0x00b90960
-int* FUN_00b90960(int* param_1, int* param_2, int param_3)
-{
-    while (true) {
-        if (param_1 == param_2)
-            return param_1;
+int* FUN_00b90960(int* param_1, int* param_2, ContinentId param_3)
+{    for (; param_1 != param_2; ++param_1) {
         int uVar1 = ((int (__thiscall*)(int))(*(void***)(*param_1 + 0x34))[0x2c / 4])(*param_1 + 0x34);
         int iVar2 = ((PlanetModelObj*)PlanetModel())->GetContinent((const void*)uVar1);
-        if (param_3 != iVar2)
+        if (param_3.value != iVar2)
             break;
-        param_1 = param_1 + 1;
     }
     return param_1;
 }

@@ -10,3 +10,4 @@ slices/s00ae6240/s00ae6240.cpp  ?GetName@cCitySimulator@@QAEPB_WH@Z  00ae6500  /
 slices/s00ae6240/s00ae6240.cpp  ?SerializeStream@cCitySimulator@@QAEXPAX@Z  00ae6610  /O2 /MD /Gy /EHsc /TP
 slices/s00ae6240/s00ae6240.cpp  ?CollectSubsystemB@@YAXPAXPAUIQuery0C@@@Z  00ae7250  /O2 /MD /Gy /EHsc /TP
 slices/s00ae6240/s00ae6240.cpp  ?AttachSubsystems@cCitySimulator@@QAEXXZ  00ae7350  /O2 /MD /Gy /EHsc /TP
+slices/s00ae6240/s00ae6240.cpp  ?erase@VecTB@@QAEPAPAUIRefB@@PAPAU2@0@Z  00ae6e70  /O2 /MD /Gy /EHsc /TP

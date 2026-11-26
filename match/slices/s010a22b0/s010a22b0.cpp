@@ -776,9 +776,8 @@ hkDefaultWorldMaintenanceMgr::hkDefaultWorldMaintenanceMgr()
 // @ 0x010a2960
 void hkDefaultWorldMaintenanceMgr::resetWorldTime(hkWorld* world, hkStepInfo& stepInfo)
 {
-    hkStepInfo& worldStep = world->m_dynamicsStepInfo.m_stepInfo;
-
     const hkReal deltaTime = stepInfo.m_endTime - stepInfo.m_startTime;
+    hkStepInfo& worldStep = world->m_dynamicsStepInfo.m_stepInfo;
     worldStep.m_startTime = m_worldTimeOffset;
     worldStep.m_endTime = deltaTime + m_worldTimeOffset;
     worldStep.m_deltaTime = deltaTime;

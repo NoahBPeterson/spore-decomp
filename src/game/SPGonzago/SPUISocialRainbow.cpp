@@ -502,22 +502,15 @@ void* sGetWindowImage(void* window)
 
 // @ 0x00e31aa0
 bool cSPUISocialRainbow::HasAnim(int i, char flag)
-{
-    void* ref = mpAnimRef;
+{    void* ref = mpAnimRef;
     if (ref == 0)
         return false;
     if (mInstances[i].mActive != 0)
         return true;
     bool r = mAnimator.HasAnimation(ref, (unsigned int)(i + 0x567c0de));
-    if (flag == 0) {
-        if (!r) {
-            if (!mAnimator.HasAnimation(mpAnimRef, (unsigned int)(i + 0x567c0c2)))
-                return false;
-        }
-        return true;
-    }
-    return r;
-}
+    if (flag == 0)
+        return r || mAnimator.HasAnimation(mpAnimRef, (unsigned int)(i + 0x567c0c2));
+    return r;}
 
 // @ 0x00e31bb0
 void cSPUISocialRainbow::GetRoundBounds(int a, int b, float* o1, float* o2)

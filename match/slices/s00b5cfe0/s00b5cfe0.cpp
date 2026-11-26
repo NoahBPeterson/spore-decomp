@@ -118,28 +118,34 @@ struct cGonzagoNode {
 
 // @ 0x00b5db40
 bool cGonzagoMode::FUN_00b5db40(int param)
-{
-    cGonzagoNode* head = (cGonzagoNode*)((char*)this + 0x20);
-    cGonzagoNode* n = head->mpNext;
-    while (n != head)
-    {
-        if (*(int*)&n->mpValue == param)
-        {
-            // The original advances to n->mpNext before the key test and recovers the
-            // unlinked node as mpNext->mpPrev (the list invariant) instead of reusing n.
-            cGonzagoNode* node = n->mpNext->mpPrev;
+{    struct NodeIt {
+        cGonzagoNode* p;
+        NodeIt(cGonzagoNode* n) : p(n) {}
+        NodeIt(const NodeIt& o) : p(o.p) {}
+    };
+    struct ListOps {
+        static __forceinline NodeIt erase(NodeIt it) {
+            it.p = it.p->mpNext;
+            cGonzagoNode* node = it.p->mpPrev;
             node->mpPrev->mpNext = node->mpNext;
             node->mpNext->mpPrev = node->mpPrev;
             void* data = node->mpValue;
             if (data)
                 ((void(__thiscall*)(void*))g_vfn(data, 8))(data);
             operator_delete_00f47380(node);
+            return it;
+        }
+    };
+    cGonzagoNode* head = (cGonzagoNode*)((char*)this + 0x20);
+    for (NodeIt it(head->mpNext); it.p != head; it.p = it.p->mpNext)
+    {
+        if (*(int*)&it.p->mpValue == param)
+        {
+            ListOps::erase(it);
             return true;
         }
-        n = n->mpNext;
     }
-    return false;
-}
+    return false;}
 
 // @ 0x00b5db90
 void cGonzagoMode::FUN_00b5db90()

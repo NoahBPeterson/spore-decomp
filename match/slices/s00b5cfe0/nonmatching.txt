@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
-00b5db40   8  list erase-by-key complete; the original advances to n->mpNext BEFORE the key test and recovers the unlinked node as mpNext->mpPrev instead of reusing the matched pointer, so on an inconsistent list it unlinks a different node (that difference made the saved input fault on our side); modeled with cGonzagoNode{mpNext,mpPrev,mpValue}; only the prev/next scratch registers differ (ecx/edx vs eax/ecx). equiv PASS (320 valid, 93.9% cov over 1400 inputs)
 00b5df90   84  cGonzagoMode constructor; base-vtable store order differs
 00b5cfe0  273  cGonzagoMode mode enter/exit; GameTime update, camera edge/move, per-layer v[0x38] tick loop; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (207 valid, 39.3% coverage; no mismatch).
 00b5d2c0  244  "bgColor" option handling; MainArguments + OptionArguments, section v[0xb4] colour read, EAVariant Construct + app-props v[0x14] + Destruct; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (147 valid, 71.2% coverage; no mismatch).

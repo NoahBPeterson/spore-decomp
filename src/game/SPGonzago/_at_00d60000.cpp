@@ -420,12 +420,10 @@ bool __cdecl FUN_00d61e40(cSPCreatureBase* c, int, int, int, int, int* st)
 
 // @ 0x00d65250
 void IntrusiveList::Remove(IRef** object)
-{
-  ListNode* node = mHead.mpNext;
+{  ListNode* node = mHead.mpNext;
   while (node != &mHead) {
-    IRef* obj = node->mpObject;
-    node = node->mpNext;
-    if (obj == *object) {
+    if (node->mpObject == *object) {
+      node = node->mpNext;
       ListNode* curr = node->mpPrev;
       curr->mpPrev->mpNext = curr->mpNext;
       curr->mpNext->mpPrev = curr->mpPrev;
@@ -433,9 +431,10 @@ void IntrusiveList::Remove(IRef** object)
         curr->mpObject->Release();
       curr->mpNext = mpFree;
       mpFree = curr;
+    } else {
+      node = node->mpNext;
     }
-  }
-}
+  }}
 
 // @ 0x00d652a0
 void* Pool::Alloc(IRef** object)

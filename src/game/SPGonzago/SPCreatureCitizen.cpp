@@ -1812,18 +1812,18 @@ void cSPCreatureBase::FUN_00c22a30()
 
 // @ 0x00c22a80
 char cSPCreatureBase::FUN_00c22a80(cInteractionTarget* pTarget)
-{
-    if (pTarget->mnType12C > 4)
+{    if (pTarget->mnType12C > 4)
         return 0;
     int nState = pTarget->GetAttackState();
     if (nState != 6 && pTarget->mn0130 != 1) {
         float fDist = pTarget->mf0134;
-        float fCap = this->GetBundleCapacity((uint32_t)pTarget->mnType12C);
-        if (fDist < fCap)
-            return 0;
+        uint32_t nType = (uint32_t)pTarget->mnType12C;
+        float fCap = this->GetBundleCapacity(nType);
+        if (fDist >= fCap)
+            return 1;
+        return 0;
     }
-    return 1;
-}
+    return 1;}
 
 // @ 0x00c22ae0
 void cSPCreatureBase::FUN_00c22ae0()

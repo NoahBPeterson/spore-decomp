@@ -571,14 +571,24 @@ void CPL::SetPositionAndOffset(float x, float y, float offX, float offY)
 
 // @ 0x00828410
 void ElemVec::DoDestroyValues(Elem* first, Elem* last)
-{
+{  struct LocalAutoRef {
+    IRefThing* p;
+    void Destroy() {
+      if (p) p->Release();
+    }
+  };
+  struct LocalVariant {
+    char data[0x10];
+    unsigned short mFlags;
+    unsigned short mTypeId;
+    void Destroy() {
+      if (mFlags & 4) ((Variant*)this)->Destruct(0);
+    }
+  };
   for (; first < last; ++first) {
-    Variant* v = &first->mVariant;
-    if (first->mVariant.mFlags & 4) v->Destruct(0);
-    IRefThing* p = (IRefThing*)first->mpObject;
-    if (p) p->Release();
-  }
-}
+    ((LocalVariant*)&first->mVariant)->Destroy();
+    ((LocalAutoRef*)&first->mpObject)->Destroy();
+  }}
 
 // @ 0x00828450
 Elem::Elem(const Elem& o)

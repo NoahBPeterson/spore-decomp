@@ -9,3 +9,4 @@ slices/s00656310/s00656310.cpp  ?Hide@cSPUIAssetView@@QAEXXZ   00657870  /O2 /MD
 slices/s00656310/s00656310.cpp  ?GetHeight@cSPUIAssetView@@QAEMXZ   006578d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00656310/s00656310.cpp  ?GetWidth@cSPUIAssetView@@QAEMXZ   006578f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00656310/s00656310.cpp  ?SetFirstUpdate@cSPUIAssetView@@QAEXH@Z   00657930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?SetVerbButtonEnabled@cSPUIAssetVerbs@@QAEXI@Z  00656830  /O2 /MD /Gy /TP /arch:SSE /fp:fast

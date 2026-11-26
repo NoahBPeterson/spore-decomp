@@ -8475,19 +8475,16 @@ void ToolSnapUpdate()
 // NOTE: retail compares byte +0x18 with 1 (see the instruction diff). The branch that skips the
 // COM-interface query when the selected object answers 0x137e8e0 (TAG_ANIM_TARGET) is kept.
 bool SelCtx::FUN_00efde90(int param_2)
-{
-    int* p = *(int**)((char*)param_2 + 0x20);
-    if (*(char*)((char*)p + 0x18) == 1)
-        p = (int*)((char*)p + *(int*)((char*)p + 0x10));
-    if (p != 0) {
-        int* piVar1 = (int*)p[3];
+{    int* p = *(int**)((char*)param_2 + 0x20);
+    int* q = (*(char*)((char*)p + 0x18) == 1) ? (int*)(*(int*)((char*)p + 0x10) + (int)p) : 0;
+    if (q != 0) {
+        int* piVar1 = (int*)q[3];
         if (piVar1 != 0 && *(char*)((char*)this + 4) != 0) {
             if (((VObj_s00ef_d020*)piVar1)->s3(0x137e8e0) != 0)
                 return false;
         }
     }
-    return true;
-}
+    return true;}
 
 // @ 0x00efdee0
 void __cdecl FUN_00efdee0()

@@ -258,12 +258,11 @@ extern "C" void FUN_01142c90(int* out, int nsamples)
 // ===========================================================================
 // @ 0x011431a0
 extern "C" void FUN_011431a0(int* src, int total)
-{
-    int local[6];
+{    int local[6];
     for (int i = 0; i < (int)g_numOutputs; i++)
         local[i] = src[i];
     while (total > 0) {
-        int n = total < 0x101 ? total : 0x100;
+        int n = total > 0x100 ? 0x100 : total;
         FUN_01142c90(local, n);
         for (int i = 0; i < (int)g_numOutputs; i++)
             local[i] += 0x400;
@@ -371,12 +370,8 @@ extern "C" void FUN_011433b0(int index)
 // ===========================================================================
 // @ 0x01143430
 extern "C" void FUN_01143430(uint8_t a, int b, uint16_t c, int* d, int e, int f)
-{
-    // Retail keeps the tail bytes in CX/DL (`mov cx,[esp+0xc]`, `xor edx,edx`, `mov dl,[esp+4]`)
-    // and zeroes the pad word with DX, so the byte/short/word writes come first and the two
-    // dwords last.
+{    d[0] = f;
     *(uint16_t*)((char*)d + 0xc) = 0;
-    d[0] = f;
     *(uint16_t*)((char*)d + 0xe) = c;
     *((uint8_t*)d + 0x10) = a;
     d[1] = e;

@@ -21,3 +21,4 @@
 ../src/game/SPCreatureAnim/_at_009f0000.cpp  ??4AnimGoal_s009f_fa00@@QAEPAU0@PAU0@@Z  009ffb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/_at_009f0000.cpp  ?animLayoutScale@@YAMPAUAnimLayout@@@Z  009f9c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/_at_009f0000.cpp  ?BehaviorLookup@@YAHPAI@Z  009fc310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?animLayoutEvaluateAll@@YAXPAUAnimLayout@@0@Z  009fa770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

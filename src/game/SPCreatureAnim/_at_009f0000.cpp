@@ -641,12 +641,11 @@ void animLayoutEvaluateAll(AnimLayout* owner, AnimLayout* self)
     fn_009fa310(owner, self);
 
     AnimHierarchy* h = self->m_hier;
+    int idx = h->m_204;
     unsigned n = (unsigned)h->m_20c;
-    int off = h->m_204 * 0x2bc;
     for (unsigned i = 0; i < n; i++)
     {
-        fn_009fa310(owner, (AnimLayout*)((char*)owner->m_poolBegin + off));
-        off += 0x2bc;
+        fn_009fa310(owner, (AnimLayout*)((char*)owner->m_poolBegin + (idx + i) * 0x2bc));
     }
 }
 

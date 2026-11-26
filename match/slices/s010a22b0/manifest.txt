@@ -10,3 +10,4 @@ slices/s010a22b0/s010a22b0.cpp  ?collidableAddedCallback@hkBroadPhaseBorder@@UAE
 slices/s010a22b0/s010a22b0.cpp  ?recoverFromStepFailure@hkHalfstepSimulation@@UAEHPAVhkWorld@@H@Z  010a31c0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ??0hkHalfstepSimulation@@QAE@XZ  010a32a0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a22b0/s010a22b0.cpp  ??1hkSimulationIsland@@UAE@XZ  010a24f0  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
+slices/s010a22b0/s010a22b0.cpp  ?resetWorldTime@hkDefaultWorldMaintenanceMgr@@QAEXPAVhkWorld@@AAVhkStepInfo@@@Z  010a2960  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast

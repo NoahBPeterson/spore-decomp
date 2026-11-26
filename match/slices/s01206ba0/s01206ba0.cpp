@@ -16,7 +16,9 @@
 
 #include <xmmintrin.h>
 #include <math.h>
+#if !defined(_MSC_VER) || _MSC_VER >= 1400
 #include <intrin.h>
+#endif
 
 typedef unsigned int uint32_t;
 
@@ -144,8 +146,7 @@ int rwcSphereLineSegIntersect(CastFraction* t, const __m128* from, const __m128*
 
 // @ 0x01206b20
 void SphereVolumeInstance_GetBBox(const void* src, const void* a, const void* b, void* out)
-{
-    (void)a; (void)b;
+{    (void)a; (void)b;
     ((Vec4*)((char*)out + 0x120))->m = ((const Vec4*)src)->m;
     *(uint32_t*)((char*)out + 0x130) = 0;    // feature type
     *(uint32_t*)out = 0;                     // result
@@ -444,8 +445,7 @@ int SphereVolume::GetInterval(const void* a, const void* b)
 
 // @ 0x01207600
 int SphereVolume::GetMaximumFeature(const void* a, const void* b, void* out)
-{
-    (void)a; (void)b;
+{    (void)a; (void)b;
     *(uint32_t*)((char*)out + 0x130) = 0;
     ((Vec4*)((char*)out + 0x120))->m = ((const Vec4*)&mTransform.r3)->m;
     return 1;
