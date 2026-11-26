@@ -6,6 +6,7 @@
 extern "C" char g_1455648[];
 extern "C" char g_1486c00[];
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cRotationRing.h"
 #include "SP/cSpatialObject.h"
@@ -1075,9 +1076,8 @@ done:
 
 // @ 0x00c8b040
 void cSpatialObjectView_s00c8_aa60::CreateEffect4(void* a, void* b, void* c, void* d)
-{
-    CreateEffectInternal(a, (int)b, c, (int)d);
-}
+{    CreateEffectInternal(a, (int)b, c, (int)d);
+    _ReadWriteBarrier();}
 #pragma optimize("", on)
 
 // @ 0x00c8b060

@@ -2370,13 +2370,14 @@ void cTribeDisplayStrategy::FUN_00ccab80()
 
 // @ 0x00ccad10
 void* CPool::FUN_00ccad10(u8* payload)
-{
-    u8* self = (u8*)this;
+{    u8* self = (u8*)this;
     u8* node = *(u8**)(self + 0x1c);
     if (node != 0) {
         *(u8**)(self + 0x1c) = *(u8**)node;
     } else {
-        node = (u8*)op_new(*(u32*)(self + 0x2c), "Simulator", 0, 0,
+        u32 sz = *(u32*)(self + 0x2c);
+        _ReadWriteBarrier();
+        node = (u8*)op_new(sz, "Simulator", 0, 0,
                            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                            0xd1);
     }

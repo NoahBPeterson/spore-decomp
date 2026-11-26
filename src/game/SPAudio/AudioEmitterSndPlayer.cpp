@@ -970,11 +970,10 @@ lab_12467:
 
 // @ 0x00a124a0
 bool EmitterSndPlayer_s00a1_2260::DestroyVoice()
-{
-    LockGuard_s00a1_2260 guard;
+{    LockGuard_s00a1_2260 guard;
 
     if (g_16e61a8)
-        *(void**)(m + 0xcec) = ((SysGlobal_s00a1_2260*)g_16e61a8)->fE0;
+        *(void**)(m + 0xcec) = hs_cp(((SysGlobal_s00a1_2260*)g_16e61a8)->fE0);
 
     if (*(void**)(m + 0x394) != *(void**)(m + 0x398)) {
         VoiceContainer* vc = (VoiceContainer*)(m + 0x38c);
@@ -989,8 +988,7 @@ bool EmitterSndPlayer_s00a1_2260::DestroyVoice()
     *(void**)(m + 0xd74) = 0;
     *(void**)(m + 0xd78) = 0;
     *(void**)(m + 0xd80) = 0;
-    return true;
-}
+    return true;}
 
 // @ 0x00a12570
 void EmitterSndPlayer_s00a1_2260::UpdatePerformanceLevel(int level)

@@ -394,16 +394,15 @@ void* DeformIface::QueryInterface(u32 id)
 
 // @ 0x0047fd30
 void cSPEditorHandleDeform::SetData(const cModelDeformationHandle* data, bool flag)
-{
-    mData.Copy(data);
+{    mData.Copy(data);
     if (mBlock) {
         cSPTransformOps xf;
+        u32 unused[8];
         mBlock->GetTransform(&xf);
         xf.Apply(&mData.mVec40);
         xf.Apply(&mData.mVec4c);
     }
-    UpdateDirection(flag);
-}
+    UpdateDirection(flag);}
 
 // @ 0x0047fda0
 cModelDeformationHandle* cModelDeformationHandle::Copy(const cModelDeformationHandle* src)

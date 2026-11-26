@@ -3,7 +3,6 @@
 00bdfd30  689   complete; inlined BubbleVec push_back scheduling, host vt[0x8c] call setup and the four/temp bubble aggregate init differ
 00bdff50  147   complete; default-construct-then-fill bubble push_back, GameTime query/IsPlayer arg order and the EndThisPlayer tail differ
 00be06c0  95    complete; GameTimeManager->Now() 64-bit add placement vs the rep-movsd push_back and timestamp store differ
-00be0730  9     complete; same control flow; only tail-call shape (call+ret vs add esp/jmp) differs, 1 byte longer
 00be0790  102   complete; std::_Tree lower_bound reproduced; insert call (DoInsert 0xde6a60 4-arg thiscall) arg setup differs
 00be0b90  190   complete; stream acquisition via vt[0x20]->vt[0x18], erase/resize and the per-element serializer temp layout differ
 00be0c80  15    complete; identical control flow and virtual release; only edx/ecx register assignment differs

@@ -8707,8 +8707,7 @@ void cAnalysisOwner::AddAnalysis(const AnalysisInfo& a, long long delta)
 
 // @ 0x00be0730
 void RefVec2_s00bd_fd30::AddDefault()
-{
-    if (mpEnd < mpCap) {
+{    if (mpEnd < mpCap) {
         RefVecElem_s00bd_fd30* p = mpEnd;
         mpEnd = mpEnd + 1;
         if (p) {
@@ -8717,15 +8716,18 @@ void RefVec2_s00bd_fd30::AddDefault()
         }
         return;
     }
-    RefVecElem_s00bd_fd30 v;
-    v.mpA = 0;
-    v.mpB = 0;
-    insert(mpEnd, v);
-    if (v.mpB)
-        v.mpB->v01();
-    if (!v.mpA)
-        return;
-    return v.mpA->v01();
+    AutoRefObj* __restrict a;
+    {
+        RefVecElem_s00bd_fd30 v;
+        v.mpA = 0;
+        v.mpB = 0;
+        insert(mpEnd, v);
+        if (v.mpB)
+            v.mpB->v01();
+        a = v.mpA;
+    }
+    if (a)
+        return a->v01();
 }
 
 // @ 0x00be0790
@@ -10596,12 +10598,12 @@ void FUN_00be9b20(Obj* a1, Sim* sim, Obj* alt, int a4, float a5, int a6, int a7)
 
 // @ 0x00be9cb0
 void Sim::sub_be9cb0(int a1, int a2, int a3, int a4)
-{
-    this->map1.clear();
+{    this->map1.clear();
     this->map2.clear();
     this->map3.clear();
     int v = this->f64c;
-    this->map1[a1] = v;
+    int* __restrict p = &this->map1[a1];
+    *p = v;
     this->sub_be92e0(a1, a2, a3, 0, a4);
 }
 

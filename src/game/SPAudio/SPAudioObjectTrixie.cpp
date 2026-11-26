@@ -1020,38 +1020,39 @@ void trixie_use(int self, int unused, int str)
 
 // @ 0x00a40dd0
 int trixie_new(int a, int b, int arg3, int arg4)
-{
+{    struct TrixieSelf {
+        int pad[10];
+        int* f28;
+        int f2c;
+        int f30;
+    };
     int self = EA::Audio::Eapd::pd_new(DAT_0166ef44);
+    TrixieSelf* __restrict s = (TrixieSelf* __restrict)self;
     int* p = (int*)EA::Audio::Eapd::getbytes(0x34, "EAPd/Trixie");
-    *(int**)(self + 0x28) = p;
+    s->f28 = p;
     if (p != 0) {
-        p[0] = 0;
-        p[1] = 0;
-        p[2] = 0;
-        p[3] = self;
+        volatile int* vp = p;
+        vp[0] = 0;
+        vp[1] = 0;
+        vp[2] = 0;
+        vp[3] = self;
         int base = (int)&DAT_01667bac;
-        p[4] = base;
-        p[5] = base;
-        p[6] = 0x1667bad;
-        p[8] = 0;
-        p[9] = 0;
-        p[10] = 0;
+        vp[4] = base;
+        vp[5] = base;
+        vp[6] = (int)&DAT_01667bad;
+        vp[8] = 0;
+        vp[9] = 0;
+        vp[10] = 0;
     } else {
         p = 0;
     }
-    int u3 = DAT_0166ef28;
-    int u4 = DAT_0166ef24;
-    *(int**)(self + 0x28) = p;
-    u3 = EA::Audio::Eapd::outlet_new(self, u4, u3);
-    *(int*)(self + 0x2c) = u3;
-    u4 = DAT_0166ef14;
-    u3 = EA::Audio::Eapd::outlet_new(self, u4, DAT_0166ef18);
-    *(int*)(self + 0x30) = u3;
+    s->f28 = p;
+    s->f2c = EA::Audio::Eapd::outlet_new(self, DAT_0166ef24, DAT_0166ef28);
+    s->f30 = EA::Audio::Eapd::outlet_new(self, DAT_0166ef14, DAT_0166ef18);
     if (arg3 == 1) {
         trixie_use(self, *(int*)(arg4 + 4), *(int*)(arg4 + 8));
     }
-    return self;
-}
+    return self;}
 
 // @ 0x00a40e80
 int SP_Audio_Trixie_Register()
