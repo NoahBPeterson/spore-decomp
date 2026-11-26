@@ -1759,10 +1759,10 @@ RCObj** FUN_00ac97a0(RCObj** last, RCObj** first, RCObj** d)
 char* FUN_00ac97f0(char* first, char* last, char* d)
 {
     while (last != first) {
-        char v = last[-8];
         last -= 0xc;
         d -= 0xc;
-        d[4] = v;
+        d[4] = last[4];
+        _ReadWriteBarrier();
         RCObj* s = *(RCObj**)(last + 8);
         RCObj* old = *(RCObj**)(d + 8);
         if (s != old) {

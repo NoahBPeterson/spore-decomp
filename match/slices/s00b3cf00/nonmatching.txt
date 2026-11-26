@@ -1,6 +1,5 @@
 00b3cf40  664  FUN_00b3cf40 property load; complete behavior (12 named float props via PropMgr/GetGroup/GetProp), reimplemented through a helper instead of 12 inlined expansions; equiv=UNSUPPORTED (symbol now resolves via marker; unresolved external ?GetFloat@PropObjF@@QAEPAMXZ)
 00b3d5f0  49  FUN_00b3d5f0 mode predicate; complete behavior (dispatch uses goto-shared body); equiv=PASS 400/400
-00b3d630  30  FUN_00b3d630 f10-local float path; complete behavior, only remaining diff is x87 fmul operand order / pop-esi scheduling (size 101 vs 102); equiv=PASS 399/400
 00b3d6a0  50  FUN_00b3d6a0 mode dispatch; complete behavior, register allocation for p40 differs (original keeps p40 in esi); equiv=WEAK (326 valid, 34.3% coverage - indirect-call paths not exercised)
 00b3d8d0  375  FUN_00b3d8d0 normalized cross product; complete behavior, magnitude accumulated in x87 (24-bit mantissa, extended exponent, like the original) with float sqrt/reciprocal in range and 2^-96 / 2^128 scaled fallbacks outside it, so the reciprocal-sqrt keeps the original's rounding; equiv=PASS 499/499
 00b3d9c0  163  FUN_00b3d9c0 centre/size vector; complete behavior; equiv=PASS 362/362

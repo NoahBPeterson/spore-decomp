@@ -3344,11 +3344,20 @@ void HeapMake(void** base, void** end, unsigned int a3, unsigned int a4, unsigne
 // @ 0x00b952e0
 Elem16* LowerBound16(Elem16* first, Elem16* last, const unsigned int* key)
 {
+    struct IsAfter {
+        bool operator()(const Elem16& e, const unsigned int* key) const {
+            if (key[0] > e.key) return true;
+            if (key[0] < e.key) return false;
+            if (e.sub >= key[1]) return false;
+            return true;
+        }
+    };
+    IsAfter isAfter;
     int n = (int)((char*)last - (char*)first) >> 4;
     while (n > 0) {
         int half = n >> 1;
         Elem16* mid = first + half;
-        if (key[0] > mid->key || (key[0] == mid->key && mid->sub < key[1])) {
+        if (isAfter(*mid, key)) {
             first = mid + 1;
             n -= half + 1;
         } else {

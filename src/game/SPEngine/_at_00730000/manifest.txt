@@ -5,3 +5,4 @@
 ../src/game/SPEngine/_at_00730000.cpp  ?Release@RefPtr@@QAEXXZ  0073a820  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00730000.cpp  ?GetMat@MatOwner@@QAE_NPAUMat24@@@Z  0073a7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00730000.cpp  ??0ResObj6e0@@QAE@H@Z  007336e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00730000.cpp  ?FUN_00733ed0@@YAXH@Z  00733ed0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

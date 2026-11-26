@@ -1,5 +1,4 @@
 00b95160 103 HeapMake: EASTL make_heap over ref-counted handles; original keeps the per-element AddRef call and fixdown interleaved in a shape my loop couldn't reproduce (75 vs 112). equiv: WEAK (249 valid, 30.2% coverage)
-00b952e0 19 LowerBound16: lexicographic pair lower_bound; MSVC emits the equal-test as jne instead of the original's ja/jb fall-through split. equiv: PASS (366 valid, 100% coverage)
 00b953a0 176 RbClone: recursive red-black node clone; register/stack frame and allocation-name argument shape differ (192 vs 218). equiv: UNSUPPORTED (original reads ecx at entry; custom/LTCG register ABI)
 00b95480 98 Partition4: partition with predicate functor; original uses a custom calling convention for the predicate and a different swap tail (120 vs 125). equiv: UNSUPPORTED (0/400 valid: fault(read)=338, fault(pool-limit)=40, fake-arity=17)
 00b95500 255 cTerrainResourceManager::GetPlanetInfo: framework-heavy lookup through SP_PlanetModel + resource manager; original uses several inline vtable dispatch sequences and a differently ordered string-key construction (103 vs 295). equiv: WEAK (311 valid, 15.8% coverage)

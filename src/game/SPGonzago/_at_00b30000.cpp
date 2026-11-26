@@ -1353,14 +1353,9 @@ Elem* FindByKey(Elem* first, Elem* last, Key key)
 void __stdcall ReleaseRange(Elem* first, Elem* last)
 {
     for (; first < last; ++first) {
-        Obj* o = first->p;
-        if (o) {
-            int rc = o->rc;
-            if (rc > 1)
-                o->rc = rc - 1;
-            else
-                o->mgr->Destroy(o, IsFlagBit(o->f4));
-        }
+        RefHandle* o = (RefHandle*)first->p;
+        if (o)
+            o->Decrement();
     }
 }
 
