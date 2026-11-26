@@ -892,8 +892,12 @@ void SB::ScrollButtonSelected(int arg)
 void PMW::OnMouseWheel(float a, float b, int c, int delta)
 {
   bool up = delta > 0;
-  char** pb = &upBtn;
-  if (!up) pb = &downBtn;
+  char** pb;
+  if (up) {
+    pb = &upBtn;
+  } else {
+    pb = &downBtn;
+  }
   PBtn* btn = (PBtn*)*pb;
   unsigned i = 0;
   if (g_164dd9c > 0) {

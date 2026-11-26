@@ -1897,11 +1897,11 @@ RbIter* RbTree::find_iter(RbIter* out, const float* key)
             node = node->mpLeft;
         }
     }
-    if (prev == &mAnchor || !((Float3Cmp*)key)->FUN_004b52b0((float*)((char*)prev + 0x10))) {
+    if (prev != &mAnchor && !((Float3Cmp*)key)->FUN_004b52b0((float*)((char*)prev + 0x10))) {
         out->assign(prev);
-    } else {
-        out->assign(&mAnchor);
+        return out;
     }
+    out->assign(&mAnchor);
     return out;
 }
 

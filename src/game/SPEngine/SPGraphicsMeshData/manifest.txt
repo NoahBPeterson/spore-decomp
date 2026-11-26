@@ -7,3 +7,4 @@
 ../src/game/SPEngine/SPGraphicsMeshData.cpp  ?FillNInt@@YAXPAHIPBH@Z  0071e7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshData.cpp  ?Obj13_findShort@@YAHPAUObj13@@HH@Z  0071e040  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshData.cpp  ?WriteStream@@YA_NPAURend@@PBUStream@@@Z  0071dbf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?Vec20_find@@YAHPBUVecDescr@@I@Z  0071dd80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

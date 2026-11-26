@@ -7,3 +7,4 @@
 ../src/game/UTFSpore_Win32/t2kstrm.cpp  _Rewind_InputStream  008cc550  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/t2kstrm.cpp  _Tell_InputStream  008cc5b0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/t2kstrm.cpp  _PreLoadT2KInputStream  008cc040  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _Seek_InputStream  008cc580  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

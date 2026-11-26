@@ -7,4 +7,3 @@
 0071ded0  338    Model::selectStreams(count, out, sem, usage, numbers, types): complete; merged greedy loop, register allocation differs, ours 325 vs 358 bytes. equiv WEAK (coverage 35%)
 0071e090  109    Model::findMeshStreamIndex(meshIndex, sem, usage, number): complete; base/register allocation differs, ours 108 vs 114 bytes. equiv WEAK (coverage 48%)
 0071e110  295    Model::findMeshStreams(meshIndex, count, sem, usage, formats, out): complete; greedy merge, register allocation differs, ours 301 vs 280 bytes. equiv WEAK (coverage 44%)
-0071dd80  29     Vec20_find(v, key) over stride-0x20 entries: complete; begin/end load order and a 2-byte vs 1-byte nop padding differ. equiv PASS

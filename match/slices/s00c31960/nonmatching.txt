@@ -1,7 +1,6 @@
 # Slice s00c31960 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
 # Format: <va> <difftest-verdict> <reason>
 00c31990 FAIL 5/207 valid inputs mismatched (call #0 depth 1); empire home-planet + weaponry level; cEmpire::GetHomePlanet/GetWeaponryLevel thiscall plumbing and register allocation (self/scratch regs) (103 vs 109 bytes)
-00c31a00 PASS 400/400 valid inputs, 100.0% coverage; tribute-point clamp; MSVC folds early-return `field = 0` to an immediate store where the original keeps `xor eax,eax; mov [..],eax` (32 diff)
 00c31a90 FAIL 5/68 valid inputs mismatched (execution); enemy-by-index getter; thiscall GetHomePlanet target-vector indexing and register tie (self/iterator regs) (90 vs 114 bytes)
 00c31b10 PASS 359/359 valid inputs, 100.0% coverage; empire-id membership scan of mEnemies; begin-ptr hoist/si re-load scheduling and i/index register choice (edx vs ecx) (71 diff)
 00c31b50 FAIL 5/120 valid inputs mismatched (execution); enemy-by-index getter; thiscall target-vector indexing and register allocation (80 vs 103 bytes) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target, ret#2 esp]

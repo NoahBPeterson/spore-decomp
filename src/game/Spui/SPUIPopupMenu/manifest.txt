@@ -23,3 +23,4 @@
 ../src/game/Spui/SPUIPopupMenu.cpp  ??1cSPUIPopupMenuWin@@QAE@XZ  0081b100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?OnMouseUp@ItemMouseUp@@QAEDMMHH@Z  0081c900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?OnAttach@cSPUIPopupMenuItemWin@@QAEXXZ  0081ad50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ?OnMouseWheel@PMW@@QAEXMMHH@Z  0081cdb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

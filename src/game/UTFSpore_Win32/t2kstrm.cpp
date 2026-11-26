@@ -395,10 +395,8 @@ void Rewind_InputStream(InputStream* in)
 // @ 0x008cc580
 void Seek_InputStream(InputStream* in, uint32 offset)
 {
-    uint32 p = offset;
-    p += in->baseOffset;
-    in->pos = p;
-    if (p < in->posZero) {
+    in->pos = in->baseOffset + offset;
+    if (in->pos < in->posZero) {
         in->cacheCount = 0;
         in->posZero = 0;
     }
