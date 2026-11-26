@@ -1002,18 +1002,19 @@ int cHeightCodec::Decode(unsigned desc)
 // @ 0x01168330
 int cHeightCodec::ResolveSource()
 {
-    int result;
+    unsigned id;
     if (mpSourceData == 0) {
-        unsigned id = mHandle4c;
-        void** vt = *(void***)this;
-        result = ((int (__thiscall*)(cHeightCodec*, unsigned))vt[1])(this, id);
+        id = mHandle4c;
     } else {
-        unsigned value = mpSourceData[1] + ((unsigned)mpSourceData[0] << 8);
-        value = (value << 8) + mpSourceData[2];
-        value = (value << 8) + mpSourceData[3];
-        void** vt = *(void***)this;
-        result = ((int (__thiscall*)(cHeightCodec*, unsigned))vt[1])(this, value);
+        id = mpSourceData[1];
+        id |= (unsigned)mpSourceData[0] << 8;
+        id <<= 8;
+        id |= mpSourceData[2];
+        id <<= 8;
+        id |= mpSourceData[3];
     }
+    void** vt = *(void***)this;
+    int result = ((int (__thiscall*)(cHeightCodec*, unsigned))vt[1])(this, id);
     return (result + 1 != 0) - 1;
 }
 

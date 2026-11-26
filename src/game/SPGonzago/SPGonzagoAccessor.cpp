@@ -480,7 +480,7 @@ float C101::M_d630()
         local = p40->f44;
         break;
     }
-    return f10 * local;
+    return (*(volatile float*)&local) * f10;
 mode01:
     {
         float r = ((V70*)p40)->f70();
