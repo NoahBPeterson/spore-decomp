@@ -353,10 +353,16 @@ int Model::sumSection()
 int Vec20_find(const VecDescr* v, uint32_t key)
 {
     int n = (int)((v->mpEnd - v->mpBegin) >> 5);
-    const char* begin = v->mpBegin;
-    for (int i = 0; i < n; ++i)
-        if (*(const uint32_t*)(begin + i * 0x20 + 0xc) == key)
-            return *(const int*)(begin + i * 0x20 + 0x10);
+    int i = 0;
+    if (n > 0) {
+        _ReadWriteBarrier();
+        const char* begin = v->mpBegin;
+        do {
+            if (*(const uint32_t*)(begin + i * 0x20 + 0xc) == key)
+                return *(const int*)(begin + i * 0x20 + 0x10);
+            ++i;
+        } while (i < n);
+    }
     return 0;
 }
 

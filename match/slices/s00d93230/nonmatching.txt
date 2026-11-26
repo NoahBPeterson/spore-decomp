@@ -4,4 +4,3 @@
 00d93560  93  vector loop pointer/index register allocation diverges (ebx/esi/edi/ebp assignment)
 00d93670  219  large complex function; register allocation and scheduling diverge throughout
 00d93880  1135  large complex function; register allocation and scheduling diverge throughout
-00d93df0  330  slice size window spans an unclaimed adjacent function; 48-byte body cannot fill 377-byte window

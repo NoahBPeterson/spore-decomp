@@ -2448,7 +2448,7 @@ f32 __cdecl FUN_00d93df0(cObj* a1)
     if (idx != -1) {
         u32 base = sub->m220;
         void* circle = (void*)(base + idx * 100);
-        if (MOPS(circle)->FUN_00af9fa0() < 5)
+        if ((s32)MOPS(circle)->FUN_00af9fa0() < 5)
             return 1.0f;
     }
     return 0.0f;

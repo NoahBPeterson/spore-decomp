@@ -11,4 +11,3 @@
 00973a40 60 SparseMatrix::IsCellUsed: complete; original reuses the dead arg slot as the second find's out iterator; difftest FAIL is a checker artifact: the only difference is the second find's out-iterator address (original: its own dead row arg slot, ours: a frame local); the checker normalises frame pointers to STK but not arg-slot pointers; return value and all memory identical on replay
 00973a90 86 SparseMatrix::GetCellPtr: complete; same arg-slot reuse; difftest FAIL is a checker artifact: the only difference is the second find's out-iterator/key addresses (original: its own arg slots after copying col over row, ours: frame locals), which the checker does not normalise to STK; return value and memory identical on replay
 00973c30 106 SparseMatrix::FindByValue (iterator to first inner node with value): complete; layout differs
-00973cc0 34 SparseMatrix::FirstUsed: complete; iterator store order differs
