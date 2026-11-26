@@ -1810,9 +1810,9 @@ int __fastcall Release763250(void* self)
 void __cdecl SwapRasterMode(char sel, int v)
 {
     if (GetGlobal67dd60() != 0) {
-        void* o = GetGlobal67dd60();
-        void** vt = *(void***)o;
         if (sel) {
+            void* o = GetGlobal67dd60();
+            void** vt = *(void***)o;
             void* fn = vt[0x6c / 4];
             ((void(__thiscall*)(void*, int))fn)(o, v);
             void* mm = MaterialManager();
@@ -1820,6 +1820,8 @@ void __cdecl SwapRasterMode(char sel, int v)
             void* mfn = mvt[0x50 / 4];
             ((void(__thiscall*)(void*, int))mfn)(mm, v);
         } else {
+            void* o = GetGlobal67dd60();
+            void** vt = *(void***)o;
             void* fn = vt[0x70 / 4];
             ((void(__thiscall*)(void*, int))fn)(o, v);
             void* mm = MaterialManager();

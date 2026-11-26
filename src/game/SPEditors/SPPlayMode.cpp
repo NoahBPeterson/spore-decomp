@@ -1253,10 +1253,23 @@ bool cSPPlayMode::BabiesReachedTargetAngle()
 
 // @ 0x00629b30
 void cSPPlayMode::SetAllBabyRotateSpeeds(float speed)
-{
-  CreatureMgr* mgr = mEditor->mgr;
+{  CreatureMgr* mgr = mEditor->mgr;
   for (int i = 0; i < (int)mNumBabies; i++) {
-    uint32_t id = mEditor->babies.IDAt(i);
+    BabyVec& v = mEditor->babies;
+    uint32_t n = v.size();
+    uint32_t id;
+    if (n == 0) {
+      if (i & 1) { id = 0xffffffff; goto idDone; }
+      if (i & 2) { id = 0xffffffff; goto idDone; }
+      if (i & 4) { id = 0xffffffff; goto idDone; }
+      if (i & 8) { id = 0xffffffff; goto idDone; }
+      id = 0xffffffff;
+    } else if ((uint32_t)i < n) {
+      id = v.mpBegin[(uint32_t)i].id;
+    } else {
+      id = v.mpBegin[0].id;
+    }
+  idDone:
     CreatureStruct* cs = mgr->GetCreatureStructure(id);
     cs->f4c = 2.5f;
     cs->f50 = speed;
