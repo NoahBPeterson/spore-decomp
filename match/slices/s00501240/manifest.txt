@@ -18,3 +18,4 @@ slices/s00501240/s00501240.cpp  ?Destroy@Holder501e20@@QAEXXZ  00501e20  /Od /Ob
 slices/s00501240/s00501240.cpp  ?push_back@Deque4@@QAEXABI@Z  00501e40  /Od /Ob1 /MD /Gy /TP
 slices/s00501240/s00501240.cpp  ?push_back@Deque4b@@QAEXXZ  00501eb0  /Od /Ob1 /MD /Gy /TP
 slices/s00501240/s00501240.cpp  ?Destroy@DequeBase@@QAEXXZ  00501ef0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?uninitialized_move_ptr@@YAPAUEd8@@PAU1@00@Z  00501a10  /Od /Ob1 /MD /Gy /TP

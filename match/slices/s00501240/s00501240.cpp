@@ -409,14 +409,25 @@ inline void destruct_wrap(Ed8* first, Ed8* last, Ed8* dest)
 
 // @ 0x00501a10
 Ed8* uninitialized_move_ptr(Ed8* first, Ed8* last, Ed8* dest)
-{
-    ScratchSlots<1>();
+{    struct Helper {
+        static __forceinline Ed8* copy(Ed8* first, Ed8* last, Ed8* currentDest)
+        {
+            for (; first != last; ++first, ++currentDest)
+                ::new(&*currentDest) Ed8(*first);
+            ScratchSlots<6>();
+            return currentDest;
+        }
+        static __forceinline void destroy(Ed8* first, Ed8* last, Ed8* dest)
+        {
+            const bool bHasTrivialDestructor = false;
+            ScratchSlots<5>();
+            destruct_range(first, last, dest);
+        }
+    };
     const bool bHasTrivialCopy = false;
-    Ed8* const result = uninitialized_copy_impl<4>(first, last, dest);
-    ScratchSlots<2>();
-    destruct_wrap<4>(first, last, dest);
-    return result;
-}
+    Ed8* const result = Helper::copy(first, last, dest);
+    Helper::destroy(first, last, dest);
+    return result;}
 
 // @ 0x00501aa0
 template <> double* vector<double>::erase(double* first, double* last)

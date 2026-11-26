@@ -1,1 +1,2 @@
 # source  symbol  va  [flags override]
+slices/s00589ce0/s00589ce0.cpp  ?Redo@cAppModeEditorBase@SP@@QAEXXZ  0058a950  /O2 /MD /Gy /TP /arch:SSE /fp:fast

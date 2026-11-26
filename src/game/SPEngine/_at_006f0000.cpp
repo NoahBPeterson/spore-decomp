@@ -1554,14 +1554,24 @@ void cState_s006f_6430::ColorDC(cTables* t, cDesc* d, int p3, int p4, int p5, in
 
 // @ 0x006f65d0
 int& cHashMap16::Subscript(const unsigned short& k)
-{
-    cHNode* n;
-    { cHIter it = find(k); n = it.mpNode; }
-    if (n == mpBucketArray[mnBucketCount]) {
-        cHPair v; v.first = k; v.second = 0;
-        cHInsertResult r = DoInsertValue(v, cTrue());
+{    cHNode* n;
+    {
+        cHIter it = find(k);
+        if (it.mpNode != mpBucketArray[mnBucketCount]) {
+            n = it.mpNode;
+            goto hit;
+        }
+    }
+    {
+        cHPair v;
+        v.first = k;
+        v.second = 0;
+        cTrue tag;
+        *reinterpret_cast<unsigned char*>(&tag) = 0;
+        cHInsertResult r = DoInsertValue(v, tag);
         n = r.first.mpNode;
     }
+hit:
     return n->second;
 }
 

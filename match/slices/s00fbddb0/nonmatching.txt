@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 # All three are COMPLETE, behaviourally-equivalent source (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, from the
 # .cpp header comment); they are not byte-exact.
-00fbe130  51  cTerrainStateMgr::cTerrainStateMgr — /O2 scheduler places the shared -1.0f/0.5f/1.0f constant loads two
                instructions earlier than the original (m600/m604/m608/m60c block: original interleaves the
                xmm constant loads around the m5f8/m5fc int stores). Diff flat at 51 across 4 rounds; no lever.
                difftest: UNSUPPORTED (fake-arity: 0/400 valid inputs — the ctor's virtual call on

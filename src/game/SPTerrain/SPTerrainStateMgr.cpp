@@ -1457,8 +1457,7 @@ CoreState* CoreState::Reset()
 
 // @ 0x00fbe130
 cTerrainStateMgr_s00fb_ddb0::cTerrainStateMgr_s00fb_ddb0(cTerrainSphere_s00fb_ddb0* sphere)
-{
-    mpTerrainSphere = sphere;
+{    mpTerrainSphere = sphere;
     m004 = sphere->v0c();
     ((CoreState*)((char*)this + 8))->Reset();
 
@@ -1477,16 +1476,23 @@ cTerrainStateMgr_s00fb_ddb0::cTerrainStateMgr_s00fb_ddb0(cTerrainSphere_s00fb_dd
     m5c8[2] = gTerraformColor[2]; m5c8[3] = gTerraformColor[3];
     m5d8[0] = gTerraformColor[0]; m5d8[1] = gTerraformColor[1];
     m5d8[2] = gTerraformColor[2]; m5d8[3] = gTerraformColor[3];
-    m5e8[0] = gTerraformColor[0]; m5e8[1] = gTerraformColor[1];
+    extern const float g_TerraformOne_01485720;
+    extern const float g_TerraformMinimum_013eb1bc;
+    extern const float g_TerraformNeutral_01471064;
+
+    const float red = gTerraformColor[0];
+    const float one = g_TerraformOne_01485720;
+    m5e8[0] = red; m5e8[1] = gTerraformColor[1];
     m5e8[2] = gTerraformColor[2]; m5e8[3] = gTerraformColor[3];
 
-    m600 = -1.0f;
-    m5f8 = 0;
-    m5fc = 0;
-    m604 = 0.5f;
+    const float minimum = g_TerraformMinimum_013eb1bc;
+    static_cast<IEffect* volatile&>(m5f8) = 0;
+    static_cast<IEffect* volatile&>(m5fc) = 0;
+    static_cast<float volatile&>(m600) = minimum;
+    m604 = g_TerraformNeutral_01471064;
     m608 = 0.0f;
-    m60c = 1.0f;
-    m610 = 1.0f;
+    m60c = one;
+    m610 = one;
     m614 = 0.0f; m618 = 0.0f; m61c = 0.0f; m620 = 0.0f; m624 = 0.0f;
 
     m7bc = 0;

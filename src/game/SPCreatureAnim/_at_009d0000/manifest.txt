@@ -31,3 +31,4 @@
 ../src/game/SPCreatureAnim/_at_009d0000.cpp  ?Set@Grid@@QAEPAXPAXHH@Z  009dbe10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/_at_009d0000.cpp  ?Cmd3@Self@?A0x70ee478a@@QAEXPAUcArguments@2@@Z  009ddca0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/_at_009d0000.cpp  ?Cmd4@Self@?A0x70ee478a@@QAEXPAUcArguments@2@@Z  009ddcf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009d0000.cpp  ??0Item@@QAE@ABU0@@Z  009d7dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

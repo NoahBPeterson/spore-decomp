@@ -10,3 +10,4 @@ slices/s007c77e0/s007c77e0.cpp  ?GetOptionDefault@cConfigManager@@QAEHI@Z  007c7
 slices/s007c77e0/s007c77e0.cpp  ?GetNumScreenResolutions@cConfigManager@@QAEHXZ  007c7ca0
 slices/s007c77e0/s007c77e0.cpp  ?OnEndBlock@cOptionBlockCommand@@QAEXH@Z  007c7e70
 slices/s007c77e0/s007c77e0.cpp  ?Do@cCmdArgs@@QAEXH@Z  007c7eb0
+slices/s007c77e0/s007c77e0.cpp  ?Read@cRandom@@QAEHPAXH@Z  007c7910  /O2 /MD /Gy /EHsc /TP /GS-

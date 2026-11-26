@@ -3051,22 +3051,23 @@ S* __cdecl DestroyRecords(S* first, S* last, S* dst)
 
 // @ 0x009d7dd0
 Item::Item(const Item& o)
-{
-    key = o.key;
+{    key = o.key;
     PtrVec& dv = v;
     dv.DoAllocateN(o.v.e - o.v.b, (void*)&o.v.alloc);
-    int nbytes = (char*)o.v.e - (char*)o.v.b;
-    u32* r = (u32*)memcpy(dv.b, o.v.b, nbytes);
+    u32* ob = o.v.b;
+    int nbytes = (char*)o.v.e - (char*)ob;
+    u32* dst = *(u32* volatile*)&dv.b;
+    u32* r = (u32*)memcpy(dst, ob, nbytes);
     dv.e = r + (nbytes >> 2);
     f18 = o.f18;
     f1c = o.f1c;
     f20 = o.f20;
-    b24 = o.b24;
+    uint8_t b = *(const volatile uint8_t*)&o.b24;
+    b24 = b;
     f28 = o.f28;
     f2c = o.f2c;
     f30 = o.f30;
-    f34 = o.f34;
-}
+    f34 = o.f34;}
 
 // @ 0x009d7e50
 Item& Item::operator=(const Item& o)
