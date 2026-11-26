@@ -1407,24 +1407,20 @@ void WinXHTMLCmd::OnDOMEvent(void* param_2)
 
 // @ 0x009947f0
 bool WinXHTML_s0099_4240::OnFocusChange(int param_2, void* param_3)
-{
-    char* self = (char*)this;
+{    char* self = (char*)this;
 
     if (param_2 != 1)
         return true;
     if (param_3 == (self != 0 ? (void*)(self + 4) : 0))
         return true;
     if (*(char*)(self + 0xa8e4) != 0) {
-        void* w = (void*)(self + 4);
-        void (__thiscall* fn)(void*, void*) =
-            *(void(__thiscall**)(void*, void*))((char*)*(void**)w + 0x114);
         WinMsg m;
         m.code = 0x51a1a2e;
         m.f3 = 0;
         m.f4 = 0;
         m.f5 = 0;
         m.f6 = 0;
-        fn(w, &m);
+        ((Win_s009946b0*)(self + 4))->SendMsg(&m);
         *(char*)(self + 0xa8e4) = 0;
     }
     if (*(void**)(self + 0x478) != 0) {
@@ -1433,9 +1429,8 @@ bool WinXHTML_s0099_4240::OnFocusChange(int param_2, void* param_3)
         ((XHTMLPage*)(self + 0x218))->Layout();
         FUN_00994240();
     }
-    VF(self + 4, 0x90, void(__thiscall*)(void*))(self + 4);
-    return true;
-}
+    ((Win_s009946b0*)(self + 4))->Invalidate();
+    return true;}
 
 // @ 0x009948a0
 bool WinXHTML_s0099_4240::FUN_009948a0(float param_2, float param_3, int)

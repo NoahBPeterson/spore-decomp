@@ -66,3 +66,4 @@
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FindClosestNPCHut@cTribeModeStrategy_s00cd_bb10@SP@@QAEPAUcHut@@I@Z  00cdbcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdd960@@YAHXZ  00cdd960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_0135db90@@YAXXZ  0135db90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00ccec20@cSPUITCCCursorStrategy@@QAEXI@Z  00ccec20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

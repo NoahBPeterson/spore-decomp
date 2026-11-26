@@ -4481,8 +4481,7 @@ void InsertionSortByDistance_Node_FromRange(cNode** pFirst, cNode** pLast, float
 
 // @ 0x00b00b40
 void InsertionSortVec3Pointers(Vec3** pFirst, Vec3** pLast, float refX, float refY, float refZ)
-{
-    if (pFirst == pLast)
+{    if (pFirst == pLast)
         return;
 
     for (Vec3** pCur = pFirst + 1; pCur != pLast; ++pCur) {
@@ -4492,15 +4491,20 @@ void InsertionSortVec3Pointers(Vec3** pFirst, Vec3** pLast, float refX, float re
             float dx1 = refX - pValue->mX;
             float dy1 = refY - pValue->mY;
             float dz1 = refZ - pValue->mZ;
+            float dist1 = dx1 * dx1;
+            dist1 += dz1 * dz1;
+            dist1 += dy1 * dy1;
             do {
                 Vec3* pPrev = pSlot[-1];
                 float dx2 = refX - pPrev->mX;
                 float dy2 = refY - pPrev->mY;
                 float dz2 = refZ - pPrev->mZ;
-                if (dx2 * dx2 + dy2 * dy2 + dz2 * dz2 <= dx1 * dx1 + dy1 * dy1 + dz1 * dz1)
+                if (dx2 * dx2 + dy2 * dy2 + dz2 * dz2 > dist1) {
+                    *pSlot = pPrev;
+                    --pSlot;
+                } else {
                     break;
-                *pSlot = pPrev;
-                --pSlot;
+                }
             } while (pSlot != pFirst);
         }
         *pSlot = pValue;

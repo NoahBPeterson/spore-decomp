@@ -153,29 +153,35 @@ void init_15a51bc()
 
 // @ 0x01370950
 void init_16ac318()
-{
+{    struct LocalKey {
+        uint32_t mInstance;
+        uint32_t mType;
+        uint32_t mGroup;
+        LocalKey() : mInstance(0), mType(0), mGroup(0) {}
+    };
+    LocalKey k;
     kProgressBarSuccessSound.mHash = FNVHash("ProgressBarSuccessSound", 0x811c9dc5, 1);
     kProgressBarSuccessSound.mpNext = sProgressBarProperties;
     sProgressBarProperties = &kProgressBarSuccessSound;
     kProgressBarSuccessSound.mpKey = &g_propKey14811f0;
-    kProgressBarSuccessSound.mValue0c = 0;
-    kProgressBarSuccessSound.mValue10 = 0;
-    kProgressBarSuccessSound.mValue14 = 0;
-    atexit(&FUN_013c75c0);
-}
+    *(LocalKey*)&kProgressBarSuccessSound.mValue0c = k;
+    atexit(&FUN_013c75c0);}
 
 // @ 0x013709b0
 void init_16ac330()
-{
+{    struct LocalKey {
+        uint32_t mInstance;
+        uint32_t mType;
+        uint32_t mGroup;
+        LocalKey() : mInstance(0), mType(0), mGroup(0) {}
+    };
+    LocalKey k;
     kProgressBarFailSound.mHash = FNVHash("ProgressBarFailSound", 0x811c9dc5, 1);
     kProgressBarFailSound.mpNext = sProgressBarProperties;
     sProgressBarProperties = &kProgressBarFailSound;
     kProgressBarFailSound.mpKey = &g_propKey14811f0;
-    kProgressBarFailSound.mValue0c = 0;
-    kProgressBarFailSound.mValue10 = 0;
-    kProgressBarFailSound.mValue14 = 0;
-    atexit(&FUN_013c75d0);
-}
+    *(LocalKey*)&kProgressBarFailSound.mValue0c = k;
+    atexit(&FUN_013c75d0);}
 
 // @ 0x013716e0
 void init_16ac5e0()
@@ -192,16 +198,19 @@ void init_16ac5e0()
 
 // @ 0x013717e0
 void init_16ac618()
-{
+{    struct LocalKey {
+        uint32_t mInstance;
+        uint32_t mType;
+        uint32_t mGroup;
+        LocalKey() : mInstance(0), mType(0), mGroup(0) {}
+    };
+    LocalKey k;
     kBackgroundEffectID.mHash = FNVHash("BackgroundEffectID", 0x811c9dc5, 1);
     kBackgroundEffectID.mpNext = sDialogLayoutProperties;
     sDialogLayoutProperties = &kBackgroundEffectID;
     kBackgroundEffectID.mpKey = &g_propKey14811f0;
-    kBackgroundEffectID.mValue0c = 0;
-    kBackgroundEffectID.mValue10 = 0;
-    kBackgroundEffectID.mValue14 = 0;
-    atexit(&FUN_013c7900);
-}
+    *(LocalKey*)&kBackgroundEffectID.mValue0c = k;
+    atexit(&FUN_013c7900);}
 
 // @ 0x01373000
 void init_16ace34()

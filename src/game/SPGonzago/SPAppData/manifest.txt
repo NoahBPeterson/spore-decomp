@@ -16,3 +16,4 @@
 ../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4bc70@@YAXXZ  00e4bc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4bd70@@YAXXZ  00e4bd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4bff0@@YAXPBDH@Z  00e4bff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4aa60@@YAPAUcEntryNode@@PB_W@Z  00e4aa60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

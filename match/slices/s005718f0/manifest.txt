@@ -36,3 +36,4 @@ slices/s005718f0/s005718f0.cpp  ?SetRanges@cAppModeEditorBase@SP@@QAEXAB_K00@Z  
 slices/s005718f0/s005718f0.cpp  ?StopFade@cAppModeEditorBase@SP@@QAEXXZ  005724a0  /O2 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?IsSporepediaModal@SP@@YA_NXZ  00572520  /O2 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?ResetUIIfReady@@YAXXZ  00572550  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?ShowTutorial@cAppModeEditorBase@SP@@QAEXXZ  00572260  /O2 /MD /Gy /EHsc /TP

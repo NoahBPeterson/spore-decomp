@@ -668,25 +668,19 @@ LightEffectSub& LightEffectSub::copy_construct(const LightEffectSub& src)
 
 // @ 0x00a98f60
 void ArgCommand::ExecuteEffect(void* argsRaw)
-{
-    cArguments* args = (cArguments*)argsRaw;
+{    cArguments* args = (cArguments*)argsRaw;
     int argc;
     const char** a = args->MainArguments(&argc, 1, 3);
 
     const char* p = a[0];
-    const char* e = p;
-    const char* q = p + 1;
-    while (*e++) { }
-    const char* end = p + (e - q);
-    ((EaString*)((char*)this + 0x90))->assign(p, end);
+    ((EaString*)((char*)this + 0x90))->assign(p, p + strlen(p));
 
     if (argc > 1) {
         int desc = ((cEffectsParser*)*(void**)((char*)this + 0x30))->GetInheritedDescription((void**)a, argc, 10);
         if (desc) sub38.operator=(*(const LightEffectSub*)desc);
     }
 
-    ((IVtParser2*)p04)->NotifyChanged(this);
-}
+    ((IVtParser2*)p04)->NotifyChanged(this);}
 
 // @ 0x00a98fd0
 void LightEffect_s00a9_87c0::Install(char flag)

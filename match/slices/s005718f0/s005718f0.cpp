@@ -645,8 +645,7 @@ namespace EditorUtils { void PlayEditorSound(uint32_t a, uint32_t b, float v, in
 
 // @ 0x00572260
 void cAppModeEditorBase::ShowTutorial()
-{
-    if (SporeGuide()->mbActive) {
+{    if (SporeGuide()->mbActive) {
         SporeGuide()->Show();
         return;
     }
@@ -656,16 +655,20 @@ void cAppModeEditorBase::ShowTutorial()
     }
     if (WindowManager()->IsModal())
         return;
-    uint32_t id;
     switch (mEditorMode) {
-    case 0: id = mTutorialPartMode; break;
-    case 1: id = mTutorialPaintMode; break;
-    case 2: id = mTutorialPlayMode; break;
-    default: return;
-    }
-    if (id)
-        cSPUIAssetBrowser::LaunchSporeGuide(id);
-}
+    case 0:
+        if (mTutorialPartMode)
+            cSPUIAssetBrowser::LaunchSporeGuide(mTutorialPartMode);
+        break;
+    case 1:
+        if (mTutorialPaintMode)
+            cSPUIAssetBrowser::LaunchSporeGuide(mTutorialPaintMode);
+        break;
+    case 2:
+        if (mTutorialPlayMode)
+            cSPUIAssetBrowser::LaunchSporeGuide(mTutorialPlayMode);
+        break;
+    }}
 
 // @ 0x005722f0
 void cAppModeEditorBase::InitBrain(uint32_t region)

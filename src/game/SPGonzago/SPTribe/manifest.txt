@@ -61,3 +61,4 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92f80@@YAPADPAD00@Z  00c92f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92d50@@YAPAURec60@@PAU1@0PAI@Z  00c92d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92a90@@YAXPAXPAPAH@Z  00c92a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?HotSpotsShutdown@@YAXXZ  00c9a080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

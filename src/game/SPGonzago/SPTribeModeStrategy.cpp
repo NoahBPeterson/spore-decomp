@@ -3965,15 +3965,14 @@ u32 cSPUITCCCursorStrategy::FUN_00cceae0(void* obj, u32 mode, void* arg3)
 
 // @ 0x00ccec20
 void cSPUITCCCursorStrategy::FUN_00ccec20(u32 flag)
-{
-    if (GetCurrentGameMode() != (void*)0x1654c02)
+{    if (GetCurrentGameMode() != (void*)0x1654c02)
         return;
     TcModeObject* mode = (TcModeObject*)V0<void*>(mpTerrain, 0x6c);
     mode->F00cc93b0(flag);
     if (GetCards())
         GetCards()->SetCardsVisibility((int)flag);
     if (mode->mpMode) {
-        if (flag != 0) {
+        if ((u8)flag != 0) {
             if (mode->mFlag54)
                 mode->mpMode->SetFlag(1);
         } else {

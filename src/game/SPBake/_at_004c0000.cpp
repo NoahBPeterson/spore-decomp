@@ -1999,15 +1999,20 @@ Elem* __cdecl FUN_004c69e0(Elem* first, Elem* last, Elem* dst)
 
 // @ 0x004c6a70
 Elem* __cdecl FUN_004c6a70(Elem* first, Elem* last, Elem* dst)
-{
+{    struct LocalHelper {
+        static __forceinline void Destroy(Elem* p, unsigned int flags) {
+            void** pobj = &p->obj;
+            if (*pobj != 0)
+                ((RefObj*)((char*)*pobj + 0xbc))->Release();
+            if (flags & 1)
+                operator delete(p);
+        }
+    };
     for (; first != last;
          first = (Elem*)((char*)first + 8), dst = (Elem*)((char*)dst + 8)) {
-        void** pobj = &first->obj;
-        if (*pobj != 0)
-            ((RefObj*)((char*)*pobj + 0xbc))->Release();
+        LocalHelper::Destroy(first, 0);
     }
-    return dst;
-}
+    return dst;}
 
 // @ 0x004c6b30
 int* __cdecl FUN_004c6b30(int* out, void* first, void* last, void* dst)

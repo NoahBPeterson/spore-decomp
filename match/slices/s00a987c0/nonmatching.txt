@@ -6,7 +6,6 @@
 00a98c90 153 FloatVec push_back loop; original re-derives sub pointer per iteration, register allocation differs (mine 202 vs 202).
 00a98d60 178 FloatVec push_back loop + penumbra option; store scheduling/register allocation differ (mine 221 vs 214).
 00a98ea0 155 Copy-construct of LightEffectSub; sub-object vector copies and register allocation differ (mine 168 vs 186). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#2 ecx]
-00a98f60 7 Register tie only (ebx vs ebp, eax/edx swap); byte-equivalent logic, no source change resolves it.
 00a991f0 74 Elem1C fill loop; x87 copy + register allocation differ (mine 75 vs 77).
 00a99240 74 Elem1C fill (offset 0x14) loop; x87 copy + register allocation differ (mine 75 vs 77).
 00a99290 64 Elem1C write_vector; x87 copy idiom/register allocation differ (mine 91 vs 93).

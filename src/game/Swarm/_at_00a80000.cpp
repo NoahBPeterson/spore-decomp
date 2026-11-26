@@ -1443,19 +1443,18 @@ bool cDistributeSimulator::OnMessage(int msg, int* pValue, int a3)
 }
 
 // @ 0x00a85f30
-int EnumGroupOverrides(char* obj, uint32* out, int limit)
-{
-    int count = 0;
+int EnumGroupOverrides(void* unused, char* obj, uint32* out, int limit)
+{    int count = 0;
     FUN_00a6c7a0((int)(obj + 0x10), 0, &count, (uint32**)&out, (int**)&limit);
-    uint32 a = *(uint32*)(obj + 0xb0);
-    uint32 b = *(uint32*)(obj + 0xb4);
-    if (((b & a) != 0xffffffff) && (++count, limit > 0)) {
-        out[0] = a;
-        out[1] = b;
-        out[2] = 5;
+    uint64_t k = *(uint64_t*)(obj + 0xb0);
+    if (k != 0xffffffffffffffffULL) {
+        ++count;
+        if (limit > 0) {
+            *(uint64_t*)out = k;
+            out[2] = 5;
+        }
     }
-    return count;
-}
+    return count;}
 
 // @ 0x00a85fb0
 void cDistributeSimulator::ReleaseEmitter()

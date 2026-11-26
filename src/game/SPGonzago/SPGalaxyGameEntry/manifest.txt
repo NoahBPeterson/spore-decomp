@@ -191,3 +191,5 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?e005b0@@YAXXZ  00e005b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ??0VBase@@QAE@XZ  00e00630  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?init_16a0dc4@@YAXXZ  0136bfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de0ae0@cGalaxyGameEntryImpl@@QAEXI@Z  00de0ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de9ec0@@YAXXZ  00de9ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -3178,7 +3178,6 @@ Elem16Vector& UIntMap::operator[](const uint32_t& key)
     return (*itLower).second;
 }
 
-// @ 0x004f68f0
 template <class T>
 inline PriorityEntry* find(PriorityEntry* first, PriorityEntry* last, const T& value)
 {
@@ -3186,29 +3185,37 @@ inline PriorityEntry* find(PriorityEntry* first, PriorityEntry* last, const T& v
         ++first;
     return first;
 }
+// @ 0x004f68f0
 int FindLowestPriority(PriorityEntry* first, PriorityEntry* last, uint32_t group, uint32_t type)
-{
-    int minPriority = 0x7FFFFFFF;
-    int bestId = -1;
-    PriorityEntry* cur = first;
+{    PriorityEntry* id;
+    int it = 0x7FFFFFFF;
+    int minPriority = -1;
+    id = first;
+    int cur;
+    PriorityInfo* pInfo;
+    int bestId;
+    PriorityEntry* priority;
     for (;;) {
-        cur = find(cur, last, GroupTypeKey(group, type));
-        if (cur != last) {
-            const int id = cur->mId;
-            PriorityInfo* const pInfo = GetPriorityManager() ? GetPriorityManager()->Find(id) : 0;
+        const GroupTypeKey key(group, type);
+        priority = id;
+        while ((priority != last) && !(*priority == key))
+            ++priority;
+        id = priority;
+        if (id != last) {
+            cur = id->mId;
+            pInfo = GetPriorityManager() ? GetPriorityManager()->Find(cur) : 0;
             if (pInfo) {
-                const int priority = pInfo->mPriority;
-                if (priority < minPriority) {
-                    minPriority = priority;
-                    bestId = id;
+                bestId = pInfo->mPriority;
+                if (bestId < it) {
+                    it = bestId;
+                    minPriority = cur;
                 }
             }
-            ++cur;
+            ++id;
         } else
             break;
     }
-    return bestId;
-}
+    return minPriority;}
 
 // @ 0x00f3b2c0
 int __stdcall _E366(int x)

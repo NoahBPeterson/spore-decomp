@@ -7636,23 +7636,25 @@ TribeToolRef* __thiscall ToolVec::PushBackAt(TribeToolRef* pos, const TribeToolR
 
 // @ 0x00c9a080
 void HotSpotsShutdown()
-{
-    if (g_hotSpotTimer.IsRunning())
+{    if (g_hotSpotTimer.IsRunning())
     {
         g_hotSpotTimer.FUN_00bc3170();
         g_hotSpotTimer.Stop();
     }
-    cHotSpotNode* begin = g_hotSpots.mpBegin;
     cHotSpotNode* end = g_hotSpots.mpEnd;
-    while (begin != end)
+    cHotSpotNode* begin = g_hotSpots.mpBegin;
+    if (begin != end)
     {
-        HotSpotGridRelease(&begin->mPosition.z);
-        ++begin;
+        do
+        {
+            HotSpotGridRelease(&begin->mPosition.z);
+            ++begin;
+        } while (begin != end);
+        end = g_hotSpots.mpEnd;
+        begin = g_hotSpots.mpBegin;
     }
-    begin = g_hotSpots.mpBegin;
-    end = g_hotSpots.mpEnd;
     g_hotSpots.FreeRange(begin, end);
-    g_hotSpots.mpEndRaw += ((char*)end - (char*)begin) / 0x60 * 0x60;
+    g_hotSpots.mpEnd -= (end - begin);
 }
 
 // @ 0x00c9a100
