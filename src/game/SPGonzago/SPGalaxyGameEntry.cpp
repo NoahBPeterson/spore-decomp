@@ -19753,7 +19753,7 @@ Vec27e8& Vec27e8::sub_dff8e0(const Vec27e8& x)
     return *this;
 }
 
-// @ 0x00dffa30
+// 0x00dffa30 (byte-exact lifted version: match/slices/s00dffa30/s00dffa30.cpp)
 PropBaseA22& PropBaseA22::sub_dffa30(const PropBaseA22& x)
 {
     f08 = x.f08;

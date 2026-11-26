@@ -162,7 +162,6 @@
 00dff650 93 vector assign stride 0x534: same shape as 0x238 version, initialised-copy call block scheduling differs; complete, equiv WEAK (165 valid, 52.9% cov, no mismatch) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00dff790 239 eastl vector operator=: MSVC register allocation differs (equiv WEAK) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00dff8e0 233 eastl vector operator=: MSVC register allocation differs (equiv WEAK) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00dffa30 970 memberwise copy assign: MSVC register allocation differs (equiv UNSUPPORTED) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00dffda0 655 mode dispatch: MSVC register allocation differs (equiv UNSUPPORTED) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e000a0 205 resource lookup: MSVC register allocation / zero-immediate differs (equiv UNSUPPORTED) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e001a0 200 input dispatch: MSVC register allocation differs (equiv WEAK) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -220,7 +220,7 @@ static void clear2(int* field)
         }
     }
 }
-// @ 0x00ed8780
+// 0x00ed8780 (byte-exact lifted version: match/slices/s00ed8780/s00ed8780.cpp)
 void Obj8780::f(unsigned char b)
 {
     char* s = (char*)this;

@@ -1,4 +1,3 @@
-00a987c0 232 Register-allocation/idiom difference; original's OnRegister uses a custom register convention that cannot be produced from plain C++ (mine 410 vs 428).
 00a98990 98 Original has no prologue and uses incoming esi as state (custom convention); plain C++ requires push esi/edi (mine 155 vs 146).
 00a98a80 68 EA arg-enum dispatch idiom mismatch; original inlines comparisons differently (mine 100 vs 113). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 return target, ret#2 esp, ret#2 esi]
 00a98b00 192 Vec3 push via ScaleCurve helper; store scheduling and register allocation differ (mine 196 vs 179).

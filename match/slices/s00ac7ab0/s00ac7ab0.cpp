@@ -372,7 +372,7 @@ IObj* FUN_00ac80d0(IObj* p, int id)
 }
 
 // ===========================================================================
-// @ 0x00ac8130
+// 0x00ac8130 (byte-exact lifted version: match/slices/s00ac8130/s00ac8130.cpp)
 // ===========================================================================
 extern "C" void* FUN_00b95050(void* self);                     // 0xb95050
 extern "C" void* FUN_00b93810(void* self, float a, float b);   // 0xb93810

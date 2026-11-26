@@ -300,7 +300,7 @@ u8 __fastcall FUN_00d466f0(void* self, void* dummy, void* unused) {
 // ======================================================================
 // 0x00d46730 - cCreatureTriggerSystem::ReadTrigger
 // ======================================================================
-// @ 0x00d46730
+// 0x00d46730 (byte-exact lifted version: match/slices/s00d46730/s00d46730.cpp)
 void __stdcall FUN_00d46730(TrigInfo* info) {
   void* prop;
 

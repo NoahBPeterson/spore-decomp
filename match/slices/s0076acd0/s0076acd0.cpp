@@ -165,7 +165,7 @@ Daf::~Daf() { if (m11c) Dealloc((void*)m11c); }
 void DeleteDaf(Daf* p) { delete p; }
 
 // ===========================================================================
-// @ 0x0076b000  tear down a viewer's arrays and physics objects
+// 0x0076b000 (byte-exact lifted version: match/slices/s0076b000/s0076b000.cpp)  tear down a viewer's arrays and physics objects
 // ===========================================================================
 static void FreePhysWorld(void*& slot)
 {

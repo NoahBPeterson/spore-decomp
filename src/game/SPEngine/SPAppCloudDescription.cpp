@@ -2035,7 +2035,7 @@ void cStrengthExCommand::ParseLine(const cArguments_s00f5_4af0& args)
 }
 }}  // namespace EA::ArgScript
 
-// @ 0x00f54ef0
+// 0x00f54ef0 (byte-exact lifted version: match/slices/s00f54ef0/s00f54ef0.cpp)
 namespace
 {
 class cCloudEffectCommand {

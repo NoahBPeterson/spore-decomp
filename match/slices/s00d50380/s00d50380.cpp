@@ -233,7 +233,7 @@ struct cMeteorStrikeEvent {
 typedef SP::cMeteorStrikeEvent MeteorEvent;
 
 // =============================================================================
-// @ 0x00d50380
+// 0x00d50380 (byte-exact lifted version: match/slices/s00d50380/s00d50380_lifted.cpp)
 void SP::cMeteorStrikeEvent::LoadAndInitMeteorStrikeData(cPropertyList* pList)
 {
     Clear();

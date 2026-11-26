@@ -6760,7 +6760,7 @@ void* RBTree::copyNode(PoolElem* src, PoolElem* parent)
     return node;
 }
 
-// @ 0x00b051f0
+// 0x00b051f0 (byte-exact lifted version: match/slices/s00b051f0/s00b051f0.cpp)
 void FUN_00b051f0(uint param_1, uint param_2)
 {
     if (param_1 >= param_2)

@@ -313,7 +313,7 @@ float BezierEval(float* a, float* b, float* c, float* d, float p5, float p6) {
   return f3 * (((*d - ((p5 * p5) * f1 * 3.0f + f2)) / (p5 + p5) + f1 * f3) * f3 + f2) + *a;
 }
 
-// @ 0x00b0f270
+// 0x00b0f270 (byte-exact lifted version: match/slices/s00b0f270/s00b0f270_lifted.cpp)
 // Publishes the camera state into the camera scratch VarMap, runs the program
 // bound to it and reads the resulting values back into the controller.
 void cTerrainCameraController::RunCameraScript(int keyboard_scroll_x, int keyboard_scroll_y,

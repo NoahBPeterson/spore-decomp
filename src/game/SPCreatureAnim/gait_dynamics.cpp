@@ -2865,7 +2865,7 @@ void SA::FUN_009ce740(float x)
     f80 = v;
 }
 
-// @ 0x009ce790
+// 0x009ce790 (byte-exact lifted version: match/slices/s009ce790/s009ce790.cpp)
 void SA::FUN_009ce790(SA* src)
 {
     f00 = src->f00; f04 = src->f04; f08 = src->f08; f0c = src->f0c;

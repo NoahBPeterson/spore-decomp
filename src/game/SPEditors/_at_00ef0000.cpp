@@ -5151,7 +5151,7 @@ bool __fastcall FUN_00ef46f0(cAssetPanel* self, void* dummy, void* context, Msg*
     return false;
 }
 
-// @ 0x00ef4940
+// 0x00ef4940 (byte-exact lifted version: match/slices/s00ef4940/s00ef4940.cpp)
 void __fastcall FUN_00ef4940(cAssetPanel* self)
 {
     void* p;

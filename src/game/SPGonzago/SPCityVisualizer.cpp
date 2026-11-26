@@ -1989,7 +1989,7 @@ void Vec12::DoAssignValues(Vec3f* position, const Vec3f& value)
     mpCapacity = nb + cap;
 }
 
-// @ 0x00ac8130
+// 0x00ac8130 (byte-exact lifted version: match/slices/s00ac8130/s00ac8130.cpp)
 void CVis::FUN_00ac8130()
 {
     void* a = operator_new6(0x34, "Simulator", 0, 0, 0, 0);

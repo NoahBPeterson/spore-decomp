@@ -1552,7 +1552,7 @@ Daf::Daf()
     m0c = 0;
 }
 
-// @ 0x0076b000
+// 0x0076b000 (byte-exact lifted version: match/slices/s0076b000/s0076b000.cpp)
 static void FreePhysWorld(void*& slot)
 {
     if (slot == 0)
