@@ -4372,7 +4372,7 @@ void cPlayer::FUN_00c79b60()
     mpVtbl34 = (void*)&g_vtbl_013eb394;
 }
 
-// @ 0x00c79e20
+// 0x00c79e20 (byte-exact lifted version: match/slices/s00c79e20/s00c79e20.cpp)
 void cPlayer::SetBanModePickPriorities(uint32_t nMode, tUintVec* pVec)
 {
     if (nMode >= 10)
@@ -5082,7 +5082,7 @@ void __cdecl FUN_00c7c530(void* stream, cBanModeVec* vec)
     ((cStream*)stream)->c1c();
 }
 
-// @ 0x00c7c6d0
+// 0x00c7c6d0 (byte-exact lifted version: match/slices/s00c7c6d0/s00c7c6d0.cpp)
 void cPlayer_s00c7_c0c0::SetGameDataOwner(int owner)
 {
     FUN_00b18550_base(owner);

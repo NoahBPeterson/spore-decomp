@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c40150 55 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactive ornament cast; the hit-sphere fallback call is unresolved; equiv UNSUPPORTED (unresolved cast helper)
 00c40200 94 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) next destructed state; the schedule table stride and callback load differ from retail; equiv FAIL (first mismatch eax)
 00c40270 74 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) ornament write; the type dword and field serializer are unresolved; equiv UNSUPPORTED (unresolved field serializer)
 00c404c0 152 cInteractiveOrnament ctor: complete behaviour (implicit cInteractableObject base ctor, explicit cCombatant ctor at +0x170, all vtable/field stores); cl hoists the xmm0/ebx zeroing before the register saves and orders the late vtable/field stores differently (211 vs 216 bytes). equiv PASS (400/400 inputs, 100% coverage)

@@ -3070,7 +3070,7 @@ DataInfo* __cdecl lower_bound_DataInfo(DataInfo* first, DataInfo* last, u32* val
     return first;
 }
 
-// @ 0x00e0ea40
+// 0x00e0ea40 (byte-exact lifted version: match/slices/s00e0ea40/s00e0ea40.cpp)
 RefHolder* RefHolder::Assign(const RefHolder& o)
 {
     mp0 = o.mp0;

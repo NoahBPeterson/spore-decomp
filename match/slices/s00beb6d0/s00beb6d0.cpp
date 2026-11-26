@@ -417,7 +417,7 @@ uint32_t GetClassId(int a, int b)
     }
 }
 
-// @ 0x00bebd00  (cdecl)
+// 0x00bebd00 (byte-exact lifted version: match/slices/s00bebd00/s00bebd00.cpp)  (cdecl)
 uint32_t GetIID(int a)
 {
     switch (a) {

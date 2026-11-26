@@ -518,7 +518,7 @@ public:
     void RemoveNoun(void* pNoun);                       // 0x00b225d0
 };
 
-// @ 0x01043c60
+// 0x01043c60 (byte-exact lifted version: match/slices/s01043c60/s01043c60.cpp)
 void FUN_01043c60(cZooMarkerMgr* pMgr, const ResourceKey* pKey)
 {
     ZooMarkerVector* pMarkers = &pMgr->mMarkers;

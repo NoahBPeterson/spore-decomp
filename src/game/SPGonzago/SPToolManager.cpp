@@ -2078,7 +2078,7 @@ cToolObjectData_s0104_e290::cToolObjectData_s0104_e290(SP::cToolObjectData::eToo
     mLootDropTimeS = 0;
 }
 
-// @ 0x0104e2f0
+// 0x0104e2f0 (byte-exact lifted version: match/slices/s0104e2f0/s0104e2f0.cpp)
 uint32_t cSpaceInventoryItem_GetItemCount(cSpaceInventoryItemData* pItem, uint32_t* pCount)
 {
     if (((pItem->mnFlags >> 5) & 1) != 0)
@@ -2392,7 +2392,7 @@ void DoChargeEffects(cSPSpaceToolData_s0104_e060* pTool)
     }
 }
 
-// @ 0x0104ef00
+// 0x0104ef00 (byte-exact lifted version: match/slices/s0104ef00/s0104ef00.cpp)
 void ClearEffectLists(cEffectLists* pLists)
 {
     pLists->mpList0[0] = nullptr;
@@ -2438,7 +2438,7 @@ void cSPToolManager::ShutdownGonzagoSubsystem()
     }
 }
 
-// @ 0x0104f250
+// 0x0104f250 (byte-exact lifted version: match/slices/s0104f250/s0104f250.cpp)
 void cSPToolManager::ClearToolEffects()
 {
     cEffectNode* pNode = (cEffectNode*)mpEffectTreeRoot;
@@ -2655,7 +2655,7 @@ CToolManager* __fastcall FUN_0104f960(CToolManager* pThis)
     return pThis;
 }
 
-// @ 0x0104fa90
+// 0x0104fa90 (byte-exact lifted version: match/slices/s0104fa90/s0104fa90.cpp)
 bool __fastcall FUN_0104fa90(CToolManager* pThis, int, CToolObject* pTool)
 {
     if (pTool == 0)

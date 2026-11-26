@@ -952,7 +952,7 @@ void cGNMPart::FUN_00b237d0()
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00b23940
+// 0x00b23940 (byte-exact lifted version: match/slices/s00b23940/s00b23940.cpp)
 // ---------------------------------------------------------------------------------------------
 cNoun* cGameNounManager::FUN_00b23940(float* pPosition, uint32_t nSpecies, uint32_t nGeneration,
                                       uint8_t bOwner, float fHitpoint, uint8_t bDebug)

@@ -575,7 +575,7 @@ int CreatureBase::PlayAnimationWithTarget(uint32_t id, void* target, int arg4)
 }
 
 // ===========================================================================
-// @ 0x00c14940
+// 0x00c14940 (byte-exact lifted version: match/slices/s00c14940/s00c14940.cpp)
 // ===========================================================================
 int CreatureBase::PlayAnimationWithTargetObj(uint32_t id, void* target, int arg5)
 {
@@ -599,7 +599,7 @@ int CreatureBase::InterruptAnimationWithTarget(uint32_t id, void* target, int ar
 }
 
 // ===========================================================================
-// @ 0x00c149c0
+// 0x00c149c0 (byte-exact lifted version: match/slices/s00c149c0/s00c149c0.cpp)
 // ===========================================================================
 int CreatureBase::InterruptAnimationWithTargetObj(uint32_t id, void* target, int arg5)
 {
@@ -886,7 +886,7 @@ void* CreatureBase::CreateBodyEffectByIndex(int partIdx, uint32_t visualEffectId
 }
 
 // ===========================================================================
-// @ 0x00c15150
+// 0x00c15150 (byte-exact lifted version: match/slices/s00c15150/s00c15150.cpp)
 // ===========================================================================
 bool CreatureBase::DetachBodyEffectById(void* handle, void* arg3)
 {

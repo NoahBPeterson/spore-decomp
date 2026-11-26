@@ -6,4 +6,3 @@
 00cb5fe0  47  pointer load folds to [eax+0x118]; original materializes eax + add eax,imm
 00cb6090  280  repeated item lookups materialize eax + add eax,imm; large function
 00cb61d0  274  repeated item lookups materialize eax + add eax,imm; large function
-00cb6500  142  compiler re-pushes args for second call; original reuses stack args

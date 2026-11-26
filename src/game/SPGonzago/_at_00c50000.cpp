@@ -904,7 +904,7 @@ void cSPMissionTradeRoute::GetUIShortDescription(WString* pOut)
 }
 }  // namespace SP
 
-// @ 0x00c5ad40
+// 0x00c5ad40 (byte-exact lifted version: match/slices/s00c5ad40/s00c5ad40.cpp)
 cMissionMultiStep::cMissionMultiStep()
 {
     mpStepsBegin = nullptr;

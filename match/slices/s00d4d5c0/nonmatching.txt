@@ -29,7 +29,6 @@
 #                single difference is that the original seeds the signature store into the delay slot
 #                of the OReader::v6() virtual call; no source shape or flag reproduces that placement
 #                (see the Write family note below).  equiv UNSUPPORTED: 0/400 inputs valid.
-00d4dae0   36  ClearData(): drops mpPropList, erases mData, removes every game-data noun, erases the
 #                game-data map.  Same semantics; the original caches the map end pointer in edi and
 #                keeps &mGameDataMap in ebp, ours swaps ebx/ebp and materialises the loop bound one
 #                slot earlier (101 vs 102 bytes).  equiv WEAK: 148/400 inputs valid, 81.8% coverage.

@@ -519,7 +519,7 @@ void KeySink::Store3(int a, int b, int c)
 }
 
 // ===========================================================================
-// @ 0x00bbc460
+// 0x00bbc460 (byte-exact lifted version: match/slices/s00bbc460/s00bbc460.cpp)
 // Store the shared empty key then three caller keys.
 // ===========================================================================
 void KeySink::Store3B(int a, int b, int c)

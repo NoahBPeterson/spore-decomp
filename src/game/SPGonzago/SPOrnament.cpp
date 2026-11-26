@@ -796,7 +796,7 @@ void*   Sub_c8a550(void* pSelf, void* pWorld);        // 0x00c8a550
 extern const Vec3_s00c8_db30  kSPColorRed;   // 0x0157a9d0
 // ---- items of slice s00c8db30 end
 
-// @ 0x00c40150
+// 0x00c40150 (byte-exact lifted version: match/slices/s00c40150/s00c40150.cpp)
 void* cInteractiveOrnamentCast(void* pObject, void* pType)
 {
     if (pType == (void*)0x13f94d4) {

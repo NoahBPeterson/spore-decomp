@@ -219,7 +219,7 @@ cCityMusicLargeAssetView_s00ea_1900::cCityMusicLargeAssetView_s00ea_1900()
     mpViewer->SetMusic(mpMusic);
 }
 
-// @ 0x00ea1a30
+// 0x00ea1a30 (byte-exact lifted version: match/slices/s00ea1a30/s00ea1a30.cpp)
 cCityMusicLargeAssetView_s00ea_1900::~cCityMusicLargeAssetView_s00ea_1900()
 {
     if (mpViewer != nullptr)

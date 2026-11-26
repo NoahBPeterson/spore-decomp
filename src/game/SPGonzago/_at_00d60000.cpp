@@ -436,7 +436,7 @@ void IntrusiveList::Remove(IRef** object)
     }
   }}
 
-// @ 0x00d652a0
+// 0x00d652a0 (byte-exact lifted version: match/slices/s00d652a0/s00d652a0.cpp)
 void* Pool::Alloc(IRef** object)
 {
   FreeListAlloc* alloc = &mAlloc;

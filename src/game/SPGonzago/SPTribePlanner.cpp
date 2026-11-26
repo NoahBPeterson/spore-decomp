@@ -1485,7 +1485,7 @@ void __fastcall FUN_00ce0f70(cTribePlanData* pData)
     ((EraseRangeThunk)FUN_00e25bd0)(pWorkers, pWorkers->mpBegin, pWorkers->mpEnd);
 }
 
-// @ 0x00ce0ff0
+// 0x00ce0ff0 (byte-exact lifted version: match/slices/s00ce0ff0/s00ce0ff0.cpp)
 cPlanTimer* FUN_00ce0ff0(int iUnused, PlanTable* pTable, uint32_t uKey, uint32_t uIndex, int iPlanId)
 {
     cPlanTimer* pTimer = (cPlanTimer*)FUN_00ce0e60(pTable, uKey, uIndex);

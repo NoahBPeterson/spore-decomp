@@ -426,7 +426,7 @@ void* cTribe::GetStructures() {
 // ===========================================================================
 // 0x00c967a0  cTribe::GetInhabitants
 // ===========================================================================
-// @ 0x00c967a0
+// 0x00c967a0 (byte-exact lifted version: match/slices/s00c967a0/s00c967a0.cpp)
 void* cTribe::GetInhabitants() {
     void** it = (void**)mCreatures_340.mpBegin;
     void** end = (void**)mCreatures_340.mpEnd;

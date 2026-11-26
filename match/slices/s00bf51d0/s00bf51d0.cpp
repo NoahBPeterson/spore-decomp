@@ -652,7 +652,7 @@ float CityThing::GetDistance(void* key)
 // ---------------------------------------------------------------------------
 // 0x00bf5be0 - city event handler.
 // ---------------------------------------------------------------------------
-// @ 0x00bf5be0
+// 0x00bf5be0 (byte-exact lifted version: match/slices/s00bf5be0/s00bf5be0.cpp)
 bool CityEventSub::OnEvent(int eventId, void* data)
 {
     if (eventId == 0x1a0219e) {

@@ -409,7 +409,7 @@ bool cNPCCityMusic::Load(const char* name) {
     return ok;
 }
 
-// @ 0x00eab340
+// 0x00eab340 (byte-exact lifted version: match/slices/s00eab340/s00eab340.cpp)
 void cNPCCityMusic::SetPosition(const Vector3* position) {
     cAudioSystem* system = GetSystemAT();
     void* object = system ? system->CreateAudioObject() : 0;
@@ -425,7 +425,7 @@ void cNPCCityMusic::ClearPosition() {
     }
 }
 
-// @ 0x00eab3b0
+// 0x00eab3b0 (byte-exact lifted version: match/slices/s00eab3b0/s00eab3b0.cpp)
 void cNPCCityMusic::SetEnabled(uint8_t enabled) {
     if (mpAudioObject && mEnabled != enabled) {
         SetAudioObjectEnabled(mpAudioObject, enabled);

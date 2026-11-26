@@ -261,7 +261,7 @@ int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
 // ---------------------------------------------------------------------------
 // 0x01052880  AppendScanResult
 // ---------------------------------------------------------------------------
-// @ 0x01052880
+// 0x01052880 (byte-exact lifted version: match/slices/s01052880/s01052880.cpp)
 void AppendScanResult(void* pList, int* pOut)
 {
     if (pOut == nullptr)
@@ -274,7 +274,7 @@ void AppendScanResult(void* pList, int* pOut)
 // ---------------------------------------------------------------------------
 // 0x01052f00  cSPToolStrategy::GetPositionUnderMouse
 // ---------------------------------------------------------------------------
-// @ 0x01052f00
+// 0x01052f00 (byte-exact lifted version: match/slices/s01052f00/s01052f00.cpp)
 Vec3* cSPToolStrategy::GetMouseWorldPosition(Vec3* pOut)
 {
     cSPSimulatorSpaceGame* pGame = GetActiveSpaceGame();
@@ -542,7 +542,7 @@ bool cSPToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget)
 // ---------------------------------------------------------------------------
 // 0x01053bb0  cSPToolStrategy::UpdatePassive
 // ---------------------------------------------------------------------------
-// @ 0x01053bb0
+// 0x01053bb0 (byte-exact lifted version: match/slices/s01053bb0/s01053bb0.cpp)
 void cSPToolStrategy::UpdatePassive()
 {
     if (mpActiveObject != nullptr && !mpActiveObject->IsAlive()) {
@@ -686,7 +686,7 @@ bool cSPDefaultBeamTool::UpdateBeam()
 // ---------------------------------------------------------------------------
 // 0x01053ee0  cSPDefaultAoETool::StopTool
 // ---------------------------------------------------------------------------
-// @ 0x01053ee0
+// 0x01053ee0 (byte-exact lifted version: match/slices/s01053ee0/s01053ee0.cpp)
 bool cSPDefaultAoETool::StopTool()
 {
     if (mpAreaEffect != nullptr) {
@@ -741,7 +741,7 @@ bool cSPScanToolStrategy::ActivateTool(int nToolId)
 // ---------------------------------------------------------------------------
 // 0x01053ff0  cSPScanToolStrategy::StopTool
 // ---------------------------------------------------------------------------
-// @ 0x01053ff0
+// 0x01053ff0 (byte-exact lifted version: match/slices/s01053ff0/s01053ff0.cpp)
 bool cSPScanToolStrategy::StopTool()
 {
     cSPSpaceInventory* pInventory = SpaceGameGet()->GetPlayerInventory();

@@ -684,7 +684,7 @@ cRefOps* __thiscall cRefOps::AssignRefPairObj(const cAutoRef12* pSrc)
     return this;
 }
 
-// @ 0x00bda7d0
+// 0x00bda7d0 (byte-exact lifted version: match/slices/s00bda7d0/s00bda7d0.cpp)
 void __thiscall cRefOps::CopyTransform50Obj(const void* pSrc)
 {
     void* pDst = this;

@@ -570,7 +570,7 @@ void cSPUISocialRainbow::F0e31d60(void)
     /* large secondary update; not reconstructed */
 }
 
-// @ 0x00e320c0
+// 0x00e320c0 (byte-exact lifted version: match/slices/s00e320c0/s00e320c0.cpp)
 void F0e320c0(void* unused, unsigned int* a, unsigned int* b, unsigned int* c, float t)
 {
     char* dst;

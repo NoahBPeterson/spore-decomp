@@ -800,7 +800,7 @@ cUIPropertyTableSet::cUIPropertyTableSet()
     mbD0 = 0;
 }
 
-// @ 0x00de2de0
+// 0x00de2de0 (byte-exact lifted version: match/slices/s00de2de0/s00de2de0.cpp)
 cUIPropertyTableSet::~cUIPropertyTableSet() {
     mTables.Destroy();
     if (mpListener)

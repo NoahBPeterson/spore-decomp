@@ -477,7 +477,7 @@ void cCityMusicLoadSave::SaveThumbnail()
     (void)rect;
 }
 
-// @ 0x00ea25f0
+// 0x00ea25f0 (byte-exact lifted version: match/slices/s00ea25f0/s00ea25f0.cpp)
 void cCityMusicLoadSave::FinishSave()
 {
     if (mbWaitingForThumbnail == 0 && mbWaitingForSaveDialog == 0)
@@ -525,7 +525,7 @@ bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
     return nKind == 0x17;
 }
 
-// @ 0x00ea26f0
+// 0x00ea26f0 (byte-exact lifted version: match/slices/s00ea26f0/s00ea26f0.cpp)
 void cCityMusicLoadSave::Shutdown()
 {
     if (mbWaitingForSaveDialog != 0) {

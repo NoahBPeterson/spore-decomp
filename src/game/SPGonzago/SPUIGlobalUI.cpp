@@ -1303,7 +1303,7 @@ char FUN_00e014a0_impl()
     return bl;
 }
 
-// @ 0x00e01570
+// 0x00e01570 (byte-exact lifted version: match/slices/s00e01570/s00e01570.cpp)
 void* PodObj::Copy(void* o)
 {
     void* s = this;
@@ -1372,7 +1372,7 @@ void* NetObj::Ctor()
     return self;
 }
 
-// @ 0x00e016f0
+// 0x00e016f0 (byte-exact lifted version: match/slices/s00e016f0/s00e016f0.cpp)
 void* NetObj::DelDtor(unsigned int flags)
 {
     void* self = this;
@@ -2372,7 +2372,7 @@ bool cSPUIGlobalUI_s00e0_33d0::Init(int param)
     return ok;
 }
 
-// @ 0x00e03740
+// 0x00e03740 (byte-exact lifted version: match/slices/s00e03740/s00e03740.cpp)
 bool cSPUIGlobalUI_s00e0_33d0::Shutdown()
 {
     if (this->mpLayout != 0) {

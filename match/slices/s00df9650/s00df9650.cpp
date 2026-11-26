@@ -362,7 +362,7 @@ void GGUI::FUN_00df9b30(int v)
 // ===========================================================================
 // 00dfa370   swarm random spawn
 // ===========================================================================
-// @ 0x00dfa370
+// 0x00dfa370 (byte-exact lifted version: match/slices/s00dfa370/s00dfa370.cpp)
 void FUN_00dfa370()
 {
     AGSwarm* o = (AGSwarm*)FUN_00dd9190();
@@ -568,7 +568,7 @@ void GGUI::FUN_00df9dc0(unsigned index, int v)
 // ===========================================================================
 // 00df9e60   step the slot selection back
 // ===========================================================================
-// @ 0x00df9e60
+// 0x00df9e60 (byte-exact lifted version: match/slices/s00df9e60/s00df9e60.cpp)
 void GGUI::FUN_00df9e60()
 {
     if (mIndex == 0) {

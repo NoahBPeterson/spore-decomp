@@ -258,7 +258,7 @@ int __thiscall Obj::GetArrayCount()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00ca03a0
+// 0x00ca03a0 (byte-exact lifted version: match/slices/s00ca03a0/s00ca03a0.cpp)
 int __thiscall Obj::CreateInteract(int key)
 {
     int result = 0;
@@ -354,7 +354,7 @@ void __thiscall Obj::ProcessEA()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00ca07f0
+// 0x00ca07f0 (byte-exact lifted version: match/slices/s00ca07f0/s00ca07f0.cpp)
 bool __cdecl FUN_00ca07f0(void* unused, void** range)
 {
     void** begin = (void**)range[0];

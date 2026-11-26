@@ -169,7 +169,7 @@ cInterfaceState::cInterfaceState(cDispatchObject* pTarget)
 // ---------------------------------------------------------------------------
 // 0x00ddfaa0  cInterfaceState::~cInterfaceState
 // ---------------------------------------------------------------------------
-// @ 0x00ddfaa0
+// 0x00ddfaa0 (byte-exact lifted version: match/slices/s00ddfaa0/s00ddfaa0.cpp)
 cInterfaceState::~cInterfaceState()
 {
     if (gInterfaceNotifier != nullptr)

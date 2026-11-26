@@ -3130,7 +3130,7 @@ void FUN_00e4f660(int v)
     *(char*)((char*)g_16b3c0c + 0x936) = (char)v;
 }
 
-// @ 0x00e4f6d0
+// 0x00e4f6d0 (byte-exact lifted version: match/slices/s00e4f6d0/s00e4f6d0.cpp)
 int FUN_00e4f6d0(int* node, int a, int b, int** out, int* counter)
 {
     if (a == b) {

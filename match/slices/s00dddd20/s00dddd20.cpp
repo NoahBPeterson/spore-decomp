@@ -172,7 +172,7 @@ struct ArgSpec {
     void ConstructSpec(const char*, const char*, int, const char*,
                        const char*, int, const char*, int);
 };
-// @ 0x00dddf30
+// 0x00dddf30 (byte-exact lifted version: match/slices/s00dddf30/s00dddf30.cpp)
 ArgScript* MakeLevelCheats(ArgScript* self, int arg) {
     FUN_0083c800();
     self->vt = (void*)0x147d41c;

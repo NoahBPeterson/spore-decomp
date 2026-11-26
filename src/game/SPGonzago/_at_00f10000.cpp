@@ -4635,7 +4635,7 @@ extern "C" int __fastcall FUN_00f13b10(void* self)
     return 1;
 }
 
-// @ 0x00f14060
+// 0x00f14060 (byte-exact lifted version: match/slices/s00f14060/s00f14060.cpp)
 extern "C" void FUN_00f14060(uint32_t* node, uint32_t* end, uint32_t* out)
 {
     if (node == end)
@@ -4648,7 +4648,7 @@ extern "C" void FUN_00f14060(uint32_t* node, uint32_t* end, uint32_t* out)
     } while (node != end);
 }
 
-// @ 0x00f14090
+// 0x00f14090 (byte-exact lifted version: match/slices/s00f14090/s00f14090.cpp)
 extern "C" void FUN_00f14090(uint32_t start, uint32_t* end, uint32_t* out)
 {
     if ((uint32_t*)start == end)
@@ -6443,7 +6443,7 @@ bool cScenarioPlayProgressBar_s00f1_8eb0::IsKindAb(int idx)
 }
 }  // namespace UI
 
-// @ 0x00f19e00
+// 0x00f19e00 (byte-exact lifted version: match/slices/s00f19e00/s00f19e00.cpp)
 namespace UI {
 bool __cdecl cScenarioPlayProgressBar_Pred(void* a)
 {

@@ -297,7 +297,7 @@ void TM::F_cd3670(void* a)
     }
 }
 
-// @ 0x00cd36f0
+// 0x00cd36f0 (byte-exact lifted version: match/slices/s00cd36f0/s00cd36f0.cpp)
 bool ForEachStructure(void* visitor, HashTable* t)
 {
     HashNode* i = *(HashNode**)t->mppBuckets;

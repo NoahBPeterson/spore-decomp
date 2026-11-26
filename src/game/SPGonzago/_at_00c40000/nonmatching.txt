@@ -5,4 +5,3 @@
 00c4e280 172 Complete mission value getter; residual is float/int conversion ordering and register allocation. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c4e570 802 Complete cSPMission Update/driver; residual is loop scheduling, call ordering, and register pressure. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c4e9a0 174 Complete mission event registration; residual is message-id setup ordering and register allocation. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c4ea70 203 Complete cMissionColonize init; residual is vtable-call and store interleaving order. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

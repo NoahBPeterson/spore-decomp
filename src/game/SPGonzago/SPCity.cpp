@@ -6301,7 +6301,7 @@ cRefOps* __thiscall cRefOps::AssignRefPairObj(const cAutoRef12* pSrc)
     return this;
 }
 
-// @ 0x00bda7d0
+// 0x00bda7d0 (byte-exact lifted version: match/slices/s00bda7d0/s00bda7d0.cpp)
 void __thiscall cRefOps::CopyTransform50Obj(const void* pSrc)
 {
     void* pDst = this;
@@ -8100,7 +8100,7 @@ void __cdecl CopyAssignRange80(CElement_s00bd_ee20* first, CElement_s00bd_ee20* 
     }
 }
 
-// @ 0x00bdf1a0
+// 0x00bdf1a0 (byte-exact lifted version: match/slices/s00bdf1a0/s00bdf1a0.cpp)
 void __cdecl CopyConstructRange80(CElement_s00bd_ee20* first, unsigned count, const CElement_s00bd_ee20* src)
 {
     if (count != 0) {
@@ -11139,7 +11139,7 @@ uint32_t GetClassId(int a, int b)
     }
 }
 
-// @ 0x00bebd00
+// 0x00bebd00 (byte-exact lifted version: match/slices/s00bebd00/s00bebd00.cpp)
 uint32_t GetIID(int a)
 {
     switch (a) {

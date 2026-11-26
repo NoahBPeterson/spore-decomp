@@ -7769,7 +7769,7 @@ float __cdecl FUN_00daa9b0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32_t,
     return 1.0f;
 }
 
-// @ 0x00daab90
+// 0x00daab90 (byte-exact lifted version: match/slices/s00daab90/s00daab90.cpp)
 float __cdecl FUN_00daab90(Creature_s00da_a530* c)
 {
     OrderRec_s00da_a530* piVar2 = (OrderRec_s00da_a530*)c->mpB4C->FirstPending();

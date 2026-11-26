@@ -9,7 +9,6 @@
 00d58460 WEAK 230 valid inputs but only 44.4% coverage; object vector notify walk; register-allocation tie - original self in esi/index in edi, ours self in edi (65 vs 79 bytes)
 00d584b0 PASS 399 valid inputs 88.6% coverage but not byte-exact; cCitizenLocomotion ctor; register-allocation tie - original arg in ebp + dead old=0 in edi, ours arg in edi (85 vs 56 bytes) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00d58510 WEAK 140 valid inputs but only 47.4% coverage; surface-orientation build; speculative vtable method slots + float path reconstruction (249 vs 256 bytes)
-00d58610 UNSUPPORTED 0/400 valid inputs (fault(read) 398, fake-arity 2); pointer-vector insertion sort; comparator is thiscall (ecx=&stack temp) and function is a 2-arg __fastcall; only 4-byte frame + call form differ (230 vs 231 bytes)
 00d58700 UNSUPPORTED 0/400 valid inputs (fault(read) 396, fake-arity 1); pointer-vector shift helper; same comparator-thiscall + 1-byte frame/call-form difference (209 vs 210 bytes)
 00d587e0 FAIL 5/5 valid inputs mismatched (first: esp); sift-up helper; arg/ABI (thiscall comparator, hi/lo order) reconstruction diverges (192 vs 182 bytes)
 00d588a0 UNSUPPORTED 0/400 valid inputs (fault(read) 400); SetUpCitizenBodyScaleRanges; PropertyManager property-lookup chain reconstructed but opaque pointers fault under difftest (468 vs 488 bytes)

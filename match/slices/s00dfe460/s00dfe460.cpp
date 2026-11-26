@@ -447,7 +447,7 @@ V4e0* V4e0::AssignWrap(V4e0* other) {
 // ===========================================================================
 //  0x00dfedb0  copy-assign for the 0x2788 element class
 // ===========================================================================
-// @ 0x00dfedb0
+// 0x00dfedb0 (byte-exact lifted version: match/slices/s00dfedb0/s00dfedb0.cpp)
 void* ElemA::CopyAssign(void* o) {
     void* s = this;
     ((CStr*)s)->Assign(o);
@@ -611,7 +611,7 @@ void* ElemB::Init(void* o) {
 // ===========================================================================
 //  0x00dff1a0  copy-ctor for the 0x2788 element class
 // ===========================================================================
-// @ 0x00dff1a0
+// 0x00dff1a0 (byte-exact lifted version: match/slices/s00dff1a0/s00dff1a0.cpp)
 void* ElemA::CopyCtor(void* o) {
     void* s = this;
     for (int i = 0; i < 8; ++i) ((uint32_t*)s)[i] = ((uint32_t*)o)[i];

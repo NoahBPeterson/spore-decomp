@@ -448,7 +448,7 @@ bool cDramaEventInstanceData::WriteData(void* stream)
 // ================================================================ 00d4dae0
 // Clears the event's associated data: releases the property list, drops the
 // (int,float) vector and each game-data noun, then drops the game-data vector.
-// @ 0x00d4dae0
+// 0x00d4dae0 (byte-exact lifted version: match/slices/s00d4dae0/s00d4dae0.cpp)
 void cDramaEventInstanceData::ClearData()
 {
     if (mpPropList) {

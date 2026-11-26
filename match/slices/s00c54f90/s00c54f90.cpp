@@ -527,7 +527,7 @@ void cMissionFindAliens::SetContactGrob()
 // ---------------------------------------------------------------------------
 // 0x00c55540  cMissionFindAliens::Init
 // ---------------------------------------------------------------------------
-// @ 0x00c55540
+// 0x00c55540 (byte-exact lifted version: match/slices/s00c55540/s00c55540.cpp)
 char cMissionFindAliens::Init()
 {
     if (!BaseMissionInit(this))

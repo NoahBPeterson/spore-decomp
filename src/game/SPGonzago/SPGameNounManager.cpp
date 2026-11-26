@@ -3345,7 +3345,7 @@ void cGNMPart::FUN_00b237d0()
     mHead108.ClearNodes();
 }
 
-// @ 0x00b23940
+// 0x00b23940 (byte-exact lifted version: match/slices/s00b23940/s00b23940.cpp)
 cNoun_s00b2_30b0* cGameNounManager_s00b2_30b0::FUN_00b23940(float* pPosition, uint32_t nSpecies, uint32_t nGeneration, uint8_t bOwner, float fHitpoint, uint8_t bDebug)
 {
     if (nSpecies == 0)
@@ -3827,7 +3827,7 @@ void FUN_00b25cd0()
     InitClassRegistry(&g_classRegistry3, 8, (int)g_145eac8, FUN_013c2000);
 }
 
-// @ 0x00b25e80
+// 0x00b25e80 (byte-exact lifted version: match/slices/s00b25e80/s00b25e80.cpp)
 void cNounManagerMessaging::FUN_00b25e80()
 {
     FUN_00b25cd0();

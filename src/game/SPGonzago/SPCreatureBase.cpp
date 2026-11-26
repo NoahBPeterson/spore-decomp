@@ -8964,7 +8964,7 @@ bool Simulator_cCreatureBase::TraceTo(const Vec3* pFrom, const Vec3* pTo, Vec3* 
     return __builtin_sqrtf(fToHit) <= __builtin_sqrtf(fToEnd);
 }
 
-// @ 0x00c0f490
+// 0x00c0f490 (byte-exact lifted version: match/slices/s00c0f490/s00c0f490.cpp)
 void Simulator_cCreatureBase::ResetCombatants()
 {
     mFlags = 0;
@@ -9375,7 +9375,7 @@ int* __cdecl FUN_00c0fda0(int* piface, int param_2)
     return piface;
 }
 
-// @ 0x00c0fe30
+// 0x00c0fe30 (byte-exact lifted version: match/slices/s00c0fe30/s00c0fe30.cpp)
 void* __thiscall CAN::fe30(void* src)
 {
     AnimBinding* d = (AnimBinding*)this;
@@ -9696,7 +9696,7 @@ void FUN_00c104d0(Vector3* out, const Vector3& up, const Vector3& fwd, const Vec
     out->z = goal.z * f + p.z * g;
 }
 
-// @ 0x00c11410
+// 0x00c11410 (byte-exact lifted version: match/slices/s00c11410/s00c11410_lifted.cpp)
 void cSpatialObject_s00c1_1410::SetSpeedState(float a, float b)
 {
     CreatureBase* owner = (CreatureBase*)((char*)this - 0xc0);
@@ -10265,7 +10265,7 @@ void cCreatureBase_s00c1_2640::UpdateRangedAttacks(float deltaTime)
     }
 }
 
-// @ 0x00c13340
+// 0x00c13340 (byte-exact lifted version: match/slices/s00c13340/s00c13340_lifted.cpp)
 void __fastcall FUN_00c13340(DestructOwner* self, void* edx)
 {
     (void)edx;
@@ -10877,7 +10877,7 @@ int CreatureBase_s00c1_4350::PlayAnimationWithTarget(uint32_t id, void* target, 
     return h;
 }
 
-// @ 0x00c14940
+// 0x00c14940 (byte-exact lifted version: match/slices/s00c14940/s00c14940.cpp)
 int CreatureBase_s00c1_4350::PlayAnimationWithTargetObj(uint32_t id, void* target, int arg5)
 {
     int h = PlayAnimation(id, 1, arg5);
@@ -10889,7 +10889,7 @@ int CreatureBase_s00c1_4350::PlayAnimationWithTargetObj(uint32_t id, void* targe
     return h;
 }
 
-// @ 0x00c149c0
+// 0x00c149c0 (byte-exact lifted version: match/slices/s00c149c0/s00c149c0.cpp)
 int CreatureBase_s00c1_4350::InterruptAnimationWithTargetObj(uint32_t id, void* target, int arg5)
 {
     int h = InterruptAnimation(id, arg5, 0);
@@ -11149,7 +11149,7 @@ void* CreatureBase_s00c1_4350::CreateBodyEffectByIndex(int partIdx, uint32_t vis
     return out;
 }
 
-// @ 0x00c15150
+// 0x00c15150 (byte-exact lifted version: match/slices/s00c15150/s00c15150.cpp)
 bool CreatureBase_s00c1_4350::DetachBodyEffectById(void* handle, void* arg3)
 {
     if (mpAnimatedCreature == 0)
@@ -14708,7 +14708,7 @@ cSPCreatureBase_s00c1_f580::cSPCreatureBase_s00c1_f580()
     mField670.mField4e8 &= 0xffff778f;      // +0xb58
 }
 
-// @ 0x00c1fe80
+// 0x00c1fe80 (byte-exact lifted version: match/slices/s00c1fe80/s00c1fe80.cpp)
 void cSPCreatureBase_s00c1_f580::FUN_00c1fe80()
 {
     mMotion58.FUN_00abf710();

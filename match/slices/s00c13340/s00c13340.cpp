@@ -254,7 +254,7 @@ struct DestructOwner {
     Rec34    mRecs[4];                // +0x0eb4
 };
 
-// @ 0x00c13340
+// 0x00c13340 (byte-exact lifted version: match/slices/s00c13340/s00c13340_lifted.cpp)
 void __fastcall FUN_00c13340(DestructOwner* self, void* edx)
 {
     (void)edx;

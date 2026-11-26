@@ -1135,7 +1135,7 @@ int __fastcall FUN_00c4e9a0(void* ecx_this, void* edx, int a)
     return 3;
 }
 
-// @ 0x00c4ea70
+// 0x00c4ea70 (byte-exact lifted version: match/slices/s00c4ea70/s00c4ea70.cpp)
 void __fastcall FUN_00c4ea70(void* ecx_this, void* edx, void* out)
 {
     void* textPtr = (char*)ecx_this + 0x14c;

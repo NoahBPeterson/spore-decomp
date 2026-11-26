@@ -3670,7 +3670,7 @@ cNPCStore_s0103_c3a0::cNPCStore_s0103_c3a0()
     }
 }
 
-// @ 0x0103d090
+// 0x0103d090 (byte-exact lifted version: match/slices/s0103d090/s0103d090.cpp)
 cNPCStore_s0103_c3a0::~cNPCStore_s0103_c3a0()
 {
     if (mSpiceCost.mpBegin && mSpiceCost.mpBegin != mSpiceCost.mpPoolBegin)

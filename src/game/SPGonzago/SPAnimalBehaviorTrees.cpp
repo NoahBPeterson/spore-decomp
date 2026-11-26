@@ -6858,7 +6858,7 @@ uint* __stdcall BuildPlanetFlags(uint* out, cEmpire* a, cEmpire* b, cPlanetRef* 
     return out;
 }
 
-// @ 0x00aee0e0
+// 0x00aee0e0 (byte-exact lifted version: match/slices/s00aee0e0/s00aee0e0.cpp)
 void RegisterPFRecordRead()
 {
     PFRecordRead* rec = (PFRecordRead*)ZoneObject_new(0x2c, "App", 0, 0, 0, 0);
@@ -7948,7 +7948,7 @@ float __cdecl FUN_00d7b1a0(CB* cb)
 }
 }  // namespace SP
 
-// @ 0x00d7b290
+// 0x00d7b290 (byte-exact lifted version: match/slices/s00d7b290/s00d7b290.cpp)
 bool __cdecl FUN_00d7b290(void* a, CB* b)
 {
   if (((Iter*)a)->AtBegin()) return false;

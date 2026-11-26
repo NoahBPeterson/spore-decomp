@@ -3290,7 +3290,7 @@ void FUN_00ba6cf0(BannerList* self)
   }
 }
 
-// @ 0x00ba6d80
+// 0x00ba6d80 (byte-exact lifted version: match/slices/s00ba6d80/s00ba6d80.cpp)
 int FUN_00ba6d80(BannerList* self, unsigned id)
 {
   if (id == 0) return *(int*)&self->m14C;
@@ -3407,7 +3407,7 @@ void FUN_00ba7100(float* pos, int* outx, int* outy)
   *outy = 0;
 }
 
-// @ 0x00ba7220
+// 0x00ba7220 (byte-exact lifted version: match/slices/s00ba7220/s00ba7220.cpp)
 void FUN_00ba7220(StarManagerCore* self, int* key)
 {
   char* grp = (char*)self->mC8;

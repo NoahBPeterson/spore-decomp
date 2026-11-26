@@ -346,7 +346,7 @@ void cAgentOrderManager::Tick(float dt)
 }
 
 // ===========================================================================
-// @ 0x00bca3d0  cAgentOrder::Assign(cAgentOrder const&)   (returns this)
+// 0x00bca3d0 (byte-exact lifted version: match/slices/s00bca3d0/s00bca3d0.cpp)  cAgentOrder::Assign(cAgentOrder const&)   (returns this)
 cAgentOrder* cAgentOrder::Assign(cAgentOrder const& o)
 {
     char* dst = (char*)this;
@@ -678,7 +678,7 @@ void FUN_00bca990(void* a1, char* list)
 }
 
 // ===========================================================================
-// @ 0x00bcaa00  cAgentOrderManager::FreeAll()
+// 0x00bcaa00 (byte-exact lifted version: match/slices/s00bcaa00/s00bcaa00.cpp)  cAgentOrderManager::FreeAll()
 void cAgentOrderManager::FreeAll()
 {
     char* self = (char*)this;
@@ -719,7 +719,7 @@ void cAgentOrderManager::ReleaseNode(char** out, char* node)
 }
 
 // ===========================================================================
-// @ 0x00bcaab0  cAgentOrderManager::AllocNode()
+// 0x00bcaab0 (byte-exact lifted version: match/slices/s00bcaab0/s00bcaab0.cpp)  cAgentOrderManager::AllocNode()
 void cAgentOrderManager::AllocNode()
 {
     char* esi = (char*)this + 8;
@@ -778,7 +778,7 @@ void cAgentOrderManager::ClearList()
 }
 
 // ===========================================================================
-// @ 0x00bcab80  cAgentOrder::CopyConstruct(cAgentOrder const&)  (returns this)
+// 0x00bcab80 (byte-exact lifted version: match/slices/s00bcab80/s00bcab80.cpp)  cAgentOrder::CopyConstruct(cAgentOrder const&)  (returns this)
 cAgentOrder* cAgentOrder::CopyConstruct(cAgentOrder const& o)
 {
     char* self = (char*)this;
@@ -820,7 +820,7 @@ cAgentOrder* cAgentOrder::CopyConstruct(cAgentOrder const& o)
 }
 
 // ===========================================================================
-// @ 0x00bcac60  cAgentOrderManager::AllocLink()
+// 0x00bcac60 (byte-exact lifted version: match/slices/s00bcac60/s00bcac60.cpp)  cAgentOrderManager::AllocLink()
 void cAgentOrderManager::AllocLink()
 {
     char* self = (char*)this;

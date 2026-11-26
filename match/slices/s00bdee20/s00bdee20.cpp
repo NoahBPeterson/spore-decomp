@@ -221,7 +221,7 @@ void __cdecl CopyAssignRange80(CElement* first, CElement* last, const CElement* 
 
 // ===========================================================================
 // 0x00bdf1a0 -- CElement range copy-construct (stride 0x80, count-based).
-// @ 0x00bdf1a0
+// 0x00bdf1a0 (byte-exact lifted version: match/slices/s00bdf1a0/s00bdf1a0.cpp)
 void __cdecl CopyConstructRange80(CElement* first, unsigned count, const CElement* src)
 {
     if (count != 0) {

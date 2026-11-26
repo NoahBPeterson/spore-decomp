@@ -1471,7 +1471,7 @@ void SP::cNest_s00c6_a550::MoveNest(const Vec3& pos)
 }
 }  // namespace SP
 
-// @ 0x00c6ab90
+// 0x00c6ab90 (byte-exact lifted version: match/slices/s00c6ab90/s00c6ab90.cpp)
 namespace SP {
 void SP::cNest_s00c6_a550::AddFootprint()
 {

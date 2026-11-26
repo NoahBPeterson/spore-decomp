@@ -588,7 +588,7 @@ IOObject* __cdecl F8e310(IOObject* pStream, const uint32_t* pData)
 }
 
 // ===========================================================================
-// @ 0x00c8e3a0  read 3 uint32 (stream reader)
+// 0x00c8e3a0 (byte-exact lifted version: match/slices/s00c8e3a0/s00c8e3a0.cpp)  read 3 uint32 (stream reader)
 // ===========================================================================
 IOObject* __cdecl F8e3a0(IOObject* pStream, uint32_t* pData)
 {

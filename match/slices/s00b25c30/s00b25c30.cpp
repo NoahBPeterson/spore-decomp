@@ -359,7 +359,7 @@ void FUN_00b25cd0()
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00b25e80  constructor of the messaging sub-object embedded at cGameNounManager+0x04
+// 0x00b25e80 (byte-exact lifted version: match/slices/s00b25e80/s00b25e80.cpp)  constructor of the messaging sub-object embedded at cGameNounManager+0x04
 // ---------------------------------------------------------------------------------------------
 class cMessagingListener {
 public:

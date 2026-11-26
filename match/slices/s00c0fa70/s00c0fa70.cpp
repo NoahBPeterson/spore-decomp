@@ -244,7 +244,7 @@ int* __cdecl FUN_00c0fda0(int* iface, int param_2) {
     return iface;
 }
 
-// @ 0x00c0fe30
+// 0x00c0fe30 (byte-exact lifted version: match/slices/s00c0fe30/s00c0fe30.cpp)
 void* __thiscall CAN::fe30(void* src) {
     AnimBinding* d = (AnimBinding*)this;
     AnimBinding* s = (AnimBinding*)src;

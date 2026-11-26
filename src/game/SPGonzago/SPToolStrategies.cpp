@@ -2726,7 +2726,7 @@ int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
     return nResult;
 }
 
-// @ 0x01052880
+// 0x01052880 (byte-exact lifted version: match/slices/s01052880/s01052880.cpp)
 struct ScanResultList {
     void* Erase(void* pItem);   // 0x00b3d390
 };
@@ -2742,7 +2742,7 @@ void AppendScanResult(void* pList, int* pOut)
     (*pOut) = ((ScanResultInfo*)pResults->Erase(pItem))->GetSize();
 }
 
-// @ 0x01052f00
+// 0x01052f00 (byte-exact lifted version: match/slices/s01052f00/s01052f00.cpp)
 Vec3* cSPToolStrategy::GetMouseWorldPosition(Vec3* pOut)
 {
     cSPSimulatorSpaceGame* pGame = GetActiveSpaceGame();
@@ -2965,7 +2965,7 @@ char cSPToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, int a3)
     return bResult;
 }
 
-// @ 0x01053bb0
+// 0x01053bb0 (byte-exact lifted version: match/slices/s01053bb0/s01053bb0.cpp)
 void cSPToolStrategy::UpdatePassive()
 {
     if (mpActiveObject != nullptr && !mpActiveObject->IsAlive())
@@ -3101,7 +3101,7 @@ bool cSPDefaultBeamTool::UpdateBeam()
     return true;
 }
 
-// @ 0x01053ee0
+// 0x01053ee0 (byte-exact lifted version: match/slices/s01053ee0/s01053ee0.cpp)
 bool cSPDefaultAoETool::StopTool()
 {
     IRefCounted* pArea = mpAreaEffect;
@@ -3151,7 +3151,7 @@ bool cSPScanToolStrategy::ActivateTool(int nToolId)
     return bResult;
 }
 
-// @ 0x01053ff0
+// 0x01053ff0 (byte-exact lifted version: match/slices/s01053ff0/s01053ff0.cpp)
 bool cSPScanToolStrategy::StopTool()
 {
     cSPSpaceInventoryItem* pHeld = nullptr;

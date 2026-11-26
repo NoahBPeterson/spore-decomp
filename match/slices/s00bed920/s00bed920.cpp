@@ -345,7 +345,7 @@ void CityWalls::FUN_00bede60(int style)
 // ---------------------------------------------------------------------------
 // 0x00bee150  cCityWalls::TransformGates  (__thiscall, ret 0)
 // ---------------------------------------------------------------------------
-// @ 0x00bee150
+// 0x00bee150 (byte-exact lifted version: match/slices/s00bee150/s00bee150.cpp)
 void CityWalls::FUN_00bee150()
 {
     int n = (int)((char*)field_15c.mpEnd - (char*)field_15c.mpBegin) / 0xc;
