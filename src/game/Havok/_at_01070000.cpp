@@ -360,7 +360,7 @@ template<class KEY> hkPointerMapBase<KEY>::hkPointerMapBase()
     clear();
 }
 
-// @ 0x0107de50
+// @ 0x0107de50 ??1?$hkPointerMapBase@K@@QAE@XZ
 template<class KEY> hkPointerMapBase<KEY>::~hkPointerMapBase()
 {
     hkFree(mTable, (mMask + 1) * (int)sizeof(KEY) * 2, 0x14);

@@ -496,6 +496,17 @@ def _def_name_after(lines, i):
     return first
 
 
+def marker_decorated(src, va):
+    """A decorated symbol written right after the address in a line-start marker, `// @ 0x0107de50 ??1?$Map@K@@QAE@XZ`:
+    names the exact function when its short name is shared (overloads, a template's instantiations; #540)."""
+    pat = re.compile(r"^\s*//\s*@\s*0x0*%x\s+(\?\S+)" % va, re.I)
+    for line in open(src, encoding="utf-8", errors="replace"):
+        m = pat.match(line)
+        if m:
+            return m.group(1)
+    return None
+
+
 def marker_names(src, va):
     """Candidate qualified names for the function at va: the definition right after a
     '// ... @ 0x<va>' marker, and names written next to the address in comments."""
@@ -599,6 +610,8 @@ def base_ident(mangled):
         m = m[3:]
     elif m.startswith(("??0", "??1")):
         m = m[3:]
+        if m.startswith("?$"):              # a class template's constructor / destructor: '??1?$C@K@@QAE@XZ' -> 'C'
+            m = m[2:]
     elif m.startswith("?"):
         m = m[1:]
     elif m.startswith("@"):
@@ -690,6 +703,11 @@ def find_symbol(coff, sid, va, src, orig_size=None):
             c = [n for n in funcs if sym in n]
             if len(c) == 1:
                 return c[0], "manifest"
+    md = marker_decorated(src, va)
+    if md:
+        if md in funcs:
+            return md, "marker names the symbol"
+        return None, "the marker names %s, which the object does not define" % md
     names = marker_names(src, va)
     sn, how = slice_symbol_name(sid, va), "symbols/slices/%s.txt" % sid
     if not sn and not SID_RE.match(sid):

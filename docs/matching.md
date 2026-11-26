@@ -165,6 +165,8 @@ Writing matchable source:
   // @ 0x0075e090` in a class body bound six cRenderer methods to an inline helper); still, keep one column-0 marker
   per function and write a callee's address as `// 0x<va>` (no `@`). `tools/matching/marker_check.py <source>`
   lists markers whose bound name differs from the slice's symbols file; the commit check prints the count.
+  When the short name is shared (overloads, or one template's several instantiations), write the decorated symbol
+  after the address: `// @ 0x0107de50 ??1?$hkPointerMapBase@K@@QAE@XZ`. check.py builds exactly that symbol (#540).
 - **Name every field you touch; no raw-offset casts** (2026-10-23). Declare the members you read or write at their
   offsets in the class (gaps as `uint32_t padN[...]`) and access them by name: `herd->mpLeader->mFlags &= ~0x400000`,
   never `*(u32*)((char*)(*(void**)((char*)p + 0xb4c)) + 0x5fc) &= 0xffbfffff`. Same bytes, but the cast chain hides
