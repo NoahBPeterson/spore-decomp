@@ -59,16 +59,34 @@ jobs:
           fi
           echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      # The downloaded .deb files are cached (warm-caches.yml fills the cache on main: pull_request_target runs may read
-      # caches but not write them). apt still unpacks and configures, but skips the ~300 MB of downloads.
+      # The installed wine, msitools and xvfb, as an archive of the files of the packages apt adds
+      # (tools/ci/wine_root.sh, made by warm-caches.yml on main: pull_request_target runs may read caches but not write
+      # them). Unpacking it takes seconds where apt took about 50. If it is missing or its wine does not run, apt
+      # installs as before.
+      - name: Restore the installed wine
+        id: wineroot
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/wine-root
+          key: wine-root-noble-v1
+
+      - name: Unpack the installed wine
+        id: unpack
+        if: steps.wineroot.outputs.cache-hit == 'true'
+        run: sh tools/ci/wine_root.sh restore ~/wine-root && echo "ok=true" >> "$GITHUB_OUTPUT" || true
+
+      # Without the archive: the downloaded .deb files are cached too (warm-caches.yml). apt still unpacks and
+      # configures, but skips the ~300 MB of downloads.
       - name: Restore the cached wine packages
+        if: steps.unpack.outputs.ok != 'true'
         id: aptcache
         uses: actions/cache/restore@v4
         with:
           path: ~/apt-archives
           key: apt-noble-winehq-v1
 
-      - name: Install wine (WineHQ stable, 32-bit), msitools, Python packages
+      - name: Install wine (WineHQ stable, 32-bit), msitools
+        if: steps.unpack.outputs.ok != 'true'
         run: |
           mkdir -p ~/apt-archives/partial
           sudo dpkg --add-architecture i386
@@ -76,12 +94,15 @@ jobs:
           sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
           sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
           if sh tools/ci/apt_update.sh; then
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+            sudo NEEDRESTART_SUSPEND=1 DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
               -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
           else
             sh tools/ci/install_cached_debs.sh "$HOME/apt-archives"
           fi
           sudo chmod -R a+rX ~/apt-archives
+
+      - name: Python packages
+        run: |
           python3 -m pip install --quiet --break-system-packages pefile capstone
           echo "WINE_VERSION=$(wine --version)" >> "$GITHUB_ENV"
 
