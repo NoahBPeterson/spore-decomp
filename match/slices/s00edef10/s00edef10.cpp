@@ -147,7 +147,7 @@ void __cdecl f00edf3c0(int p1, int p2, char flag);
 
 // ============================================================ 0x00edf410
 struct LitMgr { char pad[4]; void* GetWorldMainWindow(); };
-// @ 0x00edf410
+// 0x00edf410 (byte-exact lifted version: match/slices/s00edf410/s00edf410.cpp)
 void Ed::F410()
 {
     int* self = (int*)this;

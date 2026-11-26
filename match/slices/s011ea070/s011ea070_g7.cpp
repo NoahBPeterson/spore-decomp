@@ -519,7 +519,7 @@ uint16_t StringMap::FindOrInsert(const char* str) {
 // ---------------------------------------------------------------------------
 // 0x011eaf10 -- copy every live entry of this map into the target map
 // ---------------------------------------------------------------------------
-// @ 0x011eaf10
+// 0x011eaf10 (byte-exact lifted version: match/slices/s011eaf10/s011eaf10.cpp)
 void StringMap::CopyTo(StringMap* target) {
   MapHeader* d = mData;
   for (uint16_t i = 0; i < d->mSize; ++i) {

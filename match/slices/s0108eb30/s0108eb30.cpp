@@ -467,7 +467,7 @@ public:
 	                                                      const hkVelocityAccumulator* acc);
 };
 
-// @ 0x0108f3e0
+// 0x0108f3e0 (byte-exact lifted version: match/slices/s0108f3e0/s0108f3e0.cpp)
 hkThinBoxMotion::hkThinBoxMotion(const hkVector4& position, const hkVector4& rotation)
 	: hkBoxMotion(position, rotation)
 {

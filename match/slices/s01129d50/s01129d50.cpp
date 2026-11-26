@@ -450,7 +450,7 @@ hkBool hkConstrainedSystemFilter::isCollisionEnabled(const hkWorldRayCastInput& 
     return true;
 }
 
-// @ 0x0112a3c0
+// 0x0112a3c0 (byte-exact lifted version: match/slices/s0112a3c0/s0112a3c0.cpp)
 void hkConstrainedSystemFilter_scalarDeletingDtor();
 // Scalar deleting destructor: releases m_otherFilter, runs ~hkCollisionFilter (0x005EFD40), and (flag & 1)
 // frees through hkMemory::deallocateChunk(this, memSize, 0x24) (the class allocator's operator delete).
@@ -460,7 +460,7 @@ hkConstrainedSystemFilter::~hkConstrainedSystemFilter()
         m_otherFilter->removeReference();
 }
 
-// @ 0x0112a430
+// 0x0112a430 (byte-exact lifted version: match/slices/s0112a430/s0112a430.cpp)
 hkBool hkConstrainedSystemFilter::isCollisionEnabled(const hkCollidable& a, const hkCollidable& b) const
 {
     hkEntity* entityA = (a.m_handleType == 1) ? (hkEntity*)((uintptr_t)&a + a.m_ownerOffset) : (hkEntity*)0;

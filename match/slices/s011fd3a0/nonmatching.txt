@@ -17,7 +17,6 @@
 011fd530  109  MemBlock::Init: complete; the two-result bool (`return true/return false`) folds
                 to setne al under /O2, and the tail-then-branch layout of the second
                 VirtualAlloc differs; see scratch_s011fd3a0_papercut.md
-011fd610   62  MemBlock::Alloc: complete; the grow path (grow = (old>>1)+1, clamp to g_maxSize,
                 re-init of the free-list tail) keeps the original's arithmetic but cl hoists
                 the g_maxSize load and reorders the prologue
 011fd6f0   20  vertex shader cache bind: complete; the vtable slot is re-loaded into a register
@@ -27,7 +26,6 @@
 011fd8b0   52  ControllerShiftBlock: same in-place-add shape as 011fd870 plus the two helper
                 calls (FUN_011ffa40/FUN_01200800); see scratch_s011fd3a0_papercut.md
 011fd900   64  ControllerRebind: same as 011fd8b0, base taken from [table+0x7c]
-011fd990  147  Ctl::BuildRemap: complete; the nested scan (i over count, j over n, store j or -1)
                 uses different induction registers and moves the `valid` flag to a different
                 slot than the original's ebx
 011fda60  179  Ctl::Alloc: complete; the stride/align computation is exact, the slot-linking loop

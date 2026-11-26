@@ -354,7 +354,7 @@ void __fastcall rw_cleanup_2690(void* self)
     rw_free_block_30(self ? (char*)self + 0xc : 0);
 }
 
-// @ 0x011e26f0
+// 0x011e26f0 (byte-exact lifted version: match/slices/s011e26f0/s011e26f0.cpp)
 void __fastcall rw_UpdateSubreferencesData(void* self)
 {
     int m = *(int*)((char*)self + 0x78);

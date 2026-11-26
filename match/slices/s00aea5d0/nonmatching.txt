@@ -5,7 +5,6 @@
 00aea850  73   SpaceTool::ReleaseSelected: complete; register allocation differs
 00aea8e0  230  SpaceTool::Advance(int, int): complete; condition order + check-entry inlining differ [equiv: WEAK 224 valid, 12.9% coverage, no mismatch]
 00aea9e0  117  SpaceTool::RemoveByPtrAndUpdate: complete; register allocation differs
-00aeaa80  107  SpaceTool::RemoveMatching2: complete; register allocation differs
 00aeab40  320  SpaceTool::RemoveByKey: complete; register allocation differs
 00aeae10  122  Vec12::erase: complete (`mpEnd -= last - first` element arithmetic); loop guard/register shape differs [equiv: WEAK 144 valid, 60.8% coverage, no mismatch]
 00aeae90  346  Vec12::DoInsertValue: complete; EASTL scheduling differs

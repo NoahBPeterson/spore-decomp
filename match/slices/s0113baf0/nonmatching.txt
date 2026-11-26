@@ -12,9 +12,7 @@
 0113c290  22   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown (dec/jne vs sub/jns)
 0113c380  34   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
 0113c480  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (388 valid, 100% cov); /LTCG register allocation
-0113c550  31   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
 0113c620  22   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown
-0113c710  68   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
 0113c7a0  34   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
 0113c870  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (384 valid, 100% cov); /LTCG register allocation
 0113c950  81   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG float compare/copy scheduling

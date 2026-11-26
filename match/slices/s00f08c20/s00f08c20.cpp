@@ -571,7 +571,7 @@ void ShutdownTaskPanels()
 // ---------------------------------------------------------------------------
 // Build the object-bubble layout and its ten panel slots.
 // ---------------------------------------------------------------------------
-// @ 0x00f09580
+// 0x00f09580 (byte-exact lifted version: match/slices/s00f09580/s00f09580.cpp)
 void CreateBubblePanels()
 {
     ReadProgressTuning();

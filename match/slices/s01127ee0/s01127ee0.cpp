@@ -375,7 +375,7 @@ struct hkMemoryVtbl {
 };
 extern hkMemoryVtbl g_hkMemoryInstance;  // 0x016e4178
 
-// @ 0x011285f0
+// 0x011285f0 (byte-exact lifted version: match/slices/s011285f0/s011285f0.cpp)
 hkSpringAction::hkSpringAction(hkEntity* a, hkEntity* b, unsigned int userData)
   : hkBinaryActionBase(a, b, userData)
 {

@@ -1,0 +1,155 @@
+// 0x00b26fb0: C++ lifted from retail's machine code by vs2005-cpp lift2il (the lifter alone); byte-exact.
+// Machine-shaped on purpose: temporaries, casts and FUN_/g_ names by address. Hand-written source: match/slices/s00b26fb0/s00b26fb0.cpp.
+
+struct C_00423650 { void FUN_00423650(unsigned int, unsigned int); };
+
+// @ 0x00b26fb0
+extern "C" int __fastcall FUN_00b26fb0(char* self, int edx_unused, int a4)
+{
+    int t1002;
+    int t1004;
+    int t1005;
+    int t1006;
+    int t1007;
+    int t1011;
+    int t1012;
+    int t1013;
+    int t1014;
+    int t1018;
+    int t1019;
+    int t1020;
+    int t1021;
+    int t1025;
+    int t1026;
+    int t1027;
+    int t1028;
+    int t1029;
+    int t1030;
+    int t1031;
+    int t1032;
+    int t1033;
+    int t1034;
+    int t1035;
+    int t1036;
+    int t1037;
+    int t1038;
+    int t1039;
+    int t1040;
+    int t1041;
+    int t1042;
+    int t1043;
+    int t1044;
+    int t1045;
+    int t1046;
+    int t1047;
+    int t1048;
+    int t1049;
+    int t1050;
+    int t1051;
+    int t1052;
+    int t1053;
+    int t1054;
+    int t1055;
+    unsigned char t1056;
+    unsigned char t1057;
+    int t1058;
+    int t1059;
+    int t1060;
+    int t1062;
+    t1002 = (int)((int)(a4));
+    t1004 = (int)((int)(self));
+    if (t1002 != t1004) {
+        t1005 = (int)(*(int*)((char*)(t1002) + 4));
+        t1006 = (int)(*(int*)((char*)(t1002)));
+        t1007 = (int)(t1004);
+        ((C_00423650*)(t1007))->FUN_00423650((unsigned int)(t1006), (unsigned int)(t1005));
+    }
+    t1011 = (int)(t1002 + (int)16);
+    t1012 = (int)(t1004 + (int)16);
+    if (t1011 != t1012) {
+        t1013 = (int)(*(int*)((char*)(t1011) + 4));
+        t1014 = (int)(*(int*)((char*)(t1011)));
+        ((C_00423650*)(t1012))->FUN_00423650((unsigned int)(t1014), (unsigned int)(t1013));
+    }
+    t1018 = (int)(t1002 + (int)32);
+    t1019 = (int)(t1004 + (int)32);
+    if (t1018 != t1019) {
+        t1020 = (int)(*(int*)((char*)(t1018) + 4));
+        t1021 = (int)(*(int*)((char*)(t1018)));
+        ((C_00423650*)(t1019))->FUN_00423650((unsigned int)(t1021), (unsigned int)(t1020));
+    }
+    t1025 = (int)(*(int*)((char*)(t1002) + 48));
+    *(int*)((char*)(t1004) + 48) = (int)(t1025);
+    t1026 = (int)(*(int*)((char*)(t1002) + 52));
+    *(int*)((char*)(t1004) + 52) = (int)(t1026);
+    t1027 = (int)(*(int*)((char*)(t1002) + 56));
+    *(int*)((char*)(t1004) + 56) = (int)(t1027);
+    t1028 = (int)(*(int*)((char*)(t1002) + 60));
+    *(int*)((char*)(t1004) + 60) = (int)(t1028);
+    t1029 = (int)(*(int*)((char*)(t1002) + 64));
+    *(int*)((char*)(t1004) + 64) = (int)(t1029);
+    t1030 = (int)(*(int*)((char*)(t1002) + 68));
+    *(int*)((char*)(t1004) + 68) = (int)(t1030);
+    t1031 = (int)(*(int*)((char*)(t1002) + 72));
+    *(int*)((char*)(t1004) + 72) = (int)(t1031);
+    t1032 = (int)(*(int*)((char*)(t1002) + 76));
+    *(int*)((char*)(t1004) + 76) = (int)(t1032);
+    t1033 = (int)(*(int*)((char*)(t1002) + 80));
+    *(int*)((char*)(t1004) + 80) = (int)(t1033);
+    t1034 = (int)(*(int*)((char*)(t1002) + 84));
+    *(int*)((char*)(t1004) + 84) = (int)(t1034);
+    t1035 = (int)(*(int*)((char*)(t1002) + 88));
+    *(int*)((char*)(t1004) + 88) = (int)(t1035);
+    t1036 = (int)(*(int*)((char*)(t1002) + 92));
+    *(int*)((char*)(t1004) + 92) = (int)(t1036);
+    t1037 = (int)(*(int*)((char*)(t1002) + 96));
+    *(int*)((char*)(t1004) + 96) = (int)(t1037);
+    t1038 = (int)(*(int*)((char*)(t1002) + 100));
+    *(int*)((char*)(t1004) + 100) = (int)(t1038);
+    t1039 = (int)(*(int*)((char*)(t1002) + 104));
+    *(int*)((char*)(t1004) + 104) = (int)(t1039);
+    t1040 = (int)(*(int*)((char*)(t1002) + 108));
+    *(int*)((char*)(t1004) + 108) = (int)(t1040);
+    t1041 = (int)(*(int*)((char*)(t1002) + 112));
+    *(int*)((char*)(t1004) + 112) = (int)(t1041);
+    t1042 = (int)(*(int*)((char*)(t1002) + 116));
+    *(int*)((char*)(t1004) + 116) = (int)(t1042);
+    t1043 = (int)(*(int*)((char*)(t1002) + 120));
+    *(int*)((char*)(t1004) + 120) = (int)(t1043);
+    t1044 = (int)(*(int*)((char*)(t1002) + 124));
+    *(int*)((char*)(t1004) + 124) = (int)(t1044);
+    t1045 = (int)(*(int*)((char*)(t1002) + 128));
+    *(int*)((char*)(t1004) + 128) = (int)(t1045);
+    t1046 = (int)(*(int*)((char*)(t1002) + 132));
+    *(int*)((char*)(t1004) + 132) = (int)(t1046);
+    t1047 = (int)(*(int*)((char*)(t1002) + 136));
+    *(int*)((char*)(t1004) + 136) = (int)(t1047);
+    t1048 = (int)(*(int*)((char*)(t1002) + 140));
+    *(int*)((char*)(t1004) + 140) = (int)(t1048);
+    t1049 = (int)(*(int*)((char*)(t1002) + 144));
+    *(int*)((char*)(t1004) + 144) = (int)(t1049);
+    t1050 = (int)(*(int*)((char*)(t1002) + 148));
+    *(int*)((char*)(t1004) + 148) = (int)(t1050);
+    t1051 = (int)(*(int*)((char*)(t1002) + 152));
+    *(int*)((char*)(t1004) + 152) = (int)(t1051);
+    t1052 = (int)(*(int*)((char*)(t1002) + 156));
+    *(int*)((char*)(t1004) + 156) = (int)(t1052);
+    t1053 = (int)(*(int*)((char*)(t1002) + 160));
+    *(int*)((char*)(t1004) + 160) = (int)(t1053);
+    t1054 = (int)(*(int*)((char*)(t1002) + 164));
+    *(int*)((char*)(t1004) + 164) = (int)(t1054);
+    t1055 = (int)(*(int*)((char*)(t1002) + 168));
+    *(int*)((char*)(t1004) + 168) = (int)(t1055);
+    t1056 = (unsigned char)(*(unsigned char*)((char*)(t1002) + 172));
+    *(unsigned char*)((char*)(t1004) + 172) = (unsigned char)(t1056);
+    t1057 = (unsigned char)(*(unsigned char*)((char*)(t1002) + 173));
+    *(unsigned char*)((char*)(t1004) + 173) = (unsigned char)(t1057);
+    t1058 = (int)(*(int*)((char*)(t1002) + 176));
+    *(int*)((char*)(t1004) + 176) = (int)(t1058);
+    t1059 = (int)(*(int*)((char*)(t1002) + 180));
+    *(int*)((char*)(t1004) + 180) = (int)(t1059);
+    t1060 = (int)(*(int*)((char*)(t1002) + 184));
+    *(int*)((char*)(t1004) + 184) = (int)(t1060);
+    t1062 = (int)(t1004);
+    return (int)(t1062);
+}

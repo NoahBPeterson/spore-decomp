@@ -807,7 +807,7 @@ float FUN_00ec08d0(int obj, int a, int b, int d, int stim, char* out)
     return 0.0f;
 }
 
-// @ 0x00ec0970
+// 0x00ec0970 (byte-exact lifted version: match/slices/s00ec0970/s00ec0970.cpp)
 float FUN_00ec0970(int obj, int a, int b, int d, int stim, char* out)
 {
     int sim;

@@ -280,7 +280,7 @@ void __fastcall FUN_00addd20(void* self, int /*edx*/)
 // ================================================================================
 // 0x00addd90 -- clear all hashtable buckets
 // ================================================================================
-// @ 0x00addd90
+// 0x00addd90 (byte-exact lifted version: match/slices/s00addd90/s00addd90.cpp)
 void __fastcall FUN_00addd90(void* self, int /*edx*/)
 {
     char* s = (char*)self;

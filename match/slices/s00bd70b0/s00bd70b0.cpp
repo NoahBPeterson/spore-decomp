@@ -486,7 +486,7 @@ char Sim::FUN_00bd7ad0(int* param_2)
 }
 
 // ===========================================================================
-// @ 0x00bd7b90 — Simulator::ISimulatorSerializable::Read.
+// 0x00bd7b90 (byte-exact lifted version: match/slices/s00bd7b90/s00bd7b90.cpp) — Simulator::ISimulatorSerializable::Read.
 // ===========================================================================
 struct SimRead_ {
     char m00b18600(int*);                                   // 0x00b18600 SP::cGameData::Read

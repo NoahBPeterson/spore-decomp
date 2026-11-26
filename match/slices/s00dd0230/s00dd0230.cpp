@@ -887,7 +887,7 @@ void* AssetDiscovery_Data::ConstructPlain()
     return this;
 }
 
-// @ 0x00dd0dc0 (factory immediately after ConstructPlain; part of the 00dd0da0 range)
+// 0x00dd0dc0 (byte-exact lifted version: match/slices/s00dd0dc0/s00dd0dc0.cpp) (factory immediately after ConstructPlain; part of the 00dd0da0 range)
 void* __cdecl CreateAssetDiscoveryDataPlain()
 {
     AssetDiscovery_Data* p = (AssetDiscovery_Data*)operator new(0x9c, "Spui", 0, 0, 0, 0);

@@ -7,7 +7,6 @@
 011e6870  264  startnextrequest: complete (lock, pending-request promotion, path/id re-scan). Eq FAIL (harness cannot set ecx-only `this`).
 011e69d0   87  Stream::QueueFile: complete (getfreerequest, StringnCopy, field init, queuerequest, lock, startnextrequest). Eq FAIL (executes unresolved externals).
 011e6aa0  105  Stream::QueueMem: complete (getfreerequest, field init, queuerequest, lock, startnextrequest). Eq FAIL (executes unresolved externals).
-011e6b50  124  Stream::GetChunk: complete (lock, size accounting, free-list walk). Eq FAIL (executes unresolved externals).
 011e6c00   15  lookup request by id, returns +0x130. Eq PASS (100% coverage).
 011e6cd0   87  set priority threshold + AsyncOp::SetPriority wake. Eq UNSUPPORTED (needs `this` in ecx; harness ABI).
 011e6d20   67  StreamImpl allocator shim. Eq UNSUPPORTED (harness fake-arity). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 esp]

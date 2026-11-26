@@ -2,3 +2,4 @@
 slices/s00f09d70/s00f09d70.cpp  ?FUN_00f09db0@@YAPAUElem44@@PAU1@00@Z  00f09db0  /O2 /MD /Gy /TP
 slices/s00f09d70/s00f09d70.cpp  ?FUN_00f0a690@@YA_NPAX@Z  00f0a690  /O2 /MD /Gy /TP
 slices/s00f09d70/s00f09d70.cpp  ?FUN_00f0a6c0@@YAXPAH@Z  00f0a6c0  /O2 /MD /Gy /TP
+slices/s00f09d70/s00f09d70_lifted.cpp  _FUN_00f09d70  00f09d70  /O2 /MD /Gy /TP

@@ -1,0 +1,1 @@
+slices/s01192f50/s01192f50.cpp  _FUN_01192f50  01192f50  /O2 /MD /Gy /EHsc /TP

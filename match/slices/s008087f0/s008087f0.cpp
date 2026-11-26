@@ -303,7 +303,7 @@ struct RolloverFrameLayout : EditorResourceBase {
     virtual ~RolloverFrameLayout();
 };
 
-// @ 0x00808ce0
+// 0x00808ce0 (byte-exact lifted version: match/slices/s00808ce0/s00808ce0.cpp)
 RolloverFrameLayout::~RolloverFrameLayout()
 {
     mLayout.Shutdown(true);

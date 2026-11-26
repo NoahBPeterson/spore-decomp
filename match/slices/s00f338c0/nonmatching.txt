@@ -7,5 +7,4 @@
 00f340e0  363  complete: cTerrainSphere dtor frees vectors, message handler, refcounted members; equiv FAIL (unmapped call site past 7efff000)
 00f342d0  162  complete: ReporterList::Add grow/rotate/insert with refcounted slots; equiv PASS (297 valid, 86.4% coverage)
 00f344e0  215  complete: cTerrainSphere::SetTerrainVectors copies both vectors, ApplyVectors by value; equiv FAIL (by-value call argument/order mismatch)
-00f34560  276  complete: cTerrainSphere::PublishWorld resource props replacement, register vector, global reporter list; equiv WEAK (400 valid, 7.6% coverage)
 00f34660  342  complete: cTerrainSphere::SetPlayerColorIDs property lookup, script sets and Variant wrap; equiv UNSUPPORTED (0/400 valid inputs, fault traps)

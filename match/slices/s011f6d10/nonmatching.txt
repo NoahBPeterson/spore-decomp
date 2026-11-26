@@ -18,7 +18,6 @@
                complete; the function takes the entry count in EAX and the table in ECX
                (custom LTCG ABI), which a C declaration cannot express. difftest
                UNSUPPORTED (original reads eax at entry; register ABI).
-011f7800   15  regalloc: restore saved vertex shader (device SetVertexShader vtbl+0x170 when
                the saved shader differs): logic is now right (guard on g_1711ef0, compare with
                g_vertexShader, call, store the saved pointer back; quick check / emulator finds no
                mismatch). Residual is pure register/schedule shape. Retail:

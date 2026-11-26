@@ -126,7 +126,7 @@ struct Vector {
         return position;
     }
 
-    // @ 0x00eef110
+    // 0x00eef110 (byte-exact lifted version: match/slices/s00eef110/s00eef110.cpp)
     void push_back(const T& value) {
         T* pEnd = mpEnd;
         if (pEnd < mpCapacity) {

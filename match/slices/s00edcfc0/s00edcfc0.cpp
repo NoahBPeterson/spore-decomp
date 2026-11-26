@@ -436,7 +436,7 @@ void* __fastcall f00edd580(C* self)
 
 // ============================================================ 0x00edd6b0
 extern "C" void EA_Messaging_RemoveHandler(int, int, int, int, int);
-// @ 0x00edd6b0
+// 0x00edd6b0 (byte-exact lifted version: match/slices/s00edd6b0/s00edd6b0.cpp)
 void __fastcall f00edd6b0(C* self)
 {
     char* t = (char*)self;
@@ -477,7 +477,7 @@ void __fastcall f00edd6b0(C* self)
 extern "C" void* SP_WindowManager(); // 0x0067caa0
 extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);   // 0x0080fee0 (equiv t2)
 struct LitMgr { char pad[4]; void* GetWorldMainWindow(); };
-// @ 0x00edd810
+// 0x00edd810 (byte-exact lifted version: match/slices/s00edd810/s00edd810.cpp)
 void __fastcall f00edd810(C* self)
 {
     char* t = (char*)self;

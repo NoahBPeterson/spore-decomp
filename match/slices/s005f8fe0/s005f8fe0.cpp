@@ -440,13 +440,13 @@ template struct DequeBase<DequeItem, core_allocator_adapter, 4>;
 // =============================================================================================
 // eastl string16 -> Key pair construction shims (LTCG-generated single-object helpers).
 
-// @ 0x005F9080
+// 0x005f9080 (byte-exact lifted version: match/slices/s005f9080/s005f9080.cpp)
 void* FUN_005f9080(PairWK* pThis, const WStr* pStr, const Key* pKey) {
   new (pThis) PairWK(*pStr, *pKey);
   return pThis;
 }
 
-// @ 0x005F90C0
+// 0x005f90c0 (byte-exact lifted version: match/slices/s005f90c0/s005f90c0.cpp)
 void* FUN_005f90c0(PairKW* pThis, const Key* pKey, const WStr* pStr) {
   new (pThis) PairKW(*pKey, *pStr);
   return pThis;
@@ -470,7 +470,7 @@ struct StringProps {
   bool FUN_005f97c0(const wchar_t* name, uint32 code, WStr* out, int flag, const wchar_t* suffix);
 };
 
-// @ 0x005F9230
+// 0x005f9230 (byte-exact lifted version: match/slices/s005f9230/s005f9230.cpp)
 bool StringProps::Prop(uint32 code, WStr& out) {
   switch (code) {
     case 0x2399be55u:

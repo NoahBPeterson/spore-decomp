@@ -485,7 +485,7 @@ int* FUN_00ec9a80(int param_1, int param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec9ae0
-// @ 0x00ec9ae0
+// 0x00ec9ae0 (byte-exact lifted version: match/slices/s00ec9ae0/s00ec9ae0.cpp)
 int FUN_00ec9ae0(int param_1, int param_2)
 {
     int id = (*(int**)((char*)g_16c757c + 4))[param_1];

@@ -1,0 +1,1 @@
+slices/s0112a3c0/s0112a3c0.cpp  @FUN_0112a3c0@12  0112a3c0  /vc71 /O2 /MD /Gy /TP

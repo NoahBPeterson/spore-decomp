@@ -223,7 +223,7 @@ void FUN_011eb060(int* p)
 // ---------------------------------------------------------------------------------------------------------
 // 011eb0a0: rw::core::arena::rw_ArenaTypeRegistry::Find
 // ---------------------------------------------------------------------------------------------------------
-// @ 0x11eb0a0
+// 0x011eb0a0 (byte-exact lifted version: match/slices/s011eb0a0/s011eb0a0.cpp)
 ArenaTypeReg* rw_ArenaTypeRegistry_Find(rw_ArenaTypeRegistry* self, unsigned int id)
 {
 	ArenaTypeReg* first = &self->m_record[0];

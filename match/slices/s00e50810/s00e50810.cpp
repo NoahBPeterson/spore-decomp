@@ -505,7 +505,7 @@ void FUN_00e51580(void* self) {
   FUN_00e394f0(0x4ba824f0, (void*)(*(int*)(cg + 0x5190) + 0x10), &local[0], &local[2], &local[6]);
 }
 
-// @ 0x00e51650
+// 0x00e51650 (byte-exact lifted version: match/slices/s00e51650/s00e51650.cpp)
 void FUN_00e51650() {
   char* cg = (char*)gCellGame_16b3c04;
   if (*(char*)(cg + 0x5168) != 0) return;

@@ -26,3 +26,4 @@ slices/s0107e670/s0107e670.cpp  ?scalar_deleting_dtor@hkStdioStreamReader@@QAEPA
 slices/s0107e670/s0107e670.cpp  ?strCmp@hkString@@SAHPBD0@Z  0107f3d0  /vc71 /O2 /MD /Gy /TP
 slices/s0107e670/s0107e670.cpp  ??6hkOstream@@QAEAAV0@PBD@Z  0107ee30  /vc71 /O2 /MD /Gy /TP
 slices/s0107e670/s0107e670.cpp  ?openWriter@hkDefaultStreambufFactory@@UAEPAVhkStreamWriter@@PBD@Z  0107e820  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670_lifted.cpp  _FUN_0107e670@4  0107e670  /vc71 /O2 /MD /Gy /TP

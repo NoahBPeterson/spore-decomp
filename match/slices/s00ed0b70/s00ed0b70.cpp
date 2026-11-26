@@ -139,7 +139,7 @@ void ObjC30::f(int a, int b)
 
 // ---------------------------------------------------------------- 0x00ed0c60
 struct ObjC60 { unsigned f(unsigned, int*); };
-// @ 0x00ed0c60
+// 0x00ed0c60 (byte-exact lifted version: match/slices/s00ed0c60/s00ed0c60.cpp)
 unsigned ObjC60::f(unsigned a, int* b)
 {
     if (a == 0x30c11c7) {

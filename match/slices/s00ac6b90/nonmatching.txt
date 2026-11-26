@@ -1,7 +1,5 @@
 # va  diff-bytes  reason
 00ac6b90  47  complete; cGroundLayer ctor (cGonzagoSubsystem base + three vtables + floats + empty embedded vector); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
 00ac7680  167  complete; addInterpolated (sqrtf distance + two alpha ramps + push_back/operator=); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (393 valid, 98.4% cov)
-00ac7080  62  complete; clearVec (erase-all; reproduces the divide-by-0x3c negative-count magic); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
-00ac70c0  87  complete; reset (zero +0x24, inline erase-all, FUN_0067dd50()->vt[20](0xb)); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (398 valid, 100% cov)
 00ac6c90  263  complete; eastl range copy of the 0x3c-byte cSPTransform, member-wise (two shorts, x/y/z/w, 9-float matrix, s) with null-destination guard, returns advanced dst; retail's per-slot xmm->stack->int stores for the matrix cannot be expressed in C++ (MSVC folds a float->bits round trip back into plain copies); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, pool-limit/write faults)
 00ac6e80  181  complete; vector<cSPTransform>::DoInsertValue (shift path: copy-ctor into mpEnd, copy_backward, Assign into the slot; grow path: do_copy + placement copy-ctor + do_copy + free); retail keeps the doubled capacity in a [esp+0xc] stack slot while the source form keeps it in a register; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs)

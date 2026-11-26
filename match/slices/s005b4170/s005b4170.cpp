@@ -305,7 +305,7 @@ bool PlanarInter::DoOnMouseMove(float x, float y, int mods) {
   return true;
 }
 
-// @ 0x005b4ad0
+// 0x005b4ad0 (byte-exact lifted version: match/slices/s005b4ad0/s005b4ad0.cpp)
 void PlanarInter::SetBlock(RefA** src, uint32_t a, uint32_t b, uint32_t c, bool d, bool e) {
   RefA* blk = *src;
   RefA* old = m1c;

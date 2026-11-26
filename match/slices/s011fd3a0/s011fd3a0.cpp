@@ -286,7 +286,7 @@ void MemBlock::Deinit(void)
 }
 
 // 011fd610 -- MemBlock::Alloc
-// @ 0x011fd610
+// 0x011fd610 (byte-exact lifted version: match/slices/s011fd610/s011fd610.cpp)
 void* MemBlock::Alloc(void)
 {
     if (m_count != 0)
@@ -541,7 +541,7 @@ int __cdecl ControllerRebind(void* self, void* table)
 }
 
 // 011fd990 -- map every frame index of the source table to the target table's index (or -1)
-// @ 0x011fd990
+// 0x011fd990 (byte-exact lifted version: match/slices/s011fd990/s011fd990.cpp)
 int Ctl::BuildRemap(int slot, u32* table)
 {
     u32* s = (u32*)this;

@@ -363,7 +363,7 @@ void NameStringMapDoRehash(void* pHashtable, uint32_t nNewBucketCount)
     (void)nNewBucketCount;
 }
 
-// @ 0x00895370  eastl::fixed_string<char,12,1>::fixed_string(const char*)
+// 0x00895370 (byte-exact lifted version: match/slices/s00895370/s00895370.cpp)  eastl::fixed_string<char,12,1>::fixed_string(const char*)
 void* FixedStringAssign(void* pThis, const char* pText)
 {
     uint32_t* p = (uint32_t*)pThis;

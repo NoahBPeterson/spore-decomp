@@ -517,7 +517,7 @@ void cTerrainSphere::m00f97130()
     FUN_00f92be0(ms, 10, m10);
 }
 
-// @ 0x00f974d0
+// 0x00f974d0 (byte-exact lifted version: match/slices/s00f974d0/s00f974d0.cpp)
 Vec3* cTerrainSphere::m00f974d0(Vec3* out, Vec3* p1, Vec3* p2)
 {
     void* m = *(void**)((char*)this + 0x2c);
