@@ -4466,11 +4466,11 @@ void ResetVector3Map(cCommunityEditor* pEditor)
 
 // @ 0x00bf4e50
 void cCommunityEditor::RemoveAllCities(cCity_s00bf_4170* pCity)
-{
-    ((SubObject6c*)((char*)this + 0x6c))->AddRef(pCity);
-    for (int i = 0; i < (int)(mpCitiesEnd - mpCitiesBegin); ++i)
+{    ((SubObject6c*)((char*)this + 0x6c))->AddRef(pCity);
+    for (int i = 0; i < (int)(mpCitiesEnd - mpCitiesBegin); ++i) {
+        _ReadWriteBarrier();
         mpCitiesBegin[i]->VehicleCreateHook(this);
-}
+    }}
 
 // @ 0x00bf4eb0
 void cCommunityEditor::RebuildCityFromTerrainSphere()

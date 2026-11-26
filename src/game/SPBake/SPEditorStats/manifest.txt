@@ -7,3 +7,4 @@
 ../src/game/SPBake/SPEditorStats.cpp  ?Reset@TreeHead@@QAEXXZ  004e8850  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorStats.cpp  ?LowerBound@RBTree@@QAEPAURBSink@@PAU2@PAH@Z  004e89c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorStats.cpp  ?FreeNodes@FreeCtx@@QAEXPAX@Z  004e8a30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?ConvertOwnerEntries@@YAXPAUEntryOwner@@PAUVerbSink_s004e_7990@@@Z  004e7da0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

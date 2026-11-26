@@ -32,3 +32,4 @@ slices/s00545220/s00545220.cpp  ?EndNextID@HandshakeParser@Feed@SP@@QAEXXZ  0054
 slices/s00545220/s00545220.cpp  ?EndUserID@HandshakeParser@Feed@SP@@QAEXXZ  00546090  /Od /Ob1 /MD /Gy /TP
 slices/s00545220/s00545220.cpp  ?EndField20@HandshakeParser@Feed@SP@@QAEXXZ  005460d0  /Od /Ob1 /MD /Gy /TP
 slices/s00545220/s00545220.cpp  ?EndScreenName@HandshakeParser@Feed@SP@@QAEXXZ  00546110  /Od /Ob1 /MD /Gy /TP
+slices/s00545220/s00545220.cpp  ?EndElementHandler@AtomParser@Feed@SP@@SAXPAXPB_W@Z  005452b0  /Od /Ob1 /MD /Gy /TP

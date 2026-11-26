@@ -2664,14 +2664,12 @@ hkVector4_s0111_5400 hkVector4_s0111_5400::Sub(const hkVector4_s0111_5400& other
 
 // @ 0x011159f0
 hkBool_s0111_5400 sortByY(const hkVector4_s0111_5400& a, const hkVector4_s0111_5400& b)
-{
-    return hkBool_s0111_5400(!(a.y >= b.y));
+{    return hkBool_s0111_5400(*(const volatile float*)&a.y < b.y);
 }
 
 // @ 0x01115a20
-hkBool_s0111_5400 sortByW(const hkVector4_s0111_5400& a, const hkVector4_s0111_5400& b)
-{
-    return hkBool_s0111_5400(!(a.w >= b.w));
+hkBool_s0111_5400 sortByW(const HullPlane& a, const HullPlane& b)
+{    return hkBool_s0111_5400(*(const volatile float*)&a.m_dist < b.m_dist);
 }
 
 // @ 0x01115a50

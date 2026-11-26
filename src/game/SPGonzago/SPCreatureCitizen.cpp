@@ -4090,6 +4090,7 @@ void cGameData_s00c2_78e0::RemoveOwner()
     if (mpOwnerTribe != nullptr)
         FUN_00c0d3a0(this);
 
+    void* p58;
     void* pObj = mEditor.First();
     if (pObj != nullptr) {
         void* pContainer = ((cGroundEditorRes*)FUN_00b3d2b0())->getContainer();
@@ -4100,9 +4101,13 @@ void cGameData_s00c2_78e0::RemoveOwner()
         else {
             ((cGroundEditorRes*)FUN_00b3d2b0())->FUN_00ac79e0(pObj, &mEditor);
         }
+        p58 = mField58;
+    }
+    else {
+        p58 = mField58;
     }
 
-    ((cDispatchObject_s00c2_78e0*)FUN_00b3d260())->CallArg(0x3c, mField58);
+    ((cDispatchObject_s00c2_78e0*)FUN_00b3d260())->CallArg(0x3c, p58);
     FUN_00c1c8e0();
 
     mVec1018.Erase(mVec1018.mpBegin, mVec1018.mpEnd);

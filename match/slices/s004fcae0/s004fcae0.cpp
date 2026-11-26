@@ -78,18 +78,26 @@ Ability::Ability()
 
 // @ 0x004fcb90
 Ability::~Ability()
-{
+{    struct Helper16 {
+        __forceinline void Destroy() {
+            for (uint32_t i = (uint32_t)((Vec16*)this)->mpBegin; i < (uint32_t)((Vec16*)this)->mpEnd; i += 0x10) {
+            }
+            ScratchSlots<3>();
+            ((Vec16*)this)->f_00554b10();
+        }
+    };
+    struct Helper24 {
+        __forceinline void Destroy() {
+            for (uint32_t j = (uint32_t)((Vec24*)this)->mpBegin; j < (uint32_t)((Vec24*)this)->mpEnd; j += 0x18) {
+            }
+            ScratchSlots<3>();
+            ((Vec24*)this)->f_004fd940();
+        }
+    };
     *(int**)this = g_013f11b8;
-    Vec16* pTail = &mVec1c;
-    for (uint32_t i = (uint32_t)pTail->mpBegin; i < (uint32_t)pTail->mpEnd; i += 0x10) {
-    }
-    pTail->f_00554b10();
-    Vec24* pBody = &mVec8;
-    for (uint32_t j = (uint32_t)pBody->mpBegin; j < (uint32_t)pBody->mpEnd; j += 0x18) {
-    }
-    pBody->f_004fd940();
-    *(int**)this = g_013ef094;
-}
+    ((Helper16*)&mVec1c)->Destroy();
+    ((Helper24*)&mVec8)->Destroy();
+    *(int**)this = g_013ef094;}
 
 // @ 0x004fcc20
 int Ability::Add(const Vector3* pos, float a, float b, int c)

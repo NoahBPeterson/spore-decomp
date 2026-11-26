@@ -356,15 +356,24 @@ void init_15dd784()
 
 // @ 0x0125bd80
 void init_15de138()
-{
-    extern const char kEditorAllocName;   // 0x13eb430
+{    extern const char kEditorAllocName;   // 0x13eb430
+    extern NewObj* g_15de138;             // 0x15de138
+    struct LocalVObj {
+        virtual void V0() {}
+    };
+    struct LocalWrap {
+        LocalVObj* p;
+        __forceinline void CallV0() { p->V0(); }
+    };
     void* p = EAAllocate(0x2c, &kEditorAllocName, 0, 0, 0, 0);
-    NewObj* obj = p ? ((NewObj*)p)->Ctor(4, 4, -1) : 0;
-    *(NewObj**)0x15de138 = obj;
-    if (*(NewObj**)0x15de138)
-        (*(NewObj**)0x15de138)->V0();
-    atexit(&FUN_013bcd30);
-}
+    struct S4 {
+        __forceinline static void Pad() { uint32_t s[4]; }
+    };
+    S4::Pad();
+    g_15de138 = p ? ((NewObj*)p)->Ctor(4, 4, -1) : 0;
+    if (g_15de138)
+        ((LocalWrap*)&g_15de138)->CallV0();
+    atexit(&FUN_013bcd30);}
 
 // @ 0x0125dbc0
 void init_15de57c()

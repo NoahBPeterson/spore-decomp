@@ -17,3 +17,4 @@
 ../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?Func_00ff74f0@cSPSimPlanetHighLOD_s00ff_6a50@@QAEXXZ  00ff74f0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ffab60@SP@@YAXXZ  00ffab60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlanet.cpp  ?FUN_00ffb180@cSPSimPlanetHighLOD_s00ff_b180@@QAEXXZ  00ffb180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlanet.cpp  ??1cSPSimPlanetHighLOD_s00ff_8460@@QAE@XZ  00ff8780  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
