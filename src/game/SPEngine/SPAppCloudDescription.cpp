@@ -2078,7 +2078,7 @@ void SWARM_CloudAddCommands(Registrar* p1, Registrar* p2)
     p1->AddGroup(PTR_s_cloud, grp);
 }
 
-// @ 0x00f57590
+// 0x00f57590 (byte-exact lifted version: match/slices/s00f57590/s00f57590_lifted.cpp)
 cCloudDescription_s00f5_7590& cCloudDescription_s00f5_7590::operator=(const cCloudDescription_s00f5_7590& src)
 {
     m08 = src.m08;

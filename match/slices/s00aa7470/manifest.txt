@@ -2,3 +2,4 @@
 slices/s00aa7470/s00aa7470.cpp  ?FUN_00aa7fa0@@YAXHH@Z  00aa7fa0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00aa7470/s00aa7470.cpp  ?FUN_00aa82e0@Self@@QAEXD@Z  00aa82e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00aa7470/s00aa7470.cpp  ?FUN_00aa8370@Self@@QAEXH@Z  00aa8370  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00aa7470/s00aa7470_lifted.cpp  @FUN_00aa7470@12  00aa7470  /O2 /MD /Gy /EHsc /TP /arch:SSE

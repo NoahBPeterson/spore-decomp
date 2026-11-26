@@ -5,3 +5,4 @@ slices/s009d75b0/s009d75b0.cpp  ?DestroyRecords@@YAPAUS@@PAU1@00@Z  009d7c80  /O
 slices/s009d75b0/s009d75b0.cpp  ?AddElem@TOwner@@QAEHPAXPBUV3@@PBUV4@@@Z  009d7d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009d75b0/s009d75b0.cpp  ??4Item@@QAEAAU0@ABU0@@Z  009d7e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009d75b0/s009d75b0.cpp  ?AllocCopyItems@@YGPAUItem@@IPAU1@0@Z  009d8660  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009d75b0/s009d75b0_lifted.cpp  @FUN_009d75b0@8  009d75b0  /O2 /MD /Gy /TP /arch:SSE

@@ -2910,7 +2910,7 @@ void VecU32::DoInsertValue(u32* pos, const u32& v)
     }
 }
 
-// @ 0x009d75b0
+// 0x009d75b0 (byte-exact lifted version: match/slices/s009d75b0/s009d75b0_lifted.cpp)
 GaitElemInit* GaitElemInit::Init()
 {
     char* p = (char*)this;
