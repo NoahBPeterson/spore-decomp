@@ -95,6 +95,7 @@
 006f4f90  009518a0  slices/s009515e0/s009515e0.cpp  ?DoRealloc@?$vector@UCurvePoint@@@  # clone: its addresses differ from the twin's
 006f5bc0  005e9a00  slices/s005e9440/s005e9440.cpp  ?DoInsertValue@?$vector@_WUsp_vector_allocator@eastl@@@eastl@@QAEXPA_WAB_W@Z  # clone: its addresses differ from the twin's
 00754f80  009518a0  slices/s009515e0/s009515e0.cpp  ?DoRealloc@?$vector@UCurvePoint@@@  # clone: its addresses differ from the twin's
+007646c0  00764670  slices/s00763cb0/s00763cb0.cpp  ?Wrap670@Loader@@QAEXH@Z  # hand-written row borrowing its twin's source; its own source differs
 007809f0  00951900  slices/s009515e0/s009515e0.cpp  ?DoRealloc@?$vector@UVector3@Math@@@  # clone: its addresses differ from the twin's
 00799840  005e92c0  slices/s005e8470/s005e8470.cpp  ??0?$VectorBase@GVallocator@eastl@@@eastl@@QAE@IABVallocator@1@@Z  # clone: its addresses differ from the twin's
 00799d60  009518a0  slices/s009515e0/s009515e0.cpp  ?DoRealloc@?$vector@UCurvePoint@@@  # clone: its addresses differ from the twin's
@@ -147,6 +148,7 @@
 00836850  00618af0  slices/s00618150/s00618150.cpp  ??0string8N@Pollen@SP@@QAE@ABU012@@Z  # clone: its addresses differ from the twin's
 00836910  0060a2c0  slices/s00609790/s00609790.cpp  ?assign@?$fixed_string_base@D@eastl@@QAEAAU12@PBD0@Z  # clone: its addresses differ from the twin's
 00837270  00616960  slices/s00616360/s00616360.cpp  ?append@string8@@QAEAAU1@ID@Z  # clone: its addresses differ from the twin's
+0083e140  00675770  slices/s006755c0/s006755c0.cpp  ?clear@UIntHashTable@@QAEXXZ  # clone: its addresses differ from the twin's
 00841100  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 00841110  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 00841120  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
@@ -178,9 +180,12 @@
 00844850  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 0087fbe0  005e9b10  slices/s005e9440/s005e9440.cpp  ?DoInsertValue@?$rbtree@V?$basic_string@_WVallocator@eastl@@@eastl@@V12@U?$less@V?$basic_string@_WVallocator@eastl@@@eastl@@@2@U?$use_self@V?$basic_string@_WVallocator@eastl@@@eastl@@@2@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@V?$basic_string@_WVallocator@eastl@@@eastl@@@eastl@@_N@2@ABV?$basic_string@_WVallocator@eastl@@@2@Utrue_type@2@@Z  # clone: its addresses differ from the twin's
 00880040  005ea0d0  slices/s005e9440/s005e9440.cpp  ?DoInsertValue@?$rbtree@V?$basic_string@_WVallocator@eastl@@@eastl@@U?$pair@$$CBV?$basic_string@_WVallocator@eastl@@@eastl@@H@2@U?$less@V?$basic_string@_WVallocator@eastl@@@eastl@@@2@U?$use_first@U?$pair@$$CBV?$basic_string@_WVallocator@eastl@@@eastl@@H@eastl@@@2@@eastl@@QAE?AU?$rbtree_iterator@U?$pair@$$CBV?$basic_string@_WVallocator@eastl@@@eastl@@H@eastl@@@2@U32@ABU?$pair@$$CBV?$basic_string@_WVallocator@eastl@@@eastl@@H@2@Utrue_type@2@@Z  # clone: its addresses differ from the twin's
+00885fa0  00616aa0  slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  # clone: its addresses differ from the twin's
 00886200  00616960  slices/s00616360/s00616360.cpp  ?append@string8@@QAEAAU1@ID@Z  # clone: its addresses differ from the twin's
 00886780  00618af0  slices/s00618150/s00618150.cpp  ??0string8N@Pollen@SP@@QAE@ABU012@@Z  # clone: its addresses differ from the twin's
+00886db0  005965b0  slices/s005962e0/s005962e0.cpp  ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  # clone: its addresses differ from the twin's
 00899480  0060a600  slices/s00609790/s00609790.cpp  ?DoInsertValue@?$fixed_vector_base@PAVcCookie@Pollen@SP@@@eastl@@QAEXPAPAVcCookie@Pollen@SP@@ABQAV345@@Z  # clone: its addresses differ from the twin's
+0089a620  00643790  slices/s00642530/s00642530.cpp  ?push_back@?$VecT@UEntry@@@@QAEXABUEntry@@@Z  # clone: its addresses differ from the twin's
 008d69f0  005e9b10  slices/s005e9440/s005e9440.cpp  ?DoInsertValue@?$rbtree@V?$basic_string@_WVallocator@eastl@@@eastl@@V12@U?$less@V?$basic_string@_WVallocator@eastl@@@eastl@@@2@U?$use_self@V?$basic_string@_WVallocator@eastl@@@eastl@@@2@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@V?$basic_string@_WVallocator@eastl@@@eastl@@@eastl@@_N@2@ABV?$basic_string@_WVallocator@eastl@@@2@Utrue_type@2@@Z  # clone: its addresses differ from the twin's
 008f2420  006162d0  slices/s00614f20/s00614f20.cpp  ?Init@cSmallB@@QAEPAU1@HH@Z  # clone: its addresses differ from the twin's
 008fbc80  005d6ff0  slices/s005d61b0/s005d61b0.cpp  ?DoInsertValue@?$hashtable@PB_WPB_W@eastl@@  # clone: its addresses differ from the twin's
@@ -357,6 +362,7 @@
 00e4b9e0  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 00e4cec0  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 00e828f0  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
+00e82d40  00e82d30  slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82d30@SP@@YAXXZ  # hand-written row borrowing its twin's source; its own source differs
 00e82dc0  00e82d10  slices/s00e829c0/s00e829c0.cpp  ?FUN_00e82d10@SP@@YAXI@Z  # hand-written row borrowing its twin's source; its own source differs
 00e9da40  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 00ea42b0  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
@@ -424,6 +430,7 @@
 0107ac10  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 01082580  009515e0  slices/s009515e0/s009515e0.cpp  ?GetName@AnimationCurveFactory@  # clone: its addresses differ from the twin's
 010c8fe0  01087e20  slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkRigidBody@@YAXPAX@Z  # clone: its addresses differ from the twin's
+010dc150  010ddde0  slices/s010dcd40/s010dcd40.cpp  hkConvexListAgent_staticLinearCastForwarder  # clone: its addresses differ from the twin's
 010ef560  01087e20  slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkRigidBody@@YAXPAX@Z  # clone: its addresses differ from the twin's
 01277b20  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01277b40  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
@@ -734,6 +741,8 @@
 012b5c90  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 012cc200  0129dec0  slices/s0129de70/s0129de70.cpp  ?FUN_0129dec0@@  # clone: its addresses differ from the twin's
 012e3f70  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+012fc210  -  synth/int_tweak_init.cpp  ??__Eg_0164dd80@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+012fc260  -  synth/int_tweak_init.cpp  ??__Eg_0164dd90@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 01319980  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 013199a0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0131d170  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
@@ -759,14 +768,39 @@
 01362960  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01364a00  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01364a20  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+0136b420  -  synth/int_tweak_init.cpp  ??__Eg_016a0a60@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 0136bb60  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0136bb80  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+0136bf10  -  synth/int_tweak_init.cpp  ??__Eg_016a0da4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0136c010  -  synth/int_tweak_init.cpp  ??__Eg_016a0ddc@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0136c330  -  synth/int_tweak_init.cpp  ??__Eg_016a0e7c@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0136c630  -  synth/int_tweak_init.cpp  ??__Eg_016a0f0c@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0136c990  -  synth/int_tweak_init.cpp  ??__Eg_016a0fac@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0136c9e0  -  synth/int_tweak_init.cpp  ??__Eg_016a0fbc@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0136ce20  -  synth/int_tweak_init.cpp  ??__Eg_016a107c@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 0136d9c0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0136d9e0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0136e530  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0136e550  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01370530  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01370550  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+013728e0  -  synth/int_tweak_init.cpp  ??__Eg_016accd4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372930  -  synth/int_tweak_init.cpp  ??__Eg_016acce4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372980  -  synth/int_tweak_init.cpp  ??__Eg_016accf4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+013729d0  -  synth/int_tweak_init.cpp  ??__Eg_016acd04@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372a20  -  synth/int_tweak_init.cpp  ??__Eg_016acd14@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372a70  -  synth/int_tweak_init.cpp  ??__Eg_016acd24@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372ac0  -  synth/int_tweak_init.cpp  ??__Eg_016acd34@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372b10  -  synth/int_tweak_init.cpp  ??__Eg_016acd44@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372b60  -  synth/int_tweak_init.cpp  ??__Eg_016acd54@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372bb0  -  synth/int_tweak_init.cpp  ??__Eg_016acd64@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372c50  -  synth/int_tweak_init.cpp  ??__Eg_016acd84@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372ca0  -  synth/int_tweak_init.cpp  ??__Eg_016acd94@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372cf0  -  synth/int_tweak_init.cpp  ??__Eg_016acda4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372d40  -  synth/int_tweak_init.cpp  ??__Eg_016acdb4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01372d90  -  synth/int_tweak_init.cpp  ??__Eg_016acdc4@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+013734e0  -  synth/int_tweak_init.cpp  ??__Eg_016acf20@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+01373590  -  synth/int_tweak_init.cpp  ??__Eg_016acf40@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 0137d7e0  0137e1b0  slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  # clone: its addresses differ from the twin's
 0137d990  0137e1b0  slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  # clone: its addresses differ from the twin's
 0137dc10  0137e1b0  slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  # clone: its addresses differ from the twin's
@@ -785,6 +819,7 @@
 013881d0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 013881f0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01388690  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+01388fa0  -  synth/int_tweak_init.cpp  ??__Eg_016c7a2c@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 01389040  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 013890e0  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01389100  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
@@ -807,6 +842,9 @@
 0138a040  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0138df30  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 0138df50  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
+0138e430  -  synth/int_tweak_init.cpp  ??__Eg_016c8948@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0138e480  -  synth/int_tweak_init.cpp  ??__Eg_016c8958@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
+0138e4d0  -  synth/int_tweak_init.cpp  ??__Eg_016c8968@@YAXXZ  # synth (int_tweak_init): a name points elsewhere than retail
 01391690  0129df10  slices/s0129de70/s0129de70.cpp  ?FUN_0129df10@@  # clone: its addresses differ from the twin's
 01396930  -  synth/prop_desc_three_stack_copy.cpp  ?FUN_01396930@@YAXXZ  # synth (prop_desc_three_stack_copy): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
 01396ef0  -  synth/struct15_pair_ctor_size0.cpp  ?FUN_01396ef0@@YAXXZ  # synth (struct15_pair_ctor_size0): retail keeps one copy of 0x00b1fbf0 as a plain value and relocates the other; the template spells both alike
