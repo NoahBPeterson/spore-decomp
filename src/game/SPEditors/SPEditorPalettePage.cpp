@@ -261,7 +261,7 @@ class cSPPalettePage {
 };
 // ---- items of slice s005c85d0 end
 
-// @ 0x005c7f50
+// 0x005c7f50 (byte-exact lifted version: match/slices/s005c7f50/s005c7f50.cpp)
 namespace SP {
 cSPPalettePageBase_s005c_7500::cSPPalettePageBase_s005c_7500() {
   mFloat14 = 0.0f;

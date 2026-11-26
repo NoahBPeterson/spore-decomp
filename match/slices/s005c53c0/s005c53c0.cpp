@@ -267,7 +267,7 @@ cSPPalette::cSPPalette() {
   m3c = -1;
 }
 
-// @ 0x005c5e90
+// 0x005c5e90 (byte-exact lifted version: match/slices/s005c5e90/s005c5e90.cpp)
 cSPPalette::~cSPPalette() {
   ShutdownChildren();
 }

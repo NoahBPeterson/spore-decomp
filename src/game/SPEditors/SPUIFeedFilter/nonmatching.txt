@@ -8,7 +8,6 @@
 00660880 271 FeedEntry predicate; loop keeps a cached count/base instead of recomputing from the vector header
 006609a0 203 eastl vector<Key>::operator=; param held in eax instead of ebx, whole schedule differs; equiv FAIL (5/87 inputs mismatched; ours faults on unmapped read at 0x00b84c91 where original returns)
 00660ad0 84 vector range construct; out/first/last register assignment differs
-00660b90 92 map clear; keeps w in a register and uses ebx, original reloads and uses ebp for the end anchor
 00660e30 232 cSPUIFeedFilter destructor - complete, EA cleanup scheduling differs; equiv WEAK (161/400 valid: 188 fault(read) + 35 fault(write) + 14 VirtualFree + 2 fake-arity, 84.0% cov, 0 mismatches): FUN_00660720/FUN_00d0c930/FUN_00646d70 are all __thiscall (this + stack args, callee pops) — the old cdecl declarations leaked 0x1c of stack and left a garbage `this` flags: /O2 /MD /Gy /TP /arch:SSE2
 00661020 219 cSPUIFeedFilter constructor - complete, many field stores not byte-exact; equiv PASS (400 valid, 100% cov): FUN_0066a5e0 is __thiscall on this+0x44 (2 stack args), the old cdecl form leaked 4 bytes flags: /O2 /MD /Gy /TP /arch:SSE2
 00661180 107 GetArcheTypeAssetKeys - complete, constraint/template path differs flags: /O2 /MD /Gy /TP /arch:SSE2

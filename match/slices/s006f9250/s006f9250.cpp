@@ -431,7 +431,7 @@ void CFilterChain::Notify2(int a, int b) {
   m224 = 0;
 }
 
-// @ 0x006f9cf0  (release every GPU-side resource held by the chain)
+// 0x006f9cf0 (byte-exact lifted version: match/slices/s006f9cf0/s006f9cf0.cpp)  (release every GPU-side resource held by the chain)
 void CFilterChain::Shutdown() {
   void* rs = (void*)ReportCleanup();
   void* ctx = (this != 0) ? (void*)((char*)this + 4) : 0;

@@ -1833,7 +1833,7 @@ float SP::cDirectPropertyList::GetFloatProperty(unsigned int index) const
   return r;
 }
 
-// @ 0x006a27d0
+// 0x006a27d0 (byte-exact lifted version: match/slices/s006a27d0/s006a27d0.cpp)
 bool SP::cDirectPropertyList::HasProperty(unsigned int key) const
 {
   if (key != 0 && key < mNumDirectProps) return true;

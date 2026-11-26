@@ -343,7 +343,7 @@ __declspec(noinline) const char* CharTypeStringFindEnd(const char* pBegin, const
 }
 }  // namespace eastl
 
-// @ 0x0065b1b0
+// 0x0065b1b0 (byte-exact lifted version: match/slices/s0065b1b0/s0065b1b0.cpp)
 bool cSPUIAssetWebBrowser::Shutdown()
 {
   if (mMode == 0) {

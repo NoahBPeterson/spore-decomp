@@ -15,12 +15,8 @@
 00806bf0 71 complete; SSE scheduling differs
 00806ca0 56 complete; SSE scheduling differs
 00806de0 72 complete; loop/register differences
-008074a0 184 complete; control-flow/register differences
 00807590 63 complete; loop/register differences
 00807600 106 complete; ctor/control-flow differences
-00807690 46 complete; register differences
-008076f0 102 complete; register differences
-00807760 74 complete; allocator ctor arg/register differences
 00807880 32 complete: CreateImageWindow - resource-key pack + ImageDrawable/Window composition; only the v[2]/v[3] int->float store schedule differs; equiv: WEAK 248 valid inputs, 15.8% coverage (early-return path dominates)
 00807a50 215 complete; button-drawable selection/register schedule differs
 00807cb0 70 complete; register/scheduling differences
@@ -40,5 +36,4 @@
 008297b0 509 Tick: complete; scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0082a040 22 complete translation; cl groups the operator-new argument pushes instead of interleaving them with the vptr/member stores flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082a140 664 complete translation; local frame is 0x2c vs the retail 0x3c and the early-failure path/rect copy schedule differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
-0082a450 128 complete translation; AutoRef release sequence codegen differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082a500 782 complete translation; retail 16-byte-aligns the frame and builds the rect corners with unary-negation xorps/movss pairs; cl emits movdqa copies and different stack offsets flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2

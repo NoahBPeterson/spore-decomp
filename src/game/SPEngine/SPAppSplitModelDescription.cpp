@@ -472,7 +472,7 @@ cSplitModelKernelDescription* SplitModelKernelRead(EA::IO::IStream_s007e_06b0* s
     return p;
 }
 
-// @ 0x007e07f0
+// 0x007e07f0 (byte-exact lifted version: match/slices/s007e07f0/s007e07f0.cpp)
 void cSplitControllerEffectCommand::Execute(EA::ArgScript::cArguments_s007e_06b0& args)
 {
     int count;

@@ -423,7 +423,7 @@ void cJobManager::PromoteJobPriorityUnderLock(cJobData* job, int priority) {
 }
 
 // ===========================================================================
-// @ 0x00690930  cJobManager::SetJobPriorityUnderLock
+// 0x00690930 (byte-exact lifted version: match/slices/s00690930/s00690930.cpp)  cJobManager::SetJobPriorityUnderLock
 // ===========================================================================
 void cJobManager::SetJobPriorityUnderLock(cJobData* job, int priority) {
     int oldPriority = job->mRealPriority;
@@ -450,7 +450,7 @@ void cJobManager::SetJobPriorityUnderLock(cJobData* job, int priority) {
 }
 
 // ===========================================================================
-// @ 0x00690b50  cJobManager::CheckDependentPriority
+// 0x00690b50 (byte-exact lifted version: match/slices/s00690b50/s00690b50.cpp)  cJobManager::CheckDependentPriority
 // ===========================================================================
 void cJobManager::CheckDependentPriority(cJobData* job, int priority) {
     int pri = job->mRealPriority;

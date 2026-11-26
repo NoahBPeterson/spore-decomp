@@ -227,7 +227,7 @@ bool SerReadC(SerItem* out, void* src) {
 struct SerBuffer { void* type; void* base; unsigned count; };
 struct SerItem14 { char pad[0x14]; unsigned count; };
 
-// @ 0x007fde00
+// 0x007fde00 (byte-exact lifted version: match/slices/s007fde00/s007fde00.cpp)
 bool SerLoadVector(SerBuffer* p, void* self, SerItem14* item) {
     IObj** src = *(IObj***)((char*)self + 4);
     IObj** dst = (IObj**)(*(int*)((char*)p + 4) + *(int*)((char*)item + 0x10));

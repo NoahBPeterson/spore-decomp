@@ -171,7 +171,7 @@ struct S_c88a00 { void f(int, float); };
 struct S_c8a200 { void f(int, float); };
 
 // ================================================================ 0x00ed8690
-// @ 0x00ed8690
+// 0x00ed8690 (byte-exact lifted version: match/slices/s00ed8690/s00ed8690.cpp)
 void FUN_00ed8690(void)
 {
     void* nm = FUN_00b3d300();

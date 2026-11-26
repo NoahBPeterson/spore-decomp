@@ -2286,7 +2286,7 @@ bool cRowJobData::StepUp(CJob* job)
     return job->Continuation((void*)&FUN_007b03d0, this);
 }
 
-// @ 0x007b02f0
+// 0x007b02f0 (byte-exact lifted version: match/slices/s007b02f0/s007b02f0.cpp)
 SP::cTexturePreload::~cTexturePreload()
 {}
 

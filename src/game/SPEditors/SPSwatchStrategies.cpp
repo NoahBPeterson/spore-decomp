@@ -4878,7 +4878,7 @@ void cSwatch3DView_s005f_4310::RemoveModel(cMWModel_s005f_4310* model)
 }
 }  // namespace SP
 
-// @ 0x005f4f80
+// 0x005f4f80 (byte-exact lifted version: match/slices/s005f4f80/s005f4f80.cpp)
 namespace SP {
 void cSPSwatch_s005f_4310::Init(Key_s005f_4310* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e, uint32_t scale)
 {
@@ -4946,7 +4946,7 @@ void ShrinkTransformVector()
 { /* partial */ }
 }  // namespace SP
 
-// @ 0x005f5970
+// 0x005f5970 (byte-exact lifted version: match/slices/s005f5970/s005f5970.cpp)
 namespace SP {
 void RefVec::clear()
 {

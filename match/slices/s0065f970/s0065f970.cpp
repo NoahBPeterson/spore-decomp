@@ -579,7 +579,7 @@ struct FeedFilterD {
     void Clear();
 };
 
-// @ 0x00660b90
+// 0x00660b90 (byte-exact lifted version: match/slices/s00660b90/s00660b90.cpp)
 void FeedFilterD::Clear() {
     for (FeedTreeNode* it = mBegin; it != (FeedTreeNode*)&mEnd; it = (FeedTreeNode*)RBTreeIncrement(it)) {
         IWindow* w = it->mWin;

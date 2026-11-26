@@ -6,4 +6,3 @@
 00681700  197  Obj1700 copy ctor: 4-byte gap added after the 12-byte S8 so the vector block starts at +0x10 (the copied-from this/Reserve were off by 4); original reserves an 8-byte locals frame (ours 4) and homes the string length/end in different slots
 00681800  310  Obj1800 copy ctor: 0x60 plain copy emitted with different register rotation; same size, all copies present
 00681a10  80   ObjA copy ctor: vec copies match except lea/push scheduling and first arg register choice
-00681b50  87   ObjB50 operator=: struct-copy register rotation differs; all six member assignments in order; equiv: UNSUPPORTED (0 valid inputs, faults)

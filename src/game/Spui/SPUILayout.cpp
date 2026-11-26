@@ -675,7 +675,7 @@ void __thiscall cSPUILayoutObjectCollectionV8::OnUnload()
     ((cSPUILayoutObjectCollection_s0080_f7c0*)coll)->detach_parent();
 }
 
-// @ 0x00810310
+// 0x00810310 (byte-exact lifted version: match/slices/s00810310/s00810310.cpp)
 bool cSPUILayoutObjectCollection::SetVisibility(bool vis)
 {
     u8* s = (u8*)this;

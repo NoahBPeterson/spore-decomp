@@ -1,4 +1,3 @@
-00747ac0 111 0x38-record copy ctor register shape differs; equiv: PASS 1200 inputs 100% cov
 00747b70 179 uninitialized_copy of refcounted 0x3c elements shape differs
 00747c90 128 uninitialized_fill_n shape differs; equiv PASS (303 valid inputs, 0 mismatches, 100.0% coverage)
 00747eb0  61 make_heap<cOccluder*> schedule/copy flavour differs

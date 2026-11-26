@@ -1,5 +1,3 @@
 # va  diff-bytes  reason
-007eb060  25  int-range copy complete (first!=last guard, null-dst check and relative-index loop); equiv WEAK on inputs only: 403/1200 valid, 35% coverage because every loop-entering input faults retail on the generated first/dst ints (only first==last runs validate; all match); chk no MATCH, scheduling differs (cl folds off+dst)
-007eb360  38  vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs
 007eb3b0  66  copyDown complete; end moves by the ORIGINAL src/dst span (cursor kept in a local, long shift keeps retail's round-down-to-4) and the original dst is returned; register allocation (retail edi destination pointer vs our folded [ebx+edx]) differs; equiv PASS 268/800, 100% coverage; hybrid copy in src/game/SPEngine/SPAppTelemetry.cpp also fixed (PASS 268/800)
 007eb140  478  complete serializer write (cTelemetry::Write: magic + per-key item dumps + session); EASTL iterator/loop-tail scheduling differs; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (original faults 391/400 random inputs, 0 valid)

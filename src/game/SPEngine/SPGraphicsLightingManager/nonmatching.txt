@@ -44,7 +44,6 @@
 0070ced0 324 eastl::vector<SP::cLightingConfig>::DoInsertValue; compare/order correct, cl EH state machine differs
 0070d080 451 eastl::vector<SP::cLightingConfig>::DoInsertValues; helper call shapes differ
 0070d2c0 699 SP::cLightingWorld::cLightingWorld; all field stores/calls reproduced, scheduling/SSE differ
-0070ddd0 113 SP::cLightingManager::Shutdown; range-clear + map teardown reproduced, registers differ
 0070de90  327   cLightingManager message handler (target subobject at manager+4); register/frame layout differs, retail finds the config via an out-of-line AutoRef; equiv WEAK (400 valid, 11.6% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 0070e060  206   regalloc: R49 (2026-11-17): member LConfigVec::Resize with single-dtor LConfigTmp view gives 258/256 B and matching frame; retail keeps ctor result in ebp; tried temp arg, const-ref temp, Init() returning this (manifest symbol must become ?Resize@LConfigVec@@QAEXI@Z) | Earlier note: eastl::vector<SP::cLightingConfig> resize; helper inlining/temp differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 0070e160  226   lighting-state reload; this kept in ebx vs retail esi and frame 0x18 vs 0x20; equiv WEAK (342 valid, 57.1% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

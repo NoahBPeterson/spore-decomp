@@ -1598,7 +1598,7 @@ hkRigidBody_s005c_dd00* SP::cSPEditorSpine_s005c_dd00::CreateVertebraBody(float 
   return 0;
 }
 
-// @ 0x005ce060
+// 0x005ce060 (byte-exact lifted version: match/slices/s005ce060/s005ce060.cpp)
 int* SP::cSPEditorSpine_s005c_dd00::AddVertebraBody(int* out, float scale, hkTransform_s005c_dd00* transform)
 {
   out[0] = 0;

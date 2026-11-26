@@ -830,7 +830,7 @@ void Vec130::Resize(unsigned n)
     }
 }
 
-// @ 0x006ff100
+// 0x006ff100 (byte-exact lifted version: match/slices/s006ff100/s006ff100.cpp)
 cVertexFragmentInfo& cVertexFragmentInfo::operator=(const cVertexFragmentInfo& o)
 {
     const cVertexFragmentInfo* s = &o;

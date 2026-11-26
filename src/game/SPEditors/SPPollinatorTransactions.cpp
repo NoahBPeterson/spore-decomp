@@ -4463,7 +4463,7 @@ cMsgString8::~cMsgString8()
 {}
 }}  // namespace SP::Pollen
 
-// @ 0x00618c70
+// 0x00618c70 (byte-exact lifted version: match/slices/s00618c70/s00618c70.cpp)
 namespace SP { namespace Pollen {
 void FillFeedInfo(const FeedSource* src, FeedInfo* dst)
 {

@@ -2,8 +2,6 @@
 007ee060 883 cVolumeDescription effect update - interpolation codegen differs (no similar-size symbol)
 007ee480 111 write cVolumeDescription - virtual write calls differ
 007ee540 227 SP::cVolumeDescription::cVolumeDescription - field/vtable store schedule differs
-007ee630 111 SP::VolumeRead - read helper shapes differ
 007ee730 69 VolumeColor command - vector-conv vcall differs [equiv UNSUPPORTED: 0/1200 valid inputs (_CxxThrowException)]
 007ee780 35 VolumeSliceSpacing command - member MainArguments now called thiscall (ecx=args, one stack arg) and the converter is the +4 object (vtable+0x98); only frame/reg allocation differs [equiv PASS (323 valid, 100% cov)]
-007ee7b0 38 VolumeMaterial command - hash call shape differs
 007ee7f0 512 copy cVolumeDescription - unrolled field copy vs loop

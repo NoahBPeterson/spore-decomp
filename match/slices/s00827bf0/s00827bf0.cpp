@@ -464,7 +464,7 @@ void CPL::SetPositionAndOffset(float x, float y, float offX, float offY) {
 // Variant reset differs); see nonmatching.txt.
 // ===========================================================================
 // 00828450 pair element copy-ctor
-// @ 0x00828450
+// 0x00828450 (byte-exact lifted version: match/slices/s00828450/s00828450.cpp)
 Elem::Elem(const Elem& o) : first(o.first), mpObject(o.mpObject) {
   if (mpObject) ((IRefThing*)mpObject)->AddRef();
   mVariant = o.mVariant;

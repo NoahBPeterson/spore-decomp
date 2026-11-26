@@ -1201,7 +1201,7 @@ Obj* Obj::copyAssign(const Obj& src)
     return this;
 }
 
-// @ 0x00694210
+// 0x00694210 (byte-exact lifted version: match/slices/s00694210/s00694210_lifted.cpp)
 Elem* FUN_00694210(Elem* first, Elem* last, Elem value)
 {
     for (;;)

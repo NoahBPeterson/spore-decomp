@@ -199,7 +199,7 @@ struct cSplitControllerEffectCommand : EA::ArgScript::cBlockCommandBase {
     virtual ~cSplitControllerEffectCommand() {}
 };
 
-// @ 0x007e07f0
+// 0x007e07f0 (byte-exact lifted version: match/slices/s007e07f0/s007e07f0.cpp)
 void cSplitControllerEffectCommand::Execute(EA::ArgScript::cArguments& args) {
     int count;
     const char** av = args.MainArguments(&count, 1, 3);

@@ -1,0 +1,1 @@
+slices/s00807760/s00807760.cpp  @FUN_00807760@8  00807760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -801,7 +801,7 @@ void KeyVec::push_back(const Key& v) {
   }
 }
 
-// @ 0x005F5970
+// 0x005f5970 (byte-exact lifted version: match/slices/s005f5970/s005f5970.cpp)
 void RefVec::clear() {
   AutoRefCount<cMWModel>* begin = mpBegin;
   AutoRefCount<cMWModel>* end = mpEnd;

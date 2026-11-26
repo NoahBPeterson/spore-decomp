@@ -3,8 +3,6 @@
 006de490 15 insertion sort variant (prev-shift form, opposite compare); register naming only; equiv WEAK (29% cov) flags: /O2 /MD /Gy /EHsc /TP
 006de5e0 278 image best-fit packer (thiscall); control flow + register allocation differ; equiv WEAK (48.5% cov) flags: /O2 /MD /Gy /EHsc /TP
 006de710 226 image best-fit packer variant (thiscall); control flow + register allocation differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
-006de980 88 heap sift-down wrapper (unsigned); call/argument shape differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
-006de9f0 86 heap sift-down wrapper (signed); call/argument shape differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
 006dea60 168 heap sift-down wrapper for 0x34-byte elements; takes the 0x34-byte record by value and forwards it to the sift-up helper; equiv: PASS 333/600 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP
 006dec60 391 mesh position/uv scale by sqrt; thiscall (ECX=mesh, two stack args) with a named mVertexBase field, BakeSqrtSS root and float stores; equiv: WEAK 523 valid, 46.9% cov flags: /O2 /MD /Gy /EHsc /TP
 006dede0 280 insertion sort of 0x34-byte records; block copy schedule differs; equiv WEAK (20.9% cov) flags: /O2 /MD /Gy /EHsc /TP

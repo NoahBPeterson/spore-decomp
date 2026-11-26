@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00810020 20 complete; ctor register allocation (zero in eax, this in esi) differs
 008100d0 7 complete; derived-vtable store scheduling / pop edi placement differ
-00810310 90 complete; visibility compare/object re-load schedule differs
 008103a0 60 complete; clamped-visibility arithmetic + vcall schedule differ
 00810af0 106 complete; rbtree insert node allocation/key copy schedule differs
 00810d30 137 complete; message construction path reconstructed; register schedule differs

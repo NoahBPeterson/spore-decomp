@@ -590,7 +590,7 @@ void ElemVec::DoDestroyValues(Elem* first, Elem* last)
     ((LocalAutoRef*)&first->mpObject)->Destroy();
   }}
 
-// @ 0x00828450
+// 0x00828450 (byte-exact lifted version: match/slices/s00828450/s00828450.cpp)
 Elem::Elem(const Elem& o)
 : first(o.first), mpObject(o.mpObject) {
   if (mpObject) ((IRefThing*)mpObject)->AddRef();

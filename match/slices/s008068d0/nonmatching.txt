@@ -4,11 +4,7 @@
 00806bf0  77  complete; SSE scheduling differs
 00806ca0  64  complete; SSE scheduling differs
 00806de0  84  complete; loop/register differences
-008074a0  188 complete; control-flow/register differences
 00807590  65  complete; loop/register differences
 00807600  104 complete; FUN_0082aa20 is a `ret 0xc` thiscall, so the ctor-built ScrollFrameVertical goes in ecx with (p1,p3,0) on the stack; still not byte-exact: 141 B vs 143 B (operator_new's name push is `push 0` instead of the address, `xor esi,esi` is hoisted before the null test, the null-sf early return uses `xor eax,eax` instead of `mov eax,edi`, and a duplicate tail block)
-00807690  50  complete; register differences
-008076f0  91  complete; register differences
-00807760  78  complete; allocator ctor arg/register differences
 008070d0  571  complete; source 558 B vs retail 613 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid
 00807340  198  complete; source 171 B vs retail 232 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'ret'] vs ['call', 'call', 'call', 'call',]

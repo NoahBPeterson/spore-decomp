@@ -396,7 +396,7 @@ class cSPUIAssetWebBrowser {
   void FUN_0065b6b0(int msg, int param);
 };
 
-// @ 0x0065b1b0
+// 0x0065b1b0 (byte-exact lifted version: match/slices/s0065b1b0/s0065b1b0.cpp)
 bool cSPUIAssetWebBrowser::Shutdown() {
   if (mMode == 0) {
     IMessageServer* ms = MessageServer();

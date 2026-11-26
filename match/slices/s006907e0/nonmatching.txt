@@ -1,5 +1,3 @@
 006907e0  -    complete; QueueJobUnderLock EH/register near-miss
 006908a0  108  complete; PromoteJobPriorityUnderLock register near-miss
-00690930  83   complete; SetJobPriorityUnderLock register near-miss
-00690b50  43   complete; CheckDependentPriority near-miss
 00691260  -    complete; AddJobDependency (deps/dependents list splice) near-miss
