@@ -3510,27 +3510,25 @@ RefObj::~RefObj()
 }
 
 // @ 0x0068f0b0
+extern "C" char g_14036f0[];                // EA::Thread::kTimeoutNone (this object's copy)
 bool CJobHolder::SetJob(void* target, void* job)
 {
-    struct JobPtr {
-        void* mJob;
-        __forceinline JobPtr(void* p) : mJob(p) {
-            if (mJob) ((FnAddRef)AddRef_68F950)(mJob);
-        }
-        __forceinline ~JobPtr() {
-            if (mJob) ((FnRelease)Release_690120)(mJob);
-        }
+    struct JobPtr {                         // intrusive_ptr<SP::cJob>
+        SP::cJob* mpObject;
+        __forceinline JobPtr(SP::cJob* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+        __forceinline ~JobPtr() { if (mpObject) mpObject->Release(); }
     };
-    mMutex.Lock((unsigned)0x014036f0);
-    void* old = mJob;
-    JobPtr held(old);                                   // strong ref to the old job
-    if (job != mJob) {
-        JobPtr add(job);                                // (acquire, freed below)
-        mJob = job;
-        if (old) ((FnRelease)Release_690120)(old);
+    SP::cJob* newJob = (SP::cJob*)job;
+    mMutex.Lock((unsigned)g_14036f0);
+    JobPtr old((SP::cJob*)mJob);            // keeps the previous job alive until the end
+    if (newJob != mJob) {                   // intrusive_ptr::operator=(newJob) on mJob
+        SP::cJob* const prev = (SP::cJob*)mJob;
+        if (newJob) newJob->AddRef();
+        mJob = newJob;
+        if (prev) prev->Release();
     }
     mMutex.Unlock();
-    ((FnAddWeak)AddWeakDependency_6913C0)(target, old);
+    ((SP::cJob*)target)->AddWeakDependency(old.mpObject);
     return true;
 }
 
