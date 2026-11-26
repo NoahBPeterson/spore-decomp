@@ -14,3 +14,4 @@ slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac89e0@@YAPAPAXPAPAX00@Z  00ac89e0  /O2 /
 slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac8cd0@CVis@@QAEXHH@Z  00ac8cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ac7ab0/s00ac7ab0.cpp  ?scalarDtor@GonzagoSub@@QAEPAXE@Z  00ac7fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac7f80@COrder@@QAEXXZ  00ac7f80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac7eb0@COrder@@QAEXPAU1@0@Z  00ac7eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE
