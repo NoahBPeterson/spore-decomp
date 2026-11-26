@@ -56,12 +56,14 @@ struct COrder {                                // citizen/order object (vptr at 
     char    pad1[0x128 - 0x20];
     void*   m128;                              // +0x128
     int     m12c;                              // +0x12c
+    int     m130;                              // +0x130
     float   m134;                              // +0x134
 
     int   FUN_00ac7ab0(float amount, COrder* order, int kind);
+    void  Cleanup(COrder* order, void* noun);   // 0x00ac79e0: remove the noun registered at +0x128
     float FUN_00ac7d10(float amount, int list, int node);
     bool  FUN_00ac7de0(COrder* order);
-    void  FUN_00ac7eb0(COrder* order);
+    void  FUN_00ac7eb0(COrder* order, COrder* target);
     bool  FUN_00ac7ef0(int a, int b);
     void  FUN_00ac7f80();
 };
@@ -268,10 +270,10 @@ bool COrder::FUN_00ac7de0(COrder* order)
 // ===========================================================================
 // @ 0x00ac7eb0
 // ===========================================================================
-void COrder::FUN_00ac7eb0(COrder* order)
+void COrder::FUN_00ac7eb0(COrder* order, COrder* target)
 {
-    FUN_00ac7ab0(this->m134, order, this->m12c);
-    FUN_00ac79e0((int*)this, this->m128);
+    FUN_00ac7ab0(order->m134, target, order->m12c);
+    Cleanup(order, order->m128);
 }
 
 // ===========================================================================
