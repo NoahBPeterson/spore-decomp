@@ -351,6 +351,7 @@ th,td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white
 th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-weight:600}
 .scroll{overflow-x:auto}.mod td.barcell{width:45%;min-width:120px}.mod .bar{height:10px}
 svg text{fill:var(--muted);font-size:11px}.chart{width:100%;height:auto;display:block}
+.hov .tip{visibility:hidden;pointer-events:none}.hov:hover .tip{visibility:visible}
 pre{background:var(--code);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.5}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}p code,li code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.9em}
 .note{color:var(--muted);font-size:13px}footer{color:var(--muted);font-size:13px;padding-top:32px;padding-bottom:40px}
@@ -375,7 +376,7 @@ contain no game code or data.</footer></body></html>""" % (E(title), CSS, nav, E
 def line_chart(pts, total_f, total_b):
     if len(pts) < 2:
         return ""
-    W, H, L, R, T, B = 900, 260, 44, 130, 14, 30
+    W, H, L, R, T, B = 900, 260, 44, 165, 14, 30
     d0 = datetime.date.fromisoformat(pts[0][0]); d1 = datetime.date.fromisoformat(pts[-1][0])
     span = max(1, (d1 - d0).days)
     x = lambda d: L + (W - L - R) * (datetime.date.fromisoformat(d) - d0).days / span
@@ -425,8 +426,40 @@ def line_chart(pts, total_f, total_b):
         lines += series(se, "var(--equiv)", "+ proven", 'stroke-dasharray="2 3"')
     if any(t for _d, _f, _b, _e, t in pts):
         lines += series(st, "var(--tested)", "+ tested", 'stroke-dasharray="1 3"')
-    return ('<svg class="chart" viewBox="0 0 %d %d" role="img" aria-label="Matching share over time">%s%s%s%s</svg>'
-            % (W, H, "".join(g), "".join(ticks), lines, place_labels()))
+    return ('<svg class="chart" viewBox="0 0 %d %d" role="img" aria-label="Matching share over time">%s%s%s%s%s</svg>'
+            % (W, H, "".join(g), "".join(ticks), lines, place_labels(), hover(pts, sf, sb, se, st, x, y, W, H, L, R, T, B)))
+
+
+def hover(pts, sf, sb, se, st, x, y, W, H, L, R, T, B):
+    """One invisible column per day: hovering (or tapping) it shows a guide line, the day's points and their values.
+    CSS only (.hov:hover), so the page still needs no script."""
+    rows = [("matching, bytes", "var(--done)", sb), ("matching, functions", "var(--done2)", sf)]
+    if any(e for _d, _f, _b, e, _t in pts):
+        rows.append(("+ proven", "var(--equiv)", se))
+    if any(t for _d, _f, _b, _e, t in pts):
+        rows.append(("+ tested", "var(--tested)", st))
+    xs = [x(d) for d, *_ in pts]
+    out = []
+    for i, (d, *_rest) in enumerate(pts):
+        x0 = L if i == 0 else (xs[i - 1] + xs[i]) / 2
+        x1 = W - R if i == len(pts) - 1 else (xs[i] + xs[i + 1]) / 2
+        cx = xs[i]
+        date = datetime.date.fromisoformat(d).strftime("%b %-d, %Y")
+        tw, th = 178, 22 + 16 * len(rows)
+        tx = cx + 10 if cx + 10 + tw <= W - 4 else cx - 10 - tw
+        tip = ['<rect x="%.1f" y="%d" width="%d" height="%d" rx="6" fill="var(--panel)" stroke="var(--line)"/>' % (tx, T, tw, th),
+               '<text x="%.1f" y="%d" style="fill:var(--ink);font-weight:600">%s</text>' % (tx + 10, T + 16, date)]
+        dots = []
+        for k, (name, color, vals) in enumerate(rows):
+            v = vals[i][1]
+            dots.append('<circle cx="%.1f" cy="%.1f" r="4" fill="%s" stroke="var(--panel)" stroke-width="1.5"/>' % (cx, y(v), color))
+            tip.append('<text x="%.1f" y="%d"><tspan style="fill:%s;font-weight:600">%.1f%%</tspan> %s</text>'
+                       % (tx + 10, T + 34 + 16 * k, color, v, name))
+        out.append('<g class="hov"><title>%s: %s</title><rect x="%.1f" y="%d" width="%.1f" height="%d" fill="transparent"/>'
+                   '<g class="tip"><line x1="%.1f" x2="%.1f" y1="%d" y2="%d" stroke="var(--muted)" stroke-dasharray="3 3"/>%s%s</g></g>'
+                   % (date, ", ".join("%.1f%% %s" % (vals[i][1], name) for name, _c, vals in rows),
+                      x0, T, max(1.0, x1 - x0), H - T - B, cx, cx, T, H - B, "".join(dots), "".join(tip)))
+    return "".join(out)
 
 
 def build(out, prs_path, repo):
