@@ -4,4 +4,3 @@
 006294e0  149  SetBabyCelebrationAnim: complete; orig keeps float result slot on stack and recomputes end-begin
 00629960  86  UpdateBabyButtonEventState: complete; reg alloc/evaluation order of mgr vs id
 00629a90  4  BabiesReachedTargetAngle: complete; id lives in eax not esi
-00629b30  4  SetAllBabyRotateSpeeds: complete; id lives in eax not esi
