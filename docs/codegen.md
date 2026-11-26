@@ -1169,7 +1169,7 @@ shape.
 
 ## 19. Imported leads (2026-11-23, from the donated f4d / Fallout 4 bundle)
 
-The donated f4d bundle (`~/Downloads/f4d/`, the f4decomp.com Fallout 4 project's tooling, x64 / VC2012) documents
+The donated f4d bundle (the f4decomp.com Fallout 4 project's tooling, x64 / VC2012) documents
 compiler behaviours Spore's compilers have not been probed for. These are **leads** measured on x64 VC2012, not
 rules for Spore's x86 toolchains. <!-- work/scratch/f4d_import_notes.md holds the provenance. -->
 
@@ -1178,35 +1178,35 @@ rules for Spore's x86 toolchains. <!-- work/scratch/f4d_import_notes.md holds th
      update the worked/failed counts in this section (function VAs welcome). Never delete a failed count: a lever
      that failed 5 times stops the next person from spending rounds on it. -->
 
-## 19.1 Reference parameter vs value (f4d R1601) — worked: 0, failed: 0
+### 19.1 Reference parameter vs value (f4d R1601) — worked: 0, failed: 0
 
 In f4d: a small function that calls out with its arguments (40–65 B) matched only when a parameter was spelled
 `const T&` rather than `T`; by value the function came out 6 bytes shorter with 3 instructions different. When a
 near-miss loads through a reference-shaped argument (a `mov` from the caller's slot, not a copy), spell the
 parameter `const T&` before re-spelling statements. Button in f4d R1601; probe on cl 15.00 before trusting it.
 
-## 19.2 Volatile read after a call, frame-size tell (f4d R1602, R1510) — worked: 0, failed: 0
+### 19.2 Volatile read after a call, frame-size tell (f4d R1602, R1510) — worked: 0, failed: 0
 
 In f4d: an expression statement `item->flags;` on a `volatile uint32_t` member placed **after a call** forced a
 frame the plain version didn't have (62 B vs 53 B; prologue `sub rsp,0x28` vs `push rbx`). For Spore: if the
 original's prologue is bigger than your source's and the extra bytes are a dead load of a member read after a call,
 try a dead `volatile` member read after the call. Related: Spore's existing volatile lever docs/codegen.md §9.5.
 
-## 19.3 Constant byte argument shows the callee's parameter type (f4d R1603 / R1590) — worked: 0, failed: 0
+### 19.3 A callee's parameter width, read from the original (f4d R1603 / R1590) — worked: 0, failed: 0
 
-In f4d: `mov dl, 1` / `mov r8b, 1` before a call means the callee's parameter is `uint8_t`/`bool`; a full `mov edx, 1`
-means `int`. Spore x86 equivalent to test: `push 1; push <dummy>` byte vs dword pushes before a `call` tell whether
-the callee's parameter is `char`/`bool` vs `int`/pointer — the push width in the **caller** writes the callee's
-x86 stack slot, so the ORIGINAL function's call sites reveal its callees' parameter widths. Correcting a callee's
-declared parameter type can flip a call-site push width and has moved functions here before (docs/Papercuts.md,
-the `Dct32` siblings note).
+In f4d (x64): `mov dl, 1` / `mov r8b, 1` before a call means the callee's parameter is `uint8_t`/`bool`; `mov edx, 1`
+means `int`. On x86 every argument is pushed as a dword (`push 1` is the same for `bool` and `int`), so the width does
+not show in a constant push. It shows where a value is built or read: `mov al, ..; push eax` or a `movzx` before the
+push in a caller, and `mov al, byte ptr [esp+N]` / `movzx eax, byte ptr [esp+N]` / `test al, al` in the callee.
+When a diff shows one of those against a full-width load in yours, fix the callee's declared parameter type (and
+re-check its other callers) before re-spelling statements.
 
-## 19.4 One shared return via nested ifs vs early returns (f4d R1560) — worked: 0, failed: 0
+### 19.4 One shared return via nested ifs vs early returns (f4d R1560) — worked: 0, failed: 0
 
 In f4d: one shared `return 0` at the function end requires nesting the ifs (`if (a) { if (b) { ... } }`), not early
 `return`s. Test when the original has one epilogue block and your candidate has several `ret`s, or vice versa.
 
-## 19.5 "Makes no difference" spellings (f4d R1607) — worked: 0, failed: 0
+### 19.5 "Makes no difference" spellings (f4d R1607) — worked: 0, failed: 0
 
 <!-- ══ Trust, but verify — update with number of times it worked, and number of times it did not ══
      This is the "don't spend rounds here" list. Add a Spore-measured item only after checking both forms on a
@@ -1221,7 +1221,7 @@ caveat: MSVC 2008's own aliases fold `void*` locals per docs/codegen.md §15, so
 **not** transferable as-is for cl 15 at `/O2`; treat these as "don't spend rounds here" entries only, and add
 Spore-measured "no difference" spellings here as they are found.
 
-## 19.6 First-try diagnostics from f4d worth adopting as habit — worked: 0, failed: 0
+### 19.6 First-try diagnostics from f4d worth adopting as habit — worked: 0, failed: 0
 
 <!-- ══ Trust, but verify — update with number of times it worked, and number of times it did not ══
      worked = the diagnostic named the real cause of a diff; failed = it pointed the wrong way. -->
@@ -1229,9 +1229,6 @@ Spore-measured "no difference" spellings here as they are found.
 - When the diff is *only* block order or a register exchange, try levers for 20–30 minutes, then release the
   function with its note (f4d's "stop by the real clock": 20 min on register-only/layout-only, 30 min without a
   measured gain). Spore already says this in §14.2; f4d's F3-lessons clock is the same rule with numbers.
-- When the diff shows a **constant byte argument** before a call (a byte push where a dword push was expected),
-  the push **width** in the original's call sites reveals the callee's parameter width: fix the callee's declared
-  parameter type first, re-check its other callers, then re-try this function.
 
 ## Appendix: where to look
 
