@@ -259,8 +259,7 @@ int SampleTrackPairs(FixupTable* rec, ArenaCtx* ctx);    // 0x01200ab0
 
 // @ 0x01200800
 RegObj* FindObjectByKey(int key)
-{
-	for (int i = 0; i < g_regCount; i++)
+{	for (int i = 0; i < g_regCount; i++)
 		if (g_regList[i]->mKey == key)
 			return g_regList[i];
 	return 0;

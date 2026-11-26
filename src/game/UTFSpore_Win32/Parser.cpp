@@ -3601,8 +3601,8 @@ int cParser::ParseEnd(bool bUnwind)
     int* last = mScopeOffsets.mpEnd;
     int* first = mScopeOffsets.mpBegin;
     memcpy(first, last, (char*)mScopeOffsets.mpEnd - (char*)last);
-    mScopeOffsets.mpEnd += -(last - first);
-    int r = *(int*)((char*)this + 0x168);   // value left in eax by the original (mArgs storage field)
+    *(int* volatile*)&mScopeOffsets.mpEnd += -(last - first);
+    int r = *(volatile int*)((char*)this + 0x168);   // value left in eax by the original (mArgs storage field)
     mBlockCommentDepth = 0;
     return r;
 }

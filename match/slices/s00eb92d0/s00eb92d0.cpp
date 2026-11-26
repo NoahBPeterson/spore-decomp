@@ -494,8 +494,7 @@ struct cFlagSrc {
 
 // @ 0x00eba170
 int FUN_00eba170(const cFlagSrc* src, int* out)
-{
-    if (src->mFlags & 0x1000) {
+{    if (src->mFlags & 0x1000) {
         *out = 1;
         return 1;
     }
@@ -510,8 +509,9 @@ int FUN_00eba170(const cFlagSrc* src, int* out)
         *out = 2;
         g_16c7338 = 2;
         return 2;
-    } else if (c16 == 1) {
-        *out = 3;
+    } else if (c17 == 0 && c16 == 1) {
+        int* __restrict pOut = out;
+        *pOut = 3;
         g_16c7338 = 3;
         return 3;
     }

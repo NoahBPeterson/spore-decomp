@@ -4,6 +4,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <string.h>
 #include <xmmintrin.h>
 
 typedef unsigned char u8;
@@ -65,14 +66,15 @@ struct Property {
 // ---------------------------------------------------------------------------
 // A: 3-vector spring used by the point/terrain placement code
 namespace SP {
+struct Vec3f { float x, y, z; };
 struct Spring3 {
-  float m00, m04, m08;    // +0x00 out
-  float m0c, m10, m14;    // +0x0c start
-  float m18, m1c, m20;    // +0x18 target
+  union { struct { float m00, m04, m08; }; Vec3f v00; };    // +0x00 out
+  union { struct { float m0c, m10, m14; }; Vec3f v0c; };    // +0x0c start
+  union { struct { float m18, m1c, m20; }; Vec3f v18; };    // +0x18 target
   u8    b24;              // +0x24
   char  pad25[3];
   float m28;              // +0x28 t
-  float m2c, m30, m34;    // +0x2c
+  union { struct { float m2c, m30, m34; }; Vec3f v2c; };    // +0x2c
   void Init();                                   // 0x00eb2eb0
   void Set(int unused, float t, bool smooth);    // 0x00eb3490
 };
@@ -141,23 +143,17 @@ struct CTerrainCam {
 // ---------------------------------------------------------------------------
 // @ 0x00eb2eb0
 void Spring3::Init()
-{
-  u32* d = (u32*)this;
+{  u32* d = (u32*)this;
   d[0] = g_vec3[0];
   d[1] = g_vec3[1];
   d[2] = g_vec3[2];
-  d[3] = g_vec3[0];
-  d[4] = g_vec3[1];
-  d[6] = d[0];
-  d[5] = g_vec3[2];
-  d[7] = d[1];
-  d[8] = d[2];
-  *(float*)(d + 10) = 0.0f;
+  memcpy(&v0c, g_vec3, sizeof(v0c));
+  v18 = v00;
+  m28 = 0.0f;
   d[0xb] = g_vec3[0];
   d[0xc] = g_vec3[1];
   d[0xd] = g_vec3[2];
-  *(u8*)(d + 9) = 0;
-}
+  b24 = 0;}
 
 // @ 0x00eb2f50
 void CTerrainCam::Sync()

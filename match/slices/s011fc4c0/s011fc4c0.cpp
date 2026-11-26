@@ -10,42 +10,52 @@ typedef unsigned char byte;
 #include <math.h>
 #include <string.h>
 #include <xmmintrin.h>
+#if defined(_MSC_VER) && _MSC_VER < 1400
+static __forceinline float _mm_cvtss_f32(__m128 v) { float f; _mm_store_ss(&f, v); return f; }
+#endif
 #pragma intrinsic(sqrt)
 #pragma intrinsic(sqrtf)
+
+extern "C" uint g_1719d08[];
+extern "C" uint g_171a108[];
+extern "C" uint g_171b538[];
+extern "C" uint g_171b938[];
 
 // @ 0x011fcde0 -- FUN_011fcde0
 // Walks the NUL-terminated letter list at param_1+0x11 and invokes the
 // per-letter handler at &DAT_01719d08 when the letter's mask at &DAT_0171a108
 // intersects param_2, passing the parallel dword at param_1+0x34.
 void __cdecl FUN_011fcde0(void* param_1, uint param_2) {
-    byte* pbVar3 = (byte*)((char*)param_1 + 0x11);
-    int* puVar4 = (int*)((char*)param_1 + 0x34);
+    byte* p = (byte*)((char*)param_1 + 0x11);
+    int* q = (int*)((char*)param_1 + 0x34);
+    byte b = *p;
     do {
-        byte bVar1 = *pbVar3;
-        uint uVar2 = (uint)bVar1;
-        if ((*(uint*)(0x171a108 + uVar2 * 4) & param_2) != 0) {
-            (*(void(__cdecl**)(uint, uint, int))(0x1719d08 + uVar2 * 4))(uVar2, param_2, *puVar4);
+        uint u = (uint)b;
+        if ((g_171a108[u] & param_2) != 0) {
+            ((void(__cdecl**)(uint, uint, int))g_1719d08)[u](u, param_2, *q);
         }
-        puVar4 = puVar4 + 1;
-        pbVar3 = pbVar3 + 1;
-    } while (*pbVar3 != 0);
+        ++q;
+        ++p;
+        b = *p;
+    } while (b != 0);
 }
 
 // @ 0x011fcee0 -- FUN_011fcee0
 // Same walk as FUN_011fcde0, but against the &DAT_0171b538 mask table and the
 // &DAT_0171b938 handlers, reading the parallel dword at param_1+0x20.
 void __cdecl FUN_011fcee0(byte* param_1, uint param_2) {
-    int* pbVar3 = (int*)(param_1 + 0x20);
-    byte bVar1 = *param_1;
+    int* q = (int*)(param_1 + 0x20);
+    byte* p = param_1;
+    byte b = *p;
     do {
-        uint uVar2 = (uint)bVar1;
-        if ((*(uint*)(0x171b538 + uVar2 * 4) & param_2) != 0) {
-            (*(void(__cdecl**)(uint, uint, int))(0x171b938 + uVar2 * 4))(uVar2, param_2, *pbVar3);
+        uint u = (uint)b;
+        if ((g_171b538[u] & param_2) != 0) {
+            ((void(__cdecl**)(uint, uint, int))g_171b938)[u](u, param_2, *q);
         }
-        bVar1 = param_1[1];
-        pbVar3 = pbVar3 + 1;
-        param_1 = param_1 + 1;
-    } while (bVar1 != 0);
+        ++q;
+        ++p;
+        b = *p;
+    } while (b != 0);
 }
 
 // @ 0x011fcd10 -- FUN_011fcd10

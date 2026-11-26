@@ -1800,10 +1800,9 @@ void cSPDramaManager::PostLoad(void *p)
 
 // @ 0x00d4b450
 void RBTree::equal_range(RBNode **out, u32 *key)
-{
-    RBNode *const root = mAnchor.mpNodeParent;
+{    RBNode *n = mAnchor.mpNodeParent;
     RBNode *lo = &mAnchor;
-    for (RBNode *n = root; n != 0; ) {
+    while (n != 0) {
         if (*key < n->mKey) {
             lo = n;
             n = n->mpNodeRight;
@@ -1812,7 +1811,8 @@ void RBTree::equal_range(RBNode **out, u32 *key)
         }
     }
     RBNode *hi = &mAnchor;
-    for (RBNode *n = root; n != 0; ) {
+    n = mAnchor.mpNodeParent;
+    while (n != 0) {
         if (n->mKey >= *key) {
             hi = n;
             n = n->mpNodeRight;
@@ -1820,8 +1820,8 @@ void RBTree::equal_range(RBNode **out, u32 *key)
             n = n->mpNodeLeft;
         }
     }
-    out[0] = hi;
-    out[1] = lo;
+    *out++ = hi;
+    *out = lo;
 }
 
 // @ 0x00d4b4b0

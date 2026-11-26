@@ -154,8 +154,18 @@ struct hkGskfAgentBase
 {
     virtual ~hkGskfAgentBase();
     virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
     virtual void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                   const hkProcessCollisionInput& input, hkProcessCollisionOutput& result);
+    virtual void cleanup();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void removePoint(hkUint16 id);
+    virtual void commitPotential(hkUint16 id);
+    virtual void createZombie(hkUint16 id);
 
     hkGskfAgentBase(const hkCdBody& bodyA, const hkCdBody& bodyB, hkContactMgr* mgr);   // 0x010ed2a0
 
@@ -663,13 +673,9 @@ hkGskfAgent* hkGskfAgent::createGskfAgent(const hkCdBody& bodyA, const hkCdBody&
     {
         hkGskfAgent* const agent = (hkGskfAgent*)mem->allocateChunk(0x80, 0x1c);
         agent->m_memSizeAndFlags = 0x80;
-        new (agent) hkGskfAgentBase(bodyA, bodyB, mgr);
-        ((hkGskfAgentVtblView*)agent)->m_vptr = (void**)0x14a52d8;
-        agent->m_manifoldDword = 0;
-        return agent;
+        return new (agent) hkGskfAgent(bodyA, bodyB, mgr);
     }
-    hkGskfAgent* const agent = (hkGskfAgent*)mem->allocateChunk(0x30, 0x1c);
+    hkGskfAgentBase* const agent = (hkGskfAgentBase*)mem->allocateChunk(0x30, 0x1c);
     agent->m_memSizeAndFlags = 0x30;
-    new (agent) hkGskfAgentBase(bodyA, bodyB, 0);
-    return agent;
+    return (hkGskfAgent*)new (agent) hkGskfAgentBase(bodyA, bodyB, 0);
 }

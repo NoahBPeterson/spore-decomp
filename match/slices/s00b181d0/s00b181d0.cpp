@@ -412,19 +412,20 @@ struct FixedBuf {  // eastl::fixed_vector header: begin, end, capacity, allocato
   int mAlloc;
 };
 struct cQuerySvc {
-  void Apply();  // 0x00b7a1d0
+  void Apply(void* p, float r, void* a2, FixedBuf* d);  // 0x00b7a1d0
 };
-cQuerySvc* __stdcall QuerySvc(void* p, float r, void* a2, FixedBuf* d);  // 0x00b3d3c0
+cQuerySvc* QuerySvc();  // 0x00b3d3c0
 
 // @ 0x00b182f0
-bool BoundsQuery(cBounds* o, void* a2) {
-  if (o->mpBegin == o->mpEnd)
+bool BoundsQuery(cBounds* o, void* a2) {  if (o->mpBegin == o->mpEnd)
     o->Fill();
   float* p = (float*)o->mpBegin;
   float dx = p[0] - p[0x18];
   float dy = p[1] - p[0x19];
   float dz = p[2] - p[0x1a];
-  o->mRadius = sqrtf_(dy * dy + (dz * dz + dx * dx)) * 0.5f;
+  const double xSquared = static_cast<double>(dx) * dx;
+  const double xzSquared = xSquared + static_cast<double>(dz) * dz;
+  o->mRadius = sqrtf_(static_cast<float>(dy * dy + xzSquared)) * 0.5f;
   if (o->m_d4 == 0 && o->m_d0 == 0)
     BoundsFinish(o, o);
   char buf[0x400];
@@ -433,12 +434,11 @@ bool BoundsQuery(cBounds* o, void* a2) {
   d.mpEnd = buf;
   d.mpCapacity = buf + 0x400;
   d.mAlloc = 0;
-  QuerySvc((char*)o->mpBegin + 0x30, o->mRadius, a2, &d)->Apply();
+  QuerySvc()->Apply((char*)o->mpBegin + 0x30, o->mRadius, a2, &d);
   bool r = d.mpBegin != d.mpEnd;
   if (d.mpBegin && ((int*)d.mpBegin)[-1])
     EA_Deallocate(d.mpBegin);
-  return r;
-}
+  return r;}
 
 // ---------------------------------------------------------------------------
 // @ 0x00b183e0

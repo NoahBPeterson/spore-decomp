@@ -53,7 +53,7 @@ public:
     virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16();
     virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20();
     virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
-    virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28();
+    virtual void v25(); virtual void vapplyAngularImpulse(const hkVector4& impulse); virtual void v27(); virtual void v28();
     virtual void vapplyAngularImpulseScaled(float dt, const void* dir);   // +0x74
     char pad04[0x0c];
     hkTransform m_transform;                         // +0x10
@@ -66,6 +66,13 @@ public:
 
 // hkpRigidBody shares hkEntity's leading layout (motion pointer at +0x58) and its activate().
 class hkpRigidBody { public: char pad00[0x58]; hkMotion* m_motion; };
+struct hkRefDtorVtbl { virtual void destroy(int flags); };
+struct hkShapeCollVtbl {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual uint32_t getCollisionFilterInfo(uint32_t key) const;
+};
 
 // hkVector4 rotation helpers (0x01081440 / 0x010814a0).
 inline void hkVector4SetRotatedInverseDir(hkVector4& out, const hkRotation& r, const hkVector4& dir)
@@ -155,7 +162,7 @@ public:
     hkBool& m_default() const { return *(hkBool*)((char*)this + 0x18); }
 
     // The private 256-bit collision-mask core (sret hkBool* is the first stack argument).
-    void isCollisionEnabled_core(hkBool* result, uint32_t groupA, uint32_t groupB) const;
+    hkBool isCollisionEnabled_core(uint32_t groupA, uint32_t groupB) const;
 };
 
 // The 256-bit group-mask table is the group filter's +0x1c array; the default answer byte is the
@@ -263,7 +270,7 @@ void hkReorientAction::applyAction(const void* stepInfo)
 
     ((hkEntity*)(void*)body)->activate();
     // The original applies the angular impulse through the hkMotion angular-impulse slot (+0x68).
-    ((void(__thiscall*)(hkMotion*, const hkVector4&))*(void**)((char*)*(void**)motion + 0x68))(motion, impulse);
+    motion->vapplyAngularImpulse(impulse);
 }
 
 struct hkReorientActionCtor {
@@ -308,7 +315,7 @@ hkPoweredChainMapper::~hkPoweredChainMapper()
         if (p) {
             hkReferencedObject* o = (hkReferencedObject*)p;
             if (o->m_memSizeAndFlags != 0 && --o->m_referenceCount == 0) {
-                (*(void(__thiscall**)(hkReferencedObject*, int))*(void**)o)(o, 1);
+                ((hkRefDtorVtbl*)o)->destroy(1);
             }
         }
     }
@@ -317,7 +324,7 @@ hkPoweredChainMapper::~hkPoweredChainMapper()
     for (int i = 0; i < n3; ++i) {
         hkReferencedObject* o = (hkReferencedObject*)a3[i];
         if (o->m_memSizeAndFlags != 0 && --o->m_referenceCount == 0) {
-            (*(void(__thiscall**)(hkReferencedObject*, int))*(void**)o)(o, 1);
+            ((hkRefDtorVtbl*)o)->destroy(1);
         }
     }
     int cap3 = *(int*)(s + 0x28);
@@ -347,12 +354,12 @@ class hkPhysicsData : public hkReferencedObject { public:
 hkPhysicsData::~hkPhysicsData()
 {
     if (m_obj && m_obj->m_memSizeAndFlags != 0 && --m_obj->m_referenceCount == 0) {
-        (*(void(__thiscall**)(hkReferencedObject*, int))*(void**)m_obj)(m_obj, 1);
+        ((hkRefDtorVtbl*)m_obj)->destroy(1);
     }
     for (int i = 0; i < m_n; ++i) {
         hkReferencedObject* o = m_arr[i];
         if (o->m_memSizeAndFlags != 0 && --o->m_referenceCount == 0) {
-            (*(void(__thiscall**)(hkReferencedObject*, int))*(void**)o)(o, 1);
+            ((hkRefDtorVtbl*)o)->destroy(1);
         }
     }
     if (m_cap >= 0) {
@@ -573,8 +580,7 @@ void hkMotorAction::applyAction(const void* stepInfo)
     float dt = step[2];
 
     ((hkEntity*)(void*)body)->activate();
-    ((void(__thiscall*)(hkMotion*, float, const hkVector4&))*(void**)((char*)*(void**)motion + 0x74))
-        (motion, dt, bodyImpulse);
+    motion->vapplyAngularImpulseScaled(dt, &bodyImpulse);
 }
 
 // @ 0x011297f0
@@ -596,38 +602,32 @@ hkMotorAction* hkMotorAction::clone(const void* newEntities, const void* newPhan
 
 // ---------------------------------------------------------------- 01129850 / 01129af0 / 01129b40
 // @ 0x01129850
-void hkGroupCollisionFilter::isCollisionEnabled_core(hkBool* result, uint32_t groupA, uint32_t groupB) const
+hkBool hkGroupCollisionFilter::isCollisionEnabled_core(uint32_t groupA, uint32_t groupB) const
 {
     if (groupA == 0 || groupB == 0) {
-        *result = m_default();
-        return;
+        return m_default();
     }
 
-    // The 256-bit table is stored at +0x1c. `result` is the hidden hkBool sret pointer.
+    // The 256-bit table is stored at +0x1c.
     const uint32_t* bits = (const uint32_t*)((const char*)this + 0x1c);
     uint32_t acc = 0;
     for (unsigned bit = 0; bit < 0x20; ++bit) {
         if (groupA & (1u << bit))
             acc |= bits[bit];
     }
-    *result = hkBool((groupB & acc) != 0);
+    return hkBool((groupB & acc) != 0);
 }
 
 // hkShapeCollectionFilter::isCollisionEnabled: ask the collection for the key (vtable +0x2c), walk
 // the collision body to its root, then use the root body's group.
 // @ 0x01129af0
-hkBool hkGroupCollisionFilter::isCollisionEnabled(const void* input, const void* /*a*/, const void* b,
+hkBool hkGroupCollisionFilter::isCollisionEnabled(const void* input, const void* a, const void* b,
                                                   const void* collection, uint32_t key) const
-{
-    uint32_t group = ((uint32_t(__thiscall*)(const void*, uint32_t))(
-        *(void**)(*(const int*)collection + 0x2c)))(collection, key);
-    const unsigned char* body = (const unsigned char*)b;
+{    uint32_t group = ((const hkShapeCollVtbl*)collection)->getCollisionFilterInfo(key);
+    const unsigned char* body = (const unsigned char*)a;
     while (*(const int*)(body + 0xc) != 0)
         body = *(const unsigned char* const*)(body + 0xc);
-    hkBool result(false);
-    ((const hkGroupCollisionFilter*)((const char*)this - 0xc))
-        ->isCollisionEnabled_core(&result, *(const uint32_t*)(body + 0x1c), group);
-    return result;
+    return isCollisionEnabled_core(*(const uint32_t*)(body + 0x1c), group);
 }
 
 // hkRayShapeCollectionFilter::isCollisionEnabled: group comes from the collection key, this time
@@ -636,13 +636,10 @@ hkBool hkGroupCollisionFilter::isCollisionEnabled(const void* input, const void*
 hkBool hkGroupCollisionFilter::isCollisionEnabled(const void* input, const void* b,
                                                   const void* /*collection*/, uint32_t key) const
 {
-    uint32_t group = ((uint32_t(__thiscall*)(const void*, uint32_t))(
-        *(void**)(*(const int*)b + 0x2c)))(b, key);
+    uint32_t group = ((const hkShapeCollVtbl*)b)->getCollisionFilterInfo(key);
     const unsigned char* root = (const unsigned char*)input;
-    hkBool result(false);
-    ((const hkGroupCollisionFilter*)((const char*)this - 0x10))
-        ->isCollisionEnabled_core(&result, *(const uint32_t*)(root + 0x20), group);
-    return result;
+    return ((const hkGroupCollisionFilter*)((const char*)this - 0x10))
+        ->isCollisionEnabled_core(*(const uint32_t*)(root + 0x20), group);
 }
 
 // ---------------------------------------------------------------- 01129c70 / 01129cc0 / 01129d20

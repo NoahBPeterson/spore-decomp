@@ -1961,12 +1961,12 @@ void ToVector3(float* out, unsigned c)
 }
 
 // @ 0x00f885f0
-void ToVector4(float* out, unsigned c)
-{
-    out[0] = (float)(c & 0xff);
+float* ToVector4(float* out, unsigned c)
+{    out[0] = (float)(c & 0xff);
     out[1] = (float)((c >> 8) & 0xff);
     out[2] = (float)((c >> 16) & 0xff);
     out[3] = (float)(c >> 24);
+    return out;
 }
 
 // @ 0x00f8afd0
