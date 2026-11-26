@@ -1054,7 +1054,7 @@ void __fastcall DebugDumpDisplayList(void* self)
     Mutex_Unlock(B(self) + 0x28);
 }
 
-// @ 0x009587d0
+// 0x009587d0 (byte-exact lifted version: match/slices/s009587d0/s009587d0.cpp)
 void W::m7d0(char* node)
 {
     void** piVar2 = (void**)(*(char**)(B(this) + 0x20));

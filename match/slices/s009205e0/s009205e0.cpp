@@ -64,7 +64,7 @@ struct Range {
 Range* FUN_00920f30(Range* r, char flag);
 wchar_t* FindExtension(wchar_t* first, wchar_t* last);
 
-// @ 0x00920c20
+// 0x00920c20 (byte-exact lifted version: match/slices/s00920c20/s00920c20.cpp)
 bool HasAltSeparator(wchar_t* first, wchar_t* last) {
     for (; first < last; ++first) {
         wchar_t c = *first;
@@ -202,7 +202,7 @@ wchar_t* FindExtension(wchar_t* first, wchar_t* last) {
     return last;
 }
 
-// @ 0x00921150
+// 0x00921150 (byte-exact lifted version: match/slices/s00921150/s00921150.cpp)
 Range* FUN_00921150(Range* out, wchar_t* first, wchar_t* last) {
     if (last == g_pNullStr) {
         wchar_t* e = first;

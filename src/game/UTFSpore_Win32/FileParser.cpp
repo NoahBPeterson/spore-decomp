@@ -236,7 +236,7 @@ bool FileParserRegistration::Init()
     return false;
 }
 
-// @ 0x0083f680
+// 0x0083f680 (byte-exact lifted version: match/slices/s0083f680/s0083f680.cpp)
 bool __fastcall FileParser_Shutdown(int* self)
 {
     if (*((unsigned char*)self + 0xc)) {

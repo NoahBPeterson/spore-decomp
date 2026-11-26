@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0083f680 24 complete: cFileParser::Shutdown (clear flag, server unregister slot 11 with 0x6f41f272/0xffffd8f1, parser slot 3 + clear + slot 1, own slot 6, returns bool in al); call-shape/register diff only - [equiv: PASS, 399 valid inputs, 79.5% cov] flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083f790 112 complete: cFileParser::ParseFiles (timer lazy-start/QPC-vs-rdtsc, per-spec parse+exn guard, accumulated time, reset, message post, return !failed); cl pins the object in edi where the original used esi (and keeps an extra parser spill), so every [reg+disp] operand differs -- callee-saved allocation not reproducible from equivalent C++; instruction stream/size otherwise matches - [equiv: WEAK, 281 valid inputs, no mismatch] flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083f940 25 complete: AutoRefCount<RefCounted<FileChangeNotification>>::operator=; refcount scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083fbc0 120 complete: uninitialized_copy<cInputFileSpec*>; string copy loop scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-

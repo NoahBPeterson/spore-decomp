@@ -3,6 +3,5 @@
 0093c000  249  complete: MemoryStream grow/copy; equiv PASS (helper takes this in ecx, allocator vtable slot 2 / DefaultAllocator() fixed)
 0093c0c0  99   complete: MemoryStream position arithmetic, branch layout differs
 0093c150  219  complete: MemoryStream resize-on-write; equiv PASS (explicit round-to-nearest reproduces retail's x87 fistp)
-0093c210  62   complete: scalar deleting dtor, refcount schedule differs
 0093c920  40   complete: GetCharacterSize if-chain, compare order differs
 0093c730  117  complete: DetectEncoding; equiv PASS (UTF-8 lead-byte interval checks to two 8-bit compares in retail, MSVC folds them into add/cmp here; tail offsets shift 2 bytes)

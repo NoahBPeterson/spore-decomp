@@ -411,7 +411,7 @@ copy:
     return take == nSize;
 }
 
-// @ 0x0093c210
+// 0x0093c210 (byte-exact lifted version: match/slices/s0093c210/s0093c210.cpp)
 void* FUN_0093c210(void* self, unsigned char flags)
 {
     *(void**)self = (void*)&g_vtbl_gfar;

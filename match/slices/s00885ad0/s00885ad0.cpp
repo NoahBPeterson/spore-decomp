@@ -73,7 +73,7 @@
 // they are recorded in partial.txt and are NOT claimed byte-exact.
 // ---------------------------------------------------------------------------
 
-// @ 0x00885fa0
+// 0x00885fa0 (byte-exact lifted version: match/slices/s00885fa0/s00885fa0.cpp)
 void FUN_00885fa0() {}
 
 // @ 0x00886200

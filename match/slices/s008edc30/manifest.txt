@@ -8,3 +8,4 @@ slices/s008edc30/s008edc30.cpp  ?RefreshMargins@RenderingContext@Layout@XHTML@EA
 slices/s008edc30/s008edc30.cpp  ?lower_bound@PickingContext@Layout@XHTML@EA@@SAPAUTranslationEntry@234@PAU5234@0PBH@Z  008edfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s008edc30/s008edc30.cpp  ?SetContextRect@PickingContext@Layout@XHTML@EA@@QAEXPBM@Z  008ede40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s008edc30/s008edc30.cpp  ?SetDocument@Page@Layout@XHTML@EA@@QAEXPAX@Z  008edc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s008edc30/s008edc30_lifted.cpp  @FUN_008edc30@8  008edc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

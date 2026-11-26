@@ -559,7 +559,7 @@ static __declspec(noinline) FFT1HintClass* FFT1HintClass_releaseMem_impl(FFT1Hin
     return h;
 }
 
-// @ 0x008a8ff0
+// 0x008a8ff0 (byte-exact lifted version: match/slices/s008a8ff0/s008a8ff0.cpp)
 void FFT1HintClass_releaseMem(FFT1HintClass* h)
 {
     FFT1HintClass_releaseMem_impl(h);

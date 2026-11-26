@@ -73,7 +73,7 @@ void Ctx96::b(float* p)
         this, p[0], p[1], p[2], p[3]);
 }
 
-// @ 0x0096f240
+// 0x0096f240 (byte-exact lifted version: match/slices/s0096f240/s0096f240.cpp)
 int Ctx96::q(int iid)
 {
     switch (iid) {

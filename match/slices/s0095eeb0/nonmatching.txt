@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 0095eeb0  235  CM::TransformPoint3: complete; SSE register schedule differs
 0095efb0  205  CM::TransformPoint3B: complete; SSE register schedule differs
-0095f090  84   CM::SetAxes: complete; thiscall member form still scheduled differently; equiv: PASS (1200 inputs, 100% coverage)
 0095f0f0  193  CM::BuildMat33: complete; the original copies a 16-byte row temp whose padding dword is never written (0xcccccccc, the difftest stack fill) with dword moves; our int-copy form and movss order differ; equiv: PASS (400 inputs, 100% coverage)
 0095f1c0  289  CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
 0095f320  319  BuildRotation: complete; sin/cos x87 interleave with SSE differs (xs/ys/zs products spilled by the original); equiv: PASS (400 inputs, 100% coverage)

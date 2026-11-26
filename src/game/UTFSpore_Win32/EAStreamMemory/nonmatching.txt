@@ -3,4 +3,3 @@
 0093c000 165 complete: MemoryStream grow/copy; equiv PASS (helper takes this in ecx, allocator vtable slot 2 / DefaultAllocator() fixed) flags: /O2 /MD /Gy /TP
 0093c0c0 97 complete: MemoryStream position arithmetic, branch layout differs flags: /O2 /MD /Gy /TP
 0093c150  219  complete: MemoryStream resize-on-write; equiv PASS (explicit round-to-nearest reproduces retail's x87 fistp) flags: /O2 /MD /Gy /TP
-0093c210 67 complete: scalar deleting dtor, refcount schedule differs flags: /O2 /MD /Gy /TP

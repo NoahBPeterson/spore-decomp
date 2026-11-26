@@ -579,7 +579,7 @@ bool TreeNodeListMarshaller::Read(void* a, void* container, void* b)
     return true;
 }
 
-// @ 0x009917b0
+// 0x009917b0 (byte-exact lifted version: match/slices/s009917b0/s009917b0.cpp)
 void WinTreeView::InvalidateLayout()
 {
     ((TreeViewExtra*)this)->CalculateVisibleArea();
@@ -599,7 +599,7 @@ void WinTreeView::SetBorders(EA::UTFWin::RectF* r)
     mWindow.w36();
 }
 
-// @ 0x00991860
+// 0x00991860 (byte-exact lifted version: match/slices/s00991860/s00991860.cpp)
 void WinTreeView::ClearSelection()
 {
     eastl::intrusive_list<TreeNode>::iterator end = mNodes.mChildren.end();

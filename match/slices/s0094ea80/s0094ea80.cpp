@@ -90,7 +90,7 @@ int __fastcall RefCount_AddRef_M4(int* p)
     return _InterlockedIncrement((volatile long*)(p - 1));
 }
 
-// @ 0x0094EA90
+// 0x0094ea90 (byte-exact lifted version: match/slices/s0094ea90/s0094ea90.cpp)
 int __fastcall RefCount_Release_M8(int* self)
 {
     RefObj94* p = (RefObj94*)(self - 2);

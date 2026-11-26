@@ -290,7 +290,7 @@ struct CmdDtor {
     int          pad20[4];
     void Dtor();
 };
-// @ 0x0083cd90
+// 0x0083cd90 (byte-exact lifted version: match/slices/s0083cd90/s0083cd90.cpp)
 void CmdDtor::Dtor() {
     vtbl = (void*)&vtbl_AppProps;
     DoFreeNodesTable(mTable.mpBucketArray, mTable.mnBucketCount);
@@ -334,7 +334,7 @@ AppPropsFields::AppPropsFields() {
 // ===========================================================================
 // 0x0083ce20  AppProps deleting destructor
 // ===========================================================================
-// @ 0x0083ce20
+// 0x0083ce20 (byte-exact lifted version: match/slices/s0083ce20/s0083ce20.cpp)
 AppPropsFields* AppPropsFields::VectorDtor(unsigned char flags) {
     vtbl = vtbl_AppProps;
     DoFreeNodesTable(mpBucketArray, mnBucketCount);

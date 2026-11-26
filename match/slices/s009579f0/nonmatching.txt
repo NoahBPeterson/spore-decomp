@@ -4,7 +4,6 @@
 00958070  53  Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)
 00958640  98  DumpDisplayList: complete (splice pending nodes, reset display list, recycle nodes); regalloc/order differ; difftest WEAK (309 valid, 20.0% coverage)
 00958780  31  WindowMgr::DebugDumpDisplayList: complete (lock +0x28, pending-flag guard, lock +0x70, DumpDisplayList); bool test idiom + tail-call differ; difftest WEAK (238 valid, 50.0% coverage)
-009587d0  30  Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
 00957b00  48  GetGlobalImageTable: complete (lazy-init singleton ctor path); regalloc/schedule differ; difftest UNSUPPORTED (lazy ctor path imports _decode_pointer, 400/400 inputs discarded)
 00958570  35  Fn00958570 (intrusive list merge/splice): complete; regalloc/order differ; difftest UNSUPPORTED (all 400 inputs fault: fault(write)/fault(read)/pool-limit)
 009586f0  116  WindowMgr::Plot: complete; regalloc/schedule differ; difftest UNSUPPORTED (imports WaitForSingleObject / _decode_pointer, 400/400 inputs discarded)

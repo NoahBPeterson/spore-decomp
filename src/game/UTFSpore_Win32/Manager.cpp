@@ -1103,7 +1103,7 @@ void HashBase::DoRehash3(uint32 n)
     mnBucketCount = n;
 }
 
-// @ 0x008de7f0
+// 0x008de7f0 (byte-exact lifted version: match/slices/s008de7f0/s008de7f0.cpp)
 void HashBase::DoFreeNodes(void** pBucketArray, uint32 n)
 {
     for (uint32 i = 0; i < n; ++i) {

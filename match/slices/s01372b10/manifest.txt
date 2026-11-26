@@ -1,0 +1,1 @@
+slices/s01372b10/s01372b10.cpp  _FUN_01372b10  01372b10  /O2 /MD /Gy /EHsc /TP

@@ -1,4 +1,2 @@
 # va  diff-bytes  reason
 0083c900 214 complete: hashtable<cICommand>::insert; hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
-0083cd90 36 logic: cBlockCommandBase::~cBlockCommandBase; reordered to FreeNodesTable, mnElementCount=0, then deallocate (matches the original's +0xc store right after the call); still differs because the vtable-address store compiles to `mov dword ptr [esi], 0` (the symbol `vtbl_AppProps` is never relocated, even as `(void*)&vtbl_AppProps` with an array extern), the mnBucketCount load still comes after the FreeNodesTable call (original hoists it), and the 0x0083cad0/0x00f47380 calls resolve as internal <+off> rather than <ext>. fix1: quick check LIKELY DIFFERS/could not decide
-0083ce20 51 complete: AppProps deleting dtor; scheduling differs

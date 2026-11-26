@@ -1,12 +1,10 @@
 # va  diff-bytes  reason
-008edc30  129  Page::CreatePageLayout: complete; sequential layout/stack-object construction matches, but cl reorders the layout/dtor temp and sizes the stack object frame differently (127 vs 93 bytes)
 008edeb0  152  regalloc: PickingContext::SetContextRectRelative takes RectF by value so the four sums are written back into the argument home slots exactly like the original, and RefreshMargins now clobbers ecx so cl keeps `this` in esi; cl still loads mX544/mY548 into xmm registers and adds the argument from memory (movss/movaps/addss xmm,[esp+..]) where the original loads each argument into xmm first and adds the member (addss reg,reg), so it never uses xmm4 (162 vs 172 bytes, 27 vs 29 instructions); fix1: quick check PASS (emulator found no mismatch; it hit its own 10s limit)
 008ee010  507  PickingContext::Flush: complete; the scroll/flush loop, float-margin walk and lower_bound result use the right fields, but cl hoists the x87 sqrt-free float chain and lays the loop out differently (588 vs 557)
 008ee240  153  PickingContext::PickingContext (from rect): complete; the base-ctor call and all field inits match, but cl orders the zero fills differently (177 vs 175)
 008ee2f0  223  PickingContext::PickingContext (copy): complete; the copy ctor body matches but cl reorders the field copies (268 vs 177)
 008ee400  133  PickingContext::PickTextItem: complete; the vector append + style assigns match, cl reorders the push/assign sequence (156 vs 158)
 008ee4a0  534  PickingContext::FlushAll: complete; the multi-pass flush loop matches, cl lays out the two return paths differently (645 vs 626)
-008ee720   18  RenderingContext::SubStyleSet (this+4): Typesetter::AddLineBreak member call now gives the `mov eax,[esp+8]/mov edx,[esp+4]` pair, but cl still drops the dead leading arguments (0,0) and elides the trailing `ret 8` (21 vs 25); ret-immediate rewriting is not steerable from source
 008ee7b0    8  RenderingContext::ScrollViewport: complete and correct; cl just assigns the base-pair additions to the other xmm register
 008ee810  161  RenderingContext::RenderingContext (from rects): complete; base ctor + field inits match, cl orders the fills differently (177 vs 173)
 008ee8c0  176  RenderingContext::RenderingContext (copy): complete; field copy order differs (197 vs 195)

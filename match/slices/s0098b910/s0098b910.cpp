@@ -323,7 +323,7 @@ int IWinTextEdit::GetText(void* out, unsigned idx, unsigned n) {
 
 // ============================================================ 0x98bb60
 // eastl::deque<void*, allocator, 64>::push_back (0x98bb60).
-// @ 0x98bb60
+// 0x0098bb60 (byte-exact lifted version: match/slices/s0098bb60/s0098bb60.cpp)
 void DequeBase::push_back(void* const& value) {
     void* v = value;
     if (mItBegin.mpCurrentArrayPtr == mpPtrArray)

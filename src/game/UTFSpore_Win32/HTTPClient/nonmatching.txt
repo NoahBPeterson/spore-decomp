@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00942010 65 HTTPClientCheckTimeout: complete; branch layout differs; equiv WEAK (272 valid, 35.0% cov: reaching GetTime64 hits unmodelled import:_time64) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00942050 108 HTTPClientFindHeader: complete; stride division and loop register schedule differ; equiv WEAK (44.6% coverage, 776 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00942290 334 HTTPClient::ReadRawBody: complete; register/loop schedule differs; difftest FAIL (3/363 valid inputs, 70.4% coverage)
 009423d0 358 HTTPClient::ReadResponseLine: complete; line-scan register schedule differs; difftest PASS (237 valid inputs, 60.3% coverage)

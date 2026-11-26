@@ -4,5 +4,4 @@
 00941a10  188  Base64EncodeString: complete; eastl resize/memmove growth sequence differs; equiv UNSUPPORTED (0/400 valid: original faults on random string pointers, saved replay passes)
 00941af0  161  Base64DecodeString: complete; eastl resize/memmove growth sequence differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, call#0 ecx, call#1 esp, call#2 target]
 00941e80  151  EncodeFormURL: complete; isspace/isalnum ordering and sprintf+append path differ; equiv PASS (316 valid, 68.3% cov)
-00942010  87  HTTPClientCheckTimeout: complete; branch layout differs; equiv WEAK (272 valid, 35.0% cov: reaching GetTime64 hits unmodelled import:_time64)
 00942050  48  HTTPClientFindHeader: complete; stride division and loop register schedule differ; equiv WEAK (44.6% coverage, 776 valid inputs)

@@ -155,7 +155,7 @@ struct TextStyleOps
 {
 	void update();
 };
-// @ 0x08eaa20  EA::XHTML::Layout::Block::SetUpBox(SizingContext&, StyleState&)
+// 0x008eaa20 (byte-exact lifted version: match/slices/s008eaa20/s008eaa20.cpp)  EA::XHTML::Layout::Block::SetUpBox(SizingContext&, StyleState&)
 struct BlockOps
 {
 	void setUpBox(StackingContext* ctx, StyleState* st);

@@ -338,7 +338,7 @@ bool DatabaseDirectoryFiles::SetManager(bool bAttach, Manager* pManager, void* p
     return pfn(mpManager, 0, this, 0);
 }
 
-// @ 0x008d6410
+// 0x008d6410 (byte-exact lifted version: match/slices/s008d6410/s008d6410.cpp)
 bool DatabaseDirectoryFiles::CloseUnreferencedRecords()
 {
     mMutex.Lock(reinterpret_cast<void*>(0x1436624));

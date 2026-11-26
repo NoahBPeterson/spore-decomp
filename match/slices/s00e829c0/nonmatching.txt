@@ -8,5 +8,4 @@
 00e834d0 179 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - state update routine; body not reconstructed. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 00e836f0 206 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 197 bytes - layout initialisation routine; body not reconstructed.
 00e837c0 332 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 324 bytes - float query routine; body not reconstructed.
-00e82d40 ? other: own source builds 26 bytes, retail 12; it was listed by a row borrowing FUN_00e82d30, same shape, other targets (match/shape_only.txt, #458)
 00e82dc0 ? other: own source builds 20 bytes, retail 18; it was listed by a row borrowing FUN_00e82d10, same shape, other targets (match/shape_only.txt, #458)

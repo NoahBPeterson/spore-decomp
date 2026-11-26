@@ -117,7 +117,7 @@ bool FUN_0095e0b0(const float* p, float* o)
     return true;
 }
 
-// @ 0x0095f090
+// 0x0095f090 (byte-exact lifted version: match/slices/s0095f090/s0095f090.cpp)
 CM* CM::SetAxes(float* a, float* b, float* c)
 {
     void* self = this;
