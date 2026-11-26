@@ -814,6 +814,13 @@ treat them as noreturn) — all as in banteg. Plus:
 - **`throw()`** on a dealloc helper removes extra EH stores; declaring a
   constructing function `extern "C"` omits the constructor unwind graph C++
   linkage keeps.
+- **`extern "C"` stand-ins drop EH state stores.** Under `/EHsc` (the `c`) the compiler assumes an `extern "C"`
+  function never throws, also when it is called through a cast to a `__thiscall` pointer type
+  (`((FnRelease)Release_690120)(p)`). A call that cannot throw needs no state store before it, so where retail has
+  `mov dword ptr [esp+N], -1` (or another state number) just before a destructor's call and yours has nothing,
+  the callee was a C++ function in the original. Declare it as one: the real member (`p->Release()` on the class
+  from `include/`), or a C++ prototype with the mangled name `symbols/` records. 0x0068f0b0 (`CJobHolder::SetJob`)
+  was 8 bytes short for this reason only.
 - **Inline `__asm` in an atomic helper blocks inlining** — so the original did
   not use it (Papercut `s0060d860…`).
 
