@@ -4901,19 +4901,25 @@ void EA::UTFWinControls::WinGrid_s0097_0f30::DrawCell(EA::UTFWinControls::OwnerD
 // @ 0x009719a0
 void EA::UTFWinControls::Window::InvalidateLayout()
 {
+    struct WindowGridView : EA::UTFWinControls::IWindow {
+        char _pad004[0x204];
+        EA::UTFWinControls::IWinGrid_s0097_0f30 mGrid;
+    };
+
     EA::UTFWinControls::IWindow::InvalidateLayout();
 
-    EA::UTFWinControls::IWinGrid_s0097_0f30* pGrid = (EA::UTFWinControls::IWinGrid_s0097_0f30*)((char*)this + 0x208);
+    WindowGridView* pSelf = (WindowGridView*)this;
+    EA::UTFWinControls::IWinGrid_s0097_0f30* pGrid = &pSelf->mGrid;
 
     EA::UTFWinControls::RectF gridArea;
     pGrid->GetGridArea(gridArea);
     EA::UTFWinControls::RectF cellArea;
     pGrid->GetCellArea(cellArea);
 
-    *(float*)((char*)this + 0x240) = gridArea.right - gridArea.left;
-    *(float*)((char*)this + 0x244) = gridArea.bottom - gridArea.top;
-    *(float*)((char*)this + 0x248) = cellArea.right - cellArea.left;
-    *(float*)((char*)this + 0x24c) = cellArea.bottom - cellArea.top;
+    pSelf->mGrid.mVisibleGridAreaWidth = gridArea.right - gridArea.left;
+    pSelf->mGrid.mVisibleGridAreaHeight = gridArea.bottom - gridArea.top;
+    pSelf->mGrid.mVisibleCellAreaWidth = cellArea.right - cellArea.left;
+    pSelf->mGrid.mVisibleCellAreaHeight = cellArea.bottom - cellArea.top;
     EA::UTFWinControls::WinGrid_s0097_0f30* pWin = (EA::UTFWinControls::WinGrid_s0097_0f30*)((char*)this - 4);
     pWin->mGrid.mbRecalculateAllNeeded = 1;
     ((EA::UTFWinControls::IWindow*)((char*)pWin + 4))->SetFlag(8, 1);
