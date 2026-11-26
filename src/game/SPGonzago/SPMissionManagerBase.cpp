@@ -869,18 +869,19 @@ IRefLite** __thiscall StratMapEntry::Lookup(unsigned* key)
     HashUIntARC* self = (HashUIntARC*)this;
     HashIt it;
     ((HashFind*)self)->find(&it, key);
-    if (it.node == self->mpBucket[self->mnBucketCount]) {
-        // On a miss the find result is dead; the original reuses that slot as the value to insert
-        // (its key/value land on it.node/it.bucket, and the InsIt output on the following dword).
-        NodeUIntARC* value = (NodeUIntARC*)&it;
-        value->key = *key;
-        value->value = 0;
-        InsIt res;
-        ((InsUIntARC*)self)->Ins(&res, value, 0);
-        if (value->value) value->value->Release();
-        return (IRefLite**)((char*)res.node + 4);
-    }
-    return (IRefLite**)((char*)it.node + 4);
+    if (it.node != self->mpBucket[self->mnBucketCount])
+        return (IRefLite**)((char*)it.node + 4);
+    // On a miss the find result is dead; the original reuses that slot as the value to insert
+    // (its key/value land on it.node/it.bucket, and the InsIt output on the following dword).
+    NodeUIntARC* value = (NodeUIntARC*)&it;
+    value->key = *key;
+    value->value = 0;
+    InsIt res;
+    *(char*)&key = 0;
+    ((InsUIntARC*)self)->Ins(&res, value, *(int*)&key);
+    IRefLite** r = (IRefLite**)((char*)res.node + 4);
+    if (value->value) value->value->Release();
+    return r;
 }
 
 // @ 0x00b6ffa0
