@@ -498,13 +498,12 @@ void C2X::FUN_00be2110()
 
 // @ 0x00be2340
 PtrVecD0X* C2X::FUN_00be2340()
-{
-    C2X* const volatile self = this;
+{    struct Tag {};
+    Tag tag;
     PtrVecD0X* v = &m_vecD0;
     v->F_b48e40(v->begin, v->end);
-    v->F_bdefa0(v->end, m_begin340, m_end344, self);
-    return v;
-}
+    v->F_bdefa0(m_vecD0.end, m_begin340, m_end344, *(void**)&tag);
+    return v;}
 
 // @ 0x00be2390
 void C2X::FUN_00be2390(Ref60X* obj)

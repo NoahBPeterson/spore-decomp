@@ -450,8 +450,7 @@ float __fastcall FUN_00f31ff0(P2* p)
 
 // @ 0x00F32030
 void __fastcall FUN_00f32030(ObjD* self)
-{
-    C0C* p0 = self->m0C;
+{    C0C* p0 = self->m0C;
     if (p0) {
         self->m0C = 0;
         p0->Release();
@@ -459,12 +458,10 @@ void __fastcall FUN_00f32030(ObjD* self)
     C10* p = self->m10;
     if (p) {
         self->m10 = 0;
-        int c = p->count;
-        --c;
-        p->count = c;
+        int c = (*(volatile int*)&p->count += -1);
         if (c == 0) {
-            p->count = 1;
-            p->v00(1);
+            *(volatile int*)&p->count = 1;
+            ((void (__thiscall*)(C10*, int))(*(void** volatile*)p)[0])(p, 1);
         }
     }
     ((PlanetModelApi*)SP_PlanetModel())->Shutdown();

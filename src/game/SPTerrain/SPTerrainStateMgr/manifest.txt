@@ -8,3 +8,4 @@
 ../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?ApplyHeightRatio@cPlanet@@QAEXM@Z  00fbdaa0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?ResetRenderState@cPlanet@@QAEXXZ  00fbdb10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?Initialize@cTerrainStateMgr@@QAEXXZ  00fbe7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainStateMgr.cpp  ??0cTerrainStateMgr_s00fb_ddb0@@QAE@PAUcTerrainSphere_s00fb_ddb0@@@Z  00fbe130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -565,8 +565,7 @@ void cAppModeEditorBase::Undo(char postMsg, char isRedoFlag) {
 
 // ---------------------------------------------------------------------------
 // @ 0x0058a950
-void cAppModeEditorBase::Redo() {
-    int count = (M(int, 0x178) - M(int, 0x174)) >> 2;
+void cAppModeEditorBase::Redo() {    int count = (M(int, 0x178) - M(int, 0x174)) >> 2;
     if (M(int, 0x188) < count) {
         int i = ++M(int, 0x188);
         LocalState* ls = ((LocalState**)M(void*, 0x160))[i - 1];
@@ -607,7 +606,14 @@ void cAppModeEditorBase::Redo() {
         ((EditorUI*)M(void*, 0x78))->UpdateUIBasedOnModelSaveability();
         if (M(void*, 0x78)) ((EditorUI*)M(void*, 0x78))->EnableUndoButton(true);
         if (e2) e2->Release();
-        RcRelease(res);
+        RcSub* ref = (RcSub*)((char*)res + 4);
+        int refs = (*(volatile int*)&ref->cnt += -1);
+        if (refs == 0) {
+            _ReadWriteBarrier();
+            ref->cnt = 1;
+            _ReadWriteBarrier();
+            ((void(__thiscall*)(void*, int))ref->vt[0])(ref, 1);
+        }
         if (entry) entry->Release();
         }
         if (ls) ls->Release();

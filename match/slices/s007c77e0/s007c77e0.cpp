@@ -1,6 +1,8 @@
 // Slice s007c77e0 -- SP::cConfigManager / ArgScript option commands (retail build).
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---------------------------------------------------------------- masked externs
 uint32_t __cdecl FNVHash(const char* p, uint32_t hash, int ignore);              // 0x00932e80
@@ -165,26 +167,26 @@ int cRandom::Query(int which)
 
 // @ 0x007c7910
 int cRandom::Read(void* dst, int n)
-{
-    if (mData != 0 && dst != 0 && (mPos + 1) < mSize) {
-        uint8_t* out = (uint8_t*)dst;
+{    if (mData != 0 && dst != 0 && (mPos + 1) < mSize) {
+        uint8_t* out = static_cast<uint8_t*>(dst);
         while (n--) {
+            const uint32_t bound = mSize;
             uint32_t v = mState;
             do {
                 if (v & 1)
                     v = (v >> 1) ^ mPoly;
                 else
                     v >>= 1;
-            } while (v >= mSize);
+            } while (v >= bound);
             mState = v;
+            _ReadWriteBarrier();
             *out = mData[v];
             mPos++;
             out++;
         }
         return (int)(out - (uint8_t*)dst);
     }
-    return -1;
-}
+    return -1;}
 
 // @ 0x007c7980
 bool cRandom::Reset()

@@ -419,13 +419,14 @@ hkWingedEdgeTriangle* hkWingedEdge::findTriangleOnNearestPlane()
 // @ 0x01120850
 void hkWingedEdge::initializeWithTetrahedron(void* a, void* b, void* c)
 {
-    const uint32_t* pa = (const uint32_t*)a;   // param2 -> +0x30.., +0x70.., +0xb0.., +0xf0..
+    const uint32_t* pa = (const uint32_t*)(*static_cast<void* volatile*>(&a));   // param2 -> +0x30.., +0x70.., +0xb0.., +0xf0..
     uint32_t* self = (uint32_t*)this;
 
     this->m_i08 = 4;
-    self[0xc]  = pa[0];  self[0xd]  = pa[1];  self[0xe]  = pa[2];  self[0xf]  = pa[3];
+    self[0xc]  = pa[0];  self[0xd]  = pa[1];  self[0xe]  = pa[2];
+    static_cast<volatile uint32_t*>(self)[0xf] = pa[3];
     {
-        const uint32_t* pb = (const uint32_t*)b;   // param3 -> +0x40.., +0x80.., +0xc0.., +0x100..
+        const uint32_t* pb = (const uint32_t*)(*static_cast<void* volatile*>(&b));   // param3 -> +0x40.., +0x80.., +0xc0.., +0x100..
         self[0x10] = pb[0];  self[0x11] = pb[1];  self[0x12] = pb[2];  self[0x13] = pb[3];
         {
             const uint32_t* pc = (const uint32_t*)c;   // param4 -> +0x20.., +0x60.., +0xa0.., +0xe0..

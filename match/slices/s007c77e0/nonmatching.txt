@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 007c77e0  7   inc ecx scheduled after the two field stores instead of right after the table load
-007c7910  10  two loop-invariant load reorderings (mSize/mState, mData/mState store)
 007c7980  7   inc ecx scheduled after the two field stores instead of right after the table load
 007c7ac0  109 loop/count register allocation and compare shape (indexed-for vs pointer loop)
 007c7b30  127 64-byte-aligned stack buffer / float-format call scheduling differs

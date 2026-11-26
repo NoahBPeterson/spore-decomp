@@ -388,23 +388,37 @@ extern "C" void __fastcall FUN_00b5b6c0(void*);
 
 // @ 0x00bc3040 — editor "green simulator" constructor.
 void* cEditorRes::ctor()
-{
-    extern char v_1466744[], v_1466720[];
+{    extern char v_1466744[], v_1466720[];
     FUN_00b5b6c0(this);
-    *(void**)this = v_1466744;
-    *(void**)((char*)this + 8) = v_1466720;
-    *(void**)((char*)this + 0x10) = 0;
-    *(void**)((char*)this + 0x14) = 0;
-    *(void**)((char*)this + 0x18) = 0;
+    struct Vec {
+        float* begin;
+        float* end;
+        float* cap;
+        void Init() { begin = 0; end = 0; cap = 0; }
+    };
+    struct EditorSim {
+        void* vtbl0;
+        int   unk4;
+        void* vtbl8;
+        int   unkC;
+        Vec   vec;
+        int   unk1C[2];
+        float m24;
+    };
+    EditorSim* sim = reinterpret_cast<EditorSim*>(this);
+    sim->vtbl0 = v_1466744;
+    sim->vtbl8 = v_1466720;
+    sim->vec.Init();
 
-    void* p = operator_new(4, "Simulator", 0, 0,
+    float* __restrict p = static_cast<float*>(operator_new(4, "Simulator", 0, 0,
                            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-                           0xd1);
-    *(float*)p = 1440.0f;
-    *(void**)((char*)this + 0x10) = p;
-    *(void**)((char*)this + 0x18) = (char*)p + 4;
-    *(void**)((char*)this + 0x14) = (char*)p + 4;
-    *(float*)((char*)this + 0x24) = 86400.0f;
+                           0xd1));
+    float* end = p + 1;
+    *p = 1440.0f;
+    sim->vec.begin = p;
+    sim->vec.cap = end;
+    sim->vec.end = end;
+    sim->m24 = 86400.0f;
     g_editorSim = this;
     return this;
 }

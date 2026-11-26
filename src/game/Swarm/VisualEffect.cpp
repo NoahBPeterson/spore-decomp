@@ -381,11 +381,12 @@ void* cVisualEffect::GetBone(int which)
 
 // @ 0x00a821e0
 void cVisualEffect::SetVectorParams(int a, int b, int c)
-{
-    void** vt = *(void***)this;
-    Fn3 f = (Fn3)vt[0x44 / 4];
-    f(this, a, b, c * 3);
-}
+{    void** vt = *(void***)this;
+    int* pc = &c;
+    *pc = c * 3;
+    _ReadWriteBarrier();
+    Fn3 f = (Fn3)*((void* volatile*)vt + 0x44 / 4);
+    f(this, a, b, c);}
 
 // @ 0x00a82200
 u32* cVisualEffect::GetVectorParams(u32 idx, u32* count)

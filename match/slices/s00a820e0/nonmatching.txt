@@ -5,7 +5,6 @@
 # sibling for some rows).  Equiv verdicts are from tools/difftest/equiv.py default inputs.
                the two flag bytes differs.  Equiv WEAK (90 valid inputs, 46.7% coverage), no
                behavioural mismatch.
-00a821e0   10  cVisualEffect::SetVectorParams: complete.  Ends in a jmp-style tail call in the
                original (LTCG sibling call); a single-object /O2 build emits call+ret.
                Equiv UNSUPPORTED (0/400 valid inputs, harness rejects the generated `this`).
 00a82370   72  schedule: cVisualEffect::SetDescription: the old "[equiv REFUTED ... ret#0 eax]" described a logic

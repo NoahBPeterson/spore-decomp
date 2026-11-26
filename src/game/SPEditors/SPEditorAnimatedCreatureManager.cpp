@@ -1334,8 +1334,7 @@ void SP::cSPEditorAnimatedCreatureManager_s0059_c4c0::AddDelayedEvent(EA::AutoRe
 
 // @ 0x0059cbd0
 void SP::cSPEditorAnimatedCreatureManager_s0059_c4c0::SetCreatureIdle(uint32_t id)
-{
-    SP::cAnimatingCreature_s0059_c4c0* creature = GetCreature(id);
+{    SP::cAnimatingCreature_s0059_c4c0* __restrict creature = GetCreature(id);
     if (mAnimManager && creature)
         creature->SetIdle(0);
 }

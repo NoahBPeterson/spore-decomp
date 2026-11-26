@@ -2919,14 +2919,16 @@ SPShape* __thiscall SPShape::InitDefault()
 
 // @ 0x00af4ea0
 extern "C" void __cdecl FUN_00af4ea0(SPShape* self, int kind, const Vec3_s00af_4da0* a, const Vec3_s00af_4da0* b, const void* xform, const f32* src6, u8 flag, const Orientation* orient)
-{
-    self->kind  = kind;
+{    self->kind  = kind;
     self->type  = 1;
     self->pos   = *a;
     self->halfExt = *b;
     self->xf.Assign(xform);
     const Vec3_s00af_4da0* p6 = (const Vec3_s00af_4da0*)src6;
-    self->hi = p6[1];
+    memcpy(&self->hi.x, &p6[1].x, sizeof(f32));
+    _ReadWriteBarrier();
+    memcpy(&self->hi.y, &p6[1].y, sizeof(f32));
+    memcpy(&self->hi.z, &p6[1].z, sizeof(f32));
     self->lo = p6[0];
     self->flag40 = flag;
     self->worldPos = DAT_0167ae24_v;
@@ -2934,8 +2936,7 @@ extern "C" void __cdecl FUN_00af4ea0(SPShape* self, int kind, const Vec3_s00af_4
         self->orient = *orient;
         return;
     }
-    memset(&self->orient, 0, sizeof(self->orient));
-}
+    memset(&self->orient, 0, sizeof(self->orient));}
 
 // @ 0x00af4f70
 extern "C" void __cdecl FUN_00af4f70(SPShape* self, int kind, const Vec3_s00af_4da0* a, const Vec3_s00af_4da0* b, f32 f54, const void* xform, const Vec3_s00af_4da0* n, f32 f_c8, int b4, int b8, u8 flag, const Orientation* orient)

@@ -15,3 +15,4 @@ slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc3150@cSPTimer@@QAEX_K@Z        00bc3150
 slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc3170@cSPTimer@@QAEXXZ          00bc3170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bc2570/s00bc2570.cpp  ?GetElapsedTime@cSPTimer@@QAE_KXZ       00bc3190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc31c0@cSPTimer@@QAEPAU1@P6A_KXZ@Z  00bc31c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?ctor@cEditorRes@@QAEPAXXZ  00bc3040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
