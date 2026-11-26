@@ -1430,16 +1430,21 @@ bool EA::Trace::LogFilterGroupLevels_s0092_34f0::RemoveGroupLevel(const char* na
 
 // @ 0x00923c90
 bool EA::Trace::LogFilterGroupLevels_s0092_34f0::IsFiltered2(void* rec)
-{
-    char* name = *(char**)((char*)rec + 0x10);
-    if (name != 0 && *name != 0) {
-        EA::Trace::RBNode* it;
-        EA::Trace::RBNode* found = *mGroupLevelMap.find(&it, (const char**)&name);
-        if (found != (EA::Trace::RBNode*)&mGroupLevelMap.mAnchor)
-            return *(int*)((char*)rec + 0xc) < found->mnValue;
-    }
-    return *(int*)((char*)rec + 0xc) < mGlobalLevel;
-}
+{    struct Helper {
+        EA::Trace::LogFilterGroupLevels_s0092_34f0* self;
+        __forceinline int GetGroupLevel(const char* name) const {
+            if (name != 0 && *name != 0) {
+                EA::Trace::RBNode* it;
+                EA::Trace::RBNode* found = *self->mGroupLevelMap.find(&it, (const char**)&name);
+                if (found != (EA::Trace::RBNode*)&self->mGroupLevelMap.mAnchor)
+                    return found->mnValue;
+            }
+            return self->mGlobalLevel;
+        }
+    };
+    Helper h = { this };
+    const char* name = *(const char**)((char*)rec + 0x10);
+    return *(int*)((char*)rec + 0xc) < h.GetGroupLevel(name);}
 
 // @ 0x00923cf0
 EA::Trace::LogReporter_s0092_34f0::~LogReporter_s0092_34f0()

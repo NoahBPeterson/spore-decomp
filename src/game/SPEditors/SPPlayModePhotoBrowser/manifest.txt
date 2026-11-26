@@ -29,3 +29,4 @@
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?FindPhotoByGuid@cSPPlayModePhotoBrowser@@QAEPAUcPlayModePhoto@@I@Z  00630360  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?ResetPhotoMap@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NXZ  00632e40  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?FUN_00631dc0@@YIXPAX@Z  00631dc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModePhotoBrowser.cpp  ?IsPhotosWriting@cSPPlayModePhotoBrowser@@QAEHXZ  00630470  /O2 /MD /Gy /TP /GS- /Isrc/game/include

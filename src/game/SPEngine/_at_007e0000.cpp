@@ -160,8 +160,9 @@ struct Matrix3 {
   Matrix3(const void* p) { Assign(p); }
   Matrix3() {}
 };
-struct VBaseA { virtual void va(); virtual ~VBaseA() throw() {} };
-struct VBaseB { virtual void vb(); virtual ~VBaseB() throw() {} int mB; VBaseB() : mB(0) {} };
+struct VBaseA { virtual void va(); };
+struct VBaseB { virtual void vb(); int mB; VBaseB() : mB(0) {} };
+struct MidBase : VBaseA, VBaseB { virtual ~MidBase() throw() {} };
 struct VBaseC { virtual void vc(); };
 struct Buf {
   void* begin;  // +0
@@ -169,7 +170,7 @@ struct Buf {
   void* cap;    // +8
   ~Buf() { if (begin != 0 && ((int*)begin)[-1] != 0) operator delete[](begin); }
 };
-struct VolState : VBaseA, VBaseB, VBaseC {
+struct VolState : MidBase, VBaseC {
   int m10;             // +0x10
   void* m14;           // +0x14
   bool m18;            // +0x18

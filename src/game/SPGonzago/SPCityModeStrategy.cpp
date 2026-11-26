@@ -2248,14 +2248,13 @@ void __cdecl FUN_00cfa3b0()
     Civ* civ = ((Noun*)SP_NounManager())->GetPlayerCivilization();
     City* city = (City*)civ->mpCity_0x44c;
     int spec = city->GetSpecialty();
-    int state = city->miState_0x29c;
-    bool keep = (state != 0 || spec == 0) && (state != 1 || spec == 1) &&
-                (state != 2 || spec == 2);
-    if (keep) {
-        ((Strat*)*(void**)0x0169d2c8)->UpdateHintFlags();
+    if ((city->miState_0x29c == 0 && spec != 0) ||
+        (city->miState_0x29c == 1 && spec != 1) ||
+        (city->miState_0x29c == 2 && spec != 2)) {
+        city->Rebuild();
         return;
     }
-    city->Rebuild();
+    ((Strat*)*(void**)g_169d2c8)->UpdateHintFlags();
 }
 
 // @ 0x00cfa410

@@ -47,3 +47,5 @@
 ../src/game/Swarm/_at_00a70000.cpp  ?find@HashMapBase@@QAE?AUHIter@@ABUHKey@@@Z  00a7bf40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/_at_00a70000.cpp  ?WaveSum@@YGMPBM@Z  00a77c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/_at_00a70000.cpp  ?WaveVec4@@YGXPAMPBM@Z  00a77d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Subscript@HashMap1@@QAEPAPAUIRefT1@@ABUHKey@@@Z  00a7c100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Subscript@HashMap2@@QAEPAPAUIRefT2@@ABUHKey@@@Z  00a7c180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

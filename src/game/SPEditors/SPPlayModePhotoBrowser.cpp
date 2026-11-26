@@ -758,12 +758,13 @@ cJob* cSPPlayModePhotoBrowser::CancelAllPendingLoadJobs()
 
 // @ 0x00630470
 int cSPPlayModePhotoBrowser::IsPhotosWriting()
-{
-    for (uint32_t i = 0; i < mPhotos.size(); ++i) {
+{    for (uint32_t i = 0; i < mPhotos.size(); ++i) {
         cJob* j = mPhotos.mpBegin[i].mpObject->loadJob.mpObject;
         if (j) {
             int r = j->ContinueJob();
-            if (r == 4 || r != 7)
+            if (r == 4)
+                j->Cancel(0);
+            else if (r != 7)
                 j->Cancel(0);
             AutoRef<cJob>* slot = &mPhotos.mpBegin[i].mpObject->loadJob;
             cJob* old = slot->mpObject;
@@ -773,8 +774,7 @@ int cSPPlayModePhotoBrowser::IsPhotosWriting()
             }
         }
     }
-    return 0;
-}
+    return 0;}
 
 // @ 0x006304e0
 bool cSPPlayModePhotoBrowser::AnyWriteJobActive()

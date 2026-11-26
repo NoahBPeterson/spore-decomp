@@ -14,3 +14,4 @@
 ../src/game/SPEngine/_at_007e0000.cpp  ??1SplitControllerDtorView@@QAE@XZ  007e0f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_007e0000.cpp  ?Start@cSplitControllerEffect@@QAEXH@Z  007e15b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007e0000.cpp  ??0cSplitControllerEffect@@QAE@PAX@Z  007e1010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ??1VolState@@UAE@XZ  007ef560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

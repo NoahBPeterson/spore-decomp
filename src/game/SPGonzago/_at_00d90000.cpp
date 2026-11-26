@@ -2582,15 +2582,28 @@ void __cdecl FUN_00d9d8d0(int* out, int* src, int* end, int* dst)
 
 // @ 0x00d9d940
 void __cdecl FUN_00d9d940(void* dst, unsigned n, void* src)
-{
-  Elem20* d = (Elem20*)dst;
-  Elem20* s = (Elem20*)src;
-  while (n > 0) {
-    if (d != 0) {
-      d->a = s->a;
-      d->f[0] = s->f[0]; d->f[1] = s->f[1]; d->f[2] = s->f[2]; d->f[3] = s->f[3];
-      d->f[4] = s->f[4]; d->f[5] = s->f[5]; d->f[6] = s->f[6];
+{  struct Inner {
+    float f0, f1, f2, f3, f4, f5, f6;
+    Inner& operator=(const Inner& o) {
+      f0 = o.f0; f1 = o.f1; f2 = o.f2; f3 = o.f3;
+      f4 = o.f4; f5 = o.f5; f6 = o.f6;
+      return *this;
     }
+  };
+  struct S {
+    int a;
+    Inner rest;
+    S& operator=(const S& o) {
+      a = o.a;
+      rest = o.rest;
+      return *this;
+    }
+  };
+  S* d = (S*)dst;
+  const S* s = (const S*)src;
+  while (n > 0) {
+    if (d != 0)
+      *d = *s;
     --n;
     ++d;
   }

@@ -5,4 +5,3 @@
 00b35ec0 83 complete; original keeps redundant comp null re-check
 00b360d0 75 complete; original uses add eax,0x64 member-address form for the comp load
 00b36200 61 complete; original keeps first in memory, loop register choice
-00b36280 13 complete; dest/first load order differs

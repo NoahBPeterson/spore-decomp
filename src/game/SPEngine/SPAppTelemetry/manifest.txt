@@ -24,3 +24,4 @@
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01191f10@@YAPAIXZ  01191f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01191fe0@@YAPAIPAI0@Z  01191fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01192190@@YAIH@Z  01192190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?TelemetryRelease@@YIHPAH@Z  007ebf20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

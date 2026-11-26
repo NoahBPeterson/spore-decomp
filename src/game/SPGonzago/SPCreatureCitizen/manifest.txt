@@ -55,3 +55,4 @@
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da81c0@@YA_NPAUCreature@@@Z  00da81c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_01335fe0@@YAXXZ  01335fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c22a80@cSPCreatureBase@@QAEDPAVcInteractionTarget@@@Z  00c22a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?GetIdentityColor@cCreatureBase@@QAEPAUVec3@@XZ  00c23200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -22,7 +22,6 @@
 0065e110 775 Populate - complete, vector creation + float placement scheduling not byte-exact
 0065e570 254 RemoveAsset - complete, hashset find/erase path not byte-exact
 0065e720 317 ResetPanel - complete, hashset/window path not byte-exact
-0065e8d0 15 data: LoadLayout is 272 bytes (ret at 0x0065e9df) but the fingerprint is 293: it also covers the following 21-byte FUN_0065e9e0 (load/unload dispatcher: jmp UnloadLayout / jmp LoadLayout), so it cannot match as one function. The AddWinProc (slot 0x104) argument order is fixed by giving cSPUIFeedEdit_s0065_df30 its real bases (cStringTokenTranslator +0 size 8, IWinProc +8 per SP/cSPUIFeedEdit.h) and calling AddWinProc(this); a GetFrame argument register swap (eax/ecx around the kFrameName load) remains after that.
 0065ea00 604 DoMessage - complete message dispatch, many branches/scheduling not byte-exact
 0065ef30 950 cSPUIFeedEdit::LoadFilter complete (module flags /O2 /MD /Gy /TP /arch:SSE for this function; clear sets, filter lookup, constraint query, asset population, page count, window updates); frame slot layout of query temporaries and register allocation differ [equiv: WEAK 14% coverage, no mismatch]
 0065f390 211 AddAsset - complete, hashset find/insert path not byte-exact

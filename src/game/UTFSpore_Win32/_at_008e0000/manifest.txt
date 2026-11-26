@@ -25,3 +25,4 @@
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?AddRun@SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAEXPB_WIH@Z  008ef8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ??0StackingContext@@QAE@I@Z  008efad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?SetContextRect@StackingContext@@QAEXABURectF@@@Z  008efc80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008e0000.cpp  ?SubStyleGet@RenderingContext_s008e_dc30@Layout@XHTML@EA@@QAEXPAUVec2@234@@Z  008ee770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

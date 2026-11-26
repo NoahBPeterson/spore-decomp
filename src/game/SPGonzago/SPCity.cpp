@@ -8773,11 +8773,10 @@ void RebuildAnalysisFromStream(IStreamProvider* owner, AnalysisVec* vec)
 
 // @ 0x00be0c80
 bool RemoveItem(PtrVec2* vec, int** key)
-{
-    for (int** it = vec->mpBegin; it != vec->mpEnd; ++it) {
+{    for (int** it = vec->mpBegin, **end = vec->mpEnd; it != end; ++it) {
         if (*it == *key) {
-            if (it + 1 < vec->mpEnd)
-                MoveOverlap(it + 1, vec->mpEnd, it);        // 0x00ae6880
+            if (it + 1 < end)
+                MoveOverlap(it + 1, end, it);        // 0x00ae6880
             vec->mpEnd = vec->mpEnd - 1;
             AutoRefObj* e = (AutoRefObj*)*vec->mpEnd;
             if (e)
@@ -8785,8 +8784,7 @@ bool RemoveItem(PtrVec2* vec, int** key)
             return true;
         }
     }
-    return false;
-}
+    return false;}
 
 // @ 0x00be0d70
 InfoRec::InfoRec(const InfoRec& o)

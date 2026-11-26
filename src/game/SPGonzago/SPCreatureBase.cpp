@@ -2162,7 +2162,7 @@ virtual void  pad0c();
 virtual void  pad10();
   virtual void  Dispatch(void* a, u32 b, u32 c);  // 0x14
 };
-void __cdecl FUN_00c16090(u32* a1, u32* a2, u32* a3);       // 0xc16090
+u32* __cdecl FUN_00c16090(u32* a1, u32* a2, u32* a3);       // 0xc16090
 u8   __cdecl FUN_00c160c0(void* a1);                        // 0xc160c0
 SlotMessageVtbl* __cdecl MessageServer_s00c1_5310();                   // 0x67dcc0
 void __cdecl SlotMessage_Destruct(void* p);                 // 0x421cf0
@@ -11592,13 +11592,14 @@ void __cdecl FUN_00c15f60_impl(IOStream* a1, void* a2)
 }
 
 // @ 0x00c16090
-void __cdecl FUN_00c16090(u32* a1, u32* a2, u32* a3)
+u32* __cdecl FUN_00c16090(u32* a1, u32* a2, u32* a3)
 {
   while (a2 != a1) {
     a2--;
     a3--;
     *a3 = *a2;
   }
+  return a3;
 }
 
 // @ 0x00c160c0

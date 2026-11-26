@@ -1330,16 +1330,15 @@ cTelemetryView_7ebe70::~cTelemetryView_7ebe70()
 // @ 0x007ebf20
 int __fastcall TelemetryRelease(int* p)
 {
-  int n = p[-1];
-  p = p - 2;
-  n += -1;
-  p[1] = n;
-  if (n == 0) {
-    p[1] = 1;
-    ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
-    return 0;
-  }
-  return n;
+  struct SubObj { virtual ~SubObj() {} int rc; };
+  p -= 2;
+  SubObj* q = (SubObj*)p;
+  int n = q->rc;
+  q->rc = n - 1;
+  if (n - 1 != 0) return n - 1;
+  q->rc = 1;
+  delete q;
+  return 0;
 }
 
 // @ 0x007ebf90

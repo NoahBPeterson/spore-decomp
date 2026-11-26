@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00e824d0 14 regalloc: retail loads the global into ecx and moves it to esi (mov ecx,[gListSentinel]; mov esi,ecx; test ecx,ecx) and passes esi to operator delete; with a local or a direct gListSentinel argument cl 15 emits mov eax,[g]; mov esi,eax; test eax,eax. Now differs only by the scratch register name (eax vs ecx) plus the 1-byte size (33 vs 34); a local copy, statement-order, return-tail and custom-register-ABI forms were tried. fix1: quick check could not decide
