@@ -1,0 +1,4 @@
+# Function starts the Ghidra index, the module map and the manifests miss (tools/ci/make_fingerprints.py reads this).
+# One hex VA per line; the comment says how it was found.
+00fc9220  # rw::movie::MovieDecoder::VideoDecodeThreadFcn body after the 16-byte setter at 0x00fc9210 (#588)
+00fcdc10  # 41-byte function after the dispatcher at 0x00fcdb20 and its jump table (#588)
