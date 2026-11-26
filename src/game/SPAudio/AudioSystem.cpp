@@ -7442,15 +7442,15 @@ void ZoneVector::DoInsertValue(Zone* pos, const Zone* value)
 
 // @ 0x00a27e60
 bool CountMap::AddRef(uint32_t key)
-{
-    CountNode* n = (CountNode*)mTree.findv(key).node;
+{    CountNode* n = (CountNode*)mTree.findv(key).node;
     if ((char*)this + 8 == (char*)n) {
-        mTree.insert(CountPair(key, 1));
+        CountPair v(key, 1);
+        *(unsigned char*)&key = 0;
+        mTree.Insert(v, *(CountTrueType*)&key);
         return true;
     }
     n->count++;
-    return true;
-}
+    return true;}
 
 // @ 0x00a27ed0
 bool Submix_s00a2_6e10::ConnectToSubmix(Submix_s00a2_6e10* other)

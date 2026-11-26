@@ -6686,8 +6686,7 @@ void* VecHeader::Assign12(void** src)
 
 // @ 0x00d5a140
 void* VecHeader::Insert16(Elem16_s00d5_9b00* pos, const Elem16_s00d5_9b00* pValue)
-{
-    Elem16_s00d5_9b00* const end = (Elem16_s00d5_9b00*)mpEnd;
+{    Elem16_s00d5_9b00* const end = (Elem16_s00d5_9b00*)mpEnd;
     if (end != (Elem16_s00d5_9b00*)mpCapacity)
     {
         const Elem16_s00d5_9b00* value = pValue;
@@ -6695,13 +6694,11 @@ void* VecHeader::Insert16(Elem16_s00d5_9b00* pos, const Elem16_s00d5_9b00* pValu
             value = value + 1;
         if (end)
         {
-            float f0 = end[-1].b;
-            float f1 = end[-1].c;
-            float f2 = end[-1].d;
             end->a = end[-1].a;
-            end->b = f0;
-            end->c = f1;
-            end->d = f2;
+            _ReadWriteBarrier();
+            end->b = end[-1].b;
+            end->c = end[-1].c;
+            end->d = end[-1].d;
         }
         FUN_00edba80(pos, (Elem16_s00d5_9b00*)mpEnd - 1, (Elem16_s00d5_9b00*)mpEnd);
         *(uint32*)&pos->a = *(const uint32*)&value->a;
@@ -6724,7 +6721,11 @@ void* VecHeader::Insert16(Elem16_s00d5_9b00* pos, const Elem16_s00d5_9b00* pValu
             pNew = (Elem16_s00d5_9b00*)operator_new(n << 4, g_szSimulator, 0, 0, g_szAllocatorH, 0xd1);
         else
             pNew = 0;
-        Elem16_s00d5_9b00* p = (Elem16_s00d5_9b00*)FUN_00d577b0(mpBegin, pos, pNew);
+        Elem16_s00d5_9b00* oldBegin;
+        if ((uintptr_t)pNew & 1) { oldBegin = (Elem16_s00d5_9b00*)mpBegin; goto doCopy1; }
+        oldBegin = (Elem16_s00d5_9b00*)mpBegin;
+    doCopy1:
+        Elem16_s00d5_9b00* p = (Elem16_s00d5_9b00*)FUN_00d577b0(oldBegin, pos, pNew);
         if (p)
         {
             p->a = pValue->a;
@@ -6739,8 +6740,7 @@ void* VecHeader::Insert16(Elem16_s00d5_9b00* pos, const Elem16_s00d5_9b00* pValu
         mpEnd = p;
         mpCapacity = (char*)pNew + (n << 4);
         mpBegin = pNew;
-    }
-}
+    }}
 
 // @ 0x00d5a260
 void cFollowBehavior::Update(cSteerCtx* ctx)

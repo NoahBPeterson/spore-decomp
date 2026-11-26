@@ -99,7 +99,7 @@ struct VT {
     virtual void  q63();                       // +0xfc
 };
 struct FnC22F50  { void*  __thiscall f(); };
-struct FnC14750  { void   __thiscall f(int); };
+struct FnC14750  { void   __thiscall f(bool); };
 struct FnC232C0  { char   __thiscall f(); };
 struct FnC8E7C0  { char   __thiscall f(); };
 struct FnC9D9E0  { void*  __thiscall f(); };
@@ -928,20 +928,23 @@ U32* RBTree::InsertOrFind(const U32* pKey)
 // @ 0x00d793e0
 char cTribeGameBehaviorParty::AddAgent(void* pAgent)
 {
-    char result = 0;
-    if (((FnD7A010*)this)->f(pAgent) != 0 && pAgent != 0) {
+    if (((FnD7A010*)this)->f(pAgent) == 0)
+        goto out;
+    if (pAgent == 0)
+        goto out;
+    {
         void* pCitizen = ((VT*)pAgent)->q02(0x4f176642);
         if (pCitizen != 0 && ((FnC232C0*)pCitizen)->f() != 0) {
             void* pKey = (char*)pCitizen + 0x58;
             U32* pSlot = mAgentTree.InsertOrFind(reinterpret_cast<const U32*>(&pKey));
             *pSlot = 0;
             SpatialObject* pSpatial = &((Creature*)pCitizen)->mSpatial;
-            U8 flag = (pSpatial->q62() == 0) ? 1 : 0;
-            ((FnC14750*)pCitizen)->f(flag);
+            ((FnC14750*)pCitizen)->f(pSpatial->q62() == 0);
             ((VT*)pSpatial)->q59();
         }
     }
-    return result;
+out:
+    return 0;
 }
 
 // @ 0x00d79470

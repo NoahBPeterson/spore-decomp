@@ -1020,11 +1020,17 @@ bool __cdecl FUN_00b70410(void* nameObj, unsigned name, HashTripleARC* map)
 
 // @ 0x00b705a0
 void __thiscall MissionMgr::Dtor()
-{
-    *(void**)this                 = (void*)0x01464e18;
-    *(void**)((char*)this + 8)    = (void*)0x01464df4;
-    *(void**)((char*)this + 0x10) = (void*)0x01464de4;
-    if (mCard6c) mCard6c->Release();
+{    extern char g_1464e18[];
+    extern char g_1464df4[];
+    extern char g_1464de4[];
+    extern char g_13eb394[];
+    extern char g_13eb938[];
+    extern char g_13ec458[];
+    *(void* volatile*)this                 = g_1464e18;
+    *(void* volatile*)((char*)this + 8)    = g_1464df4;
+    *(void* volatile*)((char*)this + 0x10) = g_1464de4;
+    IRefLite* card6c = *(IRefLite* volatile*)&mCard6c;
+    if (card6c) card6c->Release();
     if (mCard68) mCard68->Release();
     HashTripleARC* tm = &mTripleMap;
     ((TriOps*)tm)->FreeNodes((void**)tm->mpBucket, tm->mnBucketCount);
@@ -1035,9 +1041,9 @@ void __thiscall MissionMgr::Dtor()
     sm->mnElementCount = 0;
     if (sm->mnBucketCount > 1) opdel(sm->mpBucket);
     ((VecOps*)&mObjectsBegin)->Dtor();
-    *(void**)((char*)this + 0x10) = (void*)0x013eb394;
-    *(void**)((char*)this + 8)    = (void*)0x013eb938;
-    *(void**)this                 = (void*)0x013ec458;
+    *(void**)((char*)this + 0x10) = g_13eb394;
+    *(void**)((char*)this + 8)    = g_13eb938;
+    *(void**)this                 = g_13ec458;
 }
 
 // @ 0x00b706a0

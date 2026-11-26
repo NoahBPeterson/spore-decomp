@@ -679,13 +679,66 @@ void* __fastcall FUN_00d1e140(E207Obj* self, void* edx, unsigned int flags)
 
 // @ 0x00d1f070
 void AbilitySet::destroy()
-{
-    for (int i = 5; i >= 0; i--) rc_release(mArr34[i]);
-    for (int i = 5; i >= 0; i--) rc_release(mArr1c[i]);
-    for (int i = 1; i >= 0; i--) rc_release(mArr14[i]);
-    for (int i = 1; i >= 0; i--) rc_release(mArr0c[i]);
-    for (int i = 2; i >= 0; i--) rc_release(mArr00[i]);
-}
+{    RCObj** p = mArr34 + 6;
+    for (int i = 5; i >= 0; i--) {
+        RCObj* obj = *--p;
+        if (obj != 0) {
+            int n = (*(volatile int*)&obj->mRef += -1);
+            if (n == 0) {
+                obj->mRef = 1;
+                _ReadWriteBarrier();
+                obj->vf0(1);
+            }
+        }
+    }
+    p = mArr1c + 6;
+    for (int i = 5; i >= 0; i--) {
+        RCObj* obj = *--p;
+        if (obj != 0) {
+            int n = (*(volatile int*)&obj->mRef += -1);
+            if (n == 0) {
+                obj->mRef = 1;
+                _ReadWriteBarrier();
+                obj->vf0(1);
+            }
+        }
+    }
+    p = mArr14 + 2;
+    for (int i = 1; i >= 0; i--) {
+        RCObj* obj = *--p;
+        if (obj != 0) {
+            int n = (*(volatile int*)&obj->mRef += -1);
+            if (n == 0) {
+                obj->mRef = 1;
+                _ReadWriteBarrier();
+                obj->vf0(1);
+            }
+        }
+    }
+    p = mArr0c + 2;
+    for (int i = 1; i >= 0; i--) {
+        RCObj* obj = *--p;
+        if (obj != 0) {
+            int n = (*(volatile int*)&obj->mRef += -1);
+            if (n == 0) {
+                obj->mRef = 1;
+                _ReadWriteBarrier();
+                obj->vf0(1);
+            }
+        }
+    }
+    p = mArr00 + 3;
+    for (int i = 2; i >= 0; i--) {
+        RCObj* obj = *--p;
+        if (obj != 0) {
+            int n = (*(volatile int*)&obj->mRef += -1);
+            if (n == 0) {
+                obj->mRef = 1;
+                _ReadWriteBarrier();
+                obj->vf0(1);
+            }
+        }
+    }}
 
 // @ 0x00d1f160
 void __cdecl FUN_00d1f160(uint32_t id, uint32_t* data, int count, void** arr)

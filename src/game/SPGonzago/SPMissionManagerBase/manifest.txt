@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Shutdown@MissionMgr@@QAEXXZ  00b70070  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Erase@StratMapErase@@QAEHPAI@Z  00b6faa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Lookup@StratMapEntry@@QAEPAPAUIRefLite@@PAI@Z  00b6ff20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Dtor@MissionMgr@@QAEXXZ  00b705a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -8,5 +8,4 @@
 00b700f0  169  OnStrategyGone (erase one object + erase strategy + remove noun): complete; equiv WEAK; schedule/register allocation differs (ebp=map/ebx=noun vs ours); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b70290  346  read the triple-key map from stream: complete; equiv WEAK; loop setup / staging differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b70410  335  compare a name object against a triple-key map: complete; equiv WEAK; schedule / register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b705a0   12  destructor (reset 3 vtables, release cards, free both maps + vector): complete; equiv PASS (221 valid, 100% coverage); only a 2-instruction scheduling swap of the mCard6c load / push edi versus the three vtable stores; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b706a0  230  hint: create a tutorial-mission noun for a tool id and remember it: complete; equiv WEAK; frame/register staging differs (orig ebp=this/ebx=key); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
