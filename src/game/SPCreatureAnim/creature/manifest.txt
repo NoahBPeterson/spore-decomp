@@ -27,3 +27,4 @@
 ../src/game/SPCreatureAnim/creature.cpp  ?FUN_009b7b10@@YIDHHHH@Z  009b7b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?SortFlaggedRuns@Solver@nSPCreatureAnim@@QAEXXZ  009b5930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?FUN_009b8f40@creature_instance_data_s009b_8720@nSPCreatureAnim@@QAEXM@Z  009b8f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?Release@creature_instance_data@nSPCreatureAnim@@QAEJXZ  009c4cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

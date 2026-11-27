@@ -8074,10 +8074,11 @@ long nSPCreatureAnim::creature_instance_data::Release()
 {
     char* b = (char*)this;
     int n = *(int*)(b + 0x14) - 1;
-    if (n < 1)
-        n = 0;
+    int zero = 0;
+    const int& r = (zero < n) ? n : zero;
+    n = r;
     *(int*)(b + 0x14) = n;
-    if (n < 1) {
+    if (n <= 0) {
         *(int*)(b + 0x14) = 1;
         this->~creature_instance_data();
         operator delete[](this);
