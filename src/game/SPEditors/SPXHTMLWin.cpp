@@ -1355,9 +1355,7 @@ bool cXHTMLWin::SubmitForm()
 // @ 0x00623730
 namespace SP { namespace Pollen {
 cSPHoverTitle::cSPHoverTitle(IWindow_s0062_2f20* pParent)
-: mpParent(pParent), mDelay(gHoverDelay) {
-  mpLayout.mpObject = 0;
-  mpTitleWin.mpObject = 0;
+: mpParent(pParent), mDelay(3.402823466e+38f) {
 }
 }}  // namespace SP::Pollen
 
