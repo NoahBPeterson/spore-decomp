@@ -2316,7 +2316,7 @@ Elem0CS* Vec0CS::insert(Elem0CS* position, const Elem0CS& value)
     return mpBegin + i;
 }
 
-// @ 0x009e0b90
+// 0x009e0b90 (byte-exact lifted version: match/slices/s009e0b90/s009e0b90.cpp)
 void __stdcall DestroyRangeA4n(ElemA4* first, ElemA4* last)
 {
     if (first >= last)
