@@ -997,24 +997,71 @@ struct Elem20 { int a; float f[7]; };
 
 // ---- items of slice s00d9dce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
-struct cMethodTable {
-    void* mpSlots[0x100];                       // 0x000
-};
 class cDispatchObject {
 public:
-    void* Call(int nSlot) {
-        return ((void* (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
-    }
-
-    char CallChar(int nSlot) {
-        return ((char (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
-    }
-
-    void CallVoid(int nSlot) {
-        ((void (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
-    }
-
-    cMethodTable* mpTable;                      // 0x000
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void v15();
+    virtual void v16();
+    virtual void v17();
+    virtual void v18();
+    virtual void v19();
+    virtual void v1a();
+    virtual void v1b();
+    virtual void v1c();
+    virtual void v1d();
+    virtual void v1e();
+    virtual void v1f();
+    virtual void v20();
+    virtual void v21();
+    virtual void v22();
+    virtual void v23();
+    virtual void v24();
+    virtual void v25();
+    virtual void v26();
+    virtual void v27();
+    virtual void v28();
+    virtual void v29();
+    virtual void v2a();
+    virtual void v2b();
+    virtual void v2c();
+    virtual void v2d();
+    virtual void v2e();
+    virtual void v2f();
+    virtual void v30();
+    virtual void v31();
+    virtual void v32();
+    virtual void v33();
+    virtual void v34();
+    virtual void v35();
+    virtual void v36();
+    virtual void v37();
+    virtual void v38();
+    virtual void v39();
+    virtual void v3a();
+    virtual void CallVoid();                    // +0xec
+    virtual void v3c();
+    virtual void v3d();
+    virtual char CallChar();                    // +0xf8
 };
 class cBehaviorStimuli {
 public:
@@ -2716,8 +2763,8 @@ char StartFindTargetBehavior(cSimCreature* pCreature, void* pA, void* pB, void* 
         return 0;
     }
 
-    pCreature->mMovement.CallVoid(0xec);
-    pCreature->SetCombatEngaged(!pCreature->mMovement.CallChar(0xf8));
+    pCreature->mMovement.CallVoid();
+    pCreature->SetCombatEngaged(!pCreature->mMovement.CallChar());
 
     void* pPrevious = pFound->mpObject;
     pFound->mnField14 = 0;
@@ -2739,7 +2786,7 @@ char StartFindTargetBehavior(cSimCreature* pCreature, void* pA, void* pB, void* 
 // @ 0x00d9eb20
 void CancelBehaviorTask(cSimCreature* pCreature, void* pA, void* pB, void* pC, void* pD, cBehaviorCallback* pCallback)
 {
-    pCreature->mMovement.CallVoid(0xec);
+    pCreature->mMovement.CallVoid();
     pCreature->mpBehaviorTree->mStimuli.ClearAll(0x2000000, 0);
     if (pCallback != nullptr && pCallback->mpTarget != nullptr)
         ((cBehaviorHandler*)pCallback->mpTarget)->Method04();
