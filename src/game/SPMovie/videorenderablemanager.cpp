@@ -323,25 +323,32 @@ u32 VideoRenderableManager::GetFromDecoderList(u32 index)
 {
     mListMutex.Lock(g_listLockToken);
     VideoRenderable* item;
+    u32 frame;
     if (index == 0) {
-        if (mSentToDecoderList->Count() == 0)
+        rw::SList* list = mSentToDecoderList;
+        if (list->Count() == 0)
             goto fail;
-        item = (VideoRenderable*)mSentToDecoderList->GetHead();
+        item = (VideoRenderable*)list->GetHead();
+        if (item != 0) {
+            frame = item->GetFrame()[0];
+            goto done;
+        }
+        goto fail;
     } else {
         if (mSentToDecoderList->Count() < index)
             goto fail;
         item = (VideoRenderable*)mSentToDecoderList->At(index);
-    }
-    if (item == 0)
-        goto fail;
-    {
-        u32 frame = item->GetFrame()[0];
-        mListMutex.Unlock();
-        return frame;
+        if (item != 0) {
+            frame = item->GetFrame()[0];
+            goto done;
+        }
     }
 fail:
     mListMutex.Unlock();
     return 0;
+done:
+    mListMutex.Unlock();
+    return frame;
 }
 
 // @ 0x00fce4c0
