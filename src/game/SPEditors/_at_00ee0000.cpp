@@ -1579,6 +1579,7 @@ extern void* gSelObject;   // 0x16c7824
 struct IWindow_s00ee_8860;
 struct cSPUILayout_s00ee_8860;
 struct cSPPalette;
+struct IMsgHandler_s00ee_8860;
 struct OBJ174;
 struct OBJ14;
 struct LayoutRecord;
@@ -1616,7 +1617,7 @@ struct IWindow_s00ee_8860 {
     PV_s00ee_8860(e0) PV_s00ee_8860(e4) PV_s00ee_8860(e8) PV_s00ee_8860(ec)
     virtual void*  Vf0(uint32_t id, int a);         // 0xf0
     PV_s00ee_8860(f4) PV_s00ee_8860(f8) PV_s00ee_8860(fc) PV_s00ee_8860(100)
-    virtual void   V104(void* pOwner);              // 0x104
+    virtual void   V104(IMsgHandler_s00ee_8860* pOwner);   // 0x104
 };
 namespace EA {
 template <class T>
@@ -6025,17 +6026,13 @@ void OBJ174::SetVisible(bool visible)
         uint32_t i = 0;
         do {
             IWindow_s00ee_8860* w = mLayout->FindWindowByID(0x16b18090 + i, 1);
-            if (w) {
-                uint8_t* p = (uint8_t*)this + 8;
-                w->V104(p);
-            }
+            if (w)
+                w->V104(this);
             ++i;
         } while (i < 0xf);
         IWindow_s00ee_8860* w = mLayout->FindWindowByID(0x16b1858d, 1);
-        if (w) {
-            uint8_t* p = (uint8_t*)this + 8;
-            w->V104(p);
-        }
+        if (w)
+            w->V104(this);
         Update();
         GetTutorialsUI()->ToggleHint(0x9b, 0x9c);
     }

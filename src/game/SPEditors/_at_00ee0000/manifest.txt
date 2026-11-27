@@ -67,3 +67,4 @@
 ../src/game/SPEditors/_at_00ee0000.cpp  ?QueryInterface@RefCountPart@@QAEPAXI@Z  00eea780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?DoMessage@Entry@@QAEEIPAUMsg@@@Z  00eea6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?SetEntryColor@View@@QAEXPAXMMM@Z  00eea910  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?SetVisible@OBJ174@@UAEX_N@Z  00ee92b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
