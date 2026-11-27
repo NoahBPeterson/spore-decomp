@@ -2548,32 +2548,32 @@ void* CopyDestroyRange1c(void* first, void* last, void* dst)
 
 // @ 0x00570330
 ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
-{
-    const bool bUnused = false;
-    ScratchSlots<4>();
-    ElemI* out = dst;
-    ElemI* src = first;
-    for (; src != last; ++src, ++out) {
-        ElemI* pElem = out;
-        ElemI* pCreated;
-        if (pElem != 0) {
-            pElem->key = src->key;
-            pElem->meta.CopyInit(&src->meta);
-            pCreated = pElem;
-        } else {
-            pCreated = 0;
+{    struct H {
+        static __forceinline ElemI* UninitCopyImpl(ElemI* src, ElemI* last, ElemI* out) {
+            for (; src != last; ++src, ++out) {
+                ::new((void*)out) ElemO((ScratchSlots<2>(), *(const ElemO*)src));
+            }
+            return out;
         }
-        (void)pCreated;
-    }
-    ElemI* result = out;
-    const bool bBlocks = false;
-    ElemI* freeDst = dst;
-    ElemI* freeSrc = first;
-    for (; freeSrc != last; ++freeSrc, ++freeDst) {
-        freeSrc->~ElemI();
-    }
-    (void)bUnused;
-    (void)bBlocks;
+        static __forceinline ElemI* CopyRange(ElemI* first, ElemI* last, ElemI* dst) {
+            const bool bUnused = false;
+            (void)bUnused;
+            return UninitCopyImpl(first, last, dst);
+        }
+        static __forceinline void DestroyImpl(ElemI* freeSrc, ElemI* last, ElemI* freeDst) {
+            for (; freeSrc != last; ++freeSrc, ++freeDst) {
+                freeSrc->~ElemI();
+            }
+        }
+        static __forceinline void DestroyRange(ElemI* first, ElemI* last, ElemI* dst) {
+            const bool bBlocks = false;
+            ScratchSlots<3>();
+            (void)bBlocks;
+            DestroyImpl(first, last, dst);
+        }
+    };
+    ElemI* result = H::CopyRange(first, last, dst);
+    H::DestroyRange(first, last, dst);
     return result;
 }
 

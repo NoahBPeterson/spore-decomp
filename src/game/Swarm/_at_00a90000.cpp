@@ -2818,30 +2818,29 @@ void __cdecl RegisterSwarmVtables(char enable)
 
 // @ 0x00a96c00
 void SwarmEffectBase::ClearParticles()
-{
-    SwarmNode* node = mHead.mpNext;
-    while (node != &mHead) {
-        SwarmNode* prev = node->mpPrev;
-        SwarmNode* next = node->mpNext;
+{    SwarmNode* head = &mHead;
+    SwarmNode* node = head->mpNext;
+    while (node != head) {
+        SwarmNode* dead = node;
+        SwarmNode* prev = *(SwarmNode* volatile*)&node->mpPrev;
+        SwarmNode* next = *(SwarmNode* volatile*)&node->mpNext;
         prev->mpNext = next;
         next->mpPrev = prev;
         node->mpNext = 0;
         node->mpPrev = 0;
         --mnCount;
-        SwarmNode* dead = node;
         node = next;
         dead->mpNext = gpFreeParticles;
         gpFreeParticles = dead;
     }
-    for (node = mHead.mpNext; node != &mHead; ) {
+    for (node = head->mpNext; node != head; ) {
         SwarmNode* next = node->mpNext;
         node->mpPrev = 0;
         node->mpNext = 0;
         node = next;
     }
-    mHead.mpNext = &mHead;
-    mHead.mpPrev = &mHead;
-}
+    head->mpPrev = head;
+    head->mpNext = head;}
 
 // @ 0x00a96c60
 void SwarmEffect::Release(int bRelease)

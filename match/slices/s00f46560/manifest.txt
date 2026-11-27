@@ -15,3 +15,4 @@ slices/s00f46560/s00f46560.cpp  ?FUN_00f46d60@cScreen@@QAE_NHPAH@Z  00f46d60  /O
 slices/s00f46560/s00f46560.cpp  ?FUN_00f468c0@UIComments@@QAE_NHPAH@Z  00f468c0  /O2 /MD /Gy /EHsc /TP
 slices/s00f46560/s00f46560.cpp  ?FUN_00f46e30@cScreen@@QAEXXZ  00f46e30  /O2 /MD /Gy /EHsc /TP
 slices/s00f46560/s00f46560.cpp  ?FUN_00f46b50@cOnlineTab@@QAEPAXXZ  00f46b50  /O2 /MD /Gy /EHsc /TP
+slices/s00f46560/s00f46560.cpp  ?FUN_00f46cf0@cOnlineTab@@QAEXHHHH@Z  00f46cf0  /O2 /MD /Gy /EHsc /TP

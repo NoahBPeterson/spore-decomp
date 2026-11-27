@@ -3,3 +3,4 @@ slices/s009ab620/s009ab620.cpp  ?Init@baked_animation@nSPCreatureAnim@@QAEX_N@Z 
 slices/s009ab620/s009ab620.cpp  ?GetScale@baked_animation@nSPCreatureAnim@@QBEMXZ  009ac2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s009ab620/s009ab620.cpp  ?GetFrame@baked_animation@nSPCreatureAnim@@QBEPAXH@Z  009ac2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s009ab620/s009ab620.cpp  ?DestroyBakedAnimManager@@YIXPAUbaked_anim_manager@nSPCreatureAnim@@@Z  009abce0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s009ab620/s009ab620.cpp  ?UnpackColor@@YAXIPAM@Z  009ac300  /O2 /MD /Gy /EHsc /TP /fp:fast

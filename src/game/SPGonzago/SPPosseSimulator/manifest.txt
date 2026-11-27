@@ -8,3 +8,4 @@
 ../src/game/SPGonzago/SPPosseSimulator.cpp  ?Init@PosseSim@@QAEPAV1@XZ  00d538f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPosseSimulator.cpp  ?partition@@YAPAPAXPAPAX0HP6ADHH@Z@Z  00d53890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPosseSimulator.cpp  ?F52cb0@@YAXPAHHHHP6ADHH@Z@Z  00d52cb0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPosseSimulator.cpp  ?removeSlot@PosseSim@@QAEXPAURefObj@@@Z  00d53330  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

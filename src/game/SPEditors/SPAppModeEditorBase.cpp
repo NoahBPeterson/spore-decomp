@@ -9108,8 +9108,7 @@ int SP::cAppModeEditorBase_s0057_44b0::CanPublish()
 
 // @ 0x00574da0
 void SP::cAppModeEditorBase_s0057_44b0::SetupThumbnailModelWorld(cIModelWorld_s0057_44b0* world, bool isAnimated)
-{
-    SP::cModelManager_s0057_44b0* mm = SP::ModelManager_s0057_44b0();
+{    SP::cModelManager_s0057_44b0* mm = SP::ModelManager_s0057_44b0();
     eastl::bitset<64> include;
     eastl::bitset<64> exclude;
     if (mIsCreatureEditor) {
@@ -9126,9 +9125,9 @@ void SP::cAppModeEditorBase_s0057_44b0::SetupThumbnailModelWorld(cIModelWorld_s0
         exclude.set(mm->GetModelGroup(0xfe39de0, 0));
     }
     world->SetModelGroups(&include, &exclude, 4);
-    void* lighting = world->CreateLightingWorld(0, 4, 1);
-    world->SetLightingWorld(lighting);
-}
+    void** vtbl = *(void***)world;
+    void* lighting = ((void* (__thiscall*)(cIModelWorld_s0057_44b0*, int, int, int))vtbl[0x51])(world, 0, 4, 1);
+    ((void (__thiscall*)(cIModelWorld_s0057_44b0*, void*))vtbl[0x50])(world, lighting);}
 
 // @ 0x00574f30
 void SP::cAppModeEditorBase_s0057_44b0::UpdateModelSounds(float deltaTime)

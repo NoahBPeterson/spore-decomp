@@ -258,8 +258,7 @@ struct cUIPropTarget {
 
 // @ 0x00e28b20
 void FUN_00e28b20(void* param_1, Variant* param_2, Variant* param_3, Variant* param_4, float param_5)
-{
-    if (param_1 == 0)
+{    if (param_1 == 0)
         return;
 
     u32 value2;
@@ -282,10 +281,14 @@ void FUN_00e28b20(void* param_1, Variant* param_2, Variant* param_3, Variant* pa
         u16 k = param_3->mKind;
         float* p;
         if (k == 0xd || k == 0x10) {
-            if ((param_3->mFlags & 0x30) != 0)
+            if ((param_3->mFlags & 0x30) != 0) {
                 p = *(float**)param_3;
-            else
-                p = (float*)((k != 0) ? (u32)param_3 : 0);
+            } else {
+                if ((int)param_3 & 1)
+                    p = (float*)((k != 0) ? (u32)param_3 : 0);
+                else
+                    p = (float*)((k != 0) ? (u32)param_3 : 0);
+            }
         } else {
             p = (float*)&g_variantDefaultFloat_15d1168;
         }

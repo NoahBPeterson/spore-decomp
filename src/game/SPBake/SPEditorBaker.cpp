@@ -9597,14 +9597,27 @@ int EditorObject::GetField78()
 
 // @ 0x00414e30
 bool BoundsLibrary::Query(unsigned int idLo, unsigned int idHi, float* weights, int nWeights, Vector3_s0041_4e30* mn, Vector3_s0041_4e30* mx)
-{
+{    struct FrameHole {
+        static __forceinline void Reserve12() { uint32_t s[12]; }
+        static __forceinline void Reserve10() { uint32_t s[10]; }
+    };
+    struct LocalIter : BoundsIter {
+        __forceinline LocalIter(BoundsTable* tbl) {
+            BoundsNode** tmp1 = tbl->buckets + tbl->bucketCount;
+            BoundsNode* tmp2 = *tmp1;
+            node = tmp2;
+            bucket = tmp1;
+        }
+    };
     uint64_t key = idLo | ((uint64_t)idHi << 32);
     BoundsIter it;
     table.Find(&it, &key);
-    if (it != table.End()) {
+    FrameHole::Reserve12();
+    if (it != LocalIter(&table)) {
         if (mn) {
             BoundsSampler sampler;
             sampler.Init(it.node->value, weights, nWeights, mn, mx);
+            FrameHole::Reserve10();
         }
         if (!mn || (*mn)[0] < (*mx)[0])
             return true;
@@ -9682,8 +9695,7 @@ IntPair* BoundsSampler::CellRange(IntPair* out, int axis, int stride, float t, f
 
 // @ 0x00415310
 void BoundsSampler::Collect(unsigned int cell, int level, Vector3_s0041_4e30* mn, Vector3_s0041_4e30* mx)
-{
-    if (cell >= total) {
+{    if (cell >= total) {
         mn->x = -0.1f; mn->y = -0.1f; mn->z = -0.1f;
         mx->x = 0.1f; mx->y = 0.1f; mx->z = 0.1f;
         return;
@@ -9695,13 +9707,20 @@ void BoundsSampler::Collect(unsigned int cell, int level, Vector3_s0041_4e30* mn
     Collect(cell + range[level].first, level + 1, mn, mx);
     if (range[level].first != range[level].second) {
         Vector3_s0041_4e30 mn2, mx2;
-        Vector3_s0041_4e30 tmp1, tmp2;
         Collect(cell + range[level].second, level + 1, &mn2, &mx2);
-        *mn = *Lerp(&tmp1, *mn, mn2, weight[level]);
-        *mx = *Lerp(&tmp2, *mx, mx2, weight[level]);
-        uint32_t u1[7];   // dead locals of the original inlined helpers (frame size only)
-        uint32_t u2[7];
-        uint32_t u3[15];
+        {
+            Vector3_s0041_4e30 tmp1;
+            *mn = *Lerp(&tmp1, *mn, mn2, weight[level]);
+        }
+        {
+            Vector3_s0041_4e30 tmp2;
+            *mx = *Lerp(&tmp2, *mx, mx2, weight[level]);
+        }
+        {
+            uint32_t u1[7];   // dead locals of the original inlined helpers (frame size only)
+            uint32_t u2[7];
+            uint32_t u3[15];
+        }
     }
 }
 

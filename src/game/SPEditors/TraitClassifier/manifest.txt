@@ -38,3 +38,4 @@
 ../src/game/SPEditors/TraitClassifier.cpp  ?DoFreeNodes@HashTable@@QAEXPAPAUHashNode@@I@Z  00570230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?CopyDestroyRange1c@@YAPAXPAX00@Z  005702c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?RigBlockSetInsert@@YAXI_N@Z  00570480  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?UninitCopy@@YAPAUElemI@@PAU1@00@Z  00570330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

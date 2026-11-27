@@ -7533,13 +7533,13 @@ u8 Class12::FUN_00d12d00(void* pMsg, int nType)
 
 // @ 0x00d12fc0
 void Class12::FUN_00d12fc0()
-{
-    if (mp28) {
-        Free5(mp28, mp2c, mp30, mp34, mp38);
+{    if (mp28) {
+        void* old = mp28;
         mp28 = 0;
+        Free5(old, mp2c, mp30, mp34, mp38);
     }
     if (mp40)
-        SELF(this)->FUN_00d100b0(1, 0);
+        SELF(this)->FUN_00d100b0(0, 1);
     if (mp3c) {
         void* old = mp3c;
         mp3c = 0;
@@ -7576,11 +7576,13 @@ void Class12::FUN_00d12fc0()
         SELF(edi)->FUN_00811ad0((void*)1);
     }
     if (mp44) {
-        void* old = mp44;
-        mp44 = 0;
-        VCall0(old, 0x08);
-    }
-}
+        _ReadWriteBarrier();
+        if (mp44) {
+            void* old = mp44;
+            mp44 = 0;
+            VCall0(old, 0x08);
+        }
+    }}
 
 // @ 0x00d130d0
 namespace SP {

@@ -505,14 +505,16 @@ void cOnlineTab::FUN_00f46c00() {
 }
 
 // @ 0x00F46CF0
-void cOnlineTab::FUN_00f46cf0(int a1, int a2, int a3, int a4) {
-    GetURL(0x811c9dc5, &mUrl);
-    FUN_004e0850(&mUrl, STR_FMT_I64U, a1, a2);
-    FUN_004e0850(&mUrl, STR_148d5f8, a3);
-    FUN_004e0850(&mUrl, STR_13f01bc, a4);
+void cOnlineTab::FUN_00f46cf0(int a1, int a2, int a3, int a4) {    GetURL(0x811c9dc5, &mUrl);
+    FUN_004e0850(&mUrl, L"%I64u/", a1, a2);
+    FUN_004e0850(&mUrl, L"%d/", a3);
+    FUN_004e0850(&mUrl, L"%d", a4);
     void* am = FUN_00607a60();
-    bool c = (*(FnB)Vslot(am, 0x24))(am);
-    FUN_00f46ab0(c == 0 ? 1 : 0);
+    union {
+        void (__thiscall cOnlineTab::*m)(int);
+        void (__thiscall *f)(cOnlineTab*, bool);
+    } u = { &cOnlineTab::FUN_00f46ab0 };
+    u.f(this, !((VBig0*)am)->v9());
 }
 
 // Secondary (message-proc) base of cOnlineTab, which sits at +4.
