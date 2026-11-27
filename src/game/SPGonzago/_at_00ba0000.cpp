@@ -2739,16 +2739,16 @@ PPD* PPD::Assign(const PPD& src)
 
 // @ 0x00ba4520
 void* __thiscall VBlk::FindOrAdd2(const WKey* key)
-{
-    VBlk* self = this;
+{    VBlk* self = this;
     char* end = self->end;
     char* at = (char*)LowerBound16(self->begin, end, key, self->flag);
     if (at == end || WKeyLess(key, (const WKey*)at)) {
-        WKey tmp = *key;
-        at = (char*)self->InsertAt(at, &tmp);
+        struct Entry16 { WKey k; u8 v; } tmp;
+        tmp.k = *key;
+        tmp.v = 0;
+        at = (char*)self->InsertAt(at, &tmp.k);
     }
-    return at + 0xc;
-}
+    return at + 0xc;}
 
 // @ 0x00ba45a0
 void* __cdecl FUN_00ba45a0(char* begin, char* end, char* dst)

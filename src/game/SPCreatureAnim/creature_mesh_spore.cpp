@@ -1086,14 +1086,52 @@ void BoneVector::insert_fill(bone* pos, uint32 n, const bone* src)
 
 // @ 0x009c6c30
 void MeshHandle::Clear()
-{
-    RefCounted* obj = mObj;
+{    struct Model;
+    struct IWorld {
+#define V4(a) virtual void v##a##_0(){} virtual void v##a##_1(){} virtual void v##a##_2(){} virtual void v##a##_3(){}
+#define V16(a) V4(a##0) V4(a##1) V4(a##2) V4(a##3)
+        V16(0) V16(1) V16(2) V16(3) V16(4)
+        V4(50) V4(51) V4(52)
+        virtual void ReleaseModel(Model* pModel, bool flag) {}
+#undef V16
+#undef V4
+    };
+    struct Bitset32 {
+        unsigned mWord[1];
+        unsigned GetWord(unsigned i) const { return mWord[i >> 5]; }
+        bool test(unsigned i) const
+        {
+            if (i < 32)
+                return (GetWord(i) & (1 << (i % 32))) != 0;
+            return false;
+        }
+    };
+    struct Model {
+        IWorld* mpWorld;
+        Bitset32 mFlags;
+        char pad08[0x38];
+        int mnRefCount;
+        void Release()
+        {
+            if (mnRefCount > 1) {
+                --mnRefCount;
+                return;
+            }
+            mpWorld->ReleaseModel(this, mFlags.test(31));
+        }
+    };
+    struct BoneVec : BoneVector {
+        void clear() { erase(mpBegin, mpEnd); }
+    };
+
+    Model* obj = (Model*)mObj;
     if (obj != 0) {
         mObj = 0;
-        ReleaseModel(obj);
+        obj->Release();
     }
+    BoneVec* vec = (BoneVec*)&mVec;
     mCount = 0;
-    mVec.erase(mVec.mpBegin, mVec.mpEnd);
+    vec->clear();
 }
 
 // @ 0x009c6c90

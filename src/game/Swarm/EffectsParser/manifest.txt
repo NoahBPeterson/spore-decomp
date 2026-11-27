@@ -3,3 +3,4 @@
 ../src/game/Swarm/EffectsParser.cpp  ?GetInheritedA@cEffectsParser_s00a6_dfc0@Swarm@EA@@QAEHHHPAX@Z  00a6f090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/Swarm/EffectsParser.cpp  ?GetInheritedB@cEffectsParser_s00a6_dfc0@Swarm@EA@@QAEHHHPAX@Z  00a6f0d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/Swarm/EffectsParser.cpp  ?AddAnonDescription@cEffectsParser_s00a6_f110__g7@@QAEXPAUcArguments@@HH_N@Z  00a6fd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/EffectsParser.cpp  ?AddDescription@cEffectsParser_s00a6_f110__g7@@QAEXPAUcArguments@@PBDH_N@Z  00a6fc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

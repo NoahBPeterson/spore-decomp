@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?InitCommRelPanels@cSPUIGlobalUICiv_s00e0_6220@@QAEXXZ  00e065c0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?AsInterface@cSPUIGlobalUI@@QAEPAXI@Z  00e04270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ??0cSPUIGlobalUICiv@@QAE@XZ  00e057a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?Shutdown@cStarManager@@QAEXXZ  00bad8d0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

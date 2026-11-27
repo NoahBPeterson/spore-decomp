@@ -551,13 +551,19 @@ int Sim::FUN_00bd7ca0(int param_2)
 // ===========================================================================
 void Sim::FUN_00bd7d10(int param_2, float param_3)
 {
-    char* this_ = (char*)this;
-    *(int*)(this_ + 0x74c) = param_2;
-    *(float*)(this_ + 0x748) = param_3;
-    Obj* o = *(Obj**)(this_ + 0x2f0);
-    if (o != 0) {
-        o->m00ff03b0(param_2);
-        o->m00ff03c0(param_3);
+    struct Layout {
+        char pad0[0x2f0];
+        Obj* mpGadget;
+        char pad2f4[0x454];
+        float mVal748;
+        int mVal74c;
+    };
+    Layout* self = (Layout*)this;
+    self->mVal74c = param_2;
+    self->mVal748 = param_3;
+    if (self->mpGadget != 0) {
+        self->mpGadget->m00ff03b0(param_2);
+        self->mpGadget->m00ff03c0(self->mVal748);
     }
 }
 

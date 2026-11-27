@@ -1297,18 +1297,12 @@ void LoadTuning(cTribePlanConfiguration_s00cd_fea0* pThis)
 
 // @ 0x00ce09b0
 float FUN_00ce09b0(cTribePlannerContext* pContext)
-{
-    // retail walks context -> planner -> order manager (thiscall) and tests the target variant
+{    // retail walks context -> planner -> order manager (thiscall) and tests the target variant
     typedef cOrderObject* (__thiscall* FirstPendingFn)(void* pOrderManager);
     cOrderObject* pOrder = ((FirstPendingFn)FUN_00bca2c0)(pContext->mpTribePlanner->mpOrderManager);
-    if (!pOrder)
-        return 0.0f;
-    // retail reads through GetUInt(): &g_defaultUInt for a variant that is not a uint
-    Variant* pValue = &pOrder->mTargetVariant;
-    unsigned uValue = g_defaultUInt;
-    if (pValue->mType == kVariantTypeUInt || pValue->mType == kVariantTypeNull)
-        uValue = VariantIsInline(*pValue) ? pValue->mValue.u : *(unsigned*)pValue->mValue.p;
-    return (uValue == 3) ? g_f_01485720 : 0.0f;
+    if (pOrder)
+        return (*((Variant_s00ce_2330*)&pOrder->mTargetVariant)->GetUInt() == 3) ? g_f_01485720 : 0.0f;
+    return 0.0f;
 }
 
 // @ 0x00ce0a20

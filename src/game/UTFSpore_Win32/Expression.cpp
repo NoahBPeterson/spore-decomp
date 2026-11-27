@@ -445,14 +445,12 @@ unsigned char __stdcall EvalContinueChar(const char** p, char c)
 
 // @ 0x0083d2f0
 void ExprStub::EvalRealParentheses4(const char** p, float* a, float* b)
-{
-    void* self = this;
+{    EA::ArgScript::cExpression* self = (EA::ArgScript::cExpression*)this;
     EvalExpectCharThrow(p, '(');
-    *a = EvalRealExpression(self, p);
+    *a = self->EvalRealExpression(*p);
     EvalExpectCharThrow(p, ',');
-    *b = EvalRealExpression(self, p);
-    EvalExpectCharThrow(p, ')');
-}
+    *b = self->EvalRealExpression(*p);
+    EvalExpectCharThrow(p, ')');}
 
 // @ 0x0083d3d0
 float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)

@@ -12,3 +12,4 @@
 ../src/game/UTFSpore_Win32/Page.cpp  ??0TableRow@Layout@XHTML@EA@@QAE@PAVPage_s008e_b250@123@PAX@Z  008ec170  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Page.cpp  ?Destroy@TextStyleHashtable@Layout@XHTML@EA@@QAEPAXE@Z  008ec1c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Page.cpp  ?SetViewportSize@Page_s008e_c360@Layout@XHTML@EA@@QAEXMM@Z  008ec8c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Page.cpp  ?IntRange_Equals@@YAHPAUIntRange@@0@Z  008eba70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

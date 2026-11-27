@@ -1914,19 +1914,20 @@ void FUN_00b389f0(RefPair_s00b3_8190* first, RefPair_s00b3_8190* last, SortCmp c
 
 // @ 0x00b38b40
 RefPair_s00b3_8190* FUN_00b38b40(RefPair_s00b3_8190* first, RefPair_s00b3_8190* last, RefPair_s00b3_8190 pivot, SortCmp cmp)
-{
-    for (;;) {
-        while (cmp.FUN_00b385d0(first, &pivot)) ++first;
-        do {
+{    for (;;) {
+        if (cmp.FUN_00b385d0(first, &pivot)) {
+            ++first;
+            continue;
+        }
+        --last;
+        while (cmp.FUN_00b385d0(&pivot, last))
             --last;
-        } while (cmp.FUN_00b385d0(&pivot, last));
-        if (last <= first) break;
+        if (first >= last) break;
         FUN_00b36610(first, last);
         ++first;
     }
     if (pivot.mpHandle) pivot.mpHandle->Decrement();
-    return first;
-}
+    return first;}
 
 // @ 0x00b38bf0
 void FUN_00b38bf0(RefPair_s00b3_8190* base, int first, int hole, RefPair_s00b3_8190 value, SortCmp cmp)

@@ -28,3 +28,5 @@
 ../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_010406d0@cSPSpaceTrading_s0103_fe90@@QAEXXZ  010406d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_013a6f80@@YAXXZ  013a6f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_013a72b0@@YAXXZ  013a72b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?erase@ItemVec_s0103_c3a0@@QAEPAV?$AutoRefCount@VcSpaceInventoryItem_s0103_c3a0@@@@PAV2@0@Z  0103c4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_0103d4a0@@YAXPAXPAUcNPCStoreFixedVec@@@Z  0103d4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

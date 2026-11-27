@@ -3,3 +3,4 @@ slices/s007ee060/s007ee060.cpp  RegisterVolumeFactory  007ee450  /O2 /MD /Gy /EH
 slices/s007ee060/s007ee060.cpp  ?OnRegister@cVolumeEffectCommand@@QAEXPAX0@Z  007eea90  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007ee060/s007ee060.cpp  ?Assign@SixFloats@@QAEPAU1@PBU1@@Z  007ee6d0  /O2 /MD /Gy /EHsc /TP
 slices/s007ee060/s007ee060.cpp  ?VolumeEffectSetup@@YAPAXPAX00I@Z  007ee3e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ee060/s007ee060.cpp  ?SliceSpacing@VolumeCmd@@QAEXPAVcArguments@ArgScript@EA@@@Z  007ee780  /O2 /MD /Gy /EHsc /TP /GS-

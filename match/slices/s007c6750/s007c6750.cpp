@@ -428,24 +428,25 @@ void cCameraManager::ClearControllers() {
 
 // ===========================================================================
 // @ 0x007c7050
-void HTStr::DoFreeNodes(int bucketArray, u32 bucketCount) throw() {
-    u32 i = 0;
-    if (bucketCount != 0) {
-        do {
-            int* p = *(int**)(bucketArray + i * 4);
-            while (p != 0) {
-                int a = *p;
-                int* nxt = (int*)p[5];
-                if ((int)((u32)(p[2] - a) & 0xfffffffeU) > 2 && a != 0)
-                    operator_delete((void*)a);
-                operator_delete(p);
-                p = nxt;
-            }
-            *(int*)(bucketArray + i * 4) = 0;
-            i++;
-        } while (i < bucketCount);
-    }
-}
+void HTStr::DoFreeNodes(int bucketArray, u32 bucketCount) throw() {    struct Node {
+        cWString str;
+        int m0c;
+        int m10;
+        Node* mpNext;
+    };
+    Node** pBucketArray = (Node**)bucketArray;
+    for (u32 i = 0; i < bucketCount; ++i) {
+        Node* pNode = pBucketArray[i];
+        while (pNode) {
+            Node* pTempNode = pNode;
+            pNode = pNode->mpNext;
+            int a = (int)pTempNode->str.mpBegin;
+            if ((int)((u32)((int)pTempNode->str.mpCapacity - a) & 0xfffffffeU) > 2 && a != 0)
+                operator_delete((void*)a);
+            operator_delete(pTempNode);
+        }
+        pBucketArray[i] = 0;
+    }}
 
 // ===========================================================================
 // @ 0x007c70b0

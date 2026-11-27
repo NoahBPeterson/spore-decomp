@@ -2676,15 +2676,13 @@ void cDistributeEffect_s00a8_7fb0::FUN_00a886f0(int visible)
 
 // @ 0x00a887b0
 void cDistributeEffect_s00a8_7fb0::FUN_00a887b0(int index, float value)
-{
-    if (*(int*)((char*)this + 0xbc) == *(int*)((char*)this + 0xc0)) {
-        if (*(int*)((char*)this + 0xa8) != *(int*)((char*)this + 0xac)) {
-            *(float*)(index * 0x4c + 0x44 + *(int*)((char*)this + 0xa8)) = value;
-            return;
+{    if (mSamples.empty()) {
+        if (!mRenderSamples.empty()) {
+            mRenderSamples.mpBegin[index].mColorAlpha.w = value;
         }
     }
     else {
-        *(float*)(index * 0x4c + 0x44 + *(int*)((char*)this + 0xbc)) = value;
+        mSamples.mpBegin[index].mColorAlpha.w = value;
     }
 }
 

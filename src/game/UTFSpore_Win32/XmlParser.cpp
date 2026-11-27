@@ -365,14 +365,11 @@ void Fn8e5e20(void* parser, wchar16* data, int count)
 
 // @ 0x008e5e50
 void Fn8e5e50(void* parser, int name, unsigned int isparam)
-{
-    XmlParser* p = (XmlParser*)parser;
+{    XmlParser* p = (XmlParser*)parser;
     if (isparam == 0) {
-        unsigned short e = Fn8e5580(name);
-        isparam = e;
-        if (e != 0) {
-            unsigned int tmp = e;
-            p->Fn8e5da0((wchar16*)&tmp, 1);
+        isparam = Fn8e5580(name);
+        if ((unsigned short)isparam != 0) {
+            p->Fn8e5da0((wchar16*)&isparam, 1);
         }
     }
     XML_DefaultCurrent(*(void**)((char*)p + 0x220));

@@ -20,3 +20,4 @@
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?CopyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  0083a900  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?CopyBackwardOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  0083a970  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?erase@VecOptions@@QAEPAUcOptionsSpec_s0083_b810@@PAU2@0@Z  0083ba40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?AssignSub@RawStr@@QAEXABU1@II@Z  00838de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

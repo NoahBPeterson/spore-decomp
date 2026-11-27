@@ -599,24 +599,18 @@ void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
 
 // @ 0x0062fee0
 int __stdcall GetHeaderInfo(void* data, int kind)
-{
-    HeaderReader r;
+{    HeaderReader r;
     uint32_t count;
     bool ok = data && r.Open(data);
     switch (kind) {
     case 0x417b3a7:
-        if (!ok || !r.Get(4, &count))
-            return 0;
+        ok = ok && r.Get(4, &count);
         break;
     case 0x417b3bc:
-        if (!ok || !r.Get(2, &count))
-            return 0;
+        ok = ok && r.Get(2, &count);
         break;
-    default:
-        if (!ok)
-            return 0;
     }
-    if (count > 0)
+    if (ok && count > 0)
         return r.Item(0);
     return 0;
 }

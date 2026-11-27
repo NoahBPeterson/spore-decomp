@@ -7,3 +7,4 @@
 ../src/game/SPEditors/SPCollectableItems.cpp  ?DoCreateNode@cItemSetRBTree@SP@@QAEPAUcItemSetTreeNode@2@ABUcItemSetValue@2@@Z  00598260  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPCollectableItems.cpp  ?DoInsertValueImpl@cItemSetRBTree@SP@@QAE?AUcItemSetIterator@2@PAUcItemSetTreeNode@2@ABUcItemSetValue@2@_N@Z  005982e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/SPCollectableItems.cpp  ?FUN_00599440@cSpaceInventory@SP@@QAE_NHHH@Z  00599440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCollectableItems.cpp  ?FUN_00598db0@cCollectableItems_s0059_8340@SP@@QAEXHHHHHHHHH@Z  00598db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -4,3 +4,4 @@
 ../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?ctor@creature_mesh_instance_data_s009c_7ff0@@QAEPAU1@XZ  009c8200  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?UcopyRange@@YAPAUmesh_instance@@PAU1@00@Z  009c65b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?ReleaseRange@@YGXPAUbody_mesh_data@@0@Z  009c67e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?Clear@MeshHandle@@QAEXXZ  009c6c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

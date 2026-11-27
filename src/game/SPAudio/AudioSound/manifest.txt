@@ -23,3 +23,5 @@
 ../src/game/SPAudio/AudioSound.cpp  ?Release@Sound@Audio@EA@@UAEHXZ  00a37c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?PauseStateAllowed@Sound_s00a1_a590@@QAE_NID@Z  00a1adc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?ClearFlag1@Sound_s00a1_a590@@QAE_NXZ  00a1acd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?FUN_00a1ac70@@YGMHH@Z  00a1ac70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?ComputeGainAttenuation@Sound_s00a1_a590@@QAENMMMMM@Z  00a1afb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

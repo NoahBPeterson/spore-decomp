@@ -885,6 +885,8 @@ extern const float g_13ec4b4;   // 0x013ec4b4
 #pragma intrinsic(sin, cos, sqrt)
 struct Vector3 {
     float x, y, z;
+    Vector3() {}
+    Vector3(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
 };
 namespace SP {
 class cPlanetModel_s00ca_3030 {
@@ -1012,6 +1014,7 @@ public:
     void FUN_00ca33b0(const Vector3* p);         // 0x00ca33b0
     uint8_t FUN_00ca3660(void* stream);          // 0x00ca3660
     void FUN_00c9fb40(float x, float y, float z, float zero, float radius);   // 0x00c9fb40
+    void FUN_00c9fb40(Vector3 pos, float zero, float radius);                 // 0x00c9fb40
     void FUN_00c9f6c0();                         // 0x00c9f6c0
 };
 Vector3* GetGameDataOwner2(cGameData_s00ca_3030* self, Vector3* out);      // 0x00bfc8a0
@@ -4857,10 +4860,9 @@ void cGameData_s00ca_3030::FUN_00ca3350(char enable)
 
 // @ 0x00ca33b0
 void cGameData_s00ca_3030::FUN_00ca33b0(const Vector3* p)
-{
-    mMarkerPos = *p;
+{    mMarkerPos = *p;
     float radius = mSpatial.GetRadius();
-    FUN_00c9fb40(p->x, p->y, p->z, 0.0f, radius * g_14853e0);
+    FUN_00c9fb40(*p, 0.0f, radius * g_14853e0);
 }
 
 // @ 0x00ca3410

@@ -6,8 +6,6 @@
 00714560 36 pair-table key lookup + value store; loop register assignment differs
 007145b0 98 matrix table store; only 12 floats are written and the copy schedule differs
 007149a0 79 copy 0x30-byte float records: complete; size exact (115/115). 12 x87 fld/fstp pairs after a per-record `dst != 0` check, matching the original's unrolled copy; the original anchors the block at first/first+0x18 with -0x14..+0x14 displacements and ours rebases the same block at first+8 with -4..+0x24, so only the base register/displacements differ. Flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast (x87, no /arch:SSE).
-00714bc0 35 pair copy with out-pointer; return `out` so eax matches the original's leftover out pointer [equiv: PASS]
-00715090 38 eastl make_heap; cl assigns first/n to swapped callee-saved regs and sign-fixes /2
 007150d0 62 eastl sort_heap; cl strength-reduces the end pointer, original keeps a running count
 00715120 206 eastl::fixed_vector<ResponseCurveData,42,1>::assign; helper roles (0x774980 alloc, 0x8f05f0 uninit) inferred; equiv UNSUPPORTED (4 unresolved masked callees)
 00715250 195 vector<4-byte>::assign; uninit helper (0x7eb060) argument order inferred; equiv UNSUPPORTED (4 unresolved masked callees)

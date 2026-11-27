@@ -126,21 +126,25 @@ int __cdecl CivComm_GetStateIconName(int state)
 // Civ state 0..11 -> one of four small icon ids. Retail folds this through a byte map plus a
 // four-entry jump table; spelled out here as a plain switch so the result is self-contained.
 int __cdecl CivComm_GetStateIconIndex(int state)
-{
-    switch (state) {
-    case 0:  return 0x71;
-    case 1:  return 0x72;
-    case 2:  return 0x73;
-    case 3:  return 0x70;
-    case 4:  return 0x72;
-    case 5:  return 0x73;
-    case 6:  return 0x71;
-    case 7:  return 0x72;
-    case 8:  return 0x73;
-    case 9:  return 0x70;
-    case 10: return 0x70;
-    case 11: return 0x71;
-    default: return 0x1006f;
+{    switch (state) {
+    case 3:
+    case 9:
+    case 10:
+        return 0x70;
+    case 0:
+    case 6:
+    case 11:
+        return 0x71;
+    case 1:
+    case 4:
+    case 7:
+        return 0x72;
+    case 2:
+    case 5:
+    case 8:
+        return 0x73;
+    default:
+        return 0x1006f;
     }
 }
 

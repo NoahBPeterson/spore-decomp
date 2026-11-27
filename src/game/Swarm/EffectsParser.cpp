@@ -640,23 +640,21 @@ void DescInstaller::InstallB(const char* name, int index, int arg)
 
 // @ 0x00a6fc30
 void cEffectsParser_s00a6_f110__g7::AddDescription(cArguments* args, const char* name, int type, bool flag)
-{
-    DescRec_s00a6_f110__g7 rec;
+{    DescRec_s00a6_f110__g7 rec;
     rec.field80 = MapFindB(name, type);
-    if (rec.field80 >= 0) {
-        rec.type = type;
-        rec.field78 = mField390;
+    if (rec.field80 < 0)
+        return;
 
-        u32 f = rec.flags;
-        if (mFlag39c) f |= 2; else f &= ~2u;
-        if (mFlag39d) f |= 8; else f &= ~8u;
-        if (flag)     f |= 1; else f &= ~1u;
-        rec.flags = f;
+    rec.type = type;
+    rec.field78 = mField390;
 
-        ParseDescRecOptions(args, &rec);
-        mDescs.push_back(rec);
-        mFlags |= rec.appFlagsMask;
-    }
+    if (mFlag39c) rec.flags |= 2; else rec.flags &= ~2u;
+    if (mFlag39d) rec.flags |= 8; else rec.flags &= ~8u;
+    if (flag)     rec.flags |= 1; else rec.flags &= ~1u;
+
+    ParseDescRecOptions(args, &rec);
+    mDescs.push_back(rec);
+    mFlags |= rec.appFlagsMask;
 }
 
 // @ 0x00a6fd40

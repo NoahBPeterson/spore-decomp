@@ -92,7 +92,6 @@
 #                (176 vs 180 bytes); the switch tail and the multiply order differ.
 #                equiv FAIL: one input yields -0.0 where the original yields +0.0 (the final tuning
 #                multiply keeps the sign of a zero operand in ours).
-00c38900  39   GetMaxSpeedForAltitude(): per-type base speed (mf0b4 / mf0b8), altitude-scaled by
 #                (|mf5ec| / mf0e8) * (mf0c4 - 1) + 1 in the space context, times
 #                PlanetDistanceScale(mNextPosition) times mf6b8.  Size-exact; ours clobbers edx, which the
 #                original keeps live across the inlined PlanetDistanceScale call.

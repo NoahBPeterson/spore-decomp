@@ -5703,9 +5703,8 @@ RefPair* FUN_00f9aff0(RefPair* first, RefPair* last, RefPair* dst)
 }
 
 // @ 0x00f9b050
-void FUN_00f9b050(float* first, float* last, float* dst)
-{
-    for (; first != last; first += 5) {
+float* FUN_00f9b050(float* first, float* last, float* dst)
+{    for (; first != last; first += 5) {
         if (dst) {
             dst[0] = first[0];
             dst[1] = first[1];
@@ -5715,7 +5714,7 @@ void FUN_00f9b050(float* first, float* last, float* dst)
         }
         dst += 5;
     }
-}
+    return dst;}
 
 // @ 0x00f9b0a0
 void* CGmeRefCount::Destroy(uint8_t flags)
@@ -10080,8 +10079,7 @@ bool cTerrainSphere_s00fa_9300::HandleMessage(uint32_t msgId, SlotMessage* msg)
 
 // @ 0x00fa96d0
 void cTerrainSphere_s00fa_9300::SetModels()
-{
-    if (mpDefinition == 0)
+{    if (mpDefinition == 0)
         return;
     Key_s00fa_9300* keys;
     GetPropertyAsKeyArray(mpDefinition, 0x3a90c57, (uint32_t*)&mNumModels, &keys);
@@ -10089,9 +10087,10 @@ void cTerrainSphere_s00fa_9300::SetModels()
     kv->resize(mNumModels);
     ((XformVec*)((char*)this + 0x7c4))->resize(mNumModels);
     {
-        Key_s00fa_9300* dest = kv->mpBegin;
+        uint32_t count = mNumModels;
+        Key_s00fa_9300* end = keys + count;
         Key_s00fa_9300* src = keys;
-        Key_s00fa_9300* end = keys + mNumModels;
+        Key_s00fa_9300* dest = kv->mpBegin;
         while (src != end) {
             dest->instance = src->instance;
             dest->type = src->type;
@@ -10103,8 +10102,7 @@ void cTerrainSphere_s00fa_9300::SetModels()
     uint32_t n = mNumModels;
     cSPTransform_s00fa_9300* xf;
     GetPropertyAsTransformArray(mpDefinition, 0x3a90c5f, &n, &xf);
-    CopyTransforms(xf, xf + mNumModels, ((XformVec*)((char*)this + 0x7c4))->mpBegin);
-}
+    CopyTransforms(xf, xf + mNumModels, ((XformVec*)((char*)this + 0x7c4))->mpBegin);}
 
 // @ 0x00fa9790
 bool cTerrainBackgroundMapJob::Update(int a)

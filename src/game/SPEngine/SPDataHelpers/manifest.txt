@@ -3,3 +3,4 @@
 ../src/game/SPEngine/SPDataHelpers.cpp  ?Init@VecBuf@@QAEPAHIPAX@Z  00686430  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPDataHelpers.cpp  _Thunk_687590  00687590  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPDataHelpers.cpp  ?Reserve@Vec28@@QAEXI@Z  00687ab0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPDataHelpers.cpp  _SetCount  00687bc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

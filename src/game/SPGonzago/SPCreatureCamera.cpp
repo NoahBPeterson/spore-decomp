@@ -1538,18 +1538,20 @@ void tCamCtrl::FUN_00d20950(unsigned n)
 
 // @ 0x00d20970
 unsigned char FUN_00d20970(void)
-{
+{    extern cGlobalMgr* g_16c7aa4;
+    struct LocalStrat { char pad[0x64]; EA::AutoRefCount<cModeTarget> m64; };
     unsigned char r = 0;
-    if (GetCurrentGameMode() == (void*)0x01654c05)
-        return 1;
-    if (static_cast<cCreatureModeStrategy*>(CreatureModeStrategy_Instance())->m64 != 0)
-        return static_cast<cCreatureModeStrategy*>(CreatureModeStrategy_Instance())->m64->m54;
-    cGlobalMgr* g = *(cGlobalMgr**)0x016c7aa4;
-    cModeTarget* t = g->m68;
-    if (t == 0)
-        return r;
-    return t->m54;
-}
+    if (GetCurrentGameMode() == (void*)0x01654c05) {
+        r = 1;
+    } else if (((LocalStrat*)CreatureModeStrategy_Instance())->m64.get() != 0) {
+        r = ((LocalStrat*)CreatureModeStrategy_Instance())->m64->m54;
+    } else {
+        cGlobalMgr* g = g_16c7aa4;
+        cModeTarget* t = g->m68;
+        if (t != 0)
+            r = t->m54;
+    }
+    return r;}
 
 // @ 0x00d209b0
 void FUN_00d209b0(void)

@@ -3043,16 +3043,18 @@ void cMorphHandle_s00c6_5940::SetT(float t)
 
 // @ 0x00c65b50
 void cMorphHandle_s00c6_5940::SetTLerp(float t)
-{
-    float* pf = &mHi;
+{    float* pf = &mHi;
     float* pg = &mLo;
     t = (mHi - mLo) * t + mLo;
-    if (t < *pf)
+    if (*pf > t)
         pf = &t;
-    if (*pf <= *pg)
-        pf = pg;
-    if (mT != *pf) {
-        mT = *pf;
+    float* res;
+    if (*pf > *pg)
+        res = pf;
+    else
+        res = pg;
+    if (mT != *res) {
+        mT = *res;
         UpdatePos();
     }
 }
