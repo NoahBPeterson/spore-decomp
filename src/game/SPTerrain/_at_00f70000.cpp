@@ -108,7 +108,7 @@ struct CCubeQuery {
     float QueryD(const V4* dir);       // 0x00f71220
     V4*   GetCubeUV();                 // 0x00f713c0
     V4*   DirToTerrainColor(V4* out, const V4* dir);  // 0x00f713e0
-    V4*   GetColorA(V4* out);          // 0x00f715d0
+    V4*   GetColorA(V4* out, const V4* unused);  // 0x00f715d0
     V4*   GetColorB(V4* out);          // 0x00f71610
     V4*   GetScaledColor(V4* out, const V4* unused);  // 0x00f716b0
 };
@@ -2866,15 +2866,16 @@ V4* CCubeQuery::GetCubeUV()
 }
 
 // @ 0x00f715d0
-V4* CCubeQuery::GetColorA(V4* out)
-{
-    const float* p = (const float*)((char*)mpTerrain + 0x42c);
-    out->w = DAT_01485720;
-    out->x = p[0];
-    out->y = p[1];
-    out->z = p[2];
-    return out;
-}
+V4* CCubeQuery::GetColorA(V4* out, const V4* unused)
+{    const float* p = (const float*)((char*)mpTerrain + 0x42c);
+    float a = DAT_01485720;
+    V4* __restrict dst = out;
+    dst->x = p[0];
+    dst->y = p[1];
+    dst->z = p[2];
+    *(volatile float*)&dst->w = p[3];
+    dst->w = a;
+    return dst;}
 
 // @ 0x00f71610
 V4* CCubeQuery::GetColorB(V4* out)

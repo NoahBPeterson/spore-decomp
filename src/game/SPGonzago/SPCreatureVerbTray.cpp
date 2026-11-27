@@ -425,8 +425,7 @@ void FUN_00d491b0(char param)
 
 // @ 0x00d49270
 int FUN_00d49270(int param_1)
-{
-    GUIWidget* p = (GUIWidget*)FUN_00d1e610();
+{    GUIWidget* p = (GUIWidget*)FUN_00d1e610();
     if (p != 0) {
         if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
             AttackTargeter* f = (AttackTargeter*)g_16c7aa4->mField78;
@@ -439,10 +438,16 @@ int FUN_00d49270(int param_1)
         }
         int n = p->SlotB0();
         if (param_1 < n) {
+            if (param_1 < 0) {
+                return FUN_00d1f650(p, param_1);
+            }
             return FUN_00d1f650(p, param_1);
         }
-        if (SP_GetCurrentGameMode() == (void*)0x1654c02 && param_1 - n < 6) {
-            return FUN_00d1fb30(param_1 - n);
+        if (SP_GetCurrentGameMode() == (void*)0x1654c02) {
+            param_1 -= n;
+            if (param_1 < 6) {
+                return FUN_00d1fb30(param_1);
+            }
         }
     }
     return 1;

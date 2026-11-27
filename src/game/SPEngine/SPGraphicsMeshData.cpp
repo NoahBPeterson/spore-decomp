@@ -849,13 +849,21 @@ void VecFC::DoInsertValues(cFaceCluster* position, unsigned n, const cFaceCluste
 
 // @ 0x0071ec20
 void CollectVertexIndices(const Mesh20* c, VecInt* out, int a, int b, int cc)
-{
+{    int i = 0;
     int n = (int)((c->mpEnd - c->mpBegin) >> 5);
-    for (int i = 0; i < n; ++i) {
+    for (; i < n; ++i) {
         if ((a == 0 || a == *(int*)(c->mpBegin + i * 0x20))
             && (b == 0 || b == *(int*)(c->mpBegin + i * 0x20 + 8))
             && (cc == 0xe || cc == *(int*)(c->mpBegin + i * 0x20 + 0xc)))
-            out->push_back(i);
+        {
+            if (out->mpEnd < out->mpCapacity) {
+                int* __restrict p = out->mpEnd++;
+                if (p)
+                    *p = i;
+            } else {
+                out->DoInsertValue(out->mpEnd, i);
+            }
+        }
     }
 }
 

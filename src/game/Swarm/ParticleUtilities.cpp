@@ -522,22 +522,24 @@ extern const float gDirDef_016770e4;
 
 // @ 0x00a797f0
 void Xform::TransformDir(Vec3* v) const
-{
-    if (flags & 2) {
-        float y = v->y;
+{    if (flags & 2) {
         float z = v->z;
+        float y = v->y;
         float x = v->x;
         Vec3 t;
-        t.x = (m[3] * y + m[6] * z) + m[0] * x;
+        t.x = (m[6] * z + m[3] * y) + m[0] * x;
         t.y = (m[1] * x + m[4] * y) + m[7] * z;
         t.z = (m[2] * x + m[5] * y) + m[8] * z;
         *v = t;
     }
     float s = scale;
-    v->x = v->x * s;
-    v->y = v->y * s;
-    v->z = s * v->z;
-}
+    float y = v->y * s;
+    float z = s * v->z;
+    float x = v->x * s;
+    _ReadWriteBarrier();
+    v->x = x;
+    v->y = y;
+    v->z = z;}
 
 // @ 0x00a798d0
 void HermiteStep(HState* s, float dt, HKeyVec* keys, float maxSpeed, HXform* xf)

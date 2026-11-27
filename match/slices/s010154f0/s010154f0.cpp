@@ -516,13 +516,17 @@ int cSPSimulatorWalkAround::FindPlantValue(int key)
 
 // @ 0x01016470
 unsigned char cSPSimulatorWalkAround::QueryBeamingFlag(IRefBut34* p)
-{
-    int* e = (int*)mPlantObstacles.mpEnd;
+{    int* e = (int*)mPlantObstacles.mpEnd;
     int* b = (int*)mPlantObstacles.mpBegin;
     if (b != e) {
-        do { if (*b == (int)(size_t)p) break; ++b; } while (b != e);
+        do {
+            if (*b == (int)(size_t)p)
+                break;
+            ++b;
+        } while (b != e);
+        _ReadWriteBarrier();
         if (b != e)
-            return (unsigned char)(p->v11() == 0);
+            return (unsigned char)(int)(p->v11() == 0);
     }
     return (unsigned char)((p->mField34 >> 1) & 1u);
 }

@@ -2305,27 +2305,28 @@ void __stdcall FUN_00e1f500(void* head, E1fIter first, E1fIter last, void* extra
 
 // @ 0x00e1f570
 void* __cdecl FUN_00e1f570(void* first, void* last, u32 key, u8 flag, RefObj_s00e1_eab0* ref, void* cmp)
-{
-    char* f = (char*)first;
+{    char* f = (char*)first;
     char* l = (char*)last;
-    u32 pivot = key;
+    u32 pivot = *(volatile u32*)&key;
     for (;;) {
-        while (*(u32*)f < pivot)
+        if (*(u32*)f < pivot) {
             f += 0xc;
-        do {
+            continue;
+        }
+        l -= 0xc;
+        while (pivot < *(u32*)l)
             l -= 0xc;
-        } while (pivot < *(u32*)l);
         if (f >= l)
             break;
         FUN_00e1e450(f, l);
         f += 0xc;
+        pivot = *(volatile u32*)&key;
     }
     if (ref)
         (*(void (__thiscall**)(RefObj_s00e1_eab0*))(*(char**)ref + 8))(ref);
     (void)flag;
     (void)cmp;
-    return f;
-}
+    return f;}
 
 // @ 0x00e1f5c0
 void __cdecl FUN_00e1f5c0(void* a, void* b, void* c, void* d)

@@ -11,3 +11,4 @@
 ../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?FUN_01021960@@YAXH@Z  01021960  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?FUN_01021370@@YAPAXXZ  01021370  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?QuickSortPlanets@@YAXPAPAX0HP6AHPAX1@Z@Z  01021fd0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?FUN_01021d40@@YAXXZ  01021d40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

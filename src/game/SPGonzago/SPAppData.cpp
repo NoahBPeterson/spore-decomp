@@ -1314,27 +1314,44 @@ void* cMyMagicCommand_s00e4_ba40::Destroy(uint flags)
 
 // @ 0x00e4bb10
 void FUN_00e4bb10(void)
-{
-    void** begin = g_appDataBegin;
+{    struct AppDataObj {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual void v0c() {}
+        virtual void v10() {}
+        virtual void v14() {}
+        virtual void v18() {}
+        virtual void v1c() {}
+        virtual void v20(int) {}
+        void** mpBegin;
+        void** mpEnd;
+        char mPad0c[0x90];
+        uint m9c;
+    };
+    struct Local {
+        static inline void** erase(void** first, void** last)
+        {
+            memcpy_(first, last, 0);
+            g_appDataEnd -= (last - first);
+            return first;
+        }
+    };
+
     void** end = g_appDataEnd;
-    if (begin != end) {
-        do {
-            void* obj = *begin;
-            void** b = *(void***)((char*)obj + 4);
-            while (b != *(void***)((char*)obj + 8)) {
-                operator_delete_array(*b);
-                ++b;
-            }
-            *(uint*)((char*)obj + 0x9c) = 0;
-            (*(void(__thiscall**)(void*, int))(*(int*)obj + 0x20))(obj, 1);
-            ++begin;
-            end = g_appDataEnd;
-        } while (begin != end);
-        begin = g_appDataBegin;
+    for (void** p = g_appDataBegin; p != end; ++p) {
+        AppDataObj* obj = (AppDataObj*)*p;
+        void** b = obj->mpBegin;
+        while (b != obj->mpEnd) {
+            operator_delete_array(*b);
+            ++b;
+        }
+        obj->m9c = 0;
+        _ReadWriteBarrier();
+        obj->v20(1);
+        end = g_appDataEnd;
     }
-    memcpy_(begin, end, 0);
-    int n = (int)(end - begin);
-    g_appDataEnd = end - n;
+    Local::erase(g_appDataBegin, end);
 }
 
 // @ 0x00e4bc70
