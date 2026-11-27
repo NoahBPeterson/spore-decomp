@@ -629,13 +629,14 @@ void cRotationRing::CopyTo(EaString* dst)
 }
 
 // @ 0x00d1deb0
+extern char g_147a2b0[];   // 0x0147a2b0  cRefObj vftable
 cRefObj* cRefObj::Init(void* o)
 {
-    mpVtbl_00 = (void*)0x147a2b0;
-    mp_04 = 0;
-    mp_08 = 0;
-    void* old = *(void* const volatile*)&mp_08;
     void* nw = o;
+    *(void* volatile*)&mpVtbl_00 = g_147a2b0;
+    mp_04 = 0;
+    *(void* volatile*)&mp_08 = 0;
+    void* old = *(void* const volatile*)&mp_08;
     if (nw != old) {
         if (nw) (*(VFn0)VSLOT(nw, 0))(nw);
         mp_08 = nw;
