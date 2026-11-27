@@ -435,7 +435,6 @@ struct CargoItem {
 struct ThiscallStub {
     void Object_Cast(int* entity);                  // 0xac0570
     int  FUN_00ac05d0(int classId);                 // 0xac05d0
-    int* FUN_00ac06c0(float* pos, float a, float b); // 0xac06c0
     int  FUN_00ac0730(void* a, void* b);            // 0xac0730
     int  FUN_00ac0810(void* a, void* b);            // 0xac0810
     void FUN_00ac0bb0(void** out);                  // 0xac0bb0
@@ -1114,23 +1113,50 @@ int ThiscallStub::FUN_00ac05d0(int classId)
     return 0;
 }
 
+class cInteractionTarget_s00ac_06c0 {
+public:
+    cInteractionTarget_s00ac_06c0();                           // 0x00ac03d0 (out of line)
+    virtual void it0();
+    uint8_t mPad04[0x14];
+};
+class cILayer_s00ac_06c0 {
+public:
+    cILayer_s00ac_06c0() {}
+    virtual void l0();
+};
+class RefCountVT_s00ac_06c0 {
+public:
+    RefCountVT_s00ac_06c0() : mRefCount(0) {}
+    virtual void r0();
+    virtual int AddRef();
+    virtual int Release();
+    int mRefCount;
+};
+struct Vec3Copy_s00ac_06c0 {
+    float x, y, z;
+    Vec3Copy_s00ac_06c0(const Vec3Copy_s00ac_06c0& o) : x(o.x), y(o.y), z(o.z) {}
+};
+class cInteractionTargetPt_s00ac_06c0 : public cInteractionTarget_s00ac_06c0,
+                                        public cILayer_s00ac_06c0,
+                                        public RefCountVT_s00ac_06c0 {
+public:
+    cInteractionTargetPt_s00ac_06c0(const Vec3Copy_s00ac_06c0* pos, float a, float b)
+        : mPos(*pos), mA(a), mB(b) {}
+    cInteractionTargetPt_s00ac_06c0* FUN_00ac06c0(const Vec3Copy_s00ac_06c0* pos, float a, float b);
+    virtual void it0();
+    virtual void l0();
+    virtual void r0();
+    Vec3Copy_s00ac_06c0 mPos;                                  // +0x24
+    float mA;                                                  // +0x30
+    float mB;                                                  // +0x34
+};
+
 // @ 0x00ac06c0
-int* ThiscallStub::FUN_00ac06c0(float* pos, float a, float b)
+cInteractionTargetPt_s00ac_06c0*
+cInteractionTargetPt_s00ac_06c0::FUN_00ac06c0(const Vec3Copy_s00ac_06c0* pos, float a, float b)
 {
-    int* self = (int*)this;
-    ((InteractionTargetCtor*)self)->ctor();
-    self[6] = (int)0x13f1ab0;
-    self[7] = (int)0x13ec458;
-    self[8] = 0;
-    self[0] = (int)VTBL_01459c04;
-    self[6] = (int)VTBL_01459c30;
-    self[7] = (int)VTBL_01459c20;
-    *(float*)(self + 9)  = pos[0];
-    *(float*)(self + 10) = pos[1];
-    *(float*)(self + 11) = pos[2];
-    *(float*)(self + 0xc) = a;
-    *(float*)(self + 0xd) = b;
-    return self;
+    this->cInteractionTargetPt_s00ac_06c0::cInteractionTargetPt_s00ac_06c0(pos, a, b);
+    return this;
 }
 
 struct IPos_ac0730 {
