@@ -113,11 +113,10 @@ void VideoEncoder_Jpeg::FUN_00fcdb20(int fmt, unsigned char* src, unsigned char*
     switch (fmt) {
     case 0:
         if (n > 0) {
-            src = src + 2;
             do {
-                dst[0] = src[-1];
-                dst[1] = src[0];
-                dst[2] = src[1];
+                dst[0] = src[1];
+                dst[1] = src[2];
+                dst[2] = src[3];
                 dst += 3;
                 src += 4;
             } while (--n != 0);
