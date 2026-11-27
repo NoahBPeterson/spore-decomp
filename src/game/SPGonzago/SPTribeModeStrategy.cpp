@@ -7900,17 +7900,15 @@ bool cPlayer::Read(cIOStream* pStream)
 // @ 0x00cde5b0
 void cMode::FUN_00cde5b0()
 {
-    cBaby* begin = mSub.mpVec1Begin;
-    cBaby* end   = mSub.mpVec1End;
+    cBaby** v = &mSub.mpVec1Begin;
+    cBaby* begin = v[0];
+    cBaby* end   = v[1];
 
     // release every pooled element, then rewind the pool back to empty
     cBaby* gap = (cBaby*)FUN_00b969a0(end, end, begin);
-    ((cSelf*)&mSub.mpVec1Begin)->FUN_01023030(gap, end);
+    ((cSelf*)v)->FUN_01023030(gap, v[1]);
 
-    uint8_t* endB   = (uint8_t*)mSub.mpVec1End;
-    uint8_t* beginB = (uint8_t*)begin;
-    endB += (beginB - endB) / (int)sizeof(cBaby) * (int)sizeof(cBaby);
-    mSub.mpVec1End = (cBaby*)endB;
+    v[1] -= end - begin;
 
     FUN_00cde2f0();
 }
@@ -7918,17 +7916,15 @@ void cMode::FUN_00cde5b0()
 // @ 0x00cde600
 void cMode::FUN_00cde600()
 {
-    cBaby* begin = mSub.mpVec1Begin;
-    cBaby* end   = mSub.mpVec1End;
+    cBaby** v = &mSub.mpVec1Begin;
+    cBaby* begin = v[0];
+    cBaby* end   = v[1];
 
     // release every pooled element, then rewind the pool back to empty
     cBaby* gap = (cBaby*)FUN_00b969a0(end, end, begin);
-    ((cSelf*)&mSub.mpVec1Begin)->FUN_01023030(gap, end);
+    ((cSelf*)v)->FUN_01023030(gap, v[1]);
 
-    uint8_t* endB   = (uint8_t*)mSub.mpVec1End;
-    uint8_t* beginB = (uint8_t*)begin;
-    endB += (beginB - endB) / (int)sizeof(cBaby) * (int)sizeof(cBaby);
-    mSub.mpVec1End = (cBaby*)endB;
+    v[1] -= end - begin;
 
     FUN_00cde2f0();
     vOn44();
