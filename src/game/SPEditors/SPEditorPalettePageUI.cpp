@@ -108,10 +108,18 @@ class cUIVtblA {
   virtual ~cUIVtblA() {}
   PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
 };
-class cUIVtblB {
+class cUIRefCountBase {
+ public:
+  cUIRefCountBase() : mRefCount(0) {}
+  virtual ~cUIRefCountBase() {}
+  virtual int AddRef();
+  virtual int Release();
+  int mRefCount;                          // +0x8
+};
+class cUIVtblB : public cUIRefCountBase {
  public:
   virtual ~cUIVtblB() {}
-  PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  PV(3) PV(4) PV(5) PV(6) PV(7)
 };
 class cSPPalettePageUI : public cUIVtblA, public cUIVtblB {
  public:
@@ -120,7 +128,6 @@ class cSPPalettePageUI : public cUIVtblA, public cUIVtblB {
   static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
   virtual cRefObj* GetRef(int a, int b, int c, int d);  // +0x20
 
-  int mField8;                            // +0x8
   AutoRefCount_s005c_85d0<cSPUILayout_s005c_85d0> mLayout;      // +0xc
   IWindow_s005c_85d0* mSwatch;                       // +0x10
   AutoRefCount_s005c_85d0<cRefObj> mField14;         // +0x14
@@ -358,7 +365,7 @@ cRefVector::~cRefVector()
 
 // @ 0x005c9010
 cSPPalettePageUI::cSPPalettePageUI()
-: mField8(0), mLayout(0), mSwatch(0), mField14(0), mFloat18(g_one), mFloat1c(g_one),
+: mLayout(0), mSwatch(0), mField14(0), mFloat18(1.0f), mFloat1c(1.0f),
       mNodes20(), mRefs34() {}
 
 // @ 0x005c9070

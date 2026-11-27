@@ -4,3 +4,4 @@
 ../src/game/SPEditors/SPEditorPalettePageUI.cpp  ?Shutdown@cSPPalettePageUI@@QAEXXZ  005c8cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPalettePageUI.cpp  ?Accept@cSPPalettePageUI@@QAEXH@Z  005c8d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPalettePageUI.cpp  ??1cRefVector@@QAE@XZ  005c8fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPalettePageUI.cpp  ??0cSPPalettePageUI@@QAE@XZ  005c9010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
