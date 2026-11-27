@@ -338,11 +338,16 @@ extern u16 g_tblY[];        // 0x15b1818
 extern u16 g_tblU[];        // 0x15b2018
 extern u16 g_tblV[];        // 0x15b2818
 extern unsigned long long g_mask7f7f;      // 0x15b3018
-extern u32 g_rgMask0[2];    // 0x16d7160
-extern u32 g_rgMask1[2];    // 0x16d7168
-extern u32 g_ditherSwitch[2];  // 0x16d8178
-extern u32 g_chanMask[2];   // 0x16d8180
-extern u32 g_dither[2];     // 0x16d8188
+// One MMX quadword constant, read as a whole by the kernels and per dword by YUV_convert.
+union MmxQuad {
+    unsigned __int64 q;
+    u32 d[2];
+};
+extern MmxQuad g_rgMask0;    // 0x16d7160
+extern MmxQuad g_rgMask1;    // 0x16d7168
+extern MmxQuad g_ditherSwitch;  // 0x16d8178
+extern MmxQuad g_chanMask;   // 0x16d8180
+extern MmxQuad g_dither;     // 0x16d8188
 extern u32 g_lutCurrent;    // 0x16d9198
 extern u8  g_convertScratch[];   // 0x16d8190
 extern u8  g_convertScratch2[];  // 0x16d7170
@@ -374,10 +379,10 @@ void ConvertYuvToRgb555(const u8* y, const u8* u, const u8* v, void* dst_, const
 // @ 0x00fce750
 void ConvertYuvDither(const u8* y, const u8* u, const u8* v, u32* dst, const u32* end)
 {
-    __m64 dith = *(const __m64*)g_dither;
-    __m64 mask0 = *(const __m64*)g_rgMask0;
-    __m64 mask1 = *(const __m64*)g_rgMask1;
-    __m64 chan = *(const __m64*)g_chanMask;
+    __m64 dith = *(const __m64*)&g_dither.q;
+    __m64 mask0 = *(const __m64*)&g_rgMask0.q;
+    __m64 mask1 = *(const __m64*)&g_rgMask1.q;
+    __m64 chan = *(const __m64*)&g_chanMask.q;
     do {
         __m64 uv = _mm_add_pi16(*(const __m64*)((const u8*)g_tblU + *u++ * 8),
                                 *(const __m64*)((const u8*)g_tblV + *v++ * 8));
@@ -399,10 +404,10 @@ void ConvertYuvDither(const u8* y, const u8* u, const u8* v, u32* dst, const u32
 // @ 0x00fce800
 void ConvertYuvDither2(const u8* y, const u8* u, const u8* v, u32* dst, const u32* end)
 {
-    __m64 dith = *(const __m64*)g_dither;
-    __m64 mask0 = *(const __m64*)g_rgMask0;
-    __m64 mask1 = *(const __m64*)g_rgMask1;
-    __m64 chan = *(const __m64*)g_chanMask;
+    __m64 dith = *(const __m64*)&g_dither.q;
+    __m64 mask0 = *(const __m64*)&g_rgMask0.q;
+    __m64 mask1 = *(const __m64*)&g_rgMask1.q;
+    __m64 chan = *(const __m64*)&g_chanMask.q;
     do {
         __m64 uv = _mm_add_pi16(*(const __m64*)((const u8*)g_tblU + *u++ * 8),
                                 *(const __m64*)((const u8*)g_tblV + *v++ * 8));
@@ -429,10 +434,10 @@ void ConvertYuvDither2(const u8* y, const u8* u, const u8* v, u32* dst, const u3
 void ConvertYuv422To16(const u32* src, u32* dst, const u32* end)
 {
     __m64 mask7f = *(__m64*)&g_mask7f7f;
-    __m64 dith = *(const __m64*)g_dither;
-    __m64 mask0 = *(const __m64*)g_rgMask0;
-    __m64 mask1 = *(const __m64*)g_rgMask1;
-    __m64 chan = *(const __m64*)g_chanMask;
+    __m64 dith = *(const __m64*)&g_dither.q;
+    __m64 mask0 = *(const __m64*)&g_rgMask0.q;
+    __m64 mask1 = *(const __m64*)&g_rgMask1.q;
+    __m64 chan = *(const __m64*)&g_chanMask.q;
     u32 prev = *src >> 1 & 0x7f7f7f7f;
     do {
         u32 cur = *src++;
@@ -453,10 +458,10 @@ void ConvertYuv422To16(const u32* src, u32* dst, const u32* end)
 void ConvertYuv422PairTo16(const u32* a, const u32* b, u32* dst, const u32* end)
 {
     __m64 mask7f = *(__m64*)&g_mask7f7f;
-    __m64 dith = *(const __m64*)g_dither;
-    __m64 mask0 = *(const __m64*)g_rgMask0;
-    __m64 mask1 = *(const __m64*)g_rgMask1;
-    __m64 chan = *(const __m64*)g_chanMask;
+    __m64 dith = *(const __m64*)&g_dither.q;
+    __m64 mask0 = *(const __m64*)&g_rgMask0.q;
+    __m64 mask1 = *(const __m64*)&g_rgMask1.q;
+    __m64 chan = *(const __m64*)&g_chanMask.q;
     u32 pa = *a >> 1 & 0x7f7f7f7f;
     u32 pb = *b >> 1 & 0x7f7f7f7f;
     u32 prev = (u32)_mm_cvtsi64_si32(
@@ -480,7 +485,7 @@ void ConvertYuv422PairTo16(const u32* a, const u32* b, u32* dst, const u32* end)
 }
 
 // @ 0x00fcea20
-void __fastcall setlut(int unused, int lut)
+static __declspec(noinline) void setlut(int lut)
 {
     if (g_lutCurrent == (u32)lut)
         return;
@@ -506,28 +511,19 @@ void __fastcall setlut(int unused, int lut)
 // @ 0x00fceaa0
 void setdepth(int depth)
 {
-    setlut(0, 1);
-    g_dither[1] = 0;
-    u32 mask;
-    if (depth == 0) {
-        g_ditherSwitch[0] = 0x60606;
-        g_ditherSwitch[1] = 0x60606;
-        g_rgMask0[0] = 0x1f800f8;
-        g_rgMask0[1] = 0x1f800f8;
-        g_dither[0] = 0x40404;
-        mask = 0x800004;
+    setlut(1);
+    if (depth != 0) {
+        g_dither.q = 0x40402;
+        g_ditherSwitch.q = 0x0006060300060603ui64;
+        g_rgMask0.q = 0x00f800fc00f800fcui64;
+        g_rgMask1.q = 0x0100000801000008ui64;
     } else {
-        g_ditherSwitch[0] = 0x60603;
-        g_ditherSwitch[1] = 0x60603;
-        g_rgMask0[0] = 0xf800fc;
-        g_rgMask0[1] = 0xf800fc;
-        g_dither[0] = 0x40402;
-        mask = 0x1000008;
+        g_dither.q = 0x40404;
+        g_ditherSwitch.q = 0x0006060600060606ui64;
+        g_rgMask0.q = 0x01f800f801f800f8ui64;
+        g_rgMask1.q = 0x0080000400800004ui64;
     }
-    g_rgMask1[0] = mask;
-    g_rgMask1[1] = mask;
-    g_chanMask[1] = 0xf800;
-    g_chanMask[0] = 0xf800;
+    g_chanMask.q = 0x0000f8000000f800ui64;
 }
 
 // @ 0x00fceb30
@@ -576,7 +572,7 @@ int YUV_convert(const u8* y, const u8* u, const u8* v, int yStride, int width,
         }
         return 0;
     case 1:
-        setlut(0, 0);
+        setlut(0);
         for (row = 0; row < height; row++) {
             ConvertYuvToRgb555(y, u, vrow, (__m64*)dst, (__m64*)(dst + bytesPerRow));
             y += yStride;
@@ -595,8 +591,8 @@ int YUV_convert(const u8* y, const u8* u, const u8* v, int yStride, int width,
             y += yStride;
             if (row & 1)
                 u += uStep;
-            g_dither[0] ^= g_ditherSwitch[0];
-            g_dither[1] ^= g_ditherSwitch[1];
+            g_dither.d[0] ^= g_ditherSwitch.d[0];
+            g_dither.d[1] ^= g_ditherSwitch.d[1];
             vrow += yStride;
             dst += dstStride;
         }
@@ -610,8 +606,8 @@ int YUV_convert(const u8* y, const u8* u, const u8* v, int yStride, int width,
             y += yStride;
             if (row & 1)
                 u += uStep;
-            g_dither[0] ^= g_ditherSwitch[0];
-            g_dither[1] ^= g_ditherSwitch[1];
+            g_dither.d[0] ^= g_ditherSwitch.d[0];
+            g_dither.d[1] ^= g_ditherSwitch.d[1];
             vrow += yStride;
             dst += dstStride;
         }
@@ -626,11 +622,11 @@ int YUV_convert(const u8* y, const u8* u, const u8* v, int yStride, int width,
             ConvertYuvToRgb555(y, u, vrow, (__m64*)g_convertScratch,
                                (__m64*)(g_convertScratch + bytesPerRow));
             ConvertYuv422To16((u32*)g_convertScratch, (u32*)dst, (u32*)(dst + bytesPerRow));
-            g_dither[0] ^= g_ditherSwitch[0];
+            g_dither.d[0] ^= g_ditherSwitch.d[0];
             ConvertYuv422PairTo16((u32*)g_convertScratch, (u32*)g_convertScratch2, (u32*)dst,
                                   (u32*)(dst + bytesPerRow));
-            g_dither[1] ^= g_ditherSwitch[1];
-            g_dither[0] ^= g_ditherSwitch[0];
+            g_dither.d[1] ^= g_ditherSwitch.d[1];
+            g_dither.d[0] ^= g_ditherSwitch.d[0];
             y += yStride;
             if (row & 1)
                 u += uStep;
