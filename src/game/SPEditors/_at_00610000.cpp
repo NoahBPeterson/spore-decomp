@@ -819,12 +819,12 @@ namespace SP { namespace Pollen {
 const char* FindLastNotOf(const char* last1, const char* first1, const char* first2, const char* last2)
 {
   while (last1 != first1) {
-    --last1;
     const char* it = first2;
     for (; it != last2; ++it) {
-      if (*last1 == *it) break;
+      if (last1[-1] == *it) break;
     }
     if (it == last2) return last1;
+    --last1;
   }
   return first1;
 }
