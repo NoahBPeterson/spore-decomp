@@ -3846,7 +3846,7 @@ bool __cdecl Read_00c78130(ISerializerStream_s00c7_7380* pStream, cHashtableHead
     return false;
 }
 
-// @ 0x00c781e0
+// 0x00c781e0 (byte-exact lifted version: match/slices/s00c781e0/s00c781e0.cpp)
 void __stdcall DestroyPlayerPlanetDataRange(cPlayerPlanetData* pBegin, cPlayerPlanetData* pEnd)
 {
     if (pBegin >= pEnd)

@@ -8,6 +8,5 @@
 00c77d30  570  cPlayerCommand::ProcessCommand (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (unresolved global g_nCheatFlagKey); large command switch
 00c78020  166  Read_00c78020 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); bool-store/reload codegen not reproducible
 00c78130  74  Read_00c78130 (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (0 valid inputs); serializer stream state
-00c781e0  44  DestroyPlayerPlanetDataRange (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv WEAK (no mismatch); remaining diffs are call-displacement and loop-shape; frame 143 vs 158
 00c78280  86  cVector<cEntry8>::Insert (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equiv UNSUPPORTED (9/40 valid, pool-limit); element shift memmove schedule
 00c77bf0  37  cPlayer::HasFlagOrInsert (/O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-): equivalent; only the bool arg's high 3 stack bytes differ (orig `mov byte[esp],bl` leaves 0xcccccc, ours `push 0`); callee reads only the low byte
