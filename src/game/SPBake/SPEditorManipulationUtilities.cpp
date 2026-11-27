@@ -7377,7 +7377,7 @@ void cSPEditorLimbStructure_s0048_9530::CollectBlocks(cSPEditorBlock_s0048_9530*
 }
 }  // namespace SP
 
-// @ 0x00489ae0
+// 0x00489ae0 (byte-exact lifted version: match/slices/s00489ae0/s00489ae0.cpp)
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::FixAllJoints()
 {
@@ -7588,7 +7588,7 @@ cSPEditorLimbJoint_s0048_c0f0* cSPEditorLimbStructure_s0048_c0f0::BuildJoints(cS
 }
 }  // namespace SP
 
-// @ 0x0048c790
+// 0x0048c790 (byte-exact lifted version: match/slices/s0048c790/s0048c790.cpp)
 namespace SP {
 void BuildPileList(cSPEditorBlock_s0048_c0f0* block, vector_s0048_c0f0<cSPEditorBlock_s0048_c0f0*>* list, bool b)
 {
@@ -10487,7 +10487,7 @@ void FUN_49ec40(cSPEditorBlock_s0049_de30* block, cSPVector3_s0049_de30* out, cS
     (*out)[0] = 0.0f;
 }
 
-// @ 0x0049ecf0
+// 0x0049ecf0 (byte-exact lifted version: match/slices/s0049ecf0/s0049ecf0_lifted.cpp)
 void FUN_49ecf0(cSPEditorBlock_s0049_ecf0* block, LimbVec_s0049_ecf0<cSPEditorBlock_s0049_ecf0*>* blocks, cSPVector3_s0049_ecf0 pos, cSPMatrix3_s0049_ecf0 mat)
 {
     cSPMatrix3_s0049_ecf0 savedTorso(block->mTorsoMat);
@@ -11100,7 +11100,7 @@ bool FUN_4a2060(cSPEditorBlock_s004a_1a70* block)
     }
 }
 
-// @ 0x004a2180
+// 0x004a2180 (byte-exact lifted version: match/slices/s004a2180/s004a2180.cpp)
 rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock_s004a_1a70* a, cSPEditorBlock_s004a_1a70* b)
 {
     int i0, axis, i2;                             // axis is the 2nd out value
@@ -11393,7 +11393,7 @@ void SnapBlockToSocket(cSPEditorBlock_s004a_29a0* block, int unused, cSPEditorBl
 void FUN_4a3760(int param, float* a, float* b)
 { (void)param; (void)a; (void)b; }
 
-// @ 0x004a37f0
+// 0x004a37f0 (byte-exact lifted version: match/slices/s004a37f0/s004a37f0.cpp)
 void FUN_4a37f0(cSPEditorBlock_s004a_3760* block)
 { (void)block; }
 
@@ -12719,7 +12719,7 @@ DequeIt* DequeIt::Inc()
     return this;
 }
 
-// @ 0x004ab4d0
+// 0x004ab4d0 (byte-exact lifted version: match/slices/s004ab4d0/s004ab4d0.cpp)
 Matrix3Like* CopyMatrixRange(Matrix3Like* param_1, Matrix3Like* param_2, Matrix3Like* param_3)
 {
     Matrix3Like* local_48 = param_3;

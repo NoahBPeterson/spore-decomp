@@ -182,7 +182,7 @@ char Meta::FUN_00550bd0(uint16_t* param_1)
     return 1;
 }
 
-// @ 0x00550cf0
+// 0x00550cf0 (byte-exact lifted version: match/slices/s00550cf0/s00550cf0.cpp)
 void Meta::FUN_00550cf0(WStr* out)
 {
     char* s = (char*)this;

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0047d870  110  cSPEditorHandle destructor: inlined AutoRefCount dtors / vtable ordering differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047d950 402 LoadProps: inlined GetPropertyT/GetPropertyAsKey templates and /Od slots differ; equiv WEAK (103 valid, 29% cov) after vtable double-deref fix (pm/mPropList slots) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047db30 1661 Init: complete (27/27 calls, all vtable slots 0x16c/0x58/0x48/0x40/0x44/0x38/0x3c, size 1889 vs 1925); fixed the cSPEditorBlock layout so mModelWorld is read at +0x18 instead of +0x08, removing the replay fault; diff is /Od local slot order and call-site layout. difftest FAIL-KEPT fake-call stack normalization (5/251 valid inputs, 89.4% coverage; all real calls match, but fake call #4's normalized stack arg is the original call-site return address 0x47db90 vs our call-site bytes, a /Od layout artifact). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047e2c0 326 Shutdown: inlined AutoRefCount release sequences and /Od slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+slices/s004b5440/s004b5440.cpp  ?FUN_004b5440@D_004b5440@@QAEXXZ  004b5440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

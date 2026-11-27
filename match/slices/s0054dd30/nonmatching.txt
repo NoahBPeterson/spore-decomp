@@ -1,1 +1,0 @@
-0054def0  32  ~cAssetDirectory: original omits the derived vptr store at destructor entry (only IHandler vptr restored at end)

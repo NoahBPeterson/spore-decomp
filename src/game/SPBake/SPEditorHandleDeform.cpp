@@ -326,7 +326,7 @@ struct MatOut {
 };
 // ---- items of slice s00481f00 end
 
-// @ 0x0047fa30
+// 0x0047fa30 (byte-exact lifted version: match/slices/s0047fa30/s0047fa30.cpp)
 void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
 {
     cSPEditorHandle_BaseCtor(self);
@@ -356,7 +356,7 @@ void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
     return self;
 }
 
-// @ 0x0047fc10
+// 0x0047fc10 (byte-exact lifted version: match/slices/s0047fc10/s0047fc10.cpp)
 void __fastcall cSPEditorHandleDeform_Dtor(cSPEditorHandle* self)
 {
     *(void**)self = (void*)0x13ef270;

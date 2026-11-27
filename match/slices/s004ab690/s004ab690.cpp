@@ -277,7 +277,7 @@ cSPEditorModel::cSPEditorModel()
     }
 }
 
-// @ 0x004aba00
+// 0x004aba00 (byte-exact lifted version: match/slices/s004aba00/s004aba00.cpp)
 void cSPEditorModel::ModelTeardown()
 {
     *(void**)this = &g_vtbl_model_a;

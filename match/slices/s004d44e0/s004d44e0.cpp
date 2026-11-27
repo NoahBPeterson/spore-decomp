@@ -291,7 +291,7 @@ int SpeciesDBLayout::GetField(int index)
     }
 }
 
-// @ 0x004D4AD0
+// 0x004d4ad0 (byte-exact lifted version: match/slices/s004d4ad0/s004d4ad0.cpp)
 void SpeciesDBLayout::PickRandomFields()
 {
     uint32_t maxB;

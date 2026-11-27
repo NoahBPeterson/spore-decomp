@@ -1,5 +1,3 @@
 # <va>  <diff-bytes>  <reason>
 0051c470  338  /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor. equiv PASS after: the Graphics::BakeSprites ctor (0x007b00f0) is a plain thiscall (this in ecx, no stack args) via BakeSprites::Construct(); the smart-pointer AddRef/Release call vtable[0]/vtable[1] directly; retail does not zero +0x48.
-0051d010  92   /Od base-vtable restore differs; complete PaintSystem dtor. equiv PASS after: PendingBatch::Flush() (0x004039f0) is a thiscall on this+0x34 with no stack args.
-0051d270  144  /Od erase tag-arg slots / symbol size mismatch; complete AutoRefVector::erase
 0051c6a0  1686  cSkinpaintTextureExtractor::HandleMessage (ret 8 body of the 0x51c640 extent): complete, all message paths; /Od frame layout (0x150 vs 0xd0) and inlined smart-pointer/size() temps differ [equiv: WEAK 400 valid, 15.8% coverage]

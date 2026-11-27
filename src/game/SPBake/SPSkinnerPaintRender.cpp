@@ -2441,7 +2441,7 @@ void* SkinJob::FUN_0051a8a0()
     return this;
 }
 
-// @ 0x0051a930
+// 0x0051a930 (byte-exact lifted version: match/slices/s0051a930/s0051a930.cpp)
 void SkinJob::FUN_0051a930()
 {
     void* self = this;
@@ -2689,7 +2689,7 @@ void SkinTexExtractorB::Init()
     }
 }
 
-// @ 0x0051d010
+// 0x0051d010 (byte-exact lifted version: match/slices/s0051d010/s0051d010.cpp)
 void PaintSystem::dtor()
 {
     if (*(int*)((char*)this + 0x34) != 0)
@@ -2722,7 +2722,7 @@ void DList::adv()
     }
 }
 
-// @ 0x0051d270
+// 0x0051d270 (byte-exact lifted version: match/slices/s0051d270/s0051d270.cpp)
 void* AutoRefVector::erase(void* pos)
 {
     if ((char*)pos + 4 < *(char**)((char*)this + 4)) {

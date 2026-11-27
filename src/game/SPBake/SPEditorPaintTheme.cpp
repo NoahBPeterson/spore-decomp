@@ -1168,7 +1168,7 @@ SP::cSPEditorPaintTheme_s004b_2320::cSPEditorPaintTheme_s004b_2320()
     }
 }
 
-// @ 0x004b25e0
+// 0x004b25e0 (byte-exact lifted version: match/slices/s004b25e0/s004b25e0.cpp)
 SP::cSPEditorPaintTheme_s004b_2320::~cSPEditorPaintTheme_s004b_2320()
 {
     mpVtbl0 = &g_vtbl_PaintTheme0;
@@ -1932,7 +1932,7 @@ int* RbTree::find_or_insert_float(const float* key)
     return (int*)((char*)found.value() + 0xc);
 }
 
-// @ 0x004b5440
+// 0x004b5440 (byte-exact lifted version: match/slices/s004b5440/s004b5440.cpp)
 void Vec544::Destroy()
 {
     for (RefObj** p = mpBegin; p < mpEnd; p++) {
@@ -1942,7 +1942,7 @@ void Vec544::Destroy()
     FUN_00425990(this);
 }
 
-// @ 0x004b5570
+// 0x004b5570 (byte-exact lifted version: match/slices/s004b5570/s004b5570.cpp)
 Blk20* Vec20::Erase(Blk20* first, Blk20* last)
 {
     Blk20* dest = first;
@@ -1952,7 +1952,7 @@ Blk20* Vec20::Erase(Blk20* first, Blk20* last)
     return first;
 }
 
-// @ 0x004b5610
+// 0x004b5610 (byte-exact lifted version: match/slices/s004b5610/s004b5610.cpp)
 void __fastcall FUN_004b5610(int* p)
 {
     int* end = (int*)p[1];

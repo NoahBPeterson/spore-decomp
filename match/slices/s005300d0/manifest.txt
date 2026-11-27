@@ -4,3 +4,4 @@ slices/s005300d0/s005300d0.cpp  ??1string@@QAE@XZ  00530670  /Od /Ob1 /MD /Gy /T
 slices/s005300d0/s005300d0.cpp  ?OnRegister@CmdStateBlock@@  00530c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 slices/s005300d0/s005300d0.cpp  ?OnRegister@CmdStateMeta@@  00530c40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 slices/s005300d0/s005300d0.cpp  ?push_back@string@@QAEXD@Z  005306c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s005300d0/s005300d0_lifted.cpp  _FUN_005300d0  005300d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc

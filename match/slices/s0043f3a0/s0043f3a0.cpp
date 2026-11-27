@@ -218,7 +218,7 @@ void cSPEditorBlock::FFa0(Matrix3 m)
     }
 }
 
-// @ 0x00440020
+// 0x00440020 (byte-exact lifted version: match/slices/s00440020/s00440020.cpp)
 void cSPEditorBlock::F4020(float v, uint8_t b)
 {
     F40420(v, b);
@@ -229,7 +229,7 @@ void cSPEditorBlock::F4020(float v, uint8_t b)
     }
 }
 
-// @ 0x00440090
+// 0x00440090 (byte-exact lifted version: match/slices/s00440090/s00440090.cpp)
 void cSPEditorBlock::F4090(float v, uint8_t b)
 {
     F40520(v, b, 0);

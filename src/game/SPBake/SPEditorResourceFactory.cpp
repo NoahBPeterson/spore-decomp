@@ -949,7 +949,7 @@ struct ViewPaintBlob { char pad[0x178]; Vec3 paint; };
 #define OFF(S, m) ((uint32_t)offsetof(S, m))
 // ---- items of slice s01244f50 end
 
-// @ 0x004afd00
+// 0x004afd00 (byte-exact lifted version: match/slices/s004afd00/s004afd00.cpp)
 void VecBase::Resize1d8(unsigned int n)
 {
     int count = (int)((mpEnd - mpBegin) / 0x1d8);
@@ -979,7 +979,7 @@ EditorBlock* EditorBlock::Init8()
     return this;
 }
 
-// @ 0x004b0340
+// 0x004b0340 (byte-exact lifted version: match/slices/s004b0340/s004b0340.cpp)
 Block194* VecBase::Erase194(Block194* dst, Block194* end)
 {
     Block194* out = (Block194*)mpEnd;

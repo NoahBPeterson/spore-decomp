@@ -109,7 +109,7 @@ extern uint32_t g_modelGroup;                                       // 0x015d430
 extern float g_ctorConst1;
 extern float g_ctorConst2;
 
-// @ 0x0047d6a0
+// 0x0047d6a0 (byte-exact lifted version: match/slices/s0047d6a0/s0047d6a0.cpp)
 cSPEditorHandle* cSPEditorHandle::Construct()
 {
     this->vptr = &g_vtblA;
@@ -179,7 +179,7 @@ inline void* WorldSlot(cMWModel* p, int slot)
     return ((void**)(*(void**)p->mWorld))[slot];
 }
 
-// @ 0x0047d870
+// 0x0047d870 (byte-exact lifted version: match/slices/s0047d870/s0047d870.cpp)
 void cSPEditorHandle::Destroy()
 {
     this->vptr = &g_vtblD;

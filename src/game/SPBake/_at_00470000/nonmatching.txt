@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
-0047e600 87 GetPosition: branch shape / x87-vs-SSE vector copy and slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047f3e0 166 SetScale: reference-local product ordering and /Od slots differ; equiv PASS (279 valid, 100% cov) now returns hidden eax (overdraw+8 upper | modcount, else model+8, else this) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047f5a0 289 cSPEditorHandle_UpdateModelTransforms (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 330 vs 378 bytes; body unexercised by equiv (virtual GetHandlePosition resolves through synthetic vtable slot 9 to mid-function 00472d00) so only the non-virtual writes are covered; equiv WEAK at --inputs 3000 (1271 valid, 10.3% cov), no mismatch; byte layout needs the original's unknown /Od temp frame flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

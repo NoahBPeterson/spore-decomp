@@ -12,11 +12,8 @@
 00519640 2446 /Od frame + inline Vector3 copies/property vcalls; complete Render() reconstruction
 0051a350 564 /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render
 0051a6a0 381 FUN_0051a6a0 (texture-from-image helper): complete (all calls, atomic AddRef, SetMipLevelData); /Od inline-accessor temps and frame layout differ (407 vs 512 bytes) [equiv: UNSUPPORTED, 0/400 valid: reads of service globals fault]
-0051a930 89 /Od member-address temps + thiscall helpers; complete dtor reconstruction [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target]
 0051a9a0 214 /Od arg stores; complete 10-arg ctor reconstruction
 0051aaa0 101 /Od refcount release pattern differs; complete Release reconstruction
 0051ab50 705 /Od int-iterator loop shape differs; complete PreloadTextures reconstruction
 0051c470 306 /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor. equiv PASS after: the Graphics::BakeSprites ctor (0x007b00f0) is a plain thiscall (this in ecx, no stack args) via BakeSprites::Construct(); the smart-pointer AddRef/Release call vtable[0]/vtable[1] directly; retail does not zero +0x48. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0051d010 71 /Od base-vtable restore differs; complete PaintSystem dtor. equiv PASS after: PendingBatch::Flush() (0x004039f0) is a thiscall on this+0x34 with no stack args. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0051d270 91 /Od erase tag-arg slots / symbol size mismatch; complete AutoRefVector::erase flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0051d300 554 complete fixed_vector<intrusive_ptr>::DoInsertValue; original inlines the move/uninitialized-copy helpers with extra flag locals (frame 0x84 vs mine) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

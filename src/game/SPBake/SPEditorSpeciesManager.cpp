@@ -4900,7 +4900,7 @@ cSpeciesProfile::cSpeciesProfile(const ResKey& key, bool flag)
         BadModelKey(&animatedBabyKey, 1);
 }
 
-// @ 0x004d44e0
+// 0x004d44e0 (byte-exact lifted version: match/slices/s004d44e0/s004d44e0_lifted.cpp)
 void SpeciesDB_Op1(void* self)
 { (void)self; }
 
@@ -4938,7 +4938,7 @@ uint32_t SpeciesDB::FindField10(int id)
 void SpeciesDB_Op2(void* self)
 { (void)self; }
 
-// @ 0x004d4ad0
+// 0x004d4ad0 (byte-exact lifted version: match/slices/s004d4ad0/s004d4ad0.cpp)
 void SpeciesDB_Op3(void* self)
 { (void)self; }
 

@@ -1,4 +1,3 @@
-005300d0  148  Read description: /Od temp schedule of the eight ReadInt32 calls differs
 00530310  221  Write description: /Od write-helper temp schedule differs
 00530770  223  vector copy ctor: complete; the uninitialized_copy instantiation takes its output iterator through a hidden return slot, so the call now pushes slot/out first (push tag, dest, last, first, slot) and stores the slot's advanced dest into mpEnd; residual diff is the /Od EH frame and local copies (156 vs 241). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc. [equiv: PASS 201 valid, 85.2% cov, seed 3; hybrid copy src/game/SPBake/SPSkinPaintDistributeDescription.cpp also PASS]
 00530870  407  vector operator=: eastl::copy tag locals / branch shapes (mine 456 vs orig 757); equiv: WEAK (369 valid, 33.5% cov)

@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-004afd00 127 complete vector grow (0x1d8 elems); the temp-block helper (0x4b0040) is called with ecx=&tmp, not this, and insert-values (0x4b11f0) takes ecx=this; remaining diff is /Od stack-slot layout [equiv: PASS 217 valid, 100% cov] flags: /Od /Ob1 /MD /Gy /TP
-004b0340 139 complete vector erase-range (0x1d8 elems) flags: /Od /Ob1 /MD /Gy /TP
 004bc080 255 SP::cSPEditorResourceFactory::Init: complete (static hash-table init + 6 manager vcalls + 2 FUN_006adc60); our manager/table stubs change the frame flags: /Od /Ob1 /MD /Gy /TP
 004bc300 283 SP::cSPEditorResourceFactory::CreateResource: complete (SetAssetData gate -> 0xac ctor / 0x128 ctor, both ctors are thiscall on the raw allocation, v24(stream, obj, param4, typeHash), v10 field copy to +8/+0xc/+0x10, *out = obj); equivalence replay identical (WEAK: 11.9% coverage) flags: /Od /Ob1 /MD /Gy /TP
 004bc540 210 SP::cSPEditorResourceFactory::ReadResource: complete (0x4c0500 -> v18 -> 0x4bf430 with handle, or v10/v18 -> ReadResourceFromStream(0x4bc6d0); 0x6ac0a0 takes 2 args); equiv WEAK (379 valid, no mismatch, 54% cov) flags /Od /Ob1 /MD /Gy /TP; v18 called with 2 args where the original passes 1 (fake-method arity -> those inputs discarded)

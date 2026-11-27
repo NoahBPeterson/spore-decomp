@@ -1542,7 +1542,7 @@ public:
 }
 // ---- items of slice s004cd1b0 end
 
-// @ 0x004c44c0
+// 0x004c44c0 (byte-exact lifted version: match/slices/s004c44c0/s004c44c0.cpp)
 namespace SP {
 cSPEditorSkinPart_s004c_38e0* cSPEditorSkinManager_s004c_38e0::CreateSkinObject(cSPEditorBlock_s004c_38e0* block, uint32_t instance)
 {
@@ -1668,7 +1668,7 @@ cSPEditorBlock_s004c_4650* cSPEditorSkinManager_s004c_4650::GetBlockOnSkin(uint3
 }
 }  // namespace SP
 
-// @ 0x004c4eb0
+// 0x004c4eb0 (byte-exact lifted version: match/slices/s004c4eb0/s004c4eb0.cpp)
 namespace SP {
 void cSPEditorSkinManager_s004c_4650::DetachSkinParts()
 {
@@ -1730,7 +1730,7 @@ void cSPEditorSkinManager_s004c_4650::SetDefaultMaterialToDetachedLimb(uint32_t 
 }
 }  // namespace SP
 
-// @ 0x004c5100
+// 0x004c5100 (byte-exact lifted version: match/slices/s004c5100/s004c5100.cpp)
 namespace SP {
 void cSPEditorSkinManager_s004c_4650::SetSkinResolutions(float realtime, float highQuality)
 {

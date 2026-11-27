@@ -369,7 +369,7 @@ cAssetDirectory::cAssetDirectory()
 {
 }
 
-// @ 0x0054DEF0
+// 0x0054def0 (byte-exact lifted version: match/slices/s0054def0/s0054def0.cpp)
 // NONMATCHING: the original omits the vptr store at the start of the destructor (only the base
 // IHandler vptr is restored at the end); 21 bytes differ.
 cAssetDirectory::~cAssetDirectory()

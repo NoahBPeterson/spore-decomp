@@ -299,7 +299,7 @@ EmbeddedState* nSPSkinner::cRTTBuffer_s0052_88f0::PrepareState()
     return shaderState;
 }
 
-// @ 0x00529520
+// 0x00529520 (byte-exact lifted version: match/slices/s00529520/s00529520.cpp)
 uint32_t nSPSkinner::cRTTBuffer_s0052_88f0::ClampAndStream(uint32_t requested)
 {
     cRTTBuffer_s0052_88f0* self = this;
@@ -375,7 +375,7 @@ void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
     reinterpret_cast<nSPSkinner::cRTTBuffer*>(this)->EndTriangles();
 }
 
-// @ 0x00529bf0
+// 0x00529bf0 (byte-exact lifted version: match/slices/s00529bf0/s00529bf0.cpp)
 void cRTTBuffer18::BeginDraw()
 {
     DAT_016f9238 = DAT_015dea64;

@@ -232,7 +232,7 @@ void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments& args
     }
 }
 
-// @ 0x00539ed0
+// 0x00539ed0 (byte-exact lifted version: match/slices/s00539ed0/s00539ed0.cpp)
 void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
 {
     void* p = EASTL_allocator_allocate(0x54, "ArgScript/SPSkinPaintParticleEffectBlock", 0, 0, 0, 0);
@@ -249,7 +249,7 @@ void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
     a->AddCommand(kParticleKeyword, q);
 }
 
-// @ 0x00539f90
+// 0x00539f90 (byte-exact lifted version: match/slices/s00539f90/s00539f90.cpp)
 cSPSkinPaintParticleEffectBlockCommand::cSPSkinPaintParticleEffectBlockCommand()
     : mCurrentModifier(0), mpEvalList(0) {
     mStateID = 0x2c96c27;
@@ -287,7 +287,7 @@ void cSPSkinPaintParticleEffectBlockCommand::Parse(EA::ArgScript::cArguments& ar
     mParser->V35();
 }
 
-// @ 0x0053a1a0
+// 0x0053a1a0 (byte-exact lifted version: match/slices/s0053a1a0/s0053a1a0.cpp)
 void cSPSkinPaintParticleEffectBlockCommand::SetChild(int b)
 {
     if (b == 0)
@@ -360,7 +360,7 @@ cSPSkinPaintParticleDescription* BrushDesc_s0053_9d70::GetRuntimeDesc()
     return (cSPSkinPaintParticleDescription*)(res ? res + 8 : 0);
 }
 
-// @ 0x0053a530
+// 0x0053a530 (byte-exact lifted version: match/slices/s0053a530/s0053a530.cpp)
 void BrushDesc_s0053_9d70::Init()
 {
     mFlags = 0;

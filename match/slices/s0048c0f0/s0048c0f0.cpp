@@ -47,7 +47,7 @@ template<int N> struct bitset {
     }
 };
 
-// @ 0x48c720
+// 0x0048c720 (byte-exact lifted version: match/slices/s0048c720/s0048c720.cpp)
 template<class T>
 void vector<T>::eraseOne(T* it)
 {
@@ -220,7 +220,7 @@ void cSPEditorLimbStructure::GetLimbOriginalPosition(cSPVector3* out)
     }
 }
 
-// @ 0x48c790
+// 0x0048c790 (byte-exact lifted version: match/slices/s0048c790/s0048c790.cpp)
 void BuildPileList(cSPEditorBlock* block, vector<cSPEditorBlock*>* list, bool b)
 {
     int n = block->mSymmetricBlocks.empty() ? 0 : (int)block->mSymmetricBlocks.size();

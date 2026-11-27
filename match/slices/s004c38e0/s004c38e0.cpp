@@ -449,7 +449,7 @@ void cSPEditorSkinManager::UpdatePaintedSkin()
     }
 }
 
-// @ 0x004c44c0
+// 0x004c44c0 (byte-exact lifted version: match/slices/s004c44c0/s004c44c0.cpp)
 cSPEditorSkinPart* cSPEditorSkinManager::CreateSkinObject(cSPEditorBlock* block, uint32_t instance)
 {
     cSPEditorSkinPart* part = new (kEditorAllocName, 0, 0, 0, 0) cSPEditorSkinPart;

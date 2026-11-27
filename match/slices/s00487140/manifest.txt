@@ -1,0 +1,1 @@
+slices/s00487140/s00487140.cpp  ?FUN_00487140@D_00487140@@QAEXH@Z  00487140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,6 +1,5 @@
 00486910  842  /Od; complete. FindNearestFlag7Block takes the query position by value (12-byte stack argument, callee-cleaned); declaring it as const& left an 8-byte stack hole that corrupted the saved esi/edi pops. Remaining diff: frame ~97 bytes short (reserved slots of inline-declined helpers) and local temp order. | difftest: PASS - 346 valid inputs, 89.0% coverage (242/272), 0 mismatches
 00486d40  258  /Od; complete. FUN_004974e0 is a free cdecl function (caller cleans 0x20); the previous member declaration left 0x20 bytes on the stack and corrupted the saved esi/edi pops. Remaining diff: local temp order. | difftest: PASS - 391 valid inputs, 99.1% coverage (106/107), 0 mismatches
-00487140  244  /Od; complete. find-iterator loop and operator- result temps / slot order differ
 004873d0  125  /Od; complete. Abs() x87 temp placement and extra frame slots differ
 004874c0  356  /Od; complete. SignOf helper inlining and frame slot order differ
 004876b0  370  /Od; complete. SignOf helper inlining and frame slot order differ

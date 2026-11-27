@@ -247,7 +247,7 @@ void cSPEditorBlock::F40bc0(const Vec3* v)
     }
 }
 
-// @ 0x00440C00
+// 0x00440c00 (byte-exact lifted version: match/slices/s00440c00/s00440c00.cpp)
 void cSPEditorBlock::F40c00(float f)
 {
     if (mModel != 0) {
@@ -293,7 +293,7 @@ void cSPEditorBlock::F404f0(Matrix3 m)
     for (int i = 0; i < 9; i++) dst[i] = src[i];
 }
 
-// @ 0x00440F60
+// 0x00440f60 (byte-exact lifted version: match/slices/s00440f60/s00440f60.cpp)
 Trans::Trans()
 {
     flag = 0;
@@ -301,7 +301,7 @@ Trans::Trans()
     b = g_v3_241c;
 }
 
-// @ 0x00440FF0
+// 0x00440ff0 (byte-exact lifted version: match/slices/s00440ff0/s00440ff0.cpp)
 Trans::Trans(const Trans& o)
 {
     flag = o.flag;

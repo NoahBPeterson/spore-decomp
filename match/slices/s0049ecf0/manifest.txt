@@ -1,1 +1,2 @@
 slices/s0049ecf0/s0049ecf0.cpp  ?FUN_49ef80@@YAXPAUcSomeTracker@@PAUcSPVector3@@@Z  0049ef80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0049ecf0/s0049ecf0_lifted.cpp  _FUN_0049ecf0  0049ecf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

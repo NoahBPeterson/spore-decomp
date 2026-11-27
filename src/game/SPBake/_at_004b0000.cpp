@@ -511,7 +511,7 @@ template <> void vector_s004b_11f0<uint32_t>::DoAssignValues(uint32_t n, const u
 }
 }  // namespace eastl
 
-// @ 0x004b2220
+// 0x004b2220 (byte-exact lifted version: match/slices/s004b2220/s004b2220.cpp)
 void** UninitCopyAutoRef(void** out, void** first, void** last, void** dest)
 {
     for (; first != last; ++first) {

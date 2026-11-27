@@ -81,7 +81,7 @@ void VecBase::Resize4F(unsigned int n)
     }
 }
 
-// @ 0x004aff80
+// 0x004aff80 (byte-exact lifted version: match/slices/s004aff80/s004aff80.cpp)
 void VecBase::Resize24(unsigned int n)
 {
     int count = (int)((mpEnd - mpBegin) / 0x18);
@@ -95,7 +95,7 @@ void VecBase::Resize24(unsigned int n)
     }
 }
 
-// @ 0x004b0340
+// 0x004b0340 (byte-exact lifted version: match/slices/s004b0340/s004b0340.cpp)
 Block194* VecBase::Erase194(Block194* dst, Block194* end)
 {
     Block194* out = (Block194*)mpEnd;
@@ -130,7 +130,7 @@ void* VecBase::Init8()
     return this;
 }
 
-// @ 0x004afd00
+// 0x004afd00 (byte-exact lifted version: match/slices/s004afd00/s004afd00.cpp)
 void VecBase::Resize1d8(unsigned int n)
 {
     int count = (int)((mpEnd - mpBegin) / 0x1d8);
@@ -144,7 +144,7 @@ void VecBase::Resize1d8(unsigned int n)
     }
 }
 
-// @ 0x004afdd0
+// 0x004afdd0 (byte-exact lifted version: match/slices/s004afdd0/s004afdd0.cpp)
 void VecBase::Reserve194(unsigned int n)
 {
     unsigned int size = (unsigned int)((mpEnd - mpBegin) / 0x1d8);
