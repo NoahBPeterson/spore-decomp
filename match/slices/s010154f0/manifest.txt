@@ -6,3 +6,4 @@ slices/s010154f0/s010154f0.cpp  ?ResetState@cSPSimulatorWalkAround@@QAEXXZ  0101
 slices/s010154f0/s010154f0.cpp  ?FindPlantValue@cSPSimulatorWalkAround@@QAEHH@Z  01015fa0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 slices/s010154f0/s010154f0.cpp  ??1cSPSimulatorWalkAround@@QAE@XZ  01015fe0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 slices/s010154f0/s010154f0.cpp  ?Write@cSPSimulatorWalkAround@@QAEXPAUIStream@@@Z  01015e30  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s010154f0/s010154f0.cpp  ?QueryBeamingFlag@cSPSimulatorWalkAround@@QAEEPAUIRefBut34@@@Z  01016470  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

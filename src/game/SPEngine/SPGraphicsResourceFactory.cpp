@@ -2654,12 +2654,11 @@ D765ac0::~D765ac0()
 
 // @ 0x00765b30
 bool AsyncReqB::Start(JobRefL* out)
-{
-    if (id18 != 0x2f4e681b)
+{    if (id18 != 0x2f4e681b)
         return false;
-    st.state = 5;
-    st.b = 0;
-    st.c = 0;
+    *(volatile uint32_t*)&st.state = 5;
+    *(IRef2* volatile*)&st.b = 0;
+    *(volatile uint32_t*)&st.c = 0;
     JobLockL lock(GetJobManager());
     JobRefL a;
     {

@@ -13,3 +13,4 @@
 ../src/game/Swarm/ParticleUtilities.cpp  ?Execute@cPathTimeCommand@SwarmImpl@@UAEXPAVcArguments_s00a7_a580@ArgScript@EA@@@Z  00a7b1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/ParticleUtilities.cpp  ?Execute@cPathCommand@SwarmImpl@@UAEXPAVcArguments_s00a7_a580@ArgScript@EA@@@Z  00a7b2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/ParticleUtilities.cpp  ?FUN_00a7a500@@YIPAUPathObj@@PAU1@PAXIII@Z  00a7a500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/ParticleUtilities.cpp  ?TransformDir@Xform@@QBEXPAUVec3@@@Z  00a797f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

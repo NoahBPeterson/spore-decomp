@@ -848,8 +848,9 @@ bool FileWatcher::SetPath(const unsigned short* p)
 {
     bool result = false;
     if (m_thread.WaitStatus(0) != 1) {
-        unsigned short* d = m_path;
-        while ((*d++ = *p++) != 0) {}
+        const unsigned short* __restrict s = p;
+        unsigned short* __restrict d = m_path;
+        while ((*d++ = *s++) != 0) {}
         result = true;
     }
     return result;

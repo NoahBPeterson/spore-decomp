@@ -11,5 +11,4 @@
 01021180   64  median-of-three comparator: complete; the comparison call order
                and register reselection differ. flags /O2 /MD /Gy /TP /arch:SSE
                and the FUN_00c8b360 tail differ. flags /O2 /MD /Gy /TP /arch:SSE
-01021d40   40  background-sim singleton ctor: complete; operator_new zero/sentinel
                stores schedule differently. flags /O2 /MD /Gy /TP /arch:SSE
