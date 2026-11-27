@@ -64,3 +64,4 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?HotSpotsShutdown@@YAXXZ  00c9a080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?CopyElems14Range@@YAPAUElem14@@PAU1@PBU1@0@Z  00c90e40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?PushBackAt@ToolVec@@QAEPAUTribeToolRef@@PAU2@PBU2@@Z  00c9a000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FillElems14@@YAXPAUElem14@@IPBU1@@Z  00c90df0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

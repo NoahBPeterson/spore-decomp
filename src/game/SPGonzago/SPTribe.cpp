@@ -748,6 +748,8 @@ struct Elem14 {
   float mX, mY, mZ, mW;                  // 0x00
   u8    mB_10;                           // 0x10
   u8    mPad_11[3];                      // 0x11
+  Elem14() {}
+  Elem14(const Elem14& o) : mX(o.mX), mY(o.mY), mZ(o.mZ), mW(o.mW), mB_10(o.mB_10) {}
 };
 struct RefCnt {
   virtual void AddRef();                 // 0x00
@@ -5078,18 +5080,13 @@ void __cdecl CopyElems14(Elem14** out, const Elem14* first, const Elem14* last, 
 // @ 0x00c90df0
 void __cdecl FillElems14(Elem14* dst, u32 count, const Elem14* value)
 {
-  if (count != 0) {
+  if (count > 0) {
+    float* pz = &dst->mZ;
     do {
-      if (dst != 0) {
-        dst->mX = value->mX;
-        dst->mY = value->mY;
-        dst->mZ = value->mZ;
-        dst->mW = value->mW;
-        dst->mB_10 = value->mB_10;
-      }
-      count--;
-      dst++;
-    } while (count != 0);
+      new ((Elem14*)(pz - 2)) Elem14(*value);
+      --count;
+      pz += 5;
+    } while (count > 0);
   }
 }
 
