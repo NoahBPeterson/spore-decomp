@@ -5307,6 +5307,8 @@ NOINLINE void __fastcall FUN_00cd54c0(char* self, int)
     p->Release();
 }
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // @ 0x00cd54f0
 NOINLINE bool CTribeMode::FUN_00cd54f0()
 {
@@ -5314,14 +5316,14 @@ NOINLINE bool CTribeMode::FUN_00cd54f0()
     char* sp = (char*)((CExtF67D90*)NounManager())->call();
     if (!sp || *(int*)(self + 0x40) == *(int*)(self + 0x44))
         return false;
-    float* a = (float*)(sp + 0x10f0);
     float* b = (float*)(sp + 0x10f4);
+    float* a = (float*)(sp + 0x10f0);
     float* large = a;
-    if (*a > *b)
+    if (*a > *b) {
+        _ReadWriteBarrier();
         large = b;
-    if (*large / *b < g_1485720)
-        return 0;
-    return 1;
+    }
+    return *large / *b >= g_1485720;
 }
 
 // @ 0x00cd5550
