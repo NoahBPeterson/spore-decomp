@@ -1,7 +1,5 @@
 # va diff reason
 007f9550 466 complete Eval clamp/scale routine; float branch scheduling differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-007f9fe0 63 complete remove-all-predicates loop; /Od local slot order / repeated getter calls differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-007fa060 63 complete remove-all-actions loop; /Od local slot order / repeated getter calls differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fa180 59 complete AsInterface; cl hoists the id compare before the branch vs original local-temp form flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fa390 272 complete message broadcast; the id filter/conditional relay reconstruction differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fab80 275 C_TF::SetNegated — complete; the finite-difference ease search (vcall 0x18/0x60, fabsf loop, 0.001f epsilon, -0.47f step) has a different branch/float schedule than the original /Od code (size 352 vs 359). `negated` is now `unsigned char` so the raw argument byte is stored (retail does `mov [this+0x39], dl`; the old bool normalised 0xe9 to 1 and changed the object state); equiv: PASS (317/500 valid slice and src, 100% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
@@ -10,5 +8,4 @@
 007fc690 196 cSPUIBehaviorEventBase::SetStateString — complete; eastl string temporaries / inlined helper frames differ
 007fc790 156 cSPUIBehaviorEventBase::SetStateInt — complete; action slot vcalls and message temporaries differ
 007fcca0 461 complete; eastl vector insert (stride 8) reconstruction; call/register schedule differs; equiv: UNSUPPORTED (no valid inputs: pool-limit/read faults) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-007fd2d0 119 complete; element-by-element vector copy in the original's three-argument form (VecOwner* owner, VecSrc* src, VecElemList* list): the span comes from the thiscall slot accessor 0x007f53c0 (ecx = arg1, one pushed arg, `ret $4`), the loop bound is list->[0x14], the per-element vtable slot +0xc takes the class id $0x2439c2f on the stack, and *src->begin is probed through a local before the call; size now matches exactly (183 bytes), residual is cl's eax/edx choice per statement; equiv PASS (255 valid, 78.1% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fd890 136 complete; DampedPeriodic eval (slot24); now calls Ev::Eval (0x7f9550) / C_TF::IsValid (0x7facf0) thiscall; logf still inlined as x87 fyl2x, frame/schedule differs; equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

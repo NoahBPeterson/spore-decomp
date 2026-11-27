@@ -191,7 +191,7 @@ IEffect* cContentValidationSummarizer::Play(int key, int mode, void* msg, int ke
     return ret;
 }
 
-// @ 0x45ae10
+// 0x0045ae10 (byte-exact lifted version: match/slices/s0045ae10/s0045ae10.cpp)
 void cContentValidationSummarizer::Play0(int key, int mode)
 {
     Play(key, mode, &XformMsg(), 0);
@@ -313,7 +313,7 @@ Node** HTable::at(int* key)
     return (Node**)((char*)it.node + 4);
 }
 
-// @ 0x45b3e0
+// 0x0045b3e0 (byte-exact lifted version: match/slices/s0045b3e0/s0045b3e0.cpp)
 Iter* HTable::erase(Iter* out, Iter it)
 {
     Node* node = it.node;
@@ -358,7 +358,7 @@ void HTable::freeNode(Node* n)
     operator delete[](n);
 }
 
-// @ 0x45b750
+// 0x0045b750 (byte-exact lifted version: match/slices/s0045b750/s0045b750.cpp)
 void HTable::clearBuckets(Node** b, uint32_t n)
 {
     for (uint32_t i = 0; i < n; i++) {
@@ -445,7 +445,7 @@ ColladaExport::ColladaExport()
 {
 }
 
-// @ 0x45b9a0
+// 0x0045b9a0 (byte-exact lifted version: match/slices/s0045b9a0/s0045b9a0.cpp)
 ColladaExport::~ColladaExport()
 {
     mPad13c.dtor64();

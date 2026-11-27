@@ -2094,7 +2094,7 @@ class cPlanetModel_s00b8_15a0__match {
 template vector_s0047_2b80<Pod12, 4>& vector_s0047_2b80<Pod12, 4>::operator=(const vector_s0047_2b80<Pod12, 4>&)
 ;
 
-// @ 0x00473890
+// 0x00473890 (byte-exact lifted version: match/slices/s00473890/s00473890.cpp)
 template void vector_s0047_2b80<Pod12, 4>::reserve(uint32_t)
 ;
 

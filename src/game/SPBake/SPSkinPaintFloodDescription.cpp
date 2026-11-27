@@ -160,7 +160,7 @@ Vec16::Vec16(const Vec16& x)
     mpEnd = (Elem16*)uninitialized_copy16(x.mpBegin, x.mpEnd, mpBegin);
 }
 
-// @ 0x00537240
+// 0x00537240 (byte-exact lifted version: match/slices/s00537240/s00537240.cpp)
 Elem20* uninitialized_copy20(Elem20* first, Elem20* last, Elem20* dest)
 {
     Elem20* p = dest;

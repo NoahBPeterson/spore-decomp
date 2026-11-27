@@ -316,7 +316,7 @@ float cTraitQuery::Compute(cFeatureVector* a, cFeatureVector* b)
     return kfSimilarityError;
 }
 
-// @ 0x00571720
+// 0x00571720 (byte-exact lifted version: match/slices/s00571720/s00571720.cpp)
 void cFeatureVector::assign(const cFeatureVector& other)
 {
     erase(mpBegin, mpEnd);

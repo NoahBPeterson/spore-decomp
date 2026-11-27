@@ -7415,7 +7415,7 @@ int ThreadedObject_s0040_4660::Release()
 }
 }  // namespace Resource_s0040_4660
 
-// @ 0x00405000
+// 0x00405000 (byte-exact lifted version: match/slices/s00405000/s00405000_lifted.cpp)
 BakerCommand_s0040_5000::BakerCommand_s0040_5000(void* pBaker)
 : mpBaker(pBaker), mOptions(1)
 {
@@ -10241,7 +10241,7 @@ ToolState::ToolState()
 {
 }
 
-// @ 0x00417fe0
+// 0x00417fe0 (byte-exact lifted version: match/slices/s00417fe0/s00417fe0.cpp)
 ToolState::~ToolState()
 {
 }
@@ -10253,7 +10253,7 @@ SubState::SubState()
 {
 }
 
-// @ 0x00418240
+// 0x00418240 (byte-exact lifted version: match/slices/s00418240/s00418240.cpp)
 SubState::~SubState()
 {
 }
@@ -10463,7 +10463,7 @@ char LoadTask::Run(Finisher* fin)
     return 1;
 }
 
-// @ 0x00419690
+// 0x00419690 (byte-exact lifted version: match/slices/s00419690/s00419690.cpp)
 void __thiscall Task::Prepare(Request* req)
 {
     f2c = 0;

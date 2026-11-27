@@ -129,7 +129,7 @@ struct Elem20
     }
 };
 
-// @ 0x0047b3d0
+// 0x0047b3d0 (byte-exact lifted version: match/slices/s0047b3d0/s0047b3d0.cpp)
 Elem20* Copy20Range(Elem20* first, Elem20* last, Elem20* dest)
 {
     Elem20* d = dest;

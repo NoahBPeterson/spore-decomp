@@ -122,7 +122,7 @@ char LoadTask::Run(Finisher* fin)
     return 1;
 }
 
-// @ 0x00419690
+// 0x00419690 (byte-exact lifted version: match/slices/s00419690/s00419690.cpp)
 void __thiscall Task::Prepare(Request* req)
 {
     f2c = 0;

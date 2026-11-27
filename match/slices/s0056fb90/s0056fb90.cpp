@@ -390,7 +390,7 @@ ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
     return result;
 }
 
-// @ 0x00570400
+// 0x00570400 (byte-exact lifted version: match/slices/s00570400/s00570400.cpp)
 // Uninitialized copy of the 0x1c-byte {uint32,payload} elements [first,last) to dst.
 // Local names chosen via tools/matching/od_names.py to reproduce the /Od slot order.
 Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst)

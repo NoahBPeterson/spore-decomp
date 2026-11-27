@@ -67,7 +67,7 @@ struct FixedC {
     void FUN_0050d750(void* p);   // 0x0050d750, ecx = this
 };
 
-// @ 0x00455cf0
+// 0x00455cf0 (byte-exact lifted version: match/slices/s00455cf0/s00455cf0.cpp)
 int* FixedC::InitFixed(void* p) {
     ((int*)this)[0] = 0;
     ((int*)this)[1] = 0;
@@ -157,7 +157,7 @@ int* HT::Insert(int* pos, int* value) {
     return node;
 }
 
-// @ 0x00455ae0 -- move 0x14-stride elements down over [param2,param3)
+// 0x00455ae0 (byte-exact lifted version: match/slices/s00455ae0/s00455ae0.cpp) -- move 0x14-stride elements down over [param2,param3)
 struct Vec14 { int* self_[2]; void* Move14(void* param2, void* param3); };
 void* Vec14::Move14(void* param2, void* param3) {
     int* self = (int*)this;

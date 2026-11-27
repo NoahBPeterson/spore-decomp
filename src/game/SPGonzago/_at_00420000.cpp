@@ -1702,7 +1702,7 @@ Deletable* Deletable::Destroy(uint32_t flags)
     return this;
 }
 
-// @ 0x00423110
+// 0x00423110 (byte-exact lifted version: match/slices/s00423110/s00423110_lifted.cpp)
 LocaleMessage::LocaleMessage(int userData)
 {
     mUserData = userData;

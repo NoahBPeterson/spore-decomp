@@ -353,7 +353,7 @@ struct VecOwner {
     void** Elements(VecElemList* list);   // 0x007f53c0
 };
 
-// @ 0x007fd2d0
+// 0x007fd2d0 (byte-exact lifted version: match/slices/s007fd2d0/s007fd2d0.cpp)
 bool __cdecl Vec8CopyFrom(VecOwner* owner, VecSrc* src, VecElemList* list) {
     void** d = src->begin;
     void** s = owner->Elements(list);

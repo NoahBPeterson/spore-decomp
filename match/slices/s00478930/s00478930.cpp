@@ -152,7 +152,7 @@ void  Construct12Range(void* dst, uint n, const void* v);             // @ 0x004
 void* Move12Range(const void* first, const void* last, void* dest);   // @ 0x004b6bf0
 void  Shift12(void* first, void* last, void* out);                    // @ 0x004797a0
 
-// @ 0x004797a0
+// 0x004797a0 (byte-exact lifted version: match/slices/s004797a0/s004797a0.cpp)
 void Shift12Out(E12** out, E12* first, E12* last, E12* dest)
 {
     E12* d = dest;

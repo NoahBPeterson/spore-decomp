@@ -1,0 +1,1 @@
+slices/s0047c240/s0047c240.cpp  _FUN_0047c240  0047c240  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
