@@ -2400,16 +2400,16 @@ u8* FUN_00ccad80_impl(u8* first, u8* last, const void* key)
     int n = (int)(last - first) / 0x18;
     const u32* k = (const u32*)key;
     if (n > 0) {
-        u32 k0 = k[0];
-        u32 k1 = k[1];
+        unsigned __int64 k64 = *(const unsigned __int64*)k;
         do {
             int half = n >> 1;
             u8* mid = first + half * 0x18;
-            if (ldu32(mid, 4) <= k1 && (ldu32(mid, 4) < k1 || ldu32(mid, 0) < k0)) {
+            if (*(unsigned __int64*)mid < k64) {
                 first = mid + 0x18;
-                half = n - (half + 1);
+                n += -1 - half;
+            } else {
+                n = half;
             }
-            n = half;
         } while (n > 0);
     }
     return first;
