@@ -302,7 +302,7 @@ void FUN_00560f20(void* pKey, void* pList, char flag)
 
 namespace Editor { struct cEditorResource { }; }
 
-// @ 0x00561090
+// 0x00561090 (byte-exact lifted version: match/slices/s00561090/s00561090.cpp)
 void* EcxStub9a::FUN_00561090_() {
     void* this_ = this;
     *(void**)this_ = (void*)0x13eb938;
@@ -331,7 +331,7 @@ int CEditorResourceThunk::f(void* p) {
     return 0;
 }
 
-// @ 0x005611b0
+// 0x005611b0 (byte-exact lifted version: match/slices/s005611b0/s005611b0.cpp)
 void EcxStub9a::FUN_005611b0() {
     void* this_ = this;
     *(void**)this_ = (void*)0x13f4b00;
@@ -345,7 +345,7 @@ void EcxStub9a::FUN_005611b0() {
     *(void**)this_ = (void*)0x13eb938;
 }
 
-// @ 0x00561220
+// 0x00561220 (byte-exact lifted version: match/slices/s00561220/s00561220.cpp)
 void EcxStub9a::FUN_00561220(void* pData)
 {
     void* this_ = this;
@@ -495,7 +495,7 @@ bool EcxStub9a::FUN_00561340(void* pKey)
     return false;
 }
 
-// @ 0x00561850
+// 0x00561850 (byte-exact lifted version: match/slices/s00561850/s00561850.cpp)
 void cSPObjectTemplateDB::FUN_00561850(int index)
 {
     char* asset = (char*)(index * 0x50 + *(int*)((char*)this + 0x14));

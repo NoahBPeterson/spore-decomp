@@ -768,7 +768,7 @@ void WString_s0042_f160::SetCapacity(uint32_t n)
     }
 }
 
-// @ 0x0045b9a0
+// 0x0045b9a0 (byte-exact lifted version: match/slices/s0045b9a0/s0045b9a0.cpp)
 ColladaExport::~ColladaExport()
 {
     mPad13c.dtor64();

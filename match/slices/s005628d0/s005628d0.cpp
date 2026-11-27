@@ -190,7 +190,7 @@ void LookupDB::FUN_005628d0(U32Vec* pList) {
     }
 }
 
-// @ 0x00562b80
+// 0x00562b80 (byte-exact lifted version: match/slices/s00562b80/s00562b80.cpp)
 void CandidateDBStub::AssignCandidates(void* out, void* pRange) {
     U32Vec* list = (U32Vec*)((char*)this + 0x12c);
     list->erase(list->mpBegin, list->mpEnd);

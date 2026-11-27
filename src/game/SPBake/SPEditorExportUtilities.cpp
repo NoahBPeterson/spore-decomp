@@ -3711,7 +3711,7 @@ void FUN_00460bf0(Bone* bones, int count, int root, float t)
     }
 }
 
-// @ 0x00460d40
+// 0x00460d40 (byte-exact lifted version: match/slices/s00460d40/s00460d40.cpp)
 void FUN_00460d40(int p1, int p2, int p3, int p4, int p5, int p6, int p7)
 {
     int   t24[3];
@@ -4142,7 +4142,7 @@ bool ExportToXMFAndBlocks(EditorModel* model, EditorCreatureData* data, const wc
 void F_00464300()
 {}
 
-// @ 0x00464480
+// 0x00464480 (byte-exact lifted version: match/slices/s00464480/s00464480.cpp)
 void F_00464480()
 {}
 
@@ -4150,7 +4150,7 @@ void F_00464480()
 void F_00464580()
 {}
 
-// @ 0x00464680
+// 0x00464680 (byte-exact lifted version: match/slices/s00464680/s00464680.cpp)
 void F_00464680()
 {}
 
@@ -6291,7 +6291,7 @@ Vec29::~Vec29()
     DoFreeSelf();
 }
 
-// @ 0x00473370
+// 0x00473370 (byte-exact lifted version: match/slices/s00473370/s00473370.cpp)
 void Vec29::resize(uint32_t n)
 {
     if (n > (uint32_t)(mpEnd - mpBegin)) {

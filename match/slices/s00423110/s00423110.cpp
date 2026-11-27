@@ -31,7 +31,7 @@ struct MessageBase {
     int mUserData;      // +0x28
 };
 
-// @ 0x00423110
+// 0x00423110 (byte-exact lifted version: match/slices/s00423110/s00423110_lifted.cpp)
 struct LocaleMessage : MessageBase {
     LocaleMessage(int userData);
     virtual void Dummy1();

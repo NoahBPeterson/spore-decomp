@@ -204,7 +204,7 @@ struct Elem100 : Base100 {
 
 struct T12 { uint32_t a, b, c; };
 
-// @ 0x0050f8b0
+// 0x0050f8b0 (byte-exact lifted version: match/slices/s0050f8b0/s0050f8b0_lifted.cpp)
 T12* UninitRelocate12(T12* first, T12* last, T12* dest)
 {
     uint8_t tag = 0;
@@ -223,7 +223,7 @@ T12* UninitRelocate12(T12* first, T12* last, T12* dest)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0050fc30  vector<Elem100>::DoInsertValues
+// 0x0050fc30 (byte-exact lifted version: match/slices/s0050fc30/s0050fc30.cpp)  vector<Elem100>::DoInsertValues
 // ---------------------------------------------------------------------------
 Elem100* Relocate100(Elem100* first, Elem100* last, Elem100* dest);  // 0x00511d50
 void RelocateCommit100(Elem100* first, Elem100* last, Elem100* dest); // 0x00511880
@@ -244,7 +244,7 @@ struct Vec100 {
     void DoInsertValues(Elem100* position, uint32_t n, const Elem100& value);
 };
 
-// @ 0x0050fc30
+// 0x0050fc30 (byte-exact lifted version: match/slices/s0050fc30/s0050fc30.cpp)
 void Vec100::DoInsertValues(Elem100* position, uint32_t n, const Elem100& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {

@@ -1115,7 +1115,7 @@ void SPVecU32_s004553b0::VectorInsertU32(unsigned* position, const unsigned& val
     }
 }
 
-// @ 0x00455cf0
+// 0x00455cf0 (byte-exact lifted version: match/slices/s00455cf0/s00455cf0.cpp)
 int* FixedC::InitFixed(void* p)
 {
     ((int*)this)[0] = 0;
@@ -1336,7 +1336,7 @@ void __fastcall FUN_00507670(Skin* self)
     SkinStoreVtable(self, (void*)0x013ef094);                // base refcount vtable
 }
 
-// @ 0x00507b30
+// 0x00507b30 (byte-exact lifted version: match/slices/s00507b30/s00507b30.cpp)
 void __fastcall DestroyVectors(Container* self)
 {
     char* base = (char*)self;
@@ -1800,7 +1800,7 @@ Vec12_s0050_d750& Vec12_s0050_d750::operator=(const Vec12_s0050_d750& x)
     return *this;
 }
 
-// @ 0x0050e290
+// 0x0050e290 (byte-exact lifted version: match/slices/s0050e290/s0050e290.cpp)
 Vec100::~Vec100()
 {
     ScratchSlots_s0050_d750<6>();

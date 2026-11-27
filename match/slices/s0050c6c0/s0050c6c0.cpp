@@ -26,7 +26,7 @@ float* __cdecl Scale2(float* out, float* s)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0050cec0  (fixed_vector<float,400> constructor)
+// 0x0050cec0 (byte-exact lifted version: match/slices/s0050cec0/s0050cec0.cpp)  (fixed_vector<float,400> constructor)
 // ---------------------------------------------------------------------------
 struct FixedVector400 {
     int* mBegin;                            // +0x00
@@ -41,7 +41,7 @@ struct FixedVector400 {
     FixedVector400* Construct(int count);   // 0x0050cec0
 };
 
-// @ 0x0050cec0
+// 0x0050cec0 (byte-exact lifted version: match/slices/s0050cec0/s0050cec0.cpp)
 FixedVector400* FixedVector400::Construct(int count)
 {
     mBegin = 0;

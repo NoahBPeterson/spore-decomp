@@ -146,8 +146,8 @@ public:
 // The constructor (0x00404500, matched in slice s00404480) is repeated here so
 // that this translation unit emits BakerCommand's vtable, and with it the
 // inline destructor's two out-of-line pieces:
-// @ 0x00405000  BakerCommand::`scalar deleting destructor' (??_GBakerCommand@@UAEPAXI@Z)
-// @ 0x00405050  ArgScript::OptionParser::~OptionParser, implicit (??1OptionParser@ArgScript@@QAE@XZ)
+// 0x00405000 (byte-exact lifted version: match/slices/s00405000/s00405000_lifted.cpp)  BakerCommand::`scalar deleting destructor' (??_GBakerCommand@@UAEPAXI@Z)
+// 0x00405050 (byte-exact lifted version: match/slices/s00405050/s00405050.cpp)  ArgScript::OptionParser::~OptionParser, implicit (??1OptionParser@ArgScript@@QAE@XZ)
 BakerCommand::BakerCommand(void* pBaker)
     : mpBaker(pBaker), mOptions(1)
 {

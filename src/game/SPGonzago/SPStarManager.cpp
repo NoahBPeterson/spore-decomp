@@ -871,7 +871,7 @@ namespace Simulator {
 }
 // ---- items of slice s013249a0 end
 
-// @ 0x0050f210
+// 0x0050f210 (byte-exact lifted version: match/slices/s0050f210/s0050f210.cpp)
 Elem100& Elem100::operator=(const Elem100& x)
 {
     vec = x.vec;
@@ -929,7 +929,7 @@ T12* Vec12::erase(T12* first, T12* last)
     return first;
 }
 
-// @ 0x0050f7f0
+// 0x0050f7f0 (byte-exact lifted version: match/slices/s0050f7f0/s0050f7f0.cpp)
 void __cdecl UninitCopy20(void** out, T20* first, T20* last, T20* dest, uint8_t tag)
 {
     (void)tag;
@@ -943,7 +943,7 @@ void __cdecl UninitCopy20(void** out, T20* first, T20* last, T20* dest, uint8_t 
     *out = d;
 }
 
-// @ 0x0050f8b0
+// 0x0050f8b0 (byte-exact lifted version: match/slices/s0050f8b0/s0050f8b0_lifted.cpp)
 T12* UninitRelocate12(T12* first, T12* last, T12* dest)
 {
     uint8_t tag = 0;
@@ -1005,7 +1005,7 @@ void InsertionSortSimpleCmp(Keyed** first, Keyed** last, uint8_t desc)
     }
 }
 
-// @ 0x0050fc30
+// 0x0050fc30 (byte-exact lifted version: match/slices/s0050fc30/s0050fc30.cpp)
 void Vec100::DoInsertValues(Elem100_s0050_f8b0* position, uint32_t n, const Elem100_s0050_f8b0& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {

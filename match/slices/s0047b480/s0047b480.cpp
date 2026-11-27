@@ -26,7 +26,7 @@ extern "C" void __cdecl FUN_0041cb40(void* dst, const void* src); // cSPMatrix3:
 extern "C" void __cdecl FUN_0047c600(void* self, uint n);          // basic_string reserve
 extern "C" void* __cdecl FUN_011e073e(void* p, int c, uint n);     // memset
 
-// @ 0x0047c1c0
+// 0x0047c1c0 (byte-exact lifted version: match/slices/s0047c1c0/s0047c1c0.cpp)
 E16* Copy16Range(E16* first, E16* last, E16* dest)
 {
     for (; first != last; ++first, ++dest) {
@@ -35,7 +35,7 @@ E16* Copy16Range(E16* first, E16* last, E16* dest)
     return dest;
 }
 
-// @ 0x0047c010
+// 0x0047c010 (byte-exact lifted version: match/slices/s0047c010/s0047c010.cpp)
 Counted** CopyRefs(Counted** first, Counted** last, Counted** dest)
 {
     for (; first != last; ++first) {
@@ -48,7 +48,7 @@ Counted** CopyRefs(Counted** first, Counted** last, Counted** dest)
     return dest;
 }
 
-// @ 0x0047c0d0
+// 0x0047c0d0 (byte-exact lifted version: match/slices/s0047c0d0/s0047c0d0.cpp)
 void AssignRefs(Counted** first, Counted** last, Counted** value)
 {
     for (; first != last; ++first) {
@@ -62,7 +62,7 @@ void AssignRefs(Counted** first, Counted** last, Counted** value)
     }
 }
 
-// @ 0x0047c140
+// 0x0047c140 (byte-exact lifted version: match/slices/s0047c140/s0047c140.cpp)
 void* Copy29Range(void* first, void* last, void* dest)
 {
     char* d = (char*)dest;
@@ -74,7 +74,7 @@ void* Copy29Range(void* first, void* last, void* dest)
     return d;
 }
 
-// @ 0x0047c240
+// 0x0047c240 (byte-exact lifted version: match/slices/s0047c240/s0047c240.cpp)
 void* Copy16Ctor(void* first, void* last, void* dest)
 {
     char* d = (char*)dest;
@@ -132,7 +132,7 @@ void InsertionSort8F2(float* first, float* last)
     }
 }
 
-// @ 0x0047bf30
+// 0x0047bf30 (byte-exact lifted version: match/slices/s0047bf30/s0047bf30.cpp)
 struct Str8 {
     char* mpBegin; char* mpEnd; char* mpCapacity;
     Str8* resize(uint n, char c);

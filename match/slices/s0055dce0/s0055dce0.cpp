@@ -358,7 +358,7 @@ unsigned char Owner::sub_55e190(char forceAll, char skipRebuild) {
     return 0;
 }
 
-// @ 0x0055eae0
+// 0x0055eae0 (byte-exact lifted version: match/slices/s0055eae0/s0055eae0.cpp)
 void* PaintStub::FUN_0055eae0(int* first, int count) {
     void* this_ = this;
     *(void**)this_ = (void*)0x13eb394;

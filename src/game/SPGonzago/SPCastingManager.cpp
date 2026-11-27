@@ -1002,13 +1002,13 @@ void VectorAssign4(uint32_t* self, uint32_t* other)
     (void)self; (void)other;
 }
 
-// @ 0x004c29c0
+// 0x004c29c0 (byte-exact lifted version: match/slices/s004c29c0/s004c29c0.cpp)
 void eastl_set_capacity(eastl::WideFixedStr* self, uint32_t n)
 {
     (void)self; (void)n;
 }
 
-// @ 0x004c2ad0
+// 0x004c2ad0 (byte-exact lifted version: match/slices/s004c2ad0/s004c2ad0.cpp)
 void WideFixedStr_SwapHeap(eastl::WideFixedStr* self, eastl::WideFixedStr* other)
 {
     (void)self; (void)other;

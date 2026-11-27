@@ -1,12 +1,10 @@
 # va  diff-bytes  reason
 00455d60 310 StringAppend: literal EASTL basic_string::append not fully reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00475930 275 complete source, byte-exactness not attempted (no variant rounds run) flags: /Od /Ob1 /MD /Gy /TP
-00475ab0 80 complete source, byte-exactness not attempted (no variant rounds run) flags: /Od /Ob1 /MD /Gy /TP
 00475ef0 53 complete source; uninitialized_copy<12-byte>, element float fld/fstp shape not reproduced flags: /O2 /MD /Gy /EHsc /TP
 00478990 479 complete source; vector<int>::insert(n,value), NOT byte-exact; equiv WEAK (now member IntVec::IntVectorInsert, ECX=this): 548 valid inputs, 6.4% coverage flags: /Od /Ob1 /MD /Gy /TP
 00478e00 706 complete source; vector<0x29c>::insert(n,value), NOT byte-exact; equiv WEAK (now member Vec29c::Elem29Insert, ECX=this): 541 valid inputs, 6.2% coverage flags: /Od /Ob1 /MD /Gy /TP
 00479330 673 complete source; vector<12-byte>::insert(n,value), NOT byte-exact; equiv WEAK (now member Vec12::Elem12Insert, ECX=this): 174 valid inputs, 41.6% coverage, no mismatches; the vector is the 4-dword eastl layout (embedded allocator instance at +0xc, its address is the allocate entry point's first argument) and the debug header in front of the old block gates the release; flags /Od /Ob1 /MD /Gy /TP.
-004797a0 87 complete source; uninitialized_copy<12-byte 3-float> wrapper, loop rotation/frame differs flags: /Od /Ob1 /MD /Gy /TP
 00479830 397 complete source; vector<8-byte,4>::insert(n,value), NOT byte-exact; allocator arg is &this+0xc (named mAlloc field) and the grow path uses UninitCopy8Destruct (0x4763a0) with the begin[-4] guard around operator_delete__ (0xf47380); equiv PASS (520 valid inputs) flags: /O2 /MD /Gy /EHsc /TP
 00479c00 47 complete source; 8-byte out-param copy wrapper: 4 args, returns out, copies two floats via x87; equiv PASS (960 valid inputs) flags: /O2 /MD /Gy /EHsc /TP
 00479c80 423 complete source; vector<8-byte,2>::insert(n,value), NOT byte-exact flags: /O2 /MD /Gy /EHsc /TP
@@ -16,12 +14,5 @@
 0047a9a0 50 complete source; uninitialized_copy<Matrix44> (copy-ctor loop), NOT byte-exact flags: /O2 /MD /Gy /EHsc /TP
 0047aa40 390 complete source; vector<16-byte>::insert(n,value), NOT byte-exact; equiv WEAK (5.6% coverage) flags: /O2 /MD /Gy /EHsc /TP
 0047ae60 604 complete source; eastl::vector<Elem32 (0x20-byte record: four words + 0x10-byte ref-counted Handle)>::insert(position, n, value), NOT byte-exact (orig 1070B, ours 674B, 1000 diff); grow path = newSize max(oldSize*2, oldSize+n), EASTL_Allocate(this+0xc, newSize*0x20, 4, 0), UninitMove32(0x0042a730) head, Construct32(0x0047cd20) n, UninitMove32 tail, free old via 0x00f47380 only when [begin-4]!=0; in-place path copies value into a local Elem32 v (copy ctor 0x00423080), then n<tail: ShiftUp32(0x0047b290) of the last n + backward operator= (0x00424f10) shift + fill with v; n>=tail: Construct32 + ShiftUp32 + fill to the OLD end; the original ends with an uninitialized RAII slot at [ebp-8] that no path writes (dropped - behaviourally inert); leftover diffs are /Od inlined-helper temp slots (the ShiftUp32 out struct and its trailing byte tag, which 0x47b290 ignores) not reproduced; flags /Od /Ob1 /MD /Gy /TP; difftest WEAK (174 valid / 5.6% coverage / 0 mismatches)
-0047b3d0 140 complete source; 0x14-byte-element uninitialized copy loop (first, last, dest) returning the running dest, NOT byte-exact (orig 172B, ours 159B, 153 diff); element assignment is an in-class memberwise operator=; the trailing no-op loop over the original range is real and kept; leftover diffs are the /Od inlined copy helper's pointer-return temp ([ebp-0x24]) and bool tag slots ([ebp-5], [ebp-0x15]) not reproduced; flags /Od /Ob1 /MD /Gy /TP; difftest WEAK (468 valid / 44.3% coverage / 0 mismatches at --inputs 1600 --alias 1.0 --seed 3; the default profile is UNSUPPORTED because random pointers never satisfy the copy loop)
 0047b7b0 200 complete source; returns first for 0/1 pairs and last otherwise; sort/frame differs from original flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047b890 131 complete source; insertion sort over 8-byte float pairs, NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047bf30 106 complete source; two-arg resize(n,fill) grows via reserve(0x47c600), memsets n-1 bytes, null-terminates; frame differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047c010 77 complete source; refcounted-pointer range copy (AddRef), NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047c0d0 85 complete source; refcounted-pointer range assign, NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047c140 87 complete source; vector<0x29c> uninitialized_copy, NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047c1c0 76 complete source; uninitialized_copy<16-byte 4-float>, loop rotation/frame differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047c240 77 complete source; vector<16-byte> uninitialized_copy, NOT byte-exact flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

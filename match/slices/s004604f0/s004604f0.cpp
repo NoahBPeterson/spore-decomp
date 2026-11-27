@@ -274,7 +274,7 @@ void C4610c0::Dtor()
 }
 
 // =====================================================================
-// @ 0x460d40  gather mesh pieces of a model and build game meshes
+// 0x00460d40 (byte-exact lifted version: match/slices/s00460d40/s00460d40.cpp)  gather mesh pieces of a model and build game meshes
 // =====================================================================
 struct Piece { int a, b; };
 struct PieceVec {                       // 0x14: vector<Piece>
@@ -328,7 +328,7 @@ struct RefVec {
 extern void __cdecl GetModelAsGameMeshes(int a, RefVec* v, int b, int c, int d, int e, EditorPropList* pl,
                                          int f, int g, int h, int i, int j);   // 0x7573a0
 
-// @ 0x460d40
+// 0x00460d40 (byte-exact lifted version: match/slices/s00460d40/s00460d40.cpp)
 void FUN_00460d40(int p1, int p2, int p3, int p4, int p5, int p6, int p7)
 {
     int   t24[3];
