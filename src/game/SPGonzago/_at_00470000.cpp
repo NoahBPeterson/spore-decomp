@@ -572,11 +572,14 @@ void Vec8c::push_back_default()
 
 // @ 0x004754e0
 void Vec8c::push_back(void* v)
-{
+{    Elem8c* p;
+    Elem8c* snap;
+    uint32_t pad[13];
     if (mpEnd < mpCapacity) {
-        Elem8c* p = (Elem8c*)mpEnd;
+        snap = (Elem8c*)mpEnd;
         mpEnd += 0x8c;
-        void* r = p ? p->CopyFrom(v) : 0;
+        p = snap;
+        p ? p->CopyFrom(v) : 0;
     } else {
         DoInsert(mpEnd, v);
     }

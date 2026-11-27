@@ -220,6 +220,9 @@ extern float gF_169e388;   // 0x0169e388
 extern float gF_169e38c;   // 0x0169e38c
 extern float gF_169e390;   // 0x0169e390
 extern void* g_168d838;    // 0x0168d838  cLocomotionStrategy template cache
+extern "C" char g_13ec458[]; // 0x013ec458 EA::RefCountVTemplate<int> vftable
+extern "C" char g_1469e38[]; // 0x01469e38 cLocomotionStrategy_Template vftable (+0x0)
+extern "C" char g_1475114[]; // 0x01475114 cLocomotionStrategy_Template vftable (+0x8)
 void* __cdecl FUN_00b18530(void*);                           // 0x00b18530
 int   __cdecl FUN_00f3c0e0(void*);                           // 0x00f3c0e0
 void  __cdecl FUN_00bc9c90(void*);                           // 0x00bc9c90
@@ -1298,22 +1301,22 @@ void NodePool::Reset()
 
 // @ 0x00c06000
 void* __cdecl FUN_00c06000()
-{
-    if (g_168d838 == 0) {
+{    void* s = g_168d838;
+    if (!s) {
         void* p = operator_new_eastl(0x10, "Simulator/LocomotionStrategy_Template", 0, 0, 0, 0);
         if (p) {
-            *(void**)((char*)p + 8) = (void*)0x13ec458;
+            *(void* volatile*)((char*)p + 8) = (void*)g_13ec458;
             *(void**)((char*)p + 0xc) = 0;
-            *(void**)p = (void*)0x1469e38;
-            *(void**)((char*)p + 8) = (void*)0x1475114;
-            g_168d838 = p;
-            (*(void(__thiscall**)(void*))*(void**)p)(p);
-            return g_168d838;
+            *(void**)p = (void*)g_1469e38;
+            *(void**)((char*)p + 8) = (void*)g_1475114;
+        } else {
+            p = 0;
         }
-        g_168d838 = 0;
-        (*(void(__thiscall**)(void*))0)(0);
+        g_168d838 = p;
+        (*(void(__thiscall***)(void*))p)[0](p);
+        return g_168d838;
     }
-    return g_168d838;
+    return s;
 }
 
 // @ 0x00c06070

@@ -27,7 +27,6 @@
 00e59010 34 complete: state transition; inner switch and state machine match, only the negated vector (load order + xorps schedule) differs
 00e59560 137 complete: original takes the cell id in EAX and the direction vector in EDI (non-standard ABI), ours uses normal parameters
 00e59800 128 cell-mode on-key handler: complete; reads gspCellGame fresh around calls, dead [gsp+0x5164] load + loop alignment nop and cmp operand order differ
-00e598e0   37  set cell flags + state on timer: complete; only UCOMISS(d>0) is scheduled after the byte stores instead of before them
 00e59c10 105 conditional callback dispatch: complete; callee FUN_00e50620 takes args in EAX/ESI/EDI (no stack pushes), not expressible without LTCG
 00e59d90 103 queried cell mode via 0xe4cc40 object: complete; jump table emitted, but result temp uses ESI instead of ECX and epilogue return register differs
 00e59ee0 451 SP::sUpdateFluidParticles: complete; loop body SSE schedule, prologue stack-frame shape and xmm4(0.0) placement differ (size mismatch)
