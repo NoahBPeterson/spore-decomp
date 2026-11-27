@@ -4714,6 +4714,17 @@ LBL:
 }
 
 // @ 0x00bc7e20
+struct TmpRec_s00bc_7e20 : Rec_s00bc_74d0 {
+    ~TmpRec_s00bc_7e20()
+    {
+        bool neg = ((flags >> 31) & 1) != 0;
+        if (!neg) {
+            if (p28 != 0) ((RefObj*)p28)->Release();
+            if (p24 != 0) ((RefObj*)p24)->Release();
+        }
+        _ReadWriteBarrier();
+    }
+};
 void WE::FUN_00bc7e20()
 {
     Rec_s00bc_74d0* puVar1 = end;
@@ -4725,15 +4736,9 @@ void WE::FUN_00bc7e20()
         }
     }
     else {
-        Rec_s00bc_74d0 tmp;
+        TmpRec_s00bc_7e20 tmp;
         tmp.flags = 0x80000000;
         FUN_00bc7ca0(puVar1, (int*)&tmp);
-        if ((int)tmp.flags >= 0) {
-            void* p28 = *(void**)((char*)&tmp + 0x28);
-            if (p28 != 0) ((RefObj*)p28)->Release();
-            void* p24 = *(void**)((char*)&tmp + 0x24);
-            if (p24 != 0) ((RefObj*)p24)->Release();
-        }
     }
 }
 
