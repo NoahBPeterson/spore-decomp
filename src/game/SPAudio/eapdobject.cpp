@@ -588,9 +588,9 @@ void obj_list(t_object* x, t_symbol s, int argc, t_atom* argv)
     t_inlet* i = x->te_inlet;
 
     if (argc) {
+        int n = argc - 1;
+        t_atom* ap = argv + 1;
         if (i) {
-            int n = argc - 1;
-            t_atom* ap = argv + 1;
             do {
                 if (!(n--))
                     break;
