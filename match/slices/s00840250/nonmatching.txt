@@ -1,2 +1,1 @@
-008409b0  52   complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
 00840340  198  complete: ClearFilePaths; node walk/hash free and spec-vector clear codegen differs

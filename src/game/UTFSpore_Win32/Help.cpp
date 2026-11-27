@@ -45,8 +45,12 @@ extern char gSprintfAppendBuf[];  // 0x0164fb80
 // @ 0x008409b0
 void __cdecl MakeCaseInsensitive(eastl::string8_s0084_0250* s)
 {
-    for (unsigned i = 0; i < (unsigned)(s->mpEnd - s->mpBegin); ++i)
-        s->mpBegin[i] = (char)tolower(s->mpBegin[i]);
+    unsigned i = 0;
+    char* p = s->mpBegin;
+    for (; i < (unsigned)(s->mpEnd - p); ++i) {
+        p[i] = (char)tolower(p[i]);
+        p = s->mpBegin;
+    }
 }
 
 // @ 0x008409f0
