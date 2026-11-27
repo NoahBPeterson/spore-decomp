@@ -432,37 +432,37 @@ void __cdecl FUN_00fd1ae0(Vp6EdgeTable* p)
 // @ 0x00fd1b10
 // Fill the runtime IDCT table: four 0xffff sentinels, seven coefficient words
 // replicated four times each, and the final rounding vector 8.
+extern "C" unsigned short g_16d91a0[48];      // runtime IDCT constant table (word view)
+extern "C" const unsigned short g_15b3660[7]; // source coefficient words
+
 void __cdecl FUN_00fd1b10(void)
 {
-    short* p = G_IDCT_WORDS + 0x10;   // 0x016d91c0
+    unsigned short* p = &g_16d91a0[16];
     do {
         p -= 1;
         *p = 0;
-    } while (p != G_IDCT_WORDS);
+    } while (p != g_16d91a0);
 
-    short ffff = -1;
-    G_IDCT_WORDS[0x0f] = ffff;   // 0x016d91be
-    G_IDCT_WORDS[0x0a] = ffff;   // 0x016d91b4
-    G_IDCT_WORDS[0x00] = ffff;   // 0x016d91a0
-    G_IDCT_WORDS[0x05] = ffff;   // 0x016d91aa
+    unsigned short ffff = 0xffff;
+    g_16d91a0[15] = ffff;
+    g_16d91a0[10] = ffff;
+    g_16d91a0[5] = ffff;
+    g_16d91a0[0] = ffff;
 
-    short* dst = G_IDCT_WORDS + 0x12;   // 0x016d91c4
-    const short* src = G_IDCT_SOURCE;
-    short* end = G_IDCT_WORDS + 0x2a;   // 0x016d91f4
-    do {
-        short w = *src++;
-        dst[1] = w;
-        dst[0] = w;
-        dst[-1] = w;
-        dst[-2] = w;
-        dst += 4;
-    } while (dst <= end);
+    int j = 0;
+    for (int i = 16; i <= 40; i += 4) {
+        unsigned short w = g_15b3660[j++];
+        g_16d91a0[i + 3] = w;
+        g_16d91a0[i + 2] = w;
+        g_16d91a0[i + 1] = w;
+        g_16d91a0[i] = w;
+    }
 
-    short eight = 8;
-    G_IDCT_WORDS[0x2f] = eight;   // 0x016d91fe
-    G_IDCT_WORDS[0x2e] = eight;   // 0x016d91fc
-    G_IDCT_WORDS[0x2d] = eight;   // 0x016d91fa
-    G_IDCT_WORDS[0x2c] = eight;   // 0x016d91f8
+    unsigned short eight = 8;
+    g_16d91a0[47] = eight;
+    g_16d91a0[46] = eight;
+    g_16d91a0[45] = eight;
+    g_16d91a0[44] = eight;
 }
 
 // @ 0x00fd1ba0
