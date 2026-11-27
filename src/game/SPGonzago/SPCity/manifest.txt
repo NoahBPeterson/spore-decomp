@@ -93,3 +93,4 @@
 ../src/game/SPGonzago/SPCity.cpp  ?RemoveItem@@YA_NPAUPtrVec2@@PAPAH@Z  00be0c80  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8a00@@YIHPAUcCity@@PAX@Z  00bd8a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdd2f0@@YIXPAUObj2f0@@@Z  00bdd2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyBucket20@@YAPAEPAE00@Z  00bda850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

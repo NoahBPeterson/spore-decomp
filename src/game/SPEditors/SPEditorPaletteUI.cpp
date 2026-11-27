@@ -788,9 +788,8 @@ void cSPPaletteUI::UpdateNavigationVisiblity()
 
 // @ 0x005cadb0
 void cSPPaletteUI::SetVisibleChunk(int value)
-{
-  mVisibleChunk = value;
-  int count = (int)(mVec48.mpEnd - mVec48.mpBegin);
+{  mVisibleChunk = value;
+  int count = mVec48.size();
   unsigned int pages = (unsigned int)(count + 8) / 9;
   IWindow_s005c_a070* w = mLayout->FindWindowByID(0x5aec4b8, true);
   if (w)

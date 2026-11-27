@@ -3523,7 +3523,11 @@ void SP::cPlayer_s00c7_7380::UpdateEmbassyEffects(int32_t nElapsedMs)
 
 // @ 0x00c77700
 void** cHashtableHeader::Insert3(void** ppOut, const uint32_t* pKey, bool bFlag)
-{
+{    struct cIter {
+        void* mpNode;
+        void** mpBucket;
+    };
+
     uint32_t nHash = pKey[0] ^ pKey[2];
     uint32_t nBucket = nHash % mnBucketCount;
 
@@ -3536,9 +3540,11 @@ void** cHashtableHeader::Insert3(void** ppOut, const uint32_t* pKey, bool bFlag)
     }
 
     if (pNode != 0) {
-        ppOut[1] = ppBucket;
-        ppOut[0] = pNode;
-        *((uint8_t*)(ppOut + 2)) = 0;
+        cIter it;
+        it.mpNode = pNode;
+        it.mpBucket = ppBucket;
+        *(cIter*)ppOut = it;
+        *((bool*)(ppOut + 2)) = false;
         return ppOut;
     }
 
@@ -3553,11 +3559,12 @@ void** cHashtableHeader::Insert3(void** ppOut, const uint32_t* pKey, bool bFlag)
     pNew->mpNext = (cKey3Node*)mpBuckets[nBucket];
     mpBuckets[nBucket] = pNew;
     ++mnElementCount;
-    ppOut[1] = &mpBuckets[nBucket];
-    ppOut[0] = pNew;
-    *((uint8_t*)(ppOut + 2)) = 1;
-    return ppOut;
-}
+    cIter it;
+    it.mpBucket = &mpBuckets[nBucket];
+    it.mpNode = pNew;
+    *(cIter*)ppOut = it;
+    *((bool*)(ppOut + 2)) = true;
+    return ppOut;}
 
 // @ 0x00c777e0
 void __cdecl Read_00c777e0(ISerializerStream_s00c7_7380* pStream, cHashtableHeader* pData)

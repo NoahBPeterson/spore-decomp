@@ -56,3 +56,4 @@
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mf10@S8@@QAEXH@Z  006ecf10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?resize@vbvec@@QAEXI@Z  006eea80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m80d0@CCreature@@QAEXHHH@Z  006e80d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Alloc18@@YGPAUNode18@@PAU1@@Z  006f1a30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

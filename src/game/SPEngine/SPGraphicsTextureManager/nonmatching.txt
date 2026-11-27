@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-007a9470 34 CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4) flags: /O2 /MD /Gy /EHsc /TP /GS-
 007a9680 83 deque range copy loop flags: /O2 /MD /Gy /EHsc /TP /GS-
 007a9730 95 WriteTexture: (tex, extra, async) 3-arg ABI; sync path manager vt[0x20] + packed key, async path cdecl FUN_006b4b60(mJob, extra, 0, &key); equiv: WEAK 211 valid, 19.7% cov flags: /O2 /MD /Gy /EHsc /TP /GS-
 007a9840 44 remove-first-matching in deque; equiv: WEAK 43 valid inputs, 32% coverage (member of DequeOwner, ECX fixed) flags: /O2 /MD /Gy /EHsc /TP /GS-

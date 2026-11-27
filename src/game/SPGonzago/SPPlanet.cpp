@@ -8653,8 +8653,8 @@ void BeamMgr2::UpdateState()
 
 // @ 0x00b0aee0
 PoolElem_s00b0_a590* PoolVec::erase(PoolElem_s00b0_a590* first, PoolElem_s00b0_a590* last)
-{
-    PoolElem_s00b0_a590* const position = copy_forward(last, mpEnd, first);
+{    PoolElem_s00b0_a590* const pEnd = mpEnd;
+    PoolElem_s00b0_a590* const position = copy_forward(last, pEnd, first);
     destroy_values(position, mpEnd);
     mpEnd -= last - first;
     return first;

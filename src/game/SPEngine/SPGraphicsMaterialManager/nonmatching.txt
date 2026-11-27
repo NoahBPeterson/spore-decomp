@@ -9,8 +9,6 @@
 0070ea70 47 uninitialized_copy with atomic refcount; spill/order differs
 0070eac0 39 fill with atomic refcount; deferred-release shape differs
 0070eb70 37 uninitialized_copy weak-refcount; parameter spills differ
-0070ebf0 30 assign weak-refcount; dst kept in memory not register
-0070ec30 33 copy_backward weak-refcount; register assignment differs
 0070eea0 128 SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070efa0 146 SP::cMaterialManager::ReadShaders; io/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070f520 27 atomic weak-release range; deferred-release sequence differs

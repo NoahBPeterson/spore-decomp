@@ -7850,25 +7850,29 @@ uint32_t __fastcall FUN_00daad10(SelObj* p)
 }
 
 // @ 0x00daadf0
-uint32_t __cdecl FUN_00daadf0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32_t, uint32_t, StateF0* out)
-{
-    out->m00 = 0;
+bool __cdecl FUN_00daadf0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32_t, uint32_t, StateF0* out)
+{    out->m00 = 0;
     out->m04 = 0.0f;
     Tribe* piVar1 = c->GetTribe();
     float fVar4 = piVar1->v60();
     c->mpB4C->mStimuli.ClearAll(0x200000, 0);
     Vec3* pfVar2 = piVar1->mObj120.v2c();
     Vec3* pfVar3 = c->mC0.v2c();
-    float dy = pfVar3->y - pfVar2->y;
-    float dz = pfVar3->z - pfVar2->z;
-    float dx = pfVar3->x - pfVar2->x;
-    if ((dx * dx + dy * dy) + dz * dz < fVar4 * fVar4) {
-        out->mFlag08 = 1;
-        return 1;
-    }
-    out->mFlag08 = 0;
-    return 1;
-}
+    struct V3 {
+        float x, y, z;
+        V3 operator-(const V3& o) const {
+            V3 r;
+            r.x = x - o.x;
+            r.y = y - o.y;
+            r.z = z - o.z;
+            return r;
+        }
+        float LenSq() const { return z * z + (x * x + y * y); }
+    };
+    V3 d = *(const V3*)pfVar3 - *(const V3*)pfVar2;
+    int res = (d.LenSq() < fVar4 * fVar4) ? 1 : 0;
+    out->mFlag08 = (uint8_t)res;
+    return true;}
 
 // @ 0x00daaec0
 bool __cdecl FUN_00daaec0(Creature_s00da_a530* c, uint32_t, uint32_t, uint32_t, uint32_t, StateEC* out)
@@ -12943,20 +12947,19 @@ void cGroupFollower::Update(float dt)
 
 // @ 0x00db90c0
 void FUN_00db90c0(float dt)
-{
-    GroupRecord* p = gGroupFirst < 0x3fffffffu ? &gGroupBegin[gGroupFirst] : gGroupEnd;
+{    GroupRecord* p = gGroupFirst < 0x3fffffffu ? &gGroupBegin[gGroupFirst] : gGroupEnd;
     GroupRecord* last = gGroupEnd;
-    if (last == p)
+    if (gGroupEnd == p)
         return;
     do {
         p->mFollower.Update(dt);
         u32 f;
         do {
-            f = p->mFlags;
+            GroupRecord* cur = p;
             ++p;
+            f = cur->mFlags;
         } while (!((u8)(f >> 30) & 1) && ((u8)(p->mFlags >> 31) & 1));
-    } while (last != p);
-}
+    } while (last != p);}
 
 // @ 0x00db9130
 void IdleBlock::EnterWalk()

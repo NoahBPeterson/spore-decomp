@@ -1554,15 +1554,16 @@ void DrawSpanCtx::FUN_00952720(const SpanSource* p)
 
 // @ 0x00952750
 Elem0C* FUN_00952750(const Elem0C* first, const Elem0C* last, Elem0C* dst)
-{
-  if (first == last) return dst;
-  ptrdiff_t off = (const char*)first - (const char*)dst;
-  do {
-    if (dst) *dst = *(const Elem0C*)((const char*)dst + off);
-    dst = (Elem0C*)((const char*)dst + 0xc);
-  } while ((const char*)dst + off != (const char*)last);
-  return dst;
-}
+{  if (first != last) {
+    char* d = (char*)dst;
+    ptrdiff_t off = (const char*)first - d;
+    do {
+      if (d) *(Elem0C*)d = *(const Elem0C*)(d + off);
+      d += 0xc;
+    } while ((const Elem0C*)(d + off) != last);
+    dst = (Elem0C*)d;
+  }
+  return dst;}
 
 // @ 0x00952800
 void ResourceHolder::Destroy()

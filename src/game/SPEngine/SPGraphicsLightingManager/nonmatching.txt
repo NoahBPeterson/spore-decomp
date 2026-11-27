@@ -32,7 +32,6 @@
 007087a0 59 ClearVec::clear: complete; element-destroy loop and the zero-size memcpy schedule differ
 00708810 192 cLightingWorld::AddLocalSample: complete; 8-float entry copy and id-vector push diverge
 00708d90 52 Vec8b::resize: complete; short-circuit branch and local-zero slot linger differently
-00708e60 34 Vec16::resize: complete; frame and copy_impl argument / mpEnd arithmetic schedule diverge
 007094c0 1363 cLightingWorld::ApplyConfig: complete (config ambient/dir-light/sun packing, light-list copy, effect ref, env/local sample refresh, message); call sequence identical (18 calls), regalloc/spill schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00709c40 63 cLightingManager init: complete field/vtable initialisation; store order and vptr sequence reordered by cl
 0070a560 33 cLightingWorld::SetLightingState: complete; zero-register materialisation and store ordering differ

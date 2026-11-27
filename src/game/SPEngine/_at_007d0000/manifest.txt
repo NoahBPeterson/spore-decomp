@@ -25,3 +25,4 @@
 ../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfbd0@@YAXPAX0@Z  007dfbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfbf0@@YAPAXXZ  007dfbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfd90@cDescCtx@@QAEXPAVcArguments_s007d_f780@ArgScript@EA@@@Z  007dfd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?Ser250@@YAPAXPAUIStream@@PAH@Z  007d0250  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

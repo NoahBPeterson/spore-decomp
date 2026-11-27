@@ -1953,12 +1953,11 @@ bool __cdecl IntersectRaySphere(const float* orig, const float* dir, float radiu
 }
 
 // @ 0x00f885b0
-void ToVector3(float* out, unsigned c)
-{
-    out[0] = (float)(c & 0xff);
+float* ToVector3(float* out, unsigned c)
+{    out[0] = (float)(c & 0xff);
     out[1] = (float)((c >> 8) & 0xff);
     out[2] = (float)((c >> 16) & 0xff);
-}
+    return out;}
 
 // @ 0x00f885f0
 float* ToVector4(float* out, unsigned c)

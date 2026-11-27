@@ -4,7 +4,6 @@
 00bda3b0  161  GetPropertyInt; complete, but the variant kind switch and Release cleanup are laid out differently
 00bda470   31  SerializeTradePartners; complete, only the count computation/WriteUint32 argument store is scheduled later than the original
 00bda500  121  SerializeCultureTargetInfo; complete, but the cVarListSerializer stack object (0x600+ bytes) has no known retail layout so the frame differs
-00bda850   23  eastl vector copy helper (0x14 stride); complete, but MSVC assigns arg1 to eax where the original uses ecx
 00bdaae0  129  AssignRefPairRangeBackward; complete, but the backward loop keeps pLast/pDstEnd in memory instead of ebp/esi
 00bdace0   73  cCulturalTarget::~cCulturalTarget; complete, but retail sets 4 vptrs (multiple inheritance) and calls the base dtors as thiscall -- needs the real class hierarchy
 00bdad60  263  cCulturalTarget::RemoveAttacker; complete, but the search and compaction loops differ in register allocation and the tail exception path

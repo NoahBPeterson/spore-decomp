@@ -2433,6 +2433,7 @@ struct RBTree_s0097_3dd0 {
     void DoInsertValueImpl_1c(RBNode** out, RBNode* parent, const V28* value, char force);  // 0x00973dd0 (RBTree::DoInsertValueImpl_1c)
     void DoInsertValueImpl_40(RBNode** out, RBNode* parent, const V40* value, char force);  // 0x00973e60 (RBTree::DoInsertValueImpl_40)
     void DoInsertValueImpl_0c(RBNode** out, RBNode* parent, const V0c* value, char force);  // 0x00973ef0 (RBTree::DoInsertValueImpl_0c)
+    RBNode* AllocateNode40(const RBNode*, RBNode*);                  // 0x972dd0
     RBNode* DoCopySubtree_40(const RBNode* src, RBNode* parent);  // 0x00973f80 (RBTree::DoCopySubtree_40)
     RBNode* DoCopySubtree_0c(const RBNode* src, RBNode* parent);  // 0x00974050 (RBTree::DoCopySubtree_0c)
 };
@@ -6037,8 +6038,7 @@ void RBTree_s0097_3dd0::DoInsertValueImpl_0c(RBNode** __restrict out, RBNode* pa
 
 // @ 0x00973f80
 RBNode* RBTree_s0097_3dd0::DoCopySubtree_40(const RBNode* src, RBNode* parent)
-{
-    RBNode* newRoot = CreateNodeCopy40(src, parent);
+{    RBNode* newRoot = AllocateNode40(src, parent);
     if (src->right)
         newRoot->right = DoCopySubtree_40(src->right, newRoot);
     RBNode* dest = newRoot;
@@ -6057,8 +6057,7 @@ RBNode* RBTree_s0097_3dd0::DoCopySubtree_40(const RBNode* src, RBNode* parent)
         dest = n;
         s = s->left;
     }
-    return newRoot;
-}
+    return newRoot;}
 
 // @ 0x00974050
 RBNode* RBTree_s0097_3dd0::DoCopySubtree_0c(const RBNode* src, RBNode* parent)

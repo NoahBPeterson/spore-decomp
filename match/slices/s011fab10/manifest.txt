@@ -2,3 +2,6 @@
 slices/s011fab10/s011fab10.cpp  ?ResolveTwo@@YAXIPAX@Z  011fb1c0
 slices/s011fab10/s011fab10.cpp  ?UnresolveTwo@@YAXIPAX@Z  011fb1f0
 slices/s011fab10/s011fab10.cpp  ?NoOp@@YAXXZ  011fb220
+slices/s011fab10/s011fab10.cpp  ?SetMaterialColor@@YAXIIH@Z  011faf00  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011fab10/s011fab10.cpp  ?SetAmbientColor@@YAXIIH@Z  011faf30  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011fab10/s011fab10.cpp  ?SetTime@@YAXIIH@Z  011faf60  /vc71 /O2 /MD /Gy /EHsc /TP

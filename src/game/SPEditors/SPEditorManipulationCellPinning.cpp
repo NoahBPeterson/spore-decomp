@@ -236,14 +236,36 @@ struct copy_result {
 };
 }
 namespace eastl {
+struct false_type_s005a_ad00 { false_type_s005a_ad00() {} };
+template <typename T>
+class generic_iterator_s005a_ad00 {
+ public:
+  T mIterator;
+  explicit generic_iterator_s005a_ad00(const T& x) : mIterator(x) {}
+  const T& base() const { return mIterator; }
+};
 template <typename T>
 copy_result<T> uninitialized_copy_impl(const T* first, const T* last, T* dest);   // 0x4b2220
+template <typename In, typename Out>
+generic_iterator_s005a_ad00<Out> uninitialized_copy_impl(generic_iterator_s005a_ad00<In> first,
+                                                         generic_iterator_s005a_ad00<In> last,
+                                                         generic_iterator_s005a_ad00<Out> dest,
+                                                         false_type_s005a_ad00);   // 0x4b2220
 }
 namespace eastl {
 template <typename T>
 inline T* uninitialized_copy_ptr(const T* first, const T* last, T* result) {
   copy_result<T> r = uninitialized_copy_impl(first, last, result);
   return r.mpResult;
+}
+template <typename T>
+inline T* uninitialized_copy_ptr(const T* first, const T* last, T* result, false_type_s005a_ad00) {
+  const generic_iterator_s005a_ad00<T*> i(
+      uninitialized_copy_impl(generic_iterator_s005a_ad00<const T*>(first),
+                              generic_iterator_s005a_ad00<const T*>(last),
+                              generic_iterator_s005a_ad00<T*>(result),
+                              false_type_s005a_ad00()));
+  return i.base();
 }
 }
 namespace eastl {
@@ -253,6 +275,9 @@ class sp_vector : public VectorBase_s005a_ad00<T> {
   sp_vector() : VectorBase_s005a_ad00<T>() {}
   sp_vector(const sp_vector& x) : VectorBase_s005a_ad00<T>((size_t)(x.mpEnd - x.mpBegin), x.mAllocator) {
     this->mpEnd = uninitialized_copy_ptr(x.mpBegin, x.mpEnd, this->mpBegin);
+  }
+  sp_vector(const sp_vector& x, false_type_s005a_ad00 tag) : VectorBase_s005a_ad00<T>((size_t)(x.mpEnd - x.mpBegin), x.mAllocator) {
+    this->mpEnd = uninitialized_copy_ptr(x.mpBegin, x.mpEnd, this->mpBegin, tag);
   }
 };
 }
@@ -1025,9 +1050,7 @@ bool SP::cSPEditorManipulationCellPinning::OnMouseUp(int, float, float, int)
 
 // @ 0x005ab1b0
 eastl::sp_vector<EA::AutoRefCount_s005a_ad00<SP::cSPEditorBlock_s005a_ad00> > SP::cSPEditorManipulationCellPinning::GetPileList()
-{
-  return mPileList;
-}
+{  return eastl::sp_vector<EA::AutoRefCount_s005a_ad00<SP::cSPEditorBlock_s005a_ad00> >(mPileList, eastl::false_type_s005a_ad00());}
 
 // @ 0x005ab220
 void SP::cSPEditorManipulationCellPinning::RecalculateMouseOffset(float, float)

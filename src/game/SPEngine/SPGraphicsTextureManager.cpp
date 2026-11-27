@@ -40,7 +40,7 @@ struct cTextureManager {
     void GetTexture(int a, int b, int c);        // 007a93c0
     void HasTexture(int a, int b);               // 007a93f0
     void* GetResourceForTexture(void* tex);      // 007a9450
-    void CreateTexture();                        // 007a9470
+    void CreateTexture(int a, int b, int c, unsigned int d, unsigned int e, int f); // 007a9470
     void CreateTextureEx(int a,int b,int c,int d,int e,unsigned int flags,int f,int g); // 007a94f0
     void RegisterGameTexture(int a, int b);      // 007a9540
     void ReloadTexture(int a, int b);            // 007a95e0
@@ -806,17 +806,13 @@ void* cTextureManager::GetResourceForTexture(void* tex)
 }
 
 // @ 0x007a9470
-void cTextureManager::CreateTexture()
-{
-    int buf[3] = { 0, 0, 0 };
+void cTextureManager::CreateTexture(int a, int b, int c, unsigned int d, unsigned int e, int f)
+{    int buf[3] = { 0, 0, 0 };
     void* gen = FUN_0067de60_IDGenerator();
-    // virtual slot 1 through the generator's vtable (the original does mov edx,[eax]; mov edx,[edx+4]);
-    // ((void**)gen)[1] read the object's second field, an incrementing ID, and the hybrid called it
     ((void(__thiscall*)(void*, int*, unsigned int, int, int, int, int))(*(void***)gen)[1])
         (gen, buf, 0x2f4e681c, 0, 0, 0x22, 0);
-    ((void(__thiscall*)(void*, int, int, int, int, int, int, int, int))((void**)this->vtbl)[0x3c / 4])
-        (this, 0x2f4e681c, 0, 0, 0, buf[0], buf[1], buf[2], 0);
-}
+    ((void(__thiscall*)(void*, int, int, int, int, int, unsigned int, unsigned int, int))((void**)this->vtbl)[0x3c / 4])
+        (this, buf[0], buf[2], a, b, c, d, e, f);}
 
 // @ 0x007a94f0
 void cTextureManager::CreateTextureEx(int a, int b, int c, int d, int e, unsigned int flags, int f, int g)

@@ -23,7 +23,6 @@
 00e582c0 758 SP::sUpdateHealthUI: complete/faithful (1129B energy/health interpolation lattice with Clamp01 and cell-axis placement); no compiled symbol of similar size (size-filtered); x87 clamp calls interleave with SSE compares and the register/schedule differ throughout.
 00e58980 252 complete: cell-pair relation table; original emits two 5-entry jump tables (counted in the target extent) and shared return blocks, ours lays the *b==current switch fallthrough and jump tables differently
 00e58c90 206 complete: clip a plane against two cell lines; same formula and math, but x87/SSE register allocation of the two 3-float vectors (xmm5/6/7, xorps mask) differs
-00e58e30 33 complete: level-entry scan (scalar); same structure, only the v/n/p/i register rotation (edx/esi/eax/ecx) differs
 00e58ef0 182 complete: level-entry scan (fills an entry); same structure and out-param stores, reg-alloc/spills differ
 00e59010 34 complete: state transition; inner switch and state machine match, only the negated vector (load order + xorps schedule) differs
 00e59560 137 complete: original takes the cell id in EAX and the direction vector in EDI (non-standard ABI), ours uses normal parameters

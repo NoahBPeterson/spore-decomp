@@ -100,3 +100,5 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef8590@@YAXXZ  00ef8590  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef1c40@cSim@@QAEXXZ  00ef1c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  _FUN_00efc8c0  00efc8c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?sub_ef7a00@CScenarioTutorialsChecklistUI@@QAEXXZ  00ef7a00  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?sub_ef7a80@CScenarioTutorialsChecklistUI@@QAEXXZ  00ef7a80  /O2 /MD /Gy /TP /Isrc/game/include

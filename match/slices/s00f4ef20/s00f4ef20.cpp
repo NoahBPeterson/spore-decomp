@@ -17,6 +17,7 @@
 //   0x00f4fb80  cTerrainTool::DragUpdate(float)               ret 4
 
 #include "types.h"
+#include <math.h>
 
 struct cSPVector3;
 
@@ -237,12 +238,8 @@ void cTerrainBrushEffect::Stop(int hardStop)
 // @ 0x00f4ef40
 float lerpAngle(float lo, float hi, float t)
 {
-    float x = fmod_f(hi - lo, 2.0f);
-    if (x > 3.1415927f)
-        x -= 2.0f;
-    else if (-3.1415927f > x)
-        x += 2.0f;
-    return x * t + lo;
+    float x = fmodf(hi - lo, K_2);
+    return ((x > K_pi) ? (x - K_2) : ((-K_pi > x) ? (K_2 + x) : x)) * t + lo;
 }
 
 // @ 0x00f4efe0

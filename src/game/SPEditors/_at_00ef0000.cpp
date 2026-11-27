@@ -6605,39 +6605,33 @@ void CScenarioTutorialsChecklistUI::sub_ef79d0()
 
 // @ 0x00ef7a00
 void CScenarioTutorialsChecklistUI::sub_ef7a00()
-{
-    char* p = (char*)this;
+{    char* p = (char*)this;
     if (*(char*)(p + 0x25) == 0) {
         void* tray = *(void**)(p + 0x20);
         ((FN2_ii)((*(void***)tray)[10]))(tray, 4, 1);
-        CString s(0xf3108302, (void*)0x07a248a0, 0);
+        SP::cString s(0xf3108302u, 0x07a248a0u, 0);
         tray = *(void**)(p + 0x20);
-        const char* t = s.GetText(-1, 1);
-        void* r = ((FN1_p)((*(void***)tray)[4]))(tray, (void*)t);
-        SetTooltipText(r);
+        ((void (__cdecl*)(void*, const wchar_t*, int, int))&SetTooltipText)(
+            ((FN0_p)((*(void***)tray)[4]))(tray),
+            s.c_str(), -1, 1);
         AnchorWindowToWindow(*(void**)(p + 0xc), *(void**)(p + 0x14), 0x11, 0);
         *(char*)(p + 0x25) = 1;
-        s.~CString();
-    }
-}
+    }}
 
 // @ 0x00ef7a80
 void CScenarioTutorialsChecklistUI::sub_ef7a80()
-{
-    char* p = (char*)this;
+{    char* p = (char*)this;
     if (*(char*)(p + 0x25) != 0) {
         void* tray = *(void**)(p + 0x20);
         ((FN2_ii)((*(void***)tray)[10]))(tray, 1, 1);
-        CString s(0xf3108302, (void*)0x07a24898, 0);
+        SP::cString s(0xf3108302u, 0x07a24898u, 0);
         tray = *(void**)(p + 0x20);
-        const char* t = s.GetText(-1, 1);
-        void* r = ((FN1_p)((*(void***)tray)[4]))(tray, (void*)t);
-        SetTooltipText(r);
+        ((void (__cdecl*)(void*, const wchar_t*, int, int))&SetTooltipText)(
+            ((FN0_p)((*(void***)tray)[4]))(tray),
+            s.c_str(), -1, 1);
         AnchorWindowToWindow(*(void**)(p + 0xc), *(void**)(p + 0x14), 0x18, 0);
         *(char*)(p + 0x25) = 0;
-        s.~CString();
-    }
-}
+    }}
 
 // @ 0x00ef7b00
 void CScenarioTutorialsChecklistUI::sub_ef7b00()

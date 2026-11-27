@@ -4,3 +4,4 @@ slices/s00f4ef20/s00f4ef20.cpp  ?Stop@cTerrainBrushEffect@SP@@UAEXH@Z  00f4ef20 
 slices/s00f4ef20/s00f4ef20.cpp  ?UpdateBrushSize@cTerrainTool@SP@@QAEXXZ  00f4fb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00f4ef20/s00f4ef20.cpp  ?Advance@cChannel@SP@@QAEXM@Z  00f4f530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00f4ef20/s00f4ef20.cpp  ?ReadFromScript@cTerrainTool@SP@@QAEXXZ  00f4fa20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f4ef20/s00f4ef20.cpp  ?lerpAngle@@YAMMMM@Z  00f4ef40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

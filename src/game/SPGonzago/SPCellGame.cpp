@@ -4417,24 +4417,23 @@ bool FUN_00e58c90(char* p)
 
 // @ 0x00e58e30
 int FUN_00e58e30()
-{
-  int result = 0;
+{  int result = 0;
   Ref t; t.Init();
   char* list = (char*)FUN_00e823a0(*(int*)(G + 0x4114), &t);
   int lvl = *(int*)(*(char**)(G + 0x5190) + 0x1c);
   int v = *LevelEntry(lvl);
   int n = *(int*)(list + 8);
-  char* p = *(char**)(list + 0xc);
-  for (int i = 0; i < n; ++i, p += 0x18) {
+  for (int i = 0; i < n; ++i) {
+    char* p = *(char**)(list + 0xc) + i * 0x18;
     if (*(int*)(p + 4) == v + 1) {
+      int r = *(int*)(p + 0x14);
       t.Release();
-      return *(int*)(p + 0x14);
+      return r;
     }
     if (*(int*)(p + 4) == -1) result = *(int*)(p + 0x14);
   }
   t.Release();
-  return result;
-}
+  return result;}
 
 // @ 0x00e58ef0
 int FUN_00e58ef0(int* out0, float* out1, float* out2, float* out3)
