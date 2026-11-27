@@ -358,23 +358,31 @@ u32 VideoRenderableManager::RemoveFromDecoderList(u32 index)
     VideoRenderable* item;
     u32 frame = 0;
     if (index == 0) {
-        if (mSentToDecoderList->Count() == 0)
+        rw::SList* list = mSentToDecoderList;
+        if (list->Count() == 0)
             goto done;
-        item = (VideoRenderable*)mSentToDecoderList->GetHead();
+        item = (VideoRenderable*)list->GetHead();
         if (item == 0)
             goto done;
+        frame = item->GetFrame()[0];
+        mSentToDecoderList->Remove(item, 0);
+        goto done;
     } else {
         if (mSentToDecoderList->Count() < index)
-            goto done;
+            goto fail;
         item = (VideoRenderable*)mSentToDecoderList->At(index);
         if (item == 0)
-            goto done;
+            goto fail;
+        frame = item->GetFrame()[0];
+        mSentToDecoderList->Remove(item, 0);
+        goto done;
     }
-    frame = item->GetFrame()[0];
-    mSentToDecoderList->Remove(item, 0);
 done:
     mListMutex.Unlock();
     return frame;
+fail:
+    mListMutex.Unlock();
+    return 0;
 }
 
 // @ 0x00fce560

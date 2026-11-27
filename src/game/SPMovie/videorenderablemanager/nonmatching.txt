@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00fce4c0 92 VideoRenderableManager::RemoveFromDecoderList: complete (both branches find the item, one shared item==0 exit, then GetFrame, vtable Remove(item,0) and one tail with a zero fall-through). The remaining bytes are register allocation: swap-checked, changing the CompareTo/frame-value handling only moves them. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. fix1: quick check DIFFERS

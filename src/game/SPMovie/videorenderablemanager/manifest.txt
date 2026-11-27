@@ -16,3 +16,4 @@
 ../src/game/SPMovie/videorenderablemanager.cpp  ?ShutdownAll@RVRenderable@@QAEXXZ  00fce010  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/videorenderablemanager.cpp  ??0VideoRenderableManager@@QAE@PAUICoreAllocator@@@Z  00fce560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/videorenderablemanager.cpp  ?GetFromDecoderList@VideoRenderableManager@@QAEII@Z  00fce440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?RemoveFromDecoderList@VideoRenderableManager@@QAEII@Z  00fce4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
