@@ -23,14 +23,9 @@
 0043f4d0 89 F4d0 child-block scan - /Od frame accessor slots differ
 0043f5b0 150 F5b0 scale clamp - /Od frame/local slots differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 0043ffa0 81 FFa0 - Matrix3 by-value copy + /Od slots differ
-00440020 81 F4020 - mirror-to-link - /Od accessor slots differ
-00440090 83 F4090 - mirror-to-link - /Od accessor slots differ
 00440390 135 F40390 - clamp+SetFlag; equivalence PASS (386 valid, 100.0% coverage); the clamp is now v = v > lo ? v : lo; v = v < hi ? v : hi so -0.0 clamps to +0.0 like the original maxss/minss; /Od clamp shape is still branchy (186 vs 130 bytes) flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00440c00 34 F40c00 - model scale store; /Od double-read slots differ flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00440c40  263  F40c40 - complete (map store + F40e60 per key); /Od frame holes (vec at -0x14 under 2-dword hole, 0xa0 frame) not reproduced [equiv: PASS] flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00440e60  32  F40e60 - complete; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; /Od frame holes (0x60 frame) differ [equiv: FAIL only on static-init guard word 015d2170 (harness maps our local static guard elsewhere); no other difference]
-00440f60 47 Trans::Trans() - constant pool copy flavour differs flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00440ff0 79 Trans::Trans(copy) - x87 field copy shape differs flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00441440 20408 (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc) complete source (all 23 KB of paths, calls and stores; call/vcall/property-hash sequence matches the original); not byte-exact: /Od frame layout (0x2d5c vs 0x3314) and slot order differ, a few inline-vs-call choices (fabs, AutoRefCount<cPropertyList>::operator=)
 00447030 183 complete behaviour; /Od name-hash frame layout, scratch-ctor loop and obj temp differ
 00448380 180 GetEffectsMaskScale - /Od frame/slot layout differs (retail declares the float result first, a/b after it, and keeps the mField33c test in a pointer slot); equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
@@ -49,7 +44,6 @@
 0044e830 237 GetBlockType: /Od property-list virtual calls, per-branch ResourceKey frames and hash-ordered locals not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044e980 166 SetBaseJointScale: sentinel/base-uniform scales are raw int bit patterns (arg compared as *(int*)&-2, mUniformScale stores 0xffffffff); FUN_0044f220 returns int; linked scale negated as an integer. Equivalence WEAK: 400 valid inputs, 0 mismatches, 56.1% coverage -- the uncovered block is only the scale==-2 sentinel path, which the corpus never generates (still 56.1% at 1999 inputs). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044ea80 461 RefreshLinkedFlag: AutoRefCount reset/assign chains (vtable+4 AddRef, vtable+8 Release) now modelled; the flag test reads mpSocketConnector, not this. Equivalence PASS (317 valid, 90.6% coverage). Not byte-exact: the twice-inlined reset chain and /Od frames differ. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0044ede0 124 RecursiveFlagA: predicate is mpSocketConnector->FUN_00435c80() (out-of-line GetFlag(0x39)), not FUN_0044c050(this). Equivalence PASS (355 valid, 76.7% coverage). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044eea0 98 RecursiveFlagB: inlined recursive branch shape and /Od frame layout not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044efb0 153 RecursiveFlagC: inlined release chain and /Od frame layout not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044f240 407 CalculateSymmetrySign: result is a ? a : b (the old code returned 0 when a==0 && b!=0); -1 only when both are 0 and the 0x7bd0ca3e bool property is set. The socket-connector flag prelude is dead code. Equivalence PASS (392 valid, 92.1% coverage). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -858,7 +858,7 @@ void DistributeInline_Execute(int param_1, cArguments_s0052_f170* args)
     }
 }
 
-// @ 0x005300d0
+// 0x005300d0 (byte-exact lifted version: match/slices/s005300d0/s005300d0_lifted.cpp)
 void ReadDistributeDescription(IStream* stream, int version, cSPSkinPaintDistributeDescription_s0053_00d0* d)
 {
     ReadString(stream, &d->mEffect);

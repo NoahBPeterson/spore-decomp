@@ -75,7 +75,7 @@ struct cVecHelpers {
     void* Insert_456360(void* pos, void* value);            // 0x456360  ret 8
 };
 
-// @ 0x00454330  (erase one intrusive pointer from a ref-ptr vector; returns position)
+// 0x00454330 (byte-exact lifted version: match/slices/s00454330/s00454330_lifted.cpp)  (erase one intrusive pointer from a ref-ptr vector; returns position)
 struct PtrVecOps : PtrVector {
     cRefCounted** erase(cRefCounted** position)
     {
@@ -98,7 +98,7 @@ void* __fastcall SlotInit_Wrapper(void* self)
     return self;
 }
 
-// @ 0x00454420
+// 0x00454420 (byte-exact lifted version: match/slices/s00454420/s00454420.cpp)
 struct PairIntTrans { int mKey; TransObj mValue; };
 struct RbIntMap : RbSet {
     int* find_or_insert(const int* key)
@@ -183,7 +183,7 @@ unsigned* RbUIntMap2::find_or_insert(const unsigned* key)
     return found.value() + 1;
 }
 
-// @ 0x00454640  (vector reserve for 8-byte elements with fixed-buffer allocator)
+// 0x00454640 (byte-exact lifted version: match/slices/s00454640/s00454640.cpp)  (vector reserve for 8-byte elements with fixed-buffer allocator)
 void __fastcall HashVec8_reserve(HashVec8* self, int, unsigned n)
 {
     if ((unsigned)((self->mpCapacity - self->mpBegin) >> 3) < n) {
@@ -237,7 +237,7 @@ void __fastcall FloatVec_push_back(FloatVec* self, int, const float* value)
     }
 }
 
-// @ 0x004548d0  (vector<Key> resize)
+// 0x004548d0 (byte-exact lifted version: match/slices/s004548d0/s004548d0.cpp)  (vector<Key> resize)
 void __fastcall KeyVec_resize(KeyVec* self, int, unsigned n)
 {
     if ((unsigned)((self->mpEnd - self->mpBegin) / 12) < n) {
@@ -364,7 +364,7 @@ int WVec::find(const wchar_t* needle, unsigned pos, int count)
     return -1;
 }
 
-// @ 0x00454dc0  (erase range of 32-byte elements, returns first)
+// 0x00454dc0 (byte-exact lifted version: match/slices/s00454dc0/s00454dc0.cpp)  (erase range of 32-byte elements, returns first)
 char* __fastcall Block32_erase(BlockVec* self, int, char* first, char* last)
 {
     char* end = self->mpEnd;
@@ -381,7 +381,7 @@ char* __fastcall Block32_erase(BlockVec* self, int, char* first, char* last)
     return first;
 }
 
-// @ 0x00454e90  (release every pointer in [first,last))
+// 0x00454e90 (byte-exact lifted version: match/slices/s00454e90/s00454e90.cpp)  (release every pointer in [first,last))
 struct PtrRangeOwner { void ReleaseRange(cRefCounted** first, cRefCounted** last); };
 void PtrRangeOwner::ReleaseRange(cRefCounted** first, cRefCounted** last)
 {
@@ -438,7 +438,7 @@ void RefPtrVec::DoInsertValue(cRefCounted** position, cRefCounted** value)
     }
 }
 
-// @ 0x004551e0  (uninitialized copy of intrusive pointers)
+// 0x004551e0 (byte-exact lifted version: match/slices/s004551e0/s004551e0.cpp)  (uninitialized copy of intrusive pointers)
 cRefCounted** __cdecl RefPtr_UninitCopy(cRefCounted** first, cRefCounted** last, cRefCounted** dest)
 {
     for (; first != last; ++first) {
@@ -451,7 +451,7 @@ cRefCounted** __cdecl RefPtr_UninitCopy(cRefCounted** first, cRefCounted** last,
     return dest;
 }
 
-// @ 0x00455290  (free storage unless it is the fixed buffer)
+// 0x00455290 (byte-exact lifted version: match/slices/s00455290/s00455290.cpp)  (free storage unless it is the fixed buffer)
 void __fastcall BlockVec_FreeStorage(BlockVec* self)
 {
     if (self->mpBegin && self->mpBegin != self->mpFixed) {

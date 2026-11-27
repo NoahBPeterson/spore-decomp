@@ -153,7 +153,7 @@ void FUN_4a3760(const Vec3* in, float* px, float* py)
     *py = (1.0f - v[1]) * res.w * 0.5f;
 }
 
-// @ 0x4a37f0
+// 0x004a37f0 (byte-exact lifted version: match/slices/s004a37f0/s004a37f0.cpp)
 BlockVector FUN_4a37f0(cSPEditorModel* model, unsigned int effectId)
 {
     BlockVector result;

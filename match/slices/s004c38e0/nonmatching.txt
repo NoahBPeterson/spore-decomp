@@ -1,2 +1,1 @@
 # va  diff-bytes  reason   (none: all 1 function byte-exact)
-004c44c0    34  cSPEditorSkinManager::CreateSkinObject (/Od /Ob1 /MD /Gy /TP /arch:SSE): complete C++; 267 vs 267 bytes. Instruction sequence matches except the stack frame (0x28 vs 0x48) and slot assignment: the original reserves 8 extra /Od temp slots (unused -8..-0x2c/-0x38..-0x40) that move part/world/vector slots; equiv UNSUPPORTED (only 18/400 inputs valid)

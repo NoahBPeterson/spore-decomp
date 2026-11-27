@@ -190,7 +190,7 @@ cSPEditorPaintTheme::cSPEditorPaintTheme()
     }
 }
 
-// @ 0x004b25e0
+// 0x004b25e0 (byte-exact lifted version: match/slices/s004b25e0/s004b25e0.cpp)
 cSPEditorPaintTheme::~cSPEditorPaintTheme()
 {
     mpVtbl0 = &g_vtbl_PaintTheme0;

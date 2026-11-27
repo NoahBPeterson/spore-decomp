@@ -100,7 +100,7 @@ class cCommandBase : public cICommand { public: cIParser* mParser; int mRefCount
 
 // ================================================================ functions
 
-// @ 0x0053acc0
+// 0x0053acc0 (byte-exact lifted version: match/slices/s0053acc0/s0053acc0_lifted.cpp)
 void ReadParticleDescription(EA::IO::IStream* s, char* d)
 {
     ReadDescBase(s, d + 0xc);
@@ -126,7 +126,7 @@ void ReadParticleDescription(EA::IO::IStream* s, char* d)
     ReadUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
 
-// @ 0x0053aea0
+// 0x0053aea0 (byte-exact lifted version: match/slices/s0053aea0/s0053aea0.cpp)
 void WriteParticleDescription(EA::IO::IStream* s, char* d)
 {
     WriteDescBase(s, d + 0xc);

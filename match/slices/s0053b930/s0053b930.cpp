@@ -146,7 +146,7 @@ struct PaintAddVar2Command : cCommandTBase {
 
 // ================================================================ functions
 
-// @ 0x0053b930
+// 0x0053b930 (byte-exact lifted version: match/slices/s0053b930/s0053b930_lifted.cpp)
 void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase* cmds)
 {
     for (int i = 0; i < 0x13; ++i) {
@@ -185,7 +185,7 @@ void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase* cmds)
     RegisterPaintVar(cmds, "comparePosition", b);
 }
 
-// @ 0x0053bc90
+// 0x0053bc90 (byte-exact lifted version: match/slices/s0053bc90/s0053bc90.cpp)
 EA::IO::IStream* ReadIntVec(EA::IO::IStream* s, int** vec)
 {
     uint32_t n = 0;

@@ -258,7 +258,7 @@ RBSink* RBTree::InsertNode(RBSink* result, RBNode* pos, const Key5* value, char 
     return result;
 }
 
-// @ 0x004e8c80
+// 0x004e8c80 (byte-exact lifted version: match/slices/s004e8c80/s004e8c80.cpp)
 // Copy a range of refcounted pointers into `dest`, AddRef-ing each non-null element.
 // Returns the destination past the last element written.
 void** Body8c80(void** first, void** last, void** dest)
@@ -291,7 +291,7 @@ void Body8da0(void* a, void* b, void* c)
     (void)a; (void)b; (void)c;
 }
 
-// @ 0x004e8ee0
+// 0x004e8ee0 (byte-exact lifted version: match/slices/s004e8ee0/s004e8ee0.cpp)
 // Same refcounted-pointer range copy, but writes the destination end through `out`
 // and returns `out`.
 void** ApplyCopyLoop8ee0(void** out, void** first, void** last, void** dest)
@@ -305,7 +305,7 @@ void** ApplyCopyLoop8ee0(void** out, void** first, void** last, void** dest)
     return out;
 }
 
-// @ 0x004e8f70
+// 0x004e8f70 (byte-exact lifted version: match/slices/s004e8f70/s004e8f70.cpp)
 // Construct a transform: null render/refcounted pointers, default basis vectors,
 // the default matrix and the reset sentinels.
 RWXform::RWXform()

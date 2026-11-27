@@ -60,7 +60,7 @@ void FUN_49ef80(cSomeTracker* self, cSPVector3* vecs)
     ScratchSlots<4>();
 }
 
-// @ 0x49ecf0
+// 0x0049ecf0 (byte-exact lifted version: match/slices/s0049ecf0/s0049ecf0_lifted.cpp)
 void FUN_49ecf0(cSPEditorBlock* block, LimbVec<cSPEditorBlock*>* blocks,
                 cSPVector3 pos, cSPMatrix3 mat)
 {

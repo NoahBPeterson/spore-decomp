@@ -124,7 +124,7 @@ Item* CopyItems(Item* begin, Item* end, Item* out)
     return out;
 }
 
-// @ 0x004ab4d0
+// 0x004ab4d0 (byte-exact lifted version: match/slices/s004ab4d0/s004ab4d0.cpp)
 Matrix3Like* CopyMatrixRange(Matrix3Like* param_1, Matrix3Like* param_2, Matrix3Like* param_3)
 {
     Matrix3Like* local_48 = param_3;

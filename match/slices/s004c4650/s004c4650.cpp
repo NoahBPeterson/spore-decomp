@@ -345,7 +345,7 @@ cSPEditorBlock* cSPEditorSkinManager::GetBlockOnSkin(uint32_t which, cSPVector3 
     return 0;
 }
 
-// @ 0x004c4eb0  cSPEditorSkinManager::DetachSkinParts (this, no args)
+// 0x004c4eb0 (byte-exact lifted version: match/slices/s004c4eb0/s004c4eb0.cpp)  cSPEditorSkinManager::DetachSkinParts (this, no args)
 void cSPEditorSkinManager::DetachSkinParts()
 {
     EnablePaint(0);
@@ -402,7 +402,7 @@ void cSPEditorSkinManager::SetDefaultMaterialToDetachedLimb(uint32_t id, const v
     }
 }
 
-// @ 0x004c5100  cSPEditorSkinManager::SetSkinResolutions (this, ret 8: realtime, highQuality)
+// 0x004c5100 (byte-exact lifted version: match/slices/s004c5100/s004c5100.cpp)  cSPEditorSkinManager::SetSkinResolutions (this, ret 8: realtime, highQuality)
 void cSPEditorSkinManager::SetSkinResolutions(float realtime, float highQuality)
 {
     mPaintResolution = highQuality;

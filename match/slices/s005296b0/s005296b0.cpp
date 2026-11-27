@@ -71,7 +71,7 @@ void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
     RwTeardown();
 }
 
-// @ 0x00529bf0
+// 0x00529bf0 (byte-exact lifted version: match/slices/s00529bf0/s00529bf0.cpp)
 void cRTTBuffer18::BeginDraw()
 {
     DAT_016f9238 = DAT_015dea64;

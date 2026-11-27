@@ -1206,7 +1206,7 @@ void* Obj43::FUN_00548910(int* param_2, int* param_3)
     return param_2;
 }
 
-// @ 0x00548a30
+// 0x00548a30 (byte-exact lifted version: match/slices/s00548a30/s00548a30.cpp)
 int Obj43::FUN_00548a30(int param_2, int param_3)
 {
     int base = (int)this;

@@ -146,7 +146,7 @@ struct cSPEditorBlock_s0047_f520 {
 };
 struct BallConnectorIface { void* QueryInterface(u32 id); };
 
-// @ 0x0047e600
+// 0x0047e600 (byte-exact lifted version: match/slices/s0047e600/s0047e600.cpp)
 void* cSPEditorHandle::GetPosition(void* out)
 {
     if (this->mBlock) {

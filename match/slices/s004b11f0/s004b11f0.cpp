@@ -26,7 +26,7 @@ void FillAutoRef(AutoRef* first, AutoRef* last, void** value)
     }
 }
 
-// @ 0x004b2220
+// 0x004b2220 (byte-exact lifted version: match/slices/s004b2220/s004b2220.cpp)
 void** UninitCopyAutoRef(void** out, void** first, void** last, void** dest)
 {
     for (; first != last; ++first) {

@@ -242,7 +242,7 @@ void cSPEditorLimbJoint::RemoveLowerJoint(cSPEditorLimbJoint* child)
     }
 }
 
-// @ 0x487140
+// 0x00487140 (byte-exact lifted version: match/slices/s00487140/s00487140.cpp)
 void cSPEditorLimbJoint::F_487140(cSPEditorLimbJoint* child)
 {
     cSPEditorLimbJoint** pEnd = mLowerJoints.end();

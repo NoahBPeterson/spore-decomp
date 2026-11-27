@@ -6126,7 +6126,7 @@ void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
 }
 }  // namespace SP
 
-// @ 0x00440020
+// 0x00440020 (byte-exact lifted version: match/slices/s00440020/s00440020.cpp)
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
 {
@@ -6139,7 +6139,7 @@ void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
 }
 }  // namespace SP
 
-// @ 0x00440090
+// 0x00440090 (byte-exact lifted version: match/slices/s00440090/s00440090.cpp)
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
 {
@@ -6292,7 +6292,7 @@ void cSPEditorBlock_s0044_0110::F40bc0(const Vec3* v)
 }
 }  // namespace SP
 
-// @ 0x00440c00
+// 0x00440c00 (byte-exact lifted version: match/slices/s00440c00/s00440c00.cpp)
 namespace SP {
 void cSPEditorBlock_s0044_0110::F40c00(float f)
 {
@@ -6386,7 +6386,7 @@ void cSPEditorBlock_s0044_0110::F40e60(uint32_t key)
 }
 }  // namespace SP
 
-// @ 0x00440f60
+// 0x00440f60 (byte-exact lifted version: match/slices/s00440f60/s00440f60.cpp)
 namespace SP {
 Trans::Trans()
 {
@@ -6396,7 +6396,7 @@ Trans::Trans()
 }
 }  // namespace SP
 
-// @ 0x00440ff0
+// 0x00440ff0 (byte-exact lifted version: match/slices/s00440ff0/s00440ff0.cpp)
 namespace SP {
 Trans::Trans(const Trans& o)
 {
@@ -8283,7 +8283,7 @@ void cSPEditorBlock::RefreshLinkedFlag()
         mpChildBegin[i]->RefreshLinkedFlag();
 }
 
-// @ 0x0044ede0
+// 0x0044ede0 (byte-exact lifted version: match/slices/s0044ede0/s0044ede0.cpp)
 void cSPEditorBlock::RecursiveFlagA()
 {
     bool b = false;

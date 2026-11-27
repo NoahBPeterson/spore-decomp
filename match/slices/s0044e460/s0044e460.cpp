@@ -259,7 +259,7 @@ void cSPEditorBlock::RefreshLinkedFlag()
         mpChildBegin[i]->RefreshLinkedFlag();
 }
 
-// @ 0x0044ede0
+// 0x0044ede0 (byte-exact lifted version: match/slices/s0044ede0/s0044ede0.cpp)
 void cSPEditorBlock::RecursiveFlagA()
 {
     bool b = false;

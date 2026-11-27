@@ -81,7 +81,7 @@ struct Vec544 {
     RefObj** mpCap;
     void Destroy();        // 0x4b5440
 };
-// @ 0x4b5440
+// 0x004b5440 (byte-exact lifted version: match/slices/s004b5440/s004b5440.cpp)
 void Vec544::Destroy()
 {
     for (RefObj** p = mpBegin; p < mpEnd; p++) {
@@ -99,7 +99,7 @@ struct Vec20 {
     Blk20* mpCap;
     Blk20* Erase(Blk20* first, Blk20* last);   // 0x4b5570
 };
-// @ 0x4b5570
+// 0x004b5570 (byte-exact lifted version: match/slices/s004b5570/s004b5570.cpp)
 Blk20* Vec20::Erase(Blk20* first, Blk20* last)
 {
     Blk20* dest = first;
@@ -134,7 +134,7 @@ void RecVec11c::FUN_004b4fa0(Rec11c* a)
     }
 }
 
-// @ 0x4b5610
+// 0x004b5610 (byte-exact lifted version: match/slices/s004b5610/s004b5610.cpp)
 void __fastcall FUN_004b5610(int* p)
 {
     int* end = (int*)p[1];

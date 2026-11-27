@@ -1368,7 +1368,7 @@ void cSPEditorLimbJoint_s0048_6910::RemoveLowerJoint(cSPEditorLimbJoint_s0048_69
 }
 }  // namespace SP
 
-// @ 0x00487140
+// 0x00487140 (byte-exact lifted version: match/slices/s00487140/s00487140.cpp)
 namespace SP {
 void cSPEditorLimbJoint_s0048_6910::F_487140(cSPEditorLimbJoint_s0048_6910* child)
 {
@@ -1648,7 +1648,7 @@ void cSPEditorLimbStructure_s0048_9530::Rebuild(cSPEditorBlock_s0048_9530* block
 }
 }  // namespace SP
 
-// @ 0x00489bc0
+// 0x00489bc0 (byte-exact lifted version: match/slices/s00489bc0/s00489bc0.cpp)
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::UpdateLimbScale()
 {
@@ -1869,7 +1869,7 @@ void cSPEditorLimbStructure_s0048_c0f0::GetLimbOriginalPosition(cSPVector3_s0048
 }
 }  // namespace SP
 
-// @ 0x0048c720
+// 0x0048c720 (byte-exact lifted version: match/slices/s0048c720/s0048c720.cpp)
 template<class T> void vector_s0048_c0f0<T>::eraseOne(T* it)
 {
     if (it + 1 < mpEnd) {

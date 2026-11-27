@@ -2122,7 +2122,7 @@ cAssetDirectory_s0054_dd30::cAssetDirectory_s0054_dd30()
 }
 }}  // namespace SP::Pollen
 
-// @ 0x0054def0
+// 0x0054def0 (byte-exact lifted version: match/slices/s0054def0/s0054def0.cpp)
 SP::Pollen::cAssetDirectory::~cAssetDirectory()
 {
 }
@@ -2707,7 +2707,7 @@ Meta::Meta()
     *(int*)(s + 0xc0) = 0; *(int*)(s + 0xc4) = 0; *(int*)(s + 0xc8) = 0;
 }
 
-// @ 0x005506c0
+// 0x005506c0 (byte-exact lifted version: match/slices/s005506c0/s005506c0.cpp)
 void Meta::FUN_005506c0()
 {
     char* s = (char*)this;
@@ -2838,7 +2838,7 @@ char Meta_s0055_0bd0::FUN_00550bd0(uint16_t* param_1)
     return 1;
 }
 
-// @ 0x00550cf0
+// 0x00550cf0 (byte-exact lifted version: match/slices/s00550cf0/s00550cf0.cpp)
 void Meta_s0055_0bd0::FUN_00550cf0(WStr* out)
 {
     char* s = (char*)this;
@@ -3332,7 +3332,7 @@ int HT::Erase64(uint32_t* key)
     }
 }
 
-// @ 0x00552c20
+// 0x00552c20 (byte-exact lifted version: match/slices/s00552c20/s00552c20.cpp)
 int* HT::EraseIter(int* out, int node, int* bucket)
 {
     char* s = (char*)this;
@@ -3526,7 +3526,7 @@ void Vec16::FUN_00553b90()
     DestroyStorage();
 }
 
-// @ 0x00553be0
+// 0x00553be0 (byte-exact lifted version: match/slices/s00553be0/s00553be0.cpp)
 void Vec16::FUN_00553be0(unsigned n)
 {
     char* s = (char*)this;

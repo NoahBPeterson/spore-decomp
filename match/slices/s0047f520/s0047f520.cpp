@@ -234,7 +234,7 @@ Vec3* __fastcall cSPEditorHandle_GetTuningVec90(void* self, int /*edx*/, Vec3* o
     return out;
 }
 
-// @ 0x47fa30  SP::cSPEditorHandleDeform::cSPEditorHandleDeform
+// 0x0047fa30 (byte-exact lifted version: match/slices/s0047fa30/s0047fa30.cpp)  SP::cSPEditorHandleDeform::cSPEditorHandleDeform
 void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
 {
     cSPEditorHandle_BaseCtor(self);
@@ -264,7 +264,7 @@ void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
     return self;
 }
 
-// @ 0x47fc10  Deform destructor
+// 0x0047fc10 (byte-exact lifted version: match/slices/s0047fc10/s0047fc10.cpp)  Deform destructor
 void __fastcall cSPEditorHandleDeform_Dtor(cSPEditorHandle* self)
 {
     *(void**)self = (void*)0x13ef270;

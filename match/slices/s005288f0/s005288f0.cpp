@@ -268,7 +268,7 @@ EmbeddedState* cRTTBuffer::PrepareState()
     return shaderState;
 }
 
-// @ 0x00529520
+// 0x00529520 (byte-exact lifted version: match/slices/s00529520/s00529520.cpp)
 uint32_t cRTTBuffer::ClampAndStream(uint32_t requested)
 {
     cRTTBuffer* self = this;

@@ -96,7 +96,7 @@ int HT::Erase64(uint32_t* key)
     }
 }
 
-// @ 0x00552c20
+// 0x00552c20 (byte-exact lifted version: match/slices/s00552c20/s00552c20.cpp)
 int* HT::EraseIter(int* out, int node, int* bucket)
 {
     char* s = (char*)this;
@@ -177,7 +177,7 @@ void Vec16::FUN_00553b90()
     DestroyStorage();
 }
 
-// @ 0x00553be0
+// 0x00553be0 (byte-exact lifted version: match/slices/s00553be0/s00553be0.cpp)
 void Vec16::FUN_00553be0(unsigned n)
 {
     char* s = (char*)this;

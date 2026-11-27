@@ -1336,7 +1336,7 @@ class cPaintSystem_s0051_f0b0 { public:
 }
 // ---- items of slice s0051f0b0 end
 
-// @ 0x0051e3d0
+// 0x0051e3d0 (byte-exact lifted version: match/slices/s0051e3d0/s0051e3d0_lifted.cpp)
 void PaintSystem2::dtor()
 {
     *(void**)this = &g_vtblF1c74;

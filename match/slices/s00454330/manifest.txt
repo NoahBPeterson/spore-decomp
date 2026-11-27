@@ -1,3 +1,4 @@
 # source  symbol  va
 slices/s00454330/s00454330.cpp  ?Vec3_Cross@@YAPAUVector3@@PAU1@PBU1@1@Z  00454c00  /Od /Ob1 /arch:SSE /GS- /Gy /fp:fast
 slices/s00454330/s00454330.cpp  ?find@WVec@@QAEHPB_WIH@Z  00454d50  /Od /MD /Gy /EHsc /TP /Ob1 /arch:SSE /GS-
+slices/s00454330/s00454330_lifted.cpp  ?FUN_00454330@D_00454330@@QAEHH@Z  00454330  /Od /Ob1 /arch:SSE /GS- /Gy /fp:fast

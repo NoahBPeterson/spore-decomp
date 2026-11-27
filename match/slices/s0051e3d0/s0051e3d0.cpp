@@ -28,7 +28,7 @@ struct PaintSystem2 {
     void dtor();
 };
 
-// @ 0x0051e3d0 PaintSystem dtor (full member teardown)
+// 0x0051e3d0 (byte-exact lifted version: match/slices/s0051e3d0/s0051e3d0_lifted.cpp) PaintSystem dtor (full member teardown)
 void PaintSystem2::dtor()
 {
     *(void**)this = &g_vtblF1c74;

@@ -234,7 +234,7 @@ void cSPEditorLimbStructure::CollectBlocks(cSPEditorBlock* block)
     }
 }
 
-// @ 0x489ae0
+// 0x00489ae0 (byte-exact lifted version: match/slices/s00489ae0/s00489ae0.cpp)
 void cSPEditorLimbStructure::FixAllJoints()
 {
     if (mEndBlock) {
@@ -247,7 +247,7 @@ void cSPEditorLimbStructure::FixAllJoints()
     }
 }
 
-// @ 0x489bc0
+// 0x00489bc0 (byte-exact lifted version: match/slices/s00489bc0/s00489bc0.cpp)
 void cSPEditorLimbStructure::UpdateLimbScale()
 {
     cSPVector3 p = GetLimbOriginalPosition();

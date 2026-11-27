@@ -269,7 +269,7 @@ bool FUN_4a2060(cSPEditorBlock* block)
 
 extern const float kSnapScale;                   // 0x013ef578 (1.3f)
 
-// @ 0x4a2180
+// 0x004a2180 (byte-exact lifted version: match/slices/s004a2180/s004a2180.cpp)
 rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock* a, cSPEditorBlock* b)
 {
     int i0, axis, i2;                             // axis is the 2nd out value
