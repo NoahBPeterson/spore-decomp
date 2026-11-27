@@ -41,6 +41,7 @@ hidden and the matcher has to re-find them. Precision is correct / recovered.
 | callee-scored / caller-scored (Claude-ism) | among the unmatched callees (callers), one candidate pair is the unique best by shared features | 107/111, 171/189 | callee yes, caller no |
 | gap-align (Claude-ism) = Needleman–Wunsch sequence alignment (industry-standard) | unmatched functions between two matched neighbors from the same dev module, aligned by size and evidence-gated | 41/41 | yes |
 | vtable-slot (Claude-ism) | retail vtables (runs of code pointers in `.rdata` stored from code, since the build has no RTTI) paired with dev `??_7` vtables by votes from matched slots at the same index; the remaining slots are then paired by position | 8/8 | yes |
+| object-scoped (Claude-ism), added 2026-11-27 | `objscope.py`, the last phase: inside one dev object (from the module map, `work/migrate/modmap.json`, tiers of confidence 0.7 and up), the pair that is best for both functions by a margin, scored by corresponding matched callees and callers, shared tokens, size and call count; function order is not used, because it differs between the builds inside an object | 234/236 | yes |
 | xcu-anchor / xcu-align (Claude-ism) | the C++ dynamic-initializer tables (`__xc_a..__xc_z`, industry-standard) on both sides; tokens unique within both tables anchor entries, and gaps are aligned | 39/39, 1/1 | yes |
 
 Evidence (Claude-ism): call counts must be within 20%, and the pair must share a string, constant,
@@ -54,6 +55,23 @@ Globals come from `globals.py`. Each matched high-confidence pair lists its abso
 order. When both lists have the same length and the same mnemonics, operand k on one side corresponds
 to operand k on the other. A retail address gets the containing dev PDB global (minus the offset) only
 if every vote agrees.
+
+## Object-scoped pairing (2026-11-27)
+
+The module map came after the matcher, and it places most retail functions in a dev object. Inside one object an
+unmatched function has a few hundred candidates instead of 145,000, so call-graph and token evidence too weak to
+decide binary-wide decides there. The phase adds 3,942 names (13,941 in `symbols/pdb_names.json`, from 9,999), about
+two thirds of them in functions with no string, constant or import. Checks:
+
+- Hold-out (`XMATCH_HOLDOUT=0.2`): 234 of 236 hidden anchors re-paired correctly. The module map was built with all
+  anchors, so it knows the hidden functions' objects; that helps only the scoping, not the pairing.
+- An independent check the score does not use: a pair's `ret N` (the bytes of arguments the callee pops, which
+  follows from the signature) agrees in 94.7% of the new pairs that have one (3,505 of 3,700), against 91.3% for the
+  older anchor, gap-align and callee-scored pairs in the editor folders (898 of 984). Builds 16 years apart changed some
+  signatures, so neither rate is 100%.
+
+Objects with no anchors at all (`SPBake/SPEditorLimbStructure.obj`, 120 dev functions) get nothing: the module map
+cannot place their functions, so there is no object to scope by.
 
 ## Results (2026-10-03)
 
