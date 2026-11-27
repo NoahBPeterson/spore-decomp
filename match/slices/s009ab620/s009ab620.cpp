@@ -75,11 +75,10 @@ void* nSPCreatureAnim::baked_animation::GetFrame(int index) const {
 // Color (10:11:11) pack/unpack helpers.
 
 // @ 0x009AC300  (unpack packed RGB into 3 floats scaled by g_colorScale)
-void __cdecl UnpackColor(uint32_t packed, float* out) {
-  out[0] = ((float)(packed >> 0x15) * 0.00048875855f - 0.5f) * g_colorScale;
-  out[1] = ((float)((packed >> 0xa) & 0x7ff) * 0.00048875855f - 0.5f) * g_colorScale;
-  out[2] = ((float)(packed & 0x3ff) * 0.0009784736f - 0.5f) * g_colorScale;
-}
+void __cdecl UnpackColor(uint32_t packed, float* out) {  float* __restrict p = out;
+  p[0] = ((float)(packed >> 0x15) * 0.00048875855f - 0.5f) * g_colorScale;
+  p[1] = ((float)((packed >> 0xa) & 0x7ff) * 0.00048875855f - 0.5f) * g_colorScale;
+  p[2] = ((float)(packed & 0x3ff) * 0.0009784736f - 0.5f) * g_colorScale;}
 
 // @ 0x009AC390  (pack 3 floats to a 10:11:11 value)
 void __cdecl PackColor(const float* in, uint32_t* out) {

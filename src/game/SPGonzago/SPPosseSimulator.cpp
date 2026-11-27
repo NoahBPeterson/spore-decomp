@@ -309,16 +309,18 @@ void FUN_00d52e90()
 
 // @ 0x00d53330
 void PosseSim::removeSlot(RefObj* p)
-{
-    int i = 0;
-    unsigned int n = (unsigned int)(mpEnd - mpBegin);
-    for (; (unsigned int)i < n; ++i) {
+{    unsigned int n = (unsigned int)(mpEnd - mpBegin);
+    for (unsigned int i = 0; i < n; ++i) {
         Slot* s = mpBegin[i];
         if (s->occupant.mp == p) {
-            s->occupant = (RefObj*)0;
+            _ReadWriteBarrier();
+            RefObj* old = s->occupant.mp;
+            if (old) {
+                s->occupant.mp = 0;
+                old->Release();
+            }
         }
-    }
-}
+    }}
 
 // @ 0x00d533c0
 void ReloadTuning(void* self)

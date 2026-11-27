@@ -69,17 +69,40 @@ inline void free24(Elem24* p, unsigned n) { if (p) dealloc24(p, n); }
 
 // @ 0x0041e770  (nonmatching: slot layout)
 void Vec24::reserve(unsigned n)
-{
-    if (n > (unsigned)(mpCap - mpBegin)) {
+{    if (n > (unsigned)(mpCap - mpBegin)) {
+        struct Helper {
+            static __forceinline Elem24* uninitMove(Elem24* first, Elem24* last, Elem24* dest) {
+                bool b = false;
+                return UninitMove24(first, last, dest);
+            }
+            static __forceinline void pad2() {
+                int u0, u1;
+            }
+            static __forceinline void destructLoop(Elem24* first, Elem24* last, Elem24* dest) {
+                Elem24* f;
+                Elem24* d;
+                d = dest;
+                f = first;
+                for (; f != last; ++f, ++d) {}
+            }
+            static __forceinline void destruct(Elem24* first, Elem24* last, Elem24* dest) {
+                bool b2 = false;
+                destructLoop(first, last, dest);
+            }
+            static __forceinline void MoveAndDestroy(Elem24* first, Elem24* last, Elem24* dest) {
+                Elem24* r = uninitMove(first, last, dest);
+                pad2();
+                destruct(first, last, dest);
+            }
+        };
         Elem24* pNewData = n ? (Elem24*)AllocatorAllocate(&alloc, n * 0x18, 4, 0) : 0;
-        MoveAndDestroy(mpBegin, mpEnd, pNewData);
+        Helper::MoveAndDestroy(mpBegin, mpEnd, pNewData);
         free24(mpBegin, mpCap - mpBegin);
         unsigned nPrevSize = (unsigned)(mpEnd - mpBegin);
         mpBegin = pNewData;
         mpEnd = pNewData + nPrevSize;
         mpCap = mpBegin + n;
-    }
-}
+    }}
 
 // @ 0x0041e8b0
 void Vec24::push_back(const Elem24& v)

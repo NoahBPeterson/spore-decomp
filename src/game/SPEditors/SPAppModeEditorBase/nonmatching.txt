@@ -8,7 +8,6 @@
 00574110 8 CreateEffects: begin-pointer load for mbActive store scheduled after (orig before) the size store
 00574460 50 HasEffect: begin pointer kept in esi from size computation (orig reloads in loop prolog)
 00574b40 202 ScoreCreatureForZCorp: frame 0x30 vs 0x2c (inlined property-float helper locals not packed like original); bbox max-extent scheduling differs
-00574da0 24 SetupThumbnailModelWorld: vptr cached in edi for both lighting-world vcalls in original; ours reloads it
 00574f30 30 UpdateModelSounds: original loads vptr before pushing args for GetPropertyList/GetProperty vcalls (scheduling only)
 005767f0 104 WriteBoolVector: original packs count/bool locals into the dead param slot and tail-calls EndBlock; ours allocates a frame slot
 00576880 71 ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot

@@ -741,24 +741,64 @@ bool MapFileGCC3::Load()
     return mEntryPairArray.mpBegin != mEntryPairArray.mpEnd;
 }
 
+// Non-anonymous mirrors for 0x0091cc60 so neither its symbol nor its callee relocations carry ?A0x...
+struct SymbolMap_s0091_cc60 {
+    unsigned mCompareAlloc;   // +0x00
+    RBNodeBase mAnchor;       // +0x04
+    unsigned mnSize;          // +0x14
+    unsigned mAlloc;          // +0x18
+    void DoNukeSubtree(void* node);  // 0x0091ca40
+};
+struct StringList_s0091_cc60 {
+    void* mpNext;
+    void* mpPrev;
+    unsigned mnSize;
+    void Destroy();           // 0x0091c380
+};
+struct FileLineMap_s0091_cc60 {
+    unsigned mCompareAlloc;   // +0x00
+    RBNodeBase mAnchor;       // +0x04
+    unsigned mnSize;          // +0x14
+    unsigned mAlloc;          // +0x18
+    void DoNukeSubtree(void* node);  // 0x009a9600
+};
+struct MapFileMSVC_s0091_cc60 {
+    void* vtable;                          // +0x00
+    bool mbLoadAttempted;                  // +0x04
+    StringW msMapFilePath;                 // +0x08
+    unsigned __int64 mBaseAddress;         // +0x18
+    SymbolMap_s0091_cc60 mAddressToSymbolMap;      // +0x20
+    StringList_s0091_cc60 mLineFilenameList;       // +0x3c
+    FileLineMap_s0091_cc60 mAddressToFileLineMap;  // +0x48
+    UIntVector mSectionArray;              // +0x64
+    GroupVector mGroupArray;               // +0x78
+    ~MapFileMSVC_s0091_cc60();
+};
+
 // @ 0x0091cc60
-MapFileMSVC::~MapFileMSVC()
-{
-    vtable = (void*)0x0143ce8c;
-    mbLoadAttempted = false;
-    mBaseAddress = 0;
-    if (mGroupArray.mpBegin != 0 && ((unsigned*)mGroupArray.mpBegin)[-1] != 0)
-        operator delete(mGroupArray.mpBegin);
+MapFileMSVC_s0091_cc60::~MapFileMSVC_s0091_cc60()
+{    struct Helper {
+        static __forceinline void nukeFL(FileLineMap_s0091_cc60* m) {
+            m->DoNukeSubtree(m->mAnchor.mpNodeParent);
+        }
+        static __forceinline void nukeSym(SymbolMap_s0091_cc60* m) {
+            m->DoNukeSubtree(m->mAnchor.mpNodeParent);
+        }
+    };
+    *(void* volatile*)&vtable = (void*)g_143ce8c;
+    *(volatile bool*)&mbLoadAttempted = false;
+    *(volatile unsigned __int64*)&mBaseAddress = 0;
+    Group* g = *(Group* volatile*)&mGroupArray.mpBegin;
+    if (g != 0 && ((unsigned*)g)[-1] != 0)
+        operator delete(g);
     FreeVectorBuffer(mSectionArray.mpBegin);
-    mAddressToFileLineMap.DoNukeSubtree(
-        (FileLineNode*)mAddressToFileLineMap.mAnchor.mpNodeParent);
+    Helper::nukeFL(&mAddressToFileLineMap);
     mLineFilenameList.Destroy();
-    mAddressToSymbolMap.DoNukeSubtree((SymbolNode*)mAddressToSymbolMap.mAnchor.mpNodeParent);
+    Helper::nukeSym(&mAddressToSymbolMap);
     if ((((int)msMapFilePath.mpCapacity - (int)msMapFilePath.mpBegin) & ~1) > 2 &&
         msMapFilePath.mpBegin)
         operator delete(msMapFilePath.mpBegin);
-    vtable = (void*)0x013f68c4;
-}
+    vtable = (void*)g_13f68c4;}
 
 // @ 0x0091d480
 MapFileMSVC::MapFileMSVC()

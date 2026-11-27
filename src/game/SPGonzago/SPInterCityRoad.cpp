@@ -438,9 +438,9 @@ bool cInterCityRoad::ReadRoad(void* stream)
 
 // @ 0x00c40e80
 void __cdecl FUN_00c40e80(void* stream, SpVecSP3* vec)
-{
-    i32 count = (i32)((u8*)vec->mEnd - (u8*)vec->mBegin) / 12;
-    StreamSub* sub = ((StreamObj*)stream)->GetSub();
+{    i32 n = (i32)(vec->mEnd - vec->mBegin);
+    RoadStreamHolder* __restrict sub = ((RoadArchive*)stream)->GetStreamHolder();
+    i32 count = n;
     void* io = sub->GetIO();
     EA_IO_WriteUint32(io, &count, 1, 0);
     Vector3* it = vec->mBegin;
@@ -451,8 +451,7 @@ void __cdecl FUN_00c40e80(void* stream, SpVecSP3* vec)
         EA_IO_WriteUint32(io2, it, 3, 0);
         it++;
     }
-    ((StreamObj*)stream)->Slot1c();
-}
+    ((StreamObj*)stream)->Slot1c();}
 
 // @ 0x00c40f10
 cInterCityRoad::cInterCityRoad()

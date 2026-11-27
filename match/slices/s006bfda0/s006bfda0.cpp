@@ -505,28 +505,36 @@ bool StreamSub::Seek(int offset, int origin)
 }
 
 // @ 0x006c0900
+struct MemStreamV_006c0900 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual int Read(void* dst, int n);                 // +0x30
+};
 int StreamSub::Read(void* dst, int n)
 {
-    PFRecordRead* owner = (PFRecordRead*)((char*)this - 0x20);
-    if (owner->mnAccessFlags == 0)
-        return -1;
-    owner->LoadOnDemand();
-    if (mStreamFlags != 0)
-        return ((int(__thiscall*)(void*, void*, int))(*(void***)&mStreamMemory)[0x30 / 4])(&mStreamMemory, dst, n);
-    int result = -1;
-    if (owner->mnAccessFlags != 0) {
-        u32 pos = mnPosition;
-        if (mnSize < pos + (u32)n || pos + (u32)n < pos)
-            result = mnSize - pos;
-        else
-            result = n;
-        if (result != 0) {
-            if (!owner->ReadAt(dst, pos, (u32)result))
-                result = 0;
+    if (((int*)this)[-1] != 0) {
+        PFRecordRead* owner = (PFRecordRead*)((char*)this - 0x20);
+        owner->LoadOnDemand();
+        if (!*(volatile u8*)&mStreamFlags) {
+            int result = -1;
+            if (((int*)this)[-1] != 0) {
+                u32 pos = mnPosition;
+                if (pos + (u32)n > mnSize || pos + (u32)n < pos)
+                    result = mnSize - pos;
+                else
+                    result = n;
+                if (result != 0) {
+                    if (!owner->ReadAt(dst, pos, (u32)result))
+                        result = 0;
+                }
+                mnPosition += (u32)result;
+            }
+            return result;
         }
-        mnPosition += (u32)result;
+        return ((MemStreamV_006c0900*)&mStreamMemory)->Read(dst, n);
     }
-    return result;
+    return -1;
 }
 
 // ---------------------------------------------------------------------------

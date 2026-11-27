@@ -9,3 +9,4 @@ slices/s0041e730/s0041e730.cpp  ??0RefVector@@QAE@ABU0@@Z  0041eae0  /Od /Ob1 /M
 slices/s0041e730/s0041e730.cpp  ??1RefVector@@QAE@XZ  0041eb80  /Od /Ob1 /MD /Gy /TP
 slices/s0041e730/s0041e730.cpp  ?resize@RefVector@@QAEXI@Z  0041ee90  /Od /Ob1 /MD /Gy /TP
 slices/s0041e730/s0041e730.cpp  ?push_back@RefVector@@QAEXABURef@@@Z  0041ef20  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?reserve@Vec24@@QAEXI@Z  0041e770  /Od /Ob1 /MD /Gy /TP

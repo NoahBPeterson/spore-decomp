@@ -6294,7 +6294,11 @@ void* __stdcall FUN_00b4c6d0(void* src)
 
 // @ 0x00b4c730
 void __cdecl FUN_00b4c730(void* obj)
-{
+{    void __cdecl FUN_00cd7d10();
+    void __cdecl FUN_00d3d420();
+    void __cdecl FUN_00acdff0();
+    void __cdecl FUN_00b1e500();
+
     char* o = (char*)obj;
     void* t = *(void**)(o + 0x80);
     void* h;
@@ -6304,19 +6308,23 @@ void __cdecl FUN_00b4c730(void* obj)
         h = 0;
 
     void* nm  = FUN_00b3d300();
-    void* vec = ((Recv*)nm)->FUN_00b21340((void*)0x00cd7d10, (void*)0x00d3d420,
-                                          (void*)0x00acdff0, (void*)0x00b1e500, (void*)0x018c43e8);
+    void* vec = ((Recv*)nm)->FUN_00b21340((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                          (void*)FUN_00acdff0, (void*)FUN_00b1e500, (void*)0x018c43e8);
     void* sub = (char*)h + 0xc0;
     void* p   = ((VSubC0*)sub)->v2c();
-    char  flag = 0;
-    char  fl   = flag;
-    int   r   = FUN_00ac9310((char*)vec + 4, p, fl);
+    struct FlagTag { bool mValue; };
+    FlagTag fl = { false };
+    int   r   = ((int(__cdecl*)(void*, void*, FlagTag))FUN_00ac9310)((char*)vec + 4, p, fl);
     if (r != 0) ((Recv*)r)->FUN_00c01350(obj);
 }
 
 // @ 0x00b4c7c0
 void __cdecl FUN_00b4c7c0(void* obj)
-{
+{    void __cdecl FUN_00cd7d10();
+    void __cdecl FUN_00d3d420();
+    void __cdecl FUN_00acdff0();
+    void __cdecl FUN_00b1e500();
+
     char* o = (char*)obj;
     void* t = *(void**)(o + 0x80);
     void* h;
@@ -6326,13 +6334,13 @@ void __cdecl FUN_00b4c7c0(void* obj)
         h = 0;
 
     void* nm  = FUN_00b3d300();
-    void* vec = ((Recv*)nm)->FUN_00b21340((void*)0x00cd7d10, (void*)0x00d3d420,
-                                          (void*)0x00acdff0, (void*)0x00b1e500, (void*)0x018c43e8);
+    void* vec = ((Recv*)nm)->FUN_00b21340((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                          (void*)FUN_00acdff0, (void*)FUN_00b1e500, (void*)0x018c43e8);
     void* sub = (char*)h + 0xc0;
     void* p   = ((VSubC0*)sub)->v2c();
-    char  flag = 0;
-    char  fl   = flag;
-    int   r   = FUN_00ac9310((char*)vec + 4, p, fl);
+    struct FlagTag { bool mValue; };
+    FlagTag fl = { false };
+    int   r   = ((int(__cdecl*)(void*, void*, FlagTag))FUN_00ac9310)((char*)vec + 4, p, fl);
     if (r != 0) ((Recv*)r)->FUN_00c015e0(obj);
 }
 

@@ -5,3 +5,4 @@ slices/s0091c640/s0091c640.cpp  ??1MapFileGCC3@?A0x12cb0d09@@QAE@XZ  0091cb40  /
 slices/s0091c640/s0091c640.cpp  ?Init@MapFileGCC3@?A0x12cb0d09@@QAEHPB_W_N@Z  0091cbd0  /O2 /MD /Gy /TP /GS-
 slices/s0091c640/s0091c640.cpp  ?Init@MapFileMSVC@?A0x12cb0d09@@QAEHPB_W_N@Z  0091d520  /O2 /MD /Gy /TP /GS-
 slices/s0091c640/s0091c640.cpp  ??0MapFileMSVC@?A0x90975299@@QAE@XZ  0091d480  /O2 /MD /Gy /TP /GS-
+slices/s0091c640/s0091c640.cpp  ??1MapFileMSVC_s0091_cc60@@QAE@XZ  0091cc60  /O2 /MD /Gy /TP /GS-

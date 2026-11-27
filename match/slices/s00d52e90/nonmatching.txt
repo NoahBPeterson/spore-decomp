@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
-00d53330  33  register assignment (n/i in esi/edi) and base reload differ
 00d53730  74  Shutdown calls ClearPosseMembers as a thiscall on the SP::NounManager() result (ecx = the manager, not `this`), so the tail loop no longer corrupts the caller's object; replay PASS, fresh equiv WEAK (no mismatch; 29.4% coverage because the harness builds `this` either as an empty-vector layout object or as soup whose random mpEnd faults before the loop body). Remaining codegen: 78 B vs 86 B (end pointer kept in esi and decremented instead of `add [this+0x24],-4`, the slot pointer lives in edi not esi, and retail's dead second `if (occupant) release` check is not emitted)
 00d539d0  49  singleton init: new-expression null-path differs
 00d53a80  148  6-slot loop: i64->float conversion and vector growth path differ
