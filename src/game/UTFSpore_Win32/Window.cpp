@@ -721,7 +721,7 @@ bool Window_s0095_ff20::Dispatch14(void* p)
     };
     Mgr* mgr = (Mgr*)m30;
     if (mgr != 0) {
-        EA::UTFWin::IWindow* self = static_cast<EA::UTFWin::IWindow*>((EA::UTFWin::Window*)((char*)this - 4));
+        EA::UTFWin::IWindow* self = static_cast<EA::UTFWin::IWindow*>((EA::UTFWin::Window*)((int*)this - 1));
         return mgr->Slot14(*(int*)p, self, p);
     }
     return false;}

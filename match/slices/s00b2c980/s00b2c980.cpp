@@ -327,14 +327,20 @@ void S::FUN_00b2d0f0() {  char* base = (char*)this;
     void* noun = *(void**)((char*)n + 0x18);
     if (noun) ((E*)NounManager(noun))->removeNoun();
   }
-  char* tree = base + 0x1c8;
+  struct TreeLayout {
+    int pad0;
+    RBNode anchor;
+    int count;
+  };
+  TreeLayout* tree = (TreeLayout*)(base + 0x1c8);
   ((E*)tree)->c260(*(void**)(base + 0x1d4));
-  RBNode* a = (RBNode*)(tree + 4);
-  *(void**)(tree + 8) = a;
-  *(int*)(tree + 0xc) = 0;
-  *(char*)(tree + 0x10) = 0;
-  *(int*)(tree + 0x14) = 0;
-  a->pxRight = a;}
+  RBNode* a = &tree->anchor;
+  tree->anchor.pxLeft = a;
+  tree->anchor.pxParent = 0;
+  *(char*)&tree->anchor.mColor = 0;
+  tree->count = 0;
+  a->pxRight = a;
+}
 
 // ---------------------------------------------------------------------------
 // @ 0x00b2d160 — vector::pop_back returning the removed slot

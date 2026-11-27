@@ -550,13 +550,22 @@ int Sim::FUN_00bd7ca0(int param_2)
 // @ 0x00bd7d10 — set the two "hover/target" values and forward to the gadget.
 // ===========================================================================
 void Sim::FUN_00bd7d10(int param_2, float param_3)
-{    char* this_ = (char*)this;
-    *(int*)(this_ + 0x74c) = param_2;
-    *(float*)(this_ + 0x748) = param_3;
-    if (*(Obj**)(this_ + 0x2f0) != 0) {
-        (*(Obj**)(this_ + 0x2f0))->m00ff03b0(param_2);
-        (*(Obj**)(this_ + 0x2f0))->m00ff03c0(*(float*)(this_ + 0x748));
-    }}
+{
+    struct Layout {
+        char pad0[0x2f0];
+        Obj* mpGadget;
+        char pad2f4[0x454];
+        float mVal748;
+        int mVal74c;
+    };
+    Layout* self = (Layout*)this;
+    self->mVal74c = param_2;
+    self->mVal748 = param_3;
+    if (self->mpGadget != 0) {
+        self->mpGadget->m00ff03b0(param_2);
+        self->mpGadget->m00ff03c0(self->mVal748);
+    }
+}
 
 // ===========================================================================
 // @ 0x00bd7d60 — predicate: flag set and timer > 50.

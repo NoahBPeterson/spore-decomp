@@ -1712,8 +1712,9 @@ PairIter_00714bc0 __cdecl CopyPairs(PairIter_00714bc0 first, PairIter_00714bc0 l
         do {
             if (d != 0) {
                 const float* p = (const float*)first.p;
-                ((float*)d)[0] = p[0];
-                ((float*)d)[1] = p[1];
+                float* q = (float*)d;
+                q[0] = p[0];
+                q[1] = p[1];
             }
             first.p += 2;
             d += 2;
