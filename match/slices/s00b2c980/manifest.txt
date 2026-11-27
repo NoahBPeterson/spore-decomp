@@ -3,3 +3,4 @@ slices/s00b2c980/s00b2c980.cpp  FUN_00b2d910  00b2d910  /O2 /MD /Gy /EHsc /TP /a
 slices/s00b2c980/s00b2c980.cpp  ?FUN_00b2d660@S@@QAEXXZ  00b2d660  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00b2c980/s00b2c980.cpp  ?FUN_00b2da50@S@@QAEXXZ  00b2da50  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00b2c980/s00b2c980.cpp  ?FUN_00b2c980@S@@QAEXPAXD@Z  00b2c980  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2c980/s00b2c980.cpp  ?FUN_00b2d0f0@S@@QAEXXZ  00b2d0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE

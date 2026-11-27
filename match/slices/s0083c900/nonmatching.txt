@@ -1,7 +1,6 @@
 0083c900  224  complete: HashCmdTable::Insert(outIt, keyPtr, bool tag); hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
 0083d020  84   complete: pair<string,AutoRefCount> copy ctor; same body from the source pair, mpRef read as ((const PairCtorStub*)src)->mpRef; written as a real constructor (eax=this); equiv: PASS (424/900 valid, 100% coverage); src/game copy also PASS (424 valid)
 0083d080  39   complete: pair<string,cExprFunction> dtor; branch layout differs
-0083d2f0  209  complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)
 0083d140  53  hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]
 0083ca00  153  complete: cExpression::FindExprValue (thiscall); inline string8 key copy + hashtable::find; alloc/memcpy call shapes and key-copy register allocation differ; equiv: WEAK (173/400 valid, 100% coverage)
 0083cc30  213  complete: cExpression::SetCommand (thiscall); case-insensitive key + map slot refcount swap + vtable slot 8 call; key-copy allocation and EH frame layout differ; equiv: UNSUPPORTED (0/400 valid: pointer-chasing inputs fault)

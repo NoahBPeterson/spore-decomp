@@ -13,3 +13,4 @@
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?FUN_00da55c0@@YAPAXPAUcSocialBandEntry@@00@Z  00da55c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?CreateObject@cSocialBandPool_s00da_5900@@QAEIXZ  00da5a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?DoInsertEntry@cSocialBandPool_s00da_49f0@@QAEXXZ  00da58a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?FUN_00d9ff00@X@@QAEXXZ  00d9ff00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -5,3 +5,4 @@
 ../src/game/UTFSpore_Win32/XmlParser.cpp  ?Fn8e5c50@@YAXPAX@Z  008e5c50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/XmlParser.cpp  ?Fn8e5ea0@XmlParser@@QAEPAXPAX@Z  008e5ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/XmlParser.cpp  ?Fn8e5730@XmlParser@@QAEHPAX0@Z  008e5730  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlParser.cpp  ?Fn8e5e50@@YAXPAXHI@Z  008e5e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

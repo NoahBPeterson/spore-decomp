@@ -5,5 +5,4 @@
 00dc6e30  461  130 vs 581 bytes; chk bounds() over-extends 00dc6e30 over the unindexed twin at 00dc6eb0 (00dc6eb0..00dc7074); no single C++ function can emit both prologues/rets; implemented body covers the real 00dc6e30..00dc6eaf; equiv FAIL (5/5 valid inputs mismatched, first: call #1 arg differs)
 00dc7150  487  503 vs 424 bytes; chk bounds() over-extends 00dc7150 over an unindexed following chunk (real body ~432 bytes); equiv UNSUPPORTED (0/400 valid inputs)
 00dc7390  335  386 vs 376 bytes; register allocation and stack slots differ; equiv FAIL (5/5 valid inputs mismatched, first: execution - ours faults at PlayIdleAnim where original succeeds)
-00dc7540  42  62 vs 65 bytes; fastcall list drain; original loads mpBegin into a register, ours loads mpEnd; equiv WEAK (229/400 valid, 28.0% coverage, no mismatch among valid inputs)
 00dc7590  272  298 vs 324 bytes; cdecl spot scan; loop index materialization (base+byte-offset vs pointer walk) and stack slots differ; equiv WEAK (206/400 valid, 16.0% coverage, no mismatch among valid inputs)

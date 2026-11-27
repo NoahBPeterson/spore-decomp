@@ -1838,21 +1838,29 @@ bool Stub_754110::FUN_00754110(int arg)
 
 // @ 0x007541b0
 void FUN_007541b0(int param_1, int param_2, int param_3)
-{
-  int found[2] = { -1, -1 };
-  int limits[2] = { 2, 2 };
-  int keys[2] = { param_2, param_3 };
-  int span[2] = { 8, 8 };
-  char c = (char)FUN_0071ded0(param_1, 2, found, span, keys, limits, 0);
+{  struct {
+    int found[2];
+    int limits[2];
+    int keys[2];
+    int span[2];
+  } p;
+  p.span[0] = 8;
+  p.span[1] = 8;
+  p.limits[0] = 2;
+  p.limits[1] = 2;
+  p.keys[1] = param_3;
+  p.found[0] = -1;
+  p.found[1] = -1;
+  p.keys[0] = param_2;
+  char c = (char)FUN_0071ded0(param_1, 2, p.found, p.span, p.keys, p.limits, 0);
   if (c != 0) {
-    *(int*)(found[1] * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
-    FUN_00738610(param_1, 1, found);
+    *(int*)(p.found[1] * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
+    FUN_00738610(param_1, 1, p.found);
     return;
   }
-  if (found[1] >= 0) {
-    *(int*)(found[1] * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
-  }
-}
+  if (p.found[1] >= 0) {
+    *(int*)(p.found[1] * 0x20 + 4 + *(int*)(param_1 + 8)) = param_2;
+  }}
 
 // @ 0x00754250
 S_754250* S_754250::FUN_00754250(int param_2)

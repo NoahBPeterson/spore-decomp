@@ -167,17 +167,14 @@ void ObjCE20::f(int arg)
 // ---------------------------------------------------------------- 0x00edcec0
 // @ 0x00edcec0
 int FUN_00edcec0(int* p, int* arr, unsigned* count)
-{
-    unsigned n = *count;
-    if (n == 0)
-        return -1;
-    int key = *p;
-    for (unsigned i = 0; i < n; ++i) {
-        if (key == arr[i])
-            return (int)i;
+{    int result = -1;
+    for (unsigned i = 0; i < *count; ++i) {
+        if (*p == arr[i]) {
+            result = (int)i;
+            break;
+        }
     }
-    return -1;
-}
+    return result;}
 
 // ---------------------------------------------------------------- 0x00edcf10
 extern "C" char g_13eb394[];   // ??_7IHandler@@6B@

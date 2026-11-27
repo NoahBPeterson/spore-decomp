@@ -32,3 +32,4 @@
 ../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006fd730@@YAXHHH@Z  006fd730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_006f0000.cpp  ?FUN_006fd990@@YAXPAX@Z  006fd990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_006f0000.cpp  ?Subscript@cHashMap16@@QAEAAHABG@Z  006f65d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006f0000.cpp  ?erase@Vec78@@QAEPAUElem78@@PAU2@0@Z  006f9a50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

@@ -14,3 +14,4 @@ slices/s00edbfc0/s00edbfc0.cpp  ?handler@ObjCE70@@QAE_NHPAUMsgCE70@@@Z  00edce70
 slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edcf60@@YAXPAHM@Z  00edcf60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00edbfc0/s00edbfc0.cpp  ?f@ObjCC90@@QAEXH@Z  00edcc90  /O2 /MD /Gy /TP /arch:SSE
 slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edcce0@@YAHPAH@Z  00edcce0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edcec0@@YAHPAH0PAI@Z  00edcec0  /O2 /MD /Gy /TP /arch:SSE

@@ -82,3 +82,4 @@
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Func6fe00@@YAHH@Z  00c6fe00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Func6fe50@@YA_NPAUWorldObject@@@Z  00c6fe50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c61e80@Mission@@QAEDHH@Z  00c61e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?SetTLerp@cMorphHandle_s00c6_5940@@QAEXM@Z  00c65b50  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include

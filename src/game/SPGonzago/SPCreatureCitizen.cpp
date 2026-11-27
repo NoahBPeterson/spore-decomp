@@ -2945,8 +2945,7 @@ void cCreatureBase_s00c2_3f80::FUN_00c248d0(i32 param_2)
 
 // @ 0x00c24c50
 i32 cCreatureBase_s00c2_3f80::FUN_00c24c50()
-{
-    i32 n = mField102c - 1;
+{    i32 n = mField102c - 1;
     i32 c = 0;
     switch (n)
     {
@@ -2959,12 +2958,11 @@ i32 cCreatureBase_s00c2_3f80::FUN_00c24c50()
     void* community = mField1010;
     if (!community)
         community = mpField1014;
+    bool leader = false;
     if (community)
-    {
-        bool leader = (MOPS(community)->FUN_00c00650() == (void*)this);
-        if (leader)
-            c += 6;
-    }
+        leader = (MOPS(community)->FUN_00c00650() == (void*)this);
+    if (leader)
+        c += 6;
     void* prof = mpFieldb20;
     u32* v = (u32*)((u8*)prof + 0x6d4);
     i32 vec = ((i32)v[1] - (i32)v[0]) >> 2;

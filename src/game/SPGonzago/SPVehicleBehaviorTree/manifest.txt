@@ -41,3 +41,4 @@
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Destroy@cVehicleTicker_s00dc_77d0@@QAEXXZ  00dc7cc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?GetBestOpportunityTarget@@YAPAXPAUcVehicle@@PAX_N2D@Z  00dc69a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?RemoveNouns@BehaviorObj@@QAEXXZ  00dcc2c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Node7540@@YIXPAURemoveList@@@Z  00dc7540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -774,12 +774,11 @@ Ent2C* UninitCopyEnts2(Ent2C* first, Ent2C* last, Ent2C* dest)
 
 // @ 0x00838de0
 void RawStr::AssignSub(const RawStr& s, uint32_t pos, uint32_t n)
-{
-    char* begin = s.mpBegin;
+{    char* begin = s.mpBegin;
     uint32_t rem = (uint32_t)(s.mpEnd - begin) - pos;
-    const uint32_t& cnt = min_alt(rem, n);
-    Assign(begin + pos, begin + pos + cnt);
-}
+    const uint32_t& cnt = (rem < n) ? rem : n;
+    const char* first = begin + pos;
+    Assign(first, first + cnt);}
 
 // @ 0x00838e80
 Ent* DestroyEnts(Ent* first, Ent* last, Ent* dst)

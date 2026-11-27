@@ -2003,14 +2003,21 @@ void cStarManager::Reset()
 
 // @ 0x00bad8d0
 void cStarManager::Shutdown()
-{
-    IRefCounted* pOld = gspBackgroundSimManager->mpIdleState;
+{    IRefCounted* pOld = gspBackgroundSimManager->mpIdleState;
     if (pOld != nullptr) {
         gspBackgroundSimManager->mpIdleState = nullptr;
         pOld->Release();
     }
 
-    mppAgentsEnd += EraseAllPointers(mppAgents, mppAgentsEnd, mppAgentsEnd);
+    struct Vec {
+        cStarAgentRecord** mpBegin;
+        cStarAgentRecord** mpEnd;
+        void Erase(cStarAgentRecord** first, cStarAgentRecord** last) {
+            memcpy(first, last, (size_t)((char*)mpEnd - (char*)last));
+            mpEnd -= (int32_t)(last - first);
+        }
+    };
+    ((Vec*)&mppAgents)->Erase(mppAgents, mppAgentsEnd);
 
     NounManager()->RemoveNounsOfType(0x18eb9d2);
     gCheatStarCount = 0;

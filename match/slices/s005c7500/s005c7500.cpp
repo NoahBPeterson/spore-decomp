@@ -352,16 +352,13 @@ int cSPPaletteCursor::Current(void* out1, int* out2, int* out3, int* out4) {
 }
 
 // @ 0x005C7E20
-int cSPPaletteCursor::Next(void* a, int* b, int* c, int* d) {
-  int result = 0;
-  if (!Advance())
-    return result;
-  do {
+int cSPPaletteCursor::Next(void* a, int* b, int* c, int* d) {  int result = 0;
+  while (Advance()) {
     result = Current(a, b, c, d);
     mItemIndex++;
     if (result)
       break;
-  } while (Advance());
+  }
   return result;
 }
 

@@ -2560,15 +2560,15 @@ void C20::AddNode(int a, int b)
 
 // @ 0x007b1040
 void C20::resize(int n)
-{
-    unsigned cnt = (unsigned)(end - begin);
+{    T20* e = end;
+    unsigned cnt = (unsigned)(e - begin);
     if ((unsigned)n > cnt) {
         T20 tmp;
-        InsertN(end, (unsigned)(n - cnt), &tmp);
+        InsertN(e, (unsigned)(n - cnt), &tmp);
     } else {
         T20* ne = begin + n;
-        RemoveIf(end, end, ne);
-        end -= (end - ne);
+        RemoveIf(e, e, ne);
+        end -= (e - ne);
     }
 }
 

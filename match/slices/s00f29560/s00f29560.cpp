@@ -370,22 +370,17 @@ struct Vec18 {
 
 // @ 0x00f2a3a0
 Elem18* Vec18::insert(Elem18* pos, const Elem18& value)
-{
-    const int index = (int)(pos - mpBegin);
+{    const int index = (int)(pos - mpBegin);
     Elem18* const p = mpEnd;
     if (pos == p && p != mpCapacity)
     {
         mpEnd = p + 1;
         if (p)
-        {
             *p = value;
-            return mpBegin + index;
-        }
     }
     else
         DoInsertSlow(pos, value);
-    return mpBegin + index;
-}
+    return mpBegin + index;}
 
 // -------------------------------------------------------------------------------------
 // 0x00f2a430 — copy-assign from one source element into [dst, dstEnd).

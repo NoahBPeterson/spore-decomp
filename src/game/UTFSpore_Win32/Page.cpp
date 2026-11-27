@@ -1076,24 +1076,23 @@ void EA::XHTML::Layout::Page_s008e_b250::ImageRequestCallback(int* pMsg)
 
 // @ 0x008eba70
 int IntRange_Equals(IntRange* a, IntRange* b)
-{
-    int nB = (int)((char*)b->mpEnd - (char*)b->mpBegin);
+{    int nB = (int)((char*)b->mpEnd - (char*)b->mpBegin);
     int nA = (int)((char*)a->mpEnd - (char*)a->mpBegin);
-    if (((nB ^ nA) & 0xfffffffc) != 0)
-        return 1;
-    int* p = a->mpBegin;
-    int* pEnd = a->mpEnd;
-    int* q = b->mpBegin;
-    if (p != pEnd) {
-        do {
-            if (*p != *q)
-                return 1;
-            ++p;
-            ++q;
-        } while (p != pEnd);
+    if (((nB ^ nA) & 0xfffffffc) == 0) {
+        int* p = a->mpBegin;
+        int* pEnd = a->mpEnd;
+        int* q = b->mpBegin;
+        if (p != pEnd) {
+            do {
+                if (*p != *q)
+                    return 1;
+                ++p;
+                ++q;
+            } while (p != pEnd);
+        }
+        return 0;
     }
-    return 0;
-}
+    return 1;}
 
 // @ 0x008ebb30
 void EA::XHTML::Layout::TextStyleHashtable::DoRehash(unsigned int nNewBucketCount)

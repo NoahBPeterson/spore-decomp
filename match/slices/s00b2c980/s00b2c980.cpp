@@ -321,20 +321,20 @@ void S::FUN_00b2cd90() {
 // ---------------------------------------------------------------------------
 // @ 0x00b2d0f0 — remove all nouns registered in a map, then clear containers
 // ---------------------------------------------------------------------------
-void S::FUN_00b2d0f0() {
-  char* base = (char*)this;
+void S::FUN_00b2d0f0() {  char* base = (char*)this;
   RBNode* anchor = (RBNode*)(base + 0x1cc);
   for (void* n = *(void**)(base + 0x1d0); n != (void*)anchor; n = RBTreeIncrement(n)) {
     void* noun = *(void**)((char*)n + 0x18);
     if (noun) ((E*)NounManager(noun))->removeNoun();
   }
-  ((E*)(base + 0x1c8))->c260(*(void**)(base + 0x1d4));
-  anchor->pxLeft = anchor;
-  anchor->pxRight = anchor;
-  *(int*)(base + 0x1d4) = 0;
-  *(char*)(base + 0x1d8) = 0;
-  *(int*)(base + 0x1dc) = 0;
-}
+  char* tree = base + 0x1c8;
+  ((E*)tree)->c260(*(void**)(base + 0x1d4));
+  RBNode* a = (RBNode*)(tree + 4);
+  *(void**)(tree + 8) = a;
+  *(int*)(tree + 0xc) = 0;
+  *(char*)(tree + 0x10) = 0;
+  *(int*)(tree + 0x14) = 0;
+  a->pxRight = a;}
 
 // ---------------------------------------------------------------------------
 // @ 0x00b2d160 — vector::pop_back returning the removed slot

@@ -593,8 +593,7 @@ bool cSPPlayModeBGMgr::FUN_0062f6c0()
 
 // @ 0x0062f6e0
 void SP::cSPPlayModeBGMgr::ShowBGThumbnails()
-{
-    uint32_t ids[4] = { 0x445b018, 0x445b318, 0x445b340, 0x445b388 };
+{    uint32_t ids[4] = { 0x445b018, 0x445b318, 0x445b340, 0x445b388 };
     uint32_t i = 0;
     do {
         if (i >= mBackGroundInfo.size())
@@ -604,8 +603,9 @@ void SP::cSPPlayModeBGMgr::ShowBGThumbnails()
         if (idx >= mBackGroundInfo.size()) {
             FUN_008068d0(win, 0, 0);
         } else {
+            uint32_t thumbID = mBackGroundInfo.mpBegin[idx].mpObject->mThumbNailID;
             AutoRef<IRefCount> img;
-            FUN_00807840(0x2f7d0004, 0x100d977c, mBackGroundInfo.mpBegin[idx].mpObject->mThumbNailID, &img, 0, -1, -1);
+            FUN_00807840(0x2f7d0004, 0x100d977c, thumbID, &img, 0, -1, -1);
             FUN_008068d0(win, img.mpObject, 0);
         }
         ++i;

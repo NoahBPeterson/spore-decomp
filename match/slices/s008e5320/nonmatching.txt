@@ -7,6 +7,5 @@
 008e59a0  89  XmlParser::FlushText; codegen differs (equiv WEAK: 22% coverage)
 008e5a70  214  ExternalEntityRefHandler; complete; codegen differs; difftest WEAK (211 valid, 22.2% coverage)
 008e5b90  142  entity-reference handler; complete; codegen differs; difftest WEAK (44 valid, 63.9% coverage)
-008e5e50  84  SkippedEntityHandler; inlined entity lookup/arg arrange differ (equiv PASS)
 008e60a0  146  XmlParser::Parse(stream); complete; codegen differs; difftest PASS (240 valid, 100% coverage)
 008e61b0  395  GUI rect scatter; complete; SSE scalar codegen not reproduced (x87 at /arch:SSE; /arch:SSE2 /fp:fast gives 226 diff); difftest WEAK (382 valid, 51% coverage)

@@ -1699,20 +1699,28 @@ void __stdcall DestroyRes50Range(void* first, void* last)
     }
 }
 
+struct PairIter_00714bc0 {
+    uint32_t* p;
+    PairIter_00714bc0() {}
+    PairIter_00714bc0(uint32_t* q) : p(q) {}
+};
 // @ 0x00714bc0
-void* __cdecl CopyPairs(uint32_t* out, uint32_t* first, uint32_t* last, uint32_t* dst)
-{
-    *out = (uint32_t)dst;
-    if (first != last) {
+PairIter_00714bc0 __cdecl CopyPairs(PairIter_00714bc0 first, PairIter_00714bc0 last, PairIter_00714bc0 dst)
+{    PairIter_00714bc0 out(dst);
+    if (first.p != last.p) {
+        uint32_t* d = dst.p;
         do {
-            if (dst != 0) { dst[0] = first[0]; dst[1] = first[1]; }
-            first += 2;
-            dst += 2;
-        } while (first != last);
-        *out = (uint32_t)dst;
+            if (d != 0) {
+                const float* p = (const float*)first.p;
+                ((float*)d)[0] = p[0];
+                ((float*)d)[1] = p[1];
+            }
+            first.p += 2;
+            d += 2;
+        } while (first.p != last.p);
+        out.p = d;
     }
-    return out;
-}
+    return out;}
 
 // @ 0x00714c00
 void __cdecl HeapSiftDown(uint32_t* base, int root, int n, int hole, uint32_t value, RecordCmp compare)
@@ -1838,17 +1846,19 @@ int* __cdecl f715010(int* first0, int* last0, int* first1, int* last1, int* out,
     return out;
 }
 
+void __cdecl adjust_heap(int* first, int hole, int length, int top, int value, int cmp);
+void __cdecl f715090(int* first, int* last, Cmp4 cmp);
 // @ 0x00715090
-void __cdecl f715090(int* first, int* last, Cmp4 cmp)
-{
-    int n = (int)(last - first);
+void __cdecl f715090(int* first, int* last, int cmp)
+{    int n = (int)(last - first);
     if (n < 2)
         return;
-    for (int parent = (n - 2) / 2; parent >= 0; --parent) {
+    int parent = ((n - 2) >> 1) + 1;
+    do {
+        --parent;
         int value = first[parent];
         adjust_heap(first, parent, n, parent, value, cmp);
-    }
-}
+    } while (parent != 0);}
 
 // @ 0x007150d0
 void __cdecl f7150d0(int* first, int* last, Cmp4 cmp)

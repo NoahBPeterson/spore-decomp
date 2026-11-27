@@ -20,3 +20,4 @@
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d272e0@cCamView@@QAEXXZ  00d272e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?MapIterateErase@RbTreeAnchor_s00d2_8900@@QAEXURbIter_s00d2_8900@@0@Z  00d28e10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ??1cCreatureCamera_s00d2_8900@@QAE@XZ  00d29570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d20970@@YAEXZ  00d20970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

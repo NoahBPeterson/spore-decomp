@@ -185,7 +185,7 @@ public:
     bool LoadModelChecked(void* pModel);
     void SetModelState(int nState, bool bForce);
     bool InitFromDefinition(void* pData, int a, uint flags);
-    void Destroy(int bDelete);
+    void Destroy();
     void Shutdown();
     void AttachEffect(void* pEffect);
     void ClearEffectState(void* pArg);
@@ -322,18 +322,51 @@ cInteractableObject::cInteractableObject()
     mModelStateIndex = 1;
 }
 
+extern void* g_vtbl_0146ca90[];
+extern void* g_vtbl_0146ca7c[];
+extern void* g_vtbl_0146c9b8[];
+struct InteractableDtorHelper_00c3fa70 {
+    void FUN_006b5240();
+    void FUN_00c8a420();
+    void FUN_00b184c0();
+};
 // @ 0x00c3fa70
-void cInteractableObject::Destroy(int bDelete)
-{
-    (void)bDelete;
-    FreeOrnamentMembers();
-    if (mpOwner != nullptr)
-        mpOwner->Release();
-    if (*(IRefCounted**)((uint8_t*)this + 0x108) != nullptr)
-        (*(IRefCounted**)((uint8_t*)this + 0x108))->Release();
-    FreeInteractableInherited();
-    FreeGameDataMembers();
-}
+void cInteractableObject::Destroy()
+{    struct VObj10c {
+        virtual void v00() {} virtual void v04() {} virtual void v08() {} virtual void v0c() {}
+        virtual void v10() {} virtual void v14() {} virtual void v18() {} virtual void v1c() {}
+        virtual void v20() {} virtual void v24() {} virtual void v28() {} virtual void v2c() {}
+        virtual void v30() {} virtual void v34() {} virtual void v38() {} virtual void v3c() {}
+        virtual void v40() {} virtual void v44() {} virtual void v48() {} virtual void v4c() {}
+        virtual void v50() {} virtual void v54() {} virtual void v58() {} virtual void v5c() {}
+        virtual void v60() {}
+        virtual void v64() {}
+    };
+    struct SelfLayout {
+        void* vtbl0;
+        void* vtbl4;
+        uint8_t pad08[0x2c];
+        union {
+            void* spatialVtbl;
+            InteractableDtorHelper_00c3fa70 spatial;
+        };
+        uint8_t pad38[0xd0];
+        IRefCounted* p108;
+        VObj10c* p10c;
+        uint8_t pad110[0x08];
+        InteractableDtorHelper_00c3fa70 sub118;
+    };
+    SelfLayout* self = (SelfLayout*)this;
+    self->vtbl0 = g_vtbl_0146ca90;
+    self->vtbl4 = g_vtbl_0146ca7c;
+    self->spatialVtbl = g_vtbl_0146c9b8;
+    self->sub118.FUN_006b5240();
+    if (self->p10c != nullptr)
+        self->p10c->v64();
+    if (self->p108 != nullptr)
+        self->p108->Release();
+    self->spatial.FUN_00c8a420();
+    ((InteractableDtorHelper_00c3fa70*)this)->FUN_00b184c0();}
 
 // @ 0x00c3fad0
 void cInteractableObject::ClearEffectState(void* pArg)

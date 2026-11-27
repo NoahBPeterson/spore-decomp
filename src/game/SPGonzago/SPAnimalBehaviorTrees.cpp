@@ -9539,8 +9539,7 @@ float FUN_00d7e340(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint
 
 // @ 0x00d7e4e0
 float FUN_00d7e4e0(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint8_t* a6, void* a7, cKeySrc* a8)
-{
-    cGameObj* found = (cGameObj*)FUN_00d998f0(a1->mp1698);
+{    cGameObj* found = (cGameObj*)FUN_00d998f0(a1->mp1698);
     if (found != 0)
     {
         void* r = ((cVtV5c*)found)->v5c(TAG_ANIM_TARGET);
@@ -9549,11 +9548,11 @@ float FUN_00d7e4e0(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint
             cTargetInfo* info = (cTargetInfo*)((cSelf*)r)->FUN_00ca71d0();
             if (info->mKind == 1)
             {
-                cGameObj* obj = (cGameObj*)info->mpObj;
-                if (obj != 0)
+                if (info->mpObj != 0)
                 {
-                    if (((cVtV2cB*)obj)->v2c() == 0)
+                    if (((cVtV2cB*)info->mpObj)->v2c() == 0)
                     {
+                        cGameObj* obj = (cGameObj*)info->mpObj;
                         if (obj != ((cVtV0c*)&a1->m5a8)->v0c())
                         {
                             if (a5 != 0)
@@ -9567,8 +9566,7 @@ float FUN_00d7e4e0(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint
             }
         }
     }
-    return 0.0f;
-}
+    return 0.0f;}
 
 // @ 0x00d7e580
 float FUN_00d7e580(cGameObj* a1, void* a2, void* a3, void* a4, cOutRec* a5, uint8_t* a6, void* a7, cKeySrc* a8)
@@ -11427,8 +11425,9 @@ bool __cdecl AddAlphaFade(tHeldStim* pStim, float fDelta)
     if (pComp != 0)
     {
         pStim->mf00 = pStim->mf00 - fDelta;
-        if (0.0f <= pStim->mf00 || pComp->mpBehaviorTreeB4c->mn1d8 == 0x341bd4be)
-            return true;
+        if (pStim->mf00 < 0.0f && pComp->mpBehaviorTreeB4c->mn1d8 != 0x341bd4be)
+            return false;
+        return true;
     }
     return false;
 }

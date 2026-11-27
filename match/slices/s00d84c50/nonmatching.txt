@@ -4,7 +4,6 @@
 00d851c0 167   complete: stalk-avatar range gate (0xd51660 info +0x10) then out-of-range reposition toward avatar; equiv WEAK (180 valid, 11.3% cov), no mismatch observed
 00d85400  45   complete: UpdateLoudness — clamp mf04*dt+mf0c to mf08 via pointer-select, add (val-cur) to component mf1000; equiv PASS (306 valid, 100% cov), xmm numbering/scheduling differences only
 00d85480  83   complete: AddHeldObject — behaviour-tree stimuli (0xbc97f0 / ClearAll 0x400000) + anim slot 0x4f26350b; equiv WEAK (225 valid, 13.5% cov), no mismatch observed
-00d854f0  35   complete: AddAlphaFade — alpha decay from dt, success when >= 0 or behaviour-tree single-arg slot == 0x341bd4be; equiv PASS (356 valid, 100% cov)
 00d856e0 288   complete: avatar-distance follow — normalise d, >30 range or loco gate triggers v8c/vc8, else step vOut toward avatar; equiv WEAK (107 valid, 67.5% cov), no mismatch observed
 00d84c50 176   complete: FRIENDLY_Tick — two range-rate reads, target resolve, proximity gates, animation-finished polling, random 0x4001125.. anim selection, PlayAnimationWithTarget target+0xc0, timer refresh; equiv FAIL-KEPT ecx (5/229 valid; eax/behaviour identical, retail push ecx/pop ecx restores ecx, our sub esp,8 frame does not)
 00d850a0 179   complete: STALK_AVATAR_Activate — avatar sim bind via v84, reach total (avatar+loco+3), avatar orientation offset reposition, MoveToPointAtSpeed(2,...,1,2), key 0x337d8b6b; equiv UNSUPPORTED (0/400 valid: fault(read)=388, fake-arity=7, budget=2)
