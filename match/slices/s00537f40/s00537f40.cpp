@@ -31,7 +31,7 @@ struct cSPMatrix3 {
     void Assign(const float* src);      // 0x0041cb40 (thiscall, ret 4)
 };
 
-// @ 0x00538000
+// 0x00538000 (byte-exact lifted version: match/slices/s00538000/s00538000.cpp)
 cSPTransform::cSPTransform(const cSPTransform& x)
 {
     mFlags = x.mFlags;

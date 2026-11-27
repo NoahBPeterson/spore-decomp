@@ -1,2 +1,1 @@
-0042eba0  ~90  PairAllocator::AllocateCopy: code identical in shape but frame is 0x44 vs 0x30; original has extra by-value iterator-param slots from forwarding layers whose copies are elided; could not reproduce (tried 2-5 inline layers, struct params with/without dtor/copy ctor)
 

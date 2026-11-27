@@ -65,7 +65,7 @@ static __forceinline int WCompare(const uint16_t* a, const uint16_t* b) {
     }
 }
 
-// @ 0x00549e40
+// 0x00549e40 (byte-exact lifted version: match/slices/s00549e40/s00549e40_lifted.cpp)
 void* FUN_00549e40(char* first, char* last, char* result)
 {
     void* res = UninitCopy10(first, last, result);
@@ -153,7 +153,7 @@ uint16_t** FUN_0054a2d0(uint16_t** first, int last, const uint16_t** value)
     return first;
 }
 
-// @ 0x0054a470
+// 0x0054a470 (byte-exact lifted version: match/slices/s0054a470/s0054a470.cpp)
 void* V::FUN_0054a470(const Pair20* src)
 {
     Pair20* self = (Pair20*)this;

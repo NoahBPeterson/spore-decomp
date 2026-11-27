@@ -687,7 +687,7 @@ vector_set<Key, Compare>::insert(iterator position, const value_type& value) {
     return base_type::mpBegin + n;
 }
 
-// @ 0x00555AA0  uninitialized_copy for basic_string (result via out-param)
+// 0x00555aa0 (byte-exact lifted version: match/slices/s00555aa0/s00555aa0.cpp)  uninitialized_copy for basic_string (result via out-param)
 template <typename T, typename Tag>
 T* uninitialized_copy(T** out, T* first, T* last, T* dest, Tag) {
     T* current = dest;
@@ -706,14 +706,14 @@ T* uninitialized_copy_ptr(T* first, T* last, T* dest) {
     return current;
 }
 
-// @ 0x00555B40  uninitialized_fill_n_ptr (basic_string)
+// 0x00555b40 (byte-exact lifted version: match/slices/s00555b40/s00555b40.cpp)  uninitialized_fill_n_ptr (basic_string)
 template <typename T, typename Tag>
 void uninitialized_fill_n_ptr(T* first, uint32_t n, const T& value, Tag) {
     for (; n > 0; --n, ++first)
         ::new ((void*)first) T(value);
 }
 
-// @ 0x005554E0  uninitialized_relocate_ptr
+// 0x005554e0 (byte-exact lifted version: match/slices/s005554e0/s005554e0.cpp)  uninitialized_relocate_ptr
 template <typename T>
 T* uninitialized_relocate_ptr(T* first, T* last, T* dest) {
     T* const pNewEnd = uninitialized_copy_ptr(first, last, dest);
