@@ -235,8 +235,16 @@ void FUN_00ec8110(evec<Pair>* v)
     p.first = 3;
     unsigned int i = 0;
     do {
-        p.second = arr[i];
-        v->push_back(p);
+        Pair* e = v->mpEnd;
+        int sec = arr[i];
+        p.second = sec;
+        if (e < v->mpCapacity) {
+            v->mpEnd = e + 1;
+            if (e)
+                ::new ((void*)e) Pair(p.first, sec);
+        } else {
+            v->DoPushBack(e, &p);
+        }
         ++i;
     } while (i < 9);
 }
