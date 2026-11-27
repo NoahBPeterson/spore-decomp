@@ -389,7 +389,10 @@ void* SerializedArray::Alloc() {
 }
 
 // @ 0x007c54b0
-void* ResolveOne(void* obj, ResourceHolder* holder) {    int id = *(int*)((char*)obj + 0x3c);
+void* ResolveOne(void* obj, ResourceHolder* holder) {
+    struct Obj3c { char pad[0x3c]; int mId; };
+    Obj3c* o = (Obj3c*)obj;
+    int id = o->mId;
     int result;
     if (id == 0) {
         result = -1;
@@ -397,8 +400,9 @@ void* ResolveOne(void* obj, ResourceHolder* holder) {    int id = *(int*)((char*
         ArenaInner* inner = holder->m_mgr->m_inner;
         result = inner->m_arena->ObjectToId(id);
     }
-    *(int*)((char*)obj + 0x3c) = result;
-    return holder;}
+    o->mId = result;
+    return holder;
+}
 
 // @ 0x007c54f0
 void ResolveOneToObject(void* obj, int unused, ResMgr1* mgr) {    int id = *(int*)((char*)obj + 0x3c);

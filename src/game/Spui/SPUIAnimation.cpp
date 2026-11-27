@@ -1058,34 +1058,47 @@ void* __cdecl F7100(void* out, void* target, float x, float y, void* anim)
 
 // @ 0x007f71b0
 bool F71B0(void* self, int a2, float a3, int phase)
-{    void* obj = *(void**)((char*)self + 0x10);
+{
+    struct AnimSelf_7f71b0 {
+        char pad[0xc];
+        void* mpAnim;
+        void* mpTarget;
+        float mV0;
+        float mV1;
+        float mV2;
+        float mV3;
+        float mBase;
+    };
+    AnimSelf_7f71b0* s = (AnimSelf_7f71b0*)self;
+    void* obj = s->mpTarget;
     if (obj == 0)
         return false;
     if (phase == 0) {
         void* p = FUN_805260(obj);
-        *(float*)((char*)self + 0x24) = *(float*)((char*)p + 0xc);
-        return *(void**)((char*)self + 0x10) != 0;
+        s->mBase = *(float*)((char*)p + 0xc);
+        return s->mpTarget != 0;
     }
     if (phase == 2) {
-        void* an = *(void**)((char*)self + 0xc);
+        void* an = s->mpAnim;
         ((void(__thiscall*)(void*, float))VT(an)[0x2c / 4])(an, a3);
         float t = ((FPF0)VT(an)[0x18 / 4])(an);
         float v[4];
-        v[0] = *(float*)((char*)self + 0x14);
-        v[1] = *(float*)((char*)self + 0x18);
-        v[2] = *(float*)((char*)self + 0x1c);
-        v[3] = *(float*)((char*)self + 0x20) * t + *(float*)((char*)self + 0x24);
-        FUN_808230(*(void**)((char*)self + 0x10), v);
+        v[0] = s->mV0;
+        v[1] = s->mV1;
+        v[2] = s->mV2;
+        v[3] = s->mV3 * t + s->mBase;
+        FUN_808230(s->mpTarget, v);
         char r = ((FPC0)VT(an)[0x3c / 4])(an);
         return r == 0;
     }
     if (phase == 1) {
-        void* p = *(void**)((char*)self + 0x10);
-        *(void**)((char*)self + 0x10) = 0;
+        void* p = s->mpTarget;
+        s->mpTarget = 0;
         if (p)
             ((FV0)VT(p)[4 / 4])(p);
     }
-    return *(void**)((char*)self + 0x10) != 0;}
+    return s->mpTarget != 0;
+}
 
 // @ 0x007f7290
 void* __cdecl SPUICreateWindowAnimationRotation(void* out, void* target, int a, int b, int c, int d, void* anim)

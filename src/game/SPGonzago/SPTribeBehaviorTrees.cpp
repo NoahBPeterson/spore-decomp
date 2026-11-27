@@ -6677,9 +6677,11 @@ u8 __cdecl FUN_00da7470(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags, void* p5,
 
 // @ 0x00da74e0
 void __cdecl FUN_00da74e0(cSPCreatureCitizen* c)
-{    char v = c->mSubC0.vf8();
+{
+    struct BTreeFlags { char pad[0x1c8]; unsigned __int64 mFlags64; };
+    char v = c->mSubC0.vf8();
     c->FUN_c14750(v == 0);
-    if ((*(unsigned __int64*)((char*)c->mpBTree + 0x1c8) & 0x2000000ui64) == 0)
+    if ((((BTreeFlags*)c->mpBTree)->mFlags64 & 0x2000000ui64) == 0)
         c->mpBTree->mStimuli.ClearAll(0, 0x20);
 }
 
