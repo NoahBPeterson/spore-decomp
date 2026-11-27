@@ -975,7 +975,7 @@ void* __cdecl eastl_copy(void*, void*, void*, void*, void*);         // 0x76ffd0
 void  __cdecl FUN_0073fe50(void*, void*, void*);                     // 0x73fe50
 void  __cdecl FUN_006ac440(void*, unsigned, void*);                  // 0x6ac440
 char* __cdecl FUN_0099efa0(char*, char*, char*);                     // 0x99efa0
-void  __cdecl vector_erase_tail(void*, void*);                       // 0xd018d0
+void  __stdcall vector_erase_tail(void*, void*);                      // 0xd018d0
 // ---- items of slice s00a52080 end
 
 // @ 0x00a52da0
@@ -1048,10 +1048,9 @@ void __thiscall PairVec::Insert(int pos, unsigned n, int* value)
 // @ 0x00a52fa0
 void __thiscall PairVec::Resize(unsigned n)
 {
-  unsigned have = (unsigned)(((char*)cur - (char*)begin) >> 3);
-  if (have < n) {
+  if (n > (unsigned)(((char*)cur - (char*)begin) >> 3)) {
     int tmp[2];
-    Insert((int)cur, n - have, tmp);
+    Insert((int)cur, n - (unsigned)(((char*)cur - (char*)begin) >> 3), tmp);
     return;
   }
   vector_erase_tail((void*)((char*)begin + n * 8), (void*)cur);

@@ -38,3 +38,4 @@
 ../src/game/SPAudio/eapdsystem.cpp  ??1FixedHashtableAllocatorObj_s00a6_70b0@@QAE@XZ  00a67d30  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ??1TaskListObj_s00a6_70b0@@QAE@XZ  00a67e80  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ??1PlayView_a53b20@@QAE@XZ  00a53b20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?Resize@PairVec@@QAEXI@Z  00a52fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00a52dd0 358 non-byte-exact; vector<pair> insert/grow with eastl copy/copy_backward/do_fill; large control-flow difference; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv WEAK (198 valid inputs, 12.5% coverage)
-00a52fa0 49 non-byte-exact; vector resize: grow path vs erase-tail (0xd018d0); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/5 valid; execution)
 00a52ff0 285 Group::Init: not emitted as a symbol of similar size (inlined / different COMDAT split); logic modeled from the card ; difftest UNSUPPORTED (0/400 valid inputs; all 400 discard as fault(read) - the Eapd Group layout the harness would have to synthesise is not modelled; 0/168 insns covered) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a53210 14 Init@FixedPool: imul scheduled before the mnNodeSize store (2-instruction scheduler swap) ; difftest WEAK (249 valid, 33% cov) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a53360 162 FixedHashtableAllocator::InitBuckets: x87 bucket-count computation; no symbol of similar size emitted ; difftest UNSUPPORTED (0/400 valid inputs; discards fake-arity=192, fault(write)=182, fault(pool-limit)=23; 0/91 insns covered) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
