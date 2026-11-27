@@ -303,14 +303,14 @@ extern uint32_t gPhotoTypeKeyInstance;   // 0x01523310
 struct SaveArea {
     virtual int s00(); virtual int s01(); virtual int s02(); virtual int s03(); virtual int s04();
     virtual int s05(); virtual int s06(); virtual int s07(); virtual int s08(); virtual int s09();
-    virtual const wchar_t* GetPath(wstring16_s0063_2780* name);   // +0x28
+    virtual const wchar_t* GetPath();   // +0x28
     virtual int s0b(); virtual int s0c(); virtual int s0d(); virtual int s0e(); virtual int s0f();
     virtual int s10(); virtual int s11(); virtual int s12(); virtual int s13(); virtual int s14();
     virtual int s15(); virtual int s16(); virtual int s17(); virtual int s18(); virtual int s19();
     virtual void WriteFile(const wchar_t* path, void* data);   // +0x68
 };
 SaveArea* GetSaveArea(uint32_t id);    // 0x006b1f90
-void OperatorPlus(wstring16_s0063_2780* result, const wchar_t* rhs);   // 0x006309e0
+void OperatorPlus(wstring16_s0063_2780* result, const wchar_t* lhs, const wstring16_s0063_2780* rhs);   // 0x006309e0
 struct FileStream : RefCountVBase {
     uint32_t pad[0x22c / 4 - 3];
     FileStream(int flags);   // 0x00931da0
@@ -1420,9 +1420,8 @@ void __fastcall FUN_006326f0(void* self)
 
 // @ 0x00632780
 bool cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType(wstring16_s0063_2780 a, uint32_t u, int kind, wstring16_s0063_2780 b)
-{
-    wstring16_s0063_2780 path((wstring16_s0063_2780::NoInit()));
-    OperatorPlus(&path, GetSaveArea(0x11ac196)->GetPath(&a));
+{    wstring16_s0063_2780 path((wstring16_s0063_2780::NoInit()));
+    OperatorPlus(&path, GetSaveArea(0x11ac196)->GetPath(), &a);
     bool ok = false;
     FileStream* mem = (FileStream*)operator new(0x22c, "Editor", 0, 0, 0, 0);
     if (mem) {
@@ -1432,10 +1431,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType(wstring16_s0063_2780 a
             fs->SetPath(path.mpBegin);
             bool opened = fs->Open(1, 6, 1, 0);
             HeaderInfo* hdr = (HeaderInfo*)GetHeaderInfo(fs, kind);
-            if (opened && hdr && FUN_00631810(hdr, u, kind, b))
-                ok = true;
-            else
-                ok = false;
+            ok = (opened && hdr && FUN_00631810(hdr, u, kind, b));
             if (hdr) {
                 HeaderReader_s0063_2780 r;
                 r.Open(fs);
@@ -1445,8 +1441,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType(wstring16_s0063_2780 a
             fs->Release();
         }
     }
-    return ok;
-}
+    return ok;}
 
 // @ 0x00632900
 void cSPPlayModePhotoBrowser_s0063_2780::AddPhoto(uint32_t guid, int kind)

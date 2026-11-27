@@ -24,3 +24,4 @@
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?SetPosition@cServerResponse@Pollen@SP@@UAE_NJW4PositionType@IO@EA@@@Z  006154c0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?IDListElement@cServerResponse_s0061_4f20@Pollen@SP@@QAEXXZ  00615520  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorServerResponse.cpp  ??0cServerResponse_s0061_4f20@Pollen@SP@@QAE@XZ  00615790  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?EndElementHandler@cServerResponse_s0061_4f20@Pollen@SP@@SAXPAV123@PB_W@Z  00615330  /O2 /MD /Gy /TP /Isrc/game/include

@@ -1046,12 +1046,13 @@ void cSPPlayModeSubModePhoto_s0063_e880::FUN_0063f060()
 
 // @ 0x0063f0e0
 cUIParamMessage::~cUIParamMessage()
-{
-    uint32_t mask = 1;
+{    uint32_t mask = 1;
     IRefCounted** slot = (IRefCounted**)this + 2;
     for (int n = 32; n; --n) {
-        if ((((uint32_t*)this)[0x18 / 4] & mask) && *slot)
+        if ((((uint32_t*)this)[0x18 / 4] & mask) && *slot) {
+            _ReadWriteBarrier();
             (*slot)->Release();
+        }
         slot += 2;
         mask = _rotl(mask, 1);
     }

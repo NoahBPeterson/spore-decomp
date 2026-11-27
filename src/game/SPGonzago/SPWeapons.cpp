@@ -5890,16 +5890,27 @@ bool SP::cICBM::Update()
 
 // @ 0x00cbad90
 void __cdecl FUN_00cbad90(Obj_s00cb_a050* pStream, PropertyList* pList)
-{
+{    struct WriterLocal {
+        virtual void f0() {}
+        virtual void f1() {}
+        virtual void f2() {}
+        virtual void f3() {}
+        virtual void f4() {}
+        virtual void f5() {}
+        virtual void* Slot18() { return 0; }
+        void WriteCount(int n) {
+            void* pOut = Slot18();
+            EA_IO_WriteUint32((int)pOut, &n, 1, 0);
+        }
+    };
     PropertyList* pListArg = pList;
-    int count = pListArg->mCount;
-    void* pWriter = ((Fn_p_p)VTSLOT(pStream, 0x20))(pStream);
-    void* pOut = ((Fn_p_p)VTSLOT(pWriter, 0x18))(pWriter);
+    int n = pListArg->mCount;
+    WriterLocal* pWriter = (WriterLocal*)((Fn_p_p)VTSLOT(pStream, 0x20))(pStream);
+    pWriter->WriteCount(n);
 
-    EA_IO_WriteUint32((int)pOut, &count, 1, 0);
-
+    void* it = pListArg->mpRoot;
     void** pSentinel = (void**)((char*)pListArg + 4);
-    for (void* it = pListArg->mpRoot; it != pSentinel;
+    for (; it != pSentinel;
          it = eastl_RBTreeIncrement(it)) {
         int v = 0;
         void* p = *(void**)((char*)it + 0x10);

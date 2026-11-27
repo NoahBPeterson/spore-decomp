@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include <intrin.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float DAT_016077c4;
@@ -22,11 +23,12 @@ extern char  DAT_01493dc0[];  // "Generic2D"
 void* __cdecl  FUN_0067dd70();                       // SP::MaterialManager
 void* __cdecl  FUN_0067dd60();                       // 0x0067dd60
 void* __cdecl  FUN_011e58c0();                       // 0x011e58c0
-int   __stdcall FUN_011ef750(int, int, void*);       // 0x011ef750
 char  __cdecl  FUN_006ddcc0(int, int, void*, void*); // 0x006ddcc0
 void  __cdecl  FUN_006ddd80(int, void*, void*, void*); // 0x006ddd80
 u32   __cdecl  FUN_00932e80(const char*, u32, int);  // FNV1_String8
-void  __cdecl  FUN_00fceb30(int, int, int, int, int, int, int, int, int);
+// planar YUV 4:2:0 -> 32-bit RGB blit (0x00fceb30)
+void  __cdecl  FUN_00fceb30(const u8* y, const u8* u, const u8* v, int yPitch, int width, int height,
+                            u8* dst, int dstPitch, int flags);
 void  __cdecl  FUN_00fcdf40(int, int, int, int, void*); // VideoRenderable::GetDataBufSizes
 void* __cdecl  FUN_00d06400();                       // 0x00d06400
 struct Ext {
@@ -72,7 +74,9 @@ struct RenderPartReset {
     u32 height;
     u32 format;
     u32 reserved3;
-    u32 partCount;
+    u32 partCount;              // +0x38
+    u8  reserved3c[0x15];
+    u8  mResult;                // +0x51
 };
 
 struct RenderPartRelease {
@@ -84,14 +88,49 @@ struct RenderPartAllocator {
     virtual void Reserved0();
     virtual void Reserved1();
     virtual void ReleasePart(RenderPartRelease*);
+    u32 mReserved04;
+    volatile long mRefCount;   // +0x08
+};
+
+struct RasterLockInfo {
+    u8* pixels;                 // +0x00
+    int reserved04;
+    int reserved08;
+    int pitch;                  // +0x0c
+    int reserved10;
+    int reserved14;
+    int reserved18;
+};
+// rw::graphics::Raster
+struct RwRaster {
+    int  Lock(int mode, int zero, RasterLockInfo* out);   // 0x011ef750
+    void Unlock(RasterLockInfo* info);                     // 0x011ef880
+};
+struct RasterTarget {
+    RwRaster* mpRaster;         // +0x00
+    u8        mFlags;           // +0x04  bit 0: registered
+};
+struct RasterTargetRegistry {   // returned by FUN_0067dd60
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30();
+    virtual void Register(RasterTarget* target);            // +0x34
 };
 
 struct Vid {
     u32 x;
     void* mManager;
-    RenderPartAllocator* mPartAllocator;
+    union {
+        RenderPartAllocator* mPartAllocator;
+        RasterTarget*        mTarget;
+    };
+    u32  mPad0c[8];
+    int  mWidth;                // +0x2c
+    int  mHeight;               // +0x30
+    int  mPitch;                // +0x34
     void  f9460(void* p);
-    u8    f9480(int param_2);
+    u8    f9480(RenderPartReset* frame);
     void  f9610(RenderPartReset* parts);
     Vid*  f9680();
 void  f96d0();
@@ -114,59 +153,56 @@ void Vid::f9460(void* p)
     *(void**)((char*)this + 8) = FUN_011e58c0();
 }
 
-// @ 0x00fd9480
-u8 Vid::f9480(int param_2)
+static inline void RegisterTarget(RasterTarget* target)
 {
-    char* s = (char*)this;
+    if ((target->mFlags & 1) == 0)
+        ((RasterTargetRegistry*)FUN_0067dd60())->Register(target);
+}
+
+// @ 0x00fd9480
+u8 Vid::f9480(RenderPartReset* frame)
+{
     u8 result = 0;
-    if (*(int*)(param_2 + 0x30) == 0) {
-        int iVar3 = *(int*)(s + 8);
-        result = *(u8*)(param_2 + 0x51);
-        if ((*(u8*)(iVar3 + 4) & 1) == 0) {
-            void* p = FUN_0067dd60();
-            ((void(__thiscall*)(void*, int))VTP(p)[0x34 / 4])(p, iVar3);
+    switch (frame->format) {
+    case 0: {
+        RasterTarget* target = mTarget;
+        result = frame->mResult;
+        RegisterTarget(target);
+        RasterLockInfo lock;
+        RwRaster* raster = target->mpRaster;
+        if (raster->Lock(2, 0, &lock) != 0) {
+            const u8* y = (const u8*)frame->partData[0];
+            const u8* u = y + mWidth * mHeight;
+            const u8* v = u + (mWidth >> 1) * (mHeight >> 1);
+            FUN_00fceb30(y, u, v, mWidth, mWidth, mHeight, lock.pixels, mPitch * 4, 1);
+            target = mTarget;
+            RegisterTarget(target);
+            target->mpRaster->Unlock(&lock);
         }
-        void* local_1c[3];
-        if (FUN_011ef750(2, 0, local_1c) != 0) {
-            int iVar1 = *(int*)(s + 0x2c);
-            int iVar3b = *(int*)(s + 0x30);
-            int iVar4 = iVar1 * iVar3b + *(int*)(param_2 + 4);
-            FUN_00fceb30(*(int*)(param_2 + 4), iVar4,
-                         (iVar1 >> 1) * (iVar3b >> 1) + iVar4,
-                         iVar1, iVar1, iVar3b, (int)local_1c[0],
-                         *(int*)(s + 0x34) * 4, 1);
-            iVar3b = *(int*)(s + 8);
-            if ((*(u8*)(iVar3b + 4) & 1) == 0) {
-                void* p = FUN_0067dd60();
-                ((void(__thiscall*)(void*, int))VTP(p)[0x34 / 4])(p, iVar3b);
+        break;
+    }
+    case 3: {
+        RasterTarget* target = mTarget;
+        RegisterTarget(target);
+        RasterLockInfo lock;
+        RwRaster* raster = target->mpRaster;
+        if (raster->Lock(2, 0, &lock) != 0) {
+            const u8* src = (const u8*)frame->partData[0];
+            int rowBytes = mWidth * 4;
+            int pitch = lock.pitch;
+            u8* dst = lock.pixels;
+            for (int row = 0; row < mHeight; ++row) {
+                memcpy(dst, src, rowBytes);
+                src += rowBytes;
+                dst += pitch;
             }
-            E(local_1c)->FUN_011ef880(local_1c);
-        }
-    } else if (*(int*)(param_2 + 0x30) == 3) {
-        int iVar3 = *(int*)(s + 8);
-        if ((*(u8*)(iVar3 + 4) & 1) == 0) {
-            void* p = FUN_0067dd60();
-            ((void(__thiscall*)(void*, int))VTP(p)[0x34 / 4])(p, iVar3);
-        }
-        void* local_1c[3];
-        if (FUN_011ef750(2, 0, local_1c) != 0) {
-            void* src = *(void**)(param_2 + 4);
-            int size = *(int*)(s + 0x2c) * 4;
-            int n = 0;
-            void* dst = local_1c[0];
-            while (n < *(int*)(s + 0x30)) {
-                FUN_00fceb30(0, 0, 0, 0, 0, 0, 0, 0, 0); // placeholder (memmove)
-                (void)dst; (void)src; (void)size;
-                n++;
-            }
-            iVar3 = *(int*)(s + 8);
-            if ((*(u8*)(iVar3 + 4) & 1) == 0) {
-                void* p = FUN_0067dd60();
-                ((void(__thiscall*)(void*, int))VTP(p)[0x34 / 4])(p, iVar3);
-            }
-            E(local_1c)->FUN_011ef880(local_1c);
+            target = mTarget;
+            RegisterTarget(target);
+            target->mpRaster->Unlock(&lock);
             return 0;
         }
+        break;
+    }
     }
     return result;
 }
@@ -217,19 +253,28 @@ Vid* Vid::f9680()
 }
 
 // @ 0x00fd96d0
+// Releases the part allocator reference twice: once explicitly (clearing the member),
+// then again from the reference member's own destructor.
+static inline void ReleaseRef(volatile long* count)
+{
+    _InterlockedDecrement(count);
+    if (_InterlockedExchangeAdd(count, 0) < 1)
+        _InterlockedIncrement(count);
+    else
+        _InterlockedExchangeAdd(count, 0);
+}
+
 void Vid::f96d0()
 {
-    char* a = (char*)this;
-    *(void**)a = &DAT_01493d80;
-    volatile int* r1 = *(volatile int**)(a + 8);
-    if (r1) {
-        int* pi = (int*)(a + 8);
-        *pi = 0;
-        // intrusive refcount release (interlocked)
-        volatile int* c = (volatile int*)(*(int*)(a + 8) + 8);
-        (void)c; (void)r1;
+    *(void* volatile*)this = &DAT_01493d80;
+    RenderPartAllocator* part = *(RenderPartAllocator* volatile*)&mPartAllocator;
+    if (part) {
+        mPartAllocator = 0;
+        ReleaseRef(&part->mRefCount);
     }
-    *(void**)a = &DAT_01493d20;
+    if (mPartAllocator)
+        ReleaseRef(&mPartAllocator->mRefCount);
+    *(void**)this = &DAT_01493d20;
 }
 
 // @ 0x00fd9750
@@ -256,7 +301,7 @@ void Vid::f97c0(void* param_2)
 {
     char* s = (char*)this;
     float* p = (float*)param_2;
-    char c = (char)f9480((int)param_2);
+    char c = (char)f9480((RenderPartReset*)param_2);
     if (*(void**)(s + 0x10)) {
         ((void(__cdecl*)(void*, void*))*(void**)(s + 0x10))(param_2, *(void**)(s + 0x14));
     }

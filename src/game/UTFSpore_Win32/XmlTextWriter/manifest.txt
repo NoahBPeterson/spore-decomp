@@ -13,3 +13,4 @@
 ../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?EndElement@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  00901b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?SetOutputStream@XmlTextWriter@XML@EA@@QAEXPAVIStream@IO@3@_N@Z  00901d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?WriteText@XmlTextWriter@XML@EA@@UAE_NPB_WI@Z  00901d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?WriteEscapedString@XmlTextWriter@XML@EA@@QAE_NPB_W@Z  009014c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -2646,8 +2646,7 @@ void __cdecl FUN_00b65b10(const RadialRay* r, hkWorld_s00b6_5b10* world, RayObj*
 
 // @ 0x00b66460
 void __cdecl FUN_00b66460(const RadialRay* r, hkWorld_s00b6_5b10* world, RayObjList* list, bool useWorld, uint32_t filterInfo, RayHitResult* out)
-{
-    out->m_status = 0;
+{    out->m_status = 0;
     int count = list->m_count;
     if (count == 0 && useWorld)
     {
@@ -2671,27 +2670,24 @@ void __cdecl FUN_00b66460(const RadialRay* r, hkWorld_s00b6_5b10* world, RayObjL
         do
         {
             FUN_00b65b10(r, world, list->m_objects[i], false, filterInfo, &hit);
-            if (hit.m_status != 0)
+            if (hit.m_status != 0 && out->m_status != 0)
             {
-                if (out->m_status != 0)
-                {
-                    float hitDist2 = hit.m_pos.z * hit.m_pos.z + hit.m_pos.y * hit.m_pos.y +
-                                     hit.m_pos.x * hit.m_pos.x;
-                    float outDist2 = out->m_pos.x * out->m_pos.x + out->m_pos.y * out->m_pos.y +
-                                     out->m_pos.z * out->m_pos.z;
-                    if (hitDist2 > outDist2)
-                        out->FUN_00b655f0(&hit);
-                    else
-                        out->FUN_00b655f0(out);
-                }
-                else
-                {
+                float hitDist2 = hit.m_pos.z * hit.m_pos.z + hit.m_pos.y * hit.m_pos.y +
+                                 hit.m_pos.x * hit.m_pos.x;
+                float outDist2 = out->m_pos.x * out->m_pos.x + out->m_pos.y * out->m_pos.y +
+                                 out->m_pos.z * out->m_pos.z;
+                if (hitDist2 > outDist2)
                     out->FUN_00b655f0(&hit);
-                }
+                else
+                    out->FUN_00b655f0(out);
             }
-            else if (out->m_status != 0)
+            else if (hit.m_status == 0 && out->m_status != 0)
             {
                 out->FUN_00b655f0(out);
+            }
+            else if (hit.m_status != 0)
+            {
+                out->FUN_00b655f0(&hit);
             }
             else
             {
@@ -2699,8 +2695,7 @@ void __cdecl FUN_00b66460(const RadialRay* r, hkWorld_s00b6_5b10* world, RayObjL
             }
             i++;
         } while (i < count);
-    }
-}
+    }}
 
 // @ 0x00b665c0
 void __cdecl FUN_00b665c0(const RadialRay* r, cPlanetModel* planet, RayHitResult* out)

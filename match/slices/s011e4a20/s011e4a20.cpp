@@ -68,8 +68,13 @@ struct ArenaPathHolder {
 struct Arena {
     uint8  pad00[0x28];
     uint32 serial28;                // +0x28  serial position used by the advance callbacks
+#if _MSC_VER >= 1400
     void   (__thiscall* writeNoCtx)(void* self, void* data, uint32 n, uint32 param);   // +0x2c
     void   (__thiscall* writeCtx)(void* self, void* data, uint32 n, uint32 param, uint32 ctx); // +0x30
+#else
+    void*  writeNoCtx;
+    void*  writeCtx;
+#endif
     uint32 writeCtxArg;             // +0x34
     uint8  pad38[0x7c - 0x38];
     uint32 serialPos;               // +0x7c
@@ -88,16 +93,26 @@ struct AtomTable {
 };
 
 // ArenaManager::Data is reached through the function pointer slot at 0x0140a57c.
+#if _MSC_VER >= 1400
 typedef uint32 (__thiscall* ArenaMgrDataFn)(void*);
+#endif
 
-// 0x011eb950  __fastcall: writes the manager vtable into *(void**)this.
-struct VtblHolder { void SetVtbl(); };
+// 0x011eb950  __thiscall: writes the manager vtable into *(void**)this.
+struct VtblHolder {
+    void* v;
+    VtblHolder();
+    ~VtblHolder();
+    void SetVtbl();
+};
 
-// 0x016f4afc subsingleton: Init() returns `this` unchanged.
-struct AtomSingleton;              // declared-only here so callers get a plain thiscall to 0x011e5870
-void* __cdecl FUN_011e5870(AtomSingleton* self);
+// 0x016f4afc subsingleton: ctor returns `this` unchanged.
+struct AtomSingleton {
+    int pad;
+    __declspec(noinline) AtomSingleton();
+};
 
 // ------------------------------------------------------------------ slab helpers
+#if _MSC_VER >= 1400
 // @ 0x011e4a20
 void* __cdecl rw_ArenaSectionTypes_Initialize(void** out, uint32 n)
 {
@@ -674,31 +689,19 @@ void __cdecl rw_register_section_writers(void)
     *(void**)(r + 4) = (void*)&rw_section_pad_advance;
     *(void**)(r + 8) = (void*)&rw_ArenaSectionAtoms_Refix;
 }
+#endif
 
 // ------------------------------------------------------------------ atom singleton
 // @ 0x011e5870
-void* __cdecl FUN_011e5870(AtomSingleton* self)
-{
-    (void)self;
-    if ((g_atomInitFlag & 1) == 0) {
-        g_atomInitFlag |= 1;
-        ((VtblHolder*)g_atomHeadStorage)->SetVtbl();
-        FUN_011e07ef((void*)&FUN_013cb3f0);
-    }
-    if (g_atomListHead == 0)
-        g_atomListHead = g_atomHeadStorage;
-    return self;
-}
+AtomSingleton::AtomSingleton()
+{    static VtblHolder s_head;
+    if (!g_atomListHead)
+        g_atomListHead = &s_head;}
 
 // @ 0x011e58c0
 void* __cdecl rw_atom_singleton_get(void)
-{
-    if ((g_atomInitFlag2 & 1) == 0) {
-        g_atomInitFlag2 |= 1;
-        FUN_011e5870((AtomSingleton*)&g_atomInitFlag2);
-    }
-    return g_atomListHead;
-}
+{    static AtomSingleton s_singleton;
+    return g_atomListHead;}
 
 // @ 0x011e5900
 void ArenaPathHolder::Split(const char* path)

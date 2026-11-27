@@ -7306,7 +7306,9 @@ int SlotAllocator::Allocate(uint32_t key, uint32_t unused)
 
 // @ 0x0074fea0
 bool cFeedbackJobs::Start(void** pSource)
-{
+{    struct Helper {
+        static inline cJob* get(cJobRef& r) { return r.mp; }
+    };
     if (*pSource == 0)
         return false;
     mTree28.ResetTree((uint32_t)*pSource);
@@ -7327,12 +7329,12 @@ bool cFeedbackJobs::Start(void** pSource)
         if (!pMgr->CreateJob(&mJobB))
             return false;
     }
-    mJobA.mp->mFlags = 0x80000000;
-    mJobA.mp->SetCallback(JobCallback, this);
-    mJobB.mp->SetDependency(mJobA.mp);
-    mJobB.mp->Start();
+    Helper::get(mJobA)->mFlags = 0x80000000;
+    Helper::get(mJobA)->SetCallback(JobCallback, this);
+    Helper::get(mJobB)->SetDependency(Helper::get(mJobA));
+    Helper::get(mJobB)->Start();
     mbStarted = 1;
-    mJobA.mp->Start();
+    Helper::get(mJobA)->Start();
     return true;
 }
 

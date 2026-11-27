@@ -4828,8 +4828,7 @@ void cSocialBandPool_s00da_49f0::Insert(cSocialBandEntry* pPos, cSocialBandEntry
 
 // @ 0x00da58a0
 void cSocialBandPool_s00da_49f0::DoInsertEntry()
-{
-    cSocialBandEntry temp;
+{    cSocialBandEntry temp;
     cSocialBandEntry* p = mpEnd;
     if (p < mpCap) {
         mpEnd = (cSocialBandEntry*)((uint8_t*)p + 0x210);
@@ -4839,7 +4838,7 @@ void cSocialBandPool_s00da_49f0::DoInsertEntry()
     }
     temp.mSlotInfo = 0x80000000u;
     Insert(p, &temp);
-    if (!temp.mIsEmpty)
+    if (!(bool)((temp.mSlotInfo >> 31) & 1))
         BandRelease(&temp.mBand);
 }
 

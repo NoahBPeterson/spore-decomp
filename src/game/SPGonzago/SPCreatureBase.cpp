@@ -10695,19 +10695,30 @@ void*__cdecl FUN_00c141b0(IStream* stream, int* rec)
 
 // @ 0x00c14350
 cContentValidationSummarizer* GetContentValidationSummarizer()
-{
-    static cContentValidationSummarizer* sSingleton;
+{    static cContentValidationSummarizer* sSingleton;
     if (sSingleton != 0)
         return sSingleton;
-    cContentValidationSummarizer* p =
-        (cContentValidationSummarizer*)EAAllocate(0x10, "Simulator/LocomotionStrategy_Template", 0, 0, 0, 0);
-    sSingleton = p;
-    if (p != 0) {
-        *(void**)((char*)p + 8)  = 0;
-        *(uint32_t*)((char*)p + 12) = 0;
-    }
-    return sSingleton;
-}
+    struct Base1 {
+        virtual int AddRef() { return 0; }
+        uint32_t mPad;
+    };
+    struct Base2 {
+        virtual void b2_v0() {}
+        int mRefCount;
+        Base2() : mRefCount(0) {}
+    };
+    struct Derived : Base1, Base2 {
+        virtual int AddRef() { return 0; }
+        virtual void b2_v0() {}
+    };
+    struct V0 {
+        virtual void f() {}
+    };
+    void* mem = EAAllocate(0x10, "Simulator/LocomotionStrategy_Template", 0, 0, 0, 0);
+    V0* p = mem ? (V0*)(new (mem) Derived()) : 0;
+    *(cContentValidationSummarizer* volatile*)&sSingleton = (cContentValidationSummarizer*)p;
+    p->f();
+    return sSingleton;}
 
 // @ 0x00c144e0
 void* Pool_s00c1_4350::Alloc(uint32_t* out)

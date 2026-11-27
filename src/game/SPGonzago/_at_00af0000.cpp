@@ -4414,10 +4414,13 @@ void SP::cActionCircle_s00af_9aa0::tSlot::Clear()
 
 // @ 0x00afa0c0
 void FUN_00afa0c0(cSPVector3_s00af_9aa0* dst, const cSPVector3_s00af_9aa0* a, const cSPVector3_s00af_9aa0* b, const cSPVector3_s00af_9aa0* c)
-{
-  dst[0] = *c;
-  dst[1] = *a;
-  dst[2] = *b;
+{  cSPVector3_s00af_9aa0* __restrict d = dst;
+  const cSPVector3_s00af_9aa0* __restrict pa = a;
+  const cSPVector3_s00af_9aa0* __restrict pb = b;
+  const cSPVector3_s00af_9aa0* __restrict pc = c;
+  d[0] = *pc;
+  d[1] = *pa;
+  d[2] = *pb;
 }
 
 // @ 0x00afa110

@@ -25,11 +25,40 @@ unsigned int SemaphoreMemSize();    // 0x009227f0 (0x10)
 
 namespace EA { namespace Thread {
 struct Mutex { ~Mutex(); };                                        // 0x00922130
-struct Semaphore;
+struct Semaphore {
+    int Wait(const unsigned int& timeout);                         // 0x00922690
+    int Post(int count);                                           // 0x00922740
+};
 struct Thread;
 struct ThreadFactory { static Thread* ConstructThread(void* mem); }; // 0x00922c00
 Semaphore* MakeSemaphore(void* mem);                               // 0x009228c0
 } }
+
+extern "C" const unsigned int g_1491ad8;   // the infinite wait timeout
+
+// a decoded-frame slot handed between the decoder thread and the renderer
+struct VideoRenderable {
+    char         m_pad00[0x10];
+    unsigned int mDataSize;                                         // +0x10
+    char         m_pad14[0x20];
+    int          mFrameNumber;                                      // +0x34
+    char         m_pad38[0x08];
+    volatile bool mbReady;                                           // +0x40
+    char         m_pad41[0x0f];
+    bool         mbForceReady;                                      // +0x50
+};
+
+struct VideoRenderableManager {
+    VideoRenderableManager(ICoreAllocator* allocator);                // 0x00fce560
+    void         AddToDecoderList(void* renderable);                  // 0x00fce250
+    unsigned int PopFromEmptyList();                                  // 0x00fce2c0
+};
+
+// the list operations of VideoRenderableManager, under the names the slice gave them
+struct RVRenderable {
+    void SetFrame0(int renderable);                                   // 0x00fce0a0 (return to the empty list)
+    void SetFrame1(int renderable);                                   // 0x00fce110 (add to the filled list)
+};
 
 namespace rw { namespace movie {
 
@@ -38,18 +67,34 @@ struct IRefCounted {
     virtual void Destroy(int flags);                                // +0x00
 };
 
-struct VideoRenderableManager {
-    VideoRenderableManager(ICoreAllocator* allocator);                // 0x00fce560
+// the video codec: slot 5 decodes one frame into a renderable
+struct IVideoFrameDecoder : IRefCounted {
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void DecodeFrame(int frameNumber, VideoRenderable* renderable);   // +0x14
+};
+
+// the object that brackets each decoded frame (slots 5 and 6)
+struct IRenderableBuffer {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void BeginFrame(VideoRenderable* renderable);          // +0x14
+    virtual void EndFrame(VideoRenderable* renderable);            // +0x18
 };
 
 // teardown object sitting right before the decoder constructor: allocator, one reference-counted
 // object, a mutex, a scratch buffer and the renderable slot array (each slot starts at -1)
 struct MovieDecoder {
     ICoreAllocator*            mAllocator;                        // +0x00
-    IRefCounted*               mVideoDecoder;                     // +0x04
+    IVideoFrameDecoder*        mVideoDecoder;                     // +0x04
     EA::Thread::Mutex*         mMutex;                            // +0x08
     IRefCounted*               mSubtitleDecoder;                  // +0x0c
-    void*                      mpRenderableBuffer;                // +0x10
+    IRenderableBuffer*         mpRenderableBuffer;                // +0x10
     void*                      mVideoStreamTapHandle;             // +0x14
     void*                      mAudioStreamTapHandle;             // +0x18
     void*                      mSubtitleStreamTapHandle;          // +0x1c
@@ -68,6 +113,7 @@ struct MovieDecoder {
     MovieDecoder(ICoreAllocator* allocator);                      // 0x00fc90e0
     void SetStreamTaps(void* audio, void* subtitle);              // 0x00fc91f0
     void SetOverlayStreamTap(void* tap);                          // 0x00fc9210
+    static int VideoDecodeThreadFcn(void* context);               // 0x00fc9220
 };
 
 // @ 0x00fc90e0
@@ -112,6 +158,41 @@ void MovieDecoder::SetOverlayStreamTap(void* tap)
 {
     if (mState == 0)
         mOverlayStreamTapHandle = tap;
+}
+
+// @ 0x00fc9220
+int MovieDecoder::VideoDecodeThreadFcn(void* context)
+{
+    MovieDecoder* self = (MovieDecoder*)context;
+    while (self->mCurFrameNumber < self->mTotalFrames) {
+        self->mEmptyVideoRenderablesSemaphore->Wait(g_1491ad8);
+        if (self->mState >= 3) {
+            self->mEmptyVideoRenderablesSemaphore->Post(1);
+            break;
+        }
+        VideoRenderable* renderable = (VideoRenderable*)self->mVideoRenderableManager->PopFromEmptyList();
+        renderable->mbReady = false;
+        self->mpRenderableBuffer->BeginFrame(renderable);
+        self->mVideoDecoder->DecodeFrame(self->mCurFrameNumber, renderable);
+        if (renderable->mDataSize > 0) {
+            if (renderable->mbForceReady) {
+                self->mpRenderableBuffer->EndFrame(renderable);
+                ((RVRenderable*)self->mVideoRenderableManager)->SetFrame1((int)renderable);
+            } else if (renderable->mbReady) {
+                self->mpRenderableBuffer->EndFrame(renderable);
+                ((RVRenderable*)self->mVideoRenderableManager)->SetFrame1((int)renderable);
+            } else {
+                renderable->mFrameNumber = -1;
+                self->mVideoRenderableManager->AddToDecoderList(renderable);
+            }
+            self->mCurFrameNumber++;
+        } else {
+            self->mpRenderableBuffer->EndFrame(renderable);
+            ((RVRenderable*)self->mVideoRenderableManager)->SetFrame0((int)renderable);
+            self->mEmptyVideoRenderablesSemaphore->Post(1);
+        }
+    }
+    return 0;
 }
 
 } }

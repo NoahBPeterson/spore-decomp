@@ -1210,10 +1210,7 @@ long double FUN_00cdfef0(int iNode, int iUnused1, int iUnused2, int iUnused3, vo
 
     *pbOut = true;
 
-    // retail reads the filter from the byte at +0x2d of the last parameter and stores the flag before walking iNode
-    int iFilter = *(int*)((char*)pParams + 0x2d);
-    void* pObject = (void*)(*(int*)(*(int*)(iNode + 4) + 0x10) + 0x1d0);
-    void* pList = FUN_00d99420(pObject, iFilter);
+    void* pList = FUN_00d99420((void*)(*(int*)(*(int*)(iNode + 4) + 0x10) + 0x1d0), *(int*)((char*)pParams + 0x2d));
     FUN_00d996e0(pList, pStimuli);
     return 1.0;
 }

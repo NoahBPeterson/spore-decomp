@@ -186,8 +186,7 @@ struct CObj3ba0 {
 
 // @ 0x00b34610
 Float3* __stdcall FUN_00b34610(Float3* out, int flag)
-{
-    void* app = SP_App();
+{    void* app = SP_App();
     void* mgr = ((IUnk*)app)->v50();
     cViewer* viewer = (cViewer*)((IUnk*)mgr)->v1C();
     Float3 pos, dir;
@@ -200,8 +199,9 @@ Float3* __stdcall FUN_00b34610(Float3* out, int flag)
         float dist = (float)sqrt(d2) * 0.99f;
         float w = ((cPlanetModel*)SP_PlanetModel())->FUN_00b7e4d0() * 0.8f;
         const float& m = (dist < w) ? dist : w;
+        float mv = m;
         Float3 tmp;
-        *out = *SegmentPhysics(&tmp, &g_kvec, m, &pos, &dir);
+        *out = *SegmentPhysics(&tmp, &g_kvec, mv, &pos, &dir);
         if (out->x != g_kvec.x || out->y != g_kvec.y || out->z != g_kvec.z) {
             *out = *pm->SnapB(&tmp, out, 0);
         }

@@ -14,4 +14,3 @@
 0050e290 40 Vec100::~Vec100: complete; outer/inner loop locals and 6 scratch holes in different /Od slots flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0050ebe0 154 SortCmp: complete sort driver (quick_sort + insertion sorts); callee slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 0050f0d0 80 SortDefault: complete sort driver; element count is last-first (pointer subtraction) and QuickSort1E takes 3 args (no cmp); equiv PASS (296 valid, 89.8% cov); /Od frame slots differ (162 == 162) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
-0083cdd0 28 complete: AppProps ctor; movss constant loads and member store order differ

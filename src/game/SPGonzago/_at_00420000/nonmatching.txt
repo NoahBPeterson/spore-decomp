@@ -1,6 +1,5 @@
 # va diff-bytes reason (flags /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
 00420390 9 HashSet::Build: extra 4-byte frame slot and by-value Key16 arg copy scheduled after sub esp (orig computes lea of source first) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
-004207e0 28 PtrVector::reserve: two inline-local bools land in different frame slots; rest of the schedule matches flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 00420c70 86 FieldSet hashtable unique insert: logic and slot layout right, but eq-arg temp slots swapped and iterator copy order (bucket then node) differs flags: /Od /Ob1 /MD /Gy /EHsc /TP /GS-
 00421290 75 vector<24-byte> operator=: instruction stream identical, but the stack slots of the inlined DoCopy bools/temp byte are laid out differently flags: /Od /Ob1 /MD /Gy /EHsc /TP /GS-
 00423110 33 logic: the [this+0x28]=arg and (+4) refcount exchange are right; the class stub lacks retail's extra vptr writes (0x13eb918 at +0, 0x13eb90c at +0, then 0x13eb90c again through a (this+8) frame local after the exchange). Multiple-inheritance stubs and an inline name store make cl15 add compensating stores (+0x2c zeroing, [0x4]=0) and never re-emit a vptr; best 83 bytes vs 79 flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

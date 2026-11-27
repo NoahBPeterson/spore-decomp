@@ -3,13 +3,11 @@
 0107daa0  89  hkThreadMemory::allocateChunk
 0107db10  70  hkThreadMemory::deallocateChunk
 0107db90  47  hkThreadMemory::onStackUnderflow
-0107dbd0  21  hkThreadMemory::replaceInstance (static)
 0107dc10  96  hkThreadMemory::onStackOverflow [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 0107dd30  30  hkMemory::replaceInstance (static)
 0107dd70  28  hkMemory::allocateChunkByRow [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 0107dda0  28  hkMemory::deallocateChunkByRow [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 0107de00  54  hkPointerMapBase<unsigned long> constructor ; equiv UNSUPPORTED: 0/1200 valid inputs (fault(write)/fake-arity); symbol via symbols file
-0107de50  15  hkPointerMapBase<unsigned long> destructor ; equiv UNSUPPORTED: symbol not found (K/_K template dtors indistinguishable to lookup; closest-size would pick wrong one)
 0107de70  102  hkPointerMapBase<unsigned long>::insert
 0107df90  -  hkPointerMapBase<unsigned long>::remove(Dummy*) ; equiv PASS (271 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 32-bit indices (158B vs 183B); chk marker binds the sibling remove overload
 0107e050  113  hkPointerMapBase<unsigned long>::resizeTable
@@ -18,5 +16,4 @@
 0107e2d0  417  hkPointerMapBase<unsigned __int64>::remove(Dummy*) ; equiv PASS (207 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 64-bit indices and lib_crt::allmul (428B vs 456B)
 0107e4a0  113  hkPointerMapBase<unsigned __int64>::resizeTable
 0107e5f0  -  hkSingleton<hkStreambufFactory>::replaceInstance ; equiv WEAK: 400 valid, 27.3% cov (coverage-limited, no mismatch); global 0x016e42b4 resolves; chk ~size binds hkThreadMemory::replaceInstance
-0107e640  24  small singleton/vtable allocator ; equiv PASS (232 valid, 100% cov, no mismatch)
 0107d7e0  451  hkThreadMemory constructor (size->class table build): rewritten as a real thiscall ctor with the hkMemory vtable call, maxRows = ok ? stackSize : 0, the two 17-entry row arrays cleared in place, and both class tables (0x00..0x200 per size, 0x400..0x2000 stride 0x400) built with the debugbreak/-1 guard. Equivalence UNSUPPORTED (0/400 valid inputs; fake-arity=399, fault=1). Remaining diff is cl15 vs retail codegen: cl15 loads the no-arg vtable call into edx instead of `call [eax+0x20]`, sign-extends the bool return (`movzx`+`neg eax` vs `neg al`), folds stackSize into `and eax,[esp+0x10]`, emits `sub ecx,1` instead of `dec ecx`, and pads both loop heads with alignment nops (668 vs 653 bytes). flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

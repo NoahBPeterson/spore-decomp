@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
 013bf600  19  body is byte-identical (mov ecx,imm; jmp dtor); the name points 10 bytes into a 0x20 region whose bytes 0x0a..0x0e are int3 and 0x0f is a bare `ret`, so no compilable function exists at this VA; the region is probably one /Gy function with junk padding (needs a split in tools/, not source)
-013c0300  18  body matches instruction-for-instruction (virtual tail call, /Od); only difference is evaluation order of the two reloads of g_164b410 (`mov ecx,[g]` before `mov eax,[g]`); __stdcall (thunk at 0x935a70) and a named local were both tried
 013c3020  42  body complete; bounds extend over an unlisted int3 + ret thunk

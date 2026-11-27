@@ -1,7 +1,6 @@
 00ba7720 - complete source; eastl::push_heap (refcounted-pointer range), NOT byte-exact (205 vs 183 bytes); equiv WEAK
 00ba77e0 - complete source; eastl::insertion_sort<ElemC*,cmp>, NOT byte-exact (147 vs 145 bytes); equiv UNSUPPORTED (0/193 valid)
 00ba7880 - complete source; eastl::insertion_sort_simple<ElemC*,cmp>, NOT byte-exact (218 vs 157 bytes); equiv UNSUPPORTED (0/218 valid)
-00ba7960 - complete source; uninitialized_move<12-byte>, NOT byte-exact (19 vs 49 bytes); equiv UNSUPPORTED (0/264 valid) Bounded batch b10: swap the 12-byte copy walk so src walks in ecx and dst in eax exactly like the sibling copy loops (fld [ecx]/fstp [eax] pairs with retail add/compare order).
 00ba79a0 - complete source; eastl::adjust_heap<RefObj**>, NOT byte-exact (84 vs 223 bytes); equiv FAIL (execution)
 00ba7a80 - complete source; eastl::adjust_heap<ElemC*>, NOT byte-exact (177 vs 185 bytes); equiv PASS
 00ba7c20 - complete source; LoadAndRegisterPropertyList, NOT byte-exact (296 vs 306 bytes; body approximate); equiv UNSUPPORTED (fake-arity)

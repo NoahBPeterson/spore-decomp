@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00fcdb20 132 pixel-format conversion dispatcher (switch 0/3/4/1/2 + vector insert for case 1). Not byte-exact: jump-table emission order and loop register assignment differ. flags /O2 /MD /Gy /EHsc /TP. difftest: FAIL esp delta (+0x14 vs +0x4) — switch-lowered epilogue shape differs.

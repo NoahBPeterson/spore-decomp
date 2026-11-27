@@ -1883,18 +1883,17 @@ void SortDefault(int* first, int* last)
 
 // @ 0x0083cdd0
 AppPropsFields::AppPropsFields()
-{
-    vtbl = vtbl_AppProps;
+{    float minVal = gAppPropsMin;
+    vtbl = (void*)&vtbl_AppProps;
     mParser = 0;
     mRefCount = 0;
     pad0c = 0;
-    mpBucketArray = gAppPropsBuckets;
-    mnBucketCount = 1;
-    mnElementCount = 0;
-    mMin = gAppPropsMin;
+    mMin = minVal;
     mMax = gAppPropsMax;
-    pad28 = 0;
-}
+    mnBucketCount = 1;
+    mpBucketArray = gAppPropsBuckets;
+    mnElementCount = 0;
+    pad28 = 0;}
 
 // @ 0x00b26d00
 cSPUIStringConfig::cSPUIStringConfig()

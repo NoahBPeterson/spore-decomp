@@ -26,3 +26,4 @@
 ../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce0d90@@YAHPAD00@Z  00ce0d90  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00ce0e00@@YGXPAD0@Z  00ce0e00  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribePlanner.cpp  ?Assign@PlanEntry@@QAEPAU1@PBU1@@Z  00cdffc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribePlanner.cpp  ?FUN_00cdfef0@@YAOHHHHPAXPA_NHPAH@Z  00cdfef0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

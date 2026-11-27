@@ -284,9 +284,10 @@ void FUN_00fd5770(const short* p1, const short* p2, short* dst)
 // @ 0x00fd5d50
 void FUN_00fd5d50(const short* a, const short* b, unsigned* dst)
 {
-    int v = ((int)a[0] * (int)b[0] + 15) >> 5;
-    unsigned short s = (unsigned short)v;
-    __stosd(dst, (unsigned)s | ((unsigned)s << 16), 0x20);
+    short* out = (short*)dst;
+    short v = (short)(((int)a[0] * (int)b[0] + 15) >> 5);
+    for (int i = 0; i < 64; i++)
+        out[i] = v;
 }
 
 // =================================================================== context

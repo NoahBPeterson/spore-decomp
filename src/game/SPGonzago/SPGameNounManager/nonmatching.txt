@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00b1fc80 99 complete InitStateOwner::Load (ReadInt32 of the entry count through the reader stream, per entry a reader slot 0x28 lookup of 0x017f243b linked at the tail of the mLoading list at +0x74 with AddRef+Release, then cVarListSerializer(this-4, 0x015685a8, 0x1a80d26).Read); flags /O2 /MD /Gy /EHsc /TP /GS-; 104 diff / 197 vs 202 bytes -- the read, the list linking and the serializer construction match; cl drops the original's `push ebp`/`pop ebp` frame and keeps the previous tail in a different register after /GS- removes the cookie; equiv: UNSUPPORTED (0/400 valid inputs: 390 fault(read), 10 fake-arity)
-00b201a0 30 cGameData::MarkFeedback: complete; difftest WEAK (78 valid, no mismatch, 20.4% cov); RBFind call shape/register roles differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20230 11 intrusive-list foreach calling vtable+0x1c: complete; difftest UNSUPPORTED (0/400 valid, random input cannot build a live list); only ebx/edi register allocation swapped; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b203e0 160 cGameData::RemoveVecItem: complete; difftest PASS (347 valid, 94.9% cov); codegen/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20470 72 cGameData::CountList: complete; difftest UNSUPPORTED (0/400 valid); register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -15,3 +15,4 @@
 ../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006fe830@@YIXPAD@Z  006fe830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006fe230@@YAXID@Z  006fe230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006fe890@@YAXXZ  006fe890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentVS.cpp  ?FUN_006feee0@@YA_NPAXPBD@Z  006feee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

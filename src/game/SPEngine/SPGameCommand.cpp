@@ -1177,21 +1177,27 @@ int cCommandServer::ExecuteCommandFormatted(const wch* fmt, ...)
 // @ 0x0068ad30
 cCommandParameterSet::cCommandParameterSet()
 {
-    vtbl1 = &vtbl_Base1;
-    mRefCount = 0;
-    vtbl0 = &vtbl_cCommandParameterSet;
-    vtbl1 = &vtbl_cCommandParameterSet2;
-    mParameterMap.aLeft = 0;
-    mParameterMap.aParent = 0;
-    mParameterMap.aColorWord = 0;
-    mParameterMap.aRight = (VMapNode*)&mParameterMap.aRight;
-    mParameterMap.aLeft = (VMapNode*)&mParameterMap.aRight;
-    mParameterMap.aParent = 0;
-    mParameterMap.aColor = 0;
-    mParameterMap.mnSize = 0;
-    mDefaultVariant.mFlags = 0;
-    mDefaultVariant.mTypeId = 0;
-}
+    *(void* volatile*)&vtbl1 = &vtbl_Base1;
+    *(volatile u32*)&mRefCount = 0;
+    *(void* volatile*)&vtbl0 = &vtbl_cCommandParameterSet;
+    *(void* volatile*)&vtbl1 = &vtbl_cCommandParameterSet2;
+    struct AnchorInit {
+        VMapNode* r;
+        VMapNode* l;
+        VMapNode* p;
+        u32 cw;
+    };
+    volatile AnchorInit* anc = (volatile AnchorInit*)&mParameterMap.aRight;
+    anc->l = 0;
+    anc->p = 0;
+    anc->cw = 0;
+    anc->r = (VMapNode*)&mParameterMap.aRight;
+    *(VMapNode* volatile*)&mParameterMap.aLeft = (VMapNode*)&mParameterMap.aRight;
+    *(VMapNode* volatile*)&mParameterMap.aParent = 0;
+    *(volatile u8*)&mParameterMap.aColor = 0;
+    *(volatile u32*)&mParameterMap.mnSize = 0;
+    *(volatile u16*)&mDefaultVariant.mFlags = 0;
+    *(volatile u16*)&mDefaultVariant.mTypeId = 0;}
 
 // @ 0x0068ad90
 bool cCommandParameterSet::ExecuteCommand(int cmd, void* a, void* b)

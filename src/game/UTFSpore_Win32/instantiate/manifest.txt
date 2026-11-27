@@ -6,3 +6,4 @@
 ../src/game/UTFSpore_Win32/instantiate.cpp  ?Unique@@YAPAHPAH0@Z  0050e4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/instantiate.cpp  ?AddTo2@@YAPAUV2@@PAU1@PBU1@@Z  0050e570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/instantiate.cpp  ??0cSPUIStringConfig@@QAE@XZ  00b26d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ??0AppPropsFields@@QAE@XZ  0083cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

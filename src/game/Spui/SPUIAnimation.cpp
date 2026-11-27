@@ -566,16 +566,14 @@ void AnimatorS::Update()
 
 // @ 0x007f64d0
 bool F64D0(void* self, int a2, float a3, int phase)
-{
-    void* obj = *(void**)((char*)self + 0x10);
+{    void* obj = *(void**)((char*)self + 0x10);
     if (obj == 0)
         return false;
     if (phase == 0) {
         thunk_7fd140(obj);
-        struct { uint64_t pad; float x, y; } v;
-        FUN_805ef0(&v.x, *(void**)((char*)self + 0x10));
-        *(float*)((char*)self + 0x1c) = v.x;
-        *(float*)((char*)self + 0x20) = v.y;
+        Vector4 v;
+        FUN_805ef0(&v, *(void**)((char*)self + 0x10));
+        *(Vector2*)((char*)self + 0x1c) = *(Vector2*)&v;
         return *(void**)((char*)self + 0x10) != 0;
     }
     if (phase == 2) {
@@ -599,8 +597,7 @@ bool F64D0(void* self, int a2, float a3, int phase)
             ((FV0)VT(p)[4 / 4])(p);
         }
     }
-    return *(void**)((char*)self + 0x10) != 0;
-}
+    return *(void**)((char*)self + 0x10) != 0;}
 
 // @ 0x007f65f0
 bool F65F0(void* self, int a2, float a3, int phase)

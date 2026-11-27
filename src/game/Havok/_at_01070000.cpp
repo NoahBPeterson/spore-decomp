@@ -4,6 +4,7 @@
 
 // addresses retail relocates here, named so the build relocates them too
 extern "C" char g_149c85c[];
+extern "C" char g_149c894[];
 
 #include "game/types.h"
 #include <malloc.h>
@@ -18,7 +19,9 @@ extern "C" __int64 __stdcall _allmul(int lo, int hi, int mlo, int mhi); // lib_c
 extern "C" void __cdecl __debugbreak(void);
 extern unsigned long g_tlsThreadMemory;           // 0x016e4174
 extern void* g_hkStreambufFactorySingleton;   // 0x016e42b4
+#if _MSC_VER >= 1400
 #pragma intrinsic(__debugbreak)
+#endif
 
 // ---- items of slice s0107d6a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VFN(p, slot) (((void**)*(void**)p)[(slot)/4])
@@ -56,6 +59,13 @@ public:
     virtual bool v20();
 };
 extern hkMemory* g_hkMemory;      // 0x016e4178
+class hkThreadMemDestroyVt {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void destroy(int flags);
+};
+#if _MSC_VER >= 1400
 inline void* hkAlloc(int size, int cls)
 {
     return ((void*(__thiscall*)(void*, int, int))VFN(g_hkMemory, 0x10))(g_hkMemory, size, cls);
@@ -64,6 +74,25 @@ inline void hkFree(void* p, int size, int cls)
 {
     ((void(__thiscall*)(void*, void*, int, int))VFN(g_hkMemory, 0x14))(g_hkMemory, p, size, cls);
 }
+#else
+class hkMemoryAllocVt {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void* allocate(int size, int cls);
+    virtual void deallocate(void* p, int size, int cls);
+};
+inline void* hkAlloc(int size, int cls)
+{
+    return ((hkMemoryAllocVt*)g_hkMemory)->allocate(size, cls);
+}
+inline void hkFree(void* p, int size, int cls)
+{
+    ((hkMemoryAllocVt*)g_hkMemory)->deallocate(p, size, cls);
+}
+#endif
 template<class KEY> class hkPointerMapBase {
 public:
     KEY* mTable;    // +0x0
@@ -197,6 +226,7 @@ hkThreadMemory::hkThreadMemory(hkMemory* memory, int stackSize)
     }
 }
 
+#if _MSC_VER >= 1400
 // @ 0x0107daa0
 void* hkThreadMemory::allocateChunk(int size, int cls)
 {
@@ -236,6 +266,7 @@ void hkThreadMemory::deallocateChunk(void* p, int size, int cls)
     }
     ((void(__thiscall*)(void*, void*, int, int))VFN(mMemory, 0x1c))(mMemory, p, row, cls);
 }
+#endif
 
 // @ 0x0107db90
 void hkThreadMemory::onStackUnderflow(void* p)
@@ -254,12 +285,12 @@ void hkThreadMemory::onStackUnderflow(void* p)
 // @ 0x0107dbd0
 void hkThreadMemory::replaceInstance(hkThreadMemory* p)
 {
-    if (p != 0)
+    if (p)
         ++p->mnRefCount;
     hkThreadMemory* old = (hkThreadMemory*)TlsGetValue(g_tlsThreadMemory);
     if (old != 0) {
         if (--old->mnRefCount == 0)
-            ((void(__thiscall*)(void*, int))VFN(old, 8))(old, 1);
+            ((hkThreadMemDestroyVt*)old)->destroy(1);
     }
     TlsSetValue(g_tlsThreadMemory, p);
 }
@@ -313,6 +344,7 @@ int hkMemory::getAllocatedSize(int size) // 0x0107dcf0
     return size + 8;
 }
 
+#if _MSC_VER >= 1400
 // @ 0x0107dd30
 void hkMemory::replaceInstance(hkMemory* p)
 {
@@ -341,6 +373,7 @@ void hkMemory::deallocateChunkByRow(void* p, int row, int memClass)
     ((void(__thiscall*)(void*, void*, int, int))VFN(this, 0x14))
         (this, p, *(int*)((char*)tls + row * 4 + 0xc0), memClass);
 }
+#endif
 
 // @ 0x0107ddd0
 template<class KEY> void hkPointerMapBase<KEY>::clear()
@@ -363,7 +396,8 @@ template<class KEY> hkPointerMapBase<KEY>::hkPointerMapBase()
 // @ 0x0107de50 ??1?$hkPointerMapBase@K@@QAE@XZ
 template<class KEY> hkPointerMapBase<KEY>::~hkPointerMapBase()
 {
-    hkFree(mTable, (mMask + 1) * (int)sizeof(KEY) * 2, 0x14);
+    int n = (mMask + 1) * (int)sizeof(KEY) * 2;
+    hkFree(mTable, n, 0x14);
 }
 
 // @ 0x0107de70
@@ -522,6 +556,7 @@ template<> void hkPointerMapBase<unsigned __int64>::FUN_0107e5d0(int numElements
     resizeTable(s);
 }
 
+#if _MSC_VER >= 1400
 // @ 0x0107e5f0
 template<> void hkSingleton<hkStreambufFactory>::replaceInstance(hkStreambufFactory* p)
 {
@@ -540,13 +575,20 @@ template<> void hkSingleton<hkStreambufFactory>::replaceInstance(hkStreambufFact
     }
     g_hkStreambufFactorySingleton = p;
 }
+#endif
 
 // @ 0x0107e640
 void FUN_0107e640()
 {
-    unsigned char* p = (unsigned char*)hkAlloc(8, 0x15);
-    *(unsigned int*)(p + 4) = 0x00010008u;
-    *(void**)p = (void*)0x149c894;
+    struct Obj8 {
+        void* vt;
+        unsigned short memSizeAndFlags;
+        unsigned short referenceCount;
+    };
+    Obj8* p = (Obj8*)hkAlloc(sizeof(Obj8), 0x15);
+    p->memSizeAndFlags = 8;
+    p->referenceCount = 1;
+    p->vt = (void*)g_149c894;
 }
 
 // ---- items of slice s0107e670 begin (TODO(rewrite): local stubs, replace by canonical classes)

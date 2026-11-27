@@ -41,6 +41,13 @@ struct TextStyleLocal { u8 raw[0x278];
     u32&   mTextWrap(){ return *(u32*)(raw + 0x24c); }
     u32&   mColor()   { return *(u32*)(raw + 0x258); }
 };
+struct StyleMgr992830 {
+    const void* GetStyle(u32 id, void* base);                        // 0x00894670
+    void RemoveStyle(u32 id);                                        // 0x00894700
+};
+struct WindowLayout992830 { void Destroy(); };                       // 0x00890560
+struct WatchList992830    { void Destroy(); };                       // 0x00620230
+struct WindowBase992830   { void Destroy(); };                       // 0x00962740
 extern float g_negMask;        // 0x013eb8b0  (-x sign flip); 0x013ec4d8 for WatchWindow ctor
 // ---- items of slice s00992480 end
 
@@ -106,15 +113,33 @@ void* __fastcall WatchWindow_ctor(char* self, int)
 // @ 0x00992830
 void __fastcall FUN_00992830(char* self, int)
 {
-    st32(self, 0, 0x14462b0u);
-    st32(self, 4, 0x1446190u);
+    extern void* vt_14462b0[];
+    extern void* vt_1446190[];
+    struct WatchWin992830 {
+        void** vt0;
+        void** vt4;
+        char pad08[0x204];
+        WatchList992830 mList;
+        char pad20d[0x17];
+        WindowLayout992830 mLayout1;
+        char pad225[0x37b];
+        WindowLayout992830 mLayout2;
+    };
+    WatchWin992830* w = (WatchWin992830*)self;
+    w->vt0 = vt_14462b0;
+    w->vt4 = vt_1446190;
     WatchWindow_Clear(self);
-    char* mgr = GetStyleManager(1);
+    StyleMgr992830* mgr = (StyleMgr992830*)GetStyleManager(1);
     if (mgr) {
-        const void* st = GetStyle(mgr, 0x6fb342b7u, 0);
-        if (st) StyleManager_RemoveStyle(mgr, st);
+        if (mgr->GetStyle(0x6fb342b7u, 0))
+            mgr->RemoveStyle(0x6fb342b7u);
+        if (mgr->GetStyle(0x6fb342b8u, 0))
+            mgr->RemoveStyle(0x6fb342b8u);
     }
-    Obj962740_f(self);
+    w->mLayout2.Destroy();
+    w->mLayout1.Destroy();
+    w->mList.Destroy();
+    ((WindowBase992830*)self)->Destroy();
 }
 
 // @ 0x009928c0
