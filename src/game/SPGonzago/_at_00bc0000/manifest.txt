@@ -76,3 +76,4 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?Write@cAnimalTrap@@QAE_NPAX@Z  00bcbad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?ScalarDeletingDtor@cAnimalTrap@@QAEPAU1@I@Z  00bcbc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7850@Rec_s00bc_74d0@@QAEPAU1@PAU1@@Z  00bc7850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?PopFront@cAgentOrderManager@@QAEXXZ  00bcaf40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

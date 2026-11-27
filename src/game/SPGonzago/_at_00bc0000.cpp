@@ -6573,21 +6573,27 @@ cAgentOrderManager::~cAgentOrderManager()
 }
 
 // @ 0x00bcaf40
+struct AgentOrderLink_s00bc_af40 {
+    AgentOrderLink_s00bc_af40* mpPrev;
+    AgentOrderLink_s00bc_af40* mpNext;
+};
+struct AgentOrderList_s00bc_af40 {
+    AgentOrderLink_s00bc_af40* mpFirst;
+    char pad[0x14];
+    AgentOrderLink_s00bc_af40* mpFree;
+};
 void cAgentOrderManager::PopFront()
 {
-    char* self = (char*)this;
-    char* head = self + 0x60c;
-    if (*(char**)head == head) {
+    AgentOrderList_s00bc_af40* list = (AgentOrderList_s00bc_af40*)&mList0Head;
+    if (list->mpFirst == (AgentOrderLink_s00bc_af40*)list)
         return;
-    }
-    char* node = *(char**)head;
-    char* next = *(char**)(node + 4);
-    char* prev = *(char**)node;
-    *(char**)next = prev;
-    *(char**)(prev + 4) = next;
-    ((cAgentOrder*)(node + 8))->cAgentOrder::~cAgentOrder();
-    *(void**)node = *(void**)(head + 0x18);
-    *(void**)(head + 0x18) = node;
+    _ReadWriteBarrier();
+    AgentOrderLink_s00bc_af40* node = list->mpFirst;
+    node->mpNext->mpPrev = node->mpPrev;
+    node->mpPrev->mpNext = node->mpNext;
+    ((cAgentOrder*)(node + 1))->cAgentOrder::~cAgentOrder();
+    node->mpPrev = list->mpFree;
+    list->mpFree = node;
 }
 
 struct OrderSrcRef {
