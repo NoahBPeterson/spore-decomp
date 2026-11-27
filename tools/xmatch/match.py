@@ -14,9 +14,15 @@ usage: match.py <dev.json> <retail.json> <out.json> [<dev symbols.json> [<tables
 4. Table alignment: the dynamic-initializer tables (xcu-align) and paired vtables (vtable-slot) are
    ordered lists on both sides; matched entries anchor them and the entries between anchors are aligned
    the same way. Vtables are paired by votes from already-matched slots at the same index.
+5. Object-scoped pairing (objscope.py), when work/migrate/modmap.json exists: inside one dev object, mutual-best
+   pairs by corresponding matched callees/callers, shared tokens, size and call count. XMATCH_NO_OBJSCOPE=1 skips it.
 Output: {retail_va: {dev_va, name, how}} plus counts; vtable pairs in <out>_vtables.json.
 """
-import collections, functools, json, sys
+import collections, functools, json, os, sys
+
+# methods applied as names (symbols/pdb_names.json); caller-* stay candidates
+APPLIED = {"anchor", "callee-single", "callee-scored", "gap-align", "vtable-slot", "xcu-anchor", "xcu-align",
+           "object-scoped"}
 
 
 def main(devp, retp, outp):
@@ -365,6 +371,13 @@ def main(devp, retp, outp):
         for x in new:
             dirty.update(y for y in rce.get(x, ()) if y in r2d)
             dirty.update(y for y in rcr.get(x, ()) if y in r2d)
+    modmap = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                          "work", "migrate", "modmap.json")
+    if syms and os.path.exists(modmap) and not os.environ.get("XMATCH_NO_OBJSCOPE"):
+        import objscope
+        n = objscope.run(dev, ret, r2d, d2r, how, dmod, modmap, APPLIED,
+                         lambda s: print(s, file=sys.stderr, flush=True))
+        print("  object-scoped -> %d (+%d)" % (len(r2d), n), file=sys.stderr, flush=True)
     if holdout:
         res = collections.defaultdict(lambda: [0, 0, 0])
         for r, d in holdout.items():
