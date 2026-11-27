@@ -62,7 +62,7 @@ int* Obj44::FUN_00548d90(int* param_2)
     return p;
 }
 
-// @ 0x00548e70
+// 0x00548e70 (byte-exact lifted version: match/slices/s00548e70/s00548e70.cpp)
 int* Obj44::FUN_00548e70(int* param_2)
 {
     int* p = (int*)this;

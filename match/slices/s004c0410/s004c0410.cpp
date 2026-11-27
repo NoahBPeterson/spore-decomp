@@ -11,7 +11,7 @@ struct VecOps {
 };
 
 struct VecPtr { int m[4]; void FUN_004c0410(uint32_t n); };
-// @ 0x004c0410
+// 0x004c0410 (byte-exact lifted version: match/slices/s004c0410/s004c0410_lifted.cpp)
 void VecPtr::FUN_004c0410(uint32_t n) {
     int* self = (int*)this;
     if ((uint32_t)(self[1] - self[0]) < n) {
@@ -105,7 +105,7 @@ void Container::FUN_004c0bd0(Elem8c* position, uint32_t n, const Elem8c& value) 
     }
 }
 
-// @ 0x004c0680
+// 0x004c0680 (byte-exact lifted version: match/slices/s004c0680/s004c0680.cpp)
 Elem8c* Container::FUN_004c0680(Elem8c* first, Elem8c* last) {
     bool bOutputIsPointer;
     bool bInputIsPointer;
@@ -123,7 +123,7 @@ Elem8c* Container::FUN_004c0680(Elem8c* first, Elem8c* last) {
     return first;
 }
 
-// @ 0x004c0730
+// 0x004c0730 (byte-exact lifted version: match/slices/s004c0730/s004c0730.cpp)
 Elem38* Container::FUN_004c0730(Elem38* first, Elem38* last) {
     bool bOutputIsPointer;
     bool bInputIsPointer;
@@ -159,7 +159,7 @@ struct StrWriter {
     void Free();                         // 004c0b80
 };
 
-// @ 0x004c0570
+// 0x004c0570 (byte-exact lifted version: match/slices/s004c0570/s004c0570.cpp)
 int* StrWriter::Init(uint32_t a, uint32_t b) {
     int* local_8 = (int*)this + 6;
     mBegin = 0;

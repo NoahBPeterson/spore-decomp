@@ -6,7 +6,6 @@
 004763a0 - complete source; uninitialized_copy+destruct<8-byte>, NOT byte-exact
 00476440 - complete source; vector<8-byte,2>::DoInsertValue, NOT byte-exact; equiv UNSUPPORTED (0/114 valid inputs)
 00476680 387 complete source; vector<16-byte,4>::DoInsertValue; fixed - the second range copy is a distinct helper 0x47c1c0 (the first is 0x476950, which is itself a wrapper that calls 0x47c1c0); worth flag - now WEAK 138 valid, 90.2% cov, no mismatch at /Od /MD /Gy /EHsc /TP; NOT byte-exact
-00476950 48 complete source; relocate+destruct<16-byte>; fixed - the copy half is the raw 16-byte loop 0x47c1c0 (the destructor sweep is non-writing); equiv PASS 311 valid, 100% cov at /Od /MD /Gy /EHsc /TP; NOT byte-exact
 004769b0 - complete source; fixed vector erase, NOT byte-exact
 00476a40 - complete source; vector<64-byte>::erase, NOT byte-exact; equiv WEAK (111 valid, 100% cov)
 00476ae0 341 complete source; vector<Matrix44,4>::DoInsertValue; fixed - the element's out-of-line copy ctor 0x45dca0 (?Ctor@Matrix44@@QAEXPBX@Z) is called for placement-new at both sites, and the aliasing guard walks value back past position; WEAK 128 valid, 45.3% cov, no mismatch at /Od /MD /Gy /EHsc /TP (coverage limited: grown-buffer inputs need a valid allocator the pool parser does not synthesise); NOT byte-exact

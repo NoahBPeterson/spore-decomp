@@ -415,7 +415,7 @@ struct Vec8c { int m[4]; void FUN_004c0350(uint32_t count); };
 // One 0x8c-byte element worth of scratch (a struct, not a char buffer: retail
 // has no /GS cookie here).
 struct Elem8cSpare { float f[0x8c / 4]; };
-// @ 0x004c0250
+// 0x004c0250 (byte-exact lifted version: match/slices/s004c0250/s004c0250.cpp)
 void Vec1d8::FUN_004c0250(uint32_t count) {
     int* self = (int*)this;
     if ((uint32_t)((self[2] - self[0]) / 0x1d8) >= count)
@@ -428,7 +428,7 @@ void Vec1d8::FUN_004c0250(uint32_t count) {
     self[2] = count * 0x1d8 + self[0];
 }
 
-// @ 0x004c0350
+// 0x004c0350 (byte-exact lifted version: match/slices/s004c0350/s004c0350.cpp)
 void Vec8c::FUN_004c0350(uint32_t count) {
     int* self = (int*)this;
     uint32_t size = (uint32_t)((self[1] - self[0]) / 0x8c);

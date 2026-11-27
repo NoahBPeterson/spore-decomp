@@ -69,7 +69,7 @@ void Modifier::AccumulateScaled(const Modifier& o)
     count++;
 }
 
-// @ 0x0040ce80
+// 0x0040ce80 (byte-exact lifted version: match/slices/s0040ce80/s0040ce80.cpp)
 Modifier::Modifier(const Modifier& o)
     : flags(o.flags), count(o.count), pos(o.pos), scale(o.scale), rot(o.rot)
 {
@@ -267,8 +267,8 @@ ListAbility::ListAbility()
 {
 }
 
-// @ 0x0040d230
-// @ 0x0040d260
+// 0x0040d230 (byte-exact lifted version: match/slices/s0040d230/s0040d230.cpp)
+// 0x0040d260 (byte-exact lifted version: match/slices/s0040d260/s0040d260.cpp)
 // ~ListAbility (0x0040d260) and its scalar deleting destructor (0x0040d230) are
 // compiler generated from the member list above; no source is written for them.
 // (Not byte-exact: the original frames reserve 0x5c / 0x50 bytes of dead inline slots.)

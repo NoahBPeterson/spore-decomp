@@ -270,7 +270,7 @@ struct BoundsVector : VectorBase32 {
 };
 // @ 0x00453dc0
 BoundsVector::~BoundsVector() { destruct(mpBegin, mpEnd); ScratchSlots<3>(); }
-// @ 0x00453e20
+// 0x00453e20 (byte-exact lifted version: match/slices/s00453e20/s00453e20.cpp)
 void BoundsVector::resize(uint32_t n)
 {
     if (n > size()) DoInsertValues(mpEnd, n - size(), Bounds());

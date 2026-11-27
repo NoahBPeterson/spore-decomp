@@ -9,7 +9,7 @@ struct SwapObj {
     uint32_t f58, f5c, f60, f64, f68;
 };
 
-// @ 0x0050bc80  (toggle a flag and swap two coordinate pairs; returns &f58)
+// 0x0050bc80 (byte-exact lifted version: match/slices/s0050bc80/s0050bc80_lifted.cpp)  (toggle a flag and swap two coordinate pairs; returns &f58)
 void* __fastcall ToggleSwap(SwapObj* s)
 {
     s->f68 = s->f68 ^ 1;

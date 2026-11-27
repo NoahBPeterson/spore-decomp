@@ -228,7 +228,7 @@ void Obj::FUN_00540560(int* pos, int* value)
     }
 }
 
-// @ 0x005407a0  (resize a vector of 8-byte pairs)
+// 0x005407a0 (byte-exact lifted version: match/slices/s005407a0/s005407a0.cpp)  (resize a vector of 8-byte pairs)
 void Obj::FUN_005407a0(unsigned int n)
 {
     int* v = (int*)this;

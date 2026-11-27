@@ -98,7 +98,7 @@ char* StrBuf::erase(char* first, char* last)
 }
 
 // =====================================================================
-// @ 0x45f0e0  make room for max(n, size)+1 bytes
+// 0x0045f0e0 (byte-exact lifted version: match/slices/s0045f0e0/s0045f0e0.cpp)  make room for max(n, size)+1 bytes
 // =====================================================================
 void StrBuf::reserve(unsigned int n)
 {
@@ -117,7 +117,7 @@ void StrBuf::reserve(unsigned int n)
 }
 
 // =====================================================================
-// @ 0x45f140  set the buffer capacity to n (shrink-to-fit / realloc)
+// 0x0045f140 (byte-exact lifted version: match/slices/s0045f140/s0045f140.cpp)  set the buffer capacity to n (shrink-to-fit / realloc)
 // =====================================================================
 void StrBuf::reallocate(unsigned int n)
 {
@@ -141,7 +141,7 @@ void StrBuf::reallocate(unsigned int n)
 }
 
 // =====================================================================
-// @ 0x45f2a0  swap two string buffers
+// 0x0045f2a0 (byte-exact lifted version: match/slices/s0045f2a0/s0045f2a0.cpp)  swap two string buffers
 // =====================================================================
 void StrBuf::swap(StrBuf& o)
 {
@@ -160,7 +160,7 @@ void StrBuf::swap(StrBuf& o)
 }
 
 // =====================================================================
-// @ 0x45f390  assign from a byte range
+// 0x0045f390 (byte-exact lifted version: match/slices/s0045f390/s0045f390.cpp)  assign from a byte range
 // =====================================================================
 StrBuf* StrBuf::assign(const char* first, const char* last)
 {
@@ -208,7 +208,7 @@ StrBuf& StrBuf::appendGrow(const char* pBegin, const char* pEnd)
 }
 
 // =====================================================================
-// @ 0x45efa0  append n copies of a byte
+// 0x0045efa0 (byte-exact lifted version: match/slices/s0045efa0/s0045efa0.cpp)  append n copies of a byte
 // =====================================================================
 void StrBuf::appendFill(unsigned int n, char c)
 {

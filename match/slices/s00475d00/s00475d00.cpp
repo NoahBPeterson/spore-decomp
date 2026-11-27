@@ -160,7 +160,7 @@ E8* UninitCopy8Destruct(E8* first, E8* last, E8* dest)
     return result;
 }
 
-// @ 0x00476950
+// 0x00476950 (byte-exact lifted version: match/slices/s00476950/s00476950.cpp)
 void* CopyAndDestruct16(void* first, void* last, void* dest)
 {
     // the copy half of the original (its relocation-masked call to 0x47c1c0); the second half is a

@@ -69,7 +69,7 @@ ForceGrid* ForceGrid::Init(float cost)
 }
 
 // ===========================================================================
-// @ 0x004f87f0
+// 0x004f87f0 (byte-exact lifted version: match/slices/s004f87f0/s004f87f0.cpp)
 // Destructor: releases the bucket table, the grid block and the field blocks,
 // then the chunk list, and restores the base vtable.
 // ===========================================================================
@@ -87,7 +87,7 @@ void ForceGrid::FUN_004f87f0()
 }
 
 // ===========================================================================
-// @ 0x004f8880
+// 0x004f8880 (byte-exact lifted version: match/slices/s004f8880/s004f8880.cpp)
 // Bump allocator for SphereFields blocks: carves an aligned sub-block out of the
 // current pool chunk (or a fresh one, at least 0x8000 bytes) and stamps it with
 // the same header FUN_004f8750 writes, so FUN_004f80b0 can free it.
@@ -116,7 +116,7 @@ void* ForceGrid::FUN_004f8880(uint32_t size, int param3)
 }
 
 // ===========================================================================
-// @ 0x004f89a0
+// 0x004f89a0 (byte-exact lifted version: match/slices/s004f89a0/s004f89a0.cpp)
 // Chunk-list teardown: returns every chunk to the global pool and clears the
 // bump state.
 // ===========================================================================
@@ -187,7 +187,7 @@ void ForceGrid::FUN_004f8580(float cost)
 }
 
 // ===========================================================================
-// @ 0x004f8d80
+// 0x004f8d80 (byte-exact lifted version: match/slices/s004f8d80/s004f8d80.cpp)
 // Scalar evaluator: -cost plus every sphere's weighted contribution.
 // ===========================================================================
 void ForceGrid::FUN_004f8d80(const float* point, float* out)

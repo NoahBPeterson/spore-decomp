@@ -100,7 +100,7 @@ void* VU32::operator=(VU32* other)
     return this;
 }
 
-// @ 0x0054b400
+// 0x0054b400 (byte-exact lifted version: match/slices/s0054b400/s0054b400.cpp)
 void* FUN_0054b400(char* first, char* last, char* result)
 {
     char* dst = result;
@@ -117,7 +117,7 @@ void* FUN_0054b400(char* first, char* last, char* result)
     return dst;
 }
 
-// @ 0x0054b480
+// 0x0054b480 (byte-exact lifted version: match/slices/s0054b480/s0054b480.cpp)
 void* VStr::FUN_0054b480(int n, void* first, void* last)
 {
     void* buf = (n == 0) ? 0 : EAAlloc(&alloc, n << 4, 4, 0);
@@ -126,7 +126,7 @@ void* VStr::FUN_0054b480(int n, void* first, void* last)
     return buf;
 }
 
-// @ 0x0054b510
+// 0x0054b510 (byte-exact lifted version: match/slices/s0054b510/s0054b510.cpp)
 void* FUN_0054b510(void** out, char* first, char* last, char* result)
 {
     char* dst = result;
@@ -144,7 +144,7 @@ void* FUN_0054b510(void** out, char* first, char* last, char* result)
     return out;
 }
 
-// @ 0x0054b5b0
+// 0x0054b5b0 (byte-exact lifted version: match/slices/s0054b5b0/s0054b5b0.cpp)
 char* FUN_0054b5b0(char* first, char* last, char* result)
 {
     char* dst = result;
@@ -158,7 +158,7 @@ char* FUN_0054b5b0(char* first, char* last, char* result)
     return dst;
 }
 
-// @ 0x0054b630
+// 0x0054b630 (byte-exact lifted version: match/slices/s0054b630/s0054b630.cpp)
 char* FUN_0054b630(char* first, char* last, char* result)
 {
     char* dst = result;

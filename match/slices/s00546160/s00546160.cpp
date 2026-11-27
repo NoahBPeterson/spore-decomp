@@ -242,7 +242,7 @@ void Obj42::FUN_00546800()
     }
 }
 
-// @ 0x00546880
+// 0x00546880 (byte-exact lifted version: match/slices/s00546880/s00546880.cpp)
 int Obj42::FUN_00546880(int pos)
 {
     int* p = (int*)this;

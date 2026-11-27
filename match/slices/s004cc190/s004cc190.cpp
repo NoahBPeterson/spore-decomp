@@ -575,7 +575,7 @@ struct fixed_vector_u32_64 {
     void resize(uint32_t n);                         // 0x004CD790
 };
 
-// @ 0x004CD0C0
+// 0x004cd0c0 (byte-exact lifted version: match/slices/s004cd0c0/s004cd0c0.cpp)
 fixed_vector_u32_64::fixed_vector_u32_64(uint32_t n)
     : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(mBuffer)
 {

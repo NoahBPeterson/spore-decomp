@@ -266,7 +266,7 @@ Pair8* f_7fbdb0(Pair8* first, Pair8* last, Pair8* dest) {
   return result;
 }
 
-// @ 0x007fbf40
+// 0x007fbf40 (byte-exact lifted version: match/slices/s007fbf40/s007fbf40.cpp)
 struct Sub18 { void Ctor(); void RemoveAllPredicates(); void RemoveAllActions(); void BaseDtor(); };
 struct Sub68 { void FreeBuffer(); };
 struct WinProcInit { void Dtor(); };
@@ -303,7 +303,7 @@ void* C_7fbf40::Ctor() {
   return this;
 }
 
-// @ 0x007fc200
+// 0x007fc200 (byte-exact lifted version: match/slices/s007fc200/s007fc200.cpp)
 extern char ed_a[], ed_b[], ed_c[], ed_d[], ed_e[];
 struct C_7fc200 { char pad[4]; void Dtor(); };
 void C_7fc200::Dtor() {

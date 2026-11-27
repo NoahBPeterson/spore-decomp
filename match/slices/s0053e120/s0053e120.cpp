@@ -278,7 +278,7 @@ static void SafeRelease(cPaintVarEvalGrid*& pEval)
         ((RefCounted*)pEval)->Release();
 }
 
-// @ 0x0053e470
+// 0x0053e470 (byte-exact lifted version: match/slices/s0053e470/s0053e470.cpp)
 void cPaintVarCtx::Destroy()
 {
     mpVptr = gVtPaintVarCtx;
@@ -451,7 +451,7 @@ void cPaintVarCtx::ResetOffset()
     mOffset = vMin;
 }
 
-// @ 0x0053ece0
+// 0x0053ece0 (byte-exact lifted version: match/slices/s0053ece0/s0053ece0.cpp)
 RingEntry* cPaintVarCtx::Register(uint32_t value, uint32_t slot)
 {
     uint32_t stored;

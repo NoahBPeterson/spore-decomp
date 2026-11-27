@@ -397,7 +397,7 @@ void init_15dec08()
     *(uint32_t*)g_15dec10 = 0;
 }
 
-// @ 0x01261040
+// 0x01261040 (byte-exact lifted version: match/slices/s01261040/s01261040.cpp)
 void init_15df0f0()
 {
     *(float*)0x15df0f0 = *(float*)0x15df2cc;
