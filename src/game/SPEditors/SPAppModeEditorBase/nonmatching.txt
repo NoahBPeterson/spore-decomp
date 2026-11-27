@@ -18,7 +18,6 @@
 00579a20 55 complete mask compare; cl schedules the 4 loads/stores differently (no esi temp)
 00579a90 63 regalloc: complete eastl wstring RangeInitialize; semantics match retail (len, nSize=len*2, AllocateSelf(len+1), memcpy, mpEnd=mpBegin+nSize, *mpEnd=0); only callee-saved assignment differs (retail s=esi/this=ebx/mpBegin=ebp, ours s=ebx/this=esi and reloads mpBegin after memcpy). Tried naming mpBegin a local (no change). fix1: quick check UNDECIDED
 00579e20 1769 complete member release cascade; macro-expanded helpers differ in reg alloc/ordering from original  ; difftest WEAK (--repairs 64: 904 valid of 2000, no mismatch, coverage 55.8%; mapped the cEditorResource/PaintSystem/cContentValidationSummarizer vtables)
-0057a610 26 complete AddTorsoToEffectsMask(Vector3 by value as x,y,z floats, int); original loads all three floats before storing  ; difftest PASS (fix: the copied vec3 is the by-value argument, not an uninitialized local)
 0057a710 367 complete SendBehaviorMessage; this/msg register roles swapped vs original  ; difftest PASS at --inputs 1000 (fixes: 0x5942e0 callee was mis-annotated as 0xae6970; vtable+0xc call double-dereferenced; AddRef is a virtual call after new, not in the ctor)
 0057a960 73 complete GetMask (returns Bits128 by value); original builds in a stack temp (sub esp,0x10)  ; difftest PASS (mapped g_mf* globals: split decls so each // 0x annotation applies)
 0057a9e0 102 complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores  ; difftest PASS (mapped g_d4*/g_mf* globals)

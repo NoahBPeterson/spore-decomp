@@ -125,3 +125,4 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?Map_26100@AudioSystem_s00a2_5c40@@QAE_NII@Z  00a26100  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?AddRef@CountMap@@QAE_NI@Z  00a27e60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?ConnectToSubmix@Submix_s00a2_6e10@@QAE_NPAU1@@Z  00a27ed0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?DoInsertKey@EHTable@@QAEPAUEInsertRes@@PAU2@PBHI@Z  00a23830  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

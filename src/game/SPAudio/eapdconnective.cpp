@@ -1331,10 +1331,10 @@ void pdsymbol_symbol(PdObject* o)
 // @ 0x00a59cc0
 void pdsymbol_anything(PdObject* o, void* a, void* b)
 {
-    PdPayload* p = (PdPayload*)((char*)o + 0x28);
-    p->at28 = (uint32_t)(uintptr_t)a;
-    p->at2c = (uint32_t)(uintptr_t)b;
+    t_symbol s = { a, b };
+    *(t_symbol*)((char*)o + 0x28) = s;
     EA::Audio::Eapd::outlet_symbol(o->pOb, a, b);
+    _ReadWriteBarrier();
 }
 
 // @ 0x00a59cf0

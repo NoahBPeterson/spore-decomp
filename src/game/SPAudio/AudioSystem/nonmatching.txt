@@ -17,7 +17,6 @@
 00a228d0 65 worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
 00a22b90 64 LoadShared: complete; inline Release uses dec vs add -1 and register order
 00a233b0 316 System::MuteAll: complete behaviour; constant materialisation (x87 fldz/fstp vs SSE), thiscall helper shape and frame differ (383 vs 440 bytes) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a23830 19 ?DoInsertKey@EHTable@@QAEPAUEInsertRes@@PAU2@PBHI@Z: difftest UNSUPPORTED (unresolved RehashRequired + operator new); table-slot insert structurally reproduced flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a23db0 122 RDD::FindById: difftest UNSUPPORTED (0/400 valid, read faults on random inputs); complete implementation flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a243e0 78 RBTree::AllocNode2: complete implementation; MSVC SEH frame / catch-scope omitted (104 vs 153 bytes), body identical flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a24530 140 RDD pool clone node: difftest UNSUPPORTED (unresolved operator new ??2@YAPAXIPBDHH0H@Z); complete implementation flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

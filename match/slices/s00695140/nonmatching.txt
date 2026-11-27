@@ -1,4 +1,3 @@
-00695450  22  short-circuit range scan + sort entry; only the bool-literal argument materialisation differs (the int cmp arg is first with its low byte cleared, matching the retail's bool stack-slot quirk); equiv PASS (1200 valid inputs)
 00695490  111  vector reserve: capacity check is cap-begin (not end-begin); allocate/copy/destroy/pointer fix-up all present; equiv PASS (930 valid inputs)
 00695e00  112  list-node allocate/construct: allocator vcall and refcount hook present; EH prolog missing so frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, call#0 esp, call#1 esp, ret#2 esp]
 00695f00  139  intrusive-list destroy with object probe: full path present; EH frame and register allocation differ; equiv UNSUPPORTED: only 0/1200 inputs valid (faults on pointer-chasing list walk)
