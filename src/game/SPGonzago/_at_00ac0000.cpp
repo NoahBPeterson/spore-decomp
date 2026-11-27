@@ -1898,7 +1898,8 @@ void FUN_00ac98e0(int* p)
 // @ 0x00ac9d90
 void Vec::FUN_00ac9d90()
 {
-    for (void** p = mpBegin; p < mpEnd; ++p) {
+    void** e = mpEnd;
+    for (void** p = mpBegin; p < e; ++p) {
         if (*p) ((CAnim2*)*p)->Release();
     }
     void* base = mpBegin;
