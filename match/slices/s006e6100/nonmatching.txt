@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-006e6840  43  GetLayout - case-body emission order in the switch jump table differs
 006e6a20  119  ComputeSize - switch grouping matches but register allocation around the FUN_006dde90 calls differs
 006e6b70  11  SetParams - register scheduling of the two int args differs (eax/edx swap)
 006e6ca0  47  SortPairsA - insertion-sort register assignment (v1/v2 in edx/esi) differs

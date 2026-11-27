@@ -2139,13 +2139,13 @@ void __stdcall GetLayout(int type, unsigned char* out)
     case 7:
     case 8:
         out[1] = 0x0c; out[2] = 0x10; out[0] = 0; break;
+    case 5:
+        out[1] = 0x0c; out[0] = 0; break;
     case 2:
     case 3:
         out[1] = 0x10; out[2] = 0x20; out[3] = 0x24; out[0] = 0; break;
     case 4:
         out[1] = 0x10; out[2] = 0x20; out[3] = 0x2c; out[4] = 0x30; out[0] = 0; break;
-    case 5:
-        out[1] = 0x0c; out[0] = 0; break;
     case 9:
         out[1] = 0x40; out[0] = 0; break;
     default:
