@@ -6,3 +6,4 @@
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?DeleteRecord@PFIndexModifiable@ResourceMan@EA@@UAE_NABVKey@23@AAUPFRecordInfo@23@@Z  006bf520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?AddRecord@PFIndexModifiable@ResourceMan@EA@@UAEXABVKey@23@ABUPFRecordInfo@23@@Z  006bfbc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?Insert@HoleTree@@QAEPAPAUHoleNode@@PAPAU2@PAU2@PBUHoleRec@@@Z  006bfc20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp  ?FUN_006bf5a0@PFHoleTable@@QAEPAU1@XZ  006bf5a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

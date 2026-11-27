@@ -51,7 +51,7 @@ struct PFHoleTable {
     bool    FUN_006bff90(uint32 a, uint32 b, int c, int d); // 0x6bff90
     void    FUN_006bef70(uint32 a, uint32 b);        // 0x6bef70
     void    FUN_006bfda0(uint32 a, uint32 b, uint32 c, uint32 d); // 0x6bfda0
-    void    FUN_006bf5a0();                          // 0x6bf5a0
+    PFHoleTable* FUN_006bf5a0();                          // 0x6bf5a0
 };
 void FUN_006bf030(void* a, void* b);                 // 0x6bf030
 void FUN_006bf140(void* a, void* b);                 // 0x6bf140
@@ -438,19 +438,14 @@ bool EA::ResourceMan::PFIndexModifiable::DeleteRecord(EA::ResourceMan::Key const
     return false;
 }
 
-// The retail initialiser returns the object pointer in eax (mov eax, ecx at
-// 0x006bf5a0).  A plain C++ body leaves ecx holding it; route the initial
-// pointer through a tiny noinline identity so cl copies `this` into eax and
-// keeps the tree pointer in ecx, matching the retail register roles.
-__declspec(noinline) static void* __fastcall PFHoleTableKeepThis(void* self) { return self; }
-
 // @ 0x006bf5a0
-void PFHoleTable::FUN_006bf5a0()
+PFHoleTable* PFHoleTable::FUN_006bf5a0()
 {
-    uint32* a = (uint32*)PFHoleTableKeepThis(this);
-    uint32* p = a + 3;
+    uint32* a = (uint32*)this;
     a[0] = 0xffffffff;
     a[1] = 0xffffffff;
+    _ReadWriteBarrier();
+    uint32* p = a + 3;
     p[1] = 0;
     p[2] = 0;
     p[3] = 0;
@@ -459,6 +454,7 @@ void PFHoleTable::FUN_006bf5a0()
     a[5] = 0;
     *((uint8*)a + 0x18) = 0;
     a[7] = 0;
+    return this;
 }
 
 // @ 0x006bf5d0
