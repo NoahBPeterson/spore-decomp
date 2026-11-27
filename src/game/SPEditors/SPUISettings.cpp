@@ -2191,12 +2191,13 @@ void cTimedObject::RestartTimer()
 {
   mStopwatch.mnStartTime = 0;
   mStopwatch.mnTotalElapsedTime = 0;
+  _ReadWriteBarrier();
   if (mStopwatch.mnUnits == EA::Stopwatch_s005f_f230::kUnitsCycles)
     mStopwatch.mnStartTime = EA::Stopwatch_s005f_f230::GetCPUCycle();
   else
     mStopwatch.mnStartTime = EA::Stopwatch_s005f_f230::GetStopwatchCycle();
   mStopwatch.mnTotalElapsedTime = 0;
-  mStopwatch.mbRunning = false;
+  *(volatile bool*)&mStopwatch.mbRunning = false;
 }
 
 // @ 0x005ff2a0
