@@ -7,5 +7,3 @@
 00a5b850   79  complete gate_new (clamp n to >=1, clamp init into [0,n], getbytes n*4, per-outlet outlet_new loop, floatinlet); loop and clamp codegen differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
 00a5bb50  139  complete switch_new (clamp, getbytes n*0x30, outlet_new once, per-spigot init at 0x30 stride with the spigot class pointer / shared outlet / on-flag, then two inlet_new); the spigot init loop and the two-symbol inlet argument setups differ [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
 00a5be50   84  complete moses_setup (class_new_t2 sz 0x30 args 5,0, float method) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
-00a5c0b0   34  complete makefilename_float (1000-byte buffer sprintf through the stored format, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable]
-00a5c100   34  complete makefilename_symbol (sprintf with the symbol name, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable]
