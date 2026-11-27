@@ -2190,7 +2190,12 @@ struct MsgHandler {
 // ---- items of slice s00ee9840 end
 
 // ---- items of slice s00eea7c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct View;  struct Entry_s00ee_a7c0;
+struct View;  struct ColorRGBv_s00ee_a7c0 {
+    float r, g, b;
+    ColorRGBv_s00ee_a7c0(float a, float b_, float c) : r(a), g(b_), b(c) {}
+    ColorRGBv_s00ee_a7c0(const ColorRGBv_s00ee_a7c0& o) : r(o.r), g(o.g), b(o.b) {}
+};
+struct Entry_s00ee_a7c0;
 struct Vec3 { float x, y, z; };
 struct IWindow_s00ee_a7c0;
 class cSPUILayout_s00ee_a7c0 { public:
@@ -2284,7 +2289,7 @@ struct Entry_s00ee_a7c0 {
     float    mUnk4c;      // +0x4c
     uint8_t  mUnk50;      // +0x50
 
-    void SetColor(float r, float g, float b);            // 0xeea190
+    void SetColor(ColorRGBv_s00ee_a7c0 color);           // 0xeea190
     Entry_s00ee_a7c0* Ctor();                                       // 0xee9be0 (returns this)
 };
 typedef Entry_s00ee_a7c0* EntryPtr;
@@ -6719,7 +6724,7 @@ void View::SetEntryColor(void* id, float r, float g, float b)
     while (it != end) {
         Entry_s00ee_a7c0* e = *it;
         if (e->mWinA == id) {
-            e->SetColor(r, g, b);
+            e->SetColor(ColorRGBv_s00ee_a7c0(r, g, b));
             return;
         }
         ++it;

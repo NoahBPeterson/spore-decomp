@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00eea7c0  183 View::ShowChildren: inlined child-window Show/Hide arg setup tone/reg allocation differs (size 186 vs 158); difftest WEAK (191 valid, 43.5% cov)
-00eea910  47 View::SetEntryColor: original builds the outgoing Entry::SetColor 12-byte Vector3 temp with movss (SSE) + xmm0; our IA32 x87 build uses fld/fstp (size 69 vs 80); difftest WEAK (215 valid, 26.9% cov)
 00eeaa90  57 View::GetEntryColor: original copies the default Vector3 with movss and interleaves `pop esi` into the entry-color x87 stores; ours uses integer moves for the copy and a different epilogue schedule (size 84 vs 101); difftest PASS (225 valid, 100% cov)
 00eeab90  276 View::SampleColor: fully covered; the remaining diff is SSE register and instruction scheduling in the interpolation loop (size 282 vs 295); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (324 valid, 100% cov)
 00eeacc0  372 View::Bake: complete; SampleColor and ColorRGBToU32 run unconditionally and only SetColor is guarded by the target window, as in retail; remaining diff is outgoing-call argument scheduling (size 413 vs 427); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (229 valid, 40.9% cov, no mismatch)
