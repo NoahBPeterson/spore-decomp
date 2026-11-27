@@ -2490,10 +2490,12 @@ int CharStream::Fn8f3d20(int c)
     }
 }
 
+extern "C" void __cdecl OpaqueAdvance_8f3d90(void*);
 // @ 0x008f3d90
 void CSSParser::Fn8f3d90()
 {
     *(volatile int*)((char*)this + 0x28) = *(volatile int*)((char*)this + 0x28);
+    OpaqueAdvance_8f3d90(this);
 }
 
 // @ 0x008f4290
@@ -2502,15 +2504,14 @@ char CSSParser::Fn8f4290()
     char* c = (char*)this;
     char r = 0;
     if (*(int*)(c + 0x28) == 2) {
+        r = 1;
         do {
-            wchar16* b = *(wchar16**)(c + 0x38);
-            if (b != *(wchar16**)(c + 0x3c)) {
-                *b = 0;
-                *(wchar16**)(c + 0x3c) = b;
+            if (*(wchar16**)(c + 0x38) != *(wchar16**)(c + 0x3c)) {
+                **(wchar16**)(c + 0x38) = 0;
+                *(wchar16**)(c + 0x3c) = *(wchar16**)(c + 0x38);
             }
             Fn8f3d90();
         } while (*(int*)(c + 0x28) == 2);
-        r = 1;
     }
     return r;
 }

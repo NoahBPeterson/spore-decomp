@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008f4290  41  CSSParser::skip TokenWS; reg-alloc differs (equiv PASS)
 008f3970  56  CSSParser ctor (begin/count); codegen differs (equiv PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 008f4360  46  CSSParser triple-swap; codegen differs (equiv PASS)
 008f3900  66  CSSParser ctor (begin/end); codegen differs (equiv PASS)

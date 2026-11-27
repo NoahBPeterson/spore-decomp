@@ -46,3 +46,4 @@
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?CreatePropertyFunc_Length_EdgeIndex@Style@XHTML@EA@@YAPAVProperty_s008f_2660@123@PAVStackAllocator_s0092_8b00@Allocator@3@PAX111ULength_s008f_2660@123@H@Z  008f3170  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?CreatePropertyFunc_uint@Style@XHTML@EA@@YAPAVProperty_s008f_2660@123@PAVStackAllocator_s0092_8b00@Allocator@3@PAX111I@Z  008f33a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?FUN_008f2550@Layout@XHTML@EA@@YAPAVPoolNodeX@123@PAVPoolX@123@IIII@Z  008f2550  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f4290@CSSParser@@QAEDXZ  008f4290  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
