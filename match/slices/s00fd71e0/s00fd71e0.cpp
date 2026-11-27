@@ -378,12 +378,14 @@ struct PacketNode { PacketNode* next; PacketNode* prev; void* payload; };
 // @ 0x00fd71e0
 void FUN_00fd71e0(int p1, int p2, int p3, int mode, IInputHandler* handler)
 {
-    int m;
-    if (mode == 1) m = 0;
-    else if (mode == 2) m = 2;
-    else if (mode == 3) m = 1;
-    else m = mode;
-    handler->v28_call(p3, m);
+    // Retail reads the mode once for the dispatch and re-reads the parameter
+    // slot on the unmapped path.
+    switch (*(volatile int*)&mode) {
+    case 1: mode = 0; break;
+    case 2: mode = 2; break;
+    case 3: mode = 1; break;
+    }
+    handler->v28_call(p3, mode);
     handler->v38_call(p1, p2);
 }
 

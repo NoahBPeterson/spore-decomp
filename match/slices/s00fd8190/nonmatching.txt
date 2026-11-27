@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
-00fd8c40  175  `anonymous_namespace'::cMovieCheat::cMovieCheat: complete; the cCommandBase
                base ctor, the derived vtable store, the cArgumentSpec sub-object ctor and
                the full ConstructSpec argument list (all option pointers/flags/strings)
                are present in original order; remaining diff is register allocation and

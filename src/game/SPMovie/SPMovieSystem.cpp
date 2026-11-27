@@ -56,10 +56,17 @@ struct IHud {
     virtual void v48() = 0; virtual void v4c() = 0;
     virtual void ShowHudMessage(int) = 0;             // +0x50
 };
+// A two-word feedback handle; {-1, -1} means none.
+struct FeedbackId {
+    int mLo;
+    int mHi;
+    FeedbackId() {}
+    FeedbackId(int lo, int hi) : mLo(lo), mHi(hi) {}
+};
 struct IFeedback {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0;
-    virtual void PostFeedback1(int a, int b) = 0;     // +0x14
+    virtual void PostFeedback1(FeedbackId id) = 0;    // +0x14
     virtual void v18() = 0;
 };
 struct BlitArgs { int a, b, c, d; };
@@ -155,6 +162,7 @@ struct EAFileStream {
 struct PacketNode {
     PacketNode* mpNext;          // +0x00
     PacketNode* mpPrev;          // +0x04
+    void*       mpPayload;       // +0x08 (owned packet data; absent on the head)
 };
 void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
@@ -234,8 +242,7 @@ public:
     int mField2f8;               // +0x2f8 (record-frame counter)
     int mField2fc;               // +0x2fc
     int mCapturedFrames;         // +0x300
-    int mField304;               // +0x304
-    int mField308;               // +0x308
+    FeedbackId mFeedback;        // +0x304 (passed to IFeedback by value)
     void* mField30c;             // +0x30c
     float mField310;             // +0x310
     float mField314;             // +0x314
@@ -406,27 +413,51 @@ int*   Prop_GetUInt(void* prop);                                // 0x0041ea00
 bool*  Prop_GetBool(void* prop);                                // 0x0041e920
 void  SPKeyFromName(void* key, const char* name, int, int);      // 0x0068d5a0
 void  EA_ConvertToString16(void* out, const wchar_t* in, int len); // 0x0093c5a0
-class cMovieCheat : public cCommandBase {
+// recording settings; the same struct sits at cMovieSystem+0xb8. Defaults are literals (15 fps, quality 0.8):
+// compiler constants can't alias the stores, which lets cl hoist the fps load like retail.
+struct MovieSettings {
+    int   mWidth;               // +0x00
+    int   mHeight;              // +0x04
+    float mFps;                 // +0x08
+    float mTime;                // +0x0c
+    float mQuality;             // +0x10
+    bool  mField14;             // +0x14
+    bool  mField15;             // +0x15
+    bool  mField16;             // +0x16
+    MovieSettings()
+        : mWidth(0x140), mHeight(0xf0), mFps(15.0f), mTime(0.0f), mQuality(0.8f),
+          mField14(true), mField15(false), mField16(true) {}
+};
+struct MovieRecordState {
+    void* mpFieldE0;            // +0x00
+    float mFieldE4;             // +0x04
+    float mFieldE8;             // +0x08
+    float mFieldEc;             // +0x0c
+    float mFieldF0;             // +0x10
+    bool  mFieldF4;             // +0x14
+    bool  mFieldF5;             // +0x15
+    MovieRecordState()
+    {
+        mFieldE4 = 0.0f;
+        mFieldE8 = 0.0f;
+        mFieldEc = 0.0f;
+        mFieldF0 = 0.0f;
+        mpFieldE0 = 0;
+        mFieldF4 = false;
+        mFieldF5 = true;
+    }
+};
+extern "C" char g_1493c24[];   // cMovieCheat vtable
+struct cMovieCheatBase : cCommandBase {
+    cMovieCheatBase() { vtbl = (void**)g_1493c24; }
+};
+class cMovieCheat : public cMovieCheatBase {
 public:
     void* mpOwner;              // +0x10
-    char  mSpecBuf[0xc8];       // +0x14  (cArgumentSpec)
+    cArgumentSpec mSpec;        // +0x14
     const char* mpRecordName;   // +0xdc
-    void* mpFieldE0;            // +0xe0
-    float mFieldE4;             // +0xe4
-    float mFieldE8;             // +0xe8
-    float mFieldEc;             // +0xec
-    float mFieldF0;             // +0xf0
-    bool  mFieldF4;             // +0xf4
-    bool  mFieldF5;             // +0xf5
-    char  mPadF6[2];
-    int   mWidth;               // +0xf8
-    int   mHeight;              // +0xfc
-    float mFps;                 // +0x100
-    float mTime;                // +0x104
-    float mQuality;             // +0x108
-    bool  mField10c;            // +0x10c
-    bool  mField10d;            // +0x10d
-    bool  mField10e;            // +0x10e
+    MovieRecordState mState;    // +0xe0
+    MovieSettings mSettings;    // +0xf8
 
     cMovieCheat(void* pOwner);                                  // 0x00fd8c40
     void Execute(int argc);                                     // 0x00fd8d80
@@ -910,53 +941,53 @@ cMovieSystem::~cMovieSystem()
 // @ 0x00fd7f80
 bool cMovieSystem::EndRecording()
 {
-    char* p = (char*)this;
-    EAMutex* mx = (EAMutex*)(p + 0x70);
-    EAMutex_Lock(mx, g_pMutexTag);
-    if (!*(bool*)(p + 0xa0)) {
-        EAMutex_Unlock(mx);
-        return false;
-    }
-    if (!*(bool*)(p + 0xcd))
-        FUN_0067dd50()->ShowHudMessage(0x25);
-    else if (*(MoviePlayer**)(p + 0x34) == 0)
-        FUN_0067dd50()->ShowHudMessage(0x1b);
-    *(float*)(p + 0x310) = 0.0f;
-    ((IVideoOps*)*(void**)(p + 0xb4))->v10();
-    FUN_0067dda0()->PostFeedback1(*(int*)(p + 0x300), *(int*)(p + 0x304));
-    *(int*)(p + 0x304) = -1;
-    *(int*)(p + 0x308) = -1;
-    operator_delete(*(void**)(p + 0x30c));
-    *(void**)(p + 0x30c) = 0;
-    if (*(bool*)(p + 0xcc)) {
+    EAMutex* mx = &mRecordMutex;
+    mx->Lock(&g_pMutexTag);
+    if (mRecording) {
+        if (!mExcludeUI)
+            FUN_0067dd50()->ShowHudMessage(0x25);
+        else if (mPlayer == 0)
+            FUN_0067dd50()->ShowHudMessage(0x1b);
+        mField310 = 0.0f;
+        ((IVideoOps*)mWidth)->v10();
+        ((IVideoOps*)&mRecordStream)->v18();
+        ((IVideoOps*)mField64)->v08();
+        IFeedback* fb = FUN_0067dda0();
+        fb->PostFeedback1(mFeedback);
+        mFeedback = FeedbackId(-1, -1);
+        operator_delete(mField30c);
+        mField30c = 0;
         IAudioSystem* au = EA_Audio_GetSystemAT();
-        if (au != 0) {
-            ((IVideoOps*)*(void**)(p + 0x68))->v08();
+        if (mAudio && au != 0) {
+            ((IVideoOps*)mField68)->v08();
             au->v38_set(0x4503efa);
             au->v40_call(0x4501144, 0x52de7b41);
             au->v58();
         }
+        if (mWidth != 0) {
+            ((IMovieResource*)mWidth)->Stop();
+            if (mWidth != 0)
+                ((IMovieResource*)mWidth)->Release(true);
+            mWidth = 0;
+        }
+        PacketNode* head = (PacketNode*)&mPacketList;
+        while (head->mpNext != head) {
+            PacketNode* n = (PacketNode*)mPacketList2;
+            void* payload = n->mpPayload;
+            n->mpPrev->mpNext = n->mpNext;
+            n->mpNext->mpPrev = n->mpPrev;
+            operator_delete(n);
+            operator_delete(payload);
+        }
+        mRecording = false;
+        mx->Unlock();
+        SP_MessageServer()->PostMsg(0x62ff414, 0, 0);
+        mx->Lock(&g_pMutexTag);
+        mx->Unlock();
+        return true;
     }
-    if (*(void**)(p + 0xb4) != 0) {
-        ((MoviePlayer*)*(void**)(p + 0xb4))->v08();
-        ((MoviePlayer*)*(void**)(p + 0xb4))->v00();
-        *(void**)(p + 0xb4) = 0;
-    }
-    while (*(void**)(p + 0x31c) != p + 0x31c) {
-        void* n = *(void**)(p + 0x320);
-        void* nn = *(void**)n;
-        void* nn2 = *(void**)((char*)n + 4);
-        *(void**)nn2 = nn;
-        *(void**)((char*)nn + 4) = nn2;
-        operator_delete(n);
-        operator_delete(*(void**)((char*)n + 8));
-    }
-    *(bool*)(p + 0xa0) = false;
-    EAMutex_Unlock(mx);
-    SP_MessageServer()->PostMsg(0x62ff414, 0, 0);
-    EAMutex_Lock(mx, g_pMutexTag);
-    EAMutex_Unlock(mx);
-    return true;
+    mx->Unlock();
+    return false;
 }
 
 // @ 0x00fd8190
@@ -1167,38 +1198,19 @@ bool cMovieSystem_s00fd_8190::PlayMovie(int /*unused*/, int* pInfo)
 
 // @ 0x00fd8c40
 cMovieCheat::cMovieCheat(void* pOwner)
+    : mpOwner(pOwner), mSpec(1)
 {
-    *(void**)this = (void*)0x01493c24;
-    mpOwner = pOwner;
-    ::new((void*)mSpecBuf) cArgumentSpec(1);
 
-    mpRecordName = 0;
-    mpFieldE0 = 0;
-    mFieldE4 = 0.0f;
-    mFieldE8 = 0.0f;
-    mFieldEc = 0.0f;
-    mFieldF0 = 0.0f;
-    mFieldF4 = false;
-    mFieldF5 = true;
-    mWidth = 0x140;
-    mHeight = 0xf0;
-    mFps = kFloat_14007f4;
-    mTime = 0.0f;
-    mQuality = kFloat_1486374;
-    mField10c = true;
-    mField10d = false;
-    mField10e = true;
-
-    ((cArgumentSpec*)mSpecBuf)->ConstructSpec(
+    mSpec.ConstructSpec(
         "Movie cheat",
         "-record^ <name:cstring> [<time:float>]",
-        0, &mpRecordName, &mTime,
+        0, &mpRecordName, &mSettings.mTime,
         "Record movie. Either give a time, or run 'movie' again with no arguments to stop.",
-        "-size <width:int> <height:int>", &mWidth, &mHeight,
+        "-size <width:int> <height:int>", &mSettings.mWidth, &mSettings.mHeight,
         "Set size for recorded movie",
-        "-quality <float>", &mQuality,
+        "-quality <float>", &mSettings.mQuality,
         "Set quality for recorded movie, 0-1",
-        "-fps <float>", &mFps,
+        "-fps <float>", &mSettings.mFps,
         "Set FPS for recorded movie",
         "-noUI^", 4, "Don't record UI",
         "-noAudio^", 3, "Don't record audio",
