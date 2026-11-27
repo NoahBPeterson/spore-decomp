@@ -5674,10 +5674,11 @@ void __thiscall Deque::FUN_00c92bd0(int** p)
         if (v)
             ((void(__thiscall*)(int*))VF(v, 0))(v);
     }
-    mp24 = (int*)((char*)mp24 + 4);
-    int* b = *(int**)mp24;
+    int** next = (int**)mp24 + 1;
+    mp24 = (int*)next;
+    int* b = *next;
     mp1c = b;
-    mp20 = (int*)((char*)b + 0x100);
+    mp20 = mp1c + 0x40;
     mpp18 = (int**)mp1c;
     if (v)
         ((void(__thiscall*)(int*))VF(v, 4))(v);
