@@ -410,18 +410,29 @@ void AtomParser::StartElementHandler(void* pUserData, const wchar_t* name, const
 }
 
 // @ 0x005452b0
-void AtomParser::EndElementHandler(void* pUserData, const wchar_t* name) {
+void AtomParser::EndElementHandler(void* pUserData, const wchar_t* name) {    struct Helper {
+        __forceinline static void Pad6() { unsigned int s[6]; }
+        __forceinline static void Pad2() { unsigned int s[2]; }
+        __forceinline static EndElementMap::iterator Find(const wchar_t* const& k) {
+            const eastl::pair<EndElementMap::iterator, EndElementMap::iterator> pairIts(sAtomEndElementMap.equal_range(k));
+            Pad6();
+            if (pairIts.first != pairIts.second)
+                return pairIts.first;
+            return sAtomEndElementMap.end();
+        }
+    };
     AtomParser* pThis = (AtomParser*)pUserData;
     if (pThis->mpDocument) {
-        EndElementMap::iterator it = sAtomEndElementMap.find(name);
+        EndElementMap::iterator it = Helper::Find(name);
         if (it != sAtomEndElementMap.end()) {
             string16& s = pThis->mCharacterData;
             s.erase(0, s.find_first_not_of(L" \t\n\r"));
+            Helper::Pad2();
             s.erase(s.find_last_not_of(L" \t\n\r") + 1);
+            Helper::Pad2();
             it->second(pThis);
         }
-    }
-}
+    }}
 
 // ---------------------------------------------------------------------------
 struct HandshakeData {

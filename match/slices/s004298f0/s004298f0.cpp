@@ -64,14 +64,34 @@ inline void uc_impl2(Rec56* first, Rec56* last, Rec56* dest) {
 }
 // @ 0x00429ce0  (nonmatching: stack slot layout only)
 Rec56* __cdecl UninitCopy56(Rec56* first, Rec56* last, Rec56* dest)
-{
-    Rec56* result;
-    const bool b = false;
-    result = uc_impl1(first, last, dest);
-    const bool b2 = false;
-    uc_impl2(first, last, dest);
-    return result;
-}
+{    struct Copy {
+        static __forceinline void ConstructAt(Rec56* dest, Rec56* src) {
+            ::new((void*)dest) Rec56(*src);
+        }
+        static __forceinline void ReserveScratch() {
+            uint32_t pad[13];
+        }
+        static __forceinline Rec56* Walk(Rec56* first, Rec56* last, Rec56* dest) {
+            for (; first != last; ++first, ++dest) {
+                ConstructAt(dest, first);
+                ReserveScratch();
+            }
+            return dest;
+        }
+        static __forceinline Rec56* Construct(Rec56* first, Rec56* last, Rec56* dest) {
+            bool hasTrivialCopy = false;
+            return Walk(first, last, dest);
+        }
+        static __forceinline void Tail(Rec56* first, Rec56* last, Rec56* dest) {
+            const bool b2 = false;
+            Rec56* f2 = dest;
+            Rec56* d2 = first;
+            for (; d2 != last; ++d2, ++f2) {}
+        }
+    };
+    Rec56* s1 = Copy::Construct(first, last, dest);
+    Copy::Tail(first, last, dest);
+    return s1;}
 
 void __cdecl FillN56(GIt first, unsigned n, const Rec56* value, tag);          // 0x42e680
 Rec56* __cdecl UninitCopyA56(Rec56* first, Rec56* last, Rec56* dest);               // 0x42e510

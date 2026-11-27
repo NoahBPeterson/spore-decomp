@@ -2884,17 +2884,23 @@ void FUN_00ff8560(int param_1, float* param_2, unsigned param_3)
 // @ 0x00ff8780
 cSPSimPlanetHighLOD_s00ff_8460::~cSPSimPlanetHighLOD_s00ff_8460()
 {
-    mpVtbl0 = (void*)0x01495000;
-    mpVtbl8 = (void*)0x01494fdc;
+    extern char g_vtbl_01495000[];
+    extern char g_vtbl_01494fdc[];
+    extern char g_vtbl_013ec458[];
+    extern char g_vtbl_013eb938[];
 
-    if (mpFx28) {
-        RCObject* p = mpFx28;
+    *(void* volatile*)&mpVtbl0 = g_vtbl_01495000;
+    *(void* volatile*)&mpVtbl8 = g_vtbl_01494fdc;
+
+    if (RCObject* p = *(RCObject* volatile*)&mpFx28) {
         mpFx28 = 0;
         p->v08();
     }
     mSub1e4.Destroy();
     if (mpFx1dc) mpFx1dc->v04();
-    mTree1c0.Destroy(mpNode1cc);
+    struct SimTree1c0View : SimTree1c0 { void* mpNode1cc; };
+    SimTree1c0View* pTree = (SimTree1c0View*)&mTree1c0;
+    pTree->Destroy(pTree->mpNode1cc);
     if (mpFx1bc) mpFx1bc->v04();
     if (mpFx1b0) mpFx1b0->v08();
     if (mpArray19c && mpArray19c[-1] != 0)
@@ -2907,8 +2913,8 @@ cSPSimPlanetHighLOD_s00ff_8460::~cSPSimPlanetHighLOD_s00ff_8460()
     if (mpFx1c) mpFx1c->v04();
     if (mpFx18) mpFx18->v04();
 
-    mpVtbl0 = (void*)0x013ec458;
-    mpVtbl8 = (void*)0x013eb938;
+    mpVtbl8 = g_vtbl_013eb938;
+    mpVtbl0 = g_vtbl_013ec458;
 }
 
 // @ 0x00ff88c0

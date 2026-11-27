@@ -11,3 +11,4 @@
 ../src/game/SPGonzago/SPStarManager.cpp  ?Clear@Owner@@QAEXXZ  005123b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarManager.cpp  ??1cPropertyListObj@@QAE@XZ  00686320  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPStarManager.cpp  ?InitStarManagerAttributes@Simulator@@YAXXZ  01326120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ?GetTriangleNormal@TriMesh@@QAE?AUVector3_s0051_1670@@H@Z  005121c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

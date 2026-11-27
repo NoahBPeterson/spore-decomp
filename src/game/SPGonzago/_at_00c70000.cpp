@@ -544,18 +544,29 @@ void PlanetCls::FUN_00c74470(void* key)
 
 // @ 0x00c744e0
 char PlanetCls::FUN_00c744e0(unsigned* key)
-{
-    void* k;
+{    void* k;
     k = ((ComCtxRef*)mPData)->GetCommContext();
     PlanetCls* s = (PlanetCls*)((NounMgr*)NounManager())->GetCurrentTerrainSphere();
     ScanNode* node = (ScanNode*)s->mScanned.find(&k);
-    EaMap* m = &node->mMaps[4];
-    char* end = (char*)m->end;
-    char* r = (char*)FUN_00d01260(m->begin, end, key, m->mCmp14);
-    if (r == end || *key < *(unsigned*)r || r == r + 8)
-        r = end;
-    return r == end ? (char)0 : *(char*)(r + 4);
-}
+    EaMap* __restrict m = &node->mMaps[4];
+    struct Pair {
+        char* first;
+        char* second;
+        Pair(char* f, char* s_) : first(f), second(s_) {}
+    };
+    struct Helper {
+        static Pair equal_range(EaMap* __restrict map, unsigned* keyPtr) {
+            char* it = (char*)FUN_00d01260(map->begin, map->end, keyPtr, map->mCmp14);
+            if (it == (char*)map->end || *keyPtr < *(unsigned*)it)
+                return Pair(it, it);
+            return Pair(it, it + 8);
+        }
+    };
+    Pair pairIts = Helper::equal_range(m, key);
+    char* cur = (pairIts.first != pairIts.second) ? pairIts.first : (char*)m->end;
+    if (cur != (char*)m->end)
+        return *(char*)(cur + 4);
+    return 0;}
 
 // @ 0x00c74650
 void PlanetCls::FUN_00c74650()

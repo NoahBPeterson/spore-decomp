@@ -1549,8 +1549,7 @@ void FUN_00952390(Draw2DLike* self, const float* pRect, const uint16_t* pText, i
 
 // @ 0x00952720
 void DrawSpanCtx::FUN_00952720(const SpanSource* p)
-{
-  DrawSpan(p->mpBegin, p->mpFont, (int)(p->mpEnd - p->mpBegin));
+{  DrawSpan(((const volatile SpanSource*)p)->mpBegin, p->mpFont, (int)(p->mpEnd - p->mpBegin));
 }
 
 // @ 0x00952750

@@ -1430,13 +1430,20 @@ template <typename RandomAccessIterator, typename Distance, typename T, typename
 
 // @ 0x005121c0
 Vector3_s0051_1670 TriMesh::GetTriangleNormal(int i)
-{
-    Vector3_s0051_1670* verts = mpVertices;
-    int* tris = mpTriangles;
-    Vector3_s0051_1670 edge2 = verts[tris[i * 3 + 2]] - verts[tris[i * 3]];
-    Vector3_s0051_1670 edge1 = verts[tris[i * 3 + 1]] - verts[tris[i * 3]];
-    return Normalize(Cross(edge1, edge2));
-}
+{    Vector3_s0051_1670* tris = mpVertices;
+    int* verts = mpTriangles;
+    {
+        Vector3_s0051_1670 edge2 = tris[verts[i * 3 + 2]] - tris[verts[i * 3]];
+        struct V3Wrap : Vector3_s0051_1670 {
+            __forceinline V3Wrap(const Vector3_s0051_1670& v) {
+                x = v.x; y = v.y; z = v.z;
+            }
+            __forceinline ~V3Wrap() {
+                ScratchSlots_s0051_1670<9>();
+            }
+        };
+        return Normalize(Cross(V3Wrap(tris[verts[i * 3 + 1]] - tris[verts[i * 3]]), edge2));
+    }}
 
 // @ 0x005122c0
 Owner::Owner()

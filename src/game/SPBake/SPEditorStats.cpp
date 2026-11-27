@@ -862,19 +862,21 @@ void FillRefVec18(RefVec_s004e_7990* out, uint32_t key)
 
 // @ 0x004e7da0
 void ConvertOwnerEntries(EntryOwner* owner, VerbSink_s004e_7990* sink)
-{
-    if (owner) {
-        EntryVec entries;
+{    if (owner) {
+        struct LocalEntryVec : EntryVec {
+            __forceinline ~LocalEntryVec() {
+                for (Entry8* p = mBegin; p < mEnd; p++) {
+                }
+                ScratchSlots<3>();
+            }
+        } entries;
         ApplyOwnerEntries(owner, &entries);
-        {
-            RefVec_s004e_7990 vec;
-            BuildVerbIcons(&entries, &vec, owner->GetKey());
-            sink->Deliver(&vec);
-        }
-        for (Entry8* p = entries.mBegin; p < entries.mEnd; p++) {
-        }
-    }
-}
+        ScratchSlots<1>();
+        RefVec_s004e_7990 z;
+        BuildVerbIcons(&entries, &z, owner->GetKey());
+        sink->Deliver(&z);
+        ScratchSlots<5>();
+    }}
 
 // @ 0x004e7eb0
 void BigBuilder2368(EditorRig* rig, RefVec_s004e_7990* out, void* arg3, float minValue)

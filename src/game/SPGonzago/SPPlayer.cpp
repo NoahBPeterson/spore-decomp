@@ -3896,10 +3896,13 @@ template <> void cVector_s00c7_7380<cEntry8>::Insert(cEntry8* pPos, const cEntry
 
 // @ 0x00c78420
 void SP::cPlayer_s00c7_7380::AddToSet(const uint32_t* pKey)
-{
-    bool bFlag = false;
+{    struct cBoolTag { uint8_t b; };
+    typedef void** (cHashtableHeader::*Insert3Fn)(void**, const uint32_t*, cBoolTag);
+    Insert3Fn fn = reinterpret_cast<Insert3Fn>(&cHashtableHeader::Insert3);
+    cBoolTag bFlag;
+    bFlag.b = 0;
     cInsertResult res;
-    mSet38.Insert3((void**)&res, pKey, bFlag);
+    (mSet38.*fn)((void**)&res, pKey, bFlag);
 }
 
 // @ 0x00c78450

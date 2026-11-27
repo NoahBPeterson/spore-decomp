@@ -4,6 +4,5 @@
 00bf45f0  841  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) city detach; the feedback-event rbtree erase and the message post are modelled through unresolved helpers; equiv UNSUPPORTED (unresolved game-mode and city helpers)
 00bf4a90  301  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) map reset; the 5 + 13 keyed zero stores are modelled as a map lookup loop instead of direct global writes; equiv UNSUPPORTED (original reads ecx at entry)
 00bf4b10  804  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) vehicle creation from model type; retail builds two nested model-type tables with early returns, modelled here as one switch plus a city sweep; equiv UNSUPPORTED (unresolved game-mode accessor)
-00bf4e50  73  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) remove all cities; the per-city hook call is unresolved and the loop bound is recomputed; equiv FAIL (first mismatch execution)
 00bf4eb0  202  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) rebuild city from terrain sphere; the city-list teardown and delete path are replaced by helper calls; equiv WEAK (17 valid inputs, 21.1% coverage)
 00bf5050  145  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) keyed map find-or-insert; the red-black insert and the empty-tree sentinel handling are simplified; equiv FAIL (first mismatch execution)
