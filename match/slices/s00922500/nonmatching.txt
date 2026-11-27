@@ -3,7 +3,6 @@
 00922690  117  Semaphore::Wait: complete; intra-process fast path schedule differs
 00922740  71   Semaphore::Post: complete; cancel-count exchange schedule differs
 009228c0  50   Semaphore::Create: complete; local SemaphoreData layout/schedule differs
-00922c20  35   SmartPtr copy+AddRef: complete; eax=this restored with an asm shim; equiv PASS (244 valid, 100% cov)
 00922c40  0    SetThreadIdealProcessor: complete; now member (ecx); equiv WEAK (737 valid, 12.7% coverage, GetSystemInfo import discards); processor-count atomic/div schedule differs
 00922da0  66   thread-data release/free: complete; void return now preserves the callee/CloseHandle eax, range check + atomic clear schedule differs; equiv WEAK (187 valid, 42.1% cov)
 00922940 103  WaitForEnd: complete; schedule differs (191 vs 199); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest WEAK (259 valid, 44.3% cov)

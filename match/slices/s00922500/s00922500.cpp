@@ -423,14 +423,13 @@ void* FUN_00922c00(void** p)
 }
 
 // @ 0x00922c20
-struct C22c20 { void* p; void Copy(void** src); };
-void C22c20::Copy(void** src)
+struct C22c20 { void* p; C22c20* Copy(void** src); };
+C22c20* C22c20::Copy(void** src)
 {
     void* q = *src;
     p = q;
-    _InterlockedExchangeAdd((volatile long*)((char*)q + 0x20), 1);
-    C22c20* self = this;
-    __asm { mov eax, self }
+    _InterlockedIncrement((volatile long*)((char*)q + 0x20));
+    return this;
 }
 
 // @ 0x00922c40
