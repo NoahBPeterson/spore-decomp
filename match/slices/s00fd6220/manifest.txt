@@ -12,3 +12,4 @@ slices/s00fd6220/s00fd6220.cpp  _vp6_frame_info  00fd6a50  /O2 /MD /Gy /EHsc /TP
 slices/s00fd6220/s00fd6220.cpp  ?vp6_decode_row@@YAHPAUVp6Ctx@@H@Z  00fd6b00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00fd6220/s00fd6220.cpp  _vp6_ctx_destroy  00fd6c10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00fd6220/s00fd6220.cpp  _vp6_widen  00fd6c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00fd6220/s00fd6220.cpp  _vp6_decode_frame  00fd6bf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

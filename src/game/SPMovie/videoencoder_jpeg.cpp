@@ -13,7 +13,6 @@ extern "C" void jpeg_start_compress(void*, int);                  // 0x850570
 extern "C" void jpeg_write_scanlines(void*, void*, int);          // 0x8505f0
 extern "C" void jpeg_finish_compress(void*);                      // 0x8503f0
 extern "C" void jpeg_destroy(void*);                              // 0x850370
-extern "C" void FUN_00fcdc10();                                   // 0xfcdc10
 
 typedef unsigned char u8;
 
@@ -149,6 +148,16 @@ void VideoEncoder_Jpeg::FUN_00fcdb20(int fmt, unsigned char* src, unsigned char*
         return;
     case 2:
         return;
+    }
+}
+
+// The libjpeg destination callback FUN_00fcda10 installs: appends encoded bytes to the encode buffer.
+// @ 0x00fcdc10
+extern "C" void FUN_00fcdc10(u8* data, int size, VideoEncoder_Jpeg* encoder)
+{
+    if (encoder) {
+        DoInsertValue(encoder->mEncodeBuffer + encoder->mEncodeBufferPos, data, size);
+        encoder->mEncodeBufferPos += size;
     }
 }
 

@@ -311,8 +311,8 @@ static __declspec(noinline) int vp6_decode_row(Vp6Ctx* ctx, int off)
     return 0;
 }
 
-// stand-in caller (original call site 0x00fd6bf0 lies outside this slice)
-extern "C" int vp6_decode_row_caller(Vp6Ctx* ctx, int off)
+// @ 0x00fd6bf0
+extern "C" int vp6_decode_frame(Vp6Ctx* ctx, int off)
 {
     return vp6_decode_row(ctx, off);
 }
