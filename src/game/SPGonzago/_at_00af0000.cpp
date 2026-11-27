@@ -4378,9 +4378,11 @@ SP::cActionCircle_s00af_9aa0::tSlot* SP::cActionCircle_s00af_9aa0::FindFreeSlot(
 // @ 0x00af9ff0
 SP::cActionCircle_s00af_9aa0::tSlot* SP::cActionCircle_s00af_9aa0::SlotAt(unsigned int index)
 {
-  if (index < (unsigned int)(mSlots.mpEnd - mSlots.mpBegin))
-    return mSlots.mpBegin + index;
-  return 0;
+  unsigned int n = (unsigned int)(mSlots.mpEnd - mSlots.mpBegin);
+  if (index >= n)
+    return 0;
+  _ReadWriteBarrier();
+  return mSlots.mpBegin + index;
 }
 
 // @ 0x00afa030
