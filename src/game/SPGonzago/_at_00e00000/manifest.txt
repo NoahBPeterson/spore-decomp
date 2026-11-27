@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/_at_00e00000.cpp  ?FUN_00e0a640@@YIXPAUcPaletteGrid@@PAX@Z  00e0a640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e00000.cpp  ?Destroy@cGrid@@QAEXXZ  00e0a400  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e00000.cpp  ?FUN_00e0a780@@YI_NPAUcPaletteGrid@@PAXPAUFloat3@@I@Z  00e0a780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e00000.cpp  ?LayoutCells@cGrid@@QAEXXZ  00e0a270  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

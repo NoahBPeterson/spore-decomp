@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00663b80 48 category comparator - complete, only branch encoding differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
-00664610 30 element-at; original loads the index into edx first, cl hoists the header loads
 00664700 190 intrusive insertion-sort primitive; allocation/compare schedule differs
 00664800 192 intrusive insertion-sort primitive; allocation/compare schedule differs
 00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; comparator inlining/register order differs; equiv: FAIL (5/5 valid inputs mismatched)

@@ -16,3 +16,4 @@
 ../src/game/SPEditors/SPSubModePhoto.cpp  ??1cSPPlayModeSubModePhoto_s0063_e880@@UAE@XZ  0063f2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ??1cFourStrings@@QAE@XZ  0063f350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ?SendPhoto@cSPPlayModeSubModePhoto_s0063_f740@@QAEXXZ  0063fd20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ??1cUIParamMessage@@UAE@XZ  0063f0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

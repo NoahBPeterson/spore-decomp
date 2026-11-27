@@ -667,12 +667,12 @@ void cSPUIFeedListCategory::FUN_00664580(bool b)
 
 // @ 0x00664610
 FeedItem* cSPUIFeedListCategory::FUN_00664610(uint32_t idx)
-{
-    FeedItem* result = 0;
-    if (idx < (uint32_t)((m8c - m88)))
+{    FeedItem* result = 0;
+    if (idx < (uint32_t)((m8c - m88))) {
+        _ReadWriteBarrier();
         result = m88[idx];
-    return result;
-}
+    }
+    return result;}
 
 
 
