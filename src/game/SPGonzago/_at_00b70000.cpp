@@ -856,7 +856,7 @@ void* SP_GonzagoModelWorld();                      // 0xb3d520
 void* __fastcall FUN_00b90410(void* self);         // 0xb90410  (GetSpeciesFromID)
 void* __fastcall FUN_00b8f860(void* self);         // 0xb8f860
 void* __fastcall FUN_00b03320(void* self);         // 0xb03320
-struct Vec3 { float x, y, z; };
+struct Vec3 { float x, y, z; Vec3() {} Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {} };
 void __cdecl FUN_00b737d0(int begin, int i, int n, int idx, Vec3 v, void* cmp);
 void __cdecl FUN_00b73920(int a, void* b, int c, void* d, Vec3 v);
 bool __cdecl WriteUint32_s00b7_3e70(void* stream, const void* p, int n, int flag);     // 0x93aa70
@@ -4403,11 +4403,9 @@ void FUN_00b74c50(char* begin, char* end, void* cmp)
     int n = (int)(end - begin) / 0xc;
     if (n >= 2) {
         int i = ((n - 2) >> 1) + 1;
-        int* p = (int*)(begin + 8 + i * 0xc);
         do {
             i--;
-            FUN_00b737d0((int)begin, i, n, i, *(Vec3*)&p[-5], cmp);
-            p -= 3;
+            FUN_00b737d0((int)begin, i, n, i, ((Vec3*)begin)[i], cmp);
         } while (i != 0);
     }
 }
