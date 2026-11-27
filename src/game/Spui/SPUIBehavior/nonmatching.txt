@@ -1,7 +1,5 @@
 # va diff reason
 007f9550 466 complete Eval clamp/scale routine; float branch scheduling differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-007f9a40 80 complete slot refresh loop; /Od local slot order and call schedule differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-007f9c10 46 complete slot add loop; /Od local slot order differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007f9fe0 63 complete remove-all-predicates loop; /Od local slot order / repeated getter calls differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fa060 63 complete remove-all-actions loop; /Od local slot order / repeated getter calls differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fa180 59 complete AsInterface; cl hoists the id compare before the branch vs original local-temp form flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
