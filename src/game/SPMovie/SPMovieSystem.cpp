@@ -56,10 +56,17 @@ struct IHud {
     virtual void v48() = 0; virtual void v4c() = 0;
     virtual void ShowHudMessage(int) = 0;             // +0x50
 };
+// A two-word feedback handle; {-1, -1} means none.
+struct FeedbackId {
+    int mLo;
+    int mHi;
+    FeedbackId() {}
+    FeedbackId(int lo, int hi) : mLo(lo), mHi(hi) {}
+};
 struct IFeedback {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
     virtual void v0c() = 0; virtual void v10() = 0;
-    virtual void PostFeedback1(int a, int b) = 0;     // +0x14
+    virtual void PostFeedback1(FeedbackId id) = 0;    // +0x14
     virtual void v18() = 0;
 };
 struct BlitArgs { int a, b, c, d; };
@@ -155,6 +162,7 @@ struct EAFileStream {
 struct PacketNode {
     PacketNode* mpNext;          // +0x00
     PacketNode* mpPrev;          // +0x04
+    void*       mpPayload;       // +0x08 (owned packet data; absent on the head)
 };
 void EAMutex_ctor(void* p, int, int);              // 0x009222a0
 void EAMutex_dtor(void* p);                        // 0x00922130
@@ -234,8 +242,7 @@ public:
     int mField2f8;               // +0x2f8 (record-frame counter)
     int mField2fc;               // +0x2fc
     int mCapturedFrames;         // +0x300
-    int mField304;               // +0x304
-    int mField308;               // +0x308
+    FeedbackId mFeedback;        // +0x304 (passed to IFeedback by value)
     void* mField30c;             // +0x30c
     float mField310;             // +0x310
     float mField314;             // +0x314
@@ -910,53 +917,53 @@ cMovieSystem::~cMovieSystem()
 // @ 0x00fd7f80
 bool cMovieSystem::EndRecording()
 {
-    char* p = (char*)this;
-    EAMutex* mx = (EAMutex*)(p + 0x70);
-    EAMutex_Lock(mx, g_pMutexTag);
-    if (!*(bool*)(p + 0xa0)) {
-        EAMutex_Unlock(mx);
-        return false;
-    }
-    if (!*(bool*)(p + 0xcd))
-        FUN_0067dd50()->ShowHudMessage(0x25);
-    else if (*(MoviePlayer**)(p + 0x34) == 0)
-        FUN_0067dd50()->ShowHudMessage(0x1b);
-    *(float*)(p + 0x310) = 0.0f;
-    ((IVideoOps*)*(void**)(p + 0xb4))->v10();
-    FUN_0067dda0()->PostFeedback1(*(int*)(p + 0x300), *(int*)(p + 0x304));
-    *(int*)(p + 0x304) = -1;
-    *(int*)(p + 0x308) = -1;
-    operator_delete(*(void**)(p + 0x30c));
-    *(void**)(p + 0x30c) = 0;
-    if (*(bool*)(p + 0xcc)) {
+    EAMutex* mx = &mRecordMutex;
+    mx->Lock(&g_pMutexTag);
+    if (mRecording) {
+        if (!mExcludeUI)
+            FUN_0067dd50()->ShowHudMessage(0x25);
+        else if (mPlayer == 0)
+            FUN_0067dd50()->ShowHudMessage(0x1b);
+        mField310 = 0.0f;
+        ((IVideoOps*)mWidth)->v10();
+        ((IVideoOps*)&mRecordStream)->v18();
+        ((IVideoOps*)mField64)->v08();
+        IFeedback* fb = FUN_0067dda0();
+        fb->PostFeedback1(mFeedback);
+        mFeedback = FeedbackId(-1, -1);
+        operator_delete(mField30c);
+        mField30c = 0;
         IAudioSystem* au = EA_Audio_GetSystemAT();
-        if (au != 0) {
-            ((IVideoOps*)*(void**)(p + 0x68))->v08();
+        if (mAudio && au != 0) {
+            ((IVideoOps*)mField68)->v08();
             au->v38_set(0x4503efa);
             au->v40_call(0x4501144, 0x52de7b41);
             au->v58();
         }
+        if (mWidth != 0) {
+            ((IMovieResource*)mWidth)->Stop();
+            if (mWidth != 0)
+                ((IMovieResource*)mWidth)->Release(true);
+            mWidth = 0;
+        }
+        PacketNode* head = (PacketNode*)&mPacketList;
+        while (head->mpNext != head) {
+            PacketNode* n = (PacketNode*)mPacketList2;
+            void* payload = n->mpPayload;
+            n->mpPrev->mpNext = n->mpNext;
+            n->mpNext->mpPrev = n->mpPrev;
+            operator_delete(n);
+            operator_delete(payload);
+        }
+        mRecording = false;
+        mx->Unlock();
+        SP_MessageServer()->PostMsg(0x62ff414, 0, 0);
+        mx->Lock(&g_pMutexTag);
+        mx->Unlock();
+        return true;
     }
-    if (*(void**)(p + 0xb4) != 0) {
-        ((MoviePlayer*)*(void**)(p + 0xb4))->v08();
-        ((MoviePlayer*)*(void**)(p + 0xb4))->v00();
-        *(void**)(p + 0xb4) = 0;
-    }
-    while (*(void**)(p + 0x31c) != p + 0x31c) {
-        void* n = *(void**)(p + 0x320);
-        void* nn = *(void**)n;
-        void* nn2 = *(void**)((char*)n + 4);
-        *(void**)nn2 = nn;
-        *(void**)((char*)nn + 4) = nn2;
-        operator_delete(n);
-        operator_delete(*(void**)((char*)n + 8));
-    }
-    *(bool*)(p + 0xa0) = false;
-    EAMutex_Unlock(mx);
-    SP_MessageServer()->PostMsg(0x62ff414, 0, 0);
-    EAMutex_Lock(mx, g_pMutexTag);
-    EAMutex_Unlock(mx);
-    return true;
+    mx->Unlock();
+    return false;
 }
 
 // @ 0x00fd8190

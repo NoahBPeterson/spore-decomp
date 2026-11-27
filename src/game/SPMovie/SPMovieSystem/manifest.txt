@@ -15,3 +15,4 @@
 ../src/game/SPMovie/SPMovieSystem.cpp  ?RecordFrames@cMovieSystem@@QAEHH@Z  00fd7660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?SubmitFrame@cMovieSystem_s00fd_8190@@QAEXH@Z  00fd86f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?Shutdown@cMovieSystem@@QAE_NXZ  00fd7800  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?EndRecording@cMovieSystem@@QAE_NXZ  00fd7f80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
