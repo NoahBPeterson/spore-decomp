@@ -108,10 +108,11 @@ static inline void* vc_p1(void* o, int off, int a) { return ((void*(__fastcall*)
 // ===========================================================================
 // 0x00f40ea0 -- is a timer below one second?
 // ===========================================================================
+struct TimerArg { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); };
 // @ 0x00f40ea0
 int __fastcall FUN_00f40ea0(void* self, int dummy, int* arg) {
     (void)dummy;
-    vc0(arg, 0x20);
+    ((TimerArg*)arg)->v8();
     float f = ((Ecx*)self)->f3e910();
     if (f < 1.0f) return 1;
     return 0;
