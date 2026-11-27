@@ -6,7 +6,6 @@
 00c71040 99  cPlanet::FindByAccessFlags: complete (scan b8dec0 objects, compare GetAccessFlags). difftest PASS 362/100%.
 00c71160 85  SP::RemoveArtifact: complete (linear scan + rep movsd compaction). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 353/100%.
 00c711e0 281  cPlanet::RemoveCity: complete (EraseCity, singleton create, tech-level update). Large register/frame differences. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest WEAK 343/21%.
-00c71370 48  cPlanet::RemoveEntity: complete (scan + b8dfe0). difftest WEAK 358/40%.
 00c71470 115  cPlanet::GetSomething: complete (naC vcall chains). Register/spill differences (byte diff 115). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 303/100%.
 00c71750 333  cVisiblePlanet::SetPlanet: complete (refcount swap, comm-context, mode switch, property read). Complex vcalls; difftest UNSUPPORTED (no valid inputs).
 00c71910 138  cVisiblePlanet::RefreshProps: complete (PropertyManager GetByKey + read 0x58cbb75). Byte diff 138. difftest PASS 320 valid / 60.7% coverage.
