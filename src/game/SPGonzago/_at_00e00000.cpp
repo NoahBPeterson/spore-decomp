@@ -327,11 +327,10 @@ int32_t cGrid::CellStart(int32_t row, int32_t col)
 
 // @ 0x00e0a270
 void cGrid::LayoutCells()
-{
-    bool merged = mRowBegin != mRowEnd;
-    uint32_t row = 0;
+{    bool merged = mRowBegin != mRowEnd;
     uint32_t col = 0;
-    uint32_t off = 0;
+    uint32_t row = 0;
+    uint32_t rowIdx = 0;
     int32_t count = (int32_t)(mDataEnd - mData);
     for (uint32_t i = 0; i < (uint32_t)count; ++i) {
         float x1 = (float)col * (mField4C + mField54) + mField44;
@@ -341,18 +340,30 @@ void cGrid::LayoutCells()
         rect[1] = y1;
         rect[2] = x1 + mField54;
         rect[3] = y1 + mField58;
-        ((cCell*)FUN_01077ae0(mData[i]))->v27(rect);
+        int32_t* pData = mData;
+        int32_t cell = *(pData + i);
+        ((cCell*)FUN_01077ae0(cell))->v27(rect);
         ++col;
         if (col == (uint32_t)mStride) {
+            if (merged) {
+                col = 0;
+                ++row;
+            } else {
+                col = 0;
+                ++row;
+            }
+        } else if (merged && col == (uint32_t)mRowBegin[rowIdx]) {
             col = 0;
             ++row;
-        } else if (merged && col == *(int32_t*)((char*)mRowBegin + off)) {
-            col = 0;
-            ++row;
-            off += 4;
+            ++rowIdx;
         }
     }
-    FUN_00807690(mField04, 1);
+    void* p04 = mField04;
+    if (merged) {
+        FUN_00807690(p04, 1);
+    } else {
+        FUN_00807690(p04, 1);
+    }
 }
 
 // @ 0x00e0a390

@@ -7853,22 +7853,23 @@ float __cdecl FUN_00d7ae80(CB* cb, int, int, uint, void* st, char* out)
 
 // @ 0x00d7aed0
 float __cdecl FUN_00d7aed0(CB* cb, int, int, uint, void* st, char* out)
-{
-  CB* a = (CB*)FUN_00d99500((void*)FUN_00d99980((void*)BS(cb)->Play(0x80000000, 0)));
+{  CB* a = (CB*)FUN_00d99500((void*)FUN_00d99980((void*)BS(cb)->Play(0x80000000, 0)));
   if (a != 0) {
     float f2 = FUN_00d38a30(2, cb);
     float f1 = FUN_00d38a30(1, cb);
-    float d = FUN_00d99ac0((char*)cb + 0xc0, (char*)a + 0xc0, 1);
-    if (!cb->Prox(a, f1, d) &&
-        !((bool (__thiscall*)(CB*, void*, float, float))(*(void***)cb)[0xc0 / 4])(cb, a, f2, d))
+    void* __restrict pA = (char*)a + 0xc0;
+    void* __restrict pCb = (char*)cb + 0xc0;
+    float d = FUN_00d99ac0(pCb, pA, 1);
+    bool bProx = cb->Prox(a, f1, d);
+    if (!bProx && !((CBVirtuals_d7a700*)cb)->IsInRange(a, f2, d))
       return 0.0f;
     if (st != 0) ((Stimuli*)st)->GetAny();
     *out = 1;
-    *(void**)((char*)st + 4) = &a->mStim5a8;
+    void* __restrict p = &a->mStim5a8;
+    *(void**)((char*)st + 4) = p;
     return 1.0f;
   }
-  return 0.0f;
-}
+  return 0.0f;}
 
 // @ 0x00d7afb0
 float __cdecl FUN_00d7afb0(CB* cb)
@@ -13959,8 +13960,7 @@ float FUN_00d8b910(cCreatureBase_s00d8_b220* self, i32 a1, i32 a2, u32 a3, cBeha
 
 // @ 0x00d8ba20
 float FUN_00d8ba20(cCreatureBase_s00d8_b220* self, i32 a1, i32 a2, u32 a3, cBehaviorStimuli_s00d8_b220* pStimuli, u8* pOut)
-{
-    i32 myID = self->GetPoliticalID();
+{    i32 myID = self->GetPoliticalID();
 
     cNounIterator it;
     it.mpCur = self->mpIterBegin140c;
@@ -13974,8 +13974,9 @@ float FUN_00d8ba20(cCreatureBase_s00d8_b220* self, i32 a1, i32 a2, u32 a3, cBeha
             if (pComp != 0 && pComp->GetTypeID() == 0x0436f342 && pComp->GetPoliticalID() != myID) {
                 if (pStimuli != 0)
                     pStimuli->GetAny();
+                void* __restrict pAnchor = &((cNounBehaviorAnchor*)pComp)->mAnchor;
                 *pOut = 1;
-                *(void**)((u8*)pStimuli + 4) = (void*)&((cNounBehaviorAnchor*)pComp)->mAnchor;
+                *(void**)((u8*)pStimuli + 4) = pAnchor;
                 return 1.0f;
             }
             cNearbyComponent* pOther = (cNearbyComponent*)pEntry->mpCreature08;
@@ -13986,15 +13987,15 @@ float FUN_00d8ba20(cCreatureBase_s00d8_b220* self, i32 a1, i32 a2, u32 a3, cBeha
                     if (pStimuli != 0)
                         pStimuli->GetAny();
                     *pOut = 1;
-                    *(void**)((u8*)pStimuli + 4) = (void*)&((cComponentBehaviorAnchor*)pOther)->mAnchor;
+                    void* __restrict pAnchor = &((cComponentBehaviorAnchor*)pOther)->mAnchor;
+                    *(void**)((u8*)pStimuli + 4) = pAnchor;
                     return 1.0f;
                 }
             }
             it.Advance();
         }
     }
-    return 0.0f;
-}
+    return 0.0f;}
 
 // @ 0x00d8bb70
 float FUN_00d8bb70(cCreatureBase_s00d8_b220* self, i32 a1, i32 a2, u32 a3, cBehaviorStimuli_s00d8_b220* pStimuli, u8* pOut)

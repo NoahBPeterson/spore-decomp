@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 00663be0  456  FeedListCategory message dispatch (548-byte switch on msg+8); behavior complete, but MSVC block ordering (def block placement), sub_b4/sub_b3 body order and register assignment differ; equiv: WEAK (29% coverage, no mismatch)
-00664610  34   element-at; original loads the index into edx first, cl hoists the header loads; a `_ReadWriteBarrier()` inside the bounds check pins the header reload after it, matching the original's order; equiv: PASS (382 valid inputs, 100% coverage)
 00664700  231  intrusive insertion-sort primitive; allocation/compare schedule differs
 00664800  195  intrusive insertion-sort primitive; allocation/compare schedule differs
 00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; the value is taken BY VALUE (copy ctor AddRef / dtor Release), as the original does - a `T&` parameter changed the whole loop and the tail; written as a plain concrete function over (AutoRefCountT*, int, int, AutoRefCountT, AlphabeticalFeedSort); comparator inlining/register order differs; equiv: WEAK (254 valid inputs, 43.2% coverage, no mismatch)

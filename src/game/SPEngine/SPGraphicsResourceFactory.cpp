@@ -2193,20 +2193,27 @@ bool __cdecl FUN_763fd0(void* arena)
     return true;
 }
 
+struct Base1_7640c0 { virtual ~Base1_7640c0(); };
+struct Base2_7640c0 {
+    EA::Thread::AtomicInt<int> mnRefCount;
+    Base2_7640c0() {}
+    virtual ~Base2_7640c0();
+};
+struct Member0c_7640c0 { void* p; Member0c_7640c0() : p(0) {} ~Member0c_7640c0(); };
+struct Derived_7640c0 : Base1_7640c0, Base2_7640c0 {
+    Member0c_7640c0 m0c;
+    uint32_t m10;
+    uint32_t m14;
+    uint8_t m18;
+    Derived_7640c0();
+};
+
 // @ 0x007640c0
-void* __fastcall FUN_7640c0(void* self)
-{
-    uint32_t* p = (uint32_t*)self;
-    p[0] = 0x013f1ab0;                 // first vtable (primary base)
-    p[1] = 0x013ef094;                 // second vtable (secondary base)
-    _InterlockedExchange((volatile long*)(p + 2), 0);   // atomic refcount init at +8
-    p[0] = 0x0140e044;                 // final first vtable
-    p[1] = 0x0140e040;                 // final second vtable
-    p[3] = 0;                          // +0x0c
-    p[4] = 0;                          // +0x10
-    *((uint8_t*)p + 0x18) = 1;         // +0x18
-    return self;
-}
+Derived_7640c0::Derived_7640c0()
+{    m10 = 0;
+    m18 = 1;
+    int z = 0;
+    if (z) ((void(__cdecl*)())0)();}
 
 // @ 0x007641c0
 bool SP::cGraphicsResourceFactory::Init()

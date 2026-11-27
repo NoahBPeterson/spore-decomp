@@ -11,3 +11,4 @@
 ../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664680@cSPUIFeedListCategory@@QAEPAUFeedItem@@H@Z  00664680  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_006646c0@cSPUIFeedListCategory@@QAEPAUFeedItem@@H@Z  006646c0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664480@cSPUIFeedListCategory@@QAEX_N@Z  00664480  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664610@cSPUIFeedListCategory@@QAEPAUFeedItem@@I@Z  00664610  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

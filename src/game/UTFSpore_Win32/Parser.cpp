@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ArgScript/cError.h"
 #include "EA/ArgScript/cICommand.h"
@@ -1150,6 +1151,13 @@ using EA::ArgScript::cArguments_s0084_2620;
 using EA::ArgScript::cExpression_s0084_2620;
 using EA::ArgScript::cParser_s0084_2620;
 using EA::ArgScript::cIBlockCommand_s0084_2620;
+
+// ---- cEndCommand ----
+struct cEndCommand_s0084_2620 : EA::ArgScript::cMetaCommandBase_s0084_2620 {
+    cParser_s0084_2620* mState;                                     // +0x0c
+    void Execute(cArguments_s0084_2620* pArgs);                     // 0x00842910
+};
+
 namespace {
 
 // ---- cMatchFunction: value-matching expression function ----
@@ -1159,12 +1167,6 @@ struct cMatchFunction_s0084_2620 {
 
     int  EvalInt(const char** p, cExpression_s0084_2620* pExpr);    // 0x00842620
     void EvalReal();                                     // 0x00842a90
-};
-
-// ---- cEndCommand ----
-struct cEndCommand_s0084_2620 : EA::ArgScript::cMetaCommandBase_s0084_2620 {
-    cParser_s0084_2620* mState;                                     // +0x0c
-    void Execute(cArguments_s0084_2620* pArgs);                     // 0x00842910
 };
 
 // ---- cPurgeCommand ----
@@ -2751,19 +2753,19 @@ void FindParentDir(const char* pPath, string8_s0084_2620* pOut)
 
 // @ 0x00842910
 void cEndCommand_s0084_2620::Execute(cArguments_s0084_2620* pArgs)
-{
-    pArgs->MainArguments(0);
+{    pArgs->MainArguments(0);
     eastl::vec_s0084_2620<void*>& stack = mState->mBlockCommandStack;
     if (stack.mpBegin == stack.mpEnd) {
         char buf[16];
         SP_cError(buf, "Not inside a block");
         ThrowException(buf, &gThrowInfo);
     }
-    void** ppEnd = mState->mBlockCommandStack.mpEnd;
-    cIBlockCommand_s0084_2620* pBlock = (cIBlockCommand_s0084_2620*)*(ppEnd - 1);
-    mState->mBlockCommandStack.mpEnd += -1;
-    return pBlock->OnEndBlock(false);
-}
+    _ReadWriteBarrier();
+    cParser_s0084_2620* state = mState;
+    cIBlockCommand_s0084_2620* pBlock = (cIBlockCommand_s0084_2620*)state->mBlockCommandStack.mpEnd[-1];
+    _ReadWriteBarrier();
+    --state->mBlockCommandStack.mpEnd;
+    return pBlock->OnEndBlock(false);}
 
 // @ 0x00842980
 void cPurgeCommand_s0084_2620::Execute(cArguments_s0084_2620* pArgs)

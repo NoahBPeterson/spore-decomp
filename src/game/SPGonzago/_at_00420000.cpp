@@ -1050,18 +1050,26 @@ void BigVector::emplace_back(int arg)
 
 // @ 0x004207e0
 void PtrVector::reserve(unsigned int n)
-{
-    if (n > (unsigned int)(mpCapacity - mpBegin)) {
+{    if (n > (unsigned int)(mpCapacity - mpBegin)) {
         void** pNew = n ? (void**)AllocateAligned(allocator, n * 4, 4, 0) : 0;
-        void** result = MovePointers(mpBegin, mpEnd, pNew);
-        Marker();
+        void** result;
+        struct Helper {
+            static __forceinline void** ReturnEnd(void** f, void** l, void** d) {
+                return (void**)memcpy(d, f, (char*)l - (char*)f) + (l - f);
+            }
+            static __forceinline void MoveAndMark(void** first, void** last, void** dst, void**& out) {
+                const bool bTrivial = true;
+                out = ReturnEnd(first, last, dst);
+                const bool b2 = true;
+            }
+        };
+        Helper::MoveAndMark(mpBegin, mpEnd, pNew, result);
         DoFree(mpBegin, mpCapacity - mpBegin);
         unsigned int count = mpEnd - mpBegin;
         mpBegin = pNew;
         mpEnd = pNew + count;
         mpCapacity = mpBegin + n;
-    }
-}
+    }}
 
 // @ 0x004208f0
 void RangeFreeVector::FreeRange()
