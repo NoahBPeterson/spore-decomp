@@ -1558,18 +1558,18 @@ __declspec(noinline) Node* __stdcall NewNode(const Node* src, void* parent)
 
 // @ 0x00af0940
 void __thiscall RBTree::FindBounds(HIter* out, const int* key)
-{
-    Node* root = this->root;
-    Node* lower = (Node*)&this->base;
-    if (root != 0)
+{    Node* n = this->root;
+    HIter res;
+    res.a = (Node*)&this->base;
+    res.b = res.a;
+    if (n != 0)
     {
         int k = *key;
-        Node* n = root;
         do
         {
             if (k < n->key)
             {
-                lower = n;
+                res.b = n;
                 n = n->right;
             }
             else
@@ -1578,27 +1578,24 @@ void __thiscall RBTree::FindBounds(HIter* out, const int* key)
             }
         } while (n != 0);
     }
-    Node* upper = (Node*)&this->base;
-    if (root != 0)
+    n = this->root;
+    if (n != 0)
     {
         int k = *key;
-        Node* n = root;
         do
         {
-            if (n->key < k)
+            if (n->key >= k)
             {
-                n = n->left;
+                res.a = n;
+                n = n->right;
             }
             else
             {
-                upper = n;
-                n = n->right;
+                n = n->left;
             }
         } while (n != 0);
     }
-    out->b = lower;
-    out->a = upper;
-}
+    *out = res;}
 
 // @ 0x00af09a0
 Node* __thiscall RBTree::Clone(Node* src, void* parent)

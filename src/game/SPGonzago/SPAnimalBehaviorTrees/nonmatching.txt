@@ -51,7 +51,6 @@
 00d7df00 261 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 387 bytes - only the decompile shape was available, so the holder-orientation predicate is a plausible reconstruction (holder presence, squared distance against the summed radii) and not the retail code
 00d7e090 245 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 497 bytes - only the decompile shape was available, so the second holder predicate is a plausible reconstruction (holder presence, id difference, radius test) and not the retail code
 00d7e340 16 FUN_00d7e340: size 408 vs 408; equiv WEAK (391 valid, coverage 29.3% < 60%)
-00d7e4e0 31 FUN_00d7e4e0: size 147 vs 147; equiv WEAK (355 valid, coverage 37.3% < 60%)
 00d7e580 222 FUN_00d7e580: size 340 vs 285; equiv WEAK (341 valid, coverage 14.4% < 60%)
 00d7e6e0 90 FUN_00d7e6e0: size 379 vs 379; equiv WEAK (266 valid, coverage 23.3% < 60%)
 00d7f790 1469 complete (42/42 calls and vtable slots in order, size 1969 vs 1924); register choice (esi/edi swapped), local slot layout and SSE scheduling differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
@@ -74,7 +73,6 @@
 00d851c0 135 complete: stalk-avatar range gate (0xd51660 info +0x10) then out-of-range reposition toward avatar; equiv WEAK (180 valid, 11.3% cov), no mismatch observed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d85400 38 complete: UpdateLoudness — clamp mf04*dt+mf0c to mf08 via pointer-select, add (val-cur) to component mf1000; equiv PASS (306 valid, 100% cov), xmm numbering/scheduling differences only flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d85480 73 complete: AddHeldObject — behaviour-tree stimuli (0xbc97f0 / ClearAll 0x400000) + anim slot 0x4f26350b; equiv WEAK (225 valid, 13.5% cov), no mismatch observed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00d854f0 34 complete: AddAlphaFade — alpha decay from dt, success when >= 0 or behaviour-tree single-arg slot == 0x341bd4be; equiv PASS (356 valid, 100% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d85540 314 complete: tool-property quadruple read (0xc96f8475/0x59d21726/0x5c542ce7/0x34bcf3d4, type 0xd) + cAgentOrderManager::Activate(0,1,creature,f0,vec4,0); equiv UNSUPPORTED (0/400 valid: fault(read)=257, fake-arity=142) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d856e0 259 complete: avatar-distance follow — normalise d, >30 range or loco gate triggers v8c/vc8, else step vOut toward avatar; equiv WEAK (107 valid, 67.5% cov), no mismatch observed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d858a0 346 complete: near-noun approach direction (+eps normalise, zero-dir fallback to loco), reach offset, PlanetModel random world position, MoveToPointAtSpeed, avatar sim bind, *pOut=5; equiv UNSUPPORTED (0/400 valid: fault(read)=321, fault(write)=66, fake-arity=10) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

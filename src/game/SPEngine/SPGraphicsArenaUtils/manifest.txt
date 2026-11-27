@@ -5,3 +5,4 @@
 ../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ??1EditorResource@@QAE@XZ  006c2120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ??1EditorResource2@@QAE@XZ  006c2170  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ??0PropertyListObj@@QAE@PAX@Z  006c2240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ?CreateRenderObjects@@YAXPAI0@Z  006c2060  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

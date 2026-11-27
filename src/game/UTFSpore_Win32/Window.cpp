@@ -711,14 +711,20 @@ void Window_s0095_ff20::ClearChildren()
 
 // @ 0x009602c0
 bool Window_s0095_ff20::Dispatch14(void* p)
-{
-    if (m30 != 0) {
-        Window_s0095_ff20* self = ((char*)this - 4) ? this : 0;
-        return (*(bool(__thiscall**)(int, int, Window_s0095_ff20*, void*))((char*)*(void**)m30 + 0x14))(
-            m30, *(int*)p, self, p);
+{    struct Mgr {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual void v0c() {}
+        virtual void v10() {}
+        virtual bool Slot14(int msg, EA::UTFWin::IWindow* win, void* pMsg) { return false; }
+    };
+    Mgr* mgr = (Mgr*)m30;
+    if (mgr != 0) {
+        EA::UTFWin::IWindow* self = static_cast<EA::UTFWin::IWindow*>((EA::UTFWin::Window*)((int*)this - 1));
+        return mgr->Slot14(*(int*)p, self, p);
     }
-    return false;
-}
+    return false;}
 
 // @ 0x009602f0
 bool Window_s0095_ff20::Dispatch(void* p)

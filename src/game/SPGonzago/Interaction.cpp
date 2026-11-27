@@ -613,22 +613,22 @@ u32 SlotVector_s00ab_e110::nextAllocated(u32 i)
 
 // @ 0x00abe8f0
 void SlotVector_s00ab_e110::freeTarget(u32 i)
-{
-  SlotEntry* e = entry(i);
+{  SlotEntry* e = entry(i);
   cInteractionTarget* p = (cInteractionTarget*)e->mpData;
   if (p) p->t14();
-  e->mMeta = (mFreeHead & 0x3fffffff) | (e->mMeta & 0xc0000000) | 0x80000000;
+  u32 head = *(const volatile u32*)&mFreeHead;
+  e->mMeta = (e->mMeta & 0xc0000000) | (head & 0x3fffffff) | 0x80000000;
   mFreeHead = i;
   if (mBeginIndex == i) mBeginIndex = nextAllocated(i);
 }
 
 // @ 0x00abe950
 void SlotVector_s00ab_e110::freeAgent(u32 i)
-{
-  SlotEntry* e = entry(i);
+{  SlotEntry* e = entry(i);
   cInteractionAgent* p = (cInteractionAgent*)e->mpData;
   if (p) p->a5c();
-  e->mMeta = (mFreeHead & 0x3fffffff) | (e->mMeta & 0xc0000000) | 0x80000000;
+  u32 head = *(const volatile u32*)&mFreeHead;
+  e->mMeta = (e->mMeta & 0xc0000000) | (head & 0x3fffffff) | 0x80000000;
   mFreeHead = i;
   if (mBeginIndex == i) mBeginIndex = nextAllocated(i);
 }

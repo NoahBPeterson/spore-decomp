@@ -672,17 +672,18 @@ void ReadItemFlagMap(ISerializer* s, ItemFlagMap& map)
 // NM 0x005957d0: 64-bit element copy loads high dword first in original
 // @ 0x005957d0
 void WriteItemList(ISerializer* s, eastl::list<ItemId>& items)
-{
-    uint32_t count = (uint32_t)items.size();
-    EA::IO::IStream* stream = s->GetStreamHolder()->GetStream();
+{    uint32_t n = (uint32_t)items.size();
+    ISerializerStream* __restrict holder = s->GetStreamHolder();
+    uint32_t count = n;
+    EA::IO::IStream* stream = holder->GetStream();
     EA::IO::WriteUint32(stream, &count, 1, 0);
     for (eastl::ListNodeBase* p = items.mNode.mpNext; p != &items.mNode; p = p->mpNext) {
+        ISerializerStream* __restrict h = s->GetStreamHolder();
         uint64_t id = *(const uint64_t*)&((eastl::ListNode<ItemId>*)p)->mValue;
-        stream = s->GetStreamHolder()->GetStream();
+        stream = h->GetStream();
         EA::IO::WriteUint64(stream, &id, 1, 0);
     }
-    s->EndItem();
-}
+    s->EndItem();}
 
 // Static item info (mapped value of the 0x2C-byte nodes)
 struct cStaticItemInfo {

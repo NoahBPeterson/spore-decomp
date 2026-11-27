@@ -6,7 +6,6 @@
 0095ff70 54 Window::GrowBy: complete; +0x6c call and SSE add schedule differ
 0095ffd0 35 Window::MoveBy2: complete; +0x6c call and SSE add schedule differ
 00960050 65 logic: original is NOT a refcount swap of m1e4: it is a 10-iteration walk (mov esi,[esp+8]; edi=this) that per pass calls vtable +0x48, breaks on a null result, breaks if arg-4 == this, walks arg-4's +0x38 chain looking for this+4, breaks if that chain ends (or if this+0x38 != 0), then calls vtable +0x90(this, pass==1) and reloads the arg from vtable +0x4c. That full shape was written and is 118 bytes vs 76, so the arg passed is probably not what retail's vtable slots expect; the semantic mismatch against the previous source is confirmed, byte shape not yet; fix1: quick check DIFFERS
-009602c0 31 Window::Dispatch14: complete; this-adjust and vtable +0x14 args differ
 00960be0 600 geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes); equiv: FAIL (now testable via member Geom; output rect differs)
 00960f20 169 SetUserData: vcall/IID schedule and bit clear order differ
 00960fe0 330 TestHit: float compare and event-block layout differ (misassigned to SerUpdate slot)

@@ -2904,8 +2904,7 @@ void cSPUIPosseItem_s00e2_4700::FUN_00e247f0(int param_2, MsgIn* param_3)
 
 // @ 0x00e248b0
 char cSPUIPosse_s00e2_4700::FUN_00e248b0(int param_2, float param_3, float param_4, int param_5, int param_6)
-{
-  uint32_t recent = (param_5 == mField144) && ((GetElapsedSeconds() - mField148) < g_clickThreshold);
+{  uint32_t recent = (param_5 == mField144) && ((GetElapsedSeconds() - mField148) < g_clickThreshold);
   mField140 = (uint8_t)recent;
   mField148 = GetElapsedSeconds();
   mField144 = param_5;
@@ -2914,10 +2913,10 @@ char cSPUIPosse_s00e2_4700::FUN_00e248b0(int param_2, float param_3, float param
       WindowMgr* wm = WindowManager_s00e2_4700();
       ((FnVoidII)wm->mpVtable->slot[0x58 / 4])(wm, 1, param_2);
     }
-    int held = (param_6 & 3) != 0;
     mFieldA2 = 1;
+    uint32_t held = (param_6 & 1) || (param_6 & 2);
     mFieldA3 = (uint8_t)held;
-    if (!held)
+    if (!mFieldA3)
       ((FnVoid0)mpVtable->slot[0xe0 / 4])(this);
     switch (mField94) {
     case 1:

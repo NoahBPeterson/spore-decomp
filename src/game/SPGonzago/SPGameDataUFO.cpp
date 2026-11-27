@@ -3762,8 +3762,8 @@ void FUN_0105c7e0(cSpaceShip* ship, const Vector3_s0105_b960& position, float ex
 
 // @ 0x0105c8d0
 void __stdcall GetMaxHeight(cSPGameDataUFO_s0105_c8d0* o)
-{
-    float len = sqrtf(o->mPos.x * o->mPos.x + o->mPos.y * o->mPos.y + o->mPos.z * o->mPos.z);
+{    Vector3_s0105_c8d0& pos = o->mPos;
+    float len = sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
     float cap = SteerConfig()->GetKinestheticBlend() + PlanetModel_s0105_c8d0()->FUN_b7e4d0();
     float ratio;
     if (o->mMode == 0) {
@@ -3784,11 +3784,9 @@ void __stdcall GetMaxHeight(cSPGameDataUFO_s0105_c8d0* o)
         return;
     ratio = cap / len;
 apply:
-    {
-        o->mPos.x = o->mPos.x * ratio;
-        o->mPos.y = o->mPos.y * ratio;
-        o->mPos.z = o->mPos.z * ratio;
-    }
+    pos.x *= ratio;
+    pos.y *= ratio;
+    pos.z *= ratio;
 }
 
 // @ 0x0105c9d0

@@ -22,3 +22,5 @@
 ../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4edd0@@YIXPAX0@Z  00c4edd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4ee30@@YIXPAX0@Z  00c4ee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionEradicate.cpp  ?ValidateHerds@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  00c4f220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?PostAlertEvent@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  00c4f960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?PostWarningEvent@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  00c4f9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

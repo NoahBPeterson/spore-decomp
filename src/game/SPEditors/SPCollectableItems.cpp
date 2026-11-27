@@ -1892,17 +1892,16 @@ FixedVec4* RowMap::find_or_insert(const uint64_t& key)
 
 // @ 0x00598db0
 void SP::cCollectableItems_s0059_8340::FUN_00598db0(int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)
-{
-    ItemID key;
+{    ItemID key;
     key.instanceID = (uint32_t)a0;
     key.groupID = (uint32_t)a1;
     cStaticItemInfo_s0059_8340* info = mItemInfo.index(key);
     info->mField0 = (uint32_t)(a2 - 1);
     info->mField8 = (uint32_t)a3;
-    info->mField18 = (uint32_t)a8;
     info->mFieldC = (uint32_t)a4;
     info->mField10 = (uint32_t)a5;
     info->mField14 = (uint32_t)a6;
+    info->mField18 = (uint32_t)a8;
     info->mField4 = *(float*)&a7;
     uint64_t k = ((uint64_t)(uint32_t)a3 << 32) |
                  ((uint64_t)(int64_t)(int32_t)a6 << 16) |
@@ -1910,7 +1909,10 @@ void SP::cCollectableItems_s0059_8340::FUN_00598db0(int a0, int a1, int a2, int 
     FixedVec4* vec = mRows.find_or_insert(k);
     if (a4 >= (int)(vec->mpEnd - vec->mpBegin))
         vec->Resize((uint32_t)a4 + 1, &gRowVecTag);
-    vec->mpBegin[a4] = key;
+    ItemID val;
+    val.instanceID = (uint32_t)a0;
+    val.groupID = (uint32_t)a1;
+    vec->mpBegin[a4] = val;
     mStatus.index(key);
 }
 

@@ -3303,16 +3303,13 @@ void Node7510(cVehicle* self, int, int, int, int, cRefObj** pp)
 
 // @ 0x00dc7540
 void __fastcall Node7540(RemoveList* self)
-{
-    if (self->mpBegin != self->mpEnd) {
-        do {
-            void* n = self->mpEnd[-1];
-            NounManager()->RemoveNoun(n);
-            self->mpEnd = self->mpEnd - 1;
-            cRefBase* p = (cRefBase*)*self->mpEnd;
-            if (p)
-                p->Release();
-        } while (self->mpBegin != self->mpEnd);
+{    while (self->mpBegin != self->mpEnd) {
+        void* n = self->mpEnd[-1];
+        NounManager()->RemoveNoun(n);
+        self->mpEnd = self->mpEnd - 1;
+        cRefBase* p = (cRefBase*)*self->mpEnd;
+        if (p)
+            p->Release();
     }
 }
 

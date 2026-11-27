@@ -1,6 +1,5 @@
 00b2ca30 44 vector::resize(n) over 4-byte elements; original keeps n in eax and begin in edx, ours assigns n->edx begin->edi (register allocation only)
 00b2ca80 126 rbtree::erase(first,last) with clear-all fast path; reconstructed via DoNuke/RBTreeIncrement/RBTreeErase; register allocation + block order differ; returns out; equiv=WEAK (32 valid, 32.8% cov; tree faults limit coverage)
-00b2d0f0 38 remove-all-nouns map walk then reset anchor; only the tail (anchor reset) block differs in register allocation / store order
 00b2d160 76 vector::pop_back(pos) destroying the tail element twice; register allocation: original keeps this in esi and reloads mEnd, ours keeps this in edi
 00b2d870 232 drop vector entries near a position within radius; float distance test reconstructed, register allocation / FP scheduling differ
 00b2cc40 197 big object destructor (250 B): vtable resets, the two rbtree DoNuke calls (0xb2c260), the string-tree nuke (0x9a9600), 0xb002a0, the list erase (0x75f3f0), the vector dtor (0xb2a8d0 + begin delete), RemoveHandler with its five fields, the two refcount Releases, the cGonzagoSubsystem dtor and the final vtable are reconstructed; residual is register allocation/scheduling (253 vs 250). equiv: UNSUPPORTED (0/400 valid: read/write faults + VirtualFree imports -- a free-heavy destructor is not observable).

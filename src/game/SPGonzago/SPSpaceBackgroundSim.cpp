@@ -357,25 +357,31 @@ void FUN_01021960(int param)
 
 // @ 0x01021d40
 void FUN_01021d40()
-{
-    void* p = FUN_00f473a0(0x34, "Simulator", 0, 0, 0, 0);
+{    struct Sim {
+        u32 m00;
+        u32 m04, m08, m0c;
+        u32 m10;
+        float m14;
+        u32 m18;
+        u32 m1c, m20, m24, m28;
+    };
+    Sim* p = (Sim*)FUN_00f473a0(0x34, "Simulator", 0, 0, 0, 0);
     float one = DAT_01485720;
-    DAT_016dda8c = p;
     if (p) {
-        *(u32*)((char*)p + 4) = 0;
-        *(u32*)((char*)p + 8) = 0;
-        *(u32*)((char*)p + 0xc) = 0;
-        *(u32*)((char*)p + 0x10) = 0xffffffff;
-        *(u32*)((char*)p + 0x18) = 0xffffffff;
-        *(u32*)((char*)p + 0x1c) = 0;
-        *(u32*)((char*)p + 0x20) = 0;
-        *(u32*)((char*)p + 0x24) = 0;
-        *(u32*)((char*)p + 0x28) = 0;
-        *(float*)((char*)p + 0x14) = one;
+        p->m04 = 0;
+        p->m08 = 0;
+        p->m0c = 0;
+        *(volatile u32*)&p->m10 = 0xffffffff;
+        *(volatile u32*)&p->m18 = 0xffffffff;
+        *(volatile u32*)&p->m1c = 0;
+        p->m20 = 0;
+        p->m24 = 0;
+        p->m28 = 0;
+        DAT_016dda8c = p;
     } else {
-        *(float*)0x14 = one;
+        DAT_016dda8c = 0;
     }
-}
+    ((Sim*)DAT_016dda8c)->m14 = one;}
 
 // @ 0x01021e50
 void** PartitionPlanets(void** ppFirst, void** ppLast, PlanetRef pivot, cPointerCompare pCompare)

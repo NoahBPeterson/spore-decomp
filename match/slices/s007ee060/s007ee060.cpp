@@ -304,10 +304,8 @@ void VolumeCmd::Color(EA::ArgScript::cArguments* args) {
 }
 
 // @ 0x007EE780  "slicespacing" command
-void VolumeCmd::SliceSpacing(EA::ArgScript::cArguments* args) {
-  void** p = args->MainArguments(1);
-  mParams->mSliceSpacing = ArgToFloat(mArgConverter, *p);
-}
+void VolumeCmd::SliceSpacing(EA::ArgScript::cArguments* args) {  typedef float(__thiscall * F0)(void*, void*);
+  mParams->mSliceSpacing = ((F0)VSLOT(mArgConverter, 0x98))(mArgConverter, *args->MainArguments(1));}
 
 // 0x007ee7b0 (byte-exact lifted version: match/slices/s007ee7b0/s007ee7b0.cpp)  "material" command (resource id)
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments* args) {

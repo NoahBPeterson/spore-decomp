@@ -41,3 +41,4 @@
 ../src/game/SPGonzago/_at_00af0000.cpp  _FUN_00af4ea0  00af4ea0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?FUN_00afa0c0@@YAXPAUcSPVector3_s00af_9aa0@SP@@PBU12@11@Z  00afa0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?SlotAt@cActionCircle_s00af_9aa0@SP@@QAEPAVtSlot@12@I@Z  00af9ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00af0000.cpp  ?FindBounds@RBTree@@QAEXPAUHIter@@PBH@Z  00af0940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

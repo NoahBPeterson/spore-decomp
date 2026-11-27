@@ -533,7 +533,7 @@ struct Sound_s00a1_a590 : SoundAttenuation {
     float  RunningAttenuation();  // 0x00a1ae90 (Sound::RunningAttenuation)
     void   RequestStop(uint32_t reason, uint8_t flags);  // 0x00a1aef0 (Sound::RequestStop)
     bool   ShouldPauseForLowGain(float gain);  // 0x00a1af80 (Sound::ShouldPauseForLowGain)
-    static double ComputeGainAttenuation(float a, float b, float c, float d, float e);  // 0x00a1afb0 (Sound::ComputeGainAttenuation)
+    double ComputeGainAttenuation(float a, float b, float c, float d, float e);  // 0x00a1afb0 (Sound::ComputeGainAttenuation)
     void   Tick(float a, float dt);  // 0x00a1b230 (Sound::Tick)
 
     bool   IsFlag1();
@@ -938,11 +938,10 @@ struct Sound_s00a1_f2b0 {
 // ---- items of slice s00a1f2b0 end
 
 // @ 0x00a1ac70
-float FUN_00a1ac70(int a, int b)
-{
-    // Note -> frequency ratio: 440 * 2^((n - 69) * 0.0577623).
-    double fa = 440.0 * pow(2.0, ((double)a - 69.0) * 0.0577623);
-    double fb = 440.0 * pow(2.0, ((double)b - 69.0) * 0.0577623);
+float __stdcall FUN_00a1ac70(int a, int b)
+{    // Note -> frequency ratio: 440 * 2^((n - 69) * 0.0577623).
+    double fa = 440.0 * exp(((double)a - 69.0) * 0.0577623);
+    double fb = 440.0 * exp(((double)b - 69.0) * 0.0577623);
     return (float)(fa / fb);
 }
 
@@ -1045,13 +1044,10 @@ bool Sound_s00a1_a590::ShouldPauseForLowGain(float gain)
 
 // @ 0x00a1afb0
 double Sound_s00a1_a590::ComputeGainAttenuation(float a, float b, float c, float d, float e)
-{
-    (void)d;
+{    (void)d;
     if (e != 1.0f)
         a = (1.0f / e) * a;
-    if (c > a)
-        return 1.0;
-    if (b == 0.0f)
+    if (c > a || b == 0.0f)
         return 1.0;
     double t = ((double)a / (double)c) - 1.0;
     return 1.0 / (t * (double)b + 1.0);

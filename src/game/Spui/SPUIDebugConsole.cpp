@@ -115,16 +115,18 @@ void Dbg_s0080_2a30::Show(int show)
 
 // @ 0x00802b20
 bool Dbg_s0080_2a30::IsEnabled()
-{
-  char* p = (char*)this;
+{  char* p = (char*)this;
   void* w = ((cSPUILayout_s0080_2a30*)(p + 0x10))->FindWindowByID(0x14a4606, 1);
-  if (!w)
-    return false;
-  if (((void* (__thiscall*)(void*))VFN(w, 0x1c))(w) != (void*)0x14a4606)
-    w = (void*)((void* (__thiscall*)(void*, void*, int))VFN(w, 0xf0))(w, (void*)0x14a4606, 1);
-  if (!w)
-    return false;
-  return (((uint32_t(__thiscall*)(void*))VFN(w, 0x28))(w) & 1) != 0;
+  if (w) {
+    void* target;
+    if (((void* (__thiscall*)(void*))VFN(w, 0x1c))(w) == (void*)0x14a4606)
+      target = w;
+    else
+      target = (void*)((void* (__thiscall*)(void*, void*, int))VFN(w, 0xf0))(w, (void*)0x14a4606, 1);
+    if (target)
+      return (((uint32_t(__thiscall*)(void*))VFN(target, 0x28))(target) & 1) != 0;
+  }
+  return false;
 }
 
 // @ 0x00802b80

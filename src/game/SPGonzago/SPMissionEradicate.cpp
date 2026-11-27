@@ -794,24 +794,20 @@ void cSPMissionEradicate_s00c4_ef00::GetUIShortDescription(void* out)
 
 // @ 0x00c4f960
 void cSPMissionEradicate_s00c4_ef00::PostAlertEvent()
-{
-  if (mAlertEvent != -1)
+{  if (mAlertEvent != -1)
     return;
   void* log = SP_EventLog(0x6c0fa994, 0x131a9f54, 0, 0, 1, 0);
-  uint id = FUN_00dd8640(log);
-  mAlertEvent = id;
-  mVec134.push_back(id);
+  mAlertEvent = FUN_00dd8640(log);
+  mVec134.push_back(mAlertEvent);
 }
 
 // @ 0x00c4f9d0
 void cSPMissionEradicate_s00c4_ef00::PostWarningEvent()
-{
-  if (mWarningEvent != -1)
+{  if (mWarningEvent != -1)
     return;
   void* log = SP_EventLog(0xcc0a183b, 0x131a9f54, 0, 0, 1, 0);
-  uint id = FUN_00dd8640(log);
-  mWarningEvent = id;
-  mVec134.push_back(id);
+  mWarningEvent = FUN_00dd8640(log);
+  mVec134.push_back(mWarningEvent);
 }
 
 // @ 0x00c4fa40

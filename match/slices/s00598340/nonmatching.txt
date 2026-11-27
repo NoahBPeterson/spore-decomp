@@ -4,5 +4,4 @@
 00598470   116  CatMap::CatMap: complete; ours 175B vs 206B (pool/allocator locals and register allocation differ); equivalence FAIL (map-ctor stack-arg shapes differ)
 00598b50   304  insert_hint: complete; ours 282B vs 342B (block ordering + register allocation differ); equivalence UNSUPPORTED (unresolved DoInsertValueImpl/DoCreateNode)
 00598cb0   235  find_or_insert: complete; ours 197B vs 252B (RowValue temp copy + register allocation differ); equivalence FAIL (faked DoAssignFromIterator memcpy dest differs)
-00598db0    38  FUN_00598db0: complete; ours 220B == 220B (only register assignment encoding differs); equivalence UNSUPPORTED (stores address of own row-vector tag copy)
 00598e90   484  AddCollectableItemInfo: complete; ours 476B vs 418B (EH unwind funclets + call scheduling differ); equivalence PASS (272 inputs)

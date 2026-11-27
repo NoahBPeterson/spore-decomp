@@ -29,3 +29,4 @@
 ../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f390@@YIPAXPAX@Z  00e1f390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f420@@YIXPAX@Z  00e1f420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f500@@YGXPAXUE1fIter@@10@Z  00e1f500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e10000.cpp  ?FUN_00e1f570@@YAPAXPAX0IEPAVRefObj_s00e1_eab0@@0@Z  00e1f570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

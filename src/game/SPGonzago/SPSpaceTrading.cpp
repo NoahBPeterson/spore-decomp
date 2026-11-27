@@ -1445,7 +1445,7 @@ template <class T> T* MoveItemRange(T* first, T* last, T* out);           // 0x0
 template <class T> T* MoveItemRangeBackward(T* first, T* last, T* out);   // 0x00ad7400
 class ItemVec_s0103_c3a0 : public Vec<ItemPtr_s0103_c3a0> {
 public:
-    void erase(ItemPtr_s0103_c3a0* first, ItemPtr_s0103_c3a0* last);
+    ItemPtr_s0103_c3a0* erase(ItemPtr_s0103_c3a0* first, ItemPtr_s0103_c3a0* last);
     ~ItemVec_s0103_c3a0();                          // 0x005c7f10
 };
 class cGonzagoTimer_s0103_c3a0 {
@@ -3385,12 +3385,19 @@ void FUN_0103c2c0(vector_s0103_b3e0<float>* list, int streamObj)
 }
 
 // @ 0x0103c4f0
-void ItemVec_s0103_c3a0::erase(ItemPtr_s0103_c3a0* first, ItemPtr_s0103_c3a0* last)
-{
-    ItemPtr_s0103_c3a0* p = MoveItemRange(last, mpEnd, first);
-    for (ItemPtr_s0103_c3a0* pEnd = mpEnd; p < pEnd; ++p)
-        p->~ItemPtr_s0103_c3a0();
-    mpEnd -= last - first;
+ItemPtr_s0103_c3a0* ItemVec_s0103_c3a0::erase(ItemPtr_s0103_c3a0* first, ItemPtr_s0103_c3a0* last)
+{    struct Local {
+        static inline void destruct(ItemPtr_s0103_c3a0* first, ItemPtr_s0103_c3a0* last)
+        {
+            for (; first < last; ++first)
+                first->~ItemPtr_s0103_c3a0();
+        }
+    };
+    ItemPtr_s0103_c3a0* const end = this->mpEnd;
+    ItemPtr_s0103_c3a0* const position = MoveItemRange(last, end, first);
+    Local::destruct(position, this->mpEnd);
+    this->mpEnd -= (last - first);
+    return first;
 }
 
 // @ 0x0103c550
@@ -3770,18 +3777,32 @@ void FUN_0103d380(void* stream, RBTree* tree)
 
 // @ 0x0103d4a0
 void FUN_0103d4a0(void* stream, cNPCStoreFixedVec* vec)
-{
-    vec->clearRange(vec->mpBegin, vec->mpEnd);
+{    vec->clearRange(vec->mpBegin, vec->mpEnd);
+
+    struct StreamV28 {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual void v0c() {}
+        virtual void v10() {}
+        virtual void v14() {}
+        virtual void* v18() { return 0; }
+        virtual void v1c() {}
+        virtual void* v20() { return 0; }
+        virtual void v24() {}
+        virtual void v28(u32 id, void** out, int flags) {}
+    };
 
     u32 count = 0;
-    void* reader = (void*)VC0(void*, stream, 0x20);
-    void* src = (void*)VC0(void*, reader, 0x18);
+    StreamV28* s = (StreamV28*)stream;
+    void* reader = s->v20();
+    void* src = ((StreamV28*)reader)->v18();
     ReadInt32(src, &count, 1, 0);
     vec->FUN_00c77b60(count);
 
     for (u32 i = 0; i < count; i++) {
         RefObj* val = 0;
-        VC3(void, stream, 0x28, u32, 0x5b82ef9u, void**, (void**)&val, int, 0);
+        s->v28(0x5b82ef9u, (void**)&val, 0);
 
         void** pEnd = (void**)vec->mpEnd;
         if ((char*)pEnd < (char*)vec->mpCapacity) {
@@ -3798,7 +3819,7 @@ void FUN_0103d4a0(void* stream, cNPCStoreFixedVec* vec)
         if (val != 0)
             VC0(void, (char*)val + 8, 4);
     }
-    VC0(void, stream, 0x1c);
+    s->v1c();
 }
 
 // @ 0x0103dbd0

@@ -5,3 +5,4 @@ slices/s005c7500/s005c7500.cpp  ?Current@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  00
 slices/s005c7500/s005c7500.cpp  ?Reset@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  005c7e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c7500/s005c7500.cpp  ?Shutdown@cSPPalettePage@SP@@QAEXXZ  005c7ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c7500/s005c7500.cpp  ??_GcSPPalettePage@SP@@UAEPAXI@Z  005c8440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c7500/s005c7500.cpp  ?Next@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  005c7e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

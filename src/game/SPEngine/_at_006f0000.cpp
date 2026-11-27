@@ -1913,14 +1913,12 @@ extern "C" Elem78* __cdecl copy_backward79(Elem78* first, Elem78* last, Elem78* 
 
 // @ 0x006f9a50
 Elem78* Vec78::erase(Elem78* first, Elem78* last)
-{
-  Elem78* newEnd = copy79(last, this->end, first);
+{  Elem78* en = this->end;
+  Elem78* newEnd = copy79(last, en, first);
   Elem78* e = this->end;
-  while (newEnd < e) {
-    newEnd->~Elem78();
-    newEnd = (Elem78*)((char*)newEnd + 0x78);
-  }
-  this->end -= last - first;
+  for (Elem78* p = newEnd; p < e; ++p)
+    p->~Elem78();
+  this->end = this->end - (last - first);
   return first;
 }
 

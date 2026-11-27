@@ -4,3 +4,4 @@
 ../src/game/Spui/SPUIDebugConsole.cpp  ?OnShow@Dbg_s0080_2a30@@QAEXHH@Z  00802fd0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUIDebugConsole.cpp  ?OnToggle@Dbg@@QAEXH@Z  00802ff0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUIDebugConsole.cpp  ?Dtor@C_803140@@QAEXXZ  00803140  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIDebugConsole.cpp  ?IsEnabled@Dbg_s0080_2a30@@QAE_NXZ  00802b20  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

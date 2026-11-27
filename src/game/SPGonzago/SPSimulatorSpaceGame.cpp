@@ -4192,17 +4192,18 @@ void cSPSimulatorSpaceGame_s0100_77e0::UpdateChasingUFOs(unsigned int param)
 }
 
 // @ 0x01008820
-void TCopyForward(UFOElem* first, UFOElem* last, UFOElem* dst)
-{
+UFOElem* TCopyForward(UFOElem* first, UFOElem* last, UFOElem* dst)
+{    UFOElem* d = dst;
     if (first != last) {
+        UFOElem* s = first;
         do {
-            dst->mpLink0c = first->mpLink0c;
-            dst->mpLink10 = first->mpLink10;
-            ++first;
-            ++dst;
-        } while (first != last);
+            d->mpLink0c = s->mpLink0c;
+            d->mpLink10 = s->mpLink10;
+            ++s;
+            ++d;
+        } while (s != last);
     }
-}
+    return d;}
 
 // @ 0x01008850
 UFOElem* UFOArray::erase(UFOElem* first, UFOElem* last)
@@ -4224,15 +4225,18 @@ UFOElem* UFOArray::erase(UFOElem* first, UFOElem* last)
 }
 
 // @ 0x010088e0
-void TCopyBackward(UFOElem* first, UFOElem* last, UFOElem* dst)
-{
-    while (last != first) {
-        --last;
-        --dst;
-        dst->mpLink0c = last->mpLink0c;
-        dst->mpLink10 = last->mpLink10;
+UFOElem* TCopyBackward(UFOElem* first, UFOElem* last, UFOElem* dst)
+{    UFOElem* d = dst;
+    if (last != first) {
+        UFOElem* s = last;
+        do {
+            --d;
+            --s;
+            d->mpLink0c = s->mpLink0c;
+            d->mpLink10 = s->mpLink10;
+        } while (s != first);
     }
-}
+    return d;}
 
 // @ 0x01009a40
 void cAutoRefVector::Push(cRefCounted* p)

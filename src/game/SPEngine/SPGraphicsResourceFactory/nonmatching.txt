@@ -19,7 +19,6 @@
 00764df0 196 complete: CreateRasterFromArena (loader Get, 0x20003 exported-object scan, EH vector ctor/dtor); original spills the object count and the arena resource to stack slots and aligns the loop head, ours keeps them in registers [equiv: WEAK, 43% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS-
 00765230 80 complete: placement-new fill of count 0x7c-stride records via 0x422fd0 copy ctor; EH-framed loop reproduced (state 0/-1, unwind destroys range) but prologue/local layout differs - original keeps the value load inside the loop and uses only esi/edi, ours hoists it into ebx (110 vs 112 bytes) [equiv: PASS, 100% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS-
 007656c0 280 complete: game-mesh record stream writer (inlined lock-xadd handle copy/release per 0x20d slot); only the xadd address/value register pairing and one index operand order differ [equiv: UNSUPPORTED, fake-arity/fault(read) on all 400 inputs] flags: /O2 /MD /Gy /EHsc /TP /GS-
-00765b30 14 complete: two chained cJobs started under the job-manager lock; only the prologue push/store interleave differs [equiv: WEAK, 10% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS-
 00766140 103 ResD ctor: EH frame (0x20 vs 0x24) + _eh_vector_constructor_iterator schedule differ; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
 007662d0 334 vector<0xa0>::insert: helper call schedule/register allocation differs flags: /O2 /MD /Gy /EHsc /TP
 007664e0 297 PNGWriteCallback: frame layout (0x2a8c vs 0x2a94) + debug-string/EH branch schedule differ; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]

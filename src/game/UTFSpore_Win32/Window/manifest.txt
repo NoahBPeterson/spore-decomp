@@ -26,3 +26,4 @@
 ../src/game/UTFSpore_Win32/Window.cpp  ?Find60@Win@@QAEPAXPAX@Z  009613a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?f@S962580@@QAEXHH@Z  00962580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?f@S9625b0@@QAEHHHH@Z  009625b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?Dispatch14@Window_s0095_ff20@@QAE_NPAX@Z  009602c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

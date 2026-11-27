@@ -3231,13 +3231,19 @@ GlyphLayoutInfo* __cdecl FUN_00d9fe20(GlyphLayoutInfo* first, GlyphLayoutInfo* l
     }
 }
 
+struct Hints_00d9ff00 {
+    static void* FUN_0067cac0();
+    void FUN_0067c8c0(u32, int);
+};
+struct FlagTarget_00d9ff00 {
+    void FUN_00e31160(int);
+};
 // @ 0x00d9ff00
 void X::FUN_00d9ff00()
-{
-    char* self = (char*)this;
+{    char* self = (char*)this;
     if (*(int*)(self + 0xc) != 0 && *(float*)(self + 0x5c) > gDAT_1485378) {
         const float* p = (const float*)(self + 0x5c);
-        if (*(float*)(self + 0x5c) < gDAT_158137c)
+        if (gDAT_158137c > *p)
             p = &gDAT_158137c;
         *(float*)(*(int*)(self + 0xc) + 0x2cc) = *p;
     }
@@ -3273,9 +3279,9 @@ void X::FUN_00d9ff00()
     }
     MS* ms = (MS*)SP_MessageServer();
     ms->m2c(this, 0x41638ca, 0xffffd8f1);
-    if (*(int*)(self + 0xe8) != 0)
-        FUN_00e31160(0);
-    ((X*)FUN_0067cac0(0xe807e90c, 1))->FUN_0067c8c0();
+    if (*(FlagTarget_00d9ff00**)(self + 0xe8) != 0)
+        (*(FlagTarget_00d9ff00**)(self + 0xe8))->FUN_00e31160(0);
+    ((Hints_00d9ff00*)Hints_00d9ff00::FUN_0067cac0())->FUN_0067c8c0(0xe807e90c, 1);
 }
 
 // @ 0x00da0070

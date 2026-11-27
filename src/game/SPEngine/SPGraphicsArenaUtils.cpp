@@ -23,7 +23,10 @@ typedef unsigned int   u32;
 typedef unsigned char  u8;
 extern u32   sub_928a30(u32, u32, int,int,int,int,int,int);   // create render object
 extern void* g_lightManager;                                  // 0x16c8b44
-struct LightMgr { void Destroy(u32 p); };
+struct LightMgr {
+    void Destroy(u32 p);
+    u32 Create(u32 a, u32 b, int c, int d, int e, int f, int g, int h);
+};
 extern void  sub_11fb220(u32);                                // free
 struct Arena {
     void Release();                                           // 0x011e40a0 (rw::core::arena::Arena::Release)
@@ -117,16 +120,15 @@ extern void* sub_f473a0(u32 size, const char* name, int a, int b, int c, int d);
 
 // @ 0x006c2060
 void CreateRenderObjects(u32* out, u32* in)
-{
-    for (u32 i = 0; i < 4; ++i) {
+{    for (u32 i = 0; i < 4; ++i) {
         u32 a = in[i * 2];
-        if (a == 0) {
-            out[i] = 0;
+        u32 b = in[i * 2 + 1];
+        if (a > 0) {
+            out[i] = ((LightMgr*)g_lightManager)->Create(a, b, 0, 0, 0, 0, 0, 0);
         } else {
-            out[i] = sub_928a30(a, in[i * 2 + 1], 0, 0, 0, 0, 0, 0);
+            out[i] = 0;
         }
-    }
-}
+    }}
 
 // @ 0x006c20b0
 void DestroyRenderObjects(u32* arr)

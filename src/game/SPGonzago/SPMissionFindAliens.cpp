@@ -287,16 +287,16 @@ void cMissionFindAliens::Update(void* pParam)
 
 // @ 0x00c55500
 void cMissionFindAliens::SetContactGrob()
-{
-    if (mnNumAliensFound == 2)
+{    MissionVt_c4e230* m = (MissionVt_c4e230*)this;
+    if (m->mState == 2)
         return;
-    ((cDispatchObject*)this)->Call(0x6c);
-    if (mnNumAliensFound != 2) {
-        mnNumAliensFound = 2;
-        TriggerUIUpdate(this);
+    m->v6c();
+    if (m->mState != 2) {
+        m->mState = 2;
+        m->TriggerUIUpdate();
     }
-    OnAcceptMission(this);
-    OnRejectMission(this);
+    m->FUN_00c472e0();
+    m->FUN_00c471c0();
 }
 
 // 0x00c55540 (byte-exact lifted version: match/slices/s00c55540/s00c55540.cpp)
