@@ -771,12 +771,8 @@ void Ufill(mesh_instance* dstBase, unsigned count, const mesh_instance* src)
 }
 
 // @ 0x009c65b0
-void UcopyRange(mesh_instance* first, mesh_instance* last, mesh_instance* dest)
-{
-    if (first == last)
-        return;
-
-    do {
+mesh_instance* UcopyRange(mesh_instance* first, mesh_instance* last, mesh_instance* dest)
+{    while (first != last) {
         if (dest != 0) {
             dest->x = first->x;
             dest->y = first->y;
@@ -787,9 +783,10 @@ void UcopyRange(mesh_instance* first, mesh_instance* last, mesh_instance* dest)
                 ++o->refCount;
             dest->index = first->index;
         }
-        first = (mesh_instance*)((char*)first + 0x14);
-        dest = (mesh_instance*)((char*)dest + 0x14);
-    } while (first != last);
+        ++first;
+        ++dest;
+    }
+    return dest;
 }
 
 // @ 0x009c6600
@@ -888,12 +885,46 @@ MeshObj* CloneMeshInstance(MeshObj* src, void* mgr, unsigned* out)
 }
 
 // @ 0x009c67e0
-void ReleaseRange(body_mesh_data* first, body_mesh_data* last)
-{
-    while (first < last) {
-        if (first->model != 0)
-            ReleaseModel(first->model);
-        first = (body_mesh_data*)((char*)first + 0x14);
+void __stdcall ReleaseRange(body_mesh_data* first, body_mesh_data* last)
+{    struct Model;
+    struct IWorld {
+#define V4(a) virtual void v##a##_0(){} virtual void v##a##_1(){} virtual void v##a##_2(){} virtual void v##a##_3(){}
+#define V16(a) V4(a##0) V4(a##1) V4(a##2) V4(a##3)
+        V16(0) V16(1) V16(2) V16(3) V16(4)
+        V4(50) V4(51) V4(52)
+        virtual void ReleaseModel(Model* pModel, bool flag) {}
+#undef V16
+#undef V4
+    };
+    struct Bitset32 {
+        unsigned mWord[1];
+        unsigned GetWord(unsigned i) const { return mWord[i >> 5]; }
+        bool test(unsigned i) const
+        {
+            if (i < 32)
+                return (GetWord(i) & (1 << (i % 32))) != 0;
+            return false;
+        }
+    };
+    struct Model {
+        IWorld* mpWorld;
+        Bitset32 mFlags;
+        char pad08[0x38];
+        int mnRefCount;
+        void Release()
+        {
+            if (mnRefCount > 1) {
+                --mnRefCount;
+                return;
+            }
+            mpWorld->ReleaseModel(this, mFlags.test(31));
+        }
+    };
+
+    for (; first < last; first = (body_mesh_data*)((char*)first + 0x14)) {
+        Model* m = (Model*)first->model;
+        if (m != 0)
+            m->Release();
     }
 }
 

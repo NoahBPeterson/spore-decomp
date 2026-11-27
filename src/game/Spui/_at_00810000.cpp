@@ -17,6 +17,7 @@ extern "C" char g_1419b50[];
 extern "C" char g_1419c70[];
 extern "C" char g_15451e8[];
 extern "C" char g_15451ec[];
+extern "C" char g_15fd918[];
 extern "C" char g_164d858[];
 
 #include "game/types.h"
@@ -1012,8 +1013,7 @@ bool MsgBoxF::setMovieState(u32 id, u32)
 
 // @ 0x008178b0
 void cSPUIMovieRecordUI::reload(int arg)
-{
-    (void)arg;
+{    (void)arg;
     void* user = this ? (void*)((char*)this + 4) : 0;
     void* server = MsgServerW();
     mHandler = server;
@@ -1044,13 +1044,14 @@ void cSPUIMovieRecordUI::reload(int arg)
     Vv2c(mW3, 0x7c, 1, 0);
     b34 = 0;
     b35 = 1;
-    void* props = *(void**)0x15fd918;
+    void* props = *(void**)g_15fd918;
     if (props) {
         Prop* pr;
-        if (Vb2c(props, 0x24, 0x641021a, (int)&pr) && pr->mType == 1)
+        if (Vb2(props, 0x24, 0x641021a, (int)&pr) && pr->mType == 1)
             b35 = *pr->GetBool();
     }
-    void* base8 = (char*)this + 8;
+    struct Sub8 { void* p0; void* p4; void* p8; };
+    void* base8 = this ? (void*)&((Sub8*)this)->p8 : 0;
     void* o = FUN_0067de40();
     o = Vcp0(o, 0x20);
     Vv1(o, 0x1c, (int)base8);

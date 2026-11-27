@@ -22,3 +22,4 @@
 ../src/game/UTFSpore_Win32/Table.cpp  ?Table_Layout_XHTML_EA_ctor@Table_Layout_XHTML_EA@@QAEPAXPAX0@Z  008f1120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Table.cpp  ?Table_Layout_XHTML_EA_dtor@Table_Layout_XHTML_EA@@QAEPAXE@Z  008f11b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Table.cpp  ?Dispose@TableRow_s008f_16c0@Layout@XHTML@EA@@QAEXXZ  008f16c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Table.cpp  ?Finish@SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAEXXZ  008ef900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

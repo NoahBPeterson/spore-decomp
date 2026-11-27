@@ -3,7 +3,6 @@
 0068e8f0  146  complete: bitmap alloc/reset (stride/width/height/flag, vector assign/erase); expression evaluation order + reused-arg slot for the zero fill differ [equiv: PASS]
 0068e9a0  332  complete: serialised-stream deserialize (Seek/Read header, magic/size checks, resize, CRC32 verify, eraseAll on failure); frame-slot/register allocation differs [equiv: WEAK]
 0068eb50  277  complete: open file + first entry decode (Hinter ctor/Open/GetFrame/GetEntry/Read/Free, resize, ReadData); EH frame and local slot order differ [equiv: WEAK]
-0068eca0  33   complete: write raw bytes (passthrough memcpy vs EncodeBit loop + CRC64 + f34); stale-eax passthrough return and block layout differ [equiv: PASS]
 0068ed70  309  complete: finish/flush coder (passthrough tail write vs magic+hash+Flush+InitMask+tail); dead 0x14036b0 load and local layout differ [equiv: WEAK]
 0068eef0  145  complete: start coder pass (external: resize+magicB seed; coded: clear+magic/hash seed via helper); register allocation and block order differ [equiv: WEAK] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 0068f350  178  complete: JobLockTable::TryLockJobs - FUN_0068f4d0 then vtable slot 0x10 try-lock for both args, operator_new(0x14,"App/JobLock") + JobLock(*a,*b,this), then vtbl[0]/vtbl[1] on the lock; mine 133 B vs 204 B; residual is the EH frame + operator_new result-slot scheduling. equiv PASS (391 valid, 98.7% cov)

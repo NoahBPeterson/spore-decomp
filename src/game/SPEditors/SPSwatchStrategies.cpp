@@ -3481,7 +3481,8 @@ bool __cdecl FUN_005f3060();
 void __cdecl FUN_00805fe0(void* out, int a);
 bool __cdecl FUN_00efc9c0();
 void __cdecl FUN_005f4750();
-void __cdecl FUN_00401020();
+struct SwatchMgr_005f0ca0 { void* CreateSwatch(void*); }; // 0x005f0ca0
+SwatchMgr_005f0ca0* __cdecl FUN_00401020();
 int* __cdecl FUN_0113ae10();
 int* __cdecl SP_WindowManager();
 void __cdecl cSPUIPropertyLayout_SetPositionAndOffset(void* self, float a, float b, float c, float d);
@@ -5580,18 +5581,19 @@ void __fastcall FUN_00ecdcc0(int param_1)
 // @ 0x00ecdf60
 void FUN_00ecdf60_fn(void)
 {
-    int* p = (int*)operator new(0x1c8);
-    if (p) {
-        FUN_005f7380();
-        p[0] = (int)vtbl_BakeSprites;
-        p[1] = (int)vtbl_cSPScenarioSwatchItemUI;
-        p[3] = (int)vtbl_PaintSystem;
-        FUN_00401020();
-        FUN_005f0ca0(p);
-        return;
+    struct SwatchObj { void* vt0; void* vt4; void* pad8; void* vtc; };
+    SwatchObj* p = (SwatchObj*)EA_New(0x1c8, "Editor", 0, 0, 0, 0);
+    SwatchObj* q;
+    if (p != 0) {
+        FUN_005f7380(p);
+        p->vt0 = vtbl_BakeSprites;
+        p->vt4 = vtbl_cSPScenarioSwatchItemUI;
+        p->vtc = vtbl_PaintSystem;
+        q = p;
+    } else {
+        q = 0;
     }
-    FUN_00401020();
-    FUN_005f0ca0(0);
+    FUN_00401020()->CreateSwatch(q);
 }
 
 // @ 0x00ecdfc0
@@ -5744,18 +5746,20 @@ bool __fastcall FUN_00ed1380(void* self)
 // @ 0x00ed1460
 void FUN_00ed1460(void)
 {
-    char* p = (char*)EA_New(0x1c8, "Editor", 0, 0, 0, 0);
+    extern void* vt_1489aa0[];
+    struct SwatchObj { void* vt0; void* vt4; void* pad8; void* vtc; };
+    SwatchObj* p = (SwatchObj*)EA_New(0x1c8, "Editor", 0, 0, 0, 0);
+    SwatchObj* q;
     if (p != 0) {
         FUN_005f7380(p);
-        *(void**)p = (void*)0x1489aa0;
-        *(void**)(p + 4) = (void*)0x13f9ea4;
-        *(void**)(p + 0xc) = (void*)0x1489590;
-        void* q = FUN_00401020(p);
-        FUN_005f0ca0(q);
+        p->vt0 = vt_1489aa0;
+        p->vt4 = vtbl_cSPScenarioSwatchItemUI;
+        p->vtc = vtbl_PaintSystem;
+        q = p;
     } else {
-        void* q = FUN_00401020(0);
-        FUN_005f0ca0(q);
+        q = 0;
     }
+    FUN_00401020()->CreateSwatch(q);
 }
 
 // @ 0x00ed14c0

@@ -206,13 +206,25 @@ extern float gTwo;        // 0x01470f1c
 
 // @ 0x00b37440
 void __thiscall cEditorRes::dtor()
-{
+{    extern void* vt_editor_0[];
+    extern void* vt_editor_4[];
+    extern void* vt_sub_0[];
+    extern void* vt_sub_4[];
+    extern void* vt_final_4[];
+    extern void* vt_final_0[];
+
+    struct LocalTree {
+        void* d[3];
+        void* mpRoot;
+        ~LocalTree() { ((TreeOps*)this)->nuke(mpRoot); }
+    };
+
     char* self = (char*)this;
 
-    *(void**)self        = VT_EDITOR_0;
-    *(void**)(self + 4)  = VT_EDITOR_4;
-    *(void**)(self + 8)  = VT_SUB_0;
-    *(void**)(self + 0xc)= VT_SUB_4;
+    *(void**)self         = vt_editor_0;
+    *(void**)(self + 4)   = vt_editor_4;
+    *(void**)(self + 8)   = vt_sub_0;
+    *(void**)(self + 0xc) = vt_sub_4;
 
     EaVector* vec = (EaVector*)(self + 0x110);
     vec->destroy(vec->mpBegin, vec->mpEnd);
@@ -226,7 +238,7 @@ void __thiscall cEditorRes::dtor()
     if (*(RefObj**)(self + 0xe4))
         (*(RefObj**)(self + 0xe4))->Release();
 
-    ((TreeOps*)(self + 0xc8))->nuke(*(void**)(self + 0xd4));
+    ((LocalTree*)(self + 0xc8))->~LocalTree();
 
     if (*(RefObj**)(self + 0xc4))
         (*(RefObj**)(self + 0xc4))->v08();
@@ -251,8 +263,8 @@ void __thiscall cEditorRes::dtor()
     ((IntrusiveList*)(self + 0x24))->~IntrusiveList();
     ((cGonzagoSubsystem*)(self + 8))->dtor();
 
-    *(void**)(self + 4) = VT_FINAL_4;
-    *(void**)self       = VT_FINAL_0;
+    *(void**)(self + 4) = vt_final_4;
+    *(void**)self       = vt_final_0;
 }
 
 // @ 0x00b375f0  eastl vector<AnalysisInfo>::operator=

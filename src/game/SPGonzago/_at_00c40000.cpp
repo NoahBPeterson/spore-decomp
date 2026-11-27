@@ -497,8 +497,7 @@ extern "C" void  __cdecl FUN_00ae6970(void* p);
 extern "C" void  __cdecl FUN_00c344f0();
 extern "C" void  __cdecl FUN_00c4dbe0(void* vec, void* val);        // eastl push_back
 extern "C" void  __cdecl FUN_00c4db30(void* self, int a);
-extern "C" void  __cdecl FUN_00c4e070(void* out, void* fmt, int val);   // WStr_Format
-extern "C" int   __cdecl FUN_00c491c0(void* self, int tag, void* out);  // cSPMission::GetTagString
+extern "C" void  __cdecl FUN_0041e050(void* out, void* fmt, int val);   // WStr_Format
 extern "C" int   __cdecl FUN_01021080();
 extern "C" int   __cdecl FUN_00ce6950(int ctx);
 extern "C" int   __cdecl FUN_00c4a6b0(void* self, int a, int b);
@@ -565,6 +564,7 @@ class ThisStubs
     bool  RegisterCallback();            // 0x00dd6b20 cSPUIEventLog::RegisterCallback
     void  MoveNestInit(void* a, void* b);  // 0x00c4db90
     void  PostInit();                    // 0x00c4a0c0
+    bool  GetTagString(int tag, void* out); // 0x00c491c0 cSPMission::GetTagString
 };
 }
 namespace SP {
@@ -890,14 +890,13 @@ LAB_CASE_DEFAULT:
 }
 
 // @ 0x00c4deb0
-int __fastcall FUN_00c4deb0(void* ecx_this, void* edx, int tag, void* out)
-{
-    if ((u32)tag == 0x649ad9deu) {
-        int diff = *(int*)((char*)ecx_this + 0x1f8) - *(int*)((char*)ecx_this + 0x1fc);
-        FUN_00c4e070(out, (void*)0x13f01bc, diff);   // WStr_Format
-        return 1;
+bool __fastcall FUN_00c4deb0(void* ecx_this, void* edx, int tag, void* out)
+{    if (tag == 0x649ad9de) {
+        SP::cMission* self = (SP::cMission*)ecx_this;
+        FUN_0041e050(out, (void*)L"%d", self->mCount1f8 - self->mCount1fc);
+        return true;
     }
-    return FUN_00c491c0(ecx_this, tag, out);         // cSPMission::GetTagString
+    return ((SP::ThisStubs*)ecx_this)->GetTagString(tag, out);
 }
 
 // @ 0x00c4def0

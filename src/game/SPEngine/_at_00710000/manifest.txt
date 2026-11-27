@@ -37,3 +37,4 @@
 ../src/game/SPEngine/_at_00710000.cpp  ?resize@Vec18@@QAEXI@Z  00717890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00710000.cpp  ?finish@MeshBuilder8@@QAEXXZ  00719240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00710000.cpp  ?assignFwd50@@YAXPAUElem50@@00@Z  00718520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?InsertionSortB@@YAXPAI0URecordCmp@@@Z  007147e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

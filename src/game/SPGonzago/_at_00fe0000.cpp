@@ -1477,12 +1477,14 @@ void Brush::f8450()
 
 // @ 0x00fe8630
 static NOINLINE float Brush_f8630(Brush_s00fe_8630* self, const float* addend)
-{
-    float d[3];
+{    float d[3];
     d[0] = self->f5c + addend[0];
     d[1] = self->f60 + addend[1];
     d[2] = self->f64 + addend[2];
-    float inv = 1.0f / sqrtf(d[0] * d[0] + (d[1] * d[1] + d[2] * d[2]));
+    float lenSq = d[0] * d[0];
+    lenSq += d[1] * d[1];
+    lenSq += d[2] * d[2];
+    float inv = 1.0f / sqrtf(lenSq);
     d[0] = d[0] * inv;
     d[1] = d[1] * inv;
     d[2] = d[2] * inv;

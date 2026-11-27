@@ -156,7 +156,7 @@ public:
     bool DoMessage(void* pMessage, int* pData);
     void Shutdown();
     bool LoadKey(int a, int b, int nKey);
-    uint32_t QueryKey(uint32_t nValue, int nKey);
+    void* QueryKey(uint32_t nKey);
 
     uint8_t mPad10[0x10];                   // 0x04..0x13
     cPlayerCityMusic* mpMusic;              // 0x14
@@ -389,13 +389,15 @@ cCityMusicLoadSave::cCityMusicLoadSave()
 }
 
 // @ 0x00ea22c0
-uint32_t cCityMusicLoadSave::QueryKey(uint32_t nValue, int nKey)
+void* cCityMusicLoadSave::QueryKey(uint32_t nKey)
 {
-    if (nKey != 0x2f009dd0 && nKey != 0x2f009dd0 - 0x2611d610)
+    struct Sub12 { char pad[0xc]; };
+    if (nKey == 0x2f009dd0u)
+        return ((Sub12*)this - 1) ? this : 0;
+    else if (nKey == 0xee3f516eu)
+        return ((Sub12*)this - 1) ? this : 0;
+    else
         return 0;
-    if (nValue != 0xc)
-        return 0;
-    return nValue;
 }
 
 // @ 0x00ea2310

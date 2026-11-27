@@ -23,3 +23,6 @@
 ../src/game/Havok/_at_01070000.cpp  ?getAllocatedSize@hkPoolMemory@@UAEHH@Z  0107f670 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/Havok/_at_01070000.cpp  ?printStatistics@hkPoolMemory@@UAEXPAVhkOstream_s0107_e670@@@Z  0107f700 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/Havok/_at_01070000.cpp  ?getStatSynopsis@hkPoolMemory@@UAEXPAUhkMemoryStatistics@@@Z  0107f800 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?replaceInstance@hkThreadMemory@@SAXPAV1@@Z  0107dbd0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ??1?$hkPointerMapBase@K@@QAE@XZ  0107de50  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01070000.cpp  ?FUN_0107e640@@YAXXZ  0107e640  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

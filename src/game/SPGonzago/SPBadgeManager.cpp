@@ -601,7 +601,9 @@ struct cSPBadgeManager_s00fe_5a20 {
     void AddToBadgeProgress(int ev, int value);   // 0xfe5430 ret 8
     void UnlockBadge(uint32 badge);               // 0xfe5a20
     long double GetProgressScore(uint32 id, int mode, void* buf, uint32 len);  // 0xfe6210
+    double GetProgressScore2(uint32 id, int mode);  // 0xfe6210 (2-arg __thiscall form)
     void OnTick(int delta);                       // 0xfe6490
+    int FeedbackScoreForMode2(uint32 id);         // 0xfe6770
 };
 extern "C" void* BadgeProps(uint32 event);                                    // 0x642c10
 extern "C" void ReportBadgeProgress(uint32 event);                            // 0xe17470
@@ -1458,10 +1460,9 @@ int EventMap::GetScoreRounded(uint32 id)
 }
 
 // @ 0x00fe6770
-int FeedbackScoreForMode2(uint32 id)
+int cSPBadgeManager_s00fe_5a20::FeedbackScoreForMode2(uint32 id)
 {
-    extern long double BadgeScoreFree(uint32 id, int mode);       // 0xfe6210 (free-call form)
-    return (int)BadgeScoreFree(id, 2);
+    return (int)(unsigned)GetProgressScore2(id, 2);
 }
 
 // @ 0x00fe67b0

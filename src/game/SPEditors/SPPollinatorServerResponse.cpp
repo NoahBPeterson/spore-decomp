@@ -803,15 +803,13 @@ void SP::Pollen::cServerResponse_s0061_4f20::DefaultEndTag(const wchar_t* tag)
 
 // @ 0x00615330
 void SP::Pollen::cServerResponse_s0061_4f20::EndElementHandler(SP::Pollen::cServerResponse_s0061_4f20* self, const wchar_t* name)
-{
-    HandlerRange_s0061_4f20 r = gEndHandlers.equal_range(name);
-    if (r.first == r.second || r.first == gEndHandlers.mpEnd) {
+{    HandlerRange r = ((HandlerMap*)&gEndHandlers)->equal_range(name);
+    if (r.first == r.second || r.first == ((HandlerMap*)&gEndHandlers)->mpEnd) {
         self->DefaultEndTag(name);
         return;
     }
     typedef void (__thiscall *Fn)(void*);
-    ((Fn)r.first->second.fn)((char*)self + r.first->second.adj);
-}
+    ((Fn)r.first->second.fn)((char*)self + r.first->second.adj);}
 
 // @ 0x00615380
 SP::Pollen::cServerResponse_s0061_4f20::~cServerResponse_s0061_4f20()

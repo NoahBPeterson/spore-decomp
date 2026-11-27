@@ -3398,30 +3398,31 @@ char Coder_s0068_e670::OpenData(const char* path)
 
 // @ 0x0068eca0
 char Coder_s0068_e670::WriteData(const u8* data, u32 n)
-{
-    if (f55) {
-        if (mState != 2) return 0;
-        mStream.resize((u32)(mStream.mpEnd - mStream.mpBegin) + n);
-        MemcpyT(mStream.mpEnd - n, data, n);
-        return 1;
+{    if (f55) {
+        if (mState == 2) {
+            VecU8& s = mStream;
+            s.resize(s.size() + n);
+            MemcpyT(s.mpEnd - n, data, n);
+            return 1;
+        }
+    } else if (mState == 2) {
+        char ok = 1;
+        const u8* p = data;
+        const u8* end = data + n;
+        while (p != end) {
+            if (!ok) break;
+            ok = EncodeBit(*p++);
+        }
+        if (ok) {
+            f34 += n;
+            u64 h = CRC64(data, n, mHashLo, mHashHi, 0);
+            mHashLo = (u32)h;
+            mHashHi = (u32)(h >> 32);
+        }
+        mState = ok ? mState : 1;
+        return ok;
     }
-    if (mState != 2) return 0;
-    char ok = 1;
-    const u8* p = data;
-    const u8* end = data + n;
-    while (p != end) {
-        if (!ok) break;
-        ok = EncodeBit(*p++);
-    }
-    if (ok) {
-        f34 += n;
-        u64 h = CRC64(data, n, mHashLo, mHashHi, 0);
-        mHashLo = (u32)h;
-        mHashHi = (u32)(h >> 32);
-    }
-    mState = ok ? mState : 1;
-    return ok;
-}
+    return 0;}
 
 // @ 0x0068ed70
 char Coder_s0068_e670::Finalize(char flag)

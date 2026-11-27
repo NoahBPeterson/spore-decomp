@@ -10,3 +10,4 @@
 ../src/game/Spui/_at_007f0000.cpp  ?Ctor@ShadeColorFull@@QAEPAU1@XZ  007ff510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_007f0000.cpp  ?SerReadC@@YA_NPAUSerItem3@@PAX@Z  007ff8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_007f0000.cpp  ?CopyThing@@YA_NPAUSerItem3@@PAX@Z  007ff940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?PredCheck@@YA_NPAXPAD@Z  007ff8f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

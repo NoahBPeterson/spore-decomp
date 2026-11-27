@@ -3650,16 +3650,17 @@ Elem16* UninitMove16(Elem16* first, Elem16* last, Elem16* dst)
 }
 
 // @ 0x00ba7960
-void UninitMove12(ElemC* first, ElemC* last, ElemC* dst)
-{
-    for (; first != last; ++first, ++dst) {
+ElemC* UninitMove12(ElemC* first, ElemC* last, ElemC* dst)
+{    while (first != last) {
         if (dst != 0) {
             dst->x = first->x;
             dst->y = first->y;
             dst->z = first->z;
         }
+        ++dst;
+        ++first;
     }
-}
+    return dst;}
 
 // @ 0x00ba79a0
 void RefAdjustHeap(RefObj** first, uint topPosition, uint heapSize, uint position, RefObj* value)

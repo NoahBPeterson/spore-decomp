@@ -1,5 +1,4 @@
 00c4dd10  416  Complete cSPMission message dispatch; residual is call/stack scheduling and register allocation.
-00c4deb0  38  Complete cMissionChangeArchetype GetTagString; residual is tail-call merging vs separate mov/jmp body.
 00c4e0f0  203  Complete mission property reader; residual is property-list walk scheduling and register allocation. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 return target, ret#1 esp, ret#1 edi]
 00c4e280  174  Complete mission value getter; residual is float/int conversion ordering and register allocation.
 00c4e440  248  Complete mission state query; residual is vtable-call scheduling and register allocation.

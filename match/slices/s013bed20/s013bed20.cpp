@@ -198,8 +198,14 @@ void f_013c0250() {
 
 // @ 0x013C0300 (/Od: reloads the global for `this` after the null test)
 // Reached through an __stdcall thunk (0x00935a70): argument cleanup is the callee's.
-void __stdcall f_013c0300() {
-    if (g_164b410) ((V4*)g_164b410)->b();
+void __stdcall f_013c0300() {    struct LocalAutoRef {
+        V4* mpObject;
+        __forceinline void ReleaseForDestruction() {
+            if (mpObject)
+                mpObject->b();
+        }
+    };
+    ((LocalAutoRef*)&g_164b410)->ReleaseForDestruction();
 }
 
 // @ 0x013C0510

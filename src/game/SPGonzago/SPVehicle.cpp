@@ -6229,16 +6229,15 @@ void __cdecl FUN_00ca9820()
 
 // @ 0x00ca9b00
 tSlot24* __thiscall cSlotVector24::Erase(tSlot24* pFirst, tSlot24* pLast)
-{
-    tSlot24* pNewEnd = FUN_00ca0da0(pLast, mpEnd, pFirst);
+{    tSlot24* pOldEnd = mpEnd;
+    tSlot24* pNewEnd = FUN_00ca0da0(pLast, pOldEnd, pFirst);
     tSlot24* pEnd = mpEnd;
     for (tSlot24* p = pNewEnd; p < pEnd; ++p) {
         if (p->mpObj)
             p->mpObj->Release();
     }
     mpEnd -= (int32_t)(pLast - pFirst);
-    return pFirst;
-}
+    return pFirst;}
 
 // @ 0x00ca9b70
 void __cdecl FUN_00ca9b70()

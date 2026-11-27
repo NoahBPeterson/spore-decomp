@@ -1589,19 +1589,17 @@ void __cdecl InsertionSortA(uint32_t* first, uint32_t* last, RecordCmp compare)
 
 // @ 0x007147e0
 void __cdecl InsertionSortB(uint32_t* first, uint32_t* last, RecordCmp compare)
-{
-    for (uint32_t* cur = first; cur != last; ++cur) {
+{    for (uint32_t* cur = first; cur != last; ++cur) {
         uint32_t value = *cur;
         uint32_t* hole = cur;
         uint32_t* prev = cur - 1;
         while (compare.less(value, *prev)) {
             *hole = *prev;
-            hole = prev;
+            --hole;
             prev = hole - 1;
         }
         *hole = value;
-    }
-}
+    }}
 
 // @ 0x00714880
 uint32_t* __cdecl MinOfThree(uint32_t* a, uint32_t* b, uint32_t* c, RecordCmp compare)

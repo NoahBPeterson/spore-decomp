@@ -19,3 +19,4 @@
 ../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetShadeAlphaW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f8290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetShadeW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f82f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ??0MissionCardAnimator@@QAE@XZ  007f83e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?F64D0@@YA_NPAXHMH@Z  007f64d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

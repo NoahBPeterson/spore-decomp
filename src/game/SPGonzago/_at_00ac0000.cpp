@@ -1171,6 +1171,8 @@ int ThiscallStub::FUN_00ac0810(void* a, void* b)
 {
     float* self = (float*)this;
     extern float* __fastcall cCivData_GetCities(void*); // 0x5c65e0
+    extern float g_1459c48; // +1.5258789e-05
+    extern float g_13f89b8; // -1.5258789e-05
     float* pa = cCivData_GetCities(a);
     float dxa = self[0] - pa[0];
     float dya = self[1] - pa[1];
@@ -1184,7 +1186,7 @@ int ThiscallStub::FUN_00ac0810(void* a, void* b)
     float db  = dzb * dzb + dyb * dyb + dxb * dxb;
 
     float diff = db - da;
-    if (diff < G_01459c48 && G_013f89b8 < diff)
+    if (diff < g_1459c48 && g_13f89b8 < diff)
         return (int)(a < b);
     if (da < db)
         return 1;
@@ -2170,18 +2172,50 @@ void __cdecl FUN_00aca620(void* obj, HashTable* ht)
 // @ 0x00aca730
 void FUN_00aca730(void* obj, int* vec)
 {
-    void* r = ((void* (__thiscall*)(void*))vc(obj, 0x20))(obj);
-    int n = (vec[1] - vec[0]) >> 2;
-    void* w = ((void* (__thiscall*)(void*))vc(r, 0x18))(r);
-    FUN_0093aa70(w, &n, 1, 0);
+    struct Sub {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual void v0c() {}
+        virtual void v10() {}
+        virtual void v14() {}
+        virtual void* v18() { return 0; }
+        void WriteCount(int n) {
+            void* w = v18();
+            FUN_0093aa70(w, &n, 1, 0);
+        }
+    };
+    struct Obj {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual void v0c() {}
+        virtual void v10() {}
+        virtual void v14() {}
+        virtual void v18() {}
+        virtual void v1c() {}
+        virtual Sub* v20() { return 0; }
+        virtual void v24() {}
+        virtual void v28() {}
+        virtual void v2c(uint) {}
+    };
+    struct Elem {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual uint v0c(int) { return 0; }
+    };
+    int count = (vec[1] - vec[0]) >> 2;
+    Sub* r = ((Obj*)obj)->v20();
+    r->WriteCount(count);
     int* b = (int*)vec[0];
     int* e = (int*)vec[1];
     for (; b != e; b++) {
         uint v = 0;
-        if (*b) v = ((uint (__thiscall*)(void*, int))vc((void*)*b, 0xc))((void*)*b, 0x179c807);
-        ((void (__thiscall*)(void*, uint))vc(obj, 0x2c))(obj, v);
+        if (*b) v = ((Elem*)*b)->v0c(0x179c807);
+        ((Obj*)obj)->v2c(v);
     }
-    ((void (__thiscall*)(void*))vc(obj, 0x1c))(obj);
+    ((Obj*)obj)->v1c();
 }
 
 // @ 0x00aca7b0
@@ -3029,18 +3063,27 @@ void VO_s00ac_c140::FUN_00acc700(void* p, float a, float b)
 // @ 0x00acc770
 void VO_s00ac_c140::FUN_00acc770()
 {
-    uchar* p = (uchar*)this;
-    int n = (*(int*)(p + 0x11c) - *(int*)(p + 0x118)) >> 2;
+    struct Vec {
+        XC_s00ac_c140** mpBegin;
+        XC_s00ac_c140** mpEnd;
+        static void DestroyRange(XC_s00ac_c140** first, XC_s00ac_c140** last) {
+            for (; first < last; first++)
+                if (*first) (*first)->FUN_00a05270();
+        }
+        XC_s00ac_c140** erase(XC_s00ac_c140** first, XC_s00ac_c140** last) {
+            XC_s00ac_c140** position = (XC_s00ac_c140**)FUN_00ac89e0(last, mpEnd, first);
+            DestroyRange(position, mpEnd);
+            mpEnd -= (last - first);
+            return first;
+        }
+    };
+    Vec* v = (Vec*)((uchar*)this + 0x118);
+    int n = (int)(v->mpEnd - v->mpBegin);
     for (int i = 0; i < n; i++) {
         int* o = (int*)FUN_00b33f40();
-        ((void (__thiscall*)(void*, int))vc(o, 0x3c))(o, *(int*)(*(int*)(p + 0x118) + i * 4));
+        ((void (__thiscall*)(void*, int))vc(o, 0x3c))(o, (int)v->mpBegin[i]);
     }
-    int b = *(int*)(p + 0x118);
-    int e = *(int*)(p + 0x11c);
-    int* it = (int*)FUN_00ac89e0((void*)e, (void*)e, (void*)b);
-    int* end = *(int**)(p + 0x11c);
-    for (; it < end; it++) if (*it) ((XC_s00ac_c140*)*it)->FUN_00a05270();
-    *(int*)(p + 0x11c) -= (e - b) >> 2 << 2;
+    v->erase(v->mpBegin, v->mpEnd);
 }
 
 // 0x00acc800 (byte-exact lifted version: match/slices/s00acc800/s00acc800.cpp)

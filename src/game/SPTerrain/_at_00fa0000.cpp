@@ -1008,8 +1008,7 @@ void __stdcall SP::SetupTerrainMesh(VertexBuffer_s00fa_e800* vb, IndexBuffer_s00
 
 // @ 0x00faef90
 void SP::InitTerrainAtmosphereMesh()
-{
-    if (SP::gTerrainAtmosphereMesh != 0)
+{    if (SP::gTerrainAtmosphereMesh != 0)
         return;
 
     SP::gTerrainAtmosphereMesh = CreateMesh(2);
@@ -1026,9 +1025,22 @@ void SP::InitTerrainAtmosphereMesh()
     indices[2] = 2;
     SP::gTerrainAtmosphereIB->Unlock(locked);
 
-    Mesh_s00fa_e800* mesh = SP::gTerrainAtmosphereMesh;
-    mesh->m_minVertex = 0;
-    mesh->m_vertexRange = SP::gTerrainAtmosphereVB->m_numVertices;
+    struct LocalVB {
+        char pad[0x0c];
+        unsigned int m_numVertices;
+        unsigned int GetNumVertices() const { return m_numVertices; }
+    };
+    struct LocalMesh {
+        char pad[0x1c];
+        unsigned int m_minVertex;
+        unsigned int m_vertexRange;
+        void SetMinAndMaxVertexIndex(unsigned int minVertex, unsigned int vertexRange) {
+            m_minVertex = minVertex;
+            m_vertexRange = vertexRange;
+        }
+    };
+    ((LocalMesh*)SP::gTerrainAtmosphereMesh)->SetMinAndMaxVertexIndex(
+        0, ((LocalVB*)SP::gTerrainAtmosphereVB)->GetNumVertices());
     SP::gTerrainAtmosphereMesh->SetVertexBuffer(0, SP::gTerrainAtmosphereVB);
     SP::gTerrainAtmosphereMesh->SetVertexBuffer(1, secondVB);
     SP::gTerrainAtmosphereMesh->SetIndexBuffer(SP::gTerrainAtmosphereIB);

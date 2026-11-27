@@ -5094,9 +5094,8 @@ void __cdecl FillElems14(Elem14* dst, u32 count, const Elem14* value)
 }
 
 // @ 0x00c90e40
-void __cdecl CopyElems14Range(Elem14* first, const Elem14* last, Elem14* dst)
-{
-  for (; first != last; first++) {
+Elem14* __cdecl CopyElems14Range(Elem14* first, const Elem14* last, Elem14* dst)
+{  for (; first != last; ++first, ++dst) {
     if (dst != 0) {
       dst->mX = first->mX;
       dst->mY = first->mY;
@@ -5104,8 +5103,8 @@ void __cdecl CopyElems14Range(Elem14* first, const Elem14* last, Elem14* dst)
       dst->mW = first->mW;
       dst->mB_10 = first->mB_10;
     }
-    dst++;
   }
+  return dst;
 }
 
 // @ 0x00c90e80
@@ -7619,19 +7618,17 @@ cTribe_s00c9_9140* __cdecl CreatePlayerTribe(int a, int b, int c, cSpeciesProfil
 
 // @ 0x00c9a000
 TribeToolRef* __thiscall ToolVec::PushBackAt(TribeToolRef* pos, const TribeToolRef* val)
-{
-    int index = (int)(pos - this->mpBegin);
+{    int index = (int)(pos - this->mpBegin);
     if (pos == this->mpEnd && this->mpEnd != this->mpCap) {
-        TribeToolRef* end = this->mpEnd;
-        this->mpEnd = end + 1;
+        TribeToolRef* end = this->mpEnd++;
         if (end != 0) {
             end->mpVtbl = val->mpVtbl;
             end->mBody.CopyFrom(val->mBody);
         }
-        return (TribeToolRef*)((char*)this->mpBegin + index * 0x60);
+    } else {
+        this->InsertAt(pos, val);
     }
-    this->InsertAt(pos, val);
-    return (TribeToolRef*)((char*)this->mpBegin + index * 0x60);
+    return this->mpBegin + index;
 }
 
 // @ 0x00c9a080

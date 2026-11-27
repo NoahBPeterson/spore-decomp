@@ -1303,12 +1303,9 @@ void cJobManager::GetJobStatus(cJobData* pJob)
 
 // @ 0x00690120
 int cJob::Release()
-{
-    cJobData* p = static_cast<cJobData*>(this);
-    long* pRC = (long*)&p->mRefCount;
-    int n = _InterlockedExchangeAdd(pRC, -1) - 1;
+{    int n = _InterlockedDecrement((long*)&static_cast<cJobData*>(this)->mRefCount);
     if (n == 0) {
-        p->mpManager->GetJobStatus(p);
+        static_cast<cJobData*>(this)->mpManager->GetJobStatus(static_cast<cJobData*>(this));
     }
     return n;
 }

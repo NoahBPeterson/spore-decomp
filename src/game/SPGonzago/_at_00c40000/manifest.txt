@@ -13,3 +13,4 @@
 ../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4dce0@@YIDPAX0@Z  00c4dce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4def0@@YIPAXPAX0@Z  00c4def0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?ContainsKey@cMissionKeys@@QAEDH@Z  00c4db00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4deb0@@YI_NPAX0H0@Z  00c4deb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
