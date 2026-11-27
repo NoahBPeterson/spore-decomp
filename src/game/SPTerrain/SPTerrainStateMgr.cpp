@@ -1,3 +1,4 @@
+#include <intrin.h>
 // src/game/SPTerrain/SPTerrainStateMgr.cpp -- migrated from slice(s) s00fbddb0, s00fc03c0, s00fbe7d0, s00fbce30, s00fba330 by tools/migrate/rewrite.py
 // Object file: SPTerrain/SPTerrainStateMgr.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -1518,7 +1519,9 @@ StateOutputParms_s00fb_ddb0::StateOutputParms_s00fb_ddb0(const StateOutputParms_
     b00 = o.b00;
     d04 = o.d04; d08 = o.d08; d0c = o.d0c; d10 = o.d10;
     d14 = o.d14; d18 = o.d18; d1c = o.d1c; d20 = o.d20;
-    d24 = o.d24; d28 = o.d28; d2c = o.d2c; d30 = o.d30;
+    d24 = o.d24; d28 = o.d28; d2c = o.d2c;
+    _ReadWriteBarrier();
+    d30 = o.d30;
     v34 = o.v34;
     v48 = o.v48;
     f5c = o.f5c; f60 = o.f60; f64 = o.f64; f68 = o.f68;
