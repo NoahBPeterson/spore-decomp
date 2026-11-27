@@ -1,4 +1,3 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
-00fd71e0  82  no symbol of similar size; 5-arg cdecl, switch mapping + two vcalls
 00fd7b30  297  cMovieSystem constructor [equiv: PASS]
 00fd7260  460  DrawLayer: complete viewer/Clear/SetMaterialColor/Update/Render path plus raster recapture and FillSpriteTexture; compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 597 vs 652 B; clamp01 stays a non-inlined SSE helper call and color[] sits 8 B lower in the frame, so block scheduling differs [equiv: WEAK 240 valid inputs, 56.7% coverage]
