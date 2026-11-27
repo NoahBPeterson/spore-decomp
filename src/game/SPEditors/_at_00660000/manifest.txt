@@ -12,3 +12,4 @@
 ../src/game/SPEditors/_at_00660000.cpp  ??RCmp38@@QAEIAAUCItem@@0@Z  0066ad10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00660000.cpp  ?Get@Switcher2@@QAEIXZ  0066ad70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00660000.cpp  ?FUN_0066b050@@YAXPAX@Z  0066b050  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00660000.cpp  ?FUN_0066b0c0@@YAXPAPAI@Z  0066b0c0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
