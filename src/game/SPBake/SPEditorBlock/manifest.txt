@@ -44,7 +44,7 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?Add@cSPBoundingBox_s0043_e3f0@@QAEXABU1@@Z  0043f050  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43f250@cSPEditorBlock_s0043_e3f0@SP@@QAEMXZ  0043f250  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?GetCorner@cSPBoundingBox_s0043_e3f0@@QBE?AUcSPVector3_s0043_e3f0@@I@Z  0043f290  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
-../src/game/SPBake/SPEditorBlock.cpp  ?F40110@cSPEditorBlock_s0044_0110@SP@@QAEXM@Z  00440110  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?F440110@cSPEditorBlock_s0044_0110@SP@@QAEXM@Z  00440110  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?SetUserOrientationHelper@cSPEditorBlock_s0044_0110@SP@@QAEXUMatrix3_s0044_0110@2@@Z  004404f0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?SetUniformScale@cSPEditorBlock_s0044_0110@SP@@QAEXM_N0@Z  00440520  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F40b90@cSPEditorBlock_s0044_0110@SP@@QAEPAUVec3@2@PAU32@@Z  00440b90  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -98,3 +98,4 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?Reset188@Block2@@QAEXXZ  00451ed0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?FUN_00451fe0@cSPEditorBlock_s0045_1ef0@@QAEXXZ  00451fe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?FUN_00452040@cSPEditorBlock_s0045_1ef0@@QAEXXZ  00452040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?F40420@cSPEditorBlock_s0044_0110@SP@@QAEXMD@Z  00440420  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
