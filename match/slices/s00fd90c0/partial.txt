@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
-00fd9480  282  ConvertRenderableToRaster: incomplete. The mode-0 path is
                complete; the mode-3 memmove loop is a placeholder and
                FUN_011ef750 is declared stdcall instead of thiscall (difftest
                shows ecx=STK vs the original's object). flags /O2 /MD /Gy /TP /arch:SSE
