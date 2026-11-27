@@ -2228,7 +2228,7 @@ char* spigot_new(float f)
     char* x = (char*)pd_new(spSpigotClass);
     if (x != 0) {
         floatinlet_new(x, x + 0x28);
-        char* o = (char*)outlet_new(x, gEmptySymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gEmptySymbol_s00a5_b510 /*DAT_016758a0*/);
+        char* o = (char*)outlet_new(x, gEmptySymbol_s00a5_b510);
         setObjP(x, 0x2c, o);
         setObjF(x, 0x28, f);
     }

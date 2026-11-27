@@ -3,7 +3,6 @@
 # EAPD slices s00a5e0f0 / s00a53f90).
 # va  diff-bytes  reason
 00a5b550   82  complete trigger_setup (gensym "trigger"/"t", class_new_t2 sz 0x30 args 9,0, class_addcreator "t", then list/bang/float/symbol/anything bindings, `&`-chain return); only the boolean `and` chain scheduling differs [equiv UNSUPPORTED: 0/400 valid, pd_new faults reading the unset class global 0x1675638]
-00a5b620   29  complete spigot_new (pd_new, floatinlet to +0x28, outlet_new storing to +0x2c, float store); register/movss scheduling differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
 00a5b850   79  complete gate_new (clamp n to >=1, clamp init into [0,n], getbytes n*4, per-outlet outlet_new loop, floatinlet); loop and clamp codegen differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
 00a5bb50  139  complete switch_new (clamp, getbytes n*0x30, outlet_new once, per-spigot init at 0x30 stride with the spigot class pointer / shared outlet / on-flag, then two inlet_new); the spigot init loop and the two-symbol inlet argument setups differ [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
 00a5be50   84  complete moses_setup (class_new_t2 sz 0x30 args 5,0, float method) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global]
