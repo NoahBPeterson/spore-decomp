@@ -9,3 +9,4 @@
 ../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Cond@cBrushCommand@@QAEXPAUcArguments@@@Z  00f49780  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Cond2@cBrushCommand@@QAEXPAUcArguments@@@Z  00f499a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ??4BrushState@@QAEAAU0@ABU0@@Z  00f4a5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainBrushDescription.cpp  ?Execute@cBrushCondRangeCommand@@QAEXPAUcArguments_s00f4_9b30@@@Z  00f49b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

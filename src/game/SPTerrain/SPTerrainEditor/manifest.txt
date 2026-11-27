@@ -15,3 +15,4 @@
 ../src/game/SPTerrain/SPTerrainEditor.cpp  ?Assign@ImgDesc@@QAEAAU1@PBD@Z  00f6b330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainEditor.cpp  ?FreeAll@QuadNode@@QAEXXZ  00f6b7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainEditor.cpp  ?PushFront@ListHead@TE@@QAEXPBX@Z  00f6bd20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?FUN_00f67770@@YGHPAUTerrainPassState@@PAUTerrainPassInfo@@@Z  00f67770  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
