@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+slices/s00475620/s00475620.cpp  ?FUN_00475620@Forwarder@@QAEXII@Z  00475620  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
