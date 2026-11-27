@@ -20,6 +20,8 @@ struct Vec3 {
     float mX;
     float mY;
     float mZ;
+    Vec3() {}
+    Vec3(const float& x, const float& y, const float& z) : mX(x), mY(y), mZ(z) {}
 };
 struct ModelKey {
     uint32_t mType;
@@ -515,10 +517,8 @@ cEggView::cEggView()
 {
     mpAnimated = nullptr;
     mpObject = nullptr;
-    mColor.mX = 1.0f;
-    mColor.mY = 1.0f;
     mpVftable = &gVtableEgg;
-    mColor.mZ = 1.0f;
+    mColor = Vec3(1.0f, 1.0f, 1.0f);
 }
 
 // @ 0x00e8e0d0
