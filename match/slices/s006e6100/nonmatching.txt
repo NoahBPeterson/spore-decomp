@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 006e6a20  119  ComputeSize - switch grouping matches but register allocation around the FUN_006dde90 calls differs
 006e6b70  11  SetParams - register scheduling of the two int args differs (eax/edx swap)
-006e6ca0  47  SortPairsA - insertion-sort register assignment (v1/v2 in edx/esi) differs
 006e6cf0  51  SortPairsB - insertion-sort register assignment differs
 006e6d40  53  SiftUp - original keeps the index in ecx and parent in eax; ours swaps them
 006e6d90  33  FillSix - original routes the float through the stack (int moves); ours uses direct stores [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]

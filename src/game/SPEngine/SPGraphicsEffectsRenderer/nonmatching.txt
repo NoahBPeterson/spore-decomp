@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 006e6b70 11 SetParams - register scheduling of the two int args differs (eax/edx swap)
-006e6ca0 47 SortPairsA - insertion-sort register assignment (v1/v2 in edx/esi) differs
 006e6cf0 51 SortPairsB - insertion-sort register assignment differs
 006e7110 191 Method7110: per-record dispatch loop (calls pushShaderDataNull / SetTransform / SetMaterialColor / Dispatch / shader, then rebinds the vertex-declaration global). Diff is register-allocation and instruction-scheduling of the 0xc-stride walk; the field accesses and call sequence match. [equiv: WEAK 245 valid inputs, 16.8% coverage; no mismatch] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7270 184 Method7270: same record walk plus a second box-state pass (FUN_00777b50 then FUN_011ee580 after the first Dispatch). [equiv: WEAK 232 valid inputs, 18.4% coverage; no mismatch] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

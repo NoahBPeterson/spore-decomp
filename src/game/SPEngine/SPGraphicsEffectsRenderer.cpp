@@ -2259,8 +2259,8 @@ void SortPairsA(uint32_t* begin, uint32_t* end)
             uint32_t v1 = *p;
             uint32_t v2 = p[1];
             uint32_t* q = p;
-            while (q != begin && q[-2] < v1) {
-                *q = q[-2];
+            while (q != begin && v1 > q[-2]) {
+                *q = *(volatile uint32_t*)&q[-2];
                 q[1] = q[-1];
                 q -= 2;
             }
