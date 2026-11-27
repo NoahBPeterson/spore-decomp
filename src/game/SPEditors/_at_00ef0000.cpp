@@ -4420,17 +4420,19 @@ void cSim::FUN_00ef1b70(u32 v)
 void cSim::FUN_00ef1c40(void)
 {
     if (bDirty) {
+        struct SimVecView { char pad[0x18]; char* mpBegin; char* mpEnd; };
+        SimVecView* sv = reinterpret_cast<SimVecView*>(this);
         int i = 0;
         do {
-            if (*(char*)(i + *(int*)((char*)this + 0x18))) {
+            if (sv->mpBegin[i]) {
                 void* s = FUN_0067dd50();
                 VFN(s, 0x5c, TC_vii)(s, i, 1);
             }
         } while (++i <= 0x1b);
-        char* end = *(char**)((char*)this + 0x1c);
-        char* begin = *(char**)((char*)this + 0x18);
-        eastl_vector_insert(begin, end, (u32)(end - end));
-        *(int*)((char*)this + 0x1c) += (int)(begin - end);
+        char* end = sv->mpEnd;
+        char* begin = sv->mpBegin;
+        eastl_vector_insert(begin, end, (u32)(sv->mpEnd - end));
+        sv->mpEnd += (int)(begin - end);
         bDirty = 0;
     }
 }
@@ -7927,11 +7929,11 @@ void __cdecl FUN_00efc890()
 // @ 0x00efc8c0
 void __cdecl FUN_00efc8c0(int v)
 {
-    int* g = (int*)g_016c7b88;
-    int old = *g;
-    *g = v;
-    if (old != v)
-        FUN_00f46410((void*)1, (void*)old, (void*)v);
+    struct Simulator74View { char pad[0x74]; void* mpObj74; };
+    void* old = *g_016c7b88;
+    *g_016c7b88 = (void*)v;
+    if (old != (void*)v)
+        ((FN3_iii)FUN_00f46410)(reinterpret_cast<Simulator74View*>(gSimulator_s00ef_c270)->mpObj74, 1, (int)old, v);
 }
 
 struct EditorStateReadView {
