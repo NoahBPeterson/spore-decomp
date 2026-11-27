@@ -640,13 +640,10 @@ char FUN_00faf920(cRibbonFacePoly* poly, float* pOut1, float* pOut2,
 // @ 0x00fad000
 void DecalHost::DetachDecal()
 {
-    FaceQuad** pFace = mpMesh->mFaces;
-    FaceQuad** pFaceEnd = pFace + 6;
-    do {
-        if (*pFace != 0)
-            (*pFace)->RemoveDecal(this);
-        ++pFace;
-    } while (pFace < pFaceEnd);
+    for (int i = 0; i < 6; ++i) {
+        if (mpMesh->mFaces[i])
+            mpMesh->mFaces[i]->RemoveDecal(this);
+    }
     mFlags &= ~0x10u;
 }
 
