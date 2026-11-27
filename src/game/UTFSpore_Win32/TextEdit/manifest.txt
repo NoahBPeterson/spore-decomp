@@ -33,3 +33,4 @@
 ../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_989740  00989740  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_989790  00989790  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_9897d0  009897d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/TextEdit.cpp  _sub_9896d0  009896d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

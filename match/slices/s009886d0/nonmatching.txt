@@ -26,6 +26,5 @@
 00989500   115   JumpTable case dispatch; cl emits a different jump-table layout.
 00989660    40   bl-mask computation (`and 1 / neg / sbb` vs `xor bl,bl` arms) and
                  esi/edi choice for `this`.
-009896d0    35   output struct written via p1; allocator virtual on p4. Diff is the copy
                  loop only: cl folds the two pointers into one induction variable.
                  cl picks eax,edx,ecx (identical body).

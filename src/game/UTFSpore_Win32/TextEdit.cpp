@@ -2106,6 +2106,7 @@ void __thiscall WinText::m_989660(uint8_t p2)
 }
 
 // @ 0x009896d0
+extern "C" uint32_t g_154eea0[];
 extern "C" char __cdecl sub_9896d0(uint32_t* out, int p2, int p3, uint32_t* allocObj)
 {
     uint8_t* c = (uint8_t*)p3;
@@ -2114,11 +2115,9 @@ extern "C" char __cdecl sub_9896d0(uint32_t* out, int p2, int p3, uint32_t* allo
     if (dst != 0) {
         out[1] = (uint32_t)dst;
         out[2] = *(uint32_t*)(c + 0x14);
-        out[0] = ((uint32_t*)0x154eea0)[*(uint16_t*)(c + 0xc) & 0xfff];
-        uint32_t* s = src;
-        uint32_t* d = dst;
+        out[0] = g_154eea0[*(uint16_t*)(c + 0xc) & 0xfff];
         for (uint32_t i = 0; i < *(uint32_t*)(c + 0x14); i++) {
-            *d++ = *s++;
+            *dst++ = *src++;
         }
         return 1;
     }
