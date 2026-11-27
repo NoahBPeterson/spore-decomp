@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00a5ee30 49 frandom_bang: complete and behaviourally equivalent (difftest PASS, 348 valid inputs, 100% coverage).  Not byte-exact: the original evaluates the `x+0x28` member first with x87 (`fld; fstp [esp+8]`), calls the thiscall NextFloat (`lea ecx,[x+0x2c]`) and finishes with `fmul [esp+8]`; cl schedules the call first. flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
