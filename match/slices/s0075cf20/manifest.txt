@@ -8,3 +8,4 @@ slices/s0075cf20/s0075cf20.cpp  ?GetRenderStats@cRenderer@@  0075dad0  /O2 /MD /
 slices/s0075cf20/s0075cf20.cpp  ?RendererFlush@@  0075db00  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0075cf20/s0075cf20.cpp  ?NumLayers@cRenderer@@QAEXPAH@Z  0075db70  /O2 /MD /Gy /EHsc /TP /arch:SSE2
 slices/s0075cf20/s0075cf20.cpp  ?CallFactory@@YAXPAX@Z  0075d920  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0075cf20/s0075cf20.cpp  ?UpdateViaManager@@YA_NH@Z  0075d870  /O2 /MD /Gy /EHsc /TP /arch:SSE2

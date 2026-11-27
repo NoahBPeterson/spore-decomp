@@ -146,11 +146,12 @@ bool UpdateViaManager(int param_1)
     int o = *(int*)(param_1 + 8);
     int a = *(int*)(o + 0x110);
     int b = *(int*)(o + 0x11c);
-    int c = *(int*)(o + 0x118);
     int d = *(int*)(o + 0x114);
+    int c = *(int*)(o + 0x118);
+    char* mgr = (char*)(o + 0xc);
     char e = *(char*)(o + 0x120);
-    if (a != 0 && b != 0 && *(char*)(o + 0xc) != 0)
-        return DoManagerUpdate((void*)(o + 0xc), a, d, c, b, e);
+    if (a != 0 && b != 0 && *mgr != 0)
+        return DoManagerUpdate(mgr, a, d, c, b, e);
     return true;
 }
 
