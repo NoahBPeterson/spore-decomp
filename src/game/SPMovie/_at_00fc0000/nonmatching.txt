@@ -9,7 +9,6 @@
 00fcf770 459 flags: /O2 /MD /Gy /TP
 00fcf9a0 223 flags: /O2 /MD /Gy /TP
 00fcfab0 228 flags: /O2 /MD /Gy /TP
-00fcfbb0 162 flags: /O2 /MD /Gy /TP
 00fcfc70 307 flags: /O2 /MD /Gy /TP
 00fcfe60 527 /O2 /MD /Gy /TP /arch:SSE equiv=FAIL(5/5 mismatched,execution) VP6 residual/token decode: retail writes the token into a byte table then dispatches a 7-way switch over edge predictions; our reconstruction of the edge-difference accumulators diverges. flags: /O2 /MD /Gy /TP /arch:SSE
 00fcf0e0 73 ReadCachedBit: complete (single-bit read from the bit cache, refilling from the byte stream).  Equiv UNSUPPORTED: same register-ABI issue as 00fcf080 (state in eax, count in ecx).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -6,5 +6,6 @@ slices/s00fce1e0/s00fce1e0.cpp  ?PopFromEmptyList@VideoRenderableManager@@QAEIXZ
 slices/s00fce1e0/s00fce1e0.cpp  ?PeekFilledList@VideoRenderableManager@@QAEIXZ  00fce320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fce1e0/s00fce1e0.cpp  ?PopFromFilledList@VideoRenderableManager@@QAEIXZ  00fce380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fce1e0/s00fce1e0.cpp  ?PopFromRendererList@VideoRenderableManager@@QAEIXZ  00fce3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00fce1e0/s00fce1e0.cpp  ?setlut@@YIXHH@Z  00fcea20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fce1e0/s00fce1e0.cpp  ?setlut@@YAXH@Z  00fcea20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fce1e0/s00fce1e0.cpp  ?DecodeBit@@YAHPAUBitState@@H@Z  00fcef00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fce1e0/s00fce1e0.cpp  ?setdepth@@YAXH@Z  00fceaa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

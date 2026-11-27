@@ -1118,28 +1118,24 @@ void FUN_00fcfbb0(int p, int ch)
                         *(int*)(p + 0x1bc) + *(int*)(p + 0x68),
                         *(int*)(p + 0x1c4) + *(int*)(p + 0x68),
                         *(int*)(p + 0x1cc), *(int*)(p + 0x6c));
-        return;
     }
-
-    if (DAT_01492cc8[fmt] != 0) {
+    else if (DAT_01492cc8[fmt] != 0) {
         FUN_00fcfab0(p, *(int*)(p + 0x1dc), ch);
         (*DAT_016d968c)(*(int*)(p + 0x1dc), *(int*)(p + 0x1cc),
                         *(int*)(p + 0x1bc) + *(int*)(p + 0x68),
                         *(int*)(p + 0x6c));
-        return;
     }
-
-    if (fmt != 5) {
+    else if (fmt == 5) {
+        (*DAT_016d9584)(*(int*)(p + 0x1dc),
+                        *(int*)(p + 0x1bc) + *(int*)(p + 0x68),
+                        *(int*)(p + 0x1c0) + *(int*)(p + 0x68),
+                        *(int*)(p + 0x1cc), *(int*)(p + 0x6c));
+    }
+    else {
         (*DAT_016d9690)(*(int*)(p + 0x1dc),
                         *(int*)(p + 0x1bc) + *(int*)(p + 0x68),
                         *(int*)(p + 0x1cc), *(int*)(p + 0x6c));
-        return;
     }
-
-    (*DAT_016d9584)(*(int*)(p + 0x1dc),
-                    *(int*)(p + 0x1bc) + *(int*)(p + 0x68),
-                    *(int*)(p + 0x1c0) + *(int*)(p + 0x68),
-                    *(int*)(p + 0x1cc), *(int*)(p + 0x6c));
 }
 
 // @ 0x00fcfc70

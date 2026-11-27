@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPMovie/aviutils.cpp  ?AVIStreamerParseFunc@@YAIPAIIIIP6A_N0I@ZI0@Z  00fc81f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
