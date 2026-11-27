@@ -413,27 +413,51 @@ int*   Prop_GetUInt(void* prop);                                // 0x0041ea00
 bool*  Prop_GetBool(void* prop);                                // 0x0041e920
 void  SPKeyFromName(void* key, const char* name, int, int);      // 0x0068d5a0
 void  EA_ConvertToString16(void* out, const wchar_t* in, int len); // 0x0093c5a0
-class cMovieCheat : public cCommandBase {
+// recording settings; the same struct sits at cMovieSystem+0xb8. Defaults are literals (15 fps, quality 0.8):
+// compiler constants can't alias the stores, which lets cl hoist the fps load like retail.
+struct MovieSettings {
+    int   mWidth;               // +0x00
+    int   mHeight;              // +0x04
+    float mFps;                 // +0x08
+    float mTime;                // +0x0c
+    float mQuality;             // +0x10
+    bool  mField14;             // +0x14
+    bool  mField15;             // +0x15
+    bool  mField16;             // +0x16
+    MovieSettings()
+        : mWidth(0x140), mHeight(0xf0), mFps(15.0f), mTime(0.0f), mQuality(0.8f),
+          mField14(true), mField15(false), mField16(true) {}
+};
+struct MovieRecordState {
+    void* mpFieldE0;            // +0x00
+    float mFieldE4;             // +0x04
+    float mFieldE8;             // +0x08
+    float mFieldEc;             // +0x0c
+    float mFieldF0;             // +0x10
+    bool  mFieldF4;             // +0x14
+    bool  mFieldF5;             // +0x15
+    MovieRecordState()
+    {
+        mFieldE4 = 0.0f;
+        mFieldE8 = 0.0f;
+        mFieldEc = 0.0f;
+        mFieldF0 = 0.0f;
+        mpFieldE0 = 0;
+        mFieldF4 = false;
+        mFieldF5 = true;
+    }
+};
+extern "C" char g_1493c24[];   // cMovieCheat vtable
+struct cMovieCheatBase : cCommandBase {
+    cMovieCheatBase() { vtbl = (void**)g_1493c24; }
+};
+class cMovieCheat : public cMovieCheatBase {
 public:
     void* mpOwner;              // +0x10
-    char  mSpecBuf[0xc8];       // +0x14  (cArgumentSpec)
+    cArgumentSpec mSpec;        // +0x14
     const char* mpRecordName;   // +0xdc
-    void* mpFieldE0;            // +0xe0
-    float mFieldE4;             // +0xe4
-    float mFieldE8;             // +0xe8
-    float mFieldEc;             // +0xec
-    float mFieldF0;             // +0xf0
-    bool  mFieldF4;             // +0xf4
-    bool  mFieldF5;             // +0xf5
-    char  mPadF6[2];
-    int   mWidth;               // +0xf8
-    int   mHeight;              // +0xfc
-    float mFps;                 // +0x100
-    float mTime;                // +0x104
-    float mQuality;             // +0x108
-    bool  mField10c;            // +0x10c
-    bool  mField10d;            // +0x10d
-    bool  mField10e;            // +0x10e
+    MovieRecordState mState;    // +0xe0
+    MovieSettings mSettings;    // +0xf8
 
     cMovieCheat(void* pOwner);                                  // 0x00fd8c40
     void Execute(int argc);                                     // 0x00fd8d80
@@ -1174,38 +1198,19 @@ bool cMovieSystem_s00fd_8190::PlayMovie(int /*unused*/, int* pInfo)
 
 // @ 0x00fd8c40
 cMovieCheat::cMovieCheat(void* pOwner)
+    : mpOwner(pOwner), mSpec(1)
 {
-    *(void**)this = (void*)0x01493c24;
-    mpOwner = pOwner;
-    ::new((void*)mSpecBuf) cArgumentSpec(1);
 
-    mpRecordName = 0;
-    mpFieldE0 = 0;
-    mFieldE4 = 0.0f;
-    mFieldE8 = 0.0f;
-    mFieldEc = 0.0f;
-    mFieldF0 = 0.0f;
-    mFieldF4 = false;
-    mFieldF5 = true;
-    mWidth = 0x140;
-    mHeight = 0xf0;
-    mFps = kFloat_14007f4;
-    mTime = 0.0f;
-    mQuality = kFloat_1486374;
-    mField10c = true;
-    mField10d = false;
-    mField10e = true;
-
-    ((cArgumentSpec*)mSpecBuf)->ConstructSpec(
+    mSpec.ConstructSpec(
         "Movie cheat",
         "-record^ <name:cstring> [<time:float>]",
-        0, &mpRecordName, &mTime,
+        0, &mpRecordName, &mSettings.mTime,
         "Record movie. Either give a time, or run 'movie' again with no arguments to stop.",
-        "-size <width:int> <height:int>", &mWidth, &mHeight,
+        "-size <width:int> <height:int>", &mSettings.mWidth, &mSettings.mHeight,
         "Set size for recorded movie",
-        "-quality <float>", &mQuality,
+        "-quality <float>", &mSettings.mQuality,
         "Set quality for recorded movie, 0-1",
-        "-fps <float>", &mFps,
+        "-fps <float>", &mSettings.mFps,
         "Set FPS for recorded movie",
         "-noUI^", 4, "Don't record UI",
         "-noAudio^", 3, "Don't record audio",

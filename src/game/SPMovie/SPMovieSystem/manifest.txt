@@ -16,3 +16,4 @@
 ../src/game/SPMovie/SPMovieSystem.cpp  ?SubmitFrame@cMovieSystem_s00fd_8190@@QAEXH@Z  00fd86f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?Shutdown@cMovieSystem@@QAE_NXZ  00fd7800  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?EndRecording@cMovieSystem@@QAE_NXZ  00fd7f80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ??0cMovieCheat@@QAE@PAX@Z  00fd8c40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
