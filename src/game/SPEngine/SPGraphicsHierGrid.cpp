@@ -1445,17 +1445,8 @@ unsigned __thiscall SlotVectorStub::create(const void* value)
 
 // @ 0x007035a0
 void __stdcall grid_destroy_count(cGrid_s0070_2980* first, cGrid_s0070_2980* last)
-{
-    if ((unsigned)first < (unsigned)last) {
-        unsigned n = (((unsigned)last - (unsigned)first) - 1) / 0x44 + 1;
-        cGrid_s0070_2980* g = first;
-        do {
-            g->Destroy();
-            g += 1;
-            n--;
-        } while (n != 0);
-    }
-}
+{    for (; first < last; ++first)
+        first->Destroy();}
 
 // @ 0x00703620
 cGrid_s0070_2980* __cdecl grid_copy_forward(cGrid_s0070_2980* first, cGrid_s0070_2980* last, cGrid_s0070_2980* dst)

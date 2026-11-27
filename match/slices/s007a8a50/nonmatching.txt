@@ -1,4 +1,3 @@
-007a9470  48  CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
 007a9680  152  deque range copy loop
 007a9730  107  WriteTexture: (tex, extra, async) 3-arg ABI; sync path manager vt[0x20] + packed key, async path cdecl FUN_006b4b60(mJob, extra, 0, &key); equiv: WEAK 211 valid, 19.7% cov
 007a97e0  40  refptr assignment (lock xadd + release); equiv: PASS (member of RefPtrSlot, returns self)

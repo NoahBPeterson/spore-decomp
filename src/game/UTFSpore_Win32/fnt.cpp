@@ -1269,13 +1269,11 @@ void fnt_MDRP(TTExecCtx* c)
 
 // @ 0x008ae7a0
 void fnt_MPPEM(TTExecCtx* c)
-{
-    TTGraphicsState* g = GS(c);
-    int w = g->mSingleW;
+{    TTGraphicsState* g = GS(c);
+    unsigned short w = g->mSingleW;
     if (g->mGray == 0)
-        w = ((util_FixMul(w * 2, fnt_GetCVTScale(c)) + 1) >> 1) & 0xffff;
-    pushInt(c, w);
-}
+        w = (unsigned short)((util_FixMul(w * 2, fnt_GetCVTScale(c)) + 1) >> 1);
+    pushInt(c, w);}
 
 // @ 0x008ae7f0
 void fnt_MPS(TTExecCtx* c)

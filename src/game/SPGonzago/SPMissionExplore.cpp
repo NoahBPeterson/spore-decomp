@@ -348,9 +348,8 @@ void __cdecl FUN_00c50e00(IOutStream* self, void* vec)
 }
 
 // @ 0x00c50e70
-void __cdecl FUN_00c50e70(Rec20f* s, Rec20f* srcEnd, Rec20f* d)
-{
-    while (s != srcEnd) {
+Rec20f* __cdecl FUN_00c50e70(Rec20f* s, Rec20f* srcEnd, Rec20f* d)
+{    while (s != srcEnd) {
         if (d) {
             d->x = s->x;
             d->y = s->y;
@@ -361,7 +360,7 @@ void __cdecl FUN_00c50e70(Rec20f* s, Rec20f* srcEnd, Rec20f* d)
         s++;
         d++;
     }
-}
+    return d;}
 
 // @ 0x00c50eb0
 int Mob::FUN_00c50eb0()

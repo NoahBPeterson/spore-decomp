@@ -20,7 +20,6 @@
 007032e0 87 destroy range of cGrid; complete, register allocation differs
 00703360 253 CellMap::Index (find-or-insert); complete, size 300 vs 271: original has no /GS cookie and its bool literal is spilled to the dead incoming `key` argument slot then reloaded as a dword, so the original pushes (key & 0xffffff00) as Insert's 3rd argument where we push a clean 0 (the callee only tests the low byte). equiv FAIL: 5/5 valid inputs, first mismatch is that call #2 3rd argument value; no other divergence seen on 73.6% coverage
 00703470 228 slot_vector_base::create; complete, register allocation differs
-007035a0 33 destroy range of cGrid by pointer delta; complete, prefix scheduling and pop order differ
 00703690 159 assign-copy cGrid range backwards; complete, register allocation differs
 00703b60 164 SP::cHierGrid::Update; complete behaviour, inlined-threshold scheduling differs
 00703ce0 83 SP::cHierGrid constructor; complete, register selection (edx vs ecx for the zero/-1 fills) differs

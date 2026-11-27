@@ -321,26 +321,26 @@ void* __cdecl FUN_00a527f0(int sym, int a)
   return p;
 }
 
-typedef void (__cdecl* set_fn_00a528b0)(char*, int, int, int, int*);
-void __cdecl FUN_00a52840(char* obj, int a, int b, int argc, int* argv);
+void __cdecl FUN_00a52840(char* obj, t_symbol s, int argc, int* argv);
 
 // @ 0x00a52840
-void __cdecl FUN_00a52840(char* obj, int a, int b, int argc, int* argv)
+__declspec(noinline) void __cdecl FUN_00a52840(char* obj, t_symbol s, int argc, int* argv)
 {
   if (argc == 1 && obj[0x34] != 0) {
     VoiceManager* vm = (VoiceManager*)EA::Audio::Eapd::GetVoiceManager();
     if (*argv == 1)
-      vm->S19(*(int*)(obj + 0x30), a, b);
+      vm->S19(*(int*)(obj + 0x30), (int)s.s_name, s.s_thing);
     else if (*argv == 2)
-      vm->S18(*(int*)(obj + 0x30), a, b, argv[1], argv[2]);
+      vm->S18(*(int*)(obj + 0x30), (int)s.s_name, s.s_thing, argv[1], argv[2]);
   }
 }
 
 // @ 0x00a528b0
-void __cdecl FUN_00a528b0(char* obj, int a, int b, int argc, int* argv)
+void __cdecl FUN_00a528b0(char* obj, t_symbol s, int argc, int* argv)
 {
+  struct t_atom_sym { int type; t_symbol sym; };
   if (argc >= 1 && *argv == 2)
-    FUN_00a52840(obj, argv[1], argv[2], argc - 1, argv + 3);
+    FUN_00a52840(obj, ((t_atom_sym*)argv)->sym, argc - 1, argv + 3);
 }
 
 // @ 0x00a528e0

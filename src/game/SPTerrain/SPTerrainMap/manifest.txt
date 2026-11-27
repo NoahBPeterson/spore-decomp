@@ -12,3 +12,4 @@
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize16@EastlVec@@QAEXI@Z  00f8fce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize4F@EastlVec@@QAEXI@Z  00f8fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainMap.cpp  ?ToVector4@@YAPAMPAMI@Z  00f885f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?ToVector3@@YAPAMPAMI@Z  00f885b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

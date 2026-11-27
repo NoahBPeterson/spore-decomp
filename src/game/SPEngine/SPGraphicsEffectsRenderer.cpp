@@ -6041,14 +6041,10 @@ int Owner1950::Call(int idx, int a, int b, int c)
 
 // @ 0x006f1a30
 Node18* __stdcall Alloc18(Node18* src)
-{
-    Node18* p = (Node18*)EAAllocate(0x18, "Graphics", 0, 0, kAllocatorFile, 0xd1);
-    Node18* q = p;
-    if (q)
-        new (q) Node18(*src);
+{    Node18* p = (Node18*)EAAllocate(0x18, "Graphics", 0, 0, kAllocatorFile, 0xd1);
+    new (p) Node18(*src);
     p->mpNext = 0;
-    return p;
-}
+    return p;}
 
 // @ 0x006f1b60
 bool EffectsRenderer_s006f_1770::LookupAndUse(unsigned a, unsigned b, ResSub** out, unsigned index)

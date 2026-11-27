@@ -5,4 +5,3 @@
 00f87ea0  -1  cTerrainMap<float>::DownSampleMap: complete; size 386 vs 491, register scheduling differs (equiv WEAK, 319 valid, 14.9% coverage)
 00f88090  -1  FaceTangentBasis: complete; face>5 is UB (original reads uninitialised locals) matched with a volatile xyz[3]; size/regs differ (equiv PASS, 100% coverage)
 00f884a0  -1  IntersectRaySphere: complete; register allocation/size differ (equiv PASS, 400 valid, 100% coverage)
-00f885b0  -1  ToVector3: complete; MSVC 2008 emits x87 fild/fstp for int->float under /arch:SSE where the original restructured (equiv PASS, 100% coverage)

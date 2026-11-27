@@ -1314,18 +1314,21 @@ void* cSPEditorBlockAbilities_s0059_f510::ScalarDeletingDtor(unsigned char flags
 
 // @ 0x0059faa0
 int AbilityVector::EraseRange(AbilityRec* first, AbilityRec* last)
-{
-    AbilityRec* p = FindAbilitySlot(last, mpEnd, first);   // (range end, old end, range start)
-    AbilityRec* end = mpEnd;
+{    AbilityRec* end = mpEnd;
+    AbilityRec* q = FindAbilitySlot(last, end, first);   // (range end, old end, range start)
+    end = mpEnd;
+    AbilityRec* p = q;
     // the record itself is the ability object: its first dword is the vtable and the
     // record pointer is the `this` handed to the teardown slot (vtable slot 2)
-    for (; p < end; p = (AbilityRec*)((char*)p + 0xc4)) {
-        void** vtbl = *(void***)p;
-        (*(void(__thiscall**)(void*, int))(vtbl + 2))(p, 0);
+    if (q < end) {
+        do {
+            void** vtbl = *(void***)p;
+            (*(void(__thiscall**)(void*, int))(vtbl + 2))(p, 0);
+            p = (AbilityRec*)((char*)p + 0xc4);
+        } while (p < end);
     }
-    mpEnd = (AbilityRec*)((char*)mpEnd + (((char*)first - (char*)last) / 0xc4) * 0xc4);
-    return (int)first;
-}
+    mpEnd -= (last - first);
+    return (int)first;}
 
 // @ 0x005a0510
 namespace SP {

@@ -2350,22 +2350,21 @@ void cUITimedTooltip::UpdateTimeoutA()
 
 // @ 0x00e365a0
 void cUITimedTooltip::UpdateTimeoutB(IWin* pWindow)
-{
-    if (m_pLayout == nullptr)
+{    if (m_pLayout == nullptr)
         return;
 
     FUN_00808b20(pWindow, m_pWindow, 0);
 
     if (m_swB.m_nStart != 0) {
-        if (m_swB.GetElapsedTime() > (int64_t)m_nTimeoutB) {
+        if ((uint64_t)m_swB.GetElapsedTime() > (uint64_t)m_nTimeoutB) {
             m_pLayout->SetVisibility(true);
-            m_swB.m_nStart = 0;
-            m_swB.m_nStop = 0;
+            EA::Stopwatch_s00e3_6150* pSw = &m_swB;
+            pSw->m_nStart = 0;
+            pSw->m_nStop = 0;
             return;
         }
     }
-    m_swA.Restart();
-}
+    m_swA.Restart();}
 
 // @ 0x00e36620
 void cUITimedTooltip::Hide()

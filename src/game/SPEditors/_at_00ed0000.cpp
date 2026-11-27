@@ -1708,18 +1708,25 @@ void RefMap::Erase(void** result, RBNode* node)
 
 // @ 0x00ed2bc0
 void SimPalette::Destroy()
-{
-    mpVtbl00 = (void*)0x01489cc8;
-    mpVtbl08 = (void*)0x01489cc0;
-    mpVtbl0c = (void*)0x01489cbc;
+{    extern char g_1489cc8[];
+    extern char g_1489cc0[];
+    extern char g_1489cbc[];
+    extern char g_15ac074[];
+    extern char g_15ac078[];
+
+    mpVtbl00 = g_1489cc8;
+    mpVtbl08 = g_1489cc0;
+    mpVtbl0c = g_1489cbc;
 
     Singleton* s = FUN_00920090();
-    s->mpVtbl->mSlot08(s, (void*)0x015ac074);
+    s->mpVtbl->mSlot08(s, g_15ac074);
     s = FUN_00920090();
-    s->mpVtbl->mSlot08(s, (void*)0x015ac078);
+    s->mpVtbl->mSlot08(s, g_15ac078);
 
-    RBNode* root = mMap.mRoot;
-    mMap.Nuke(root);
+    struct LocalMap : RefMap {
+        void Clear() { Nuke(mRoot); }
+    };
+    ((LocalMap*)&mMap)->Clear();
 
     ((ObjVec*)((char*)this + 0x70))->Destroy(mpVec70Begin, mpVec70End);
     if (mpVec70Begin && ((int*)mpVec70Begin)[-1])
@@ -1749,9 +1756,8 @@ void SimPalette::Destroy()
         RemoveHandler(h, mH14, mH18, mH1c, mH20);
     }
 
-    mpVtbl00 = (void*)0x013ec458;
-    mpVtbl08 = (void*)0x013eb394;
-}
+    mpVtbl08 = g_13eb394;
+    mpVtbl00 = g_13ec458;}
 
 // @ 0x00ed3120
 void SimPalette::UpdateCategory(CategoryUI* cat, char flag)

@@ -102,3 +102,4 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?InsertionSortVec3Pointers@@YAXPAPAUVec3@@0MMM@Z  00b00b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?InsertionSortByDistance_Positioned@@YAXPAPAUcPositionedObject@@0PBUVec3@@@Z  00b00820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?InsertionSortByDistance_Node@@YAXPAPAUcNode@@0MMM@Z  00b009b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?erase@PoolVec@@QAEPAUPoolElem_s00b0_a590@@PAU2@0@Z  00b0aee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

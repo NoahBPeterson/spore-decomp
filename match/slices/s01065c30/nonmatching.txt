@@ -5,7 +5,6 @@
 01066230 113 complete starmap-filter predicate; bool local seeded from this preserves the original's garbage upper bytes in the SetShown dword arg; flags /O2 /MD /Gy /TP /arch=SSE; difftest WEAK (193 valid, 87.5%)
 01066390 193 complete camera-relative screen distance; GetCameraLocationInfo, two projections, sqrtf, 25% window-height clamp; flags /O2 /MD /Gy /TP /arch=SSE; difftest UNSUPPORTED (unresolved _sqrtf)
 01066480 66 complete OnState1 refcount swap + CalloutMessageBox state tail; residual vtable-load register roles and folded state==2; flags /O2 /MD /Gy /TP /arch=SSE; difftest WEAK (292 valid, 59.0%)
-010666b0 36 complete 6-slot toggle loop; absolute id table vs base-register indexing and esi/edi roles differ; flags /O2 /MD /Gy /TP /arch=SSE; difftest UNSUPPORTED (0/400 valid: read/write faults)
 01066720 75 complete SetWindowImage helper; original receives its key in EAX (custom/LTCG ABI), reconstructed as cdecl 1-arg; flags /O2 /MD /Gy /TP /arch=SSE; difftest UNSUPPORTED (custom register ABI)
 01066780 212 complete text-zoom mouse handler; key 0x1b/0x1c + flags==1, id to mZoomBegin[0..2], Activate/Deactivate; flags /O2 /MD /Gy /TP /arch=SSE; difftest WEAK (400 valid, 19.2%)
 01066880 192 complete CmdObj ctor; operator_new 0x18, layout ctor, Init(L"RolloverSpaceCityButton" at 0x149c200), FindWindowByID/vtable+0x104 tooltip, SetVisibility; flags /O2 /MD /Gy /TP /arch=SSE; difftest UNSUPPORTED (0/400 valid: iswctype import)

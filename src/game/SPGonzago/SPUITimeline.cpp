@@ -4402,9 +4402,8 @@ void EvalCatmullRom2D(float* pOut, const float* p0, const float* p1, const float
 
 // @ 0x00e3a230
 int cBigEditorObject::GetDrawPriority()
-{
-    bool bVisible = mFlag36c || (mSub24.mpLayout && mSub24.mpLayout->IsVisible());
-    return bVisible ? 0x87 : 0;
+{    int b = (mFlag36c || (mSub24.mpLayout ? (int)mSub24.mpLayout->IsVisible() : 0)) ? 1 : 0;
+    return ((u8)b) ? 0x87 : 0;
 }
 
 // @ 0x00e3a270

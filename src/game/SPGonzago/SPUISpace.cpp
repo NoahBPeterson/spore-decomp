@@ -6967,15 +6967,15 @@ void* FUN_010666a0()
 
 // @ 0x010666b0
 void SPUISpace::FUN_010666b0()
-{
-    for (uint i = 0; i < 6; ++i) {
+{    for (uint i = 0; i < 6; ++i) {
         Win* w = ((GlobalUI_s0106_5c30*)mGlobalUI)->FindWindowByID(g_ids149c178[i]);
         Win28* q = w ? (Win28*)((Winc*)w)->v3(0x8ed27e7a) : 0;
-        void* o = FUN_01046fc0();
-        bool b = ((cPropView*)o)->Test(i);
-        q->call28(4, b ? 1 : 0);
-    }
-}
+        if (((cPropView*)FUN_01046fc0())->Test(i)) {
+            q->call28(4, 1);
+        } else {
+            q->call28(4, 0);
+        }
+    }}
 
 // @ 0x01066720
 void FUN_01066720(int* key)

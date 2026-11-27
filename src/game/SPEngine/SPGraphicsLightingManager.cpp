@@ -2967,17 +2967,18 @@ void* ConstructVec(int* self, int a, int b)
 
 // @ 0x00708e60
 void Vec16::resize(uint32_t n)
-{
-    const uint32_t size = (uint32_t)((mpEnd - mpBegin) >> 4);
+{    struct Elem16 { uint32_t d[4]; };
+    Elem16* end = (Elem16*)mpEnd;
+    Elem16* begin = (Elem16*)mpBegin;
+    const uint32_t size = (uint32_t)(end - begin);
     if (n > size) {
-        uint32_t buf[4];
-        DoInsertValues16(mpEnd, n - size, buf);
+        Elem16 buf;
+        DoInsertValues16((char*)end, n - size, &buf);
         return;
     }
-    char* mid = mpBegin + n * 0x10;
-    Copy16(mpEnd, mpEnd, mid);
-    mpEnd -= ((uint32_t)(mpEnd - mid) >> 4) * 0x10;
-}
+    Elem16* mid = begin + n;
+    Copy16((char*)end, (char*)end, (char*)mid);
+    ((Elem16*&)mpEnd) -= (end - mid);}
 
 // @ 0x007094c0
 void cLightingWorld_s0070_8f40::ApplyConfig()

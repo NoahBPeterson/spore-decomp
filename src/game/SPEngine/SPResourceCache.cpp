@@ -802,18 +802,15 @@ bool C_6b0130::f(int a, unsigned* p3, unsigned* p4, int p5, int p6, int p7)
 
 // @ 0x006b02b0
 void __fastcall FUN_006b02b0(char* self)
-{
-    char* p = self + 8;
+{    char* p = self + 8;
     while ((int)FUN_0068c140((__int64*)p) != 0) {
-        int lo = *(int*)p;
-        int hi = *(int*)(p + 4);
+        __int64 val = *(__int64*)p;
         char* n = (char*)(int)FUN_0068c140((__int64*)p);
         *(int*)p = *(int*)(n + 0x18);
         *(int*)(p + 4) = *(int*)(n + 0x1c);
-        ((C_6afd10*)self)->f(((__int64)hi << 32) | (unsigned)lo);
+        ((C_6afd10*)self)->f(val);
     }
-    FUN_006afcb0((__int64*)self);
-}
+    FUN_006afcb0((__int64*)self);}
 
 // @ 0x006b0300
 bool C_6b0300::f(void* out)

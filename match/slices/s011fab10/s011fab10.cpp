@@ -1,8 +1,13 @@
 // RenderWare shader constant-builder callbacks + arena resolve helpers, 0x011fab10-0x011fba34.
 // Reconstructed from the retail disassembly + Ghidra decompile.
 #include "types.h"
+#if _MSC_VER >= 1400
 #include <intrin.h>
+#endif
 #include <xmmintrin.h>
+#if defined(_MSC_VER) && _MSC_VER < 1400
+static __forceinline float _mm_cvtss_f32(__m128 v) { float f; _mm_store_ss(&f, v); return f; }
+#endif
 
 typedef uint8_t  u8;
 typedef uint16_t u16;
@@ -276,20 +281,26 @@ void __cdecl SetWorldMatrixRows23(u32 a, u32 b, int c)
 
 // @ 0x011faf00
 void __cdecl SetMaterialColor(u32 a, u32 b, int c)
-{
-    DEV_SET(a, &g_colorActive, 1);
+{    if (c != 0)
+        g_d3dDeviceP->SetVertexShaderConstantF(a, &g_colorActive, 1);
+    else
+        g_d3dDeviceP->SetPixelShaderConstantF(a, &g_colorActive, 1);
 }
 
 // @ 0x011faf30
 void __cdecl SetAmbientColor(u32 a, u32 b, int c)
-{
-    DEV_SET(a, &g_ambientActive, 1);
+{    if (c != 0)
+        g_d3dDeviceP->SetVertexShaderConstantF(a, &g_ambientActive, 1);
+    else
+        g_d3dDeviceP->SetPixelShaderConstantF(a, &g_ambientActive, 1);
 }
 
 // @ 0x011faf60
 void __cdecl SetTime(u32 a, u32 b, int c)
-{
-    DEV_SET(a, &g_timeActive, 1);
+{    if (c != 0)
+        g_d3dDeviceP->SetVertexShaderConstantF(a, &g_timeActive, 1);
+    else
+        g_d3dDeviceP->SetPixelShaderConstantF(a, &g_timeActive, 1);
 }
 
 // @ 0x011faf90

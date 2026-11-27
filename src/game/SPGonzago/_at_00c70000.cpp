@@ -323,6 +323,10 @@ void __cdecl  FinalSort(void** a, void** b, void** c, Vec3_s00c7_d120 v);       
 void __cdecl  SortVecImpl(void** a, void** b, Vec3_s00c7_d120 v);                        // 0x00c7dac0
 void __cdecl  SortRec(void** a, void** b, int depth, Vec3_s00c7_d120 v);                 // 0x00c7d940
 void __cdecl  SortRefs(void** a, void** b, Vec3_s00c7_d120 v);                           // 0x00c7d120
+struct cTargetListIter {
+    void* node;
+    cTargetListIter() {}
+};
 struct cTargetList {
     void** vptr;            // +0x000
     void*  mp04;            // +0x004  raw block ([p-4] holds an allocation count)
@@ -360,7 +364,8 @@ struct cTargetList {
 
     cTargetList();                          // 0x00c7d700
     ~cTargetList();                         // 0x00c7d650
-    bool Has(u32 key);                      // 0x00c7d6d0
+    cTargetListIter FindKey(const u32& key); // 0x00e5c780
+    int Has(const u32& key);                // 0x00c7d6d0
     void* FindTarget(void* ctx);            // 0x00c7d7a0
     void* FindTargetThunk();                // 0x00c7d930
     bool HasKey(void* obj);                 // 0x00c7da70
@@ -823,10 +828,11 @@ cTargetList::~cTargetList()
 }
 
 // @ 0x00c7d6d0
-bool cTargetList::Has(u32 key)
-{
-    ((void (__thiscall*)(void*, void**, const u32*))0x00e5c780)(this, (void**)&key, &key);
-    return *(void**)&key != (char*)this + 4;
+int cTargetList::Has(const u32& key)
+{    struct Cmp {
+        static bool Neq(cTargetListIter a, void* b) { return a.node != b; }
+    };
+    return Cmp::Neq(FindKey(key), (char*)this + 4);
 }
 
 // @ 0x00c7d700

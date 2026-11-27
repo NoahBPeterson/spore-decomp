@@ -6309,7 +6309,7 @@ void __thiscall cRefOps::CopyTransform50Obj(const void* pSrc)
 }
 
 // @ 0x00bda850
-void CopyBucket20(uint8_t* pSrc, uint8_t* pEnd, uint8_t* pDst)
+uint8_t* CopyBucket20(uint8_t* pSrc, uint8_t* pEnd, uint8_t* pDst)
 {
     while (pSrc != pEnd) {
         if (pDst) {
@@ -6322,6 +6322,7 @@ void CopyBucket20(uint8_t* pSrc, uint8_t* pEnd, uint8_t* pDst)
         pSrc += 0x14;
         pDst += 0x14;
     }
+    return pDst;
 }
 
 // @ 0x00bda8d0

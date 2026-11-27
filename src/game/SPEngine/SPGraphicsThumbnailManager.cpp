@@ -921,7 +921,7 @@ struct MsgBase_s007b_6570 : MsgHdr {
     virtual void s0();
     virtual void AddRef();
     virtual void Release();
-    MsgBase_s007b_6570() { mRefCount.Set(0); }
+    MsgBase_s007b_6570() { volatile long* p = &mRefCount.mn; _InterlockedExchange(p, 0); }
 };
 struct Msg : MsgBase_s007b_6570 {
     Msg() {}
@@ -5390,8 +5390,7 @@ void __fastcall RefHolder_Reset(RefHolder* h)
 
 // @ 0x007b6570
 void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
-{
-    viewer->Copy(*a3, 0, 0);
+{    viewer->Copy(*a3, 0, 0);
     viewer->F4b50(1.0f);
     MsgRef mr(new("Graphics", 0, 0, 0, 0) Msg());
     Msg* m = mr.p;
@@ -5405,8 +5404,9 @@ void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
     viewer->F3c50(7);
     m->f8 = SP_App()->f20()->f7();
     SP_MessageServer()->f5(0x12d74a2, m, 0);
+    Obj14* p = p14;
     ViewerRef ctx = { (int)viewer, 0, 0, 0 };
-    p14->o->f3(a1, a2, &ctx, a4);
+    p->o->f3(a1, a2, &ctx, a4);
     Gfx_67ddb0()->f22(a, b, a4, 1.0f);
     Fn35a0();
 }

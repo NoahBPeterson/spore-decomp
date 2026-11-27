@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPCreatureAnim/_at_009e0000.cpp  ?FastInvSqrt@@YAMM@Z  009e5c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

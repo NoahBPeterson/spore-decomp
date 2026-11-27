@@ -1726,9 +1726,8 @@ void FillWeak14(void** first, void** last, void** value)
 }
 
 // @ 0x0070ebf0
-void AssignWeak14(void** first, void** last, void** dst)
-{
-    while (first != last)
+void** AssignWeak14(void** first, void** last, void** dst)
+{    while (first != last)
     {
         void* s = *first;
         void* old = *dst;
@@ -1747,17 +1746,14 @@ void AssignWeak14(void** first, void** last, void** dst)
         ++first;
         ++dst;
     }
-}
+    return dst;}
 
 // @ 0x0070ec30
 void** CopyBackwardWeak14(void** first, void** last, void** dstEnd)
-{
-    while (last != first)
+{    while (last != first)
     {
-        void* s = last[-1];
-        void* old = dstEnd[-1];
-        --last;
-        --dstEnd;
+        void* s = *--last;
+        void* old = *--dstEnd;
         if (s != old)
         {
             if (s != 0)
@@ -1771,8 +1767,7 @@ void** CopyBackwardWeak14(void** first, void** last, void** dstEnd)
             }
         }
     }
-    return dstEnd;
-}
+    return dstEnd;}
 
 // @ 0x0070ec80
 char cMaterialManager_Init(void* self)

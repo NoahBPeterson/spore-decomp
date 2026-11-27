@@ -99,3 +99,4 @@
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e69f90@@YAHHH@Z  00e69f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e57a60@@YADIIHHPAM@Z  00e57a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e57b50@@YADIIHPAM@Z  00e57b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e58e30@@YAHXZ  00e58e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

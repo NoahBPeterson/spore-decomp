@@ -1017,11 +1017,12 @@ void* Ser1F0(IStream* s, char* p)
 
 // @ 0x007d0250
 void* Ser250(IStream* s, int* vec)
-{
-    int n = (vec[1] - vec[0]) >> 2;
+{    int n = (vec[1] - vec[0]) >> 2;
     WriteUint32(s, (uint32_t)n, 1, 0);
-    for (uint32_t i = 0; i < (uint32_t)n; i++)
-        WriteFloat32(s, (float)*(float*)(vec[0] + i * 4), 1, 0);
+    for (uint32_t i = 0; i < (uint32_t)n; i++) {
+        float v = *(float*)(vec[0] + i * 4);
+        WriteFloat32(s, v, 1, 0);
+    }
     return s;
 }
 

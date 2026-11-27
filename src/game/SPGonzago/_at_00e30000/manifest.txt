@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/_at_00e30000.cpp  ?UpdateC@cUITimedTooltip@@QAE_NXZ  00e36d80  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?UpdateB@cUITimedTooltip@@QAE_NXZ  00e36d30  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?UpdateTimeoutA@cUITimedTooltip@@QAEXXZ  00e36540  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?UpdateTimeoutB@cUITimedTooltip@@QAEXPAVIWin@@@Z  00e365a0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

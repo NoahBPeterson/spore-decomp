@@ -5,3 +5,4 @@
 ../src/game/SPEditors/SPEditorManipulationCellPinning.cpp  ??1cSPEditorManipulationCellPinning@SP@@UAE@XZ  005aad00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorManipulationCellPinning.cpp  ?AsInterface@cSPEditorManipulationCellPinning_s005a_c950@SP@@UAEPAXI@Z  005ac950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorManipulationCellPinning.cpp  ?DoOnMouseDown@cSPEditorManipulationInterpenetration@SP@@QAE_NHMMH@Z  005ada50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationCellPinning.cpp  ?GetPileList@cSPEditorManipulationCellPinning@SP@@UAE?AV?$sp_vector@V?$AutoRefCount_s005a_ad00@VcSPEditorBlock_s005a_ad00@SP@@@EA@@@eastl@@XZ  005ab1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

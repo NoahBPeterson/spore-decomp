@@ -1724,10 +1724,8 @@ PathT* __stdcall FUN_0062cb20(const Vec3* pos, float speed, char type, float rea
 
 // @ 0x0062e2e0
 float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId, uint32_t anim, bool flag, uint32_t param, uint32_t* outHandle)
-{
-  EditorBase* eb = mEditorBase;
-  uint32_t cid = creatureId;
-  CreatureStructure* cs = eb->mgr->GetCreatureStructure(cid);
+{  AnimMgr* mgr = mEditorBase->mgr;
+  CreatureStructure* cs = mgr->GetCreatureStructure(creatureId);
   if (cs != 0) {
     AnimatingCreature* c = cs->mCreature;
     if (c != 0) {
@@ -1765,8 +1763,7 @@ float cSPPlayModeAnimation_s0062_da00__ui::StartNewAnimation(uint32_t creatureId
     }
   }
   if (outHandle != 0) *outHandle = 0;
-  return -1.0f;
-}
+  return -1.0f;}
 
 // @ 0x0062f2a0
 void cSPPlayModeAnimation_s0062_e7e0::Init(void* editorBase, cSPPlayModeUI_s0062_e7e0* ui)
