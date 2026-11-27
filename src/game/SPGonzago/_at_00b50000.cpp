@@ -2628,18 +2628,15 @@ void Big::M_b51d50(float dt)
 // @ 0x00b51df0
 void Big::M_b51df0(unsigned a, unsigned b)
 {
-    char* self = (char*)this;
-    Big* t = (Big*)(self + 0x1858);
-
-    unsigned lo = a, hi = b;
     if (b < a) {
-        lo = b;
-        hi = a;
+        unsigned tmp = a;
+        a = b;
+        b = tmp;
     }
     int pair[2];
-    pair[0] = (int)lo;
-    pair[1] = (int)hi;
-    t->M_b51c20(pair);
+    pair[0] = (int)a;
+    pair[1] = (int)b;
+    ((Big*)((char*)this + 0x1858))->M_b51c20(pair);
 }
 
 // @ 0x00b51e30
