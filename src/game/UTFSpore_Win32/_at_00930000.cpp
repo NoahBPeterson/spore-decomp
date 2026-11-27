@@ -1418,9 +1418,7 @@ double RandomMersenneTwister_s0093_6090::GenerateDouble()
 {
     int v = (int)Generate();
     double f = (double)v * 2.3283064365386963e-10 + 0.5;
-    if (f < 1.0)
-        return f;
-    return 0.0;
+    return f >= 1.0 ? 0.0 : f;
 }
 }}  // namespace EA::Random
 
