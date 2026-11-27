@@ -113,6 +113,9 @@ struct Ev {
 struct EvSub { void M(); uint32_t ExtFlags(); };
 struct Cont;
 struct Cont {                  // cSPUIBehaviorEventBase
+    char  pad00[0x34];
+    int   mCurrentSlot;        // +0x34
+    int   mValue;              // +0x38
     int** SlotB(int i);        // FUN_007f93b0
     int** SlotC(int i);        // FUN_007f93c0
     int** SlotD(int i);        // FUN_007f93d0
@@ -916,14 +919,21 @@ void Cont::Refresh()
     *(int*)((char*)this + 0x34) = -1;
 }
 
+struct SlotValueObj {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+    virtual void SetValue(void* v);   // slot 12 (+0x30)
+};
+
 // @ 0x007f9ae0
 bool Cont::SetValue(int v)
 {
-    *(int*)((char*)this + 0x38) = v;
+    mValue = v;
     for (int i = 0; i < 4; ++i) {
         int** slot = SlotB(i);
         if (*slot != 0) {
-            VCall1(*slot, 0x30, (void*)v);
+            ((SlotValueObj*)*slot)->SetValue((void*)mValue);
         }
     }
     return true;
