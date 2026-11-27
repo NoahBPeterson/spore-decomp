@@ -2219,7 +2219,7 @@ cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
     return pNode;
 }
 
-// @ 0x0104e810
+// 0x0104e810 (byte-exact lifted version: match/slices/s0104e810/s0104e810.cpp)
 cSPSpaceToolData_s0104_e060* cSPSpaceToolData_s0104_e060::CopyFrom(cSPSpaceToolData_s0104_e060* pOther)
 {
     cSPSpaceInventoryItem::operator=(pOther);

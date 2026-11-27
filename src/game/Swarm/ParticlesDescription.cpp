@@ -2248,7 +2248,7 @@ void cCommand::cParticleLifeExecute(EA::ArgScript::cArguments_s00aa_5940* args)
     d->at<uint32_t>(0x10) |= 0x100000;
 }
 
-// @ 0x00aa7470
+// 0x00aa7470 (byte-exact lifted version: match/slices/s00aa7470/s00aa7470_lifted.cpp)
 Self* Self::FUN_00aa7470(const Self* o)
 {
     char* t = raw;

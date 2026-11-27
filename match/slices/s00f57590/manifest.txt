@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00f57590/s00f57590.cpp  ?SetCloudGlobal@@YAXHH@Z  00f58230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f57590/s00f57590.cpp  ?SetEnabled@cCloudCmdState@@QAEXD@Z  00f58520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f57590/s00f57590_lifted.cpp  @FUN_00f57590@12  00f57590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

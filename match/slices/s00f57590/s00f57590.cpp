@@ -265,7 +265,7 @@ struct cCloudSurfaceCommand {
 // Function bodies.
 // ===========================================================================
 
-// @ 0x00f57590
+// 0x00f57590 (byte-exact lifted version: match/slices/s00f57590/s00f57590_lifted.cpp)
 cCloudDescription& cCloudDescription::operator=(const cCloudDescription& src)
 {
     m08 = src.m08;
