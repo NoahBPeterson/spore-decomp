@@ -84,6 +84,8 @@ struct RenderPartAllocator {
     virtual void Reserved0();
     virtual void Reserved1();
     virtual void ReleasePart(RenderPartRelease*);
+    u32 mReserved04;
+    volatile long mRefCount;   // +0x08
 };
 
 struct Vid {
@@ -217,19 +219,28 @@ Vid* Vid::f9680()
 }
 
 // @ 0x00fd96d0
+// Releases the part allocator reference twice: once explicitly (clearing the member),
+// then again from the reference member's own destructor.
+static inline void ReleaseRef(volatile long* count)
+{
+    _InterlockedDecrement(count);
+    if (_InterlockedExchangeAdd(count, 0) < 1)
+        _InterlockedIncrement(count);
+    else
+        _InterlockedExchangeAdd(count, 0);
+}
+
 void Vid::f96d0()
 {
-    char* a = (char*)this;
-    *(void**)a = &DAT_01493d80;
-    volatile int* r1 = *(volatile int**)(a + 8);
-    if (r1) {
-        int* pi = (int*)(a + 8);
-        *pi = 0;
-        // intrusive refcount release (interlocked)
-        volatile int* c = (volatile int*)(*(int*)(a + 8) + 8);
-        (void)c; (void)r1;
+    *(void* volatile*)this = &DAT_01493d80;
+    RenderPartAllocator* part = *(RenderPartAllocator* volatile*)&mPartAllocator;
+    if (part) {
+        mPartAllocator = 0;
+        ReleaseRef(&part->mRefCount);
     }
-    *(void**)a = &DAT_01493d20;
+    if (mPartAllocator)
+        ReleaseRef(&mPartAllocator->mRefCount);
+    *(void**)this = &DAT_01493d20;
 }
 
 // @ 0x00fd9750
