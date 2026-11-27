@@ -6,3 +6,4 @@
 ../src/game/SPTerrain/_at_00f60000.cpp  ?SelectLod@@YAHPAM@Z  00f676f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/_at_00f60000.cpp  ?GetCountShort@cTerrainEffectMapNormal@@QAEHXZ  00f6efa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/_at_00f60000.cpp  ?GetCountSum@cTerrainEffectMapNormal@@QAEHXZ  00f6f190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f60000.cpp  ?FUN_00f6eb40@@YGXPAUAABox@@@Z  00f6eb40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

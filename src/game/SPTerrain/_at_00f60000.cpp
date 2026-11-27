@@ -1,3 +1,4 @@
+#include <intrin.h>
 // src/game/SPTerrain/_at_00f60000.cpp -- migrated from slice(s) s00f6df40, s00f6c940, s00f66f80, s00f66050, s00f63a50 by tools/migrate/rewrite.py
 // Object file: SPTerrain/_at_00f60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -789,9 +790,8 @@ void DecalProjector::BuildDecal(const Vector3* pos, const Quaternion* orient, fl
 // @ 0x00f6eb40
 void __stdcall FUN_00f6eb40(AABox* box)
 {
-    AABox tmp;
-    tmp.mMin = cSPVector3_s00f6_df40(-1000.0f, -1000.0f, -1000.0f);
-    tmp.mMax = cSPVector3_s00f6_df40(1000.0f, 1000.0f, 1000.0f);
+    AABox tmp = {cSPVector3_s00f6_df40(-1000.0f, -1000.0f, -1000.0f),
+                 cSPVector3_s00f6_df40(1000.0f, 1000.0f, 1000.0f)};
     const AABox& r = tmp;
     box->mMax = r.mMax;
     box->mMin = r.mMin;

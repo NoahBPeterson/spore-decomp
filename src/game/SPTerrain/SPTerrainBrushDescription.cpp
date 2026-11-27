@@ -1,3 +1,4 @@
+#include <intrin.h>
 // src/game/SPTerrain/SPTerrainBrushDescription.cpp -- migrated from slice(s) s00f49b30, s00f48b80 by tools/migrate/rewrite.py
 // Object file: SPTerrain/SPTerrainBrushDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -674,34 +675,52 @@ void cBrushCommand::Cond2(cArguments* args)
     mDesc->mDesc.mFallOffN2 = (mDesc->mDesc.mFallOffN2 + 1.0f) * 0.5f;
 }
 
+struct BrushRangeState {
+    char reserved[0xc0];
+    u8 mode;
+    char reservedC1[3];
+    float lower;
+    float upper;
+    u8 enabled;
+    char reservedCD[3];
+    float start;
+    float end;
+};
+
 // @ 0x00f49b30
 void cBrushCondRangeCommand::Execute(cArguments_s00f4_9b30* args)
 {
     int n;
     const char** a = args->MainArguments(&n, 0, 0x7fffffff);
-    *(u8*)((char*)this->state + 0xc0) = (u8)ParseEnum(a[0], T_148de50);
-    *(u8*)((char*)this->state + 0xcc) = 0;
-    if (*(u8*)((char*)this->state + 0xc0) == 3 && n == 5) {
-        *(u8*)((char*)this->state + 0xcc) = 1;
-        *(float*)((char*)this->state + 0xd0) =
+    static_cast<BrushRangeState*>(this->state)->mode = (u8)ParseEnum(a[0], T_148de50);
+    static_cast<BrushRangeState*>(this->state)->enabled = 0;
+    if (static_cast<BrushRangeState*>(this->state)->mode == 3 && n == 5) {
+        static_cast<BrushRangeState*>(this->state)->enabled = 1;
+        _ReadWriteBarrier();
+        static_cast<BrushRangeState*>(this->state)->start =
             VFN(this->parser, 0x98, TC_fp)(this->parser, a[1]);
-        *(float*)((char*)this->state + 0xc4) =
+        _ReadWriteBarrier();
+        static_cast<BrushRangeState*>(this->state)->lower =
             VFN(this->parser, 0x98, TC_fp)(this->parser, a[2]);
-        *(float*)((char*)this->state + 0xc8) =
+        _ReadWriteBarrier();
+        static_cast<BrushRangeState*>(this->state)->upper =
             VFN(this->parser, 0x98, TC_fp)(this->parser, a[3]);
-        *(float*)((char*)this->state + 0xd4) =
+        _ReadWriteBarrier();
+        static_cast<BrushRangeState*>(this->state)->end =
             VFN(this->parser, 0x98, TC_fp)(this->parser, a[4]);
         return;
     }
     if (n == 3) {
-        *(u8*)((char*)this->state + 0xcc) = 1;
-        *(float*)((char*)this->state + 0xd0) =
+        static_cast<BrushRangeState*>(this->state)->enabled = 1;
+        _ReadWriteBarrier();
+        static_cast<BrushRangeState*>(this->state)->start =
             VFN(this->parser, 0x98, TC_fp)(this->parser, a[2]);
-        *(float*)((char*)this->state + 0xc4) =
+        _ReadWriteBarrier();
+        static_cast<BrushRangeState*>(this->state)->lower =
             VFN(this->parser, 0x98, TC_fp)(this->parser, a[1]);
         return;
     }
-    *(u8*)((char*)this->state + 0xc0) = 0;
+    static_cast<BrushRangeState*>(this->state)->mode = 0;
 }
 
 // @ 0x00f49c50

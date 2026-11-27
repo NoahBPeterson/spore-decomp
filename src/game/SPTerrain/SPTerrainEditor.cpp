@@ -1898,27 +1898,38 @@ tail:
     }
 }
 
+struct TerrainPassState { unsigned char enabled; unsigned char alternate; };
+struct TerrainPassInfo {
+    char reserved[4];
+    unsigned char textured;
+    unsigned char alternate;
+    unsigned char special;
+    char reserved7[5];
+    int kind;
+};
+
 // @ 0x00f67770
-int __stdcall FUN_00f67770(char* self, char* info)
+int __stdcall FUN_00f67770(TerrainPassState* state, TerrainPassInfo* info)
 {
-    if (info[6] != 0) {
-        if (*(int*)(info + 0xc) != 3 && *(int*)(info + 0xc) != 4)
-            return 0x0e;
-        return 0x0f;
+    if (info->special) {
+        if (info->kind != 3 && info->kind != 4)
+            return 14;
+        return 15;
     }
-    if (*self != 0)
-        return (self[1] != 0) + 5;
-    int kind = *(int*)(info + 0xc);
-    if (kind == 5)
-        return kind + 0xd;
-    if (kind == 6)
-        return kind + 0xd;
-    if (kind == 3 && info[4])
-        return (info[5] != 0) + 3;
-    if (kind == 3 || kind == 4)
+    if (state->enabled)
+        return (state->alternate != 0) + 5;
+    int kind = info->kind;
+    if (kind == 5) return 18;
+    if (kind == 6) return 19;
+    if (kind == 3) {
+        if (info->textured)
+            return (info->alternate != 0) + 3;
+nine:
         return 9;
-    if (info[4] != 0)
-        return (info[5] != 0) + 1;
+    }
+    if (kind == 4) goto nine;
+    if (info->textured)
+        return (info->alternate != 0) + 1;
     return 8;
 }
 
