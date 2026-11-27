@@ -743,15 +743,18 @@ bool cSPUIAssetWebBrowser::HandleMessage(int id, void* data)
   if (id == 0x3d1cd0b || id == 0x3ffd8c9) {
     IMessageServer* ms = MessageServer();                       // 0x67dcc0
     ms->Post(0x53dd093, 0, 0);                                  // vtbl[0x14]
-    void* w = self->mpContentWin;
-    if (w) {
-      void* doc = (void*)((void*(__thiscall*)(void*, unsigned int))(*(void***)w)[0xc / 4])(w, 0x4d044f3);
-      if (doc) {
-        void* d = ((void*(__thiscall*)(void*))WinXHTML_GetDocument)(doc);  // 0xcd8000 (thiscall)
-        void* url = *(void**)((char*)d + 0x48);
-        self->mFrameSet.HandleLocationChange(self->mpContentWin, (const wchar_t*)url, 0, 0);  // 0x997730
+    if (self->mpContentWin) {
+      _ReadWriteBarrier();
+      void* w = self->mpContentWin;
+      if (w) {
+        void* doc = (void*)((void*(__thiscall*)(void*, unsigned int))(*(void***)w)[0xc / 4])(w, 0x4d044f3);
+        if (doc) {
+          void* d = ((void*(__thiscall*)(void*))WinXHTML_GetDocument)(doc);  // 0xcd8000 (thiscall)
+          void* url = *(void**)((char*)d + 0x48);
+          self->mFrameSet.HandleLocationChange(self->mpContentWin, (const wchar_t*)url, 0, 0);  // 0x997730
+        }
       }
-    }
+      }
     return true;
   }
   if (id == (int)0xd4231540 && data) {

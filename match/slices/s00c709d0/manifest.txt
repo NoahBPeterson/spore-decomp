@@ -21,3 +21,4 @@ slices/s00c709d0/s00c709d0.cpp  ?FUN_00c71570@VPlanet@@QAEPAXXZ  00c71570  /O2 /
 slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70c10@VPlanet@@QAEHXZ  00c70c10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70c90@VPlanet@@QAEHXZ  00c70c90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70b50@VPlanet@@QAE_NXZ  00c70b50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c71370@VPlanet@@QAEXH@Z  00c71370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

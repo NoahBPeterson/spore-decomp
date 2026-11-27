@@ -748,6 +748,8 @@ struct Elem14 {
   float mX, mY, mZ, mW;                  // 0x00
   u8    mB_10;                           // 0x10
   u8    mPad_11[3];                      // 0x11
+  Elem14() {}
+  Elem14(const Elem14& o) : mX(o.mX), mY(o.mY), mZ(o.mZ), mW(o.mW), mB_10(o.mB_10) {}
 };
 struct RefCnt {
   virtual void AddRef();                 // 0x00
@@ -5078,18 +5080,13 @@ void __cdecl CopyElems14(Elem14** out, const Elem14* first, const Elem14* last, 
 // @ 0x00c90df0
 void __cdecl FillElems14(Elem14* dst, u32 count, const Elem14* value)
 {
-  if (count != 0) {
+  if (count > 0) {
+    float* pz = &dst->mZ;
     do {
-      if (dst != 0) {
-        dst->mX = value->mX;
-        dst->mY = value->mY;
-        dst->mZ = value->mZ;
-        dst->mW = value->mW;
-        dst->mB_10 = value->mB_10;
-      }
-      count--;
-      dst++;
-    } while (count != 0);
+      new ((Elem14*)(pz - 2)) Elem14(*value);
+      --count;
+      pz += 5;
+    } while (count > 0);
   }
 }
 
@@ -5677,10 +5674,11 @@ void __thiscall Deque::FUN_00c92bd0(int** p)
         if (v)
             ((void(__thiscall*)(int*))VF(v, 0))(v);
     }
-    mp24 = (int*)((char*)mp24 + 4);
-    int* b = *(int**)mp24;
+    int** next = (int**)mp24 + 1;
+    mp24 = (int*)next;
+    int* b = *next;
     mp1c = b;
-    mp20 = (int*)((char*)b + 0x100);
+    mp20 = mp1c + 0x40;
     mpp18 = (int**)mp1c;
     if (v)
         ((void(__thiscall*)(int*))VF(v, 4))(v);

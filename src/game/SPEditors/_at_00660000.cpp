@@ -604,8 +604,14 @@ void __cdecl FUN_0066b0c0(unsigned** vec)
     gTreeRoot = 0;
     gB9c = 0;
     gBA0 = 0;
-    for (unsigned i = 0; i < (unsigned)(vec[1] - vec[0]); ++i)
-        gMapU[vec[0][i]] = i;
+    unsigned i = 0;
+    if (0 < (unsigned)(vec[1] - vec[0])) {
+        do {
+            const unsigned& k = vec[0][i];
+            gMapU[k] = i;
+            ++i;
+        } while (i < (unsigned)(vec[1] - vec[0]));
+    }
 }
 
 // @ 0x0066b480

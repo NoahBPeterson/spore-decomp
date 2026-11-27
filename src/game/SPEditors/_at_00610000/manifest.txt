@@ -9,3 +9,4 @@
 ../src/game/SPEditors/_at_00610000.cpp  ?Dtor@PaintSystem@Pollen@SP@@QAEXXZ  0061e540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ?Init@cFeedManager@@QAEXXZ  0061faf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00610000.cpp  ?Dispatch2@cFeedManager@@QAE_NIPAX@Z  0061fbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00610000.cpp  ?FindLastNotOf@Pollen@SP@@YAPBDPBD000@Z  0061dfa0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

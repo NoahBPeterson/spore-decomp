@@ -556,9 +556,15 @@ void VPlanet::FUN_00c71370(int id)
 {
     PlanetData* pd = mpPlanet;
     int n = (int)(pd->mp174 - pd->mp170) >> 2;
-    uint32_t* e = (uint32_t*)pd->mp170;
-    for (int i = 0; i < n; ++i, ++e)
-        if (*e == (uint32_t)id) { pd->fn_00b8dfe0(i); return; }
+    int i = 0;
+    _ReadWriteBarrier();
+    if (n > 0) {
+        uint32_t* e = (uint32_t*)pd->mp170;
+        do {
+            if (*e == (uint32_t)id) { mpPlanet->fn_00b8dfe0(i); return; }
+            ++i; ++e;
+        } while (i < n);
+    }
 }
 
 // @ 0x00c713c0

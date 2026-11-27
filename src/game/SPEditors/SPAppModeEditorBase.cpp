@@ -8887,9 +8887,16 @@ namespace SP {
 bool cAppModeEditorBase_s0057_3520::HasEffect(uint32_t id)
 {
     const int count = mEffectsEnd - mEffectsBegin;
-    for (int i = 0; i < count; ++i) {
-        if (mEffectsBegin[i].mId == id)
-            return true;
+    int i = 0;
+    if (count > 0) {
+        _ReadWriteBarrier();
+        EffectEntry* p = mEffectsBegin;
+        do {
+            if (p->mId == id)
+                return true;
+            ++i;
+            ++p;
+        } while (i < count);
     }
     return false;
 }

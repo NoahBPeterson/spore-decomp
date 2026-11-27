@@ -71,3 +71,4 @@
 ../src/game/SPGonzago/_at_00b70000.cpp  ?SetItemTextColor@ButtonVec@@QAEXHH@Z  00b7c890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?GetPosition@cPieMenuScreenPosition@@QAE_NPAM0@Z  00b7cb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?OnPieMsg@ServerObj@@QAE_NHH@Z  00b7d420  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b74c50@@YAXPAD0PAX@Z  00b74c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

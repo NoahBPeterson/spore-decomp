@@ -1086,6 +1086,8 @@ struct ElemC {
     float x;                    // +0x00
     float y;                    // +0x04
     uint  z;                    // +0x08
+    ElemC() {}
+    ElemC(const ElemC& o) : x(o.x), y(o.y), z(o.z) {}
 };
 struct RefObj {
     virtual void AddRef();

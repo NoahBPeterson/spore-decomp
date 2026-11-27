@@ -1,4 +1,3 @@
-0075d870  37  complete; cl did not hoist the six argument loads before the guard test (register pressure differs)
 0075d9e0  139  complete; monitor/aspect helper (GetMonitorInfoA/CreateDCA/GetDeviceCaps/DeleteDC via dllimport), size/frame differs
 0075dc20  82  complete; palette table build (pow loop + d3d9 SetPalette via [vtbl+0x54]), frame/reg layout differs; equiv: UNSUPPORTED (ecx read is only a nop lea ecx,[ecx] pad; fn is stdcall ret 4, left as is)
 0075dca0  87  complete; cRenderer::InitShaders caps check + state flags, frame/allocation differs

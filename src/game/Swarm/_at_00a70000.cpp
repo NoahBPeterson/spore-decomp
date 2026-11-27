@@ -967,15 +967,7 @@ bool cMapInfo::Contains(const float* p)
 {
     if (mbWrap3c)
         return true;
-    if (p[0] < mMinX)
-        return false;
-    if (mMaxX <= p[0])
-        return false;
-    if (p[1] < mMinY)
-        return false;
-    if (mMaxY <= p[1])
-        return false;
-    return true;
+    return p[0] >= mMinX && mMaxX > p[0] && p[1] >= mMinY && mMaxY > p[1];
 }
 }}  // namespace EA::Swarm
 

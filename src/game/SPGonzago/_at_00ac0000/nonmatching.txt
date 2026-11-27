@@ -10,7 +10,6 @@
 00ac93c0 171 complete; EASTL heap sift-up-by-key, control-flow/schedule differs (183 vs 192); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (164 valid, 39.5% cov)
 00ac94c0 72 complete; construct 0xc-pair range from template element; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
 00ac96b0 106 complete; 0x2c-struct forward copy, x87 float copies sched differs (107 vs 137); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (69 valid, 19.2% cov)
-00ac9d90 38 complete; vector<ptr> release + pool free, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (71.4% cov)
 00ac9f70 83 complete; hashmap serialize loop, register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00aca0c0 252 complete; heap sift-down (always descends into the farther child via SortValue::FUN_00ac0730, addrefs/releases the displaced element, then completes the repair through 0x00ac93c0 with arg5 addref/release around the tail call). equiv WEAK: 153 valid inputs (need 200), 35.4% coverage (need 60%); the remaining inputs are discarded as fake-arity=142 / fault(read)=105 because the generated vector slots do not point at valid 0x120-bearing elements flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00aca2f0 80 complete; 0x20-stride range destroy, register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

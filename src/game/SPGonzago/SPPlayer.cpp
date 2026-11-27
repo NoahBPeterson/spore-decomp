@@ -2971,8 +2971,11 @@ bool __cdecl FixupPlayerPlanetData(void* pCtx, cVector<cKeyBoolPair>& items)
 // @ 0x00c76100
 void __cdecl WriteElem20Vector(ISerializer* pWriter, cVector<CElem20>& items)
 {
-    U32 nCount = (U32)(items.mpEnd - items.mpBegin);
-    IO_WriteUint32(pWriter->GetStreamHolder()->GetStream(), &nCount, 1, 0);
+    U32 n = (U32)(items.mpEnd - items.mpBegin);
+    ISerializerStream* __restrict holder = pWriter->GetStreamHolder();
+    U32 nCount = n;
+    EA_IO_Stream* pStream = holder->GetStream();
+    IO_WriteUint32(pStream, &nCount, 1, 0);
     for (CElem20* pItem = items.mpBegin, *pEnd = items.mpEnd; pItem != pEnd; ++pItem)
         FUN_00c75ba0(pWriter, pItem);
     pWriter->EndItem();

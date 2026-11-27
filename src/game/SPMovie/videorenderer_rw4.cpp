@@ -364,31 +364,49 @@ void Vid::f97c0(void* param_2)
     FUN_006ddd80(4, *(void**)(s + 4), *(void**)(s + 8), *(void**)(s + 0xc));
 }
 
+struct VidSizeAlign {
+    u32 mSize; u32 mAlign;
+    VidSizeAlign() : mSize(0), mAlign(1) {}
+    VidSizeAlign(u32 size, u32 align) : mSize(size), mAlign(align) {}
+};
+struct VidResDesc {
+    VidSizeAlign m[4];
+    VidResDesc(u32 size, u32 align) { m[0] = VidSizeAlign(size, align); }
+};
+struct VidResource {
+    void* mpData[4];
+};
+struct VidBufAllocator {
+    virtual void v00();
+    virtual void Alloc(VidResource* out, const VidResDesc* desc, const char* name);
+};
+struct VidBufs {
+    u32   mPad00;
+    void* mData[3];    // +0x04
+    u32   mSize[3];    // +0x10
+    u32   mPad1c[3];
+    int   mWidth;      // +0x28
+    int   mHeight;     // +0x2c
+    int   mFormat;     // +0x30
+    u32   mPad34;
+    u32   mCount;      // +0x38
+};
+
 // @ 0x00fd9b70
 void Vid::f9b70(int param_2, int param_3, int param_4, int param_5, u32 param_6)
 {
-    char* s = (char*)this;
-    *(u32*)(param_2 + 0x38) = param_6;
-    u32 stack[8];
-    FUN_00fcdf40(param_3, param_4, param_5, param_6, stack);
-    if (param_6 != 0) {
-        int* pu = (int*)(param_2 + 0x10);
-        for (u32 i = 0; i < param_6; ++i) {
-            u32 buf[8];
-            buf[0] = stack[i];
-            buf[1] = 0; buf[2] = 0; buf[3] = 0;
-            buf[4] = 4; buf[5] = 1; buf[6] = 1; buf[7] = 1;
-            void* alloc = *(void**)(s + 8);
-            void* vt2 = *(void**)(alloc);
-            ((void(__thiscall*)(void*, u32*, u32*, const char*))VTP(alloc)[1])(
-                alloc, &buf[1], buf, (const char*)DAT_01493dcc);
-            (void)vt2;
-            pu[-3] = buf[1];
-            *pu = stack[i];
-            pu++;
-        }
+    VidBufs* b = (VidBufs*)param_2;
+    b->mCount = param_6;
+    u32 sizes[3];
+    FUN_00fcdf40(param_3, param_4, param_5, param_6, sizes);
+    for (u32 i = 0; i < param_6; ++i) {
+        VidResDesc desc(sizes[i], 4);
+        VidResource out;
+        ((VidBufAllocator*)mPartAllocator)->Alloc(&out, &desc, (const char*)DAT_01493dcc);
+        b->mData[i] = out.mpData[0];
+        b->mSize[i] = sizes[i];
     }
-    *(int*)(param_2 + 0x28) = param_3;
-    *(int*)(param_2 + 0x2c) = param_4;
-    *(int*)(param_2 + 0x30) = param_5;
+    b->mWidth = param_3;
+    b->mHeight = param_4;
+    b->mFormat = param_5;
 }

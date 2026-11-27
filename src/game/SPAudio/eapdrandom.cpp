@@ -214,7 +214,8 @@ void frandom_bang(char* x)
 {
     if (*(float*)(x + 0x28) < 0.0f)
         *(float*)(x + 0x28) = 0.0f;
-    float v = *(float*)(x + 0x28) * (*(RandomLinearCongruential_s00a5_e0f0*)(x + 0x2c)).NextFloat();
+    float a = *(float*)(x + 0x28);
+    float v = a * (*(RandomLinearCongruential_s00a5_e0f0*)(x + 0x2c)).NextFloat();
     t_outlet* o = *(t_outlet**)(x + 0xc);
     outlet_cnt(o, v);
 }

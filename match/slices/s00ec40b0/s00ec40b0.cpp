@@ -243,14 +243,18 @@ static inline It find_rec(It first, It last, const T& val)
 // @ 0x00ec4430  -- find(first,last,val): the matching record's iterator, or last when none matches (STL find).
 Rec* FUN_00ec4430(Rec* first, Rec* last, const Rec* val)
 {
-    const uint32_t key = val->key;
-    const uint32_t value = val->value;
-    for (; first != last; ++first)
+    if (first != last)
     {
-        if (first->key == key && first->value == value)
-            return first;
+        const uint32_t key = val->key;
+        const uint32_t value = val->value;
+        do
+        {
+            if (*(volatile uint32_t*)&first->key == key && *(volatile uint32_t*)&first->value == value)
+                break;
+            ++first;
+        } while (first != last);
     }
-    return last;
+    return first;
 }
 
 // @ 0x00ec4460

@@ -5,3 +5,4 @@
 ../src/game/UTFSpore_Win32/Help.cpp  ?ParseRangedVector3@@YAPAMPAMPAHHMM@Z  00840e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Help.cpp  ?Sprintf@@YAXPAUstring8_s0084_0250@eastl@@PBDZZ  00840c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Help.cpp  ?SprintfAppend@@YAXPAUstring8_s0084_0250@eastl@@PBDZZ  00840c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Help.cpp  ?MakeCaseInsensitive@@YAXPAUstring8_s0084_0250@eastl@@@Z  008409b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

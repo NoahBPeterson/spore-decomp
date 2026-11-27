@@ -2139,13 +2139,13 @@ void __stdcall GetLayout(int type, unsigned char* out)
     case 7:
     case 8:
         out[1] = 0x0c; out[2] = 0x10; out[0] = 0; break;
+    case 5:
+        out[1] = 0x0c; out[0] = 0; break;
     case 2:
     case 3:
         out[1] = 0x10; out[2] = 0x20; out[3] = 0x24; out[0] = 0; break;
     case 4:
         out[1] = 0x10; out[2] = 0x20; out[3] = 0x2c; out[4] = 0x30; out[0] = 0; break;
-    case 5:
-        out[1] = 0x0c; out[0] = 0; break;
     case 9:
         out[1] = 0x40; out[0] = 0; break;
     default:
@@ -2259,8 +2259,8 @@ void SortPairsA(uint32_t* begin, uint32_t* end)
             uint32_t v1 = *p;
             uint32_t v2 = p[1];
             uint32_t* q = p;
-            while (q != begin && q[-2] < v1) {
-                *q = q[-2];
+            while (q != begin && v1 > q[-2]) {
+                *q = *(volatile uint32_t*)&q[-2];
                 q[1] = q[-1];
                 q -= 2;
             }

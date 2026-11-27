@@ -5,3 +5,4 @@
 ../src/game/SPMovie/videorenderer_rw4.cpp  ?f9610@Vid@@QAEXPAURenderPartReset@@@Z  00fd9610  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/videorenderer_rw4.cpp  ?f96d0@Vid@@QAEXXZ  00fd96d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/videorenderer_rw4.cpp  ?f9480@Vid@@QAEEPAURenderPartReset@@@Z  00fd9480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/videorenderer_rw4.cpp  ?f9b70@Vid@@QAEXHHHHI@Z  00fd9b70  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

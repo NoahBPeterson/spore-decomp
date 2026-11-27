@@ -1,4 +1,3 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 0066afd0  101  comparator: complete map-lookup/vtable 0x24 path; map operator[] inlining and register allocation differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 esp]
-0066b0c0  47   layout-map reset/reindex: complete DoNukeSubtree + map[] loop; cl hoists the size/pointer reloads
 0066b480  1321  16 refcounted Sporepedia handler registrations: complete; cl keeps the new-result in a register differently (stack reloads)

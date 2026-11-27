@@ -5050,10 +5050,17 @@ void** CopyRefs(void** begin, void** end, void** out)
             if (src != 0)
                 ++((RefObj*)src)->mnRef;
             *out = src;
-            if (old != 0 && --((RefObj*)old)->mnRef == 0)
+            if (old != 0)
             {
-                ((RefObj*)old)->mnRef = 1;
-                ((RefObj*)old)->Slot0(1);
+                RefObj* ro = (RefObj*)old;
+                int c = --ro->mnRef;
+                ro->mnRef = c;
+                if (c == 0)
+                {
+                    ro->mnRef = 1;
+                    _ReadWriteBarrier();
+                    ro->Slot0(1);
+                }
             }
         }
         ++begin;

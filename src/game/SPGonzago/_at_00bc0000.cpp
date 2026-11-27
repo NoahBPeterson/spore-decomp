@@ -4714,6 +4714,17 @@ LBL:
 }
 
 // @ 0x00bc7e20
+struct TmpRec_s00bc_7e20 : Rec_s00bc_74d0 {
+    ~TmpRec_s00bc_7e20()
+    {
+        bool neg = ((flags >> 31) & 1) != 0;
+        if (!neg) {
+            if (p28 != 0) ((RefObj*)p28)->Release();
+            if (p24 != 0) ((RefObj*)p24)->Release();
+        }
+        _ReadWriteBarrier();
+    }
+};
 void WE::FUN_00bc7e20()
 {
     Rec_s00bc_74d0* puVar1 = end;
@@ -4725,15 +4736,9 @@ void WE::FUN_00bc7e20()
         }
     }
     else {
-        Rec_s00bc_74d0 tmp;
+        TmpRec_s00bc_7e20 tmp;
         tmp.flags = 0x80000000;
         FUN_00bc7ca0(puVar1, (int*)&tmp);
-        if ((int)tmp.flags >= 0) {
-            void* p28 = *(void**)((char*)&tmp + 0x28);
-            if (p28 != 0) ((RefObj*)p28)->Release();
-            void* p24 = *(void**)((char*)&tmp + 0x24);
-            if (p24 != 0) ((RefObj*)p24)->Release();
-        }
     }
 }
 
@@ -6573,21 +6578,27 @@ cAgentOrderManager::~cAgentOrderManager()
 }
 
 // @ 0x00bcaf40
+struct AgentOrderLink_s00bc_af40 {
+    AgentOrderLink_s00bc_af40* mpPrev;
+    AgentOrderLink_s00bc_af40* mpNext;
+};
+struct AgentOrderList_s00bc_af40 {
+    AgentOrderLink_s00bc_af40* mpFirst;
+    char pad[0x14];
+    AgentOrderLink_s00bc_af40* mpFree;
+};
 void cAgentOrderManager::PopFront()
 {
-    char* self = (char*)this;
-    char* head = self + 0x60c;
-    if (*(char**)head == head) {
+    AgentOrderList_s00bc_af40* list = (AgentOrderList_s00bc_af40*)&mList0Head;
+    if (list->mpFirst == (AgentOrderLink_s00bc_af40*)list)
         return;
-    }
-    char* node = *(char**)head;
-    char* next = *(char**)(node + 4);
-    char* prev = *(char**)node;
-    *(char**)next = prev;
-    *(char**)(prev + 4) = next;
-    ((cAgentOrder*)(node + 8))->cAgentOrder::~cAgentOrder();
-    *(void**)node = *(void**)(head + 0x18);
-    *(void**)(head + 0x18) = node;
+    _ReadWriteBarrier();
+    AgentOrderLink_s00bc_af40* node = list->mpFirst;
+    node->mpNext->mpPrev = node->mpPrev;
+    node->mpPrev->mpNext = node->mpNext;
+    ((cAgentOrder*)(node + 1))->cAgentOrder::~cAgentOrder();
+    node->mpPrev = list->mpFree;
+    list->mpFree = node;
 }
 
 struct OrderSrcRef {

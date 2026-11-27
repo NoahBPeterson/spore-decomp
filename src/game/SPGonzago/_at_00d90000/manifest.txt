@@ -33,3 +33,4 @@
 ../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9da80@@YAXPAPAUHeapNode_d9da80@@HHHPAU1@UHeapCmp_d9da80@@@Z  00d9da80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d90000.cpp  ?FinishBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  00d9e420  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9d940@@YAXPAXI0@Z  00d9d940  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?CancelBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  00d9eb20  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

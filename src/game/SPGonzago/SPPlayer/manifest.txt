@@ -54,3 +54,4 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?WriteObjectLists@@YA_NPAUISerializer@@AAU?$cVector@UCObjectList@@@@@Z  00c76170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?AddToSet@cPlayer_s00c7_7380@SP@@QAEXPBI@Z  00c78420  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?Insert3@cHashtableHeader@@QAEPAPAXPAPAXPBI_N@Z  00c77700  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?WriteElem20Vector@@YAXPAUISerializer@@AAU?$cVector@UCElem20@@@@@Z  00c76100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

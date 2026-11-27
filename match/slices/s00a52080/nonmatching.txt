@@ -24,4 +24,3 @@
 00a52c80 67 non-byte-exact; groupsize_symbol: hash lookup then same float broadcast; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/88 valid; writes xmm0 untouched by original)
 00a52d00 78 non-byte-exact; group class-registration setup; class_new arg order and bang/symbol add ordering differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00a52dd0 374 non-byte-exact; vector<pair> insert/grow with eastl copy/copy_backward/do_fill; large control-flow difference; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv WEAK (198 valid inputs, 12.5% coverage)
-00a52fa0 53 non-byte-exact; vector resize: grow path vs erase-tail (0xd018d0); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/5 valid; execution)
