@@ -2098,8 +2098,7 @@ void __fastcall FUN_010030c0(SimGame_s0100_21a0* self)
 
 // @ 0x01003160
 void __fastcall FUN_01003160(SimGame_s0100_21a0* self)
-{
-    SimTicker_s0100_21a0* t = FUN_00b3d330_s0100_21a0();
+{    SimTicker_s0100_21a0* t = FUN_00b3d330_s0100_21a0();
     t->Slot54(self);
     t->Slot54(self->mField70);
     t->Slot54(self->mFieldb8);
@@ -2117,7 +2116,9 @@ void __fastcall FUN_01003160(SimGame_s0100_21a0* self)
     }
     if (FUN_00b3d400_s0100_21a0() != 0)
         FUN_00b3d400_s0100_21a0()->SetCardsVisibility(false);
-    g_0167ea54->Slot30((void*)FNV1_String8("Planet_Space", 0x811c9dc5, 1));
+    RefMgr* mgr = g_0167ea54;
+    uint32_t id = FNV1_String8("Planet_Space", 0x811c9dc5, 1);
+    mgr->Slot30((void*)id);
 }
 
 // @ 0x01003230

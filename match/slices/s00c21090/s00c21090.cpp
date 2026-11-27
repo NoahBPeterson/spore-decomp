@@ -377,16 +377,27 @@ void cSPCreatureBase::FUN_00c21090()
 // Serialization read handler for cSPCreatureBase::mItemInventory (creature+0xe40);
 // registered as Read_00c21260(stream, void*) and called with the member address.
 void FUN_00c21260(void* pStream, cCurvePointVector* pVec)
-{
+{    struct LocalStream {
+        virtual void v00() {}
+        virtual void v04() {}
+        virtual void v08() {}
+        virtual void v0c() {}
+        virtual void v10() {}
+        virtual void v14() {}
+        virtual void v18() {}
+        virtual void v1c() {}
+        virtual void* v20() { return 0; }
+    };
+
     cCurvePoint* pBeg = pVec->mpBegin;
     cCurvePoint* pEnd = pVec->mpEnd;
     void* pRet = FUN_00c0ff80(pEnd, pEnd, pBeg);
     pVec->FUN_00c144b0((cCurvePoint*)pRet, pVec->mpEnd);
-    pVec->mpEnd += (pEnd - pBeg);
+    pVec->mpEnd -= (pEnd - pBeg);
 
     // Read the count via the read stream, then reserve that many points.
     int nCount = 0;
-    void* pReader = (*(FnPtr)(*(char**)pStream + 0x20))(pStream);
+    void* pReader = ((LocalStream*)pStream)->v20();
     void* pStream2 = (*(FnPtr)(*(char**)pReader + 0x18))(pReader);
     EA_IO_ReadInt32(pStream2, &nCount, 1, 0);
     pVec->FUN_00c19aa0((uint32_t)nCount);
@@ -397,8 +408,7 @@ void FUN_00c21260(void* pStream, cCurvePointVector* pVec)
         pVec->push_back(point);
     }
 
-    (*(FnVoid)(*(char**)pStream + 0x1c))(pStream);
-}
+    (*(FnVoid)(*(char**)pStream + 0x1c))(pStream);}
 
 // @ 0x00c213d0
 void cSPCreatureBase::FUN_00c213d0(int nElapsed)

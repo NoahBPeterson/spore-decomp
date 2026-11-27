@@ -450,8 +450,7 @@ int __cdecl FUN_00b3d550(float* v)
 
 // @ 0x00b3d5f0
 bool C101::M_d5f0()
-{
-    switch (nMode) {
+{    switch (nMode) {
     case 0: goto body;
     case 1: goto body;
     case 2:
@@ -461,11 +460,8 @@ bool C101::M_d5f0()
 body:
     {
         Obj40* o = p40;
-        if (o->b75 != 0 && (o->b70 != 0 || b35 != 0))
-            return true;
-        return false;
-    }
-}
+        return o->b75 != 0 && (o->b70 != 0 || b35 != 0);
+    }}
 
 // @ 0x00b3d630
 float C101::M_d630()

@@ -3,3 +3,4 @@
 ../src/game/SPGonzago/SPGonzagoAccessor.cpp  ?SP_RelationshipManager@@YAPAXXZ  00b3d2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGonzagoAccessor.cpp  ?FUN_00b3d550@@YAHPAM@Z  00b3d550  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGonzagoAccessor.cpp  ?M_d630@C101@@QAEMXZ  00b3d630  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoAccessor.cpp  ?M_d5f0@C101@@QAE_NXZ  00b3d5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

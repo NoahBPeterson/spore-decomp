@@ -1479,14 +1479,14 @@ int FUN_0099efd0(char* name, int arg)
 
 // @ 0x0099f050
 void S99f050::f()
-{
-  int* p = (int*)((char*)this + 0xc2c);
-  for (int edi = 0x3f; edi >= 0; edi--) {
-    int v = p[-10];
-    p = (int*)((char*)p - 0x28);
+{  struct Slot { int v; int pad[9]; };
+  int edi = 0x3f;
+  Slot* p = (Slot*)((char*)this + 0xc2c);
+  do {
+    --p;
+    int v = p->v;
     if (v && *(int*)(v - 4) != 0) FUN_f47380((void*)v);
-  }
-}
+  } while (--edi >= 0);}
 
 // @ 0x0099f090
 S99f090* S99f090::f()

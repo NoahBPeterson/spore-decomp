@@ -21,3 +21,4 @@
 ../src/game/SPEngine/SPJobManager.cpp  ?InsertJobByPriority@cJobManager@@QAEXPAUIntrusiveList@@PAUcJobData@@@Z  0068fff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?PreShutdown@cJobManager@@QAEXXZ  0068fd40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Continuation@cJob@@QAE_NPAX0@Z  0068f9f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Release@cJob@@QAEHXZ  00690120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

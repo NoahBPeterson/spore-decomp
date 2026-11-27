@@ -1085,8 +1085,7 @@ extern "C" int FUN_00a85090(int a1, void* a2, int* out, int count)
 
 // @ 0x00a850d0
 void __thiscall Sim::Activate(bool)
-{
-    if (this->b14 != 0)
+{    if (this->b14 != 0)
         return;
     this->b14 = 1;
     if (this->h10 != 0) {
@@ -1094,10 +1093,13 @@ void __thiscall Sim::Activate(bool)
             (*(void (__thiscall**)(void*))(*(uint32_t**)this->h10 + 0x18 / 4))(this->h10);
         uint32_t f = this->cfg->flags;
         if (Bit(f, 4)) {
-            uint32_t w = this->cfg->wa8;
-            (*(void (__thiscall**)(void*, uint32_t, void*))(*(uint32_t**)this->h10 + 0x1c / 4))
-                (this->h10, w,
-                 Bit(f, 6) ? (void*)((char*)this + 0x28) : 0);
+            if (Bit(f, 6)) {
+                (*(void (__thiscall**)(void*, uint32_t, void*))(*(uint32_t**)this->h10 + 0x1c / 4))
+                    (this->h10, this->cfg->wa8, (void*)((char*)this + 0x28));
+            } else {
+                (*(void (__thiscall**)(void*, uint32_t, void*))(*(uint32_t**)this->h10 + 0x1c / 4))
+                    (this->h10, this->cfg->wa8, 0);
+            }
         }
         this->i68 = -1;
         if (Bit(this->cfg->flags, 1)) {
@@ -1114,7 +1116,10 @@ void __thiscall Sim::Activate(bool)
     }
     this->f1c = 0.0f;
     this->f20 = 0.0f;
-    this->f18 = (this->cfg->f10 > 0.0f) ? (1.0f / this->cfg->f10) : 0.0f;
+    if (this->cfg->f10 > 0.0f)
+        this->f18 = 1.0f / this->cfg->f10;
+    else
+        this->f18 = 0.0f;
 }
 
 // @ 0x00a851d0

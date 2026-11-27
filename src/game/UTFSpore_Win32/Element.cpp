@@ -191,25 +191,28 @@ Element* Element::AppendChild(Element* child)
 
 // @ 0x008e4380
 void* Element::AppendAttr(Attr* attr)
-{
-    Element* self = this;
+{    Element* self = this;
     int (__cdecl* wcsicmp)(const u16*, const u16*) = (int (__cdecl*)(const u16*, const u16*))g_wcsicmpPtr;
     *(u8*)((char*)self->mpDocument + 0x2c) = 1;
-    void* prev = self->mAttributes.link1;
-    void* sentinel = (char*)self + 0x20;
+    struct NodeLink { void* next; void* prev; };
+    NodeLink* sentinel = (NodeLink*)&self->mAttributes;
+    void* prev = sentinel->prev;
     *(void**)((char*)attr + 8) = prev;
     void* link = (char*)attr + 4;
     *(void**)link = sentinel;
-    *(void**)((char*)sentinel + 4) = link;
+    sentinel->prev = link;
     *(void**)*(void**)((char*)attr + 8) = link;
-    if (wcsicmp(attr->mpName, (const u16*)g_w_013f3858) == 0) {
+    u16* name = attr->mpName;
+    if (wcsicmp(name, (const u16*)g_w_013f3858) == 0) {
         self->mpIdValue = attr->mpValue;
-    } else if (wcsicmp(attr->mpName, (const u16*)g_w_01436c8c) == 0) {
+        ((void (__thiscall*)(Element*, u16*, u16*))(*(void***)self)[0x30 / 4])(self, attr->mpName, attr->mpValue);
+        return attr;
+    }
+    if (wcsicmp(attr->mpName, (const u16*)g_w_01436c8c) == 0) {
         self->mpNameValue = attr->mpValue;
     }
     ((void (__thiscall*)(Element*, u16*, u16*))(*(void***)self)[0x30 / 4])(self, attr->mpName, attr->mpValue);
-    return attr;
-}
+    return attr;}
 
 // @ 0x008e4400
 Element* Element::Ctor2(void* doc, void* tag, void* className)

@@ -2263,14 +2263,16 @@ void __thiscall ArtilleryBase::Dtor()
 void __thiscall GameDataBig::MarkFeedback(cGameData* p)
 {
     if (!p) return;
+    struct GameDataBig98 { char pad[0x98]; RBTreeHeader mFeedback; };
     unsigned id = (unsigned)p->gv20();
     void* found;
-    RBNode* node = (RBNode*)*mFeedback.Find(&found, &id);
-    if (node != (RBNode*)&mFeedback.mAnchor) {
+    ((GameDataBig98*)this)->mFeedback.Find(&found, &id);
+    RBNode* node = (RBNode*)found;
+    if (node != &((GameDataBig98*)this)->mFeedback.mAnchor) {
         *(char*)(*(int*)((char*)node + 0x14)) = 1;
     }
-    RBNode* it = mFeedback.mAnchor.mpNodeLeft;
-    RBNode* end = (RBNode*)&mFeedback.mAnchor;
+    RBNode* it = ((GameDataBig98*)this)->mFeedback.mAnchor.mpNodeLeft;
+    RBNode* end = &((GameDataBig98*)this)->mFeedback.mAnchor;
     while (it != end) {
         char* flag = *(char**)((char*)it + 0x14);
         if (*flag == 0) {

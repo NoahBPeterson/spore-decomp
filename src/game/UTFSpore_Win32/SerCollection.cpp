@@ -191,19 +191,17 @@ void Misc34::f98fc0(void* o)
 // @ 0x00999000
 void __fastcall SerCollection_RemoveAll(char* self)
 {
-    char* end = *(char**)(self + 0x60);
-    for (char* p = *(char**)(self + 0x5c); p != end; p += 4) {
-        void* o = *(void**)p;
+    struct SerVec { char pad[0x5c]; void** begin; void** end; };
+    SerVec* v = (SerVec*)self;
+    void** end = v->end;
+    for (void** p = v->begin; p != end; ++p) {
+        void* o = *p;
         (*(void(__thiscall**)(void*))((char*)*(void**)o + 4))(o);
     }
-    char* a = *(char**)(self + 0x5c);
-    char* b = *(char**)(self + 0x60);
-    FUN_011e0744_(a, b, (int)b - (int)b);
-    int n = (int)(b - a) >> 2;
-    n = -n;
-    n = n + n;
-    n = n + n;
-    *(int*)(self + 0x60) = (int)b + n;
+    void** a = v->begin;
+    void** b = v->end;
+    FUN_011e0744_(a, b, (char*)v->end - (char*)b);
+    v->end -= (b - a);
 }
 
 // @ 0x00999050

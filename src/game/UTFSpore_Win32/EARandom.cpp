@@ -27,15 +27,18 @@ unsigned int EA::Random::RandomLinearCongruential::RandomUint32Uniform()
 
 // @ 0x009360d0
 double EA::Random::RandomLinearCongruential::RandomDoubleUniform()
-{
+{    extern const float g_143e8d4;
+    extern const float g_1471064;
     if (mnSeed == 0)
         mnSeed = (uint32_t)__rdtsc();
     uint32_t v = mnSeed * 0x278dde6d;
     mnSeed = v;
-    float f = (float)(int)v * 2.3283064e-10f + 0.5f;
-    if (f >= 1.0f)
-        return 0.0f;
-    return f;
+    double d = (int)v;
+    d *= g_143e8d4;
+    d += g_1471064;
+    if (d >= 1.0)
+        return 0.0;
+    return d;
 }
 
 // @ 0x00a68fb0

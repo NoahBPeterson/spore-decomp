@@ -15,10 +15,8 @@ extern "C" int   __cdecl Vsnprintf16(wchar_t* buf, unsigned int count,
 
 // @ 0x009014c0
 bool EA::XML::XmlTextWriter::WriteEscapedString(wchar_t const * str)
-{
-    const wchar_t* p = str;
-    const wchar_t* start = str;
-    wchar_t c = *p;
+{    const wchar_t* start = str;
+    wchar_t c = *str;
     if (c != 0) {
         do {
             switch (c) {
@@ -27,7 +25,7 @@ bool EA::XML::XmlTextWriter::WriteEscapedString(wchar_t const * str)
             case L'\'':
             case L'<':
             case L'>':
-                if (start < p && !WriteText(start, (p - start)))
+                if (start < str && !WriteText(start, (str - start)))
                     return false;
                 switch (c) {
                 case L'&':  if (!WriteText(L"&amp;", 5))  return false;
@@ -36,15 +34,15 @@ bool EA::XML::XmlTextWriter::WriteEscapedString(wchar_t const * str)
                 case L'"':  if (!WriteText(L"&quot;", 6)) return false;
                 case L'\'': if (!WriteText(L"&apos;", 6)) return false;
                 }
-                start = p + 1;
+                start = str + 1;
                 break;
             default:
                 break;
             }
-            c = p[1];
-            ++p;
+            c = str[1];
+            ++str;
         } while (c != 0);
-        if (start < p && !WriteText(start, (p - start)))
+        if (start < str && !WriteText(start, (str - start)))
             return false;
     }
     return true;

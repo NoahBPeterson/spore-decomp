@@ -6,7 +6,6 @@
 0068fda0 217 complete, not byte-exact: GetFreeJob(cJob** ppOut) locked pop-front of mJobs[0] (or EAAllocate + placement cJobData), AddRef inlined, full field reset, append to mJobs[1], *ppOut assignment before the setne result and Unlock. Differs in EH frame layout (0xc vs 8 bytes) and the pop-front null-guard idiom (cmov-style vs branch).
 0068fed0 111 complete, not byte-exact: IsAffinityInUse scan ordering near-miss (renders "WEAK": 54.4% original coverage, no mismatch)
 00690050 78 complete, not byte-exact: head-pop list idiom near-miss [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
-00690120 17 complete, not byte-exact: Release refcount decrement shape differs (renders "WEAK": 44.8% original coverage, no mismatch)
 006903c0 212 complete, not byte-exact: Shutdown drains mJobs[0..8] (extra release, dependency list clears, deallocate), then mFreeLinks, then mFreeWaitNodes with the Semaphore dtor; differs only in loop/register shapes.
 00690630 378 complete, not byte-exact: FailJobDependents walks the dependent chain and splits into strong (FailJob) / weak-free (mFreeLinks + conditional ScheduleJob) / weak-kept, then moves kept nodes back and clears the local list; differs in register allocation and the possibly-null link idiom.
 006907e0 102 complete; QueueJobUnderLock EH/register near-miss

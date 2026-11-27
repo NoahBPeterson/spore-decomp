@@ -4499,8 +4499,7 @@ void WE::FUN_00bc77e0(int param_2)
 
 // @ 0x00bc7850
 Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc7850(Rec_s00bc_74d0* param_2)
-{
-    flags = param_2->flags;
+{    flags = param_2->flags;
     f04 = param_2->f04;
     f08 = param_2->f08;
     *(float*)&f0c = *(float*)&param_2->f0c;
@@ -4512,13 +4511,8 @@ Rec_s00bc_74d0* Rec_s00bc_74d0::FUN_00bc7850(Rec_s00bc_74d0* param_2)
     if (p20 != 0) ((RefObj*)p20)->Add();
     p24 = param_2->p24;
     if (p24 != 0) ((RefObj*)p24)->Add();
-    int* s = &param_2->f28;
-    f28 = param_2->f28;
-    f2c = s[1];
-    f30 = s[2];
-    f34 = s[3];
-    return this;
-}
+    *(Quad_s00bc_76d0*)&f28 = *(const Quad_s00bc_76d0*)&param_2->f28;
+    return this;}
 
 // @ 0x00bc78d0
 void __stdcall FUN_00bc78d0(Rec_s00bc_74d0* param_1, Rec_s00bc_74d0* param_2)

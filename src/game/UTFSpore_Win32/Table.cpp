@@ -2605,10 +2605,9 @@ void EA::XHTML::Layout::SizingContext_s008e_ebb0::Clear()
 
 // @ 0x008ef900
 void EA::XHTML::Layout::SizingContext_s008e_ebb0::Finish()
-{
-    EA::Text::LineLayout_s008e_ebb0* pLine = GetLineLayout();
+{    EA::Text::LineLayout_s008e_ebb0* pLine = GetLineLayout();
     GetGameData()->mMode = 3;
-    Set(*(const float*)0x013f6d90, 0.0f, 0.0f);
+    Set(100000.0f, 0.0f, 0.0f);
     while (GetType() != 2) {
         FinalizeLine();
         mfMaxHeight = tmax(mfMaxHeight, (float)ceil((double)pLine->mLineMetrics[2]));
@@ -2622,10 +2621,9 @@ void EA::XHTML::Layout::SizingContext_s008e_ebb0::Finish()
         mfMaxWidth = tmax(mfMaxWidth, pLine->mLineMetrics[2]);
         NextLine(0);
     }
-    if (mfMaxWidth == *(const float*)0x01485378)
+    if (mfMaxWidth == 0.0f)
         mfMaxWidth = mfMaxHeight;
-    Reset(1);
-}
+    Reset(1);}
 
 // @ 0x008efa90
 void EA::XHTML::Layout::RenderingContext_s008e_ebb0::AddLineBreak(const wchar_t* s, unsigned n, int style)

@@ -1,5 +1,4 @@
 0083c900  224  complete: HashCmdTable::Insert(outIt, keyPtr, bool tag); hash walk/EH and helper call shapes differ; equiv: UNSUPPORTED (0/1200 valid inputs)
-0083cdd0  34   complete: AppProps ctor; movss constant loads and member store order differ
 0083d020  84   complete: pair<string,AutoRefCount> copy ctor; same body from the source pair, mpRef read as ((const PairCtorStub*)src)->mpRef; written as a real constructor (eax=this); equiv: PASS (424/900 valid, 100% coverage); src/game copy also PASS (424 valid)
 0083d080  39   complete: pair<string,cExprFunction> dtor; branch layout differs
 0083d2f0  209  complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)

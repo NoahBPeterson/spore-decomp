@@ -576,48 +576,35 @@ void FUN_00e86930(SphereTree* tree, Node* node)
 
 // @ 0x00e86980
 void FUN_00e86980(SphereTree* tree, Node* node)
-{
-  if (tree->root == node) {
-    SpherePool* pool = tree->pool;
+{  if (tree->root == node) {
     tree->root = 0;
-    pool->count--;
-    node->freeNext = pool->freeHead;
-    pool->freeHead = node;
-    return;
-  }
-
-  Node* parent = node->parent;
-  if (parent == 0) {
-    Node* cur = tree->head;
-    Node* prev = 0;
-    while (cur != 0) {
-      if (cur == node)
-        break;
-      prev = cur;
-      cur = cur->next;
+  } else {
+    Node* parent = node->parent;
+    if (parent == 0) {
+      Node* cur = tree->head;
+      Node* prev = 0;
+      while (cur != 0) {
+        if (node == cur)
+          break;
+        prev = cur;
+        cur = cur->next;
+      }
+      if (prev != 0)
+        prev->next = cur->next;
+      else
+        tree->head = cur->next;
+    } else if (parent == tree->root) {
+      Node* sibling = parent->next;
+      if (sibling == node)
+        sibling = parent->right;
+      tree->root = sibling;
+      sibling->parent = 0;
+      FreeSphereNode(tree, node->parent);
+    } else {
+      FUN_00e86930(tree, node);
     }
-    if (prev != 0)
-      prev->next = cur->next;
-    else
-      tree->head = cur->next;
-    FreeSphereNode(tree, node);
-    return;
   }
-
-  if (parent == tree->root) {
-    Node* sibling = parent->next;
-    if (sibling == node)
-      sibling = parent->right;
-    tree->root = sibling;
-    sibling->parent = 0;
-    FreeSphereNode(tree, node->parent);
-    FreeSphereNode(tree, node);
-    return;
-  }
-
-  FUN_00e86930(tree, node);
-  FreeSphereNode(tree, node);
-}
+  FreeSphereNode(tree, node);}
 
 // @ 0x00e86ad0
 void FUN_00e86ad0()

@@ -67,3 +67,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb94b0@TObj@@QAEPAV1@XZ  00cb94b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Update@cResourceProjectile_s00cb_a050@SP@@QAE_NXZ  00cbac80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb9780@TObj@@QAE?AUIter@1@PAXPAPAXD@Z  00cb9780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cbad90@@YAXPAUObj_s00cb_a050@@PAUPropertyList@@@Z  00cbad90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1683,14 +1683,12 @@ void cSPMissionManager::FUN_00fec430(i32 delta)
 
 // @ 0x00fec4e0
 void cSPMissionManager::FUN_00fec4e0()
-{
-    u8* head = (u8*)&mNPCMissionList;
-    u8* n = *(u8**)head;
-    while (n != (u8*)&mNPCMissionList)
+{    for (u8* n = *(u8**)&mNPCMissionList; n != (u8*)&mNPCMissionList; n = *(u8**)n)
     {
-        if ((u8*)n + 8 != 0)
+        u8* item = n + 8;
+        if (item != 0)
         {
-            void* timer = (u8*)n + 0x10;
+            void* timer = item + 8;
             if (MOPS(timer)->FUN_00feba90())
             {
                 u64 elapsed = MOPS(timer)->FUN_00bc3190();
@@ -1698,15 +1696,14 @@ void cSPMissionManager::FUN_00fec4e0()
                     MOPS(timer)->FUN_00bc3110();
             }
         }
-        n = *(u8**)n;
     }
 
-    u8* n2 = *(u8**)&mColonyMissionList;
-    while (n2 != (u8*)&mColonyMissionList)
+    for (u8* n2 = *(u8**)&mColonyMissionList; n2 != (u8*)&mColonyMissionList; n2 = *(u8**)n2)
     {
-        if ((u8*)n2 + 8 != 0)
+        u8* item = n2 + 8;
+        if (item != 0)
         {
-            void* timer = (u8*)n2 + 0x10;
+            void* timer = item + 8;
             if (MOPS(timer)->FUN_00feba90())
             {
                 u64 elapsed = MOPS(timer)->FUN_00bc3190();
@@ -1714,7 +1711,6 @@ void cSPMissionManager::FUN_00fec4e0()
                     MOPS(timer)->FUN_00bc3110();
             }
         }
-        n2 = *(u8**)n2;
     }
 }
 

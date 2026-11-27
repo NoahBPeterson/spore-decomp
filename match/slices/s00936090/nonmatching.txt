@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-009360d0  33  RandomDoubleUniform: complete; float clamp use fcomp/fnstsw instead of the original fcomi (flag-dependent)
 00936110  577  MersenneTwister::Reload: complete MT reload (two loops + wrap-around); cl's unrolled counter/rotation schedule differs. The retail tail leaves mState[0] with its low byte masked by the scalar `and al,1` in eax, so the slice declares Reload returning that value (dead for the game, observable to LTCG callers) -- equiv PASS 400 valid inputs, 100% coverage; only byte shape differs (size 401 vs 217)
 009361f0  70  MersenneTwister::InitState: complete; register allocation differs (seed kept in ebx vs eax) and store/or split
 009362d0  16  MersenneTwister::GenerateDouble: complete; double clamp uses fcomp/fnstsw instead of fcomi

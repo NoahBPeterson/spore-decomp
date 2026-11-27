@@ -2,7 +2,6 @@
 007f6210 143 complete; loop strength-reduction/register allocation differs (fixed: declare it void, not bool - retail leaves eax live at the ret and the original symbol is bool, so equiv compares eax&0xff; a `return false` clobbers it. Re-evaluating the loop bound in the for condition reproduces retail's signed-division scratch in eax)  [equiv: PASS (334 valid, 65% cov, no mismatch)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007f62c0 121 complete; keeps `this` in ecx (original re-reads mBegin/mEnd each iteration); _ReadWriteBarrier() stops the loop bound being hoisted into ecx; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv PASS (249 valid, 100% cov)
 007f6340 89 complete; loop register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-007f64d0 28 complete; phase0 frame size / store schedule differs
 007f67f0 195 complete; vtable[0x38] pointer/lerp shape differs
 007f6a60 37 complete; Color::Lerp/vcall register schedule differs
 007f6b50 118 complete; vtable slot call shape differs

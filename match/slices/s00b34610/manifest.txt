@@ -1,3 +1,4 @@
 slices/s00b34610/s00b34610.cpp  ?FUN_00b34c60@@YIPAUFloat3@@PAX0PAU1@HH@Z  00b34c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b34610/s00b34610.cpp  ?FUN_00b34d60@@YGPBDH@Z  00b34d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b34610/s00b34610.cpp  ?FUN_00b34ff0@@YIXPAUCAct@@PAX@Z  00b34ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b34610/s00b34610.cpp  ?FUN_00b34610@@YGPAUFloat3@@PAU1@H@Z  00b34610  /O2 /MD /Gy /TP /arch:SSE /fp:fast

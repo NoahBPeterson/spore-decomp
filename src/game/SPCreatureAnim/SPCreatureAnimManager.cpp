@@ -7209,13 +7209,13 @@ void* __cdecl FUN_00a094d0(void** first1, void** last1, void** first2, void** la
 
 // @ 0x00a095a0
 void __cdecl FUN_00a095a0(Rec* dst, Rec* last, const Rec* value)
-{
-    while (dst != last) {
+{    while (dst != last) {
         dst->f0 = value->f0;
         dst->f4 = value->f4;
         dst->f8 = value->f8;
-        if (&dst->s != &value->s)
-            dst->s.Assign(value->s.begin, value->s.end);
+        const WideStr* src = &value->s;
+        if (src != &dst->s)
+            dst->s.Assign(src->begin, src->end);
         ++dst;
     }
 }

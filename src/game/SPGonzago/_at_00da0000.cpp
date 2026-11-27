@@ -1276,14 +1276,12 @@ float10 f00da8f20(int creature)
 // @ 0x00da8fe0
 float10 f00da8fe0(void)
 {
-    float10 fVar1 = (float10)((Rng*)0x01601760)->RandomDoubleUniform();
-    float10 fVar2 = (float10)0.1;
-    float10 fVar3 = fVar1 * (float10)0.9 + fVar2;
-    fVar1 = (float10)1;
-    if (fVar3 < fVar1) {
-        fVar1 = fVar3;
-        if (fVar3 < fVar2)
-            return fVar2 * (float10)g_half;
+    double lo = 0.1;
+    double x = ((Rng*)&g_MathRandom)->RandomDoubleUniform() * 0.9 + lo;
+    if (x >= 1.0) {
+        x = 1.0;
+    } else if (x < lo) {
+        x = lo;
     }
-    return fVar1 * (float10)g_half;
+    return (float10)x * (float10)g_half;
 }

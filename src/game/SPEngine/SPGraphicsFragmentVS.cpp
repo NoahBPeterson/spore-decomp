@@ -762,8 +762,9 @@ bool __cdecl FUN_006feee0(void* a1, const char* name)
     } else {
         shader = FUN_006fec40(a1, (void*)nm);
     }
-    bool changed = (g_16f6564 != (void*)shader);
-    if (changed) {
+    void* prev = g_16f6564;
+    bool changed = (prev != (void*)shader);
+    if (prev != (void*)shader) {
         void* dev = g_16f89d0;
         void* fn = (*(void***)dev)[0x170 / 4];
         ((void(__stdcall*)(void*, void*))fn)(dev, (void*)shader);
