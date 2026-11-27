@@ -770,7 +770,7 @@ __forceinline void Zero(int* p) { _InterlockedExchange((volatile long*)p, 0); }
 struct PropBase : Obj_s00a2_4e10 {
     int rc;
     int f8, fc, f10;
-    __forceinline PropBase() { Zero(&rc); f8 = 0; fc = 0; f10 = 0; }
+    __forceinline PropBase() { volatile long* q = (volatile long*)&rc; long z = 0; _InterlockedExchange(q, z); f8 = 0; fc = 0; f10 = 0; }
 };
 struct PropList : PropBase {
     int  f14;

@@ -20,3 +20,4 @@
 ../src/game/UTFSpore_Win32/_at_00930000.cpp  ?FUN_0093c6f0@EA@@YAXPBD@Z  0093c6f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GetTextLine@Text@EA@@YAPBDPBD0PAPBD@Z  0093d0b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00930000.cpp  ?Find@HashTable@@QAE?AUHashTableIter@@PBX@Z  0093e3f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GenerateDouble@RandomMersenneTwister_s0093_6090@Random@EA@@QAENXZ  009362d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

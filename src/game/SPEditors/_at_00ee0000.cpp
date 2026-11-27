@@ -1579,6 +1579,7 @@ extern void* gSelObject;   // 0x16c7824
 struct IWindow_s00ee_8860;
 struct cSPUILayout_s00ee_8860;
 struct cSPPalette;
+struct IMsgHandler_s00ee_8860;
 struct OBJ174;
 struct OBJ14;
 struct LayoutRecord;
@@ -1616,7 +1617,7 @@ struct IWindow_s00ee_8860 {
     PV_s00ee_8860(e0) PV_s00ee_8860(e4) PV_s00ee_8860(e8) PV_s00ee_8860(ec)
     virtual void*  Vf0(uint32_t id, int a);         // 0xf0
     PV_s00ee_8860(f4) PV_s00ee_8860(f8) PV_s00ee_8860(fc) PV_s00ee_8860(100)
-    virtual void   V104(void* pOwner);              // 0x104
+    virtual void   V104(IMsgHandler_s00ee_8860* pOwner);   // 0x104
 };
 namespace EA {
 template <class T>
@@ -2190,7 +2191,12 @@ struct MsgHandler {
 // ---- items of slice s00ee9840 end
 
 // ---- items of slice s00eea7c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct View;  struct Entry_s00ee_a7c0;
+struct View;  struct ColorRGBv_s00ee_a7c0 {
+    float r, g, b;
+    ColorRGBv_s00ee_a7c0(float a, float b_, float c) : r(a), g(b_), b(c) {}
+    ColorRGBv_s00ee_a7c0(const ColorRGBv_s00ee_a7c0& o) : r(o.r), g(o.g), b(o.b) {}
+};
+struct Entry_s00ee_a7c0;
 struct Vec3 { float x, y, z; };
 struct IWindow_s00ee_a7c0;
 class cSPUILayout_s00ee_a7c0 { public:
@@ -2284,7 +2290,7 @@ struct Entry_s00ee_a7c0 {
     float    mUnk4c;      // +0x4c
     uint8_t  mUnk50;      // +0x50
 
-    void SetColor(float r, float g, float b);            // 0xeea190
+    void SetColor(ColorRGBv_s00ee_a7c0 color);           // 0xeea190
     Entry_s00ee_a7c0* Ctor();                                       // 0xee9be0 (returns this)
 };
 typedef Entry_s00ee_a7c0* EntryPtr;
@@ -6020,17 +6026,13 @@ void OBJ174::SetVisible(bool visible)
         uint32_t i = 0;
         do {
             IWindow_s00ee_8860* w = mLayout->FindWindowByID(0x16b18090 + i, 1);
-            if (w) {
-                uint8_t* p = (uint8_t*)this + 8;
-                w->V104(p);
-            }
+            if (w)
+                w->V104(this);
             ++i;
         } while (i < 0xf);
         IWindow_s00ee_8860* w = mLayout->FindWindowByID(0x16b1858d, 1);
-        if (w) {
-            uint8_t* p = (uint8_t*)this + 8;
-            w->V104(p);
-        }
+        if (w)
+            w->V104(this);
         Update();
         GetTutorialsUI()->ToggleHint(0x9b, 0x9c);
     }
@@ -6719,7 +6721,7 @@ void View::SetEntryColor(void* id, float r, float g, float b)
     while (it != end) {
         Entry_s00ee_a7c0* e = *it;
         if (e->mWinA == id) {
-            e->SetColor(r, g, b);
+            e->SetColor(ColorRGBv_s00ee_a7c0(r, g, b));
             return;
         }
         ++it;

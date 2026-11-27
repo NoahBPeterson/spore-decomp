@@ -1533,7 +1533,7 @@ class cSPEditorBlock_s0044_0110 { public:
     void  F40390(float f);                      // 00440390
     void  F40420(float f, char b);              // 00440420
     void  SetUserOrientationHelper(Matrix3_s0044_0110 m);   // 004404F0
-    void  F40110(float f);                      // 00440110
+    void  F440110(float f);                      // 00440110
     void  SetUniformScale(float scale, bool b, bool force);   // 00440520
     void  SetFlag(int a, int b);                // 00435A10
 };
@@ -6154,7 +6154,7 @@ void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
 
 // @ 0x00440110
 namespace SP {
-void cSPEditorBlock_s0044_0110::F40110(float f)
+void cSPEditorBlock_s0044_0110::F440110(float f)
 {
     if (mMinScale218 > f)
         f = mMinScale218;
@@ -6206,8 +6206,8 @@ void cSPEditorBlock_s0044_0110::F40420(float f, char b)
     } else if (*(float*)((char*)this + 0x1E0) > *(float*)((char*)this + 0x1DC)) {
         *(float*)((char*)this + 0x1DC) = *(float*)((char*)this + 0x1E0);
     }
-    if (b != 0 && p3ec != 0) {
-        F40110((*(float*)((char*)this + 0x1DC) / old) * *(float*)((char*)this + 0x1D4));
+    if ((unsigned char)b != 0 && p3ec != 0) {
+        F440110((*(float*)((char*)this + 0x1DC) / old) * *(float*)((char*)this + 0x1D4));
     }
 }
 }  // namespace SP
@@ -6247,7 +6247,7 @@ void cSPEditorBlock_s0044_0110::SetUniformScale(float scale, bool b, bool force)
         }
         if (b) {
             if (mBooleanAttributes.test(31))
-                F40110((mUniformScale / oldScale) * mDefaultMouseOffset);
+                F440110((mUniformScale / oldScale) * mDefaultMouseOffset);
             if (mpSocketConnectorModel)
                 mpSocketConnectorModel->mTransform.SetScale(scale);
         }

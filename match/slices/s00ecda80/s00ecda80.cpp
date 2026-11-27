@@ -6,6 +6,7 @@ extern "C" char g_15ad328[];
 
 #include "types.h"
 #include <intrin.h>
+#include <new>
 
 // ---- vtable call helpers (__thiscall in a cast is legal; free __thiscall decls are not)
 #define C0(p, off)      ((void(__thiscall*)(void*))(((void**)(p))[(off) / 4]))(p)
@@ -805,20 +806,43 @@ bool __fastcall FUN_00ece7f0(int param_1)
 }
 
 // ============================================================ 0x00ece870
+struct SwatchItemSrc_ece870 { int pad0[3]; int mC; int mD; int mE; };    // +0xc, +0x10, +0x14 read
+class SwatchItemBaseA_ece870 {
+public:
+    SwatchItemBaseA_ece870() : mField4(0) {}
+    virtual void a0();
+    virtual void a1(); virtual void a2(); virtual void a3();
+    virtual void a4(); virtual void a5(); virtual void a6();
+    virtual void SetValue(int v);                    // +0x1c
+    int mField4;
+};
+class SwatchItemBaseB_ece870 {
+public:
+    SwatchItemBaseB_ece870() {}
+    virtual void b0();
+    virtual void b1();
+};
+class SwatchItem_ece870 : public SwatchItemBaseA_ece870, public SwatchItemBaseB_ece870 {
+public:
+    SwatchItem_ece870(const SwatchItemSrc_ece870* src) {
+        mP = 0;
+        mQ = 0;
+        mR = 0;
+        _ReadWriteBarrier();
+        mE = src->mE;
+        mC = src->mC;
+    }
+    virtual void a0();
+    SwatchItem_ece870* FUN_00ece870(const SwatchItemSrc_ece870* src);
+    int mC, mD, mE, mP, mQ, mR;
+};
 // @ 0x00ece870
-int* FUN_00ece870(int* param_1, int param_2)
+SwatchItem_ece870* SwatchItem_ece870::FUN_00ece870(const SwatchItemSrc_ece870* src)
 {
-    param_1[1] = 0;
-    param_1[2] = (int)vtbl_BakeSprites;
-    param_1[0] = (int)vtbl_cSPScenarioSwatchItemUI;
-    param_1[2] = (int)vtbl_PaintSystem;
-    param_1[6] = 0;
-    param_1[7] = 0;
-    param_1[8] = 0;
-    param_1[5] = *(int*)(param_2 + 0x14);
-    param_1[3] = *(int*)(param_2 + 0xc);
-    C1(param_1, 0x1c, *(int*)(param_2 + 0x10));
-    return param_1;
+    this->SwatchItem_ece870::SwatchItem_ece870(src);
+    _ReadWriteBarrier();
+    ((void(__thiscall*)(void*, int))VTB(this, 0x1c))(this, src->mD);
+    return this;
 }
 
 // ============================================================ 0x00ece8c0

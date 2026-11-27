@@ -767,9 +767,9 @@ void cMapInfo::Normalize()
     if (mpPixels40)
         return;
     mpOwner38->RequestGrid(mpGrid, (int*)&m20, (int*)&m24, (int*)&mpPixels40);
-    mpPixels40 = (uint32_t*)((char*)mpPixels40 + m4c);
     int cols = (int)m20;
     m44 = (1 << m48) * cols;
+    mpPixels40 = (uint32_t*)((char*)mpPixels40 + m4c);
     mScaleX = (float)(cols - 1) / (mMaxX - mMinX);
     mScaleY = (float)((int)m24 - 1) / (mMaxY - mMinY);
 }

@@ -4,7 +4,6 @@
 00932890 124 RemoveDirectoryRecursive: complete; the redundant strlen in the separator branch and the pointer-copy loop differ
 00936110 393 MersenneTwister::Reload: complete MT reload (two loops + wrap-around); cl's unrolled counter/rotation schedule differs. The retail tail leaves mState[0] with its low byte masked by the scalar `and al,1` in eax, so the slice declares Reload returning that value (dead for the game, observable to LTCG callers) -- equiv PASS 400 valid inputs, 100% coverage; only byte shape differs (size 401 vs 217)
 009361f0 67 MersenneTwister::InitState: complete; register allocation differs (seed kept in ebx vs eax) and store/or split
-009362d0 15 MersenneTwister::GenerateDouble: complete; double clamp uses fcomp/fnstsw instead of fcomi
 0093d110 219 complete; GetToken basic-block layout differs (bool delimiter test placement)
 0093d6f0 64 complete; cl folds (p+n)-p, original kept it unfolded
 0093d740 677 complete; wide-string command tokenizer (1074B; reached from the command server as ParseCmd): trims leading blanks, copies the string into a working buffer, scans for the separator char while counting double quotes, then appends each token to the output vector<WStr> via WStr::Assign (trailing-blank trim + surrounding-quote strip) and returns the token count; reconstructed; equiv WEAK (202 valid inputs, 39.2% coverage - the harness discards most inputs on output-vector pointer faults so the deep paths are not exercised); flags /O2 /MD /Gy /EHsc /TP; helper inlining (WStr::erase/Resize) and register scheduling differ

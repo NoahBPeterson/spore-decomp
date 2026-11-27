@@ -834,18 +834,16 @@ extern "C" void FUN_00816790(IObj* p)
 // @ 0x008167d0
 void MatEffect::sub8167d0(IObj* p, float f)
 {
-    if (f > 0.5f) {
-        if (f88 > 0.5f) return;
+    if (f > 0.5f && f88 <= 0.5f) {
         p80 = &f70;
-    } else if (f < 0.5f) {
-        if (f88 < 0.5f) return;
+    } else if (f < 0.5f && f88 >= 0.5f) {
         p80 = &f60;
     } else {
         return;
     }
     void* x = Vcp0(p, 0x14);
     int   y = Vi1(this, 0x0c, 0xee3f516e);
-    Vv2(x, 0x1c, 0x816790, y);
+    Vv2(x, 0x1c, (int)FUN_00816790, y);
     f88 = f;
 }
 

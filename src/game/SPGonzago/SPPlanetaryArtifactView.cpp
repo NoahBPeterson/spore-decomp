@@ -336,13 +336,14 @@ void cDamageView::HandleSimulationUpdate_91190(int a, int b)
     if (m == 0)
         return;
     uint32_t fl = m->mFlags;
-    if (((fl >> 0xe) & 1) == 0)
+    bool on = ((fl >> 0xe) & 1) != 0;
+    if (!on)
         return;
     float dmgDist = m->mField8c;
-    if (dmgDist <= g_thr)
-        OnDamageStateChanged(1, 0);
-    else
+    if (dmgDist > g_thr)
         OnDamageStateChanged(0, 0);
+    else
+        OnDamageStateChanged(1, 0);
 }
 
 // @ 0x00e911f0

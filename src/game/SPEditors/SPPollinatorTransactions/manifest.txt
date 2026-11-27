@@ -50,3 +50,5 @@
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0RefObject@Pollen@SP@@QAE@PAUIRefObject@12@@Z  0061df40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Destroy@cContentValidationTransaction@Pollen@SP@@QAEXXZ  0061bf50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?OnFailure@cModelUploadTransaction_s0061_4f20@@QAEXXZ  00615db0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cAssetUploadTransaction@@QAE@PAUcAssetMetadata_s0061_4f20@@PAUcAssetDirectory_s0061_4f20@@_N2I@Z  00615d30  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cModelUploadTransaction_s0061_4f20@@QAE@PAUcAssetMetadata_s0061_4f20@@PAUcAssetDirectory_s0061_4f20@@_N2I@Z  00615e50  /O2 /MD /Gy /TP /Isrc/game/include

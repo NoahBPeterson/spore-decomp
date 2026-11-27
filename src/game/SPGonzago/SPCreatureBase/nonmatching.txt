@@ -38,7 +38,6 @@
 00c0db80 266 UNSUPPORTED  size/scale from terrain properties; complete; unresolved stub callees flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0dcb0 110 UNSUPPORTED  size from terrain property; complete; unresolved stub callees flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0ddb0 60 PASS         Community::func58h wrapper + set bubble extents; complete [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c0e000 42 PASS         set animation slot +8; complete; this was *(p+0x17c) not p+0x17c flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e070 41 PASS         animation guid valid-motion query; complete; returns bool (was char: 16-bit eax mask false FAIL) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e0c0 74 PASS         current animation guid compare; complete; QueryA(param_2) + vtable cast fixed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e170 232 UNSUPPORTED  motion-state gate; complete; 5 unresolved stub callees flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

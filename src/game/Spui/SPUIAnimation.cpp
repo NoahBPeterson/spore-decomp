@@ -873,7 +873,7 @@ bool F6C30(void* self, int a2, float a3, int phase)
 // @ 0x007f6d20
 bool F6D20(void* self, int a2, int a3, int phase)
 {
-    char* s = (char*)self;
+    char* s = *(char* volatile*)&self;
     if (phase == 2) {
         void* a = *(void**)(s + 0x10);
         void* b = s + 0x14;

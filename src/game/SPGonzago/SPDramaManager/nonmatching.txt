@@ -15,10 +15,6 @@
 00d4d5c0 201 ConsumeDramaEvents(uint): walks the drama-event multimap for the requested event mask,
 00d4d6c0 156 ConsumeAllDramaEvents(): full walk that deactivates every event, recomputing the active
 00d4d7f0 301 Stream re-reader: clears the tree, re-initialises the anchor, reads (key,event) pairs via
-00d4da10 15 WriteData(void*): base stream writer (signature + prop-key + game-data record).  The
-00d4de20 15 cSeaMonsterEvent::Write(void*): signature 0x5599f7c / name 0x1583a4c.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
-00d4deb0 15 cTribeFoodRaidEvent::Write(void*): signature 0x5ed29d3 / name 0x1583a88.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
-00d4df40 15 cMeteorStrikeEvent::Write(void*): signature 0x609eedc / name 0x1583ac4.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00d4e070 609 Init(): mode-gated rebuild of the drama-event multimap from the mode's tuning property
 00d4e350 282 Shutdown(): ConsumeAllDramaEvents, then walk the map deactivating and destroying each
 00d4e8e0 94 regalloc: sorted 8-byte erase -- the logic already matches retail (unsigned `*key < it->key`, the always-true `it != it+1` check, `SlotMove(0xa35070)` over [it+1,end), `mpEnd -= 8`, Release of the trailing +4 object, return 1/0 with `ret 4`); the whole difference is register allocation. Retail keeps this in edi, end in esi and key in ebx (three values live across the SlotLower call), cl keeps this in esi and key in edi and reloads mpEnd after the call, so both call offsets shift. Hoisting `end` into a local makes cl keep it, but cl then folds the second `it == end` test (102 bytes); retail's extra `mov eax,end; cmp eax,end` is not reproducible. fix1: quick check UNSUPPORTED (emulator: wall-clock limit)

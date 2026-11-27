@@ -3343,12 +3343,8 @@ bool EditFeedConstructRequest(void* self, void* ppRequest);
 
 // @ 0x00615d30
 cAssetUploadTransaction::cAssetUploadTransaction(cAssetMetadata_s0061_4f20* m, cAssetDirectory_s0061_4f20* dir, bool a, bool b, unsigned n)
-: mKey(), mpAssetDir(dir), mnNextAssetID((u64)-1)
+: mKey(), mpAssetMetadata(m), mpAssetDir(dir), mnNextAssetID((u64)-1), mbA(a), mbB(b), mnRetries(n)
 {
-    mbA = a;
-    mbB = b;
-    mpAssetMetadata = m;
-    mnRetries = n;
     if (mpAssetMetadata) {
         mKey = *mpAssetMetadata->GetKey();
         mpAssetMetadata->AddRef();
@@ -3369,13 +3365,8 @@ void cModelUploadTransaction_s0061_4f20::OnFailure()
 
 // @ 0x00615e50
 cModelUploadTransaction_s0061_4f20::cModelUploadTransaction_s0061_4f20(cAssetMetadata_s0061_4f20* m, cAssetDirectory_s0061_4f20* dir, bool a, bool b, unsigned n)
-: mKey(), mpAssetDir(dir), mnNextAssetID((u64)-1)
+: mKey(), mpAssetMetadata(m), mpAssetDir(dir), mnNextAssetID((u64)-1), mbA(a), mbB(b), mnRetries(n), mbDone(false)
 {
-    mbA = a;
-    mbB = b;
-    mpAssetMetadata = m;
-    mnRetries = n;
-    mbDone = false;
     if (mpAssetMetadata) {
         mKey = *mpAssetMetadata->GetKey();
         mpAssetMetadata->AddRef();

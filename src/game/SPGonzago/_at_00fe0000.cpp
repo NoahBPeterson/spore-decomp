@@ -1656,10 +1656,10 @@ void FUN_00fefe70(u32 param1)
 // @ 0x00fefe90
 void FUN_00fefe90(u32 param1, u32 param2, u32 param3)
 {
-    u32 buf[1];
-    void* r = ((cBioFunctor*)param1)->FUN_00b8de30();
-    buf[0] = param1;
-    FUN_00fefcd0((u32)r, (void**)buf, (u8*)param2, (u8*)param3);
+    u32 saved = param1;
+    void* r = ((cBioFunctor*)saved)->FUN_00b8de30();
+    *(volatile u32*)&param1 = saved;
+    FUN_00fefcd0((u32)r, (void**)&param1, (u8*)param2, (u8*)param3);
 }
 
 // @ 0x00fefec0

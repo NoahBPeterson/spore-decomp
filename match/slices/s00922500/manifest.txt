@@ -22,3 +22,4 @@ slices/s00922500/s00922500.cpp  ?EAThreadEntryWrapped@Thread@EA@@YGIPAX@Z  00923
 slices/s00922500/s00922500.cpp  ?FUN_00923310@@YAXPAPAX@Z  00923310  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00922500/s00922500.cpp  ??0Semaphore@Thread@EA@@QAE@H_N@Z  00922820  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00922500/s00922500.cpp  ??0Semaphore@Thread@EA@@QAE@H@Z  00922880  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00922500/s00922500.cpp  ?Copy@C22c20@@QAEPAU1@PAPAX@Z  00922c20  /O2 /MD /Gy /EHsc /TP /GS-

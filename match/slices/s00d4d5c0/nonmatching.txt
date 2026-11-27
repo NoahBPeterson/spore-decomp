@@ -25,7 +25,6 @@
 #                StreamGetData and rebuilds nodes with RBTreeInsert.  Complete reconstruction; the
 #                inlined eastl insert/hint sequence and node allocator bookkeeping are scheduled
 #                differently (415 vs 435 bytes).  equiv UNSUPPORTED: 0/400 inputs valid.
-00d4da10   15  WriteData(void*): base stream writer (signature + prop-key + game-data record).  The
 #                single difference is that the original seeds the signature store into the delay slot
 #                of the OReader::v6() virtual call; no source shape or flag reproduces that placement
 #                (see the Write family note below).  equiv UNSUPPORTED: 0/400 inputs valid.
@@ -38,11 +37,8 @@
 #                UNSUPPORTED: 0/400 inputs valid.
 #                0/400 inputs valid.
 #                0/400 inputs valid.
-00d4de20   15  cSeaMonsterEvent::Write(void*): signature 0x5599f7c / name 0x1583a4c.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
-00d4deb0   15  cTribeFoodRaidEvent::Write(void*): signature 0x5ed29d3 / name 0x1583a88.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
-00d4df40   15  cMeteorStrikeEvent::Write(void*): signature 0x609eedc / name 0x1583ac4.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
 00d4e070  629  Init(): mode-gated rebuild of the drama-event multimap from the mode's tuning property
 #                list — property queries, variant tag dispatch (0..8), per-event factory calls, key

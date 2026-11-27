@@ -113,6 +113,9 @@ struct Ev {
 struct EvSub { void M(); uint32_t ExtFlags(); };
 struct Cont;
 struct Cont {                  // cSPUIBehaviorEventBase
+    char  pad00[0x34];
+    int   mCurrentSlot;        // +0x34
+    int   mValue;              // +0x38
     int** SlotB(int i);        // FUN_007f93b0
     int** SlotC(int i);        // FUN_007f93c0
     int** SlotD(int i);        // FUN_007f93d0
@@ -901,29 +904,36 @@ void* Ev::AsD(int id)
     return 0;
 }
 
+struct SlotValueObj {
+    virtual void AddRef(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
+    virtual void s8(); virtual void s9(); virtual void s10(); virtual int GetValue();   // slot 11 (+0x2c)
+    virtual void SetValue(void* v);   // slot 12 (+0x30)
+};
+
 // @ 0x007f9a40
 void Cont::Refresh()
 {
     for (int i = 0; i < 4; ++i) {
         int** slot = SlotB(i);
         if (*slot != 0) {
-            int r = (int)VCallR(*slot, 0x2c);
-            if (r != *(int*)((char*)this + 0x38)) {
-                VCall1(*slot, 0x30, (void*)(*(int*)((char*)this + 0x38)));
+            if (((SlotValueObj*)*slot)->GetValue() != mValue) {
+                ((SlotValueObj*)*slot)->SetValue((void*)mValue);
             }
         }
     }
-    *(int*)((char*)this + 0x34) = -1;
+    mCurrentSlot = -1;
 }
+
 
 // @ 0x007f9ae0
 bool Cont::SetValue(int v)
 {
-    *(int*)((char*)this + 0x38) = v;
+    mValue = v;
     for (int i = 0; i < 4; ++i) {
         int** slot = SlotB(i);
         if (*slot != 0) {
-            VCall1(*slot, 0x30, (void*)v);
+            ((SlotValueObj*)*slot)->SetValue((void*)mValue);
         }
     }
     return true;
@@ -960,8 +970,8 @@ bool Cont::AddB(void* obj)
         int** slot = SlotB(i);
         if (*slot == 0) {
             *slot = (int*)obj;
-            VCallR(obj, 0);
-            VCall1(obj, 0x30, (void*)(*(int*)((char*)this + 0x38)));
+            ((SlotValueObj*)*slot)->AddRef();
+            ((SlotValueObj*)*slot)->SetValue((void*)mValue);
             return true;
         }
     }

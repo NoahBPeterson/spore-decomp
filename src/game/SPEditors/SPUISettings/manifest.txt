@@ -22,3 +22,4 @@
 ../src/game/SPEditors/SPUISettings.cpp  ?FE0@GraphicsTabF10@@QAEXXZ  00603fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUISettings.cpp  ?HandleMessage@Handler14@@QAE_NIPAX@Z  006041f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUISettings.cpp  ?SaveAllSettings@cSPUISettings14@@QAEXXZ  00604860  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?RestartTimer@cTimedObject@@QAEXXZ  005ff230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

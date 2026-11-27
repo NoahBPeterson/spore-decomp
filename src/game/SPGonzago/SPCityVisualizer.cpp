@@ -627,6 +627,7 @@ struct CityCircle {
     uint8_t* mEnd54;                            // +0x54
 };
 struct CityVis {
+    void FUN_00d590b0(int param_2, Vector3_s00d5_8a80* param_3, float param_4);   // 0x00d590b0
     uint8_t   pad00[0x10];                      // +0x00
     uint8_t   mTimer[0x20];                      // +0x10 (cGonzagoTimer)
     uint8_t   mCircle30[0x64];                  // +0x30
@@ -6225,9 +6226,9 @@ void __fastcall FUN_00d58ea0(CityVis* self, void* edx)
 }
 
 // @ 0x00d590b0
-void __fastcall FUN_00d590b0(CityVis* self, void* edx, int param_2, Vector3_s00d5_8a80* param_3, float param_4)
+void CityVis::FUN_00d590b0(int param_2, Vector3_s00d5_8a80* param_3, float param_4)
 {
-    (void)edx;
+    CityVis* self = this;
     void** p = self->mpVecA64;
     void** end = self->mpVecA68;
     for (; p != end; ++p) {
@@ -6377,9 +6378,9 @@ void __fastcall FUN_00d59520(CityVis* self, void* edx, Vector3_s00d5_8a80* pos)
         float dx = p->x - pos->x;
         float dy = p->y - pos->y;
         float dz = p->z - pos->z;
-        float d = sqrtf(dx * dx + dy * dy + dz * dz);
+        float d = sqrtf(dy * dy + (dx * dx + dz * dz));
         if (d < gConst77FBC)
-            FUN_00d590b0(self, 0, 0, pos, d);
+            self->FUN_00d590b0(0, pos, d);
     }
 }
 
@@ -8326,7 +8327,7 @@ void Viz::Update(u64 t)
                         float dx = ((float*)node)[3] - r->x;
                         float dz = ((float*)node)[5] - r->z;
                         float dy = ((float*)node)[4] - r->y;
-                        if (dx * dx + dz * dz + dy * dy < 10000.0f) {
+                        if (dy * dy + (dx * dx + dz * dz) < 10000.0f) {
                             Stim* s = st->FUN_00bc97f0(0x200, 0, 100.0f, 0);
                             if (s) {
                                 s->x = ((float*)node)[3];

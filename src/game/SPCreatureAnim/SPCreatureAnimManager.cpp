@@ -5496,27 +5496,18 @@ bool CallbackPair::SetCallbackPair(CallbackPair* self, void* newObj)
 // @ 0x00a057f0
 void* RBTreeHead::FindRaw(void** outNode, uint32_t* key)
 {
-    char* sentinel = (char*)this + 4;
-    char* pos = sentinel;
+    char* pos = (char*)this + 4;
     char* node = root;
     if (node != 0) {
-        uint32_t klo = key[0];
-        uint32_t khi = key[1];
-        for (;;) {
-            uint32_t nhi = *(uint32_t*)(node + 0x14);
-            if (nhi < khi) {
-                node = *(char**)node;
-            } else if (nhi > khi) {
+        unsigned __int64 k = *(unsigned __int64*)key;
+        do {
+            if (!(*(unsigned __int64*)(node + 0x10) < k)) {
                 pos = node;
                 node = *(char**)(node + 4);
-            } else if (*(uint32_t*)(node + 0x10) < klo) {
-                node = *(char**)node;
             } else {
-                pos = node;
-                node = *(char**)(node + 4);
+                node = *(char**)node;
             }
-            if (node == 0) break;
-        }
+        } while (node != 0);
     }
     *outNode = pos;
     return outNode;

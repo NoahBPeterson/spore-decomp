@@ -28,6 +28,7 @@ extern "C" char g_16758c8[];
 
 #include "game/types.h"
 #include <string.h>
+#include <stdio.h>
 #include <malloc.h>
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
@@ -2227,7 +2228,7 @@ char* spigot_new(float f)
     char* x = (char*)pd_new(spSpigotClass);
     if (x != 0) {
         floatinlet_new(x, x + 0x28);
-        char* o = (char*)outlet_new(x, gEmptySymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gEmptySymbol_s00a5_b510 /*DAT_016758a0*/);
+        char* o = (char*)outlet_new(x, gEmptySymbol_s00a5_b510);
         setObjP(x, 0x2c, o);
         setObjF(x, 0x28, f);
     }
@@ -2629,7 +2630,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void makefilename_float(char* x, float f)
 {
     char buf[1000];
-    espd_sprintf(buf, (const char*)objP(x, 0x2c), (int)f);
+    sprintf(buf, (const char*)objP(x, 0x2c), (int)f);
     t_symbol_s00a5_b510 tmp;
     t_symbol_s00a5_b510* p = gensym(&tmp, buf);
     outlet_symbol((char*)objP(x, 0xc), *p);
@@ -2641,7 +2642,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void makefilename_symbol(char* x, t_symbol_s00a5_b510 s)
 {
     char buf[1000];
-    espd_sprintf(buf, (const char*)objP(x, 0x2c), s.mpName);
+    sprintf(buf, (const char*)objP(x, 0x2c), s.mpName);
     t_symbol_s00a5_b510 tmp;
     t_symbol_s00a5_b510* p = gensym(&tmp, buf);
     outlet_symbol((char*)objP(x, 0xc), *p);

@@ -76,3 +76,6 @@
 ../src/game/Spui/SPUIBehavior.cpp  ?AsD@Ev@@QAEPAXH@Z  007f99e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?AsE@Ev@@QAEPAXH@Z  007f9bb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?f_7fbdb0@@YAPAUPair8@@PAU1@00@Z  007fbdb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?SetValue@Cont@@QAE_NH@Z  007f9ae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?Refresh@Cont@@QAEXXZ  007f9a40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?AddB@Cont@@QAE_NPAX@Z  007f9c10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

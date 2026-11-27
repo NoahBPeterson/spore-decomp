@@ -35,3 +35,4 @@
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00ccb2c0@cTDS@@QAEXM@Z  00ccb2c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00ccad10@CPool@@QAEPAXPAE@Z  00ccad10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc98e0@@YGPAUOrnament@@PAUTribeObj@@@Z  00cc98e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00ccad80_impl@@YAPAEPAE0PBX@Z  00ccad80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

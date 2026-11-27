@@ -7,6 +7,5 @@
 0093b3c0  108  complete: SetStream, refcount/field ordering differs
 0093b450  38   complete: Close, field-store ordering differs
 0093b490  101  complete: Write, branch layout differs
-0093b770  47   complete: StreamChild::Read, unsigned min branch vs cmov
 0093b820  129  complete: WriteEncoded, ConvertEncoding loop schedule differs
 0093b9a0  41   complete: FixedMemoryStream::Read, unsigned test/cmov differs

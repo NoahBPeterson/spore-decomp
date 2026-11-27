@@ -51,3 +51,7 @@
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cRainStormEvent_s00d4_d5c0@@QAE_NPAX@Z  00d4dd90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cMeteorStrikeEvent_s00d4_f2e0@SP@@QAE_NPAX@Z  00d50260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?equal_range@RBTree@@QAEXPAPAURBNode@@PAI@Z  00d4b450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cSeaMonsterEvent_s00d4_d5c0@@QAE_NPAX@Z  00d4de20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cTribeFoodRaidEvent@@QAE_NPAX@Z  00d4deb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cMeteorStrikeEvent@@QAE_NPAX@Z  00d4df40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?WriteData@cDramaEventInstanceData_s00d4_d5c0@@QAE_NPAX@Z  00d4da10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

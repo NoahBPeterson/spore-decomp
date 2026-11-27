@@ -2,7 +2,6 @@
 00c0ddb0  105  PASS         Community::func58h wrapper + set bubble extents; complete [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00c0de60   57  UNSUPPORTED  SetGraspedEffectOffsets; complete; unresolved stub F_b3050
 00c0dee0  161  PASS         find entry in +0x8c array (optional erase); complete; returns bool (was char: 16-bit eax mask false FAIL)
-00c0e000   49  PASS         set animation slot +8; complete; this was *(p+0x17c) not p+0x17c
 00c0e070   46  PASS         animation guid valid-motion query; complete; returns bool (was char: 16-bit eax mask false FAIL)
 00c0e0c0   82  PASS         current animation guid compare; complete; QueryA(param_2) + vtable cast fixed
 00c0e170   -   UNSUPPORTED  motion-state gate; complete; 5 unresolved stub callees

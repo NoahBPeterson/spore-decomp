@@ -12,3 +12,4 @@
 ../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fef810@@YAPAXPAUcReqElem@@00@Z  00fef810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fefe70@@YAXI@Z  00fefe70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00fe0000.cpp  ?Brush_f8630@@YAMPAUBrush_s00fe_8630@@PBM@Z  00fe8630  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fefe90@@YAXIII@Z  00fefe90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

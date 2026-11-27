@@ -16214,8 +16214,8 @@ bool WinA::FUN_00df6850(RefVt* param)
     }
     if (mp34 != 0) {
         mp34->v08(0);
-        param = (RefVt*)m20.mp10;
-        mp34->v48(9, &param, 1);
+        RefVt* arg = (RefVt*)m20.mp10;
+        mp34->v48(9, &arg, 1);
     }
     return true;
 }

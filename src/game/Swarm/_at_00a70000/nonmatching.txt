@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00a75020 193 MapToCell: codegen differs. Original uses the inlined floorf idiom (cvtss2si + ucomiss + cmovb) and spills u/v to the stack; ours uses cvttss2si + comiss/jbe/dec and produces a 160-byte body vs 241. Semantically correct. [equiv PASS 389 valid, 100% cov]
-00a75120 29 Normalize: instruction set identical, scheduling/register order differs (mpPixels40 += m4c placed earlier than the original's post-subss add). [equiv WEAK 352 valid, 20% cov]
 00a75410 10 cMapInfo_SortRect3: branch polarity fixed; only the first store's out-pointer load (`mov eax,[esp+0x10]`) is scheduled after `fld [edx]` rather than before. [equiv FAIL 1/400 (memory-pool artifact)]
 00a75480 8 cMapInfo_SortRect3R: branch polarity + arg load order fixed; only the first store's out-pointer load is scheduled after `fld [edx]` rather than before. [equiv FAIL 3/400 (memory-pool artifact)]
 00a754f0 38 UnpackColor: original converts int->float via x87 (fild/fstp) from per-channel int temps; ours uses cvtsi2ss from the masked uint32. [equiv PASS 320 valid, 96.7% cov]

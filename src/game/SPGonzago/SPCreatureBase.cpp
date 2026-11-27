@@ -8422,15 +8422,17 @@ void* __thiscall CCM_s00c0_ddb0::dfd0(int param)
 // @ 0x00c0e000
 char __thiscall CCM_s00c0_ddb0::e000(int param_2, int param_3)
 {
+    char ok = 0;
     CCMInner* p = mpInner_b54;
     if (p != 0) {
-        char* r = (char*)((F_cab60*)p->mpTable_17c)->f(param_2);
+        F_cab60* t = (F_cab60*)p->mpTable_17c;
+        char* r = (char*)t->f(param_2);
         if (r != 0 && param_3 != -1) {
             *(int*)(r + 8) = param_3;
-            return 1;
+            ok = 1;
         }
     }
-    return 0;
+    return ok;
 }
 
 // @ 0x00c0e040

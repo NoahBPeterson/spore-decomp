@@ -1513,15 +1513,17 @@ namespace SP {
 bool SP::cHerd_s00c6_a550::UnbrokenEggsInNest()
 {
     int n = (int)(mLocationStatusEnd - mLocationStatus);
-    if (n <= 0)
-        return false;
-    u8* base = mLocationStatus;
-    for (int i = 0; i < n; ++i) {
-        if (base[i] == 0) {
-            int v = mValidLocations[i];
-            if (v == 1 || v == 2)
-                return true;
-        }
+    int i = 0;
+    if (i < n) {
+        _ReadWriteBarrier();
+        u8* base = mLocationStatus;
+        do {
+            if (base[i] == 0) {
+                int v = mValidLocations[i];
+                if (v == 1 || v == 2)
+                    return true;
+            }
+        } while (++i < n);
     }
     return false;
 }
@@ -1531,8 +1533,10 @@ bool SP::cHerd_s00c6_a550::UnbrokenEggsInNest()
 namespace SP {
 int SP::cHerd_s00c6_a550::ClearLocationStatus(int i)
 {
-    if (i >= 0 && i < mLocationStatusEnd - mLocationStatus)
+    if (i >= 0 && i < mLocationStatusEnd - mLocationStatus) {
+        _ReadWriteBarrier();
         mLocationStatus[i] = 0;
+    }
     return i;
 }
 }  // namespace SP

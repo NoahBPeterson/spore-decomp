@@ -5,7 +5,6 @@
 007f67f0 195 complete; vtable[0x38] pointer/lerp shape differs
 007f6a60 37 complete; Color::Lerp/vcall register schedule differs
 007f6b50 118 complete; vtable slot call shape differs
-007f6d20 19 complete; cdecl argument register assignment differs
 007f6ee0 114 complete; range copy loop layout differs
 007f6f80 63 complete; range destroy loop layout differs
 007f7050 126 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
