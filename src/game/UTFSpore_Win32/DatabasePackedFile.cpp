@@ -2247,6 +2247,7 @@ int PFIndexModifiable::GetDataEnd()
             ++pBucket;
         pNode = *pBucket;
     }
+    _ReadWriteBarrier();
     HashNode* pLast = mpBucketArray[mnBucketCount];
     while (pNode != pLast) {
         unsigned n = (unsigned)pNode->mnSize + (unsigned)pNode->mnPosition;

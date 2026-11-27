@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008daf40 68 complete: PFIndexModifiable::GetDataEnd (bucket-array iteration); register allocation differs (pBucket kept in edi instead of esi); difftest PASS (236 valid, 100% coverage)
 008dafa0 50 complete: PFIndexModifiable::GetTotalDiskSize (bucket-array iteration); peeled-scan/register-allocation differences; difftest PASS (261 valid, 100% coverage)
 008da750 332 complete: DatabasePackedFile::ReadIndexRecord; VecBuf/read/index-serialize flow reconstructed; buffer alloc-header handling and register allocation differ; difftest PASS (351 valid, 88.5% coverage)
 008da140 393 complete: DatabasePackedFile::CompactDatabaseInternal (hole-table merge, empty-index fast path, temp-file copy/rename/cleanup); vtable dispatch, helper inlining and stack layout differ; difftest UNSUPPORTED (0/400 valid - original faults on generated object)
