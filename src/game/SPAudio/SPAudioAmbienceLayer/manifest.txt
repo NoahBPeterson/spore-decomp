@@ -5,3 +5,4 @@
 ../src/game/SPAudio/SPAudioAmbienceLayer.cpp  ??1AmbRefPairVec@@QAE@XZ  00a35570  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioAmbienceLayer.cpp  ?pushPair@S106@@QAEXPAPAX@Z  00a35ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioAmbienceLayer.cpp  ?UpdatePrimitives@AmbLayer@@QAEXMH@Z  00a34ee0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioAmbienceLayer.cpp  ?FUN_00a35c00@@YIXH@Z  00a35c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

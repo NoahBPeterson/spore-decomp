@@ -101,3 +101,4 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daaec0@@YA_NPAUCreature_s00da_a530@@IIIIPAUStateEC@@@Z  00daaec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00db90c0@@YAXM@Z  00db90c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00daadf0@@YA_NPAUCreature_s00da_a530@@IIIIPAUStateF0@@@Z  00daadf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da74e0@@YAXPAUcSPCreatureCitizen@@@Z  00da74e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

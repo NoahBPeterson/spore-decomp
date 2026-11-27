@@ -5,7 +5,6 @@
 00f1b370 142 UNSUPPORTED: 3 unresolved imports (?V04@Msg@@QAEXXZ, ?Post@MsgServer@@QAEXHPAXH@Z, ?V08@Msg@@QAEXXZ)
 00f1b450 170 WEAK: complete impl, equivalence unproven (21.6% insn coverage, 219 valid)
 00f1b590 137 WEAK: complete impl, equivalence unproven (13.1% insn coverage, 397 valid)
-00f1b730 44 UNSUPPORTED: 0/400 valid inputs (wild reads); only diff is select-vs-branch on ev->type id table
 00f1b820 351 WEAK: complete impl, equivalence unproven (41.5% insn coverage, 334 valid)
 00f1ba50 335 WEAK: complete impl, equivalence unproven (6.7% insn coverage, 238 valid)
 00f1bc00 85 WEAK: complete impl, equivalence unproven (81.1% insn coverage, 169 valid); thiscall stub gives add esp,4 vs original add esp,8 for callee-popped arg

@@ -10,3 +10,4 @@
 ../src/game/SPGonzago/_at_00ae0000.cpp  ?FUN_00aefb30@cHavokLocomotiveCollisionListener@SP@@QAEPAXI@Z  00aefb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00ae0000.cpp  ?FUN_00aef6b0@cHavokLocomotiveController@SP@@QAEXHM@Z  00aef6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00ae0000.cpp  ?UpdateTransform@cDebugBehavior@@QAEXXZ  00aef330  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?ReleaseOwner@cDebugBehavior@@QAEXXZ  00aef2f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

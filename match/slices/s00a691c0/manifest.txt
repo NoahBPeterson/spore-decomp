@@ -5,3 +5,4 @@ slices/s00a691c0/s00a691c0.cpp  ?FillRef@@YAXPAPAURefObject@@I0@Z  00a695a0  /O2
 slices/s00a691c0/s00a691c0.cpp  ?DestroyRange@RefVec@@QAEXPAPAURefObject@@0@Z  00a693f0  /O2 /MD /Gy /EHsc /TP
 slices/s00a691c0/s00a691c0.cpp  ?DestroySlotRange@@YAPAURefVecSlot@@PAU1@00@Z  00a69d60  /O2 /MD /Gy /EHsc /TP
 slices/s00a691c0/s00a691c0.cpp  ?Destroy@BigThing@@QAEXXZ  00a69f40  /O2 /MD /Gy /EHsc /TP
+slices/s00a691c0/s00a691c0.cpp  ?UninitCopyRef@@YA?AURefIt_a69490@@U1@00@Z  00a69490  /O2 /MD /Gy /EHsc /TP

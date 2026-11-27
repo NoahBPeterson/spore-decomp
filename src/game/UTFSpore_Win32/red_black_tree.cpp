@@ -31,20 +31,19 @@ template <class T> void swap(T& a, T& b){ T t = a; a = b; b = t; }
 
 // @ 0x00921580
 RBNode* RBTreeIncrement(RBNode* n)
-{
-    if (n->mpRight != 0) {
-        n = n->mpRight;
-        while (n->mpLeft != 0)
-            n = n->mpLeft;
-        return n;
+{    RBNode* p = n->mpRight;
+    if (p != 0) {
+        while (p->mpLeft != 0)
+            p = p->mpLeft;
+        return p;
     }
-    RBNode* p = n->mpParent;
+    p = n->mpParent;
     while (n == p->mpRight) {
         n = p;
         p = p->mpParent;
     }
     if (n->mpRight != p)
-        n = p;
+        return p;
     return n;
 }
 

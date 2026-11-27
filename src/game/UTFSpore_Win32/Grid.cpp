@@ -5829,18 +5829,16 @@ bool SparseMatrix::GetMinMaxUsedRowForCol(int key, int* pMin, int* pMax)
 
 // @ 0x00973930
 int SparseMatrix::GetMinUsedColAndRow(int* pRow)
-{
-    int r = 0x80000000;
+{    int r = 0x80000000;
     *pRow = 0x80000000;
     for (OutNode* n = Begin(); n != End(); n = (OutNode*)RBTreeIncrement(&n->b)) {
-        int v = ((InNode*)n->inner.anchor.left)->f14;
-        if (v < r || r == 0x80000000) {
-            r = v;
+        int* p = &((InNode*)n->inner.anchor.left)->f14;
+        if (*p < r || r == 0x80000000) {
+            r = *p;
             *pRow = n->f14;
         }
     }
-    return r;
-}
+    return r;}
 
 // @ 0x00973980
 int SparseMatrix::GetMaxUsedColAndRow(int* pRow)

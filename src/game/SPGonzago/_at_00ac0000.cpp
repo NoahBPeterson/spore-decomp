@@ -762,7 +762,7 @@ struct VO {
     int* v;                       // +0 begin
     void* FUN_00acb490(int* src); // 00acb490
     void  FUN_00acb680(uchar* pos, uchar* val);
-    void  FUN_00acb7c0(void* a2, void* a3);
+    void* FUN_00acb7c0(void* a2, void* a3);
     void  FUN_00acb810(uchar* pos, uchar* val);
     void  FUN_00acb930(int a2, int a3, int a4);
     void* FUN_00acbaf0(int* src);
@@ -2620,17 +2620,15 @@ void VO::FUN_00acb680(uchar* pos, uchar* val)
 }
 
 // @ 0x00acb7c0
-void VO::FUN_00acb7c0(void* a2, void* a3)
-{
-    int* p = (int*)this;
-    int* it = (int*)FUN_00ac89e0(a3, *(void**)((uchar*)p + 4), a2);
-    int* end = *(int**)((uchar*)p + 4);
-    for (; it < end; it++) {
-        if (*it) ((XC*)*it)->FUN_00a05270();
-    }
-    int n = (int)((char*)a3 - (char*)a2) >> 2;
-    *(int*)((uchar*)p + 4) -= n * 4;
-}
+void* VO::FUN_00acb7c0(void* a2, void* a3)
+{    XC*** p = (XC***)this;
+    XC** en = p[1];
+    XC** newEnd = (XC**)FUN_00ac89e0(a3, en, a2);
+    XC** e = p[1];
+    for (XC** it = newEnd; it < e; ++it)
+        if (*it) (*it)->FUN_00a05270();
+    p[1] = p[1] - ((XC**)a3 - (XC**)a2);
+    return a2;}
 
 // @ 0x00acb810
 void VO::FUN_00acb810(uchar* pos, uchar* val)
@@ -2823,18 +2821,14 @@ int* VO::FUN_00acbd90(int* other)
 
 // @ 0x00acbed0
 int VO::FUN_00acbed0(int a2, int a3)
-{
-    int* p = (int*)this;
-    int* it = (int*)FUN_00ac9740((void*)a3, *(void**)((uchar*)p + 4), (void*)a2);
-    int* end = *(int**)((uchar*)p + 4);
-    for (; it < end; it += 3) {
-        void*** obj = (void***)it;
-        ((void (__thiscall*)(void*, int))((*obj)[0]))(obj, 0);
-    }
-    int n = (a2 - a3) / 0xc;
-    *(int*)((uchar*)p + 4) += n * 0xc;
-    return a2;
-}
+{    ElemC** p = (ElemC**)this;
+    ElemC* en = p[1];
+    ElemC* newEnd = (ElemC*)FUN_00ac9740((ElemC*)a3, en, (ElemC*)a2);
+    ElemC* e = p[1];
+    for (ElemC* it = newEnd; it < e; ++it)
+        ((void (__thiscall*)(void*, int))(it->vptr[0]))(it, 0);
+    p[1] = p[1] - ((ElemC*)a3 - (ElemC*)a2);
+    return a2;}
 
 // @ 0x00acbf30
 void VO::FUN_00acbf30(int a2, uint a3, int a4)

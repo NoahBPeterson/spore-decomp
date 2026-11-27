@@ -671,15 +671,13 @@ class cNamedRefCount : public RefCountVTemplate_s0062_da00__ui {
 
 // @ 0x00621bf0
 void cXHTMLControlAppearance::Apply(WinXHTML* w)
-{
-  if (w == 0) return;
+{  if (w == 0) return;
+  ControlDrawable* p = mpBegin;
   ControlDrawable* e = mpEnd;
-  for (ControlDrawable* p = mpBegin; p != e; ++p)
+  for (; p != e; ++p)
     w->SetFormControlDrawable(p->mId, p->mpDrawable);
   w->SetScrollbarDrawable(0, mpScroll2 ? (char*)mpScroll2 + 0xc : 0);
-  if (mpScroll1) w->SetScrollbarDrawable(1, (char*)mpScroll1 + 0xc);
-  else w->SetScrollbarDrawable(1, 0);
-}
+  w->SetScrollbarDrawable(1, mpScroll1 ? (char*)mpScroll1 + 0xc : 0);}
 
 // @ 0x00621c80
 void SetGlobalAppearance(Drawable* p)

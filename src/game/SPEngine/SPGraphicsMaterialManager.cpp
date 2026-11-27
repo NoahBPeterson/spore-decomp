@@ -320,7 +320,7 @@ struct RefPtrVecStorage {
 };
 struct VecA : RefPtrVecStorage {
     ~VecA();
-    void Shrink(void** a, void** b);
+    void** Shrink(void** a, void** b);
 };
 struct VecB : RefPtrVecStorage {
     ~VecB();
@@ -1680,26 +1680,26 @@ void FillNAtomic8(void** dst, unsigned n, void** value)
     }
 }
 
+struct WeakRef_70eb70 {
+    void* p;
+    WeakRef_70eb70(const WeakRef_70eb70& o) : p(o.p) { if (p) ++*(int*)((char*)p + 0x14); }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct WeakIt_70eb70 {
+    WeakRef_70eb70* p;
+    WeakIt_70eb70(WeakRef_70eb70* q) : p(q) {}
+    WeakRef_70eb70& operator*() const { return *p; }
+    WeakIt_70eb70& operator++() { ++p; return *this; }
+    bool operator!=(const WeakIt_70eb70& o) const { return p != o.p; }
+};
+
 // @ 0x0070eb70
-void UninitCopyWeak14(void** out, void** first, void** last, void** dst)
-{
-    *out = dst;
-    if (first != last)
-    {
-        do
-        {
-            if (dst != 0)
-            {
-                void* p = *first;
-                *dst = p;
-                if (p != 0)
-                    ++*(int*)((char*)p + 0x14);
-            }
-            ++first;
-            ++dst;
-        } while (first != last);
-        *out = dst;
-    }
+WeakIt_70eb70 UninitCopyWeak14(WeakIt_70eb70 first, WeakIt_70eb70 last, WeakIt_70eb70 dest)
+{    WeakIt_70eb70 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) WeakRef_70eb70(*first);
+    return result;
 }
 
 // @ 0x0070ebb0
@@ -2042,16 +2042,22 @@ void FVecC::Teardown()
 }
 
 // @ 0x0070fa60
-void VecA::Shrink(void** arg1, void** arg2)
-{
-    void** p = AssignCopyA(arg1, mpEnd, arg2);
+void** VecA::Shrink(void** arg1, void** arg2)
+{    void** oldEnd = mpEnd;
+    void** const pos = AssignCopyA(arg2, oldEnd, arg1);
     void** end = mpEnd;
-    for (; p < end; ++p)
+    void** p = pos;
+    if (pos < end)
     {
-        if (*p != 0)
-            ((RC3c_s0070_efa0*)*p)->Release();
+        do
+        {
+            if (*p != 0)
+                ((RC3c_s0070_efa0*)*p)->Release();
+            ++p;
+        } while (p < end);
     }
-    mpEnd = (void**)((char*)mpEnd + ((char*)arg2 - (char*)arg1));
+    mpEnd -= (arg2 - arg1);
+    return arg1;
 }
 
 // @ 0x0070fab0

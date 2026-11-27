@@ -1627,18 +1627,15 @@ void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
 
 // @ 0x007ae920
 Span* Span::Init(int x, int y, int dx, int dy, int extra)
-{
-    int* p = (int*)this;
-    p[0] = x;
-    p[2] = x + dx;
-    p[1] = y;
-    p[3] = y + dy;
-    p[5] = -1;
-    p[6] = -1;
-    ((uint8_t*)this)[0x1c] = 0;
-    p[4] = extra;
-    return this;
-}
+{    mX = x;
+    mY = y;
+    mXEnd = x + dx;
+    mYEnd = y + dy;
+    mExtra = extra;
+    mM1 = -1;
+    mM2 = -1;
+    mFlag = 0;
+    return this;}
 
 // @ 0x007ae960
 uint8_t FlagHolder::IsSet()

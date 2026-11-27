@@ -1058,13 +1058,12 @@ void* __cdecl F7100(void* out, void* target, float x, float y, void* anim)
 
 // @ 0x007f71b0
 bool F71B0(void* self, int a2, float a3, int phase)
-{
-    void* obj = *(void**)((char*)self + 0x10);
+{    void* obj = *(void**)((char*)self + 0x10);
     if (obj == 0)
         return false;
     if (phase == 0) {
         void* p = FUN_805260(obj);
-        *(int*)((char*)self + 0x24) = *(int*)((char*)p + 0xc);
+        *(float*)((char*)self + 0x24) = *(float*)((char*)p + 0xc);
         return *(void**)((char*)self + 0x10) != 0;
     }
     if (phase == 2) {
@@ -1081,12 +1080,12 @@ bool F71B0(void* self, int a2, float a3, int phase)
         return r == 0;
     }
     if (phase == 1) {
+        void* p = *(void**)((char*)self + 0x10);
         *(void**)((char*)self + 0x10) = 0;
-        if (obj)
-            ((FV0)VT(obj)[4 / 4])(obj);
+        if (p)
+            ((FV0)VT(p)[4 / 4])(p);
     }
-    return *(void**)((char*)self + 0x10) != 0;
-}
+    return *(void**)((char*)self + 0x10) != 0;}
 
 // @ 0x007f7290
 void* __cdecl SPUICreateWindowAnimationRotation(void* out, void* target, int a, int b, int c, int d, void* anim)

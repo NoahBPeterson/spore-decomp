@@ -11,3 +11,4 @@
 ../src/game/SPEngine/_at_007a0000.cpp  ?FUN_007a41c0@@YAXPAX@Z  007a41c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007a0000.cpp  ?ScalarDelete@TextRenderWare@@QAEPAXE@Z  007a88b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007a0000.cpp  ?FindAndErase@TextureListOwner@@QAE_NPAH@Z  007a9130  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?Resize@VecV20@@QAEXI@Z  007a1100  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

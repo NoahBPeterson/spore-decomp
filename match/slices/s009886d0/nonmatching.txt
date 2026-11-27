@@ -21,7 +21,6 @@
 00988cd0   596   large CalcSize variant; heavy scheduling + float-register differences.
 00989000   139   constructor init sequence; store ordering differs throughout.
                  reloaded from the argument slot, and cold-return placement.
-00989410    38   original branches on the flag byte with a duplicated virtual load;
                  cl folds the two arms.
 00989500   115   JumpTable case dispatch; cl emits a different jump-table layout.
 00989660    40   bl-mask computation (`and 1 / neg / sbb` vs `xor bl,bl` arms) and

@@ -232,7 +232,7 @@ struct CB {
   bool  __thiscall AnimationFinished(int);       // 00c123f0
   bool  __thiscall AnimationFinishedX(int);      // 00c12400
   int   __thiscall InterruptAnimation(int, int, int);  // 00c12310
-  void  __thiscall Sub01(int);                   // 00c14750
+  void  __thiscall Sub01(bool);                  // 00c14750
   bool  __thiscall CheckA(void*);                // 00c0b860
   bool  __thiscall CheckB(void*);                // 00c0b8a0
 };
@@ -7982,13 +7982,10 @@ bool __cdecl FUN_00d7b310(void* a, void* b)
 
 // @ 0x00d7b350
 bool __cdecl FUN_00d7b350(CB* cb)
-{
-  bool r = ((bool (__thiscall*)(void*))(*(void***)((char*)cb + 0xc0))[0xf8 / 4])((char*)cb + 0xc0);
-  cb->mGeneralFlags |= 4;
-  cb->Sub01(r ? 0 : 1);
+{  cb->mGeneralFlags |= 4;
+  cb->Sub01(!((cSpatialObject*)((char*)cb + 0xc0))->vf8());
   int v = ((int (__thiscall*)(void*))(*(void***)((char*)cb + 0x58))[0x20 / 4])((char*)cb + 0x58);
-  return v != 0;
-}
+  return v != 0;}
 
 // @ 0x00d7b3a0
 void __cdecl FUN_00d7b3a0(CB* cb)
@@ -8964,17 +8961,16 @@ bool FUN_00d7ce90(cCreatureBase* pCreature, int32_t nArg2, int32_t nArg3, int32_
 
 // @ 0x00d7cef0
 void FUN_00d7cef0(cCreatureBase* pCreature)
-{
-    pCreature->mpBehaviorTree->mStimuli.ClearAll(0, 0x20000);
+{    pCreature->mpBehaviorTree->mStimuli.ClearAll(0, 0x20000);
 
     if (pCreature->mCombatant.GetFileCount() == 2) {
         pCreature->mbField166D = 1;
-        pCreature->InterruptAnimation(pCreature->Flag388() ? 0x7a96805 : 0x7a96801, -1, 0);
+        int32_t nAnim = pCreature->Flag388() ? 0x7a96805 : 0x7a96801;
+        pCreature->InterruptAnimation(nAnim, -1, 0);
         return;
     }
 
-    pCreature->UpdateLocomotion(0);
-}
+    pCreature->UpdateLocomotion(0);}
 
 // @ 0x00d7cf50
 cAnimIterator* cAnimIterator::Advance()
@@ -12138,10 +12134,9 @@ u8 FUN_00d86d30(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState*
 
 // @ 0x00d86df0
 void FUN_00d86df0(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState* state)
-{
-    void* p = state->m8.p;
-    if (p) {
-        state->m8.p = 0;
+{    void** slot = &state->m8.p;
+    if (void* p = *slot) {
+        *slot = 0;
         ((void (__thiscall*)(void*))VT(p)[0xc0 / 4])(p);
     }
     MOPS(&creature->mB4C->mStimuli)->FUN_00bc98f0(0, 0x40000);
@@ -12149,8 +12144,7 @@ void FUN_00d86df0(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeStat
     if (state && state->m8.p) {
         void* q = state->m8.p;
         return ((void (__thiscall*)(void*))VT(q)[0xc0 / 4])(q);
-    }
-}
+    }}
 
 // @ 0x00d86e50
 u8 FUN_00d86e50(cCreature* creature, u32 a2, u32 a3, u32 a4, u32 a5, cNodeState* state)

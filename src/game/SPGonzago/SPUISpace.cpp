@@ -9731,17 +9731,15 @@ void cSPUISpace_s0106_ea40::FUN_0106ea40(u32 index)
 
 // @ 0x0106eb40
 Blk28_s0106_ea40* Blk28Vec::erase(Blk28_s0106_ea40* first, Blk28_s0106_ea40* last)
-{
-    Blk28_s0106_ea40* p = Blk28_mvassign(last, mpEnd, first);
-    Blk28_s0106_ea40* end = mpEnd;
-    while (p < end) {
+{    Blk28_s0106_ea40* en = mpEnd;
+    Blk28_s0106_ea40* newEnd = Blk28_mvassign(last, en, first);
+    Blk28_s0106_ea40* e = mpEnd;
+    for (Blk28_s0106_ea40* p = newEnd; p < e; ++p) {
         if (p->mpRef != 0)
             p->mpRef->Release();
-        p += 1;
     }
-    mpEnd -= last - first;
-    return first;
-}
+    mpEnd = mpEnd - (last - first);
+    return first;}
 
 // @ 0x0106ebb0
 Blk28_s0106_ea40* Blk28Vec::insert(Blk28_s0106_ea40* position, u32 n, const Blk28_s0106_ea40& value)

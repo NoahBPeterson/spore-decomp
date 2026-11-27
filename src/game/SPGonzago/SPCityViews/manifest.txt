@@ -26,3 +26,4 @@
 ../src/game/SPGonzago/SPCityViews.cpp  ??0cCulturalTargetView@SP@@QAE@XZ  00e89d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityViews.cpp  ?FUN_00e89e50@cCulturalTargetView@SP@@QAEIIIPAUFloat3@@@Z  00e89e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityViews.cpp  ??1cCulturalTargetView@SP@@QAE@XZ  00e89f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ??0cBuildingView@@QAE@XZ  00e87b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

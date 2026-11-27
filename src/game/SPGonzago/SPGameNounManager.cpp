@@ -3847,14 +3847,15 @@ void cNounManagerMessaging::FUN_00b25e80()
 
 // @ 0x00b25ee0
 void cGameNounManager_s00b2_5c30::FUN_00b25ee0()
-{
-    tGameDataVector* pVector = GetGameDataVector((tVectorCreateFn)0x00b21080, (tVectorClearFn)0x00d3d420,
-                                                 (tVectorAddFn)0x00b236c0, (tVectorMatchFn)0x00b1e500,
+{    void __cdecl FUN_00b236c0(tGameDataVector*, cGameData_s00b2_5c30*);
+    tGameDataVector* pHolder = GetGameDataVector((tVectorCreateFn)&g_funB21080, (tVectorClearFn)&g_funD3D420,
+                                                 FUN_00b236c0, (tVectorMatchFn)&g_funB1E500,
                                                  0x018c816a);
+    cObjectVector* pVector = (cObjectVector*)&pHolder->mpBegin;
     int count = (int)(pVector->mpEnd - pVector->mpBegin);
     for (int i = 0; i < count; ++i) {
-        FUN_00b21410(pVector->mpBegin[i]);
-        RemoveNoun(pVector->mpBegin[i]);
+        FUN_00b21410((cGameData_s00b2_5c30*)pVector->mpBegin[i]);
+        RemoveNoun((cGameData_s00b2_5c30*)pVector->mpBegin[i]);
     }
 }
 

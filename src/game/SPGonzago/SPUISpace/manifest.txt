@@ -89,3 +89,4 @@
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0107abb0@cToolWidget@SP@@QAEXXZ  0107abb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?fn_bbc870@@YGXPAHHHPAX@Z  00bbc870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010666b0@SPUISpace@@QAEXXZ  010666b0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?erase@Blk28Vec@@QAEPAUBlk28_s0106_ea40@@PAU2@0@Z  0106eb40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

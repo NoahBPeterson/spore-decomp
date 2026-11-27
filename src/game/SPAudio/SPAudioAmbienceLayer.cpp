@@ -596,10 +596,9 @@ void* __fastcall FUN_00a35aa0(int* param_1)
 
 // @ 0x00a35c00
 void __fastcall FUN_00a35c00(int param_1)
-{
-    void* _Src = *(void**)(param_1 + 0x28);
+{    void* _Src = *(void**)(param_1 + 0x28);
     void* _Dst = *(void**)(param_1 + 0x24);
-    FUN_011e0744(_Dst, _Src, 0);
+    FUN_011e0744(_Dst, _Src, *(int*)(param_1 + 0x28) - (int)_Src);
     *(int*)(param_1 + 0x28) = *(int*)(param_1 + 0x28) +
                               (((int)_Src - (int)_Dst) >> 2) * -4;
     *(float*)(param_1 + 0x290) = 0.0f;

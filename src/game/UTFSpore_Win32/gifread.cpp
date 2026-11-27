@@ -868,11 +868,11 @@ void* __stdcall GIF_info(GIFInfo* info, int index)
 
 // @ 0x0084cd70
 int __stdcall GIF_read(void* info, void* desc, int p3, int p4)
-{
-    int r = 0;
+{    int r = 0;
     GifFileType_s0084_cd70* g = (GifFileType_s0084_cd70*)GIFgetinfo(*(void**)((char*)info + 0x10),
                                               *(int*)((char*)desc + 0xc), (void*)p3, p4);
     if (g) {
+        r++;
         void* p = g->Private;
         if (g->SavedImageColorMap)
             gfree(g->SavedImageColorMap);
@@ -881,7 +881,5 @@ int __stdcall GIF_read(void* info, void* desc, int p3, int p4)
         if (p)
             gfree(p);
         gfree(g);
-        r = 1;
     }
-    return r;
-}
+    return r;}

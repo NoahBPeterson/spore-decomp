@@ -3598,7 +3598,7 @@ struct DecalPtrVec {                    // SPVector<smart_ptr> at offset 0 of it
     DecalPtr* mEnd;                     // +4
     DecalPtr* mCapacity;                // +8
     void Insert(DecalPtr* pos, DecalPtr* value);        // 0x00fa2440
-    void EraseRange(DecalPtr* first, DecalPtr* last);   // 0x00fa25c0
+    DecalPtr* EraseRange(DecalPtr* first, DecalPtr* last); // 0x00fa25c0
 };
 struct LayerVec {                       // SPVector<uint> slot, 0x14-byte stride
     uint32_t* mBegin;                   // +0
@@ -7841,17 +7841,17 @@ alloc_done:
 }
 
 // @ 0x00fa25c0
-void DecalPtrVec::EraseRange(DecalPtr* first, DecalPtr* last)
-{
-    DecalPtr* p = (DecalPtr*)DecalVecMoveDown_00f9ae80(last, mEnd, first);
+DecalPtr* DecalPtrVec::EraseRange(DecalPtr* first, DecalPtr* last)
+{    DecalPtr* oldEnd = mEnd;
+    DecalPtr* const pos = (DecalPtr*)DecalVecMoveDown_00f9ae80(last, oldEnd, first);
     DecalPtr* e = mEnd;
-    for (; p < e; ++p) {
+    for (DecalPtr* p = pos; p < e; ++p) {
         RefCounted* o = p->mPtr;
         if (o)
             o->Release();
     }
     mEnd -= last - first;
-}
+    return first;}
 
 // @ 0x00fa2620
 void __stdcall FUN_00fa2620(DecalArrayElem* first, DecalArrayElem* last)

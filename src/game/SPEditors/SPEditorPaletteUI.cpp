@@ -712,7 +712,7 @@ struct cSPUIFeedList {
 };
 struct VecAutoRef {
     void* begin; void* end; void* cap;
-    void erase(void* first, void* last);
+    void* erase(void* first, void* last);
 };
 // ---- items of slice s00662d70 end
 
@@ -1091,16 +1091,25 @@ void cSPPaletteUI_s005c_b060::Shutdown()
 }  // namespace SP
 
 // @ 0x00663430
-void VecAutoRef::erase(void* first, void* last)
+void* VecAutoRef::erase(void* first, void* last)
 {
-    char* r = (char*)CopyImpl(last, end, first);
-    char* e = (char*)end;
-    while (r < e) {
-        void* p = *(void**)r;
-        if (p) (*(FnP)Vslot(p, 0xc))(p);
-        r += 4;
-    }
-    *(int*)&end += -((((int)((char*)last - (char*)first)) >> 2) * 4);
+    struct AutoRef {
+        void* p;
+        ~AutoRef() { if (p) (*(FnP)Vslot(p, 0xc))(p); }
+    };
+    struct Ops {
+        static AutoRef* copy(AutoRef* first, AutoRef* last, AutoRef* result) {
+            return (AutoRef*)CopyImpl(first, last, result);
+        }
+        static void destruct(AutoRef* first, AutoRef* last) {
+            for (; first < last; ++first)
+                first->~AutoRef();
+        }
+    };
+    AutoRef* const position = Ops::copy((AutoRef*)last, (AutoRef*)end, (AutoRef*)first);
+    Ops::destruct(position, (AutoRef*)end);
+    ((AutoRef*&)end) -= ((AutoRef*)last - (AutoRef*)first);
+    return first;
 }
 
 // @ 0x00663490

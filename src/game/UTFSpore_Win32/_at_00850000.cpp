@@ -2470,7 +2470,7 @@ void FUN_0085d290(void *param_1)
 }
 
 // @ 0x0085d2d0
-void FUN_0085d2d0(void *param_1)
+static __declspec(noinline) void FUN_0085d2d0(void *param_1)
 {
     CInfo *c = C(param_1);
     Master *m = c->master;
@@ -2652,25 +2652,22 @@ void FUN_0085d610(void *param_1, i32 *param_2, i32 param_3, void **param_4)
 
 // @ 0x0085d830
 void FUN_0085d830(void *param_1)
-{
-    CInfo *c = C(param_1);
+{    CInfo *c = C(param_1);
     Master *m = (Master *)c->mem->alloc_small(param_1, 1, 0x30);
     c->master = m;
     m->fn00 = (void (*)(void *))&FUN_0085d3a0;
     m->fn08 = 0;
-    i32 n = c->f78 * c->f70;
-    m->f28 = (u32)n;
+    m->f28 = (u32)(c->f78 * c->f70);
     if (c->f538 == 2) {
         m->fn04 = (void (*)(void *))&FUN_0085d3c0;
         m->fn0c = (void (*)(void *, i32, i32 *, void **))&FUN_0085d610;
-        m->buf20 = (u8 *)c->mem->alloc_large(param_1, 1, (u32)n);
+        m->buf20 = (u8 *)c->mem->alloc_large(param_1, 1, m->f28);
         return FUN_0085d2d0(param_1);
     }
     m->buf20 = 0;
     m->fn04 = (void (*)(void *))&Fn_0085d480;
     m->fn0c = (void (*)(void *, i32, i32 *, void **))&FUN_0085d4c0;
-    return FUN_0085d2d0(param_1);
-}
+    return FUN_0085d2d0(param_1);}
 
 // @ 0x0085d8b0
 i32 FUN_0085d8b0(void *param_1)

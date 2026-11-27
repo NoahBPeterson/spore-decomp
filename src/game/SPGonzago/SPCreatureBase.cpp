@@ -72,6 +72,9 @@ void* __cdecl SP_PlanetModel();                        // 0xb3d350
 void* __cdecl FUN_00401090();                          // 0x401090
 void* __cdecl FUN_004df420();                          // 0x4df420
 void  __cdecl FUN_00ef1930(void*, float);              // 0xef1930
+struct cSim {
+  void FUN_00ef1930(int a, float b);                   // 0xef1930
+};
 int   __cdecl FUN_00ebfd50(int, int);                  // 0xebfd50
 bool  __cdecl FUN_00c0b1c0(void*, void*, int);         // 0xc0b1c0
 bool  __cdecl FUN_00c0b220(void*, void*);              // 0xc0b220
@@ -7668,13 +7671,11 @@ float __thiscall C_s00c0_bd70::Speed1(char b)
 
 // @ 0x00c0c200
 void __thiscall C_s00c0_bd70::C200(float f)
-{
-  void* gm = SP_GetCurrentGameMode();
+{  void* gm = SP_GetCurrentGameMode();
   if (gm == (void*)0x1654c10 && *(int*)((char*)g_16c7aa4 + 0xcc) == 2) {
-    if (this) FUN_00ef1930((char*)this + 0x5a8, f);
-    else FUN_00ef1930(0, f);
-  }
-}
+    cSim* sim = (cSim*)g_16c7aa4;
+    sim->FUN_00ef1930(this ? (int)((char*)this + 0x5a8) : 0, f);
+  }}
 
 // @ 0x00c0c250
 int __thiscall C_s00c0_bd70::C0c250_()
@@ -7754,19 +7755,18 @@ C_s00c0_bd70* __thiscall C_s00c0_bd70::QuatHalf(float a)
 
 // @ 0x00c0c5b0
 bool __cdecl C5b0(int obj, int b, int* out)
-{
-  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+{  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
     int r = FUN_00ebfd50(obj, b);
     *out = r;
     return r != b;
   }
   void* p = *(void**)((char*)obj + 0xe84);
   if (p && *(char*)((char*)p + 0x388) != 0) {
-    void* mgr = *(void**)0x168d900;
-    if (FUN_00c0b1c0((void*)b, (void*)out, *(int*)((char*)mgr + 0x1c))) return true;
+    int v = ((int*)g_168d900)[7];
+    bool res = FUN_00c0b1c0((void*)b, (void*)out, v);
+    if (res) return res;
   }
-  return FUN_00c0b220((void*)b, (void*)out);
-}
+  return FUN_00c0b220((void*)b, (void*)out);}
 
 // @ 0x00c0c630
 void __thiscall C_s00c0_bd70::C0c630(char bparam, int* p3, int* p4, int* p5)

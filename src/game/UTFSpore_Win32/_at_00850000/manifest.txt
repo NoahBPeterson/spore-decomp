@@ -29,3 +29,4 @@
 ../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085e630@@YAXHHHHHPAHH@Z  0085e630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085e6b0@@YAXHHHHHPAH@Z  0085e6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085e760@@YAXHHHHHPAHH@Z  0085e760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085d830@@YAXPAX@Z  0085d830  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

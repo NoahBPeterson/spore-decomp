@@ -1548,10 +1548,9 @@ void SP::cSPSimulatorPlayerUFO_s00ff_c230::SetPlanetDestination(float* dest, uns
 
 // @ 0x00ffc490
 float __stdcall FUN_00ffc490(ICiv* a, ICiv* b)
-{
-    float f = FUN_010434e0(a->GetCities(), b->GetCities());
-    return f > 1.0f ? f : 1.0f;
-}
+{    float f = FUN_010434e0(a->GetCities(), b->GetCities());
+    float one = 1.0f;
+    return *(f > one ? &f : &one);}
 
 // @ 0x00ffc4e0
 void __stdcall FUN_00ffc4e0(ICiv* self, void* nounMgr)

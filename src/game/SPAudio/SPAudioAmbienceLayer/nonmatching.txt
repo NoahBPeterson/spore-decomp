@@ -3,7 +3,6 @@
 00a35150 452 FUN_00a35150 (ambience-cluster recentre): complete implementation; difftest UNSUPPORTED (unresolved SP_App / Memset32)
 00a35610 175 F_a35610::call (vector insert at position): complete implementation; difftest UNSUPPORTED (0/400 valid, memmove import on unmapped ranges)
 00a358d0 314 F_a358d0::call (AutoRefCount-pair vector insert, EH-aware): equivalent; difftest WEAK (127 valid, 59.0% coverage)
-00a35c00 45 FUN_00a35c00 (clear primitive vector, reset accumulators): equivalent; difftest PASS (400 valid, 100.0% coverage)
 00a35c40 174 F_a35c40::call (select primitives + recentre): complete implementation; difftest UNSUPPORTED (0/400 valid, read faults)
 00a35d20 352 SP::Audio::cAmbienceLayer::Update: complete ambience update (0xa35150 tick, 3d-listener/0xa35840 primitive param pushes, 3d-sound start/stop); reconstructed retail offsets and vtable slots; frame/allocation differs (439 vs 462 bytes, raw masked diff 375); difftest PASS (216 valid, 77.3% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a35f70 146 SP::Audio::cAmbienceLayer::Shutdown: complete shutdown (server notify 0x2c, four 0xa35840 param resets, sound stop 0x572020, primitive-list teardown via 0x621f50 erase); frame differs (235 vs 245 bytes, raw masked diff 156); difftest PASS (270 valid, 79.6% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

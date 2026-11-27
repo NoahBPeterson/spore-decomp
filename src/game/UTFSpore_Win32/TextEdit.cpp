@@ -2025,13 +2025,8 @@ void __thiscall WinText::m_9893d0(uint32_t a)
 
 // @ 0x00989410
 void __thiscall WinText::m_989410(uint32_t a, uint8_t flag)
-{
-    WinBase* b = (WinBase*)this;
-    if (flag) {
-        b->v37(a, F(this, 0x60));
-    } else {
-        b->v37(a, a);
-    }
+{    WinBase* b = (WinBase*)this;
+    b->v37(a, flag ? F(this, 0x60) : a);
 }
 
 // @ 0x00989450

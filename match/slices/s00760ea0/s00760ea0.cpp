@@ -194,14 +194,13 @@ struct Local1240 { unsigned int a, b, c, d; };
 struct V1240 { virtual void v0(); virtual void v1(); virtual void v2(Local1240*); void set(Arg1240*); };
 // @ 0x761240
 void V1240::set(Arg1240* p)
-{
-    Local1240 l;
+{    Local1240 l;
+    l.c = 0;
+    l.a = 0;
     l.b = p->a;
     l.d = p->b;
     p->a = 0;
     p->b = 0;
-    l.a = 0;
-    l.c = 0;
     v2(&l);
 }
 

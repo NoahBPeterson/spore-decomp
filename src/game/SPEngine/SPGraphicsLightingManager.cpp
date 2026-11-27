@@ -2103,16 +2103,16 @@ unsigned W69e0::next(unsigned idx)
 
 // @ 0x00706ab0
 __m128* FUN_00706ab0(__m128* first, __m128* last, __m128* out)
-{
-    if (first != last) {
-        int offset = (int)((char*)first - (char*)out);
-        do {
-            if (out != 0)
-                *(__m128*)out = *(__m128*)((char*)out + offset);
-            out = (__m128*)((char*)out + 16);
-        } while ((__m128*)((char*)out + offset) != last);
-    }
-    return out;
+{    struct S {
+        __m128 m;
+        S(const S& o) : m(o.m) {}
+    };
+    const S* f = (const S*)first;
+    const S* l = (const S*)last;
+    S* o = (S*)out;
+    for (; f != l; ++f, ++o)
+        ::new ((void*)o) S(*f);
+    return (__m128*)o;
 }
 
 // @ 0x00706af0

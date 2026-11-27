@@ -1346,12 +1346,16 @@ void Mission::FUN_00c2fc10()
 
 // @ 0x00c2fc80
 void Mission::FUN_00c2fc80()
-{
-    int* self = (int*)this;
-    int* p = (int*)self[0x32];
+{    int* self = (int*)this;
+    volatile long* p = (volatile long*)self[0x32];
     if (p != 0) {
+        p += 2;
         self[0x32] = 0;
-        ReleaseRef(p);
+        _InterlockedDecrement(p);
+        if (_InterlockedExchangeAdd(p, 0) < 1)
+            _InterlockedExchangeAdd(p, 1);
+        else
+            _InterlockedExchangeAdd(p, 0);
     }
 }
 

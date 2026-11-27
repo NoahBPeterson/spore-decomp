@@ -47,6 +47,7 @@ struct PairCtorStub {
     int*                       mpRef;  // +0x10  AutoRefCount payload
     PairCtorStub* CtorA(const eastl::string8_s0083_c900* s, int** ref);   // 0x0083cef0
     PairCtorStub* CtorB(const void* src);                                 // 0x0083d020
+    void Dtor();                                                          // 0x0083d080
 };
 struct TrueTag {};                       // eastl::true_type (an empty by-value argument still takes a stack slot)
 struct ExprNode_s0083_c900 {
@@ -370,14 +371,13 @@ PairCtorStub* PairCtorStub::CtorB(const void* src)
 }
 
 // @ 0x0083d080
-void __cdecl PairStringExprDtor(void* self)
-{
-    int* obj = *(int**)((char*)self + 0x10);
+void PairCtorStub::Dtor()
+{    int* obj = mpRef;
     if (obj) {
         if (--obj[1] == 0)
             EASTL_allocator_deallocate(obj);
     }
-    eastl::string8_s0083_c900* str = (eastl::string8_s0083_c900*)self;
+    eastl::string8_s0083_c900* str = &mKey;
     if ((str->mpCapacity - str->mpBegin) > 1 && str->mpBegin)
         EASTL_allocator_deallocate(str->mpBegin);
 }

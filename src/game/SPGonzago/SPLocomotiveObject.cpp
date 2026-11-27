@@ -967,14 +967,18 @@ bool __fastcall FUN_00c42210(cRoad* this_, float r)
 
 // @ 0x00c422c0
 float __fastcall FUN_00c422c0(cRoad* this_)
-{
-    if (this_->mF250 == 0)
-        return 0.0f;
-    const Vector3& pos = this_->GetPosition();
-    float dx = this_->mV208.x - pos.x;
-    float dy = this_->mV208.y - pos.y;
-    float dz = this_->mV208.z - pos.z;
-    return dz * dz + dx * dx + dy * dy;
+{    if (this_->mF250 != 0)
+    {
+        const Vector3& pos = this_->GetPosition();
+        float dx = this_->mV208.x - pos.x;
+        float dy = this_->mV208.y - pos.y;
+        float dz = this_->mV208.z - pos.z;
+        float sum = dx * dx;
+        sum += dy * dy;
+        sum += dz * dz;
+        return sum;
+    }
+    return 0.0f;
 }
 
 // @ 0x00c42310

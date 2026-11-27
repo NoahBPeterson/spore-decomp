@@ -397,6 +397,7 @@ struct cSPPlayMode_s0062_9c50 {
   char pad[0x3620];
   bool HasActivePath(int creatureID);  // 0x0062a360 (cSPPlayMode::HasActivePath)
   uint8_t OnMouseDown(void* a, void* b, void* c, void* d);  // 0x0062a7f0 (cSPPlayMode::OnMouseDown)
+  void SetBabySitState(uint32_t index);  // 0x0062aa90 (cSPPlayMode::SetBabySitState)
   void SetAllBabySitState();  // 0x0062ab80 (cSPPlayMode::SetAllBabySitState)
 };
 void* __cdecl FUN_0062cb20(const float* p, float a, int b, float c);   // 0x62cb20
@@ -1461,12 +1462,10 @@ void SetBabySitState(cSPPlayMode_s0062_9c50* m, uint32_t index)
 
 // @ 0x0062ab80
 void cSPPlayMode_s0062_9c50::SetAllBabySitState()
-{
-  cSPPlayMode_s0062_9c50* m = this;
-  char* ed = *(char**)((char*)m + 0x3614);                       // mEditor
-  int n = (*(int*)(ed + 0x370) - *(int*)(ed + 0x36c)) / 0x30;    // babies
-  for (int i = 0; i < n; ++i) SetBabySitState(m, (uint32_t)i);
-}
+{  char* ed = *(char**)((char*)this + 0x3614);
+  BabyVec& v = *(BabyVec*)(ed + 0x36c);
+  uint32_t n = v.size();
+  for (uint32_t i = 0; i < n; ++i) SetBabySitState(i);}
 
 // @ 0x0062abd0
 void __fastcall cSPPlayMode_MakeCreaturesFaceCamera(void* self)

@@ -5,7 +5,6 @@
 0092ce80  85  _ecvt result widened to UTF-16; local buffer layout differs
 0092cef0  85  _fcvt result widened to UTF-16; local buffer layout differs
 0092cff0  94  base-10 signed formatter wrapper; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 378 valid inputs, 93.5% coverage]
-0092d040  16  base-N unsigned formatter wrapper; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 367 valid inputs, 100.0% coverage]
 0092d060  96  signed formatter to UTF-16; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 375 valid inputs, 100.0% coverage]
 0092d0d0  79  unsigned formatter to UTF-16; static-helper eax convention differs. Calls UInt64ToStrImpl, which sign-extends the base like the original's cdq. [equiv: PASS 374 valid inputs, 100.0% coverage]
 0092cd20  171  BitmaskFind bitmask tokenizer complete; compiler rotates our leading-delimiter skip loop to a bottom-test do-while where the original keeps the top-test form; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: PASS]

@@ -18,3 +18,4 @@
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c44040@Vec@@QAEXXZ  00c44040  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?UpdateSteeringForMovementStyle@cLocomotiveObject_s00c4_4610@@QAEXXZ  00c44610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?AddMarker@cMarkerOwner@@QAEXPBM_N@Z  00c446d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c422c0@@YIMPAUcRoad@@@Z  00c422c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

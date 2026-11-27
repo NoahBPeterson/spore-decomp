@@ -3320,29 +3320,26 @@ __declspec(noinline) void __fastcall cObjectPool::Advance(int* pIndex, cObjectPo
 
 // @ 0x00b72160
 uint32_t cObjectPool::Alloc()
-{
-    int used = mUsed;
-    int high = mHighWater;
+{    int high = mHighWater;
     uint32_t index;
     uint32_t* pSlot;
-    if (used == high) {
-        if (used == mCapacity)
+    if (mUsed == high) {
+        if (mUsed == mCapacity)
             return 0;
-        index = (uint32_t)used;
-        pSlot = (uint32_t*)&mpData[(size_t)mStride * (size_t)used];
+        index = (uint32_t)mUsed;
+        pSlot = (uint32_t*)&mpData[(size_t)mStride * (size_t)index];
         mHighWater = high + 1;
     } else {
         index = (uint32_t)mFreeHead;
         pSlot = (uint32_t*)&mpData[(size_t)mStride * (size_t)index];
         mFreeHead = (int)*pSlot;
     }
+    ++mUsed;
     ++mNextHandle;
-    mUsed = used + 1;
     uint32_t handle = (mNextHandle << 16) | index;
     memset(pSlot, 0, (size_t)mStride);
     *pSlot = handle;
-    return handle;
-}
+    return handle;}
 
 // @ 0x00b721d0
 void* cObjectPool::Get(uint32_t handle)

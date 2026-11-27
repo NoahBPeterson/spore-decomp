@@ -10,7 +10,6 @@
 00706920 74 complete slot-vector next scan (stride 0xc4); register/evaluation order differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706980 74 complete slot-vector next scan (stride 0x1f0); register/evaluation order differs [equiv: PASS 681 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 007069e0 74 complete slot-vector next scan (stride 0x1e0); register/evaluation order differs [equiv: PASS 752 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00706ab0 32 complete forward copy of 16-byte elements; offset folded away by cl; equiv: PASS (now returns the destination end in eax; void left garbage: hybrid crash 2026-10-12) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706af0 64 complete vector-of-0x20 allocator; parameter register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706b50 70 complete CfgPool::push over 0xb0-byte pool nodes (11-dword CfgRec snapshot before grow/alloc, then slot append); only MSVC store/`pop edi` scheduling differs (0x2c frame, regs, call sequence match) [equiv: PASS 278 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706c80 89 complete forward copy of 9-dword elements; returns the first argument pointer in eax like the original; register allocation differs; slice/hybrid equiv WEAK 103 valid, 22.0% coverage, no mismatch; replay PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

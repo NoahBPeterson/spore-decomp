@@ -2668,12 +2668,10 @@ bool FreeQueue::TryPop(void** out)
 
 // @ 0x0068c460
 void FreeQueue::Drain()
-{
-    while (mPending != mPendingEnd) {
-        void* item = ((void**)mPendingEnd)[-2];
-        void (__cdecl* f)(void*) = ((void(__cdecl**)(void*))mPendingEnd)[-1];
-        f(item);
-        mPendingEnd = (char*)mPendingEnd - sizeof(uint64);
+{    while (mPending != mPendingEnd) {
+        PopOut* p = (PopOut*)mPendingEnd - 1;
+        ((void (__cdecl*)(void*))p->b)(p->a);
+        mPendingEnd = (PopOut*)mPendingEnd - 1;
     }
     PopOut v;
     while (TryPop((void**)&v))

@@ -718,11 +718,13 @@ void ApplyHost::Apply(V12* target)
 
 // @ 0x007a1100
 void VecV20::Resize(unsigned n)
-{
-    if (n > (unsigned)(mpEnd - mpBegin))
-        InsertC(mpEnd, n - (unsigned)(mpEnd - mpBegin), V20());
-    else
+{    if (n > (unsigned)(mpEnd - mpBegin)) {
+        V20 val;
+        unsigned cur = (unsigned)(mpEnd - mpBegin);
+        InsertC(mpEnd, n - cur, val);
+    } else {
         EraseTail(mpBegin + n, mpEnd);
+    }
 }
 
 // @ 0x007a11c0

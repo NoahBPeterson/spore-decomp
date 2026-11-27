@@ -39,3 +39,4 @@
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?resize@ByteString@@QAEXI@Z  00b20610  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?InitGameNounManagerExAttributes@Simulator@@YAXXZ  0131ad80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?MarkFeedback@GameDataBig@@QAEXPAUcGameData@@@Z  00b201a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b25ee0@cGameNounManager_s00b2_5c30@@QAEXXZ  00b25ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
