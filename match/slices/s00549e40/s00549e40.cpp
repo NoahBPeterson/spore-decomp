@@ -239,7 +239,7 @@ void* V::FUN_0054aba0(char* otherp)
     return this;
 }
 
-// @ 0x0054ac70
+// 0x0054ac70 (byte-exact lifted version: match/slices/s0054ac70/s0054ac70.cpp)
 void* V::FUN_0054ac70(char* otherp)
 {
     V* other = (V*)otherp;

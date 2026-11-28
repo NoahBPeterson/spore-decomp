@@ -450,7 +450,7 @@ template void vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>::resize(uint32_t, co
 template vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>& vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>::operator=(const vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>&)
 ;
 
-// @ 0x00474bd0
+// 0x00474bd0 (byte-exact lifted version: match/slices/s00474bd0/s00474bd0_lifted.cpp)
 RefVec& RefVec::assign(const RefVec& x)
 {
     if (&x != this) {
