@@ -168,6 +168,26 @@ it easy to see by adding one variant and watching distant bytes move.
 register in the body, is `int idv = i + 4;` before the loop. Keeping `i + 4` inside the loop keeps a second induction
 variable the original never updates (0x00c5c310).
 
+### 3.6 Strength reduction runs in rounds: what becomes a pointer walk **[13]**
+
+Traced in cl 13.10's backend by the vs2005-cpp project (c2scope `docs/c2/loopopt.md`); it confirms the note in #674.
+Per loop, c2 runs combine, strength reduction, elimination, combine, loop-test rewrite, elimination, address modes.
+Strength reduction works in **rounds**. Each round turns an induction variable combined with a **loop-invariant term**
+(a literal or any invariant variable) into a new induction variable. A temporary computed from one (`t = i*4`) becomes an
+induction variable only in the next round, and each added invariant term costs a round. The source consequences:
+
+- `a[i]` stays indexed (`[esi+ecx*4]`); `a[i*3]`, `a[i+k]` and a 12-byte struct stride become **pointer walks**.
+- For `a[i]*b[i]` the preheader loads `b` first, and `a` rides on `b` as a difference.
+- New induction-variable increments come after the source's own, in the order they were created.
+- `p++` and `offs = offs + 1` are induction variables from the start. With `next = offs + 1` used twice and `offs = next`,
+  `offs` is not one (the listing keeps `lea` + `mov`); with `next` used once, the copy folds and `offs` is a plain
+  pointer induction variable. So the number of uses of a "next" temporary is a lever.
+- An **address-taken** loop counter is never an induction variable: it is recomputed and stored every iteration. An
+  address-taken pointer base is not loop-invariant when the loop makes a call: it is reloaded every iteration, which
+  costs one more round.
+
+cl 13.10.3077 behaves like 3052 here. 14.00 differs only in `add`/`sub` spelling. cl 15.00 first unrolls by two (§3.2).
+
 ---
 
 ## 4. Statement order, ownership and spelling
