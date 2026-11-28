@@ -20,7 +20,16 @@ else:
     if len(c) != 1:
         sys.exit("ambiguous/not found: %s" % ", ".join(c) if c else "not found")
     si, off = syms[c[0]]
-    mine = secs[si]["data"][off:]
+    # our object's relocated fields hold 0 (or an addend) until link time: give DIR32 fields an address-like value so
+    # they normalise to <addr> like retail's, and point REL32 calls/jumps outside the function (<ext>), so only real
+    # differences show (before, every global and external call of ours differed; 2026-11-27)
+    data = bytearray(secs[si]["data"])
+    for (roff, _sym, typ) in secs[si]["relocs"]:
+        if typ == 6:      # IMAGE_REL_I386_DIR32
+            data[roff:roff + 4] = (0x01000000).to_bytes(4, "little")
+        elif typ == 20:   # IMAGE_REL_I386_REL32
+            data[roff:roff + 4] = (0x7f000000).to_bytes(4, "little")
+    mine = bytes(data[off:])
 pe = pefile.PE(os.path.join(ROOT, "work/SporeApp.analysis.bin"), fast_load=True)
 # the retail function's own size (its fingerprint) when known: reading len(mine) bytes made a build longer than the
 # original run on into the next retail functions, which looked like extra code (0x007864c0, 2026-11-11)
