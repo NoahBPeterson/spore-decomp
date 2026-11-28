@@ -9,7 +9,6 @@
 011f5270   66  Destroy vertex-buffer pool: complete; difftest WEAK (400, 16.1%). Both list walks and the three allocator teardowns match; global reload schedule differs.
 011f5330  312  Vertex-buffer pool range allocate: complete; difftest UNSUPPORTED (VirtualAlloc path). Keyed entry list, size-class search, CreateVertexBuffer + list insert all mirrored.
 011f5500  252  Vertex-buffer pool range free (coalesce): complete; difftest WEAK (400, 5.3%). Adjacent-range coalescing loop reconstructed from the disassembly.
-011f5630   45  Reset vertex-buffer pool state: complete; difftest PASS (400, 64.7%). Slot zeroing and buffer Release walk match; the slot-zero stores are scheduled before the head load.
 011f56b0  144  Get/create vertex buffer of a given size: complete; difftest UNSUPPORTED (VirtualAlloc). Free-list reuse, CreateVertexBuffer and the out-pointer store all reconstructed.
 011f57a0  280  Allocate within the current vertex-slot: complete; difftest WEAK (400, 8.8%; replay first difference None). Slot search / grow / Lock(offset,size) reconstruction. Removing the bool `found` spill and making `local` the single volatile 4-byte frame makes the prologue `push ecx` and every return `pop ecx`, preserving the caller's ecx (size 420 vs 407; /LTCG schedule differs).
 011f5950   13  Advance the current vertex-slot: complete; difftest PASS (400, 91.7%). Instruction sequence is identical; only the counter/zero registers are swapped (ECX<->EAX).

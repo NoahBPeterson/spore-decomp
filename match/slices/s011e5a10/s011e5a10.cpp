@@ -436,7 +436,7 @@ void StreamImpl_shutdown(void* self)
 // 0x011e5ff0 -- resolve a path to a device: "drive:path" -> device by name,
 // otherwise fall back to the root / current device.
 // ===========================================================================
-// @ 0x011e5ff0
+// 0x011e5ff0 (byte-exact lifted version: match/slices/s011e5ff0/s011e5ff0.cpp)
 void* filesys_resolvePath(const char* path, char relativeToCurrent)
 {
     char* colon = FUN_011e8c60(path, 0x3a);

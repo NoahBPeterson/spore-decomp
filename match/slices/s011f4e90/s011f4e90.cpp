@@ -448,7 +448,7 @@ void FUN_011f5500(u32 param_1, u32 param_2, int param_3, int param_4, int param_
 
 // ===================================================================================
 //  FUN_011f5630 @ 0x011f5630 -- reset the vertex-buffer pool state
-// @ 0x011f5630
+// 0x011f5630 (byte-exact lifted version: match/slices/s011f5630/s011f5630.cpp)
 // ===================================================================================
 void FUN_011f5630(void)
 {

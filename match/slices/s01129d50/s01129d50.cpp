@@ -766,7 +766,7 @@ hkResult hkBinaryPackfileReader::loadFileHeader(hkStreamReader* reader, hkPackfi
     return HK_FAILURE;
 }
 
-// @ 0x0112ad10
+// 0x0112ad10 (byte-exact lifted version: match/slices/s0112ad10/s0112ad10.cpp)
 hkResult hkBinaryPackfileReader::loadSectionHeadersNoSeek(hkStreamReader* reader, hkPackfileSectionHeader* sections)
 {
     if (sections == 0)
