@@ -39,15 +39,19 @@ def parse_coff(path):
         relocs = [struct.unpack_from("<IIH", d, relptr + 10 * k) for k in range(nrel)]
         secs.append({"name": nm, "data": d[ptr:ptr + size] if ptr else b"\0" * size, "relocs": relocs})
     syms = {}
+    symtab = {}                 # raw symbol-table index -> (name, 1-based section or <= 0, value): relocation targets
     i = 0
     while i < nsym:
         o = symptr + 18 * i
         value, secno, typ, cls, naux = struct.unpack_from("<IHHBB", d, o + 8)
         secno = secno if secno < 0xFF00 else secno - 0x10000
         nm = name_of(d[o:o + 8])
+        symtab[i] = (nm, secno, value)
         if secno > 0 and cls in (2, 3) and (typ >> 4) == 2:  # function symbols
             syms.setdefault(nm, (secno - 1, value))
         i += 1 + naux
+    for s in secs:
+        s["symtab"] = symtab
     return secs, syms
 
 def main():
