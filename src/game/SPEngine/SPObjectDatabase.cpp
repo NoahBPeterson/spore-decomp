@@ -712,7 +712,7 @@ struct Cond_0069dc60 {
 bool C2a::f(int, int)
 { flag = 0; return false; }
 
-// @ 0x0069d210
+// 0x0069d210 (byte-exact lifted version: match/slices/s0069d210/s0069d210.cpp)
 char C3::read(int size)
 {
     char buffer[1024];

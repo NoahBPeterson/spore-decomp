@@ -1367,7 +1367,7 @@ bool ToXml_00f29650(void* pData, const char* pName, int depth);
 }
 // ---- items of slice s01347830 end
 
-// @ 0x00c5b210
+// 0x00c5b210 (byte-exact lifted version: match/slices/s00c5b210/s00c5b210.cpp)
 bool cPlanetMission::Read(void* pData)
 {
     bool bBase = ReadMissionBase(pData);

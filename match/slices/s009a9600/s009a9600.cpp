@@ -136,7 +136,7 @@ struct cSPUILayoutManager {
 };
 
 // ---------------------------------------------------------------------------
-// @ 0x009a9680  cSPUILayoutManager::Shutdown
+// 0x009a9680 (byte-exact lifted version: match/slices/s009a9680/s009a9680.cpp)  cSPUILayoutManager::Shutdown
 // ---------------------------------------------------------------------------
 void cSPUILayoutManager::Shutdown() {
   if (!mbInitialized) return;

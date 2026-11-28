@@ -4,7 +4,6 @@
 0054c780 2179 complete; instruction stream and registers identical, only /Od frame-slot offsets differ (frame 0x25c vs 0x2ec: missing inline-callee holes)
 0054eb10 242 complete; /Od mutex-guarded map/set lookup dispatch schedule differs
 0054ed50 243 complete; /Od mutex-guarded lookup+erase schedule differs
-0054efb0 170 complete; /Od three-container clear schedule differs
 0054f0f0 86 complete; /Od job-scheduler setup schedule differs
 0054f1a0 1285 complete; /Od frame slot order differs (local name hash), loop C has one fewer iterator copy layer than original
 0054fb00 785 complete; /Od RestoreMappings hashtable deserialization schedule differs

@@ -2789,7 +2789,7 @@ int* HashtableU64::erase(int* out, int* node, int* bucket)
   return out;
 }
 
-// @ 0x0065d720
+// 0x0065d720 (byte-exact lifted version: match/slices/s0065d720/s0065d720.cpp)
 bool cSPUIFeedEditAssetView_s0065_d050::Init(void* parent, unsigned int index)
 {
   char* p = (char*)this;
@@ -2850,7 +2850,7 @@ void SP::cSPUIFeedEditAssetView::Shutdown()
 FeedEditObj::~FeedEditObj()
 {}
 
-// @ 0x0065d9f0
+// 0x0065d9f0 (byte-exact lifted version: match/slices/s0065d9f0/s0065d9f0.cpp)
 void cSPUIFeedEdit_s0065_d050::SetActive(bool b)
 {
   char* p = (char*)this;

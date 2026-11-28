@@ -1,2 +1,1 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-slices/s01102fc0/s01102fc0.cpp  ?init@hkMoppSettingsPartA@@QAEPAU1@H@Z  011037e0  /vc71 /O2 /MD /Gy /TP

@@ -489,7 +489,7 @@ void cSPGenericPressureEvent::OnComplete()
 // =============================================================================================
 // 0x00c56360 -- cSPGenericPressureEvent::Init
 // =============================================================================================
-// @ 0x00c56360 cSPGenericPressureEvent::Init
+// 0x00c56360 (byte-exact lifted version: match/slices/s00c56360/s00c56360.cpp) cSPGenericPressureEvent::Init
 bool cSPGenericPressureEvent::Init()
 {
     if (mpMissionPropList) {

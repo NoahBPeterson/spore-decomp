@@ -185,7 +185,7 @@ bool ReadSerItem(SerBuffer* p, C53* self, SerItem14* item) {
     return true;
 }
 
-// @ 0x007fd390
+// 0x007fd390 (byte-exact lifted version: match/slices/s007fd390/s007fd390.cpp)
 bool WriteSerItem(SerBuffer* p, C53* self, SerItem14* item, void* alloc) {
     void* begin = self->M(item);
     void* dst = (void*)((void*(__thiscall*)(void*, int, int))VCallR(alloc, 0))(alloc, item->count << 2, 4);

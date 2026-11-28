@@ -563,7 +563,7 @@ void RefreshTargetPlanetConditional(cSPMission* pMission)
 // ---------------------------------------------------------------------------
 // 0x00c5b210  cPlanetMission::Read
 // ---------------------------------------------------------------------------
-// @ 0x00c5b210
+// 0x00c5b210 (byte-exact lifted version: match/slices/s00c5b210/s00c5b210.cpp)
 bool cPlanetMission::Read(void* pData)
 {
     bool bBase = ReadMissionBase(pData);

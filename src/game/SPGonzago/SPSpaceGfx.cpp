@@ -1592,7 +1592,7 @@ void AllianceGraphUpdate(uint32_t param)
     } while (pNode != pHead);
 }
 
-// @ 0x010377f0
+// 0x010377f0 (byte-exact lifted version: match/slices/s010377f0/s010377f0_lifted.cpp)
 void cSPSpaceGfx_s0103_77f0::UpdateForSpaceGame(int nArg)
 {
     int nContext = cSPLivingUniverse_GetUniverseContext();

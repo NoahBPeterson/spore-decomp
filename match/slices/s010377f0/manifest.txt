@@ -9,3 +9,4 @@ slices/s010377f0/s010377f0.cpp  ?GetPlayerProgressOnTradeRoute@cSpaceTradeRouteM
 slices/s010377f0/s010377f0.cpp  ?ResetPlayerProgressOnTradeRoute@cSpaceTradeRouteManager@@QAEXIIM@Z  01037eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s010377f0/s010377f0.cpp  ?GetNumberOfPlayerTradeRoutes@cSpaceTradeRouteManager@@QAEHXZ  01037f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s010377f0/s010377f0.cpp  ?erase@cTradeRouteTree@@QAEXPAUcRBNodeBase@@@Z  010380b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s010377f0/s010377f0_lifted.cpp  @FUN_010377f0@12  010377f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

@@ -249,7 +249,7 @@ void* GetImageFromLayout(void* layout, int id) {
     return 0;
 }
 
-// @ 0x00806230 SPUIHelpers::CreateImageFromResource
+// 0x00806230 (byte-exact lifted version: match/slices/s00806230/s00806230.cpp) SPUIHelpers::CreateImageFromResource
 char CreateImageFromResource2(void* key, void** out, char flag, int a, int b) {
     *out = 0;
     int* k = (int*)key;

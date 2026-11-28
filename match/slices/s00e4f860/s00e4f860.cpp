@@ -184,7 +184,7 @@ bool FUN_00e505f0(int* arr, int n, int key) {
   return false;
 }
 
-// @ 0x00e50540
+// 0x00e50540 (byte-exact lifted version: match/slices/s00e50540/s00e50540.cpp)
 bool FUN_00e50540(char* p) {
   unsigned a = FNV1_String8("cell_EggkidSmall", 0x811c9dc5, 1);
   if (*(int*)(*(int*)(p + 0x108)) == (int)a) return true;

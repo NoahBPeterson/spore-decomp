@@ -300,7 +300,7 @@ bool EA::UTFWinControls::WatchGraph::OnRebuild(void* ctx)
     return true;
 }
 
-// @ 0x00992480
+// 0x00992480 (byte-exact lifted version: match/slices/s00992480/s00992480_lifted.cpp)
 u8 __fastcall WatchGraph_OnTick(char* self, int)
 {
     // Rings the history buffer: for each live history node, sample the graph value into the ring

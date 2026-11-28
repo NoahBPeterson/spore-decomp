@@ -229,7 +229,7 @@ void __cdecl f00edf3c0(int p1, int p2, char flag)
 }
 
 // ============================================================ 0x00edfce0
-// @ 0x00edfce0
+// 0x00edfce0 (byte-exact lifted version: match/slices/s00edfce0/s00edfce0.cpp)
 bool __cdecl f00edfce0(void* obj, int* p2)
 {
     bool b = ((Viso*)obj)->F26440(*p2) == 0;

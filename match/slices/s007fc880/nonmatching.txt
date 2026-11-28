@@ -1,5 +1,4 @@
 # va diff reason
 007fcca0 150 complete; eastl vector insert (stride 8) reconstruction; call/register schedule differs; equiv: UNSUPPORTED (no valid inputs: pool-limit/read faults)
 007fcf40 135 complete; eastl vector emplace reconstruction; argument/register schedule differs; equiv: WEAK (84.5% coverage)
-007fd390 131 complete; SerItem writer reconstruction; allocator/register schedule differs
 007fd790 130 complete; damping exp multiplier/local frame layout differs; equiv: UNSUPPORTED (unresolved _exp; defined in s007fc880_o2.cpp, run with --src)

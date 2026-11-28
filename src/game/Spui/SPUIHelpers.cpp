@@ -1179,7 +1179,7 @@ void UpdateMouseFocus(int v)
     WMObj()->Hc0(v);
 }
 
-// @ 0x00804f80
+// 0x00804f80 (byte-exact lifted version: match/slices/s00804f80/s00804f80.cpp)
 void Help2(void* a, float f, float g, void* b)
 {
     WMObj()->H40(a, f, g, b);
@@ -1336,7 +1336,7 @@ float AttrF10(int* p)
     return 0.0f;
 }
 
-// @ 0x00805310
+// 0x00805310 (byte-exact lifted version: match/slices/s00805310/s00805310.cpp)
 bool CreditsTabInit(int param1, int param2, void** out)
 {
     char layout[0x18];
@@ -1712,7 +1712,7 @@ void* GetImageFromLayout(void* layout, int id)
     return 0;
 }
 
-// @ 0x00806230
+// 0x00806230 (byte-exact lifted version: match/slices/s00806230/s00806230.cpp)
 char CreateImageFromResource2(void* key, void** out, char flag, int a, int b)
 {
     int* k = (int*)key;

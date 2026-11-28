@@ -585,7 +585,7 @@ void WinTreeView::InvalidateLayout()
     ((TreeViewExtra*)this)->CalculateVisibleArea();
 }
 
-// @ 0x009917f0
+// 0x009917f0 (byte-exact lifted version: match/slices/s009917f0/s009917f0.cpp)
 void WinTreeView::SetBorders(EA::UTFWin::RectF* r)
 {
     mLocalX0 = r->left;

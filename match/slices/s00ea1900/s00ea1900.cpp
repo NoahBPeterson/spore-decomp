@@ -764,7 +764,7 @@ void cCityMusicLoadSave::FinishSave()
 // ---------------------------------------------------------------------------
 // 0x00ea2670  SP::Audio::cCityMusicLoadSave::DoMessage
 // ---------------------------------------------------------------------------
-// @ 0x00ea2670
+// 0x00ea2670 (byte-exact lifted version: match/slices/s00ea2670/s00ea2670.cpp)
 bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
 {
     int nKind = pData[2];

@@ -1821,7 +1821,7 @@ bool Obj7fc600::f_7fc600(int a, int b)
   return ok;
 }
 
-// @ 0x007fc690
+// 0x007fc690 (byte-exact lifted version: match/slices/s007fc690/s007fc690.cpp)
 int f_7fc690(void* self, void* param)
 {
   char s[0x10];
@@ -1843,7 +1843,7 @@ int f_7fc690(void* self, void* param)
   return 1;
 }
 
-// @ 0x007fc790
+// 0x007fc790 (byte-exact lifted version: match/slices/s007fc790/s007fc790.cpp)
 int f_7fc790(void* self, void* param)
 {
   void* old = *(void**)((char*)self + 0x4c);

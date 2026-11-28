@@ -661,7 +661,7 @@ bool cSPUIFeedEdit::FUN_0065bf20(void* msg, int* data) {
   return false;
 }
 
-// @ 0x0065c3c0
+// 0x0065c3c0 (byte-exact lifted version: match/slices/s0065c3c0/s0065c3c0.cpp)
 bool cSPUIFeedEdit::FUN_0065c3c0(int a, int b) {
   char* p = (char*)this;
   void* win = *(void**)(p + 0x9c);

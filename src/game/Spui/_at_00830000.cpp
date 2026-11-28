@@ -58,7 +58,7 @@ class cSPUIVariableWidthDrawable : public CustomDrawable { public:
 };
 // ---- items of slice s008356e0 end
 
-// @ 0x00830080
+// 0x00830080 (byte-exact lifted version: match/slices/s00830080/s00830080.cpp)
 void FUN_00830080(int *param_1)
 {
     int *obj;

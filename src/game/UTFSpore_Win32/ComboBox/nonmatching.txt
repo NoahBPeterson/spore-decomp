@@ -16,4 +16,3 @@
 009695d0 69 complete (WinComboBox dtor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/340 valid; read/write faults, VirtualFree import); size 125 vs 121
 00969650 283 complete (WinComboBox::CalcSize) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (223 valid, 26.4% cov); size 436 vs 526, LayoutParagraph result plumbing simplified
 00969870 59 complete (WinComboBox::SetValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (230 valid, 89.3% cov); register/expression scheduling only
-009699d0 88 complete (WinComboBox::InsertValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (232 valid, 88.9% cov); frame size + signed-vs-unsigned compare

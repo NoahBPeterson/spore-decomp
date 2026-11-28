@@ -1,6 +1,5 @@
 0080da50 258  complete; first stack arg is the rect; 0x14 frame needed for callee stack residue
 0080dbb0 151  complete; early-out gate on +0x258 added; virtual call register schedule differs
-0080dd50  75  complete; scalar local avoids /GS cookie; branch layout differs
 0080dfe0 595  complete; early-return eax = last object / bbox; float path matches
 0080d810  542  complete; float->Vec2 arg copies use x87 fld/fstp vs retail movss and SSE helper temps clobber xmm4; frame 16- vs 8-byte aligned
 0080e270  958  complete; WEAK equiv (10% coverage); renderer/camera-state field layout and float->int rounding (cvtss2si) codegen differ

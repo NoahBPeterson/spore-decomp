@@ -110,7 +110,7 @@ bool Dir::FUN_0054ed50(int param2, int param3, char param4)
     return r;
 }
 
-// @ 0x0054efb0
+// 0x0054efb0 (byte-exact lifted version: match/slices/s0054efb0/s0054efb0.cpp)
 char Dir::FUN_0054efb0()
 {
     int self = (int)this;

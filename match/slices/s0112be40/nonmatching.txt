@@ -25,7 +25,6 @@
                1-byte loop-alignment nop that cl puts before the second loop (everything
                after it shifts by one byte, hence the byte count).
                flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-0112c640  49  System::someCheck: predicate is identical; the original keeps the two voice
                counters in ecx/edx where ours spills/reloads them.
                flags /vc71 /O2 /MD /Gy /EHsc /TP
                rotated loop pre-test differs (original `xor eax,eax; cmp ax,[edi+0xf0]`,

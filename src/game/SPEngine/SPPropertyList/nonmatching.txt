@@ -19,7 +19,6 @@
 006a2710 124 SP::cDirectPropertyList::GetFloatProperty - complete; inlined lower_bound + VariantT<float> conversion (0x6a1a10); register allocation differs [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2940 100 eastl::vector<pair>::insert(iterator,value) - complete; append fast path inlined, DoInsertValue only when growing [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2a80 64 SP::cPropertyList::Clear - complete; same copy/destroy/shrink sequence plus the modification count [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
-006a2b20 34 SP::cDirectPropertyList::Clear - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2c50 70 eastl::vector_map::insert(value) - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2cb0 62 eastl::vector_map::erase(key) - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
 006a2f60 194 SP::cPropertyList::Read - complete; IO/PropertyManager/vtable+0x2c/resize path reproduced [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-

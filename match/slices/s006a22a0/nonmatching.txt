@@ -4,7 +4,6 @@
 006a2530  57   SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference; equiv: PASS (lower_bound annotated 0x612db0 after the hybrid crashed on a wrong instantiation, 2026-10-11)
 006a2940  150  eastl::vector<pair>::insert(iterator,value) - complete; append fast path inlined, DoInsertValue only when growing [equiv: PASS]
 006a2a80  64   SP::cPropertyList::Clear - complete; same copy/destroy/shrink sequence plus the modification count [equiv: PASS]
-006a2b20  75   SP::cDirectPropertyList::Clear - complete
 006a2b80  136  eastl::vector<pair>::resize - complete
 006a2c50  72   eastl::vector_map::insert(value) - complete
 006a2cb0  91   eastl::vector_map::erase(key) - complete

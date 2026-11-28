@@ -525,7 +525,7 @@ void ArgCommand::ExecuteType(void* argsRaw)
     }
 }
 
-// @ 0x00a98b00
+// 0x00a98b00 (byte-exact lifted version: match/slices/s00a98b00/s00a98b00.cpp)
 void ArgCommand::ExecuteSize(void* argsRaw)
 {
     cArguments* args = (cArguments*)argsRaw;

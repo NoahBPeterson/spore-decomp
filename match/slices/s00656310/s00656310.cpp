@@ -309,7 +309,7 @@ void __cdecl ReloadCallback(cSPUIAssetVerbs* self, void* layout, bool reload) {
     if (self->mWin7) SPUIHelpers_SetWindowAreaToParent(self->mWin7);
 }
 
-// @ 0x00656b80  cSPUIAssetVerbs::Init
+// 0x00656b80 (byte-exact lifted version: match/slices/s00656b80/s00656b80.cpp)  cSPUIAssetVerbs::Init
 void cSPUIAssetVerbs::Init(void* parent) {
     AssignWin(&mWinParent, parent);
     void* p = EA_operator_new(0x18, "Sporepedia", 0, 0, 0, 0);

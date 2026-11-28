@@ -1,4 +1,3 @@
-0065c3c0  187  cSPUIFeedEdit::LoadPage-like: complete; wstring temp/dtor schedule differs
 0065c490  514  GetThumbnailBackdrop: complete; return register is eax=out via asm shim, switch compare register differs; equiv PASS (400 valid, 83.2% cov)
 0065c790  32  ctor: complete; dead base-vtable store differs, eax=this via asm shim; equiv PASS (400 valid, 100% cov)
 0065c840  326  SetMode: complete; vcall scheduling/register allocation differs; equiv PASS (324 valid, 100% cov)

@@ -7889,7 +7889,7 @@ bool __cdecl FUN_00c0ca00(float* p1, float* p2, float t, float* out, float* vel)
   return false;
 }
 
-// @ 0x00c0ccc0
+// 0x00c0ccc0 (byte-exact lifted version: match/slices/s00c0ccc0/s00c0ccc0.cpp)
 char __cdecl FUN_00c0ccc0(float* p, float dt)
 {
   TransitionState* s = (TransitionState*)p;

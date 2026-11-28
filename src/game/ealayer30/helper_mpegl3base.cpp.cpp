@@ -888,7 +888,7 @@ void NegateRows(Row* rows)
     }
 }
 
-// @ 0x01167cf0
+// 0x01167cf0 (byte-exact lifted version: match/slices/s01167cf0/s01167cf0.cpp)
 void PackHeightBlock(const float* src, short* dst)
 {
     short* end = dst + 576;

@@ -1,4 +1,3 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 0062bdb0  223  FUN_0062bdb0: complete; vector<bool>-ish DoInsertValue erase loop and pointer/register scheduling differ
-0062c910   73  FUN_0062c910: complete; release-chain scheduling and tail-call epilogue placement
 0062c990   85  FUN_0062c990: complete; branch layout of the toggle/destroy paths differs

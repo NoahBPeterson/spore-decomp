@@ -20,7 +20,6 @@
 00c0c4b0 201 quaternion half-angle rotation: complete; x87/SSE schedule flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0c630 779 SP::cCreatureLocomotion::Execute: complete state machine; gate UNSUPPORTED (difftest site_arity miscounts the 0x28 frame as args, shifting esp; all 400 inputs fault(write)) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0ca00 434 ballistic aim solver: complete; x87-vs-SSE overflow/NaN edge (gate FAIL 19/400, inf sign in out[1]) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c0ccc0 175 creature transition tick: complete; FAIL-KEPT ECX (original push/pop ecx preserves entry ecx; wrapper clobbers it) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebx, ret#2 edi] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0cdb0 68 inline: R48 (2026-11-17): retail inlines fnstcw / or 0xc00 / fldcw / fistp qword / fldcw; no compiler option tried (/arch:SSE, none, /QIfist, /fp modes, /Ox) produces it (codegen.md 9.7). Lead: the reviewed X87RoundToInt64-style helpers in sse_helpers.h, if one matches this truncating sequence. | Earlier note: game-mode creature id lookup: complete; original inlines _ftol2 (x87); gate WEAK 39.5% coverage flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0ce30 61 relation index: complete; call/global load order flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0ce80 153 PASS         animation weight selector; complete; PASS (339 valid, 88.9% cov); vtable-call idiom fixed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

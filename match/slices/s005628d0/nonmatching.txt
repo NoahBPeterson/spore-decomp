@@ -1,3 +1,2 @@
 005628d0  675  complete; equiv WEAK (261 valid, 28.9% cov); /Od frame differs (nonmatching)
 00562ca0  120  candidate filter path; same thiscall ecx fixes (erase/00565500/00562510) and now returns RandomizeFirstN(a,b) instead of true; /Od frame differs. [equiv: PASS 204 valid, 100% coverage; src PASS]
-005632d0  160  complete; equiv WEAK (148 valid, 75% cov); /Od slot order now matches; residual register allocation + bool-lowering differs

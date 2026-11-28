@@ -7239,7 +7239,7 @@ uint32_t* GetBehaviorVectorFromResource(uint32_t* pOut, void* pKey, int a, int b
     return pOut;
 }
 
-// @ 0x00aeeda0
+// 0x00aeeda0 (byte-exact lifted version: match/slices/s00aeeda0/s00aeeda0.cpp)
 uint8_t GetBehaviorUnlockFlag(void* pKey)
 {
     cBehaviorTable* pTable = (cBehaviorTable*)LookupResourceRecord(pKey);

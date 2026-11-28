@@ -12,8 +12,6 @@
 0065d410 96 cSPUIFeedEdit::AssetRequestCallBack: complete; vcall/refcount register schedule differs
 0065d570 77 cSPUIFeedEdit::ShowAsset: complete; vcall/register schedule differs
 0065d6a0 102 hashtable<uint64>::erase: complete; node-unlink register schedule differs
-0065d720 163 cSPUIFeedEditAssetView::Init: complete; ctor/operator-new schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#4 esp, call#5 esp]
-0065d9f0 77 cSPUIFeedEdit::SetActive: complete; wstring temp + vcall schedule differs
 0065daa0 82 cSPUIFeedEdit::cSPUIFeedEdit: complete (bases + members as typed model); store schedule of the 2nd/3rd hashtable policy fields and 0x138-0x140 string differs [equiv: UNSUPPORTED - vtable mapping]
 0065dc60 174 cSPUIFeedEdit::TranslateToken: complete; wide-string assign/dtor schedule differs
 0065dd30 197 resource-request helper: complete (url build, StrtoU6416/wcstoul, request object, provider call); register allocation (s in esi vs edi, zero reg ebx) differs [equiv: UNSUPPORTED - 0/400 valid inputs]

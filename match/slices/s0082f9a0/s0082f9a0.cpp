@@ -147,7 +147,7 @@ struct ShadowDescExt {
 // ---------------------------------------------------------------- 0x00830080
 struct VisitCtx { uint8_t b; char pad[3]; uint32_t v; };
 
-// @ 0x00830080
+// 0x00830080 (byte-exact lifted version: match/slices/s00830080/s00830080.cpp)
 void FUN_00830080(int *param_1)
 {
     int *obj;

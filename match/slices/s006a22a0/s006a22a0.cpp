@@ -324,7 +324,7 @@ void SP::cDirectPropertyList::Copy(cPropertyList* src) {
   SetParent(mParent);
 }
 
-// @ 0x006A2B20
+// 0x006a2b20 (byte-exact lifted version: match/slices/s006a2b20/s006a2b20.cpp)
 void SP::cDirectPropertyList::Clear() {
   Memset32(mDirectProps, 0, mNumDirectProps); // 0x0092cb00
   PairsDestroy(mPropertyMap.mpBegin, mPropertyMap.mpEnd);

@@ -183,7 +183,7 @@ struct PropertyManager_ {
 };
 PropertyManager_* __stdcall PropertyManager();   // 0x0067DE30
 
-// @ 0x00675700
+// 0x00675700 (byte-exact lifted version: match/slices/s00675700/s00675700.cpp)
 bool __stdcall FUN_00675700(uint32_t a)   // retail returns with `ret 4`
 {
     PropertyList* props = 0;

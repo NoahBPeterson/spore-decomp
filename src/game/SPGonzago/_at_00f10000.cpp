@@ -6934,7 +6934,7 @@ void Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a970(int b)
     }
 }
 
-// @ 0x00f1aa10
+// 0x00f1aa10 (byte-exact lifted version: match/slices/s00f1aa10/s00f1aa10.cpp)
 float __stdcall FUN_00f1aa10(char flag, ObjHdr* obj)
 {
     if (obj)

@@ -623,7 +623,7 @@ int IniFile::ReadEntryRaw(void* a, void* b, wchar_t* dst, int maxn)
     return r;
 }
 
-// @ 0x009338e0
+// 0x009338e0 (byte-exact lifted version: match/slices/s009338e0/s009338e0.cpp)
 int IniFile::ReadEntry(void* a, void* b, WString* c)
 {
     (void)c;
