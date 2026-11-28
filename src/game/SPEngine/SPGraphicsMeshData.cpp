@@ -918,21 +918,35 @@ void MergeKeys(VecKeyPair* vec, int n, const int* keys)
 
 // @ 0x0071ee10
 void FindPrimitives(MeshPrims* mesh, VecInt* out, int typeEntry, int start, int aux)
-{
-    out->reserve((unsigned)(mesh->mpPrimEnd - mesh->mpPrimBegin));
+{    out->reserve((unsigned)(mesh->mpPrimEnd - mesh->mpPrimBegin));
     if (start == 0 && aux < 0) {
+        int i = 0;
         int n = (int)(mesh->mpPrimEnd - mesh->mpPrimBegin);
-        for (int i = 0; i < n; ++i) {
-            if (mesh->mpPrimBegin[i].mEntry == typeEntry)
-                out->push_back(i);
+        for (; i < n; ++i) {
+            if (mesh->mpPrimBegin[i].mEntry == typeEntry) {
+                if (out->mpEnd < out->mpCapacity) {
+                    int* __restrict p = out->mpEnd++;
+                    if (p)
+                        *p = i;
+                } else {
+                    out->DoInsertValue(out->mpEnd, i);
+                }
+            }
         }
     } else {
+        int i = 0;
         int n = (int)(mesh->mpPrimEnd - mesh->mpPrimBegin);
-        for (int i = 0; i < n; ++i) {
+        for (; i < n; ++i) {
             if ((typeEntry == -1 || mesh->mpPrimBegin[i].mEntry == typeEntry)
                 && (start == 0 || mesh->mpPrimBegin[i].mType == start)
-                && (aux == -1 || mesh->mpPrimBegin[i].mAux == aux))
-                out->push_back(i);
+                && (aux == -1 || mesh->mpPrimBegin[i].mAux == aux)) {
+                if (out->mpEnd < out->mpCapacity) {
+                    int* __restrict p = out->mpEnd++;
+                    if (p)
+                        *p = i;
+                } else {
+                    out->DoInsertValue(out->mpEnd, i);
+                }
+            }
         }
-    }
-}
+    }}

@@ -12,3 +12,4 @@
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c410@@YIEPAUcRaidEvent@@PAXI1@Z  00c5c410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?HandleMessage_F50@RaidHandler@SP@@QAE_NIPAX@Z  00c5df50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?InitUFOAttributes@Simulator@@YAXXZ  01347b70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?Shutdown@cSPRaidEvent@@QAEXXZ  00c5b660  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

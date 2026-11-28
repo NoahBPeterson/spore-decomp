@@ -5,7 +5,6 @@
 00810af0 106 complete; rbtree insert node allocation/key copy schedule differs
 00810d30 137 complete; message construction path reconstructed; register schedule differs
 00811260 158 complete; vector operator= grow/copy branch schedule differs; equiv: FAIL (ours faults on read where original returns) after symbol fix
-00811f20 46 complete; manager ctor field-store order/schedule differs
 00811f80 14 schedule: teardown rebuilt on the real map members (mObjectCollections at 0x28, mWorlds at 0xc; each map's root is at tree+0xc) with the right subtree walkers (0x810df0 then 0x9a9600, this = map base, node = *(base+0xc)) - calls, dereferences and stores now all line up with retail. Only store order inside the first block differs: retail emits `lea ecx,[esi+0x28]` before the two vptr stores and sinks `g_spLayoutManager = 0` to between `push eax` and the first call [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 memory]; the bracket is the pre-fix refutation, kept until a checker can rerun it. fix1: quick check UNSUPPORTED (emulator wall-clock limit, no angr)
 00812210 60 complete; comparison operand load order / register allocation differs
 00812310 64 complete; eraseSys RBTreeIncrement/Erase schedule differs

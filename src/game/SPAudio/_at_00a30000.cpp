@@ -796,13 +796,12 @@ struct DbgCtx {
 
 // @ 0x00a34d70
 void EA::Audio::VoiceContainer_s00a3_3ee0::SetSendId(uint32_t id)
-{
-    U32Vec* v = (U32Vec*)&mpSendBegin;
-    if (v->empty()) {
-        v->push_back(id);
+{    if (!((U32Vec*)&mpSendBegin)->empty()) {
+        _ReadWriteBarrier();
+        mpSendEnd[-1] = id;
         return;
     }
-    v->back() = id;
+    ((U32Vec*)&mpSendBegin)->push_back(id);
 }
 
 // @ 0x00a34dc0

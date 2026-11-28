@@ -50,3 +50,4 @@
 ../src/game/SPEngine/_at_00770000.cpp  ?CopyWire@WireObj@@QAEPAU1@PBU1@@Z  0077d450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00770000.cpp  ?sort_range@@YAXPAUSortElem@@0P6A_NABU1@1@Z@Z  007749e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00770000.cpp  ?Init@cShaderPreviewA@@QAE_NXZ  00776f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077cad0@GfxConst@@QAEHF@Z  0077cad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

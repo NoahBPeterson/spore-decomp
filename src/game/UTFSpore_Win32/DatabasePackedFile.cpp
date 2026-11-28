@@ -2263,8 +2263,7 @@ int PFIndexModifiable::GetDataEnd()
 
 // @ 0x008dafa0
 int PFIndexModifiable::GetTotalDiskSize()
-{
-    HashNode** pBucket = mpBucketArray;
+{    HashNode** pBucket = mpBucketArray;
     HashNode* pNode = *pBucket;
     int nTotal = 0;
     if (pNode == 0) {
@@ -2273,6 +2272,7 @@ int PFIndexModifiable::GetTotalDiskSize()
             ++pBucket;
         pNode = *pBucket;
     }
+    _ReadWriteBarrier();
     HashNode* pLast = mpBucketArray[mnBucketCount];
     while (pNode != pLast) {
         nTotal += pNode->mnSize;
@@ -2282,8 +2282,7 @@ int PFIndexModifiable::GetTotalDiskSize()
             pNode = *pBucket;
         }
     }
-    return nTotal;
-}
+    return nTotal;}
 
 // @ 0x008daff0
 bool PFIndexModifiable_s008d_aff0::Write(void** ppBuf, unsigned* pSize, unsigned count, char flag)

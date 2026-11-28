@@ -1530,6 +1530,12 @@ bool cSPRaidEvent::Init(int a, int b, int c)
 // @ 0x00c5b660
 void cSPRaidEvent::Shutdown()
 {
+    struct RaidLayout {
+        uint8_t mPad00[0x34];
+        int mHandler;
+        uint8_t mPad38[0x1e8];
+        uint32_t mEventId;
+    };
     cRaidSpawner* pSpawner = ((cPlanetRaid*)(intptr_t)GetTargetPlanet())->p13c->GetSpawner();
     _ReadWriteBarrier();
     pSpawner->SpawnRaid(0x200, 0);
@@ -1537,10 +1543,12 @@ void cSPRaidEvent::Shutdown()
     uint32_t nPlanet = GetTargetPlanet();
     SetPlanetHighlight(nPlanet);
     ShutdownMissionStepState();
-    mEventId = 0;
+    RaidLayout* pSelf = (RaidLayout*)this;
+    pSelf->mEventId = 0;
 
+    int* pHandler = this ? &pSelf->mHandler : 0;
     cMessageServer* pServer = MessageServer();
-    pServer->v2c((int*)((uint8_t*)this + 0x34), (const void*)0x01622184, 0xffffd8f1);
+    pServer->v2c(pHandler, (const void*)0x01622184, 0xffffd8f1);
 }
 
 // @ 0x00c5b6c0

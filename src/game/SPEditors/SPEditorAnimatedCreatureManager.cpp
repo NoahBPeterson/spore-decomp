@@ -1016,8 +1016,8 @@ struct AnimContext {
 
 // @ 0x0059ace0
 void* Simulator::cAnimatedData::FUN_0059ace0()
-{
-    *(void**)this = (void*)gAnimVtblA;
+{    *(void**)this = (void*)gAnimVtblA;
+    _ReadWriteBarrier();
     mField04 = 0;
     mpCreature = 0;
     mField0c = 0;
@@ -1027,11 +1027,16 @@ void* Simulator::cAnimatedData::FUN_0059ace0()
     mField1c = 0;
     mVec0[0] = gAnimVecX; mVec0[1] = gAnimVecY; mVec0[2] = gAnimVecZ;
     mVec1[0] = gAnimVecX; mVec1[1] = gAnimVecY; mVec1[2] = gAnimVecZ;
-    mVec2[0] = gAnimVecX; mVec2[1] = gAnimVecY; mVec2[2] = gAnimVecZ;
-    mField44 = 0.0f;
-    mField48 = 0.0f;
-    mField4c = gAnim2_5;
-    mField50 = gAnimScale;
+    float v2x = gAnimVecX;
+    _ReadWriteBarrier();
+    float f4c = gAnim2_5;
+    mVec2[0] = v2x; mVec2[1] = gAnimVecY; mVec2[2] = gAnimVecZ;
+    float z = 0.0f;
+    mField4c = f4c;
+    float f50 = gAnimScale;
+    mField44 = z;
+    mField48 = z;
+    mField50 = f50;
     mField54 = false;
     mField55 = false;
     mField58 = gAnimVecX; mField5c = gAnimVecY; mField60 = gAnimVecZ;
@@ -1039,8 +1044,9 @@ void* Simulator::cAnimatedData::FUN_0059ace0()
     mField74 = 0.0f;
     mField78 = 0.0f;
     mField7c = 0.0f;
+    float f80 = gAnimHalf;
     mField70 = true;
-    mField80 = gAnimHalf;
+    mField80 = f80;
     mField84 = false;
     return this;
 }

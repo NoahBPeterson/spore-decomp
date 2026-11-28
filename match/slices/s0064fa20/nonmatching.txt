@@ -1,2 +1,1 @@
 0064ff90  90  CompareGridKeys (__stdcall entry comparator): complete; equiv PASS (398 valid, 100.0% cov); 16-dword __stdcall, prologue/register allocation differs
-006505d0  58  cSPUIAssetGrid::Find(card): complete (restored after the part1 rewrite dropped it; compares each entry's card at +0x10); equiv PASS (327 valid, 100.0% cov); original re-reads mpGridBegin and tail-merges the return-0 exit

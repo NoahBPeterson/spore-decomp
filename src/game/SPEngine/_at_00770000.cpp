@@ -2974,20 +2974,19 @@ void GfxConst::FUN_0077ca20(unsigned idx, float a, float b, float c, float d)
 
 // @ 0x0077cad0
 int GfxConst::FUN_0077cad0(short id)
-{
-    int n = (*(int*)((char*)this + 0xc) - *(int*)((char*)this + 8)) >> 2;
+{    struct Entry { int pad0; short id; };
+    int n = (int)(*(Entry***)((char*)this + 0xc) - *(Entry***)((char*)this + 8));
+    int i = 0;
     if (n > 0) {
-        int* q = *(int**)((char*)this + 8);
-        int i = 0;
+        Entry** q = *(Entry** volatile*)((char*)this + 8);
         do {
-            if (*(short*)(*q + 4) == id)
+            if ((*q)->id == id)
                 return i;
             ++i;
             ++q;
         } while (i < n);
     }
-    return -1;
-}
+    return -1;}
 
 // @ 0x0077cb10
 int GfxConst::FUN_0077cb10(unsigned a, unsigned b)
