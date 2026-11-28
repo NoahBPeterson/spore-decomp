@@ -39,6 +39,11 @@
 "how": "object-scoped",
 "name": "SP::cEditorBaker::cPreloadData::Begin"
 },
+"00402ab0": {
+"dev": "00c6adf0",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorLimbStructure::GetPileList"
+},
 "00403af0": {
 "dev": "015062b0",
 "how": "object-scoped",
@@ -333,6 +338,11 @@
 "dev": "00c006a0",
 "how": "callee-scored",
 "name": "SP::Editor::GetConfigFromModelType"
+},
+"00435c00": {
+"dev": "00c0a220",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorModel::GetBounds"
 },
 "00435ed0": {
 "dev": "00932b30",
@@ -929,6 +939,56 @@
 "how": "vtable-slot",
 "name": "SP::cSPEditorHandleRotationRing::Shutdown"
 },
+"00485b90": {
+"dev": "00c6b680",
+"how": "xanchor-features",
+"name": "SP::cSPEditorLimbJoint::GetGroundPosition"
+},
+"00486910": {
+"dev": "00c6b780",
+"how": "xanchor-features",
+"name": "SP::cSPEditorLimbJoint::CheckAndResolveJointAgainstBounds"
+},
+"00486e70": {
+"dev": "00c6ba40",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorLimbJoint::CheckAndBumpJointAgainstPlaneOfSymmetry"
+},
+"004874c0": {
+"dev": "00c6bb60",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorLimbJoint::GetTargetSymmetrySign"
+},
+"00488600": {
+"dev": "00c6def0",
+"how": "xanchor-features",
+"name": "SP::cSPEditorLimbJoint::GetOrientation"
+},
+"00488850": {
+"dev": "00c6ed40",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorLimbStructure::cSPEditorLimbStructure"
+},
+"0048a580": {
+"dev": "00c6ee10",
+"how": "xanchor-features",
+"name": "SP::cSPEditorLimbStructure::SetUIStateOfLimb"
+},
+"0048b120": {
+"dev": "00c6ef00",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorLimbStructure::CheckAndResolvePlaneOfSymmetryOnTargets"
+},
+"0048bbb0": {
+"dev": "00c6ef80",
+"how": "xanchor-caller-single",
+"name": "SP::cSPEditorLimbStructure::PlaceAllHandsAboveGround"
+},
+"0048bf40": {
+"dev": "00c6f780",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorLimbStructure::DebugDrawLimb"
+},
 "0048ca10": {
 "dev": "00c153e0",
 "how": "callee-scored",
@@ -1109,15 +1169,70 @@
 "how": "callee-scored",
 "name": "EA::COM::interface_cast<SP::cSPEditorBlock *,EA::COM::IUnknown32,EA::AutoRefCount>"
 },
+"004adb60": {
+"dev": "00c0a2d0",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::SetUseBoundsForDelete"
+},
+"004adb80": {
+"dev": "00c0a2e0",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorModel::ShouldShowHiddenHandles"
+},
+"004adba0": {
+"dev": "00c0a2f0",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::SetShouldShowHiddenHandles"
+},
+"004adbc0": {
+"dev": "00c0a300",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorModel::ShouldShowBoneLengthHandles"
+},
+"004adbe0": {
+"dev": "00c0a310",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::SetShouldShowBoneLengthHandles"
+},
+"004adc00": {
+"dev": "00c0a320",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorModel::SetMinimumLeglessCreatureHeight"
+},
 "004adc40": {
 "dev": "00c146d0",
 "how": "object-scoped",
 "name": "SP::EditorUtils::BreakSymmetricReferences"
 },
+"004adc60": {
+"dev": "00c0a370",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::GetSkinEffect"
+},
+"004adc80": {
+"dev": "00c0a390",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::GetSkinEffectSeed"
+},
+"004adcf0": {
+"dev": "00c0a3b0",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::SetSkinEffect"
+},
+"004add10": {
+"dev": "00c0a3d0",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModel::SetSkinEffectSeed"
+},
 "004adfc0": {
 "dev": "00c0a420",
 "how": "object-scoped",
 "name": "SP::cSPEditorModel::SetChanged"
+},
+"004ae000": {
+"dev": "00c0a440",
+"how": "xanchor-callee-align",
+"name": "SP::cSPEditorModel::GetCleanFileName"
 },
 "004af210": {
 "dev": "00493cf0",
@@ -1554,6 +1669,11 @@
 "how": "callee-scored",
 "name": "SP::EditorUtils::IsDietCategory"
 },
+"004e8ee0": {
+"dev": "00c06ba0",
+"how": "xanchor-gap-align",
+"name": "SP::cSPEditorModelValidity::TestFloatingParts"
+},
 "004e9950": {
 "dev": "00c06f80",
 "how": "object-scoped",
@@ -1699,6 +1819,11 @@
 "how": "anchor",
 "name": "eastl::VectorBase<int,eastl::fixed_vector_allocator<4,256,4,0,1> >::VectorBase<int,eastl::fixed_vector_allocator<4,256,4,0,1> >"
 },
+"0050c490": {
+"dev": "00ca3d70",
+"how": "xanchor-callee-align",
+"name": "nSPSkinner::cMesh::ComputePosition"
+},
 "0050d4e0": {
 "dev": "01017ec0",
 "how": "callee-single",
@@ -1713,6 +1838,11 @@
 "dev": "00cbe010",
 "how": "callee-scored",
 "name": "`anonymous namespace'::FastMemCopy"
+},
+"00516e10": {
+"dev": "00cbe7f0",
+"how": "xanchor-gap-align",
+"name": "nSPSkinner::cMeshAORender::UpdateBounds"
 },
 "00516eb0": {
 "dev": "00cc0110",
