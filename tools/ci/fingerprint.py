@@ -15,11 +15,13 @@ Fingerprints hold no names and no instructions: apart from those addresses, no c
 
 The check (gate.py, CI) compiles the function, cuts it out of the object file together with the EH funclets and local
 labels the compiler places after it, and requires: the same size, every relocation on a masked offset, the same hash.
+A thread-local variable's offset (a SECREL relocation) is a constant in the linked image, so it is filled in from the
+variable (its offset in the object's .tls section, or the N of an undefined tls_<N>) and compared as bytes.
 Agreement with run_all.py on 79,169 manifest rows (2026-11-09, work/claude/fpcheck_all.py): never passes a row that
 run_all.py fails; fails ~0.4% that run_all.py passes, about half of them because run_all.py accepts a constant
 modelled as an address (0x0042fc40: push 0x2458018 written as &g_Table2458018).
 """
-import hashlib, os, sys
+import hashlib, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "tools", "matching"))
@@ -132,10 +134,37 @@ def extract(obj_secs, syms, name):
     si, off = syms[name]
     sec = obj_secs[si]
     after = sorted(o for nm, (s_, o) in syms.items() if s_ == si and o > off and not nm.startswith(FUNCLET))
-    data = sec["data"][off:after[0] if after else len(sec["data"])].rstrip(b"\xcc")
+    data = bytearray(sec["data"][off:after[0] if after else len(sec["data"])].rstrip(b"\xcc"))
     n = len(data)
-    rel = {v + k - off for v, _s, t in sec["relocs"] for k in range(REL_SIZES.get(t, 4)) if off <= v + k < off + n}
-    return data, rel
+    rel = set()
+    for v, s, t in sec["relocs"]:
+        if not off <= v < off + n:
+            continue
+        tls = tls_offset(obj_secs, sec.get("symtab", {}).get(s)) if t == 0x0B else None
+        if tls is not None:
+            # a thread-local variable's offset (SECREL): the linker writes a constant there, which retail's .reloc
+            # does not list, so it is checked as bytes, not masked: write the offset the linker would
+            o = v - off
+            data[o:o + 4] = (int.from_bytes(data[o:o + 4], "little") + tls).to_bytes(4, "little")
+            continue
+        rel |= {v + k - off for k in range(REL_SIZES.get(t, 4)) if v + k < off + n}
+    return bytes(data), rel
+
+
+def tls_offset(obj_secs, sym):
+    """The offset in the image's .tls section of the thread-local variable a SECREL relocation names, or None.
+    A variable defined in this object's .tls$ section sits at its offset there (the translation unit's TLS data comes
+    first; a source models the variables before it with padding). An undeclared one is named by its offset,
+    tls_<hex> (`extern __declspec(thread) int tls_4;`), as the lifter writes it."""
+    if not sym:
+        return None
+    nm, secno, value = sym
+    if secno > 0 and obj_secs[secno - 1]["name"].startswith(".tls"):
+        return value
+    m = re.fullmatch(r"\?tls_([0-9a-f]+)@@.*|_tls_([0-9a-f]+)", nm)
+    if secno == 0 and m:
+        return int(m.group(1) or m.group(2), 16)
+    return None
 
 
 def check(fp, data, rel):
