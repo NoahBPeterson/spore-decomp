@@ -512,7 +512,7 @@ struct FeedInfo {  // destination record
   int mFeedType;         // +0x68
 };
 
-// 0x00618c70 (byte-exact lifted version: match/slices/s00618c70/s00618c70.cpp)
+// 0x00618c70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00618c70/s00618c70.cpp
 void FillFeedInfo(const FeedSource* src, FeedInfo* dst) {
   dst->mURI = src->mURI;
   dst->mURIHash = FNVHash(dst->mURI.mpBegin, 0x811c9dc5, 1);

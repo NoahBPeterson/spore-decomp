@@ -592,7 +592,7 @@ int cHash30::Remove(void* keyPtr)
 
 // ------------------------------------------------------------ 0x00b45b50
 
-// 0x00b45b50 (byte-exact lifted version: match/slices/s00b45b50/s00b45b50.cpp)  (186 bytes)
+// 0x00b45b50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b45b50/s00b45b50.cpp  (186 bytes)
 cIter cHash30::Insert(void* keyPtr, void* arg2)
 {
     cIter out;

@@ -12,7 +12,6 @@ template<class T> __forceinline bool il2c_nz(T v) { return v != 0; }
 template<class T> __forceinline T il2c_k(T v) { return v; }
 
 // @ 0x0049fee0
-// @ 0x0049fee0
 extern "C" void __cdecl FUN_0049fee0(int a4, int a8)
 {
     int v_l24;

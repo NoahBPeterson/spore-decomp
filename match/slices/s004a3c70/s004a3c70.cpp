@@ -10,7 +10,6 @@ struct C_004accb0 { int FUN_004accb0(unsigned int); };
 struct C_004accf0 { int FUN_004accf0(); };
 
 // @ 0x004a3c70
-// @ 0x004a3c70
 extern "C" int __cdecl FUN_004a3c70(int a4, int a8)
 {
     float v_l32_p;

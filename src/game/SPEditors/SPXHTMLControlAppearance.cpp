@@ -275,7 +275,7 @@ cXHTMLControlAppearance::~cXHTMLControlAppearance()
   *(const uint32_t**)this = (const uint32_t*)g_13ec458;   // base vtable (inlined base dtor)
 }
 
-// 0x00621f50 (byte-exact lifted version: match/slices/s00621f50/s00621f50.cpp)
+// 0x00621f50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00621f50/s00621f50.cpp
 ControlDrawable* eastl::vector_s0062_1830::erase(ControlDrawable* first, ControlDrawable* last)
 {
   void* self = this;

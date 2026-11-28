@@ -383,7 +383,7 @@ void cSPPalettePage::Shutdown() {
 
 extern float g_one;  // 0x01485720
 
-// 0x005c7f50 (byte-exact lifted version: match/slices/s005c7f50/s005c7f50.cpp)
+// 0x005c7f50: not byte-exact; the byte-exact version is the lifted one in match/slices/s005c7f50/s005c7f50.cpp
 cSPPalettePage::cSPPalettePage()
     : mLayoutInstanceID(0xd8006607),
       mField10(0),

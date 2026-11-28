@@ -60,7 +60,6 @@ extern "C" unsigned char g_013f09b4[];
 extern "C" int __cdecl FUN_00f473a0(...);
 
 // @ 0x0104e7b0
-// @ 0x0104e7b0
 extern "C" int __stdcall FUN_0104e7b0(int a4)
 {
     int t1003;

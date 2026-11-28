@@ -259,7 +259,7 @@ cCityMusicLargeAssetView::cCityMusicLargeAssetView()
 // ---------------------------------------------------------------------------
 // 0x00ea1a30  Simulator::cCityMusicLargeAssetView::~cCityMusicLargeAssetView
 // ---------------------------------------------------------------------------
-// 0x00ea1a30 (byte-exact lifted version: match/slices/s00ea1a30/s00ea1a30.cpp)
+// 0x00ea1a30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea1a30/s00ea1a30.cpp
 cCityMusicLargeAssetView::~cCityMusicLargeAssetView()
 {
     if (mpViewer != nullptr)
@@ -736,7 +736,7 @@ void cCityMusicLoadSave::SaveThumbnail()
 // ---------------------------------------------------------------------------
 // 0x00ea25f0  SP::Audio::cCityMusicLoadSave::FinishSave
 // ---------------------------------------------------------------------------
-// 0x00ea25f0 (byte-exact lifted version: match/slices/s00ea25f0/s00ea25f0.cpp)
+// 0x00ea25f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea25f0/s00ea25f0.cpp
 void cCityMusicLoadSave::FinishSave()
 {
     if (mbWaitingForThumbnail == 0 && mbWaitingForSaveDialog == 0)
@@ -764,7 +764,7 @@ void cCityMusicLoadSave::FinishSave()
 // ---------------------------------------------------------------------------
 // 0x00ea2670  SP::Audio::cCityMusicLoadSave::DoMessage
 // ---------------------------------------------------------------------------
-// 0x00ea2670 (byte-exact lifted version: match/slices/s00ea2670/s00ea2670.cpp)
+// 0x00ea2670: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea2670/s00ea2670.cpp
 bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
 {
     int nKind = pData[2];
@@ -790,7 +790,7 @@ bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
 // ---------------------------------------------------------------------------
 // 0x00ea26f0  SP::Audio::cCityMusicLoadSave::Shutdown
 // ---------------------------------------------------------------------------
-// 0x00ea26f0 (byte-exact lifted version: match/slices/s00ea26f0/s00ea26f0.cpp)
+// 0x00ea26f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea26f0/s00ea26f0.cpp
 void cCityMusicLoadSave::Shutdown()
 {
     if (mbWaitingForSaveDialog != 0) {

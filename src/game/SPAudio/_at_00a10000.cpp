@@ -394,7 +394,7 @@ bool CmdQueue::Reset(u32 n)
     return true;
 }
 
-// 0x00a102e0 (byte-exact lifted version: match/slices/s00a102e0/s00a102e0_lifted.cpp)
+// 0x00a102e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a102e0/s00a102e0_lifted.cpp
 void Serializer::BeginTree(uint32_t id)
 {
     if (mpMark1 != 0 && mpMark0 != 0) {

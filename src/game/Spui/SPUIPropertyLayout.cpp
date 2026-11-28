@@ -597,7 +597,7 @@ void ElemVec::DoDestroyValues(Elem* first, Elem* last)
     ((LocalAutoRef*)&first->mpObject)->Destroy();
   }}
 
-// 0x00828450 (byte-exact lifted version: match/slices/s00828450/s00828450.cpp)
+// 0x00828450: not byte-exact; the byte-exact version is the lifted one in match/slices/s00828450/s00828450.cpp
 Elem::Elem(const Elem& o)
 : first(o.first), mpObject(o.mpObject) {
   if (mpObject) ((IRefThing*)mpObject)->AddRef();

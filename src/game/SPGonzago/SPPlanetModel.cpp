@@ -2090,11 +2090,11 @@ class cPlanetModel_s00b8_15a0__match {
 }
 // ---- items of slice s00b815a0_match end
 
-// 0x00473500 (byte-exact lifted version: match/slices/s00473500/s00473500.cpp)
+// 0x00473500: not byte-exact; the byte-exact version is the lifted one in match/slices/s00473500/s00473500.cpp
 template vector_s0047_2b80<Pod12, 4>& vector_s0047_2b80<Pod12, 4>::operator=(const vector_s0047_2b80<Pod12, 4>&)
 ;
 
-// 0x00473890 (byte-exact lifted version: match/slices/s00473890/s00473890.cpp)
+// 0x00473890: not byte-exact; the byte-exact version is the lifted one in match/slices/s00473890/s00473890.cpp
 template void vector_s0047_2b80<Pod12, 4>::reserve(uint32_t)
 ;
 
@@ -3637,7 +3637,7 @@ void *SpVector20B::AssignN(u32 n, u32 unused)
     return this;
 }
 
-// 0x00b85f30 (byte-exact lifted version: match/slices/s00b85f30/s00b85f30.cpp)
+// 0x00b85f30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b85f30/s00b85f30.cpp
 void Vertex2DVec_Resize(void *pThis, u32 n)
 {
     Vertex2DVec *p = (Vertex2DVec *)pThis;
@@ -4602,7 +4602,7 @@ bool cPlanetModel_s00b8_bb70::FindClosestWater(const SVector3* pOrigin, float fD
     return RayCast(pOrigin, fDirection, pOut, 1.0f, true, 0);
 }
 
-// 0x00b8d2a0 (byte-exact lifted version: match/slices/s00b8d2a0/s00b8d2a0.cpp)
+// 0x00b8d2a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b8d2a0/s00b8d2a0.cpp
 bool cPlanetModel_s00b8_d190::HandleMessage(uint32_t id, void* msg)
 {
     if (id == 0x1b537e5) {

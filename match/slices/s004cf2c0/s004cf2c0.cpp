@@ -19,7 +19,6 @@ struct S3 { int m0; int m1; int m2; };
 
 struct D_004cf2c0 { void FUN_004cf2c0(int a4, int a8, int a12); };
 // @ 0x004cf2c0
-// @ 0x004cf2c0
 void D_004cf2c0::FUN_004cf2c0(int a4, int a8, int a12)
 {
     int v_l8;

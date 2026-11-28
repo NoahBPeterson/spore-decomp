@@ -1054,7 +1054,7 @@ unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
     return *(unsigned*)(p + 0xc);
 }
 
-// 0x0075e330 (byte-exact lifted version: match/slices/s0075e330/s0075e330.cpp)
+// 0x0075e330: not byte-exact; the byte-exact version is the lifted one in match/slices/s0075e330/s0075e330.cpp
 int cRenderer_s0075_de80::NumLayers()
 {
     mMutex.Lock((const void*)g_140dca0);

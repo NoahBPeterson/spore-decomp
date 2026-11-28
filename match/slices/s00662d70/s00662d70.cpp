@@ -498,7 +498,7 @@ void FUN_00663680(char* p, int layout, char reload) {
     ((cSPUIFeedList*)p)->FUN_006634d0();
 }
 
-// 0x00663860 (byte-exact lifted version: match/slices/s00663860/s00663860.cpp)  ReloadCallback
+// 0x00663860: not byte-exact; the byte-exact version is the lifted one in match/slices/s00663860/s00663860.cpp  ReloadCallback
 void cSPUIFeedList::ReloadCallback(void* parent, int a, int b, void* cfg) {
     char* p = (char*)this;
     AssignRef((void**)(p + 0x24), parent);

@@ -1048,7 +1048,7 @@ void StrTree::NukeSub(Node* n)
     }
 }
 
-// 0x0067f710 (byte-exact lifted version: match/slices/s0067f710/s0067f710.cpp)
+// 0x0067f710: not byte-exact; the byte-exact version is the lifted one in match/slices/s0067f710/s0067f710.cpp
 int CheatMgr::FindMatches(const char* pat, PtrVec* out)
 {
     int n = 0;

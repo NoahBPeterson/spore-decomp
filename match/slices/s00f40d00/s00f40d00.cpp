@@ -121,7 +121,7 @@ int __fastcall FUN_00f40ea0(void* self, int dummy, int* arg) {
 // ===========================================================================
 // 0x00f410f0 -- recycle a surface-node record slot
 // ===========================================================================
-// 0x00f410f0 (byte-exact lifted version: match/slices/s00f410f0/s00f410f0.cpp)
+// 0x00f410f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f410f0/s00f410f0.cpp
 void __fastcall FUN_00f410f0(int* p, int dummy, int idx) {
     (void)dummy;
     int* e = (int*)(idx * 0x238 + *p);
@@ -162,7 +162,7 @@ char __fastcall FUN_00f41270(int self, int dummy, int* out) {
 // ===========================================================================
 // 0x00f41420 -- validate the node against the active scenario
 // ===========================================================================
-// 0x00f41420 (byte-exact lifted version: match/slices/s00f41420/s00f41420.cpp)
+// 0x00f41420: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f41420/s00f41420.cpp
 char __fastcall FUN_00f41420(int self, int dummy, int a0, int a1, int a2, int a3) {
     (void)dummy;
     int r = FUN_00eeca30(a0);

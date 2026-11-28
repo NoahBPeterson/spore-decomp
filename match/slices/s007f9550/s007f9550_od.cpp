@@ -147,7 +147,7 @@ bool Iface::RemoveAction(void* act) {
     return false;
 }
 
-// 0x007f9fe0 (byte-exact lifted version: match/slices/s007f9fe0/s007f9fe0.cpp)
+// 0x007f9fe0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f9fe0/s007f9fe0.cpp
 bool Iface::RemoveAllPredicates() {
     for (int i = 0; i < 4; ++i) {
         int** slot = ((Cont*)((char*)this - 0x18))->SlotC(i);
@@ -160,7 +160,7 @@ bool Iface::RemoveAllPredicates() {
     return true;
 }
 
-// 0x007fa060 (byte-exact lifted version: match/slices/s007fa060/s007fa060.cpp)
+// 0x007fa060: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fa060/s007fa060.cpp
 bool Iface::RemoveAllActions() {
     for (int i = 0; i < 4; ++i) {
         int** slot = ((Cont*)((char*)this - 0x18))->SlotD(i);
@@ -299,7 +299,7 @@ void FUN_007fa4f0(int p, int a2, int p3) {
     FUN_007fa4c0((int*)p, *(int*)((char*)p3 + 8));
 }
 
-// 0x007f9550 (byte-exact lifted version: match/slices/s007f9550/s007f9550_lifted.cpp)
+// 0x007f9550: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f9550/s007f9550_lifted.cpp
 bool Ev::Eval() {
     *(char*)((char*)this + 0x3a) = 0;
     VCallR(this, 0x24);

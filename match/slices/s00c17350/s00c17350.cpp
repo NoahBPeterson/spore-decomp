@@ -215,7 +215,7 @@ uint32_t cSPCreatureBase::CreateBodyEffect(uint32_t kind, uint32_t a, uint32_t b
 // ---------------------------------------------------------------------------
 // 0x00c17cc0  checked body-effect creation (guards on a live effect)
 // ---------------------------------------------------------------------------
-// 0x00c17cc0 (byte-exact lifted version: match/slices/s00c17cc0/s00c17cc0.cpp)
+// 0x00c17cc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c17cc0/s00c17cc0.cpp
 uint32_t cSPCreatureBase::CreateBodyEffectChecked(bool flag, uint32_t kind, uint32_t a,
                                                   uint32_t e, uint32_t b)
 {
@@ -243,7 +243,7 @@ uint32_t cSPCreatureBase::CreateBodyEffectChecked(bool flag, uint32_t kind, uint
 // ---------------------------------------------------------------------------
 // 0x00c17d60  checked body-effect creation (no part query)
 // ---------------------------------------------------------------------------
-// 0x00c17d60 (byte-exact lifted version: match/slices/s00c17d60/s00c17d60.cpp)
+// 0x00c17d60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c17d60/s00c17d60.cpp
 uint32_t cSPCreatureBase::CreateBodyEffectChecked2(bool flag, uint32_t kind, uint32_t a,
                                                    uint32_t e, uint32_t b)
 {

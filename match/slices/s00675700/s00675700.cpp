@@ -36,7 +36,6 @@ struct C_0041e920 { int FUN_0041e920(); };
 extern "C" int __cdecl FUN_0067de30(...);
 
 // @ 0x00675700
-// @ 0x00675700
 extern "C" bool __stdcall FUN_00675700(int a4)
 {
     int v_l4;

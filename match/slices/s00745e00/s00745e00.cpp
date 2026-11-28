@@ -4,7 +4,6 @@
 extern "C" int __cdecl FUN_00743f00(...);
 
 // @ 0x00745e00
-// @ 0x00745e00
 extern "C" void __cdecl FUN_00745e00(int a4, int a8, int a12, int a16, int a20, int a24, int a28)
 {
     int t1000;

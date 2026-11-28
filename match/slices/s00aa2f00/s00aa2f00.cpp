@@ -569,7 +569,7 @@ cParticlesDescription::cParticlesDescription()
     mRotationCurve.push_back(0.0f);
 }
 
-// 0x00aa32f0 (byte-exact lifted version: match/slices/s00aa32f0/s00aa32f0.cpp)
+// 0x00aa32f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aa32f0/s00aa32f0.cpp
 cParticlesDescription::~cParticlesDescription()
 {
 }

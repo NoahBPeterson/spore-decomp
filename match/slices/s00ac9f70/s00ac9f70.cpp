@@ -158,7 +158,7 @@ void __cdecl FUN_00aca0c0(void** arr, void* arg2, int n, int holeIndex, void* ar
     if (arg5) ((void (__thiscall*)(void*))vc(arg5, 4))(arg5);
 }
 
-// 0x00aca1f0 (byte-exact lifted version: match/slices/s00aca1f0/s00aca1f0.cpp)  lower_bound over 0x20-byte elements; returns the resulting iterator
+// 0x00aca1f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aca1f0/s00aca1f0.cpp  lower_bound over 0x20-byte elements; returns the resulting iterator
 int* FUN_00aca1f0(int* begin, int* end, int* key) {
     int n = (int)((char*)end - (char*)begin) >> 5;
     if (n > 0) {

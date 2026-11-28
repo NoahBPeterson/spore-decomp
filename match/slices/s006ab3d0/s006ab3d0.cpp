@@ -90,7 +90,7 @@ struct FixedAlloc {
     FixedAlloc* InitDefaults(int unused);                                                     // @ 0x006ac140
 };
 
-// 0x006abe50 (byte-exact lifted version: match/slices/s006abe50/s006abe50.cpp)
+// 0x006abe50: not byte-exact; the byte-exact version is the lifted one in match/slices/s006abe50/s006abe50.cpp
 void* FixedAlloc::AllocateChunk(uint32_t size, int flags)
 {
     FixedAlloc* self = this;
@@ -111,7 +111,7 @@ void* FixedAlloc::AllocateChunk(uint32_t size, int flags)
 // small copy / free helpers
 // ===========================================================================
 
-// 0x006ac440 (byte-exact lifted version: match/slices/s006ac440/s006ac440.cpp)
+// 0x006ac440: not byte-exact; the byte-exact version is the lifted one in match/slices/s006ac440/s006ac440.cpp
 uint32_t* FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
 {
     uint32_t* p = dst;

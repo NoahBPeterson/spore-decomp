@@ -202,7 +202,7 @@ void FUN_00e4f680(int val)
 }
 
 // =====================================================================
-// 0x00e4f6d0 (byte-exact lifted version: match/slices/s00e4f6d0/s00e4f6d0.cpp)
+// 0x00e4f6d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e4f6d0/s00e4f6d0.cpp
 // =====================================================================
 int FUN_00e4f6d0(int* node, int a, int b, int** out, int* counter)
 {

@@ -4172,7 +4172,7 @@ void __cdecl FUN_00cb64e0(void* a1)
     FUN_00cb6400(object, 0);
 }
 
-// 0x00cb6500 (byte-exact lifted version: match/slices/s00cb6500/s00cb6500.cpp)
+// 0x00cb6500: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cb6500/s00cb6500.cpp
 u32 __cdecl FUN_00cb6500(u32 a1, f32 a2, u32 a3, void* a4)
 {
     u8 old = 0;
@@ -4958,7 +4958,7 @@ void cSpaceDefenseMissile::FUN_00cb86a0()
     mBase.Destroy();
 }
 
-// 0x00cb8760 (byte-exact lifted version: match/slices/s00cb8760/s00cb8760.cpp)
+// 0x00cb8760: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cb8760/s00cb8760.cpp
 void cSpaceDefenseMissile::FUN_00cb8760(const Vector3* pos, IVtblObject* target)
 {
     IVtblObject* old = mpTarget;

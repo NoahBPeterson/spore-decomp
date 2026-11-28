@@ -218,7 +218,7 @@ struct Record1d8Vector {
     Record1d8Vector& Assign(const Record1d8Vector& other);                               // 0x4b0ef0
 };
 
-// 0x004b0ef0 (byte-exact lifted version: match/slices/s004b0ef0/s004b0ef0.cpp)
+// 0x004b0ef0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b0ef0/s004b0ef0.cpp
 Record1d8Vector& Record1d8Vector::Assign(const Record1d8Vector& other)
 {
     if (this != &other) {

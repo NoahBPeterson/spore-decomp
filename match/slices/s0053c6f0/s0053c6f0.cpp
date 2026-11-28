@@ -212,7 +212,7 @@ void** UninitCopy20(void** out, Entry20* first, Entry20* last, Entry20* dst, uin
     return out;
 }
 
-// 0x0053d230 (byte-exact lifted version: match/slices/s0053d230/s0053d230.cpp)
+// 0x0053d230: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053d230/s0053d230.cpp
 void* UninitFill20(Entry20* dst, int n, const Entry20* value, uint8_t /*isPod*/)
 {
     Entry20* d = dst;

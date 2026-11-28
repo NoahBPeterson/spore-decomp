@@ -524,7 +524,7 @@ bool __fastcall FUN_00ef46f0(cAssetPanel* self, void* dummy, void* context, Msg*
 }
 
 // ---------------------------------------------------------------------------
-// 0x00ef4940 (byte-exact lifted version: match/slices/s00ef4940/s00ef4940.cpp)  shut the panel down: release every window and sub-object.
+// 0x00ef4940: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ef4940/s00ef4940.cpp  shut the panel down: release every window and sub-object.
 // ---------------------------------------------------------------------------
 void __fastcall FUN_00ef4940(cAssetPanel* self)
 {

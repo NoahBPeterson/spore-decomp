@@ -892,7 +892,7 @@ Elem38_s0052_66f0::Elem38_s0052_66f0(const Elem38_s0052_66f0& x)
 {
 }
 
-// 0x00527570 (byte-exact lifted version: match/slices/s00527570/s00527570.cpp)
+// 0x00527570: not byte-exact; the byte-exact version is the lifted one in match/slices/s00527570/s00527570.cpp
 void VectorElem38::DoInsertValues(Elem38_s0052_66f0* position, size_type n, const Elem38_s0052_66f0& value)
 {
     if (n == 0)
@@ -954,7 +954,7 @@ void* UninitCopy18(void* first, void* last, void* dest)
     return (void*)((char*)dest + (((char*)last - (char*)first) / 0x18) * 0x18);
 }
 
-// 0x00527c70 (byte-exact lifted version: match/slices/s00527c70/s00527c70.cpp)
+// 0x00527c70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00527c70/s00527c70.cpp
 VectorElem40_s0052_7a70& VectorElem40_s0052_7a70::operator=(const VectorElem40_s0052_7a70& x)
 {
     if (this != &x) {

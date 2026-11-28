@@ -438,7 +438,7 @@ struct Attribute {
 };
 // ---- items of slice s01353d90 end
 
-// 0x00c8b450 (byte-exact lifted version: match/slices/s00c8b450/s00c8b450.cpp)
+// 0x00c8b450: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8b450/s00c8b450.cpp
 bool __cdecl c8b450(int k)
 {
     if (k == 0) return false;

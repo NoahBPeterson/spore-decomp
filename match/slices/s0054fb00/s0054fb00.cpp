@@ -124,7 +124,7 @@ Meta::Meta()
     *(int*)(s + 0xc0) = 0; *(int*)(s + 0xc4) = 0; *(int*)(s + 0xc8) = 0;
 }
 
-// 0x005506c0 (byte-exact lifted version: match/slices/s005506c0/s005506c0.cpp)
+// 0x005506c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005506c0/s005506c0.cpp
 void Meta::FUN_005506c0()
 {
     char* s = (char*)this;

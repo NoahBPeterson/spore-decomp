@@ -20,7 +20,6 @@ struct il2c_vc2 {
 
 
 // @ 0x007aa3a0
-// @ 0x007aa3a0
 extern "C" bool __fastcall FUN_007aa3a0(char* self, int edx_unused, int a4)
 {
     int t1004;

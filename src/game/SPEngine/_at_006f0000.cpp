@@ -1010,7 +1010,7 @@ void cRenderInstanceSet::GetRange(int* out)
     Range r = { -1, -1 };
     *(Range*)out = r;}
 
-// 0x006f41e0 (byte-exact lifted version: match/slices/s006f41e0/s006f41e0.cpp)
+// 0x006f41e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006f41e0/s006f41e0.cpp
 cViewer* cRenderInstanceSet::RenderRange(void* src)
 {
     int uVar2 = 0;

@@ -396,7 +396,7 @@ class cSPUIAssetWebBrowser {
   void FUN_0065b6b0(int msg, int param);
 };
 
-// 0x0065b1b0 (byte-exact lifted version: match/slices/s0065b1b0/s0065b1b0.cpp)
+// 0x0065b1b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0065b1b0/s0065b1b0.cpp
 bool cSPUIAssetWebBrowser::Shutdown() {
   if (mMode == 0) {
     IMessageServer* ms = MessageServer();
@@ -703,7 +703,7 @@ bool cSPUIAssetWebBrowser::Init(void* parent, void* content) {
   return mpContentWin != 0;
 }
 
-// 0x0065bc20 (byte-exact lifted version: match/slices/s0065bc20/s0065bc20.cpp)
+// 0x0065bc20: not byte-exact; the byte-exact version is the lifted one in match/slices/s0065bc20/s0065bc20.cpp
 bool cSPUIAssetWebBrowser::LoadPage(void* url) {
   if (!mpContentWin)
     return false;

@@ -238,7 +238,7 @@ cCountedSlot* __thiscall cCountedSlot::FUN_00d06eb0(cRefCounted* p)
 }
 }  // namespace SP
 
-// 0x00d06f00 (byte-exact lifted version: match/slices/s00d06f00/s00d06f00.cpp)
+// 0x00d06f00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d06f00/s00d06f00.cpp
 namespace SP {
 void __fastcall FUN_00d06f00(void* this_, int unused)
 {
@@ -296,7 +296,7 @@ void __fastcall FUN_00d075d0(void* this_, int unused)
 }
 }  // namespace SP
 
-// 0x00d07770 (byte-exact lifted version: match/slices/s00d07770/s00d07770_lifted.cpp)
+// 0x00d07770: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d07770/s00d07770_lifted.cpp
 void C103::FillCounts()
 {
     char* p = (char*)this;

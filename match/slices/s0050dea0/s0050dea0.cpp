@@ -9,7 +9,6 @@ struct S3 { int m0; int m1; int m2; };
 
 struct D_0050dea0 { int FUN_0050dea0(int a4); };
 // @ 0x0050dea0
-// @ 0x0050dea0
 int D_0050dea0::FUN_0050dea0(int a4)
 {
     int v_l64_r;

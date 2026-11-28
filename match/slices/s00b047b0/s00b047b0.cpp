@@ -620,7 +620,7 @@ void* RBTree::copyNode(PoolElem* src, PoolElem* parent)
 }
 
 // ===========================================================================
-// 0x00b051f0 (byte-exact lifted version: match/slices/s00b051f0/s00b051f0.cpp)  destructor sweep over a count of 0x19a8-byte leaves
+// 0x00b051f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b051f0/s00b051f0.cpp  destructor sweep over a count of 0x19a8-byte leaves
 // ===========================================================================
 void FUN_00b051f0(uint param_1, uint param_2)
 {

@@ -257,7 +257,7 @@ public:
     void* Dtor(uint32_t flags);   // @ 0x00559050
 };
 
-// 0x00559050 (byte-exact lifted version: match/slices/s00559050/s00559050_lifted.cpp)
+// 0x00559050: not byte-exact; the byte-exact version is the lifted one in match/slices/s00559050/s00559050_lifted.cpp
 void* c559050::Dtor(uint32_t flags)
 {
     VectorBaseRK* vec = &mVec18;
@@ -304,7 +304,7 @@ public:
     ~cSPObjectTemplateDB();       // @ 0x00559590
 };
 
-// 0x00559590 (byte-exact lifted version: match/slices/s00559590/s00559590.cpp)
+// 0x00559590: not byte-exact; the byte-exact version is the lifted one in match/slices/s00559590/s00559590.cpp
 cSPObjectTemplateDB::~cSPObjectTemplateDB()
 {
     mBase00.mpVtbl = &vtbl_ObjectTemplateDB_00;

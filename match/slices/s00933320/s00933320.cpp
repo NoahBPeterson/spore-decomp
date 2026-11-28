@@ -269,7 +269,7 @@ int IniFile::ReadEntryRaw(void* a, void* b, wchar_t* dst, int maxn) {
 // ---------------------------------------------------------------------------------------------
 extern "C" int Vsscanf16(void*, void*, void*);                          // 0x00939d30
 
-// 0x009338e0 (byte-exact lifted version: match/slices/s009338e0/s009338e0.cpp)  ReadEntryFormatted (cdecl free form: self, fmt, src, c, d)
+// 0x009338e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009338e0/s009338e0.cpp  ReadEntryFormatted (cdecl free form: self, fmt, src, c, d)
 int ReadEntryFormatted(IniFile* self, void* a, void* b, void* c, void* d) {
     char16_t* loc[4];
     loc[0] = (char16_t*)&gEmptyString16;

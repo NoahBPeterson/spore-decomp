@@ -87,7 +87,7 @@ void FUN_00ec8d20(int param_1)
 }
 
 // ------------------------------------------------------------------ 0x00ec8d80
-// 0x00ec8d80 (byte-exact lifted version: match/slices/s00ec8d80/s00ec8d80.cpp)
+// 0x00ec8d80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec8d80/s00ec8d80.cpp
 struct KV { int k; int v; };
 void FUN_00ec8d80(int param_1)
 {
@@ -481,7 +481,7 @@ int* FUN_00ec9a80(int param_1, int param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec9ae0
-// 0x00ec9ae0 (byte-exact lifted version: match/slices/s00ec9ae0/s00ec9ae0.cpp)
+// 0x00ec9ae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec9ae0/s00ec9ae0.cpp
 int FUN_00ec9ae0(int param_1, int param_2)
 {
     int id = (*(int**)((char*)g_16c757c + 4))[param_1];

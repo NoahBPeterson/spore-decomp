@@ -461,7 +461,7 @@ void* RefRecordOps::Assign(const void* src)
 struct RefRecordOps2 {
     void* Assign2(const void* src);
 };
-// 0x00b01d30 (byte-exact lifted version: match/slices/s00b01d30/s00b01d30.cpp)
+// 0x00b01d30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b01d30/s00b01d30.cpp
 void* RefRecordOps2::Assign2(const void* src)
 {
     u8* self = (u8*)this;
@@ -716,7 +716,7 @@ void GridOwner::Rebuild()
 struct GridEntryOps {
     void SetEntry(void* obj, u8 add);
 };
-// 0x00b02350 (byte-exact lifted version: match/slices/s00b02350/s00b02350.cpp)
+// 0x00b02350: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b02350/s00b02350.cpp
 void GridEntryOps::SetEntry(void* obj, u8 add)
 {
     u8* self = (u8*)this;

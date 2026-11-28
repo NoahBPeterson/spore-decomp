@@ -251,7 +251,7 @@ struct CreatureBase {
     cSpatialObject& GetSpatial() { return mSpatial; }
 };
 
-// 0x00c11410 (byte-exact lifted version: match/slices/s00c11410/s00c11410_lifted.cpp)
+// 0x00c11410: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c11410/s00c11410_lifted.cpp
 void cSpatialObject::SetSpeedState(float a, float b)
 {
     CreatureBase* owner = (CreatureBase*)((char*)this - 0xc0);

@@ -757,7 +757,7 @@ void System::Unlock()
 // =====================================================================================
 // 0112c640  System::someCheck
 // =====================================================================================
-// 0x0112c640 (byte-exact lifted version: match/slices/s0112c640/s0112c640.cpp)
+// 0x0112c640: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112c640/s0112c640.cpp
 bool System::someCheck(u32 v)
 {
     Mutex m;

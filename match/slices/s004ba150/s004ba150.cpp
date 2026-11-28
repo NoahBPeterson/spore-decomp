@@ -92,7 +92,7 @@ cResourceBase* cRuntimeCreatureResource::AsInterface(int type)
                : ((cResourceBase*)this)->AsInterface(type);
 }
 
-// 0x004bacc0 (byte-exact lifted version: match/slices/s004bacc0/s004bacc0.cpp)
+// 0x004bacc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004bacc0/s004bacc0.cpp
 void* cRuntimeCreatureResource::zero()
 {
     *(int*)this = 0;
@@ -111,7 +111,7 @@ void* cRuntimeCreatureResource::zero()
     return this;
 }
 
-// 0x004bad50 (byte-exact lifted version: match/slices/s004bad50/s004bad50.cpp)
+// 0x004bad50: not byte-exact; the byte-exact version is the lifted one in match/slices/s004bad50/s004bad50.cpp
 // Resource destructor: destroy the two vector subobjects, release the
 // ThreadedObject at +8 and the EA::Counted at +4, then release *p virtually.
 void __fastcall FUN_004bad50(int* p)

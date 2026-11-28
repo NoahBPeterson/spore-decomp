@@ -54,7 +54,7 @@ struct cRenderer {
 static inline char* LayerBegin(cRenderer* r) { return *(char**)((char*)r + 0x8c); }
 static inline char* LayerEnd(cRenderer* r)   { return *(char**)((char*)r + 0x90); }
 
-// 0x0075e330 (byte-exact lifted version: match/slices/s0075e330/s0075e330.cpp)
+// 0x0075e330: not byte-exact; the byte-exact version is the lifted one in match/slices/s0075e330/s0075e330.cpp
 int cRenderer::NumLayers()
 {
     mMutex.Lock((const void*)0x140dca0);

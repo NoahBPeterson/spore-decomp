@@ -73,7 +73,7 @@ struct Vec20 {
     T20* AllocCopy(uint32_t n, const T20* first, const T20* last);
 };
 
-// 0x0050eab0 (byte-exact lifted version: match/slices/s0050eab0/s0050eab0.cpp)  (allocate n and uninitialized-copy [first,last))
+// 0x0050eab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050eab0/s0050eab0.cpp  (allocate n and uninitialized-copy [first,last))
 T20* Vec20::AllocCopy(uint32_t n, const T20* first, const T20* last)
 {
     T20* p = n ? (T20*)EASTL_Allocate(&mAlloc, n * sizeof(T20), 4, 0) : 0;
@@ -82,7 +82,7 @@ T20* Vec20::AllocCopy(uint32_t n, const T20* first, const T20* last)
     return p;
 }
 
-// 0x0050eb40 (byte-exact lifted version: match/slices/s0050eb40/s0050eb40.cpp)
+// 0x0050eb40: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050eb40/s0050eb40.cpp
 T12* UninitCopy12(T12* first, T12* last, T12* result)
 {
     T12* d = result;
@@ -165,7 +165,7 @@ struct Elem100 : Base100 {
     Elem100& operator=(const Elem100& x);   // 0x0050f210
 };
 
-// 0x0050f210 (byte-exact lifted version: match/slices/s0050f210/s0050f210.cpp)
+// 0x0050f210: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f210/s0050f210.cpp
 Elem100& Elem100::operator=(const Elem100& x)
 {
     vec = x.vec;
@@ -219,7 +219,7 @@ struct Vec100 : VecBase {
     Elem100* DoAllocate(uint32_t n);
 };
 
-// 0x0050eca0 (byte-exact lifted version: match/slices/s0050eca0/s0050eca0.cpp)
+// 0x0050eca0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050eca0/s0050eca0.cpp
 Elem100* Vec100::EraseRange(Elem100* first, Elem100* last)
 {
     Elem100* position = first;
@@ -289,7 +289,7 @@ T12* Vec12::erase(T12* first, T12* last)
 }
 
 // ---------------------------------------------------------------------------
-// 0x0050f7f0 (byte-exact lifted version: match/slices/s0050f7f0/s0050f7f0.cpp)  uninitialized_copy (result via out-param) for T20
+// 0x0050f7f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f7f0/s0050f7f0.cpp  uninitialized_copy (result via out-param) for T20
 // ---------------------------------------------------------------------------
 void __cdecl UninitCopy20(void** out, T20* first, T20* last, T20* dest, uint8_t tag)
 {
@@ -389,7 +389,7 @@ void Fill24(T24* first, T24* last, const T24& value)
         *first = value;
 }
 
-// 0x0050f290 (byte-exact lifted version: match/slices/s0050f290/s0050f290.cpp)
+// 0x0050f290: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f290/s0050f290.cpp
 void Vec24Full::DoInsertValues(T24* position, uint32_t n, const T24& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {

@@ -784,7 +784,7 @@ static int sim_singleton(void)
     return g_pSimSingleton;
 }
 
-// 0x00ec08d0 (byte-exact lifted version: match/slices/s00ec08d0/s00ec08d0.cpp) — behave as an "inspect object" decider: creates the stimulus
+// 0x00ec08d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec08d0/s00ec08d0.cpp — behave as an "inspect object" decider: creates the stimulus
 // and reports whether one was produced.
 float FUN_00ec08d0(int obj, int a, int b, int d, int stim, char* out)
 {
@@ -807,7 +807,7 @@ float FUN_00ec08d0(int obj, int a, int b, int d, int stim, char* out)
     return 0.0f;
 }
 
-// 0x00ec0970 (byte-exact lifted version: match/slices/s00ec0970/s00ec0970.cpp)
+// 0x00ec0970: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec0970/s00ec0970.cpp
 float FUN_00ec0970(int obj, int a, int b, int d, int stim, char* out)
 {
     int sim;

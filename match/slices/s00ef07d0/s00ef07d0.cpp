@@ -472,7 +472,7 @@ void __thiscall Strategy::FUN_00ef0c80()
 }
 
 // ===========================================================================
-// 0x00ef0cd0 (byte-exact lifted version: match/slices/s00ef0cd0/s00ef0cd0.cpp)
+// 0x00ef0cd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ef0cd0/s00ef0cd0.cpp
 void __thiscall Strategy::FUN_00ef0cd0()
 {
     Strategy* this_ = this;

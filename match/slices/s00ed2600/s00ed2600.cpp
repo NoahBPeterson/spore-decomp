@@ -896,7 +896,7 @@ BigElem* BigVector::InsertAt(BigElem* pos, BigElem* value)
 // (definition above with the map helpers)
 
 // ---------------------------------------------------------------- 0x00ed3350
-// 0x00ed3350 (byte-exact lifted version: match/slices/s00ed3350/s00ed3350.cpp)
+// 0x00ed3350: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed3350/s00ed3350.cpp
 void Pal::f_ed3350(int a)
 {
     if (a == -2)
@@ -912,7 +912,7 @@ void Pal::f_ed3350(int a)
 }
 
 // ---------------------------------------------------------------- 0x00ed33a0
-// 0x00ed33a0 (byte-exact lifted version: match/slices/s00ed33a0/s00ed33a0.cpp)
+// 0x00ed33a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed33a0/s00ed33a0.cpp
 void Pal::f_ed33a0(int a)
 {
     void* r = (void*)FUN_00ed1f00((char*)this + 0x70, a);

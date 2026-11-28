@@ -763,7 +763,7 @@ int __cdecl FUN_007a49e0(u32 param_1, u32 param_2, u32 param_3, u32 param_4,
 }
 
 // ---------------------------------------------------------------------------
-// 0x007a4cb0 (byte-exact lifted version: match/slices/s007a4cb0/s007a4cb0.cpp)  Swap the renderer device held at +0x10 and probe it; on a
+// 0x007a4cb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007a4cb0/s007a4cb0.cpp  Swap the renderer device held at +0x10 and probe it; on a
 // failed probe drop the device again.
 // ---------------------------------------------------------------------------
 u32 cGraphicsSystem::SwapRendererDevice() {

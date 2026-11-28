@@ -127,7 +127,7 @@ bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant** out) c
   return cPropertyList::GetProperty(key, out);
 }
 
-// 0x006a27d0 (byte-exact lifted version: match/slices/s006a27d0/s006a27d0.cpp)
+// 0x006a27d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006a27d0/s006a27d0.cpp
 bool SP::cDirectPropertyList::HasProperty(unsigned int key) const {
   if (key != 0 && key < mNumDirectProps) return true;
   // The original keeps the inherited lookup as a real call (never a tail call) and returns a
@@ -324,7 +324,7 @@ void SP::cDirectPropertyList::Copy(cPropertyList* src) {
   SetParent(mParent);
 }
 
-// 0x006a2b20 (byte-exact lifted version: match/slices/s006a2b20/s006a2b20.cpp)
+// 0x006a2b20: not byte-exact; the byte-exact version is the lifted one in match/slices/s006a2b20/s006a2b20.cpp
 void SP::cDirectPropertyList::Clear() {
   Memset32(mDirectProps, 0, mNumDirectProps); // 0x0092cb00
   PairsDestroy(mPropertyMap.mpBegin, mPropertyMap.mpEnd);
@@ -435,7 +435,7 @@ void SP::cPropertyList::RemoveProperty(unsigned int key) {
   mModificationCount++;
 }
 
-// 0x006a2f10 (byte-exact lifted version: match/slices/s006a2f10/s006a2f10.cpp)
+// 0x006a2f10: not byte-exact; the byte-exact version is the lifted one in match/slices/s006a2f10/s006a2f10.cpp
 void SP::cPropertyList::v12(cPropertyList* src) {
   if (this == src) return;
   VariantPair* it = src->mPropertyMap.mpBegin;
@@ -460,7 +460,7 @@ unsigned int SP::cPropertyList::GetPropertyIDs(unsigned int* ids) {
   return (unsigned int)(size_t)mPropertyMap.mpEnd;
 }
 
-// 0x006a30c0 (byte-exact lifted version: match/slices/s006a30c0/s006a30c0.cpp)
+// 0x006a30c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006a30c0/s006a30c0.cpp
 void SP::cDirectPropertyList::SetProperty(unsigned int index, EA::Variant* value) {
   if (index < mNumDirectProps) {
     void* mgr = PropertyManager();

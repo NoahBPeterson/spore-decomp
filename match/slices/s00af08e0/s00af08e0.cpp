@@ -83,7 +83,7 @@ void __thiscall RBTree::FindBounds(HIter* out, const int* key)
     out->a = upper;
 }
 
-// 0x00af09a0 (byte-exact lifted version: match/slices/s00af09a0/s00af09a0.cpp) — deep copy a subtree.
+// 0x00af09a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00af09a0/s00af09a0.cpp — deep copy a subtree.
 Node* __thiscall RBTree::Clone(Node* src, void* parent)
 {
     Node* head = NewNode(src, parent);

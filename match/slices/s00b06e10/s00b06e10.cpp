@@ -46,7 +46,7 @@ struct cBigVector {
 
 void* __cdecl destroy_range_big(void* src, void* end, void* dst); // 0x00b03f10
 
-// 0x00b07140 (byte-exact lifted version: match/slices/s00b07140/s00b07140.cpp)
+// 0x00b07140: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b07140/s00b07140.cpp
 void cBigVector::Erase(void* first, void* last)
 {
     cBigElement* p = (cBigElement*)destroy_range_big(last, mpEnd, first);

@@ -142,7 +142,6 @@ extern "C" void __cdecl FUN_008d5d10(...);
 extern "C" void __cdecl FUN_00c2e4e0(...);
 
 // @ 0x007e6470
-// @ 0x007e6470
 extern "C" bool __fastcall FUN_007e6470(char* self, int edx_unused)
 {
     int t1003;

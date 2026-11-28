@@ -29,7 +29,6 @@ extern "C" unsigned char g_015f7cf4[];
 struct C_0062c340 { void FUN_0062c340(); };
 
 // @ 0x0062c910
-// @ 0x0062c910
 extern "C" void __fastcall FUN_0062c910(char* self, int edx_unused)
 {
     int t1002;

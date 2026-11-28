@@ -36,7 +36,7 @@ extern "C" const int g_01550b14;            // 0x01550b14
 extern "C" const int g_0166c020;            // 0x0166c020
 // ---- items of slice s009f9b40 end
 
-// 0x009f9ce0 (byte-exact lifted version: match/slices/s009f9ce0/s009f9ce0.cpp)
+// 0x009f9ce0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009f9ce0/s009f9ce0.cpp
 int animNameAllowed(AnimNameHolder* obj)
 {
     if (g_0166c01c != 0 && obj->m_name.HasTag(0x00657965))    // "eye"

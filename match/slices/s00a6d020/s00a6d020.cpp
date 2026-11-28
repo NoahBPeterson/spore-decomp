@@ -461,7 +461,7 @@ const char* cEffectsManager::GetStatsString()
 }
 
 // ===========================================================================
-// 0x00a6d730 (byte-exact lifted version: match/slices/s00a6d730/s00a6d730.cpp)
+// 0x00a6d730: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a6d730/s00a6d730.cpp
 bool cEffectsManager::GetEffectInfo(int a, const char* name)
 {
     mName.assign(name, name + strlen(name));

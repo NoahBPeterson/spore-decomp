@@ -158,7 +158,7 @@ struct SkelNode {
 // 0x00460a80: depth-first reorder of the ids whose parent is `target`, returns count placed.
 int ReorderChildren(const SkelNode* nodes, int target, int* ids, int count);   // 0x00460a80
 
-// 0x00461680 (byte-exact lifted version: match/slices/s00461680/s00461680_lifted.cpp)
+// 0x00461680: not byte-exact; the byte-exact version is the lifted one in match/slices/s00461680/s00461680_lifted.cpp
 // Orders the skeleton's node indices into pOrder by class (5,4,3,2,1 from the highest root
 // class downwards), each class's nodes depth-first under the previously placed ones.
 // Outputs the running group boundaries.

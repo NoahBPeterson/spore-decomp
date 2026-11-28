@@ -6,7 +6,6 @@ extern "C" unsigned char g_0148534c[];
 extern "C" int __cdecl FUN_00932e80(...);
 
 // @ 0x00e50540
-// @ 0x00e50540
 extern "C" bool __cdecl FUN_00e50540(int a4)
 {
     int t1002;

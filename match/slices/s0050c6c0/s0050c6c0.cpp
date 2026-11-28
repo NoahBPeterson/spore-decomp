@@ -26,7 +26,7 @@ float* __cdecl Scale2(float* out, float* s)
 }
 
 // ---------------------------------------------------------------------------
-// 0x0050cec0 (byte-exact lifted version: match/slices/s0050cec0/s0050cec0.cpp)  (fixed_vector<float,400> constructor)
+// 0x0050cec0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050cec0/s0050cec0.cpp  (fixed_vector<float,400> constructor)
 // ---------------------------------------------------------------------------
 struct FixedVector400 {
     int* mBegin;                            // +0x00
@@ -41,7 +41,7 @@ struct FixedVector400 {
     FixedVector400* Construct(int count);   // 0x0050cec0
 };
 
-// 0x0050cec0 (byte-exact lifted version: match/slices/s0050cec0/s0050cec0.cpp)
+// 0x0050cec0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050cec0/s0050cec0.cpp
 FixedVector400* FixedVector400::Construct(int count)
 {
     mBegin = 0;
@@ -245,7 +245,7 @@ void Skin::Append(const Skin& other)
 void __fastcall ProcessD(int self) { (void)self; }
 
 // ---------------------------------------------------------------------------
-// 0x0050d070 (byte-exact lifted version: match/slices/s0050d070/s0050d070.cpp)  eastl::vector<Rec18>::operator=  (thiscall, ret 4)
+// 0x0050d070: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050d070/s0050d070.cpp  eastl::vector<Rec18>::operator=  (thiscall, ret 4)
 //
 // `Rec18` is the 0x18-byte element (six dwords, trivially destructible); the function is
 // eastl's vector copy-assignment: grow+copy when the source is larger than our capacity,
@@ -278,7 +278,7 @@ struct VecRec18 {
     VecRec18& Assign(const VecRec18& x);
 };
 
-// 0x0050d070 (byte-exact lifted version: match/slices/s0050d070/s0050d070.cpp)
+// 0x0050d070: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050d070/s0050d070.cpp
 VecRec18& VecRec18::Assign(const VecRec18& x)
 {
     if (this != &x) {

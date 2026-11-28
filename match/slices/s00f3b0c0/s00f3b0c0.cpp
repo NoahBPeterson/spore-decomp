@@ -301,7 +301,7 @@ bool cSim::FUN_00f3b950() {
 }
 
 // ---------------------------------------------------------------------------
-// 0x00f3b990 (byte-exact lifted version: match/slices/s00f3b990/s00f3b990.cpp)
+// 0x00f3b990: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f3b990/s00f3b990.cpp
 // ---------------------------------------------------------------------------
 void cSim::FUN_00f3b990() {
     if (this == 0) return;

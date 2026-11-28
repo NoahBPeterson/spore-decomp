@@ -300,7 +300,7 @@ u8 __fastcall FUN_00d466f0(void* self, void* dummy, void* unused) {
 // ======================================================================
 // 0x00d46730 - cCreatureTriggerSystem::ReadTrigger
 // ======================================================================
-// 0x00d46730 (byte-exact lifted version: match/slices/s00d46730/s00d46730.cpp)
+// 0x00d46730: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d46730/s00d46730.cpp
 void __stdcall FUN_00d46730(TrigInfo* info) {
   void* prop;
 
@@ -649,7 +649,7 @@ BigC* __fastcall FUN_00d47380(BigC* self, void* dummy, void* p2, void* p3) {
 // ======================================================================
 // 0x00d473e0 - BigC pool allocation / construction
 // ======================================================================
-// 0x00d473e0 (byte-exact lifted version: match/slices/s00d473e0/s00d473e0.cpp)
+// 0x00d473e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d473e0/s00d473e0.cpp
 void* __fastcall FUN_00d473e0(void* self, void* dummy, u32 arg) {
   (void)dummy;
   BigC* obj = *(BigC**)((char*)self + 0x1c);

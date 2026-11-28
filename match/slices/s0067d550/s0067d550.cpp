@@ -435,7 +435,7 @@ class HTTPMultipartFormDataPostBodyStream : public IO::IStream, public RCAtomicB
 }  // namespace Internet
 }  // namespace EA
 
-// 0x0067da30 (byte-exact lifted version: match/slices/s0067da30/s0067da30.cpp)
+// 0x0067da30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0067da30/s0067da30.cpp
 int EA::Internet::RCAtomicBlock::Release() {
   if (_InterlockedDecrement(&mRefCount) == 0) {
     _InterlockedExchange(&mRefCount, 1);

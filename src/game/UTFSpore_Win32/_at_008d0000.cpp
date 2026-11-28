@@ -1965,7 +1965,7 @@ bool DatabaseDirectoryFiles_s008d_62f0::SetManager(bool bAttach, Manager_s008d_6
 }
 }}  // namespace EA::ResourceMan
 
-// 0x008d6410 (byte-exact lifted version: match/slices/s008d6410/s008d6410.cpp)
+// 0x008d6410: not byte-exact; the byte-exact version is the lifted one in match/slices/s008d6410/s008d6410.cpp
 namespace EA { namespace ResourceMan {
 bool DatabaseDirectoryFiles_s008d_62f0::CloseUnreferencedRecords()
 {

@@ -513,7 +513,7 @@ void* GObj::pool_alloc()
 }
 
 // ------------------------------------------------------------------ 00aa0a90
-// 0x00aa0a90 (byte-exact lifted version: match/slices/s00aa0a90/s00aa0a90.cpp)
+// 0x00aa0a90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aa0a90/s00aa0a90.cpp
 void GObj::clear_list()
 {
     RefNode* head = (RefNode*)op(this, 0x24);

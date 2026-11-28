@@ -41,7 +41,6 @@ extern "C" int __cdecl FUN_00f473a0(...);
 struct C_00ff54e0 { int FUN_00ff54e0(); };
 
 // @ 0x00ff5c50
-// @ 0x00ff5c50
 extern "C" bool __fastcall FUN_00ff5c50(char* self, int edx_unused, int a4)
 {
     int t1003;

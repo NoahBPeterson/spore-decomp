@@ -372,7 +372,7 @@ void __stdcall FUN_0080dcd0(void* a, i32 b, u8 c)
     if (d != 0) VisitTree(a, (void*)FUN_0080d670, local14);
 }
 
-// 0x0080dd50 (byte-exact lifted version: match/slices/s0080dd50/s0080dd50.cpp)
+// 0x0080dd50: not byte-exact; the byte-exact version is the lifted one in match/slices/s0080dd50/s0080dd50.cpp
 struct DDBounds {
     i32 flag;    // +0 (only the low byte is used)
     i32 lo;      // +4

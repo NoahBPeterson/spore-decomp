@@ -1,4 +1,4 @@
-// 0x00537d90 (byte-exact lifted version: match/slices/s00537d90/s00537d90_lifted.cpp)
+// 0x00537d90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00537d90/s00537d90_lifted.cpp
 // Swarm skin-paint host (cSPSkinPaintParticleEffect): initialise the transform subobject from
 // a default transform and reset the flag. Unoptimised TU:
 // /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
@@ -30,7 +30,7 @@ struct cSPSkinPaintParticleEffect {
     void InitParticles(void* a, void* b, void* c);
 };
 
-// 0x00537d90 (byte-exact lifted version: match/slices/s00537d90/s00537d90_lifted.cpp)
+// 0x00537d90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00537d90/s00537d90_lifted.cpp
 void cSPSkinPaintParticleEffect::InitParticles(void* a, void* b, void* c)
 {
     (void)a;

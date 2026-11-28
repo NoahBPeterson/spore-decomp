@@ -704,7 +704,7 @@ void cXHTMLWin::SetFormControlValue(DomElement* e, const wchar_t* value) {
   }
 }
 
-// 0x00623f40 (byte-exact lifted version: match/slices/s00623f40/s00623f40.cpp) (separate function located inside the 0x00623ef0 range; the callback registered by cRegistrationDialog)
+// 0x00623f40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00623f40/s00623f40.cpp (separate function located inside the 0x00623ef0 range; the callback registered by cRegistrationDialog)
 struct IXHTMLWinManager {
   void Register(cXHTMLWin* w);  // 0x00621bf0
 };

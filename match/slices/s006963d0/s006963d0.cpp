@@ -6,7 +6,6 @@ extern "C" unsigned char g_013f65b4[];
 extern "C" void __cdecl FUN_00f47380(...);
 
 // @ 0x006963d0
-// @ 0x006963d0
 extern "C" int __fastcall FUN_006963d0(char* self, int edx_unused, int a4)
 {
     int t1002;

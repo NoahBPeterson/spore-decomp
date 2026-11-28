@@ -432,7 +432,7 @@ void Table::DoRehash(unsigned n)
 }
 }  // namespace Cur
 
-// 0x0097dd80 (byte-exact lifted version: match/slices/s0097dd80/s0097dd80.cpp)
+// 0x0097dd80: not byte-exact; the byte-exact version is the lifted one in match/slices/s0097dd80/s0097dd80.cpp
 namespace Cur {
 HNode* Table::AllocNodeCopy(const CursorPair* src)
 {

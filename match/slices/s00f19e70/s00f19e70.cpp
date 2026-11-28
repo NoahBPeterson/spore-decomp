@@ -850,7 +850,7 @@ void cScenarioPlayMode::FUN_00f1a970(int b)
 }
 
 // ---------------------------------------------------------------------------
-// 0x00f1aa10 (byte-exact lifted version: match/slices/s00f1aa10/s00f1aa10.cpp)
+// 0x00f1aa10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f1aa10/s00f1aa10.cpp
 // ---------------------------------------------------------------------------
 float __stdcall FUN_00f1aa10(char flag, ObjHdr* obj)
 {

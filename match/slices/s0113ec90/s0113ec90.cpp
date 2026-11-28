@@ -125,7 +125,7 @@ int F_0113ee40(unsigned* p)
     return 0;
 }
 
-// 0x0113ef00 (byte-exact lifted version: match/slices/s0113ef00/s0113ef00.cpp)
+// 0x0113ef00: not byte-exact; the byte-exact version is the lifted one in match/slices/s0113ef00/s0113ef00.cpp
 int SNDSYS_restore(void)
 {
     if (Sub_11330e0() == 0) return -14;
@@ -563,7 +563,7 @@ void F_0113f8f0(int index, int p2, int p3)
     }
 }
 
-// 0x0113f940 (byte-exact lifted version: match/slices/s0113f940/s0113f940.cpp)
+// 0x0113f940: not byte-exact; the byte-exact version is the lifted one in match/slices/s0113f940/s0113f940.cpp
 void F_0113f940(void)
 {
     int i = 0;

@@ -4,7 +4,6 @@
 extern "C" void __cdecl FUN_0107f530(...);
 
 // @ 0x010825a0
-// @ 0x010825a0
 extern "C" int __fastcall FUN_010825a0(char* self, int edx_unused, int a4, int a8, int a12)
 {
     int t1001;

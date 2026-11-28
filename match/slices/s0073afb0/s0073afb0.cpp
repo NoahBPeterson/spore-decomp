@@ -506,7 +506,7 @@ void Model47::Collect(void* a, void* b)
 namespace SP {
 
 // ---------------------------------------------------------------------------
-// 0x0073b980 (byte-exact lifted version: match/slices/s0073b980/s0073b980.cpp) — describe the packed-file allocator bound at +0xcc: element
+// 0x0073b980: not byte-exact; the byte-exact version is the lifted one in match/slices/s0073b980/s0073b980.cpp — describe the packed-file allocator bound at +0xcc: element
 // size (0x10), the two capacity limits and the format table entries.
 // ---------------------------------------------------------------------------
 struct cAllocLayout {

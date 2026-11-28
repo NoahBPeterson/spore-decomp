@@ -183,7 +183,7 @@ struct PropertyManager_ {
 };
 PropertyManager_* __stdcall PropertyManager();   // 0x0067DE30
 
-// 0x00675700 (byte-exact lifted version: match/slices/s00675700/s00675700.cpp)
+// 0x00675700: not byte-exact; the byte-exact version is the lifted one in match/slices/s00675700/s00675700.cpp
 bool __stdcall FUN_00675700(uint32_t a)   // retail returns with `ret 4`
 {
     PropertyList* props = 0;
@@ -334,7 +334,7 @@ void __cdecl FUN_00675790(IPropWriter* pWriter, UIntHashTable* pMap)
 // ---------------------------------------------------------------------------
 // 0x006758A0 : eastl::hashtable<uint32_t,uint32_t>::DoInsertValue
 // ---------------------------------------------------------------------------
-// 0x006758a0 (byte-exact lifted version: match/slices/s006758a0/s006758a0.cpp)
+// 0x006758a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006758a0/s006758a0.cpp
 HashInsertResult* UIntHashTable::DoInsertValue(HashInsertResult* pResult, const uint32_t* pKey,
                                                bool)
 {

@@ -277,7 +277,7 @@ cSPEditorModel::cSPEditorModel()
     }
 }
 
-// 0x004aba00 (byte-exact lifted version: match/slices/s004aba00/s004aba00.cpp)
+// 0x004aba00: not byte-exact; the byte-exact version is the lifted one in match/slices/s004aba00/s004aba00.cpp
 void cSPEditorModel::ModelTeardown()
 {
     *(void**)this = &g_vtbl_model_a;
@@ -408,7 +408,7 @@ cSPVector3 cSPEditorModel::GetBestBlockPointBasedOnDistance(cSPVector3 point, cS
     return bestPos;
 }
 
-// 0x004ac480 (byte-exact lifted version: match/slices/s004ac480/s004ac480.cpp)
+// 0x004ac480: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ac480/s004ac480.cpp
 cSPEditorBlock* cSPEditorModel::FindNearestFlag7Block(cSPVector3 point)
 {
     float best = g_floatMax;

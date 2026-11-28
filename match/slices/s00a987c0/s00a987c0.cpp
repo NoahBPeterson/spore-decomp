@@ -211,7 +211,7 @@ static void* MakeCommand(unsigned int sz, const char* name, void* vtbl)
 }
 
 // ---------------------------------------------------------------------------
-// 0x00a987c0 (byte-exact lifted version: match/slices/s00a987c0/s00a987c0_lifted.cpp)  ArgCommand::OnRegister
+// 0x00a987c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a987c0/s00a987c0_lifted.cpp  ArgCommand::OnRegister
 // ---------------------------------------------------------------------------
 void ArgCommand::OnRegister(void* parser, void* state)
 {
@@ -303,7 +303,7 @@ void ArgCommand::ExecuteType(void* argsRaw)
 }
 
 // ---------------------------------------------------------------------------
-// 0x00a98b00 (byte-exact lifted version: match/slices/s00a98b00/s00a98b00.cpp)  ArgCommand::ExecuteSize
+// 0x00a98b00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a98b00/s00a98b00.cpp  ArgCommand::ExecuteSize
 // ---------------------------------------------------------------------------
 extern void __stdcall Vec0C_erase(void* first, void* last);   // 0x9e0480 (ret 8)
 

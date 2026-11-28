@@ -233,7 +233,7 @@ struct cMeteorStrikeEvent {
 typedef SP::cMeteorStrikeEvent MeteorEvent;
 
 // =============================================================================
-// 0x00d50380 (byte-exact lifted version: match/slices/s00d50380/s00d50380_lifted.cpp)
+// 0x00d50380: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d50380/s00d50380_lifted.cpp
 void SP::cMeteorStrikeEvent::LoadAndInitMeteorStrikeData(cPropertyList* pList)
 {
     Clear();

@@ -773,7 +773,7 @@ void __fastcall Func_007827C0(int param_1)
     ((ShadowBase*)(param_1 - 8))->Notify();
 }
 
-// 0x00782800 (byte-exact lifted version: match/slices/s00782800/s00782800.cpp)
+// 0x00782800: not byte-exact; the byte-exact version is the lifted one in match/slices/s00782800/s00782800.cpp
 char* Func_00782800(char* self, char* first, char* last)
 {
     char* dst = (char*)Func_00782420((E36*)last, *(E36**)(self + 4), (E36*)first);
@@ -785,7 +785,7 @@ char* Func_00782800(char* self, char* first, char* last)
     return first;
 }
 
-// 0x00782b00 (byte-exact lifted version: match/slices/s00782b00/s00782b00.cpp)
+// 0x00782b00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00782b00/s00782b00.cpp
 void __fastcall FUN_00782B00(int p)
 {
     char* self = (char*)p + 0x2c;

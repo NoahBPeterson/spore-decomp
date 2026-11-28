@@ -149,7 +149,7 @@ struct Vec24I {
     void insert(T24* position, T24* first, T24* last);
 };
 
-// 0x00510bc0 (byte-exact lifted version: match/slices/s00510bc0/s00510bc0.cpp)
+// 0x00510bc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00510bc0/s00510bc0.cpp
 void Vec24I::insert(T24* position, T24* first, T24* last)
 {
     if (first != last) {

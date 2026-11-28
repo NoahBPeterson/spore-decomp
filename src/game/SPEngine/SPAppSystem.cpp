@@ -1203,7 +1203,7 @@ void LoadGameInfoProperties(void* data)
     (void)data;
 }
 
-// 0x007e6470 (byte-exact lifted version: match/slices/s007e6470/s007e6470.cpp)
+// 0x007e6470: not byte-exact; the byte-exact version is the lifted one in match/slices/s007e6470/s007e6470.cpp
 int cAppSystem::PreShutdown()
 {
     VC0(*(void**)((char*)this + 0xc8), 0x1c);

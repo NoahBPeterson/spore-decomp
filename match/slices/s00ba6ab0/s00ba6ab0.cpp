@@ -5,7 +5,6 @@ extern "C" unsigned char g_01601760[];
 struct C_00a68fb0 { int FUN_00a68fb0(unsigned int); };
 
 // @ 0x00ba6ab0
-// @ 0x00ba6ab0
 extern "C" int __cdecl FUN_00ba6ab0(int a4)
 {
     int t1001;

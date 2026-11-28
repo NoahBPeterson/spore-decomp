@@ -8,7 +8,6 @@ struct S9 { int m0; int m1; int m2; int m3; int m4; int m5; int m6; int m7; int 
 template<class T> __forceinline T il2c_k(T v) { return v; }
 
 // @ 0x004a9610
-// @ 0x004a9610
 extern "C" void __cdecl FUN_004a9610(int a4, int a8)
 {
     float v_l16_i;

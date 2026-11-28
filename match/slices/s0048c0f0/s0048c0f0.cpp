@@ -47,7 +47,7 @@ template<int N> struct bitset {
     }
 };
 
-// 0x0048c720 (byte-exact lifted version: match/slices/s0048c720/s0048c720.cpp)
+// 0x0048c720: not byte-exact; the byte-exact version is the lifted one in match/slices/s0048c720/s0048c720.cpp
 template<class T>
 void vector<T>::eraseOne(T* it)
 {
@@ -220,7 +220,7 @@ void cSPEditorLimbStructure::GetLimbOriginalPosition(cSPVector3* out)
     }
 }
 
-// 0x0048c790 (byte-exact lifted version: match/slices/s0048c790/s0048c790.cpp)
+// 0x0048c790: not byte-exact; the byte-exact version is the lifted one in match/slices/s0048c790/s0048c790.cpp
 void BuildPileList(cSPEditorBlock* block, vector<cSPEditorBlock*>* list, bool b)
 {
     int n = block->mSymmetricBlocks.empty() ? 0 : (int)block->mSymmetricBlocks.size();
@@ -317,7 +317,7 @@ int CountModelParts(cSPEditorModel* model)
     return count;
 }
 
-// 0x0048cf00 (byte-exact lifted version: match/slices/s0048cf00/s0048cf00.cpp)
+// 0x0048cf00: not byte-exact; the byte-exact version is the lifted one in match/slices/s0048cf00/s0048cf00.cpp
 float GetModelMinZ(cSPEditorModel* model)
 {
     float result = 0.0f;

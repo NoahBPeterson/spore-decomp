@@ -501,7 +501,7 @@ finish:
 }
 
 // ===========================================================================
-// 0x00c8a890 (byte-exact lifted version: match/slices/s00c8a890/s00c8a890.cpp)  eastl::vector<tEffectInfo>::erase
+// 0x00c8a890: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8a890/s00c8a890.cpp  eastl::vector<tEffectInfo>::erase
 // ===========================================================================
 // `this` is the vector member itself (belongs at Spatial+0xc0), not the Spatial.
 // Shifts [last, vecEnd) down to `first`, destroys the vacated tail through the

@@ -475,7 +475,7 @@ void cEventModifier::ModifyEvent(Command* cmd, uint32_t mask, char* name, int ex
     }
 }
 
-// 0x00a39620 (byte-exact lifted version: match/slices/s00a39620/s00a39620.cpp)
+// 0x00a39620: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a39620/s00a39620.cpp
 bool cEventModifier::CommandResolve(Command* cmd) {
     if (cmd->Type() != 0x3475365) return false;
     AudioSystem* sys = GetSystemAT();

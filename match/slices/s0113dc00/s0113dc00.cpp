@@ -334,7 +334,7 @@ void Dac::PostCmd(int cmd, void* val)
 // plug-in instances built on top of the attribute system (other classes)
 // ---------------------------------------------------------------------------
 
-// 0x0113e4e0 (byte-exact lifted version: match/slices/s0113e4e0/s0113e4e0.cpp)
+// 0x0113e4e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0113e4e0/s0113e4e0.cpp
 bool Plugin_InitA(void* self)
 {
     if (self != 0) {

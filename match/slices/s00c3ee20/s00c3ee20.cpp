@@ -352,7 +352,7 @@ void cGameplayMarker::Shutdown()
 // ---------------------------------------------------------------------------
 // 0x00c3efb0  Simulator::cGameplayMarker::cGameplayMarker
 // ---------------------------------------------------------------------------
-// 0x00c3efb0 (byte-exact lifted version: match/slices/s00c3efb0/s00c3efb0.cpp)
+// 0x00c3efb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c3efb0/s00c3efb0.cpp
 cGameplayMarker::cGameplayMarker()
 {
     mType = 0;
@@ -814,7 +814,7 @@ void cInteractiveOrnament::AttachEffect(void* pEffect)
 // ---------------------------------------------------------------------------
 // 0x00c40150  Object::Cast
 // ---------------------------------------------------------------------------
-// 0x00c40150 (byte-exact lifted version: match/slices/s00c40150/s00c40150.cpp)
+// 0x00c40150: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c40150/s00c40150.cpp
 void* cInteractiveOrnamentCast(void* pObject, void* pType)
 {
     if (pType == (void*)0x13f94d4) {

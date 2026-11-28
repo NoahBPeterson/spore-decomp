@@ -373,7 +373,7 @@ void SetEffectConfig(cEffectConfig* pConfig, uint32_t nChannel, const Vec3* pCol
 // ---------------------------------------------------------------------------
 // 0x0104e2f0  Simulator::cSpaceInventoryItem::GetItemCount
 // ---------------------------------------------------------------------------
-// 0x0104e2f0 (byte-exact lifted version: match/slices/s0104e2f0/s0104e2f0.cpp)
+// 0x0104e2f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104e2f0/s0104e2f0.cpp
 uint32_t cSpaceInventoryItem_GetItemCount(cSpaceInventoryItemData* pItem, uint32_t* pCount)
 {
     if (((pItem->mnFlags >> 5) & 1) != 0)
@@ -520,7 +520,7 @@ void cSPSpaceToolData::FreeEffectBuffers()
 // ---------------------------------------------------------------------------
 // 0x0104e7b0  Simulator::CreateToolCategoryNode
 // ---------------------------------------------------------------------------
-// 0x0104e7b0 (byte-exact lifted version: match/slices/s0104e7b0/s0104e7b0.cpp)
+// 0x0104e7b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104e7b0/s0104e7b0.cpp
 cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
 {
     cToolCategoryNode* pNode = (cToolCategoryNode*)
@@ -540,7 +540,7 @@ cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
 // ---------------------------------------------------------------------------
 // 0x0104e810  SP::cSPSpaceToolData::operator=
 // ---------------------------------------------------------------------------
-// 0x0104e810 (byte-exact lifted version: match/slices/s0104e810/s0104e810.cpp)
+// 0x0104e810: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104e810/s0104e810.cpp
 cSPSpaceToolData* cSPSpaceToolData::CopyFrom(cSPSpaceToolData* pOther)
 {
     cSPSpaceInventoryItem::operator=(pOther);
@@ -722,7 +722,7 @@ void DoChargeEffects(cSPSpaceToolData* pTool)
 // ---------------------------------------------------------------------------
 // 0x0104ef00  SP::ClearEffectLists
 // ---------------------------------------------------------------------------
-// 0x0104ef00 (byte-exact lifted version: match/slices/s0104ef00/s0104ef00.cpp)
+// 0x0104ef00: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104ef00/s0104ef00.cpp
 void ClearEffectLists(cEffectLists* pLists)
 {
     pLists->mpList0[0] = nullptr;
@@ -775,7 +775,7 @@ void cSPToolManager::ShutdownGonzagoSubsystem()
 // ---------------------------------------------------------------------------
 // 0x0104f250  SP::cSPToolManager::ClearToolEffects
 // ---------------------------------------------------------------------------
-// 0x0104f250 (byte-exact lifted version: match/slices/s0104f250/s0104f250.cpp)
+// 0x0104f250: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104f250/s0104f250.cpp
 void cSPToolManager::ClearToolEffects()
 {
     cEffectNode* pNode = (cEffectNode*)mpEffectTreeRoot;

@@ -141,7 +141,7 @@ extern const float g_0166c024, g_0166c028, g_0166c02c, g_0166c038, g_0166c03c, g
 
 template <class T> static inline T& at(void* p, int off) { return *(T*)((char*)p + off); }
 
-// 0x009d75b0 (byte-exact lifted version: match/slices/s009d75b0/s009d75b0_lifted.cpp)
+// 0x009d75b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009d75b0/s009d75b0_lifted.cpp
 struct GaitElemInit {
     char raw[0x108];
     GaitElemInit* Init();

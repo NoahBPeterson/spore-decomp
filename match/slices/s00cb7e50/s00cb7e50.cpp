@@ -441,7 +441,7 @@ void cSpaceDefenseMissile::FUN_00cb86a0()
     mBase.Destroy();
 }
 
-// 0x00cb8760 (byte-exact lifted version: match/slices/s00cb8760/s00cb8760.cpp)  Simulator::cSpaceDefenseMissile::SetTarget -- new target + locomotion
+// 0x00cb8760: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cb8760/s00cb8760.cpp  Simulator::cSpaceDefenseMissile::SetTarget -- new target + locomotion
 void cSpaceDefenseMissile::FUN_00cb8760(const Vector3* pos, IVtblObject* target)
 {
     IVtblObject* old = mpTarget;

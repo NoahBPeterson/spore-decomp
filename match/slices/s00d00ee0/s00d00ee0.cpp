@@ -475,7 +475,7 @@ float RelBook::FindRelScaled(RelTree* t, uint32_t a, uint32_t b, uint32_t key, T
 }
 
 // ---------------------------------------------------------------------------
-// 0x00d01820 (byte-exact lifted version: match/slices/s00d01820/s00d01820.cpp)  rbtree::DoCopySubtree over a set of pair keys
+// 0x00d01820: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d01820/s00d01820.cpp  rbtree::DoCopySubtree over a set of pair keys
 PairKeyNode* PairSetTree::DoCopySubtree(PairKeyNode* src, PairKeyNode* dest)
 {
     PairKeyNode* root = DoCreateNode(src, dest);

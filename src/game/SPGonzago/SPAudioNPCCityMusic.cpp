@@ -614,7 +614,7 @@ bool cNPCCityMusic::Read(SP::cIObjectDatabaseIStream& stream)
 }
 }}  // namespace SP::Audio
 
-// 0x00eab340 (byte-exact lifted version: match/slices/s00eab340/s00eab340.cpp)
+// 0x00eab340: not byte-exact; the byte-exact version is the lifted one in match/slices/s00eab340/s00eab340.cpp
 namespace SP { namespace Audio {
 void cNPCCityMusic::SetPosition(const Vector3* position)
 {
@@ -636,7 +636,7 @@ void cNPCCityMusic::ClearPosition()
 }
 }}  // namespace SP::Audio
 
-// 0x00eab3b0 (byte-exact lifted version: match/slices/s00eab3b0/s00eab3b0.cpp)
+// 0x00eab3b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00eab3b0/s00eab3b0.cpp
 namespace SP { namespace Audio {
 void cNPCCityMusic::SetEnabled(uint8_t enabled)
 {

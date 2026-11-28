@@ -54,7 +54,6 @@ struct C_006bef70 { int FUN_006bef70(unsigned int, unsigned int); };
 struct C_00929290 { void FUN_00929290(); };
 
 // @ 0x006bd430
-// @ 0x006bd430
 extern "C" bool __fastcall FUN_006bd430(char* self, int edx_unused, int a4)
 {
     int t1003;

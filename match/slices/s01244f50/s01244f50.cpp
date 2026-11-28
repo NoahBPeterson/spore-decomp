@@ -128,7 +128,7 @@ struct ViewAsym { char pad[4]; int isasymmetric; };
 #define FLD(i, m) (*(uint32_t*)(0x150c720 + (i) * 0xc + (m)))
 #define OFF(S, m) ((uint32_t)offsetof(S, m))
 
-// 0x01244f50 (byte-exact lifted version: match/slices/s01244f50/s01244f50_lifted.cpp)
+// 0x01244f50: not byte-exact; the byte-exact version is the lifted one in match/slices/s01244f50/s01244f50_lifted.cpp
 void init_150c720()
 {
     FLD(0, 0) = OFF(ViewRowsA, rows[0]);
@@ -397,7 +397,7 @@ void init_15dec08()
     *(uint32_t*)g_15dec10 = 0;
 }
 
-// 0x01261040 (byte-exact lifted version: match/slices/s01261040/s01261040.cpp)
+// 0x01261040: not byte-exact; the byte-exact version is the lifted one in match/slices/s01261040/s01261040.cpp
 void init_15df0f0()
 {
     *(float*)0x15df0f0 = *(float*)0x15df2cc;

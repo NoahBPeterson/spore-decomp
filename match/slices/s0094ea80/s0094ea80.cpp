@@ -90,7 +90,7 @@ int __fastcall RefCount_AddRef_M4(int* p)
     return _InterlockedIncrement((volatile long*)(p - 1));
 }
 
-// 0x0094ea90 (byte-exact lifted version: match/slices/s0094ea90/s0094ea90.cpp)
+// 0x0094ea90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0094ea90/s0094ea90.cpp
 int __fastcall RefCount_Release_M8(int* self)
 {
     RefObj94* p = (RefObj94*)(self - 2);

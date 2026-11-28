@@ -445,7 +445,7 @@ void cVolumeSetCommand::Execute(EA::ArgScript::cArguments* args) {
   }
 }
 
-// 0x007ef080 (byte-exact lifted version: match/slices/s007ef080/s007ef080.cpp)  cVolumeEffectCommand::Execute
+// 0x007ef080: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ef080/s007ef080.cpp  cVolumeEffectCommand::Execute
 void cVolumeEffectCommand::Execute(void* args) {
   int count = 0;
   char** a = (char**)((EA::ArgScript::cArguments*)args)->MainArguments(&count, 1, 3);

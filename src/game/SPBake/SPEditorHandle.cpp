@@ -274,7 +274,7 @@ inline void GetFloatProperty_s0047_e4b0(cPropertyList* pl, uint32_t key, float* 
 extern Vector3 g_defaultHandleColor;   // 0x015d443c (equiv t2)
 // ---- items of slice s0047e4b0 end
 
-// 0x0047d870 (byte-exact lifted version: match/slices/s0047d870/s0047d870.cpp)
+// 0x0047d870: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047d870/s0047d870.cpp
 void cSPEditorHandle::Destroy()
 {
     this->vptr = &g_vtblD;

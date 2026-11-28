@@ -379,7 +379,7 @@ int32_t* cSearchHost::FindAndInsert(const void* pKey)
 }
 
 // =============================================================================================
-// 0x00afc0d0 (byte-exact lifted version: match/slices/s00afc0d0/s00afc0d0.cpp)  erase the slot range [pFirst, pLast) (thiscall, ret 8)
+// 0x00afc0d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00afc0d0/s00afc0d0.cpp  erase the slot range [pFirst, pLast) (thiscall, ret 8)
 // =============================================================================================
 tSlot* cSlotVec::EraseRange(tSlot* pFirst, tSlot* pLast)
 {

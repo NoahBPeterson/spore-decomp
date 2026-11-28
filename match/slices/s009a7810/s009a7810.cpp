@@ -537,7 +537,7 @@ LAB_009a84c2:
 // ===========================================================================
 // 0x009a84f0  eastl::rbtree<...>::find
 // ===========================================================================
-// 0x009a84f0 (byte-exact lifted version: match/slices/s009a84f0/s009a84f0.cpp)
+// 0x009a84f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009a84f0/s009a84f0.cpp
 int* rbtree_find(int* param_1, uint32_t param_2, int param_3, uint32_t* param_4)
 {
     uint32_t uVar3 = 0;
@@ -583,7 +583,7 @@ int* nSPCreatureAnim::GetAvailableDeformsForContextTarget(uint32_t* param_1, uin
 // ===========================================================================
 // 0x009a85c0  property-name table lookup (stride 0x1c, 20 entries)
 // ===========================================================================
-// 0x009a85c0 (byte-exact lifted version: match/slices/s009a85c0/s009a85c0.cpp)
+// 0x009a85c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009a85c0/s009a85c0.cpp
 int FUN_009a85c0(uint32_t* param_1, uint32_t* param_2)
 {
     uint32_t key = *param_1 & 0x100003;

@@ -231,7 +231,7 @@ __forceinline void VC0(void* o, int off) { ((VF0)*(void**)((char*)*(void**)o + o
 __forceinline void VC1(void* o, int off, int a) { ((VF1)*(void**)((char*)*(void**)o + off))(o, a); }
 __forceinline void VC3(void* o, int off, void* a, int b, int c) { ((VF3)*(void**)((char*)*(void**)o + off))(o, a, b, c); }
 
-// 0x007e6470 (byte-exact lifted version: match/slices/s007e6470/s007e6470.cpp)  (cAppSystem::PreShutdown)
+// 0x007e6470: not byte-exact; the byte-exact version is the lifted one in match/slices/s007e6470/s007e6470.cpp  (cAppSystem::PreShutdown)
 int cAppSystem::PreShutdown() {
     VC0(*(void**)((char*)this + 0xc8), 0x1c);
     if (mJobManager) { VC0(mJobManager, 8); mBaseThread = 0; }

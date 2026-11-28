@@ -6296,7 +6296,7 @@ cRefOps* __thiscall cRefOps::AssignRefPairObj(const cAutoRef12* pSrc)
     return this;
 }
 
-// 0x00bda7d0 (byte-exact lifted version: match/slices/s00bda7d0/s00bda7d0.cpp)
+// 0x00bda7d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bda7d0/s00bda7d0.cpp
 void __thiscall cRefOps::CopyTransform50Obj(const void* pSrc)
 {
     void* pDst = this;
@@ -8100,7 +8100,7 @@ void __cdecl CopyAssignRange80(CElement_s00bd_ee20* first, CElement_s00bd_ee20* 
     }
 }
 
-// 0x00bdf1a0 (byte-exact lifted version: match/slices/s00bdf1a0/s00bdf1a0.cpp)
+// 0x00bdf1a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf1a0/s00bdf1a0.cpp
 void __cdecl CopyConstructRange80(CElement_s00bd_ee20* first, unsigned count, const CElement_s00bd_ee20* src)
 {
     if (count != 0) {
@@ -8298,7 +8298,7 @@ bool IdHost::AddUniqueId(uint32_t id)
     return result;
 }
 
-// 0x00bdf750 (byte-exact lifted version: match/slices/s00bdf750/s00bdf750.cpp)
+// 0x00bdf750: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf750/s00bdf750.cpp
 void CityFlatten::Flatten5a4(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5b4));
@@ -8323,7 +8323,7 @@ void CityFlatten::Flatten5a4(PairVec* dst)
     }
 }
 
-// 0x00bdf7e0 (byte-exact lifted version: match/slices/s00bdf7e0/s00bdf7e0.cpp)
+// 0x00bdf7e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf7e0/s00bdf7e0.cpp
 void CityFlatten::Flatten5c0(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5d0));
@@ -8350,7 +8350,7 @@ void CityFlatten::Flatten5c0(PairVec* dst)
     }
 }
 
-// 0x00bdf880 (byte-exact lifted version: match/slices/s00bdf880/s00bdf880.cpp)
+// 0x00bdf880: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf880/s00bdf880.cpp
 void CityFlatten::Flatten5dc(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5ec));
@@ -8754,7 +8754,7 @@ int* IntMap::GetOrInsert(const int* key)
     return (int*)((char*)out + 0x14);
 }
 
-// 0x00be0b90 (byte-exact lifted version: match/slices/s00be0b90/s00be0b90.cpp)
+// 0x00be0b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00be0b90/s00be0b90.cpp
 void RebuildAnalysisFromStream(IStreamProvider* owner, AnalysisVec* vec)
 {
     vec->erase(vec->mpBegin, vec->mpEnd);
@@ -11139,7 +11139,7 @@ uint32_t GetClassId(int a, int b)
     }
 }
 
-// 0x00bebd00 (byte-exact lifted version: match/slices/s00bebd00/s00bebd00.cpp)
+// 0x00bebd00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bebd00/s00bebd00.cpp
 uint32_t GetIID(int a)
 {
     switch (a) {

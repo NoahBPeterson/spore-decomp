@@ -831,7 +831,7 @@ void Vec130::Resize(unsigned n)
     }
 }
 
-// 0x006ff100 (byte-exact lifted version: match/slices/s006ff100/s006ff100.cpp)
+// 0x006ff100: not byte-exact; the byte-exact version is the lifted one in match/slices/s006ff100/s006ff100.cpp
 cVertexFragmentInfo& cVertexFragmentInfo::operator=(const cVertexFragmentInfo& o)
 {
     const cVertexFragmentInfo* s = &o;

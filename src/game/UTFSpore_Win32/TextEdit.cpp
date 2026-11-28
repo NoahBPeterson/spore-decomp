@@ -2433,7 +2433,7 @@ void EA::UTFWinControls::WinTextEdit_s0098_9870::F98A090(int idx)
     }
 }
 
-// 0x0098a270 (byte-exact lifted version: match/slices/s0098a270/s0098a270.cpp)
+// 0x0098a270: not byte-exact; the byte-exact version is the lifted one in match/slices/s0098a270/s0098a270.cpp
 void EA::UTFWinControls::WinTextEdit_s0098_9870::F98A270(unsigned idx, int* outBegin, int* outLen)
 {
     int* vec = *(int**)((char*)this + 0x50c);
@@ -3079,7 +3079,7 @@ void ParagraphVector::reserve(unsigned n)
 }
 }}  // namespace EA::UTFWinControls
 
-// 0x0098bb60 (byte-exact lifted version: match/slices/s0098bb60/s0098bb60.cpp)
+// 0x0098bb60: not byte-exact; the byte-exact version is the lifted one in match/slices/s0098bb60/s0098bb60.cpp
 namespace EA { namespace UTFWinControls {
 void DequeBase::push_back(void* const& value)
 {
@@ -3612,7 +3612,7 @@ void ParagraphVector_s0098_c880::push_back(const Paragraph_s0098_c880& v)
 }
 }}  // namespace EA::UTFWinControls
 
-// 0x0098cbb0 (byte-exact lifted version: match/slices/s0098cbb0/s0098cbb0.cpp)
+// 0x0098cbb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0098cbb0/s0098cbb0.cpp
 namespace EA { namespace UTFWinControls {
 WinTextEdit_s0098_c880::~WinTextEdit_s0098_c880()
 {

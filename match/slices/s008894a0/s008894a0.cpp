@@ -21,10 +21,10 @@
 // @ 0x0088a000  basic_string<...>::set_capacity
 // @ 0x0088a0f0  EA::Text::FontServer::AddSubstitution
 // @ 0x0088a240  EA::Text::GlyphCache::ClearTextureInternal
-// 0x0088a2b0 (byte-exact lifted version: match/slices/s0088a2b0/s0088a2b0.cpp)  EA::Text::GlyphCache::SetAllocator
+// 0x0088a2b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0088a2b0/s0088a2b0.cpp  EA::Text::GlyphCache::SetAllocator
 // @ 0x0088a2c0  EA::Text::GlyphCache::Init
-// 0x0088a330 (byte-exact lifted version: match/slices/s0088a330/s0088a330.cpp)  fixed_hash_map<string,FontServer::Face,...>::fixed_hash_map
-// 0x0088a420 (byte-exact lifted version: match/slices/s0088a420/s0088a420.cpp)  EA::Text::GlyphCache::~GlyphCache
+// 0x0088a330: not byte-exact; the byte-exact version is the lifted one in match/slices/s0088a330/s0088a330.cpp  fixed_hash_map<string,FontServer::Face,...>::fixed_hash_map
+// 0x0088a420: not byte-exact; the byte-exact version is the lifted one in match/slices/s0088a420/s0088a420.cpp  EA::Text::GlyphCache::~GlyphCache
 
 #include "types.h"
 

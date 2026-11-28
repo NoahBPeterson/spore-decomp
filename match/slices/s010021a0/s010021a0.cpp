@@ -573,7 +573,7 @@ void __fastcall FUN_01003070(SimGame* self)
 // ---------------------------------------------------------------------------
 // 0x010030c0  lazily create the UI space and show the mission cards.
 // ---------------------------------------------------------------------------
-// 0x010030c0 (byte-exact lifted version: match/slices/s010030c0/s010030c0.cpp)
+// 0x010030c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010030c0/s010030c0.cpp
 void __fastcall FUN_010030c0(SimGame* self)
 {
     if (self->mUISpace14 == 0) {

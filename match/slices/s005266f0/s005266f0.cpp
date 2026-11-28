@@ -175,7 +175,7 @@ void VectorElem38::DoInsertValue(Elem38* position, const Elem38& value)
     }
 }
 
-// 0x00527570 (byte-exact lifted version: match/slices/s00527570/s00527570.cpp)
+// 0x00527570: not byte-exact; the byte-exact version is the lifted one in match/slices/s00527570/s00527570.cpp
 void VectorElem38::DoInsertValues(Elem38* position, size_type n, const Elem38& value)
 {
     if (n == 0)

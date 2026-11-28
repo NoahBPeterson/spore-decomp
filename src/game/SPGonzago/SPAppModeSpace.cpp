@@ -4949,7 +4949,7 @@ void cAppModeSpace_s00fd_bd60::TransitionFromEditorToPlanet()
     }
 }
 
-// 0x00fdc980 (byte-exact lifted version: match/slices/s00fdc980/s00fdc980.cpp)
+// 0x00fdc980: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fdc980/s00fdc980.cpp
 void cAppModeSpace_s00fd_bd60::TransitionToEntry()
 {
     if (mpGameMode != nullptr) {

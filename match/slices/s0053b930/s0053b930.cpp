@@ -146,7 +146,7 @@ struct PaintAddVar2Command : cCommandTBase {
 
 // ================================================================ functions
 
-// 0x0053b930 (byte-exact lifted version: match/slices/s0053b930/s0053b930_lifted.cpp)
+// 0x0053b930: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053b930/s0053b930_lifted.cpp
 void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase* cmds)
 {
     for (int i = 0; i < 0x13; ++i) {
@@ -185,7 +185,7 @@ void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase* cmds)
     RegisterPaintVar(cmds, "comparePosition", b);
 }
 
-// 0x0053bc90 (byte-exact lifted version: match/slices/s0053bc90/s0053bc90.cpp)
+// 0x0053bc90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053bc90/s0053bc90.cpp
 EA::IO::IStream* ReadIntVec(EA::IO::IStream* s, int** vec)
 {
     uint32_t n = 0;
@@ -376,7 +376,7 @@ void PaintVarModifierCommand::Execute(EA::ArgScript::cArguments& args)
     mParser->PushBlock(this);
 }
 
-// 0x0053c480 (byte-exact lifted version: match/slices/s0053c480/s0053c480.cpp)
+// 0x0053c480: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053c480/s0053c480.cpp
 float Dot3(const float* a, const float* b)
 {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];

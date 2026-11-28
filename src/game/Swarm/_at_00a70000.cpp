@@ -1381,7 +1381,7 @@ void MapInfo::GetRect(float* out)
     out[5] = v[5];
 }
 
-// 0x00a77020 (byte-exact lifted version: match/slices/s00a77020/s00a77020.cpp)
+// 0x00a77020: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a77020/s00a77020.cpp
 bool MapInfo::ContainsPoint(float* p)
 {
     IValue* v = mp70;

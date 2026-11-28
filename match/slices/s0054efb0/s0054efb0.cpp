@@ -12,7 +12,6 @@ struct C_00922270 { void FUN_00922270(); };
 
 struct D_0054efb0 { bool FUN_0054efb0(); };
 // @ 0x0054efb0
-// @ 0x0054efb0
 bool D_0054efb0::FUN_0054efb0()
 {
     int v_l80_c;

@@ -223,7 +223,7 @@ void *ImageInfo2::ScalarDtor(unsigned flags)
 }
 
 // ---------------------------------------------------------------- 0x008310a0
-// 0x008310a0 (byte-exact lifted version: match/slices/s008310a0/s008310a0.cpp)
+// 0x008310a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008310a0/s008310a0.cpp
 void ImageInfo2::CopyFrom(const ImageInfo2 *src)
 {
     if (src->mpImage != mpImage) {

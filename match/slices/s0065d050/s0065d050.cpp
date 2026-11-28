@@ -206,7 +206,7 @@ void ReloadCallback(cSPUIFeedEditAssetView* self, void* layout, bool b) {
   }
 }
 
-// 0x0065d720 (byte-exact lifted version: match/slices/s0065d720/s0065d720.cpp)
+// 0x0065d720: not byte-exact; the byte-exact version is the lifted one in match/slices/s0065d720/s0065d720.cpp
 bool cSPUIFeedEditAssetView::Init(void* parent, unsigned int index) {
   char* p = (char*)this;
   *(void**)(p + 0x10) = parent;
@@ -455,7 +455,7 @@ int* HashtableU64::erase(int* out, int* node, int* bucket) {
   return out;
 }
 
-// 0x0065d9f0 (byte-exact lifted version: match/slices/s0065d9f0/s0065d9f0.cpp)
+// 0x0065d9f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0065d9f0/s0065d9f0.cpp
 void cSPUIFeedEdit::SetActive(bool b) {
   char* p = (char*)this;
   if (b && *(void**)(p + 0x7c))
@@ -715,7 +715,7 @@ void __stdcall FUN_0065dd30(const wchar_t* s) {
     EASTL_allocator_deallocate(url.b);
 }
 
-// 0x0065ded0 (byte-exact lifted version: match/slices/s0065ded0/s0065ded0.cpp)
+// 0x0065ded0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0065ded0/s0065ded0.cpp
 struct UFOCollisionEffectInfo { int a, b, c; int ref; };
 struct VecUFO {
   char pad[4];

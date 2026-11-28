@@ -192,7 +192,7 @@ float cTerrainCameraController::InterpByAngle() {
   return (m378 - m374) * ang + m374;
 }
 
-// 0x00b0f950 (byte-exact lifted version: match/slices/s00b0f950/s00b0f950.cpp)
+// 0x00b0f950: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0f950/s00b0f950.cpp
 void cTerrainCameraController::SetToggle(int b) {
   if (mb11 != (u8)b) {
     if ((u8)b) {
@@ -205,7 +205,7 @@ void cTerrainCameraController::SetToggle(int b) {
   mb11 = (u8)b;
 }
 
-// 0x00b0f9a0 (byte-exact lifted version: match/slices/s00b0f9a0/s00b0f9a0.cpp)
+// 0x00b0f9a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0f9a0/s00b0f9a0.cpp
 bool cTerrainCameraController::KeysHeld() {
   void* im = SP_GameInputManager();
   if (mb11 == 0 && mb319 != 0) {
@@ -313,7 +313,7 @@ float BezierEval(float* a, float* b, float* c, float* d, float p5, float p6) {
   return f3 * (((*d - ((p5 * p5) * f1 * 3.0f + f2)) / (p5 + p5) + f1 * f3) * f3 + f2) + *a;
 }
 
-// 0x00b0f270 (byte-exact lifted version: match/slices/s00b0f270/s00b0f270_lifted.cpp)
+// 0x00b0f270: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0f270/s00b0f270_lifted.cpp
 // Publishes the camera state into the camera scratch VarMap, runs the program
 // bound to it and reads the resulting values back into the controller.
 void cTerrainCameraController::RunCameraScript(int keyboard_scroll_x, int keyboard_scroll_y,

@@ -1835,7 +1835,7 @@ void SimPalette::UpdateCategory(CategoryUI* cat, char flag)
         operator_delete(flags.mpBegin);
 }
 
-// 0x00ed3350 (byte-exact lifted version: match/slices/s00ed3350/s00ed3350.cpp)
+// 0x00ed3350: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed3350/s00ed3350.cpp
 void Pal::f_ed3350(int a)
 {
     if (a == -2)
@@ -1850,7 +1850,7 @@ void Pal::f_ed3350(int a)
     f_ed3120((int)p[1], 1);
 }
 
-// 0x00ed33a0 (byte-exact lifted version: match/slices/s00ed33a0/s00ed33a0.cpp)
+// 0x00ed33a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed33a0/s00ed33a0.cpp
 void Pal::f_ed33a0(int a)
 {
     void* r = (void*)FUN_00ed1f00((char*)this + 0x70, a);
@@ -2505,7 +2505,7 @@ void Obj8610::f()
     m04.~Ref_ed8610();
 }
 
-// 0x00ed8690 (byte-exact lifted version: match/slices/s00ed8690/s00ed8690.cpp)
+// 0x00ed8690: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed8690/s00ed8690.cpp
 void FUN_00ed8690(void)
 {
     void* nm = FUN_00b3d300();
@@ -2530,7 +2530,7 @@ void FUN_00ed8690(void)
     }
 }
 
-// 0x00ed8780 (byte-exact lifted version: match/slices/s00ed8780/s00ed8780.cpp)
+// 0x00ed8780: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed8780/s00ed8780.cpp
 void Obj8780::f(unsigned char b)
 {
     char* s = (char*)this;

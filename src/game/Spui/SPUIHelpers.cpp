@@ -1179,7 +1179,7 @@ void UpdateMouseFocus(int v)
     WMObj()->Hc0(v);
 }
 
-// 0x00804f80 (byte-exact lifted version: match/slices/s00804f80/s00804f80.cpp)
+// 0x00804f80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00804f80/s00804f80.cpp
 void Help2(void* a, float f, float g, void* b)
 {
     WMObj()->H40(a, f, g, b);
@@ -1336,7 +1336,7 @@ float AttrF10(int* p)
     return 0.0f;
 }
 
-// 0x00805310 (byte-exact lifted version: match/slices/s00805310/s00805310.cpp)
+// 0x00805310: not byte-exact; the byte-exact version is the lifted one in match/slices/s00805310/s00805310.cpp
 bool CreditsTabInit(int param1, int param2, void** out)
 {
     char layout[0x18];
@@ -1712,7 +1712,7 @@ void* GetImageFromLayout(void* layout, int id)
     return 0;
 }
 
-// 0x00806230 (byte-exact lifted version: match/slices/s00806230/s00806230.cpp)
+// 0x00806230: not byte-exact; the byte-exact version is the lifted one in match/slices/s00806230/s00806230.cpp
 char CreateImageFromResource2(void* key, void** out, char flag, int a, int b)
 {
     int* k = (int*)key;
@@ -2222,7 +2222,7 @@ void FUN_00807430(W_s0080_68d0* w, float v)
     (*(void(__thiscall**)(void*, float))VSlot(o, 4))(o, x);
 }
 
-// 0x008074a0 (byte-exact lifted version: match/slices/s008074a0/s008074a0.cpp)
+// 0x008074a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008074a0/s008074a0.cpp
 char DestroyRolloverFrame(W_s0080_68d0* w)
 {
     if (w == 0) return 0;
@@ -2289,7 +2289,7 @@ void* FUN_00807600(void* p1, void* p2, void* p3)
     return piVar5;
 }
 
-// 0x00807690 (byte-exact lifted version: match/slices/s00807690/s00807690.cpp)
+// 0x00807690: not byte-exact; the byte-exact version is the lifted one in match/slices/s00807690/s00807690.cpp
 char FUN_00807690(W_s0080_68d0* w)
 {
     W_s0080_68d0* a = (W_s0080_68d0*)w->mB4(0x4a61af1);
@@ -2302,7 +2302,7 @@ char FUN_00807690(W_s0080_68d0* w)
     return 1;
 }
 
-// 0x008076f0 (byte-exact lifted version: match/slices/s008076f0/s008076f0.cpp)
+// 0x008076f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008076f0/s008076f0.cpp
 char FUN_008076f0(W_s0080_68d0* w)
 {
     if (w == 0) return 0;
@@ -2317,7 +2317,7 @@ char FUN_008076f0(W_s0080_68d0* w)
     return 1;
 }
 
-// 0x00807760 (byte-exact lifted version: match/slices/s00807760/s00807760.cpp)
+// 0x00807760: not byte-exact; the byte-exact version is the lifted one in match/slices/s00807760/s00807760.cpp
 void* __fastcall FUN_00807760(void* p)
 {
     *(void**)p = &PTR_FUN_01417958;
@@ -3505,7 +3505,7 @@ bool SFV::Create(int a, bool b, unsigned c)
   return true;
 }
 
-// 0x0082a450 (byte-exact lifted version: match/slices/s0082a450/s0082a450.cpp)
+// 0x0082a450: not byte-exact; the byte-exact version is the lifted one in match/slices/s0082a450/s0082a450.cpp
 void SFV::Shutdown()
 {
   if (m10.mpObject) {

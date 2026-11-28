@@ -8,7 +8,6 @@ __forceinline bool il2c_cc_l(int a, int b) { return a < b; }
 
 struct D_004552e0 { int FUN_004552e0(int a4, int a8); };
 // @ 0x004552e0
-// @ 0x004552e0
 int D_004552e0::FUN_004552e0(int a4, int a8)
 {
     int v_l24;

@@ -627,7 +627,7 @@ class cAuthManager : public EA::UTFWin::IWinProc,
   AutoRefCount<cRegistrationDialog> pReg; // +0x6c
 };
 
-// 0x00606d00 (byte-exact lifted version: match/slices/s00606d00/s00606d00.cpp)
+// 0x00606d00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00606d00/s00606d00.cpp
 void* cAuthManager::AsInterface(uint32_t typeID) {
   switch ((int)typeID) {
     case 0x40f7cee: return this;

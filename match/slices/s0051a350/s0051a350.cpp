@@ -231,7 +231,7 @@ void* SkinJob::FUN_0051a8a0()
     return this;
 }
 
-// 0x0051a930 (byte-exact lifted version: match/slices/s0051a930/s0051a930.cpp) FUN_0051a930
+// 0x0051a930: not byte-exact; the byte-exact version is the lifted one in match/slices/s0051a930/s0051a930.cpp FUN_0051a930
 void SkinJob::FUN_0051a930()
 {
     void* self = this;

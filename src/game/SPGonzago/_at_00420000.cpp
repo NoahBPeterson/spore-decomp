@@ -1243,7 +1243,7 @@ Elem24Vec::~Elem24Vec()
     Free();
 }
 
-// 0x00421290 (byte-exact lifted version: match/slices/s00421290/s00421290.cpp)
+// 0x00421290: not byte-exact; the byte-exact version is the lifted one in match/slices/s00421290/s00421290.cpp
 Elem24Vec& Elem24Vec::assign(const Elem24Vec& x)
 {
     if (&x != this) {
@@ -1702,7 +1702,7 @@ Deletable* Deletable::Destroy(uint32_t flags)
     return this;
 }
 
-// 0x00423110 (byte-exact lifted version: match/slices/s00423110/s00423110_lifted.cpp)
+// 0x00423110: not byte-exact; the byte-exact version is the lifted one in match/slices/s00423110/s00423110_lifted.cpp
 LocaleMessage::LocaleMessage(int userData)
 {
     mUserData = userData;

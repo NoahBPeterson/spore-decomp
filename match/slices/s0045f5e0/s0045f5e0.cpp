@@ -123,7 +123,7 @@ struct Vec16T {
 };
 int __cdecl FUN_0071de40(MeshDesc*, int, int, int, int);
 
-// 0x004600f0 (byte-exact lifted version: match/slices/s004600f0/s004600f0.cpp)  (appends one mesh stream's positions and colours to the output vectors)
+// 0x004600f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004600f0/s004600f0.cpp  (appends one mesh stream's positions and colours to the output vectors)
 bool FUN_004600f0(MeshDesc* mesh, Vec8T* positions, Vec16T* colors, int base)
 {
     int* pCount = (int*)FUN_0071de40(mesh, 1, -1, 0, 0xe);

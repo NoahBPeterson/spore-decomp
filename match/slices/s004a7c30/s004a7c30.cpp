@@ -100,7 +100,7 @@ bool SameKey(ResKeySource* a, ResKeySource* b)
         && first.mGroup == src.mGroup;
 }
 
-// 0x004a7c90 (byte-exact lifted version: match/slices/s004a7c90/s004a7c90.cpp)
+// 0x004a7c90: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a7c90/s004a7c90.cpp
 void GatherBlocks(cSPEditorBlock* param_1, UIntVector* param_2)
 {
     if (param_1 == 0) return;

@@ -390,7 +390,7 @@ ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
     return result;
 }
 
-// 0x00570400 (byte-exact lifted version: match/slices/s00570400/s00570400.cpp)
+// 0x00570400: not byte-exact; the byte-exact version is the lifted one in match/slices/s00570400/s00570400.cpp
 // Uninitialized copy of the 0x1c-byte {uint32,payload} elements [first,last) to dst.
 // Local names chosen via tools/matching/od_names.py to reproduce the /Od slot order.
 Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst)
@@ -431,7 +431,7 @@ void RigBlockSetInsert(uint32_t key, bool bInsert)
     }
 }
 
-// 0x005704c0 (byte-exact lifted version: match/slices/s005704c0/s005704c0.cpp)
+// 0x005704c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005704c0/s005704c0.cpp
 // Weighted intersection of two cFeatureVector maps: the weight of every key that
 // is also present in the global rig-block set, summed with a greedy merge of the
 // two sorted key runs.

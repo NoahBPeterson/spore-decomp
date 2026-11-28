@@ -1557,7 +1557,7 @@ void cJobManager_s0069_07e0::PromoteJobPriorityUnderLock(cJobData_s0069_07e0* jo
     }
 }
 
-// 0x00690930 (byte-exact lifted version: match/slices/s00690930/s00690930.cpp)
+// 0x00690930: not byte-exact; the byte-exact version is the lifted one in match/slices/s00690930/s00690930.cpp
 void cJobManager_s0069_07e0::SetJobPriorityUnderLock(cJobData_s0069_07e0* job, int priority)
 {
     int oldPriority = job->mRealPriority;
@@ -1596,7 +1596,7 @@ void* ProfTable_DoInsertValue(void* self, void* result, void* key)
     return 0;
 }
 
-// 0x00690b50 (byte-exact lifted version: match/slices/s00690b50/s00690b50.cpp)
+// 0x00690b50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00690b50/s00690b50.cpp
 void cJobManager_s0069_07e0::CheckDependentPriority(cJobData_s0069_07e0* job, int priority)
 {
     int pri = job->mRealPriority;

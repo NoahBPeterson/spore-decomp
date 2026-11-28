@@ -8,7 +8,6 @@ extern "C" int __cdecl FUN_00939950(...);
 
 struct D_004c09e0 { int FUN_004c09e0(int a4, int a8); };
 // @ 0x004c09e0
-// @ 0x004c09e0
 int D_004c09e0::FUN_004c09e0(int a4, int a8)
 {
     int v_l24;

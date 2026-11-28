@@ -65,7 +65,7 @@ static __forceinline int WCompare(const uint16_t* a, const uint16_t* b) {
     }
 }
 
-// 0x00549e40 (byte-exact lifted version: match/slices/s00549e40/s00549e40_lifted.cpp)
+// 0x00549e40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00549e40/s00549e40_lifted.cpp
 void* FUN_00549e40(char* first, char* last, char* result)
 {
     void* res = UninitCopy10(first, last, result);
@@ -153,7 +153,7 @@ uint16_t** FUN_0054a2d0(uint16_t** first, int last, const uint16_t** value)
     return first;
 }
 
-// 0x0054a470 (byte-exact lifted version: match/slices/s0054a470/s0054a470.cpp)
+// 0x0054a470: not byte-exact; the byte-exact version is the lifted one in match/slices/s0054a470/s0054a470.cpp
 void* V::FUN_0054a470(const Pair20* src)
 {
     Pair20* self = (Pair20*)this;
@@ -165,7 +165,7 @@ void* V::FUN_0054a470(const Pair20* src)
     return this;
 }
 
-// 0x0054a670 (byte-exact lifted version: match/slices/s0054a670/s0054a670.cpp)
+// 0x0054a670: not byte-exact; the byte-exact version is the lifted one in match/slices/s0054a670/s0054a670.cpp
 void* V::FUN_0054a670(char* otherp)
 {
     V* other = (V*)otherp;
@@ -239,7 +239,7 @@ void* V::FUN_0054aba0(char* otherp)
     return this;
 }
 
-// 0x0054ac70 (byte-exact lifted version: match/slices/s0054ac70/s0054ac70.cpp)
+// 0x0054ac70: not byte-exact; the byte-exact version is the lifted one in match/slices/s0054ac70/s0054ac70.cpp
 void* V::FUN_0054ac70(char* otherp)
 {
     V* other = (V*)otherp;

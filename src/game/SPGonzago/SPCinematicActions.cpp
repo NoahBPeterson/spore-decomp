@@ -113,7 +113,7 @@ Elem24Vec2::~Elem24Vec2()
     Free();
 }
 
-// 0x00405050 (byte-exact lifted version: match/slices/s00405050/s00405050.cpp)
+// 0x00405050: not byte-exact; the byte-exact version is the lifted one in match/slices/s00405050/s00405050.cpp
 namespace EA { namespace ArgScript {
 cArgumentSpec::~cArgumentSpec()
 {

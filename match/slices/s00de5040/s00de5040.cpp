@@ -860,7 +860,7 @@ struct HashTable34 {
     InsertResult8* FUN_00de5df0(InsertResult8* pOut, const uint32_t* pKey, uint32_t nReserved); // 0x00de5df0
 };
 
-// 0x00de5df0 (byte-exact lifted version: match/slices/s00de5df0/s00de5df0.cpp)
+// 0x00de5df0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00de5df0/s00de5df0.cpp
 InsertResult8* HashTable34::FUN_00de5df0(InsertResult8* pOut, const uint32_t* pKey,
                                         uint32_t nReserved)
 {

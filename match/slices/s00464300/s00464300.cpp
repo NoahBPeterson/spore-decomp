@@ -231,7 +231,7 @@ cExportHelper::cExportHelper()
     bool unused;                                      // retail kept a 1-byte local: the tags start at -2
 }
 
-// 0x00464480 (byte-exact lifted version: match/slices/s00464480/s00464480.cpp)
+// 0x00464480: not byte-exact; the byte-exact version is the lifted one in match/slices/s00464480/s00464480.cpp
 cExportHelper::~cExportHelper()
 {
 }
@@ -265,7 +265,7 @@ cBlockGeometryExporter::cBlockGeometryExporter()
 {
 }
 
-// 0x00464680 (byte-exact lifted version: match/slices/s00464680/s00464680.cpp)
+// 0x00464680: not byte-exact; the byte-exact version is the lifted one in match/slices/s00464680/s00464680.cpp
 cBlockGeometryExporter::~cBlockGeometryExporter()
 {
 }

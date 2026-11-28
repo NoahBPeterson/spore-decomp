@@ -871,7 +871,7 @@ namespace Simulator {
 }
 // ---- items of slice s013249a0 end
 
-// 0x0050f210 (byte-exact lifted version: match/slices/s0050f210/s0050f210.cpp)
+// 0x0050f210: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f210/s0050f210.cpp
 Elem100& Elem100::operator=(const Elem100& x)
 {
     vec = x.vec;
@@ -881,7 +881,7 @@ Elem100& Elem100::operator=(const Elem100& x)
     return *this;
 }
 
-// 0x0050f290 (byte-exact lifted version: match/slices/s0050f290/s0050f290.cpp)
+// 0x0050f290: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f290/s0050f290.cpp
 void Vec24Full::DoInsertValues(T24* position, uint32_t n, const T24& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {
@@ -929,7 +929,7 @@ T12* Vec12::erase(T12* first, T12* last)
     return first;
 }
 
-// 0x0050f7f0 (byte-exact lifted version: match/slices/s0050f7f0/s0050f7f0.cpp)
+// 0x0050f7f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f7f0/s0050f7f0.cpp
 void __cdecl UninitCopy20(void** out, T20* first, T20* last, T20* dest, uint8_t tag)
 {
     (void)tag;
@@ -943,7 +943,7 @@ void __cdecl UninitCopy20(void** out, T20* first, T20* last, T20* dest, uint8_t 
     *out = d;
 }
 
-// 0x0050f8b0 (byte-exact lifted version: match/slices/s0050f8b0/s0050f8b0_lifted.cpp)
+// 0x0050f8b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050f8b0/s0050f8b0_lifted.cpp
 T12* UninitRelocate12(T12* first, T12* last, T12* dest)
 {
     uint8_t tag = 0;
@@ -1005,7 +1005,7 @@ void InsertionSortSimpleCmp(Keyed** first, Keyed** last, uint8_t desc)
     }
 }
 
-// 0x0050fc30 (byte-exact lifted version: match/slices/s0050fc30/s0050fc30.cpp)
+// 0x0050fc30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050fc30/s0050fc30.cpp
 void Vec100::DoInsertValues(Elem100_s0050_f8b0* position, uint32_t n, const Elem100_s0050_f8b0& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {
@@ -1133,7 +1133,7 @@ void InsertionSortSimpleU32(uint32_t* first, uint32_t* last)
     }
 }
 
-// 0x00510350 (byte-exact lifted version: match/slices/s00510350/s00510350.cpp)
+// 0x00510350: not byte-exact; the byte-exact version is the lifted one in match/slices/s00510350/s00510350.cpp
 void Vec12I::insert(T12* position, T12* first, T12* last)
 {
     if (first != last) {
@@ -1231,7 +1231,7 @@ void Vec8I::insert(P2* position, P2* first, P2* last)
     }
 }
 
-// 0x00510bc0 (byte-exact lifted version: match/slices/s00510bc0/s00510bc0.cpp)
+// 0x00510bc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00510bc0/s00510bc0.cpp
 void Vec24I::insert(T24_s0051_07d0* position, T24_s0051_07d0* first, T24_s0051_07d0* last)
 {
     if (first != last) {

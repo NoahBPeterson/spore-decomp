@@ -17,7 +17,6 @@ extern "C" void __cdecl FUN_00f47380(...);
 
 struct D_0047ae60 { void FUN_0047ae60(int a4, int a8, int a12); };
 // @ 0x0047ae60
-// @ 0x0047ae60
 void D_0047ae60::FUN_0047ae60(int a4, int a8, int a12)
 {
     int v_l44_f;

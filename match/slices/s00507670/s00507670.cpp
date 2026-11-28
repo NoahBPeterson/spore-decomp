@@ -25,7 +25,7 @@ void __fastcall DestroySubA(void* self);   // 0x005156b0
 void __fastcall DestroySubB(void* self);   // 0x00425990
 void __fastcall DestroySubC(void* self);   // 0x0050ea50
 
-// 0x00507b30 (byte-exact lifted version: match/slices/s00507b30/s00507b30.cpp)  (destroy the six vector members)
+// 0x00507b30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00507b30/s00507b30.cpp  (destroy the six vector members)
 void __fastcall DestroyVectors(Container* self)
 {
     char* base = (char*)self;

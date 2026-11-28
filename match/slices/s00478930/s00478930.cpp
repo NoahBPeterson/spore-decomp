@@ -112,7 +112,7 @@ struct Vec29c {
     void Elem29Insert(Elem29c* position, uint n, const Elem29c& value);
 };
 
-// 0x00478e00 (byte-exact lifted version: match/slices/s00478e00/s00478e00.cpp)
+// 0x00478e00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00478e00/s00478e00.cpp
 void Vec29c::Elem29Insert(Elem29c* position, uint n, const Elem29c& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x29c < n) {
@@ -152,7 +152,7 @@ void  Construct12Range(void* dst, uint n, const void* v);             // @ 0x004
 void* Move12Range(const void* first, const void* last, void* dest);   // @ 0x004b6bf0
 void  Shift12(void* first, void* last, void* out);                    // @ 0x004797a0
 
-// 0x004797a0 (byte-exact lifted version: match/slices/s004797a0/s004797a0.cpp)
+// 0x004797a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004797a0/s004797a0.cpp
 void Shift12Out(E12** out, E12* first, E12* last, E12* dest)
 {
     E12* d = dest;

@@ -138,7 +138,7 @@ struct Rec38 {
     Mat3 rot;   // +0x18
 };
 struct Rec38Stub { Rec38* F(Rec38* src); };
-// 0x00747ac0 (byte-exact lifted version: match/slices/s00747ac0/s00747ac0.cpp)
+// 0x00747ac0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00747ac0/s00747ac0.cpp
 Rec38* Rec38Stub::F(Rec38* src)
 {
     Rec38* dst = (Rec38*)this;

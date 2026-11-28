@@ -381,7 +381,7 @@ AmbRefPairVec::~AmbRefPairVec()
         p->~AmbRefPair();
 }
 
-// 0x00a355e0 (byte-exact lifted version: match/slices/s00a355e0/s00a355e0.cpp)
+// 0x00a355e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a355e0/s00a355e0.cpp
 void F_a355e0::call(char* s)
 {
     char* p = s;

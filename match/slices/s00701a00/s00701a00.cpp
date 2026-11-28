@@ -123,7 +123,7 @@ void __thiscall PtrVec::insert(void** pos, void** value)
     mpCap = (void**)((char*)pNew + cap * 4);
 }
 
-// 0x00702660 (byte-exact lifted version: match/slices/s00702660/s00702660.cpp)  (free every bucket chain of a hash table's bucket array)
+// 0x00702660: not byte-exact; the byte-exact version is the lifted one in match/slices/s00702660/s00702660.cpp  (free every bucket chain of a hash table's bucket array)
 void __stdcall HashTable_ClearBuckets(CellNode** buckets, unsigned count)
 {
     for (unsigned i = 0; i < count; i++) {

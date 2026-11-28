@@ -15,7 +15,6 @@ __forceinline bool il2c_cc_ne(int a, int b) { return a != b; }
 
 struct D_005632d0 { int FUN_005632d0(int a4, int a8); };
 // @ 0x005632d0
-// @ 0x005632d0
 int D_005632d0::FUN_005632d0(int a4, int a8)
 {
     int dead_0_15[3];

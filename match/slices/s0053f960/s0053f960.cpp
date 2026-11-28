@@ -114,7 +114,7 @@ int Obj::FUN_005400a0(int param_2, int param_3, float param_4)
     return 1;
 }
 
-// 0x00540210 (byte-exact lifted version: match/slices/s00540210/s00540210.cpp)
+// 0x00540210: not byte-exact; the byte-exact version is the lifted one in match/slices/s00540210/s00540210.cpp
 void Obj::FUN_00540210()
 {
     char* self = (char*)this;
@@ -228,7 +228,7 @@ void Obj::FUN_00540560(int* pos, int* value)
     }
 }
 
-// 0x005407a0 (byte-exact lifted version: match/slices/s005407a0/s005407a0.cpp)  (resize a vector of 8-byte pairs)
+// 0x005407a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005407a0/s005407a0.cpp  (resize a vector of 8-byte pairs)
 void Obj::FUN_005407a0(unsigned int n)
 {
     int* v = (int*)this;

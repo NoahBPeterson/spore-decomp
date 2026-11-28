@@ -180,7 +180,7 @@ void cSPEditorLimbStructure::MirrorTargetsOffset(cSPEditorLimbJoint* joint, floa
     }
 }
 
-// 0x00489710 (byte-exact lifted version: match/slices/s00489710/s00489710.cpp)
+// 0x00489710: not byte-exact; the byte-exact version is the lifted one in match/slices/s00489710/s00489710.cpp
 void cSPEditorLimbStructure::RefreshTargets(vector<cSPEditorLimbJoint*>* list, bool b)
 {
     if (!b) FUN_0049d1f0(mBaseBlock, mBaseJoint->mOriginalPosition.x, 0, 0);
@@ -190,7 +190,7 @@ void cSPEditorLimbStructure::RefreshTargets(vector<cSPEditorLimbJoint*>* list, b
     UpdateSymmetry();
 }
 
-// 0x004897b0 (byte-exact lifted version: match/slices/s004897b0/s004897b0.cpp)
+// 0x004897b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004897b0/s004897b0.cpp
 void cSPEditorLimbStructure::RefreshBlockTargets(cSPEditorBlock* block, bool b)
 {
     if (block) {
@@ -234,7 +234,7 @@ void cSPEditorLimbStructure::CollectBlocks(cSPEditorBlock* block)
     }
 }
 
-// 0x00489ae0 (byte-exact lifted version: match/slices/s00489ae0/s00489ae0.cpp)
+// 0x00489ae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00489ae0/s00489ae0.cpp
 void cSPEditorLimbStructure::FixAllJoints()
 {
     if (mEndBlock) {
@@ -247,7 +247,7 @@ void cSPEditorLimbStructure::FixAllJoints()
     }
 }
 
-// 0x00489bc0 (byte-exact lifted version: match/slices/s00489bc0/s00489bc0.cpp)
+// 0x00489bc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00489bc0/s00489bc0.cpp
 void cSPEditorLimbStructure::UpdateLimbScale()
 {
     cSPVector3 p = GetLimbOriginalPosition();

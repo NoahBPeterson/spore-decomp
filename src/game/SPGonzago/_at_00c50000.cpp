@@ -904,7 +904,7 @@ void cSPMissionTradeRoute::GetUIShortDescription(WString* pOut)
 }
 }  // namespace SP
 
-// 0x00c5ad40 (byte-exact lifted version: match/slices/s00c5ad40/s00c5ad40.cpp)
+// 0x00c5ad40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c5ad40/s00c5ad40.cpp
 cMissionMultiStep::cMissionMultiStep()
 {
     mpStepsBegin = nullptr;

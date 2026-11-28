@@ -2911,7 +2911,7 @@ void VecU32::DoInsertValue(u32* pos, const u32& v)
     }
 }
 
-// 0x009d75b0 (byte-exact lifted version: match/slices/s009d75b0/s009d75b0_lifted.cpp)
+// 0x009d75b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009d75b0/s009d75b0_lifted.cpp
 GaitElemInit* GaitElemInit::Init()
 {
     char* p = (char*)this;
@@ -3838,7 +3838,7 @@ void S_s009d_9620::SortGroups(u32)
         SortRange<SortGroupsLarge>(items.b, items.e);
 }
 
-// 0x009da640 (byte-exact lifted version: match/slices/s009da640/s009da640_lifted.cpp)
+// 0x009da640: not byte-exact; the byte-exact version is the lifted one in match/slices/s009da640/s009da640_lifted.cpp
 void Anim_s009d_a640::A640(void* ctx)
 {
     // The original spills the loop counter into a 4-byte frame slot (its `push ecx` /

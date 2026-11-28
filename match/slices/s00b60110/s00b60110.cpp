@@ -447,7 +447,7 @@ void* App::cStyleFilter::FUN_00b60830(int flags)
 
 // ---------------------------------------------------------------------------
 // adventure look command
-// 0x00b60920 (byte-exact lifted version: match/slices/s00b60920/s00b60920.cpp)
+// 0x00b60920: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b60920/s00b60920.cpp
 void App::cAdventureLook::FUN_00b60920(EA::ArgScript::cArguments* args)
 {
     mSpec.Parse(args, mParser);

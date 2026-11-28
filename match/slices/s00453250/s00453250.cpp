@@ -270,7 +270,7 @@ struct BoundsVector : VectorBase32 {
 };
 // @ 0x00453dc0
 BoundsVector::~BoundsVector() { destruct(mpBegin, mpEnd); ScratchSlots<3>(); }
-// 0x00453e20 (byte-exact lifted version: match/slices/s00453e20/s00453e20.cpp)
+// 0x00453e20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00453e20/s00453e20.cpp
 void BoundsVector::resize(uint32_t n)
 {
     if (n > size()) DoInsertValues(mpEnd, n - size(), Bounds());
@@ -314,7 +314,7 @@ struct BlockVector : BlockVectorBase {
 };
 // @ 0x00453eb0
 BlockVector::~BlockVector() { destruct(mpBegin, mpEnd); ScratchSlots<3>(); }
-// 0x00453f20 (byte-exact lifted version: match/slices/s00453f20/s00453f20.cpp)
+// 0x00453f20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00453f20/s00453f20.cpp
 BlockVector& BlockVector::operator=(const BlockVector& x)
 {
     if (&x != this) {

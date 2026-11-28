@@ -463,7 +463,7 @@ void* __cdecl CreateTimeSmooth(void* out, float a2, float a3, float a4, float a5
     return out;
 }
 
-// 0x007f6170 (byte-exact lifted version: match/slices/s007f6170/s007f6170.cpp)
+// 0x007f6170: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f6170/s007f6170.cpp
 void* __cdecl CreateTimeDamped(void* out, float a2, float a3, float a4, float a5, float a6, float a7, float a8)
 {
     *(void**)out = &g_vt_013f63fc;
@@ -882,7 +882,7 @@ bool F6D20(void* self, int a2, int a3, int phase)
     return true;
 }
 
-// 0x007f6d90 (byte-exact lifted version: match/slices/s007f6d90/s007f6d90.cpp)
+// 0x007f6d90: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f6d90/s007f6d90.cpp
 void* TargetElem::CopyFrom(void* src)
 {
     void* dst = this;
@@ -903,7 +903,7 @@ void* TargetElem::CopyFrom(void* src)
     return dst;
 }
 
-// 0x007f6df0 (byte-exact lifted version: match/slices/s007f6df0/s007f6df0.cpp)
+// 0x007f6df0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f6df0/s007f6df0.cpp
 void* WindowAnimTarget::CopyFrom(void* src)
 {
     void* dst = this;
@@ -1346,7 +1346,7 @@ AInfo8c* AInfo8c::operator=(AInfo8c* src)
     return this;
 }
 
-// 0x007f7a60 (byte-exact lifted version: match/slices/s007f7a60/s007f7a60.cpp)
+// 0x007f7a60: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f7a60/s007f7a60.cpp
 AInfo8c* do_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* dst)
 {
     while (first != last) {
@@ -1361,7 +1361,7 @@ AInfo8c* do_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* dst)
     return dst;
 }
 
-// 0x007f7b30 (byte-exact lifted version: match/slices/s007f7b30/s007f7b30.cpp)
+// 0x007f7b30: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f7b30/s007f7b30.cpp
 AInfo88* copy_animinfo88(AInfo88* first, AInfo88* last, AInfo88* dst)
 {
     while (first != last) {
@@ -1405,7 +1405,7 @@ AInfo8c* fill_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src)
     return first;
 }
 
-// 0x007f7db0 (byte-exact lifted version: match/slices/s007f7db0/s007f7db0.cpp)
+// 0x007f7db0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f7db0/s007f7db0.cpp
 AInfo8c* fill_copy_backward_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src)
 {
     while (last != first) {

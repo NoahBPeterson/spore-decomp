@@ -121,7 +121,7 @@ void FixedBufferAllocatorStub::Free(void* p) {
 }
 
 // 004bfc10
-// 0x004bfc10 (byte-exact lifted version: match/slices/s004bfc10/s004bfc10.cpp)
+// 0x004bfc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s004bfc10/s004bfc10.cpp
 void FUN_004bfc10(void* p) {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
     fba->Malloc((uint32_t)p, 4);
@@ -415,7 +415,7 @@ struct Vec8c { int m[4]; void FUN_004c0350(uint32_t count); };
 // One 0x8c-byte element worth of scratch (a struct, not a char buffer: retail
 // has no /GS cookie here).
 struct Elem8cSpare { float f[0x8c / 4]; };
-// 0x004c0250 (byte-exact lifted version: match/slices/s004c0250/s004c0250.cpp)
+// 0x004c0250: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0250/s004c0250.cpp
 void Vec1d8::FUN_004c0250(uint32_t count) {
     int* self = (int*)this;
     if ((uint32_t)((self[2] - self[0]) / 0x1d8) >= count)
@@ -428,7 +428,7 @@ void Vec1d8::FUN_004c0250(uint32_t count) {
     self[2] = count * 0x1d8 + self[0];
 }
 
-// 0x004c0350 (byte-exact lifted version: match/slices/s004c0350/s004c0350.cpp)
+// 0x004c0350: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0350/s004c0350.cpp
 void Vec8c::FUN_004c0350(uint32_t count) {
     int* self = (int*)this;
     uint32_t size = (uint32_t)((self[1] - self[0]) / 0x8c);

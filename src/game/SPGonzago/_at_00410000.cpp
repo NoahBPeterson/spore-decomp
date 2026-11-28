@@ -310,7 +310,7 @@ RefVector::~RefVector()
     tail();
 }
 
-// 0x0041ebe0 (byte-exact lifted version: match/slices/s0041ebe0/s0041ebe0.cpp)
+// 0x0041ebe0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0041ebe0/s0041ebe0.cpp
 RefVector& RefVector::operator=(const RefVector& x)
 {
     if (&x != this) {

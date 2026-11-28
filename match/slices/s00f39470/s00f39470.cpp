@@ -22,7 +22,6 @@ struct C_006b55c0 { int FUN_006b55c0(); };
 struct C_006b5770 { void FUN_006b5770(unsigned int, unsigned int, unsigned int); };
 
 // @ 0x00f39470
-// @ 0x00f39470
 extern "C" bool __cdecl FUN_00f39470(int a4, int a8)
 {
     int t1003;

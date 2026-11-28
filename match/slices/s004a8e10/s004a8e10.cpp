@@ -8,7 +8,6 @@ extern "C" void __cdecl FUN_0069b440(...);
 template<class T> __forceinline T il2c_k(T v) { return v; }
 
 // @ 0x004a8e10
-// @ 0x004a8e10
 extern "C" int __cdecl FUN_004a8e10(int a4, int a8, int a12)
 {
     int v_l16_i[3];

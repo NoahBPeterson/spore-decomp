@@ -163,7 +163,7 @@ Vec29::~Vec29()
         it->~Elem29c();
     DoFreeSelf();
 }
-// 0x00473370 (byte-exact lifted version: match/slices/s00473370/s00473370.cpp)
+// 0x00473370: not byte-exact; the byte-exact version is the lifted one in match/slices/s00473370/s00473370.cpp
 void Vec29::resize(uint32_t n)
 {
     if (n > (uint32_t)(mpEnd - mpBegin)) {
@@ -252,11 +252,11 @@ StrW::StrW(int unused, const wchar_t* p, ...)
 // (CharVec copy ctor above: marker at its definition)
 // @ 0x00473270
 template void vector<AutoRefCount, 4>::resize(uint32_t);
-// 0x00473500 (byte-exact lifted version: match/slices/s00473500/s00473500.cpp)
+// 0x00473500: not byte-exact; the byte-exact version is the lifted one in match/slices/s00473500/s00473500.cpp
 template vector<Pod12, 4>& vector<Pod12, 4>::operator=(const vector<Pod12, 4>&);
 // @ 0x004737f0
 template uint32_t vector<Pod12, 4>::size() const;
-// 0x00473890 (byte-exact lifted version: match/slices/s00473890/s00473890.cpp)
+// 0x00473890: not byte-exact; the byte-exact version is the lifted one in match/slices/s00473890/s00473890.cpp
 template void vector<Pod12, 4>::reserve(uint32_t);
 // @ 0x00473b00
 template vector<Pair8, 4>& vector<Pair8, 4>::operator=(const vector<Pair8, 4>&);

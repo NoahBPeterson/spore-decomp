@@ -30,7 +30,6 @@ struct C_00dd8640 { int FUN_00dd8640(); };
 extern "C" int __cdecl FUN_00f47380(...);
 
 // @ 0x00c56360
-// @ 0x00c56360
 extern "C" bool __fastcall FUN_00c56360(char* self, int edx_unused)
 {
     int t1003;

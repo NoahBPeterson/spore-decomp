@@ -585,7 +585,7 @@ void __stdcall FUN_010346b0(float x, float y, float z)
 
 // --------------------------------------------------------------------------- 0x010346e0
 // Refresh the four per-behaviour factors and tuning variants from the tuning source.
-// 0x010346e0 (byte-exact lifted version: match/slices/s010346e0/s010346e0.cpp)
+// 0x010346e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010346e0/s010346e0.cpp
 void Behavior::FUN_010346e0()
 {
     for (int i = 0; i < 4; i++) {

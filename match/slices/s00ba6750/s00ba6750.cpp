@@ -213,7 +213,7 @@ void FUN_00ba6a40(unsigned which, unsigned* bits) {
   }
 }
 
-// 0x00ba6ab0 (byte-exact lifted version: match/slices/s00ba6ab0/s00ba6ab0.cpp)
+// 0x00ba6ab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba6ab0/s00ba6ab0.cpp
 int FUN_00ba6ab0(unsigned* flags) {
   unsigned f = *flags;
   int n = (f & 1) != 0;
@@ -228,7 +228,7 @@ int FUN_00ba6ab0(unsigned* flags) {
   return (f & 8) ? 3 : 0;
 }
 
-// 0x00ba6b40 (byte-exact lifted version: match/slices/s00ba6b40/s00ba6b40.cpp)
+// 0x00ba6b40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba6b40/s00ba6b40.cpp
 int FUN_00ba6b40(int* vec, int start, void* civ, float threshold) {
   int n = (vec[1] - vec[0]) >> 2;
   int w = start;
@@ -293,7 +293,7 @@ void FUN_00ba6cf0(BannerList* self) {
   }
 }
 
-// 0x00ba6d80 (byte-exact lifted version: match/slices/s00ba6d80/s00ba6d80.cpp)
+// 0x00ba6d80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba6d80/s00ba6d80.cpp
 int FUN_00ba6d80(BannerList* self, unsigned id) {
   if (id == 0) return *(int*)&self->m14C;
   if (id == 0xffffffff) return 0;
@@ -466,7 +466,7 @@ void* FUN_00ba71b0(void* civ, int* vec) {
   return best;
 }
 
-// 0x00ba7220 (byte-exact lifted version: match/slices/s00ba7220/s00ba7220.cpp)
+// 0x00ba7220: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba7220/s00ba7220.cpp
 struct StarManagerCore {
   char pad000[0xc8];
   void* mC8;   // +0xc8

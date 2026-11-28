@@ -170,7 +170,7 @@ template <> void vector<Rec38>::DoFree(Rec38* p, uint32_t)
         eastl_free(p);
 }
 
-// 0x004c1520 (byte-exact lifted version: match/slices/s004c1520/s004c1520.cpp)  eastl::vector<Rec38,sp_vector_allocator>::DoInsertValues
+// 0x004c1520: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c1520/s004c1520.cpp  eastl::vector<Rec38,sp_vector_allocator>::DoInsertValues
 template <> void vector<Rec38>::DoInsertValues(Rec38* position, uint32_t n, const Rec38& value)
 {
     if (n <= (uint32_t)(mpCapacity - mpEnd)) {

@@ -803,7 +803,7 @@ void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments_s0053
     }
 }
 
-// 0x00539ed0 (byte-exact lifted version: match/slices/s00539ed0/s00539ed0.cpp)
+// 0x00539ed0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00539ed0/s00539ed0.cpp
 void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
 {
     void* p = EASTL_allocator_allocate(0x54, "ArgScript/SPSkinPaintParticleEffectBlock", 0, 0, 0, 0);
@@ -820,7 +820,7 @@ void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
     a->AddCommand(kParticleKeyword, q);
 }
 
-// 0x00539f90 (byte-exact lifted version: match/slices/s00539f90/s00539f90.cpp)
+// 0x00539f90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00539f90/s00539f90.cpp
 cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::cSPSkinPaintParticleEffectBlockCommand_s0053_9d70()
 : mCurrentModifier(0), mpEvalList(0) {
     mStateID = 0x2c96c27;
@@ -858,7 +858,7 @@ void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::Parse(EA::ArgScript::cAr
     mParser->V35();
 }
 
-// 0x0053a1a0 (byte-exact lifted version: match/slices/s0053a1a0/s0053a1a0.cpp)
+// 0x0053a1a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053a1a0/s0053a1a0.cpp
 void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::SetChild(int b)
 {
     if (b == 0)
@@ -931,7 +931,7 @@ cSPSkinPaintParticleDescription_s0053_9d70* BrushDesc_s0053_9d70::GetRuntimeDesc
     return (cSPSkinPaintParticleDescription_s0053_9d70*)(res ? res + 8 : 0);
 }
 
-// 0x0053a530 (byte-exact lifted version: match/slices/s0053a530/s0053a530.cpp)
+// 0x0053a530: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053a530/s0053a530.cpp
 void BrushDesc_s0053_9d70::Init()
 {
     mFlags = 0;
@@ -955,7 +955,7 @@ void BrushDesc_s0053_9d70::Init()
     mBlend2 = 0;
 }
 
-// 0x0053a6d0 (byte-exact lifted version: match/slices/s0053a6d0/s0053a6d0.cpp)
+// 0x0053a6d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053a6d0/s0053a6d0.cpp
 EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
 {
     int32_t n = 0;
@@ -994,7 +994,7 @@ EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, Eva
     return stream;
 }
 
-// 0x0053a930 (byte-exact lifted version: match/slices/s0053a930/s0053a930.cpp)
+// 0x0053a930: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053a930/s0053a930.cpp
 EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
 {
     uint32_t n = (uint32_t)(((char**)((char*)e + 4))[0] - *(char**)e) >> 4;
@@ -1032,7 +1032,7 @@ EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, Ev
     return stream;
 }
 
-// 0x0053acc0 (byte-exact lifted version: match/slices/s0053acc0/s0053acc0_lifted.cpp)
+// 0x0053acc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053acc0/s0053acc0_lifted.cpp
 void ReadParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
 {
     ReadDescBase(s, d + 0xc);
@@ -1058,7 +1058,7 @@ void ReadParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
     ReadUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
 
-// 0x0053aea0 (byte-exact lifted version: match/slices/s0053aea0/s0053aea0.cpp)
+// 0x0053aea0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053aea0/s0053aea0.cpp
 void WriteParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
 {
     WriteDescBase(s, d + 0xc);
@@ -1116,7 +1116,7 @@ PaintCompatB* PaintCompatB::Ctor1f0()
     return this;
 }
 
-// 0x0053b210 (byte-exact lifted version: match/slices/s0053b210/s0053b210.cpp)
+// 0x0053b210: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053b210/s0053b210.cpp
 BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
     return BlobAssign<0x10>(this, o);
@@ -1128,7 +1128,7 @@ void BlobVec::Vector16Resize(unsigned n)
     BlobResize<0x10>(this, n);
 }
 
-// 0x0053b5a0 (byte-exact lifted version: match/slices/s0053b5a0/s0053b5a0.cpp)
+// 0x0053b5a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053b5a0/s0053b5a0.cpp
 BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
 {
     return BlobAssign<0x14>(this, o);
@@ -1140,7 +1140,7 @@ void BlobVec::Vector20Resize(unsigned n)
     BlobResize<0x14>(this, n);
 }
 
-// 0x0053b930 (byte-exact lifted version: match/slices/s0053b930/s0053b930_lifted.cpp)
+// 0x0053b930: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053b930/s0053b930_lifted.cpp
 void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase_s0053_b930* cmds)
 {
     for (int i = 0; i < 0x13; ++i) {
@@ -1179,7 +1179,7 @@ void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase_s0053_b930* cmds)
     RegisterPaintVar(cmds, "comparePosition", b);
 }
 
-// 0x0053bc90 (byte-exact lifted version: match/slices/s0053bc90/s0053bc90.cpp)
+// 0x0053bc90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053bc90/s0053bc90.cpp
 EA::IO::IStream_s0053_b930* ReadIntVec(EA::IO::IStream_s0053_b930* s, int** vec)
 {
     uint32_t n = 0;
@@ -1283,7 +1283,7 @@ Entry20** UninitCopy20(Entry20** out, Entry20* first, Entry20* last, Entry20* ds
     return out;
 }
 
-// 0x0053d230 (byte-exact lifted version: match/slices/s0053d230/s0053d230.cpp)
+// 0x0053d230: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053d230/s0053d230.cpp
 void* UninitFill20(Entry20* dst, int n, const Entry20* value, uint8_t /*isPod*/)
 {
     Entry20* d = dst;

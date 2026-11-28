@@ -429,7 +429,7 @@ void* spVecF::FUN_00fef570(void* a, void* b) {
 // =============================================================================================
 // 00fef5d0  SP::cSPMissionManager::ShutdownForGame
 // =============================================================================================
-// 0x00fef5d0 (byte-exact lifted version: match/slices/s00fef5d0/s00fef5d0.cpp)  SP::cSPMissionManager::ShutdownForGame
+// 0x00fef5d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fef5d0/s00fef5d0.cpp  SP::cSPMissionManager::ShutdownForGame
 void cSPMissionManager::ShutdownForGame() {
     cSimTicker* t = (cSimTicker*)FUN_00b3d330();
     t->FUN_54(this);

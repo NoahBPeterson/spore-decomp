@@ -583,7 +583,7 @@ struct BigXform {
     BigXform* CopyFrom(const BigXform* o);
 };
 
-// 0x00f9f620 (byte-exact lifted version: match/slices/s00f9f620/s00f9f620.cpp)
+// 0x00f9f620: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f9f620/s00f9f620.cpp
 BigXform* BigXform::CopyFrom(const BigXform* o)
 {
     mBase = o->mBase;

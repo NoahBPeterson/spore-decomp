@@ -111,7 +111,7 @@ PaintSystem::PaintSystem(int kind, void* a, void* b, char c, void* d, char e, ch
         *(void**)((char*)this + 0x20) = *(void**)(*(int*)(mat + 0x10 + kind * 4) + 0x60);
 }
 
-// 0x0051d010 (byte-exact lifted version: match/slices/s0051d010/s0051d010.cpp) PaintSystem dtor (base-vtable restore)
+// 0x0051d010: not byte-exact; the byte-exact version is the lifted one in match/slices/s0051d010/s0051d010.cpp PaintSystem dtor (base-vtable restore)
 void PaintSystem::dtor()
 {
     if (*(int*)((char*)this + 0x34) != 0)
@@ -144,7 +144,7 @@ void DList::adv()
     }
 }
 
-// 0x0051d270 (byte-exact lifted version: match/slices/s0051d270/s0051d270.cpp) eastl::vector<AutoRefCount<...>>::erase one element
+// 0x0051d270: not byte-exact; the byte-exact version is the lifted one in match/slices/s0051d270/s0051d270.cpp eastl::vector<AutoRefCount<...>>::erase one element
 void* AutoRefVector::erase(void* pos)
 {
     if ((char*)pos + 4 < *(char**)((char*)this + 4)) {

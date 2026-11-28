@@ -216,7 +216,7 @@ inline void pad9() { int u0, u1, u2, u3, u4, u5, u6, u7, u8; }
 inline Ref* copyW(Ref* first, Ref* last, Ref* dest) { bool t1 = false; bool t2 = false; int w[4]; return CopyRefs(first, last, dest); }
 inline Ref* copyW3(Ref* first, Ref* last, Ref* dest) { bool t1 = false; bool t2 = false; int w[8]; return CopyRefs(first, last, dest); }
 
-// 0x0041ebe0 (byte-exact lifted version: match/slices/s0041ebe0/s0041ebe0.cpp)  (nonmatching: slot layout)
+// 0x0041ebe0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0041ebe0/s0041ebe0.cpp  (nonmatching: slot layout)
 RefVector& RefVector::operator=(const RefVector& x)
 {
     if (&x != this) {

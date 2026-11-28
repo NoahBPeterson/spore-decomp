@@ -10,7 +10,6 @@ struct S118 { int m0; int m1; int m2; int m3; int m4; int m5; int m6; int m7; in
 
 struct D_004b0ef0 { int FUN_004b0ef0(int a4); };
 // @ 0x004b0ef0
-// @ 0x004b0ef0
 int D_004b0ef0::FUN_004b0ef0(int a4)
 {
     int v_l64_r;

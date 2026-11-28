@@ -254,7 +254,7 @@ struct DestructOwner {
     Rec34    mRecs[4];                // +0x0eb4
 };
 
-// 0x00c13340 (byte-exact lifted version: match/slices/s00c13340/s00c13340_lifted.cpp)
+// 0x00c13340: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c13340/s00c13340_lifted.cpp
 void __fastcall FUN_00c13340(DestructOwner* self, void* edx)
 {
     (void)edx;

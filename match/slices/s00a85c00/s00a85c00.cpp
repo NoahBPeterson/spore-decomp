@@ -384,7 +384,7 @@ bool cDistributeSimulator::OnMessage(int msg, int* pValue, int a3)
 // ===========================================================================
 // 0x00a86050 -- message handler for a few message ids.
 // ===========================================================================
-// 0x00a86050 (byte-exact lifted version: match/slices/s00a86050/s00a86050.cpp)
+// 0x00a86050: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a86050/s00a86050.cpp
 bool cDistributeSimulator::SetParams(int msg, float* p, int a3)
 {
     switch (msg) {

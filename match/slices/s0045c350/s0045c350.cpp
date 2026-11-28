@@ -48,7 +48,7 @@ struct BigStr {
 };
 
 // =====================================================================
-// 0x0045cd90 (byte-exact lifted version: match/slices/s0045cd90/s0045cd90.cpp)  formatted write through the sink (varargs)
+// 0x0045cd90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0045cd90/s0045cd90.cpp  formatted write through the sink (varargs)
 // =====================================================================
 bool WriterFmtSink(int out, const char* fmt, ...)
 {

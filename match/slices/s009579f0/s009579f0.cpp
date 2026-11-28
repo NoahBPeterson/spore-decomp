@@ -169,7 +169,7 @@ UIImage* UIImage::Image(void* obj, int a, int b, float c, float d, float e, floa
 }
 
 // ===========================================================================
-// 0x00957a60 (byte-exact lifted version: match/slices/s00957a60/s00957a60.cpp)  Fn00957a60
+// 0x00957a60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00957a60/s00957a60.cpp  Fn00957a60
 // ===========================================================================
 void** __cdecl Fn00957a60(int a, int b)
 {
@@ -210,7 +210,7 @@ void* __stdcall Fn00957ac0(int a, int b)
 }
 
 // ===========================================================================
-// 0x00957b00 (byte-exact lifted version: match/slices/s00957b00/s00957b00.cpp)  EA::UTFWin::GetGlobalImageTable
+// 0x00957b00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00957b00/s00957b00.cpp  EA::UTFWin::GetGlobalImageTable
 // ===========================================================================
 void* __cdecl GetGlobalImageTable()
 {
@@ -712,7 +712,7 @@ void __fastcall DebugDumpDisplayList(void* self)
 }
 
 // ===========================================================================
-// 0x009587d0 (byte-exact lifted version: match/slices/s009587d0/s009587d0.cpp)  Fn009587d0
+// 0x009587d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009587d0/s009587d0.cpp  Fn009587d0
 // ===========================================================================
 void W::m7d0(char* node)
 {

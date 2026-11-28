@@ -95,7 +95,6 @@ struct il2c_vc1 {
 
 
 // @ 0x00971b60
-// @ 0x00971b60
 extern "C" void __fastcall FUN_00971b60(char* self, int edx_unused, int a4)
 {
     int t1002;

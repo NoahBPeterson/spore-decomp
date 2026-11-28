@@ -193,7 +193,7 @@ extern "C" int*   GetPropertyAsInt();       // 0x41e990
 // ---------------------------------------------------------------------------
 // 0x00f07c90: read the progress-bar tuning properties off the config object.
 // ---------------------------------------------------------------------------
-// 0x00f07c90 (byte-exact lifted version: match/slices/s00f07c90/s00f07c90_lifted.cpp)
+// 0x00f07c90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f07c90/s00f07c90_lifted.cpp
 void ReadProgressTuning(void)
 {
     void* v;

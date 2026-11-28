@@ -547,7 +547,7 @@ int __fastcall FUN_00675370(char* p) {
 }
 
 // ---- 0x006753a0 ------------------------------------------------------
-// 0x006753a0 (byte-exact lifted version: match/slices/s006753a0/s006753a0.cpp)
+// 0x006753a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006753a0/s006753a0.cpp
 void __fastcall FUN_006753a0(char* p) {
     void* srv = GetMessagingServer();
     ((FnV3pii)((VObj*)srv)->vt[0x2c / 4])(srv, p, 0x212d3e7, -0x270f);

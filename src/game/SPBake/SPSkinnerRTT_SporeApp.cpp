@@ -263,7 +263,7 @@ void StateBits::Set(unsigned char a, unsigned char b, unsigned char c, unsigned 
     mFlags = (a ? 1 : 0) | (b ? 2 : 0) | (c ? 4 : 0) | (d ? 8 : 0);
 }
 
-// 0x005292d0 (byte-exact lifted version: match/slices/s005292d0/s005292d0.cpp)
+// 0x005292d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005292d0/s005292d0.cpp
 void DrawCtx::Draw(float* v, float w)
 {
     SetRenderState(0xa8, writemask & g_15dea68);
@@ -299,7 +299,7 @@ EmbeddedState* nSPSkinner::cRTTBuffer_s0052_88f0::PrepareState()
     return shaderState;
 }
 
-// 0x00529520 (byte-exact lifted version: match/slices/s00529520/s00529520.cpp)
+// 0x00529520: not byte-exact; the byte-exact version is the lifted one in match/slices/s00529520/s00529520.cpp
 uint32_t nSPSkinner::cRTTBuffer_s0052_88f0::ClampAndStream(uint32_t requested)
 {
     cRTTBuffer_s0052_88f0* self = this;
@@ -338,7 +338,7 @@ void nSPSkinner::cRTTBuffer::EndTriangles()
     RwShutdown2();
 }
 
-// 0x005296b0 (byte-exact lifted version: match/slices/s005296b0/s005296b0_lifted.cpp)
+// 0x005296b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005296b0/s005296b0_lifted.cpp
 void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
 {
     FUN_00529520(2);
@@ -375,7 +375,7 @@ void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
     reinterpret_cast<nSPSkinner::cRTTBuffer*>(this)->EndTriangles();
 }
 
-// 0x00529bf0 (byte-exact lifted version: match/slices/s00529bf0/s00529bf0.cpp)
+// 0x00529bf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00529bf0/s00529bf0.cpp
 void cRTTBuffer18::BeginDraw()
 {
     DAT_016f9238 = DAT_015dea64;

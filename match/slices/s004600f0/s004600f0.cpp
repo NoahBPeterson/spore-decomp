@@ -66,7 +66,6 @@ struct Fr1_004600f0 {
 __forceinline bool il2c_cc_e(int a, int b) { return a == b; }
 
 // @ 0x004600f0
-// @ 0x004600f0
 extern "C" bool __cdecl FUN_004600f0(int a4, int a8, int a12, int a16)
 {
     Fr0_004600f0 fb;

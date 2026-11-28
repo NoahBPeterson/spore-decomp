@@ -212,7 +212,7 @@ float FUN_00783130(float theta, unsigned m, float phi, float extra)
 // ---------------------------------------------------------------------------
 // 0x00782B00 : cleanup + erase + virtual notify
 // ---------------------------------------------------------------------------
-// 0x00782b00 (byte-exact lifted version: match/slices/s00782b00/s00782b00.cpp)
+// 0x00782b00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00782b00/s00782b00.cpp
 void __fastcall FUN_00782B00(int p)
 {
     FUN_007806a0((char*)p - 8);

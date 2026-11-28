@@ -105,7 +105,7 @@ int TreeClumpArrayDestroyAll(int bUnused, cTreeClumpVector* pVector)
 // ---------------------------------------------------------------------------
 // 0x00b00560  TreeClumpArray::Free
 // ---------------------------------------------------------------------------
-// 0x00b00560 (byte-exact lifted version: match/slices/s00b00560/s00b00560.cpp)
+// 0x00b00560: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b00560/s00b00560.cpp
 void TreeClumpArrayFree(cTreeClumpVector* pVector)
 {
     cTreeClump** pEnd = pVector->mpEnd;

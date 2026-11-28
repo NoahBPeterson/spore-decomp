@@ -8,7 +8,6 @@ template<class T> __forceinline T il2c_k(T v) { return v; }
 
 struct D_004c4290 { void FUN_004c4290(); };
 // @ 0x004c4290
-// @ 0x004c4290
 void D_004c4290::FUN_004c4290()
 {
     int v_l32_p;

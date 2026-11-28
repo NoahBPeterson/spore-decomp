@@ -78,7 +78,7 @@ typedef int  (__thiscall *SlotGetInt)(char* self);
 // ==================================================================================================
 // 0x00992480  EA::UTFWinControls::WatchGraph::OnTick
 // ==================================================================================================
-// 0x00992480 (byte-exact lifted version: match/slices/s00992480/s00992480_lifted.cpp)
+// 0x00992480: not byte-exact; the byte-exact version is the lifted one in match/slices/s00992480/s00992480_lifted.cpp
 u8 __fastcall WatchGraph_OnTick(char* self, int)
 {
     // Rings the history buffer: for each live history node, sample the graph value into the ring
@@ -105,7 +105,7 @@ u8 __fastcall WatchGraph_OnTick(char* self, int)
 // ==================================================================================================
 // 0x00992550  EA::UTFWinControls::WatchGraph::`scalar deleting destructor'
 // ==================================================================================================
-// 0x00992550 (byte-exact lifted version: match/slices/s00992550/s00992550.cpp)
+// 0x00992550: not byte-exact; the byte-exact version is the lifted one in match/slices/s00992550/s00992550.cpp
 void* __fastcall WatchGraph_scalarDtor(char* self, int, u8 flags)
 {
     st32(self, 0, 0x1446078u);            // vtbl WatchGraph
@@ -571,7 +571,7 @@ u8 __fastcall WinXHTML_OnRebuild(char* self, int, char* ctx)
 // ==================================================================================================
 // 0x00993490  EA::UTFWinExtras::WinXHTML::SetScrollPosition
 // ==================================================================================================
-// 0x00993490 (byte-exact lifted version: match/slices/s00993490/s00993490.cpp)
+// 0x00993490: not byte-exact; the byte-exact version is the lifted one in match/slices/s00993490/s00993490.cpp
 void __fastcall WinXHTML_SetScrollPosition(char* self, int, float* pos)
 {
     if (ldf(self, 0xa8b4) != pos[0] || ldf(self, 0xa8b8) != pos[1]) {

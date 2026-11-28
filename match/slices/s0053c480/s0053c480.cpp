@@ -4,7 +4,6 @@
 template<class T> __forceinline T il2c_k(T v) { return v; }
 
 // @ 0x0053c480
-// @ 0x0053c480
 extern "C" float __cdecl FUN_0053c480(int a4, int a8)
 {
     return (float)((float)((float)((float)*(float*)((char*)a4 + (il2c_k(0) << 2)) * (float)*(float*)((char*)a8 + (il2c_k(0) << 2))) + (float)((float)*(float*)((char*)a4 + (il2c_k(1) << 2)) * (float)*(float*)((char*)a8 + (il2c_k(1) << 2)))) + (float)((float)*(float*)((char*)a4 + (il2c_k(2) << 2)) * (float)*(float*)((char*)a8 + (il2c_k(2) << 2))));

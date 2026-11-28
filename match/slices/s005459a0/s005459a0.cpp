@@ -7,7 +7,6 @@ extern "C" int __cdecl FUN_00903550(...);
 
 struct D_005459a0 { void FUN_005459a0(); };
 // @ 0x005459a0
-// @ 0x005459a0
 void D_005459a0::FUN_005459a0()
 {
     int dead_0_15[10];

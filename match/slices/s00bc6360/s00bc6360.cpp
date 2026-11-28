@@ -459,7 +459,7 @@ SubVec::SubVec(const SubVec& src)
     e = outEnd;
 }
 
-// 0x00bc7110 (byte-exact lifted version: match/slices/s00bc7110/s00bc7110.cpp)
+// 0x00bc7110: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc7110/s00bc7110.cpp
 Sub* SubVec::Erase(Sub* first, Sub* last)
 {
     Sub* newEnd = ShiftTail(last, e, first);

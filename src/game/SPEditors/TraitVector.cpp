@@ -176,7 +176,7 @@ struct KeyComparator {
 };
 inline void advance(Key12_s0057_18f0*& i, int n) { i += n; }
 
-// 0x005704c0 (byte-exact lifted version: match/slices/s005704c0/s005704c0.cpp)
+// 0x005704c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005704c0/s005704c0.cpp
 float TraitData::Intersect(FeatureVector* lhs, FeatureVector* rhs)
 {
     // Declaration order chosen to reproduce the original /Od slot order.
@@ -316,7 +316,7 @@ float cTraitQuery::Compute(cFeatureVector* a, cFeatureVector* b)
     return kfSimilarityError;
 }
 
-// 0x00571720 (byte-exact lifted version: match/slices/s00571720/s00571720.cpp)
+// 0x00571720: not byte-exact; the byte-exact version is the lifted one in match/slices/s00571720/s00571720.cpp
 void cFeatureVector::assign(const cFeatureVector& other)
 {
     erase(mpBegin, mpEnd);

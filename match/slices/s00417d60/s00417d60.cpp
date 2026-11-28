@@ -209,7 +209,7 @@ ToolState::ToolState()
 {
 }
 
-// 0x00417fe0 (byte-exact lifted version: match/slices/s00417fe0/s00417fe0.cpp)
+// 0x00417fe0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00417fe0/s00417fe0.cpp
 ToolState::~ToolState()
 {
 }
@@ -221,7 +221,7 @@ SubState::SubState()
 {
 }
 
-// 0x00418240 (byte-exact lifted version: match/slices/s00418240/s00418240.cpp)
+// 0x00418240: not byte-exact; the byte-exact version is the lifted one in match/slices/s00418240/s00418240.cpp
 SubState::~SubState()
 {
 }

@@ -286,7 +286,7 @@ void MemBlock::Deinit(void)
 }
 
 // 011fd610 -- MemBlock::Alloc
-// 0x011fd610 (byte-exact lifted version: match/slices/s011fd610/s011fd610.cpp)
+// 0x011fd610: not byte-exact; the byte-exact version is the lifted one in match/slices/s011fd610/s011fd610.cpp
 void* MemBlock::Alloc(void)
 {
     if (m_count != 0)
@@ -353,7 +353,7 @@ char* __cdecl rw__graphics__D3D9TextCopy(char* dst, const char* src)
 // ============================================================ shader cache
 // A shader descriptor cache: {vtable; u32 current; ... desc at +8}.
 // 011fd6f0 -- bind the cached vertex shader (creating it on first use)
-// 0x011fd6f0 (byte-exact lifted version: match/slices/s011fd6f0/s011fd6f0.cpp)
+// 0x011fd6f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s011fd6f0/s011fd6f0.cpp
 void __fastcall FUN_011fd6f0(void* pself)
 {
     u32* self = (u32*)pself;
@@ -374,7 +374,7 @@ void __fastcall FUN_011fd6f0(void* pself)
 }
 
 // 011fd730 -- bind the cached pixel shader (creating it on first use)
-// 0x011fd730 (byte-exact lifted version: match/slices/s011fd730/s011fd730.cpp)
+// 0x011fd730: not byte-exact; the byte-exact version is the lifted one in match/slices/s011fd730/s011fd730.cpp
 void __fastcall FUN_011fd730(void* pself)
 {
     u32* self = (u32*)pself;
@@ -541,7 +541,7 @@ int __cdecl ControllerRebind(void* self, void* table)
 }
 
 // 011fd990 -- map every frame index of the source table to the target table's index (or -1)
-// 0x011fd990 (byte-exact lifted version: match/slices/s011fd990/s011fd990.cpp)
+// 0x011fd990: not byte-exact; the byte-exact version is the lifted one in match/slices/s011fd990/s011fd990.cpp
 int Ctl::BuildRemap(int slot, u32* table)
 {
     u32* s = (u32*)this;
@@ -688,7 +688,7 @@ void Ctl::SetFrame(u32 handle, float frame)
 }
 
 // 011fdc00 -- clamp the loop length and advance
-// 0x011fdc00 (byte-exact lifted version: match/slices/s011fdc00/s011fdc00.cpp)
+// 0x011fdc00: not byte-exact; the byte-exact version is the lifted one in match/slices/s011fdc00/s011fdc00.cpp
 void Ctl::Advance(float dt)
 {
     u8* s = (u8*)this;

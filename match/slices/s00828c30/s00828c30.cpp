@@ -369,7 +369,7 @@ cWrap::cWrap(IProv* prov, IRef* ref) : m10(ref) {
   mC = t;
 }
 
-// 0x00828e30 (byte-exact lifted version: match/slices/s00828e30/s00828e30.cpp)
+// 0x00828e30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00828e30/s00828e30.cpp
 cRender2D* __cdecl BeginRender(RenderContext* ctx, IProv* prov, cWrap** out) {
   ctx->End2D();
   cWrap* w = new (g_wrapAllocName, 0, 0, 0, 0) cWrap(prov, 0);

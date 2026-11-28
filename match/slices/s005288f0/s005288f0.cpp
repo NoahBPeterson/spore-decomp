@@ -233,7 +233,7 @@ void SetRenderState(int state, uint32_t value)
     ((uint32_t*)g_16f91e0)[state] = value;
 }
 
-// 0x005292d0 (byte-exact lifted version: match/slices/s005292d0/s005292d0.cpp)
+// 0x005292d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005292d0/s005292d0.cpp
 struct DrawCtx {
     VPi* mVertexProcessor;          // +0
     uint32_t mUnused4;              // +4
@@ -268,7 +268,7 @@ EmbeddedState* cRTTBuffer::PrepareState()
     return shaderState;
 }
 
-// 0x00529520 (byte-exact lifted version: match/slices/s00529520/s00529520.cpp)
+// 0x00529520: not byte-exact; the byte-exact version is the lifted one in match/slices/s00529520/s00529520.cpp
 uint32_t cRTTBuffer::ClampAndStream(uint32_t requested)
 {
     cRTTBuffer* self = this;

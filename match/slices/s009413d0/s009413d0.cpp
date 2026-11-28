@@ -482,7 +482,7 @@ bool __stdcall HTTPClientAllocateSocket(int obj, void** out) {
     return *out != 0;
 }
 
-// 0x00942010 (byte-exact lifted version: match/slices/s00942010/s00942010.cpp)
+// 0x00942010: not byte-exact; the byte-exact version is the lifted one in match/slices/s00942010/s00942010.cpp
 bool __stdcall HTTPClientCheckTimeout(int self, int* timeout) {
     if (*(int*)(self + 0xc) > 0) {
         __int64 now = GetTime64();

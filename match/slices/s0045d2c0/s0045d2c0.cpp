@@ -134,7 +134,7 @@ Matrix44::Matrix44(const Matrix44& o)
 }
 
 // =====================================================================
-// 0x0045dc00 (byte-exact lifted version: match/slices/s0045dc00/s0045dc00.cpp)  uninitialized copy of a Matrix44 range
+// 0x0045dc00: not byte-exact; the byte-exact version is the lifted one in match/slices/s0045dc00/s0045dc00.cpp  uninitialized copy of a Matrix44 range
 // =====================================================================
 Matrix44* CopyMatrixRange(char* first, char* last, Matrix44* dest)
 {
@@ -218,7 +218,7 @@ int FUN_0045da80(int a, int b)
 }
 
 // =====================================================================
-// 0x0045d6f0 (byte-exact lifted version: match/slices/s0045d6f0/s0045d6f0.cpp)  SSO string ctor (buffer at this+0x14, capacity 0x300)
+// 0x0045d6f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0045d6f0/s0045d6f0.cpp  SSO string ctor (buffer at this+0x14, capacity 0x300)
 // =====================================================================
 struct BigStr {
     char* begin;
@@ -300,7 +300,7 @@ void WriteNode(int out, char** names, int* parents, Matrix44* mats,
 }
 
 // =====================================================================
-// 0x0045d790 (byte-exact lifted version: match/slices/s0045d790/s0045d790.cpp)  vector<Elem(0x40)>::assign
+// 0x0045d790: not byte-exact; the byte-exact version is the lifted one in match/slices/s0045d790/s0045d790.cpp  vector<Elem(0x40)>::assign
 // =====================================================================
 struct Elem {
     char b[0x40];

@@ -9,7 +9,6 @@ struct S3 { int m0; int m1; int m2; };
 
 struct D_00473500 { int FUN_00473500(int a4); };
 // @ 0x00473500
-// @ 0x00473500
 int D_00473500::FUN_00473500(int a4)
 {
     int v_l64_r;

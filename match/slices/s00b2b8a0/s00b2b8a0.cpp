@@ -416,7 +416,7 @@ void S::FUN_00b2bf40(void* key)
 // ===========================================================================
 // 0x00b2bf90 — rb-tree lower_bound then node insert
 // ===========================================================================
-// 0x00b2bf90 (byte-exact lifted version: match/slices/s00b2bf90/s00b2bf90.cpp)
+// 0x00b2bf90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b2bf90/s00b2bf90.cpp
 void S::FUN_00b2bf90(void* out, void* key, void* b)
 {
   void** rootp = (void**)((char*)this + 0xc);

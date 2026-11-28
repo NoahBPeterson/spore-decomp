@@ -127,7 +127,7 @@ int Ability::Add2(void* a, void* b, float c, void* d)
     return mVec1c.size() - 1;
 }
 
-// 0x004fd520 (byte-exact lifted version: match/slices/s004fd520/s004fd520.cpp)
+// 0x004fd520: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fd520/s004fd520.cpp
 void Ability::Dispose()
 {
     mVec8.f_0050e690(mVec8.mpBegin, mVec8.mpEnd);
@@ -158,7 +158,7 @@ void FreeRawBlock(void* p);                                             // 0x00f
 
 struct Pod24 { Pod24* Copy(const void* src); };
 
-// 0x004fd670 (byte-exact lifted version: match/slices/s004fd670/s004fd670.cpp)
+// 0x004fd670: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fd670/s004fd670.cpp
 // The original returns `this` in eax (the hidden void return); declare it so the checker's eax
 // observable matches instead of leaving the last `src` load behind.
 Pod24* Pod24::Copy(const void* src)
@@ -313,7 +313,7 @@ void Stepper::Run(Owner* owner, float k0, Vec3f* pA, float pSpeed, float p5, Vec
     }
 }
 
-// 0x004fd380 (byte-exact lifted version: match/slices/s004fd380/s004fd380.cpp)
+// 0x004fd380: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fd380/s004fd380.cpp
 void Ability::Steppers(Owner* pOwner)
 {
     Owner* owner = pOwner;

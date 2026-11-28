@@ -368,7 +368,7 @@ struct TargetElem {
     void* CopyFrom(void* src);
 };
 
-// 0x007f6d90 (byte-exact lifted version: match/slices/s007f6d90/s007f6d90.cpp)  (copy constructor for the target element)
+// 0x007f6d90: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f6d90/s007f6d90.cpp  (copy constructor for the target element)
 void* TargetElem::CopyFrom(void* src)
 {
     void* dst = this;
@@ -393,7 +393,7 @@ struct WindowAnimTarget {
     void* CopyFrom(void* src);
 };
 
-// 0x007f6df0 (byte-exact lifted version: match/slices/s007f6df0/s007f6df0.cpp)  (copy constructor for the window-animation target)
+// 0x007f6df0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f6df0/s007f6df0.cpp  (copy constructor for the window-animation target)
 void* WindowAnimTarget::CopyFrom(void* src)
 {
     void* dst = this;

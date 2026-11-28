@@ -558,7 +558,7 @@ void cGameEditInputStrategy::MarkEditorActive()
     gLevelEditorActive = 1;
 }
 
-// 0x00d1bf20 (byte-exact lifted version: match/slices/s00d1bf20/s00d1bf20.cpp)
+// 0x00d1bf20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d1bf20/s00d1bf20.cpp
 bool cGameEditInputStrategy::ActivateEditor()
 {
     IEditorMode* mode = GetEditorMode(0xebb801);

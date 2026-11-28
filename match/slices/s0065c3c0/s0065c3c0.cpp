@@ -11,7 +11,6 @@ struct C_00997730 { bool FUN_00997730(unsigned int, unsigned int, unsigned int, 
 extern "C" int __cdecl FUN_00f47380(...);
 
 // @ 0x0065c3c0
-// @ 0x0065c3c0
 extern "C" bool __fastcall FUN_0065c3c0(char* self, int edx_unused, int a4, int a8)
 {
     int t1002;

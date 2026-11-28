@@ -2498,7 +2498,7 @@ bool __stdcall PickingContext_FlushAllThunk(EA::XHTML::Layout::PickingContext_s0
     return false;
 }
 
-// 0x008eaa20 (byte-exact lifted version: match/slices/s008eaa20/s008eaa20.cpp)
+// 0x008eaa20: not byte-exact; the byte-exact version is the lifted one in match/slices/s008eaa20/s008eaa20.cpp
 void EA::XHTML::Layout::Block_s008e_a290::SetUpBox(EA::XHTML::Layout::SizingContext_s008e_a290& sc, Style::StyleState_s008e_a290& style)
 {
     if (mpBorder == 0 && style.HasBorder()) {

@@ -319,7 +319,7 @@ public:
 // ---------------------------------------------------------------------------
 // 0x010377f0  cSPSpaceGfx::UpdateForSpaceGame
 // ---------------------------------------------------------------------------
-// 0x010377f0 (byte-exact lifted version: match/slices/s010377f0/s010377f0_lifted.cpp)
+// 0x010377f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010377f0/s010377f0_lifted.cpp
 void cSPSpaceGfx::UpdateForSpaceGame(int nArg)
 {
     int nContext = cSPLivingUniverse_GetUniverseContext();

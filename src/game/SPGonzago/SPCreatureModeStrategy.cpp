@@ -5089,7 +5089,7 @@ void HeapMake(SortEntry* begin, SortEntry* end, int cmp)
     }
 }
 
-// 0x00d3b480 (byte-exact lifted version: match/slices/s00d3b480/s00d3b480.cpp)
+// 0x00d3b480: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d3b480/s00d3b480.cpp
 void HeapSort(SortEntry* begin, SortEntry* end, int cmp)
 {
     int n = (int)(end - begin);
@@ -7026,7 +7026,7 @@ u8 __fastcall FUN_00d466f0(void* self, void* dummy, void* unused)
   return 0;
 }
 
-// 0x00d46730 (byte-exact lifted version: match/slices/s00d46730/s00d46730.cpp)
+// 0x00d46730: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d46730/s00d46730.cpp
 void __stdcall FUN_00d46730(TrigInfo* info)
 {
   void* prop;
@@ -7357,7 +7357,7 @@ BigC* __fastcall FUN_00d47380(BigC* self, void* dummy, void* p2, void* p3)
   return self;
 }
 
-// 0x00d473e0 (byte-exact lifted version: match/slices/s00d473e0/s00d473e0.cpp)
+// 0x00d473e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d473e0/s00d473e0.cpp
 void* __fastcall FUN_00d473e0(void* self, void* dummy, u32 arg)
 {
   (void)dummy;

@@ -493,7 +493,7 @@ RBNode* __stdcall RB_AllocNode(const RBNode* src, RBNode* parent)
     return n;
 }
 
-// 0x00a24530 (byte-exact lifted version: match/slices/s00a24530/s00a24530.cpp)
+// 0x00a24530: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a24530/s00a24530.cpp
 RBNode* __thiscall RBTree::CloneNode(RBNode* src, RBNode* parent)
 {
     RBNode* dst = RB_AllocNode(src, parent);

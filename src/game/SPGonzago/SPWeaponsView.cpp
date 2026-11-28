@@ -694,7 +694,7 @@ cSpaceDefenseMissileView::~cSpaceDefenseMissileView()
         mpEffectInfo->Release();
 }
 
-// 0x00cc2d30 (byte-exact lifted version: match/slices/s00cc2d30/s00cc2d30.cpp)
+// 0x00cc2d30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cc2d30/s00cc2d30.cpp
 void cSpaceDefenseMissileView::HandleSimulationUpdate(int a, int b)
 {
     cSpatialObjectView::HandleSimulationUpdate(a, b);

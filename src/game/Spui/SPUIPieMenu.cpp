@@ -672,7 +672,7 @@ bool cSPUIPieMenuItem::SetPos(int a, int b)
     return true;
 }
 
-// 0x00817ee0 (byte-exact lifted version: match/slices/s00817ee0/s00817ee0.cpp)
+// 0x00817ee0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00817ee0/s00817ee0.cpp
 void cSPUIPieMenuItem::SetTextColor(int color)
 {
     if (!color) return;

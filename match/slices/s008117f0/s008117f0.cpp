@@ -331,7 +331,7 @@ void __thiscall cSPUILayoutObjectCollection::attach_parent()
     ((CollStub*)this)->m11330();
 }
 
-// 0x00811b80 (byte-exact lifted version: match/slices/s00811b80/s00811b80.cpp)
+// 0x00811b80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00811b80/s00811b80.cpp
 void __thiscall cSPUILayoutObjectCollectionV8::OnLoad()
 {
     u8* self = (u8*)this;

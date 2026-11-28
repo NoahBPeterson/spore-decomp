@@ -199,7 +199,7 @@ SwarmEffect::SwarmEffect()
       f40(0), f44(0), f48(0), f4c(0), f50(0), f54(0), f58(0), f5c(0),
       f60(0), f64(0), f68(0), f6c(0), f70(0), f74(0) {}
 
-// 0x007ec660 (byte-exact lifted version: match/slices/s007ec660/s007ec660.cpp)
+// 0x007ec660: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ec660/s007ec660.cpp
 SwarmEffect::~SwarmEffect()
 {
   if (f6c && *(int*)(f6c - 4)) operator delete((void*)f6c);

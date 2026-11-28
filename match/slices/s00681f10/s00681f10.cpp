@@ -494,7 +494,7 @@ ObjC30* Map1::operator[](const int& key) {
 }
 
 // =====================================================================
-// 0x00682be0 (byte-exact lifted version: match/slices/s00682be0/s00682be0.cpp)  clone Map2 tree (eastl rbtree copy)
+// 0x00682be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00682be0/s00682be0.cpp  clone Map2 tree (eastl rbtree copy)
 // =====================================================================
 Node2* Map2::Clone(Node2* src, Node2* parent) {
     Node2* dst = (Node2*)CreateNode2(&src->mKey);

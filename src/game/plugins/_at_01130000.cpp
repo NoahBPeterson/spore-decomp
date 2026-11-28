@@ -398,7 +398,7 @@ int __cdecl FUN_01139230(void* rec)
 }
 }}}  // namespace rw::audio::core
 
-// 0x01139260 (byte-exact lifted version: match/slices/s01139260/s01139260.cpp)
+// 0x01139260: not byte-exact; the byte-exact version is the lifted one in match/slices/s01139260/s01139260.cpp
 namespace rw { namespace audio { namespace core {
 bool __cdecl FUN_01139260(void* p)
 {

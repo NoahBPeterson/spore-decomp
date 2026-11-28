@@ -361,7 +361,7 @@ void __thiscall LayerInfoVec::dtor()
     if (b && b != inline_) GameFree(b);
 }
 
-// 0x0080ead0 (byte-exact lifted version: match/slices/s0080ead0/s0080ead0.cpp)
+// 0x0080ead0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0080ead0/s0080ead0.cpp
 void __thiscall cSPUILayeredObject::dtor()
 {
     vtbl = (void**)0x1417dc4;

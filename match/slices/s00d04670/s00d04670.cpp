@@ -9,7 +9,6 @@ struct C_00d04670 { int FUN_00d04670(unsigned int, unsigned int); };
 extern "C" int __cdecl FUN_00f473a0(...);
 
 // @ 0x00d04670
-// @ 0x00d04670
 extern "C" int __fastcall FUN_00d04670(char* self, int edx_unused, int a4, int a8)
 {
     int t1004;

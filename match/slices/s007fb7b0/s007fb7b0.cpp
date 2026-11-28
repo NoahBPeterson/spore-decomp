@@ -266,7 +266,7 @@ Pair8* f_7fbdb0(Pair8* first, Pair8* last, Pair8* dest) {
   return result;
 }
 
-// 0x007fbf40 (byte-exact lifted version: match/slices/s007fbf40/s007fbf40.cpp)
+// 0x007fbf40: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fbf40/s007fbf40.cpp
 struct Sub18 { void Ctor(); void RemoveAllPredicates(); void RemoveAllActions(); void BaseDtor(); };
 struct Sub68 { void FreeBuffer(); };
 struct WinProcInit { void Dtor(); };
@@ -303,7 +303,7 @@ void* C_7fbf40::Ctor() {
   return this;
 }
 
-// 0x007fc200 (byte-exact lifted version: match/slices/s007fc200/s007fc200.cpp)
+// 0x007fc200: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fc200/s007fc200.cpp
 extern char ed_a[], ed_b[], ed_c[], ed_d[], ed_e[];
 struct C_7fc200 { char pad[4]; void Dtor(); };
 void C_7fc200::Dtor() {
@@ -440,7 +440,7 @@ bool Obj7fc600::f_7fc600(int a, int b) {
   return ok;
 }
 
-// 0x007fc690 (byte-exact lifted version: match/slices/s007fc690/s007fc690.cpp)
+// 0x007fc690: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fc690/s007fc690.cpp
 int f_7fc690(void* self, void* param) {
   char s[0x10];
   string_ctor_copy(s, (char*)self + 0x50);
@@ -461,7 +461,7 @@ int f_7fc690(void* self, void* param) {
   return 1;
 }
 
-// 0x007fc790 (byte-exact lifted version: match/slices/s007fc790/s007fc790.cpp)
+// 0x007fc790: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fc790/s007fc790.cpp
 int f_7fc790(void* self, void* param) {
   void* old = *(void**)((char*)self + 0x4c);
   *(void**)((char*)self + 0x4c) = param;

@@ -26,7 +26,6 @@ extern "C" void __cdecl FUN_01036af0(...);
 extern "C" void __cdecl FUN_01037760(...);
 
 // @ 0x010377f0
-// @ 0x010377f0
 extern "C" void __fastcall FUN_010377f0(char* self, int edx_unused, int a4)
 {
     int t1002;

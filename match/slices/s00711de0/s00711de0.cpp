@@ -134,7 +134,7 @@ TailVec::TailVec(const TailVec& src)
     assign(src.mpBegin, src.mpEnd, &src);
 }
 
-// 0x007127d0 (byte-exact lifted version: match/slices/s007127d0/s007127d0.cpp)
+// 0x007127d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007127d0/s007127d0.cpp
 struct State27D0 {
     uint32_t m0[9];        // +0x00
     TailVec mVec;          // +0x24
@@ -149,7 +149,7 @@ State27D0* State27D0::CopyFrom(const State27D0& src)
     return this;
 }
 
-// 0x00712850 (byte-exact lifted version: match/slices/s00712850/s00712850.cpp)
+// 0x00712850: not byte-exact; the byte-exact version is the lifted one in match/slices/s00712850/s00712850.cpp
 struct State2850 {
     uint32_t m0[9];        // +0x00
     TailVec mVec;          // +0x24
@@ -585,7 +585,7 @@ struct FreeNode24 {
     FreeNode24* mpNext;    // +0x4c
 };
 
-// 0x00712320 (byte-exact lifted version: match/slices/s00712320/s00712320.cpp)
+// 0x00712320: not byte-exact; the byte-exact version is the lifted one in match/slices/s00712320/s00712320.cpp
 void __stdcall DoFreeNodes24(FreeNode24** pArray, uint32_t n)
 {
     uint32_t result;

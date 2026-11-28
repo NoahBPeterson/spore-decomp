@@ -177,7 +177,7 @@ void Stopwatch_s0057_18f0::Restart()
 }
 }  // namespace EA
 
-// 0x006758a0 (byte-exact lifted version: match/slices/s006758a0/s006758a0.cpp)
+// 0x006758a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006758a0/s006758a0.cpp
 HashInsertResult* UIntHashTable::DoInsertValue(HashInsertResult* pResult, const uint32_t* pKey, bool)
 {
     uint32_t nKey         = *pKey;

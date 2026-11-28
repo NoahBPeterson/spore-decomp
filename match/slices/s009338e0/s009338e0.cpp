@@ -20,7 +20,6 @@ extern "C" int __cdecl FUN_00939d30(...);
 extern "C" void __cdecl FUN_00f47380(...);
 
 // @ 0x009338e0
-// @ 0x009338e0
 extern "C" int __cdecl FUN_009338e0(int a4, int a8, int a12, int a16, int a20)
 {
     int t1000;

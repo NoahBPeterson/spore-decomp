@@ -4973,7 +4973,7 @@ bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetCellGutters(float a, float b, f
     return true;
 }
 
-// 0x00971b60 (byte-exact lifted version: match/slices/s00971b60/s00971b60.cpp)
+// 0x00971b60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00971b60/s00971b60.cpp
 void EA::UTFWinControls::IWinGrid_s0097_0f30::ScrollToColumn(int col)
 {
     if (col == mnFirstVisibleColumn)
@@ -4992,7 +4992,7 @@ void EA::UTFWinControls::IWinGrid_s0097_0f30::ScrollToColumn(int col)
     ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->Invalidate();
 }
 
-// 0x00971be0 (byte-exact lifted version: match/slices/s00971be0/s00971be0.cpp)
+// 0x00971be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00971be0/s00971be0.cpp
 void EA::UTFWinControls::IWinGrid_s0097_0f30::ScrollToRow(int row)
 {
     if (row == mnFirstVisibleRow)
@@ -5103,7 +5103,7 @@ bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetHeadingSizes(float colHeight, f
     return true;
 }
 
-// 0x00971eb0 (byte-exact lifted version: match/slices/s00971eb0/s00971eb0_lifted.cpp)
+// 0x00971eb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00971eb0/s00971eb0_lifted.cpp
 void EA::UTFWinControls::IWinGrid_s0097_1eb0::SetHeadingFormat(const void* pFormat)
 {
     unsigned long* pDst = (unsigned long*)&mVisibleColumnCount;
@@ -6057,7 +6057,7 @@ RBNode* RBTree_s0097_3dd0::DoCopySubtree_40(const RBNode* src, RBNode* parent)
     }
     return newRoot;}
 
-// 0x00974050 (byte-exact lifted version: match/slices/s00974050/s00974050.cpp)
+// 0x00974050: not byte-exact; the byte-exact version is the lifted one in match/slices/s00974050/s00974050.cpp
 RBNode* RBTree_s0097_3dd0::DoCopySubtree_0c(const RBNode* src, RBNode* parent)
 {
     RBNode* newRoot = CreateNodeCopy(src, parent);
@@ -6380,7 +6380,7 @@ int IWinGrid::GetCellExtraData(int col, int row)
     return 0;
 }
 
-// 0x00974c30 (byte-exact lifted version: match/slices/s00974c30/s00974c30.cpp)
+// 0x00974c30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00974c30/s00974c30.cpp
 int __cdecl Comparator(CellData_s0097_3dd0* a, CellData_s0097_3dd0* b)
 {
     int t = a->nCellType;

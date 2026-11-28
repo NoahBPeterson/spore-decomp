@@ -711,7 +711,7 @@ void IMECompositionStringDataEx_s0084_af40::Clear()
     RebuildCandidates();
 }
 
-// 0x0084b260 (byte-exact lifted version: match/slices/s0084b260/s0084b260.cpp)
+// 0x0084b260: not byte-exact; the byte-exact version is the lifted one in match/slices/s0084b260/s0084b260.cpp
 void IMECompositionStringDataEx_s0084_af40::ResizeCandidates(unsigned nCount)
 {
     unsigned nHave = (unsigned)(mVectorAtZero.mpEnd - mVectorAtZero.mpBegin);

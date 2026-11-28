@@ -388,7 +388,7 @@ void* Mp3Player_link(Mp3Player* self)
     return node;
 }
 
-// 0x011313b0 (byte-exact lifted version: match/slices/s011313b0/s011313b0.cpp)
+// 0x011313b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s011313b0/s011313b0.cpp
 int Mp3Player_setTableGain(void* fmt, int index, Mp3Player* self)
 {
     float* tbl = *(float**)((unsigned char*)fmt + 0xc);
@@ -456,7 +456,7 @@ int Mp3Player_destroy(Mp3Player* self)
     return 0;
 }
 
-// 0x01131540 (byte-exact lifted version: match/slices/s01131540/s01131540.cpp)
+// 0x01131540: not byte-exact; the byte-exact version is the lifted one in match/slices/s01131540/s01131540.cpp
 int Mp3Player_setChannel(void* fmt, Mp3Player* self)
 {
     FUN_0113ff00(self->mStartHandle, RwFloat2Int(*(float*)fmt * 127.0f));

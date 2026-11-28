@@ -465,7 +465,7 @@ bool __cdecl FUN_00f392b0(const ResKey& key, eastl::string16* out, uint32_t x)
 // ===========================================================================
 // 0x00f39470 -- collectable-item text builder
 // ===========================================================================
-// 0x00f39470 (byte-exact lifted version: match/slices/s00f39470/s00f39470.cpp)
+// 0x00f39470: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f39470/s00f39470.cpp
 bool __cdecl FUN_00f39470(const ResKey* key, eastl::string16* out)
 {
   cPropertyList* list = 0;

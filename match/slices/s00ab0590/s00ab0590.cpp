@@ -466,7 +466,7 @@ void cParticlesEffect::Update(float dt)
     } while (dt > 0.0f);
 }
 
-// 0x00ab0720 (byte-exact lifted version: match/slices/s00ab0720/s00ab0720.cpp)
+// 0x00ab0720: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ab0720/s00ab0720.cpp
 void cParticlesEffect::StepFrame()
 {
     cParticle* pHead = (cParticle*)&mParticles.mpNext;

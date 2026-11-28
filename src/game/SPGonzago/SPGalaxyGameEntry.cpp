@@ -8946,7 +8946,7 @@ char __stdcall FUN_00dddaa0(int a1, float a2, float a3, int a4)
     return 0;
 }
 
-// 0x00dddb10 (byte-exact lifted version: match/slices/s00dddb10/s00dddb10.cpp)
+// 0x00dddb10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dddb10/s00dddb10.cpp
 char __stdcall FUN_00dddb10(int a1, float a2, float a3, int a4)
 {
     if (kGUI_PanelIDs_s00dd_cdc0 != 0)
@@ -9092,7 +9092,7 @@ void RegisterSmall(void* param)
         *(void***)param)[0x20 / 4])(param, o, 0x2ccd1d2, "GalaxyGameEntry");
 }
 
-// 0x00dddf30 (byte-exact lifted version: match/slices/s00dddf30/s00dddf30.cpp)
+// 0x00dddf30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dddf30/s00dddf30.cpp
 ArgScript* MakeLevelCheats(ArgScript* self, int arg)
 {
     FUN_0083c800();
@@ -10234,7 +10234,7 @@ cUIPropertyTableSet::cUIPropertyTableSet()
     mbD0 = 0;
 }
 
-// 0x00de2de0 (byte-exact lifted version: match/slices/s00de2de0/s00de2de0.cpp)
+// 0x00de2de0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00de2de0/s00de2de0.cpp
 cUIPropertyTableSet::~cUIPropertyTableSet()
 {
     mTables.Destroy();
@@ -11585,7 +11585,7 @@ void __stdcall FUN_00de5d00(uint32_t a1, uint32_t a2, uint32_t a3, const uint32_
     req.Dtor();
 }
 
-// 0x00de5df0 (byte-exact lifted version: match/slices/s00de5df0/s00de5df0.cpp)
+// 0x00de5df0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00de5df0/s00de5df0.cpp
 InsertResult8* HashTable34::FUN_00de5df0(InsertResult8* pOut, const uint32_t* pKey, uint32_t nReserved)
 {
     (void)nReserved;
@@ -11945,7 +11945,7 @@ void cRecordMap::FUN_00de9dc0(const void* pKey)
     this->FUN_00de6f20((uint32_t)pKey, (uint8_t*)pNode + 0x1c);
 }
 
-// 0x00de9e20 (byte-exact lifted version: match/slices/s00de9e20/s00de9e20.cpp)
+// 0x00de9e20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00de9e20/s00de9e20.cpp
 void cGameInfoVector::FUN_00de9e20(uint32_t nCount)
 {
     int32_t nHave = (int32_t)(mpEnd - mpBegin) / 0xbc;
@@ -15824,7 +15824,7 @@ void cGalaxyGameEntryUIStateMachine_s00df_47b0::FUN_00df5330()
     ((GalaxyStateBase*)this)->FUN_00dee360();
 }
 
-// 0x00df5830 (byte-exact lifted version: match/slices/s00df5830/s00df5830.cpp)
+// 0x00df5830: not byte-exact; the byte-exact version is the lifted one in match/slices/s00df5830/s00df5830.cpp
 bool cDownloadDialog::FUN_00df5830(void* retaddr)
 {
     uint key[3];
@@ -15891,7 +15891,7 @@ cDownloadDialog* __fastcall cDownloadDialog_ctor_5940(cDownloadDialog* self)
     return self;
 }
 
-// 0x00df59c0 (byte-exact lifted version: match/slices/s00df59c0/s00df59c0.cpp)
+// 0x00df59c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00df59c0/s00df59c0.cpp
 bool cDownloadDialog::FUN_00df59c0(void* p)
 {
     uint key[3];
@@ -17233,7 +17233,7 @@ void GGUI::FUN_00df9dc0(unsigned index, int v)
     }
 }
 
-// 0x00df9e60 (byte-exact lifted version: match/slices/s00df9e60/s00df9e60.cpp)
+// 0x00df9e60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00df9e60/s00df9e60.cpp
 void GGUI::FUN_00df9e60()
 {
     if (mIndex == 0) {
@@ -17375,7 +17375,7 @@ void GGUI::FUN_00df9fc0()
     FUN_00df9b30(flag2);
 }
 
-// 0x00dfa370 (byte-exact lifted version: match/slices/s00dfa370/s00dfa370.cpp)
+// 0x00dfa370: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dfa370/s00dfa370.cpp
 void FUN_00dfa370()
 {
     AGSwarm* o = (AGSwarm*)FUN_00dd9190_s00df_9650();
@@ -19475,7 +19475,7 @@ V4e0* V4e0::AssignWrap(V4e0* other)
     return this;
 }
 
-// 0x00dfedb0 (byte-exact lifted version: match/slices/s00dfedb0/s00dfedb0.cpp)
+// 0x00dfedb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dfedb0/s00dfedb0.cpp
 void* ElemA::CopyAssign(void* o)
 {
     void* s = this;
@@ -19569,7 +19569,7 @@ void cUISpaceRes::Destroy()
     mpVtbl00 = (void*)g_13eb938;
 }
 
-// 0x00dff130 (byte-exact lifted version: match/slices/s00dff130/s00dff130.cpp)
+// 0x00dff130: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dff130/s00dff130.cpp
 void* ElemB::Init(void* o)
 {
     void* s = this;
@@ -19586,7 +19586,7 @@ void* ElemB::Init(void* o)
     return s;
 }
 
-// 0x00dff1a0 (byte-exact lifted version: match/slices/s00dff1a0/s00dff1a0.cpp)
+// 0x00dff1a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dff1a0/s00dff1a0.cpp
 void* ElemA::CopyCtor(void* o)
 {
     void* s = this;
@@ -19753,7 +19753,7 @@ Vec27e8& Vec27e8::sub_dff8e0(const Vec27e8& x)
     return *this;
 }
 
-// 0x00dffa30 (byte-exact lifted version: match/slices/s00dffa30/s00dffa30.cpp)
+// 0x00dffa30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00dffa30/s00dffa30.cpp
 PropBaseA22& PropBaseA22::sub_dffa30(const PropBaseA22& x)
 {
     f08 = x.f08;

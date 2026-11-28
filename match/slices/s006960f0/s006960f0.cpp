@@ -179,7 +179,7 @@ class cLocaleChangeMessage : public EA::Messaging::IMessageRC, public EA::RefCou
 // @ 0x00696350
 cLocaleChangeMessage::cLocaleChangeMessage(const FixedString16& id) : mLocaleId(id) {}
 
-// 0x006963d0 (byte-exact lifted version: match/slices/s006963d0/s006963d0.cpp) is the compiler-generated scalar deleting destructor (??_G) of
+// 0x006963d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006963d0/s006963d0.cpp is the compiler-generated scalar deleting destructor (??_G) of
 // cLocaleChangeMessage: it inlines the destructor below.
 
 cLocaleChangeMessage::~cLocaleChangeMessage() {}

@@ -900,7 +900,7 @@ Quaternion* QuaternionFromMatrix33(Quaternion* out, const Matrix33* mat, float e
     return out;
 }
 
-// 0x004c09e0 (byte-exact lifted version: match/slices/s004c09e0/s004c09e0.cpp)
+// 0x004c09e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c09e0/s004c09e0.cpp
 BasicString16* BasicString16::sprintf_va_list(const wchar_t* fmt, char* args)
 {
     const int nOldSize = (int)(((char*)mpEnd - (char*)mpBegin) >> 1);
@@ -969,7 +969,7 @@ WideFixedStr_s004c_10e0* WideFixedStr_s004c_10e0::AppendN(uint32_t n, uint16_t c
 }
 }  // namespace eastl
 
-// 0x004c2100 (byte-exact lifted version: match/slices/s004c2100/s004c2100_lifted.cpp)
+// 0x004c2100: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c2100/s004c2100_lifted.cpp
 void VectorSwap4(uint32_t* a, uint32_t* b)
 {
     if (&a[3] == &b[3]) {
@@ -1002,13 +1002,13 @@ void VectorAssign4(uint32_t* self, uint32_t* other)
     (void)self; (void)other;
 }
 
-// 0x004c29c0 (byte-exact lifted version: match/slices/s004c29c0/s004c29c0.cpp)
+// 0x004c29c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c29c0/s004c29c0.cpp
 void eastl_set_capacity(eastl::WideFixedStr* self, uint32_t n)
 {
     (void)self; (void)n;
 }
 
-// 0x004c2ad0 (byte-exact lifted version: match/slices/s004c2ad0/s004c2ad0.cpp)
+// 0x004c2ad0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c2ad0/s004c2ad0.cpp
 void WideFixedStr_SwapHeap(eastl::WideFixedStr* self, eastl::WideFixedStr* other)
 {
     (void)self; (void)other;

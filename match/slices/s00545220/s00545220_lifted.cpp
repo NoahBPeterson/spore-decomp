@@ -10,7 +10,6 @@ struct C_00429520 { void FUN_00429520(unsigned int); };
 struct C_00548740 { void FUN_00548740(unsigned int, unsigned int); };
 
 // @ 0x00545220
-// @ 0x00545220
 extern "C" void __cdecl FUN_00545220(int a4, int a8, int a12)
 {
     int v_l24;

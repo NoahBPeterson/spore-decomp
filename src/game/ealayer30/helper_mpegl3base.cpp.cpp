@@ -888,7 +888,7 @@ void NegateRows(Row* rows)
     }
 }
 
-// 0x01167cf0 (byte-exact lifted version: match/slices/s01167cf0/s01167cf0.cpp)
+// 0x01167cf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01167cf0/s01167cf0.cpp
 void PackHeightBlock(const float* src, short* dst)
 {
     short* end = dst + 576;

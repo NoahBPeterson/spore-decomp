@@ -119,7 +119,7 @@ loop:
     }
 }
 
-// 0x01165fa0 (byte-exact lifted version: match/slices/s01165fa0/s01165fa0.cpp)
+// 0x01165fa0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01165fa0/s01165fa0.cpp
 // The dequantiser leaves the four short windows of each of the eight 72-line blocks stacked as a
 // 4x18 matrix (four 18-line planes at stride 0x120 bytes); the IMDCT wants them as 18 four-wide
 // slots, so every block is transposed.  (The original spells the outer 18-trip loop out with the

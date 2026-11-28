@@ -193,7 +193,7 @@ void AudioFuncB4()
     s->CallB4();
 }
 
-// 0x00a46690 (byte-exact lifted version: match/slices/s00a46690/s00a46690.cpp)
+// 0x00a46690: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a46690/s00a46690.cpp
 int __stdcall AtomCheckPtr(int* p, unsigned int n)
 {
     if (p != 0) {

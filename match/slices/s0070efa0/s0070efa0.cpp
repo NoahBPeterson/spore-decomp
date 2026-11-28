@@ -140,7 +140,7 @@ void VecA::Shrink(void** arg1, void** arg2)
     mpEnd = (void**)((char*)mpEnd + ((char*)arg2 - (char*)arg1));
 }
 
-// 0x0070fab0 (byte-exact lifted version: match/slices/s0070fab0/s0070fab0.cpp)
+// 0x0070fab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0070fab0/s0070fab0.cpp
 void VecB::Shrink(void** arg1, void** arg2)
 {
     void** p = AssignCopyB(arg1, mpEnd, arg2);

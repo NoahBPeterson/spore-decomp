@@ -440,7 +440,7 @@ void f_013ca6f0() {
     *(void**)g_15b7510 = vtbl_1416f14;
 }
 
-// 0x013ca7f0 (byte-exact lifted version: match/slices/s013ca7f0/s013ca7f0.cpp)
+// 0x013ca7f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s013ca7f0/s013ca7f0.cpp
 void f_013ca7f0() {
     void* p = g_15b7650;
     *(void**)g_15b7648 = vtbl_14996d4;

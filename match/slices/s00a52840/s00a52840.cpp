@@ -24,7 +24,6 @@ struct il2c_vc1 {
 extern "C" int __cdecl FUN_00a67d00(...);
 
 // @ 0x00a52840
-// @ 0x00a52840
 extern "C" void __cdecl FUN_00a52840(int a4, int a8, int a12, int a16, int a20)
 {
     int t1001;

@@ -593,7 +593,7 @@ struct Vec28 {
     Vec28* Construct(int count, int unused);   // 0x00a05830
 };
 
-// 0x00a05830 (byte-exact lifted version: match/slices/s00a05830/s00a05830.cpp)
+// 0x00a05830: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a05830/s00a05830.cpp
 Vec28* Vec28::Construct(int count, int unused) {
     (void)unused;
     void* p = 0;

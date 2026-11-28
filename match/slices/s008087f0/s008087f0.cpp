@@ -303,7 +303,7 @@ struct RolloverFrameLayout : EditorResourceBase {
     virtual ~RolloverFrameLayout();
 };
 
-// 0x00808ce0 (byte-exact lifted version: match/slices/s00808ce0/s00808ce0.cpp)
+// 0x00808ce0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00808ce0/s00808ce0.cpp
 RolloverFrameLayout::~RolloverFrameLayout()
 {
     mLayout.Shutdown(true);

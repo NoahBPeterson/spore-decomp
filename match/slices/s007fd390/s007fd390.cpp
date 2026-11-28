@@ -9,7 +9,6 @@ extern "C" unsigned char g_01415b14[];
 struct C_007f53c0 { int FUN_007f53c0(unsigned int); };
 
 // @ 0x007fd390
-// @ 0x007fd390
 extern "C" bool __cdecl FUN_007fd390(int a4, int a8, int a12, int a16)
 {
     int v_l8;

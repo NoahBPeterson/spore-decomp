@@ -198,7 +198,7 @@ void Obj43::FUN_00548450(int pos, int value)
     }
 }
 
-// 0x00548690 (byte-exact lifted version: match/slices/s00548690/s00548690.cpp)
+// 0x00548690: not byte-exact; the byte-exact version is the lifted one in match/slices/s00548690/s00548690.cpp
 void* Obj43::FUN_00548690(int* param_2, int* param_3)
 {
     int base = (int)this;
@@ -265,7 +265,7 @@ void* Obj43::FUN_00548910(int* param_2, int* param_3)
     return param_2;
 }
 
-// 0x00548a30 (byte-exact lifted version: match/slices/s00548a30/s00548a30.cpp)
+// 0x00548a30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00548a30/s00548a30.cpp
 int Obj43::FUN_00548a30(int param_2, int param_3)
 {
     int base = (int)this;

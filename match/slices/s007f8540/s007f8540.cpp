@@ -142,7 +142,7 @@ struct Vec8c {
     void     reserve(uint32_t n);                                      // 0x007f90f0
 };
 
-// 0x007f8540 (byte-exact lifted version: match/slices/s007f8540/s007f8540_lifted.cpp)
+// 0x007f8540: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f8540/s007f8540_lifted.cpp
 AInfo8c* Vec8c::erase(AInfo8c* first, AInfo8c* last) {
     AInfo8c* end = mpEnd;
     AInfo8c* newEnd = do_copy_animinfo(last, end, first);

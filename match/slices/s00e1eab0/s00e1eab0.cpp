@@ -516,7 +516,7 @@ void* __cdecl FUN_00e1f570(void* first, void* last, u32 key, u8 flag, RefObj* re
 // ---------------------------------------------------------------------------------------------
 // 0x00e1f700 -- insert [a,b) into the sorted record vector, destroying any overwritten tail.
 // ---------------------------------------------------------------------------------------------
-// 0x00e1f700 (byte-exact lifted version: match/slices/s00e1f700/s00e1f700.cpp)
+// 0x00e1f700: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e1f700/s00e1f700.cpp
 void* __fastcall FUN_00e1f700(void* self, int, void* a, void* b)
 {
     char* end = *(char**)((char*)self + 4);

@@ -469,7 +469,7 @@ void __fastcall FUN_00ed63a0(void* self_)
     *(u32*)(self + 0x20) = 0xffffffff;
 }
 
-// 0x00ed6540 (byte-exact lifted version: match/slices/s00ed6540/s00ed6540.cpp)
+// 0x00ed6540: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed6540/s00ed6540.cpp
 void __fastcall FUN_00ed6540(void* self_, int dummy, int param_2)
 {
     char* self = (char*)self_;

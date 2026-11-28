@@ -712,7 +712,7 @@ struct cTreeOwner {
 };
 // ---- items of slice s00e18ac0 end
 
-// 0x00e188b0 (byte-exact lifted version: match/slices/s00e188b0/s00e188b0.cpp)
+// 0x00e188b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e188b0/s00e188b0.cpp
 void *cUIMissionCardPanel::InitHints(void *param)
 {
     void *raw = operator_new(0x18, 0x13f6b3c, 0, 0, 0, 0);
@@ -2379,7 +2379,7 @@ void __cdecl FUN_00e1f5c0(void* a, void* b, void* c, void* d)
     FUN_00e1f330(first, middle, cmp);
 }
 
-// 0x00e1f700 (byte-exact lifted version: match/slices/s00e1f700/s00e1f700.cpp)
+// 0x00e1f700: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e1f700/s00e1f700.cpp
 void* __fastcall FUN_00e1f700(void* self, int, void* a, void* b)
 {
     char* end = *(char**)((char*)self + 4);

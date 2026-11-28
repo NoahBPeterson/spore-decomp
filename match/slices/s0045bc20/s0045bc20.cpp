@@ -106,7 +106,7 @@ void Skel::Compact()
 }
 
 // =====================================================================
-// 0x0045c0f0 (byte-exact lifted version: match/slices/s0045c0f0/s0045c0f0.cpp)  rebuild skinning arrays into local copies + remap indices
+// 0x0045c0f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0045c0f0/s0045c0f0.cpp  rebuild skinning arrays into local copies + remap indices
 // =====================================================================
 struct Mat4 { float m[16]; };              // 0x40-byte matrix element
 
@@ -137,7 +137,7 @@ struct ColladaExport {
     void Finalize0();
 };
 
-// 0x0045c0f0 (byte-exact lifted version: match/slices/s0045c0f0/s0045c0f0.cpp)
+// 0x0045c0f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0045c0f0/s0045c0f0.cpp
 void ColladaExport::Finalize0()
 {
     Mat4 tmpC, tmpB, tmpA;

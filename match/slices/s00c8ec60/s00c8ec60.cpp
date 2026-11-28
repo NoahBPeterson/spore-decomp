@@ -545,7 +545,7 @@ void cSpatialThing_FUN_00c8ef20(cSpatialThing* pThis, cSPVector3* pOut)
 // ---------------------------------------------------------------------------
 // 0x00c8efc0
 // ---------------------------------------------------------------------------
-// 0x00c8efc0 (byte-exact lifted version: match/slices/s00c8efc0/s00c8efc0.cpp)
+// 0x00c8efc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8efc0/s00c8efc0.cpp
 void cTribe_FUN_00c8efc0(cTribe* pThis)
 {
     if (pThis->mppToolBegin != nullptr) {
@@ -976,7 +976,7 @@ bool cTribe::Write(void* pStream)
 // ---------------------------------------------------------------------------
 // 0x00c8fa60
 // ---------------------------------------------------------------------------
-// 0x00c8fa60 (byte-exact lifted version: match/slices/s00c8fa60/s00c8fa60.cpp)
+// 0x00c8fa60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8fa60/s00c8fa60.cpp
 bool cTribe::FUN_00c8fa60()
 {
     cSpeciesManager* pManager = (cSpeciesManager*)GetSetting9();

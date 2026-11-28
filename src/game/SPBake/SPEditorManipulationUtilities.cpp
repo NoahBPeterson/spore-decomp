@@ -7327,7 +7327,7 @@ void cSPEditorLimbStructure_s0048_9530::MirrorTargetsOffset(cSPEditorLimbJoint_s
 }
 }  // namespace SP
 
-// 0x00489710 (byte-exact lifted version: match/slices/s00489710/s00489710.cpp)
+// 0x00489710: not byte-exact; the byte-exact version is the lifted one in match/slices/s00489710/s00489710.cpp
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::RefreshTargets(vector_s0048_9530<cSPEditorLimbJoint_s0048_9530*>* list, bool b)
 {
@@ -7339,7 +7339,7 @@ void cSPEditorLimbStructure_s0048_9530::RefreshTargets(vector_s0048_9530<cSPEdit
 }
 }  // namespace SP
 
-// 0x004897b0 (byte-exact lifted version: match/slices/s004897b0/s004897b0.cpp)
+// 0x004897b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004897b0/s004897b0.cpp
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::RefreshBlockTargets(cSPEditorBlock_s0048_9530* block, bool b)
 {
@@ -7377,7 +7377,7 @@ void cSPEditorLimbStructure_s0048_9530::CollectBlocks(cSPEditorBlock_s0048_9530*
 }
 }  // namespace SP
 
-// 0x00489ae0 (byte-exact lifted version: match/slices/s00489ae0/s00489ae0.cpp)
+// 0x00489ae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00489ae0/s00489ae0.cpp
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::FixAllJoints()
 {
@@ -7588,7 +7588,7 @@ cSPEditorLimbJoint_s0048_c0f0* cSPEditorLimbStructure_s0048_c0f0::BuildJoints(cS
 }
 }  // namespace SP
 
-// 0x0048c790 (byte-exact lifted version: match/slices/s0048c790/s0048c790.cpp)
+// 0x0048c790: not byte-exact; the byte-exact version is the lifted one in match/slices/s0048c790/s0048c790.cpp
 namespace SP {
 void BuildPileList(cSPEditorBlock_s0048_c0f0* block, vector_s0048_c0f0<cSPEditorBlock_s0048_c0f0*>* list, bool b)
 {
@@ -10487,7 +10487,7 @@ void FUN_49ec40(cSPEditorBlock_s0049_de30* block, cSPVector3_s0049_de30* out, cS
     (*out)[0] = 0.0f;
 }
 
-// 0x0049ecf0 (byte-exact lifted version: match/slices/s0049ecf0/s0049ecf0_lifted.cpp)
+// 0x0049ecf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0049ecf0/s0049ecf0_lifted.cpp
 void FUN_49ecf0(cSPEditorBlock_s0049_ecf0* block, LimbVec_s0049_ecf0<cSPEditorBlock_s0049_ecf0*>* blocks, cSPVector3_s0049_ecf0 pos, cSPMatrix3_s0049_ecf0 mat)
 {
     cSPMatrix3_s0049_ecf0 savedTorso(block->mTorsoMat);
@@ -10620,7 +10620,7 @@ void RepinBlockToTorso(cSPEditorBlock_s0049_fbd0* block, cSPVector3_s0049_fbd0 t
     }
 }
 
-// 0x0049fee0 (byte-exact lifted version: match/slices/s0049fee0/s0049fee0.cpp)
+// 0x0049fee0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0049fee0/s0049fee0.cpp
 void FUN_49fee0(cSPEditorBlock_s0049_fbd0* block, bool unique)
 {
     LimbVec<cSPEditorBlock_s0049_fbd0*> limbs;
@@ -11100,7 +11100,7 @@ bool FUN_4a2060(cSPEditorBlock_s004a_1a70* block)
     }
 }
 
-// 0x004a2180 (byte-exact lifted version: match/slices/s004a2180/s004a2180.cpp)
+// 0x004a2180: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a2180/s004a2180.cpp
 rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock_s004a_1a70* a, cSPEditorBlock_s004a_1a70* b)
 {
     int i0, axis, i2;                             // axis is the 2nd out value
@@ -11397,7 +11397,7 @@ void SnapBlockToSocket(cSPEditorBlock_s004a_29a0* block, int unused, cSPEditorBl
 void FUN_4a3760(int param, float* a, float* b)
 { (void)param; (void)a; (void)b; }
 
-// 0x004a37f0 (byte-exact lifted version: match/slices/s004a37f0/s004a37f0.cpp)
+// 0x004a37f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a37f0/s004a37f0.cpp
 void FUN_4a37f0(cSPEditorBlock_s004a_3760* block)
 { (void)block; }
 
@@ -11405,7 +11405,7 @@ void FUN_4a37f0(cSPEditorBlock_s004a_3760* block)
 void FUN_4a3920(cSPEditorBlock_s004a_3760* block)
 { (void)block; }
 
-// 0x004a3c70 (byte-exact lifted version: match/slices/s004a3c70/s004a3c70.cpp)
+// 0x004a3c70: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a3c70/s004a3c70.cpp
 cSPEditorBlock_s004a_3760* FUN_4a3c70(cSPEditorBlock_s004a_3760* block)
 { (void)block; return 0; }
 
@@ -11883,7 +11883,7 @@ void FUN_4a6ca0(cSPEditorModel_s004a_6690* model, int value)
     model->FUN_4adc20(saved);
 }
 
-// 0x004a6d20 (byte-exact lifted version: match/slices/s004a6d20/s004a6d20.cpp)
+// 0x004a6d20: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a6d20/s004a6d20.cpp
 void FUN_4a6d20(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6690* blocks, bool param3, cSPEditorSkinManager* skin, int param5, bool invalid, bool recurseChildren, bool recurseSymmetric)
 {
     AutoRefCount_s004a_6690<cSPEditorModel_s004a_6690> model(block->GetEditorModel());
@@ -12027,7 +12027,7 @@ bool SameKey(ResKeySource* a, ResKeySource* b)
         && first.mGroup == src.mGroup;
 }
 
-// 0x004a7c90 (byte-exact lifted version: match/slices/s004a7c90/s004a7c90.cpp)
+// 0x004a7c90: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a7c90/s004a7c90.cpp
 void GatherBlocks(cSPEditorBlock_s004a_7c30* param_1, UIntVector* param_2)
 {
     if (param_1 == 0) return;
@@ -12237,7 +12237,7 @@ M3::M3(float a, float b, float c, float d, float e, float f, float g, float h, f
     m[2].Set(g, h, i);
 }
 
-// 0x004a8e10 (byte-exact lifted version: match/slices/s004a8e10/s004a8e10.cpp)
+// 0x004a8e10: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a8e10/s004a8e10.cpp
 void* BuildFacingMatrix(void* param_1, void* param_2, unsigned char param_3)
 {
     float f1[3];
@@ -12306,7 +12306,7 @@ void HavokAlignedRoutine(void* param_1, void* param_2)
     (void)param_2;
 }
 
-// 0x004a9610 (byte-exact lifted version: match/slices/s004a9610/s004a9610.cpp)
+// 0x004a9610: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a9610/s004a9610.cpp
 void ConvertToMatrix(void* param_1, void* param_2)
 {
     float f[4];
@@ -12723,7 +12723,7 @@ DequeIt* DequeIt::Inc()
     return this;
 }
 
-// 0x004ab4d0 (byte-exact lifted version: match/slices/s004ab4d0/s004ab4d0.cpp)
+// 0x004ab4d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ab4d0/s004ab4d0.cpp
 Matrix3Like* CopyMatrixRange(Matrix3Like* param_1, Matrix3Like* param_2, Matrix3Like* param_3)
 {
     Matrix3Like* local_48 = param_3;
@@ -12847,7 +12847,7 @@ cSPVector3_s004a_b690 cSPEditorModel_s004a_b690::GetBestBlockPointBasedOnDistanc
 }
 }  // namespace SP
 
-// 0x004ac480 (byte-exact lifted version: match/slices/s004ac480/s004ac480.cpp)
+// 0x004ac480: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ac480/s004ac480.cpp
 namespace SP {
 extern double FUN_004a5bd0(cSPEditorBlock_s004a_b690* b);                           // 0x004a5bd0
 extern float g_floatMax;                                                 // 0x013ef5c8
@@ -12882,7 +12882,7 @@ cSPEditorBlock_s004a_c610* cSPEditorModel_s004a_c610::GetBlock(uint32_t index)
 }
 }  // namespace SP
 
-// 0x004ad370 (byte-exact lifted version: match/slices/s004ad370/s004ad370.cpp)
+// 0x004ad370: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ad370/s004ad370.cpp
 namespace SP {
 void cSPEditorModel_s004a_c610::SetPhysicsWorld(cSPEditorPhysicsWorld_s004a_c610* world)
 {

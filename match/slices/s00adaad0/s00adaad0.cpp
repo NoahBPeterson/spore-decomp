@@ -342,7 +342,7 @@ void __fastcall FUN_00adb0b0(void* self, int /*edx*/, unsigned int wanted)
     }
 }
 
-// 0x00adb1b0 (byte-exact lifted version: match/slices/s00adb1b0/s00adb1b0.cpp)
+// 0x00adb1b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00adb1b0/s00adb1b0.cpp
 char __fastcall FUN_00adb1b0(void* self, int /*edx*/, unsigned int key, unsigned int* out)
 {
     char* s = (char*)self;

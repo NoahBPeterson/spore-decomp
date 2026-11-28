@@ -903,7 +903,7 @@ bool __cdecl Read_00c78130(ISerializerStream* pStream, cHashtableHeader* pData)
 // ---------------------------------------------------------------------------------------------
 // 0x00c781e0 - destroy a range of 0xb0-byte PlayerPlanetData records
 // ---------------------------------------------------------------------------------------------
-// 0x00c781e0 (byte-exact lifted version: match/slices/s00c781e0/s00c781e0.cpp)
+// 0x00c781e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c781e0/s00c781e0.cpp
 void __stdcall DestroyPlayerPlanetDataRange(cPlayerPlanetData* pBegin, cPlayerPlanetData* pEnd)
 {
     if (pBegin >= pEnd)

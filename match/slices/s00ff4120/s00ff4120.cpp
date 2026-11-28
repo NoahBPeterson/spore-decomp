@@ -458,7 +458,7 @@ void cSPPlayerInventory::FUN_00ff46e0() {
     }
 }
 
-// 0x00ff4840 (byte-exact lifted version: match/slices/s00ff4840/s00ff4840.cpp) FUN_00ff4840
+// 0x00ff4840: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ff4840/s00ff4840.cpp FUN_00ff4840
 u8 cSPPlayerInventory::FUN_00ff4840(void* key) {
     cInvItem** it = mToolSet.mBegin;
     cInvItem** end = mToolSet.mEnd;

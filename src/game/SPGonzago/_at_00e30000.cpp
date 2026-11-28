@@ -2146,7 +2146,7 @@ bool cAssetSwatchWidget::HandleMessage()
     return mpAsset != 0;
 }
 
-// 0x00e34af0 (byte-exact lifted version: match/slices/s00e34af0/s00e34af0.cpp)
+// 0x00e34af0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e34af0/s00e34af0.cpp
 void cAssetSwatchWidget::CreateSwatch()
 {
     if (!mpAsset)
@@ -2457,7 +2457,7 @@ Vector4* __cdecl AccumulateBounds(Vector4* pOut, IWinNode* pNode, bool bDeep, bo
     return pOut;
 }
 
-// 0x00e36890 (byte-exact lifted version: match/slices/s00e36890/s00e36890.cpp)
+// 0x00e36890: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e36890/s00e36890.cpp
 void* cUITimedTooltip::DestroyDeleting(bool bDelete)
 {
     if (m_pWindow != nullptr)

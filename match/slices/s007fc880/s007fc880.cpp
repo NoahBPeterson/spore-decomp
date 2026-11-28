@@ -130,7 +130,7 @@ struct FlagObj {
     void SetFlag(unsigned mask, bool on);   // @ 0x007fd200
 };
 
-// 0x007fd200 (byte-exact lifted version: match/slices/s007fd200/s007fd200.cpp)
+// 0x007fd200: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fd200/s007fd200.cpp
 void FlagObj::SetFlag(unsigned mask, bool on) {
     unsigned old = mFlags;
     unsigned nv = old & ~mask;
@@ -185,7 +185,7 @@ bool ReadSerItem(SerBuffer* p, C53* self, SerItem14* item) {
     return true;
 }
 
-// 0x007fd390 (byte-exact lifted version: match/slices/s007fd390/s007fd390.cpp)
+// 0x007fd390: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fd390/s007fd390.cpp
 bool WriteSerItem(SerBuffer* p, C53* self, SerItem14* item, void* alloc) {
     void* begin = self->M(item);
     void* dst = (void*)((void*(__thiscall*)(void*, int, int))VCallR(alloc, 0))(alloc, item->count << 2, 4);
@@ -353,7 +353,7 @@ struct VecOwner {
     void** Elements(VecElemList* list);   // 0x007f53c0
 };
 
-// 0x007fd2d0 (byte-exact lifted version: match/slices/s007fd2d0/s007fd2d0.cpp)
+// 0x007fd2d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fd2d0/s007fd2d0.cpp
 bool __cdecl Vec8CopyFrom(VecOwner* owner, VecSrc* src, VecElemList* list) {
     void** d = src->begin;
     void** s = owner->Elements(list);

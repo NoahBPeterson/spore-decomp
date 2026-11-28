@@ -42,7 +42,6 @@ extern "C" unsigned char g_015ad934[];
 extern "C" unsigned char g_015ad938[];
 
 // @ 0x00f1aa10
-// @ 0x00f1aa10
 extern "C" float __stdcall FUN_00f1aa10(int a4, float a8)
 {
     int t1000;

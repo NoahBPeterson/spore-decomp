@@ -11,7 +11,6 @@ template<class T> __forceinline T il2c_k(T v) { return v; }
 
 struct D_004897b0 { void FUN_004897b0(int a4, int a8); };
 // @ 0x004897b0
-// @ 0x004897b0
 void D_004897b0::FUN_004897b0(int a4, int a8)
 {
     int v_l16_i[3];

@@ -168,7 +168,7 @@ template<class R> static inline R vcall0(void* p, int off)
 { return ((R(__thiscall*)(void*))g_vfn(p, off))(p); }
 // ---- items of slice s00b10200 end
 
-// 0x00b0f270 (byte-exact lifted version: match/slices/s00b0f270/s00b0f270_lifted.cpp)
+// 0x00b0f270: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0f270/s00b0f270_lifted.cpp
 void SP::cTerrainCameraController::RunCameraScript(int, int, int, int, int)
 {
   // incomplete skeleton: long straight-line sequence of VarMap::SetVar/GetVar.
@@ -229,7 +229,7 @@ void __stdcall SetEdgeDistance(float* p)
   g_edgeY = p[1];
 }
 
-// 0x00b0f950 (byte-exact lifted version: match/slices/s00b0f950/s00b0f950.cpp)
+// 0x00b0f950: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0f950/s00b0f950.cpp
 void SP::cTerrainCameraController::SetToggle(int b)
 {
   if (mb11 != (u8)b) {
@@ -243,7 +243,7 @@ void SP::cTerrainCameraController::SetToggle(int b)
   mb11 = (u8)b;
 }
 
-// 0x00b0f9a0 (byte-exact lifted version: match/slices/s00b0f9a0/s00b0f9a0.cpp)
+// 0x00b0f9a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0f9a0/s00b0f9a0.cpp
 bool SP::cTerrainCameraController::KeysHeld()
 {
   void* im = SP_GameInputManager();

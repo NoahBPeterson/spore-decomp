@@ -26,7 +26,7 @@ struct RefVec {
 void CopyNode(DefaultRefCounted** p);                     // 0x4e4350 (ref-counted pointer copy)
 void UninitCopy(void* out, DefaultRefCounted** first, DefaultRefCounted** last, DefaultRefCounted** dst, uchar t); // 0x42e860
 
-// 0x00474bd0 (byte-exact lifted version: match/slices/s00474bd0/s00474bd0_lifted.cpp)
+// 0x00474bd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00474bd0/s00474bd0_lifted.cpp
 RefVec& RefVec::assign(const RefVec& x)
 {
     if (&x != this) {
@@ -72,7 +72,7 @@ struct VecD8 {
     void Free();   // 0x476f20
 };
 
-// 0x00474f30 (byte-exact lifted version: match/slices/s00474f30/s00474f30.cpp)
+// 0x00474f30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00474f30/s00474f30.cpp
 Vec48::~Vec48()
 {
     char* end = mpEnd;
@@ -83,7 +83,7 @@ Vec48::~Vec48()
     Free();
 }
 
-// 0x00474fb0 (byte-exact lifted version: match/slices/s00474fb0/s00474fb0.cpp)
+// 0x00474fb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00474fb0/s00474fb0.cpp
 VecD8::~VecD8()
 {
     char* end = mpEnd;
@@ -107,7 +107,7 @@ struct FixedVecInt {
 };
 void CopyInts(int* first, int* last, int* dst);        // 0x477200
 
-// 0x00475040 (byte-exact lifted version: match/slices/s00475040/s00475040.cpp)
+// 0x00475040: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475040/s00475040.cpp
 void FixedVecInt::reserve(uint n)
 {
     if ((uint)(mpCapacity - mpBegin) < n) {
@@ -211,7 +211,7 @@ void Vec32::resize(uint n)
     }
 }
 
-// 0x00475320 (byte-exact lifted version: match/slices/s00475320/s00475320.cpp)
+// 0x00475320: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475320/s00475320.cpp
 void Vec32::reserve(uint n)
 {
     if ((uint)((mpCapacity - mpBegin) >> 5) < n) {
@@ -399,7 +399,7 @@ struct basic_string {
     void set_capacity(uint n);                         // 0x478930
 };
 
-// 0x00475930 (byte-exact lifted version: match/slices/s00475930/s00475930.cpp)
+// 0x00475930: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475930/s00475930.cpp
 basic_string& basic_string::append_sprintf_va_list(const char* fmt, void* args)
 {
     const int nPrevLength = (int)(mpEnd - mpBegin);
@@ -428,7 +428,7 @@ basic_string& basic_string::append_sprintf_va_list(const char* fmt, void* args)
     return *this;
 }
 
-// 0x00475ab0 (byte-exact lifted version: match/slices/s00475ab0/s00475ab0.cpp)
+// 0x00475ab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475ab0/s00475ab0.cpp
 void basic_string::RangeInitialize(uint n)
 {
     if (n < 2) {

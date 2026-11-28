@@ -79,7 +79,6 @@ struct C_0098fbe0 { void FUN_0098fbe0(); };
 struct C_00990ff0 { void FUN_00990ff0(unsigned int); };
 
 // @ 0x009917f0
-// @ 0x009917f0
 extern "C" void __fastcall FUN_009917f0(char* self, int edx_unused, int a4)
 {
     int t1000;

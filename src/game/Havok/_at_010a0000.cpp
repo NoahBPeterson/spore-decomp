@@ -2767,7 +2767,7 @@ void hkSoftContactConstraintData::toiCollisionResponseEndCallback(const hkContac
 	s_toiActive = 0;
 }
 
-// 0x010a4850 (byte-exact lifted version: match/slices/s010a4850/s010a4850.cpp)
+// 0x010a4850: not byte-exact; the byte-exact version is the lifted one in match/slices/s010a4850/s010a4850.cpp
 hkBodyVelocity_s010a_3ed0* hkSoftContactConstraintData::toiCollisionResponseBeginCallback(const hkContactPoint_s010a_3ed0&, hkSimpleConstraintInfoInitInput&, hkBodyVelocity_s010a_3ed0& velA, hkSimpleConstraintInfoInitInput&, hkBodyVelocity_s010a_3ed0& velB)
 {
 	s_toiActive = 1;

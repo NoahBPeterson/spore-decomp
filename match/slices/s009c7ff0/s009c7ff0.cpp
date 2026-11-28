@@ -222,7 +222,7 @@ void* InvalidEditorModelKey(ResKey* key, uint flags);               // 0x0068c70
 void* EngineGetManager();                                           // 0x00401010
 
 // =====================================================================
-// 0x009c7ff0 (byte-exact lifted version: match/slices/s009c7ff0/s009c7ff0_lifted.cpp)
+// 0x009c7ff0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009c7ff0/s009c7ff0_lifted.cpp
 void creature_mesh_instance_data::Clear()
 {
     force_not_in_world = false;

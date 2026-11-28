@@ -656,7 +656,7 @@ u8 __fastcall WinXHTML_OnRebuild(char* self, int, char* ctx)
     return 1;
 }
 
-// 0x00993490 (byte-exact lifted version: match/slices/s00993490/s00993490.cpp)
+// 0x00993490: not byte-exact; the byte-exact version is the lifted one in match/slices/s00993490/s00993490.cpp
 void __fastcall WinXHTML_SetScrollPosition(char* self, int, float* pos)
 {
     if (ldf(self, 0xa8b4) != pos[0] || ldf(self, 0xa8b8) != pos[1]) {

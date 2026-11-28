@@ -26,7 +26,7 @@ void FillAutoRef(AutoRef* first, AutoRef* last, void** value)
     }
 }
 
-// 0x004b2220 (byte-exact lifted version: match/slices/s004b2220/s004b2220.cpp)
+// 0x004b2220: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b2220/s004b2220.cpp
 void** UninitCopyAutoRef(void** out, void** first, void** last, void** dest)
 {
     for (; first != last; ++first) {
@@ -287,7 +287,7 @@ void vector<S24>::DoAssignFromIterator(const S24* first, const S24* last, random
     }
 }
 
-// 0x004b2030 (byte-exact lifted version: match/slices/s004b2030/s004b2030.cpp)
+// 0x004b2030: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b2030/s004b2030.cpp
 template <>
 void vector<uint32_t>::DoAssignValues(uint32_t n, const uint32_t& value)
 {

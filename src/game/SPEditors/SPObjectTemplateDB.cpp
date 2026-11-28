@@ -5093,7 +5093,7 @@ bool cParameterResourceFactory::CreateResource(IPFRecord* pRecord, ResourceObjec
 }
 }  // namespace SP
 
-// 0x00559050 (byte-exact lifted version: match/slices/s00559050/s00559050_lifted.cpp)
+// 0x00559050: not byte-exact; the byte-exact version is the lifted one in match/slices/s00559050/s00559050_lifted.cpp
 namespace Editor { namespace W1G2_58 {
 void* c559050::Dtor(uint32_t)
 {
@@ -5131,7 +5131,7 @@ int SP::cSPObjectTemplateDB::AddRef()
     return len;
 }
 
-// 0x00559590 (byte-exact lifted version: match/slices/s00559590/s00559590.cpp)
+// 0x00559590: not byte-exact; the byte-exact version is the lifted one in match/slices/s00559590/s00559590.cpp
 SP::cSPObjectTemplateDB::~cSPObjectTemplateDB()
 {
 }
@@ -5944,7 +5944,7 @@ char cSPObjectTemplateDB_s0055_ce80::FUN_0055db30(void* pObj)
 }
 }  // namespace SP
 
-// 0x0055eae0 (byte-exact lifted version: match/slices/s0055eae0/s0055eae0.cpp)
+// 0x0055eae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0055eae0/s0055eae0.cpp
 void* PaintStub::FUN_0055eae0(int* first, int count)
 {
     void* this_ = this;
@@ -6463,7 +6463,7 @@ void FUN_00560f20(void* pKey, void* pList, char flag)
 }
 }  // namespace SP
 
-// 0x00561090 (byte-exact lifted version: match/slices/s00561090/s00561090.cpp)
+// 0x00561090: not byte-exact; the byte-exact version is the lifted one in match/slices/s00561090/s00561090.cpp
 namespace SP {
 void* EcxStub9a::FUN_00561090_()
 {
@@ -6486,7 +6486,7 @@ void* EcxStub9a::FUN_00561090_()
 }
 }  // namespace SP
 
-// 0x00561220 (byte-exact lifted version: match/slices/s00561220/s00561220.cpp)
+// 0x00561220: not byte-exact; the byte-exact version is the lifted one in match/slices/s00561220/s00561220.cpp
 namespace SP {
 void EcxStub9a::FUN_00561220(void* pData)
 {
@@ -6640,7 +6640,7 @@ bool EcxStub9a::FUN_00561340(void* pKey)
 }
 }  // namespace SP
 
-// 0x00561850 (byte-exact lifted version: match/slices/s00561850/s00561850.cpp)
+// 0x00561850: not byte-exact; the byte-exact version is the lifted one in match/slices/s00561850/s00561850.cpp
 namespace SP {
 void cSPObjectTemplateDB_s0056_09a0::FUN_00561850(int index)
 {
@@ -6942,7 +6942,7 @@ void cSPObjectTemplateDB_s0056_1970::ClearExcludedParameter()
 }
 }  // namespace SP
 
-// 0x00562b80 (byte-exact lifted version: match/slices/s00562b80/s00562b80.cpp)
+// 0x00562b80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00562b80/s00562b80.cpp
 namespace SP {
 void CandidateDBStub::AssignCandidates(void* out, void* pRange)
 {

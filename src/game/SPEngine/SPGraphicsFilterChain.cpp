@@ -1573,7 +1573,7 @@ bool CFilterChain::AddFilterChain(int a, int b)
   return false;
 }
 
-// 0x006f9cf0 (byte-exact lifted version: match/slices/s006f9cf0/s006f9cf0.cpp)
+// 0x006f9cf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006f9cf0/s006f9cf0.cpp
 void CFilterChain::Shutdown()
 {
   void* rs = (void*)ReportCleanup();

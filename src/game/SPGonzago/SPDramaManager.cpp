@@ -2520,7 +2520,7 @@ bool cDramaEventInstanceData_s00d4_d5c0::WriteData(void* stream)
     return local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream));
 }
 
-// 0x00d4dae0 (byte-exact lifted version: match/slices/s00d4dae0/s00d4dae0.cpp)
+// 0x00d4dae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d4dae0/s00d4dae0.cpp
 void cDramaEventInstanceData_s00d4_d5c0::ClearData()
 {
     if (mpPropList) {
@@ -3244,7 +3244,7 @@ bool SP::cMeteorStrikeEvent_s00d4_f2e0::Write(void* stream)
     return false;
 }
 
-// 0x00d50380 (byte-exact lifted version: match/slices/s00d50380/s00d50380_lifted.cpp)
+// 0x00d50380: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d50380/s00d50380_lifted.cpp
 void SP::cMeteorStrikeEvent_s00d5_0380::LoadAndInitMeteorStrikeData(cPropertyList_s00d5_0380* pList)
 {
     Clear();

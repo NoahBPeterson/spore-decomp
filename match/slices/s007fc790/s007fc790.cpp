@@ -28,7 +28,6 @@ struct C_007fc2a0 { void FUN_007fc2a0(); };
 
 struct D_007fc790 { bool FUN_007fc790(int a4); };
 // @ 0x007fc790
-// @ 0x007fc790
 bool D_007fc790::FUN_007fc790(int a4)
 {
     int v_l52_f;

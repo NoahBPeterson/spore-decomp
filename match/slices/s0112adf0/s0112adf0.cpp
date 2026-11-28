@@ -507,7 +507,7 @@ void hkPointerMultiMap_insert(hkPointerMultiMap* self, void* key, void** const& 
     self->insert((hkUlong32)(uintptr_t)key, value);
 }
 
-// 0x0112b680 (byte-exact lifted version: match/slices/s0112b680/s0112b680.cpp)
+// 0x0112b680: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112b680/s0112b680.cpp
 hkPackfileObjectUpdateTracker::~hkPackfileObjectUpdateTracker()
 {
     m_finish.~hkPointerMapBase();
@@ -655,14 +655,14 @@ const hkClass* hkVtableClassRegistry::getClassFromVirtualInstance(const void* ob
     return c;
 }
 
-// 0x0112bbf0 (byte-exact lifted version: match/slices/s0112bbf0/s0112bbf0.cpp)
+// 0x0112bbf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112bbf0/s0112bbf0.cpp
 // scalar deleting destructor of hkVtableClassRegistry
 void hkVtableClassRegistry::deletingDtor(unsigned flags)
 {
     delete this;
 }
 
-// 0x0112bc30 (byte-exact lifted version: match/slices/s0112bc30/s0112bc30.cpp)
+// 0x0112bc30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112bc30/s0112bc30.cpp
 // scalar deleting destructor of hkFinishLoadedObjectRegistry / hkClassNameRegistry
 void hkFinishLoadedObjectRegistry::deletingDtor(unsigned flags)
 {

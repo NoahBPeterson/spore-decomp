@@ -338,7 +338,7 @@ bool DatabaseDirectoryFiles::SetManager(bool bAttach, Manager* pManager, void* p
     return pfn(mpManager, 0, this, 0);
 }
 
-// 0x008d6410 (byte-exact lifted version: match/slices/s008d6410/s008d6410.cpp)
+// 0x008d6410: not byte-exact; the byte-exact version is the lifted one in match/slices/s008d6410/s008d6410.cpp
 bool DatabaseDirectoryFiles::CloseUnreferencedRecords()
 {
     mMutex.Lock(reinterpret_cast<void*>(0x1436624));
@@ -724,7 +724,7 @@ int DatabaseDirectoryFiles::GetKeyList(void* pKeyVector, void* pFilter)
     return nCount;
 }
 
-// 0x008d6be0 (byte-exact lifted version: match/slices/s008d6be0/s008d6be0.cpp)
+// 0x008d6be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008d6be0/s008d6be0.cpp
 void ExtTreeDoNukeSubtree(RBTree* pTree, RBNode* pNode)
 {
     while (pNode != 0)

@@ -7,7 +7,6 @@ extern "C" unsigned char g_0140d204[];
 extern "C" void __cdecl FUN_0113ff00(...);
 
 // @ 0x01131540
-// @ 0x01131540
 extern "C" int __cdecl FUN_01131540(int a4, int a8)
 {
     int t1000;

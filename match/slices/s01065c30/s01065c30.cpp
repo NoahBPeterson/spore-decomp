@@ -688,7 +688,7 @@ struct SpaceZoom {
     void** mZoomCap;                         // +0x6a0
     bool FUN_01066780(int unused, InputEvent* ev);
 };
-// 0x01066780 (byte-exact lifted version: match/slices/s01066780/s01066780.cpp)
+// 0x01066780: not byte-exact; the byte-exact version is the lifted one in match/slices/s01066780/s01066780.cpp
 bool SpaceZoom::FUN_01066780(int unused, InputEvent* ev) {
     (void)unused;
     if (!mp258) return true;

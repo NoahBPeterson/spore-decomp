@@ -190,7 +190,7 @@ void LookupDB::FUN_005628d0(U32Vec* pList) {
     }
 }
 
-// 0x00562b80 (byte-exact lifted version: match/slices/s00562b80/s00562b80.cpp)
+// 0x00562b80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00562b80/s00562b80.cpp
 void CandidateDBStub::AssignCandidates(void* out, void* pRange) {
     U32Vec* list = (U32Vec*)((char*)this + 0x12c);
     list->erase(list->mpBegin, list->mpEnd);
@@ -336,7 +336,7 @@ int LookupDB::FindAssetIndex(const ResourceKey& key) {
     return index;
 }
 
-// 0x005632d0 (byte-exact lifted version: match/slices/s005632d0/s005632d0.cpp)
+// 0x005632d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005632d0/s005632d0.cpp
 bool LookupDB::FUN_005632d0(PodDeque* dq, SpVecV3* out) {
     DqIter p30;
     DqIter n10;

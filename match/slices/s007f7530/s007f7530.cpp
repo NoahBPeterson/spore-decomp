@@ -282,7 +282,7 @@ AInfo8c* AInfo8c::operator=(AInfo8c* src) {
 }
 
 // ===========================================================================
-// 0x007f7a60 (byte-exact lifted version: match/slices/s007f7a60/s007f7a60.cpp)  eastl::copy_impl<...>::do_copy<cAnimInfo*,cAnimInfo*>
+// 0x007f7a60: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f7a60/s007f7a60.cpp  eastl::copy_impl<...>::do_copy<cAnimInfo*,cAnimInfo*>
 // ===========================================================================
 AInfo8c* do_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* dst) {
     while (first != last) {
@@ -298,7 +298,7 @@ AInfo8c* do_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* dst) {
 }
 
 // ===========================================================================
-// 0x007f7b30 (byte-exact lifted version: match/slices/s007f7b30/s007f7b30.cpp)  forward copy of cAnimationInfo (stride 0x88)
+// 0x007f7b30: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f7b30/s007f7b30.cpp  forward copy of cAnimationInfo (stride 0x88)
 // ===========================================================================
 AInfo88* copy_animinfo88(AInfo88* first, AInfo88* last, AInfo88* dst) {
     while (first != last) {
@@ -345,7 +345,7 @@ AInfo8c* fill_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src) {
 }
 
 // ===========================================================================
-// 0x007f7db0 (byte-exact lifted version: match/slices/s007f7db0/s007f7db0.cpp)  fill-style backward copy of cAnimInfo (single source)
+// 0x007f7db0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f7db0/s007f7db0.cpp  fill-style backward copy of cAnimInfo (single source)
 // ===========================================================================
 AInfo8c* fill_copy_backward_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src) {
     while (last != first) {

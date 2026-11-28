@@ -4326,7 +4326,7 @@ bool WriteTreeClumps(TreeClumpArchive* archive, cTreeClumpVector* pVector)
     return true;
 }
 
-// 0x00b00560 (byte-exact lifted version: match/slices/s00b00560/s00b00560.cpp)
+// 0x00b00560: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b00560/s00b00560.cpp
 void TreeClumpArrayFree(cTreeClumpVector* pVector)
 {
     cTreeClump** pEnd = pVector->mpEnd;
@@ -5036,7 +5036,7 @@ void* RefRecordOps::Assign(const void* src)
     return self;
 }
 
-// 0x00b01d30 (byte-exact lifted version: match/slices/s00b01d30/s00b01d30.cpp)
+// 0x00b01d30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b01d30/s00b01d30.cpp
 void* RefRecordOps2::Assign2(const void* src)
 {
     u8* self = (u8*)this;
@@ -5264,7 +5264,7 @@ void GridOwner::Rebuild()
     }
 }
 
-// 0x00b02350 (byte-exact lifted version: match/slices/s00b02350/s00b02350.cpp)
+// 0x00b02350: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b02350/s00b02350.cpp
 void GridEntryOps::SetEntry(void* obj, u8 add)
 {
     u8* self = (u8*)this;
@@ -6315,7 +6315,7 @@ void PoolOwner::erase_tree_node(void** out, void* node)
     *out = next;
 }
 
-// 0x00b04420 (byte-exact lifted version: match/slices/s00b04420/s00b04420.cpp)
+// 0x00b04420: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b04420/s00b04420.cpp
 void __cdecl node_free_walk(void* self, void* node)
 {
     while (node != 0) {
@@ -6764,7 +6764,7 @@ void* RBTree::copyNode(PoolElem* src, PoolElem* parent)
     return node;
 }
 
-// 0x00b051f0 (byte-exact lifted version: match/slices/s00b051f0/s00b051f0.cpp)
+// 0x00b051f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b051f0/s00b051f0.cpp
 void FUN_00b051f0(uint param_1, uint param_2)
 {
     if (param_1 >= param_2)
@@ -7471,7 +7471,7 @@ void ModelList::F06cd0()
 }
 
 void* __cdecl destroy_range_big_s06(void* src, void* end, void* dst); // 0x00b03f10 (slice view: declared only)
-// 0x00b07140 (byte-exact lifted version: match/slices/s00b07140/s00b07140.cpp)
+// 0x00b07140: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b07140/s00b07140.cpp
 void cBigVector::Erase(void* first, void* last)
 {
     cBigElement* p = (cBigElement*)destroy_range_big_s06(last, mpEnd, first);
@@ -8098,7 +8098,7 @@ cEffectPool* cEffectPool::FUN_00b09510(int a1)
     return this;
 }
 
-// 0x00b09570 (byte-exact lifted version: match/slices/s00b09570/s00b09570_lifted.cpp)
+// 0x00b09570: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b09570/s00b09570_lifted.cpp
 Scatter::Scatter(const Scatter &src)
 {
     mX = src.mX;
@@ -8588,7 +8588,7 @@ void Stream::ReadTreeRefVector(void *pThis, void *pVecRaw)
     pS->EndRead();
 }
 
-// 0x00b0a3f0 (byte-exact lifted version: match/slices/s00b0a3f0/s00b0a3f0.cpp)
+// 0x00b0a3f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0a3f0/s00b0a3f0.cpp
 Scatter &Scatter::AssignFrom(const Scatter &src)
 {
     mX = src.mX;
@@ -10180,7 +10180,7 @@ void GetTurretAndBuildingCounts(SimCivObject_c7* self, int* pBuildings, int* pTu
     }
 }
 
-// 0x00c70420 (byte-exact lifted version: match/slices/s00c70420/s00c70420.cpp)
+// 0x00c70420: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c70420/s00c70420.cpp
 int SimCivObject_CountCities(SimCivObject_c7* self) {
     int total = 0;
     int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;

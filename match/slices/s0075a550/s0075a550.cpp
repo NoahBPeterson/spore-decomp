@@ -140,7 +140,7 @@ int cMultiBlender::AddWeight() {
 }
 
 // ---------------------------------------------------------------------------
-// 0x0075a690 (byte-exact lifted version: match/slices/s0075a690/s0075a690.cpp)
+// 0x0075a690: not byte-exact; the byte-exact version is the lifted one in match/slices/s0075a690/s0075a690.cpp
 // ---------------------------------------------------------------------------
 void cMultiBlender::F690(float arg) {
     int n = mNumAnims;

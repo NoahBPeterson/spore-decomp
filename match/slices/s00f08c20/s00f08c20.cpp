@@ -571,7 +571,7 @@ void ShutdownTaskPanels()
 // ---------------------------------------------------------------------------
 // Build the object-bubble layout and its ten panel slots.
 // ---------------------------------------------------------------------------
-// 0x00f09580 (byte-exact lifted version: match/slices/s00f09580/s00f09580.cpp)
+// 0x00f09580: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f09580/s00f09580.cpp
 void CreateBubblePanels()
 {
     ReadProgressTuning();

@@ -232,7 +232,7 @@ struct AnimHandler {
     bool HandleMessage(u32 id, Msg* m);
 };
 
-// 0x00a0f610 (byte-exact lifted version: match/slices/s00a0f610/s00a0f610.cpp)
+// 0x00a0f610: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a0f610/s00a0f610.cpp
 bool AnimHandler::HandleMessage(u32 id, Msg* m)
 {
     switch (id) {

@@ -303,7 +303,7 @@ float FUN_00cf7090()
     return result;
 }
 
-// 0x00cf71d0 (byte-exact lifted version: match/slices/s00cf71d0/s00cf71d0.cpp)
+// 0x00cf71d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cf71d0/s00cf71d0.cpp
 void __fastcall FUN_00cf71d0(void *self, void * /*edx*/, u32 arg)
 {
     u8 *s = (u8 *)self;

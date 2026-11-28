@@ -269,7 +269,7 @@ bool MainWin::InitHitMaskFactory() {
     return true;
 }
 
-// 0x008137f0 (byte-exact lifted version: match/slices/s008137f0/s008137f0.cpp)
+// 0x008137f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008137f0/s008137f0.cpp
 bool MainWin::InitStringFactories() {
     Mgr* m = (Mgr*)GetManager();
     if (m) {

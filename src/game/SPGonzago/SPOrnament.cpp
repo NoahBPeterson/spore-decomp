@@ -796,7 +796,7 @@ void*   Sub_c8a550(void* pSelf, void* pWorld);        // 0x00c8a550
 extern const Vec3_s00c8_db30  kSPColorRed;   // 0x0157a9d0
 // ---- items of slice s00c8db30 end
 
-// 0x00c40150 (byte-exact lifted version: match/slices/s00c40150/s00c40150.cpp)
+// 0x00c40150: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c40150/s00c40150.cpp
 void* cInteractiveOrnamentCast(void* pObject, void* pType)
 {
     if (pType == (void*)0x13f94d4) {
@@ -1283,7 +1283,7 @@ __declspec(noinline) void Vec0C::resize(unsigned int n, const Vec3_s00c8_db30& r
     erase(mBegin + n * 12, mEnd);
 }
 
-// 0x00c8deb0 (byte-exact lifted version: match/slices/s00c8deb0/s00c8deb0.cpp)
+// 0x00c8deb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8deb0/s00c8deb0.cpp
 void __fastcall TP_RemoveOwner(TotemPole* pSelf)
 {
     MWModel** pBegin = pSelf->mModels.mBegin;
@@ -1315,7 +1315,7 @@ bool TotemPole::PostDataLoad(unsigned int nID)
     return bRet;
 }
 
-// 0x00c8df60 (byte-exact lifted version: match/slices/s00c8df60/s00c8df60.cpp)
+// 0x00c8df60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8df60/s00c8df60.cpp
 void __fastcall TP_ResetModels(SpatialBody* pSelf)
 {
     ModelList* pList = &pSelf->mModels;

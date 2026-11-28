@@ -20,7 +20,6 @@ struct C_0098c520 { void FUN_0098c520(); };
 extern "C" void __cdecl FUN_00f47380(...);
 
 // @ 0x0098cbb0
-// @ 0x0098cbb0
 extern "C" void __fastcall FUN_0098cbb0(char* self, int edx_unused)
 {
     int t1002;

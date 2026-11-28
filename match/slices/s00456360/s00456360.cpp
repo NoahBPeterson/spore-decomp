@@ -358,7 +358,7 @@ char* NodeAlloc::DoCreateNode(const NodeValue* v)
     return node;
 }
 
-// 0x00457450 (byte-exact lifted version: match/slices/s00457450/s00457450.cpp)  (uninitialized_fill_n of 12-byte elements; retail leaves the last written
+// 0x00457450: not byte-exact; the byte-exact version is the lifted one in match/slices/s00457450/s00457450.cpp  (uninitialized_fill_n of 12-byte elements; retail leaves the last written
 // element in eax, which the harness compares, so return it)
 struct Triple { uint32_t a, b, c; };
 Triple* uninitialized_fill_n_Triple(Triple* dst, int n, const Triple* v)
@@ -390,7 +390,7 @@ RefObj** copy_ref_backward(RefObj** first, RefObj** last, RefObj** dst)
     return dst;
 }
 
-// 0x00457540 (byte-exact lifted version: match/slices/s00457540/s00457540.cpp)
+// 0x00457540: not byte-exact; the byte-exact version is the lifted one in match/slices/s00457540/s00457540.cpp
 static Elem32* uninitialized_copy_Elem32(Elem32* first, Elem32* last, Elem32* dst)
 {
     Elem32* d = dst;

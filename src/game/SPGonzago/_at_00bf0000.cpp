@@ -2330,7 +2330,7 @@ void CStub::FUN_00bf02b0(void* arg, int b, int c, int d)
         ((NoopStub*)this)->FUN_00bef850();
 }
 
-// 0x00bf0330 (byte-exact lifted version: match/slices/s00bf0330/s00bf0330.cpp)
+// 0x00bf0330: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf0330/s00bf0330.cpp
 void CStub::FUN_00bf0330(void* city)
 {
     if (!(**(u8(__thiscall**)(int))(*(int*)((char*)city + 0x120) + 0x58))((int)city + 0x120)) return;
@@ -4412,7 +4412,7 @@ void cCommunityEditor::DetachCity(cCity_s00bf_4170* pCity, int bRemoving)
     Release();
 }
 
-// 0x00bf49e0 (byte-exact lifted version: match/slices/s00bf49e0/s00bf49e0.cpp)
+// 0x00bf49e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf49e0/s00bf49e0.cpp
 void cCommunityEditor::NotifySubEditor(cCommunityEditor* pSub)
 {
     if (pSub == 0)
@@ -4563,7 +4563,7 @@ Vec3_s00bf_4170* cVector3Map::FindOrInsert(const int* pKey)
     return (Vec3_s00bf_4170*)(pLower + 5);
 }
 
-// 0x00bf51d0 (byte-exact lifted version: match/slices/s00bf51d0/s00bf51d0_lifted.cpp)
+// 0x00bf51d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf51d0/s00bf51d0_lifted.cpp
 GonzagoTimer* TimerVec::eraseRange(GonzagoTimer* first, GonzagoTimer* last)
 {
     GonzagoTimer* newEnd = (GonzagoTimer*)FUN_00bf29c0(last, m_end, first);
@@ -4975,7 +4975,7 @@ float CityThing::GetDistance(void* key)
     return value;
 }
 
-// 0x00bf5be0 (byte-exact lifted version: match/slices/s00bf5be0/s00bf5be0.cpp)
+// 0x00bf5be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf5be0/s00bf5be0.cpp
 bool CityEventSub::OnEvent(int eventId, void* data)
 {
     if (eventId == 0x1a0219e) {

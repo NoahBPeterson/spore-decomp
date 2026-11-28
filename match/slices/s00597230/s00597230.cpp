@@ -862,7 +862,7 @@ struct SummaryMap {
 };
 
 // NM 0x00597290: value copy uses edx instead of ecx for the key
-// 0x00597290 (byte-exact lifted version: match/slices/s00597290/s00597290.cpp)
+// 0x00597290: not byte-exact; the byte-exact version is the lifted one in match/slices/s00597290/s00597290.cpp
 SummaryNode* SummaryMap::DoAllocateNode(const SummaryValue& value)
 {
     SummaryNode* const pNode = (SummaryNode*)mAllocator.allocate(sizeof(SummaryNode));

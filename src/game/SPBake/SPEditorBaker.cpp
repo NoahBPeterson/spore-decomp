@@ -7415,7 +7415,7 @@ int ThreadedObject_s0040_4660::Release()
 }
 }  // namespace Resource_s0040_4660
 
-// 0x00405000 (byte-exact lifted version: match/slices/s00405000/s00405000_lifted.cpp)
+// 0x00405000: not byte-exact; the byte-exact version is the lifted one in match/slices/s00405000/s00405000_lifted.cpp
 BakerCommand_s0040_5000::BakerCommand_s0040_5000(void* pBaker)
 : mpBaker(pBaker), mOptions(1)
 {
@@ -10098,7 +10098,7 @@ void EditorPanel_s0041_6990::CollectAll(EntrySink* out)
     }
 }
 
-// 0x00417150 (byte-exact lifted version: match/slices/s00417150/s00417150.cpp)
+// 0x00417150: not byte-exact; the byte-exact version is the lifted one in match/slices/s00417150/s00417150.cpp
 float EditorPanel_s0041_6990::GetSlotValue(KeyedEvent* ev)
 {
     ResourceKey_s0041_6990* key = &ev->key;
@@ -10255,7 +10255,7 @@ ToolState::ToolState()
 {
 }
 
-// 0x00417fe0 (byte-exact lifted version: match/slices/s00417fe0/s00417fe0.cpp)
+// 0x00417fe0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00417fe0/s00417fe0.cpp
 ToolState::~ToolState()
 {
 }
@@ -10267,7 +10267,7 @@ SubState::SubState()
 {
 }
 
-// 0x00418240 (byte-exact lifted version: match/slices/s00418240/s00418240.cpp)
+// 0x00418240: not byte-exact; the byte-exact version is the lifted one in match/slices/s00418240/s00418240.cpp
 SubState::~SubState()
 {
 }
@@ -10477,7 +10477,7 @@ char LoadTask::Run(Finisher* fin)
     return 1;
 }
 
-// 0x00419690 (byte-exact lifted version: match/slices/s00419690/s00419690.cpp)
+// 0x00419690: not byte-exact; the byte-exact version is the lifted one in match/slices/s00419690/s00419690.cpp
 void __thiscall Task::Prepare(Request* req)
 {
     f2c = 0;

@@ -484,7 +484,7 @@ int StrncpyUTF8ToUTF16(char* pDest, unsigned int nDestLength, const wchar_t* pSo
 }
 }}  // namespace EA::Text
 
-// 0x0093cf60 (byte-exact lifted version: match/slices/s0093cf60/s0093cf60.cpp)
+// 0x0093cf60: not byte-exact; the byte-exact version is the lifted one in match/slices/s0093cf60/s0093cf60.cpp
 namespace EA { namespace Text {
 unsigned int GetCharacterAsUTF16(wchar_t* pDest, unsigned int nDestLength, const char* pSource, int nSourceLength)
 {
