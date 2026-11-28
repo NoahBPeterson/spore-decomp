@@ -858,6 +858,7 @@ struct Variant_s007c_a950 {
     unsigned short mFlags;   // +0x10
     unsigned short mTypeId;  // +0x12
     Variant_s007c_a950() : mFlags(0), mTypeId(0) {}
+    template <typename T> Variant_s007c_a950(const T& x) : mFlags(0), mTypeId(0) { *this = x; }
     ~Variant_s007c_a950() { if (mFlags & 4) Destruct(false); }
     Variant_s007c_a950& operator=(const Variant_s007c_a950& x);
     template <typename T> Variant_s007c_a950& operator=(const T& x);
@@ -1026,7 +1027,6 @@ struct cOption_s007c_a950 {
 };
 }
 template SP::cOption_s007c_a950* eastl::uninitialized_move_impl<0, std::random_access_iterator_tag>::do_move_commit<SP::cOption_s007c_a950*, SP::cOption_s007c_a950*>(SP::cOption_s007c_a950*, SP::cOption_s007c_a950*, SP::cOption_s007c_a950*);
-namespace {
 
 struct cPropertySource {
 virtual void v00();
@@ -1123,7 +1123,6 @@ public:
     void Execute(EA::ArgScript::cArguments_s007c_a950* pArgs);
 };
 
-}  // anonymous namespace
 // ---- items of slice s007ca950 end
 
 // ---- items of slice s007cb590 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -3262,42 +3261,60 @@ SP::cPropertyList_s007c_a950* GetPropListSettings(const void* pName, PropMap* pM
 
 // @ 0x007cae30
 void cOptionBoolPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
-{
-    void** main = pArgs->MainArguments(2);
+{    void** main = pArgs->MainArguments(2);
     void** opt = pArgs->OptionArguments("list", 1);
-    SP::cPropertyList_s007c_a950* pList = GetTargetList(this, opt);
+    SP::cPropertyList_s007c_a950* pList;
+    if (opt) {
+        OptionTable* t = mpTable;
+        SP::cOption_s007c_a950* pOpt = (SP::cOption_s007c_a950*)(t->mBase + t->mCount * 0xac);
+        PropMap* pMap = &pOpt->mExternalSettings.mpBegin[t->mIndex];
+        pList = GetPropListSettings(opt[0], pMap);
+    } else {
+        OptionTable* t = mpTable;
+        pList = ((SP::cOption_s007c_a950*)t->mBase)[t->mCount].mPropertySettings.mpBegin[t->mIndex].mpObject;
+    }
     if (pList) {
-        bool b = mpSource->GetBool(main[1]);
-        EA::Variant_s007c_a950 v;
-        v = b;
+        EA::Variant_s007c_a950 v(mpSource->GetBool(main[1]));
         pList->SetProperty(GetPropID((const char*)main[0]), v);
     }
 }
 
 // @ 0x007caf40
 void cOptionIntPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
-{
-    void** main = pArgs->MainArguments(2);
+{    void** main = pArgs->MainArguments(2);
     void** opt = pArgs->OptionArguments("list", 1);
-    SP::cPropertyList_s007c_a950* pList = GetTargetList(this, opt);
+    SP::cPropertyList_s007c_a950* pList;
+    if (opt) {
+        OptionTable* t = mpTable;
+        SP::cOption_s007c_a950* pOpt = (SP::cOption_s007c_a950*)(t->mBase + t->mCount * 0xac);
+        PropMap* pMap = &pOpt->mExternalSettings.mpBegin[t->mIndex];
+        pList = GetPropListSettings(opt[0], pMap);
+    } else {
+        OptionTable* t = mpTable;
+        pList = ((SP::cOption_s007c_a950*)t->mBase)[t->mCount].mPropertySettings.mpBegin[t->mIndex].mpObject;
+    }
     if (pList) {
-        int i = mpSource->GetInt(main[1]);
-        EA::Variant_s007c_a950 v;
-        v = i;
+        EA::Variant_s007c_a950 v(mpSource->GetInt(main[1]));
         pList->SetProperty(GetPropID((const char*)main[0]), v);
     }
 }
 
 // @ 0x007cb050
 void cOptionFloatPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
-{
-    void** main = pArgs->MainArguments(2);
+{    void** main = pArgs->MainArguments(2);
     void** opt = pArgs->OptionArguments("list", 1);
-    SP::cPropertyList_s007c_a950* pList = GetTargetList(this, opt);
+    SP::cPropertyList_s007c_a950* pList;
+    if (opt) {
+        OptionTable* t = mpTable;
+        SP::cOption_s007c_a950* pOpt = (SP::cOption_s007c_a950*)(t->mBase + t->mCount * 0xac);
+        PropMap* pMap = &pOpt->mExternalSettings.mpBegin[t->mIndex];
+        pList = GetPropListSettings(opt[0], pMap);
+    } else {
+        OptionTable* t = mpTable;
+        pList = ((SP::cOption_s007c_a950*)t->mBase)[t->mCount].mPropertySettings.mpBegin[t->mIndex].mpObject;
+    }
     if (pList) {
-        float f = mpSource->GetFloat(main[1]);
-        EA::Variant_s007c_a950 v;
-        v = f;
+        EA::Variant_s007c_a950 v(mpSource->GetFloat(main[1]));
         pList->SetProperty(GetPropID((const char*)main[0]), v);
     }
 }

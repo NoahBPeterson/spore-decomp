@@ -1086,33 +1086,31 @@ rw::collision::TriangleKDTreeProcedural_s0072_c270* CreateTriangleKDTreeProcedur
 
 // @ 0x00729430
 int FUN_00729430(int a)
-{
-    switch (a) {
-    case 2:
+{    switch (a) {
+    case 2:    return 2;
     case 0x12: return 2;
-    case 3:
-    case 5:  return 5;
-    case 4:  return 6;
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 0xa:
-    case 0xb:
-    case 0xc:
-    case 0xd: return 8;
-    case 0xe: return 9;
-    case 0xf: return 10;
+    case 3:    return 5;
+    case 5:    return 5;
+    case 4:    return 6;
+    case 6:    return 8;
+    case 7:    return 8;
+    case 8:    return 8;
+    case 9:    return 8;
+    case 0xa:  return 8;
+    case 0xb:  return 8;
+    case 0xc:  return 8;
+    case 0xd:  return 8;
+    case 0xe:  return 9;
+    case 0xf:  return 10;
     case 0x13: return 3;
     case 0x14: return 4;
-    case 0:  return 1;
-    case 1:  return 1;
+    case 0:    return 1;
+    case 1:    return 1;
     case 0x10: return 1;
     case 0x11: return 1;
     case 0x15: return 1;
-    default:  return 1;
-    }
-}
+    default:   return 1;
+    }}
 
 // @ 0x007294d0
 int FUN_007294d0(int a)

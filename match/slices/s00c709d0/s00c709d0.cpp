@@ -284,20 +284,14 @@ void*  FUN_00b3d2a0_00(void* p);
 
 // @ 0x00c709d0
 float VPlanet::FUN_00c709d0()
-{
-    if (mpPlanet != 0) return mpPlanet->mB0;
-    return 0.5f;
-}
+{    return mpPlanet != 0 ? mpPlanet->mB0 : 0.5f;}
 
 // @ 0x00c70a00
 void VPlanet::FUN_00c70a00(float f) { mpPlanet->mB0 = f; }
 
 // @ 0x00c70a20
 float VPlanet::FUN_00c70a20()
-{
-    if (mpPlanet != 0) return mpPlanet->mB4;
-    return 0.5f;
-}
+{    return mpPlanet != 0 ? mpPlanet->mB4 : 0.5f;}
 
 // @ 0x00c70a50
 void VPlanet::FUN_00c70a50(float f) { mpPlanet->mB4 = f; }

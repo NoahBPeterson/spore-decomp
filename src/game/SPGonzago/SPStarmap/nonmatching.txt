@@ -10,7 +10,6 @@
 01045200 297 BuildVisual: aux call signatures/layout reconstructed from disasm; 392 vs 365 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045370 81 deque block-map growth inlined differently; 115 bytes flags: /O2 /MD /Gy /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target, ret#2 esp]
 010453f0 129 ReadSTLSequence: serializer vtable slots reconstructed; 144 vs 148 bytes flags: /O2 /MD /Gy /TP /arch:SSE
-01045500 43 SetInitialVisuals: register allocation and branch layout differ; 149 vs 144 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045590 52 multimap erase call sequence differs; 68 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 010455e0 166 debug list dump: wstring/build path approximated; 184 vs 352 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 01045740 212 CreateVisual: effect arg setup and map insert differ; 251 vs 423 bytes flags: /O2 /MD /Gy /TP /arch:SSE

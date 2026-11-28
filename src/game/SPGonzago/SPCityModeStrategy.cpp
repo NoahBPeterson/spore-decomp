@@ -1500,8 +1500,7 @@ bool IsCityVehicleSpecialtyMismatch()
 
 // @ 0x00cf7920
 void FUN_00cf7920()
-{
-    CivEventReq req;
+{    CivEventReq req;
     req.m_id = 0x6307841;
     req.m_pad04 = 0;
     req.m_hash = 0xaa9a8ed7;
@@ -1520,16 +1519,17 @@ void FUN_00cf7920()
     }
     void *cfg = SP_ConfigManager();
     u32 v = ((u32 (__thiscall *)(void *, u32))(*(void ***)cfg)[0x30 / 4])(cfg, 0x4ea96cb);
-    if (v == 0) {
+    if (v <= 0) {
         return;
     }
     {
         typedef void (__thiscall *IncFn)(void *self, u32 hash);
-        ((IncFn)FUN_00b32220)(GameTimeManager(), 0x4bf38a7);
+        void *tm = GameTimeManager();
+        ((IncFn)FUN_00b32220)(tm, 0x4bf38a7);
     }
     typedef void (__thiscall *StepFn)(void *self);
-    ((StepFn)FUN_0067aaf0)(((void *(__cdecl *)(u32, u32, u32, void *, int, int, int, int))FUN_0067caf0)(
-        g_1581b48, g_1581b4c, g_1581b50, &g_1581bd0, 0xbf800000, 0xbf800000, 0, 0));
+    ((StepFn)FUN_0067aaf0)(((void *(__stdcall *)(U3, void *, int, float, float, float, int, int))FUN_0067caf0)(
+        *(U3 *)&g_1581b48, &g_1581bd0, 0, -1.0f, -1.0f, 0.0f, 0, 0));
 }
 
 // @ 0x00cf7a10

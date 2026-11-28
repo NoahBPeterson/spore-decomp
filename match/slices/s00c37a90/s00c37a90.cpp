@@ -689,10 +689,16 @@ float PlanetDistanceScale(Vector3 v)
     return (float)((g_pPlanetTuning->mf090 - 1.0) * fT + 1.0);
 }
 
+struct Vector3Val_00c38900 {
+    float x, y, z;
+    Vector3Val_00c38900(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
+    Vector3Val_00c38900(const Vector3Val_00c38900& o) : x(o.x), y(o.y), z(o.z) {}
+};
+float PlanetDistanceScale(Vector3Val_00c38900 v);
+
 // @ 0x00c38840
 float cSPGameDataUFO::GetStandardSpeedForAltitude()
-{
-    float fBase;
+{    float fBase;
     switch (mUFOType) {
     case 0:  fBase = g_pPlanetTuning->mf068; break;
     case 1:  fBase = g_pPlanetTuning->mf078; break;
@@ -701,15 +707,9 @@ float cSPGameDataUFO::GetStandardSpeedForAltitude()
     case 4:  fBase = g_pPlanetTuning->mf074; break;
     default: fBase = g_pPlanetTuning->mf06c; break;
     }
-    return PlanetDistanceScale(mNextPosition) * fBase * mf6b4;
+    fBase *= PlanetDistanceScale(*(const Vector3Val_00c38900*)&mNextPosition);
+    return fBase * mf6b4;
 }
-
-struct Vector3Val_00c38900 {
-    float x, y, z;
-    Vector3Val_00c38900(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
-    Vector3Val_00c38900(const Vector3Val_00c38900& o) : x(o.x), y(o.y), z(o.z) {}
-};
-float PlanetDistanceScale(Vector3Val_00c38900 v);
 
 // @ 0x00c38900
 float cSPGameDataUFO::GetMaxSpeedForAltitude()

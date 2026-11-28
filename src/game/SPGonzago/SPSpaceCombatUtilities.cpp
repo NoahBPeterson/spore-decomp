@@ -119,6 +119,7 @@ public:
     bool  F_cdb0(void*);                             // 0x0104cdb0
     bool  F_8990(int);                               // 0x00c38990
     void  F_b500();                                  // 0x0106b500
+    void  F_b500(void*);                             // 0x0106b500
     void  F_7b0(int, int);                           // 0x010027b0 AddPosseMember
     float* F_f70();                                  // 0x0041ea70 Property::GetFloat
     void  F_dstruct();                               // 0x00421cf0 ~MessageBasicRC
@@ -1191,18 +1192,17 @@ void __cdecl FUN_0102b4f0(int param_1, void* param_2)
 
 // @ 0x0102b620
 void __cdecl FUN_0102b620(void)
-{
-    Obj* sg = (Obj*)FUN_01002bd0();
+{    Obj* sg = (Obj*)FUN_01002bd0();
     char* list = (char*)((Obj*)FUN_00ffbe50())->F_8db30();
     char* p1 = *(char**)list;
-    for (char* p2 = p1; p2 != list; p2 = *(char**)p2) {
+    for (char* p2 = *(char**)list; p2 != list; p2 = *(char**)p2) {
     }
     for (; p1 != list; p1 = *(char**)p1) {
         void* r = sg->F_4bb0(*(int*)(p1 + 8));
-        if (r == 0) {
-            ((Obj*)FUN_00ffbe50())->F_7b0(*(int*)(p1 + 8), 0);
+        if (r != 0) {
+            ((Obj*)MinimapIconSource())->F_b500(r);
         } else {
-            ((Obj*)FUN_010666a0(r))->F_b500();
+            ((Obj*)FUN_00ffbe50())->F_7b0(*(int*)(p1 + 8), 0);
         }
     }
 }

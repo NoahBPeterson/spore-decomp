@@ -11,3 +11,4 @@ slices/s011ebf70/s011ebf70.cpp  ?f_011ecd90@@YIXPAH@Z  011ecd90
 slices/s011ebf70/s011ebf70.cpp  ?f_011ecdb0@@YIXPAH@Z  011ecdb0
 slices/s011ebf70/s011ebf70.cpp  ?f_011ecdd0@@YIXPAH@Z  011ecdd0
 slices/s011ebf70/s011ebf70.cpp  ?f_011ecde0@@YIXPAH@Z  011ecde0
+slices/s011ebf70/s011ebf70.cpp  ?ctor@ThreadObj@@QAEPAU1@HD@Z  011ec390  /vc71 /O2 /MD /Gy /EHsc /TP

@@ -103,7 +103,11 @@ static __forceinline void SpliceInl(void* pos_, void* node_)
     node->mpPrev = p1;
     node->mpNext = pos;
 }
-__declspec(noinline) void __stdcall Splice(void* pos, void* x, void* node);
+struct LIter {
+    LNode* mpNode;
+    LIter(void* p) : mpNode((LNode*)p) {}
+};
+__declspec(noinline) void __stdcall Splice(LIter pos, void* x, LIter node);
 struct RCObjN {
     virtual void v0(int);
     virtual void v1();
@@ -819,10 +823,21 @@ void** ListHdr::Find(void** out, void* limit)
 }
 
 // @ 0x008fe6d0
-void __stdcall Splice(void* pos, void* x, void* node)
-{
-    (void)x;
-    SpliceInl(pos, node);
+void __stdcall Splice(LIter pos, void* x, LIter node)
+{    (void)x;
+    if (pos.mpNode == node.mpNode)
+        return;
+    LNode* n0 = node.mpNode->mpNext;
+    LNode* n1 = node.mpNode->mpPrev;
+    n0->mpPrev = n1;
+    n1->mpNext = n0;
+    LNode* p = pos.mpNode;
+    LNode** ppPrev = &p->mpPrev;
+    LNode* p1 = *ppPrev;
+    p1->mpNext = node.mpNode;
+    *ppPrev = node.mpNode;
+    node.mpNode->mpPrev = p1;
+    node.mpNode->mpNext = p;
 }
 
 // @ 0x008fe7e0

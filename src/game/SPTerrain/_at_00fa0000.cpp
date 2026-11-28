@@ -41,7 +41,7 @@ struct BoxElem {
     float mVal[4];                              // +0x4
 };
 void CopyBoxElemsChecked(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDst);
-void CopyBoxElems(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDst);
+BoxElem* CopyBoxElems(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDst);
 void CopyBoxElemsBackward(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDstEnd);
 // ---- items of slice s00fac5c0 end
 
@@ -664,18 +664,23 @@ void CopyBoxElemsChecked(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* p
 }
 
 // @ 0x00fad0a0
-void CopyBoxElems(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDst)
-{
-    while (pFirst != pLast) {
-        pDst->mKey = pFirst->mKey;
-        pDst->mVal[0] = pFirst->mVal[0];
-        pDst->mVal[1] = pFirst->mVal[1];
-        pDst->mVal[2] = pFirst->mVal[2];
-        pDst->mVal[3] = pFirst->mVal[3];
-        ++pFirst;
-        ++pDst;
+BoxElem* CopyBoxElems(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDst)
+{    if (pFirst != pLast) {
+        float* dstF = &pDst->mVal[2];
+        const float* srcF = &pFirst->mVal[2];
+        do {
+            pDst->mKey = pFirst->mKey;
+            dstF[-2] = srcF[-2];
+            dstF[-1] = srcF[-1];
+            dstF[0] = srcF[0];
+            dstF[1] = srcF[1];
+            ++pFirst;
+            ++pDst;
+            dstF += 5;
+            srcF += 5;
+        } while (pFirst != pLast);
     }
-}
+    return pDst;}
 
 // @ 0x00fad0f0
 void CopyBoxElemsBackward(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* pDstEnd)

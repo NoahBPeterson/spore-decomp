@@ -1,6 +1,9 @@
 // Slice s011f8bc0 -- RenderWare D3D9 graphics device caps + global vertex/index state.
 // Flags: /O2 /MD /Gy /TP /GS-
 #include "types.h"
+#if defined(_MSC_VER) && _MSC_VER < 1400
+#define __thiscall
+#endif
 
 typedef unsigned int uint;
 typedef unsigned int size_t;
@@ -144,7 +147,7 @@ void f011f8d60(int* param_1, int param_2)
         int obj = *(int*)(g_15d0840 + i);
         if (obj != 0) {
             int* self = param_1;
-            int rc = (*(int(__thiscall**)(int*, int, int, int, int, int, int))(*(int*)self + 0x28))
+            int rc = (*(int(__stdcall**)(int*, int, int, int, int, int, int))(*(int*)self + 0x28))
                          (self, *(int*)(param_2 + 0x148), 1, *(int*)(param_2 + 0x408), 0, 3, obj);
             if (rc == 0) *slot = obj;
         }

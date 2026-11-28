@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/StandardHTMLEntities.cpp  ?Fn8e53a0@@YAPADPAD0PBX@Z  008e53a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

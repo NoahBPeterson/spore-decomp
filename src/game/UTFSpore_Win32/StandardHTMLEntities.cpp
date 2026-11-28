@@ -17,8 +17,7 @@ extern "C" char gEntityNumbers[];  // 0x0154cf28
 
 // @ 0x008e53a0
 char* Fn8e53a0(char* begin, char* end, const void* key)
-{
-    int count = (int)(end - begin) >> 3;
+{    int count = (int)(end - begin) >> 3;
     if (count <= 0) return begin;
     const wchar16* k = *(const wchar16**)key;
     do {
@@ -32,13 +31,13 @@ char* Fn8e53a0(char* begin, char* end, const void* key)
             a = *s;
         }
         if (*s < *kk) {
-            begin = begin + 8 + mid * 8;
-            mid = count + (-1 - mid);
+            begin += mid * 8 + 8;
+            count -= mid + 1;
+        } else {
+            count = mid;
         }
-        count = mid;
     } while (count > 0);
-    return begin;
-}
+    return begin;}
 
 // @ 0x008e5410
 char* Fn8e5410(char* begin, char* end, const void* key)

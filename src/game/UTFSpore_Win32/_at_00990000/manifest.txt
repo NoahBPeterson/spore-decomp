@@ -7,3 +7,4 @@
 ../src/game/UTFSpore_Win32/_at_00990000.cpp  ?ReloadChangedLayouts@@YAXPAX@Z  00998d30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00990000.cpp  ?Bind@FrameSet@@QAE_NPAPAHHPAH@Z  00997bf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00990000.cpp  ?clear@Obj33@@QAEXXZ  00997ba0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00990000.cpp  ?OnResourceChanged@@YAXHPAUKey3@@PAUSerAutoUpdate@@@Z  00998d70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,4 +1,3 @@
 00beeb70  1716  cVehicleLike::Init (owner city, locator copy, 8 offset points, 4 rotated+projected corner points, memset): complete, call/vslot sequence matches; SSE register allocation and scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00bef670  50  complete: Object::Cast (two identity type ids, +0x3c view for the third, else FUN_00b18460); cl15 keeps the type id in eax and `this` in ecx, retail keeps `this` in eax and the id in ecx (54 vs 56 bytes)
 00bef770  73  complete: RaiseLevel (raise civ level, ping the civ-mode strategy's CheckEvents for the player, DoNext(0x3120767d,1) above level 4); retail reloads mLevel into ecx for a second (self) compare, cl15 folds the load and branches directly (97 vs 105 bytes)
 00befab0  236  complete: CountFlags (count set bytes among the 12 flag bytes at +0x484..+0x48f); retail keeps the 3x4 loop with four accumulators, cl15 unrolls and reassociates the additions (167 vs 79 bytes)

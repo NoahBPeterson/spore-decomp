@@ -5056,16 +5056,13 @@ void cCommunityEditor_s00d0_a160::ShowRolloverWindows(u32 idA, u32 idB)
 
 // @ 0x00d0a540
 void cCommunityEditor_s00d0_a160::ShowPlacementCursor()
-{
-  mpWindowCtrl_2f8->mWindow_04.Slot7c(1, 1);
+{  mpWindowCtrl_2f8->mWindow_04.Slot7c(1, 1);
   WindowCtrl* c = mpWindowCtrl_2f8;
   void* p = (c != 0) ? (void*)&c->mWindow_04 : 0;
   ((IWindowMgr*)WindowManagerObj())->Slot58(1, p);
-  if (mpWindowCtrl_2f8 != 0) {
-    ((IWindowMgr*)WindowManagerObj())->Slot58(0, &mpWindowCtrl_2f8->mWindow_04);
-    return;
-  }
-  ((IWindowMgr*)WindowManagerObj())->Slot58(0, 0);
+  WindowCtrl* c2 = mpWindowCtrl_2f8;
+  void* q = (c2 != 0) ? (void*)&c2->mWindow_04 : 0;
+  ((IWindowMgr*)WindowManagerObj())->Slot58(0, q);
 }
 
 // @ 0x00d0a5b0

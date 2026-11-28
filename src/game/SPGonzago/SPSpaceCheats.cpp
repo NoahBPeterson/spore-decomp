@@ -96,6 +96,7 @@ cVector3* g_pCityReferencePoint = nullptr;                  // 0x16ddb34
 class cSPSimulatorUFO {
 public:
     int32_t GetTravelCharge();
+    int32_t GetTravelCharge(int32_t nFrom, int32_t nTo);
     void TravelToStarCharge(int32_t nStarIndex);
     cDispatchObject* GetPlayerInventory();
 };
@@ -1793,12 +1794,12 @@ void TravelToStar(int32_t nStarIndex)
     if (GetUniverseContextId() != 2)
         return;
 
-    cSPSimulatorUFO* pSimulator = (cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50(GetUFOContextId());
-    int32_t nCharge = pSimulator->GetTravelCharge();
+    int32_t nCharge = ((cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50())
+                          ->GetTravelCharge(GetUFOContextId(), nStarIndex);
     int32_t nStars = ((cPlayerInventory*)GetPlayerUniverse())->GetStarCount();
 
     ((cPlayerInventory*)GetPlayerUniverse())->SetStarCount(nCharge + nStars);
-    ((cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50(nStarIndex))->TravelToStarCharge(0);
+    ((cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50())->TravelToStarCharge(nStarIndex);
 
     cSPGameDataUFO* pGameData = (cSPGameDataUFO*)((cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50())
                                     ->GetPlayerInventory();

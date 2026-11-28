@@ -1234,11 +1234,17 @@ void GameModelSizeCommand::Execute(cArguments* args)
 // @ 0x007d1970
 void CmdBase::Execute(cArguments* args)
 {
-    int self = (int)this;
-    ObjV* obj = *(ObjV**)(self + 4);
+    struct DstLayout { char mPad00[0x18]; int mVal[3]; };
+    struct CmdLayout { void* m00; void* mParser; void* m08; DstLayout* mDst; };
+    CmdLayout* self = (CmdLayout*)this;
+    void** vtbl = *(void***)self->mParser;
     void** a = args->MainArguments(1);
-    V3 v = obj->Get(*a);
-    *(V3*)(*(int*)(self + 0xc) + 0x18) = v;
+    V3 tmp;
+    V3* p = ((V3*(__thiscall*)(void*, V3*, const void*))vtbl[0xb0 / 4])(self->mParser, &tmp, *a);
+    int* dst = self->mDst->mVal;
+    dst[0] = p->a;
+    dst[1] = p->b;
+    dst[2] = p->c;
 }
 
 // @ 0x007d19c0

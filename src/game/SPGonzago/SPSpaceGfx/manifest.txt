@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPSpaceGfx.cpp  ?FUN_01034950@Behavior@@QAEXHH@Z  01034950  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceGfx.cpp  ?AllianceGraphCreate@cSPSpaceGfx@@QAEXXZ  01037700  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGfx.cpp  ?DoNukeSubtree@ColonyMap@@QAEXPAURBNode@@@Z  01036fc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

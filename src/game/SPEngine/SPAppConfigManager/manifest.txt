@@ -42,3 +42,6 @@
 ../src/game/SPEngine/SPAppConfigManager.cpp  ?GetConfigString@cConfigManager_s007c_8940@@QAE_NIPAUStr16@@@Z  007c9760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppConfigManager.cpp  ?GetScreenResolutionInfo@cConfigManager@@QAE_NHPAI00@Z  007c7cd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppConfigManager.cpp  ?GetOptionIDs@cConfigManager_s007c_9910@@QAEXPAUUIntVec@@@Z  007ca150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?Execute@cOptionBoolPropertyCommand@@QAEXPAUcArguments_s007c_a950@ArgScript@EA@@@Z  007cae30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?Execute@cOptionIntPropertyCommand@@QAEXPAUcArguments_s007c_a950@ArgScript@EA@@@Z  007caf40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?Execute@cOptionFloatPropertyCommand@@QAEXPAUcArguments_s007c_a950@ArgScript@EA@@@Z  007cb050  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

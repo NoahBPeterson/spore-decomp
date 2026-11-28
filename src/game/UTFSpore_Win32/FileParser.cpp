@@ -441,18 +441,16 @@ int* __cdecl UninitCopySpecs(int* first, int* last, int* dst)
 
 // @ 0x0083fcd0
 int* __cdecl CopyBackwardSpecs(int* first, int* last, int* dst)
-{
-    if (first == last)
-        return dst;
-    do {
-        if (first != dst)
-            ((eastl::string8_s0083_f140*)dst)->assign(*(eastl::string8_s0083_f140*)first);
+{    while (first != last) {
+        if (first != dst) {
+            eastl::string8_s0083_f140* f = (eastl::string8_s0083_f140*)first;
+            ((eastl::string8_s0083_f140*)dst)->assign(f->mpBegin, f->mpEnd);
+        }
         *(uint16*)(dst + 4) = *(uint16*)(first + 4);
         first += 5;
         dst += 5;
-    } while (first != last);
-    return dst;
-}
+    }
+    return dst;}
 
 // @ 0x0083fd20
 int* __cdecl CopyBackwardSpecsRev(int* first, int* last, int* dst)

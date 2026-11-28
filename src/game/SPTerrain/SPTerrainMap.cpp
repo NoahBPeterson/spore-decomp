@@ -1793,29 +1793,29 @@ uint32_t __cdecl Direction4fToDirection4c(const float* v)
 
 // @ 0x00f87d20
 template <> void cTerrainMap_s00f8_7b30<float>::Convolve(int face, int x, int y, float* dst, const float* k, int)
-{
-    int size = (int)mFaceSize;
+{    int size = (int)mFaceSize;
     int centre = (size * face + y) * size + x;
 
-    int i2 = GetRelativeIndex(face, x, y, -1, -1);
-    int i3 = GetRelativeIndex(face, x, y, 0, -1);
-    int i4 = GetRelativeIndex(face, x, y, 1, -1);
-    int i5 = GetRelativeIndex(face, x, y, -1, 0);
-    int i6 = GetRelativeIndex(face, x, y, 1, 0);
-    int i7 = GetRelativeIndex(face, x, y, -1, 1);
-    int i8 = GetRelativeIndex(face, x, y, 0, 1);
-    int i9 = GetRelativeIndex(face, x, y, 1, 1);
+    int idx[9];
+    idx[0] = GetRelativeIndex(face, x, y, -1, -1);
+    idx[1] = GetRelativeIndex(face, x, y, 0, -1);
+    idx[2] = GetRelativeIndex(face, x, y, 1, -1);
+    idx[3] = GetRelativeIndex(face, x, y, -1, 0);
+    idx[4] = centre;
+    idx[5] = GetRelativeIndex(face, x, y, 1, 0);
+    idx[6] = GetRelativeIndex(face, x, y, -1, 1);
+    idx[7] = GetRelativeIndex(face, x, y, 0, 1);
+    idx[8] = GetRelativeIndex(face, x, y, 1, 1);
 
-    float sum = mBegin[i3] * k[1] + mBegin[i2] * k[0];
-    sum += mBegin[i4] * k[2];
-    sum += mBegin[i5] * k[3];
-    sum += mBegin[centre] * k[4];
-    sum += mBegin[i6] * k[5];
-    sum += mBegin[i7] * k[6];
-    sum += mBegin[i8] * k[7];
-    sum += mBegin[i9] * k[8];
-    dst[centre] = sum;
-}
+    float sum = mBegin[idx[1]] * k[1] + mBegin[idx[0]] * k[0];
+    sum += mBegin[idx[2]] * k[2];
+    sum += mBegin[idx[3]] * k[3];
+    sum += mBegin[idx[4]] * k[4];
+    sum += mBegin[idx[5]] * k[5];
+    sum += mBegin[idx[6]] * k[6];
+    sum += mBegin[idx[7]] * k[7];
+    sum += mBegin[idx[8]] * k[8];
+    dst[centre] = sum;}
 
 // @ 0x00f87ea0
 template <> void cTerrainMap_s00f8_7b30<float>::DownSampleMap(const cTerrainMap_s00f8_7b30<float>& src)

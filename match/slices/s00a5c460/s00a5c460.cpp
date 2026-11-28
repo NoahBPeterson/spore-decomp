@@ -335,8 +335,7 @@ void alist_list(t_alist* self, t_symbol sel, int argc, t_atom* argv)
 
 // @ 0x00a5c8e0
 void alist_anything(t_alist* self, t_symbol sel, int argc, t_atom* argv)
-{
-    if (self->atoms != 0)
+{    if (self->atoms != 0)
         freebytes(self->atoms, self->count * sizeof(t_atom));
     self->atoms = (t_atom*)getbytes((argc + 1) * sizeof(t_atom), "EAPd/t_list_atoms");
     if (self->atoms == 0) {
@@ -346,10 +345,11 @@ void alist_anything(t_alist* self, t_symbol sel, int argc, t_atom* argv)
     self->count = argc + 1;
     self->atoms[0].a_type = 2;
     self->atoms[0].s = sel;
+    t_atom* dst = self->atoms + 1;
     if (argc <= 0)
         return;
     for (int i = 0; i < argc; ++i)
-        self->atoms[i + 1] = argv[i];
+        dst[i] = argv[i];
 }
 
 // @ 0x00a5c980

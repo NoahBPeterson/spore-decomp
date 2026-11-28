@@ -91,3 +91,5 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Copy20@@YAPAUE20@@PAU1@00@Z  00745bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?F@Stub00747920@@QAEXXZ  00747920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Start@cFeedbackJobs@@QAE_NPAPAX@Z  0074fea0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SortDescUnguarded@@YAXPAUPair8@@0@Z  00743c50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?next@SlotVec@@QAEHH@Z  00745520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

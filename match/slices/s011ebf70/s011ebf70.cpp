@@ -9,6 +9,9 @@
 extern "C" char g_13ec47c[];
 
 #include "types.h"
+#if defined(_MSC_VER) && _MSC_VER < 1400
+#define __thiscall
+#endif
 #include <intrin.h>
 
 #define EXCEPTION_EXECUTE_HANDLER 1
@@ -461,13 +464,13 @@ char ThreadObj::ctorStream(const char* name)
 
 // @ 0x011ec390
 ThreadObj* ThreadObj::ctor(int a, char b)
-{
-    _InterlockedExchange((volatile long*)this, 0);
+{    _InterlockedExchange((volatile long*)this, 0);
     this->mField4 = 0;
     this->mField8 = 0;
     ((Semaphore*)((char*)this + 0x0c))->ctor0(0, 0);
     ((Semaphore*)((char*)this + 0x1c))->ctor0(0, 0);
     ((Mutex*)((char*)this + 0x2c))->ctor0(0, 0);
+    // Default intra-process stream name when a == 0 && b != 0.
     if (a == 0 && b)
     {
         RwwString nm;

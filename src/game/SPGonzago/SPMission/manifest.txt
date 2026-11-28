@@ -77,3 +77,4 @@
 ../src/game/SPGonzago/SPMission.cpp  ??0cMissionAdventure@Simulator@@QAE@XZ  00c4af60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ??0cMissionBalance@Simulator@@QAE@XZ  00c4b570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?IsAtStar@cSPMission@@QAE_NHH@Z  00c455b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48ba0@SPObject@@QAEXH@Z  00c48ba0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

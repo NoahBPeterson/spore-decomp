@@ -333,8 +333,8 @@ unsigned int VolPoolSizer::Size()
 // void FUN_012056a0(void* a, void* b)
 // @ 0x012056a0
 void FUN_012056a0(int a, int b)
-{
-    FUN_012070e0(*(void**)(a + 0x3c), (void*)b);
+{    FUN_012070e0(*(void**)(a + 0x3c), (void*)b);
+    // Slide the four instance fields down by (a - *(b + 0x20)).
     int d = *(int*)(b + 0x20);
     int delta = a;
     delta -= d;

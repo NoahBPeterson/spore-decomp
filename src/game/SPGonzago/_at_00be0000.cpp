@@ -2318,12 +2318,14 @@ int __cdecl FUN_00bef640(int type)
 // @ 0x00bef670
 void* Object::Cast(int type)
 {
-    Object* self = this;
-    if (type == (int)0x901f1362 || type == (int)0xee3f516e)
-        return self;
-    if (type == (int)0x5593a1a)
-        return self ? (void*)((char*)self + 0x3c) : 0;
-    return self->FUN_00b18460(type);
+    struct SubIface { char mPad00[0x3c]; char mSub; };
+    if (type == (int)0x901f1362)
+        return this;
+    if (type == (int)0xee3f516e)
+        return this;
+    if (type != (int)0x5593a1a)
+        return FUN_00b18460(type);
+    return this ? (void*)&((SubIface*)this)->mSub : 0;
 }
 
 // @ 0x00bef6d0

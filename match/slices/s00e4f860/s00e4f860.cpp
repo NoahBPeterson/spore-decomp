@@ -129,13 +129,13 @@ char FUN_00e4ff10(char* p) {
 }
 
 // @ 0x00e503a0
-float FUN_00e503a0(int which) {
-  cGuard16 g;
+float FUN_00e503a0(int which) {  cGuard16 g;
   char* r = (char*)FUN_00e4ce40(&g);
-  if (which == 2) return *(float*)(r + 0x104);
-  if (which == 4) return *(float*)(r + 0x108);
-  return 10.0f;
-}
+  switch (which) {
+    case 2: return *(float*)(r + 0x104);
+    case 4: return *(float*)(r + 0x108);
+    default: return 10.0f;
+  }}
 
 // 0x00e507d0 (byte-exact lifted version: match/slices/s00e507d0/s00e507d0.cpp)
 unsigned FUN_00e507d0(float a, float b) {

@@ -33,3 +33,4 @@
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0ca00@SP@@YIPAPAUtTreeNode@1@PAUcMapInsert@1@HPAPAU21@PAU21@PAUtMapValue@1@_N@Z  00d0ca00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?HandleSwatchRolloverOn@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSwatch_s00d0_def0@2@@Z  00d0e0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d12fc0@Class12@@QAEXXZ  00d12fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?ShowPlacementCursor@cCommunityEditor_s00d0_a160@@QAEXXZ  00d0a540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

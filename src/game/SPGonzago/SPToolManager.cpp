@@ -146,6 +146,7 @@ u32   __cdecl GetPlayerEmpireID();                            // 0x01021090
 bool  __cdecl IsHostileToAll(void* p);                        // 0x0102c600
 void* __cdecl FUN_00b67740(void* p);                          // 0x00b67740
 bool  __cdecl cSPSpaceCommCanTarget(void* a, void* b);        // 0x0102aa50
+bool  __cdecl cSPSpaceCommCanTarget(void* a, void* b, bool c); // 0x0102aa50 (3-arg)
 bool  __fastcall FUN_00bfc480(void* self);                    // 0x00bfc480
 struct cTerrainSphere;
 struct cTerrainEditor {
@@ -1874,8 +1875,7 @@ u8 SP::cSPSpaceToolData_s0104_bcc0::FUN_0104cc90()
 
 // @ 0x0104cdb0
 u8 SP::cSPSpaceToolData_s0104_bcc0::FUN_0104cdb0(cIface* target)
-{
-    if ((mFlagsBytes.mByte176 & 1) != 0) {
+{    if ((mFlagsBytes.mByte176 & 1) != 0) {
         if ((u32)target->Call(0x4c) == GetPlayerEmpireID()) return 0;
     }
     if (mStrategyClassID == 0) return 1;
@@ -1903,18 +1903,17 @@ u8 SP::cSPSpaceToolData_s0104_bcc0::FUN_0104cdb0(cIface* target)
     if (!tookCase) result = (u8)(mStrategyClassID >> 7);
 
     result &= 1;
-    u8 b = result;
     if (GetUniverseContext() == 0 && tookCase && result != 0 &&
         (mStrategyClassID & 0x200) != 0) {
-        b = (u8)IsHostileToAll(FUN_01021260());
+        bool b = IsHostileToAll(FUN_01021260());
         void* s = FUN_00b67740(target);
-        cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
-        result = b;
-        if (s != 0)
-            result = (u8)cSPSpaceCommCanTarget(s, sim->GetPlayerInventory());
+        result = (u8)b;
+        if (s != 0) {
+            result = (u8)cSPSpaceCommCanTarget(
+                s, ((cSPSimulatorSpaceGame*)GetUFOSimulator())->GetPlayerInventory(), b);
+        }
     }
-    return result;
-}
+    return result;}
 
 // @ 0x0104cf20
 void cSPSpaceToolData::UpdateTuning()

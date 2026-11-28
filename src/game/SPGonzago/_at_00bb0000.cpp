@@ -1248,13 +1248,12 @@ void FUN_00bbea40(RefObj2** a, int lo, int hi, int hole, RefObj2* value, bool (*
 // @ 0x00bbeb20
 void FUN_00bbeb20(RefObj** a, RefObj** end, bool (*cmp)(void*, void*))
 {
-    int n = (int)((char*)end - (char*)a) >> 2;
-    if (1 < n) {
+    const int n = (int)(end - a);
+    if (n >= 2) {
         int i = ((n - 2) >> 1) + 1;
         do {
-            int v = (int)a[i - 1];
             --i;
-            FUN_00bbd180_s00bb_e5f0(a, i, n, i, (void*)v, (void*)cmp);
+            FUN_00bbd180_s00bb_e5f0(a, i, n, i, (void*)a[i], (void*)cmp);
         } while (i != 0);
     }
 }

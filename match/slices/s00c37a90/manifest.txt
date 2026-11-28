@@ -5,3 +5,4 @@ slices/s00c37a90/s00c37a90.cpp  ?TestFlag@cSPGameDataUFO@@QAE_NI@Z  00c38990  /O
 slices/s00c37a90/s00c37a90.cpp  ?WarpToDestination@cSPGameDataUFO@@QAE_NXZ  00c37cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00c37a90/s00c37a90.cpp  ?TickUFOBehaviorTree@cSPGameDataUFO@@QAE_NMN@Z  00c38740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00c37a90/s00c37a90.cpp  ?GetMaxSpeedForAltitude@cSPGameDataUFO@@QAEMXZ  00c38900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00c37a90/s00c37a90.cpp  ?GetStandardSpeedForAltitude@cSPGameDataUFO@@QAEMXZ  00c38840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

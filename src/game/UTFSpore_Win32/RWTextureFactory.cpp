@@ -53,7 +53,7 @@ extern "C" void* FUN_011f0220(void* out, int w, int h, int a, int b, int fmt);  
 extern "C" void* FUN_011efeb0(void* raster, int w, int h, int a, int b, int fmt); // rw::graphics::Raster::Initialize
 struct ImgInfo { int pad[4]; int w; int h; int bpp; };   // +0x10 w, +0x14 h, +0x18 bpp
 struct ImgReader {
-    unsigned s[6];
+    unsigned s[5];
     void   __thiscall ctor();                              // 0x87cde0
     char   __thiscall Open(void* stream);                  // 0x87ce00
     char   __thiscall Init(unsigned base, void* info);     // 0x87d0b0
@@ -85,7 +85,7 @@ struct RWTexResource {
 struct MemPool { void* __thiscall LockedAligned(int a, int b, int c, int d, int e, int f, int g, int h); };  // 0x928a30
 extern "C" MemPool* g_memPool_16c8b44;
 struct RasterObj {
-    char   __thiscall Lock(int mode, int a, void* info);   // 0x11ef750 (bool)
+    void*  __thiscall Lock(int mode, int a, void* info);   // 0x11ef750 (Raster*)
     void   __thiscall Unlock(void* info);                  // 0x11ef880
     void   __thiscall Destroy();                           // 0x11eff60
 };
@@ -172,53 +172,53 @@ bool EA::UTFWinTools::RWTextureFactory::CanConvert(unsigned int a, unsigned int 
 
 // @ 0x00998250
 void RWTexResource::InitTextureResources()
-{
-    if (mReader == 0)
+{    if (mReader == 0)
         return;
     ImgReader rd;
     rd.ctor();
     char ok = 0;
     unsigned base = ((unsigned)VF(mReader, 0x10, int*(__thiscall*)(void*))(mReader)[1]) - 0x2f7d0000;
-    if (rd.Open(VF(mReader, 0x18, void*(__thiscall*)(void*))(mReader))) {
-        int info[4];
-        if (rd.Init(base, info)) {
-            ImgInfo* img = rd.GetImage(0);
-            if (img) {
-                int desc[3];
-                FUN_011f0220(desc, mW, mH, 1, 8, 0x15);
-                void* mem = g_memPool_16c8b44->LockedAligned(desc[1], desc[2], 0, 0, 0, 0, 0, 0);
-                if (mem) {
-                    int raster[4];
-                    raster[0] = (int)mem; raster[1] = 0; raster[2] = 0; raster[3] = 0;
-                    RasterObj* r = (RasterObj*)FUN_011efeb0(raster, mW, mH, 1, 8, 0x15);
-                    if (r) {
-                        int lk[5];
-                        if (r->Lock(2, 0, lk)) {
-                            if (rd.Copy(img, (void*)lk[0], lk[3])) {
-                                mRaster = r;
-                                ok = 1;
-                            }
-                            r->Unlock(lk);
-                            if (ok)
-                                goto done_img;
+    if (!rd.Open(VF(mReader, 0x18, void*(__thiscall*)(void*))(mReader))) {
+        rd.Close();
+        return;
+    }
+    int info;
+    if (rd.Init(base, &info)) {
+        ImgInfo* img = rd.GetImage(0);
+        if (img) {
+            int desc[8];
+            FUN_011f0220(desc, mW, mH, 1, 8, 0x15);
+            void* mem = g_memPool_16c8b44->LockedAligned(desc[0], desc[1], 0, 0, 0, 0, 0, 0);
+            if (mem) {
+                int raster[4];
+                raster[0] = (int)mem; raster[1] = 0; raster[2] = 0; raster[3] = 0;
+                RasterObj* r = (RasterObj*)FUN_011efeb0(raster, mW, mH, 1, 8, 0x15);
+                if (r) {
+                    int lk[7];
+                    if (r->Lock(2, 0, lk)) {
+                        if (rd.Copy(img, (void*)lk[0], lk[3])) {
+                            mRaster = r;
+                            ok = 1;
                         }
-                        r->Destroy();
-                        ((PoolMgr*)g_memPool_16c8b44)->Free(r);
+                        r->Unlock(lk);
+                        if (ok)
+                            goto done_img;
                     }
+                    r->Destroy();
+                    ((PoolMgr*)g_memPool_16c8b44)->Free(r);
                 }
-            done_img:
-                rd.Free(img);
             }
-        }
-        VF(mReader, 0x24, void(__thiscall*)(void*))(mReader);
-        void* old = mReader;
-        if (old) {
-            mReader = 0;
-            VF(old, 8, void(__thiscall*)(void*))(old);
+        done_img:
+            rd.Free(img);
         }
     }
-    rd.Close();
-}
+    VF(mReader, 0x24, void(__thiscall*)(void*))(mReader);
+    void* old = mReader;
+    if (old) {
+        mReader = 0;
+        VF(old, 8, void(__thiscall*)(void*))(old);
+    }
+    rd.Close();}
 
 // @ 0x009983d0
 bool EA::UTFWinTools::RWTextureFactory::ReadResource(EA::ResourceMan::Record * reader, EA::ResourceMan::Resource * container, void * a3, unsigned int a4)

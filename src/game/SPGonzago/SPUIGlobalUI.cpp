@@ -914,21 +914,16 @@ void FUN_00e00bf0_impl()
 
 // @ 0x00e00c40
 char FUN_00e00c40_impl()
-{
-    char prop = (char)((TC*)(uint32_t)g_15fd918)->F_006a25a0(0xd5797c10);
+{    char prop = (char)((TC*)(uint32_t)g_15fd918)->F_006a25a0(0xd5797c10);
     bool m = (SP_GetCurrentGameMode() == (void*)0x1654c05);
     bool b0 = m && (((TC*)SP_SpaceGameGet())->F_00b18e40() != 0);
     bool b2 = m && (((TC*)FUN_01015df0())->F_00a98020() != 0);
     bool b1 = m && (((TC*)((char*)((TC*)FUN_00ffbe50())->F_00a1ad60() + 0x508))->F_008e7f80() == 2);
     bool bv = m && (((uint8_t*)FUN_00ffbe50())[0x18] != 0);
-    if (b0) return 1;
-    if (b1) return 1;
-    if (bv) return 1;
-    if (b2 && prop == 0) return 1;
-    void* g = FUN_00b3d4a0();
-    if (g != 0 && ((TC*)g)->F_00ae9390()) return 1;
-    return 0;
-}
+    if (b0 || b1 || bv || (b2 && prop == 0) ||
+        (FUN_00b3d4a0() != 0 && ((TC*)FUN_00b3d4a0())->F_00ae9390()))
+        return 1;
+    return 0;}
 
 // @ 0x00e00d20
 char FUN_00e00d20_impl()
