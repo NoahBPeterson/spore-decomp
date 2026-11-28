@@ -524,7 +524,7 @@ struct cActivePlanet {
     U32 mp13c;                 // +0x13c
 };
 
-// @ 0x00c38270
+// 0x00c38270 (byte-exact lifted version: match/slices/s00c38270/s00c38270.cpp)
 bool cSPGameDataUFO::CanEnterPlanetContext()
 {
     cActivePlanet* pPlanet = (cActivePlanet*)FUN_01021260();

@@ -5804,7 +5804,7 @@ cSPTransform2* cSPTransform2::Init(const cSPTransform2* src)
     return this;
 }
 
-// @ 0x00f9b2b0
+// 0x00f9b2b0 (byte-exact lifted version: match/slices/s00f9b2b0/s00f9b2b0.cpp)
 cSPTransform2* cSPTransform2::CopyFrom(const float* pos, const cSPTransform2* src, bool flag)
 {
     mFlags = src->mFlags;

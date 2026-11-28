@@ -301,7 +301,7 @@ void cDownloadDialog::FUN_00df57d0(int b)
 }
 
 // 0x00DF5830
-// @ 0x00df5830
+// 0x00df5830 (byte-exact lifted version: match/slices/s00df5830/s00df5830.cpp)
 bool cDownloadDialog::FUN_00df5830(void* retaddr)
 {
     uint key[3];

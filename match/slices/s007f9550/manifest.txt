@@ -15,3 +15,4 @@ slices/s007f9550/s007f9550_od.cpp  _FUN_007fa4f0  007fa4f0  /Od /Ob1 /MD /Gy /TP
 slices/s007f9550/s007f9550_od.cpp  ?AddPredicate@CB@@  007f9d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007f9550/s007f9550_od.cpp  ?AddAction@CB@@  007f9e20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007f9550/s007f9550_od.cpp  ?SerUpdate@CB@@  007fa1d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_lifted.cpp  ?FUN_007f9550@D_007f9550@@QAE_NXZ  007f9550  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

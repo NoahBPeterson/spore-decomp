@@ -1,6 +1,5 @@
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
 00745cf0  86 FIXED PromoteOccluder is the adjust_heap wrapper (sift-down loop, then the out-of-line promote half 0x00743e50); equiv PASS (323 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00745e00 113 FIXED PromotePairGt is the adjust_heap wrapper for the greater comparator (no comparator argument; out-of-line promote half 0x00743f00); equiv PASS (358 valid, 88.1% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00745e80 113 FIXED PromotePairLt is the adjust_heap wrapper for the less comparator (out-of-line promote half 0x00743f60); equiv PASS (353 valid, 100% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00745f90 181 0x94-byte render/cull record ctor shape differs
 007460b0 336 FIXED FilterModelFrustum returns bool; the frustum callback is __thiscall (ECX=ctx); the local transform starts from the identity at 0x162ec4c; box copy/transform and point/sphere tests are thiscall members; equiv PASS (400 valid, 75.4% coverage). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -228,7 +228,7 @@ void cSPEditorLimbStructure::SetHandsTargets(bool b)
     }
 }
 
-// @ 0x48bca0
+// 0x0048bca0 (byte-exact lifted version: match/slices/s0048bca0/s0048bca0.cpp)
 float cSPEditorLimbStructure::GetMaxDistanceFromBase()
 {
     float base = mBaseJoint->mPositionAtCreation[2];

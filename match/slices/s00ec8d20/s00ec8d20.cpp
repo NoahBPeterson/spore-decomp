@@ -87,7 +87,7 @@ void FUN_00ec8d20(int param_1)
 }
 
 // ------------------------------------------------------------------ 0x00ec8d80
-// @ 0x00ec8d80
+// 0x00ec8d80 (byte-exact lifted version: match/slices/s00ec8d80/s00ec8d80.cpp)
 struct KV { int k; int v; };
 void FUN_00ec8d80(int param_1)
 {

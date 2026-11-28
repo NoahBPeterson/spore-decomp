@@ -1639,7 +1639,7 @@ cSPUIAssetDiscoveryCard* cSPUIAssetDiscoveryCard::Clone()
     return pCopy;
 }
 
-// @ 0x00e2fe10
+// 0x00e2fe10 (byte-exact lifted version: match/slices/s00e2fe10/s00e2fe10.cpp)
 void cSPUIAssetDiscoveryManager::Init()
 {
     cMessageServer* pServer = (cMessageServer*)MessageServer();

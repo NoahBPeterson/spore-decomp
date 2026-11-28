@@ -431,7 +431,7 @@ void RigBlockSetInsert(uint32_t key, bool bInsert)
     }
 }
 
-// @ 0x005704c0
+// 0x005704c0 (byte-exact lifted version: match/slices/s005704c0/s005704c0.cpp)
 // Weighted intersection of two cFeatureVector maps: the weight of every key that
 // is also present in the global rig-block set, summed with a greedy merge of the
 // two sorted key runs.

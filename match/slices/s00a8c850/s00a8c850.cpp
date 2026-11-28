@@ -478,7 +478,7 @@ void SampleVector::erase_all()
     mpEnd -= (last - first);
 }
 
-// @ 0x00a8d020
+// 0x00a8d020 (byte-exact lifted version: match/slices/s00a8d020/s00a8d020.cpp)
 cEffectRef* EffectVector::erase(cEffectRef* first, cEffectRef* last)
 {
     cEffectRef* newEnd = CopyEffectRefs(last, mpEnd, first);

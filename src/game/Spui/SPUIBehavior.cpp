@@ -807,7 +807,7 @@ void AnimMgr::Clear()
     Shutdown();
 }
 
-// @ 0x007f9550
+// 0x007f9550 (byte-exact lifted version: match/slices/s007f9550/s007f9550_lifted.cpp)
 bool Ev::Eval()
 {
     *(char*)((char*)this + 0x3a) = 0;

@@ -421,7 +421,7 @@ struct PtrVector {
   void    insert(RefPtr* position, unsigned n, const RefPtr& v); // 0x00a8c690
 };
 
-// @ 0x00a8c4e0
+// 0x00a8c4e0 (byte-exact lifted version: match/slices/s00a8c4e0/s00a8c4e0.cpp)
 RefPtr* PtrVector::erase(RefPtr* first, RefPtr* last)
 {
   RefPtr* p = (RefPtr*)MovePtr(last, mpEnd, first);

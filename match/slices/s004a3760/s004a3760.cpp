@@ -211,7 +211,7 @@ EaVector FUN_4a3920(cSPEditorModel* model, bool symmetric)
     return result;
 }
 
-// @ 0x4a3c70
+// 0x004a3c70 (byte-exact lifted version: match/slices/s004a3c70/s004a3c70.cpp)
 cSPEditorBlock* FUN_4a3c70(cSPEditorBlock* block, Vec3 target)
 {
     if (!block->mSocketConnector)

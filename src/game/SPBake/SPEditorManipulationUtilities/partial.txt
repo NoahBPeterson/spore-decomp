@@ -11,7 +11,6 @@
 0049d6b0  -  skeleton: large recursive limb rebuild; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
 0049dd20  -  skeleton: recursive child traversal (eastl::vector temp); match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
 004a3920  -  skeleton: block search helper; match/slices/s004a3760/s004a3760.cpp mentions this address and may hold an earlier draft.
-004a3c70  -  skeleton: nearest-block search; match/slices/s004a3760/s004a3760.cpp mentions this address and may hold an earlier draft.
 004a89e0  900  incomplete: large matrix routine (x87/SSE); only entry paths sketched
 004a8fc0  760  incomplete: 764-byte 16-byte-aligned SSE matrix routine (and esp,-16); not reconstructed
 004a92c0  838  incomplete: 838-byte 16-byte-aligned (and esp,-16) routine; not reconstructed; match/slices/s004a89e0/s004a89e0.cpp mentions this address and may hold an earlier draft.

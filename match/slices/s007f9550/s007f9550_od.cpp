@@ -299,7 +299,7 @@ void FUN_007fa4f0(int p, int a2, int p3) {
     FUN_007fa4c0((int*)p, *(int*)((char*)p3 + 8));
 }
 
-// @ 0x007f9550
+// 0x007f9550 (byte-exact lifted version: match/slices/s007f9550/s007f9550_lifted.cpp)
 bool Ev::Eval() {
     *(char*)((char*)this + 0x3a) = 0;
     VCallR(this, 0x24);

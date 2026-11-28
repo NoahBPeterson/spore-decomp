@@ -317,7 +317,7 @@ int CountModelParts(cSPEditorModel* model)
     return count;
 }
 
-// @ 0x48cf00
+// 0x0048cf00 (byte-exact lifted version: match/slices/s0048cf00/s0048cf00.cpp)
 float GetModelMinZ(cSPEditorModel* model)
 {
     float result = 0.0f;

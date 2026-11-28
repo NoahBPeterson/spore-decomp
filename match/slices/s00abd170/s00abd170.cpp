@@ -121,7 +121,7 @@ struct Eff {
 int* __cdecl FUN_00abd170(int* stream, Vector* vec);
 
 // ---------------------------------------------------------------- 0x00abd170
-// @ 0x00ABD170
+// 0x00abd170 (byte-exact lifted version: match/slices/s00abd170/s00abd170_lifted.cpp)
 int* __cdecl FUN_00abd170(int* stream, Vector* vec) {
     int n;
     ReadInt32(stream, &n, 1, 0);
