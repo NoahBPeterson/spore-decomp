@@ -394,7 +394,7 @@ void TimerManager::ExecuteTimers(int collectionIndex)
     }
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp) -- compact both owned collections.
+// 0x0112da30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112da30/s0112da30.cpp -- compact both owned collections.
 void TimerManager::Defragment()
 {
     Collection* p = maCollections;
@@ -406,7 +406,7 @@ void TimerManager::Defragment()
     }
 }
 
-// 0x0112da60 (byte-exact lifted version: match/slices/s0112da60/s0112da60.cpp) -- clear then release both owned collections.
+// 0x0112da60: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112da60/s0112da60.cpp -- clear then release both owned collections.
 void TimerManager::Release()
 {
     Collection* p = maCollections;

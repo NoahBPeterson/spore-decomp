@@ -5314,7 +5314,7 @@ void HK_CALL hkBoxBoxAgent_s010d_9470::registerAgent(hkCollisionDispatcher_s010d
 	dispatcher->registerCollisionAgent(funcs, 7, 7);
 }
 
-// 0x010d9ea0 (byte-exact lifted version: match/slices/s010d9ea0/s010d9ea0.cpp)
+// 0x010d9ea0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010d9ea0/s010d9ea0.cpp
 hkCollisionAgent_s010d_9470* HK_CALL hkPredGskfAgent_s010d_9470::createPredGskfAgent(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input, hkContactMgr_s010d_9470* mgr)
 {
 	if (mgr != 0)
