@@ -6,7 +6,6 @@
 0043d420  8    F3d420 - bone transform pipeline stubbed out
 0043e080  98   F3e080 - keyed offset lookup approximated
 0043e0f0  60   F3e0f0 - child-bone scan stubbed
-0043e2b0  150  F3e2b0 - symmetry/limb loop approximated
 0043f6b0  1300  SetValid - large path set approximated (BBox/transform flow not reproduced)
 0043fc20  371   F3fc20 - transform/euler chain (FUN_004adb40/00/00) approximated
 0044bcf0  -  incomplete skeleton (826-byte /Od method)

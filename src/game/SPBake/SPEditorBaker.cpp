@@ -10084,7 +10084,7 @@ void EditorPanel_s0041_6990::CollectAll(EntrySink* out)
     }
 }
 
-// @ 0x00417150
+// 0x00417150 (byte-exact lifted version: match/slices/s00417150/s00417150.cpp)
 float EditorPanel_s0041_6990::GetSlotValue(KeyedEvent* ev)
 {
     ResourceKey_s0041_6990* key = &ev->key;

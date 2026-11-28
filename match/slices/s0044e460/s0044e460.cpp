@@ -207,7 +207,7 @@ int cSPEditorBlock::GetBlockType(unsigned int key)
     return -1;
 }
 
-// @ 0x0044e980
+// 0x0044e980 (byte-exact lifted version: match/slices/s0044e980/s0044e980.cpp)
 void cSPEditorBlock::SetBaseJointScale(float scale)
 {
     if (*(int*)&scale == -2) {
@@ -273,7 +273,7 @@ void cSPEditorBlock::RecursiveFlagA()
         mpChildBegin[i]->RecursiveFlagA();
 }
 
-// @ 0x0044eea0
+// 0x0044eea0 (byte-exact lifted version: match/slices/s0044eea0/s0044eea0.cpp)
 void cSPEditorBlock::RecursiveFlagB()
 {
     if (GetFlag(0x39)) {
@@ -323,7 +323,7 @@ void cSPEditorBlock::SetScaleType(int type)
     }
 }
 
-// @ 0x0044f240
+// 0x0044f240 (byte-exact lifted version: match/slices/s0044f240/s0044f240.cpp)
 int cSPEditorBlock::CalculateSymmetrySign()
 {
     FUN_0044a7e60(this);

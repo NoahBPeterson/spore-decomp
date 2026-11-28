@@ -437,7 +437,7 @@ void cSPEditorHandleDeform::UpdateDirection(bool flag)
     PlaceHandle();
 }
 
-// @ 0x0047ff90
+// 0x0047ff90 (byte-exact lifted version: match/slices/s0047ff90/s0047ff90.cpp)
 Vec3* Mat3_TransformDir_(Vec3* out, char* mat, void* v)
 {
     float a = Vec3_Dot((Vec3*)v, mat);

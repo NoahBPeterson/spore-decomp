@@ -224,7 +224,7 @@ void VecE8::DoInsertValuesE8(Elem8* position, unsigned int n, Elem8 const& value
     }
 }
 
-// @ 0x004CF2C0
+// 0x004cf2c0 (byte-exact lifted version: match/slices/s004cf2c0/s004cf2c0.cpp)
 void VecE34::DoInsertValuesE34(Elem34* position, unsigned int n, Elem34 const& value)
 {
     if (((unsigned int)(mpCapacity - mpEnd)) < n) {

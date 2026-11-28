@@ -128,7 +128,7 @@ struct ViewAsym { char pad[4]; int isasymmetric; };
 #define FLD(i, m) (*(uint32_t*)(0x150c720 + (i) * 0xc + (m)))
 #define OFF(S, m) ((uint32_t)offsetof(S, m))
 
-// @ 0x01244f50
+// 0x01244f50 (byte-exact lifted version: match/slices/s01244f50/s01244f50_lifted.cpp)
 void init_150c720()
 {
     FLD(0, 0) = OFF(ViewRowsA, rows[0]);

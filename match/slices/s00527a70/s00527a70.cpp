@@ -108,7 +108,7 @@ struct VectorElem40 : VectorBase<Elem40> {
     void insert(Elem40* position, size_type n, const Elem40& value) { DoInsertValues(position, n, value); }
 };
 
-// @ 0x00527c70
+// 0x00527c70 (byte-exact lifted version: match/slices/s00527c70/s00527c70.cpp)
 VectorElem40& VectorElem40::operator=(const VectorElem40& x)
 {
     if (this != &x) {

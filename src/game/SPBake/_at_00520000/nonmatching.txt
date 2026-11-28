@@ -2,10 +2,8 @@
 005267c0 451 Elem38 vector DoInsertValue; complete; VectorBase::DoAllocate now passes alignment 0 (matching the original's EASTL_Allocate allocator,size,0,0 call), remaining /Od frame (0xcc) and helper spill slots differ. [equiv: WEAK 360 valid (--layout 0 --inputs 1600), 55.6% cov, 0 mismatches; replay PASS] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00526b30 402 0x1c-byte vector operator=; complete but /Od frame/spill slots differ; equiv WEAK (442 valid, 45.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00526e70 402 0x18-byte vector operator=; complete but /Od frame/spill slots differ; equiv WEAK (402 valid, 45.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-00527570 915 Elem38 vector DoInsertValues (fill); complete but byte layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00527a70 57 eastl::uninitialized_copy<Elem1c*>; complete, but gi-wrapper frame (0x44) not reproduced flags: /O2 /MD /Gy /EHsc /TP
 00527b70 48 eastl::uninitialized_copy<Elem18*>; complete, but gi-wrapper frame (0x44) not reproduced flags: /O2 /MD /Gy /EHsc /TP
-00527c70 331 VectorElem40::operator=; complete but /Od frame/spill slots differ; equiv WEAK (433 valid, 38.3% coverage) flags: /Od /MD /Gy /EHsc /TP
 00527f30 522 VectorElem40::DoInsertValues; complete but byte layout differs flags: /O2 /MD /Gy /EHsc /TP
 005283d0 413 fixed_vector<8-byte>::assign; complete; retail pops three stack dwords (the third is unused) and the grow helper 0x56a0e0 is a thiscall on the vector (ecx = this); our /Od body is 450B with a 0x34 frame vs retail's 566B/0x9c, so every frame slot differs; equiv PASS 221 valid 67.3% cov flags: /Od /MD /Gy /EHsc /TP
 00528610 81 Elem40 copy ctor; only the inlined Matrix33 ctor 'this' spill slot differs (-0xc vs -0x38) flags: /O2 /MD /Gy /EHsc /TP; hint (#539): retail prologue (sub esp,0x3c; mov [ebp-0x3c],ecx; mov eax,[ebp-0x3c]) looks /Od; with /Od ours is 105 vs 176 bytes (checked 2026-11-26)

@@ -165,7 +165,7 @@ float cSPEditorBlock::F3a0()
     return 0.0f;
 }
 
-// @ 0x0043F3F0
+// 0x0043f3f0 (byte-exact lifted version: match/slices/s0043f3f0/s0043f3f0.cpp)
 float cSPEditorBlock::F3f0()
 {
     int count = vec340.size();
@@ -176,7 +176,7 @@ float cSPEditorBlock::F3f0()
     return 1.0f;
 }
 
-// @ 0x0043F4D0
+// 0x0043f4d0 (byte-exact lifted version: match/slices/s0043f4d0/s0043f4d0.cpp)
 float cSPEditorBlock::F4d0()
 {
     int count = vec340.size();

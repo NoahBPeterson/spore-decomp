@@ -396,7 +396,7 @@ bool cSPEditorBlock::F_43ecb0()
     return result;
 }
 
-// @ 0x0043eef0
+// 0x0043eef0 (byte-exact lifted version: match/slices/s0043eef0/s0043eef0.cpp)
 cSPBoundingBox cSPEditorBlock::F_43eef0()
 {
     cSPBoundingBox box;

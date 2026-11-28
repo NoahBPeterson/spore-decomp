@@ -399,7 +399,7 @@ struct basic_string {
     void set_capacity(uint n);                         // 0x478930
 };
 
-// @ 0x00475930
+// 0x00475930 (byte-exact lifted version: match/slices/s00475930/s00475930.cpp)
 basic_string& basic_string::append_sprintf_va_list(const char* fmt, void* args)
 {
     const int nPrevLength = (int)(mpEnd - mpBegin);

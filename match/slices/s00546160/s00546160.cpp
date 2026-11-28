@@ -88,7 +88,7 @@ struct Obj42 {
     void Insert118(int* pos, void* value);     // 0x00548450 (thiscall)
 };
 
-// @ 0x00546160  SP::Feed::HandshakeParser::StartElementHandler
+// 0x00546160 (byte-exact lifted version: match/slices/s00546160/s00546160_lifted.cpp)  SP::Feed::HandshakeParser::StartElementHandler
 void FUN_00546160(int param_1, const wchar_t* name, int* attrs)
 {
     StringResizeW(0);
@@ -125,7 +125,7 @@ void FUN_00546160(int param_1, const wchar_t* name, int* attrs)
     FUN_00545bd0();
 }
 
-// @ 0x005462f0  SP::Feed::HandshakeParser::EndElementHandler
+// 0x005462f0 (byte-exact lifted version: match/slices/s005462f0/s005462f0.cpp)  SP::Feed::HandshakeParser::EndElementHandler
 void FUN_005462f0(int param_1, const wchar_t* name)
 {
     short* local_14 = gFeedEndTable;

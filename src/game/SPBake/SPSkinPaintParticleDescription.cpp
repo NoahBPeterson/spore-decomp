@@ -955,7 +955,7 @@ void BrushDesc_s0053_9d70::Init()
     mBlend2 = 0;
 }
 
-// @ 0x0053a6d0
+// 0x0053a6d0 (byte-exact lifted version: match/slices/s0053a6d0/s0053a6d0.cpp)
 EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
 {
     int32_t n = 0;
@@ -994,7 +994,7 @@ EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, Eva
     return stream;
 }
 
-// @ 0x0053a930
+// 0x0053a930 (byte-exact lifted version: match/slices/s0053a930/s0053a930.cpp)
 EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
 {
     uint32_t n = (uint32_t)(((char**)((char*)e + 4))[0] - *(char**)e) >> 4;
@@ -1116,7 +1116,7 @@ PaintCompatB* PaintCompatB::Ctor1f0()
     return this;
 }
 
-// @ 0x0053b210
+// 0x0053b210 (byte-exact lifted version: match/slices/s0053b210/s0053b210.cpp)
 BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
     return BlobAssign<0x10>(this, o);
@@ -1128,7 +1128,7 @@ void BlobVec::Vector16Resize(unsigned n)
     BlobResize<0x10>(this, n);
 }
 
-// @ 0x0053b5a0
+// 0x0053b5a0 (byte-exact lifted version: match/slices/s0053b5a0/s0053b5a0.cpp)
 BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
 {
     return BlobAssign<0x14>(this, o);

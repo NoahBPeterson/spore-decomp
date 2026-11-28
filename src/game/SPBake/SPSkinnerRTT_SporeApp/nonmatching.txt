@@ -1,5 +1,3 @@
 # va  diff-bytes  reason
 005288f0 585 cRTTBuffer::cRTTBuffer complete (camera setup, viewport, projection matrix rows, StateBits::Set); inline-setter argument order, `this` temps and the sAppProperties accessor temp differ; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /GS-; equiv: WEAK (113 valid inputs, 100% cov, no FAIL)
 005291f0 37 cEffectsModel::Dispatch; complete; original uses aligned SSE (and esp,-16) 4xmovaps copy
-005292d0 64 thiscall draw helper; complete but /Od layout differs
-005296b0 470 WriteQuadVerts; complete 6-vertex emit but /Od frame/spill slots differ; equiv: UNSUPPORTED (this now in ECX; 0/485 inputs valid, emulation faults)

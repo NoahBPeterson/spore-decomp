@@ -681,7 +681,7 @@ off_type HandshakeParser::GetPosition(EA::IO::PositionType positionType) const {
     return -1;
 }
 
-// @ 0x005459a0
+// 0x005459a0 (byte-exact lifted version: match/slices/s005459a0/s005459a0.cpp)
 void HandshakeParser::StartDoc() {
     if (mpMyFeeds && mpSubscriptions && mpList28) {
         mpMyFeeds->clear();

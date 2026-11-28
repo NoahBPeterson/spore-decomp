@@ -5774,7 +5774,7 @@ bool cSPEditorBlockStub::F3e0f0(int* out)
 }
 }  // namespace SP
 
-// @ 0x0043e2b0
+// 0x0043e2b0 (byte-exact lifted version: match/slices/s0043e2b0/s0043e2b0.cpp)
 namespace SP {
 void cSPEditorBlockStub::F3e2b0()
 {
@@ -5954,7 +5954,7 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43ecb0()
     return result;
 }
 
-// @ 0x0043eef0
+// 0x0043eef0 (byte-exact lifted version: match/slices/s0043eef0/s0043eef0.cpp)
 cSPBoundingBox_s0043_e3f0 SP::cSPEditorBlock_s0043_e3f0::F_43eef0()
 {
     cSPBoundingBox_s0043_e3f0 box;
@@ -6018,7 +6018,7 @@ float cSPEditorBlock_s0043_f3a0::F3a0()
 }
 }  // namespace SP
 
-// @ 0x0043f3f0
+// 0x0043f3f0 (byte-exact lifted version: match/slices/s0043f3f0/s0043f3f0.cpp)
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F3f0()
 {
@@ -6031,7 +6031,7 @@ float cSPEditorBlock_s0043_f3a0::F3f0()
 }
 }  // namespace SP
 
-// @ 0x0043f4d0
+// 0x0043f4d0 (byte-exact lifted version: match/slices/s0043f4d0/s0043f4d0.cpp)
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F4d0()
 {
@@ -8231,7 +8231,7 @@ int cSPEditorBlock::GetBlockType(unsigned int key)
     return -1;
 }
 
-// @ 0x0044e980
+// 0x0044e980 (byte-exact lifted version: match/slices/s0044e980/s0044e980.cpp)
 void cSPEditorBlock::SetBaseJointScale(float scale)
 {
     if (*(int*)&scale == -2) {
@@ -8297,7 +8297,7 @@ void cSPEditorBlock::RecursiveFlagA()
         mpChildBegin[i]->RecursiveFlagA();
 }
 
-// @ 0x0044eea0
+// 0x0044eea0 (byte-exact lifted version: match/slices/s0044eea0/s0044eea0.cpp)
 void cSPEditorBlock::RecursiveFlagB()
 {
     if (GetFlag(0x39)) {
@@ -8347,7 +8347,7 @@ void cSPEditorBlock::SetScaleType(int type)
     }
 }
 
-// @ 0x0044f240
+// 0x0044f240 (byte-exact lifted version: match/slices/s0044f240/s0044f240.cpp)
 int cSPEditorBlock::CalculateSymmetrySign()
 {
     FUN_0044a7e60(this);

@@ -17,10 +17,7 @@
 0043bd80 282 complete; original spills outgoing-arg esp to a stack slot before copy-constructing the by-value Matrix3 arg (one extra slot shifts later offsets); otherwise instruction-identical
 0043ce40 240 F3ce40 - reset all slot states; /Od frame + inlined accessor slots differ
 0043e3f0 539 complete; original uses an and-esp aligned ebp frame with esp-relative locals, ours gets the ebx-aligned frame from inline asm Clamp; also copy of operator- result into a named local
-0043eef0 267 complete; frame layout only (original has 0x20 extra temp bytes, 0x18-byte hole) - all instructions otherwise identical [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 0043f3a0 18 F3a0 - only an /Od dead-tail jump differs
-0043f3f0 89 F3f0 child-block scan - /Od frame accessor slots differ
-0043f4d0 89 F4d0 child-block scan - /Od frame accessor slots differ
 0043f5b0 150 F5b0 scale clamp - /Od frame/local slots differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 0043ffa0 81 FFa0 - Matrix3 by-value copy + /Od slots differ
 00440390 135 F40390 - clamp+SetFlag; equivalence PASS (386 valid, 100.0% coverage); the clamp is now v = v > lo ? v : lo; v = v < hi ? v : hi so -0.0 clamps to +0.0 like the original maxss/minss; /Od clamp shape is still branchy (186 vs 130 bytes) flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
@@ -42,11 +39,8 @@
 0044e460 58 Cross: this cl build evaluates the left product first; original computes the subtrahend first (same result, mirrored instruction order) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044e720 160 GetBounds: inlined Bounds construct/destroy and snap-axis (0x234 base, stride 0x20) handling not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044e830 237 GetBlockType: /Od property-list virtual calls, per-branch ResourceKey frames and hash-ordered locals not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0044e980 166 SetBaseJointScale: sentinel/base-uniform scales are raw int bit patterns (arg compared as *(int*)&-2, mUniformScale stores 0xffffffff); FUN_0044f220 returns int; linked scale negated as an integer. Equivalence WEAK: 400 valid inputs, 0 mismatches, 56.1% coverage -- the uncovered block is only the scale==-2 sentinel path, which the corpus never generates (still 56.1% at 1999 inputs). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044ea80 461 RefreshLinkedFlag: AutoRefCount reset/assign chains (vtable+4 AddRef, vtable+8 Release) now modelled; the flag test reads mpSocketConnector, not this. Equivalence PASS (317 valid, 90.6% coverage). Not byte-exact: the twice-inlined reset chain and /Od frames differ. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0044eea0 98 RecursiveFlagB: inlined recursive branch shape and /Od frame layout not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044efb0 153 RecursiveFlagC: inlined release chain and /Od frame layout not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0044f240 407 CalculateSymmetrySign: result is a ? a : b (the old code returned 0 when a==0 && b!=0); -1 only when both are 0 and the 0x7bd0ca3e bool property is set. The socket-connector flag prelude is dead code. Equivalence PASS (392 valid, 92.1% coverage). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044f420 582 Split: /Od local frames, inlined eastl::vector<> ctor/dtor and the refcount socket handling not reproduced
 0044f7c0 4633 CloneBlock (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-): complete; instruction stream matches except /Od slot layout (frame 0x2d8 vs 0x320), inner fixed_vector dtor inlined in original, Matrix3 by-value arg temp order
 00450f70 493 Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced

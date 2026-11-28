@@ -287,7 +287,7 @@ void vector<S24>::DoAssignFromIterator(const S24* first, const S24* last, random
     }
 }
 
-// @ 0x004b2030
+// 0x004b2030 (byte-exact lifted version: match/slices/s004b2030/s004b2030.cpp)
 template <>
 void vector<uint32_t>::DoAssignValues(uint32_t n, const uint32_t& value)
 {

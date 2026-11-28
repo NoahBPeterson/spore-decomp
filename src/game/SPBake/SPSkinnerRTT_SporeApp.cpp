@@ -263,7 +263,7 @@ void StateBits::Set(unsigned char a, unsigned char b, unsigned char c, unsigned 
     mFlags = (a ? 1 : 0) | (b ? 2 : 0) | (c ? 4 : 0) | (d ? 8 : 0);
 }
 
-// @ 0x005292d0
+// 0x005292d0 (byte-exact lifted version: match/slices/s005292d0/s005292d0.cpp)
 void DrawCtx::Draw(float* v, float w)
 {
     SetRenderState(0xa8, writemask & g_15dea68);
@@ -338,7 +338,7 @@ void nSPSkinner::cRTTBuffer::EndTriangles()
     RwShutdown2();
 }
 
-// @ 0x005296b0
+// 0x005296b0 (byte-exact lifted version: match/slices/s005296b0/s005296b0_lifted.cpp)
 void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
 {
     FUN_00529520(2);

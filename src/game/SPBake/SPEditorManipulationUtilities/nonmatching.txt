@@ -13,8 +13,6 @@
 00488600 208 /Od; complete. GetOrientation's degenerate branch now constructs the cMatrix3Init basis in a named temporary and returns it, so the base-matrix copy is made from that temporary's address; the old `return cMatrix3Init(...)` copied from the constructor's eax return value (garbage), leaving the returned cSPMatrix3 uninitialized in the else arm. Equiv PASS seed1 1858/2000 and seed5 1842/2000, 100% coverage (both arms). Still not byte-exact: 619 B vs 579 B (/Od stack-slot layout, the 0x48-byte reserved inline-slot region and temp order are not reproduced). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00489530 225 /Od; complete. mirror recursion; /Od frame slot layout and iterator temps differ; equiv PASS (295 valid inputs at --inputs 600, 0 mismatches, 86.3% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00489640 121 /Od; complete. mirror+offset recursion; frame slot layout differs; equiv PASS (367 valid inputs, 0 mismatches, 78.8% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-00489710 95 /Od; complete. refresh wrapper; frame slot layout differs; equiv PASS (226 valid inputs, 0 mismatches, 100.0% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-004897b0 136 /Od; complete. block-target refresh; frame/temp layout differs; equiv PASS (267 valid inputs, 0 mismatches, 100.0% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00489900 412 /Od; complete. CollectBlocks flag checks; frame slot layout and bitset temp order differ; equiv PASS (260 valid inputs, 0 mismatches, 97.9% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00489cf0 1551 /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; complete. repin branches (has-lower / bit0x2c leaf / other), symmetry-sign fixup, recursion; frame 0x214 vs 0x264 and by-value Vector3 arg copies differ; equiv PASS (395 valid inputs at --inputs 800, 0 mismatches, 72.0% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0048a690 1012 /Od; complete. ~25 named locals in hash order + reserved inline slots not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
@@ -56,7 +54,6 @@
 0049e6a0 43 complete (SetBlockScale); /Od frame 0x54 vs 0x70, temp slot order
 0049e880 308 complete (basis re-orthonormalize); /Od frame 0x11c vs 0x174 and length^2 add order (z,y,x loads); equiv WEAK (397 valid, 92.4% coverage) after dropping the prototype `// @` markers (recheck FAIL was symbol misresolution, same as 0049de30)
 0049fbd0 485 COMPLETE RepinBlockToTorso; /Od frame slot layout and by-value arg temps differ; difftest PASS (mapped ctor annotations; touched vector now uses the AutoRefCount vector dtor 0x453eb0 that releases elements)
-0049fee0 247 COMPLETE limb-structure FixAllJoints loop; /Od slot order differs; difftest WEAK (38.6% coverage; LimbVec/LimbStructure annotations fixed)
 004a0020 456 COMPLETE GetAllLimbs; /Od slot order (vector locals, inline operator[] temps) differs; difftest WEAK (44.3% coverage; LimbVec annotations fixed)
 004a02b0 756 COMPLETE limb scale/repin; /Od slots and by-value vec/mat temps differ; difftest WEAK (35.4% coverage; by-value matrix now built with the 0x449cc0 ctor directly)
 004a06c0 184 COMPLETE block offset getter; extra per-test bool slots missing
@@ -72,9 +69,7 @@
 004a3dc0 2236 complete; /Od frame slot layout and temp slots not matched
 004a4840 875 complete; /Od frame slot layout (locals/temps hash order) not matched
 004a6520 13 /Od; complete. skin virtual call: conversion slot vs this-temp order differs
-004a6d20  -  complete draft carried over from s004a6690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: bytes differ
 004a6f10 1696 SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form
-004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
 004a88f0 259 complete behavior (XformMsg post to EffectsManager); /GS cookie and vector-copy shape differ; equiv: UNSUPPORTED (0/1200 inputs valid: fake-arity/read faults on EffectsManager vtable calls)
 004a96d0 327 complete flag/children walk; /Od inlined-flag + element temp slots differ
 004aa3c0 561 /Od; complete (EASTL vector::DoInsertValue). inlined copy_backward/uninitialized_copy tag and iterator slots not reproduced; equiv: UNSUPPORTED (only 4/104 inputs valid, 40.6% coverage; read/write/pool-limit faults) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

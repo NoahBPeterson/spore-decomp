@@ -112,7 +112,7 @@ struct Vec29c {
     void Elem29Insert(Elem29c* position, uint n, const Elem29c& value);
 };
 
-// @ 0x00478e00
+// 0x00478e00 (byte-exact lifted version: match/slices/s00478e00/s00478e00.cpp)
 void Vec29c::Elem29Insert(Elem29c* position, uint n, const Elem29c& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x29c < n) {

@@ -34,7 +34,7 @@ extern uint32_t DAT_015dea64, DAT_015dea5c, DAT_015dea58, DAT_015dea68, DAT_015d
 extern uint32_t g_renderStateDirty;   // 0x016fa388
 extern uint32_t g_rasterDelta;        // 0x016f921c
 
-// @ 0x005296b0
+// 0x005296b0 (byte-exact lifted version: match/slices/s005296b0/s005296b0_lifted.cpp)
 void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
 {
     FUN_00529520(2);

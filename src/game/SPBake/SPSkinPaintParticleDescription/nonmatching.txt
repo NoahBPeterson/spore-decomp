@@ -10,9 +10,5 @@
 0053a030 245 cSPSkinPaintParticleEffectBlockCommand::Parse complete; name assign + Skinner description alloc + inherited copy
 0053a220 142 cSPSkinPaintParticleEffectBlockCommand::dtor complete; equiv: FAIL (5/5 valid mismatched, execution)
 0053a4a0 127 FUN_0053a4a0 runtime-description lookup complete; equiv: WEAK (1200 valid, 29.5% cov)
-0053a6d0 512 ReadEvalList complete; three array reads via ReadInt32/ReadUInt8/ReadUInt16
-0053a930 574 WriteEvalList complete; three array writes
-0053b210 404 eastl::vector<Entry16>::operator= complete; implemented as byte-stride assign (POD elements); equiv UNSUPPORTED unresolved operator new[](size_t) (orig uses 6-arg EA new[] 0xf473a0; ours a different impl); now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0053b5a0 390 eastl::vector<Entry20>::operator= complete; equiv UNSUPPORTED unresolved operator new[](size_t); now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0053b8a0 224 eastl::vector<Entry20>::resize complete; equiv UNSUPPORTED unresolved operator new[](size_t); orig is a thin wrapper over insert/erase; now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0053cd80 723 SimpleVector<Entry20>::insert complete (785 vs 1046 bytes): capacity test against (mpCapacity-mpEnd)/20, growth path (capacity = 2*size or size+n, EASTL_Allocate on &mAllocator, CopyRange prefix, uninitialized_fill_n of n, CopyRange suffix, guarded operator delete of the old buffer, re-point begin/end/capacity), in-place path with the value saved to a local, tail shift via uninitialized_copy + backward element loop + fill, and the past-end variant via fill_n + MoveBack + fill; remaining gap is the /Od growth-bookkeeping temporaries and the uninitialized_* out-parameter wrappers. difftest WEAK 183/400 valid, 6.1% coverage, no mismatch. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

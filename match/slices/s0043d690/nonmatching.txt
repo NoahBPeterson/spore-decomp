@@ -1,2 +1,1 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-0043e2b0  87  morph-weight refresh loop: count via the mMorphHandles begin/end pointers, f440=0.4f/f444=-0.35f, Sub_4537F0(2.0f,count)+Sub_11E0810()-1, per-index boolean-attribute-0xb guard then SetMorphHandleWeight. All instructions match; residual is only the /Od frame size (0x28 vs 0x18) and the resulting local slot numbering (this/p/count/i homes shifted by 0x10). Equivalence WEAK (354 valid, 26.7% coverage). Flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.

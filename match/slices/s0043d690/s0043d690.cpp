@@ -367,7 +367,7 @@ bool cSPEditorBlockStub::F3e0f0(int* out)
     return false;
 }
 
-// @ 0x0043E2B0
+// 0x0043e2b0 (byte-exact lifted version: match/slices/s0043e2b0/s0043e2b0.cpp)
 void cSPEditorBlockStub::F3e2b0()
 {
     int count;

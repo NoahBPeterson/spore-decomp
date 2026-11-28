@@ -743,7 +743,7 @@ BasicString* BasicString::assign(const char* first, const char* last)
     return this;
 }
 
-// @ 0x00455d60
+// 0x00455d60 (byte-exact lifted version: match/slices/s00455d60/s00455d60.cpp)
 int* StringAppend(int* self, const char* first, const char* last)
 {
     if (first != last) {
@@ -812,7 +812,7 @@ void Vec32::resize(uint n)
     }
 }
 
-// @ 0x00475930
+// 0x00475930 (byte-exact lifted version: match/slices/s00475930/s00475930.cpp)
 namespace eastl {
 basic_string_s0047_4bd0& basic_string_s0047_4bd0::append_sprintf_va_list(const char* fmt, void* args)
 {
@@ -940,7 +940,7 @@ RefPtr& RefPtr::operator=(Counted_s0047_8930* p)
     return *this;
 }
 
-// @ 0x00478e00
+// 0x00478e00 (byte-exact lifted version: match/slices/s00478e00/s00478e00.cpp)
 void Vec29c::Elem29Insert(Elem29c* position, uint n, const Elem29c& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x29c < n) {
@@ -1244,7 +1244,7 @@ void V16::Insert(P16* position, uint n, const P16& value)
     }
 }
 
-// @ 0x0047ae60
+// 0x0047ae60 (byte-exact lifted version: match/slices/s0047ae60/s0047ae60.cpp)
 void Vec32_s0047_a5a0::DoInsertValues(Elem32* position, uint n, const Elem32& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x20 < n) {
