@@ -1777,7 +1777,7 @@ void Vec8_s0050_d750::resize(uint32_t n)
     }
 }
 
-// @ 0x0050dea0
+// 0x0050dea0 (byte-exact lifted version: match/slices/s0050dea0/s0050dea0.cpp)
 Vec12_s0050_d750& Vec12_s0050_d750::operator=(const Vec12_s0050_d750& x)
 {
     if (this != &x) {

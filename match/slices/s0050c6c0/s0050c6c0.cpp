@@ -245,7 +245,7 @@ void Skin::Append(const Skin& other)
 void __fastcall ProcessD(int self) { (void)self; }
 
 // ---------------------------------------------------------------------------
-// @ 0x0050d070  eastl::vector<Rec18>::operator=  (thiscall, ret 4)
+// 0x0050d070 (byte-exact lifted version: match/slices/s0050d070/s0050d070.cpp)  eastl::vector<Rec18>::operator=  (thiscall, ret 4)
 //
 // `Rec18` is the 0x18-byte element (six dwords, trivially destructible); the function is
 // eastl's vector copy-assignment: grow+copy when the source is larger than our capacity,
@@ -278,7 +278,7 @@ struct VecRec18 {
     VecRec18& Assign(const VecRec18& x);
 };
 
-// @ 0x0050d070
+// 0x0050d070 (byte-exact lifted version: match/slices/s0050d070/s0050d070.cpp)
 VecRec18& VecRec18::Assign(const VecRec18& x)
 {
     if (this != &x) {

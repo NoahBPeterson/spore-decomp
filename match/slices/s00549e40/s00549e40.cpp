@@ -165,7 +165,7 @@ void* V::FUN_0054a470(const Pair20* src)
     return this;
 }
 
-// @ 0x0054a670
+// 0x0054a670 (byte-exact lifted version: match/slices/s0054a670/s0054a670.cpp)
 void* V::FUN_0054a670(char* otherp)
 {
     V* other = (V*)otherp;

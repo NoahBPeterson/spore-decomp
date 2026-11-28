@@ -4,3 +4,4 @@ slices/s005409d0/s005409d0.cpp  ?FUN_00541600@@YAXH@Z         00541600  /Od /Ob1
 slices/s005409d0/s005409d0.cpp  ?FUN_00541660@@YAXH@Z         00541660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005409d0/s005409d0.cpp  ?FUN_00540f20@Obj@@QAEPAUEntry18@@PAU2@@Z  00540f20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005409d0/s005409d0.cpp  ?FUN_00541630@@YAXHH@Z  00541630  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005409d0/s005409d0_lifted.cpp  ?FUN_005409d0@D_005409d0@@QAEXHHH@Z  005409d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

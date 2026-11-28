@@ -97,7 +97,7 @@ struct VecE48 {
     void DoInsertValues(E48* position, unsigned n, const E48& value);   // 0x00501f40
 };
 
-// @ 0x00501f40
+// 0x00501f40 (byte-exact lifted version: match/slices/s00501f40/s00501f40_lifted.cpp)
 void VecE48::DoInsertValues(E48* position, unsigned n, const E48& value)
 {
     if (!(n > (unsigned)(mpCapacity - mpEnd))) {
@@ -158,7 +158,7 @@ struct VecEA54 {
     void DoInsertValues(EA54* position, unsigned n, const EA54& value);   // 0x00502450
 };
 
-// @ 0x00502450
+// 0x00502450 (byte-exact lifted version: match/slices/s00502450/s00502450.cpp)
 void VecEA54::DoInsertValues(EA54* position, unsigned n, const EA54& value)
 {
     if (!(n > (unsigned)(mpCapacity - mpEnd))) {
@@ -228,7 +228,7 @@ struct VecEd216 {
     void DoInsertValues(Ed216* position, unsigned n, const Ed216& value);   // 0x00502880
 };
 
-// @ 0x00502880
+// 0x00502880 (byte-exact lifted version: match/slices/s00502880/s00502880.cpp)
 void VecEd216::DoInsertValues(Ed216* position, unsigned n, const Ed216& value)
 {
     if (!(n > (unsigned)(mpCapacity - mpEnd))) {

@@ -2090,7 +2090,7 @@ class cPlanetModel_s00b8_15a0__match {
 }
 // ---- items of slice s00b815a0_match end
 
-// @ 0x00473500
+// 0x00473500 (byte-exact lifted version: match/slices/s00473500/s00473500.cpp)
 template vector_s0047_2b80<Pod12, 4>& vector_s0047_2b80<Pod12, 4>::operator=(const vector_s0047_2b80<Pod12, 4>&)
 ;
 

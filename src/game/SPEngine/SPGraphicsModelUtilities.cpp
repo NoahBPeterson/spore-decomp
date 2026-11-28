@@ -1472,7 +1472,7 @@ BakeJob::BakeJob(uint32_t keyLow, uint32_t keyHigh)
     mKeyHigh = keyHigh;
 }
 
-// @ 0x004298f0
+// 0x004298f0 (byte-exact lifted version: match/slices/s004298f0/s004298f0_lifted.cpp)
 void Vec56::DoInsertValues(Rec56* position, uint32_t n, const Rec56& value)
 {
     if (n <= (uint32_t)(mpCapacity - mpEnd)) {

@@ -459,7 +459,7 @@ void __fastcall BlockVec_FreeStorage(BlockVec* self)
     }
 }
 
-// @ 0x004552e0  (rbtree insert with hint)
+// 0x004552e0 (byte-exact lifted version: match/slices/s004552e0/s004552e0.cpp)  (rbtree insert with hint)
 struct RbHint : RbSet {
     int* insert_hint(int* position, int* key)
     {

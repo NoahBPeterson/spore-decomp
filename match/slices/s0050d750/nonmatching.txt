@@ -1,5 +1,3 @@
 # Non-byte-exact but complete behavioral ports (every path and call reproduced).
 # All differences are /Od stack-slot / frame-hole layout of inlined EASTL helpers.
 0050d750   165  Vec8::operator= (pair<int,int> stride-8): complete; target frame 0xa4 vs 0x4c (inlined copy/uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov)
-0050db60   221  Vec20::operator= (stride 0x14): complete; target frame 0x? larger (inlined copy + uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov)
-0050dea0   170  Vec12::operator= (stride 0xc): complete; target frame larger (inlined copy/uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov)

@@ -324,7 +324,7 @@ void RefCountAdd(void* p)
         VCallV(p, 0x9c);
 }
 
-// @ 0x007fd200
+// 0x007fd200 (byte-exact lifted version: match/slices/s007fd200/s007fd200.cpp)
 void FlagObj::SetFlag(unsigned mask, bool on)
 {
     unsigned old = mFlags;

@@ -1,10 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP)
-0050f290 633 Vec24Full::DoInsertValues: complete insert-n path (grow and in-place); frame slots differ; equiv UNSUPPORTED (unresolved ref ??0Vector3 copy ctor) after marker fix flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 0050f950 165 QuickSortCmp (Keyed pointer array, custom compare): complete recursive quick sort; frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005100c0 243 QuickSortU32: complete default quick sort; frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-00510350 835 Vec12I::insert(position, first, last): complete range insert (grow + in-place); frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005107d0 760 Vec8I::insert(position, first, last): complete range insert; frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-00510bc0 943 Vec24I::insert(position, first, last): complete range insert (T24); frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005111b0 661 MedianCmp: complete median; keyed compare is strict greater (desc swaps the key roles); /Od stack-slot layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005114f0 348 GetPartitionCmp: complete Hoare partition with the retail strict-greater loops; /Od frame slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00512400 1109 InitRenderJob: complete job-record fill (transform, bone ids, packed colors); BuildMatrix is a RenderCfg::BuildMatrix thiscall (ecx=cfg, seven stack args) and the six output floats must be one float[6] array, because /Od split the former scalar locals non-contiguously and the callee overwrote the frame; corrected RenderCfg byte fields at +0x9c/+0xa0/+0xa4 with padding. difftest PASS 599/600 valid, 100.0% coverage; remaining 1530-byte diff is /Od frame/scheduling codegen. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

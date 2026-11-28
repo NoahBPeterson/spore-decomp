@@ -1,3 +1,2 @@
 00472b80 859 complete source; flags /Od /Ob1 /MD /Gy /TP /Oi. The extra /Oi is required: retail lowers float sqrt to the x87 _CIsqrt import, while /Od without /Oi inlines sqrt and produces a different import trace. Equiv PASS 600 valid, 100% coverage; residual diff is the /Od temp/slot and branch store order. flags /Od /Ob1 /MD /Gy /TP /Oi
-00473500 27 complete source; vector<Pod12>::operator=, branch-2 CopyRef local slot layout differs; equiv WEAK (339 valid, 37% cov)
 00473b00 27 complete source; vector<Pair8>::operator=, branch-2 CopyRef local slot layout differs; equiv WEAK (264 valid, 43% cov)

@@ -376,7 +376,7 @@ void PaintVarModifierCommand::Execute(EA::ArgScript::cArguments& args)
     mParser->PushBlock(this);
 }
 
-// @ 0x0053c480
+// 0x0053c480 (byte-exact lifted version: match/slices/s0053c480/s0053c480.cpp)
 float Dot3(const float* a, const float* b)
 {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];

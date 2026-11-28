@@ -72,7 +72,7 @@ struct Entry48Vector {
     void insert_n(Entry48* position, uint32_t n, const Entry48& value);
 };
 
-// @ 0x0042b600
+// 0x0042b600 (byte-exact lifted version: match/slices/s0042b600/s0042b600.cpp)
 void Entry48Vector::insert_n(Entry48* position, uint32_t n, const Entry48& value)
 {
     if (n <= (uint32_t)(mpCapacity - mpEnd)) {
