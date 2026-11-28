@@ -231,12 +231,13 @@ def shape_before(sha, vas):
 
 
 def offsets_removed(sha, done):
-    """Functions byte-exact now whose byte offsets (tools/ci/offsets.py: `*(T*)(p + N)`, `(char*)this`, ...) the merge
+    """Functions byte-exact now whose readability counters (tools/ci/readability.py: byte offsets, casts, placeholder
+    names, machine variable names, untyped declarations) the merge
     `sha` lowered, summed over the files it changed so that a function moved between files is compared with itself.
     Counted as "made readable" (decision 2026-11-20)."""
     import sys
     sys.path.insert(0, os.path.join(ROOT, "tools", "ci"))
-    import offsets
+    import readability as offsets
     if git("log", "-1", "--format=%s", sha).startswith('Revert "'):
         return set()    # undoing a merge brings older source back; that is not readability work
     files = [f for f in git("diff", "--name-only", "%s^" % sha, sha, "--", *offsets.ALLOWED).split()
