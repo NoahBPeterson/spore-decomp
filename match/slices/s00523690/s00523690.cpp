@@ -262,7 +262,7 @@ struct HitBuildArgs9 {                                       // 0x14 bytes
     uint32_t  seed;                                          // +0x10
 };
 
-// @ 0x005240e0 -- build a hit record for one (tri, uv) mesh position.
+// 0x005240e0 (byte-exact lifted version: match/slices/s005240e0/s005240e0.cpp) -- build a hit record for one (tri, uv) mesh position.
 void __fastcall FUN_005240e0(Ctx9* self, HitBuildArgs9 args)
 {
     FUN_00525f40(&self->mCtx3c);
@@ -376,4 +376,4 @@ void Ctx9::BuildHit(HitRec9* out, Param9* p, cMeshPos9 pos, uint32_t seed)
     out->i30 = 0;
 }
 
-// @ 0x005240e0 and 0x00524150 are defined above (render-job hit helpers).
+// 0x005240e0 (byte-exact lifted version: match/slices/s005240e0/s005240e0.cpp) and 0x00524150 are defined above (render-job hit helpers).
