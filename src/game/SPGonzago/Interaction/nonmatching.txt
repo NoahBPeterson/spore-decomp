@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00abe8a0 52 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS; free/end bit tests compile as cmp/jl
 00abeb20 177 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest FAIL (fault on synthetic input); range advance loop layout
 00abece0 80 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); begin/end cmov + stack layout
 00abed40 89 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest not run (equiv time limit); this in esi vs edi

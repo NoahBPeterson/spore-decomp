@@ -492,18 +492,13 @@ u8 MapFile::Open(void* source)
 
 // @ 0x0091bd70
 u8 MapFile::ReadSymbolBytes(int idx, u8* dst)
-{
-    int count = 0;
-    if (mOpened != 0 && (mBase38 | mBase3c) != 0 && mStride != 0)
-        count = mCount;
-    if (idx >= count)
-        return 0;
-    u8* cur = (u8*)(mBase38 + mStride * idx);
-    void* stream = mpStream;
-    void** vtbl = *(void***)stream;
-    if (((u8 (__thiscall*)(void*, u8*, int))vtbl[0x28 / 4])(stream, cur, 0) == 0)
-        return 0;
-    return ReadRecord(dst);
+{    int count = (mOpened != 0 && *(unsigned __int64*)&mBase38 != 0 && mStride != 0) ? (int)mCount : 0;
+    if (idx < count) {
+        if (((EA::IO::IStream*)mpStream)->SetPosition((long)(mBase38 + mStride * idx), EA::IO::kPositionTypeBegin)) {
+            return ReadRecord(dst);
+        }
+    }
+    return 0;
 }
 
 // @ 0x0091bdd0

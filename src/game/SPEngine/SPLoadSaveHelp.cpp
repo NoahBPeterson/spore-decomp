@@ -699,17 +699,19 @@ void SortRecords_A(void* first, void* last)
 
 // @ 0x00692d20
 void SortRecords_B(SortRec* first, SortRec* last)
-{
-    for (SortRec* i = first; i != last; ++i) {
-        SortRec val = *i;
-        SortRec* next = i;
-        unsigned int* key = &next[-1].f[1];
-        while (val.f[1] < *key) {
-            *next = next[-1];
-            key -= 15;
-            --next;
+{    struct Cmp {
+        static inline bool Less(const SortRec& a, const SortRec& b) {
+            return a.f[1] < b.f[1];
         }
-        *next = val;
+    };
+    for (SortRec* current = first; current != last; ++current) {
+        const SortRec value(*current);
+        SortRec* end = current;
+        SortRec* prev = current;
+        for (--prev; Cmp::Less(value, *prev); --end, --prev) {
+            *end = *prev;
+        }
+        *end = value;
     }
 }
 

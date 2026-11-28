@@ -398,10 +398,9 @@ extern "C" void* __cdecl memset(void*, int, size_t);
 
 // @ 0x00f63da0
 int* SP::cDistGrid::CellIndex(int level, int face, unsigned char a, unsigned char b)
-{
-    int t = g_swizzle[b >> 4] * 2 | g_swizzle[a >> 4];
-    t = t << 7 | g_swizzle[b & 0xf];
-    t = t << 1 | g_swizzle[a & 0xf];
+{    unsigned int t = ((unsigned int)g_swizzle[b >> 4] << 1) | g_swizzle[a >> 4];
+    t = (t << 7) | g_swizzle[b & 0xf];
+    t = (t << 1) | g_swizzle[a & 0xf];
     return ((SP::cHeightRanges*)this)->mCellData +
            (t + ((SP::cHeightRanges*)this)->mLevelOffsets[level] +
             ((SP::cHeightRanges*)this)->mFaceSize * face);

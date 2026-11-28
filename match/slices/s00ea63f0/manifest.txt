@@ -25,3 +25,4 @@ slices/s00ea63f0/s00ea63f0.cpp  ?Ability_7e90@@YIXPAUPrimBase@@PAXMI@Z  00ea7e90
 slices/s00ea63f0/s00ea63f0.cpp  ?Ability_7f70@@YIXPAUPrimBase@@PAXMI@Z  00ea7f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ea63f0/s00ea63f0.cpp  ?Ability_80a0@@YIXPAUPrimBase@@PAXMI@Z  00ea80a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ea63f0/s00ea63f0.cpp  ?GmeEditorResBase_dtor@@YIPAXPAUGmeRefCounted@@PAXE@Z  00ea8100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ea63f0/s00ea63f0.cpp  ?Ability_7190@@YIXPAUPrimBase@@PAXMI@Z  00ea7190  /O2 /MD /Gy /TP /arch:SSE /fp:fast

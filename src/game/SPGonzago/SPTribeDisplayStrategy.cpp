@@ -1188,17 +1188,13 @@ u32 TribeStrategy::FUN_00cc89f0(bool first)
 
 // @ 0x00cc8a30
 void TribeStrategy::FUN_00cc8a30(void* pose, Citizen8a30* citizen)
-{
-    Tribe8a30* tribe = (Tribe8a30*)citizen->GetTribe(0);
+{    Tribe8a30* tribe = (Tribe8a30*)citizen->GetTribe(0);
     Profile8a30* profile = tribe->GetSlot0();
     if (!profile)
         profile = GetSetting9()->GetAvatarProfile();
-    mVec.x = profile->m504;
-    mVec.y = profile->m508;
-    mVec.z = profile->m50c;
+    mVec = *(Vec3u*)&profile->m504;
     mVec.y = 0x2f7d0004;
-    V2<void, Vec3u*, int>(pose, 0x90, &mVec, 0);
-}
+    V2<void, Vec3u*, int>(pose, 0x90, &mVec, 0);}
 
 // @ 0x00cc8aa0
 void TribeStrategy::FUN_00cc8aa0(bool show)

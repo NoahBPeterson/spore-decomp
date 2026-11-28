@@ -4,7 +4,6 @@
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
 00924060  144  rbtree::DoInsertValue: complete; traversal/insert schedule differs
 00924170  34   LogReporter::LogReporter: complete; string/notify schedule differs
-009241f0  60   Server::RemoveLogReporter: complete; copy/erase schedule differs
 009243d0  42   LogFormatterSimple::LogFormatterSimple: complete; fixed-string init schedule differs
 009244d0  43   LogFormatterFancy::LogFormatterFancy: complete; fixed-string init schedule differs; difftest PASS after fixing the Stopwatch constructor call (thiscall with 2 args; was a free function taking the timer as first arg)
 009234f0  254  ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates

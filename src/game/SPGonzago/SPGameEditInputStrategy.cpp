@@ -2576,8 +2576,7 @@ void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15600()
 
 // @ 0x00d15630
 void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15630(void* a1, float* pX, float* pY)
-{
-    Obj* label = WinText_CreateDefault(-1, 0xacbf4564);
+{    Obj* label = WinText_CreateDefault(-1, 0xacbf4564);
     if (label != 0)
         ((Fn_v_p)VTSLOT(label, 0))(label);
 
@@ -2600,11 +2599,10 @@ void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15630(void* a1, float* pX, fl
     *pX += DAT_013f08e8;
 
     void* owner = mpFieldA8;
-    Obj* t = ((Fn_p_p)VTSLOT(label, 0x10))(label);
-    ((Fn_v_pp)VTSLOT(owner, 0xd8))(owner, t);
+    void** pSlot = &(*(void***)owner)[0xd8 / 4];
+    ((Fn_v_pp)(*pSlot))(owner, ((Fn_p_p)VTSLOT(label, 0x10))(label));
 
-    ((Fn_v_p)VTSLOT(label, 4))(label);
-}
+    ((Fn_v_p)VTSLOT(label, 4))(label);}
 
 // @ 0x00d15780
 float SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15780(void* a1, float* pX, float* pY)

@@ -308,41 +308,54 @@ unsigned FUN_00732eb0(const float* src, Mat4* out)
 }
 
 // @ 0x00732fb0
+struct ContV;
+struct EltArrayRet
+{
+    int32_t  mNumElts;    // +0x00
+    uint8_t* mData;       // +0x04
+    uint16_t mEltSize;    // +0x08
+    uint16_t mEltStride;  // +0x0a
+    ContV*   mRC;         // +0x0c
+    EltArrayRet() : mNumElts(0), mData(0), mEltSize(0), mEltStride(0), mRC(0) {}
+    EltArrayRet(int32_t n, uint8_t* d, uint16_t sz, uint16_t st, ContV* rc);
+    ~EltArrayRet();
+};
 struct ContV
 {
-    virtual void Init(int);
+    virtual void AddRef();
+    virtual void Release();
     char    pad[8];
     int32_t mC;    // +0x0c
     int32_t m10;   // +0x10
-    EltArray* Make16(EltArray* out);
-    EltArray* Make4(EltArray* out);
+    EltArrayRet Make16();
+    EltArrayRet Make4();
 };
-// @ 0x00732fb0
-EltArray* ContV::Make16(EltArray* out)
+inline EltArrayRet::EltArrayRet(int32_t n, uint8_t* d, uint16_t sz, uint16_t st, ContV* rc)
+    : mNumElts(n), mData(d), mEltSize(sz), mEltStride(st), mRC(rc)
 {
+    if (mRC) mRC->AddRef();
+}
+inline EltArrayRet::~EltArrayRet() { if (mRC) mRC->Release(); }
+// @ 0x00732fb0
+EltArrayRet ContV::Make16()
+{
+    EltArrayRet out;
     int iVar1 = mC;
     int iVar2 = m10;
-    out->mData = (uint8_t*)iVar1;
-    out->mNumElts = (iVar2 - iVar1) >> 4;
-    out->mEltStride = 0x10;
-    out->mEltSize = 0x10;
-    out->mRC = this;
-    Init(0);
+    out.mData = (uint8_t*)iVar1;
+    out.mNumElts = (iVar2 - iVar1) >> 4;
+    out.mEltStride = 0x10;
+    out.mEltSize = 0x10;
+    out.mRC = this;
+    AddRef();
     return out;
 }
 
 // @ 0x00732ff0
-EltArray* ContV::Make4(EltArray* out)
-{
+EltArrayRet ContV::Make4()
+{    int iVar2 = m10;
     int iVar1 = mC;
-    int iVar2 = m10;
-    out->mData = (uint8_t*)iVar1;
-    out->mNumElts = (iVar2 - iVar1) >> 2;
-    out->mEltStride = 4;
-    out->mEltSize = 4;
-    out->mRC = this;
-    Init(0);
-    return out;
+    return EltArrayRet((iVar2 - iVar1) >> 2, (uint8_t*)iVar1, 4, 4, this);
 }
 
 // @ 0x007330d0

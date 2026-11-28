@@ -5,3 +5,4 @@
 ../src/game/UTFSpore_Win32/util.cpp  ?FUN_008d1960@@YIHI@Z  008d1960  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/util.cpp  ?put_hashClass@@YAXPAUTsiHashClass@@IGPBD@Z  008d1c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/util.cpp  ?Delete_hashClass@@YAXPAUTsiHashClass@@@Z  008d1cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/util.cpp  ?get_using_uint16_hashClass@@YAHHGPAG@Z  008d1ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -4,7 +4,6 @@
 0065fd30 661 cSPUIEventLog::DoMessage: complete (show/hide sweep with animation targets); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; frame is 0x34 bytes larger in the original (unused AnimTarget temp slots) and register roles differ [equiv: UNSUPPORTED 0/400 valid]
 006600c0 494 cSPUIFeedFilter::GetSupportedFilterTypes: complete (flag-set rebuild, array property, per-button AND/OR merge, recursion); loop induction variable and frame-slot assignment differ [equiv: WEAK 398 valid, 12.9% coverage]
 00660430 101 eastl lower_bound; register assignment (first=ebp vs ebx) and a spill differ
-00660650 50 KeyContains; comparison materialised with setcc per step instead of once at the join
 00660880 271 FeedEntry predicate; loop keeps a cached count/base instead of recomputing from the vector header
 006609a0 203 eastl vector<Key>::operator=; param held in eax instead of ebx, whole schedule differs; equiv FAIL (5/87 inputs mismatched; ours faults on unmapped read at 0x00b84c91 where original returns)
 00660ad0 84 vector range construct; out/first/last register assignment differs

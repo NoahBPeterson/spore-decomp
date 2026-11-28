@@ -19,3 +19,4 @@
 ../src/game/SPGonzago/_at_00c70000.cpp  ?SortRefs@@YAXPAPAX0UVec3_s00c7_d120@@@Z  00c7d120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c744e0@PlanetCls@@QAEDPAI@Z  00c744e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c70000.cpp  ?Has@cTargetList@@QAEHABI@Z  00c7d6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?AdvanceIndex@@YG_NPAX@Z  00c7e160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

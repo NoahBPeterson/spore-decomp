@@ -11,3 +11,4 @@
 ../src/game/UTFSpore_Win32/EAMessage.cpp  ?dtor_impl@Server@@QAEXXZ  00884fb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAMessage.cpp  ?MessagePost@Server@@QAEXHPAXH0@Z  00885890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAMessage.cpp  ?MessagePostFunction@Server@@QAEXHPAXH00@Z  00885930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?clear@Deque_s0106_78e0@@QAEPAHPAHPAUDeqNode@@1@Z  01068380  /O2 /MD /Gy /TP /Isrc/game/include

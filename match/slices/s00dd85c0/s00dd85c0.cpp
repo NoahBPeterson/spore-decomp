@@ -622,19 +622,17 @@ void __stdcall FUN_00dd8e30(cSPUIThrobber* pTarget)
 
 // @ 0x00dd8f50
 void __stdcall FUN_00dd8f50(cSPUIThrobber* pTarget)
-{
-    uint64_t ticks;
-    EAStopwatch* pStopwatch = &pTarget->mStopwatch;
+{    EAStopwatch* pStopwatch = &pTarget->mStopwatch;
     if (pStopwatch->mnMode == 1) {
-        ticks = (uint64_t)rdtsc64();
+        uint64_t ticks = (uint64_t)rdtsc64();
         pStopwatch->mLow = (uint32_t)ticks;
+        pStopwatch->mHigh = (uint32_t)(ticks >> 32);
     } else {
         uint64_t counter;
         QueryPerformanceCounter(&counter);
-        ticks = counter;
-        pStopwatch->mLow = (uint32_t)ticks;
+        pStopwatch->mLow = (uint32_t)counter;
+        pStopwatch->mHigh = (uint32_t)(counter >> 32);
     }
-    pStopwatch->mHigh = (uint32_t)(ticks >> 32);
     pStopwatch->mElapsedLow = 0;
     pStopwatch->mElapsedHigh = 0;
     uint32_t soundId = pTarget->mSoundId;
@@ -644,8 +642,7 @@ void __stdcall FUN_00dd8f50(cSPUIThrobber* pTarget)
         pAudio->SetSoundParam(0x3475385, soundId);
         pAudio->SetSoundParam(0x34753a0, 1);
         pAudio->StopSoundEvent();
-    }
-}
+    }}
 
 // @ 0x00dd8ff0
 void __stdcall FUN_00dd8ff0(cSPUIThrobber* pTarget)

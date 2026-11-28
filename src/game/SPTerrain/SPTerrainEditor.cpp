@@ -28,7 +28,7 @@ extern "C" void* __cdecl operator_new(int size, const char* file, int line, int 
                                       const char* name, int line2);  // 0x00f473a0
 extern "C" void  __cdecl EA_MsgRemoveHandler(void* h, void* a, void* b, void* c, void* d);  // 0x00571db0
 extern "C" void  __fastcall FUN_00f674c0(void* self);               // 0x00f674c0 (ecx=this, no args)
-extern "C" void  __stdcall FUN_00f672b0(void* p);                   // 0x00f672b0 (ret 4)
+extern "C" void  __cdecl FUN_00f672b0(void* p);                     // 0x00f672b0
 extern "C" void  __fastcall cViewer_dtor(void* self);               // 0x007c4000
 extern const char kAllocFile[];      // 0x013f09b4  "Simulator"
 extern const char kAllocFile2[];     // 0x013ebb38
@@ -219,6 +219,7 @@ struct QuadNode {                   // intrusive list node; the sentinel embeds 
     void*     mpRes1dc;             // +0x1dc intrusive resource pointer (counter at -4)
     void FreeAll();                 // 0x00f6b7c0  (called on the sentinel)
 };
+extern QuadNode g_15b0e48;          // 0x015b0e48
 struct QuadMgr {
     uint32_t  pad000[0x08 / 4];
     void*     mpHandler08;          // +0x08  EA::Messaging handler
@@ -3183,8 +3184,7 @@ void QuadNode::FreeAll()
 
 // @ 0x00f6b840
 void QuadMgr::Destroy()
-{
-    void* h = mpHandler08;
+{    void* h = mpHandler08;
     if (h != 0) {
         mpHandler08 = 0;
         EA_MsgRemoveHandler(h, (void*)m0c, (void*)m10, (void*)m14, (void*)m18);
@@ -3222,10 +3222,9 @@ void QuadMgr::Destroy()
         operator_delete(viewer);
     }
     mpViewer1c = 0;
-    QuadNode* sentinel = (QuadNode*)0x015b0e48;
-    sentinel->FreeAll();
-    sentinel->mpNext = sentinel;
-    sentinel->mpPrev = sentinel;
+    g_15b0e48.FreeAll();
+    g_15b0e48.mpNext = &g_15b0e48;
+    g_15b0e48.mpPrev = &g_15b0e48;
     FUN_00f672b0(mp200);
     mp200 = 0;
     FUN_00f672b0(mp204);

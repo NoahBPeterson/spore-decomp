@@ -1561,8 +1561,7 @@ cSPUIInfoLine* __thiscall InfoVec::Erase(cSPUIInfoLine* first, cSPUIInfoLine* la
 
 // @ 0x0080cc80
 void __thiscall InfoVec::Insert(cSPUIInfoLine* pos, const cSPUIInfoLine* val)
-{
-    if (end != cap) {
+{    if (end != cap) {
         cSPUIInfoLine* v = (cSPUIInfoLine*)val;
         if (v >= pos && v < end) v = (cSPUIInfoLine*)((u8*)v + 0x42c);
         if (end) ((cSPUIInfoLine*)end)->ctor2((cSPUIInfoLine*)((u8*)end - 0x42c));
@@ -1574,19 +1573,20 @@ void __thiscall InfoVec::Insert(cSPUIInfoLine* pos, const cSPUIInfoLine* val)
     i32 n = (i32)((u8*)end - (u8*)begin) / 0x42c;
     u32 newCap = n ? (u32)n * 2 : 1;
     u8* mem;
-    if (newCap) mem = (u8*)GameAlloc(newCap * 0x42c, (const char*)0x13f6b3c, 0, 0, (const char*)0x13ebb38, 0xd1);
+    if (newCap) mem = (u8*)GameAlloc(newCap * 0x42c, "EASTL", 0, 0, "vector.h", 0xd1);
     else        mem = 0;
-    u8* p = (u8*)VecCopyCtor(begin, pos, mem);
-    VecDestroy(begin, pos, mem);
+    cSPUIInfoLine* b = begin;
+    u8* p = (u8*)VecCopyCtor(b, pos, mem);
+    VecDestroy(b, pos, mem);
     if (p) ((cSPUIInfoLine*)p)->ctor2(val);
+    u8* q = p + 0x42c;
     cSPUIInfoLine* e = end;
-    u8* p2 = (u8*)VecCopyCtor(pos, e, p + 0x42c);
-    VecDestroy(pos, e, p + 0x42c);
+    u8* p2 = (u8*)VecCopyCtor(pos, e, q);
+    VecDestroy(pos, e, q);
     if (begin && begin != (cSPUIInfoLine*)alloc) GameFree(begin);
     begin = (cSPUIInfoLine*)mem;
     end = (cSPUIInfoLine*)p2;
-    cap = (cSPUIInfoLine*)(mem + newCap * 0x42c);
-}
+    cap = (cSPUIInfoLine*)(mem + newCap * 0x42c);}
 
 // @ 0x0080cdd0
 void __thiscall cSPUIInfoLineTray::dtor()

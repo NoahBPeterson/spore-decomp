@@ -1045,27 +1045,19 @@ void cTargetList::Update()
 
 // @ 0x00c7e160
 bool __stdcall AdvanceIndex(void* p)
-{
-    int* v = (int*)p;
-    int one = 1;
-    int zero = 0;
-    bool ok = true;
+{    int* v = (int*)p;
     v[3] += 0x54;
-    v[0] += one;
-    if (v[0] >= 4) {
-        v[1] += one;
-        v[0] = zero;
-        if (v[1] >= 4) {
-            v[2] += one;
-            v[1] = zero;
-            if (v[2] >= 6) {
-                v[3] = zero;
-                ok = false;
+    if (++v[0] >= 4) {
+        v[0] = 0;
+        if (++v[1] >= 4) {
+            v[1] = 0;
+            if (++v[2] >= 6) {
+                v[3] = 0;
+                return false;
             }
         }
     }
-    return ok;
-}
+    return true;}
 
 // @ 0x00c7e1a0
 void* cTargetList::Get(int* idx)

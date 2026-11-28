@@ -41,3 +41,4 @@
 ../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SetOutputLevel@Server_s0092_45b0@Trace@EA@@QAE_NPBD0H@Z  00924a80  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ealog_imp.cpp  ?FormatRecord@LogFormatterSimple_s0092_45b0@Trace@EA@@QAEPBDPAUILogRecord@23@@Z  00924d10  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ealog_imp.cpp  ?IsFiltered2@LogFilterGroupLevels_s0092_34f0@Trace@EA@@QAE_NPAX@Z  00923c90  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?RemoveLogReporter@Server_s0092_34f0@Trace@EA@@QAE_NPAUILogReporter_s0092_34f0@23@@Z  009241f0  /O2 /MD /Gy /TP /Isrc/game/include

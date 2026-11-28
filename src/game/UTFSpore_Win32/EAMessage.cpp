@@ -1418,29 +1418,24 @@ void Server::MessagePostFunction(int a, void* rc, int b, void* fn, void* ctx)
 
 // @ 0x01068380
 int* Deque_s0106_78e0::clear(int* out, DeqNode* self, DeqNode* root)
-{
-    DeqNode* n = self->m08;
+{    int n = (int)self->m08;
     out[1] = (int)root;
-    out[0] = (int)n;
-    while (n == 0) {
+    out[0] = n;
+    while (out[0] == 0) {
         out[1] += 4;
-        n = *(DeqNode**)out[1];
-        out[0] = (int)n;
+        out[0] = *(int*)out[1];
     }
     DeqNode* r = (DeqNode*)root->m00;
     if (r == self) {
         root->m00 = r->m08;
-        SP_DeleteArray(self);
-        m0c = m0c - 1;
-        return out;
+    } else {
+        DeqNode* e = r->m08;
+        while (e != self) {
+            r = e;
+            e = r->m08;
+        }
+        r->m08 = e->m08;
     }
-    DeqNode* e = r->m08;
-    while (e != self) {
-        r = e;
-        e = r->m08;
-    }
-    r->m08 = e->m08;
     SP_DeleteArray(self);
     m0c = m0c - 1;
-    return out;
-}
+    return out;}

@@ -839,13 +839,10 @@ bool cAmbLayer::Shutdown()
 
 // @ 0x00e9e2f0
 bool cAmbLayer::RemoveTag(uint tag)
-{
+{    uint key = tag;
     void* it;
-    mIdToTagMap.find(&it, &tag);
-    if (it == &mIdToTagMap.mAnchor) {
-        return false;
-    }
-    cAmbienceTag* t = ((TagMapNode*)it)->mpValue;
+    mIdToTagMap.find(&it, &key);
+    cAmbienceTag* t = (it != &mIdToTagMap.mAnchor) ? ((TagMapNode*)it)->mpValue : 0;
     if (t == 0) {
         return false;
     }

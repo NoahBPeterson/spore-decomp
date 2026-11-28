@@ -2968,19 +2968,15 @@ void FUN_0103b590(RBAnchorSet* tree, RBNode** pOut, RBNode* parent, RareMapKey* 
 
 // @ 0x0103b640
 void FUN_0103b640(int* first, int* last, int extra)
-{
-    int n = (int)(last - first);
+{    AutoRef* a = (AutoRef*)first;
+    int n = (int)((AutoRef*)last - a);
     if (n < 2)
         return;
     int i = ((n - 2) >> 1) + 1;
     do {
         --i;
-        ObjV04x* p = *(ObjV04x**)(first + i);
-        if (p != 0)
-            p->v1((int)p, extra);
-        FUN_0103b1b0(first, i, n, i);
-    } while (i != 0);
-}
+        FUN_0103b1b0(a, i, n, i, a[i], (int (*)(int, int))extra);
+    } while (i != 0);}
 
 // @ 0x0103b690
 SP::cSPSpaceTrading_s0103_b3e0::cSPSpaceTrading_s0103_b3e0()

@@ -16,3 +16,5 @@
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?grid_assign_fill@@YAXPAUcGrid_s0070_3700@@0PBU1@@Z  00703c80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?FrustumQuery@cHierGrid_s0070_1a00@@QAEHPAXHPAPAX@Z  007026d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?grid_destroy_count@@YGXPAUcGrid_s0070_2980@@0@Z  007035a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?list_insert_range@@YGXPAUListNode@@UListIterator@@1H@Z  007010b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?Query3Result@cHierGrid_s0070_1a00@@QAEHPAM0MHPAPAX@Z  00702860  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -1311,16 +1311,17 @@ FeedEntry* __cdecl FeedDestroyRange(FeedEntry* first, FeedEntry* last, FeedEntry
 
 // @ 0x00660650
 bool __cdecl KeyContains(Key* first, Key* last, const Key* key)
-{
+{    struct Helper {
+        static __forceinline bool less(const Key* a, const Key* b) {
+            if (a->mInstance != b->mInstance)
+                return a->mInstance < b->mInstance;
+            if (a->mGroup != b->mGroup)
+                return a->mGroup < b->mGroup;
+            return a->mType < b->mType;
+        }
+    };
     Key* it = KeyLowerBound(first, last, key);
-    if (it == last) return false;
-    bool less = key->mInstance < it->mInstance;
-    if (key->mInstance == it->mInstance) {
-        less = key->mGroup < it->mGroup;
-        if (key->mGroup == it->mGroup)
-            less = key->mType < it->mType;
-    }
-    return !less;
+    return (it != last && !Helper::less(key, it));
 }
 
 // @ 0x00660880

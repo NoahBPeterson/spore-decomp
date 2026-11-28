@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00e86dc0  57  treeNearest: complete - walks the tree to the closest descendant (both child branches, radius compare, the mpPending->mChildB result); 192 vs 192 B, /fp:fast SSE reassociation/register allocation differ; equiv PASS (343 valid inputs, 100.0% coverage)
 00e86e80  113  treeRefit: complete - ancestor re-fit loop, both child containment tests and the FUN_00e86bb0 bounding-sphere call in original order; 238 vs 232 B, x87/SSE scheduling and spill placement differ; equiv PASS (334 valid inputs, 100.0% coverage)
 00e87040  110  treeRemove: complete - center/radius write, parent-containment early-out, pending-child splice and pool free-list push; 187 vs 185 B, x87 sqrt association and register allocation differ; equiv PASS (383 valid inputs, 70.6% coverage)
 00e87100  95  collectSphereRec: complete - ray/sphere leaf test, child recursion over mChildA/mChildB and count cap; 242 vs 241 B, register allocation; equiv PASS (367 valid inputs, 100.0% coverage)

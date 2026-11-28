@@ -24,3 +24,4 @@
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?AddBoundary@cNatlBounds@@QAEXPBUVec3@@0II@Z  00b899b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?FindClosestWater@cPlanetModel_s00b8_bb70@@QAE_NPBUSVector3@@MPAU2@@Z  00b8bb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b8d2f0@cPlanetModel_s00b8_d190@@QAEXXZ  00b8d2f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b7f860@@YAXPAUS18@@IPBU1@@Z  00b7f860  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

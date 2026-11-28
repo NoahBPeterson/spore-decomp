@@ -314,16 +314,14 @@ bool Obj::M54E0()
 
 // @ 0x007F55B0
 void Obj::M55B0()
-{
-    void* sub = (char*)this + 4;
+{    void* sub = (char*)this + 4;
     int r = ((FPI0)VTOBJ(sub)[0x28 / 4])(sub);
-    bool flag;
+    struct Flag { bool v; } flag;
     if ((r & 1) != 0 && *(char*)((char*)this + 0x244) != 0)
-        flag = true;
+        flag.v = true;
     else
-        flag = false;
-    ((void(__thiscall*)(void*, int, int))VTOBJ(sub)[0x7c / 4])(sub, 8, flag);
-}
+        flag.v = false;
+    ((void(__thiscall*)(void*, int, Flag))VTOBJ(sub)[0x7c / 4])(sub, 8, flag);}
 
 // @ 0x007F55F0
 bool Obj::M55F0(void* ev)

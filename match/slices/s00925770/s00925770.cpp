@@ -640,22 +640,18 @@ void FUN_00926160(unsigned size) {
 
 // FNV-1 hash of a byte key, optionally folded to lower case.
 // @ 0x00926190
-int C26190::Hash(const char* s) {
-    unsigned h = 0x811c9dc5u;
+int C26190::Hash(const char* s) {    unsigned h = 0x811c9dc5u;
     if (mCaseSensitive) {
-        const char* p = s;
-        int c = *p;
-        while (c != 0) {
+        while (int c = *s) {
+            ++s;
             h = (h * 0x1000193u) ^ (unsigned)c;
-            c = *++p;
         }
     } else {
-        int c = *s;
-        while (c != 0) {
+        while (int c = *s) {
+            ++s;
             unsigned d = (unsigned)(c - 'A');
             if (d < 26u) c = d + 'a';
             h = (h * 0x1000193u) ^ (unsigned)c;
-            c = *++s;
         }
     }
     return (int)h;

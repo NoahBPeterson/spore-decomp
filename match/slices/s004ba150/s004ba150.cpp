@@ -33,6 +33,9 @@ struct cResourceBase {
     cResourceBase* AsInterface(int type);
 };
 
+struct ValidityBits16 { int w[4]; };
+void __cdecl CalculateValidity_004f3de0(void* sret, void* model, ValidityBits16 tests, bool stop);
+
 class cEditorResource {
 public:
     void* mpVtbl0;   // +0
@@ -40,6 +43,7 @@ public:
     char  pad[0x100];
     cEditorResource(int* src);
     void* AsInterface(int type) { return SP_cResourceBase_AsInterface(this, type); }
+    void* CalculateValidity(void* sret, ValidityBits16 tests, bool stop);
 };
 
 class cRuntimeCreatureResource {
@@ -75,10 +79,9 @@ void* __fastcall FUN_004babe0(void* self, void* unused, void* a, char c)
 }
 
 // @ 0x4bac30
-void* __fastcall FUN_004bac30(void* self, void* unused, void* a, void* c, void* d, void* e, void* f, char g)
-{
-    FUN_004f3de0(a, self, (int)c, (int)d, (int)e, (int)f, g);
-    return a;
+void* cEditorResource::CalculateValidity(void* sret, ValidityBits16 tests, bool stop)
+{    CalculateValidity_004f3de0(sret, this, tests, stop);
+    return sret;
 }
 
 // @ 0x4bac80

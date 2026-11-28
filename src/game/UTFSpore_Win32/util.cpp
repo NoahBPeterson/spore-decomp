@@ -320,27 +320,21 @@ int* New_hashClass(int param_1, int param_2, int param_3, int param_4)
 
 // @ 0x008d1ac0
 int get_using_uint16_hashClass(int param_1, unsigned short param_2, unsigned short* out)
-{
-    int* tbl = *(int**)(param_1 + 0x20);
-    int mod = *(int*)(param_1 + 0x14);
-    unsigned idx = param_2;
-    int slot;
-    for (;;) {
-        slot = (int)idx % mod;
-        unsigned short v = *(unsigned short*)((char*)tbl + slot * 4);
-        if (v == 0xffff && *(short*)((char*)tbl + slot * 4 + 2) == (short)0xffff)
-            break;
-        if (v == param_2) {
-            *(int*)(param_1 + 4) = slot;
-            *out = *(unsigned short*)((char*)tbl + slot * 4 + 2);
+{    hashClass* h = (hashClass*)param_1;
+    hashEntry* tbl = h->hash;
+    int mod = h->m;
+    int slot = (int)param_2 % mod;
+    while (tbl[slot].key != 0xffff || tbl[slot].value != 0xffff) {
+        if (tbl[slot].key == param_2) {
+            h->x = slot;
+            *out = tbl[slot].value;
             return 1;
         }
-        idx = slot + 1;
+        slot = (slot + 1) % mod;
     }
-    *(int*)(param_1 + 4) = slot;
+    h->x = slot;
     *out = 0xffff;
-    return 0;
-}
+    return 0;}
 
 // @ 0x008d1b30
 int get_using_str_hashClass(TsiHashClass* h, const char* str, unsigned short* outValue)

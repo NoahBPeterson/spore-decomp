@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00936380 19 SharedLibrary::Reload: complete; tail merge of the false path differs
 00936440 88 SharedLibrary::generic_command_function: complete; inlined strcmp differs from cl's byte-pair compare loop
-009364f0 61 SharedLibraryRegistry::RemoveAllLibraries: complete; eastl vector erase/locking schedule differs
 009365e0 159 other: SharedLibrary::Load: logic verified correct (registry vtable+0x24 call, startup callback, OnSharedLibraryLoad dispatch and vtable+0x24 call all match retail); only register allocation/scheduling differs (retail keeps this in edi and fn in ebx, cl swaps them; early returns are inlined instead of sharing the fail block). flags: /O2 /MD /Gy /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 ebx, ret#1 edi] fix1: quick check WEAK
 009366d0 67 SharedLibrary::Unregister: complete; pair erase tail moves differ flags: /O2 /MD /Gy /TP /GS-
 00936b70 71 SharedLibrary::Unload: complete; eastl pair-vector erase schedule differs flags: /O2 /MD /Gy /TP /GS-

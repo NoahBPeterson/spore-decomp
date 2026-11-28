@@ -546,18 +546,17 @@ int FUN_008b1ed0(DecState* p)
 
 // @ 0x008b1f50
 void FUN_008b1f50(BitReader* p)
-{
+{    int count1 = 0;
+    int count0 = 0;
     uint8 mask = p->mask;
     uint8 inv  = p->xorflag;
     int remaining = p->remaining;
-    int count1 = 0;
-    int count0 = 0;
     if (remaining > 0) {
         uint8 v = *p->cur ^ inv;
         while ((mask & v) != 0) {
             count0++;
             remaining--;
-            if (remaining < 1)
+            if (remaining <= 0)
                 goto done;
             mask >>= 1;
             if (mask == 0) {
@@ -570,7 +569,7 @@ void FUN_008b1f50(BitReader* p)
         while ((mask & v) != 0) {
             remaining--;
             count1++;
-            if (remaining < 1)
+            if (remaining <= 0)
                 break;
             mask >>= 1;
             if (mask == 0) {
@@ -584,27 +583,29 @@ done:
     p->remaining = remaining;
     p->count1 = count1;
     p->count0 = count0;
-    p->mask = mask;
-}
+    p->mask = mask;}
 
 // @ 0x008b1ff0
 void FUN_008b1ff0(NibReader* p)
-{
-    p->f0c = 0;
+{    p->f0c = 0;
     p->f10 = 0;
     if (p->remaining <= 0)
         return;
     uint8 lo;
+    uint8* next;
+    int rem;
     do {
-        uint8 v = *p->cur;
+        uint8* cur = p->cur;
+        uint8 v = *cur;
+        next = cur + 1;
         uint8 hi = v >> 4;
         lo = v & 0xf;
+        p->remaining -= (int)hi + (int)lo;
         p->f10 += lo;
         p->f0c += hi;
-        p->cur = p->cur + 1;
-        p->remaining -= (int)hi + (int)lo;
-    } while (p->remaining > 0 && (lo == 0 || *p->cur == 0));
-}
+        rem = p->remaining;
+        p->cur = next;
+    } while (rem > 0 && (lo == 0 || *next == 0));}
 
 // @ 0x008b2050
 void FUN_008b2050(NibReader* p)

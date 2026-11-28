@@ -564,39 +564,28 @@ void __cdecl FUN_00ff3090(SerHost* host, VecU32* vec)
 
 // @ 0x00ff3190
 void __fastcall FUN_00ff3190(CitySummary* ecx_this, void* edx, KeyMap* pMap)
-{
-    ecx_this->ResizeEntries(0x10);
+{    ecx_this->ResizeEntries(0x10);
 
-    u32  off  = 0;
-    int* pKey = (int*)_sStoredModelKeys;
-    do {
+    for (int i = 0; i < 16; ++i) {
         RBNode* pNode  = pMap->mHeader.mpParent;
-        int key = *pKey;
+        int key = _sStoredModelKeys[i];
         RBNode* pFound = &pMap->mHeader;
         if (pNode != 0) {
             do {
-                if (pNode->mKey < key) {
-                    pNode = pNode->mpLeft;
-                } else {
+                if (!(pNode->mKey < key)) {
                     pFound = pNode;
                     pNode  = pNode->mpRight;
+                } else {
+                    pNode = pNode->mpLeft;
                 }
             } while (pNode != 0);
             if (pFound != &pMap->mHeader && key >= pFound->mKey) {
-                Vector3* pRec = (Vector3*)((char*)ecx_this->mEntries + off);
-                pRec->x = pFound->mValue[0];
-                pRec->y = pFound->mValue[1];
-                pRec->z = pFound->mValue[2];
-                ++pKey;
-                off += 0xc;
+                ecx_this->mEntries[i] = *(Vector3*)pFound->mValue;
                 continue;
             }
         }
-        *(u32*)((char*)ecx_this->mEntries + off) = 0xffffffff;
-        ++pKey;
-        off += 0xc;
-    } while (pKey < (int*)_sStoredModelKeys + 16);
-}
+        ecx_this->mEntries[i].x = 0xffffffff;
+    }}
 
 // @ 0x00ff3220
 CitySummary* __fastcall FUN_00ff3220(CitySummary* ecx_this, void* edx, cCity* pCity, void* pV28, void* pV3C)

@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s004ba150/s004ba150.cpp  ?AsInterface@cRuntimeCreatureResource@@  004bac80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s004ba150/s004ba150.cpp  ??0cEditorResource@@QAE@PAH@Z  004bab30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004ba150/s004ba150.cpp  ?CalculateValidity@cEditorResource@@QAEPAXPAXUValidityBits16@@_N@Z  004bac30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

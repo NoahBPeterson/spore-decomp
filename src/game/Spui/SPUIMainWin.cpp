@@ -1175,12 +1175,12 @@ void Outer::ExecuteColor(int arg)
 
 // @ 0x00815aa0
 void HashtableStub::DoFreeNodes(void** buckets, unsigned n)
-{
-    char* s = (char*)this;
+{    char* s = (char*)this;
     for (unsigned i = 0; i < n; ++i) {
-        char* node = (char*)buckets[i];
-        while (node) {
-            char* next = *(char**)(node + 0x24);
+        char* next = (char*)buckets[i];
+        while (next) {
+            char* node = next;
+            next = *(char**)(next + 0x24);
             void* str = *(void**)node;
             int cap = *(int*)(node + 8) - *(int*)node;
             if (cap > 1 && str && str != *(void**)(node + 0x10))
@@ -1190,11 +1190,9 @@ void HashtableStub::DoFreeNodes(void** buckets, unsigned n)
                     EastlDealloc(node);
                 else { *(void**)node = *(void**)(s + 0x1c); *(void**)(s + 0x1c) = node; }
             }
-            node = next;
         }
         buckets[i] = 0;
-    }
-}
+    }}
 
 // @ 0x00815b30
 void Outer::Wrap(int arg)

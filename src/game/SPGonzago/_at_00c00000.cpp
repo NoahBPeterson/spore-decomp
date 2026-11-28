@@ -522,18 +522,22 @@ int __thiscall CreatureBase_s00c0_45a0::Sub4790()
 
 // @ 0x00c047d0
 int __thiscall CreatureBase_s00c0_45a0::Sub47d0()
-{
-  int r = 2;
-  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
-    int g = ((GameDataStub*)this)->GetObjectData();
-    if (g != 0) {
-      int idx = ((ThingMgrStub*)*(int*)((char*)g_16c7aa4 + 0x74))->GetThing();
-      void* p = (void*)(idx * 0x4e0 + *(int*)((char*)g + 0x70));
-      if (p != 0 && *(char*)((char*)p + 0x4c8) == 0)
-        r = *(int*)((char*)p + 0x4ac);
+{  struct Helper {
+    static __forceinline void* Get(CreatureBase_s00c0_45a0* self) {
+      if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+        int g = ((GameDataStub*)self)->GetObjectData();
+        if (g != 0) {
+          int idx = ((ThingMgrStub*)*(int*)((char*)g_16c7aa4 + 0x74))->GetThing();
+          return (void*)(idx * 0x4e0 + *(int*)((char*)g + 0x70));
+        }
+      }
+      return 0;
     }
-  }
-  return r;
+  };
+  void* p = Helper::Get(this);
+  if (p != 0 && *(char*)((char*)p + 0x4c8) == 0)
+    return *(int*)((char*)p + 0x4ac);
+  return 2;
 }
 
 // @ 0x00c04820

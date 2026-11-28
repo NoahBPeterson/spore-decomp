@@ -2,7 +2,6 @@
 00700c00 50 interleaved cell-id pack (6 x 5-bit fields through the 0x15352a8 table): complete; cl re-associates the shift/or chain (one `*2` is folded into the `<<13`).
 00700da0 261 complete cell-id-from-position helper; SSE schedule and floor-idiom spill slots differ, return blocks use short jumps where the original uses long
 00700ff0 71 slot_vector_base::destroy, complete; register allocation (blocks in edx vs the original's esi) and loop-entry load order differ
-007010b0 60 list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
 00701110 37 eastl hashtable bucket-nonempty / find, complete; the original materialises a two-word iterator local that is not reproduced
 00701170 18 object-list copy constructor, complete; EH frame and call-argument register setup differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
 007011d0 651 SP::cHierGrid::CullCellList, complete recursive reconstruction; register scheduling throughout differs
@@ -11,7 +10,6 @@
 00701e40 1720 complete cHierGrid::Query3 (z/y/x slab traversal of the segment p0->p1 per level, third arg unused as in the original); 0 calls, size 1853 vs 1724; the original keeps deltas in SSE and only fabs in x87 with an 8-aligned frame, mine computes the deltas in x87
 00702500 78 dtor with an /EHsc frame and a freed raw pointer; the local EH object shape (state word, unwind funclet) is not reproduced
 00702550 126 eastl vector<_Ty>::insert; the DoInsertValue/reallocation schedule is not reproduced
-00702860 51 3-argument query wrapper; copy-out loop register allocation differs
 007028e0 88 eastl hashtable erase; structurally complete, register allocation differs
 00702a10 226 CellMap copy constructor; complete, allocation/copy schedule differs
 00702af0 565 SP::cHierGrid::Clear; complete (slot free-list unlink, mask propagation, level trim) but register allocation and local-slot layout differ throughout. equiv WEAK: 695 valid, 25.5% coverage, no mismatch (exact source vs original, /O2 /MD /Gy /EHsc /TP /arch:SSE)

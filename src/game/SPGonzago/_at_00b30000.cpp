@@ -1381,15 +1381,15 @@ void HeapPercolate(Obj** arr, int first, int len, int hole, u32 v1, u32 v2)
 }
 
 // @ 0x00b36200
-Iter CopyRange(Elem* first, Elem* last, Elem* dest)
-{
-    Iter r(dest);
-    Elem* d = dest;
-    for (; first != last; ++first, ++d)
-        new (d) Elem(*first);
-    r.p = d;
-    return r;
-}
+Iter CopyRange(Iter first, Iter last, Iter dest)
+{    Iter currentDest(dest);
+    for (; first.p != last.p; ++first.p, ++currentDest.p) {
+        if (currentDest.p) {
+            Elem* src = first.p;
+            new (currentDest.p) Elem(*src);
+        }
+    }
+    return currentDest;}
 
 // @ 0x00b36250
 void FillN(Elem* dest, unsigned n, const Elem* src)

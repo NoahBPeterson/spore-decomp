@@ -2,3 +2,5 @@
 slices/s008b14b0/s008b14b0.cpp  ?tsi_DeletePFRClass@@YAXPAUPFRClass@@@Z  008b1520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 slices/s008b14b0/s008b14b0.cpp  ?GetPFRNameProperty@@YAPADPAUPFRClass@@@Z  008b1980  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 slices/s008b14b0/s008b14b0.cpp  ?FUN_008b2050@@YAXPAUNibReader@@@Z  008b2050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+slices/s008b14b0/s008b14b0.cpp  ?FUN_008b1f50@@YAXPAUBitReader@@@Z  008b1f50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+slices/s008b14b0/s008b14b0.cpp  ?FUN_008b1ff0@@YAXPAUNibReader@@@Z  008b1ff0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast

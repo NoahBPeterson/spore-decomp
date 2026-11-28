@@ -1616,28 +1616,23 @@ EA::Trace::LogReporter::LogReporter(char const * name)
 
 // @ 0x009241f0
 bool EA::Trace::Server_s0092_34f0::RemoveLogReporter(EA::Trace::ILogReporter_s0092_34f0* p)
-{
-    mMutex.Lock((unsigned*)&g_timeoutP);
-    void** it = (void**)mReporters.mpBegin;
-    while (it != (void**)mReporters.mpEnd) {
-        if (*it == p)
-            break;
-        ++it;
+{    mMutex.Lock((unsigned*)&g_timeoutP);
+    ReporterVector& vec = mReporters;
+    for (void** it = (void**)vec.mpBegin; it != (void**)vec.mpEnd; ++it) {
+        if (*it == p) {
+            if ((char*)it + 4 < (char*)mReporters.mpEnd) {
+                eastl_copy_impl((char*)it + 4, mReporters.mpEnd, it);
+            }
+            mReporters.mpEnd = (char*)mReporters.mpEnd - 4;
+            EA::Trace::ILogReporter_s0092_34f0* last = *(EA::Trace::ILogReporter_s0092_34f0**)mReporters.mpEnd;
+            if (last)
+                ((void(__thiscall*)(void*))(*(void***)last)[1])(last);
+            mMutex.Unlock();
+            return true;
+        }
     }
-    if (it == (void**)mReporters.mpEnd) {
-        mMutex.Unlock();
-        return false;
-    }
-    if ((char*)it + 4 < (char*)mReporters.mpEnd) {
-        eastl_copy_impl((char*)it + 4, mReporters.mpEnd, it);
-    }
-    mReporters.mpEnd = (char*)mReporters.mpEnd - 4;
-    EA::Trace::ILogReporter_s0092_34f0* last = *(EA::Trace::ILogReporter_s0092_34f0**)mReporters.mpEnd;
-    if (last)
-        ((void(__thiscall*)(void*))(*(void***)last)[1])(last);
     mMutex.Unlock();
-    return true;
-}
+    return false;}
 
 // @ 0x00924270
 int EA::Trace::LogReporter_s0092_34f0::SkipFilter1(void* rec)

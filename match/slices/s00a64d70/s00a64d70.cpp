@@ -772,16 +772,13 @@ bool InstanceManager::RemoveInstance(uint32_t id)
 // ===========================================================================
 // @ 0x00a65d60
 void* InstanceManager::FindInstance(uint32_t id)
-{
-    HashtableBig* map = &mBindings;
-    void* none = 0;
+{    HashtableBig* map = &mBindings;
+    void* result = 0;
     void* local[2];
     map->Find(local, &id);
-    void* result = none;
     if (local[0] != map->mpBucketArray[map->mnBucketCount])
         result = *(void**)((char*)local[0] + 0x10);
-    return result;
-}
+    return result;}
 
 // ===========================================================================
 // InstanceManager::CreateCanvas  -- build a canvas for a {name,id} pair via the

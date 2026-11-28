@@ -21,3 +21,4 @@
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FUN_006624d0@FeedList@@QAEXH@Z  006624d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FUN_00662540@FeedList@@QAEXXZ  00662540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedFilter.cpp  ?FUN_006627d0@FeedList@@QAE_NPAXPAH@Z  006627d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIFeedFilter.cpp  ?KeyContains@@YA_NPAUKey@@0PBU1@@Z  00660650  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

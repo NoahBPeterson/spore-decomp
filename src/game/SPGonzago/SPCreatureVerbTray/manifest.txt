@@ -13,3 +13,4 @@
 ../src/game/SPGonzago/SPCreatureVerbTray.cpp  ?VerbTray_HandleRebuild@@YA_NPAX0@Z  00d4a570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureVerbTray.cpp  ?FUN_00d48ff0@@YAHPAUCmpObj@@@Z  00d48ff0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureVerbTray.cpp  ?FUN_00d49270@@YAHH@Z  00d49270  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureVerbTray.cpp  ?FUN_00d49450@@YAXXZ  00d49450  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

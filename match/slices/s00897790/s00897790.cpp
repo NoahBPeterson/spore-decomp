@@ -34,27 +34,28 @@ unsigned int Typesetter::GetGlyphsForChar(Char const* pChar, unsigned int /*coun
                                           AnalysisInfo const* pAnalysisInfo, GlyphId* pGlyphIdArray,
                                           unsigned int& glyphIdCount, Char const* pFallbackOptions,
                                           unsigned int fallbackOptionCount)
-{
-    Char const* p = pChar;
-    Char const c = *p;
-    if (c != (Char)0xfffc) {
+{    Char const* p = pChar;
+    if (*p != (Char)0xfffc) {
         unsigned int i = 0;
-        if (pAnalysisInfo->mpFont->GetGlyphIds(p, 1, pGlyphIdArray,
-                                               fallbackOptionCount == 0,
-                                               sizeof(GlyphId)) == 0) {
+        unsigned int r = pAnalysisInfo->mpFont->GetGlyphIds(p, 1, pGlyphIdArray,
+                                                            fallbackOptionCount == 0,
+                                                            sizeof(GlyphId));
+        if (r == 0) {
             p = pFallbackOptions;
-            while (i < fallbackOptionCount) {
-                ++i;
-                if (pAnalysisInfo->mpFont->GetGlyphIds(p, 1, pGlyphIdArray,
-                                                       i < fallbackOptionCount,
-                                                       sizeof(GlyphId)) != 0)
+            do {
+                if (i >= fallbackOptionCount)
                     break;
+                ++i;
+                r = pAnalysisInfo->mpFont->GetGlyphIds(p, 1, pGlyphIdArray,
+                                                       i < fallbackOptionCount,
+                                                       sizeof(GlyphId));
                 p += 1;
-            }
+            } while (r == 0);
         }
+        ++glyphIdCount;
+        return 1;
     } else {
         *pGlyphIdArray = 0xffff;
-    }
-    ++glyphIdCount;
-    return 1;
-}
+        ++glyphIdCount;
+        return 1;
+    }}

@@ -2330,23 +2330,15 @@ void* FUN_00b7f800(S24b* dst, unsigned count, const S24b* src)
 }
 
 // @ 0x00b7f860
-void* FUN_00b7f860(S18* dst, unsigned count, const S18* src)
-{
-    // See FUN_00b7f800: void return, count==0 leaves eax untouched in the original.
-    if (count != 0) {
+void FUN_00b7f860(S18* dst, unsigned count, const S18* src)
+{    if (count > 0) {
         S18* d = dst;
         do {
-            if (d) {
-                d->a = src->a; d->v = src->v;
-                d->e = src->e; d->f = src->f; d->g = src->g;
-            }
+            ::new ((void*)d) S18(*src);
             --count;
             ++d;
-        } while (count != 0);
-        // The retail loop keeps its cursor biased to the `d` member (+0xc) in eax.
-        return (char*)d + 0x0c;
-    }
-}
+        } while (count > 0);
+    }}
 
 // @ 0x00b7f8b0
 S24b* FUN_00b7f8b0(const S24b* first, const S24b* last, S24b* dst)

@@ -3,4 +3,3 @@
 0080c840  411  complete; element ctor: prefix copy, layout alloc/init, failure cleanup, 11-slot WinRec build; register allocation and temp layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv UNSUPPORTED (3 unresolved: ElemCopy28, ArrayCopy, GameAlloc)
 0080c9f0  119  complete; prefix copy, vector erase+copy-range, layout refcount swap, scalar tail; operand reload and scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv WEAK (138/200 valid, 100% cov)
 0080cb30  102  complete; copy ctor: prefix copy, inline vector copy-range, layout addref; argument evaluation and register use differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv UNSUPPORTED (1 unresolved: ElemCopy28)
-0080cc80   60  complete; inline insert plus grow/reallocate path; register allocation of grow-path temporaries differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv UNSUPPORTED (0/400 valid: helper fakes fault)

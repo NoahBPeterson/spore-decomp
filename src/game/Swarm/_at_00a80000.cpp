@@ -641,16 +641,18 @@ void EA::Swarm::cSurfaceDecalManager::SetSurface(void* surface, void* transform)
 }
 
 // @ 0x00a81530
-void __fastcall FUN_00a81530(void* table)
+void* __fastcall FUN_00a81530(void* table)
 {
-    float* t = (float*)table;
+    int i = 0;
     float scale = DAT_01485720 / DAT_0167790c;
-    for (int i = 0; i < 16; ++i) {
+    float* t = (float*)table;
+    do {
         float a = (float)i * scale;
         t[i * 2 + 0] = (float)sin((double)a);
         t[i * 2 + 1] = (float)cos((double)a);
-    }
-}
+        ++i;
+    } while (i < 16);
+    return table;}
 
 // @ 0x00a81580
 float* FUN_00a81580(float* p, float* box)

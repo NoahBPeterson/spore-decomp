@@ -507,20 +507,26 @@ struct Tribe {
 };
 // @ 0x00ea7190
 void __fastcall Ability_7190(PrimBase* self, void* /*edx*/, float value, u32 id)
-{
+{    struct Pad { char pad[0x1c8]; };
+    struct Sub {
+        TribeObj* m;
+        bool Has() const { return m != 0; }
+        TribeObj* Get() const { return m; }
+    };
+    struct Tribe2 : Pad, Sub {};
+
     float r = kFf;
     void* app = App();
     if (((AppVtbl*)app)->GetState() == 0x1654c02)
     {
-        if ((*(Tribe*)cTribeModeStrategy_Instance()).m1c8 != 0)
+        if (((Tribe2*)cTribeModeStrategy_Instance())->Has())
         {
-            r = (*(Tribe*)cTribeModeStrategy_Instance()).m1c8->Value();
+            r = ((Tribe2*)cTribeModeStrategy_Instance())->Get()->Value();
             COMMIT(self, r);
             return;
         }
     }
-    COMMIT(self, r);
-}
+    COMMIT(self, r);}
 
 // ===========================================================================================================
 // SP::NounManager() object: 0x00b25c30 is a plain __thiscall getter.

@@ -547,12 +547,12 @@ ListNode** __stdcall list_insert_before(ListNode** out, ListIterator position, v
 
 // @ 0x007010b0
 void __stdcall list_insert_range(ListNode* pos, ListIterator first, ListIterator last, int tag)
-{
-    for (; first.mpNode != last.mpNode; first.mpNode = first.mpNode->pNext) {
+{    for (; first.mpNode != last.mpNode; first.mpNode = first.mpNode->pNext) {
+        void** val = &first.mpNode->mValue;
         ListNode* node = (ListNode*)EA_new(0xc, "Graphics", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
         if (&node->mValue)
-            new (&node->mValue) void*(first.mpNode->mValue);
+            new (&node->mValue) void*(*val);
         node->pNext = pos;
         node->pPrev = pos->pPrev;
         pos->pPrev->pNext = node;
@@ -1055,26 +1055,21 @@ int __thiscall cHierGrid_s0070_1a00::QuerySegmentResult(float* p0, float* p1, in
 
 // @ 0x00702860
 int __thiscall cHierGrid_s0070_1a00::Query3Result(float* p0, float* p1, float r, int count, void** buffer)
-{
-    if (count <= 0)
+{    if (count <= 0)
         return 0;
     mQueryListIt = buffer;
     mQueryListEnd = buffer + count;
     Query3(p0, p1, r);
-    ObjListNode* node = mOutOfGrid.pNext;
-    if (mQueryListIt < mQueryListEnd) {
-        do {
-            if (node == &mOutOfGrid)
-                break;
-            *(void**)mQueryListIt = node->mObj;
-            mQueryListIt = (void**)((int)mQueryListIt + 4);
-            node = node->pNext;
-        } while ((unsigned)mQueryListIt < (unsigned)mQueryListEnd);
+    for (ObjListNode* node = mOutOfGrid.pNext; mQueryListIt < mQueryListEnd; node = node->pNext) {
+        if (node == &mOutOfGrid)
+            break;
+        *mQueryListIt = node->mObj;
+        mQueryListIt++;
     }
-    int result = (int)mQueryListIt - (int)buffer;
+    int result = mQueryListIt - buffer;
     mQueryListIt = 0;
     mQueryListEnd = 0;
-    return result >> 2;
+    return result;
 }
 
 // @ 0x007028e0

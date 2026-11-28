@@ -10,3 +10,4 @@
 ../src/game/SPGonzago/Interaction.cpp  ?SlotDistance@@YAHUSlotIter_s00ab_e110@@0@Z  00abea00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/Interaction.cpp  ?freeTarget@SlotVector_s00ab_e110@@QAEXI@Z  00abe8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/Interaction.cpp  ?freeAgent@SlotVector_s00ab_e110@@QAEXI@Z  00abe950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ?nextAllocated@SlotVector_s00ab_e110@@QAEII@Z  00abe8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
