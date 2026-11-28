@@ -2088,7 +2088,7 @@ void FUN_00eaed40(int* v, int* pos, unsigned n, float* val)
     while (k--) *w2++ = value;
 }
 
-// @ 0x00eaeef0
+// 0x00eaeef0 (byte-exact lifted version: match/slices/s00eaeef0/s00eaeef0.cpp)
 void FUN_00eaeef0(int* v, float* first, float* last)
 {
     float* begin = (float*)v[0];

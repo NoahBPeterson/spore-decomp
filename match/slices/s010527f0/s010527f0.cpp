@@ -242,7 +242,7 @@ int gSpaceToolFlags[8];
 // ---------------------------------------------------------------------------
 // 0x010527f0  cSPToolStrategy::SetErrorEvent
 // ---------------------------------------------------------------------------
-// @ 0x010527f0
+// 0x010527f0 (byte-exact lifted version: match/slices/s010527f0/s010527f0_lifted.cpp)
 int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
 {
     int nResult = 0;

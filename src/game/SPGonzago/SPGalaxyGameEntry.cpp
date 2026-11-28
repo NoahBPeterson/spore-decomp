@@ -8946,7 +8946,7 @@ char __stdcall FUN_00dddaa0(int a1, float a2, float a3, int a4)
     return 0;
 }
 
-// @ 0x00dddb10
+// 0x00dddb10 (byte-exact lifted version: match/slices/s00dddb10/s00dddb10.cpp)
 char __stdcall FUN_00dddb10(int a1, float a2, float a3, int a4)
 {
     if (kGUI_PanelIDs_s00dd_cdc0 != 0)

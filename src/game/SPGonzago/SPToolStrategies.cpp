@@ -2710,7 +2710,7 @@ Matrix3Rows_s0105_54c0__tools* __cdecl Matrix3FromFacingAndUp_s0105_54c0__tools(
                                             const Vector3* pUp);  // 0x0069b440
 // ---- items of slice s010554c0_tools end
 
-// @ 0x010527f0
+// 0x010527f0 (byte-exact lifted version: match/slices/s010527f0/s010527f0_lifted.cpp)
 int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
 {
     int nResult = 0;
