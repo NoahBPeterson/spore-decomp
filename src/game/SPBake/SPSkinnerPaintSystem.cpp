@@ -1610,7 +1610,7 @@ bool TickState::HandleMessage(int id, void* msg)
     return true;
 }
 
-// @ 0x00521ba0
+// 0x00521ba0 (byte-exact lifted version: match/slices/s00521ba0/s00521ba0.cpp)
 void TickState::Tick(int dt)
 {
     if (F(char*, 0x1c) != 0) {

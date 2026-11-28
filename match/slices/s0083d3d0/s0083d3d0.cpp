@@ -386,7 +386,7 @@ void __fastcall ExprTableClear(void* self) {
 // ===========================================================================
 // 0x0083e160  EA::ArgScript::cExpression::EvalRealFactor
 // ===========================================================================
-// @ 0x0083e160
+// 0x0083e160 (byte-exact lifted version: match/slices/s0083e160/s0083e160.cpp)
 long double EA::ArgScript::cExpression::EvalRealFactor(const char** p) {
     long double base = EvalSignedRealNumber(p);
     DiscardWhiteSpace(p);

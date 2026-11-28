@@ -738,7 +738,7 @@ void __stdcall FUN_00b269f0(int a)
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00b26a10  start/stop the frame timer around a mode change
+// 0x00b26a10 (byte-exact lifted version: match/slices/s00b26a10/s00b26a10.cpp)  start/stop the frame timer around a mode change
 // ---------------------------------------------------------------------------------------------
 class cTimerViewer {
 public:

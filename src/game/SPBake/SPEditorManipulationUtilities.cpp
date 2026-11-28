@@ -12878,7 +12878,7 @@ cSPEditorBlock_s004a_c610* cSPEditorModel_s004a_c610::GetBlock(uint32_t index)
 }
 }  // namespace SP
 
-// @ 0x004ad370
+// 0x004ad370 (byte-exact lifted version: match/slices/s004ad370/s004ad370.cpp)
 namespace SP {
 void cSPEditorModel_s004a_c610::SetPhysicsWorld(cSPEditorPhysicsWorld_s004a_c610* world)
 {

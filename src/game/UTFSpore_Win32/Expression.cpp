@@ -653,7 +653,7 @@ void __fastcall ExprTableClear(void* self)
     *(int*)((char*)self + 0xc) = 0;
 }
 
-// @ 0x0083e160
+// 0x0083e160 (byte-exact lifted version: match/slices/s0083e160/s0083e160.cpp)
 float EA::ArgScript::cExpression::EvalRealFactor(char const *& p)
 {
     long double base = EvalSignedRealNumber(p);
