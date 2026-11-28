@@ -127,7 +127,7 @@ uint32_t FUN_0113a8b0(uint32_t* rec)
     return 0xc;
 }
 
-// @ 0x0113aa50
+// 0x0113aa50 (byte-exact lifted version: match/slices/s0113aa50/s0113aa50.cpp)
 // ReverbIR1: enqueue a command record { handler, this, arg } into the system command buffer.
 void Ctx::FUN_0113aa50(int param_2, uint32_t* param_3)
 {
@@ -206,7 +206,7 @@ bool FUN_0113ac40(uint8_t* p)
     return true;
 }
 
-// @ 0x0113ac60
+// 0x0113ac60 (byte-exact lifted version: match/slices/s0113ac60/s0113ac60.cpp)
 void Ctx::FUN_0113ac60(int param_2, uint32_t* param_3)
 {
     uint8_t* sys = (uint8_t*)P(this, 4);
@@ -294,7 +294,7 @@ uint32_t FUN_0113af70(uint8_t* rec)
     return 8;
 }
 
-// @ 0x0113af90
+// 0x0113af90 (byte-exact lifted version: match/slices/s0113af90/s0113af90.cpp)
 void Ctx::FUN_0113af90()
 {
     if (W(this, 0x90) != 0) {
@@ -398,7 +398,7 @@ bool FUN_0113b060(uint8_t* p, uint8_t* params)
     return true;
 }
 
-// @ 0x0113b290
+// 0x0113b290 (byte-exact lifted version: match/slices/s0113b290/s0113b290.cpp)
 void Ctx::FUN_0113b290(int param_2, uint32_t* param_3)
 {
     uint8_t* sys = (uint8_t*)P(this, 4);
