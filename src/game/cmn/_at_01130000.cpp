@@ -679,7 +679,7 @@ void __cdecl FUN_01133250(void)
 	*(int*)g_16e8114 = 0x38;
 }
 
-// 0x01133290 (byte-exact lifted version: match/slices/s01133290/s01133290.cpp)
+// @ 0x01133290
 void __cdecl FUN_01133290(void)
 {
 	int* p = g_voiceList;

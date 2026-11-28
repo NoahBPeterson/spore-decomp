@@ -2,7 +2,7 @@
 struct Collection { int a[7]; void f(); void g(); };
 struct TM { Collection c[2]; };
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMa(TM* t) {
     Collection* p = t->c;
     int n = 2;
@@ -12,7 +12,7 @@ void TMa(TM* t) {
     } while (--n);
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMb(TM* t) {
     Collection* p = t->c;
     int n = 2;
@@ -22,7 +22,7 @@ void TMb(TM* t) {
     }
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMc(TM* t) {
     Collection* p = t->c;
     int n = 2;
@@ -33,7 +33,7 @@ void TMc(TM* t) {
     } while (n != 0);
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMd(TM* t) {
     Collection* p = t->c;
     int n = 2;
@@ -43,7 +43,7 @@ void TMd(TM* t) {
     } while (n = n - 1);
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMe(TM* t) {
     int n = 2;
     Collection* p = t->c;
@@ -54,7 +54,7 @@ void TMe(TM* t) {
     }
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMf(TM* t) {
     Collection* p = t->c;
     for (int n = 2; n > 0; --n) {
@@ -63,7 +63,7 @@ void TMf(TM* t) {
     }
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMg(TM* t) {
     int n = 2;
     Collection* p = t->c;
@@ -74,7 +74,7 @@ void TMg(TM* t) {
     } while (n);
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMh(TM* t) {
     Collection* p = t->c;
     int n = 2;
@@ -85,7 +85,7 @@ void TMh(TM* t) {
     } while (n);
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMi(TM* t) {
     Collection* p = t->c;
     for (int n = 2; n; --n) {
@@ -94,7 +94,7 @@ void TMi(TM* t) {
     }
 }
 
-// 0x0112da30 (byte-exact lifted version: match/slices/s0112da30/s0112da30.cpp)
+// @ 0x0112da30
 void TMj(TM* t) {
     Collection* p = t->c;
     for (int n = 2; --n >= 0;) {

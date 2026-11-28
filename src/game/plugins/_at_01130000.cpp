@@ -500,7 +500,7 @@ void AudioObj::F_4b0()
 }
 }}}  // namespace rw::audio::core
 
-// 0x01139660 (byte-exact lifted version: match/slices/s01139660/s01139660.cpp)
+// @ 0x01139660
 namespace rw { namespace audio { namespace core {
 void AudioObj::F_660(int cmd, int* param)
 {
