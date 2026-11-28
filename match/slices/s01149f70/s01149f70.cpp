@@ -208,7 +208,7 @@ void EALayer3Core::AnalyzeStatistics(int a2, int a3)
     *(unsigned short*)((char*)this + 0x14a) = (unsigned short)cnt;
 }
 
-// 0x0114a470 (byte-exact lifted version: match/slices/s0114a470/s0114a470.cpp)
+// 0x0114a470: not byte-exact; the byte-exact version is the lifted one in match/slices/s0114a470/s0114a470.cpp
 void EALayer3Core::OnInterface(EALayer3Core* self, int a2)
 {
     EALayer3Core* volatile s = self;

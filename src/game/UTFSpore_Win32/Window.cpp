@@ -636,7 +636,7 @@ void Window_s0095_ff20::Set1E4(void* p)
     }
 }
 
-// 0x009600a0 (byte-exact lifted version: match/slices/s009600a0/s009600a0.cpp)
+// 0x009600a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009600a0/s009600a0.cpp
 void Window_s0095_ff20::OnPaint2()
 {
     if ((m2c & 4) == 0) {
@@ -687,7 +687,7 @@ void Window_s0095_ff20::GetChild(void* out, void* node)
     *(void**)out = node;
 }
 
-// 0x00960230 (byte-exact lifted version: match/slices/s00960230/s00960230.cpp)
+// 0x00960230: not byte-exact; the byte-exact version is the lifted one in match/slices/s00960230/s00960230.cpp
 void Window_s0095_ff20::RemoveChild(void* node)
 {
     if (node != 0) {
@@ -1454,7 +1454,7 @@ bool FUN_00961d50(Win* p)
     return true;
 }
 
-// 0x00961db0 (byte-exact lifted version: match/slices/s00961db0/s00961db0_lifted.cpp)
+// 0x00961db0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00961db0/s00961db0_lifted.cpp
 void S961db0::f(void** pbuckets, unsigned count)
 {
   HNode** buckets = (HNode**)pbuckets;

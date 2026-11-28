@@ -100,7 +100,7 @@ class cCommandBase : public cICommand { public: cIParser* mParser; int mRefCount
 
 // ================================================================ functions
 
-// 0x0053acc0 (byte-exact lifted version: match/slices/s0053acc0/s0053acc0_lifted.cpp)
+// 0x0053acc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053acc0/s0053acc0_lifted.cpp
 void ReadParticleDescription(EA::IO::IStream* s, char* d)
 {
     ReadDescBase(s, d + 0xc);
@@ -126,7 +126,7 @@ void ReadParticleDescription(EA::IO::IStream* s, char* d)
     ReadUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
 
-// 0x0053aea0 (byte-exact lifted version: match/slices/s0053aea0/s0053aea0.cpp)
+// 0x0053aea0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053aea0/s0053aea0.cpp
 void WriteParticleDescription(EA::IO::IStream* s, char* d)
 {
     WriteDescBase(s, d + 0xc);
@@ -200,7 +200,7 @@ void BlobVec::Vector16Resize(unsigned n)
     BlobResize<0x10>(this, n);
 }
 
-// 0x0053b210 (byte-exact lifted version: match/slices/s0053b210/s0053b210.cpp)  eastl::vector<Entry16>::operator=
+// 0x0053b210: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053b210/s0053b210.cpp  eastl::vector<Entry16>::operator=
 BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
     return BlobAssign<0x10>(this, o);
@@ -212,7 +212,7 @@ void BlobVec::Vector20Resize(unsigned n)
     BlobResize<0x14>(this, n);
 }
 
-// 0x0053b5a0 (byte-exact lifted version: match/slices/s0053b5a0/s0053b5a0.cpp)  eastl::vector<Entry20>::operator=
+// 0x0053b5a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053b5a0/s0053b5a0.cpp  eastl::vector<Entry20>::operator=
 BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
 {
     return BlobAssign<0x14>(this, o);

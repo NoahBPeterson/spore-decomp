@@ -1130,7 +1130,7 @@ bool cTribeTool::Write(Stream* s)
     return false;
 }
 
-// 0x00c9db70 (byte-exact lifted version: match/slices/s00c9db70/s00c9db70.cpp)
+// 0x00c9db70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c9db70/s00c9db70.cpp
 bool cTribeTool::Read(Stream* s)
 {
     uint32_t tmp;

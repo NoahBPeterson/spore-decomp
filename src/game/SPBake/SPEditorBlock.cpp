@@ -5774,7 +5774,7 @@ bool cSPEditorBlockStub::F3e0f0(int* out)
 }
 }  // namespace SP
 
-// 0x0043e2b0 (byte-exact lifted version: match/slices/s0043e2b0/s0043e2b0.cpp)
+// 0x0043e2b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043e2b0/s0043e2b0.cpp
 namespace SP {
 void cSPEditorBlockStub::F3e2b0()
 {
@@ -5954,7 +5954,7 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43ecb0()
     return result;
 }
 
-// 0x0043eef0 (byte-exact lifted version: match/slices/s0043eef0/s0043eef0.cpp)
+// 0x0043eef0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043eef0/s0043eef0.cpp
 cSPBoundingBox_s0043_e3f0 SP::cSPEditorBlock_s0043_e3f0::F_43eef0()
 {
     cSPBoundingBox_s0043_e3f0 box;
@@ -6018,7 +6018,7 @@ float cSPEditorBlock_s0043_f3a0::F3a0()
 }
 }  // namespace SP
 
-// 0x0043f3f0 (byte-exact lifted version: match/slices/s0043f3f0/s0043f3f0.cpp)
+// 0x0043f3f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043f3f0/s0043f3f0.cpp
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F3f0()
 {
@@ -6031,7 +6031,7 @@ float cSPEditorBlock_s0043_f3a0::F3f0()
 }
 }  // namespace SP
 
-// 0x0043f4d0 (byte-exact lifted version: match/slices/s0043f4d0/s0043f4d0.cpp)
+// 0x0043f4d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043f4d0/s0043f4d0.cpp
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F4d0()
 {
@@ -6126,7 +6126,7 @@ void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
 }
 }  // namespace SP
 
-// 0x00440020 (byte-exact lifted version: match/slices/s00440020/s00440020.cpp)
+// 0x00440020: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440020/s00440020.cpp
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
 {
@@ -6139,7 +6139,7 @@ void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
 }
 }  // namespace SP
 
-// 0x00440090 (byte-exact lifted version: match/slices/s00440090/s00440090.cpp)
+// 0x00440090: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440090/s00440090.cpp
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
 {
@@ -6292,7 +6292,7 @@ void cSPEditorBlock_s0044_0110::F40bc0(const Vec3* v)
 }
 }  // namespace SP
 
-// 0x00440c00 (byte-exact lifted version: match/slices/s00440c00/s00440c00.cpp)
+// 0x00440c00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440c00/s00440c00.cpp
 namespace SP {
 void cSPEditorBlock_s0044_0110::F40c00(float f)
 {
@@ -6386,7 +6386,7 @@ void cSPEditorBlock_s0044_0110::F40e60(uint32_t key)
 }
 }  // namespace SP
 
-// 0x00440f60 (byte-exact lifted version: match/slices/s00440f60/s00440f60.cpp)
+// 0x00440f60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440f60/s00440f60.cpp
 namespace SP {
 Trans::Trans()
 {
@@ -6396,7 +6396,7 @@ Trans::Trans()
 }
 }  // namespace SP
 
-// 0x00440ff0 (byte-exact lifted version: match/slices/s00440ff0/s00440ff0.cpp)
+// 0x00440ff0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440ff0/s00440ff0.cpp
 namespace SP {
 Trans::Trans(const Trans& o)
 {
@@ -8231,7 +8231,7 @@ int cSPEditorBlock::GetBlockType(unsigned int key)
     return -1;
 }
 
-// 0x0044e980 (byte-exact lifted version: match/slices/s0044e980/s0044e980.cpp)
+// 0x0044e980: not byte-exact; the byte-exact version is the lifted one in match/slices/s0044e980/s0044e980.cpp
 void cSPEditorBlock::SetBaseJointScale(float scale)
 {
     if (*(int*)&scale == -2) {
@@ -8283,7 +8283,7 @@ void cSPEditorBlock::RefreshLinkedFlag()
         mpChildBegin[i]->RefreshLinkedFlag();
 }
 
-// 0x0044ede0 (byte-exact lifted version: match/slices/s0044ede0/s0044ede0.cpp)
+// 0x0044ede0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0044ede0/s0044ede0.cpp
 void cSPEditorBlock::RecursiveFlagA()
 {
     bool b = false;
@@ -8297,7 +8297,7 @@ void cSPEditorBlock::RecursiveFlagA()
         mpChildBegin[i]->RecursiveFlagA();
 }
 
-// 0x0044eea0 (byte-exact lifted version: match/slices/s0044eea0/s0044eea0.cpp)
+// 0x0044eea0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0044eea0/s0044eea0.cpp
 void cSPEditorBlock::RecursiveFlagB()
 {
     if (GetFlag(0x39)) {
@@ -8347,7 +8347,7 @@ void cSPEditorBlock::SetScaleType(int type)
     }
 }
 
-// 0x0044f240 (byte-exact lifted version: match/slices/s0044f240/s0044f240.cpp)
+// 0x0044f240: not byte-exact; the byte-exact version is the lifted one in match/slices/s0044f240/s0044f240.cpp
 int cSPEditorBlock::CalculateSymmetrySign()
 {
     FUN_0044a7e60(this);

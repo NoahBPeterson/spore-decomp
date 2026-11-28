@@ -105,7 +105,6 @@ extern "C" int __cdecl FUN_005f4e10(...);
 struct C_00c898f0 { void FUN_00c898f0(); };
 
 // @ 0x00c8df60
-// @ 0x00c8df60
 extern "C" void __fastcall FUN_00c8df60(char* self, int edx_unused)
 {
     int t1004;

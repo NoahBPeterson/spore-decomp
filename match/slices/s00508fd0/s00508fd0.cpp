@@ -33,7 +33,7 @@ uint8_t Key::Equals(int x, int y)
 }
 
 // ---------------------------------------------------------------------------
-// 0x00509ec0 (byte-exact lifted version: match/slices/s00509ec0/s00509ec0.cpp)  (build a 2-dword pair; index bit flips the sign bit)
+// 0x00509ec0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00509ec0/s00509ec0.cpp  (build a 2-dword pair; index bit flips the sign bit)
 // ---------------------------------------------------------------------------
 uint32_t* __cdecl MakePair(uint32_t* out, int base, uint32_t idx)
 {

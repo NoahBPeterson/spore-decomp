@@ -368,7 +368,7 @@ void cMissionMultiStep::FUN_00c5a260(void* out)
     FUN_00c5a180((u32)mCurrSub, out);
 }
 
-// 0x00c5a280 (byte-exact lifted version: match/slices/s00c5a280/s00c5a280.cpp)
+// 0x00c5a280: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c5a280/s00c5a280.cpp
 void cMissionMultiStep::FUN_00c5a280(u32 idx, void* out)
 {
     u32 tbl[15];
@@ -402,7 +402,7 @@ void cMissionMultiStep::FUN_00c5a390(void* out)
     FUN_00c5a280((u32)mCurrSub, out);
 }
 
-// 0x00c5a3b0 (byte-exact lifted version: match/slices/s00c5a3b0/s00c5a3b0.cpp)
+// 0x00c5a3b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c5a3b0/s00c5a3b0.cpp
 void cMissionMultiStep::FUN_00c5a3b0(u32 idx, void* out)
 {
     u32 tbl[15];

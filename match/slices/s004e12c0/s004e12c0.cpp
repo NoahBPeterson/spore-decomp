@@ -75,7 +75,7 @@ void ConstraintVectorDestroy(void* self)
     (void)self;
 }
 
-// 0x004e17e0 (byte-exact lifted version: match/slices/s004e17e0/s004e17e0.cpp)
+// 0x004e17e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004e17e0/s004e17e0.cpp
 // vector<FunctionalMatch::Constraint>::reserve.
 void ConstraintVectorReserve(void* self, uint32_t n)
 {

@@ -276,7 +276,7 @@ struct GateList
 };
 extern GateList g_gateList;               // 0x015B0E48
 
-// 0x00f6bc10 (byte-exact lifted version: match/slices/s00f6bc10/s00f6bc10.cpp)
+// 0x00f6bc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f6bc10/s00f6bc10.cpp
 void cTerrainEditor::ResetEditor()
 {
     if (mpSphere != 0)

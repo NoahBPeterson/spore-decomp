@@ -246,7 +246,7 @@ void FUN_0112eeb0(int id, int* d)
     if (d[0x31] == 0 && d[0x24] == 0) d[3] = 3;
 }
 
-// 0x0112f080 (byte-exact lifted version: match/slices/s0112f080/s0112f080.cpp) -- set a plug-in parameter from a scaled float table entry.
+// 0x0112f080: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112f080/s0112f080.cpp -- set a plug-in parameter from a scaled float table entry.
 int FUN_0112f080(int p, int index, int obj)
 {
     FUN_0113fdd0(*(u32*)(obj + 0xa4), index,
@@ -324,7 +324,7 @@ int FUN_0112f130(int p)
     return 0;
 }
 
-// 0x0112f230 (byte-exact lifted version: match/slices/s0112f230/s0112f230.cpp) -- set a plug-in parameter from a scaled float.
+// 0x0112f230: not byte-exact; the byte-exact version is the lifted one in match/slices/s0112f230/s0112f230.cpp -- set a plug-in parameter from a scaled float.
 int FUN_0112f230(float* p, int obj)
 {
     FUN_0113ff00(*(u32*)(obj + 0xa4), RoundToInt(*p * 127.0f));

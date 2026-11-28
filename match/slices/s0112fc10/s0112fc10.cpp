@@ -348,7 +348,7 @@ void AiffPlayer_processBuffer(void* channelBuffer, AiffPlayer* self)
     self->mSamplesLeft -= count;
 }
 
-// 0x01130230 (byte-exact lifted version: match/slices/s01130230/s01130230.cpp)
+// 0x01130230: not byte-exact; the byte-exact version is the lifted one in match/slices/s01130230/s01130230.cpp
 // Set one gain coefficient of the puller's per-channel mix table.
 int AiffPlayer_setTableGain(void* fmt, int index, AiffPlayer* self)
 {
@@ -366,7 +366,7 @@ int AiffPlayer_start(AiffPlayer* self)
     return 0;
 }
 
-// 0x011302a0 (byte-exact lifted version: match/slices/s011302a0/s011302a0.cpp)
+// 0x011302a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s011302a0/s011302a0.cpp
 // Set the start position (in samples).
 int AiffPlayer_setStart(void* fmt, AiffPlayer* self)
 {
@@ -377,7 +377,7 @@ int AiffPlayer_setStart(void* fmt, AiffPlayer* self)
     return 0;
 }
 
-// 0x011302e0 (byte-exact lifted version: match/slices/s011302e0/s011302e0.cpp)
+// 0x011302e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s011302e0/s011302e0.cpp
 int AiffPlayer_setChannel(void* fmt, AiffPlayer* self)
 {
     FUN_0113ff00(self->mStartHandle, (int)(RwFloat2Int(((AiffFormat*)fmt)->f0 * 127.0f)));

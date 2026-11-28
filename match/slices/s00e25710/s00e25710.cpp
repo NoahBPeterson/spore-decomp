@@ -186,7 +186,7 @@ void* cUIPosse15::ctor() {
   return this;
 }
 
-// 0x00e25bd0 (byte-exact lifted version: match/slices/s00e25bd0/s00e25bd0.cpp)  eastl::vector<AutoRefCount<ILogReporter>>::erase(first,last)
+// 0x00e25bd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e25bd0/s00e25bd0.cpp  eastl::vector<AutoRefCount<ILogReporter>>::erase(first,last)
 struct cVec15 { void* f(void** First, void** Last); };
 void* cVec15::f(void** First, void** Last) {
   char* s = (char*)this;
@@ -299,7 +299,7 @@ void cPosseItem15::update_control_value(unsigned key) {
   *(int*)(match + 0xc) = 0;
 }
 
-// 0x00e260a0 (byte-exact lifted version: match/slices/s00e260a0/s00e260a0.cpp)  cSPUIPosseItem::update_control_values(char)
+// 0x00e260a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e260a0/s00e260a0.cpp  cSPUIPosseItem::update_control_values(char)
 void cPosseItem15::update_control_values(char force) {
   char* p = mControlValuesBegin;
   char* end = mControlValuesEnd;
@@ -338,7 +338,7 @@ void __cdecl FUN_00e26410(char* first, char* last, int depth, void* ctx) {
   if (depth == 0) FUN_00e25df0(first, last, last, ctx);
 }
 
-// 0x00e264b0 (byte-exact lifted version: match/slices/s00e264b0/s00e264b0.cpp)  partition over 8-byte elements
+// 0x00e264b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e264b0/s00e264b0.cpp  partition over 8-byte elements
 void* __cdecl FUN_00e264b0(char* first, char* last, char** out1, char** out2, void* pred) {
   unsigned char (*fn)(void*, void*) = (unsigned char (*)(void*, void*))pred;
   while (true) {

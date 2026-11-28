@@ -67,7 +67,7 @@ struct FixedC {
     void FUN_0050d750(void* p);   // 0x0050d750, ecx = this
 };
 
-// 0x00455cf0 (byte-exact lifted version: match/slices/s00455cf0/s00455cf0.cpp)
+// 0x00455cf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00455cf0/s00455cf0.cpp
 int* FixedC::InitFixed(void* p) {
     ((int*)this)[0] = 0;
     ((int*)this)[1] = 0;
@@ -157,7 +157,7 @@ int* HT::Insert(int* pos, int* value) {
     return node;
 }
 
-// 0x00455ae0 (byte-exact lifted version: match/slices/s00455ae0/s00455ae0.cpp) -- move 0x14-stride elements down over [param2,param3)
+// 0x00455ae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00455ae0/s00455ae0.cpp -- move 0x14-stride elements down over [param2,param3)
 struct Vec14 { int* self_[2]; void* Move14(void* param2, void* param3); };
 void* Vec14::Move14(void* param2, void* param3) {
     int* self = (int*)this;
@@ -189,7 +189,7 @@ void* ParseVec3(void* out, const char* s) {
 extern float FUN_004565f0(int s);
 extern void  FUN_00456650(void* out, int s, float f);
 
-// 0x00455d60 (byte-exact lifted version: match/slices/s00455d60/s00455d60.cpp) -- eastl::basic_string<char>::append(first,last)
+// 0x00455d60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00455d60/s00455d60.cpp -- eastl::basic_string<char>::append(first,last)
 int* StringAppend(int* self, const char* first, const char* last) {
     if (first != last) {
         int oldSize = self[1] - self[0];
@@ -222,7 +222,7 @@ int* StringAppend(int* self, const char* first, const char* last) {
 extern void* FUN_11e0744_alloc(unsigned int n);
 extern void  FUN_11e0744_copy(void* dst, void* src, int n);
 
-// 0x00455fa0 (byte-exact lifted version: match/slices/s00455fa0/s00455fa0.cpp) -- vector-of-0x20 insert/resize (partial approximation)
+// 0x00455fa0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00455fa0/s00455fa0.cpp -- vector-of-0x20 insert/resize (partial approximation)
 void* VecInsert32(int* self, void* position, unsigned int count, void* value) {
     if (count > (unsigned int)((self[2] - self[1]) >> 5)) {
         int oldSize = (self[1] - self[0]) >> 5;

@@ -217,7 +217,7 @@ void Stream_Quad_V4F_N4F_G3F_C4B_T4B(cDistributeEffect* effect, IVertexStream* s
 }
 
 // ================================================================================
-// 0x00a8bf10 (byte-exact lifted version: match/slices/s00a8bf10/s00a8bf10.cpp)  installs the streamer table (0x80-byte block at 0x016781b0).
+// 0x00a8bf10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a8bf10/s00a8bf10.cpp  installs the streamer table (0x80-byte block at 0x016781b0).
 void RegisterMeshStreamers(bool install)
 {
   if (install) {
@@ -421,7 +421,7 @@ struct PtrVector {
   void    insert(RefPtr* position, unsigned n, const RefPtr& v); // 0x00a8c690
 };
 
-// 0x00a8c4e0 (byte-exact lifted version: match/slices/s00a8c4e0/s00a8c4e0.cpp)
+// 0x00a8c4e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a8c4e0/s00a8c4e0.cpp
 RefPtr* PtrVector::erase(RefPtr* first, RefPtr* last)
 {
   RefPtr* p = (RefPtr*)MovePtr(last, mpEnd, first);

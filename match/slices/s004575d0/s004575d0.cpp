@@ -256,7 +256,7 @@ void* __fastcall FUN_004575d0(int* self) {
     return self;
 }
 
-// 0x00457840 (byte-exact lifted version: match/slices/s00457840/s00457840.cpp)
+// 0x00457840: not byte-exact; the byte-exact version is the lifted one in match/slices/s00457840/s00457840.cpp
 void __fastcall FUN_00457840(int* self) {
     self[0] = (int)V_013ec584;
     self[1] = (int)V_013ec574;

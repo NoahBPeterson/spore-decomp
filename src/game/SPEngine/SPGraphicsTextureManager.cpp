@@ -1255,7 +1255,7 @@ void JobSlots::Clear()
     }
 }
 
-// 0x007aa3a0 (byte-exact lifted version: match/slices/s007aa3a0/s007aa3a0.cpp)
+// 0x007aa3a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007aa3a0/s007aa3a0.cpp
 char JobSlots::Transfer(int param_2)
 {
     int self = (int)this;

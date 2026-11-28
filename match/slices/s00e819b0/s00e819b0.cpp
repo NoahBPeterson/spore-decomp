@@ -498,7 +498,7 @@ void FUN_00e819b0(char param_1)
     }
 }
 
-// 0x00e81ba0 (byte-exact lifted version: match/slices/s00e81ba0/s00e81ba0.cpp)
+// 0x00e81ba0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e81ba0/s00e81ba0.cpp
 void FUN_00e81ba0()
 {
     int* p = (int*)MessageServer();

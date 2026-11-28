@@ -219,7 +219,7 @@ hkBufferedStreamReader::hkBufferedStreamReader(hkStreamReader* s, int bufSize)
 	m_stream->addReference();
 }
 
-// 0x01080890 (byte-exact lifted version: match/slices/s01080890/s01080890.cpp) (scalar deleting destructor)
+// 0x01080890: not byte-exact; the byte-exact version is the lifted one in match/slices/s01080890/s01080890.cpp (scalar deleting destructor)
 hkBufferedStreamReader::~hkBufferedStreamReader()
 {
 	m_stream->removeReference();

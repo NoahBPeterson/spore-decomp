@@ -5,7 +5,6 @@ extern "C" double __cdecl FUN_00455cc0(...);
 template<class T> __forceinline T il2c_k(T v) { return v; }
 
 // @ 0x0047ff90
-// @ 0x0047ff90
 extern "C" int __cdecl FUN_0047ff90(int a4, int a8, int a12)
 {
     float v_l24;

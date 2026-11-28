@@ -3974,7 +3974,7 @@ IOObject* __cdecl F8e310(IOObject* pStream, const uint32_t* pData)
     return pStream;
 }
 
-// 0x00c8e3a0 (byte-exact lifted version: match/slices/s00c8e3a0/s00c8e3a0.cpp)
+// 0x00c8e3a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8e3a0/s00c8e3a0.cpp
 IOObject* __cdecl F8e3a0(IOObject* pStream, uint32_t* pData)
 {
     EA::IO::ReadInt32(pStream->v08()->v06(), &pData[0], 1, 0);
@@ -4475,7 +4475,7 @@ void cSpatialThing_FUN_00c8ef20(cSpatialThing* pThis, cSPVector3_s00c8_ec60* pOu
     pOut->mz = pPosition->mz + fRadius * pOrientation->mz;
 }
 
-// 0x00c8efc0 (byte-exact lifted version: match/slices/s00c8efc0/s00c8efc0.cpp)
+// 0x00c8efc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8efc0/s00c8efc0.cpp
 void cTribe_FUN_00c8efc0(cTribe* pThis)
 {
     if (pThis->mppToolBegin != nullptr) {
@@ -4772,7 +4772,7 @@ bool cTribe::Write(void* pStream)
     return false;
 }
 
-// 0x00c8fa60 (byte-exact lifted version: match/slices/s00c8fa60/s00c8fa60.cpp)
+// 0x00c8fa60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8fa60/s00c8fa60.cpp
 bool cTribe::FUN_00c8fa60()
 {
     cSpeciesManager* pManager = (cSpeciesManager*)GetSetting9();
@@ -5844,7 +5844,7 @@ void __stdcall FUN_00c93690(uint32_t first, uint32_t last)
     }
 }
 
-// 0x00c93700 (byte-exact lifted version: match/slices/s00c93700/s00c93700.cpp)
+// 0x00c93700: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c93700/s00c93700.cpp
 void __stdcall FUN_00c93700(uint32_t array, uint32_t count)
 {
     for (uint32_t i = 0; i < count; ++i) {
@@ -6767,7 +6767,7 @@ void* SP::cTribe_s00c9_5980::GetStructures()
     return (void*)&mChatAreaHandles_354;
 }
 
-// 0x00c967a0 (byte-exact lifted version: match/slices/s00c967a0/s00c967a0.cpp)
+// 0x00c967a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c967a0/s00c967a0.cpp
 void* SP::cTribe_s00c9_5980::GetInhabitants()
 {
     SVec* out = &mInhabitants_e4;

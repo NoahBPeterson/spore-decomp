@@ -37,7 +37,7 @@ int MaxIndex(const float* p)
     }
 }
 
-// 0x004fde40 (byte-exact lifted version: match/slices/s004fde40/s004fde40.cpp)
+// 0x004fde40: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fde40/s004fde40.cpp
 void* Alloc::PopChunk()
 {
     Alloc* alloc = this;
@@ -66,7 +66,7 @@ Vector2* AddVec2(Vector2* out, const Vector2* a, const Vector2* b)
     return out;
 }
 
-// 0x004fdd60 (byte-exact lifted version: match/slices/s004fdd60/s004fdd60.cpp)
+// 0x004fdd60: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fdd60/s004fdd60.cpp
 void Owner::Destroy()
 {
     void* self = this;
@@ -76,7 +76,7 @@ void Owner::Destroy()
     ((Vec10*)((char*)self + 0x10))->FUN_00425990();
 }
 
-// 0x004fe860 (byte-exact lifted version: match/slices/s004fe860/s004fe860.cpp)
+// 0x004fe860: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fe860/s004fe860.cpp
 void WStr::Assign(const wchar_t* s)
 {
     void* self = this;
@@ -256,7 +256,7 @@ void ElemVector::Insert(Elem16* position, const Elem16& value)
     }
 }
 
-// 0x004fdcb0 (byte-exact lifted version: match/slices/s004fdcb0/s004fdcb0.cpp)
+// 0x004fdcb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fdcb0/s004fdcb0.cpp
 Elem16* __cdecl CopyElems(Elem16* first, Elem16* last, Elem16* dst)
 {
     Elem16* firstStart = first;
@@ -349,7 +349,7 @@ void MeshBVH::SearchRay(const BVHNode* node, const Vec3* origin, const Vec3* dir
     }
 }
 
-// 0x004fe2a0 (byte-exact lifted version: match/slices/s004fe2a0/s004fe2a0.cpp)
+// 0x004fe2a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004fe2a0/s004fe2a0.cpp
 TransformDesc::TransformDesc(uint32_t ownerId)
 {
     mId = 0;

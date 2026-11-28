@@ -301,7 +301,7 @@ void cDownloadDialog::FUN_00df57d0(int b)
 }
 
 // 0x00DF5830
-// 0x00df5830 (byte-exact lifted version: match/slices/s00df5830/s00df5830.cpp)
+// 0x00df5830: not byte-exact; the byte-exact version is the lifted one in match/slices/s00df5830/s00df5830.cpp
 bool cDownloadDialog::FUN_00df5830(void* retaddr)
 {
     uint key[3];
@@ -369,7 +369,7 @@ cDownloadDialog* __fastcall cDownloadDialog_ctor_5940(cDownloadDialog* self)
     return self;
 }
 // 0x00DF59C0
-// 0x00df59c0 (byte-exact lifted version: match/slices/s00df59c0/s00df59c0.cpp)
+// 0x00df59c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00df59c0/s00df59c0.cpp
 bool cDownloadDialog::FUN_00df59c0(void* p)
 {
     uint key[3];

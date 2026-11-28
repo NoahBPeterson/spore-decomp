@@ -1350,7 +1350,7 @@ void cSpatialObjectView::MakeView_740(void* a, void* b, void* c, void* d)
     }
 }
 
-// 0x00e92910 (byte-exact lifted version: match/slices/s00e92910/s00e92910.cpp)
+// 0x00e92910: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e92910/s00e92910.cpp
 void cSpatialObjectView::Init(void* gamedata)
 {
     void* newObj = 0;

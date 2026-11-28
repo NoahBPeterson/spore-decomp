@@ -677,7 +677,7 @@ void __thiscall cSPUILayoutObjectCollectionV8::OnUnload()
     ((cSPUILayoutObjectCollection_s0080_f7c0*)coll)->detach_parent();
 }
 
-// 0x00810310 (byte-exact lifted version: match/slices/s00810310/s00810310.cpp)
+// 0x00810310: not byte-exact; the byte-exact version is the lifted one in match/slices/s00810310/s00810310.cpp
 bool cSPUILayoutObjectCollection::SetVisibility(bool vis)
 {
     u8* s = (u8*)this;
@@ -1297,7 +1297,7 @@ void cSPUILayoutObjectCollection::attach_parent()
     ((CollStub*)this)->m11330();
 }
 
-// 0x00811b80 (byte-exact lifted version: match/slices/s00811b80/s00811b80.cpp)
+// 0x00811b80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00811b80/s00811b80.cpp
 void cSPUILayoutObjectCollection::OnLoad()
 {
     u8* self = (u8*)static_cast<EA::UTFWinTools::SerCollection *>(this);

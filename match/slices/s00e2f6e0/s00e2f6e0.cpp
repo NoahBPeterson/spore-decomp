@@ -361,7 +361,7 @@ void cSPUIAssetDiscoveryManager::ReloadTuning()
 // ---------------------------------------------------------------------------
 // 0x00e2fc40  cSPUIAssetDiscoveryManager::HandleCardMessage
 // ---------------------------------------------------------------------------
-// 0x00e2fc40 (byte-exact lifted version: match/slices/s00e2fc40/s00e2fc40.cpp)
+// 0x00e2fc40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e2fc40/s00e2fc40.cpp
 int cSPUIAssetDiscoveryManager::HandleCardMessage(int nMessage, int nData, int nFlags)
 {
     if (nMessage == 0xf62def) {
@@ -433,7 +433,7 @@ void cSPUIAssetDiscoveryManager::ReleaseCurrentCard()
 // ---------------------------------------------------------------------------
 // 0x00e2fda0  cSPUIAssetDiscoveryCard::Clone
 // ---------------------------------------------------------------------------
-// 0x00e2fda0 (byte-exact lifted version: match/slices/s00e2fda0/s00e2fda0.cpp)
+// 0x00e2fda0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e2fda0/s00e2fda0.cpp
 cSPUIAssetDiscoveryCard* cSPUIAssetDiscoveryCard::Clone()
 {
     cSPUIAssetDiscoveryCard* pCopy = (cSPUIAssetDiscoveryCard*)
@@ -459,7 +459,7 @@ cSPUIAssetDiscoveryCard* cSPUIAssetDiscoveryCard::Clone()
 // ---------------------------------------------------------------------------
 // 0x00e2fe10  cSPUIAssetDiscoveryManager::Init
 // ---------------------------------------------------------------------------
-// 0x00e2fe10 (byte-exact lifted version: match/slices/s00e2fe10/s00e2fe10.cpp)
+// 0x00e2fe10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e2fe10/s00e2fe10.cpp
 void cSPUIAssetDiscoveryManager::Init()
 {
     cMessageServer* pServer = (cMessageServer*)MessageServer();
@@ -483,7 +483,7 @@ void cSPUIAssetDiscoveryManager::Init()
 // ---------------------------------------------------------------------------
 // 0x00e2feb0  cSPUIAssetDiscoveryManager::HandleAssetMessage
 // ---------------------------------------------------------------------------
-// 0x00e2feb0 (byte-exact lifted version: match/slices/s00e2feb0/s00e2feb0.cpp)
+// 0x00e2feb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e2feb0/s00e2feb0.cpp
 int cSPUIAssetDiscoveryManager::HandleAssetMessage(int nMessage, int nData)
 {
     if (nMessage == 0xf62def && nData == 0x689fa1a) {

@@ -79,7 +79,7 @@ struct Self {
 };
 
 // ===========================================================================
-// 0x00aa7470 (byte-exact lifted version: match/slices/s00aa7470/s00aa7470_lifted.cpp)
+// 0x00aa7470: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aa7470/s00aa7470_lifted.cpp
 Self* Self::FUN_00aa7470(const Self* o)
 {
     char* t = raw;

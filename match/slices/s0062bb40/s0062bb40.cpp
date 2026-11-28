@@ -725,7 +725,7 @@ void PM::Update(int delta) {
   ((TC_UI*)s->mUI)->FUN_00634c80(delta);
 }
 
-// 0x0062c7e0 (byte-exact lifted version: match/slices/s0062c7e0/s0062c7e0.cpp)
+// 0x0062c7e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0062c7e0/s0062c7e0.cpp
 bool PM::FUN_0062c7e0(int idx, int a) {
   char* s = (char*)this;
   if (*(unsigned char*)(s + 0x36d0) >= 3) return false;
@@ -752,7 +752,7 @@ bool PM::FUN_0062c7e0(int idx, int a) {
   return true;
 }
 
-// 0x0062c910 (byte-exact lifted version: match/slices/s0062c910/s0062c910.cpp)
+// 0x0062c910: not byte-exact; the byte-exact version is the lifted one in match/slices/s0062c910/s0062c910.cpp
 void PM::FUN_0062c910() {
   char* s = (char*)this;
   void* p = *(void**)(s + 0x94);

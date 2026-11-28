@@ -4,7 +4,6 @@
 struct C_00b534c0 { int FUN_00b534c0(unsigned int, unsigned int); };
 
 // @ 0x00ec8d80
-// @ 0x00ec8d80
 extern "C" int __cdecl FUN_00ec8d80(int a4)
 {
     int t1003;

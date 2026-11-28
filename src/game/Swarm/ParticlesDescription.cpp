@@ -1214,7 +1214,7 @@ void* CreateParticlesEffectCommand(int flags)
     return 0;
 }
 
-// 0x00aa32f0 (byte-exact lifted version: match/slices/s00aa32f0/s00aa32f0.cpp)
+// 0x00aa32f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aa32f0/s00aa32f0.cpp
 cParticlesDescription::~cParticlesDescription()
 {
 }
@@ -2248,7 +2248,7 @@ void cCommand::cParticleLifeExecute(EA::ArgScript::cArguments_s00aa_5940* args)
     d->at<uint32_t>(0x10) |= 0x100000;
 }
 
-// 0x00aa7470 (byte-exact lifted version: match/slices/s00aa7470/s00aa7470_lifted.cpp)
+// 0x00aa7470: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aa7470/s00aa7470_lifted.cpp
 Self* Self::FUN_00aa7470(const Self* o)
 {
     char* t = raw;

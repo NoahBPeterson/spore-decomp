@@ -758,7 +758,7 @@ cSPEditorModel_s004a_b690::cSPEditorModel_s004a_b690()
 }
 }  // namespace SP
 
-// 0x004aba00 (byte-exact lifted version: match/slices/s004aba00/s004aba00.cpp)
+// 0x004aba00: not byte-exact; the byte-exact version is the lifted one in match/slices/s004aba00/s004aba00.cpp
 namespace SP {
 void cSPEditorModel_s004a_b690::ModelTeardown()
 {

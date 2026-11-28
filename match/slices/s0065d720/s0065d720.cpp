@@ -21,7 +21,6 @@ struct C_008121b0 { void FUN_008121b0(unsigned int, unsigned int, unsigned int);
 extern "C" int __cdecl FUN_00f473a0(...);
 
 // @ 0x0065d720
-// @ 0x0065d720
 extern "C" bool __fastcall FUN_0065d720(char* self, int edx_unused, int a4, int a8)
 {
     int t1000;

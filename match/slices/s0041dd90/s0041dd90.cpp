@@ -187,7 +187,7 @@ void TransformVec::clearDtors()
     Free();
 }
 
-// 0x0041e0d0 (byte-exact lifted version: match/slices/s0041e0d0/s0041e0d0.cpp)
+// 0x0041e0d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0041e0d0/s0041e0d0.cpp
 TransformVec& TransformVec::assign(const TransformVec& x)
 {
     if (&x != this) {

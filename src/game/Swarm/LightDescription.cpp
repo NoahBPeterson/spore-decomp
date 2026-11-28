@@ -474,7 +474,7 @@ void cCameraLifeCommand::Execute(void* args)
 	d->mw14 = (*(u16(__thiscall**)(void*, int))(*(char**)mpHost + 0xa0))(mpHost, *p);
 }
 
-// 0x00a987c0 (byte-exact lifted version: match/slices/s00a987c0/s00a987c0_lifted.cpp)
+// 0x00a987c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a987c0/s00a987c0_lifted.cpp
 void ArgCommand::OnRegister(void* parser, void* state)
 {
     void* sub = (state != 0) ? (void*)((int)state - 0xc) : 0;
@@ -525,7 +525,7 @@ void ArgCommand::ExecuteType(void* argsRaw)
     }
 }
 
-// 0x00a98b00 (byte-exact lifted version: match/slices/s00a98b00/s00a98b00.cpp)
+// 0x00a98b00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a98b00/s00a98b00.cpp
 void ArgCommand::ExecuteSize(void* argsRaw)
 {
     cArguments* args = (cArguments*)argsRaw;

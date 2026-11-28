@@ -431,7 +431,7 @@ void SP::SLEEP_Deactivate(cSPCreatureBase* self, int, int, int, int, int* st)
 }
 
 // ==================================================================================
-// 0x00d705b0 (byte-exact lifted version: match/slices/s00d705b0/s00d705b0.cpp)
+// 0x00d705b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d705b0/s00d705b0.cpp
 float FUN_00d705b0(cSPCreatureBase* self)
 {
     cSPCreatureBase* c = self->GetHomeInfo()->m164;

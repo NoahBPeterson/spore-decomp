@@ -1573,7 +1573,7 @@ __declspec(noinline) Obj1800::Obj1800(const Obj1800& other)
 __declspec(noinline) ObjA::ObjA(const ObjA& other)
 : m0(other.m0), mF0(other.mF0), mF1(other.mF1), mF2(other.mF2), mF3(other.mF3) {}
 
-// 0x00681b50 (byte-exact lifted version: match/slices/s00681b50/s00681b50.cpp)
+// 0x00681b50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00681b50/s00681b50.cpp
 ObjB50& ObjB50::operator=(const ObjB50& x)
 {
     m0 = x.m0;
@@ -1805,7 +1805,7 @@ ObjC30_s0068_1f10* Map1::operator[](const int& key)
     return &itLower.mpNode->mVal;
 }
 
-// 0x00682be0 (byte-exact lifted version: match/slices/s00682be0/s00682be0.cpp)
+// 0x00682be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00682be0/s00682be0.cpp
 Node2* Map2::Clone(Node2* src, Node2* parent)
 {
     Node2* dst = (Node2*)CreateNode2(&src->mKey);

@@ -757,7 +757,7 @@ void Page::CreateLayoutItems(DOM::Element* pElement, RuleVec* pOut)
 // ===========================================================================
 // 0x008ECC10  EA::XHTML::Layout::Page::FilterRuleList
 // ===========================================================================
-// 0x008ecc10 (byte-exact lifted version: match/slices/s008ecc10/s008ecc10.cpp)
+// 0x008ecc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s008ecc10/s008ecc10.cpp
 void Page::FilterRuleList(DOM::Element* pElement, RuleVec* pIn, RuleVec* pOut)
 {
     for (int i = 0; i < pIn->size(); ++i) {

@@ -403,7 +403,7 @@ void __fastcall FUN_00eb0460(void* self_)
     FUN_00ead1a0(self, 0, 1);
 }
 
-// 0x00eb0810 (byte-exact lifted version: match/slices/s00eb0810/s00eb0810.cpp)
+// 0x00eb0810: not byte-exact; the byte-exact version is the lifted one in match/slices/s00eb0810/s00eb0810.cpp
 void* __fastcall FUN_00eb0810(void* vec, int, char* first, char* last)
 {
     char* end    = *(char**)((char*)vec + 4);
@@ -497,7 +497,7 @@ void __fastcall FUN_00eb0cb0(void* self_, int, void** out, void* dCont, char* dC
     out[1] = dCur;
 }
 
-// 0x00eb0d60 (byte-exact lifted version: match/slices/s00eb0d60/s00eb0d60.cpp)
+// 0x00eb0d60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00eb0d60/s00eb0d60.cpp
 void __fastcall FUN_00eb0d60(void* vec_, int, u32 n)
 {
     u32** vec   = (u32**)vec_;

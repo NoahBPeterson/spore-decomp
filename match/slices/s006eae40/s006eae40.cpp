@@ -163,7 +163,7 @@ void __stdcall f990(char* p1, char* p2)
 }
 
 // ---------------------------------------------------------------------------
-// 0x006eb9d0 (byte-exact lifted version: match/slices/s006eb9d0/s006eb9d0.cpp)
+// 0x006eb9d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006eb9d0/s006eb9d0.cpp
 void f9d0(uint* p1, uint* p2, int extra)
 {
     int n = (int)p2 - (int)p1 >> 3;

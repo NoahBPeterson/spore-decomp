@@ -167,7 +167,7 @@ struct cPlanetModel {
 // --------------------------------------------------------------------------- 0x00b8d2a0
 // Message handler: the minimap-init message arms the minimap with the payload's id, the two dirty
 // messages only mark the model (and the key state) for a rebuild.
-// 0x00b8d2a0 (byte-exact lifted version: match/slices/s00b8d2a0/s00b8d2a0.cpp)
+// 0x00b8d2a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b8d2a0/s00b8d2a0.cpp
 bool cPlanetModel::HandleMessage(uint32_t id, void* msg)
 {
     if (id == 0x1b537e5) {

@@ -1192,7 +1192,7 @@ void Sound_s00a1_a590::Tick(float a, float dt)
     (void)a;
 }
 
-// 0x00a1b320 (byte-exact lifted version: match/slices/s00a1b320/s00a1b320.cpp)
+// 0x00a1b320: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a1b320/s00a1b320.cpp
 bool SoundGraph::Remove(void* target)
 {
     void** it = mListC7c;

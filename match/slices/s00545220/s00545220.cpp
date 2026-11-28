@@ -398,7 +398,7 @@ typedef eastl::vector_map<const wchar_t*, eastl::mem_fun_t<void, AtomParser> > E
 extern StartElementMap sAtomStartElementMap;    // 0x015e2e48
 extern EndElementMap sAtomEndElementMap;        // 0x015e2da8
 
-// 0x00545220 (byte-exact lifted version: match/slices/s00545220/s00545220_lifted.cpp)
+// 0x00545220: not byte-exact; the byte-exact version is the lifted one in match/slices/s00545220/s00545220_lifted.cpp
 void AtomParser::StartElementHandler(void* pUserData, const wchar_t* name, const wchar_t** attrs) {
     AtomParser* pThis = (AtomParser*)pUserData;
     if (pThis->mpDocument) {
@@ -681,7 +681,7 @@ off_type HandshakeParser::GetPosition(EA::IO::PositionType positionType) const {
     return -1;
 }
 
-// 0x005459a0 (byte-exact lifted version: match/slices/s005459a0/s005459a0.cpp)
+// 0x005459a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005459a0/s005459a0.cpp
 void HandshakeParser::StartDoc() {
     if (mpMyFeeds && mpSubscriptions && mpList28) {
         mpMyFeeds->clear();

@@ -14,7 +14,6 @@ extern "C" int __cdecl FUN_0067caa0(...);
 struct C_00de44a0 { int FUN_00de44a0(unsigned int, float, float, unsigned int); };
 
 // @ 0x00dddb10
-// @ 0x00dddb10
 extern "C" bool __stdcall FUN_00dddb10(int a4, float a8, float a12, int a16)
 {
     int t1000;

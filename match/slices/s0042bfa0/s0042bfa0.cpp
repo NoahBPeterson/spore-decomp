@@ -11,7 +11,6 @@ struct C_004c2100 { void FUN_004c2100(unsigned int); };
 
 struct D_0042bfa0 { void FUN_0042bfa0(int a4, int a8); };
 // @ 0x0042bfa0
-// @ 0x0042bfa0
 void D_0042bfa0::FUN_0042bfa0(int a4, int a8)
 {
     int v_l24;

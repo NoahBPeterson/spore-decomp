@@ -122,7 +122,7 @@ int RevObj::F_9e0(int out, float sr)
     return 1;
 }
 
-// 0x01139d60 (byte-exact lifted version: match/slices/s01139d60/s01139d60.cpp)  ReverbModel1 (this, out6)
+// 0x01139d60: not byte-exact; the byte-exact version is the lifted one in match/slices/s01139d60/s01139d60.cpp  ReverbModel1 (this, out6)
 bool RevObj::F_d60(float* out)
 {
     void* p = this;

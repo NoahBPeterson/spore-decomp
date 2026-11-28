@@ -103,7 +103,7 @@ struct C103M { u8 DoProbe(int which, int v); };
 // ================================================================ 0x00d07770
 // Fill the three numeric text fields of the dialog by formatting the three
 // resource counts named by the object.
-// 0x00d07770 (byte-exact lifted version: match/slices/s00d07770/s00d07770_lifted.cpp)
+// 0x00d07770: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d07770/s00d07770_lifted.cpp
 void C103::FillCounts() {
     char* p = (char*)this;
     u16 buf[32];

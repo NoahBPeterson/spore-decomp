@@ -133,7 +133,7 @@ int* __fastcall FUN_004b9c70(int* p)
     return p;
 }
 
-// 0x004b9d40 (byte-exact lifted version: match/slices/s004b9d40/s004b9d40.cpp)
+// 0x004b9d40: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b9d40/s004b9d40.cpp
 void __fastcall FUN_004b9d40(int* p)
 {
     *p = (int)&g_vtblB;
@@ -171,7 +171,7 @@ int* __fastcall FUN_004b9da0(int* p)
     return p;
 }
 
-// 0x004b9f70 (byte-exact lifted version: match/slices/s004b9f70/s004b9f70.cpp)
+// 0x004b9f70: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b9f70/s004b9f70.cpp
 void __fastcall FUN_004b9f70(int* p)
 {
     *p = (int)&g_vtblE;

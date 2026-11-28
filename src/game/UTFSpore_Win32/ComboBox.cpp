@@ -1265,7 +1265,7 @@ void WinComboBox::AddValue(const wchar_t* s)
         f_operator_delete(tmp.a);
 }
 
-// 0x009699d0 (byte-exact lifted version: match/slices/s009699d0/s009699d0.cpp)
+// 0x009699d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009699d0/s009699d0.cpp
 bool WinComboBox::InsertValue(unsigned idx, const wchar_t* s)
 {
     char* self = (char*)this;

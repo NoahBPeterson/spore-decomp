@@ -5470,7 +5470,7 @@ void hkConvexListAgent::cleanup()
     hkReferencedObject_deletingDtor(1);
 }
 
-// 0x010dd1d0 (byte-exact lifted version: match/slices/s010dd1d0/s010dd1d0.cpp)
+// 0x010dd1d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010dd1d0/s010dd1d0.cpp
 hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup(const hkProcessCollisionOutput_s010d_cd40& out)
 {
     m_firstFreeContactPoint = out.m_firstFreeContactPoint;
@@ -5485,7 +5485,7 @@ hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup(const hkProcessCo
     }
 }
 
-// 0x010dd260 (byte-exact lifted version: match/slices/s010dd260/s010dd260.cpp)
+// 0x010dd260: not byte-exact; the byte-exact version is the lifted one in match/slices/s010dd260/s010dd260.cpp
 hkProcessCollisionOutputBackup* hkProcessCollisionOutputBackup::restore(hkProcessCollisionOutput_s010d_cd40& out)
 {
     out.m_firstFreeContactPoint = m_firstFreeContactPoint;

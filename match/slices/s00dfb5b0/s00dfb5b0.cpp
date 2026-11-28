@@ -373,7 +373,6 @@ void Huge::Destroy() {
 }
 
 // @ 0x00dfbc80  uninitialized_copy of 0x34-byte TypeB elements
-// @ 0x00dfbc80  uninitialized_copy of 0x34-byte TypeB elements
 void* UninitCopyB(void* out, const void* first, const void* last, void* dest) {
   TypeB* d = (TypeB*)dest;
   TypeB* f = (TypeB*)first;

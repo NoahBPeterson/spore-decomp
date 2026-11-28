@@ -190,7 +190,7 @@ char* GetExplicitIdStartA(char* first, char* last, uint8 flag3, uint8 flag4)
 }
 
 // ===========================================================================
-// 0x0068cd40 (byte-exact lifted version: match/slices/s0068cd40/s0068cd40.cpp)  packed string insert C-string (thiscall)
+// 0x0068cd40: not byte-exact; the byte-exact version is the lifted one in match/slices/s0068cd40/s0068cd40.cpp  packed string insert C-string (thiscall)
 // ===========================================================================
 struct PackStr {
     char* mpBegin;    // +0x00

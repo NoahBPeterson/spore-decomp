@@ -504,7 +504,7 @@ void cCommunityEditor::DetachCity(cCity* pCity, int bRemoving)
 // ---------------------------------------------------------------------------
 // 0x00bf49e0  cCommunityEditor::NotifySubEditor
 // ---------------------------------------------------------------------------
-// 0x00bf49e0 (byte-exact lifted version: match/slices/s00bf49e0/s00bf49e0.cpp)
+// 0x00bf49e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf49e0/s00bf49e0.cpp
 void cCommunityEditor::NotifySubEditor()
 {
     if (this == nullptr)

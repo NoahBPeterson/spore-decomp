@@ -375,7 +375,7 @@ bool cSPUIGlobalUI::Init(int param)
 }
 
 // ===========================================================================
-// 0x00e03740 (byte-exact lifted version: match/slices/s00e03740/s00e03740.cpp)
+// 0x00e03740: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e03740/s00e03740.cpp
 bool cSPUIGlobalUI::Shutdown()
 {
     if (this->mpLayout != 0) {

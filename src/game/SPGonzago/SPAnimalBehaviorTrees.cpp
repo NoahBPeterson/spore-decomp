@@ -6858,7 +6858,7 @@ uint* __stdcall BuildPlanetFlags(uint* out, cEmpire* a, cEmpire* b, cPlanetRef* 
     return out;
 }
 
-// 0x00aee0e0 (byte-exact lifted version: match/slices/s00aee0e0/s00aee0e0.cpp)
+// 0x00aee0e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aee0e0/s00aee0e0.cpp
 void RegisterPFRecordRead()
 {
     PFRecordRead* rec = (PFRecordRead*)ZoneObject_new(0x2c, "App", 0, 0, 0, 0);
@@ -7239,7 +7239,7 @@ uint32_t* GetBehaviorVectorFromResource(uint32_t* pOut, void* pKey, int a, int b
     return pOut;
 }
 
-// 0x00aeeda0 (byte-exact lifted version: match/slices/s00aeeda0/s00aeeda0.cpp)
+// 0x00aeeda0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aeeda0/s00aeeda0.cpp
 uint8_t GetBehaviorUnlockFlag(void* pKey)
 {
     cBehaviorTable* pTable = (cBehaviorTable*)LookupResourceRecord(pKey);
@@ -7263,7 +7263,7 @@ void GetBehaviorFlags(uint8_t* pFlags, void* pKey)
     }
 }
 
-// 0x00aeef00 (byte-exact lifted version: match/slices/s00aeef00/s00aeef00.cpp)
+// 0x00aeef00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aeef00/s00aeef00.cpp
 int CountBehaviorSubRecords(void* pKey)
 {
     int nCount = 0;
@@ -7282,7 +7282,7 @@ int CountBehaviorSubRecords(void* pKey)
     return nCount;
 }
 
-// 0x00aeefc0 (byte-exact lifted version: match/slices/s00aeefc0/s00aeefc0.cpp)
+// 0x00aeefc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aeefc0/s00aeefc0.cpp
 uint32_t* GetBehaviorSubRecordValues(uint32_t* pOut, void* pKey, int nWanted, int a)
 {
     int nIndex = 0;
@@ -7949,7 +7949,7 @@ float __cdecl FUN_00d7b1a0(CB* cb)
 }
 }  // namespace SP
 
-// 0x00d7b290 (byte-exact lifted version: match/slices/s00d7b290/s00d7b290.cpp)
+// 0x00d7b290: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d7b290/s00d7b290.cpp
 bool __cdecl FUN_00d7b290(void* a, CB* b)
 {
   if (((Iter*)a)->AtBegin()) return false;

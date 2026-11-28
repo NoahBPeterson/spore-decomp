@@ -95,7 +95,7 @@ static inline double SqrtX87(double v)
     return v;
 }
 
-// 0x00fc2040 (byte-exact lifted version: match/slices/s00fc2040/s00fc2040.cpp)
+// 0x00fc2040: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fc2040/s00fc2040.cpp
 float __cdecl FUN_00fc2040(float x, float y)
 {
     double dx = (double)x - 0.5;

@@ -2185,7 +2185,7 @@ void __cdecl FUN_00ff5be0(int* param_1, int* param_2)
     }
 }
 
-// 0x00ff5c50 (byte-exact lifted version: match/slices/s00ff5c50/s00ff5c50.cpp)
+// 0x00ff5c50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ff5c50/s00ff5c50.cpp
 char __thiscall cSPSimPlanetHighLOD::Read(IStream* s)
 {
     int id;

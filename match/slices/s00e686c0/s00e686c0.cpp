@@ -468,7 +468,7 @@ void FUN_00e69190(cCell* cell, float param_2, int* outA, int* outB, int* outC,
     }
 }
 
-// 0x00e693f0 (byte-exact lifted version: match/slices/s00e693f0/s00e693f0.cpp)
+// 0x00e693f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e693f0/s00e693f0.cpp
 int FUN_00e693f0(int unused0, int* start, float unused2, float radius, int* out)
 {
     *out = *start;

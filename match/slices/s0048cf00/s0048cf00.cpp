@@ -10,7 +10,6 @@ template<class T> __forceinline bool il2c_nz(T v) { return v != 0; }
 template<class T> __forceinline T il2c_k(T v) { return v; }
 
 // @ 0x0048cf00
-// @ 0x0048cf00
 extern "C" float __cdecl FUN_0048cf00(int a4)
 {
     int v_l52_w;

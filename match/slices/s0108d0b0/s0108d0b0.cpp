@@ -646,7 +646,7 @@ class hkShape : public hkReferencedObject { public:
 
 class hkMotionState { public:
     uint8_t m_pad[0x40];
-    // 0x01088410 (byte-exact lifted version: match/slices/s01088410/s01088410.cpp)
+    // 0x01088410: not byte-exact; the byte-exact version is the lifted one in match/slices/s01088410/s01088410.cpp
     void setTransform(const hkTransform& t);
 };
 

@@ -808,7 +808,7 @@ void Ctx40::FUN_00543c10(int* attrs, int mode)
     }
 }
 
-// 0x005459a0 (byte-exact lifted version: match/slices/s005459a0/s005459a0.cpp)
+// 0x005459a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005459a0/s005459a0.cpp
 namespace SP { namespace Feed {
 void HandshakeParser_s0054_5220::StartDoc()
 {
@@ -1021,7 +1021,7 @@ void HandshakeParser_s0054_5220::EndScreenName()
 }
 }}  // namespace SP::Feed
 
-// 0x00546160 (byte-exact lifted version: match/slices/s00546160/s00546160_lifted.cpp)
+// 0x00546160: not byte-exact; the byte-exact version is the lifted one in match/slices/s00546160/s00546160_lifted.cpp
 void FUN_00546160(int param_1, const wchar_t* name, int* attrs)
 {
     StringResizeW(0);
@@ -1058,7 +1058,7 @@ void FUN_00546160(int param_1, const wchar_t* name, int* attrs)
     FUN_00545bd0();
 }
 
-// 0x005462f0 (byte-exact lifted version: match/slices/s005462f0/s005462f0.cpp)
+// 0x005462f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005462f0/s005462f0.cpp
 void FUN_005462f0(int param_1, const wchar_t* name)
 {
     short* local_14 = gFeedEndTable;
@@ -1206,7 +1206,7 @@ void* Obj43::FUN_00548910(int* param_2, int* param_3)
     return param_2;
 }
 
-// 0x00548a30 (byte-exact lifted version: match/slices/s00548a30/s00548a30.cpp)
+// 0x00548a30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00548a30/s00548a30.cpp
 int Obj43::FUN_00548a30(int param_2, int param_3)
 {
     int base = (int)this;

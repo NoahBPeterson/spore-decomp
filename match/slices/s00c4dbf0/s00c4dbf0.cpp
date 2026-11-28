@@ -713,7 +713,7 @@ int __fastcall FUN_00c4e9a0(void* ecx_this, void* edx, int a)
 // ---------------------------------------------------------------------------------------------
 // 0x00c4ea70 -- FUN_00c4ea70 (cSPMissionFetch::GetUIShortDescription, ret 4)
 // ---------------------------------------------------------------------------------------------
-// 0x00c4ea70 (byte-exact lifted version: match/slices/s00c4ea70/s00c4ea70.cpp)
+// 0x00c4ea70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c4ea70/s00c4ea70.cpp
 void __fastcall FUN_00c4ea70(void* ecx_this, void* edx, void* out)
 {
     void* textPtr = (char*)ecx_this + 0x14c;

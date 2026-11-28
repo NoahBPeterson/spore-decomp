@@ -1597,7 +1597,7 @@ void __thiscall RBTree::FindBounds(HIter* out, const int* key)
     }
     *out = res;}
 
-// 0x00af09a0 (byte-exact lifted version: match/slices/s00af09a0/s00af09a0.cpp)
+// 0x00af09a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00af09a0/s00af09a0.cpp
 Node* __thiscall RBTree::Clone(Node* src, void* parent)
 {
     Node* head = NewNode(src, parent);
@@ -4298,7 +4298,7 @@ void SP::cEntityListener::Destroy()
   m_vtbl = &g_vftableB;
 }
 
-// 0x00af9cf0 (byte-exact lifted version: match/slices/s00af9cf0/s00af9cf0.cpp)
+// 0x00af9cf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00af9cf0/s00af9cf0.cpp
 void SP::cActionCircle_s00af_9aa0::SetAtCenter(const cSPVector3_s00af_9aa0* center, float radius, const cSPVector3_s00af_9aa0* facing, float altitude)
 {
   mbRelative = false;
@@ -4642,7 +4642,7 @@ SP::cActionCircle_s00af_ab70::tSlot* SP::cActionCircle_s00af_ab70::FindClosestFr
   return &mSlots.mpBegin[index];
 }
 
-// 0x00afc0d0 (byte-exact lifted version: match/slices/s00afc0d0/s00afc0d0.cpp)
+// 0x00afc0d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00afc0d0/s00afc0d0.cpp
 tSlot* cSlotVec::EraseRange(tSlot* pFirst, tSlot* pLast)
 {
     tSlot* pNewEnd = (tSlot*)FUN_00afa430(pLast, mpEnd, pFirst);

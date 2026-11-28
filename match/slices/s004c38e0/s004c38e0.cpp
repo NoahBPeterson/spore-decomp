@@ -398,7 +398,7 @@ void cSPEditorSkinManager::Update(uint32_t unused, bool paintAll, uint32_t p4, u
     UpdatePaintedSkin();
 }
 
-// 0x004c4290 (byte-exact lifted version: match/slices/s004c4290/s004c4290.cpp)
+// 0x004c4290: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c4290/s004c4290.cpp
 void cSPEditorSkinManager::UpdatePaintedSkin()
 {
     if (!mPaintEnabled)
@@ -449,7 +449,7 @@ void cSPEditorSkinManager::UpdatePaintedSkin()
     }
 }
 
-// 0x004c44c0 (byte-exact lifted version: match/slices/s004c44c0/s004c44c0.cpp)
+// 0x004c44c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c44c0/s004c44c0.cpp
 cSPEditorSkinPart* cSPEditorSkinManager::CreateSkinObject(cSPEditorBlock* block, uint32_t instance)
 {
     cSPEditorSkinPart* part = new (kEditorAllocName, 0, 0, 0, 0) cSPEditorSkinPart;

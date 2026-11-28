@@ -245,7 +245,7 @@ RBNode* RBTree::DoCopySubtree_40(const RBNode* src, RBNode* parent)
     return newRoot;
 }
 
-// 0x00974050 (byte-exact lifted version: match/slices/s00974050/s00974050.cpp)
+// 0x00974050: not byte-exact; the byte-exact version is the lifted one in match/slices/s00974050/s00974050.cpp
 RBNode* RBTree::DoCopySubtree_0c(const RBNode* src, RBNode* parent)
 {
     RBNode* newRoot = CreateNodeCopy(src, parent);
@@ -628,7 +628,7 @@ void WinGrid::PlaceAllCellWindows()
     }
 }
 
-// 0x00974c30 (byte-exact lifted version: match/slices/s00974c30/s00974c30.cpp)
+// 0x00974c30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00974c30/s00974c30.cpp
 int __cdecl Comparator(CellData* a, CellData* b)
 {
     int t = a->nCellType;

@@ -1336,7 +1336,7 @@ class cPaintSystem_s0051_f0b0 { public:
 }
 // ---- items of slice s0051f0b0 end
 
-// 0x0051e3d0 (byte-exact lifted version: match/slices/s0051e3d0/s0051e3d0_lifted.cpp)
+// 0x0051e3d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0051e3d0/s0051e3d0_lifted.cpp
 void PaintSystem2::dtor()
 {
     *(void**)this = &g_vtblF1c74;
@@ -1610,7 +1610,7 @@ bool TickState::HandleMessage(int id, void* msg)
     return true;
 }
 
-// 0x00521ba0 (byte-exact lifted version: match/slices/s00521ba0/s00521ba0.cpp)
+// 0x00521ba0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00521ba0/s00521ba0.cpp
 void TickState::Tick(int dt)
 {
     if (F(char*, 0x1c) != 0) {
@@ -2053,7 +2053,7 @@ void Ctx9::BuildHit(HitRec9* out, Param9* p, cMeshPos9 pos, uint32_t seed)
     out->i30 = 0;
 }
 
-// 0x005240e0 (byte-exact lifted version: match/slices/s005240e0/s005240e0.cpp)
+// 0x005240e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005240e0/s005240e0.cpp
 void __fastcall FUN_005240e0(Ctx9* self, HitBuildArgs9 args)
 {
     FUN_00525f40(&self->mCtx3c);

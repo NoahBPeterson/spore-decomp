@@ -197,7 +197,7 @@ inline void DoFree12(T12* p)
     }
 }
 
-// 0x0050dea0 (byte-exact lifted version: match/slices/s0050dea0/s0050dea0.cpp)
+// 0x0050dea0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050dea0/s0050dea0.cpp
 Vec12& Vec12::operator=(const Vec12& x)
 {
     if (this != &x) {
@@ -246,7 +246,7 @@ inline void DoFree20(T20* p)
     }
 }
 
-// 0x0050da90 (byte-exact lifted version: match/slices/s0050da90/s0050da90.cpp)
+// 0x0050da90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050da90/s0050da90.cpp
 Vec20::Vec20(const Vec20& x)
 {
     uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
@@ -259,7 +259,7 @@ Vec20::Vec20(const Vec20& x)
     mpEnd = (T20*)pResult;
 }
 
-// 0x0050db60 (byte-exact lifted version: match/slices/s0050db60/s0050db60.cpp)
+// 0x0050db60: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050db60/s0050db60.cpp
 Vec20& Vec20::operator=(const Vec20& x)
 {
     if (this != &x) {
@@ -355,7 +355,7 @@ struct Vec100 : VecBase {
     void push_back(const Elem100& value);
 };
 
-// 0x0050e290 (byte-exact lifted version: match/slices/s0050e290/s0050e290.cpp)
+// 0x0050e290: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050e290/s0050e290.cpp
 Vec100::~Vec100()
 {
     ScratchSlots<6>();
@@ -367,7 +367,7 @@ Vec100::~Vec100()
     }
 }
 
-// 0x0050e310 (byte-exact lifted version: match/slices/s0050e310/s0050e310.cpp)
+// 0x0050e310: not byte-exact; the byte-exact version is the lifted one in match/slices/s0050e310/s0050e310.cpp
 void Vec100::resize(uint32_t n)
 {
     if (n > (uint32_t)(mpEnd - mpBegin)) {

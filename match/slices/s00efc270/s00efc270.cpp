@@ -220,7 +220,7 @@ int __cdecl FUN_00efcd90()
     return 0;
 }
 
-// 0x00efcae0 (byte-exact lifted version: match/slices/s00efcae0/s00efcae0.cpp)
+// 0x00efcae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00efcae0/s00efcae0.cpp
 void __cdecl FUN_00efcae0()
 {
     int app = SP_App();

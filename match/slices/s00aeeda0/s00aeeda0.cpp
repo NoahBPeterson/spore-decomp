@@ -21,7 +21,6 @@ struct C_00684610 { int FUN_00684610(unsigned int); };
 struct C_00e39fb0 { int FUN_00e39fb0(unsigned int, unsigned int); };
 
 // @ 0x00aeeda0
-// @ 0x00aeeda0
 extern "C" bool __stdcall FUN_00aeeda0(int a4, int a8)
 {
     int t1000;

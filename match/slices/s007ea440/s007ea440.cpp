@@ -30,7 +30,7 @@ void* ObjAF::Cast(int id) {
     return 0;
 }
 
-// 0x007eb060 (byte-exact lifted version: match/slices/s007eb060/s007eb060.cpp)  (copy ints [first,last) to dst; eax is left holding the advanced dst)
+// 0x007eb060: not byte-exact; the byte-exact version is the lifted one in match/slices/s007eb060/s007eb060.cpp  (copy ints [first,last) to dst; eax is left holding the advanced dst)
 int* FUN_007eb060(int first, int last, int* dst) {
     if (first != last) {
         int off = first - (int)dst;
@@ -94,7 +94,7 @@ int ObjB1::FUN_007eb100(int key) {
     return 0;
 }
 
-// 0x007eb360 (byte-exact lifted version: match/slices/s007eb360/s007eb360.cpp)  (vector assign from another)
+// 0x007eb360: not byte-exact; the byte-exact version is the lifted one in match/slices/s007eb360/s007eb360.cpp  (vector assign from another)
 struct VecB { int* begin; int* end; int* cap; };
 struct ObjB3 {
     int* begin; int* end; int* cap;

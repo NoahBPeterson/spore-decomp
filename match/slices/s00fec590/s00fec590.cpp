@@ -659,7 +659,7 @@ void cSPMissionManager::FUN_00fecbb0(uint32_t nKey)
 // =============================================================================================
 // 0x00fecbf0 - is the current feedback-event not yet consumed?
 // =============================================================================================
-// 0x00fecbf0 (byte-exact lifted version: match/slices/s00fecbf0/s00fecbf0.cpp) FUN_00fecbf0
+// 0x00fecbf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fecbf0/s00fecbf0.cpp FUN_00fecbf0
 uint32_t cSPMissionManager::FUN_00fecbf0()
 {
     if (IsWorldLayoutFlagSet(2)) {

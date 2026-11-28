@@ -156,7 +156,7 @@ float EA::ArgScript::cExpression::EvalRealNumber(const char** p) {
 // ===========================================================================
 // 0x0083db70  EA::ArgScript::cExpression::EvalIntParentheses
 // ===========================================================================
-// 0x0083db70 (byte-exact lifted version: match/slices/s0083db70/s0083db70.cpp)
+// 0x0083db70: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083db70/s0083db70.cpp
 int EA::ArgScript::cExpression::EvalIntParentheses(const char** p) {
     DiscardWhiteSpace(p);
     if (**p != '(') {
@@ -377,7 +377,7 @@ void ExprTable::Register(const char* name, int* ref) {
 // ===========================================================================
 // 0x0083e140  hashtable<...cExprFunction...> node/dtor reset
 // ===========================================================================
-// 0x0083e140 (byte-exact lifted version: match/slices/s0083e140/s0083e140.cpp)
+// 0x0083e140: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083e140/s0083e140.cpp
 void __fastcall ExprTableClear(void* self) {
     DoFreeNodesExpr(*(void**)((char*)self + 4), *(int*)((char*)self + 8));
     *(int*)((char*)self + 0xc) = 0;
@@ -386,7 +386,7 @@ void __fastcall ExprTableClear(void* self) {
 // ===========================================================================
 // 0x0083e160  EA::ArgScript::cExpression::EvalRealFactor
 // ===========================================================================
-// 0x0083e160 (byte-exact lifted version: match/slices/s0083e160/s0083e160.cpp)
+// 0x0083e160: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083e160/s0083e160.cpp
 long double EA::ArgScript::cExpression::EvalRealFactor(const char** p) {
     long double base = EvalSignedRealNumber(p);
     DiscardWhiteSpace(p);

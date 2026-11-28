@@ -278,7 +278,7 @@ void CDS::GodModeUpdateReticles()
 // =======================================================================
 // 0x00ce9380 - 215 bytes: union of the posses' screen rects
 // =======================================================================
-// 0x00ce9380 (byte-exact lifted version: match/slices/s00ce9380/s00ce9380.cpp)
+// 0x00ce9380: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ce9380/s00ce9380.cpp
 void CDS::AccumulatePosseArea(Vec4* out)
 {
     int i;

@@ -20,7 +20,6 @@ struct C_00ea23e0 { void FUN_00ea23e0(); };
 struct C_00ea25f0 { int FUN_00ea25f0(); };
 
 // @ 0x00ea2670
-// @ 0x00ea2670
 extern "C" bool __fastcall FUN_00ea2670(char* self, int edx_unused, int a4, int a8)
 {
     int t1000;

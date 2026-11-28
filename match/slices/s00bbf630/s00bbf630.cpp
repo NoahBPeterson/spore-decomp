@@ -463,7 +463,7 @@ Elem12* median(Elem12* a, Elem12* b, Elem12* c, KeyIntern intern, AllocNode* cle
     }
 }
 
-// 0x00bbfce0 (byte-exact lifted version: match/slices/s00bbfce0/s00bbfce0.cpp)  eastl::Internal::get_partition
+// 0x00bbfce0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bbfce0/s00bbfce0.cpp  eastl::Internal::get_partition
 Elem12* get_partition(Elem12* first, Elem12* last, Elem12 pivot, KeyIntern intern, AllocNode* cleanup)
 {
     for (;;) {

@@ -137,7 +137,7 @@ float FUN_00e503a0(int which) {  cGuard16 g;
     default: return 10.0f;
   }}
 
-// 0x00e507d0 (byte-exact lifted version: match/slices/s00e507d0/s00e507d0.cpp)
+// 0x00e507d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e507d0/s00e507d0.cpp
 unsigned FUN_00e507d0(float a, float b) {
   float f = (a / b) * 2.0f;
   int i = _mm_cvt_ss2si(_mm_set_ss(f));
@@ -184,7 +184,7 @@ bool FUN_00e505f0(int* arr, int n, int key) {
   return false;
 }
 
-// 0x00e50540 (byte-exact lifted version: match/slices/s00e50540/s00e50540.cpp)
+// 0x00e50540: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e50540/s00e50540.cpp
 bool FUN_00e50540(char* p) {
   unsigned a = FNV1_String8("cell_EggkidSmall", 0x811c9dc5, 1);
   if (*(int*)(*(int*)(p + 0x108)) == (int)a) return true;
@@ -549,7 +549,7 @@ extern "C" void FUN_00e4f920_standin(int u, float* v, float a, float b, float c,
   FUN_00e4f920(u, v, a, b, c, p);
 }
 
-// 0x00e4fd30 (byte-exact lifted version: match/slices/s00e4fd30/s00e4fd30.cpp)  fill 13 bytes from a fixed 1/0 pattern
+// 0x00e4fd30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e4fd30/s00e4fd30.cpp  fill 13 bytes from a fixed 1/0 pattern
 int FUN_00e4fd30(unsigned char* p) {
   unsigned char* q = p;
   int key = -2;

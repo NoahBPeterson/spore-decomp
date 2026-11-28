@@ -285,7 +285,7 @@ void FloatVec::pushBack(const float& value)
     }
 }
 
-// 0x00a1a500 (byte-exact lifted version: match/slices/s00a1a500/s00a1a500.cpp)
+// 0x00a1a500: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a1a500/s00a1a500.cpp
 void RcdVec::resize(unsigned n)
 {
     ResponseCurveData* end = mpEnd;

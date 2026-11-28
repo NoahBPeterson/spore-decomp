@@ -552,7 +552,7 @@ struct SetMerger {
     void UnionRange(UIntVector* out, float a, float b, UIntRangeMap* map);
 };
 
-// 0x005650b0 (byte-exact lifted version: match/slices/s005650b0/s005650b0.cpp) odn sym=?UnionRange@SetMerger@@QAEXPAUUIntVector@@IIPAUUIntRangeMap@@@Z
+// 0x005650b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005650b0/s005650b0.cpp odn sym=?UnionRange@SetMerger@@QAEXPAUUIntVector@@IIPAUUIntRangeMap@@@Z
 void SetMerger::UnionRange(UIntVector* out, uint32_t a, uint32_t b, UIntRangeMap* map)
 {
     pair<MapIter, MapIter> range = map->FindRange(a, b);
@@ -570,7 +570,7 @@ void SetMerger::UnionRange(UIntVector* out, uint32_t a, uint32_t b, UIntRangeMap
     }
 }
 
-// 0x00565210 (byte-exact lifted version: match/slices/s00565210/s00565210.cpp) odn sym=?UnionRange@SetMerger@@QAEXPAUUIntVector@@MMPAUUIntRangeMap@@@Z
+// 0x00565210: not byte-exact; the byte-exact version is the lifted one in match/slices/s00565210/s00565210.cpp odn sym=?UnionRange@SetMerger@@QAEXPAUUIntVector@@MMPAUUIntRangeMap@@@Z
 void SetMerger::UnionRange(UIntVector* out, float a, float b, UIntRangeMap* map)
 {
     pair<MapIter, MapIter> range = map->FindRange(a, b);

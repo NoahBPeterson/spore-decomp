@@ -784,7 +784,7 @@ void cRecordMap::FUN_00de9dc0(const void* pKey)
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x00de9e20 (byte-exact lifted version: match/slices/s00de9e20/s00de9e20.cpp)
+// 0x00de9e20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00de9e20/s00de9e20.cpp
 // ---------------------------------------------------------------------------------------------
 void cGameInfoVector::FUN_00de9e20(uint32_t nCount)
 {

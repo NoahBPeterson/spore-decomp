@@ -12,7 +12,6 @@ struct S3 { int m0; int m1; int m2; };
 
 struct D_00510350 { void FUN_00510350(int a4, int a8, int a12, int a16); };
 // @ 0x00510350
-// @ 0x00510350
 void D_00510350::FUN_00510350(int a4, int a8, int a12, int a16)
 {
     char dead_0_15;

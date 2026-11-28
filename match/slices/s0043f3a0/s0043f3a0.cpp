@@ -165,7 +165,7 @@ float cSPEditorBlock::F3a0()
     return 0.0f;
 }
 
-// 0x0043f3f0 (byte-exact lifted version: match/slices/s0043f3f0/s0043f3f0.cpp)
+// 0x0043f3f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043f3f0/s0043f3f0.cpp
 float cSPEditorBlock::F3f0()
 {
     int count = vec340.size();
@@ -176,7 +176,7 @@ float cSPEditorBlock::F3f0()
     return 1.0f;
 }
 
-// 0x0043f4d0 (byte-exact lifted version: match/slices/s0043f4d0/s0043f4d0.cpp)
+// 0x0043f4d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043f4d0/s0043f4d0.cpp
 float cSPEditorBlock::F4d0()
 {
     int count = vec340.size();
@@ -218,7 +218,7 @@ void cSPEditorBlock::FFa0(Matrix3 m)
     }
 }
 
-// 0x00440020 (byte-exact lifted version: match/slices/s00440020/s00440020.cpp)
+// 0x00440020: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440020/s00440020.cpp
 void cSPEditorBlock::F4020(float v, uint8_t b)
 {
     F40420(v, b);
@@ -229,7 +229,7 @@ void cSPEditorBlock::F4020(float v, uint8_t b)
     }
 }
 
-// 0x00440090 (byte-exact lifted version: match/slices/s00440090/s00440090.cpp)
+// 0x00440090: not byte-exact; the byte-exact version is the lifted one in match/slices/s00440090/s00440090.cpp
 void cSPEditorBlock::F4090(float v, uint8_t b)
 {
     F40520(v, b, 0);

@@ -8,7 +8,6 @@ struct C_00922270 { void FUN_00922270(); };
 struct C_009222a0 { void FUN_009222a0(unsigned int, unsigned int); };
 
 // @ 0x0112c640
-// @ 0x0112c640
 extern "C" bool __fastcall FUN_0112c640(char* self, int edx_unused, int a4)
 {
     int t1003;

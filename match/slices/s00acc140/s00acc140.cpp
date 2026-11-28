@@ -461,7 +461,7 @@ void VO::FUN_00acc770() {
     *(int*)(p + 0x11c) -= (e - b) >> 2 << 2;
 }
 
-// 0x00acc800 (byte-exact lifted version: match/slices/s00acc800/s00acc800.cpp)  (LoadSelector)
+// 0x00acc800: not byte-exact; the byte-exact version is the lifted one in match/slices/s00acc800/s00acc800.cpp  (LoadSelector)
 void __stdcall FUN_00acc800(KeyVec* v) {
     LivingUniverse* lu = (LivingUniverse*)FUN_01021260();
     if (!lu) return;
@@ -738,7 +738,7 @@ void VO::FUN_00acc390() {
     }
 }
 
-// 0x00accd70 (byte-exact lifted version: match/slices/s00accd70/s00accd70.cpp)
+// 0x00accd70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00accd70/s00accd70.cpp
 void FUN_00accd70(int arr, uint n) {
     for (uint i = 0; i < n; i++) {
         int node = *(int*)(arr + i * 4);

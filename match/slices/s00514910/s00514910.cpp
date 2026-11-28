@@ -160,7 +160,7 @@ struct ByteVec {
     void Insert(uint8_t* position, uint32_t n, const uint8_t& value);        // 0x005151b0
 };
 
-// 0x00515000 (byte-exact lifted version: match/slices/s00515000/s00515000.cpp)
+// 0x00515000: not byte-exact; the byte-exact version is the lifted one in match/slices/s00515000/s00515000.cpp
 template <typename T>
 void DequeBase<T>::Construct(uint32_t n)
 {

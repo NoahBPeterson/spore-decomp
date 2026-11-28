@@ -567,7 +567,7 @@ void ChartFillN_6de8f0(ChartIt_6de850 first, unsigned n, const ChartElem_6de850&
         new (&*cur) ChartElem_6de850(value);
 }
 
-// 0x006de980 (byte-exact lifted version: match/slices/s006de980/s006de980.cpp)
+// 0x006de980: not byte-exact; the byte-exact version is the lifted one in match/slices/s006de980/s006de980.cpp
 void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;
@@ -591,7 +591,7 @@ void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_
     FUN_006de4e0(param_1, param_2, param_4, param_5);
 }
 
-// 0x006de9f0 (byte-exact lifted version: match/slices/s006de9f0/s006de9f0.cpp)
+// 0x006de9f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006de9f0/s006de9f0.cpp
 void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;
@@ -984,7 +984,7 @@ void ClusterMapAdder::AddCluster(int* rect)
     }
 }
 
-// 0x006dfca0 (byte-exact lifted version: match/slices/s006dfca0/s006dfca0.cpp)
+// 0x006dfca0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006dfca0/s006dfca0.cpp
 int Elem16Vector::Elem16VecEraseRange(int dest, int from)
 {
     int* self = (int*)this;

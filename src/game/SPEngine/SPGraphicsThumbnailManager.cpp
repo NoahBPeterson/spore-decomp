@@ -5070,7 +5070,7 @@ void ItemList::Fn(int a, int b, int c, int d)
 void partial_007b4a50(void)
 {}
 
-// 0x007b4b10 (byte-exact lifted version: match/slices/s007b4b10/s007b4b10.cpp)
+// 0x007b4b10: not byte-exact; the byte-exact version is the lifted one in match/slices/s007b4b10/s007b4b10.cpp
 void partial_007b4b10(void)
 {}
 

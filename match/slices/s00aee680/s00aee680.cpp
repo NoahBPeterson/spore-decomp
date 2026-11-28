@@ -498,7 +498,7 @@ uint32_t* GetBehaviorVectorFromResource(uint32_t* pOut, void* pKey, int a, int b
 // ---------------------------------------------------------------------------
 // 0x00aeeda0  SP::GetBehaviorUnlockFlag
 // ---------------------------------------------------------------------------
-// 0x00aeeda0 (byte-exact lifted version: match/slices/s00aeeda0/s00aeeda0.cpp)
+// 0x00aeeda0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aeeda0/s00aeeda0.cpp
 uint8_t GetBehaviorUnlockFlag(void* pKey)
 {
     cBehaviorTable* pTable = (cBehaviorTable*)LookupResourceRecord(pKey);
@@ -528,7 +528,7 @@ void GetBehaviorFlags(uint8_t* pFlags, void* pKey)
 // ---------------------------------------------------------------------------
 // 0x00aeef00  SP::CountBehaviorSubRecords
 // ---------------------------------------------------------------------------
-// 0x00aeef00 (byte-exact lifted version: match/slices/s00aeef00/s00aeef00.cpp)
+// 0x00aeef00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aeef00/s00aeef00.cpp
 int CountBehaviorSubRecords(void* pKey)
 {
     int nCount = 0;
@@ -550,7 +550,7 @@ int CountBehaviorSubRecords(void* pKey)
 // ---------------------------------------------------------------------------
 // 0x00aeefc0  SP::GetBehaviorSubRecordValues
 // ---------------------------------------------------------------------------
-// 0x00aeefc0 (byte-exact lifted version: match/slices/s00aeefc0/s00aeefc0.cpp)
+// 0x00aeefc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00aeefc0/s00aeefc0.cpp
 uint32_t* GetBehaviorSubRecordValues(uint32_t* pOut, void* pKey, int nWanted, int a)
 {
     int nIndex = 0;

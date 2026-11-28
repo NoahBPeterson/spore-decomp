@@ -10,7 +10,6 @@ struct S16 { int m0; int m1; int m2; int m3; int m4; int m5; int m6; int m7; int
 
 struct D_0045d790 { int FUN_0045d790(int a4); };
 // @ 0x0045d790
-// @ 0x0045d790
 int D_0045d790::FUN_0045d790(int a4)
 {
     int v_l64_r;

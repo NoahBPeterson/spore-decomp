@@ -354,7 +354,7 @@ bool cCellFactoryBinary::ReadResource(void* stream, void* p3, void* p4, void* p5
 }
 
 // =====================================================================
-// 0x00e4cfc0 (byte-exact lifted version: match/slices/s00e4cfc0/s00e4cfc0.cpp)  SP::cCellFactoryBinary::GetSupportedTypes
+// 0x00e4cfc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e4cfc0/s00e4cfc0.cpp  SP::cCellFactoryBinary::GetSupportedTypes
 // =====================================================================
 int __stdcall CellFactory_GetSupportedTypes(unsigned* out, unsigned n)
 {

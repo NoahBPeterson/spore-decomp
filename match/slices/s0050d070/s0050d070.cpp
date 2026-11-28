@@ -9,7 +9,6 @@ struct S6 { int m0; int m1; int m2; int m3; int m4; int m5; };
 
 struct D_0050d070 { int FUN_0050d070(int a4); };
 // @ 0x0050d070
-// @ 0x0050d070
 int D_0050d070::FUN_0050d070(int a4)
 {
     int v_l64_r;

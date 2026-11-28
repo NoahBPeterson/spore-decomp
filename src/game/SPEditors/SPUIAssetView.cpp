@@ -950,7 +950,7 @@ void FUN_00659270(void* self)
 void FUN_00659340(void* self)
 { (void)self; }
 
-// 0x006593c0 (byte-exact lifted version: match/slices/s006593c0/s006593c0.cpp)
+// 0x006593c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006593c0/s006593c0.cpp
 void FUN_006593c0(void* self)
 { (void)self; }
 

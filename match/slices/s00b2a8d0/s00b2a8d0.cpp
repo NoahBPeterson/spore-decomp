@@ -636,7 +636,7 @@ int HashTableDistance(HashTableIterator first, HashTableIterator last)
     return IteratorDistanceImpl(first, last, category);
 }
 
-// 0x00b2b6d0 (byte-exact lifted version: match/slices/s00b2b6d0/s00b2b6d0.cpp)
+// 0x00b2b6d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b2b6d0/s00b2b6d0.cpp
 void* cEventTree::Insert(const uint32_t* pKey)
 {
     cEventNode* pNode = (cEventNode*)mHeader.mpParent;

@@ -8,7 +8,6 @@ struct C_00f45970 { void FUN_00f45970(); };
 struct C_00f45a80 { int FUN_00f45a80(); };
 
 // @ 0x00edfce0
-// @ 0x00edfce0
 extern "C" bool __cdecl FUN_00edfce0(int a4, int a8)
 {
     int t1002;

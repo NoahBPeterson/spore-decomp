@@ -4300,7 +4300,7 @@ void PromoteOccluder(cOccluder_s0074_5ac0* first, int topPosition, int heapSize,
     FUN_00743e50(first, topPosition, position, value, compare);
 }
 
-// 0x00745e00 (byte-exact lifted version: match/slices/s00745e00/s00745e00.cpp)
+// 0x00745e00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00745e00/s00745e00.cpp
 // adjust_heap for the 8-byte pair with the greater comparator.
 void FUN_00743f00(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value); // 0x00743f00
 void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int position,
@@ -4320,7 +4320,7 @@ void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int posit
     FUN_00743f00(first, topPosition, position, value);
 }
 
-// 0x00745e80 (byte-exact lifted version: match/slices/s00745e80/s00745e80.cpp)
+// 0x00745e80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00745e80/s00745e80.cpp
 // adjust_heap for the 8-byte pair with the less comparator.
 void FUN_00743f60(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value); // 0x00743f60
 void PromotePairLt(FloatKeyPair* first, int topPosition, int heapSize, int position,
@@ -4431,7 +4431,7 @@ bool FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
     return 0;
 }
 
-// 0x00746250 (byte-exact lifted version: match/slices/s00746250/s00746250.cpp)
+// 0x00746250: not byte-exact; the byte-exact version is the lifted one in match/slices/s00746250/s00746250.cpp
 void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int idx)
 {
     MWInternal* p = handle ? (MWInternal*)((char*)handle - 8) : 0;
@@ -5185,7 +5185,7 @@ void FUN_00747980(int* d, int* entry)
     RelObj(o);
 }
 
-// 0x00747ac0 (byte-exact lifted version: match/slices/s00747ac0/s00747ac0.cpp)
+// 0x00747ac0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00747ac0/s00747ac0.cpp
 Rec38* Rec38Stub::F(Rec38* src)
 {
     Rec38* dst = (Rec38*)this;

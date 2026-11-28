@@ -1093,7 +1093,7 @@ bool cSPUIRolloverCivCityVehicle_s00e2_b9d0::Initialize()
 }
 }  // namespace civroll
 
-// 0x00e2c290 (byte-exact lifted version: match/slices/s00e2c290/s00e2c290.cpp)
+// 0x00e2c290: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e2c290/s00e2c290.cpp
 namespace civroll {
 cString_s00e2_b9d0* cStringVec::Erase(cString_s00e2_b9d0* first, cString_s00e2_b9d0* last)
 {

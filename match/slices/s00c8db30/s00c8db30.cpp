@@ -458,7 +458,7 @@ __declspec(noinline) void Vec0C::resize(unsigned int n, const Vec3& rValue)
 }
 
 // ===========================================================================
-// 0x00c8deb0 (byte-exact lifted version: match/slices/s00c8deb0/s00c8deb0.cpp)  cGameData::RemoveOwner / TotemPole teardown
+// 0x00c8deb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8deb0/s00c8deb0.cpp  cGameData::RemoveOwner / TotemPole teardown
 // ===========================================================================
 void __fastcall TP_RemoveOwner(TotemPole* pSelf)
 {
@@ -494,7 +494,7 @@ bool TotemPole::PostDataLoad(unsigned int nID)
 }
 
 // ===========================================================================
-// 0x00c8df60 (byte-exact lifted version: match/slices/s00c8df60/s00c8df60.cpp)  cSpatialObject model reset / release helper (this = +0x34)
+// 0x00c8df60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8df60/s00c8df60.cpp  cSpatialObject model reset / release helper (this = +0x34)
 // ===========================================================================
 void __fastcall TP_ResetModels(SpatialBody* pSelf)
 {
@@ -588,7 +588,7 @@ IOObject* __cdecl F8e310(IOObject* pStream, const uint32_t* pData)
 }
 
 // ===========================================================================
-// 0x00c8e3a0 (byte-exact lifted version: match/slices/s00c8e3a0/s00c8e3a0.cpp)  read 3 uint32 (stream reader)
+// 0x00c8e3a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c8e3a0/s00c8e3a0.cpp  read 3 uint32 (stream reader)
 // ===========================================================================
 IOObject* __cdecl F8e3a0(IOObject* pStream, uint32_t* pData)
 {

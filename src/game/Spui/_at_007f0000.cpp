@@ -324,7 +324,7 @@ void RefCountAdd(void* p)
         VCallV(p, 0x9c);
 }
 
-// 0x007fd200 (byte-exact lifted version: match/slices/s007fd200/s007fd200.cpp)
+// 0x007fd200: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fd200/s007fd200.cpp
 void FlagObj::SetFlag(unsigned mask, bool on)
 {
     unsigned old = mFlags;
@@ -347,7 +347,7 @@ void FlagObj::SetFlag(unsigned mask, bool on)
     }
 }
 
-// 0x007fd390 (byte-exact lifted version: match/slices/s007fd390/s007fd390.cpp)
+// 0x007fd390: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fd390/s007fd390.cpp
 bool WriteSerItem(SerBuffer* p, C53* self, SerItem14* item, void* alloc)
 {
     void* begin = self->M(item);

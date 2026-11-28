@@ -807,7 +807,7 @@ void AnimMgr::Clear()
     Shutdown();
 }
 
-// 0x007f9550 (byte-exact lifted version: match/slices/s007f9550/s007f9550_lifted.cpp)
+// 0x007f9550: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f9550/s007f9550_lifted.cpp
 bool Ev::Eval()
 {
     *(char*)((char*)this + 0x3a) = 0;
@@ -1087,7 +1087,7 @@ bool cSPUIBehaviorEventBase::RemoveAction(cISPUIBehaviorAction * act)
     return false;
 }
 
-// 0x007f9fe0 (byte-exact lifted version: match/slices/s007f9fe0/s007f9fe0.cpp)
+// 0x007f9fe0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007f9fe0/s007f9fe0.cpp
 bool cSPUIBehaviorEventBase::RemoveAllPredicates()
 {
     for (int i = 0; i < 4; ++i) {
@@ -1101,7 +1101,7 @@ bool cSPUIBehaviorEventBase::RemoveAllPredicates()
     return true;
 }
 
-// 0x007fa060 (byte-exact lifted version: match/slices/s007fa060/s007fa060.cpp)
+// 0x007fa060: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fa060/s007fa060.cpp
 bool cSPUIBehaviorEventBase::RemoveAllActions()
 {
     for (int i = 0; i < 4; ++i) {
@@ -1821,7 +1821,7 @@ bool Obj7fc600::f_7fc600(int a, int b)
   return ok;
 }
 
-// 0x007fc690 (byte-exact lifted version: match/slices/s007fc690/s007fc690.cpp)
+// 0x007fc690: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fc690/s007fc690.cpp
 int f_7fc690(void* self, void* param)
 {
   char s[0x10];
@@ -1843,7 +1843,7 @@ int f_7fc690(void* self, void* param)
   return 1;
 }
 
-// 0x007fc790 (byte-exact lifted version: match/slices/s007fc790/s007fc790.cpp)
+// 0x007fc790: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fc790/s007fc790.cpp
 int f_7fc790(void* self, void* param)
 {
   void* old = *(void**)((char*)self + 0x4c);
@@ -1984,7 +1984,7 @@ bool Ev_s007f_c880::HandleBase(int msg, void* arg)
     return false;
 }
 
-// 0x007fd2d0 (byte-exact lifted version: match/slices/s007fd2d0/s007fd2d0.cpp)
+// 0x007fd2d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007fd2d0/s007fd2d0.cpp
 bool __cdecl Vec8CopyFrom(VecOwner* owner, VecSrc* src, VecElemList* list)
 {
     void** d = src->begin;

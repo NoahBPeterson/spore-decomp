@@ -10,7 +10,6 @@ struct C_00525f40 { void FUN_00525f40(); };
 
 struct D_005240e0 { void FUN_005240e0(int a4, int a8, int a12, int a16, int a20); };
 // @ 0x005240e0
-// @ 0x005240e0
 void D_005240e0::FUN_005240e0(int a4, int a8, int a12, int a16, int a20)
 {
     int v_l8;

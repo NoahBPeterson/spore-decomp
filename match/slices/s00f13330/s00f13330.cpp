@@ -600,7 +600,7 @@ extern "C" int __fastcall FUN_00f13b10(void* self)
 // ===========================================================================
 // 0x00f14060 -- copy a linked list of pairs into a flat array.
 // ===========================================================================
-// 0x00f14060 (byte-exact lifted version: match/slices/s00f14060/s00f14060.cpp)
+// 0x00f14060: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f14060/s00f14060.cpp
 extern "C" void FUN_00f14060(uint32_t* node, uint32_t* end, uint32_t* out)
 {
     if (node == end)
@@ -616,7 +616,7 @@ extern "C" void FUN_00f14060(uint32_t* node, uint32_t* end, uint32_t* out)
 // ===========================================================================
 // 0x00f14090 -- copy a linked list of pairs into a flat array, backwards.
 // ===========================================================================
-// 0x00f14090 (byte-exact lifted version: match/slices/s00f14090/s00f14090.cpp)
+// 0x00f14090: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f14090/s00f14090.cpp
 extern "C" void FUN_00f14090(uint32_t start, uint32_t* end, uint32_t* out)
 {
     if ((uint32_t*)start == end)

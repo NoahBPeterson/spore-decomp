@@ -450,7 +450,7 @@ template void vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>::resize(uint32_t, co
 template vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>& vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>::operator=(const vector_s0047_3e40<AutoRefCount_s0047_3e40, 4>&)
 ;
 
-// 0x00474bd0 (byte-exact lifted version: match/slices/s00474bd0/s00474bd0_lifted.cpp)
+// 0x00474bd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00474bd0/s00474bd0_lifted.cpp
 RefVec& RefVec::assign(const RefVec& x)
 {
     if (&x != this) {
@@ -479,7 +479,7 @@ RefVec& RefVec::assign(const RefVec& x)
     return *this;
 }
 
-// 0x00474f30 (byte-exact lifted version: match/slices/s00474f30/s00474f30.cpp)
+// 0x00474f30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00474f30/s00474f30.cpp
 Vec48::~Vec48()
 {
     char* end = mpEnd;
@@ -490,7 +490,7 @@ Vec48::~Vec48()
     Free();
 }
 
-// 0x00474fb0 (byte-exact lifted version: match/slices/s00474fb0/s00474fb0.cpp)
+// 0x00474fb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00474fb0/s00474fb0.cpp
 VecD8::~VecD8()
 {
     char* end = mpEnd;
@@ -501,7 +501,7 @@ VecD8::~VecD8()
     Free();
 }
 
-// 0x00475040 (byte-exact lifted version: match/slices/s00475040/s00475040.cpp)
+// 0x00475040: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475040/s00475040.cpp
 void FixedVecInt::reserve(uint n)
 {
     if ((uint)(mpCapacity - mpBegin) < n) {
@@ -537,7 +537,7 @@ void FixedVecInt::push_back(const int& v)
 int Vec32::size() const
 { return (mpEnd - mpBegin) >> 5; }
 
-// 0x00475320 (byte-exact lifted version: match/slices/s00475320/s00475320.cpp)
+// 0x00475320: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475320/s00475320.cpp
 void Vec32::reserve(uint n)
 {
     if ((uint)((mpCapacity - mpBegin) >> 5) < n) {

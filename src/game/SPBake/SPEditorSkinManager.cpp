@@ -1120,7 +1120,7 @@ void cSPEditorSkinManager_s004c_38e0::Update(uint32_t unused, bool paintAll, uin
 }
 }  // namespace SP
 
-// 0x004c4290 (byte-exact lifted version: match/slices/s004c4290/s004c4290.cpp)
+// 0x004c4290: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c4290/s004c4290.cpp
 namespace SP {
 void cSPEditorSkinManager_s004c_38e0::UpdatePaintedSkin()
 {

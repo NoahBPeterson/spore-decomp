@@ -670,7 +670,7 @@ void* __fastcall FUN_00d59630(void* self, void* edx, void* src)
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x00d596a0 (byte-exact lifted version: match/slices/s00d596a0/s00d596a0.cpp)
+// 0x00d596a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d596a0/s00d596a0.cpp
 // ---------------------------------------------------------------------------------------------
 void* __fastcall FUN_00d596a0(CVec* self, void* edx, int count, Vector3* src, void* alloc)
 {

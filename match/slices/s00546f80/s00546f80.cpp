@@ -448,7 +448,7 @@ void ForceFeedSpecialMembers(SP::Feed::Link* pLink, SP::Feed::FeedDescription* p
 }
 
 namespace SP { namespace Feed {
-// 0x00546f80 (byte-exact lifted version: match/slices/s00546f80/s00546f80_lifted.cpp) sym=??1AtomEntry@Feed@SP@@QAE@XZ
+// 0x00546f80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00546f80/s00546f80_lifted.cpp sym=??1AtomEntry@Feed@SP@@QAE@XZ
 AtomEntry::~AtomEntry() {
     mpAuthor = 0;
 }

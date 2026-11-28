@@ -74,7 +74,7 @@ public:
 
 }}   // namespace EA::Text
 
-// 0x0089b250 (byte-exact lifted version: match/slices/s0089b250/s0089b250_lifted.cpp)
+// 0x0089b250: not byte-exact; the byte-exact version is the lifted one in match/slices/s0089b250/s0089b250_lifted.cpp
 void EA::Text::Typesetter::AddLineBreak(const wchar_t* s, unsigned n, bool a, bool b)
 {
     mItems.PushBackDefault();

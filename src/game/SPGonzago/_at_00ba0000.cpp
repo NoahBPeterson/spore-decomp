@@ -3262,7 +3262,7 @@ void FUN_00ba6a40(unsigned which, unsigned* bits)
   }
 }
 
-// 0x00ba6ab0 (byte-exact lifted version: match/slices/s00ba6ab0/s00ba6ab0.cpp)
+// 0x00ba6ab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba6ab0/s00ba6ab0.cpp
 int FUN_00ba6ab0(unsigned* flags)
 {
   unsigned f = *flags;
@@ -3292,7 +3292,7 @@ void FUN_00ba6cf0(BannerList* self)
   }
 }
 
-// 0x00ba6d80 (byte-exact lifted version: match/slices/s00ba6d80/s00ba6d80.cpp)
+// 0x00ba6d80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba6d80/s00ba6d80.cpp
 int FUN_00ba6d80(BannerList* self, unsigned id)
 {
   if (id == 0) return *(int*)&self->m14C;
@@ -3409,7 +3409,7 @@ void FUN_00ba7100(float* pos, int* outx, int* outy)
   *outy = 0;
 }
 
-// 0x00ba7220 (byte-exact lifted version: match/slices/s00ba7220/s00ba7220.cpp)
+// 0x00ba7220: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ba7220/s00ba7220.cpp
 void FUN_00ba7220(StarManagerCore* self, int* key)
 {
   char* grp = (char*)self->mC8;

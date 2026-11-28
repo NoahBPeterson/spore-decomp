@@ -11,7 +11,7 @@ struct VecOps {
 };
 
 struct VecPtr { int m[4]; void FUN_004c0410(uint32_t n); };
-// 0x004c0410 (byte-exact lifted version: match/slices/s004c0410/s004c0410_lifted.cpp)
+// 0x004c0410: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0410/s004c0410_lifted.cpp
 void VecPtr::FUN_004c0410(uint32_t n) {
     int* self = (int*)this;
     if ((uint32_t)(self[1] - self[0]) < n) {
@@ -51,7 +51,7 @@ void    FUN_004c22a0(Elem8c** pOut, Elem8c* first, Elem8c* last, Elem8c* dst, bo
 // Elem8c copy ctor: thiscall (ecx = destination, one stack argument).
 void __fastcall FUN_0047b950(Elem8c* self, int dummy, const Elem8c* src);                // @ 0x47b950
 
-// 0x004c0bd0 (byte-exact lifted version: match/slices/s004c0bd0/s004c0bd0.cpp)  eastl::vector<Elem8c>::insert(position, n, value)
+// 0x004c0bd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0bd0/s004c0bd0.cpp  eastl::vector<Elem8c>::insert(position, n, value)
 void Container::FUN_004c0bd0(Elem8c* position, uint32_t n, const Elem8c& value) {
     const uint32_t nFree = (uint32_t)(((char*)mCapacity - (char*)mEnd) / 0x8c);
     if (nFree < n) {
@@ -105,7 +105,7 @@ void Container::FUN_004c0bd0(Elem8c* position, uint32_t n, const Elem8c& value) 
     }
 }
 
-// 0x004c0680 (byte-exact lifted version: match/slices/s004c0680/s004c0680.cpp)
+// 0x004c0680: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0680/s004c0680.cpp
 Elem8c* Container::FUN_004c0680(Elem8c* first, Elem8c* last) {
     bool bOutputIsPointer;
     bool bInputIsPointer;
@@ -123,7 +123,7 @@ Elem8c* Container::FUN_004c0680(Elem8c* first, Elem8c* last) {
     return first;
 }
 
-// 0x004c0730 (byte-exact lifted version: match/slices/s004c0730/s004c0730.cpp)
+// 0x004c0730: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0730/s004c0730.cpp
 Elem38* Container::FUN_004c0730(Elem38* first, Elem38* last) {
     bool bOutputIsPointer;
     bool bInputIsPointer;
@@ -159,7 +159,7 @@ struct StrWriter {
     void Free();                         // 004c0b80
 };
 
-// 0x004c0570 (byte-exact lifted version: match/slices/s004c0570/s004c0570.cpp)
+// 0x004c0570: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c0570/s004c0570.cpp
 int* StrWriter::Init(uint32_t a, uint32_t b) {
     int* local_8 = (int*)this + 6;
     mBegin = 0;
@@ -238,7 +238,7 @@ struct BasicString16 {
     BasicString16* sprintf_va_list(const wchar_t* fmt, char* args);  // @ 0x4c09e0
 };
 
-// 0x004c09e0 (byte-exact lifted version: match/slices/s004c09e0/s004c09e0.cpp)
+// 0x004c09e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c09e0/s004c09e0.cpp
 BasicString16* BasicString16::sprintf_va_list(const wchar_t* fmt, char* args) {
     const int nOldSize = (int)(((char*)mpEnd - (char*)mpBegin) >> 1);
     int n = (mpBegin == (uint16_t*)&gEmptyString16)

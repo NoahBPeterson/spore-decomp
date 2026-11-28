@@ -45,7 +45,7 @@ struct RBTree {
     __declspec(noinline) RBNode* DoCreateNode(const RBValue*);
 };
 
-// 0x0088c690 (byte-exact lifted version: match/slices/s0088c690/s0088c690_lifted.cpp)
+// 0x0088c690: not byte-exact; the byte-exact version is the lifted one in match/slices/s0088c690/s0088c690_lifted.cpp
 RBNode* RBTree::DoCreateNode(const RBValue* pValue)
 {
     RBNode* node = mpFreeList;

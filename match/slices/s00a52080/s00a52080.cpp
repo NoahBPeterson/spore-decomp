@@ -323,7 +323,7 @@ void* __cdecl FUN_00a527f0(int sym, int a)
 
 void __cdecl FUN_00a52840(char* obj, t_symbol s, int argc, int* argv);
 
-// 0x00a52840 (byte-exact lifted version: match/slices/s00a52840/s00a52840.cpp)
+// 0x00a52840: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a52840/s00a52840.cpp
 __declspec(noinline) void __cdecl FUN_00a52840(char* obj, t_symbol s, int argc, int* argv)
 {
   if (argc == 1 && obj[0x34] != 0) {

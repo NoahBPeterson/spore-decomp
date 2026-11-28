@@ -633,7 +633,7 @@ cSPTransform2* cSPTransform2::Init(const cSPTransform2* src)
     return this;
 }
 // ----------------------------------------------------------------------------------------
-// 0x00f9b2b0 (byte-exact lifted version: match/slices/s00f9b2b0/s00f9b2b0.cpp)
+// 0x00f9b2b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f9b2b0/s00f9b2b0.cpp
 void* __cdecl FUN_00f96390(void* a, void* b);            // 0x00f96390
 cSPTransform2* cSPTransform2::CopyFrom(const float* pos, const cSPTransform2* src, bool flag)
 {

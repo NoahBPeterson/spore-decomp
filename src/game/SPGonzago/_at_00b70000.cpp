@@ -3898,7 +3898,7 @@ E10* FUN_00b739f0(E10* first, E10* last, E10* dst)
     return dst;
 }
 
-// 0x00b73a30 (byte-exact lifted version: match/slices/s00b73a30/s00b73a30.cpp)
+// 0x00b73a30: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b73a30/s00b73a30.cpp
 cObstacle::cObstacle()
 : cGameData() {
     m34 = 0;

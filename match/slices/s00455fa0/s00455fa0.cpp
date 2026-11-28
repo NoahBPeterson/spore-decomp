@@ -15,7 +15,6 @@ struct S8 { int m0; int m1; int m2; int m3; int m4; int m5; int m6; int m7; };
 
 struct D_00455fa0 { void FUN_00455fa0(int a4, int a8, int a12); };
 // @ 0x00455fa0
-// @ 0x00455fa0
 void D_00455fa0::FUN_00455fa0(int a4, int a8, int a12)
 {
     int v_l44_f;

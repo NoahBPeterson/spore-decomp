@@ -165,7 +165,7 @@ extern int   g_16f9140;
 extern void* g_16f6568;         // shader state object pointer
 
 // ---------------------------------------------------------------------------
-// 0x00961db0 (byte-exact lifted version: match/slices/s00961db0/s00961db0_lifted.cpp)  hashtable::DoFreeNodes(bucketArray, bucketCount)
+// 0x00961db0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00961db0/s00961db0_lifted.cpp  hashtable::DoFreeNodes(bucketArray, bucketCount)
 // ---------------------------------------------------------------------------
 void S961db0::f(void** pbuckets, unsigned count) {
   HNode** buckets = (HNode**)pbuckets;

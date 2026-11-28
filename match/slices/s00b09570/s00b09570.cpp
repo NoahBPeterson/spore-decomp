@@ -259,7 +259,7 @@ static inline u32 FUN_00b058f0_tc(Mgr *p) { return FUN_00b058f0(p, 0); }
 
 // ------------------------------------------------------------------ functions
 
-// 0x00b09570 (byte-exact lifted version: match/slices/s00b09570/s00b09570_lifted.cpp)
+// 0x00b09570: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b09570/s00b09570_lifted.cpp
 Scatter::Scatter(const Scatter &src)
 {
     mX = src.mX;
@@ -723,7 +723,7 @@ void Stream::ReadTreeRefVector(void *pThis, void *pVecRaw)
     pS->EndRead();
 }
 
-// 0x00b0a3f0 (byte-exact lifted version: match/slices/s00b0a3f0/s00b0a3f0.cpp)
+// 0x00b0a3f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b0a3f0/s00b0a3f0.cpp
 Scatter &Scatter::AssignFrom(const Scatter &src)
 {
     mX = src.mX;

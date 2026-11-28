@@ -472,7 +472,7 @@ bool __fastcall FUN_00e9fe40(void* self, void* edx, uint param_2, uint param_3)
     return ok;
 }
 
-// 0x00e9fe90 (byte-exact lifted version: match/slices/s00e9fe90/s00e9fe90.cpp)
+// 0x00e9fe90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e9fe90/s00e9fe90.cpp
 void __fastcall FUN_00e9fe90(cWindowPulse* self, void* edx, IWnd* wnd)
 {
     (void)edx;
@@ -536,7 +536,7 @@ void __fastcall FUN_00e9ffb0(cCityMusicEditor* self, void* edx, void* music)
     ((Thiscall*)(void*)self->mpLoadSave)->SetMusicLoad(music);
 }
 
-// 0x00ea0010 (byte-exact lifted version: match/slices/s00ea0010/s00ea0010.cpp)
+// 0x00ea0010: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea0010/s00ea0010.cpp
 void __fastcall FUN_00ea0010(cCityMusicEditor* self, void* edx, uint param_2)
 {
     (void)edx;

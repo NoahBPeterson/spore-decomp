@@ -1710,7 +1710,7 @@ void FUN_004e9fc0(int modelType, Vec* out, int kind)
     }
 }
 
-// 0x004ea190 (byte-exact lifted version: match/slices/s004ea190/s004ea190.cpp)
+// 0x004ea190: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ea190/s004ea190.cpp
 void FUN_004ea190(int id, Vec* out, int flag)
 {
     DeclareParam d;

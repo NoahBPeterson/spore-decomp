@@ -743,7 +743,7 @@ BasicString* BasicString::assign(const char* first, const char* last)
     return this;
 }
 
-// 0x00455d60 (byte-exact lifted version: match/slices/s00455d60/s00455d60.cpp)
+// 0x00455d60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00455d60/s00455d60.cpp
 int* StringAppend(int* self, const char* first, const char* last)
 {
     if (first != last) {
@@ -812,7 +812,7 @@ void Vec32::resize(uint n)
     }
 }
 
-// 0x00475930 (byte-exact lifted version: match/slices/s00475930/s00475930.cpp)
+// 0x00475930: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475930/s00475930.cpp
 namespace eastl {
 basic_string_s0047_4bd0& basic_string_s0047_4bd0::append_sprintf_va_list(const char* fmt, void* args)
 {
@@ -843,7 +843,7 @@ basic_string_s0047_4bd0& basic_string_s0047_4bd0::append_sprintf_va_list(const c
 }
 }  // namespace eastl
 
-// 0x00475ab0 (byte-exact lifted version: match/slices/s00475ab0/s00475ab0.cpp)
+// 0x00475ab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00475ab0/s00475ab0.cpp
 namespace eastl {
 void basic_string_s0047_4bd0::RangeInitialize(uint n)
 {
@@ -940,7 +940,7 @@ RefPtr& RefPtr::operator=(Counted_s0047_8930* p)
     return *this;
 }
 
-// 0x00478e00 (byte-exact lifted version: match/slices/s00478e00/s00478e00.cpp)
+// 0x00478e00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00478e00/s00478e00.cpp
 void Vec29c::Elem29Insert(Elem29c* position, uint n, const Elem29c& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x29c < n) {
@@ -1010,7 +1010,7 @@ void Vec12::Elem12Insert(E12_s0047_8930* position, uint n, const E12_s0047_8930&
     }
 }
 
-// 0x004797a0 (byte-exact lifted version: match/slices/s004797a0/s004797a0.cpp)
+// 0x004797a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004797a0/s004797a0.cpp
 void Shift12Out(E12_s0047_8930** out, E12_s0047_8930* first, E12_s0047_8930* last, E12_s0047_8930* dest)
 {
     E12_s0047_8930* d = dest;
@@ -1244,7 +1244,7 @@ void V16::Insert(P16* position, uint n, const P16& value)
     }
 }
 
-// 0x0047ae60 (byte-exact lifted version: match/slices/s0047ae60/s0047ae60.cpp)
+// 0x0047ae60: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047ae60/s0047ae60.cpp
 void Vec32_s0047_a5a0::DoInsertValues(Elem32* position, uint n, const Elem32& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x20 < n) {
@@ -1282,7 +1282,7 @@ void Vec32_s0047_a5a0::DoInsertValues(Elem32* position, uint n, const Elem32& va
     }
 }
 
-// 0x0047b3d0 (byte-exact lifted version: match/slices/s0047b3d0/s0047b3d0.cpp)
+// 0x0047b3d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047b3d0/s0047b3d0.cpp
 Elem20* Copy20Range(Elem20* first, Elem20* last, Elem20* dest)
 {
     Elem20* d = dest;
@@ -1405,7 +1405,7 @@ Obj29C::Obj29C(const Obj29C& o)
 {
 }
 
-// 0x0047bf30 (byte-exact lifted version: match/slices/s0047bf30/s0047bf30.cpp)
+// 0x0047bf30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047bf30/s0047bf30.cpp
 Str8_s0047_b480* Str8_s0047_b480::resize(uint n, char c)
 {
     const uint cur = (uint)(mpEnd - mpBegin);
@@ -1425,7 +1425,7 @@ Str8_s0047_b480* Str8_s0047_b480::resize(uint n, char c)
     return this;
 }
 
-// 0x0047c010 (byte-exact lifted version: match/slices/s0047c010/s0047c010.cpp)
+// 0x0047c010: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047c010/s0047c010.cpp
 Counted_s0047_b480** CopyRefs(Counted_s0047_b480** first, Counted_s0047_b480** last, Counted_s0047_b480** dest)
 {
     for (; first != last; ++first) {
@@ -1438,7 +1438,7 @@ Counted_s0047_b480** CopyRefs(Counted_s0047_b480** first, Counted_s0047_b480** l
     return dest;
 }
 
-// 0x0047c0d0 (byte-exact lifted version: match/slices/s0047c0d0/s0047c0d0.cpp)
+// 0x0047c0d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047c0d0/s0047c0d0.cpp
 void AssignRefs(Counted_s0047_b480** first, Counted_s0047_b480** last, Counted_s0047_b480** value)
 {
     for (; first != last; ++first) {
@@ -1452,7 +1452,7 @@ void AssignRefs(Counted_s0047_b480** first, Counted_s0047_b480** last, Counted_s
     }
 }
 
-// 0x0047c140 (byte-exact lifted version: match/slices/s0047c140/s0047c140.cpp)
+// 0x0047c140: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047c140/s0047c140.cpp
 void* Copy29Range(void* first, void* last, void* dest)
 {
     char* d = (char*)dest;
@@ -1464,7 +1464,7 @@ void* Copy29Range(void* first, void* last, void* dest)
     return d;
 }
 
-// 0x0047c1c0 (byte-exact lifted version: match/slices/s0047c1c0/s0047c1c0.cpp)
+// 0x0047c1c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047c1c0/s0047c1c0.cpp
 E16* Copy16Range(E16* first, E16* last, E16* dest)
 {
     for (; first != last; ++first, ++dest) {
@@ -1473,7 +1473,7 @@ E16* Copy16Range(E16* first, E16* last, E16* dest)
     return dest;
 }
 
-// 0x0047c240 (byte-exact lifted version: match/slices/s0047c240/s0047c240.cpp)
+// 0x0047c240: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047c240/s0047c240.cpp
 void* Copy16Ctor(void* first, void* last, void* dest)
 {
     char* d = (char*)dest;

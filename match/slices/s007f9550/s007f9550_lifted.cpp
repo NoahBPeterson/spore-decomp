@@ -21,7 +21,6 @@ extern "C" unsigned char g_01485720[];
 
 struct D_007f9550 { bool FUN_007f9550(); };
 // @ 0x007f9550
-// @ 0x007f9550
 bool D_007f9550::FUN_007f9550()
 {
     *(unsigned char*)((char*)(int)this + 58) = (unsigned char)0;

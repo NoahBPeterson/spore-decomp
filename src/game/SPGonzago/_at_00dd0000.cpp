@@ -2629,7 +2629,7 @@ cInterfaceState::cInterfaceState(cDispatchObject* pTarget)
         ResetCameraNotifier(0);
 }
 
-// 0x00ddfaa0 (byte-exact lifted version: match/slices/s00ddfaa0/s00ddfaa0.cpp)
+// 0x00ddfaa0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ddfaa0/s00ddfaa0.cpp
 cInterfaceState::~cInterfaceState()
 {
     if (gInterfaceNotifier != nullptr)

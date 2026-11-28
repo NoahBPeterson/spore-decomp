@@ -117,7 +117,7 @@ void hkUnaryAction::getEntities(hkArray<hkEntity*>& out)
     out.pushBack(m_entity);
 }
 
-// 0x0120b960 (byte-exact lifted version: match/slices/s0120b960/s0120b960.cpp)
+// 0x0120b960: not byte-exact; the byte-exact version is the lifted one in match/slices/s0120b960/s0120b960.cpp
 hkBinaryAction::hkBinaryAction(hkEntity* a, hkEntity* b, unsigned int u)
 {
     m_world = 0;
@@ -132,7 +132,7 @@ hkBinaryAction::hkBinaryAction(hkEntity* a, hkEntity* b, unsigned int u)
         b->addReference();
 }
 
-// 0x0120b9c0 (byte-exact lifted version: match/slices/s0120b9c0/s0120b9c0.cpp)
+// 0x0120b9c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0120b9c0/s0120b9c0.cpp
 hkBinaryAction::~hkBinaryAction()
 {
     if (m_entityA)

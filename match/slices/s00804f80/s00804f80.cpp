@@ -10,7 +10,6 @@ extern "C" int __cdecl FUN_0067caa0(...);
 struct C_00813040 { int FUN_00813040(float, float, unsigned int, unsigned int); };
 
 // @ 0x00804f80
-// @ 0x00804f80
 extern "C" void __cdecl FUN_00804f80(float a4, float a8, int a12, int a16)
 {
     int t1001;

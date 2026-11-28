@@ -267,7 +267,7 @@ cSPPalette::cSPPalette() {
   m3c = -1;
 }
 
-// 0x005c5e90 (byte-exact lifted version: match/slices/s005c5e90/s005c5e90.cpp)
+// 0x005c5e90: not byte-exact; the byte-exact version is the lifted one in match/slices/s005c5e90/s005c5e90.cpp
 cSPPalette::~cSPPalette() {
   ShutdownChildren();
 }

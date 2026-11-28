@@ -1343,7 +1343,7 @@ int DatabaseDirectoryFiles_s008d_62f0::GetKeyList(void* pKeyVector, void* pFilte
 }
 }}  // namespace EA::ResourceMan
 
-// 0x008d6be0 (byte-exact lifted version: match/slices/s008d6be0/s008d6be0.cpp)
+// 0x008d6be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008d6be0/s008d6be0.cpp
 namespace EA { namespace ResourceMan {
 void ExtTreeDoNukeSubtree(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
 {

@@ -373,7 +373,7 @@ cContentValidationSummarizer* GetContentValidationSummarizer()
 }
 
 // ===========================================================================
-// 0x00c144e0 (byte-exact lifted version: match/slices/s00c144e0/s00c144e0.cpp)  PoolAlloc  (__thiscall: ecx = pool, one stack arg -> out[2])
+// 0x00c144e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c144e0/s00c144e0.cpp  PoolAlloc  (__thiscall: ecx = pool, one stack arg -> out[2])
 // ===========================================================================
 struct PoolNode {
     uint32_t mNext;     // +0x00  (free-list link, = node[0] when free)
@@ -575,7 +575,7 @@ int CreatureBase::PlayAnimationWithTarget(uint32_t id, void* target, int arg4)
 }
 
 // ===========================================================================
-// 0x00c14940 (byte-exact lifted version: match/slices/s00c14940/s00c14940.cpp)
+// 0x00c14940: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c14940/s00c14940.cpp
 // ===========================================================================
 int CreatureBase::PlayAnimationWithTargetObj(uint32_t id, void* target, int arg5)
 {
@@ -599,7 +599,7 @@ int CreatureBase::InterruptAnimationWithTarget(uint32_t id, void* target, int ar
 }
 
 // ===========================================================================
-// 0x00c149c0 (byte-exact lifted version: match/slices/s00c149c0/s00c149c0.cpp)
+// 0x00c149c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c149c0/s00c149c0.cpp
 // ===========================================================================
 int CreatureBase::InterruptAnimationWithTargetObj(uint32_t id, void* target, int arg5)
 {
@@ -770,7 +770,7 @@ void CreatureBase::NotifySummarizer()
 }
 
 // ===========================================================================
-// 0x00c14e70 (byte-exact lifted version: match/slices/s00c14e70/s00c14e70.cpp)
+// 0x00c14e70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c14e70/s00c14e70.cpp
 // ===========================================================================
 void* __fastcall LookupTextStyle(void* self, void* /*edx*/, uint32_t* key)
 {
@@ -886,7 +886,7 @@ void* CreatureBase::CreateBodyEffectByIndex(int partIdx, uint32_t visualEffectId
 }
 
 // ===========================================================================
-// 0x00c15150 (byte-exact lifted version: match/slices/s00c15150/s00c15150.cpp)
+// 0x00c15150: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c15150/s00c15150.cpp
 // ===========================================================================
 bool CreatureBase::DetachBodyEffectById(void* handle, void* arg3)
 {

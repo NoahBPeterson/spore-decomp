@@ -36,7 +36,6 @@ struct C_00833a80 { int FUN_00833a80(); };
 struct C_00833ba0 { int FUN_00833ba0(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int); };
 
 // @ 0x00806230
-// @ 0x00806230
 extern "C" bool __cdecl FUN_00806230(int a4, int a8, int a12, int a16, int a20)
 {
     int t1000;

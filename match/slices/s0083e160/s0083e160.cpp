@@ -7,7 +7,6 @@ struct C_0083dd70 { double FUN_0083dd70(unsigned int); };
 struct C_0083e160 { double FUN_0083e160(unsigned int); };
 
 // @ 0x0083e160
-// @ 0x0083e160
 extern "C" float __fastcall FUN_0083e160(char* self, int edx_unused, float a4)
 {
     int t1001;

@@ -217,7 +217,7 @@ void PromoteOccluder(cOccluder* first, int topPosition, int heapSize, int positi
     FUN_00743e50(first, topPosition, position, value, compare);
 }
 
-// 0x00745e00 (byte-exact lifted version: match/slices/s00745e00/s00745e00.cpp) : adjust_heap for the 8-byte pair with the greater comparator.
+// 0x00745e00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00745e00/s00745e00.cpp : adjust_heap for the 8-byte pair with the greater comparator.
 void FUN_00743f00(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value);
 void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int position,
                    FloatKeyPair value)
@@ -236,7 +236,7 @@ void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int posit
     FUN_00743f00(first, topPosition, position, value);
 }
 
-// 0x00745e80 (byte-exact lifted version: match/slices/s00745e80/s00745e80.cpp) : adjust_heap for the 8-byte pair with the less comparator.
+// 0x00745e80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00745e80/s00745e80.cpp : adjust_heap for the 8-byte pair with the less comparator.
 void FUN_00743f60(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value);
 void PromotePairLt(FloatKeyPair* first, int topPosition, int heapSize, int position,
                    FloatKeyPair value)
@@ -403,7 +403,7 @@ bool FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
 }
 
 // ===========================================================================
-// 0x00746250 (byte-exact lifted version: match/slices/s00746250/s00746250.cpp) : SP::cModelWorld::SetMaterialInfo.
+// 0x00746250: not byte-exact; the byte-exact version is the lifted one in match/slices/s00746250/s00746250.cpp : SP::cModelWorld::SetMaterialInfo.
 struct SlotObj { void F(int idx, void* handle); };
 struct ObjD8 { void G(void* info); };
 struct MWInternal {

@@ -268,7 +268,7 @@ void __cdecl FUN_009ce560(float* e, int n)
 }
 
 // =====================================================================
-// 0x009ce5e0 (byte-exact lifted version: match/slices/s009ce5e0/s009ce5e0.cpp)
+// 0x009ce5e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009ce5e0/s009ce5e0.cpp
 //   reset the record's rotation/scale scratch fields.
 // =====================================================================
 void SA::FUN_009ce5e0()
@@ -325,7 +325,7 @@ void SA::FUN_009ce740(float x)
 }
 
 // =====================================================================
-// 0x009ce790 (byte-exact lifted version: match/slices/s009ce790/s009ce790.cpp)
+// 0x009ce790: not byte-exact; the byte-exact version is the lifted one in match/slices/s009ce790/s009ce790.cpp
 //   member-wise copy of the whole 0x108-byte record (dst = this, src = arg).
 // =====================================================================
 void SA::FUN_009ce790(SA* src)

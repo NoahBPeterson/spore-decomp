@@ -443,7 +443,7 @@ void cMissionMultiStep::GetUILongDescriptionSoFar(void* pString)
 // ---------------------------------------------------------------------------
 // 0x00c5ad40  cMissionMultiStep::cMissionMultiStep
 // ---------------------------------------------------------------------------
-// 0x00c5ad40 (byte-exact lifted version: match/slices/s00c5ad40/s00c5ad40.cpp)
+// 0x00c5ad40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c5ad40/s00c5ad40.cpp
 cMissionMultiStep::cMissionMultiStep()
 {
     mpStepsBegin = nullptr;
@@ -563,7 +563,7 @@ void RefreshTargetPlanetConditional(cSPMission* pMission)
 // ---------------------------------------------------------------------------
 // 0x00c5b210  cPlanetMission::Read
 // ---------------------------------------------------------------------------
-// 0x00c5b210 (byte-exact lifted version: match/slices/s00c5b210/s00c5b210.cpp)
+// 0x00c5b210: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c5b210/s00c5b210.cpp
 bool cPlanetMission::Read(void* pData)
 {
     bool bBase = ReadMissionBase(pData);

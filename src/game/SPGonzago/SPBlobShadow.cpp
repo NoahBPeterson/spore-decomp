@@ -757,7 +757,7 @@ Mat3Target* __cdecl Matrix3_Transposed(Mat3Target* out, const Matrix3* src)
     return out;
 }
 
-// 0x00537d90 (byte-exact lifted version: match/slices/s00537d90/s00537d90_lifted.cpp)
+// 0x00537d90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00537d90/s00537d90_lifted.cpp
 void cSPSkinPaintParticleEffect::InitParticles(void* a, void* b, void* c)
 {
     (void)a;

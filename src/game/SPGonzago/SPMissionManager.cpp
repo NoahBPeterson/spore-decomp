@@ -1921,7 +1921,7 @@ void cSPMissionManager_s00fe_c590::FUN_00fecbb0(uint32_t nKey)
         mFeedbackMap.Erase(key);
 }
 
-// 0x00fecbf0 (byte-exact lifted version: match/slices/s00fecbf0/s00fecbf0.cpp)
+// 0x00fecbf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fecbf0/s00fecbf0.cpp
 uint32_t cSPMissionManager_s00fe_c590::FUN_00fecbf0()
 {
     if (IsWorldLayoutFlagSet(2)) {
@@ -3497,7 +3497,7 @@ void* spVecF::FUN_00fef570(void* a, void* b)
     return a;
 }
 
-// 0x00fef5d0 (byte-exact lifted version: match/slices/s00fef5d0/s00fef5d0.cpp)
+// 0x00fef5d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fef5d0/s00fef5d0.cpp
 void cSPMissionManager_s00fe_f140::ShutdownForGame()
 {
     cSimTicker_s00fe_f140* t = (cSimTicker_s00fe_f140*)FUN_00b3d330();

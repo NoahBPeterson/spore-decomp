@@ -318,7 +318,7 @@ int BigObj::fn28b80(WStr* out) {
   return FUN_00eeea50(this, out);
 }
 
-// 0x00f28c50 (byte-exact lifted version: match/slices/s00f28c50/s00f28c50.cpp)
+// 0x00f28c50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f28c50/s00f28c50.cpp
 int TextObj::fn28c50(void* stream) {
   ListSer ser;
   ser.ctor(this, &g_015aff90, 0x1a80d26);

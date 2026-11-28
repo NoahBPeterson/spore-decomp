@@ -549,7 +549,7 @@ void __cdecl FUN_00b6fc90(ISerializer* s, HashUIntARC* map)
     s->EndItem();
 }
 
-// 0x00b6fd80 (byte-exact lifted version: match/slices/s00b6fd80/s00b6fd80.cpp)  broadcast a notification to every strategy in the +0x48 triple map.
+// 0x00b6fd80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b6fd80/s00b6fd80.cpp  broadcast a notification to every strategy in the +0x48 triple map.
 bool __cdecl FUN_00b6fd80(unsigned a, HashTripleARC* map)
 {
     NodeTripleARC** bucket = map->mpBucket;

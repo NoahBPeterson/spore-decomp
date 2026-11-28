@@ -1271,7 +1271,7 @@ void EA::XHTML::Layout::Page_s008e_b250::CreateAttributeStyles(void* pElement, v
     }
 }
 
-// 0x008ec0e0 (byte-exact lifted version: match/slices/s008ec0e0/s008ec0e0.cpp)
+// 0x008ec0e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008ec0e0/s008ec0e0.cpp
 void* EA::XHTML::Layout::TextStyleHashtable::AllocNode(const void* pStyle)
 {
     void* pNode = mpFreeList;

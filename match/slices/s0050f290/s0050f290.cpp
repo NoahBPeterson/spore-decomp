@@ -14,7 +14,6 @@ struct S6 { int m0; int m1; int m2; int m3; int m4; int m5; };
 
 struct D_0050f290 { void FUN_0050f290(int a4, int a8, int a12); };
 // @ 0x0050f290
-// @ 0x0050f290
 void D_0050f290::FUN_0050f290(int a4, int a8, int a12)
 {
     int dead_0_15[2];

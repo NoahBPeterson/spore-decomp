@@ -298,7 +298,7 @@ void cTribeDisplayStrategy::FUN_00cca0a0()
 // ===========================================================================
 // 0x00cca0e0 - 43 bytes: copy `count` 3-float records
 // ===========================================================================
-// 0x00cca0e0 (byte-exact lifted version: match/slices/s00cca0e0/s00cca0e0.cpp)
+// 0x00cca0e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cca0e0/s00cca0e0.cpp
 void FUN_00cca0e0_impl(void* dst, unsigned count, const void* src)
 {
     struct P3 { u32 a, b, c; };
@@ -847,7 +847,7 @@ u8* FUN_00ccad80_impl(u8* first, u8* last, const void* key)
 // ===========================================================================
 // 0x00ccaf60 - 129 bytes: sCheckForBabiesThatGrewUp handler
 // ===========================================================================
-// 0x00ccaf60 (byte-exact lifted version: match/slices/s00ccaf60/s00ccaf60.cpp)
+// 0x00ccaf60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ccaf60/s00ccaf60.cpp
 char __cdecl FUN_00ccaf60(void* self)
 {
     u8* p = (u8*)self;

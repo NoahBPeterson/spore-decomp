@@ -396,7 +396,7 @@ bool cSPEditorBlock::F_43ecb0()
     return result;
 }
 
-// 0x0043eef0 (byte-exact lifted version: match/slices/s0043eef0/s0043eef0.cpp)
+// 0x0043eef0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0043eef0/s0043eef0.cpp
 cSPBoundingBox cSPEditorBlock::F_43eef0()
 {
     cSPBoundingBox box;

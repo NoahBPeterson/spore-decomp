@@ -216,7 +216,7 @@ static __forceinline short ToFixed14(float value)
     out[(r) * 4 + 2] = ToFixed14(src[(r) * 72 + 2]); \
     out[(r) * 4 + 3] = ToFixed14(src[(r) * 72 + 3]);
 
-// 0x01167cf0 (byte-exact lifted version: match/slices/s01167cf0/s01167cf0.cpp)
+// 0x01167cf0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01167cf0/s01167cf0.cpp
 void PackHeightBlock(const float* src, short* dst)
 {
     short* end = dst + 576;

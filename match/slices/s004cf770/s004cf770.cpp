@@ -185,7 +185,7 @@ __forceinline Word32* copy(const Word32* first, const Word32* last, Word32* resu
     return (Word32*)memmove(result, first, (unsigned int)((uint32_t)last - (uint32_t)first)) + (last - first);
 }
 
-// 0x004cf770 (byte-exact lifted version: match/slices/s004cf770/s004cf770_lifted.cpp)
+// 0x004cf770: not byte-exact; the byte-exact version is the lifted one in match/slices/s004cf770/s004cf770_lifted.cpp
 template <> void vector<Rec14>::DoInsertValues(Rec14* position, uint32_t n, const Rec14& value)
 {
     if (n <= (uint32_t)(mpCapacity - mpEnd)) {

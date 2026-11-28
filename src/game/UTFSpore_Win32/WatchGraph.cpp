@@ -300,7 +300,7 @@ bool EA::UTFWinControls::WatchGraph::OnRebuild(void* ctx)
     return true;
 }
 
-// 0x00992480 (byte-exact lifted version: match/slices/s00992480/s00992480_lifted.cpp)
+// 0x00992480: not byte-exact; the byte-exact version is the lifted one in match/slices/s00992480/s00992480_lifted.cpp
 u8 __fastcall WatchGraph_OnTick(char* self, int)
 {
     // Rings the history buffer: for each live history node, sample the graph value into the ring
@@ -324,7 +324,7 @@ u8 __fastcall WatchGraph_OnTick(char* self, int)
     return 1;
 }
 
-// 0x00992550 (byte-exact lifted version: match/slices/s00992550/s00992550.cpp)
+// 0x00992550: not byte-exact; the byte-exact version is the lifted one in match/slices/s00992550/s00992550.cpp
 void* __fastcall WatchGraph_scalarDtor(char* self, int, u8 flags)
 {
     st32(self, 0, 0x1446078u);            // vtbl WatchGraph

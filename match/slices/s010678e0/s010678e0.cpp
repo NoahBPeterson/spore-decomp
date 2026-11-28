@@ -410,7 +410,7 @@ u8 cSPUISpace::FUN_01067b60() {
     return 1;
 }
 
-// 0x01067c50 (byte-exact lifted version: match/slices/s01067c50/s01067c50.cpp) SetToolTip
+// 0x01067c50: not byte-exact; the byte-exact version is the lifted one in match/slices/s01067c50/s01067c50.cpp SetToolTip
 void cSPUISpace::SetToolTip(void* a1, void* a2, void* a3, void* a4, void* a5) {
     cLayoutHolder* h = mpLayoutHolder;
     void* w1 = h->FindWindowByID(0x44ead4f, 1);
@@ -471,7 +471,7 @@ void cSPUISpace::FUN_01067e70(void* p1, Key* key) {
     SetToolTip(p1, img, mTooltipText.GetText(), 0, &local);
 }
 
-// 0x01067ef0 (byte-exact lifted version: match/slices/s01067ef0/s01067ef0.cpp) FUN_01067ef0
+// 0x01067ef0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01067ef0/s01067ef0.cpp FUN_01067ef0
 Blk28* cSPUISpace::FUN_01067ef0(u32 id) {
     int count = (int)(mpListEnd - mpListBegin);
     for (int i = 0; i < count; ++i) {

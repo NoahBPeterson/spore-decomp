@@ -611,7 +611,7 @@ cTexturePreload::cTexturePreload(int n)
         ((VecReserve*)&mInProgress)->Reserve(n);
     }
 }
-// 0x007b02f0 (byte-exact lifted version: match/slices/s007b02f0/s007b02f0.cpp)
+// 0x007b02f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007b02f0/s007b02f0.cpp
 cTexturePreload::~cTexturePreload() {}
 
 // ---------------------------------------------------------------------------

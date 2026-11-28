@@ -261,7 +261,7 @@ class cSPPalettePage {
 };
 // ---- items of slice s005c85d0 end
 
-// 0x005c7f50 (byte-exact lifted version: match/slices/s005c7f50/s005c7f50.cpp)
+// 0x005c7f50: not byte-exact; the byte-exact version is the lifted one in match/slices/s005c7f50/s005c7f50.cpp
 namespace SP {
 cSPPalettePageBase_s005c_7500::cSPPalettePageBase_s005c_7500() {
   mFloat14 = 0.0f;

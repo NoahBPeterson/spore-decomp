@@ -916,7 +916,7 @@ bool __stdcall RangeNotEmpty(void* p)
     return false;
 }
 
-// 0x00a6cdb0 (byte-exact lifted version: match/slices/s00a6cdb0/s00a6cdb0.cpp)
+// 0x00a6cdb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a6cdb0/s00a6cdb0.cpp
 cGlobalParams::cGlobalParams()
 {
     mParticleDensity = 1.0f;
@@ -1187,7 +1187,7 @@ const char* cEffectsManager_s00a6_d020::GetStatsString()
 }
 }}  // namespace EA::Swarm
 
-// 0x00a6d730 (byte-exact lifted version: match/slices/s00a6d730/s00a6d730.cpp)
+// 0x00a6d730: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a6d730/s00a6d730.cpp
 namespace EA { namespace Swarm {
 bool cEffectsManager_s00a6_d020::GetEffectInfo(int a, const char* name)
 {

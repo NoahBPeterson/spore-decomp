@@ -733,7 +733,7 @@ void cSPUIPosseItem::MotiveBarsAndBackgroundCollectInitialMetrics()
     }
 }
 
-// 0x00e22370 (byte-exact lifted version: match/slices/s00e22370/s00e22370.cpp)
+// 0x00e22370: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e22370/s00e22370.cpp
 char cSPUIPosseItem::Shutdown()
 {
     if (mpField13c && MessageServer())

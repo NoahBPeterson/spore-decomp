@@ -484,7 +484,7 @@ void init_16679d0()
     atexit(&FUN_013c0c50);
 }
 
-// 0x01300010 (byte-exact lifted version: match/slices/s01300010/s01300010.cpp)
+// 0x01300010: not byte-exact; the byte-exact version is the lifted one in match/slices/s01300010/s01300010.cpp
 void init_1549834()
 {
     FUN_0089a570();

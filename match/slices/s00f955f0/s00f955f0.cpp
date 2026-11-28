@@ -613,7 +613,7 @@ char cTerrainOverlay::ClearSlot()
     mVal08 = 0;
     return 1;
 }
-// 0x00f964b0 (byte-exact lifted version: match/slices/s00f964b0/s00f964b0.cpp)
+// 0x00f964b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f964b0/s00f964b0.cpp
 int __fastcall ReleaseRef(int* self)
 {
     int* p = (int*)((char*)self + 4);
@@ -638,7 +638,7 @@ void* cDynCast::Cast(unsigned id)
     return 0;
 }
 
-// 0x00f96520 (byte-exact lifted version: match/slices/s00f96520/s00f96520.cpp)
+// 0x00f96520: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f96520/s00f96520.cpp
 void cTerrainSphere::RemoveFromEffectsSystem()
 {
     int* mgr = Sub_67ddd0();

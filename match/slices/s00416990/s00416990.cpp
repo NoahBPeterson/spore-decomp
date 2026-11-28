@@ -245,7 +245,7 @@ void EditorPanel::CollectAll(EntrySink* out)
     }
 }
 
-// 0x00417150 (byte-exact lifted version: match/slices/s00417150/s00417150.cpp)
+// 0x00417150: not byte-exact; the byte-exact version is the lifted one in match/slices/s00417150/s00417150.cpp
 float EditorPanel::GetSlotValue(KeyedEvent* ev)
 {
     ResourceKey* key = &ev->key;

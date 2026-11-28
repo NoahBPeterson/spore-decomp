@@ -2820,7 +2820,7 @@ void __cdecl FUN_009ce560(float* e, int n)
     e[0] = s;
 }
 
-// 0x009ce5e0 (byte-exact lifted version: match/slices/s009ce5e0/s009ce5e0.cpp)
+// 0x009ce5e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009ce5e0/s009ce5e0.cpp
 void SA::FUN_009ce5e0()
 {
     f08 = 0.0f; f04 = 0.0f; f00 = 0.0f;
@@ -2865,7 +2865,7 @@ void SA::FUN_009ce740(float x)
     f80 = v;
 }
 
-// 0x009ce790 (byte-exact lifted version: match/slices/s009ce790/s009ce790.cpp)
+// 0x009ce790: not byte-exact; the byte-exact version is the lifted one in match/slices/s009ce790/s009ce790.cpp
 void SA::FUN_009ce790(SA* src)
 {
     f00 = src->f00; f04 = src->f04; f08 = src->f08; f0c = src->f0c;

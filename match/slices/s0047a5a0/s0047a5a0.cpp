@@ -129,7 +129,7 @@ struct Elem20
     }
 };
 
-// 0x0047b3d0 (byte-exact lifted version: match/slices/s0047b3d0/s0047b3d0.cpp)
+// 0x0047b3d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047b3d0/s0047b3d0.cpp
 Elem20* Copy20Range(Elem20* first, Elem20* last, Elem20* dest)
 {
     Elem20* d = dest;
@@ -172,7 +172,7 @@ struct Vec32
     void DoInsertValues(Elem32* position, uint n, const Elem32& value);
 };
 
-// 0x0047ae60 (byte-exact lifted version: match/slices/s0047ae60/s0047ae60.cpp)
+// 0x0047ae60: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047ae60/s0047ae60.cpp
 void Vec32::DoInsertValues(Elem32* position, uint n, const Elem32& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x20 < n) {

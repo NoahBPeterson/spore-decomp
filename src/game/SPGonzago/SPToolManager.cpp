@@ -2077,7 +2077,7 @@ cToolObjectData_s0104_e290::cToolObjectData_s0104_e290(SP::cToolObjectData::eToo
     mLootDropTimeS = 0;
 }
 
-// 0x0104e2f0 (byte-exact lifted version: match/slices/s0104e2f0/s0104e2f0.cpp)
+// 0x0104e2f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104e2f0/s0104e2f0.cpp
 uint32_t cSpaceInventoryItem_GetItemCount(cSpaceInventoryItemData* pItem, uint32_t* pCount)
 {
     if (((pItem->mnFlags >> 5) & 1) != 0)
@@ -2201,7 +2201,7 @@ void cSPSpaceToolData_s0104_e060::FreeEffectBuffers()
         operator_delete__(ppBlock[0]);
 }
 
-// 0x0104e7b0 (byte-exact lifted version: match/slices/s0104e7b0/s0104e7b0.cpp)
+// 0x0104e7b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104e7b0/s0104e7b0.cpp
 cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
 {
     cToolCategoryNode* pNode = (cToolCategoryNode*)
@@ -2218,7 +2218,7 @@ cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
     return pNode;
 }
 
-// 0x0104e810 (byte-exact lifted version: match/slices/s0104e810/s0104e810.cpp)
+// 0x0104e810: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104e810/s0104e810.cpp
 cSPSpaceToolData_s0104_e060* cSPSpaceToolData_s0104_e060::CopyFrom(cSPSpaceToolData_s0104_e060* pOther)
 {
     cSPSpaceInventoryItem::operator=(pOther);
@@ -2391,7 +2391,7 @@ void DoChargeEffects(cSPSpaceToolData_s0104_e060* pTool)
     }
 }
 
-// 0x0104ef00 (byte-exact lifted version: match/slices/s0104ef00/s0104ef00.cpp)
+// 0x0104ef00: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104ef00/s0104ef00.cpp
 void ClearEffectLists(cEffectLists* pLists)
 {
     pLists->mpList0[0] = nullptr;
@@ -2437,7 +2437,7 @@ void cSPToolManager::ShutdownGonzagoSubsystem()
     }
 }
 
-// 0x0104f250 (byte-exact lifted version: match/slices/s0104f250/s0104f250.cpp)
+// 0x0104f250: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104f250/s0104f250.cpp
 void cSPToolManager::ClearToolEffects()
 {
     cEffectNode* pNode = (cEffectNode*)mpEffectTreeRoot;
@@ -2654,7 +2654,7 @@ CToolManager* __fastcall FUN_0104f960(CToolManager* pThis)
     return pThis;
 }
 
-// 0x0104fa90 (byte-exact lifted version: match/slices/s0104fa90/s0104fa90.cpp)
+// 0x0104fa90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0104fa90/s0104fa90.cpp
 bool __fastcall FUN_0104fa90(CToolManager* pThis, int, CToolObject* pTool)
 {
     if (pTool == 0)

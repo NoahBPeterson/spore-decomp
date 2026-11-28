@@ -279,7 +279,7 @@ using namespace SP;
 // ---------------------------------------------------------------------------
 // 005ce060 -- create a vertebra body, add it to the world, attach listener.
 // ---------------------------------------------------------------------------
-// 0x005ce060 (byte-exact lifted version: match/slices/s005ce060/s005ce060.cpp)
+// 0x005ce060: not byte-exact; the byte-exact version is the lifted one in match/slices/s005ce060/s005ce060.cpp
 int* cSPEditorSpine::AddVertebraBody(int* out, float scale, hkTransform* transform) {
   out[0] = 0;
   out[1] = 0;

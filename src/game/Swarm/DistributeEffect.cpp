@@ -2604,7 +2604,7 @@ void FUN_00a88490(float* out, float param_2, float param_3, float param_4)
     out[1] = ((c2 - (c1 * fVar4) * DAT_01471064) * fVar4 + c1) * a;
 }
 
-// 0x00a88640 (byte-exact lifted version: match/slices/s00a88640/s00a88640.cpp)
+// 0x00a88640: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a88640/s00a88640.cpp
 void FUN_00a88640(int base, void* renderer)
 {
     short* p = (short*)(base + 2);
@@ -3418,7 +3418,7 @@ SampleVector_s00a8_b940::SampleVector_s00a8_b940(const SampleVector_s00a8_b940& 
 }
 }}  // namespace EA::Swarm
 
-// 0x00a8c4e0 (byte-exact lifted version: match/slices/s00a8c4e0/s00a8c4e0.cpp)
+// 0x00a8c4e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a8c4e0/s00a8c4e0.cpp
 namespace EA { namespace Swarm {
 RefPtr* PtrVector::erase(RefPtr* first, RefPtr* last)
 {

@@ -265,7 +265,7 @@ struct cCloudSurfaceCommand {
 // Function bodies.
 // ===========================================================================
 
-// 0x00f57590 (byte-exact lifted version: match/slices/s00f57590/s00f57590_lifted.cpp)
+// 0x00f57590: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f57590/s00f57590_lifted.cpp
 cCloudDescription& cCloudDescription::operator=(const cCloudDescription& src)
 {
     m08 = src.m08;
@@ -366,7 +366,7 @@ void cCloudSurfaceCommand::Execute(EA::ArgScript::cArguments& args)
     mState->mFlags |= 0x1000;
 }
 
-// 0x00f57ba0 (byte-exact lifted version: match/slices/s00f57ba0/s00f57ba0.cpp)
+// 0x00f57ba0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f57ba0/s00f57ba0.cpp
 void cCloudEffect::Execute(EA::ArgScript::cArguments& args)
 {
     int count;

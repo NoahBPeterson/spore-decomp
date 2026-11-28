@@ -2319,7 +2319,7 @@ void cSPUIGlobalUICiv_s00e0_43c0::SetMinimapStateFromButton(int mode)
     SPUIHelpers_SetTooltipText(target, str);
 }
 
-// 0x00e046b0 (byte-exact lifted version: match/slices/s00e046b0/s00e046b0.cpp)
+// 0x00e046b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e046b0/s00e046b0.cpp
 void cSPUIGlobalUICiv_s00e0_43c0::SetStanceButtonsState(int a0, int a1, int a2, int a3, int a4)
 {
     if (a0 != 0) {

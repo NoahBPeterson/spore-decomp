@@ -6,7 +6,6 @@ extern "C" int __cdecl FUN_009c6860(...);
 struct C_009c6c30 { void FUN_009c6c30(); };
 
 // @ 0x009c7ff0
-// @ 0x009c7ff0
 extern "C" int __fastcall FUN_009c7ff0(char* self, int edx_unused)
 {
     int t1003;

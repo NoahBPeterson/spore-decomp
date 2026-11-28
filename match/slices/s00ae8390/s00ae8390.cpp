@@ -116,7 +116,7 @@ void Host::FUN_00ae9000(int a) {
 void Host::FUN_00ae9150(int a, int b) {
   GetCommScreen()->FUN_00dd2780(a, b);
 }
-// 0x00ae9040 (byte-exact lifted version: match/slices/s00ae9040/s00ae9040.cpp)
+// 0x00ae9040: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ae9040/s00ae9040.cpp
 int Host::FUN_00ae9040(int a, int b, u32* out1, u32* out2) {
   FUN_00b3d2a0((u32)b);
   u32 m = FUN_00ba6dc0((u32)b);

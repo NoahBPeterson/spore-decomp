@@ -355,7 +355,7 @@ void cGameplayMarker::Shutdown()
     ShutdownMarkerExtras();
 }
 
-// 0x00c3efb0 (byte-exact lifted version: match/slices/s00c3efb0/s00c3efb0.cpp)
+// 0x00c3efb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c3efb0/s00c3efb0.cpp
 cGameplayMarker::cGameplayMarker()
 {
     mType = 0;

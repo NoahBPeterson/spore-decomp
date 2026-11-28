@@ -153,7 +153,7 @@ void FUN_4a3760(const Vec3* in, float* px, float* py)
     *py = (1.0f - v[1]) * res.w * 0.5f;
 }
 
-// 0x004a37f0 (byte-exact lifted version: match/slices/s004a37f0/s004a37f0.cpp)
+// 0x004a37f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a37f0/s004a37f0.cpp
 BlockVector FUN_4a37f0(cSPEditorModel* model, unsigned int effectId)
 {
     BlockVector result;
@@ -211,7 +211,7 @@ EaVector FUN_4a3920(cSPEditorModel* model, bool symmetric)
     return result;
 }
 
-// 0x004a3c70 (byte-exact lifted version: match/slices/s004a3c70/s004a3c70.cpp)
+// 0x004a3c70: not byte-exact; the byte-exact version is the lifted one in match/slices/s004a3c70/s004a3c70.cpp
 cSPEditorBlock* FUN_4a3c70(cSPEditorBlock* block, Vec3 target)
 {
     if (!block->mSocketConnector)

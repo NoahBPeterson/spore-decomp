@@ -336,7 +336,7 @@ template <> void Vec<GaitItem>::reserve(int n)
     }
 }
 
-// 0x009df8b0 (byte-exact lifted version: match/slices/s009df8b0/s009df8b0.cpp) Vec::Vec
+// 0x009df8b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009df8b0/s009df8b0.cpp Vec::Vec
 template <> Vec<GaitItem>::Vec(unsigned int n, const GaitItem& value, int unused)
 {
     GaitItem* p = n ? (GaitItem*)operator new(n * sizeof(GaitItem), "Anim/gait/untagged",

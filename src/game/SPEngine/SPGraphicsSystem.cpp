@@ -925,7 +925,7 @@ void cObjectRef::Flush()
   }
 }
 
-// 0x007a4cb0 (byte-exact lifted version: match/slices/s007a4cb0/s007a4cb0.cpp)
+// 0x007a4cb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007a4cb0/s007a4cb0.cpp
 bool SP::cGraphicsSystem::InitRenderer()
 {
   char* const fresh = (char*)EXT_75fb90();

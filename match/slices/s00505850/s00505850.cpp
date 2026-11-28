@@ -308,7 +308,7 @@ void __fastcall cCreatureAbility_dtor(cCreatureAbility* self)
     self->mVtbl = (void*)0x13ef094u;
 }
 
-// 0x00506590 (byte-exact lifted version: match/slices/s00506590/s00506590.cpp)  (Setup)
+// 0x00506590: not byte-exact; the byte-exact version is the lifted one in match/slices/s00506590/s00506590.cpp  (Setup)
 void __fastcall cCreatureAbility_Setup(cCreatureAbility* self, int param)
 {
     self->mSlots[0] = CreateRTT(param);

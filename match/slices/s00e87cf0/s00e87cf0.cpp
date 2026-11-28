@@ -526,7 +526,7 @@ cCitySoundLoopView* __stdcall MakeCitySoundLoopView(void* owner)
     return p;
 }
 
-// 0x00e88680 (byte-exact lifted version: match/slices/s00e88680/s00e88680.cpp)
+// 0x00e88680: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e88680/s00e88680.cpp
 cCityWallsView::cCityWallsView()
 {
     mpCity = 0;

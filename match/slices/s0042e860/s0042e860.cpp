@@ -241,7 +241,7 @@ inline void CopyPairsOuter(PairIter dest, PairIter last, PairIter first)
     CopyPairsInner(dest, last, first);
 }
 
-// 0x0042eba0 (byte-exact lifted version: match/slices/s0042eba0/s0042eba0.cpp)
+// 0x0042eba0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0042eba0/s0042eba0.cpp
 PairRec* PairAllocator::AllocateCopy(unsigned int n, PairIter first, PairIter last)
 {
     PairRec* mem;

@@ -210,7 +210,7 @@ struct cTDS {
 };
 
 // ===========================================================================
-// 0x00ccbb60 (byte-exact lifted version: match/slices/s00ccbb60/s00ccbb60.cpp)
+// 0x00ccbb60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ccbb60/s00ccbb60.cpp
 // ===========================================================================
 void cTDS::FUN_00ccbb60(void* key)
 {

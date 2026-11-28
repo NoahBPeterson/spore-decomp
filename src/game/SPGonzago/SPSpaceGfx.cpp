@@ -825,7 +825,7 @@ public:
 };
 // ---- items of slice s01035900 end
 
-// 0x010346e0 (byte-exact lifted version: match/slices/s010346e0/s010346e0.cpp)
+// 0x010346e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010346e0/s010346e0.cpp
 void Behavior::FUN_010346e0()
 {
     for (int i = 0; i < 4; i++) {
@@ -1592,7 +1592,7 @@ void AllianceGraphUpdate(uint32_t param)
     } while (pNode != pHead);
 }
 
-// 0x010377f0 (byte-exact lifted version: match/slices/s010377f0/s010377f0_lifted.cpp)
+// 0x010377f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010377f0/s010377f0_lifted.cpp
 void cSPSpaceGfx_s0103_77f0::UpdateForSpaceGame(int nArg)
 {
     int nContext = cSPLivingUniverse_GetUniverseContext();

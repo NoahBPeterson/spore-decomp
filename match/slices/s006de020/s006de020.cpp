@@ -510,7 +510,7 @@ void FUN_006de8f0(uint32_t* param_1, int param_2, uint32_t* param_3)
 
 // ---------------------------------------------------------------------------
 // 0x006de980: heap sift-down -> sift-up (unsigned).
-// 0x006de980 (byte-exact lifted version: match/slices/s006de980/s006de980.cpp)
+// 0x006de980: not byte-exact; the byte-exact version is the lifted one in match/slices/s006de980/s006de980.cpp
 void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;
@@ -535,7 +535,7 @@ void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_
 }
 
 // 0x006de9f0: heap sift-down -> sift-up (signed).
-// 0x006de9f0 (byte-exact lifted version: match/slices/s006de9f0/s006de9f0.cpp)
+// 0x006de9f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s006de9f0/s006de9f0.cpp
 void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;

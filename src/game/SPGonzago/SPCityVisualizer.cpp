@@ -1990,7 +1990,7 @@ void Vec12::DoAssignValues(Vec3f* position, const Vec3f& value)
     mpCapacity = nb + cap;
 }
 
-// 0x00ac8130 (byte-exact lifted version: match/slices/s00ac8130/s00ac8130.cpp)
+// 0x00ac8130: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ac8130/s00ac8130.cpp
 void CVis::FUN_00ac8130()
 {
     void* a = operator_new6(0x34, "Simulator", 0, 0, 0, 0);
@@ -5852,7 +5852,7 @@ void** __fastcall FUN_00d58510(void* self, void* /*edx*/, void* out, void* obj, 
   return (void**)out;
 }
 
-// 0x00d58610 (byte-exact lifted version: match/slices/s00d58610/s00d58610.cpp)
+// 0x00d58610: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d58610/s00d58610.cpp
 void __cdecl FUN_00d58610(void** lo, void** hi)
 {
   void** p = lo;
@@ -6429,7 +6429,7 @@ void* __fastcall FUN_00d59630(void* self, void* edx, void* src)
     return self;
 }
 
-// 0x00d596a0 (byte-exact lifted version: match/slices/s00d596a0/s00d596a0.cpp)
+// 0x00d596a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d596a0/s00d596a0.cpp
 void* __fastcall FUN_00d596a0(CVec* self, void* edx, int count, Vector3_s00d5_8a80* src, void* alloc)
 {
     (void)edx;
@@ -8159,7 +8159,7 @@ void Elem1CVec::push_back()
     }
 }
 
-// 0x00d5edc0 (byte-exact lifted version: match/slices/s00d5edc0/s00d5edc0.cpp)
+// 0x00d5edc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d5edc0/s00d5edc0.cpp
 cActionCircle_s00d5_e730* ActionCircleVec::erase(cActionCircle_s00d5_e730* first, cActionCircle_s00d5_e730* last)
 {
     cActionCircle_s00d5_e730* newEnd = FUN_00d5d530(last, mEnd, first);

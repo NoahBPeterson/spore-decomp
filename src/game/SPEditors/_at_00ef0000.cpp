@@ -3736,7 +3736,7 @@ void __thiscall Strategy::FUN_00ef0c80()
     *(u32*)((char*)gm + 0x110) -= 1;
 }
 
-// 0x00ef0cd0 (byte-exact lifted version: match/slices/s00ef0cd0/s00ef0cd0.cpp)
+// 0x00ef0cd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ef0cd0/s00ef0cd0.cpp
 void __thiscall Strategy::FUN_00ef0cd0()
 {
     Strategy* this_ = this;
@@ -5153,7 +5153,7 @@ bool __fastcall FUN_00ef46f0(cAssetPanel* self, void* dummy, void* context, Msg*
     return false;
 }
 
-// 0x00ef4940 (byte-exact lifted version: match/slices/s00ef4940/s00ef4940.cpp)
+// 0x00ef4940: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ef4940/s00ef4940.cpp
 void __fastcall FUN_00ef4940(cAssetPanel* self)
 {
     void* p;
@@ -6839,7 +6839,7 @@ void FUN_00ef8590()
     r->ReleaseAll();
 }
 
-// 0x00ef8600 (byte-exact lifted version: match/slices/s00ef8600/s00ef8600.cpp)
+// 0x00ef8600: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ef8600/s00ef8600.cpp
 void CGadget::AudioToggle(int id)
 {
     releaseAll();
@@ -8010,7 +8010,7 @@ bool __cdecl FUN_00efca60(char* a)
     return 1;
 }
 
-// 0x00efcae0 (byte-exact lifted version: match/slices/s00efcae0/s00efcae0.cpp)
+// 0x00efcae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00efcae0/s00efcae0.cpp
 void __cdecl FUN_00efcae0()
 {
     int app = SP_App();

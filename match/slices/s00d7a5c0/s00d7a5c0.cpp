@@ -493,7 +493,7 @@ float __cdecl FUN_00d7b1a0(CB* cb)
 
 }  // namespace SP
 
-// 0x00d7b290 (byte-exact lifted version: match/slices/s00d7b290/s00d7b290.cpp)
+// 0x00d7b290: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d7b290/s00d7b290.cpp
 bool __cdecl FUN_00d7b290(void* a, CB* b)
 {
   if (((Iter*)a)->AtBegin()) return false;

@@ -312,7 +312,7 @@ public:
 // ---------------------------------------------------------------------------------------------
 // 0x00c798a0 - eastl::vector<pair<unsigned, cGonzagoTimer>>::erase(first, last)
 // ---------------------------------------------------------------------------------------------
-// 0x00c798a0 (byte-exact lifted version: match/slices/s00c798a0/s00c798a0.cpp) tPairVec::erase
+// 0x00c798a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c798a0/s00c798a0.cpp tPairVec::erase
 tPair28* tPairVec::erase(tPair28* pFirst, tPair28* pLast)
 {
     tPair28* pNewEnd = (tPair28*)FUN_00c771e0(pLast, mpEnd, pFirst);
@@ -473,7 +473,7 @@ void cPlayer::FUN_00c79fa0(cPlayerInner* pObj)
 // ---------------------------------------------------------------------------------------------
 // 0x00c79e20 - SP::cCityInputStrategy::SetBanModePickPriorities
 // ---------------------------------------------------------------------------------------------
-// 0x00c79e20 (byte-exact lifted version: match/slices/s00c79e20/s00c79e20.cpp) cPlayer::SetBanModePickPriorities
+// 0x00c79e20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c79e20/s00c79e20.cpp cPlayer::SetBanModePickPriorities
 void cPlayer::SetBanModePickPriorities(uint32_t nMode, tUintVec* pVec)
 {
     if (nMode >= 10)

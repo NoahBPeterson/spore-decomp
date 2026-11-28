@@ -4635,7 +4635,7 @@ extern "C" int __fastcall FUN_00f13b10(void* self)
     return 1;
 }
 
-// 0x00f14060 (byte-exact lifted version: match/slices/s00f14060/s00f14060.cpp)
+// 0x00f14060: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f14060/s00f14060.cpp
 extern "C" void FUN_00f14060(uint32_t* node, uint32_t* end, uint32_t* out)
 {
     if (node == end)
@@ -4648,7 +4648,7 @@ extern "C" void FUN_00f14060(uint32_t* node, uint32_t* end, uint32_t* out)
     } while (node != end);
 }
 
-// 0x00f14090 (byte-exact lifted version: match/slices/s00f14090/s00f14090.cpp)
+// 0x00f14090: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f14090/s00f14090.cpp
 extern "C" void FUN_00f14090(uint32_t start, uint32_t* end, uint32_t* out)
 {
     if ((uint32_t*)start == end)
@@ -5285,7 +5285,7 @@ void Int64ListVector::AssignFromList(ListIterator first, ListIterator last, int 
     }
 }
 
-// 0x00f16330 (byte-exact lifted version: match/slices/s00f16330/s00f16330.cpp)
+// 0x00f16330: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f16330/s00f16330.cpp
 Element* ElementVector::EraseRange(Element* last, Element* pos)
 {
     Element* p = MoveElements(pos, mpEnd, last);
@@ -6443,7 +6443,7 @@ bool cScenarioPlayProgressBar_s00f1_8eb0::IsKindAb(int idx)
 }
 }  // namespace UI
 
-// 0x00f19e00 (byte-exact lifted version: match/slices/s00f19e00/s00f19e00.cpp)
+// 0x00f19e00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f19e00/s00f19e00.cpp
 namespace UI {
 bool __cdecl cScenarioPlayProgressBar_Pred(void* a)
 {
@@ -6934,7 +6934,7 @@ void Simulator::cScenarioPlayMode_s00f1_9e70::FUN_00f1a970(int b)
     }
 }
 
-// 0x00f1aa10 (byte-exact lifted version: match/slices/s00f1aa10/s00f1aa10.cpp)
+// 0x00f1aa10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f1aa10/s00f1aa10.cpp
 float __stdcall FUN_00f1aa10(char flag, ObjHdr* obj)
 {
     if (obj)

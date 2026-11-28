@@ -5513,7 +5513,7 @@ void* RBTreeHead::FindRaw(void** outNode, uint32_t* key)
     return outNode;
 }
 
-// 0x00a05830 (byte-exact lifted version: match/slices/s00a05830/s00a05830.cpp)
+// 0x00a05830: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a05830/s00a05830.cpp
 Vec28* Vec28::Construct(int count, int unused)
 {
     (void)unused;
@@ -5810,7 +5810,7 @@ void anim_creature_s00a0_5c20::SetTargetRoot(anim_creature_s00a0_5c20* target)
     f160 = 0;
 }
 
-// 0x00a062a0 (byte-exact lifted version: match/slices/s00a062a0/s00a062a0.cpp)
+// 0x00a062a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a062a0/s00a062a0.cpp
 void anim_creature_s00a0_5c20::SetTargetBody(anim_creature_s00a0_5c20* target, uint value)
 {
     f154 = 0;
@@ -9638,7 +9638,7 @@ bool AnimMgr::Init(bool flag)
     return true;
 }
 
-// 0x00a0f610 (byte-exact lifted version: match/slices/s00a0f610/s00a0f610.cpp)
+// 0x00a0f610: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a0f610/s00a0f610.cpp
 bool AnimHandler::HandleMessage(u32 id, Msg* m)
 {
     switch (id) {

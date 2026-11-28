@@ -15,7 +15,7 @@
 // ---- OpenSSL error reporting / allocation -------------------------------
 // @ 0x01180d50  ERR_put_error(int lib, int func, int reason, const char* file, int line)
 extern "C" void ERR_put_error(int lib, int func, int reason, const char* file, int line);
-// 0x01183410 (byte-exact lifted version: match/slices/s01183410/s01183410.cpp)  CRYPTO_malloc(int num, const char* file, int line)
+// 0x01183410: not byte-exact; the byte-exact version is the lifted one in match/slices/s01183410/s01183410.cpp  CRYPTO_malloc(int num, const char* file, int line)
 extern "C" void* CRYPTO_malloc(int num, const char* file, int line);
 // @ 0x011835c0  CRYPTO_free(void* addr)
 extern "C" void CRYPTO_free(void* addr);

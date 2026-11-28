@@ -48,7 +48,7 @@ void Elem1CVec::push_back()
 }
 
 // ---------------------------------------------------------------------------
-// 0x00d5edc0 (byte-exact lifted version: match/slices/s00d5edc0/s00d5edc0.cpp)
+// 0x00d5edc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00d5edc0/s00d5edc0.cpp
 // eastl::vector<SP::cActionCircle>::erase(first, last): copy the tail down,
 // destruct the moved-from tail, then shrink mEnd.
 // ---------------------------------------------------------------------------

@@ -1552,7 +1552,7 @@ Daf::Daf()
     m0c = 0;
 }
 
-// 0x0076b000 (byte-exact lifted version: match/slices/s0076b000/s0076b000.cpp)
+// 0x0076b000: not byte-exact; the byte-exact version is the lifted one in match/slices/s0076b000/s0076b000.cpp
 static void FreePhysWorld(void*& slot)
 {
     if (slot == 0)

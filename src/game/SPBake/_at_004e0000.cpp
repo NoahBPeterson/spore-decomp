@@ -531,7 +531,7 @@ void BuildAndDispatch18(void* owner, VerbSink_s004e_7990* sink)
     sink->Deliver(&vec);
 }
 
-// 0x004e8c80 (byte-exact lifted version: match/slices/s004e8c80/s004e8c80.cpp)
+// 0x004e8c80: not byte-exact; the byte-exact version is the lifted one in match/slices/s004e8c80/s004e8c80.cpp
 void** Body8c80(void** first, void** last, void** dest)
 {
     void** d = dest;
@@ -553,7 +553,7 @@ Key5* NodeAlloc::Allocate(const Key5* rp)
     return (Key5*)foo;
 }
 
-// 0x004e8ee0 (byte-exact lifted version: match/slices/s004e8ee0/s004e8ee0.cpp)
+// 0x004e8ee0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004e8ee0/s004e8ee0.cpp
 void** ApplyCopyLoop8ee0(void** out, void** first, void** last, void** dest)
 {
     void** d = dest;
@@ -565,7 +565,7 @@ void** ApplyCopyLoop8ee0(void** out, void** first, void** last, void** dest)
     return out;
 }
 
-// 0x004e8f70 (byte-exact lifted version: match/slices/s004e8f70/s004e8f70.cpp)
+// 0x004e8f70: not byte-exact; the byte-exact version is the lifted one in match/slices/s004e8f70/s004e8f70.cpp
 RWXform::RWXform()
 {
     mp00 = 0;

@@ -3849,7 +3849,7 @@ bool __cdecl Read_00c78130(ISerializerStream_s00c7_7380* pStream, cHashtableHead
     return false;
 }
 
-// 0x00c781e0 (byte-exact lifted version: match/slices/s00c781e0/s00c781e0.cpp)
+// 0x00c781e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c781e0/s00c781e0.cpp
 void __stdcall DestroyPlayerPlanetDataRange(cPlayerPlanetData* pBegin, cPlayerPlanetData* pEnd)
 {
     if (pBegin >= pEnd)
@@ -4241,7 +4241,7 @@ void tRefVec::insert(tAutoRef* pPos, uint32_t n, tAutoRef* pValue)
     }
 }
 
-// 0x00c798a0 (byte-exact lifted version: match/slices/s00c798a0/s00c798a0.cpp)
+// 0x00c798a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c798a0/s00c798a0.cpp
 tPair28* tPairVec::erase(tPair28* pFirst, tPair28* pLast)
 {
     tPair28* pNewEnd = (tPair28*)FUN_00c771e0(pLast, mpEnd, pFirst);
@@ -4385,7 +4385,7 @@ void cPlayer::FUN_00c79b60()
     mpVtbl34 = (void*)&g_vtbl_013eb394;
 }
 
-// 0x00c79e20 (byte-exact lifted version: match/slices/s00c79e20/s00c79e20.cpp)
+// 0x00c79e20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c79e20/s00c79e20.cpp
 void cPlayer::SetBanModePickPriorities(uint32_t nMode, tUintVec* pVec)
 {
     if (nMode >= 10)
@@ -5095,7 +5095,7 @@ void __cdecl FUN_00c7c530(void* stream, cBanModeVec* vec)
     ((cStream*)stream)->c1c();
 }
 
-// 0x00c7c6d0 (byte-exact lifted version: match/slices/s00c7c6d0/s00c7c6d0.cpp)
+// 0x00c7c6d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c7c6d0/s00c7c6d0.cpp
 void cPlayer_s00c7_c0c0::SetGameDataOwner(int owner)
 {
     FUN_00b18550_base(owner);

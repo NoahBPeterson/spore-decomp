@@ -227,7 +227,7 @@ SP::cVolumeDescription::cVolumeDescription()
   }
 }
 
-// 0x007ee630 (byte-exact lifted version: match/slices/s007ee630/s007ee630.cpp)
+// 0x007ee630: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ee630/s007ee630.cpp
 extern "C" void* VolumeRead(int* reader)
 {
   SP::cVolumeDescription* v = (SP::cVolumeDescription*)operator new(0xf0, "Swarm", 0, 0, 0, 0);
@@ -263,7 +263,7 @@ void VolumeCmd::Color(EA::ArgScript::cArguments_s007e_e060* args)
   mParams->mColor = *r;
 }
 
-// 0x007ee7b0 (byte-exact lifted version: match/slices/s007ee7b0/s007ee7b0.cpp)
+// 0x007ee7b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ee7b0/s007ee7b0.cpp
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments_s007e_e060* args)
 {
   char const* const* p = ((EA::ArgScript::cArguments*)args)->MainArguments(1);
@@ -422,7 +422,7 @@ void cVolumeSetCommand::Execute(EA::ArgScript::cArguments_s007e_ed10* args)
   }
 }
 
-// 0x007ef080 (byte-exact lifted version: match/slices/s007ef080/s007ef080.cpp)
+// 0x007ef080: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ef080/s007ef080.cpp
 void cVolumeEffectCommand::Execute(void* args)
 {
   int count = 0;

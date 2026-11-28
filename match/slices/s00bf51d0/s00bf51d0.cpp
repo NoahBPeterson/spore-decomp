@@ -199,7 +199,7 @@ struct VehicleSnapshot
 // ---------------------------------------------------------------------------
 // 0x00bf51d0 - erase [first,last) from a cGonzagoTimer vector.
 // ---------------------------------------------------------------------------
-// 0x00bf51d0 (byte-exact lifted version: match/slices/s00bf51d0/s00bf51d0_lifted.cpp)
+// 0x00bf51d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf51d0/s00bf51d0_lifted.cpp
 GonzagoTimer* TimerVec::eraseRange(GonzagoTimer* first, GonzagoTimer* last)
 {
     GonzagoTimer* newEnd = (GonzagoTimer*)FUN_00bf29c0(last, m_end, first);
@@ -652,7 +652,7 @@ float CityThing::GetDistance(void* key)
 // ---------------------------------------------------------------------------
 // 0x00bf5be0 - city event handler.
 // ---------------------------------------------------------------------------
-// 0x00bf5be0 (byte-exact lifted version: match/slices/s00bf5be0/s00bf5be0.cpp)
+// 0x00bf5be0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bf5be0/s00bf5be0.cpp
 bool CityEventSub::OnEvent(int eventId, void* data)
 {
     if (eventId == 0x1a0219e) {

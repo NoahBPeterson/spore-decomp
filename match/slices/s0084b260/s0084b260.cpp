@@ -8,7 +8,6 @@ extern "C" int __cdecl FUN_0084ab40(...);
 struct C_0084afc0 { int FUN_0084afc0(unsigned int, unsigned int, unsigned int); };
 
 // @ 0x0084b260
-// @ 0x0084b260
 extern "C" void __fastcall FUN_0084b260(char* self, int edx_unused, int a4)
 {
     int t1000;

@@ -6207,7 +6207,7 @@ void KeySink::Store3(int a, int b, int c)
     *(int*)(s + 0x90) = g_dw168a490;
 }
 
-// 0x00bbc460 (byte-exact lifted version: match/slices/s00bbc460/s00bbc460.cpp)
+// 0x00bbc460: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bbc460/s00bbc460.cpp
 void KeySink::Store3B(int a, int b, int c)
 {
     char* s = (char*)this;
@@ -6997,7 +6997,7 @@ void FUN_01066720(int* key)
     SetWindowImage(w, local, -1);
 }
 
-// 0x01066780 (byte-exact lifted version: match/slices/s01066780/s01066780.cpp)
+// 0x01066780: not byte-exact; the byte-exact version is the lifted one in match/slices/s01066780/s01066780.cpp
 bool SpaceZoom::FUN_01066780(int unused, InputEvent* ev)
 {
     (void)unused;
@@ -7619,7 +7619,7 @@ u8 cSPUISpace_s0106_78e0::FUN_01067b60()
     return 1;
 }
 
-// 0x01067c50 (byte-exact lifted version: match/slices/s01067c50/s01067c50.cpp)
+// 0x01067c50: not byte-exact; the byte-exact version is the lifted one in match/slices/s01067c50/s01067c50.cpp
 void cSPUISpace_s0106_78e0::SetToolTip(void* a1, void* a2, void* a3, void* a4, void* a5)
 {
     cLayoutHolder* h = mpLayoutHolder;
@@ -7682,7 +7682,7 @@ void cSPUISpace_s0106_78e0::FUN_01067e70(void* p1, Key* key)
     SetToolTip(p1, img, mTooltipText.GetText(), 0, &local);
 }
 
-// 0x01067ef0 (byte-exact lifted version: match/slices/s01067ef0/s01067ef0.cpp)
+// 0x01067ef0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01067ef0/s01067ef0.cpp
 Blk28* cSPUISpace_s0106_78e0::FUN_01067ef0(u32 id)
 {
     int count = (int)(mpListEnd - mpListBegin);

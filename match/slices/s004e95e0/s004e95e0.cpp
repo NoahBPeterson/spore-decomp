@@ -240,7 +240,7 @@ void AddPaintKeys(DeclareParam param, Vec* out)
 }
 
 // ===========================================================================
-// 0x004ea190 (byte-exact lifted version: match/slices/s004ea190/s004ea190.cpp)  (complete; not byte-exact)
+// 0x004ea190: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ea190/s004ea190.cpp  (complete; not byte-exact)
 // Recursively adds the declare-param entries that a model-type id maps to.
 // ===========================================================================
 void FUN_004ea190(int id, Vec* out, int flag)

@@ -618,7 +618,7 @@ void __stdcall FUN_0080dcd0(void* a, i32 b, u8 c)
     if (apply.mDelta != 0) VisitTree(a, (void*)FUN_0080d670, &apply);
 }
 
-// 0x0080dd50 (byte-exact lifted version: match/slices/s0080dd50/s0080dd50.cpp)
+// 0x0080dd50: not byte-exact; the byte-exact version is the lifted one in match/slices/s0080dd50/s0080dd50.cpp
 int Layered::MethodDD50()
 {
     void* p = vBegin;
@@ -1059,7 +1059,7 @@ void __thiscall LayerInfoVec::dtor()
     if (b && b != inline_) GameFree(b);
 }
 
-// 0x0080ead0 (byte-exact lifted version: match/slices/s0080ead0/s0080ead0.cpp)
+// 0x0080ead0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0080ead0/s0080ead0.cpp
 void __thiscall cSPUILayeredObject_s0080_e6b0::dtor()
 {
     u8* self = (u8*)this;

@@ -8,7 +8,6 @@ template<class T> __forceinline T il2c_k(T v) { return v; }
 
 struct D_0043f4d0 { float FUN_0043f4d0(); };
 // @ 0x0043f4d0
-// @ 0x0043f4d0
 float D_0043f4d0::FUN_0043f4d0()
 {
     int v_l28_g;

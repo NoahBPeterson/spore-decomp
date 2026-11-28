@@ -85,7 +85,7 @@ void Editor::FUN_005dbc10(int p2)
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x005dbc70 (byte-exact lifted version: match/slices/s005dbc70/s005dbc70.cpp)  UTFInternet::HTTPRequest::HTTPRequest
+// 0x005dbc70: not byte-exact; the byte-exact version is the lifted one in match/slices/s005dbc70/s005dbc70.cpp  UTFInternet::HTTPRequest::HTTPRequest
 // Complete, but 24 bytes off: cl schedules the 0.2f constant load late (in the zero-fill
 // loop) where the original hoisted it right after the +0x1c store.
 namespace UTFInternet {

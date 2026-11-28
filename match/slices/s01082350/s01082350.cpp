@@ -252,7 +252,7 @@ class hkWorldObject : public hkReferencedObject { public:
 
 // @ 0x01082590 (addReference; see hkReferencedObject::addReference)
 
-// 0x010825a0 (byte-exact lifted version: match/slices/s010825a0/s010825a0.cpp)
+// 0x010825a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010825a0/s010825a0.cpp
 void hkWorldObject::addProperty(uint32_t key, hkPropertyValue value)
 {
     for (int i = 0; i < m_properties.m_size; ++i)

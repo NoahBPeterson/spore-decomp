@@ -3639,7 +3639,7 @@ ElemVec* ElemVec::assign(const ElemVec& src)
     return this;
 }
 
-// 0x00bc51c0 (byte-exact lifted version: match/slices/s00bc51c0/s00bc51c0.cpp)
+// 0x00bc51c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc51c0/s00bc51c0.cpp
 Node* Reg_s00bc_4730::newNode()
 {
     Node* p;
@@ -4256,7 +4256,7 @@ void SimClass::Destroy()
     BaseDtor();
 }
 
-// 0x00bc7110 (byte-exact lifted version: match/slices/s00bc7110/s00bc7110.cpp)
+// 0x00bc7110: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc7110/s00bc7110.cpp
 Sub* SubVec::Erase(Sub* first, Sub* last)
 {
     Sub* newEnd = ShiftTail(last, e, first);
@@ -4363,7 +4363,7 @@ SubVec* HashMap::FindOrAdd(uint32_t* key)
     return (SubVec*)((char*)it.node + 4);
 }
 
-// 0x00bc74d0 (byte-exact lifted version: match/slices/s00bc74d0/s00bc74d0_lifted.cpp)
+// 0x00bc74d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc74d0/s00bc74d0_lifted.cpp
 void WE::FUN_00bc74d0(uint param_2)
 {
     Rec7* b = (Rec7*)begin;
@@ -4485,7 +4485,7 @@ int __cdecl FUN_00bc7780(Rec_s00bc_74d0* param_1, Rec_s00bc_74d0* param_2, int p
     return param_3;
 }
 
-// 0x00bc77e0 (byte-exact lifted version: match/slices/s00bc77e0/s00bc77e0.cpp)
+// 0x00bc77e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc77e0/s00bc77e0.cpp
 void WE::FUN_00bc77e0(int param_2)
 {
     int iVar2;
@@ -4655,7 +4655,7 @@ void WE::FUN_00bc7b70(uint param_2)
     }
 }
 
-// 0x00bc7c40 (byte-exact lifted version: match/slices/s00bc7c40/s00bc7c40.cpp)
+// 0x00bc7c40: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc7c40/s00bc7c40.cpp
 int WE::FUN_00bc7c40(int param_2, int param_3)
 {
     int* uVar1 = FUN_00bc79f0((void*)param_3, (void*)end, (void*)param_2);
@@ -6106,7 +6106,7 @@ void cAgentOrderManager::Tick(float dt)
     } while (live != 0);
 }
 
-// 0x00bca3d0 (byte-exact lifted version: match/slices/s00bca3d0/s00bca3d0.cpp)
+// 0x00bca3d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bca3d0/s00bca3d0.cpp
 cAgentOrder* cAgentOrder::Assign(cAgentOrder const& o)
 {
     char* dst = (char*)this;
@@ -6360,7 +6360,7 @@ void FUN_00bca990(void* a1, char* list)
     fn(a1);
 }
 
-// 0x00bcaa00 (byte-exact lifted version: match/slices/s00bcaa00/s00bcaa00.cpp)
+// 0x00bcaa00: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bcaa00/s00bcaa00.cpp
 void cAgentOrderManager::FreeAll()
 {
     char* self = (char*)this;
@@ -6399,7 +6399,7 @@ void OrderList::ReleaseNode(char** out, char* node)
     *out = *(char**)node;
 }
 
-// 0x00bcaab0 (byte-exact lifted version: match/slices/s00bcaab0/s00bcaab0.cpp)
+// 0x00bcaab0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bcaab0/s00bcaab0.cpp
 ListNode* RawList::AllocNode()
 {
     OrderPool* pool = (OrderPool*)((char*)this + 8);
@@ -6457,7 +6457,7 @@ void OrderList::ClearList()
     }
 }
 
-// 0x00bcab80 (byte-exact lifted version: match/slices/s00bcab80/s00bcab80.cpp)
+// 0x00bcab80: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bcab80/s00bcab80.cpp
 cAgentOrder* cAgentOrder::CopyConstruct(cAgentOrder const& o)
 {
     char* self = (char*)this;
@@ -6498,7 +6498,7 @@ cAgentOrder* cAgentOrder::CopyConstruct(cAgentOrder const& o)
     return this;
 }
 
-// 0x00bcac60 (byte-exact lifted version: match/slices/s00bcac60/s00bcac60.cpp)
+// 0x00bcac60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bcac60/s00bcac60.cpp
 void OrderList::AllocLink()
 {
     OrderPool* pool = &mAlloc;

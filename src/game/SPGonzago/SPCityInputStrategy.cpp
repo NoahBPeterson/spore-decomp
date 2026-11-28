@@ -1059,7 +1059,7 @@ u32 __stdcall FUN_00cf1060(void* param_1, u32 param_2)
     return 0;
 }
 
-// 0x00cf10d0 (byte-exact lifted version: match/slices/s00cf10d0/s00cf10d0.cpp)
+// 0x00cf10d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cf10d0/s00cf10d0.cpp
 void __cdecl FUN_00cf10d0(void** param_1, void** param_2)
 {
     if (param_1 == param_2)

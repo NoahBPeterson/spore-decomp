@@ -4188,7 +4188,7 @@ cLightingWorld_s0070_ced0* cLightingManager::MakeWorld(int owner, int a3, void* 
     return world;
 }
 
-// 0x0070ddd0 (byte-exact lifted version: match/slices/s0070ddd0/s0070ddd0.cpp)
+// 0x0070ddd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0070ddd0/s0070ddd0.cpp
 bool SP::cLightingManager::Shutdown()
 {
     unsigned char* p = (unsigned char*)this;

@@ -184,7 +184,7 @@ void FUN_00ebbb40(float* param_1)
     param_1[1] = inv * fVar2;
 }
 
-// 0x00ebbc10 (byte-exact lifted version: match/slices/s00ebbc10/s00ebbc10.cpp)
+// 0x00ebbc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ebbc10/s00ebbc10.cpp
 struct WpStub { int* asg(int* p2); int* cpy(int* p2); };
 int* WpStub::asg(int* p1x)
 {
@@ -203,7 +203,7 @@ int* WpStub::asg(int* p1x)
     return p1;
 }
 
-// 0x00ebbcd0 (byte-exact lifted version: match/slices/s00ebbcd0/s00ebbcd0.cpp)
+// 0x00ebbcd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ebbcd0/s00ebbcd0.cpp
 int* WpStub::cpy(int* p2)
 {
     int* p1 = (int*)this;

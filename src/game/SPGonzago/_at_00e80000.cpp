@@ -527,7 +527,7 @@ void ComputeShapeMatchGoals(int n, const Vector3_s00e8_5dc0* restOffsets, const 
     goals[i] = (restOffsets[i] * scale) * T + center;
 }
 
-// 0x00e86880 (byte-exact lifted version: match/slices/s00e86880/s00e86880.cpp)
+// 0x00e86880: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e86880/s00e86880.cpp
 Node* FUN_00e86880(SphereTree* tree, const Vector3_s00e8_5dc0* pos, float f, int data)
 {
   SpherePool* pool = tree->pool;

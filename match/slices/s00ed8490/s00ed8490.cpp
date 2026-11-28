@@ -171,7 +171,7 @@ struct S_c88a00 { void f(int, float); };
 struct S_c8a200 { void f(int, float); };
 
 // ================================================================ 0x00ed8690
-// 0x00ed8690 (byte-exact lifted version: match/slices/s00ed8690/s00ed8690.cpp)
+// 0x00ed8690: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed8690/s00ed8690.cpp
 void FUN_00ed8690(void)
 {
     void* nm = FUN_00b3d300();
@@ -220,7 +220,7 @@ static void clear2(int* field)
         }
     }
 }
-// 0x00ed8780 (byte-exact lifted version: match/slices/s00ed8780/s00ed8780.cpp)
+// 0x00ed8780: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ed8780/s00ed8780.cpp
 void Obj8780::f(unsigned char b)
 {
     char* s = (char*)this;

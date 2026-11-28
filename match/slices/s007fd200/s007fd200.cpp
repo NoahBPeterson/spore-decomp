@@ -42,7 +42,6 @@ extern "C" int __cdecl FUN_007fd140(...);
 
 struct D_007fd200 { void FUN_007fd200(int a4, int a8); };
 // @ 0x007fd200
-// @ 0x007fd200
 void D_007fd200::FUN_007fd200(int a4, int a8)
 {
     int v_l8;

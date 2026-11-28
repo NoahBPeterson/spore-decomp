@@ -320,7 +320,7 @@ void BattleCommand::FloatListParentCommand(EA::ArgScript::cArguments* args) {
     mDesc->mFlags |= 1;
 }
 
-// 0x007ed740 (byte-exact lifted version: match/slices/s007ed740/s007ed740.cpp)  copy effect description fields
+// 0x007ed740: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ed740/s007ed740.cpp  copy effect description fields
 extern "C" int CopyEffectDesc(char* dst, char* src) {
   *(uint32_t*)(dst + 8) = *(uint32_t*)(src + 8);
   if (src + 0xc != dst + 0xc) {

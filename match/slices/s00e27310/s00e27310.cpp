@@ -823,7 +823,7 @@ void cVec8::push_back(cRefPair* src)
 // ===========================================================================
 // 0x00e281a0
 // ===========================================================================
-// 0x00e281a0 (byte-exact lifted version: match/slices/s00e281a0/s00e281a0.cpp)
+// 0x00e281a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e281a0/s00e281a0.cpp
 void cSPUIPosseItem::FUN_00e281a0(u8 flag)
 {
     if (flag != 0)

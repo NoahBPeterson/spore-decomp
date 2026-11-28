@@ -326,7 +326,7 @@ struct MatOut {
 };
 // ---- items of slice s00481f00 end
 
-// 0x0047fa30 (byte-exact lifted version: match/slices/s0047fa30/s0047fa30.cpp)
+// 0x0047fa30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047fa30/s0047fa30.cpp
 void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
 {
     cSPEditorHandle_BaseCtor(self);
@@ -356,7 +356,7 @@ void* __fastcall cSPEditorHandleDeform_Ctor(cSPEditorHandle* self)
     return self;
 }
 
-// 0x0047fc10 (byte-exact lifted version: match/slices/s0047fc10/s0047fc10.cpp)
+// 0x0047fc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047fc10/s0047fc10.cpp
 void __fastcall cSPEditorHandleDeform_Dtor(cSPEditorHandle* self)
 {
     *(void**)self = (void*)0x13ef270;
@@ -437,7 +437,7 @@ void cSPEditorHandleDeform::UpdateDirection(bool flag)
     PlaceHandle();
 }
 
-// 0x0047ff90 (byte-exact lifted version: match/slices/s0047ff90/s0047ff90.cpp)
+// 0x0047ff90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047ff90/s0047ff90.cpp
 Vec3* Mat3_TransformDir_(Vec3* out, char* mat, void* v)
 {
     float a = Vec3_Dot((Vec3*)v, mat);

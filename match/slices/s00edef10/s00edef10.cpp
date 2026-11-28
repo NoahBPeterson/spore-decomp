@@ -147,7 +147,7 @@ void __cdecl f00edf3c0(int p1, int p2, char flag);
 
 // ============================================================ 0x00edf410
 struct LitMgr { char pad[4]; void* GetWorldMainWindow(); };
-// 0x00edf410 (byte-exact lifted version: match/slices/s00edf410/s00edf410.cpp)
+// 0x00edf410: not byte-exact; the byte-exact version is the lifted one in match/slices/s00edf410/s00edf410.cpp
 void Ed::F410()
 {
     int* self = (int*)this;
@@ -229,7 +229,7 @@ void __cdecl f00edf3c0(int p1, int p2, char flag)
 }
 
 // ============================================================ 0x00edfce0
-// 0x00edfce0 (byte-exact lifted version: match/slices/s00edfce0/s00edfce0.cpp)
+// 0x00edfce0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00edfce0/s00edfce0.cpp
 bool __cdecl f00edfce0(void* obj, int* p2)
 {
     bool b = ((Viso*)obj)->F26440(*p2) == 0;

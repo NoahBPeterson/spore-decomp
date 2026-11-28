@@ -314,7 +314,7 @@ using namespace EA::UTFWinControls;
 // ===========================================================================
 // 0x971eb0 WinGrid::SetHeadingFormat
 // ===========================================================================
-// 0x00971eb0 (byte-exact lifted version: match/slices/s00971eb0/s00971eb0_lifted.cpp)
+// 0x00971eb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00971eb0/s00971eb0_lifted.cpp
 void IWinGrid::SetHeadingFormat(const void* pFormat)
 {
     unsigned long* pDst = (unsigned long*)&mVisibleColumnCount;

@@ -18,7 +18,7 @@
 //   @ 0x009e09c0  eastl::vector<0x1c,...>::clear
 //   @ 0x009e0a00  eastl::vector<0x0c,...>::resize(n, value)
 //   @ 0x009e0b20  eastl::vector<0x0c,...>::insert(pos, value)
-// 0x009e0b90 (byte-exact lifted version: match/slices/s009e0b90/s009e0b90.cpp)  destruct-range (count form)             for the 0xa4-stride entry
+// 0x009e0b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e0b90/s009e0b90.cpp  destruct-range (count form)             for the 0xa4-stride entry
 //   @ 0x009e0cd0  eastl::copy (forward)                   for the 0x40-stride entry
 //   @ 0x009e0d30  eastl::copy_backward                    for the 0x40-stride entry
 //
@@ -635,7 +635,7 @@ Elem0CS* Vec0CS::insert(Elem0CS* position, const Elem0CS& value)
 
 // ------------------------------------------------------------------ @ 0x009e0b90
 
-// 0x009e0b90 (byte-exact lifted version: match/slices/s009e0b90/s009e0b90.cpp)
+// 0x009e0b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e0b90/s009e0b90.cpp
 void __stdcall DestroyRangeA4n(ElemA4* first, ElemA4* last)
 {
     if (first >= last)

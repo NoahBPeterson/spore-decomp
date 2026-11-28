@@ -7,7 +7,6 @@ struct C_00b534c0 { void FUN_00b534c0(unsigned int, unsigned int); };
 struct C_00d018d0 { int FUN_00d018d0(unsigned int, unsigned int); };
 
 // @ 0x00bdf7e0
-// @ 0x00bdf7e0
 extern "C" void __fastcall FUN_00bdf7e0(char* self, int edx_unused, int a4)
 {
     int t1003;

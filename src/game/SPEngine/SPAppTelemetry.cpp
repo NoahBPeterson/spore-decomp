@@ -915,7 +915,7 @@ void* ObjAF::Cast(int id)
     return 0;
 }
 
-// 0x007eb060 (byte-exact lifted version: match/slices/s007eb060/s007eb060.cpp)
+// 0x007eb060: not byte-exact; the byte-exact version is the lifted one in match/slices/s007eb060/s007eb060.cpp
 int* FUN_007eb060(int first, int last, int* dst)
 {
     if (first != last) {
@@ -1001,7 +1001,7 @@ bool CTelemetryObj::Write(void* writer)
     return true;
 }
 
-// 0x007eb360 (byte-exact lifted version: match/slices/s007eb360/s007eb360.cpp)
+// 0x007eb360: not byte-exact; the byte-exact version is the lifted one in match/slices/s007eb360/s007eb360.cpp
 ObjB3* ObjB3::FUN_007eb360(VecB* src)
 {
     FUN_007eb000((src->end - src->begin) >> 2, src + 1);

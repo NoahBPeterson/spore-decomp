@@ -214,7 +214,7 @@ typedef void (__thiscall* TailFn)(void*, u8*, u8*);
 #define ELEM_D0 0xd0
 #define ELEM_50 0x50
 
-// 0x00719330 (byte-exact lifted version: match/slices/s00719330/s00719330.cpp)  MeshVecD0::relocateRange — relocate [first,last) and destroy the tail
+// 0x00719330: not byte-exact; the byte-exact version is the lifted one in match/slices/s00719330/s00719330.cpp  MeshVecD0::relocateRange — relocate [first,last) and destroy the tail
 u8* MeshVecD0::relocateRange(u8* first, u8* last)
 {
     u8* r      = (u8*)FUN_00717a90(last, mpEnd, first);

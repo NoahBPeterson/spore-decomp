@@ -126,7 +126,7 @@ E48* destroy_E48(E48* first, E48* last, E48* result)
     return result;
 }
 
-// 0x005031d0 (byte-exact lifted version: match/slices/s005031d0/s005031d0.cpp)
+// 0x005031d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005031d0/s005031d0.cpp
 E48* relocate_E48(E48* first, E48* last, E48* result)
 {
     const bool bHasTrivialCopy = false;

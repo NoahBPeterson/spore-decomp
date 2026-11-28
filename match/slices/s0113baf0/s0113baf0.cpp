@@ -460,7 +460,7 @@ bool FUN_0113c480(uint8_t* p)
     return true;
 }
 
-// 0x0113c550 (byte-exact lifted version: match/slices/s0113c550/s0113c550.cpp)
+// 0x0113c550: not byte-exact; the byte-exact version is the lifted one in match/slices/s0113c550/s0113c550.cpp
 bool FUN_0113c550(uint8_t* p)
 {
     if (p != 0) {
@@ -495,7 +495,7 @@ void FUN_0113c620(uint8_t* p, int param_2)
         W(p, 0xc) = (uint32_t)(p + param_2);
 }
 
-// 0x0113c710 (byte-exact lifted version: match/slices/s0113c710/s0113c710.cpp)
+// 0x0113c710: not byte-exact; the byte-exact version is the lifted one in match/slices/s0113c710/s0113c710.cpp
 bool FUN_0113c710(uint8_t* p)
 {
     FUN_0113c290(p, 0x28);
@@ -563,7 +563,7 @@ uint32_t FUN_0113c950(uint8_t* rec)
     return 0x20;
 }
 
-// 0x0113c9d0 (byte-exact lifted version: match/slices/s0113c9d0/s0113c9d0.cpp)
+// 0x0113c9d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0113c9d0/s0113c9d0.cpp
 bool FUN_0113c9d0(uint8_t* p)
 {
     if (p != 0)

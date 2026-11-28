@@ -3974,7 +3974,7 @@ int __thiscall Obj::GetArrayCount()
     return 0;
 }
 
-// 0x00ca03a0 (byte-exact lifted version: match/slices/s00ca03a0/s00ca03a0.cpp)
+// 0x00ca03a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ca03a0/s00ca03a0.cpp
 int __thiscall Obj::CreateInteract(int key)
 {
     int result = 0;
@@ -4067,7 +4067,7 @@ void __thiscall Obj::ProcessEA()
     }
 }
 
-// 0x00ca07f0 (byte-exact lifted version: match/slices/s00ca07f0/s00ca07f0.cpp)
+// 0x00ca07f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ca07f0/s00ca07f0.cpp
 bool __cdecl FUN_00ca07f0(void* unused, void** range)
 {
     void** begin = (void**)range[0];
@@ -7142,7 +7142,7 @@ void FUN_01355f90(void)
     lib_atexit((void (__cdecl*)())0x13c42d0);
 }
 
-// 0x013579e0 (byte-exact lifted version: match/slices/s013579e0/s013579e0.cpp)
+// 0x013579e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s013579e0/s013579e0.cpp
 void FUN_013579e0(void)
 {
     u32 z = 0;
@@ -7184,7 +7184,7 @@ void FUN_013579e0(void)
     *(u32*)0x169a1a4 = z;
 }
 
-// 0x01357ae0 (byte-exact lifted version: match/slices/s01357ae0/s01357ae0.cpp)
+// 0x01357ae0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01357ae0/s01357ae0.cpp
 void FUN_01357ae0(void)
 {
     u32 z = 0;

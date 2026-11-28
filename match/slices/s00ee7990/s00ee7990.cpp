@@ -109,7 +109,7 @@ void __thiscall SpuEd::Update(void* arg)
     }
 }
 
-// 0x00ee7cb0 (byte-exact lifted version: match/slices/s00ee7cb0/s00ee7cb0.cpp) — find the planet slot whose key/offset pair matches id.
+// 0x00ee7cb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ee7cb0/s00ee7cb0.cpp — find the planet slot whose key/offset pair matches id.
 int __cdecl FindPlanetSlot(u32 id, int* outA, int* outB)
 {
     u32 key, off;

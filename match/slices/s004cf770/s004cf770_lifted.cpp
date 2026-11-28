@@ -14,7 +14,6 @@ struct S5 { int m0; int m1; int m2; int m3; int m4; };
 
 struct D_004cf770 { void FUN_004cf770(int a4, int a8, int a12); };
 // @ 0x004cf770
-// @ 0x004cf770
 void D_004cf770::FUN_004cf770(int a4, int a8, int a12)
 {
     int v_l44_f;

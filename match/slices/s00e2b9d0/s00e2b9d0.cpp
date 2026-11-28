@@ -268,7 +268,7 @@ struct cStringVec
     void     Index(uint32_t i);                                       // 0x00e2ca70
 };
 
-// 0x00e2c290 (byte-exact lifted version: match/slices/s00e2c290/s00e2c290.cpp)
+// 0x00e2c290: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e2c290/s00e2c290.cpp
 cString* cStringVec::Erase(cString* first, cString* last)
 {
     cString* p = F_e2a6f0(last, mpEnd, first);

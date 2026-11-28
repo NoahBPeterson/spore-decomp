@@ -138,7 +138,7 @@ struct cFeatureVector_s0057_09b0__g7 {
 };
 // ---- items of slice s005709b0_g7 end
 
-// 0x00570400 (byte-exact lifted version: match/slices/s00570400/s00570400.cpp)
+// 0x00570400: not byte-exact; the byte-exact version is the lifted one in match/slices/s00570400/s00570400.cpp
 Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst)
 {
     bool v6 = false;                // bUnused: /Od still materialises the store

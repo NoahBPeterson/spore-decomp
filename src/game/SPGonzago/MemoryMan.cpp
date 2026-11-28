@@ -1060,7 +1060,7 @@ void OnPI(XmlTextReader* t, void* a2, void* a3)
     AppendTok(t, p);
 }
 
-// 0x009011e0 (byte-exact lifted version: match/slices/s009011e0/s009011e0.cpp)
+// 0x009011e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009011e0/s009011e0.cpp
 XmlTextReader* XmlTextReader::DeletingDtor(char flags)
 {
     XmlTextReader* t = this;

@@ -443,7 +443,7 @@ cSPPalette_s005c_53c0::cSPPalette_s005c_53c0()
 }
 }  // namespace SP
 
-// 0x005c5e90 (byte-exact lifted version: match/slices/s005c5e90/s005c5e90.cpp)
+// 0x005c5e90: not byte-exact; the byte-exact version is the lifted one in match/slices/s005c5e90/s005c5e90.cpp
 namespace SP {
 cSPPalette_s005c_53c0::~cSPPalette_s005c_53c0()
 {

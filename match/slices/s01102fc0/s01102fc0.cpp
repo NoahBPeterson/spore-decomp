@@ -302,7 +302,7 @@ hkMoppSettings* hkMoppSettings::construct(int preset)
     self->m_d3 = 0;
     return self;
 }
-// 0x011037e0 (byte-exact lifted version: match/slices/s011037e0/s011037e0.cpp)
+// 0x011037e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s011037e0/s011037e0.cpp
 hkMoppSettingsPartA* hkMoppSettingsPartA::init(int preset)
 {
     m_i4 = 5;
@@ -632,7 +632,7 @@ extern unsigned long g_hkThreadMemoryTls;     // 0x016e4174
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 #endif
 
-// 0x01103bc0 (byte-exact lifted version: match/slices/s01103bc0/s01103bc0.cpp)  hkAgent1nMachine_Create  (a track starts with one sector that only holds the end marker)
+// 0x01103bc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s01103bc0/s01103bc0.cpp  hkAgent1nMachine_Create  (a track starts with one sector that only holds the end marker)
 void __cdecl hkAgent1nMachine_Create(hkAgent1nTrack& track)
 {
     track.m_sectorsSize = 0;

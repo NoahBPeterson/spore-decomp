@@ -18,7 +18,7 @@
 //   @ 0x009e1760  ItemArr::Build(const Src2*)
 //   @ 0x009e17d0  RBTree::find_or_insert(const int*)
 //   @ 0x009e1850  FindOrCreate(const char*, uint32)
-// 0x009e18c0 (byte-exact lifted version: match/slices/s009e18c0/s009e18c0.cpp)  LoadGaitFile(const char*, int, int)
+// 0x009e18c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e18c0/s009e18c0.cpp  LoadGaitFile(const char*, int, int)
 //   @ 0x009e1990  Vec<Gait>::realloc_insert(Gait*, const Gait&)
 //   @ 0x009e1b40  Outer::Select(void*)            pick A/B/C by remaining capacity, push the
 //                                                 gait when full, then store the evaluated id
@@ -531,7 +531,7 @@ void* __stdcall FindOrCreate(const char* name, uint32 hash)
 
 struct GaitLoader { void* LoadGaitFile(const char* name, int, int); };
 
-// 0x009e18c0 (byte-exact lifted version: match/slices/s009e18c0/s009e18c0.cpp)
+// 0x009e18c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e18c0/s009e18c0.cpp
 void* GaitLoader::LoadGaitFile(const char* name, int, int)
 {
     uint32 h = HashName(name, 0x811c9dc5u, 1);

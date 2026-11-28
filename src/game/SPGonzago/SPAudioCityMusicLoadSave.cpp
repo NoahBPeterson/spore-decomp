@@ -479,7 +479,7 @@ void cCityMusicLoadSave::SaveThumbnail()
     (void)rect;
 }
 
-// 0x00ea25f0 (byte-exact lifted version: match/slices/s00ea25f0/s00ea25f0.cpp)
+// 0x00ea25f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea25f0/s00ea25f0.cpp
 void cCityMusicLoadSave::FinishSave()
 {
     if (mbWaitingForThumbnail == 0 && mbWaitingForSaveDialog == 0)
@@ -504,7 +504,7 @@ void cCityMusicLoadSave::FinishSave()
     mbWaitingForSaveDialog = 0;
 }
 
-// 0x00ea2670 (byte-exact lifted version: match/slices/s00ea2670/s00ea2670.cpp)
+// 0x00ea2670: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea2670/s00ea2670.cpp
 bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
 {
     int nKind = pData[2];
@@ -527,7 +527,7 @@ bool cCityMusicLoadSave::DoMessage(void* pMessage, int* pData)
     return nKind == 0x17;
 }
 
-// 0x00ea26f0 (byte-exact lifted version: match/slices/s00ea26f0/s00ea26f0.cpp)
+// 0x00ea26f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ea26f0/s00ea26f0.cpp
 void cCityMusicLoadSave::Shutdown()
 {
     if (mbWaitingForSaveDialog != 0) {

@@ -1416,7 +1416,7 @@ FeedEntry* __cdecl FeedUninitCopy(FeedEntry* first, FeedEntry* last, FeedEntry* 
     return dest;
 }
 
-// 0x00660b90 (byte-exact lifted version: match/slices/s00660b90/s00660b90.cpp)
+// 0x00660b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00660b90/s00660b90.cpp
 void FeedFilterD::Clear()
 {
     for (FeedTreeNode* it = mBegin; it != (FeedTreeNode*)&mEnd; it = (FeedTreeNode*)RBTreeIncrement(it)) {

@@ -351,7 +351,7 @@ bool Sys::UnregisterKey(void* key)
 // ===========================================================================
 // 00a291b0: release every value of the table at +0x13f4, then free its buckets.
 // ===========================================================================
-// 0x00a291b0 (byte-exact lifted version: match/slices/s00a291b0/s00a291b0.cpp)
+// 0x00a291b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a291b0/s00a291b0.cpp
 void Sys::ClearUnregTable()
 {
     HTable* t = &mUnregTable;

@@ -721,7 +721,7 @@ public:
 	hkLinearCastCollisionInput m_shapeInput;             // +0x20
 };
 
-// 0x010cc7d0 (byte-exact lifted version: match/slices/s010cc7d0/s010cc7d0.cpp)
+// 0x010cc7d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010cc7d0/s010cc7d0.cpp
 hkReal hkWorldLinearCaster::addBroadPhaseHandle(const hkBroadPhaseHandle* broadPhaseHandle, int castIndex)
 {
 	const hkTypedBroadPhaseHandle* handle = (const hkTypedBroadPhaseHandle*)broadPhaseHandle;

@@ -23,7 +23,6 @@ struct C_00547970 { int FUN_00547970(unsigned int, unsigned int, unsigned int, u
 extern "C" int __cdecl FUN_00932f30(...);
 
 // @ 0x005462f0
-// @ 0x005462f0
 extern "C" void __cdecl FUN_005462f0(int a4, int a8)
 {
     int v_l16_i;

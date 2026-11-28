@@ -525,7 +525,7 @@ unsigned __fastcall cLightingWorld_AddLight(void* self, int, const float* colour
     return slot;
 }
 
-// 0x0070ddd0 (byte-exact lifted version: match/slices/s0070ddd0/s0070ddd0.cpp)
+// 0x0070ddd0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0070ddd0/s0070ddd0.cpp
 char cLightingManager::Shutdown()
 {
     unsigned char* p = (unsigned char*)this;

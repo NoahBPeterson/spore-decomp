@@ -39,7 +39,7 @@ bool EcxStub9a::FUN_00560d20(void* other)
 }
 }  // namespace SP
 
-// 0x005611b0 (byte-exact lifted version: match/slices/s005611b0/s005611b0.cpp)
+// 0x005611b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005611b0/s005611b0.cpp
 namespace SP {
 void EcxStub9a::FUN_005611b0()
 {

@@ -3823,7 +3823,7 @@ void nSPCreatureAnim::Solver::ShutdownAnims()
     } while (-1 < i);
 }
 
-// 0x009b5a00 (byte-exact lifted version: match/slices/s009b5a00/s009b5a00.cpp)
+// 0x009b5a00: not byte-exact; the byte-exact version is the lifted one in match/slices/s009b5a00/s009b5a00.cpp
 void Bone_ResetState(unsigned int* p)
 {
     p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;

@@ -42,7 +42,6 @@ extern "C" unsigned char g_0168d910[];
 extern "C" int __cdecl FUN_00c0c320(...);
 
 // @ 0x00c0ccc0
-// @ 0x00c0ccc0
 extern "C" bool __cdecl FUN_00c0ccc0(int a4, float a8)
 {
     int t1002;

@@ -59,7 +59,7 @@ struct Obj {
     void  FUN_00541030(int* pos, unsigned int n, int* value);
 };
 
-// 0x005409d0 (byte-exact lifted version: match/slices/s005409d0/s005409d0_lifted.cpp)  (vector of 0x18-byte entries: insert/grow)
+// 0x005409d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s005409d0/s005409d0_lifted.cpp  (vector of 0x18-byte entries: insert/grow)
 void Obj::FUN_005409d0(int* pos, unsigned int n, int* value)
 {
     int* v = (int*)this;

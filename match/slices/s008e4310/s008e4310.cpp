@@ -534,7 +534,7 @@ Element* Element::Ctor1(void* doc, const u16* tag)
     return self;
 }
 
-// 0x008e49e0 (byte-exact lifted version: match/slices/s008e49e0/s008e49e0.cpp)
+// 0x008e49e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008e49e0/s008e49e0.cpp
 void Element::CollectText(void* wstr)
 {
     Element* self = this;

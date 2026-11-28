@@ -13,7 +13,6 @@ struct C_005716e0 { int FUN_005716e0(); };
 
 struct D_005704c0 { float FUN_005704c0(int a4, int a8); };
 // @ 0x005704c0
-// @ 0x005704c0
 float D_005704c0::FUN_005704c0(int a4, int a8)
 {
     int v_l44_f;

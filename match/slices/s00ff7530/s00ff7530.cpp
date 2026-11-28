@@ -570,7 +570,7 @@ void SimPool34::Destroy()
 	}
 }
 
-// 0x00ff8100 (byte-exact lifted version: match/slices/s00ff8100/s00ff8100.cpp)
+// 0x00ff8100: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ff8100/s00ff8100.cpp
 SimPoolNode* SimPool34::AllocNode(const SimPoolPayload* pData)
 {
 	SimPoolNode* node = (SimPoolNode*)mPool.mpHead;

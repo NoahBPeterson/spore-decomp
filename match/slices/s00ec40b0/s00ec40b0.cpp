@@ -189,7 +189,7 @@ void CardIdView_ec4330::FUN_00ec4330(uint32_t* id)
 // =====================================================================================================
 // 0x00EC4380 -- pick the callout text for a card state (3 bools) and show it.
 // =====================================================================================================
-// 0x00ec4380 (byte-exact lifted version: match/slices/s00ec4380/s00ec4380.cpp)
+// 0x00ec4380: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec4380/s00ec4380.cpp
 void FUN_00ec4380(void* self, char sel, char alt, char warn)
 {
     void* box = (char*)self + 0x10;

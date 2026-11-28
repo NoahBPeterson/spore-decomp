@@ -278,7 +278,7 @@ static void SafeRelease(cPaintVarEvalGrid*& pEval)
         ((RefCounted*)pEval)->Release();
 }
 
-// 0x0053e470 (byte-exact lifted version: match/slices/s0053e470/s0053e470.cpp)
+// 0x0053e470: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053e470/s0053e470.cpp
 void cPaintVarCtx::Destroy()
 {
     mpVptr = gVtPaintVarCtx;
@@ -301,7 +301,7 @@ void cPaintVarCtx::Destroy()
     mpVptr = gVtGmeRefCount;
 }
 
-// 0x0053e580 (byte-exact lifted version: match/slices/s0053e580/s0053e580.cpp)
+// 0x0053e580: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053e580/s0053e580.cpp
 void cPaintVarCtx::Reset()
 {
     mRing.Resize(0x4000);
@@ -451,7 +451,7 @@ void cPaintVarCtx::ResetOffset()
     mOffset = vMin;
 }
 
-// 0x0053ece0 (byte-exact lifted version: match/slices/s0053ece0/s0053ece0.cpp)
+// 0x0053ece0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0053ece0/s0053ece0.cpp
 RingEntry* cPaintVarCtx::Register(uint32_t value, uint32_t slot)
 {
     uint32_t stored;

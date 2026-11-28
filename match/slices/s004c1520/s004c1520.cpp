@@ -14,7 +14,6 @@ struct S14 { int m0; int m1; int m2; int m3; int m4; int m5; int m6; int m7; int
 
 struct D_004c1520 { void FUN_004c1520(int a4, int a8, int a12); };
 // @ 0x004c1520
-// @ 0x004c1520
 void D_004c1520::FUN_004c1520(int a4, int a8, int a12)
 {
     int v_l80_c;

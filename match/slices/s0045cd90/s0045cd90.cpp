@@ -24,7 +24,6 @@ struct C_0045d6f0 { void FUN_0045d6f0(); };
 struct C_0045da50 { void FUN_0045da50(unsigned int, unsigned int); };
 
 // @ 0x0045cd90
-// @ 0x0045cd90
 extern "C" bool __cdecl FUN_0045cd90(int a4, int a8, int a12)
 {
     int v_l8;

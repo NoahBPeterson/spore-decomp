@@ -285,7 +285,7 @@ void CalloutMessageBox::sub816b20(int id, int owner) {
     cString_dtor(str);
 }
 
-// 0x00816b90 (byte-exact lifted version: match/slices/s00816b90/s00816b90.cpp)
+// 0x00816b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00816b90/s00816b90.cpp
 // Returns bool, not int: every exit is `mov $0x1,%al` / `xor %al,%al` (0x816c1f, 0x816c8e, 0x816be3),
 // so the upper 24 bits of eax are left as whatever the last call returned. With an int return cl
 // zeroes all of eax (`xor %eax,%eax`) and the harness sees a different eax on the false paths.

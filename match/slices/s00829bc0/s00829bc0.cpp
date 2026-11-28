@@ -455,7 +455,7 @@ void SFV::Destroy() {
   vtbl0 = (ObjT1*)&g_sfvBase0Vtbl;
 }
 
-// 0x0082a450 (byte-exact lifted version: match/slices/s0082a450/s0082a450.cpp)
+// 0x0082a450: not byte-exact; the byte-exact version is the lifted one in match/slices/s0082a450/s0082a450.cpp
 void SFV::Shutdown() {
   if (m10.mpObject) {
     ObjT1* pObj = m10.mpObject->m4();

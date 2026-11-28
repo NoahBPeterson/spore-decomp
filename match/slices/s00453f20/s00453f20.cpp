@@ -21,7 +21,6 @@ __forceinline void il2c_d_FUN_00f47380(int p, int fl) { if (fl & 1) FUN_00f47380
 
 struct D_00453f20 { int FUN_00453f20(int a4); };
 // @ 0x00453f20
-// @ 0x00453f20
 int D_00453f20::FUN_00453f20(int a4)
 {
     int v_l16_i;

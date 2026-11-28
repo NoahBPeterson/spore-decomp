@@ -239,7 +239,7 @@ SP::cVolumeDescription::cVolumeDescription() {
   }
 }
 
-// 0x007ee630 (byte-exact lifted version: match/slices/s007ee630/s007ee630.cpp)  SP::VolumeRead
+// 0x007ee630: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ee630/s007ee630.cpp  SP::VolumeRead
 extern "C" void* VolumeRead(int* reader) {
   SP::cVolumeDescription* v = (SP::cVolumeDescription*)operator new(0xf0, "Swarm", 0, 0, 0, 0);
   if (v) new (v) SP::cVolumeDescription();
@@ -307,7 +307,7 @@ void VolumeCmd::Color(EA::ArgScript::cArguments* args) {
 void VolumeCmd::SliceSpacing(EA::ArgScript::cArguments* args) {  typedef float(__thiscall * F0)(void*, void*);
   mParams->mSliceSpacing = ((F0)VSLOT(mArgConverter, 0x98))(mArgConverter, *args->MainArguments(1));}
 
-// 0x007ee7b0 (byte-exact lifted version: match/slices/s007ee7b0/s007ee7b0.cpp)  "material" command (resource id)
+// 0x007ee7b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007ee7b0/s007ee7b0.cpp  "material" command (resource id)
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments* args) {
   void** p = args->MainArguments(1);
   extern uint32_t HashName(const char*, uint32_t, int);   // 0x00932e80 (equiv t3)

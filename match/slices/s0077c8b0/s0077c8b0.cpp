@@ -128,7 +128,7 @@ float* __fastcall FUN_0077d130(float* p) {
     return p;
 }
 
-// 0x0077d170 (byte-exact lifted version: match/slices/s0077d170/s0077d170.cpp)
+// 0x0077d170: not byte-exact; the byte-exact version is the lifted one in match/slices/s0077d170/s0077d170.cpp
 float* __fastcall FUN_0077d170(float* p) {
     __m128 z = _mm_setzero_ps();
     _mm_store_ss(p + 0, z);

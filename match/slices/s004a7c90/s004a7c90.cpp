@@ -8,7 +8,6 @@ struct C_004accf0 { int FUN_004accf0(); };
 struct C_004adc40 { int FUN_004adc40(); };
 
 // @ 0x004a7c90
-// @ 0x004a7c90
 extern "C" void __cdecl FUN_004a7c90(int a4, int a8)
 {
     int v_l28_g;

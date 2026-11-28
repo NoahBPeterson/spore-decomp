@@ -122,7 +122,7 @@ T188* Vec188::erase(T188* pos)
     return pos;
 }
 
-// 0x00f43830 (byte-exact lifted version: match/slices/s00f43830/s00f43830.cpp)  erase element #idx from the 0x188 vector of the object returned by 0xf3be60
+// 0x00f43830: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f43830/s00f43830.cpp  erase element #idx from the 0x188 vector of the object returned by 0xf3be60
 struct Obj188 {
     char   pad00[0x84];
     Vec188 vec;             // +0x84

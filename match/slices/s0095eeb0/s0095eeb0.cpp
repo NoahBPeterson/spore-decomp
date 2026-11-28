@@ -60,7 +60,7 @@ void CM::TransformPoint3B(float* out, const float* v) {
     out[2] = m[10] * z + (m[2] * x + m[6] * y);
 }
 
-// 0x0095f090 (byte-exact lifted version: match/slices/s0095f090/s0095f090.cpp)
+// 0x0095f090: not byte-exact; the byte-exact version is the lifted one in match/slices/s0095f090/s0095f090.cpp
 CM* CM::SetAxes(float* a, float* b, float* c) {
     void* self = this;
     ((float*)self)[0] = a[0]; ((float*)self)[1] = a[1]; ((float*)self)[2] = a[2]; ((float*)self)[3] = a[3];

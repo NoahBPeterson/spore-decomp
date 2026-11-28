@@ -310,7 +310,7 @@ WorldCtx* FixupToIds(Fixup4* rec, WorldCtx* ctx)
 	return ctx;
 }
 
-// 0x012009c0 (byte-exact lifted version: match/slices/s012009c0/s012009c0.cpp)
+// 0x012009c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s012009c0/s012009c0.cpp
 void FixupToPointers(Fixup4* rec, int unknown, ArenaCtx* ctx)
 {
 	rec->mpLink = ctx->mpArena->IdToObject((int)rec->mpLink);
@@ -319,7 +319,7 @@ void FixupToPointers(Fixup4* rec, int unknown, ArenaCtx* ctx)
 	rec->mpData10 = ctx->mpArena->IdToObject((int)rec->mpData10);
 }
 
-// 0x01200a10 (byte-exact lifted version: match/slices/s01200a10/s01200a10.cpp)
+// 0x01200a10: not byte-exact; the byte-exact version is the lifted one in match/slices/s01200a10/s01200a10.cpp
 int InitFixup4(Fixup4* rec, ArenaCtx* ctx)
 {
 	rec->mpFn = (void*)FixupCallback;
@@ -373,7 +373,7 @@ int RebaseDeltaFromBase(int* p, ArenaCtx* ctx)
 	return 1;
 }
 
-// 0x01201050 (byte-exact lifted version: match/slices/s01201050/s01201050.cpp)
+// 0x01201050: not byte-exact; the byte-exact version is the lifted one in match/slices/s01201050/s01201050.cpp
 void RebaseToBase20(int* p, Base20Ctx* ctx)
 {
 	int d = (int)ctx->mpBase - (int)p;

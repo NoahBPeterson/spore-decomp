@@ -562,7 +562,7 @@ __declspec(noinline)
 ObjA::ObjA(const ObjA& other)
     : m0(other.m0), mF0(other.mF0), mF1(other.mF1), mF2(other.mF2), mF3(other.mF3) {}
 
-// 0x00681b50 (byte-exact lifted version: match/slices/s00681b50/s00681b50.cpp)
+// 0x00681b50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00681b50/s00681b50.cpp
 ObjB50& ObjB50::operator=(const ObjB50& x) {
     m0 = x.m0;
     mV48 = &x.mV48;

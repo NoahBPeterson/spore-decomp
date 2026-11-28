@@ -4663,7 +4663,7 @@ char cTerrainOverlay::ClearSlot()
     return 1;
 }
 
-// 0x00f964b0 (byte-exact lifted version: match/slices/s00f964b0/s00f964b0.cpp)
+// 0x00f964b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f964b0/s00f964b0.cpp
 int __fastcall ReleaseRef_s00f9_55f0(int* self)
 {
     int* p = (int*)((char*)self + 4);
@@ -4688,7 +4688,7 @@ void* cDynCast::Cast(unsigned id)
     return 0;
 }
 
-// 0x00f96520 (byte-exact lifted version: match/slices/s00f96520/s00f96520.cpp)
+// 0x00f96520: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f96520/s00f96520.cpp
 void cTerrainSphere_s00f9_55f0::RemoveFromEffectsSystem()
 {
     int* mgr = SP::Sub_67ddd0();
@@ -5804,7 +5804,7 @@ cSPTransform2* cSPTransform2::Init(const cSPTransform2* src)
     return this;
 }
 
-// 0x00f9b2b0 (byte-exact lifted version: match/slices/s00f9b2b0/s00f9b2b0.cpp)
+// 0x00f9b2b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f9b2b0/s00f9b2b0.cpp
 cSPTransform2* cSPTransform2::CopyFrom(const float* pos, const cSPTransform2* src, bool flag)
 {
     mFlags = src->mFlags;
@@ -7326,7 +7326,7 @@ bool DirtyFlag::TestFlag(unsigned char bits)
     return (Flag0() & bits) != 0;
 }
 
-// 0x00fa0f10 (byte-exact lifted version: match/slices/s00fa0f10/s00fa0f10.cpp)
+// 0x00fa0f10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fa0f10/s00fa0f10.cpp
 int JobHolder::Release()
 {
     return (mObj).Release();
@@ -8928,7 +8928,7 @@ void cTerrainSphere_s00fa_5610::UpdateQuadsPostCamera(void* camera)
     }
 }
 
-// 0x00fa5cc0 (byte-exact lifted version: match/slices/s00fa5cc0/s00fa5cc0.cpp)
+// 0x00fa5cc0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00fa5cc0/s00fa5cc0.cpp
 void cTerrainSphere_s00fa_5610::DrawLayerRTT(void** a1, void* a2, void*)
 {
     cDirectPropertyList_s00fa_5610* props = sAppProperties;

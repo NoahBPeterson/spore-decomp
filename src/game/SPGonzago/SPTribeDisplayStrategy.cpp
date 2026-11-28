@@ -1904,7 +1904,7 @@ void cTribeDisplayStrategy::FUN_00cca0a0()
     }
 }
 
-// 0x00cca0e0 (byte-exact lifted version: match/slices/s00cca0e0/s00cca0e0.cpp)
+// 0x00cca0e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00cca0e0/s00cca0e0.cpp
 void FUN_00cca0e0_impl(void* dst, unsigned count, const void* src)
 {
     struct P3 { u32 a, b, c; };
@@ -2415,7 +2415,7 @@ u8* FUN_00ccad80_impl(u8* first, u8* last, const void* key)
     return first;
 }
 
-// 0x00ccaf60 (byte-exact lifted version: match/slices/s00ccaf60/s00ccaf60.cpp)
+// 0x00ccaf60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ccaf60/s00ccaf60.cpp
 char __cdecl FUN_00ccaf60(void* self)
 {
     u8* p = (u8*)self;
@@ -2754,7 +2754,7 @@ alloc_done:
     mpCapacity = (Vertex3D*)((char*)b + (cap2 + cap2 * 2) * 8);
 }
 
-// 0x00ccbb60 (byte-exact lifted version: match/slices/s00ccbb60/s00ccbb60.cpp)
+// 0x00ccbb60: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ccbb60/s00ccbb60.cpp
 void cTDS::FUN_00ccbb60(void* key)
 {
     if (mpMiniMapWin)

@@ -949,7 +949,7 @@ struct ViewPaintBlob { char pad[0x178]; Vec3 paint; };
 #define OFF(S, m) ((uint32_t)offsetof(S, m))
 // ---- items of slice s01244f50 end
 
-// 0x004afd00 (byte-exact lifted version: match/slices/s004afd00/s004afd00.cpp)
+// 0x004afd00: not byte-exact; the byte-exact version is the lifted one in match/slices/s004afd00/s004afd00.cpp
 void VecBase::Resize1d8(unsigned int n)
 {
     int count = (int)((mpEnd - mpBegin) / 0x1d8);
@@ -979,7 +979,7 @@ EditorBlock* EditorBlock::Init8()
     return this;
 }
 
-// 0x004b0340 (byte-exact lifted version: match/slices/s004b0340/s004b0340.cpp)
+// 0x004b0340: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b0340/s004b0340.cpp
 Block194* VecBase::Erase194(Block194* dst, Block194* end)
 {
     Block194* out = (Block194*)mpEnd;
@@ -2124,7 +2124,7 @@ bool FUN_004bfb20(StreamWriter* w, int data)
     return false;
 }
 
-// 0x004bfc10 (byte-exact lifted version: match/slices/s004bfc10/s004bfc10.cpp)
+// 0x004bfc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s004bfc10/s004bfc10.cpp
 void FUN_004bfc10(void* p)
 {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
@@ -2273,7 +2273,7 @@ void cExportHelper::ExportMeshEnd()
     export_mesh_FILE = 0;
 }
 
-// 0x01244f50 (byte-exact lifted version: match/slices/s01244f50/s01244f50_lifted.cpp)
+// 0x01244f50: not byte-exact; the byte-exact version is the lifted one in match/slices/s01244f50/s01244f50_lifted.cpp
 void init_150c720()
 {
     FLD(0, 0) = OFF(ViewRowsA, rows[0]);

@@ -329,7 +329,7 @@ hkBool MoppAssembler::needsExtraProperty(const void* a, const int* b) const
 	return hkBool(false);
 }
 
-// 0x0111cf00 (byte-exact lifted version: match/slices/s0111cf00/s0111cf00.cpp)
+// 0x0111cf00: not byte-exact; the byte-exact version is the lifted one in match/slices/s0111cf00/s0111cf00.cpp
 // Chooses between the child's own "level" (+0x34 of the parent) and this assembler's (+0x24 of a1) for the
 // property level of a1; the odd condition is a size check on the three operand magnitudes (all unsigned).
 void __stdcall chooseLevelForProperty(const void* a1, const void* a2, void* a3)
@@ -528,7 +528,7 @@ void MoppChunk::computeShift()
 	CW(8) = (best > 0x18) ? 0x18 : best;
 }
 
-// 0x0111d3c0 (byte-exact lifted version: match/slices/s0111d3c0/s0111d3c0.cpp)
+// 0x0111d3c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s0111d3c0/s0111d3c0.cpp
 MoppChunk* MoppChunk::initFromParent(const MoppChunk* parent, const void* box, const float* xform)
 {
 	for (int i = 0; i < 0x12; ++i)      // rep movsd, 0x48 bytes

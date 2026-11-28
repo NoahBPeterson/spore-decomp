@@ -221,7 +221,7 @@ void __cdecl CopyAssignRange80(CElement* first, CElement* last, const CElement* 
 
 // ===========================================================================
 // 0x00bdf1a0 -- CElement range copy-construct (stride 0x80, count-based).
-// 0x00bdf1a0 (byte-exact lifted version: match/slices/s00bdf1a0/s00bdf1a0.cpp)
+// 0x00bdf1a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf1a0/s00bdf1a0.cpp
 void __cdecl CopyConstructRange80(CElement* first, unsigned count, const CElement* src)
 {
     if (count != 0) {
@@ -557,7 +557,7 @@ struct CityFlatten {
     void Flatten5dc(PairVec* dst);
 };
 
-// 0x00bdf750 (byte-exact lifted version: match/slices/s00bdf750/s00bdf750.cpp)
+// 0x00bdf750: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf750/s00bdf750.cpp
 void CityFlatten::Flatten5a4(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5b4));
@@ -585,7 +585,7 @@ void CityFlatten::Flatten5a4(PairVec* dst)
 // ===========================================================================
 // 0x00bdf7e0 -- same flatten for tree at +0x5c0 (skip when node value == 0).
 // ===========================================================================
-// 0x00bdf7e0 (byte-exact lifted version: match/slices/s00bdf7e0/s00bdf7e0.cpp)
+// 0x00bdf7e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf7e0/s00bdf7e0.cpp
 void CityFlatten::Flatten5c0(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5d0));
@@ -615,7 +615,7 @@ void CityFlatten::Flatten5c0(PairVec* dst)
 // ===========================================================================
 // 0x00bdf880 -- same flatten for tree at +0x5dc.
 // ===========================================================================
-// 0x00bdf880 (byte-exact lifted version: match/slices/s00bdf880/s00bdf880.cpp)
+// 0x00bdf880: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bdf880/s00bdf880.cpp
 void CityFlatten::Flatten5dc(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5ec));

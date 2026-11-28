@@ -183,7 +183,7 @@ double __cdecl FUN_00ec0c40(void* self) {
 }
 
 // ================================================================ 0x00ec0c90
-// 0x00ec0c90 (byte-exact lifted version: match/slices/s00ec0c90/s00ec0c90.cpp)
+// 0x00ec0c90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec0c90/s00ec0c90.cpp
 u8 __cdecl FUN_00ec0c90(void* obj, void* key) {
     u8 res = 0;
     if (obj != 0) {
@@ -486,7 +486,7 @@ double __cdecl FUN_00ec1610(void* self_, void* a2, void* a3, void* a5, void* sti
 }
 
 // ================================================================ 0x00ec1670
-// 0x00ec1670 (byte-exact lifted version: match/slices/s00ec1670/s00ec1670.cpp)
+// 0x00ec1670: not byte-exact; the byte-exact version is the lifted one in match/slices/s00ec1670/s00ec1670.cpp
 double __cdecl FUN_00ec1670(void* self_, void* a2, void* a3, void* a5, void* stimuli, u8* out, int evt) {
     char* s = (char*)self_;
     uint* p = (uint*)(*(ushort*)((char*)evt + 0x12) * 0x20 + *(uint*)(s + 0x674));

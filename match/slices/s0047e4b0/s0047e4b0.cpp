@@ -130,7 +130,7 @@ uint32_t cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)
     return eax;
 }
 
-// 0x0047e600 (byte-exact lifted version: match/slices/s0047e600/s0047e600.cpp)
+// 0x0047e600: not byte-exact; the byte-exact version is the lifted one in match/slices/s0047e600/s0047e600.cpp
 void* cSPEditorHandle::GetPosition(void* out)
 {
     if (this->mBlock) {

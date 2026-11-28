@@ -120,7 +120,7 @@ void WideFixedStr::EnsureCapacity(uint32_t n)
 // Remaining editor-skin / wide-string helpers (PARTIAL skeletons).
 // ===========================================================================
 
-// 0x004c2100 (byte-exact lifted version: match/slices/s004c2100/s004c2100_lifted.cpp)  vector<T> swap-with-fallback (3-pointer swap when allocators match)
+// 0x004c2100: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c2100/s004c2100_lifted.cpp  vector<T> swap-with-fallback (3-pointer swap when allocators match)
 void VectorSwap4(uint32_t* a, uint32_t* b)
 {
     if (&a[3] == &b[3]) {
@@ -138,13 +138,13 @@ void VectorAssign4(uint32_t* self, uint32_t* other)
     (void)self; (void)other;
 }
 
-// 0x004c29c0 (byte-exact lifted version: match/slices/s004c29c0/s004c29c0.cpp)  PARTIAL: basic_string<wchar_t,256>::set_capacity
+// 0x004c29c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c29c0/s004c29c0.cpp  PARTIAL: basic_string<wchar_t,256>::set_capacity
 void eastl_set_capacity(eastl::WideFixedStr* self, uint32_t n)
 {
     (void)self; (void)n;
 }
 
-// 0x004c2ad0 (byte-exact lifted version: match/slices/s004c2ad0/s004c2ad0.cpp)  PARTIAL: wide-buffer heap swap
+// 0x004c2ad0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004c2ad0/s004c2ad0.cpp  PARTIAL: wide-buffer heap swap
 void WideFixedStr_SwapHeap(eastl::WideFixedStr* self, eastl::WideFixedStr* other)
 {
     (void)self; (void)other;

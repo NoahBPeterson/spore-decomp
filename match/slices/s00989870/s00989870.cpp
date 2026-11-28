@@ -375,7 +375,7 @@ void WinTextEdit::F98A090(int idx) {
     }
 }
 
-// 0x0098a270 (byte-exact lifted version: match/slices/s0098a270/s0098a270.cpp)
+// 0x0098a270: not byte-exact; the byte-exact version is the lifted one in match/slices/s0098a270/s0098a270.cpp
 void WinTextEdit::F98A270(unsigned idx, int* outBegin, int* outLen) {
     int* vec = *(int**)((char*)this + 0x50c);
     int* vend = *(int**)((char*)this + 0x510);

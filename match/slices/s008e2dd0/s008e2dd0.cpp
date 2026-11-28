@@ -857,7 +857,7 @@ void __fastcall Fn8e3660(void* pThis, void* elem)
 // ===========================================================================
 // 0x008e37e0  Document::Stylesheets
 // ===========================================================================
-// 0x008e37e0 (byte-exact lifted version: match/slices/s008e37e0/s008e37e0.cpp)
+// 0x008e37e0: not byte-exact; the byte-exact version is the lifted one in match/slices/s008e37e0/s008e37e0.cpp
 void* __fastcall Fn8e37e0(Document* pThis)
 {
     if (pThis->mbDocumentChanged != 0) {

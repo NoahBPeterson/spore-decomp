@@ -811,7 +811,7 @@ found:
     }
 }
 
-// 0x008e2b90 (byte-exact lifted version: match/slices/s008e2b90/s008e2b90.cpp)
+// 0x008e2b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s008e2b90/s008e2b90.cpp
 void ManagerX::ResetAll()
 {
     // frees three intrusive sub-lists (+0x108, +0xa8, +0x50), destroys the

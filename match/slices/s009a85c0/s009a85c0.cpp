@@ -6,7 +6,6 @@ extern "C" unsigned char g_015507a8[];
 extern "C" unsigned char g_015507ac[];
 
 // @ 0x009a85c0
-// @ 0x009a85c0
 extern "C" int __cdecl FUN_009a85c0(int a4, int a8)
 {
     int t1000;

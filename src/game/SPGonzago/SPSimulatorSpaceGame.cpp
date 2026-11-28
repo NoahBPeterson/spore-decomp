@@ -2071,7 +2071,7 @@ void __fastcall FUN_01003070(SimGame_s0100_21a0* self)
     }
 }
 
-// 0x010030c0 (byte-exact lifted version: match/slices/s010030c0/s010030c0.cpp)
+// 0x010030c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s010030c0/s010030c0.cpp
 void __fastcall FUN_010030c0(SimGame_s0100_21a0* self)
 {
     if (self->mUISpace14 == 0) {

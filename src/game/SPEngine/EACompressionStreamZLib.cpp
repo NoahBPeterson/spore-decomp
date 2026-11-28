@@ -598,7 +598,7 @@ bool EA::IO::StreamDecompressionZLib_s0067_d550::Close()
   return true;
 }
 
-// 0x0067da30 (byte-exact lifted version: match/slices/s0067da30/s0067da30.cpp)
+// 0x0067da30: not byte-exact; the byte-exact version is the lifted one in match/slices/s0067da30/s0067da30.cpp
 int EA::Internet::RCAtomicBlock::Release()
 {
   if (_InterlockedDecrement(&mRefCount) == 0) {

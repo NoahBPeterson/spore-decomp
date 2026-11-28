@@ -299,7 +299,7 @@ void cMissionFindAliens::SetContactGrob()
     m->FUN_00c471c0();
 }
 
-// 0x00c55540 (byte-exact lifted version: match/slices/s00c55540/s00c55540.cpp)
+// 0x00c55540: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c55540/s00c55540.cpp
 char cMissionFindAliens::Init()
 {
     if (!BaseMissionInit(this))

@@ -223,7 +223,7 @@ void __cdecl FUN_00c93640(int** first, int** last, int** blockptr) {
         FUN_00c92c70(first + 1, last, first, blockptr);
 }
 
-// 0x00c93700 (byte-exact lifted version: match/slices/s00c93700/s00c93700.cpp) - destroy an array of singly-linked cActionCircle lists.
+// 0x00c93700: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c93700/s00c93700.cpp - destroy an array of singly-linked cActionCircle lists.
 struct ActionCircle {           // SP::cActionCircle prefix; only the dtor is called
     void dtor(void);            // 0x00afbad0 - SP::cActionCircle::~cActionCircle
 };

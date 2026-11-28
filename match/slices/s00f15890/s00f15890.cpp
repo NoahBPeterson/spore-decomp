@@ -128,7 +128,7 @@ void Int64ListVector::AssignFromList(ListIterator first, ListIterator last, int 
     }
 }
 
-// 0x00f16330 (byte-exact lifted version: match/slices/s00f16330/s00f16330.cpp)
+// 0x00f16330: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f16330/s00f16330.cpp
 Element* ElementVector::EraseRange(Element* last, Element* pos)
 {
     Element* p = MoveElements(pos, mpEnd, last);

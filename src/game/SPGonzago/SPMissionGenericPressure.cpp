@@ -469,7 +469,7 @@ void cSPGenericPressureEvent_s00c5_62b0::OnComplete()
 }
 }  // namespace SP
 
-// 0x00c56360 (byte-exact lifted version: match/slices/s00c56360/s00c56360.cpp)
+// 0x00c56360: not byte-exact; the byte-exact version is the lifted one in match/slices/s00c56360/s00c56360.cpp
 namespace SP {
 bool cSPGenericPressureEvent_s00c5_62b0::Init()
 {

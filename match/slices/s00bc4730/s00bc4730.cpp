@@ -607,7 +607,7 @@ void Reg::enable(uint32_t key, Creature* c)
     }
 }
 
-// 0x00bc51c0 (byte-exact lifted version: match/slices/s00bc51c0/s00bc51c0.cpp)
+// 0x00bc51c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bc51c0/s00bc51c0.cpp
 Node* Reg::newNode()
 {
     Node* p;

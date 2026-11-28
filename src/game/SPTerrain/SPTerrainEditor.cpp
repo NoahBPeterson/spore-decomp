@@ -3144,7 +3144,7 @@ TexVector::TexVector(const TexVector& o)
     mpCur = newCur;
 }
 
-// 0x00f6b670 (byte-exact lifted version: match/slices/s00f6b670/s00f6b670.cpp)
+// 0x00f6b670: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f6b670/s00f6b670.cpp
 QuadSource& QuadSource::CopyFrom(const QuadSource& o)
 {
     memcpy(this, &o, 0x7c);
@@ -3234,7 +3234,7 @@ void QuadMgr::Destroy()
     mp208 = 0;
 }
 
-// 0x00f6bc10 (byte-exact lifted version: match/slices/s00f6bc10/s00f6bc10.cpp)
+// 0x00f6bc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00f6bc10/s00f6bc10.cpp
 namespace TE {
 void cTerrainEditor::ResetEditor()
 {

@@ -350,7 +350,7 @@ void* LayoutCache::Ctor()
     return s;
 }
 
-// 0x0094d270 (byte-exact lifted version: match/slices/s0094d270/s0094d270.cpp)
+// 0x0094d270: not byte-exact; the byte-exact version is the lifted one in match/slices/s0094d270/s0094d270.cpp
 void LayoutCache::Erase(const char* name)
 {
     mMutex.Lock(0x143f9c4);

@@ -43,7 +43,7 @@ struct HtStrOwner {
 };
 // ---- items of slice s00b20fb0 end
 
-// 0x00b210d0 (byte-exact lifted version: match/slices/s00b210d0/s00b210d0.cpp)
+// 0x00b210d0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b210d0/s00b210d0.cpp
 void HtStrOwner::FUN_00b210d0(uint32_t* dst, uint32_t maxCount)
 {
   HtStrNode** bucket = mTable.mpBuckets;

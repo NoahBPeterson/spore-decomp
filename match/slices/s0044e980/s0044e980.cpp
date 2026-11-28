@@ -7,7 +7,6 @@ struct C_0044f240 { int FUN_0044f240(); };
 
 struct D_0044e980 { void FUN_0044e980(int a4); };
 // @ 0x0044e980
-// @ 0x0044e980
 void D_0044e980::FUN_0044e980(int a4)
 {
     int v_l24;

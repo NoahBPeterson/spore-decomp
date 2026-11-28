@@ -6134,7 +6134,7 @@ void PHTable::FreeBuckets(PHNode** buckets, u32 count)
     }
 }
 
-// 0x00a24530 (byte-exact lifted version: match/slices/s00a24530/s00a24530.cpp)
+// 0x00a24530: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a24530/s00a24530.cpp
 RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
 {
     RBNode_s00a2_3360* dst = RB_AllocNode(src, parent);
@@ -8002,7 +8002,7 @@ bool Sys_s00a2_90b0::UnregisterKey(void* key)
     return true;
 }
 
-// 0x00a291b0 (byte-exact lifted version: match/slices/s00a291b0/s00a291b0.cpp)
+// 0x00a291b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a291b0/s00a291b0.cpp
 void Sys_s00a2_90b0::ClearUnregTable()
 {
     HTable_s00a2_90b0* t = &mUnregTable;
@@ -8612,7 +8612,7 @@ void SmallStubs::DestroyBuckets(int param_2, u32 param_3)
     }
 }
 
-// 0x00a2ae90 (byte-exact lifted version: match/slices/s00a2ae90/s00a2ae90.cpp)
+// 0x00a2ae90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00a2ae90/s00a2ae90.cpp
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
     u32 u = (u32)(size_t)ARCopy((void*)param_3,

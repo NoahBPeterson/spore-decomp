@@ -699,7 +699,7 @@ void cSwatch3DView::RemoveModel(cMWModel* model) {
   }
 }
 
-// 0x005f4f80 (byte-exact lifted version: match/slices/s005f4f80/s005f4f80.cpp)
+// 0x005f4f80: not byte-exact; the byte-exact version is the lifted one in match/slices/s005f4f80/s005f4f80.cpp
 void cSPSwatch_s005f_4310::Init(Key* key, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e, uint32_t scale) {
   if (a != 0) {
     mScaleParam = scale;

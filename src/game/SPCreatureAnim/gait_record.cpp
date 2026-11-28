@@ -2087,7 +2087,7 @@ template <> void Vec_s009d_e8b0<GaitItem>::reserve(int n)
     }
 }
 
-// 0x009df8b0 (byte-exact lifted version: match/slices/s009df8b0/s009df8b0.cpp)
+// 0x009df8b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009df8b0/s009df8b0.cpp
 template <> Vec_s009d_e8b0<GaitItem>::Vec_s009d_e8b0(unsigned int n, const GaitItem& value, int unused)
 {
     GaitItem* p = n ? (GaitItem*)operator new(n * sizeof(GaitItem), "Anim/gait/untagged",
@@ -2316,7 +2316,7 @@ Elem0CS* Vec0CS::insert(Elem0CS* position, const Elem0CS& value)
     return mpBegin + i;
 }
 
-// 0x009e0b90 (byte-exact lifted version: match/slices/s009e0b90/s009e0b90.cpp)
+// 0x009e0b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e0b90/s009e0b90.cpp
 void __stdcall DestroyRangeA4n(ElemA4* first, ElemA4* last)
 {
     if (first >= last)
@@ -2612,7 +2612,7 @@ void* __stdcall FindOrCreate(const char* name, uint32 hash)
     return 0;
 }
 
-// 0x009e18c0 (byte-exact lifted version: match/slices/s009e18c0/s009e18c0.cpp)
+// 0x009e18c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e18c0/s009e18c0.cpp
 bool nSPCreatureAnim::gait_record::LoadGaitFile(char const * name, nSPCreatureAnim::dynamics_phasegroup * a1, int a2)
 {
     uint32 h = HashName(name, 0x811c9dc5u, 1);
@@ -2834,7 +2834,7 @@ void gcmddHost::Create(int /*unused*/)
     ((void (__thiscall*)(void*, void*))vt[0x23])(obj, this);
 }
 
-// 0x009e3790 (byte-exact lifted version: match/slices/s009e3790/s009e3790.cpp)
+// 0x009e3790: not byte-exact; the byte-exact version is the lifted one in match/slices/s009e3790/s009e3790.cpp
 Inner_s009e_3580& Inner_s009e_3580::operator=(const Inner_s009e_3580& o)
 {
     if (this != &o) {

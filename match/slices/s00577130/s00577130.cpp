@@ -314,7 +314,7 @@ void cAppModeEditorBase::SetSomeBlock(int param)
         DoSomeOther(0, -1);
 }
 
-// 0x00577520 (byte-exact lifted version: match/slices/s00577520/s00577520.cpp)
+// 0x00577520: not byte-exact; the byte-exact version is the lifted one in match/slices/s00577520/s00577520.cpp
 void cAppModeEditorBase::UpdateBlockState()
 {
     void* p = Ref<void*>(this, 0xcc);

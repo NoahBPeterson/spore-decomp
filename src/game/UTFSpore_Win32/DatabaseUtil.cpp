@@ -155,7 +155,7 @@ extern "C" char FUN_008ddb90(void* self, int a2, int a3, int a4, int a5)
     return result;
 }
 
-// 0x008ddc10 (byte-exact lifted version: match/slices/s008ddc10/s008ddc10.cpp)
+// 0x008ddc10: not byte-exact; the byte-exact version is the lifted one in match/slices/s008ddc10/s008ddc10.cpp
 extern "C" char FUN_008ddc10(int a1, void* out, void* pKey)
 {
     wchar_t buf[0x104];

@@ -928,7 +928,6 @@ void __cdecl FUN_00e83590(cRefTriple* pState)
 }  // namespace SP
 
 // @ 0x00e83640
-// @ 0x00e83640
 namespace SP {
 extern char DAT_013f09b4[];                             // 0x013f09b4 "Simulator"
 struct cStateItem {

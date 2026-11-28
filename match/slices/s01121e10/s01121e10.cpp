@@ -564,7 +564,7 @@ struct hkGeomConvexHullTester
 	                          hkArray<hkVector4>& vertices);                            // 0x011228f0
 };
 
-// 0x011223b0 (byte-exact lifted version: match/slices/s011223b0/s011223b0.cpp) hkGeomConvexHullTester::findSameEdges
+// 0x011223b0: not byte-exact; the byte-exact version is the lifted one in match/slices/s011223b0/s011223b0.cpp hkGeomConvexHullTester::findSameEdges
 hkBool hkGeomConvexHullTester::findSameEdges(const PlaneAndPoints& pa, const PlaneAndPoints& pb,
                                              hkBool& e0, hkBool& e1, hkBool& e2)
 {

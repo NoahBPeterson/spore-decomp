@@ -148,7 +148,7 @@ static const uint32_t ADDR_c08  = 0x01654c08;
 static const uint32_t ADDR_3ec460 = 0x013ec460;
 
 // ===========================================================================
-// 0x00b26fb0 (byte-exact lifted version: match/slices/s00b26fb0/s00b26fb0_lifted.cpp)  copy-assign a cSavedGameHeader-like block
+// 0x00b26fb0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b26fb0/s00b26fb0_lifted.cpp  copy-assign a cSavedGameHeader-like block
 // ===========================================================================
 void* SavedGameHeader_Assign(void* pself, void* src)
 {

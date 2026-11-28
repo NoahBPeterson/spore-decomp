@@ -422,7 +422,7 @@ void __fastcall FUN_00bd7900(int* param_1)
 }
 
 // ===========================================================================
-// 0x00bd7a10 (byte-exact lifted version: match/slices/s00bd7a10/s00bd7a10.cpp) — Object::Cast (multi-base lookup).
+// 0x00bd7a10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bd7a10/s00bd7a10.cpp — Object::Cast (multi-base lookup).
 // ===========================================================================
 void* Sim::FUN_00bd7a10(int param_2)
 {
@@ -486,7 +486,7 @@ char Sim::FUN_00bd7ad0(int* param_2)
 }
 
 // ===========================================================================
-// 0x00bd7b90 (byte-exact lifted version: match/slices/s00bd7b90/s00bd7b90.cpp) — Simulator::ISimulatorSerializable::Read.
+// 0x00bd7b90: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bd7b90/s00bd7b90.cpp — Simulator::ISimulatorSerializable::Read.
 // ===========================================================================
 struct SimRead_ {
     char m00b18600(int*);                                   // 0x00b18600 SP::cGameData::Read
@@ -532,7 +532,7 @@ void __fastcall FUN_00bd7c80(char* this_)
 }
 
 // ===========================================================================
-// 0x00bd7ca0 (byte-exact lifted version: match/slices/s00bd7ca0/s00bd7ca0.cpp) — Object cast on the +0x1f4 base.
+// 0x00bd7ca0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bd7ca0/s00bd7ca0.cpp — Object cast on the +0x1f4 base.
 // ===========================================================================
 int Sim::FUN_00bd7ca0(int param_2)
 {

@@ -18,7 +18,6 @@ struct S3 { int m0; int m1; int m2; };
 
 struct D_00501f40 { void FUN_00501f40(int a4, int a8, int a12); };
 // @ 0x00501f40
-// @ 0x00501f40
 void D_00501f40::FUN_00501f40(int a4, int a8, int a12)
 {
     int v_l80_c;

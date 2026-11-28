@@ -376,7 +376,7 @@ void cSPEditorModel::Clear()
     if (mPhysicsWorld) mPhysicsWorld->DetachModel(this);
 }
 
-// 0x004ad370 (byte-exact lifted version: match/slices/s004ad370/s004ad370.cpp)
+// 0x004ad370: not byte-exact; the byte-exact version is the lifted one in match/slices/s004ad370/s004ad370.cpp
 void cSPEditorModel::SetPhysicsWorld(cSPEditorPhysicsWorld* world)
 {
     mPhysicsWorld = world;

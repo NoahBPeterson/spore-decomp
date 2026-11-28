@@ -205,7 +205,7 @@ u32 __stdcall FUN_01077ae0(cSPUILayout* layout);
 u32 __cdecl FUN_01077b40(void* p);
 
 // ============================================================================
-// 0x01077470 (byte-exact lifted version: match/slices/s01077470/s01077470_lifted.cpp) SP::cSPUISpaceTrading::FUN_01077470
+// 0x01077470: not byte-exact; the byte-exact version is the lifted one in match/slices/s01077470/s01077470_lifted.cpp SP::cSPUISpaceTrading::FUN_01077470
 // Rebuild the NPC scrolling frame (owner slot +0x18, frame +0x14).
 // ============================================================================
 void SP::cSPUISpaceTrading::FUN_01077470()

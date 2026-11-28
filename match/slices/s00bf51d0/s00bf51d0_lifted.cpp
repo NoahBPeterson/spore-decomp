@@ -8,7 +8,6 @@ struct il2c_vc0 {
 extern "C" int __cdecl FUN_00bf29c0(...);
 
 // @ 0x00bf51d0
-// @ 0x00bf51d0
 extern "C" int __fastcall FUN_00bf51d0(char* self, int edx_unused, int a4, int a8)
 {
     int t1002;

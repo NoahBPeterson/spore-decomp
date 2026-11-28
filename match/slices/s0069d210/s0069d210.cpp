@@ -36,7 +36,6 @@ struct il2c_vc1 {
 
 
 // @ 0x0069d210
-// @ 0x0069d210
 extern "C" bool __fastcall FUN_0069d210(char* self, int edx_unused, int a4)
 {
     int t1000;

@@ -1015,7 +1015,7 @@ void cVehicleView::ToggleShowPaths()
 }
 }  // namespace SP
 
-// 0x00e94a10 (byte-exact lifted version: match/slices/s00e94a10/s00e94a10.cpp)
+// 0x00e94a10: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e94a10/s00e94a10.cpp
 namespace SP {
 void cEffectToggle::Update(int a2, float t, float f2, cEmitter* emitter, cEffectTarget* target)
 {
@@ -1045,7 +1045,7 @@ void cEffectToggle::Update(int a2, float t, float f2, cEmitter* emitter, cEffect
 }
 }  // namespace SP
 
-// 0x00e94ad0 (byte-exact lifted version: match/slices/s00e94ad0/s00e94ad0.cpp)
+// 0x00e94ad0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e94ad0/s00e94ad0.cpp
 namespace SP {
 void __stdcall FUN_00e94ad0(cEmitter* self, cEffectTarget* target, int i)
 {

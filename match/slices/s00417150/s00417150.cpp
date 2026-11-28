@@ -7,7 +7,6 @@ __forceinline bool il2c_cc_ne(int a, int b) { return a != b; }
 
 struct D_00417150 { float FUN_00417150(int a4); };
 // @ 0x00417150
-// @ 0x00417150
 float D_00417150::FUN_00417150(int a4)
 {
     int v_l24;

@@ -252,7 +252,7 @@ void HashmapSetCommand(void* self, const char* name, int* cmd)
     (void)self; (void)cmd;
 }
 
-// 0x0083cd90 (byte-exact lifted version: match/slices/s0083cd90/s0083cd90.cpp)
+// 0x0083cd90: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083cd90/s0083cd90.cpp
 void CmdDtor::Dtor()
 {
     vtbl = (void*)&vtbl_AppProps;
@@ -262,7 +262,7 @@ void CmdDtor::Dtor()
         EASTL_allocator_deallocate(mTable.mpBucketArray);
 }
 
-// 0x0083ce20 (byte-exact lifted version: match/slices/s0083ce20/s0083ce20.cpp)
+// 0x0083ce20: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083ce20/s0083ce20.cpp
 AppPropsFields* AppPropsFields::VectorDtor(unsigned char flags)
 {
     vtbl = vtbl_AppProps;

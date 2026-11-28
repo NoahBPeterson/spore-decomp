@@ -930,7 +930,7 @@ void cStarRecord::CachePlanetRecords()
 }
 
 // ===========================================================================
-// 0x00bba790 (byte-exact lifted version: match/slices/s00bba790/s00bba790.cpp)
+// 0x00bba790: not byte-exact; the byte-exact version is the lifted one in match/slices/s00bba790/s00bba790.cpp
 // ===========================================================================
 Vec* cStarRecord::GetPlanetRecords()
 {

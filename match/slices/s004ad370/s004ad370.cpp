@@ -12,7 +12,6 @@ struct il2c_pi_4_int_8919c3cc { char pad[4]; int x; __forceinline int f() { retu
 
 struct D_004ad370 { void FUN_004ad370(int a4); };
 // @ 0x004ad370
-// @ 0x004ad370
 void D_004ad370::FUN_004ad370(int a4)
 {
     int v_l16_i;

@@ -363,7 +363,7 @@ end:
     sDoEnd(self, dt, 0, 0);
 }
 
-// 0x00e7e7a0 (byte-exact lifted version: match/slices/s00e7e7a0/s00e7e7a0.cpp)
+// 0x00e7e7a0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e7e7a0/s00e7e7a0.cpp
 void FUN_00e7e7a0(float dt)
 {
     int local = manager()->GetPriority();

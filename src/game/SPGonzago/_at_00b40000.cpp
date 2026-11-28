@@ -3140,7 +3140,7 @@ PoolNode* Pool::NewNode(Obj** ppObj)
     return node;
 }
 
-// 0x00b41e20 (byte-exact lifted version: match/slices/s00b41e20/s00b41e20.cpp)
+// 0x00b41e20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b41e20/s00b41e20.cpp
 void Pool::FreeBuckets(PoolNode** buckets, uint32_t count)
 {
     for (uint32_t i = 0; i < count; i++) {
@@ -3995,7 +3995,7 @@ int cHash30::Remove(void* keyPtr)
     return before - mNodeCount;
 }
 
-// 0x00b45b50 (byte-exact lifted version: match/slices/s00b45b50/s00b45b50.cpp)
+// 0x00b45b50: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b45b50/s00b45b50.cpp
 cIter cHash30::Insert(void* keyPtr, void* arg2)
 {
     cIter out;
@@ -6791,7 +6791,7 @@ void __fastcall FUN_00b4d930(char* self)
     stf(self, 0x14ec, g_oneF);
 }
 
-// 0x00b4d980 (byte-exact lifted version: match/slices/s00b4d980/s00b4d980.cpp)
+// 0x00b4d980: not byte-exact; the byte-exact version is the lifted one in match/slices/s00b4d980/s00b4d980.cpp
 void* __fastcall FUN_00b4d980(char* self, int, char* src)
 {
     st32(self, 0x0, ld32(src, 0x0));

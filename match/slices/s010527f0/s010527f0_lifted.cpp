@@ -23,7 +23,6 @@ struct C_00dd7620 { void FUN_00dd7620(); };
 struct C_00dd8640 { int FUN_00dd8640(); };
 
 // @ 0x010527f0
-// @ 0x010527f0
 extern "C" int __cdecl FUN_010527f0(int a4, int a8, int a12)
 {
     int t1000;

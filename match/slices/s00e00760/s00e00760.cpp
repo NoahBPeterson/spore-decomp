@@ -415,7 +415,7 @@ char FUN_00e00c40_impl() {
     return 0;
 }
 
-// 0x00e00d20 (byte-exact lifted version: match/slices/s00e00d20/s00e00d20.cpp)
+// 0x00e00d20: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e00d20/s00e00d20.cpp
 char FUN_00e00d20_impl() {
     if (SP_GetCurrentGameMode() == (void*)0x1654c00) {
         return 0;
@@ -779,7 +779,7 @@ char FUN_00e014a0_impl() {
 // ===========================================================================
 //  0x00e01570  small POD copy with refcounted members
 // ===========================================================================
-// 0x00e01570 (byte-exact lifted version: match/slices/s00e01570/s00e01570.cpp)
+// 0x00e01570: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e01570/s00e01570.cpp
 void* PodObj::Copy(void* o) {
     void* s = this;
     *(uint32_t*)s = *(uint32_t*)o;
@@ -848,7 +848,7 @@ void* NetObj::Ctor() {
     return self;
 }
 
-// 0x00e016f0 (byte-exact lifted version: match/slices/s00e016f0/s00e016f0.cpp)
+// 0x00e016f0: not byte-exact; the byte-exact version is the lifted one in match/slices/s00e016f0/s00e016f0.cpp
 void* NetObj::DelDtor(unsigned int flags) {
     void* self = this;
     *(void**)self = (void*)0x147f0dc;

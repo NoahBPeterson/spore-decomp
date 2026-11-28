@@ -386,7 +386,7 @@ void FloatVector::DoInsertValues(float* position, unsigned n, const float* value
     }
 }
 
-// 0x004b0ef0 (byte-exact lifted version: match/slices/s004b0ef0/s004b0ef0.cpp)
+// 0x004b0ef0: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b0ef0/s004b0ef0.cpp
 Record1d8Vector& Record1d8Vector::Assign(const Record1d8Vector& other)
 {
     if (this != &other) {
@@ -488,7 +488,7 @@ template <> void vector_s004b_11f0<S24>::DoAssignFromIterator(const S24* first, 
 }
 }  // namespace eastl
 
-// 0x004b2030 (byte-exact lifted version: match/slices/s004b2030/s004b2030.cpp)
+// 0x004b2030: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b2030/s004b2030.cpp
 namespace eastl {
 template <> void vector_s004b_11f0<uint32_t>::DoAssignValues(uint32_t n, const uint32_t& value)
 {
@@ -511,7 +511,7 @@ template <> void vector_s004b_11f0<uint32_t>::DoAssignValues(uint32_t n, const u
 }
 }  // namespace eastl
 
-// 0x004b2220 (byte-exact lifted version: match/slices/s004b2220/s004b2220.cpp)
+// 0x004b2220: not byte-exact; the byte-exact version is the lifted one in match/slices/s004b2220/s004b2220.cpp
 void** UninitCopyAutoRef(void** out, void** first, void** last, void** dest)
 {
     for (; first != last; ++first) {

@@ -505,7 +505,7 @@ float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)
     return (*r)->fn->Eval(p, this);
 }
 
-// 0x0083db70 (byte-exact lifted version: match/slices/s0083db70/s0083db70.cpp)
+// 0x0083db70: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083db70/s0083db70.cpp
 int EA::ArgScript::cExpression_s0083_d3d0::EvalIntParentheses(const char** p)
 {
     DiscardWhiteSpace(p);
@@ -646,14 +646,14 @@ int ExprTable::erase(const eastl::string8_s0083_d3d0& key)
     return saved - mnElementCount;
 }
 
-// 0x0083e140 (byte-exact lifted version: match/slices/s0083e140/s0083e140.cpp)
+// 0x0083e140: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083e140/s0083e140.cpp
 void __fastcall ExprTableClear(void* self)
 {
     DoFreeNodesExpr(*(void**)((char*)self + 4), *(int*)((char*)self + 8));
     *(int*)((char*)self + 0xc) = 0;
 }
 
-// 0x0083e160 (byte-exact lifted version: match/slices/s0083e160/s0083e160.cpp)
+// 0x0083e160: not byte-exact; the byte-exact version is the lifted one in match/slices/s0083e160/s0083e160.cpp
 float EA::ArgScript::cExpression::EvalRealFactor(char const *& p)
 {
     long double base = EvalSignedRealNumber(p);

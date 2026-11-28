@@ -137,7 +137,7 @@ void cFeatureVector::ResetResourceType()
 }
 
 // ---------------------------------------------------------------------------
-// 0x00571720 (byte-exact lifted version: match/slices/s00571720/s00571720.cpp)
+// 0x00571720: not byte-exact; the byte-exact version is the lifted one in match/slices/s00571720/s00571720.cpp
 void cFeatureVector::assign(const cFeatureVector& other)
 {
     erase(mpBegin, mpEnd);

@@ -834,7 +834,7 @@ RWMutex::~RWMutex() {
     // member destructors run automatically after this (empty) body: write condition,
     // read condition, then the mutex -- the original's 0xa0 / 0x40 / 0x10 sequence.
 }
-// 0x00922330 (byte-exact lifted version: match/slices/s00922330/s00922330.cpp)
+// 0x00922330: not byte-exact; the byte-exact version is the lifted one in match/slices/s00922330/s00922330.cpp
 bool RWMutex::Init(const RWMutexParameters* pParameters) {
     if (!pParameters) return false;
     unsigned char flag = pParameters->mbIntraProcess;

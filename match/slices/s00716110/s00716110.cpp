@@ -107,7 +107,7 @@ void MeshBuilder::pushV1c(const Vec3& v) { v1c.v.push_back(v); }
 // @ 0x00716780
 void MeshBuilder::pushV30(const Vec2& v, int index) { v30[index].v.push_back(v); }
 
-// 0x007168c0 (byte-exact lifted version: match/slices/s007168c0/s007168c0.cpp)
+// 0x007168c0: not byte-exact; the byte-exact version is the lifted one in match/slices/s007168c0/s007168c0.cpp
 void MeshBuilder::resizeV8(int n, const Vec3& v)
 {
     v8.v.reserve((int)(v8.v.mpEnd - v8.v.mpBegin) + n);
@@ -115,7 +115,7 @@ void MeshBuilder::resizeV8(int n, const Vec3& v)
         v8.v.push_back(v);
 }
 
-// 0x00716930 (byte-exact lifted version: match/slices/s00716930/s00716930.cpp)
+// 0x00716930: not byte-exact; the byte-exact version is the lifted one in match/slices/s00716930/s00716930.cpp
 void MeshBuilder::resizeV1c(int n, const Vec3& v)
 {
     v1c.v.reserve((int)(v1c.v.mpEnd - v1c.v.mpBegin) + n);

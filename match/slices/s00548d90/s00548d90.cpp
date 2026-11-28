@@ -62,7 +62,7 @@ int* Obj44::FUN_00548d90(int* param_2)
     return p;
 }
 
-// 0x00548e70 (byte-exact lifted version: match/slices/s00548e70/s00548e70.cpp)
+// 0x00548e70: not byte-exact; the byte-exact version is the lifted one in match/slices/s00548e70/s00548e70.cpp
 int* Obj44::FUN_00548e70(int* param_2)
 {
     int* p = (int*)this;
@@ -210,7 +210,7 @@ int FUN_00549840(int param_1, int param_2, short* param_3, short* param_4)
     }
 }
 
-// 0x00549940 (byte-exact lifted version: match/slices/s00549940/s00549940.cpp)
+// 0x00549940: not byte-exact; the byte-exact version is the lifted one in match/slices/s00549940/s00549940.cpp
 unsigned* Obj44::FUN_00549940(unsigned* param_2)
 {
     unsigned* p = (unsigned*)this;
