@@ -172,7 +172,7 @@ struct Vec32
     void DoInsertValues(Elem32* position, uint n, const Elem32& value);
 };
 
-// @ 0x0047ae60
+// 0x0047ae60 (byte-exact lifted version: match/slices/s0047ae60/s0047ae60.cpp)
 void Vec32::DoInsertValues(Elem32* position, uint n, const Elem32& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x20 < n) {

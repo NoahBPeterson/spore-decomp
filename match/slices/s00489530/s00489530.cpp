@@ -180,7 +180,7 @@ void cSPEditorLimbStructure::MirrorTargetsOffset(cSPEditorLimbJoint* joint, floa
     }
 }
 
-// @ 0x489710
+// 0x00489710 (byte-exact lifted version: match/slices/s00489710/s00489710.cpp)
 void cSPEditorLimbStructure::RefreshTargets(vector<cSPEditorLimbJoint*>* list, bool b)
 {
     if (!b) FUN_0049d1f0(mBaseBlock, mBaseJoint->mOriginalPosition.x, 0, 0);
@@ -190,7 +190,7 @@ void cSPEditorLimbStructure::RefreshTargets(vector<cSPEditorLimbJoint*>* list, b
     UpdateSymmetry();
 }
 
-// @ 0x4897b0
+// 0x004897b0 (byte-exact lifted version: match/slices/s004897b0/s004897b0.cpp)
 void cSPEditorLimbStructure::RefreshBlockTargets(cSPEditorBlock* block, bool b)
 {
     if (block) {

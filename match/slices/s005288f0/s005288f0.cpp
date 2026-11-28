@@ -233,7 +233,7 @@ void SetRenderState(int state, uint32_t value)
     ((uint32_t*)g_16f91e0)[state] = value;
 }
 
-// @ 0x005292d0
+// 0x005292d0 (byte-exact lifted version: match/slices/s005292d0/s005292d0.cpp)
 struct DrawCtx {
     VPi* mVertexProcessor;          // +0
     uint32_t mUnused4;              // +4

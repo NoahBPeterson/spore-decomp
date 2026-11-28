@@ -2273,7 +2273,7 @@ void cExportHelper::ExportMeshEnd()
     export_mesh_FILE = 0;
 }
 
-// @ 0x01244f50
+// 0x01244f50 (byte-exact lifted version: match/slices/s01244f50/s01244f50_lifted.cpp)
 void init_150c720()
 {
     FLD(0, 0) = OFF(ViewRowsA, rows[0]);

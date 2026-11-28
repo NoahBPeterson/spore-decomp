@@ -195,7 +195,7 @@ void AssignCollisionGroups(cSPEditorBlock* block, BlockVector* list, int grpAll,
     }
 }
 
-// @ 0x4a6d20
+// 0x004a6d20 (byte-exact lifted version: match/slices/s004a6d20/s004a6d20.cpp)
 // Re-validates `block` (and, recursively, its symmetric partner, a supplied list of blocks and its
 // children), with the model's symmetry switch off while the flags are recomputed.
 void FUN_4a6d20(cSPEditorBlock* block, BlockVector* blocks, bool param3, cSPEditorSkinManager* skin,

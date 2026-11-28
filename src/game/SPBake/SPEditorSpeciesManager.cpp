@@ -3921,7 +3921,7 @@ void VecE8::DoInsertValuesE8(Elem8* position, unsigned int n, Elem8 const& value
 }
 
 #pragma function(memcpy)   // the slice calls memcpy out of line here; the file-wide intrinsic would inline the 12-byte copy
-// @ 0x004cf2c0
+// 0x004cf2c0 (byte-exact lifted version: match/slices/s004cf2c0/s004cf2c0.cpp)
 void VecE34::DoInsertValuesE34(Elem34_s004c_e310* position, unsigned int n, Elem34_s004c_e310 const& value)
 {
     if (((unsigned int)(mpCapacity - mpEnd)) < n) {
@@ -3989,7 +3989,7 @@ void VecE34::DoInsertValuesE34(Elem34_s004c_e310* position, unsigned int n, Elem
 }
 #pragma intrinsic(memcpy)
 
-// @ 0x004cf770
+// 0x004cf770 (byte-exact lifted version: match/slices/s004cf770/s004cf770_lifted.cpp)
 namespace eastl {
 template <> void vector_s004c_f770<Rec14>::DoInsertValues(Rec14* position, uint32_t n, const Rec14& value)
 {

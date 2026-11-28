@@ -200,7 +200,7 @@ void BlobVec::Vector16Resize(unsigned n)
     BlobResize<0x10>(this, n);
 }
 
-// @ 0x0053b210  eastl::vector<Entry16>::operator=
+// 0x0053b210 (byte-exact lifted version: match/slices/s0053b210/s0053b210.cpp)  eastl::vector<Entry16>::operator=
 BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
     return BlobAssign<0x10>(this, o);
@@ -212,7 +212,7 @@ void BlobVec::Vector20Resize(unsigned n)
     BlobResize<0x14>(this, n);
 }
 
-// @ 0x0053b5a0  eastl::vector<Entry20>::operator=
+// 0x0053b5a0 (byte-exact lifted version: match/slices/s0053b5a0/s0053b5a0.cpp)  eastl::vector<Entry20>::operator=
 BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
 {
     return BlobAssign<0x14>(this, o);

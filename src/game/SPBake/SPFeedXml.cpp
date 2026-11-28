@@ -808,7 +808,7 @@ void Ctx40::FUN_00543c10(int* attrs, int mode)
     }
 }
 
-// @ 0x005459a0
+// 0x005459a0 (byte-exact lifted version: match/slices/s005459a0/s005459a0.cpp)
 namespace SP { namespace Feed {
 void HandshakeParser_s0054_5220::StartDoc()
 {
@@ -1021,7 +1021,7 @@ void HandshakeParser_s0054_5220::EndScreenName()
 }
 }}  // namespace SP::Feed
 
-// @ 0x00546160
+// 0x00546160 (byte-exact lifted version: match/slices/s00546160/s00546160_lifted.cpp)
 void FUN_00546160(int param_1, const wchar_t* name, int* attrs)
 {
     StringResizeW(0);
@@ -1058,7 +1058,7 @@ void FUN_00546160(int param_1, const wchar_t* name, int* attrs)
     FUN_00545bd0();
 }
 
-// @ 0x005462f0
+// 0x005462f0 (byte-exact lifted version: match/slices/s005462f0/s005462f0.cpp)
 void FUN_005462f0(int param_1, const wchar_t* name)
 {
     short* local_14 = gFeedEndTable;

@@ -7327,7 +7327,7 @@ void cSPEditorLimbStructure_s0048_9530::MirrorTargetsOffset(cSPEditorLimbJoint_s
 }
 }  // namespace SP
 
-// @ 0x00489710
+// 0x00489710 (byte-exact lifted version: match/slices/s00489710/s00489710.cpp)
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::RefreshTargets(vector_s0048_9530<cSPEditorLimbJoint_s0048_9530*>* list, bool b)
 {
@@ -7339,7 +7339,7 @@ void cSPEditorLimbStructure_s0048_9530::RefreshTargets(vector_s0048_9530<cSPEdit
 }
 }  // namespace SP
 
-// @ 0x004897b0
+// 0x004897b0 (byte-exact lifted version: match/slices/s004897b0/s004897b0.cpp)
 namespace SP {
 void cSPEditorLimbStructure_s0048_9530::RefreshBlockTargets(cSPEditorBlock_s0048_9530* block, bool b)
 {
@@ -10620,7 +10620,7 @@ void RepinBlockToTorso(cSPEditorBlock_s0049_fbd0* block, cSPVector3_s0049_fbd0 t
     }
 }
 
-// @ 0x0049fee0
+// 0x0049fee0 (byte-exact lifted version: match/slices/s0049fee0/s0049fee0.cpp)
 void FUN_49fee0(cSPEditorBlock_s0049_fbd0* block, bool unique)
 {
     LimbVec<cSPEditorBlock_s0049_fbd0*> limbs;
@@ -11879,7 +11879,7 @@ void FUN_4a6ca0(cSPEditorModel_s004a_6690* model, int value)
     model->FUN_4adc20(saved);
 }
 
-// @ 0x004a6d20
+// 0x004a6d20 (byte-exact lifted version: match/slices/s004a6d20/s004a6d20.cpp)
 void FUN_4a6d20(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6690* blocks, bool param3, cSPEditorSkinManager* skin, int param5, bool invalid, bool recurseChildren, bool recurseSymmetric)
 {
     AutoRefCount_s004a_6690<cSPEditorModel_s004a_6690> model(block->GetEditorModel());
@@ -12023,7 +12023,7 @@ bool SameKey(ResKeySource* a, ResKeySource* b)
         && first.mGroup == src.mGroup;
 }
 
-// @ 0x004a7c90
+// 0x004a7c90 (byte-exact lifted version: match/slices/s004a7c90/s004a7c90.cpp)
 void GatherBlocks(cSPEditorBlock_s004a_7c30* param_1, UIntVector* param_2)
 {
     if (param_1 == 0) return;
@@ -12233,7 +12233,7 @@ M3::M3(float a, float b, float c, float d, float e, float f, float g, float h, f
     m[2].Set(g, h, i);
 }
 
-// @ 0x004a8e10
+// 0x004a8e10 (byte-exact lifted version: match/slices/s004a8e10/s004a8e10.cpp)
 void* BuildFacingMatrix(void* param_1, void* param_2, unsigned char param_3)
 {
     float f1[3];
@@ -12302,7 +12302,7 @@ void HavokAlignedRoutine(void* param_1, void* param_2)
     (void)param_2;
 }
 
-// @ 0x004a9610
+// 0x004a9610 (byte-exact lifted version: match/slices/s004a9610/s004a9610.cpp)
 void ConvertToMatrix(void* param_1, void* param_2)
 {
     float f[4];

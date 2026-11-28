@@ -1120,7 +1120,7 @@ void cSPEditorSkinManager_s004c_38e0::Update(uint32_t unused, bool paintAll, uin
 }
 }  // namespace SP
 
-// @ 0x004c4290
+// 0x004c4290 (byte-exact lifted version: match/slices/s004c4290/s004c4290.cpp)
 namespace SP {
 void cSPEditorSkinManager_s004c_38e0::UpdatePaintedSkin()
 {

@@ -189,7 +189,7 @@ void* ParseVec3(void* out, const char* s) {
 extern float FUN_004565f0(int s);
 extern void  FUN_00456650(void* out, int s, float f);
 
-// @ 0x00455d60 -- eastl::basic_string<char>::append(first,last)
+// 0x00455d60 (byte-exact lifted version: match/slices/s00455d60/s00455d60.cpp) -- eastl::basic_string<char>::append(first,last)
 int* StringAppend(int* self, const char* first, const char* last) {
     if (first != last) {
         int oldSize = self[1] - self[0];
@@ -222,7 +222,7 @@ int* StringAppend(int* self, const char* first, const char* last) {
 extern void* FUN_11e0744_alloc(unsigned int n);
 extern void  FUN_11e0744_copy(void* dst, void* src, int n);
 
-// @ 0x00455fa0 -- vector-of-0x20 insert/resize (partial approximation)
+// 0x00455fa0 (byte-exact lifted version: match/slices/s00455fa0/s00455fa0.cpp) -- vector-of-0x20 insert/resize (partial approximation)
 void* VecInsert32(int* self, void* position, unsigned int count, void* value) {
     if (count > (unsigned int)((self[2] - self[1]) >> 5)) {
         int oldSize = (self[1] - self[0]) >> 5;

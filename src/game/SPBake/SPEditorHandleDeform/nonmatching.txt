@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 0047fe20 303 cSPEditorHandleDeform::UpdateDirection (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): slice-layout hold, moved verbatim by hand; 304 vs 360 bytes; math and member writes match; original /Od keeps extra temporaries for the inlined dot/normalize sequence; equiv PASS (inline-calls tolerated)
-0047ff90 89 Mat3_TransformDir_ (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 114 vs 159 bytes; three dot products are all present, original /Od materializes each row sum into its own temp; equiv PASS flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00480030 563 cSPEditorHandleDeform::Init (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): slice-layout hold, moved verbatim by hand; 354 vs 587 bytes; initialization sequence matches by disassembly (model manager validation, copy, Deform::Init call), original /Od temp frame is much larger; equiv WEAK (142 valid, 21.3% cov), no mismatch
 00481fa0 109 GetHandlePos: transform/vector helper shapes and /Od slots differ flags: /Od /MD /Gy /EHsc /TP
 00482040 123 GetDir: semantics PASS (100% cov, mP1-mP0); retail body is unoptimised-shaped (temp+copy of the VSub result), our optimised form is shorter flags: /O2 /MD /Gy /EHsc /TP

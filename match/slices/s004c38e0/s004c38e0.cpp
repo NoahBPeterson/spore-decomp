@@ -398,7 +398,7 @@ void cSPEditorSkinManager::Update(uint32_t unused, bool paintAll, uint32_t p4, u
     UpdatePaintedSkin();
 }
 
-// @ 0x004c4290
+// 0x004c4290 (byte-exact lifted version: match/slices/s004c4290/s004c4290.cpp)
 void cSPEditorSkinManager::UpdatePaintedSkin()
 {
     if (!mPaintEnabled)

@@ -164,7 +164,7 @@ void RepinBlockToTorso(cSPEditorBlock* block, cSPVector3 t, cSPMatrix3 r, bool f
     }
 }
 
-// @ 0x49fee0
+// 0x0049fee0 (byte-exact lifted version: match/slices/s0049fee0/s0049fee0.cpp)
 void FUN_49fee0(cSPEditorBlock* block, bool unique)
 {
     LimbVec<cSPEditorBlock*> limbs;

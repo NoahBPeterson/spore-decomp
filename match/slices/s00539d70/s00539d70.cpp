@@ -384,7 +384,7 @@ void BrushDesc_s0053_9d70::Init()
     mBlend2 = 0;
 }
 
-// @ 0x0053a6d0
+// 0x0053a6d0 (byte-exact lifted version: match/slices/s0053a6d0/s0053a6d0.cpp)
 EA::IO::IStream* ReadEvalList(EA::IO::IStream* stream, EvalList* e)
 {
     int32_t n = 0;
@@ -423,7 +423,7 @@ EA::IO::IStream* ReadEvalList(EA::IO::IStream* stream, EvalList* e)
     return stream;
 }
 
-// @ 0x0053a930
+// 0x0053a930 (byte-exact lifted version: match/slices/s0053a930/s0053a930.cpp)
 EA::IO::IStream* WriteEvalList(EA::IO::IStream* stream, EvalList* e)
 {
     uint32_t n = (uint32_t)(((char**)((char*)e + 4))[0] - *(char**)e) >> 4;

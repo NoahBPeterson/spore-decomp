@@ -1243,7 +1243,7 @@ Elem24Vec::~Elem24Vec()
     Free();
 }
 
-// @ 0x00421290
+// 0x00421290 (byte-exact lifted version: match/slices/s00421290/s00421290.cpp)
 Elem24Vec& Elem24Vec::assign(const Elem24Vec& x)
 {
     if (&x != this) {

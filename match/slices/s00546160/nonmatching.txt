@@ -1,5 +1,3 @@
-00546160  323  complete; /Od hash-dispatch schedule/frame differs
-005462f0  570  complete; /Od hash-dispatch schedule/frame differs
 00546630  358  complete; /Od multi-string ctor slot layout differs
 00546800  117  complete; fixed thiscall push_back - /Od vector insert schedule differs
 00546930  290  complete; fixed vector_map::operator[] (0x14 compare byte, thiscall insert/destroy) - schedule differs

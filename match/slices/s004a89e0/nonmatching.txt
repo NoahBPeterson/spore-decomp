@@ -1,5 +1,3 @@
 004a89e0  808  BuildOrientation (Mat3* out, const Vec3* a, const Vec3* b): complete source (A = -a, B = b, C = A x B, |C|-threshold orthonormalize path, degenerate-basis fallback, M3 ctor, assign into out); x87 compare and SSE scheduling differ; equiv PASS 100.0% cov (400 valid) [/Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast]
-004a8e10  269  BuildFacingMatrix: complete source (VecMulMat of the two global bases with param_2, sign flip of .x / .z per param_3, then Matrix3FromFacingAndUp); equiv PASS 82.7% cov (400 valid) [/Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast]
 004a8fc0  764  TransposeInto: complete behaviourally-equivalent reimplementation of the 16-byte-aligned SSE matrix transpose; equiv PASS 100.0% cov (400 valid) [/Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast]
-004a9610  171  ConvertToMatrix: complete source (quaternion from 4 floats, QuaternionToMatrix, Matrix33 copy-ctor, 9-dword copy out); equiv PASS 100.0% cov (400 valid) [/Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast]
 004a96d0  335  complete flag/children walk; /Od inlined-flag + element temp slots differ

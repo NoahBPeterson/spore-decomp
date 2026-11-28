@@ -310,7 +310,7 @@ RefVector::~RefVector()
     tail();
 }
 
-// @ 0x0041ebe0
+// 0x0041ebe0 (byte-exact lifted version: match/slices/s0041ebe0/s0041ebe0.cpp)
 RefVector& RefVector::operator=(const RefVector& x)
 {
     if (&x != this) {

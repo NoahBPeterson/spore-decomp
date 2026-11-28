@@ -7,7 +7,6 @@
 #   UNSUPPORTED : 01244f50 (unresolved extern annotation), 0125bd80 (unresolved virtual),
 #                 0126dae0/0126db20/0126db60 (import _decode_pointer), 01277f40/012817b0/01281800
 #                 (harness could not bind the object symbol)
-01244f50  256  init_150c720: complete; table layout correct, but the 12-byte row offsets (index*12) are constant-folded by cl 15 at /Od whereas the original keeps the runtime `imul r,r,12` for indices 0..2
 01277f40  296  init_150d100: complete; 8 record copies into the descriptor table; per-record field/store schedule differs
 
 # 16 of the 31 VAs are byte-exact (14 via manifest.txt with its /Od /Ob1 rows, plus

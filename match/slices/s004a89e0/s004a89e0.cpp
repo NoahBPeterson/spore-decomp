@@ -115,7 +115,7 @@ M3::M3(float a, float b, float c, float d, float e, float f,
     m[2].x = g; m[2].y = h; m[2].z = i;
 }
 
-// @ 0x004a8e10 — BuildFacingMatrix: two bases through the matrix, then Matrix3FromFacingAndUp.
+// 0x004a8e10 (byte-exact lifted version: match/slices/s004a8e10/s004a8e10.cpp) — BuildFacingMatrix: two bases through the matrix, then Matrix3FromFacingAndUp.
 struct V3g { float x, y, z; };
 struct M3g { V3g m[3]; };
 V3g* __cdecl VecMulMat(V3g* out, const V3g* v, const M3g* m);        // 0x041daf0
@@ -146,7 +146,7 @@ void* BuildFacingMatrix(void* param_1, void* param_2, unsigned char param_3)
     return param_1;
 }
 
-// @ 0x004a9610 — ConvertToMatrix: quaternion -> Matrix33, then copy out.
+// 0x004a9610 (byte-exact lifted version: match/slices/s004a9610/s004a9610.cpp) — ConvertToMatrix: quaternion -> Matrix33, then copy out.
 struct M33 {
     float m[9];
     M33(const M33& o);                                   // 0x041cb40
