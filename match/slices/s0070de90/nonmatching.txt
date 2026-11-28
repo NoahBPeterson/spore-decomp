@@ -1,5 +1,4 @@
 0070e060  206   regalloc: R49 (2026-11-17): member LConfigVec::Resize with single-dtor LConfigTmp view gives 258/256 B and matching frame; retail keeps ctor result in ebp; tried temp arg, const-ref temp, Init() returning this (manifest symbol must become ?Resize@LConfigVec@@QAEXI@Z) | Earlier note: eastl::vector<SP::cLightingConfig> resize; helper inlining/temp differs
-0070e280  45    cLightingManager message registration; 0070e160 is __thiscall (this in ecx, no stack arg); equiv WEAK (331 valid, 32.1% cov)
 0070e4e0  198   graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
 0070e5e0  91    graphics resource release; fine register/order differences
 0070e6b0  91    hash-node constructor; __stdcall (callee pops src); equiv PASS (358 valid, 100% cov); EH frame still smaller than orig

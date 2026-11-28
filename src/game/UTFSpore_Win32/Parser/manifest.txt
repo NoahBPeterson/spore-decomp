@@ -59,3 +59,4 @@
 ../src/game/UTFSpore_Win32/Parser.cpp  ?erase@MacroHashtable@@QAE?AUMacroHashIterator@@U2@@Z  00846c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?ParseEnd@cParser@@QAEH_N@Z  00844ec0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?Execute@cEndCommand_s0084_2620@@UAEXPAUcArguments_s0084_2620@ArgScript@EA@@@Z  00842910  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?PushScope@cParser@@QAEXPBD@Z  00845260  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

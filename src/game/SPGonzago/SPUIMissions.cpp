@@ -3518,11 +3518,16 @@ void cUIMissionCardPanel::SetCardsVisibility(bool bVisible)
     int count = (int)(mpCardsEnd - mpCardsBegin);
     for (int i = 0; i < count; ++i) {
         cUICard* pCard = mpCardsBegin[i].mpObject;
-        if (pCard == nullptr || pCard->mLayout.mpObject == nullptr)
-            continue;
-        pCard->mLayout.mpObject->SetVisibility(bVisible);
-        if (pCard->mpMainWin.mpObject != nullptr)
-            pCard->mpMainWin.mpObject->Show(1, bVisible);
+        if (pCard != nullptr) {
+            cSPUILayout_s00e1_4a30* pLayout = *(cSPUILayout_s00e1_4a30**)((uint8_t*)pCard + 0x1c);
+            if (pLayout != nullptr) {
+                pLayout->SetVisibility(bVisible);
+                void* pMain = *(void**)((uint8_t*)pCard + 0x24);
+                if (pMain != nullptr)
+                    ((void (__thiscall*)(void*, int, bool))(*(void***)pMain)[0x7c / 4])(
+                        pMain, 1, bVisible);
+            }
+        }
     }
 }
 

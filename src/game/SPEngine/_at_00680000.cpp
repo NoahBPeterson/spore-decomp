@@ -1860,11 +1860,9 @@ void SerCtx::WriteMap2A10(Map3* map, IWrt* w)
 
 // @ 0x00682e90
 void SerCtx::LoadMap1(Map1* map, IRd* r)
-{
-    void* self = this;
-    int count;
+{    uint32_t count;
     r->Read(&count, 4);
-    for (int i = 0; i < count; ++i) {
+    for (uint32_t i = 0; i < count; ++i) {
         int key;
         r->Read(&key, 4);
         ObjC30_s0068_1f10* val = map->operator[](key);
@@ -1875,12 +1873,11 @@ void SerCtx::LoadMap1(Map1* map, IRd* r)
         int len;
         ReadInt32(r, &len, 1, 0);
         if (len) {
-            StringResize(&val->mStr, 0);
+            ((S8_s0068_3f80*)&val->mStr)->Resize(len, 0);
             r->Read(val->mStr.mpBegin, len);
         }
-        LoadEntries(self, &val->mVec, r);
-    }
-}
+        ((LoadEntriesT*)this)->load(&val->mVec, r);
+    }}
 
 // Destruction view of Factory (0x00683f80): no own vtable store on entry (novtable). The buffer's erase (0x680b70) and
 // free are nothrow, so only the three maps (0x683160, 0x681500, 0x682800) need unwind states; then the editor
@@ -2606,14 +2603,12 @@ uint64 __fastcall AtomicExchange64(volatile uint64* p, uint64 v)
 
 // @ 0x0068c220
 void FreeList::Drain()
-{
-    while ((uint32)AtomicRead64(&mHead) != 0) {
-        volatile uint64 head = mHead;
+{    while ((uint32)AtomicRead64(&mHead) != 0) {
+        __declspec(align(8)) uint64 head = mHead;
         FreeItem* n = (FreeItem*)(uintptr_t_s0068_b150)AtomicRead64((volatile uint64*)&head);
         mHead = n->next;
         EAFree((void*)(uintptr_t_s0068_b150)AtomicRead64((volatile uint64*)&head));
-    }
-}
+    }}
 
 // @ 0x0068c280
 void FreeList::Push(uint32 a, uint32 b)

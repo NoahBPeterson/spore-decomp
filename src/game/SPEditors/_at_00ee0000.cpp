@@ -3453,8 +3453,8 @@ void __cdecl f_ee1510(int key, float param_2)
 
 // @ 0x00ee1630
 void __cdecl f_ee1630(int key)
-{
-    IntVec v;
+{    struct Vec20 { int* begin; int* end; int* cap; int alloc[2]; };
+    Vec20 v;
     v.begin = 0; v.end = 0; v.cap = 0;
     g_16c7aa4_s00ee_0d70->f74->FUN_00f40d00(key, &v);
     IObj** end = (IObj**)v.end;
@@ -3463,13 +3463,13 @@ void __cdecl f_ee1630(int key)
         IObj* r = (obj != 0) ? (IObj*)obj->Query(0x1186577) : 0;
         r->FUN_00c8ad30(0xb78987ff, 0);
     }
-    for (IObj** q = (IObj**)v.begin; q < (IObj**)v.end; ++q) {
+    IObj** qEnd = (IObj**)v.end;
+    for (IObj** q = (IObj**)v.begin; q < qEnd; ++q) {
         if (*q != 0)
             (*q)->Release();
     }
     if (v.begin != 0 && v.begin[-1] != 0)
-        operator_delete(v.begin);
-}
+        operator_delete(v.begin);}
 
 // @ 0x00ee16f0
 void TutorialPanel::Refresh()
@@ -5621,8 +5621,7 @@ void __thiscall XCat::Refresh(u8 which)
 
 // @ 0x00ee82c0
 void __thiscall SpuEd::UpdateCategory(u32 sel)
-{
-    char* rec = *(char**)((char*)g_universe + 0x18);
+{    char* rec = *(char**)((char*)g_universe + 0x18);
     if (!rec) return;
     u32 id = *(u32*)(rec + 0x160);
     int outCat;
@@ -5630,8 +5629,14 @@ void __thiscall SpuEd::UpdateCategory(u32 sel)
     ((XCat*)this)->FindCategory(id, &outCat, &flag);
     u32 idx = sel + 0xe94e7f70;
     if ((int)idx < 0 || idx >= 0xf) return;
-    u32 chosen = flag ? g_catA[idx] : g_catB[idx];
-    if (chosen == id) return;
+    u32 chosen;
+    if (flag) {
+        chosen = g_catA[idx];
+        if (chosen == id) return;
+    } else {
+        chosen = g_catB[idx];
+        if (chosen == id) return;
+    }
     XUniv* u = (XUniv*)rec;
     u->F33bf0();
     u->F352c0(chosen);
@@ -5641,8 +5646,7 @@ void __thiscall SpuEd::UpdateCategory(u32 sel)
     if (!w) return;
     u8 inTable = ((XCat*)this)->IsInTable(chosen);
     Fn1350(w, flag && inTable);
-    Fn2fa0(w, sel);
-}
+    ((void(__cdecl*)(void*, u8))Fn2fa0)(w, inTable);}
 
 // @ 0x00ee83a0
 void __thiscall SpuEd::SetObject(void* obj)

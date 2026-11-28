@@ -563,22 +563,20 @@ void EA::ArgScript::cExpression::EvalString(char const *& p, eastl::basic_string
 
 // @ 0x0083dd00
 void __stdcall DoFreeNodesExpr(void* bucketArray, int bucketCount)
-{
-    for (int i = 0; i < bucketCount; ++i) {
-        char* node = *(char**)((char*)bucketArray + i * 4);
-        while (node) {
-            char* next = *(char**)(node + 0x14);
-            int* ref = *(int**)(node + 0x10);
+{    for (unsigned int i = 0; i < (unsigned int)bucketCount; ++i) {
+        char* pNode = *(char**)((char*)bucketArray + i * 4);
+        while (pNode) {
+            char* pTempNode = pNode;
+            pNode = *(char**)(pNode + 0x14);
+            int* ref = *(int**)(pTempNode + 0x10);
             if (ref) { if (--ref[1] == 0) EASTL_allocator_deallocate(ref); }
-            eastl::string8_s0083_d3d0* s = (eastl::string8_s0083_d3d0*)node;
+            eastl::string8_s0083_d3d0* s = (eastl::string8_s0083_d3d0*)pTempNode;
             if ((s->mpCapacity - s->mpBegin) > 1 && s->mpBegin)
                 EASTL_allocator_deallocate(s->mpBegin);
-            EASTL_allocator_deallocate(node);
-            node = next;
+            EASTL_allocator_deallocate(pTempNode);
         }
         *(void**)((char*)bucketArray + i * 4) = 0;
-    }
-}
+    }}
 
 // @ 0x0083dd70
 float EA::ArgScript::cExpression::EvalSignedRealNumber(char const *& p)

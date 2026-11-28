@@ -435,6 +435,7 @@ struct StatusMap {          // map<uint32, int> at +0x2c
     uint32 pad;
     RBNode anchor;
     int& operator[](const uint32& key);          // 0xbadea0
+    void** Find(void** out, const uint32* key);  // 0xe5c780
 };
 struct StageMap {           // map<uint32, uint32> at +0x48
     uint32 pad;
@@ -628,7 +629,8 @@ struct EventMap {
     char pad00[0x2c];
     StatusMap mEvents;                                 // +0x2c (anchor +0x30)
     cSPBadgeManager_s00fe_5a20* mOwner;                           // +0x38
-    long double GetScore(uint32 id);                   // 0xfe6690 (ret 4)
+    float GetScore(uint32 id);                         // 0xfe6690 (ret 4)
+    float GetProgressScore2(uint32 id, int mode);      // 0xfe6210 (ret 8)
     int  GetScoreRounded(uint32 id);                   // 0xfe66f0 (ret 4)
     long double GetWeightedScore();                    // 0xfe67b0
     void FormatScore(uint32 id, void* text);           // 0xfe6800 (ret 8)
@@ -1437,15 +1439,14 @@ void cSPBadgeManager_s00fe_5a20::OnTick(int delta)
 }
 
 // @ 0x00fe6690
-long double EventMap::GetScore(uint32 id)
-{
-    uint32 key = id;
-    void* slot = 0;
-    void** found = MapFind((void*)&mEvents, &slot, &key);
+float EventMap::GetScore(uint32 id)
+{    uint32 key = id;
+    void* slot;
+    void** found = mEvents.Find(&slot, &key);
     EventNode* node = (EventNode*)*found;
-    if (node != (EventNode*)&mEvents.anchor && node->mCount14 < 2)
-        return 1.0;
-    return mOwner->GetProgressScore(id, 0, 0, 0);
+    return (node != (EventNode*)&mEvents.anchor && node->mCount14 <= 1)
+        ? 1.0f
+        : GetProgressScore2(id, 0);
 }
 
 // @ 0x00fe66f0

@@ -80,3 +80,5 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7e20@WE@@QAEXXZ  00bc7e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7570@@YAXHPAUWE@@@Z  00bc7570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?resetByKey@Reg_s00bc_4730@@QAEXI@Z  00bc5040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?SetSubject@CityDisplayOwner@@QAEXPAX@Z  00bc20e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc78d0@@YGXPAURec_s00bc_74d0@@0@Z  00bc78d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

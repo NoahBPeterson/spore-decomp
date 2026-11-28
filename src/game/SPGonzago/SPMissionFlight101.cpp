@@ -379,34 +379,28 @@ void cSPMissionFlight101::OnAccept()
 
 // @ 0x00c559e0
 cSubMission* cSPMissionFlight101::GetEradicateSubMission()
-{
-    int32_t nIndex = 0;
-    int32_t nCount = (int32_t)(mSubMissions.mpEnd - mSubMissions.mpBegin);
-    while (nIndex < nCount) {
-        cSubMission* pSub = mSubMissions.mpBegin[nIndex];
+{    int32_t nCount = (int32_t)(mSubMissions.mpEnd - mSubMissions.mpBegin);
+    for (int32_t nIndex = 0; nIndex < nCount; ++nIndex) {
+        cSubMission*& pSub = mSubMissions.mpBegin[nIndex];
         if (pSub != nullptr) {
             cSubMission* pResult = (cSubMission*)(intptr_t)pSub->HasKey(0x2f9998c);
             if (pResult != nullptr)
                 return pResult;
         }
-        ++nIndex;
     }
-    return nullptr;
-}
+    return nullptr;}
 
 // @ 0x00c55a30
 cSubMission* cSPMissionFlight101::GetHerdSubMission()
 {
-    int32_t nIndex = 0;
     int32_t nCount = (int32_t)(mSubMissions.mpEnd - mSubMissions.mpBegin);
-    while (nIndex < nCount) {
-        cSubMission* pSub = mSubMissions.mpBegin[nIndex];
+    for (int32_t nIndex = 0; nIndex < nCount; ++nIndex) {
+        cSubMission*& pSub = mSubMissions.mpBegin[nIndex];
         if (pSub != nullptr) {
             cSubMission* pResult = (cSubMission*)(intptr_t)pSub->HasKey(0x2afd27e);
             if (pResult != nullptr)
                 return pResult;
         }
-        ++nIndex;
     }
     return nullptr;
 }

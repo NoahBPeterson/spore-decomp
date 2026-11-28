@@ -28,3 +28,5 @@
 ../src/game/SPCreatureAnim/creature.cpp  ?SortFlaggedRuns@Solver@nSPCreatureAnim@@QAEXXZ  009b5930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?FUN_009b8f40@creature_instance_data_s009b_8720@nSPCreatureAnim@@QAEXM@Z  009b8f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?Release@creature_instance_data@nSPCreatureAnim@@QAEJXZ  009c4cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?CopyWigglesGuarded@@YAPAUwiggle_static_data_s009b_3e40@nSPCreatureAnim@@PAU12@00@Z  009b4350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?CopyWigglesBackward@@YAPAUwiggle_static_data_s009b_3e40@nSPCreatureAnim@@PAU12@00@Z  009b4870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

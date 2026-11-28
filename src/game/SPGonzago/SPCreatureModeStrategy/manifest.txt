@@ -54,3 +54,4 @@
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?GetCreatureGUIWindow@@YAPAXI@Z  00d48b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?CopyRefs@@YAPAPAXPAPAX00@Z  00d3b3c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?Shuffle@@YAXPAUSortEntry@@0PAURandomLinearCongruential@@@Z  00d3b520  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d3b920@@YAPAPAUcSPVector3_s00d3_b920@@PAPAU1@UcSPVectorRange@@PAU1@@Z  00d3b920  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

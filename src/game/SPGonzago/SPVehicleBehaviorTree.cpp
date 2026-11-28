@@ -2547,16 +2547,16 @@ void KeyLookup::Reset()
 
 // @ 0x00dc4d40
 char FUN_00dc4d40(Obj* self, Obj* ctx)
-{
-    switch (self->mStateB1c) {
+{    switch (self->mStateB1c) {
     case 0: {
+        Sub* s2 = &ctx->mSub120;
         void* a = (void*)((VfnP)self->mSub34.mpVtbl->mSlots[kVt2C])(&self->mSub34);
         PlanetModel* pm1 = (PlanetModel*)SP_PlanetModel(a);
         int c1 = pm1->GetContinent();
-        void* b = (void*)((VfnP)ctx->mSub120.mpVtbl->mSlots[kVt2C])(&ctx->mSub120);
+        void* b = (void*)((VfnP)s2->mpVtbl->mSlots[kVt2C])(s2);
         PlanetModel* pm2 = (PlanetModel*)SP_PlanetModel(b);
         int c2 = pm2->GetContinent();
-        return c1 == c2;
+        return (int)(c2 == c1);
     }
     case 1: {
         float* p = ((City*)ctx)->GetPositionPtr();
@@ -2571,8 +2571,7 @@ char FUN_00dc4d40(Obj* self, Obj* ctx)
     case 2:
         return 1;
     }
-    return 0;
-}
+    return 0;}
 
 // @ 0x00dc4e20
 char IsValidFireTarget(Obj* ctx, Obj* target)

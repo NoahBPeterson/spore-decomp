@@ -434,16 +434,9 @@ void UnpackColor(u32 packed, float* out)
 // @ 0x006c26f0
 bool KeyLess(const u32* a, const u32* b)
 {
-    if (a[1] < b[1] || (a[1] == b[1] && a[0] < b[0]))
-        return true;
-    if (a[0] == b[0] && a[1] == b[1]) {
-        if (a[3] < b[3])
-            return true;
-        if (a[3] == b[3] && a[2] < b[2])
-            return true;
-    }
-    return false;
-}
+    const uint64_t* pa = (const uint64_t*)a;
+    const uint64_t* pb = (const uint64_t*)b;
+    return pa[0] < pb[0] || (pa[0] == pb[0] && pa[1] < pb[1]);}
 
 // @ 0x006c2740
 void KeyPack::Assign(const u32* a, const u32* b, const u32* c, const u32* d)

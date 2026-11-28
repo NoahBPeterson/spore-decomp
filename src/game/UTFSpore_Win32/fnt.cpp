@@ -977,16 +977,12 @@ void fnt_FLIPRGON(TTExecCtx* c)
 
 // @ 0x008adfe0
 void fnt_FLIPRGOFF(TTExecCtx* c)
-{
-    int* p = c->mStack;
-    int hi = p[-1];
-    p -= 1;
-    int lo = p[-1];
-    p -= 1;
-    unsigned char* const flags = c->mZp0->mFlags;
+{    unsigned char* flags = c->mZp0->mFlags;
+    int hi = popInt(c);
+    int lo = popInt(c);
+    flags += lo;
     for (short i = (short)(hi - lo); i >= 0; i--)
-        flags[lo++] &= 0xfe;
-    c->mStack = p;
+        *flags++ &= 0xfe;
 }
 
 // @ 0x008ae020

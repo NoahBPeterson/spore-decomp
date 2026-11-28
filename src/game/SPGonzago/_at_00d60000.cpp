@@ -135,7 +135,7 @@ struct cPlanetModel {
 struct IRef {
   virtual void AddRef();      // +0x00
   virtual void Release();     // +0x04
-  void* Get(IRef** out);      // 0x00c04590
+  void* Get();                // 0x00c04590
 };
 struct ListNode {
   ListNode* mpNext;           // +0x00
@@ -465,16 +465,14 @@ void* Pool::Alloc(IRef** object)
 
 // @ 0x00d652f0
 void FUN_00d652f0(IRef* object)
-{
+{  IRef* p = object;
   if (object != 0)
     object->AddRef();
 
-  Manager* mgr = (Manager*)object->Get(&object);
-  mgr->mList.Remove(&object);
+  ((Manager*)object->Get())->mList.Remove(&p);
 
   if (object != 0)
-    object->Release();
-}
+    object->Release();}
 
 // @ 0x00d65330
 uint32_t FUN_00d65330(int* self, uint32_t arg2, uint32_t arg3, int arg4, uint32_t arg5, AimResult* out)

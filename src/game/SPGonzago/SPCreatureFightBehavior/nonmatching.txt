@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00d65580 50 surface projection: PlanetModel call cleanup deferred in original; 70 vs 67 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d655d0 274 nearest interactable scan abbreviated (inventory/avatar state opaque); 306 vs 625 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d659e0 56 combatant decision tree abbreviated; 63 vs 603 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d65c40 134 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes flags: /O2 /MD /Gy /TP /arch:SSE

@@ -1018,8 +1018,7 @@ void cFieldWalker::OffsetInstances(void* pArg1, char* pBase, cTypeDef* pType)
 
 // @ 0x00e4add0
 void cFieldWalker::AdjustPointers(void* pDelta, char* pBase, cTypeDef* pType)
-{
-    cTypeRecord* pRecord = pType->mpRecords;
+{    cTypeRecord* pRecord = pType->mpRecords;
     if (pRecord->mOffset == -1)
         return;
     int32_t offset = 0;
@@ -1027,15 +1026,15 @@ void cFieldWalker::AdjustPointers(void* pDelta, char* pBase, cTypeDef* pType)
         if (pRecord->mFlags == 4) {
             uint32_t value = *(uint32_t*)(pBase + pRecord->mOffset);
             if (value <= 0xffff) {
-                value += (uint32_t)pDelta;
-                *(uint32_t*)(pBase + pRecord->mOffset) = value;
+                char* pNew = (char*)pDelta + value;
+                *(char**)(pBase + pRecord->mOffset) = pNew;
                 if (pRecord->mType >= 0xc && FUN_00e4a960(pRecord->mType)) {
                     int32_t size = FUN_00e4a8a0(pRecord->mType);
                     int32_t count = *(int32_t*)(pBase + pRecord->mCountOffset);
                     if (count > 0) {
                         do {
-                            AdjustPointers(pDelta, (char*)(uintptr_t)value, (cTypeDef*)(uintptr_t)pRecord->mType);
-                            value += size;
+                            AdjustPointers(pDelta, pNew, (cTypeDef*)(uintptr_t)pRecord->mType);
+                            pNew += size;
                             --count;
                         } while (count != 0);
                     }
@@ -1044,8 +1043,7 @@ void cFieldWalker::AdjustPointers(void* pDelta, char* pBase, cTypeDef* pType)
         }
         offset += 0x28;
         pRecord = (cTypeRecord*)((char*)pType->mpRecords + offset);
-    } while (pRecord->mOffset != -1);
-}
+    } while (pRecord->mOffset != -1);}
 
 // @ 0x00e4ae80
 void cFieldWalker::ReadRecords(IRecStream* pStream, char* pBase, cTypeDef* pType)

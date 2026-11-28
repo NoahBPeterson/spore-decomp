@@ -445,31 +445,49 @@ void* ResolveMany(void* a, ResourceHolder* holder) {
 }
 
 // @ 0x007c55d0
-void ResolveManyToObject(void* a, int unused, ResMgr1* mgr) {
-    int x = (*(int*)a == -1) ? 0 : mgr->m_inner->m_arena->IdToObject(*(int*)a);
-    *(int*)a = x;
-    int n = *(int*)((char*)a + 4);
-    for (int i = 0; i < n; i++) {
-        int* e = (int*)(*(void**)a);
-        int id = e[i * 2 + 1];
-        int r = (id == -1) ? 0 : mgr->m_inner->m_arena->IdToObject(id);
-        ((int*)*(void**)a)[i * 2 + 1] = r;
+void ResolveManyToObject(void* a, int unused, ResMgr1* mgr) {    int id0 = *(int*)a;
+    int x;
+    if (id0 == -1) {
+        x = 0;
+    } else {
+        ArenaInner* inner = mgr->m_inner;
+        x = inner->m_arena->IdToObject(id0);
     }
-}
+    *(int*)a = x;
+    for (int i = 0; i < *(int*)((char*)a + 4); i++) {
+        int id = ((int*)(*(void**)a))[i * 2 + 1];
+        int r;
+        if (id == -1) {
+            r = 0;
+        } else {
+            ArenaInner* inner = mgr->m_inner;
+            r = inner->m_arena->IdToObject(id);
+        }
+        ((int*)(*(void**)a))[i * 2 + 1] = r;
+    }}
 
 // @ 0x007c5630
-int ResolveManyToObject2(void* a, ResMgr1* mgr) {
-    int x = (*(int*)a == -1) ? 0 : mgr->m_inner->m_arena->IdToObject(*(int*)a);
-    *(int*)a = x;
-    int n = *(int*)((char*)a + 4);
-    for (int i = 0; i < n; i++) {
-        int* e = (int*)(*(void**)a);
-        int id = e[i * 2 + 1];
-        int r = (id == -1) ? 0 : mgr->m_inner->m_arena->IdToObject(id);
-        ((int*)*(void**)a)[i * 2 + 1] = r;
+int ResolveManyToObject2(void* a, ResMgr1* mgr) {    int id0 = *(int*)a;
+    int x;
+    if (id0 == -1) {
+        x = 0;
+    } else {
+        ArenaInner* inner = mgr->m_inner;
+        x = inner->m_arena->IdToObject(id0);
     }
-    return 1;
-}
+    *(int*)a = x;
+    for (int i = 0; i < *(int*)((char*)a + 4); i++) {
+        int id = ((int*)(*(void**)a))[i * 2 + 1];
+        int r;
+        if (id == -1) {
+            r = 0;
+        } else {
+            ArenaInner* inner = mgr->m_inner;
+            r = inner->m_arena->IdToObject(id);
+        }
+        ((int*)(*(void**)a))[i * 2 + 1] = r;
+    }
+    return 1;}
 
 // @ 0x007c56a0
 int SerializeArray(int out, int* src) {

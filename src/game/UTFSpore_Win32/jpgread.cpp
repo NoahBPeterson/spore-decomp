@@ -159,21 +159,20 @@ int __stdcall JPG_is(void* io)
 
 // @ 0x00864000
 int __stdcall FUN_00864000(void** out, void* io, int a3, int a4)
-{
-    int  ok = 0;
-    int* h = (int*)galloc(0x18);
+{    struct GInst { int f0, f1, f2, f3, f4, f5; };
+    int ok = 0;
+    GInst* h = (GInst*)galloc(0x18);
     if (h != 0) {
-        h[3] = 0;
-        h[5] = 0;
-        h[2] = 1;
-        h[0] = 0x4a504547;
-        h[1] = 0x18;
-        h[4] = (int)io;
+        GInst z = { 0 };
+        *h = z;
+        h->f2 = 1;
+        h->f0 = 0x4a504547;
+        h->f1 = 0x18;
+        h->f4 = (int)io;
         *out = h;
         ok = 1;
     }
-    return ok;
-}
+    return ok;}
 
 // @ 0x00864050
 void* __stdcall FUN_00864050(void* handle, int a2)

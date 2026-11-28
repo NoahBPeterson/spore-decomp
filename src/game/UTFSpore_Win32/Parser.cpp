@@ -3652,10 +3652,9 @@ void cParser::InstantiateMacro(const char* name, EA::ArgScript::cArguments_s0084
 
 // @ 0x00845260
 void cParser::PushScope(const char* name)
-{
-    int offset = mScope.mpEnd - mScope.mpBegin;
+{    int offset = mScope.mpEnd - mScope.mpBegin;
     mScopeOffsets.push_back(offset);
-    const char* e = name + CharStrlen(name);
+    const char* e = name + strlen(name);
     mScope.append(name, e);
     mScope.append(":", ":" + 1);
 }

@@ -46,3 +46,4 @@
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?ElemCMakeHeap@@YAXPAUElemC@@0P6A_NPBU1@1@Z@Z  00ba8550  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?ElemCAdjustHeap@@YAXPAUElemC@@IHHU1@P6A_NPBU1@2@Z@Z  00ba7a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?FindOrAdd2@VBlk@@QAEPAXPBUWKey@@@Z  00ba4520  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba45a0@@YAPAXPAD00@Z  00ba45a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

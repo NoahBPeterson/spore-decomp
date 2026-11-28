@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 006e6b70 11 SetParams - register scheduling of the two int args differs (eax/edx swap)
-006e6cf0 51 SortPairsB - insertion-sort register assignment differs
 006e7110 191 Method7110: per-record dispatch loop (calls pushShaderDataNull / SetTransform / SetMaterialColor / Dispatch / shader, then rebinds the vertex-declaration global). Diff is register-allocation and instruction-scheduling of the 0xc-stride walk; the field accesses and call sequence match. [equiv: WEAK 245 valid inputs, 16.8% coverage; no mismatch] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7270 184 Method7270: same record walk plus a second box-state pass (FUN_00777b50 then FUN_011ee580 after the first Dispatch). [equiv: WEAK 232 valid inputs, 18.4% coverage; no mismatch] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7450 726 Method7450: 1071-byte property-driven subsystem initialiser (viewer factories, material manager, graphics/resource viewers, interface registration). EH frame and object-creation scheduling differ; behaviour equivalent. [equiv: UNSUPPORTED - the original faults on every generated input (fault(read)/fault(write)/fault(write-prot)), so no valid input exists to compare against] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

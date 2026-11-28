@@ -202,6 +202,7 @@ struct RBTree {
   RBNode* FUN_010450b0(const uint32_t* value);             // 0x010450b0 DoCreateNode (ICF-folded)
   struct iterator { RBNode* mpNode; iterator(RBNode* p) : mpNode(p) {} };
   iterator DoInsertValueImpl(const uint32_t* value, bool force);   // 0x01045490
+  iterator MultiMapErase(RBNode* node);                            // 0x01045590
 };
 struct VisualCtx;
 class cStarMap {
@@ -1620,17 +1621,15 @@ void cStarMap::SetInitialVisuals()
   Init();}
 
 // @ 0x01045590
-void MultiMapErase(RBTree* tree, RBNode** out, RBNode* node)
-{
-  tree->mnSize = tree->mnSize - 1;
+RBTree::iterator RBTree::MultiMapErase(RBNode* node)
+{  --this->mnSize;
   RBNode* next = RBTreeIncrement(node);
-  RBTreeErase(node, (RBNode**)&tree->mpAnchorLeft);
+  RBTreeErase(node, (RBNode**)&this->mpAnchorLeft);
   VEffect* obj = node->mValue.mpObject;
   if (obj != 0)
     obj->Release();
   operator_delete__(node);
-  *out = next;
-}
+  return iterator(next);}
 
 // @ 0x010455e0
 byte FUN_010455e0(DebugWriter* writer, const char* label, Deque64<cStarRecord*>* dq)

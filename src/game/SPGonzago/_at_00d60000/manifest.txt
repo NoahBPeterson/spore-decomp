@@ -12,3 +12,4 @@
 ../src/game/SPGonzago/_at_00d60000.cpp  ?FUN_00d6f760@SP@@YAXPAVcBehaviorActor@1@@Z  00d6f760  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d60000.cpp  ?FUN_00d6f790@SP@@YA_NPAVcBehaviorActor@1@HHHHPAH@Z  00d6f790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d60000.cpp  ?Remove@IntrusiveList@@QAEXPAPAUIRef@@@Z  00d65250  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d60000.cpp  ?FUN_00d652f0@@YAXPAUIRef@@@Z  00d652f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

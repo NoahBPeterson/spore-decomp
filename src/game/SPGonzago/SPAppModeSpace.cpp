@@ -4277,18 +4277,15 @@ L1f8:
 }
 
 // @ 0x00fdb230
-void FUN_00fdb230(uint32_t** out, uint32_t* begin, uint32_t* end, const uint32_t* key)
-{
-    if (begin == end) {
-        *out = begin;
-        return;
-    }
-    while (begin != end) {
-        if (begin[2] == key[0] && begin[3] == key[1] && begin[4] == key[2])
+ListIter FindKey(ListIter first, ListIter last, const KeyTriple& value)
+{    while (first.mpNode != last.mpNode) {
+        const uint32_t* p = (const uint32_t*)first.mpNode;
+        if (p[2] == value.a && p[3] == value.b && p[4] == value.c)
             break;
-        begin = (uint32_t*)*begin;
+        first.mpNode = first.mpNode->mpNext;
     }
-    *out = begin;
+
+    return first;
 }
 
 // @ 0x00fdb330

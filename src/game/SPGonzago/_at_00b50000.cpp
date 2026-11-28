@@ -3801,18 +3801,16 @@ uint32_t* cPairMapInner::Lookup(const SPKeyPair* key)
 
 // @ 0x00b54b40
 void cPairMap::Insert(uint32_t a, uint32_t b, float c)
-{
-    SPKeyPair key;
-    uint32_t lo = a, hi = b;
-    if (hi < lo) {
-        lo = b;
-        hi = a;
+{    if (b < a) {
+        uint32_t tmp = a;
+        a = b;
+        b = tmp;
     }
-    key.lo = lo;
-    key.hi = hi;
+    SPKeyPair key;
+    key.lo = a;
+    key.hi = b;
     uint32_t* r = mInner.Lookup(&key);
-    *(float*)r = c;
-}
+    *(float*)r = c;}
 
 // @ 0x00b54b80
 void FUN_00b54b80(void)

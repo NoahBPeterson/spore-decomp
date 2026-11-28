@@ -7,5 +7,4 @@
 00863b70 241 FUN_00863b70: complete; original uses EAX/ECX + stack args (non-C register ABI) [equiv UNSUPPORTED: unresolved _strncpy]
 00863c50 245 FUN_00863c50: complete; APP0/GIMEX marker reader, direct src[3] callbacks, IAT strncmp and ECX-preserving skip_input_data shim [equiv PASS: 430/600]
 00863d50 228 FUN_00863d50: complete; COM marker reader, direct src[3] callbacks and ECX-preserving skip_input_data shim [equiv PASS: 441/600]
-00864000  50 FUN_00864000 (JPG_open): complete; cl keeps the live zero in ecx/esi in a different order than the original [equiv PASS, 336 inputs]
 00864050 593 FUN_00864050 (JPG_info): complete; decodes the JPEG then builds the GIMEX descriptor; uses setjmp3, large-frame regalloc differs [equiv UNSUPPORTED: setjmp3 import not simulatable]
