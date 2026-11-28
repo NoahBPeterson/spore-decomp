@@ -393,7 +393,7 @@ int StrncpyUTF8ToUTF16(char* pDest, unsigned int nDestLength, const wchar_t* pSo
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0093CF60  EA::Text::GetCharacterAsUTF16
+// 0x0093cf60 (byte-exact lifted version: match/slices/s0093cf60/s0093cf60.cpp)  EA::Text::GetCharacterAsUTF16
 // Converts one UTF-8 character sequence into UTF-16, null-terminating when room remains.
 // ---------------------------------------------------------------------------------------------
 unsigned int GetCharacterAsUTF16(wchar_t* pDest, unsigned int nDestLength, const char* pSource,

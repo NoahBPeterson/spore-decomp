@@ -3427,7 +3427,7 @@ void* cSPUIPosseItemTribeGhostShell::ctor()
   return this;
 }
 
-// @ 0x00e25bd0
+// 0x00e25bd0 (byte-exact lifted version: match/slices/s00e25bd0/s00e25bd0.cpp)
 void* cVec15::f(void** First, void** Last)
 {
   char* s = (char*)this;

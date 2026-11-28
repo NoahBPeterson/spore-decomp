@@ -505,7 +505,7 @@ float EA::ArgScript::cExpression_s0083_d3d0::EvalRealNumber(const char** p)
     return (*r)->fn->Eval(p, this);
 }
 
-// @ 0x0083db70
+// 0x0083db70 (byte-exact lifted version: match/slices/s0083db70/s0083db70.cpp)
 int EA::ArgScript::cExpression_s0083_d3d0::EvalIntParentheses(const char** p)
 {
     DiscardWhiteSpace(p);

@@ -10722,7 +10722,7 @@ cContentValidationSummarizer* GetContentValidationSummarizer()
     p->f();
     return sSingleton;}
 
-// @ 0x00c144e0
+// 0x00c144e0 (byte-exact lifted version: match/slices/s00c144e0/s00c144e0.cpp)
 void* Pool_s00c1_4350::Alloc(uint32_t* out)
 {
     PoolNode* node = mpFree;
@@ -11056,7 +11056,7 @@ void CreatureBase_s00c1_4350::NotifySummarizer()
     ((cSpatialObject_s00c1_4350*)((char*)this + 0xc0))->FUN_c421b0(c);
 }
 
-// @ 0x00c14e70
+// 0x00c14e70 (byte-exact lifted version: match/slices/s00c14e70/s00c14e70.cpp)
 void* __fastcall LookupTextStyle(void* self, void* /*edx*/, uint32_t* key)
 {
     struct Hash {
@@ -11975,7 +11975,7 @@ uint32_t cSPCreatureBase_s00c1_7350::CreateBodyEffect(uint32_t kind, uint32_t a,
     return 0;
 }
 
-// @ 0x00c17cc0
+// 0x00c17cc0 (byte-exact lifted version: match/slices/s00c17cc0/s00c17cc0.cpp)
 uint32_t cSPCreatureBase_s00c1_7350::CreateBodyEffectChecked(bool flag, uint32_t kind, uint32_t a, uint32_t e, uint32_t b)
 {
     if (flag != 0) {
@@ -11999,7 +11999,7 @@ uint32_t cSPCreatureBase_s00c1_7350::CreateBodyEffectChecked(bool flag, uint32_t
     return 0;
 }
 
-// @ 0x00c17d60
+// 0x00c17d60 (byte-exact lifted version: match/slices/s00c17d60/s00c17d60.cpp)
 uint32_t cSPCreatureBase_s00c1_7350::CreateBodyEffectChecked2(bool flag, uint32_t kind, uint32_t a, uint32_t e, uint32_t b)
 {
     if (flag != 0) {
@@ -13851,7 +13851,7 @@ cVObj* cSPCreatureBase_s00c1_c9f0::FUN_00c1d460(u32 a, u32 b)
     return local;
 }
 
-// @ 0x00c1d5e0
+// 0x00c1d5e0 (byte-exact lifted version: match/slices/s00c1d5e0/s00c1d5e0.cpp)
 i32 cSPCreatureBase_s00c1_c9f0::FUN_00c1d5e0(char a, u32 b, u32 c)
 {
     if (a != 0) {

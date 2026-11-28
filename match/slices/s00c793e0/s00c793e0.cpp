@@ -312,7 +312,7 @@ public:
 // ---------------------------------------------------------------------------------------------
 // 0x00c798a0 - eastl::vector<pair<unsigned, cGonzagoTimer>>::erase(first, last)
 // ---------------------------------------------------------------------------------------------
-// @ 0x00c798a0 tPairVec::erase
+// 0x00c798a0 (byte-exact lifted version: match/slices/s00c798a0/s00c798a0.cpp) tPairVec::erase
 tPair28* tPairVec::erase(tPair28* pFirst, tPair28* pLast)
 {
     tPair28* pNewEnd = (tPair28*)FUN_00c771e0(pLast, mpEnd, pFirst);

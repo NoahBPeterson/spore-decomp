@@ -748,7 +748,7 @@ ObjVec* ObjVec::AssignVec(ObjVec* other)
 // ===========================================================================
 // 0x00b0dec0 -- destroy the range and shrink the vector.
 // ===========================================================================
-// @ 0x00b0dec0
+// 0x00b0dec0 (byte-exact lifted version: match/slices/s00b0dec0/s00b0dec0.cpp)
 void* ObjVec::EraseRange(void** first, void** last)
 {
     void** it = (void**)FUN_00b0d0d0(last, mpEnd, first);

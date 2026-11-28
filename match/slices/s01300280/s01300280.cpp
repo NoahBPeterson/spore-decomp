@@ -76,7 +76,7 @@ void init_166aab4()
     *(void**)g_166aab4 = GetDefaultAllocator0();
 }
 
-// @ 0x01300760
+// 0x01300760 (byte-exact lifted version: match/slices/s01300760/s01300760.cpp)
 void init_166b194()
 {
     void* a = GetDefaultAllocator0();

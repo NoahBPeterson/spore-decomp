@@ -333,7 +333,7 @@ void FUN_011563b0(void) {
     A16(0x16e7cc6) = 0;
 }
 
-// @ 0x01156480
+// 0x01156480 (byte-exact lifted version: match/slices/s01156480/s01156480.cpp)
 void FUN_01156480(int param_1) {
     A32(0x16f16d4) = A32(0x15c3828) + param_1;
     A32(0x16f16d8) = A32(0x15c382c) + param_1;

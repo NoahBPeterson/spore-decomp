@@ -90,7 +90,7 @@ void* __cdecl    GetGlobalImageTable();                  // 0x00957B00
 void  __cdecl    ProcessPendingTextures();               // 0x00957D30
 // ---- items of slice s009579f0 end
 
-// @ 0x00957b00
+// 0x00957b00 (byte-exact lifted version: match/slices/s00957b00/s00957b00.cpp)
 void* __cdecl GetGlobalImageTable()
 {
     void* r = *(void**)0x166b130;

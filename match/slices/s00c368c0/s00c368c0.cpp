@@ -442,7 +442,7 @@ void __fastcall FUN_00c36ae0(Ufo* self, void* dummy, float dt)
 // ======================================================================
 // 0x00c36e80 - cast key to game-data object
 // ======================================================================
-// @ 0x00c36e80
+// 0x00c36e80 (byte-exact lifted version: match/slices/s00c36e80/s00c36e80.cpp)
 void* __fastcall FUN_00c36e80(Ufo* self, void* dummy, u32 key)
 {
   (void)dummy;

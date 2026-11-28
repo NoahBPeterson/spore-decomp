@@ -554,7 +554,7 @@ int __cdecl FUN_01139500(void* rec)
     return A<int>(rec, 8);
 }
 
-// @ 0x01139660  SampleCapture command ring
+// 0x01139660 (byte-exact lifted version: match/slices/s01139660/s01139660.cpp)  SampleCapture command ring
 void AudioObj::F_660(int cmd, int* param)
 {
     void* self = this;

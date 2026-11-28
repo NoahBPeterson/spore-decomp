@@ -415,7 +415,7 @@ char FUN_00e00c40_impl() {
     return 0;
 }
 
-// @ 0x00e00d20
+// 0x00e00d20 (byte-exact lifted version: match/slices/s00e00d20/s00e00d20.cpp)
 char FUN_00e00d20_impl() {
     if (SP_GetCurrentGameMode() == (void*)0x1654c00) {
         return 0;

@@ -4256,7 +4256,7 @@ void SimClass::Destroy()
     BaseDtor();
 }
 
-// @ 0x00bc7110
+// 0x00bc7110 (byte-exact lifted version: match/slices/s00bc7110/s00bc7110.cpp)
 Sub* SubVec::Erase(Sub* first, Sub* last)
 {
     Sub* newEnd = ShiftTail(last, e, first);
@@ -4655,7 +4655,7 @@ void WE::FUN_00bc7b70(uint param_2)
     }
 }
 
-// @ 0x00bc7c40
+// 0x00bc7c40 (byte-exact lifted version: match/slices/s00bc7c40/s00bc7c40.cpp)
 int WE::FUN_00bc7c40(int param_2, int param_3)
 {
     int* uVar1 = FUN_00bc79f0((void*)param_3, (void*)end, (void*)param_2);

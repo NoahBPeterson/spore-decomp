@@ -85,7 +85,7 @@ struct S9a2c90Obj {
 };
 
 // ---------------------------------------------------------------------------
-// @ 0x009a3890
+// 0x009a3890 (byte-exact lifted version: match/slices/s009a3890/s009a3890.cpp)
 // ---------------------------------------------------------------------------
 __declspec(noinline) void* S9a3890::f(int* param_1) {
   char* n = (char*)operator_new(
@@ -183,7 +183,7 @@ __declspec(noinline) S9a34a0* S9a34a0::f() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x009a2cc0  FUN_009a2cc0: animation object init
+// 0x009a2cc0 (byte-exact lifted version: match/slices/s009a2cc0/s009a2cc0.cpp)  FUN_009a2cc0: animation object init
 // ---------------------------------------------------------------------------
 // animation object; only the fields touched here are named.
 struct S9a2cc0Obj {

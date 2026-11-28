@@ -415,7 +415,7 @@ bool cCellFactoryBinary::ReadResource(void* stream, void* p3, void* p4, void* p5
     return r != 0;
 }
 
-// @ 0x00e4cfc0
+// 0x00e4cfc0 (byte-exact lifted version: match/slices/s00e4cfc0/s00e4cfc0.cpp)
 int __stdcall CellFactory_GetSupportedTypes(unsigned* out, unsigned n)
 {
     if (out) {

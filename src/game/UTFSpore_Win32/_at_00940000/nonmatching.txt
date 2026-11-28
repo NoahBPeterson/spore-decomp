@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 0094c130 64 Sockets_ParseAddress: complete; loop induction uses pre-incremented pointer (lea ecx,[edx+1]) vs original mov ecx,edx + [ecx+1], range test now matches; difftest PASS (400 valid inputs, 91.9% coverage) [flags /O2 /MD /Gy /TP /GS-]
-0094d270 154 LayoutCache::Erase (FUN_0094d270): complete implementation; equiv UNSUPPORTED (all inputs discarded on import:inet_addr, i.e. an unresolved MapStrFind_Find callee), not a source defect. flags /O2 /MD /Gy /TP /GS- /Isrc/game/include

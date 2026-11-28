@@ -834,7 +834,7 @@ unsigned BitReader::FUN_01134a60(int n)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x01134ae0
+// 0x01134ae0 (byte-exact lifted version: match/slices/s01134ae0/s01134ae0.cpp)
 // The original is a virtual call: ecx = the argument (this), [this] = vtable,
 // [vtable+4] = slot 1, which pops its int argument (ret 4). A free __stdcall
 // function pointer leaves ecx unset, so the fake-call `this` mismatches.

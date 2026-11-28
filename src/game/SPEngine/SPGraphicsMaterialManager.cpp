@@ -2060,7 +2060,7 @@ void** VecA::Shrink(void** arg1, void** arg2)
     return arg1;
 }
 
-// @ 0x0070fab0
+// 0x0070fab0 (byte-exact lifted version: match/slices/s0070fab0/s0070fab0.cpp)
 void VecB::Shrink(void** arg1, void** arg2)
 {
     void** p = AssignCopyB(arg1, mpEnd, arg2);

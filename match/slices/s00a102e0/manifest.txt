@@ -19,3 +19,4 @@ slices/s00a102e0/s00a102e0.cpp  ?q11210@EmitterSndPlayer@@QAE_NM@Z  00a11210  /O
 slices/s00a102e0/s00a102e0.cpp  ?q11270@EmitterSndPlayer@@QAE_NM@Z  00a11270  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a102e0/s00a102e0.cpp  ?q11350@EmitterSndPlayer@@QAEPAU1@XZ  00a11350  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00a102e0/s00a102e0.cpp  ?q11370@EmitterSndPlayer@@QAEXXZ  00a11370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00a102e0/s00a102e0_lifted.cpp  @FUN_00a102e0@12  00a102e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

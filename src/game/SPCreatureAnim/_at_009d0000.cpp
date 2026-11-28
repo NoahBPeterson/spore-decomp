@@ -3839,7 +3839,7 @@ void S_s009d_9620::SortGroups(u32)
         SortRange<SortGroupsLarge>(items.b, items.e);
 }
 
-// @ 0x009da640
+// 0x009da640 (byte-exact lifted version: match/slices/s009da640/s009da640_lifted.cpp)
 void Anim_s009d_a640::A640(void* ctx)
 {
     // The original spills the loop counter into a 4-byte frame slot (its `push ecx` /

@@ -146,6 +146,9 @@ struct Rec { void __thiscall dtor(); };            // 0x00bc4730
 
 #define LIST_END(self) ((Node*)((char*)(self) + 0x1c))
 
+extern "C" char g_1466898[];
+extern "C" char g_1466890[];
+
 // @ 0x00bc6690
 void __thiscall Reg::Update(int, int)
 {
@@ -456,7 +459,7 @@ SubVec::SubVec(const SubVec& src)
     e = outEnd;
 }
 
-// @ 0x00bc7110
+// 0x00bc7110 (byte-exact lifted version: match/slices/s00bc7110/s00bc7110.cpp)
 Sub* SubVec::Erase(Sub* first, Sub* last)
 {
     Sub* newEnd = ShiftTail(last, e, first);
@@ -680,8 +683,8 @@ void __fastcall CommitAlloc(void* p);              // 0x00926640
 SimClass::SimClass()
 {
     BaseCtor();
-    vtbl0 = (uint32_t)0x1466898;
-    vtbl1 = (uint32_t)0x1466890;
+    vtbl0 = (uint32_t)g_1466898;
+    vtbl1 = (uint32_t)g_1466890;
     uint32_t zero = 0;
     FixedAlloc fa(0x95c, 4, 0x20, zero, 0xffffffff, (void*)0x6abeb0, (void*)0xf47410, "Simulator/list");
     ListHead* l = &list;
@@ -702,8 +705,8 @@ SimClass::SimClass()
 void SimClass::Destroy()
 {
     HashMap* m = &map;
-    vtbl0 = (uint32_t)0x1466898;
-    vtbl1 = (uint32_t)0x1466890;
+    vtbl0 = (uint32_t)g_1466898;
+    vtbl1 = (uint32_t)g_1466890;
     m->ClearBuckets((void**)m->buckets, m->bucketCount);
     m->size = 0;
     if (m->bucketCount > 1)

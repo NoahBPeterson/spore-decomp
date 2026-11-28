@@ -373,7 +373,7 @@ int Ctx::FUN_0113d5d0()
     }
 }
 
-// @ 0x0113d710
+// 0x0113d710 (byte-exact lifted version: match/slices/s0113d710/s0113d710.cpp)
 void Ctx::FUN_0113d710()
 {
     if (g_16e7b9c != 0) {

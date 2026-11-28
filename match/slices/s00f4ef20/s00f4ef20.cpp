@@ -249,7 +249,7 @@ char cTerrainTool::SubSet(int code, float value)
     return 0;
 }
 
-// @ 0x00f4f000
+// 0x00f4f000 (byte-exact lifted version: match/slices/s00f4f000/s00f4f000.cpp)
 void cTerrainTool::RegisterParams(float a, float b, float c, float d, float e)
 {
     int* mgr = EffectsManager();

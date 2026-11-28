@@ -3093,7 +3093,7 @@ float* __fastcall FUN_0077d130(float* p)
     return p;
 }
 
-// @ 0x0077d170
+// 0x0077d170 (byte-exact lifted version: match/slices/s0077d170/s0077d170.cpp)
 float* __fastcall FUN_0077d170(float* p)
 {
     __m128 z = _mm_setzero_ps();

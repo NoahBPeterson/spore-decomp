@@ -1,4 +1,3 @@
-0083db70  139  complete: EvalIntParentheses; calling convention/throw frame differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
 0083dc00  241  complete: EvalString; thiscall ABI and string assign scheduling differ; difftest WEAK (450 valid, 44.4% coverage) after ECX member fix
 0083dd00  50   complete: hashtable<cExprFunction>::DoFreeNodes; retail uses __stdcall (ret 8) despite the cdecl symbol spelling; node free scheduling differs; equiv PASS 251 valid, 100%
 0083dd70  58   complete: EvalSignedRealNumber; x87 sign/register scheduling differs; difftest WEAK (361 valid, 67.9% coverage) after ECX member fix

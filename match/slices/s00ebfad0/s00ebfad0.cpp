@@ -784,7 +784,7 @@ static int sim_singleton(void)
     return g_pSimSingleton;
 }
 
-// @ 0x00ec08d0 — behave as an "inspect object" decider: creates the stimulus
+// 0x00ec08d0 (byte-exact lifted version: match/slices/s00ec08d0/s00ec08d0.cpp) — behave as an "inspect object" decider: creates the stimulus
 // and reports whether one was produced.
 float FUN_00ec08d0(int obj, int a, int b, int d, int stim, char* out)
 {

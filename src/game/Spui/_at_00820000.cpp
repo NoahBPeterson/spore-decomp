@@ -1050,7 +1050,7 @@ void C25b::Do(int arg)
 // @ 0x00828ea0
 // cWrap scalar deleting destructor (implicit): emitted with the vtable by cWrap::cWrap above
 
-// @ 0x00828e30
+// 0x00828e30 (byte-exact lifted version: match/slices/s00828e30/s00828e30.cpp)
 cRender2D* __cdecl BeginRender(RenderContext* ctx, IProv* prov, cWrap** out)
 {
   ctx->End2D();

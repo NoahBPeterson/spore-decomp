@@ -163,7 +163,7 @@ int RevObj::F_9e0(int out, float sr)
 }
 }}}  // namespace rw::audio::core
 
-// @ 0x01139d60
+// 0x01139d60 (byte-exact lifted version: match/slices/s01139d60/s01139d60.cpp)
 namespace rw { namespace audio { namespace core {
 bool RevObj::F_d60(float* out)
 {

@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00e4cf80 50 cCellFactoryBinary::ReadResource; complete (thiscall fixed). difftest: UNSUPPORTED (fake-arity) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e4cfc0 37 cCellFactoryBinary::GetSupportedTypes; complete (jbe vs ja layout). difftest: PASS (400 valid, 100% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e4d120 86 property-list build + read; complete. difftest: PASS (296 valid, 98.6% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e4d1d0 178 LayerAabb_Transform; complete (midpoints via named float locals, int-bit copies). difftest: FAIL (5/5 valid, xmm4 clobber: original uses only xmm0-xmm3) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e4d2b0 396 LayerAabb_Recurse; complete (SENTINEL ordering, float* p = local+1, emit-field mapping). difftest: WEAK (198 valid, 79.6% cov; no mismatches) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

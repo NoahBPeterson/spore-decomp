@@ -2146,7 +2146,7 @@ bool cAssetSwatchWidget::HandleMessage()
     return mpAsset != 0;
 }
 
-// @ 0x00e34af0
+// 0x00e34af0 (byte-exact lifted version: match/slices/s00e34af0/s00e34af0.cpp)
 void cAssetSwatchWidget::CreateSwatch()
 {
     if (!mpAsset)

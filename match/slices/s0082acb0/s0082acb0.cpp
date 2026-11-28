@@ -491,7 +491,7 @@ Value20* SerializeHelper::NewArrayValue(int count) {
   return p;
 }
 
-// @ 0x0082B7F0 : cSPUISerializationAllocator::Allocate (8-byte object fast path)
+// 0x0082b7f0 (byte-exact lifted version: match/slices/s0082b7f0/s0082b7f0.cpp) : cSPUISerializationAllocator::Allocate (8-byte object fast path)
 struct SerAlloc {
   char pad0[4];
   TempAlloc mAlloc;   // +0x04

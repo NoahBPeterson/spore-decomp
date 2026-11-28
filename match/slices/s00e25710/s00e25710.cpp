@@ -186,7 +186,7 @@ void* cUIPosse15::ctor() {
   return this;
 }
 
-// @ 0x00e25bd0  eastl::vector<AutoRefCount<ILogReporter>>::erase(first,last)
+// 0x00e25bd0 (byte-exact lifted version: match/slices/s00e25bd0/s00e25bd0.cpp)  eastl::vector<AutoRefCount<ILogReporter>>::erase(first,last)
 struct cVec15 { void* f(void** First, void** Last); };
 void* cVec15::f(void** First, void** Last) {
   char* s = (char*)this;

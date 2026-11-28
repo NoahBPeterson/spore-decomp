@@ -1753,7 +1753,7 @@ void EA::Trace::LogFormatterFancy_s0092_34f0::SetName(const char* name)
     }
 }
 
-// @ 0x009245b0
+// 0x009245b0 (byte-exact lifted version: match/slices/s009245b0/s009245b0_lifted.cpp)
 namespace EA { namespace Trace {
 ILogFormatter_s0092_45b0* LogFormatterFancy_s0092_45b0::Clone()
 {

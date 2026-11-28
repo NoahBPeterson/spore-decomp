@@ -266,7 +266,7 @@ bool AchievementNotifier::TextureReady()
   return true;
 }
 
-// @ 0x005fdaa0
+// 0x005fdaa0 (byte-exact lifted version: match/slices/s005fdaa0/s005fdaa0.cpp)
 void AchievementNotifier::ToggleWindow(int on)
 {
   char* t = (char*)this;

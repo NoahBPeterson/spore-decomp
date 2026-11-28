@@ -1297,7 +1297,7 @@ void cSPUILayoutObjectCollection::attach_parent()
     ((CollStub*)this)->m11330();
 }
 
-// @ 0x00811b80
+// 0x00811b80 (byte-exact lifted version: match/slices/s00811b80/s00811b80.cpp)
 void cSPUILayoutObjectCollection::OnLoad()
 {
     u8* self = (u8*)static_cast<EA::UTFWinTools::SerCollection *>(this);

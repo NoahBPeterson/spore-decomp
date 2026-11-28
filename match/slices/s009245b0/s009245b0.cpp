@@ -124,7 +124,7 @@ class LogFormatterFancy : public ILogFormatter { public:
     ILogFormatter* Clone();
     const char* FormatRecord(ILogRecord* r);
 };
-// @ 0x009245B0
+// 0x009245b0 (byte-exact lifted version: match/slices/s009245b0/s009245b0_lifted.cpp)
 ILogFormatter* LogFormatterFancy::Clone() {
     void* m = eanew6(0xa58, "EATrace/LogFormatterFancy/LogFormatterFancy", 0, 0, 0, 0);
     LogFormatterFancy* r = m ? new (m) LogFormatterFancy(*(const char**)((char*)this + 8)) : 0;

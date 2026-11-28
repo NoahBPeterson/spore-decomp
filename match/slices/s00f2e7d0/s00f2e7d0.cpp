@@ -228,7 +228,7 @@ int V238::AssignAt(void* value)
 struct E27e0 { char pad[0x27e0]; };
 struct V27e0 { E27e0* mpBegin; E27e0* mpEnd; E27e0* mpCapacity; };
 
-// @ 0x00F2F2E0
+// 0x00f2f2e0 (byte-exact lifted version: match/slices/s00f2f2e0/s00f2f2e0.cpp)
 int __fastcall V27e0_Erase(V27e0* self, int edx, E27e0* first, E27e0* last)
 {
     E27e0* p = (E27e0*)((void*(__cdecl*)(void*, void*, void*))H_dff2b0)(last, self->mpEnd, first);
@@ -242,7 +242,7 @@ int __fastcall V27e0_Erase(V27e0* self, int edx, E27e0* first, E27e0* last)
     return (int)first;
 }
 
-// @ 0x00F2F340
+// 0x00f2f340 (byte-exact lifted version: match/slices/s00f2f340/s00f2f340.cpp)
 int __fastcall V27e8_Erase(V27e8* self, int edx, E27e8* first, E27e8* last)
 {
     E27e8* p = (E27e8*)((void*(__cdecl*)(void*, void*, void*))H_dff2b0)(last, self->mpEnd, first);
@@ -418,7 +418,7 @@ void FUN_00f2f1b0(VObj* owner, V238* vec)
     owner->V1c();
 }
 
-// @ 0x00F2F4F0  V534 deserialize loop
+// 0x00f2f4f0 (byte-exact lifted version: match/slices/s00f2f4f0/s00f2f4f0.cpp)  V534 deserialize loop
 void FUN_00f2f4f0(VObj* owner, V534* vec)
 {
     ((TC2)H_f2efe0)(vec, vec->mpBegin, vec->mpEnd);

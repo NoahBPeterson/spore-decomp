@@ -369,7 +369,7 @@ cDownloadDialog* __fastcall cDownloadDialog_ctor_5940(cDownloadDialog* self)
     return self;
 }
 // 0x00DF59C0
-// @ 0x00df59c0
+// 0x00df59c0 (byte-exact lifted version: match/slices/s00df59c0/s00df59c0.cpp)
 bool cDownloadDialog::FUN_00df59c0(void* p)
 {
     uint key[3];

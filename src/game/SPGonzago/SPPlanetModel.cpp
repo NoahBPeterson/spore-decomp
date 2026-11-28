@@ -3645,7 +3645,7 @@ void *SpVector20B::AssignN(u32 n, u32 unused)
     return this;
 }
 
-// @ 0x00b85f30
+// 0x00b85f30 (byte-exact lifted version: match/slices/s00b85f30/s00b85f30.cpp)
 void Vertex2DVec_Resize(void *pThis, u32 n)
 {
     Vertex2DVec *p = (Vertex2DVec *)pThis;
@@ -4610,7 +4610,7 @@ bool cPlanetModel_s00b8_bb70::FindClosestWater(const SVector3* pOrigin, float fD
     return RayCast(pOrigin, fDirection, pOut, 1.0f, true, 0);
 }
 
-// @ 0x00b8d2a0
+// 0x00b8d2a0 (byte-exact lifted version: match/slices/s00b8d2a0/s00b8d2a0.cpp)
 bool cPlanetModel_s00b8_d190::HandleMessage(uint32_t id, void* msg)
 {
     if (id == 0x1b537e5) {

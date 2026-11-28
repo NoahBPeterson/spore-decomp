@@ -2952,7 +2952,7 @@ void __stdcall FUN_0065dd30(const wchar_t* s)
     EASTL_allocator_deallocate(url.b);
 }
 
-// @ 0x0065ded0
+// 0x0065ded0 (byte-exact lifted version: match/slices/s0065ded0/s0065ded0.cpp)
 UFOCollisionEffectInfo* VecUFO::erase(UFOCollisionEffectInfo* first, UFOCollisionEffectInfo* last)
 {
   UFOCollisionEffectInfo* p =

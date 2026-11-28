@@ -403,7 +403,7 @@ void __fastcall FUN_00eb0460(void* self_)
     FUN_00ead1a0(self, 0, 1);
 }
 
-// @ 0x00eb0810
+// 0x00eb0810 (byte-exact lifted version: match/slices/s00eb0810/s00eb0810.cpp)
 void* __fastcall FUN_00eb0810(void* vec, int, char* first, char* last)
 {
     char* end    = *(char**)((char*)vec + 4);

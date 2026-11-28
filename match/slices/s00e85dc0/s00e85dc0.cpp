@@ -156,7 +156,7 @@ static __forceinline void FreeSphereNode(SphereTree* tree, Node* node)
   pool->freeHead = node;
 }
 
-// @ 0x00e86880
+// 0x00e86880 (byte-exact lifted version: match/slices/s00e86880/s00e86880.cpp)
 Node* FUN_00e86880(SphereTree* tree, const Vector3* pos, float f, int data)
 {
   SpherePool* pool = tree->pool;

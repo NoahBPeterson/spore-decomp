@@ -6,5 +6,4 @@
 00d46c30 UNSUPPORTED 1 unresolved reference (?FUN_00d67dd0); EvaluateTrigger; 808-byte diff (988 vs 1000 bytes) from missing eastl::string16 scratch teardown, x87 vs SSE clamp and stack layout
 00d47020 FAIL 5/64 valid inputs; TrigVec::Assign; difftest cannot model the unresolved Grow/DestroyRange callees (fake faults where the original succeeds); 275-byte diff (283 vs 312 bytes) from parameter and callee-saved register ordering
 00d472a0 FAIL 5/60 valid inputs; TrigVec push_back-default; difftest unresolved FUN_00d47160 fake faults where the original succeeds; 30-byte diff from ecx/edx choice, esi allocation and mid-function epilogue placement
-00d473e0 WEAK 158 valid inputs, 100.0% coverage; BigC pool allocation; 2-byte diff (copy-ctor argument loaded into edx instead of ecx)
 00d47510 FAIL 5/6 valid inputs; trigger map lookup/insert; difftest unresolved Insert/DestroyRange callees fault where the original succeeds; 301-byte diff (321 vs 288 bytes) from the SrcTrig/BigC stack objects and /GS cookie

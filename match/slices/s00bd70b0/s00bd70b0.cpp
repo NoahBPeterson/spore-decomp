@@ -422,7 +422,7 @@ void __fastcall FUN_00bd7900(int* param_1)
 }
 
 // ===========================================================================
-// @ 0x00bd7a10 — Object::Cast (multi-base lookup).
+// 0x00bd7a10 (byte-exact lifted version: match/slices/s00bd7a10/s00bd7a10.cpp) — Object::Cast (multi-base lookup).
 // ===========================================================================
 void* Sim::FUN_00bd7a10(int param_2)
 {
@@ -532,7 +532,7 @@ void __fastcall FUN_00bd7c80(char* this_)
 }
 
 // ===========================================================================
-// @ 0x00bd7ca0 — Object cast on the +0x1f4 base.
+// 0x00bd7ca0 (byte-exact lifted version: match/slices/s00bd7ca0/s00bd7ca0.cpp) — Object cast on the +0x1f4 base.
 // ===========================================================================
 int Sim::FUN_00bd7ca0(int param_2)
 {

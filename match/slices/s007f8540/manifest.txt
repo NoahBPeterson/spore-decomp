@@ -7,3 +7,4 @@ slices/s007f8540/s007f8540_od.cpp  ?Get@AnimMgr@@QAE_NHPAM@Z  007f94b0  /Od /Ob1
 slices/s007f8540/s007f8540_od.cpp  ?Has@AnimMgr@@QAE_NH@Z  007f9500  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007f8540/s007f8540_od.cpp  ?Clear@AnimMgr@@QAEXXZ  007f9530  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007f8540/s007f8540.cpp  ??1cSPUIAnimator@@UAE@XZ  007f8c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f8540/s007f8540_lifted.cpp  @FUN_007f8540@16  007f8540  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-00828e30 6 BeginRender: complete; edx vs eax for Begin2D arg flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00829110 64 UninitCopyRefs: complete; params kept in regs vs stack flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 008294c0 374 SetRect2: complete; branch layout/scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00829690 9 GetRectLocal: complete; ecx load order flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -343,7 +343,7 @@ static void ReleaseSkinModel(cMWModel* obj)
         obj->mRefCount = rc - 1;
 }
 
-// @ 0x007b4b10
+// 0x007b4b10 (byte-exact lifted version: match/slices/s007b4b10/s007b4b10.cpp)
 void cThumbnailManager::SetTerrainFilterRects(Point2* a, Point2* b, Point2* c, int d)
 {
     if (!m10d1)

@@ -1502,7 +1502,7 @@ void cShadowUpdater::UpdateShadows()
     mLightBias = -(mLightBiasScale * mLightDirScale);
 }
 
-// @ 0x007819d0
+// 0x007819d0 (byte-exact lifted version: match/slices/s007819d0/s007819d0_lifted.cpp)
 void ShadowSub::TryApply(int other)
 {
     ShadowSub* self = this;

@@ -632,7 +632,7 @@ extern unsigned long g_hkThreadMemoryTls;     // 0x016e4174
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 #endif
 
-// @ 0x01103bc0  hkAgent1nMachine_Create  (a track starts with one sector that only holds the end marker)
+// 0x01103bc0 (byte-exact lifted version: match/slices/s01103bc0/s01103bc0.cpp)  hkAgent1nMachine_Create  (a track starts with one sector that only holds the end marker)
 void __cdecl hkAgent1nMachine_Create(hkAgent1nTrack& track)
 {
     track.m_sectorsSize = 0;

@@ -7474,7 +7474,7 @@ void ModelList::F06cd0()
 }
 
 void* __cdecl destroy_range_big_s06(void* src, void* end, void* dst); // 0x00b03f10 (slice view: declared only)
-// @ 0x00b07140
+// 0x00b07140 (byte-exact lifted version: match/slices/s00b07140/s00b07140.cpp)
 void cBigVector::Erase(void* first, void* last)
 {
     cBigElement* p = (cBigElement*)destroy_range_big_s06(last, mpEnd, first);

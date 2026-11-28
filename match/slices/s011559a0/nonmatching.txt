@@ -6,7 +6,6 @@
 01155f40  655  SNDI_precalcaztospkrvol (azimuth->speaker volume table builder) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (196 valid, 57.1% coverage)
 01156310   91  FUN_01156310 (volume-table lookup into float[6]) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (400 valid, 28.6% coverage)
 011563b0  138  FUN_011563b0 (init speaker angle table) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
-01156480   37  FUN_01156480 (set module base offsets) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage)
 01156530  287  FUN_01156530 (CPU feature probe, uint64) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
 01156660   99  FUN_01156660 (find next free voice slot) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (179 valid, 63.6% coverage)
 011566f0   69  MIX_createFxglobals complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (210 valid, 100.0% coverage)

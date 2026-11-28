@@ -6,3 +6,4 @@ slices/s00d07770/s00d07770.cpp  ?SetTribeValue@C103@@QAEXHH@Z  00d07e10  /O2 /MD
 slices/s00d07770/s00d07770.cpp  ?GetTribeValue@C103@@QAEHH@Z  00d07d70  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00d07770/s00d07770.cpp  ?CanAffordScalar@C103@@QAEEHH@Z  00d07d50  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00d07770/s00d07770.cpp  ?Destroy@C103@@QAEPAXE@Z  00d07890  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00d07770/s00d07770_lifted.cpp  @FUN_00d07770@8  00d07770  /O2 /MD /Gy /EHsc /TP /arch:SSE

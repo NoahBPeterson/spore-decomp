@@ -502,7 +502,7 @@ bool cTribeTool::Write(Stream* s)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00c9db70
+// 0x00c9db70 (byte-exact lifted version: match/slices/s00c9db70/s00c9db70.cpp)
 bool cTribeTool::Read(Stream* s)
 {
     uint32_t tmp;

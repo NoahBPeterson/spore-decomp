@@ -1,6 +1,4 @@
-009a2cc0 94 complete animation-object init; float return discarded via (void) call; equiv PASS: 221 valid inputs, 100.0% coverage (all insns)
 009a34a0 172 complete animation-object field init; calls partial 009a3080 via undefined symbol resolved to original image; equiv PASS: 400 valid inputs, 100.0% coverage (all insns)
-009a3890 61 complete rbtree node allocate; scheduling differs; equiv UNSUPPORTED: 3 unresolved reference(s): ?operator_new@@YAPAXHPBDHH0H@Z, ?f@S9b3450@@QAEXXZ, ?f@S99c980@ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 009a3980 104 complete rbtree insert; scheduling differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?operator_new@@YAPAXHPBDHH0H@Z, ?f@S99c660@@QAEXXZ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#3 eax]
 009a3a10 79 complete rbtree insert (node ctor); register allocation differs; equiv PASS: 1004 valid inputs, 100.0% coverage (all insns)
 009a2d50 554 complete vector insert(n,value); compiler factors grow/in-place paths differently; equiv WEAK: 165 valid inputs (need 200), 14.3% coverage (need 60%)

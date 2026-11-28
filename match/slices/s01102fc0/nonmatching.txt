@@ -10,4 +10,3 @@
 01103a10 117 havok-equivalent
 01103aa0 67 havok-equivalent
 01103b50 88 havok-equivalent
-01103bc0 64 havok-equivalent

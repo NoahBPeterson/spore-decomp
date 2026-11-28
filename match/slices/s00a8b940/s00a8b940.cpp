@@ -217,7 +217,7 @@ void Stream_Quad_V4F_N4F_G3F_C4B_T4B(cDistributeEffect* effect, IVertexStream* s
 }
 
 // ================================================================================
-// @ 0x00a8bf10  installs the streamer table (0x80-byte block at 0x016781b0).
+// 0x00a8bf10 (byte-exact lifted version: match/slices/s00a8bf10/s00a8bf10.cpp)  installs the streamer table (0x80-byte block at 0x016781b0).
 void RegisterMeshStreamers(bool install)
 {
   if (install) {

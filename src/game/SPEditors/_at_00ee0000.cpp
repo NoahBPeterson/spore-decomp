@@ -5411,7 +5411,7 @@ void __thiscall SpuEd::Update(void* arg)
     }
 }
 
-// @ 0x00ee7cb0
+// 0x00ee7cb0 (byte-exact lifted version: match/slices/s00ee7cb0/s00ee7cb0.cpp)
 int __cdecl FindPlanetSlot(u32 id, int* outA, int* outB)
 {
     u32 key, off;

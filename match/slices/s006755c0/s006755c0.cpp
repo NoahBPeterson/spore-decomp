@@ -334,7 +334,7 @@ void __cdecl FUN_00675790(IPropWriter* pWriter, UIntHashTable* pMap)
 // ---------------------------------------------------------------------------
 // 0x006758A0 : eastl::hashtable<uint32_t,uint32_t>::DoInsertValue
 // ---------------------------------------------------------------------------
-// @ 0x006758A0
+// 0x006758a0 (byte-exact lifted version: match/slices/s006758a0/s006758a0.cpp)
 HashInsertResult* UIntHashTable::DoInsertValue(HashInsertResult* pResult, const uint32_t* pKey,
                                                bool)
 {

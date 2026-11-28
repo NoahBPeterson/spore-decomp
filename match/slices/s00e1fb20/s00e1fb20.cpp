@@ -766,7 +766,7 @@ void* PatchElem::Destroy(unsigned flags)
     return this;
 }
 
-// @ 0x00e20780
+// 0x00e20780 (byte-exact lifted version: match/slices/s00e20780/s00e20780.cpp)
 PatchMgr::PatchMgr()
 {
     *(uint32*)((char*)this + 4) = 0;

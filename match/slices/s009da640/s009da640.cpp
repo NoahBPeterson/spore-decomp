@@ -124,7 +124,7 @@ struct Anim {
     int  A630(Solver** ps, Bone** a, Bone** b, int c);  // 0x009db630
 };
 
-// @ 0x009da640
+// 0x009da640 (byte-exact lifted version: match/slices/s009da640/s009da640_lifted.cpp)
 void Anim::A640(void* ctx)
 {
     // The original spills the loop counter into a 4-byte frame slot (its `push ecx` /

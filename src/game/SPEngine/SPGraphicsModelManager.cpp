@@ -4320,7 +4320,7 @@ void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int posit
     FUN_00743f00(first, topPosition, position, value);
 }
 
-// @ 0x00745e80
+// 0x00745e80 (byte-exact lifted version: match/slices/s00745e80/s00745e80.cpp)
 // adjust_heap for the 8-byte pair with the less comparator.
 void FUN_00743f60(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value); // 0x00743f60
 void PromotePairLt(FloatKeyPair* first, int topPosition, int heapSize, int position,
@@ -4431,7 +4431,7 @@ bool FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
     return 0;
 }
 
-// @ 0x00746250
+// 0x00746250 (byte-exact lifted version: match/slices/s00746250/s00746250.cpp)
 void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int idx)
 {
     MWInternal* p = handle ? (MWInternal*)((char*)handle - 8) : 0;

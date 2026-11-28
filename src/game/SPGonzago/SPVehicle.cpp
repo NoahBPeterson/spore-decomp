@@ -7142,7 +7142,7 @@ void FUN_01355f90(void)
     lib_atexit((void (__cdecl*)())0x13c42d0);
 }
 
-// @ 0x013579e0
+// 0x013579e0 (byte-exact lifted version: match/slices/s013579e0/s013579e0.cpp)
 void FUN_013579e0(void)
 {
     u32 z = 0;
@@ -7184,7 +7184,7 @@ void FUN_013579e0(void)
     *(u32*)0x169a1a4 = z;
 }
 
-// @ 0x01357ae0
+// 0x01357ae0 (byte-exact lifted version: match/slices/s01357ae0/s01357ae0.cpp)
 void FUN_01357ae0(void)
 {
     u32 z = 0;

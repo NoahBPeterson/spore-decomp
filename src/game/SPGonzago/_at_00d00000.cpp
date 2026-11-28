@@ -296,7 +296,7 @@ void __fastcall FUN_00d075d0(void* this_, int unused)
 }
 }  // namespace SP
 
-// @ 0x00d07770
+// 0x00d07770 (byte-exact lifted version: match/slices/s00d07770/s00d07770_lifted.cpp)
 void C103::FillCounts()
 {
     char* p = (char*)this;

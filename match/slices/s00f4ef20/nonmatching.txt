@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00f4f000  218  cTerrainTool::RegisterParams: complete; 32 g_paramCtx Set calls match but cl hoists the float-mul chain and the screenW/H division operands differ
 00f4f480   58  cTerrainTool::SampleCurveValue: complete; dot-product reassociation under /fp:fast + fabs constant-load order differ
 00f4f5a0   71  cTerrainTool::SetMatrix: complete (verified equivalence PASS); cl folds the zero stores and reorders the (x,y,z) column replication
 00f4f630   96  cTerrainTool::SetParams: complete; the two channel Advance blocks match, cl orders the tween constants differently

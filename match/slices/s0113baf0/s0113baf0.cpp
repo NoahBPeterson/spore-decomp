@@ -563,7 +563,7 @@ uint32_t FUN_0113c950(uint8_t* rec)
     return 0x20;
 }
 
-// @ 0x0113c9d0
+// 0x0113c9d0 (byte-exact lifted version: match/slices/s0113c9d0/s0113c9d0.cpp)
 bool FUN_0113c9d0(uint8_t* p)
 {
     if (p != 0)

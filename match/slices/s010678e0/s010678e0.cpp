@@ -410,7 +410,7 @@ u8 cSPUISpace::FUN_01067b60() {
     return 1;
 }
 
-// @ 0x01067c50 SetToolTip
+// 0x01067c50 (byte-exact lifted version: match/slices/s01067c50/s01067c50.cpp) SetToolTip
 void cSPUISpace::SetToolTip(void* a1, void* a2, void* a3, void* a4, void* a5) {
     cLayoutHolder* h = mpLayoutHolder;
     void* w1 = h->FindWindowByID(0x44ead4f, 1);
