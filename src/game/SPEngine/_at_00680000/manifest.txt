@@ -42,3 +42,4 @@
 ../src/game/SPEngine/_at_00680000.cpp  ??0JobLockView_68f1d0@@QAE@PAUJlRecord_68f1d0@@PAX1@Z  0068f1d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?SetJob@CJobHolder@@QAE_NPAX0@Z  0068f0b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?WriteData@Coder_s0068_e670@@QAEDPBEI@Z  0068eca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?Drain@FreeQueue@@QAEXXZ  0068c460  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

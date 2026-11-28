@@ -40,3 +40,5 @@
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?FillNAtomic8@@YAXPAPAXI0@Z  0070eb30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?AssignWeak14@@YAPAPAXPAPAX00@Z  0070ebf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?CopyBackwardWeak14@@YAPAPAXPAPAX00@Z  0070ec30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?Shrink@VecA@@QAEPAPAXPAPAX0@Z  0070fa60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?UninitCopyWeak14@@YA?AUWeakIt_70eb70@@U1@00@Z  0070eb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

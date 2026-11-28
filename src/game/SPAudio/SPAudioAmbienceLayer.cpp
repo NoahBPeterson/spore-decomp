@@ -597,13 +597,21 @@ void* __fastcall FUN_00a35aa0(int* param_1)
 // @ 0x00a35c00
 void __fastcall FUN_00a35c00(int param_1)
 {
-    void* _Src = *(void**)(param_1 + 0x28);
-    void* _Dst = *(void**)(param_1 + 0x24);
-    FUN_011e0744(_Dst, _Src, 0);
-    *(int*)(param_1 + 0x28) = *(int*)(param_1 + 0x28) +
-                              (((int)_Src - (int)_Dst) >> 2) * -4;
-    *(float*)(param_1 + 0x290) = 0.0f;
-    *(float*)(param_1 + 0x294) = 0.0f;
+    struct AmbLayer_a35c00 {
+        char pad0[0x24];
+        void* mpBegin;
+        void* mpEnd;
+        char pad1[0x264];
+        float mF290;
+        float mF294;
+    };
+    AmbLayer_a35c00* self = (AmbLayer_a35c00*)param_1;
+    void* _Src = self->mpEnd;
+    void* _Dst = self->mpBegin;
+    FUN_011e0744(_Dst, _Src, (int)self->mpEnd - (int)_Src);
+    self->mpEnd = (void*)((int)self->mpEnd + (((int)_Src - (int)_Dst) >> 2) * -4);
+    self->mF290 = 0.0f;
+    self->mF294 = 0.0f;
 }
 
 // @ 0x00a35c40

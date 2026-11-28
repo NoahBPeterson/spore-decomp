@@ -2611,8 +2611,7 @@ void Kin::Fn63f90()
 
 // @ 0x00c640e0
 void CmpObj64::Fn()
-{
-    char* self = (char*)this;
+{    char* self = (char*)this;
     float tmp[3];
     Vec3f* v = (Vec3f*)((VObj*)(self + 0x34))->v60(tmp);
     float s = *(float*)(self + 0x1bc);
@@ -2620,10 +2619,13 @@ void CmpObj64::Fn()
     sc.x = v->x * s;
     sc.y = v->y * s;
     sc.z = v->z * s;
+    sc.x += *(float*)(self + 0x198);
+    sc.y += *(float*)(self + 0x19c);
+    sc.z += *(float*)(self + 0x1a0);
     Vec3f out;
-    out.x = sc.x + *(float*)(self + 0x198);
-    out.y = sc.y + *(float*)(self + 0x19c);
-    out.z = sc.z + *(float*)(self + 0x1a0);
+    out.x = sc.x;
+    out.y = sc.y;
+    out.z = sc.z;
     ((VObj*)(self + 0x34))->v38(&out);
 }
 

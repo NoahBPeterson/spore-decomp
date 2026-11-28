@@ -5123,13 +5123,13 @@ void* cContentValidationSummarizer::ScalarDeletingDestructor(unsigned int flags)
 
 // @ 0x00d3b520
 void Shuffle(SortEntry* begin, SortEntry* end, RandomLinearCongruential* rng)
-{
-    for (SortEntry* it = begin + 1; it < end; ++it)
+{    for (SortEntry* it = begin + 1; it < end; ++it)
     {
         uint32_t idx = rng->RandomUint32Uniform((uint32_t)(it - begin) + 1);
+        SortEntry* target = begin + idx;
         SortEntry tmp = *it;
-        *it = begin[idx];
-        begin[idx] = tmp;
+        *it = *target;
+        *target = tmp;
     }
 }
 

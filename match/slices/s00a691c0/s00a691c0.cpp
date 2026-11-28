@@ -197,23 +197,26 @@ void RefVec::DestroyRange(RefObject** first, RefObject** last)
 }
 
 // ===========================================================================
+struct Ref_a69490 {
+    RefObject* p;
+    Ref_a69490(const Ref_a69490& o) : p(o.p) { if (p) ++p->mnRefCount; }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct RefIt_a69490 {
+    Ref_a69490* p;
+    RefIt_a69490(Ref_a69490* q) : p(q) {}
+    Ref_a69490& operator*() const { return *p; }
+    RefIt_a69490& operator++() { ++p; return *this; }
+    bool operator!=(const RefIt_a69490& o) const { return p != o.p; }
+};
+
 // @ 0x00a69490
-void __cdecl UninitCopyRef(void** result, RefObject** first, RefObject** last, RefObject** dest)
-{
-    *result = dest;
-    if (first != last) {
-        do {
-            if (dest) {
-                RefObject* o = *first;
-                *dest = o;
-                if (o)
-                    ++o->mnRefCount;
-            }
-            ++first;
-            ++dest;
-        } while (first != last);
-        *result = dest;
-    }
+RefIt_a69490 UninitCopyRef(RefIt_a69490 first, RefIt_a69490 last, RefIt_a69490 dest)
+{    RefIt_a69490 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) Ref_a69490(*first);
+    return result;
 }
 
 // ===========================================================================

@@ -3947,8 +3947,7 @@ void CreateDownloadJob(IAddRef* pDb, SubOwner_s0061_6360* pOwner, const Resource
 
 // @ 0x00616ed0
 bool cTxDownload::HandleResult(int err, void* a, void* b)
-{
-    ResourceKey_s0061_6360 scratch;
+{    ResourceKey_s0061_6360 scratch;
     bool closed;
     if (!mpResp)
         closed = false;
@@ -3968,7 +3967,8 @@ bool cTxDownload::HandleResult(int err, void* a, void* b)
         scratch.instanceID = mKey.instanceID;
         scratch.typeID = 0x1a99b06b;
         scratch.groupID = mKey.groupID;
-        CreateDownloadJob(mpMetadata, (SubOwner_s0061_6360*)GetSaveArea(0x11ac19d), &scratch);
+        IAddRef* meta = mpMetadata;
+        CreateDownloadJob(meta, (SubOwner_s0061_6360*)GetSaveArea(0x11ac19d), &scratch);
         return true;
     }
     cAssetDirectory* dir = GetPollinatorDir()->mpAssetDirectory;
@@ -3978,8 +3978,7 @@ bool cTxDownload::HandleResult(int err, void* a, void* b)
             dir->Fn54ed50(id[0], id[1], 0);
         dir->Fn54e7b0(id[0], id[1], 0);
     }
-    return false;
-}
+    return false;}
 
 // @ 0x00617010
 bool cTxThumbnail::ConstructRequest(char** ppOut)

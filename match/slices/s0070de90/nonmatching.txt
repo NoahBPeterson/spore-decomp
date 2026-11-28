@@ -6,7 +6,6 @@
 0070ea70  61    uninitialized_copy with atomic refcount; returns out in eax; equiv WEAK (78 valid, 30.4% cov)
 0070eac0  89    fill with atomic refcount; deferred-release shape differs
 0070eb30  45    fill_n with atomic refcount; register allocation differs
-0070eb70  41    uninitialized_copy weak-refcount; parameter spills differ
 0070eea0  200   SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070de90  327   cLightingManager message handler (target subobject at manager+4); register/frame layout differs, retail finds the config via an out-of-line AutoRef; equiv WEAK (400 valid, 11.6% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 0070e160  226   lighting-state reload; this kept in ebx vs retail esi and frame 0x18 vs 0x20; equiv WEAK (342 valid, 57.1% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

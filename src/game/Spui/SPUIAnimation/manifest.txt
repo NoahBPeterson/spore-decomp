@@ -21,3 +21,4 @@
 ../src/game/Spui/SPUIAnimation.cpp  ??0MissionCardAnimator@@QAE@XZ  007f83e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ?F64D0@@YA_NPAXHMH@Z  007f64d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ?F6D20@@YA_NPAXHHH@Z  007f6d20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?F71B0@@YA_NPAXHMH@Z  007f71b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

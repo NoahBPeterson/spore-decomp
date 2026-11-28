@@ -137,3 +137,6 @@
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8ba20@@YAMPAUcCreatureBase_s00d8_b220@@HHIPAUcBehaviorStimuli_s00d8_b220@@PAE@Z  00d8ba20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7e4e0@@YAMPAUcGameObj@@PAX11PAUcOutRec@@PAE1PAUcKeySrc@@@Z  00d7e4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?AddAlphaFade@@YA_NPAVtHeldStim@@M@Z  00d854f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7cef0@@YAXPAVcCreatureBase@@@Z  00d7cef0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d86df0@@YAXPAUcCreature@@IIIIPAUcNodeState@@@Z  00d86df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7b350@@YA_NPAUCB@@@Z  00d7b350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -7382,8 +7382,7 @@ void PB::SetText(int kind)
 
 // @ 0x00f1b730
 void PB_s00f1_ae10::SetMode(int a, PBEl* ev, int kind)
-{
-    char* w = (char*)g_16c7aa4->f7c;
+{    char* w = (char*)g_16c7aa4->f7c;
     if (w) *(int*)(w + 0xc) = a;
     CString s;
     switch (kind) {
@@ -7395,14 +7394,12 @@ void PB_s00f1_ae10::SetMode(int a, PBEl* ev, int kind)
         break;
     case 2: {
         int t = ev->type;
-        uint id;
         if (t == 10)
-            id = 0x796cfe1;
+            s.Load(0x21851ebe, 0x796cfe1, 0);
         else if (t == 11)
-            id = 0x796cfe5;
+            s.Load(0x21851ebe, 0x796cfe5, 0);
         else
-            id = 0x796d59a;
-        s.Load(0x21851ebe, id, 0);
+            s.Load(0x21851ebe, 0x796d59a, 0);
         break;
     }
     case 3:

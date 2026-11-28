@@ -348,38 +348,34 @@ int* TreeFind::FUN_00ec9530(int* param_2)
 // ------------------------------------------------------------------ 0x00ec95f0 / 0x00ec9640
 // @ 0x00ec95f0
 NOINLINE long long FUN_00ec95f0(int param_1, int param_2)
-{
-    if (param_2 != -1) {
-        int* ids = *(int**)((char*)g_16c757c + 4);
-        int id = ids[param_1];
-        int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&id);
-        int iVar1 = *p;
-        if (iVar1 != p[1]) {
-            long long r;
-            ((int*)&r)[0] = *(int*)(iVar1 + param_2 * 8);
-            ((int*)&r)[1] = *(int*)(iVar1 + 4 + param_2 * 8);
-            return r;
-        }
+{    static const int kInvalid[2] = { -1, -1 };
+    if (param_2 == -1) {
+        return *(const long long*)kInvalid;
     }
-    return -1;
+    int* ids = *(int**)((char*)g_16c757c + 4);
+    int id = ids[param_1];
+    int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&id);
+    int iVar1 = *p;
+    if (iVar1 == p[1]) {
+        return *(const long long*)kInvalid;
+    }
+    return *(long long*)(iVar1 + param_2 * 8);
 }
 
 // @ 0x00ec9640
 NOINLINE long long FUN_00ec9640(int param_1, int param_2)
-{
-    if (param_2 != -1) {
-        int* ids = *(int**)((char*)g_16c757c + 4);
-        int id = ids[param_1];
-        int* p = ((TreeFind*)((char*)g_16c757c + 0x34))->FUN_00ec9530(&id);
-        int iVar1 = *p;
-        if (iVar1 != p[1]) {
-            long long r;
-            ((int*)&r)[0] = *(int*)(iVar1 + param_2 * 8);
-            ((int*)&r)[1] = *(int*)(iVar1 + 4 + param_2 * 8);
-            return r;
-        }
+{    static const int kInvalid[2] = { -1, -1 };
+    if (param_2 == -1) {
+        return *(const long long*)kInvalid;
     }
-    return -1;
+    int* ids = *(int**)((char*)g_16c757c + 4);
+    int id = ids[param_1];
+    int* p = ((TreeFind*)((char*)g_16c757c + 0x34))->FUN_00ec9530(&id);
+    int iVar1 = *p;
+    if (iVar1 == p[1]) {
+        return *(const long long*)kInvalid;
+    }
+    return *(long long*)(iVar1 + param_2 * 8);
 }
 
 // ------------------------------------------------------------------ 0x00ec9690 / 0x00ec96f0

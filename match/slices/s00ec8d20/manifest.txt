@@ -6,3 +6,5 @@ slices/s00ec8d20/s00ec8d20.cpp  ?FUN_00ec9690@@YAXHH@Z  00ec9690  /O2 /MD /Gy /E
 slices/s00ec8d20/s00ec8d20.cpp  ?FUN_00ec8d20@@YAXH@Z  00ec8d20  /O2 /MD /Gy /EHsc /TP
 slices/s00ec8d20/s00ec8d20.cpp  ?Insert@RbTree@@QAEPAHPAHH0D@Z  00ec9140  /O2 /MD /Gy /EHsc /TP
 slices/s00ec8d20/s00ec8d20.cpp  ?FUN_00ec94d0@@YAXXZ  00ec94d0  /O2 /MD /Gy /EHsc /TP
+slices/s00ec8d20/s00ec8d20.cpp  ?FUN_00ec95f0@@YA_JHH@Z  00ec95f0  /O2 /MD /Gy /EHsc /TP
+slices/s00ec8d20/s00ec8d20.cpp  ?FUN_00ec9640@@YA_JHH@Z  00ec9640  /O2 /MD /Gy /EHsc /TP

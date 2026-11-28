@@ -31,3 +31,4 @@
 ../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_WCVT@@YAXPAUTTExecCtx@@@Z  008ae580  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_SCANCTRL@@YAXPAUTTExecCtx@@@Z  008ae020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_MPPEM@@YAXPAUTTExecCtx@@@Z  008ae7a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_a0b0@@YAXPAUTTExecCtx@@@Z  008ae460  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

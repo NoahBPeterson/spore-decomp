@@ -390,12 +390,17 @@ void* SerializedArray::Alloc() {
 
 // @ 0x007c54b0
 void* ResolveOne(void* obj, ResourceHolder* holder) {
-    int* p = (int*)((char*)obj + 0x3c);
-    if (*p == 0) {
-        *p = -1;
-        return holder;
+    struct Obj3c { char pad[0x3c]; int mId; };
+    Obj3c* o = (Obj3c*)obj;
+    int id = o->mId;
+    int result;
+    if (id == 0) {
+        result = -1;
+    } else {
+        ArenaInner* inner = holder->m_mgr->m_inner;
+        result = inner->m_arena->ObjectToId(id);
     }
-    *p = holder->m_mgr->m_inner->m_arena->ObjectToId(*p);
+    o->mId = result;
     return holder;
 }
 

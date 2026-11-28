@@ -205,21 +205,14 @@ uint16_t* FcvtW(double v, int n, int* dp, int* sign, uint16_t* out)
 // Body of 0x0092cf60.  The original helper is TU-static and gets cl's register
 // convention for the wrappers' direct calls; the VA's external entry point below
 // keeps the original's caller-visible shape (four cdecl slots + base in eax).
-static __declspec(noinline) char* UInt64ToStrImpl(int lo, int hi, char* buf, int sign, int base)
+static __declspec(noinline) char* UInt64ToStrImpl(unsigned long long v, char* buf, int sign, int base)
 {
     char* p = buf;
     if (sign) {
         *p++ = '-';
-        unsigned long long neg = (unsigned long long)((unsigned)lo);
-        unsigned long long hv = (unsigned long long)(unsigned)hi;
-        // 64-bit negate: (0 - value)
-        unsigned long long v0 = (hv << 32) | neg;
-        v0 = (unsigned long long)0 - v0;
-        lo = (int)v0;
-        hi = (int)(v0 >> 32);
+        v = (unsigned long long)0 - v;
     }
     char* start = p;
-    unsigned long long v = ((unsigned long long)(unsigned)hi << 32) | (unsigned)lo;
     long long divisor = base;                       // original sign-extends the base (cdq)
     unsigned long long d = (unsigned long long)divisor;
     do {
@@ -243,7 +236,8 @@ char* UInt64ToStr(int lo, int hi, char* buf, int sign, int base)
     int inBase;
     __asm { mov inBase, eax }           // the original's caller puts the base in eax
     (void)base;                         // the fifth cdecl slot is never read
-    return UInt64ToStrImpl(lo, hi, buf, sign, inBase);
+    unsigned long long v = ((unsigned long long)(unsigned)hi << 32) | (unsigned)lo;
+    return UInt64ToStrImpl(v, buf, sign, inBase);
 }
 
 // @ 0x0092cff0
@@ -251,14 +245,13 @@ char* UInt64ToStrAuto(int lo, int hi, char* buf, int base)
 {
     __int64 v = ((__int64)hi << 32) | (unsigned)lo;
     if (base == 10 && v < 0)
-        return UInt64ToStrImpl(lo, hi, buf, 1, base);
-    return UInt64ToStrImpl(lo, hi, buf, 0, base);
+        return UInt64ToStrImpl((unsigned long long)v, buf, 1, base);
+    return UInt64ToStrImpl((unsigned long long)v, buf, 0, base);
 }
 
 // @ 0x0092d040
-char* UInt64ToStrNoSign(int lo, int hi, char* buf, int base)
-{
-    return UInt64ToStrImpl(lo, hi, buf, 0, base);
+char* UInt64ToStrNoSign(unsigned long long v, char* buf, int base)
+{    return UInt64ToStrImpl(v, buf, 0, base);
 }
 
 // @ 0x0092d060
@@ -267,7 +260,7 @@ void UInt64ToStrW(int lo, int hi, uint16_t* out, int base)
     char buf[0x30];
     __int64 v = ((__int64)hi << 32) | (unsigned)lo;
     int neg = (base == 10 && v < 0) ? 1 : 0;
-    UInt64ToStrImpl(lo, hi, buf, neg, base);
+    UInt64ToStrImpl((unsigned long long)v, buf, neg, base);
     char* p = buf;
     uint16_t* o = out;
     while (buf[0] != 0) {
@@ -283,7 +276,8 @@ void UInt64ToStrW(int lo, int hi, uint16_t* out, int base)
 void UInt64ToStrW2(int lo, int hi, uint16_t* out, int base)
 {
     char buf[0x30];
-    UInt64ToStrImpl(lo, hi, buf, 0, base);
+    unsigned long long v = ((unsigned long long)(unsigned)hi << 32) | (unsigned)lo;
+    UInt64ToStrImpl(v, buf, 0, base);
     char* p = buf;
     uint16_t* o = out;
     while (buf[0] != 0) {

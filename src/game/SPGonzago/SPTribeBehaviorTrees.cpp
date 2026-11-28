@@ -519,7 +519,7 @@ struct cSPCreatureCitizen : Crt {
     char    Proximity(void* t, float a, float b);                // 0x00c0d560
     u32     InterruptAnimation(u32 id, int a, int b);            // 0x00c12310
     void    PlayAnimation(u32 id, int a, int b);                 // 0x00c12190
-    void    FUN_c14750(int a);                                   // 0x00c14750
+    void    FUN_c14750(bool a);                                  // 0x00c14750
     void    FUN_c279a0(int a);                                   // 0x00c279a0
     void    SetCurrentToolEffect(int a, int b);                  // 0x00c24f40
     void    ForceOrdersUpdate();                                 // 0x00c26450
@@ -6678,9 +6678,10 @@ u8 __cdecl FUN_00da7470(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags, void* p5,
 // @ 0x00da74e0
 void __cdecl FUN_00da74e0(cSPCreatureCitizen* c)
 {
+    struct BTreeFlags { char pad[0x1c8]; unsigned __int64 mFlags64; };
     char v = c->mSubC0.vf8();
     c->FUN_c14750(v == 0);
-    if ((c->mpBTree->mFlags1c8 & 0x2000000) == 0)
+    if ((((BTreeFlags*)c->mpBTree)->mFlags64 & 0x2000000ui64) == 0)
         c->mpBTree->mStimuli.ClearAll(0, 0x20);
 }
 

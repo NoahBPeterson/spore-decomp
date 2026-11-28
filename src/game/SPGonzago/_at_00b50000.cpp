@@ -2175,21 +2175,16 @@ void RegisterHavokResourceFactory()
 
 // @ 0x00b51040
 void* __cdecl FindNear(Cursor* c, float x)
-{
-    NodeA* n = c->cur;
-    if (n != c->end) {
-        do {
-            if (fabs((double)n->f - (double)x) <= 1.5258789e-05f)
-                return &n->value;
-            n = c->cur->next;
-            c->cur = n;
-            while (!n) {
-                c->bucket += 1;
-                n = *c->bucket;
-                c->cur = n;
-            }
-            n = c->cur;
-        } while (n != c->end);
+{    NodeA* n;
+    while ((n = c->cur) != c->end) {
+        void* res = &n->value;
+        if (fabsf(n->f - x) <= 1.5258789e-05f)
+            return res;
+        c->cur = c->cur->next;
+        while (!c->cur) {
+            c->bucket += 1;
+            c->cur = *c->bucket;
+        }
     }
     return 0;
 }

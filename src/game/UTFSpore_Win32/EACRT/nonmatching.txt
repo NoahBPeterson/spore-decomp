@@ -6,7 +6,6 @@
 0092ce80 82 _ecvt result widened to UTF-16; local buffer layout differs
 0092cef0 82 _fcvt result widened to UTF-16; local buffer layout differs
 0092cff0 85 base-10 signed formatter wrapper; static-helper eax convention differs
-0092d040 15 base-N unsigned formatter wrapper; static-helper eax convention differs
 0092d060 135 signed formatter to UTF-16; static-helper eax convention differs
 0092d0d0 77 unsigned formatter to UTF-16; static-helper eax convention differs
 0092d3e0 661 StrtoU64Common16(nptr,endptr,base): wide strtoull with sign/base 0|2..36, 0x/0X prefix, __aulldivrm overflow bound and ERANGE saturation; original drives iswctype/towupper through the MSVCR90 IAT and uses the wide switch/loop register allocation we cannot reproduce with _alldiv/_allmul helpers. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, discard import:iswctype=400 — the difftest machine has no iswctype handler)

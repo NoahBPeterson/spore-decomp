@@ -5,7 +5,6 @@
 00920d00   99  SkipComponentBack: backward component loop schedule differs
 00920e30  150  FindExtension: dot/extension scan schedule differs
 00921440  243  RangeMapper::Map: equiv PASS 100% (900 valid); remaining bytes are the x87 stack-slot/compare-operand ordering (297 vs 315)
-00921580   41  RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ
 00920780  501  complete; EapdSymbolTable::LoadSymbols full port (symbol pass plus group pass with Find/erase iterators); local-slot/register scheduling differs (514 vs 562); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, lock imports WaitForSingleObject/GetCurrentThread)
 00920b30  187  complete; EapdSymbolTable::LoadGroups full port; our frame is 0x23c vs retail 0x244 (8 bytes of unused locals missing) and owner/i registers are swapped (207 vs 232); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (0/400 valid, lock imports WaitForSingleObject/GetCurrentThread)
 00920f30  463  complete; FUN_00920f30 path canonicalizer full port (separator run, `:` branch, `.`/`..` collapse, epilogue memmove); control-flow shape and scheduling differ (517 vs 515); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (147 valid, 17.0% cov)

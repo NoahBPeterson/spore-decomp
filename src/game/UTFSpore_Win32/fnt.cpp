@@ -1127,22 +1127,20 @@ void fnt_svtca_lo(TTExecCtx* c)
 // @ 0x008ae460
 void fnt_a0b0(TTExecCtx* c)
 {
-    unsigned char* in = c->mIP;
-    int n = (unsigned short)*in;
-    unsigned char* next = in + 1;
+    unsigned char* in0 = c->mIP;
+    short n = (unsigned short)*in0;
+    c->mIP = in0 + 1;
     int* out = c->mStack;
-    c->mIP = next;
+    unsigned char* in = c->mIP;
     n -= 1;
-    if ((short)n >= 0) {
+    if (n >= 0) {
         do {
-            *out = *next;
-            out++;
-            next++;
+            *out++ = *in++;
             n--;
-        } while ((short)n >= 0);
+        } while (n >= 0);
     }
-    c->mIP = next;
     c->mStack = out;
+    c->mIP = in;
 }
 
 // @ 0x008ae4a0

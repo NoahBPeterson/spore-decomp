@@ -26,3 +26,4 @@
 ../src/game/SPEditors/_at_00620000.cpp  ??_GcNamedRefCount@@UAEPAXI@Z  0062e2b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00620000.cpp  ?IsSendPhotoWinVisible@cSPPlayModePhotoBrowser@@QAEEXZ  0062fd60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00620000.cpp  ?RFindFirstOf@@YAPBDPBD000@Z  0062ff90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?Apply@cXHTMLControlAppearance@@QAEXPAUWinXHTML@@@Z  00621bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

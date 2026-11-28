@@ -8,12 +8,10 @@
 0070e6b0 41 other: R48 (2026-11-17): MakeHashNode; a node type with a constructor plus an EAlloc placement new and matching placement delete reproduces the EH frame and both unwind slots (149 vs 120 B), but cl splits the null path into a second epilogue, uses immediate zeros where retail uses xor edi,edi, and orders the slots differently. | Earlier note: hash-node constructor; EH frame missing
 0070ea70 47 uninitialized_copy with atomic refcount; spill/order differs
 0070eac0 39 fill with atomic refcount; deferred-release shape differs
-0070eb70 37 uninitialized_copy weak-refcount; parameter spills differ
 0070eea0 128 SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070efa0 146 SP::cMaterialManager::ReadShaders; io/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070f520 27 atomic weak-release range; deferred-release sequence differs
 0070f8c0 176 SP::cMaterialManager::HasMaterial; map/mutex register shape differs
-0070fa60 33 vector::erase (RC3c); register assignment differs
 0070fab0 33 vector::erase (RC3b); register assignment differs
 007101f0 123 hash_map<uint32_t,T>::operator[]; equiv FAIL (5/5 inputs mismatched: ours faults at a bad address, guessed helper roles); EH frame/locals and insert-return shape not reproduced
 007102b0 123 hash_map<uint32_t,T>::operator[] second instantiation; equiv FAIL (5/5 inputs mismatched: ours faults, guessed helper roles); same shape mismatch

@@ -678,25 +678,46 @@ namespace G7
 
 // @ 0x00ba1ea0
     void SerializeList(Owner* owner, List* list)
-    {
+    {        struct IOwner {
+            virtual void v00() {} virtual void v04() {} virtual void v08() {} virtual void v0c() {}
+            virtual void v10() {} virtual void v14() {} virtual void v18() {}
+            virtual void End() {}
+            virtual void* GetA() { return 0; }
+            virtual void v24() {} virtual void v28() {}
+            virtual void WriteItem(void* r) {}
+        };
+        struct IA {
+            virtual void v00() {} virtual void v04() {} virtual void v08() {} virtual void v0c() {}
+            virtual void v10() {} virtual void v14() {}
+            virtual void* GetB() { return 0; }
+        };
+        struct ISub {
+            virtual void v00() {} virtual void v04() {} virtual void v08() {}
+            virtual void* GetId(int tag) { return 0; }
+        };
+        struct Helper {
+            static __forceinline void WriteU32(void* b, u32 val) {
+                G7WriteUint32(b, &val, 1, 0);
+            }
+        };
+
         u32 count = 0;
         Node* p = list->pNext;
         while (p != (Node*)list) {
             p = p->pNext;
             ++count;
         }
-        void* a = ((void* (__thiscall*)(Owner*))VSlot(owner, 0x20))(owner);
-        void* b = ((void* (__thiscall*)(void*))VSlot(a, 0x18))(a);
-        u32 num = count;
-        G7WriteUint32(b, &num, 1, 0);
+        void* a = ((IOwner*)owner)->GetA();
+        Helper::WriteU32(((IA*)a)->GetB(), count);
         for (Node* n = list->pNext; n != (Node*)list; n = n->pNext) {
+            Obj* o = n->pObj;
             void* r = 0;
-            if (n->pObj)
-                r = ((void* (__thiscall*)(void*, int))VSlot(ObjSub(n->pObj), 0xc))(ObjSub(n->pObj), 0x179c807);
-            ((void (__thiscall*)(Owner*, void*))VSlot(owner, 0x2c))(owner, r);
+            if (o)
+                r = ((ISub*)ObjSub(o))->GetId(0x179c807);
+            ((IOwner*)owner)->WriteItem(r);
         }
-        ((void (__thiscall*)(Owner*))VSlot(owner, 0x1c))(owner);
-    }
+        ((IOwner*)owner)->End();
+}
 
 // @ 0x00ba1f30
     void Owner::ReadFrom(void* stream)

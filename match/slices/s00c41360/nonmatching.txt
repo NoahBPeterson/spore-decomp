@@ -4,5 +4,4 @@
 00c41f30  183  large float/vector setter (mF254/mF260/mF26c/mF270, 4.0f default); implemented; shares symbol-size with 00c42210 (183 vs 174) so cmp cannot pin it; structure close but scheduling differs
 00c41ff0  212  large setter (vector + 0x1e flag block + 0x00c71540 world lookup); NOT IMPLEMENTED (only declared)
 00c42210  165  bool FUN_00c42210(float r): if mF250==0 true; pick last curve point (or +0x208 when empty), distance from GetPosition() (+0x2c) < r; implemented; 148 diff (x87 vs SSE sqrt sequence and the empty-list branch layout differ; 174 vs 165 B)
-00c422c0  69  float FUN_00c422c0(): if mF250==0 return 0; else squared distance between +0x208 and GetPosition(); implemented; 49 diff (original uses an x87 st(2)/st(3) multiply chain, mine uses SSE mulss)
 00c42350  98  void FUN_00c42350(): if mF26c != 0, fetch the avatar holder (0x00b3d240), id-lookup 0x17f243b via vtable +0xb8, BuildEffect(scale=mF26c, pos=&+0x278, 0, 0x00d9a9c0, id) via vtable +0x2c, then holder vtable +0x48(effect); implemented; 51 diff (original pre-loads the holder's vtable pointer [edi] into ebx before the BuildEffect call; mine reloads after; 96 vs 98 B)

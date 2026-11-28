@@ -27,3 +27,4 @@
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?f@W1e70@@QAEXPAX0@Z  007b1e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAUPropKey@@@Z  007b1e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?resize@C20@@QAEXH@Z  007b1040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?Init@Span@@QAEPAV1@HHHHH@Z  007ae920  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -3596,10 +3596,11 @@ void ElemVec::insert(Elem98_s00bc_4730* pos, unsigned n, const Elem98_s00bc_4730
 
 // @ 0x00bc5040
 void Reg_s00bc_4730::resetByKey(uint32_t key)
-{
-    for (Node* n = mSentinel.mpNext; n != &mSentinel; n = n->mpNext) {
-        if (n->mEntry.mKey == key) {
-            resetEntry(&n->mEntry);
+{    Node* end = &mSentinel;
+    for (Node* n = mSentinel.mpNext; n != end; n = n->mpNext) {
+        Entry_s00bc_4730* e = &n->mEntry;
+        if (e->mKey == key) {
+            resetEntry(e);
             return;
         }
     }
@@ -4379,13 +4380,17 @@ void WE::FUN_00bc74d0(uint param_2)
 
 // @ 0x00bc7570
 void __cdecl FUN_00bc7570(int param_1, WE* self)
-{
-    IntVec list;
+{    PropMgr_s00bc_74d0* pm = FUN_0067de30_s00bc_74d0();
+    struct LocalIntVec {
+        int* begin;
+        int* end;
+        int* cap;
+        int alloc[2];
+    } list;
     list.begin = 0;
     list.end = 0;
     list.cap = 0;
-    PropMgr_s00bc_74d0* pm = FUN_0067de30_s00bc_74d0();
-    pm->GetVector(param_1, &list);
+    pm->GetVector(param_1, (IntVec*)&list);
     int count = (int)(list.end - list.begin);
     self->FUN_00bc74d0(count);
     if (0 < count) {

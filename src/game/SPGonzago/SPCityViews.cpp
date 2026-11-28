@@ -1698,18 +1698,19 @@ void UpdateCloudTendril(cSpatialObjectView * view)
 
 // @ 0x00e87b70
 cBuildingView::cBuildingView()
-{
+{    float one = 1.0f;
     mpEffect_34 = 0;
-    float one = kOne;
     mScale_3c = one;
     mScale_40 = one;
+    float half = kOneAndAHalf;
     mState_38 = 0;
-    mScale_44 = kOneAndAHalf;
+    mScale_44 = half;
     mbFlag_58 = 0;
     mTimer.Construct();
-    mXformIndices[0] = mXformIndices[1] = mXformIndices[2] = mXformIndices[3] = -1;
     mpEffect_80 = 0;
     mpEffect_84 = 0;
+    for (int i = 0; i < 4; ++i)
+        mXformIndices[i] = -1;
 }
 
 // @ 0x00e87be0

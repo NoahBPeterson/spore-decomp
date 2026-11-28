@@ -18,3 +18,4 @@
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalChar@cExpression_s0083_f140@ArgScript@EA@@QAEHPAPBD@Z  0083f480  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?ParseBool@cExpression_s0083_f140@ArgScript@EA@@QAE_NPBD@Z  0083f510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalRealParentheses4@ExprStub@@QAEXPAPBDPAM1@Z  0083d2f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?Dtor@PairCtorStub@@QAEXXZ  0083d080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -4,6 +4,5 @@
 00b71e40  136  Fn_00b71e40 (rbtree insert-unique with hint) - complete behaviour port; not byte-exact (130 vs 155: inlined 00b71900 sret insert differs). equiv UNSUPPORTED: original reads ecx at entry (register ABI not declared)
 00b71ee0  166  Fn_00b71ee0 (per-frame feedback time step) - complete behaviour port; not byte-exact (118 vs 200: float/global constant folding + loop expansion differ). equiv UNSUPPORTED: 0/400 inputs valid (fault(read)=400)
 00b71fb0  164  Fn_00b71fb0 (create/insert feedback event) - complete behaviour port; not byte-exact (209 vs 203). equiv UNSUPPORTED: original reads ecx at entry (register ABI not declared)
-00b72160   35  cObjectPool::Alloc - complete behaviour port and behaviourally CORRECT (equiv PASS 298 valid inputs, 100% coverage); not byte-exact only because the register allocator assigns mHighWater to eax instead of the original's ebx (and index to ebx not eax); 97 vs 97
 00b72640  521  cModeTuning::UpdateFromGameMode - complete behaviour port of the property-id/tuning block updates; not byte-exact (597 vs 551). equiv FAIL 5/5 (fake-arity through an unmodelled property callback)
 00b72890  613  Fn_00b72890 (float/tuning curve evaluation, D=double + PAM out) - complete behaviour port; not byte-exact (574 vs 705: SSE constant materialisation and branch layout differ). equiv FAIL 5/5 (first mismatch memory pool 40040000)

@@ -147,6 +147,7 @@ public:
     void addCollisionListener(void* listener);                    // 0x01088C90
     void removeCollisionListener(void* listener);                 // 0x01088A70
     void addReference();                                          // 0x01082590
+    void removeReference();                                       // 0x0109AE60
 };
 class hkWorld_s00ae_f610 {
 public:
@@ -351,15 +352,14 @@ void* cDebugBehavior::GetOwner()
 
 // @ 0x00aef2f0
 void cDebugBehavior::ReleaseOwner()
-{
-    if (*(int*)((uint8_t*)mpOwnerRef + 8) != 0) {
-        DebugBehaviorStopTimers((uint8_t*)this + 0x58);
-        uint8_t bFlag = 0;
-        ((cOwnerRelease*)mpOwner)->ReleaseOwnerRef(&bFlag, mpOwnerRef);
-        ((cPropertyList*)mpOwnerRef)->Release();
+{    if (((hkRigidBody_s00ae_f610*)mpOwnerRef)->m_field08 != 0) {
+        ((hkRigidBody_s00ae_f610*)mpOwnerRef)->removeCollisionListener((uint8_t*)this + 0x58);
+        bool bFlag;
+        ((hkWorld_s00ae_f610*)mpOwner)->removeEntity(&bFlag, (hkRigidBody_s00ae_f610*)mpOwnerRef);
     }
+    ((hkRigidBody_s00ae_f610*)mpOwnerRef)->removeReference();
     mpOwnerRef = nullptr;
-}
+    mpOwner = nullptr;}
 
 // @ 0x00aef330
 void cDebugBehavior::UpdateTransform()
