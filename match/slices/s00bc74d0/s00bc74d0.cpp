@@ -447,7 +447,7 @@ void WE::FUN_00bc7b70(uint param_2)
 }
 
 // ===========================================================================
-// 0x00bc7c40 (byte-exact lifted version: match/slices/s00bc7c40/s00bc7c40.cpp) — erase the range [first,last); returns `first`.
+// 0x00bc7c40: not byte-exact; the byte-exact version is in src/game/SPGonzago/_at_00bc0000.cpp — erase the range [first,last); returns `first`.
 // ===========================================================================
 int WE::FUN_00bc7c40(int param_2, int param_3)
 {

@@ -3093,27 +3093,27 @@ float* __fastcall FUN_0077d130(float* p)
     return p;
 }
 
-// 0x0077d170 (byte-exact lifted version: match/slices/s0077d170/s0077d170.cpp)
-float* __fastcall FUN_0077d170(float* p)
+// @ 0x0077d170
+// Zeroes a 4x4 float matrix (element 4 first, as retail stores it).
+float* __fastcall FUN_0077d170(float* m)
 {
-    __m128 z = _mm_setzero_ps();
-    _mm_store_ss(p + 0, z);
-    _mm_store_ss(p + 4, z);
-    _mm_store_ss(p + 1, z);
-    _mm_store_ss(p + 2, z);
-    _mm_store_ss(p + 3, z);
-    _mm_store_ss(p + 5, z);
-    _mm_store_ss(p + 6, z);
-    _mm_store_ss(p + 7, z);
-    _mm_store_ss(p + 8, z);
-    _mm_store_ss(p + 9, z);
-    _mm_store_ss(p + 10, z);
-    _mm_store_ss(p + 11, z);
-    _mm_store_ss(p + 12, z);
-    _mm_store_ss(p + 13, z);
-    _mm_store_ss(p + 14, z);
-    _mm_store_ss(p + 15, z);
-    return p;
+    m[0] = 0.0f;
+    m[4] = 0.0f;
+    m[1] = 0.0f;
+    m[2] = 0.0f;
+    m[3] = 0.0f;
+    m[5] = 0.0f;
+    m[6] = 0.0f;
+    m[7] = 0.0f;
+    m[8] = 0.0f;
+    m[9] = 0.0f;
+    m[10] = 0.0f;
+    m[11] = 0.0f;
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+    m[15] = 0.0f;
+    return m;
 }
 
 // @ 0x0077d1d0

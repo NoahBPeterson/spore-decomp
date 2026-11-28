@@ -1527,6 +1527,7 @@ struct WE {
     int   FUN_00bc7680(int index);
     void  FUN_00bc77e0(int index);
     void** FUN_00bc7a70(void** out, Rec_s00bc_74d0* at);
+    void  FUN_00bc78d0(Rec_s00bc_74d0* first, Rec_s00bc_74d0* last);   // 0x00bc78d0: destroys [first, last)
     void  FUN_00bc7b70(uint n);
     __declspec(noinline) int FUN_00bc7c40(int first, int last);
     void  FUN_00bc7ca0(Rec_s00bc_74d0* at, int* val);
@@ -4655,14 +4656,14 @@ void WE::FUN_00bc7b70(uint param_2)
     }
 }
 
-// 0x00bc7c40 (byte-exact lifted version: match/slices/s00bc7c40/s00bc7c40.cpp)
-int WE::FUN_00bc7c40(int param_2, int param_3)
+// @ 0x00bc7c40
+// erase(first, last): move the tail down over the range, destroy what is left past the new end
+int WE::FUN_00bc7c40(int first, int last)
 {
-    int* uVar1 = FUN_00bc79f0((void*)param_3, (void*)end, (void*)param_2);
-    FUN_00bc78d0((Rec_s00bc_74d0*)uVar1, end);
-    int x = param_3 - param_2;
-    end = (Rec_s00bc_74d0*)((char*)end - (x / 0x3c) * 0x3c);
-    return param_2;
+    Rec_s00bc_74d0* newEnd = (Rec_s00bc_74d0*)FUN_00bc79f0((void*)last, (void*)end, (void*)first);
+    FUN_00bc78d0(newEnd, end);
+    end -= (last - first) / (int)sizeof(Rec_s00bc_74d0);
+    return first;
 }
 
 // @ 0x00bc7ca0

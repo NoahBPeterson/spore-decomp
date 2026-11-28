@@ -7142,100 +7142,105 @@ void FUN_01355f90(void)
     lib_atexit((void (__cdecl*)())0x13c42d0);
 }
 
-// 0x013579e0 (byte-exact lifted version: match/slices/s013579e0/s013579e0.cpp)
+struct VehicleIdEntry { uint32_t id; uint32_t a; uint32_t b; };   // 12 bytes
+extern VehicleIdEntry gVehicleIdTableA[12];   // 0x0169a118
+
+// @ 0x013579e0
+// Static initialiser: 12 ids, each with two zeroed words.
 void FUN_013579e0(void)
 {
-    u32 z = 0;
-    *(u32*)0x169a118 = 0x4c0cd24;
-    *(u32*)0x169a11c = z;
-    *(u32*)0x169a120 = z;
-    *(u32*)0x169a124 = 0x4c0cd27;
-    *(u32*)0x169a128 = z;
-    *(u32*)0x169a12c = z;
-    *(u32*)0x169a130 = 0x4c0cd26;
-    *(u32*)0x169a134 = z;
-    *(u32*)0x169a138 = z;
-    *(u32*)0x169a13c = 0x4c0cd21;
-    *(u32*)0x169a140 = z;
-    *(u32*)0x169a144 = z;
-    *(u32*)0x169a148 = 0x4c0cd20;
-    *(u32*)0x169a14c = z;
-    *(u32*)0x169a150 = z;
-    *(u32*)0x169a154 = 0x4c0cd23;
-    *(u32*)0x169a158 = z;
-    *(u32*)0x169a15c = z;
-    *(u32*)0x169a160 = 0x4c0cd22;
-    *(u32*)0x169a164 = z;
-    *(u32*)0x169a168 = z;
-    *(u32*)0x169a16c = 0x4c0cd2d;
-    *(u32*)0x169a170 = z;
-    *(u32*)0x169a174 = z;
-    *(u32*)0x169a178 = 0x4c0cd2c;
-    *(u32*)0x169a17c = z;
-    *(u32*)0x169a180 = z;
-    *(u32*)0x169a184 = 0x9f82ef9c;
-    *(u32*)0x169a188 = z;
-    *(u32*)0x169a18c = z;
-    *(u32*)0x169a190 = 0x9f82ef9d;
-    *(u32*)0x169a194 = z;
-    *(u32*)0x169a198 = z;
-    *(u32*)0x169a19c = 0x9f82ef9e;
-    *(u32*)0x169a1a0 = z;
-    *(u32*)0x169a1a4 = z;
+    gVehicleIdTableA[0].id = 0x04c0cd24;
+    gVehicleIdTableA[0].a = 0;
+    gVehicleIdTableA[0].b = 0;
+    gVehicleIdTableA[1].id = 0x04c0cd27;
+    gVehicleIdTableA[1].a = 0;
+    gVehicleIdTableA[1].b = 0;
+    gVehicleIdTableA[2].id = 0x04c0cd26;
+    gVehicleIdTableA[2].a = 0;
+    gVehicleIdTableA[2].b = 0;
+    gVehicleIdTableA[3].id = 0x04c0cd21;
+    gVehicleIdTableA[3].a = 0;
+    gVehicleIdTableA[3].b = 0;
+    gVehicleIdTableA[4].id = 0x04c0cd20;
+    gVehicleIdTableA[4].a = 0;
+    gVehicleIdTableA[4].b = 0;
+    gVehicleIdTableA[5].id = 0x04c0cd23;
+    gVehicleIdTableA[5].a = 0;
+    gVehicleIdTableA[5].b = 0;
+    gVehicleIdTableA[6].id = 0x04c0cd22;
+    gVehicleIdTableA[6].a = 0;
+    gVehicleIdTableA[6].b = 0;
+    gVehicleIdTableA[7].id = 0x04c0cd2d;
+    gVehicleIdTableA[7].a = 0;
+    gVehicleIdTableA[7].b = 0;
+    gVehicleIdTableA[8].id = 0x04c0cd2c;
+    gVehicleIdTableA[8].a = 0;
+    gVehicleIdTableA[8].b = 0;
+    gVehicleIdTableA[9].id = 0x9f82ef9c;
+    gVehicleIdTableA[9].a = 0;
+    gVehicleIdTableA[9].b = 0;
+    gVehicleIdTableA[10].id = 0x9f82ef9d;
+    gVehicleIdTableA[10].a = 0;
+    gVehicleIdTableA[10].b = 0;
+    gVehicleIdTableA[11].id = 0x9f82ef9e;
+    gVehicleIdTableA[11].a = 0;
+    gVehicleIdTableA[11].b = 0;
 }
 
-// 0x01357ae0 (byte-exact lifted version: match/slices/s01357ae0/s01357ae0.cpp)
+extern VehicleIdEntry gVehicleIdTableB[16];   // 0x0169a1a8
+
+// @ 0x01357ae0
+// Static initialiser: 16 ids, each with two zeroed words.
 void FUN_01357ae0(void)
 {
-    u32 z = 0;
-    *(u32*)0x169a1a8 = 0xfe53e4ad;
-    *(u32*)0x169a1ac = z;
-    *(u32*)0x169a1b0 = z;
-    *(u32*)0x169a1b4 = 0xfe53e4ae;
-    *(u32*)0x169a1b8 = z;
-    *(u32*)0x169a1bc = z;
-    *(u32*)0x169a1c0 = 0xfe53e4af;
-    *(u32*)0x169a1c4 = z;
-    *(u32*)0x169a1c8 = z;
-    *(u32*)0x169a1cc = 0xfe53e4a8;
-    *(u32*)0x169a1d0 = z;
-    *(u32*)0x169a1d4 = z;
-    *(u32*)0x169a1d8 = 0xfe53e4a9;
-    *(u32*)0x169a1dc = z;
-    *(u32*)0x169a1e0 = z;
-    *(u32*)0x169a1e4 = 0xfe53e4aa;
-    *(u32*)0x169a1e8 = z;
-    *(u32*)0x169a1ec = z;
-    *(u32*)0x169a1f0 = 0xfe53e4ab;
-    *(u32*)0x169a1f4 = z;
-    *(u32*)0x169a1f8 = z;
-    *(u32*)0x169a1fc = 0xfe53e4a4;
-    *(u32*)0x169a200 = z;
-    *(u32*)0x169a204 = z;
-    *(u32*)0x169a208 = 0xfe53e4a5;
-    *(u32*)0x169a20c = z;
-    *(u32*)0x169a210 = z;
-    *(u32*)0x169a214 = 0xff53e61c;
-    *(u32*)0x169a218 = z;
-    *(u32*)0x169a21c = z;
-    *(u32*)0x169a220 = 0xff53e61b;
-    *(u32*)0x169a224 = z;
-    *(u32*)0x169a228 = z;
-    *(u32*)0x169a22c = 0xff53e61a;
-    *(u32*)0x169a230 = z;
-    *(u32*)0x169a234 = z;
-    *(u32*)0x169a238 = 0xff53e619;
-    *(u32*)0x169a23c = z;
-    *(u32*)0x169a240 = z;
-    *(u32*)0x169a244 = 0xff53e618;
-    *(u32*)0x169a248 = z;
-    *(u32*)0x169a24c = z;
-    *(u32*)0x169a250 = 0xff53e617;
-    *(u32*)0x169a254 = z;
-    *(u32*)0x169a258 = z;
-    *(u32*)0x169a25c = 0xff53e616;
-    *(u32*)0x169a260 = z;
-    *(u32*)0x169a264 = z;
+    gVehicleIdTableB[0].id = 0xfe53e4ad;
+    gVehicleIdTableB[0].a = 0;
+    gVehicleIdTableB[0].b = 0;
+    gVehicleIdTableB[1].id = 0xfe53e4ae;
+    gVehicleIdTableB[1].a = 0;
+    gVehicleIdTableB[1].b = 0;
+    gVehicleIdTableB[2].id = 0xfe53e4af;
+    gVehicleIdTableB[2].a = 0;
+    gVehicleIdTableB[2].b = 0;
+    gVehicleIdTableB[3].id = 0xfe53e4a8;
+    gVehicleIdTableB[3].a = 0;
+    gVehicleIdTableB[3].b = 0;
+    gVehicleIdTableB[4].id = 0xfe53e4a9;
+    gVehicleIdTableB[4].a = 0;
+    gVehicleIdTableB[4].b = 0;
+    gVehicleIdTableB[5].id = 0xfe53e4aa;
+    gVehicleIdTableB[5].a = 0;
+    gVehicleIdTableB[5].b = 0;
+    gVehicleIdTableB[6].id = 0xfe53e4ab;
+    gVehicleIdTableB[6].a = 0;
+    gVehicleIdTableB[6].b = 0;
+    gVehicleIdTableB[7].id = 0xfe53e4a4;
+    gVehicleIdTableB[7].a = 0;
+    gVehicleIdTableB[7].b = 0;
+    gVehicleIdTableB[8].id = 0xfe53e4a5;
+    gVehicleIdTableB[8].a = 0;
+    gVehicleIdTableB[8].b = 0;
+    gVehicleIdTableB[9].id = 0xff53e61c;
+    gVehicleIdTableB[9].a = 0;
+    gVehicleIdTableB[9].b = 0;
+    gVehicleIdTableB[10].id = 0xff53e61b;
+    gVehicleIdTableB[10].a = 0;
+    gVehicleIdTableB[10].b = 0;
+    gVehicleIdTableB[11].id = 0xff53e61a;
+    gVehicleIdTableB[11].a = 0;
+    gVehicleIdTableB[11].b = 0;
+    gVehicleIdTableB[12].id = 0xff53e619;
+    gVehicleIdTableB[12].a = 0;
+    gVehicleIdTableB[12].b = 0;
+    gVehicleIdTableB[13].id = 0xff53e618;
+    gVehicleIdTableB[13].a = 0;
+    gVehicleIdTableB[13].b = 0;
+    gVehicleIdTableB[14].id = 0xff53e617;
+    gVehicleIdTableB[14].a = 0;
+    gVehicleIdTableB[14].b = 0;
+    gVehicleIdTableB[15].id = 0xff53e616;
+    gVehicleIdTableB[15].a = 0;
+    gVehicleIdTableB[15].b = 0;
 }
 
 // @ 0x01357d00

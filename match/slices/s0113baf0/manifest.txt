@@ -9,3 +9,4 @@ slices/s0113baf0/s0113baf0.cpp  FUN_0113cd80  0113cd80  /vc71 /O2 /MD /Gy /TP /a
 slices/s0113baf0/s0113baf0.cpp  FUN_0113cdd0  0113cdd0  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s0113baf0/s0113baf0.cpp  ?FUN_0113cb20@Ctx@@QAEXXZ  0113cb20  /vc71 /O1 /MD /Gy /TP /arch:SSE
 slices/s0113baf0/s0113baf0.cpp  ?FUN_0113c060@@YA_NPAE@Z  0113c060  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0113baf0/s0113baf0.cpp  ?FUN_0113c9d0@@YA_NPAE@Z  0113c9d0  /vc71 /O2 /MD /Gy /TP /arch:SSE

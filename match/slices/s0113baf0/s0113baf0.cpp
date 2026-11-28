@@ -563,16 +563,17 @@ uint32_t FUN_0113c950(uint8_t* rec)
     return 0x20;
 }
 
-// 0x0113c9d0 (byte-exact lifted version: match/slices/s0113c9d0/s0113c9d0.cpp)
+// @ 0x0113c9d0
 bool FUN_0113c9d0(uint8_t* p)
 {
     if (p != 0)
         P(p, 0) = g_vtbl_014c13b8;
-    F(p, 0x28) = 1.0f;
-    W(p, 0xc) = (uint32_t)(p + 0x28);
+    float* value = (float*)(p + 0x28);
+    W(p, 0xc) = (uint32_t)value;
     B(p, 0x68) = 0;
     B(p, 0x69) = 0;
     F(p, 0x64) = 1.0f;
+    *value = 1.0f;
     return true;
 }
 

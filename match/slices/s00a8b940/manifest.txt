@@ -1,1 +1,2 @@
 slices/s00a8b940/s00a8b940.cpp  ??1?$SpVector@URefVertex@Swarm@EA@@@Swarm@EA@@QAE@XZ  00a8c440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a8b940/s00a8b940.cpp  ?RegisterMeshStreamers@Swarm@EA@@YAX_N@Z  00a8bf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

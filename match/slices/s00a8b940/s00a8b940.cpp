@@ -136,7 +136,7 @@ static __forceinline void WriteVertex(uint8_t*& pPos, uint8_t*& pNrm, uint8_t*& 
 
 // ---- helpers implemented in other translation units -----------------------------
 void* EAAllocate(unsigned size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
-void* EANew(const char* tag, int align, unsigned size);                                    // 0x011e073e
+extern "C" void* __cdecl memset(void* dst, int c, unsigned int n);                       // 0x011e073e (the CRT's)
 void  OperatorDelete(void* p);                                                             // 0x00f47380
 void* UninitCopyVec(void* out, void* first, void* last, void* dst, void* alloc);           // 0x00a89e40
 void* VectorDoAllocate(void* self, unsigned n, void* alloc);                               // 0x00a89840
@@ -217,15 +217,18 @@ void Stream_Quad_V4F_N4F_G3F_C4B_T4B(cDistributeEffect* effect, IVertexStream* s
 }
 
 // ================================================================================
-// 0x00a8bf10 (byte-exact lifted version: match/slices/s00a8bf10/s00a8bf10.cpp)  installs the streamer table (0x80-byte block at 0x016781b0).
+// The mesh streamers by stream kind (0x80 bytes: 32 slots), filled in by RegisterMeshStreamers.
+extern void* gMeshStreamers[32];                                                           // 0x016781b0
+
+// @ 0x00a8bf10
 void RegisterMeshStreamers(bool install)
 {
   if (install) {
-    EANew((const char*)0x016781b0, 0, 0x80);
-    *(void**)0x016781b0 = (void*)&FUN_00a8a8b0;
-    *(void**)0x016781b8 = (void*)&Stream_Quad_V4F_N4F_C4B_T2F;
-    *(void**)0x016781bc = (void*)&Stream_Quad_V4F_N4F_C4B_T4B;
-    *(void**)0x016781c0 = (void*)&Stream_Quad_V4F_N4F_G3F_C4B_T4B;
+    memset(gMeshStreamers, 0, sizeof(gMeshStreamers));
+    gMeshStreamers[0] = (void*)&FUN_00a8a8b0;
+    gMeshStreamers[2] = (void*)&Stream_Quad_V4F_N4F_C4B_T2F;
+    gMeshStreamers[3] = (void*)&Stream_Quad_V4F_N4F_C4B_T4B;
+    gMeshStreamers[4] = (void*)&Stream_Quad_V4F_N4F_G3F_C4B_T4B;
   }
 }
 
