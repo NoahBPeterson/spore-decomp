@@ -931,6 +931,9 @@ void __cdecl FUN_00e83590(cRefTriple* pState)
 // @ 0x00e83640
 namespace SP {
 extern char DAT_013f09b4[];                             // 0x013f09b4 "Simulator"
+}  // namespace SP
+extern "C" char g_1453948[];                            // cStateItem vtable
+namespace SP {
 struct cStateItem {
     void*    mpVtbl;                                    // +0x00 (0x01453948)
     uint16_t mField04;                                  // +0x04 (0x236)
@@ -941,7 +944,7 @@ struct cStateItem {
     {
         mField04 = 0x236;
         mField06 = 4;
-        mpVtbl = (void*)0x1453948;
+        mpVtbl = (void*)g_1453948;
         mpValue = &mField0C;
     }
 };
