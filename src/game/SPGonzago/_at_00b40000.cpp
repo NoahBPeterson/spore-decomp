@@ -3676,11 +3676,11 @@ void cObj451f0::OnEvent()
 {
     if (FUN_0067dcc0() != 0)
     {
-        ((cIface2c*)FUN_0067dcc0())->Send((char*)this - 4, 0x182c582, 0xffffd8f1);
-        ((cIface2c*)FUN_0067dcc0())->Send((char*)this - 4, 0x1a0219e, 0xffffd8f1);
-        ((cIface2c*)FUN_0067dcc0())->Send((char*)this - 4, 0x25630b7, 0xffffd8f1);
-        ((cIface2c*)FUN_0067dcc0())->Send((char*)this - 4, 0x31018b9, 0xffffd8f1);
-        ((cIface2c*)FUN_0067dcc0())->Send((char*)this - 4, 0xf62def, 0xffffd8f1);
+        ((cIface2c*)FUN_0067dcc0())->Send((uint32_t*)this - 1, 0x182c582, 0xffffd8f1);
+        ((cIface2c*)FUN_0067dcc0())->Send((uint32_t*)this - 1, 0x1a0219e, 0xffffd8f1);
+        ((cIface2c*)FUN_0067dcc0())->Send((uint32_t*)this - 1, 0x25630b7, 0xffffd8f1);
+        ((cIface2c*)FUN_0067dcc0())->Send((uint32_t*)this - 1, 0x31018b9, 0xffffd8f1);
+        ((cIface2c*)FUN_0067dcc0())->Send((uint32_t*)this - 1, 0xf62def, 0xffffd8f1);
     }
 
     FUN_00b4d720();

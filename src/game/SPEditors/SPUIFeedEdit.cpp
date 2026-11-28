@@ -4044,17 +4044,20 @@ void Obj4c70::f(int flag)
 
 // @ 0x00ed4e30
 int Obj4e30::f()
-{    char* s = (char*)this;
-    int* p = *(int**)(s + 0x84);
+{
+    struct Obj4e30Layout { char mPad00[0x84]; int* mpTarget; };
+    Obj4e30Layout* self = (Obj4e30Layout*)this;
+    int* p = self->mpTarget;
     if (p != 0) {
         if (((FV_q)(*(void***)p)[0x60 / 4])(p) == 0x6ca35b3bull) {
-            int* p2 = *(int**)(s + 0x84);
+            int* p2 = self->mpTarget;
             int* q = (int*)((FV_iir)(*(void***)p2)[0x58 / 4])(p2, 6, 0);
             if (*q >= 0x7eaf738 && *q <= 0x7eaf739)
                 return *q;
         }
     }
-    return 0;}
+    return 0;
+}
 
 // @ 0x00ed4f90
 bool Obj4f90::f(int a, int b)

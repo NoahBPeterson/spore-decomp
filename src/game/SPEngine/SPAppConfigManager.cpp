@@ -3266,8 +3266,8 @@ void cOptionBoolPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* p
     SP::cPropertyList_s007c_a950* pList;
     if (opt) {
         OptionTable* t = mpTable;
-        char* p = t->mBase + t->mCount * 0xac;
-        PropMap* pMap = (PropMap*)(*(char**)(p + 0x34) + t->mIndex * 0x18);
+        SP::cOption_s007c_a950* pOpt = (SP::cOption_s007c_a950*)(t->mBase + t->mCount * 0xac);
+        PropMap* pMap = &pOpt->mExternalSettings.mpBegin[t->mIndex];
         pList = GetPropListSettings(opt[0], pMap);
     } else {
         OptionTable* t = mpTable;
@@ -3286,8 +3286,8 @@ void cOptionIntPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pA
     SP::cPropertyList_s007c_a950* pList;
     if (opt) {
         OptionTable* t = mpTable;
-        char* p = t->mBase + t->mCount * 0xac;
-        PropMap* pMap = (PropMap*)(*(char**)(p + 0x34) + t->mIndex * 0x18);
+        SP::cOption_s007c_a950* pOpt = (SP::cOption_s007c_a950*)(t->mBase + t->mCount * 0xac);
+        PropMap* pMap = &pOpt->mExternalSettings.mpBegin[t->mIndex];
         pList = GetPropListSettings(opt[0], pMap);
     } else {
         OptionTable* t = mpTable;
@@ -3306,8 +3306,8 @@ void cOptionFloatPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* 
     SP::cPropertyList_s007c_a950* pList;
     if (opt) {
         OptionTable* t = mpTable;
-        char* p = t->mBase + t->mCount * 0xac;
-        PropMap* pMap = (PropMap*)(*(char**)(p + 0x34) + t->mIndex * 0x18);
+        SP::cOption_s007c_a950* pOpt = (SP::cOption_s007c_a950*)(t->mBase + t->mCount * 0xac);
+        PropMap* pMap = &pOpt->mExternalSettings.mpBegin[t->mIndex];
         pList = GetPropListSettings(opt[0], pMap);
     } else {
         OptionTable* t = mpTable;
