@@ -11401,7 +11401,7 @@ void FUN_4a37f0(cSPEditorBlock_s004a_3760* block)
 void FUN_4a3920(cSPEditorBlock_s004a_3760* block)
 { (void)block; }
 
-// @ 0x004a3c70
+// 0x004a3c70 (byte-exact lifted version: match/slices/s004a3c70/s004a3c70.cpp)
 cSPEditorBlock_s004a_3760* FUN_4a3c70(cSPEditorBlock_s004a_3760* block)
 { (void)block; return 0; }
 
@@ -12843,7 +12843,7 @@ cSPVector3_s004a_b690 cSPEditorModel_s004a_b690::GetBestBlockPointBasedOnDistanc
 }
 }  // namespace SP
 
-// @ 0x004ac480
+// 0x004ac480 (byte-exact lifted version: match/slices/s004ac480/s004ac480.cpp)
 namespace SP {
 extern double FUN_004a5bd0(cSPEditorBlock_s004a_b690* b);                           // 0x004a5bd0
 extern float g_floatMax;                                                 // 0x013ef5c8

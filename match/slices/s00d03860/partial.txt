@@ -8,4 +8,3 @@
 00d040a0  -  stub: placeholder body (ours 3 bytes, retail 302 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 302 bytes - relationship helper body not reconstructed.
 00d04290  -  stub: placeholder body (ours 3 bytes, retail 144 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 144 bytes - relationship helper body not reconstructed.
 00d04320  -  stub: placeholder body (ours 3 bytes, retail 834 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 834 bytes - cRelationshipManager::CalculateRelationshipCityProximity body not reconstructed.
-00d04670  -  stub: placeholder body (ours 3 bytes, retail 216 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 216 bytes - relationship helper body not reconstructed.

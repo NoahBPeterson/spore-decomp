@@ -8323,7 +8323,7 @@ void CityFlatten::Flatten5a4(PairVec* dst)
     }
 }
 
-// @ 0x00bdf7e0
+// 0x00bdf7e0 (byte-exact lifted version: match/slices/s00bdf7e0/s00bdf7e0.cpp)
 void CityFlatten::Flatten5c0(PairVec* dst)
 {
     dst->reserve(*(uint32_t*)((char*)this + 0x5d0));

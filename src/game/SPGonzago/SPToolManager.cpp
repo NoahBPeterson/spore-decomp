@@ -2201,7 +2201,7 @@ void cSPSpaceToolData_s0104_e060::FreeEffectBuffers()
         operator_delete__(ppBlock[0]);
 }
 
-// @ 0x0104e7b0
+// 0x0104e7b0 (byte-exact lifted version: match/slices/s0104e7b0/s0104e7b0.cpp)
 cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
 {
     cToolCategoryNode* pNode = (cToolCategoryNode*)

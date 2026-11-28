@@ -1,3 +1,2 @@
 007fa180 60  complete AsInterface; cl hoists the id compare before the branch vs original local-temp form
-007f9550 342  complete Eval clamp/scale routine; float branch scheduling differs
 007fa390 275  complete message broadcast; the id filter/conditional relay reconstruction differs

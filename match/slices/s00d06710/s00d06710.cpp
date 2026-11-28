@@ -127,7 +127,7 @@ cCountedSlot* __thiscall cCountedSlot::FUN_00d06eb0(cRefCounted* p)
     return this;
 }
 
-// @ 0xd06f00 FUN_00d06f00
+// 0x00d06f00 (byte-exact lifted version: match/slices/s00d06f00/s00d06f00.cpp) FUN_00d06f00
 void __fastcall FUN_00d06f00(void* this_, int unused)
 {
     (void)this_;

@@ -199,7 +199,7 @@ struct VehicleSnapshot
 // ---------------------------------------------------------------------------
 // 0x00bf51d0 - erase [first,last) from a cGonzagoTimer vector.
 // ---------------------------------------------------------------------------
-// @ 0x00bf51d0
+// 0x00bf51d0 (byte-exact lifted version: match/slices/s00bf51d0/s00bf51d0_lifted.cpp)
 GonzagoTimer* TimerVec::eraseRange(GonzagoTimer* first, GonzagoTimer* last)
 {
     GonzagoTimer* newEnd = (GonzagoTimer*)FUN_00bf29c0(last, m_end, first);

@@ -11585,7 +11585,7 @@ void __stdcall FUN_00de5d00(uint32_t a1, uint32_t a2, uint32_t a3, const uint32_
     req.Dtor();
 }
 
-// @ 0x00de5df0
+// 0x00de5df0 (byte-exact lifted version: match/slices/s00de5df0/s00de5df0.cpp)
 InsertResult8* HashTable34::FUN_00de5df0(InsertResult8* pOut, const uint32_t* pKey, uint32_t nReserved)
 {
     (void)nReserved;
@@ -15824,7 +15824,7 @@ void cGalaxyGameEntryUIStateMachine_s00df_47b0::FUN_00df5330()
     ((GalaxyStateBase*)this)->FUN_00dee360();
 }
 
-// @ 0x00df5830
+// 0x00df5830 (byte-exact lifted version: match/slices/s00df5830/s00df5830.cpp)
 bool cDownloadDialog::FUN_00df5830(void* retaddr)
 {
     uint key[3];

@@ -3995,7 +3995,7 @@ int cHash30::Remove(void* keyPtr)
     return before - mNodeCount;
 }
 
-// @ 0x00b45b50
+// 0x00b45b50 (byte-exact lifted version: match/slices/s00b45b50/s00b45b50.cpp)
 cIter cHash30::Insert(void* keyPtr, void* arg2)
 {
     cIter out;

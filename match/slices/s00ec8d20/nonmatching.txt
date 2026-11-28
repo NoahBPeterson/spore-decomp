@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00ec8d80  119  complete pair-emit loops; callee FUN_00b534c0 is __thiscall (owner in ECX) and reads the value pair from the pointer it is given, so the source now calls a VecInsert member with an adjacent k/v pair. equiv: WEAK (137 valid, 0 mismatch, 100% coverage; min_valid 200 unreachable because most random owner pointers fault). flags /O2 /MD /Gy /EHsc /TP
 00ec8ed0   70  complete vector resize; signed cap and __thiscall grow/erase callees; equiv: PASS (not byte-exact: tmp-buffer init and loop scheduling)
 00ec90c0  113  complete intrusive-list initializer; returns the object and matches the original store order; equiv: PASS (our code is shorter -- cl folds some of the original's redundant stores)
 00ec9250   52  complete rbtree teardown; subtree offset scheduling differs; equiv: UNSUPPORTED (unresolved refs DoNukeSubtree, operator delete) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#4 esp, call#5 esp, ret#6 return target, ret#6 esp]

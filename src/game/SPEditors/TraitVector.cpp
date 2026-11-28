@@ -176,7 +176,7 @@ struct KeyComparator {
 };
 inline void advance(Key12_s0057_18f0*& i, int n) { i += n; }
 
-// @ 0x005704c0
+// 0x005704c0 (byte-exact lifted version: match/slices/s005704c0/s005704c0.cpp)
 float TraitData::Intersect(FeatureVector* lhs, FeatureVector* rhs)
 {
     // Declaration order chosen to reproduce the original /Od slot order.

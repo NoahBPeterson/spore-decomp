@@ -338,7 +338,7 @@ void __thiscall cRelationshipManager::CalculateRelationshipCityProximity(uint32_
     (void)a2;
 }
 
-// @ 0xd04670 FUN_00d04670
+// 0x00d04670 (byte-exact lifted version: match/slices/s00d04670/s00d04670.cpp) FUN_00d04670
 void __fastcall FUN_00d04670(cRelationshipManager* this_, int unused, uint32_t a1)
 {
     (void)this_;

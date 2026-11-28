@@ -408,7 +408,7 @@ cSPVector3 cSPEditorModel::GetBestBlockPointBasedOnDistance(cSPVector3 point, cS
     return bestPos;
 }
 
-// @ 0x004ac480
+// 0x004ac480 (byte-exact lifted version: match/slices/s004ac480/s004ac480.cpp)
 cSPEditorBlock* cSPEditorModel::FindNearestFlag7Block(cSPVector3 point)
 {
     float best = g_floatMax;

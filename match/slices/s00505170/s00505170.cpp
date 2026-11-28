@@ -80,7 +80,7 @@ bool __cdecl RayTri(const float* orig, const float* dir, const float* v0,
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x005056d0
+// 0x005056d0 (byte-exact lifted version: match/slices/s005056d0/s005056d0.cpp)
 // float __cdecl DistPointBoxSq(const float* p, const float* lo, const float* hi)
 // ---------------------------------------------------------------------------
 float __cdecl DistPointBoxSq(const float* p, const float* lo, const float* hi)

@@ -217,7 +217,7 @@ void PromoteOccluder(cOccluder* first, int topPosition, int heapSize, int positi
     FUN_00743e50(first, topPosition, position, value, compare);
 }
 
-// @ 0x00745e00 : adjust_heap for the 8-byte pair with the greater comparator.
+// 0x00745e00 (byte-exact lifted version: match/slices/s00745e00/s00745e00.cpp) : adjust_heap for the 8-byte pair with the greater comparator.
 void FUN_00743f00(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value);
 void PromotePairGt(FloatKeyPair* first, int topPosition, int heapSize, int position,
                    FloatKeyPair value)

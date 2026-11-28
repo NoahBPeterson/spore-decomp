@@ -520,7 +520,7 @@ void cSPSpaceToolData::FreeEffectBuffers()
 // ---------------------------------------------------------------------------
 // 0x0104e7b0  Simulator::CreateToolCategoryNode
 // ---------------------------------------------------------------------------
-// @ 0x0104e7b0
+// 0x0104e7b0 (byte-exact lifted version: match/slices/s0104e7b0/s0104e7b0.cpp)
 cToolCategoryNode* CreateToolCategoryNode(cToolManagerOwning* pOwner)
 {
     cToolCategoryNode* pNode = (cToolCategoryNode*)

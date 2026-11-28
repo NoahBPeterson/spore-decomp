@@ -57,7 +57,6 @@
 #                (119 vs 120 bytes); the original copies the offset through two xmm registers before the
 #                vector add, ours uses one.
 #                equiv UNSUPPORTED: 0/400 valid (fake-arity on the vtable call).
-00c38270  79   CanEnterPlanetContext(): rejects when there is no active planet, when its context id is 1,
 #                when its +0x13c object answers true, when the UFO is not warping, and - for
 #                non-positive mf540 - when the planet's owner differs from the current one or a mission is
 #                active there.  Complete reconstruction (113 vs 108 bytes); the original emits the merged

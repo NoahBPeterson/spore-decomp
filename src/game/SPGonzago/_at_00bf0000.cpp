@@ -4563,7 +4563,7 @@ Vec3_s00bf_4170* cVector3Map::FindOrInsert(const int* pKey)
     return (Vec3_s00bf_4170*)(pLower + 5);
 }
 
-// @ 0x00bf51d0
+// 0x00bf51d0 (byte-exact lifted version: match/slices/s00bf51d0/s00bf51d0_lifted.cpp)
 GonzagoTimer* TimerVec::eraseRange(GonzagoTimer* first, GonzagoTimer* last)
 {
     GonzagoTimer* newEnd = (GonzagoTimer*)FUN_00bf29c0(last, m_end, first);

@@ -3418,7 +3418,7 @@ SampleVector_s00a8_b940::SampleVector_s00a8_b940(const SampleVector_s00a8_b940& 
 }
 }}  // namespace EA::Swarm
 
-// @ 0x00a8c4e0
+// 0x00a8c4e0 (byte-exact lifted version: match/slices/s00a8c4e0/s00a8c4e0.cpp)
 namespace EA { namespace Swarm {
 RefPtr* PtrVector::erase(RefPtr* first, RefPtr* last)
 {

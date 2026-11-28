@@ -17,7 +17,6 @@
 007459c0 175 sort of 24-byte records: temp/compare schedule differs [equiv: UNSUPPORTED (0/220 valid inputs)]
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
 00745cf0 143 adjust_heap<cOccluder*,...> value-pass copy flavour differs
-00745e00 66 adjust_heap pair (greater) value-copy/schedule differs
 00745e80 68 adjust_heap pair (less) value-copy/schedule differs
 00745f90 181 0x94-byte render/cull record ctor shape differs
 007460b0 352 FilterModelFrustum register allocation differs
