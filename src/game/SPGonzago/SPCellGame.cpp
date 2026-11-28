@@ -4733,9 +4733,8 @@ void FUN_00e59800(int param_1)
 
 // @ 0x00e598e0
 static bool FUN_00e598e0(int id, float t)
-{
-  CellPool_s00e5_9640* pool = &gspCellGame_s00e5_9640->mCells;
-  char* c = (char*)pool->Get(id);
+{  CellPool_s00e5_9640* pool = &gspCellGame_s00e5_9640->mCells;
+  char* __restrict c = (char* __restrict)pool->Get(id);
   if (!c) return false;
   float d = t - kf1485720;
   c[0x16c] = 1;

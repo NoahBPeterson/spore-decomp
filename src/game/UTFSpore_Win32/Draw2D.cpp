@@ -1385,17 +1385,17 @@ void* MemPool::Alloc(unsigned size)
 
 // @ 0x00951dc0
 IterCopy* IterCopy::Set(int* src)
-{
-    f0 = (int)(size_t)src;
+{    f0 = (int)(size_t)src;
     f1 = src[1];
     f2 = src[2];
     int v = src[3];
     f3 = v;
     f4 = v;
-    int v2 = src[5];
-    f5 = v2;
+    f5 = src[5];
     f6 = src[6];
+    int v2 = f5;
     f7 = 0;
+    _ReadWriteBarrier();
     if (v2 != f6) f7 = f3 + *(int*)(v2 + 4) * 0x14;
     return this;
 }

@@ -53,3 +53,4 @@
 ../src/game/Swarm/_at_00a70000.cpp  ?InverseTransformDir@Xform@@QBEXPAUVec3@@@Z  00a78e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/_at_00a70000.cpp  ?Normalize@cMapInfo@Swarm@EA@@QAEXXZ  00a75120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/_at_00a70000.cpp  ?Contains@cMapInfo@Swarm@EA@@QAE_NPBM@Z  00a757c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Next@Halton2@@QAEHXZ  00a7c350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

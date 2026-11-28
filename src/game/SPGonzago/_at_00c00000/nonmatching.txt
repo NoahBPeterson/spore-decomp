@@ -17,7 +17,6 @@
 00c05bf0 195 Simulator::cSPCreatureBase::func5bf0: complete; equiv UNSUPPORTED (1 unresolved callee); branchy rounding (cvtss2si+cvtsi2ss) and global loads differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05df0 84 intrusive pool Free (0x14-byte elements): complete; equiv FAIL (5/207 mismatch, execution); loop/call schedule around ref-releases differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c05ee0 270 intrusive pool Reset: complete; equiv FAIL (5/5 mismatch, memory pool @40010010); nested release loops reordered relative to original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c06000 42 cLocomotionStrategy_Template singleton accessor: complete; equiv PASS (343 valid inputs, 78.1% coverage); vtable store order and null-path scheduling differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c06070 161 intrusive pool AllocChunk: complete; equiv FAIL (5/5 mismatch, execution); allocate/append schedule and allocator args differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c061b0 241 ~cCreatureAnimal (vtable/wall teardown): complete; equiv UNSUPPORTED (0/400 valid inputs, fault(read)/VirtualFree); cGonzagoTimer dtor call shape differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0dee0 148 PASS         find entry in +0x8c array (optional erase); complete; returns bool (was char: 16-bit eax mask false FAIL) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

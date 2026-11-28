@@ -2425,16 +2425,17 @@ int Halton2::Next()
     uint32_t mask = 3;
     int step = 1;
     float f = 1.0f / 3.0f;
-    if ((mDigits3 & 3) == 3) {
-        do {
-            mDigits3 = mDigits3 + step;
-            mY = mY - f * 2.0f;
-            mask = mask * 4;
-            step = step * 4;
-            f = f * (1.0f / 3.0f);
-        } while (((uint32_t)mDigits3 & mask) == mask);
+    while (((uint32_t)mDigits3 & mask) == mask) {
+        mDigits3 += step;
+        mY -= f * 2.0f;
+        mask <<= 2;
+        step <<= 2;
+        f *= (1.0f / 3.0f);
     }
-    mY = mY + f;
+    float y = mY;
+    _ReadWriteBarrier();
+    mY = y + f;
+    _ReadWriteBarrier();
     return mIndex;
 }
 
