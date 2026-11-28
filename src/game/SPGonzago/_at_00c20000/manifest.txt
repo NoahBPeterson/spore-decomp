@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/_at_00c20000.cpp  ?CopyFrom@Value@@QAEPAU1@PBIPAUTraceCache@@@Z  00c2b030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c20000.cpp  ?FindOrInsert@Ht@@QAEPAUTraceCache@@PBI@Z  00c2b080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c20000.cpp  ?FUN_00c2b110@@YAPAUTraceCache@@I@Z  00c2b110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?FindOrAdd@cActionCircleMap@@QAEPAVcActionCircle@@PAH@Z  00c27d20  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

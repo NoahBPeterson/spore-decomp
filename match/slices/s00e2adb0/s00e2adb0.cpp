@@ -559,8 +559,7 @@ extern "C" void Pollinator(void* node, float* value); // 0x00806d10
 
 // @ 0x00e2b4f0
 void CursorAttachment::SetPurposeIcon(int purpose)
-{
-    IWindow* found = mLayout.FindWindowByID(0x3058a88, true);
+{    IWindow* found = mLayout.FindWindowByID(0x3058a88, true);
     if (found != 0) {
         CursorNode* window = (CursorNode*)found;
         void* begin;
@@ -568,14 +567,12 @@ void CursorAttachment::SetPurposeIcon(int purpose)
         window->GetBegin(&begin);
         window->GetEnd(&end);
         while (begin != end) {
-            void* next = *(void**)begin;
-            CursorNode* node = (CursorNode*)((uint8_t*)begin + g_cursorListOffset);
-            int control = node->GetControlID();
-            node->SetSelected(1, control == purpose);
-            begin = next;
+            void* cur = begin;
+            begin = *(void**)cur;
+            CursorNode* node = (CursorNode*)((uint8_t*)cur + g_cursorListOffset);
+            node->SetSelected(1, purpose == node->GetControlID());
         }
-    }
-}
+    }}
 
 // @ 0x00e2b580
 bool CursorAttachment::HandleUIMessage(IWindow* window, const Message& message)

@@ -516,16 +516,10 @@ bool __cdecl EA_generic_command_function(const char* name, void* self, void** ou
 
 // @ 0x009364f0
 bool EA::SharedLibraryRegistry::RemoveAllLibraries(bool flag)
-{
-    mMutex.Lock(*(unsigned int const *)&gpRegistryMutexName);
-    void** begin = (void**)mSharedLibraries.mpBegin;
-    void** end = (void**)mSharedLibraries.mpEnd;
-    if (begin != end) {
-        while (((char*)end - (char*)begin) >> 2 > 1) {
-            void* lib = begin[1];
-            RemoveLibrary((EA::SharedLibrary *)lib, flag);
-            begin = (void**)mSharedLibraries.mpBegin;
-            end = (void**)mSharedLibraries.mpEnd;
+{    mMutex.Lock(*(unsigned int const *)&gpRegistryMutexName);
+    if (!mSharedLibraries.empty()) {
+        while (mSharedLibraries.size() > 1) {
+            RemoveLibrary(mSharedLibraries[1], flag);
         }
     }
     mMutex.Unlock();

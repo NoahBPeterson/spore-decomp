@@ -3131,7 +3131,12 @@ struct TribeArchetype {
 };
 extern TribeArchetype gTribeArchetypes[96];                       // 0x01695458
 struct cRefObj { virtual void AddRef(); virtual void Release(); virtual void Release2(); };
-struct SlotPair { uint32_t a, b, c, d; };
+struct SlotPair {
+    uint32_t a, b, c, d;
+    SlotPair() {}
+    SlotPair(const SlotPair& o) : a(o.a), b(o.b), c(o.c), d(o.d) {}
+};
+struct SlotPairPod { uint32_t a, b, c, d; };
 struct RegionSlot {
     uint32_t  pad00[2];       // +0x00
     uint32_t* mpBegin;        // +0x08  first bucket entry
@@ -3146,7 +3151,7 @@ struct RegionSlot {
     SlotPair& Lo() { return *(SlotPair*)&mpBegin; }     // +0x08 .. +0x14
     SlotPair& Hi() { return *(SlotPair*)&mpEnd; }       // +0x18 .. +0x24
 
-    void Update(const SlotPair* out, SlotPair value);   // 0x00c95660
+    void Update(const SlotPair* out, SlotPairPod value);   // 0x00c95660
     void Insert(void** value);                          // 0x00c92bd0
 };
 struct TribeMap {             // cTribe+0x4e4
@@ -5057,24 +5062,20 @@ float* __cdecl NearestOfThree(float* a, float* b, float* c, float x, float y, fl
   return c;
 }
 
+template <typename T>
+struct Elem14Iter {
+  T* mIterator;
+  explicit Elem14Iter(T* x) : mIterator(x) {}
+};
+
 // @ 0x00c90da0
-void __cdecl CopyElems14(Elem14** out, const Elem14* first, const Elem14* last, Elem14* dst)
-{
-  *out = dst;
-  if (first != last) {
-    do {
-      if (dst != 0) {
-        dst->mX = first->mX;
-        dst->mY = first->mY;
-        dst->mZ = first->mZ;
-        dst->mW = first->mW;
-        dst->mB_10 = first->mB_10;
-      }
-      first++;
-      dst++;
-    } while (first != last);
-    *out = dst;
+Elem14Iter<Elem14> __cdecl CopyElems14(Elem14Iter<const Elem14> first, Elem14Iter<const Elem14> last, Elem14Iter<Elem14> dst)
+{  Elem14Iter<Elem14> currentDest(dst);
+  for (; first.mIterator != last.mIterator; ++first.mIterator, ++currentDest.mIterator) {
+    const Elem14* src = first.mIterator;
+    ::new (currentDest.mIterator) Elem14(*src);
   }
+  return currentDest;
 }
 
 // @ 0x00c90df0
@@ -7146,16 +7147,13 @@ int cTribe_s00c9_7220::InsertRegionValue(uint32_t key, void* obj)
 
 // @ 0x00c97d40
 void cTribe_s00c9_7220::UpdateRegionSlot(uint32_t key, uint32_t* extra)
-{
-    uint32_t k = key;
+{    uint32_t k = key;
     RegionSlot* slot = this->map4e4.Find(&k);
 
     SlotPair out;
-    SlotPair lo = slot->Lo();
-    SlotPair hi = slot->Hi();
-    SlotRehash(&out, lo, hi, &extra);
+    SlotRehash(&out, slot->Lo(), slot->Hi(), &extra);
     if (out.a != (uint32_t)slot->mpEnd)
-        slot->Update(&out, out);
+        slot->Update(&out, *(const SlotPairPod*)&out);
 }
 
 // @ 0x00c97de0

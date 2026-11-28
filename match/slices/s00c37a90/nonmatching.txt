@@ -31,7 +31,6 @@
 #                StarManager/GetEmpireByID argument-register setup to push the model query's five zero
 #                arguments and zeroes vDest with xorps, ours needs separate pushes.
 #                equiv WEAK: 295/400 inputs valid, 30.9% coverage.
-00c37dc0  60   ScaleForPlanetDistance(const cMotionFrame*): forms the frame delta, keeps a pointer to the
 #                largest of the three components, and returns clamp(one/scale) from
 #                g_pPlanetTuning->mf028 / mf02c, defaulting to 1.0.  Size-exact (39 instructions);
 #                ours spills the two tuning constants to an extra stack slot and materialises the

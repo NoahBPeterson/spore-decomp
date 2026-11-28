@@ -102,14 +102,14 @@ public:
     void* m48;                                  // +0x48
     u8  mPad4c[4];                              // +0x4c
     cStarRecordVector mStars;                   // +0x50
-    u8 mPad5c[0x0c];                            // +0x5c
+    u8 mPad5c[0x08];                            // +0x5c
 };
 struct cMapIterator { void* mpNode; void* mpEnd; u32 mPad; };
 struct cMapRecord { u32 mKey; cActionCircle mCircle; };
 class cActionCircleMap {
 public:
     void Find(cMapIterator* pOut, u32* pKey);               // 0x00ac9d30
-    void Insert(cMapIterator* pIt, cMapRecord* pRec, bool flag);  // 0x00c27a80
+    void Insert(cMapIterator* pIt, cMapRecord* pRec, unsigned existing);  // 0x00c27a80
     cActionCircle* FindOrAdd(i32* pKey);                    // 0x00c27d20
 
     u8    mPad00[4];                            // +0x00
@@ -1068,23 +1068,27 @@ struct TraceCache_s00c2_c7b0 {
 
 // @ 0x00c27d20
 cActionCircle* cActionCircleMap::FindOrAdd(i32* pKey)
-{
-    cMapIterator it;
-    Find(&it, (u32*)pKey);
+{    union InsertSlot
+    {
+        cMapIterator it;
+        u32          flags;
+        bool         bExisting;
+    } out;
+    Find(&out.it, (u32*)pKey);
 
-    if (it.mpNode == mpBuckets[mnCount]) {
+    if (out.it.mpNode == mpBuckets[mnCount]) {
         cActionCircle temp;
         cMapRecord rec;
         cActionCircle* p = temp.FUN_00afba10();
         rec.mKey = (u32)*pKey;
         rec.mCircle.CopyFrom(p);
-        Insert(&it, &rec, false);
+        out.bExisting = false;
+        Insert(&out.it, &rec, out.flags);
         rec.mCircle.FUN_00afbad0();
         temp.FUN_00afbad0();
     }
 
-    return (cActionCircle*)((u8*)it.mpNode + 4);
-}
+    return (cActionCircle*)((u8*)out.it.mpNode + 4);}
 
 // @ 0x00c27db0
 i32 cActionMapOwner::FindOrAddKey(i32 nKey)

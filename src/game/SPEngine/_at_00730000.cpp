@@ -47,15 +47,34 @@ struct RefCnt
     virtual void Release();
 };
 struct Mat4 { float m[16]; };
+struct ContV;
+struct EltArrayRet_s0073_2410
+{
+    int32_t  mNumElts;    // +0x00
+    uint8_t* mData;       // +0x04
+    uint16_t mEltSize;    // +0x08
+    uint16_t mEltStride;  // +0x0a
+    ContV*   mRC;         // +0x0c
+    EltArrayRet_s0073_2410() : mNumElts(0), mData(0), mEltSize(0), mEltStride(0), mRC(0) {}
+    EltArrayRet_s0073_2410(int32_t n, uint8_t* d, uint16_t sz, uint16_t st, ContV* rc);
+    ~EltArrayRet_s0073_2410();
+};
 struct ContV
 {
-    virtual void Init(int);
+    virtual void AddRef();
+    virtual void Release();
     char    pad[8];
     int32_t mC;    // +0x0c
     int32_t m10;   // +0x10
-    EltArray_s0073_2410* Make16(EltArray_s0073_2410* out);
-    EltArray_s0073_2410* Make4(EltArray_s0073_2410* out);
+    EltArrayRet_s0073_2410 Make16();
+    EltArrayRet_s0073_2410 Make4();
 };
+inline EltArrayRet_s0073_2410::EltArrayRet_s0073_2410(int32_t n, uint8_t* d, uint16_t sz, uint16_t st, ContV* rc)
+    : mNumElts(n), mData(d), mEltSize(sz), mEltStride(st), mRC(rc)
+{
+    if (mRC) mRC->AddRef();
+}
+inline EltArrayRet_s0073_2410::~EltArrayRet_s0073_2410() { if (mRC) mRC->Release(); }
 // ---- items of slice s00732410 end
 
 // ---- items of slice s00733400 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -631,17 +650,10 @@ unsigned FUN_00732eb0(const float* src, Mat4* out)
 }
 
 // @ 0x00732fb0
-EltArray_s0073_2410* ContV::Make16(EltArray_s0073_2410* out)
-{
+EltArrayRet_s0073_2410 ContV::Make16()
+{    int iVar2 = m10;
     int iVar1 = mC;
-    int iVar2 = m10;
-    out->mData = (uint8_t*)iVar1;
-    out->mNumElts = (iVar2 - iVar1) >> 4;
-    out->mEltStride = 0x10;
-    out->mEltSize = 0x10;
-    out->mRC = this;
-    Init(0);
-    return out;
+    return EltArrayRet_s0073_2410((iVar2 - iVar1) >> 4, (uint8_t*)iVar1, 0x10, 0x10, this);
 }
 
 // @ 0x00733140

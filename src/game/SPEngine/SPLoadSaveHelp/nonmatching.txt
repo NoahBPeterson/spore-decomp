@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00692880 80 complete; Init serializer-record layout near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692900 371 complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
-00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00693390  772  Variant writer (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): io/info register roles swapped and cl cross-jumps identical case tails the original keeps separate [equiv: WEAK]
 00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
 006939b0 165 binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ

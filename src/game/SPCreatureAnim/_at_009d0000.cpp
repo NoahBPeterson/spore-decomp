@@ -1024,8 +1024,9 @@ struct S_s009d_9620 {
     ~S_s009d_9620()
     {
         FreeArr(idx.b);
-        items.DestroyRange(items.b, items.e);
-        FreeArr(items.b);
+        Item_s009d_9620* itemsBegin = items.b;
+        items.DestroyRange(itemsBegin, items.e);
+        FreeArr(itemsBegin);
     }
     void FillGroups(void* y);           // 0x9da000
     void SortGroups(u32 unused);        // 0x9da5b0 (ret 4: one unused stack arg)
@@ -3719,11 +3720,9 @@ void __cdecl PushHeapWord(S_s009d_9620* first, int top, int hole, S_s009d_9620 v
 
 // @ 0x009d9f80
 void __cdecl SwapRecords(S_s009d_9620* a, S_s009d_9620* b)
-{
-    S_s009d_9620 tmp(*a);
+{    S_s009d_9620 tmp = *a;
     *a = *b;
-    *b = tmp;
-}
+    *b = tmp;}
 
 // @ 0x009da000
 void S_s009d_9620::FillGroups(void* y)

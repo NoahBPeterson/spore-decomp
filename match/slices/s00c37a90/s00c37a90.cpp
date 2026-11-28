@@ -432,8 +432,7 @@ bool cSPGameDataUFO::WarpToDestination()
 
 // @ 0x00c37dc0
 float __fastcall ScaleForPlanetDistance(const cMotionFrame* pFrame)
-{
-    float d[3];
+{    float d[3];
     d[0] = pFrame->mTo.x - pFrame->mFrom.x;
     d[1] = pFrame->mTo.y - pFrame->mFrom.y;
     d[2] = pFrame->mTo.z - pFrame->mFrom.z;
@@ -441,15 +440,17 @@ float __fastcall ScaleForPlanetDistance(const cMotionFrame* pFrame)
     if (d[2] > *pMax)
         pMax = &d[2];
     float m = *pMax;
+    float scale = 1.0f;
     if (m > 1.52587890625e-05f) {
         cPlanetTuning* pTuning = g_pPlanetTuning;
-        if (m > pTuning->mf02c)
-            return pTuning->mf02c / m;
-        if (m < pTuning->mf028)
-            return pTuning->mf028 / m;
+        float fMax = pTuning->mf02c;
+        float fMin = pTuning->mf028;
+        if (m > fMax)
+            scale = fMax / m;
+        else if (m < fMin)
+            scale = fMin / m;
     }
-    return 1.0f;
-}
+    return scale;}
 
 // @ 0x00c37e60
 void cSPGameDataUFO::PopToDestination()

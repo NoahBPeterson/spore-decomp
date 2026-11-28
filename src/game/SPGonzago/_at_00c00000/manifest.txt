@@ -15,3 +15,4 @@
 ../src/game/SPGonzago/_at_00c00000.cpp  ?de30@CCM@@QAEHXZ  00c0de30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?Cur@NodePool@@QAEPAEXZ  00c05e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c06000@@YAPAXXZ  00c06000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?Sub47d0@CreatureBase_s00c0_45a0@@QAEHXZ  00c047d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

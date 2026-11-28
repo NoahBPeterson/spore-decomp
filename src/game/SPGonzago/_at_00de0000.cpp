@@ -1246,31 +1246,28 @@ int* __fastcall FUN_00de67b0(int param_1)
 
 // @ 0x00de6840
 void __cdecl FUN_00de6840(CRecordSource* reader, ERBTree* tree)
-{
-    unsigned int count = 0;
-    unsigned int value;
-    void* iter[2];
-    unsigned int i;
-    union { unsigned int mDword; unsigned char mByte; } flag;
-
-    tree->DoNukeSubtree(tree->mpRoot);
+{    tree->DoNukeSubtree(tree->mpRoot);
     tree->mpLeft = &tree->mpLeft;
     tree->mpRight = &tree->mpLeft;
     tree->mpRoot = 0;
     tree->mFlag = 0;
     tree->mCount = 0;
+
+    unsigned int count = 0;
     void* stream = reader->GetSource()->GetStream();
     EA_IO_ReadInt32(stream, &count, 1, 0);
-    i = 0;
-    while (i < count) {
+    for (unsigned int i = 0; i < count; ++i) {
+        unsigned int value;
+        void* iter[2];
+        union { unsigned int mDword; unsigned char mByte; } flag;
+
         stream = reader->GetSource()->GetStream();
         EA_IO_ReadInt32(stream, &value, 1, 0);
         reader->Next();
         flag.mByte = 0;
         ((CFindMixin*)tree)->insert(iter, &value, flag.mDword);
-        i++;
     }
-    reader->Next();
+    return reader->Next();
 }
 
 // @ 0x00de6900

@@ -56,7 +56,6 @@
 009d9bc0 177 complete unguarded insertion sort (LessWord); same differences flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009d9d60 41 complete push_heap (LessIdx), value by value; dtor inline and functor slot differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009d9e70 41 complete push_heap (LessWord); same flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-009d9f80 56 complete swap of two records; only schedule of the inlined dtor differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009da000 320 complete group-by-key fill of items (memcpy(0,0,0) for empty vector copy kept); reg alloc/layout differs; difftest WEAK (21% coverage: random inputs rarely enter the group loop) after fixing the clear call: the original calls ItemVec::erase(begin,end) 0x9d8e20 (which also resets end), ours called the range destroy 0x9c15f0 and left end stale; memcpy declaration annotated as the 0x11e0744 import thunk flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009da170 93 complete adjust_heap (LessIdx); inlined dtor/functor slot differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009da2d0 93 complete adjust_heap (LessWord); same flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

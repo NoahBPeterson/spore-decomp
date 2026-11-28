@@ -10,7 +10,8 @@ namespace EA { namespace Audio { namespace Eapd {
 
 // Address of the (fixed-pool) allocator vftable, materialized as a constant so
 // allocator-owning structs can be initialized without a real symbol reference.
-extern void* const g_allocVftable;
+extern void* g_allocVftable[];       // 0x01454fac
+extern void* g_paramIterVftable[]; // 0x01454fdc
 
 // @ 0xa52ff0
 NOINLINE bool Group::Init(void* param_2, void* param_3, int nAtoms, void* argv)
@@ -248,26 +249,21 @@ NOINLINE ParamNode* ParamTable::AllocNode(const ParamPair* v)
 
 // @ 0xa53640
 NOINLINE ParamIter::ParamIter(ParamTable* t)
-{
-    mpTable = t;
-    mpVftable = (void*)0x1454fdc;
+{    mpVftable = g_paramIterVftable;
     ParamNode** p = t->mpBucketArray;
-    ParamNode* n = *p;
-    mpNode = n;
+    mpNode = *p;
     mpBucket = p;
-    if (n == 0) {
+    if (mpNode == 0) {
         mpBucket = p + 1;
-        ParamNode* m = p[1];
-        while (m == 0) {
+        while (*mpBucket == 0) {
             mpBucket += 1;
-            m = *mpBucket;
         }
         mpNode = *mpBucket;
     }
     ParamNode** end = t->mpBucketArray + t->mnBucketCount;
     mpLast = *end;
     mpBucketEnd = end;
-}
+    mpTable = t;}
 
 // @ 0xa536a0
 NOINLINE bool ParamIter::Next(Symbol* out, AtomValue* value)
@@ -409,22 +405,22 @@ struct VoiceListCtorExternal {
 
 // @ 0xa539d0
 NOINLINE int artists_play_step(void* self)
-{
-    int r = 0;
+{    int r = 0;
     if (self != 0) {
         t_play* x = *(t_play**)((char*)self + 0xc);
         if (x != 0) {
-            ((Play*)((char*)x + 0x28))->SetPlaying();
-            if (x->play.mnBusyVoices == 0) {
+            Play* p = &x->play;
+            p->SetPlaying();
+            if (p->mnBusyVoices <= 0) {
                 x->pUpdateCallback = 0;
                 outlet_bang(x->pDoneOutlet);
+                r = 0;
             } else {
                 r = 1;
             }
         }
     }
-    return r;
-}
+    return r;}
 
 // @ 0xa53a20
 NOINLINE void VoiceList::PushBack(ListLink* anchor, const unsigned* value2)
@@ -641,5 +637,3 @@ NOINLINE void Play::ParamEvent(Symbol key, ParamPair* atom)
 void DestroyVoiceListOutOfLine(VoiceList* p) { p->~VoiceList(); }
 
 }}}  // namespace
-
-void* const EA::Audio::Eapd::g_allocVftable = (void*)0x1454fac;

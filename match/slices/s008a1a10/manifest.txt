@@ -3,3 +3,4 @@ slices/s008a1a10/s008a1a10.cpp  ?DestroyInlineBuffers@SP@@YAPAUCInlineBuffer@1@P
 slices/s008a1a10/s008a1a10.cpp  ?DoDestroyValues@FeatureLookupVector@Text@EA@@QAEXPAUFeatureLookup@23@0@Z  008a1c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008a1a10/s008a1a10.cpp  ?erase@FeatureLookupVector@Text@EA@@QAEPAUFeatureLookup@23@PAU423@0@Z  008a26d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008a1a10/s008a1a10.cpp  ??0FeatureLookup@Text@EA@@QAE@ABU012@@Z  008a24c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008a1a10/s008a1a10.cpp  ?UninitializedCopyLookups@Text@EA@@YAPAULookupIterator@12@PAU312@UConstLookupIterator@12@1PAUFeatureLookup@12@@Z  008a2500  /O2 /MD /Gy /TP /arch:SSE /fp:fast

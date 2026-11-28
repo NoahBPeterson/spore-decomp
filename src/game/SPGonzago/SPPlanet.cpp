@@ -5394,19 +5394,16 @@ void FUN_00b02520(void* obj)
 
 // @ 0x00b02750
 u8* FUN_00b02750(u8* first, u8* last, const u32* key)
-{
-    i32 n = (i32)(last - first) / 0x19a8;
-    i32 half = 0;
-    if (n > 0) {
-        do {
-            half = n >> 1;
-            u8* mid = first + half * 0x19a8;
-            if (*(u32*)mid < *key) {
-                first = mid + 0x19a8;
-                half = n + (-1 - half);
-            }
+{    i32 n = (i32)(last - first) / 0x19a8;
+    while (n > 0) {
+        i32 half = n >> 1;
+        u8* mid = first + half * 0x19a8;
+        if (*(u32*)mid < *key) {
+            first = mid + 0x19a8;
+            n -= half + 1;
+        } else {
             n = half;
-        } while (half > 0);
+        }
     }
     return first;
 }

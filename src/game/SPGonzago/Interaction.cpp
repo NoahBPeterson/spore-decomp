@@ -601,15 +601,15 @@ public:
 
 // @ 0x00abe8a0
 u32 SlotVector_s00ab_e110::nextAllocated(u32 i)
-{
-  u32 m = entry(i)->mMeta;
-  do {
-    if ((m >> 30) & 1) return kSlotEmpty;
-    ++i;
-    m = entry(i)->mMeta;
-  } while ((int)m < 0);
-  return i;
-}
+{  if (((u8)(entry(i)->mMeta >> 30) & 1) == 0) {
+    u32 m;
+    do {
+      ++i;
+      m = entry(i)->mMeta;
+      if (((u8)(m >> 31) & 1) == 0) return i;
+    } while (((u8)(m >> 30) & 1) == 0);
+  }
+  return kSlotEmpty;}
 
 // @ 0x00abe8f0
 void SlotVector_s00ab_e110::freeTarget(u32 i)

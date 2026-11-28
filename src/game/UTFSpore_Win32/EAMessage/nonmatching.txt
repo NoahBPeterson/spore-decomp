@@ -20,4 +20,3 @@
 008853b0 547 MessageSend handler iteration/dispatch (604B); frame 0xa2c vs 0xa24 plus register allocation and call scheduling. rc!=0 path now a real virtual call `((HObj*)rc)->v1(id,arg)` (this=rc in ecx, as the original), not a free fn-ptr call. equiv WEAK 390 valid 40.8% cov (82/201 insns); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 00885610 184 deque::insert rebalance/insert path (246B); register/schedule differences. equiv WEAK 187 valid 52.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 00885710 301 MessageQueue::InsertMessage deque push (384B); register/schedule differences. equiv WEAK 265 valid 41.7% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
-01068380 57 eastl::deque<Message,allocator,8>::clear: complete; the target's node-destroy walk uses a slightly different register/loop layout (118 vs 121 bytes). [equiv UNSUPPORTED: 0/400 inputs valid (fault(read)=350, budget=35, fault(pool-limit)=15)] flags: /O2 /MD /Gy /TP

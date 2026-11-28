@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e86930@@YAXPAUSphereTree@@PAUNode@@@Z  00e86930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e80000.cpp  ??0cNestView@@QAE@XZ  00e8ded0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e86980@@YAXPAUSphereTree@@PAUNode@@@Z  00e86980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?treeNearest@@YAPAUEffRec@@PBMMPAU1@@Z  00e86dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

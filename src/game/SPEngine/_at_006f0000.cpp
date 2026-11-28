@@ -149,13 +149,6 @@ struct WideHashtable : HashtableHead {
 struct ResourceHashtable : HashtableHead {
     void DoFreeNodes(void** array, unsigned count);   // 0x007611f0
 };
-static void AddRef(void* p) { _InterlockedExchangeAdd((volatile long*)((char*)p + 8), 1); }
-static void Release(void* p) {
-    volatile long* rc = (volatile long*)((char*)p + 8);
-    _InterlockedExchangeAdd(rc, -1);
-    long c = _InterlockedExchangeAdd(rc, 0);
-    if (c < 1) _InterlockedExchangeAdd(rc, 1);
-}
 struct CamVec { float x, y, z; float w; };   // 4 floats; w doubles as the homogeneous term
 static void Camera_FetchPositions(CamVec* pos, float* light) {
     pos->x = g_16194f8;
@@ -998,17 +991,15 @@ bool cRenderInstanceSet::IsRangeEmpty() const
 
 // @ 0x006f4190
 void cRenderInstanceSet::GetRange(int* out)
-{
+{    struct Range { int a, b; };
     unsigned int uVar2 = 0;
     int* piVar3 = mArr1b4;
     do {
         if (*piVar3 >= 0) {
             if ((int)uVar2 >= 0) {
                 int* iVar1 = ((int**)mModelArray)[uVar2];
-                unsigned short idx = *(unsigned short*)((char*)iVar1 + 8);
-                void* base = *(void**)((char*)iVar1 + 0x4c);
-                out[0] = *(int*)((char*)base + idx * 8);
-                out[1] = *(int*)((char*)base + idx * 8 + 4);
+                Range* base = *(Range**)((char*)iVar1 + 0x4c);
+                *(Range*)out = base[*(unsigned short*)((char*)iVar1 + 8)];
                 return;
             }
             break;
@@ -1016,9 +1007,8 @@ void cRenderInstanceSet::GetRange(int* out)
         uVar2++;
         piVar3++;
     } while (uVar2 < 2);
-    out[0] = -1;
-    out[1] = -1;
-}
+    Range r = { -1, -1 };
+    *(Range*)out = r;}
 
 // 0x006f41e0 (byte-exact lifted version: match/slices/s006f41e0/s006f41e0.cpp)
 cViewer* cRenderInstanceSet::RenderRange(void* src)
@@ -1086,18 +1076,25 @@ void cGraphicsHash::Resize(unsigned int newSize)
 
 // @ 0x006f4450
 void** FUN_006f4450(void** first, void** last, void** destEnd)
-{
-    while (last != first) {
+{    while (last != first) {
         void* s = *--last;
         void* d = *--destEnd;
         if (s != d) {
-            if (s) AddRef(s);
+            if (s) {
+                _InterlockedIncrement((volatile long*)((char*)s + 8));
+            }
             *destEnd = s;
-            if (d) Release(d);
+            if (d) {
+                volatile long* rc = (volatile long*)((char*)d + 8);
+                _InterlockedDecrement(rc);
+                if (_InterlockedExchangeAdd(rc, 0) < 1)
+                    _InterlockedIncrement(rc);
+                else
+                    _InterlockedExchangeAdd(rc, 0);
+            }
         }
     }
-    return destEnd;
-}
+    return destEnd;}
 
 // @ 0x006f44c0
 bool __stdcall FUN_006f44c0(void* a, void* b, cImageHost* host)

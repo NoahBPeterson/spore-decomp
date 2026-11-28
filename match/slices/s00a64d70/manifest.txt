@@ -10,3 +10,4 @@ slices/s00a64d70/s00a64d70.cpp  ?InitNamed@Hashtable@Eapd@Audio@EA@@QAEPAV1234@P
 slices/s00a64d70/s00a64d70.cpp  ??1GroupMapDtorView_a651e0@@QAE@XZ  00a651e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00a64d70/s00a64d70.cpp  ??0GroupMapCtorView_a654a0@@QAE@PAX@Z  00a654a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00a64d70/s00a64d70.cpp  ?ScalarDtor@GroupMapDelView_a65500@@QAEPAU1@I@Z  00a65500  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a64d70/s00a64d70.cpp  ?FindInstance@InstanceManager@Eapd@Audio@EA@@QAEPAXI@Z  00a65d60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

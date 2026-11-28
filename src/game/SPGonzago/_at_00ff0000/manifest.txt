@@ -8,3 +8,4 @@
 ../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff53f0@@YAHH@Z  00ff53f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00ff0000.cpp  ?ctor@cColonySimulator@@QAEPAU1@XZ  00ff54e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff5a10@@YAXPAX0@Z  00ff5a10  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff3190@@YIXPAUCitySummary@@PAXPAUKeyMap@@@Z  00ff3190  /O2 /MD /Gy /TP /Isrc/game/include

@@ -779,15 +779,16 @@ void Vec24::insert(char* pos, const char* value)
 
 // @ 0x007efc90
 void PQ::Push(const HeapNode& v)
-{
-  if (mpEnd < mpCapacity) {
+{  if (mpEnd < mpCapacity) {
     HeapNode* p = mpEnd++;
     new (p) HeapNode(v);
   } else {
     DoInsertValue(mpEnd, v);
   }
-  SiftUp(mpBegin, 0, (int)(mpEnd - mpBegin) - 1, *(mpEnd - 1), mCmp);
-}
+  HeapNode* last = mpEnd;
+  HeapNode* first = mpBegin;
+  EmptyCmp cmp = mCmp;
+  SiftUp(first, 0, (int)(last - first) - 1, *(last - 1), cmp);}
 
 // @ 0x007efd10
 void VolState_s007e_fd10::BuildSlices(float dx, float dy, float dz, SliceVertexVector& verts, UIntVector& counts)

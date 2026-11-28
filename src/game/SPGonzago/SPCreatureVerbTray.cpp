@@ -506,8 +506,7 @@ void sActivatePanel(int param_1)
 
 // @ 0x00d49450
 void FUN_00d49450(void)
-{
-    AbilitySlot* t = g_169e3ec;
+{    AbilitySlot* t = g_169e3ec;
     for (int i = 0; i < 0x19; i++) {
         t[i].mAbility = -1;
         t[i].mFlag = 0;
@@ -527,8 +526,13 @@ void FUN_00d49450(void)
         }
     }
     if (SP_GetCurrentGameMode() == (void*)0x1654c02) {
+        struct Slot {
+            CmpObj* p;
+            CmpObj* get() const { return p; }
+        };
+        struct SlotTable { char pad[0x34]; Slot m34[6]; };
         for (int j = 0; j < 6; j++) {
-            CmpObj* a = (CmpObj*)*(int*)((char*)FUN_00d1e660() + 0x34 + j * 4);
+            CmpObj* a = ((SlotTable*)FUN_00d1e660())->m34[j].get();
             if (FUN_00d48f20(a) && FUN_00d1fa20(a)) {
                 int k = FUN_00d48ff0(a);
                 if (k >= 0) {
@@ -537,8 +541,7 @@ void FUN_00d49450(void)
             }
         }
     }
-    FUN_00d48d30();
-}
+    FUN_00d48d30();}
 
 // @ 0x00d49560
 float FUN_00d49560(int idx)

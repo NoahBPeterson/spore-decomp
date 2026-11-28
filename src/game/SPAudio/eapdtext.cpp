@@ -1855,18 +1855,14 @@ void gatom_bang(t_gatom* x)
 
 // @ 0x00a4fe90
 void gatom_float(Gatom* x, float f)
-{
-    t_atom_s00a4_f1e0 a;
+{    t_atom_s00a4_f1e0 a;
     a.a_type = 1;
     a.a_w.a_float = f;
     if (x->a_atom.a_type == 1)
     {
         x->a_atom.a_w.a_float = atom_getfloat(&a);
-        x->a_dirty = 0;
-        gatom_bang(x);
-        return;
     }
-    if (x->a_atom.a_type == 2)
+    else if (x->a_atom.a_type == 2)
     {
         t_symbol buf;
         x->a_atom.a_w.a_symbol = *atom_getsymbol(&buf, &a);
@@ -1891,18 +1887,14 @@ static void gatom_clipfloat(Gatom* x, float f)
 
 // @ 0x00a4ff70
 void gatom_symbol(Gatom* x, t_symbol s)
-{
-    t_atom_s00a4_f1e0 a;
+{    t_atom_s00a4_f1e0 a;
     a.a_type = 2;
     a.a_w.a_symbol = s;
     if (x->a_atom.a_type == 1)
     {
         x->a_atom.a_w.a_float = atom_getfloat(&a);
-        x->a_dirty = 0;
-        gatom_bang(x);
-        return;
     }
-    if (x->a_atom.a_type == 2)
+    else if (x->a_atom.a_type == 2)
     {
         t_symbol buf;
         x->a_atom.a_w.a_symbol = *atom_getsymbol(&buf, &a);

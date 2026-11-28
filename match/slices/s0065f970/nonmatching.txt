@@ -1,7 +1,6 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 0065f970  86  four-window visibility update; cl picks this=ebp/n=ebx and materialises the bool args with setle instead of the original branch pushes
 00660430  96  eastl lower_bound; register assignment (first=ebp vs ebx) and a spill differ
-00660650  58  KeyContains; comparison materialised with setcc per step instead of once at the join
 00660880  255  FeedEntry predicate; loop keeps a cached count/base instead of recomputing from the vector header
 006609a0  266  eastl vector<Key>::operator=; schedule differs (param in eax, n/have in different registers). Fixed the copy operands: partial path is CopyOverlap(o.mBegin, o.mBegin+have, mBegin) then UninitCopyPtr(..., extra=o.mEnd); the full path is CopyOverlap(o.mBegin, o.mEnd, mBegin) (source incorrectly passed mBegin as the source first). Replay None; fresh equiv WEAK 164/400 valid, 44.3% coverage, no mismatches; src copy mirrored and same. Residual /O2 schedule (290 vs 283 B).
 00660ad0  83  vector range construct; out/first/last register assignment differs

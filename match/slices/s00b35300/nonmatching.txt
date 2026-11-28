@@ -4,4 +4,3 @@
 00b35d30 409 complete; frame 0x20 vs 0x24, register allocation
 00b35ec0 83 complete; original keeps redundant comp null re-check
 00b360d0 75 complete; original uses add eax,0x64 member-address form for the comp load
-00b36200 61 complete; original keeps first in memory, loop register choice

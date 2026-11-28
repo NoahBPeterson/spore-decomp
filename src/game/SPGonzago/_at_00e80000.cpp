@@ -721,8 +721,7 @@ EffRec* treePush(EffTree* t, EffRec* a, EffRec* b)
 
 // @ 0x00e86dc0
 EffRec* treeNearest(const float* pos, float radius, EffRec* n)
-{
-    EffRec* childA = n->mChildA;
+{    EffRec* childA = n->mChildA;
     if (childA == 0)
         return n;
     float px = pos[0], py = pos[1], pz = pos[2];
@@ -734,17 +733,16 @@ EffRec* treeNearest(const float* pos, float radius, EffRec* n)
         float b0 = childB->mCenter[0] - px;
         float b1 = childB->mCenter[1] - py;
         float b2 = childB->mCenter[2] - pz;
-        float da = a1 * a1 + a0 * a0 + a2 * a2;
+        float da = a2 * a2 + (a1 * a1 + a0 * a0);
         float db = b2 * b2 + b1 * b1 + b0 * b0;
-        if (db > da)
+        if (da < db)
             n = childA;
         else
             n = childB;
         childA = n->mChildA;
         if (childA == 0)
             return n;
-    }
-}
+    }}
 
 // @ 0x00e86e80
 void treeRefit(EffRec* n)

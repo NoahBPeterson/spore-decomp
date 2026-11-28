@@ -400,7 +400,7 @@ bool Manager::DoManualDialup(DialupCallback cb, char* entry, char* user, char* p
 
 // @ 0x0094c9d0
 bool Manager::CancelManualDialup()
-{
+{    bool result = false;
     if (mbManualDialupBusy) {
         if (mhRASConn != 0) {
             long long t = _time64(0) + 3;
@@ -416,10 +416,11 @@ bool Manager::CancelManualDialup()
         }
         mhRASConn = 0;
         mbManualDialupBusy = false;
-        return true;
+        result = true;
+    } else {
+        mhRASConn = 0;
     }
-    mhRASConn = 0;
-    return false;
+    return result;
 }
 
 // @ 0x0094ca60

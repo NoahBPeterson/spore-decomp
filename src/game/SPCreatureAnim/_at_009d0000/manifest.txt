@@ -33,3 +33,4 @@
 ../src/game/SPCreatureAnim/_at_009d0000.cpp  ?Cmd4@Self@?A0x70ee478a@@QAEXPAUcArguments@2@@Z  009ddcf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/_at_009d0000.cpp  ??0Item@@QAE@ABU0@@Z  009d7dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/_at_009d0000.cpp  ?ItemCount@Track2_s009d_d6a0@@QAEHXZ  009dd6a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009d0000.cpp  ?SwapRecords@@YAXPAUS_s009d_9620@@0@Z  009d9f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -3800,17 +3800,18 @@ void NounCreateMap::RegisterNounClasses()
 
 // @ 0x00b25c30
 cGameData_s00b2_5c30* cGameNounManager_s00b2_5c30::FUN_00b25c30()
-{
-    tGameDataVector* pVector = GetGameDataVector((tVectorCreateFn)0x00cd7d10, (tVectorClearFn)0x00d3d420,
-                                                 (tVectorAddFn)0x00acdff0, (tVectorMatchFn)0x00b1e500,
-                                                 0x018c43e8);
+{    void __cdecl FUN_00acdff0(tGameDataVector*, cGameData_s00b2_5c30*);
+    cVectorHolder* pHolder = (cVectorHolder*)GetGameDataVector(
+        (tVectorCreateFn)&g_funCD7D10, (tVectorClearFn)&g_funD3D420,
+        FUN_00acdff0, (tVectorMatchFn)&g_funB1E500,
+        0x018c43e8);
+    cObjectVector* pVector = &pHolder->mVec;
     uint32_t count = (uint32_t)(pVector->mpEnd - pVector->mpBegin);
     for (uint32_t i = 0; i < count; ++i) {
-        if (pVector->mpBegin[i]->mLocation.IsActive())
-            return pVector->mpBegin[i];
+        if (((cGameData_s00b2_5c30*)pVector->mpBegin[i])->mLocation.IsActive())
+            return (cGameData_s00b2_5c30*)pVector->mpBegin[i];
     }
-    return 0;
-}
+    return 0;}
 
 // @ 0x00b25cd0
 void FUN_00b25cd0()
@@ -3861,18 +3862,19 @@ void cGameNounManager_s00b2_5c30::FUN_00b25ee0()
 
 // @ 0x00b25f40
 cGameData_s00b2_5c30* cGameNounManager_s00b2_5c30::FindNounByEmpireID(uint32_t civID)
-{
-    tGameDataVector* pVector = GetGameDataVector((tVectorCreateFn)0x00b21080, (tVectorClearFn)0x00d3d420,
-                                                 (tVectorAddFn)0x00b236c0, (tVectorMatchFn)0x00b1e500,
-                                                 0x018c816a);
+{    void __cdecl FUN_00b236c0(tGameDataVector*, cGameData_s00b2_5c30*);
+    cVectorHolder* pHolder = (cVectorHolder*)GetGameDataVector(
+        (tVectorCreateFn)&g_funB21080, (tVectorClearFn)&g_funD3D420,
+        FUN_00b236c0, (tVectorMatchFn)&g_funB1E500,
+        0x018c816a);
+    cObjectVector* pVector = &pHolder->mVec;
     int count = (int)(pVector->mpEnd - pVector->mpBegin);
     for (int i = 0; i < count; ++i) {
-        cGameData_s00b2_5c30* pNoun = pVector->mpBegin[i];
+        cGameData_s00b2_5c30* pNoun = (cGameData_s00b2_5c30*)pVector->mpBegin[i];
         if (pNoun->GetPoliticalID() == civID)
-            return pVector->mpBegin[i];
+            return pNoun;
     }
-    return 0;
-}
+    return 0;}
 
 // @ 0x00b25fb0
 cCivilization* cGameNounManager_s00b2_5c30::GetPlayerCivilization()

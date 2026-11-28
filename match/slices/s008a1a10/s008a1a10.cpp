@@ -188,6 +188,11 @@ struct FeatureLookup {
 struct LookupIterator {
   FeatureLookup* mpCurrent;    // +0x00
 };
+struct ConstLookupIterator {
+  const FeatureLookup* mpCurrent; // +0x00
+  ConstLookupIterator() {}
+  explicit ConstLookupIterator(const FeatureLookup* p) : mpCurrent(p) {}
+};
 
 // Destroys every lookup array in [pFirst, pLast), releasing out-of-pool blocks.
 struct FeatureLookupVector;
@@ -209,8 +214,8 @@ FeatureLookup* CopyFeatureLookups(const FeatureLookup* pFirst, const FeatureLook
                                   FeatureLookup* pDest);               // 0x008a2380
 FeatureLookup* CopyFeatureLookupsBackward(const FeatureLookup* pFirst, const FeatureLookup* pLast,
                                           FeatureLookup* pDest);       // 0x008a2420
-LookupIterator* UninitializedCopyLookups(LookupIterator* pOut, const FeatureLookup* pFirst,
-                                         const FeatureLookup* pLast, FeatureLookup* pDest);  // 0x008a2500
+LookupIterator* UninitializedCopyLookups(LookupIterator* pOut, ConstLookupIterator pFirst,
+                                         ConstLookupIterator pLast, FeatureLookup* pDest);  // 0x008a2500
 void FillFeatureLookups(FeatureLookup* pFirst, FeatureLookup* pLast,
                         const FeatureLookup* pValue);                  // 0x008a2570
 void UninitializedFillLookups(FeatureLookup* pDest, uint32_t nCount,
@@ -495,20 +500,20 @@ inline FeatureLookup* ConstructLookup(FeatureLookup* pDest, const FeatureLookup&
 // @ 0x008a2500
 // uninitialized_copy of [pFirst, pLast) onto pDest, handing the advanced cursor back
 // through pOut.
-LookupIterator* UninitializedCopyLookups(LookupIterator* pOut, const FeatureLookup* pFirst,
-                                         const FeatureLookup* pLast, FeatureLookup* pDest)
-{
-  pOut->mpCurrent = pDest;
+LookupIterator* UninitializedCopyLookups(LookupIterator* pOut, ConstLookupIterator pFirst,
+                                         ConstLookupIterator pLast, FeatureLookup* pDest)
+{  pOut->mpCurrent = pDest;
 
-  while (pFirst != pLast) {
-    if (pOut->mpCurrent != 0)
-      ConstructLookup(pOut->mpCurrent, *pFirst);
+  while (pFirst.mpCurrent != pLast.mpCurrent) {
+    if (pOut->mpCurrent != 0) {
+      const FeatureLookup* pSrc = pFirst.mpCurrent;
+      ConstructLookup(pOut->mpCurrent, *pSrc);
+    }
     ++pOut->mpCurrent;
-    ++pFirst;
+    ++pFirst.mpCurrent;
   }
 
-  return pOut;
-}
+  return pOut;}
 
 // @ 0x008a2570
 // Assigns a FeatureLookup value to every record in [pFirst, pLast).
@@ -630,7 +635,7 @@ void FeatureLookupVector::insert(FeatureLookup* pPosition, uint32_t nCount,
   const uint32_t nAfter = (uint32_t)(mpEnd - pPosition);
   if (nCount < nAfter) {
     LookupIterator newEnd;
-    UninitializedCopyLookups(&newEnd, mpEnd - nCount, mpEnd, mpEnd);
+    UninitializedCopyLookups(&newEnd, ConstLookupIterator(mpEnd - nCount), ConstLookupIterator(mpEnd), mpEnd);
     mpEnd += nCount;
     CopyFeatureLookupsBackward(pPosition, mpEnd - nCount * 2, newEnd.mpCurrent);
     FillFeatureLookups(pPosition, pPosition + nCount, &valueCopy);
@@ -639,7 +644,7 @@ void FeatureLookupVector::insert(FeatureLookup* pPosition, uint32_t nCount,
     mpEnd += nCount - nAfter;
     LookupIterator newEnd;
     newEnd.mpCurrent = mpEnd;
-    UninitializedCopyLookups(&newEnd, pPosition, pPosition + nAfter, mpEnd);
+    UninitializedCopyLookups(&newEnd, ConstLookupIterator(pPosition), ConstLookupIterator(pPosition + nAfter), mpEnd);
     mpEnd += nAfter;
     FillFeatureLookups(pPosition, pPosition + nAfter, &valueCopy);
   }

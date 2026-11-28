@@ -11,3 +11,4 @@
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?CanUnload@SharedLibrary@EA@@UBE_NXZ  00936330  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?ExecuteCommandAll@SharedLibraryRegistry@EA@@UAEIPBDPAX111@Z  00936550  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?Release@SharedLibrary@EA@@UAEHXZ  008dd1c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?RemoveAllLibraries@SharedLibraryRegistry@EA@@UAE_N_N@Z  009364f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

@@ -4,3 +4,4 @@ slices/s00e2adb0/s00e2adb0.cpp  ?DoNukeSubtree@CStringTree@@QAEXPAUCStringNode@@
 slices/s00e2adb0/s00e2adb0.cpp  ?FUN_00e2b7f0@@YGXPAUSmallNode@@PAX@Z  00e2b7f0  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s00e2adb0/s00e2adb0.cpp  ?_virtual_dtor@Object@@QAEPAV1@I@Z  00e2b990  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s00e2adb0/s00e2adb0.cpp  ?InsertNode@WorldTree@@QAE?AUWorldNodeIter@@PAUWorldNode@@PBI_N@Z  00e2b6c0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00e2adb0/s00e2adb0.cpp  ?SetPurposeIcon@CursorAttachment@@QAEXH@Z  00e2b4f0  /O2 /MD /Gy /TP /GS- /arch:SSE

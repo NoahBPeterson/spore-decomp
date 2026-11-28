@@ -66,3 +66,5 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?PushBackAt@ToolVec@@QAEPAUTribeToolRef@@PAU2@PBU2@@Z  00c9a000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FillElems14@@YAXPAUElem14@@IPBU1@@Z  00c90df0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92bd0@Deque@@QAEXPAPAH@Z  00c92bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?CopyElems14@@YA?AU?$Elem14Iter@UElem14@@@@U?$Elem14Iter@$$CBUElem14@@@@0U1@@Z  00c90da0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?UpdateRegionSlot@cTribe_s00c9_7220@@QAEXIPAI@Z  00c97d40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

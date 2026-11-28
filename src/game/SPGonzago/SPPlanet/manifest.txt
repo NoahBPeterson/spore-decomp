@@ -105,3 +105,4 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?erase@PoolVec@@QAEPAUPoolElem_s00b0_a590@@PAU2@0@Z  00b0aee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00b037e0@@YAPAUR_00b037e0@@PAU1@UI_00b037e0@@1PAUS_00b037e0@@@Z  00b037e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00b056e0@@YAPAUR_00b056e0@@PAU1@UI_00b056e0@@1PAUS_00b056e0@@@Z  00b056e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00b02750@@YAPAEPAE0PBI@Z  00b02750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

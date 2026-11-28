@@ -7,3 +7,4 @@
 ../src/game/UTFSpore_Win32/_at_00910000.cpp  ?ScalarDeletingDtor@SymbolEngine@@QAEPAXE@Z  0091d7d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00910000.cpp  ?CompareName@MapFile@@QAEEPBD@Z  0091bce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00910000.cpp  ?ReadRecord@MapFile@@QAEEPAE@Z  0091bc30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00910000.cpp  ?ReadSymbolBytes@MapFile@@QAEEHPAE@Z  0091bd70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
